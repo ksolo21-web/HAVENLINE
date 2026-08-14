@@ -43,6 +43,18 @@ namespace Havenline.Editor
             "greybox",
         };
 
+        private static readonly string[] ForbiddenAssetPathFragments =
+        {
+            "/Placeholder/",
+            "/Placeholders/",
+            "/Prototype/",
+            "/Prototypes/",
+            "/Greybox/",
+            "/Graybox/",
+            "/Blockout/",
+            "/Blockouts/",
+        };
+
         private static readonly HashSet<string> BuiltInPrimitiveMeshNames =
             new HashSet<string>(StringComparer.OrdinalIgnoreCase)
             {
@@ -129,7 +141,27 @@ namespace Havenline.Editor
                     errors.Add($"Prototype/default scene is enabled for shipping: {scenePath}");
                 }
 
+                ValidateSceneDependencies(scenePath, errors);
                 ScanScene(scenePath, errors, warnings);
+            }
+        }
+
+        private static void ValidateSceneDependencies(string scenePath, List<string> errors)
+        {
+            foreach (var dependency in AssetDatabase.GetDependencies(scenePath, true))
+            {
+                if (string.Equals(dependency, scenePath, StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                var normalized = dependency.Replace('\\', '/');
+                foreach (var fragment in ForbiddenAssetPathFragments)
+                {
+                    if (normalized.IndexOf(fragment, StringComparison.OrdinalIgnoreCase) < 0)
+                        continue;
+
+                    errors.Add($"Shipping scene '{scenePath}' still depends on prototype/placeholder asset: {dependency}");
+                    break;
+                }
             }
         }
 
@@ -204,9 +236,12 @@ namespace Havenline.Editor
                 return;
 
             var mesh = filter.sharedMesh;
-            var meshAssetPath = AssetDatabase.GetAssetPath(mesh);
+            var meshAssetPath = AssetDatabase.GetAssetPath(mesh) ?? string.Empty;
+            var builtInMesh = string.IsNullOrEmpty(meshAssetPath) ||
+                              meshAssetPath.IndexOf("unity default resources", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                              meshAssetPath.IndexOf("unity_builtin_extra", StringComparison.OrdinalIgnoreCase) >= 0;
 
-            if (string.IsNullOrEmpty(meshAssetPath) && BuiltInPrimitiveMeshNames.Contains(mesh.name))
+            if (builtInMesh && BuiltInPrimitiveMeshNames.Contains(mesh.name))
             {
                 errors.Add(
                     $"Visible Unity primitive '{mesh.name}' is still rendering in shipping scene '{scenePath}' at {GetHierarchyPath(gameObject.transform)}. " +
@@ -251,7 +286,7 @@ namespace Havenline.Editor
             for (var character = 1; character <= 4; character++)
             {
                 var path = $"{ProductionCharacterRoot}/Character{character}/Character{character}_production.fbx";
-                if (!File.Exists(Path.GetFullPath(path)))
+                if (!File.Exists(ToAbsoluteProjectPath(path)))
                 {
                     errors.Add(
                         $"Character {character} production asset is missing: {path}. " +
@@ -324,9 +359,22 @@ namespace Havenline.Editor
             if (PlayerSettings.colorSpace != ColorSpace.Linear)
                 errors.Add($"Production Android rendering must use Linear color space; current setting is {PlayerSettings.colorSpace}.");
 
+            var scriptingBackend = PlayerSettings.GetScriptingBackend(NamedBuildTarget.Android);
+            if (scriptingBackend != ScriptingImplementation.IL2CPP)
+                errors.Add($"Production Android builds must use IL2CPP; current scripting backend is {scriptingBackend}.");
+
             var architectures = PlayerSettings.Android.targetArchitectures;
             if ((architectures & AndroidArchitecture.ARM64) == 0)
                 errors.Add($"Android ARM64 support is required; current targetArchitectures={architectures}.");
+        }
+
+        private static string ToAbsoluteProjectPath(string assetPath)
+        {
+            var projectRoot = Directory.GetParent(Application.dataPath)?.FullName;
+            if (string.IsNullOrEmpty(projectRoot))
+                return Path.GetFullPath(assetPath);
+
+            return Path.GetFullPath(Path.Combine(projectRoot, assetPath.Replace('/', Path.DirectorySeparatorChar)));
         }
 
         private static string GetHierarchyPath(Transform transform)
