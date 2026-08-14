@@ -24,6 +24,17 @@ A failed approach is not permission to stop if another credible path remains.
 - Character readability at gameplay scale matters; do not approve characters only from close-up asset inspection.
 - Preserve existing working gameplay and project architecture while improving assets and systems.
 
+### Production visual bar
+
+- HAVENLINE is being built to a premium AAA-style Android presentation bar, not a prototype/greybox bar.
+- Do not ship visible placeholder, greybox, generic-player, block-built, default-material, or SampleScene content.
+- Visible environment, shelter, furnace, resource, defense, and character geometry must read as authored production art rather than Unity primitives/blockouts.
+- The shipping camera should preserve the established close landscape orthographic/isometric readability: the player must remain clearly readable while the inhabited camp, furnace, shelters, storage, resources/helpers/defenses, and immediate action space remain legible.
+- HUD presentation stays compact and gameplay-first. Do not regress to giant permanent cards, oversized action-button decoration, or a large artificial warmth circle.
+- Warm furnace lighting against a colder snowy environment, atmospheric depth, controlled bloom/color grading, readable materials, and restrained winter motion/effects are part of the visual identity; effects should enhance the scene rather than hide low-detail art.
+- Real C1–C4 Humanoid characters are required for the production path. A shipping build must never silently substitute an old generic/blocky player.
+- Visual claims require proof from the real Unity shipping scene/camera. A technically passing build is not visually approved merely because tests or static contracts pass.
+
 ## Character roles
 
 - Character 1 and Character 2 are the two playable lead options.
