@@ -1,0 +1,45 @@
+name: Eden WebGL visual review
+
+on:
+  push:
+    branches: ["astra-webgl-review/**"]
+    paths: ["eden-review/**", ".github/workflows/eden-webgl-review.yml"]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: eden-render-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    defaults:
+      run:
+        working-directory: eden-review
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v6
+        with:
+          node-version: "22"
+      - name: Install pinned browser tools
+        run: npm ci
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Restore the verified HTML build and scene assets
+        run: node review/restore.mjs
+      - name: Capture actual WebGL scenes
+        run: node review/capture.mjs
+      - name: Preserve screenshots and capture metadata
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: eden-webgl-${{ github.sha }}
+          path: eden-review/review-results/
+          retention-days: 14
+          if-no-files-found: error
