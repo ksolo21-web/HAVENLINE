@@ -98,7 +98,8 @@ jobs:
           python3 tools/havenline/configure_android.py --sdk "$ANDROID_HOME" --java "$JAVA_HOME" --godot "$RUNNER_TEMP/godot/Godot_v4.7.2-stable_linux.x86_64"
           mkdir -p HavenlineGodot/build
           Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --export-debug 'Android Review' 2>&1 | tee artifacts/export.log
-          "$ANDROID_HOME/build-tools/35.0.1/apksigner" verify --verbose HavenlineGodot/build/HAVENLINE-native-review-arm64.apk > artifacts/apk-signature.txt
+          "$ANDROID_HOME/build-tools/35.0.1/apksigner" verify --verbose --print-certs HavenlineGodot/build/HAVENLINE-native-review-arm64.apk > artifacts/apk-signature.txt
+          python3 tools/havenline/verify_apk.py HavenlineGodot/build/HAVENLINE-native-review-arm64.apk --output artifacts/apk-inspection.json
           cp HavenlineGodot/build/HAVENLINE-native-review-arm64.apk artifacts/
           sha256sum artifacts/*.apk > artifacts/SHA256SUMS.txt
           cp HavenlineGodot/data/release-status.json artifacts/
