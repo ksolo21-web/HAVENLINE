@@ -6,10 +6,12 @@ This parser only reads the binary manifest and checks packaging invariants.
 from __future__ import annotations
 
 import argparse
+import configparser
+import io
 import hashlib
 import json
 import struct
-from pathlib import Path
+from pathlib import Path, PurePosixPath
 from zipfile import ZipFile
 
 
@@ -70,6 +72,73 @@ def manifest_elements(data: bytes) -> list[dict]:
     return elements
 
 
+def audio_import_targets(archive: ZipFile) -> dict[str, str]:
+    """Resolve exported WAV import records to real, nonempty sample resources.
+
+    Imported WAVs retain .wav.import metadata, not .wav.remap metadata.
+    A matching filename alone does not prove the audio resource is usable.
+    """
+    names = archive.namelist()
+    targets: dict[str, str] = {}
+    for clip in ('wind', 'fire', 'wood', 'stone', 'transfer', 'upgrade'):
+        record = f'assets/assets/audio/{clip}.wav.import'
+        if names.count(record) != 1:
+            continue
+        try:
+            config = configparser.ConfigParser(interpolation=None, strict=True)
+            config.read_string(archive.read(record).decode('utf-8'))
+            if json.loads(config.get('remap', 'type')) != 'AudioStreamWAV':
+                continue
+            resource = json.loads(config.get('remap', 'path'))
+            if not isinstance(resource, str) or not resource.startswith('res://.godot/imported/'):
+                continue
+            relative = resource.removeprefix('res://')
+            if '..' in PurePosixPath(relative).parts or '\\' in relative:
+                continue
+            target = 'assets/' + relative
+            if not PurePosixPath(target).name.startswith(clip + '.wav-') or not target.endswith('.sample'):
+                continue
+            if names.count(target) != 1 or archive.getinfo(target).file_size < 16:
+                continue
+            with archive.open(target) as stream:
+                if stream.read(4) not in (b'RSRC', b'RSCC'):
+                    continue
+            targets[clip] = target
+        except (KeyError, ValueError, TypeError, configparser.Error, UnicodeError):
+            continue
+    return targets
+
+
+def self_test() -> dict:
+    """Exercise valid, absent, stale, malformed and unsafe audio import records."""
+    def fixture(record: str | None, payload: bytes | None = b'RSRC' + b'\0' * 28,
+                target: str = 'assets/.godot/imported/wind.wav-test.sample') -> dict:
+        output = io.BytesIO()
+        with ZipFile(output, 'w') as archive:
+            if record is not None:
+                archive.writestr('assets/assets/audio/wind.wav.import', record)
+            if payload is not None:
+                archive.writestr(target, payload)
+        with ZipFile(io.BytesIO(output.getvalue())) as archive:
+            return audio_import_targets(archive)
+    valid = '[remap]\ntype="AudioStreamWAV"\npath="res://.godot/imported/wind.wav-test.sample"\n'
+    tests = {
+        'valid_import_resolves': 'wind' in fixture(valid),
+        'missing_record_rejected': not fixture(None),
+        'missing_sample_rejected': not fixture(valid, None),
+        'empty_sample_rejected': not fixture(valid, b''),
+        'wrong_resource_magic_rejected': not fixture(valid, b'fake' + b'\0' * 28),
+        'compressed_sample_accepted': 'wind' in fixture(valid, b'RSCC' + b'\0' * 28),
+        'wrong_resource_type_rejected': not fixture(valid.replace('AudioStreamWAV', 'Texture2D')),
+        'foreign_resource_path_rejected': not fixture(valid.replace('res://', 'user://')),
+        'traversal_rejected': not fixture(valid.replace('imported/', 'imported/../')),
+        'wrong_clip_rejected': not fixture(valid.replace('wind.wav-', 'fire.wav-')),
+        'malformed_record_rejected': not fixture('[remap]\npath=invalid\n'),
+        'wrong_sample_extension_rejected': not fixture(valid.replace('.sample', '.png')),
+    }
+    return {'checks': tests, 'total_checks': len(tests), 'passed': all(tests.values())}
+
+
 def inspect(apk: Path) -> dict:
     with ZipFile(apk) as archive:
         names = archive.namelist()
@@ -78,6 +147,7 @@ def inspect(apk: Path) -> dict:
         manifest = attrs.get('manifest', {})
         application = attrs.get('application', {})
         libraries = [name for name in names if name.startswith('lib/') and name.endswith('.so')]
+        audio_targets = audio_import_targets(archive)
         checks = {
             'zip_integrity': archive.testzip() is None,
             'isolated_review_package': manifest.get('package') == 'com.kaleb.havenline.review',
@@ -89,12 +159,13 @@ def inspect(apk: Path) -> dict:
             'npc_catalog_packaged': 'assets/data/npc-catalog.json' in names,
             'population_runtime_packaged': all(f'assets/scripts/{name}.gdc' in names for name in ('npc_population', 'population_simulation', 'population_view', 'render_policy')),
             'outpost_runtime_packaged': all(f'assets/scripts/{name}.gdc' in names for name in ('outpost_climate', 'outpost_simulation', 'outpost_view', 'outpost_audio', 'outpost_surface', 'action_readout')),
-            'outpost_audio_remaps_packaged': all(f'assets/assets/audio/{name}.wav.remap' in names for name in ('wind', 'fire', 'wood', 'stone', 'transfer', 'upgrade')),
+            'outpost_audio_import_references_resolve': len(audio_targets) == 6,
             'outpost_audio_imports_packaged': sum(n.startswith('assets/.godot/imported/') and n.endswith('.sample') and any('/' + clip + '.wav-' in n for clip in ('wind', 'fire', 'wood', 'stone', 'transfer', 'upgrade')) for n in names) == 6,
             'all_derived_crew_motion_packaged': all(f'assets/assets/motion/Character{i}.res' in names for i in (2, 3, 4)),
         }
     return {'apk': apk.name, 'sha256': hashlib.sha256(apk.read_bytes()).hexdigest(),
             'manifest': elements, 'native_libraries': libraries, 'checks': checks,
+            'audio_import_targets': audio_targets,
             # Android deprecated isGame at API 26; appCategory=game is canonical.
             # https://developer.android.com/guide/topics/manifest/application-element#isGame
             'legacy_is_game': application.get('isGame'),
@@ -105,10 +176,17 @@ def inspect(apk: Path) -> dict:
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('apk', type=Path)
+    parser.add_argument('apk', type=Path, nargs='?')
+    parser.add_argument('--self-test', action='store_true')
     parser.add_argument('--output', type=Path, required=True)
     args = parser.parse_args()
-    result = inspect(args.apk)
+    if not args.self_test and args.apk is None:
+        parser.error('APK path is required unless --self-test is specified')
+    preflight = self_test()
+    result = preflight if args.self_test else inspect(args.apk)
+    if not args.self_test:
+        result['verifier_self_test'] = preflight
+        result['passed'] = result['passed'] and preflight['passed']
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2) + '\n')
     print(json.dumps(result))
