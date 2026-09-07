@@ -66,9 +66,10 @@ jobs:
           set -euo pipefail
           mkdir -p artifacts
           python3 tools/havenline/asset_audit.py --output artifacts/assets.json
+          python3 tools/havenline/bake_outpost_audio.py | tee artifacts/audio-bake.json
           timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit 2>&1 | tee artifacts/import.log
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd 2>&1 | tee artifacts/motion-bake.log
-          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population; do
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime; do
             timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "artifacts/$suite.log"
           done
           timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --quit-after 5 2>&1 | tee artifacts/launch.log
@@ -81,7 +82,7 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y -qq xvfb mesa-vulkan-drivers
           mkdir -p artifacts/mobile-render
-          timeout 120 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy -- --render-review --motion=idle --phase=0 --capture="$PWD/artifacts/mobile-render" 2>&1 | tee artifacts/mobile-render.log
+          timeout 120 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy --fixed-fps 60 -- --render-review --motion=idle --phase=0 --capture="$PWD/artifacts/mobile-render" 2>&1 | tee artifacts/mobile-render.log
           python3 - <<'PY'
           import json
           from pathlib import Path
@@ -97,9 +98,39 @@ jobs:
           set -euo pipefail
           for view in rear side three-quarter; do
             mkdir -p "artifacts/mobile-$view"
-            timeout 120 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy -- --render-review --view="$view" --capture="$PWD/artifacts/mobile-$view" 2>&1 | tee "artifacts/mobile-$view.log"
+            timeout 120 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy --fixed-fps 60 -- --render-review --view="$view" --capture="$PWD/artifacts/mobile-$view" 2>&1 | tee "artifacts/mobile-$view.log"
           done
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' artifacts/mobile-*.log; then exit 1; fi
+      - name: Capture weather, warmth, interaction and native 4K evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          for pair in night:three-quarter blizzard:front warmth4:overhead gather:side; do
+            scenario="${pair%%:*}"
+            view="${pair##*:}"
+            mkdir -p "artifacts/outpost-$scenario"
+            timeout 180 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy --fixed-fps 60 -- --render-review --scenario="$scenario" --view="$view" --capture="$PWD/artifacts/outpost-$scenario" 2>&1 | tee "artifacts/outpost-$scenario.log"
+          done
+          mkdir -p artifacts/outpost-native-4k
+          timeout 240 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy --fixed-fps 60 -- --scenario=warmth2 --view=three-quarter --capture="$PWD/artifacts/outpost-native-4k" 2>&1 | tee artifacts/outpost-native-4k.log
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' artifacts/outpost-*.log; then exit 1; fi
+          python3 - <<'PYCODE'
+          import json, pathlib, struct
+          for p in pathlib.Path('artifacts').glob('outpost-*/render-evidence.json'):
+              r = json.loads(p.read_text())
+              assert r['renderer'] == 'mobile'
+              assert r['render_scale'] == 1.0 and not r['performance_certified']
+              assert len(r['characters']) == 4 and r['custom_c2_c4_rig_review_deferred']
+              assert r['outpost']['snow_instances'] == 640
+              assert len(r['npc_population']['missing_templates']) == 13
+          p = pathlib.Path('artifacts/outpost-native-4k')
+          r = json.loads((p/'render-evidence.json').read_text())
+          width, height = struct.unpack('>II', (p/'native-scene.png').read_bytes()[16:24])
+          assert width >= 3840 and height >= 2160
+          assert r['internal_render'] == [width, height]
+          assert not r['render_review'] and not r['outpost']['native_4k60_certified']
+          assert json.loads(pathlib.Path('artifacts/outpost-gather/render-evidence.json').read_text())['action_readout']['kind'] == 'gather'
+          PYCODE
       - name: Export isolated ARM64 review APK
         shell: bash
         run: |
