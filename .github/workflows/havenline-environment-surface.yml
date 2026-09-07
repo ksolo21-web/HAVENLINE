@@ -1,0 +1,56 @@
+name: Bake Havenline environment surface repairs
+on:
+  push:
+    branches: ['codex/havenline-environment-review']
+    paths: ['.github/workflows/havenline-environment-surface.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  refine-surfaces:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/havenline-environment-review
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply checksum-verified surface repairs
+        run: |
+          set -euo pipefail
+          mkdir -p surface-evidence
+          echo '7821dea228c788a5dfe01219526475923f6240f1118e16f5e020d36c4673f5ae  .github/environment-surface-refinement.patch' | sha256sum -c -
+          cp .github/environment-surface-refinement.patch surface-evidence/applied.patch
+          git apply --check .github/environment-surface-refinement.patch
+          git apply .github/environment-surface-refinement.patch
+          python3 -m pip install -r tools/havenline/requirements-environment.txt
+          python3 tools/havenline/bake_environment.py | tee surface-evidence/bake.json
+          python3 tools/havenline/environment_asset_audit.py --output surface-evidence/asset-audit.json
+          python3 - <<'PY'
+          import pathlib,json,hashlib
+          records=json.loads(pathlib.Path('Docs/Art/EnvironmentReview/source-preservation.json').read_text())
+          for filename,expected in records['original_glbs'].items():
+              assert hashlib.sha256(pathlib.Path(filename).read_bytes()).hexdigest()==expected,filename
+          assert len(records['original_glbs'])==16
+          print('All sixteen original GLBs unchanged; C2-C4 rig fixes still deferred.')
+          PY
+      - name: Save authored source and rebuilt geometry
+        run: |
+          set -euo pipefail
+          test "$(git branch --show-current)" = codex/havenline-environment-review
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/havenline/bake_environment.py HavenlineGodot/assets/environment_v2
+          git rm .github/environment-surface-refinement.patch
+          git commit -m 'Smooth foliage seams and snow contours; replace striped mineral shading with natural stone detail'
+          git push origin HEAD:codex/havenline-environment-review
+          git rev-parse HEAD | tee surface-evidence/source-commit.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-environment-surface-evidence
+          path: surface-evidence/
+          retention-days: 30
+          if-no-files-found: error
