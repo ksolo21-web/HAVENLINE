@@ -61,10 +61,15 @@ func sync(sim, dt: float, paused: bool):
 	var dusk:=1.0-absf(daylight*2.0-1.0)
 	environment.background_color=Color("14243e").lerp(Color("89b9d5"),daylight)
 	environment.ambient_light_color=Color("8ea6d4").lerp(Color("c9e0f1"),daylight)
-	environment.ambient_light_energy=lerpf(.28,.30,daylight)
+	environment.ambient_light_energy=lerpf(.19,.22,daylight)
 	environment.fog_light_color=Color("283d61").lerp(Color("bbd8e8"),daylight)
-	environment.fog_density=lerpf(.004,.014,float(weather.snow))
-	sunlight.light_energy=lerpf(.20,.68,daylight)*(1.0-float(weather.snow)*.38)
+	# Depth fog is anchored beyond the near gameplay plane, not to the old camera origin.
+	environment.fog_mode=Environment.FOG_MODE_DEPTH
+	environment.fog_depth_begin=27.0
+	environment.fog_depth_end=67.0
+	environment.fog_depth_curve=1.35
+	environment.fog_density=lerpf(.12,.63,float(weather.snow))
+	sunlight.light_energy=lerpf(.17,.61,daylight)*(1.0-float(weather.snow)*.38)
 	sunlight.light_color=Color("97b7ed").lerp(Color("fff0d6"),daylight).lerp(Color("ffb076"),dusk*.5)
 	sunlight.rotation_degrees=Vector3(lerpf(-28.0,-56.0,daylight),-32.0+sin(sim.climate.hour()*PI/12.)*18.,0)
 	heat_light.omni_range=sim.warmth()+1.5

@@ -166,7 +166,7 @@ def inspect(apk: Path) -> dict:
         checks = {
             'zip_integrity': archive.testzip() is None,
             'isolated_review_package': manifest.get('package') == 'com.kaleb.havenline.review',
-            'expected_version': manifest.get('versionCode') == 403 and manifest.get('versionName') == '0.4.3-outpost-review',
+            'expected_version': manifest.get('versionCode') == 404 and manifest.get('versionName') == '0.4.4-environment-review',
             'android_game_category': application.get('appCategory') == 0,
             'arm64_godot_runtime': 'lib/arm64-v8a/libgodot_android.so' in libraries,
             'no_other_architecture': bool(libraries) and all(name.startswith('lib/arm64-v8a/') for name in libraries),

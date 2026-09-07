@@ -1,5 +1,12 @@
 extends Control
 
+const ENVIRONMENT_REVISION := "0.4.4-winter-environment"
+var scenery_instances: Array[GeometryInstance3D] = []
+var scenery_origins: Array[Vector3] = []
+var scenery_heights: Array[float] = []
+var foreground_faded := 0
+var scenery_cutaway: Array[float] = []
+
 const Simulation = preload("res://scripts/outpost_simulation.gd")
 const OutpostView = preload("res://scripts/outpost_view.gd")
 const Surface = preload("res://scripts/outpost_surface.gd")
@@ -168,18 +175,23 @@ func build_environment():
 	sun.light_color = Color("e4f0ff")
 	sun.light_energy = 1.05
 	sun.shadow_enabled = true
-	sun.directional_shadow_max_distance = 45
+	sun.directional_shadow_max_distance = 70
 	world.add_child(sun)
 	camera = Camera3D.new()
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	# Unity orthographicSize is a half-height; Godot's size is the full span.
 	camera.size = float(sim.contract.camera.size) * 2.0
-	camera.far = 100
+	camera.near = 0.05
+	camera.far = 180
 	world.add_child(camera)
 	camera.current = true
 
 func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 	var path := "res://assets/" + asset + ".glb"
+	if asset.begins_with("world/"):
+		# Authored replacement required: never silently display the retired blockout.
+		path = "res://assets/environment_v2/" + asset.trim_prefix("world/") + ".glb"
+		assert(ResourceLoader.exists(path), "Missing required winter environment mesh: " + path)
 	if not asset_cache.has(path):
 		asset_cache[path] = load(path)
 	var instance: Node3D
@@ -190,15 +202,23 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 				for i in merged_cache[asset].get_surface_count():
 					var source_material: Material = merged_cache[asset].surface_get_material(i)
 					if source_material is BaseMaterial3D:
-						var leaf_material: BaseMaterial3D = source_material.duplicate()
-						leaf_material.cull_mode = BaseMaterial3D.CULL_DISABLED
-						merged_cache[asset].surface_set_material(i, leaf_material)
+						var leaf_material := ShaderMaterial.new()
+						leaf_material.shader=load("res://shaders/evergreen.gdshader")
+						leaf_material.set_shader_parameter("albedo_texture",source_material.albedo_texture)
+						leaf_material.set_shader_parameter("normal_texture",source_material.normal_texture)
+						leaf_material.set_shader_parameter("surface_roughness",source_material.roughness)
+						merged_cache[asset].surface_set_material(i,leaf_material)
 		instance = MeshInstance3D.new()
 		instance.mesh = merged_cache[asset]
 	else:
 		instance = asset_cache[path].instantiate()
 	parent.add_child(instance)
 	instance.position = p
+	if asset.begins_with("world/pine_") and instance is GeometryInstance3D:
+		scenery_instances.append(instance)
+		scenery_origins.append(p)
+		scenery_heights.append(instance.mesh.get_aabb().end.y)
+		scenery_cutaway.append(0.0)
 	return instance
 
 func build_world():
@@ -219,22 +239,18 @@ func build_world():
 		var node: Dictionary = sim.resources[index]
 		var asset: String = "pine_" + str(1 + index % 3) if node.kind == "wood" else node.kind
 		resource_visuals[node.id] = model("world/" + asset, world, xyz(node.position))
-	var forest := {0: [], 1: [], 2: []}
-	for i in range(38):
-		var a := i * TAU / 38.0
-		var p := xyz(Vector2(cos(a) * (15.5 + sin(i * 12.2)), sin(a) * 18.8))
-		var scale_factor := 0.85 + fmod(i * .17, .5)
-		if no_batching:
-			var tree := model("world/pine_" + str(1 + i % 3), world, p)
-			tree.scale = Vector3.ONE * scale_factor
-			tree_rotation(tree, i)
-		else:
-			forest[i % 3].append(Transform3D(Basis(Vector3.UP, i * 1.71).scaled(Vector3.ONE * scale_factor), p))
-	if not no_batching:
-		for variant in forest:
-			var transforms: Array[Transform3D] = []
-			transforms.assign(forest[variant])
-			Scenery.instances(merged_cache["world/pine_" + str(variant + 1)], transforms, world)
+	# Irregular woodland groups instead of the old evenly spaced circular fence.
+	for i in range(44):
+		var a := float(i) * 2.399963
+		var rx := 16.6 + sin(i * 7.13) * 3.8
+		var rz := 19.0 + cos(i * 4.71) * 3.2
+		var point := Vector2(cos(a) * rx, sin(a) * rz)
+		# Keep entrances and the default camera's lower central view readable.
+		if absf(point.x) < 4.8 and point.y > 13.0: continue
+		var tree := model("world/pine_" + str(1 + i % 3), world, xyz(point))
+		tree.scale = Vector3.ONE * (0.76 + fposmod(i * .137, .52))
+		tree_rotation(tree, i)
+	build_environment_dressing()
 	for side in sim.defenses:
 		defense_visuals[side] = model("world/barricade", world, xyz(sim.defenses[side].position))
 		defense_visuals[side].scale.y = 0.15
@@ -559,16 +575,28 @@ func _process(dt: float):
 	update_carry()
 	outpost_view.sync(sim, dt, paused)
 	outpost_audio.sync(sim, paused, dt)
-	var focus := xyz(sim.position) + Vector3(0, .95, 0)
+	# Preserve the close zoom; a short look-ahead includes roofs above the player.
+	var focus := xyz(sim.position) + Vector3(0, .95, -3.6)
 	var offset := Vector3(0, 6.8, 8.6)
+	if qa_mode and capture_scenario in ["shelter-detail","shelter-detail-rear"]:
+		focus=xyz(Vector2(-6.6,-4.8))+Vector3(0,1.45,0);camera.size=5.1;offset=Vector3(4,3.6,7)
+	elif qa_mode and capture_scenario == "furnace-detail":
+		focus=xyz(Vector2(0,.2))+Vector3(0,1.0,0);camera.size=3.8;offset=Vector3(4,3.6,7)
+	elif qa_mode and capture_scenario == "tree-detail":
+		focus=xyz(sim.resources[0].position)+Vector3(0,2.0,0);camera.size=5.6;offset=Vector3(4,3.6,7)
 	if qa_mode:
 		if capture_view == "side": offset = Vector3(8.6, 6.8, 0)
+		elif capture_view == "left": offset = Vector3(-8.6, 6.8, 0)
 		elif capture_view == "rear": offset = Vector3(0, 6.8, -8.6)
 		elif capture_view == "three-quarter": offset = Vector3(8.6, 6.8, 8.6)
 		elif capture_view == "overhead": offset = Vector3(0.001, 16.0, 0.001)
 	var desired := focus + offset
+	# Orthographic framing is unchanged when translated along the viewing ray.
+	# Moving the camera back prevents its near plane cutting foreground scenery.
+	desired += offset.normalized() * 18.0
 	camera.position = camera.position.lerp(desired, 1 - exp(-8.6 * dt)) if capture_frames > 0 else desired
 	camera.look_at(focus)
+	update_foreground_visibility(xyz(sim.position)+Vector3(0,.95,0), dt)
 	status.text = "HEAT %d   ·   %d carried" % [sim.level, sim.carried()]
 	var hour: float = sim.climate.hour()
 	climate_status.text = "Day %d · %02d:%02d · %s\nWarmth %d%%  ·  Health %d%%" % [sim.climate.day_number(), int(hour), int(floor(fposmod(hour,1.0)*60.0)), sim.climate.weather().name, roundi(sim.temperature), roundi(sim.health)]
@@ -590,6 +618,11 @@ func _process(dt: float):
 		get_viewport().get_texture().get_image().save_png(capture_directory.path_join("gameplay.png"))
 		scene_view.get_texture().get_image().save_png(capture_directory.path_join("native-scene.png"))
 		var report := {"renderer": RenderingServer.get_current_rendering_method(), "device": RenderingServer.get_video_adapter_name(), "window": [get_viewport().size.x, get_viewport().size.y], "internal_render": [scene_view.size.x, scene_view.size.y], "render_scale": scene_view.scaling_3d_scale, "render_review": render_review, "performance_certified": false, "characters": actors.keys(), "source_clips": {}}
+		report["environment_revision"] = ENVIRONMENT_REVISION
+		report["environment_kit"] = JSON.parse_string(FileAccess.get_file_as_string("res://assets/environment_v2/manifest.json"))
+		report["foreground_faded"] = foreground_faded
+		report["camera_near"] = camera.near
+		report["camera_focus_distance"] = camera.position.distance_to(focus)
 		report["npc_population"] = population_view.evidence()
 		report["outpost"] = outpost_view.evidence(sim)
 		report["capture_scenario"] = capture_scenario
@@ -713,3 +746,59 @@ func build_population_menu():
 			resource.disabled = allowed[index] != "gather")
 		resource.item_selected.connect(func(index):
 			sim.assign_job(id, allowed[job.selected], Simulation.KINDS[index]))
+
+func build_environment_dressing():
+	# Non-interactive set dressing avoids the existing opening objectives and lanes.
+	# Meshes are shared; low ground dressing is grouped into material batches.
+	var groups := {"snow_rock": [], "winter_shrub": []}
+	for i in range(56):
+		var a := i * 2.399963
+		var p := Vector2(cos(a) * (11.8 + fposmod(i * .831, 8.0)), sin(a) * (14.3 + fposmod(i * .713, 7.0)))
+		if absf(p.x) < 3.5: continue
+		var blocked := false
+		for r in sim.resources:
+			if p.distance_to(r.position) < 1.8: blocked = true
+		for x in [-6.6,6.6]:
+			if p.distance_to(Vector2(x,-4.8)) < 2.6: blocked = true
+		if blocked: continue
+		var asset := "snow_rock" if i % 3 == 0 else "winter_shrub"
+		var scale_factor := .60 + fposmod(i * .191,.85)
+		groups[asset].append(Transform3D(Basis(Vector3.UP, i * 1.71).scaled(Vector3.ONE * scale_factor), xyz(p)))
+	for asset in groups:
+		var path: String = "res://assets/environment_v2/" + asset + ".glb"
+		var mesh := Scenery.compile(load(path))
+		var transforms: Array[Transform3D] = []
+		transforms.assign(groups[asset])
+		Scenery.instances(mesh, transforms, world)
+	for p in [Vector2(-3.8,-.7),Vector2(3.8,-.7),Vector2(-3.5,-9.5),Vector2(3.5,-9.5)]:
+		model("world/lantern_post",world,xyz(p))
+		var light := OmniLight3D.new()
+		light.position = xyz(p) + Vector3(.33,1.43,0)
+		light.light_color = Color("ffc081")
+		light.light_energy = .72
+		light.omni_range = 3.3
+		light.shadow_enabled = false
+		world.add_child(light)
+
+func update_foreground_visibility(focus: Vector3, dt: float):
+	# Smooth opaque-dither cutaway for crowns hiding the lead; no transparent sorting.
+	# Gameplay nodes remain alive; visibility is not a change to resource state.
+	foreground_faded = 0
+	var view := camera.global_transform.affine_inverse()
+	var target := view * (focus + Vector3(0,.05,0))
+	for i in range(scenery_instances.size()):
+		var tree := scenery_instances[i]
+		if not is_instance_valid(tree): continue
+		var base: Vector3 = view * tree.global_position
+		var top: Vector3 = view * (tree.global_position + Vector3(0,scenery_heights[i] * tree.scale.y,0))
+		var depth_front := maxf(base.z,top.z) > target.z + 1.4
+		var covers := absf(base.x-target.x) < 2.0 and target.y > minf(base.y,top.y)-.65 and target.y < maxf(base.y,top.y)+.65
+		# A depleted resource stays hidden even when camera occlusion changes.
+		var depleted := false
+		for r in sim.resources:
+			if resource_visuals.get(r.id) == tree and r.units <= 0: depleted = true
+		var target_cutaway := 1.0 if depth_front and covers else 0.0
+		scenery_cutaway[i]=move_toward(scenery_cutaway[i],target_cutaway,clampf(dt,0,.10)*4.0)
+		tree.set_instance_shader_parameter("cutaway",scenery_cutaway[i])
+		tree.visible = not depleted
+		if scenery_cutaway[i] > .01: foreground_faded += 1
