@@ -1,6 +1,6 @@
 extends Control
 
-const ENVIRONMENT_REVISION := "0.4.4-winter-environment"
+const ENVIRONMENT_REVISION := "0.4.5-environment-candidate"
 var scenery_instances: Array[GeometryInstance3D] = []
 var scenery_origins: Array[Vector3] = []
 var scenery_heights: Array[float] = []
@@ -20,6 +20,8 @@ var environment: Environment
 var capture_scenario := "opening"
 const Saves = preload("res://scripts/save_store.gd")
 const Scenery = preload("res://scripts/scenery_batch.gd")
+const DeviceBenchmark = preload("res://scripts/device_benchmark.gd")
+var device_benchmark: PanelContainer
 const FrameRecord = preload("res://scripts/performance_record.gd")
 const CarryStack = preload("res://scripts/carry_stack.gd")
 const TransferFeedback = preload("res://scripts/transfer_feedback.gd")
@@ -482,6 +484,12 @@ func rebuild_menu():
 	var explanation := text_label("Move to act. Crew assignments never replace your movement control.",20,menu_column)
 	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	explanation.custom_minimum_size.y = 48
+	var benchmark_button := Button.new()
+	benchmark_button.text = "Measure native 4K frame timing · 30 minutes"
+	benchmark_button.custom_minimum_size.y = 64
+	benchmark_button.add_theme_font_size_override("font_size",22)
+	menu_column.add_child(benchmark_button)
+	benchmark_button.pressed.connect(start_device_benchmark)
 	var resume := Button.new()
 	resume.text = "Return to the outpost"
 	resume.custom_minimum_size.y = 64
@@ -690,7 +698,7 @@ func write_performance_record():
 		"renderer":RenderingServer.get_current_rendering_method(),
 		"gpu":RenderingServer.get_video_adapter_name(),
 		"render_scale":scene_view.scaling_3d_scale if is_instance_valid(scene_view) else 0.0,
-		"build":"0.4.4-environment-development", "review_resolution":render_review})
+		"build":"0.4.5-environment-development", "review_resolution":render_review})
 
 func layout_hud():
 	if not is_instance_valid(status): return
@@ -802,3 +810,10 @@ func update_foreground_visibility(focus: Vector3, dt: float):
 		tree.set_instance_shader_parameter("cutaway",scenery_cutaway[i])
 		tree.visible = not depleted
 		if scenery_cutaway[i] > .01: foreground_faded += 1
+
+func start_device_benchmark():
+	if is_instance_valid(device_benchmark): device_benchmark.queue_free()
+	if paused: toggle_menu()
+	device_benchmark = DeviceBenchmark.new()
+	add_child(device_benchmark)
+	device_benchmark.configure(self)

@@ -35,13 +35,17 @@ void fragment() {
  float compact=(1.0-smoothstep(.32,1.02,path+(broad-.5)*.29))*(1.0-snow_amount*.44);
  float ripple=sin(p.x*3.8+p.y*1.35+broad*3.0)*.5+.5;
  vec3 snow=mix(vec3(.72,.84,.91),vec3(.92,.96,.98),.38+broad*.32+n*.15+grain*.08);
- snow=mix(snow,vec3(.58,.73,.82),compact*.49);
+ snow=mix(snow,vec3(.58,.73,.82),compact*.58);
  float prints=max(boot_track(p,furnace_center,vec2(-6.6,-3.65)),boot_track(p,furnace_center,vec2(6.6,-3.65)));
  prints=max(prints,boot_track(p,vec2(0,12.2),furnace_center))*(1.0-snow_amount*.85);
- snow=mix(snow,vec3(.45,.59,.68),prints*.29);
- snow*=.973+.027*ripple;
+ snow=mix(snow,vec3(.45,.59,.68),prints*.40);
+ snow*=.963+.037*ripple;
  vec3 ground=mix(vec3(.29,.32,.32),vec3(.47,.43,.35),n*.58+broad*.35);
- float stones=smoothstep(.82,.93,noise(p*13.0));
+ // Rounded pebbles replace the old thresholded grid-noise cross artifacts.
+ vec2 cell=floor(p*7.0);vec2 local=fract(p*7.0)-.5;
+ vec2 jitter=vec2(hash(cell),hash(cell+vec2(13.7,9.2)))-.5;
+ float pebble=length((local-jitter*.42)*vec2(1.0,1.35));
+ float stones=(1.0-smoothstep(.09,.19,pebble))*step(.48,hash(cell+vec2(5.9,17.4)));
  ground=mix(ground,vec3(.56,.56,.50),stones*.36);
  ground=mix(ground,vec3(.19,.23,.26),(1.0-smoothstep(.8,2.0,dist))*heat_strength*.55);
  ALBEDO=mix(pow(snow,vec3(2.2)),pow(ground,vec3(2.2)),melt*.93);

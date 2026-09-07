@@ -32,3 +32,17 @@ Before substantial HAVENLINE work, read `Docs/AI/HavenlineProjectContext.md` and
 - Legacy cat saves migrate to foxes without losing identity, recruitment, assignments or partial rescue progress. The expanded encounter pool must remain restart-safe and fail-closed for missing art.
 - Show the first explicit progress bar in COMMENTARY BEFORE substantial tool work, then update it during work at verified milestones. A completed bar buried in the final answer alone does not meet the user's requirement. Include completed/total milestones, current stage, verified result and next action/blocker; never present iteration progress as whole-game completion.
 - C2-C4 rigging fixes and final review still stay last. This roster correction does not approve their existing rigs or the unfinished animal models.
+
+## Environment priority — 2026-09-07 user escalation
+
+The environment acceptance target is now **10/10**, not merely 9/10 or >9.
+Every required visual dimension and view must pass; no average can conceal a defect.
+Only fresh, source-bound actual renders can be reviewed. Preserve raw independent
+critic results, including failures; a successful review workflow is not a passing score.
+Native >=3840x2160, scale 1.0, sustained >=60 FPS remains a separate requirement.
+A screenshot, fixed-fps capture, Linux software-rendered benchmark, or in-game
+submission counter cannot certify physical Android presentation or thermals.
+Use a named target device and at least a 30-minute sustained run for device evidence.
+Environment quality and its measured rendering workload remain the highest priority.
+Characters 2–4 rigging fixes and final visual review are still deferred until last.
+Show truthful commentary progress bars during work, not only in the final response.

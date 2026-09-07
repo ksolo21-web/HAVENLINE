@@ -34,6 +34,10 @@ def texture(kind,base,size=256):
         for cx,cy in [(0.23,.34),(.72,.76)]:
             d=np.sqrt((xx-cx)**2+((yy-cy)*.21)**2)
             h+=.12*np.cos(d*250)*np.exp(-d*20)
+    elif kind=='endgrain':
+        radius=np.sqrt((xx-.5)**2+(yy-.5)**2)
+        warp=radius+.005*np.sin(np.arctan2(yy-.5,xx-.5)*7)
+        h=.53+.095*np.sin(warp*TAU*27)+.028*np.sin(warp*TAU*58)+fine*.04
     elif kind=='bark':
         h=.52+.12*np.sin((xx+.015*np.sin(yy*TAU*2))*TAU*17)+fine*.14
     elif kind=='stone':
@@ -50,7 +54,7 @@ def texture(kind,base,size=256):
     image=Image.fromarray((rgb*255).astype(np.uint8),'RGB')
     buf=io.BytesIO();image.save(buf,format='PNG',optimize=True)
     gy,gx=np.gradient(h)
-    strength=1.5 if kind in ['wood','bark','stone'] else .5
+    strength={'wood':4.5,'bark':6.0,'stone':1.5,'endgrain':3.0}.get(kind,.5)
     n=norm(np.stack([-gx*strength,-gy*strength,np.ones_like(h)],axis=-1))
     nb=io.BytesIO();Image.fromarray(((n*.5+.5)*255).astype(np.uint8)).save(nb,format='PNG')
     return buf.getvalue(),nb.getvalue()
@@ -58,11 +62,11 @@ def texture(kind,base,size=256):
 MATS={
  'timber':('wood','a66b3b',.92,0.,None),
  'timber_dark':('wood','624833',.94,0.,None),
- 'endgrain':('wood','bf935b',.94,0.,None),
+ 'endgrain':('endgrain','bf935b',.94,0.,None),
  'bark':('bark','6f513b',.98,0.,None),
  'snow':('snow','c7d9e3',.83,0.,None),
- 'needles':('needles','173e39',.95,0.,None),
- 'needles_light':('needles','2d6253',.95,0.,None),
+ 'needles':('needles','285848',.95,0.,None),
+ 'needles_light':('needles','457b61',.95,0.,None),
  'blue':('metal','315c7a',.43,.52,None),
  'orange':('metal','c07937',.5,.20,None),
  'iron':('metal','394c57',.42,.72,None),
@@ -225,42 +229,51 @@ class Model:
 
 
 def tree(variant):
- m=Model('pine_'+str(variant));rng=np.random.default_rng(1144+variant);height=[4.35,4.0,4.65][variant-1]
- p=[(math.sin(t*2)*.04,t*height,math.sin(t*3)*.04) for t in np.linspace(0,1,14)]
- m.tube(p,np.linspace(.16,.012,len(p)),'bark',12)
+ """Closed needle sprays with irregular snow pockets, not oval broad leaves."""
+ m=Model('pine_'+str(variant));rng=np.random.default_rng(1144+variant)
+ height=[4.35,4.0,4.65][variant-1]
+ p=[(math.sin(t*2)*.04,t*height,math.sin(t*3)*.04) for t in np.linspace(0,1,12)]
+ m.tube(p,np.linspace(.16,.010,len(p)),'bark',10)
  for i in range(5):
-   a=i*TAU/5+.2;m.tube([(math.sin(a)*d,.1*(1-d/.48),math.cos(a)*d) for d in np.linspace(.03,.48,5)],np.linspace(.105,.02,5),'bark',8)
- def tuft(start,end,width,thick,mat,phase):
-   axis=np.asarray(end)-start;direction=norm(axis);side=norm(np.cross(direction,[0,1,0]));up=np.cross(side,direction)
-   # Solid, tapering needle-cluster with separate lobed ridges; no flat foliage card.
-   def fn(u,v):
-     angle=u*TAU;shape=math.sin(math.pi*v)**.64
-     ridge=1+.09*math.cos(angle*4+phase)+.06*math.sin(v*13+phase)
-     return start+axis*v+side*math.sin(angle)*width*shape*ridge+up*(math.cos(angle)*thick*shape+.045*math.sin(v*math.pi))
-   m.patch(lambda u,v:fn(1-u,v),10,7,mat)
- for j in range(55):
-   t=j/55;h=.51+t*(height-.65)+rng.uniform(-.12,.12);angle=j*2.39996+rng.uniform(-.42,.42)
-   length=(1.39*(1-t)**.70+.09)*rng.uniform(.76,1.12);width=length*rng.uniform(.24,.35)
-   a=np.array([math.sin(angle),0,math.cos(angle)]);b=np.array([-math.cos(angle),0,math.sin(angle)])
-   bend=rng.uniform(.05,.19);phase=rng.uniform(0,TAU)
-   def spine(u):return a*(.025+length*u)+np.array([0,h-.23*length*u+.18*length*u*u,0])+b*math.sin(u*2.6)*bend
-   m.tube([spine(u) for u in np.linspace(0,1,5)],np.linspace(.041,.006,5),'bark',7)
-   for k in range(5):
-    u=.12+k*.155
-    for side in [-1,1]:
-     spread=width*(math.sin(math.pi*u)**.6)*rng.uniform(.85,1.18)
-     start=spine(u);end=spine(min(.99,u+.23))+b*side*spread+np.array([0,rng.uniform(-.03,.055),0])
-     tuft(start,end,spread*.36+.018,length*.048,'needles_light' if (j+k)%7==0 else 'needles',phase+k)
-   tuft(spine(.60),spine(1.015),length*.09,length*.051,'needles',phase)
-   # Irregular, fully rounded snow saddle nested in the foliage instead of a white tier.
-   if j%9!=3:
-    cover=rng.uniform(.80,.96);snow_width=width*rng.uniform(.80,.98)
-    def saddle(u,v):
-      along=.04+v*cover;angle=(1-u)*TAU;shape=math.sin(math.pi*v)**.63
-      width_variation=1+.16*math.sin(v*17+phase)
-      return spine(along)+b*math.sin(angle)*snow_width*shape*width_variation+np.array([0,.073+math.cos(angle)*length*.082*shape+.075*shape,0])
-    m.patch(saddle,16,12,'snow')
- m.features=['55 asymmetric branching boughs','605 solid tapered needle clusters','rounded irregular snow saddles','three distinct silhouettes','bark and needle normal maps','root flares']
+  a=i*TAU/5+.2;m.tube([(math.sin(a)*d,.1*(1-d/.48),math.cos(a)*d) for d in np.linspace(.03,.48,4)],np.linspace(.105,.02,4),'bark',7)
+ def spray(start,end,width,thick,mat,phase):
+  axis=np.asarray(end)-start;direction=norm(axis)
+  side=norm(np.cross(direction,[0,1,0]));up=np.cross(side,direction)
+  # Tapered three-dimensional lancelets. Finely serrated edges read as needles
+  # at close range, while retaining solid opaque geometry on mobile.
+  def fn(u,v):
+   angle=(1-u)*TAU
+   shape=math.sin(math.pi*v)**.72*(1-.28*v)
+   serration=1+.20*math.sin(v*math.pi*8+phase)**2
+   return start+axis*v+side*math.sin(angle)*width*shape*serration+up*(math.cos(angle)*thick*shape+.025*math.sin(v*math.pi))
+  m.patch(fn,6,8,mat)
+ boughs=43
+ for j in range(boughs):
+  t=j/boughs;h=.50+t*(height-.65)+rng.uniform(-.14,.14)
+  angle=j*2.39996+rng.uniform(-.43,.43)
+  length=(1.39*(1-t)**.70+.09)*rng.uniform(.78,1.13)
+  width=length*rng.uniform(.24,.32)
+  a=np.array([math.sin(angle),0,math.cos(angle)]);b=np.array([-math.cos(angle),0,math.sin(angle)])
+  bend=rng.uniform(.045,.17);phase=rng.uniform(0,TAU)
+  def spine(u):return a*(.025+length*u)+np.array([0,h-.25*length*u+.19*length*u*u,0])+b*math.sin(u*2.6)*bend
+  m.tube([spine(u) for u in np.linspace(0,1,4)],np.linspace(.038,.004,4),'bark',6)
+  for k in range(7):
+   u=.10+k*.115
+   for side in [-1,1]:
+    spread=width*(math.sin(math.pi*u)**.6)*rng.uniform(.84,1.14)
+    start=spine(u);end=spine(min(1.015,u+.27))+b*side*spread+np.array([0,rng.uniform(-.04,.06),0])
+    spray(start,end,.036+spread*.10,length*.027,'needles_light' if (j+k)%5==0 else 'needles',phase+k)
+  spray(spine(.65),spine(1.04),length*.049,length*.031,'needles_light',phase)
+  # Snow follows the spine. Narrow, uneven pockets leave clear needle silhouettes;
+  # no broad continuous white shelves hiding the entire crown.
+  if j%8!=3:
+   cover=rng.uniform(.70,.94);sw=width*rng.uniform(.66,.86)
+   def saddle(u,v):
+    along=.11+v*cover;angle=(1-u)*TAU;shape=math.sin(math.pi*v)**.68
+    variation=1+.17*math.sin(v*15+phase)
+    return spine(along)+b*math.sin(angle)*sw*shape*variation+np.array([0,.036+math.cos(angle)*length*.058*shape+.046*shape,0])
+   m.patch(saddle,12,10,'snow')
+ m.features=['43 irregular structural boughs','645 closed serrated needle sprays','narrow curved snow pockets','three distinct silhouettes','bark and needle normal maps','root flares','imported screen-space LODs retained at runtime']
  return m
 
 def window(m,c,w=.66,h=.72):
@@ -318,6 +331,15 @@ def shelter():
    m.box((x,(1.91+top)/2,z),(.17,top-1.91,.14),'timber',.015)
   for sign in [-1,1]:m.tube([(0,2.99,z+.04),(sign*1.40,1.91,z+.04)],[.075,.075],'timber_dark',10)
  window(m,(0,2.35,1.10),.44,.40)
+ # Real side elevations: rotate a detailed window assembly onto each log wall.
+ for side in [-1,1]:
+  detail=Model('side_window');window(detail,(0,1.20,0),.52,.62)
+  theta=side*math.pi/2;co,si=math.cos(theta),math.sin(theta)
+  rotation=np.array([[co,0,si],[0,1,0],[-si,0,co]])
+  shift=np.array([side*1.205,0,-.16])
+  for mat,parts in detail.parts.items():
+   for v,f,n,uv in parts:m.add(v@rotation.T+shift,f,mat,n@rotation.T,uv)
+
  # Curved blue roof; thick continuous scalloped snow sheet, curled eaves.
  def roof(u,v,raised=0):
   x=(u-.5)*3.18;z=(v-.5)*2.95
@@ -344,7 +366,7 @@ def shelter():
  m.blob((.67,3.54,-.63),(.29,.09,.27),'snow',6,16,8,.035)
  lantern(m,(1.03,1.73,1.31),.85)
  m.tube([(1.03,1.97,1.30),(1.03,2.04,1.09)],.025,'iron',8)
- m.features=['rounded interlocking timber walls','five-panel blue door','glazed mullioned windows','continuous curved snowy roof','staggered masonry chimney','forged hinges and lantern','front and rear geometry']
+ m.features=['rounded interlocking timber walls','five-panel blue door','glazed mullioned windows','continuous curved snowy roof','staggered masonry chimney','forged hinges and lantern','front rear and detailed side elevations']
  return m
 
 def furnace():
@@ -391,7 +413,7 @@ def storage():
  m.patch(lambda u,v:((u-.5)*1.91,1.25+.10*math.sin(u*math.pi),(v-.5)*1.39),16,10,'blue')
  def snowblanket(u,v):
   a=u*TAU;b=v*math.pi;d=math.sin(b)**.37
-  x=.98*math.sin(a)*d;z=.74*math.cos(a)*d
+  x=.97*math.copysign(abs(math.sin(a))**.50,math.sin(a))*d;z=.72*math.copysign(abs(math.cos(a))**.50,math.cos(a))*d
   return (x,1.35+math.cos(b)*.105+.026*math.sin(x*7+z*3),z)
  m.patch(snowblanket,40,14,'snow')
  m.features=['forged blue rack','bark and cut-end logs','separate snow cap','rounded frame']
@@ -495,6 +517,6 @@ def dressing():
 
 if __name__=='__main__':
  models=[tree(i) for i in (1,2,3)]+[shelter(),furnace(),storage(),barricade(),log()]+[rocks(k) for k in ['stone','metal','fuel']]+dressing()
- manifest={'schema':1,'kit':'Havenline winter environment 0.4.4','source':'tools/havenline/bake_environment.py','deterministic':True,'original_glbs_modified':False,'production_visual_approval':False,'assets':[m.export() for m in models]}
+ manifest={'schema':1,'kit':'Havenline winter environment 0.4.5','source':'tools/havenline/bake_environment.py','deterministic':True,'original_glbs_modified':False,'production_visual_approval':False,'assets':[m.export() for m in models]}
  (OUT/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
  print(json.dumps({'assets':len(models),'triangles':sum(a['triangles'] for a in manifest['assets']),'bytes':sum(a['bytes'] for a in manifest['assets']),'output':str(OUT)},indent=2))

@@ -61,7 +61,7 @@ func sync(sim, dt: float, paused: bool):
 	var dusk:=1.0-absf(daylight*2.0-1.0)
 	environment.background_color=Color("14243e").lerp(Color("89b9d5"),daylight)
 	environment.ambient_light_color=Color("8ea6d4").lerp(Color("c9e0f1"),daylight)
-	environment.ambient_light_energy=lerpf(.19,.22,daylight)
+	environment.ambient_light_energy=lerpf(.19,.38,daylight)
 	environment.fog_light_color=Color("283d61").lerp(Color("bbd8e8"),daylight)
 	# Depth fog is anchored beyond the near gameplay plane, not to the old camera origin.
 	environment.fog_mode=Environment.FOG_MODE_DEPTH
@@ -73,7 +73,7 @@ func sync(sim, dt: float, paused: bool):
 	sunlight.light_color=Color("97b7ed").lerp(Color("fff0d6"),daylight).lerp(Color("ffb076"),dusk*.5)
 	sunlight.rotation_degrees=Vector3(lerpf(-28.0,-56.0,daylight),-32.0+sin(sim.climate.hour()*PI/12.)*18.,0)
 	heat_light.omni_range=sim.warmth()+1.5
-	heat_light.light_energy=(2.1+sim.level*.6+sin(sim.elapsed*6.3)*.12)*target_heat
+	heat_light.light_energy=(2.1+sim.level*.6+sin(sim.elapsed*6.3)*.12)*target_heat*lerpf(1.0,.62,daylight)
 	# Only the supplied furnace mesh is resized; no invisible upgrade/currency.
 	var target_scale:=Vector3.ONE*(1.0+float(sim.level-1)*.085)
 	if not paused: furnace_node.scale=furnace_node.scale.lerp(target_scale,1.0-exp(-dt*4.0))
