@@ -38,7 +38,7 @@ func _initialize():
 	check("four reusable customer bases", p.catalog.customer_template_pool.size() == 4)
 	check("two male and two female customer bases", p.catalog.customer_template_pool.filter(func(k): return p.catalog.templates[k].gender == "male").size() == 2 and p.catalog.customer_template_pool.filter(func(k): return p.catalog.templates[k].gender == "female").size() == 2)
 	check("separate male/female survivor pool", p.catalog.survivor_template_pool == ["survivor_male_01", "survivor_female_01"])
-	check("pet archetypes are separate from human crew", p.catalog.pet_template_pool == ["pet_dog_01", "pet_cat_01"])
+	check("pet archetypes are separate from human crew", p.catalog.pet_template_pool == ["pet_dog_01", "pet_lion_01", "pet_tiger_01", "pet_bear_01", "pet_wolf_01", "pet_owl_01", "pet_fox_01"])
 	var paths: Array = []
 	for spec in p.catalog.templates.values(): paths.append(spec.model)
 	var distinct := true
@@ -215,7 +215,67 @@ func _initialize():
 	view.configure(Sim.new(), Callable())
 	check("missing art produces no primitive fallback nodes", view.nodes.is_empty() and view.scenes.is_empty() and view.get_child_count() == 0)
 	check("missing art explicitly blocks runtime rescue", not view.sim.rescue_enabled and view.sim.population.presentation_required)
-	check("missing model evidence lists all eight required templates", view.evidence().missing_templates.size() == 8 and not view.evidence().final_art_approved)
+	check("missing model evidence lists all thirteen required templates", view.evidence().missing_templates.size() == 13 and not view.evidence().final_art_approved)
 	view.free()
+	# Roster correction: exact user species, no cats, backward-compatible saves.
+	p = Pop.new()
+	check("domestic cats cannot allocate identities or spawn", p.make_person("pet_cat_01", Vector2.ZERO).is_empty() and p.add_encounter("pet_cat_01", Vector2.ZERO) == -1 and p.next_id == 100)
+	check("seven animal references are distinct", p.catalog.pet_template_pool.size() == 7 and p.catalog.pet_template_pool.all(func(k): return p.catalog.templates[k].reference_id == k))
+	check("owl has an avian rather than quadruped production profile", p.catalog.templates.pet_owl_01.locomotion_profile == "avian")
+	for template in p.catalog.pet_template_pool:
+		var actor: Dictionary = p.make_person(template, Vector2(8, 8))
+		p.pets.append(actor)
+		check(template + " remains a pet with no human labor", not p.assign_job(actor.id, "gather") and p.assign_job(actor.id, "scout") and actor.cargo == 0)
+	p2 = Pop.new()
+	check("all seven pet species survive a JSON round trip", p2.restore(JSON.parse_string(JSON.stringify(p.snapshot()))) and p2.pets.map(func(x): return x.species) == ["dog", "lion", "tiger", "bear", "wolf", "owl", "fox"])
+	s = ready_sim(); s.rescued = true
+	s.companions.append({"id": 5, "position": Vector2.ZERO, "job": "follow", "cooldown": 0.0})
+	frames(s, 0.01)
+	check("all nine encounter slots seed in logical tests", s.seeded_sites.size() == 9 and s.encounter_sites_seeded and s.population.encounters.size() == 9)
+	frames(s, 0.03)
+	check("expanded encounter seeding cannot duplicate actors", s.population.encounters.size() == 9)
+	copy = Sim.new()
+	check("nine-site state survives JSON round trip", copy.restore(JSON.parse_string(JSON.stringify(s.snapshot()))) and copy.seeded_sites.size() == 9 and copy.encounter_sites_seeded)
+	# Build a true old four-site save including an in-progress cat rescue.
+	state = s.snapshot()
+	state.erase("encounter_sites_revision")
+	state.population.schema = 1
+	state.population.encounters = state.population.encounters.filter(func(x): return x.template in ["survivor_male_01", "survivor_female_01", "pet_dog_01", "pet_fox_01"])
+	state.seeded_sites = {}
+	var cat_id := -1
+	for actor in state.population.encounters:
+		if actor.template == "pet_fox_01":
+			actor.template = "pet_cat_01"; actor.species = "cat"; cat_id = actor.id
+		state.seeded_sites[actor.template] = actor.id
+	state.population.rescue_clocks[str(cat_id)] = 1.1
+	var untouched: Dictionary = state.duplicate(true)
+	copy = Sim.new()
+	check("legacy cat and seeded slot migrate to fox without mutating input", copy.restore(JSON.parse_string(JSON.stringify(state))) and state == untouched and copy.seeded_sites.has("pet_fox_01") and not copy.seeded_sites.has("pet_cat_01"))
+	check("legacy pet identity and partial rescue are retained", copy.population.encounters.any(func(x): return x.id == cat_id and x.template == "pet_fox_01" and x.species == "fox") and copy.population.rescue_clocks.get(str(cat_id)) == 1.1)
+	check("old completed seeding reopens only the five new slots", copy.seeded_sites.size() == 4 and not copy.encounter_sites_seeded)
+	frames(copy, 0.01)
+	check("legacy world gets five new sites without duplicate dog or fox", copy.seeded_sites.size() == 9 and copy.population.encounters.size() == 9 and copy.population.encounters.filter(func(x): return x.template == "pet_fox_01").size() == 1)
+	var again = Sim.new()
+	check("migrated current state is restart-safe", again.restore(copy.snapshot()) and again.population.snapshot().schema == 2 and again.seeded_sites.size() == 9)
+	bad = untouched.duplicate(true); bad.population.schema = 2
+	reject(copy, bad, "current-schema cat injection is rejected without live-state mutation")
+	bad = untouched.duplicate(true)
+	for actor in bad.population.encounters:
+		if actor.template == "pet_cat_01": actor.species = "dog"
+	reject(copy, bad, "legacy migration cannot conceal a tampered species")
+	bad = copy.snapshot(); bad.seeded_sites["pet_cat_01"] = cat_id
+	reject(copy, bad, "retired cat site rejected in current saves")
+	bad = copy.snapshot(); bad.encounter_sites_revision = 99
+	reject(copy, bad, "unknown encounter revision rejected transactionally")
+	for version in [0, 1.5, 3, "2", true]:
+		bad = copy.snapshot(); bad.population.schema = version
+		reject(copy, bad, "invalid population schema rejected: " + str(version))
+		bad = copy.snapshot(); bad.encounter_sites_revision = version
+		reject(copy, bad, "invalid encounter revision rejected: " + str(version))
+	# Migration also covers already recruited pets and preserves their work state.
+	p = Pop.new(); a = p.make_person("pet_fox_01", Vector2(6, 7)); a.job = "scout"; a.cooldown = 2.0; p.pets.append(a)
+	state = p.snapshot(); state.schema = 1; state.pets[0].template = "pet_cat_01"; state.pets[0].species = "cat"
+	p2 = Pop.new()
+	check("recruited legacy pet keeps name, identity, job and alert cooldown", p2.restore(JSON.parse_string(JSON.stringify(state))) and p2.pets[0].id == a.id and p2.pets[0].name == a.name and p2.pets[0].job == "scout" and p2.pets[0].cooldown == 2.0 and p2.pets[0].species == "fox")
 	print(JSON.stringify({"suite": "population", "passed": failures.is_empty(), "checks": checks, "failures": failures}))
 	quit(0 if failures.is_empty() else 1)

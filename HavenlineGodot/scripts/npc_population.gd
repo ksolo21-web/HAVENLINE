@@ -236,7 +236,7 @@ func step_pet(sim, p: Dictionary, slot: int, dt: float):
 	# Pets are not human workers: no axes, mining, construction or ghost cargo.
 
 func snapshot() -> Dictionary:
-	var data := {"schema": 1, "seed": seed_value, "next_id": next_id, "credits": credits,
+	var data := {"schema": 2, "seed": seed_value, "next_id": next_id, "credits": credits,
 		"customer_clock": customer_clock, "service_clock": service_clock, "service_id": service_id,
 		"rescue_clocks": rescue_clocks.duplicate(), "arrivals": arrivals}
 	for group in ["customers", "encounters", "recruits", "pets"]:
@@ -263,7 +263,8 @@ static func clocks(value) -> bool:
 
 func restore(data: Dictionary) -> bool:
 	# Validate every nested object before mutating live state.
-	if data.get("schema") != 1: return false
+	# JSON numbers decode as floats; validate integral value, not Variant type membership.
+	if not count(data.get("schema"), 2) or int(data.schema) < 1: return false
 	for key in ["seed", "next_id", "credits", "arrivals"]:
 		if not count(data.get(key)): return false
 	if data.next_id < 100: return false
@@ -279,7 +280,13 @@ func restore(data: Dictionary) -> bool:
 		decoded[group] = []
 		for person in data[group]:
 			if not person is Dictionary: return false
-			var c: Dictionary = person
+			var c: Dictionary = person.duplicate(true)
+			# Only the retired schema-1 cat is migrated. Never repair tampered
+			# role/species data or mutate the caller's save while validating.
+			if c.get("template") == "pet_cat_01":
+				if data.schema != 1 or c.get("role") != "pet" or c.get("species") != "cat" or c.get("gender") != "unspecified": return false
+				c.template = "pet_fox_01"
+				c.species = "fox"
 			if not count(c.get("id")) or c.id < 100 or c.id >= data.next_id or int(c.id) in ids: return false
 			ids.append(int(c.id))
 			if not c.get("template") is String or not catalog.templates.has(c.template): return false

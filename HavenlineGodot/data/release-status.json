@@ -31,9 +31,21 @@
     "Review presentation gates block invisible restored threats and additional NPC work; complete rendered rescue/wolf encounters remain unfinished.",
     "Timed crew jobs are implemented; full production chains and connected biomes are not complete.",
     "No production export preset or permanent production signing configuration is provided until the complete release gate passes.",
-    "0.4.2 adds tested customer, survivor and pet state/behavior but all eight new authored model slots remain empty. Do not label these slots finished NPCs.",
+    "The animal-roster correction requires thirteen authored NPC models: four customers, two additional human survivors, and seven animal species. All thirteen model slots remain empty; reference art and logical tests are not finished NPCs.",
     "C2-C4 rigging fixes and final rig review are deferred to the final character-polish stage by explicit user direction; source GLBs are unchanged.",
     "Native resolution policy now enforces both width >=3840 and height >=2160, including ultrawide layouts. This is not physical 4K/60 certification.",
     "Trade tuning and supply tokens are provisional game design. No real-money system is added."
-  ]
+  ],
+  "animal_roster_correction": {
+    "species": ["dog", "lion", "tiger", "bear", "wolf", "owl", "fox"],
+    "domestic_cats_allowed": false,
+    "required_npc_models": 13,
+    "delivered_npc_models": 0,
+    "legacy_cat_migration": "fox; preserve identity and saved progress",
+    "validation_status": "234_engine_checks_passed",
+    "apk_status": "not_rebuilt_for_this_correction",
+    "reference_images_are_game_assets": false,
+    "independent_critic_executed": false,
+    "visual_quality_score": null
+  }
 }

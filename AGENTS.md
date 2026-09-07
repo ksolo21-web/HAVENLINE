@@ -24,3 +24,11 @@ Before substantial HAVENLINE work, read `Docs/AI/HavenlineProjectContext.md` and
 - Customers are a distinct reusable pool (two male and two female model slots). Additional male/female survivors and pet companions have separate models and persistent identities, not copies of the custom crew.
 - Missing authored NPC models must never spawn invisible working actors or primitive stand-ins. `data/npc-catalog.json` tracks actual model readiness separately from gameplay tests.
 - Use the saved planner/critic workflow and show truthful milestone bars during substantial work. Passing requires strictly >9.0 AND every mandatory check; internal review and automated tests are not independent critic execution.
+
+## Animal roster and progress-display correction
+
+- Animal companions are exactly dogs, lions, tigers, bears, wolves, owls and foxes. No domestic cats. The retired cat ID exists only in explicit legacy-save migration and rejection tests.
+- Use the seven user-provided references registered in `Docs/Art/AnimalCompanions/reference-register.json`; do not replace their premium stylized expedition look with primitive stand-ins. Reference images are not rigged models or in-game render evidence.
+- Legacy cat saves migrate to foxes without losing identity, recruitment, assignments or partial rescue progress. The expanded encounter pool must remain restart-safe and fail-closed for missing art.
+- Show the first explicit progress bar in COMMENTARY BEFORE substantial tool work, then update it during work at verified milestones. A completed bar buried in the final answer alone does not meet the user's requirement. Include completed/total milestones, current stage, verified result and next action/blocker; never present iteration progress as whole-game completion.
+- C2-C4 rigging fixes and final review still stay last. This roster correction does not approve their existing rigs or the unfinished animal models.
