@@ -1,0 +1,30 @@
+{
+  "schema": 1,
+  "product": "HAVENLINE",
+  "engine": "Godot 4.7.2",
+  "status": "development_only",
+  "required": {
+    "native_arm64_build": "PASS",
+    "android_install_launch_lifecycle": "UNTESTED",
+    "opening_gameplay_rendered_end_to_end": "FAIL",
+    "four_character_identities_human_approved": "UNTESTED",
+    "all_character_motion_sets": "FAIL",
+    "whole_rig_critic_at_least_9": "UNTESTED",
+    "non_primitive_environment_human_approved": "FAIL",
+    "wolf_and_additional_survivor_art": "FAIL",
+    "production_chains_and_worker_jobs": "FAIL",
+    "ten_connected_biomes_and_transport": "FAIL",
+    "weather_and_day_night": "FAIL",
+    "google_identity_and_cloud_save": "FAIL",
+    "safe_area_and_fold_lifecycle": "UNTESTED",
+    "sustained_physical_4k_60": "UNTESTED",
+    "audio_and_feedback_complete": "FAIL"
+  },
+  "notes": [
+    "Passing source tests or importing GLBs is not production approval.",
+    "C1 source has idle/run/walk; C2-C4 recovered V7 sources have no clips.",
+    "Newly authored world meshes are unapproved visual candidates.",
+    "Native scene review stops before wolf pressure; the deterministic simulation includes wave/defense logic.",
+    "No production export preset is provided until the complete release gate passes."
+  ]
+}
