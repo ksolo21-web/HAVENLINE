@@ -18,8 +18,18 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Install image decoder
-        run: python3 -m pip install 'pillow==11.3.0'
+      - name: Install image decoder and pin the verified CPU release
+        run: |
+          python3 -m pip install 'pillow==11.3.0'
+          python3 - <<'PY'
+          import pathlib
+          p=pathlib.Path('tools/havenline/run_environment_vision_critic.py')
+          s=p.read_text()
+          # v0.4.0 contains only nightly-tag.txt; its official release links b10809.
+          assert 'releases/latest' in s
+          s=s.replace('releases/latest','releases/tags/b10809')
+          p.write_text(s)
+          PY
       - name: Review exact revised screenshots with a separate vision model
         run: python3 -u tools/havenline/run_environment_vision_critic.py
       - uses: actions/upload-artifact@v4
