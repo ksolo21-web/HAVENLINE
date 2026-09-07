@@ -1,0 +1,70 @@
+name: Havenline Mobile color calibration
+on:
+  push:
+    branches: ['codex/havenline-environment-calibration']
+    paths: ['.github/workflows/havenline-mobile-color-calibration.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  compare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          run-id: 34148198845
+          name: havenline-pinned-environment-engine
+          path: ${{ runner.temp }}/engine
+      - name: Verify engine and import preserved source
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/engine"
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -
+          unzip -q engine.zip
+          chmod +x Godot_v4.7.2-stable_linux.x86_64
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          cd "$GITHUB_WORKSPACE"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb mesa-vulkan-drivers
+          mkdir -p calibration
+          python3 tools/havenline/bake_outpost_audio.py
+          timeout 180 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --path HavenlineGodot --import --quit > calibration/import.log 2>&1
+          timeout 120 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > calibration/motion-bake.log 2>&1
+      - name: Render actual daylight and night comparisons, no post-processing
+        run: |
+          set -euo pipefail
+          cp HavenlineGodot/scripts/main.gd calibration/original-main.gd
+          for variant in linear aces; do
+            VARIANT="$variant" python3 - <<'PY'
+          import pathlib,os,json
+          v=os.environ['VARIANT'];text=pathlib.Path('calibration/original-main.gd').read_text()
+          mapper='LINEAR' if v=='linear' else 'ACES';exposure=1.0 if v=='linear' else 1.6
+          text=text.replace('Environment.TONE_MAPPER_FILMIC','Environment.TONE_MAPPER_'+mapper)
+          text=text.replace('environment.tonemap_exposure = 0.9','environment.tonemap_exposure = '+str(exposure))
+          pathlib.Path('HavenlineGodot/scripts/main.gd').write_text(text)
+          pathlib.Path('calibration/'+v+'-settings.json').write_text(json.dumps({'tone_mapper':mapper,'exposure':exposure,'purpose':'actual Mobile preview; not final game changes or visual approval'}))
+          PY
+            for scenario in opening night; do
+              dir="calibration/$variant-$scenario"
+              mkdir -p "$dir"
+              timeout 180 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy --fixed-fps 60 -- --render-review --scenario="$scenario" --view=front --capture="$PWD/$dir" > "$dir/run.log" 2>&1
+            done
+          done
+          if grep -RE 'SCRIPT ERROR|Parse Error|ERROR:' calibration/*/run.log; then exit 1; fi
+          python3 - <<'PY'
+          import pathlib,json
+          assert len(list(pathlib.Path('calibration').glob('*/native-scene.png')))==4
+          for p in pathlib.Path('calibration').glob('*/render-evidence.json'):
+              r=json.loads(p.read_text());assert r['renderer']=='mobile' and r['render_scale']==1.0
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-mobile-calibration
+          path: calibration/
+          retention-days: 14
+          if-no-files-found: error
