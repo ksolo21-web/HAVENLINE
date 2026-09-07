@@ -1,0 +1,107 @@
+name: HAVENLINE Apply and Validate Outpost 0.4.3
+on:
+  push:
+    branches: ['codex/havenline-godot-android']
+    paths: ['.github/workflows/havenline-outpost-update.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: havenline-outpost-source-update
+  cancel-in-progress: false
+jobs:
+  apply-verified-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/havenline-godot-android
+          fetch-depth: 1
+          lfs: false
+      - name: Validate exact source transport and apply without overwriting divergent work
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          python3 - <<'PY'
+          import base64,gzip,hashlib,json,pathlib,subprocess
+          root=pathlib.Path('tools/havenline/updates')
+          pieces=[]
+          for i in range(1,4):
+              p=root/f'outpost-043.part{i}.b64'
+              b=p.read_bytes()
+              print(p, len(b), hashlib.sha256(b).hexdigest())
+              pieces.append(b.decode().strip())
+          compressed=base64.b64decode(''.join(pieces),validate=True)
+          digest=hashlib.sha256(compressed).hexdigest()
+          print('compressed_sha256',digest)
+          assert digest=='cef0c14ce10be417b671dda079c04b6bcaec7741b0edf523174f4e1306d31230'
+          data=json.loads(gzip.decompress(compressed))
+          entries=data['files']
+          assert len(entries)==21 and len({e['path'] for e in entries})==21
+          for e in entries:
+              p=pathlib.Path(e['path'])
+              assert not p.is_absolute() and '..' not in p.parts
+              assert str(p).startswith(('HavenlineGodot/','tools/havenline/','Docs/AI/'))
+          already=all(pathlib.Path(e['path']).exists() and hashlib.sha256(pathlib.Path(e['path']).read_bytes()).hexdigest()==e['sha256'] for e in entries)
+          if not already:
+              for e in entries:
+                  p=pathlib.Path(e['path'])
+                  actual=hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else None
+                  assert actual==e['base_sha256'], f'Divergent source, not overwritten: {p}: {actual}'
+              patch=pathlib.Path('/tmp/outpost-043.patch')
+              patch.write_text(data['patch'])
+              subprocess.run(['git','apply','--check','--index',str(patch)],check=True)
+              subprocess.run(['git','apply','--index',str(patch)],check=True)
+          for e in entries:
+              assert hashlib.sha256(pathlib.Path(e['path']).read_bytes()).hexdigest()==e['sha256'], e['path']
+          pathlib.Path('artifacts/applied-source-manifest.json').write_text(json.dumps({'compressed_sha256':digest,'already_applied':already,'files':entries},indent=2)+'\n')
+          PY
+          if ! git diff --cached --quiet; then
+            git -c user.name='Havenline Native Build' -c user.email='havenline-build@users.noreply.github.com' commit -m 'Build saved weather, daylight, furnace thaw, action feedback and original outpost audio; preserve custom rigs'
+          fi
+          echo "BUILT_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Install the checksum-pinned native engine
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/godot"
+          cd "$RUNNER_TEMP/godot"
+          base='https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable'
+          curl -fL --retry 3 "$base/Godot_v4.7.2-stable_linux.x86_64.zip" -o editor.zip
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  editor.zip' | sha512sum -c -
+          unzip -q editor.zip
+          chmod +x Godot_v4.7.2-stable_linux.x86_64
+          echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
+      - name: Run real engine tests before source publication
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/asset_audit.py --output artifacts/assets.json
+          python3 tools/havenline/bake_outpost_audio.py | tee artifacts/audio-bake.json
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit 2>&1 | tee artifacts/import.log
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd 2>&1 | tee artifacts/motion-bake.log
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime; do
+            timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "artifacts/$suite.log"
+          done
+          timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --quit-after 5 2>&1 | tee artifacts/launch.log
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' artifacts/*.log; then exit 1; fi
+          python3 tools/havenline/summarize_evidence.py --artifacts artifacts
+      - name: Publish tested source without a force push
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push origin HEAD:codex/havenline-godot-android
+          python3 - <<'PY'
+          import json,os,pathlib
+          report={'built_source_commit':os.environ['BUILT_COMMIT'],'workflow_commit':os.environ['GITHUB_SHA'],'source_published':True,'production_approved':False,'apk_built_by_this_workflow':False,'independent_critic_executed':False,'custom_rig_changes':False}
+          pathlib.Path('artifacts/source-publication.json').write_text(json.dumps(report,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HAVENLINE-outpost-source-validation-${{ github.sha }}
+          path: artifacts/
+          retention-days: 30
+          if-no-files-found: error
