@@ -160,8 +160,8 @@ func build_environment():
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	environment.ambient_light_color = Color("c1d9f0")
 	environment.ambient_light_energy = 0.38
-	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	environment.tonemap_exposure = 0.9
+	environment.tonemap_mode = Environment.TONE_MAPPER_ACES
+	environment.tonemap_exposure = 1.6
 	# Reserve highlight headroom instead of clipping every sunlit snow surface.
 	environment.tonemap_white = 6.0
 	environment.fog_enabled = true
@@ -690,7 +690,7 @@ func write_performance_record():
 		"renderer":RenderingServer.get_current_rendering_method(),
 		"gpu":RenderingServer.get_video_adapter_name(),
 		"render_scale":scene_view.scaling_3d_scale if is_instance_valid(scene_view) else 0.0,
-		"build":"0.4.3-outpost-development", "review_resolution":render_review})
+		"build":"0.4.4-environment-development", "review_resolution":render_review})
 
 func layout_hud():
 	if not is_instance_valid(status): return
