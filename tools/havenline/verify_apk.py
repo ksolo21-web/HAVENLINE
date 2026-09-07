@@ -85,8 +85,14 @@ def audio_import_targets(archive: ZipFile) -> dict[str, str]:
         if names.count(record) != 1:
             continue
         try:
-            config = configparser.ConfigParser(interpolation=None, strict=True)
-            config.read_string(archive.read(record).decode('utf-8'))
+            # The actual Android APK contains NUL-terminated .import text.
+            # Strip terminators only; an embedded NUL remains an invalid record.
+            text = archive.read(record).decode('utf-8').rstrip('\x00')
+            if '\x00' in text:
+                continue
+            config = configparser.ConfigParser(interpolation=None, strict=True,
+                                               inline_comment_prefixes=(';',))
+            config.read_string(text)
             # Android exports strip the editor-only type field; validate it when present.
             if config.has_option('remap', 'type') and json.loads(config.get('remap', 'type')) != 'AudioStreamWAV':
                 continue
@@ -126,6 +132,13 @@ def self_test() -> dict:
     tests = {
         'valid_import_resolves': 'wind' in fixture(valid),
         'stripped_export_import_resolves': 'wind' in fixture(valid.replace('type="AudioStreamWAV"\n', '')),
+        'nul_terminated_export_resolves': 'wind' in fixture(valid + '\x00'),
+        'multiple_terminators_resolve': 'wind' in fixture(valid + '\x00\x00'),
+        'stripped_nul_terminated_export_resolves': 'wind' in fixture(valid.replace('type="AudioStreamWAV"\n', '') + '\x00'),
+        'embedded_nul_rejected': not fixture(valid.replace('wind.wav', 'wind\x00.wav')),
+        'commented_scalar_resolves': 'wind' in fixture(valid.replace('.sample"', '.sample" ; imported audio')),
+        'noncomment_trailing_junk_rejected': not fixture(valid.replace('.sample"', '.sample" garbage')),
+        'duplicate_path_rejected': not fixture(valid + 'path="res://.godot/imported/wind.wav-test.sample"\n'),
         'missing_record_rejected': not fixture(None),
         'missing_sample_rejected': not fixture(valid, None),
         'empty_sample_rejected': not fixture(valid, b''),
