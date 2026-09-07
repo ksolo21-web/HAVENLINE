@@ -23,6 +23,21 @@ jobs:
       - uses: actions/checkout@v4
         with:
           lfs: false
+      - name: Archive exact native source for reproducible continuation
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/havenline-source"
+          git archive --format=zip HEAD HavenlineGodot tools/havenline Docs/AI AGENTS.md README.md .github/workflows/havenline-godot-android.yml > "$RUNNER_TEMP/havenline-source/HAVENLINE-native-source.zip"
+          git rev-parse HEAD > "$RUNNER_TEMP/havenline-source/COMMIT.txt"
+          cd "$RUNNER_TEMP/havenline-source"
+          sha256sum HAVENLINE-native-source.zip > SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HAVENLINE-native-source-${{ github.sha }}
+          path: ${{ runner.temp }}/havenline-source/
+          retention-days: 30
+          if-no-files-found: error
       - uses: actions/setup-java@v4
         with:
           distribution: temurin
@@ -45,6 +60,12 @@ jobs:
           unzip -j -q templates.tpz templates/android_debug.apk templates/android_release.apk templates/version.txt -d "$HOME/.local/share/godot/export_templates/4.7.2.stable"
           rm editor.zip templates.tpz
           sdkmanager 'platform-tools' 'build-tools;35.0.1'
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HAVENLINE-pinned-Godot-4.7.2-${{ github.run_id }}
+          path: ${{ runner.temp }}/godot/Godot_v4.7.2-stable_linux.x86_64
+          retention-days: 7
+          if-no-files-found: error
       - name: Verify supplied assets and run real Godot tests
         shell: bash
         run: |
