@@ -2,6 +2,10 @@ extends Control
 
 const Simulation = preload("res://scripts/simulation.gd")
 const Saves = preload("res://scripts/save_store.gd")
+const Scenery = preload("res://scripts/scenery_batch.gd")
+const FrameRecord = preload("res://scripts/performance_record.gd")
+const CarryStack = preload("res://scripts/carry_stack.gd")
+const TransferFeedback = preload("res://scripts/transfer_feedback.gd")
 const UHD_PIXELS := 3840 * 2160
 var sim = Simulation.new()
 var scene_view: SubViewport
@@ -14,6 +18,10 @@ var defense_visuals: Dictionary = {}
 var asset_cache: Dictionary = {}
 var player_rig: Node3D
 var carry_root: Node3D
+var carry_stacks: Dictionary = {}
+var transfer_feedback: Node3D
+var menu_column: VBoxContainer
+var camp_button: Button
 var carry_count := -1
 var furnace: Node3D
 var heat_light: OmniLight3D
@@ -30,23 +38,37 @@ var capture_frames := 0
 var capture_directory := ""
 var qa_mode := false
 var render_review := false
-var frame_intervals: Array = []
+var performance_record := FrameRecord.new()
+var merged_cache: Dictionary = {}
+var no_batching := false
+var capture_phase := 0.0
 var last_frame_usec := 0
 var warmup_frames := 180
+var save_recovery_path := ""
+var capture_motion := ""
+var capture_view := "front"
 
 func _ready():
+	# Fail closed before loading a saved encounter: no invisible wolves/helper can
+	# damage or secretly work in a scene that does not yet have their approved art.
+	sim.threats_enabled = false
+	sim.rescue_enabled = false
+	sim.presented_actor_ids = [1,2,3,4]
+	get_tree().quit_on_go_back = false
 	Engine.max_fps = 60
 	for argument in OS.get_cmdline_user_args():
 		if argument.begins_with("--capture="):
 			capture_directory = argument.trim_prefix("--capture=")
 			qa_mode = true
 		if argument == "--render-review": render_review = true
+		if argument.begins_with("--motion="): capture_motion = argument.trim_prefix("--motion=")
+		if argument == "--no-batching": no_batching = true
+		if argument.begins_with("--phase="): capture_phase = clampf(argument.trim_prefix("--phase=").to_float(), 0, 1)
+		if argument.begins_with("--view="): capture_view = argument.trim_prefix("--view=")
 	# Review uses the same scene and materials at a disclosed smaller render size.
 	# It never grants the 4K/60 performance gate.
 	if not qa_mode:
-		var saved := Saves.read_state()
-		if not saved.is_empty():
-			sim.restore(saved)
+		save_recovery_path = Saves.load_into(sim)
 	scene_view = SubViewport.new()
 	scene_view.own_world_3d = true
 	scene_view.render_target_update_mode = SubViewport.UPDATE_ALWAYS
@@ -65,6 +87,9 @@ func _ready():
 	build_environment()
 	build_world()
 	build_crew()
+	transfer_feedback = TransferFeedback.new()
+	transfer_feedback.loader = resource_piece
+	world.add_child(transfer_feedback)
 	build_hud()
 	resized.connect(resize_render)
 	resize_render()
@@ -77,7 +102,9 @@ func resize_render():
 	var pixels := 1280 * 720 if render_review else UHD_PIXELS
 	var height := int(ceil(sqrt(float(pixels) / aspect)))
 	scene_view.size = Vector2i(int(ceil(height * aspect)), height)
+	performance_record.resolution(scene_view.size)
 	if is_instance_valid(camera): camera.keep_aspect = Camera3D.KEEP_HEIGHT
+	layout_hud()
 	queue_redraw()
 
 func build_environment():
@@ -114,7 +141,13 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 	var path := "res://assets/" + asset + ".glb"
 	if not asset_cache.has(path):
 		asset_cache[path] = load(path)
-	var instance: Node3D = asset_cache[path].instantiate()
+	var instance: Node3D
+	if asset.begins_with("world/") and not no_batching:
+		if not merged_cache.has(asset): merged_cache[asset] = Scenery.compile(asset_cache[path])
+		instance = MeshInstance3D.new()
+		instance.mesh = merged_cache[asset]
+	else:
+		instance = asset_cache[path].instantiate()
 	parent.add_child(instance)
 	instance.position = p
 	return instance
@@ -136,12 +169,22 @@ func build_world():
 		var node: Dictionary = sim.resources[index]
 		var asset: String = "pine_" + str(1 + index % 3) if node.kind == "wood" else node.kind
 		resource_visuals[node.id] = model("world/" + asset, world, xyz(node.position))
+	var forest := {0: [], 1: [], 2: []}
 	for i in range(38):
 		var a := i * TAU / 38.0
 		var p := Vector3(cos(a) * (15.5 + sin(i * 12.2)), 0, sin(a) * 18.8)
-		var tree := model("world/pine_" + str(1 + i % 3), world, p)
-		tree.scale = Vector3.ONE * (0.85 + fmod(i * .17, .5))
-		tree_rotation(tree, i)
+		var scale_factor := 0.85 + fmod(i * .17, .5)
+		if no_batching:
+			var tree := model("world/pine_" + str(1 + i % 3), world, p)
+			tree.scale = Vector3.ONE * scale_factor
+			tree_rotation(tree, i)
+		else:
+			forest[i % 3].append(Transform3D(Basis(Vector3.UP, i * 1.71).scaled(Vector3.ONE * scale_factor), p))
+	if not no_batching:
+		for variant in forest:
+			var transforms: Array[Transform3D] = []
+			transforms.assign(forest[variant])
+			Scenery.instances(merged_cache["world/pine_" + str(variant + 1)], transforms, world)
 	for side in sim.defenses:
 		defense_visuals[side] = model("world/barricade", world, xyz(sim.defenses[side].position))
 		defense_visuals[side].scale.y = 0.15
@@ -173,6 +216,18 @@ func actor(id: int) -> Node3D:
 	visual.scale *= factor
 	visual.position = Vector3(-bounds.get_center().x, -bounds.position.y, -bounds.get_center().z) * factor
 	var animation := find_animation_player(visual)
+	if id >= 2:
+		var motion_path := "res://assets/motion/Character%d.res" % id
+		if ResourceLoader.exists(motion_path):
+			var skeleton := find_skeleton(visual)
+			if skeleton:
+				animation = AnimationPlayer.new()
+				skeleton.add_child(animation)
+				animation.root_node = NodePath("..")
+				animation.add_animation_library("motion", load(motion_path))
+				root.set_meta("motion_candidate", true)
+		else:
+			push_error("Missing baked crew motion: run res://tools/bake_crew_motion.gd")
 	if animation:
 		for clip in animation.get_animation_list():
 			if not clip.ends_with("RESET"):
@@ -181,6 +236,13 @@ func actor(id: int) -> Node3D:
 	root.set_meta("visual", visual)
 	return root
 
+func find_skeleton(node: Node) -> Skeleton3D:
+	if node is Skeleton3D: return node
+	for child in node.get_children():
+		var found := find_skeleton(child)
+		if found: return found
+	return null
+
 func find_animation_player(node: Node) -> AnimationPlayer:
 	if node is AnimationPlayer: return node
 	for child in node.get_children():
@@ -188,45 +250,54 @@ func find_animation_player(node: Node) -> AnimationPlayer:
 		if found: return found
 	return null
 
+func resource_piece(kind: String, parent: Node3D) -> Node3D:
+	return model("world/" + ("log" if kind == "wood" else kind), parent)
+
 func build_crew():
-	for id in range(1, 5): actors[id] = actor(id)
+	for id in range(1, 5):
+		actors[id] = actor(id)
+		var stack := CarryStack.new()
+		stack.loader = resource_piece
+		stack.position = Vector3(0, .65, -.42)
+		actors[id].add_child(stack)
+		carry_stacks[id] = stack
 	player_rig = actors[sim.lead]
-	carry_root = Node3D.new()
-	carry_root.position = Vector3(0, .65, -.42)
-	player_rig.add_child(carry_root)
+	carry_root = carry_stacks[sim.lead]
 
 func animate(root: Node3D, speed: float):
 	if not root.has_meta("animation"): return
 	var animation: AnimationPlayer = root.get_meta("animation")
 	var desired := "run" if speed > 4.3 else ("walk" if speed > .15 else "idle")
+	if qa_mode and not capture_motion.is_empty(): desired = capture_motion
 	for clip in animation.get_animation_list():
 		if clip.to_lower().ends_with(desired):
-			if animation.current_animation != clip: animation.play(clip, .16)
+			if animation.current_animation != clip: animation.play(clip, 0.0 if qa_mode else .16)
+			if qa_mode and not capture_motion.is_empty():
+				animation.seek(animation.get_animation(clip).length * capture_phase, true)
+				animation.speed_scale = 0.0
+				return
 			# Use source cadence; integration locomotion review must verify sliding.
-			animation.speed_scale = 1.0
+			animation.speed_scale = 0.0 if paused else 1.0
 			return
 
 func update_carry():
-	var count: int = sim.carried()
-	if count == carry_count: return
-	carry_count = count
-	for child in carry_root.get_children(): child.queue_free()
-	var shown := mini(count, 32)
-	for i in range(shown):
-		var sample := int(float(i) * count / maxf(1, shown))
-		var kind := "wood"
-		var cumulative := 0
-		for resource in Simulation.KINDS:
-			cumulative += sim.inventory[resource]
-			if sample < cumulative:
-				kind = resource
-				break
-		var piece := model("world/" + ("log" if kind == "wood" else kind), carry_root, Vector3((i % 3 - 1) * .19, (i / 3) * .10, 0))
-		piece.rotation_degrees.x = 90
-		piece.scale = Vector3.ONE * (.63 if kind == "wood" else .18)
-	# Visual pooling is bounded; logical carrying is unlimited.
-	# Growth continues logarithmically after 32 meshes without deleting inventory.
-	carry_root.scale = Vector3.ONE * (1.0 + log(1.0 + maxf(0, count - 32) / 32.0) * .08)
+	carry_stacks[sim.lead].update_inventory(sim.inventory)
+	for companion in sim.companions:
+		if not carry_stacks.has(companion.id): continue
+		var inventory := {"wood":0,"stone":0,"metal":0,"fuel":0}
+		inventory[companion.get("cargo_kind","wood")] = companion.get("cargo",0)
+		carry_stacks[companion.id].update_inventory(inventory)
+
+func present_events():
+	for event in sim.events:
+		var kind: String = event.get("resource", "")
+		if kind.is_empty(): continue
+		var target: Vector3 = xyz(event.get("target",event.position)) + Vector3(0,.75,0)
+		var origin := xyz(sim.position) + Vector3(0,1.0,-.35)
+		if event.has("actor_id"): origin = xyz(event.position) + Vector3(0,1.0,-.35)
+		if event.type in ["gather","worker_gather"]: transfer_feedback.transfer(kind,target,origin)
+		elif event.type in ["deposit","worker_deposit","build","worker_build","repair","worker_repair"]:
+			transfer_feedback.transfer(kind,origin,target)
 
 func text_label(text: String, font_size: int, parent: Control) -> Label:
 	var label := Label.new()
@@ -255,6 +326,7 @@ func build_hud():
 	hint.size.x = 700
 	hint.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	var pause_button := Button.new()
+	camp_button = pause_button
 	add_child(pause_button)
 	pause_button.text = "Camp"
 	pause_button.add_theme_font_size_override("font_size", 26)
@@ -268,37 +340,81 @@ func build_hud():
 	menu.set_anchors_and_offsets_preset(Control.PRESET_CENTER)
 	menu.position = size / 2 - Vector2(220, 150)
 	menu.size = Vector2(440, 300)
-	var column := VBoxContainer.new()
-	column.add_theme_constant_override("separation", 20)
-	menu.add_child(column)
-	text_label("HAVENLINE · Camp", 32, column)
-	for id in [1, 2]:
+	menu.size = Vector2(780,570)
+	menu.position = size / 2 - menu.size / 2
+	var padding := MarginContainer.new()
+	for side in ["left","right","top","bottom"]:
+		padding.add_theme_constant_override("margin_" + side,24)
+	menu.add_child(padding)
+	menu_column = VBoxContainer.new()
+	menu_column.add_theme_constant_override("separation",16)
+	padding.add_child(menu_column)
+	rebuild_menu()
+
+func rebuild_menu():
+	for child in menu_column.get_children():
+		menu_column.remove_child(child)
+		child.queue_free()
+	text_label("HAVENLINE · Outpost crew",32,menu_column)
+	var leads := HBoxContainer.new()
+	menu_column.add_child(leads)
+	for id in [1,2]:
 		var choice := Button.new()
-		choice.text = "Lead with Character " + str(id)
-		choice.custom_minimum_size.y = 64
-		choice.add_theme_font_size_override("font_size", 26)
-		column.add_child(choice)
+		choice.text = ("Leading · " if id == sim.lead else "Lead with ") + "Character " + str(id)
+		choice.custom_minimum_size = Vector2(345,64)
+		choice.add_theme_font_size_override("font_size",24)
+		leads.add_child(choice)
 		choice.pressed.connect(func(): switch_lead(id))
+	for companion in sim.companions:
+		if not actors.has(companion.id): continue
+		var id: int = companion.id
+		var row := HBoxContainer.new()
+		row.add_theme_constant_override("separation",14)
+		menu_column.add_child(row)
+		var name_label := text_label("Character " + str(id),24,row)
+		name_label.custom_minimum_size.x = 180
+		var job := OptionButton.new()
+		var resource := OptionButton.new()
+		for value in Simulation.CrewWork.JOBS: job.add_item(value.capitalize())
+		for value in Simulation.KINDS: resource.add_item(value.capitalize())
+		job.select(Simulation.CrewWork.JOBS.find(companion.job))
+		resource.select(Simulation.KINDS.find(companion.get("resource_kind","wood")))
+		job.custom_minimum_size = Vector2(240,64)
+		resource.custom_minimum_size = Vector2(210,64)
+		for control in [job,resource]:
+			control.add_theme_font_size_override("font_size",24)
+			row.add_child(control)
+		resource.disabled = companion.job != "gather"
+		job.item_selected.connect(func(index):
+			sim.assign_job(id, Simulation.CrewWork.JOBS[index], Simulation.KINDS[resource.selected])
+			resource.disabled = Simulation.CrewWork.JOBS[index] != "gather")
+		resource.item_selected.connect(func(index):
+			sim.assign_job(id, Simulation.CrewWork.JOBS[job.selected], Simulation.KINDS[index]))
+	var explanation := text_label("Move to act. Crew assignments never replace your movement control.",20,menu_column)
+	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	explanation.custom_minimum_size.y = 48
 	var resume := Button.new()
-	resume.text = "Continue"
-	resume.custom_minimum_size.y = 60
-	column.add_child(resume)
+	resume.text = "Return to the outpost"
+	resume.custom_minimum_size.y = 64
+	resume.add_theme_font_size_override("font_size",24)
+	menu_column.add_child(resume)
 	resume.pressed.connect(toggle_menu)
+	call_deferred("layout_hud")
 
 func toggle_menu():
 	paused = not paused
 	menu.visible = paused
+	if paused: rebuild_menu()
+	transfer_feedback.set_process(not paused)
 	joystick_id = -1
-	if paused and not qa_mode: Saves.write_state(sim.snapshot())
+	if paused and not qa_mode:
+		Saves.write_state(sim.snapshot())
+		write_performance_record()
 	queue_redraw()
 
 func switch_lead(id: int):
-	if id != sim.lead:
-		var previous: int = sim.lead
-		for companion in sim.companions:
-			if companion.id == id: companion.id = previous
-		sim.lead = id
-		carry_root.reparent(actors[id], false)
+	if sim.select_lead(id):
+		carry_root = carry_stacks[id]
 		player_rig = actors[id]
 	toggle_menu()
 
@@ -340,6 +456,7 @@ func _physics_process(dt: float):
 	if paused or not is_instance_valid(world): return
 	var direction := movement_input()
 	sim.step(dt, direction, direction.length() > .82 and (joystick_id != -1 or Input.is_physical_key_pressed(KEY_SHIFT)))
+	present_events()
 	save_timer += dt
 	if save_timer >= 10 and not qa_mode:
 		save_timer = 0
@@ -368,21 +485,24 @@ func _process(dt: float):
 	heat_light.light_energy = 3.0 + sin(sim.elapsed * 8) * .08
 	heat_light.omni_range = sim.warmth()
 	var focus := xyz(sim.position) + Vector3(0, .95, 0)
-	var desired := focus + Vector3(0, 6.8, 8.6)
+	var offset := Vector3(0, 6.8, 8.6)
+	if qa_mode:
+		if capture_view == "side": offset = Vector3(8.6, 6.8, 0)
+		elif capture_view == "rear": offset = Vector3(0, 6.8, -8.6)
+	var desired := focus + offset
 	camera.position = camera.position.lerp(desired, 1 - exp(-8.6 * dt)) if capture_frames > 0 else desired
 	camera.look_at(focus)
 	status.text = "HEAT %d   ·   %d carried" % [sim.level, sim.carried()]
 	if sim.level < 2:
-		objective.text = "Furnace   %d / 18 wood   ·   %d / 6 stone" % [mini(sim.stored.wood, 18), mini(sim.stored.stone, 6)]
-	elif not sim.rescued: objective.text = "Warmth restored. Reach the frozen survivor."
+		objective.text = "Furnace · %d/18 wood + %d/6 stone" % [mini(sim.stored.wood, 18), mini(sim.stored.stone, 6)]
+	elif not sim.rescued: objective.text = "Warmth restored · rescue art pending"
 	elif not sim.defenses.north.built: objective.text = "Build the north defense   ·   8 wood + 3 stone"
-	else: objective.text = "Outpost restored · full threat presentation is still in development"
+	else: objective.text = "Outpost restored · threat art pending"
 	if not sim.action.is_empty():
 		hint.text = {"gather":"Gathering", "deposit":"Delivering", "build":"Building", "repair":"Repairing", "defense_repair":"Repairing", "rescue":"Rescuing", "enemy":"Defending"}.get(sim.action.kind, "")
 	else: hint.text = ""
-	# A missing enemy asset must never create invisible damage in a review APK.
-	if sim.gate_open() and not sim.wave_active:
-		sim.wave_timer = maxf(sim.wave_timer, 1.0)
+	# Presentation capability gates live in simulation, not frame-rate-dependent
+	# timer rewrites. Active saved encounters remain intact but cannot hurt invisibly.
 	measure_frame()
 	capture_frames += 1
 	if qa_mode and capture_frames == 12:
@@ -392,6 +512,16 @@ func _process(dt: float):
 		var report := {"renderer": RenderingServer.get_current_rendering_method(), "device": RenderingServer.get_video_adapter_name(), "window": [get_viewport().size.x, get_viewport().size.y], "internal_render": [scene_view.size.x, scene_view.size.y], "render_scale": scene_view.scaling_3d_scale, "render_review": render_review, "performance_certified": false, "characters": actors.keys(), "source_clips": {}}
 		report["scene_script_sha256"] = FileAccess.get_file_as_string("res://scripts/main.gd").sha256_text()
 		report["camera_full_height"] = camera.size
+		report["capture_motion"] = capture_motion
+		report["capture_view"] = capture_view
+		report["crew_motion_is_unapproved_candidate"] = true
+		report["threats_enabled"] = sim.threats_enabled
+		report["source_glbs_modified"] = false
+		report["capture_phase"] = capture_phase
+		report["scenery_batched"] = not no_batching
+		report["draw_calls"] = scene_view.get_render_info(Viewport.RENDER_INFO_TYPE_VISIBLE, Viewport.RENDER_INFO_DRAW_CALLS_IN_FRAME)
+		report["primitives"] = scene_view.get_render_info(Viewport.RENDER_INFO_TYPE_VISIBLE, Viewport.RENDER_INFO_PRIMITIVES_IN_FRAME)
+		report["performance"] = performance_record.report()
 		for id in actors:
 			var a: Node3D = actors[id]
 			report.source_clips[str(id)] = Array(a.get_meta("animation").get_animation_list()) if a.has_meta("animation") else []
@@ -403,16 +533,52 @@ func _process(dt: float):
 func measure_frame():
 	var now := Time.get_ticks_usec()
 	if last_frame_usec > 0 and not paused and capture_frames > warmup_frames:
-		frame_intervals.append(float(now - last_frame_usec) / 1000.0)
-		if frame_intervals.size() > 72000: frame_intervals.pop_front()
+		performance_record.sample(float(now - last_frame_usec) / 1000.0)
 	last_frame_usec = now
 
 func _notification(what: int):
-	if what == NOTIFICATION_APPLICATION_PAUSED:
+	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+		if is_instance_valid(menu) and not paused: toggle_menu()
+	elif what == NOTIFICATION_APPLICATION_PAUSED:
 		paused = true
 		joystick_id = -1
-		if is_instance_valid(menu): menu.visible = true
-		if not qa_mode and sim: Saves.write_state(sim.snapshot())
+		if is_instance_valid(menu):
+			menu.visible = true
+			rebuild_menu()
+		if is_instance_valid(transfer_feedback): transfer_feedback.set_process(false)
+		if not qa_mode and sim:
+			Saves.write_state(sim.snapshot())
+			write_performance_record()
 	elif what == NOTIFICATION_APPLICATION_RESUMED:
 		last_frame_usec = 0
 		joystick_id = -1
+
+func write_performance_record():
+	performance_record.write("user://performance-review.json", {
+		"os":OS.get_name(), "model":OS.get_model_name(),
+		"renderer":RenderingServer.get_current_rendering_method(),
+		"gpu":RenderingServer.get_video_adapter_name(),
+		"render_scale":scene_view.scaling_3d_scale if is_instance_valid(scene_view) else 0.0,
+		"build":"0.4.1-native-development", "review_resolution":render_review})
+
+func layout_hud():
+	if not is_instance_valid(status): return
+	var safe := Rect2(Vector2.ZERO,size)
+	if OS.has_feature("android"):
+		var physical := Vector2(DisplayServer.window_get_size())
+		var area := DisplayServer.get_display_safe_area()
+		if physical.x > 0 and physical.y > 0 and area.size.x > 0 and area.size.y > 0:
+			var factor := size / physical
+			safe = Rect2(Vector2(area.position) * factor,Vector2(area.size) * factor).intersection(safe)
+	status.position = safe.position + Vector2(32,28)
+	objective.size.x = minf(780,maxf(300,safe.size.x - 660))
+	objective.position = Vector2(safe.get_center().x - objective.size.x / 2,safe.position.y + 34)
+	hint.size.x = minf(780,safe.size.x - 96)
+	hint.position = Vector2(safe.get_center().x - hint.size.x / 2,safe.end.y - 72)
+	camp_button.position = Vector2(safe.end.x - 156,safe.position.y + 26)
+	menu.position = safe.get_center() - menu.size / 2
+
+func _unhandled_key_input(event: InputEvent):
+	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_ESCAPE:
+		toggle_menu()
+		get_viewport().set_input_as_handled()

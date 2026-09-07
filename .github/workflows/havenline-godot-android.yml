@@ -60,12 +60,6 @@ jobs:
           unzip -j -q templates.tpz templates/android_debug.apk templates/android_release.apk templates/version.txt -d "$HOME/.local/share/godot/export_templates/4.7.2.stable"
           rm editor.zip templates.tpz
           sdkmanager 'platform-tools' 'build-tools;35.0.1'
-      - uses: actions/upload-artifact@v4
-        with:
-          name: HAVENLINE-pinned-Godot-4.7.2-${{ github.run_id }}
-          path: ${{ runner.temp }}/godot/Godot_v4.7.2-stable_linux.x86_64
-          retention-days: 7
-          if-no-files-found: error
       - name: Verify supplied assets and run real Godot tests
         shell: bash
         run: |
@@ -73,9 +67,30 @@ jobs:
           mkdir -p artifacts
           python3 tools/havenline/asset_audit.py --output artifacts/assets.json
           timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit 2>&1 | tee artifacts/import.log
-          timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tests/test_simulation.gd 2>&1 | tee artifacts/gameplay.log
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd 2>&1 | tee artifacts/motion-bake.log
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance; do
+            timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "artifacts/$suite.log"
+          done
           timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --quit-after 5 2>&1 | tee artifacts/launch.log
-          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' artifacts/import.log artifacts/gameplay.log artifacts/launch.log; then exit 1; fi
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' artifacts/*.log; then exit 1; fi
+          python3 tools/havenline/summarize_evidence.py --artifacts artifacts
+      - name: Render the actual Mobile scene with software Vulkan (not a device benchmark)
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb mesa-vulkan-drivers
+          mkdir -p artifacts/mobile-render
+          timeout 120 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy -- --render-review --motion=idle --phase=0 --capture="$PWD/artifacts/mobile-render" 2>&1 | tee artifacts/mobile-render.log
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report = json.loads(Path('artifacts/mobile-render/render-evidence.json').read_text())
+          assert report['renderer'] == 'mobile', 'Do not relabel a fallback renderer as Mobile Vulkan'
+          assert report['performance_certified'] is False
+          assert len(report['characters']) == 4
+          assert all(len(clips) >= 3 for clips in report['source_clips'].values())
+          PY
       - name: Export isolated ARM64 review APK
         shell: bash
         run: |

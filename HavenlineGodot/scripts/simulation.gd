@@ -3,6 +3,7 @@ extends RefCounted
 
 # Deterministic, engine-independent gameplay state. Vector2 stores world X/Z.
 # Rendering consumes events; it cannot invent inventory or progression.
+const CrewWork = preload("res://scripts/crew_work.gd")
 const KINDS = ["wood", "stone", "metal", "fuel"]
 var contract: Dictionary
 var tuning: Dictionary
@@ -32,6 +33,11 @@ var action: Dictionary = {}
 var action_clocks: Dictionary = {}
 var events: Array = []
 var threat_serial := 0
+# Runtime presentation capabilities are NOT saved progression and default to full
+# simulation. The native review sets them before restoring any saved encounter.
+var threats_enabled := true
+var rescue_enabled := true
+var presented_actor_ids: Array = []
 
 func _init(data: Dictionary = {}, chosen_lead: int = 1):
 	contract = data if not data.is_empty() else JSON.parse_string(FileAccess.get_file_as_string("res://data/reference-contract.json"))
@@ -103,14 +109,16 @@ func choose_action() -> Dictionary:
 	var options: Array = []
 	var p: Dictionary = contract.player
 	for enemy in enemies:
-		if enemy.health > 0:
+		if threats_enabled and enemy.health > 0:
 			options.append(candidate("enemy", enemy.id, enemy.position, p.combatRadius, 200))
 	var furnace := point(contract.world.furnace)
 	if durability < tuning.furnaceMaxDurability and inventory.wood > 0:
 		options.append(candidate("repair", "furnace", furnace, p.depositRadius, 130))
 	elif carried() > 0 and durability > 0:
 		options.append(candidate("deposit", "furnace", furnace, p.depositRadius, 95))
-	if not rescued and level >= 2 and durability > 0:
+	if carried() > 0 and durability > 0:
+		options.append(candidate("deposit", "storage", point(contract.world.storage), p.depositRadius, 95))
+	if rescue_enabled and not rescued and level >= 2 and durability > 0:
 		options.append(candidate("rescue", "survivor", point(contract.world.survivor), p.rescueRadius, 110))
 	for side in defenses:
 		var d: Dictionary = defenses[side]
@@ -151,6 +159,7 @@ func step(dt: float, input_vector: Vector2, sprint := false):
 	step_companions(dt)
 	step_threats(dt)
 	step_climate(dt)
+	prune_action_clocks()
 	for resource in resources:
 		if resource.units <= 0:
 			resource.respawn += dt
@@ -198,9 +207,11 @@ func perform_action(dt: float):
 			event["resource"] = item
 			update_level()
 		"repair":
+			event["resource"] = "wood"
 			inventory.wood -= 1
 			durability = minf(tuning.furnaceMaxDurability, durability + tuning.furnaceRepairPerWood)
 		"defense_repair":
+			event["resource"] = "wood"
 			inventory.wood -= 1
 			defenses[action.id].health = minf(160, defenses[action.id].health + 42)
 		"rescue":
@@ -214,6 +225,7 @@ func perform_action(dt: float):
 				if defense.delivered[item] < need[item] and inventory[item] > 0:
 					inventory[item] -= 1
 					defense.delivered[item] += 1
+					event["resource"] = item
 					break
 			if meets(defense.delivered, need):
 				defense.built = true
@@ -224,35 +236,85 @@ func perform_action(dt: float):
 					enemy.health -= tuning.wolf.playerDamagePerHit
 	events.append(event)
 
-func step_companions(dt: float):
-	for index in range(companions.size()):
-		var companion: Dictionary = companions[index]
-		companion.cooldown = maxf(0, companion.cooldown - dt)
-		var target: Vector2 = position + point(contract.characterSystem.companionFormationOffsets[index % 3])
-		if companion.job == "gather":
-			if companion.cargo >= 4:
-				target = point(contract.world.furnace) + Vector2(1.4, 0)
-				if companion.position.distance_to(target) < 0.25:
-					stored.wood += companion.cargo
-					companion.cargo = 0
-					update_level()
+func select_lead(id: int) -> bool:
+	if id not in [1,2]: return false
+	if id == lead: return true
+	for index in companions.size():
+		var c: Dictionary = companions[index]
+		if c.id != id: continue
+		CrewWork.prepare(c)
+		# Transfer the incoming lead's actual cargo into the selected-lead stack;
+		# never leave a duplicate copy on the outgoing lead's companion record.
+		inventory[c.cargo_kind] += c.cargo
+		var new_position: Vector2 = c.position
+		c.id = lead
+		c.position = position
+		c.cargo = 0
+		c.job = "follow"
+		c.delivering = false
+		c["building"] = false
+		c.work_clocks.clear()
+		lead = id
+		position = new_position
+		velocity = Vector2.ZERO
+		action = {}
+		action_clocks.clear()
+		return true
+	return false
+
+func prune_action_clocks():
+	# Progress can survive movement while still in reach, but dead/depleted or
+	# abandoned targets must not accumulate unbounded obsolete save entries.
+	for key in action_clocks.keys():
+		var parts: PackedStringArray = key.split(":",true,1)
+		if parts.size() != 2:
+			action_clocks.erase(key)
+			continue
+		var kind := parts[0]
+		var id := parts[1]
+		var keep := false
+		var radius: float = contract.player.interactionRadius
+		if kind == "gather":
+			for resource in resources:
+				if resource.id == id and resource.units > 0:
+					keep = position.distance_to(resource.position) <= radius + tuning.automaticActionTargetHysteresis
+		elif kind == "enemy":
+			radius = contract.player.combatRadius
+			for enemy in enemies:
+				if enemy.id == id and enemy.health > 0:
+					keep = position.distance_to(enemy.position) <= radius + tuning.automaticActionTargetHysteresis
+		else:
+			var target: Vector2
+			if id in defenses:
+				target = defenses[id].position
+				radius = contract.player.buildRadius
+			elif kind == "rescue":
+				target = point(contract.world.survivor)
+				radius = contract.player.rescueRadius
 			else:
-				for resource in resources:
-					if resource.kind == "wood" and resource.units > 0:
-						target = resource.position + Vector2(0, 1.1)
-						if companion.position.distance_to(target) < 0.3 and companion.cooldown <= 0:
-							resource.units -= 1
-							companion.cargo += 1
-							companion.cooldown = 1.2
-						break
-		companion.position = companion.position.move_toward(target, 3.7 * dt)
-		for enemy in enemies:
-			if enemy.health > 0 and companion.position.distance_to(enemy.position) < 2.2 and companion.cooldown <= 0:
-				enemy.health -= 9
-				companion.cooldown = 0.95
-				break
+				target = point(contract.world.storage if id == "storage" else contract.world.furnace)
+				radius = contract.player.depositRadius
+			keep = position.distance_to(target) <= radius + tuning.automaticActionTargetHysteresis
+		if not keep: action_clocks.erase(key)
+
+func assign_job(id: int, job: String, resource_kind := "wood") -> bool:
+	if job not in CrewWork.JOBS or resource_kind not in KINDS: return false
+	for c in companions:
+		if c.id != id: continue
+		CrewWork.prepare(c)
+		c.job = job
+		c.resource_kind = resource_kind
+		c["building"] = false
+		# Existing cargo is delivered intact before starting a different resource.
+		if c.cargo > 0: c.delivering = true
+		return true
+	return false
+
+func step_companions(dt: float):
+	CrewWork.step(self, dt)
 
 func step_threats(dt: float):
+	if not threats_enabled: return
 	if not wave_active and gate_open():
 		wave_timer = maxf(0, wave_timer - dt)
 		if wave_timer <= 0:
@@ -321,12 +383,12 @@ func snapshot() -> Dictionary:
 		enemy_state.append({"id": e.id, "position": [e.position.x, e.position.y], "health": maxf(0, e.health), "cooldown": e.cooldown})
 	var crew: Array = []
 	for c in companions:
-		crew.append({"id": c.id, "position": [c.position.x, c.position.y], "cooldown": c.cooldown, "job": c.job, "cargo": c.get("cargo", 0)})
-	return {"schema": 1, "lead": lead, "position": [position.x, position.y], "inventory": inventory.duplicate(), "stored": stored.duplicate(), "level": level, "durability": durability, "health": health, "temperature": temperature, "rescued": rescued, "resources": resource_state, "defenses": defense_state, "wave": wave, "completed_waves": completed_waves, "wave_timer": wave_timer, "wave_active": wave_active, "enemies": enemy_state, "threat_serial": threat_serial, "forest_unlocked": forest_unlocked, "elapsed": elapsed, "companions": crew}
+		crew.append({"id": c.id, "position": [c.position.x, c.position.y], "cooldown": c.cooldown, "job": c.job, "cargo": c.get("cargo", 0), "cargo_kind": c.get("cargo_kind", "wood"), "resource_kind": c.get("resource_kind", "wood"), "delivering": c.get("delivering", false), "building": c.get("building", false), "work_clocks": c.get("work_clocks", {}).duplicate()})
+	return {"schema": 1, "action_clocks": action_clocks.duplicate(), "facing": [facing.x, facing.y], "lead": lead, "position": [position.x, position.y], "inventory": inventory.duplicate(), "stored": stored.duplicate(), "level": level, "durability": durability, "health": health, "temperature": temperature, "rescued": rescued, "resources": resource_state, "defenses": defense_state, "wave": wave, "completed_waves": completed_waves, "wave_timer": wave_timer, "wave_active": wave_active, "enemies": enemy_state, "threat_serial": threat_serial, "forest_unlocked": forest_unlocked, "elapsed": elapsed, "companions": crew}
 
 func restore(data: Dictionary) -> bool:
 	# Validate the whole envelope before changing live gameplay state.
-	if data.get("schema") != 1 or not valid_number(data.get("lead")): return false
+	if data.get("schema") != 1 or not valid_count(data.get("lead")): return false
 	if int(data.lead) not in [1, 2] or float(data.lead) != float(int(data.lead)): return false
 	for name in ["inventory", "stored", "defenses"]:
 		if not data.get(name) is Dictionary: return false
@@ -339,25 +401,37 @@ func restore(data: Dictionary) -> bool:
 		if not data.get(name) is bool: return false
 	for name in ["inventory", "stored"]:
 		for kind in KINDS:
-			if not valid_number(data[name].get(kind)) or fmod(float(data[name][kind]), 1.0) != 0: return false
+			if not valid_count(data[name].get(kind)): return false
 	for side in defenses:
 		var d = data.defenses.get(side)
 		if not d is Dictionary or not d.get("delivered") is Dictionary or not d.get("built") is bool or not valid_number(d.get("health")): return false
 		for kind in ["wood", "stone"]:
-			if not valid_number(d.delivered.get(kind)): return false
+			if not valid_count(d.delivered.get(kind)): return false
+			if d.delivered[kind] > tuning[side + "BarricadeBuild"][kind]: return false
 	if data.resources.size() != resources.size(): return false
 	for i in range(resources.size()):
 		var r = data.resources[i]
-		if not r is Dictionary or r.get("id") != resources[i].id or not valid_number(r.get("units")) or not valid_number(r.get("respawn")): return false
+		if not r is Dictionary or r.get("id") != resources[i].id or not valid_count(r.get("units")) or not valid_number(r.get("respawn")): return false
+	var enemy_ids: Array = []
 	for e in data.enemies:
 		if not e is Dictionary or not e.get("id") is String or not valid_point(e.get("position")) or not valid_number(e.get("health")) or not valid_number(e.get("cooldown"), true): return false
+		if e.id.is_empty() or e.id in enemy_ids: return false
+		enemy_ids.append(e.id)
+	for key in ["level", "wave", "completed_waves", "threat_serial"]:
+		if not valid_count(data[key]): return false
+	if not valid_clocks(data.get("action_clocks", {})): return false
+	if not valid_point(data.get("facing", [0, 1])): return false
 	var expected: Array = [1, 2, 3, 4]
 	expected.erase(int(data.lead))
 	if data.rescued: expected.append(5)
 	var actual: Array = []
 	for c in data.companions:
-		if not c is Dictionary or not valid_point(c.get("position")) or c.get("job") not in ["follow", "gather"] or not valid_number(c.get("cargo")) or not valid_number(c.get("cooldown")): return false
-		actual.append(int(c.get("id", -1)))
+		if not c is Dictionary or not valid_point(c.get("position")) or c.get("job") not in CrewWork.JOBS or not valid_count(c.get("cargo")) or not valid_number(c.get("cooldown")): return false
+		if not valid_count(c.get("id")): return false
+		if c.get("cargo_kind", "wood") not in KINDS or c.get("resource_kind", "wood") not in KINDS: return false
+		if not c.get("delivering", false) is bool or not c.get("building", false) is bool: return false
+		if not valid_clocks(c.get("work_clocks", {})): return false
+		actual.append(int(c.id))
 	actual.sort()
 	if actual != expected: return false
 	lead = int(data.lead)
@@ -384,7 +458,7 @@ func restore(data: Dictionary) -> bool:
 		resources[i].respawn = data.resources[i].respawn
 	companions.clear()
 	for c in data.companions:
-		companions.append({"id": int(c.id), "position": Vector2(c.position[0], c.position[1]), "cooldown": float(c.cooldown), "job": c.job, "cargo": int(c.cargo)})
+		companions.append({"id": int(c.id), "position": Vector2(c.position[0], c.position[1]), "cooldown": float(c.cooldown), "job": c.job, "cargo": int(c.cargo), "cargo_kind": c.get("cargo_kind", "wood"), "resource_kind": c.get("resource_kind", "wood"), "delivering": c.get("delivering", false), "building": c.get("building", false), "work_clocks": c.get("work_clocks", {}).duplicate()})
 	enemies.clear()
 	for e in data.enemies:
 		enemies.append({"id": e.id, "position": Vector2(e.position[0], e.position[1]), "health": float(e.health), "cooldown": float(e.cooldown)})
@@ -396,7 +470,8 @@ func restore(data: Dictionary) -> bool:
 	threat_serial = int(data.threat_serial)
 	elapsed = float(data.elapsed)
 	action = {}
-	action_clocks.clear()
+	action_clocks = data.get("action_clocks", {}).duplicate()
+	facing = Vector2(data.get("facing", [0, 1])[0], data.get("facing", [0, 1])[1]).normalized()
 	events.clear()
 	return true
 
@@ -405,3 +480,12 @@ static func valid_number(value, allow_negative := false) -> bool:
 
 static func valid_point(value) -> bool:
 	return value is Array and value.size() == 2 and valid_number(value[0], true) and valid_number(value[1], true)
+
+static func valid_count(value) -> bool:
+	return valid_number(value) and float(value) < 9223372036854775807.0 and fmod(float(value), 1.0) == 0.0
+
+static func valid_clocks(value) -> bool:
+	if not value is Dictionary or value.size() > 256: return false
+	for key in value:
+		if not key is String or key.length() > 96 or not valid_number(value[key]) or value[key] > 60.0: return false
+	return true
