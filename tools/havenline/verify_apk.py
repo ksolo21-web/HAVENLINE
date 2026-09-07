@@ -83,7 +83,6 @@ def inspect(apk: Path) -> dict:
             'isolated_review_package': manifest.get('package') == 'com.kaleb.havenline.review',
             'expected_version': manifest.get('versionCode') == 401 and manifest.get('versionName') == '0.4.1-native-review',
             'android_game_category': application.get('appCategory') == 0,
-            'android_game_legacy_flag': application.get('isGame') == 0xffffffff,
             'arm64_godot_runtime': 'lib/arm64-v8a/libgodot_android.so' in libraries,
             'no_other_architecture': bool(libraries) and all(name.startswith('lib/arm64-v8a/') for name in libraries),
             'no_unity_or_il2cpp_native_libraries': not any('unity' in name.lower() or 'il2cpp' in name.lower() for name in libraries),
@@ -91,6 +90,10 @@ def inspect(apk: Path) -> dict:
         }
     return {'apk': apk.name, 'sha256': hashlib.sha256(apk.read_bytes()).hexdigest(),
             'manifest': elements, 'native_libraries': libraries, 'checks': checks,
+            # Android deprecated isGame at API 26; appCategory=game is canonical.
+            # https://developer.android.com/guide/topics/manifest/application-element#isGame
+            'legacy_is_game': application.get('isGame'),
+            'classification_basis': 'appCategory=game; deprecated isGame is informational only',
             'passed': all(checks.values()), 'signature_verification': 'Separate apksigner CI step',
             'physical_install_launch_verified': False, 'production_approved': False}
 
