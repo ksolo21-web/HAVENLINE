@@ -1,0 +1,32 @@
+name: Fix Havenline tree review framing
+on:
+  push:
+    branches: ['codex/havenline-environment-review']
+    paths: ['.github/workflows/havenline-environment-review-camera.yml']
+permissions:
+  contents: write
+jobs:
+  camera:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/havenline-environment-review
+      - name: Correct dedicated QA camera only
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib
+          p=pathlib.Path('HavenlineGodot/scripts/main.gd');s=p.read_text()
+          old='focus=xyz(sim.resources[0].position)+Vector3(0,2.0,0);camera.size=5.6;offset=Vector3(4,3.6,7)'
+          new='focus=xyz(sim.resources[0].position)+Vector3(0,2.35,0);camera.size=6.6;offset=Vector3(4,3.6,7)'
+          assert s.count(old)==1
+          assert 'elif qa_mode and capture_scenario == "tree-detail":\n\t\t'+old in s
+          p.write_text(s.replace(old,new))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add HavenlineGodot/scripts/main.gd
+          git commit -m 'Frame the complete hero evergreen in the dedicated review camera'
+          git push origin HEAD:codex/havenline-environment-review
