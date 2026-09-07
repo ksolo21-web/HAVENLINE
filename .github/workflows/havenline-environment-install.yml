@@ -33,10 +33,19 @@ jobs:
           actual=hashlib.sha256(patch).hexdigest()
           pathlib.Path('transfer-evidence/patch-sha256.txt').write_text(actual+'\n')
           assert actual=='03b7ccc4629672c79ab56b0e66ba782b3e88899f27159e16b70eb941d6a81ad0', 'Source transfer checksum mismatch'
-          pathlib.Path('transfer-evidence/environment-update.patch').write_bytes(patch)
+          pathlib.Path('transfer-evidence/original.patch').write_bytes(patch)
+          # difflib omitted Git's required new-file mode header. Normalize metadata
+          # only AFTER validating the original source payload, retaining both forms.
+          normalized=patch.replace(b'\n--- /dev/null\n',b'\nnew file mode 100644\n--- /dev/null\n')
+          pathlib.Path('transfer-evidence/environment-update.patch').write_bytes(normalized)
+          polish=(root/'polish.patch').read_bytes()
+          assert hashlib.sha256(polish).hexdigest()=='56ec3874ccd4e4a1b95190d0bafc78df5d0aaa934c65ebd7a1b1ec969ced3bae', 'Polish patch mismatch'
+          pathlib.Path('transfer-evidence/polish.patch').write_bytes(polish)
           PY
           git apply --check transfer-evidence/environment-update.patch
           git apply transfer-evidence/environment-update.patch
+          git apply --check transfer-evidence/polish.patch
+          git apply transfer-evidence/polish.patch
       - name: Generate and inspect actual environment assets
         shell: bash
         run: |
@@ -61,7 +70,7 @@ jobs:
           git add tools/havenline/bake_environment.py tools/havenline/environment_asset_audit.py tools/havenline/verify_environment_apk.py tools/havenline/requirements-environment.txt tools/havenline/verify_apk.py tools/havenline/summarize_evidence.py
           git add HavenlineGodot/scripts/main.gd HavenlineGodot/scripts/outpost_surface.gd HavenlineGodot/scripts/outpost_view.gd HavenlineGodot/shaders HavenlineGodot/tests/test_environment.gd HavenlineGodot/data/release-status.json HavenlineGodot/project.godot HavenlineGodot/export_presets.cfg HavenlineGodot/assets/environment_v2
           git add .github/workflows/havenline-godot-android.yml .github/skills/environment-review Docs/Art/EnvironmentReview
-          git rm .github/environment-payload/part1.b64 .github/environment-payload/part2.b64 .github/environment-payload/part3.b64
+          git rm .github/environment-payload/part1.b64 .github/environment-payload/part2.b64 .github/environment-payload/part3.b64 .github/environment-payload/polish.patch
           git commit -m 'Replace blockout environment with detailed winter assets, camera cutaway and regression gates'
           git push origin HEAD:codex/havenline-environment-review
           git rev-parse HEAD | tee transfer-evidence/source-commit.txt
