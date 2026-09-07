@@ -1,8 +1,8 @@
 # Actual environment render evidence
 
-Source 22c9a4eba92f57fa5cdef6989575b57640d6b348; tested merge d7a14dffde8e52b2b5e2dcbe7e6fd75525429f7d; original run 34159224288; APK reverified in run 34160345428.
+Source 7800adab5184fd3f2580bf164aa46f6a07ffdc3c; tested merge 2ddb92d225c1822b4a26b0b1ee0e9dd4ba41e36e; Actions run 34161099655.
 
-Actual unaltered Mobile/software-Vulkan frames. No physical Android 4K/60 or visual approval is implied.
+These are unaltered Godot Mobile/software-Vulkan frames, not a physical-device FPS benchmark or a visual approval.
 
 ## mobile-left
 
