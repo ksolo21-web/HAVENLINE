@@ -583,7 +583,7 @@ func _process(dt: float):
 	elif qa_mode and capture_scenario == "furnace-detail":
 		focus=xyz(Vector2(0,.2))+Vector3(0,1.0,0);camera.size=3.8;offset=Vector3(4,3.6,7)
 	elif qa_mode and capture_scenario == "tree-detail":
-		focus=xyz(sim.resources[0].position)+Vector3(0,2.0,0);camera.size=5.6;offset=Vector3(4,3.6,7)
+		focus=xyz(sim.resources[0].position)+Vector3(0,2.35,0);camera.size=6.6;offset=Vector3(4,3.6,7)
 	if qa_mode:
 		if capture_view == "side": offset = Vector3(8.6, 6.8, 0)
 		elif capture_view == "left": offset = Vector3(-8.6, 6.8, 0)
