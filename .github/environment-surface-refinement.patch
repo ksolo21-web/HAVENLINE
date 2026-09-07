@@ -1,0 +1,72 @@
+diff --git a/tools/havenline/bake_environment.py b/tools/havenline/bake_environment.py
+--- a/tools/havenline/bake_environment.py
++++ b/tools/havenline/bake_environment.py
+@@ -37,7 +37,8 @@
+     elif kind=='bark':
+         h=.52+.12*np.sin((xx+.015*np.sin(yy*TAU*2))*TAU*17)+fine*.14
+     elif kind=='stone':
+-        h=.50+.08*np.sin(xx*TAU*7+np.sin(yy*TAU*3))+.055*np.sin(yy*TAU*19)+fine*.10
++        coarse=gaussian_filter(fine,7.,mode='wrap');medium=gaussian_filter(fine,2.,mode='wrap')
++        h=.50+.055*coarse/max(float(coarse.std()),1e-6)+.028*medium/max(float(medium.std()),1e-6)+fine*.07
+     elif kind=='snow':
+         h=.57+.025*np.sin(xx*TAU*3)*np.cos(yy*TAU*5)+fine*.04
+     elif kind=='needles':
+@@ -84,7 +85,11 @@
+     if n is None:
+         n=np.zeros_like(v);fn=np.cross(v[f[:,1]]-v[f[:,0]],v[f[:,2]]-v[f[:,0]])
+         for k in range(3):np.add.at(n,f[:,k],fn)
+-        n=norm(n)
++        # Weld normal contributions at curved-patch seams and poles. Positions
++        # and intentional hard-edge normals remain unchanged.
++        _,groups=np.unique(np.round(v,6),axis=0,return_inverse=True)
++        smooth=np.zeros((int(groups.max())+1,3),dtype=np.float64)
++        np.add.at(smooth,groups,n);n=norm(smooth[groups])
+     if uv is None:uv=v[:,[0,1]]*.6
+     self.parts.setdefault(mat,[]).append((v,f,np.asarray(n,dtype=np.float32),np.asarray(uv,dtype=np.float32)))
+  def patch(self,fn,nu,nv,mat):
+@@ -232,7 +237,7 @@
+      angle=u*TAU;shape=math.sin(math.pi*v)**.64
+      ridge=1+.09*math.cos(angle*4+phase)+.06*math.sin(v*13+phase)
+      return start+axis*v+side*math.sin(angle)*width*shape*ridge+up*(math.cos(angle)*thick*shape+.045*math.sin(v*math.pi))
+-   m.patch(lambda u,v:fn(1-u,v),8,5,mat)
++   m.patch(lambda u,v:fn(1-u,v),10,7,mat)
+  for j in range(55):
+    t=j/55;h=.51+t*(height-.65)+rng.uniform(-.12,.12);angle=j*2.39996+rng.uniform(-.42,.42)
+    length=(1.39*(1-t)**.70+.09)*rng.uniform(.76,1.12);width=length*rng.uniform(.24,.35)
+@@ -254,7 +259,7 @@
+       along=.04+v*cover;angle=(1-u)*TAU;shape=math.sin(math.pi*v)**.63
+       width_variation=1+.16*math.sin(v*17+phase)
+       return spine(along)+b*math.sin(angle)*snow_width*shape*width_variation+np.array([0,.073+math.cos(angle)*length*.082*shape+.075*shape,0])
+-    m.patch(saddle,12,9,'snow')
++    m.patch(saddle,16,12,'snow')
+  m.features=['55 asymmetric branching boughs','605 solid tapered needle clusters','rounded irregular snow saddles','three distinct silhouettes','bark and needle normal maps','root flares']
+  return m
+ 
+@@ -428,6 +433,27 @@
+   for ix in range(64):
+    for tri in [((ix,iz),(ix,iz+1),(ix+1,iz)),((ix+1,iz),(ix,iz+1),(ix+1,iz+1))]:
+     if all(k in lookup for k in tri):faces.append(tuple(lookup[k] for k in tri))
++ # Smooth the contour rather than retaining the raster mask's stair-step edge.
++ edge_counts={}
++ for face in faces:
++  for a,b in zip(face,face[1:]+face[:1]):
++   key=tuple(sorted((a,b)));edge_counts.setdefault(key,[]).append((a,b))
++ edges=[v[0] for v in edge_counts.values() if len(v)==1]
++ neighbors={}
++ for a,b in edges:neighbors.setdefault(a,[]).append(b);neighbors.setdefault(b,[]).append(a)
++ verts=np.array(vertices,dtype=float)
++ for _ in range(5):
++  updated=verts.copy()
++  for i,adj in neighbors.items():updated[i,[0,2]]=.58*verts[i,[0,2]]+.42*verts[adj][:,[0,2]].mean(axis=0)
++  verts=updated
++ for i in neighbors:
++  x,z=verts[i,[0,2]];gx=(x-grid[0])/(grid[1]-grid[0]);gz=(z-grid[0])/(grid[1]-grid[0]);ix=int(gx);iz=int(gz);tx=gx-ix;tz=gz-iz
++  interpolated=(heights[iz,ix]*(1-tx)+heights[iz,ix+1]*tx)*(1-tz)+(heights[iz+1,ix]*(1-tx)+heights[iz+1,ix+1]*tx)*tz
++  verts[i,1]=max(interpolated,max(top(x,z,rock) for rock in rocks)+.022)
++ vertices=verts.tolist();lower={}
++ for i in neighbors:
++  lower[i]=len(vertices);v=verts[i].copy();v[1]-=.025;vertices.append(v.tolist());uv.append((v[0],v[2]))
++ for a,b in edges:faces.extend([(b,a,lower[a]),(b,lower[a],lower[b])])
+  m.add(vertices,faces,'snow',uv=uv)
+  m.features=[('three asymmetrically grouped stones' if kind=='snow_rock' else 'four lobed sculpted stones'),'normal-mapped mineral surfaces','snow conforms to exposed union of rocks','no buried cap intersections']
+  return m
