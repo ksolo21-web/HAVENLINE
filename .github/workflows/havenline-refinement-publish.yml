@@ -1,0 +1,79 @@
+name: Publish guarded Havenline environment candidate
+on:
+  push:
+    branches: ['codex/havenline-environment-review']
+    paths: ['.github/workflows/havenline-refinement-publish.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  publish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify source fingerprints and apply the candidate patch
+        run: |
+          set -euo pipefail
+          mkdir -p refinement-evidence
+          python3 - <<'PY'
+          import re,base64,zlib,json,pathlib,hashlib,subprocess
+          source=pathlib.Path('.github/workflows/havenline-refinement-045.yml').read_text()
+          encoded=re.search("encoded='''(.*?)'''",source,re.S).group(1)
+          encoded=encoded.replace('n+utbLSLSNlG1','n+utbLSNlG1')
+          d=json.loads(zlib.decompress(base64.b64decode(encoded,validate=True)))
+          for name,expected in d['before'].items():
+              p=pathlib.Path(name)
+              assert not p.is_absolute() and '..' not in p.parts
+              actual=hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else None
+              assert actual==expected,('Source drift',name,actual,expected)
+          for name,expected in d['protected'].items():
+              assert hashlib.sha256(pathlib.Path(name).read_bytes()).hexdigest()==expected,name
+          pathlib.Path('/tmp/refinement.json').write_text(json.dumps(d))
+          pathlib.Path('refinement-evidence/refinement.patch').write_text(d['patch'])
+          subprocess.run(['git','apply','--check','refinement-evidence/refinement.patch'],check=True)
+          subprocess.run(['git','apply','refinement-evidence/refinement.patch'],check=True)
+          print('Applied verified text files:',len(d['before']))
+          PY
+      - name: Reproduce exact assets and audit protected originals
+        run: |
+          set -euo pipefail
+          python3 -m pip install -r tools/havenline/requirements-environment.txt
+          python3 tools/havenline/bake_environment.py | tee refinement-evidence/bake.json
+          python3 tools/havenline/asset_audit.py --output refinement-evidence/original-assets.json
+          python3 tools/havenline/environment_asset_audit.py --output refinement-evidence/environment-assets.json
+          python3 - <<'PY'
+          import json,pathlib,hashlib
+          d=json.loads(pathlib.Path('/tmp/refinement.json').read_text())
+          for name,expected in d['protected'].items():
+              assert hashlib.sha256(pathlib.Path(name).read_bytes()).hexdigest()==expected,name
+          manifest=pathlib.Path('HavenlineGodot/assets/environment_v2/manifest.json')
+          assert hashlib.sha256(manifest.read_bytes()).hexdigest()==d['expected_environment_manifest'],'Generated assets do not match local review'
+          print('Original GLBs unchanged and generated manifest matches exactly.')
+          PY
+      - name: Commit development candidate without merging
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib,subprocess
+          d=json.loads(pathlib.Path('/tmp/refinement.json').read_text())
+          names=list(d['before'])+[str(p) for p in pathlib.Path('HavenlineGodot/assets/environment_v2').glob('*.glb')]+['HavenlineGodot/assets/environment_v2/manifest.json']
+          subprocess.run(['git','add','--',*names],check=True)
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git commit -m 'Refine conifers and winter surfaces; preserve mesh LODs; measure native frame timing'
+          git push origin HEAD:codex/havenline-environment-review
+          git rev-parse HEAD > refinement-evidence/commit.txt
+          cp HavenlineGodot/assets/environment_v2/manifest.json refinement-evidence/
+          printf '%s\n' 'Development candidate. Environment 10/10 and physical Android 4K/60 are NOT certified.' > refinement-evidence/STATUS.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-refinement-045-publication
+          path: refinement-evidence/
+          retention-days: 30
+          if-no-files-found: warn
