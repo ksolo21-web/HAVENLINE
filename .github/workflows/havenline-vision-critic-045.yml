@@ -1,0 +1,107 @@
+name: Havenline 045 independent environment review
+on:
+  push:
+    branches: ['codex/havenline-visual-critic']
+    paths: ['.github/workflows/havenline-vision-critic-045.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  inspect:
+    strategy:
+      fail-fast: false
+      max-parallel: 7
+      matrix:
+        shard: [0, 1, 2, 3, 4, 5, 6]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      EXPECTED_SOURCE: '22c9a4eba92f57fa5cdef6989575b57640d6b348'
+      REVIEW_SHARD: ${{ matrix.shard }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Retain the same critic rubric and tighten only acceptance
+        run: |
+          set -euo pipefail
+          python3 -m pip install 'pillow==11.3.0'
+          python3 - <<'PY'
+          import pathlib
+          p=pathlib.Path('tools/havenline/run_environment_vision_critic.py');s=p.read_text()
+          replacements={
+              'releases/latest':'releases/tags/b10809',
+              'for attempt in range(45):':'for attempt in range(90):',
+              '    for index,name in enumerate(order):':"    order=order[int(os.environ['REVIEW_SHARD'])::7]\n    for index,name in enumerate(order):",
+              "record['lowest_score']>9":"record['lowest_score']==10",
+              "'passed':len(records)==14 and all(r['passed'] for r in records)":"'passed':len(records)==len(order) and all(r['passed'] for r in records)",
+              "'views_reviewed':len(records)":"'views_reviewed':len(records),'shard':int(os.environ['REVIEW_SHARD']),'acceptance_score':10"
+          }
+          for old,new in replacements.items():
+              assert s.count(old)==1,(old,s.count(old))
+              s=s.replace(old,new)
+          p.write_text(s)
+          pathlib.Path('critic-results-v2').mkdir(exist_ok=True)
+          pathlib.Path('critic-results-v2/executed-reviewer.py').write_text(s)
+          PY
+      - name: Independently inspect actual images from the exact revised source
+        run: python3 -u tools/havenline/run_environment_vision_critic.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-045-critic-shard-${{ matrix.shard }}
+          path: critic-results-v2/
+          retention-days: 30
+          if-no-files-found: error
+  aggregate:
+    needs: inspect
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-045-critic-shard-*
+          path: shard-reports
+      - name: Validate evidence coverage and preserve every score and defect
+        run: |
+          set -euo pipefail
+          mkdir -p independent-environment-review
+          python3 - <<'PY'
+          import pathlib,json,shutil
+          root=pathlib.Path('shard-reports');out=pathlib.Path('independent-environment-review')
+          expected_source='22c9a4eba92f57fa5cdef6989575b57640d6b348'
+          expected={'mobile-render','outpost-tree-detail','outpost-shelter-detail','outpost-shelter-detail-rear','outpost-furnace-detail','outpost-night','mobile-three-quarter','mobile-rear','mobile-left','mobile-side','outpost-blizzard','outpost-warmth4','outpost-gather','outpost-native-4k'}
+          errors=[];records=[];provenances=[]
+          for shard in range(7):
+              folder=root/f'havenline-045-critic-shard-{shard}'
+              if not folder.exists():errors.append(f'Missing shard{shard}');continue
+              shutil.copytree(folder,out/f'shard-{shard}',dirs_exist_ok=True)
+              try:
+                  p=json.loads((folder/'provenance.json').read_text());provenances.append(p)
+                  assert p['independent_model_execution'] and p['expected_source']==expected_source
+                  assert p['capture_provenance']['source']==expected_source
+              except Exception as e:errors.append(f'Incomplete or mismatched provenance shard{shard}: {e}')
+              for file in folder.glob('view-*.json'):
+                  r=json.loads(file.read_text());records.append(r)
+                  if 'validation_error' in r or 'parsed' not in r:errors.append('Invalid review '+r['view'])
+          names=[r['view'] for r in records]
+          if set(names)!=expected or len(names)!=len(expected):errors.append('Fourteen unique required views not all reviewed')
+          if len({p['model_revision'] for p in provenances})!=1:errors.append('Model revisions differ')
+          if any(r.get('parsed',{}).get('confidence')=='low' for r in records):errors.append('Low-confidence review needs verification')
+          valid=[r for r in records if 'lowest_score' in r and 'validation_error' not in r]
+          passed=not errors and len(valid)==14 and all(r['lowest_score']==10 and not r['parsed']['defects'] for r in valid)
+          report={'expected_source':expected_source,'independent_model_execution':bool(valid),'coverage_complete':not errors,'views_reviewed':len(records),'valid_reviews':len(valid),'coverage_errors':errors,'required_score':10,'lowest_valid_score':min((r['lowest_score'] for r in valid),default=None),'all_critic_views_passed':passed,'production_approved':False,'physical_android_4k60_verified':False,'findings':[{'view':r['view'],'scores':r.get('parsed',{}).get('scores'),'defects':r.get('parsed',{}).get('defects'),'confidence':r.get('parsed',{}).get('confidence')} for r in records],'limitations':['Separate quantized8B model opinions must be checked against original images.','Resized frames cannot certify motion, installation, display presentation or sustained4K60.','Workflow success records review execution, not visual approval.']}
+          (out/'aggregate.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report,indent=2))
+          if errors:raise SystemExit(1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-045-independent-environment-review
+          path: independent-environment-review/
+          retention-days: 30
+          if-no-files-found: error
