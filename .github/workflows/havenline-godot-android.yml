@@ -2,7 +2,7 @@ name: HAVENLINE Native Android Review
 
 on:
   push:
-    branches: ['codex/havenline-godot-android', 'main']
+    branches: ['codex/havenline-godot-android', 'codex/havenline-native-completion-20260907', 'main']
     paths: ['HavenlineGodot/**', 'tools/havenline/**', '.github/workflows/havenline-godot-android.yml']
   workflow_dispatch:
   pull_request:
@@ -59,7 +59,7 @@ jobs:
           echo 'ca4d71c4d7b81dfc15d1a98baa07534aa95b03fdda78a0075b06672e1648d2e5f40980c9adc28d23e1b92e732ee7bf3461997aa804af74ec2fcd7a93ccb84079  templates.tpz' | sha512sum -c -
           unzip -j -q templates.tpz templates/android_debug.apk templates/android_release.apk templates/version.txt -d "$HOME/.local/share/godot/export_templates/4.7.2.stable"
           rm editor.zip templates.tpz
-          sdkmanager 'platform-tools' 'build-tools;35.0.1'
+          sdkmanager 'platform-tools' 'build-tools;35.0.1' 'platforms;android-35'
       - uses: actions/upload-artifact@v4
         with:
           name: HAVENLINE-pinned-Godot-4.7.2-${{ github.run_id }}
@@ -73,9 +73,58 @@ jobs:
           mkdir -p artifacts
           python3 tools/havenline/asset_audit.py --output artifacts/assets.json
           timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit 2>&1 | tee artifacts/import.log
-          timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tests/test_simulation.gd 2>&1 | tee artifacts/gameplay.log
+          timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/build_locomotion.gd 2>&1 | tee artifacts/locomotion.log
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit 2>&1 | tee artifacts/derived-import.log
+          for suite in test_simulation test_native_regression test_native_runtime test_native_scene; do
+            timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "artifacts/$suite.log"
+          done
           timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --quit-after 5 2>&1 | tee artifacts/launch.log
-          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' artifacts/import.log artifacts/gameplay.log artifacts/launch.log; then exit 1; fi
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' artifacts/*.log; then exit 1; fi
+      - name: Render actual Mobile-engine evidence, not performance certification
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends xvfb xauth libvulkan1 mesa-vulkan-drivers
+          mkdir -p artifacts/render
+          for fixture in 'idle 0 1.8 front-idle' 'walk 0 .6 front-walk' 'run 0 .3 front-run' 'run 90 .3 side-run' 'run 180 .8 back-run' 'run 270 .8 other-side-run'; do
+            read -r clip angle phase name <<< "$fixture"
+            folder="$GITHUB_WORKSPACE/artifacts/render/$name"
+            mkdir -p "$folder"
+            timeout 180 xvfb-run -a -s '-screen 0 1280x720x24' Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy --resolution 1280x720 -- --render-review "--qa-animation=$clip" "--qa-angle=$angle" "--qa-time=$phase" "--capture=$folder" 2>&1 | tee "artifacts/render-$name.log"
+          done
+          folder="$GITHUB_WORKSPACE/artifacts/render/native-4k"
+          mkdir -p "$folder"
+          timeout 240 xvfb-run -a -s '-screen 0 1280x720x24' Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy --resolution 1280x720 -- --qa-animation=idle --qa-time=1.8 "--capture=$folder" 2>&1 | tee artifacts/render-native-4k.log
+          python3 - <<'PYRENDER'
+          import json, struct
+          from pathlib import Path
+          reports = list(Path('artifacts/render').glob('*/render-evidence.json'))
+          assert len(reports) == 7, 'Missing rendered evidence'
+          for path in reports:
+              data = json.loads(path.read_text())
+              assert data['renderer'] == 'mobile', 'Renderer fallback is not native Mobile evidence'
+              assert data['active_script'] == 'res://scripts/main_native.gd'
+              assert data['source_character1_sha256'] == '95e4fed3a2778656cdf8b73affd2eb3feda8a32f82f4a0c3f76d90c82633c099'
+              assert data['performance_certified'] is False
+              if path.parent.name == 'native-4k':
+                  assert data['internal_render'] == [3840, 2160]
+                  assert data['render_scale'] == 1 and not data['render_review']
+                  png = (path.parent / 'native-scene.png').read_bytes()
+                  assert png[:8] == b'\x89PNG\r\n\x1a\n'
+                  assert struct.unpack('>II', png[16:24]) == (3840, 2160)
+          print('Seven native-renderer fixtures captured; physical Android 4K/60 remains untested.')
+          PYRENDER
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' artifacts/render-*.log; then exit 1; fi
+      - name: Stamp exact build identity
+        shell: bash
+        run: |
+          python3 - <<'PYIDENTITY'
+          import json, os
+          from pathlib import Path
+          data = {'schema': 1, 'source_revision': os.environ['GITHUB_SHA'], 'source_head_branch': os.environ.get('GITHUB_HEAD_REF') or os.environ['GITHUB_REF_NAME'], 'workflow_run_id': os.environ['GITHUB_RUN_ID'], 'engine': 'Godot 4.7.2', 'status': 'development_only', 'physical_performance_certified': False}
+          Path('HavenlineGodot/data/build-identity.json').write_text(json.dumps(data, indent=2) + '\n')
+          PYIDENTITY
       - name: Export isolated ARM64 review APK
         shell: bash
         run: |
@@ -87,6 +136,19 @@ jobs:
           cp HavenlineGodot/build/HAVENLINE-native-review-arm64.apk artifacts/
           sha256sum artifacts/*.apk > artifacts/SHA256SUMS.txt
           cp HavenlineGodot/data/release-status.json artifacts/
+          cp HavenlineGodot/data/build-identity.json artifacts/
+          cp HavenlineGodot/assets/animations/provenance.json artifacts/locomotion-provenance.json
+          python3 - <<'PYSOURCE'
+          from pathlib import Path
+          from zipfile import ZipFile, ZIP_DEFLATED
+          with ZipFile('artifacts/HAVENLINE-native-buildable-source.zip','w',ZIP_DEFLATED) as z:
+              for directory in ['HavenlineGodot','tools/havenline','Docs/AI']:
+                  for p in Path(directory).rglob('*'):
+                      if p.is_file() and not any(x in p.parts for x in ['.godot','build','__pycache__']):
+                          z.write(p,p.as_posix())
+              for name in ['AGENTS.md','README.md','.github/workflows/havenline-godot-android.yml']:
+                  z.write(name,name)
+          PYSOURCE
       - uses: actions/upload-artifact@v4
         if: always()
         with:
