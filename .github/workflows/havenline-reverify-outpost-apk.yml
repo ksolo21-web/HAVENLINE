@@ -1,0 +1,70 @@
+name: HAVENLINE Reverify Preserved Outpost APK
+on:
+  push:
+    branches: ['codex/havenline-godot-android']
+    paths: ['.github/workflows/havenline-reverify-outpost-apk.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  reverify-original-apk:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          lfs: false
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: actions/download-artifact@v4
+        with:
+          name: HAVENLINE-native-review-1685f045e9d55eb06db5cb421438db609393e909
+          run-id: 34144531869
+          github-token: ${{ github.token }}
+          path: original-export
+      - name: Verify immutable APK bytes, signature, resources and original evidence
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p verification
+          apk='original-export/HAVENLINE-native-review-arm64.apk'
+          echo "546788d76913243be4b0ee91e7ded8eeca86185762316fb05ed990fc8e0e6720  $apk" | sha256sum -c -
+          signer="$(find "${ANDROID_HOME:-/usr/local/lib/android/sdk}/build-tools" -type f -name apksigner | sort -V | tail -n1)"
+          test -n "$signer"
+          "$signer" verify --verbose --print-certs "$apk" > verification/apk-signature.txt
+          python3 tools/havenline/verify_apk.py "$apk" --output verification/apk-reinspection.json
+          python3 tools/havenline/verify_apk.py --self-test --output verification/verifier-regressions.json
+          cp tools/havenline/verify_apk.py verification/
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,struct
+          old=pathlib.Path('original-export');out=pathlib.Path('verification')
+          tests=json.loads((old/'test-summary.json').read_text())
+          assert tests['all_checks_passed'] and tests['total_checks']==312
+          assert not tests['game_complete'] and not tests['physical_4k60_certified']
+          original=json.loads((old/'apk-inspection.json').read_text())
+          assert original['sha256']=='546788d76913243be4b0ee91e7ded8eeca86185762316fb05ed990fc8e0e6720'
+          report=json.loads((out/'apk-reinspection.json').read_text())
+          assert report['passed'] and len(report['checks'])==13 and len(report['audio_import_targets'])==6
+          assert report['verifier_self_test']['total_checks']==20
+          frames=[]
+          for d in ('mobile-render','mobile-rear','mobile-side','mobile-three-quarter','outpost-night','outpost-blizzard','outpost-warmth4','outpost-gather','outpost-native-4k'):
+              r=json.loads((old/d/'render-evidence.json').read_text())
+              assert r['renderer']=='mobile' and r['render_scale']==1.0 and not r['performance_certified']
+              png=(old/d/'native-scene.png').read_bytes();size=list(struct.unpack('>II',png[16:24]))
+              assert r['internal_render']==size
+              if d=='outpost-native-4k':assert size[0]>=3840 and size[1]>=2160 and not r['render_review']
+              frames.append({'view':d,'size':size,'sha256':hashlib.sha256(png).hexdigest()})
+          result={'original_export_run':34144531869,'original_source_checkout':'1685f045e9d55eb06db5cb421438db609393e909','original_pipeline_conclusion':'failure: audio metadata parser rejected NUL terminator','verification_run':int(os.environ['GITHUB_RUN_ID']),'verification_commit':os.environ['GITHUB_SHA'],'apk_sha256':report['sha256'],'same_original_apk_bytes':True,'apk_signature_reverified':True,'apk_resource_checks_passed':13,'verifier_regressions_passed':20,'original_engine_checks_passed':312,'captures':frames,'independent_critic_executed':False,'production_approved':False,'physical_4k60_certified':False}
+          (out/'verification-provenance.json').write_text(json.dumps(result,indent=2)+'\n')
+          (out/'original-failed-inspection.json').write_text(json.dumps(original,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HAVENLINE-outpost-APK-reverification-${{ github.sha }}
+          path: verification/
+          retention-days: 30
+          if-no-files-found: error

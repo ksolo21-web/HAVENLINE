@@ -1,0 +1,33 @@
+{
+  "schema": 2,
+  "opening_survivor_template": "survivor_male_01",
+  "templates": {
+    "customer_male_01": {"role":"customer","gender":"male","species":"human","model":"res://assets/npcs/customer_male_01.glb","height":1.72,"asset_status":"missing","review_status":"not_reviewed"},
+    "customer_male_02": {"role":"customer","gender":"male","species":"human","model":"res://assets/npcs/customer_male_02.glb","height":1.72,"asset_status":"missing","review_status":"not_reviewed"},
+    "survivor_male_01": {"role":"survivor","gender":"male","species":"human","model":"res://assets/npcs/survivor_male_01.glb","height":1.74,"asset_status":"missing","review_status":"not_reviewed"},
+    "customer_female_01": {"role":"customer","gender":"female","species":"human","model":"res://assets/npcs/customer_female_01.glb","height":1.66,"asset_status":"missing","review_status":"not_reviewed"},
+    "customer_female_02": {"role":"customer","gender":"female","species":"human","model":"res://assets/npcs/customer_female_02.glb","height":1.66,"asset_status":"missing","review_status":"not_reviewed"},
+    "survivor_female_01": {"role":"survivor","gender":"female","species":"human","model":"res://assets/npcs/survivor_female_01.glb","height":1.67,"asset_status":"missing","review_status":"not_reviewed"},
+    "pet_dog_01": {"role":"pet","gender":"unspecified","species":"dog","model":"res://assets/npcs/pet_dog_01.glb","height":0.7,"asset_status":"missing","review_status":"not_reviewed","reference_id":"pet_dog_01","locomotion_profile":"quadruped","height_status":"provisional_game_scale_not_reviewed"},
+    "pet_lion_01": {"role":"pet","gender":"unspecified","species":"lion","model":"res://assets/npcs/pet_lion_01.glb","height":1.25,"asset_status":"missing","review_status":"not_reviewed","reference_id":"pet_lion_01","locomotion_profile":"quadruped","height_status":"provisional_game_scale_not_reviewed"},
+    "pet_tiger_01": {"role":"pet","gender":"unspecified","species":"tiger","model":"res://assets/npcs/pet_tiger_01.glb","height":1.12,"asset_status":"missing","review_status":"not_reviewed","reference_id":"pet_tiger_01","locomotion_profile":"quadruped","height_status":"provisional_game_scale_not_reviewed"},
+    "pet_bear_01": {"role":"pet","gender":"unspecified","species":"bear","model":"res://assets/npcs/pet_bear_01.glb","height":1.4,"asset_status":"missing","review_status":"not_reviewed","reference_id":"pet_bear_01","locomotion_profile":"quadruped","height_status":"provisional_game_scale_not_reviewed"},
+    "pet_wolf_01": {"role":"pet","gender":"unspecified","species":"wolf","model":"res://assets/npcs/pet_wolf_01.glb","height":0.85,"asset_status":"missing","review_status":"not_reviewed","reference_id":"pet_wolf_01","locomotion_profile":"quadruped","height_status":"provisional_game_scale_not_reviewed"},
+    "pet_owl_01": {"role":"pet","gender":"unspecified","species":"owl","model":"res://assets/npcs/pet_owl_01.glb","height":0.68,"asset_status":"missing","review_status":"not_reviewed","reference_id":"pet_owl_01","locomotion_profile":"avian","height_status":"provisional_game_scale_not_reviewed"},
+    "pet_fox_01": {"role":"pet","gender":"unspecified","species":"fox","model":"res://assets/npcs/pet_fox_01.glb","height":0.6,"asset_status":"missing","review_status":"not_reviewed","reference_id":"pet_fox_01","locomotion_profile":"quadruped","height_status":"provisional_game_scale_not_reviewed"}
+  },
+  "customer_template_pool": ["customer_male_01","customer_male_02","customer_female_01","customer_female_02"],
+  "survivor_template_pool": ["survivor_male_01","survivor_female_01"],
+  "pet_template_pool": ["pet_dog_01","pet_lion_01","pet_tiger_01","pet_bear_01","pet_wolf_01","pet_owl_01","pet_fox_01"],
+  "notes": [
+    "These are model contracts, NOT delivered or approved visual assets. No core-character model may be used as a fallback.",
+    "Two male and two female customer bases are reused with persistent, per-instance variation descriptors.",
+    "Additional survivor male/female bases are distinct from the four custom characters and the customer bases.",
+    "Characters 2–4 rigging fixes and final reviews are deferred to the final character-polish stage, not approved or removed.",
+    "Allowed animals are dogs, lions, tigers, bears, wolves, owls and foxes. No domestic cats.",
+    "The seven user-supplied images are design references, not rigged GLBs or actual game-render evidence.",
+    "Legacy schema-1 domestic-cat records migrate once to foxes, preserving saved identity and interaction progress.",
+    "Owl flight, takeoff, landing, wing clearance and aerial navigation need separate authored motion and runtime review; do not substitute a quadruped rig.",
+    "All pet model heights are provisional scale targets, not approved dimensions."
+  ]
+}

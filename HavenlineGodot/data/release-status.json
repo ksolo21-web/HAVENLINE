@@ -1,0 +1,78 @@
+{
+  "schema": 1,
+  "product": "HAVENLINE",
+  "engine": "Godot 4.7.2",
+  "status": "development_only",
+  "required": {
+    "native_arm64_build": "UNTESTED_FOR_0.4.3_AT_SOURCE_CHECKPOINT",
+    "android_install_launch_lifecycle": "UNTESTED",
+    "opening_gameplay_rendered_end_to_end": "FAIL",
+    "four_character_identities_human_approved": "UNTESTED",
+    "all_character_motion_sets": "FAIL",
+    "whole_rig_critic_at_least_9": "UNTESTED",
+    "non_primitive_environment_human_approved": "FAIL",
+    "wolf_and_additional_survivor_art": "FAIL",
+    "production_chains_and_worker_jobs": "FAIL",
+    "ten_connected_biomes_and_transport": "FAIL",
+    "weather_and_day_night": "IMPLEMENTED_TESTED_LOCAL_RENDER_ACCEPTANCE_PENDING",
+    "google_identity_and_cloud_save": "FAIL",
+    "safe_area_and_fold_lifecycle": "UNTESTED",
+    "sustained_physical_4k_60": "UNTESTED",
+    "audio_and_feedback_complete": "PARTIAL_OUTPOST_AUDIO_TESTED_FULL_SOUNDTRACK_AND_ACTION_FOLEY_PENDING",
+    "customer_survivor_pet_authored_models": "FAIL",
+    "population_gameplay_and_save_regression": "PASS_LOCAL",
+    "npc_role_animations_and_visual_variants": "FAIL",
+    "independent_critic_strictly_above_9": "UNTESTED"
+  },
+  "notes": [
+    "Passing source tests, bone-length checks, imported GLBs or successful APK export is not production approval.",
+    "C1 source has idle/run/walk; C2-C4 use derived locomotion libraries, still unapproved and missing full action animation.",
+    "Source GLBs are unchanged. Static batching and instancing do not constitute visual approval of the world meshes.",
+    "Review presentation gates block invisible restored threats and additional NPC work; complete rendered rescue/wolf encounters remain unfinished.",
+    "Timed crew jobs are implemented; full production chains and connected biomes are not complete.",
+    "No production export preset or permanent production signing configuration is provided until the complete release gate passes.",
+    "The animal-roster correction requires thirteen authored NPC models: four customers, two additional human survivors, and seven animal species. All thirteen model slots remain empty; reference art and logical tests are not finished NPCs.",
+    "C2-C4 rigging fixes and final rig review are deferred to the final character-polish stage by explicit user direction; source GLBs are unchanged.",
+    "Native resolution policy now enforces both width >=3840 and height >=2160, including ultrawide layouts. This is not physical 4K/60 certification.",
+    "Trade tuning and supply tokens are provisional game design. No real-money system is added."
+  ],
+  "animal_roster_correction": {
+    "species": [
+      "dog",
+      "lion",
+      "tiger",
+      "bear",
+      "wolf",
+      "owl",
+      "fox"
+    ],
+    "domestic_cats_allowed": false,
+    "required_npc_models": 13,
+    "delivered_npc_models": 0,
+    "legacy_cat_migration": "fox; preserve identity and saved progress",
+    "validation_status": "234_engine_checks_passed",
+    "apk_status": "not_rebuilt_for_this_correction",
+    "reference_images_are_game_assets": false,
+    "independent_critic_executed": false,
+    "visual_quality_score": null
+  },
+  "outpost_043": {
+    "version": "0.4.3-outpost-review",
+    "source_checkpoint": true,
+    "features": [
+      "saved simulation-time day/night and blended weather",
+      "climate-dependent cooling and furnace heat",
+      "sculpted terrain and expanding thaw",
+      "real-timer automatic action feedback",
+      "six original baked sound effects and persistent mute"
+    ],
+    "local_engine_checks": 311,
+    "local_render_method": "OpenGL Compatibility software llvmpipe",
+    "mobile_vulkan_and_apk": "PENDING_CI",
+    "original_custom_glbs_modified": false,
+    "npc_models_added": 0,
+    "independent_critic_executed": false,
+    "production_approved": false,
+    "visual_quality_score": null
+  }
+}

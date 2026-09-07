@@ -1,0 +1,152 @@
+name: HAVENLINE Apply and Validate Population 0.4.2
+on:
+  push:
+    branches: ['codex/havenline-godot-android']
+    paths: ['.github/workflows/havenline-population-update.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: havenline-population-update
+  cancel-in-progress: false
+jobs:
+  native-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/havenline-godot-android
+          fetch-depth: 1
+          lfs: false
+      - name: Recover and apply exact verified source transport
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import base64,gzip,hashlib,pathlib,subprocess
+          root=pathlib.Path('tools/havenline/updates')
+          # Recover the one known truncated text-transfer segment before validating
+          # the complete source patch. Neither compressed data nor decoded source
+          # is accepted unless its expected digest matches exactly.
+          p=root/'population-042.part2.b64'
+          s=p.read_text()
+          b=s.encode()
+          git_hash=lambda b: hashlib.sha1(('blob '+str(len(b))+'\0').encode()+b).hexdigest()
+          if git_hash(b)=='9260dc566b6991264e3977c91b4e6f9143c09e0a':
+              middle='HYTgaj0e0pTv3s9pF445WG7H20B0M4bwajFiykyjoIkASDMm5BIUei2nBW5eLfgo+jBjbtt1K6dclUCDdu8MQv+ennlRe7SXQXhCWvWNsiO8s7ZW/Apatbnd8Jw0illVLn36D1MsLjknYMW8XyhpJ/EKpj2fwrJM0TFLp1i7Y+w4j3eRD6VsOTyeG/Y0qQtt7WGtLqzNJP7pzf/3uefTmxb+fv3wbnJwGzGT/HICzmv25YJH3jbDnrYOIYBwJFy/tr0ud+hGSxn32mJOYpQ9SmYLKmxPis0l68PwhLFFIy6E+HRKFJEq1O/oOu6ffvN2Mf9STKS9Ze7B9MQHjHP7DAyFhaKOBSdwFwNPicCY6/VOSaYKII+XbnZOHwYM/Bt/EJDuSEu3FIJtI81gTaayicCLRgS7lELGRJjhsEi+4wySeQ9KCYpaS2oBQbY70ypAJK9n4a8TTWk/6LUmZnEYpMXTWmiQhKQ8IUqEDZegrSJGN3D0NhCFza9WLIo26p5fKlfmtqEBbXmrvpGhzHmWUJTid7wfdYfegO7pkeB8/5poJfQ4tqoOUTTCRF0iKbdWnvHneb6hV9HPvQQVXaMwy/il67D3gHkKSzCISMKivyocNfYVGcUjbtMIuC69cc2GZpZMUc6mdNBq+ek4NftYbh0AX2v/TSs/UtjrZ2rcdKULxhEC5N+grE65ClH9T34iGk/MqgM6mEv9aRMbGG31EFkDbnZ/OCbJnNitgJg5GLCGOdCTm8c20PQj7iOb5OQ1vgv3qo9sOERv+akkKyKzAV4PhMejM42EfxQiUeKguQk1Sjyzptyr107cZYcIkzWbt4p+rdXtKUFu3pecODS4z6/CYbv4hZkKQ/ZGj+oZZ23ai/f7ZftjVoYAB9Q58ahiahNgIL9vSQbe8Gux0Axdwik+7MkZHNqS+GRPiN6uYNkL+CBE4Guk+nCIrhR4e'
+              s=s.replace('PwmB4ND8ePA+/','PwmB4ND8e'+middle+'PA+/',1)
+              p.write_text(s)
+          assert git_hash(p.read_bytes())=='8f8f6a3cd710f4a9f6da52fb4457831baa591975'
+          encoded=''.join((root/f'population-042.part{i}.b64').read_text().strip() for i in range(1,5))
+          compressed=base64.b64decode(encoded,validate=True)
+          assert hashlib.sha256(compressed).hexdigest()=='e8a3c258d6f6546bc721c64c09c3560e93b4bab239de07cba193c9407f1efe3b'
+          patch=gzip.decompress(compressed)
+          assert hashlib.sha256(patch).hexdigest()=='614c3a8eb160df375f1763d1c21c34dc976f2bdec9d6f6e2a4789d178946e6e1'
+          pathlib.Path('/tmp/population-042.patch').write_bytes(patch)
+          subprocess.run(['git','apply','--check','--index','/tmp/population-042.patch'],check=True)
+          subprocess.run(['git','apply','--index','/tmp/population-042.patch'],check=True)
+          subprocess.run(['git','add',str(p)],check=True)
+          PY
+          git -c user.name='Havenline Native Build' -c user.email='havenline-build@users.noreply.github.com' commit -m 'Implement separate customer, survivor and pet systems; preserve deferred custom rigs'
+          echo "BUILT_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
+      - name: Archive exact native source
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/havenline-source"
+          git archive --format=zip HEAD HavenlineGodot tools/havenline Docs/AI AGENTS.md README.md .github/workflows > "$RUNNER_TEMP/havenline-source/HAVENLINE-native-source.zip"
+          git rev-parse HEAD > "$RUNNER_TEMP/havenline-source/COMMIT.txt"
+          cd "$RUNNER_TEMP/havenline-source"
+          sha256sum HAVENLINE-native-source.zip > SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: HAVENLINE-native-source-${{ env.BUILT_COMMIT }}
+          path: ${{ runner.temp }}/havenline-source/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install pinned Godot and Android templates
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/godot" "$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          cd "$RUNNER_TEMP/godot"
+          base='https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable'
+          curl -fL --retry 3 "$base/Godot_v4.7.2-stable_linux.x86_64.zip" -o editor.zip
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  editor.zip' | sha512sum -c -
+          unzip -q editor.zip
+          chmod +x Godot_v4.7.2-stable_linux.x86_64
+          echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
+          curl -fL --retry 3 "$base/Godot_v4.7.2-stable_export_templates.tpz" -o templates.tpz
+          echo 'ca4d71c4d7b81dfc15d1a98baa07534aa95b03fdda78a0075b06672e1648d2e5f40980c9adc28d23e1b92e732ee7bf3461997aa804af74ec2fcd7a93ccb84079  templates.tpz' | sha512sum -c -
+          unzip -j -q templates.tpz templates/android_debug.apk templates/android_release.apk templates/version.txt -d "$HOME/.local/share/godot/export_templates/4.7.2.stable"
+          rm editor.zip templates.tpz
+          sdkmanager 'platform-tools' 'build-tools;35.0.1'
+      - name: Run actual engine tests and launch verification
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          python3 tools/havenline/asset_audit.py --output artifacts/assets.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit 2>&1 | tee artifacts/import.log
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd 2>&1 | tee artifacts/motion-bake.log
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population; do
+            timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "artifacts/$suite.log"
+          done
+          timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --quit-after 5 2>&1 | tee artifacts/launch.log
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' artifacts/*.log; then exit 1; fi
+          python3 tools/havenline/summarize_evidence.py --artifacts artifacts
+      - name: Capture actual Mobile Vulkan scene from four angles
+        shell: bash
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb mesa-vulkan-drivers
+          for view in front rear side three-quarter; do
+            mkdir -p "artifacts/mobile-$view"
+            timeout 120 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy -- --render-review --view="$view" --capture="$PWD/artifacts/mobile-$view" 2>&1 | tee "artifacts/mobile-$view.log"
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' artifacts/mobile-*.log; then exit 1; fi
+          python3 - <<'PY'
+          import json,pathlib
+          for p in pathlib.Path('artifacts').glob('mobile-*/render-evidence.json'):
+              r=json.loads(p.read_text())
+              assert r['renderer']=='mobile', 'Renderer fallback is not Mobile evidence'
+              assert r['performance_certified'] is False
+              assert len(r['characters'])==4
+              assert all(len(clips)>=3 for clips in r['source_clips'].values())
+          PY
+      - name: Export and inspect isolated ARM64 review APK
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/configure_android.py --sdk "$ANDROID_HOME" --java "$JAVA_HOME" --godot "$RUNNER_TEMP/godot/Godot_v4.7.2-stable_linux.x86_64"
+          mkdir -p HavenlineGodot/build
+          Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --export-debug 'Android Review' 2>&1 | tee artifacts/export.log
+          "$ANDROID_HOME/build-tools/35.0.1/apksigner" verify --verbose --print-certs HavenlineGodot/build/HAVENLINE-native-review-arm64.apk > artifacts/apk-signature.txt
+          python3 tools/havenline/verify_apk.py HavenlineGodot/build/HAVENLINE-native-review-arm64.apk --output artifacts/apk-inspection.json
+          cp HavenlineGodot/build/HAVENLINE-native-review-arm64.apk artifacts/
+          sha256sum artifacts/*.apk > artifacts/SHA256SUMS.txt
+          cp HavenlineGodot/data/release-status.json artifacts/
+      - name: Publish verified source without force push
+        shell: bash
+        run: |
+          set -euo pipefail
+          git push origin HEAD:codex/havenline-godot-android
+          python3 - <<'PY'
+          import json,os,pathlib
+          report={'built_source_commit':os.environ['BUILT_COMMIT'],'workflow_commit':os.environ['GITHUB_SHA'],'published_source':True,'production_approved':False,'authored_npc_models_delivered':0,'independent_critic_executed':False}
+          pathlib.Path('artifacts/source-publication.json').write_text(json.dumps(report,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: HAVENLINE-native-review-${{ env.BUILT_COMMIT }}
+          path: artifacts/
+          retention-days: 30
+          if-no-files-found: error
