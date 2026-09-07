@@ -1,6 +1,16 @@
 extends Control
 
-const Simulation = preload("res://scripts/population_simulation.gd")
+const Simulation = preload("res://scripts/outpost_simulation.gd")
+const OutpostView = preload("res://scripts/outpost_view.gd")
+const Surface = preload("res://scripts/outpost_surface.gd")
+const ActionReadout = preload("res://scripts/action_readout.gd")
+const OutpostAudio = preload("res://scripts/outpost_audio.gd")
+var outpost_view: Node3D
+var outpost_audio: Node
+var action_readout: Control
+var climate_status: Label
+var environment: Environment
+var capture_scenario := "opening"
 const Saves = preload("res://scripts/save_store.gd")
 const Scenery = preload("res://scripts/scenery_batch.gd")
 const FrameRecord = preload("res://scripts/performance_record.gd")
@@ -58,6 +68,7 @@ func _ready():
 	sim.rescue_enabled = false
 	sim.presented_actor_ids = [1,2,3,4]
 	get_tree().quit_on_go_back = false
+	get_tree().auto_accept_quit = false
 	Engine.max_fps = 60
 	for argument in OS.get_cmdline_user_args():
 		if argument.begins_with("--capture="):
@@ -68,10 +79,13 @@ func _ready():
 		if argument == "--no-batching": no_batching = true
 		if argument.begins_with("--phase="): capture_phase = clampf(argument.trim_prefix("--phase=").to_float(), 0, 1)
 		if argument.begins_with("--view="): capture_view = argument.trim_prefix("--view=")
+		if argument.begins_with("--scenario="): capture_scenario = argument.trim_prefix("--scenario=")
 	# Review uses the same scene and materials at a disclosed smaller render size.
 	# It never grants the 4K/60 performance gate.
 	if not qa_mode:
 		save_recovery_path = Saves.load_into(sim)
+	else:
+		apply_capture_scenario()
 	scene_view = SubViewport.new()
 	scene_view.own_world_3d = true
 	scene_view.render_target_update_mode = SubViewport.UPDATE_ALWAYS
@@ -89,6 +103,11 @@ func _ready():
 	scene_view.add_child(world)
 	build_environment()
 	build_world()
+	outpost_view = OutpostView.new()
+	world.add_child(outpost_view)
+	outpost_view.configure(environment, sun, furnace, heat_light, sim)
+	outpost_audio = OutpostAudio.new()
+	add_child(outpost_audio)
 	build_crew()
 	population_view = PopulationView.new()
 	world.add_child(population_view)
@@ -97,6 +116,9 @@ func _ready():
 	transfer_feedback.loader = resource_piece
 	world.add_child(transfer_feedback)
 	build_hud()
+	action_readout = ActionReadout.new()
+	add_child(action_readout)
+	action_readout.configure(sim, camera, scene_view)
 	resized.connect(resize_render)
 	resize_render()
 	if qa_mode:
@@ -111,8 +133,21 @@ func resize_render():
 	layout_hud()
 	queue_redraw()
 
+func apply_capture_scenario():
+	# Explicit QA fixtures only. Normal player saves/starts never use these values.
+	if capture_scenario in ["warmth2", "night", "blizzard", "warmth4"]:
+		sim.stored.wood = 18; sim.stored.stone = 6
+		if capture_scenario == "warmth4":
+			sim.stored.wood = 64; sim.stored.stone = 28; sim.stored.metal = 6
+		sim.update_level()
+	if capture_scenario == "night": sim.climate.seconds = 670.0
+	if capture_scenario == "blizzard": sim.climate.seconds = 585.0
+	if capture_scenario == "gather":
+		sim.position = sim.resources[0].position + Vector2(0, 1.1)
+		sim.action_clocks["gather:" + sim.resources[0].id] = 0.15
+
 func build_environment():
-	var environment := Environment.new()
+	environment = Environment.new()
 	environment.background_mode = Environment.BG_COLOR
 	environment.background_color = Color("577b9a")
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
@@ -120,6 +155,8 @@ func build_environment():
 	environment.ambient_light_energy = 0.38
 	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
 	environment.tonemap_exposure = 0.9
+	# Reserve highlight headroom instead of clipping every sunlit snow surface.
+	environment.tonemap_white = 6.0
 	environment.fog_enabled = true
 	environment.fog_light_color = Color("89adcc")
 	environment.fog_density = 0.007
@@ -147,7 +184,15 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 		asset_cache[path] = load(path)
 	var instance: Node3D
 	if asset.begins_with("world/") and not no_batching:
-		if not merged_cache.has(asset): merged_cache[asset] = Scenery.compile(asset_cache[path])
+		if not merged_cache.has(asset):
+			merged_cache[asset] = Scenery.compile(asset_cache[path])
+			if asset.begins_with("world/pine_"):
+				for i in merged_cache[asset].get_surface_count():
+					var source_material: Material = merged_cache[asset].surface_get_material(i)
+					if source_material is BaseMaterial3D:
+						var leaf_material: BaseMaterial3D = source_material.duplicate()
+						leaf_material.cull_mode = BaseMaterial3D.CULL_DISABLED
+						merged_cache[asset].surface_set_material(i, leaf_material)
 		instance = MeshInstance3D.new()
 		instance.mesh = merged_cache[asset]
 	else:
@@ -157,7 +202,8 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 	return instance
 
 func build_world():
-	model("world/terrain", world)
+	# The sculpted OutpostView surface replaces the flat terrain render only.
+	# All original GLB source assets are retained unchanged.
 	furnace = model("world/furnace", world, xyz(Simulation.point(sim.contract.world.furnace)))
 	heat_light = OmniLight3D.new()
 	heat_light.position = Vector3(0, 1.2, 0.6)
@@ -167,7 +213,7 @@ func build_world():
 	furnace.add_child(heat_light)
 	model("world/storage", world, xyz(Simulation.point(sim.contract.world.storage)))
 	for x in [-6.6, 6.6]:
-		var shelter := model("world/shelter", world, Vector3(x, 0, -4.8))
+		var shelter := model("world/shelter", world, xyz(Vector2(x, -4.8)))
 		shelter.rotation.y = -0.12 if x < 0 else 0.12
 	for index in range(sim.resources.size()):
 		var node: Dictionary = sim.resources[index]
@@ -176,7 +222,7 @@ func build_world():
 	var forest := {0: [], 1: [], 2: []}
 	for i in range(38):
 		var a := i * TAU / 38.0
-		var p := Vector3(cos(a) * (15.5 + sin(i * 12.2)), 0, sin(a) * 18.8)
+		var p := xyz(Vector2(cos(a) * (15.5 + sin(i * 12.2)), sin(a) * 18.8))
 		var scale_factor := 0.85 + fmod(i * .17, .5)
 		if no_batching:
 			var tree := model("world/pine_" + str(1 + i % 3), world, p)
@@ -197,7 +243,7 @@ func tree_rotation(tree: Node3D, index: int):
 	tree.rotation.y = index * 1.71
 
 func xyz(p: Vector2) -> Vector3:
-	return Vector3(p.x, 0, p.y)
+	return Vector3(p.x, Surface.height_at(p), p.y)
 
 func gather_meshes(node: Node, output: Array):
 	if node is MeshInstance3D: output.append(node)
@@ -293,6 +339,8 @@ func update_carry():
 		carry_stacks[companion.id].update_inventory(inventory)
 
 func present_events():
+	action_readout.consume(sim.events)
+	outpost_audio.consume(sim.events)
 	for event in sim.events:
 		var kind: String = event.get("resource", "")
 		if kind.is_empty(): continue
@@ -318,6 +366,8 @@ func text_label(text: String, font_size: int, parent: Control) -> Label:
 func build_hud():
 	status = text_label("", 27, self)
 	status.position = Vector2(40, 30)
+	climate_status = text_label("", 18, self)
+	climate_status.position = Vector2(40, 76)
 	objective = text_label("", 25, self)
 	objective.set_anchors_and_offsets_preset(Control.PRESET_CENTER_TOP)
 	objective.position.y = 35
@@ -407,6 +457,12 @@ func rebuild_menu():
 		resource.item_selected.connect(func(index):
 			sim.assign_job(id, Simulation.CrewWork.JOBS[job.selected], Simulation.KINDS[index]))
 	build_population_menu()
+	var audio_toggle := CheckButton.new()
+	audio_toggle.text = "Outpost sound"
+	audio_toggle.button_pressed = not outpost_audio.muted
+	audio_toggle.custom_minimum_size.y = 56
+	menu_column.add_child(audio_toggle)
+	audio_toggle.toggled.connect(func(enabled): outpost_audio.set_muted(not enabled))
 	var explanation := text_label("Move to act. Crew assignments never replace your movement control.",20,menu_column)
 	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	explanation.custom_minimum_size.y = 48
@@ -501,8 +557,8 @@ func _process(dt: float):
 		var d: Dictionary = sim.defenses[side]
 		defense_visuals[side].scale.y = .15 + .85 * (float(d.delivered.wood + d.delivered.stone) / 11)
 	update_carry()
-	heat_light.light_energy = 3.0 + sin(sim.elapsed * 8) * .08
-	heat_light.omni_range = sim.warmth()
+	outpost_view.sync(sim, dt, paused)
+	outpost_audio.sync(sim, paused, dt)
 	var focus := xyz(sim.position) + Vector3(0, .95, 0)
 	var offset := Vector3(0, 6.8, 8.6)
 	if qa_mode:
@@ -514,6 +570,9 @@ func _process(dt: float):
 	camera.position = camera.position.lerp(desired, 1 - exp(-8.6 * dt)) if capture_frames > 0 else desired
 	camera.look_at(focus)
 	status.text = "HEAT %d   ·   %d carried" % [sim.level, sim.carried()]
+	var hour: float = sim.climate.hour()
+	climate_status.text = "Day %d · %02d:%02d · %s\nWarmth %d%%  ·  Health %d%%" % [sim.climate.day_number(), int(hour), int(floor(fposmod(hour,1.0)*60.0)), sim.climate.weather().name, roundi(sim.temperature), roundi(sim.health)]
+	action_readout.refresh(dt, paused)
 	if sim.level < 2:
 		objective.text = "Furnace · %d/18 wood + %d/6 stone" % [mini(sim.stored.wood, 18), mini(sim.stored.stone, 6)]
 	elif not sim.rescued: objective.text = "Warmth restored · approach the survivor" if sim.rescue_enabled else "Warmth restored · rescue art pending"
@@ -532,6 +591,11 @@ func _process(dt: float):
 		scene_view.get_texture().get_image().save_png(capture_directory.path_join("native-scene.png"))
 		var report := {"renderer": RenderingServer.get_current_rendering_method(), "device": RenderingServer.get_video_adapter_name(), "window": [get_viewport().size.x, get_viewport().size.y], "internal_render": [scene_view.size.x, scene_view.size.y], "render_scale": scene_view.scaling_3d_scale, "render_review": render_review, "performance_certified": false, "characters": actors.keys(), "source_clips": {}}
 		report["npc_population"] = population_view.evidence()
+		report["outpost"] = outpost_view.evidence(sim)
+		report["capture_scenario"] = capture_scenario
+		report["scenario_is_test_fixture"] = capture_scenario != "opening"
+		report["action_readout"] = action_readout.descriptor
+		report["audio_event_count"] = outpost_audio.emitted_events
 		report["custom_c2_c4_rig_review_deferred"] = true
 		report["scene_script_sha256"] = FileAccess.get_file_as_string("res://scripts/main.gd").sha256_text()
 		report["camera_full_height"] = camera.size
@@ -551,7 +615,7 @@ func _process(dt: float):
 		var file := FileAccess.open(capture_directory.path_join("render-evidence.json"), FileAccess.WRITE)
 		file.store_string(JSON.stringify(report, "\t"))
 		file.close()
-		get_tree().quit()
+		await close_game()
 
 func measure_frame():
 	var now := Time.get_ticks_usec()
@@ -559,8 +623,19 @@ func measure_frame():
 		performance_record.sample(float(now - last_frame_usec) / 1000.0)
 	last_frame_usec = now
 
+func close_game():
+	# Retire real audio playback before disposing the scene or renderer.
+	set_process(false)
+	set_physics_process(false)
+	if is_instance_valid(outpost_audio): outpost_audio.stop_all()
+	await get_tree().create_timer(.35).timeout
+	get_tree().quit()
+
 func _notification(what: int):
-	if what == NOTIFICATION_WM_GO_BACK_REQUEST:
+	if what == NOTIFICATION_WM_CLOSE_REQUEST:
+		if not qa_mode: Saves.write_state(sim.snapshot())
+		close_game()
+	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
 		if is_instance_valid(menu) and not paused: toggle_menu()
 	elif what == NOTIFICATION_APPLICATION_PAUSED:
 		paused = true
@@ -582,7 +657,7 @@ func write_performance_record():
 		"renderer":RenderingServer.get_current_rendering_method(),
 		"gpu":RenderingServer.get_video_adapter_name(),
 		"render_scale":scene_view.scaling_3d_scale if is_instance_valid(scene_view) else 0.0,
-		"build":"0.4.2-population-development", "review_resolution":render_review})
+		"build":"0.4.3-outpost-development", "review_resolution":render_review})
 
 func layout_hud():
 	if not is_instance_valid(status): return
@@ -594,6 +669,7 @@ func layout_hud():
 			var factor := size / physical
 			safe = Rect2(Vector2(area.position) * factor,Vector2(area.size) * factor).intersection(safe)
 	status.position = safe.position + Vector2(32,28)
+	climate_status.position = safe.position + Vector2(36,74)
 	objective.size.x = minf(780,maxf(300,safe.size.x - 660))
 	objective.position = Vector2(safe.get_center().x - objective.size.x / 2,safe.position.y + 34)
 	hint.size.x = minf(780,safe.size.x - 96)

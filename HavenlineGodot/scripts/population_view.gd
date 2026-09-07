@@ -2,6 +2,7 @@ extends Node3D
 
 # Actual imported models only. Missing models never become invisible working
 # NPCs, colored capsules, clones of a custom character, or claimed final art.
+const Surface = preload("res://scripts/outpost_surface.gd")
 const CarryStack = preload("res://scripts/carry_stack.gd")
 var sim
 var nodes: Dictionary = {}
@@ -83,7 +84,7 @@ func create_actor(person: Dictionary) -> Node3D:
 	root.set_meta("animation", animation)
 	root.set_meta("appearance_descriptor", person.get("appearance", {}))
 	root.set_meta("visual_variants_applied", false)
-	root.position = Vector3(person.position.x, 0, person.position.y)
+	root.position = Vector3(person.position.x, Surface.height_at(person.position), person.position.y)
 	if person.role == "survivor":
 		var stack := CarryStack.new()
 		stack.loader = resource_loader
@@ -111,7 +112,7 @@ func sync(dt: float):
 		if not nodes.has(person.id): continue
 		present.append(person.id)
 		var root: Node3D = nodes[person.id]
-		var target := Vector3(person.position.x, 0, person.position.y)
+		var target := Vector3(person.position.x, Surface.height_at(person.position), person.position.y)
 		var motion := target - root.position
 		root.position = target
 		if motion.length() > 0.001:

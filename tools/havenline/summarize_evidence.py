@@ -7,7 +7,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--artifacts', type=Path, required=True)
 args = parser.parse_args()
 suites = []
-for name in ('test_simulation', 'test_crew_and_persistence', 'test_motion_and_performance', 'test_population'):
+for name in ('test_simulation', 'test_crew_and_persistence', 'test_motion_and_performance', 'test_population', 'test_outpost', 'test_outpost_runtime'):
     path = args.artifacts / f'{name}.log'
     reports = [json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
     if not reports:
