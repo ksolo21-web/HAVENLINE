@@ -63,6 +63,15 @@ func run():
 	check("Original first furnace upgrade preserved",game.sim.level==1 and is_equal_approx(game.sim.warmth(),4.5))
 	check("Missing humans and animals remain honestly gated",game.population_view.nodes.is_empty() and not game.sim.threats_enabled)
 	check("Actual native performance is still uncertified",not game.outpost_view.evidence(game.sim).native_4k60_certified)
+	# The dedicated close-up must show the complete hero asset, not a cropped tip.
+	game.capture_scenario="tree-detail";game.capture_frames=0
+	game._process(.016);game.capture_frames=100
+	var complete_asset=true
+	var frame=Rect2(Vector2.ZERO,Vector2(game.scene_view.size)).grow(-8.0)
+	for k in range(8):
+		var point:Vector3=tree.to_global(tree.mesh.get_aabb().get_endpoint(k))
+		if game.camera.is_position_behind(point) or not frame.has_point(game.camera.unproject_position(point)):complete_asset=false
+	check("Tree detail camera includes the complete asset silhouette",complete_asset)
 	game.outpost_audio.stop_all()
 	await create_timer(.35).timeout
 	game.free()
