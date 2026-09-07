@@ -87,7 +87,8 @@ def audio_import_targets(archive: ZipFile) -> dict[str, str]:
         try:
             config = configparser.ConfigParser(interpolation=None, strict=True)
             config.read_string(archive.read(record).decode('utf-8'))
-            if json.loads(config.get('remap', 'type')) != 'AudioStreamWAV':
+            # Android exports strip the editor-only type field; validate it when present.
+            if config.has_option('remap', 'type') and json.loads(config.get('remap', 'type')) != 'AudioStreamWAV':
                 continue
             resource = json.loads(config.get('remap', 'path'))
             if not isinstance(resource, str) or not resource.startswith('res://.godot/imported/'):
@@ -124,6 +125,7 @@ def self_test() -> dict:
     valid = '[remap]\ntype="AudioStreamWAV"\npath="res://.godot/imported/wind.wav-test.sample"\n'
     tests = {
         'valid_import_resolves': 'wind' in fixture(valid),
+        'stripped_export_import_resolves': 'wind' in fixture(valid.replace('type="AudioStreamWAV"\n', '')),
         'missing_record_rejected': not fixture(None),
         'missing_sample_rejected': not fixture(valid, None),
         'empty_sample_rejected': not fixture(valid, b''),
