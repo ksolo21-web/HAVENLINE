@@ -22,11 +22,11 @@ jobs:
           unzip -q editor.zip -d toolkit
           chmod +x toolkit/Godot_v4.7.2-stable_linux.x86_64
           toolkit/Godot_v4.7.2-stable_linux.x86_64 --version | tee toolkit/VERSION.txt
-          sha256sum toolkit/Godot_v4.7.2-stable_linux.x86_64 > toolkit/SHA256SUMS.txt
+          (cd toolkit && sha256sum Godot_v4.7.2-stable_linux.x86_64 > SHA256SUMS.txt)
           printf '%s\n' 'Pinned public engine binary for native source tests and software-rendered review. This archive is not a game build, independent critic, or physical-device benchmark.' > toolkit/README.txt
       - uses: actions/upload-artifact@v4
         with:
           name: HAVENLINE-pinned-native-toolkit-${{ github.sha }}
           path: toolkit/
-          retention-days: 7
+          retention-days: 30
           if-no-files-found: error
