@@ -19,7 +19,7 @@ jobs:
           ref: codex/havenline-godot-android
           fetch-depth: 1
           lfs: false
-      - name: Validate exact source transport and apply without overwriting divergent work
+      - name: Validate exact source and cleanup transports without overwriting divergent work
         shell: bash
         run: |
           set -euo pipefail
@@ -27,39 +27,38 @@ jobs:
           python3 - <<'PY'
           import base64,gzip,hashlib,json,pathlib,subprocess
           root=pathlib.Path('tools/havenline/updates')
-          pieces=[]
-          for i in range(1,4):
-              p=root/f'outpost-043.part{i}.b64'
-              b=p.read_bytes()
-              print(p, len(b), hashlib.sha256(b).hexdigest())
-              pieces.append(b.decode().strip())
-          compressed=base64.b64decode(''.join(pieces),validate=True)
-          digest=hashlib.sha256(compressed).hexdigest()
-          print('compressed_sha256',digest)
-          assert digest=='cef0c14ce10be417b671dda079c04b6bcaec7741b0edf523174f4e1306d31230'
-          data=json.loads(gzip.decompress(compressed))
-          entries=data['files']
-          assert len(entries)==21 and len({e['path'] for e in entries})==21
-          for e in entries:
-              p=pathlib.Path(e['path'])
-              assert not p.is_absolute() and '..' not in p.parts
-              assert str(p).startswith(('HavenlineGodot/','tools/havenline/','Docs/AI/'))
-          already=all(pathlib.Path(e['path']).exists() and hashlib.sha256(pathlib.Path(e['path']).read_bytes()).hexdigest()==e['sha256'] for e in entries)
-          if not already:
-              for e in entries:
+          transports=[(''.join((root/f'outpost-043.part{i}.b64').read_text().strip() for i in range(1,4)),'cef0c14ce10be417b671dda079c04b6bcaec7741b0edf523174f4e1306d31230'),((root/'outpost-043-cleanup.b64').read_text().strip(),'525f20fe47679111b41ac25171c4b70723bfc0d90b2167135ce64145e07bdf8a')]
+          batches=[]
+          final={}
+          for text,digest in transports:
+              compressed=base64.b64decode(text,validate=True)
+              assert hashlib.sha256(compressed).hexdigest()==digest
+              data=json.loads(gzip.decompress(compressed))
+              for e in data['files']:
                   p=pathlib.Path(e['path'])
-                  actual=hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else None
-                  assert actual==e['base_sha256'], f'Divergent source, not overwritten: {p}: {actual}'
-              patch=pathlib.Path('/tmp/outpost-043.patch')
-              patch.write_text(data['patch'])
-              subprocess.run(['git','apply','--check','--index',str(patch)],check=True)
-              subprocess.run(['git','apply','--index',str(patch)],check=True)
-          for e in entries:
-              assert hashlib.sha256(pathlib.Path(e['path']).read_bytes()).hexdigest()==e['sha256'], e['path']
-          pathlib.Path('artifacts/applied-source-manifest.json').write_text(json.dumps({'compressed_sha256':digest,'already_applied':already,'files':entries},indent=2)+'\n')
+                  assert not p.is_absolute() and '..' not in p.parts
+                  assert str(p).startswith(('HavenlineGodot/','tools/havenline/','Docs/AI/'))
+                  final[e['path']]=e
+              batches.append(data)
+          assert len(batches[0]['files'])==21 and len(batches[1]['files'])==4 and len(final)==22
+          def actual(e):
+              p=pathlib.Path(e['path'])
+              return hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else None
+          already=all(actual(e)==e['sha256'] for e in final.values())
+          if not already:
+              for index,data in enumerate(batches):
+                  if all(actual(e)==e['sha256'] for e in data['files']): continue
+                  for e in data['files']:
+                      assert actual(e)==e['base_sha256'], f"Divergent source, not overwritten: {e['path']}"
+                  patch=pathlib.Path(f'/tmp/outpost-{index}.patch')
+                  patch.write_text(data['patch'])
+                  subprocess.run(['git','apply','--check','--index',str(patch)],check=True)
+                  subprocess.run(['git','apply','--index',str(patch)],check=True)
+          for e in final.values(): assert actual(e)==e['sha256'], e['path']
+          pathlib.Path('artifacts/applied-source-manifest.json').write_text(json.dumps({'transport_sha256':[d for _,d in transports],'already_applied':already,'files':list(final.values())},indent=2)+'\n')
           PY
           if ! git diff --cached --quiet; then
-            git -c user.name='Havenline Native Build' -c user.email='havenline-build@users.noreply.github.com' commit -m 'Build saved weather, daylight, furnace thaw, action feedback and original outpost audio; preserve custom rigs'
+            git -c user.name='Havenline Native Build' -c user.email='havenline-build@users.noreply.github.com' commit -m 'Build saved weather, daylight, furnace thaw, action feedback and original audio with graceful shutdown; preserve custom rigs'
           fi
           echo "BUILT_COMMIT=$(git rev-parse HEAD)" >> "$GITHUB_ENV"
       - name: Install the checksum-pinned native engine
@@ -85,8 +84,8 @@ jobs:
           for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime; do
             timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "artifacts/$suite.log"
           done
-          timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --quit-after 5 2>&1 | tee artifacts/launch.log
-          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' artifacts/*.log; then exit 1; fi
+          timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/smoke_launch.gd 2>&1 | tee artifacts/launch.log
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' artifacts/*.log; then exit 1; fi
           python3 tools/havenline/summarize_evidence.py --artifacts artifacts
       - name: Publish tested source without a force push
         shell: bash
