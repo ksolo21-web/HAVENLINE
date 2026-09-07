@@ -1,0 +1,82 @@
+diff --git a/tools/havenline/bake_environment.py b/tools/havenline/bake_environment.py
+--- a/tools/havenline/bake_environment.py
++++ b/tools/havenline/bake_environment.py
+@@ -280,6 +280,7 @@
+ 
+ def shelter():
+  m=Model('shelter')
++ def roof_y(x):return 3.03-1.00*(abs(x)/1.52)**1.12+.06*math.cos(x*1.8)
+  # Staggered foundation stones, individual timber boards and dressed corners.
+  for x in [-.96,-.32,.32,.96]:
+   for z in [-1.05,1.05]:m.blob((x,.12,z),(.36,.17,.25),'stone',int((x+2)*50+(z+2)*5),12,7,.08)
+@@ -301,13 +302,18 @@
+  window(m,(-.78,1.16,1.05),.38,.50);window(m,(.78,1.16,1.05),.38,.50)
+  # Gabled ends with individual tapered boards, rear opening and structural rafters.
+  for z in [-1.035,1.035]:
++  # Continuous fitted gable backing closes hairline gaps behind separate boards.
++  sign=1 if z>0 else -1
++  def backing(u,v,sg=sign,zz=z):
++   x=(u-.5)*2.40*sg
++   return (x,1.91+v*(roof_y(x)-.035-1.91),zz)
++  m.patch(backing,28,3,'timber_dark')
+   for i in range(13):
+    x=-1.05+i*.175;top=2.94-abs(x)*.78
+    m.box((x,(1.91+top)/2,z),(.17,top-1.91,.14),'timber',.015)
+   for sign in [-1,1]:m.tube([(0,2.99,z+.04),(sign*1.40,1.91,z+.04)],[.075,.075],'timber_dark',10)
+  window(m,(0,2.35,1.10),.44,.40)
+  # Curved blue roof; thick continuous scalloped snow sheet, curled eaves.
+- def roof_y(x):return 3.03-1.00*(abs(x)/1.52)**1.12+.06*math.cos(x*1.8)
+  def roof(u,v,raised=0):
+   x=(u-.5)*3.18;z=(v-.5)*2.95
+   return (x,roof_y(x)+raised,z)
+@@ -320,7 +326,7 @@
+  def snowroof(u,v):
+   x=(u-.5)*3.27;z=(v-.5)*3.02
+   edge=max(abs(x)/1.635,abs(z)/1.51)
+-  thick=.11+.045*math.sin(x*3.1+z*2)+.025*math.cos(z*5+x)
++  thick=.15+.045*math.sin(x*3.1+z*2)+.025*math.cos(z*5+x)
+   return (x,roof_y(x)+thick+.04*(1-edge),z)
+  m.patch(snowroof,36,26,'snow')
+  for sign in [-1,1]:
+@@ -355,6 +361,9 @@
+  for x in [-.22,-.11,0,.11,.22]:m.tube([(x,.49,.739),(x,1.,.739)],[.026,.026],'iron',8)
+  m.box((0,.46,.77),(.68,.075,.20),'brass',.025)
+  m.lathe([(.20,1.64),(.205,1.72),(.17,1.76),(.17,2.38),(.21,2.40),(.22,2.45),(.21,2.49)],'iron',sides=32)
++ # Continuous rim plus dark inner wall: never see the ground through a culled pipe.
++ m.lathe([(.21,2.49),(.175,2.49)],'iron',sides=32)
++ m.lathe([(.175,2.49),(.155,2.42),(.155,2.18),(0.0,2.18)],'black',sides=32)
+  for y in [1.82,2.25]:m.lathe([(.18,y-.025),(.194,y),(.18,y+.025)],'brass',sides=24)
+  m.box((.64,.89,0),(.15,.25,.35),'iron',.04)
+  m.tube([(.76,.82,.12),(.82,.93,.12),(.76,1.03,.12)],[.028,.03,.028],'brass',8)
+@@ -420,7 +429,7 @@
+    for tri in [((ix,iz),(ix,iz+1),(ix+1,iz)),((ix+1,iz),(ix,iz+1),(ix+1,iz+1))]:
+     if all(k in lookup for k in tri):faces.append(tuple(lookup[k] for k in tri))
+  m.add(vertices,faces,'snow',uv=uv)
+- m.features=['four lobed sculpted stones','normal-mapped mineral surfaces','snow conforms to exposed union of rocks','no buried cap intersections']
++ m.features=[('three asymmetrically grouped stones' if kind=='snow_rock' else 'four lobed sculpted stones'),'normal-mapped mineral surfaces','snow conforms to exposed union of rocks','no buried cap intersections']
+  return m
+ 
+ def barricade():
+diff --git a/HavenlineGodot/scripts/main.gd b/HavenlineGodot/scripts/main.gd
+--- a/HavenlineGodot/scripts/main.gd
++++ b/HavenlineGodot/scripts/main.gd
+@@ -160,8 +160,8 @@
+ 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
+ 	environment.ambient_light_color = Color("c1d9f0")
+ 	environment.ambient_light_energy = 0.38
+-	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
+-	environment.tonemap_exposure = 0.9
++	environment.tonemap_mode = Environment.TONE_MAPPER_ACES
++	environment.tonemap_exposure = 1.6
+ 	# Reserve highlight headroom instead of clipping every sunlit snow surface.
+ 	environment.tonemap_white = 6.0
+ 	environment.fog_enabled = true
+@@ -690,7 +690,7 @@
+ 		"renderer":RenderingServer.get_current_rendering_method(),
+ 		"gpu":RenderingServer.get_video_adapter_name(),
+ 		"render_scale":scene_view.scaling_3d_scale if is_instance_valid(scene_view) else 0.0,
+-		"build":"0.4.3-outpost-development", "review_resolution":render_review})
++		"build":"0.4.4-environment-development", "review_resolution":render_review})
+ 
+ func layout_hud():
+ 	if not is_instance_valid(status): return
