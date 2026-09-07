@@ -1,12 +1,14 @@
 extends Control
 
-const Simulation = preload("res://scripts/simulation.gd")
+const Simulation = preload("res://scripts/population_simulation.gd")
 const Saves = preload("res://scripts/save_store.gd")
 const Scenery = preload("res://scripts/scenery_batch.gd")
 const FrameRecord = preload("res://scripts/performance_record.gd")
 const CarryStack = preload("res://scripts/carry_stack.gd")
 const TransferFeedback = preload("res://scripts/transfer_feedback.gd")
-const UHD_PIXELS := 3840 * 2160
+const RenderPolicy = preload("res://scripts/render_policy.gd")
+const PopulationView = preload("res://scripts/population_view.gd")
+var population_view: Node3D
 var sim = Simulation.new()
 var scene_view: SubViewport
 var world: Node3D
@@ -51,6 +53,7 @@ var capture_view := "front"
 func _ready():
 	# Fail closed before loading a saved encounter: no invisible wolves/helper can
 	# damage or secretly work in a scene that does not yet have their approved art.
+	sim.population.presentation_required = true
 	sim.threats_enabled = false
 	sim.rescue_enabled = false
 	sim.presented_actor_ids = [1,2,3,4]
@@ -87,6 +90,9 @@ func _ready():
 	build_environment()
 	build_world()
 	build_crew()
+	population_view = PopulationView.new()
+	world.add_child(population_view)
+	population_view.configure(sim, resource_piece)
 	transfer_feedback = TransferFeedback.new()
 	transfer_feedback.loader = resource_piece
 	world.add_child(transfer_feedback)
@@ -99,9 +105,7 @@ func _ready():
 func resize_render():
 	if not is_instance_valid(scene_view): return
 	var aspect := maxf(1.0, size.x / maxf(1.0, size.y))
-	var pixels := 1280 * 720 if render_review else UHD_PIXELS
-	var height := int(ceil(sqrt(float(pixels) / aspect)))
-	scene_view.size = Vector2i(int(ceil(height * aspect)), height)
+	scene_view.size = RenderPolicy.internal_size(aspect, render_review)
 	performance_record.resolution(scene_view.size)
 	if is_instance_valid(camera): camera.keep_aspect = Camera3D.KEEP_HEIGHT
 	layout_hud()
@@ -296,7 +300,7 @@ func present_events():
 		var origin := xyz(sim.position) + Vector3(0,1.0,-.35)
 		if event.has("actor_id"): origin = xyz(event.position) + Vector3(0,1.0,-.35)
 		if event.type in ["gather","worker_gather"]: transfer_feedback.transfer(kind,target,origin)
-		elif event.type in ["deposit","worker_deposit","build","worker_build","repair","worker_repair"]:
+		elif event.type in ["deposit","worker_deposit","build","worker_build","repair","worker_repair","customer_sale"]:
 			transfer_feedback.transfer(kind,origin,target)
 
 func text_label(text: String, font_size: int, parent: Control) -> Label:
@@ -348,7 +352,12 @@ func build_hud():
 	menu.add_child(padding)
 	menu_column = VBoxContainer.new()
 	menu_column.add_theme_constant_override("separation",16)
-	padding.add_child(menu_column)
+	var scroll := ScrollContainer.new()
+	scroll.custom_minimum_size = Vector2(0, 440)
+	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
+	padding.add_child(scroll)
+	menu_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	scroll.add_child(menu_column)
 	rebuild_menu()
 
 func rebuild_menu():
@@ -356,6 +365,13 @@ func rebuild_menu():
 		menu_column.remove_child(child)
 		child.queue_free()
 	text_label("HAVENLINE · Outpost crew",32,menu_column)
+	if is_instance_valid(population_view):
+		var pop = sim.population
+		var summary := "Customers %d · Recruits %d · Pets %d · Supply tokens %d" % [pop.customers.size(), pop.recruits.size(), pop.pets.size(), pop.credits]
+		text_label(summary, 20, menu_column)
+		if population_view.scenes.is_empty():
+			var pending := text_label("NPC models pending — no placeholder people or invisible workers.", 18, menu_column)
+			pending.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	var leads := HBoxContainer.new()
 	menu_column.add_child(leads)
 	for id in [1,2]:
@@ -390,6 +406,7 @@ func rebuild_menu():
 			resource.disabled = Simulation.CrewWork.JOBS[index] != "gather")
 		resource.item_selected.connect(func(index):
 			sim.assign_job(id, Simulation.CrewWork.JOBS[job.selected], Simulation.KINDS[index]))
+	build_population_menu()
 	var explanation := text_label("Move to act. Crew assignments never replace your movement control.",20,menu_column)
 	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	explanation.custom_minimum_size.y = 48
@@ -456,6 +473,7 @@ func _physics_process(dt: float):
 	if paused or not is_instance_valid(world): return
 	var direction := movement_input()
 	sim.step(dt, direction, direction.length() > .82 and (joystick_id != -1 or Input.is_physical_key_pressed(KEY_SHIFT)))
+	population_view.sync(dt)
 	present_events()
 	save_timer += dt
 	if save_timer >= 10 and not qa_mode:
@@ -464,6 +482,7 @@ func _physics_process(dt: float):
 
 func _process(dt: float):
 	if not is_instance_valid(world): return
+	population_view.pause_animations(paused)
 	player_rig.position = xyz(sim.position)
 	if sim.velocity.length() > .1:
 		player_rig.rotation.y = lerp_angle(player_rig.rotation.y, atan2(sim.facing.x, sim.facing.y), 1 - exp(-16 * dt))
@@ -489,17 +508,19 @@ func _process(dt: float):
 	if qa_mode:
 		if capture_view == "side": offset = Vector3(8.6, 6.8, 0)
 		elif capture_view == "rear": offset = Vector3(0, 6.8, -8.6)
+		elif capture_view == "three-quarter": offset = Vector3(8.6, 6.8, 8.6)
+		elif capture_view == "overhead": offset = Vector3(0.001, 16.0, 0.001)
 	var desired := focus + offset
 	camera.position = camera.position.lerp(desired, 1 - exp(-8.6 * dt)) if capture_frames > 0 else desired
 	camera.look_at(focus)
 	status.text = "HEAT %d   ·   %d carried" % [sim.level, sim.carried()]
 	if sim.level < 2:
 		objective.text = "Furnace · %d/18 wood + %d/6 stone" % [mini(sim.stored.wood, 18), mini(sim.stored.stone, 6)]
-	elif not sim.rescued: objective.text = "Warmth restored · rescue art pending"
+	elif not sim.rescued: objective.text = "Warmth restored · approach the survivor" if sim.rescue_enabled else "Warmth restored · rescue art pending"
 	elif not sim.defenses.north.built: objective.text = "Build the north defense   ·   8 wood + 3 stone"
 	else: objective.text = "Outpost restored · threat art pending"
 	if not sim.action.is_empty():
-		hint.text = {"gather":"Gathering", "deposit":"Delivering", "build":"Building", "repair":"Repairing", "defense_repair":"Repairing", "rescue":"Rescuing", "enemy":"Defending"}.get(sim.action.kind, "")
+		hint.text = {"gather":"Gathering", "deposit":"Delivering", "build":"Building", "repair":"Repairing", "defense_repair":"Repairing", "rescue":"Rescuing", "enemy":"Defending", "npc_rescue":"Welcoming a companion", "customer_service":"Serving a customer"}.get(sim.action.kind, "")
 	else: hint.text = ""
 	# Presentation capability gates live in simulation, not frame-rate-dependent
 	# timer rewrites. Active saved encounters remain intact but cannot hurt invisibly.
@@ -510,6 +531,8 @@ func _process(dt: float):
 		get_viewport().get_texture().get_image().save_png(capture_directory.path_join("gameplay.png"))
 		scene_view.get_texture().get_image().save_png(capture_directory.path_join("native-scene.png"))
 		var report := {"renderer": RenderingServer.get_current_rendering_method(), "device": RenderingServer.get_video_adapter_name(), "window": [get_viewport().size.x, get_viewport().size.y], "internal_render": [scene_view.size.x, scene_view.size.y], "render_scale": scene_view.scaling_3d_scale, "render_review": render_review, "performance_certified": false, "characters": actors.keys(), "source_clips": {}}
+		report["npc_population"] = population_view.evidence()
+		report["custom_c2_c4_rig_review_deferred"] = true
 		report["scene_script_sha256"] = FileAccess.get_file_as_string("res://scripts/main.gd").sha256_text()
 		report["camera_full_height"] = camera.size
 		report["capture_motion"] = capture_motion
@@ -559,7 +582,7 @@ func write_performance_record():
 		"renderer":RenderingServer.get_current_rendering_method(),
 		"gpu":RenderingServer.get_video_adapter_name(),
 		"render_scale":scene_view.scaling_3d_scale if is_instance_valid(scene_view) else 0.0,
-		"build":"0.4.1-native-development", "review_resolution":render_review})
+		"build":"0.4.2-population-development", "review_resolution":render_review})
 
 func layout_hud():
 	if not is_instance_valid(status): return
@@ -582,3 +605,35 @@ func _unhandled_key_input(event: InputEvent):
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_ESCAPE:
 		toggle_menu()
 		get_viewport().set_input_as_handled()
+
+func build_population_menu():
+	var people: Array = sim.population.recruits + sim.population.pets
+	for c in sim.companions:
+		if c.id == 5 and sim.rescue_enabled:
+			var opening: Dictionary = c.duplicate(true)
+			opening["name"] = "Rescued survivor"
+			opening["role"] = "survivor"
+			people.append(opening)
+	for person in people:
+		var row := HBoxContainer.new()
+		menu_column.add_child(row)
+		var label := text_label(person.name, 22, row)
+		label.custom_minimum_size.x = 200
+		var job := OptionButton.new()
+		var allowed: Array = sim.population.PET_JOBS if person.role == "pet" else Simulation.CrewWork.JOBS
+		for choice in allowed: job.add_item(choice.capitalize())
+		job.select(allowed.find(person.job))
+		job.custom_minimum_size = Vector2(230, 64)
+		row.add_child(job)
+		var resource := OptionButton.new()
+		for kind in Simulation.KINDS: resource.add_item(kind.capitalize())
+		resource.select(Simulation.KINDS.find(person.resource_kind))
+		resource.custom_minimum_size = Vector2(200, 64)
+		resource.disabled = person.role == "pet" or person.job != "gather"
+		row.add_child(resource)
+		var id: int = person.id
+		job.item_selected.connect(func(index):
+			sim.assign_job(id, allowed[index], Simulation.KINDS[resource.selected])
+			resource.disabled = allowed[index] != "gather")
+		resource.item_selected.connect(func(index):
+			sim.assign_job(id, allowed[job.selected], Simulation.KINDS[index]))

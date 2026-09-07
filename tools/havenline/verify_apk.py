@@ -81,11 +81,13 @@ def inspect(apk: Path) -> dict:
         checks = {
             'zip_integrity': archive.testzip() is None,
             'isolated_review_package': manifest.get('package') == 'com.kaleb.havenline.review',
-            'expected_version': manifest.get('versionCode') == 401 and manifest.get('versionName') == '0.4.1-native-review',
+            'expected_version': manifest.get('versionCode') == 402 and manifest.get('versionName') == '0.4.2-population-review',
             'android_game_category': application.get('appCategory') == 0,
             'arm64_godot_runtime': 'lib/arm64-v8a/libgodot_android.so' in libraries,
             'no_other_architecture': bool(libraries) and all(name.startswith('lib/arm64-v8a/') for name in libraries),
             'no_unity_or_il2cpp_native_libraries': not any('unity' in name.lower() or 'il2cpp' in name.lower() for name in libraries),
+            'npc_catalog_packaged': 'assets/data/npc-catalog.json' in names,
+            'population_runtime_packaged': all(f'assets/scripts/{name}.gdc' in names for name in ('npc_population', 'population_simulation', 'population_view', 'render_policy')),
             'all_derived_crew_motion_packaged': all(f'assets/assets/motion/Character{i}.res' in names for i in (2, 3, 4)),
         }
     return {'apk': apk.name, 'sha256': hashlib.sha256(apk.read_bytes()).hexdigest(),

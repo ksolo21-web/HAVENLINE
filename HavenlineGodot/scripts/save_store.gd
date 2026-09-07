@@ -1,7 +1,7 @@
 class_name HavenlineSaveStore
 extends RefCounted
 
-const Simulation = preload("res://scripts/simulation.gd")
+const Simulation = preload("res://scripts/population_simulation.gd")
 const SAVE_PATH = "user://outpost-v1.json"
 const MAX_SAVE_BYTES := 8 * 1024 * 1024
 

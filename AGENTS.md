@@ -17,3 +17,10 @@ Before substantial HAVENLINE work, read `Docs/AI/HavenlineProjectContext.md` and
 - 4K/60 is an acceptance requirement, not a marketing claim. Actual internal resolution, frame intervals, sustained physical-device evidence, and temperature/lifecycle behavior must pass. Never silently lower render resolution or count upscaling as native 4K.
 - Do not silently fall back to an older character checkpoint when a newer proven one exists.
 - Repository evidence is authoritative when chat memory and repository state disagree.
+
+## Population continuation — September 7, 2026
+
+- Custom Characters 2–4 keep their existing identities and files. Defer their rigging fixes and final rig review to the final character-polish stage; this is not approval.
+- Customers are a distinct reusable pool (two male and two female model slots). Additional male/female survivors and pet companions have separate models and persistent identities, not copies of the custom crew.
+- Missing authored NPC models must never spawn invisible working actors or primitive stand-ins. `data/npc-catalog.json` tracks actual model readiness separately from gameplay tests.
+- Use the saved planner/critic workflow and show truthful milestone bars during substantial work. Passing requires strictly >9.0 AND every mandatory check; internal review and automated tests are not independent critic execution.
