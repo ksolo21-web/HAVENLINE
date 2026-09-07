@@ -57,6 +57,8 @@ func run():
 	game.sim.resources[0].units=old_units;tree.position=old_position
 	game._process(.016)
 	check("Fog begins beyond the near gameplay plane",game.environment.fog_mode==Environment.FOG_MODE_DEPTH and game.environment.fog_depth_begin>=25.)
+	check("Mobile tone mapping retains the reviewed ACES setting",game.environment.tonemap_mode==Environment.TONE_MAPPER_ACES)
+	check("Mobile exposure preserves the reviewed snow highlight headroom",is_equal_approx(game.environment.tonemap_exposure,1.6) and is_equal_approx(game.environment.tonemap_white,6.0))
 	check("Snowbanks use the shared actor-height sampler",Surface.height_at(Vector2(8.4,8.0))>Surface.height_at(Vector2.ZERO)+.2)
 	check("Original first furnace upgrade preserved",game.sim.level==1 and is_equal_approx(game.sim.warmth(),4.5))
 	check("Missing humans and animals remain honestly gated",game.population_view.nodes.is_empty() and not game.sim.threats_enabled)
