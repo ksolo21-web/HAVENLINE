@@ -1,64 +1,50 @@
 # HAVENLINE Agent Instructions
 
-Before substantial HAVENLINE work, read `Docs/AI/HavenlineProjectContext.md`, then `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md` and its source manifest. Inspect the current repository state for anything newer. `Docs/AI/UnityProjectContext.md` is historical context.
+## Required starting point
 
-## Core execution rule
+Read `Docs/Production/SEQUENTIAL_REPAIR_PLAN.md` and `Docs/Production/task-gates.json` FIRST, then `Docs/AI/HavenlineProjectContext.md`, `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and the actual reference pixels. Inspect the current source and evidence for newer work. `Docs/AI/UnityProjectContext.md` is historical.
 
-**Work through failures and blockers. Do not get stuck.** Diagnose failures, preserve good work, use alternate approaches or fallbacks, reject worse experiments, and keep progressing until reasonable paths are exhausted. Never fabricate a pass or claim unverified work is complete.
+## Latest user instruction: one task at a time
 
-## Project rules
+Only the active task may be implemented. All subsequent tasks stay LOCKED until the active task's frozen-scope checks AND independent critics pass. The intermediate task minimum is **9.0/10 in EVERY mandatory dimension**, with **10/10 as the target**. This supersedes earlier exact-10 instructions for intermediate task progression only; the final full-game release gate remains separate and unchanged. Never retrospectively promote an old failure.
 
-- Shipping gameplay is landscape-only.
-- Preserve working architecture and assets unless a change is justified and validated.
-- Character 1 and Character 2 are the playable lead choices; the unselected lead becomes a helper/companion alongside Characters 3 and 4.
-- The user explicitly retired Unity on 2026-09-07. The active Android project is `HavenlineGodot/`, using Godot 4.7.2. No Unity installation, license, runtime, or build step is allowed in this path.
-- Do not approve character assets from GLB/static inspection alone. Require actual Godot renderer, whole-rig animation/clipping, gameplay-scale, and human side-by-side evidence. Preserve the quality requirements when changing engines.
-- Keep the original gameplay contract, four distinct crew identities, unlimited carrying, proximity actions, and landscape camera. No primitive/blockout art may be presented as production art.
-- 4K/60 is an acceptance requirement, not a marketing claim. Actual internal resolution, frame intervals, sustained physical-device evidence, and temperature/lifecycle behavior must pass. Never silently lower render resolution or count upscaling as native 4K.
-- Do not silently fall back to an older character checkpoint when a newer proven one exists.
-- Repository evidence is authoritative when chat memory and repository state disagree. New explicit user requirements supersede historical implementation assumptions; preserve a change log for conflicts.
+Use the sequence BUILD -> TEST -> ACTUAL CAPTURES -> INDEPENDENT CRITICS -> FIX -> FRESH EVIDENCE -> REVIEW. Two separately executed review roles are required: reference fidelity and technical/visual integrity. Disclose shared model families; two processes are not two diverse expert models. Builder self-review, code tests, geometry counts, saved agent definitions and successful workflow execution are not independent visual approval.
 
-## Population continuation — September 7, 2026
+No averaging, rounding, missing-area exclusion, unchanged rescoring to obtain a desired number, invented scores or unresolved mandatory defects. Missing, invalid, truncated, low-confidence or incomplete required evidence blocks progression. Verify model observations against actual pixels/geometry; preserve raw unsupported observations and genuine failures rather than blindly adopting or deleting them.
 
-- Custom Characters 2–4 keep their existing identities and files. Defer their rigging fixes and final rig review to the final character-polish stage; this is not approval.
-- Customers are a distinct reusable pool (two male and two female model slots). Additional male/female survivors and pet companions have separate models and persistent identities, not copies of the custom crew.
-- Missing authored NPC models must never spawn invisible working actors or primitive stand-ins. `data/npc-catalog.json` tracks actual model readiness separately from gameplay tests.
-- Use the saved planner/critic workflow and show truthful milestone bars during substantial work. The former >9 rule is superseded for this task by the exact 10/10 and reference requirements below. Internal review and automated tests are not independent critic execution.
+Freeze each task's scope and evidence before scoring. A tree-only pass cannot approve terrain, buildings, gameplay or release. Later tasks remain mandatory, not waived. A regression reopens the earlier task and locks progression until repaired. Infrastructure and validation needed for the active task are allowed; unrelated next-task implementation is not.
 
-## Animal roster and progress-display correction
+Work through genuine failures: diagnose, preserve working checkpoints, change approach when justified, and continue within the active task. Do not replace building with repeated planning. Save exact source/asset/capture hashes, tests, reviewer results, unresolved defects and the next executable action.
 
-- Animal companions are exactly dogs, lions, tigers, bears, wolves, owls and foxes. No domestic cats. The retired cat ID exists only in explicit legacy-save migration and rejection tests.
-- Use the seven user-provided references registered in `Docs/Art/AnimalCompanions/reference-register.json`; do not replace their premium stylized expedition look with primitive stand-ins. Reference images are not rigged models or in-game render evidence.
-- Legacy cat saves migrate to foxes without losing identity, recruitment, assignments or partial rescue progress. The expanded encounter pool must remain restart-safe and fail-closed for missing art.
-- Show the first explicit progress bar in COMMENTARY BEFORE substantial tool work, then update it during work at verified milestones. A completed bar buried in the final answer alone does not meet the user's requirement. Include completed/total milestones, current stage, verified result and next action/blocker; never present iteration progress as whole-game completion.
-- C2-C4 rigging fixes and final review still stay last. This roster correction does not approve their existing rigs or the unfinished animal models.
+## Visible progress
 
-## Environment priority — 2026-09-07 user escalation
+Show an explicit progress bar in COMMENTARY BEFORE substantial tools, then update at verified milestones DURING execution. Include current stage, completed/total count, latest verified result and next step/blocker. A final-answer-only bar fails the requirement. Separate active-task iteration progress from approved tasks and whole-game completion. No time-based fake percentage, native-widget claim or unscheduled background-work promise.
 
-The environment acceptance target is now **10/10**, not merely 9/10 or >9.
-Every required visual dimension and view must pass; no average can conceal a defect.
-Only fresh, source-bound actual renders can be reviewed. Preserve raw independent
-critic results, including failures; a successful review workflow is not a passing score.
-Native >=3840x2160, scale 1.0, sustained >=60 FPS remains a separate requirement.
-A screenshot, fixed-fps capture, Linux software-rendered benchmark, or in-game
-submission counter cannot certify physical Android presentation or thermals.
-Use named physical phone AND tablet targets and at least a 30-minute sustained run
-on each category for device evidence. Environment quality and its measured rendering
-workload remain the highest priority. Characters 2–4 rigging fixes and final visual
-review are still deferred until last. Show truthful commentary progress bars during
-work, not only in the final response.
+## Preserve the actual project
 
-## Latest reference-video and no-user-testing directive
+- Active Android project: `HavenlineGodot/`, Godot 4.7.2. Unity was explicitly retired. No Unity installation, license, runtime, build step or IL2CPP path is allowed. Preserve historical files outside the active build.
+- Preserve all original character/model identities, geometry, skinning, textures, saves and validated fixes. Never silently revert to an older character checkpoint.
+- C1 and C2 are selectable leads; the unselected lead is a helper alongside C3 and C4. Unlimited logical carrying and movement/proximity gathering, fighting, rescue, deposit, build and repair remain required. No manual-action-button substitute.
+- **C2–C4 rigging fixes and final rig reviews stay LAST at the final character stage, not waived.** Require actual rendered full animation cycles, transitions, skinning, clipping, feet/knees, equipment and gameplay-scale evidence. Import or GLB inspection alone is not rig approval.
+- Customers are a separate reusable pool of two male/two female bases with individual persistent identities. Additional male/female survivors and animal companions are not copies replacing the custom crew.
+- Missing authored NPCs cannot become invisible working actors or primitive stand-ins. Keep readiness explicit in `data/npc-catalog.json`.
+- Animals are exactly dogs, lions, tigers, bears, wolves, owls and foxes. No domestic cats. Use the seven registered expedition-style animal references. Images are not rigged models. Legacy cat saves migrate to foxes without losing identity/recruitment/assignment/rescue progress; restart safety remains required.
+- Preserve explicit historical progression and save contracts; record conflicts with newer reference requirements rather than silently rewriting distinct actions or prices.
 
-- The two supplied `Screen_Recording_20260817_124839_YouTube.mp4` and `Screen_Recording_20260817_124510_YouTube.mp4` recordings are the authoritative observable appearance/gameplay target. Read the reference lock and inspect the actual source pixels. A filenames-only or builder-summary-only critique must be marked UNREVIEWED.
-- BOTH loops are required: fishing/food production/customer service/reinvestment, AND harvesting/hunting/camp supply/weapon upgrades/defenses. A generic cabin-and-furnace clearing is not a substitute. Preserve explicit project-specific characters, animals, landscape and Unity-free Android requirements.
-- Match dense blue-white stylized forest framing, clear warm work areas, station layout, oblique camera, animated tall resource/cash stacks, queues, helpers, machinery, marked pads and upgrade transformations. Do not equate more realistic bark or more polygons with reference fidelity. No unfinished/default/debug/primitive stand-ins.
-- The old acceptance instruction to show both existing shelters is superseded as a composition target. Preserve the models and old evidence, but do not force the wrong layout into the reference scene.
-- Automatic phone AND tablet layouts, controls, saves and lifecycle must be verified. Native internal 4K/60 certification requires representative full-load physical evidence in both categories, not one screenshot, one device, an emulator or user testing.
-- Kaleb explicitly does NOT want to test unfinished builds. Do not send development APKs or ask him to run benchmarks while functionality, reference fidelity, independent 10/10 review, no-placeholder art or physical phone/tablet 4K/60 gates are unmet. Internal development exports may continue. Report missing access as a blocker, not an assignment to the user.
-- The reference audit itself changes documentation/evidence tooling, not the game runtime, and does not constitute a new score or performance pass.
+## Both reference videos are authoritative
 
+The recordings ending `124839` and `124510` are the observable visual and gameplay standard, not loose inspiration. Inspect actual source pixels and motion. A filenames-only or builder-summary-only comparison is UNREVIEWED.
 
-## Verified adaptive-device implementation and delivery check
+Both loops remain required: fishing/food production/customer service/reinvestment, AND harvesting/hunting/camp supply/weapon upgrades/defenses. Match bright sculpted winter scenery, dense blue-white forest, warm cleared work zones, fences, machinery, tall moving resource/cash stacks, crowds, helpers, ground pads and paid visible transformations. A generic cabin/furnace clearing is not the target. Preserve old shelter assets without forcing the old two-cabin composition. More realistic bark/noise or polygons is not inherently closer to the reference. No primitive-looking blockout or unfinished/default/debug materials may be passed as final art.
 
-Read `Docs/QA/PHONE_TABLET_RELEASE_CONTRACT.md` and run `tools/havenline/release_gate.py`. Automatic layout checks are not physical-device approval. No unfinished APKs or player-run benchmarks; development builds remain internal. Preserve the newer reference-video lock, its full motion/state comparisons, all original gameplay and C2-C4 final rig work deferred until last. The delivery validator is supplementary to, not a replacement for, the reference-video acceptance protocol.
+Environment/reference correction remains the priority, following the ordered tasks. The full scope also retains the ten connected biomes, transportation, weather/day/night, sound, Google identity/cloud and complete production/progression systems. Configuration and plans are not implementation.
+
+## Phones, tablets and release remain separate mandatory gates
+
+Shipping gameplay is landscape, automatically adapting to phones AND tablets, including applicable foldable transitions. Verify safe areas, camera scale, readable text, touch controls, menus, resizing, lifecycle and saved-state continuity; do not add a manual device selector or stretch the world.
+
+Require native internal width >=3840 AND height >=2160, render scale 1.0, with sustained >=60 FPS on named representative physical phones AND tablets under completed-game load for at least 30 minutes. Preserve presentation timing, resolution and thermal evidence. Neither an emulator/software renderer, 4K screenshot, fixed-step capture nor engine counter certifies physical presentation/thermals. Never silently lower resolution, count upscaling as native4K, or generalize one device to all hardware. Protect rendering workload during earlier tasks; repeat final measurements after all content and character fixes.
+
+**Kaleb must not receive unfinished APKs or be asked to test or benchmark them.** Internal isolated-package builds may continue. Final delivery requires complete functionality, reference fidelity, final independent approval, no placeholder art, full motion review, save/auth/cloud correctness and physical phone/tablet 4K60 evidence. Missing test access is a blocker to solve, not work reassigned to Kaleb.
+
+Read `Docs/QA/PHONE_TABLET_RELEASE_CONTRACT.md` and run `tools/havenline/release_gate.py` for final delivery. That evidence validator is neither an AI critic, a connected device lab nor a branch-protection change. Task-specific reviews do not replace full-state/motion reference comparison or the final release gate.
