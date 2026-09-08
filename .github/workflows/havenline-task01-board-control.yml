@@ -1,0 +1,33 @@
+name: Havenline T01 single-board comparison control
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-board-control.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare-controls:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-gemma
+          key: havenline-t01-gemma3-12b-qat-b10809-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Verify factual same/different comparison; no art score requested
+        run: python3 -u tools/havenline/check_single_board_comparison.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-single-board-control-${{ github.run_id }}
+          path: comparison-control/
+          retention-days: 30
+          if-no-files-found: error
+# The control contains original references and a known different real subject.
+# No game source changes, quality pass, runtime performance claim or task advance.
