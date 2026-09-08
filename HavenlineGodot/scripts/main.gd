@@ -20,6 +20,8 @@ var environment: Environment
 var capture_scenario := "opening"
 const Saves = preload("res://scripts/save_store.gd")
 const Scenery = preload("res://scripts/scenery_batch.gd")
+const ReferenceForest = preload("res://scripts/reference_forest.gd")
+var reference_forest_evidence: Dictionary = {}
 const DeviceBenchmark = preload("res://scripts/device_benchmark.gd")
 var device_benchmark: PanelContainer
 const FrameRecord = preload("res://scripts/performance_record.gd")
@@ -204,6 +206,8 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 	if asset.begins_with("world/"):
 		# Authored replacement required: never silently display the retired blockout.
 		path = "res://assets/environment_v2/" + asset.trim_prefix("world/") + ".glb"
+		if asset.begins_with("world/pine_"):
+			path = "res://assets/reference_forest/" + asset.trim_prefix("world/") + ".glb"
 		assert(ResourceLoader.exists(path), "Missing required winter environment mesh: " + path)
 	if not asset_cache.has(path):
 		asset_cache[path] = load(path)
@@ -252,17 +256,8 @@ func build_world():
 		var node: Dictionary = sim.resources[index]
 		var asset: String = "pine_" + str(1 + index % 3) if node.kind == "wood" else node.kind
 		resource_visuals[node.id] = model("world/" + asset, world, xyz(node.position))
-	# Irregular woodland groups instead of the old evenly spaced circular fence.
-	for i in range(44):
-		var a := float(i) * 2.399963
-		var rx := 16.6 + sin(i * 7.13) * 3.8
-		var rz := 19.0 + cos(i * 4.71) * 3.2
-		var point := Vector2(cos(a) * rx, sin(a) * rz)
-		# Keep entrances and the default camera's lower central view readable.
-		if absf(point.x) < 4.8 and point.y > 13.0: continue
-		var tree := model("world/pine_" + str(1 + i % 3), world, xyz(point))
-		tree.scale = Vector3.ONE * (0.76 + fposmod(i * .137, .52))
-		tree_rotation(tree, i)
+	# T01 reference forest; no change to resource actions or later-task layout.
+	reference_forest_evidence = ReferenceForest.build(self)
 	build_environment_dressing()
 	for side in sim.defenses:
 		defense_visuals[side] = model("world/barricade", world, xyz(sim.defenses[side].position))
@@ -653,6 +648,7 @@ func _process(dt: float):
 		scene_view.get_texture().get_image().save_png(capture_directory.path_join("native-scene.png"))
 		var report := {"renderer": RenderingServer.get_current_rendering_method(), "device": RenderingServer.get_video_adapter_name(), "window": [get_viewport().size.x, get_viewport().size.y], "internal_render": [scene_view.size.x, scene_view.size.y], "render_scale": scene_view.scaling_3d_scale, "render_review": render_review, "performance_certified": false, "characters": actors.keys(), "source_clips": {}}
 		report["environment_revision"] = ENVIRONMENT_REVISION
+		report["reference_forest"] = reference_forest_evidence
 		report["environment_kit"] = JSON.parse_string(FileAccess.get_file_as_string("res://assets/environment_v2/manifest.json"))
 		report["foreground_faded"] = foreground_faded
 		report["camera_near"] = camera.near
