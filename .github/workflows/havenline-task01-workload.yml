@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: '8632c5b2c2a70ec1eb88db08bef8ca18b707e1a6'
+          ref: 'c516d772a7f802e7b9e40928d9bf9f6dbba52767'
       - name: Install checksum-pinned engine and software Vulkan
         run: |
           set -euo pipefail
@@ -60,7 +60,7 @@ jobs:
           \tawait record("east-forest",Vector2(12.4,0),"front")
           \tawait record("west-forest",Vector2(-12.4,0),"rear")
           \tawait record("north-forest",Vector2(8,-14.8),"three-quarter")
-          \tvar report={"task":"T01","source":"8632c5b2c2a70ec1eb88db08bef8ca18b707e1a6","renderer":RenderingServer.get_current_rendering_method(),"device":RenderingServer.get_video_adapter_name(),"rows":rows,"diagnostic_positions_disclosed":true,"not_frame_rate_measurement":true,"physical_phone_tablet_4k60_verified":false,"task_approved":false}
+          \tvar report={"task":"T01","source":"c516d772a7f802e7b9e40928d9bf9f6dbba52767","renderer":RenderingServer.get_current_rendering_method(),"device":RenderingServer.get_video_adapter_name(),"rows":rows,"diagnostic_positions_disclosed":true,"not_frame_rate_measurement":true,"physical_phone_tablet_4k60_verified":false,"task_approved":false}
           \tvar f=FileAccess.open(out.path_join("workload.json"),FileAccess.WRITE);f.store_string(JSON.stringify(report,"\\t"));f.close()
           \tgame.outpost_audio.stop_all();await create_timer(.35).timeout;game.free();await process_frame;quit()
           '''
