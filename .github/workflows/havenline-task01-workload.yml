@@ -1,0 +1,101 @@
+name: Havenline T01 actual dense-forest workload evidence
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-workload.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  measure-render-workload:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '8632c5b2c2a70ec1eb88db08bef8ca18b707e1a6'
+      - name: Install checksum-pinned engine and software Vulkan
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine" workload-evidence
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+      - name: Create a disclosed diagnostic harness; preserve all runtime source and GLBs
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          files=[p for p in Path('HavenlineGodot').rglob('*') if p.is_file() and (p.suffix=='.glb' or 'scripts' in p.parts or 'shaders' in p.parts)]
+          Path('workload-evidence/protected-before.json').write_text(json.dumps({str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in files},indent=2))
+          script='''extends SceneTree
+          const Main = preload("res://scripts/main.gd")
+          var out := "user://task01-workload"
+          var game
+          var rows: Array = []
+          func _initialize():
+          \tfor arg in OS.get_cmdline_user_args():
+          \t\tif arg.begins_with("--out="): out=arg.trim_prefix("--out=")
+          \tcall_deferred("run")
+          func record(name: String, position: Vector2, view: String):
+          \tgame.sim.position=position
+          \tgame.capture_view=view
+          \tgame.capture_frames=0
+          \tgame._process(.001)
+          \tgame.capture_frames=100
+          \tfor frame in range(4):
+          \t\tawait process_frame
+          \t\tawait RenderingServer.frame_post_draw
+          \tvar row={"name":name,"player_fixture":[position.x,position.y],"view":view,"internal_size":[game.scene_view.size.x,game.scene_view.size.y],"render_scale":game.scene_view.scaling_3d_scale,"draw_calls":game.scene_view.get_render_info(Viewport.RENDER_INFO_TYPE_VISIBLE,Viewport.RENDER_INFO_DRAW_CALLS_IN_FRAME),"submitted_primitives":game.scene_view.get_render_info(Viewport.RENDER_INFO_TYPE_VISIBLE,Viewport.RENDER_INFO_PRIMITIVES_IN_FRAME),"forest":game.reference_forest_evidence}
+          \tgame.scene_view.get_texture().get_image().save_png(out.path_join(name+".png"))
+          \trows.append(row)
+          func run():
+          \tDirAccess.make_dir_recursive_absolute(out)
+          \tgame=Main.new();game.qa_mode=true;game.render_review=false;game.capture_frames=100
+          \tgame.capture_directory=out;game.size=Vector2(3840,2160);root.add_child(game)
+          \tgame.set_process(false);game.set_physics_process(false)
+          \tawait record("opening",game.sim.position,"front")
+          \tawait record("east-forest",Vector2(12.4,0),"front")
+          \tawait record("west-forest",Vector2(-12.4,0),"rear")
+          \tawait record("north-forest",Vector2(8,-14.8),"three-quarter")
+          \tvar report={"task":"T01","source":"8632c5b2c2a70ec1eb88db08bef8ca18b707e1a6","renderer":RenderingServer.get_current_rendering_method(),"device":RenderingServer.get_video_adapter_name(),"rows":rows,"diagnostic_positions_disclosed":true,"not_frame_rate_measurement":true,"physical_phone_tablet_4k60_verified":false,"task_approved":false}
+          \tvar f=FileAccess.open(out.path_join("workload.json"),FileAccess.WRITE);f.store_string(JSON.stringify(report,"\\t"));f.close()
+          \tgame.outpost_audio.stop_all();await create_timer(.35).timeout;game.free();await process_frame;quit()
+          '''
+          Path('HavenlineGodot/tests/probe_task01_workload.gd').write_text(script)
+          Path('workload-evidence/executed-harness.gd').write_text(script)
+          PY
+          python3 tools/havenline/bake_outpost_audio.py > workload-evidence/audio-fixture.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > workload-evidence/import.log 2>&1
+          timeout 100 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > workload-evidence/motion-fixture.log 2>&1
+      - name: Capture actual native-4K workloads at disclosed forest-edge positions
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/probe_task01_workload.gd -- --out="$(pwd)/workload-evidence" > workload-evidence/render.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' workload-evidence/*.log; then exit 1; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          out=Path('workload-evidence');before=json.loads((out/'protected-before.json').read_text())
+          assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in before.items())
+          r=json.loads((out/'workload.json').read_text());assert r['renderer']=='mobile' and len(r['rows'])==4
+          for row in r['rows']:
+              assert row['internal_size'][0]>=3840 and row['internal_size'][1]>=2160 and row['render_scale']==1
+              assert row['forest']['instances']==586
+          r['runtime_and_all_glbs_unchanged']=True
+          r['capture_sha256']={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in out.glob('*.png')}
+          r['harness_sha256']=hashlib.sha256((out/'executed-harness.gd').read_bytes()).hexdigest()
+          (out/'workload.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-native4k-workload-${{ github.run_id }}
+          path: workload-evidence/
+          retention-days: 30
+          if-no-files-found: error
+# Read-only runtime/asset audit. Does not change the critic rubric, game source, task order or release gates.
