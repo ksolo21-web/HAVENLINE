@@ -1,0 +1,116 @@
+name: Havenline T01 competency-gated independent review
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-competent-review.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  independent-review:
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        shard: [0, 1, 2]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 36
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_SHARD: ${{ matrix.shard }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - run: git fetch --no-tags --depth=1 origin 8632c5b2c2a70ec1eb88db08bef8ca18b707e1a6
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-recovered-evidence-34222185319
+          run-id: 34222185319
+          github-token: ${{ github.token }}
+          path: task01-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Require factual recognition before grading actual Task 1 evidence
+        run: python3 -u tools/havenline/review_task01_competent.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-competent-${{ matrix.role }}-${{ matrix.shard }}-${{ github.run_id }}
+          path: critic-results/
+          retention-days: 30
+          if-no-files-found: error
+  task-model-gate:
+    needs: independent-review
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-T01-competent-*-${{ github.run_id }}
+          path: reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-recovered-evidence-34222185319
+          run-id: 34222185319
+          github-token: ${{ github.token }}
+          path: evidence/
+      - name: Validate raw recognition, complete reviews, unchanged evidence and minimum-nine scores
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,math,hashlib
+          source='8632c5b2c2a70ec1eb88db08bef8ca18b707e1a6';expected={'variant-1','variant-2','variant-3','forest','clearance','camera-motion'}
+          keys={'silhouette','materials','reference_fidelity','integration','geometric_integrity'}
+          probe_expected={'A':'human_character','B':'snow_tree','C':'snow_tree','D':'human_character'}
+          facts={'baseline_tree_blocks_central_player':False,'disabled_tree_blocks_central_player':True,'enabled_tree_blocks_central_player':False,'depleted_resource_tree_visible':False}
+          errors=[];reviews=[];scores={};models=[]
+          m=json.loads(Path('evidence/mechanical-review.json').read_text());p=json.loads(Path('evidence/provenance.json').read_text())
+          if m['source']!=source or not m['passed']:errors.append('Mechanical/source checks not passing')
+          for name,h in p['captures'].items():
+              if hashlib.sha256((Path('evidence')/name).read_bytes()).hexdigest()!=h:errors.append('Changed actual capture '+name)
+          for role in ('reference-fidelity','visual-integrity'):
+              rows=[];shards=[]
+              for path in Path('reviews').glob('*'+role+'*/shard-review.json'):
+                  r=json.loads(path.read_text());shards.append(r['shard'])
+                  if r['source']!=source or r['role']!=role or r.get('competency_passed') is not True:errors.append('Source/role/competency failed '+str(path))
+                  try:
+                      c=json.loads((path.parent/'competency.json').read_text());raw=json.loads((path.parent/'competency-raw.json').read_text());choice=raw['choices'][0]
+                      if c['passed'] is not True or c['answers']!=probe_expected or choice['finish_reason']!='stop' or json.loads(choice['message']['content'])!=probe_expected:errors.append('Blind competency not passed '+str(path))
+                      pr=json.loads((path.parent/'provenance.json').read_text());models.append((pr['model'],pr['model_revision']))
+                  except Exception as exc:errors.append('Missing competency/provenance '+str(path)+': '+str(exc))
+                  for row in r.get('reviews',[]):
+                      rows.append(row);label=role+'/'+row.get('group','missing');value=row.get('review',{});s=value.get('scores',{})
+                      if row.get('source')!=source or row.get('independent_execution') is not True or row.get('passed') is not True or row.get('competency_passed') is not True:errors.append('Not passing '+label)
+                      if set(s)!=keys or any(type(v) not in (float,int) or not math.isfinite(v) or not 9<=v<=10 for v in s.values()):errors.append('Invalid/below-nine '+label)
+                      elif row.get('lowest_score')!=min(s.values()):errors.append('Incorrect reported minimum '+label)
+                      if value.get('defects')!=[] or value.get('coverage_complete') is not True or value.get('confidence') not in ('medium','high'):errors.append('Defects/incomplete evidence '+label)
+                      try:
+                          raw=json.loads((path.parent/(row['group']+'-raw.json')).read_text());choice=raw['choices'][0]
+                          if choice['finish_reason']!='stop' or json.loads(choice['message']['content'])!=value:errors.append('Raw response mismatch '+label)
+                      except Exception as exc:errors.append('Missing raw '+label+': '+str(exc))
+                      if row.get('group')=='clearance' and (row.get('factual_image_recognition_passed') is not True or value.get('evidence_facts')!=facts):errors.append('Incorrect actual clearance states '+label)
+              if set(shards)!={0,1,2} or len(shards)!=3 or len(rows)!=6 or {r.get('group') for r in rows}!=expected:errors.append('Incomplete/duplicate coverage '+role)
+              scores[role]=min((r.get('lowest_score',0) for r in rows),default=None);reviews+=rows
+          if len(models)!=6 or len(set(models))!=1:errors.append('Missing/mismatched reviewer revision provenance')
+          result={'task':'T01','source':source,'minimum_dimension_score':9,'target':10,'mechanical_and_critics_passed':not errors,'role_lowest_scores':scores,'model_family':models[0] if models else None,'same_model_family_roles_disclosed':True,'reviews':reviews,'errors':errors,'blind_competency_required':True,'prior_failed_reviews_preserved':True,'final_actual_pixel_verification_required':True,'task_approved':False,'task2_started':False,'full_game_approved':False,'physical_phone_tablet_4k60_verified':False}
+          out=Path('gate-report');out.mkdir(exist_ok=True);(out/'T01-competency-model-gate.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
+          raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-competency-gate-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# Read-only original captures; a different reviewer is not a different game revision.
+# No score injection, threshold reduction, automatic advancement, paid API, APK or user testing.
