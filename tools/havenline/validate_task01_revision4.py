@@ -35,7 +35,7 @@ def main():
  p=argparse.ArgumentParser();p.add_argument('--evidence',type=Path,required=True);p.add_argument('--reviews',type=Path,required=True);p.add_argument('--source-tree',type=Path,required=True);p.add_argument('--signoff',type=Path,required=True);p.add_argument('--output',type=Path,required=True);a=p.parse_args();errors=[];rows=[]
  try:
   pro=load(a.evidence/'provenance.json');source=pro['source']
-  if len(source)!=40 or pro['task']!='T01' or pro['revision']!=4:errors.append('source identity')
+  if len(source)!=40 or pro['task']!='T01' or pro['revision'] not in (4,5):errors.append('source identity')
   required={f'gallery/v{i:02d}-{angle}.png' for i in (1,2,3) for angle in ('front','rear','side','three-quarter')}
   required|={f'gallery/orbit-{i:02d}.png' for i in range(24)}|{f'gallery/integration-{i:02d}.png' for i in range(12)}
   required|={'gallery/gameplay-integration.png','gallery/forest-boundary-gameplay.png'}
@@ -69,9 +69,14 @@ def main():
      if row['role']!=role:errors.append('review role '+label)
      board=path.parent/(row['group']+'.png')
      if sha(board)!=row['inputs'][0]['board_sha256']:errors.append('model board bytes '+label)
+     from PIL import Image
+     import io
+     image=Image.open(board).convert('RGB');image.thumbnail((1536,1536),Image.Resampling.LANCZOS)
+     buffer=io.BytesIO();image.save(buffer,format='PNG')
+     if hashlib.sha256(buffer.getvalue()).hexdigest()!=row['inputs'][0]['input_sha256']:errors.append('actual model input bytes '+label)
      for panel in load(path.parent/(row['group']+'-sources.json')):
       if pro['captures'].get(panel['file'])!=panel['source_sha256']:errors.append('panel origin '+label)
-   if len(shards)!=3 or set(shards)!={0,1,2} or len(role_rows)!=6 or {r['group'] for r in role_rows}!=GROUPS:errors.append('independent coverage '+role)
+   if len(shards)!=(3 if pro['revision']==4 else 6) or set(shards)!=set(range(3 if pro['revision']==4 else 6)) or len(role_rows)!=6 or {r['group'] for r in role_rows}!=GROUPS:errors.append('independent coverage '+role)
    rows+=role_rows
   sign=load(a.signoff)
   checks={'reference_pixels_verified','all_variant_angles_inspected','camera_sequence_inspected','ground_contact_inspected','cutaway_and_resource_behavior_verified','raw_critic_findings_checked','source_and_asset_hashes_verified','prior_glbs_unchanged','frozen_scope_preserved','no_unresolved_mandatory_task_defect'}
