@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: '741373970197049a01ca7ddd2fd8a5034b8c80ee'
+          ref: '41f5446b2ecc4e29ad63ae814ad8491cc2763674'
       - run: python3 -m pip install pyyaml
       - name: Execute the unchanged workload harness against the exact new source
         run: |
@@ -23,7 +23,7 @@ jobs:
           w=yaml.safe_load(Path('.github/workflows/havenline-task01-workload.yml').read_text())
           runs=[s['run'] for s in w['jobs']['measure-render-workload']['steps'] if 'run' in s]
           assert len(runs)==3
-          runs=[s.replace('c516d772a7f802e7b9e40928d9bf9f6dbba52767','741373970197049a01ca7ddd2fd8a5034b8c80ee') for s in runs]
+          runs=[s.replace('c516d772a7f802e7b9e40928d9bf9f6dbba52767','41f5446b2ecc4e29ad63ae814ad8491cc2763674') for s in runs]
           runs[0]+='\nexport PATH="$RUNNER_TEMP/engine:$PATH"\n'
           subprocess.run(['bash','-euo','pipefail','-c','\n'.join(runs)],check=True)
           PY
