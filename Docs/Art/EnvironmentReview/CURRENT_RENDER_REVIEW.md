@@ -1,6 +1,6 @@
 # Actual environment render evidence
 
-Source 7800adab5184fd3f2580bf164aa46f6a07ffdc3c; tested merge 2ddb92d225c1822b4a26b0b1ee0e9dd4ba41e36e; Actions run 34161099655.
+Source 555bbf75cf51902f70ecd767504740f66dce1688; tested merge d028bcf5074f1fca892e8c63e25b03b1d1342867; Actions run 34183959350.
 
 These are unaltered Godot Mobile/software-Vulkan frames, not a physical-device FPS benchmark or a visual approval.
 
