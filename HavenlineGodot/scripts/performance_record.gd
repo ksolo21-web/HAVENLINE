@@ -2,8 +2,8 @@ class_name HavenlinePerformanceRecord
 extends RefCounted
 
 # Engine interval evidence, not GPU presentation timing or physical-device proof.
-# O(1) ring insertion avoids moving 72,000 samples on every frame after 20 minutes.
-const CAPACITY := 72000
+# O(1) ring insertion avoids moving 216,000 samples on every frame during hour-long sessions.
+const CAPACITY := 216000
 var intervals := PackedFloat64Array()
 var count := 0
 var cursor := 0
@@ -36,12 +36,13 @@ func report() -> Dictionary:
 		if value > 1000.0 / 30.0 + 0.1: over_30 += 1
 	var native_budget := not resolutions.is_empty()
 	for size in resolutions:
-		if size[0] * size[1] < 3840 * 2160: native_budget = false
+		if size[0] < 3840 or size[1] < 2160: native_budget = false
 	return {"measurement":"engine_frame_intervals_not_display_presentations", "samples":count,
 		"total_samples":total_samples,"retained_seconds":sum_ms / 1000.0,
 		"average_engine_fps":1000.0 * count / sum_ms if sum_ms > 0 else 0.0,
 		"p50_ms":percentile(ordered,0.5),"p95_ms":percentile(ordered,0.95),"p99_ms":percentile(ordered,0.99),
 		"maximum_ms":ordered[-1] if count > 0 else 0.0,"over_60hz_budget":over_60,"over_30hz_budget":over_30,
+		"minimum_dimensions_at_all_recorded_resolutions":native_budget,
 		"internal_resolutions":resolutions.duplicate(true),"uhd_pixel_budget_at_all_recorded_resolutions":native_budget,
 		"physical_device_validated":false,"thermal_validated":false,"sustained_4k60_certified":false}
 

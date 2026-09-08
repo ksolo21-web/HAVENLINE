@@ -15,6 +15,12 @@ from pathlib import Path, PurePosixPath
 from zipfile import ZipFile
 
 
+def expected_review_version(manifest: dict) -> bool:
+    return (type(manifest.get('versionCode')) is int
+            and manifest['versionCode'] == 405
+            and manifest.get('versionName') == '0.4.5-environment-review')
+
+
 def manifest_elements(data: bytes) -> list[dict]:
     if len(data) < 8 or struct.unpack_from('<H', data)[0] != 3:
         raise ValueError('Expected Android binary XML')
@@ -151,6 +157,15 @@ def self_test() -> dict:
         'malformed_record_rejected': not fixture('[remap]\npath=invalid\n'),
         'wrong_sample_extension_rejected': not fixture(valid.replace('.sample', '.png')),
     }
+    identity = {'versionCode': 405, 'versionName': '0.4.5-environment-review'}
+    tests.update({
+        'current_review_version_matches': expected_review_version(identity),
+        'previous_review_code_rejected': not expected_review_version(dict(identity, versionCode=404)),
+        'previous_review_name_rejected': not expected_review_version(dict(identity, versionName='0.4.4-environment-review')),
+        'string_version_code_rejected': not expected_review_version(dict(identity, versionCode='405')),
+        'missing_version_rejected': not expected_review_version({}),
+        'future_unknown_version_rejected': not expected_review_version(dict(identity, versionCode=406)),
+    })
     return {'checks': tests, 'total_checks': len(tests), 'passed': all(tests.values())}
 
 
@@ -166,7 +181,7 @@ def inspect(apk: Path) -> dict:
         checks = {
             'zip_integrity': archive.testzip() is None,
             'isolated_review_package': manifest.get('package') == 'com.kaleb.havenline.review',
-            'expected_version': manifest.get('versionCode') == 403 and manifest.get('versionName') == '0.4.3-outpost-review',
+            'expected_version': expected_review_version(manifest),
             'android_game_category': application.get('appCategory') == 0,
             'arm64_godot_runtime': 'lib/arm64-v8a/libgodot_android.so' in libraries,
             'no_other_architecture': bool(libraries) and all(name.startswith('lib/arm64-v8a/') for name in libraries),

@@ -1,5 +1,12 @@
 extends Control
 
+const ENVIRONMENT_REVISION := "0.4.5-environment-candidate"
+var scenery_instances: Array[GeometryInstance3D] = []
+var scenery_origins: Array[Vector3] = []
+var scenery_heights: Array[float] = []
+var foreground_faded := 0
+var scenery_cutaway: Array[float] = []
+
 const Simulation = preload("res://scripts/outpost_simulation.gd")
 const OutpostView = preload("res://scripts/outpost_view.gd")
 const Surface = preload("res://scripts/outpost_surface.gd")
@@ -13,10 +20,18 @@ var environment: Environment
 var capture_scenario := "opening"
 const Saves = preload("res://scripts/save_store.gd")
 const Scenery = preload("res://scripts/scenery_batch.gd")
+const DeviceBenchmark = preload("res://scripts/device_benchmark.gd")
+var device_benchmark: PanelContainer
 const FrameRecord = preload("res://scripts/performance_record.gd")
 const CarryStack = preload("res://scripts/carry_stack.gd")
 const TransferFeedback = preload("res://scripts/transfer_feedback.gd")
 const RenderPolicy = preload("res://scripts/render_policy.gd")
+const AdaptiveLayout = preload("res://scripts/adaptive_layout.gd")
+var hud_safe_rect := Rect2()
+var joystick_radius := 110.0
+var menu_return_button: Button
+var menu_scroll: ScrollContainer
+var layout_snapshot: Dictionary = {}
 const PopulationView = preload("res://scripts/population_view.gd")
 var population_view: Node3D
 var sim = Simulation.new()
@@ -125,6 +140,11 @@ func _ready():
 		DirAccess.make_dir_recursive_absolute(capture_directory)
 
 func resize_render():
+	# A fold/resize invalidates an old pointer coordinate, not the player save.
+	joystick_id = -1
+	joystick_current = Vector2.ZERO
+	joystick_origin = Vector2.ZERO
+	last_frame_usec = 0
 	if not is_instance_valid(scene_view): return
 	var aspect := maxf(1.0, size.x / maxf(1.0, size.y))
 	scene_view.size = RenderPolicy.internal_size(aspect, render_review)
@@ -153,8 +173,8 @@ func build_environment():
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	environment.ambient_light_color = Color("c1d9f0")
 	environment.ambient_light_energy = 0.38
-	environment.tonemap_mode = Environment.TONE_MAPPER_FILMIC
-	environment.tonemap_exposure = 0.9
+	environment.tonemap_mode = Environment.TONE_MAPPER_ACES
+	environment.tonemap_exposure = 1.6
 	# Reserve highlight headroom instead of clipping every sunlit snow surface.
 	environment.tonemap_white = 6.0
 	environment.fog_enabled = true
@@ -168,18 +188,23 @@ func build_environment():
 	sun.light_color = Color("e4f0ff")
 	sun.light_energy = 1.05
 	sun.shadow_enabled = true
-	sun.directional_shadow_max_distance = 45
+	sun.directional_shadow_max_distance = 70
 	world.add_child(sun)
 	camera = Camera3D.new()
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	# Unity orthographicSize is a half-height; Godot's size is the full span.
 	camera.size = float(sim.contract.camera.size) * 2.0
-	camera.far = 100
+	camera.near = 0.05
+	camera.far = 180
 	world.add_child(camera)
 	camera.current = true
 
 func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 	var path := "res://assets/" + asset + ".glb"
+	if asset.begins_with("world/"):
+		# Authored replacement required: never silently display the retired blockout.
+		path = "res://assets/environment_v2/" + asset.trim_prefix("world/") + ".glb"
+		assert(ResourceLoader.exists(path), "Missing required winter environment mesh: " + path)
 	if not asset_cache.has(path):
 		asset_cache[path] = load(path)
 	var instance: Node3D
@@ -190,15 +215,23 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 				for i in merged_cache[asset].get_surface_count():
 					var source_material: Material = merged_cache[asset].surface_get_material(i)
 					if source_material is BaseMaterial3D:
-						var leaf_material: BaseMaterial3D = source_material.duplicate()
-						leaf_material.cull_mode = BaseMaterial3D.CULL_DISABLED
-						merged_cache[asset].surface_set_material(i, leaf_material)
+						var leaf_material := ShaderMaterial.new()
+						leaf_material.shader=load("res://shaders/evergreen.gdshader")
+						leaf_material.set_shader_parameter("albedo_texture",source_material.albedo_texture)
+						leaf_material.set_shader_parameter("normal_texture",source_material.normal_texture)
+						leaf_material.set_shader_parameter("surface_roughness",source_material.roughness)
+						merged_cache[asset].surface_set_material(i,leaf_material)
 		instance = MeshInstance3D.new()
 		instance.mesh = merged_cache[asset]
 	else:
 		instance = asset_cache[path].instantiate()
 	parent.add_child(instance)
 	instance.position = p
+	if asset.begins_with("world/pine_") and instance is GeometryInstance3D:
+		scenery_instances.append(instance)
+		scenery_origins.append(p)
+		scenery_heights.append(instance.mesh.get_aabb().end.y)
+		scenery_cutaway.append(0.0)
 	return instance
 
 func build_world():
@@ -219,22 +252,18 @@ func build_world():
 		var node: Dictionary = sim.resources[index]
 		var asset: String = "pine_" + str(1 + index % 3) if node.kind == "wood" else node.kind
 		resource_visuals[node.id] = model("world/" + asset, world, xyz(node.position))
-	var forest := {0: [], 1: [], 2: []}
-	for i in range(38):
-		var a := i * TAU / 38.0
-		var p := xyz(Vector2(cos(a) * (15.5 + sin(i * 12.2)), sin(a) * 18.8))
-		var scale_factor := 0.85 + fmod(i * .17, .5)
-		if no_batching:
-			var tree := model("world/pine_" + str(1 + i % 3), world, p)
-			tree.scale = Vector3.ONE * scale_factor
-			tree_rotation(tree, i)
-		else:
-			forest[i % 3].append(Transform3D(Basis(Vector3.UP, i * 1.71).scaled(Vector3.ONE * scale_factor), p))
-	if not no_batching:
-		for variant in forest:
-			var transforms: Array[Transform3D] = []
-			transforms.assign(forest[variant])
-			Scenery.instances(merged_cache["world/pine_" + str(variant + 1)], transforms, world)
+	# Irregular woodland groups instead of the old evenly spaced circular fence.
+	for i in range(44):
+		var a := float(i) * 2.399963
+		var rx := 16.6 + sin(i * 7.13) * 3.8
+		var rz := 19.0 + cos(i * 4.71) * 3.2
+		var point := Vector2(cos(a) * rx, sin(a) * rz)
+		# Keep entrances and the default camera's lower central view readable.
+		if absf(point.x) < 4.8 and point.y > 13.0: continue
+		var tree := model("world/pine_" + str(1 + i % 3), world, xyz(point))
+		tree.scale = Vector3.ONE * (0.76 + fposmod(i * .137, .52))
+		tree_rotation(tree, i)
+	build_environment_dressing()
 	for side in sim.defenses:
 		defense_visuals[side] = model("world/barricade", world, xyz(sim.defenses[side].position))
 		defense_visuals[side].scale.y = 0.15
@@ -400,12 +429,23 @@ func build_hud():
 	for side in ["left","right","top","bottom"]:
 		padding.add_theme_constant_override("margin_" + side,24)
 	menu.add_child(padding)
+	var panel_column := VBoxContainer.new()
+	panel_column.add_theme_constant_override("separation", 12)
+	padding.add_child(panel_column)
+	menu_return_button = Button.new()
+	menu_return_button.text = "Return to the outpost"
+	menu_return_button.custom_minimum_size.y = 48
+	menu_return_button.add_theme_font_size_override("font_size", 22)
+	menu_return_button.pressed.connect(toggle_menu)
+	panel_column.add_child(menu_return_button)
 	menu_column = VBoxContainer.new()
 	menu_column.add_theme_constant_override("separation",16)
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(0, 440)
+	menu_scroll = scroll
+	scroll.custom_minimum_size = Vector2.ZERO
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	padding.add_child(scroll)
+	panel_column.add_child(scroll)
 	menu_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(menu_column)
 	rebuild_menu()
@@ -422,7 +462,8 @@ func rebuild_menu():
 		if population_view.scenes.is_empty():
 			var pending := text_label("NPC models pending — no placeholder people or invisible workers.", 18, menu_column)
 			pending.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	var leads := HBoxContainer.new()
+	var leads := HFlowContainer.new()
+	leads.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	menu_column.add_child(leads)
 	for id in [1,2]:
 		var choice := Button.new()
@@ -434,7 +475,8 @@ func rebuild_menu():
 	for companion in sim.companions:
 		if not actors.has(companion.id): continue
 		var id: int = companion.id
-		var row := HBoxContainer.new()
+		var row := HFlowContainer.new()
+		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_theme_constant_override("separation",14)
 		menu_column.add_child(row)
 		var name_label := text_label("Character " + str(id),24,row)
@@ -466,6 +508,14 @@ func rebuild_menu():
 	var explanation := text_label("Move to act. Crew assignments never replace your movement control.",20,menu_column)
 	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	explanation.custom_minimum_size.y = 48
+	# Measurement instrumentation is developer-only; Kaleb is not the QA runner.
+	if qa_mode:
+		var benchmark_button := Button.new()
+		benchmark_button.text = "QA · Measure native frame timing"
+		benchmark_button.custom_minimum_size.y = 64
+		benchmark_button.add_theme_font_size_override("font_size",22)
+		menu_column.add_child(benchmark_button)
+		benchmark_button.pressed.connect(start_device_benchmark)
 	var resume := Button.new()
 	resume.text = "Return to the outpost"
 	resume.custom_minimum_size.y = 64
@@ -493,7 +543,7 @@ func switch_lead(id: int):
 
 func movement_input() -> Vector2:
 	if paused: return Vector2.ZERO
-	if joystick_id != -1: return ((joystick_current - joystick_origin) / 110.0).limit_length(1)
+	if joystick_id != -1: return ((joystick_current - joystick_origin) / joystick_radius).limit_length(1)
 	var x := float(Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT)) - float(Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT))
 	var y := float(Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN)) - float(Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP))
 	return Vector2(x, y).limit_length(1)
@@ -501,7 +551,7 @@ func movement_input() -> Vector2:
 func _gui_input(event: InputEvent):
 	if paused: return
 	if event is InputEventScreenTouch:
-		if event.pressed and joystick_id == -1 and event.position.x < size.x * .55 and event.position.y > size.y * .30:
+		if event.pressed and joystick_id == -1 and hud_safe_rect.has_point(event.position) and event.position.x < hud_safe_rect.position.x + hud_safe_rect.size.x * .55 and event.position.y > hud_safe_rect.position.y + hud_safe_rect.size.y * .30:
 			joystick_id = event.index
 			joystick_origin = event.position
 			joystick_current = event.position
@@ -509,7 +559,7 @@ func _gui_input(event: InputEvent):
 	elif event is InputEventScreenDrag and event.index == joystick_id:
 		joystick_current = event.position
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed and event.position.x < size.x * .55:
+		if event.pressed and hud_safe_rect.has_point(event.position) and event.position.x < hud_safe_rect.position.x + hud_safe_rect.size.x * .55 and event.position.y > hud_safe_rect.position.y + hud_safe_rect.size.y * .30:
 			joystick_id = -2
 			joystick_origin = event.position
 			joystick_current = event.position
@@ -520,10 +570,10 @@ func _gui_input(event: InputEvent):
 
 func _draw():
 	if joystick_id != -1:
-		draw_circle(joystick_origin, 112, Color(.68, .84, 1, .10))
-		draw_arc(joystick_origin, 112, 0, TAU, 64, Color(.84, .92, 1, .42), 3, true)
-		var offset := (joystick_current - joystick_origin).limit_length(110)
-		draw_circle(joystick_origin + offset, 43, Color(.85, .93, 1, .5))
+		draw_circle(joystick_origin, joystick_radius + 2, Color(.68, .84, 1, .10))
+		draw_arc(joystick_origin, joystick_radius + 2, 0, TAU, 64, Color(.84, .92, 1, .42), 3, true)
+		var offset := (joystick_current - joystick_origin).limit_length(joystick_radius)
+		draw_circle(joystick_origin + offset, joystick_radius * .39, Color(.85, .93, 1, .5))
 
 func _physics_process(dt: float):
 	if paused or not is_instance_valid(world): return
@@ -559,16 +609,28 @@ func _process(dt: float):
 	update_carry()
 	outpost_view.sync(sim, dt, paused)
 	outpost_audio.sync(sim, paused, dt)
-	var focus := xyz(sim.position) + Vector3(0, .95, 0)
+	# Preserve the close zoom; a short look-ahead includes roofs above the player.
+	var focus := xyz(sim.position) + Vector3(0, .95, -3.6)
 	var offset := Vector3(0, 6.8, 8.6)
+	if qa_mode and capture_scenario in ["shelter-detail","shelter-detail-rear"]:
+		focus=xyz(Vector2(-6.6,-4.8))+Vector3(0,1.45,0);camera.size=5.1;offset=Vector3(4,3.6,7)
+	elif qa_mode and capture_scenario == "furnace-detail":
+		focus=xyz(Vector2(0,.2))+Vector3(0,1.0,0);camera.size=3.8;offset=Vector3(4,3.6,7)
+	elif qa_mode and capture_scenario == "tree-detail":
+		focus=xyz(sim.resources[0].position)+Vector3(0,2.35,0);camera.size=6.6;offset=Vector3(4,3.6,7)
 	if qa_mode:
 		if capture_view == "side": offset = Vector3(8.6, 6.8, 0)
+		elif capture_view == "left": offset = Vector3(-8.6, 6.8, 0)
 		elif capture_view == "rear": offset = Vector3(0, 6.8, -8.6)
 		elif capture_view == "three-quarter": offset = Vector3(8.6, 6.8, 8.6)
 		elif capture_view == "overhead": offset = Vector3(0.001, 16.0, 0.001)
 	var desired := focus + offset
+	# Orthographic framing is unchanged when translated along the viewing ray.
+	# Moving the camera back prevents its near plane cutting foreground scenery.
+	desired += offset.normalized() * 18.0
 	camera.position = camera.position.lerp(desired, 1 - exp(-8.6 * dt)) if capture_frames > 0 else desired
 	camera.look_at(focus)
+	update_foreground_visibility(xyz(sim.position)+Vector3(0,.95,0), dt)
 	status.text = "HEAT %d   ·   %d carried" % [sim.level, sim.carried()]
 	var hour: float = sim.climate.hour()
 	climate_status.text = "Day %d · %02d:%02d · %s\nWarmth %d%%  ·  Health %d%%" % [sim.climate.day_number(), int(hour), int(floor(fposmod(hour,1.0)*60.0)), sim.climate.weather().name, roundi(sim.temperature), roundi(sim.health)]
@@ -590,6 +652,11 @@ func _process(dt: float):
 		get_viewport().get_texture().get_image().save_png(capture_directory.path_join("gameplay.png"))
 		scene_view.get_texture().get_image().save_png(capture_directory.path_join("native-scene.png"))
 		var report := {"renderer": RenderingServer.get_current_rendering_method(), "device": RenderingServer.get_video_adapter_name(), "window": [get_viewport().size.x, get_viewport().size.y], "internal_render": [scene_view.size.x, scene_view.size.y], "render_scale": scene_view.scaling_3d_scale, "render_review": render_review, "performance_certified": false, "characters": actors.keys(), "source_clips": {}}
+		report["environment_revision"] = ENVIRONMENT_REVISION
+		report["environment_kit"] = JSON.parse_string(FileAccess.get_file_as_string("res://assets/environment_v2/manifest.json"))
+		report["foreground_faded"] = foreground_faded
+		report["camera_near"] = camera.near
+		report["camera_focus_distance"] = camera.position.distance_to(focus)
 		report["npc_population"] = population_view.evidence()
 		report["outpost"] = outpost_view.evidence(sim)
 		report["capture_scenario"] = capture_scenario
@@ -636,7 +703,7 @@ func _notification(what: int):
 		if not qa_mode: Saves.write_state(sim.snapshot())
 		close_game()
 	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
-		if is_instance_valid(menu) and not paused: toggle_menu()
+		if is_instance_valid(menu): toggle_menu()
 	elif what == NOTIFICATION_APPLICATION_PAUSED:
 		paused = true
 		joystick_id = -1
@@ -650,6 +717,7 @@ func _notification(what: int):
 	elif what == NOTIFICATION_APPLICATION_RESUMED:
 		last_frame_usec = 0
 		joystick_id = -1
+		call_deferred("resize_render")
 
 func write_performance_record():
 	performance_record.write("user://performance-review.json", {
@@ -657,25 +725,56 @@ func write_performance_record():
 		"renderer":RenderingServer.get_current_rendering_method(),
 		"gpu":RenderingServer.get_video_adapter_name(),
 		"render_scale":scene_view.scaling_3d_scale if is_instance_valid(scene_view) else 0.0,
-		"build":"0.4.3-outpost-development", "review_resolution":render_review})
+		"build":"0.4.5-environment-development", "review_resolution":render_review})
 
 func layout_hud():
 	if not is_instance_valid(status): return
-	var safe := Rect2(Vector2.ZERO,size)
+	var safe := Rect2(Vector2.ZERO, size)
+	var ui_scale := 1.0
 	if OS.has_feature("android"):
-		var physical := Vector2(DisplayServer.window_get_size())
-		var area := DisplayServer.get_display_safe_area()
-		if physical.x > 0 and physical.y > 0 and area.size.x > 0 and area.size.y > 0:
-			var factor := size / physical
-			safe = Rect2(Vector2(area.position) * factor,Vector2(area.size) * factor).intersection(safe)
-	status.position = safe.position + Vector2(32,28)
-	climate_status.position = safe.position + Vector2(36,74)
-	objective.size.x = minf(780,maxf(300,safe.size.x - 660))
-	objective.position = Vector2(safe.get_center().x - objective.size.x / 2,safe.position.y + 34)
-	hint.size.x = minf(780,safe.size.x - 96)
-	hint.position = Vector2(safe.get_center().x - hint.size.x / 2,safe.end.y - 72)
-	camp_button.position = Vector2(safe.end.x - 156,safe.position.y + 26)
-	menu.position = safe.get_center() - menu.size / 2
+		var pixels := Vector2(DisplayServer.window_get_size())
+		safe = AdaptiveLayout.safe_rect(size, pixels, Rect2(DisplayServer.get_display_safe_area()), Vector2(DisplayServer.window_get_position()))
+		ui_scale = AdaptiveLayout.density_scale(size, pixels, DisplayServer.screen_get_dpi())
+	apply_hud_layout(safe, ui_scale)
+
+func apply_hud_layout(safe: Rect2, ui_scale: float):
+	# Public to deterministic layout tests. Does not change native render policy.
+	layout_snapshot = AdaptiveLayout.plan(safe, ui_scale)
+	hud_safe_rect = safe
+	joystick_radius = layout_snapshot.joystick_radius
+	var controls := {"status":status, "climate":climate_status, "objective":objective, "hint":hint, "camp":camp_button}
+	var fonts := {"status":22, "climate":16, "objective":20, "hint":18, "camp":22}
+	for key in controls:
+		var control: Control = controls[key]
+		control.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+		control.visible = not paused
+		control.position = layout_snapshot.rects[key].position
+		control.size = layout_snapshot.rects[key].size
+		control.add_theme_font_size_override("font_size", maxi(12, roundi(fonts[key] * ui_scale)))
+		if control is Label:
+			control.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			control.clip_text = true
+	objective.max_lines_visible = 2
+	menu.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	menu.scale = Vector2.ONE * ui_scale
+	menu.custom_minimum_size = Vector2.ZERO
+	menu.size = layout_snapshot.menu_size
+	menu.position = layout_snapshot.menu_position
+	fit_menu_content(menu_column, maxf(1.0, menu.size.x - 64))
+	menu.reset_size()
+	menu.size = layout_snapshot.menu_size
+
+func fit_menu_content(node: Node, width: float):
+	for child in node.get_children():
+		if child is Control:
+			if not child.has_meta("authored_minimum_width"):
+				child.set_meta("authored_minimum_width", child.custom_minimum_size.x)
+			child.custom_minimum_size.x = minf(float(child.get_meta("authored_minimum_width")), width)
+			if child is Button: child.clip_text = true
+			if child is Label and child.get_parent() == menu_column:
+				child.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				child.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		fit_menu_content(child, width)
 
 func _unhandled_key_input(event: InputEvent):
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_ESCAPE:
@@ -691,7 +790,8 @@ func build_population_menu():
 			opening["role"] = "survivor"
 			people.append(opening)
 	for person in people:
-		var row := HBoxContainer.new()
+		var row := HFlowContainer.new()
+		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		menu_column.add_child(row)
 		var label := text_label(person.name, 22, row)
 		label.custom_minimum_size.x = 200
@@ -713,3 +813,66 @@ func build_population_menu():
 			resource.disabled = allowed[index] != "gather")
 		resource.item_selected.connect(func(index):
 			sim.assign_job(id, allowed[job.selected], Simulation.KINDS[index]))
+
+func build_environment_dressing():
+	# Non-interactive set dressing avoids the existing opening objectives and lanes.
+	# Meshes are shared; low ground dressing is grouped into material batches.
+	var groups := {"snow_rock": [], "winter_shrub": []}
+	for i in range(56):
+		var a := i * 2.399963
+		var p := Vector2(cos(a) * (11.8 + fposmod(i * .831, 8.0)), sin(a) * (14.3 + fposmod(i * .713, 7.0)))
+		if absf(p.x) < 3.5: continue
+		var blocked := false
+		for r in sim.resources:
+			if p.distance_to(r.position) < 1.8: blocked = true
+		for x in [-6.6,6.6]:
+			if p.distance_to(Vector2(x,-4.8)) < 2.6: blocked = true
+		if blocked: continue
+		var asset := "snow_rock" if i % 3 == 0 else "winter_shrub"
+		var scale_factor := .60 + fposmod(i * .191,.85)
+		groups[asset].append(Transform3D(Basis(Vector3.UP, i * 1.71).scaled(Vector3.ONE * scale_factor), xyz(p)))
+	for asset in groups:
+		var path: String = "res://assets/environment_v2/" + asset + ".glb"
+		var mesh := Scenery.compile(load(path))
+		var transforms: Array[Transform3D] = []
+		transforms.assign(groups[asset])
+		Scenery.instances(mesh, transforms, world)
+	for p in [Vector2(-3.8,-.7),Vector2(3.8,-.7),Vector2(-3.5,-9.5),Vector2(3.5,-9.5)]:
+		model("world/lantern_post",world,xyz(p))
+		var light := OmniLight3D.new()
+		light.position = xyz(p) + Vector3(.33,1.43,0)
+		light.light_color = Color("ffc081")
+		light.light_energy = .72
+		light.omni_range = 3.3
+		light.shadow_enabled = false
+		world.add_child(light)
+
+func update_foreground_visibility(focus: Vector3, dt: float):
+	# Smooth opaque-dither cutaway for crowns hiding the lead; no transparent sorting.
+	# Gameplay nodes remain alive; visibility is not a change to resource state.
+	foreground_faded = 0
+	var view := camera.global_transform.affine_inverse()
+	var target := view * (focus + Vector3(0,.05,0))
+	for i in range(scenery_instances.size()):
+		var tree := scenery_instances[i]
+		if not is_instance_valid(tree): continue
+		var base: Vector3 = view * tree.global_position
+		var top: Vector3 = view * (tree.global_position + Vector3(0,scenery_heights[i] * tree.scale.y,0))
+		var depth_front := maxf(base.z,top.z) > target.z + 1.4
+		var covers := absf(base.x-target.x) < 2.0 and target.y > minf(base.y,top.y)-.65 and target.y < maxf(base.y,top.y)+.65
+		# A depleted resource stays hidden even when camera occlusion changes.
+		var depleted := false
+		for r in sim.resources:
+			if resource_visuals.get(r.id) == tree and r.units <= 0: depleted = true
+		var target_cutaway := 1.0 if depth_front and covers else 0.0
+		scenery_cutaway[i]=move_toward(scenery_cutaway[i],target_cutaway,clampf(dt,0,.10)*4.0)
+		tree.set_instance_shader_parameter("cutaway",scenery_cutaway[i])
+		tree.visible = not depleted
+		if scenery_cutaway[i] > .01: foreground_faded += 1
+
+func start_device_benchmark():
+	if is_instance_valid(device_benchmark): device_benchmark.queue_free()
+	if paused: toggle_menu()
+	device_benchmark = DeviceBenchmark.new()
+	add_child(device_benchmark)
+	device_benchmark.configure(self)

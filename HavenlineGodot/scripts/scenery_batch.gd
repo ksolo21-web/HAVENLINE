@@ -17,6 +17,20 @@ static func collect(node: Node3D, transform: Transform3D, surfaces: Dictionary):
 
 static func compile(scene: PackedScene) -> ArrayMesh:
 	var root: Node3D = scene.instantiate()
+	# The authored kit contains one mesh in an identity transform. Rebuilding
+	# it with SurfaceTool discards imported screen-space LODs and shadow meshes.
+	# Duplicate the mesh resource (not its vertices) to keep both intact while
+	# allowing instance materials to change without mutating the source scene.
+	var candidates: Array = []
+	collect_meshes(root, Transform3D.IDENTITY, candidates)
+	if candidates.size() == 1 and candidates[0].transform.is_equal_approx(Transform3D.IDENTITY):
+		var source: MeshInstance3D = candidates[0].node
+		if source.mesh is ArrayMesh and source.skin == null:
+			var retained: ArrayMesh = source.mesh.duplicate()
+			for i in source.mesh.get_surface_count():
+				retained.surface_set_material(i, source.get_active_material(i))
+			root.free()
+			return retained
 	var surfaces: Dictionary = {}
 	collect(root, Transform3D.IDENTITY, surfaces)
 	var result := ArrayMesh.new()
@@ -40,3 +54,11 @@ static func instances(mesh: Mesh, transforms: Array[Transform3D], parent: Node3D
 	visual.multimesh = batch
 	parent.add_child(visual)
 	return visual
+
+static func collect_meshes(node: Node3D, parent_transform: Transform3D, result: Array):
+	var combined := parent_transform * node.transform
+	if node is MeshInstance3D and node.mesh:
+		assert(node.skin == null, "Skinned geometry must never enter static batching")
+		result.append({"node": node, "transform": combined})
+	for child in node.get_children():
+		if child is Node3D: collect_meshes(child, combined, result)

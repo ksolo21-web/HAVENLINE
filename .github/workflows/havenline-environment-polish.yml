@@ -1,0 +1,56 @@
+name: Bake Havenline environment visual repairs
+on:
+  push:
+    branches: ['codex/havenline-environment-review']
+    paths: ['.github/workflows/havenline-environment-polish.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apply-polish:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/havenline-environment-review
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Apply checksum-verified repairs
+        run: |
+          set -euo pipefail
+          mkdir -p polish-evidence
+          echo 'ffa3eaae46ecfc6c84585e4bbe04c7bfedd7f14b6a23c9dff1e15ed88e2ec681  .github/environment-mobile-polish.patch' | sha256sum -c -
+          cp .github/environment-mobile-polish.patch polish-evidence/applied.patch
+          git apply --check .github/environment-mobile-polish.patch
+          git apply .github/environment-mobile-polish.patch
+          python3 -m pip install -r tools/havenline/requirements-environment.txt
+          python3 tools/havenline/bake_environment.py | tee polish-evidence/bake.json
+          python3 tools/havenline/environment_asset_audit.py --output polish-evidence/asset-audit.json
+          python3 - <<'PY'
+          import pathlib,json,hashlib
+          records=json.loads(pathlib.Path('Docs/Art/EnvironmentReview/source-preservation.json').read_text())
+          for filename,expected in records['original_glbs'].items():
+              assert hashlib.sha256(pathlib.Path(filename).read_bytes()).hexdigest()==expected, filename
+          assert len(records['original_glbs'])==16
+          print('All sixteen original GLBs unchanged; custom C2-C4 rig fixes still deferred.')
+          PY
+      - name: Save the actual source and rebuilt geometry
+        run: |
+          set -euo pipefail
+          test "$(git branch --show-current)" = codex/havenline-environment-review
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/havenline/bake_environment.py HavenlineGodot/scripts/main.gd HavenlineGodot/assets/environment_v2
+          git rm .github/environment-mobile-polish.patch
+          git commit -m 'Correct Mobile light response, seal shelter gables and finish furnace chimney interior'
+          git push origin HEAD:codex/havenline-environment-review
+          git rev-parse HEAD | tee polish-evidence/source-commit.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-environment-polish-evidence
+          path: polish-evidence/
+          retention-days: 30
+          if-no-files-found: error

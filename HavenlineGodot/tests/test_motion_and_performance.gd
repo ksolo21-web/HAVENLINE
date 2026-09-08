@@ -20,10 +20,10 @@ func run():
 	metrics.sample(NAN); metrics.sample(-1)
 	check("invalid intervals cannot corrupt performance evidence", metrics.count == 100)
 	metrics = Metrics.new()
-	for i in 72001: metrics.sample(16.0)
+	for i in Metrics.CAPACITY+1: metrics.sample(16.0)
 	report = metrics.report()
-	check("ring retains exactly its bounded sample budget", report.samples == 72000 and report.total_samples == 72001)
-	check("ring overwrites in place without losing duration accounting", is_equal_approx(report.retained_seconds,1152.0))
+	check("ring retains exactly its bounded sample budget", report.samples == Metrics.CAPACITY and report.total_samples == Metrics.CAPACITY+1)
+	check("ring overwrites in place without losing duration accounting", is_equal_approx(report.retained_seconds,Metrics.CAPACITY*.016))
 	var game := Main.new()
 	# We use production actor normalization and motion attachment for these tests.
 	game.world = Node3D.new(); root.add_child(game.world)

@@ -1,0 +1,80 @@
+name: Materialize Havenline environment review
+on:
+  push:
+    branches: ['codex/havenline-environment-review']
+    paths: ['.github/workflows/havenline-environment-install.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  materialize:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/havenline-environment-review
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Verify source transfer, normalize new-file metadata, apply
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p transfer-evidence
+          python3 - <<'PY'
+          import base64,gzip,hashlib,pathlib
+          root=pathlib.Path('.github/environment-payload')
+          encoded=''.join(''.join((root/f'part{i}.b64').read_text().split()) for i in range(1,4))
+          pathlib.Path('transfer-evidence/received.b64').write_text(encoded)
+          patch=gzip.decompress(base64.b64decode(encoded,validate=True))
+          actual=hashlib.sha256(patch).hexdigest()
+          assert actual=='03b7ccc4629672c79ab56b0e66ba782b3e88899f27159e16b70eb941d6a81ad0'
+          pathlib.Path('transfer-evidence/patch-sha256.txt').write_text(actual+'\n')
+          pathlib.Path('transfer-evidence/original.patch').write_bytes(patch)
+          normalized=patch.replace(b'\n--- /dev/null\n',b'\nnew file mode 100644\n--- /dev/null\n')
+          pathlib.Path('transfer-evidence/environment-update.patch').write_bytes(normalized)
+          polish=(root/'polish.patch').read_bytes()
+          assert hashlib.sha256(polish).hexdigest()=='56ec3874ccd4e4a1b95190d0bafc78df5d0aaa934c65ebd7a1b1ec969ced3bae'
+          pathlib.Path('transfer-evidence/polish.patch').write_bytes(polish)
+          PY
+          git apply --check transfer-evidence/environment-update.patch
+          git apply transfer-evidence/environment-update.patch
+          git apply --check transfer-evidence/polish.patch
+          git apply transfer-evidence/polish.patch
+          cp .github/workflows/havenline-godot-android.yml transfer-evidence/review-workflow.yml
+          git restore -- .github/workflows/havenline-godot-android.yml
+      - name: Generate and inspect actual assets
+        run: |
+          set -euo pipefail
+          python3 -m pip install -r tools/havenline/requirements-environment.txt
+          python3 tools/havenline/bake_environment.py | tee transfer-evidence/bake.log
+          python3 tools/havenline/environment_asset_audit.py --output transfer-evidence/environment-assets.json
+          python3 - <<'PY'
+          import pathlib,json,hashlib
+          record=json.loads(pathlib.Path('Docs/Art/EnvironmentReview/source-preservation.json').read_text())
+          for filename,expected in record['original_glbs'].items():
+              assert hashlib.sha256(pathlib.Path(filename).read_bytes()).hexdigest()==expected,filename
+          print('All 16 original GLBs unchanged; C2-C4 rig work deferred.')
+          PY
+      - name: Commit game files without modifying workflows
+        run: |
+          set -euo pipefail
+          test "$(git branch --show-current)" = codex/havenline-environment-review
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/havenline/bake_environment.py tools/havenline/environment_asset_audit.py tools/havenline/verify_environment_apk.py tools/havenline/requirements-environment.txt tools/havenline/verify_apk.py tools/havenline/summarize_evidence.py
+          git add HavenlineGodot/scripts/main.gd HavenlineGodot/scripts/outpost_surface.gd HavenlineGodot/scripts/outpost_view.gd HavenlineGodot/shaders HavenlineGodot/tests/test_environment.gd HavenlineGodot/data/release-status.json HavenlineGodot/project.godot HavenlineGodot/export_presets.cfg HavenlineGodot/assets/environment_v2
+          git add .github/skills/environment-review Docs/Art/EnvironmentReview
+          git rm .github/environment-payload/part1.b64 .github/environment-payload/part2.b64 .github/environment-payload/part3.b64 .github/environment-payload/polish.patch
+          git commit -m 'Replace blockout environment with detailed winter assets, camera cutaway and regression gates'
+          git push origin HEAD:codex/havenline-environment-review
+          git rev-parse HEAD | tee transfer-evidence/source-commit.txt
+          git status --short > transfer-evidence/git-status.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-environment-source-transfer
+          path: transfer-evidence/
+          retention-days: 14
+          if-no-files-found: error

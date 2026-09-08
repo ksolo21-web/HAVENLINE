@@ -1,0 +1,108 @@
+name: Reverify exact Havenline 045 build and publish evidence
+on:
+  push:
+    branches: ['codex/havenline-environment-review']
+    paths: ['.github/workflows/havenline-reverify-045.yml']
+  workflow_dispatch:
+permissions:
+  actions: read
+  contents: write
+jobs:
+  reverify:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      SOURCE_SHA: '22c9a4eba92f57fa5cdef6989575b57640d6b348'
+      BUILD_SHA: 'd7a14dffde8e52b2b5e2dcbe7e6fd75525429f7d'
+      ORIGINAL_RUN: '34159224288'
+      EXPECTED_APK_SHA: '8d77d9061dda984aa0f0e5ec58e17d65ff95867ecfc28da1cd09750261ae7c12'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          name: HAVENLINE-native-review-d7a14dffde8e52b2b5e2dcbe7e6fd75525429f7d
+          run-id: 34159224288
+          github-token: ${{ github.token }}
+          path: original-build
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Verify unchanged game source and correct only version matching
+        run: |
+          set -euo pipefail
+          mkdir -p reverified
+          git diff --exit-code "$SOURCE_SHA" -- HavenlineGodot tools/havenline/bake_environment.py
+          python3 - <<'PY'
+          import pathlib,hashlib,os
+          apk=pathlib.Path('original-build/HAVENLINE-native-review-arm64.apk')
+          assert hashlib.sha256(apk.read_bytes()).hexdigest()==os.environ['EXPECTED_APK_SHA']
+          p=pathlib.Path('tools/havenline/verify_apk.py');s=p.read_text()
+          old="manifest.get('versionCode') == 404 and manifest.get('versionName') == '0.4.4-environment-review'"
+          assert s.count(old)==1,'Source verifier changed; review before replacing'
+          s=s.replace(old,'expected_review_version(manifest)')
+          anchor='def manifest_elements(data: bytes) -> list[dict]:'
+          helper="def expected_review_version(manifest: dict) -> bool:\n    return (type(manifest.get('versionCode')) is int\n            and manifest['versionCode'] == 405\n            and manifest.get('versionName') == '0.4.5-environment-review')\n\n\n"
+          assert s.count(anchor)==1;s=s.replace(anchor,helper+anchor)
+          anchor="    return {'checks': tests, 'total_checks': len(tests), 'passed': all(tests.values())}"
+          extra="    identity = {'versionCode': 405, 'versionName': '0.4.5-environment-review'}\n    tests.update({\n        'current_review_version_matches': expected_review_version(identity),\n        'previous_review_code_rejected': not expected_review_version(dict(identity, versionCode=404)),\n        'previous_review_name_rejected': not expected_review_version(dict(identity, versionName='0.4.4-environment-review')),\n        'string_version_code_rejected': not expected_review_version(dict(identity, versionCode='405')),\n        'missing_version_rejected': not expected_review_version({}),\n        'future_unknown_version_rejected': not expected_review_version(dict(identity, versionCode=406)),\n    })\n"
+          assert s.count(anchor)==1;s=s.replace(anchor,extra+anchor);p.write_text(s)
+          pathlib.Path('reverified/executed-verify_apk.py').write_text(s)
+          PY
+      - name: Reverify signature, all APK invariants and imported environment resources
+        run: |
+          set -euo pipefail
+          sdkmanager 'build-tools;35.0.1'
+          "$ANDROID_HOME/build-tools/35.0.1/apksigner" verify --verbose --print-certs original-build/HAVENLINE-native-review-arm64.apk > reverified/apk-signature.txt
+          python3 tools/havenline/verify_apk.py --self-test --output reverified/verifier-regression-tests.json
+          python3 tools/havenline/verify_apk.py original-build/HAVENLINE-native-review-arm64.apk --output reverified/apk-inspection.json
+          python3 tools/havenline/verify_environment_apk.py original-build/HAVENLINE-native-review-arm64.apk --output reverified/environment-apk-inspection.json
+      - name: Preserve source-bound captures, failures and corrective verification
+        env:
+          REVERIFICATION_RUN: ${{ github.run_id }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import pathlib,os,hashlib,json,shutil,struct
+          build=pathlib.Path('original-build');out=pathlib.Path('reverified')
+          assert json.loads((build/'test-summary.json').read_text())['total_checks']==391
+          assert json.loads((build/'test-summary.json').read_text())['all_checks_passed']
+          expected={'mobile-render','mobile-rear','mobile-side','mobile-left','mobile-three-quarter','outpost-night','outpost-blizzard','outpost-warmth4','outpost-gather','outpost-shelter-detail','outpost-shelter-detail-rear','outpost-furnace-detail','outpost-tree-detail','outpost-native-4k'}
+          images=list(build.glob('*/native-scene.png'));assert {p.parent.name for p in images}==expected and len(images)==14
+          root=pathlib.Path('Docs/Art/EnvironmentReview/captures');root.mkdir(parents=True,exist_ok=True)
+          (root/'.gitattributes').write_text('*.png -filter -diff -merge\n*.json text eol=lf\n')
+          records=[];text=['# Actual environment render evidence','',f"Source {os.environ['SOURCE_SHA']}; tested merge {os.environ['BUILD_SHA']}; original run {os.environ['ORIGINAL_RUN']}; APK reverified in run {os.environ['REVERIFICATION_RUN']}.",'','Actual unaltered Mobile/software-Vulkan frames. No physical Android 4K/60 or visual approval is implied.','']
+          for png in sorted(images):
+              r=json.loads((png.parent/'render-evidence.json').read_text());assert r['renderer']=='mobile' and r['render_scale']==1.0 and not r['performance_certified']
+              if png.parent.name=='outpost-native-4k':
+                  w,h=struct.unpack('>II',png.read_bytes()[16:24]);assert w>=3840 and h>=2160 and r['internal_render']==[w,h]
+              dest=root/png.parent.name;dest.mkdir(exist_ok=True)
+              for name in ('native-scene.png','render-evidence.json'):shutil.copy2(png.parent/name,dest/name)
+              records.append({'view':png.parent.name,'sha256':hashlib.sha256(png.read_bytes()).hexdigest()})
+              text += ['## '+png.parent.name,'',f'![{png.parent.name}](captures/{png.parent.name}/native-scene.png)','']
+          provenance={'source':os.environ['SOURCE_SHA'],'build':os.environ['BUILD_SHA'],'run':os.environ['ORIGINAL_RUN'],'reverification_run':os.environ['REVERIFICATION_RUN'],'apk_sha256':os.environ['EXPECTED_APK_SHA'],'captures':records,'independent_review_completed':False,'visual_score':None,'original_failure':'Stale expected version404; unchanged APK is version405. Corrected strict identity guard retains isolated package checks.','physical_android_4k60_verified':False}
+          (root/'provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
+          (out/'provenance.json').write_text(json.dumps(provenance,indent=2)+'\n')
+          pathlib.Path('Docs/Art/EnvironmentReview/CURRENT_RENDER_REVIEW.md').write_text('\n'.join(text))
+          shutil.copy2(build/'apk-inspection.json',out/'original-failed-apk-inspection.json')
+          shutil.copy2(build/'test-summary.json',out/'test-summary.json')
+          shutil.copy2(build/'environment-benchmark/benchmark.json',out/'software-native-benchmark.json')
+          shutil.copy2(build/'HAVENLINE-native-review-arm64.apk',out/'HAVENLINE-0.4.5-Native-Environment-Review-ARM64.apk')
+          print(json.dumps(provenance))
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add tools/havenline/verify_apk.py Docs/Art/EnvironmentReview/captures Docs/Art/EnvironmentReview/CURRENT_RENDER_REVIEW.md
+          git commit -m 'Correct stale APK version verifier and publish unaltered 045 Mobile evidence for independent review'
+          git push origin HEAD:codex/havenline-environment-review
+          git rev-parse HEAD > reverified/VERIFICATION_COMMIT.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-045-reverified-apk-and-evidence
+          path: reverified/
+          retention-days: 30
+          if-no-files-found: error

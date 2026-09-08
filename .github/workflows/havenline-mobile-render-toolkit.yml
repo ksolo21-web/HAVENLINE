@@ -1,0 +1,30 @@
+name: Havenline Mobile render toolkit
+on:
+  push:
+    branches: ['codex/havenline-environment-review']
+    paths: ['.github/workflows/havenline-mobile-render-toolkit.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  toolkit:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - name: Fetch Debian software Vulkan runtime for actual Mobile renderer checks
+        run: |
+          set -euo pipefail
+          mkdir -p toolkit
+          docker run --rm -v "$PWD/toolkit:/out" debian:trixie-slim sh -ec '
+            apt-get update
+            cd /out
+            apt-get download mesa-vulkan-drivers libllvm19 vulkan-tools
+            sha256sum *.deb > SHA256SUMS.txt
+          '
+          printf '%s\n' 'Software Vulkan only. Does not establish physical Android performance.' > toolkit/LIMITATIONS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: havenline-mobile-software-vulkan-toolkit
+          path: toolkit/
+          retention-days: 7
+          if-no-files-found: error
