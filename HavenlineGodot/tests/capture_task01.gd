@@ -37,11 +37,13 @@ func run():
 		if child is WorldEnvironment:allowed.append(child)
 		if child is VisualInstance3D or child is Node3D:
 			if not child in allowed:child.visible=false
+	game.outpost_view.visible=true
+	game.outpost_view.snow.visible=false
 	game.ReferenceForest.set_player_clearance(game, Vector3.ZERO, false)
 	var display_root:=Node3D.new();game.world.add_child(display_root)
 	var variants: Array=[]
 	for i in range(1,4):
-		var t=game.model("world/pine_%d"%i,display_root,Vector3((i-2)*2.8,0,0))
+		var t=game.model("world/pine_%d"%i,display_root,game.xyz(Vector2(18.0+(i-2)*2.8,0)))
 		variants.append(t)
 	var target:=Vector3(0,1.6,0)
 	game.camera.size=4.6
@@ -61,7 +63,7 @@ func run():
 		game.camera.position=target+Vector3(sin(theta)*11,3.2,cos(theta)*11)
 		game.camera.look_at(target)
 		await save_frame("orbit-%02d"%frame)
-	var report={"task":"T01","renderer":RenderingServer.get_current_rendering_method(),"device":RenderingServer.get_video_adapter_name(),"internal_size":[game.scene_view.size.x,game.scene_view.size.y],"scale":game.scene_view.scaling_3d_scale,"asset_views_isolated":true,"camera_sequence_frames":24,"integration_camera_frames":12,"forest_edge_fixture_position":[12.4,0],"scene_script_sha256":FileAccess.get_file_as_string("res://scripts/main.gd").sha256_text(),"forest":game.reference_forest_evidence,"physical_4k60_verified":false,"visual_approval":false}
+	var report={"task":"T01","renderer":RenderingServer.get_current_rendering_method(),"device":RenderingServer.get_video_adapter_name(),"internal_size":[game.scene_view.size.x,game.scene_view.size.y],"scale":game.scene_view.scaling_3d_scale,"asset_views_isolated":true,"asset_views_use_actual_snowfield":true,"camera_sequence_frames":24,"integration_camera_frames":12,"forest_edge_fixture_position":[12.4,0],"scene_script_sha256":FileAccess.get_file_as_string("res://scripts/main.gd").sha256_text(),"forest":game.reference_forest_evidence,"physical_4k60_verified":false,"visual_approval":false}
 	var file=FileAccess.open(out.path_join("capture.json"),FileAccess.WRITE);file.store_string(JSON.stringify(report,"\t"));file.close()
 	game.outpost_audio.stop_all();await create_timer(.35).timeout;game.free();await process_frame
 	quit()
