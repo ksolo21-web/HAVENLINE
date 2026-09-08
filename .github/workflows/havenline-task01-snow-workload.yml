@@ -1,0 +1,37 @@
+name: Havenline T01 snow-finish native workload
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-snow-workload.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  workload:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '741373970197049a01ca7ddd2fd8a5034b8c80ee'
+      - run: python3 -m pip install pyyaml
+      - name: Execute the unchanged workload harness against the exact new source
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          w=yaml.safe_load(Path('.github/workflows/havenline-task01-workload.yml').read_text())
+          runs=[s['run'] for s in w['jobs']['measure-render-workload']['steps'] if 'run' in s]
+          assert len(runs)==3
+          runs=[s.replace('c516d772a7f802e7b9e40928d9bf9f6dbba52767','741373970197049a01ca7ddd2fd8a5034b8c80ee') for s in runs]
+          runs[0]+='\nexport PATH="$RUNNER_TEMP/engine:$PATH"\n'
+          subprocess.run(['bash','-euo','pipefail','-c','\n'.join(runs)],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-snow-native-workload-${{ github.run_id }}
+          path: workload-evidence/
+          retention-days: 30
+          if-no-files-found: error
+# Four source-bound 4K captures/workload counts, NOT device FPS or task approval.
