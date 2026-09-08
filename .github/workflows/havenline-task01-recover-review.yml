@@ -1,0 +1,159 @@
+name: Havenline T01 recovered exact-source independent review
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-recover-review.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  verify-existing-captures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '8632c5b2c2a70ec1eb88db08bef8ca18b707e1a6'
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-repaired-evidence-34221005033
+          run-id: 34221005033
+          github-token: ${{ github.token }}
+          path: task01-evidence/
+      - run: python3 -m pip install numpy pillow
+      - name: Verify exact named captures instead of dropping the extra HUD image
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/verify_task01_evidence.py task01-evidence
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          from PIL import Image
+          e=Path('task01-evidence');source=(e/'SOURCE.txt').read_text().strip()
+          assert source=='8632c5b2c2a70ec1eb88db08bef8ca18b707e1a6'
+          required={f'gallery/v{i:02d}-{angle}.png' for i in (1,2,3) for angle in ('front','rear','side','three-quarter')}
+          required|={f'gallery/orbit-{i:02d}.png' for i in range(24)}
+          required|={f'gallery/integration-{i:02d}.png' for i in range(12)}
+          required|={'gallery/gameplay-integration.png','gallery/forest-boundary-gameplay.png'}
+          required|={f'clearance/clearance-{x}.png' for x in ('baseline','disabled','enabled')}
+          required|={f'clearance/resource-clearance-{i:02d}.png' for i in range(6)}
+          required|={'clearance/resource-depleted.png','clearance/resource-restored.png','native4k/native-scene.png','native4k/gameplay.png'}
+          actual={str(p.relative_to(e)) for p in e.rglob('*.png')}
+          assert actual==required,{'missing':sorted(required-actual),'unexpected':sorted(actual-required)}
+          assert len(actual)==63
+          captures={name:hashlib.sha256((e/name).read_bytes()).hexdigest() for name in sorted(actual)}
+          for name in actual:
+              with Image.open(e/name) as im:im.verify()
+          r=json.loads((e/'gallery/capture.json').read_text());n=json.loads((e/'native4k/render-evidence.json').read_text())
+          assets={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('HavenlineGodot/assets/reference_forest').glob('*.glb')}
+          record={'task':'T01','source':source,'captures':captures,'assets':assets,'renderer':'mobile','device':r['device'],'capture_count':63,'camera_pose_frames':24,'integration_pose_frames':12,'native_dimensions':n['internal_render'],'render_scale':n['render_scale'],'fixed_step_capture_is_not_fps_evidence':True,'task_approved':False,'physical_4k60_verified':False,'recovery':{'original_run':34221005033,'original_artifact_id':10053855852,'original_artifact_zip_sha256':'c0a22d497b0301888e8a85ee154e4427d3fa939a14759a70aa1c1c60bbc65b05','reason':'Original final count expected 62; complete named set has 63 including supplemental native HUD capture. No image or runtime changed.','unchanged_original_capture_bytes':True}}
+          (e/'provenance.json').write_text(json.dumps(record,indent=2)+'\n')
+          print(json.dumps({'source':source,'required_images':len(required),'all_named_images_verified':True,'mechanical_pass':json.loads((e/'mechanical-review.json').read_text())['passed'],'critic_approved':False}))
+          PY
+          mkdir -p source-snapshot
+          git archive --format=tar.gz --output=source-snapshot/task01-reviewed-source.tar.gz HEAD HavenlineGodot tools/havenline Docs AGENTS.md .github
+          git rev-parse HEAD > source-snapshot/SOURCE.txt
+          sha256sum source-snapshot/task01-reviewed-source.tar.gz > source-snapshot/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: havenline-T01-recovered-evidence-${{ github.run_id }}
+          path: task01-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        with:
+          name: havenline-T01-reviewed-source-${{ github.run_id }}
+          path: source-snapshot/
+          retention-days: 30
+          if-no-files-found: error
+  independent-critics:
+    needs: verify-existing-captures
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        shard: [0, 1, 2]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 38
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_SHARD: ${{ matrix.shard }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '8632c5b2c2a70ec1eb88db08bef8ca18b707e1a6'
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-recovered-evidence-${{ github.run_id }}
+          path: task01-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-vision
+          key: havenline-qwen3vl8b-f982a075-b10809-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Independently review the actual images; rubric and source unchanged
+        run: python3 -u tools/havenline/review_task01_cached.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-independent-${{ matrix.role }}-${{ matrix.shard }}-${{ github.run_id }}
+          path: critic-results/
+          retention-days: 30
+          if-no-files-found: error
+  independent-and-mechanical-gate:
+    needs: [verify-existing-captures,independent-critics]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-T01-independent-*-${{ github.run_id }}
+          path: reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-recovered-evidence-${{ github.run_id }}
+          path: evidence/
+      - name: Require every named group and both independent roles to pass
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,math
+          source='8632c5b2c2a70ec1eb88db08bef8ca18b707e1a6'
+          expected={'variant-1','variant-2','variant-3','forest','clearance','camera-motion'}
+          keys={'silhouette','materials','reference_fidelity','integration','geometric_integrity'}
+          reports=[];errors=[];scores={}
+          try:
+              mechanical=json.loads(Path('evidence/mechanical-review.json').read_text())
+              if mechanical['source']!=source or not mechanical['passed']:errors.append('Mechanical/source check failed')
+          except Exception as exc:errors.append('Missing mechanical evidence: '+str(exc))
+          for role in ('reference-fidelity','visual-integrity'):
+              rows=[];shards=[]
+              for p in Path('reviews').glob('*'+role+'*/shard-review.json'):
+                  r=json.loads(p.read_text());rows+=r['reviews'];shards.append(r['shard'])
+                  if r['role']!=role or r['source']!=source:errors.append('Wrong shard source/role '+role)
+              if set(shards)!={0,1,2} or len(shards)!=3:errors.append('Missing/duplicate shards '+role)
+              if {r['group'] for r in rows}!=expected or len(rows)!=6:errors.append('Missing/duplicate coverage '+role)
+              for r in rows:
+                  review=r.get('review',{});s=review.get('scores',{})
+                  if not r.get('independent_execution') or r['source']!=source or not r.get('passed'):errors.append('Not passing '+role+'/'+r['group'])
+                  if set(s)!=keys or any(type(v) not in (int,float) or not math.isfinite(v) or not 9<=v<=10 for v in s.values()):errors.append('Invalid/below-nine '+role+'/'+r['group'])
+                  if review.get('defects') or review.get('coverage_complete') is not True or review.get('confidence') not in ('medium','high'):errors.append('Defects or incomplete evidence '+role+'/'+r['group'])
+              scores[role]=min((r.get('lowest_score',0) for r in rows),default=None);reports+=rows
+          result={'task':'T01','source':source,'minimum_dimension_score':9,'target':10,'mechanical_and_critics_passed':not errors,'role_lowest_scores':scores,'reviews':reports,'errors':errors,'final_actual_pixel_verification_required':True,'task_approved':False,'next_task_started':False,'game_complete':False,'physical_phone_tablet_4k60_verified':False}
+          out=Path('gate-report');out.mkdir(exist_ok=True)
+          (out/'T01-independent-and-mechanical.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
+          raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-recovered-gate-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# The earlier failed run stays failed. No altered capture, APK, final-game approval or Task 2 work.
