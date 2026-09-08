@@ -1,0 +1,50 @@
+name: Havenline phone/tablet delivery gate
+on:
+  push:
+    branches: ['codex/havenline-environment-review', 'codex/havenline-godot-android', 'main']
+    paths: ['HavenlineGodot/**', 'tools/havenline/**', 'Docs/QA/**', '.github/workflows/havenline-device-release-gate.yml']
+  pull_request:
+    paths: ['HavenlineGodot/**', 'tools/havenline/**', 'Docs/QA/**', '.github/workflows/havenline-device-release-gate.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validator-tests:
+    name: Validator regression tests (not game approval)
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m unittest discover -s tools/havenline/tests -p 'test_release_gate.py' -v
+  production-readiness:
+    name: Full game + independent 10/10 + physical phone/tablet 4K60
+    needs: validator-tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+      - name: Enforce the exact-source gate before any player delivery
+        env:
+          SOURCE: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          python3 tools/havenline/release_gate.py \
+            --evidence Docs/QA/ReleaseEvidence \
+            --source "$SOURCE" \
+            --status HavenlineGodot/data/release-status.json \
+            --output delivery-gate/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-player-delivery-gate-${{ github.run_id }}
+          path: delivery-gate/
+          if-no-files-found: error
+          retention-days: 30
+# No APK export or publication. Missing evidence is an intentional failing check.
+# Branch-protection settings are not changed by this workflow.

@@ -22,7 +22,12 @@
     "customer_survivor_pet_authored_models": "FAIL",
     "population_gameplay_and_save_regression": "PASS_LOCAL",
     "npc_role_animations_and_visual_variants": "FAIL",
-    "independent_critic_strictly_above_9": "UNTESTED"
+    "independent_critic_strictly_above_9": "UNTESTED",
+    "phone_and_tablet_automatic_layout": "IMPLEMENTED_113_LOCAL_LAYOUT_CHECKS_HARDWARE_UNVERIFIED",
+    "phone_and_tablet_full_functionality": "UNTESTED",
+    "environment_independent_critic_10_of_10": "FAIL_ON_CURRENT_ART_EVIDENCE",
+    "native_4k60_physical_phone_and_tablet": "UNTESTED",
+    "reference_video_fidelity_10_of_10": "UNTESTED_REQUIRED_BY_REFERENCE_VIDEO_LOCK"
   },
   "notes": [
     "Passing source tests, bone-length checks, imported GLBs or successful APK export is not production approval.",
@@ -34,7 +39,8 @@
     "The animal-roster correction requires thirteen authored NPC models: four customers, two additional human survivors, and seven animal species. All thirteen model slots remain empty; reference art and logical tests are not finished NPCs.",
     "C2-C4 rigging fixes and final rig review are deferred to the final character-polish stage by explicit user direction; source GLBs are unchanged.",
     "Native resolution policy now enforces both width >=3840 and height >=2160, including ultrawide layouts. This is not physical 4K/60 certification.",
-    "Trade tuning and supply tokens are provisional game design. No real-money system is added."
+    "Trade tuning and supply tokens are provisional game design. No real-money system is added.",
+    "Latest user direction: automatic phone/tablet compatibility; no unfinished build delivery or player-run benchmarking. Development APKs are internal test artifacts only. Full-game, 10/10 environment, device functionality and sustained physical native4K60 gates all remain mandatory. No old approval carries across an untested runtime/source change."
   ],
   "animal_roster_correction": {
     "species": [
@@ -82,5 +88,24 @@
     "visual_quality_score": null,
     "production_approved": false,
     "hardware_4k60_verified": false
+  },
+  "player_preview_delivery_allowed": false,
+  "phone_tablet_acceptance": {
+    "automatic_ui": true,
+    "manual_device_mode_required": false,
+    "environment_target": 10,
+    "primitive_looking_placeholders_allowed": false,
+    "internal_dimensions_minimum": [
+      3840,
+      2160
+    ],
+    "render_scale": 1.0,
+    "sustained_presented_fps_minimum": 60,
+    "measured_seconds_minimum": 1800,
+    "must_test_before_user_delivery": true,
+    "physical_phone_certified": false,
+    "physical_tablet_certified": false,
+    "supported_hardware_must_be_measured": true,
+    "custom_characters_2_to_4_final_rig_review_stays_last": true
   }
 }

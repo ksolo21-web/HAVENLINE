@@ -57,3 +57,8 @@ work, not only in the final response.
 - Automatic phone AND tablet layouts, controls, saves and lifecycle must be verified. Native internal 4K/60 certification requires representative full-load physical evidence in both categories, not one screenshot, one device, an emulator or user testing.
 - Kaleb explicitly does NOT want to test unfinished builds. Do not send development APKs or ask him to run benchmarks while functionality, reference fidelity, independent 10/10 review, no-placeholder art or physical phone/tablet 4K/60 gates are unmet. Internal development exports may continue. Report missing access as a blocker, not an assignment to the user.
 - The reference audit itself changes documentation/evidence tooling, not the game runtime, and does not constitute a new score or performance pass.
+
+
+## Verified adaptive-device implementation and delivery check
+
+Read `Docs/QA/PHONE_TABLET_RELEASE_CONTRACT.md` and run `tools/havenline/release_gate.py`. Automatic layout checks are not physical-device approval. No unfinished APKs or player-run benchmarks; development builds remain internal. Preserve the newer reference-video lock, its full motion/state comparisons, all original gameplay and C2-C4 final rig work deferred until last. The delivery validator is supplementary to, not a replacement for, the reference-video acceptance protocol.

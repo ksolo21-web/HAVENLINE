@@ -37,3 +37,8 @@ Automatic phone AND tablet behavior is required: layout, safe areas, touch, came
 Kaleb explicitly does NOT want to test unfinished builds. Do not send another development APK or ask him to run a benchmark before full functionality, reference fidelity, independent critics, no-placeholder art and physical phone/tablet performance gates pass. Internal isolated-package builds remain permitted. Missing test access is an honest blocker, not a testing task transferred to Kaleb.
 
 Release also requires complete motion/rig review, production features, Android lifecycle, authentication/cloud and save integrity. Environment approval alone is not whole-game approval. Show truthful progress bars in commentary BEFORE substantial work and at verified milestones during execution, not only in the final response.
+
+
+## Verified adaptive-device implementation and delivery check
+
+Read `Docs/QA/PHONE_TABLET_RELEASE_CONTRACT.md` and run `tools/havenline/release_gate.py`. Automatic layout checks are not physical-device approval. No unfinished APKs or player-run benchmarks; development builds remain internal. Preserve the newer reference-video lock, its full motion/state comparisons, all original gameplay and C2-C4 final rig work deferred until last. The delivery validator is supplementary to, not a replacement for, the reference-video acceptance protocol.

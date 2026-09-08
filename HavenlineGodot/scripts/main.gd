@@ -26,6 +26,12 @@ const FrameRecord = preload("res://scripts/performance_record.gd")
 const CarryStack = preload("res://scripts/carry_stack.gd")
 const TransferFeedback = preload("res://scripts/transfer_feedback.gd")
 const RenderPolicy = preload("res://scripts/render_policy.gd")
+const AdaptiveLayout = preload("res://scripts/adaptive_layout.gd")
+var hud_safe_rect := Rect2()
+var joystick_radius := 110.0
+var menu_return_button: Button
+var menu_scroll: ScrollContainer
+var layout_snapshot: Dictionary = {}
 const PopulationView = preload("res://scripts/population_view.gd")
 var population_view: Node3D
 var sim = Simulation.new()
@@ -134,6 +140,11 @@ func _ready():
 		DirAccess.make_dir_recursive_absolute(capture_directory)
 
 func resize_render():
+	# A fold/resize invalidates an old pointer coordinate, not the player save.
+	joystick_id = -1
+	joystick_current = Vector2.ZERO
+	joystick_origin = Vector2.ZERO
+	last_frame_usec = 0
 	if not is_instance_valid(scene_view): return
 	var aspect := maxf(1.0, size.x / maxf(1.0, size.y))
 	scene_view.size = RenderPolicy.internal_size(aspect, render_review)
@@ -418,12 +429,23 @@ func build_hud():
 	for side in ["left","right","top","bottom"]:
 		padding.add_theme_constant_override("margin_" + side,24)
 	menu.add_child(padding)
+	var panel_column := VBoxContainer.new()
+	panel_column.add_theme_constant_override("separation", 12)
+	padding.add_child(panel_column)
+	menu_return_button = Button.new()
+	menu_return_button.text = "Return to the outpost"
+	menu_return_button.custom_minimum_size.y = 48
+	menu_return_button.add_theme_font_size_override("font_size", 22)
+	menu_return_button.pressed.connect(toggle_menu)
+	panel_column.add_child(menu_return_button)
 	menu_column = VBoxContainer.new()
 	menu_column.add_theme_constant_override("separation",16)
 	var scroll := ScrollContainer.new()
-	scroll.custom_minimum_size = Vector2(0, 440)
+	menu_scroll = scroll
+	scroll.custom_minimum_size = Vector2.ZERO
+	scroll.size_flags_vertical = Control.SIZE_EXPAND_FILL
 	scroll.horizontal_scroll_mode = ScrollContainer.SCROLL_MODE_DISABLED
-	padding.add_child(scroll)
+	panel_column.add_child(scroll)
 	menu_column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	scroll.add_child(menu_column)
 	rebuild_menu()
@@ -440,7 +462,8 @@ func rebuild_menu():
 		if population_view.scenes.is_empty():
 			var pending := text_label("NPC models pending — no placeholder people or invisible workers.", 18, menu_column)
 			pending.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	var leads := HBoxContainer.new()
+	var leads := HFlowContainer.new()
+	leads.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	menu_column.add_child(leads)
 	for id in [1,2]:
 		var choice := Button.new()
@@ -452,7 +475,8 @@ func rebuild_menu():
 	for companion in sim.companions:
 		if not actors.has(companion.id): continue
 		var id: int = companion.id
-		var row := HBoxContainer.new()
+		var row := HFlowContainer.new()
+		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		row.add_theme_constant_override("separation",14)
 		menu_column.add_child(row)
 		var name_label := text_label("Character " + str(id),24,row)
@@ -484,12 +508,14 @@ func rebuild_menu():
 	var explanation := text_label("Move to act. Crew assignments never replace your movement control.",20,menu_column)
 	explanation.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	explanation.custom_minimum_size.y = 48
-	var benchmark_button := Button.new()
-	benchmark_button.text = "Measure native 4K frame timing · 30 minutes"
-	benchmark_button.custom_minimum_size.y = 64
-	benchmark_button.add_theme_font_size_override("font_size",22)
-	menu_column.add_child(benchmark_button)
-	benchmark_button.pressed.connect(start_device_benchmark)
+	# Measurement instrumentation is developer-only; Kaleb is not the QA runner.
+	if qa_mode:
+		var benchmark_button := Button.new()
+		benchmark_button.text = "QA · Measure native frame timing"
+		benchmark_button.custom_minimum_size.y = 64
+		benchmark_button.add_theme_font_size_override("font_size",22)
+		menu_column.add_child(benchmark_button)
+		benchmark_button.pressed.connect(start_device_benchmark)
 	var resume := Button.new()
 	resume.text = "Return to the outpost"
 	resume.custom_minimum_size.y = 64
@@ -517,7 +543,7 @@ func switch_lead(id: int):
 
 func movement_input() -> Vector2:
 	if paused: return Vector2.ZERO
-	if joystick_id != -1: return ((joystick_current - joystick_origin) / 110.0).limit_length(1)
+	if joystick_id != -1: return ((joystick_current - joystick_origin) / joystick_radius).limit_length(1)
 	var x := float(Input.is_physical_key_pressed(KEY_D) or Input.is_physical_key_pressed(KEY_RIGHT)) - float(Input.is_physical_key_pressed(KEY_A) or Input.is_physical_key_pressed(KEY_LEFT))
 	var y := float(Input.is_physical_key_pressed(KEY_S) or Input.is_physical_key_pressed(KEY_DOWN)) - float(Input.is_physical_key_pressed(KEY_W) or Input.is_physical_key_pressed(KEY_UP))
 	return Vector2(x, y).limit_length(1)
@@ -525,7 +551,7 @@ func movement_input() -> Vector2:
 func _gui_input(event: InputEvent):
 	if paused: return
 	if event is InputEventScreenTouch:
-		if event.pressed and joystick_id == -1 and event.position.x < size.x * .55 and event.position.y > size.y * .30:
+		if event.pressed and joystick_id == -1 and hud_safe_rect.has_point(event.position) and event.position.x < hud_safe_rect.position.x + hud_safe_rect.size.x * .55 and event.position.y > hud_safe_rect.position.y + hud_safe_rect.size.y * .30:
 			joystick_id = event.index
 			joystick_origin = event.position
 			joystick_current = event.position
@@ -533,7 +559,7 @@ func _gui_input(event: InputEvent):
 	elif event is InputEventScreenDrag and event.index == joystick_id:
 		joystick_current = event.position
 	elif event is InputEventMouseButton and event.button_index == MOUSE_BUTTON_LEFT:
-		if event.pressed and event.position.x < size.x * .55:
+		if event.pressed and hud_safe_rect.has_point(event.position) and event.position.x < hud_safe_rect.position.x + hud_safe_rect.size.x * .55 and event.position.y > hud_safe_rect.position.y + hud_safe_rect.size.y * .30:
 			joystick_id = -2
 			joystick_origin = event.position
 			joystick_current = event.position
@@ -544,10 +570,10 @@ func _gui_input(event: InputEvent):
 
 func _draw():
 	if joystick_id != -1:
-		draw_circle(joystick_origin, 112, Color(.68, .84, 1, .10))
-		draw_arc(joystick_origin, 112, 0, TAU, 64, Color(.84, .92, 1, .42), 3, true)
-		var offset := (joystick_current - joystick_origin).limit_length(110)
-		draw_circle(joystick_origin + offset, 43, Color(.85, .93, 1, .5))
+		draw_circle(joystick_origin, joystick_radius + 2, Color(.68, .84, 1, .10))
+		draw_arc(joystick_origin, joystick_radius + 2, 0, TAU, 64, Color(.84, .92, 1, .42), 3, true)
+		var offset := (joystick_current - joystick_origin).limit_length(joystick_radius)
+		draw_circle(joystick_origin + offset, joystick_radius * .39, Color(.85, .93, 1, .5))
 
 func _physics_process(dt: float):
 	if paused or not is_instance_valid(world): return
@@ -677,7 +703,7 @@ func _notification(what: int):
 		if not qa_mode: Saves.write_state(sim.snapshot())
 		close_game()
 	elif what == NOTIFICATION_WM_GO_BACK_REQUEST:
-		if is_instance_valid(menu) and not paused: toggle_menu()
+		if is_instance_valid(menu): toggle_menu()
 	elif what == NOTIFICATION_APPLICATION_PAUSED:
 		paused = true
 		joystick_id = -1
@@ -691,6 +717,7 @@ func _notification(what: int):
 	elif what == NOTIFICATION_APPLICATION_RESUMED:
 		last_frame_usec = 0
 		joystick_id = -1
+		call_deferred("resize_render")
 
 func write_performance_record():
 	performance_record.write("user://performance-review.json", {
@@ -702,21 +729,52 @@ func write_performance_record():
 
 func layout_hud():
 	if not is_instance_valid(status): return
-	var safe := Rect2(Vector2.ZERO,size)
+	var safe := Rect2(Vector2.ZERO, size)
+	var ui_scale := 1.0
 	if OS.has_feature("android"):
-		var physical := Vector2(DisplayServer.window_get_size())
-		var area := DisplayServer.get_display_safe_area()
-		if physical.x > 0 and physical.y > 0 and area.size.x > 0 and area.size.y > 0:
-			var factor := size / physical
-			safe = Rect2(Vector2(area.position) * factor,Vector2(area.size) * factor).intersection(safe)
-	status.position = safe.position + Vector2(32,28)
-	climate_status.position = safe.position + Vector2(36,74)
-	objective.size.x = minf(780,maxf(300,safe.size.x - 660))
-	objective.position = Vector2(safe.get_center().x - objective.size.x / 2,safe.position.y + 34)
-	hint.size.x = minf(780,safe.size.x - 96)
-	hint.position = Vector2(safe.get_center().x - hint.size.x / 2,safe.end.y - 72)
-	camp_button.position = Vector2(safe.end.x - 156,safe.position.y + 26)
-	menu.position = safe.get_center() - menu.size / 2
+		var pixels := Vector2(DisplayServer.window_get_size())
+		safe = AdaptiveLayout.safe_rect(size, pixels, Rect2(DisplayServer.get_display_safe_area()), Vector2(DisplayServer.window_get_position()))
+		ui_scale = AdaptiveLayout.density_scale(size, pixels, DisplayServer.screen_get_dpi())
+	apply_hud_layout(safe, ui_scale)
+
+func apply_hud_layout(safe: Rect2, ui_scale: float):
+	# Public to deterministic layout tests. Does not change native render policy.
+	layout_snapshot = AdaptiveLayout.plan(safe, ui_scale)
+	hud_safe_rect = safe
+	joystick_radius = layout_snapshot.joystick_radius
+	var controls := {"status":status, "climate":climate_status, "objective":objective, "hint":hint, "camp":camp_button}
+	var fonts := {"status":22, "climate":16, "objective":20, "hint":18, "camp":22}
+	for key in controls:
+		var control: Control = controls[key]
+		control.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+		control.visible = not paused
+		control.position = layout_snapshot.rects[key].position
+		control.size = layout_snapshot.rects[key].size
+		control.add_theme_font_size_override("font_size", maxi(12, roundi(fonts[key] * ui_scale)))
+		if control is Label:
+			control.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+			control.clip_text = true
+	objective.max_lines_visible = 2
+	menu.set_anchors_and_offsets_preset(Control.PRESET_TOP_LEFT)
+	menu.scale = Vector2.ONE * ui_scale
+	menu.custom_minimum_size = Vector2.ZERO
+	menu.size = layout_snapshot.menu_size
+	menu.position = layout_snapshot.menu_position
+	fit_menu_content(menu_column, maxf(1.0, menu.size.x - 64))
+	menu.reset_size()
+	menu.size = layout_snapshot.menu_size
+
+func fit_menu_content(node: Node, width: float):
+	for child in node.get_children():
+		if child is Control:
+			if not child.has_meta("authored_minimum_width"):
+				child.set_meta("authored_minimum_width", child.custom_minimum_size.x)
+			child.custom_minimum_size.x = minf(float(child.get_meta("authored_minimum_width")), width)
+			if child is Button: child.clip_text = true
+			if child is Label and child.get_parent() == menu_column:
+				child.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+				child.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		fit_menu_content(child, width)
 
 func _unhandled_key_input(event: InputEvent):
 	if event is InputEventKey and event.pressed and not event.echo and event.physical_keycode == KEY_ESCAPE:
@@ -732,7 +790,8 @@ func build_population_menu():
 			opening["role"] = "survivor"
 			people.append(opening)
 	for person in people:
-		var row := HBoxContainer.new()
+		var row := HFlowContainer.new()
+		row.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		menu_column.add_child(row)
 		var label := text_label(person.name, 22, row)
 		label.custom_minimum_size.x = 200
