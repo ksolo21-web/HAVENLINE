@@ -5,17 +5,19 @@ const Forest = preload("res://scripts/reference_forest.gd")
 const Scenery = preload("res://scripts/scenery_batch.gd")
 var out := "user://task01-clearance"
 var game
+var native_4k := false
 func _initialize():
 	for arg in OS.get_cmdline_user_args():
 		if arg.begins_with("--out="):out=arg.trim_prefix("--out=")
+		if arg=="--native-4k":native_4k=true
 	call_deferred("run")
 func image(name: String):
 	await process_frame;await RenderingServer.frame_post_draw
 	game.scene_view.get_texture().get_image().save_png(out.path_join(name+".png"))
 func run():
 	DirAccess.make_dir_recursive_absolute(out)
-	game=Main.new();game.qa_mode=true;game.render_review=true;game.capture_frames=100
-	game.capture_directory=out;game.size=Vector2(1280,720);root.add_child(game)
+	game=Main.new();game.qa_mode=true;game.render_review=not native_4k;game.capture_frames=100
+	game.capture_directory=out;game.size=Vector2(3840,2160) if native_4k else Vector2(1280,720);root.add_child(game)
 	game.set_process(false);game.set_physics_process(false)
 	game.capture_frames=0;game._process(.001);game.capture_frames=100
 	var focus: Vector3=game.xyz(game.sim.position)+Vector3(0,.95,0)

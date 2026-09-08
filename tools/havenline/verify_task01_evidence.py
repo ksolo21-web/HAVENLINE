@@ -37,7 +37,8 @@ check('Clearance uses actual Mobile renderer',clear['renderer']=='mobile')
 images={name:np.asarray(Image.open(root/'clearance'/f'clearance-{name}.png').convert('RGB')).astype(float) for name in ('baseline','disabled','enabled')}
 x,y=clear['focus_screen'];x,y=int(x),int(y)
 # Crop covers the actual player, whose focus coordinate is supplied by the renderer.
-roi=(max(0,x-45),max(0,y-40),min(clear['image_size'][0],x+45),min(clear['image_size'][1],y+110))
+sx,sy=clear['image_size'][0]/1280,clear['image_size'][1]/720
+roi=(max(0,x-round(45*sx)),max(0,y-round(40*sy)),min(clear['image_size'][0],x+round(45*sx)),min(clear['image_size'][1],y+round(110*sy)))
 a,b,c,d=roi
 error_disabled=float(np.abs(images['disabled'][b:d,a:c]-images['baseline'][b:d,a:c]).mean())
 error_enabled=float(np.abs(images['enabled'][b:d,a:c]-images['baseline'][b:d,a:c]).mean())
