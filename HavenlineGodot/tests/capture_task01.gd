@@ -37,6 +37,7 @@ func run():
 		if child is WorldEnvironment:allowed.append(child)
 		if child is VisualInstance3D or child is Node3D:
 			if not child in allowed:child.visible=false
+	game.ReferenceForest.set_player_clearance(game, Vector3.ZERO, false)
 	var display_root:=Node3D.new();game.world.add_child(display_root)
 	var variants: Array=[]
 	for i in range(1,4):

@@ -42,3 +42,19 @@ static func build(game) -> Dictionary:
 		batch.name = "ReferenceForest_%d" % batches
 		batches += 1
 	return {"task":"T01","instances":places.size(),"spatial_batches":batches,"no_playable_bounds_change":true,"physical_4k60_verified":false,"independent_critic_approved":false}
+
+static func set_player_clearance(game, focus: Vector3, enabled: bool = true) -> int:
+	# Shared shader parameters update three meshes, not hundreds of tree nodes.
+	# The shader evaluates each MultiMesh instance's world transform separately.
+	var updated := 0
+	for variant in range(1,4):
+		var key := "world/pine_%d" % variant
+		if not game.merged_cache.has(key): continue
+		var mesh: ArrayMesh = game.merged_cache[key]
+		for surface in mesh.get_surface_count():
+			var material = mesh.surface_get_material(surface)
+			if material is ShaderMaterial:
+				material.set_shader_parameter("player_focus_world",focus)
+				material.set_shader_parameter("player_clearance_enabled",enabled)
+				updated += 1
+	return updated

@@ -844,6 +844,7 @@ func build_environment_dressing():
 		world.add_child(light)
 
 func update_foreground_visibility(focus: Vector3, dt: float):
+	ReferenceForest.set_player_clearance(self, focus + Vector3(0,.05,0))
 	# Smooth opaque-dither cutaway for crowns hiding the lead; no transparent sorting.
 	# Gameplay nodes remain alive; visibility is not a change to resource state.
 	foreground_faded = 0
