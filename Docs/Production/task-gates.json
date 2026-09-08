@@ -13,9 +13,9 @@
   "independent_review_roles_required": ["reference-fidelity", "visual-integrity"],
   "independent_model_family": "Qwen3-VL-8B (two separate role executions are not two diverse model families)",
   "required_before_advancement": ["all frozen-scope checks passed", "fresh source-bound actual output captured", "both independent role reports valid and complete", "every mandatory dimension at least 9.0", "no unresolved mandatory defect", "raw findings verified against actual evidence", "prior approvals unaffected or revalidated"],
-  "active_candidate_source": "a5544a0120d23aa4f41b3badabe61e3a1fb87314",
-  "review_run": 34185910075,
-  "active_status": "CANDIDATE_UNAPPROVED_REVIEW_IN_PROGRESS",
+  "active_candidate_source": "8632c5b2c2a70ec1eb88db08bef8ca18b707e1a6",
+  "review_run": 34223706516,
+  "active_status": "MECHANICAL_PASS_INDEPENDENT_REVIEW_UNRESOLVED",
   "active_score": null,
   "next_task": "T02",
   "next_task_locked": true,
@@ -23,5 +23,41 @@
   "unfinished_apk_delivery_allowed": false,
   "user_testing_requested": false,
   "physical_phone_tablet_native_4k60_verified": false,
-  "game_complete": false
+  "game_complete": false,
+  "verified_task_evidence": {
+    "engine_checks_passed": 676,
+    "geometry_checks_passed": 9,
+    "mechanical_evidence_checks_passed": 52,
+    "original_glbs_unchanged": 30,
+    "required_and_supplemental_pngs": 63,
+    "recovered_unchanged_evidence_run": 34222185319,
+    "recovered_evidence_artifact": 10054200294,
+    "recovered_evidence_zip_sha256": "f8fde1c5ff4b122e24ab9e04feadf80653712da335241a2a60b8da77cf465c07",
+    "reference_video_bytes_and_crops_verified": true,
+    "player_obstruction_error_reduction_fraction": 0.8435305323749988,
+    "dense_forest_instances": 586,
+    "spatial_batches": 96,
+    "native_workload_run": 34222546676,
+    "native_workload_artifact": 10054413347,
+    "native_workload_zip_sha256": "0f724da1df55ca6c48b7f860358d595614debcacca7d7bdf2940debf0179b33f",
+    "workload_views": 4,
+    "internal_resolution": [3840, 2160],
+    "render_scale": 1.0,
+    "visible_pass_draw_call_range": [36, 52],
+    "visible_pass_primitive_range": [429989, 460309],
+    "not_physical_device_fps_evidence": true
+  },
+  "preserved_failures": [
+    {"run":34221005033,"reason":"After successful tests and captures, final count assertion expected 62 instead of complete named 63 including HUD view. Original failure retained; original images recovered unchanged."},
+    {"run":34222185319,"reason":"Complete independent reports include failed dimensions and observations contradicting actual clearance/isolated images. Runtime warned minimum 1024 image tokens needed; old configuration only set maximum. Raw results preserved; no task pass claimed."}
+  ],
+  "reviewer_repair": {
+    "script":"tools/havenline/review_task01_grounded.py",
+    "image_min_tokens":1024,
+    "image_max_tokens":2048,
+    "factual_clearance_state_recognition_required":true,
+    "task_score_threshold_unchanged":true,
+    "game_source_and_capture_bytes_unchanged":true,
+    "status":"EXECUTING_NOT_APPROVED"
+  }
 }
