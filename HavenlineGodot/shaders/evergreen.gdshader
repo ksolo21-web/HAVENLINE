@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode diffuse_burley, specular_schlick_ggx, cull_back;
+render_mode diffuse_lambert, specular_schlick_ggx, cull_back;
 uniform sampler2D albedo_texture : source_color, filter_linear_mipmap, repeat_enable;
 uniform sampler2D normal_texture : hint_normal, filter_linear_mipmap, repeat_enable;
 uniform float surface_roughness = 0.95;
@@ -35,4 +35,10 @@ void fragment() {
  NORMAL_MAP_DEPTH = 0.38;
  ROUGHNESS = surface_roughness;
  SPECULAR = 0.18;
+ // Dense layered boughs receive less broad sky fill than an exposed snowfield.
+ // Keep direct sunlight and its real shadows unchanged, giving the clean snow
+ // material the directional depth visible in the reference. No baked light
+ // direction, unshaded mode, added passes, global lighting or camera changes.
+ AO = 0.42;
+ AO_LIGHT_AFFECT = 0.0;
 }
