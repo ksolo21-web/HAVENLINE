@@ -26,7 +26,13 @@ void fragment() {
  if (coverage < max(cutaway,forest_clearance)) { discard; }
  vec3 surface_color = texture(albedo_texture,UV).rgb;
  float wood = step(surface_color.b*1.25,surface_color.r);
- ALBEDO = surface_color*mix(COLOR.rgb,vec3(1.0),wood);
+ // Tree-only stylized palette calibration in linear light. It compensates
+ // the existing scene's warm/gray response, not the screen or world lighting.
+ // Both the original video samples and the prior actual render were measured.
+ float band = clamp(floor(UV.y*3.0),0.0,2.0)*0.5;
+ vec3 snow_gain = mix(vec3(0.40,0.74,1.42),vec3(0.50,0.90,1.40),band);
+ vec3 wood_gain = vec3(0.22,0.30,0.48);
+ ALBEDO = surface_color*mix(COLOR.rgb,vec3(1.0),wood)*mix(snow_gain,wood_gain,wood);
  ALBEDO *= mix(mix(0.10,0.65,wood),1.0,smoothstep(0.04,0.22,abs(dot(NORMAL,VIEW))));
  NORMAL_MAP = texture(normal_texture,UV).rgb;
  NORMAL_MAP_DEPTH = 0.38;
@@ -34,7 +40,6 @@ void fragment() {
  SPECULAR = 0.18;
  AO = mix(0.88,1.0,wood);
  AO_LIGHT_AFFECT = 0.0;
- // Tree mantles retain ambient/direct shape lighting and cast ground shadows.
- // They do not receive hard shadow-map bands from overlapping mantles; this
- // matches the clean reference style without unshaded/emissive rendering.
+ // Directional shape lighting and cast ground shadows remain. No emission,
+ // unshaded mode, extra render pass, reduced resolution or global color grade.
 }
