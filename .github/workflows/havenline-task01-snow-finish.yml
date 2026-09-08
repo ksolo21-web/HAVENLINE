@@ -30,13 +30,21 @@ jobs:
           assert len(runs)==4
           runs[0]=runs[0].replace('python3 tools/havenline/polish_reference_forest.py','python3 tools/havenline/finish_reference_snow.py')
           runs[0]+='\nexport PATH="$RUNNER_TEMP/engine:$PATH"\npython3 -m py_compile tools/havenline/finish_reference_snow.py tools/havenline/review_task01_single_group.py\n'
-          runs[2]=runs[2].replace('T01 revision4: smooth crown normals and tints; grounded diagnostics; no approval claimed','T01 revision5: rounded snow depth and authored surface relief; preserve topology and prior models; not yet approved')
+          runs[2]=runs[2].replace('T01 revision4: smooth crown normals and tints; grounded diagnostics; no approval claimed','T01 revision6: directional snow contrast, unchanged geometry; no approval claimed')
           assert runs[3].count("'revision':4")==1
-          runs[3]=runs[3].replace("'revision':4","'revision':5")
+          runs[3]=runs[3].replace("'revision':4","'revision':6")
           script='\n'.join(runs)
           Path('task01-evidence').mkdir(exist_ok=True)
           Path('task01-evidence/executed-build.sh').write_text(script)
           subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          e=Path('task01-evidence');p=e/'provenance.json';r=json.loads(p.read_text())
+          r['runtime_shader_sha256']=hashlib.sha256(Path('HavenlineGodot/shaders/evergreen.gdshader').read_bytes()).hexdigest()
+          r['change']='Tree-only Lambert diffuse response and reduced ambient fill; world lighting, geometry, reference rubric and minimum score unchanged.'
+          p.write_text(json.dumps(r,indent=2)+'\n')
           PY
       - uses: actions/upload-artifact@v4
         if: always()
@@ -89,4 +97,4 @@ jobs:
           path: critic-results/
           retention-days: 30
           if-no-files-found: error
-# New material/volume revision, same acceptance threshold. No Task 2 or APK delivery.
+# Fresh tree-shading revision, same acceptance threshold. No Task 2 or APK delivery.
