@@ -1,0 +1,139 @@
+name: Install tested phone-tablet adaptation without delivering an APK
+on:
+  push:
+    branches: ['codex/havenline-environment-review']
+    paths: ['.github/workflows/havenline-device-acceptance-install.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  install-and-test:
+    permissions:
+      contents: write
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    outputs:
+      source: ${{ steps.commit.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Apply only the checksum-bound source changes and preserve newer reference locks
+        run: |
+          set -euo pipefail
+          mkdir -p artifacts
+          python3 - <<'PY'
+          from pathlib import Path
+          import gzip,hashlib,json,subprocess
+          base=Path('Docs/QA/updates/phone-tablet')
+          raw=b''.join((base/f'patch.part{i}').read_bytes() for i in range(1,5))
+          assert hashlib.sha256(raw).hexdigest()=='b6e757e1e9de8197b3ee0a85a98c2fb7df9ddf751d5608f0ffedd464e4e043a7'
+          package=json.loads(gzip.decompress(raw))
+          preserve={'AGENTS.md','Docs/AI/HavenlineProjectContext.md'}
+          files=[x for x in package['after'] if x not in preserve]
+          for name in files:
+              path=Path(name)
+              assert not path.is_absolute() and '..' not in path.parts
+              actual=hashlib.sha256(path.read_bytes()).hexdigest() if path.exists() else None
+              assert actual==package['before'][name],f'Concurrent edit: {name}'
+          protected={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('HavenlineGodot/assets').rglob('*.glb')}
+          Path('artifacts/protected-before.json').write_text(json.dumps(protected,indent=2))
+          Path('artifacts/update.patch').write_text(package['patch'])
+          command=['git','apply','--exclude=AGENTS.md','--exclude=Docs/AI/HavenlineProjectContext.md']
+          subprocess.run(command+['--check','artifacts/update.patch'],check=True)
+          subprocess.run(command+['artifacts/update.patch'],check=True)
+          for name in files:
+              assert hashlib.sha256(Path(name).read_bytes()).hexdigest()==package['after'][name],name
+          # The reference lock was updated concurrently; never overwrite that newer authority.
+          note='\n\n## Verified adaptive-device implementation and delivery check\n\nRead `Docs/QA/PHONE_TABLET_RELEASE_CONTRACT.md` and run `tools/havenline/release_gate.py`. Automatic layout checks are not physical-device approval. No unfinished APKs or player-run benchmarks; development builds remain internal. Preserve the newer reference-video lock, its full motion/state comparisons, all original gameplay and C2-C4 final rig work deferred until last. The delivery validator is supplementary to, not a replacement for, the reference-video acceptance protocol.\n'
+          for name in preserve:
+              p=Path(name);p.write_text(p.read_text()+note)
+          gate=Path('tools/havenline/release_gate.py')
+          s=gate.read_text();needle='REQUIRED_GAME_CHECKS = (';assert s.count(needle)==1
+          gate.write_text(s.replace(needle,needle+"'reference_video_fidelity_10_of_10', "))
+          status=Path('HavenlineGodot/data/release-status.json');s=json.loads(status.read_text())
+          s['required']['reference_video_fidelity_10_of_10']='UNTESTED_REQUIRED_BY_REFERENCE_VIDEO_LOCK'
+          status.write_text(json.dumps(s,indent=2)+'\n')
+          doc=Path('Docs/QA/PHONE_TABLET_RELEASE_CONTRACT.md')
+          doc.write_text(doc.read_text()+'\n## Newer reference-video lock retained\n\n`Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md` remains authoritative. Its complete state/motion comparisons and exact 10/10 reference fidelity remain an additional mandatory release requirement. The legacy fourteen environment views are supplemental diagnostic coverage, not permission to preserve the wrong cabin staging or replace the full reference comparison.\n')
+          Path('artifacts/changed-files.json').write_text(json.dumps(sorted(files+list(preserve))))
+          Path('artifacts/source-file-hashes.json').write_text(json.dumps({name:hashlib.sha256(Path(name).read_bytes()).hexdigest() for name in files+list(preserve)},indent=2))
+          PY
+      - name: Install the pinned native engine
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/godot"
+          cd "$RUNNER_TEMP/godot"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o engine.zip
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -
+          unzip -q engine.zip
+          chmod +x Godot_v4.7.2-stable_linux.x86_64
+          echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
+      - name: Execute the game and evidence-validator regressions
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/bake_outpost_audio.py > artifacts/audio-bake.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > artifacts/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > artifacts/motion-bake.log 2>&1
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices; do
+            timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "artifacts/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' artifacts/*.log; then exit 1; fi
+          python3 tools/havenline/summarize_evidence.py --artifacts artifacts
+          python3 -m unittest discover -s tools/havenline/tests -p 'test_release_gate.py' -v > artifacts/validator-tests.log 2>&1
+          cat artifacts/validator-tests.log
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          before=json.loads(Path('artifacts/protected-before.json').read_text())
+          after={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('HavenlineGodot/assets').rglob('*.glb')}
+          assert before==after
+          r=json.loads(Path('artifacts/test-summary.json').read_text());assert r['total_checks']==504 and r['all_checks_passed']
+          Path('artifacts/protected-assets.json').write_text(json.dumps({'all_unchanged':True,'models':len(before)},indent=2))
+          PY
+      - name: Commit exactly the tested source, never force-push concurrent changes
+        id: commit
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          python3 - <<'PY'
+          import subprocess,json
+          from pathlib import Path
+          files=json.loads(Path('artifacts/changed-files.json').read_text())
+          subprocess.run(['git','add','--',*files],check=True)
+          PY
+          test "$(git ls-remote origin refs/heads/codex/havenline-environment-review | cut -f1)" = "$GITHUB_SHA"
+          git commit -m 'Adapt phone/tablet controls automatically; block unfinished user delivery and preserve reference-video lock'
+          source=$(git rev-parse HEAD)
+          git push origin HEAD:refs/heads/codex/havenline-environment-review
+          echo "source=$source" >> "$GITHUB_OUTPUT"
+          echo "$source" > artifacts/SOURCE.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-adaptive-device-regressions-${{ github.run_id }}
+          path: artifacts/
+          if-no-files-found: error
+          retention-days: 30
+  production-readiness:
+    needs: install-and-test
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.install-and-test.outputs.source }}
+      - name: Run the real delivery gate; missing art or device proof must fail
+        env:
+          SOURCE: ${{ needs.install-and-test.outputs.source }}
+        run: |
+          python3 tools/havenline/release_gate.py --evidence Docs/QA/ReleaseEvidence --source "$SOURCE" --status HavenlineGodot/data/release-status.json --output delivery-gate/report.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-blocked-delivery-report-${{ github.run_id }}
+          path: delivery-gate/
+          if-no-files-found: error
+          retention-days: 30
+# No APK is exported or delivered by this workflow. Regression success is not release approval.
