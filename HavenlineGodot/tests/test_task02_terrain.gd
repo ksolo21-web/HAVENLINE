@@ -42,6 +42,15 @@ func run():
 	check("Actor contact matches rendered triangle interiors",interpolated)
 	var water:=Surface.water_mesh()
 	check("Water is a bounded custom contour under 256 triangles",water.get_faces().size()/3==192)
+	var edge_buried:=true;var water_faces:=true
+	var wf:=water.get_faces()
+	for v in wf:
+		var q:=Vector2(v.x,v.z)
+		if Surface.lake_distance(q)>.1 and Surface.height_at(q)<=Surface.WATER_Y+.10:edge_buried=false
+	for i in range(0,wf.size(),3):
+		if (wf[i+1]-wf[i]).cross(wf[i+2]-wf[i]).y>=-.000001:water_faces=false
+	check("Every water mesh rim is buried under the actual bank",edge_buried)
+	check("Water has no reversed or degenerate faces",water_faces)
 	check("Lakebed below water",Surface.height_at(Surface.LAKE_CENTER)<Surface.WATER_Y-.5)
 	check("Camp is not a circular mud patch",Surface.work_distance(Vector2(8,5))<0 and absf(Surface.height_at(Vector2(8,5)))<.02)
 	check("Production bay is cleared land",Surface.work_distance(Vector2(-9,-9.5))<0 and Surface.lake_distance(Vector2(-9,-9.5))>.4)

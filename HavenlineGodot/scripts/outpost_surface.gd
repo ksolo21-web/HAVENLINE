@@ -25,10 +25,15 @@ static func work_distance(p: Vector2) -> float:
 	var connector := rounded_rect(p,Vector2(-6.5,-6.8),Vector2(2.25,1.25),0.5)
 	return minf(main,minf(bay,connector))
 
+static func coast_shape(q: Vector2) -> float:
+	var angle := atan2(q.y,q.x)
+	return 1.0+.035*sin(3.0*angle)+.018*cos(5.0*angle)
+
 static func lake_distance(p: Vector2) -> float:
 	# Rounded-superellipse coast: smooth continuous contour, no rectangular plane.
-	var q := (p-LAKE_CENTER).abs()/LAKE_HALF
-	return (pow(pow(q.x,4.0)+pow(q.y,4.0),0.25)-1.0)*LAKE_HALF.y
+	var signed_q := (p-LAKE_CENTER)/LAKE_HALF
+	var q := signed_q.abs()
+	return (pow(pow(q.x,4.0)+pow(q.y,4.0),0.25)/coast_shape(signed_q)-1.0)*LAKE_HALF.y
 
 static func land_position(p: Vector2, margin := LAND_MARGIN) -> Vector2:
 	if not p.is_finite(): return Vector2.ZERO
@@ -39,7 +44,7 @@ static func land_position(p: Vector2, margin := LAND_MARGIN) -> Vector2:
 	# overshoot near its centre. The complete dry rim fits inside playable bounds.
 	var scaled := q.abs()/LAKE_HALF
 	var norm := pow(pow(scaled.x,4.0)+pow(scaled.y,4.0),.25)
-	return LAKE_CENTER+q*((1.0+(margin+.00002)/LAKE_HALF.y)/norm)
+	return LAKE_CENTER+q*((1.0+(margin+.00002)/LAKE_HALF.y)*coast_shape(q/LAKE_HALF)/norm)
 
 static func _shape_height(p: Vector2) -> float:
 	# Preserve the accepted outer woodland terrain exactly, including seated roots.
@@ -129,11 +134,12 @@ static func water_mesh() -> ArrayMesh:
 	if _water_mesh!=null: return _water_mesh
 	var tool := SurfaceTool.new();tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var contour := PackedVector2Array()
-	# The rim reaches d=-.06; the ground itself occludes the inner shoreline.
+	# Extend beyond the actual ground/water intersection so the whole mesh edge
+	# is buried under the snow bank, never an exposed floating water lip.
 	for i in range(192):
 		var a := TAU*float(i)/192.0
 		var q := Vector2(signf(cos(a))*sqrt(absf(cos(a))),signf(sin(a))*sqrt(absf(sin(a))))
-		contour.append(LAKE_CENTER+q*LAKE_HALF*(1.0-.06/LAKE_HALF.y))
+		contour.append(LAKE_CENTER+q*LAKE_HALF*coast_shape(q)*(1.0+.20/LAKE_HALF.y))
 	for i in range(contour.size()):
 		for p in [LAKE_CENTER,contour[i],contour[(i+1)%contour.size()]]:
 			tool.set_normal(Vector3.UP);tool.set_uv(p*.1);tool.add_vertex(Vector3(p.x,WATER_Y,p.y))

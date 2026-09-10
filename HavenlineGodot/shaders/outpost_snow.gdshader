@@ -17,8 +17,9 @@ float work_distance(vec2 p) {
  return min(a,min(b,rounded_rect(p,vec2(-6.5,-6.8),vec2(2.25,1.25),.5)));
 }
 float shore_distance(vec2 p) {
- vec2 q=abs(p-lake_center)/lake_half;
- return (pow(pow(q.x,4.)+pow(q.y,4.),.25)-1.)*lake_half.y;
+ vec2 signed_q=(p-lake_center)/lake_half;vec2 q=abs(signed_q);
+ float angle=atan(signed_q.y,signed_q.x);float shape=1.+.035*sin(3.*angle)+.018*cos(5.*angle);
+ return (pow(pow(q.x,4.)+pow(q.y,4.),.25)/shape-1.)*lake_half.y;
 }
 void vertex(){world_pos=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;}
 void fragment(){
@@ -39,8 +40,8 @@ void fragment(){
  floor=mix(floor,floor+vec3(.025,.012,0.),warmth*.42);
  vec3 material=mix(snow,floor,cleared);
  // The submerged bank grades into a cool clean ice-blue face; not an extra plane.
- float ice=(1.-smoothstep(.12,.33,shore));
- material=mix(material,vec3(.37,.67,.84),ice*.48);
+ float ice=(1.-smoothstep(-.12,.035,shore));
+ material=mix(material,vec3(.37,.67,.84),ice*.35);
  ALBEDO=pow(material,vec3(2.2));
  ROUGHNESS=mix(.91,.87,cleared);SPECULAR=.20;
 }
