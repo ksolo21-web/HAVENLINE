@@ -68,6 +68,8 @@ func sync(sim, dt: float, paused: bool):
 	ground_material.set_shader_parameter("snow_amount",weather.snow)
 	ground_material.set_shader_parameter("daylight_fill",daylight)
 	lake_material.set_shader_parameter("sim_time",sim.climate.seconds)
+	lake_material.set_shader_parameter("stable_ambient_color",environment.ambient_light_color)
+	lake_material.set_shader_parameter("stable_ambient_energy",environment.ambient_light_energy)
 	snow_material.set_shader_parameter("sim_time",sim.climate.seconds)
 	snow_material.set_shader_parameter("snow_amount",weather.snow)
 	snow_material.set_shader_parameter("wind",weather.wind)
