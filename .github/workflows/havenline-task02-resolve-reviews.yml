@@ -8,41 +8,19 @@ permissions:
   contents: read
   actions: read
 jobs:
-  prepare-second-family:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 18
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.sha }}
-      - uses: actions/cache/restore@v4
-        id: cache
-        with:
-          path: ~/.cache/havenline-t01-gemma
-          key: havenline-t01-gemma3-12b-qat-b10809-v1
-      - run: python3 -m pip install pyyaml
-      - name: Reuse the existing publisher-checksummed public runtime bootstrap
-        if: steps.cache.outputs.cache-hit != 'true'
-        run: |
-          python3 - <<'PY'
-          import yaml,subprocess
-          from pathlib import Path
-          w=yaml.safe_load(Path('.github/workflows/havenline-task01-gemma-runtime.yml').read_text())
-          runs=[s['run'] for s in w['jobs']['prepare']['steps'] if 'run' in s]
-          assert len(runs)==1
-          subprocess.run(['bash','-euo','pipefail','-c',runs[0]],check=True)
-          PY
-      - uses: actions/cache/save@v4
-        if: steps.cache.outputs.cache-hit != 'true'
-        with:
-          path: ~/.cache/havenline-t01-gemma
-          key: havenline-t01-gemma3-12b-qat-b10809-v1
-  complete-unscored-request:
+  state-explicit-review:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        group: [tree-visibility, night-overview]
     runs-on: ubuntu-24.04
     timeout-minutes: 48
     env:
-      REVIEW_ROLE: reference-fidelity
-      REVIEW_GROUP: workfloor
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      MODEL_FAMILY: qwen
       OMP_NUM_THREADS: '4'
     steps:
       - uses: actions/checkout@v4
@@ -66,93 +44,44 @@ jobs:
           key: havenline-t01-qwen35-9b-q5-20260908-v1
           fail-on-cache-miss: true
       - run: python3 -m pip install pillow
-      - name: Finish the same previously timed-out request; no earlier numeric verdict exists
+      - name: Require the blind control and correct candidate-state recognition before accepting independent scores
         run: python3 -u tools/havenline/finish_task02_reviews.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: T02-resolved-reference-fidelity-workfloor-${{ github.run_id }}
+          name: T02-state-explicit-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
           path: task02-review/
           retention-days: 30
           if-no-files-found: error
-  second-family-resolution:
-    needs: prepare-second-family
-    strategy:
-      fail-fast: false
-      max-parallel: 4
-      matrix:
-        role: [reference-fidelity, visual-integrity]
-        group: [tree-visibility, night-overview]
-    runs-on: ubuntu-24.04
-    timeout-minutes: 48
-    env:
-      REVIEW_ROLE: ${{ matrix.role }}
-      REVIEW_GROUP: ${{ matrix.group }}
-      OMP_NUM_THREADS: '4'
-    steps:
-      - uses: actions/checkout@v4
-        with:
-          ref: ${{ github.sha }}
-      - uses: actions/download-artifact@v4
-        with:
-          name: havenline-T02-final-independent-evidence-34510062914
-          run-id: 34510062914
-          github-token: ${{ github.token }}
-          path: previous/
-      - uses: actions/download-artifact@v4
-        with:
-          name: havenline-T02-finished-surface-evidence-34508687675
-          run-id: 34508687675
-          github-token: ${{ github.token }}
-          path: task02-evidence/
-      - uses: actions/cache/restore@v4
-        with:
-          path: ~/.cache/havenline-t01-gemma
-          key: havenline-t01-gemma3-12b-qat-b10809-v1
-          fail-on-cache-miss: true
-      - run: python3 -m pip install pillow
-      - name: Independent state-aware review with factual image recognition and unchanged scoring dimensions
-        run: python3 -u tools/havenline/finish_task02_reviews.py
-      - uses: actions/upload-artifact@v4
-        if: always()
-        with:
-          name: T02-resolved-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
-          path: task02-review/
-          retention-days: 30
-          if-no-files-found: error
-  assemble-reviews:
-    needs: [complete-unscored-request,second-family-resolution]
+  assemble-records:
+    needs: state-explicit-review
     if: always()
     runs-on: ubuntu-24.04
     timeout-minutes: 5
     steps:
       - uses: actions/download-artifact@v4
         with:
-          pattern: T02-resolved-*-${{ github.run_id }}
-          path: review-resolution/new/
-      - uses: actions/download-artifact@v4
-        with:
-          name: havenline-T02-final-independent-evidence-34510062914
-          run-id: 34510062914
-          github-token: ${{ github.token }}
-          path: review-resolution/prior/
-      - name: Preserve complete original and resolving evidence; task approval still requires final verification
+          pattern: T02-state-explicit-*-${{ github.run_id }}
+          path: state-explicit-reviews/
+      - name: Preserve all four actual outcomes; no automatic task approval
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import json
-          out=Path('review-resolution');rows=[]
-          for p in sorted((out/'new').glob('*/review.json')):rows.append(json.loads(p.read_text()))
-          r={'task':'T02','source':'586604eb8ab6404fc8084b6853fd03cfa842d3af','new_reports':rows,'complete_new_coverage':len(rows)==5,'all_new_reports_passed':len(rows)==5 and all(x.get('passed') is True for x in rows),'original_raw_reports_preserved':True,'task_approved':False,'task3_started':False,'physical_4k60_verified':False}
-          (out/'resolution-summary.json').write_text(json.dumps(r,indent=2));print(json.dumps(r,indent=2))
-          raise SystemExit(0 if r['all_new_reports_passed'] else 1)
+          out=Path('state-explicit-reviews');rows=[]
+          for p in sorted(out.glob('*/review.json')):rows.append(json.loads(p.read_text()))
+          r={'task':'T02','source':'586604eb8ab6404fc8084b6853fd03cfa842d3af','reviews':rows,'complete':len(rows)==4,'all_passed':len(rows)==4 and all(x.get('passed') is True and x.get('factual_recognition_passed') is True for x in rows),'alternate_failed_controls_run':34513749870,'unscored_workfloor_retry_continues_in_run':34513749870,'old_raw_failures_preserved':True,'task_approved':False,'task3_started':False,'physical_4k60_verified':False}
+          (out/'summary.json').write_text(json.dumps(r,indent=2));print(json.dumps(r,indent=2))
+          raise SystemExit(0 if r['all_passed'] else 1)
           PY
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: havenline-T02-resolving-independent-evidence-${{ github.run_id }}
-          path: review-resolution/
+          name: havenline-T02-state-explicit-records-${{ github.run_id }}
+          path: state-explicit-reviews/
           retention-days: 30
           if-no-files-found: error
-# No game/capture edits, lowering of thresholds, hand-written approval, Task3 or APK.
-# A second family resolves demonstrated factual contradictions, not a search for desired scores.
+# The alternate model's failed controls are not treated as scores or approval.
+# Actual source586604e and every original PNG remain unchanged. No thresholds lowered.
+# The prior still-running identical workfloor retry is not cancelled or duplicated.
+# No APK, automatic Task3, new game features, model shopping or injected score.
