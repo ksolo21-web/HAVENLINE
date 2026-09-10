@@ -14,7 +14,7 @@ float rounded_rect(vec2 p,vec2 c,vec2 h,float r) {
 float work_distance(vec2 p) {
  float a=rounded_rect(p,vec2(0,.3),vec2(9.75,6.7),.72);
  float b=rounded_rect(p,vec2(-6.5,-9.4),vec2(6.6,1.95),.65);
- return min(a,min(b,rounded_rect(p,vec2(-6.5,-6.8),vec2(2.25,1.25),.5)));
+ return min(a,min(b,rounded_rect(p,vec2(-4.3,-6.8),vec2(4.45,1.25),.5)));
 }
 float shore_distance(vec2 p) {
  vec2 signed_q=(p-lake_center)/lake_half;vec2 q=abs(signed_q);

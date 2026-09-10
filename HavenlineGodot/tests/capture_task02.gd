@@ -48,14 +48,14 @@ func run():
 		focus_at(Vector2(-7.9,-13.7),Vector3(-13,16,-13),10.0);await snap("lakeshore-rear")
 		focus_at(Vector2(9.7,4),Vector3(7,9,12),7.0);await snap("snow-workfloor-join")
 		normal_at(Vector2(12.4,0));await snap("approved-forest-contact")
-		focus_at(Vector2(-6.5,-7),Vector3(0,17,12),9.0);await snap("bay-connection")
+		focus_at(Vector2(-2.5,-7),Vector3(0,17,12),9.0);await snap("bay-connection")
 		focus_at(Vector2(-7.9,-13.5),Vector3(0,16,13),9.0)
 		for i in range(6):
 			game.sim.climate.seconds+=.4;game.outpost_view.sync(game.sim,.4,false)
 			await snap("water-motion-%02d"%i)
-		for i in range(8):
-			var t:=float(i)/7.0
-			normal_at(Vector2(0,6.2).lerp(Vector2(-6.5,-9.0),t));await snap("route-camera-%02d"%i)
+		var ground_route: Array[Vector2]=[Vector2(0,6.2),Vector2(2.2,3),Vector2(2.2,-2.2),Vector2(-2.2,-2.2),Vector2(-2.2,-6.8),Vector2(-2.2,-9),Vector2(-4.5,-9),Vector2(-6.5,-9)]
+		for i in range(ground_route.size()):
+			normal_at(ground_route[i]);await snap("route-camera-%02d"%i)
 		game.sim.climate.seconds=630.0;game.outpost_view.sync(game.sim,.1,false)
 		normal_at(Vector2(-6.5,-9));await snap("lakeshore-night")
 	var report={"task":"T02","renderer":RenderingServer.get_current_rendering_method(),"device":RenderingServer.get_video_adapter_name(),"captures":records,"forest":game.reference_forest_evidence,"outpost":game.outpost_view.evidence(game.sim),"camera_views_are_disclosed_qa_states":true,"motion_is_sampled_not_fps_evidence":true,"physical_phone_tablet_4k60_verified":false,"task_approved":false}

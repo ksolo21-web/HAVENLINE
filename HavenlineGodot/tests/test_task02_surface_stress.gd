@@ -1,5 +1,6 @@
 extends SceneTree
 const Surface=preload("res://scripts/outpost_surface.gd")
+const Scenery=preload("res://scripts/scenery_batch.gd")
 const Sim=preload("res://scripts/outpost_simulation.gd")
 var checks: Array=[]
 var failures: Array=[]
@@ -22,12 +23,17 @@ func run():
 	check("Every sampled projected point is above water with clearance",bank_clear)
 	# Vector2 is float32; 0.0001 world units is the comparison tolerance at
 	# original bound coordinates, not an expansion of the navigation boundary.
-	var paths: Array=[];var unobstructed:=true;var route_length:=0.0
+	var paths: Array=[];var unobstructed:=true;var route_length:=0.0;var avoids_buildings:=true
+	var station_bounds: Array[AABB]=[]
+	for record in [["shelter",Vector3(-6.6,0,-4.8),-.12],["shelter",Vector3(6.6,0,-4.8),.12],["furnace",Vector3(0,0,.2),0.0],["storage",Vector3(-2.8,0,2.25),0.0]]:
+		var scene=load("res://assets/environment_v2/%s.glb"%record[0])
+		var box: AABB=Transform3D(Basis(Vector3.UP,record[2]),record[1])*Scenery.compile(scene).get_aabb()
+		station_bounds.append(box.grow(.25))
 	# The exact connected workfloor route used by the capture camera, tested with
 	# actual velocity/acceleration simulation rather than teleporting a marker.
 	var sim:=Sim.new();sim.threats_enabled=false;sim.rescue_enabled=false
 	sim.population.enabled_templates.clear();sim.position=Vector2(0,6.2)
-	for target in [Vector2(0,3),Vector2(-5,0),Vector2(-6.5,-7),Vector2(-6.5,-9),Vector2(-6.5,-11.3)]:
+	for target in [Vector2(2.2,3),Vector2(2.2,-2.2),Vector2(-2.2,-2.2),Vector2(-2.2,-6.8),Vector2(-2.2,-9),Vector2(-6.5,-9),Vector2(-6.5,-11.3)]:
 		var reached:=false
 		for frame in range(900):
 			var delta: Vector2=target-sim.position
@@ -36,9 +42,12 @@ func run():
 			sim.step(1.0/60.0,delta.normalized()*minf(1.0,delta.length()*2.),false)
 			route_length+=sim.position.distance_to(old)
 			unobstructed=unobstructed and Surface.lake_distance(sim.position)>.319
+			for box in station_bounds:
+				if sim.position.x>box.position.x and sim.position.x<box.end.x and sim.position.y>box.position.z and sim.position.y<box.end.z:avoids_buildings=false
 		paths.append({"target":[target.x,target.y],"reached":reached,"position":[sim.position.x,sim.position.y]})
 		check("Existing controls reach dry waypoint "+str(target),reached)
 	check("The full workfloor-to-shore walk never crosses water",unobstructed)
+	check("Ground route avoids all actual cabin/furnace/storage bounds plus clearance",avoids_buildings)
 	var all_saved:=true
 	for offset in [Vector2.ZERO,Vector2(4,0),Vector2(-4,0),Vector2(0,1.1),Vector2(0,-1.1)]:
 		sim.position=Surface.LAKE_CENTER+offset;sim.inventory.wood=321;sim.stored.stone=765

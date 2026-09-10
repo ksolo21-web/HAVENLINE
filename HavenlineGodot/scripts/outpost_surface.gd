@@ -22,7 +22,7 @@ static func rounded_rect(p: Vector2, center: Vector2, half_size: Vector2, radius
 static func work_distance(p: Vector2) -> float:
 	var main := rounded_rect(p,WORK_CENTER,WORK_HALF,0.72)
 	var bay := rounded_rect(p,BAY_CENTER,BAY_HALF,0.65)
-	var connector := rounded_rect(p,Vector2(-6.5,-6.8),Vector2(2.25,1.25),0.5)
+	var connector := rounded_rect(p,Vector2(-4.3,-6.8),Vector2(4.45,1.25),0.5)
 	return minf(main,minf(bay,connector))
 
 static func coast_shape(q: Vector2) -> float:
