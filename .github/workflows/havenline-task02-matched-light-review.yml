@@ -1,0 +1,148 @@
+name: Havenline T02 matched-light independent completion review
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-matched-light-review.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  expanded-night-review:
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-bank-evidence-34528232295
+          run-id: 34528232295
+          github-token: ${{ github.token }}
+          path: evidence/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-matched-light-evidence-34532016318
+          run-id: 34532016318
+          github-token: ${{ github.token }}
+          path: matched-light-evidence/
+      - run: python3 -m pip install 'gradio_client==1.14.0' pillow
+      - name: Inspect the expanded night group from new matched source-bound frames
+        run: python3 -u tools/havenline/review_task02_matched_light.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-matched-${{ matrix.role }}-${{ github.run_id }}
+          path: publisher-review/
+          retention-days: 30
+          if-no-files-found: error
+  combined-task-review-gate:
+    needs: expanded-night-review
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-publisher-complete-evidence-34531219636
+          run-id: 34531219636
+          github-token: ${{ github.token }}
+          path: gate-report/original-reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-T02-matched-*-${{ github.run_id }}
+          path: gate-report/expanded-night-reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-bank-evidence-34528232295
+          run-id: 34528232295
+          github-token: ${{ github.token }}
+          path: evidence/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-matched-light-evidence-34532016318
+          run-id: 34532016318
+          github-token: ${{ github.token }}
+          path: matched-light-evidence/
+      - name: Validate all original task groups and both newly expanded night reviews without rewriting a score
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,html,re,hashlib,math
+          source='96f8d396a5015e136c590dc496214a689adb1e43';space='eb7f245e2c0d3b573dd8ed6addca9b7f6af26847'
+          roles={'reference-fidelity','visual-integrity'};groups={'workfloor','shoreline','snow-contact','tree-visibility','camera-route-early','camera-route-late','water-sequence','night-overview'}
+          dims={'reference_fidelity','material_finish','geometry_contact','layout_readability','view_consistency'}
+          control_expected={'A':'human_character','B':'snow_tree','C':'snow_tree','D':'human_character'}
+          facts_expected={'day_water_tone':'bright_blue_or_turquoise','clear_night_water_tone':'dark_blue_or_navy','day_return_materials_consistent':True}
+          def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+          def raw(p):
+              text=json.loads(p.read_text())[-1][1];clean=html.unescape(re.sub(r'<[^>]+>','\n',text));start=clean.find('{');assert start>=0
+              value,_=json.JSONDecoder().raw_decode(clean[start:]);return value
+          errors=[];selected=[];scores={};pro=json.loads(Path('evidence/provenance.json').read_text());sup=json.loads(Path('matched-light-evidence/verified-conditions.json').read_text())
+          assert pro['source']==sup['source']==source and sup['all_checks_passed'] and len(sup['checks'])==10
+          allowed=dict(pro['captures']);allowed.update({'matched/'+n:h for n,h in sup['source_images'].items()});assert len(allowed)==51
+          for name,h in allowed.items():
+              path=(Path('matched-light-evidence')/name.split('/',1)[1]) if name.startswith('matched/') else Path('evidence')/name
+              if sha(path)!=h:errors.append('Changed actual image '+name)
+          tests=json.loads(Path('evidence/tests.json').read_text());assert tests['all_passed'] and tests['total_checks']==726
+          original=Path('gate-report/original-reviews/reviews');expanded=Path('gate-report/expanded-night-reviews')
+          for role in sorted(roles):
+              prior=list(original.glob('*'+role+'*/role-summary.json'));fresh=list(expanded.glob('*'+role+'*/role-summary.json'))
+              if len(prior)!=1 or len(fresh)!=1:errors.append('Missing/duplicate role report '+role);continue
+              selections=[]
+              for path,is_new in ((prior[0],False),(fresh[0],True)):
+                  report=json.loads(path.read_text());pr=json.loads((path.parent/'provider-provenance.json').read_text())
+                  if report['source']!=source or report['role']!=role or pr['provider_space_revision']!=space or pr.get('independent_model_execution') is not True:errors.append('Wrong provenance '+role)
+                  try:
+                      c=json.loads((path.parent/'control.json').read_text())
+                      if c['passed'] is not True or c['answers']!=control_expected or raw(path.parent/'control-raw.json')!=control_expected:errors.append('Blind control failed '+role)
+                  except Exception as exc:errors.append('No valid control '+role+': '+str(exc))
+                  if is_new:
+                      if len(report['reviews'])!=1 or report['reviews'][0]['group']!='night-overview':errors.append('Expanded night coverage invalid '+role)
+                      if pr.get('additional_actual_4k_frames')!=6 or pr.get('matched_condition_report_sha256')!=sha(Path('matched-light-evidence/verified-conditions.json')):errors.append('Missing matched-condition binding '+role)
+                  for row in report['reviews']:
+                      if (row['group']=='night-overview') != is_new:continue
+                      selections.append((row,path.parent))
+              covered=set();names=set()
+              for row,folder in selections:
+                  name=row['group'];names.add(name);label=role+'/'+name;v=row.get('review',{});s=v.get('scores',{})
+                  if row.get('source')!=source or row.get('independent_execution') is not True or row.get('passed') is not True:errors.append('Not passing '+label)
+                  if set(s)!=dims or any(type(x) not in (float,int) or not math.isfinite(x) or not 9<=x<=10 for x in s.values()):errors.append('Invalid/below-nine '+label)
+                  elif row.get('lowest_score')!=min(s.values()):errors.append('Wrong minimum '+label)
+                  if v.get('defects')!=[] or v.get('coverage_complete') is not True or v.get('confidence') not in ('medium','high'):errors.append('Defects/incomplete '+label)
+                  try:
+                      if raw(folder/(name+'-raw.json'))!=v:errors.append('Raw/scored response mismatch '+label)
+                      req=json.loads((folder/(name+'-request.json')).read_text())
+                      if sha(folder/(name+'-input.png'))!=req['image_sha256'] or req['image_sha256']!=row['execution']['image_sha256']:errors.append('Wrong reviewer image '+label)
+                  except Exception as exc:errors.append('Invalid original execution '+label+': '+str(exc))
+                  for item in row['inputs']:
+                      covered.add(item['filename'])
+                      if allowed.get(item['filename'])!=item['sha256']:errors.append('Wrong actual frame '+label)
+                  if name=='night-overview' and (row.get('condition_facts_verified') is not True or v.get('condition_facts')!=facts_expected):errors.append('Incorrect actual condition recognition '+role)
+                  selected.append({'role':role,'group':name,'scores':s,'lowest_score':row.get('lowest_score'),'passed':row.get('passed'),'raw_response_sha256':sha(folder/(name+'-raw.json')),'source':source,'input_count':len(row['inputs'])})
+              if len(selections)!=8 or names!=groups or covered!=set(allowed):errors.append('Incomplete51-frame/eight-group coverage '+role)
+              scores[role]=min((r['lowest_score'] for r in selected if r['role']==role),default=None)
+          result={'task':'T02','source':source,'all_checks_and_independent_reviews_passed':not errors,'errors':errors,'minimum_dimension_score':9,'target':10,'role_minimums':scores,'reviews':selected,'review_count':len(selected),'actual_frames':51,'native4k_frames':14,'engine_assertions':726,'additional_controlled_condition_checks':10,'old_night_reviews_preserved_unchanged':True,'new_night_reviews_include_both_old_frames_plus6_new_matched_conditions':True,'raw_scores_modified':False,'prior_small_model_findings_require_actual_pixel_adjudication':True,'final_cumulative_signoff_required':True,'task_approved':False,'full_game_approved':False,'physical_phone_tablet4k60_verified':False,'task3_started':False}
+          out=Path('gate-report');out.mkdir(exist_ok=True);(out/'T02-combined-review-gate.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2))
+          raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-combined-reviewed-evidence-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# Night review evidence expanded using actual new renderer output. Both prior
+# night reports remain unaltered; no averaging, rounding or threshold reduction.
+# No game/runtime edits, automatic progression, billing setup or APK handoff.
