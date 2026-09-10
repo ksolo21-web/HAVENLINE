@@ -9,7 +9,7 @@ ROOT=Path(__file__).resolve().parents[2]
 def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
 before={
 'HavenlineGodot/scripts/outpost_surface.gd':'75c92cccf39d1446d6f9cbf6262aaf92b4400ce4018226fdce307794ebf4850e',
-'HavenlineGodot/scripts/main.gd':'f25263c0422e6459d769245ff078c7ae18abee2f3a890375bc8264088b167dc6',
+'HavenlineGodot/scripts/main.gd':'c176a5d1e10abd3c5f0db591e8b617af98eb65e88f64d35b2ded228d48c84332',
 'HavenlineGodot/tests/test_task02_terrain.gd':'1b891ac7cafd03f4d257e72a94136702ab97cb0a499d9fae98f6ea52e3c3b0fd'}
 for n,h in before.items():assert sha(ROOT/n)==h,'Concurrent change: '+n
 p=ROOT/'HavenlineGodot/scripts/outpost_surface.gd';text=p.read_text();text=text[:text.index('static func water_mesh()')]+'''static func water_mesh() -> ArrayMesh:
