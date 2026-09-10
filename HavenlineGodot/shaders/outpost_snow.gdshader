@@ -25,18 +25,16 @@ void vertex(){world_pos=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;}
 void fragment(){
  vec2 p=world_pos.xz;
  float d=work_distance(p);float shore=shore_distance(p);
- float sweeping=sin(p.x*.19+p.y*.13)*sin(p.y*.24-p.x*.08);
- float softness=.5+.5*sweeping;
- vec3 snow=mix(vec3(.88,.91,.98),vec3(.97,.975,1.),softness*.55+.23);
+ // Clean blue-white reference snow; shape and lighting supply the shading.
+ vec3 snow=vec3(.97,.987,1.0);
  // A continuous blue shadow under the rounded, genuinely elevated snow lip.
  float rim=(1.-smoothstep(.02,.26,d))*smoothstep(-.08,.02,d);
  snow=mix(snow,vec3(.69,.79,.94),rim*.23);
  // Screen-derivative coverage keeps the painted boundary stable at every view.
  float aa=max(fwidth(d)*.75,.022);
  float cleared=1.-smoothstep(-aa,aa,d);
- vec3 floor=mix(vec3(.79,.40,.255),vec3(.84,.47,.32),.50+.18*sin(p.x*.21)*cos(p.y*.15));
- float compacted_edge=exp(-pow((d+.14)/.16,2.));
- floor*=1.-.035*compacted_edge;
+ // Uniform reference workfloor, without procedural mottling or edge dirt.
+ vec3 floor=vec3(.815,.435,.29);
  float dist=length(p-furnace_center);
  float warmth=(1.-smoothstep(warmth_radius-.4,warmth_radius+.12,dist))*heat_strength;
  floor=mix(floor,floor+vec3(.025,.012,0.),warmth*.42);

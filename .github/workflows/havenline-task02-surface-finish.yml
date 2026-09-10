@@ -18,7 +18,7 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 2
       - run: python3 -m pip install pyyaml
-      - name: Repair the ground connection, run all checks and capture the actual new revision
+      - name: Verify the uniform reference finish and capture the actual new revision
         run: |
           python3 - <<'PY'
           from pathlib import Path
@@ -27,17 +27,16 @@ jobs:
           runs=[s['run'] for s in workflow['jobs']['terrain-build']['steps'] if 'run' in s]
           assert len(runs)==5
           runs[0]+='\nexport PATH="$RUNNER_TEMP/engine:$PATH"\n'
-          runs[1]='python3 tools/havenline/finish_task02_connection.py\n'+runs[1]
+          # The connection was already applied and tested in c2ad2b1. Never
+          # reapply its historical installer over the newer reviewed material.
           runs[2]=runs[2].replace('test_task02_terrain;','test_task02_terrain test_task02_surface_stress;').replace('len(rows)==12','len(rows)==13').replace('705','723')
-          runs[3]=runs[3].replace('git add HavenlineGodot/tests/test_outpost.gd','git add HavenlineGodot/tests/test_outpost.gd HavenlineGodot/scripts/outpost_surface.gd HavenlineGodot/shaders/outpost_snow.gdshader HavenlineGodot/tests/capture_task02.gd HavenlineGodot/tests/test_task02_surface_stress.gd')
-          runs[3]=runs[3].replace('T02: retain tested lake topology and dry-snow slope checks; no critic approval','T02: widen the ground connection and verify a route clear of actual structures; no critic approval')
           runs[4]=runs[4].replace("(3 if name=='native4k' else 24)","(6 if name=='native4k' else 24)").replace("'tests':705","'tests':723")
           script='\n'.join(runs)
           e=Path('task02-evidence');e.mkdir(exist_ok=True);(e/'executed-build.sh').write_text(script)
           subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
           for name in ('reference-ground.webp','reference-ground-provenance.json'):
               (e/name).write_bytes((Path('Docs/Production/T02')/name).read_bytes())
-          note={'task':'T02','revision':'clear-ground-connection','prior_source':'3b3e0af44ec638b0671a02e4bd7b5909d89ea2cd','prior_review_run':34504373276,'changes':['Retain the reference surface colors and stable snow edges','Widen the main-floor to lakeside-bay ground connection without moving any station or resource','Verify a controlled walk avoiding actual cabin/furnace/storage mesh bounds with 0.25 clearance','Capture the verified clear route rather than an interpolated path through existing structures'],'tests':723,'task_approved':False,'physical_4k60_verified':False}
+          note={'task':'T02','revision':'uniform-reference-finish','prior_source':'c2ad2b101d863d238342adfa32204faf7d227c07','prior_review_run':34506698944,'changes':['Remove actual sine-based workfloor mottling and edge dirt','Use a clean brighter blue-white snow material without procedural color mottling','Preserve the repaired shoreline, water surface, widened connection and verified dry route','Retain all 33 GLBs, shipping camera and approved forest shader/placement'],'tests':723,'task_approved':False,'physical_4k60_verified':False}
           (e/'revision.json').write_text(json.dumps(note,indent=2)+'\n')
           PY
       - uses: actions/upload-artifact@v4
@@ -54,4 +53,5 @@ jobs:
           path: source-snapshot/
           retention-days: 30
           if-no-files-found: error
-# Actual T02 ground change, same score threshold. No Task3, scene-asset replacement or APK handoff.
+# Fix actual critic-identified materials; do not change the score, model or task scope.
+# No T03, production APK handoff or physical-FPS claim.
