@@ -1,0 +1,110 @@
+name: Havenline T02 independent single-frame factual resolution
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-single-frame-review.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  frame-review:
+    strategy:
+      fail-fast: false
+      max-parallel: 14
+      matrix:
+        include:
+          - {role: reference-fidelity, group: workfloor, index: 0}
+          - {role: reference-fidelity, group: workfloor, index: 1}
+          - {role: reference-fidelity, group: workfloor, index: 2}
+          - {role: reference-fidelity, group: workfloor, index: 3}
+          - {role: reference-fidelity, group: tree-visibility, index: 0}
+          - {role: reference-fidelity, group: tree-visibility, index: 1}
+          - {role: reference-fidelity, group: tree-visibility, index: 2}
+          - {role: reference-fidelity, group: tree-visibility, index: 3}
+          - {role: reference-fidelity, group: tree-visibility, index: 4}
+          - {role: visual-integrity, group: tree-visibility, index: 0}
+          - {role: visual-integrity, group: tree-visibility, index: 1}
+          - {role: visual-integrity, group: tree-visibility, index: 2}
+          - {role: visual-integrity, group: tree-visibility, index: 3}
+          - {role: visual-integrity, group: tree-visibility, index: 4}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 38
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      REVIEW_INDEX: ${{ matrix.index }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-finished-surface-evidence-34508687675
+          run-id: 34508687675
+          github-token: ${{ github.token }}
+          path: task02-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-gemma
+          key: havenline-t01-gemma3-12b-qat-b10809-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Independently ground in actual single images before reviewing this required frame
+        run: python3 -u tools/havenline/review_task02_single_frame.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T02-single-${{ matrix.role }}-${{ matrix.group }}-${{ matrix.index }}-${{ github.run_id }}
+          path: single-review/
+          retention-days: 30
+          if-no-files-found: error
+  collect:
+    needs: frame-review
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: T02-single-*-${{ github.run_id }}
+          path: single-frame-results/reviews/
+      - name: Preserve complete required-frame results without averaging or changing original scores
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,math
+          source='586604eb8ab6404fc8084b6853fd03cfa842d3af'
+          expected={('reference-fidelity','workfloor',i) for i in range(4)}|{(r,'tree-visibility',i) for r in ('reference-fidelity','visual-integrity') for i in range(5)}
+          rows=[];errors=[];seen=set()
+          for p in Path('single-frame-results/reviews').glob('*/review.json'):
+              row=json.loads(p.read_text());rows.append(row);key=(row['role'],row['group'],row['index'])
+              if key in seen:errors.append('Duplicate '+str(key))
+              seen.add(key)
+              if row.get('source')!=source or row.get('passed') is not True or row.get('control_passed') is not True:errors.append('Not passing '+str(key))
+              if row.get('independent_execution') is not True:errors.append('No actual review '+str(key))
+              try:
+                  raw=json.loads((p.parent/'review-raw.json').read_text())['choices'][0]
+                  if raw['finish_reason']!='stop' or json.loads(raw['message']['content'])!=row['review']:errors.append('Raw mismatch '+str(key))
+                  controls=json.loads((p.parent/'controls.json').read_text())
+                  for i,c in enumerate(controls):
+                      rr=json.loads((p.parent/f'control-{i}-raw.json').read_text())['choices'][0]
+                      if not c['passed'] or rr['finish_reason']!='stop' or json.loads(rr['message']['content'])!=c['expected']:errors.append('Direct control failed '+str(key))
+                  if len(controls)!=2:errors.append('Missing controls '+str(key))
+              except Exception as exc:errors.append(str(key)+': '+str(exc))
+          if seen!=expected or len(rows)!=14:errors.append('Incomplete required single-frame coverage')
+          report={'task':'T02','source':source,'reviews':rows,'errors':errors,'all_required_frames_passed':not errors,'lowest_score':min((r.get('lowest_score',0) for r in rows),default=None),'task_approved':False,'previous_raw_reviews_preserved':True,'task3_started':False,'physical_4k60_verified':False}
+          Path('single-frame-results/summary.json').write_text(json.dumps(report,indent=2));print(json.dumps(report,indent=2))
+          raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-complete-single-frame-reviews-${{ github.run_id }}
+          path: single-frame-results/
+          retention-days: 30
+          if-no-files-found: error
+# Diagnosis-driven evidence association repair, not score-shopping or artwork change.
+# Every previously required candidate frame is included; prior reports remain intact.
+# The complete task gate additionally requires other groups, motion, tests and actual-pixel signoff.
