@@ -1,16 +1,18 @@
 #!/usr/bin/env python3
-"""Complete only five unresolved T02 reviews, preserving all previous records.
+"""Complete only unresolved T02 reviews; preserve every previous raw result.
 
-One Qwen request timed out without returning any art verdict. Retry its unchanged
-input/prompt with a longer response timeout. Two tree/night groups have factual
-contradictions in prior reports; use the existing independently pinned Gemma
-family with explicitly identified time/state panels and factual recognition.
-No old score is sent to a reviewer; no source, original PNG or score is altered.
+Timeouts have no art verdict. Explicit day/night and visibility-state evidence
+corrects demonstrated factual contradictions. The alternate Gemma run failed its
+blind control and cannot approve anything. Qwen may review the clarified evidence
+only after independently passing the control and the extra candidate-state facts.
+No old score or factual answer key is supplied to the model. No image is retouched.
 """
 from pathlib import Path
 import hashlib,json,os
 
 ROLE=os.environ['REVIEW_ROLE'];GROUP=os.environ['REVIEW_GROUP']
+MODEL_FAMILY=os.environ.get('MODEL_FAMILY','gemma')
+assert MODEL_FAMILY in ('qwen','gemma')
 SOURCE='586604eb8ab6404fc8084b6853fd03cfa842d3af'
 allowed={('reference-fidelity','workfloor'),('reference-fidelity','tree-visibility'),('visual-integrity','tree-visibility'),('reference-fidelity','night-overview'),('visual-integrity','night-overview')}
 assert (ROLE,GROUP) in allowed
@@ -23,17 +25,15 @@ if GROUP=='workfloor':
     assert old.get('error')=='timed out' and 'review' not in old and not (old_root/'review-raw.json').exists()
     repair='No-verdict execution timeout. Identical image selection, rubric, model, seed and temperature; longer request timeout only.'
 else:
-    repair='Independent second-family factual resolution. Original source pixels unchanged; time/state labels and factual recognition explicit; no old verdict or desired score supplied.'
-    old_cache="Path.home()/'.cache/havenline-t01-qwen35'"
-    assert s.count(old_cache)==1;s=s.replace(old_cache,"Path.home()/'.cache/havenline-t01-gemma'")
-    old_assert="assert manifest['base_model']=='Qwen/Qwen3.5-9B' and manifest['revision']=='3885219b6810b007914f3a7950a8d1b469d598a5'"
-    assert s.count(old_assert)==1
-    s=s.replace(old_assert,"assert manifest['base_model']=='google/gemma-3-12b-it' and manifest['publisher']=='ggml-org/gemma-3-12b-it-qat-GGUF' and len(manifest['revision'])==40")
-    # Gemma uses its own image encoder, not Qwen-specific image token hints.
-    s=s.replace(",'--image-min-tokens','1024','--image-max-tokens','2048'",'')
-    s=s.replace(",'chat_template_kwargs':{'enable_thinking':False}",'')
-    # Keep the original required views. Add a matching daytime shoreline view
-    # so darkness and surface-material changes are not conflated by the critic.
+    repair='State-explicit factual resolution after image contradictions. Original source pixels unchanged; additional factual recognition required; no old verdict or desired score supplied. Alternate failed-control reports remain rejected, not approved.'
+    if MODEL_FAMILY=='gemma':
+        old_cache="Path.home()/'.cache/havenline-t01-qwen35'"
+        assert s.count(old_cache)==1;s=s.replace(old_cache,"Path.home()/'.cache/havenline-t01-gemma'")
+        old_assert="assert manifest['base_model']=='Qwen/Qwen3.5-9B' and manifest['revision']=='3885219b6810b007914f3a7950a8d1b469d598a5'"
+        assert s.count(old_assert)==1
+        s=s.replace(old_assert,"assert manifest['base_model']=='google/gemma-3-12b-it' and manifest['publisher']=='ggml-org/gemma-3-12b-it-qat-GGUF' and manifest['revision']=='05c2df468ad7a0bb1284b3d6fe2bdf495a885567'")
+        s=s.replace(",'--image-min-tokens','1024','--image-max-tokens','2048'",'')
+        s=s.replace(",'chat_template_kwargs':{'enable_thinking':False}",'')
     if GROUP=='night-overview':
         marker='names=GROUPS[GROUP];'
         assert s.count(marker)==1
@@ -56,9 +56,9 @@ else:
     s=s.replace(marker,"report['factual_recognition_passed']=review.get('evidence_facts')=="+repr(expected)+"\n assert report['factual_recognition_passed'],'Review facts contradict independently verified original pixels'\n "+marker)
     marker="(OUT/'provenance.json').write_text(json.dumps(provenance,indent=2))"
     assert s.count(marker)==1
-    s=s.replace(marker,"provenance['different_model_family_resolution']=True\n "+marker)
+    s=s.replace(marker,"provenance['different_model_family_resolution']="+repr(MODEL_FAMILY=='gemma')+"\n provenance['state_explicit_input_and_fact_checks']=True\n "+marker)
 
 out=Path('task02-review');out.mkdir(exist_ok=True)
 (out/'executed-reviewer.py').write_text(s)
-(out/'resolution-provenance.json').write_text(json.dumps({'task':'T02','source':SOURCE,'role':ROLE,'group':GROUP,'prior_run':34510062914,'prior_review_sha256':hashlib.sha256((old_root/'review.json').read_bytes()).hexdigest(),'prior_executed_code_sha256':hashlib.sha256(raw).hexdigest(),'executed_code_sha256':hashlib.sha256(s.encode()).hexdigest(),'wrapper_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'reason':repair,'original_source_and_capture_bytes_unchanged':True,'score_threshold_unchanged':9,'old_failures_retained':True,'task_approved':False},indent=2))
-exec(compile(s,'T02-complete-unresolved-independent-reviews','exec'),{'__name__':'__main__','__file__':__file__})
+(out/'resolution-provenance.json').write_text(json.dumps({'task':'T02','source':SOURCE,'role':ROLE,'group':GROUP,'model_selection':MODEL_FAMILY,'prior_run':34510062914,'rejected_alternate_control_run':34513749870,'prior_review_sha256':hashlib.sha256((old_root/'review.json').read_bytes()).hexdigest(),'prior_executed_code_sha256':hashlib.sha256(raw).hexdigest(),'executed_code_sha256':hashlib.sha256(s.encode()).hexdigest(),'wrapper_sha256':hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),'reason':repair,'original_source_and_capture_bytes_unchanged':True,'score_threshold_unchanged':9,'old_failures_retained':True,'task_approved':False},indent=2))
+exec(compile(s,'T02-state-explicit-independent-reviews','exec'),{'__name__':'__main__','__file__':__file__})
