@@ -8,8 +8,8 @@ uniform float warmth_radius = 4.5;
 uniform float heat_strength = 1.0;
 uniform float snow_amount = 0.03;
 uniform float daylight_fill = 1.0;
-uniform vec2 lake_center = vec2(-7.6,-13.85);
-uniform vec2 lake_half = vec2(5.2,1.85);
+uniform vec2 lake_center = vec2(0.0,-13.85);
+uniform vec2 lake_half = vec2(15.2,1.85);
 varying vec3 world_pos;
 float rounded_rect(vec2 p,vec2 c,vec2 h,float r) {
  vec2 q=abs(p-c)-h+vec2(r);return length(max(q,vec2(0)))+min(max(q.x,q.y),0.0)-r;
@@ -20,9 +20,8 @@ float work_distance(vec2 p) {
  return min(a,min(b,rounded_rect(p,vec2(-4.3,-6.8),vec2(4.45,1.25),.5)));
 }
 float shore_distance(vec2 p) {
- vec2 signed_q=(p-lake_center)/lake_half;vec2 q=abs(signed_q);
- float angle=length(signed_q)>.00001?atan(signed_q.y,signed_q.x):0.0;float shape=1.+.035*sin(3.*angle)+.018*cos(5.*angle);
- return (pow(pow(q.x,4.)+pow(q.y,4.),.25)/shape-1.)*lake_half.y;
+ vec2 q=abs(p-lake_center);
+ return length(vec2(max(q.x-(lake_half.x-lake_half.y),0.),q.y))-lake_half.y;
 }
 float material_hash(vec2 p){
  vec3 h=fract(vec3(p.xyx)*vec3(.1031,.1030,.0973));

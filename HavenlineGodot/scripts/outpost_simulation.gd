@@ -4,6 +4,15 @@ const PopulationSimulation = preload("res://scripts/population_simulation.gd")
 var climate = Climate.new()
 const Terrain = preload("res://scripts/outpost_surface.gd")
 
+func _init(data: Dictionary = {}, chosen_lead: int = 1):
+	super(data,chosen_lead)
+	# Preserve the historical on-disk contract and all prices/progression. Resolve
+	# its now-submerged future north-gate approach onto connected dry shoreline.
+	contract=contract.duplicate(true)
+	tuning=contract.openingLoopTuning
+	var gate := Terrain.land_position(point(contract.world.forestGate),0.50)
+	contract.world.forestGate=[gate.x,float(contract.world.forestGate[1]),gate.y]
+
 func constrain_shoreline():
 	var dry := Terrain.land_position(position)
 	if dry.distance_squared_to(position)>.000001:

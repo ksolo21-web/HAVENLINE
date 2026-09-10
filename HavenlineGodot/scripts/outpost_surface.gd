@@ -3,8 +3,8 @@ extends RefCounted
 # The approved T01 trees are NOT regenerated. No camera, fence or station changes.
 const HALF := 31.0
 const STEP := 0.25
-const LAKE_CENTER := Vector2(-7.6, -13.85)
-const LAKE_HALF := Vector2(5.2, 1.85)
+const LAKE_CENTER := Vector2(0.0, -13.85)
+const LAKE_HALF := Vector2(15.2, 1.85)
 const WATER_Y := -0.34
 const LAND_MARGIN := 0.32
 const WORK_CENTER := Vector2(0.0, 0.3)
@@ -25,26 +25,33 @@ static func work_distance(p: Vector2) -> float:
 	var connector := rounded_rect(p,Vector2(-4.3,-6.8),Vector2(4.45,1.25),0.5)
 	return minf(main,minf(bay,connector))
 
-static func coast_shape(q: Vector2) -> float:
-	var angle := atan2(q.y,q.x)
-	return 1.0+.035*sin(3.0*angle)+.018*cos(5.0*angle)
-
 static func lake_distance(p: Vector2) -> float:
-	# Rounded-superellipse coast: smooth continuous contour, no rectangular plane.
-	var signed_q := (p-LAKE_CENTER)/LAKE_HALF
-	var q := signed_q.abs()
-	return (pow(pow(q.x,4.0)+pow(q.y,4.0),0.25)/coast_shape(signed_q)-1.0)*LAKE_HALF.y
+	# World-unit capsule distance: consistent bank width along the full east-west
+	# lake, including both rounded ends. Water continues beyond x=+/-14.2.
+	var q := (p-LAKE_CENTER).abs()
+	var straight_half := LAKE_HALF.x-LAKE_HALF.y
+	return Vector2(maxf(q.x-straight_half,0.0),q.y).length()-LAKE_HALF.y
+
+static func southern_shore_y(x: float, margin := LAND_MARGIN) -> float:
+	var radius := LAKE_HALF.y+maxf(margin,0.0)+0.00005
+	var dx := maxf(absf(x-LAKE_CENTER.x)-(LAKE_HALF.x-LAKE_HALF.y),0.0)
+	return LAKE_CENTER.y+sqrt(maxf(radius*radius-dx*dx,0.0))
 
 static func land_position(p: Vector2, margin := LAND_MARGIN) -> Vector2:
 	if not p.is_finite(): return Vector2.ZERO
-	if lake_distance(p)>=margin: return p
-	var q := p-LAKE_CENTER
-	if q.length_squared()<0.000001: return LAKE_CENTER+Vector2(0,LAKE_HALF.y+margin)
-	# Exact radial projection of the rounded-superellipse, avoiding Newton
-	# overshoot near its centre. The complete dry rim fits inside playable bounds.
-	var scaled := q.abs()/LAKE_HALF
-	var norm := pow(pow(scaled.x,4.0)+pow(scaled.y,4.0),.25)
-	return LAKE_CENTER+q*((1.0+(margin+.00002)/LAKE_HALF.y)*coast_shape(q/LAKE_HALF)/norm)
+	# End-to-end water separates the former north strip from the active camp.
+	# Recover old actors to the connected south bank, preserving X instead of
+	# radially flinging them beyond the playable east/west bounds.
+	var radius := LAKE_HALF.y+maxf(margin,0.0)
+	var in_span := absf(p.x-LAKE_CENTER.x)<=LAKE_HALF.x+maxf(margin,0.0)
+	if not in_span: return p
+	var shore := southern_shore_y(p.x,margin)
+	if p.y>=shore: return p
+	# Only the existing playable north strip and lake need recovery; decorative
+	# far-north forest geometry is not an actor destination or a terrain clamp.
+	if p.y>=-16.2001 or lake_distance(p)<radius-LAKE_HALF.y:
+		return Vector2(p.x,shore)
+	return p
 
 static func _shape_height(p: Vector2) -> float:
 	# Preserve the accepted outer woodland terrain exactly, including seated roots.
@@ -134,12 +141,14 @@ static func water_mesh() -> ArrayMesh:
 	if _water_mesh!=null: return _water_mesh
 	var tool := SurfaceTool.new();tool.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var contour := PackedVector2Array()
-	# Extend beyond the actual ground/water intersection so the whole mesh edge
-	# is buried under the snow bank, never an exposed floating water lip.
-	for i in range(192):
-		var a := TAU*float(i)/192.0
-		var q := Vector2(signf(cos(a))*sqrt(absf(cos(a))),signf(sin(a))*sqrt(absf(sin(a))))
-		contour.append(LAKE_CENTER+q*LAKE_HALF*coast_shape(q)*(1.0+.20/LAKE_HALF.y))
+	# Keep the contour buried 0.20 world units inside the physical snow bank.
+	# Ninety-six samples per semicircle retain the 192-triangle water budget.
+	var radius := LAKE_HALF.y+0.20
+	var straight_half := LAKE_HALF.x-LAKE_HALF.y
+	for side in [1.0,-1.0]:
+		for i in range(96):
+			var a := -PI*.5+PI*float(i)/95.0+(PI if side<0.0 else 0.0)
+			contour.append(LAKE_CENTER+Vector2(side*straight_half+radius*cos(a),radius*sin(a)))
 	for i in range(contour.size()):
 		for p in [LAKE_CENTER,contour[i],contour[(i+1)%contour.size()]]:
 			tool.set_normal(Vector3.UP);tool.set_uv(p*.1);tool.add_vertex(Vector3(p.x,WATER_Y,p.y))

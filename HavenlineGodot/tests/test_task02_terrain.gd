@@ -59,10 +59,10 @@ func run():
 	var dry:=true;var smooth_routes:=true
 	for r in sim.resources:
 		if Surface.lake_distance(r.position)<.4:dry=false
-	for p in [Vector2(0,.2),Vector2(-2.8,2.25),Vector2(-6.6,-4.8),Vector2(6.6,-4.8),Vector2(0,-10.7),Vector2(0,11.7),Vector2(0,-14.8),Vector2(-12,-11)]:
+	for p in [Vector2(0,.2),Vector2(-2.8,2.25),Vector2(-6.6,-4.8),Vector2(6.6,-4.8),Vector2(0,-10.7),Vector2(0,11.7),Sim.point(sim.contract.world.forestGate),Vector2(-12,-11)]:
 		if Surface.lake_distance(p)<.4:dry=false
 	check("Every original resource, station, gate and bear site stays dry",dry)
-	for route in [[Vector2(0,6.2),Vector2(0,.2)],[Vector2(0,.2),Vector2(-6.5,-9)],[Vector2(0,.2),Vector2(0,-14.8)],[Vector2(-6.5,-9),Vector2(-6.5,-11.3)]]:
+	for route in [[Vector2(0,6.2),Vector2(0,.2)],[Vector2(0,.2),Vector2(-6.5,-9)],[Vector2(0,.2),Sim.point(sim.contract.world.forestGate)],[Vector2(-6.5,-9),Vector2(-6.5,-11.3)]]:
 		for i in range(51):
 			var p:Vector2=route[0].lerp(route[1],float(i)/50.)
 			var q:=p+Vector2(.05,0)

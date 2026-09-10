@@ -22,6 +22,8 @@ func configure(env: Environment, sun: DirectionalLight3D, furnace: Node3D, light
 	terrain.mesh=Surface.mesh()
 	ground_material=ShaderMaterial.new()
 	ground_material.shader=load("res://shaders/outpost_snow.gdshader")
+	ground_material.set_shader_parameter("lake_center",Surface.LAKE_CENTER)
+	ground_material.set_shader_parameter("lake_half",Surface.LAKE_HALF)
 	terrain.material_override=ground_material
 	add_child(terrain)
 	lake=MeshInstance3D.new()
@@ -29,6 +31,8 @@ func configure(env: Environment, sun: DirectionalLight3D, furnace: Node3D, light
 	lake.mesh=Surface.water_mesh()
 	lake_material=ShaderMaterial.new()
 	lake_material.shader=load("res://shaders/lakeshore_water.gdshader")
+	lake_material.set_shader_parameter("lake_center",Surface.LAKE_CENTER)
+	lake_material.set_shader_parameter("lake_half",Surface.LAKE_HALF)
 	lake.material_override=lake_material
 	lake.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(lake)
@@ -95,7 +99,9 @@ func evidence(sim) -> Dictionary:
 		"warmth_gameplay_radius":sim.warmth(), "warmth_visual_radius":current_radius,
 		"heat_strength":current_heat, "snow_instances":snow.multimesh.instance_count,
 		"surface_triangles":terrain.mesh.get_faces().size()/3,
-		"terrain_revision":"T02-rounded-bank-and-snow-finish", "lake_triangles":lake.mesh.get_faces().size()/3,
+		"terrain_revision":"T02-east-west-end-to-end-lake", "lake_triangles":lake.mesh.get_faces().size()/3,
 		"water_y":Surface.WATER_Y,"lake_center":[Surface.LAKE_CENTER.x,Surface.LAKE_CENTER.y],
-		"shared_actor_surface":true,
+		"lake_half":[Surface.LAKE_HALF.x,Surface.LAKE_HALF.y],
+		"lake_extent_x":[Surface.LAKE_CENTER.x-Surface.LAKE_HALF.x,Surface.LAKE_CENTER.x+Surface.LAKE_HALF.x],
+		"east_west_end_to_end":true,"shared_actor_surface":true,
 		"native_4k60_certified":false}
