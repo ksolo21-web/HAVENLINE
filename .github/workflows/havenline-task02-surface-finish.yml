@@ -1,0 +1,54 @@
+name: Havenline T02 reference-colored surfaces and verified dry routes
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-surface-finish.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-and-capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+      - run: python3 -m pip install pyyaml
+      - name: Run all source and terrain checks plus complete fresh Mobile captures
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess,json,hashlib
+          workflow=yaml.safe_load(Path('.github/workflows/havenline-task02.yml').read_text())
+          runs=[s['run'] for s in workflow['jobs']['terrain-build']['steps'] if 'run' in s]
+          assert len(runs)==5
+          runs[0]+='\nexport PATH="$RUNNER_TEMP/engine:$PATH"\n'
+          runs[2]=runs[2].replace('test_task02_terrain;','test_task02_terrain test_task02_surface_stress;').replace('len(rows)==12','len(rows)==13').replace('705','720')
+          runs[4]=runs[4].replace("(3 if name=='native4k' else 24)","(6 if name=='native4k' else 24)").replace("'tests':705","'tests':720")
+          script='\n'.join(runs)
+          e=Path('task02-evidence');e.mkdir(exist_ok=True);(e/'executed-build.sh').write_text(script)
+          subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          for name in ('reference-ground.webp','reference-ground-provenance.json'):
+              (e/name).write_bytes((Path('Docs/Production/T02')/name).read_bytes())
+          note={'task':'T02','revision':'reference-color-and-edge-finish','prior_source':'824b91c973355cb9726bab526de98267fe19d6a7','prior_review_run':34500084473,'changes':['Warmer reference work-floor palette','Narrower blue/cyan shallow-water gradient and quiet current strokes','Derivative antialiasing of floor/snow boundary','Defined shader value at lake-centre angle','6240 shoreline sample checks and actual-control dry-route traversal','Three additional native4K detail captures'],'tests':720,'task_approved':False,'physical_4k60_verified':False}
+          (e/'revision.json').write_text(json.dumps(note,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-finished-surface-evidence-${{ github.run_id }}
+          path: task02-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-finished-surface-source-${{ github.run_id }}
+          path: source-snapshot/
+          retention-days: 30
+          if-no-files-found: error
+# Active T02 only. No APK handoff, Task3 implementation or physical-FPS claim.

@@ -38,6 +38,9 @@ func run():
 	normal_at(Vector2(-6.5,-9.0));await snap("lakeshore-gameplay")
 	if native:
 		focus_at(Vector2(-3,-4),Vector3(22,36,31),25.0);await snap("native-overview")
+		focus_at(Vector2(-7.9,-13.7),Vector3(0,16,13),10.0);await snap("native-shore-detail")
+		focus_at(Vector2(9.7,4),Vector3(7,9,12),7.0);await snap("native-snow-join")
+		focus_at(Vector2(0,.3),Vector3(0,36,.01),21.0);await snap("native-workfloor-overhead")
 	else:
 		focus_at(Vector2(-3,-4),Vector3(22,36,31),25.0);await snap("terrain-overview")
 		focus_at(Vector2(0,.3),Vector3(0,36,.01),21.0);await snap("workfloor-overhead")

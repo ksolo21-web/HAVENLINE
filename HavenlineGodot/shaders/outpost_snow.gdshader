@@ -18,7 +18,7 @@ float work_distance(vec2 p) {
 }
 float shore_distance(vec2 p) {
  vec2 signed_q=(p-lake_center)/lake_half;vec2 q=abs(signed_q);
- float angle=atan(signed_q.y,signed_q.x);float shape=1.+.035*sin(3.*angle)+.018*cos(5.*angle);
+ float angle=length(signed_q)>.00001?atan(signed_q.y,signed_q.x):0.0;float shape=1.+.035*sin(3.*angle)+.018*cos(5.*angle);
  return (pow(pow(q.x,4.)+pow(q.y,4.),.25)/shape-1.)*lake_half.y;
 }
 void vertex(){world_pos=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;}
@@ -30,9 +30,11 @@ void fragment(){
  vec3 snow=mix(vec3(.88,.91,.98),vec3(.97,.975,1.),softness*.55+.23);
  // A continuous blue shadow under the rounded, genuinely elevated snow lip.
  float rim=(1.-smoothstep(.02,.26,d))*smoothstep(-.08,.02,d);
- snow=mix(snow,vec3(.69,.79,.94),rim*.35);
- float cleared=1.-smoothstep(-.055,.09,d);
- vec3 floor=mix(vec3(.80,.49,.34),vec3(.85,.56,.41),.50+.18*sin(p.x*.21)*cos(p.y*.15));
+ snow=mix(snow,vec3(.69,.79,.94),rim*.23);
+ // Screen-derivative coverage keeps the painted boundary stable at every view.
+ float aa=max(fwidth(d)*.75,.022);
+ float cleared=1.-smoothstep(-aa,aa,d);
+ vec3 floor=mix(vec3(.79,.40,.255),vec3(.84,.47,.32),.50+.18*sin(p.x*.21)*cos(p.y*.15));
  float compacted_edge=exp(-pow((d+.14)/.16,2.));
  floor*=1.-.035*compacted_edge;
  float dist=length(p-furnace_center);
