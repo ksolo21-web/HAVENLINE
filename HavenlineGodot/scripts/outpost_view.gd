@@ -1,6 +1,8 @@
 extends Node3D
 const Surface = preload("res://scripts/outpost_surface.gd")
 var terrain: MeshInstance3D
+var lake: MeshInstance3D
+var lake_material: ShaderMaterial
 var snow: MultiMeshInstance3D
 var ground_material: ShaderMaterial
 var snow_material: ShaderMaterial
@@ -22,6 +24,14 @@ func configure(env: Environment, sun: DirectionalLight3D, furnace: Node3D, light
 	ground_material.shader=load("res://shaders/outpost_snow.gdshader")
 	terrain.material_override=ground_material
 	add_child(terrain)
+	lake=MeshInstance3D.new()
+	lake.name="TurquoiseLakeshore"
+	lake.mesh=Surface.water_mesh()
+	lake_material=ShaderMaterial.new()
+	lake_material.shader=load("res://shaders/lakeshore_water.gdshader")
+	lake.material_override=lake_material
+	lake.cast_shadow=GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	add_child(lake)
 	snow=MultiMeshInstance3D.new()
 	snow.name="InstancedSnowfall"
 	var particles:=MultiMesh.new()
@@ -52,6 +62,7 @@ func sync(sim, dt: float, paused: bool):
 	ground_material.set_shader_parameter("warmth_radius",current_radius)
 	ground_material.set_shader_parameter("heat_strength",current_heat)
 	ground_material.set_shader_parameter("snow_amount",weather.snow)
+	lake_material.set_shader_parameter("sim_time",sim.climate.seconds)
 	snow_material.set_shader_parameter("sim_time",sim.climate.seconds)
 	snow_material.set_shader_parameter("snow_amount",weather.snow)
 	snow_material.set_shader_parameter("wind",weather.wind)
@@ -83,4 +94,7 @@ func evidence(sim) -> Dictionary:
 		"warmth_gameplay_radius":sim.warmth(), "warmth_visual_radius":current_radius,
 		"heat_strength":current_heat, "snow_instances":snow.multimesh.instance_count,
 		"surface_triangles":terrain.mesh.get_faces().size()/3,
+		"terrain_revision":"T02-1", "lake_triangles":lake.mesh.get_faces().size()/3,
+		"water_y":Surface.WATER_Y,"lake_center":[Surface.LAKE_CENTER.x,Surface.LAKE_CENTER.y],
+		"shared_actor_surface":true,
 		"native_4k60_certified":false}

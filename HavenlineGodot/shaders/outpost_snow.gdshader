@@ -1,59 +1,46 @@
 shader_type spatial;
 render_mode diffuse_burley, specular_schlick_ggx;
+// T02: clean painted-snow material. No stock checker, gravel noise or black mud.
 uniform vec2 furnace_center = vec2(0.0,0.2);
 uniform float warmth_radius = 4.5;
 uniform float heat_strength = 1.0;
 uniform float snow_amount = 0.03;
+uniform vec2 lake_center = vec2(-7.6,-13.85);
+uniform vec2 lake_half = vec2(5.2,1.85);
 varying vec3 world_pos;
-float hash(vec2 p) { return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
-float noise(vec2 p) {
- vec2 i=floor(p); vec2 f=fract(p); f=f*f*(3.0-2.0*f);
- return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);
+float rounded_rect(vec2 p,vec2 c,vec2 h,float r) {
+ vec2 q=abs(p-c)-h+vec2(r);return length(max(q,vec2(0)))+min(max(q.x,q.y),0.0)-r;
 }
-float path_distance(vec2 p, vec2 a, vec2 b) {
- vec2 v=b-a; return length(p-a-v*clamp(dot(p-a,v)/dot(v,v),0.0,1.0));
+float work_distance(vec2 p) {
+ float a=rounded_rect(p,vec2(0,.3),vec2(9.75,6.7),.72);
+ float b=rounded_rect(p,vec2(-6.5,-9.4),vec2(6.6,1.95),.65);
+ return min(a,min(b,rounded_rect(p,vec2(-6.5,-6.8),vec2(2.25,1.25),.5)));
 }
-float boot_track(vec2 p, vec2 a, vec2 b) {
- vec2 dir=normalize(b-a); vec2 side=vec2(-dir.y,dir.x);vec2 d=p-a;
- float along=dot(d,dir);float lane=dot(d,side);
- float stride=floor(along/.58);float phase=fract(along/.58)-.5;
- float lateral=lane-(mod(stride,2.0)*2.0-1.0)*.16;
- float oval=length(vec2(phase*.58/.14,lateral/.072));
- return (1.0-smoothstep(.76,1.16,oval))*step(0.0,along)*step(along,length(b-a));
+float shore_distance(vec2 p) {
+ vec2 q=abs(p-lake_center)/lake_half;
+ return (pow(pow(q.x,4.)+pow(q.y,4.),.25)-1.)*lake_half.y;
 }
-void vertex() { world_pos = (MODEL_MATRIX * vec4(VERTEX,1.0)).xyz; }
-void fragment() {
+void vertex(){world_pos=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;}
+void fragment(){
  vec2 p=world_pos.xz;
- float broad=noise(p*.58);float n=noise(p*2.7);float grain=noise(p*29.0);
+ float d=work_distance(p);float shore=shore_distance(p);
+ float sweeping=sin(p.x*.19+p.y*.13)*sin(p.y*.24-p.x*.08);
+ float softness=.5+.5*sweeping;
+ vec3 snow=mix(vec3(.88,.91,.98),vec3(.97,.975,1.),softness*.55+.23);
+ // A continuous blue shadow under the rounded, genuinely elevated snow lip.
+ float rim=(1.-smoothstep(.02,.26,d))*smoothstep(-.08,.02,d);
+ snow=mix(snow,vec3(.69,.79,.94),rim*.35);
+ float cleared=1.-smoothstep(-.055,.09,d);
+ vec3 floor=mix(vec3(.80,.49,.34),vec3(.85,.56,.41),.50+.18*sin(p.x*.21)*cos(p.y*.15));
+ float compacted_edge=exp(-pow((d+.14)/.16,2.));
+ floor*=1.-.035*compacted_edge;
  float dist=length(p-furnace_center);
- float warm=(1.0-smoothstep(warmth_radius-.80,warmth_radius+.10,dist))*heat_strength;
- float melt=(1.0-smoothstep(warmth_radius-1.50,warmth_radius+.05,dist+(broad-.5)*.72))*heat_strength;
- float path=min(path_distance(p,vec2(0,12.2),furnace_center),path_distance(p,vec2(-2.8,2.25),furnace_center));
- path=min(path,path_distance(p,vec2(-6.6,-3.65),furnace_center));
- path=min(path,path_distance(p,vec2(6.6,-3.65),furnace_center));
- path=min(path,path_distance(p,vec2(0,-10.7),furnace_center));
- float compact=(1.0-smoothstep(.32,1.02,path+(broad-.5)*.29))*(1.0-snow_amount*.44);
- float ripple=sin(p.x*3.8+p.y*1.35+broad*3.0)*.5+.5;
- vec3 snow=mix(vec3(.72,.84,.91),vec3(.92,.96,.98),.38+broad*.32+n*.15+grain*.08);
- snow=mix(snow,vec3(.58,.73,.82),compact*.58);
- float prints=max(boot_track(p,furnace_center,vec2(-6.6,-3.65)),boot_track(p,furnace_center,vec2(6.6,-3.65)));
- prints=max(prints,boot_track(p,vec2(0,12.2),furnace_center))*(1.0-snow_amount*.85);
- snow=mix(snow,vec3(.45,.59,.68),prints*.40);
- snow*=.963+.037*ripple;
- vec3 ground=mix(vec3(.29,.32,.32),vec3(.47,.43,.35),n*.58+broad*.35);
- // Rounded pebbles replace the old thresholded grid-noise cross artifacts.
- vec2 cell=floor(p*7.0);vec2 local=fract(p*7.0)-.5;
- vec2 jitter=vec2(hash(cell),hash(cell+vec2(13.7,9.2)))-.5;
- float pebble=length((local-jitter*.42)*vec2(1.0,1.35));
- float stones=(1.0-smoothstep(.09,.19,pebble))*step(.48,hash(cell+vec2(5.9,17.4)));
- ground=mix(ground,vec3(.56,.56,.50),stones*.36);
- ground=mix(ground,vec3(.19,.23,.26),(1.0-smoothstep(.8,2.0,dist))*heat_strength*.55);
- ALBEDO=mix(pow(snow,vec3(2.2)),pow(ground,vec3(2.2)),melt*.93);
- ROUGHNESS=mix(.88,.79,melt)-stones*melt*.06;
- SPECULAR=.25;
- float dx=noise((p+vec2(.017,0))*29.0)-grain;
- float dz=noise((p+vec2(0,.017))*29.0)-grain;
- NORMAL_MAP=normalize(vec3(-dx*.24,-dz*.24,1.0))*.5+.5;
- NORMAL_MAP_DEPTH=.6;
- EMISSION=vec3(.03,.012,.002)*warm*(1.0-smoothstep(0.,warmth_radius,dist));
+ float warmth=(1.-smoothstep(warmth_radius-.4,warmth_radius+.12,dist))*heat_strength;
+ floor=mix(floor,floor+vec3(.025,.012,0.),warmth*.42);
+ vec3 material=mix(snow,floor,cleared);
+ // The submerged bank grades into a cool clean ice-blue face; not an extra plane.
+ float ice=(1.-smoothstep(.12,.33,shore));
+ material=mix(material,vec3(.37,.67,.84),ice*.48);
+ ALBEDO=pow(material,vec3(2.2));
+ ROUGHNESS=mix(.91,.87,cleared);SPECULAR=.20;
 }

@@ -2,6 +2,23 @@ extends "res://scripts/population_simulation.gd"
 const Climate = preload("res://scripts/outpost_climate.gd")
 const PopulationSimulation = preload("res://scripts/population_simulation.gd")
 var climate = Climate.new()
+const Terrain = preload("res://scripts/outpost_surface.gd")
+
+func constrain_shoreline():
+	var dry := Terrain.land_position(position)
+	if dry.distance_squared_to(position)>.000001:
+		var normal := (dry-position).normalized()
+		position=dry
+		if velocity.dot(normal)<0: velocity-=normal*velocity.dot(normal)
+	for c in companions+enemies+population.actor_records():
+		c.position=Terrain.land_position(c.position)
+
+func step(dt: float, input_vector: Vector2, sprint := false):
+	if dt<=0 or not is_finite(dt): return
+	# Coast collision belongs to the surface, not a decorative invisible barrier.
+	constrain_shoreline()
+	super.step(dt,input_vector,sprint)
+	constrain_shoreline()
 
 func step_climate(dt: float):
 	climate.step(dt)
@@ -37,4 +54,5 @@ func restore(state: Dictionary) -> bool:
 	if not verifier.restore(state): return false
 	if not super.restore(state): return false
 	climate = clock
+	constrain_shoreline()
 	return true
