@@ -65,13 +65,13 @@ static func _shape_height(p: Vector2) -> float:
 	var original := -.035+ripple+drift+local_drifts+shoulders
 	var wd := work_distance(p)
 	var floor_height := 0.008*sin(p.x*.22)*sin(p.y*.26)
-	var snow_rim := .065*exp(-pow((wd-.28)/.48,2.0))
+	var snow_rim := .12*exp(-pow((wd-.36)/.62,2.0))
 	var result := lerpf(floor_height,original,smoothstep(-.12,1.80,wd))+snow_rim
 	var shore := lake_distance(p)
 	# A submerged basin and rounded snow-covered lip, connected without overlays.
-	var bank_height := lerpf(WATER_Y-.85,.055,smoothstep(-.44,.27,shore))
-	bank_height += .085*exp(-pow((shore-.36)/.30,2.0))
-	result=lerpf(bank_height,result,smoothstep(.45,1.2,shore))
+	var bank_height := lerpf(WATER_Y-.85,.16,smoothstep(-.46,.30,shore))
+	bank_height += .19*exp(-pow((shore-.38)/.37,2.0))
+	result=lerpf(bank_height,result,smoothstep(.54,1.32,shore))
 	return result
 
 static func _ensure_heights():

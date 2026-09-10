@@ -25,6 +25,9 @@ func focus_at(p: Vector2, offset: Vector3, zoom: float):
 	game.camera.position=target+offset
 	game.camera.look_at(target)
 	game.update_foreground_visibility(game.xyz(game.sim.position)+Vector3(0,.95,0),.1)
+func hide_nonterrain_diagnostic():
+	for node in game.world.find_children("*","GeometryInstance3D",true,false):
+		if node!=game.outpost_view.terrain and node!=game.outpost_view.lake:node.visible=false
 func normal_at(p: Vector2):
 	game.sim.position=Surface.land_position(p)
 	game.capture_frames=0;game._process(.001);game.capture_frames=100
@@ -58,6 +61,14 @@ func run():
 			normal_at(ground_route[i]);await snap("route-camera-%02d"%i)
 		game.sim.climate.seconds=630.0;game.outpost_view.sync(game.sim,.1,false)
 		normal_at(Vector2(-6.5,-9));await snap("lakeshore-night")
+	# Supplementary terrain-only diagnostics make bank thickness and snow
+	# shaping visible without roofs/trees concealing the ground. Normal gameplay
+	# frames above are retained; this is NOT the shipping visibility state.
+	game.sim.climate.seconds=0.0;game.outpost_view.sync(game.sim,0.0,false)
+	focus_at(Vector2(9.5,3.0),Vector3(4,3,6),5.0);hide_nonterrain_diagnostic();await snap("terrain-only-floor-profile")
+	records[-1]["terrain_only_diagnostic"]=true
+	focus_at(Vector2(-7.6,-12.3),Vector3(0,3.5,8),7.2);hide_nonterrain_diagnostic();await snap("terrain-only-bank-profile")
+	records[-1]["terrain_only_diagnostic"]=true
 	var report={"task":"T02","renderer":RenderingServer.get_current_rendering_method(),"device":RenderingServer.get_video_adapter_name(),"captures":records,"forest":game.reference_forest_evidence,"outpost":game.outpost_view.evidence(game.sim),"camera_views_are_disclosed_qa_states":true,"motion_is_sampled_not_fps_evidence":true,"physical_phone_tablet_4k60_verified":false,"task_approved":false}
 	var f=FileAccess.open(output.path_join("capture.json"),FileAccess.WRITE);f.store_string(JSON.stringify(report,"\t"));f.close()
 	game.outpost_audio.stop_all();await create_timer(.35).timeout;game.free();await process_frame;quit()

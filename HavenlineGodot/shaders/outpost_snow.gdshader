@@ -7,6 +7,7 @@ uniform vec2 furnace_center = vec2(0.0,0.2);
 uniform float warmth_radius = 4.5;
 uniform float heat_strength = 1.0;
 uniform float snow_amount = 0.03;
+uniform float daylight_fill = 1.0;
 uniform vec2 lake_center = vec2(-7.6,-13.85);
 uniform vec2 lake_half = vec2(5.2,1.85);
 varying vec3 world_pos;
@@ -42,7 +43,7 @@ void fragment(){
  float fine=material_noise(p*7.8)-.5;
  float footprint=max(length(dFdx(p)),length(dFdy(p)));
  float detail_weight=1.-smoothstep(.025,.16,footprint);
- vec3 snow=vec3(.955,.976,1.0)+vec3(.042,.029,.016)*broad;
+ vec3 snow=vec3(.98,.994,1.0)+vec3(.042,.029,.016)*broad;
  snow+=vec3(.012,.010,.008)*fine*detail_weight;
  float rim=(1.-smoothstep(.04,.48,d))*smoothstep(-.16,.04,d);
  snow=mix(snow,vec3(.73,.82,.94),rim*.16);
@@ -52,8 +53,8 @@ void fragment(){
  float edge_d=d+(material_noise(p*1.6)-.5)*.035;
  float cleared=1.-smoothstep(-.08-aa,.13+aa,edge_d);
  // Restrained peach/clay variation and wear, without checkerboard tiling.
- vec3 floor=vec3(.80,.48,.36)+vec3(.046,.032,.023)*broad;
- floor+=vec3(.010,.008,.006)*fine*detail_weight;
+ vec3 floor=vec3(.80,.48,.36)+vec3(.09,.058,.043)*broad;
+ floor+=vec3(.022,.015,.011)*fine*detail_weight;
  float dist=length(p-furnace_center);
  float warmth=(1.-smoothstep(warmth_radius-.4,warmth_radius+.12,dist))*heat_strength;
  floor=mix(floor,floor+vec3(.025,.012,0.),warmth*.42);
@@ -61,7 +62,10 @@ void fragment(){
  // The submerged bank grades into a cool clean ice-blue face; not an extra plane.
  float ice=(1.-smoothstep(-.12,.035,shore));
  material=mix(material,vec3(.37,.67,.84),ice*.35);
- ALBEDO=pow(material,vec3(2.2));
+ ALBEDO=pow(clamp(material,vec3(0.),vec3(1.)),vec3(2.2));
+ // A small daylight-only painted-snow fill keeps the reference white readable.
+ // It is disabled at night and does not change any other asset or world light.
+ EMISSION=vec3(.030,.034,.040)*(1.-cleared)*clamp(daylight_fill,0.,1.);
  // Very small grain slopes soften highlights; they do not deform geometry.
  float sx=cos(p.x*8.1+p.y*3.7)*.006;
  float sz=cos(p.x*-4.6+p.y*9.3)*.006;

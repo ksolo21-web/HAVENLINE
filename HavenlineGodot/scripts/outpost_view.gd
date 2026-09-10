@@ -62,6 +62,7 @@ func sync(sim, dt: float, paused: bool):
 	ground_material.set_shader_parameter("warmth_radius",current_radius)
 	ground_material.set_shader_parameter("heat_strength",current_heat)
 	ground_material.set_shader_parameter("snow_amount",weather.snow)
+	ground_material.set_shader_parameter("daylight_fill",daylight)
 	lake_material.set_shader_parameter("sim_time",sim.climate.seconds)
 	snow_material.set_shader_parameter("sim_time",sim.climate.seconds)
 	snow_material.set_shader_parameter("snow_amount",weather.snow)
@@ -94,7 +95,7 @@ func evidence(sim) -> Dictionary:
 		"warmth_gameplay_radius":sim.warmth(), "warmth_visual_radius":current_radius,
 		"heat_strength":current_heat, "snow_instances":snow.multimesh.instance_count,
 		"surface_triangles":terrain.mesh.get_faces().size()/3,
-		"terrain_revision":"T02-1", "lake_triangles":lake.mesh.get_faces().size()/3,
+		"terrain_revision":"T02-rounded-bank-and-snow-finish", "lake_triangles":lake.mesh.get_faces().size()/3,
 		"water_y":Surface.WATER_Y,"lake_center":[Surface.LAKE_CENTER.x,Surface.LAKE_CENTER.y],
 		"shared_actor_surface":true,
 		"native_4k60_certified":false}
