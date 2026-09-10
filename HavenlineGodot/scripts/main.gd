@@ -818,6 +818,8 @@ func build_environment_dressing():
 		var a := i * 2.399963
 		var p := Vector2(cos(a) * (11.8 + fposmod(i * .831, 8.0)), sin(a) * (14.3 + fposmod(i * .713, 7.0)))
 		if absf(p.x) < 3.5: continue
+		# The extended lake must not leave shrub/rock tops protruding through water.
+		if Surface.lake_distance(p) < 1.0: continue
 		var blocked := false
 		for r in sim.resources:
 			if p.distance_to(r.position) < 1.8: blocked = true

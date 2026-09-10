@@ -139,17 +139,34 @@ static func mesh() -> ArrayMesh:
 
 static func water_mesh() -> ArrayMesh:
 	if _water_mesh!=null: return _water_mesh
-	var tool := SurfaceTool.new();tool.begin(Mesh.PRIMITIVE_TRIANGLES)
-	var contour := PackedVector2Array()
-	# Keep the contour buried 0.20 world units inside the physical snow bank.
-	# Ninety-six samples per semicircle retain the 192-triangle water budget.
+	# Short, regular triangles prevent vertex fog/light interpolation from exposing
+	# the old giant triangle fan when the lake is extended across the entire map.
+	# One opaque surface and one draw submission; no transparent plane overlays.
 	var radius := LAKE_HALF.y+0.20
 	var straight_half := LAKE_HALF.x-LAKE_HALF.y
-	for side in [1.0,-1.0]:
-		for i in range(96):
-			var a := -PI*.5+PI*float(i)/95.0+(PI if side<0.0 else 0.0)
-			contour.append(LAKE_CENTER+Vector2(side*straight_half+radius*cos(a),radius*sin(a)))
-	for i in range(contour.size()):
-		for p in [LAKE_CENTER,contour[i],contour[(i+1)%contour.size()]]:
-			tool.set_normal(Vector3.UP);tool.set_uv(p*.1);tool.add_vertex(Vector3(p.x,WATER_Y,p.y))
-	tool.generate_tangents();tool.index();_water_mesh=tool.commit();return _water_mesh
+	var xs := PackedFloat32Array()
+	for i in range(25): xs.append(-straight_half-radius*cos(PI*.5*float(i)/24.0))
+	for i in range(1,61): xs.append(-straight_half+2.0*straight_half*float(i)/60.0)
+	for i in range(1,25): xs.append(straight_half+radius*sin(PI*.5*float(i)/24.0))
+	var vertices := PackedVector3Array();var normals := PackedVector3Array()
+	var uv := PackedVector2Array();var tangents := PackedFloat32Array()
+	var indices := PackedInt32Array();var rows := 13
+	for x in xs:
+		var cap_x := maxf(absf(x)-straight_half,0.0)
+		var half_depth := sqrt(maxf(radius*radius-cap_x*cap_x,0.0))
+		for j in range(rows):
+			var p := LAKE_CENTER+Vector2(x,lerpf(-half_depth,half_depth,float(j)/12.0))
+			vertices.append(Vector3(p.x,WATER_Y,p.y));normals.append(Vector3.UP)
+			uv.append(p*.1);tangents.append_array(PackedFloat32Array([1.,0.,0.,1.]))
+	for x in range(xs.size()-1):
+		for z in range(rows-1):
+			var a := x*rows+z;var b := (x+1)*rows+z
+			for triangle in [[a,b,a+1],[b,b+1,a+1]]:
+				var area: Vector3=(vertices[triangle[1]]-vertices[triangle[0]]).cross(vertices[triangle[2]]-vertices[triangle[0]])
+				if area.length_squared()>.0000000001:
+					for index in triangle: indices.append(index)
+	var arrays: Array=[];arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX]=vertices;arrays[Mesh.ARRAY_NORMAL]=normals
+	arrays[Mesh.ARRAY_TEX_UV]=uv;arrays[Mesh.ARRAY_TANGENT]=tangents;arrays[Mesh.ARRAY_INDEX]=indices
+	_water_mesh=ArrayMesh.new();_water_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
+	return _water_mesh

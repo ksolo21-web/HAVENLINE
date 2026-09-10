@@ -41,7 +41,7 @@ func run():
 		if absf(p.y-Surface.height_at(Vector2(p.x,p.z)))>.00015:interpolated=false
 	check("Actor contact matches rendered triangle interiors",interpolated)
 	var water:=Surface.water_mesh()
-	check("Water is a bounded custom contour under 256 triangles",water.get_faces().size()/3==192)
+	check("Extended water is a bounded custom surface under 3000 triangles",water.get_faces().size()/3>2000 and water.get_faces().size()/3<3000)
 	var edge_buried:=true;var water_faces:=true
 	var wf:=water.get_faces()
 	for v in wf:

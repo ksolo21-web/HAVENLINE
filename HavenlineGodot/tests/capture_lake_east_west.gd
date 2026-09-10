@@ -15,11 +15,16 @@ func run():
 	focus_at(Vector2(13.6,-13.5),Vector3(5,12,13),8.0);await snap("lake-east-bank")
 	focus_at(Vector2(0,-13.85),Vector3(0,13,-14),18.0);await snap("lake-rear-shore")
 	focus_at(Vector2(0,-10.8),Vector3(0,25,24),22.0)
+	# Hold unrelated actor poses for the controlled lighting comparison only.
+	var held_animations := 0
+	for animation in game.world.find_children("*","AnimationPlayer",true,false):
+		animation.pause();held_animations+=1
 	# Match the same view under recorded clear/night/weather states.
 	for setting in [["day",0.0],["dusk",400.0],["night",930.0],["dawn",990.0],["blizzard-night",630.0],["day-return",0.0]]:
 		game.sim.climate.seconds=float(setting[1]);game.outpost_view.sync(game.sim,.1,false)
 		await snap("lake-condition-"+str(setting[0]))
 		var weather: Dictionary=game.sim.climate.weather()
+		records[-1]["held_unrelated_animation_players"]=held_animations
 		records[-1]["hour"]=game.sim.climate.hour()
 		records[-1]["weather"]=weather
 		records[-1]["daylight"]=game.sim.climate.daylight()

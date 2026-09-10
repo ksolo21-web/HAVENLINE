@@ -79,7 +79,12 @@ func run():
 	root.add_child(game);game.set_process(false);game.set_physics_process(false)
 	for material in [game.outpost_view.ground_material,game.outpost_view.lake_material]:
 		check("Shader coast shares exact runtime lake centre and dimensions",material.get_shader_parameter("lake_center")==Surface.LAKE_CENTER and material.get_shader_parameter("lake_half")==Surface.LAKE_HALF)
-	check("Water triangles unchanged at 192",game.outpost_view.lake.mesh.get_faces().size()/3==192)
+	var faces: PackedVector3Array=game.outpost_view.lake.mesh.get_faces()
+	var short_edges:=true
+	for i in range(0,faces.size(),3):
+		for j in range(3):
+			short_edges=short_edges and faces[i+j].distance_to(faces[i+(j+1)%3])<.61
+	check("Single water surface uses short coherent triangles under 3000",short_edges and faces.size()/3>2000 and faces.size()/3<3000 and game.outpost_view.lake.mesh.get_surface_count()==1)
 	check("Approved tree count and native render scale unchanged",game.reference_forest_evidence.instances==586 and game.scene_view.scaling_3d_scale==1.)
 	game.outpost_audio.stop_all();await create_timer(.35).timeout;game.free();await process_frame
 	print(JSON.stringify({"suite":"T02_east_west_lake","checks":checks,"failures":failures,"passed":failures.is_empty(),"projection_samples":projections,"physical_4k60_verified":false,"independent_critic":false}))
