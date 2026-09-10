@@ -12,9 +12,14 @@ var current_radius := 4.5
 var current_heat := 1.0
 var furnace_node: Node3D
 var heat_light: OmniLight3D
+var material_debanding_enabled := false
 
 func configure(env: Environment, sun: DirectionalLight3D, furnace: Node3D, light: OmniLight3D, sim):
 	environment=env; sunlight=sun; furnace_node=furnace; heat_light=light
+	# Mobile precision dithering prevents visible bands in low-contrast water fog.
+	# Keep normal material lighting; no extra fullscreen blur or unlit fallback.
+	RenderingServer.material_set_use_debanding(true)
+	material_debanding_enabled=true
 	current_radius=sim.warmth()
 	current_heat=1.0 if sim.durability > 0 else 0.0
 	terrain=MeshInstance3D.new()
@@ -68,8 +73,6 @@ func sync(sim, dt: float, paused: bool):
 	ground_material.set_shader_parameter("snow_amount",weather.snow)
 	ground_material.set_shader_parameter("daylight_fill",daylight)
 	lake_material.set_shader_parameter("sim_time",sim.climate.seconds)
-	lake_material.set_shader_parameter("stable_ambient_color",environment.ambient_light_color)
-	lake_material.set_shader_parameter("stable_ambient_energy",environment.ambient_light_energy)
 	snow_material.set_shader_parameter("sim_time",sim.climate.seconds)
 	snow_material.set_shader_parameter("snow_amount",weather.snow)
 	snow_material.set_shader_parameter("wind",weather.wind)
@@ -105,5 +108,5 @@ func evidence(sim) -> Dictionary:
 		"water_y":Surface.WATER_Y,"lake_center":[Surface.LAKE_CENTER.x,Surface.LAKE_CENTER.y],
 		"lake_half":[Surface.LAKE_HALF.x,Surface.LAKE_HALF.y],
 		"lake_extent_x":[Surface.LAKE_CENTER.x-Surface.LAKE_HALF.x,Surface.LAKE_CENTER.x+Surface.LAKE_HALF.x],
-		"east_west_end_to_end":true,"shared_actor_surface":true,
+		"material_debanding_enabled":material_debanding_enabled,"east_west_end_to_end":true,"shared_actor_surface":true,
 		"native_4k60_certified":false}

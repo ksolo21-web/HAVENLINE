@@ -1,13 +1,7 @@
 shader_type spatial;
-render_mode diffuse_burley, specular_disabled, ambient_light_disabled;
-// One opaque bounded surface; no screen refraction or transparent depth sorting.
-// Native same-view diagnostics isolated the broad bands to the automatic ambient
-// term. Use the scene's uniform ambient color/energy explicitly for this flat
-// water surface. Direct sun/moon diffuse lighting and received shadows remain.
-// This is not an unshaded fallback or a fixed day/night-independent glow.
-uniform vec4 stable_ambient_color : source_color = vec4(.68,.76,.80,1.);
-uniform float stable_ambient_energy=0.38;
-// Saved simulation time keeps current/ripples coherent with pause/resume.
+render_mode diffuse_burley, specular_schlick_ggx;
+// Opaque bounded water avoids full-screen refraction and transparent depth sorting.
+// Runtime simulation time (not shader TIME) freezes coherently with pause/resume.
 uniform float sim_time=0.0;
 uniform vec2 lake_center=vec2(0.0,-13.85);
 uniform vec2 lake_half=vec2(15.2,1.85);
@@ -26,9 +20,8 @@ void fragment(){
  base+=vec3(.006,.022,.028)*caustic+vec3(.003,.012,.021)*stroke;
  float shoreline=exp(-pow((sd+.115)/.035,2.0));
  base=mix(base,vec3(.49,.87,.95),shoreline*.055);
- ALBEDO=pow(base,vec3(2.2));ROUGHNESS=.54;SPECULAR=0.;
- EMISSION=ALBEDO*stable_ambient_color.rgb*clamp(stable_ambient_energy,0.,1.);
- // Small analytic slopes retain calm, rounded ripples without moving the bank.
+ ALBEDO=pow(base,vec3(2.2));ROUGHNESS=.54;SPECULAR=.12;
+ // Small analytic slopes keep calm, rounded ripples without displacing the bank.
  NORMAL_MAP=normalize(vec3(cos(p.x*2.5+p.y*1.5+sim_time*.75)*.035,cos(p.x*-1.7+p.y*3.3-sim_time*.42)*.045,1.0))*.5+.5;
  NORMAL_MAP_DEPTH=.4;
 }
