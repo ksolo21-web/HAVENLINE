@@ -1,0 +1,158 @@
+name: Havenline T02 targeted unresolved-review completion
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-resolve-reviews.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  prepare-second-family:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: ~/.cache/havenline-t01-gemma
+          key: havenline-t01-gemma3-12b-qat-b10809-v1
+      - run: python3 -m pip install pyyaml
+      - name: Reuse the existing publisher-checksummed public runtime bootstrap
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          python3 - <<'PY'
+          import yaml,subprocess
+          from pathlib import Path
+          w=yaml.safe_load(Path('.github/workflows/havenline-task01-gemma-runtime.yml').read_text())
+          runs=[s['run'] for s in w['jobs']['prepare']['steps'] if 'run' in s]
+          assert len(runs)==1
+          subprocess.run(['bash','-euo','pipefail','-c',runs[0]],check=True)
+          PY
+      - uses: actions/cache/save@v4
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/havenline-t01-gemma
+          key: havenline-t01-gemma3-12b-qat-b10809-v1
+  complete-unscored-request:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 48
+    env:
+      REVIEW_ROLE: reference-fidelity
+      REVIEW_GROUP: workfloor
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-final-independent-evidence-34510062914
+          run-id: 34510062914
+          github-token: ${{ github.token }}
+          path: previous/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-finished-surface-evidence-34508687675
+          run-id: 34508687675
+          github-token: ${{ github.token }}
+          path: task02-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Finish the same previously timed-out request; no earlier numeric verdict exists
+        run: python3 -u tools/havenline/finish_task02_reviews.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T02-resolved-reference-fidelity-workfloor-${{ github.run_id }}
+          path: task02-review/
+          retention-days: 30
+          if-no-files-found: error
+  second-family-resolution:
+    needs: prepare-second-family
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        group: [tree-visibility, night-overview]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 48
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-final-independent-evidence-34510062914
+          run-id: 34510062914
+          github-token: ${{ github.token }}
+          path: previous/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-finished-surface-evidence-34508687675
+          run-id: 34508687675
+          github-token: ${{ github.token }}
+          path: task02-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-gemma
+          key: havenline-t01-gemma3-12b-qat-b10809-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Independent state-aware review with factual image recognition and unchanged scoring dimensions
+        run: python3 -u tools/havenline/finish_task02_reviews.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T02-resolved-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
+          path: task02-review/
+          retention-days: 30
+          if-no-files-found: error
+  assemble-reviews:
+    needs: [complete-unscored-request,second-family-resolution]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: T02-resolved-*-${{ github.run_id }}
+          path: review-resolution/new/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-final-independent-evidence-34510062914
+          run-id: 34510062914
+          github-token: ${{ github.token }}
+          path: review-resolution/prior/
+      - name: Preserve complete original and resolving evidence; task approval still requires final verification
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          out=Path('review-resolution');rows=[]
+          for p in sorted((out/'new').glob('*/review.json')):rows.append(json.loads(p.read_text()))
+          r={'task':'T02','source':'586604eb8ab6404fc8084b6853fd03cfa842d3af','new_reports':rows,'complete_new_coverage':len(rows)==5,'all_new_reports_passed':len(rows)==5 and all(x.get('passed') is True for x in rows),'original_raw_reports_preserved':True,'task_approved':False,'task3_started':False,'physical_4k60_verified':False}
+          (out/'resolution-summary.json').write_text(json.dumps(r,indent=2));print(json.dumps(r,indent=2))
+          raise SystemExit(0 if r['all_new_reports_passed'] else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-resolving-independent-evidence-${{ github.run_id }}
+          path: review-resolution/
+          retention-days: 30
+          if-no-files-found: error
+# No game/capture edits, lowering of thresholds, hand-written approval, Task3 or APK.
+# A second family resolves demonstrated factual contradictions, not a search for desired scores.
