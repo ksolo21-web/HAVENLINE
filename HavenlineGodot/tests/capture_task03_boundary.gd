@@ -18,14 +18,17 @@ func capture_gallery():
 	var north:Dictionary=gate("north-main")
 	focus_at(north.center,Vector3(0,7,9),7.3);await snap("north-gate-front")
 	focus_at(north.center,Vector3(0,7,-9),7.3);await snap("north-gate-rear")
-	var west:Dictionary=gate("west-work");focus_at(west.center,Vector3(-8,7,0),7.0);await snap("west-work-gate")
-	var east:Dictionary=gate("east-work");focus_at(east.center,Vector3(8,7,0),7.0);await snap("east-work-gate")
+	# Slightly oblique side-gate views expose the open leaves, grounded hinge
+	# posts and packed lane in one frame instead of flattening the gate head-on.
+	var west:Dictionary=gate("west-work");focus_at(west.center,Vector3(-7.5,6.2,4.8),6.3);await snap("west-work-gate")
+	var east:Dictionary=gate("east-work");focus_at(east.center,Vector3(7.5,6.2,4.8),6.3);await snap("east-work-gate")
 	for row in [["river--9.0","west"],["river-1.5","centre"],["river-10.0","east"]]:
 		var g:Dictionary=gate(row[0]);focus_at(g.center,Vector3(0,8,9),7.5);await snap("river-gate-"+String(row[1]))
 	for row in [[-8.0,"west"],[1.5,"centre"],[9.0,"east"]]:
 		var p:=Boundary.south_point(float(row[0]));focus_at(p,Vector3(0,7,9),7.4);await snap("south-fence-"+String(row[1]))
-	for row in [[Vector2(0,7.2),"central-spine-north"],[Vector2(0,2.4),"central-spine-centre"],[Boundary.bank_lane_point(1.5),"central-spine-river"]]:
+	for row in [[Vector2(0,7.2),"central-spine-north"],[Vector2(0,2.4),"central-spine-centre"]]:
 		normal_at(row[0]);await snap(String(row[1]))
+	focus_at(Boundary.bank_lane_point(1.5),Vector3(0,11,9),9.0);await snap("central-spine-river")
 	for row in [[Vector2(-9.4,2.4),"cross-lane-west"],[Vector2(0,2.25),"cross-lane-centre"],[Vector2(9.4,2.4),"cross-lane-east"]]:
 		normal_at(row[0]);await snap(String(row[1]))
 	for row in [[Boundary.SHELTER_WEST,"shelter-branch-west"],[Boundary.SHELTER_EAST,"shelter-branch-east"]]:
@@ -33,9 +36,9 @@ func capture_gallery():
 	for row in [[-9.0,"west"],[1.5,"centre"],[10.0,"east"]]:
 		normal_at(Boundary.bank_lane_point(float(row[0])));await snap("bank-lane-"+String(row[1]))
 	var panel:Dictionary=Boundary.panel_specs()[5]
-	focus_at(panel.mid,Vector3(0,4.2,5.3),4.7);await snap("fence-panel-detail")
-	focus_at(north.a,Vector3(-2.6,4.2,5.2),4.3);await snap("gate-post-detail")
-	focus_at(north.center,Vector3(0,4.8,5.6),5.0);await snap("open-gate-leaves-detail")
+	focus_at(panel.mid,Vector3(0,4.0,4.6),4.1);await snap("fence-panel-detail")
+	focus_at(north.a,Vector3(-1.8,3.5,4.6),3.7);await snap("gate-post-detail")
+	focus_at(north.center,Vector3(0,4.2,4.8),4.2);await snap("open-gate-leaves-detail")
 	normal_at(Vector2(0,7.0));await snap("gameplay-north-gate")
 	normal_at(Vector2(-10.4,2.4));await snap("gameplay-west-gate")
 	normal_at(Vector2(10.4,2.4));await snap("gameplay-east-gate")
@@ -52,13 +55,13 @@ func capture_native():
 	focus_at(Vector2(0,2.1),Vector3(0,36,.01),29.0);await snap("native-perimeter")
 	focus_at(Vector2(0,2.0),Vector3(21,30,27),25.0);await snap("native-camp-oblique")
 	var north:Dictionary=gate("north-main");focus_at(north.center,Vector3(0,7,9),7.3);await snap("native-north-gate")
-	for id_name in [["west-work","west"],["east-work","east"]]:
-		var g:Dictionary=gate(id_name[0]);focus_at(g.center,Vector3(-8 if id_name[1]=="west" else 8,7,0),7.0);await snap("native-side-gate-"+String(id_name[1]))
+	var west:Dictionary=gate("west-work");focus_at(west.center,Vector3(-7.5,6.2,4.8),6.3);await snap("native-side-gate-west")
+	var east:Dictionary=gate("east-work");focus_at(east.center,Vector3(7.5,6.2,4.8),6.3);await snap("native-side-gate-east")
 	for id_name in [["river--9.0","west"],["river-1.5","centre"],["river-10.0","east"]]:
 		var g:Dictionary=gate(id_name[0]);focus_at(g.center,Vector3(0,8,9),7.5);await snap("native-river-gate-"+String(id_name[1]))
 	focus_at(Boundary.south_point(1.5),Vector3(0,7,9),7.4);await snap("native-south-fence")
 	focus_at(Vector2(0,2.0),Vector3(0,31,.01),22.0);await snap("native-lane-network")
-	var panel:Dictionary=Boundary.panel_specs()[5];focus_at(panel.mid,Vector3(0,4.2,5.3),4.7);await snap("native-fence-detail")
+	var panel:Dictionary=Boundary.panel_specs()[5];focus_at(panel.mid,Vector3(0,4.0,4.6),4.1);await snap("native-fence-detail")
 
 func run():
 	DirAccess.make_dir_recursive_absolute(output)
