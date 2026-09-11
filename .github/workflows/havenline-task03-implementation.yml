@@ -75,6 +75,7 @@ jobs:
           path: task03-mechanical/
           retention-days: 30
           if-no-files-found: error
-# Retry 2 restores the inherited audio fixture required by test_outpost.
-# Task 3 geometry remains unchanged; no previous regression is skipped.
+# Retry 3 keeps the T02 river shader regression meaningful after T03 extends
+# the existing authored vertex payload from RG to RGB for the lane-distance mask.
+# No river geometry or Task 3 geometry changed to satisfy the regression.
 # Mechanical gate only. No visual approval, APK handoff or physical-device claim.
