@@ -29,19 +29,20 @@ jobs:
       - run: python3 -m pip install 'gradio_client==1.14.0' pillow
       - name: Retry the reference role that previously returned zero verdicts
         run: python3 -u tools/havenline/review_task03_reference_retry.py
-      - name: Require all ten reference-fidelity groups at 9+
+      - name: Require all eleven reference-fidelity groups at 9+
         run: |
           python3 - <<'PY'
           from pathlib import Path
           import json
           o=json.loads(Path('task03-reference-retry/role-summary.json').read_text())
           assert o['role']=='reference-fidelity' and o['source']=='8dc19649160597f2926ad5bacbccc26ad01ab48f'
-          assert len(o['reviews'])==10 and o['passed'] is True
+          assert len(o['reviews'])==11 and o['passed'] is True
+          assert {r['group'] for r in o['reviews']}=={'perimeter','north-gate','side-gates','river-gates','south-fence','central-lane','cross-shelter-lanes','bank-lane','detail-contact','gameplay','conditions'}
           for r in o['reviews']:
             assert r['independent_execution'] is True and r['passed'] is True
             assert r['review']['defects']==[] and r['review']['coverage_complete'] is True and r['review']['confidence']!='low'
             assert min(r['review']['scores'].values())>=9.0
-          print(json.dumps({'passed':True,'groups':10,'first_attempt_scored_groups':0}))
+          print(json.dumps({'passed':True,'groups':11,'first_attempt_scored_groups':0}))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
@@ -51,3 +52,4 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 # The first reference-fidelity execution returned zero verdicts. This retry does not replace a low score and does not alter game source.
+# T03 has eleven mandatory evidence groups per role; all eleven are required here.
