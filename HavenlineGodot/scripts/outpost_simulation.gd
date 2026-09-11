@@ -28,23 +28,24 @@ func _migrate_world_layout():
 	for key in ["survivor","forestGate"]:
 		var raw:Array=contract.world[key];var q:=_bounded_dry(point(raw),0.50)
 		contract.world[key]=_array_point(q,float(raw[1]))
-	for kind in ["wood","stone"]:
-		var relocated:Array=[]
-		for raw in contract.world[kind+"Nodes"]:
+	for kind_value in ["wood","stone"]:
+		var kind:String=String(kind_value);var nodes_key:String=kind+"Nodes";var relocated:Array=[]
+		for raw in contract.world[nodes_key]:
 			var q:=_bounded_dry(point(raw),0.55);relocated.append(_array_point(q,float(raw[1])))
-		contract.world[kind+"Nodes"]=relocated
-	for kind in ["metal","fuel"]:
-		var key:=kind+"Node";var raw:Array=contract.world[key]
+		contract.world[nodes_key]=relocated
+	for kind_value in ["metal","fuel"]:
+		var kind:String=String(kind_value);var key:String=kind+"Node";var raw:Array=contract.world[key]
 		var q:=_bounded_dry(point(raw),0.55);contract.world[key]=_array_point(q,float(raw[1]))
 	# BaseSimulation built resource/defense records before this subclass migration.
 	for resource in resources:
-		if resource.kind in ["wood","stone"]:
-			var index:=int(String(resource.id).trim_prefix(resource.kind))
-			resource.position=point(contract.world[resource.kind+"Nodes"][index])
+		var resource_kind:String=String(resource.kind)
+		if resource_kind in ["wood","stone"]:
+			var index:=int(String(resource.id).trim_prefix(resource_kind))
+			resource.position=point(contract.world[resource_kind+"Nodes"][index])
 		else:
-			resource.position=point(contract.world[resource.kind+"Node"])
+			resource.position=point(contract.world[resource_kind+"Node"])
 	for side in defenses:
-		defenses[side].position=point(contract.world[side+"Barricade"])
+		defenses[side].position=point(contract.world[String(side)+"Barricade"])
 	position=_bounded_dry(position,River.DEFAULT_DRY_MARGIN)
 	for c in companions:c.position=_bounded_dry(c.position,River.DEFAULT_DRY_MARGIN)
 
@@ -101,8 +102,6 @@ func restore(state: Dictionary) -> bool:
 	if not verifier.restore(state): return false
 	if not super.restore(state): return false
 	climate = clock
-	# super.restore may load lake-era positions and old resource records. Project
-	# every actor/resource/defense back onto the same authored river geometry.
 	_migrate_world_layout()
 	constrain_shoreline()
 	return true
