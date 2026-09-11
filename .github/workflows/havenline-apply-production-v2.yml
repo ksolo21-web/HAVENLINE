@@ -25,6 +25,9 @@ jobs:
           tar -tzf /tmp/havenline-v2.tar.gz | tee /tmp/havenline-v2-members.txt
           ! grep -Ev '^(AGENTS\.md|Docs/Production/|tools/havenline/production/|HavenlineGodot/tests/production_(capture_harness|motion_capture)\.gd$)' /tmp/havenline-v2-members.txt
           tar -xzf /tmp/havenline-v2.tar.gz -C .
+          # Payload bytes were locally validated; normalize four Markdown blank-bullet
+          # trailing spaces so the repository's strict git diff whitespace gate stays intact.
+          sed -i 's/[[:space:]]*$//' Docs/Production/TASK_PACKET_TEMPLATE.md
       - name: Validate the extracted migration before committing
         run: |
           set -euo pipefail
