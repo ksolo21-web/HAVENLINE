@@ -60,7 +60,11 @@ func run():
 	check("Legacy wet saves across both banks preserve state/side and recover above water",legacy_ok)
 	var ground:=FileAccess.get_file_as_string("res://shaders/outpost_snow.gdshader");var water:=FileAccess.get_file_as_string("res://shaders/lakeshore_water.gdshader")
 	check("Ground edge coverage still uses derivative antialiasing",ground.contains("fwidth(d)"))
-	check("Ground shader reads authored river distance from terrain vertices",ground.contains("authored_distance=COLOR.rg*8.-4."))
+	# T03 extends the accepted T02 COLOR.rg payload with COLOR.b for the work-lane
+	# mask. The river regression still requires shore distance to remain channel X.
+	var authored_rgb:=ground.contains("authored_distance=COLOR.rgb*8.-4.") and ground.contains("float shore=authored_distance.x;")
+	var authored_rg:=ground.contains("authored_distance=COLOR.rg*8.-4.") and ground.contains("float shore=authored_distance.x;")
+	check("Ground shader reads authored river distance from terrain vertices",authored_rgb or authored_rg)
 	check("River has no refraction backbuffer, alpha pass or unshaded fallback",not water.contains("hint_screen_texture") and not water.contains("ALPHA") and not water.contains("unshaded"))
 	var banks:=true
 	for x_value in [-30.0,-24.0,-17.0,-10.0,-3.0,4.0,11.0,19.0,25.0,30.0]:
