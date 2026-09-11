@@ -45,17 +45,18 @@ void fragment(){
  float warmth=(1.-smoothstep(warmth_radius-.4,warmth_radius+.12,dist))*heat_strength;
  floor=mix(floor,floor+vec3(.025,.012,0.),warmth*.42);
  vec3 material=mix(snow,floor,cleared);
- // T03 lanes are compressed/worn material inside the SAME terrain surface.
- // In snowy bank areas they read as cool packed snow; on the warm workfloor
- // they become a slightly darker, calmer peach track rather than a floating path.
+ // T03 lanes remain compressed/worn material in the SAME terrain surface.
+ // The first pass was too subtle on the warm camp floor. This revision raises
+ // value separation while retaining soft edges/noisy material variation so the
+ // paths read as natural wear rather than painted stripes or floating planes.
  float lane_aa=max(fwidth(lane)*.8,.025);
  float lane_mask=1.-smoothstep(-.05-lane_aa,.16+lane_aa,lane);
- vec3 packed_snow=mix(vec3(.79,.87,.94),vec3(.83,.89,.95),broad*.5+.5);
- vec3 packed_floor=floor*.84+vec3(.035,.018,.012);
+ vec3 packed_snow=mix(vec3(.72,.82,.91),vec3(.79,.86,.93),broad*.5+.5);
+ vec3 packed_floor=floor*.72+vec3(.060,.034,.024);
  vec3 packed=mix(packed_snow,packed_floor,cleared);
- material=mix(material,packed,lane_mask*.62);
- float lane_edge=(1.-smoothstep(.08,.28,abs(lane)))*smoothstep(-.08,.02,abs(lane));
- material=mix(material,material+vec3(.018,.012,.008),lane_edge*.18);
+ material=mix(material,packed,lane_mask*.78);
+ float lane_edge=(1.-smoothstep(.08,.30,abs(lane)))*smoothstep(-.08,.02,abs(lane));
+ material=mix(material,material*.955,lane_edge*.34);
  float ice=1.-smoothstep(-.12,.035,shore);
  material=mix(material,vec3(.37,.67,.84),ice*.35);
  ALBEDO=pow(clamp(material,vec3(0.),vec3(1.)),vec3(2.2));
