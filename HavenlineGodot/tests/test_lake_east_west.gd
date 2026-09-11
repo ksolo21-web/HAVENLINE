@@ -6,8 +6,11 @@ const River=preload("res://scripts/river_geometry.gd")
 const Sim=preload("res://scripts/outpost_simulation.gd")
 const Main=preload("res://scripts/main.gd")
 const Forest=preload("res://scripts/reference_forest.gd")
-var checks:Array=[];var failures:Array=[]
-func check(name:String,passed:bool):checks.append({"name":name,"passed":passed});failures.append(name) if not passed else null
+var checks:Array=[]
+var failures:Array=[]
+func check(name:String,passed:bool):
+	checks.append({"name":name,"passed":passed})
+	if not passed:failures.append(name)
 func _initialize():call_deferred("run")
 func run():
 	check("Historical test now targets the map-spanning river contract",River.LAYOUT_VERSION=="river_v1_mapspan")
@@ -29,8 +32,8 @@ func run():
 			sim.inventory.wood=4321+cases;sim.stored.stone=7654+cases
 			var old_state:Dictionary=sim.snapshot();old_state.erase("river_layout_version");var restored=Sim.new();cases+=1
 			migrated=migrated and restored.restore(old_state) and restored.inventory.wood==4321+cases-1 and restored.stored.stone==7654+cases-1
-			var rq:Dictionary=River.query(restored.position);migrated=migrated and float(rq.side)==side and float(rq.shore_distance)>=River.DEFAULT_DRY_MARGIN-.002
-	check("Lake-era saves on either future bank migrate without inventory loss",migrated)
+			var rq:Dictionary=River.query(restored.position);migrated=migrated and float(rq.side)==side and float(rq.shore_distance)>=River.DEFAULT_DRY_MARGIN-.002 and Surface.height_at(restored.position)>Surface.WATER_Y+.05
+	check("Lake-era saves on either future bank migrate without inventory loss and above water",migrated)
 	var trees_dry:=true
 	for tree_value in Forest.placements(Vector2(14.2,16.2)):
 		var tree:Dictionary=tree_value;trees_dry=trees_dry and River.shore_distance(tree.point)>.4 and Surface.height_at(tree.point)>Surface.WATER_Y
@@ -45,5 +48,5 @@ func run():
 	check("River is a single local-triangle surface, not the former stretched lake",short_edges and faces.size()/3>5000 and faces.size()/3<7000 and game.outpost_view.lake.mesh.get_surface_count()==1)
 	check("Approved tree count and native render scale stay unchanged",game.reference_forest_evidence.instances==586 and game.scene_view.scaling_3d_scale==1.0)
 	game.outpost_audio.stop_all();await create_timer(.35).timeout;game.free();await process_frame
-	print(JSON.stringify({"suite":"T02_lake_era_to_river_compatibility","checks":checks,"failures":failures,"passed":failures.is_empty(),"legacy_cases":cases,"physical_4k60_verified":false,"independent_critic":false}))
+	print(JSON.stringify({"suite":"T02_lake_era_to_river_compatibility","checks":checks,"failures":failures,"passed":failures.is_empty(),"legacy_cases":cases,"gameplay_dry_margin":River.DEFAULT_DRY_MARGIN,"physical_4k60_verified":false,"independent_critic":false}))
 	quit(0 if failures.is_empty() else 1)
