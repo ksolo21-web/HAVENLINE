@@ -3,6 +3,7 @@ const Climate = preload("res://scripts/outpost_climate.gd")
 const PopulationSimulation = preload("res://scripts/population_simulation.gd")
 const Terrain = preload("res://scripts/outpost_surface.gd")
 const River = preload("res://scripts/river_geometry.gd")
+const RESOURCE_RIVER_MARGIN := River.DEFAULT_DRY_MARGIN+0.05
 const STRUCTURE_RIVER_MARGIN := River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER+River.BUILD_SETBACK+0.10
 var climate = Climate.new()
 
@@ -11,7 +12,9 @@ static func _array_point(p: Vector2, y:=0.0) -> Array:
 
 func _bounded_dry(p: Vector2, margin: float) -> Vector2:
 	var q:=p
-	for _iteration in range(3):
+	# River.dry_position itself converges; repeat after movement-bound clamping so
+	# no current-map edge can push a recovered point back onto the wet slope.
+	for _iteration in range(5):
 		q=Terrain.land_position(q,margin)
 		q.x=clampf(q.x,-float(contract.world.boundX),float(contract.world.boundX))
 		q.y=clampf(q.y,-float(contract.world.boundZ),float(contract.world.boundZ))
@@ -40,16 +43,16 @@ func _migrate_world_layout():
 		var q:=_protected_structure_position(key,point(raw))
 		contract.world[key]=_array_point(q,float(raw[1]))
 	for key_value in ["survivor","forestGate"]:
-		var key:String=String(key_value);var raw:Array=contract.world[key];var q:=_bounded_dry(point(raw),0.50)
+		var key:String=String(key_value);var raw:Array=contract.world[key];var q:=_bounded_dry(point(raw),RESOURCE_RIVER_MARGIN)
 		contract.world[key]=_array_point(q,float(raw[1]))
 	for kind_value in ["wood","stone"]:
 		var kind:String=String(kind_value);var nodes_key:String=kind+"Nodes";var relocated:Array=[]
 		for raw in contract.world[nodes_key]:
-			var q:=_bounded_dry(point(raw),0.55);relocated.append(_array_point(q,float(raw[1])))
+			var q:=_bounded_dry(point(raw),RESOURCE_RIVER_MARGIN);relocated.append(_array_point(q,float(raw[1])))
 		contract.world[nodes_key]=relocated
 	for kind_value in ["metal","fuel"]:
 		var kind:String=String(kind_value);var key:String=kind+"Node";var raw:Array=contract.world[key]
-		var q:=_bounded_dry(point(raw),0.55);contract.world[key]=_array_point(q,float(raw[1]))
+		var q:=_bounded_dry(point(raw),RESOURCE_RIVER_MARGIN);contract.world[key]=_array_point(q,float(raw[1]))
 	for resource in resources:
 		var resource_kind:String=String(resource.kind)
 		if resource_kind in ["wood","stone"]:
