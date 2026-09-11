@@ -11,7 +11,9 @@ def digest(path:pathlib.Path)->str:
 
 def main():
     cfg=load_json(DOCS/'CRITIC_EXECUTION.json')['local_independent_runtime'];cache=pathlib.Path(os.path.expanduser(cfg['cache_path']));m=json.loads((cache/'manifest.json').read_text())
-    assert m['publisher']==cfg['provider'] and m['base_model']==cfg['base_model']
+    assert m.get('publisher')==cfg['provider'] and m.get('base_model')==cfg['base_model']
+    assert m.get('revision')==cfg['model_revision'],(m.get('revision'),cfg['model_revision'])
+    assert m.get('runtime_release')=='b10809',m.get('runtime_release')
     for item in m['files']:assert digest(cache/item['filename'])==item['sha256']
     servers=list((cache/'runtime').rglob('llama-server'));assert len(servers)==1;server=servers[0];env=dict(os.environ);env['LD_LIBRARY_PATH']=str(server.parent)+':'+env.get('LD_LIBRARY_PATH','')
     log=open('specialist-runtime-smoke.log','w');cmd=[str(server),'-m',str(cache/m['model_file']),'--mmproj',str(cache/m['projector_file']),'--host','127.0.0.1','--port','8080','-c','2048','-t','4','-tb','4','-ngl','0','--no-mmproj-offload','--parallel','1','--jinja']
@@ -29,7 +31,7 @@ def main():
         req=urllib.request.Request('http://127.0.0.1:8080/v1/chat/completions',data=json.dumps(body).encode(),headers={'Content-Type':'application/json'},method='POST')
         with urllib.request.urlopen(req,timeout=300) as r:raw=json.load(r)
         parsed=json.loads(raw['choices'][0]['message']['content']);assert raw['choices'][0]['finish_reason']=='stop' and parsed=={'runtime_ready':True,'token':'havenline-specialist-v1'}
-        result={'passed':True,'provider':m['publisher'],'base_model':m['base_model'],'publisher_revision':m.get('revision'),'runtime_release':m.get('runtime_release'),'all_cached_files_hash_verified':True,'response':parsed}
+        result={'passed':True,'provider':m['publisher'],'base_model':m['base_model'],'publisher_revision_expected':cfg['model_revision'],'publisher_revision_actual':m.get('revision'),'runtime_release':m.get('runtime_release'),'all_cached_files_hash_verified':True,'response':parsed}
         pathlib.Path('specialist-runtime-smoke.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
     finally:
         proc.terminate()
