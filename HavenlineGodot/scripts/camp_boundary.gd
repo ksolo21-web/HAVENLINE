@@ -13,8 +13,12 @@ const RIVER_GATE_HALF := 1.7
 const COLLISION_RADIUS := 0.32
 const PANEL_TARGET := 2.72
 const PANEL_SOURCE_LENGTH := 2.95
-const GATE_LEAF_LENGTH := 0.92
-const GATE_OPEN_ANGLE := 1.28
+# T03 polish revision: the prior .92-unit leaves were physically present but
+# too short to read unmistakably as opened gates from normal oblique views.
+# Gate openings/collision widths remain unchanged; only the authored open-leaf
+# presentation becomes more legible.
+const GATE_LEAF_LENGTH := 1.35
+const GATE_OPEN_ANGLE := 1.18
 const SOUTH_FENCE_MARGIN := River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER+River.BUILD_SETBACK
 const LANE_HALF := 1.30
 const BANK_LANE_MARGIN := River.DEFAULT_DRY_MARGIN+0.55
