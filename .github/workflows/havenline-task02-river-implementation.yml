@@ -49,7 +49,7 @@ jobs:
           path: river-evidence/
           retention-days: 30
           if-no-files-found: error
-# Retry 6: all river geometry checks reached execution; only the centre crossing
-# reserve conflicted with the old x=0 barricade layout. Runtime migration now
-# keeps those progression structures on the same bank outside all reserves.
+# Retry 7: reserve clearing passed; curved projection undershot the locked build
+# setback by 0.0015 units. Permanent structures now carry a disclosed 0.10-unit
+# safety buffer beyond that minimum. River/bank geometry is unchanged.
 # Earlier failures remain preserved. No critic score or task approval here.
