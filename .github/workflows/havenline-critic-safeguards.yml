@@ -49,14 +49,27 @@ jobs:
           if-no-files-found: error
   independent-runtime-smoke:
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 85
     steps:
       - uses: actions/checkout@v4
       - uses: actions/cache/restore@v4
+        id: reviewer-cache
         with:
           path: ~/.cache/havenline-t01-qwen35
           key: havenline-t01-qwen35-9b-q5-20260908-v1
-          fail-on-cache-miss: true
+      - name: Self-heal exact reviewer runtime if cache is unavailable on this branch
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py | tee specialist-runtime-preparation.json
+      - uses: actions/cache/save@v4
+        if: steps.reviewer-cache.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
       - name: Start checksum-pinned local independent reviewer and require structured response
         run: python3 -u tools/havenline/production/specialist_runtime_smoke.py
       - uses: actions/upload-artifact@v4
@@ -64,6 +77,7 @@ jobs:
         with:
           name: havenline-specialist-runtime-smoke-${{ github.run_id }}
           path: |
+            specialist-runtime-preparation.json
             specialist-runtime-smoke.json
             specialist-runtime-smoke.log
           retention-days: 30
@@ -78,7 +92,7 @@ jobs:
           test '${{ needs.deterministic-safeguards.result }}' = success
           test '${{ needs.independent-runtime-smoke.result }}' = success
           cat > readiness.json <<EOF
-          {"candidate":"${GITHUB_SHA}","deterministic_safeguards":"PASS","independent_local_model_runtime":"PASS","critics_C1_through_C11":"OPERATIONAL","future_runtime_tasks_started":false}
+          {"candidate":"${GITHUB_SHA}","deterministic_safeguards":"PASS","independent_local_model_runtime":"PASS","self_healing_cache":"PASS","critics_C1_through_C11":"OPERATIONAL","future_runtime_tasks_started":false}
           EOF
       - uses: actions/upload-artifact@v4
         with:
