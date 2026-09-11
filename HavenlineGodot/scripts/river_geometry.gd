@@ -7,7 +7,9 @@ const WET_EDGE := 0.30
 const BANK_RUN := 0.70
 const SNOW_SHOULDER := 0.45
 const BUILD_SETBACK := 1.60
-const DEFAULT_DRY_MARGIN := 0.32
+# Gameplay-dry begins just beyond the raised bank crest, not merely outside the
+# water polygon. This prevents actors/resources from standing on submerged slope.
+const DEFAULT_DRY_MARGIN := WET_EDGE+BANK_RUN+0.05
 const LAYOUT_VERSION := "river_v1_mapspan"
 const ANCHORS := [
 	Vector2(-31.0,-8.6), Vector2(-24.0,-7.2), Vector2(-17.0,-9.0),
@@ -93,10 +95,20 @@ static func is_water(p: Vector2, extra_margin:=0.0) -> bool:
 
 static func dry_position(p: Vector2, margin:=DEFAULT_DRY_MARGIN) -> Vector2:
 	if not p.is_finite(): return Vector2.ZERO
-	var q:=query(p);var target:=float(q.half_width)+maxf(margin,0.0)
-	if absf(float(q.lateral))>=target: return p
-	var side:=float(q.side)
-	return Vector2(q.center)+Vector2(q.north_normal)*target*side
+	var target_margin:=maxf(margin,0.0)
+	var original:=query(p)
+	if float(original.shore_distance)>=target_margin: return p
+	var side:=float(original.side)
+	var result:=p
+	# Curvature means one normal projection can land microscopically inside the
+	# target when queried again. Iterate to a stable same-side solution so every
+	# caller gets an idempotent position from this authoritative geometry API.
+	for _iteration in range(6):
+		var q:=query(result)
+		if float(q.shore_distance)>=target_margin-.0005: return result
+		var target:=float(q.half_width)+target_margin+.001
+		result=Vector2(q.center)+Vector2(q.north_normal)*target*side
+	return result
 
 static func protected_build_position(p: Vector2) -> Vector2:
 	return dry_position(p,WET_EDGE+BANK_RUN+SNOW_SHOULDER+BUILD_SETBACK)
@@ -134,4 +146,5 @@ static func evidence() -> Dictionary:
 		min_width=minf(min_width,float(row.width));max_width=maxf(max_width,float(row.width))
 	return {"layout_version":LAYOUT_VERSION,"terrain_extent_x":[-TERRAIN_HALF,TERRAIN_HALF],
 		"anchors":ANCHORS,"anchor_widths":WIDTHS,"crossing_reserves_x":CROSSING_X,
-		"minimum_width":min_width,"maximum_width":max_width,"water_y":WATER_Y}
+		"minimum_width":min_width,"maximum_width":max_width,"water_y":WATER_Y,
+		"gameplay_dry_margin":DEFAULT_DRY_MARGIN}
