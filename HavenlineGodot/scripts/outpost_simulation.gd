@@ -3,6 +3,7 @@ const Climate = preload("res://scripts/outpost_climate.gd")
 const PopulationSimulation = preload("res://scripts/population_simulation.gd")
 const Terrain = preload("res://scripts/outpost_surface.gd")
 const River = preload("res://scripts/river_geometry.gd")
+const STRUCTURE_RIVER_MARGIN := River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER+River.BUILD_SETBACK+0.10
 var climate = Climate.new()
 
 static func _array_point(p: Vector2, y:=0.0) -> Array:
@@ -17,23 +18,21 @@ func _bounded_dry(p: Vector2, margin: float) -> Vector2:
 	return q
 
 func _protected_structure_position(key: String, p: Vector2) -> Vector2:
-	var q:Vector2=River.protected_build_position(p)
-	# Bridge/crossing corridors are intentionally empty in T02. The old contract
-	# placed both barricades on x=0, inside the new centre crossing reserve. Keep
-	# each barricade on its original river side but move it laterally along that
-	# bank. Prices, health, names and wave gates are untouched.
-	if River.crossing_reserved(q):
+	# First evaluate the exact locked minimum to determine whether the historical
+	# point would obstruct a reserved crossing. Then place it 0.10 farther out to
+	# absorb curved-projection float error; the authored 1.60 setback is unchanged.
+	var minimum:Vector2=River.protected_build_position(p)
+	var q:Vector2=River.dry_position(p,STRUCTURE_RIVER_MARGIN)
+	if River.crossing_reserved(minimum):
 		var reserved_safe_x:=p.x
 		if key=="northBarricade": reserved_safe_x=-5.0
 		elif key=="southBarricade": reserved_safe_x=5.0
 		elif key=="leftTent": reserved_safe_x=-6.0
 		elif key=="rightTent": reserved_safe_x=6.0
-		q=River.protected_build_position(Vector2(reserved_safe_x,p.y))
-	return _bounded_dry(q,River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER+River.BUILD_SETBACK)
+		q=River.dry_position(Vector2(reserved_safe_x,p.y),STRUCTURE_RIVER_MARGIN)
+	return _bounded_dry(q,STRUCTURE_RIVER_MARGIN)
 
 func _migrate_world_layout():
-	# The source JSON remains immutable. Runtime locations that conflict with the
-	# new river move to the nearest same-side dry bank; economic state is kept.
 	contract=contract.duplicate(true)
 	tuning=contract.openingLoopTuning
 	for key_value in ["leftTent","rightTent","northBarricade","southBarricade"]:
@@ -51,7 +50,6 @@ func _migrate_world_layout():
 	for kind_value in ["metal","fuel"]:
 		var kind:String=String(kind_value);var key:String=kind+"Node";var raw:Array=contract.world[key]
 		var q:=_bounded_dry(point(raw),0.55);contract.world[key]=_array_point(q,float(raw[1]))
-	# BaseSimulation built resource/defense records before this subclass migration.
 	for resource in resources:
 		var resource_kind:String=String(resource.kind)
 		if resource_kind in ["wood","stone"]:
