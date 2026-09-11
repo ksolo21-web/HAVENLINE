@@ -1,0 +1,22 @@
+{
+  "schema_version":1,
+  "universal_baseline":["test_simulation","test_crew_and_persistence","test_outpost_runtime"],
+  "approved_task_suites":{
+    "T01":["test_reference_forest","test_reference_forest_acceptance","audit_task01_geometry.py"],
+    "T02":["test_task02_terrain","test_task02_surface_stress","test_lake_east_west","test_task02_river"],
+    "T03":["test_task03_boundary"]
+  },
+  "impact_rules":[
+    {"glob":"HavenlineGodot/assets/reference_forest/**","tasks":["T01","T02","T03"]},
+    {"glob":"HavenlineGodot/scripts/reference_forest.gd","tasks":["T01","T02","T03"]},
+    {"glob":"HavenlineGodot/scripts/river_geometry.gd","tasks":["T02","T03"]},
+    {"glob":"HavenlineGodot/scripts/outpost_surface.gd","tasks":["T02","T03"]},
+    {"glob":"HavenlineGodot/shaders/outpost_snow.gdshader","tasks":["T02","T03"]},
+    {"glob":"HavenlineGodot/scripts/camp_boundary*.gd","tasks":["T03"]},
+    {"glob":"HavenlineGodot/scripts/main.gd","tasks":["T01","T02","T03"]},
+    {"glob":"HavenlineGodot/scripts/outpost_simulation.gd","tasks":["T02","T03"]},
+    {"glob":"HavenlineGodot/scripts/outpost_view.gd","tasks":["T01","T02","T03"]},
+    {"glob":"HavenlineGodot/project.godot","tasks":["T01","T02","T03"]}
+  ],
+  "rule":"Run universal baseline plus every suite belonging to each impacted approved/active task. New task-specific suites are always added by its task packet. Integration owner may add regressions but may not omit an impact-selected mandatory suite without recorded disposition."
+}
