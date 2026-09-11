@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "purpose": "Prevent visually strong tasks from consuming unsustainable full-game resources. Budgets are early guardrails, not substitutes for T68/T69 physical certification.",
+  "global_targets": {
+    "native_internal_resolution_minimum":"3840x2160 where existing release contract requires",
+    "render_scale":1.0,
+    "final_physical_device_fps_minimum":60,
+    "final_certification_tasks":["T68","T69"],
+    "task_budget_rule":"Any task exceeding its assigned budget or materially regressing an approved baseline fails G8 until fixed or explicitly re-budgeted by the integration owner with evidence."
+  },
+  "tracked_metrics":["triangles","draw_calls","materials","texture_memory_mb","shader_complexity","cpu_frame_ms","gpu_frame_ms","physics_bodies","physics_step_cost_ms","active_animation_cost_ms","npc_companion_population","memory_mb","storage_download_mb"],
+  "baseline_records": {
+    "T01":{"forest_instances":586,"visible_draw_calls_observed":[36,52],"submitted_primitives_observed":[429989,460309],"note":"software-renderer workload evidence only"},
+    "T02":{"protected_forest_instances":586,"native_capture_scale":1.0,"note":"exact current river candidate must preserve accepted T01/T02 workload unless impact evidence justifies change"},
+    "T03":{"current_functional_suites":16,"current_total_checks":807,"current_source_bound_images":61,"native4k_images":11}
+  },
+  "subsystem_reservations": {
+    "environment_and_regions":{"share_of_full_scene_budget_percent":30,"focus":["triangles","draw_calls","materials","texture_memory_mb","shader_complexity"]},
+    "characters_companions_crowds":{"share_of_full_scene_budget_percent":25,"focus":["triangles","active_animation_cost_ms","npc_companion_population","memory_mb"]},
+    "production_props_and_world_transformation":{"share_of_full_scene_budget_percent":15,"focus":["draw_calls","materials","physics_bodies","cpu_frame_ms"]},
+    "gameplay_simulation_ai":{"share_of_cpu_budget_percent":20,"focus":["cpu_frame_ms","physics_step_cost_ms","npc_companion_population"]},
+    "ui_liveops_services":{"share_of_cpu_memory_budget_percent":10,"focus":["cpu_frame_ms","memory_mb","storage_download_mb"]}
+  },
+  "per_candidate_required_fields": ["candidate_commit","scene_state","renderer","resolution","render_scale","triangles_or_primitives","draw_calls","materials","memory_if_measurable","cpu_frame_time_if_measurable","gpu_frame_time_if_measurable","physics_bodies_if_applicable","animation_population_if_applicable","comparison_baseline","regression_disposition"],
+  "rules": [
+    "Do not silently lower resolution or count upscaling as native 4K.",
+    "Software/emulator captures may detect regressions but do not certify device thermals or sustained FPS.",
+    "A task can fail G8 even when C1/C2 visual scores are excellent.",
+    "Budget exceptions require integration-owner approval, measured impact, and an explicit downstream offset plan."
+  ]
+}
