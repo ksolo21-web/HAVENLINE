@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "integration_branch": "codex/havenline-sequential-task-01",
+  "rules": {
+    "no_overlapping_active_ownership": true,
+    "foreign_owned_path_action": "CREATE_CHANGE_REQUEST",
+    "stale_base_requires_reconcile": true,
+    "shared_integration_paths_are_integration_owner_only": true
+  },
+  "shared_integration_owner_only": [
+    "HavenlineGodot/scripts/main.gd",
+    "HavenlineGodot/scripts/outpost_view.gd",
+    "HavenlineGodot/scripts/outpost_simulation.gd",
+    "HavenlineGodot/scripts/outpost_surface.gd",
+    "HavenlineGodot/data/reference-contract.json",
+    "HavenlineGodot/project.godot",
+    "Docs/Production/task-gates.json",
+    "Docs/Production/WORKSTREAM_REGISTRY.json",
+    "Docs/Production/DEPENDENCY_GRAPH.json",
+    "Docs/Production/PATH_OWNERSHIP.json"
+  ],
+  "protected_approved": {
+    "T01":["HavenlineGodot/assets/reference_forest/**","HavenlineGodot/scripts/reference_forest.gd"],
+    "T02":["HavenlineGodot/scripts/river_geometry.gd","Docs/Production/T02/RIVER_LAYOUT_SPEC.md"]
+  },
+  "active_ownership": {
+    "T03":[
+      "HavenlineGodot/scripts/camp_boundary.gd",
+      "HavenlineGodot/scripts/camp_boundary_view.gd",
+      "HavenlineGodot/shaders/outpost_snow.gdshader",
+      "HavenlineGodot/tests/test_task03_boundary.gd",
+      "HavenlineGodot/tests/capture_task03_boundary.gd",
+      "tools/havenline/review_task03_local_reference.py"
+    ],
+    "GOV-V2":["Docs/Production/**","tools/havenline/production/**"]
+  },
+  "wave_1_reservations_after_T03_approval": {
+    "T04": ["HavenlineGodot/scripts/camera/**","HavenlineGodot/tests/task04/**","Docs/Production/Evidence/T04/**"],
+    "T05": ["HavenlineGodot/assets/production_stations/**","HavenlineGodot/scripts/stations/**","HavenlineGodot/tests/task05/**","Docs/Production/Evidence/T05/**"],
+    "T06": ["HavenlineGodot/assets/character1_motion/**","HavenlineGodot/scripts/character1/**","HavenlineGodot/tests/task06/**","Docs/Production/Evidence/T06/**"],
+    "QA": ["tools/havenline/production/**","Docs/Production/Evidence/QA/**"]
+  },
+  "change_request_schema": {
+    "requesting_task":"string",
+    "target_path":"string",
+    "requested_change":"string",
+    "reason":"string",
+    "dependency":"string_or_null",
+    "expected_behavior":"string",
+    "tests_required":["string"]
+  }
+}
