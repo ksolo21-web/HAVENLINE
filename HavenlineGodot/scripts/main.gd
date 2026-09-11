@@ -1,6 +1,6 @@
 extends Control
 
-const ENVIRONMENT_REVISION := "0.4.5-environment-candidate"
+const ENVIRONMENT_REVISION := "0.5.0-task03-boundary"
 var scenery_instances: Array[GeometryInstance3D] = []
 var scenery_origins: Array[Vector3] = []
 var scenery_heights: Array[float] = []
@@ -22,6 +22,8 @@ const Saves = preload("res://scripts/save_store.gd")
 const Scenery = preload("res://scripts/scenery_batch.gd")
 const ReferenceForest = preload("res://scripts/reference_forest.gd")
 var reference_forest_evidence: Dictionary = {}
+const CampBoundaryView = preload("res://scripts/camp_boundary_view.gd")
+var camp_boundary_view: Node3D
 const DeviceBenchmark = preload("res://scripts/device_benchmark.gd")
 var device_benchmark: PanelContainer
 const FrameRecord = preload("res://scripts/performance_record.gd")
@@ -123,6 +125,9 @@ func _ready():
 	outpost_view = OutpostView.new()
 	world.add_child(outpost_view)
 	outpost_view.configure(environment, sun, furnace, heat_light, sim)
+	camp_boundary_view = CampBoundaryView.new()
+	world.add_child(camp_boundary_view)
+	camp_boundary_view.configure(self)
 	outpost_audio = OutpostAudio.new()
 	add_child(outpost_audio)
 	build_crew()
@@ -249,9 +254,10 @@ func build_world():
 	heat_light.omni_range = 5
 	furnace.add_child(heat_light)
 	model("world/storage", world, xyz(Simulation.point(sim.contract.world.storage)))
-	for x in [-6.6, 6.6]:
-		var shelter := model("world/shelter", world, xyz(Vector2(x, -4.8)))
-		shelter.rotation.y = -0.12 if x < 0 else 0.12
+	for key in ["leftTent","rightTent"]:
+		var shelter_point := Simulation.point(sim.contract.world[key])
+		var shelter := model("world/shelter", world, xyz(shelter_point))
+		shelter.rotation.y = -0.12 if shelter_point.x < 0 else 0.12
 	for index in range(sim.resources.size()):
 		var node: Dictionary = sim.resources[index]
 		var asset: String = "pine_" + str(1 + index % 3) if node.kind == "wood" else node.kind
@@ -655,6 +661,7 @@ func _process(dt: float):
 		report["camera_focus_distance"] = camera.position.distance_to(focus)
 		report["npc_population"] = population_view.evidence()
 		report["outpost"] = outpost_view.evidence(sim)
+		report["task03_boundary"] = camp_boundary_view.descriptor
 		report["capture_scenario"] = capture_scenario
 		report["scenario_is_test_fixture"] = capture_scenario != "opening"
 		report["action_readout"] = action_readout.descriptor
