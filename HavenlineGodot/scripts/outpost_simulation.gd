@@ -3,8 +3,10 @@ const Climate = preload("res://scripts/outpost_climate.gd")
 const PopulationSimulation = preload("res://scripts/population_simulation.gd")
 const Terrain = preload("res://scripts/outpost_surface.gd")
 const River = preload("res://scripts/river_geometry.gd")
+const Boundary = preload("res://scripts/camp_boundary.gd")
 const RESOURCE_RIVER_MARGIN := River.DEFAULT_DRY_MARGIN+0.05
 const STRUCTURE_RIVER_MARGIN := River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER+River.BUILD_SETBACK+0.10
+const BOUNDARY_VERSION := "t03_camp_boundary_v1"
 var climate = Climate.new()
 
 static func _array_point(p: Vector2, y:=0.0) -> Array:
@@ -12,8 +14,6 @@ static func _array_point(p: Vector2, y:=0.0) -> Array:
 
 func _bounded_dry(p: Vector2, margin: float) -> Vector2:
 	var q:=p
-	# River.dry_position itself converges; repeat after movement-bound clamping so
-	# no current-map edge can push a recovered point back onto the wet slope.
 	for _iteration in range(5):
 		q=Terrain.land_position(q,margin)
 		q.x=clampf(q.x,-float(contract.world.boundX),float(contract.world.boundX))
@@ -21,24 +21,25 @@ func _bounded_dry(p: Vector2, margin: float) -> Vector2:
 	return q
 
 func _protected_structure_position(key: String, p: Vector2) -> Vector2:
-	# First evaluate the exact locked minimum to determine whether the historical
-	# point would obstruct a reserved crossing. Then place it 0.10 farther out to
-	# absorb curved-projection float error; the authored 1.60 setback is unchanged.
 	var minimum:Vector2=River.protected_build_position(p)
 	var q:Vector2=River.dry_position(p,STRUCTURE_RIVER_MARGIN)
 	if River.crossing_reserved(minimum):
 		var reserved_safe_x:=p.x
 		if key=="northBarricade": reserved_safe_x=-5.0
 		elif key=="southBarricade": reserved_safe_x=5.0
-		elif key=="leftTent": reserved_safe_x=-6.0
-		elif key=="rightTent": reserved_safe_x=6.0
 		q=River.dry_position(Vector2(reserved_safe_x,p.y),STRUCTURE_RIVER_MARGIN)
 	return _bounded_dry(q,STRUCTURE_RIVER_MARGIN)
 
 func _migrate_world_layout():
 	contract=contract.duplicate(true)
 	tuning=contract.openingLoopTuning
-	for key_value in ["leftTent","rightTent","northBarricade","southBarricade"]:
+	# Task 3 keeps the existing shelters but seats them inside the protected camp
+	# on the ends of their authored work lanes. Identity/art/economy are unchanged.
+	for item in [["leftTent",Boundary.SHELTER_WEST],["rightTent",Boundary.SHELTER_EAST]]:
+		var key:String=item[0];var raw:Array=contract.world[key];var q:Vector2=item[1]
+		assert(River.unrestricted_build_distance(q)>0.0)
+		contract.world[key]=_array_point(q,float(raw[1]))
+	for key_value in ["northBarricade","southBarricade"]:
 		var key:String=String(key_value);var raw:Array=contract.world[key]
 		var q:=_protected_structure_position(key,point(raw))
 		contract.world[key]=_array_point(q,float(raw[1]))
@@ -60,10 +61,11 @@ func _migrate_world_layout():
 			resource.position=point(contract.world[resource_kind+"Nodes"][index])
 		else:
 			resource.position=point(contract.world[resource_kind+"Node"])
-	for side in defenses:
-		defenses[side].position=point(contract.world[String(side)+"Barricade"])
+	for side in defenses:defenses[side].position=point(contract.world[String(side)+"Barricade"])
 	position=_bounded_dry(position,River.DEFAULT_DRY_MARGIN)
-	for c in companions:c.position=_bounded_dry(c.position,River.DEFAULT_DRY_MARGIN)
+	position=Boundary.push_off_fence(position)
+	for c in companions:
+		c.position=Boundary.push_off_fence(_bounded_dry(c.position,River.DEFAULT_DRY_MARGIN))
 
 func _init(data: Dictionary = {}, chosen_lead: int = 1):
 	super(data,chosen_lead)
@@ -76,11 +78,19 @@ func constrain_shoreline():
 		if velocity.dot(normal)<0:velocity-=normal*velocity.dot(normal)
 	for c in companions+enemies+population.actor_records():
 		c.position=_bounded_dry(c.position,River.DEFAULT_DRY_MARGIN)
+		c.position=Boundary.push_off_fence(c.position)
 
 func step(dt: float, input_vector: Vector2, sprint := false):
 	if dt<=0 or not is_finite(dt): return
 	constrain_shoreline()
+	position=Boundary.push_off_fence(position)
+	var previous:=position
 	super.step(dt,input_vector,sprint)
+	# River remains the first environmental authority; the visible fence then
+	# constrains that dry candidate using the exact same panel list as rendering.
+	position=_bounded_dry(position,River.DEFAULT_DRY_MARGIN)
+	position=Boundary.constrain_motion(previous,position)
+	position=_bounded_dry(position,River.DEFAULT_DRY_MARGIN)
 	constrain_shoreline()
 
 func step_climate(dt: float):
@@ -91,7 +101,7 @@ func step_climate(dt: float):
 	if safe: health = minf(100.0, health + 4.0 * dt)
 	elif temperature <= 0.0: health = maxf(0.0, health - 3.0 * dt)
 	if health <= 0.0:
-		position = _bounded_dry(point(contract.player.spawn),River.DEFAULT_DRY_MARGIN)
+		position = Boundary.push_off_fence(_bounded_dry(point(contract.player.spawn),River.DEFAULT_DRY_MARGIN))
 		velocity = Vector2.ZERO
 		health = 100.0
 		temperature = 65.0
@@ -101,12 +111,16 @@ func snapshot() -> Dictionary:
 	var state: Dictionary = super.snapshot()
 	state["climate"] = climate.snapshot()
 	state["river_layout_version"] = River.LAYOUT_VERSION
+	state["camp_boundary_version"] = BOUNDARY_VERSION
 	return state
 
 func restore(state: Dictionary) -> bool:
-	var version=state.get("river_layout_version","")
-	if not version is String:return false
-	if not String(version).is_empty() and String(version)!=River.LAYOUT_VERSION:return false
+	var river_version=state.get("river_layout_version","")
+	if not river_version is String:return false
+	if not String(river_version).is_empty() and String(river_version)!=River.LAYOUT_VERSION:return false
+	var boundary_version=state.get("camp_boundary_version","")
+	if not boundary_version is String:return false
+	if not String(boundary_version).is_empty() and String(boundary_version)!=BOUNDARY_VERSION:return false
 	var clock = Climate.new()
 	if state.has("climate"):
 		if not clock.restore(state.climate): return false
@@ -120,4 +134,5 @@ func restore(state: Dictionary) -> bool:
 	climate = clock
 	_migrate_world_layout()
 	constrain_shoreline()
+	position=Boundary.push_off_fence(position)
 	return true
