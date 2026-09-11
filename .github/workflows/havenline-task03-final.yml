@@ -16,6 +16,7 @@ jobs:
       - uses: actions/checkout@v4
         with:
           ref: ${{ github.sha }}
+          fetch-depth: 0
       - name: Prepare pinned Godot and Mobile software renderer
         run: |
           set -euo pipefail
@@ -216,4 +217,5 @@ jobs:
           path: gate/
           retention-days: 30
           if-no-files-found: error
+# Retry 1 changes only checkout history depth so accepted T2 source can be compared.
 # Final Task 3 evidence only. No Task 4 implementation and no APK/device-FPS claim.
