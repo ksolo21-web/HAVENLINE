@@ -1,0 +1,67 @@
+name: Havenline specialist reviewer runtime cache
+on:
+  workflow_dispatch:
+  push:
+    branches: ['havenline/QA-integration','codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-specialist-model-cache.yml']
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - uses: actions/cache@v4
+        id: cache
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Restore or build checksum-pinned public local reviewer
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq; sudo apt-get install -y aria2
+          mkdir -p "$HOME/.cache/havenline-t01-qwen35" runtime-evidence
+          python3 - <<'PY'
+          from pathlib import Path
+          import urllib.request,json,hashlib,subprocess,concurrent.futures,tarfile
+          root=Path.home()/'.cache/havenline-t01-qwen35';out=Path('runtime-evidence');repo='unsloth/Qwen3.5-9B-GGUF'
+          def digest(p):
+              h=hashlib.sha256()
+              with p.open('rb') as f:
+                  for b in iter(lambda:f.read(4194304),b''):h.update(b)
+              return h.hexdigest()
+          if (root/'manifest.json').exists():manifest=json.loads((root/'manifest.json').read_text())
+          else:
+              req=urllib.request.Request('https://huggingface.co/api/models/'+repo+'?blobs=true',headers={'User-Agent':'Havenline-independent-specialist-review'})
+              with urllib.request.urlopen(req,timeout=45) as r:info=json.load(r)
+              siblings={r['rfilename']:r for r in info['siblings']};model='Qwen3.5-9B-Q5_K_M.gguf';projector='mmproj-F16.gguf' if 'mmproj-F16.gguf' in siblings else 'mmproj-BF16.gguf';records=[]
+              for name in (model,projector):
+                  item=siblings[name];sha=item.get('lfs',{}).get('sha256');assert sha and len(sha)==64,'Publisher SHA missing: '+name
+                  records.append({'filename':name,'sha256':sha,'url':'https://huggingface.co/'+repo+'/resolve/'+info['sha']+'/'+name+'?download=true'})
+              records.append({'filename':'runtime.tar.gz','sha256':'5e34434ddc6d03cd1584f403201aff0d4bd1a5793a72ff7e286532dfd1e4b941','url':'https://github.com/ggml-org/llama.cpp/releases/download/b10809/llama-b10809-bin-ubuntu-x64.tar.gz'})
+              manifest={'publisher':repo,'revision':info['sha'],'base_model':'Qwen/Qwen3.5-9B','model_file':model,'projector_file':projector,'runtime_release':'b10809','files':records,'purpose':'Havenline independent C1/C2/C3/C4/C5/C7/C8/C10/C11 review','paid_inference':False}
+          assert manifest['publisher']==repo and manifest['base_model']=='Qwen/Qwen3.5-9B'
+          def download(item):
+              p=root/item['filename']
+              if not p.exists() or digest(p)!=item['sha256']:
+                  subprocess.run(['aria2c','--console-log-level=warn','--summary-interval=20','-x','12','-s','12','-k','4M','--file-allocation=none','--max-tries=3','--retry-wait=3','--connect-timeout=20','--timeout=60','--allow-overwrite=true','--auto-file-renaming=false','-d',str(root),'-o',p.name,item['url']],check=True)
+              assert digest(p)==item['sha256'];item['bytes']=p.stat().st_size
+          with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:list(pool.map(download,manifest['files']))
+          runtime=root/'runtime';runtime.mkdir(exist_ok=True)
+          with tarfile.open(root/'runtime.tar.gz') as t:t.extractall(runtime,filter='data')
+          servers=list(runtime.rglob('llama-server'));assert len(servers)==1;servers[0].chmod(0o755)
+          (root/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');(out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          PY
+      - uses: actions/cache/save@v4
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-specialist-runtime-metadata-${{ github.run_id }}
+          path: runtime-evidence/
+          retention-days: 30
+          if-no-files-found: error
+# Public open-weight model only. No paid API, account secret, game change, or automatic approval.
