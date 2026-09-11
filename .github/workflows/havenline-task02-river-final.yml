@@ -1,0 +1,222 @@
+name: Havenline Task 2 river final gate
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-river-final.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    outputs:
+      source: ${{ steps.source.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Prepare pinned Godot and Mobile software renderer
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install pillow
+          mkdir -p "$RUNNER_TEMP/engine" river-evidence/tests river-evidence/gallery river-evidence/native4k river-evidence/tree-clearance source-snapshot
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+      - name: Record protected assets and prepare established fixtures
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          protected=sorted(set(Path('HavenlineGodot/assets').rglob('*.glb'))|set(Path('HavenlineGodot/assets/reference_forest').rglob('*.*')))
+          assert len(list(Path('HavenlineGodot/assets').rglob('*.glb')))==33
+          Path('river-evidence/protected-before.json').write_text(json.dumps({str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in protected},indent=2))
+          PY
+          python3 tools/havenline/bake_outpost_audio.py > river-evidence/audio-fixture.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > river-evidence/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > river-evidence/tests/motion-fixture.log 2>&1
+      - name: Run every prior functional suite plus the new river acceptance
+        run: |
+          set -euo pipefail
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river; do
+            timeout 150 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "river-evidence/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' river-evidence/tests/*.log; then exit 1; fi
+          python3 tools/havenline/audit_task01_geometry.py > river-evidence/tree-geometry.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          out=Path('river-evidence');rows=[]
+          for path in sorted((out/'tests').glob('test_*.log')):
+              found=[json.loads(s) for s in path.read_text().splitlines() if s.startswith('{')]
+              assert found,path
+              data=found[-1];assert data.get('passed') is True and not data.get('failures'),(path,data.get('failures'))
+              checks=data.get('checks',[]);count=len(checks) if isinstance(checks,list) else int(checks)
+              rows.append({'suite':path.stem,'checks':count,'passed':True})
+          assert len(rows)==15,rows
+          total=sum(r['checks'] for r in rows);assert total>=750,total
+          before=json.loads((out/'protected-before.json').read_text())
+          assert all(Path(p).exists() and hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in before.items())
+          geometry=json.loads((out/'tree-geometry.json').read_text());assert geometry['passed']
+          report={'source':'${{ github.sha }}','suites':rows,'suite_count':15,'total_checks':total,'all_passed':True,'protected_assets_unchanged':len(before),'glbs_unchanged':33,'tree_geometry_passed':True,'task_approved':False,'physical4k60_verified':False}
+          (out/'tests.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
+          PY
+      - name: Capture exact-source river gallery, native 4K views and T01 visibility regression
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 480 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task02_river.gd -- --out="$(pwd)/river-evidence/gallery" > river-evidence/gallery.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 480 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task02_river.gd -- --native-4k --out="$(pwd)/river-evidence/native4k" > river-evidence/native4k.log 2>&1
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task01_clearance.gd -- --out="$(pwd)/river-evidence/tree-clearance" > river-evidence/tree-clearance.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' river-evidence/*.log; then exit 1; fi
+          cp Docs/Production/T02/reference-ground.webp river-evidence/reference-ground.webp
+      - name: Bind every capture and runtime file to this exact source
+        id: source
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          from PIL import Image
+          out=Path('river-evidence');captures={str(p.relative_to(out)):hashlib.sha256(p.read_bytes()).hexdigest() for p in out.rglob('*.png')}
+          assert len(list((out/'gallery').glob('*.png')))==39
+          assert len(list((out/'native4k').glob('*.png')))==11
+          assert len(list((out/'tree-clearance').glob('*.png')))==11
+          assert len(captures)==61,len(captures)
+          native=0
+          for name in captures:
+              with Image.open(out/name) as image:
+                  if name.startswith('native4k/'):
+                      assert image.size==(3840,2160),(name,image.size);native+=1
+                  else:assert image.size==(1280,720),(name,image.size)
+                  image.verify()
+          assert native==11
+          for folder,expected in [('gallery',39),('native4k',11)]:
+              report=json.loads((out/folder/'capture.json').read_text());assert report['renderer']=='mobile' and report['forest']['instances']==586 and report['task']=='T02-river-v1-mapspan'
+              assert len(report['captures'])==expected and all(row['render_scale']==1.0 for row in report['captures'])
+              assert report['outpost']['river_layout_version']=='river_v1_mapspan'
+          before=json.loads((out/'protected-before.json').read_text());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in before.items())
+          gallery=json.loads((out/'gallery/capture.json').read_text());conditions=[r for r in gallery['captures'] if r['name'].startswith('river-condition-')]
+          assert len(conditions)==6 and len({(tuple(r['camera_position']),r['camera_basis'],r['camera_size']) for r in conditions})==1
+          assert captures['gallery/river-condition-day.png']==captures['gallery/river-condition-day-return.png']
+          source='${{ github.sha }}'
+          runtime=['HavenlineGodot/scripts/river_geometry.gd','HavenlineGodot/scripts/outpost_surface.gd','HavenlineGodot/scripts/outpost_simulation.gd','HavenlineGodot/scripts/outpost_view.gd','HavenlineGodot/scripts/reference_forest.gd','HavenlineGodot/shaders/outpost_snow.gdshader','HavenlineGodot/shaders/lakeshore_water.gdshader','HavenlineGodot/data/reference-contract.json']
+          runtime_hashes={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in runtime}
+          report={'task':'T02-river-v1-mapspan','source':source,'renderer':'mobile','captures':captures,'runtime_files':runtime_hashes,'protected_files':before,'actual_images':61,'native3840x2160_scale1_frames':native,'full_terrain_bounds':[-31.0,31.0,-31.0,31.0],'current_movement_bounds':[-14.2,14.2,-16.2,16.2],'locked_anchors':[[-31,-8.6],[-24,-7.2],[-17,-9.0],[-10,-6.8],[-3,-8.7],[4,-6.9],[11,-8.5],[19,-6.7],[25,-8.1],[31,-7.3]],'matched_condition_camera_verified':True,'day_return_identical':True,'all61_images_verified':True,'task_approved':False,'physical_phone_tablet4k60_verified':False}
+          (out/'provenance.json').write_text(json.dumps(report,indent=2));print(json.dumps({k:v for k,v in report.items() if k not in ('captures','runtime_files','protected_files')}))
+          PY
+          echo "source=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          echo "$GITHUB_SHA" > source-snapshot/SOURCE.txt
+          git archive --format=tar.gz --output=source-snapshot/source.tar.gz "$GITHUB_SHA" HavenlineGodot tools/havenline Docs AGENTS.md .github
+          sha256sum source-snapshot/source.tar.gz > source-snapshot/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task02-river-evidence-${{ github.run_id }}
+          path: river-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task02-river-source-${{ github.run_id }}
+          path: source-snapshot/
+          retention-days: 30
+          if-no-files-found: error
+  independent-review:
+    needs: build-capture
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        role: [reference-fidelity,visual-integrity]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      EXPECTED_SOURCE: ${{ needs.build-capture.outputs.source }}
+      REVIEW_ROLE: ${{ matrix.role }}
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build-capture.outputs.source }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-task02-river-evidence-${{ github.run_id }}
+          path: river-evidence/
+      - run: python3 -m pip install 'gradio_client==1.14.0' pillow
+      - name: Execute one independent source-bound role
+        run: python3 -u tools/havenline/review_task02_river.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task02-river-review-${{ matrix.role }}-${{ github.run_id }}
+          path: river-review/
+          retention-days: 30
+          if-no-files-found: error
+  critic-gate:
+    needs: [build-capture,independent-review]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      SOURCE: ${{ needs.build-capture.outputs.source }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-task02-river-evidence-${{ github.run_id }}
+          path: evidence/
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-task02-river-review-*-${{ github.run_id }}
+          path: reviews/
+      - name: Require both raw critic roles at 9+ on every group and dimension
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,html,json,math,os,re
+          source=os.environ['SOURCE'];roles={'reference-fidelity','visual-integrity'}
+          groups={'map-span','current-layout','endpoints','meanders-west','meanders-east','bank-contact','gameplay-banks','crossing-reserves','flow-sequence','conditions'}
+          dims={'reference_fidelity','river_form','bank_finish','expansion_readiness','view_consistency'};expected={'A':'human_character','B':'snow_tree','C':'snow_tree','D':'human_character'}
+          def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+          def parse_raw(p):
+              raw=json.loads(p.read_text());text=raw[-1][1];clean=html.unescape(re.sub(r'<[^>]+>','\n',text));i=clean.find('{');assert i>=0;return json.JSONDecoder().raw_decode(clean[i:])[0]
+          evidence=Path('evidence');pro=json.loads((evidence/'provenance.json').read_text());tests=json.loads((evidence/'tests.json').read_text())
+          assert pro['source']==source and pro['all61_images_verified'] and len(pro['captures'])==61 and pro['native3840x2160_scale1_frames']==11
+          assert tests['source']==source and tests['all_passed'] and tests['suite_count']==15 and tests['total_checks']>=750
+          for name,h in pro['captures'].items():assert sha(evidence/name)==h
+          seen=set();all_rows=[]
+          for summary_path in Path('reviews').glob('*/role-summary.json'):
+              folder=summary_path.parent;summary=json.loads(summary_path.read_text());role=summary['role'];seen.add(role)
+              assert role in roles and summary['source']==source and summary['error'] is None and summary['passed'] is True and len(summary['reviews'])==10
+              pp=json.loads((folder/'provider-provenance.json').read_text());assert pp['source']==source and pp['role']==role and pp['provider_space_revision']=='eb7f245e2c0d3b573dd8ed6addca9b7f6af26847' and pp['independent_model_execution'] is True and pp['same_published_model_for_both_roles'] is True
+              control=json.loads((folder/'control.json').read_text());assert control['passed'] is True and control['answers']==expected and parse_raw(folder/'control-raw.json')==expected
+              covered=set()
+              for row in summary['reviews']:
+                  group=row['group'];covered.add(group);assert group in groups and row['source']==source and row['role']==role and row['independent_execution'] is True and row['passed'] is True
+                  review=row['review'];assert set(review['scores'])==dims and all(type(v) in (int,float) and not isinstance(v,bool) and math.isfinite(v) and 9.0<=v<=10.0 for v in review['scores'].values())
+                  assert review['defects']==[] and review['coverage_complete'] is True and review['confidence']!='low' and row['lowest_score']==min(review['scores'].values())
+                  assert parse_raw(folder/(group+'-raw.json'))==review
+                  for inp in row['inputs']:assert sha(evidence/inp['filename'])==inp['sha256']
+                  all_rows.append({'role':role,'group':group,'scores':review['scores'],'lowest':row['lowest_score'],'confidence':review['confidence']})
+              assert covered==groups
+          assert seen==roles,(seen,roles)
+          minimum=min(r['lowest'] for r in all_rows);assert minimum>=9.0
+          gate={'task':'T02-river-v1-mapspan','source':source,'status':'CRITICS_PASS_PENDING_PIXEL_SIGNOFF','roles':sorted(seen),'same_published_model_for_both_roles':True,'review_groups_per_role':10,'dimension_minimum':minimum,'rows':all_rows,'tests':tests,'actual_images':61,'native4k_images':11,'raw_scores_modified':False,'task_approved':False,'physical4k60_verified':False}
+          Path('gate').mkdir();Path('gate/gate.json').write_text(json.dumps(gate,indent=2));print(json.dumps({k:v for k,v in gate.items() if k!='rows'}))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task02-river-critic-gate-${{ github.run_id }}
+          path: gate/
+          retention-days: 30
+          if-no-files-found: error
+# This workflow validates scoped Task 2 only. Native screenshots do not certify
+# physical Android FPS/thermals. Task 3 remains locked until final pixel signoff.
