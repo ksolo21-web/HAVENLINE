@@ -44,16 +44,9 @@
       "workstream_id": "T03-legacy-integrated",
       "branch": "codex/havenline-sequential-task-01",
       "base_commit": "1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff",
-      "dependencies": [
-        "T02"
-      ],
-      "owned_paths": [
-        "@ownership:T03"
-      ],
-      "protected_paths": [
-        "@protected:T01",
-        "@protected:T02"
-      ],
+      "dependencies": ["T02"],
+      "owned_paths": ["@ownership:T03"],
+      "protected_paths": ["@protected:T01", "@protected:T02"],
       "candidate_commit": "6947849f581db9cfa53a17ff9202ecde1c0ee80c",
       "candidate_hash_or_artifact": "run:34632784857 evidence:10277539118 source:10277374176",
       "tests": {
@@ -63,49 +56,49 @@
         "tree_geometry_checks": 9
       },
       "evidence_path": "Docs/Production/Evidence/T03/",
-      "critic_requirements": [
-        "C1",
-        "C2",
-        "C6"
-      ],
+      "critic_requirements": ["C1", "C2", "C6"],
       "critic_status": {
         "C1": "FAIL river-gates; role minimum 4 in latest combined gate",
         "C2": "FAIL river-gates; role minimum 2 in latest combined gate",
-        "C6": "PENDING under V2 governance"
+        "C6": "PENDING under operational V2 safeguard system"
       },
       "integration_status": "already integrated before governance migration; grandfathered only for finishing T03",
       "known_blockers": [
         "Latest combined critic gate run 34632784857 rejects river-gates in both C1 and C2.",
-        "V2 adds C6 performance-budget review before T03 approval."
+        "V2 requires C6 performance-budget review before T03 approval."
       ],
-      "next_action": "After governance migration passes, repair only verified T03 river-gate readability defects, run impact regression, fresh evidence, C1+C2+C6, closure validator."
+      "next_action": "Resume the preserved scoped river-gate repair, run impact regression, fresh evidence, C1+C2+C6, then strict V2 closure validation."
     },
     {
       "task_id": "QA-GOV",
       "task_name": "Parallel-production governance and build accelerator",
-      "status": "INTEGRATING",
+      "status": "APPROVED",
       "owner": "primary-integration-owner",
       "workstream_id": "QA-GOV-20260911",
       "branch": "codex/havenline-sequential-task-01",
       "base_commit": "f26b3d6d5a788c03192f593936bfe8ce5ccfc5bc",
       "dependencies": [],
-      "owned_paths": [
-        "@ownership:QA-GOV"
-      ],
-      "protected_paths": [
-        "@protected:runtime-approved"
-      ],
-      "candidate_commit": null,
-      "candidate_hash_or_artifact": null,
+      "owned_paths": ["@ownership:QA-GOV"],
+      "protected_paths": ["@protected:runtime-approved"],
+      "candidate_commit": "4e851ce496e077342e6369b18b78ca27e4724849",
+      "candidate_hash_or_artifact": "governance-run:34652626961 critic-readiness-run:34652627066",
       "tests": {
-        "result": "PENDING migration validation"
+        "governance_and_safeguard_unit_tests": 20,
+        "unit_test_failures": 0,
+        "critic_readiness": "PASS",
+        "independent_runtime_smoke": "PASS",
+        "pinned_revision_and_hash_checks": "PASS",
+        "runtime_game_files_changed": 0
       },
       "evidence_path": "Docs/Production/Evidence/GovernanceMigration/",
       "critic_requirements": [],
-      "critic_status": {},
-      "integration_status": "INTEGRATING",
+      "critic_status": {
+        "C1-C11 execution readiness": "PASS",
+        "self_healing_independent_runtime": "PASS"
+      },
+      "integration_status": "APPROVED and integrated on codex/havenline-sequential-task-01",
       "known_blockers": [],
-      "next_action": "Commit governance files, run migration validators/unit tests, then mark APPROVED."
+      "next_action": "Maintain governance and critic-readiness gates; do not weaken them from gameplay workstreams."
     },
     {
       "task_id": "T04",
@@ -115,30 +108,17 @@
       "workstream_id": "wave1-camera",
       "branch": "havenline/T04-camera",
       "base_commit": null,
-      "dependencies": [
-        "T03"
-      ],
-      "owned_paths": [
-        "@reservation:T04"
-      ],
-      "protected_paths": [
-        "@protected:approved",
-        "@integration-only"
-      ],
+      "dependencies": ["T03"],
+      "owned_paths": ["@reservation:T04"],
+      "protected_paths": ["@protected:approved", "@integration-only"],
       "candidate_commit": null,
       "candidate_hash_or_artifact": null,
       "tests": {},
       "evidence_path": "Docs/Production/Evidence/T04/",
-      "critic_requirements": [
-        "C1",
-        "C2",
-        "C6"
-      ],
+      "critic_requirements": ["C1", "C2", "C6"],
       "critic_status": {},
       "integration_status": "not started",
-      "known_blockers": [
-        "T03 not APPROVED"
-      ],
+      "known_blockers": ["T03 not APPROVED"],
       "next_action": "Prepare/assign only after T03 APPROVED."
     },
     {
@@ -149,30 +129,17 @@
       "workstream_id": "wave1-props",
       "branch": "havenline/T05-props",
       "base_commit": null,
-      "dependencies": [
-        "T03"
-      ],
-      "owned_paths": [
-        "@reservation:T05"
-      ],
-      "protected_paths": [
-        "@protected:approved",
-        "@integration-only"
-      ],
+      "dependencies": ["T03"],
+      "owned_paths": ["@reservation:T05"],
+      "protected_paths": ["@protected:approved", "@integration-only"],
       "candidate_commit": null,
       "candidate_hash_or_artifact": null,
       "tests": {},
       "evidence_path": "Docs/Production/Evidence/T05/",
-      "critic_requirements": [
-        "C1",
-        "C2",
-        "C6"
-      ],
+      "critic_requirements": ["C1", "C2", "C6"],
       "critic_status": {},
       "integration_status": "not started",
-      "known_blockers": [
-        "T03 not APPROVED"
-      ],
+      "known_blockers": ["T03 not APPROVED"],
       "next_action": "Prepare/assign only after T03 APPROVED."
     },
     {
@@ -183,38 +150,24 @@
       "workstream_id": "wave1-character1",
       "branch": "havenline/T06-character1",
       "base_commit": null,
-      "dependencies": [
-        "T03"
-      ],
-      "owned_paths": [
-        "@reservation:T06"
-      ],
-      "protected_paths": [
-        "@protected:approved",
-        "@integration-only",
-        "@protected:C1-model"
-      ],
+      "dependencies": ["T03"],
+      "owned_paths": ["@reservation:T06"],
+      "protected_paths": ["@protected:approved", "@integration-only", "@protected:C1-model"],
       "candidate_commit": null,
       "candidate_hash_or_artifact": null,
       "tests": {},
       "evidence_path": "Docs/Production/Evidence/T06/",
-      "critic_requirements": [
-        "C1",
-        "C2",
-        "C5",
-        "C6"
-      ],
+      "critic_requirements": ["C1", "C2", "C5", "C6"],
       "critic_status": {},
       "integration_status": "not started",
-      "known_blockers": [
-        "T03 not APPROVED"
-      ],
+      "known_blockers": ["T03 not APPROVED"],
       "next_action": "Prepare/assign only after T03 APPROVED."
     }
   ],
   "notes": [
     "T03 is grandfathered as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
     "No T04+ runtime work may begin until T03 is APPROVED.",
-    "All future runtime builders use isolated branches and cannot approve themselves."
+    "All future runtime builders use isolated branches and cannot approve themselves.",
+    "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them."
   ]
 }
