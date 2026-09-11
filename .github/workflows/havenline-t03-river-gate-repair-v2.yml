@@ -19,12 +19,29 @@ jobs:
         run: |
           set -euo pipefail
           before=$(git rev-parse HEAD)
-          python3 tools/havenline/production/production_cli.py validate-registry
+          python3 tools/havenline/production/workstream.py validate-registry
           python3 tools/havenline/production/repair_t03_river_gate_readability_v2.py
           mapfile -t changed < <(git diff --name-only -- HavenlineGodot)
           printf '%s\n' "${changed[@]}"
-          test "${#changed[@]}" -eq 4
-          python3 tools/havenline/production/production_cli.py validate-candidate T03 "${changed[@]}" --integration-owner
+          python3 - "${changed[@]}" <<'PY'
+          from pathlib import Path
+          import json,fnmatch,sys
+          changed=sys.argv[1:]
+          expected={
+            'HavenlineGodot/scripts/camp_boundary.gd',
+            'HavenlineGodot/shaders/outpost_snow.gdshader',
+            'HavenlineGodot/tests/capture_task03_boundary.gd',
+            'HavenlineGodot/tests/test_task03_boundary.gd'
+          }
+          assert set(changed)==expected,(changed,expected)
+          own=json.loads(Path('Docs/Production/PATH_OWNERSHIP.json').read_text())
+          allowed=own['aliases']['@ownership:T03']
+          def ok(p):return any(fnmatch.fnmatch(p,g) or (g.endswith('/**') and p.startswith(g[:-3])) for g in allowed)
+          assert all(ok(p) for p in changed),changed
+          protected=own['aliases']['@protected:T01']+own['aliases']['@protected:T02']
+          assert not any(any(fnmatch.fnmatch(p,g) or (g.endswith('/**') and p.startswith(g[:-3])) for g in protected) for p in changed),changed
+          print(json.dumps({'passed':True,'task':'T03','changed_files':changed,'owned_alias':'@ownership:T03'},indent=2))
+          PY
           test -z "$(git diff --name-only -- HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd HavenlineGodot/assets)"
           git diff --check -- HavenlineGodot
           echo "$before" > /tmp/base.txt
