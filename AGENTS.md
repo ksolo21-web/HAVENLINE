@@ -1,50 +1,68 @@
 # HAVENLINE Agent Instructions
 
 ## Required starting point
+Read `Docs/Production/HAVENLINE_BUILD_PLAN_V2.md`, `Docs/Production/SEQUENTIAL_REPAIR_PLAN.md`, `Docs/Production/task-gates.json`, `Docs/Production/WORKSTREAM_REGISTRY.json`, `Docs/Production/DEPENDENCY_GRAPH.json`, `Docs/Production/PATH_OWNERSHIP.json`, `Docs/Production/CRITIC_MATRIX.json`, and `Docs/Production/PERFORMANCE_BUDGETS.json` FIRST. Then read `Docs/AI/HavenlineProjectContext.md`, the reference-video lock/source manifest, actual reference pixels, current source and current evidence. The archived pre-V2 plan is historical audit evidence, not the active production mechanism.
 
-Read `Docs/Production/SEQUENTIAL_REPAIR_PLAN.md` and `Docs/Production/task-gates.json` FIRST, then `Docs/AI/HavenlineProjectContext.md`, `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and the actual reference pixels. Inspect the current source and evidence for newer work. `Docs/AI/UnityProjectContext.md` is historical.
+## Controlled parallel production
+The old pure-serial `ONE TASK BUILDS → NEXT TASK BUILDS` rule is superseded by controlled dependency-graph production:
+`DEPENDENCY GRAPH → ISOLATED PARALLEL BUILD → CONTROLLED INTEGRATION → IMPACT-BASED REGRESSION → APPLICABLE SPECIALIST CRITICS → FIX/RETEST → APPROVE → UNLOCK DEPENDENTS`.
 
-## Latest user instruction: one task at a time
+Only the integration owner may merge production candidates into `codex/havenline-sequential-task-01` or mark an integrated task APPROVED. Worker branches may build in parallel only when dependencies and path ownership allow. A worker branch can be `INTEGRATION_READY`; isolated success is never production approval.
 
-Only the active task may be implemented. All subsequent tasks stay LOCKED until the active task's frozen-scope checks AND independent critics pass. The intermediate task minimum is **9.0/10 in EVERY mandatory dimension**, with **10/10 as the target**. This supersedes earlier exact-10 instructions for intermediate task progression only; the final full-game release gate remains separate and unchanged. Never retrospectively promote an old failure.
+Task states: `LOCKED`, `PREPARED`, `ASSIGNED`, `BUILDING_ISOLATED`, `BUILT_PENDING_DEPENDENCY`, `INTEGRATION_READY`, `INTEGRATING`, `UNDER_REVIEW`, `FIX_REQUIRED`, `APPROVED`, `BLOCKED`.
 
-Use the sequence BUILD -> TEST -> ACTUAL CAPTURES -> INDEPENDENT CRITICS -> FIX -> FRESH EVIDENCE -> REVIEW. Two separately executed review roles are required: reference fidelity and technical/visual integrity. Disclose shared model families; two processes are not two diverse expert models. Builder self-review, code tests, geometry counts, saved agent definitions and successful workflow execution are not independent visual approval.
+Forward-going intermediate PASS requires **every applicable mandatory reviewed dimension strictly >9.0 unrounded**, every applicable G1–G14 gate passed, and no unresolved mandatory defect. Target 10/10. Do not retroactively revoke T01/T02 solely because their original gate wording differed.
 
-No averaging, rounding, missing-area exclusion, unchanged rescoring to obtain a desired number, invented scores or unresolved mandatory defects. Missing, invalid, truncated, low-confidence or incomplete required evidence blocks progression. Verify model observations against actual pixels/geometry; preserve raw unsupported observations and genuine failures rather than blindly adopting or deleting them.
+No averaging, rounding, missing-area exclusion, unchanged rescoring to obtain a desired result, invented scores, or unresolved mandatory defects. Missing/invalid/truncated/low-confidence/incomplete evidence blocks the relevant gate. Preserve raw failures and unsupported observations; verify critic claims against actual pixels/geometry.
 
-Freeze each task's scope and evidence before scoring. A tree-only pass cannot approve terrain, buildings, gameplay or release. Later tasks remain mandatory, not waived. A regression reopens the earlier task and locks progression until repaired. Infrastructure and validation needed for the active task are allowed; unrelated next-task implementation is not.
+A builder/self-review/persona rerun is not an independent critic. Use applicable C1–C11 from `CRITIC_MATRIX.json`. Independent critics require a genuinely separate permitted $0 reviewer/model runtime with provider/model/run ID, candidate hash, inputs and raw output preserved. If unavailable, continue useful construction/testing but leave G12 BLOCKED.
 
-Work through genuine failures: diagnose, preserve working checkpoints, change approach when justified, and continue within the active task. Do not replace building with repeated planning. Save exact source/asset/capture hashes, tests, reviewer results, unresolved defects and the next executable action.
+## Path ownership and change requests
+Before editing production files, verify the workstream registry, exact base commit and `PATH_OWNERSHIP.json`. No two active workstreams may own overlapping production paths. Do not modify a protected/foreign-owned path. Create a structured request under `Docs/Production/ChangeRequests/`; the integration owner resolves it.
 
-## Visible progress
+Shared integration paths such as `main.gd`, `outpost_view.gd`, `outpost_simulation.gd`, `outpost_surface.gd`, the reference contract and coordination registries are integration-owner-only unless explicitly reassigned.
 
-Show an explicit progress bar in COMMENTARY BEFORE substantial tools, then update at verified milestones DURING execution. Include current stage, completed/total count, latest verified result and next step/blocker. A final-answer-only bar fails the requirement. Separate active-task iteration progress from approved tasks and whole-game completion. No time-based fake percentage, native-widget claim or unscheduled background-work promise.
+A stale task branch may not silently merge over newer integration work. Reconcile/rebase to the current integration candidate, rerun affected tests, and recapture affected evidence before integration.
+
+## Integration owner procedure
+For each candidate: verify assignment; base commit; owned/protected paths; changed files; reconcile stale base; integrate cleanly; run change-impact detection; run mandatory regression; capture fresh integration evidence; run applicable independent critics; fix/retest any mandatory score <=9.0 or gate failure; only then approve, update registry and unlock dependents.
+
+Use `tools/havenline/production/production_cli.py` for registry/path validation, impact selection, regression planning, frozen task packets, capture/motion plans, save/device matrices, evidence packaging and closure validation. These tools are validators/coordinators, not independent critics and not physical-device certification.
+
+## Current protected production state
+Repository truth controls. T01 and T02 are approved and remain authoritative unless a later regression reopens them. T03 retains its existing frozen scope and current production checkpoint; do not restart or throw away its work. T04+ runtime work remains locked until T03 passes. Governance/QA tooling may continue without expanding T03 runtime scope.
+
+After T03 approval, Wave 1 may assign T04 camera/composition, T05 station/prop kit and T06 Character 1 motion in isolated non-overlapping branches, plus QA/integration infrastructure. Dependency graph and path ownership, not elapsed time or task number alone, control later parallelism.
+
+## Permanent Havenline gameplay identity
+Havenline stays simple and immediate:
+`MOVE → AUTO-INTERACT → GATHER → VISIBLY CARRY → DELIVER → TRANSFORM → RESCUE → BUILD/UPGRADE → EXPLORE → DEFEND`.
+
+One primary movement joystick. Auto collect, gather/harvest, attack, contextual unload/deposit and rescue/interactions. Minimal contextual controls only for genuine choices. No button-heavy RPG combat, 4X warfare, complicated manual inventory management, mandatory guilds/guild war, free-text global chat, mandatory multiplayer, unrestricted building or energy systems in Havenline 1.0.
+
+Launch contract remains Level 1–100, connected world, visible progression, spend-blind Challenge Director, seven companion species, weather/day-night, survivor workers, production, defense, physical carrying, world transformation, monetization/VIP, LiveOps, security and phone/tablet/foldable support. Challenge Director may never consume spend/VIP/purchase signals. F2P completion must remain realistic.
 
 ## Preserve the actual project
+- Active Android project: `HavenlineGodot/`, Godot 4.7.2. Unity is retired.
+- Preserve original character/model identities, geometry, skinning, textures, saves and validated fixes.
+- C1/C2 selectable leads; unselected lead plus C3/C4 helpers. Unlimited logical carrying and movement/proximity gathering, fighting, rescue, deposit, build and repair remain.
+- C2–C4 final rigging/motion reviews remain final character tasks (T59–T61).
+- Separate customer pool; distinct survivors; no invisible working actors or primitive stand-ins.
+- Companions exactly dog, wolf, fox, owl, male lion, white tiger, brown bear; no domestic cats. Legacy cat saves migrate safely to fox.
+- Preserve explicit historical progression/save contracts; record conflicts rather than silently rewriting them.
 
-- Active Android project: `HavenlineGodot/`, Godot 4.7.2. Unity was explicitly retired. No Unity installation, license, runtime, build step or IL2CPP path is allowed. Preserve historical files outside the active build.
-- Preserve all original character/model identities, geometry, skinning, textures, saves and validated fixes. Never silently revert to an older character checkpoint.
-- C1 and C2 are selectable leads; the unselected lead is a helper alongside C3 and C4. Unlimited logical carrying and movement/proximity gathering, fighting, rescue, deposit, build and repair remain required. No manual-action-button substitute.
-- **C2–C4 rigging fixes and final rig reviews stay LAST at the final character stage, not waived.** Require actual rendered full animation cycles, transitions, skinning, clipping, feet/knees, equipment and gameplay-scale evidence. Import or GLB inspection alone is not rig approval.
-- Customers are a separate reusable pool of two male/two female bases with individual persistent identities. Additional male/female survivors and animal companions are not copies replacing the custom crew.
-- Missing authored NPCs cannot become invisible working actors or primitive stand-ins. Keep readiness explicit in `data/npc-catalog.json`.
-- Animals are exactly dogs, lions, tigers, bears, wolves, owls and foxes. No domestic cats. Use the seven registered expedition-style animal references. Images are not rigged models. Legacy cat saves migrate to foxes without losing identity/recruitment/assignment/rescue progress; restart safety remains required.
-- Preserve explicit historical progression and save contracts; record conflicts with newer reference requirements rather than silently rewriting distinct actions or prices.
+## Reference videos
+Both recordings ending `124839` and `124510` remain authoritative observable visual/gameplay standards. Inspect actual source pixels and motion. Match bright sculpted winter scenery, dense blue-white forest, warm cleared work zones, fences, machinery, physical resource/cash stacks, crowds, helpers, pads and visible transformations. No primitive-looking blockout/default/debug materials may pass final art.
 
-## Both reference videos are authoritative
+## Evidence and performance
+Freeze task scope/evidence before scoring. Record exact source/asset/capture hashes, tests, reviewer results, unresolved defects and next action. Deterministic evidence should include applicable front/rear/left/right/3-quarter/gameplay/detail/overhead/day-night-weather/native-4K states. Motion tasks require full real-time/slow cycles, turns, transitions, feet/toes/knees, hands, gear, tails/wings/mane, ground contact and clipping states.
 
-The recordings ending `124839` and `124510` are the observable visual and gameplay standard, not loose inspiration. Inspect actual source pixels and motion. A filenames-only or builder-summary-only comparison is UNREVIEWED.
+Track geometry, draw calls, materials, texture memory, shader complexity, CPU/GPU frame time where measurable, physics, animation/NPC load, memory and storage footprint. A visually excellent task may still fail G8.
 
-Both loops remain required: fishing/food production/customer service/reinvestment, AND harvesting/hunting/camp supply/weapon upgrades/defenses. Match bright sculpted winter scenery, dense blue-white forest, warm cleared work zones, fences, machinery, tall moving resource/cash stacks, crowds, helpers, ground pads and paid visible transformations. A generic cabin/furnace clearing is not the target. Preserve old shelter assets without forcing the old two-cabin composition. More realistic bark/noise or polygons is not inherently closer to the reference. No primitive-looking blockout or unfinished/default/debug materials may be passed as final art.
+## Physical release gates remain separate
+Landscape must adapt automatically to phones/tablets/foldables. Final required native internal width >=3840 and height >=2160 at render scale 1.0 with sustained >=60 FPS on named representative physical phones/tablets for >=30 minutes where specified. T68/T69 alone certify final physical 4K/60. Software rendering/screenshots/counters do not.
 
-Environment/reference correction remains the priority, following the ordered tasks. The full scope also retains the ten connected biomes, transportation, weather/day/night, sound, Google identity/cloud and complete production/progression systems. Configuration and plans are not implementation.
+Do not send unfinished APKs or assign testing/benchmarking to Kaleb. Final delivery requires complete functionality, reference fidelity, final independent approval, finished art/motion, save/auth/cloud correctness and physical-device evidence.
 
-## Phones, tablets and release remain separate mandatory gates
-
-Shipping gameplay is landscape, automatically adapting to phones AND tablets, including applicable foldable transitions. Verify safe areas, camera scale, readable text, touch controls, menus, resizing, lifecycle and saved-state continuity; do not add a manual device selector or stretch the world.
-
-Require native internal width >=3840 AND height >=2160, render scale 1.0, with sustained >=60 FPS on named representative physical phones AND tablets under completed-game load for at least 30 minutes. Preserve presentation timing, resolution and thermal evidence. Neither an emulator/software renderer, 4K screenshot, fixed-step capture nor engine counter certifies physical presentation/thermals. Never silently lower resolution, count upscaling as native4K, or generalize one device to all hardware. Protect rendering workload during earlier tasks; repeat final measurements after all content and character fixes.
-
-**Kaleb must not receive unfinished APKs or be asked to test or benchmark them.** Internal isolated-package builds may continue. Final delivery requires complete functionality, reference fidelity, final independent approval, no placeholder art, full motion review, save/auth/cloud correctness and physical phone/tablet 4K60 evidence. Missing test access is a blocker to solve, not work reassigned to Kaleb.
-
-Read `Docs/QA/PHONE_TABLET_RELEASE_CONTRACT.md` and run `tools/havenline/release_gate.py` for final delivery. That evidence validator is neither an AI critic, a connected device lab nor a branch-protection change. Task-specific reviews do not replace full-state/motion reference comparison or the final release gate.
+## Visible progress
+Show a progress bar before substantial tool work and update it at verified milestones. Separate active-task iteration, approved tasks and whole-game completion. No fake time-based progress or background-work promises.
