@@ -1,7 +1,8 @@
 extends RefCounted
-# T02 river revision: one continuous terrain surface plus one spline-following
-# water surface. The authoritative geometry lives in river_geometry.gd.
+# T02 river revision remains authoritative for terrain/water. T03 adds only an
+# encoded packed-lane mask to this same continuous terrain surface.
 const River = preload("res://scripts/river_geometry.gd")
+const Boundary = preload("res://scripts/camp_boundary.gd")
 const HALF := 31.0
 const STEP := 0.25
 const WATER_Y := River.WATER_Y
@@ -17,14 +18,12 @@ static func rounded_rect(p: Vector2, center: Vector2, half_size: Vector2, radius
 	return q.max(Vector2.ZERO).length()+minf(maxf(q.x,q.y),0.0)-radius
 
 static func work_distance(p: Vector2) -> float:
-	# The retired lake bay/connector are gone. The warm workfloor stays entirely
-	# on the river's north-bank camp side, clear of the permanent-build setback.
 	return rounded_rect(p,WORK_CENTER,WORK_HALF,0.78)
 
 static func river_distance(p: Vector2) -> float:
 	return River.shore_distance(p)
 
-# Compatibility for older diagnostic scripts only. Runtime code uses river_*. 
+# Compatibility for older diagnostic scripts only. Runtime code uses river_*.
 static func lake_distance(p: Vector2) -> float:
 	return river_distance(p)
 
@@ -35,8 +34,6 @@ static func protected_build_position(p: Vector2) -> Vector2:
 	return River.protected_build_position(p)
 
 static func _shape_height(p: Vector2) -> float:
-	# Preserve the approved T01 outer snowfield character while cutting the river
-	# through the same indexed terrain rather than layering a collision plane.
 	var ripple := sin(p.x*.53+sin(p.y*.26))*cos(p.y*.48)*.055
 	var edge := smoothstep(13.5,24.0,maxf(absf(p.x),absf(p.y)*.86))
 	var drift := edge*(.64+.52*pow(sin(p.x*.19+p.y*.15),2.0))
@@ -57,8 +54,6 @@ static func _shape_height(p: Vector2) -> float:
 	var snow_rim := .12*exp(-pow((wd-.36)/.62,2.0))
 	var result := lerpf(floor_height,original,smoothstep(-.12,1.80,wd))+snow_rim
 	var shore := river_distance(p)
-	# Shared cross-section: submerged channel -> 0.30 wet edge -> 0.70 slope ->
-	# 0.45 soft shoulder. The outer shoulder blends back into the snowfield.
 	var bank_height := lerpf(WATER_Y-.82,.15,smoothstep(-.42,River.WET_EDGE+River.BANK_RUN,shore))
 	bank_height += .18*exp(-pow((shore-(River.WET_EDGE+River.BANK_RUN+.14))/.34,2.0))
 	result=lerpf(bank_height,result,smoothstep(River.WET_EDGE+River.BANK_RUN,River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER,shore))
@@ -73,8 +68,6 @@ static func _ensure_heights():
 			_heights[z*side+x]=_shape_height(Vector2(-HALF+x*STEP,-HALF+z*STEP))
 
 static func height_at(p: Vector2) -> float:
-	# Barycentric sampling of the actual indexed triangles, not a second collision
-	# approximation. Actors, river banks and approved tree roots share this mesh.
 	_ensure_heights()
 	if absf(p.x)>=HALF or absf(p.y)>=HALF: return _shape_height(p)
 	var n := int(HALF*2.0/STEP);var side := n+1
@@ -97,11 +90,10 @@ static func _indexed_grid() -> ArrayMesh:
 		for x in range(side):
 			var p := Vector2(-HALF+x*STEP,-HALF+z*STEP);var i := z*side+x
 			vertices[i]=Vector3(p.x,_heights[i],p.y);uv[i]=p*.08
-			# The shader receives CPU-authored distances derived from the exact same
-			# river function as collision/recovery, so the visible bank cannot drift.
 			var shore:=clampf((river_distance(p)+4.0)/8.0,0.0,1.0)
 			var work:=clampf((work_distance(p)+4.0)/8.0,0.0,1.0)
-			colors[i]=Color(shore,work,0.0,1.0)
+			var lane:=clampf((Boundary.lane_signed_distance(p)+4.0)/8.0,0.0,1.0)
+			colors[i]=Color(shore,work,lane,1.0)
 	for z in range(side):
 		for x in range(side):
 			var l := maxi(0,x-1);var r := mini(n,x+1);var b := maxi(0,z-1);var t := mini(n,z+1)
@@ -159,4 +151,5 @@ static func river_evidence() -> Dictionary:
 	evidence["terrain_triangles"]=mesh().get_faces().size()/3
 	evidence["work_center"]=[WORK_CENTER.x,WORK_CENTER.y]
 	evidence["work_half"]=[WORK_HALF.x,WORK_HALF.y]
+	evidence["task03_lane_network"]=Boundary.evidence()
 	return evidence
