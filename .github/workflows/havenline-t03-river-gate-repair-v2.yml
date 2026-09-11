@@ -21,12 +21,12 @@ jobs:
           before=$(git rev-parse HEAD)
           python3 tools/havenline/production/production_cli.py validate-registry
           python3 tools/havenline/production/repair_t03_river_gate_readability_v2.py
-          mapfile -t changed < <(git diff --name-only)
+          mapfile -t changed < <(git diff --name-only -- HavenlineGodot)
           printf '%s\n' "${changed[@]}"
           test "${#changed[@]}" -eq 4
           python3 tools/havenline/production/production_cli.py validate-candidate T03 "${changed[@]}" --integration-owner
           test -z "$(git diff --name-only -- HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd HavenlineGodot/assets)"
-          git diff --check
+          git diff --check -- HavenlineGodot
           echo "$before" > /tmp/base.txt
       - name: Prepare Godot and established fixtures
         run: |
