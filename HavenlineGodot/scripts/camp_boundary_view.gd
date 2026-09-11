@@ -4,6 +4,7 @@ extends Node3D
 const Boundary=preload("res://scripts/camp_boundary.gd")
 const Surface=preload("res://scripts/outpost_surface.gd")
 const Scenery=preload("res://scripts/scenery_batch.gd")
+const FENCE_ROOT_SINK := 0.04
 var fence_batch:MultiMeshInstance3D
 var post_batch:MultiMeshInstance3D
 var descriptor:Dictionary={}
@@ -16,7 +17,7 @@ func _mesh(game,asset:String)->ArrayMesh:
 	return game.merged_cache[asset]
 
 func _segment_transform(a:Vector2,b:Vector2)->Transform3D:
-	var pa:=Vector3(a.x,Surface.height_at(a),a.y);var pb:=Vector3(b.x,Surface.height_at(b),b.y)
+	var pa:=Vector3(a.x,Surface.height_at(a)-FENCE_ROOT_SINK,a.y);var pb:=Vector3(b.x,Surface.height_at(b)-FENCE_ROOT_SINK,b.y)
 	var x_axis:=(pb-pa).normalized()
 	var z_axis:=x_axis.cross(Vector3.UP).normalized()
 	if z_axis.length_squared()<.001:z_axis=Vector3.FORWARD
@@ -51,5 +52,6 @@ func configure(game):
 	descriptor["visual_collision_share_panel_authority"]=true
 	descriptor["authored_fence_asset"]="environment_v2/barricade.glb"
 	descriptor["authored_gate_post_asset"]="environment_v2/lantern_post.glb"
+	descriptor["fence_root_sink"]=FENCE_ROOT_SINK
 	descriptor["primitive_fence_meshes_created"]=false
 	descriptor["draw_batches"]=2

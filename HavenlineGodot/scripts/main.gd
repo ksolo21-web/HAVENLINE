@@ -1,6 +1,6 @@
 extends Control
 
-const ENVIRONMENT_REVISION := "0.5.0-task03-boundary"
+const ENVIRONMENT_REVISION := "0.5.1-task03-visual-polish"
 var scenery_instances: Array[GeometryInstance3D] = []
 var scenery_origins: Array[Vector3] = []
 var scenery_heights: Array[float] = []
@@ -266,8 +266,11 @@ func build_world():
 	reference_forest_evidence = ReferenceForest.build(self)
 	build_environment_dressing()
 	for side in sim.defenses:
-		defense_visuals[side] = model("world/barricade", world, xyz(sim.defenses[side].position))
-		defense_visuals[side].scale.y = 0.15
+		var defense:Dictionary=sim.defenses[side]
+		var progress:=int(defense.delivered.wood)+int(defense.delivered.stone)
+		defense_visuals[side] = model("world/barricade", world, xyz(defense.position))
+		defense_visuals[side].visible = bool(defense.built) or progress > 0
+		defense_visuals[side].scale.y = .35 + .65 * clampf(float(progress)/11.0,0.0,1.0) if defense_visuals[side].visible else 1.0
 
 func tree_rotation(tree: Node3D, index: int):
 	tree.rotation.y = index * 1.71
@@ -606,7 +609,10 @@ func _process(dt: float):
 		resource_visuals[node.id].visible = node.units > 0
 	for side in sim.defenses:
 		var d: Dictionary = sim.defenses[side]
-		defense_visuals[side].scale.y = .15 + .85 * (float(d.delivered.wood + d.delivered.stone) / 11)
+		var progress:=int(d.delivered.wood)+int(d.delivered.stone)
+		defense_visuals[side].visible = bool(d.built) or progress > 0
+		if defense_visuals[side].visible:
+			defense_visuals[side].scale.y = .35 + .65 * clampf(float(progress)/11.0,0.0,1.0)
 	update_carry()
 	outpost_view.sync(sim, dt, paused)
 	outpost_audio.sync(sim, paused, dt)

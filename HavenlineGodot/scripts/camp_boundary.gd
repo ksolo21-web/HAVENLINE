@@ -13,6 +13,8 @@ const RIVER_GATE_HALF := 1.7
 const COLLISION_RADIUS := 0.32
 const PANEL_TARGET := 2.72
 const PANEL_SOURCE_LENGTH := 2.95
+const GATE_LEAF_LENGTH := 0.92
+const GATE_OPEN_ANGLE := 1.28
 const SOUTH_FENCE_MARGIN := River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER+River.BUILD_SETBACK
 const LANE_HALF := 1.30
 const BANK_LANE_MARGIN := River.DEFAULT_DRY_MARGIN+0.55
@@ -121,14 +123,14 @@ static func gate_specs()->Array[Dictionary]:
 	return result
 
 static func gate_leaf_specs()->Array[Dictionary]:
-	var result:Array[Dictionary]=[];var leaf_length:=1.16
+	var result:Array[Dictionary]=[];var leaf_length:=GATE_LEAF_LENGTH
 	for gate in gate_specs():
 		var a:Vector2=gate.a;var b:Vector2=gate.b;var tangent:Vector2=gate.tangent;var mid:Vector2=gate.center
 		var inward:=(CAMP_CENTER-mid).normalized()
-		var left_dir:=tangent.rotated(1.10)
-		if left_dir.dot(inward)<0:left_dir=tangent.rotated(-1.10)
-		var right_dir:=(-tangent).rotated(1.10)
-		if right_dir.dot(inward)<0:right_dir=(-tangent).rotated(-1.10)
+		var left_dir:=tangent.rotated(GATE_OPEN_ANGLE)
+		if left_dir.dot(inward)<0:left_dir=tangent.rotated(-GATE_OPEN_ANGLE)
+		var right_dir:=(-tangent).rotated(GATE_OPEN_ANGLE)
+		if right_dir.dot(inward)<0:right_dir=(-tangent).rotated(-GATE_OPEN_ANGLE)
 		result.append({"gate":gate.id,"hinge":a,"a":a,"b":a+left_dir*leaf_length,"length":leaf_length})
 		result.append({"gate":gate.id,"hinge":b,"a":b,"b":b+right_dir*leaf_length,"length":leaf_length})
 	return result
@@ -197,4 +199,5 @@ static func evidence()->Dictionary:
 	return {"task":"T03","side_x":SIDE_X,"north_z":NORTH_Z,"panel_count":panel_specs().size(),"gate_count":gates.size(),
 		"minimum_gate_width":minimum_gate,"south_fence_minimum_shore_distance":min_south_margin,
 		"south_fence_required_margin":SOUTH_FENCE_MARGIN,"collision_radius":COLLISION_RADIUS,"lane_half_width":LANE_HALF,
+		"gate_leaf_length":GATE_LEAF_LENGTH,"gate_open_angle":GATE_OPEN_ANGLE,
 		"lane_ids":lane_polylines().map(func(row):return row.id),"river_gate_reserves":RIVER_GATES,"task_approved":false}

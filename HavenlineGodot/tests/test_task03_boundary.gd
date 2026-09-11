@@ -104,6 +104,12 @@ func run():
 	var desc:Dictionary=game.camp_boundary_view.descriptor
 	check("Fence visuals and collision use same authoritative panel count",desc.collision_panel_instances==panels.size() and desc.visual_collision_share_panel_authority is bool and desc.visual_collision_share_panel_authority)
 	check("Six gates have twelve lantern posts and twelve open timber leaves",desc.gate_count==6 and desc.gate_post_instances==12 and desc.open_gate_leaf_instances==12)
+	check("Gate leaves use the polished readable opening geometry",Boundary.GATE_LEAF_LENGTH==.92 and Boundary.GATE_OPEN_ANGLE==1.28)
+	check("Authored fence roots are deliberately sunk into terrain",is_equal_approx(float(desc.fence_root_sink),.04))
+	var zero_progress_hidden:=true
+	for side in game.sim.defenses:
+		zero_progress_hidden=zero_progress_hidden and not game.defense_visuals[side].visible
+	check("Zero-progress defense barricades do not appear as collapsed fence debris",zero_progress_hidden)
 	check("No primitive Task 3 fence geometry is created",desc.primitive_fence_meshes_created is bool and not desc.primitive_fence_meshes_created and desc.draw_batches==2)
 	check("Native render scale remains exactly one",game.scene_view.scaling_3d_scale==1.0)
 	check("Approved river still reports mapspan layout",game.outpost_view.evidence(game.sim).river_layout_version==River.LAYOUT_VERSION)
