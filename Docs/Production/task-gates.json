@@ -7,10 +7,10 @@
   "approved_task_count": 1,
   "active_task": "T02",
   "active_task_title": "Terrain, snow, warm work areas and full map-spanning expandable river",
-  "active_status": "REOPENED_SPEC_LOCKED_NOT_IMPLEMENTED",
-  "active_candidate_source": null,
+  "active_status": "IMPLEMENTATION_IN_PROGRESS_MECHANICAL_GATE_PENDING",
+  "active_candidate_source": "a79806b85de9db0e26ec008dfb14a49751b688c8",
   "active_score": null,
-  "active_task_implementation_started": false,
+  "active_task_implementation_started": true,
   "all_tasks_after_active_are_locked": true,
   "work_in_progress_limit": 1,
   "minimum_intermediate_dimension_score": 9.0,
@@ -30,10 +30,7 @@
   "river_locked_geometry": {
     "generated_terrain_bounds": {"x": [-31.0,31.0], "z": [-31.0,31.0]},
     "current_movement_bounds": {"x": [-14.2,14.2], "z": [-16.2,16.2]},
-    "centreline_anchors": [
-      [-31.0,-8.6],[-24.0,-7.2],[-17.0,-9.0],[-10.0,-6.8],[-3.0,-8.7],
-      [4.0,-6.9],[11.0,-8.5],[19.0,-6.7],[25.0,-8.1],[31.0,-7.3]
-    ],
+    "centreline_anchors": [[-31.0,-8.6],[-24.0,-7.2],[-17.0,-9.0],[-10.0,-6.8],[-3.0,-8.7],[4.0,-6.9],[11.0,-8.5],[19.0,-6.7],[25.0,-8.1],[31.0,-7.3]],
     "primary_meander_bends": 5,
     "nominal_water_width": 3.8,
     "minimum_water_width": 3.2,
@@ -47,12 +44,17 @@
     "future_crossing_reserve_width": 3.0,
     "main_camp_bank": "north"
   },
-  "latest_historical_task2_approval": {
-    "status": "SUPERSEDED_BY_USER_RIVER_REQUIREMENT",
-    "source": "25cf9ea5a31ef0acc90fbc4612498dc671565ccb",
-    "score": 9.5,
-    "record": "Docs/Production/T02/lake-east-west-accepted.json"
-  },
+  "implementation_files": [
+    "HavenlineGodot/scripts/river_geometry.gd",
+    "HavenlineGodot/scripts/outpost_surface.gd",
+    "HavenlineGodot/scripts/outpost_simulation.gd",
+    "HavenlineGodot/scripts/outpost_view.gd",
+    "HavenlineGodot/shaders/outpost_snow.gdshader",
+    "HavenlineGodot/shaders/lakeshore_water.gdshader",
+    "HavenlineGodot/tests/test_task02_river.gd"
+  ],
+  "current_mechanical_run": 34582213765,
+  "latest_historical_task2_approval": {"status":"SUPERSEDED_BY_USER_RIVER_REQUIREMENT","source":"25cf9ea5a31ef0acc90fbc4612498dc671565ccb","score":9.5,"record":"Docs/Production/T02/lake-east-west-accepted.json"},
   "completed_task_records": {
     "T01": {
       "task": "T01",
@@ -87,7 +89,7 @@
   "active_evidence": null,
   "next_task": "T03",
   "next_task_locked": true,
-  "checkpoint_correction": "Kaleb superseded the previously accepted east-west lake with a persistent meandering river spanning the full 62-unit generated terrain. Task 2 is reopened and its exact river layout is locked in RIVER_LAYOUT_SPEC.md. Task 3 is relocked and remains unstarted until the river version of T02 passes fresh gates and critics.",
+  "checkpoint_correction": "The locked R0-R9 map-spanning river is now implemented in source as the shared authority for terrain carving, water mesh, wet collision, save recovery and future crossing masks. Mechanical CI is running. Task 3 remains locked; Task 2 is not approved until fresh actual renders and both critic roles pass.",
   "final_release_gate_unchanged": true,
   "unfinished_apk_delivery_allowed": false,
   "user_testing_requested": false,
@@ -95,21 +97,7 @@
   "game_complete": false,
   "c2_c4_final_rigging_and_review_remain_last": true,
   "historical_approvals": [
-    {
-      "task": "T02",
-      "title": "Terrain, snow, warm work floor and short lakeshore layout",
-      "status": "HISTORICAL_SUPERSEDED",
-      "source": "96f8d396a5015e136c590dc496214a689adb1e43",
-      "score": 9.0,
-      "record": "Docs/Production/T02/VERIFIED_COMPLETION.md"
-    },
-    {
-      "task": "T02",
-      "title": "Terrain, snow, warm workfloor and full-width lake",
-      "status": "HISTORICAL_SUPERSEDED",
-      "source": "25cf9ea5a31ef0acc90fbc4612498dc671565ccb",
-      "score": 9.5,
-      "record": "Docs/Production/T02/LAKE_EAST_WEST_CORRECTION.md"
-    }
+    {"task":"T02","title":"Terrain, snow, warm work floor and short lakeshore layout","status":"HISTORICAL_SUPERSEDED","source":"96f8d396a5015e136c590dc496214a689adb1e43","score":9.0,"record":"Docs/Production/T02/VERIFIED_COMPLETION.md"},
+    {"task":"T02","title":"Terrain, snow, warm workfloor and full-width lake","status":"HISTORICAL_SUPERSEDED","source":"25cf9ea5a31ef0acc90fbc4612498dc671565ccb","score":9.5,"record":"Docs/Production/T02/LAKE_EAST_WEST_CORRECTION.md"}
   ]
 }
