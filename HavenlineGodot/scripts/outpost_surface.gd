@@ -1,16 +1,13 @@
 extends RefCounted
-# T02: one continuous indexed surface shared by scenery, actors and shoreline.
-# The approved T01 trees are NOT regenerated. No camera, fence or station changes.
+# T02 river revision: one continuous terrain surface plus one spline-following
+# water surface. The authoritative geometry lives in river_geometry.gd.
+const River = preload("res://scripts/river_geometry.gd")
 const HALF := 31.0
 const STEP := 0.25
-const LAKE_CENTER := Vector2(0.0, -13.85)
-const LAKE_HALF := Vector2(15.2, 1.85)
-const WATER_Y := -0.34
-const LAND_MARGIN := 0.32
-const WORK_CENTER := Vector2(0.0, 0.3)
-const WORK_HALF := Vector2(9.75, 6.7)
-const BAY_CENTER := Vector2(-6.5, -9.4)
-const BAY_HALF := Vector2(6.6, 1.95)
+const WATER_Y := River.WATER_Y
+const LAND_MARGIN := River.DEFAULT_DRY_MARGIN
+const WORK_CENTER := Vector2(0.0, 2.8)
+const WORK_HALF := Vector2(9.75, 4.3)
 static var _mesh: ArrayMesh
 static var _water_mesh: ArrayMesh
 static var _heights := PackedFloat32Array()
@@ -20,41 +17,26 @@ static func rounded_rect(p: Vector2, center: Vector2, half_size: Vector2, radius
 	return q.max(Vector2.ZERO).length()+minf(maxf(q.x,q.y),0.0)-radius
 
 static func work_distance(p: Vector2) -> float:
-	var main := rounded_rect(p,WORK_CENTER,WORK_HALF,0.72)
-	var bay := rounded_rect(p,BAY_CENTER,BAY_HALF,0.65)
-	var connector := rounded_rect(p,Vector2(-4.3,-6.8),Vector2(4.45,1.25),0.5)
-	return minf(main,minf(bay,connector))
+	# The retired lake bay/connector are gone. The warm workfloor stays entirely
+	# on the river's north-bank camp side, clear of the permanent-build setback.
+	return rounded_rect(p,WORK_CENTER,WORK_HALF,0.78)
 
+static func river_distance(p: Vector2) -> float:
+	return River.shore_distance(p)
+
+# Compatibility for older diagnostic scripts only. Runtime code uses river_*. 
 static func lake_distance(p: Vector2) -> float:
-	# World-unit capsule distance: consistent bank width along the full east-west
-	# lake, including both rounded ends. Water continues beyond x=+/-14.2.
-	var q := (p-LAKE_CENTER).abs()
-	var straight_half := LAKE_HALF.x-LAKE_HALF.y
-	return Vector2(maxf(q.x-straight_half,0.0),q.y).length()-LAKE_HALF.y
-
-static func southern_shore_y(x: float, margin := LAND_MARGIN) -> float:
-	var radius := LAKE_HALF.y+maxf(margin,0.0)+0.00005
-	var dx := maxf(absf(x-LAKE_CENTER.x)-(LAKE_HALF.x-LAKE_HALF.y),0.0)
-	return LAKE_CENTER.y+sqrt(maxf(radius*radius-dx*dx,0.0))
+	return river_distance(p)
 
 static func land_position(p: Vector2, margin := LAND_MARGIN) -> Vector2:
-	if not p.is_finite(): return Vector2.ZERO
-	# End-to-end water separates the former north strip from the active camp.
-	# Recover old actors to the connected south bank, preserving X instead of
-	# radially flinging them beyond the playable east/west bounds.
-	var radius := LAKE_HALF.y+maxf(margin,0.0)
-	var in_span := absf(p.x-LAKE_CENTER.x)<=LAKE_HALF.x+maxf(margin,0.0)
-	if not in_span: return p
-	var shore := southern_shore_y(p.x,margin)
-	if p.y>=shore: return p
-	# Only the existing playable north strip and lake need recovery; decorative
-	# far-north forest geometry is not an actor destination or a terrain clamp.
-	if p.y>=-16.2001 or lake_distance(p)<radius-LAKE_HALF.y:
-		return Vector2(p.x,shore)
-	return p
+	return River.dry_position(p,margin)
+
+static func protected_build_position(p: Vector2) -> Vector2:
+	return River.protected_build_position(p)
 
 static func _shape_height(p: Vector2) -> float:
-	# Preserve the accepted outer woodland terrain exactly, including seated roots.
+	# Preserve the approved T01 outer snowfield character while cutting the river
+	# through the same indexed terrain rather than layering a collision plane.
 	var ripple := sin(p.x*.53+sin(p.y*.26))*cos(p.y*.48)*.055
 	var edge := smoothstep(13.5,24.0,maxf(absf(p.x),absf(p.y)*.86))
 	var drift := edge*(.64+.52*pow(sin(p.x*.19+p.y*.15),2.0))
@@ -74,11 +56,12 @@ static func _shape_height(p: Vector2) -> float:
 	var floor_height := 0.008*sin(p.x*.22)*sin(p.y*.26)
 	var snow_rim := .12*exp(-pow((wd-.36)/.62,2.0))
 	var result := lerpf(floor_height,original,smoothstep(-.12,1.80,wd))+snow_rim
-	var shore := lake_distance(p)
-	# A submerged basin and rounded snow-covered lip, connected without overlays.
-	var bank_height := lerpf(WATER_Y-.85,.16,smoothstep(-.46,.30,shore))
-	bank_height += .19*exp(-pow((shore-.38)/.37,2.0))
-	result=lerpf(bank_height,result,smoothstep(.54,1.32,shore))
+	var shore := river_distance(p)
+	# Shared cross-section: submerged channel -> 0.30 wet edge -> 0.70 slope ->
+	# 0.45 soft shoulder. The outer shoulder blends back into the snowfield.
+	var bank_height := lerpf(WATER_Y-.82,.15,smoothstep(-.42,River.WET_EDGE+River.BANK_RUN,shore))
+	bank_height += .18*exp(-pow((shore-(River.WET_EDGE+River.BANK_RUN+.14))/.34,2.0))
+	result=lerpf(bank_height,result,smoothstep(River.WET_EDGE+River.BANK_RUN,River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER,shore))
 	return result
 
 static func _ensure_heights():
@@ -90,8 +73,8 @@ static func _ensure_heights():
 			_heights[z*side+x]=_shape_height(Vector2(-HALF+x*STEP,-HALF+z*STEP))
 
 static func height_at(p: Vector2) -> float:
-	# Barycentric sampling of the actual indexed triangles, not an approximate
-	# second collision plane. Actors and approved tree roots use these same faces.
+	# Barycentric sampling of the actual indexed triangles, not a second collision
+	# approximation. Actors, river banks and approved tree roots share this mesh.
 	_ensure_heights()
 	if absf(p.x)>=HALF or absf(p.y)>=HALF: return _shape_height(p)
 	var n := int(HALF*2.0/STEP);var side := n+1
@@ -104,21 +87,24 @@ static func height_at(p: Vector2) -> float:
 
 static func _indexed_grid() -> ArrayMesh:
 	_ensure_heights()
-	var n := int(HALF*2.0/STEP)
-	var side := n+1
+	var n := int(HALF*2.0/STEP);var side := n+1
 	var vertices := PackedVector3Array();vertices.resize(side*side)
 	var normals := PackedVector3Array();normals.resize(side*side)
 	var uv := PackedVector2Array();uv.resize(side*side)
+	var colors := PackedColorArray();colors.resize(side*side)
 	var indices := PackedInt32Array();indices.resize(n*n*6)
 	for z in range(side):
 		for x in range(side):
-			var p := Vector2(-HALF+x*STEP,-HALF+z*STEP)
-			var i := z*side+x
+			var p := Vector2(-HALF+x*STEP,-HALF+z*STEP);var i := z*side+x
 			vertices[i]=Vector3(p.x,_heights[i],p.y);uv[i]=p*.08
+			# The shader receives CPU-authored distances derived from the exact same
+			# river function as collision/recovery, so the visible bank cannot drift.
+			var shore:=clampf((river_distance(p)+4.0)/8.0,0.0,1.0)
+			var work:=clampf((work_distance(p)+4.0)/8.0,0.0,1.0)
+			colors[i]=Color(shore,work,0.0,1.0)
 	for z in range(side):
 		for x in range(side):
-			var l := maxi(0,x-1);var r := mini(n,x+1)
-			var b := maxi(0,z-1);var t := mini(n,z+1)
+			var l := maxi(0,x-1);var r := mini(n,x+1);var b := maxi(0,z-1);var t := mini(n,z+1)
 			var dx := (vertices[z*side+r].y-vertices[z*side+l].y)/(float(r-l)*STEP)
 			var dz := (vertices[t*side+x].y-vertices[b*side+x].y)/(float(t-b)*STEP)
 			normals[z*side+x]=Vector3(-dx,1,-dz).normalized()
@@ -129,7 +115,7 @@ static func _indexed_grid() -> ArrayMesh:
 			indices[i+3]=a+1;indices[i+4]=a+side+1;indices[i+5]=a+side
 	var arrays: Array=[];arrays.resize(Mesh.ARRAY_MAX)
 	arrays[Mesh.ARRAY_VERTEX]=vertices;arrays[Mesh.ARRAY_NORMAL]=normals
-	arrays[Mesh.ARRAY_TEX_UV]=uv;arrays[Mesh.ARRAY_INDEX]=indices
+	arrays[Mesh.ARRAY_TEX_UV]=uv;arrays[Mesh.ARRAY_COLOR]=colors;arrays[Mesh.ARRAY_INDEX]=indices
 	var result := ArrayMesh.new();result.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
 	return result
 
@@ -139,34 +125,38 @@ static func mesh() -> ArrayMesh:
 
 static func water_mesh() -> ArrayMesh:
 	if _water_mesh!=null: return _water_mesh
-	# Short, regular triangles prevent vertex fog/light interpolation from exposing
-	# the old giant triangle fan when the lake is extended across the entire map.
-	# One opaque surface and one draw submission; no transparent plane overlays.
-	var radius := LAKE_HALF.y+0.20
-	var straight_half := LAKE_HALF.x-LAKE_HALF.y
-	var xs := PackedFloat32Array()
-	for i in range(25): xs.append(-straight_half-radius*cos(PI*.5*float(i)/24.0))
-	for i in range(1,61): xs.append(-straight_half+2.0*straight_half*float(i)/60.0)
-	for i in range(1,25): xs.append(straight_half+radius*sin(PI*.5*float(i)/24.0))
-	var vertices := PackedVector3Array();var normals := PackedVector3Array()
-	var uv := PackedVector2Array();var tangents := PackedFloat32Array()
-	var indices := PackedInt32Array();var rows := 13
-	for x in xs:
-		var cap_x := maxf(absf(x)-straight_half,0.0)
-		var half_depth := sqrt(maxf(radius*radius-cap_x*cap_x,0.0))
+	var rows:=13;var samples:=River.plan_samples(.25)
+	var vertices:=PackedVector3Array();var normals:=PackedVector3Array()
+	var uv:=PackedVector2Array();var tangents:=PackedFloat32Array();var indices:=PackedInt32Array()
+	var along:=0.0;var previous:=Vector2.ZERO
+	for i in range(samples.size()):
+		var sample:Dictionary=samples[i];var center:Vector2=sample.center
+		if i>0: along+=center.distance_to(previous)
+		previous=center
+		var north:Vector2=sample.north_normal;var half:=float(sample.width)*.5
 		for j in range(rows):
-			var p := LAKE_CENTER+Vector2(x,lerpf(-half_depth,half_depth,float(j)/12.0))
+			var lateral:=lerpf(-half,half,float(j)/float(rows-1))
+			var p:=center+north*lateral
 			vertices.append(Vector3(p.x,WATER_Y,p.y));normals.append(Vector3.UP)
-			uv.append(p*.1);tangents.append_array(PackedFloat32Array([1.,0.,0.,1.]))
-	for x in range(xs.size()-1):
-		for z in range(rows-1):
-			var a := x*rows+z;var b := (x+1)*rows+z
+			uv.append(Vector2(along*.12,float(j)/float(rows-1)))
+			tangents.append_array(PackedFloat32Array([float(sample.tangent.x),0.,float(sample.tangent.y),1.]))
+	for i in range(samples.size()-1):
+		for j in range(rows-1):
+			var a:=i*rows+j;var b:=(i+1)*rows+j
 			for triangle in [[a,b,a+1],[b,b+1,a+1]]:
-				var area: Vector3=(vertices[triangle[1]]-vertices[triangle[0]]).cross(vertices[triangle[2]]-vertices[triangle[0]])
+				var area:Vector3=(vertices[triangle[1]]-vertices[triangle[0]]).cross(vertices[triangle[2]]-vertices[triangle[0]])
 				if area.length_squared()>.0000000001:
-					for index in triangle: indices.append(index)
-	var arrays: Array=[];arrays.resize(Mesh.ARRAY_MAX)
+					for index in triangle:indices.append(index)
+	var arrays:Array=[];arrays.resize(Mesh.ARRAY_MAX)
 	arrays[Mesh.ARRAY_VERTEX]=vertices;arrays[Mesh.ARRAY_NORMAL]=normals
 	arrays[Mesh.ARRAY_TEX_UV]=uv;arrays[Mesh.ARRAY_TANGENT]=tangents;arrays[Mesh.ARRAY_INDEX]=indices
 	_water_mesh=ArrayMesh.new();_water_mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES,arrays)
 	return _water_mesh
+
+static func river_evidence() -> Dictionary:
+	var evidence:=River.evidence()
+	evidence["water_triangles"]=water_mesh().get_faces().size()/3
+	evidence["terrain_triangles"]=mesh().get_faces().size()/3
+	evidence["work_center"]=[WORK_CENTER.x,WORK_CENTER.y]
+	evidence["work_half"]=[WORK_HALF.x,WORK_HALF.y]
+	return evidence
