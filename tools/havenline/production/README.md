@@ -1,19 +1,22 @@
-# Havenline Production Accelerator
+# Havenline Production Accelerator — V2
 
-`production_cli.py` is the stdlib-only governance/acceleration entry point.
+This directory is the authoritative controlled-parallel production toolset. Each tool has one responsibility so builders and the integration owner cannot bypass path, dependency, evidence, regression, critic or closure gates through a broad self-certifying command.
 
-Commands:
-- `validate-registry` — validates active dependency/path ownership collisions.
-- `validate-candidate TASK FILE...` — rejects protected, foreign-owned, shared-integration or out-of-scope paths; `--integration-owner` permits integration-owner coordination paths but not foreign protected runtime.
-- `impact FILE...` — maps changed files to impacted approved/active tasks.
-- `regression-plan FILE...` — universal baseline + mandatory impacted regression suites.
-- `task-packet TASK --output FILE` — freezes assignment values against current integration commit.
-- `capture-plan TASK [--motion]` — deterministic still/motion evidence contract.
-- `save-matrix TASK` — fresh/existing/previous/interrupted/reload/migration/recovery matrix.
-- `device-matrix TASK` — phone/tablet/foldable early layout matrix.
-- `package TASK --candidate SHA --changed ... --output ZIP` — source-bound evidence package manifest + digest.
-- `closure MANIFEST` — candidate closure validator; mandatory critic dimensions must be strictly `>9.0` unrounded.
+Core tools:
+- `task_packet.py` — generate/freeze the task packet from the dependency graph, registry, ownership and critic matrix.
+- `workstream.py` — claim workstreams, validate registry collisions, reject stale bases and protected/foreign path changes, and apply status transitions.
+- `change_impact.py` — map changed files to affected approved tasks and required regression.
+- `regression_runner.py` — execute the union of universal and impact-selected mandatory suites, or emit a plan with `--plan-only`.
+- `evidence_capture.py` — deterministic still-evidence capture orchestration and metadata.
+- `motion_capture.py` — full-cycle/slow/turn/transition/contact/clipping evidence orchestration for character and animal motion tasks.
+- `save_state_matrix.py` — fresh/current/previous/interrupted/reload/migration/recovery persistence matrix.
+- `device_matrix.py` — early phone/tablet/foldable layout and lifecycle matrix.
+- `evidence_packager.py` — package exact source hashes, changed files, tests, logs, screenshots/videos, performance records, raw critic material, failures and dispositions.
+- `critic_harness.py` — prepare/validate applicable specialist-critic records; never converts builder self-review into an independent pass.
+- `closure_validator.py` — final task-candidate closure gate; mandatory reviewed dimensions must be strictly `>9.0` unrounded.
+- `validate_migration.py` — verify the V2 governance migration itself, including T01/T02 preservation, T03 recovered state, all 70 tasks, all 11 critics, budgets and allowed migration paths.
 
-The CLI never awards an independent critic pass, never certifies physical 4K/60, and never marks a task APPROVED. Approval is an integration-owner registry/task-gate mutation after G1–G14 are satisfied.
+Authoritative coordination data lives in `Docs/Production/`:
+`DEPENDENCY_GRAPH.json`, `WORKSTREAM_REGISTRY.json`, `PATH_OWNERSHIP.json`, `CRITIC_MATRIX.json`, `PERFORMANCE_BUDGETS.json`, `REGRESSION_MATRIX.json`, `SAVE_STATE_MATRIX.json`, `DEVICE_LAYOUT_MATRIX.json`, task packets, change requests and evidence manifests.
 
-Large binary evidence remains in Actions artifacts or equivalent hashed storage; `Docs/Production/Evidence/` stores manifests, artifact IDs/digests, raw-review references and dispositions.
+No tool here may mark an isolated builder branch production-APPROVED. Only the integration owner can approve after integration, impact regression, fresh evidence, applicable critics and G1–G14 closure. T68/T69 remain the only final physical native-4K/60 certification tasks.
