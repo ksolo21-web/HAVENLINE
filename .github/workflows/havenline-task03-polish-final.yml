@@ -59,7 +59,7 @@ jobs:
               data=found[-1];assert data.get('passed') is True and not data.get('failures'),(path,data.get('failures'))
               checks=data.get('checks',[]);rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
           assert len(rows)==16,rows
-          total=sum(r['checks'] for r in rows);assert total==804,total
+          total=sum(r['checks'] for r in rows);assert total==807,total
           geometry=json.loads((out/'tree-geometry.json').read_text());assert geometry['passed'] and geometry['geometry_checks']==9
           before=json.loads((out/'protected-before.json').read_text());assert all(Path(p).exists() and hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in before.items())
           report={'source':'${{ github.sha }}','suite_count':16,'total_checks':total,'suites':rows,'all_passed':True,'tree_geometry_checks':9,'protected_glbs_unchanged':33,'task_approved':False,'physical4k60_verified':False}
@@ -190,7 +190,7 @@ jobs:
           evidence=Path('evidence');pro=json.loads((evidence/'provenance.json').read_text());tests=json.loads((evidence/'tests.json').read_text())
           errors=[];rows=[];models=[]
           if pro['source']!=source or not pro['all61_images_verified'] or len(pro['captures'])!=61:errors.append('Evidence provenance invalid')
-          if tests['source']!=source or not tests['all_passed'] or tests['suite_count']!=16 or tests['total_checks']!=804:errors.append('Mechanical regression invalid')
+          if tests['source']!=source or not tests['all_passed'] or tests['suite_count']!=16 or tests['total_checks']!=807:errors.append('Mechanical regression invalid')
           for name,h in pro['captures'].items():
               if sha(evidence/name)!=h:errors.append('Changed capture '+name)
           for role in roles:
