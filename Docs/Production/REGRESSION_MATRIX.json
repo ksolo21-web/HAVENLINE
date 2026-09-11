@@ -28,17 +28,8 @@
         "HavenlineGodot/assets/reference_forest/**",
         "HavenlineGodot/scripts/reference_forest.gd"
       ],
-      "tasks": [
-        "T01",
-        "T02",
-        "T03"
-      ],
-      "suites": [
-        "test_reference_forest",
-        "test_reference_forest_acceptance",
-        "test_task02_river",
-        "test_task03_boundary"
-      ]
+      "tasks": ["T01","T02","T03"],
+      "suites": ["test_reference_forest","test_reference_forest_acceptance","test_task02_river","test_task03_boundary"]
     },
     {
       "patterns": [
@@ -46,17 +37,8 @@
         "HavenlineGodot/scripts/outpost_surface.gd",
         "HavenlineGodot/shaders/lakeshore_water.gdshader"
       ],
-      "tasks": [
-        "T02",
-        "T03"
-      ],
-      "suites": [
-        "test_task02_terrain",
-        "test_task02_surface_stress",
-        "test_lake_east_west",
-        "test_task02_river",
-        "test_task03_boundary"
-      ]
+      "tasks": ["T02","T03"],
+      "suites": ["test_task02_terrain","test_task02_surface_stress","test_lake_east_west","test_task02_river","test_task03_boundary"]
     },
     {
       "patterns": [
@@ -64,14 +46,8 @@
         "HavenlineGodot/scripts/camp_boundary_view.gd",
         "HavenlineGodot/shaders/outpost_snow.gdshader"
       ],
-      "tasks": [
-        "T03"
-      ],
-      "suites": [
-        "test_task03_boundary",
-        "test_task02_surface_stress",
-        "test_task02_river"
-      ]
+      "tasks": ["T03"],
+      "suites": ["test_task03_boundary","test_task02_surface_stress","test_task02_river"]
     },
     {
       "patterns": [
@@ -79,61 +55,39 @@
         "HavenlineGodot/scripts/outpost_simulation.gd",
         "HavenlineGodot/data/reference-contract.json"
       ],
-      "tasks": [
-        "T01",
-        "T02",
-        "T03"
-      ],
-      "suites": [
-        "test_simulation",
-        "test_crew_and_persistence",
-        "test_outpost",
-        "test_outpost_runtime",
-        "test_environment",
-        "test_reference_forest",
-        "test_task02_river",
-        "test_task03_boundary"
-      ]
+      "tasks": ["T01","T02","T03"],
+      "suites": ["test_simulation","test_crew_and_persistence","test_outpost","test_outpost_runtime","test_environment","test_reference_forest","test_task02_river","test_task03_boundary"]
     },
     {
       "patterns": [
         "HavenlineGodot/scripts/camera*.gd",
         "HavenlineGodot/scripts/*camera*.gd"
       ],
-      "tasks": [
-        "T01",
-        "T02",
-        "T03",
-        "T04"
-      ],
-      "suites": [
-        "test_adaptive_devices",
-        "test_render_budget"
-      ]
+      "tasks": ["T01","T02","T03","T04"],
+      "suites": ["test_adaptive_devices","test_render_budget"]
     },
     {
       "patterns": [
         "HavenlineGodot/animations/**",
         "HavenlineGodot/scripts/character*.gd"
       ],
-      "tasks": [
-        "T06"
-      ],
-      "suites": [
-        "test_motion_and_performance",
-        "test_population"
-      ]
+      "tasks": ["T06"],
+      "suites": ["test_motion_and_performance","test_population"]
     },
     {
       "patterns": [
         "Docs/Production/**",
         "tools/havenline/production/**",
-        ".github/workflows/havenline-production-*.yml"
+        ".github/workflows/havenline-production-governance.yml",
+        ".github/workflows/havenline-candidate-guard.yml",
+        "HavenlineGodot/tests/production_capture_harness.gd",
+        "HavenlineGodot/tests/production_motion_capture.gd",
+        "AGENTS.md"
       ],
       "tasks": [],
       "suites": [],
       "governance_only": true
     }
   ],
-  "rule": "Union all matching impact suites with universal baseline. Approved impacted tasks must be revalidated on the integration candidate; unknown production changes fall back to the full current suite set."
+  "rule": "Union all matching impact suites with universal baseline. Match impact per changed file. Any unknown HavenlineGodot production path forces the full currently known mandatory suite set even when another file in the same candidate matched a rule. Approved impacted tasks must be revalidated on the integration candidate."
 }
