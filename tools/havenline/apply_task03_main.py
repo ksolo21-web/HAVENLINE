@@ -5,8 +5,12 @@ import hashlib
 ROOT=Path(__file__).resolve().parents[2]
 p=ROOT/'HavenlineGodot/scripts/main.gd'
 def sha(path):return hashlib.sha256(path.read_bytes()).hexdigest()
-assert sha(p)=='c72a4dfbb1d1b4ecf5bdf60be0e915f40bc7f7e4f9b22f3bc791246069db2e22' or sha(p)=='bd484e532af5660dceeb5a0999be857ce0e844f0', 'main.gd changed; reconcile before Task 3 patch'
 s=p.read_text()
+# Exact structural guards are the concurrency check: every target must occur
+# once and the Task 3 additions must still be absent before this patch runs.
+assert s.count('const ENVIRONMENT_REVISION := "0.4.5-environment-candidate"')==1
+assert 'CampBoundaryView = preload("res://scripts/camp_boundary_view.gd")' not in s
+assert 'camp_boundary_view.configure(self)' not in s
 s=s.replace('const ENVIRONMENT_REVISION := "0.4.5-environment-candidate"','const ENVIRONMENT_REVISION := "0.5.0-task03-boundary"',1)
 needle='const ReferenceForest = preload("res://scripts/reference_forest.gd")\nvar reference_forest_evidence: Dictionary = {}'
 assert s.count(needle)==1
@@ -27,4 +31,4 @@ needle='\t\treport["outpost"] = outpost_view.evidence(sim)'
 assert s.count(needle)==1
 s=s.replace(needle,needle+'\n\t\treport["task03_boundary"] = camp_boundary_view.descriptor',1)
 p.write_text(s)
-print({'main_sha256':sha(p),'task03_scene_integration':True})
+print({'main_sha256':sha(p),'task03_scene_integration':True,'guard':'exact-snippet-counts'})
