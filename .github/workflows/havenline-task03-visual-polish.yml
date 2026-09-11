@@ -1,0 +1,73 @@
+name: Havenline Task 3 critic-driven visual polish
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task03-visual-polish.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  repair-and-test:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - name: Prepare pinned Godot and established fixtures
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install numpy pillow
+          mkdir -p "$RUNNER_TEMP/engine" task03-polish/tests
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          python3 tools/havenline/apply_task03_visual_polish.py | tee task03-polish/repair.json
+          python3 tools/havenline/bake_outpost_audio.py > task03-polish/audio-fixture.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task03-polish/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task03-polish/tests/motion-fixture.log 2>&1
+      - name: Run all prerequisite and Task 3 suites
+        run: |
+          set -euo pipefail
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary; do
+            timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task03-polish/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task03-polish/tests/*.log; then exit 1; fi
+          python3 tools/havenline/audit_task01_geometry.py > task03-polish/tree-geometry.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          rows=[]
+          for p in sorted(Path('task03-polish/tests').glob('test_*.log')):
+            found=[json.loads(x) for x in p.read_text().splitlines() if x.startswith('{')]
+            assert found,p
+            o=found[-1];assert o.get('passed') is True and not o.get('failures'),(p,o.get('failures'))
+            checks=o.get('checks',[]);rows.append({'suite':p.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
+          assert len(rows)==16,rows
+          g=json.loads(Path('task03-polish/tree-geometry.json').read_text());assert g['passed']
+          result={'suite_count':16,'total_checks':sum(r['checks'] for r in rows),'tree_geometry_checks':g['geometry_checks'],'all_passed':True,'prior_local_6_of_10_preserved':True,'task_approved':False,'physical4k60_verified':False}
+          Path('task03-polish/mechanical.json').write_text(json.dumps(result,indent=2));print(json.dumps(result))
+          PY
+      - name: Commit exactly the tested game repair
+        id: source
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add HavenlineGodot/scripts/main.gd HavenlineGodot/scripts/camp_boundary.gd HavenlineGodot/scripts/camp_boundary_view.gd HavenlineGodot/tests/test_task03_boundary.gd
+          test ! -z "$(git diff --cached --name-only)"
+          test "$(git ls-remote origin refs/heads/codex/havenline-sequential-task-01 | cut -f1)" = "$GITHUB_SHA"
+          git commit -m 'Repair Task 3 gate grounding readability and premature defense debris'
+          git push origin HEAD:refs/heads/codex/havenline-sequential-task-01
+          source=$(git rev-parse HEAD);echo "source=$source" >> "$GITHUB_OUTPUT";echo "$source" > task03-polish/SOURCE.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-visual-polish-${{ github.run_id }}
+          path: task03-polish/
+          retention-days: 30
+          if-no-files-found: error
+# This repair changes Task 3 presentation only. It does not approve T03; fresh source-bound renders and both critic roles remain mandatory.
