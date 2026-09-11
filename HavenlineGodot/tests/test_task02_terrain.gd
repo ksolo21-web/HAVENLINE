@@ -4,8 +4,11 @@ const River=preload("res://scripts/river_geometry.gd")
 const Main=preload("res://scripts/main.gd")
 const Sim=preload("res://scripts/outpost_simulation.gd")
 const Forest=preload("res://scripts/reference_forest.gd")
-var checks:Array=[];var failures:Array=[]
-func check(name:String,passed:bool):checks.append({"name":name,"passed":passed});failures.append(name) if not passed else null
+var checks:Array=[]
+var failures:Array=[]
+func check(name:String,passed:bool):
+	checks.append({"name":name,"passed":passed})
+	if not passed:failures.append(name)
 func _initialize():call_deferred("run")
 func run():
 	var mesh:ArrayMesh=Surface.mesh();var arrays:Array=mesh.surface_get_arrays(0)
@@ -45,13 +48,14 @@ func run():
 			if Surface.work_distance(p)<0:work_safe=work_safe and River.unrestricted_build_distance(p)>=0
 	check("Warm production floor stays on the north buildable bank",work_safe)
 	var sim=Sim.new();var dry:=true
-	for resource in sim.resources:dry=dry and River.shore_distance(resource.position)>=.549
-	for key in ["leftTent","rightTent","northBarricade","southBarricade","forestGate"]:dry=dry and River.shore_distance(Sim.point(sim.contract.world[key]))>=River.DEFAULT_DRY_MARGIN-.001
-	check("Runtime resources, shelters, defenses and gate remain dry",dry)
+	for resource in sim.resources:dry=dry and River.shore_distance(resource.position)>=River.DEFAULT_DRY_MARGIN+.048 and Surface.height_at(resource.position)>Surface.WATER_Y+.05
+	for key in ["leftTent","rightTent","northBarricade","southBarricade","forestGate"]:
+		var p:Vector2=Sim.point(sim.contract.world[key]);dry=dry and River.shore_distance(p)>=River.DEFAULT_DRY_MARGIN-.002 and Surface.height_at(p)>Surface.WATER_Y+.05
+	check("Runtime resources, shelters, defenses and gate remain physically dry",dry)
 	var centre:Vector2=River.center_at_x(0.0);sim.position=centre;sim.inventory.wood=123;sim.stored.stone=456
 	var state:Dictionary=sim.snapshot();state.erase("river_layout_version");var restored=Sim.new()
-	check("Legacy wet save restores without losing materials",restored.restore(state) and restored.inventory.wood==123 and restored.stored.stone==456 and River.shore_distance(restored.position)>=River.DEFAULT_DRY_MARGIN-.001)
-	sim.companions[0].position=centre;sim.step(.01,Vector2.ZERO);check("Companions use the same dry river constraint",River.shore_distance(sim.companions[0].position)>=River.DEFAULT_DRY_MARGIN-.001)
+	check("Legacy wet save restores without losing materials",restored.restore(state) and restored.inventory.wood==123 and restored.stored.stone==456 and River.shore_distance(restored.position)>=River.DEFAULT_DRY_MARGIN-.002 and Surface.height_at(restored.position)>Surface.WATER_Y+.05)
+	sim.companions[0].position=centre;sim.step(.01,Vector2.ZERO);check("Companions use the same raised dry river constraint",River.shore_distance(sim.companions[0].position)>=River.DEFAULT_DRY_MARGIN-.002 and Surface.height_at(sim.companions[0].position)>Surface.WATER_Y+.05)
 	var game=Main.new();game.qa_mode=true;game.render_review=true;game.capture_directory="user://t02-river-unit";game.capture_frames=100;game.size=Vector2(1280,720)
 	root.add_child(game);game.set_process(false);game.set_physics_process(false)
 	check("Actual scene creates terrain and map-spanning river",game.outpost_view.lake.name=="MapSpanningRiver" and game.outpost_view.lake.mesh==water and game.outpost_view.terrain.mesh==mesh)
@@ -68,5 +72,5 @@ func run():
 	check("Approved T01 trees remain seated on river terrain",seated)
 	check("Native render scale remains exactly 1.0",game.scene_view.scaling_3d_scale==1.0);check("Existing four character identities remain loaded",game.actors.size()==4)
 	game.outpost_audio.stop_all();await create_timer(.35).timeout;game.free();await process_frame
-	print(JSON.stringify({"suite":"T02_river_terrain","checks":checks,"failures":failures,"passed":failures.is_empty(),"terrain_triangles":indices.size()/3,"water_triangles":wf.size()/3,"independent_critic":false,"physical_4k60_verified":false}))
+	print(JSON.stringify({"suite":"T02_river_terrain","checks":checks,"failures":failures,"passed":failures.is_empty(),"terrain_triangles":indices.size()/3,"water_triangles":wf.size()/3,"gameplay_dry_margin":River.DEFAULT_DRY_MARGIN,"independent_critic":false,"physical_4k60_verified":false}))
 	quit(0 if failures.is_empty() else 1)
