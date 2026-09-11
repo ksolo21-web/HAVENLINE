@@ -91,11 +91,11 @@ jobs:
               with Image.open(out/name) as image:
                   assert image.size==((3840,2160) if name.startswith('native4k/') else (1280,720)),(name,image.size);image.verify()
           for folder,expected in [('gallery',39),('native4k',11)]:
-              report=json.loads((out/folder/'capture.json').read_text());assert report['renderer']=='mobile' and report['forest']['instances']==586 and report['task']=='T03-boundary-v1'
+              report=json.loads((out/folder/'capture.json').read_text());assert report['renderer']=='mobile' and report['forest']['instances']==586 and report['task']=='T03-boundary-v2'
               assert len(report['captures'])==expected and all(row['render_scale']==1.0 for row in report['captures'])
               assert report['river']['river_layout_version']=='river_v1_mapspan'
               assert report['boundary']['gate_count']==6 and report['boundary']['collision_panel_instances']==32 and report['boundary']['primitive_fence_meshes_created'] is False
-              assert abs(report['boundary']['gate_leaf_length']-1.35)<.0001 and abs(report['boundary']['fence_root_sink']-.08)<.0001 and abs(report['boundary']['visual_join_overlap']-.10)<.0001
+              assert abs(report['boundary']['gate_leaf_length']-1.35)<.0001 and abs(report['boundary']['river_gate_leaf_length']-1.60)<.0001 and abs(report['boundary']['river_gate_open_angle']-1.43)<.0001 and abs(report['boundary']['river_apron_inset']-.55)<.0001 and abs(report['boundary']['fence_root_sink']-.08)<.0001 and abs(report['boundary']['visual_join_overlap']-.10)<.0001
           before=json.loads((out/'protected-before.json').read_text());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in before.items())
           gallery=json.loads((out/'gallery/capture.json').read_text());conditions=[r for r in gallery['captures'] if r['name'].startswith('boundary-condition-')]
           assert len(conditions)==6 and len({(tuple(r['camera_position']),r['camera_basis'],r['camera_size']) for r in conditions})==1
@@ -103,7 +103,7 @@ jobs:
           source='${{ github.sha }}'
           runtime=['HavenlineGodot/scripts/camp_boundary.gd','HavenlineGodot/scripts/camp_boundary_view.gd','HavenlineGodot/scripts/outpost_surface.gd','HavenlineGodot/scripts/outpost_simulation.gd','HavenlineGodot/scripts/outpost_view.gd','HavenlineGodot/scripts/main.gd','HavenlineGodot/scripts/river_geometry.gd','HavenlineGodot/scripts/reference_forest.gd','HavenlineGodot/shaders/outpost_snow.gdshader','HavenlineGodot/shaders/lakeshore_water.gdshader','HavenlineGodot/data/reference-contract.json']
           runtime_hashes={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in runtime}
-          report={'task':'T03-boundary-v2','source':source,'renderer':'mobile','captures':captures,'runtime_files':runtime_hashes,'protected_files':before,'actual_images':61,'gallery_images':39,'native3840x2160_scale1_frames':11,'tree_clearance_frames':11,'gate_count':6,'collision_panels':32,'river_layout_version':'river_v1_mapspan','matched_condition_camera_verified':True,'day_return_identical':True,'all61_images_verified':True,'polish_revision':{'gate_leaf_length':1.35,'gate_open_angle':1.18,'fence_root_sink':.08,'visual_join_overlap':.10,'stronger_integrated_lane_contrast':True},'task_approved':False,'physical_phone_tablet4k60_verified':False}
+          report={'task':'T03-boundary-v2','source':source,'renderer':'mobile','captures':captures,'runtime_files':runtime_hashes,'protected_files':before,'actual_images':61,'gallery_images':39,'native3840x2160_scale1_frames':11,'tree_clearance_frames':11,'gate_count':6,'collision_panels':32,'river_layout_version':'river_v1_mapspan','matched_condition_camera_verified':True,'day_return_identical':True,'all61_images_verified':True,'polish_revision':{'gate_leaf_length':1.35,'gate_open_angle':1.18,'river_gate_leaf_length':1.60,'river_gate_open_angle':1.43,'river_apron_inset':.55,'fence_root_sink':.08,'visual_join_overlap':.10,'stronger_integrated_lane_contrast':True,'river_threshold_aprons':True},'task_approved':False,'physical_phone_tablet4k60_verified':False}
           (out/'provenance.json').write_text(json.dumps(report,indent=2));print(json.dumps({k:v for k,v in report.items() if k not in ('captures','runtime_files','protected_files')}))
           PY
           echo "source=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
@@ -133,7 +133,7 @@ jobs:
         role: [reference-fidelity,visual-integrity]
         shard: [0,1,2,3]
     runs-on: ubuntu-24.04
-    timeout-minutes: 50
+    timeout-minutes: 75
     env:
       EXPECTED_SOURCE: ${{ needs.build-capture.outputs.source }}
       REVIEW_ROLE: ${{ matrix.role }}
