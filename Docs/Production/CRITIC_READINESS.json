@@ -1,10 +1,11 @@
 {
   "schema_version": 1,
-  "status": "READY_FOR_INTEGRATION",
+  "status": "INTEGRATED_OPERATIONAL",
   "scope": "quality-safeguard infrastructure only; no T04+ runtime feature work",
+  "integration_branch": "codex/havenline-sequential-task-01",
+  "integrated_tooling_commit": "4e851ce496e077342e6369b18b78ca27e4724849",
+  "coordination_finalization_parent": "94ca6287af3077dc95960e5e345123418779178d",
   "qa_branch": "havenline/QA-integration",
-  "qa_base_integration_commit": "9fa12ea09ae6907ed5ed0609952892ff2d912ceb",
-  "validated_governance_head": "57e1d39d5b28e18804ff97853405d51897833472",
   "forward_acceptance": {
     "mandatory_dimension_operator": ">",
     "threshold": 9.0,
@@ -13,13 +14,25 @@
     "averaging_waiver_allowed": false,
     "unresolved_mandatory_defect_allowed": false
   },
-  "readiness_run": {
+  "integration_readiness_run": {
     "workflow": "Havenline critic safeguard readiness",
-    "run_id": 34651444922,
-    "tested_source": "bf17d0b83c346e0dae15472e115d49767a589fbb",
+    "run_id": 34652627066,
+    "tested_source": "4e851ce496e077342e6369b18b78ca27e4724849",
     "deterministic_safeguards": "PASS",
     "independent_runtime_smoke": "PASS",
+    "self_healing_pinned_runtime": "PASS",
     "combined_readiness_gate": "PASS",
+    "unit_tests": {"passed": 20, "failed": 0}
+  },
+  "integration_governance_run": {
+    "run_id": 34652626961,
+    "source": "4e851ce496e077342e6369b18b78ca27e4724849",
+    "result": "PASS",
+    "all_steps_passed": true
+  },
+  "prior_qa_readiness_proof": {
+    "run_id": 34651444922,
+    "tested_source": "bf17d0b83c346e0dae15472e115d49767a589fbb",
     "unit_tests": {"passed": 20, "failed": 0},
     "deterministic_artifact": {
       "artifact_id": 10284335243,
@@ -30,20 +43,15 @@
       "zip_sha256": "ef0357878ecc32ac5a092010e161547f2e59a2b30c151c98dae3d8c127214da0"
     }
   },
-  "latest_permanent_governance_validation": {
-    "run_id": 34651848785,
-    "source": "57e1d39d5b28e18804ff97853405d51897833472",
-    "result": "PASS",
-    "all_steps_passed": true
-  },
   "independent_local_reviewer_runtime": {
     "provider": "unsloth/Qwen3.5-9B-GGUF",
     "base_model": "Qwen/Qwen3.5-9B",
     "publisher_revision": "3885219b6810b007914f3a7950a8d1b469d598a5",
     "runtime_release": "llama.cpp b10809",
     "cache_key": "havenline-t01-qwen35-9b-q5-20260908-v1",
-    "restored_bytes": 7302696641,
+    "pinned_revision_enforced_at_prepare_and_use": true,
     "all_cached_files_hash_verified": true,
+    "cache_miss_self_healing": true,
     "actual_inference_smoke": {
       "passed": true,
       "response": {"runtime_ready": true, "token": "havenline-specialist-v1"}
@@ -75,7 +83,13 @@
   ],
   "runtime_integrity": {
     "havenline_runtime_modified_by_safeguard_workstream": false,
-    "proof": "critic readiness CI diffed havenline/QA-integration against 9fa12ea09ae6907ed5ed0609952892ff2d912ceb with no HavenlineGodot changes"
+    "proof": "QA-to-integration fast-forward changed governance/critic tooling only; compare from 2e1efeca5bb0d43feca1c8575e569f96b33e5969 to 4e851ce496e077342e6369b18b78ca27e4724849 contained zero HavenlineGodot paths."
   },
-  "next_step": "Fast-forward this QA-only work into the protected integration branch after confirming the branch is still based on 9fa12ea09ae6907ed5ed0609952892ff2d912ceb; then rerun governance/readiness on integration. T03 remains FIX_REQUIRED and T04+ runtime stays locked."
+  "task_state": {
+    "T01": "APPROVED",
+    "T02": "APPROVED",
+    "T03": "FIX_REQUIRED",
+    "T04_plus_runtime": "LOCKED"
+  },
+  "next_step": "Resume T03 from its preserved river-gate FIX_REQUIRED checkpoint using operational C1+C2+C6 safeguards. After T03 approval, prepare isolated T04/T05/T06 Wave 1 workstreams."
 }
