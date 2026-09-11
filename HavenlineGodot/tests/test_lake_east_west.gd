@@ -1,91 +1,49 @@
 extends SceneTree
-# T02 user correction: the lake spans both east/west playable boundaries.
+# Historical filename retained so old CI references keep running. The previous
+# east-west lake requirement is superseded by river_v1_mapspan.
 const Surface=preload("res://scripts/outpost_surface.gd")
+const River=preload("res://scripts/river_geometry.gd")
 const Sim=preload("res://scripts/outpost_simulation.gd")
 const Main=preload("res://scripts/main.gd")
 const Forest=preload("res://scripts/reference_forest.gd")
-var checks: Array=[]
-var failures: Array=[]
-func check(name: String, result: bool):
-	checks.append({"name":name,"passed":result})
-	if not result: failures.append(name)
-func _initialize(): call_deferred("run")
+var checks:Array=[];var failures:Array=[]
+func check(name:String,passed:bool):checks.append({"name":name,"passed":passed});failures.append(name) if not passed else null
+func _initialize():call_deferred("run")
 func run():
-	var sim=Sim.new()
-	var bounds: Vector2=Vector2(sim.contract.world.boundX,sim.contract.world.boundZ)
-	check("Lake is centred east-west",Surface.LAKE_CENTER.x==0.0)
-	check("Lake width exceeds the full playable east-west width",Surface.LAKE_HALF.x>bounds.x)
-	check("East-west length is at least 2.9 times the prior lake",Surface.LAKE_HALF.x/5.2>=2.9)
-	check("Existing water elevation and north-south centre preserved",Surface.WATER_Y==-.34 and absf(Surface.LAKE_CENTER.y+13.85)<.00001)
-	var continuous:=true;var below:=true
-	for i in range(569):
-		var p:=Vector2(-bounds.x+float(i)*.05,Surface.LAKE_CENTER.y)
-		continuous=continuous and Surface.lake_distance(p)<-.7
-		below=below and Surface.height_at(p)<Surface.WATER_Y-.25
-	check("Water uninterrupted across 569 samples from west to east boundary",continuous)
-	check("Actual basin below water across entire east-west span",below)
-	var dry:=true;var bounded:=true;var stable:=true;var same_x:=true
-	var projections:=0
-	for z in range(-162,-108):
-		for x in range(-142,143):
-			var p:=Vector2(x,z)*.1;var q:=Surface.land_position(p)
-			projections+=1
-			dry=dry and Surface.lake_distance(q)>.3199 and Surface.height_at(q)>Surface.WATER_Y+.18
-			bounded=bounded and absf(q.x)<=bounds.x+.0001 and absf(q.y)<=bounds.y+.0001
-			stable=stable and q.distance_to(Surface.land_position(q))<.0001
-			same_x=same_x and absf(p.x-q.x)<.00001
-	check("All 15390 wet/rim/north-strip positions recover to dry connected land",dry)
-	check("Every recovery remains within playable bounds",bounded)
-	check("Recovery is idempotent and does not drift saved positions",stable)
-	check("Recovery preserves X rather than ejecting actors past map ends",same_x)
-	var source=JSON.parse_string(FileAccess.get_file_as_string("res://data/reference-contract.json"))
-	var original=source.duplicate(true);var custom=Sim.new(source,2)
-	check("Historical source contract not edited or mutated in memory",source==original and source.world.forestGate==[0.0,0.0,-14.8])
-	var gate: Vector2=Sim.point(custom.contract.world.forestGate)
-	check("Existing forest approach resolved onto connected near shore",Surface.lake_distance(gate)>.49 and gate.y>Surface.LAKE_CENTER.y)
-	check("No gameplay prices or unlock rules changed",custom.contract.openingLoopTuning==source.openingLoopTuning)
-	var save_ok:=true
-	for x in [-14.2,-12.,-6.,0.,6.,12.,14.2]:
-		for z in [-16.2,-15.2,-13.85,-12.5]:
-			sim.position=Vector2(x,z);sim.inventory.wood=4321;sim.stored.stone=7654
-			var state=sim.snapshot();var restored=Sim.new()
-			save_ok=save_ok and restored.restore(state) and restored.inventory.wood==4321 and restored.stored.stone==7654
-			save_ok=save_ok and Surface.lake_distance(restored.position)>.319 and restored.position.y>Surface.LAKE_CENTER.y
-	check("28 legacy wet/north-bank saves preserve inventory and return to connected shore",save_ok)
-	var walking:=true
-	sim=Sim.new();sim.threats_enabled=false;sim.rescue_enabled=false;sim.population.enabled_templates.clear()
-	sim.position=Vector2(-13.5,-11.1)
-	for target in [Vector2(13.5,-11.1),Vector2(-13.5,-11.1),gate]:
-		var reached:=false
-		for frame in range(3200):
-			var delta: Vector2=target-sim.position
-			if delta.length()<.1: reached=true;break
-			sim.step(1./60.,delta.normalized()*minf(1.,delta.length()*2.),false)
-			walking=walking and Surface.lake_distance(sim.position)>.319
-		check("Real controls reach lakeside waypoint "+str(target),reached)
-	check("Walking east-west and to the gate never crosses water",walking)
-	var keep_dry:=true
-	for x in [-14.,-7.,0.,7.,14.]:
-		sim.position=Vector2(x,-11.3)
-		for frame in range(240):
-			sim.step(1./60.,Vector2.UP,true)
-			keep_dry=keep_dry and Surface.lake_distance(sim.position)>.319 and sim.position.y>Surface.LAKE_CENTER.y
-	check("Sprinting into all five lake sectors cannot tunnel through water",keep_dry)
+	check("Historical test now targets the map-spanning river contract",River.LAYOUT_VERSION=="river_v1_mapspan")
+	var alias_ok:=true;var span_ok:=true
+	for i in range(125):
+		var x:float=-31.0+float(i)*.5;var c:Vector2=River.center_at_x(x)
+		alias_ok=alias_ok and absf(Surface.lake_distance(c)-Surface.river_distance(c))<.000001
+		span_ok=span_ok and River.shore_distance(c)<-1.55
+	check("Legacy lake_distance API is a pure river-distance compatibility alias",alias_ok)
+	check("New water remains continuous across the full 62-unit terrain",span_ok)
+	var source:Dictionary=JSON.parse_string(FileAccess.get_file_as_string("res://data/reference-contract.json"));var untouched:=source.duplicate(true);var sim=Sim.new(source,2)
+	check("Historical source contract stays byte-semantically unchanged",source==untouched and source.world.forestGate==[0.0,0.0,-14.8])
+	check("Historical prices and opening progression remain unchanged",sim.contract.openingLoopTuning==source.openingLoopTuning)
+	var migrated:=true;var cases:=0
+	for x_value in [-14.0,-9.0,-3.0,0.0,1.5,6.0,10.0,14.0]:
+		var x:float=float(x_value);var q:Dictionary=River.query(River.center_at_x(x))
+		for side_value in [-1.0,1.0]:
+			var side:float=float(side_value);sim=Sim.new();sim.position=Vector2(q.center)+Vector2(q.north_normal)*float(q.half_width)*.25*side
+			sim.inventory.wood=4321+cases;sim.stored.stone=7654+cases
+			var old_state:Dictionary=sim.snapshot();old_state.erase("river_layout_version");var restored=Sim.new();cases+=1
+			migrated=migrated and restored.restore(old_state) and restored.inventory.wood==4321+cases-1 and restored.stored.stone==7654+cases-1
+			var rq:Dictionary=River.query(restored.position);migrated=migrated and float(rq.side)==side and float(rq.shore_distance)>=River.DEFAULT_DRY_MARGIN-.002
+	check("Lake-era saves on either future bank migrate without inventory loss",migrated)
 	var trees_dry:=true
-	for tree in Forest.placements(bounds):
-		trees_dry=trees_dry and Surface.lake_distance(tree.point)>.4 and Surface.height_at(tree.point)>Surface.WATER_Y
-	check("All 586 approved perimeter tree positions remain above water",trees_dry)
-	var game=Main.new();game.qa_mode=true;game.render_review=true;game.capture_frames=100;game.capture_directory="user://lake-correction-test";game.size=Vector2(1280,720)
+	for tree_value in Forest.placements(Vector2(14.2,16.2)):
+		var tree:Dictionary=tree_value;trees_dry=trees_dry and River.shore_distance(tree.point)>.4 and Surface.height_at(tree.point)>Surface.WATER_Y
+	check("All 586 approved perimeter trees remain above river water",trees_dry)
+	var game=Main.new();game.qa_mode=true;game.render_review=true;game.capture_frames=100;game.capture_directory="user://river-compatibility-test";game.size=Vector2(1280,720)
 	root.add_child(game);game.set_process(false);game.set_physics_process(false)
-	for material in [game.outpost_view.ground_material,game.outpost_view.lake_material]:
-		check("Shader coast shares exact runtime lake centre and dimensions",material.get_shader_parameter("lake_center")==Surface.LAKE_CENTER and material.get_shader_parameter("lake_half")==Surface.LAKE_HALF)
-	var faces: PackedVector3Array=game.outpost_view.lake.mesh.get_faces()
-	var short_edges:=true
+	check("Runtime water node identifies the river rather than a lake",game.outpost_view.lake.name=="MapSpanningRiver")
+	check("Water shader no longer contains fixed lake centre/half uniforms",not game.outpost_view.lake_material.shader.code.contains("lake_center") and not game.outpost_view.lake_material.shader.code.contains("lake_half"))
+	var faces:PackedVector3Array=game.outpost_view.lake.mesh.get_faces();var short_edges:=true
 	for i in range(0,faces.size(),3):
-		for j in range(3):
-			short_edges=short_edges and faces[i+j].distance_to(faces[i+(j+1)%3])<.61
-	check("Single water surface uses short coherent triangles under 3000",short_edges and faces.size()/3>2000 and faces.size()/3<3000 and game.outpost_view.lake.mesh.get_surface_count()==1)
-	check("Approved tree count and native render scale unchanged",game.reference_forest_evidence.instances==586 and game.scene_view.scaling_3d_scale==1.)
+		for j in range(3):short_edges=short_edges and faces[i+j].distance_to(faces[i+(j+1)%3])<.65
+	check("River is a single local-triangle surface, not the former stretched lake",short_edges and faces.size()/3>5000 and faces.size()/3<7000 and game.outpost_view.lake.mesh.get_surface_count()==1)
+	check("Approved tree count and native render scale stay unchanged",game.reference_forest_evidence.instances==586 and game.scene_view.scaling_3d_scale==1.0)
 	game.outpost_audio.stop_all();await create_timer(.35).timeout;game.free();await process_frame
-	print(JSON.stringify({"suite":"T02_east_west_lake","checks":checks,"failures":failures,"passed":failures.is_empty(),"projection_samples":projections,"physical_4k60_verified":false,"independent_critic":false}))
+	print(JSON.stringify({"suite":"T02_lake_era_to_river_compatibility","checks":checks,"failures":failures,"passed":failures.is_empty(),"legacy_cases":cases,"physical_4k60_verified":false,"independent_critic":false}))
 	quit(0 if failures.is_empty() else 1)
