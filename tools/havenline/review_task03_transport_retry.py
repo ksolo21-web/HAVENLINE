@@ -9,7 +9,7 @@ from pathlib import Path
 import hashlib, os
 base=Path('tools/havenline/review_task03_boundary.py')
 source=base.read_text()
-expected='ca6fc04ed17501667fc4acaac5ab91d75dd238c4'
+expected='2bc99cb544473513a2e139461239cac25c0c40e79022c83881c817291b093b90'
 actual=hashlib.sha256(base.read_bytes()).hexdigest()
 assert actual==expected,(actual,expected)
 groups=[x.strip() for x in os.environ['RETRY_GROUPS'].split(',') if x.strip()]
