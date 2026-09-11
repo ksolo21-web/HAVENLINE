@@ -1,0 +1,53 @@
+name: Havenline isolated candidate guard
+on:
+  push:
+    branches:
+      - 'havenline/**'
+  pull_request:
+    branches:
+      - 'codex/havenline-sequential-task-01'
+permissions:
+  contents: read
+jobs:
+  validate-candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Resolve registered task and exact candidate base
+        id: resolve
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' > /tmp/resolve.env
+          import json, os, re, subprocess
+          reg=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
+          ref=os.environ.get('GITHUB_HEAD_REF') or os.environ.get('GITHUB_REF_NAME','')
+          m=re.search(r'(T\d{2})',ref,re.I)
+          if not m: raise SystemExit(f'No Txx task id in isolated branch {ref!r}')
+          task=m.group(1).upper()
+          ws=next((x for x in reg['workstreams'] if x['task_id']==task),None)
+          if not ws: raise SystemExit(f'{task} is not registered')
+          if ws['status'] in ('LOCKED','APPROVED'):
+              raise SystemExit(f'{task} status {ws["status"]} may not produce an integration candidate')
+          base=ws.get('base_commit')
+          if not base: raise SystemExit(f'{task} has no recorded base_commit')
+          integration=subprocess.check_output(['git','ls-remote','origin','refs/heads/'+reg['integration_branch']],text=True).split()[0]
+          print('TASK='+task)
+          print('BASE='+base)
+          print('INTEGRATION_HEAD='+integration)
+          PY
+          cat /tmp/resolve.env >> "$GITHUB_ENV"
+          cat /tmp/resolve.env
+      - name: Reject foreign/protected paths and stale candidate base
+        run: |
+          python3 tools/havenline/production/workstream.py validate-candidate "$TASK" --base "$BASE" --head HEAD --integration-head "$INTEGRATION_HEAD"
+      - name: Calculate mandatory impact regression plan
+        run: |
+          mkdir -p Docs/Production/Evidence/CandidateGuard
+          python3 tools/havenline/production/change_impact.py --base "$BASE" --head HEAD | tee Docs/Production/Evidence/CandidateGuard/impact.json
+          python3 tools/havenline/production/regression_runner.py --base "$BASE" --head HEAD --plan-only | tee Docs/Production/Evidence/CandidateGuard/regression-plan.json
+# Passing this guard means only that assignment/base/path/impact rules are valid.
+# It never marks a task APPROVED and never replaces integrated regression/evidence/critics.
