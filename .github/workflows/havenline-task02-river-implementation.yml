@@ -49,5 +49,7 @@ jobs:
           path: river-evidence/
           retention-days: 30
           if-no-files-found: error
-# Retry 5: T01 seating is green; this run reaches the strict-type-clean river test.
+# Retry 6: all river geometry checks reached execution; only the centre crossing
+# reserve conflicted with the old x=0 barricade layout. Runtime migration now
+# keeps those progression structures on the same bank outside all reserves.
 # Earlier failures remain preserved. No critic score or task approval here.
