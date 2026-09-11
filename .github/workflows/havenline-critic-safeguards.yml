@@ -1,0 +1,88 @@
+name: Havenline critic safeguard readiness
+on:
+  push:
+    branches: ['havenline/QA-integration','codex/havenline-sequential-task-01']
+    paths:
+      - 'Docs/Production/CRITIC_*.json'
+      - 'Docs/Production/SECURITY_ATTACK_MATRIX.json'
+      - 'Docs/Production/PATH_OWNERSHIP.json'
+      - 'tools/havenline/production/**'
+      - '.github/workflows/havenline-specialist-*.yml'
+      - '.github/workflows/havenline-critic-safeguards.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  deterministic-safeguards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - run: python3 -m pip install pyyaml
+      - name: Prove QA work did not alter game runtime
+        if: github.ref_name == 'havenline/QA-integration'
+        run: git diff --exit-code 9fa12ea09ae6907ed5ed0609952892ff2d912ceb...HEAD -- HavenlineGodot
+      - name: Compile all production safeguard tools
+        run: python3 -m compileall -q tools/havenline/production
+      - name: Validate governance and critic readiness
+        run: |
+          python3 tools/havenline/production/validate_migration.py
+          python3 tools/havenline/production/validate_critic_readiness.py | tee critic-readiness.json
+      - name: Run all positive and negative safeguard tests
+        run: python3 -m unittest discover -v -s tools/havenline/production/tests -p 'test_*.py'
+      - name: Parse reusable workflow YAML
+        run: |
+          python3 - <<'PY'
+          import yaml,pathlib
+          for rel in ['.github/workflows/havenline-specialist-critic.yml','.github/workflows/havenline-specialist-model-cache.yml','.github/workflows/havenline-critic-safeguards.yml']:
+            d=yaml.safe_load(pathlib.Path(rel).read_text());assert isinstance(d,dict) and ('on' in d or True in d) and 'jobs' in d,rel
+          print('workflow YAML parse: PASS')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-critic-deterministic-readiness-${{ github.run_id }}
+          path: critic-readiness.json
+          retention-days: 30
+          if-no-files-found: error
+  independent-runtime-smoke:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - name: Start checksum-pinned local independent reviewer and require structured response
+        run: python3 -u tools/havenline/production/specialist_runtime_smoke.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-specialist-runtime-smoke-${{ github.run_id }}
+          path: |
+            specialist-runtime-smoke.json
+            specialist-runtime-smoke.log
+          retention-days: 30
+          if-no-files-found: error
+  readiness-gate:
+    needs: [deterministic-safeguards,independent-runtime-smoke]
+    if: always()
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Require both operational layers
+        run: |
+          test '${{ needs.deterministic-safeguards.result }}' = success
+          test '${{ needs.independent-runtime-smoke.result }}' = success
+          cat > readiness.json <<EOF
+          {"candidate":"${GITHUB_SHA}","deterministic_safeguards":"PASS","independent_local_model_runtime":"PASS","critics_C1_through_C11":"OPERATIONAL","future_runtime_tasks_started":false}
+          EOF
+      - uses: actions/upload-artifact@v4
+        with:
+          name: havenline-critic-readiness-gate-${{ github.run_id }}
+          path: readiness.json
+          retention-days: 30
+# This readiness gate proves tooling/runtime availability only; it never grants a gameplay task critic score or task approval.
