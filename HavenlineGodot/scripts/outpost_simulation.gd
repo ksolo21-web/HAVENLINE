@@ -16,17 +16,32 @@ func _bounded_dry(p: Vector2, margin: float) -> Vector2:
 		q.y=clampf(q.y,-float(contract.world.boundZ),float(contract.world.boundZ))
 	return q
 
+func _protected_structure_position(key: String, p: Vector2) -> Vector2:
+	var q:Vector2=River.protected_build_position(p)
+	# Bridge/crossing corridors are intentionally empty in T02. The old contract
+	# placed both barricades on x=0, inside the new centre crossing reserve. Keep
+	# each barricade on its original river side but move it laterally along that
+	# bank. Prices, health, names and wave gates are untouched.
+	if River.crossing_reserved(q):
+		var reserved_safe_x:=p.x
+		if key=="northBarricade": reserved_safe_x=-5.0
+		elif key=="southBarricade": reserved_safe_x=5.0
+		elif key=="leftTent": reserved_safe_x=-6.0
+		elif key=="rightTent": reserved_safe_x=6.0
+		q=River.protected_build_position(Vector2(reserved_safe_x,p.y))
+	return _bounded_dry(q,River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER+River.BUILD_SETBACK)
+
 func _migrate_world_layout():
 	# The source JSON remains immutable. Runtime locations that conflict with the
 	# new river move to the nearest same-side dry bank; economic state is kept.
 	contract=contract.duplicate(true)
 	tuning=contract.openingLoopTuning
-	for key in ["leftTent","rightTent","northBarricade","southBarricade"]:
-		var raw:Array=contract.world[key];var q:=River.protected_build_position(point(raw))
-		q=_bounded_dry(q,River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER+River.BUILD_SETBACK)
+	for key_value in ["leftTent","rightTent","northBarricade","southBarricade"]:
+		var key:String=String(key_value);var raw:Array=contract.world[key]
+		var q:=_protected_structure_position(key,point(raw))
 		contract.world[key]=_array_point(q,float(raw[1]))
-	for key in ["survivor","forestGate"]:
-		var raw:Array=contract.world[key];var q:=_bounded_dry(point(raw),0.50)
+	for key_value in ["survivor","forestGate"]:
+		var key:String=String(key_value);var raw:Array=contract.world[key];var q:=_bounded_dry(point(raw),0.50)
 		contract.world[key]=_array_point(q,float(raw[1]))
 	for kind_value in ["wood","stone"]:
 		var kind:String=String(kind_value);var nodes_key:String=kind+"Nodes";var relocated:Array=[]
