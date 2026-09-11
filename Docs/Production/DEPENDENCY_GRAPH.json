@@ -2,83 +2,1190 @@
   "schema_version": 1,
   "authoritative_plan": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
   "integration_branch": "codex/havenline-sequential-task-01",
-  "unlock_rule": "A task may be assigned only when all dependencies are APPROVED and path-ownership validation passes. Isolated build success never equals production approval.",
-  "tasks": {
-    "T01":{"depends_on":[]},
-    "T02":{"depends_on":["T01"]},
-    "T03":{"depends_on":["T01","T02"]},
-    "T04":{"depends_on":["T03"]},
-    "T05":{"depends_on":["T03"]},
-    "T06":{"depends_on":["T03"]},
-    "T07":{"depends_on":["T04","T06"]},
-    "T08":{"depends_on":["T06","T07"]},
-    "T09":{"depends_on":["T07","T08"]},
-    "T10":{"depends_on":["T05","T08","T09"]},
-    "T11":{"depends_on":["T05","T10"]},
-    "T12":{"depends_on":["T10","T11"]},
-    "T13":{"depends_on":["T12"]},
-    "T14":{"depends_on":["T07","T12"]},
-    "T15":{"depends_on":["T04","T07","T14"]},
-    "T16":{"depends_on":["T05","T09","T10"]},
-    "T17":{"depends_on":["T08","T15","T16"]},
-    "T18":{"depends_on":["T05","T16","T17"]},
-    "T19":{"depends_on":["T09","T18"]},
-    "T20":{"depends_on":["T15","T17"]},
-    "T21":{"depends_on":["T06","T07","T09","T13"]},
-    "T22":{"depends_on":["T10","T11","T21"]},
-    "T23":{"depends_on":["T07","T14","T21"]},
-    "T24":{"depends_on":["T06","T14","T23"]},
-    "T25":{"depends_on":["T06","T14","T23"]},
-    "T26":{"depends_on":["T06","T14","T23"]},
-    "T27":{"depends_on":["T06","T14","T23"]},
-    "T28":{"depends_on":["T06","T14","T23"]},
-    "T29":{"depends_on":["T06","T14","T23"]},
-    "T30":{"depends_on":["T06","T14","T23"]},
-    "T31":{"depends_on":["T24","T25","T26","T27","T28","T29","T30"]},
-    "T32":{"depends_on":["T11","T12","T13","T15","T16","T17","T18","T19","T20","T21","T22","T23","T31"]},
-    "T33":{"depends_on":["T12","T13","T32"]},
-    "T34":{"depends_on":["T14","T33"]},
-    "T35":{"depends_on":["T34"]},
-    "T36":{"depends_on":["T34","T35"]},
-    "T37":{"depends_on":["T13","T14","T33","T34"]},
-    "T38":{"depends_on":["T37"]},
-    "T39":{"depends_on":["T37","T38"]},
-    "T40":{"depends_on":["T35","T37","T38"]},
-    "T41":{"depends_on":["T14","T34","T35","T37"]},
-    "T42":{"depends_on":["T13","T14","T37"]},
-    "T43":{"depends_on":["T14","T34","T41"]},
-    "T44":{"depends_on":["T32","T33","T43"]},
-    "T45":{"depends_on":["T44"]},
-    "T46":{"depends_on":["T45"]},
-    "T47":{"depends_on":["T46"]},
-    "T48":{"depends_on":["T47"]},
-    "T49":{"depends_on":["T48"]},
-    "T50":{"depends_on":["T49"]},
-    "T51":{"depends_on":["T50"]},
-    "T52":{"depends_on":["T51"]},
-    "T53":{"depends_on":["T44","T45","T46","T47","T48","T49","T50","T51","T52"]},
-    "T54":{"depends_on":["T53"]},
-    "T55":{"depends_on":["T07","T54"]},
-    "T56":{"depends_on":["T54","T55"]},
-    "T57":{"depends_on":["T43","T54"]},
-    "T58":{"depends_on":["T43","T55","T56"]},
-    "T59":{"depends_on":["T58"]},
-    "T60":{"depends_on":["T59"]},
-    "T61":{"depends_on":["T60"]},
-    "T62":{"depends_on":["T53","T54","T55","T56","T57","T61"]},
-    "T63":{"depends_on":["T33","T62"]},
-    "T64":{"depends_on":["T35","T36","T62","T63"]},
-    "T65":{"depends_on":["T39","T40","T62","T64"]},
-    "T66":{"depends_on":["T41","T43","T64","T65"]},
-    "T67":{"depends_on":["T62","T63","T64","T65","T66"]},
-    "T68":{"depends_on":["T58","T67"]},
-    "T69":{"depends_on":["T58","T67"]},
-    "T70":{"depends_on":["T68","T69"]}
+  "acceptance_rule": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "legacy_approved_tasks_grandfathered": [
+      "T01",
+      "T02"
+    ]
   },
-  "wave_1_after_T03": {
-    "T04":{"workstream":"A","branch":"havenline/T04-camera"},
-    "T05":{"workstream":"B","branch":"havenline/T05-props"},
-    "T06":{"workstream":"C","branch":"havenline/T06-character1"},
-    "QA":{"workstream":"Q","branch":"havenline/QA-integration","runtime_scope":"none"}
+  "states": [
+    "LOCKED",
+    "PREPARED",
+    "ASSIGNED",
+    "BUILDING_ISOLATED",
+    "BUILT_PENDING_DEPENDENCY",
+    "INTEGRATION_READY",
+    "INTEGRATING",
+    "UNDER_REVIEW",
+    "FIX_REQUIRED",
+    "APPROVED",
+    "BLOCKED"
+  ],
+  "tasks": {
+    "T01": {
+      "name": "Reference snow-covered trees and forest framing",
+      "dependencies": [],
+      "status": "APPROVED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C6"
+      ]
+    },
+    "T02": {
+      "name": "Terrain, snow, warm work-floor and lakeshore",
+      "dependencies": [
+        "T01"
+      ],
+      "status": "APPROVED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C6"
+      ]
+    },
+    "T03": {
+      "name": "Fences, gates and navigable work lanes",
+      "dependencies": [
+        "T02"
+      ],
+      "status": "FIX_REQUIRED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C6"
+      ]
+    },
+    "T04": {
+      "name": "Reference camera and automatic screen composition",
+      "dependencies": [
+        "T03"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C6"
+      ]
+    },
+    "T05": {
+      "name": "Production station and prop kit",
+      "dependencies": [
+        "T03"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C6"
+      ]
+    },
+    "T06": {
+      "name": "Character 1 complete movement/interactions",
+      "dependencies": [
+        "T03"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ]
+    },
+    "T07": {
+      "name": "Havenline Simple Control & Context Director",
+      "dependencies": [
+        "T04",
+        "T06"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C11"
+      ]
+    },
+    "T08": {
+      "name": "Visible inventory, physical carrying and transfers",
+      "dependencies": [
+        "T05",
+        "T06",
+        "T07"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6"
+      ]
+    },
+    "T09": {
+      "name": "Harvesting and automatic acquisition",
+      "dependencies": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6"
+      ]
+    },
+    "T10": {
+      "name": "World Transformation Framework",
+      "dependencies": [
+        "T05",
+        "T08",
+        "T09"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T11": {
+      "name": "Camp construction and visual upgrade system",
+      "dependencies": [
+        "T05",
+        "T10"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6"
+      ]
+    },
+    "T12": {
+      "name": "Level 1–100 progression architecture",
+      "dependencies": [
+        "T07",
+        "T08",
+        "T10",
+        "T11"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T13": {
+      "name": "Progressive Difficulty & spend-blind Challenge Director",
+      "dependencies": [
+        "T12"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T14": {
+      "name": "Save-state/versioning foundation",
+      "dependencies": [
+        "T08",
+        "T10",
+        "T12"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C9"
+      ]
+    },
+    "T15": {
+      "name": "Customer/NPC models, crowds and routing",
+      "dependencies": [
+        "T04",
+        "T05",
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C1"
+      ]
+    },
+    "T16": {
+      "name": "Fishing and initial food processing",
+      "dependencies": [
+        "T08",
+        "T09",
+        "T15"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C1"
+      ]
+    },
+    "T17": {
+      "name": "Customer service, physical payment and reinvestment",
+      "dependencies": [
+        "T15",
+        "T16"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6"
+      ]
+    },
+    "T18": {
+      "name": "Mechanized fishing, conveyors and helpers",
+      "dependencies": [
+        "T16",
+        "T17"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C1"
+      ]
+    },
+    "T19": {
+      "name": "Wheat/additional food production",
+      "dependencies": [
+        "T16",
+        "T18"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C1"
+      ]
+    },
+    "T20": {
+      "name": "Road and vehicle customer service",
+      "dependencies": [
+        "T15",
+        "T17"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C1"
+      ]
+    },
+    "T21": {
+      "name": "Visible hostiles, hunting and weapon progression",
+      "dependencies": [
+        "T06",
+        "T07",
+        "T08",
+        "T09",
+        "T13"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C1"
+      ]
+    },
+    "T22": {
+      "name": "Working defensive structures",
+      "dependencies": [
+        "T11",
+        "T21"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C1"
+      ]
+    },
+    "T23": {
+      "name": "Survivor rescue and basic survivor identity",
+      "dependencies": [
+        "T06",
+        "T07",
+        "T14",
+        "T21"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C1"
+      ]
+    },
+    "T24": {
+      "name": "Guardian dog",
+      "dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ]
+    },
+    "T25": {
+      "name": "Gray wolf",
+      "dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ]
+    },
+    "T26": {
+      "name": "Fox",
+      "dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ]
+    },
+    "T27": {
+      "name": "Owl",
+      "dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ]
+    },
+    "T28": {
+      "name": "Male lion",
+      "dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ]
+    },
+    "T29": {
+      "name": "White tiger",
+      "dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ]
+    },
+    "T30": {
+      "name": "Brown bear",
+      "dependencies": [
+        "T06",
+        "T07",
+        "T14"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ]
+    },
+    "T31": {
+      "name": "Integrated companion jobs and population safety",
+      "dependencies": [
+        "T15",
+        "T23",
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ]
+    },
+    "T32": {
+      "name": "Complete frozen-region Level 1–10 production progression",
+      "dependencies": [
+        "T12",
+        "T13",
+        "T14",
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T23",
+        "T31"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T33": {
+      "name": "Core economy & F2P progression model",
+      "dependencies": [
+        "T12",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T32"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C3",
+        "C7",
+        "C8",
+        "C9"
+      ]
+    },
+    "T34": {
+      "name": "Server-authoritative premium economy",
+      "dependencies": [
+        "T14",
+        "T33"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C3",
+        "C7",
+        "C8",
+        "C9"
+      ]
+    },
+    "T35": {
+      "name": "Store, billing and entitlement system",
+      "dependencies": [
+        "T34"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C3",
+        "C7",
+        "C8",
+        "C9",
+        "C11"
+      ]
+    },
+    "T36": {
+      "name": "Permanent VIP system",
+      "dependencies": [
+        "T35"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C3",
+        "C7",
+        "C8",
+        "C9"
+      ]
+    },
+    "T37": {
+      "name": "LiveOps Director",
+      "dependencies": [
+        "T12",
+        "T14",
+        "T33",
+        "T34"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C3",
+        "C7",
+        "C8",
+        "C9",
+        "C10"
+      ]
+    },
+    "T38": {
+      "name": "Automatic Event Composer & Validator",
+      "dependencies": [
+        "T37"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C3",
+        "C7",
+        "C8",
+        "C9",
+        "C10"
+      ]
+    },
+    "T39": {
+      "name": "The First Thaw launch event",
+      "dependencies": [
+        "T32",
+        "T33",
+        "T38"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C3",
+        "C7",
+        "C8",
+        "C9",
+        "C10"
+      ]
+    },
+    "T40": {
+      "name": "Weekly/seasonal/holiday/sales rotations",
+      "dependencies": [
+        "T38",
+        "T39"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C3",
+        "C7",
+        "C8",
+        "C9",
+        "C10"
+      ]
+    },
+    "T41": {
+      "name": "Anti-cheat and economic-security foundation",
+      "dependencies": [
+        "T14",
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C9"
+      ]
+    },
+    "T42": {
+      "name": "Privacy-respecting telemetry, difficulty analytics and crash diagnostics",
+      "dependencies": [
+        "T13",
+        "T14",
+        "T37",
+        "T41"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C3",
+        "C7",
+        "C9"
+      ]
+    },
+    "T43": {
+      "name": "Identity, cloud continuity and recovery",
+      "dependencies": [
+        "T14",
+        "T41"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C9",
+        "C11"
+      ]
+    },
+    "T44": {
+      "name": "Connected forest region / approximately Levels 11–20",
+      "dependencies": [
+        "T32",
+        "T43"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T45": {
+      "name": "Connected desert region / approximately Levels 21–30",
+      "dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T46": {
+      "name": "Connected underwater region / approximately Levels 31–40",
+      "dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T47": {
+      "name": "Connected sky region / approximately Levels 41–50",
+      "dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T48": {
+      "name": "Connected volcanic region / approximately Levels 51–60",
+      "dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T49": {
+      "name": "Connected swamp region / approximately Levels 61–70",
+      "dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T50": {
+      "name": "Connected ruins region / approximately Levels 71–80",
+      "dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T51": {
+      "name": "Connected underground region / approximately Levels 81–90",
+      "dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T52": {
+      "name": "Connected alien region / approximately Levels 91–100",
+      "dependencies": [
+        "T32",
+        "T43",
+        "T44"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T53": {
+      "name": "Transportation and inter-region continuity",
+      "dependencies": [
+        "T43",
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
+    },
+    "T54": {
+      "name": "Day/night, weather, audio and final game feedback",
+      "dependencies": [
+        "T32",
+        "T53"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6"
+      ]
+    },
+    "T55": {
+      "name": "Accessibility and control customization",
+      "dependencies": [
+        "T07",
+        "T43"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C4",
+        "C11"
+      ]
+    },
+    "T56": {
+      "name": "Performance/Quality/Balanced/Battery player modes",
+      "dependencies": [
+        "T42",
+        "T54",
+        "T55"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C4",
+        "C6",
+        "C11"
+      ]
+    },
+    "T57": {
+      "name": "Basic shareable milestone system",
+      "dependencies": [
+        "T12",
+        "T43"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C4",
+        "C11"
+      ]
+    },
+    "T58": {
+      "name": "Phone/tablet/foldable functional acceptance",
+      "dependencies": [
+        "T43",
+        "T54",
+        "T55",
+        "T56"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C2",
+        "C4",
+        "C6",
+        "C11"
+      ]
+    },
+    "T59": {
+      "name": "Character 2 final rigging and motion review",
+      "dependencies": [
+        "T58"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ]
+    },
+    "T60": {
+      "name": "Character 3 final rigging and motion review",
+      "dependencies": [
+        "T58"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ]
+    },
+    "T61": {
+      "name": "Character 4 final rigging and motion review",
+      "dependencies": [
+        "T58"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ]
+    },
+    "T62": {
+      "name": "Complete Level 1–100 progression acceptance",
+      "dependencies": [
+        "T33",
+        "T36",
+        "T40",
+        "T43",
+        "T53",
+        "T54",
+        "T58",
+        "T59",
+        "T60",
+        "T61"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7",
+        "C8",
+        "C9",
+        "C10",
+        "C11"
+      ]
+    },
+    "T63": {
+      "name": "$0 lifelong-F2P player completion test",
+      "dependencies": [
+        "T33",
+        "T62"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C3",
+        "C7",
+        "C8"
+      ]
+    },
+    "T64": {
+      "name": "Purchase-value/fairness test",
+      "dependencies": [
+        "T35",
+        "T36",
+        "T62",
+        "T63"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C3",
+        "C7",
+        "C8",
+        "C9"
+      ]
+    },
+    "T65": {
+      "name": "Full LiveOps launch rehearsal",
+      "dependencies": [
+        "T39",
+        "T40",
+        "T62",
+        "T64"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C3",
+        "C7",
+        "C8",
+        "C9",
+        "C10"
+      ]
+    },
+    "T66": {
+      "name": "Security/exploit attack review",
+      "dependencies": [
+        "T41",
+        "T43",
+        "T65"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C9"
+      ]
+    },
+    "T67": {
+      "name": "Full-game reference/regression acceptance",
+      "dependencies": [
+        "T62",
+        "T63",
+        "T64",
+        "T65",
+        "T66"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7",
+        "C8",
+        "C9",
+        "C10",
+        "C11"
+      ]
+    },
+    "T68": {
+      "name": "Sustained native 4K/60 phone evidence",
+      "dependencies": [
+        "T67"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C6",
+        "C11"
+      ]
+    },
+    "T69": {
+      "name": "Sustained native 4K/60 tablet/foldable evidence",
+      "dependencies": [
+        "T67"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C6",
+        "C11"
+      ]
+    },
+    "T70": {
+      "name": "Final production release handoff",
+      "dependencies": [
+        "T68",
+        "T69"
+      ],
+      "status": "LOCKED",
+      "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
+      "critics": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6",
+        "C7",
+        "C8",
+        "C9",
+        "C10",
+        "C11"
+      ]
+    }
   }
 }

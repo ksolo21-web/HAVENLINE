@@ -1,68 +1,211 @@
-# HAVENLINE Agent Instructions
+# HAVENLINE Agent Instructions — V2 Controlled Parallel Production
 
 ## Required starting point
-Read `Docs/Production/HAVENLINE_BUILD_PLAN_V2.md`, `Docs/Production/SEQUENTIAL_REPAIR_PLAN.md`, `Docs/Production/task-gates.json`, `Docs/Production/WORKSTREAM_REGISTRY.json`, `Docs/Production/DEPENDENCY_GRAPH.json`, `Docs/Production/PATH_OWNERSHIP.json`, `Docs/Production/CRITIC_MATRIX.json`, and `Docs/Production/PERFORMANCE_BUDGETS.json` FIRST. Then read `Docs/AI/HavenlineProjectContext.md`, the reference-video lock/source manifest, actual reference pixels, current source and current evidence. The archived pre-V2 plan is historical audit evidence, not the active production mechanism.
 
-## Controlled parallel production
-The old pure-serial `ONE TASK BUILDS → NEXT TASK BUILDS` rule is superseded by controlled dependency-graph production:
-`DEPENDENCY GRAPH → ISOLATED PARALLEL BUILD → CONTROLLED INTEGRATION → IMPACT-BASED REGRESSION → APPLICABLE SPECIALIST CRITICS → FIX/RETEST → APPROVE → UNLOCK DEPENDENTS`.
+Read in this order before any Havenline production work:
 
-Only the integration owner may merge production candidates into `codex/havenline-sequential-task-01` or mark an integrated task APPROVED. Worker branches may build in parallel only when dependencies and path ownership allow. A worker branch can be `INTEGRATION_READY`; isolated success is never production approval.
+1. `Docs/Production/HAVENLINE_BUILD_PLAN_V2.md`
+2. `Docs/Production/SEQUENTIAL_REPAIR_PLAN.md`
+3. `Docs/Production/task-gates.json`
+4. `Docs/Production/WORKSTREAM_REGISTRY.json`
+5. `Docs/Production/DEPENDENCY_GRAPH.json`
+6. `Docs/Production/PATH_OWNERSHIP.json`
+7. `Docs/Production/CRITIC_MATRIX.json`
+8. `Docs/Production/PERFORMANCE_BUDGETS.json`
+9. the active task packet/frozen scope
+10. `Docs/AI/HavenlineProjectContext.md`
+11. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
 
-Task states: `LOCKED`, `PREPARED`, `ASSIGNED`, `BUILDING_ISOLATED`, `BUILT_PENDING_DEPENDENCY`, `INTEGRATION_READY`, `INTEGRATING`, `UNDER_REVIEW`, `FIX_REQUIRED`, `APPROVED`, `BLOCKED`.
+Inspect current source/evidence for newer work. `Docs/AI/UnityProjectContext.md` is historical.
 
-Forward-going intermediate PASS requires **every applicable mandatory reviewed dimension strictly >9.0 unrounded**, every applicable G1–G14 gate passed, and no unresolved mandatory defect. Target 10/10. Do not retroactively revoke T01/T02 solely because their original gate wording differed.
+## Current migration checkpoint
 
-No averaging, rounding, missing-area exclusion, unchanged rescoring to obtain a desired result, invented scores, or unresolved mandatory defects. Missing/invalid/truncated/low-confidence/incomplete evidence blocks the relevant gate. Preserve raw failures and unsupported observations; verify critic claims against actual pixels/geometry.
+T01 and T02 are APPROVED at their recorded accepted sources. Do not restart or
+retroactively revoke them merely because the forward gate is stricter.
 
-A builder/self-review/persona rerun is not an independent critic. Use applicable C1–C11 from `CRITIC_MATRIX.json`. Independent critics require a genuinely separate permitted $0 reviewer/model runtime with provider/model/run ID, candidate hash, inputs and raw output preserved. If unavailable, continue useful construction/testing but leave G12 BLOCKED.
+T03 is ACTIVE / FIX_REQUIRED at `Docs/Production/T03/FROZEN_SCOPE.md`. Its
+latest reviewed exact candidate before V2 migration is
+`6947849f581db9cfa53a17ff9202ecde1c0ee80c`; 16 suites / 807 checks passed,
+but the latest combined C1/C2 gate still rejected the `river-gates` group.
+T04+ runtime production remains LOCKED until T03 is APPROVED.
 
-## Path ownership and change requests
-Before editing production files, verify the workstream registry, exact base commit and `PATH_OWNERSHIP.json`. No two active workstreams may own overlapping production paths. Do not modify a protected/foreign-owned path. Create a structured request under `Docs/Production/ChangeRequests/`; the integration owner resolves it.
+T03 is the only legacy task grandfathered to finish directly on
+`codex/havenline-sequential-task-01` because its runtime work was already
+integrated before this governance migration. All future runtime work uses
+isolated task branches.
 
-Shared integration paths such as `main.gd`, `outpost_view.gd`, `outpost_simulation.gd`, `outpost_surface.gd`, the reference contract and coordination registries are integration-owner-only unless explicitly reassigned.
+## Forward acceptance rule
 
-A stale task branch may not silently merge over newer integration work. Reconcile/rebase to the current integration candidate, rerun affected tests, and recapture affected evidence before integration.
+For every not-yet-approved task, PASS requires every applicable mandatory
+review dimension to score **strictly greater than 9.0, unrounded**, all
+applicable gates G1-G14 to pass, complete required critic coverage, and zero
+unresolved mandatory defects. Target is 10/10.
 
-## Integration owner procedure
-For each candidate: verify assignment; base commit; owned/protected paths; changed files; reconcile stale base; integrate cleanly; run change-impact detection; run mandatory regression; capture fresh integration evidence; run applicable independent critics; fix/retest any mandatory score <=9.0 or gate failure; only then approve, update registry and unlock dependents.
+No averaging, rounding, missing-area exclusion, unchanged rescoring to obtain a
+desired number, invented scores, or unresolved mandatory defects. Missing,
+invalid, truncated, low-confidence or incomplete required evidence blocks
+approval.
 
-Use `tools/havenline/production/production_cli.py` for registry/path validation, impact selection, regression planning, frozen task packets, capture/motion plans, save/device matrices, evidence packaging and closure validation. These tools are validators/coordinators, not independent critics and not physical-device certification.
+## Controlled parallel-production rule
 
-## Current protected production state
-Repository truth controls. T01 and T02 are approved and remain authoritative unless a later regression reopens them. T03 retains its existing frozen scope and current production checkpoint; do not restart or throw away its work. T04+ runtime work remains locked until T03 passes. Governance/QA tooling may continue without expanding T03 runtime scope.
+Production flow is:
 
-After T03 approval, Wave 1 may assign T04 camera/composition, T05 station/prop kit and T06 Character 1 motion in isolated non-overlapping branches, plus QA/integration infrastructure. Dependency graph and path ownership, not elapsed time or task number alone, control later parallelism.
+DEPENDENCY GRAPH -> TASK PACKET -> CLAIM DISJOINT PATHS -> BUILD ISOLATED ->
+TEST -> PACKAGE CANDIDATE -> INTEGRATION OWNER REVIEW -> RECONCILE STALE BASE ->
+INTEGRATE -> IMPACT REGRESSION -> FRESH INTEGRATION EVIDENCE -> APPLICABLE
+CRITICS -> FIX/RETEST -> APPROVE -> UNLOCK DEPENDENTS.
 
-## Permanent Havenline gameplay identity
-Havenline stays simple and immediate:
-`MOVE → AUTO-INTERACT → GATHER → VISIBLY CARRY → DELIVER → TRANSFORM → RESCUE → BUILD/UPGRADE → EXPLORE → DEFEND`.
+Only the integration owner may integrate production candidates onto the
+integration branch. A builder may reach `INTEGRATION_READY` but may never
+self-declare production approval.
 
-One primary movement joystick. Auto collect, gather/harvest, attack, contextual unload/deposit and rescue/interactions. Minimal contextual controls only for genuine choices. No button-heavy RPG combat, 4X warfare, complicated manual inventory management, mandatory guilds/guild war, free-text global chat, mandatory multiplayer, unrestricted building or energy systems in Havenline 1.0.
+No two active workstreams may own the same production file/path. If a builder
+needs a path owned by another workstream or marked integration-only, DO NOT
+MODIFY IT. Create a structured request under
+`Docs/Production/ChangeRequests/`. The integration owner resolves it.
 
-Launch contract remains Level 1–100, connected world, visible progression, spend-blind Challenge Director, seven companion species, weather/day-night, survivor workers, production, defense, physical carrying, world transformation, monetization/VIP, LiveOps, security and phone/tablet/foldable support. Challenge Director may never consume spend/VIP/purchase signals. F2P completion must remain realistic.
+Before integration, a stale task must reconcile against the current integration
+candidate, rerun affected tests and recapture affected evidence.
+
+## Task states
+
+LOCKED, PREPARED, ASSIGNED, BUILDING_ISOLATED, BUILT_PENDING_DEPENDENCY,
+INTEGRATION_READY, INTEGRATING, UNDER_REVIEW, FIX_REQUIRED, APPROVED, BLOCKED.
+
+Status never advances because time passed.
+
+## Havenline gameplay identity
+
+Permanent gameplay language:
+
+MOVE -> AUTO-INTERACT -> GATHER -> VISIBLY CARRY -> DELIVER -> TRANSFORM ->
+RESCUE -> BUILD/UPGRADE -> EXPLORE -> DEFEND.
+
+Permanent control philosophy:
+
+- one primary movement joystick;
+- auto collect;
+- auto gather/harvest;
+- auto attack;
+- automatic contextual unloading/deposit;
+- automatic contextual rescue/interactions;
+- minimal contextual controls only when a deliberate choice genuinely requires them.
+
+Do not evolve Havenline into button-heavy RPG combat, 4X warfare, complicated
+manual inventory, mandatory multiplayer, unrestricted building, guild warfare,
+free-text global chat, or an energy-wall game. Depth, scale and difficulty may
+grow; control complexity should not.
 
 ## Preserve the actual project
+
 - Active Android project: `HavenlineGodot/`, Godot 4.7.2. Unity is retired.
-- Preserve original character/model identities, geometry, skinning, textures, saves and validated fixes.
-- C1/C2 selectable leads; unselected lead plus C3/C4 helpers. Unlimited logical carrying and movement/proximity gathering, fighting, rescue, deposit, build and repair remain.
-- C2–C4 final rigging/motion reviews remain final character tasks (T59–T61).
-- Separate customer pool; distinct survivors; no invisible working actors or primitive stand-ins.
-- Companions exactly dog, wolf, fox, owl, male lion, white tiger, brown bear; no domestic cats. Legacy cat saves migrate safely to fox.
-- Preserve explicit historical progression/save contracts; record conflicts rather than silently rewriting them.
+  No Unity install/license/runtime/build/IL2CPP path.
+- Preserve original character/model identities, geometry, skinning, textures,
+  saves and validated fixes. Never silently revert to older checkpoints.
+- C1/C2 are selectable leads; unselected lead is helper with C3/C4.
+- Unlimited logical carrying and movement/proximity gathering, fighting,
+  rescue, deposit, build and repair remain required. No manual-action-button
+  substitute.
+- C2-C4 final rigging/final rig reviews remain T59-T61.
+- Customers remain separate reusable two-male/two-female bases with persistent
+  identities. Survivors and animal companions do not replace them.
+- Missing authored NPCs cannot become invisible working actors or primitive
+  stand-ins. Keep readiness explicit in `data/npc-catalog.json`.
+- Animal companions are exactly guardian dog, gray wolf, fox, owl, male lion,
+  white tiger and brown bear. No domestic cats. Legacy cat saves migrate to fox
+  without losing identity/recruitment/assignment/rescue progress.
+- Preserve historical progression/save contracts; record conflicts instead of
+  silently rewriting distinct actions or prices.
 
-## Reference videos
-Both recordings ending `124839` and `124510` remain authoritative observable visual/gameplay standards. Inspect actual source pixels and motion. Match bright sculpted winter scenery, dense blue-white forest, warm cleared work zones, fences, machinery, physical resource/cash stacks, crowds, helpers, pads and visible transformations. No primitive-looking blockout/default/debug materials may pass final art.
+## Both reference videos are authoritative
 
-## Evidence and performance
-Freeze task scope/evidence before scoring. Record exact source/asset/capture hashes, tests, reviewer results, unresolved defects and next action. Deterministic evidence should include applicable front/rear/left/right/3-quarter/gameplay/detail/overhead/day-night-weather/native-4K states. Motion tasks require full real-time/slow cycles, turns, transitions, feet/toes/knees, hands, gear, tails/wings/mane, ground contact and clipping states.
+The recordings ending `124839` and `124510` are the observable visual/gameplay
+standard, not loose inspiration. Inspect actual source pixels and motion.
 
-Track geometry, draw calls, materials, texture memory, shader complexity, CPU/GPU frame time where measurable, physics, animation/NPC load, memory and storage footprint. A visually excellent task may still fail G8.
+Both loops remain required: fishing/food/customer service/reinvestment AND
+harvesting/hunting/camp supply/weapon upgrades/defenses. Match bright sculpted
+winter scenery, dense blue-white forest, warm cleared work zones, fences,
+machinery, tall moving resource/cash stacks, crowds, helpers, pads and visible
+paid transformations. Generic cabin/furnace clearing is not the target.
+Photorealism/noise/polygon count is not automatically closer. No primitive
+blockout/default/debug material may pass as finished art.
 
-## Physical release gates remain separate
-Landscape must adapt automatically to phones/tablets/foldables. Final required native internal width >=3840 and height >=2160 at render scale 1.0 with sustained >=60 FPS on named representative physical phones/tablets for >=30 minutes where specified. T68/T69 alone certify final physical 4K/60. Software rendering/screenshots/counters do not.
+## Monetization and LiveOps
 
-Do not send unfinished APKs or assign testing/benchmarking to Kaleb. Final delivery requires complete functionality, reference fidelity, final independent approval, finished art/motion, save/auth/cloud correctness and physical-device evidence.
+No energy wall, mandatory payment, fake discounts, hidden spend-based
+difficulty, or intentionally miserable F2P. Challenge Director may never
+consume purchase history/VIP/spend signals. One primary premium currency.
+VIP is permanent and transparent. Level 1-100 must remain realistically
+completable at $0.
+
+Launch LiveOps retains The First Thaw, weekly gameplay event, weekly sale
+rotation, seasonal/holiday frameworks, server-authoritative time, automatic
+validated scheduling, pre-approved event composition and remote kill switch.
+
+## Evidence and critics
+
+Use the task packet and `CRITIC_MATRIX.json`. Builder self-review, a second
+persona, or a second prompt from the builder is NOT an independent critic.
+Use a genuinely separate reviewer/model runtime when required and permitted at
+$0. Record provider/model, run/session/request ID, candidate hash, exact inputs
+and raw output. If no independent runtime is available, continue useful work
+but leave that gate BLOCKED. Do not introduce paid critic APIs.
+
+C6 quantitative performance review and C9 adversarial security harnesses may be
+deterministic specialist gates; they still require preserved raw measurement
+or attack evidence and cannot be hand-waved.
+
+## Regression and path ownership
+
+Run `tools/havenline/production/change_impact.py` on candidate changes, then
+`regression_runner.py` for the union of universal and impacted mandatory
+suites. Unknown production changes fall back to the full current mandatory
+suite set.
+
+Run `workstream.py validate-candidate` before integration. Unauthorized
+foreign/protected path modifications fail G2. A needed shared-path edit becomes
+a change request rather than an opportunistic builder edit.
+
+## Persistence, device and evidence matrices
+
+Use `SAVE_STATE_MATRIX.json` for fresh/current/previous/interrupted/reload/
+migration/rollback cases where applicable.
+
+Use `DEVICE_LAYOUT_MATRIX.json` early for phone/tablet/foldable functional
+states. Shipping remains landscape and automatically adaptive; no manual device
+selector.
+
+Use deterministic evidence capture metadata: candidate commit/hash, scene/state,
+camera, renderer, resolution, build/run ID and timestamp. Visual tasks capture
+front/rear/left/right/3/4/gameplay/detail/overhead/conditions/native-4K where
+applicable. Motion tasks capture full real-time/slow cycles, turns, transitions,
+feet/toes/knees/hands, gear, tails/wings/mane and contact/clipping states.
+
+## Performance and release
+
+`PERFORMANCE_BUDGETS.json` protects full-game headroom. A visually excellent
+task may still fail G8 when it consumes an unsustainable share of CPU/GPU/
+memory/geometry/physics/animation/resource budget.
+
+Final physical release still requires native internal width >=3840 and height
+>=2160, scale 1.0, sustained >=60 FPS on representative named physical phones
+AND tablets/foldables under completed-game load for at least 30 minutes, with
+presentation timing, resolution and thermal evidence. Only T68/T69 certify
+that. Software rendering, screenshots or engine counters do not.
+
+Kaleb must not receive unfinished APKs or be asked to test/benchmark them.
+Internal isolated-package builds may continue.
 
 ## Visible progress
-Show a progress bar before substantial tool work and update it at verified milestones. Separate active-task iteration, approved tasks and whole-game completion. No fake time-based progress or background-work promises.
+
+Before substantial work, show an explicit commentary progress bar. Update it at
+verified milestones with current stage, completed/total count, latest verified
+result and next blocker/action. Do not fabricate time-based percentages or
+promise unscheduled background work.
+
+## Failure handling
+
+Work through genuine failures: diagnose, preserve working checkpoints, change
+approach when justified, fix and rerun. Do not lower thresholds to finish.
+Record exact source/asset/capture hashes, tests, raw critic results, unresolved
+defects and the next executable action after each cycle.

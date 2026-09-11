@@ -1,61 +1,191 @@
 {
   "schema_version": 4,
   "authoritative_plan": "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
-  "execution_plan": "Docs/Production/SEQUENTIAL_REPAIR_PLAN.md",
-  "archived_pre_v2_plan": "Docs/Production/Archive/SEQUENTIAL_REPAIR_PLAN.pre-v2.2026-09-11.md",
+  "operational_plan": "Docs/Production/SEQUENTIAL_REPAIR_PLAN.md",
   "integration_branch": "codex/havenline-sequential-task-01",
   "integration_owner": "primary-integration-owner",
-  "ordered_tasks": ["T01","T02","T03","T04","T05","T06","T07","T08","T09","T10","T11","T12","T13","T14","T15","T16","T17","T18","T19","T20","T21","T22","T23","T24","T25","T26","T27","T28","T29","T30","T31","T32","T33","T34","T35","T36","T37","T38","T39","T40","T41","T42","T43","T44","T45","T46","T47","T48","T49","T50","T51","T52","T53","T54","T55","T56","T57","T58","T59","T60","T61","T62","T63","T64","T65","T66","T67","T68","T69","T70"],
-  "approved_tasks": ["T01","T02"],
+  "ordered_tasks": [
+    "T01",
+    "T02",
+    "T03",
+    "T04",
+    "T05",
+    "T06",
+    "T07",
+    "T08",
+    "T09",
+    "T10",
+    "T11",
+    "T12",
+    "T13",
+    "T14",
+    "T15",
+    "T16",
+    "T17",
+    "T18",
+    "T19",
+    "T20",
+    "T21",
+    "T22",
+    "T23",
+    "T24",
+    "T25",
+    "T26",
+    "T27",
+    "T28",
+    "T29",
+    "T30",
+    "T31",
+    "T32",
+    "T33",
+    "T34",
+    "T35",
+    "T36",
+    "T37",
+    "T38",
+    "T39",
+    "T40",
+    "T41",
+    "T42",
+    "T43",
+    "T44",
+    "T45",
+    "T46",
+    "T47",
+    "T48",
+    "T49",
+    "T50",
+    "T51",
+    "T52",
+    "T53",
+    "T54",
+    "T55",
+    "T56",
+    "T57",
+    "T58",
+    "T59",
+    "T60",
+    "T61",
+    "T62",
+    "T63",
+    "T64",
+    "T65",
+    "T66",
+    "T67",
+    "T68",
+    "T69",
+    "T70"
+  ],
+  "approved_tasks": [
+    "T01",
+    "T02"
+  ],
   "approved_task_count": 2,
+  "legacy_approval_policy": {
+    "T01_T02_not_retroactively_revoked": true
+  },
+  "forward_acceptance": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "all_applicable_gates_must_pass": true,
+    "no_unresolved_mandatory_defects": true
+  },
   "active_task": "T03",
   "active_task_title": "Fences, gates and navigable work lanes",
   "active_status": "FIX_REQUIRED",
+  "active_frozen_scope": "Docs/Production/T03/FROZEN_SCOPE.md",
   "active_candidate_source": "6947849f581db9cfa53a17ff9202ecde1c0ee80c",
-  "active_candidate_source_artifact_sha256": "562e31130520157aafede7a0f90006b0fb730eeb456638caf1958e71e22567a5",
-  "active_task_implementation_started": true,
-  "active_functional_suites": 16,
-  "active_total_checks": 807,
-  "active_source_bound_images": 61,
-  "active_native3840x2160_scale1_images": 11,
-  "active_critic_judgments": 22,
-  "active_critic_gate": {
-    "status": "FAIL",
-    "artifact": 10279571441,
-    "artifact_sha256": "ae830b988f88dd8a8d680272fd3eb00c2a900c6ae51949703f86bfe372ceec78",
-    "failing_group": "river-gates",
-    "visual_integrity_minimum": 2.0,
-    "reference_fidelity_minimum": 4.0,
-    "unresolved_mandatory_defect": true
+  "active_candidate_run": 34632784857,
+  "active_tests": {
+    "suites": 16,
+    "checks": 807,
+    "result": "PASS",
+    "tree_geometry_checks": 9
   },
-  "all_tasks_after_active_runtime_locked": true,
-  "controlled_parallel_build_enabled_after_T03_approval": true,
-  "forward_minimum_rule": "strictly greater than 9.0 in every applicable mandatory reviewed dimension, unrounded",
-  "target_score": 10.0,
-  "historical_T01_T02_not_retroactively_revoked": true,
-  "required_before_approval": ["G1 dependency","G2 path ownership","G3 scope","G4 build/import","G5 functional","G6 regression","G7 evidence provenance","G8 performance budget","G9 persistence if applicable","G10 security/economy if applicable","G11 accessibility/adaptive UI if applicable","G12 critic coverage","G13 every mandatory dimension >9.0 unrounded","G14 integrated-candidate regression","no unresolved mandatory defect"],
-  "completed_task_records": {
-    "T01": {
-      "status":"APPROVED","source":"45ba7905cd468c229cd61364f4d1ac45b14d3e5e","score":10.0,"critic_role_minimums":{"reference-fidelity":10.0,"visual-integrity":10.0},"engine_assertions":676,"geometry_checks":9,"mechanical_evidence_checks":54,"source_bound_pngs":63,"report":"Docs/Production/T01/VERIFIED_COMPLETION.md","later_regressions_reopen":true
+  "active_evidence": {
+    "actual_source_bound_pngs": 61,
+    "native3840x2160_scale1_pngs": 11,
+    "evidence_artifact": 10277539118,
+    "source_artifact": 10277374176
+  },
+  "active_critic_state": {
+    "C1": {
+      "status": "FAIL",
+      "latest_group": "river-gates",
+      "latest_role_minimum": 4,
+      "run": 34632784857
     },
-    "T02": {
-      "status":"APPROVED","source":"1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff","river_layout_version":"river_v1_mapspan","score":10.0,"critic_role_minimums":{"reference-fidelity":10.0,"visual-integrity":10.0},"functional_suites":15,"total_checks":777,"geometry_checks":9,"source_bound_pngs":61,"native4k_scale1_pngs":11,"report":"Docs/Production/T02/RIVER_VERIFIED_COMPLETION.md","later_regressions_reopen":true
+    "C2": {
+      "status": "FAIL",
+      "latest_group": "river-gates",
+      "latest_role_minimum": 2,
+      "run": 34632784857
+    },
+    "C6": {
+      "status": "PENDING_V2",
+      "reason": "New V2 performance critic/gate required before T03 approval."
     }
   },
-  "T02_river_authority": {
-    "generated_terrain_bounds":{"x":[-31.0,31.0],"z":[-31.0,31.0]},
-    "layout_version":"river_v1_mapspan",
-    "future_crossing_reserves_x":[-9.0,1.5,10.0],
-    "main_camp_bank":"north"
+  "task04_plus_runtime_locked": true,
+  "states": [
+    "LOCKED",
+    "PREPARED",
+    "ASSIGNED",
+    "BUILDING_ISOLATED",
+    "BUILT_PENDING_DEPENDENCY",
+    "INTEGRATION_READY",
+    "INTEGRATING",
+    "UNDER_REVIEW",
+    "FIX_REQUIRED",
+    "APPROVED",
+    "BLOCKED"
+  ],
+  "coordination_files": {
+    "dependency_graph": "Docs/Production/DEPENDENCY_GRAPH.json",
+    "workstream_registry": "Docs/Production/WORKSTREAM_REGISTRY.json",
+    "path_ownership": "Docs/Production/PATH_OWNERSHIP.json",
+    "critic_matrix": "Docs/Production/CRITIC_MATRIX.json",
+    "performance_budgets": "Docs/Production/PERFORMANCE_BUDGETS.json"
   },
-  "next_safe_parallel_wave_after_T03_approval": {
-    "T04":{"workstream":"A","branch":"havenline/T04-camera","status":"LOCKED"},
-    "T05":{"workstream":"B","branch":"havenline/T05-props","status":"LOCKED"},
-    "T06":{"workstream":"C","branch":"havenline/T06-character1","status":"LOCKED"},
-    "QA":{"workstream":"Q","branch":"havenline/QA-integration","status":"PREPARED","runtime_scope":"none"}
+  "completed_task_records": {
+    "T01": {
+      "status": "APPROVED",
+      "accepted_source": "45ba7905cd468c229cd61364f4d1ac45b14d3e5e",
+      "score": 10.0,
+      "historical_gate_operator": ">= 9.0",
+      "record": "Docs/Production/T01/verified-completion.json",
+      "later_regression_reopens_task": true
+    },
+    "T02": {
+      "status": "APPROVED",
+      "accepted_source": "1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff",
+      "score": 10.0,
+      "historical_gate_operator": ">= 9.0",
+      "record": "Docs/Production/T02/river-verified-completion.json",
+      "river_layout_version": "river_v1_mapspan",
+      "later_regression_reopens_task": true
+    }
   },
-  "governance_files": ["Docs/Production/DEPENDENCY_GRAPH.json","Docs/Production/WORKSTREAM_REGISTRY.json","Docs/Production/PATH_OWNERSHIP.json","Docs/Production/CRITIC_MATRIX.json","Docs/Production/PERFORMANCE_BUDGETS.json","Docs/Production/REGRESSION_SUITES.json","Docs/Production/TASK_PACKET_TEMPLATE.md"],
-  "game_complete": false,
+  "next_post_t03_wave": [
+    {
+      "task": "T04",
+      "branch": "havenline/T04-camera",
+      "state": "LOCKED"
+    },
+    {
+      "task": "T05",
+      "branch": "havenline/T05-props",
+      "state": "LOCKED"
+    },
+    {
+      "task": "T06",
+      "branch": "havenline/T06-character1",
+      "state": "LOCKED"
+    }
+  ],
+  "whole_game_approved": false,
   "physical_phone_tablet_native_4k60_verified": false,
   "unfinished_apk_delivery_allowed": false,
   "user_testing_requested": false

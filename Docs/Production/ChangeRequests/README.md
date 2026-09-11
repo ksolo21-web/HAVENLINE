@@ -1,21 +1,8 @@
-# Havenline Change Requests
+# Havenline production change requests
 
-Builders must not modify protected or foreign-owned production paths. Create a JSON request here instead.
+Builders do not edit foreign-owned or integration-only production paths.
 
-Required fields:
-```json
-{
-  "request_id":"CR-TNN-0001",
-  "requesting_task":"TNN",
-  "target_path":"path/to/file",
-  "requested_change":"precise requested edit/interface",
-  "reason":"why the requesting task needs it",
-  "dependency":"task/interface or null",
-  "expected_behavior":"observable result",
-  "tests_required":["test or gate"],
-  "status":"OPEN",
-  "integration_owner_disposition":null
-}
-```
-
-Only the integration owner may approve/reject/implement a cross-owned production change. Requests are evidence, not authorization by themselves.
+Copy `CHANGE_REQUEST_TEMPLATE.json` to a uniquely named JSON file and fill every
+field. `status` starts `PENDING`. Only the integration owner may set
+`status: APPROVED` together with `integration_owner_disposition: AUTHORIZED`.
+Authorization is path-specific and does not approve the requesting task.

@@ -1,29 +1,220 @@
 {
-  "schema_version": 2,
+  "schema_version": 1,
   "integration_owner": "primary-integration-owner",
   "integration_branch": "codex/havenline-sequential-task-01",
-  "migration_recovery_head": "f26b3d6d5a788c03192f593936bfe8ce5ccfc5bc",
-  "governance_validation_run": 34648061663,
-  "governance_validation_job": 103423489800,
-  "states": ["LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","BUILT_PENDING_DEPENDENCY","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"],
+  "migration_start_head": "f26b3d6d5a788c03192f593936bfe8ce5ccfc5bc",
+  "runtime_candidate_before_migration": "6947849f581db9cfa53a17ff9202ecde1c0ee80c",
+  "allowed_states": [
+    "LOCKED",
+    "PREPARED",
+    "ASSIGNED",
+    "BUILDING_ISOLATED",
+    "BUILT_PENDING_DEPENDENCY",
+    "INTEGRATION_READY",
+    "INTEGRATING",
+    "UNDER_REVIEW",
+    "FIX_REQUIRED",
+    "APPROVED",
+    "BLOCKED"
+  ],
+  "forward_score_rule": {
+    "operator": ">",
+    "threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0
+  },
+  "legacy_approvals": {
+    "T01": {
+      "status": "APPROVED",
+      "accepted_source": "45ba7905cd468c229cd61364f4d1ac45b14d3e5e",
+      "grandfathered": true
+    },
+    "T02": {
+      "status": "APPROVED",
+      "accepted_source": "1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff",
+      "grandfathered": true
+    }
+  },
   "workstreams": [
     {
-      "task_id":"T01","task_name":"Reference snow-covered trees and forest framing","status":"APPROVED","owner":"historical-approved","branch":"codex/havenline-sequential-task-01","base_commit":"555bbf75cf51902f70ecd767504740f66dce1688","dependencies":[],"owned_paths":[],"protected_paths":["HavenlineGodot/assets/reference_forest/**","HavenlineGodot/scripts/reference_forest.gd"],"candidate_commit":"45ba7905cd468c229cd61364f4d1ac45b14d3e5e","candidate_hash":null,"tests":["676 engine assertions","9 geometry checks","54 mechanical/evidence checks"],"evidence_path":"Docs/Production/T01/","critic_requirements":["C1","C2"],"critic_status":"historical-approved","integration_status":"APPROVED","known_blockers":[],"next_action":"regress only when impact detector marks T01 affected"
+      "task_id": "T03",
+      "task_name": "Fences, gates and navigable work lanes",
+      "status": "FIX_REQUIRED",
+      "owner": "primary-integration-owner",
+      "workstream_id": "T03-legacy-integrated",
+      "branch": "codex/havenline-sequential-task-01",
+      "base_commit": "1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff",
+      "dependencies": [
+        "T02"
+      ],
+      "owned_paths": [
+        "@ownership:T03"
+      ],
+      "protected_paths": [
+        "@protected:T01",
+        "@protected:T02"
+      ],
+      "candidate_commit": "6947849f581db9cfa53a17ff9202ecde1c0ee80c",
+      "candidate_hash_or_artifact": "run:34632784857 evidence:10277539118 source:10277374176",
+      "tests": {
+        "suites": 16,
+        "checks": 807,
+        "result": "PASS",
+        "tree_geometry_checks": 9
+      },
+      "evidence_path": "Docs/Production/Evidence/T03/",
+      "critic_requirements": [
+        "C1",
+        "C2",
+        "C6"
+      ],
+      "critic_status": {
+        "C1": "FAIL river-gates; role minimum 4 in latest combined gate",
+        "C2": "FAIL river-gates; role minimum 2 in latest combined gate",
+        "C6": "PENDING under V2 governance"
+      },
+      "integration_status": "already integrated before governance migration; grandfathered only for finishing T03",
+      "known_blockers": [
+        "Latest combined critic gate run 34632784857 rejects river-gates in both C1 and C2.",
+        "V2 adds C6 performance-budget review before T03 approval."
+      ],
+      "next_action": "After governance migration passes, repair only verified T03 river-gate readability defects, run impact regression, fresh evidence, C1+C2+C6, closure validator."
     },
     {
-      "task_id":"T02","task_name":"Terrain, snow, warm work areas and map-spanning river","status":"APPROVED","owner":"historical-approved","branch":"codex/havenline-sequential-task-01","base_commit":"45ba7905cd468c229cd61364f4d1ac45b14d3e5e","dependencies":["T01"],"owned_paths":[],"protected_paths":["HavenlineGodot/scripts/river_geometry.gd","Docs/Production/T02/RIVER_LAYOUT_SPEC.md"],"candidate_commit":"1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff","candidate_hash":null,"tests":["15 suites / 777 checks","9 T01 geometry checks","61 source-bound captures","11 native 3840x2160 scale-1 captures"],"evidence_path":"Docs/Production/T02/","critic_requirements":["C1","C2","C6"],"critic_status":"historical-approved-under-prior-gate-wording; no retroactive revocation","integration_status":"APPROVED","known_blockers":[],"next_action":"regress only when impact detector marks T02 affected"
+      "task_id": "QA-GOV",
+      "task_name": "Parallel-production governance and build accelerator",
+      "status": "INTEGRATING",
+      "owner": "primary-integration-owner",
+      "workstream_id": "QA-GOV-20260911",
+      "branch": "codex/havenline-sequential-task-01",
+      "base_commit": "f26b3d6d5a788c03192f593936bfe8ce5ccfc5bc",
+      "dependencies": [],
+      "owned_paths": [
+        "@ownership:QA-GOV"
+      ],
+      "protected_paths": [
+        "@protected:runtime-approved"
+      ],
+      "candidate_commit": null,
+      "candidate_hash_or_artifact": null,
+      "tests": {
+        "result": "PENDING migration validation"
+      },
+      "evidence_path": "Docs/Production/Evidence/GovernanceMigration/",
+      "critic_requirements": [],
+      "critic_status": {},
+      "integration_status": "INTEGRATING",
+      "known_blockers": [],
+      "next_action": "Commit governance files, run migration validators/unit tests, then mark APPROVED."
     },
     {
-      "task_id":"T03","task_name":"Fences, gates and navigable work lanes","status":"FIX_REQUIRED","owner":"primary-integration-owner","branch":"codex/havenline-sequential-task-01","base_commit":"1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff","dependencies":["T01","T02"],"owned_paths":["HavenlineGodot/scripts/camp_boundary.gd","HavenlineGodot/scripts/camp_boundary_view.gd","HavenlineGodot/shaders/outpost_snow.gdshader","HavenlineGodot/tests/test_task03_boundary.gd","HavenlineGodot/tests/capture_task03_boundary.gd","tools/havenline/review_task03_local_reference.py"],"protected_paths":["HavenlineGodot/assets/**","HavenlineGodot/scripts/river_geometry.gd","HavenlineGodot/scripts/reference_forest.gd"],"candidate_commit":"6947849f581db9cfa53a17ff9202ecde1c0ee80c","candidate_hash":"sha256:562e31130520157aafede7a0f90006b0fb730eeb456638caf1958e71e22567a5","tests":["16 suites / 807 checks PASS","9 T01 geometry checks PASS","61 source-bound captures verified","11 native 3840x2160 scale-1 captures"],"evidence_path":"Docs/Production/Evidence/T03/","critic_requirements":["C1","C2","C6"],"critic_status":"C1/C2 actually executed: 22/22 judgments complete; combined gate FAIL on river-gates. C2/visual-integrity minimum 2.0; C1/reference-fidelity minimum 4.0. C6 is configured by V2 but has not yet been independently executed on this candidate.","critic_artifact":{"run":34632784857,"gate_artifact":10279571441,"gate_artifact_sha256":"ae830b988f88dd8a8d680272fd3eb00c2a900c6ae51949703f86bfe372ceec78"},"integration_status":"FIX_REQUIRED","known_blockers":["G13 fails: river-gates mandatory C1/C2 dimensions are <=9.0 and carry unresolved defects","G12 incomplete under V2: required independent C6 Performance Critic has not yet executed"],"next_action":"repair only the grounded river-gate readability/finish defects within frozen T03 scope; rerun impact-selected regression and fresh source-bound evidence; execute required independent C1+C2+C6; require every mandatory dimension >9.0 unrounded; then run G14 on the integrated candidate"
+      "task_id": "T04",
+      "task_name": "Reference camera and automatic screen composition",
+      "status": "LOCKED",
+      "owner": null,
+      "workstream_id": "wave1-camera",
+      "branch": "havenline/T04-camera",
+      "base_commit": null,
+      "dependencies": [
+        "T03"
+      ],
+      "owned_paths": [
+        "@reservation:T04"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only"
+      ],
+      "candidate_commit": null,
+      "candidate_hash_or_artifact": null,
+      "tests": {},
+      "evidence_path": "Docs/Production/Evidence/T04/",
+      "critic_requirements": [
+        "C1",
+        "C2",
+        "C6"
+      ],
+      "critic_status": {},
+      "integration_status": "not started",
+      "known_blockers": [
+        "T03 not APPROVED"
+      ],
+      "next_action": "Prepare/assign only after T03 APPROVED."
     },
     {
-      "task_id":"GOV-V2","task_name":"Controlled parallel-production governance migration","status":"APPROVED","owner":"primary-integration-owner","branch":"codex/havenline-sequential-task-01","base_commit":"f26b3d6d5a788c03192f593936bfe8ce5ccfc5bc","dependencies":[],"owned_paths":["Docs/Production/**","tools/havenline/production/**"],"protected_paths":["HavenlineGodot/**"],"candidate_commit":"58830836bc4eec88135423b4980135b83a6a123f","candidate_hash":null,"tests":["Governance Actions run 34648061663 PASS","job 103423489800 PASS","12/12 production accelerator migration tests PASS","runtime HavenlineGodot diff versus recovery head empty","archived pre-V2 plan byte-identical to recovered source"],"evidence_path":"Docs/Production/Evidence/GOV-V2/","critic_requirements":[],"critic_status":"not applicable; governance/tooling migration has deterministic validation instead of art/gameplay critic scoring","integration_status":"APPROVED","known_blockers":[],"next_action":"preserve governance contracts; resume T03 FIX_REQUIRED from exact candidate/evidence checkpoint"
+      "task_id": "T05",
+      "task_name": "Production station and prop kit",
+      "status": "LOCKED",
+      "owner": null,
+      "workstream_id": "wave1-props",
+      "branch": "havenline/T05-props",
+      "base_commit": null,
+      "dependencies": [
+        "T03"
+      ],
+      "owned_paths": [
+        "@reservation:T05"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only"
+      ],
+      "candidate_commit": null,
+      "candidate_hash_or_artifact": null,
+      "tests": {},
+      "evidence_path": "Docs/Production/Evidence/T05/",
+      "critic_requirements": [
+        "C1",
+        "C2",
+        "C6"
+      ],
+      "critic_status": {},
+      "integration_status": "not started",
+      "known_blockers": [
+        "T03 not APPROVED"
+      ],
+      "next_action": "Prepare/assign only after T03 APPROVED."
+    },
+    {
+      "task_id": "T06",
+      "task_name": "Character 1 complete movement/interactions",
+      "status": "LOCKED",
+      "owner": null,
+      "workstream_id": "wave1-character1",
+      "branch": "havenline/T06-character1",
+      "base_commit": null,
+      "dependencies": [
+        "T03"
+      ],
+      "owned_paths": [
+        "@reservation:T06"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only",
+        "@protected:C1-model"
+      ],
+      "candidate_commit": null,
+      "candidate_hash_or_artifact": null,
+      "tests": {},
+      "evidence_path": "Docs/Production/Evidence/T06/",
+      "critic_requirements": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ],
+      "critic_status": {},
+      "integration_status": "not started",
+      "known_blockers": [
+        "T03 not APPROVED"
+      ],
+      "next_action": "Prepare/assign only after T03 APPROVED."
     }
   ],
-  "planned_wave_1_locked_until_T03_approved": [
-    {"task_id":"T04","workstream":"A","branch":"havenline/T04-camera","status":"LOCKED","unlock_condition":"T03 APPROVED and G1/G2 assignment validation passes"},
-    {"task_id":"T05","workstream":"B","branch":"havenline/T05-props","status":"LOCKED","unlock_condition":"T03 APPROVED and G1/G2 assignment validation passes"},
-    {"task_id":"T06","workstream":"C","branch":"havenline/T06-character1","status":"LOCKED","unlock_condition":"T03 APPROVED and G1/G2 assignment validation passes"},
-    {"task_id":"QA","workstream":"Q","branch":"havenline/QA-integration","status":"PREPARED","runtime_scope":"none","owned_paths":["tools/havenline/production/**","Docs/Production/Evidence/QA/**"]}
+  "notes": [
+    "T03 is grandfathered as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
+    "No T04+ runtime work may begin until T03 is APPROVED.",
+    "All future runtime builders use isolated branches and cannot approve themselves."
   ]
 }

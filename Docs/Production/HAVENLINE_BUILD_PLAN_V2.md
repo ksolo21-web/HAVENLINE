@@ -1,137 +1,164 @@
-# HAVENLINE BUILD PLAN V2
+# HAVENLINE BUILD PLAN V2 — Controlled Parallel Production
 
-**Authoritative production plan.** This supersedes the pure-serial workflow model while preserving the archived pre-V2 plan at `Docs/Production/Archive/SEQUENTIAL_REPAIR_PLAN.pre-v2.2026-09-11.md` and its provenance record. It does **not** revoke T01/T02 approvals or restart T03.
+**Authoritative production plan.** This plan supersedes `Docs/Production/Archive/SEQUENTIAL_REPAIR_PLAN.pre-v2.2026-09-11.md` for forward production governance. The archived plan remains byte-identical to the pre-migration source and is retained for audit/recovery.
 
-## Current baseline
-- Integration branch: `codex/havenline-sequential-task-01`.
-- T01: APPROVED; accepted source/evidence remain authoritative.
-- T02: APPROVED; accepted map-spanning river source/evidence remain authoritative.
-- T03: active existing production work; migration may change planning/QA/critic/evidence infrastructure but may not silently expand T03 runtime scope.
-- T04+ runtime implementation remains locked until T03 approval.
-- Forward intermediate PASS requires **every applicable mandatory reviewed dimension >9.0 unrounded**, all applicable gates passing, and no unresolved mandatory defect. Target 10/10. This rule is not retroactive against T01/T02.
+## Migration checkpoint
+
+- Integration branch remains `codex/havenline-sequential-task-01`; T03 is grandfathered to finish there because its runtime work was already integrated before this migration.
+- T01 and T02 remain APPROVED at their recorded accepted sources. Their approvals are not revoked by the stricter forward score rule.
+- T03 remains ACTIVE/FIX_REQUIRED at its existing frozen scope in `Docs/Production/T03/FROZEN_SCOPE.md`; no T04+ runtime work begins until T03 is APPROVED.
+- Forward intermediate PASS requires every applicable mandatory reviewed dimension to be **strictly > 9.0 unrounded**, every mandatory gate to pass, and zero unresolved mandatory defects. Target remains 10/10.
 
 ## Permanent Havenline product contract
-`MOVE → AUTO-INTERACT → GATHER → VISIBLY CARRY → DELIVER → TRANSFORM → RESCUE → BUILD/UPGRADE → EXPLORE → DEFEND.`
 
-One primary movement joystick. Auto collect, gather/harvest, attack, contextual unload/deposit and rescue/interactions. Minimal contextual controls only for genuine choices. No button-heavy RPG combat, 4X warfare, complicated manual inventory management, unrestricted building, mandatory guilds/guild warfare, free-text global chat, mandatory multiplayer or energy systems in Havenline 1.0.
+Havenline stays simple and immediately enjoyable. Its permanent gameplay language is:
 
-Launch: Level 1–100; connected world; visible progression every level where practical; noticeable improvement at least every 3 levels; major milestone about every 10 levels; realistically completable; spend-blind Challenge Director; guardian dog, gray wolf, fox, owl, male lion, white tiger, brown bear; weather/day-night; survivor rescue/workers; production; defense; physical carrying; world transformation; monetization/VIP; launch/weekly/seasonal/holiday LiveOps; security; phone/tablet/foldable support; existing physical-device native-4K/60 acceptance contract.
+**MOVE → AUTO-INTERACT → GATHER → VISIBLY CARRY → DELIVER → TRANSFORM → RESCUE → BUILD/UPGRADE → EXPLORE → DEFEND.**
 
-Monetization: no energy wall, mandatory payment, hidden spend-based difficulty or fake discount; Challenge Director never consumes purchase/VIP/spend signals; purchases retain advertised value; one primary premium currency; VIP permanent/transparent; realistic $0 Level-1-to-100 completion; intentionally limited launch store.
+Controls remain one primary movement joystick with auto collect, auto gather/harvest, auto attack, contextual unloading/deposit, contextual rescue/interactions, and only minimal deliberate-choice controls. Do not turn Havenline into button-heavy RPG combat, 4X warfare, complicated manual inventory, mandatory multiplayer, guild warfare, global free-text chat, unrestricted building, or an energy-wall game.
 
-LiveOps launch: The First Thaw; weekly gameplay event; weekly sale rotation; seasonal and holiday frameworks; server-authoritative time; automatic scheduling; pre-approved composition; automatic validation; remote kill switch.
+Launch remains Level 1–100 across a connected world, with practical visual progression every level, noticeable visual improvement at least every ~3 levels, major milestones approximately every 10 levels, spend-blind adaptive Challenge Director, seven companions (guardian dog, gray wolf, fox, owl, male lion, white tiger, brown bear), weather/day-night, survivor rescue/workers, production, defense, physical carrying, world transformation, monetization/VIP, LiveOps, security, adaptive phone/tablet/foldable support, and the existing final native-4K/60 physical-device target.
 
-## Production model
-Old: `ONE TASK BUILDS → NEXT TASK BUILDS`.
+## Monetization and LiveOps rules
 
-New: `DEPENDENCY GRAPH → ISOLATED PARALLEL BUILD → CONTROLLED INTEGRATION → IMPACT-BASED REGRESSION → APPLICABLE SPECIALIST CRITICS → FIX/RETEST → APPROVE → UNLOCK DEPENDENTS`.
+No energy wall, mandatory payment, fake discount, hidden spend-based difficulty, or intentionally miserable F2P path. Challenge Director may never consume purchase history, VIP, or spend signals. Purchases retain advertised value. Use one primary premium currency. VIP is permanent and transparent. Level 1–100 must remain realistically completable at $0. Launch LiveOps includes The First Thaw, weekly gameplay and sale rotation, seasonal/holiday frameworks, server-authoritative time, automatic validated scheduling, pre-approved composition, and a remote kill switch.
 
-Only the integration owner may move production candidates onto the protected integration branch. A worker branch may become `INTEGRATION_READY`; it cannot self-declare production `APPROVED`.
+## Controlled parallel-production model
 
-### States
-`LOCKED`, `PREPARED`, `ASSIGNED`, `BUILDING_ISOLATED`, `BUILT_PENDING_DEPENDENCY`, `INTEGRATION_READY`, `INTEGRATING`, `UNDER_REVIEW`, `FIX_REQUIRED`, `APPROVED`, `BLOCKED`.
+The old pure serial model is replaced by:
 
-### Universal gates
-G1 Dependency; G2 Path ownership; G3 Scope; G4 Build/import; G5 Functional; G6 Regression; G7 Evidence provenance; G8 Performance budget; G9 Persistence; G10 Security/economy; G11 Accessibility/adaptive UI; G12 Critic coverage; G13 Score; G14 Integration.
+**DEPENDENCY GRAPH → ISOLATED PARALLEL BUILD → CONTROLLED INTEGRATION → FULL IMPACT-BASED REGRESSION → APPLICABLE SPECIALIST CRITICS → FIX/RETEST → APPROVE → UNLOCK DEPENDENTS.**
 
-**G13:** every applicable mandatory dimension must be **strictly >9.0 unrounded**. No averaging away a weak category. Target 10/10.
+Only the integration owner may integrate production candidates into the integration branch. Isolated builders may never self-approve production. No two active workstreams may own the same production path. Foreign-path needs become structured change requests. A stale candidate must reconcile to the current integration candidate, rerun affected tests, and recapture affected evidence before integration.
 
-### Specialist critics
-C1 Reference Fidelity; C2 Technical/Visual Integrity; C3 Havenline Gameplay Identity; C4 Gameplay UX/Readability; C5 Motion/Rigging; C6 Performance; C7 Progression/Difficulty; C8 Economy/Fairness; C9 Security/Exploit; C10 LiveOps; C11 Accessibility.
+## Task states
 
-A builder cannot self-certify an independent critic pass. Use a genuinely separate $0 reviewer/model runtime when available and record provider/model, run/session ID, candidate hash, inputs and raw output. If unavailable, useful construction/testing continues but the independent critic gate remains BLOCKED.
+`LOCKED → PREPARED → ASSIGNED → BUILDING_ISOLATED → BUILT_PENDING_DEPENDENCY → INTEGRATION_READY → INTEGRATING → UNDER_REVIEW → FIX_REQUIRED → APPROVED`, with `BLOCKED` available whenever a mandatory prerequisite cannot currently be satisfied. State changes require evidence; time passing never advances status.
 
-## 70-task release sequence
-T01 — Reference snow-covered trees and forest framing — APPROVED
-T02 — Terrain, snow, warm work-floor and lakeshore — APPROVED
-T03 — Fences, gates and navigable work lanes — ACTIVE
-T04 — Reference camera and automatic screen composition
-T05 — Production station and prop kit
-T06 — Character 1 complete movement/interactions
-T07 — Havenline Simple Control & Context Director
-T08 — Visible inventory, physical carrying and transfers
-T09 — Harvesting and automatic acquisition
-T10 — World Transformation Framework
-T11 — Camp construction and visual upgrade system
-T12 — Level 1–100 progression architecture
-T13 — Progressive Difficulty & spend-blind Challenge Director
-T14 — Save-state/versioning foundation
-T15 — Customer/NPC models, crowds and routing
-T16 — Fishing and initial food processing
-T17 — Customer service, physical payment and reinvestment
-T18 — Mechanized fishing, conveyors and helpers
-T19 — Wheat/additional food production
-T20 — Road and vehicle customer service
-T21 — Visible hostiles, hunting and weapon progression
-T22 — Working defensive structures
-T23 — Survivor rescue and basic survivor identity
-T24 — Guardian dog
-T25 — Gray wolf
-T26 — Fox
-T27 — Owl
-T28 — Male lion
-T29 — White tiger
-T30 — Brown bear
-T31 — Integrated companion jobs and population safety
-T32 — Complete frozen-region Level 1–10 production progression
-T33 — Core economy & F2P progression model
-T34 — Server-authoritative premium economy
-T35 — Store, billing and entitlement system
-T36 — Permanent VIP system
-T37 — LiveOps Director
-T38 — Automatic Event Composer & Validator
-T39 — The First Thaw launch event
-T40 — Weekly/seasonal/holiday/sales rotations
-T41 — Anti-cheat and economic-security foundation
-T42 — Privacy-respecting telemetry, difficulty analytics and crash diagnostics
-T43 — Identity, cloud continuity and recovery
-T44 — Connected forest region / approximately Levels 11–20
-T45 — Connected desert region / approximately Levels 21–30
-T46 — Connected underwater region / approximately Levels 31–40
-T47 — Connected sky region / approximately Levels 41–50
-T48 — Connected volcanic region / approximately Levels 51–60
-T49 — Connected swamp region / approximately Levels 61–70
-T50 — Connected ruins region / approximately Levels 71–80
-T51 — Connected underground region / approximately Levels 81–90
-T52 — Connected alien region / approximately Levels 91–100
-T53 — Transportation and inter-region continuity
-T54 — Day/night, weather, audio and final game feedback
-T55 — Accessibility and control customization
-T56 — Performance/Quality/Balanced/Battery player modes
-T57 — Basic shareable milestone system
-T58 — Phone/tablet/foldable functional acceptance
-T59 — Character 2 final rigging and motion review
-T60 — Character 3 final rigging and motion review
-T61 — Character 4 final rigging and motion review
-T62 — Complete Level 1–100 progression acceptance
-T63 — $0 lifelong-F2P player completion test
-T64 — Purchase-value/fairness test
-T65 — Full LiveOps launch rehearsal
-T66 — Security/exploit attack review
-T67 — Full-game reference/regression acceptance
-T68 — Sustained native 4K/60 phone evidence
-T69 — Sustained native 4K/60 tablet/foldable evidence
-T70 — Final production release handoff
+## Universal gates
 
-## Controlled parallel waves
-While T03 is active: finish T03 plus governance/coordination/QA infrastructure only; do not implement T04+ runtime features.
+- **G1 Dependency — required upstream interfaces/approved prerequisites satisfied.**
+- **G2 Path ownership — only authorized production paths changed.**
+- **G3 Scope — frozen requirements addressed; no unauthorized scope added.**
+- **G4 Build/import — no compile/import/parser/resource failure.**
+- **G5 Functional — feature operates through required use states.**
+- **G6 Regression — impacted approved work remains valid.**
+- **G7 Evidence provenance — evidence is current, exact-source-bound and hashed.**
+- **G8 Performance budget — CPU/GPU/memory/geometry/physics/animation/resource budgets respected.**
+- **G9 Persistence — save/reload/migration/recovery works where applicable.**
+- **G10 Security/economy — required for purchases, economy, LiveOps, cloud and competitive-value systems.**
+- **G11 Accessibility/adaptive UI — required for player-facing controls/UI where relevant.**
+- **G12 Critic coverage — every required critic has current complete evidence.**
+- **G13 Score — every applicable mandatory dimension is strictly >9.0 unrounded; no averaging; no unresolved mandatory defect.**
+- **G14 Integration — the merged integration candidate, not merely the isolated branch, passes affected regression.**
 
-After T03 APPROVED, Wave 1 may be assigned only after registry/path-collision validation:
-- Workstream A — T04 camera/composition.
-- Workstream B — T05 station/prop kit.
-- Workstream C — T06 Character 1 motion.
-- Workstream Q — QA/automation/integration infrastructure only.
+## Production sequence
 
-No active workstreams may own overlapping production paths. Foreign-path needs become structured change requests under `Docs/Production/ChangeRequests/`.
+| ID | Production task | State at migration |
+|---|---|---|
+| T01 | Reference snow-covered trees and forest framing | APPROVED |
+| T02 | Terrain, snow, warm work-floor and lakeshore | APPROVED |
+| T03 | Fences, gates and navigable work lanes | FIX_REQUIRED / ACTIVE |
+| T04 | Reference camera and automatic screen composition | LOCKED |
+| T05 | Production station and prop kit | LOCKED |
+| T06 | Character 1 complete movement/interactions | LOCKED |
+| T07 | Havenline Simple Control & Context Director | LOCKED |
+| T08 | Visible inventory, physical carrying and transfers | LOCKED |
+| T09 | Harvesting and automatic acquisition | LOCKED |
+| T10 | World Transformation Framework | LOCKED |
+| T11 | Camp construction and visual upgrade system | LOCKED |
+| T12 | Level 1–100 progression architecture | LOCKED |
+| T13 | Progressive Difficulty & spend-blind Challenge Director | LOCKED |
+| T14 | Save-state/versioning foundation | LOCKED |
+| T15 | Customer/NPC models, crowds and routing | LOCKED |
+| T16 | Fishing and initial food processing | LOCKED |
+| T17 | Customer service, physical payment and reinvestment | LOCKED |
+| T18 | Mechanized fishing, conveyors and helpers | LOCKED |
+| T19 | Wheat/additional food production | LOCKED |
+| T20 | Road and vehicle customer service | LOCKED |
+| T21 | Visible hostiles, hunting and weapon progression | LOCKED |
+| T22 | Working defensive structures | LOCKED |
+| T23 | Survivor rescue and basic survivor identity | LOCKED |
+| T24 | Guardian dog | LOCKED |
+| T25 | Gray wolf | LOCKED |
+| T26 | Fox | LOCKED |
+| T27 | Owl | LOCKED |
+| T28 | Male lion | LOCKED |
+| T29 | White tiger | LOCKED |
+| T30 | Brown bear | LOCKED |
+| T31 | Integrated companion jobs and population safety | LOCKED |
+| T32 | Complete frozen-region Level 1–10 production progression | LOCKED |
+| T33 | Core economy & F2P progression model | LOCKED |
+| T34 | Server-authoritative premium economy | LOCKED |
+| T35 | Store, billing and entitlement system | LOCKED |
+| T36 | Permanent VIP system | LOCKED |
+| T37 | LiveOps Director | LOCKED |
+| T38 | Automatic Event Composer & Validator | LOCKED |
+| T39 | The First Thaw launch event | LOCKED |
+| T40 | Weekly/seasonal/holiday/sales rotations | LOCKED |
+| T41 | Anti-cheat and economic-security foundation | LOCKED |
+| T42 | Privacy-respecting telemetry, difficulty analytics and crash diagnostics | LOCKED |
+| T43 | Identity, cloud continuity and recovery | LOCKED |
+| T44 | Connected forest region / approximately Levels 11–20 | LOCKED |
+| T45 | Connected desert region / approximately Levels 21–30 | LOCKED |
+| T46 | Connected underwater region / approximately Levels 31–40 | LOCKED |
+| T47 | Connected sky region / approximately Levels 41–50 | LOCKED |
+| T48 | Connected volcanic region / approximately Levels 51–60 | LOCKED |
+| T49 | Connected swamp region / approximately Levels 61–70 | LOCKED |
+| T50 | Connected ruins region / approximately Levels 71–80 | LOCKED |
+| T51 | Connected underground region / approximately Levels 81–90 | LOCKED |
+| T52 | Connected alien region / approximately Levels 91–100 | LOCKED |
+| T53 | Transportation and inter-region continuity | LOCKED |
+| T54 | Day/night, weather, audio and final game feedback | LOCKED |
+| T55 | Accessibility and control customization | LOCKED |
+| T56 | Performance/Quality/Balanced/Battery player modes | LOCKED |
+| T57 | Basic shareable milestone system | LOCKED |
+| T58 | Phone/tablet/foldable functional acceptance | LOCKED |
+| T59 | Character 2 final rigging and motion review | LOCKED |
+| T60 | Character 3 final rigging and motion review | LOCKED |
+| T61 | Character 4 final rigging and motion review | LOCKED |
+| T62 | Complete Level 1–100 progression acceptance | LOCKED |
+| T63 | $0 lifelong-F2P player completion test | LOCKED |
+| T64 | Purchase-value/fairness test | LOCKED |
+| T65 | Full LiveOps launch rehearsal | LOCKED |
+| T66 | Security/exploit attack review | LOCKED |
+| T67 | Full-game reference/regression acceptance | LOCKED |
+| T68 | Sustained native 4K/60 phone evidence | LOCKED |
+| T69 | Sustained native 4K/60 tablet/foldable evidence | LOCKED |
+| T70 | Final production release handoff | LOCKED |
 
-## Integration owner procedure
-Verify assignment, base commit, owned/protected paths and changed files; reconcile stale base; integrate into a clean candidate; run impact detection and required regression; capture fresh integration evidence; run applicable critics; fix/retest if any mandatory result <=9.0 or any gate fails; then and only then mark APPROVED, update registry and unlock dependents.
+Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. T01/T02 accepted records remain authoritative; T03 frozen detail remains in `Docs/Production/T03/FROZEN_SCOPE.md`.
 
-## Branching
-The current production branch remains the protected integration branch unless explicitly migrated later. Isolated task branches use `havenline/TNN-short-name`, record exact base integration commit, and may not silently merge over newer integration work.
+## Parallel Wave 1 after T03 approval
 
-## Post-launch roadmap
-More Level-100 activities; new event families; richer secrets; more companion cosmetics/interactions; controlled decoration zones; deeper survivor personality; expanded photo tools; asynchronous friends/Haven visits; community projects; optional future 2–4-player co-op; new regions/expansions; future level-cap increase only with meaningful new progression.
+- **Workstream A / `havenline/T04-camera`** — T04 camera/composition only.
+- **Workstream B / `havenline/T05-props`** — T05 station/prop kit only.
+- **Workstream C / `havenline/T06-character1`** — T06 Character 1 motion only; original C1 model is protected.
+- **Workstream Q** — QA/automation/integration infrastructure only.
 
-## Final release
-T68/T69 alone certify sustained physical-device native internal >=3840×2160 at >=60 FPS where required. Emulator/software-renderer/native screenshots are not physical-device certification.
+These workstreams may build in parallel only after T03 is APPROVED and the registry assigns disjoint path ownership. Integration remains serial and integration-owner-controlled.
+
+## Evidence and review
+
+Every frozen candidate package contains exact source/commit hashes, changed-file list, test logs, deterministic screenshots/videos, performance records, raw critic inputs/outputs, known failures and dispositions. Relevant visual evidence includes front, rear, left, right, 3/4, gameplay-scale, close detail, overhead, applicable day/night/weather, and native 3840×2160 scale-1. Motion tasks additionally require real-time and slow cycles, turns/transitions, feet/toes/knees/hands, gear and animal appendage/contact views. Save and device matrices run early rather than waiting for final release.
+
+## Performance rule
+
+A task can fail even when visually excellent if it consumes an unsustainable share of the full-game budget. Early performance evidence protects headroom but cannot certify physical performance. Only T68/T69 can certify sustained native internal >=3840×2160 at >=60 FPS on representative physical phone/tablet/foldable hardware under completed-game load.
+
+## Post-launch roadmap — outside release-critical T01–T70
+
+- more Level-100 activities.
+- new event families.
+- richer secrets.
+- more companion cosmetics/interactions.
+- controlled decoration zones.
+- deeper survivor personality.
+- expanded photo tools.
+- asynchronous friends/Haven visits.
+- community projects.
+- optional future 2–4-player co-op.
+- new regions/expansions.
+- future level-cap increase only when meaningful new progression exists.
+
+These are not Havenline 1.0 dependencies and must not leak into release-critical scope without a new approved plan revision.

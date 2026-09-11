@@ -1,105 +1,106 @@
-# Havenline Frozen Task Packet — TEMPLATE
+# Havenline frozen task packet — TEMPLATE
 
-> Generated/filled before assignment. A worker may not expand this packet's runtime scope without an integration-owner change request.
+> Generate a task-specific copy with `python3 tools/havenline/production/task_packet.py TASK_ID`.
+> A packet freezes construction scope; it never self-approves production.
 
 ## Identity
 - Task ID:
 - Task name:
-- Workstream owner/id:
+- Workstream ID:
+- Owner:
 - Isolated branch:
 - Exact base integration commit:
-- Packet generated from integration commit:
-- Status at generation: PREPARED
-
-## Frozen requirements
-- In-scope behavior/art:
-- Explicitly out of scope:
-- Preserved approved behavior/assets:
-- Product-contract constraints:
+- Packet generation timestamp/build ID:
 
 ## Dependencies
 - Required APPROVED upstream tasks:
-- Interfaces consumed:
-- Dependency hashes/versions:
+- Required stable interfaces:
+- Dependency evidence paths:
+
+## Frozen scope
+### Required behavior
+-
+
+### Explicit exclusions
+-
+
+### Havenline identity constraints
+- Preserve one-primary-joystick/simple-context philosophy.
+- Preserve MOVE → AUTO-INTERACT → GATHER → VISIBLY CARRY → DELIVER → TRANSFORM → RESCUE → BUILD/UPGRADE → EXPLORE → DEFEND.
+- No unauthorized control/menu complexity.
+- No unrelated future-task implementation.
 
 ## Path ownership
 ### Owned production paths
-- 
+-
 
-### Protected / foreign-owned paths
-- 
+### Protected/foreign-owned paths
+-
 
-If a protected/foreign path must change: **do not modify it.** Create `Docs/Production/ChangeRequests/<task>-<target>-<id>.json` with requesting task, target path, requested change, reason, dependency, expected behavior, and tests required.
+### Integration-only paths
+-
+
+If an owned-path conflict is discovered, STOP modifying that path and create a
+structured request in `Docs/Production/ChangeRequests/`.
 
 ## Acceptance gates
-- G1 Dependency
-- G2 Path ownership
-- G3 Scope
-- G4 Build/import
-- G5 Functional
-- G6 Regression
-- G7 Evidence provenance
-- G8 Performance budget
-- G9 Persistence if applicable
-- G10 Security/economy if applicable
-- G11 Accessibility/adaptive UI if applicable
-- G12 Critic coverage
-- G13 every mandatory dimension **>9.0 unrounded**, target 10/10
-- G14 merged integration candidate regression
+Mark every applicable gate REQUIRED or N/A with rationale.
+
+- G1 DEPENDENCY
+- G2 PATH-OWNERSHIP
+- G3 SCOPE
+- G4 BUILD/IMPORT
+- G5 FUNCTIONAL
+- G6 REGRESSION
+- G7 EVIDENCE-PROVENANCE
+- G8 PERFORMANCE-BUDGET
+- G9 PERSISTENCE
+- G10 SECURITY/ECONOMY
+- G11 ACCESSIBILITY/ADAPTIVE-UI
+- G12 CRITIC-COVERAGE
+- G13 SCORE (>9.0 unrounded in every mandatory dimension; target 10/10)
+- G14 INTEGRATION
 
 ## Required tests
 - Universal baseline:
 - Task-specific:
-- Impact-selected prior-task regression:
-- Save-state matrix if applicable:
-- Device/layout matrix if applicable:
+- Approved-task regressions:
+- Save-state matrix cases:
+- Device/layout cases:
+- Performance metrics:
 
-## Required deterministic evidence
-- front
-- rear
-- left
-- right
-- 3/4
-- gameplay scale
-- close-up/detail
-- relevant overhead
-- relevant day/night/weather
-- native 3840×2160 scale-1 where applicable
-
-Every capture record must include candidate commit/hash, scene/state, camera, renderer, resolution, timestamp/build ID.
-
-## Motion evidence when applicable
-Full real-time cycles, slow review cycles, turns, transitions, feet/toes/knees, hands, gear, tails/wings/mane, ground contact and clipping states.
+## Required evidence
+- Exact candidate commit/hash.
+- Changed-file manifest and base commit.
+- Front/rear/left/right/3/4 where visually applicable.
+- Gameplay scale.
+- Close-up/detail.
+- Relevant overhead.
+- Relevant day/night/weather.
+- Native 3840×2160 scale-1 where applicable.
+- Motion cycles/transitions/contact/clipping where applicable.
+- Logs, performance records and persistence records.
+- Raw critic inputs and outputs.
 
 ## Required critics
-- Applicable critic IDs from `CRITIC_MATRIX.json`:
-- Independent runtime/provider/model:
-- Raw input/output destination:
+List exact critic IDs from `CRITIC_MATRIX.json`.
 
-A builder self-review is recorded separately and cannot satisfy an independent critic gate.
+-
+
+Independent-required critics must use a genuinely separate reviewer/model
+runtime. Builder self-review is recorded separately and cannot satisfy them.
 
 ## Performance budget
 - Assigned subsystem budget:
-- Baseline:
-- Required metrics:
-- Failure threshold / regression rule:
+- Baseline measurements:
+- Candidate measurements:
+- Remaining headroom:
 
-## Evidence package
-Destination: `Docs/Production/Evidence/<TASK>/` plus external artifact IDs/hashes for large binary evidence.
-
-Package must contain/source-link: candidate/source hashes, changed-file list, tests/logs, screenshots/videos, performance records, raw critic inputs, raw critic outputs, known failures, dispositions.
-
-## Integration readiness checklist
-- [ ] exact branch/base recorded
-- [ ] no unauthorized path modification
-- [ ] dependency gate satisfied
-- [ ] build/import clean
-- [ ] task functional tests pass
-- [ ] impact-selected regressions pass
-- [ ] evidence is source-bound/current
-- [ ] performance budget passes
-- [ ] persistence/device/security gates pass where applicable
-- [ ] required independent critics complete
-- [ ] every mandatory dimension >9.0 unrounded
-- [ ] no unresolved mandatory defect
-- [ ] candidate marked INTEGRATION_READY only; not self-approved
+## Candidate handoff
+- Candidate commit:
+- Candidate artifact hash:
+- Evidence package:
+- Known failures:
+- Unresolved mandatory defects:
+- Reconcile/rebase status against current integration head:
+- Integration-owner disposition:

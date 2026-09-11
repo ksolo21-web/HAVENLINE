@@ -1,70 +1,709 @@
 {
   "schema_version": 1,
-  "forward_score_rule": "Every applicable mandatory dimension must be strictly >9.0 unrounded; target 10.0; no averaging; no unresolved mandatory defect.",
-  "historical_approval_exception": "T01/T02 remain accepted under their original completed gates unless a later regression reopens them.",
-  "independence_rule": "A builder/self-review/persona rerun is not an independent critic. Required independent reviews must use a separate permitted $0 reviewer/model runtime and preserve provider/model/run/candidate/input/raw-output provenance.",
+  "forward_acceptance": {
+    "dimension_operator": ">",
+    "threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "no_average_waiver": true,
+    "no_unresolved_mandatory_defect": true
+  },
+  "independence_rule": "A builder/self-review/persona swap is not an independent critic. Use a genuinely separate reviewer/model runtime when required; if unavailable, keep the independent gate BLOCKED.",
+  "cost_rule": "No paid APIs or paid critic services.",
   "critics": {
-    "C1":{"name":"Reference Fidelity Critic","checks":["authoritative video/pixel fit","style language","composition","visual continuity"]},
-    "C2":{"name":"Technical / Visual Integrity Critic","checks":["geometry/contact","clipping","seams","materials","cross-view consistency"]},
-    "C3":{"name":"Havenline Gameplay Identity Critic","checks":["one-joystick/simple-context philosophy","core physical loop","no unnecessary control complexity","world response readability"]},
-    "C4":{"name":"Gameplay UX / Readability Critic","checks":["interactable target","danger","collection feedback","resource destination","world change","next action"]},
-    "C5":{"name":"Motion / Rigging Critic","checks":["full cycles","foot strike","stance/toe-off","knees/hips","hands","weight transfer","transitions","clipping","tails/wings/mane/gear/contact"]},
-    "C6":{"name":"Performance Critic","checks":["frame time","draw calls","geometry","texture/memory","shader cost","physics","animation","NPC load","thermal-risk indicators"],"not_final_device_certification":true},
-    "C7":{"name":"Progression / Difficulty Critic","checks":["rising difficulty","no HP-only inflation","no impossible spikes","no dead stretches","meaningful upgrades","bounded spend-blind Challenge Director"]},
-    "C8":{"name":"Economy / Fairness Critic","checks":["F2P viability","sources/sinks","inflation","VIP","purchase value","paywall risk","misery-by-design risk"]},
-    "C9":{"name":"Security / Exploit Critic","checks":["save modification","clock manipulation","replay","duplicate grants","fake purchase","fake premium balance","VIP manipulation","event fraud","rollback","leaderboard fabrication"]},
-    "C10":{"name":"LiveOps Critic","checks":["impossible requirements","event collision","reward values","F2P feasibility","duplicate rewards","pricing/sales","timing","asset/localization readiness"]},
-    "C11":{"name":"Accessibility Critic","checks":["touch targets","UI scale","text readability","color differentiation","reduced motion","subtitles","joystick layout","controller","phone/tablet/foldable states"]}
+    "C1": {
+      "name": "Reference Fidelity Critic",
+      "independent_model_required": true,
+      "checks": [
+        "authoritative reference-video fidelity",
+        "visual-language match",
+        "cross-view consistency"
+      ]
+    },
+    "C2": {
+      "name": "Technical / Visual Integrity Critic",
+      "independent_model_required": true,
+      "checks": [
+        "geometry/contact",
+        "clipping/seams",
+        "intentional gaps versus defects",
+        "cross-view integrity"
+      ]
+    },
+    "C3": {
+      "name": "Havenline Gameplay Identity Critic",
+      "independent_model_required": true,
+      "checks": [
+        "Havenline feel",
+        "one-joystick/simple-context philosophy",
+        "core physical loop",
+        "no unnecessary control complexity",
+        "world response readability"
+      ]
+    },
+    "C4": {
+      "name": "Gameplay UX / Readability Critic",
+      "independent_model_required": true,
+      "checks": [
+        "interactable target clarity",
+        "danger clarity",
+        "collection feedback",
+        "resource destination",
+        "world change clarity",
+        "next-action clarity"
+      ]
+    },
+    "C5": {
+      "name": "Motion / Rigging Critic",
+      "independent_model_required": true,
+      "checks": [
+        "full cycles",
+        "foot strike",
+        "stance",
+        "toe-off",
+        "knees/hips",
+        "hands",
+        "weight transfer",
+        "transitions",
+        "clipping",
+        "tails/wings/mane/gear/contact"
+      ]
+    },
+    "C6": {
+      "name": "Performance Critic",
+      "independent_model_required": false,
+      "quantitative_specialist_gate": true,
+      "checks": [
+        "frame time",
+        "draw calls",
+        "geometry",
+        "texture/memory",
+        "shader cost",
+        "physics",
+        "animation",
+        "NPC load",
+        "thermal-risk indicators"
+      ],
+      "note": "Numeric performance gate; does not replace T68/T69 physical certification."
+    },
+    "C7": {
+      "name": "Progression / Difficulty Critic",
+      "independent_model_required": true,
+      "checks": [
+        "rising difficulty",
+        "not HP-only inflation",
+        "no impossible spikes",
+        "no boring stretches",
+        "meaningful upgrades",
+        "bounded Challenge Director"
+      ]
+    },
+    "C8": {
+      "name": "Economy / Fairness Critic",
+      "independent_model_required": true,
+      "checks": [
+        "F2P viability",
+        "sources/sinks",
+        "inflation",
+        "VIP",
+        "purchase value",
+        "paywall risk",
+        "no intentionally miserable F2P"
+      ]
+    },
+    "C9": {
+      "name": "Security / Exploit Critic",
+      "independent_model_required": false,
+      "adversarial_test_harness_required": true,
+      "checks": [
+        "save modification",
+        "clock manipulation",
+        "replay",
+        "duplicate grants",
+        "fake purchase",
+        "fake premium balance",
+        "VIP manipulation",
+        "event fraud",
+        "rollback",
+        "leaderboard fabrication"
+      ]
+    },
+    "C10": {
+      "name": "LiveOps Critic",
+      "independent_model_required": true,
+      "checks": [
+        "impossible requirements",
+        "event collision",
+        "reward values",
+        "F2P feasibility",
+        "duplicate rewards",
+        "pricing/sales",
+        "timing",
+        "assets/localization"
+      ]
+    },
+    "C11": {
+      "name": "Accessibility Critic",
+      "independent_model_required": true,
+      "checks": [
+        "touch targets",
+        "UI scale",
+        "text readability",
+        "color differentiation",
+        "reduced motion",
+        "subtitles",
+        "joystick layout",
+        "controller",
+        "phone/tablet/foldable states"
+      ]
+    }
   },
-  "task_classes": {
-    "environment_visual":["C1","C2","C6"],
-    "character_animal":["C1","C2","C5","C6"],
-    "core_gameplay":["C2","C3","C4","C6"],
-    "progression_region":["C1","C2","C3","C4","C6","C7"],
-    "economy_monetization":["C3","C7","C8","C9"],
-    "liveops":["C3","C7","C8","C9","C10"],
-    "ui_accessibility":["C2","C4","C11"],
-    "security":["C9"],
-    "final_whole_game":["C1","C2","C3","C4","C5","C6","C7","C8","C9","C10","C11"]
+  "task_applicability": {
+    "T01": [
+      "C1",
+      "C2",
+      "C6"
+    ],
+    "T02": [
+      "C1",
+      "C2",
+      "C6"
+    ],
+    "T03": [
+      "C1",
+      "C2",
+      "C6"
+    ],
+    "T04": [
+      "C1",
+      "C2",
+      "C6"
+    ],
+    "T05": [
+      "C1",
+      "C2",
+      "C6"
+    ],
+    "T06": [
+      "C1",
+      "C2",
+      "C5",
+      "C6"
+    ],
+    "T07": [
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C11"
+    ],
+    "T08": [
+      "C2",
+      "C3",
+      "C4",
+      "C6"
+    ],
+    "T09": [
+      "C2",
+      "C3",
+      "C4",
+      "C6"
+    ],
+    "T10": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T11": [
+      "C2",
+      "C3",
+      "C4",
+      "C6"
+    ],
+    "T12": [
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T13": [
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T14": [
+      "C2",
+      "C9"
+    ],
+    "T15": [
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C1"
+    ],
+    "T16": [
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C1"
+    ],
+    "T17": [
+      "C2",
+      "C3",
+      "C4",
+      "C6"
+    ],
+    "T18": [
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C1"
+    ],
+    "T19": [
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C1"
+    ],
+    "T20": [
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C1"
+    ],
+    "T21": [
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C1"
+    ],
+    "T22": [
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C1"
+    ],
+    "T23": [
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C1"
+    ],
+    "T24": [
+      "C1",
+      "C2",
+      "C5",
+      "C6"
+    ],
+    "T25": [
+      "C1",
+      "C2",
+      "C5",
+      "C6"
+    ],
+    "T26": [
+      "C1",
+      "C2",
+      "C5",
+      "C6"
+    ],
+    "T27": [
+      "C1",
+      "C2",
+      "C5",
+      "C6"
+    ],
+    "T28": [
+      "C1",
+      "C2",
+      "C5",
+      "C6"
+    ],
+    "T29": [
+      "C1",
+      "C2",
+      "C5",
+      "C6"
+    ],
+    "T30": [
+      "C1",
+      "C2",
+      "C5",
+      "C6"
+    ],
+    "T31": [
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6"
+    ],
+    "T32": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T33": [
+      "C3",
+      "C7",
+      "C8",
+      "C9"
+    ],
+    "T34": [
+      "C3",
+      "C7",
+      "C8",
+      "C9"
+    ],
+    "T35": [
+      "C3",
+      "C7",
+      "C8",
+      "C9",
+      "C11"
+    ],
+    "T36": [
+      "C3",
+      "C7",
+      "C8",
+      "C9"
+    ],
+    "T37": [
+      "C3",
+      "C7",
+      "C8",
+      "C9",
+      "C10"
+    ],
+    "T38": [
+      "C3",
+      "C7",
+      "C8",
+      "C9",
+      "C10"
+    ],
+    "T39": [
+      "C3",
+      "C7",
+      "C8",
+      "C9",
+      "C10"
+    ],
+    "T40": [
+      "C3",
+      "C7",
+      "C8",
+      "C9",
+      "C10"
+    ],
+    "T41": [
+      "C9"
+    ],
+    "T42": [
+      "C3",
+      "C7",
+      "C9"
+    ],
+    "T43": [
+      "C9",
+      "C11"
+    ],
+    "T44": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T45": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T46": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T47": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T48": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T49": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T50": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T51": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T52": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T53": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "T54": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6"
+    ],
+    "T55": [
+      "C2",
+      "C4",
+      "C11"
+    ],
+    "T56": [
+      "C2",
+      "C4",
+      "C6",
+      "C11"
+    ],
+    "T57": [
+      "C2",
+      "C4",
+      "C11"
+    ],
+    "T58": [
+      "C2",
+      "C4",
+      "C6",
+      "C11"
+    ],
+    "T59": [
+      "C1",
+      "C2",
+      "C5",
+      "C6"
+    ],
+    "T60": [
+      "C1",
+      "C2",
+      "C5",
+      "C6"
+    ],
+    "T61": [
+      "C1",
+      "C2",
+      "C5",
+      "C6"
+    ],
+    "T62": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6",
+      "C7",
+      "C8",
+      "C9",
+      "C10",
+      "C11"
+    ],
+    "T63": [
+      "C3",
+      "C7",
+      "C8"
+    ],
+    "T64": [
+      "C3",
+      "C7",
+      "C8",
+      "C9"
+    ],
+    "T65": [
+      "C3",
+      "C7",
+      "C8",
+      "C9",
+      "C10"
+    ],
+    "T66": [
+      "C9"
+    ],
+    "T67": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6",
+      "C7",
+      "C8",
+      "C9",
+      "C10",
+      "C11"
+    ],
+    "T68": [
+      "C6",
+      "C11"
+    ],
+    "T69": [
+      "C6",
+      "C11"
+    ],
+    "T70": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6",
+      "C7",
+      "C8",
+      "C9",
+      "C10",
+      "C11"
+    ]
   },
-  "task_overrides": {
-    "T01":["C1","C2"],
-    "T02":["C1","C2","C6"],
-    "T03":["C1","C2","C6"],
-    "T04":["C1","C2","C4","C6"],
-    "T05":["C1","C2","C6"],
-    "T06":["C1","C2","C5","C6"],
-    "T07":["C2","C3","C4","C6","C11"],
-    "T08":["C2","C3","C4","C6"],
-    "T09":["C2","C3","C4","C6"],
-    "T10":["C1","C2","C3","C4","C6"],
-    "T11":["C1","C2","C3","C4","C6"],
-    "T12":["C3","C4","C6","C7"],
-    "T13":["C3","C6","C7","C8"],
-    "T14":["C2","C6","C9"],
-    "T15":["C1","C2","C3","C4","C6"],
-    "T16":["C1","C2","C3","C4","C6"],
-    "T17":["C2","C3","C4","C6","C8"],
-    "T18":["C1","C2","C3","C4","C6"],
-    "T19":["C1","C2","C3","C4","C6"],
-    "T20":["C1","C2","C3","C4","C6"],
-    "T21":["C1","C2","C3","C4","C5","C6","C7"],
-    "T22":["C1","C2","C3","C4","C6","C7"],
-    "T23":["C1","C2","C3","C4","C5","C6"],
-    "T24-T31":["C1","C2","C5","C6"],
-    "T32":["C1","C2","C3","C4","C6","C7"],
-    "T33":["C3","C7","C8"],
-    "T34-T36":["C3","C7","C8","C9"],
-    "T37-T40":["C3","C7","C8","C9","C10"],
-    "T41":["C9"],
-    "T42":["C3","C6","C9","C11"],
-    "T43":["C2","C6","C9"],
-    "T44-T53":["C1","C2","C3","C4","C6","C7"],
-    "T54":["C1","C2","C3","C4","C6","C11"],
-    "T55-T58":["C2","C4","C6","C11"],
-    "T59-T61":["C1","C2","C5","C6"],
-    "T62-T67":["C1","C2","C3","C4","C5","C6","C7","C8","C9","C10","C11"],
-    "T68-T69":["C2","C6","C11"],
-    "T70":["C1","C2","C3","C4","C5","C6","C7","C8","C9","C10","C11"]
+  "archetype_defaults": {
+    "environment_visual": [
+      "C1",
+      "C2",
+      "C6"
+    ],
+    "character_animal": [
+      "C1",
+      "C2",
+      "C5",
+      "C6"
+    ],
+    "core_gameplay": [
+      "C2",
+      "C3",
+      "C4",
+      "C6"
+    ],
+    "progression_region": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "economy_monetization": [
+      "C3",
+      "C7",
+      "C8",
+      "C9"
+    ],
+    "liveops": [
+      "C3",
+      "C7",
+      "C8",
+      "C9",
+      "C10"
+    ],
+    "ui_accessibility": [
+      "C2",
+      "C4",
+      "C11"
+    ],
+    "security": [
+      "C9"
+    ],
+    "final_whole_game": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C5",
+      "C6",
+      "C7",
+      "C8",
+      "C9",
+      "C10",
+      "C11"
+    ]
+  },
+  "record_required": [
+    "critic_id",
+    "provider",
+    "model",
+    "request_or_run_id",
+    "candidate_hash",
+    "input_manifest_hash",
+    "raw_output_path",
+    "raw_output_hash",
+    "scores",
+    "defects",
+    "coverage_complete",
+    "confidence"
+  ],
+  "current_t03": {
+    "required": [
+      "C1",
+      "C2",
+      "C6"
+    ],
+    "C1": "latest run 34632784857 completed but river-gates below threshold",
+    "C2": "latest run 34632784857 completed but river-gates below threshold",
+    "C6": "new V2 requirement; not yet executed"
   }
 }

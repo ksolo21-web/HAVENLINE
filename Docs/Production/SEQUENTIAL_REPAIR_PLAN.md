@@ -1,59 +1,128 @@
-# Havenline — controlled integration repair plan
+# Havenline — authoritative controlled integration plan
 
-**Authoritative execution companion to `HAVENLINE_BUILD_PLAN_V2.md`.** The exact pre-V2 serial plan is preserved at `Docs/Production/Archive/SEQUENTIAL_REPAIR_PLAN.pre-v2.2026-09-11.md` with provenance. This file supersedes its one-task-only production mechanism, not its accepted history or T01–T03 frozen requirements.
+This file is the forward operational companion to `HAVENLINE_BUILD_PLAN_V2.md`.
+
+The exact pre-migration sequential plan is preserved byte-for-byte at
+`Docs/Production/Archive/SEQUENTIAL_REPAIR_PLAN.pre-v2.2026-09-11.md`
+with provenance in the adjacent JSON record. V2 replaces pure serial building
+with dependency-controlled parallel construction, while retaining serial,
+integration-owner-controlled production integration.
+
+## Current authoritative checkpoint
+
+- Integration branch: `codex/havenline-sequential-task-01`.
+- T01: APPROVED at `45ba7905cd468c229cd61364f4d1ac45b14d3e5e`.
+- T02: APPROVED at `1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff`.
+- T03: ACTIVE / FIX_REQUIRED. Frozen scope remains
+  `Docs/Production/T03/FROZEN_SCOPE.md`.
+- T03 exact latest reviewed runtime/evidence candidate before this governance
+  migration: `6947849f581db9cfa53a17ff9202ecde1c0ee80c`.
+- Latest T03 build/capture passed 16 suites / 807 checks and produced 61
+  source-bound renders, but run `34632784857` still failed the combined critic
+  gate because the `river-gates` group scored below the required threshold in
+  both C1 and C2. T03 is therefore NOT APPROVED.
+- T04+ runtime production remains LOCKED until T03 is APPROVED.
+
+The stale pre-migration top-level `task-gates.json` fields that said T03 was
+`READY_NOT_STARTED` are superseded by this recovered checkpoint and the V2
+registry.
 
 ## Forward acceptance rule
-For T03 and every future intermediate task, PASS requires every applicable mandatory reviewed dimension to score **strictly >9.0 unrounded**, all applicable G1–G14 gates to pass, and no unresolved mandatory defect. Target remains 10/10. T01/T02 are not retroactively revoked merely because their original gate wording differed.
 
-## Production model
-`DEPENDENCY GRAPH → ISOLATED PARALLEL BUILD → CONTROLLED INTEGRATION → IMPACT-BASED REGRESSION → APPLICABLE SPECIALIST CRITICS → FIX/RETEST → APPROVE → UNLOCK DEPENDENTS`.
+For every not-yet-approved task, PASS requires:
 
-Only the integration owner may merge production candidates to `codex/havenline-sequential-task-01`. Worker branches may become `INTEGRATION_READY`; only the integrated candidate may become `APPROVED` after G14.
+1. every applicable mandatory reviewed dimension is **strictly greater than
+   9.0, unrounded**;
+2. every applicable gate G1-G14 passes;
+3. every critic required by `CRITIC_MATRIX.json` has current complete evidence;
+4. no unresolved mandatory defect remains;
+5. integration-candidate regression passes after merge/reconciliation.
 
-States: `LOCKED`, `PREPARED`, `ASSIGNED`, `BUILDING_ISOLATED`, `BUILT_PENDING_DEPENDENCY`, `INTEGRATION_READY`, `INTEGRATING`, `UNDER_REVIEW`, `FIX_REQUIRED`, `APPROVED`, `BLOCKED`.
+Target remains 10/10. T01/T02 remain approved under their historical accepted
+records and are not retroactively revoked.
 
-## Preserved requirements
-Both authoritative reference videos remain required actual-pixel/motion standards. Preserve original characters/models/identities/saves/validated fixes. Godot 4.7.2 Android is active; Unity is retired. Landscape automatic phone/tablet/foldable adaptation, unlimited logical carrying and movement/proximity actions remain. Companion species are dog, wolf, fox, owl, lion, tiger and bear; no domestic cats. C2–C4 final rig fixes/reviews remain at the final character stage. No unfinished APK or user benchmarking assignment.
+## Controlled production flow
 
-Permanent gameplay language: `MOVE → AUTO-INTERACT → GATHER → VISIBLY CARRY → DELIVER → TRANSFORM → RESCUE → BUILD/UPGRADE → EXPLORE → DEFEND`, using one primary joystick and minimal contextual controls.
+`DEPENDENCY GRAPH -> PREPARE PACKET -> CLAIM DISJOINT PATHS -> BUILD ISOLATED
+-> TEST -> PACKAGE CANDIDATE -> INTEGRATION OWNER REVIEW -> RECONCILE STALE BASE
+-> INTEGRATE CLEANLY -> IMPACT-BASED REGRESSION -> FRESH INTEGRATION EVIDENCE
+-> APPLICABLE CRITICS -> FIX/RETEST -> APPROVE -> UNLOCK DEPENDENTS`
 
-## T01 frozen scope — preserved approved
-Three finished blue-white sculpted conifer variants; layered/scalloped silhouettes; clean reference-matched materials; dense surrounding woodland; resource-tree routing; ground contact; foreground cutaway; geometry workload. Preserve resource quantities, playable bounds and routing. Excludes terrain/work-floor redesign, camera redesign, fences, buildings, machinery, NPCs and later gameplay.
+Only the integration owner may move production changes onto the integration
+branch. An isolated builder can reach `INTEGRATION_READY`; it cannot mark
+itself `APPROVED`.
 
-Required evidence remains actual front/rear/side/three-quarter/detail runtime images, moving-camera sequence, gameplay integration, reference crop provenance, source/asset/capture hashes, depletion/cutaway regression, geometry/material checks, workload/resolution and independent C1/C2 review. **T01 remains APPROVED.**
+## States
 
-## T02 frozen scope — preserved approved
-Terrain/snow/warm work areas plus the persistent map-spanning river authority. The river remains the exact approved `river_v1_mapspan` system using the accepted T02 source, with terrain/water/collision/save-recovery/future-crossing continuity and approved T01 forest preserved. **T02 remains APPROVED.** Later tasks may not silently alter its authoritative river geometry.
+`LOCKED`, `PREPARED`, `ASSIGNED`, `BUILDING_ISOLATED`,
+`BUILT_PENDING_DEPENDENCY`, `INTEGRATION_READY`, `INTEGRATING`,
+`UNDER_REVIEW`, `FIX_REQUIRED`, `APPROVED`, `BLOCKED`.
 
-## T03 frozen scope — current active production task
-Finished camp fences, six intentional gate openings, and navigable packed work lanes. Visual boundary and collision use the same authoritative panel/gate geometry; routes must remain traversable with no invisible obstacles or trap states. Three river-facing openings preserve T02 future crossing reserves; Task 3 does not implement bridges or Task 4+ behavior. Preserve T01 forest and T02 river.
+No state change is time-based.
 
-Current recovered T03 checkpoint:
-- candidate/integration source under review: `6947849f581db9cfa53a17ff9202ecde1c0ee80c`;
-- 16 suites / 807 checks PASS;
-- 61 source-bound renders verified, including 11 native 3840×2160 scale-1 captures;
-- 22 critic judgments completed;
-- combined gate FAILS specifically on `river-gates`: visual-integrity role minimum 2/10, reference-fidelity role minimum 4/10;
-- T03 state is therefore **FIX_REQUIRED**, not approved;
-- T04+ runtime remains locked until T03 is repaired and passes the forward >9 rule.
+## Collision protection
 
-## Universal gates
-G1 Dependency; G2 Path ownership; G3 Scope; G4 Build/import; G5 Functional; G6 Regression; G7 Evidence provenance; G8 Performance budget; G9 Persistence where applicable; G10 Security/economy where applicable; G11 Accessibility/adaptive UI where applicable; G12 Critic coverage; G13 every mandatory dimension >9.0 unrounded; G14 integrated candidate regression.
+`PATH_OWNERSHIP.json` is authoritative for active ownership and protected
+paths. No two active workstreams may own the same production path.
 
-## Coordination authority
-- `DEPENDENCY_GRAPH.json` — unlock graph.
-- `WORKSTREAM_REGISTRY.json` — assignment/state/source registry.
-- `PATH_OWNERSHIP.json` — collision protection and change-request rule.
-- `CRITIC_MATRIX.json` — C1–C11 applicability.
-- `PERFORMANCE_BUDGETS.json` — early resource budgets.
-- `REGRESSION_SUITES.json` — change-impact regression mapping.
-- `TASK_PACKET_TEMPLATE.md` — frozen builder handoff.
-- `tools/havenline/production/` — validators/generators/packaging/closure tooling.
+If a builder needs a foreign-owned or integration-only path, it creates a
+change request under `Docs/Production/ChangeRequests/` and does not modify that
+path. The integration owner resolves the request.
 
-## Release path
-The authoritative task names and dependency-based 70-task release path are in `HAVENLINE_BUILD_PLAN_V2.md` and `DEPENDENCY_GRAPH.json`. Numerical order is the release roadmap; actual assignment/unlock follows dependencies and path ownership.
+The current T03 is grandfathered as the final legacy task allowed to finish on
+the integration branch because its runtime changes were already integrated
+before V2. No T04+ builder receives that exception.
 
-After T03 approval only, controlled Wave 1 may assign T04 camera/composition, T05 station/prop kit, T06 Character 1 motion, plus QA/integration infrastructure. They must use isolated branches and non-overlapping path ownership. Shared runtime changes require a structured `ChangeRequests/` request and integration-owner resolution.
+## Regression and evidence
 
-## Final acceptance
-T68/T69 remain the only final sustained physical-device native-4K/60 certification tasks. Software renderer screenshots/counters are regression evidence only, not final hardware certification.
+Changed files are mapped through `REGRESSION_MATRIX.json`. The integration
+candidate runs the union of universal checks and all impacted approved-task
+checks. Unknown production changes fall back to the full mandatory suite set.
+
+Evidence must be deterministic and exact-source-bound. Capture metadata records
+candidate commit/hash, scene/state, camera, renderer, resolution, build/run id,
+and timestamp. Visual tasks use front/rear/left/right/3/4/gameplay/detail/
+overhead/condition/native-4K views where applicable. Motion tasks use complete
+real-time/slow cycles plus turns, transitions and contact/clipping views.
+
+`SAVE_STATE_MATRIX.json` and `DEVICE_LAYOUT_MATRIX.json` define early
+persistence/device coverage. `PERFORMANCE_BUDGETS.json` defines headroom gates.
+None of these early checks replace T68/T69 physical-device certification.
+
+## Critic independence
+
+C1-C11 and per-task applicability are defined in `CRITIC_MATRIX.json`.
+Builder self-review, a second persona, or a second prompt from the same builder
+is not an independent pass. When an independent runtime is required and no
+separate $0 reviewer is available, useful construction/testing continues but
+the critic gate remains `BLOCKED`. Never manufacture a pass and never add a
+paid critic dependency.
+
+## Wave 1 after T03 approval
+
+Only after T03 becomes APPROVED may the registry assign:
+
+- `havenline/T04-camera` — T04 camera/composition.
+- `havenline/T05-props` — T05 station/prop kit.
+- `havenline/T06-character1` — T06 Character 1 motion.
+- QA/integration infrastructure may continue separately.
+
+Those workstreams are isolated and path-disjoint. Shared wiring remains
+integration-owner work or a change request.
+
+## Sequence
+
+The release-critical task list is T01-T70 exactly as defined in
+`HAVENLINE_BUILD_PLAN_V2.md` and `DEPENDENCY_GRAPH.json`. Numerical order is
+the roadmap order; dependency approval, ownership and integration gates decide
+what may build in parallel.
+
+## Resumability
+
+After every integration or failed gate, update:
+`WORKSTREAM_REGISTRY.json`, `task-gates.json`, task evidence, exact candidate
+hashes, tests, critic raw outputs, blockers and next executable action.
+
+A governance/tooling commit does not approve gameplay. A task packet does not
+approve gameplay. Only the integrated candidate satisfying all applicable
+gates can become APPROVED.
