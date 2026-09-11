@@ -1,0 +1,36 @@
+name: Havenline production governance validation
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - 'Docs/Production/**'
+      - 'tools/havenline/production/**'
+      - '.github/workflows/havenline-production-governance.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify migration does not alter runtime game files
+        run: git diff --exit-code f26b3d6d5a788c03192f593936bfe8ce5ccfc5bc -- HavenlineGodot
+      - name: Verify archived pre-V2 plan matches exact recovered source
+        run: |
+          git show 6947849f581db9cfa53a17ff9202ecde1c0ee80c:Docs/Production/SEQUENTIAL_REPAIR_PLAN.md > /tmp/pre-v2-plan.md
+          cmp /tmp/pre-v2-plan.md Docs/Production/Archive/SEQUENTIAL_REPAIR_PLAN.pre-v2.2026-09-11.md
+      - name: Validate JSON and coordination contracts
+        run: |
+          python3 -m json.tool Docs/Production/DEPENDENCY_GRAPH.json >/dev/null
+          python3 -m json.tool Docs/Production/WORKSTREAM_REGISTRY.json >/dev/null
+          python3 -m json.tool Docs/Production/PATH_OWNERSHIP.json >/dev/null
+          python3 -m json.tool Docs/Production/CRITIC_MATRIX.json >/dev/null
+          python3 -m json.tool Docs/Production/PERFORMANCE_BUDGETS.json >/dev/null
+          python3 -m json.tool Docs/Production/REGRESSION_SUITES.json >/dev/null
+          python3 tools/havenline/production/production_cli.py validate-registry
+      - name: Run migration validator tests
+        run: python3 tools/havenline/production/test_production_cli.py
