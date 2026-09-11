@@ -7,6 +7,8 @@ on:
       - 'HavenlineGodot/scripts/camp_boundary.gd'
       - 'HavenlineGodot/scripts/camp_boundary_view.gd'
       - 'HavenlineGodot/tests/test_task03_boundary.gd'
+      - '.github/workflows/havenline-task03-polished-evidence.yml'
+  workflow_dispatch:
 permissions:
   contents: read
 jobs:
@@ -110,4 +112,4 @@ jobs:
           path: source-snapshot/
           retention-days: 30
           if-no-files-found: error
-# Fresh evidence only. No critic score is reused across the game-source repair.
+# Fresh repaired-source evidence only. No old critic score is reused across the game-source repair.
