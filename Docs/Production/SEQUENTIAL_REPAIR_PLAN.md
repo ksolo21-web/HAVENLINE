@@ -1,85 +1,59 @@
-# Havenline — sequential repair plan
+# Havenline — controlled integration repair plan
 
-## One active task. The next task stays locked.
+**Authoritative execution companion to `HAVENLINE_BUILD_PLAN_V2.md`.** The exact pre-V2 serial plan is preserved at `Docs/Production/Archive/SEQUENTIAL_REPAIR_PLAN.pre-v2.2026-09-11.md` with provenance. This file supersedes its one-task-only production mechanism, not its accepted history or T01–T03 frozen requirements.
 
-Latest user instruction: plan the fixes, execute each task separately, and move forward only after its quality gate AND critics pass. Intermediate task progression requires **at least 9.0/10 in every mandatory dimension; always aim for 10.0**. This supersedes the older exact-10 rule for intermediate task progression only. It does not waive the separate full-game release gate or retrospectively promote an old failure.
+## Forward acceptance rule
+For T03 and every future intermediate task, PASS requires every applicable mandatory reviewed dimension to score **strictly >9.0 unrounded**, all applicable G1–G14 gates to pass, and no unresolved mandatory defect. Target remains 10/10. T01/T02 are not retroactively revoked merely because their original gate wording differed.
 
-Each task follows: BUILD -> TEST -> CAPTURE ACTUAL OUTPUT -> INDEPENDENT CRITICS -> FIX -> FRESH EVIDENCE -> REVIEW. At least two separately executed review roles (reference fidelity and technical/visual integrity) are required. Two roles using the same model are one model family, not a diverse expert panel. Builder self-review, saved instructions and automated checkers are not independent AI critics.
+## Production model
+`DEPENDENCY GRAPH → ISOLATED PARALLEL BUILD → CONTROLLED INTEGRATION → IMPACT-BASED REGRESSION → APPLICABLE SPECIALIST CRITICS → FIX/RETEST → APPROVE → UNLOCK DEPENDENTS`.
 
-Every required check must pass, the lowest required score must be >=9, and no mandatory defect may remain. Missing, invalid, truncated, low-confidence or incomplete reviews block progression. No averaging, rounding, repeated unchanged rescoring or placeholders may manufacture a pass. Preserve raw failures and unsupported observations; verify model claims against actual pixels/geometry rather than blindly accepting them.
+Only the integration owner may merge production candidates to `codex/havenline-sequential-task-01`. Worker branches may become `INTEGRATION_READY`; only the integrated candidate may become `APPROVED` after G14.
 
-Freeze scope and evidence BEFORE scoring. A scoped tree pass cannot certify buildings, gameplay or the full game. Later tasks are not waived; they remain locked. Any new change that breaks an approved task reopens it and blocks further progression until the regression passes again. Verification/tooling needed for the active task is allowed; unrelated next-task implementation is not.
+States: `LOCKED`, `PREPARED`, `ASSIGNED`, `BUILDING_ISOLATED`, `BUILT_PENDING_DEPENDENCY`, `INTEGRATION_READY`, `INTEGRATING`, `UNDER_REVIEW`, `FIX_REQUIRED`, `APPROVED`, `BLOCKED`.
 
 ## Preserved requirements
+Both authoritative reference videos remain required actual-pixel/motion standards. Preserve original characters/models/identities/saves/validated fixes. Godot 4.7.2 Android is active; Unity is retired. Landscape automatic phone/tablet/foldable adaptation, unlimited logical carrying and movement/proximity actions remain. Companion species are dog, wolf, fox, owl, lion, tiger and bear; no domestic cats. C2–C4 final rig fixes/reviews remain at the final character stage. No unfinished APK or user benchmarking assignment.
 
-Both uploaded reference videos remain authoritative; actual pixels and motion are required. Keep the original characters, models, identities, saves and validated fixes. Unity remains excluded. Keep landscape, automatic phone/tablet/foldable adaptation, unlimited logical carrying and movement/proximity actions. Animals: dogs, wolves, foxes, owls, lions, tigers and bears; no domestic cats. C2-C4 final rig fixes/reviews stay at the final character stage.
+Permanent gameplay language: `MOVE → AUTO-INTERACT → GATHER → VISIBLY CARRY → DELIVER → TRANSFORM → RESCUE → BUILD/UPGRADE → EXPLORE → DEFEND`, using one primary joystick and minimal contextual controls.
 
-No unfinished APK handoff or testing/benchmark assignment to Kaleb. Final release still needs complete functionality, reference fidelity, finished non-primitive-looking artwork/materials, independent final approval and sustained native >=3840x2160 at scale 1.0 and >=60 FPS on representative named physical phones AND tablets. Protect render budgets from T01 onward; repeat final physical tests after all content is present. Software rendering, engine counters and screenshots do not certify physical performance.
+## T01 frozen scope — preserved approved
+Three finished blue-white sculpted conifer variants; layered/scalloped silhouettes; clean reference-matched materials; dense surrounding woodland; resource-tree routing; ground contact; foreground cutaway; geometry workload. Preserve resource quantities, playable bounds and routing. Excludes terrain/work-floor redesign, camera redesign, fences, buildings, machinery, NPCs and later gameplay.
 
-## T01 frozen scope — reference conifers and forest framing
+Required evidence remains actual front/rear/side/three-quarter/detail runtime images, moving-camera sequence, gameplay integration, reference crop provenance, source/asset/capture hashes, depletion/cutaway regression, geometry/material checks, workload/resolution and independent C1/C2 review. **T01 remains APPROVED.**
 
-Includes three finished blue-white sculpted conifer variants; layered/scalloped silhouettes and clean materials matching the videos; dense surrounding woodland; resource-tree routing; ground contact; foreground cutaway; geometry workload. Preserve resource quantities, playable bounds and existing routing.
+## T02 frozen scope — preserved approved
+Terrain/snow/warm work areas plus the persistent map-spanning river authority. The river remains the exact approved `river_v1_mapspan` system using the accepted T02 source, with terrain/water/collision/save-recovery/future-crossing continuity and approved T01 forest preserved. **T02 remains APPROVED.** Later tasks may not silently alter its authoritative river geometry.
 
-Excludes terrain/work-floor redesign, different camera behavior, fences, buildings, machinery, NPCs and later gameplay. They remain separate locked tasks. Existing cabins may appear in diagnostic whole-scene captures, but T01 cannot approve them or the old scene layout.
+## T03 frozen scope — current active production task
+Finished camp fences, six intentional gate openings, and navigable packed work lanes. Visual boundary and collision use the same authoritative panel/gate geometry; routes must remain traversable with no invisible obstacles or trap states. Three river-facing openings preserve T02 future crossing reserves; Task 3 does not implement bridges or Task 4+ behavior. Preserve T01 forest and T02 river.
 
-Required evidence: actual runtime front/rear/side/three-quarter/detail images; moving-camera sequence; normal gameplay integration view; reference tree crops with source/crop provenance; exact source/asset/capture hashes; resource-depletion/cutaway regression checks; finite outward geometry, closed joins and material tests; workload/resolution record; unaltered outputs from both independent review roles. Any missing required evidence means T01 cannot pass.
+Current recovered T03 checkpoint:
+- candidate/integration source under review: `6947849f581db9cfa53a17ff9202ecde1c0ee80c`;
+- 16 suites / 807 checks PASS;
+- 61 source-bound renders verified, including 11 native 3840×2160 scale-1 captures;
+- 22 critic judgments completed;
+- combined gate FAILS specifically on `river-gates`: visual-integrity role minimum 2/10, reference-fidelity role minimum 4/10;
+- T03 state is therefore **FIX_REQUIRED**, not approved;
+- T04+ runtime remains locked until T03 is repaired and passes the forward >9 rule.
 
-## Ordered tasks
+## Universal gates
+G1 Dependency; G2 Path ownership; G3 Scope; G4 Build/import; G5 Functional; G6 Regression; G7 Evidence provenance; G8 Performance budget; G9 Persistence where applicable; G10 Security/economy where applicable; G11 Accessibility/adaptive UI where applicable; G12 Critic coverage; G13 every mandatory dimension >9.0 unrounded; G14 integrated candidate regression.
 
-| ID | Fix/build | Exit requirement beyond the universal gate |
-|---|---|---|
-| T01 | Reference snow-covered trees and forest framing | Frozen scope and evidence above. |
-| T02 | Terrain, snow, warm work-floor and lakeshore layout | Match both reference zones; correct ground contact and station routes. |
-| T03 | Fences, gates and navigable work lanes | Finished boundaries; walk every route without trapping or invisible obstacles. |
-| T04 | Reference camera and automatic screen composition | Matched oblique tracking and actor/item scale across landscape aspect ratios. |
-| T05 | Authored station and prop kit | Furnace/vessel, counters, pads, fishing/processing/defense fixtures reviewed in use and closeup. |
-| T06 | Character 1 movement and interaction animation | Full cycles/transitions, foot contact, turns, carry/tools and no clipping; C2-C4 untouched. |
-| T07 | Visible inventory, stockpiles and transfers | Tall physical stacks, conserved quantities and interrupted/reloaded transfers. |
-| T08 | Harvesting and contextual actions | Visible acquisition, depletion and proximity actions; no invisible yield or manual-action substitute. |
-| T09 | Camp construction and paid upgrade pads | Visible paid transformations; no double charges; preserved distinct progression rules. |
-| T10 | Customer models, crowds and routing | Two male/two female reusable bases, unique identities, dense queues and no deadlocks. |
-| T11 | Fishing and initial food processing | Full early reference-A fishing/carry/process/output loop with saved state. |
-| T12 | Customer service, physical payments and reinvestment | Real demand, stock, cash, collection and spending with accounting integrity. |
-| T13 | Mechanized fishing, conveyors and helpers | Paid intake transformation and working automatic transport/processing. |
-| T14 | Wheat and additional food production | Two simultaneous real supply chains and interruption/restart safety. |
-| T15 | Road and vehicle customer service | Authored moving cars/queues, road access and real transactions. |
-| T16 | Visible hostiles, hunting and weapon upgrades | Reference-B hunting/supply loop, health/contact/drops and orbiting-weapon progression. |
-| T17 | Working defensive structures | Visible firing/damage and economy running simultaneously; no hidden attacks. |
-| T18 | Additional human survivors and rescue | Distinct finished male/female survivors, animated rescue/recruitment and persistence. |
-| T19 | Dog companion | Reference match, full rig/motion/contact/gear/role review. |
-| T20 | Wolf companion | Reference match, complete motion/roles and separation from hostile wolves. |
-| T21 | Fox companion | Reference match, full motion/tail/gear review; no cat fallback. |
-| T22 | Owl companion | Reference match, flight/takeoff/landing/perching and wing/gear clearance. |
-| T23 | Lion companion | Reference male lion, full mane/gear deformation and role/motion checks. |
-| T24 | Tiger companion | Reference white tiger, stable markings, full motion/gear/role review. |
-| T25 | Bear companion | Reference brown bear, complete gait/paw/shoulder/gear/role review. |
-| T26 | Integrated companion jobs and population safety | Visible crew/workers/pets, navigation, assignments, cargo and persistence under load. |
-| T27 | Complete frozen-region progression | Start-to-region completion, both reference loops and no blocked progression. |
-| T28 | Connected forest biome | Complete authored playable region, transitions, progression and saved state. |
-| T29 | Connected desert biome | Complete region, hazards/resources, navigation and persistence. |
-| T30 | Connected underwater biome | Finished traversal/camera transitions, resources, hazards and persistence. |
-| T31 | Connected sky biome | Finished access/traversal, edge safety, progression and persistence. |
-| T32 | Connected volcanic biome | Finished region, readable hazards and persistent progression. |
-| T33 | Connected swamp biome | Finished region, ground/water contact, routes and progression. |
-| T34 | Connected ruins biome | Finished exploration, occlusion/camera, routes and persistence. |
-| T35 | Connected underground biome | Finished readable lighting, collision, traversal and persistence. |
-| T36 | Connected alien biome | Finished distinct region and cross-region progression continuity. |
-| T37 | Transportation and inter-region continuity | All ten regions connected without lost inventory/crew/state. |
-| T38 | Day/night, weather, sound and final game feedback | Actual visual/motion/listening reviews and effect-load/lifecycle checks. |
-| T39 | Phone/tablet/foldable functional acceptance | Named physical hardware, touch/safe areas/menus/resize/resume; not fixtures alone. |
-| T40 | Save recovery, Google identity and cloud continuity | Real authentication/cloud round trip, account isolation, recovery and cross-device restore. |
-| T41 | Character 2 final rigging and review | Every animation, equipment and lead/helper transition; original identity preserved. |
-| T42 | Character 3 final rigging and review | Every animation/angle and companion action; identity preserved. |
-| T43 | Character 4 final rigging and review | Every animation/angle and companion action; last character-rig task. |
-| T44 | Full-game reference and regression acceptance | Fresh complete-state/motion comparison to both videos and end-to-end progression. |
-| T45 | Sustained native 4K/60 on phones | Final full-load >=30-minute physical runs with presentation, resolution and thermal records. |
-| T46 | Sustained native 4K/60 on tablets/foldables | Final full-load physical tablet and applicable fold-state evidence; no resolution reduction. |
-| T47 | Final production handoff | All approvals valid, final gates passed, stable signing and exact verified package/evidence. |
+## Coordination authority
+- `DEPENDENCY_GRAPH.json` — unlock graph.
+- `WORKSTREAM_REGISTRY.json` — assignment/state/source registry.
+- `PATH_OWNERSHIP.json` — collision protection and change-request rule.
+- `CRITIC_MATRIX.json` — C1–C11 applicability.
+- `PERFORMANCE_BUDGETS.json` — early resource budgets.
+- `REGRESSION_SUITES.json` — change-impact regression mapping.
+- `TASK_PACKET_TEMPLATE.md` — frozen builder handoff.
+- `tools/havenline/production/` — validators/generators/packaging/closure tooling.
 
-## Current checkpoint and progress
+## Release path
+The authoritative task names and dependency-based 70-task release path are in `HAVENLINE_BUILD_PLAN_V2.md` and `DEPENDENCY_GRAPH.json`. Numerical order is the release roadmap; actual assignment/unlock follows dependencies and path ownership.
 
-Initial checkpoint: T01 ACTIVE; T02-T47 LOCKED; zero task approvals. No next task may start because this document exists. A plan is not a game pass.
+After T03 approval only, controlled Wave 1 may assign T04 camera/composition, T05 station/prop kit, T06 Character 1 motion, plus QA/integration infrastructure. They must use isolated branches and non-overlapping path ownership. Shared runtime changes require a structured `ChangeRequests/` request and integration-owner resolution.
 
-Show a visible progress bar before substantial work and update at verified milestones during execution. Distinguish setup, active-task progress and approved tasks. Record exact changed files/source/output hashes, actual tests, raw critic results, defects and next action after each cycle. A stalled review leaves the same task active. Do not manufacture time-based percentages or promise unscheduled background execution.
-
-Completion estimates must be based on measured build/review throughput. Diagnose repeated failure, preserve working checkpoints and change approach when justified; never lower the threshold just to finish. The 47-task plan is not a claim that everything fits in one response.
+## Final acceptance
+T68/T69 remain the only final sustained physical-device native-4K/60 certification tasks. Software renderer screenshots/counters are regression evidence only, not final hardware certification.
