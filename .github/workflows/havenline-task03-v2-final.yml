@@ -1,0 +1,180 @@
+name: Havenline T03 V2 final integration gate
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - 'HavenlineGodot/scripts/camp_boundary.gd'
+      - 'HavenlineGodot/shaders/outpost_snow.gdshader'
+      - 'HavenlineGodot/tests/capture_task03_boundary.gd'
+      - 'HavenlineGodot/tests/test_task03_boundary.gd'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  build-capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    outputs:
+      source: ${{ steps.prov.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - name: G1 G2 G3 and protected authority
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/production_cli.py validate-registry
+          changed=(HavenlineGodot/scripts/camp_boundary.gd HavenlineGodot/shaders/outpost_snow.gdshader HavenlineGodot/tests/capture_task03_boundary.gd HavenlineGodot/tests/test_task03_boundary.gd)
+          python3 tools/havenline/production/production_cli.py validate-candidate T03 "${changed[@]}" --integration-owner
+          git diff --exit-code 1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff -- HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd HavenlineGodot/assets/reference_forest
+      - name: Prepare pinned Godot and fixtures
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq; sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install pillow numpy
+          mkdir -p "$RUNNER_TEMP/engine" task03-evidence/tests task03-evidence/gallery task03-evidence/native4k task03-evidence/tree-clearance source-snapshot
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          python3 tools/havenline/bake_outpost_audio.py > task03-evidence/audio-fixture.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task03-evidence/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task03-evidence/tests/motion-fixture.log 2>&1
+      - name: G4 G5 G6 full inherited regression
+        run: |
+          set -euo pipefail
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary; do
+            timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task03-evidence/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task03-evidence/tests/*.log; then exit 1; fi
+          python3 tools/havenline/audit_task01_geometry.py > task03-evidence/tree-geometry.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          rows=[]
+          for p in sorted(Path('task03-evidence/tests').glob('test_*.log')):
+            j=[json.loads(x) for x in p.read_text().splitlines() if x.startswith('{')][-1];assert j.get('passed') is True and not j.get('failures'),(p,j.get('failures'))
+            c=j.get('checks',[]);rows.append({'suite':p.stem,'checks':len(c) if isinstance(c,list) else int(c)})
+          total=sum(x['checks'] for x in rows);assert len(rows)==16 and total==807,(len(rows),total)
+          g=json.loads(Path('task03-evidence/tree-geometry.json').read_text());assert g['passed'] and g['geometry_checks']==9
+          Path('task03-evidence/tests.json').write_text(json.dumps({'source':'${{ github.sha }}','suite_count':16,'total_checks':807,'tree_geometry_checks':9,'suites':rows,'all_passed':True},indent=2))
+          PY
+      - name: G7 deterministic fresh evidence
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1); test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task03_boundary.gd -- --out="$(pwd)/task03-evidence/gallery" > task03-evidence/gallery.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task03_boundary.gd -- --native-4k --out="$(pwd)/task03-evidence/native4k" > task03-evidence/native4k.log 2>&1
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task01_clearance.gd -- --out="$(pwd)/task03-evidence/tree-clearance" > task03-evidence/tree-clearance.log 2>&1
+          cp Docs/Production/T02/reference-ground.webp task03-evidence/reference-ground.webp
+      - name: Bind pixels and source
+        id: prov
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import hashlib,json
+          o=Path('task03-evidence');caps={str(p.relative_to(o)):hashlib.sha256(p.read_bytes()).hexdigest() for p in o.rglob('*.png')}
+          assert len(list((o/'gallery').glob('*.png')))==39 and len(list((o/'native4k').glob('*.png')))==11 and len(list((o/'tree-clearance').glob('*.png')))==11 and len(caps)==61
+          for n in caps:
+            with Image.open(o/n) as im: assert im.size==((3840,2160) if n.startswith('native4k/') else (1280,720)); im.verify()
+          for folder,count in [('gallery',39),('native4k',11)]:
+            r=json.loads((o/folder/'capture.json').read_text());b=r['boundary'];assert r['task']=='T03-boundary-v2' and r['renderer']=='mobile' and r['forest']['instances']==586 and len(r['captures'])==count and all(x['render_scale']==1.0 for x in r['captures'])
+            assert r['river']['river_layout_version']=='river_v1_mapspan' and b['gate_count']==6 and b['collision_panel_instances']==32 and b['primitive_fence_meshes_created'] is False
+            assert abs(b['river_gate_leaf_length']-1.85)<.0001 and abs(b['river_gate_open_angle']-1.48)<.0001 and abs(b['river_lane_half_width']-1.55)<.0001
+          g=json.loads((o/'gallery/capture.json').read_text());conditions=[x for x in g['captures'] if x['name'].startswith('boundary-condition-')];assert len(conditions)==6 and len({(tuple(x['camera_position']),x['camera_basis'],x['camera_size']) for x in conditions})==1
+          assert caps['gallery/boundary-condition-day.png']==caps['gallery/boundary-condition-day-return.png']
+          report={'task':'T03-boundary-v2','source':'${{ github.sha }}','captures':caps,'all61_images_verified':True,'gallery_images':39,'native3840x2160_scale1_frames':11,'tree_clearance_frames':11,'river_layout_version':'river_v1_mapspan','physical_phone_tablet4k60_verified':False,'task_approved':False}
+          (o/'provenance.json').write_text(json.dumps(report,indent=2))
+          PY
+          echo "source=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          echo "$GITHUB_SHA" > source-snapshot/SOURCE.txt
+          git archive --format=tar.gz --output=source-snapshot/source.tar.gz "$GITHUB_SHA" HavenlineGodot tools/havenline Docs AGENTS.md .github
+          sha256sum source-snapshot/source.tar.gz > source-snapshot/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with: {name: 'havenline-t03-v2-evidence-${{ github.run_id }}', path: 'task03-evidence/', retention-days: 30}
+      - uses: actions/upload-artifact@v4
+        with: {name: 'havenline-t03-v2-source-${{ github.run_id }}', path: 'source-snapshot/', retention-days: 30}
+  visual-review:
+    needs: build-capture
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix: {role: [reference-fidelity, visual-integrity], shard: [0,1,2,3]}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env: {EXPECTED_SOURCE: '${{ needs.build-capture.outputs.source }}', REVIEW_ROLE: '${{ matrix.role }}', REVIEW_SHARD: '${{ matrix.shard }}', OMP_NUM_THREADS: '4'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ needs.build-capture.outputs.source }}'}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t03-v2-evidence-${{ github.run_id }}', path: 'task03-evidence/'}
+      - uses: actions/cache/restore@v4
+        with: {path: '~/.cache/havenline-t01-qwen35', key: 'havenline-t01-qwen35-9b-q5-20260908-v1', fail-on-cache-miss: true}
+      - run: python3 -m pip install pillow
+      - run: python3 -u tools/havenline/production/review_task03_strict_v2_wrapper.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'havenline-t03-v2-${{ matrix.role }}-${{ matrix.shard }}-${{ github.run_id }}', path: 'task03-local-review/', retention-days: 30, if-no-files-found: error}
+  performance-review:
+    needs: build-capture
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env: {EXPECTED_SOURCE: '${{ needs.build-capture.outputs.source }}', OMP_NUM_THREADS: '4'}
+    steps:
+      - uses: actions/checkout@v4
+        with: {ref: '${{ needs.build-capture.outputs.source }}'}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t03-v2-evidence-${{ github.run_id }}', path: 'task03-evidence/'}
+      - uses: actions/cache/restore@v4
+        with: {path: '~/.cache/havenline-t01-qwen35', key: 'havenline-t01-qwen35-9b-q5-20260908-v1', fail-on-cache-miss: true}
+      - run: python3 -u tools/havenline/production/review_t03_performance_local.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'havenline-t03-v2-C6-${{ github.run_id }}', path: 'task03-performance-review/', retention-days: 30, if-no-files-found: error}
+  final-gate:
+    needs: [build-capture, visual-review, performance-review]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env: {SOURCE: '${{ needs.build-capture.outputs.source }}'}
+    steps:
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t03-v2-evidence-${{ github.run_id }}', path: 'evidence/'}
+      - uses: actions/download-artifact@v4
+        with: {pattern: 'havenline-t03-v2-*-*-${{ github.run_id }}', path: 'reviews/'}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t03-v2-C6-${{ github.run_id }}', path: 'performance/'}
+      - name: G8 G12 G13 G14 strict integrated-candidate gate
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,math,os,hashlib
+          source=os.environ['SOURCE'];errors=[];rows=[];roles={'reference-fidelity','visual-integrity'};groups={'perimeter','north-gate','side-gates','river-gates','south-fence','central-lane','cross-shelter-lanes','bank-lane','detail-contact','gameplay','conditions'};dims={'reference_fidelity','boundary_finish','gate_readability','lane_legibility','river_preservation','view_consistency'}
+          pro=json.loads(Path('evidence/provenance.json').read_text());tests=json.loads(Path('evidence/tests.json').read_text())
+          if pro.get('source')!=source or not pro.get('all61_images_verified') or len(pro.get('captures',{}))!=61:errors.append('G7 provenance')
+          if tests.get('source')!=source or not tests.get('all_passed') or tests.get('total_checks')!=807:errors.append('G6/G14 regression')
+          for role in roles:
+            rr=[];shards=[]
+            for p in Path('reviews').glob('*'+role+'*/shard-review.json'):
+              s=json.loads(p.read_text());shards.append(s.get('shard'))
+              if s.get('source')!=source or s.get('role')!=role or s.get('competency_passed') is not True or s.get('error') is not None:errors.append('bad shard '+str(p))
+              for r in s.get('reviews',[]):
+                rr.append(r);v=r.get('review',{});scores=v.get('scores',{});label=role+'/'+r.get('group','?')
+                if set(scores)!=dims or any(isinstance(x,bool) or not isinstance(x,(int,float)) or not math.isfinite(x) or not x>9.0 for x in scores.values()):errors.append('G13 <=9 '+label)
+                if r.get('passed') is not True or v.get('defects')!=[] or v.get('coverage_complete') is not True or v.get('confidence') not in ('medium','high'):errors.append('G12 defect/incomplete '+label)
+              rows+=s.get('reviews',[])
+            if set(shards)!={0,1,2,3} or len(rr)!=11 or {r.get('group') for r in rr}!=groups:errors.append('G12 coverage '+role)
+          c6_files=list(Path('performance').rglob('result.json'))
+          if len(c6_files)!=1:errors.append('C6 result missing')
+          else:
+            c6=json.loads(c6_files[0].read_text());scores=c6.get('mandatory_dimensions',{})
+            if c6.get('candidate_commit')!=source or c6.get('independent') is not True or c6.get('passed') is not True:errors.append('C6 invalid')
+            if not scores or any(isinstance(x,bool) or not isinstance(x,(int,float)) or not math.isfinite(x) or not x>9.0 for x in scores.values()):errors.append('C6 <=9')
+            if c6.get('defects')!=[]:errors.append('C6 defects')
+          result={'task':'T03','source':source,'passed':not errors,'visual_judgments':len(rows),'C6_present':len(c6_files)==1,'strict_rule':'>9.0 unrounded','errors':errors,'task_approved':False,'physical4k60_verified':False}
+          Path('gate-report').mkdir();Path('gate-report/final-gate.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2));raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with: {name: 'havenline-t03-v2-final-gate-${{ github.run_id }}', path: 'gate-report/', retention-days: 30}
+# T03 only. No T04+ runtime. Native 4K captures are not T68/T69 physical certification.
