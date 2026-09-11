@@ -24,7 +24,7 @@ permissions:
 jobs:
   independent-specialist-review:
     runs-on: ubuntu-24.04
-    timeout-minutes: 75
+    timeout-minutes: 85
     env:
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
@@ -37,10 +37,23 @@ jobs:
           name: ${{ inputs.evidence_artifact }}
           path: critic-input/
       - uses: actions/cache/restore@v4
+        id: reviewer-cache
         with:
           path: ~/.cache/havenline-t01-qwen35
           key: havenline-t01-qwen35-9b-q5-20260908-v1
-          fail-on-cache-miss: true
+      - name: Self-heal reviewer runtime if this branch has no usable cache
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > specialist-runtime-preparation.json
+      - uses: actions/cache/save@v4
+        if: steps.reviewer-cache.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
       - run: python3 -m pip install pillow
       - name: Validate exact source-bound evidence manifest
         run: python3 tools/havenline/production/specialist_evidence_manifest.py validate "critic-input/${{ inputs.manifest_name }}"
@@ -51,6 +64,7 @@ jobs:
             --candidate "${{ inputs.candidate }}" \
             --manifest "critic-input/${{ inputs.manifest_name }}" \
             --out specialist-review
+          cp specialist-runtime-preparation.json specialist-review/runtime-preparation.json
       - name: Enforce strict >9 raw critic gate
         if: always()
         run: |
@@ -63,7 +77,10 @@ jobs:
         if: always()
         with:
           name: ${{ inputs.output_artifact }}
-          path: specialist-review/
+          path: |
+            specialist-review/
+            specialist-runtime-preparation.json
           retention-days: 30
           if-no-files-found: error
-# Only C3/C4/C5/C7/C8/C10/C11 use this workflow. C1/C2 keep their reference-specific visual review; C6/C9 are deterministic specialist gates.
+# C3/C4/C5/C7/C8/C10/C11 use this workflow. It is branch-independent: a missing cache causes exact pinned runtime preparation, never a silent reviewer downgrade.
+# C1/C2 keep their reference-specific visual review; C6/C9 are deterministic specialist gates.
