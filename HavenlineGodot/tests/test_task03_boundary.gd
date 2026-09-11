@@ -104,8 +104,10 @@ func run():
 	var desc:Dictionary=game.camp_boundary_view.descriptor
 	check("Fence visuals and collision use same authoritative panel count",desc.collision_panel_instances==panels.size() and desc.visual_collision_share_panel_authority is bool and desc.visual_collision_share_panel_authority)
 	check("Six gates have twelve lantern posts and twelve open timber leaves",desc.gate_count==6 and desc.gate_post_instances==12 and desc.open_gate_leaf_instances==12)
-	check("Gate leaves use the polished readable opening geometry",Boundary.GATE_LEAF_LENGTH==.92 and Boundary.GATE_OPEN_ANGLE==1.28)
-	check("Authored fence roots are deliberately sunk into terrain",is_equal_approx(float(desc.fence_root_sink),.04))
+	check("Gate leaves use the polished readable opening geometry",is_equal_approx(Boundary.GATE_LEAF_LENGTH,1.35) and is_equal_approx(Boundary.GATE_OPEN_ANGLE,1.18))
+	check("Polished gate leaves remain clearly open instead of crossing the threshold",Boundary.GATE_LEAF_LENGTH*cos(Boundary.GATE_OPEN_ANGLE)*2.0<3.0)
+	check("Authored fence roots are deliberately sunk into terrain",is_equal_approx(float(desc.fence_root_sink),.08))
+	check("Fence visuals overlap tiny joint seams without changing collision",is_equal_approx(float(desc.visual_join_overlap),.10))
 	var zero_progress_hidden:=true
 	for side in game.sim.defenses:
 		zero_progress_hidden=zero_progress_hidden and not game.defense_visuals[side].visible
