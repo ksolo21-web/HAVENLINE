@@ -1,0 +1,77 @@
+name: Havenline Task 3 boundary implementation
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task03-implementation.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  mechanical:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 1
+      - name: Prepare pinned Godot 4.7.2 and QA dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install numpy pillow
+          mkdir -p "$RUNNER_TEMP/engine" task03-mechanical/tests
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+      - name: Apply checksum-bound live-scene integration
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/apply_task03_main.py | tee task03-mechanical/main-patch.txt
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task03-mechanical/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task03-mechanical/tests/motion-fixture.log 2>&1
+      - name: Run all prior gates plus Task 3 boundary acceptance
+        run: |
+          set -euo pipefail
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary; do
+            timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task03-mechanical/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task03-mechanical/tests/*.log; then exit 1; fi
+          python3 tools/havenline/audit_task01_geometry.py > task03-mechanical/tree-geometry.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          rows=[]
+          for path in sorted(Path('task03-mechanical/tests').glob('test_*.log')):
+              found=[json.loads(s) for s in path.read_text().splitlines() if s.startswith('{')]
+              assert found,path
+              data=found[-1];assert data.get('passed') is True and not data.get('failures'),(path,data.get('failures'))
+              checks=data.get('checks',[]);rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
+          assert len(rows)==16,rows
+          total=sum(r['checks'] for r in rows)
+          geometry=json.loads(Path('task03-mechanical/tree-geometry.json').read_text());assert geometry['passed']
+          report={'suite_count':16,'total_checks':total,'all_passed':True,'tree_geometry_checks':geometry['geometry_checks'],'task_approved':False,'physical4k60_verified':False}
+          Path('task03-mechanical/mechanical.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
+          PY
+      - name: Save exactly the tested Task 3 gameplay source
+        id: source
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add HavenlineGodot/scripts/main.gd
+          if ! git diff --cached --quiet; then
+            test "$(git ls-remote origin refs/heads/codex/havenline-sequential-task-01 | cut -f1)" = "$GITHUB_SHA"
+            git commit -m 'Integrate authored Task 3 camp fences gates and work lanes into live scene'
+            git push origin HEAD:refs/heads/codex/havenline-sequential-task-01
+          fi
+          source=$(git rev-parse HEAD);echo "source=$source" >> "$GITHUB_OUTPUT";echo "$source" > task03-mechanical/SOURCE.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-mechanical-${{ github.run_id }}
+          path: task03-mechanical/
+          retention-days: 30
+          if-no-files-found: error
+# Mechanical gate only. No visual approval, APK handoff or physical-device claim.
