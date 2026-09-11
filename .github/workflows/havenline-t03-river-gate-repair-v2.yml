@@ -1,0 +1,79 @@
+name: Havenline T03 controlled river-gate repair
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-t03-river-gate-repair-v2.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  repair-test-integrate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/havenline-sequential-task-01
+          fetch-depth: 0
+      - name: Apply scoped repair and enforce G1/G2/G3
+        run: |
+          set -euo pipefail
+          before=$(git rev-parse HEAD)
+          python3 tools/havenline/production/production_cli.py validate-registry
+          python3 tools/havenline/production/repair_t03_river_gate_readability_v2.py
+          mapfile -t changed < <(git diff --name-only)
+          printf '%s\n' "${changed[@]}"
+          test "${#changed[@]}" -eq 4
+          python3 tools/havenline/production/production_cli.py validate-candidate T03 "${changed[@]}" --integration-owner
+          test -z "$(git diff --name-only -- HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd HavenlineGodot/assets)"
+          git diff --check
+          echo "$before" > /tmp/base.txt
+      - name: Prepare Godot and established fixtures
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine" t03-repair-tests
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          python3 tools/havenline/bake_outpost_audio.py > t03-repair-tests/audio-fixture.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > t03-repair-tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > t03-repair-tests/motion-fixture.log 2>&1
+      - name: Run full inherited regression plus T03
+        run: |
+          set -euo pipefail
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary; do
+            timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "t03-repair-tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' t03-repair-tests/*.log; then exit 1; fi
+          python3 tools/havenline/audit_task01_geometry.py > t03-repair-tests/tree-geometry.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          rows=[]
+          for p in sorted(Path('t03-repair-tests').glob('test_*.log')):
+            j=[json.loads(x) for x in p.read_text().splitlines() if x.startswith('{')][-1]
+            assert j.get('passed') is True and not j.get('failures'),(p,j.get('failures'))
+            c=j.get('checks',[]);rows.append((p.stem,len(c) if isinstance(c,list) else int(c)))
+          assert len(rows)==16,rows
+          total=sum(x[1] for x in rows);assert total==807,total
+          g=json.loads(Path('t03-repair-tests/tree-geometry.json').read_text());assert g['passed'] and g['geometry_checks']==9
+          print(json.dumps({'suites':16,'checks':total,'tree_geometry':9,'passed':True,'rows':rows},indent=2))
+          PY
+      - name: Commit only tested T03 runtime repair
+        run: |
+          set -euo pipefail
+          git config user.name havenline-integration
+          git config user.email havenline-integration@users.noreply.github.com
+          git add HavenlineGodot/scripts/camp_boundary.gd HavenlineGodot/shaders/outpost_snow.gdshader HavenlineGodot/tests/capture_task03_boundary.gd HavenlineGodot/tests/test_task03_boundary.gd
+          test -z "$(git diff --name-only --cached -- HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd HavenlineGodot/assets)"
+          git commit -m 'Repair T03 river gate readability within frozen scope'
+          git push origin HEAD:codex/havenline-sequential-task-01
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-t03-river-gate-repair-tests-${{ github.run_id }}
+          path: t03-repair-tests/
+          retention-days: 30
+          if-no-files-found: warn
