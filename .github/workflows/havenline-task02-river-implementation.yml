@@ -9,7 +9,7 @@ permissions:
 jobs:
   mechanical:
     runs-on: ubuntu-24.04
-    timeout-minutes: 18
+    timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
       - name: Prepare pinned Godot 4.7.2
@@ -21,14 +21,14 @@ jobs:
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
-      - name: Import project and run river plus core regressions
+      - name: Import project and run river, dry-bank and T1 regressions
         run: |
           set -euo pipefail
           python3 tools/havenline/bake_outpost_audio.py > river-evidence/tests/audio-fixture.json
           timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > river-evidence/tests/import.log 2>&1
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > river-evidence/tests/motion-fixture.log 2>&1
-          for suite in test_simulation test_crew_and_persistence test_population test_outpost test_outpost_runtime test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_river; do
-            timeout 140 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "river-evidence/tests/$suite.log" 2>&1
+          for suite in test_simulation test_crew_and_persistence test_population test_outpost test_outpost_runtime test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river; do
+            timeout 160 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "river-evidence/tests/$suite.log" 2>&1
           done
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' river-evidence/tests/*.log; then exit 1; fi
           python3 - <<'PY'
@@ -40,7 +40,8 @@ jobs:
               assert found,p
               row=found[-1];assert row.get('passed') is True and not row.get('failures'),(p,row)
               rows.append({'suite':p.stem,'checks':len(row.get('checks',[])) if isinstance(row.get('checks'),list) else row.get('checks'),'passed':True})
-          Path('river-evidence/mechanical.json').write_text(json.dumps({'source':'${{ github.sha }}','suites':rows,'all_passed':True,'task_approved':False,'physical_4k60_verified':False},indent=2))
+          assert len(rows)==12,rows
+          Path('river-evidence/mechanical.json').write_text(json.dumps({'source':'${{ github.sha }}','suites':rows,'total_checks':sum(r['checks'] for r in rows),'all_passed':True,'task_approved':False,'physical_4k60_verified':False},indent=2))
           PY
       - uses: actions/upload-artifact@v4
         if: always()
@@ -49,7 +50,7 @@ jobs:
           path: river-evidence/
           retention-days: 30
           if-no-files-found: error
-# Retry 7: reserve clearing passed; curved projection undershot the locked build
-# setback by 0.0015 units. Permanent structures now carry a disclosed 0.10-unit
-# safety buffer beyond that minimum. River/bank geometry is unchanged.
+# Focused pre-final gate after the final workflow exposed two useful regressions:
+# old gameplay-dry points on submerged bank slope and river-relocated T1 trees
+# crossing the original forest exclusion envelope. River anchors/widths unchanged.
 # Earlier failures remain preserved. No critic score or task approval here.
