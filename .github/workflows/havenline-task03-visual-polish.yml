@@ -71,5 +71,5 @@ jobs:
           path: task03-polish/
           retention-days: 30
           if-no-files-found: error
-# Retry 1 changes only same-step PATH availability. Repair logic is unchanged.
+# Retry 2 explicitly triggers the already-prepared critic-driven repair.
 # This repair changes Task 3 presentation only. Fresh source-bound renders and both critic roles remain mandatory.
