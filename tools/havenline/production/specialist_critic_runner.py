@@ -84,8 +84,10 @@ def main():
     matrix=load_json(DOCS/'CRITIC_MATRIX.json');execution=load_json(DOCS/'CRITIC_EXECUTION.json');spec=execution['critics'][cid];dimensions=spec['dimensions'];checks=matrix['critics'][cid]['checks']
     out=(ROOT/a.out).resolve();out.mkdir(parents=True,exist_ok=True)
     cache=pathlib.Path(os.path.expanduser(os.environ.get('HAVENLINE_SPECIALIST_CACHE',execution['local_independent_runtime']['cache_path'])))
-    m=json.loads((cache/'manifest.json').read_text())
-    runtime=execution['local_independent_runtime'];assert m['publisher']==runtime['provider'] and m['base_model']==runtime['base_model']
+    m=json.loads((cache/'manifest.json').read_text());runtime=execution['local_independent_runtime']
+    if m.get('publisher')!=runtime['provider'] or m.get('base_model')!=runtime['base_model']:raise SystemExit('critic runtime provider/base-model mismatch')
+    if m.get('revision')!=runtime['model_revision']:raise SystemExit(f"critic runtime publisher revision mismatch: {m.get('revision')} != {runtime['model_revision']}")
+    if m.get('runtime_release')!='b10809':raise SystemExit('critic runtime llama.cpp release mismatch')
     for item in m['files']:
         if digest(cache/item['filename'])!=item['sha256']:raise SystemExit('critic runtime hash mismatch '+item['filename'])
     servers=list((cache/'runtime').rglob('llama-server'))
@@ -124,6 +126,6 @@ def main():
     confidence_order={'low':0,'medium':1,'high':2};confidence=min((r.get('review',{}).get('confidence','low') for r in rows),key=lambda x:confidence_order.get(x,0),default='low')
     raw={'critic_id':cid,'candidate':candidate,'groups':rows,'fatal_error':fatal};raw_path=out/'raw-output.json';raw_path.write_text(json.dumps(raw,indent=2)+'\n')
     passed=fatal is None and len(rows)==len(manifest['groups']) and all(r['passed'] for r in rows)
-    record={'critic_id':cid,'provider':m['publisher'],'model':m['base_model'],'model_revision_expected':runtime['model_revision'],'request_or_run_id':os.environ.get('GITHUB_RUN_ID','local')+'/'+os.environ.get('GITHUB_JOB','specialist'),'candidate_hash':candidate,'input_manifest_hash':digest(manifest_path),'raw_output_path':str(raw_path.relative_to(ROOT)),'raw_output_hash':digest(raw_path),'scores':dim_scores,'defects':defects,'coverage_complete':fatal is None and len(rows)==len(manifest['groups']) and all(r.get('review',{}).get('coverage_complete') is True for r in rows),'confidence':confidence,'independent_runtime':True,'groups':rows,'fatal_error':fatal,'passed':passed}
+    record={'critic_id':cid,'provider':m['publisher'],'model':m['base_model'],'model_revision_expected':runtime['model_revision'],'model_revision_actual':m['revision'],'runtime_release':m.get('runtime_release'),'request_or_run_id':os.environ.get('GITHUB_RUN_ID','local')+'/'+os.environ.get('GITHUB_JOB','specialist'),'candidate_hash':candidate,'input_manifest_hash':digest(manifest_path),'raw_output_path':str(raw_path.relative_to(ROOT)),'raw_output_hash':digest(raw_path),'scores':dim_scores,'defects':defects,'coverage_complete':fatal is None and len(rows)==len(manifest['groups']) and all(r.get('review',{}).get('coverage_complete') is True for r in rows),'confidence':confidence,'independent_runtime':True,'groups':rows,'fatal_error':fatal,'passed':passed}
     (out/'critic-record.json').write_text(json.dumps(record,indent=2)+'\n');print(json.dumps(record,indent=2));raise SystemExit(0 if passed else 1)
 if __name__=='__main__':main()
