@@ -19,6 +19,12 @@ const PANEL_SOURCE_LENGTH := 2.95
 # presentation becomes more legible.
 const GATE_LEAF_LENGTH := 1.35
 const GATE_OPEN_ANGLE := 1.18
+# River-facing entrances need stronger visual hierarchy because snow/river-bank
+# colors reduce contrast. These are visual open leaves only; collision openings
+# and future crossing reserves remain exactly unchanged.
+const RIVER_GATE_LEAF_LENGTH := 1.60
+const RIVER_GATE_OPEN_ANGLE := 1.43
+const RIVER_APRON_INSET := 0.55
 const SOUTH_FENCE_MARGIN := River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER+River.BUILD_SETBACK
 const LANE_HALF := 1.30
 const BANK_LANE_MARGIN := River.DEFAULT_DRY_MARGIN+0.55
@@ -127,17 +133,23 @@ static func gate_specs()->Array[Dictionary]:
 	return result
 
 static func gate_leaf_specs()->Array[Dictionary]:
-	var result:Array[Dictionary]=[];var leaf_length:=GATE_LEAF_LENGTH
+	var result:Array[Dictionary]=[]
 	for gate in gate_specs():
 		var a:Vector2=gate.a;var b:Vector2=gate.b;var tangent:Vector2=gate.tangent;var mid:Vector2=gate.center
 		var inward:=(CAMP_CENTER-mid).normalized()
-		var left_dir:=tangent.rotated(GATE_OPEN_ANGLE)
-		if left_dir.dot(inward)<0:left_dir=tangent.rotated(-GATE_OPEN_ANGLE)
-		var right_dir:=(-tangent).rotated(GATE_OPEN_ANGLE)
-		if right_dir.dot(inward)<0:right_dir=(-tangent).rotated(-GATE_OPEN_ANGLE)
-		result.append({"gate":gate.id,"hinge":a,"a":a,"b":a+left_dir*leaf_length,"length":leaf_length})
-		result.append({"gate":gate.id,"hinge":b,"a":b,"b":b+right_dir*leaf_length,"length":leaf_length})
+		var leaf_length:=RIVER_GATE_LEAF_LENGTH if gate.kind=="river" else GATE_LEAF_LENGTH
+		var open_angle:=RIVER_GATE_OPEN_ANGLE if gate.kind=="river" else GATE_OPEN_ANGLE
+		var left_dir:=tangent.rotated(open_angle)
+		if left_dir.dot(inward)<0:left_dir=tangent.rotated(-open_angle)
+		var right_dir:=(-tangent).rotated(open_angle)
+		if right_dir.dot(inward)<0:right_dir=(-tangent).rotated(-open_angle)
+		result.append({"gate":gate.id,"hinge":a,"a":a,"b":a+left_dir*leaf_length,"length":leaf_length,"open_angle":open_angle})
+		result.append({"gate":gate.id,"hinge":b,"a":b,"b":b+right_dir*leaf_length,"length":leaf_length,"open_angle":open_angle})
 	return result
+
+static func _river_apron(gate:Dictionary)->Array[Vector2]:
+	var a:Vector2=gate.a;var b:Vector2=gate.b;var tangent:Vector2=gate.tangent
+	return [a+tangent*RIVER_APRON_INSET,b-tangent*RIVER_APRON_INSET]
 
 static func lane_polylines()->Array[Dictionary]:
 	var gates:=gate_specs();var by_id:Dictionary={}
@@ -151,7 +163,12 @@ static func lane_polylines()->Array[Dictionary]:
 		{"id":"east-shelter","points":[Vector2(4.7,2.25),Vector2(5.5,0.9),SHELTER_EAST]},
 		{"id":"north-bank","points":bank},
 		{"id":"west-river-connector","points":[bank_lane_point(-9.0),Vector2(by_id["river--9.0"].center),Vector2(-8.3,0.9),Vector2(-6.8,2.25)]},
-		{"id":"east-river-connector","points":[bank_lane_point(10.0),Vector2(by_id["river-10.0"].center),Vector2(8.7,0.9),Vector2(6.8,2.25)]}
+		{"id":"east-river-connector","points":[bank_lane_point(10.0),Vector2(by_id["river-10.0"].center),Vector2(8.7,0.9),Vector2(6.8,2.25)]},
+		# Worn threshold aprons make each river opening legible as a used gate,
+		# while staying entirely inside the already-open collision interval.
+		{"id":"river-apron-west","points":_river_apron(by_id["river--9.0"])},
+		{"id":"river-apron-centre","points":_river_apron(by_id["river-1.5"])},
+		{"id":"river-apron-east","points":_river_apron(by_id["river-10.0"])}
 	]
 
 static func lane_signed_distance(p:Vector2)->float:
@@ -204,4 +221,6 @@ static func evidence()->Dictionary:
 		"minimum_gate_width":minimum_gate,"south_fence_minimum_shore_distance":min_south_margin,
 		"south_fence_required_margin":SOUTH_FENCE_MARGIN,"collision_radius":COLLISION_RADIUS,"lane_half_width":LANE_HALF,
 		"gate_leaf_length":GATE_LEAF_LENGTH,"gate_open_angle":GATE_OPEN_ANGLE,
+		"river_gate_leaf_length":RIVER_GATE_LEAF_LENGTH,"river_gate_open_angle":RIVER_GATE_OPEN_ANGLE,
+		"river_apron_inset":RIVER_APRON_INSET,
 		"lane_ids":lane_polylines().map(func(row):return row.id),"river_gate_reserves":RIVER_GATES,"task_approved":false}
