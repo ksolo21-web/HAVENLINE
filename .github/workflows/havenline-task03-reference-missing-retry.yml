@@ -1,0 +1,55 @@
+name: Havenline Task 3 one missing reference group
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task03-reference-missing-retry.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retry-one-reference-group:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    env:
+      EXPECTED_SOURCE: 8dc19649160597f2926ad5bacbccc26ad01ab48f
+      REVIEW_ROLE: reference-fidelity
+      RETRY_GROUPS: cross-shelter-lanes
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-task03-evidence-34601284867
+          path: task03-evidence/
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 34601284867
+      - run: python3 -m pip install 'gradio_client==1.14.0' pillow
+      - name: Review only the reference group that returned no verdict
+        run: python3 -u tools/havenline/review_task03_transport_retry.py
+      - name: Require the missing reference verdict at 9+
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          o=json.loads(Path('task03-review-retry/role-summary.json').read_text())
+          assert o['role']=='reference-fidelity' and o['source']=='8dc19649160597f2926ad5bacbccc26ad01ab48f'
+          assert len(o['reviews'])==1 and o['reviews'][0]['group']=='cross-shelter-lanes' and o['passed'] is True
+          r=o['reviews'][0];rev=r['review']
+          assert r['independent_execution'] is True and r['passed'] is True
+          assert rev['defects']==[] and rev['coverage_complete'] is True and rev['confidence']!='low'
+          assert min(rev['scores'].values())>=9.0
+          print(json.dumps({'passed':True,'group':'cross-shelter-lanes','completed_reference_scores_retried':False}))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-reference-missing-retry-${{ github.run_id }}
+          path: task03-review-retry/
+          retention-days: 30
+          if-no-files-found: error
+# Ten reference-fidelity groups already returned scored 10/10 verdicts and are not rerun here.
+# This is transport recovery only; game source and evidence are unchanged.
