@@ -10,6 +10,7 @@ permissions:
   contents: read
 jobs:
   validate-candidate:
+    if: github.ref_name != 'havenline/QA-integration' && github.head_ref != 'havenline/QA-integration'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
@@ -49,5 +50,5 @@ jobs:
           mkdir -p Docs/Production/Evidence/CandidateGuard
           python3 tools/havenline/production/change_impact.py --base "$BASE" --head HEAD | tee Docs/Production/Evidence/CandidateGuard/impact.json
           python3 tools/havenline/production/regression_runner.py --base "$BASE" --head HEAD --plan-only | tee Docs/Production/Evidence/CandidateGuard/regression-plan.json
-# Passing this guard means only that assignment/base/path/impact rules are valid.
-# It never marks a task APPROVED and never replaces integrated regression/evidence/critics.
+# QA-integration is governance infrastructure, not a Txx builder branch, so it is validated by the governance/safeguard workflows instead.
+# Passing this guard means only assignment/base/path/impact rules are valid; it never approves a task.
