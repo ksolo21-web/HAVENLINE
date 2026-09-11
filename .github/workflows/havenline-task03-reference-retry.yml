@@ -1,0 +1,53 @@
+name: Havenline Task 3 reference critic retry
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task03-reference-retry.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retry-reference:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      EXPECTED_SOURCE: 8dc19649160597f2926ad5bacbccc26ad01ab48f
+      REVIEW_ROLE: reference-fidelity
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-task03-evidence-34601284867
+          path: task03-evidence/
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 34601284867
+      - run: python3 -m pip install 'gradio_client==1.14.0' pillow
+      - name: Retry the reference role that previously returned zero verdicts
+        run: python3 -u tools/havenline/review_task03_reference_retry.py
+      - name: Require all ten reference-fidelity groups at 9+
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          o=json.loads(Path('task03-reference-retry/role-summary.json').read_text())
+          assert o['role']=='reference-fidelity' and o['source']=='8dc19649160597f2926ad5bacbccc26ad01ab48f'
+          assert len(o['reviews'])==10 and o['passed'] is True
+          for r in o['reviews']:
+            assert r['independent_execution'] is True and r['passed'] is True
+            assert r['review']['defects']==[] and r['review']['coverage_complete'] is True and r['review']['confidence']!='low'
+            assert min(r['review']['scores'].values())>=9.0
+          print(json.dumps({'passed':True,'groups':10,'first_attempt_scored_groups':0}))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-reference-retry-${{ github.run_id }}
+          path: task03-reference-retry/
+          retention-days: 30
+          if-no-files-found: error
+# The first reference-fidelity execution returned zero verdicts. This retry does not replace a low score and does not alter game source.
