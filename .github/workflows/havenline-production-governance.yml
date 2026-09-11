@@ -3,9 +3,13 @@ on:
   push:
     branches: ['codex/havenline-sequential-task-01']
     paths:
+      - 'AGENTS.md'
       - 'Docs/Production/**'
       - 'tools/havenline/production/**'
+      - 'HavenlineGodot/tests/production_capture_harness.gd'
+      - 'HavenlineGodot/tests/production_motion_capture.gd'
       - '.github/workflows/havenline-production-governance.yml'
+      - '.github/workflows/havenline-candidate-guard.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -17,20 +21,26 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0
-      - name: Verify migration does not alter runtime game files
-        run: git diff --exit-code f26b3d6d5a788c03192f593936bfe8ce5ccfc5bc -- HavenlineGodot
-      - name: Verify archived pre-V2 plan matches exact recovered source
+      - name: Compile production accelerator tooling
+        run: python3 -m py_compile tools/havenline/production/*.py
+      - name: Run governance migration unit tests
+        run: python3 -m unittest discover -s tools/havenline/production/tests -v
+      - name: Validate workstream registry and ownership collisions
+        run: python3 tools/havenline/production/workstream.py validate-registry
+      - name: Validate complete V2 migration against recovered runtime checkpoint
+        run: python3 tools/havenline/production/validate_migration.py --base 6947849f581db9cfa53a17ff9202ecde1c0ee80c
+      - name: Regenerate frozen T03 task packet as a smoke test
         run: |
-          git show 6947849f581db9cfa53a17ff9202ecde1c0ee80c:Docs/Production/SEQUENTIAL_REPAIR_PLAN.md > /tmp/pre-v2-plan.md
-          cmp /tmp/pre-v2-plan.md Docs/Production/Archive/SEQUENTIAL_REPAIR_PLAN.pre-v2.2026-09-11.md
-      - name: Validate JSON and coordination contracts
+          python3 tools/havenline/production/task_packet.py T03
+          test -s Docs/Production/Evidence/T03/TASK_PACKET.md
+      - name: Verify governance change impact stays governance-only
         run: |
-          python3 -m json.tool Docs/Production/DEPENDENCY_GRAPH.json >/dev/null
-          python3 -m json.tool Docs/Production/WORKSTREAM_REGISTRY.json >/dev/null
-          python3 -m json.tool Docs/Production/PATH_OWNERSHIP.json >/dev/null
-          python3 -m json.tool Docs/Production/CRITIC_MATRIX.json >/dev/null
-          python3 -m json.tool Docs/Production/PERFORMANCE_BUDGETS.json >/dev/null
-          python3 -m json.tool Docs/Production/REGRESSION_SUITES.json >/dev/null
-          python3 tools/havenline/production/production_cli.py validate-registry
-      - name: Run migration validator tests
-        run: python3 tools/havenline/production/test_production_cli.py
+          python3 tools/havenline/production/change_impact.py --base 6947849f581db9cfa53a17ff9202ecde1c0ee80c --head HEAD > /tmp/impact.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('/tmp/impact.json'))
+          assert d['governance_only'] is True, d
+          assert d['unknown_production_fallback'] is False, d
+          print(json.dumps(d,indent=2))
+          PY
+# This workflow validates governance/QA infrastructure only. It cannot approve T03 or later gameplay tasks.
