@@ -1,4 +1,4 @@
-import json, pathlib, sys, unittest
+import pathlib, sys, unittest
 HERE=pathlib.Path(__file__).resolve()
 PROD=HERE.parents[1]
 sys.path.insert(0,str(PROD))
@@ -43,6 +43,19 @@ class GovernanceTests(unittest.TestCase):
     def test_governance_only_change(self):
         r=calculate(["Docs/Production/WORKSTREAM_REGISTRY.json"])
         self.assertTrue(r["governance_only"])
+        self.assertFalse(r["unknown_production_fallback"])
+    def test_qa_capture_harness_is_governance_only(self):
+        r=calculate(["HavenlineGodot/tests/production_capture_harness.gd"])
+        self.assertTrue(r["governance_only"])
+        self.assertFalse(r["unknown_production_fallback"])
+    def test_unknown_runtime_is_never_hidden_by_docs_match(self):
+        r=calculate(["Docs/Production/WORKSTREAM_REGISTRY.json","HavenlineGodot/scripts/unregistered_future_runtime.gd"])
+        self.assertFalse(r["governance_only"])
+        self.assertTrue(r["unknown_production_fallback"])
+        self.assertIn("HavenlineGodot/scripts/unregistered_future_runtime.gd",r["unknown_production_files"])
+        self.assertIn("T01",r["impacted_approved_tasks"])
+        self.assertIn("T02",r["impacted_approved_tasks"])
+        self.assertIn("T03",r["impacted_approved_tasks"])
     def test_performance_budget_fields(self):
         b=load_json(DOCS/"PERFORMANCE_BUDGETS.json")["global_soft_budgets"]
         for key in ["visible_triangles","draw_calls","materials_visible","texture_gpu_memory_mb","cpu_frame_ms","gpu_frame_ms_where_measurable","physics_active_bodies","animated_rigs_active","npc_companion_active_population","process_memory_mb","storage_download_mb"]:
