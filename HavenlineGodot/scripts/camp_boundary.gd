@@ -23,7 +23,11 @@ const GATE_OPEN_ANGLE := 1.18
 # colors reduce contrast. These are visual open leaves only; collision openings
 # and future crossing reserves remain exactly unchanged.
 const RIVER_GATE_LEAF_LENGTH := 1.85
-const RIVER_GATE_OPEN_ANGLE := 1.48
+# 1.53 rad keeps the long leaves visibly authored while swinging them far enough
+# open to preserve a comfortable pixel-space threshold, not merely collision.
+const RIVER_GATE_OPEN_ANGLE := 1.53
+const RIVER_RESERVED_CORRIDOR := 3.0
+const RIVER_VISUAL_CLEARANCE_MIN := 3.20
 # River approaches need a broader worn threshold than ordinary camp lanes so
 # the three future-crossing entrances read as intentional gates in snow.
 const RIVER_LANE_HALF := 1.55
@@ -35,6 +39,8 @@ const CAMP_CENTER := Vector2(0.0,2.8)
 const SHELTER_WEST := Vector2(-6.4,-0.4)
 const SHELTER_EAST := Vector2(6.4,-0.4)
 const RIVER_GATES := [-9.0,1.5,10.0]
+const RIVER_EVIDENCE_KINDS := ["river-side-approach","threshold-three-quarter","camp-side-outward","gameplay-scale"]
+const GATE_AUTHORITY_ID := "T03-gate-geometry-v3"
 
 static func _cross(a: Vector2,b: Vector2)->float:
 	return a.x*b.y-a.y*b.x
@@ -133,6 +139,7 @@ static func gate_specs()->Array[Dictionary]:
 		gate["center"]=(Vector2(gate.a)+Vector2(gate.b))*.5
 		gate["width"]=Vector2(gate.a).distance_to(Vector2(gate.b))
 		gate["tangent"]=(Vector2(gate.b)-Vector2(gate.a)).normalized()
+		gate["authority_id"]=GATE_AUTHORITY_ID
 	return result
 
 static func gate_leaf_specs()->Array[Dictionary]:
@@ -146,8 +153,8 @@ static func gate_leaf_specs()->Array[Dictionary]:
 		if left_dir.dot(inward)<0:left_dir=tangent.rotated(-open_angle)
 		var right_dir:=(-tangent).rotated(open_angle)
 		if right_dir.dot(inward)<0:right_dir=(-tangent).rotated(-open_angle)
-		result.append({"gate":gate.id,"hinge":a,"a":a,"b":a+left_dir*leaf_length,"length":leaf_length,"open_angle":open_angle})
-		result.append({"gate":gate.id,"hinge":b,"a":b,"b":b+right_dir*leaf_length,"length":leaf_length,"open_angle":open_angle})
+		result.append({"gate":gate.id,"hinge":a,"a":a,"b":a+left_dir*leaf_length,"length":leaf_length,"open_angle":open_angle,"authority_id":GATE_AUTHORITY_ID})
+		result.append({"gate":gate.id,"hinge":b,"a":b,"b":b+right_dir*leaf_length,"length":leaf_length,"open_angle":open_angle,"authority_id":GATE_AUTHORITY_ID})
 	return result
 
 static func _river_apron(gate:Dictionary)->Array[Vector2]:
@@ -158,6 +165,37 @@ static func _river_apron(gate:Dictionary)->Array[Vector2]:
 	var inward:=(CAMP_CENTER-center).normalized()
 	var outside:=bank_lane_point(float(gate.reserve_x))
 	return [outside,center,center+inward*2.20]
+
+static func _river_slug(x:float)->String:
+	if is_equal_approx(x,-9.0):return "west"
+	if is_equal_approx(x,1.5):return "centre"
+	if is_equal_approx(x,10.0):return "east"
+	assert(false,"Unknown river gate reserve: "+str(x))
+	return "unknown"
+
+static func river_gate_contracts()->Array[Dictionary]:
+	# One authoritative river-gate contract feeds route metadata, capture IDs and
+	# visual-clearance assertions. Collision gaps and rendered leaves are already
+	# derived from the same gate constants/specs above.
+	var result:Array[Dictionary]=[]
+	var leaf_intrusion:=maxf(0.0,RIVER_GATE_LEAF_LENGTH*cos(RIVER_GATE_OPEN_ANGLE))
+	for gate in gate_specs():
+		if gate.kind!="river":continue
+		var route:=_river_apron(gate)
+		var slug:=_river_slug(float(gate.reserve_x))
+		var evidence_ids:Dictionary={}
+		for kind in RIVER_EVIDENCE_KINDS:evidence_ids[kind]="river-gate/%s/%s"%[slug,kind]
+		result.append({
+			"id":gate.id,"slug":slug,"reserve_x":float(gate.reserve_x),"a":gate.a,"b":gate.b,
+			"center":gate.center,"tangent":gate.tangent,"inward":(CAMP_CENTER-Vector2(gate.center)).normalized(),
+			"outside":route[0],"inside":route[-1],"route_points":route,"width":float(gate.width),
+			"collision_reserved_width":RIVER_RESERVED_CORRIDOR,
+			"visual_leaf_intrusion_each":leaf_intrusion,
+			"visual_clear_width":float(gate.width)-leaf_intrusion*2.0,
+			"visual_clearance_min":RIVER_VISUAL_CLEARANCE_MIN,
+			"evidence_ids":evidence_ids,"authority_id":GATE_AUTHORITY_ID
+		})
+	return result
 
 static func lane_polylines()->Array[Dictionary]:
 	var gates:=gate_specs();var by_id:Dictionary={}
@@ -226,10 +264,30 @@ static func evidence()->Dictionary:
 	for gate in gates:minimum_gate=minf(minimum_gate,float(gate.width))
 	var min_south_margin:=999.0
 	for x in range(-124,125):min_south_margin=minf(min_south_margin,River.shore_distance(south_point(float(x)*.1)))
+	var contract_evidence:Array=[]
+	var evidence_ids:Array=[]
+	var visual_clearance_pass:=true
+	for contract in river_gate_contracts():
+		var route:Array=[]
+		for p in contract.route_points:route.append([Vector2(p).x,Vector2(p).y])
+		var ids:Dictionary=contract.evidence_ids
+		for kind in RIVER_EVIDENCE_KINDS:evidence_ids.append(String(ids[kind]))
+		visual_clearance_pass=visual_clearance_pass and float(contract.visual_clear_width)>=RIVER_VISUAL_CLEARANCE_MIN
+		contract_evidence.append({
+			"id":contract.id,"slug":contract.slug,"reserve_x":contract.reserve_x,
+			"center":[Vector2(contract.center).x,Vector2(contract.center).y],"width":contract.width,
+			"collision_reserved_width":contract.collision_reserved_width,
+			"visual_leaf_intrusion_each":contract.visual_leaf_intrusion_each,
+			"visual_clear_width":contract.visual_clear_width,"visual_clearance_min":contract.visual_clearance_min,
+			"route_points":route,"evidence_ids":ids,"authority_id":GATE_AUTHORITY_ID
+		})
 	return {"task":"T03","side_x":SIDE_X,"north_z":NORTH_Z,"panel_count":panel_specs().size(),"gate_count":gates.size(),
 		"minimum_gate_width":minimum_gate,"south_fence_minimum_shore_distance":min_south_margin,
 		"south_fence_required_margin":SOUTH_FENCE_MARGIN,"collision_radius":COLLISION_RADIUS,"lane_half_width":LANE_HALF,
 		"gate_leaf_length":GATE_LEAF_LENGTH,"gate_open_angle":GATE_OPEN_ANGLE,
 		"river_gate_leaf_length":RIVER_GATE_LEAF_LENGTH,"river_gate_open_angle":RIVER_GATE_OPEN_ANGLE,
 		"river_lane_half_width":RIVER_LANE_HALF,"river_apron_inset":RIVER_APRON_INSET,
-		"lane_ids":lane_polylines().map(func(row):return row.id),"river_gate_reserves":RIVER_GATES,"task_approved":false}
+		"river_visual_clearance_min":RIVER_VISUAL_CLEARANCE_MIN,"all_river_visual_clearance_pass":visual_clearance_pass,
+		"river_gate_contracts":contract_evidence,"required_river_gate_evidence_ids":evidence_ids,
+		"gate_authority_id":GATE_AUTHORITY_ID,"lane_ids":lane_polylines().map(func(row):return row.id),
+		"river_gate_reserves":RIVER_GATES,"task_approved":false}
