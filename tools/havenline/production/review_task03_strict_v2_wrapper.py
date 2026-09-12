@@ -3,10 +3,12 @@
 
 The base reviewer remains the independent model/seed implementation. This T03
 adapter binds it to the formal river-gate preflight, expands the river-gate
-pixel set to all four required views per gate, and enforces strict >9.0.
+pixel set to all four required views per gate, enforces strict >9.0, and
+materializes/verifies the exact LFS-backed reference before any critic starts.
 """
 from pathlib import Path
-import hashlib,json,os
+import hashlib,io,json,os,subprocess
+from PIL import Image
 
 root=Path('task03-evidence')
 preflight=json.loads((root/'gate-preflight.json').read_text())
@@ -16,6 +18,41 @@ assert preflight.get('passed') is True,preflight
 assert preflight.get('required_evidence_count')==12,preflight
 assert preflight.get('visual_clearance_pass') is True,preflight
 assert preflight.get('authority_id')=='T03-gate-geometry-v3',preflight
+
+# The T02 reference is intentionally stored in Git LFS. A normal checkout with
+# lfs:false leaves only the text pointer. Previous C1 jobs therefore launched
+# but returned image-decode errors instead of real visual judgments. Make the
+# exact LFS object an explicit pre-critic dependency and verify its content hash
+# and decodability before the independent reviewer is allowed to execute.
+reference_source=Path('Docs/Production/T02/reference-ground.webp')
+reference_target=root/'reference-ground.webp'
+reference_sha='3c424b0df53c1c6de49018278779a4ef1ced58562e5b9dbb54fe276d13aa2ddb'
+reference_size=10784
+pointer=reference_source.read_bytes()
+assert b'version https://git-lfs.github.com/spec/v1' in pointer,'T02 reference is not the expected LFS pointer'
+assert ('oid sha256:'+reference_sha).encode() in pointer,'T02 reference LFS oid changed'
+assert ('size '+str(reference_size)).encode() in pointer,'T02 reference LFS size changed'
+
+def verified_reference(data:bytes)->dict:
+    digest=hashlib.sha256(data).hexdigest()
+    assert digest==reference_sha,('reference sha256',digest,reference_sha)
+    assert len(data)==reference_size,('reference size',len(data),reference_size)
+    with Image.open(io.BytesIO(data)) as image:
+        fmt=image.format
+        size=image.size
+        image.verify()
+    return {'sha256':digest,'bytes':len(data),'format':fmt,'dimensions':list(size),'source_commit':expected,'lfs_oid':'sha256:'+reference_sha}
+
+reference_bytes=reference_target.read_bytes() if reference_target.exists() else b''
+if hashlib.sha256(reference_bytes).hexdigest()!=reference_sha:
+    subprocess.run([
+        'git','lfs','fetch','origin',expected,
+        '--include=Docs/Production/T02/reference-ground.webp','--exclude='
+    ],check=True)
+    smudged=subprocess.run(['git','lfs','smudge'],input=pointer,stdout=subprocess.PIPE,stderr=subprocess.PIPE,check=True).stdout
+    reference_bytes=smudged
+reference_provenance=verified_reference(reference_bytes)
+reference_target.write_bytes(reference_bytes)
 
 base=Path('tools/havenline/review_task03_local_reference.py')
 data=base.read_bytes()
@@ -69,13 +106,16 @@ source=source.replace(river_note_old,river_note_new,1)
 
 out=Path('task03-local-review')
 out.mkdir(exist_ok=True)
+(out/'reference-provenance.json').write_text(json.dumps(reference_provenance,indent=2))
 executed=out/'executed-reviewer.py'
 executed.write_text(source)
 (out/'strict-wrapper-provenance.txt').write_text(
     'base_sha256='+hashlib.sha256(data).hexdigest()+'\n'
     'base_provenance=T03-boundary-v2_verified\n'
     'preflight_source='+expected+'\n'
-    'changes=score_rule_strict_gt_9;prompt_matches_strict_rule;river_gate_four_view_contract\n'
+    'reference_sha256='+reference_sha+'\n'
+    'reference_lfs_materialized_and_decodable=true\n'
+    'changes=score_rule_strict_gt_9;prompt_matches_strict_rule;river_gate_four_view_contract;verified_lfs_reference\n'
     'threshold=>9.0_unrounded\n'
     'required_river_gate_evidence=12\n'
     'diagnostic_confidence=low_medium_high_only\n'
