@@ -56,6 +56,7 @@ jobs:
           mkdir -p "$RUNNER_TEMP/engine" task03-evidence/tests task03-evidence/gallery task03-evidence/native4k task03-evidence/tree-clearance source-snapshot
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          export PATH="$RUNNER_TEMP/engine:$PATH"
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
           python3 tools/havenline/bake_outpost_audio.py > task03-evidence/audio-fixture.json
           timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task03-evidence/tests/import.log 2>&1
