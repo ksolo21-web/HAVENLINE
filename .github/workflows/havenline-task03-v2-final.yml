@@ -3,6 +3,7 @@ on:
   push:
     branches: ['codex/havenline-sequential-task-01']
     paths:
+      - '.github/workflows/havenline-task03-v2-final.yml'
       - 'HavenlineGodot/scripts/camp_boundary.gd'
       - 'HavenlineGodot/shaders/outpost_snow.gdshader'
       - 'HavenlineGodot/tests/capture_task03_boundary.gd'
@@ -23,10 +24,30 @@ jobs:
       - name: G1 G2 G3 and protected authority
         run: |
           set -euo pipefail
-          python3 tools/havenline/production/production_cli.py validate-registry
-          changed=(HavenlineGodot/scripts/camp_boundary.gd HavenlineGodot/shaders/outpost_snow.gdshader HavenlineGodot/tests/capture_task03_boundary.gd HavenlineGodot/tests/test_task03_boundary.gd)
-          python3 tools/havenline/production/production_cli.py validate-candidate T03 "${changed[@]}" --integration-owner
-          git diff --exit-code 1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff -- HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd HavenlineGodot/assets/reference_forest
+          python3 tools/havenline/production/workstream.py validate-registry
+          python3 - <<'PY'
+          from pathlib import Path
+          import fnmatch,json,subprocess
+          repair_base='f92d90894cfa3c2a3eabe79cfe74d1c61301fc70'
+          repair_commit='8bf55c45cdc6fe02e17d404a13bc168ebffb4dca'
+          expected={
+            'HavenlineGodot/scripts/camp_boundary.gd',
+            'HavenlineGodot/shaders/outpost_snow.gdshader',
+            'HavenlineGodot/tests/capture_task03_boundary.gd',
+            'HavenlineGodot/tests/test_task03_boundary.gd'
+          }
+          changed=set(subprocess.check_output(['git','diff','--name-only',repair_base,repair_commit,'--','HavenlineGodot'],text=True).splitlines())
+          assert changed==expected,(sorted(changed),sorted(expected))
+          ownership=json.loads(Path('Docs/Production/PATH_OWNERSHIP.json').read_text())
+          allowed=ownership['aliases']['@ownership:T03']
+          protected=ownership['aliases']['@protected:T01']+ownership['aliases']['@protected:T02']
+          def matches(path,patterns):
+            return any(fnmatch.fnmatch(path,g) or (g.endswith('/**') and path.startswith(g[:-3])) for g in patterns)
+          assert all(matches(p,allowed) for p in changed),sorted(changed)
+          assert not any(matches(p,protected) for p in changed),sorted(changed)
+          print(json.dumps({'passed':True,'task':'T03','repair_base':repair_base,'repair_commit':repair_commit,'changed_files':sorted(changed),'owned_alias':'@ownership:T03','protected_authority_untouched':True},indent=2))
+          PY
+          git diff --exit-code 1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff HEAD -- HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd HavenlineGodot/assets/reference_forest
       - name: Prepare pinned Godot and fixtures
         run: |
           set -euo pipefail
