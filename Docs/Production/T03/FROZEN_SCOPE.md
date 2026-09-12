@@ -2,7 +2,9 @@
 
 ## Status
 
-Task 3 is ACTIVE. Task 4 and later tasks stay locked until this scope passes mechanical/regression checks, source-bound actual captures, both independent critic roles at >=9.0 in every mandatory dimension, and final pixel signoff. Target is 10/10.
+Task 3 is ACTIVE. Task 4 and later tasks stay locked until this scope passes mechanical/regression checks, the cheap performance-budget preflight, the formal source-bound river-gate evidence preflight, both independent critic roles at >9.0 in every applicable mandatory dimension, the full C6 Performance Critic, and final pixel signoff. Target is 10/10.
+
+The strict `>9.0` rule is forward-only from T03. Prior T01/T02 approvals are not retroactively revoked.
 
 Accepted prerequisites remain authoritative:
 
@@ -38,7 +40,9 @@ All openings are real collision gaps and visually marked with lantern posts plus
 5. Central river gate: centered on Task 2 crossing reserve X=+1.5, clear width 3.4.
 6. East river gate: centered on Task 2 crossing reserve X=+10.0, clear width 3.4.
 
-The three river-facing openings must preserve at least the Task 2 reserved 3.0-unit crossing corridor. Posts/leaves stay outside the reserved corridor. No permanent fence panel may cross those reserves.
+The three river-facing openings must preserve at least the Task 2 reserved 3.0-unit collision/crossing corridor. Posts and open leaves must also preserve a separate minimum 3.20-unit visual aperture after leaf projection so a technically open gate cannot pass while looking cramped or obstructed. No permanent fence panel may cross the reserves.
+
+Where practical, the same authoritative T03 gate contract must drive visible gate geometry, collision-gap assumptions, route reservation/apron geometry, and evidence metadata. A repair may not move only the visible leaf while leaving route/evidence assumptions stale.
 
 ## Locked work lanes
 
@@ -69,22 +73,28 @@ The two historical buildable barricade/defense records and all resource prices/u
 
 ## Required Task 3 evidence
 
+The required order is **mechanical/regression -> cheap performance-budget preflight -> formal gate-specific visual preflight -> fresh C1/C2 -> C6 -> final pixel signoff**. Critics are not a substitute for obvious preflight checks.
+
 Before Task 3 may pass:
 
 1. Exact perimeter constants and all six gate definitions match this file.
 2. South fence remains outside the T02 river permanent-build setback for every segment.
 3. No fence panel obstructs the three reserved future river crossings.
 4. Fence visual panels and collision segments derive from the same segment list.
-5. Every gate is at least its locked clear width in collision and actual rendered pixels.
+5. Every gate is at least its locked clear width in collision; every river gate also passes the separate 3.20-unit visual-aperture gate.
 6. Player walks and sprints through every gate in both directions.
 7. Player cannot walk or sprint through representative solid fence sections, including corners and curved south-bank sections.
 8. Continuous dry routes connect all required lanes without crossing water or fence collision.
 9. All original functional suites plus T01/T02 acceptance suites pass.
 10. T01 approved forest remains seated/unchanged and T02 river geometry, width, banks, recovery and crossing reserves remain valid.
-11. Source-bound actual renders cover full perimeter, north/west/east gates, all three river gates, south curved fence, central/cross lanes, both shelter branches, river lane, normal gameplay, close panel/post contact, day/night/weather and native 3840x2160 scale-1 views.
-12. Both separately executed critic roles pass every mandatory T03 dimension at >=9.0 with no unresolved mandatory defect.
-13. Final pixel signoff checks the actual captures and raw critic observations rather than accepting scores blindly.
-14. No unfinished APK or user benchmark is requested.
+11. A cheap pre-critic performance-budget check must reject obviously excessive draw calls or submitted primitives against the governed integration budgets. This is not physical-device FPS certification.
+12. Each west/central/east river gate must provide machine-readable source-bound evidence IDs for exactly four required views: `river-side-approach`, `threshold-three-quarter`, `camp-side-outward`, and `gameplay-scale`. Missing or duplicate evidence blocks C1/C2.
+13. With no explanatory caption, each river-gate evidence set must visibly communicate: protected camp -> authored gate structure -> clear threshold -> worn path through the threshold -> continuation toward the river lane. Captions may not rescue ambiguous pixels.
+14. Source-bound actual renders also cover full perimeter, north/west/east work gates, south curved fence, central/cross lanes, both shelter branches, river lane, close panel/post contact, day/night/weather and native 3840x2160 scale-1 views.
+15. Both separately executed critic roles must freshly review the repaired candidate and pass every applicable mandatory T03 dimension strictly >9.0 unrounded with no unresolved mandatory defect. A score of exactly 9.0 fails. Target remains 10/10.
+16. Full C6 Performance Critic runs only after the visual critic gate passes. C6 mandatory dimensions also require strictly >9.0 unrounded and no unresolved defect.
+17. Final pixel signoff checks the actual captures and raw critic observations rather than accepting scores blindly. Diagnostic confidence is recorded only as `low`, `medium`, or `high`; it is never expressed on the production 0–10 quality scale.
+18. No unfinished APK or user benchmark is requested.
 
 ## Scope exclusions
 
