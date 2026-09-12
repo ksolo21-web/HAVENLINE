@@ -28,6 +28,11 @@
       "commit": "3773cf929fe5c67af0556383cd34aa4a55ebc0d4",
       "status": "REJECTED",
       "reason": "mechanically invalid candidate: 16 suites / 807 checks, 69 renders, 12-ID gate preflight and cheap performance passed, but source binding still asserted the superseded 0.16 leaf sink"
+    },
+    {
+      "commit": "400c6b91bef8decb6594391d762f385bed6e5d95",
+      "status": "REJECTED",
+      "reason": "reference-fidelity north-gate minimum 8.0: terrain-crown seating leaked onto fixed panels and warm-floor lane wear lacked macro variation; river-gates visual-integrity itself reached 10.0"
     }
   ],
   "repair_range": {
@@ -100,6 +105,23 @@
       "verification_evidence": ["river-gate/centre/gameplay-scale"],
       "status": "READY_FOR_VERIFICATION",
       "counters": {"review_round_count": 3, "same_root_cause_count": 3, "evidence_only_attempt_count": 1, "production_repair_count": 2}
+    },
+    {
+      "defect_id": "T03-NG-001",
+      "critic_source": "run 34705706558 / reference-fidelity / north-gate",
+      "visible_symptom": "north gate detail shows adjacent fixed fence panels settling out of alignment and its warm-floor route reading too uniformly",
+      "triage": "VALID_PRODUCTION_REGRESSION",
+      "affected_production_object": "fixed fence panel transforms and packed warm-floor lane material",
+      "probable_root_cause": "terrain-crown compensation intended for long open leaves was applied to every fixed panel, while macro wear was mixed out on cleared camp floor",
+      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary_view.gd", "HavenlineGodot/shaders/outpost_snow.gdshader"],
+      "evidence_files_showing_defect": ["gallery/north-gate-front.png", "gallery/north-gate-rear.png", "gallery/open-gate-leaves-detail.png"],
+      "production_change": "apply sampled crown seating only to open gate leaves and propagate macro compression/scuffs into the packed warm-floor branch",
+      "expected_visible_result": "north fixed panels retain their shared authored alignment while the route remains visibly worn across the snow-to-floor transition",
+      "required_proof": ["north-gate", "central-lane", "gameplay"],
+      "repair_commit": "SELF",
+      "verification_evidence": ["gallery/north-gate-front.png", "gallery/north-gate-rear.png", "gallery/open-gate-leaves-detail.png"],
+      "status": "READY_FOR_VERIFICATION",
+      "counters": {"review_round_count": 1, "same_root_cause_count": 1, "evidence_only_attempt_count": 0, "production_repair_count": 1}
     }
   ]
 }

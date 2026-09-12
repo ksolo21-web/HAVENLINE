@@ -24,7 +24,7 @@ func _mesh(game,asset:String)->ArrayMesh:
 		game.merged_cache[asset]=Scenery.compile(load(path))
 	return game.merged_cache[asset]
 
-func _segment_transform(a:Vector2,b:Vector2,overlap:=0.0,root_sink:=FENCE_ROOT_SINK)->Transform3D:
+func _segment_transform(a:Vector2,b:Vector2,overlap:=0.0,root_sink:=FENCE_ROOT_SINK,terrain_seat:=false)->Transform3D:
 	var aa:=a;var bb:=b
 	var flat:=b-a
 	if overlap>0.0 and flat.length_squared()>.0001:
@@ -34,10 +34,11 @@ func _segment_transform(a:Vector2,b:Vector2,overlap:=0.0,root_sink:=FENCE_ROOT_S
 	# terrain crown from leaving visible daylight below an otherwise sunk leaf.
 	var height_a:=Surface.height_at(aa);var height_b:=Surface.height_at(bb)
 	var terrain_crown:=0.0
-	for sample in range(1,TERRAIN_SEAT_SAMPLES):
-		var t:=float(sample)/float(TERRAIN_SEAT_SAMPLES)
-		var p:=aa.lerp(bb,t)
-		terrain_crown=maxf(terrain_crown,Surface.height_at(p)-lerpf(height_a,height_b,t))
+	if terrain_seat:
+		for sample in range(1,TERRAIN_SEAT_SAMPLES):
+			var t:=float(sample)/float(TERRAIN_SEAT_SAMPLES)
+			var p:=aa.lerp(bb,t)
+			terrain_crown=maxf(terrain_crown,Surface.height_at(p)-lerpf(height_a,height_b,t))
 	var seated_sink:=root_sink+terrain_crown
 	var pa:=Vector3(aa.x,height_a-seated_sink,aa.y);var pb:=Vector3(bb.x,height_b-seated_sink,bb.y)
 	var x_axis:=(pb-pa).normalized()
@@ -61,7 +62,7 @@ func configure(game):
 		var overlap:=VISUAL_JOIN_OVERLAP
 		if south_corners.any(func(c):return Vector2(panel.a).distance_to(c)<.01 or Vector2(panel.b).distance_to(c)<.01):overlap=VISUAL_CORNER_JOIN_OVERLAP
 		fence_transforms.append(_segment_transform(panel.a,panel.b,overlap))
-	for leaf in Boundary.gate_leaf_specs():fence_transforms.append(_segment_transform(leaf.a,leaf.b,0.0,GATE_LEAF_ROOT_SINK))
+	for leaf in Boundary.gate_leaf_specs():fence_transforms.append(_segment_transform(leaf.a,leaf.b,0.0,GATE_LEAF_ROOT_SINK,true))
 	fence_batch=Scenery.instances(_mesh(game,"world/barricade"),fence_transforms,self)
 	fence_batch.name="AuthoredTimberFenceAndOpenGateLeaves"
 	var post_transforms:Array[Transform3D]=[]
@@ -85,6 +86,7 @@ func configure(game):
 	descriptor["visual_corner_join_overlap"]=VISUAL_CORNER_JOIN_OVERLAP
 	descriptor["gate_leaf_root_sink"]=GATE_LEAF_ROOT_SINK
 	descriptor["terrain_seat_samples"]=TERRAIN_SEAT_SAMPLES
+	descriptor["terrain_crown_applied_to_gate_leaves_only"]=true
 	descriptor["river_gate_post_scale"]=RIVER_GATE_POST_SCALE
 	descriptor["primitive_fence_meshes_created"]=false
 	descriptor["draw_batches"]=2
