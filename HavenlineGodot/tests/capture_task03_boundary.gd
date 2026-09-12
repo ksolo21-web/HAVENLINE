@@ -21,6 +21,17 @@ func tag_river_evidence(contract:Dictionary,kind:String):
 	records[-1]["evidence_kind"]=kind
 	records[-1]["gate_authority_id"]=String(contract.authority_id)
 
+func gameplay_gate_at(contract:Dictionary):
+	# Keep the shipping gameplay camera's actual position, orthographic size and
+	# player placement, but disclose a QA re-aim toward the authoritative gate
+	# threshold. The former generic normal_at frame looked back toward the river
+	# and could omit the gate entirely, which is invalid gameplay-scale evidence.
+	normal_at(Vector2(contract.outside))
+	var center:Vector2=contract.center
+	var target:=Vector3(center.x,Surface.height_at(center)+.65,center.y)
+	game.camera.look_at(target)
+	game.update_foreground_visibility(game.xyz(game.sim.position)+Vector3(0,.95,0),.1)
+
 func capture_gallery():
 	focus_at(Vector2(0,2.1),Vector3(0,36,.01),29.0);await snap("perimeter-topdown")
 	focus_at(Vector2(0,2.0),Vector3(21,30,27),25.0);await snap("perimeter-oblique")
@@ -48,8 +59,10 @@ func capture_gallery():
 		var camp_offset:Vector2=inward*4.6-tangent*1.0
 		focus_at(center,offset3(camp_offset,4.7),5.9)
 		await snap("river-gate-"+slug+"-camp-side");tag_river_evidence(contract,"camp-side-outward")
-		normal_at(Vector2(contract.outside))
+		gameplay_gate_at(contract)
 		await snap("gameplay-river-gate-"+slug);tag_river_evidence(contract,"gameplay-scale")
+		records[-1]["gameplay_camera_position_and_scale_preserved"]=true
+		records[-1]["qa_camera_reaimed_to_authoritative_threshold"]=true
 
 	for row in [[-8.0,"west"],[1.5,"centre"],[9.0,"east"]]:
 		var p:=Boundary.south_point(float(row[0]));focus_at(p,Vector3(0,7,9),7.4);await snap("south-fence-"+String(row[1]))
