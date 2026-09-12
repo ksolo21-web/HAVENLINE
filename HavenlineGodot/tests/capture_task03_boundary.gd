@@ -39,7 +39,7 @@ func river_camera_profile(slug:String,kind:String)->Dictionary:
 	assert(false,"Unknown T03 river evidence kind "+kind)
 	return {}
 
-func apply_river_camera(contract:Dictionary,kind:String):
+func apply_river_camera(contract:Dictionary,kind:String)->Dictionary:
 	var profile:=river_camera_profile(String(contract.slug),kind)
 	var center:Vector2=contract.center
 	var offset:Vector2=Vector2(contract.inward)*float(profile["inward"])+Vector2(contract.tangent)*float(profile["tangent"])
