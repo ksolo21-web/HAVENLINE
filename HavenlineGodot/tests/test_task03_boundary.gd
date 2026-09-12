@@ -119,7 +119,8 @@ func run():
 			var eid:=String(contract.evidence_ids[kind]);evidence_ids[eid]=true
 	check("River gates share authoritative geometry for visual clearance routes and evidence",river_authority_ok and evidence_ids.size()==12 and evidence.required_river_gate_evidence_ids.size()==12 and evidence.all_river_visual_clearance_pass)
 	check("Authored fence roots are deliberately sunk into terrain",is_equal_approx(float(desc.fence_root_sink),.08))
-	check("Fence joins and open leaves preserve strong terrain contact without changing collision",is_equal_approx(float(desc.visual_join_overlap),.10) and is_equal_approx(float(desc.visual_corner_join_overlap),.28) and is_equal_approx(float(desc.gate_leaf_root_sink),.16))
+	check("Fence joins and open leaves preserve strong terrain contact without changing collision",is_equal_approx(float(desc.visual_join_overlap),.10) and is_equal_approx(float(desc.visual_corner_join_overlap),.28) and is_equal_approx(float(desc.gate_leaf_root_sink),.30) and int(desc.terrain_seat_samples)==7)
+	check("River thresholds use enlarged authored lantern posts for caption-independent gate readability",is_equal_approx(float(desc.river_gate_post_scale),1.18))
 	var zero_progress_hidden:=true
 	for side in game.sim.defenses:
 		zero_progress_hidden=zero_progress_hidden and not game.defense_visuals[side].visible

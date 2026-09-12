@@ -10,7 +10,9 @@ const Scenery=preload("res://scripts/scenery_batch.gd")
 const FENCE_ROOT_SINK := 0.08
 const VISUAL_JOIN_OVERLAP := 0.10
 const VISUAL_CORNER_JOIN_OVERLAP := 0.28
-const GATE_LEAF_ROOT_SINK := 0.16
+const GATE_LEAF_ROOT_SINK := 0.30
+const TERRAIN_SEAT_SAMPLES := 7
+const RIVER_GATE_POST_SCALE := 1.18
 var fence_batch:MultiMeshInstance3D
 var post_batch:MultiMeshInstance3D
 var descriptor:Dictionary={}
@@ -27,7 +29,17 @@ func _segment_transform(a:Vector2,b:Vector2,overlap:=0.0,root_sink:=FENCE_ROOT_S
 	var flat:=b-a
 	if overlap>0.0 and flat.length_squared()>.0001:
 		var d:=flat.normalized();aa-=d*overlap*.5;bb+=d*overlap*.5
-	var pa:=Vector3(aa.x,Surface.height_at(aa)-root_sink,aa.y);var pb:=Vector3(bb.x,Surface.height_at(bb)-root_sink,bb.y)
+	# A rigid authored panel follows the chord between its end points, while the
+	# snow bank curves underneath it. Sampling the full chord prevents a local
+	# terrain crown from leaving visible daylight below an otherwise sunk leaf.
+	var height_a:=Surface.height_at(aa);var height_b:=Surface.height_at(bb)
+	var terrain_crown:=0.0
+	for sample in range(1,TERRAIN_SEAT_SAMPLES):
+		var t:=float(sample)/float(TERRAIN_SEAT_SAMPLES)
+		var p:=aa.lerp(bb,t)
+		terrain_crown=maxf(terrain_crown,Surface.height_at(p)-lerpf(height_a,height_b,t))
+	var seated_sink:=root_sink+terrain_crown
+	var pa:=Vector3(aa.x,height_a-seated_sink,aa.y);var pb:=Vector3(bb.x,height_b-seated_sink,bb.y)
 	var x_axis:=(pb-pa).normalized()
 	var z_axis:=x_axis.cross(Vector3.UP).normalized()
 	if z_axis.length_squared()<.001:z_axis=Vector3.FORWARD
@@ -36,9 +48,10 @@ func _segment_transform(a:Vector2,b:Vector2,overlap:=0.0,root_sink:=FENCE_ROOT_S
 	var basis:=Basis(x_axis,y_axis,z_axis).scaled(Vector3(length/Boundary.PANEL_SOURCE_LENGTH,1.0,1.0))
 	return Transform3D(basis,(pa+pb)*.5)
 
-func _post_transform(p:Vector2,tangent:Vector2)->Transform3D:
+func _post_transform(p:Vector2,tangent:Vector2,visual_scale:=1.0)->Transform3D:
 	var angle:=atan2(tangent.y,tangent.x)
-	return Transform3D(Basis(Vector3.UP,-angle),Vector3(p.x,Surface.height_at(p)-FENCE_ROOT_SINK*.35,p.y))
+	var basis:=Basis(Vector3.UP,-angle).scaled(Vector3.ONE*visual_scale)
+	return Transform3D(basis,Vector3(p.x,Surface.height_at(p)-FENCE_ROOT_SINK*.35,p.y))
 
 func configure(game):
 	name="Task03CampBoundary"
@@ -54,8 +67,9 @@ func configure(game):
 	var post_transforms:Array[Transform3D]=[]
 	for gate in Boundary.gate_specs():
 		var tangent:Vector2=gate.tangent
-		post_transforms.append(_post_transform(gate.a,tangent))
-		post_transforms.append(_post_transform(gate.b,tangent))
+		var post_scale:=RIVER_GATE_POST_SCALE if gate.kind=="river" else 1.0
+		post_transforms.append(_post_transform(gate.a,tangent,post_scale))
+		post_transforms.append(_post_transform(gate.b,tangent,post_scale))
 	post_batch=Scenery.instances(_mesh(game,"world/lantern_post"),post_transforms,self)
 	post_batch.name="GateLanternPosts"
 	descriptor=Boundary.evidence()
@@ -70,5 +84,7 @@ func configure(game):
 	descriptor["visual_join_overlap"]=VISUAL_JOIN_OVERLAP
 	descriptor["visual_corner_join_overlap"]=VISUAL_CORNER_JOIN_OVERLAP
 	descriptor["gate_leaf_root_sink"]=GATE_LEAF_ROOT_SINK
+	descriptor["terrain_seat_samples"]=TERRAIN_SEAT_SAMPLES
+	descriptor["river_gate_post_scale"]=RIVER_GATE_POST_SCALE
 	descriptor["primitive_fence_meshes_created"]=false
 	descriptor["draw_batches"]=2
