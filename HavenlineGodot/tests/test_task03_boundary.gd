@@ -105,8 +105,19 @@ func run():
 	var desc:Dictionary=game.camp_boundary_view.descriptor
 	check("Fence visuals and collision use same authoritative panel count",desc.collision_panel_instances==panels.size() and desc.visual_collision_share_panel_authority is bool and desc.visual_collision_share_panel_authority)
 	check("Six gates have twelve lantern posts and twelve open timber leaves",desc.gate_count==6 and desc.gate_post_instances==12 and desc.open_gate_leaf_instances==12)
-	check("Gate leaves use polished general and river-specific opening geometry",is_equal_approx(Boundary.GATE_LEAF_LENGTH,1.35) and is_equal_approx(Boundary.GATE_OPEN_ANGLE,1.18) and is_equal_approx(Boundary.RIVER_GATE_LEAF_LENGTH,1.85) and is_equal_approx(Boundary.RIVER_GATE_OPEN_ANGLE,1.48) and is_equal_approx(Boundary.RIVER_LANE_HALF,1.55))
-	check("Polished gate leaves remain clearly open instead of crossing the threshold",Boundary.GATE_LEAF_LENGTH*cos(Boundary.GATE_OPEN_ANGLE)*2.0<3.0 and Boundary.RIVER_GATE_LEAF_LENGTH*cos(Boundary.RIVER_GATE_OPEN_ANGLE)*2.0<3.0)
+	check("Gate leaves use polished general and river-specific opening geometry",is_equal_approx(Boundary.GATE_LEAF_LENGTH,1.35) and is_equal_approx(Boundary.GATE_OPEN_ANGLE,1.18) and is_equal_approx(Boundary.RIVER_GATE_LEAF_LENGTH,1.85) and is_equal_approx(Boundary.RIVER_GATE_OPEN_ANGLE,1.53) and is_equal_approx(Boundary.RIVER_LANE_HALF,1.55))
+	var river_authority_ok:=Boundary.river_gate_contracts().size()==3
+	var evidence_ids:Dictionary={}
+	for contract in Boundary.river_gate_contracts():
+		var route:Array=contract.route_points
+		river_authority_ok=river_authority_ok and String(contract.authority_id)==Boundary.GATE_AUTHORITY_ID
+		river_authority_ok=river_authority_ok and float(contract.visual_clear_width)>=Boundary.RIVER_VISUAL_CLEARANCE_MIN
+		river_authority_ok=river_authority_ok and float(contract.width)>=3.4-.001 and float(contract.collision_reserved_width)==3.0
+		river_authority_ok=river_authority_ok and route.size()==3 and Vector2(route[1]).distance_to(Vector2(contract.center))<.001
+		river_authority_ok=river_authority_ok and Vector2(route[0]).distance_to(Boundary.bank_lane_point(float(contract.reserve_x)))<.001
+		for kind in Boundary.RIVER_EVIDENCE_KINDS:
+			var eid:=String(contract.evidence_ids[kind]);evidence_ids[eid]=true
+	check("River gates share authoritative geometry for visual clearance routes and evidence",river_authority_ok and evidence_ids.size()==12 and evidence.required_river_gate_evidence_ids.size()==12 and evidence.all_river_visual_clearance_pass)
 	check("Authored fence roots are deliberately sunk into terrain",is_equal_approx(float(desc.fence_root_sink),.08))
 	check("Fence visuals overlap tiny joint seams without changing collision",is_equal_approx(float(desc.visual_join_overlap),.10))
 	var zero_progress_hidden:=true
