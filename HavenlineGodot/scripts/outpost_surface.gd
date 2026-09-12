@@ -14,6 +14,7 @@ const T03_LANE_RUT_DEPTH := 0.035
 static var _mesh: ArrayMesh
 static var _water_mesh: ArrayMesh
 static var _heights := PackedFloat32Array()
+static var _lane_distances := PackedFloat32Array()
 
 static func rounded_rect(p: Vector2, center: Vector2, half_size: Vector2, radius: float) -> float:
 	var q := (p-center).abs()-half_size+Vector2.ONE*radius
@@ -35,7 +36,7 @@ static func land_position(p: Vector2, margin := LAND_MARGIN) -> Vector2:
 static func protected_build_position(p: Vector2) -> Vector2:
 	return River.protected_build_position(p)
 
-static func _shape_height(p: Vector2) -> float:
+static func _shape_height(p: Vector2,lane_distance:=INF) -> float:
 	var ripple := sin(p.x*.53+sin(p.y*.26))*cos(p.y*.48)*.055
 	var edge := smoothstep(13.5,24.0,maxf(absf(p.x),absf(p.y)*.86))
 	var drift := edge*(.64+.52*pow(sin(p.x*.19+p.y*.15),2.0))
@@ -63,7 +64,7 @@ static func _shape_height(p: Vector2) -> float:
 	# previous shader-only tint could read as a flat overlay at grouped evidence
 	# scale. A shallow continuous bed plus paired traffic ruts now creates real
 	# height/contact cues without adding a path plane or touching T02 water.
-	var lane:=Boundary.lane_signed_distance(p)
+	var lane:=Boundary.lane_signed_distance(p) if is_inf(lane_distance) else lane_distance
 	var lane_bed:=1.0-smoothstep(-.08,.22,lane)
 	var centre_distance:=maxf(0.0,lane+Boundary.LANE_HALF)
 	var paired_ruts:=exp(-pow((centre_distance-.62)/.17,2.0))
@@ -75,9 +76,12 @@ static func _ensure_heights():
 	if not _heights.is_empty(): return
 	var n := int(HALF*2.0/STEP);var side := n+1
 	_heights.resize(side*side)
+	_lane_distances.resize(side*side)
 	for z in range(side):
 		for x in range(side):
-			_heights[z*side+x]=_shape_height(Vector2(-HALF+x*STEP,-HALF+z*STEP))
+			var i:=z*side+x;var p:=Vector2(-HALF+x*STEP,-HALF+z*STEP)
+			_lane_distances[i]=Boundary.lane_signed_distance(p)
+			_heights[i]=_shape_height(p,_lane_distances[i])
 
 static func height_at(p: Vector2) -> float:
 	_ensure_heights()
@@ -104,7 +108,7 @@ static func _indexed_grid() -> ArrayMesh:
 			vertices[i]=Vector3(p.x,_heights[i],p.y);uv[i]=p*.08
 			var shore:=clampf((river_distance(p)+4.0)/8.0,0.0,1.0)
 			var work:=clampf((work_distance(p)+4.0)/8.0,0.0,1.0)
-			var lane:=clampf((Boundary.lane_signed_distance(p)+4.0)/8.0,0.0,1.0)
+			var lane:=clampf((_lane_distances[i]+4.0)/8.0,0.0,1.0)
 			colors[i]=Color(shore,work,lane,1.0)
 	for z in range(side):
 		for x in range(side):

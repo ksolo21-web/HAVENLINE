@@ -43,6 +43,7 @@ const SHELTER_EAST := Vector2(6.4,-0.4)
 const RIVER_GATES := [-9.0,1.5,10.0]
 const RIVER_EVIDENCE_KINDS := ["river-side-approach","threshold-three-quarter","camp-side-outward","gameplay-scale"]
 const GATE_AUTHORITY_ID := "T03-gate-geometry-v3"
+static var _lane_cache:Array[Dictionary]=[]
 
 static func _cross(a: Vector2,b: Vector2)->float:
 	return a.x*b.y-a.y*b.x
@@ -209,11 +210,12 @@ static func river_gate_contracts()->Array[Dictionary]:
 	return result
 
 static func lane_polylines()->Array[Dictionary]:
+	if not _lane_cache.is_empty():return _lane_cache
 	var gates:=gate_specs();var by_id:Dictionary={}
 	for gate in gates:by_id[gate.id]=gate
 	var bank:Array[Vector2]=[]
 	for x in [-10.5,-9.0,-5.0,0.0,1.5,5.0,10.0,10.5]:bank.append(bank_lane_point(float(x)))
-	return [
+	_lane_cache=[
 		{"id":"central-spine","points":[bank_lane_point(1.5),Vector2(by_id["river-1.5"].center),Vector2(1.5,0.3),Vector2(0.0,2.25),Vector2(by_id["north-main"].center)]},
 		{"id":"cross-camp","points":[Vector2(by_id["west-work"].center),Vector2(-2.8,2.25),Vector2(0.0,2.25),Vector2(by_id["east-work"].center)]},
 		{"id":"west-shelter","points":[Vector2(-4.7,2.25),Vector2(-5.5,0.9),SHELTER_WEST]},
@@ -227,6 +229,7 @@ static func lane_polylines()->Array[Dictionary]:
 		{"id":"river-apron-centre","points":_river_apron(by_id["river-1.5"]),"half_width":RIVER_LANE_HALF},
 		{"id":"river-apron-east","points":_river_apron(by_id["river-10.0"]),"half_width":RIVER_LANE_HALF}
 	]
+	return _lane_cache
 
 static func lane_signed_distance(p:Vector2)->float:
 	var result:=999.0

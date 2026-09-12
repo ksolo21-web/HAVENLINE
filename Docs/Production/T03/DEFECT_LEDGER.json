@@ -48,6 +48,11 @@
       "commit": "1df5f7a877e75df075d45ab8e9cbff0d6ec8aed6",
       "status": "REJECTED",
       "reason": "run 34716946357: both critics rejected river-gates and south-fence; the shader-only grey lane read as a flat overlay rather than compressed snow, future-crossing thresholds remained undefined, and fence/post bases still appeared insufficiently grounded"
+    },
+    {
+      "commit": "a2c210774e1e90c2244e233d3c76b6cf472bda2c",
+      "status": "REJECTED",
+      "reason": "run 34720841193: mechanically blocked before evidence when full regression hit the 180-second per-suite timeout because the new physical lane-height pass recomputed uncached route geometry for every terrain vertex"
     }
   ],
   "repair_range": {
