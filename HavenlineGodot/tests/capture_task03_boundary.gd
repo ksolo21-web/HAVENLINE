@@ -21,6 +21,31 @@ func tag_river_evidence(contract:Dictionary,kind:String):
 	records[-1]["evidence_kind"]=kind
 	records[-1]["gate_authority_id"]=String(contract.authority_id)
 
+func river_camera_profile(slug:String,kind:String)->Dictionary:
+	# Evidence cameras are T03-only disclosed QA viewpoints. The east river gate
+	# has permanent cabin/tree/rock context close to the threshold, so the generic
+	# tangential offsets can hide an open leaf or the route behind authored scene
+	# geometry. Its profile uses the opposite shoulder and a closer camp-side
+	# station; runtime gameplay camera behavior remains untouched.
+	if slug=="east":
+		match kind:
+			"river-side-approach":return {"inward":-4.5,"tangent":-1.6,"height":4.8,"size":5.7,"profile":"east-unoccluded-v1"}
+			"threshold-three-quarter":return {"inward":-3.2,"tangent":-1.6,"height":5.0,"size":5.1,"profile":"east-unoccluded-v1"}
+			"camp-side-outward":return {"inward":2.8,"tangent":1.8,"height":4.4,"size":5.0,"profile":"east-unoccluded-v1"}
+	match kind:
+		"river-side-approach":return {"inward":-5.8,"tangent":.8,"height":4.8,"size":6.6,"profile":"standard-v1"}
+		"threshold-three-quarter":return {"inward":-4.0,"tangent":2.4,"height":5.2,"size":5.7,"profile":"standard-v1"}
+		"camp-side-outward":return {"inward":4.6,"tangent":-1.0,"height":4.7,"size":5.9,"profile":"standard-v1"}
+	assert(false,"Unknown T03 river evidence kind "+kind)
+	return {}
+
+func apply_river_camera(contract:Dictionary,kind:String):
+	var profile:=river_camera_profile(String(contract.slug),kind)
+	var center:Vector2=contract.center
+	var offset:Vector2=Vector2(contract.inward)*float(profile["inward"])+Vector2(contract.tangent)*float(profile["tangent"])
+	focus_at(center,offset3(offset,float(profile["height"])),float(profile["size"]))
+	return profile
+
 func gameplay_gate_at(contract:Dictionary):
 	# Keep the shipping gameplay camera's actual position, orthographic size and
 	# player placement, but disclose a QA re-aim toward the authoritative gate
@@ -46,23 +71,18 @@ func capture_gallery():
 	# Formal T03 river-gate evidence contract. Each gate gets four independent
 	# views, all derived from the same gate geometry that drives leaves/routes.
 	for contract in Boundary.river_gate_contracts():
-		var center:Vector2=contract.center
-		var inward:Vector2=contract.inward
-		var tangent:Vector2=contract.tangent
 		var slug:=String(contract.slug)
-		var approach_offset:Vector2=-inward*5.8+tangent*.8
-		focus_at(center,offset3(approach_offset,4.8),6.6)
-		await snap("river-gate-"+slug+"-approach");tag_river_evidence(contract,"river-side-approach")
-		var threshold_offset:Vector2=-inward*4.0+tangent*2.4
-		focus_at(center,offset3(threshold_offset,5.2),5.7)
-		await snap("river-gate-"+slug);tag_river_evidence(contract,"threshold-three-quarter")
-		var camp_offset:Vector2=inward*4.6-tangent*1.0
-		focus_at(center,offset3(camp_offset,4.7),5.9)
-		await snap("river-gate-"+slug+"-camp-side");tag_river_evidence(contract,"camp-side-outward")
+		var profile:=apply_river_camera(contract,"river-side-approach")
+		await snap("river-gate-"+slug+"-approach");tag_river_evidence(contract,"river-side-approach");records[-1]["qa_view_profile"]=profile["profile"]
+		profile=apply_river_camera(contract,"threshold-three-quarter")
+		await snap("river-gate-"+slug);tag_river_evidence(contract,"threshold-three-quarter");records[-1]["qa_view_profile"]=profile["profile"]
+		profile=apply_river_camera(contract,"camp-side-outward")
+		await snap("river-gate-"+slug+"-camp-side");tag_river_evidence(contract,"camp-side-outward");records[-1]["qa_view_profile"]=profile["profile"]
 		gameplay_gate_at(contract)
 		await snap("gameplay-river-gate-"+slug);tag_river_evidence(contract,"gameplay-scale")
 		records[-1]["gameplay_camera_position_and_scale_preserved"]=true
 		records[-1]["qa_camera_reaimed_to_authoritative_threshold"]=true
+		records[-1]["qa_view_profile"]="shipping-gameplay-position-reaim-v1"
 
 	for row in [[-8.0,"west"],[1.5,"centre"],[9.0,"east"]]:
 		var p:=Boundary.south_point(float(row[0]));focus_at(p,Vector3(0,7,9),7.4);await snap("south-fence-"+String(row[1]))
@@ -97,10 +117,8 @@ func capture_native():
 	var west:Dictionary=gate("west-work");focus_at(west.center,Vector3(-7.5,6.2,4.8),6.3);await snap("native-side-gate-west")
 	var east:Dictionary=gate("east-work");focus_at(east.center,Vector3(7.5,6.2,4.8),6.3);await snap("native-side-gate-east")
 	for contract in Boundary.river_gate_contracts():
-		var inward:Vector2=contract.inward;var tangent:Vector2=contract.tangent
-		var threshold_offset:Vector2=-inward*4.0+tangent*2.4
-		focus_at(Vector2(contract.center),offset3(threshold_offset,5.2),5.7)
-		await snap("native-river-gate-"+String(contract.slug))
+		var profile:=apply_river_camera(contract,"threshold-three-quarter")
+		await snap("native-river-gate-"+String(contract.slug));records[-1]["qa_view_profile"]=profile["profile"]
 	focus_at(Boundary.south_point(1.5),Vector3(0,7,9),7.4);await snap("native-south-fence")
 	focus_at(Vector2(0,2.0),Vector3(0,31,.01),22.0);await snap("native-lane-network")
 	var panel:Dictionary=Boundary.panel_specs()[5];focus_at(panel.mid,Vector3(0,4.0,4.6),4.1);await snap("native-fence-detail")
