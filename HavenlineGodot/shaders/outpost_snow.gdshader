@@ -64,29 +64,29 @@ void fragment(){
  // Keep the compressed bed recognisably snowy, then cut paired irregular
  // traffic ruts through it. This replaces the former broad grey overlay read
  // with visible compression marks on the continuous authored terrain.
- vec3 packed_snow=mix(vec3(.43,.47,.47),vec3(.72,.73,.70),packed_compression);
+ vec3 packed_snow=mix(vec3(.60,.64,.64),vec3(.84,.85,.82),packed_compression);
  packed_snow+=vec3(.030,.028,.025)*fine*detail_weight;
  float packed_scuff=smoothstep(.50,.78,material_noise(p*3.35+vec2(2.2,5.1)));
  float packed_clump=smoothstep(.43,.72,material_noise(p*1.28+vec2(-5.4,1.7)));
- packed_snow*=1.-packed_scuff*.18;
- packed_snow=mix(packed_snow,vec3(.34,.29,.23),packed_clump*.26);
+ packed_snow*=1.-packed_scuff*.10;
+ packed_snow=mix(packed_snow,vec3(.48,.43,.36),packed_clump*.20);
  packed_snow+=vec3(.060,.041,.024)*(packed_mid-.5);
  float packed_core=1.-smoothstep(-.76,-.24,lane_edge_d);
  float lane_center_distance=max(lane+1.30,0.0);
- float paired_rut=1.-smoothstep(.10,.25,abs(lane_center_distance-.62));
- float rut_breakup=.58+.42*smoothstep(.22,.76,material_noise(p*2.72+vec2(7.1,-4.3)));
- packed_snow=mix(packed_snow,vec3(.22,.25,.24),paired_rut*lane_mask*rut_breakup*.78);
+ float paired_rut=1.-smoothstep(.09,.28,abs(lane_center_distance-.62));
+ float rut_breakup=.84+.16*smoothstep(.22,.76,material_noise(p*2.72+vec2(7.1,-4.3)));
+ packed_snow=mix(packed_snow,vec3(.20,.17,.13),paired_rut*lane_mask*rut_breakup*.94);
  float churned_snow=smoothstep(.68,.88,material_noise(p*1.92+vec2(-8.4,2.6)));
  packed_snow=mix(packed_snow,vec3(.78,.80,.77),churned_snow*lane_mask*.30);
- packed_snow*=1.-packed_core*(.14+packed_mid*.07);
+ packed_snow*=1.-packed_core*(.055+packed_mid*.025);
  // Warm-ground wear stays clearly related to the existing camp floor, but is
  // compressed/duller so the same route can be followed across the snow/floor join.
- vec3 packed_floor=mix(floor*.43+vec3(.052,.032,.023),floor*.66+vec3(.030,.019,.014),packed_compression);
- packed_floor*=1.-packed_scuff*.16;
- packed_floor=mix(packed_floor,packed_floor*vec3(.84,.79,.72),packed_clump*.24);
- packed_floor+=vec3(.052,.033,.019)*(packed_mid-.5);
- packed_floor=mix(packed_floor,packed_floor*vec3(.58,.56,.52),paired_rut*lane_mask*rut_breakup*.62);
- packed_floor*=1.-packed_core*(.13+packed_mid*.06);
+ vec3 packed_floor=mix(floor*.74+vec3(.040,.024,.016),floor*.90+vec3(.018,.011,.007),packed_compression);
+ packed_floor*=1.-packed_scuff*.08;
+ packed_floor=mix(packed_floor,packed_floor*vec3(.90,.86,.80),packed_clump*.18);
+ packed_floor+=vec3(.042,.027,.016)*(packed_mid-.5);
+ packed_floor=mix(packed_floor,vec3(.19,.105,.065),paired_rut*lane_mask*rut_breakup*.90);
+ packed_floor*=1.-packed_core*(.045+packed_mid*.022);
  vec3 packed=mix(packed_snow,packed_floor,cleared);
  float wear=clamp(.84+material_noise(p*2.05)*.12+material_noise(p*5.1)*.06,.82,1.0);
  material=mix(material,packed,lane_mask*.97*wear);

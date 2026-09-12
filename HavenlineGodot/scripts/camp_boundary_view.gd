@@ -7,13 +7,13 @@ const Scenery=preload("res://scripts/scenery_batch.gd")
 # Slightly deeper seating and a tiny visual-only overlap remove daylight slivers
 # at joints on uneven/curved terrain. Collision still uses Boundary.panel_specs()
 # exactly, so openings and gameplay widths do not change.
-const FENCE_ROOT_SINK := 0.20
+const FENCE_ROOT_SINK := 0.34
 const VISUAL_JOIN_OVERLAP := 0.10
 const VISUAL_CORNER_JOIN_OVERLAP := 0.28
 const GATE_HINGE_OVERLAP := 0.12
-const GATE_LEAF_ROOT_SINK := 0.40
+const GATE_LEAF_ROOT_SINK := 0.50
 const TERRAIN_SEAT_SAMPLES := 7
-const GATE_POST_ROOT_SINK := 0.16
+const GATE_POST_ROOT_SINK := 0.30
 const WORK_GATE_POST_SCALE := 1.20
 const RIVER_GATE_POST_SCALE := 1.70
 var fence_batch:MultiMeshInstance3D
@@ -99,5 +99,6 @@ func configure(game):
 	descriptor["work_gate_post_scale"]=WORK_GATE_POST_SCALE
 	descriptor["lane_compression_depth"]=Surface.T03_LANE_COMPRESSION_DEPTH
 	descriptor["lane_rut_depth"]=Surface.T03_LANE_RUT_DEPTH
+	descriptor["lane_shoulder_height"]=Surface.T03_LANE_SHOULDER_HEIGHT
 	descriptor["primitive_fence_meshes_created"]=false
 	descriptor["draw_batches"]=2

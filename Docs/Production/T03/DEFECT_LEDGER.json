@@ -53,6 +53,11 @@
       "commit": "a2c210774e1e90c2244e233d3c76b6cf472bda2c",
       "status": "REJECTED",
       "reason": "run 34720841193: mechanically blocked before evidence when full regression hit the 180-second per-suite timeout because the new physical lane-height pass recomputed uncached route geometry for every terrain vertex"
+    },
+    {
+      "commit": "991a6389fe9c636b21b63359383c65a2070cd534",
+      "status": "REJECTED",
+      "reason": "run 34721142869: all deterministic gates and manual pixel review passed, but both critics still read the river lane as a flat snow/grey plane without continuous threshold wear and visual-integrity still found shallow river fence/post contact; other reported groups scored 10"
     }
   ],
   "repair_range": {
@@ -193,6 +198,23 @@
       "verification_evidence": ["river-gate/west/river-side-approach", "river-gate/centre/threshold-three-quarter", "river-gate/east/camp-side-outward", "river-gate/centre/gameplay-scale"],
       "status": "READY_FOR_VERIFICATION",
       "counters": {"review_round_count": 6, "same_root_cause_count": 6, "evidence_only_attempt_count": 1, "production_repair_count": 5}
+    },
+    {
+      "defect_id": "T03-RG-006",
+      "critic_source": "run 34721142869 / reference-fidelity + visual-integrity / river-gates",
+      "visible_symptom": "even with visible macro ruts, the dedicated critic board reads the broad grey corridor as a flat plane and still sees shallow fence/post contact on the river bank",
+      "triage": "VALID_PRODUCTION_DEFECT",
+      "affected_production_object": "continuous terrain height/material and authored river fence/post root transforms",
+      "probable_root_cause": "the dark treatment covers the whole lane instead of reserving contrast for continuous tread grooves, physical depression has no raised swept-snow shoulder at reduced scale, and 0.20/0.16 root seating remains too shallow against the sloped bank",
+      "production_files_likely_implicated": ["HavenlineGodot/scripts/outpost_surface.gd", "HavenlineGodot/scripts/camp_boundary_view.gd", "HavenlineGodot/shaders/outpost_snow.gdshader"],
+      "evidence_files_showing_defect": ["gallery/river-gate-west-approach.png", "gallery/river-gate-centre.png", "gallery/river-gate-east-camp-side.png", "native4k/native-river-gate-west.png", "native4k/native-river-gate-centre.png", "native4k/native-river-gate-east.png"],
+      "production_change": "return the compressed bed toward near-white snow, reserve strong dirt contrast for unbroken paired tread grooves across both snow and warm floor, deepen the real terrain bed/ruts, raise irregular swept-snow shoulders along the route, and seat fixed fence, leaves and existing lantern posts substantially deeper",
+      "expected_visible_result": "the same downsampled critic board reads one continuous physically cut snow route through grounded timber thresholds rather than a grey overlay",
+      "required_proof": ["river-gates", "south-fence", "central-lane", "gameplay", "detail-contact"],
+      "repair_commit": "SELF",
+      "verification_evidence": ["river-gate/west/river-side-approach", "river-gate/centre/threshold-three-quarter", "river-gate/east/camp-side-outward", "river-gate/centre/gameplay-scale"],
+      "status": "READY_FOR_VERIFICATION",
+      "counters": {"review_round_count": 7, "same_root_cause_count": 7, "evidence_only_attempt_count": 1, "production_repair_count": 6}
     }
   ]
 }

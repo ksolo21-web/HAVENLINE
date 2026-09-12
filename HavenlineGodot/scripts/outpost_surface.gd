@@ -9,8 +9,9 @@ const WATER_Y := River.WATER_Y
 const LAND_MARGIN := River.DEFAULT_DRY_MARGIN
 const WORK_CENTER := Vector2(0.0, 2.8)
 const WORK_HALF := Vector2(9.75, 4.3)
-const T03_LANE_COMPRESSION_DEPTH := 0.055
-const T03_LANE_RUT_DEPTH := 0.035
+const T03_LANE_COMPRESSION_DEPTH := 0.075
+const T03_LANE_RUT_DEPTH := 0.045
+const T03_LANE_SHOULDER_HEIGHT := 0.065
 static var _mesh: ArrayMesh
 static var _water_mesh: ArrayMesh
 static var _heights := PackedFloat32Array()
@@ -70,6 +71,8 @@ static func _shape_height(p: Vector2,lane_distance:=INF) -> float:
 	var paired_ruts:=exp(-pow((centre_distance-.62)/.17,2.0))
 	var compression_variation:=.82+.18*pow(sin(p.x*.91+p.y*.57),2.0)
 	result-=lane_bed*(T03_LANE_COMPRESSION_DEPTH*compression_variation+T03_LANE_RUT_DEPTH*paired_ruts)
+	var swept_snow_shoulder:=exp(-pow((lane-.13)/.17,2.0))
+	result+=T03_LANE_SHOULDER_HEIGHT*swept_snow_shoulder*(.82+.18*pow(sin(p.x*.47-p.y*.81),2.0))
 	return result
 
 static func _ensure_heights():
