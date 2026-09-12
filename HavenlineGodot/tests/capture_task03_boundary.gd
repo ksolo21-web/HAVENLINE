@@ -1,4 +1,6 @@
 extends "res://tests/capture_task02.gd"
+# Closure revalidation trigger: the controlled repair push used GITHUB_TOKEN,
+# which suppresses new push-triggered workflows; this comment changes no behavior.
 # T03 disclosed QA cameras over the unchanged live scene. No hidden fence or
 # alternate art state is introduced; only camera/player position and the six
 # controlled climate captures differ from normal gameplay.
