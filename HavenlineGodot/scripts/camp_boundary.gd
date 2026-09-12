@@ -9,7 +9,7 @@ const NORTH_Z := 8.8
 const SIDE_GATE_Z := 2.4
 const NORTH_GATE_HALF := 1.8
 const SIDE_GATE_HALF := 1.7
-const RIVER_GATE_HALF := 1.7
+const RIVER_GATE_HALF := 2.0
 const COLLISION_RADIUS := 0.32
 const PANEL_TARGET := 2.72
 const PANEL_SOURCE_LENGTH := 2.95
@@ -23,9 +23,10 @@ const GATE_OPEN_ANGLE := 1.18
 # colors reduce contrast. These are visual open leaves only; collision openings
 # and future crossing reserves remain exactly unchanged.
 const RIVER_GATE_LEAF_LENGTH := 1.85
-# 1.53 rad keeps the long leaves visibly authored while swinging them far enough
-# open to preserve a comfortable pixel-space threshold, not merely collision.
-const RIVER_GATE_OPEN_ANGLE := 1.53
+# A wider four-unit opening lets the authored leaves sit at a visibly open
+# angle instead of disappearing edge-on. The resulting pixel aperture remains
+# independently wider than the locked three-unit crossing reserve.
+const RIVER_GATE_OPEN_ANGLE := 1.42
 const RIVER_RESERVED_CORRIDOR := 3.0
 const RIVER_VISUAL_CLEARANCE_MIN := 3.20
 # River approaches need a broader worn threshold than ordinary camp lanes so
@@ -295,6 +296,7 @@ static func evidence()->Dictionary:
 		"minimum_gate_width":minimum_gate,"south_fence_minimum_shore_distance":min_south_margin,
 		"south_fence_required_margin":SOUTH_FENCE_MARGIN,"collision_radius":COLLISION_RADIUS,"lane_half_width":LANE_HALF,
 		"gate_leaf_length":GATE_LEAF_LENGTH,"gate_open_angle":GATE_OPEN_ANGLE,
+		"river_gate_half":RIVER_GATE_HALF,
 		"river_gate_leaf_length":RIVER_GATE_LEAF_LENGTH,"river_gate_open_angle":RIVER_GATE_OPEN_ANGLE,
 		"river_lane_half_width":RIVER_LANE_HALF,"river_apron_inset":RIVER_APRON_INSET,
 		"river_approach_margin":RIVER_APPROACH_MARGIN,

@@ -105,7 +105,7 @@ func run():
 	var desc:Dictionary=game.camp_boundary_view.descriptor
 	check("Fence visuals and collision use same authoritative panel count",desc.collision_panel_instances==panels.size() and desc.visual_collision_share_panel_authority is bool and desc.visual_collision_share_panel_authority)
 	check("Six gates have twelve lantern posts and twelve open timber leaves",desc.gate_count==6 and desc.gate_post_instances==12 and desc.open_gate_leaf_instances==12)
-	check("Gate leaves use polished general and river-specific opening geometry",is_equal_approx(Boundary.GATE_LEAF_LENGTH,1.35) and is_equal_approx(Boundary.GATE_OPEN_ANGLE,1.18) and is_equal_approx(Boundary.RIVER_GATE_LEAF_LENGTH,1.85) and is_equal_approx(Boundary.RIVER_GATE_OPEN_ANGLE,1.53) and is_equal_approx(Boundary.RIVER_LANE_HALF,1.55))
+	check("Gate leaves use polished general and river-specific opening geometry",is_equal_approx(Boundary.GATE_LEAF_LENGTH,1.35) and is_equal_approx(Boundary.GATE_OPEN_ANGLE,1.18) and is_equal_approx(Boundary.RIVER_GATE_HALF,2.0) and is_equal_approx(Boundary.RIVER_GATE_LEAF_LENGTH,1.85) and is_equal_approx(Boundary.RIVER_GATE_OPEN_ANGLE,1.42) and is_equal_approx(Boundary.RIVER_LANE_HALF,1.55))
 	var river_authority_ok:=Boundary.river_gate_contracts().size()==3
 	var evidence_ids:Dictionary={}
 	for contract in Boundary.river_gate_contracts():
@@ -118,8 +118,8 @@ func run():
 		for kind in Boundary.RIVER_EVIDENCE_KINDS:
 			var eid:=String(contract.evidence_ids[kind]);evidence_ids[eid]=true
 	check("River gates share authoritative geometry for visual clearance routes and evidence",river_authority_ok and evidence_ids.size()==12 and evidence.required_river_gate_evidence_ids.size()==12 and evidence.all_river_visual_clearance_pass)
-	check("Authored fence roots are deliberately sunk into terrain",is_equal_approx(float(desc.fence_root_sink),.12))
-	check("Fence joins open leaves and river posts preserve strong terrain contact and threshold readability without changing collision",is_equal_approx(float(desc.visual_join_overlap),.10) and is_equal_approx(float(desc.visual_corner_join_overlap),.28) and is_equal_approx(float(desc.gate_hinge_overlap),.12) and is_equal_approx(float(desc.gate_leaf_root_sink),.36) and is_equal_approx(float(desc.gate_leaf_hinge_sink),.12) and int(desc.terrain_seat_samples)==7 and desc.terrain_crown_applied_to_gate_leaves_only and is_equal_approx(float(desc.river_gate_post_scale),1.50) and is_equal_approx(float(desc.work_gate_post_scale),1.20))
+	check("Authored fence roots are deliberately sunk into terrain",is_equal_approx(float(desc.fence_root_sink),.20))
+	check("Fence joins open leaves posts and compressed terrain preserve strong threshold contact without changing collision",is_equal_approx(float(desc.visual_join_overlap),.10) and is_equal_approx(float(desc.visual_corner_join_overlap),.28) and is_equal_approx(float(desc.gate_hinge_overlap),.12) and is_equal_approx(float(desc.gate_leaf_root_sink),.40) and is_equal_approx(float(desc.gate_leaf_hinge_sink),.20) and int(desc.terrain_seat_samples)==7 and desc.terrain_crown_applied_to_gate_leaves_only and is_equal_approx(float(desc.gate_post_root_sink),.16) and is_equal_approx(float(desc.river_gate_post_scale),1.70) and is_equal_approx(float(desc.work_gate_post_scale),1.20) and is_equal_approx(float(desc.lane_compression_depth),.055) and is_equal_approx(float(desc.lane_rut_depth),.035))
 	var zero_progress_hidden:=true
 	for side in game.sim.defenses:
 		zero_progress_hidden=zero_progress_hidden and not game.defense_visuals[side].visible

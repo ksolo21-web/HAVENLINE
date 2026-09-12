@@ -7,14 +7,15 @@ const Scenery=preload("res://scripts/scenery_batch.gd")
 # Slightly deeper seating and a tiny visual-only overlap remove daylight slivers
 # at joints on uneven/curved terrain. Collision still uses Boundary.panel_specs()
 # exactly, so openings and gameplay widths do not change.
-const FENCE_ROOT_SINK := 0.12
+const FENCE_ROOT_SINK := 0.20
 const VISUAL_JOIN_OVERLAP := 0.10
 const VISUAL_CORNER_JOIN_OVERLAP := 0.28
 const GATE_HINGE_OVERLAP := 0.12
-const GATE_LEAF_ROOT_SINK := 0.36
+const GATE_LEAF_ROOT_SINK := 0.40
 const TERRAIN_SEAT_SAMPLES := 7
+const GATE_POST_ROOT_SINK := 0.16
 const WORK_GATE_POST_SCALE := 1.20
-const RIVER_GATE_POST_SCALE := 1.50
+const RIVER_GATE_POST_SCALE := 1.70
 var fence_batch:MultiMeshInstance3D
 var post_batch:MultiMeshInstance3D
 var descriptor:Dictionary={}
@@ -56,7 +57,7 @@ func _segment_transform(a:Vector2,b:Vector2,overlap:=0.0,root_sink:=FENCE_ROOT_S
 func _post_transform(p:Vector2,tangent:Vector2,visual_scale:=1.0)->Transform3D:
 	var angle:=atan2(tangent.y,tangent.x)
 	var basis:=Basis(Vector3.UP,-angle).scaled(Vector3.ONE*visual_scale)
-	return Transform3D(basis,Vector3(p.x,Surface.height_at(p)-FENCE_ROOT_SINK*.35,p.y))
+	return Transform3D(basis,Vector3(p.x,Surface.height_at(p)-GATE_POST_ROOT_SINK,p.y))
 
 func configure(game):
 	name="Task03CampBoundary"
@@ -93,7 +94,10 @@ func configure(game):
 	descriptor["gate_leaf_hinge_sink"]=FENCE_ROOT_SINK
 	descriptor["terrain_seat_samples"]=TERRAIN_SEAT_SAMPLES
 	descriptor["terrain_crown_applied_to_gate_leaves_only"]=true
+	descriptor["gate_post_root_sink"]=GATE_POST_ROOT_SINK
 	descriptor["river_gate_post_scale"]=RIVER_GATE_POST_SCALE
 	descriptor["work_gate_post_scale"]=WORK_GATE_POST_SCALE
+	descriptor["lane_compression_depth"]=Surface.T03_LANE_COMPRESSION_DEPTH
+	descriptor["lane_rut_depth"]=Surface.T03_LANE_RUT_DEPTH
 	descriptor["primitive_fence_meshes_created"]=false
 	descriptor["draw_batches"]=2

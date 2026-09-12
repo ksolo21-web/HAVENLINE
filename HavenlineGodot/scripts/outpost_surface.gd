@@ -9,6 +9,8 @@ const WATER_Y := River.WATER_Y
 const LAND_MARGIN := River.DEFAULT_DRY_MARGIN
 const WORK_CENTER := Vector2(0.0, 2.8)
 const WORK_HALF := Vector2(9.75, 4.3)
+const T03_LANE_COMPRESSION_DEPTH := 0.055
+const T03_LANE_RUT_DEPTH := 0.035
 static var _mesh: ArrayMesh
 static var _water_mesh: ArrayMesh
 static var _heights := PackedFloat32Array()
@@ -57,6 +59,16 @@ static func _shape_height(p: Vector2) -> float:
 	var bank_height := lerpf(WATER_Y-.82,.15,smoothstep(-.42,River.WET_EDGE+River.BANK_RUN,shore))
 	bank_height += .18*exp(-pow((shore-(River.WET_EDGE+River.BANK_RUN+.14))/.34,2.0))
 	result=lerpf(bank_height,result,smoothstep(River.WET_EDGE+River.BANK_RUN,River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER,shore))
+	# T03 routes are physically compressed into this same terrain mesh. The
+	# previous shader-only tint could read as a flat overlay at grouped evidence
+	# scale. A shallow continuous bed plus paired traffic ruts now creates real
+	# height/contact cues without adding a path plane or touching T02 water.
+	var lane:=Boundary.lane_signed_distance(p)
+	var lane_bed:=1.0-smoothstep(-.08,.22,lane)
+	var centre_distance:=maxf(0.0,lane+Boundary.LANE_HALF)
+	var paired_ruts:=exp(-pow((centre_distance-.62)/.17,2.0))
+	var compression_variation:=.82+.18*pow(sin(p.x*.91+p.y*.57),2.0)
+	result-=lane_bed*(T03_LANE_COMPRESSION_DEPTH*compression_variation+T03_LANE_RUT_DEPTH*paired_ruts)
 	return result
 
 static func _ensure_heights():

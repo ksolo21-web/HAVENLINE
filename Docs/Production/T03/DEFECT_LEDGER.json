@@ -43,6 +43,11 @@
       "commit": "e33dd79d2e28869ee282554309e73a8c7682ac49",
       "status": "REJECTED",
       "reason": "both critic roles rejected river-gates at minimum 7.0: the packed corridor still blended into the river bank, threshold leaves/posts lacked consistent gameplay hierarchy and river fence contact remained weak; visual-integrity gameplay also failed strict >9.0 at 9.0, while two unrelated shards timed out incomplete"
+    },
+    {
+      "commit": "1df5f7a877e75df075d45ab8e9cbff0d6ec8aed6",
+      "status": "REJECTED",
+      "reason": "run 34716946357: both critics rejected river-gates and south-fence; the shader-only grey lane read as a flat overlay rather than compressed snow, future-crossing thresholds remained undefined, and fence/post bases still appeared insufficiently grounded"
     }
   ],
   "repair_range": {
@@ -166,6 +171,23 @@
       "verification_evidence": ["gallery/gameplay-east-gate.png", "gallery/open-gate-leaves-detail.png", "river-gate/centre/gameplay-scale"],
       "status": "READY_FOR_VERIFICATION",
       "counters": {"review_round_count": 1, "same_root_cause_count": 1, "evidence_only_attempt_count": 0, "production_repair_count": 1}
+    },
+    {
+      "defect_id": "T03-RG-005",
+      "critic_source": "run 34716946357 / reference-fidelity + visual-integrity / river-gates + south-fence",
+      "visible_symptom": "the route is visible as a broad grey tint but lacks unmistakable compressed-snow height and track cues; river openings and nearby fence/post bases remain visually under-grounded",
+      "triage": "VALID_PRODUCTION_DEFECT",
+      "affected_production_object": "continuous terrain geometry/material and authored river gate/fence transforms",
+      "probable_root_cause": "color contrast alone cannot communicate compression, the near-edge-on leaves minimize gate silhouette, and shallow root placement does not survive sloped bank views",
+      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary.gd", "HavenlineGodot/scripts/outpost_surface.gd", "HavenlineGodot/scripts/camp_boundary_view.gd", "HavenlineGodot/shaders/outpost_snow.gdshader"],
+      "evidence_files_showing_defect": ["gallery/river-gate-west-approach.png", "gallery/river-gate-centre.png", "gallery/river-gate-east-approach.png", "gallery/south-fence-west.png", "gallery/south-fence-centre.png", "gallery/south-fence-east.png"],
+      "production_change": "physically depress the existing route bed and paired ruts in the shared terrain mesh, replace the flat grey read with irregular snowy compression and tread breakup, widen the actual river openings so long leaves can remain visibly open while preserving a greater-than-3.20 aperture, and deeply seat existing fence, leaf and lantern-post roots",
+      "expected_visible_result": "unchanged evidence views show a continuous, textured and physically compressed snow route passing between obvious grounded posts/leaves to the dry river edge",
+      "required_proof": ["river-gates", "south-fence", "central-lane", "gameplay", "detail-contact"],
+      "repair_commit": "SELF",
+      "verification_evidence": ["river-gate/west/river-side-approach", "river-gate/centre/threshold-three-quarter", "river-gate/east/camp-side-outward", "river-gate/centre/gameplay-scale"],
+      "status": "READY_FOR_VERIFICATION",
+      "counters": {"review_round_count": 6, "same_root_cause_count": 6, "evidence_only_attempt_count": 1, "production_repair_count": 5}
     }
   ]
 }
