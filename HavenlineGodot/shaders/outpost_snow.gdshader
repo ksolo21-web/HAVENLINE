@@ -57,6 +57,12 @@ void fragment(){
  float lane_mask=1.-smoothstep(-.07-lane_aa,.18+lane_aa,lane_edge_d);
  vec3 packed_snow=mix(vec3(.29,.43,.58),vec3(.52,.64,.74),broad*.5+.5);
  packed_snow+=vec3(.033,.034,.032)*fine*detail_weight;
+ // Preserve readable compression at evidence/gameplay distance. Mid-scale
+ // irregular mottling supplies real surface variation instead of a flat tint;
+ // it remains authored on the terrain and is masked by the same route SDF.
+ float packed_mottle=material_noise(p*1.85);
+ packed_snow*=.82+packed_mottle*.30;
+ packed_snow+=vec3(.040,.029,.018)*(material_noise(p*4.2)-.5)*detail_weight;
  // Warm-ground wear stays clearly related to the existing camp floor, but is
  // compressed/duller so the same route can be followed across the snow/floor join.
  vec3 packed_floor=floor*.54+vec3(.060,.037,.027);
