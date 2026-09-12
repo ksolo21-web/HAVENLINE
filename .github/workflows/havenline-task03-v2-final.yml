@@ -99,6 +99,8 @@ jobs:
           import json,os
           root=Path('task03-evidence');source=os.environ['GITHUB_SHA'];errors=[]
           gallery=json.loads((root/'gallery/capture.json').read_text());native=json.loads((root/'native4k/capture.json').read_text())
+          reference_contract=json.loads(Path('HavenlineGodot/data/reference-contract.json').read_text())
+          shipping_camera_full_height=float(reference_contract['camera']['size'])*2.0
           boundary=gallery['boundary'];contracts=boundary.get('river_gate_contracts',[])
           kinds={'river-side-approach','threshold-three-quarter','camp-side-outward','gameplay-scale'}
           by_eid={}
@@ -122,6 +124,11 @@ jobs:
               row=by_eid.get(eid)
               if not row:errors.append('missing evidence '+eid);continue
               if row.get('river_gate_id')!=c.get('id') or row.get('evidence_kind')!=kind or row.get('gate_authority_id')!='T03-gate-geometry-v3':errors.append('metadata mismatch '+eid)
+              if kind=='gameplay-scale':
+                if row.get('gameplay_camera_position_and_scale_preserved') is not True:errors.append('gameplay camera preservation flag '+eid)
+                if row.get('qa_camera_reaimed_to_authoritative_threshold') is not True:errors.append('gameplay threshold re-aim disclosure '+eid)
+                if abs(float(row.get('camera_size',-1))-shipping_camera_full_height)>.0001:errors.append('gameplay camera size '+eid)
+                if abs(float(row.get('shipping_camera_full_height',-1))-shipping_camera_full_height)>.0001:errors.append('shipping camera contract '+eid)
               image=root/'gallery'/(row['name']+'.png')
               if not image.exists():errors.append('missing image '+str(image));continue
               with Image.open(image) as im:

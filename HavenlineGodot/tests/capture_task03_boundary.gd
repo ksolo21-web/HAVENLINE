@@ -52,7 +52,10 @@ func gameplay_gate_at(contract:Dictionary):
 	# player placement, but disclose a QA re-aim toward the authoritative gate
 	# threshold. The former generic normal_at frame looked back toward the river
 	# and could omit the gate entirely, which is invalid gameplay-scale evidence.
+	var shipping_size:=float(game.sim.contract.camera.size)*2.0
+	game.camera.size=shipping_size
 	normal_at(Vector2(contract.outside))
+	assert(is_equal_approx(game.camera.size,shipping_size))
 	var center:Vector2=contract.center
 	var target:=Vector3(center.x,Surface.height_at(center)+.65,center.y)
 	game.camera.look_at(target)
@@ -81,7 +84,10 @@ func capture_gallery():
 		await snap("river-gate-"+slug+"-camp-side");tag_river_evidence(contract,"camp-side-outward");records[-1]["qa_view_profile"]=profile["profile"]
 		gameplay_gate_at(contract)
 		await snap("gameplay-river-gate-"+slug);tag_river_evidence(contract,"gameplay-scale")
-		records[-1]["gameplay_camera_position_and_scale_preserved"]=true
+		var shipping_size:=float(game.sim.contract.camera.size)*2.0
+		records[-1]["gameplay_camera_position_and_scale_preserved"]=is_equal_approx(game.camera.size,shipping_size)
+		records[-1]["shipping_camera_full_height"]=shipping_size
+		assert(records[-1]["gameplay_camera_position_and_scale_preserved"])
 		records[-1]["qa_camera_reaimed_to_authoritative_threshold"]=true
 		records[-1]["qa_view_profile"]="shipping-gameplay-position-reaim-v1"
 
