@@ -33,6 +33,11 @@
       "commit": "400c6b91bef8decb6594391d762f385bed6e5d95",
       "status": "REJECTED",
       "reason": "reference-fidelity north-gate minimum 8.0: terrain-crown seating leaked onto fixed panels and warm-floor lane wear lacked macro variation; river-gates visual-integrity itself reached 10.0"
+    },
+    {
+      "commit": "f6848e8f1cc1c32dc78348afbd6b33077176d376",
+      "status": "REJECTED",
+      "reason": "reference-fidelity river-gates minimum 7.5: deep uniform leaf seating weakened hinge joinery, threshold hierarchy remained inconsistent and worn aprons lacked a continuous compressed core"
     }
   ],
   "repair_range": {
@@ -64,13 +69,13 @@
       "probable_root_cause": "standard-scale lantern posts and low-frequency route contrast lose the threshold hierarchy in the camp-side view",
       "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary_view.gd"],
       "evidence_files_showing_defect": ["gallery/river-gate-west-camp-side.png"],
-      "production_change": "retain the repaired corner join, scale the existing authored river threshold posts to 1.18, and strengthen macro compression variation on the same terrain route",
+      "production_change": "retain the repaired corner join, scale the existing authored river threshold posts to 1.35, align each leaf hinge to the fixed panel, and add a continuous compressed core on the same terrain route",
       "expected_visible_result": "the two threshold posts, open leaves and worn corridor form one caption-independent west gate read",
       "required_proof": ["river-gate/west/camp-side-outward", "river-gate/west/gameplay-scale"],
       "repair_commit": "SELF",
       "verification_evidence": ["river-gate/west/gameplay-scale"],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 3, "same_root_cause_count": 1, "evidence_only_attempt_count": 2, "production_repair_count": 2}
+      "counters": {"review_round_count": 4, "same_root_cause_count": 2, "evidence_only_attempt_count": 2, "production_repair_count": 3}
     },
     {
       "defect_id": "T03-RG-002",
@@ -81,13 +86,13 @@
       "probable_root_cause": "endpoint-only height fitting does not account for a higher terrain midpoint beneath a rigid open leaf",
       "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary_view.gd"],
       "evidence_files_showing_defect": ["gallery/river-gate-centre-camp-side.png"],
-      "production_change": "sample each rigid fence chord at seven intervals, add the measured terrain crown to a 0.30 leaf sink, and leave hinge/aperture/collision geometry unchanged",
-      "expected_visible_result": "every open leaf remains visibly embedded across curved snow rather than only touching at its endpoints",
+      "production_change": "keep the hinge at the fixed-panel 0.08 sink, solve a minimum 0.30 free-tip sink across seven terrain samples, and leave aperture/collision geometry unchanged",
+      "expected_visible_result": "each leaf is visibly joined at the hinge and embedded at its free tip across curved snow",
       "required_proof": ["river-gate/centre/camp-side-outward", "river-gate/centre/gameplay-scale"],
       "repair_commit": "SELF",
       "verification_evidence": ["river-gate/centre/gameplay-scale"],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 3, "same_root_cause_count": 3, "evidence_only_attempt_count": 2, "production_repair_count": 2}
+      "counters": {"review_round_count": 4, "same_root_cause_count": 4, "evidence_only_attempt_count": 2, "production_repair_count": 3}
     },
     {
       "defect_id": "T03-RG-003",
@@ -98,13 +103,13 @@
       "probable_root_cause": "the previous 1.85-frequency mottle loses readable amplitude when the grouped evidence is downsampled",
       "production_files_likely_implicated": ["HavenlineGodot/shaders/outpost_snow.gdshader"],
       "evidence_files_showing_defect": ["gallery/river-gate-west-approach.png", "gallery/river-gate-centre.png", "gallery/river-gate-east-approach.png"],
-      "production_change": "add full-range 0.68-frequency compression patches plus mid-scale scuffs inside the existing route SDF on the same terrain shader",
+      "production_change": "add full-range 0.68-frequency compression patches, mid-scale scuffs and a noisy continuous compression core inside the existing route SDF on the same terrain shader",
       "expected_visible_result": "natural worn tonal breakup survives grouped and gameplay reduction without a path plane or painted stripe",
       "required_proof": ["river-gate/centre/threshold-three-quarter", "river-gate/centre/gameplay-scale"],
       "repair_commit": "SELF",
       "verification_evidence": ["river-gate/centre/gameplay-scale"],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 3, "same_root_cause_count": 3, "evidence_only_attempt_count": 1, "production_repair_count": 2}
+      "counters": {"review_round_count": 4, "same_root_cause_count": 4, "evidence_only_attempt_count": 1, "production_repair_count": 3}
     },
     {
       "defect_id": "T03-NG-001",

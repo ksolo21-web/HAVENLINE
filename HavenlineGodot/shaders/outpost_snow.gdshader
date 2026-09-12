@@ -66,11 +66,14 @@ void fragment(){
  float packed_scuff=smoothstep(.58,.82,material_noise(p*3.35+vec2(2.2,5.1)));
  packed_snow*=1.-packed_scuff*.14;
  packed_snow+=vec3(.045,.031,.019)*(packed_mid-.5);
+ float packed_core=1.-smoothstep(-.84,-.30,lane_edge_d);
+ packed_snow*=1.-packed_core*(.14+packed_mid*.08);
  // Warm-ground wear stays clearly related to the existing camp floor, but is
  // compressed/duller so the same route can be followed across the snow/floor join.
  vec3 packed_floor=mix(floor*.47+vec3(.055,.034,.025),floor*.63+vec3(.035,.022,.017),packed_compression);
  packed_floor*=1.-packed_scuff*.10;
  packed_floor+=vec3(.035,.022,.014)*(packed_mid-.5);
+ packed_floor*=1.-packed_core*(.11+packed_mid*.06);
  vec3 packed=mix(packed_snow,packed_floor,cleared);
  float wear=clamp(.74+material_noise(p*2.05)*.20+material_noise(p*5.1)*.08,.66,1.0);
  material=mix(material,packed,lane_mask*.97*wear);
