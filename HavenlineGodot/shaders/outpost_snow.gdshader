@@ -45,22 +45,27 @@ void fragment(){
  float warmth=(1.-smoothstep(warmth_radius-.4,warmth_radius+.12,dist))*heat_strength;
  floor=mix(floor,floor+vec3(.025,.012,0.),warmth*.42);
  vec3 material=mix(snow,floor,cleared);
+
  // T03 lanes remain compressed/worn material in the SAME terrain surface.
- // The first pass was too subtle on the warm camp floor. This revision raises
- // value separation while retaining soft edges/noisy material variation so the
- // paths read as natural wear rather than painted stripes or floating planes.
+ // Source-bound gate preflight showed that the prior blue-grey compression was
+ // still too close to untouched snow at river approaches. Increase value and
+ // temperature separation enough to read without captions, while preserving
+ // broad/fine variation and a noisy edge so it never becomes a painted stripe.
+ float lane_noise=(material_noise(p*1.17)-.5)*.115+(material_noise(p*3.35)-.5)*.055;
  float lane_aa=max(fwidth(lane)*.8,.025);
- float lane_mask=1.-smoothstep(-.05-lane_aa,.16+lane_aa,lane);
- vec3 packed_snow=mix(vec3(.43,.60,.77),vec3(.66,.78,.88),broad*.5+.5);
- packed_snow+=vec3(.026,.032,.038)*fine*detail_weight;
- vec3 packed_floor=floor*.64+vec3(.050,.028,.019);
+ float lane_edge_d=lane+lane_noise;
+ float lane_mask=1.-smoothstep(-.07-lane_aa,.18+lane_aa,lane_edge_d);
+ vec3 packed_snow=mix(vec3(.29,.43,.58),vec3(.52,.64,.74),broad*.5+.5);
+ packed_snow+=vec3(.033,.034,.032)*fine*detail_weight;
+ // Warm-ground wear stays clearly related to the existing camp floor, but is
+ // compressed/duller so the same route can be followed across the snow/floor join.
+ vec3 packed_floor=floor*.54+vec3(.060,.037,.027);
  vec3 packed=mix(packed_snow,packed_floor,cleared);
- // Stronger value separation plus irregular compressed patches make the route
- // readable in snow while remaining the same terrain surface (never a path plane).
- float wear=clamp(.86+material_noise(p*2.35)*.14,0.,1.);
- material=mix(material,packed,lane_mask*.94*wear);
- float lane_edge=(1.-smoothstep(.07,.34,abs(lane)))*smoothstep(-.09,.015,abs(lane));
- material=mix(material,material*.91,lane_edge*.46);
+ float wear=clamp(.74+material_noise(p*2.05)*.20+material_noise(p*5.1)*.08,.66,1.0);
+ material=mix(material,packed,lane_mask*.97*wear);
+ float lane_edge=(1.-smoothstep(.08,.38,abs(lane_edge_d)))*smoothstep(-.10,.018,abs(lane_edge_d));
+ material=mix(material,material*.87,lane_edge*.48);
+
  float ice=1.-smoothstep(-.12,.035,shore);
  material=mix(material,vec3(.37,.67,.84),ice*.35);
  ALBEDO=pow(clamp(material,vec3(0.),vec3(1.)),vec3(2.2));
