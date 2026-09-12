@@ -7,7 +7,7 @@ from workstream import registry_errors
 EXPECTED_TOOLS={
 "task_packet.py","workstream.py","change_impact.py","regression_runner.py","evidence_capture.py",
 "motion_capture.py","save_state_matrix.py","device_matrix.py","evidence_packager.py",
-"closure_validator.py","critic_harness.py","validate_migration.py","lib.py"
+"closure_validator.py","critic_harness.py","validate_migration.py","validate_repair_cycle.py","lib.py"
 }
 ALLOWED_MIGRATION_PATTERNS=[
 "Docs/Production/**","tools/havenline/production/**","AGENTS.md",
@@ -23,7 +23,7 @@ def main():
     ap=argparse.ArgumentParser();ap.add_argument("--base");a=ap.parse_args()
     errors=[]
     required=[
-      "HAVENLINE_BUILD_PLAN_V2.md","SEQUENTIAL_REPAIR_PLAN.md","DEPENDENCY_GRAPH.json",
+      "HAVENLINE_BUILD_PLAN_V2.md","ANTI_LOOP_ROOT_CAUSE_STANDARD.md","SEQUENTIAL_REPAIR_PLAN.md","DEPENDENCY_GRAPH.json",
       "WORKSTREAM_REGISTRY.json","PATH_OWNERSHIP.json","CRITIC_MATRIX.json",
       "PERFORMANCE_BUDGETS.json","TASK_PACKET_TEMPLATE.md","REGRESSION_MATRIX.json",
       "DEVICE_LAYOUT_MATRIX.json","SAVE_STATE_MATRIX.json","task-gates.json"

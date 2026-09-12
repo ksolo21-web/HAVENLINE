@@ -5,16 +5,17 @@
 Read in this order before any Havenline production work:
 
 1. `Docs/Production/HAVENLINE_BUILD_PLAN_V2.md`
-2. `Docs/Production/SEQUENTIAL_REPAIR_PLAN.md`
-3. `Docs/Production/task-gates.json`
-4. `Docs/Production/WORKSTREAM_REGISTRY.json`
-5. `Docs/Production/DEPENDENCY_GRAPH.json`
-6. `Docs/Production/PATH_OWNERSHIP.json`
-7. `Docs/Production/CRITIC_MATRIX.json`
-8. `Docs/Production/PERFORMANCE_BUDGETS.json`
-9. the active task packet/frozen scope
-10. `Docs/AI/HavenlineProjectContext.md`
-11. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
+2. `Docs/Production/ANTI_LOOP_ROOT_CAUSE_STANDARD.md`
+3. `Docs/Production/SEQUENTIAL_REPAIR_PLAN.md`
+4. `Docs/Production/task-gates.json`
+5. `Docs/Production/WORKSTREAM_REGISTRY.json`
+6. `Docs/Production/DEPENDENCY_GRAPH.json`
+7. `Docs/Production/PATH_OWNERSHIP.json`
+8. `Docs/Production/CRITIC_MATRIX.json`
+9. `Docs/Production/PERFORMANCE_BUDGETS.json`
+10. the active task packet/frozen scope
+11. `Docs/AI/HavenlineProjectContext.md`
+12. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
 
 Inspect current source/evidence for newer work. `Docs/AI/UnityProjectContext.md` is historical.
 
@@ -209,3 +210,8 @@ Work through genuine failures: diagnose, preserve working checkpoints, change
 approach when justified, fix and rerun. Do not lower thresholds to finish.
 Record exact source/asset/capture hashes, tests, raw critic results, unresolved
 defects and the next executable action after each cycle.
+
+Every critic-driven repair must satisfy
+`Docs/Production/ANTI_LOOP_ROOT_CAUSE_STANDARD.md`. Production defects require
+causal production changes and unchanged matched-camera proof before another
+critic run. Evidence-only changes cannot resolve them.
