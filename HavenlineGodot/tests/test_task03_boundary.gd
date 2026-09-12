@@ -105,7 +105,7 @@ func run():
 	var desc:Dictionary=game.camp_boundary_view.descriptor
 	check("Fence visuals and collision use same authoritative panel count",desc.collision_panel_instances==panels.size() and desc.visual_collision_share_panel_authority is bool and desc.visual_collision_share_panel_authority)
 	check("Six gates have twelve lantern posts and twelve open timber leaves",desc.gate_count==6 and desc.gate_post_instances==12 and desc.open_gate_leaf_instances==12)
-	check("Gate leaves use polished general and river-specific opening geometry",is_equal_approx(Boundary.GATE_LEAF_LENGTH,1.35) and is_equal_approx(Boundary.GATE_OPEN_ANGLE,1.18) and is_equal_approx(Boundary.RIVER_GATE_LEAF_LENGTH,1.60) and is_equal_approx(Boundary.RIVER_GATE_OPEN_ANGLE,1.43))
+	check("Gate leaves use polished general and river-specific opening geometry",is_equal_approx(Boundary.GATE_LEAF_LENGTH,1.35) and is_equal_approx(Boundary.GATE_OPEN_ANGLE,1.18) and is_equal_approx(Boundary.RIVER_GATE_LEAF_LENGTH,1.85) and is_equal_approx(Boundary.RIVER_GATE_OPEN_ANGLE,1.48) and is_equal_approx(Boundary.RIVER_LANE_HALF,1.55))
 	check("Polished gate leaves remain clearly open instead of crossing the threshold",Boundary.GATE_LEAF_LENGTH*cos(Boundary.GATE_OPEN_ANGLE)*2.0<3.0 and Boundary.RIVER_GATE_LEAF_LENGTH*cos(Boundary.RIVER_GATE_OPEN_ANGLE)*2.0<3.0)
 	check("Authored fence roots are deliberately sunk into terrain",is_equal_approx(float(desc.fence_root_sink),.08))
 	check("Fence visuals overlap tiny joint seams without changing collision",is_equal_approx(float(desc.visual_join_overlap),.10))

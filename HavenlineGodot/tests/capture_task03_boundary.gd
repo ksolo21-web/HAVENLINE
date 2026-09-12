@@ -22,8 +22,8 @@ func capture_gallery():
 	# posts and packed lane in one frame instead of flattening the gate head-on.
 	var west:Dictionary=gate("west-work");focus_at(west.center,Vector3(-7.5,6.2,4.8),6.3);await snap("west-work-gate")
 	var east:Dictionary=gate("east-work");focus_at(east.center,Vector3(7.5,6.2,4.8),6.3);await snap("east-work-gate")
-	for row in [["river--9.0","west",Vector3(4.4,6.8,6.8)],["river-1.5","centre",Vector3(3.4,6.8,6.8)],["river-10.0","east",Vector3(-4.4,6.8,6.8)]]:
-		var g:Dictionary=gate(row[0]);focus_at(g.center,row[2],6.7);await snap("river-gate-"+String(row[1]))
+	for row in [["river--9.0","west",Vector3(3.6,5.4,6.2)],["river-1.5","centre",Vector3(2.8,5.4,6.2)],["river-10.0","east",Vector3(-3.6,5.4,6.2)]]:
+		var g:Dictionary=gate(row[0]);focus_at(g.center,row[2],5.7);await snap("river-gate-"+String(row[1]))
 	for row in [[-8.0,"west"],[1.5,"centre"],[9.0,"east"]]:
 		var p:=Boundary.south_point(float(row[0]));focus_at(p,Vector3(0,7,9),7.4);await snap("south-fence-"+String(row[1]))
 	for row in [[Vector2(0,7.2),"central-spine-north"],[Vector2(0,2.4),"central-spine-centre"]]:
@@ -57,8 +57,8 @@ func capture_native():
 	var north:Dictionary=gate("north-main");focus_at(north.center,Vector3(0,7,9),7.3);await snap("native-north-gate")
 	var west:Dictionary=gate("west-work");focus_at(west.center,Vector3(-7.5,6.2,4.8),6.3);await snap("native-side-gate-west")
 	var east:Dictionary=gate("east-work");focus_at(east.center,Vector3(7.5,6.2,4.8),6.3);await snap("native-side-gate-east")
-	for id_name in [["river--9.0","west",Vector3(4.4,6.8,6.8)],["river-1.5","centre",Vector3(3.4,6.8,6.8)],["river-10.0","east",Vector3(-4.4,6.8,6.8)]]:
-		var g:Dictionary=gate(id_name[0]);focus_at(g.center,id_name[2],6.7);await snap("native-river-gate-"+String(id_name[1]))
+	for id_name in [["river--9.0","west",Vector3(3.6,5.4,6.2)],["river-1.5","centre",Vector3(2.8,5.4,6.2)],["river-10.0","east",Vector3(-3.6,5.4,6.2)]]:
+		var g:Dictionary=gate(id_name[0]);focus_at(g.center,id_name[2],5.7);await snap("native-river-gate-"+String(id_name[1]))
 	focus_at(Boundary.south_point(1.5),Vector3(0,7,9),7.4);await snap("native-south-fence")
 	focus_at(Vector2(0,2.0),Vector3(0,31,.01),22.0);await snap("native-lane-network")
 	var panel:Dictionary=Boundary.panel_specs()[5];focus_at(panel.mid,Vector3(0,4.0,4.6),4.1);await snap("native-fence-detail")

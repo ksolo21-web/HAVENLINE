@@ -22,8 +22,11 @@ const GATE_OPEN_ANGLE := 1.18
 # River-facing entrances need stronger visual hierarchy because snow/river-bank
 # colors reduce contrast. These are visual open leaves only; collision openings
 # and future crossing reserves remain exactly unchanged.
-const RIVER_GATE_LEAF_LENGTH := 1.60
-const RIVER_GATE_OPEN_ANGLE := 1.43
+const RIVER_GATE_LEAF_LENGTH := 1.85
+const RIVER_GATE_OPEN_ANGLE := 1.48
+# River approaches need a broader worn threshold than ordinary camp lanes so
+# the three future-crossing entrances read as intentional gates in snow.
+const RIVER_LANE_HALF := 1.55
 const RIVER_APRON_INSET := 0.55
 const SOUTH_FENCE_MARGIN := River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER+River.BUILD_SETBACK
 const LANE_HALF := 1.30
@@ -148,8 +151,13 @@ static func gate_leaf_specs()->Array[Dictionary]:
 	return result
 
 static func _river_apron(gate:Dictionary)->Array[Vector2]:
-	var a:Vector2=gate.a;var b:Vector2=gate.b;var tangent:Vector2=gate.tangent
-	return [a+tangent*RIVER_APRON_INSET,b-tangent*RIVER_APRON_INSET]
+	# Cross the gate perpendicular to the fence, from the dry bank lane through
+	# the threshold and visibly into camp. The old apron ran ALONG the opening,
+	# which did not visually communicate an approach/entrance.
+	var center:Vector2=gate.center
+	var inward:=(CAMP_CENTER-center).normalized()
+	var outside:=bank_lane_point(float(gate.reserve_x))
+	return [outside,center,center+inward*2.20]
 
 static func lane_polylines()->Array[Dictionary]:
 	var gates:=gate_specs();var by_id:Dictionary={}
@@ -166,16 +174,17 @@ static func lane_polylines()->Array[Dictionary]:
 		{"id":"east-river-connector","points":[bank_lane_point(10.0),Vector2(by_id["river-10.0"].center),Vector2(8.7,0.9),Vector2(6.8,2.25)]},
 		# Worn threshold aprons make each river opening legible as a used gate,
 		# while staying entirely inside the already-open collision interval.
-		{"id":"river-apron-west","points":_river_apron(by_id["river--9.0"])},
-		{"id":"river-apron-centre","points":_river_apron(by_id["river-1.5"])},
-		{"id":"river-apron-east","points":_river_apron(by_id["river-10.0"])}
+		{"id":"river-apron-west","points":_river_apron(by_id["river--9.0"]),"half_width":RIVER_LANE_HALF},
+		{"id":"river-apron-centre","points":_river_apron(by_id["river-1.5"]),"half_width":RIVER_LANE_HALF},
+		{"id":"river-apron-east","points":_river_apron(by_id["river-10.0"]),"half_width":RIVER_LANE_HALF}
 	]
 
 static func lane_signed_distance(p:Vector2)->float:
 	var result:=999.0
 	for lane in lane_polylines():
 		var points:Array=lane.points
-		for i in range(points.size()-1):result=minf(result,_distance_to_segment(p,points[i],points[i+1])-LANE_HALF)
+		var half_width:=float(lane.get("half_width",LANE_HALF))
+		for i in range(points.size()-1):result=minf(result,_distance_to_segment(p,points[i],points[i+1])-half_width)
 	return result
 
 static func constrain_motion(previous:Vector2,candidate:Vector2,radius:=COLLISION_RADIUS)->Vector2:
@@ -222,5 +231,5 @@ static func evidence()->Dictionary:
 		"south_fence_required_margin":SOUTH_FENCE_MARGIN,"collision_radius":COLLISION_RADIUS,"lane_half_width":LANE_HALF,
 		"gate_leaf_length":GATE_LEAF_LENGTH,"gate_open_angle":GATE_OPEN_ANGLE,
 		"river_gate_leaf_length":RIVER_GATE_LEAF_LENGTH,"river_gate_open_angle":RIVER_GATE_OPEN_ANGLE,
-		"river_apron_inset":RIVER_APRON_INSET,
+		"river_lane_half_width":RIVER_LANE_HALF,"river_apron_inset":RIVER_APRON_INSET,
 		"lane_ids":lane_polylines().map(func(row):return row.id),"river_gate_reserves":RIVER_GATES,"task_approved":false}

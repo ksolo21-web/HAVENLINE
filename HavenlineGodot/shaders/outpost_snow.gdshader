@@ -51,13 +51,16 @@ void fragment(){
  // paths read as natural wear rather than painted stripes or floating planes.
  float lane_aa=max(fwidth(lane)*.8,.025);
  float lane_mask=1.-smoothstep(-.05-lane_aa,.16+lane_aa,lane);
- vec3 packed_snow=mix(vec3(.60,.73,.86),vec3(.75,.84,.92),broad*.5+.5);
- packed_snow+=vec3(.018,.023,.029)*fine*detail_weight;
- vec3 packed_floor=floor*.69+vec3(.055,.031,.021);
+ vec3 packed_snow=mix(vec3(.43,.60,.77),vec3(.66,.78,.88),broad*.5+.5);
+ packed_snow+=vec3(.026,.032,.038)*fine*detail_weight;
+ vec3 packed_floor=floor*.64+vec3(.050,.028,.019);
  vec3 packed=mix(packed_snow,packed_floor,cleared);
- material=mix(material,packed,lane_mask*.86);
- float lane_edge=(1.-smoothstep(.08,.32,abs(lane)))*smoothstep(-.08,.02,abs(lane));
- material=mix(material,material*.94,lane_edge*.38);
+ // Stronger value separation plus irregular compressed patches make the route
+ // readable in snow while remaining the same terrain surface (never a path plane).
+ float wear=clamp(.86+material_noise(p*2.35)*.14,0.,1.);
+ material=mix(material,packed,lane_mask*.94*wear);
+ float lane_edge=(1.-smoothstep(.07,.34,abs(lane)))*smoothstep(-.09,.015,abs(lane));
+ material=mix(material,material*.91,lane_edge*.46);
  float ice=1.-smoothstep(-.12,.035,shore);
  material=mix(material,vec3(.37,.67,.84),ice*.35);
  ALBEDO=pow(clamp(material,vec3(0.),vec3(1.)),vec3(2.2));
