@@ -1,7 +1,4 @@
 extends "res://tests/capture_task02.gd"
-# Closure revalidation trigger: the controlled repair push used GITHUB_TOKEN,
-# which suppresses new push-triggered workflows; this comment changes no behavior.
-# Strict critic adapter revalidation trigger; capture behavior remains unchanged.
 # T03 disclosed QA cameras over the unchanged live scene. No hidden fence or
 # alternate art state is introduced; only camera/player position and the six
 # controlled climate captures differ from normal gameplay.
@@ -13,6 +10,17 @@ func gate(id:String)->Dictionary:
 		if row.id==id:return row
 	assert(false,"Missing gate "+id);return {}
 
+func offset3(v:Vector2,height:float)->Vector3:
+	return Vector3(v.x,height,v.y)
+
+func tag_river_evidence(contract:Dictionary,kind:String):
+	assert(kind in Boundary.RIVER_EVIDENCE_KINDS)
+	records[-1]["evidence_id"]=String(contract.evidence_ids[kind])
+	records[-1]["river_gate_id"]=String(contract.id)
+	records[-1]["river_gate_slug"]=String(contract.slug)
+	records[-1]["evidence_kind"]=kind
+	records[-1]["gate_authority_id"]=String(contract.authority_id)
+
 func capture_gallery():
 	focus_at(Vector2(0,2.1),Vector3(0,36,.01),29.0);await snap("perimeter-topdown")
 	focus_at(Vector2(0,2.0),Vector3(21,30,27),25.0);await snap("perimeter-oblique")
@@ -21,12 +29,28 @@ func capture_gallery():
 	var north:Dictionary=gate("north-main")
 	focus_at(north.center,Vector3(0,7,9),7.3);await snap("north-gate-front")
 	focus_at(north.center,Vector3(0,7,-9),7.3);await snap("north-gate-rear")
-	# Slightly oblique side-gate views expose the open leaves, grounded hinge
-	# posts and packed lane in one frame instead of flattening the gate head-on.
 	var west:Dictionary=gate("west-work");focus_at(west.center,Vector3(-7.5,6.2,4.8),6.3);await snap("west-work-gate")
 	var east:Dictionary=gate("east-work");focus_at(east.center,Vector3(7.5,6.2,4.8),6.3);await snap("east-work-gate")
-	for row in [["river--9.0","west",Vector3(3.6,5.4,6.2)],["river-1.5","centre",Vector3(2.8,5.4,6.2)],["river-10.0","east",Vector3(-3.6,5.4,6.2)]]:
-		var g:Dictionary=gate(row[0]);focus_at(g.center,row[2],5.7);await snap("river-gate-"+String(row[1]))
+
+	# Formal T03 river-gate evidence contract. Each gate gets four independent
+	# views, all derived from the same gate geometry that drives leaves/routes.
+	for contract in Boundary.river_gate_contracts():
+		var center:Vector2=contract.center
+		var inward:Vector2=contract.inward
+		var tangent:Vector2=contract.tangent
+		var slug:=String(contract.slug)
+		var approach_offset:Vector2=-inward*5.8+tangent*.8
+		focus_at(center,offset3(approach_offset,4.8),6.6)
+		await snap("river-gate-"+slug+"-approach");tag_river_evidence(contract,"river-side-approach")
+		var threshold_offset:Vector2=-inward*4.0+tangent*2.4
+		focus_at(center,offset3(threshold_offset,5.2),5.7)
+		await snap("river-gate-"+slug);tag_river_evidence(contract,"threshold-three-quarter")
+		var camp_offset:Vector2=inward*4.6-tangent*1.0
+		focus_at(center,offset3(camp_offset,4.7),5.9)
+		await snap("river-gate-"+slug+"-camp-side");tag_river_evidence(contract,"camp-side-outward")
+		normal_at(Vector2(contract.outside))
+		await snap("gameplay-river-gate-"+slug);tag_river_evidence(contract,"gameplay-scale")
+
 	for row in [[-8.0,"west"],[1.5,"centre"],[9.0,"east"]]:
 		var p:=Boundary.south_point(float(row[0]));focus_at(p,Vector3(0,7,9),7.4);await snap("south-fence-"+String(row[1]))
 	for row in [[Vector2(0,7.2),"central-spine-north"],[Vector2(0,2.4),"central-spine-centre"]]:
@@ -45,7 +69,6 @@ func capture_gallery():
 	normal_at(Vector2(0,7.0));await snap("gameplay-north-gate")
 	normal_at(Vector2(-10.4,2.4));await snap("gameplay-west-gate")
 	normal_at(Vector2(10.4,2.4));await snap("gameplay-east-gate")
-	normal_at(Boundary.bank_lane_point(1.5));await snap("gameplay-river-gate-centre")
 	focus_at(Vector2(1.0,-1.5),Vector3(0,31,.01),22.5);await snap("reserved-crossings-overhead")
 	# Same camera and held unrelated animation poses for condition comparison only.
 	focus_at(Vector2(0,2.0),Vector3(16,20,19),17.0)
@@ -60,8 +83,11 @@ func capture_native():
 	var north:Dictionary=gate("north-main");focus_at(north.center,Vector3(0,7,9),7.3);await snap("native-north-gate")
 	var west:Dictionary=gate("west-work");focus_at(west.center,Vector3(-7.5,6.2,4.8),6.3);await snap("native-side-gate-west")
 	var east:Dictionary=gate("east-work");focus_at(east.center,Vector3(7.5,6.2,4.8),6.3);await snap("native-side-gate-east")
-	for id_name in [["river--9.0","west",Vector3(3.6,5.4,6.2)],["river-1.5","centre",Vector3(2.8,5.4,6.2)],["river-10.0","east",Vector3(-3.6,5.4,6.2)]]:
-		var g:Dictionary=gate(id_name[0]);focus_at(g.center,id_name[2],5.7);await snap("native-river-gate-"+String(id_name[1]))
+	for contract in Boundary.river_gate_contracts():
+		var inward:Vector2=contract.inward;var tangent:Vector2=contract.tangent
+		var threshold_offset:Vector2=-inward*4.0+tangent*2.4
+		focus_at(Vector2(contract.center),offset3(threshold_offset,5.2),5.7)
+		await snap("native-river-gate-"+String(contract.slug))
 	focus_at(Boundary.south_point(1.5),Vector3(0,7,9),7.4);await snap("native-south-fence")
 	focus_at(Vector2(0,2.0),Vector3(0,31,.01),22.0);await snap("native-lane-network")
 	var panel:Dictionary=Boundary.panel_specs()[5];focus_at(panel.mid,Vector3(0,4.0,4.6),4.1);await snap("native-fence-detail")
