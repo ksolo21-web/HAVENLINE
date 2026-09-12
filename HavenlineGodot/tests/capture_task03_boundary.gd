@@ -25,13 +25,14 @@ func river_camera_profile(slug:String,kind:String)->Dictionary:
 	# Evidence cameras are T03-only disclosed QA viewpoints. The east river gate
 	# has permanent cabin/tree/rock context close to the threshold, so the generic
 	# tangential offsets can hide an open leaf or the route behind authored scene
-	# geometry. Its profile uses the opposite shoulder and a closer camp-side
-	# station; runtime gameplay camera behavior remains untouched.
+	# geometry. Its profile uses an elevated resource-clear shoulder: the rock and
+	# tree stay honestly visible, but no longer project across the gate aperture.
+	# Runtime gameplay camera behavior remains untouched.
 	if slug=="east":
 		match kind:
-			"river-side-approach":return {"inward":-4.5,"tangent":-1.6,"height":4.8,"size":5.7,"profile":"east-unoccluded-v1"}
-			"threshold-three-quarter":return {"inward":-3.2,"tangent":-1.6,"height":5.0,"size":5.1,"profile":"east-unoccluded-v1"}
-			"camp-side-outward":return {"inward":2.8,"tangent":1.8,"height":4.4,"size":5.0,"profile":"east-unoccluded-v1"}
+			"river-side-approach":return {"inward":-5.2,"tangent":3.2,"height":8.0,"size":7.0,"profile":"east-unoccluded-v2"}
+			"threshold-three-quarter":return {"inward":-3.8,"tangent":3.0,"height":7.8,"size":6.2,"profile":"east-unoccluded-v2"}
+			"camp-side-outward":return {"inward":3.8,"tangent":3.0,"height":7.6,"size":6.2,"profile":"east-unoccluded-v2"}
 	match kind:
 		"river-side-approach":return {"inward":-5.8,"tangent":.8,"height":4.8,"size":6.6,"profile":"standard-v1"}
 		"threshold-three-quarter":return {"inward":-4.0,"tangent":2.4,"height":5.2,"size":5.7,"profile":"standard-v1"}
