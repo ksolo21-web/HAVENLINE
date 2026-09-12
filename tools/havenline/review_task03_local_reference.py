@@ -98,7 +98,7 @@ def query(image,prompt,schema,name,max_tokens=650):
  reqbody={'model':'T03-local-'+ROLE,'messages':[{'role':'user','content':[{'type':'image_url','image_url':{'url':'data:image/jpeg;base64,'+base64.b64encode(data).decode()}},{'type':'text','text':prompt}]}],'max_tokens':max_tokens,'temperature':.25,'top_p':.9,'seed':20260911+SHARD+(0 if ROLE=='reference-fidelity' else 100),'chat_template_kwargs':{'enable_thinking':False},'response_format':{'type':'json_object','schema':schema},'cache_prompt':False}
  (OUT/(name+'-request.json')).write_text(json.dumps({'model':reqbody['model'],'prompt':prompt,'schema':schema,'image_sha256':hashlib.sha256(data).hexdigest(),'original_size':original,'input_size':im.size},indent=2,default=list))
  start=time.monotonic();req=urllib.request.Request('http://127.0.0.1:8080/v1/chat/completions',data=json.dumps(reqbody).encode(),headers={'Content-Type':'application/json'},method='POST')
- with urllib.request.urlopen(req,timeout=900) as resp:result=json.load(resp)
+ with urllib.request.urlopen(req,timeout=1200) as resp:result=json.load(resp)
  (OUT/(name+'-raw.json')).write_text(json.dumps(result,indent=2));choice=result['choices'][0];assert choice['finish_reason']=='stop','Truncated '+name
  content=choice['message']['content'];(OUT/(name+'-raw.txt')).write_text(content);return json.loads(content),round(time.monotonic()-start,3)
 

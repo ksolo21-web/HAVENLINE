@@ -63,7 +63,7 @@ func run():
 	for gate in gates:
 		var center:Vector2=gate.center;var inward:Vector2=(Boundary.CAMP_CENTER-center).normalized()
 		var inside:=center+inward*1.15;var outside:=center-inward*1.15
-		if gate.kind=="river":outside=Boundary.bank_lane_point(float(gate.reserve_x))
+		if gate.kind=="river":outside=Boundary.river_approach_point(float(gate.reserve_x))
 		for sprint in [false,true]:
 			sim.position=inside;sim.velocity=Vector2.ZERO
 			var out_ok:=run_to(sim,outside,sprint,900)
@@ -113,13 +113,13 @@ func run():
 		river_authority_ok=river_authority_ok and String(contract.authority_id)==Boundary.GATE_AUTHORITY_ID
 		river_authority_ok=river_authority_ok and float(contract.visual_clear_width)>=Boundary.RIVER_VISUAL_CLEARANCE_MIN
 		river_authority_ok=river_authority_ok and float(contract.width)>=3.4-.001 and float(contract.collision_reserved_width)==3.0
-		river_authority_ok=river_authority_ok and route.size()==3 and Vector2(route[1]).distance_to(Vector2(contract.center))<.001
-		river_authority_ok=river_authority_ok and Vector2(route[0]).distance_to(Boundary.bank_lane_point(float(contract.reserve_x)))<.001
+		river_authority_ok=river_authority_ok and route.size()==4 and Vector2(route[2]).distance_to(Vector2(contract.center))<.001
+		river_authority_ok=river_authority_ok and Vector2(route[0]).distance_to(Boundary.river_approach_point(float(contract.reserve_x)))<.001 and Vector2(route[1]).distance_to(Boundary.bank_lane_point(float(contract.reserve_x)))<.001
 		for kind in Boundary.RIVER_EVIDENCE_KINDS:
 			var eid:=String(contract.evidence_ids[kind]);evidence_ids[eid]=true
 	check("River gates share authoritative geometry for visual clearance routes and evidence",river_authority_ok and evidence_ids.size()==12 and evidence.required_river_gate_evidence_ids.size()==12 and evidence.all_river_visual_clearance_pass)
-	check("Authored fence roots are deliberately sunk into terrain",is_equal_approx(float(desc.fence_root_sink),.08))
-	check("Fence joins open leaves and river posts preserve strong terrain contact and threshold readability without changing collision",is_equal_approx(float(desc.visual_join_overlap),.10) and is_equal_approx(float(desc.visual_corner_join_overlap),.28) and is_equal_approx(float(desc.gate_leaf_root_sink),.30) and is_equal_approx(float(desc.gate_leaf_hinge_sink),.08) and int(desc.terrain_seat_samples)==7 and desc.terrain_crown_applied_to_gate_leaves_only and is_equal_approx(float(desc.river_gate_post_scale),1.35))
+	check("Authored fence roots are deliberately sunk into terrain",is_equal_approx(float(desc.fence_root_sink),.12))
+	check("Fence joins open leaves and river posts preserve strong terrain contact and threshold readability without changing collision",is_equal_approx(float(desc.visual_join_overlap),.10) and is_equal_approx(float(desc.visual_corner_join_overlap),.28) and is_equal_approx(float(desc.gate_hinge_overlap),.12) and is_equal_approx(float(desc.gate_leaf_root_sink),.36) and is_equal_approx(float(desc.gate_leaf_hinge_sink),.12) and int(desc.terrain_seat_samples)==7 and desc.terrain_crown_applied_to_gate_leaves_only and is_equal_approx(float(desc.river_gate_post_scale),1.50) and is_equal_approx(float(desc.work_gate_post_scale),1.20))
 	var zero_progress_hidden:=true
 	for side in game.sim.defenses:
 		zero_progress_hidden=zero_progress_hidden and not game.defense_visuals[side].visible

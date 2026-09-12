@@ -60,22 +60,27 @@ void fragment(){
  // Both terms remain inside the authored route SDF on the terrain itself.
  float packed_macro=material_noise(p*.68+vec2(4.7,-2.1));
  float packed_mid=material_noise(p*2.15+vec2(-1.3,3.8));
- float packed_compression=smoothstep(.16,.84,packed_macro*.68+packed_mid*.32);
- vec3 packed_snow=mix(vec3(.24,.34,.45),vec3(.56,.65,.72),packed_compression);
+ float packed_compression=smoothstep(.12,.86,packed_macro*.68+packed_mid*.32);
+ // Dirty neutral compression separates the travelled corridor from the blue
+ // river shoulder at gameplay scale; macro clumps and scuffs prevent a flat strip.
+ vec3 packed_snow=mix(vec3(.27,.31,.32),vec3(.61,.62,.60),packed_compression);
  packed_snow+=vec3(.030,.028,.025)*fine*detail_weight;
- float packed_scuff=smoothstep(.58,.82,material_noise(p*3.35+vec2(2.2,5.1)));
- packed_snow*=1.-packed_scuff*.14;
- packed_snow+=vec3(.045,.031,.019)*(packed_mid-.5);
- float packed_core=1.-smoothstep(-.84,-.30,lane_edge_d);
- packed_snow*=1.-packed_core*(.14+packed_mid*.08);
+ float packed_scuff=smoothstep(.50,.78,material_noise(p*3.35+vec2(2.2,5.1)));
+ float packed_clump=smoothstep(.43,.72,material_noise(p*1.28+vec2(-5.4,1.7)));
+ packed_snow*=1.-packed_scuff*.22;
+ packed_snow=mix(packed_snow,vec3(.34,.29,.23),packed_clump*.26);
+ packed_snow+=vec3(.060,.041,.024)*(packed_mid-.5);
+ float packed_core=1.-smoothstep(-.76,-.24,lane_edge_d);
+ packed_snow*=1.-packed_core*(.22+packed_mid*.10);
  // Warm-ground wear stays clearly related to the existing camp floor, but is
  // compressed/duller so the same route can be followed across the snow/floor join.
- vec3 packed_floor=mix(floor*.47+vec3(.055,.034,.025),floor*.63+vec3(.035,.022,.017),packed_compression);
- packed_floor*=1.-packed_scuff*.10;
- packed_floor+=vec3(.035,.022,.014)*(packed_mid-.5);
- packed_floor*=1.-packed_core*(.11+packed_mid*.06);
+ vec3 packed_floor=mix(floor*.43+vec3(.052,.032,.023),floor*.66+vec3(.030,.019,.014),packed_compression);
+ packed_floor*=1.-packed_scuff*.16;
+ packed_floor=mix(packed_floor,packed_floor*vec3(.84,.79,.72),packed_clump*.24);
+ packed_floor+=vec3(.052,.033,.019)*(packed_mid-.5);
+ packed_floor*=1.-packed_core*(.17+packed_mid*.08);
  vec3 packed=mix(packed_snow,packed_floor,cleared);
- float wear=clamp(.74+material_noise(p*2.05)*.20+material_noise(p*5.1)*.08,.66,1.0);
+ float wear=clamp(.84+material_noise(p*2.05)*.12+material_noise(p*5.1)*.06,.82,1.0);
  material=mix(material,packed,lane_mask*.97*wear);
  float lane_edge=(1.-smoothstep(.08,.38,abs(lane_edge_d)))*smoothstep(-.10,.018,abs(lane_edge_d));
  material=mix(material,material*.87,lane_edge*.48);

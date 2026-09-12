@@ -32,6 +32,7 @@ const RIVER_VISUAL_CLEARANCE_MIN := 3.20
 # the three future-crossing entrances read as intentional gates in snow.
 const RIVER_LANE_HALF := 1.55
 const RIVER_APRON_INSET := 0.55
+const RIVER_APPROACH_MARGIN := River.DEFAULT_DRY_MARGIN
 const SOUTH_FENCE_MARGIN := River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER+River.BUILD_SETBACK
 const LANE_HALF := 1.30
 const BANK_LANE_MARGIN := River.DEFAULT_DRY_MARGIN+0.55
@@ -75,11 +76,19 @@ static func south_point(x:float)->Vector2:
 	return Vector2(clamped,z)
 
 static func bank_lane_point(x:float)->Vector2:
+	return _north_shore_point(x,BANK_LANE_MARGIN)
+
+static func river_approach_point(x:float)->Vector2:
+	# Carry the worn threshold to the authoritative dry edge. This leaves the
+	# river itself untouched while making the future crossing direction visible.
+	return _north_shore_point(x,RIVER_APPROACH_MARGIN)
+
+static func _north_shore_point(x:float,margin:float)->Vector2:
 	var clamped:=clampf(x,-SIDE_X,SIDE_X);var center:=River.center_at_x(clamped)
-	var z:=center.y+River.width_at_x(clamped)*.5+BANK_LANE_MARGIN
+	var z:=center.y+River.width_at_x(clamped)*.5+margin
 	for _i in range(8):
 		var p:=Vector2(clamped,z);var q:=River.query(p)
-		var error:=BANK_LANE_MARGIN-float(q.shore_distance)
+		var error:=margin-float(q.shore_distance)
 		if absf(error)<0.0001:break
 		z+=error/maxf(absf(Vector2(q.north_normal).y),0.55)
 	return Vector2(clamped,z)
@@ -163,8 +172,9 @@ static func _river_apron(gate:Dictionary)->Array[Vector2]:
 	# which did not visually communicate an approach/entrance.
 	var center:Vector2=gate.center
 	var inward:=(CAMP_CENTER-center).normalized()
-	var outside:=bank_lane_point(float(gate.reserve_x))
-	return [outside,center,center+inward*2.20]
+	var approach:=river_approach_point(float(gate.reserve_x))
+	var bank:=bank_lane_point(float(gate.reserve_x))
+	return [approach,bank,center,center+inward*2.20]
 
 static func _river_slug(x:float)->String:
 	if is_equal_approx(x,-9.0):return "west"
@@ -287,6 +297,7 @@ static func evidence()->Dictionary:
 		"gate_leaf_length":GATE_LEAF_LENGTH,"gate_open_angle":GATE_OPEN_ANGLE,
 		"river_gate_leaf_length":RIVER_GATE_LEAF_LENGTH,"river_gate_open_angle":RIVER_GATE_OPEN_ANGLE,
 		"river_lane_half_width":RIVER_LANE_HALF,"river_apron_inset":RIVER_APRON_INSET,
+		"river_approach_margin":RIVER_APPROACH_MARGIN,
 		"river_visual_clearance_min":RIVER_VISUAL_CLEARANCE_MIN,"all_river_visual_clearance_pass":visual_clearance_pass,
 		"river_gate_contracts":contract_evidence,"required_river_gate_evidence_ids":evidence_ids,
 		"gate_authority_id":GATE_AUTHORITY_ID,"lane_ids":lane_polylines().map(func(row):return row.id),

@@ -38,6 +38,11 @@
       "commit": "f6848e8f1cc1c32dc78348afbd6b33077176d376",
       "status": "REJECTED",
       "reason": "reference-fidelity river-gates minimum 7.5: deep uniform leaf seating weakened hinge joinery, threshold hierarchy remained inconsistent and worn aprons lacked a continuous compressed core"
+    },
+    {
+      "commit": "e33dd79d2e28869ee282554309e73a8c7682ac49",
+      "status": "REJECTED",
+      "reason": "both critic roles rejected river-gates at minimum 7.0: the packed corridor still blended into the river bank, threshold leaves/posts lacked consistent gameplay hierarchy and river fence contact remained weak; visual-integrity gameplay also failed strict >9.0 at 9.0, while two unrelated shards timed out incomplete"
     }
   ],
   "repair_range": {
@@ -125,6 +130,40 @@
       "required_proof": ["north-gate", "central-lane", "gameplay"],
       "repair_commit": "SELF",
       "verification_evidence": ["gallery/north-gate-front.png", "gallery/north-gate-rear.png", "gallery/open-gate-leaves-detail.png"],
+      "status": "READY_FOR_VERIFICATION",
+      "counters": {"review_round_count": 1, "same_root_cause_count": 1, "evidence_only_attempt_count": 0, "production_repair_count": 1}
+    },
+    {
+      "defect_id": "T03-RG-004",
+      "critic_source": "run 34712351031 / reference-fidelity + visual-integrity / river-gates",
+      "visible_symptom": "all three river approaches still read as broad flat bank tint instead of a compressed route with a clear threshold and visible continuation toward the river",
+      "triage": "VALID_PRODUCTION_DEFECT",
+      "affected_production_object": "river apron route geometry, continuous packed-lane terrain material, open leaf contact and authored threshold posts",
+      "probable_root_cause": "the route terminated at the inner bank lane, its compressed material retained too much blue-grey bank similarity, and threshold/contact silhouettes remained too small at gameplay scale",
+      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary.gd", "HavenlineGodot/scripts/camp_boundary_view.gd", "HavenlineGodot/shaders/outpost_snow.gdshader"],
+      "evidence_files_showing_defect": ["gallery/river-gate-west-approach.png", "gallery/river-gate-centre.png", "gallery/river-gate-east-approach.png", "gallery/gameplay-river-gate-centre.png"],
+      "production_change": "extend each existing apron from camp through the gate to the authoritative dry edge, increase neutral dirty-snow macro compression and scuffs inside the same route SDF, deepen fence/leaf seating, overlap leaf hinges into fixed panels and scale the existing river threshold posts to 1.50",
+      "expected_visible_result": "each river entrance reads without captions as camp lane, grounded open gate, compressed threshold and dry future-crossing approach",
+      "required_proof": ["river-gate/west/river-side-approach", "river-gate/centre/threshold-three-quarter", "river-gate/east/camp-side-outward", "river-gate/centre/gameplay-scale"],
+      "repair_commit": "SELF",
+      "verification_evidence": ["river-gate/west/gameplay-scale", "river-gate/centre/gameplay-scale", "river-gate/east/gameplay-scale"],
+      "status": "READY_FOR_VERIFICATION",
+      "counters": {"review_round_count": 5, "same_root_cause_count": 5, "evidence_only_attempt_count": 1, "production_repair_count": 4}
+    },
+    {
+      "defect_id": "T03-GP-001",
+      "critic_source": "run 34712351031 / visual-integrity / gameplay",
+      "visible_symptom": "the east work-gate threshold post is weak at gameplay scale and the centre river leaf-to-panel join shows a small visual discontinuity",
+      "triage": "VALID_PRODUCTION_DEFECT",
+      "affected_production_object": "authored work-gate lantern posts and open gate leaf hinge/contact transforms",
+      "probable_root_cause": "standard work-post scale loses hierarchy beside nearby scenery while zero leaf overlap exposes the authored mesh end at the hinge",
+      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary_view.gd"],
+      "evidence_files_showing_defect": ["gallery/gameplay-east-gate.png", "gallery/gameplay-river-gate-centre.png"],
+      "production_change": "scale existing work-gate lantern posts to 1.20, add a 0.12 visual hinge overlap, and preserve a shared 0.12 hinge/fixed-panel root sink",
+      "expected_visible_result": "the east work threshold remains obvious beside scenery and every open leaf visibly joins its fixed fence panel",
+      "required_proof": ["gameplay", "detail-contact", "river-gate/centre/gameplay-scale"],
+      "repair_commit": "SELF",
+      "verification_evidence": ["gallery/gameplay-east-gate.png", "gallery/open-gate-leaves-detail.png", "river-gate/centre/gameplay-scale"],
       "status": "READY_FOR_VERIFICATION",
       "counters": {"review_round_count": 1, "same_root_cause_count": 1, "evidence_only_attempt_count": 0, "production_repair_count": 1}
     }

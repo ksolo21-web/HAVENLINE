@@ -7,12 +7,14 @@ const Scenery=preload("res://scripts/scenery_batch.gd")
 # Slightly deeper seating and a tiny visual-only overlap remove daylight slivers
 # at joints on uneven/curved terrain. Collision still uses Boundary.panel_specs()
 # exactly, so openings and gameplay widths do not change.
-const FENCE_ROOT_SINK := 0.08
+const FENCE_ROOT_SINK := 0.12
 const VISUAL_JOIN_OVERLAP := 0.10
 const VISUAL_CORNER_JOIN_OVERLAP := 0.28
-const GATE_LEAF_ROOT_SINK := 0.30
+const GATE_HINGE_OVERLAP := 0.12
+const GATE_LEAF_ROOT_SINK := 0.36
 const TERRAIN_SEAT_SAMPLES := 7
-const RIVER_GATE_POST_SCALE := 1.35
+const WORK_GATE_POST_SCALE := 1.20
+const RIVER_GATE_POST_SCALE := 1.50
 var fence_batch:MultiMeshInstance3D
 var post_batch:MultiMeshInstance3D
 var descriptor:Dictionary={}
@@ -64,13 +66,13 @@ func configure(game):
 		var overlap:=VISUAL_JOIN_OVERLAP
 		if south_corners.any(func(c):return Vector2(panel.a).distance_to(c)<.01 or Vector2(panel.b).distance_to(c)<.01):overlap=VISUAL_CORNER_JOIN_OVERLAP
 		fence_transforms.append(_segment_transform(panel.a,panel.b,overlap))
-	for leaf in Boundary.gate_leaf_specs():fence_transforms.append(_segment_transform(leaf.a,leaf.b,0.0,FENCE_ROOT_SINK,GATE_LEAF_ROOT_SINK,true))
+	for leaf in Boundary.gate_leaf_specs():fence_transforms.append(_segment_transform(leaf.a,leaf.b,GATE_HINGE_OVERLAP,FENCE_ROOT_SINK,GATE_LEAF_ROOT_SINK,true))
 	fence_batch=Scenery.instances(_mesh(game,"world/barricade"),fence_transforms,self)
 	fence_batch.name="AuthoredTimberFenceAndOpenGateLeaves"
 	var post_transforms:Array[Transform3D]=[]
 	for gate in Boundary.gate_specs():
 		var tangent:Vector2=gate.tangent
-		var post_scale:=RIVER_GATE_POST_SCALE if gate.kind=="river" else 1.0
+		var post_scale:=RIVER_GATE_POST_SCALE if gate.kind=="river" else (WORK_GATE_POST_SCALE if gate.kind=="work" else 1.0)
 		post_transforms.append(_post_transform(gate.a,tangent,post_scale))
 		post_transforms.append(_post_transform(gate.b,tangent,post_scale))
 	post_batch=Scenery.instances(_mesh(game,"world/lantern_post"),post_transforms,self)
@@ -86,10 +88,12 @@ func configure(game):
 	descriptor["fence_root_sink"]=FENCE_ROOT_SINK
 	descriptor["visual_join_overlap"]=VISUAL_JOIN_OVERLAP
 	descriptor["visual_corner_join_overlap"]=VISUAL_CORNER_JOIN_OVERLAP
+	descriptor["gate_hinge_overlap"]=GATE_HINGE_OVERLAP
 	descriptor["gate_leaf_root_sink"]=GATE_LEAF_ROOT_SINK
 	descriptor["gate_leaf_hinge_sink"]=FENCE_ROOT_SINK
 	descriptor["terrain_seat_samples"]=TERRAIN_SEAT_SAMPLES
 	descriptor["terrain_crown_applied_to_gate_leaves_only"]=true
 	descriptor["river_gate_post_scale"]=RIVER_GATE_POST_SCALE
+	descriptor["work_gate_post_scale"]=WORK_GATE_POST_SCALE
 	descriptor["primitive_fence_meshes_created"]=false
 	descriptor["draw_batches"]=2
