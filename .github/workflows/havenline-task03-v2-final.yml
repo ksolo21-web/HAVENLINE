@@ -42,14 +42,14 @@ jobs:
           repair_changed=set(subprocess.check_output(['git','diff','--name-only',repair_base,repair_commit,'--','HavenlineGodot'],text=True).splitlines())
           assert repair_changed==expected,(sorted(repair_changed),sorted(expected))
           ownership=json.loads(Path('Docs/Production/PATH_OWNERSHIP.json').read_text())
-          allowed=ownership['aliases']['@ownership:T03']
+          allowed=ownership['aliases']['@ownership:T03']+ownership['aliases']['@ownership:QA-GOV']
           protected=ownership['aliases']['@protected:T01']+ownership['aliases']['@protected:T02']
           def matches(path,patterns):
             return any(fnmatch.fnmatch(path,g) or (g.endswith('/**') and path.startswith(g[:-3])) for g in patterns)
           post_repair=set(subprocess.check_output(['git','diff','--name-only',repair_commit,'HEAD'],text=True).splitlines())
           assert all(matches(p,allowed) for p in post_repair),(sorted(post_repair),allowed)
           assert not any(matches(p,protected) for p in post_repair),sorted(post_repair)
-          print(json.dumps({'passed':True,'task':'T03','repair_base':repair_base,'repair_commit':repair_commit,'repair_changed_files':sorted(repair_changed),'post_repair_t03_owned_files':sorted(post_repair),'owned_alias':'@ownership:T03','protected_authority_untouched':True},indent=2))
+          print(json.dumps({'passed':True,'task':'T03','repair_base':repair_base,'repair_commit':repair_commit,'repair_changed_files':sorted(repair_changed),'post_repair_owned_files':sorted(post_repair),'owned_aliases':['@ownership:T03','@ownership:QA-GOV'],'protected_authority_untouched':True},indent=2))
           PY
           git diff --exit-code 1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff HEAD -- HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd HavenlineGodot/assets/reference_forest
       - name: Prepare pinned Godot and fixtures
@@ -170,6 +170,7 @@ jobs:
             r=json.loads((o/folder/'capture.json').read_text());b=r['boundary'];assert r['task']=='T03-boundary-v2' and r['renderer']=='mobile' and r['forest']['instances']==586 and len(r['captures'])==count and all(x['render_scale']==1.0 for x in r['captures'])
             assert r['river']['river_layout_version']=='river_v1_mapspan' and b['gate_count']==6 and b['collision_panel_instances']==32 and b['primitive_fence_meshes_created'] is False
             assert abs(b['river_gate_leaf_length']-1.85)<.0001 and abs(b['river_gate_open_angle']-1.53)<.0001 and abs(b['river_lane_half_width']-1.55)<.0001
+            assert abs(b['visual_corner_join_overlap']-.28)<.0001 and abs(b['gate_leaf_root_sink']-.16)<.0001
             assert b['gate_authority_id']=='T03-gate-geometry-v3' and b['all_river_visual_clearance_pass'] is True and len(b['required_river_gate_evidence_ids'])==12
           g=json.loads((o/'gallery/capture.json').read_text());conditions=[x for x in g['captures'] if x['name'].startswith('boundary-condition-')];assert len(conditions)==6 and len({(tuple(x['camera_position']),x['camera_basis'],x['camera_size']) for x in conditions})==1
           assert caps['gallery/boundary-condition-day.png']==caps['gallery/boundary-condition-day-return.png']

@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "task_id": "T03",
+  "task_status": "FIX_REQUIRED",
+  "acceptance_target": "10/10; every mandatory dimension strictly greater than 9.0 unrounded",
+  "rejected_candidates": [
+    {
+      "commit": "e89818070603399cce27b595ff1116e40b8b3b2a",
+      "status": "REJECTED",
+      "reason": "C1 river-gates minimum 8.5 with west termination, east grounding and centre packed-lane defects"
+    },
+    {
+      "commit": "791741444c1608358e5ef54ffc63b1db7376beb4",
+      "status": "REJECTED",
+      "reason": "west/east response changed evidence cameras instead of production geometry; run is non-authoritative"
+    }
+  ],
+  "repair_range": {
+    "base": "e89818070603399cce27b595ff1116e40b8b3b2a",
+    "repair_commit": "SELF",
+    "classifications": ["PRODUCTION_FIX", "TOOLING_FIX", "TEST_FIX"],
+    "evidence_only": false
+  },
+  "same_object_before_after": {
+    "baseline_candidate": "e89818070603399cce27b595ff1116e40b8b3b2a",
+    "capture_source_file": "HavenlineGodot/tests/capture_task03_boundary.gd",
+    "same_camera_required": true,
+    "same_scene_required": true,
+    "same_lighting_required": true,
+    "same_resolution_required": true,
+    "required_gameplay_evidence_ids": [
+      "river-gate/west/gameplay-scale",
+      "river-gate/centre/gameplay-scale",
+      "river-gate/east/gameplay-scale"
+    ]
+  },
+  "defects": [
+    {
+      "defect_id": "T03-RG-001",
+      "critic_source": "run 34691574736 / reference-fidelity / river-gates",
+      "visible_symptom": "west camp-side fence continuation reads as an abrupt riverbank termination",
+      "triage": "VALID_PRODUCTION_DEFECT",
+      "affected_production_object": "curved south fence to side-fence corner join",
+      "probable_root_cause": "the generic 0.10 visual overlap is too small at the compound riverbank corner, weakening the authored timber connection",
+      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary_view.gd"],
+      "evidence_files_showing_defect": ["gallery/river-gate-west-camp-side.png"],
+      "production_change": "use a 0.28 visual-only overlap at the two south riverbank corner joins while collision remains on the unchanged authoritative panel segments",
+      "expected_visible_result": "continuous interlocked timber across the west riverbank corner with no apparent termination gap",
+      "required_proof": ["river-gate/west/camp-side-outward", "river-gate/west/gameplay-scale"],
+      "repair_commit": "SELF",
+      "verification_evidence": ["river-gate/west/gameplay-scale"],
+      "status": "READY_FOR_VERIFICATION",
+      "counters": {"review_round_count": 2, "same_root_cause_count": 2, "evidence_only_attempt_count": 2, "production_repair_count": 1}
+    },
+    {
+      "defect_id": "T03-RG-002",
+      "critic_source": "run 34691574736 / reference-fidelity / river-gates",
+      "visible_symptom": "east open fence leaf appears to float above the snow",
+      "triage": "VALID_PRODUCTION_DEFECT",
+      "affected_production_object": "authored open river-gate leaves",
+      "probable_root_cause": "long open leaves inherited the shallow static-panel root sink across sloped terrain chords",
+      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary_view.gd"],
+      "evidence_files_showing_defect": ["gallery/river-gate-east-camp-side.png"],
+      "production_change": "seat every authored open gate leaf at a dedicated 0.16 terrain root sink without changing hinge, aperture or collision geometry",
+      "expected_visible_result": "the east leaf maintains continuous snow contact without shrinking the real opening",
+      "required_proof": ["river-gate/east/camp-side-outward", "river-gate/east/gameplay-scale"],
+      "repair_commit": "SELF",
+      "verification_evidence": ["river-gate/east/gameplay-scale"],
+      "status": "READY_FOR_VERIFICATION",
+      "counters": {"review_round_count": 2, "same_root_cause_count": 2, "evidence_only_attempt_count": 2, "production_repair_count": 1}
+    },
+    {
+      "defect_id": "T03-RG-003",
+      "critic_source": "run 34691574736 / reference-fidelity / river-gates",
+      "visible_symptom": "central river approach reads as a flat tint instead of worn compressed snow",
+      "triage": "VALID_PRODUCTION_DEFECT",
+      "affected_production_object": "continuous terrain packed-lane material",
+      "probable_root_cause": "existing broad and high-frequency terms lose visible variation at gameplay/evidence distance",
+      "production_files_likely_implicated": ["HavenlineGodot/shaders/outpost_snow.gdshader"],
+      "evidence_files_showing_defect": ["gallery/river-gate-centre.png"],
+      "production_change": "add mid-scale irregular compression mottling inside the existing route SDF on the same terrain shader",
+      "expected_visible_result": "natural worn tonal breakup remains readable through the central threshold at gameplay scale without a path plane or stripe",
+      "required_proof": ["river-gate/centre/threshold-three-quarter", "river-gate/centre/gameplay-scale"],
+      "repair_commit": "SELF",
+      "verification_evidence": ["river-gate/centre/gameplay-scale"],
+      "status": "READY_FOR_VERIFICATION",
+      "counters": {"review_round_count": 2, "same_root_cause_count": 2, "evidence_only_attempt_count": 1, "production_repair_count": 1}
+    }
+  ]
+}

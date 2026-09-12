@@ -32,14 +32,7 @@ func river_camera_profile(slug:String,kind:String)->Dictionary:
 		match kind:
 			"river-side-approach":return {"inward":-5.2,"tangent":3.2,"height":8.0,"size":7.0,"profile":"east-unoccluded-v2"}
 			"threshold-three-quarter":return {"inward":-3.8,"tangent":3.0,"height":7.8,"size":6.2,"profile":"east-unoccluded-v2"}
-			# Keep the resource-clear shoulder but lower the camp-side view. The
-			# former near-overhead angle hid ground contact and made a seated fence
-			# segment read as floating even though the approach views showed it.
-			"camp-side-outward":return {"inward":3.8,"tangent":3.2,"height":5.4,"size":5.8,"profile":"east-grounding-v3"}
-	if slug=="west" and kind=="camp-side-outward":
-		# Look back from the opposite interior shoulder so the cabin cannot crop
-		# the boundary continuation at the edge of the formal camp-side frame.
-		return {"inward":4.6,"tangent":2.8,"height":5.1,"size":6.1,"profile":"west-termination-v2"}
+			"camp-side-outward":return {"inward":3.8,"tangent":3.0,"height":7.6,"size":6.2,"profile":"east-unoccluded-v2"}
 	match kind:
 		"river-side-approach":return {"inward":-5.8,"tangent":.8,"height":4.8,"size":6.6,"profile":"standard-v1"}
 		"threshold-three-quarter":return {"inward":-4.0,"tangent":2.4,"height":5.2,"size":5.7,"profile":"standard-v1"}
