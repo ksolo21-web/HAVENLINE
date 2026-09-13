@@ -144,11 +144,11 @@ for label, benchmark in (("candidate", candidate_benchmark), ("baseline", baseli
     missing = required_benchmark_fields - set(benchmark)
     if missing:
         errors.append(f"{label} benchmark missing fields: {sorted(missing)}")
-    if benchmark.get("samples", 0) < 300 or benchmark.get("retained_seconds", 0) < 30:
+    if benchmark.get("samples", 0) < 300 or benchmark.get("retained_seconds", 0) < 1200 or benchmark.get("requested_seconds", 0) < 1200:
         errors.append(f"{label} benchmark duration/sample count is insufficient")
     if benchmark.get("native_dimensions_and_scale_maintained") is not True or benchmark.get("fixed_timestep_used") is not False:
         errors.append(f"{label} benchmark was not real elapsed native-4K scale-1 rendering")
-if any(candidate_benchmark.get(key) != baseline_benchmark.get(key) for key in ("renderer", "display_driver", "gpu", "software_renderer")):
+if any(candidate_benchmark.get(key) != baseline_benchmark.get(key) for key in ("renderer", "display_driver", "gpu", "software_renderer", "requested_seconds")):
     errors.append("candidate/baseline benchmark conditions differ")
 if args.candidate_rss_kb <= 0 or args.baseline_rss_kb <= 0:
     errors.append("measured maximum RSS is unavailable")
@@ -223,7 +223,7 @@ record = {
     "storage_download_mb": kit_storage_bytes / (1024 * 1024),
     "cpu_frame_ms": None, "gpu_frame_ms_where_measurable": None,
     "engine_frame_p99_ms": candidate_benchmark["p99_ms"],
-    "measurement_method": "Same Ubuntu runner, pinned Godot 4.7.2, Mobile Vulkan, Xvfb native 4K scale 1, real elapsed 30-second candidate and T04-baseline runs; GNU time maximum RSS; exact matched capture counters; GLB JSON/catalog inspection.",
+    "measurement_method": "Same Ubuntu runner, pinned Godot 4.7.2, Mobile Vulkan, Xvfb native 4K scale 1, real elapsed 20-minute candidate and T04-baseline runs; GNU time maximum RSS; exact matched capture counters; GLB JSON/catalog inspection.",
     "incremental_record": True, "matched_frames": 23,
     "draw_call_delta_min": min(draw_deltas), "draw_call_delta_max": max(draw_deltas),
     "primitive_delta_min": min(primitive_deltas), "primitive_delta_max": max(primitive_deltas),

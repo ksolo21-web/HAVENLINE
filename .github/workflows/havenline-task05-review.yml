@@ -177,7 +177,7 @@ jobs:
     needs: preflight
     if: github.event_name != 'workflow_dispatch' || inputs.mode == 'primary'
     runs-on: ubuntu-24.04
-    timeout-minutes: 55
+    timeout-minutes: 65
     steps:
       - uses: actions/checkout@v4
         with: {fetch-depth: 0}
@@ -220,8 +220,8 @@ jobs:
           cmp candidate-source/HavenlineGodot/scripts/performance_record.gd baseline-source/HavenlineGodot/scripts/performance_record.gd
           timeout 240 "$engine" --headless --editor --path candidate-source/HavenlineGodot --import --quit > candidate-benchmark/import.log 2>&1
           timeout 240 "$engine" --headless --editor --path baseline-source/HavenlineGodot --import --quit > baseline-benchmark/import.log 2>&1
-          /usr/bin/time -v -o candidate-benchmark/time.txt xvfb-run -a -s '-screen 0 3840x2160x24' timeout 300 "$engine" --path candidate-source/HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=30 --benchmark-warmup=5 --benchmark-output="$(pwd)/candidate-benchmark" > candidate-benchmark/run.log 2>&1
-          /usr/bin/time -v -o baseline-benchmark/time.txt xvfb-run -a -s '-screen 0 3840x2160x24' timeout 300 "$engine" --path baseline-source/HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=30 --benchmark-warmup=5 --benchmark-output="$(pwd)/baseline-benchmark" > baseline-benchmark/run.log 2>&1
+          /usr/bin/time -v -o candidate-benchmark/time.txt xvfb-run -a -s '-screen 0 3840x2160x24' timeout 1500 "$engine" --path candidate-source/HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=1200 --benchmark-warmup=5 --benchmark-output="$(pwd)/candidate-benchmark" > candidate-benchmark/run.log 2>&1
+          /usr/bin/time -v -o baseline-benchmark/time.txt xvfb-run -a -s '-screen 0 3840x2160x24' timeout 1500 "$engine" --path baseline-source/HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=1200 --benchmark-warmup=5 --benchmark-output="$(pwd)/baseline-benchmark" > baseline-benchmark/run.log 2>&1
           allowed_baked_errors='^ERROR: Missing baked outpost audio: run tools/havenline/bake_outpost_audio\.py$|^ERROR: Missing baked crew motion: run res://tools/bake_crew_motion\.gd$'
           for log in candidate-benchmark/run.log baseline-benchmark/run.log; do
             grep -E 'SCRIPT ERROR|Parse Error|ERROR:' "$log" | grep -Ev "$allowed_baked_errors" > "$log.unexpected" || true
