@@ -127,7 +127,7 @@
     {
       "task_id": "T05",
       "task_name": "Production station and prop kit",
-      "status": "ASSIGNED",
+      "status": "INTEGRATING",
       "owner": "station-prop-builder",
       "workstream_id": "wave1-props",
       "branch": "havenline/T05-props",
@@ -135,15 +135,22 @@
       "dependencies": ["T03"],
       "owned_paths": ["@reservation:T05"],
       "protected_paths": ["@protected:approved", "@integration-only"],
-      "candidate_commit": null,
-      "candidate_hash_or_artifact": null,
-      "tests": {},
+      "candidate_commit": "8224596250e3cd37df2ea5cb3db3c9328108023c",
+      "candidate_hash_or_artifact": "isolated-run:34760953227 artifact:10319106223 sha256:58920207eeea62d304a35111d918eef4d7c423ff1638c56ddf3a18ce3a735c92",
+      "tests": {
+        "suites": 18,
+        "checks": 1117,
+        "result": "PASS",
+        "formal_family_views": 42,
+        "isolated_gallery_views": 12,
+        "native_4k_views": 3
+      },
       "evidence_path": "Docs/Production/Evidence/T05/",
       "critic_requirements": ["C1", "C2", "C6"],
       "critic_status": {},
-      "integration_status": "assigned; isolated runtime construction not yet started",
+      "integration_status": "INTEGRATING; isolated candidate passed preflight and is wired on the integration branch; fresh integrated 77-frame precritic evidence pending",
       "known_blockers": [],
-      "next_action": "Create the isolated T05 branch from the exact base, validate the baseline, then build only @reservation:T05."
+      "next_action": "Run the exact-source integrated regression, 77-frame pixel/performance preflight, and manual quick-look before invoking C1, C2, or C6."
     },
     {
       "task_id": "T06",

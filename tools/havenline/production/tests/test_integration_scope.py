@@ -42,7 +42,8 @@ class IntegrationScopeTests(unittest.TestCase):
         self.assertEqual(report["task_id"], "T04")
 
     def test_assigned_t05_runtime_cannot_integrate_early(self):
-        report = evaluate(["HavenlineGodot/scripts/station_kit.gd"], self.registry, self.ownership)
+        registry = self.registry_with("T05", "ASSIGNED")
+        report = evaluate(["HavenlineGodot/scripts/station_kit.gd"], registry, self.ownership)
         self.assertFalse(report["passed"])
         self.assertTrue(any("T05 runtime path changed while task state is ASSIGNED" in x for x in report["errors"]))
 

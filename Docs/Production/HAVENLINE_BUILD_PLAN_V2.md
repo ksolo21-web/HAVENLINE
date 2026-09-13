@@ -8,7 +8,7 @@
 - T01 and T02 remain APPROVED at their recorded accepted sources. Their approvals are not revoked by the stricter forward score rule.
 - T03 is APPROVED at accepted gameplay source `5df9726e0b1c33f0f8865385b1c49aca229fd461`.
 - T04 is APPROVED at accepted gameplay source `e08fd37e9a999d878644c03089c4b4b253bd7472`.
-- T05 is assigned as the active isolated workstream at `Docs/Production/T05/FROZEN_SCOPE.md`; T06+ remains locked until separately prepared and assigned.
+- T05 isolated candidate `8224596250e3cd37df2ea5cb3db3c9328108023c` passed preflight and is now INTEGRATING under `Docs/Production/T05/FROZEN_SCOPE.md`; T06+ remains locked until separately prepared and assigned.
 - Forward intermediate PASS requires every applicable mandatory reviewed dimension to be **strictly > 9.0 unrounded**, every mandatory gate to pass, and zero unresolved mandatory defects. Target remains 10/10.
 
 ## Permanent Havenline product contract
@@ -83,7 +83,7 @@ Only the integration owner may integrate production candidates into the integrat
 | T02 | Terrain, snow, warm work-floor and lakeshore | APPROVED |
 | T03 | Fences, gates and navigable work lanes | APPROVED |
 | T04 | Reference camera and automatic screen composition | APPROVED |
-| T05 | Production station and prop kit | ASSIGNED / ACTIVE |
+| T05 | Production station and prop kit | INTEGRATING / ACTIVE |
 | T06 | Character 1 complete movement/interactions | LOCKED |
 | T07 | Havenline Simple Control & Context Director | LOCKED |
 | T08 | Visible inventory, physical carrying and transfers | LOCKED |
@@ -155,7 +155,7 @@ Detailed dependencies and critic applicability are machine-authoritative in `DEP
 ## Parallel Wave 1 after T03 approval
 
 - **Completed A / T04** — approved camera/composition; preserve its accepted source.
-- **Workstream B / `havenline/T05-props`** — active T05 station/prop kit only.
+- **Workstream B / `havenline/T05-props`** — T05 station/prop kit integrated candidate under exact-source precritic validation.
 - **Workstream C / `havenline/T06-character1`** — T06 Character 1 motion only; original C1 model is protected.
 - **Workstream Q** — QA/automation/integration infrastructure only.
 
