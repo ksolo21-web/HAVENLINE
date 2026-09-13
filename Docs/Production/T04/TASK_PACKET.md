@@ -84,8 +84,10 @@ Integration-only paths:
 
 ## Candidate handoff
 
-- Candidate commit: pending
-- Evidence package: pending
-- Known failures: none before construction
-- Unresolved mandatory defects: none before construction
-- Integration wiring request: required for `HavenlineGodot/scripts/main.gd`
+- Candidate commit: `7c3f6e1c43871a424a78ed7590e3c0b153ef9d62`
+- Evidence package: run `34738403369`, artifact `10311871879`
+- Tests: 17 suites / 848 checks, all passing
+- Quick-look: PASS after repairing target occlusion, transient cutaway capture and LFS reference materialization before critics
+- Known failures: none on the authoritative isolated candidate
+- Unresolved mandatory defects: none before integration
+- Integration wiring request: approved in `Docs/Production/ChangeRequests/T04-main-camera.json`

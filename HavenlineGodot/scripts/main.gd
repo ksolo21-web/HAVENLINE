@@ -12,6 +12,7 @@ const OutpostView = preload("res://scripts/outpost_view.gd")
 const Surface = preload("res://scripts/outpost_surface.gd")
 const ActionReadout = preload("res://scripts/action_readout.gd")
 const OutpostAudio = preload("res://scripts/outpost_audio.gd")
+const CameraComposition = preload("res://scripts/camera_composition.gd")
 var outpost_view: Node3D
 var outpost_audio: Node
 var action_readout: Control
@@ -70,6 +71,7 @@ var capture_directory := ""
 var qa_mode := false
 var render_review := false
 var performance_record := FrameRecord.new()
+var camera_composition = CameraComposition.new()
 var merged_cache: Dictionary = {}
 var no_batching := false
 var capture_phase := 0.0
@@ -590,6 +592,11 @@ func _physics_process(dt: float):
 		save_timer = 0
 		Saves.write_state(sim.snapshot())
 
+func camera_action_target() -> Variant:
+	if sim.action.is_empty(): return null
+	var target: Variant = sim.action.get("position")
+	return xyz(target) if target is Vector2 else null
+
 func _process(dt: float):
 	if not is_instance_valid(world): return
 	population_view.pause_animations(paused)
@@ -616,27 +623,42 @@ func _process(dt: float):
 	update_carry()
 	outpost_view.sync(sim, dt, paused)
 	outpost_audio.sync(sim, paused, dt)
-	# Preserve the close zoom; a short look-ahead includes roofs above the player.
-	var focus := xyz(sim.position) + Vector3(0, .95, -3.6)
-	var offset := Vector3(0, 6.8, 8.6)
-	if qa_mode and capture_scenario in ["shelter-detail","shelter-detail-rear"]:
-		focus=xyz(Vector2(-6.6,-4.8))+Vector3(0,1.45,0);camera.size=5.1;offset=Vector3(4,3.6,7)
-	elif qa_mode and capture_scenario == "furnace-detail":
-		focus=xyz(Vector2(0,.2))+Vector3(0,1.0,0);camera.size=3.8;offset=Vector3(4,3.6,7)
-	elif qa_mode and capture_scenario == "tree-detail":
-		focus=xyz(sim.resources[0].position)+Vector3(0,2.35,0);camera.size=6.6;offset=Vector3(4,3.6,7)
-	if qa_mode:
+	var active_camera_focus := xyz(sim.position) + Vector3(0.0, 0.95, 0.0)
+	var qa_camera_override := qa_mode and (capture_scenario in ["shelter-detail","shelter-detail-rear","furnace-detail","tree-detail"] or capture_view != "front")
+	if qa_camera_override:
+		# Keep disclosed evidence-only viewpoints intact. They never run in normal
+		# gameplay and do not replace the automatic shipping composition.
+		var focus := xyz(sim.position) + Vector3(0, .95, -3.6)
+		var offset := Vector3(0, 6.8, 8.6)
+		if capture_scenario in ["shelter-detail","shelter-detail-rear"]:
+			focus=xyz(Vector2(-6.6,-4.8))+Vector3(0,1.45,0);camera.size=5.1;offset=Vector3(4,3.6,7)
+		elif capture_scenario == "furnace-detail":
+			focus=xyz(Vector2(0,.2))+Vector3(0,1.0,0);camera.size=3.8;offset=Vector3(4,3.6,7)
+		elif capture_scenario == "tree-detail":
+			focus=xyz(sim.resources[0].position)+Vector3(0,2.35,0);camera.size=6.6;offset=Vector3(4,3.6,7)
 		if capture_view == "side": offset = Vector3(8.6, 6.8, 0)
 		elif capture_view == "left": offset = Vector3(-8.6, 6.8, 0)
 		elif capture_view == "rear": offset = Vector3(0, 6.8, -8.6)
 		elif capture_view == "three-quarter": offset = Vector3(8.6, 6.8, 8.6)
 		elif capture_view == "overhead": offset = Vector3(0.001, 16.0, 0.001)
-	var desired := focus + offset
-	# Orthographic framing is unchanged when translated along the viewing ray.
-	# Moving the camera back prevents its near plane cutting foreground scenery.
-	desired += offset.normalized() * 18.0
-	camera.position = camera.position.lerp(desired, 1 - exp(-8.6 * dt)) if capture_frames > 0 else desired
-	camera.look_at(focus)
+		var desired := focus + offset + offset.normalized() * 18.0
+		camera.position = camera.position.lerp(desired, 1 - exp(-8.6 * dt)) if capture_frames > 0 else desired
+		camera.look_at(focus)
+		active_camera_focus = focus
+	else:
+		var camera_state := camera_composition.compose(
+			xyz(sim.position),
+			Vector3(sim.velocity.x, 0.0, sim.velocity.y),
+			Vector3(sim.facing.x, 0.0, sim.facing.y),
+			camera_action_target(),
+			size,
+			dt
+		)
+		camera.keep_aspect = camera_state.keep_aspect
+		camera.size = camera_state.full_height
+		camera.position = camera_state.camera_position
+		camera.look_at(camera_state.focus)
+		active_camera_focus = camera_state.focus
 	update_foreground_visibility(xyz(sim.position)+Vector3(0,.95,0), dt)
 	status.text = "HEAT %d   ·   %d carried" % [sim.level, sim.carried()]
 	var hour: float = sim.climate.hour()
@@ -664,7 +686,7 @@ func _process(dt: float):
 		report["environment_kit"] = JSON.parse_string(FileAccess.get_file_as_string("res://assets/environment_v2/manifest.json"))
 		report["foreground_faded"] = foreground_faded
 		report["camera_near"] = camera.near
-		report["camera_focus_distance"] = camera.position.distance_to(focus)
+		report["camera_focus_distance"] = camera.position.distance_to(active_camera_focus)
 		report["npc_population"] = population_view.evidence()
 		report["outpost"] = outpost_view.evidence(sim)
 		report["task03_boundary"] = camp_boundary_view.descriptor

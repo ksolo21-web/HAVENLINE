@@ -78,6 +78,12 @@ func run() -> void:
 	check("Resize widens immediately before content can crop", narrow.full_height >= Composition.full_height_for(Vector2(2208,1768)))
 	check("Resize does not move the selected lead discontinuously", narrow.focus.distance_to(wide.focus) < 0.001)
 
+	var integration_source := FileAccess.get_file_as_string("res://scripts/main.gd")
+	check("Runtime preloads the T04 camera authority", integration_source.contains('const CameraComposition = preload("res://scripts/camera_composition.gd")'))
+	check("Runtime resolves the current contextual action target", integration_source.contains("func camera_action_target() -> Variant:"))
+	check("Normal gameplay calls the bounded composition controller", integration_source.contains("camera_composition.compose("))
+	check("Disclosed QA viewpoints remain explicitly separated", integration_source.contains("var qa_camera_override := qa_mode"))
+
 	print(JSON.stringify({
 		"suite": "T04_reference_camera_composition",
 		"checks": checks,
