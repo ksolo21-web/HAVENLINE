@@ -1,0 +1,127 @@
+{
+  "task": "T03",
+  "title": "Fences, gates and navigable work lanes",
+  "status": "PASS",
+  "accepted_gameplay_source": "5df9726e0b1c33f0f8865385b1c49aca229fd461",
+  "review_governance_source": "71ee598950a0ad71af743537099c3d0d6fa7c1e3",
+  "primary_run": 34730602238,
+  "adjudicated_closeout_run": 34735423968,
+  "acceptance_rule": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9.0,
+    "unrounded": true,
+    "score_averaging_used": false,
+    "target": 10.0
+  },
+  "mechanical_evidence": {
+    "functional_suites": 16,
+    "total_assertions_checks": 807,
+    "all_passed": true,
+    "t01_geometry_checks": 9,
+    "t01_geometry_passed": true,
+    "formal_river_gate_evidence_ids_expected": 12,
+    "formal_river_gate_evidence_ids_present": 12,
+    "source_bound_pngs": 69,
+    "visual_apertures": {
+      "west": 3.509634,
+      "centre": 3.626626,
+      "east": 3.255770,
+      "required_strict_minimum": 3.2
+    },
+    "performance_preflight": {
+      "captured_frames": 58,
+      "maximum_draw_calls": 105,
+      "maximum_submitted_primitives": 654275,
+      "passed": true
+    }
+  },
+  "visual_review": {
+    "status": "PASS_BY_QUORUM",
+    "passed": true,
+    "primary_judgments_expected": 22,
+    "clean_primary_judgments": 18,
+    "raw_scores_modified": false,
+    "completed_low_verdicts_retried": false,
+    "unsupported_coverage_flags_resolved_by_deterministic_evidence": [
+      "reference-fidelity/gameplay",
+      "visual-integrity/bank-lane"
+    ],
+    "adjudicated_groups": {
+      "conditions": {
+        "result": "PASS_BY_2_OF_3_QUORUM",
+        "adjudicator_minimum_score": 10.0
+      },
+      "river-gates": {
+        "result": "PASS_BY_2_OF_3_QUORUM",
+        "adjudicator_minimum_score": 10.0
+      }
+    },
+    "errors": []
+  },
+  "performance_critic": {
+    "critic": "C6",
+    "passed": true,
+    "coverage_complete": true,
+    "confidence": "high",
+    "minimum_mandatory_dimension_score": 9.5,
+    "scores": {
+      "draw_call_batching": 9.5,
+      "geometry_increment": 10.0,
+      "shader_increment": 10.0,
+      "physics_increment": 9.8,
+      "animation_npc_increment": 10.0,
+      "memory_storage_increment": 10.0,
+      "thermal_risk_proxy": 10.0
+    },
+    "defects": []
+  },
+  "final_gate": {
+    "passed": true,
+    "visual_status": "PASS_BY_QUORUM",
+    "ready_for_final_pixel_signoff": true,
+    "errors": []
+  },
+  "pixel_signoff": {
+    "performed_against_accepted_gameplay_source": true,
+    "all_three_river_gates_readable_across_four_view_contract": true,
+    "worn_routes_cross_each_gate": true,
+    "east_gate_not_materially_occluded": true,
+    "no_visible_floating_gate_or_fence_base": true,
+    "no_missing_threshold_or_route_break": true,
+    "unresolved_mandatory_task_defects": []
+  },
+  "artifacts": {
+    "primary_evidence": {
+      "id": 10308254512,
+      "name": "havenline-t03-v2-evidence-34730602238",
+      "download_zip_sha256": "86cd380937f3445ea7fad0df73fa1ee62ce5232218c0f542e21bceb603dd6a92"
+    },
+    "primary_source": {
+      "id": 10308369258,
+      "name": "havenline-t03-v2-source-34730602238"
+    },
+    "final_visual": {
+      "id": 10310956842,
+      "download_zip_sha256": "24d2b5ec40b434644d4b3a9cc4c40df046d38adade70e39f74a4de60ef648117"
+    },
+    "final_c6": {
+      "id": 10309999501,
+      "download_zip_sha256": "c15194687a1f3cd0e78cf8b800af9c708e0b40040471fac851bad5a4d595e977"
+    },
+    "final_gate": {
+      "id": 10310887222,
+      "download_zip_sha256": "253c22dc05ea60164e3ab9e294812ff1c07c6745dce8be9c8702f7e32b4f5b06"
+    }
+  },
+  "governance_integrity": {
+    "rejected_candidates_and_low_verdicts_preserved": true,
+    "product_rerendered_during_adjudication": false,
+    "deterministic_or_mechanical_failures_overridable": false,
+    "two_critics_failing_same_group_overridable": false
+  },
+  "t04_plus_runtime_started": false,
+  "whole_game_approved": false,
+  "physical_phone_tablet_native_4k60_verified": false,
+  "unfinished_apk_delivered": false,
+  "later_regressions_reopen_this_task": true
+}

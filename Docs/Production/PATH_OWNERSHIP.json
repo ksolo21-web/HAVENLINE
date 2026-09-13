@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "integration_branch": "codex/havenline-sequential-task-01",
+  "integration_owner": "primary-integration-owner",
+  "rules": {
+    "no_two_active_workstreams_share_owned_paths": true,
+    "foreign_owned_path_requires_change_request": true,
+    "stale_base_requires_reconcile_before_integration": true,
+    "integration_only_paths_may_only_be_changed_by_integration_owner": true
+  },
+  "aliases": {
+    "@protected:T01": ["HavenlineGodot/assets/reference_forest/**","HavenlineGodot/scripts/reference_forest.gd","Docs/Production/T01/**"],
+    "@protected:T02": ["HavenlineGodot/scripts/river_geometry.gd","Docs/Production/T02/**"],
+    "@protected:C1-model": ["HavenlineGodot/assets/**/*.glb"],
+    "@protected:approved": ["HavenlineGodot/assets/reference_forest/**","HavenlineGodot/scripts/reference_forest.gd","HavenlineGodot/scripts/river_geometry.gd","Docs/Production/T01/**","Docs/Production/T02/**"],
+    "@protected:runtime-approved": ["HavenlineGodot/**"],
+    "@integration-only": ["HavenlineGodot/scripts/main.gd","HavenlineGodot/scripts/outpost_simulation.gd","HavenlineGodot/scripts/outpost_view.gd","HavenlineGodot/data/reference-contract.json"],
+    "@ownership:T03": ["HavenlineGodot/scripts/camp_boundary.gd","HavenlineGodot/scripts/camp_boundary_view.gd","HavenlineGodot/scripts/main.gd","HavenlineGodot/scripts/outpost_simulation.gd","HavenlineGodot/scripts/outpost_surface.gd","HavenlineGodot/shaders/outpost_snow.gdshader","HavenlineGodot/tests/capture_task03_boundary.gd","HavenlineGodot/tests/test_task03_boundary.gd","HavenlineGodot/tests/test_task02_surface_stress.gd","Docs/Production/T03/**",".github/workflows/havenline-task03-*.yml","tools/havenline/*task03*"],
+    "@ownership:QA-GOV": [
+      "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md","Docs/Production/ANTI_LOOP_ROOT_CAUSE_STANDARD.md","Docs/Production/SEQUENTIAL_REPAIR_PLAN.md","Docs/Production/WORKSTREAM_REGISTRY.json","Docs/Production/DEPENDENCY_GRAPH.json","Docs/Production/PATH_OWNERSHIP.json","Docs/Production/CRITIC_MATRIX.json","Docs/Production/CRITIC_EXECUTION.json","Docs/Production/SECURITY_ATTACK_MATRIX.json","Docs/Production/CRITIC_READINESS.json","Docs/Production/PERFORMANCE_BUDGETS.json","Docs/Production/TASK_PACKET_TEMPLATE.md","Docs/Production/REGRESSION_MATRIX.json","Docs/Production/DEVICE_LAYOUT_MATRIX.json","Docs/Production/SAVE_STATE_MATRIX.json","Docs/Production/Archive/**","Docs/Production/ChangeRequests/**","Docs/Production/Evidence/**","tools/havenline/production/**",".github/workflows/havenline-production-governance.yml",".github/workflows/havenline-candidate-guard.yml",".github/workflows/havenline-specialist-critic.yml",".github/workflows/havenline-specialist-model-cache.yml",".github/workflows/havenline-critic-safeguards.yml","AGENTS.md","Docs/Production/task-gates.json",".github/workflows/havenline-apply-governance-v2.yml"
+    ],
+    "@reservation:T04": ["HavenlineGodot/scripts/camera_composition.gd","HavenlineGodot/tests/test_task04_camera.gd","HavenlineGodot/tests/capture_task04_camera.gd","Docs/Production/T04/**","tools/havenline/task04/**",".github/workflows/havenline-task04-*.yml"],
+    "@reservation:T05": ["HavenlineGodot/assets/stations_v2/**","HavenlineGodot/scripts/station_kit.gd","HavenlineGodot/tests/test_task05_station_kit.gd","HavenlineGodot/tests/capture_task05_station_kit.gd","Docs/Production/T05/**","tools/havenline/task05/**",".github/workflows/havenline-task05-*.yml"],
+    "@reservation:T06": ["HavenlineGodot/animations/c1/**","HavenlineGodot/scripts/character1_motion.gd","HavenlineGodot/tests/test_task06_character1.gd","HavenlineGodot/tests/capture_task06_character1.gd","Docs/Production/T06/**","tools/havenline/task06/**",".github/workflows/havenline-task06-*.yml"]
+  },
+  "active_owners": [
+    {"workstream":"wave1-camera","task_id":"T04","paths_alias":"@reservation:T04","status":"ASSIGNED","branch":"havenline/T04-camera"}
+  ],
+  "completed_production_owners": [
+    {"workstream":"T03-legacy-integrated","task_id":"T03","paths_alias":"@ownership:T03","status":"APPROVED","accepted_source":"5df9726e0b1c33f0f8865385b1c49aca229fd461"}
+  ],
+  "completed_governance_owners": [
+    {"workstream":"QA-GOV-20260911","task_id":"QA-GOV","paths_alias":"@ownership:QA-GOV","status":"APPROVED","integrated_candidate":"4e851ce496e077342e6369b18b78ca27e4724849"}
+  ],
+  "future_wave1_reservations": [
+    {"task_id":"T04","branch":"havenline/T04-camera","paths_alias":"@reservation:T04"},
+    {"task_id":"T05","branch":"havenline/T05-props","paths_alias":"@reservation:T05"},
+    {"task_id":"T06","branch":"havenline/T06-character1","paths_alias":"@reservation:T06"}
+  ],
+  "change_request_required_fields": ["requesting_task","target_path","requested_change","reason","dependency","expected_behavior","tests_required","status","integration_owner_disposition"]
+}

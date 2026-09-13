@@ -2,10 +2,18 @@ name: HAVENLINE Native Android Review
 on:
   push:
     branches: ['codex/havenline-godot-android', 'main']
-    paths: ['HavenlineGodot/**', 'tools/havenline/**', '.github/workflows/havenline-godot-android.yml']
+    paths:
+      - 'HavenlineGodot/**'
+      - 'tools/havenline/**'
+      - '!tools/havenline/production/**'
+      - '.github/workflows/havenline-godot-android.yml'
   workflow_dispatch:
   pull_request:
-    paths: ['HavenlineGodot/**', 'tools/havenline/**', '.github/workflows/havenline-godot-android.yml']
+    paths:
+      - 'HavenlineGodot/**'
+      - 'tools/havenline/**'
+      - '!tools/havenline/production/**'
+      - '.github/workflows/havenline-godot-android.yml'
 permissions:
   contents: read
 concurrency:

@@ -1,0 +1,32 @@
+name: Havenline Task 3 final gate contract update
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task03-final-gate-patch.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  patch:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/havenline-sequential-task-01
+      - name: Align final gate with the repaired Task 3 source
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/update_task03_final_gate_for_river_polish.py
+          git diff --check
+          git diff -- .github/workflows/havenline-task03-polish-final.yml
+      - name: Commit gate contract update
+        run: |
+          set -euo pipefail
+          git config user.name 'havenline-ci'
+          git config user.email 'havenline-ci@users.noreply.github.com'
+          git add .github/workflows/havenline-task03-polish-final.yml
+          git diff --cached --quiet && { echo 'Expected final-gate changes missing'; exit 1; }
+          git commit -m 'Align Task 3 final gate with river gate polish'
+          git push origin HEAD:codex/havenline-sequential-task-01
+# Updating the final workflow file intentionally triggers the full 807-check + fresh-capture + critic gate.

@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "purpose": "Early full-game headroom budgets. These are integration gates, not T68/T69 physical-device certification.",
+  "frame_contract": {
+    "target_fps": 60,
+    "frame_time_ms": 16.6667,
+    "native_internal_min": [
+      3840,
+      2160
+    ],
+    "render_scale": 1.0
+  },
+  "global_soft_budgets": {
+    "cpu_frame_ms": 10.0,
+    "gpu_frame_ms_where_measurable": 12.0,
+    "cpu_gpu_total_headroom_note": "Keep >=20% scheduling/thermal headroom before final physical certification.",
+    "visible_triangles": 2000000,
+    "draw_calls": 650,
+    "materials_visible": 220,
+    "texture_gpu_memory_mb": 1024,
+    "process_memory_mb": 2560,
+    "physics_active_bodies": 300,
+    "animated_rigs_active": 48,
+    "npc_companion_active_population": 80,
+    "storage_download_mb": 1500
+  },
+  "subsystem_share_percent": {
+    "environment_and_regions": 25,
+    "characters_companions_npcs": 22,
+    "production_economy_interactables": 18,
+    "combat_defense_fx_weather": 15,
+    "ui_audio_services": 8,
+    "reserved_headroom": 12
+  },
+  "task_gate_policy": {
+    "G8": "A candidate fails when it exceeds an assigned hard budget, causes a material regression versus its base, or leaves required metrics missing.",
+    "soft_budget_exceedance": "Requires integration-owner disposition with measured evidence and compensating headroom; cannot be waived by visual score.",
+    "final_physical_certification": "Only T68/T69 can certify sustained native 4K/60 on representative physical hardware."
+  },
+  "baseline_known_evidence": {
+    "T01": {
+      "visible_draw_calls_range": [
+        36,
+        52
+      ],
+      "submitted_primitives_range": [
+        429989,
+        460309
+      ],
+      "forest_instances": 586,
+      "note": "Historical software-rendered workload evidence only."
+    },
+    "T03_current": {
+      "functional_suites": 16,
+      "functional_checks": 807,
+      "native4k_capture_frames": 11,
+      "note": "Current capture evidence is not physical FPS evidence."
+    }
+  },
+  "required_per_candidate": [
+    "candidate_commit",
+    "scene_state",
+    "resolution",
+    "renderer",
+    "draw_calls",
+    "triangles_or_primitives",
+    "materials",
+    "texture_memory_if_measurable",
+    "cpu_frame_time_if_measurable",
+    "gpu_frame_time_if_measurable",
+    "physics_body_count",
+    "animation_count",
+    "population_count",
+    "process_memory_if_measurable",
+    "storage_delta",
+    "measurement_method",
+    "known_unmeasured_fields"
+  ]
+}

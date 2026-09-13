@@ -1,0 +1,36 @@
+name: Havenline lake light-source diagnosis
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-lake-light-sources.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - run: python3 -m pip install pyyaml
+      - name: Isolate individual light contributions on actual water
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          w=yaml.safe_load(Path('.github/workflows/havenline-lake-shading-diagnostic.yml').read_text())
+          runs=[s['run'] for s in w['jobs']['diagnose']['steps'] if 'run' in s];assert len(runs)==1
+          run=runs[0].replace('res://tests/probe_lake_shading.gd','res://tests/probe_lake_light_sources.gd').replace('timeout 180','timeout 240')
+          Path('diagnosis').mkdir(exist_ok=True);Path('diagnosis/executed.sh').write_text(run)
+          subprocess.run(['bash','-euo','pipefail','-c',run],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-lake-light-sources-${{ github.run_id }}
+          path: diagnosis/
+          retention-days: 30
+          if-no-files-found: error
+# Diagnostic only; no production material change or independent score.

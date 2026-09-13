@@ -1,0 +1,69 @@
+name: Havenline T01 second-family vision runtime
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-gemma-runtime.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: ~/.cache/havenline-t01-gemma
+          key: havenline-t01-gemma3-12b-qat-b10809-v1
+      - name: Download public publisher-checksummed Gemma vision weights and pinned runtime
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y aria2
+          mkdir -p "$HOME/.cache/havenline-t01-gemma" runtime-evidence
+          python3 - <<'PY'
+          from pathlib import Path
+          import urllib.request,json,hashlib,subprocess,concurrent.futures,tarfile
+          root=Path.home()/'.cache/havenline-t01-gemma';out=Path('runtime-evidence')
+          repo='ggml-org/gemma-3-12b-it-qat-GGUF'
+          def digest(p):
+              h=hashlib.sha256()
+              with p.open('rb') as f:
+                  for b in iter(lambda:f.read(4194304),b''):h.update(b)
+              return h.hexdigest()
+          if (root/'manifest.json').exists(): manifest=json.loads((root/'manifest.json').read_text())
+          else:
+              req=urllib.request.Request('https://huggingface.co/api/models/'+repo+'?blobs=true',headers={'User-Agent':'Havenline-T01-source-bound-review'})
+              with urllib.request.urlopen(req,timeout=45) as r:info=json.load(r)
+              siblings={r['rfilename']:r for r in info['siblings']}
+              names=['gemma-3-12b-it-qat-Q4_0.gguf','mmproj-model-f16-12B.gguf'];records=[]
+              for name in names:
+                  item=siblings[name];sha=item.get('lfs',{}).get('sha256');assert sha and len(sha)==64
+                  records.append({'filename':name,'sha256':sha,'url':'https://huggingface.co/'+repo+'/resolve/'+info['sha']+'/'+name+'?download=true'})
+              records.append({'filename':'runtime.tar.gz','sha256':'5e34434ddc6d03cd1584f403201aff0d4bd1a5793a72ff7e286532dfd1e4b941','url':'https://github.com/ggml-org/llama.cpp/releases/download/b10809/llama-b10809-bin-ubuntu-x64.tar.gz'})
+              manifest={'publisher':repo,'revision':info['sha'],'base_model':'google/gemma-3-12b-it','model_file':names[0],'projector_file':names[1],'runtime_release':'b10809','files':records,'task':'T01','approved':False,'reason':'Qwen reports contradicted original 3D camera frames; second family must independently inspect readable evidence. Prior raw failures retained.'}
+          def download(item):
+              p=root/item['filename']
+              if not p.exists() or digest(p)!=item['sha256']:
+                  subprocess.run(['aria2c','--console-log-level=warn','--summary-interval=30','-x','12','-s','12','-k','4M','--file-allocation=none','--max-tries=3','--retry-wait=3','--connect-timeout=20','--timeout=60','--allow-overwrite=true','--auto-file-renaming=false','-d',str(root),'-o',p.name,item['url']],check=True)
+              assert digest(p)==item['sha256'];item['bytes']=p.stat().st_size
+          with concurrent.futures.ThreadPoolExecutor(max_workers=3) as pool:list(pool.map(download,manifest['files']))
+          runtime=root/'runtime';runtime.mkdir(exist_ok=True)
+          with tarfile.open(root/'runtime.tar.gz') as t:t.extractall(runtime,filter='data')
+          server=list(runtime.rglob('llama-server'));assert len(server)==1;server[0].chmod(0o755)
+          (root/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');(out/'manifest.json').write_text(json.dumps(manifest,indent=2)+'\n');print(json.dumps(manifest,indent=2))
+          PY
+      - uses: actions/cache/save@v4
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/havenline-t01-gemma
+          key: havenline-t01-gemma3-12b-qat-b10809-v1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-gemma-runtime-${{ github.run_id }}
+          path: runtime-evidence/
+          retention-days: 30
+          if-no-files-found: error
+# Public local inference only. No billing change, account key, art-score injection or game modification.

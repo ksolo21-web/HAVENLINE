@@ -1,0 +1,120 @@
+{
+  "task": "T04",
+  "title": "Reference camera and automatic screen composition",
+  "status": "PASS",
+  "accepted_gameplay_source": "e08fd37e9a999d878644c03089c4b4b253bd7472",
+  "review_governance_source": "9d15e76fa4d57674e11215d99f386a930367d0b4",
+  "integrated_evidence_run": 34738864775,
+  "evidence_closeout_run": 34745334414,
+  "acceptance_rule": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9.0,
+    "unrounded": true,
+    "score_averaging_used": false,
+    "target": 10.0,
+    "defect_rule": "Only corroborated, in-scope, pixel-supported defects block; contradicted claims remain retained in raw artifacts."
+  },
+  "mechanical_evidence": {
+    "functional_suites": 17,
+    "total_assertions_checks": 852,
+    "all_passed": true,
+    "source_bound_images": 23,
+    "gallery_images": 20,
+    "native_3840x2160_scale1_frames": 3,
+    "shipping_main_call_site_exercised": true,
+    "reference_sha256": "3c424b0df53c1c6de49018278779a4ef1ced58562e5b9dbb54fe276d13aa2ddb",
+    "player_anchor_x_range": [0.457568444540334, 0.580716800689697],
+    "player_anchor_y_range": [0.468771362304688, 0.617436896430122],
+    "player_height_fraction_range": [0.0904275228810865, 0.0987377166748047],
+    "target_anchor_x_range": [0.43517484664917, 0.525174840291341],
+    "target_anchor_y_range": [0.390668402777778, 0.510760554560909]
+  },
+  "visual_review": {
+    "status": "PASS_BY_CORROBORATED_EVIDENCE",
+    "passed": true,
+    "minimum_mandatory_dimension_score": 9.5,
+    "scores": {
+      "C1": {
+        "reference_fidelity": 9.8,
+        "visual_language": 10.0,
+        "cross_view_consistency": 9.5
+      },
+      "C2": {
+        "geometry_contact": 10.0,
+        "clipping_seams": 10.0,
+        "intentional_gap_integrity": 10.0,
+        "cross_view_integrity": 9.5
+      }
+    },
+    "selected_complete_judgments": 6,
+    "raw_dissenting_outputs_retained": true,
+    "completed_low_scores_retried": false,
+    "additional_model_calls_authorized": false,
+    "score_averaging_used": false,
+    "valid_unresolved_defects": []
+  },
+  "performance_critic": {
+    "critic": "C6",
+    "passed": true,
+    "coverage_complete": true,
+    "confidence": "high",
+    "minimum_mandatory_dimension_score": 9.8,
+    "scores": {
+      "frame_time": 9.8,
+      "draw_calls": 10.0,
+      "geometry": 10.0,
+      "texture_memory": 10.0,
+      "shader_cost": 10.0,
+      "physics": 10.0,
+      "animation": 10.0,
+      "population": 10.0,
+      "thermal_risk": 9.8
+    },
+    "matched_isolated_to_shipping_frames": 23,
+    "no_positive_draw_or_primitive_regression": true,
+    "physical_device_certification": false,
+    "defects": []
+  },
+  "final_gate": {
+    "passed": true,
+    "visual_minimum": 9.5,
+    "C6_minimum": 9.8,
+    "ready_for_final_pixel_signoff": true,
+    "errors": []
+  },
+  "pixel_signoff": {
+    "performed_after_C1_C2_and_C6": true,
+    "performed_against_accepted_gameplay_source": true,
+    "all_23_frames_reviewed": true,
+    "disputed_blizzard_frame_readable": true,
+    "disputed_directional_lead_fully_visible": true,
+    "disputed_fold_resize_frame_safe": true,
+    "disputed_native_east_gate_lead_and_target_visible": true,
+    "no_stretching_or_vertical_deformation": true,
+    "unresolved_mandatory_task_defects": []
+  },
+  "artifacts": {
+    "integrated_evidence": {"id": 10312061966, "download_zip_sha256": "19f302fc698556f0f296eed57da1ec285ccdad780b7b032c509ea363db04ad9b"},
+    "primary_C1": {"id": 10312199412, "download_zip_sha256": "1606b6e902bc53a9e99963543de9dd6d92163696507610f33f664b58f266e4b8"},
+    "primary_C2": {"id": 10313235714, "download_zip_sha256": "2a274aee17d85f03638f4cc50ac3b28242dea40432c7df9ee316dc675b9a33c5"},
+    "supplemental_C1_1": {"id": 10312837007, "download_zip_sha256": "f72c8a5b332485cda7c45815737bdbf606ff00647d0c96dcbb3826ac6a3b752b"},
+    "supplemental_C1_2": {"id": 10313067847, "download_zip_sha256": "c3e4afd5827079488eb638a4322078cbefdd2e339925cf7ad1c9e91f69905604"},
+    "supplemental_C2_1": {"id": 10314045759, "download_zip_sha256": "9b6a6be4260763983929102052b554755535b0a2d35773440f8c123ee024f5de"},
+    "supplemental_C2_2": {"id": 10313591794, "download_zip_sha256": "0261ce1e6deb97625a309fc88e431cb5568cafb1c338634fcfe0442741826eb9"},
+    "resolved_visual": {"id": 10314335550, "download_zip_sha256": "9d9b9df3ce4a6e800f1b4a4f9b335dea7a8269f79284bebd3c7737245b4bc8ea"},
+    "C6": {"id": 10314165847, "download_zip_sha256": "5fc13c73c65965623db08877dbb92e893de9d6f4484e6422d5a8366935aae68b"},
+    "final_gate": {"id": 10314145918, "download_zip_sha256": "1689857c611d84363cfe8a84ea354e39418048a218ba9f46b6a2893a607e75b4"}
+  },
+  "governance_integrity": {
+    "gameplay_rerendered_during_critic_resolution": false,
+    "raw_low_scores_and_claims_preserved": true,
+    "objective_claim_dispositions_recorded": true,
+    "score_averaging_used": false,
+    "more_visual_model_calls_allowed": false
+  },
+  "t05_plus_runtime_started": false,
+  "whole_game_approved": false,
+  "physical_phone_tablet_native_4k60_verified": false,
+  "unfinished_apk_delivered": false,
+  "later_regressions_reopen_this_task": true
+}

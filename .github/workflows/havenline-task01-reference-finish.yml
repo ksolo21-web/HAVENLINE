@@ -1,0 +1,172 @@
+name: Havenline T01 reference-finish verification
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-reference-finish.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.build.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - run: python3 -m pip install pyyaml
+      - name: Build only T01; retain all prior checks and capture the actual native fade resolution
+        id: build
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          capture=Path('HavenlineGodot/tests/capture_task01_clearance.gd');s=capture.read_text()
+          if 'var native_4k' not in s:
+              assert s.count('var game\n')==1
+              s=s.replace('var game\n','var game\nvar native_4k := false\n')
+              s=s.replace('if arg.begins_with("--out="):out=arg.trim_prefix("--out=")','if arg.begins_with("--out="):out=arg.trim_prefix("--out=")\n\t\tif arg=="--native-4k":native_4k=true')
+              assert s.count('game.render_review=true')==1
+              s=s.replace('game.render_review=true','game.render_review=not native_4k')
+              s=s.replace('game.size=Vector2(1280,720)','game.size=Vector2(3840,2160) if native_4k else Vector2(1280,720)')
+              capture.write_text(s)
+          verifier=Path('tools/havenline/verify_task01_evidence.py');s=verifier.read_text()
+          old="roi=(max(0,x-45),max(0,y-40),min(clear['image_size'][0],x+45),min(clear['image_size'][1],y+110))"
+          if old in s:
+              s=s.replace(old,"sx,sy=clear['image_size'][0]/1280,clear['image_size'][1]/720\nroi=(max(0,x-round(45*sx)),max(0,y-round(40*sy)),min(clear['image_size'][0],x+round(45*sx)),min(clear['image_size'][1],y+round(110*sy)))")
+              verifier.write_text(s)
+          w=yaml.safe_load(Path('.github/workflows/havenline-task01-revision4.yml').read_text())
+          runs=[r['run'] for r in w['jobs']['build']['steps'] if 'run' in r];assert len(runs)==4
+          runs[0]=runs[0].replace('python3 tools/havenline/polish_reference_forest.py','python3 tools/havenline/finish_reference_tree.py')
+          runs[0]+='\nexport PATH="$RUNNER_TEMP/engine:$PATH"\npython3 -m py_compile tools/havenline/finish_reference_tree.py tools/havenline/review_task01_reference_finish.py\n'
+          runs[2]=runs[2].replace('git add HavenlineGodot/assets/reference_forest/*.glb','git add HavenlineGodot/tests/capture_task01_clearance.gd tools/havenline/verify_task01_evidence.py HavenlineGodot/assets/reference_forest/*.glb')
+          runs[2]=runs[2].replace('T01 revision4: smooth crown normals and tints; grounded diagnostics; no approval claimed','T01 revision7: reference notches, blue rims, warm trunk and native clearance diagnostics; unapproved candidate')
+          runs[3]=runs[3].replace("'revision':4","'revision':7")
+          old="xvfb-run -a -s '-screen 0 1280x720x24' timeout 150"
+          assert runs[3].count(old)==1
+          runs[3]=runs[3].replace(old,"xvfb-run -a -s '-screen 0 3840x2160x24' timeout 360")
+          old='--resolution 1280x720 --script res://tests/capture_task01_clearance.gd -- --out='
+          assert runs[3].count(old)==1
+          runs[3]=runs[3].replace(old,'--resolution 3840x2160 --script res://tests/capture_task01_clearance.gd -- --native-4k --out=')
+          script='\n'.join(runs);Path('task01-evidence').mkdir(exist_ok=True)
+          Path('task01-evidence/executed-build.sh').write_text(script)
+          subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          e=Path('task01-evidence');p=e/'provenance.json';r=json.loads(p.read_text())
+          c=json.loads((e/'clearance/clearance.json').read_text())
+          assert c['image_size']==[3840,2160] and c['render_scale']==1
+          r['clearance_dimensions']=c['image_size']
+          r['runtime_shader_sha256']=hashlib.sha256(Path('HavenlineGodot/shaders/evergreen.gdshader').read_bytes()).hexdigest()
+          r['capture_resolution_note']='Eleven clearance/depletion frames rendered natively at3840x2160. Gallery remains1280x720; separate native scene3840x2160. No source image upscaled.'
+          p.write_text(json.dumps(r,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-reference-finish-evidence-${{ github.run_id }}
+          path: task01-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: havenline-T01-reference-finish-source-${{ github.run_id }}
+          path: task01-source/
+          retention-days: 30
+          if-no-files-found: error
+  independent-review:
+    needs: build
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        group: [variant-1, variant-2, variant-3, forest, clearance, camera-motion]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      TASK_SOURCE: ${{ needs.build.outputs.source }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build.outputs.source }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-reference-finish-evidence-${{ github.run_id }}
+          path: task01-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-gemma
+          key: havenline-t01-gemma3-12b-qat-b10809-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Inspect every required group with the preserved independent rubric
+        run: python3 -u tools/havenline/review_task01_reference_finish.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-reference-finish-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
+          path: critic-results/
+          retention-days: 30
+          if-no-files-found: error
+  collect-review:
+    needs: [build,independent-review]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      TASK_SOURCE: ${{ needs.build.outputs.source }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-T01-reference-finish-reference-fidelity-*-${{ github.run_id }}
+          path: reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-T01-reference-finish-visual-integrity-*-${{ github.run_id }}
+          path: reviews/
+      - name: Preserve all raw results; no score averaging or automatic task advance
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import os,json,math
+          groups={'variant-1','variant-2','variant-3','forest','clearance','camera-motion'}
+          keys={'silhouette','materials','reference_fidelity','integration','geometric_integrity'}
+          rows=[];errors=[]
+          for role in ('reference-fidelity','visual-integrity'):
+              found=[]
+              for p in Path('reviews').glob('*'+role+'*/task-review.json'):
+                  r=json.loads(p.read_text());found.append(r);label=role+'/'+r.get('group','unknown')
+                  scores=r.get('review',{}).get('scores',{})
+                  if r.get('source')!=os.environ['TASK_SOURCE'] or r.get('role')!=role or r.get('independent_execution') is not True or r.get('competency_passed') is not True or r.get('passed') is not True:errors.append('Not passing '+label)
+                  if set(scores)!=keys or any(type(v) not in (float,int) or not math.isfinite(v) or not 9<=v<=10 for v in scores.values()):errors.append('Missing/invalid/below9 '+label)
+                  v=r.get('review',{})
+                  if v.get('defect_count')!=0 or v.get('coverage_complete') is not True or v.get('confidence') not in ('medium','high'):errors.append('Defects or incomplete '+label)
+                  try:
+                      raw=json.loads((p.parent/(r['group']+'-raw.json')).read_text())['choices'][0]
+                      if raw['finish_reason']!='stop' or json.loads(raw['message']['content'])!=v:errors.append('Raw mismatch '+label)
+                  except Exception as exc:errors.append('Missing raw '+label+': '+str(exc))
+              if len(found)!=6 or {r.get('group') for r in found}!=groups:errors.append('Incomplete coverage '+role)
+              rows+=found
+          summary={'task':'T01','source':os.environ['TASK_SOURCE'],'critic_reviews_passed':not errors,'reviews':rows,'errors':errors,'minimum_score':min((r.get('lowest_score',0) for r in rows),default=None),'final_pixel_and_mechanical_signoff_required':True,'task_approved':False,'task2_started':False,'physical_4k60_verified':False,'whole_game_approved':False}
+          Path('reviews/summary.json').write_text(json.dumps(summary,indent=2));print(json.dumps(summary,indent=2))
+          raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-reference-finish-complete-reviews-${{ github.run_id }}
+          path: reviews/
+          retention-days: 30
+          if-no-files-found: error
+# All earlier failures preserved. No new APK, user test, Task2 change or hardware certificate.

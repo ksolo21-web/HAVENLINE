@@ -1,0 +1,176 @@
+{
+  "schema_version": 1,
+  "integration_owner": "primary-integration-owner",
+  "integration_branch": "codex/havenline-sequential-task-01",
+  "migration_start_head": "f26b3d6d5a788c03192f593936bfe8ce5ccfc5bc",
+  "runtime_candidate_before_migration": "6947849f581db9cfa53a17ff9202ecde1c0ee80c",
+  "allowed_states": [
+    "LOCKED",
+    "PREPARED",
+    "ASSIGNED",
+    "BUILDING_ISOLATED",
+    "BUILT_PENDING_DEPENDENCY",
+    "INTEGRATION_READY",
+    "INTEGRATING",
+    "UNDER_REVIEW",
+    "FIX_REQUIRED",
+    "APPROVED",
+    "BLOCKED"
+  ],
+  "forward_score_rule": {
+    "operator": ">",
+    "threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0
+  },
+  "legacy_approvals": {
+    "T01": {
+      "status": "APPROVED",
+      "accepted_source": "45ba7905cd468c229cd61364f4d1ac45b14d3e5e",
+      "grandfathered": true
+    },
+    "T02": {
+      "status": "APPROVED",
+      "accepted_source": "1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff",
+      "grandfathered": true
+    }
+  },
+  "workstreams": [
+    {
+      "task_id": "T03",
+      "task_name": "Fences, gates and navigable work lanes",
+      "status": "APPROVED",
+      "owner": "primary-integration-owner",
+      "workstream_id": "T03-legacy-integrated",
+      "branch": "codex/havenline-sequential-task-01",
+      "base_commit": "1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff",
+      "dependencies": ["T02"],
+      "owned_paths": ["@ownership:T03"],
+      "protected_paths": ["@protected:T01", "@protected:T02"],
+      "candidate_commit": "5df9726e0b1c33f0f8865385b1c49aca229fd461",
+      "candidate_hash_or_artifact": "primary-run:34730602238 closeout-run:34735423968 evidence:10308254512 source:10308369258",
+      "tests": {
+        "suites": 16,
+        "checks": 807,
+        "result": "PASS",
+        "tree_geometry_checks": 9
+      },
+      "evidence_path": "Docs/Production/Evidence/T03/",
+      "critic_requirements": ["C1", "C2", "C6"],
+      "critic_status": {
+        "C1+C2": "PASS_BY_QUORUM; 18 clean primary judgments and focused 2-of-3 quorums for conditions and river-gates",
+        "C6": "PASS; minimum mandatory dimension 9.5"
+      },
+      "integration_status": "APPROVED; accepted gameplay source 5df9726e0b1c33f0f8865385b1c49aca229fd461",
+      "known_blockers": [],
+      "next_action": "Preserve T03; prepare and assign isolated T04/T05/T06 task packets before runtime work begins."
+    },
+    {
+      "task_id": "QA-GOV",
+      "task_name": "Parallel-production governance and build accelerator",
+      "status": "APPROVED",
+      "owner": "primary-integration-owner",
+      "workstream_id": "QA-GOV-20260911",
+      "branch": "codex/havenline-sequential-task-01",
+      "base_commit": "f26b3d6d5a788c03192f593936bfe8ce5ccfc5bc",
+      "dependencies": [],
+      "owned_paths": ["@ownership:QA-GOV"],
+      "protected_paths": ["@protected:runtime-approved"],
+      "candidate_commit": "4e851ce496e077342e6369b18b78ca27e4724849",
+      "candidate_hash_or_artifact": "governance-run:34652626961 critic-readiness-run:34652627066",
+      "tests": {
+        "governance_and_safeguard_unit_tests": 20,
+        "unit_test_failures": 0,
+        "critic_readiness": "PASS",
+        "independent_runtime_smoke": "PASS",
+        "pinned_revision_and_hash_checks": "PASS",
+        "runtime_game_files_changed": 0
+      },
+      "evidence_path": "Docs/Production/Evidence/GovernanceMigration/",
+      "critic_requirements": [],
+      "critic_status": {
+        "C1-C11 execution readiness": "PASS",
+        "self_healing_independent_runtime": "PASS"
+      },
+      "integration_status": "APPROVED and integrated on codex/havenline-sequential-task-01",
+      "known_blockers": [],
+      "next_action": "Maintain governance and critic-readiness gates; do not weaken them from gameplay workstreams."
+    },
+    {
+      "task_id": "T04",
+      "task_name": "Reference camera and automatic screen composition",
+      "status": "APPROVED",
+      "owner": "primary-integration-owner",
+      "workstream_id": "wave1-camera",
+      "branch": "codex/havenline-sequential-task-01",
+      "base_commit": "5135cddf96123afb962f4046f41e5ac0e510428a",
+      "dependencies": ["T03"],
+      "owned_paths": ["@reservation:T04"],
+      "protected_paths": ["@protected:approved", "@integration-only"],
+      "candidate_commit": "e08fd37e9a999d878644c03089c4b4b253bd7472",
+      "candidate_hash_or_artifact": "integrated-evidence-run:34738864775 artifact:10312061966 closeout-run:34745334414",
+      "tests": {
+        "suites": 17,
+        "checks": 852,
+        "result": "PASS"
+      },
+      "evidence_path": "Docs/Production/Evidence/T04/",
+      "critic_requirements": ["C1", "C2", "C6"],
+      "critic_status": {
+        "C1+C2": "PASS_BY_CORROBORATED_EVIDENCE; minimum mandatory score 9.5; no score averaging; unsupported claims retained and objectively resolved",
+        "C6": "PASS; minimum mandatory dimension 9.8"
+      },
+      "integration_status": "APPROVED; accepted gameplay source e08fd37e9a999d878644c03089c4b4b253bd7472",
+      "known_blockers": [],
+      "next_action": "Preserve T04; prepare and assign the isolated T05 production-station and prop-kit packet."
+    },
+    {
+      "task_id": "T05",
+      "task_name": "Production station and prop kit",
+      "status": "LOCKED",
+      "owner": null,
+      "workstream_id": "wave1-props",
+      "branch": "havenline/T05-props",
+      "base_commit": null,
+      "dependencies": ["T03"],
+      "owned_paths": ["@reservation:T05"],
+      "protected_paths": ["@protected:approved", "@integration-only"],
+      "candidate_commit": null,
+      "candidate_hash_or_artifact": null,
+      "tests": {},
+      "evidence_path": "Docs/Production/Evidence/T05/",
+      "critic_requirements": ["C1", "C2", "C6"],
+      "critic_status": {},
+      "integration_status": "not started",
+      "known_blockers": ["Task packet and owner not yet prepared"],
+      "next_action": "Prepare the isolated T05 packet, assign an owner, and validate ownership before changing runtime."
+    },
+    {
+      "task_id": "T06",
+      "task_name": "Character 1 complete movement/interactions",
+      "status": "LOCKED",
+      "owner": null,
+      "workstream_id": "wave1-character1",
+      "branch": "havenline/T06-character1",
+      "base_commit": null,
+      "dependencies": ["T03"],
+      "owned_paths": ["@reservation:T06"],
+      "protected_paths": ["@protected:approved", "@integration-only", "@protected:C1-model"],
+      "candidate_commit": null,
+      "candidate_hash_or_artifact": null,
+      "tests": {},
+      "evidence_path": "Docs/Production/Evidence/T06/",
+      "critic_requirements": ["C1", "C2", "C5", "C6"],
+      "critic_status": {},
+      "integration_status": "not started",
+      "known_blockers": ["Task packet and owner not yet prepared"],
+      "next_action": "Prepare the isolated T06 packet, assign an owner, and validate ownership before changing runtime."
+    }
+  ],
+  "notes": [
+    "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
+    "T03 is APPROVED; T04+ runtime work remains locked until its isolated task packet, owner and ownership validation are prepared.",
+    "All future runtime builders use isolated branches and cannot approve themselves.",
+    "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them."
+  ]
+}

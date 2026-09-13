@@ -1,6 +1,6 @@
 extends Control
 
-const ENVIRONMENT_REVISION := "0.4.5-environment-candidate"
+const ENVIRONMENT_REVISION := "0.5.1-task03-visual-polish"
 var scenery_instances: Array[GeometryInstance3D] = []
 var scenery_origins: Array[Vector3] = []
 var scenery_heights: Array[float] = []
@@ -12,6 +12,7 @@ const OutpostView = preload("res://scripts/outpost_view.gd")
 const Surface = preload("res://scripts/outpost_surface.gd")
 const ActionReadout = preload("res://scripts/action_readout.gd")
 const OutpostAudio = preload("res://scripts/outpost_audio.gd")
+const CameraComposition = preload("res://scripts/camera_composition.gd")
 var outpost_view: Node3D
 var outpost_audio: Node
 var action_readout: Control
@@ -20,6 +21,10 @@ var environment: Environment
 var capture_scenario := "opening"
 const Saves = preload("res://scripts/save_store.gd")
 const Scenery = preload("res://scripts/scenery_batch.gd")
+const ReferenceForest = preload("res://scripts/reference_forest.gd")
+var reference_forest_evidence: Dictionary = {}
+const CampBoundaryView = preload("res://scripts/camp_boundary_view.gd")
+var camp_boundary_view: Node3D
 const DeviceBenchmark = preload("res://scripts/device_benchmark.gd")
 var device_benchmark: PanelContainer
 const FrameRecord = preload("res://scripts/performance_record.gd")
@@ -66,6 +71,7 @@ var capture_directory := ""
 var qa_mode := false
 var render_review := false
 var performance_record := FrameRecord.new()
+var camera_composition = CameraComposition.new()
 var merged_cache: Dictionary = {}
 var no_batching := false
 var capture_phase := 0.0
@@ -121,6 +127,9 @@ func _ready():
 	outpost_view = OutpostView.new()
 	world.add_child(outpost_view)
 	outpost_view.configure(environment, sun, furnace, heat_light, sim)
+	camp_boundary_view = CampBoundaryView.new()
+	world.add_child(camp_boundary_view)
+	camp_boundary_view.configure(self)
 	outpost_audio = OutpostAudio.new()
 	add_child(outpost_audio)
 	build_crew()
@@ -204,6 +213,8 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 	if asset.begins_with("world/"):
 		# Authored replacement required: never silently display the retired blockout.
 		path = "res://assets/environment_v2/" + asset.trim_prefix("world/") + ".glb"
+		if asset.begins_with("world/pine_"):
+			path = "res://assets/reference_forest/" + asset.trim_prefix("world/") + ".glb"
 		assert(ResourceLoader.exists(path), "Missing required winter environment mesh: " + path)
 	if not asset_cache.has(path):
 		asset_cache[path] = load(path)
@@ -245,28 +256,23 @@ func build_world():
 	heat_light.omni_range = 5
 	furnace.add_child(heat_light)
 	model("world/storage", world, xyz(Simulation.point(sim.contract.world.storage)))
-	for x in [-6.6, 6.6]:
-		var shelter := model("world/shelter", world, xyz(Vector2(x, -4.8)))
-		shelter.rotation.y = -0.12 if x < 0 else 0.12
+	for key in ["leftTent","rightTent"]:
+		var shelter_point := Simulation.point(sim.contract.world[key])
+		var shelter := model("world/shelter", world, xyz(shelter_point))
+		shelter.rotation.y = -0.12 if shelter_point.x < 0 else 0.12
 	for index in range(sim.resources.size()):
 		var node: Dictionary = sim.resources[index]
 		var asset: String = "pine_" + str(1 + index % 3) if node.kind == "wood" else node.kind
 		resource_visuals[node.id] = model("world/" + asset, world, xyz(node.position))
-	# Irregular woodland groups instead of the old evenly spaced circular fence.
-	for i in range(44):
-		var a := float(i) * 2.399963
-		var rx := 16.6 + sin(i * 7.13) * 3.8
-		var rz := 19.0 + cos(i * 4.71) * 3.2
-		var point := Vector2(cos(a) * rx, sin(a) * rz)
-		# Keep entrances and the default camera's lower central view readable.
-		if absf(point.x) < 4.8 and point.y > 13.0: continue
-		var tree := model("world/pine_" + str(1 + i % 3), world, xyz(point))
-		tree.scale = Vector3.ONE * (0.76 + fposmod(i * .137, .52))
-		tree_rotation(tree, i)
+	# T01 reference forest; no change to resource actions or later-task layout.
+	reference_forest_evidence = ReferenceForest.build(self)
 	build_environment_dressing()
 	for side in sim.defenses:
-		defense_visuals[side] = model("world/barricade", world, xyz(sim.defenses[side].position))
-		defense_visuals[side].scale.y = 0.15
+		var defense:Dictionary=sim.defenses[side]
+		var progress:=int(defense.delivered.wood)+int(defense.delivered.stone)
+		defense_visuals[side] = model("world/barricade", world, xyz(defense.position))
+		defense_visuals[side].visible = bool(defense.built) or progress > 0
+		defense_visuals[side].scale.y = .35 + .65 * clampf(float(progress)/11.0,0.0,1.0) if defense_visuals[side].visible else 1.0
 
 func tree_rotation(tree: Node3D, index: int):
 	tree.rotation.y = index * 1.71
@@ -586,6 +592,11 @@ func _physics_process(dt: float):
 		save_timer = 0
 		Saves.write_state(sim.snapshot())
 
+func camera_action_target() -> Variant:
+	if sim.action.is_empty(): return null
+	var target: Variant = sim.action.get("position")
+	return xyz(target) if target is Vector2 else null
+
 func _process(dt: float):
 	if not is_instance_valid(world): return
 	population_view.pause_animations(paused)
@@ -605,31 +616,49 @@ func _process(dt: float):
 		resource_visuals[node.id].visible = node.units > 0
 	for side in sim.defenses:
 		var d: Dictionary = sim.defenses[side]
-		defense_visuals[side].scale.y = .15 + .85 * (float(d.delivered.wood + d.delivered.stone) / 11)
+		var progress:=int(d.delivered.wood)+int(d.delivered.stone)
+		defense_visuals[side].visible = bool(d.built) or progress > 0
+		if defense_visuals[side].visible:
+			defense_visuals[side].scale.y = .35 + .65 * clampf(float(progress)/11.0,0.0,1.0)
 	update_carry()
 	outpost_view.sync(sim, dt, paused)
 	outpost_audio.sync(sim, paused, dt)
-	# Preserve the close zoom; a short look-ahead includes roofs above the player.
-	var focus := xyz(sim.position) + Vector3(0, .95, -3.6)
-	var offset := Vector3(0, 6.8, 8.6)
-	if qa_mode and capture_scenario in ["shelter-detail","shelter-detail-rear"]:
-		focus=xyz(Vector2(-6.6,-4.8))+Vector3(0,1.45,0);camera.size=5.1;offset=Vector3(4,3.6,7)
-	elif qa_mode and capture_scenario == "furnace-detail":
-		focus=xyz(Vector2(0,.2))+Vector3(0,1.0,0);camera.size=3.8;offset=Vector3(4,3.6,7)
-	elif qa_mode and capture_scenario == "tree-detail":
-		focus=xyz(sim.resources[0].position)+Vector3(0,2.35,0);camera.size=6.6;offset=Vector3(4,3.6,7)
-	if qa_mode:
+	var active_camera_focus := xyz(sim.position) + Vector3(0.0, 0.95, 0.0)
+	var qa_camera_override := qa_mode and (capture_scenario in ["shelter-detail","shelter-detail-rear","furnace-detail","tree-detail"] or capture_view != "front")
+	if qa_camera_override:
+		# Keep disclosed evidence-only viewpoints intact. They never run in normal
+		# gameplay and do not replace the automatic shipping composition.
+		var focus := xyz(sim.position) + Vector3(0, .95, -3.6)
+		var offset := Vector3(0, 6.8, 8.6)
+		if capture_scenario in ["shelter-detail","shelter-detail-rear"]:
+			focus=xyz(Vector2(-6.6,-4.8))+Vector3(0,1.45,0);camera.size=5.1;offset=Vector3(4,3.6,7)
+		elif capture_scenario == "furnace-detail":
+			focus=xyz(Vector2(0,.2))+Vector3(0,1.0,0);camera.size=3.8;offset=Vector3(4,3.6,7)
+		elif capture_scenario == "tree-detail":
+			focus=xyz(sim.resources[0].position)+Vector3(0,2.35,0);camera.size=6.6;offset=Vector3(4,3.6,7)
 		if capture_view == "side": offset = Vector3(8.6, 6.8, 0)
 		elif capture_view == "left": offset = Vector3(-8.6, 6.8, 0)
 		elif capture_view == "rear": offset = Vector3(0, 6.8, -8.6)
 		elif capture_view == "three-quarter": offset = Vector3(8.6, 6.8, 8.6)
 		elif capture_view == "overhead": offset = Vector3(0.001, 16.0, 0.001)
-	var desired := focus + offset
-	# Orthographic framing is unchanged when translated along the viewing ray.
-	# Moving the camera back prevents its near plane cutting foreground scenery.
-	desired += offset.normalized() * 18.0
-	camera.position = camera.position.lerp(desired, 1 - exp(-8.6 * dt)) if capture_frames > 0 else desired
-	camera.look_at(focus)
+		var desired := focus + offset + offset.normalized() * 18.0
+		camera.position = camera.position.lerp(desired, 1 - exp(-8.6 * dt)) if capture_frames > 0 else desired
+		camera.look_at(focus)
+		active_camera_focus = focus
+	else:
+		var camera_state := camera_composition.compose(
+			xyz(sim.position),
+			Vector3(sim.velocity.x, 0.0, sim.velocity.y),
+			Vector3(sim.facing.x, 0.0, sim.facing.y),
+			camera_action_target(),
+			size,
+			dt
+		)
+		camera.keep_aspect = camera_state.keep_aspect
+		camera.size = camera_state.full_height
+		camera.position = camera_state.camera_position
+		camera.look_at(camera_state.focus)
+		active_camera_focus = camera_state.focus
 	update_foreground_visibility(xyz(sim.position)+Vector3(0,.95,0), dt)
 	status.text = "HEAT %d   ·   %d carried" % [sim.level, sim.carried()]
 	var hour: float = sim.climate.hour()
@@ -653,12 +682,14 @@ func _process(dt: float):
 		scene_view.get_texture().get_image().save_png(capture_directory.path_join("native-scene.png"))
 		var report := {"renderer": RenderingServer.get_current_rendering_method(), "device": RenderingServer.get_video_adapter_name(), "window": [get_viewport().size.x, get_viewport().size.y], "internal_render": [scene_view.size.x, scene_view.size.y], "render_scale": scene_view.scaling_3d_scale, "render_review": render_review, "performance_certified": false, "characters": actors.keys(), "source_clips": {}}
 		report["environment_revision"] = ENVIRONMENT_REVISION
+		report["reference_forest"] = reference_forest_evidence
 		report["environment_kit"] = JSON.parse_string(FileAccess.get_file_as_string("res://assets/environment_v2/manifest.json"))
 		report["foreground_faded"] = foreground_faded
 		report["camera_near"] = camera.near
-		report["camera_focus_distance"] = camera.position.distance_to(focus)
+		report["camera_focus_distance"] = camera.position.distance_to(active_camera_focus)
 		report["npc_population"] = population_view.evidence()
 		report["outpost"] = outpost_view.evidence(sim)
+		report["task03_boundary"] = camp_boundary_view.descriptor
 		report["capture_scenario"] = capture_scenario
 		report["scenario_is_test_fixture"] = capture_scenario != "opening"
 		report["action_readout"] = action_readout.descriptor
@@ -822,6 +853,8 @@ func build_environment_dressing():
 		var a := i * 2.399963
 		var p := Vector2(cos(a) * (11.8 + fposmod(i * .831, 8.0)), sin(a) * (14.3 + fposmod(i * .713, 7.0)))
 		if absf(p.x) < 3.5: continue
+		# The extended lake must not leave shrub/rock tops protruding through water.
+		if Surface.lake_distance(p) < 1.0: continue
 		var blocked := false
 		for r in sim.resources:
 			if p.distance_to(r.position) < 1.8: blocked = true
@@ -848,6 +881,7 @@ func build_environment_dressing():
 		world.add_child(light)
 
 func update_foreground_visibility(focus: Vector3, dt: float):
+	ReferenceForest.set_player_clearance(self, focus + Vector3(0,.05,0))
 	# Smooth opaque-dither cutaway for crowns hiding the lead; no transparent sorting.
 	# Gameplay nodes remain alive; visibility is not a change to resource state.
 	foreground_faded = 0

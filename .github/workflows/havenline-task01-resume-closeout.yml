@@ -1,0 +1,102 @@
+name: Havenline T01 resilient independent closeout
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-resume-closeout.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  prepare-reviewer:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Download pinned bytes when cache is missing; never stop at cache miss
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y aria2
+          python3 tools/havenline/ensure_task01_reviewer.py
+      - uses: actions/cache/save@v4
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+  independent-review:
+    needs: prepare-reviewer
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        group: [variant-1, variant-2, variant-3, forest, clearance, camera-motion]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-closeout-evidence-34258653668
+          run-id: 34258653668
+          github-token: ${{ github.token }}
+          path: task01-evidence/
+      - uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Recover exact reviewer if cache disappears between jobs
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y aria2
+          python3 tools/havenline/ensure_task01_reviewer.py
+      - run: python3 -m pip install pillow
+      - name: Independent review with identical evidence, unchanged rubric and blind controls
+        run: python3 -u tools/havenline/review_task01_closeout.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-closeout-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
+          path: critic-results/
+          retention-days: 30
+          if-no-files-found: error
+  collect:
+    needs: independent-review
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-T01-closeout-*-${{ github.run_id }}
+          path: complete-reviews/
+      - name: Inventory every raw group; successful collection is not art approval
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('complete-reviews');rows=[]
+          for p in root.glob('*/task-review.json'):
+              r=json.loads(p.read_text());rows.append({'role':r['role'],'group':r['group'],'source':r['source'],'score':r.get('lowest_score'),'passed':r.get('passed',False),'error':r.get('error')})
+          (root/'inventory.json').write_text(json.dumps({'reviews':rows,'raw_group_count':len(rows),'task_approved':False},indent=2));print(json.dumps(rows,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-complete-closeout-reviews-${{ github.run_id }}
+          path: complete-reviews/
+          retention-days: 30
+          if-no-files-found: error
+# Reuses the successfully verified current game/evidence. No rerender, artwork
+# change, threshold change, paid model API, Task 2 work or APK delivery.

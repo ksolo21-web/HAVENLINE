@@ -1,0 +1,148 @@
+name: Havenline Task 4 camera candidate
+on:
+  push:
+    branches: ['havenline/T04-camera', 'codex/havenline-sequential-task-01']
+    paths:
+      - 'HavenlineGodot/scripts/camera_composition.gd'
+      - 'HavenlineGodot/tests/test_task04_camera.gd'
+      - 'HavenlineGodot/tests/capture_task04_camera.gd'
+      - '.github/workflows/havenline-task04-camera-candidate.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: havenline-task04-camera-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  precritic-camera-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Prepare pinned Godot and software Vulkan
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install pillow
+          mkdir -p "$RUNNER_TEMP/engine" task04-evidence/tests task04-evidence/gallery task04-evidence/native4k
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          git lfs fetch origin "$GITHUB_SHA" --include=Docs/Production/T02/reference-ground.webp --exclude=''
+          git lfs checkout Docs/Production/T02/reference-ground.webp
+          echo '3c424b0df53c1c6de49018278779a4ef1ced58562e5b9dbb54fe276d13aa2ddb  Docs/Production/T02/reference-ground.webp' | sha256sum -c -
+      - name: Verify scope and prepare deterministic fixtures
+        run: |
+          set -euo pipefail
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          if [ "$GITHUB_REF_NAME" = 'codex/havenline-sequential-task-01' ]; then
+            branch_point=$(git rev-parse "$GITHUB_SHA^")
+          else
+            branch_point=$(git merge-base "$GITHUB_SHA" "$integration")
+          fi
+          mapfile -t changed < <(git diff --name-only "$branch_point" "$GITHUB_SHA")
+          echo "candidate_branch_point=$branch_point" | tee task04-evidence/candidate-scope.txt
+          printf '%s\n' "${changed[@]}" | tee task04-evidence/changed-files.txt
+          test "${#changed[@]}" -gt 0
+          for path in "${changed[@]}"; do
+            case "$path" in
+              HavenlineGodot/scripts/camera_composition.gd|HavenlineGodot/tests/test_task04_camera.gd|HavenlineGodot/tests/capture_task04_camera.gd|.github/workflows/havenline-task04-*.yml) ;;
+              *) echo "Foreign path in isolated T04 candidate: $path" >&2; exit 1 ;;
+            esac
+          done
+          python3 tools/havenline/bake_outpost_audio.py > task04-evidence/audio-fixture.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task04-evidence/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task04-evidence/tests/motion-fixture.log 2>&1
+      - name: Run baseline and Task 4 deterministic acceptance
+        run: |
+          set -euo pipefail
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary test_task04_camera; do
+            timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task04-evidence/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task04-evidence/tests/*.log; then exit 1; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          rows=[]
+          for path in sorted(Path('task04-evidence/tests').glob('test_*.log')):
+              reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
+              assert reports,path
+              report=reports[-1]
+              assert report.get('passed') is True and not report.get('failures'),(path,report.get('failures'))
+              checks=report.get('checks',[])
+              rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
+          assert len(rows)==17,rows
+          total=sum(row['checks'] for row in rows)
+          assert total>=848,total
+          out={'task':'T04-reference-camera-v1','source':'${{ github.sha }}','suite_count':len(rows),'total_checks':total,'suites':rows,'all_passed':True,'task_approved':False}
+          Path('task04-evidence/tests.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps(out))
+          PY
+      - name: Capture device matrix, transitions, contexts and native frames
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task04_camera.gd -- --out="$(pwd)/task04-evidence/gallery" > task04-evidence/gallery.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task04_camera.gd -- --native-4k --out="$(pwd)/task04-evidence/native4k" > task04-evidence/native4k.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task04-evidence/gallery.log task04-evidence/native4k.log; then exit 1; fi
+          cp Docs/Production/T02/reference-ground.webp task04-evidence/reference-ground.webp
+      - name: Enforce pre-critic framing and provenance checks
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image,ImageDraw
+          import hashlib,json,math
+          root=Path('task04-evidence')
+          gallery=json.loads((root/'gallery/capture.json').read_text())
+          native=json.loads((root/'native4k/capture.json').read_text())
+          assert gallery['task']==native['task']=='T04-reference-camera-v1'
+          assert gallery['renderer']==native['renderer']=='mobile'
+          assert gallery['source_bound'] and native['source_bound']
+          assert gallery['reference_pixels_sha256']=='3c424b0df53c1c6de49018278779a4ef1ced58562e5b9dbb54fe276d13aa2ddb'
+          assert hashlib.sha256((root/'reference-ground.webp').read_bytes()).hexdigest()==gallery['reference_pixels_sha256']
+          assert len(gallery['captures'])==20,len(gallery['captures'])
+          assert len(native['captures'])==3,len(native['captures'])
+          names={row['name'] for row in gallery['captures']}
+          assert len([name for name in names if name.startswith('aspect-')])==6
+          assert len([name for name in names if name.startswith('direction-')])==4
+          for row in gallery['captures']+native['captures']:
+              assert 14.29 <= row['camera_full_height'] <= 16.01,row
+              assert 0.04 <= row['player_height_fraction'] <= 0.20,row
+              x,y=row['player_anchor_normalized'];assert 0.08 <= x <= 0.92 and 0.08 <= y <= 0.92,row
+              if row['target_in_range']:
+                  assert row['target_anchor_normalized'] is not None,row
+                  tx,ty=row['target_anchor_normalized'];assert -0.02 <= tx <= 1.02 and -0.02 <= ty <= 1.02,row
+          for row in native['captures']:
+              assert row['internal_size']==[3840,2160],row
+              assert row['render_scale']==1.0,row
+          pngs=sorted((root/'gallery').glob('*.png'))+sorted((root/'native4k').glob('*.png'))
+          assert len(pngs)==23,len(pngs)
+          hashes={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in pngs}
+          for path in pngs:
+              with Image.open(path) as im: im.verify()
+          thumbs=[]
+          for path in sorted((root/'gallery').glob('*.png')):
+              im=Image.open(path).convert('RGB');im.thumbnail((320,180))
+              tile=Image.new('RGB',(340,215),'#111820');tile.paste(im,((340-im.width)//2,8));
+              ImageDraw.Draw(tile).text((10,190),path.stem,fill='white');thumbs.append(tile)
+          sheet=Image.new('RGB',(1360,math.ceil(len(thumbs)/4)*215),'#080d12')
+          for index,tile in enumerate(thumbs):sheet.paste(tile,((index%4)*340,(index//4)*215))
+          sheet.save(root/'contact-sheet.jpg',quality=90)
+          branch_point=(root/'candidate-scope.txt').read_text().strip().split('=',1)[1]
+          provenance={'task':'T04-reference-camera-v1','source':'${{ github.sha }}','registry_base':'5135cddf96123afb962f4046f41e5ac0e510428a','candidate_branch_point':branch_point,'captures':hashes,'actual_images':23,'gallery_images':20,'native3840x2160_scale1_frames':3,'automated_framing_gate_passed':True,'manual_quick_look_required_before_critics':True,'task_approved':False,'physical_4k60_verified':False}
+          (root/'provenance.json').write_text(json.dumps(provenance,indent=2))
+          print(json.dumps({k:v for k,v in provenance.items() if k!='captures'}))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: task04-camera-precritic-${{ github.sha }}
+          path: task04-evidence
+          if-no-files-found: error
+          retention-days: 14

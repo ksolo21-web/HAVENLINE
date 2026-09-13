@@ -37,6 +37,19 @@ class GateTests(unittest.TestCase):
         return data
     def report(self):
         return gate.validate(self.root,self.source,self.status)
+    def test_delivery_workflow_keeps_full_release_stage_scoped(self):
+        workflow=(Path(__file__).resolve().parents[3]/'.github/workflows/havenline-device-release-gate.yml').read_text()
+        for marker in [
+            "ENFORCE_RELEASE_GATE:",
+            "github.event_name == 'workflow_dispatch'",
+            "github.ref == 'refs/heads/main'",
+            "github.base_ref == 'main'",
+            "startsWith(github.base_ref, 'release/')",
+            "if: env.ENFORCE_RELEASE_GATE == 'true'",
+            "python3 tools/havenline/release_gate.py",
+            "validator regression tests remain mandatory",
+        ]:
+            self.assertIn(marker,workflow)
     def test_no_evidence_cannot_pass(self):
         self.assertFalse(self.report()['passed'])
     def test_missing_mandatory_game_check_rejected(self):

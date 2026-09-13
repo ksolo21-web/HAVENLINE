@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "protocol": "havenline-security-probe-v1",
+  "candidate_bound": true,
+  "score_rule": {"pass_score": 10.0, "fail_score": 0.0, "required": ">9.0"},
+  "attacks": [
+    {"id":"save_modification","description":"Tamper with persisted player/resources/progression state.","required_assertions":["tamper_rejected_or_safely_recovered","no_unauthorized_value_gain","audit_signal_recorded"]},
+    {"id":"clock_manipulation","description":"Move client clock forward/backward around rewards/events.","required_assertions":["client_clock_not_authoritative","no_duplicate_or_early_grant","server_time_or_trusted_time_used"]},
+    {"id":"replay","description":"Replay an already accepted grant/claim/request.","required_assertions":["replay_rejected","idempotency_preserved","no_duplicate_value"]},
+    {"id":"duplicate_grants","description":"Race or duplicate a reward grant.","required_assertions":["single_grant_only","atomic_or_idempotent_write","balance_consistent"]},
+    {"id":"fake_purchase","description":"Forge or alter a purchase/receipt entitlement.","required_assertions":["unverified_purchase_rejected","no_entitlement_granted","authoritative_verification_required"]},
+    {"id":"fake_premium_balance","description":"Modify local premium-currency balance or request a fabricated balance.","required_assertions":["authoritative_balance_preserved","forged_balance_rejected","no_spendable_gain"]},
+    {"id":"vip_manipulation","description":"Forge VIP level/status or replay VIP entitlement.","required_assertions":["vip_entitlement_authoritative","forged_vip_rejected","permanent_valid_vip_preserved"]},
+    {"id":"event_fraud","description":"Forge event state, completion, schedule or reward claim.","required_assertions":["event_state_authoritative","invalid_claim_rejected","kill_switch_respected"]},
+    {"id":"rollback","description":"Restore older local state to duplicate value/progression.","required_assertions":["rollback_detected_or_reconciled","no_duplicate_value","newer_authoritative_state_wins"]},
+    {"id":"leaderboard_fabrication","description":"Submit fabricated score/progression/competitive-value data.","required_assertions":["fabricated_submission_rejected","authoritative_validation_required","no_published_false_result"]}
+  ],
+  "adapter_contract": {
+    "invocation": "<adapter command> --attack <id> --candidate <40-char-sha>",
+    "stdout_last_json_required": true,
+    "required_result_fields": ["attack_id","candidate_commit","passed","assertions","before_state_hash","after_state_hash","notes"],
+    "assertions_value": "object mapping required assertion names to booleans"
+  }
+}

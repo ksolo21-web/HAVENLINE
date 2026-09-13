@@ -1,0 +1,229 @@
+name: Havenline Task 3 polished final gate
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task03-polish-final.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  build-capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    outputs:
+      source: ${{ steps.source.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Prepare pinned Godot 4.7.2 and Mobile software renderer
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install numpy pillow
+          mkdir -p "$RUNNER_TEMP/engine" task03-evidence/tests task03-evidence/gallery task03-evidence/native4k task03-evidence/tree-clearance source-snapshot
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+      - name: Protect T01 assets and T02 river authority; prepare established fixtures
+        run: |
+          set -euo pipefail
+          git diff --exit-code 1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff -- HavenlineGodot/assets HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          glbs=sorted(Path('HavenlineGodot/assets').rglob('*.glb'));assert len(glbs)==33
+          protected=sorted(set(glbs)|set(Path('HavenlineGodot/assets/reference_forest').rglob('*.*')))
+          Path('task03-evidence/protected-before.json').write_text(json.dumps({str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in protected},indent=2))
+          PY
+          python3 tools/havenline/bake_outpost_audio.py > task03-evidence/audio-fixture.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task03-evidence/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task03-evidence/tests/motion-fixture.log 2>&1
+      - name: Run every prior suite plus repaired Task 3 acceptance
+        run: |
+          set -euo pipefail
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary; do
+            timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task03-evidence/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task03-evidence/tests/*.log; then exit 1; fi
+          python3 tools/havenline/audit_task01_geometry.py > task03-evidence/tree-geometry.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          out=Path('task03-evidence');rows=[]
+          for path in sorted((out/'tests').glob('test_*.log')):
+              found=[json.loads(s) for s in path.read_text().splitlines() if s.startswith('{')];assert found,path
+              data=found[-1];assert data.get('passed') is True and not data.get('failures'),(path,data.get('failures'))
+              checks=data.get('checks',[]);rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
+          assert len(rows)==16,rows
+          total=sum(r['checks'] for r in rows);assert total==807,total
+          geometry=json.loads((out/'tree-geometry.json').read_text());assert geometry['passed'] and geometry['geometry_checks']==9
+          before=json.loads((out/'protected-before.json').read_text());assert all(Path(p).exists() and hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in before.items())
+          report={'source':'${{ github.sha }}','suite_count':16,'total_checks':total,'suites':rows,'all_passed':True,'tree_geometry_checks':9,'protected_glbs_unchanged':33,'task_approved':False,'physical4k60_verified':False}
+          (out/'tests.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
+          PY
+      - name: Capture fresh Task 3 gallery, native 4K and T01 visibility regression
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1);test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task03_boundary.gd -- --out="$(pwd)/task03-evidence/gallery" > task03-evidence/gallery.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task03_boundary.gd -- --native-4k --out="$(pwd)/task03-evidence/native4k" > task03-evidence/native4k.log 2>&1
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task01_clearance.gd -- --out="$(pwd)/task03-evidence/tree-clearance" > task03-evidence/tree-clearance.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task03-evidence/*.log; then exit 1; fi
+          cp Docs/Production/T02/reference-ground.webp task03-evidence/reference-ground.webp
+      - name: Bind every new pixel and runtime file to this exact source
+        id: source
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          from PIL import Image
+          out=Path('task03-evidence');captures={str(p.relative_to(out)):hashlib.sha256(p.read_bytes()).hexdigest() for p in out.rglob('*.png')}
+          assert len(list((out/'gallery').glob('*.png')))==39
+          assert len(list((out/'native4k').glob('*.png')))==11
+          assert len(list((out/'tree-clearance').glob('*.png')))==11
+          assert len(captures)==61,len(captures)
+          for name in captures:
+              with Image.open(out/name) as image:
+                  assert image.size==((3840,2160) if name.startswith('native4k/') else (1280,720)),(name,image.size);image.verify()
+          for folder,expected in [('gallery',39),('native4k',11)]:
+              report=json.loads((out/folder/'capture.json').read_text());assert report['renderer']=='mobile' and report['forest']['instances']==586 and report['task']=='T03-boundary-v2'
+              assert len(report['captures'])==expected and all(row['render_scale']==1.0 for row in report['captures'])
+              assert report['river']['river_layout_version']=='river_v1_mapspan'
+              assert report['boundary']['gate_count']==6 and report['boundary']['collision_panel_instances']==32 and report['boundary']['primitive_fence_meshes_created'] is False
+              assert abs(report['boundary']['gate_leaf_length']-1.35)<.0001 and abs(report['boundary']['river_gate_leaf_length']-1.60)<.0001 and abs(report['boundary']['river_gate_open_angle']-1.43)<.0001 and abs(report['boundary']['river_apron_inset']-.55)<.0001 and abs(report['boundary']['fence_root_sink']-.08)<.0001 and abs(report['boundary']['visual_join_overlap']-.10)<.0001
+          before=json.loads((out/'protected-before.json').read_text());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in before.items())
+          gallery=json.loads((out/'gallery/capture.json').read_text());conditions=[r for r in gallery['captures'] if r['name'].startswith('boundary-condition-')]
+          assert len(conditions)==6 and len({(tuple(r['camera_position']),r['camera_basis'],r['camera_size']) for r in conditions})==1
+          assert captures['gallery/boundary-condition-day.png']==captures['gallery/boundary-condition-day-return.png']
+          source='${{ github.sha }}'
+          runtime=['HavenlineGodot/scripts/camp_boundary.gd','HavenlineGodot/scripts/camp_boundary_view.gd','HavenlineGodot/scripts/outpost_surface.gd','HavenlineGodot/scripts/outpost_simulation.gd','HavenlineGodot/scripts/outpost_view.gd','HavenlineGodot/scripts/main.gd','HavenlineGodot/scripts/river_geometry.gd','HavenlineGodot/scripts/reference_forest.gd','HavenlineGodot/shaders/outpost_snow.gdshader','HavenlineGodot/shaders/lakeshore_water.gdshader','HavenlineGodot/data/reference-contract.json']
+          runtime_hashes={p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in runtime}
+          report={'task':'T03-boundary-v2','source':source,'renderer':'mobile','captures':captures,'runtime_files':runtime_hashes,'protected_files':before,'actual_images':61,'gallery_images':39,'native3840x2160_scale1_frames':11,'tree_clearance_frames':11,'gate_count':6,'collision_panels':32,'river_layout_version':'river_v1_mapspan','matched_condition_camera_verified':True,'day_return_identical':True,'all61_images_verified':True,'polish_revision':{'gate_leaf_length':1.35,'gate_open_angle':1.18,'river_gate_leaf_length':1.60,'river_gate_open_angle':1.43,'river_apron_inset':.55,'fence_root_sink':.08,'visual_join_overlap':.10,'stronger_integrated_lane_contrast':True,'river_threshold_aprons':True},'task_approved':False,'physical_phone_tablet4k60_verified':False}
+          (out/'provenance.json').write_text(json.dumps(report,indent=2));print(json.dumps({k:v for k,v in report.items() if k not in ('captures','runtime_files','protected_files')}))
+          PY
+          echo "source=${GITHUB_SHA}" >> "$GITHUB_OUTPUT"
+          echo "$GITHUB_SHA" > source-snapshot/SOURCE.txt
+          git archive --format=tar.gz --output=source-snapshot/source.tar.gz "$GITHUB_SHA" HavenlineGodot tools/havenline Docs AGENTS.md .github
+          sha256sum source-snapshot/source.tar.gz > source-snapshot/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-polished-evidence-${{ github.run_id }}
+          path: task03-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-polished-source-${{ github.run_id }}
+          path: source-snapshot/
+          retention-days: 30
+          if-no-files-found: error
+  independent-review:
+    needs: build-capture
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        role: [reference-fidelity,visual-integrity]
+        shard: [0,1,2,3]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      EXPECTED_SOURCE: ${{ needs.build-capture.outputs.source }}
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_SHARD: ${{ matrix.shard }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build-capture.outputs.source }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-task03-polished-evidence-${{ github.run_id }}
+          path: task03-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Blind-competency-gated independent Task 3 review
+        run: python3 -u tools/havenline/review_task03_local_reference.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-polished-${{ matrix.role }}-${{ matrix.shard }}-${{ github.run_id }}
+          path: task03-local-review/
+          retention-days: 30
+          if-no-files-found: error
+  critic-gate:
+    needs: [build-capture,independent-review]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      SOURCE: ${{ needs.build-capture.outputs.source }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-task03-polished-evidence-${{ github.run_id }}
+          path: evidence/
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-task03-polished-*-*-${{ github.run_id }}
+          path: reviews/
+      - name: Require 22 complete raw judgments at 9+ with no defects
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,math,os
+          source=os.environ['SOURCE'];roles={'reference-fidelity','visual-integrity'}
+          groups={'perimeter','north-gate','side-gates','river-gates','south-fence','central-lane','cross-shelter-lanes','bank-lane','detail-contact','gameplay','conditions'}
+          dims={'reference_fidelity','boundary_finish','gate_readability','lane_legibility','river_preservation','view_consistency'};expected_probe={'A':'human_character','B':'snow_tree','C':'snow_tree','D':'human_character'}
+          def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+          evidence=Path('evidence');pro=json.loads((evidence/'provenance.json').read_text());tests=json.loads((evidence/'tests.json').read_text())
+          errors=[];rows=[];models=[]
+          if pro['source']!=source or not pro['all61_images_verified'] or len(pro['captures'])!=61:errors.append('Evidence provenance invalid')
+          if tests['source']!=source or not tests['all_passed'] or tests['suite_count']!=16 or tests['total_checks']!=807:errors.append('Mechanical regression invalid')
+          for name,h in pro['captures'].items():
+              if sha(evidence/name)!=h:errors.append('Changed capture '+name)
+          for role in roles:
+              role_rows=[];shards=[]
+              for path in Path('reviews').glob('*'+role+'*/shard-review.json'):
+                  s=json.loads(path.read_text());shards.append(s['shard'])
+                  if s['source']!=source or s['role']!=role or s.get('competency_passed') is not True or s.get('error') is not None:errors.append('Bad shard '+str(path))
+                  try:
+                      c=json.loads((path.parent/'competency.json').read_text());raw=json.loads((path.parent/'competency-raw.json').read_text());choice=raw['choices'][0]
+                      if c['passed'] is not True or c['answers']!=expected_probe or choice['finish_reason']!='stop' or json.loads(choice['message']['content'])!=expected_probe:errors.append('Blind competency mismatch '+str(path))
+                      pp=json.loads((path.parent/'provenance.json').read_text());m=pp['model_manifest'];models.append((m['base_model'],m['revision']))
+                  except Exception as exc:errors.append('Missing reviewer provenance '+str(path)+': '+str(exc))
+                  for r in s.get('reviews',[]):
+                      role_rows.append(r);label=role+'/'+r.get('group','missing');v=r.get('review',{});scores=v.get('scores',{})
+                      if r.get('independent_execution') is not True or r.get('passed') is not True:errors.append('Not passing '+label)
+                      if set(scores)!=dims or any(type(x) not in (int,float) or not math.isfinite(x) or x<9 or x>10 for x in scores.values()):errors.append('Invalid/below-nine '+label)
+                      if v.get('defects')!=[] or v.get('coverage_complete') is not True or v.get('confidence') not in ('medium','high'):errors.append('Defect/incomplete '+label)
+                      try:
+                          raw=json.loads((path.parent/(r['group']+'-raw.json')).read_text());choice=raw['choices'][0]
+                          if choice['finish_reason']!='stop' or json.loads(choice['message']['content'])!=v:errors.append('Raw mismatch '+label)
+                      except Exception as exc:errors.append('Missing raw '+label+': '+str(exc))
+              if set(shards)!={0,1,2,3} or len(shards)!=4 or len(role_rows)!=11 or {r.get('group') for r in role_rows}!=groups:errors.append('Incomplete coverage '+role)
+              rows+=role_rows
+          if len(models)!=8 or len(set(models))!=1:errors.append('Reviewer model/revision mismatch')
+          result={'task':'T03-boundary-v2','source':source,'passed':not errors,'minimum_dimension_score':9.0,'target':10.0,'judgments':len(rows),'role_minimums':{role:min((r.get('lowest_score',0) for r in rows if r.get('role',role)==role),default=None) for role in roles},'same_model_family_roles_disclosed':True,'errors':errors,'task_approved':False,'physical4k60_verified':False}
+          out=Path('gate-report');out.mkdir(exist_ok=True);(out/'critic-gate.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2));raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-polished-critic-gate-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# Scoped Task 3 gate only. Native 4K captures are not physical Android FPS evidence.
+# Task 4 remains locked until actual-pixel inspection and this gate both pass.

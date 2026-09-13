@@ -1,0 +1,89 @@
+name: Havenline T02 exact-source cleaned-surface review
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-final-surface-review.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  critic:
+    strategy:
+      fail-fast: false
+      max-parallel: 16
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        group: [workfloor, shoreline, snow-contact, tree-visibility, camera-route-early, camera-route-late, water-sequence, night-overview]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '586604eb8ab6404fc8084b6853fd03cfa842d3af'
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-finished-surface-evidence-34508687675
+          run-id: 34508687675
+          github-token: ${{ github.token }}
+          path: task02-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Review actual new surfaces with the existing independent rubric and blind control
+        run: python3 -u tools/havenline/review_task02_fullsize.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T02-final-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
+          path: task02-review/
+          retention-days: 30
+          if-no-files-found: error
+  task-gate:
+    needs: critic
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '586604eb8ab6404fc8084b6853fd03cfa842d3af'
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: T02-final-*-${{ github.run_id }}
+          path: gate-report/reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-finished-surface-evidence-34508687675
+          run-id: 34508687675
+          github-token: ${{ github.token }}
+          path: evidence/
+      - run: python3 -m pip install pyyaml
+      - name: Apply the existing raw-score, source and full-coverage gate to this revision
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          w=yaml.safe_load(Path('.github/workflows/havenline-task02-fullsize-review.yml').read_text())
+          scripts=[s['run'] for s in w['jobs']['task-gate']['steps'] if 'run' in s]
+          assert len(scripts)==1
+          script=scripts[0].replace('3b3e0af44ec638b0671a02e4bd7b5909d89ea2cd','586604eb8ab6404fc8084b6853fd03cfa842d3af').replace('720','723')
+          Path('gate-report/executed-gate.sh').write_text(script)
+          subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-final-independent-evidence-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# Genuine new material revision; no changed rubric, injected score or rescore of unchanged art.
+# Previous failed reviews stay preserved. No Task3, automatic approval, physical-FPS claim or APK.

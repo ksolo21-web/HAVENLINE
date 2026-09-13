@@ -95,12 +95,14 @@ func _initialize():
 	for suffix in ["",".bak",".tmp",".bak.tmp"]:DirAccess.remove_absolute(path+suffix)
 	var mesh:=Surface.mesh();var vertices: PackedVector3Array=mesh.surface_get_arrays(0)[Mesh.ARRAY_VERTEX]
 	var normals: PackedVector3Array=mesh.surface_get_arrays(0)[Mesh.ARRAY_NORMAL]
-	check("Terrain uses a continuous sculpted mesh",vertices.size()>10000 and mesh.get_faces().size()==30752*3)
+	check("Terrain uses a continuous sculpted mesh",vertices.size()>10000 and mesh.get_faces().size()==int(Surface.HALF*2.0/Surface.STEP)*int(Surface.HALF*2.0/Surface.STEP)*6)
 	var contact_ok:=true;var normals_ok:=true;var variation:=0.
 	for i in range(0,vertices.size(),113):
 		var v: Vector3=vertices[i]
 		contact_ok=contact_ok and absf(v.y-Surface.height_at(Vector2(v.x,v.z)))<.00001
-		normals_ok=normals_ok and normals[i].y>.9
+		# T02: the submerged nonwalkable bank has separate normal/winding tests.
+		if Surface.lake_distance(Vector2(v.x,v.z))>1.2:
+			normals_ok=normals_ok and normals[i].y>.9
 		variation=maxf(variation,v.y)
 	check("Ground contact sampler matches actual surface vertices",contact_ok)
 	check("Snow surface faces upward with gentle ground slopes",normals_ok)

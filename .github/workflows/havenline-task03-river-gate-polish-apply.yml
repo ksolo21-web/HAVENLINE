@@ -1,0 +1,34 @@
+name: Havenline Task 3 river-gate readability repair
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task03-river-gate-polish-apply.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  apply:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/havenline-sequential-task-01
+          fetch-depth: 0
+      - name: Apply only the scoped river-gate readability polish
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/polish_task03_river_gate_readability.py
+          git diff --check
+          git diff -- HavenlineGodot/scripts/camp_boundary.gd HavenlineGodot/shaders/outpost_snow.gdshader HavenlineGodot/tests/capture_task03_boundary.gd HavenlineGodot/tests/test_task03_boundary.gd tools/havenline/review_task03_local_reference.py
+          test -z "$(git diff --name-only -- HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd HavenlineGodot/assets)"
+      - name: Commit repaired Task 3 source
+        run: |
+          set -euo pipefail
+          git config user.name 'havenline-ci'
+          git config user.email 'havenline-ci@users.noreply.github.com'
+          git add HavenlineGodot/scripts/camp_boundary.gd HavenlineGodot/shaders/outpost_snow.gdshader HavenlineGodot/tests/capture_task03_boundary.gd HavenlineGodot/tests/test_task03_boundary.gd tools/havenline/review_task03_local_reference.py
+          git diff --cached --quiet && { echo 'Expected scoped changes were not produced'; exit 1; }
+          git commit -m 'Polish Task 3 river gate readability after critic review'
+          git push origin HEAD:codex/havenline-sequential-task-01
+# Does not alter T02 river geometry, approved assets, collision openings, or Task 4.
