@@ -127,7 +127,7 @@
     {
       "task_id": "T05",
       "task_name": "Production station and prop kit",
-      "status": "INTEGRATING",
+      "status": "UNDER_REVIEW",
       "owner": "station-prop-builder",
       "workstream_id": "wave1-props",
       "branch": "havenline/T05-props",
@@ -135,8 +135,8 @@
       "dependencies": ["T03"],
       "owned_paths": ["@reservation:T05"],
       "protected_paths": ["@protected:approved", "@integration-only"],
-      "candidate_commit": "8224596250e3cd37df2ea5cb3db3c9328108023c",
-      "candidate_hash_or_artifact": "isolated-run:34760953227 artifact:10319106223 sha256:58920207eeea62d304a35111d918eef4d7c423ff1638c56ddf3a18ce3a735c92",
+      "candidate_commit": "8c9da476ca93a7a826d51eae892449fd20e9c105",
+      "candidate_hash_or_artifact": "integrated-run:34762404417 artifact:10319911117 sha256:f050b2f9835063b83166a537e0769fd045dc7bd6998d42e397e8e6648ba938df; isolated-source:8224596250e3cd37df2ea5cb3db3c9328108023c",
       "tests": {
         "suites": 18,
         "checks": 1117,
@@ -147,10 +147,13 @@
       },
       "evidence_path": "Docs/Production/Evidence/T05/",
       "critic_requirements": ["C1", "C2", "C6"],
-      "critic_status": {},
-      "integration_status": "INTEGRATING; isolated candidate passed preflight and is wired on the integration branch; fresh integrated 77-frame precritic evidence pending",
+      "critic_status": {
+        "C1+C2": "AUTHORIZED after exact-source integrated preflight and manual quick-look; pending independent review",
+        "C6": "pending after C1/C2 visual resolution"
+      },
+      "integration_status": "UNDER_REVIEW; integrated source 8c9da476ca93a7a826d51eae892449fd20e9c105 passed 18 suites / 1117 checks, 77-frame pixel/performance preflight, and manual quick-look",
       "known_blockers": [],
-      "next_action": "Run the exact-source integrated regression, 77-frame pixel/performance preflight, and manual quick-look before invoking C1, C2, or C6."
+      "next_action": "Run independent C1/C2 against artifact 10319911117, resolve any single-role dissent by same-role 2-of-3 evidence quorum, then run deterministic C6 and final pixel signoff."
     },
     {
       "task_id": "T06",
