@@ -135,6 +135,18 @@ class CriticLoopRegressionTests(unittest.TestCase):
         self.assertIn("'tools/havenline/**'", workflow)
         self.assertIn("'.github/workflows/havenline-godot-android.yml'", workflow)
 
+    def test_superseded_validation_runs_are_cancelled_per_branch(self):
+        workflows = [
+            ".github/workflows/havenline-production-governance.yml",
+            ".github/workflows/havenline-critic-safeguards.yml",
+            ".github/workflows/havenline-device-release-gate.yml",
+        ]
+        for rel in workflows:
+            workflow = (ROOT / rel).read_text()
+            self.assertIn("concurrency:", workflow, rel)
+            self.assertIn("cancel-in-progress: true", workflow, rel)
+            self.assertIn("github.event.pull_request.head.ref || github.ref_name", workflow, rel)
+
     def test_repair_policy_blocks_evidence_only_loop_after_real_defect(self):
         policy = (PRODUCTION / "validate_repair_cycle.py").read_text()
         self.assertIn("two-strike rule blocks evidence-only rerun", policy)
