@@ -1,7 +1,7 @@
 extends SceneTree
 
-## Exact-scene T04 evidence. The isolated candidate applies the shipping
-## composition component directly because main.gd remains integration-only.
+## Exact-scene T04 evidence driven through the authorized shipping main.gd
+## call site. Disclosed QA teleports select repeatable states only.
 
 const Main = preload("res://scripts/main.gd")
 const Composition = preload("res://scripts/camera_composition.gd")
@@ -43,13 +43,16 @@ func apply_composition(
 	game.sim.position = player
 	game.sim.velocity = velocity
 	game.sim.facing = facing
-	game.player_rig.position = world_at(player)
+	game.sim.action = {"kind":"deposit", "id":"storage", "position":target} if target is Vector2 else {}
+	game.camera_composition = controller
+	game._process(delta)
 	var target_world: Variant = world_at(target, 0.7) if target is Vector2 else null
-	var row := controller.compose(world_at(player), Vector3(velocity.x, 0.0, velocity.y), Vector3(facing.x, 0.0, facing.y), target_world, viewport, delta, snap_camera)
-	game.camera.keep_aspect = row.keep_aspect
-	game.camera.size = row.full_height
-	game.camera.position = row.camera_position
-	game.camera.look_at(row.focus)
+	var row := {
+		"focus": controller.smoothed_focus,
+		"camera_position": game.camera.position,
+		"full_height": game.camera.size,
+		"target_in_range": target is Vector2 and target.distance_to(player) <= Composition.TARGET_MAX_DISTANCE
+	}
 	# A snap stands in for an already-settled shipping camera. Let the existing
 	# opaque-dither pine cutaway reach that stable state instead of recording a
 	# misleading single-frame transition pattern after a QA teleport.
@@ -183,7 +186,8 @@ func run() -> void:
 		await capture_gameplay_context()
 	var report := {
 		"task": "T04-reference-camera-v1",
-		"candidate_component_applied_directly_because_main_is_integration_only": true,
+		"candidate_component_applied_directly_because_main_is_integration_only": false,
+		"shipping_main_call_site_exercised": true,
 		"renderer": RenderingServer.get_current_rendering_method(),
 		"device": RenderingServer.get_video_adapter_name(),
 		"camera_authority": Composition.descriptor(),

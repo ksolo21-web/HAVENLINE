@@ -1,7 +1,7 @@
 name: Havenline Task 4 camera candidate
 on:
   push:
-    branches: ['havenline/T04-camera']
+    branches: ['havenline/T04-camera', 'codex/havenline-sequential-task-01']
     paths:
       - 'HavenlineGodot/scripts/camera_composition.gd'
       - 'HavenlineGodot/tests/test_task04_camera.gd'
@@ -39,7 +39,11 @@ jobs:
         run: |
           set -euo pipefail
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
-          branch_point=$(git merge-base "$GITHUB_SHA" "$integration")
+          if [ "$GITHUB_REF_NAME" = 'codex/havenline-sequential-task-01' ]; then
+            branch_point=$(git rev-parse "$GITHUB_SHA^")
+          else
+            branch_point=$(git merge-base "$GITHUB_SHA" "$integration")
+          fi
           mapfile -t changed < <(git diff --name-only "$branch_point" "$GITHUB_SHA")
           echo "candidate_branch_point=$branch_point" | tee task04-evidence/candidate-scope.txt
           printf '%s\n' "${changed[@]}" | tee task04-evidence/changed-files.txt
