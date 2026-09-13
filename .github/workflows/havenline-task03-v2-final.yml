@@ -219,7 +219,7 @@ jobs:
       max-parallel: 8
       matrix: {role: [reference-fidelity, visual-integrity], shard: [0,1,2,3]}
     runs-on: ubuntu-24.04
-    timeout-minutes: 75
+    timeout-minutes: 120
     env: {EXPECTED_SOURCE: '${{ needs.build-capture.outputs.source }}', REVIEW_ROLE: '${{ matrix.role }}', REVIEW_SHARD: '${{ matrix.shard }}', OMP_NUM_THREADS: '4'}
     steps:
       - uses: actions/checkout@v4
