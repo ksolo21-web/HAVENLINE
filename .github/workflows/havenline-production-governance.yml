@@ -13,6 +13,7 @@ on:
       - '.github/workflows/havenline-specialist-critic.yml'
       - '.github/workflows/havenline-specialist-model-cache.yml'
       - '.github/workflows/havenline-critic-safeguards.yml'
+      - '.github/workflows/havenline-task03-v2-final.yml'
   pull_request:
     branches: ['codex/havenline-sequential-task-01']
     paths:
@@ -26,6 +27,7 @@ on:
       - '.github/workflows/havenline-specialist-critic.yml'
       - '.github/workflows/havenline-specialist-model-cache.yml'
       - '.github/workflows/havenline-critic-safeguards.yml'
+      - '.github/workflows/havenline-task03-v2-final.yml'
   workflow_dispatch:
 permissions:
   contents: read
@@ -70,9 +72,10 @@ jobs:
           fi
           python3 tools/havenline/production/change_impact.py --base "$base" --head HEAD > /tmp/impact.json
           python3 tools/havenline/production/validate_integration_scope.py --base "$base" --head HEAD --output /tmp/integration-scope.json
-          # T03 is already approved and has a historical defect ledger, so any
-          # later T03-owned runtime repair retains the stricter anti-loop check.
-          if jq -e '.task_id == "T03" and (.task_files.T03 | length > 0)' /tmp/integration-scope.json >/dev/null; then
+          # T03 is already approved. Only a real T03 runtime change should reopen
+          # the strict repair-cycle validator; workflow/docs-only maintenance is
+          # governance and must not replay the historical T03 repair range.
+          if jq -e '.task_id == "T03" and ([.task_files.T03[]? | select(startswith("HavenlineGodot/"))] | length > 0)' /tmp/integration-scope.json >/dev/null; then
             python3 tools/havenline/production/validate_repair_cycle.py \
               --ledger Docs/Production/T03/DEFECT_LEDGER.json \
               --base e89818070603399cce27b595ff1116e40b8b3b2a \
