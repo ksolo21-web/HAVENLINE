@@ -8,6 +8,11 @@ import json
 import math
 from pathlib import Path
 
+from review_protocol import (
+    FILES, GROUP_FAMILIES, build_review_prompt, build_review_schema,
+    build_slice_contract, expected_request_settings, reference_family_for,
+)
+
 
 SOURCE_GROUPS = {
     "core-families",
@@ -31,6 +36,8 @@ def digest(path: Path) -> str:
 
 def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[str]:
     errors = []
+    if row.get("execution_complete") is not True or row.get("error") is not None:
+        return ["critic row incomplete: " + str(row.get("error") or "execution_complete is false")]
     required_equal = {
         "provider": EXPECTED_PROVIDER,
         "model": EXPECTED_MODEL,
@@ -87,7 +94,7 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
     if board_manifest is not None:
         slices = board_manifest.get("slices", [])
         contract = board_manifest.get("layout_contract", {})
-        if board_manifest.get("schema_version") != 2 or board_manifest.get("task") != "T05" or board_manifest.get("source") != row.get("source") or board_manifest.get("group") != row.get("group"):
+        if board_manifest.get("schema_version") != 3 or board_manifest.get("protocol") != "family-matched-local-scope-v3" or board_manifest.get("task") != "T05" or board_manifest.get("source") != row.get("source") or board_manifest.get("group") != row.get("group"):
             errors.append("board manifest identity mismatch")
         if not slices or contract.get("canvas_size") != [1600, 1200] or contract.get("maximum_model_input") != [1664, 1664]:
             errors.append("invalid board resolution contract")
@@ -96,6 +103,12 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
         board_inputs = {}
         candidates = []
         references = set()
+        reference_families = set()
+        expected_scopes = {}
+        bindings = board_manifest.get("reference_bindings", {})
+        required_families = set(GROUP_FAMILIES.get(row.get("group"), ()))
+        if set(board_manifest.get("required_reference_families", [])) != required_families or set(bindings) != required_families:
+            errors.append("wrong or incomplete reference-family bindings")
         for item in slices:
             name = item.get("path")
             if not isinstance(name, str) or Path(name).name != name or not isinstance(item.get("sha256"), str):
@@ -107,7 +120,30 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
             board_inputs[name] = item["sha256"]
             if item.get("canvas_size") != [1600, 1200] or item.get("reference_display_size", [0])[0] < 420:
                 errors.append("board slice violates reference resolution contract")
-            references.add(item.get("reference_path"))
+            reference_path = item.get("reference_path")
+            reference_family = item.get("reference_family")
+            references.add(reference_path)
+            reference_families.add(reference_family)
+            if reference_family not in required_families or reference_path not in bindings.get(reference_family, []):
+                errors.append("wrong-family reference on board slice")
+            if item.get("unseen_assets_out_of_scope") is not True or item.get("comparison_mode") not in ("direct_family_reference", "style_feature_authority_not_scene_identity"):
+                errors.append("missing local unseen-asset scope guard")
+            candidate_paths = [candidate.get("path") for candidate in item.get("candidates", [])]
+            if item.get("reviewed_candidate_paths") != candidate_paths or not candidate_paths:
+                errors.append("board slice candidate scope mismatch")
+            for candidate_path in candidate_paths:
+                try:
+                    if candidate_path not in FILES[row.get("group")] or reference_family_for(candidate_path) != reference_family:
+                        errors.append("candidate is not paired with its protocol-declared reference family")
+                except (KeyError, TypeError, ValueError):
+                    errors.append("candidate path is outside the declared protocol")
+            expected_scopes[name] = {
+                "reference_family": reference_family,
+                "reference_path": reference_path,
+                "candidate_paths": candidate_paths,
+                "comparison_mode": item.get("comparison_mode"),
+                "unseen_assets_out_of_scope": True,
+            }
             for candidate in item.get("candidates", []):
                 candidates.append(candidate.get("path"))
                 size = candidate.get("display_size", [0, 0])
@@ -116,12 +152,19 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
         if input_manifest is None or input_manifest.get("pixel_manifest", {}).get("board_inputs") != board_inputs:
             errors.append("input manifest does not bind all board slices")
         if input_manifest is not None:
-            if len(candidates) != len(set(candidates)) or set(candidates) != set(input_manifest.get("inputs", {})):
+            if len(candidates) != len(set(candidates)) or set(candidates) != set(FILES.get(row.get("group"), [])):
+                errors.append("board slices do not cover the exact protocol candidate set once")
+            if set(candidates) != set(input_manifest.get("inputs", {})):
                 errors.append("board slices do not cover every candidate exactly once")
             if references != set(input_manifest.get("pixel_manifest", {}).get("reference_inputs", {})):
                 errors.append("board slices do not cover every required reference")
+            if reference_families != required_families:
+                errors.append("board slices do not cover every required reference family")
+            pixel_manifest = input_manifest.get("pixel_manifest", {})
+            if pixel_manifest.get("reference_bindings") != bindings or pixel_manifest.get("slice_scopes") != expected_scopes:
+                errors.append("input manifest does not bind local slice scope")
     if raw_bundle is not None:
-        if raw_bundle.get("schema_version") != 2 or raw_bundle.get("source") != row.get("source") or raw_bundle.get("critic_id") != role or raw_bundle.get("group") != row.get("group") or raw_bundle.get("attempt") != row.get("attempt") or raw_bundle.get("seed") != row.get("seed"):
+        if raw_bundle.get("schema_version") != 3 or raw_bundle.get("execution_complete") is not True or raw_bundle.get("source") != row.get("source") or raw_bundle.get("critic_id") != role or raw_bundle.get("group") != row.get("group") or raw_bundle.get("attempt") != row.get("attempt") or raw_bundle.get("seed") != row.get("seed"):
             errors.append("raw-output bundle identity mismatch")
         raw_slices = raw_bundle.get("slices", [])
         if raw_bundle.get("aggregate_review") != row.get("review"):
@@ -129,13 +172,17 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
         if board_manifest is None or len(raw_slices) != len(board_manifest.get("slices", [])):
             errors.append("raw-output bundle does not cover every board slice")
         board_hashes = {item.get("path"): item.get("sha256") for item in (board_manifest or {}).get("slices", [])}
+        board_scopes = {item.get("path"): item for item in (board_manifest or {}).get("slices", [])}
         bound_reviews = []
         raw_board_paths = []
         bound_output_paths = []
-        for item in raw_slices:
+        for slice_index, item in enumerate(raw_slices, 1):
             raw_board_paths.append(item.get("board_path"))
             if board_hashes.get(item.get("board_path")) != item.get("board_sha256"):
                 errors.append("raw-output slice is not bound to its board")
+            scope = board_scopes.get(item.get("board_path"), {})
+            if item.get("reviewed_candidate_paths") != scope.get("reviewed_candidate_paths") or item.get("reference_family") != scope.get("reference_family") or item.get("reference_path") != scope.get("reference_path"):
+                errors.append("raw-output slice scope mismatch")
             answer_review = None
             raw_review = None
             for path_key, hash_key in (("raw_output_path", "raw_output_sha256"), ("request_path", "request_sha256"), ("answer_path", "answer_sha256")):
@@ -152,6 +199,20 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
                         request = json.loads(path.read_text())
                         if request.get("source_image_path") != item.get("board_path") or request.get("source_image_sha256") != item.get("board_sha256") or request.get("original_size") != [1600, 1200] or request.get("input_size") != [1600, 1200]:
                             errors.append("model request is not bound to the full-resolution board slice")
+                        expected_contract = build_slice_contract(
+                            row.get("source"), role, row.get("attempt"), row.get("group"),
+                            slice_index, len(raw_slices), scope,
+                        )
+                        expected_schema = build_review_schema(role, scope.get("reviewed_candidate_paths"), scope.get("reference_path"))
+                        expected_settings = expected_request_settings(role, row.get("attempt"), row.get("seed"))
+                        if request.get("request_contract") != expected_contract:
+                            errors.append("model request contract does not match exact protocol slice scope")
+                        if request.get("prompt") != build_review_prompt(row.get("source"), role, expected_contract):
+                            errors.append("model request does not contain the exact protocol prompt")
+                        if request.get("schema") != expected_schema:
+                            errors.append("model request does not contain the exact dynamic response schema")
+                        if request.get("request_settings") != expected_settings or request.get("model") != expected_settings["model"] or request.get("seed") != row.get("seed"):
+                            errors.append("model request settings do not match claimed role, attempt, and seed")
                     except Exception:
                         errors.append("invalid bound slice request JSON")
                 elif path_key == "raw_output_path":
@@ -173,6 +234,12 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
             if answer_review != item.get("review"):
                 errors.append("bound slice answer does not match recorded slice review")
             elif isinstance(answer_review, dict):
+                if answer_review.get("reviewed_candidate_paths") != scope.get("reviewed_candidate_paths"):
+                    errors.append("model did not acknowledge exact candidate paths")
+                if answer_review.get("reference_path_used") != scope.get("reference_path"):
+                    errors.append("model did not acknowledge exact reference path")
+                if answer_review.get("unseen_assets_out_of_scope_acknowledged") is not True:
+                    errors.append("model did not acknowledge unseen-asset scope")
                 bound_reviews.append(answer_review)
         if len(raw_board_paths) != len(set(raw_board_paths)) or set(raw_board_paths) != set(board_hashes):
             errors.append("raw-output slices do not map one-to-one onto every board slice")
@@ -203,7 +270,7 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
 def classify(row: dict, source: str, role: str, group: str) -> str:
     if row.get("source") != source or row.get("critic_id") != role or row.get("group") != group:
         return "INCOMPLETE"
-    if row.get("independent_execution") is not True or row.get("error") is not None or row.get("_provenance_errors"):
+    if row.get("independent_execution") is not True or row.get("execution_complete") is not True or row.get("error") is not None or row.get("_provenance_errors"):
         return "INCOMPLETE"
     review = row.get("review", {})
     scores = review.get("scores", {})
@@ -229,7 +296,7 @@ def load_rows(root: Path | None, source: str, attempts: set[str]) -> dict[tuple[
         role = result.get("critic_id")
         if result.get("source") != source or role not in DIMS or result.get("attempt") not in attempts:
             continue
-        if result.get("competency_passed") is not True or result.get("error") is not None:
+        if result.get("competency_passed") is not True:
             for group in result.get("groups", []):
                 rows.setdefault((role, group), []).append({
                     "source": source, "critic_id": role, "group": group,
@@ -238,7 +305,10 @@ def load_rows(root: Path | None, source: str, attempts: set[str]) -> dict[tuple[
                 })
             continue
         for row in result.get("reviews", []):
-            row["_provenance_errors"] = provenance_errors(row, result, path.parent, role)
+            if row.get("error") is not None or row.get("execution_complete") is not True:
+                row["_provenance_errors"] = ["critic row incomplete: " + str(row.get("error") or "execution_complete is false")]
+            else:
+                row["_provenance_errors"] = provenance_errors(row, result, path.parent, role)
             rows.setdefault((role, row.get("group")), []).append(row)
     return rows
 
@@ -341,7 +411,14 @@ def evaluate(primary_root: Path, source: str, supplemental_root: Path | None, ad
             continue
         extra_states = [classify(row, source, dissent_role, group) for row in extra]
         if "INCOMPLETE" in extra_states:
-            errors.append(f"incomplete supplemental judgment {dissent_role}/{group}")
+            details = [
+                detail
+                for row, state in zip(extra, extra_states)
+                if state == "INCOMPLETE"
+                for detail in row.get("_provenance_errors", [])
+            ]
+            suffix = ": " + "; ".join(details) if details else ""
+            errors.append(f"incomplete supplemental judgment {dissent_role}/{group}{suffix}")
             continue
         attempts = {row.get("attempt") for row in extra}
         seeds = {row.get("seed") for row in extra}

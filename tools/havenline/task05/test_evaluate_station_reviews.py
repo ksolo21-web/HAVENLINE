@@ -6,6 +6,11 @@ from pathlib import Path
 
 from evaluate_station_reviews import DIMS, SOURCE_GROUPS, evaluate
 from final_gate import EXPECTED_DIMENSIONS, MEASUREMENT_NAMES, build_gate
+from review_protocol import (
+    FILES, GROUP_FAMILIES, build_review_prompt, build_review_schema,
+    build_slice_contract, build_slice_plan, expected_request_settings,
+    persist_model_response, review_exit_code, write_incomplete_group_bundle,
+)
 
 
 SOURCE = "5" * 40
@@ -38,7 +43,7 @@ def row(role, group, passed=True, attempt="primary", seed=1):
         "input_manifest_hash": hashlib.sha256(manifest).hexdigest(),
         "board_path": f"{group}-{seed}-board.jpg", "board_sha256": board_hash,
         "raw_output_path": f"{group}-{seed}-raw.json", "raw_output_sha256": hashlib.sha256(raw).hexdigest(),
-        "reference_scope_complete": True, "independent_execution": True, "error": None,
+        "reference_scope_complete": True, "independent_execution": True, "execution_complete": True, "error": None,
         "review": {
             "scores": scores, "observations": ["Observed all panels."],
             "defects": [] if passed else ["Visible production defect."],
@@ -52,68 +57,109 @@ def write_result(root: Path, role: str, attempt: str, rows: list[dict]):
     folder.mkdir(parents=True)
     for item in rows:
         group = item["group"]
-        slice_name = f"{group}-board-01.jpg"
-        slice_bytes = f"board:{group}".encode()
-        slice_hash = hashlib.sha256(slice_bytes).hexdigest()
-        (folder / slice_name).write_bytes(slice_bytes)
+        reference_bindings = {family: [f"reference/{family}.png"] for family in GROUP_FAMILIES[group]}
+        candidate_inputs = {candidate: "d" * 64 for candidate in FILES[group]}
+        plan = build_slice_plan(group, reference_bindings)
+        slices = []
+        raw_slices = []
+        board_inputs = {}
+        slice_scopes = {}
+        for index, scope in enumerate(plan, 1):
+            family = scope["reference_family"]
+            slice_name = f"{group}-board-{index:02d}.jpg"
+            slice_bytes = f"board:{group}:{family}".encode()
+            slice_hash = hashlib.sha256(slice_bytes).hexdigest()
+            (folder / slice_name).write_bytes(slice_bytes)
+            candidate_paths = scope["candidate_paths"]
+            reference_path = scope["reference_path"]
+            board_inputs[slice_name] = slice_hash
+            slice_scopes[slice_name] = {
+                "reference_family": family, "reference_path": reference_path,
+                "candidate_paths": candidate_paths, "comparison_mode": scope["comparison_mode"],
+                "unseen_assets_out_of_scope": True,
+            }
+            slices.append({
+                "path": slice_name, "sha256": slice_hash, "canvas_size": [1600, 1200],
+                "reference_path": reference_path, "reference_family": family,
+                "comparison_mode": scope["comparison_mode"], "unseen_assets_out_of_scope": True,
+                "reviewed_candidate_paths": candidate_paths,
+                "reference_display_size": [420, 980],
+                "candidates": [{"path": candidate_path, "display_size": [900, 480]} for candidate_path in candidate_paths],
+            })
+
+            prefix = f"{group}-slice-{index:02d}"
+            raw_name, request_name, answer_name = prefix + "-raw.json", prefix + "-request.json", prefix + "-answer.json"
+            slice_review = json.loads(json.dumps(item["review"]))
+            slice_review.update({
+                "reviewed_candidate_paths": candidate_paths,
+                "reference_path_used": reference_path,
+                "unseen_assets_out_of_scope_acknowledged": True,
+            })
+            raw_slice = json.dumps({
+                "id": f"{role}:{group}:{attempt}:{item['seed']}:{index}",
+                "choices": [{"finish_reason": "stop", "message": {"content": json.dumps(slice_review)}}],
+            }).encode()
+            request_contract = build_slice_contract(SOURCE, role, attempt, group, index, len(plan), slices[-1])
+            request_settings = expected_request_settings(role, attempt, item["seed"])
+            request = json.dumps({
+                "model": request_settings["model"],
+                "prompt": build_review_prompt(SOURCE, role, request_contract),
+                "schema": build_review_schema(role, candidate_paths, reference_path),
+                "request_contract": request_contract, "request_settings": request_settings,
+                "source_image_path": slice_name, "source_image_sha256": slice_hash,
+                "original_size": [1600, 1200], "input_size": [1600, 1200],
+                "seed": item["seed"],
+            }).encode()
+            answer = json.dumps(slice_review).encode()
+            (folder / raw_name).write_bytes(raw_slice)
+            (folder / request_name).write_bytes(request)
+            (folder / answer_name).write_bytes(answer)
+            raw_slices.append({
+                "board_path": slice_name, "board_sha256": slice_hash,
+                "reviewed_candidate_paths": candidate_paths, "reference_family": family, "reference_path": reference_path,
+                "raw_output_path": raw_name, "raw_output_sha256": hashlib.sha256(raw_slice).hexdigest(),
+                "request_path": request_name, "request_sha256": hashlib.sha256(request).hexdigest(),
+                "answer_path": answer_name, "answer_sha256": hashlib.sha256(answer).hexdigest(),
+                "review": slice_review,
+            })
+
         board_payload = {
-            "schema_version": 2, "task": "T05", "source": SOURCE, "group": group,
+            "schema_version": 3, "protocol": "family-matched-local-scope-v3",
+            "task": "T05", "source": SOURCE, "group": group,
+            "required_reference_families": list(GROUP_FAMILIES[group]),
+            "reference_bindings": reference_bindings,
             "layout_contract": {
                 "canvas_size": [1600, 1200], "maximum_model_input": [1664, 1664],
                 "minimum_reference_display_width": 420, "minimum_candidate_display_height": 480,
-                "maximum_candidates_per_board": 2,
+                "maximum_candidates_per_board": 2, "coverage_complete_is_slice_local": True,
+                "unlisted_assets_may_not_be_scored_as_missing": True,
             },
-            "slices": [{
-                "path": slice_name, "sha256": slice_hash, "canvas_size": [1600, 1200],
-                "reference_path": "reference/frame.png", "reference_display_size": [420, 980],
-                "candidates": [{"path": f"evidence/{group}.png", "display_size": [900, 480]}],
-            }],
+            "slices": slices,
         }
         board_name = f"{group}-board-manifest.json"
         board = (json.dumps(board_payload, indent=2, sort_keys=True) + "\n").encode()
         (folder / board_name).write_bytes(board)
         board_hash = hashlib.sha256(board).hexdigest()
-        candidate_inputs = {f"evidence/{item['group']}.png": "d" * 64}
         manifest_name = f"{group}-input-manifest.json"
         manifest = (json.dumps({
             "candidate_commit": SOURCE, "critic_id": role, "group": item["group"],
             "board_sha256": board_hash, "inputs": candidate_inputs,
             "pixel_manifest": {
                 "candidate_inputs": candidate_inputs,
-                "reference_inputs": {"reference/frame.png": "e" * 64},
+                "reference_inputs": {f"reference/{family}.png": "e" * 64 for family in GROUP_FAMILIES[group]},
+                "reference_bindings": reference_bindings,
+                "slice_scopes": slice_scopes,
                 "reference_coverage_sha256": "f" * 64,
                 "reference_extraction_sha256": "1" * 64,
                 "board_sha256": board_hash,
-                "board_inputs": {slice_name: slice_hash},
+                "board_inputs": board_inputs,
             },
         }, sort_keys=True) + "\n").encode()
         (folder / manifest_name).write_bytes(manifest)
-
-        prefix = f"{group}-slice-01"
-        raw_name, request_name, answer_name = prefix + "-raw.json", prefix + "-request.json", prefix + "-answer.json"
-        raw_slice = json.dumps({
-            "id": f"{role}:{group}:{attempt}:{item['seed']}",
-            "choices": [{"finish_reason": "stop", "message": {"content": json.dumps(item["review"])}}],
-        }).encode()
-        request = json.dumps({
-            "source_image_path": slice_name, "source_image_sha256": slice_hash,
-            "original_size": [1600, 1200], "input_size": [1600, 1200],
-            "attempt": attempt, "seed": item["seed"],
-        }).encode()
-        answer = json.dumps(item["review"]).encode()
-        (folder / raw_name).write_bytes(raw_slice)
-        (folder / request_name).write_bytes(request)
-        (folder / answer_name).write_bytes(answer)
         raw_payload = {
-            "schema_version": 2, "task": "T05", "source": SOURCE, "critic_id": role,
+            "schema_version": 3, "task": "T05", "source": SOURCE, "critic_id": role,
             "attempt": attempt, "seed": item["seed"], "group": group,
-            "slices": [{
-                "board_path": slice_name, "board_sha256": slice_hash,
-                "raw_output_path": raw_name, "raw_output_sha256": hashlib.sha256(raw_slice).hexdigest(),
-                "request_path": request_name, "request_sha256": hashlib.sha256(request).hexdigest(),
-                "answer_path": answer_name, "answer_sha256": hashlib.sha256(answer).hexdigest(),
-                "review": item["review"],
-            }],
+            "execution_complete": True, "slices": raw_slices,
             "aggregate_review": item["review"],
         }
         raw_bundle_name = f"{group}-raw-bundle.json"
@@ -130,7 +176,7 @@ def write_result(root: Path, role: str, attempt: str, rows: list[dict]):
         "model": "Qwen/Qwen3.5-9B", "model_revision": "3885219b6810b007914f3a7950a8d1b469d598a5",
         "runtime_release_sha256": "a" * 64,
         "independent_runtime": True, "request_or_run_id": f"run:{role}:{attempt}",
-        "competency_passed": True, "error": None, "groups": [item["group"] for item in rows],
+        "competency_passed": True, "execution_complete": True, "error": None, "groups": [item["group"] for item in rows],
         "reviews": rows,
     }))
 
@@ -148,6 +194,22 @@ def write_adjudication(root: Path, role: str, group: str) -> Path:
         "decisions": [{"critic_id": role, "group": group, "disposition": "not_corroborated", "inspected_items": inputs}],
     }))
     return path
+
+
+def mutate_bound_request(result_path: Path, mutate) -> None:
+    result = json.loads(result_path.read_text())
+    row_data = result["reviews"][0]
+    bundle_path = result_path.parent / row_data["raw_output_path"]
+    bundle = json.loads(bundle_path.read_text())
+    slice_data = bundle["slices"][0]
+    request_path = result_path.parent / slice_data["request_path"]
+    request = json.loads(request_path.read_text())
+    mutate(request)
+    request_path.write_text(json.dumps(request))
+    slice_data["request_sha256"] = hashlib.sha256(request_path.read_bytes()).hexdigest()
+    bundle_path.write_text(json.dumps(bundle))
+    row_data["raw_output_sha256"] = hashlib.sha256(bundle_path.read_bytes()).hexdigest()
+    result_path.write_text(json.dumps(result))
 
 
 class VisualQuorumTests(unittest.TestCase):
@@ -248,6 +310,181 @@ class VisualQuorumTests(unittest.TestCase):
             self.assertFalse(report["passed"])
             self.assertIn("board slice", " ".join(report["errors"]))
 
+    def test_protocol_planner_covers_all_77_candidates_once_with_matched_references(self):
+        seen = []
+        for group in FILES:
+            references = {family: [f"reference/{family}.png"] for family in GROUP_FAMILIES[group]}
+            plan = build_slice_plan(group, references)
+            candidates = [path for item in plan for path in item["candidate_paths"]]
+            self.assertEqual(set(candidates), set(FILES[group]))
+            self.assertEqual(len(candidates), len(set(candidates)))
+            self.assertEqual({item["reference_family"] for item in plan}, set(GROUP_FAMILIES[group]))
+            self.assertTrue(all(item["reference_path"] in references[item["reference_family"]] for item in plan))
+            self.assertTrue(all(item["unseen_assets_out_of_scope"] is True for item in plan))
+            seen.extend(candidates)
+        self.assertEqual(len(seen), 77)
+        self.assertEqual(len(seen), len(set(seen)))
+
+    def test_wrong_family_reference_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.primaries(root)
+            result_path = next(root.rglob("review-result.json"))
+            result = json.loads(result_path.read_text())
+            row_data = result["reviews"][0]
+            board_path = result_path.parent / row_data["board_path"]
+            board = json.loads(board_path.read_text())
+            first = board["slices"][0]
+            first["reference_family"] = board["required_reference_families"][1]
+            board_path.write_text(json.dumps(board))
+            row_data["board_sha256"] = hashlib.sha256(board_path.read_bytes()).hexdigest()
+            manifest_path = result_path.parent / row_data["input_manifest_path"]
+            manifest = json.loads(manifest_path.read_text())
+            manifest["board_sha256"] = row_data["board_sha256"]
+            manifest["pixel_manifest"]["board_sha256"] = row_data["board_sha256"]
+            manifest_path.write_text(json.dumps(manifest))
+            row_data["input_manifest_hash"] = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+            result_path.write_text(json.dumps(result))
+            report = evaluate(root, SOURCE, None)
+            self.assertFalse(report["passed"])
+            self.assertIn("wrong-family reference", " ".join(report["errors"]))
+
+    def test_missing_unseen_asset_scope_guard_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.primaries(root)
+            result_path = next(root.rglob("review-result.json"))
+            result = json.loads(result_path.read_text())
+            row_data = result["reviews"][0]
+            board_path = result_path.parent / row_data["board_path"]
+            board = json.loads(board_path.read_text())
+            board["slices"][0]["unseen_assets_out_of_scope"] = False
+            board_path.write_text(json.dumps(board))
+            row_data["board_sha256"] = hashlib.sha256(board_path.read_bytes()).hexdigest()
+            manifest_path = result_path.parent / row_data["input_manifest_path"]
+            manifest = json.loads(manifest_path.read_text())
+            manifest["board_sha256"] = row_data["board_sha256"]
+            manifest["pixel_manifest"]["board_sha256"] = row_data["board_sha256"]
+            manifest_path.write_text(json.dumps(manifest))
+            row_data["input_manifest_hash"] = hashlib.sha256(manifest_path.read_bytes()).hexdigest()
+            result_path.write_text(json.dumps(result))
+            report = evaluate(root, SOURCE, None)
+            self.assertFalse(report["passed"])
+            self.assertIn("unseen-asset scope guard", " ".join(report["errors"]))
+
+    def test_model_candidate_path_acknowledgment_mismatch_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.primaries(root)
+            result_path = next(root.rglob("review-result.json"))
+            result = json.loads(result_path.read_text())
+            row_data = result["reviews"][0]
+            bundle_path = result_path.parent / row_data["raw_output_path"]
+            bundle = json.loads(bundle_path.read_text())
+            slice_data = bundle["slices"][0]
+            changed_review = json.loads(json.dumps(slice_data["review"]))
+            changed_review["reviewed_candidate_paths"] = ["evidence/not-on-this-slice.png"]
+            answer_path = result_path.parent / slice_data["answer_path"]
+            answer_path.write_text(json.dumps(changed_review))
+            slice_data["answer_sha256"] = hashlib.sha256(answer_path.read_bytes()).hexdigest()
+            raw_path = result_path.parent / slice_data["raw_output_path"]
+            raw = json.loads(raw_path.read_text())
+            raw["choices"][0]["message"]["content"] = json.dumps(changed_review)
+            raw_path.write_text(json.dumps(raw))
+            slice_data["raw_output_sha256"] = hashlib.sha256(raw_path.read_bytes()).hexdigest()
+            slice_data["review"] = changed_review
+            bundle_path.write_text(json.dumps(bundle))
+            row_data["raw_output_sha256"] = hashlib.sha256(bundle_path.read_bytes()).hexdigest()
+            result_path.write_text(json.dumps(result))
+            report = evaluate(root, SOURCE, None)
+            self.assertFalse(report["passed"])
+            self.assertIn("model did not acknowledge exact candidate paths", " ".join(report["errors"]))
+
+    def test_altered_global_inventory_prompt_is_rejected_even_when_rehashed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.primaries(root)
+            result_path = next(root.rglob("review-result.json"))
+            mutate_bound_request(result_path, lambda request: request.update({"prompt": "Judge the full inventory on every slice."}))
+            report = evaluate(root, SOURCE, None)
+            self.assertFalse(report["passed"])
+            self.assertIn("exact protocol prompt", " ".join(report["errors"]))
+
+    def test_altered_dynamic_schema_is_rejected_even_when_rehashed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.primaries(root)
+            result_path = next(root.rglob("review-result.json"))
+            mutate_bound_request(
+                result_path,
+                lambda request: request["schema"]["properties"]["reviewed_candidate_paths"].update({"maxItems": 99}),
+            )
+            report = evaluate(root, SOURCE, None)
+            self.assertFalse(report["passed"])
+            self.assertIn("exact dynamic response schema", " ".join(report["errors"]))
+
+    def test_supplement_claimed_seed_must_match_bound_request_seed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            primary, supplemental = root / "primary", root / "supplemental"
+            target = sorted(SOURCE_GROUPS)[0]
+            self.primaries(primary, {("C1", target)})
+            write_result(supplemental, "C1", "supplement-1", [row("C1", target, True, "supplement-1", 2)])
+            write_result(supplemental, "C1", "supplement-2", [row("C1", target, True, "supplement-2", 3)])
+            result_path = supplemental / "C1-supplement-1/review-result.json"
+            mutate_bound_request(result_path, lambda request: request["request_settings"].update({"seed": 999}))
+            report = evaluate(primary, SOURCE, supplemental, write_adjudication(root, "C1", target))
+            self.assertFalse(report["passed"])
+            self.assertIn("claimed role, attempt, and seed", " ".join(report["errors"]))
+
+    def test_incomplete_row_reports_exact_truncation_without_path_noise(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.primaries(root)
+            result_path = next(root.rglob("review-result.json"))
+            result = json.loads(result_path.read_text())
+            row_data = result["reviews"][0]
+            row_data.update({"execution_complete": False, "independent_execution": False, "error": "truncated core-families-slice-03"})
+            for key in ("board_sha256", "raw_output_sha256", "raw_output_path"):
+                row_data.pop(key, None)
+            result["execution_complete"] = False
+            result_path.write_text(json.dumps(result))
+            report = evaluate(root, SOURCE, None)
+            joined = " ".join(report["errors"])
+            self.assertIn("truncated core-families-slice-03", joined)
+            self.assertNotIn("invalid board_sha256", joined)
+            self.assertNotIn("invalid raw_output_path", joined)
+
+    def test_producer_truncation_preserves_raw_and_request_then_fails_closed(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            request_path = root / "slice-request.json"
+            raw_path = root / "slice-raw.json"
+            answer_path = root / "slice-answer.json"
+            request_path.write_text('{"request_contract":"bound-before-call"}')
+            raw_bytes = json.dumps({
+                "choices": [{"finish_reason": "length", "message": {"content": "{\"partial\":"}}],
+            }).encode()
+            with self.assertRaisesRegex(RuntimeError, "truncated group-slice-01"):
+                persist_model_response(raw_bytes, raw_path, answer_path, "group-slice-01")
+            failed_slice = {
+                "request_path": request_path.name,
+                "request_sha256": hashlib.sha256(request_path.read_bytes()).hexdigest(),
+                "raw_output_path": raw_path.name,
+                "raw_output_sha256": hashlib.sha256(raw_path.read_bytes()).hexdigest(),
+                "error": "truncated group-slice-01",
+            }
+            bundle_path = root / "group-raw-bundle.json"
+            bundle = write_incomplete_group_bundle(
+                bundle_path, source=SOURCE, role="C1", attempt="primary", seed=1,
+                group="core-families", slices=[], failed_slice=failed_slice,
+            )
+            self.assertEqual(raw_path.read_bytes(), raw_bytes)
+            self.assertTrue(request_path.is_file())
+            self.assertFalse(answer_path.exists())
+            self.assertFalse(bundle["execution_complete"])
+            self.assertEqual(review_exit_code(bundle["execution_complete"]), 1)
+
     def test_passing_aggregate_cannot_hide_low_bound_slice_score(self):
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
@@ -338,13 +575,13 @@ class VisualQuorumTests(unittest.TestCase):
             input_path.write_text(json.dumps(input_manifest))
             record_path = performance_root / "task05-C6/performance-record.json"
             record_path.write_text('{"mode":"same-runner"}')
-            raw_path = performance_root / "candidate-benchmark/benchmark.json"
+            raw_path = performance_root / "candidate-a/benchmark.json"
             c6 = {
                 "candidate_commit": SOURCE, "baseline_commit": "4" * 40,
                 "passed": True, "defects": [], "mandatory_dimensions": {name: 9.5 for name in EXPECTED_DIMENSIONS},
                 "request_or_run_id": "123456:1:source",
                 "input_manifest_path": "task05-C6/input-manifest.json", "input_manifest_hash": hashlib.sha256(input_path.read_bytes()).hexdigest(),
-                "raw_output_path": "candidate-benchmark/benchmark.json", "raw_output_hash": hashlib.sha256(raw_path.read_bytes()).hexdigest(),
+                "raw_output_path": "candidate-a/benchmark.json", "raw_output_hash": hashlib.sha256(raw_path.read_bytes()).hexdigest(),
                 "performance_record_path": "task05-C6/performance-record.json", "performance_record_hash": hashlib.sha256(record_path.read_bytes()).hexdigest(),
                 "measurement_files": measurement_files,
             }

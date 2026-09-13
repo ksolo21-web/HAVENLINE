@@ -6,9 +6,12 @@ on:
     paths:
       - '.github/workflows/havenline-task05-review.yml'
       - 'tools/havenline/task05/review_station_kit.py'
+      - 'tools/havenline/task05/review_protocol.py'
       - 'tools/havenline/task05/evaluate_station_reviews.py'
       - 'tools/havenline/task05/test_evaluate_station_reviews.py'
       - 'tools/havenline/task05/performance_gate.py'
+      - 'tools/havenline/task05/performance_protocol.py'
+      - 'tools/havenline/task05/test_performance_protocol.py'
       - 'tools/havenline/task05/final_gate.py'
       - 'Docs/Production/Evidence/T05/**'
       - 'Docs/Production/T05/ReferenceFrames/**'
@@ -82,6 +85,7 @@ jobs:
           assert len(list(Path('task05-evidence').glob('native4k/*.png')))==3
           PY
       - run: python3 -m unittest discover -s tools/havenline/task05 -p 'test_evaluate_station_reviews.py'
+      - run: python3 -m unittest discover -s tools/havenline/task05 -p 'test_performance_protocol.py'
 
   primary-visual:
     needs: preflight
@@ -92,7 +96,7 @@ jobs:
         critic: ['C1', 'C2']
         group: ['core-families', 'loop-families', 'resources-and-details', 'shipping-device-and-tracking', 'shipping-contexts-and-native']
     runs-on: ubuntu-24.04
-    timeout-minutes: 150
+    timeout-minutes: 240
     env:
       REVIEW_ROLE: '${{ matrix.critic }}'
       REVIEW_ATTEMPT: primary
@@ -177,7 +181,7 @@ jobs:
     needs: preflight
     if: github.event_name != 'workflow_dispatch' || inputs.mode == 'primary'
     runs-on: ubuntu-24.04
-    timeout-minutes: 65
+    timeout-minutes: 110
     steps:
       - uses: actions/checkout@v4
         with: {fetch-depth: 0}
@@ -210,7 +214,7 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y xvfb mesa-vulkan-drivers
-          mkdir -p "$RUNNER_TEMP/engine" candidate-benchmark baseline-benchmark
+          mkdir -p "$RUNNER_TEMP/engine" baseline-a candidate-a candidate-b baseline-b
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
@@ -218,23 +222,37 @@ jobs:
           test -n "$VK_ICD_FILENAMES"
           cmp candidate-source/HavenlineGodot/tests/benchmark_environment.gd baseline-source/HavenlineGodot/tests/benchmark_environment.gd
           cmp candidate-source/HavenlineGodot/scripts/performance_record.gd baseline-source/HavenlineGodot/scripts/performance_record.gd
-          timeout 240 "$engine" --headless --editor --path candidate-source/HavenlineGodot --import --quit > candidate-benchmark/import.log 2>&1
-          timeout 240 "$engine" --headless --editor --path baseline-source/HavenlineGodot --import --quit > baseline-benchmark/import.log 2>&1
-          /usr/bin/time -v -o candidate-benchmark/time.txt xvfb-run -a -s '-screen 0 3840x2160x24' timeout 1500 "$engine" --path candidate-source/HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=1200 --benchmark-warmup=5 --benchmark-output="$(pwd)/candidate-benchmark" > candidate-benchmark/run.log 2>&1
-          /usr/bin/time -v -o baseline-benchmark/time.txt xvfb-run -a -s '-screen 0 3840x2160x24' timeout 1500 "$engine" --path baseline-source/HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=1200 --benchmark-warmup=5 --benchmark-output="$(pwd)/baseline-benchmark" > baseline-benchmark/run.log 2>&1
+          timeout 240 "$engine" --headless --editor --path candidate-source/HavenlineGodot --import --quit > candidate-import.log 2>&1
+          timeout 240 "$engine" --headless --editor --path baseline-source/HavenlineGodot --import --quit > baseline-import.log 2>&1
+          for folder in candidate-a candidate-b; do cp candidate-import.log "$folder/import.log"; done
+          for folder in baseline-a baseline-b; do cp baseline-import.log "$folder/import.log"; done
+          run_benchmark() {
+            label="$1"
+            project="$2"
+            /usr/bin/time -v -o "$label/time.txt" xvfb-run -a -s '-screen 0 3840x2160x24' timeout 1500 "$engine" --path "$project/HavenlineGodot" --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=1200 --benchmark-warmup=5 --benchmark-output="$(pwd)/$label" > "$label/run.log" 2>&1
+          }
+          run_benchmark baseline-a baseline-source
+          run_benchmark candidate-a candidate-source
+          run_benchmark candidate-b candidate-source
+          run_benchmark baseline-b baseline-source
           allowed_baked_errors='^ERROR: Missing baked outpost audio: run tools/havenline/bake_outpost_audio\.py$|^ERROR: Missing baked crew motion: run res://tools/bake_crew_motion\.gd$'
-          for log in candidate-benchmark/run.log baseline-benchmark/run.log; do
+          for log in baseline-a/run.log candidate-a/run.log candidate-b/run.log baseline-b/run.log; do
             grep -E 'SCRIPT ERROR|Parse Error|ERROR:' "$log" | grep -Ev "$allowed_baked_errors" > "$log.unexpected" || true
             test ! -s "$log.unexpected"
           done
-          cmp <(grep -E "$allowed_baked_errors" candidate-benchmark/run.log | sort) <(grep -E "$allowed_baked_errors" baseline-benchmark/run.log | sort)
+          for log in candidate-a/run.log candidate-b/run.log baseline-b/run.log; do
+            cmp <(grep -E "$allowed_baked_errors" baseline-a/run.log | sort) <(grep -E "$allowed_baked_errors" "$log" | sort)
+          done
       - name: Evaluate measured C6 record
         run: |
           set -euo pipefail
-          candidate_rss=$(awk -F: '/Maximum resident set size/{gsub(/^[ \t]+/,"",$2); print $2}' candidate-benchmark/time.txt)
-          baseline_rss=$(awk -F: '/Maximum resident set size/{gsub(/^[ \t]+/,"",$2); print $2}' baseline-benchmark/time.txt)
-          test -n "$candidate_rss" && test -n "$baseline_rss"
-          python3 tools/havenline/task05/performance_gate.py --candidate "$EXPECTED_SOURCE" --baseline-source "$T04_BASELINE_SOURCE" --candidate-root candidate-source --baseline-root baseline-source --candidate-benchmark candidate-benchmark/benchmark.json --baseline-benchmark baseline-benchmark/benchmark.json --candidate-rss-kb "$candidate_rss" --baseline-rss-kb "$baseline_rss" --evidence task05-evidence --baseline-evidence task04-baseline --output task05-C6
+          rss() { awk -F: '/Maximum resident set size/{gsub(/^[ \t]+/,"",$2); print $2}' "$1"; }
+          candidate_a_rss=$(rss candidate-a/time.txt)
+          candidate_b_rss=$(rss candidate-b/time.txt)
+          baseline_a_rss=$(rss baseline-a/time.txt)
+          baseline_b_rss=$(rss baseline-b/time.txt)
+          test -n "$candidate_a_rss" && test -n "$candidate_b_rss" && test -n "$baseline_a_rss" && test -n "$baseline_b_rss"
+          python3 tools/havenline/task05/performance_gate.py --candidate "$EXPECTED_SOURCE" --baseline-source "$T04_BASELINE_SOURCE" --candidate-root candidate-source --baseline-root baseline-source --candidate-benchmark candidate-a/benchmark.json --candidate-benchmark candidate-b/benchmark.json --baseline-benchmark baseline-a/benchmark.json --baseline-benchmark baseline-b/benchmark.json --candidate-rss-kb "$candidate_a_rss" --candidate-rss-kb "$candidate_b_rss" --baseline-rss-kb "$baseline_a_rss" --baseline-rss-kb "$baseline_b_rss" --evidence task05-evidence --baseline-evidence task04-baseline --output task05-C6
       - name: Publish C6 verdict
         if: always()
         run: |
@@ -249,8 +267,10 @@ jobs:
           name: 'havenline-t05-C6-${{ github.run_id }}'
           path: |
             task05-C6/
-            candidate-benchmark/
-            baseline-benchmark/
+            candidate-a/
+            candidate-b/
+            baseline-a/
+            baseline-b/
           retention-days: 30
           if-no-files-found: error
 
@@ -327,7 +347,7 @@ jobs:
       fail-fast: false
       matrix: '${{ fromJSON(needs.adjudication-precheck.outputs.matrix) }}'
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 240
     env:
       REVIEW_ROLE: '${{ matrix.role }}'
       REVIEW_GROUPS: '${{ matrix.group }}'

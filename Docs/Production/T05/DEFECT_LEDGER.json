@@ -1,13 +1,59 @@
 {
   "schema_version": 1,
   "task_id": "T05",
-  "candidate_commit": null,
-  "defects": [],
+  "candidate_commit": "8c9da476ca93a7a826d51eae892449fd20e9c105",
+  "defects": [
+    {
+      "id": "T05-D01",
+      "source_run": 34771751255,
+      "visible_symptom": "Completed C1/C2 slices reported unrelated T05 families as missing and collapsed group scores to zero.",
+      "triage": ["EVIDENCE_FIX", "TOOLING_FIX"],
+      "affected_production_object": null,
+      "probable_root_cause": "Protocol v2 enumerated the whole T05 inventory on every one-or-two-candidate slice, defined coverage globally, and paired reference families round-robin rather than to the visible candidate family.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Protocol v3 binds exact candidate paths, a matched reference family/path, slice-local coverage, and an explicit unseen-assets-out-of-scope acknowledgment.",
+      "expected_visible_result": "Fresh critics evaluate only what each source-bound slice actually contains; real visible defects remain score-blocking.",
+      "proof_contract": "Twenty visual-integrity tests plus a fresh complete ten-job C1/C2 primary run on the unchanged source.",
+      "counters": {"review_round": 1, "same_family_strikes": 0},
+      "status": "REJECTED_AS_INVALID_FINDING"
+    },
+    {
+      "id": "T05-D02",
+      "source_run": 34771751255,
+      "visible_symptom": "Two C2 groups truncated and one C1 job was cancelled, leaving mandatory visual coverage incomplete.",
+      "triage": ["TOOLING_FIX", "EVIDENCE_FIX"],
+      "affected_production_object": null,
+      "probable_root_cause": "The model output cap and completion contract allowed row-level truncation to exit successfully and the resolver then emitted secondary missing-hash noise.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Constrain response length, raise the response cap, preserve failed-slice raw evidence, set execution_complete=false, exit nonzero, and report the exact row error without fabricated path errors.",
+      "expected_visible_result": "Every required group yields either a fully bound verdict or a precise incomplete execution; cancellations are never treated as votes.",
+      "proof_contract": "Fresh ten-job primary matrix with all artifacts complete and evaluator provenance clean.",
+      "counters": {"review_round": 1, "same_family_strikes": 0},
+      "status": "READY_FOR_VERIFICATION"
+    },
+    {
+      "id": "T05-D03",
+      "source_run": 34771751255,
+      "diagnostic_run": 34774570475,
+      "visible_symptom": "The official single-pair C6 run produced thermal_risk 8.80268 from a 1.119732 RSS ratio, while the diagnostic baseline repeats drifted about eight percent.",
+      "triage": ["DIAGNOSTIC_ONLY", "TEST_FIX"],
+      "affected_production_object": null,
+      "probable_root_cause": "One sequential candidate/baseline pair cannot distinguish production RSS from runner/order drift; diagnostic variant effects were smaller than baseline repeat spread.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Run counterbalanced B-A-A-B 20-minute repeats and fail measurement when either role's max-RSS repeat spread exceeds five percent of its mean.",
+      "expected_visible_result": "C6 applies the unchanged regression score only to stable counterbalanced means and preserves all four raw measurements.",
+      "proof_contract": "Four complete native-4K scale-1 runs with at least 300 samples each, exact condition equality, warning equality, raw hashes, repeat stability, and every unchanged C6 dimension strictly above 9.0.",
+      "counters": {"review_round": 1, "evidence_attempts": 2, "same_family_strikes": 0},
+      "status": "READY_FOR_VERIFICATION"
+    }
+  ],
   "counters": {
-    "review_round_count": 0,
-    "evidence_only_attempt_count": 0,
+    "review_round_count": 1,
+    "evidence_only_attempt_count": 2,
     "production_repair_count": 0
   },
   "rule": "Every mandatory finding follows CRITIC SYMPTOM -> ROOT CAUSE -> PRODUCTION CHANGE -> EXPECTED VISIBLE RESULT -> REQUIRED PROOF."
 }
-

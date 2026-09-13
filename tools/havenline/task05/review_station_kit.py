@@ -17,7 +17,13 @@ import time
 import urllib.request
 from pathlib import Path
 
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
+
+from review_protocol import (
+    FILES, GROUP_FAMILIES, PROTOCOL, ROLE_DIMENSIONS, build_review_prompt,
+    build_review_schema, build_slice_contract, build_slice_plan, expected_request_settings,
+    persist_model_response, review_exit_code, write_incomplete_group_bundle,
+)
 
 
 SOURCE = os.environ["EXPECTED_SOURCE"]
@@ -34,76 +40,13 @@ assert ROLE in ("C1", "C2")
 RUN_ID = os.environ.get("GITHUB_RUN_ID", "local")
 RUN_ATTEMPT = os.environ.get("GITHUB_RUN_ATTEMPT", "0")
 RUN_JOB = os.environ.get("GITHUB_JOB", "local")
+TITLE_FONT = ImageFont.load_default(size=26)
+LABEL_FONT = ImageFont.load_default(size=22)
 
-DIMS = {
-    "C1": ["reference_fidelity", "visual_language", "cross_view_consistency"],
-    "C2": ["geometry_contact", "clipping_seams", "intentional_gap_integrity", "cross_view_integrity"],
-}
-
-VIEWS = ["front", "rear", "left", "right", "three-quarter", "detail"]
-
-
-def family_files(*families: str) -> list[str]:
-    return [f"families/family-{family}-{view}.png" for family in families for view in VIEWS]
-
-
-FILES = {
-    "core-families": family_files("hearth", "counters", "pads"),
-    "loop-families": family_files("fishing", "processing", "defense"),
-    "resources-and-details": family_files("resources") + [
-        "component/close-hearth-front.png",
-        "component/close-counter-reverse.png",
-        "component/close-fishing-side.png",
-        "component/close-processing-front.png",
-        "component/close-defense-reverse.png",
-        "component/camp-day-front.png",
-        "component/camp-day-reverse.png",
-        "component/lakeshore-day-front.png",
-        "component/lakeshore-day-reverse.png",
-        "component/camp-night-front.png",
-        "component/camp-blizzard-side.png",
-        "component/lakeshore-night-front.png",
-    ],
-    "shipping-device-and-tracking": [
-        "gameplay/aspect-phone-16-9.png",
-        "gameplay/aspect-phone-20-9.png",
-        "gameplay/aspect-tablet-16-10.png",
-        "gameplay/aspect-tablet-4-3.png",
-        "gameplay/aspect-foldable-outer.png",
-        "gameplay/aspect-foldable-inner.png",
-        "gameplay/direction-north.png",
-        "gameplay/direction-east.png",
-        "gameplay/direction-south.png",
-        "gameplay/direction-west.png",
-        "gameplay/target-inclusion-storage.png",
-        "gameplay/target-release-damped.png",
-        "gameplay/resize-fold-inner-safe.png",
-        "gameplay/resize-fold-inner-settled.png",
-    ],
-    "shipping-contexts-and-native": [
-        "gameplay/gameplay-camp.png",
-        "gameplay/gameplay-lakeshore.png",
-        "gameplay/gameplay-west-gate.png",
-        "gameplay/condition-day.png",
-        "gameplay/condition-night.png",
-        "gameplay/condition-blizzard.png",
-        "native4k/native-gameplay-camp.png",
-        "native4k/native-gameplay-lakeshore.png",
-        "native4k/native-gameplay-east-river-gate.png",
-    ],
-}
+DIMS = ROLE_DIMENSIONS
 
 GROUPS = [name for name in os.environ.get("REVIEW_GROUPS", ",".join(FILES)).split(",") if name]
 assert GROUPS and set(GROUPS) <= set(FILES)
-
-NOTES = {
-    "core-families": "Inspect every angle of the heated vessel, counters and six distinct pads. Pads may share a family language, but their silhouettes/trim/icon sockets must remain distinguishable without HUD text.",
-    "loop-families": "Inspect fishing, processing and defense fixtures from all six required angles. T05 supplies static visual foundations and sockets only; later fishing, conveyor, processing and firing behavior is explicitly outside this task.",
-    "resources-and-details": "Inspect all reusable resource props, close details, camp/lakeshore arrangements and night/blizzard conditions. Judge authored finish, grounding, legibility and cross-view consistency, not future moving-stack behavior.",
-    "shipping-device-and-tracking": "Inspect the exact integrated shipping call site across landscape phone/tablet/foldable and tracking/target states. Grade T05 station visibility, scale, contact and obstruction only; T04 camera behavior is already approved.",
-    "shipping-contexts-and-native": "Inspect normal camp/lakeshore/gate use, day/night/blizzard and all three 3840x2160 scale-1 frames. Preserve T01-T04; report only defects caused by T05 assets or placement.",
-}
-
 
 def digest(path: Path) -> str:
     value = hashlib.sha256()
@@ -254,7 +197,7 @@ def build_probe() -> Path:
         x = (index % 2) * 480 + (480 - source.width) // 2
         y = (index // 2) * 480 + 45 + (410 - source.height) // 2
         board.paste(source, (x, y))
-        draw.text(((index % 2) * 480 + 16, (index // 2) * 480 + 12), label, fill="white")
+        draw.text(((index % 2) * 480 + 16, (index // 2) * 480 + 12), label, fill="white", font=TITLE_FONT)
         sources.append({"panel": label, "expected": expected})
     path = OUT / "blind-competency.jpg"
     board.save(path, quality=94)
@@ -263,36 +206,23 @@ def build_probe() -> Path:
 
 
 def build_boards(group: str) -> tuple[list[Path], Path]:
-    """Build small review boards without shrinking authoritative pixels into a contact sheet."""
-    group_families = {
-        "core-families": ("hearth", "counters", "pads"),
-        "loop-families": ("fishing", "processing", "defense"),
-        "resources-and-details": ("resources", "hearth", "counters", "fishing", "processing", "defense"),
-        "shipping-device-and-tracking": ("hearth", "counters", "pads", "fishing", "processing", "defense", "resources"),
-        "shipping-contexts-and-native": ("hearth", "counters", "pads", "fishing", "processing", "defense", "resources"),
-    }[group]
-    refs: list[tuple[str, Path]] = []
-    if reference_scope_complete:
-        for family in group_families:
-            for path in reference_frames.get(family, []):
-                refs.append(("REFERENCE " + family + ": " + path.name, path))
-    else:
-        refs.append(("LIMITED REFERENCE — fishing/hearth only", reference))
-
-    candidates = FILES[group]
-    slice_count = max(math.ceil(len(candidates) / 2), len(refs))
+    """Build protocol-v3 boards with local, family-matched slice scope."""
+    reference_paths = {
+        family: [str(path.relative_to(ROOT)) for path in reference_frames.get(family, [])]
+        for family in GROUP_FAMILIES[group]
+    }
+    slice_plan = build_slice_plan(group, reference_paths)
     boards: list[Path] = []
     board_rows = []
-    for index in range(slice_count):
-        start = index * len(candidates) // slice_count
-        end = (index + 1) * len(candidates) // slice_count
-        candidate_names = candidates[start:end]
-        ref_label, ref_path = refs[index % len(refs)]
+    for index, scope in enumerate(slice_plan):
+        candidate_names = scope["candidate_paths"]
+        ref_path = ROOT / scope["reference_path"]
+        ref_label = "REFERENCE %s: %s" % (scope["reference_family"], ref_path.name)
 
         board = Image.new("RGB", (1600, 1200), (20, 29, 38))
         draw = ImageDraw.Draw(board)
-        draw.text((18, 14), f"T05 {group} — slice {index + 1}/{slice_count}", fill="white")
-        draw.text((18, 40), ref_label, fill="white")
+        draw.text((18, 10), f"T05 {group} — slice {index + 1}/{len(slice_plan)}", fill="white", font=TITLE_FONT)
+        draw.text((18, 42), ref_label, fill="white", font=LABEL_FONT)
         ref_image = Image.open(ref_path).convert("RGB")
         ref_image.thumbnail((420, 1080), Image.Resampling.LANCZOS)
         ref_position = (18 + (420 - ref_image.width) // 2, 78 + (1080 - ref_image.height) // 2)
@@ -302,7 +232,7 @@ def build_boards(group: str) -> tuple[list[Path], Path]:
         cell_height = 550 if len(candidate_names) == 2 else 1100
         for candidate_index, name in enumerate(candidate_names):
             y0 = 58 + candidate_index * cell_height
-            draw.text((468, y0), "SOURCE-BOUND CANDIDATE: " + name, fill="white")
+            draw.text((468, y0), "SOURCE-BOUND CANDIDATE: " + name, fill="white", font=LABEL_FONT)
             candidate = Image.open(ROOT / name).convert("RGB")
             candidate.thumbnail((1120, cell_height - 42), Image.Resampling.LANCZOS)
             position = (468 + (1120 - candidate.width) // 2, y0 + 32 + (cell_height - 42 - candidate.height) // 2)
@@ -315,25 +245,34 @@ def build_boards(group: str) -> tuple[list[Path], Path]:
         board_rows.append({
             "path": path.name, "sha256": digest(path), "canvas_size": list(board.size),
             "reference_path": str(ref_path.relative_to(ROOT)),
+            "reference_family": scope["reference_family"],
+            "comparison_mode": scope["comparison_mode"],
+            "unseen_assets_out_of_scope": True,
+            "reviewed_candidate_paths": candidate_names,
             "reference_display_size": list(ref_image.size), "reference_position": list(ref_position),
             "candidates": candidate_rows,
         })
 
     manifest = OUT / f"{group}-board-manifest.json"
     manifest.write_text(json.dumps({
-        "schema_version": 2, "task": "T05", "source": SOURCE, "group": group,
+        "schema_version": 3, "task": "T05", "source": SOURCE, "group": group,
+        "protocol": PROTOCOL,
+        "required_reference_families": list(GROUP_FAMILIES[group]),
+        "reference_bindings": reference_paths,
         "layout_contract": {
             "canvas_size": [1600, 1200], "maximum_model_input": [1664, 1664],
             "minimum_reference_display_width": 420, "minimum_candidate_display_height": 480,
             "maximum_candidates_per_board": 2, "all_group_candidates_present_once": True,
-            "all_group_references_present_at_least_once": True,
+            "all_required_reference_families_present_at_least_once": True,
+            "coverage_complete_is_slice_local": True,
+            "unlisted_assets_may_not_be_scored_as_missing": True,
         },
         "slices": board_rows,
     }, indent=2, sort_keys=True) + "\n")
     return boards, manifest
 
 
-def query(image_path: Path, prompt: str, schema: dict, name: str, max_tokens: int) -> tuple[dict, float]:
+def query(image_path: Path, prompt: str, schema: dict, name: str, max_tokens: int, request_contract: dict | None = None) -> tuple[dict, float]:
     image = Image.open(image_path).convert("RGB")
     original = image.size
     image.thumbnail((1664, 1664), Image.Resampling.LANCZOS)
@@ -355,8 +294,15 @@ def query(image_path: Path, prompt: str, schema: dict, name: str, max_tokens: in
         "response_format": {"type": "json_object", "schema": schema},
         "cache_prompt": False,
     }
+    request_settings = {
+        "model": request["model"], "max_tokens": max_tokens,
+        "temperature": request["temperature"], "top_p": request["top_p"], "seed": request["seed"],
+        "repeat_penalty": request["repeat_penalty"], "chat_template_kwargs": request["chat_template_kwargs"],
+        "response_format_type": request["response_format"]["type"], "cache_prompt": request["cache_prompt"],
+    }
     (OUT / (name + "-request.json")).write_text(json.dumps({
         "model": request["model"], "prompt": prompt, "schema": schema,
+        "request_contract": request_contract, "request_settings": request_settings,
         "source_image_path": image_path.name, "source_image_sha256": digest(image_path),
         "image_sha256": hashlib.sha256(payload).hexdigest(),
         "original_size": original, "input_size": image.size, "seed": SEED,
@@ -367,12 +313,10 @@ def query(image_path: Path, prompt: str, schema: dict, name: str, max_tokens: in
         data=json.dumps(request).encode(), headers={"Content-Type": "application/json"}, method="POST",
     )
     with urllib.request.urlopen(call, timeout=1800) as response:
-        raw = json.load(response)
-    (OUT / (name + "-raw.json")).write_text(json.dumps(raw, indent=2))
-    choice = raw["choices"][0]
-    assert choice["finish_reason"] == "stop", "truncated " + name
-    parsed = json.loads(choice["message"]["content"])
-    (OUT / (name + "-answer.json")).write_text(json.dumps(parsed, indent=2))
+        raw_bytes = response.read()
+    parsed = persist_model_response(
+        raw_bytes, OUT / (name + "-raw.json"), OUT / (name + "-answer.json"), name,
+    )
     return parsed, round(time.monotonic() - began, 3)
 
 
@@ -393,6 +337,17 @@ def write_input_manifest(group: str, board_manifest: Path) -> tuple[str, str]:
         "pixel_manifest": {
             "candidate_inputs": candidate_inputs,
             "reference_inputs": reference_inputs,
+            "reference_bindings": board_payload["reference_bindings"],
+            "slice_scopes": {
+                row["path"]: {
+                    "reference_family": row["reference_family"],
+                    "reference_path": row["reference_path"],
+                    "candidate_paths": row["reviewed_candidate_paths"],
+                    "comparison_mode": row["comparison_mode"],
+                    "unseen_assets_out_of_scope": row["unseen_assets_out_of_scope"],
+                }
+                for row in board_payload["slices"]
+            },
             "reference_coverage_sha256": digest(ROOT / "reference/coverage.json") if reference_scope_complete else None,
             "reference_extraction_sha256": digest(ROOT / "reference/extraction-report.json") if reference_scope_complete else None,
             "board_sha256": digest(board_manifest),
@@ -406,26 +361,6 @@ def write_input_manifest(group: str, board_manifest: Path) -> tuple[str, str]:
     path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
     return path.name, digest(path)
 
-
-role_prompt = {
-    "C1": "Judge reference fidelity, bright polished sculpted Havenline visual language, normal-scale readability and consistency across all supplied views.",
-    "C2": "Judge grounding/contact, clipping, seams, sockets/bounds implied by visible construction, deliberate openings versus defects and cross-view technical integrity.",
-}[ROLE]
-base_prompt = f"""You are an independent visual critic reviewing only Havenline Task T05: the production station and prop kit at exact integrated source {SOURCE}. Each board presents one large checksum-bound frame from the authoritative user recordings beside no more than two labelled exact source-bound candidate renders. T05 is a static authored visual/socket foundation. Fishing, processing, conveyor motion, customer service, payments, combat, upgrades, actors and animations are later tasks and MUST NOT be scored as missing T05 behavior. Preserve approved T01-T04 environment and camera. Judge only T05 assets and their integration: heated vessel; counters; build/upgrade/input/output/stock/payment pads; fishing fixtures; intake/cooker/conveyor fixtures; defense platform; wood/stone/metal/fuel/fish/cooked-food/money/crate props; coherent blue/orange/yellow timber/metal snow-aware art; stable readable silhouettes; grounding; route/camera compatibility. Primitive-looking unfinished art, default/debug materials, visible penetrations, floating contact, broken silhouettes, indistinguishable pad variants or inconsistent cross-views are defects. {role_prompt} Inspect every labelled panel. Every mandatory score is 0-10. PASS requires each score strictly above 9.0 unrounded, zero defects, complete coverage and medium/high confidence. Do not average, round, or excuse a visible defect. Return JSON only."""
-
-score_properties = {name: {"type": "number", "minimum": 0, "maximum": 10} for name in DIMS[ROLE]}
-schema = {
-    "type": "object",
-    "properties": {
-        "observations": {"type": "array", "items": {"type": "string"}, "minItems": 2, "maxItems": 6},
-        "defects": {"type": "array", "items": {"type": "string"}, "maxItems": 6},
-        "coverage_complete": {"type": "boolean"},
-        "confidence": {"type": "string", "enum": ["low", "medium", "high"]},
-        "scores": {"type": "object", "properties": score_properties, "required": DIMS[ROLE], "additionalProperties": False},
-    },
-    "required": ["observations", "defects", "coverage_complete", "confidence", "scores"],
-    "additionalProperties": False,
-}
 
 environment = dict(os.environ)
 environment["LD_LIBRARY_PATH"] = str(server.parent) + ":" + environment.get("LD_LIBRARY_PATH", "")
@@ -479,23 +414,44 @@ try:
             "model_revision": manifest["revision"], "runtime_release_sha256": digest(server),
             "request_or_run_id": ":".join((RUN_ID, RUN_ATTEMPT, RUN_JOB, ROLE, ATTEMPT, group)),
             "input_manifest_path": input_manifest_path, "input_manifest_hash": input_manifest_hash,
-            "board_path": board_manifest.name,
-            "independent_execution": False, "passed": False,
+            "board_path": board_manifest.name, "board_sha256": digest(board_manifest),
+            "independent_execution": False, "execution_complete": False, "passed": False,
             "reference_scope_complete": reference_scope_complete if ROLE == "C1" else True,
             "reference_scope_error": reference_scope_error if ROLE == "C1" else None,
         }
+        slice_reviews = []
+        failed_slice = None
         try:
-            slice_reviews = []
+            board_payload = json.loads(board_manifest.read_text())
             for slice_index, board in enumerate(boards, 1):
                 name = f"{group}-slice-{slice_index:02d}"
-                review, elapsed = query(
-                    board,
-                    base_prompt + f"\nCurrent evidence group: {group}; board slice {slice_index}/{len(boards)}. "
-                    + NOTES[group] + " Grade every candidate panel on this slice against the large authoritative reference panel.",
-                    schema, name, 760,
-                )
+                scope = board_payload["slices"][slice_index - 1]
+                request_contract = build_slice_contract(SOURCE, ROLE, ATTEMPT, group, slice_index, len(boards), scope)
+                slice_schema = build_review_schema(ROLE, scope["reviewed_candidate_paths"], scope["reference_path"])
+                slice_prompt = build_review_prompt(SOURCE, ROLE, request_contract)
+                assert expected_request_settings(ROLE, ATTEMPT, SEED)["max_tokens"] == 1150
+                try:
+                    review, elapsed = query(board, slice_prompt, slice_schema, name, 1150, request_contract)
+                except Exception as error:
+                    failed_slice = {
+                        "slice": slice_index, "board_path": board.name, "board_sha256": digest(board),
+                        "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
+                        "reference_family": scope["reference_family"], "reference_path": scope["reference_path"],
+                        "error": str(error),
+                    }
+                    for path_key, suffix in (("raw_output_path", "-raw.json"), ("request_path", "-request.json"), ("answer_path", "-answer.json")):
+                        partial = OUT / (name + suffix)
+                        if partial.is_file():
+                            failed_slice[path_key] = partial.name
+                            failed_slice[path_key.replace("path", "sha256")] = digest(partial)
+                    raise
+                assert review["reviewed_candidate_paths"] == scope["reviewed_candidate_paths"], "reviewed candidate path acknowledgment mismatch"
+                assert review["reference_path_used"] == scope["reference_path"], "reference path acknowledgment mismatch"
+                assert review["unseen_assets_out_of_scope_acknowledged"] is True, "unseen-asset scope was not acknowledged"
                 slice_reviews.append({
                     "slice": slice_index, "board_path": board.name, "board_sha256": digest(board),
+                    "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
+                    "reference_family": scope["reference_family"], "reference_path": scope["reference_path"],
                     "raw_output_path": name + "-raw.json", "raw_output_sha256": digest(OUT / (name + "-raw.json")),
                     "request_path": name + "-request.json", "request_sha256": digest(OUT / (name + "-request.json")),
                     "answer_path": name + "-answer.json", "answer_sha256": digest(OUT / (name + "-answer.json")),
@@ -511,18 +467,19 @@ try:
             }
             elapsed = round(sum(part["elapsed_seconds"] for part in slice_reviews), 3)
             raw_path.write_text(json.dumps({
-                "schema_version": 2, "task": "T05", "source": SOURCE, "critic_id": ROLE,
+                "schema_version": 3, "task": "T05", "source": SOURCE, "critic_id": ROLE,
                 "attempt": ATTEMPT, "seed": SEED, "group": group,
                 "aggregation": "minimum score; union defects; all slices require coverage; lowest confidence",
-                "slices": slice_reviews, "aggregate_review": review,
+                "execution_complete": True, "slices": slice_reviews, "aggregate_review": review,
             }, indent=2, sort_keys=True) + "\n")
             scores = review["scores"]
             assert set(scores) == set(DIMS[ROLE])
             assert all(not isinstance(value, bool) and isinstance(value, (int, float)) and math.isfinite(value) and 0 <= value <= 10 for value in scores.values())
             assert isinstance(review["defects"], list) and isinstance(review["coverage_complete"], bool)
             row.update({
-                "independent_execution": True, "review": review, "minimum": min(scores.values()),
-                "elapsed_seconds": elapsed, "board_sha256": digest(board_manifest),
+                "independent_execution": True, "execution_complete": True,
+                "review": review, "minimum": min(scores.values()),
+                "elapsed_seconds": elapsed,
                 "raw_output_path": raw_path.name, "raw_output_sha256": digest(raw_path), "error": None,
             })
             row["passed"] = (
@@ -532,16 +489,25 @@ try:
             )
         except Exception as error:
             row["error"] = str(error)
+            write_incomplete_group_bundle(
+                raw_path, source=SOURCE, role=ROLE, attempt=ATTEMPT, seed=SEED,
+                group=group, slices=slice_reviews, failed_slice=failed_slice,
+            )
+            row.update({"raw_output_path": raw_path.name, "raw_output_sha256": digest(raw_path)})
         rows.append(row)
         (OUT / (group + "-review.json")).write_text(json.dumps(row, indent=2))
         print(json.dumps(row), flush=True)
 except Exception as error:
     failure = str(error)
 finally:
+    incomplete_groups = [row.get("group") for row in rows if row.get("execution_complete") is not True or row.get("error") is not None]
+    execution_complete = competent and failure is None and len(rows) == len(GROUPS) and not incomplete_groups
     result = {
         "task": "T05", "source": SOURCE, "critic_id": ROLE, "attempt": ATTEMPT,
         "groups": GROUPS, "reviews": rows, "competency_passed": competent,
-        "error": failure, "passed": competent and failure is None and len(rows) == len(GROUPS) and all(row["passed"] for row in rows),
+        "error": failure, "execution_complete": execution_complete,
+        "incomplete_groups": incomplete_groups,
+        "passed": execution_complete and all(row["passed"] for row in rows),
         "provider": "local-checksum-pinned-public-model", "model": manifest["base_model"],
         "model_revision": manifest["revision"], "runtime_release_sha256": digest(server),
         "request_or_run_id": ":".join((RUN_ID, RUN_ATTEMPT, RUN_JOB, ROLE, ATTEMPT)),
@@ -565,4 +531,4 @@ finally:
     except subprocess.TimeoutExpired:
         process.kill()
     log.close()
-raise SystemExit(0 if result["error"] is None and result["competency_passed"] else 1)
+raise SystemExit(review_exit_code(result["execution_complete"]))

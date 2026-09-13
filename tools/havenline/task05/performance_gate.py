@@ -11,6 +11,8 @@ import struct
 import subprocess
 from pathlib import Path
 
+from performance_protocol import REPEAT_STABILITY_LIMIT, repeat_mean, repeat_spread
+
 
 def read_json(path: Path) -> dict:
     return json.loads(path.read_text())
@@ -73,16 +75,22 @@ parser.add_argument("--candidate", required=True)
 parser.add_argument("--baseline-source", required=True)
 parser.add_argument("--candidate-root", type=Path, required=True)
 parser.add_argument("--baseline-root", type=Path, required=True)
-parser.add_argument("--candidate-benchmark", type=Path, required=True)
-parser.add_argument("--baseline-benchmark", type=Path, required=True)
-parser.add_argument("--candidate-rss-kb", type=int, required=True)
-parser.add_argument("--baseline-rss-kb", type=int, required=True)
+parser.add_argument("--candidate-benchmark", type=Path, action="append", required=True)
+parser.add_argument("--baseline-benchmark", type=Path, action="append", required=True)
+parser.add_argument("--candidate-rss-kb", type=int, action="append", required=True)
+parser.add_argument("--baseline-rss-kb", type=int, action="append", required=True)
 parser.add_argument("--evidence", type=Path, required=True)
 parser.add_argument("--baseline-evidence", type=Path, required=True)
 parser.add_argument("--output", type=Path, required=True)
 args = parser.parse_args()
 
 errors: list[str] = []
+if not all(len(values) == 2 for values in (args.candidate_benchmark, args.baseline_benchmark, args.candidate_rss_kb, args.baseline_rss_kb)):
+    parser.error("counterbalanced C6 requires exactly two candidate and two baseline repeats")
+if [path.parent.name for path in args.candidate_benchmark] != ["candidate-a", "candidate-b"]:
+    errors.append("candidate benchmark order must be candidate-a then candidate-b")
+if [path.parent.name for path in args.baseline_benchmark] != ["baseline-a", "baseline-b"]:
+    errors.append("baseline benchmark order must be baseline-a then baseline-b")
 if git_head(args.candidate_root) != args.candidate:
     errors.append("candidate checkout is not the frozen T05 source")
 if git_head(args.baseline_root) != args.baseline_source:
@@ -96,13 +104,13 @@ current_native = read_json(args.evidence / "native4k/capture.json")
 base_gallery = read_json(args.baseline_evidence / "gallery/capture.json")
 base_native = read_json(args.baseline_evidence / "native4k/capture.json")
 preflight = read_json(args.evidence / "performance-preflight.json")
-candidate_benchmark = read_json(args.candidate_benchmark)
-baseline_benchmark = read_json(args.baseline_benchmark)
+candidate_benchmarks = [read_json(path) for path in args.candidate_benchmark]
+baseline_benchmarks = [read_json(path) for path in args.baseline_benchmark]
 catalog_path = args.candidate_root / "HavenlineGodot/assets/stations_v2/catalog.json"
 catalog = read_json(catalog_path)
 
 measurement_paths = []
-for folder in (args.candidate_benchmark.parent, args.baseline_benchmark.parent):
+for folder in [path.parent for path in args.baseline_benchmark + args.candidate_benchmark]:
     for name in ("benchmark.json", "time.txt", "run.log", "import.log", "start-native.png", "end-native.png"):
         path = folder / name
         if not path.is_file():
@@ -140,18 +148,37 @@ else:
     primitive_deltas = [current[name]["submitted_primitives"] - baseline[name]["submitted_primitives"] for name in current]
 
 required_benchmark_fields = {"samples", "retained_seconds", "average_engine_fps", "p95_ms", "p99_ms", "renderer", "display_driver", "gpu", "native_dimensions_and_scale_maintained", "fixed_timestep_used", "software_renderer"}
-for label, benchmark in (("candidate", candidate_benchmark), ("baseline", baseline_benchmark)):
+all_benchmarks = [("baseline-a", baseline_benchmarks[0]), ("candidate-a", candidate_benchmarks[0]), ("candidate-b", candidate_benchmarks[1]), ("baseline-b", baseline_benchmarks[1])]
+for label, benchmark in all_benchmarks:
     missing = required_benchmark_fields - set(benchmark)
     if missing:
         errors.append(f"{label} benchmark missing fields: {sorted(missing)}")
-    if benchmark.get("samples", 0) < 300 or benchmark.get("retained_seconds", 0) < 1200 or benchmark.get("requested_seconds", 0) < 1200:
+    if benchmark.get("samples", 0) < 300 or benchmark.get("retained_seconds", 0) < 1200 or benchmark.get("requested_seconds") != 1200:
         errors.append(f"{label} benchmark duration/sample count is insufficient")
     if benchmark.get("native_dimensions_and_scale_maintained") is not True or benchmark.get("fixed_timestep_used") is not False:
         errors.append(f"{label} benchmark was not real elapsed native-4K scale-1 rendering")
-if any(candidate_benchmark.get(key) != baseline_benchmark.get(key) for key in ("renderer", "display_driver", "gpu", "software_renderer", "requested_seconds")):
-    errors.append("candidate/baseline benchmark conditions differ")
-if args.candidate_rss_kb <= 0 or args.baseline_rss_kb <= 0:
+condition_keys = ("renderer", "display_driver", "gpu", "software_renderer", "requested_seconds")
+conditions = [tuple(benchmark.get(key) for key in condition_keys) for _, benchmark in all_benchmarks]
+if len(set(conditions)) != 1:
+    errors.append("counterbalanced benchmark conditions differ")
+if any(value <= 0 for value in args.candidate_rss_kb + args.baseline_rss_kb):
     errors.append("measured maximum RSS is unavailable")
+
+
+candidate_rss_mean = repeat_mean(args.candidate_rss_kb)
+baseline_rss_mean = repeat_mean(args.baseline_rss_kb)
+candidate_rss_spread = repeat_spread(args.candidate_rss_kb)
+baseline_rss_spread = repeat_spread(args.baseline_rss_kb)
+if candidate_rss_spread > REPEAT_STABILITY_LIMIT:
+    errors.append(f"candidate RSS repeats are unstable ({candidate_rss_spread:.6f} > {REPEAT_STABILITY_LIMIT})")
+if baseline_rss_spread > REPEAT_STABILITY_LIMIT:
+    errors.append(f"baseline RSS repeats are unstable ({baseline_rss_spread:.6f} > {REPEAT_STABILITY_LIMIT})")
+
+candidate_benchmark = dict(candidate_benchmarks[0])
+baseline_benchmark = dict(baseline_benchmarks[0])
+for field in ("average_engine_fps", "p95_ms", "p99_ms"):
+    candidate_benchmark[field] = repeat_mean([float(row[field]) for row in candidate_benchmarks])
+    baseline_benchmark[field] = repeat_mean([float(row[field]) for row in baseline_benchmarks])
 
 entries = {row["id"]: row for row in catalog["entries"]}
 arrangements = {
@@ -191,7 +218,7 @@ frame_ratios = [
     baseline_benchmark["average_engine_fps"] / candidate_benchmark["average_engine_fps"],
 ]
 frame_ratio = max(frame_ratios)
-rss_ratio = args.candidate_rss_kb / args.baseline_rss_kb
+rss_ratio = candidate_rss_mean / baseline_rss_mean
 dimensions = {
     "frame_time": regression_score(frame_ratio),
     "draw_calls": budget_score(max(0, max(draw_deltas)), contract["draw_calls_max"]),
@@ -217,18 +244,25 @@ record = {
     "draw_calls": max(row["draw_calls"] for row in current.values()),
     "materials_visible": max_arrangement_materials,
     "texture_gpu_memory_mb": 0 if texture_records == 0 else None,
-    "process_memory_mb": args.candidate_rss_kb / 1024,
-    "process_memory_baseline_mb": args.baseline_rss_kb / 1024,
+    "process_memory_mb": candidate_rss_mean / 1024,
+    "process_memory_baseline_mb": baseline_rss_mean / 1024,
     "physics_active_bodies": 0, "animated_rigs_active": 0, "npc_companion_active_population": 0,
     "storage_download_mb": kit_storage_bytes / (1024 * 1024),
     "cpu_frame_ms": None, "gpu_frame_ms_where_measurable": None,
     "engine_frame_p99_ms": candidate_benchmark["p99_ms"],
-    "measurement_method": "Same Ubuntu runner, pinned Godot 4.7.2, Mobile Vulkan, Xvfb native 4K scale 1, real elapsed 20-minute candidate and T04-baseline runs; GNU time maximum RSS; exact matched capture counters; GLB JSON/catalog inspection.",
+    "measurement_method": "Same Ubuntu runner, pinned Godot 4.7.2, Mobile Vulkan, Xvfb native 4K scale 1, counterbalanced B-A-A-B real elapsed 20-minute runs; two T04 baseline and two T05 candidate repeats; GNU time maximum RSS with <=5% within-role repeat-spread gate; exact matched capture counters; GLB JSON/catalog inspection.",
     "incremental_record": True, "matched_frames": 23,
     "draw_call_delta_min": min(draw_deltas), "draw_call_delta_max": max(draw_deltas),
     "primitive_delta_min": min(primitive_deltas), "primitive_delta_max": max(primitive_deltas),
     "frame_regression_ratio": frame_ratio, "rss_regression_ratio": rss_ratio,
-    "candidate_benchmark": candidate_benchmark, "baseline_benchmark": baseline_benchmark,
+    "candidate_benchmark_aggregate": candidate_benchmark,
+    "baseline_benchmark_aggregate": baseline_benchmark,
+    "candidate_benchmark_repeats": candidate_benchmarks,
+    "baseline_benchmark_repeats": baseline_benchmarks,
+    "candidate_rss_kib_repeats": args.candidate_rss_kb,
+    "baseline_rss_kib_repeats": args.baseline_rss_kb,
+    "candidate_rss_repeat_spread": candidate_rss_spread,
+    "baseline_rss_repeat_spread": baseline_rss_spread,
     "kit_total_triangles": kit_triangles, "kit_unique_materials": kit_materials,
     "kit_storage_bytes": kit_storage_bytes, "embedded_texture_or_image_records": texture_records,
     "nominal_arrangements": arrangements,
@@ -262,8 +296,8 @@ result = {
     "request_or_run_id": ":".join((os.environ.get("GITHUB_RUN_ID", "local"), os.environ.get("GITHUB_RUN_ATTEMPT", "0"), args.candidate)), "independent": True,
     "input_manifest_path": "task05-C6/input-manifest.json",
     "input_manifest_hash": digest(args.output / "input-manifest.json"),
-    "raw_output_path": f"{args.candidate_benchmark.parent.name}/{args.candidate_benchmark.name}",
-    "raw_output_hash": digest(args.candidate_benchmark),
+    "raw_output_path": f"{args.candidate_benchmark[0].parent.name}/{args.candidate_benchmark[0].name}",
+    "raw_output_hash": digest(args.candidate_benchmark[0]),
     "measurement_files": measurement_files,
     "performance_record_path": "task05-C6/performance-record.json",
     "performance_record_hash": digest(args.output / "performance-record.json"),

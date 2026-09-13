@@ -15,8 +15,8 @@ EXPECTED_DIMENSIONS = {
     "physics", "animation", "population", "thermal_risk",
 }
 MEASUREMENT_NAMES = {
-    f"{side}-benchmark/{name}"
-    for side in ("candidate", "baseline")
+    f"{repeat}/{name}"
+    for repeat in ("baseline-a", "candidate-a", "candidate-b", "baseline-b")
     for name in ("benchmark.json", "time.txt", "run.log", "import.log", "start-native.png", "end-native.png")
 }
 
