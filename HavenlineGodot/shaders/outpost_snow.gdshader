@@ -61,6 +61,11 @@ void fragment(){
  float packed_macro=material_noise(p*.68+vec2(4.7,-2.1));
  float packed_mid=material_noise(p*2.15+vec2(-1.3,3.8));
  float packed_compression=smoothstep(.12,.86,packed_macro*.68+packed_mid*.32);
+ // Broad broken compression islands and finer grit keep the authored lane from
+ // flattening into one uniform value after gameplay/contact-sheet reduction.
+ // They alter only the existing terrain material inside the route SDF.
+ float packed_patch=smoothstep(.28,.73,material_noise(p*.91+vec2(8.2,-3.6))*.62+material_noise(p*2.83+vec2(-2.7,7.9))*.38);
+ float packed_grit=smoothstep(.42,.78,material_noise(p*5.65+vec2(1.4,-6.3)));
  // Keep the compressed bed recognisably snowy, then cut paired irregular
  // traffic ruts through it. This replaces the former broad grey overlay read
  // with visible compression marks on the continuous authored terrain.
@@ -71,6 +76,8 @@ void fragment(){
  packed_snow*=1.-packed_scuff*.10;
  packed_snow=mix(packed_snow,vec3(.56,.49,.39),packed_clump*.24);
  packed_snow+=vec3(.075,.052,.030)*(packed_mid-.5);
+ packed_snow=mix(packed_snow,vec3(.72,.68,.59),packed_patch*.16);
+ packed_snow=mix(packed_snow,vec3(.97,.98,.95),packed_grit*(1.-packed_patch)*.11);
  float packed_core=1.-smoothstep(-.76,-.24,lane_edge_d);
  float lane_center_distance=max(lane+1.30,0.0);
  float paired_rut=1.-smoothstep(.09,.28,abs(lane_center_distance-.62));
@@ -89,6 +96,8 @@ void fragment(){
  packed_floor*=1.-packed_scuff*.08;
  packed_floor=mix(packed_floor,packed_floor*vec3(.90,.86,.80),packed_clump*.18);
  packed_floor+=vec3(.042,.027,.016)*(packed_mid-.5);
+ packed_floor=mix(packed_floor,vec3(.58,.34,.24),packed_patch*.14);
+ packed_floor=mix(packed_floor,vec3(.88,.58,.43),packed_grit*(1.-packed_patch)*.09);
  packed_floor=mix(packed_floor,vec3(.19,.105,.065),paired_rut*lane_mask*rut_breakup*.96);
  packed_floor=mix(packed_floor,vec3(.25,.14,.085),footfall*.72);
  packed_floor*=1.-packed_core*(.045+packed_mid*.022);

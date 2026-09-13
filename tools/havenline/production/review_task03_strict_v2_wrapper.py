@@ -115,10 +115,11 @@ executed.write_text(source)
     'preflight_source='+expected+'\n'
     'reference_sha256='+reference_sha+'\n'
     'reference_lfs_materialized_and_decodable=true\n'
-    'changes=score_rule_strict_gt_9;prompt_matches_strict_rule;river_gate_four_view_contract;verified_lfs_reference\n'
+    'changes=score_rule_strict_gt_9;prompt_matches_strict_rule;river_gate_four_view_contract;verified_lfs_reference;output_compaction_and_repeat_guard\n'
     'threshold=>9.0_unrounded\n'
     'required_river_gate_evidence=12\n'
     'diagnostic_confidence=low_medium_high_only\n'
     'model_groups_seeds_unchanged=true\n'
+    'scoring_rubric_unchanged=true\n'
 )
 exec(compile(source,str(executed),'exec'),{'__name__':'__main__','__file__':str(executed.resolve())})

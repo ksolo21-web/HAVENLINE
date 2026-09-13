@@ -63,6 +63,11 @@
       "commit": "e59dcadfd5661787cba11897a07049cd55100997",
       "status": "REJECTED",
       "reason": "run 34723989502: deterministic evidence and repair validation passed, but reference-fidelity gameplay scored 8.0 for uniform north/work gate wear while visual-integrity scored river-gates 7.0, north-gate 5.0 and side-gates 9.0 because short fence-derived leaves, small threshold posts and a broad smooth lane bed did not remain categorically readable at delivered critic-board scale"
+    },
+    {
+      "commit": "07ba04b2a1a699ccbfd04f8e3a9e9680e02d7326",
+      "status": "REJECTED",
+      "reason": "run 34727681196: 20 completed judgments scored 10.0, but reference-fidelity cross-shelter-lanes scored 8.0 for insufficient packed-surface variation and two weak contact reads; the visual-integrity river-gates response was positive but invalid because repeated text reached the output cap"
     }
   ],
   "repair_range": {
@@ -237,6 +242,40 @@
       "verification_evidence": ["gallery/north-gate-front.png", "gallery/west-work-gate.png", "gallery/east-work-gate.png", "river-gate/west/threshold-three-quarter", "river-gate/centre/threshold-three-quarter", "river-gate/east/threshold-three-quarter"],
       "status": "READY_FOR_VERIFICATION",
       "counters": {"review_round_count": 8, "same_root_cause_count": 8, "evidence_only_attempt_count": 1, "production_repair_count": 7}
+    },
+    {
+      "defect_id": "T03-LANE-008",
+      "critic_source": "run 34727681196 / reference-fidelity / cross-shelter-lanes",
+      "visible_symptom": "the cross-camp packed route can lose natural compression variation at delivered board scale, and a lane lantern/fence edge can read as insufficiently seated",
+      "triage": "VALID_PRODUCTION_DEFECT",
+      "affected_production_object": "continuous packed-lane terrain material and existing fence/leaf/threshold-post root transforms",
+      "probable_root_cause": "the lane's strongest variation remains concentrated in narrow ruts while broad bed values reduce uniformly, and contact seating has too little margin in oblique snow views",
+      "production_files_likely_implicated": ["HavenlineGodot/shaders/outpost_snow.gdshader", "HavenlineGodot/scripts/camp_boundary_view.gd"],
+      "evidence_files_showing_defect": ["gallery/cross-lane-west.png", "gallery/cross-lane-centre.png", "gallery/cross-lane-east.png"],
+      "production_change": "add broad broken compression islands and fine grit inside the existing terrain route SDF, then deepen fixed fence, open leaf and threshold-post root seating without changing collision or cameras",
+      "expected_visible_result": "cross-camp routes retain irregular compressed texture after reduction and every existing timber/post base remains visibly embedded in the terrain",
+      "required_proof": ["cross-shelter-lanes", "detail-contact", "gameplay"],
+      "repair_commit": "SELF",
+      "verification_evidence": ["gallery/cross-lane-west.png", "gallery/cross-lane-centre.png", "gallery/cross-lane-east.png", "gallery/open-gate-leaves-detail.png", "gallery/gate-post-detail.png"],
+      "status": "READY_FOR_VERIFICATION",
+      "counters": {"review_round_count": 1, "same_root_cause_count": 1, "evidence_only_attempt_count": 0, "production_repair_count": 1}
+    },
+    {
+      "defect_id": "T03-CRITIC-009",
+      "critic_source": "run 34727681196 / visual-integrity / river-gates",
+      "visible_symptom": "a positive river-gate judgment repeated its explanation until the 650-token response cap and could not produce valid scored JSON",
+      "triage": "VALID_TOOLING_DEFECT",
+      "affected_production_object": "local critic response transport only; rendered product is unchanged",
+      "probable_root_cause": "the output contract constrained item count but did not bound sentence length or penalize phrase repetition",
+      "production_files_likely_implicated": ["tools/havenline/review_task03_local_reference.py", "tools/havenline/production/review_task03_strict_v2_wrapper.py"],
+      "evidence_files_showing_defect": ["task03-local-review/river-gates-raw.json"],
+      "production_change": "none; add output-only sentence-length discipline and a repeat penalty while preserving the model, pixels, rubric, seed and strict score threshold",
+      "expected_visible_result": "the same independent judgment terminates as compact valid JSON instead of reaching the response cap",
+      "required_proof": ["complete visual-integrity river-gates judgment"],
+      "repair_commit": "SELF",
+      "verification_evidence": ["task03-local-review/river-gates-review.json"],
+      "status": "READY_FOR_VERIFICATION",
+      "counters": {"review_round_count": 1, "same_root_cause_count": 1, "evidence_only_attempt_count": 0, "production_repair_count": 0}
     }
   ]
 }

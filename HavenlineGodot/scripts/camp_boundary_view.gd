@@ -7,13 +7,13 @@ const Scenery=preload("res://scripts/scenery_batch.gd")
 # Slightly deeper seating and a tiny visual-only overlap remove daylight slivers
 # at joints on uneven/curved terrain. Collision still uses Boundary.panel_specs()
 # exactly, so openings and gameplay widths do not change.
-const FENCE_ROOT_SINK := 0.34
+const FENCE_ROOT_SINK := 0.40
 const VISUAL_JOIN_OVERLAP := 0.10
 const VISUAL_CORNER_JOIN_OVERLAP := 0.28
 const GATE_HINGE_OVERLAP := 0.12
-const GATE_LEAF_ROOT_SINK := 0.50
+const GATE_LEAF_ROOT_SINK := 0.56
 const TERRAIN_SEAT_SAMPLES := 7
-const GATE_POST_ROOT_SINK := 0.30
+const GATE_POST_ROOT_SINK := 0.40
 const MAIN_GATE_POST_SCALE := 1.15
 const MAIN_GATE_POST_HEIGHT_SCALE := 1.55
 const WORK_GATE_POST_SCALE := 1.18
