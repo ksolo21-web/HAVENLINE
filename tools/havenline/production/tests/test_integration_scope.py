@@ -41,10 +41,10 @@ class IntegrationScopeTests(unittest.TestCase):
         self.assertTrue(report["passed"])
         self.assertEqual(report["task_id"], "T04")
 
-    def test_locked_t05_runtime_is_rejected(self):
+    def test_assigned_t05_runtime_cannot_integrate_early(self):
         report = evaluate(["HavenlineGodot/scripts/station_kit.gd"], self.registry, self.ownership)
         self.assertFalse(report["passed"])
-        self.assertTrue(any("T05 runtime path changed while task state is LOCKED" in x for x in report["errors"]))
+        self.assertTrue(any("T05 runtime path changed while task state is ASSIGNED" in x for x in report["errors"]))
 
     def test_unowned_runtime_is_rejected(self):
         report = evaluate(["HavenlineGodot/scripts/unregistered_future_runtime.gd"], self.registry, self.ownership)

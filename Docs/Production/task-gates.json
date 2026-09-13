@@ -94,19 +94,20 @@
     "all_applicable_gates_must_pass": true,
     "no_unresolved_mandatory_defects": true
   },
-  "active_task": null,
-  "active_task_title": null,
-  "active_status": null,
-  "active_frozen_scope": null,
-  "active_task_packet": null,
-  "active_base_integration_commit": null,
+  "active_task": "T05",
+  "active_task_title": "Production station and prop kit",
+  "active_status": "ASSIGNED",
+  "active_frozen_scope": "Docs/Production/T05/FROZEN_SCOPE.md",
+  "active_task_packet": "Docs/Production/T05/TASK_PACKET.md",
+  "active_base_integration_commit": "746c3e8757ccaf2a279a6184b6ed109a143d5b3a",
   "active_candidate_source": null,
   "active_candidate_run": null,
-  "active_tests": null,
-  "active_evidence": null,
-  "active_critic_state": null,
+  "active_tests": "baseline pending; task suite not yet built",
+  "active_evidence": "pending isolated candidate",
+  "active_critic_state": "not started; C1+C2+C6 required after quick-look",
   "task04_plus_runtime_locked": false,
-  "task05_plus_runtime_locked": true,
+  "task05_plus_runtime_locked": false,
+  "task06_plus_runtime_locked": true,
   "states": [
     "LOCKED",
     "PREPARED",
@@ -182,8 +183,10 @@
     {
       "task": "T05",
       "branch": "havenline/T05-props",
-      "state": "LOCKED",
-      "reason": "T03 dependency is approved; task packet and owner are not yet prepared."
+      "state": "ASSIGNED",
+      "owner": "station-prop-builder",
+      "base_commit": "746c3e8757ccaf2a279a6184b6ed109a143d5b3a",
+      "reason": "T03 dependency is approved; frozen scope, packet and disjoint ownership are assigned."
     },
     {
       "task": "T06",

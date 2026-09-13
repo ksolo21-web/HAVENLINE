@@ -20,6 +20,9 @@
     ],
     "T03": [
       "test_task03_boundary"
+    ],
+    "T04": [
+      "test_task04_camera"
     ]
   },
   "impact_rules": [
@@ -65,6 +68,14 @@
       ],
       "tasks": ["T01","T02","T03","T04"],
       "suites": ["test_adaptive_devices","test_render_budget"]
+    },
+    {
+      "patterns": [
+        "HavenlineGodot/assets/stations_v2/**",
+        "HavenlineGodot/scripts/station_kit.gd"
+      ],
+      "tasks": ["T03","T04","T05"],
+      "suites": ["test_task03_boundary","test_task04_camera","test_render_budget","test_task05_station_kit"]
     },
     {
       "patterns": [

@@ -16,9 +16,12 @@ integration-owner-controlled production integration.
 - T03: APPROVED at accepted gameplay source
   `5df9726e0b1c33f0f8865385b1c49aca229fd461`; verified closure is recorded in
   `Docs/Production/T03/verified-completion.json`.
-- T04: ASSIGNED on isolated branch `havenline/T04-camera` from integration base
-  `5135cddf96123afb962f4046f41e5ac0e510428a`.
-- T05+ runtime production remains LOCKED until separately prepared and assigned.
+- T04: APPROVED at accepted gameplay source
+  `e08fd37e9a999d878644c03089c4b4b253bd7472`; verified closure is recorded in
+  `Docs/Production/T04/verified-completion.json`.
+- T05: ASSIGNED on isolated branch `havenline/T05-props` from integration base
+  `746c3e8757ccaf2a279a6184b6ed109a143d5b3a`.
+- T06+ runtime production remains LOCKED until separately prepared and assigned.
 
 ## Forward acceptance rule
 
@@ -96,8 +99,8 @@ paid critic dependency.
 T03 is approved. The registry may now assign these workstreams individually
 after each packet and owner are prepared:
 
-- `havenline/T04-camera` — T04 camera/composition (currently assigned).
-- `havenline/T05-props` — T05 station/prop kit.
+- T04 camera/composition is complete and APPROVED.
+- `havenline/T05-props` — T05 station/prop kit (currently assigned).
 - `havenline/T06-character1` — T06 Character 1 motion.
 - QA/integration infrastructure may continue separately.
 

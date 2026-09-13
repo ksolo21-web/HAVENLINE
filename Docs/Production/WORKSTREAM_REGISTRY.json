@@ -127,11 +127,11 @@
     {
       "task_id": "T05",
       "task_name": "Production station and prop kit",
-      "status": "LOCKED",
-      "owner": null,
+      "status": "ASSIGNED",
+      "owner": "station-prop-builder",
       "workstream_id": "wave1-props",
       "branch": "havenline/T05-props",
-      "base_commit": null,
+      "base_commit": "746c3e8757ccaf2a279a6184b6ed109a143d5b3a",
       "dependencies": ["T03"],
       "owned_paths": ["@reservation:T05"],
       "protected_paths": ["@protected:approved", "@integration-only"],
@@ -141,9 +141,9 @@
       "evidence_path": "Docs/Production/Evidence/T05/",
       "critic_requirements": ["C1", "C2", "C6"],
       "critic_status": {},
-      "integration_status": "not started",
-      "known_blockers": ["Task packet and owner not yet prepared"],
-      "next_action": "Prepare the isolated T05 packet, assign an owner, and validate ownership before changing runtime."
+      "integration_status": "assigned; isolated runtime construction not yet started",
+      "known_blockers": [],
+      "next_action": "Create the isolated T05 branch from the exact base, validate the baseline, then build only @reservation:T05."
     },
     {
       "task_id": "T06",

@@ -54,13 +54,19 @@ def main():
     if graph["tasks"]["T01"]["status"]!="APPROVED" or graph["tasks"]["T02"]["status"]!="APPROVED":errors.append("T01/T02 approval lost")
     t03_status=graph["tasks"]["T03"]["status"]
     t04_status=graph["tasks"]["T04"]["status"]
+    t05_status=graph["tasks"]["T05"]["status"]
     if t03_status not in {"FIX_REQUIRED","APPROVED"}:errors.append("T03 must be FIX_REQUIRED or APPROVED")
     if t03_status=="FIX_REQUIRED":
         if any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[3:]):errors.append("T04+ must remain LOCKED until T03 approval")
     else:
         if t04_status not in {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}:
             errors.append("invalid T04 post-T03 state")
-        if any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[4:]):errors.append("T05+ must remain LOCKED until separately prepared")
+        if t04_status!="APPROVED":
+            if any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[4:]):errors.append("T05+ must remain LOCKED until T04 is approved and T05 is separately prepared")
+        else:
+            if t05_status not in {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}:
+                errors.append("invalid T05 post-T04 state")
+            if any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[5:]):errors.append("T06+ must remain LOCKED until separately prepared")
     acc=graph["acceptance_rule"]
     if acc.get("mandatory_dimension_operator")!=">" or acc.get("mandatory_dimension_threshold")!=9.0 or acc.get("unrounded") is not True:
         errors.append("forward strict >9.0 rule missing")
@@ -101,7 +107,6 @@ def main():
         if t04_status=="LOCKED":
             if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must have no active task while T04 is locked")
         elif t04_status=="APPROVED":
-            if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task after T04 approval")
             t04_completion=DOCS/"T04/verified-completion.json"
             if not t04_completion.exists():errors.append("T04 verified completion record missing")
             else:
@@ -112,6 +117,14 @@ def main():
                     errors.append("T04 verified completion gates are incomplete")
                 if record.get("pixel_signoff",{}).get("unresolved_mandatory_task_defects")!=[]:
                     errors.append("T04 final pixel signoff is incomplete")
+            if t05_status=="LOCKED":
+                if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task while T05 is locked")
+            elif t05_status=="APPROVED":
+                if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task after T05 approval")
+            else:
+                if tg.get("active_task")!="T05" or tg.get("active_status")!=t05_status:errors.append("task-gates must match active T05 state")
+                packet=DOCS/"T05/TASK_PACKET.md";scope=DOCS/"T05/FROZEN_SCOPE.md"
+                if not packet.exists() or not scope.exists():errors.append("active T05 packet/frozen scope missing")
         else:
             if tg.get("active_task")!="T04" or tg.get("active_status")!=t04_status:errors.append("task-gates must match active T04 state")
             packet=DOCS/"T04/TASK_PACKET.md";scope=DOCS/"T04/FROZEN_SCOPE.md"
