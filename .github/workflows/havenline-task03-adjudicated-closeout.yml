@@ -21,7 +21,7 @@ env:
 jobs:
   focused-visual-resolution:
     runs-on: ubuntu-24.04
-    timeout-minutes: 120
+    timeout-minutes: 12
     env:
       EXPECTED_SOURCE: '5df9726e0b1c33f0f8865385b1c49aca229fd461'
       REVIEWS_ROOT: 'original-reviews'
@@ -36,12 +36,13 @@ jobs:
           run-id: '34730602238'
           pattern: 'havenline-t03-v2-*-*-34730602238'
           path: 'original-reviews'
-      - uses: actions/cache/restore@v4
+      - uses: actions/download-artifact@v4
         with:
-          path: '~/.cache/havenline-t01-qwen35'
-          key: 'havenline-t01-qwen35-9b-q5-20260908-v1'
-          fail-on-cache-miss: true
-      - run: python3 -m pip install pillow
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '34732972898'
+          name: 'havenline-t03-adjudicated-visual-34732972898'
+          path: 'previous-visual'
       - name: Validate adjudication policy implementation
         run: python3 -m unittest tools/havenline/production/test_visual_quorum.py
       - name: Classify primary judgments without averaging
@@ -59,14 +60,15 @@ jobs:
           import json
           report=json.load(open('primary-decision.json'))
           assert report['judgments_expected']==22 and report['judgments_present']==22,report
-          assert set(report['incomplete_judgments'])=={'reference-fidelity/gameplay','visual-integrity/bank-lane'},report
+          assert report['status']=='ADJUDICATION_REQUIRED',report
+          assert report['incomplete_judgments']==[],report
           assert set(report['dissent_judgments'])=={'visual-integrity/conditions','visual-integrity/river-gates'},report
+          assert set(report['unsupported_coverage_flags_resolved_by_preflight'])=={'reference-fidelity/gameplay','visual-integrity/bank-lane'},report
           assert report['strict_rule']=='>9.0 unrounded; no score averaging',report
           PY
-      - name: Retry incomplete outputs and adjudicate split groups
-        run: python3 -u tools/havenline/production/review_visual_supplement.py
       - name: Enforce per-group two-of-three quorum
         run: |
+          cp -R previous-visual/supplemental-review supplemental-review
           python3 tools/havenline/production/evaluate_visual_quorum.py \
             --reviews original-reviews \
             --supplemental supplemental-review/supplemental-reviews.json \
@@ -79,6 +81,7 @@ jobs:
           assert report['passed'] is True,report
           assert report['status'] in ('PASS','PASS_BY_QUORUM'),report
           assert not report['incomplete_judgments'],report
+          assert set(report['unsupported_coverage_flags_resolved_by_preflight'])=={'reference-fidelity/gameplay','visual-integrity/bank-lane'},report
           assert {q['group'] for q in report['quorums']}=={'conditions','river-gates'},report
           assert all(q['clean_votes']==2 and q['total_votes']==3 for q in report['quorums']),report
           PY

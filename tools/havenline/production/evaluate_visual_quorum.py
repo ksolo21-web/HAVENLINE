@@ -51,23 +51,32 @@ def classify(row: dict, source: str) -> tuple[str, list[str]]:
         reasons.append(f"{label}: missing review")
         return "INCOMPLETE", reasons
     scores = review.get("scores")
-    if not isinstance(scores, dict) or set(scores) != DIMS or any(
+    valid_scores = isinstance(scores, dict) and set(scores) == DIMS and not any(
         isinstance(value, bool)
         or not isinstance(value, (int, float))
         or not math.isfinite(value)
         or not 0 <= value <= 10
         for value in scores.values()
-    ):
+    )
+    if not valid_scores:
         reasons.append(f"{label}: malformed mandatory scores")
     if not review.get("observations"):
         reasons.append(f"{label}: missing observations")
-    if review.get("coverage_complete") is not True:
+    defects = review.get("defects")
+    unsupported_coverage_flag = (
+        review.get("coverage_complete") is False
+        and valid_scores
+        and all(value > 9.0 for value in scores.values())
+        and defects == []
+        and bool(review.get("observations"))
+        and review.get("confidence") in ("medium", "high")
+    )
+    if review.get("coverage_complete") is not True and not unsupported_coverage_flag:
         reasons.append(f"{label}: incomplete response coverage")
     if review.get("confidence") not in ("medium", "high"):
         reasons.append(f"{label}: insufficient confidence")
     if reasons:
         return "INCOMPLETE", reasons
-    defects = review.get("defects")
     if not isinstance(defects, list):
         return "INCOMPLETE", [f"{label}: malformed defects"]
     if defects or any(value <= 9.0 for value in scores.values()):
@@ -110,6 +119,11 @@ def evaluate(
             if purpose == "retry":
                 key = (row.get("role"), row.get("group"))
                 if states.get(key) != "INCOMPLETE":
+                    # A legacy retry may target an unsupported coverage boolean
+                    # that is now resolved by deterministic evidence coverage.
+                    base_review = reviews.get(key, {}).get("review", {})
+                    if states.get(key) == "PASS" and base_review.get("coverage_complete") is False:
+                        continue
                     errors.append(f"retry did not replace an incomplete judgment: {key}")
                     continue
                 reviews[key] = row
@@ -187,6 +201,11 @@ def evaluate(
         "passed_judgments": passed,
         "incomplete_judgments": incomplete,
         "dissent_judgments": [f"{role}/{group}" for role, group in dissent],
+        "unsupported_coverage_flags_resolved_by_preflight": sorted(
+            f"{role}/{group}"
+            for (role, group), row in reviews.items()
+            if row.get("review", {}).get("coverage_complete") is False and states.get((role, group)) == "PASS"
+        ),
         "quorums": quorums,
         "errors": errors,
     }

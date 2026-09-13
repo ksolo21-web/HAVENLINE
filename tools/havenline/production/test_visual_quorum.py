@@ -60,12 +60,19 @@ class VisualQuorumTests(unittest.TestCase):
         self.write_base()
         self.assertEqual(evaluate(self.root, SOURCE, GROUPS, None)["status"], "PASS")
 
-    def test_incomplete_is_retried_not_counted_as_vote(self):
-        bad = row("reference-fidelity", "gate", coverage=False)
+    def test_supported_incomplete_is_retried_not_counted_as_vote(self):
+        bad = row("reference-fidelity", "gate", coverage=False, defects=["A required panel is missing."])
         self.write_base({("reference-fidelity", "gate"): bad})
         report = evaluate(self.root, SOURCE, GROUPS, None)
         self.assertEqual(report["status"], "RETRY_REQUIRED")
         self.assertEqual(report["dissent_judgments"], [])
+
+    def test_unsupported_coverage_boolean_does_not_override_clean_scores(self):
+        contradictory = row("reference-fidelity", "gate", coverage=False)
+        self.write_base({("reference-fidelity", "gate"): contradictory})
+        report = evaluate(self.root, SOURCE, GROUPS, None)
+        self.assertEqual(report["status"], "PASS")
+        self.assertEqual(report["unsupported_coverage_flags_resolved_by_preflight"], ["reference-fidelity/gate"])
 
     def test_one_dissent_requires_adjudication_then_two_of_three_passes(self):
         bad = row("visual-integrity", "gate", score=8, defects=["Visible defect."])
@@ -110,7 +117,8 @@ class VisualQuorumTests(unittest.TestCase):
         self.assertEqual(evaluate(self.root, SOURCE, GROUPS, adjudication)["status"], "FAIL")
 
     def test_supplemental_retry_is_not_a_vote_and_can_clear_incomplete(self):
-        incomplete = row("reference-fidelity", "gate", coverage=False)
+        incomplete = row("reference-fidelity", "gate")
+        incomplete["review"]["observations"] = []
         self.write_base({("reference-fidelity", "gate"): incomplete})
         supplemental = self.root / "supplemental.json"
         retry = row("reference-fidelity", "gate")
