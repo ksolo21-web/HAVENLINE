@@ -23,7 +23,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 120
     env:
-      EXPECTED_SOURCE: '${{ env.ACCEPTED_SOURCE }}'
+      EXPECTED_SOURCE: '5df9726e0b1c33f0f8865385b1c49aca229fd461'
       REVIEWS_ROOT: 'original-reviews'
       SUPPLEMENT_OUT: 'supplemental-review'
       OMP_NUM_THREADS: '4'
@@ -33,8 +33,8 @@ jobs:
         with:
           github-token: '${{ github.token }}'
           repository: '${{ github.repository }}'
-          run-id: '${{ env.PRIMARY_RUN_ID }}'
-          pattern: 'havenline-t03-v2-*-*-${{ env.PRIMARY_RUN_ID }}'
+          run-id: '34730602238'
+          pattern: 'havenline-t03-v2-*-*-34730602238'
           path: 'original-reviews'
       - uses: actions/cache/restore@v4
         with:
@@ -97,18 +97,18 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     env:
-      EXPECTED_SOURCE: '${{ env.ACCEPTED_SOURCE }}'
+      EXPECTED_SOURCE: '5df9726e0b1c33f0f8865385b1c49aca229fd461'
       OMP_NUM_THREADS: '4'
     steps:
       - uses: actions/checkout@v4
         with:
-          ref: '${{ env.ACCEPTED_SOURCE }}'
+          ref: '5df9726e0b1c33f0f8865385b1c49aca229fd461'
       - uses: actions/download-artifact@v4
         with:
           github-token: '${{ github.token }}'
           repository: '${{ github.repository }}'
-          run-id: '${{ env.PRIMARY_RUN_ID }}'
-          name: 'havenline-t03-v2-evidence-${{ env.PRIMARY_RUN_ID }}'
+          run-id: '34730602238'
+          name: 'havenline-t03-v2-evidence-34730602238'
           path: 'task03-evidence'
       - uses: actions/cache/restore@v4
         with:
@@ -134,8 +134,8 @@ jobs:
         with:
           github-token: '${{ github.token }}'
           repository: '${{ github.repository }}'
-          run-id: '${{ env.PRIMARY_RUN_ID }}'
-          name: 'havenline-t03-v2-evidence-${{ env.PRIMARY_RUN_ID }}'
+          run-id: '34730602238'
+          name: 'havenline-t03-v2-evidence-34730602238'
           path: 'evidence'
       - uses: actions/download-artifact@v4
         with:
@@ -147,7 +147,7 @@ jobs:
           path: 'performance'
       - name: Bind source, visual quorum, regression, and C6
         env:
-          SOURCE: '${{ env.ACCEPTED_SOURCE }}'
+          SOURCE: '5df9726e0b1c33f0f8865385b1c49aca229fd461'
         run: |
           python3 - <<'PY'
           from pathlib import Path
