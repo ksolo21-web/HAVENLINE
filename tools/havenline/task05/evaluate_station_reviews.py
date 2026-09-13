@@ -8,9 +8,12 @@ import json
 import math
 from pathlib import Path
 
+from PIL import Image, ImageChops
+
 from review_protocol import (
-    FILES, GROUP_FAMILIES, build_review_prompt, build_review_schema,
-    build_slice_contract, expected_request_settings, reference_family_for,
+    FILES, GROUP_FAMILIES, PROTOCOL, REFERENCE_FOCUS_BOXES,
+    build_review_prompt, build_review_schema, build_slice_contract,
+    expected_request_settings, reference_family_for, review_integrity_errors,
 )
 
 
@@ -94,16 +97,17 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
     if board_manifest is not None:
         slices = board_manifest.get("slices", [])
         contract = board_manifest.get("layout_contract", {})
-        if board_manifest.get("schema_version") != 3 or board_manifest.get("protocol") != "family-matched-local-scope-v3" or board_manifest.get("task") != "T05" or board_manifest.get("source") != row.get("source") or board_manifest.get("group") != row.get("group"):
+        if board_manifest.get("schema_version") != 4 or board_manifest.get("protocol") != PROTOCOL or board_manifest.get("task") != "T05" or board_manifest.get("source") != row.get("source") or board_manifest.get("group") != row.get("group"):
             errors.append("board manifest identity mismatch")
         if not slices or contract.get("canvas_size") != [1600, 1200] or contract.get("maximum_model_input") != [1664, 1664]:
             errors.append("invalid board resolution contract")
-        if contract.get("minimum_reference_display_width", 0) < 420 or contract.get("minimum_candidate_display_height", 0) < 480 or contract.get("maximum_candidates_per_board") != 2:
+        if contract.get("minimum_reference_display_width", 0) < 500 or contract.get("minimum_candidate_display_height", 0) < 480 or contract.get("maximum_candidates_per_board") != 2:
             errors.append("review panels are too small for strict visual grading")
         board_inputs = {}
         candidates = []
         references = set()
         reference_families = set()
+        validated_focus_pairs = set()
         expected_scopes = {}
         bindings = board_manifest.get("reference_bindings", {})
         required_families = set(GROUP_FAMILIES.get(row.get("group"), ()))
@@ -118,7 +122,7 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
             if not slice_path.is_file() or digest(slice_path) != item["sha256"]:
                 errors.append("missing or changed board slice")
             board_inputs[name] = item["sha256"]
-            if item.get("canvas_size") != [1600, 1200] or item.get("reference_display_size", [0])[0] < 420:
+            if item.get("canvas_size") != [1600, 1200] or item.get("reference_display_size", [0])[0] < 500:
                 errors.append("board slice violates reference resolution contract")
             reference_path = item.get("reference_path")
             reference_family = item.get("reference_family")
@@ -126,6 +130,34 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
             reference_families.add(reference_family)
             if reference_family not in required_families or reference_path not in bindings.get(reference_family, []):
                 errors.append("wrong-family reference on board slice")
+            source_name = item.get("reference_source_path")
+            source_path = folder / str(source_name)
+            source_hash = item.get("reference_source_sha256")
+            if (
+                not isinstance(source_name, str) or Path(source_name).name != source_name
+                or not source_path.is_file() or digest(source_path) != source_hash
+                or input_manifest is None
+                or source_hash != input_manifest.get("pixel_manifest", {}).get("reference_inputs", {}).get(reference_path)
+            ):
+                errors.append("reference focus crop is not bound to its original reference pixels")
+            focus_name = item.get("reference_focus_path")
+            focus_path = folder / str(focus_name)
+            if (
+                not isinstance(focus_name, str) or Path(focus_name).name != focus_name
+                or not focus_path.is_file() or digest(focus_path) != item.get("reference_focus_sha256")
+                or item.get("reference_focus_crop_box") != REFERENCE_FOCUS_BOXES.get(reference_family)
+            ):
+                errors.append("missing or changed checksum-bound reference focus crop")
+            elif (source_name, focus_name, reference_family) not in validated_focus_pairs:
+                try:
+                    with Image.open(source_path) as source_image, Image.open(focus_path) as focus_image:
+                        expected_focus = source_image.convert("RGB").crop(tuple(REFERENCE_FOCUS_BOXES[reference_family]))
+                        actual_focus = focus_image.convert("RGB")
+                        if expected_focus.size != actual_focus.size or ImageChops.difference(expected_focus, actual_focus).getbbox() is not None:
+                            errors.append("reference focus pixels do not match the declared source crop")
+                        validated_focus_pairs.add((source_name, focus_name, reference_family))
+                except Exception:
+                    errors.append("reference focus source or crop is not a valid image")
             if item.get("unseen_assets_out_of_scope") is not True or item.get("comparison_mode") not in ("direct_family_reference", "style_feature_authority_not_scene_identity"):
                 errors.append("missing local unseen-asset scope guard")
             candidate_paths = [candidate.get("path") for candidate in item.get("candidates", [])]
@@ -143,6 +175,11 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
                 "candidate_paths": candidate_paths,
                 "comparison_mode": item.get("comparison_mode"),
                 "unseen_assets_out_of_scope": True,
+                "reference_source_path": item.get("reference_source_path"),
+                "reference_source_sha256": item.get("reference_source_sha256"),
+                "reference_focus_path": item.get("reference_focus_path"),
+                "reference_focus_sha256": item.get("reference_focus_sha256"),
+                "reference_focus_crop_box": item.get("reference_focus_crop_box"),
             }
             for candidate in item.get("candidates", []):
                 candidates.append(candidate.get("path"))
@@ -164,7 +201,7 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
             if pixel_manifest.get("reference_bindings") != bindings or pixel_manifest.get("slice_scopes") != expected_scopes:
                 errors.append("input manifest does not bind local slice scope")
     if raw_bundle is not None:
-        if raw_bundle.get("schema_version") != 3 or raw_bundle.get("execution_complete") is not True or raw_bundle.get("source") != row.get("source") or raw_bundle.get("critic_id") != role or raw_bundle.get("group") != row.get("group") or raw_bundle.get("attempt") != row.get("attempt") or raw_bundle.get("seed") != row.get("seed"):
+        if raw_bundle.get("schema_version") != 4 or raw_bundle.get("execution_complete") is not True or raw_bundle.get("source") != row.get("source") or raw_bundle.get("critic_id") != role or raw_bundle.get("group") != row.get("group") or raw_bundle.get("attempt") != row.get("attempt") or raw_bundle.get("seed") != row.get("seed"):
             errors.append("raw-output bundle identity mismatch")
         raw_slices = raw_bundle.get("slices", [])
         if raw_bundle.get("aggregate_review") != row.get("review"):
@@ -240,6 +277,8 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
                     errors.append("model did not acknowledge exact reference path")
                 if answer_review.get("unseen_assets_out_of_scope_acknowledged") is not True:
                     errors.append("model did not acknowledge unseen-asset scope")
+                for integrity_error in review_integrity_errors(answer_review, role, scope.get("reviewed_candidate_paths", [])):
+                    errors.append("invalid slice review: " + integrity_error)
                 bound_reviews.append(answer_review)
         if len(raw_board_paths) != len(set(raw_board_paths)) or set(raw_board_paths) != set(board_hashes):
             errors.append("raw-output slices do not map one-to-one onto every board slice")
@@ -247,12 +286,24 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
             errors.append("bound raw/request/answer paths must be unique per slice")
         try:
             confidence_order = {"low": 0, "medium": 1, "high": 2}
+            defect_evidence = []
+            seen_defect_evidence = set()
+            for part in bound_reviews:
+                for evidence in part["defect_evidence"]:
+                    key = json.dumps(evidence, sort_keys=True)
+                    if key not in seen_defect_evidence:
+                        seen_defect_evidence.add(key)
+                        defect_evidence.append(evidence)
             recomputed = {
                 "observations": list(dict.fromkeys(value for part in bound_reviews for value in part["observations"])),
-                "defects": list(dict.fromkeys(value for part in bound_reviews for value in part["defects"])),
+                "defects": [evidence["description"] for evidence in defect_evidence],
+                "defect_evidence": defect_evidence,
                 "coverage_complete": len(bound_reviews) == len(raw_slices) and all(part["coverage_complete"] is True for part in bound_reviews),
                 "confidence": min((part["confidence"] for part in bound_reviews), key=confidence_order.get),
-                "scores": {dimension: min(part["scores"][dimension] for part in bound_reviews) for dimension in DIMS[role]},
+                "scores": {
+                    dimension: min(part["scores"][dimension] for part in bound_reviews if dimension in part["scores"])
+                    for dimension in DIMS[role]
+                },
             }
             if recomputed != raw_bundle.get("aggregate_review"):
                 errors.append("aggregate review was not recomputed conservatively from every slice")
@@ -283,6 +334,8 @@ def classify(row: dict, source: str, role: str, group: str) -> str:
     if not review.get("observations") or review.get("coverage_complete") is not True:
         return "INCOMPLETE"
     if review.get("confidence") not in ("medium", "high") or not isinstance(review.get("defects"), list):
+        return "INCOMPLETE"
+    if review_integrity_errors(review, role, FILES[group]):
         return "INCOMPLETE"
     return "PASS" if all(value > 9.0 for value in scores.values()) and review["defects"] == [] else "DISSENT"
 

@@ -6,6 +6,26 @@ import math
 
 
 REPEAT_STABILITY_LIMIT = 0.05
+COUNTERBALANCED_ORDER = ("baseline-a", "candidate-a", "candidate-b", "baseline-b")
+EQUAL_WARMUP_SECONDS = 30
+
+
+def validate_counterbalanced_order(labels: list[str] | tuple[str, ...]) -> bool:
+    return tuple(labels) == COUNTERBALANCED_ORDER
+
+
+def valid_warmup_record(record: dict) -> bool:
+    return (
+        record.get("requested_seconds") == EQUAL_WARMUP_SECONDS
+        and isinstance(record.get("retained_seconds"), (int, float))
+        and not isinstance(record.get("retained_seconds"), bool)
+        and record["retained_seconds"] >= EQUAL_WARMUP_SECONDS
+        and isinstance(record.get("samples"), int)
+        and not isinstance(record.get("samples"), bool)
+        and record["samples"] > 0
+        and record.get("native_dimensions_and_scale_maintained") is True
+        and record.get("fixed_timestep_used") is False
+    )
 
 
 def repeat_mean(values: list[float]) -> float:

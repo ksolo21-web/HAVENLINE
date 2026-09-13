@@ -37,22 +37,44 @@
       "id": "T05-D03",
       "source_run": 34771751255,
       "diagnostic_run": 34774570475,
+      "verification_run": 34781683369,
       "visible_symptom": "The official single-pair C6 run produced thermal_risk 8.80268 from a 1.119732 RSS ratio, while the diagnostic baseline repeats drifted about eight percent.",
       "triage": ["DIAGNOSTIC_ONLY", "TEST_FIX"],
       "affected_production_object": null,
-      "probable_root_cause": "One sequential candidate/baseline pair cannot distinguish production RSS from runner/order drift; diagnostic variant effects were smaller than baseline repeat spread.",
+      "probable_root_cause": "One sequential candidate/baseline pair cannot distinguish production RSS from runner/order drift; the first B-A-A-B verification then showed a 5.9461% baseline repeat spread with cold-cache filesystem input and major faults in baseline A but not baseline B, while the candidate repeats were stable at 1.2647%.",
       "implicated_production_files": [],
       "causal_production_change": null,
-      "tooling_change": "Run counterbalanced B-A-A-B 20-minute repeats and fail measurement when either role's max-RSS repeat spread exceeds five percent of its mean.",
+      "tooling_change": "Run equal discarded B-A-A-B 30-second native-4K warm-ups before the unchanged counterbalanced B-A-A-B 20-minute measurements, and fail measurement when either role's max-RSS repeat spread exceeds five percent of its mean.",
       "expected_visible_result": "C6 applies the unchanged regression score only to stable counterbalanced means and preserves all four raw measurements.",
       "proof_contract": "Four complete native-4K scale-1 runs with at least 300 samples each, exact condition equality, warning equality, raw hashes, repeat stability, and every unchanged C6 dimension strictly above 9.0.",
-      "counters": {"review_round": 1, "evidence_attempts": 2, "same_family_strikes": 0},
+      "counters": {"review_round": 1, "evidence_attempts": 3, "same_family_strikes": 0},
+      "status": "READY_FOR_VERIFICATION"
+    },
+    {
+      "id": "T05-D04",
+      "source_run": 34781683369,
+      "visible_symptom": "Otherwise complete C1/C2 responses penalized required night context, approved camera reversal, close-detail framing, context actors, and an invented in-scene shipping device; single-image slices also received unsupported cross-view scores and clean slices received scores at or below 9.0 without visible defects.",
+      "triage": [
+        "EVIDENCE_FIX",
+        "TOOLING_FIX"
+      ],
+      "affected_production_object": null,
+      "probable_root_cause": "Protocol v3 appended whole-group instructions to slice-local prompts, exposed an ambiguous shipping-device group label, forced cross-view dimensions on single-candidate slices, showed full vertical reference frames at low feature scale, and did not require low scores or defect text to bind a visible region and exact candidate.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Protocol v4 uses family- and condition-specific instructions, display-only device-matrix language, checksum-bound family focus crops, dynamic omission of cross-view dimensions for single candidates, and fail-closed candidate/dimension/region evidence for every score at or below 9.0.",
+      "expected_visible_result": "Fresh critics grade only visible T05 properties on the declared slice, while any genuine visible defect remains localized, reproducible, and score-blocking.",
+      "proof_contract": "Twenty-four visual-integrity tests, independent protocol review above 9/10, and a fresh complete ten-job C1/C2 primary run on unchanged production source 8c9da476ca93a7a826d51eae892449fd20e9c105.",
+      "counters": {
+        "review_round": 2,
+        "same_family_strikes": 0
+      },
       "status": "READY_FOR_VERIFICATION"
     }
   ],
   "counters": {
-    "review_round_count": 1,
-    "evidence_only_attempt_count": 2,
+    "review_round_count": 2,
+    "evidence_only_attempt_count": 3,
     "production_repair_count": 0
   },
   "rule": "Every mandatory finding follows CRITIC SYMPTOM -> ROOT CAUSE -> PRODUCTION CHANGE -> EXPECTED VISIBLE RESULT -> REQUIRED PROOF."

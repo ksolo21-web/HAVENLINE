@@ -84,6 +84,7 @@ jobs:
           assert len(list(Path('task05-evidence').glob('gameplay/*.png')))==20
           assert len(list(Path('task05-evidence').glob('native4k/*.png')))==3
           PY
+      - run: python3 -m pip install pillow==11.3.0
       - run: python3 -m unittest discover -s tools/havenline/task05 -p 'test_evaluate_station_reviews.py'
       - run: python3 -m unittest discover -s tools/havenline/task05 -p 'test_performance_protocol.py'
 
@@ -153,6 +154,7 @@ jobs:
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
+      - run: python3 -m pip install pillow==11.3.0
       - uses: actions/download-artifact@v4
         with:
           pattern: 'havenline-t05-*-primary-${{ github.run_id }}'
@@ -214,7 +216,7 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y xvfb mesa-vulkan-drivers
-          mkdir -p "$RUNNER_TEMP/engine" baseline-a candidate-a candidate-b baseline-b
+          mkdir -p "$RUNNER_TEMP/engine" baseline-a candidate-a candidate-b baseline-b warmup-baseline-a warmup-candidate-a warmup-candidate-b warmup-baseline-b
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
@@ -226,6 +228,16 @@ jobs:
           timeout 240 "$engine" --headless --editor --path baseline-source/HavenlineGodot --import --quit > baseline-import.log 2>&1
           for folder in candidate-a candidate-b; do cp candidate-import.log "$folder/import.log"; done
           for folder in baseline-a baseline-b; do cp baseline-import.log "$folder/import.log"; done
+          warmup_project() {
+            label="$1"
+            project="$2"
+            xvfb-run -a -s '-screen 0 3840x2160x24' timeout 90 "$engine" --path "$project/HavenlineGodot" --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=30 --benchmark-warmup=5 --benchmark-output="$(pwd)/warmup-$label" > "warmup-$label/run.log" 2>&1
+          }
+          # Equal discarded warm-ups in the same B-A-A-B order remove cold-cache asymmetry.
+          warmup_project baseline-a baseline-source
+          warmup_project candidate-a candidate-source
+          warmup_project candidate-b candidate-source
+          warmup_project baseline-b baseline-source
           run_benchmark() {
             label="$1"
             project="$2"
@@ -236,7 +248,7 @@ jobs:
           run_benchmark candidate-b candidate-source
           run_benchmark baseline-b baseline-source
           allowed_baked_errors='^ERROR: Missing baked outpost audio: run tools/havenline/bake_outpost_audio\.py$|^ERROR: Missing baked crew motion: run res://tools/bake_crew_motion\.gd$'
-          for log in baseline-a/run.log candidate-a/run.log candidate-b/run.log baseline-b/run.log; do
+          for log in warmup-baseline-a/run.log warmup-candidate-a/run.log warmup-candidate-b/run.log warmup-baseline-b/run.log baseline-a/run.log candidate-a/run.log candidate-b/run.log baseline-b/run.log; do
             grep -E 'SCRIPT ERROR|Parse Error|ERROR:' "$log" | grep -Ev "$allowed_baked_errors" > "$log.unexpected" || true
             test ! -s "$log.unexpected"
           done
@@ -252,7 +264,7 @@ jobs:
           baseline_a_rss=$(rss baseline-a/time.txt)
           baseline_b_rss=$(rss baseline-b/time.txt)
           test -n "$candidate_a_rss" && test -n "$candidate_b_rss" && test -n "$baseline_a_rss" && test -n "$baseline_b_rss"
-          python3 tools/havenline/task05/performance_gate.py --candidate "$EXPECTED_SOURCE" --baseline-source "$T04_BASELINE_SOURCE" --candidate-root candidate-source --baseline-root baseline-source --candidate-benchmark candidate-a/benchmark.json --candidate-benchmark candidate-b/benchmark.json --baseline-benchmark baseline-a/benchmark.json --baseline-benchmark baseline-b/benchmark.json --candidate-rss-kb "$candidate_a_rss" --candidate-rss-kb "$candidate_b_rss" --baseline-rss-kb "$baseline_a_rss" --baseline-rss-kb "$baseline_b_rss" --evidence task05-evidence --baseline-evidence task04-baseline --output task05-C6
+          python3 tools/havenline/task05/performance_gate.py --candidate "$EXPECTED_SOURCE" --baseline-source "$T04_BASELINE_SOURCE" --candidate-root candidate-source --baseline-root baseline-source --candidate-benchmark candidate-a/benchmark.json --candidate-benchmark candidate-b/benchmark.json --baseline-benchmark baseline-a/benchmark.json --baseline-benchmark baseline-b/benchmark.json --warmup warmup-baseline-a/benchmark.json --warmup warmup-candidate-a/benchmark.json --warmup warmup-candidate-b/benchmark.json --warmup warmup-baseline-b/benchmark.json --candidate-rss-kb "$candidate_a_rss" --candidate-rss-kb "$candidate_b_rss" --baseline-rss-kb "$baseline_a_rss" --baseline-rss-kb "$baseline_b_rss" --evidence task05-evidence --baseline-evidence task04-baseline --output task05-C6
       - name: Publish C6 verdict
         if: always()
         run: |
@@ -271,6 +283,10 @@ jobs:
             candidate-b/
             baseline-a/
             baseline-b/
+            warmup-baseline-a/
+            warmup-candidate-a/
+            warmup-candidate-b/
+            warmup-baseline-b/
           retention-days: 30
           if-no-files-found: error
 
@@ -283,6 +299,7 @@ jobs:
       matrix: '${{ steps.build_matrix.outputs.matrix }}'
     steps:
       - uses: actions/checkout@v4
+      - run: python3 -m pip install pillow==11.3.0
       - uses: actions/download-artifact@v4
         with:
           github-token: '${{ github.token }}'
@@ -392,6 +409,7 @@ jobs:
     timeout-minutes: 20
     steps:
       - uses: actions/checkout@v4
+      - run: python3 -m pip install pillow==11.3.0
       - uses: actions/download-artifact@v4
         with:
           github-token: '${{ github.token }}'

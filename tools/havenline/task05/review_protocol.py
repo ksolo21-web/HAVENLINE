@@ -4,22 +4,43 @@ from __future__ import annotations
 
 from collections import defaultdict
 import json
+import math
 from pathlib import Path
 
 
 VIEWS = ["front", "rear", "left", "right", "three-quarter", "detail"]
-PROTOCOL = "family-matched-local-scope-v3"
+PROTOCOL = "family-focus-local-scope-v4"
 ROLE_DIMENSIONS = {
     "C1": ["reference_fidelity", "visual_language", "cross_view_consistency"],
     "C2": ["geometry_contact", "clipping_seams", "intentional_gap_integrity", "cross_view_integrity"],
 }
 
-NOTES = {
-    "core-families": "Inspect every angle of the heated vessel, counters and six distinct pads. Pads may share a family language, but their silhouettes/trim/icon sockets must remain distinguishable without HUD text.",
-    "loop-families": "Inspect fishing, processing and defense fixtures from all six required angles. T05 supplies static visual foundations and sockets only; later fishing, conveyor, processing and firing behavior is explicitly outside this task.",
-    "resources-and-details": "Inspect all reusable resource props, close details, camp/lakeshore arrangements and night/blizzard conditions. Judge authored finish, grounding, legibility and cross-view consistency, not future moving-stack behavior.",
-    "shipping-device-and-tracking": "Inspect the exact integrated shipping call site across landscape phone/tablet/foldable and tracking/target states. Grade T05 station visibility, scale, contact and obstruction only; T04 camera behavior is already approved.",
-    "shipping-contexts-and-native": "Inspect normal camp/lakeshore/gate use, day/night/blizzard and all three 3840x2160 scale-1 frames. Preserve T01-T04; report only defects caused by T05 assets or placement.",
+GROUP_DISPLAY_NAMES = {
+    "core-families": "station-family turntables",
+    "loop-families": "fixture-family turntables",
+    "resources-and-details": "resource, detail, and environment-context views",
+    "shipping-device-and-tracking": "landscape device-matrix and approved camera-state views",
+    "shipping-contexts-and-native": "integrated context and native-4K views",
+}
+
+FAMILY_NOTES = {
+    "hearth": "Judge only the visible heated-vessel/hearth construction, authored finish, grounding, and readability.",
+    "counters": "Judge only the visible service-counter construction, authored finish, work surfaces, grounding, and readability. Do not require pad variants or catalog metadata.",
+    "pads": "Judge only visible pad silhouettes, trim differentiation, icon-socket presentation, grounding, and readability. Do not require unrelated stations.",
+    "fishing": "Judge only visible fishing fixture/prop construction, authored finish, grounding, and readability. A close-detail view is not required to show shoreline or water.",
+    "processing": "Judge only visible processing fixture construction, authored finish, openings, grounding, and readability. Motion and processing behavior are out of scope.",
+    "defense": "Judge only visible defense fixture construction, authored finish, grounding, and readability. Firing, targeting, and damage behavior are out of scope.",
+    "resources": "Judge only visible resource-prop construction, authored finish, grounding, differentiation, and readability. Moving-stack behavior is out of scope.",
+}
+
+REFERENCE_FOCUS_BOXES = {
+    "hearth": [90, 380, 1000, 1560],
+    "counters": [380, 1100, 1060, 1850],
+    "pads": [150, 620, 980, 1570],
+    "fishing": [250, 650, 1020, 1550],
+    "processing": [80, 400, 1080, 1550],
+    "defense": [140, 350, 1000, 1450],
+    "resources": [50, 420, 1000, 1600],
 }
 
 
@@ -165,13 +186,40 @@ def build_slice_plan(group: str, reference_paths: dict[str, list[str]]) -> list[
     return slices
 
 
+def applicable_dimensions(role: str, candidate_paths: list[str]) -> list[str]:
+    """A single candidate cannot provide cross-view evidence."""
+    dimensions = list(ROLE_DIMENSIONS[role])
+    if len(candidate_paths) == 1:
+        dimensions = [name for name in dimensions if not name.startswith("cross_view_")]
+    return dimensions
+
+
+def slice_note(scope: dict) -> str:
+    paths = scope["candidate_paths"]
+    conditions = []
+    joined = " ".join(paths)
+    for condition in ("day", "night", "blizzard"):
+        if condition in joined:
+            conditions.append(condition)
+    note = FAMILY_NOTES[scope["reference_family"]]
+    if conditions:
+        note += " The candidate's required scene condition is " + "/".join(conditions) + "; it must not be penalized for differing from the reference frame's condition."
+    if any("direction-" in path for path in paths):
+        note += " Approved camera-direction changes can reverse screen position; do not call that a layout inconsistency."
+    if any("aspect-" in path or "fold-" in path or "resize-" in path for path in paths):
+        note += " Aspect/fold/resize differences are approved T04 framing states; grade only T05 visibility, contact, and obstruction."
+    if len(paths) == 1:
+        note += " This slice has one candidate, so no cross-view dimension is applicable or requested."
+    return note
+
+
 def build_slice_contract(source: str, role: str, attempt: str, group: str, index: int, total: int, scope: dict) -> dict:
     assert role in ROLE_DIMENSIONS and group in FILES and 1 <= index <= total
     return {
         "task": "T05", "source": source, "critic_id": role, "attempt": attempt,
         "group": group, "protocol": PROTOCOL,
         "slice_scope": {
-            "group": group,
+            "review_context": GROUP_DISPLAY_NAMES[group],
             "slice": f"{index}/{total}",
             "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
             "reference_family": scope["reference_family"],
@@ -179,6 +227,8 @@ def build_slice_contract(source: str, role: str, attempt: str, group: str, index
             "comparison_mode": scope["comparison_mode"],
             "unseen_assets_out_of_scope": True,
             "coverage_complete_definition": "all and only reviewed_candidate_paths were inspected for reference_family",
+            "applicable_dimensions": applicable_dimensions(role, scope["reviewed_candidate_paths"]),
+            "slice_specific_instruction": slice_note({**scope, "candidate_paths": scope["reviewed_candidate_paths"]}),
         },
     }
 
@@ -186,29 +236,85 @@ def build_slice_contract(source: str, role: str, attempt: str, group: str, index
 def build_review_prompt(source: str, role: str, contract: dict) -> str:
     role_prompt = {
         "C1": "Judge reference fidelity, bright polished sculpted Havenline visual language, normal-scale readability and consistency across all supplied views.",
-        "C2": "Judge grounding/contact, clipping, seams, sockets/bounds implied by visible construction, deliberate openings versus defects and cross-view technical integrity.",
+        "C2": "Judge visible grounding/contact, clipping, seams, deliberate openings versus defects, and cross-view technical integrity only when multiple views are supplied.",
     }[role]
-    base = f"""You are an independent visual critic reviewing only Havenline Task T05 at exact integrated source {source}. Each board shows one checksum-bound authoritative user-video reference on the LEFT and one or two labelled exact source-bound candidates on the RIGHT. The full T05 inventory is distributed across many slices; one slice is NEVER required to show assets assigned to another slice. Judge only the exact candidate paths and reference family declared in CURRENT SLICE SCOPE. An absent unlisted asset is out of scope and MUST NOT be reported as a defect or reduce any score. coverage_complete means every declared candidate on this slice was inspected for this slice's declared reference family; it does not mean the entire T05 inventory appears here. The reference is visual/style/feature authority, not a demand for scene-content identity in integrated context frames. T05 is a static authored visual/socket foundation. Fishing, conveyor motion, customer service, payments, combat, upgrades, actors and animations are later tasks and MUST NOT be scored as missing behavior. Context actors are scale markers, not T05 defects. Preserve approved T01-T04 environment and camera. Primitive-looking unfinished art, default/debug materials, visible penetrations, floating contact, broken silhouettes, indistinguishable pad variants or inconsistent cross-views remain defects when visible in a declared candidate. {role_prompt} Inspect every labelled candidate. Use 2-4 concise observations and no more than 4 concise defects; defects must be [] when clean and never contain words such as 'none'. Every mandatory score is 0-10. PASS requires each score strictly above 9.0 unrounded, zero defects, slice-local complete coverage and medium/high confidence. Do not average, round, excuse a visible defect, or penalize unlisted assets. Return JSON only."""
-    return base + "\nCURRENT SLICE SCOPE (binding JSON): " + json.dumps(contract["slice_scope"], sort_keys=True) + "\n" + NOTES[contract["group"]]
+    base = f"""You are an independent visual critic reviewing only Havenline Task T05 at exact integrated source {source}. Each board shows a checksum-bound focused crop of one authoritative user-video reference on the LEFT and one or two labelled exact source-bound candidates on the RIGHT. The full T05 inventory is distributed across many slices; one slice is NEVER required to show assets, views, contexts, or conditions assigned to another slice. Judge only the exact candidate paths, reference family, applicable dimensions, and slice-specific instruction declared in CURRENT SLICE SCOPE. An absent unlisted asset is out of scope and MUST NOT be reported as a defect or reduce any score. coverage_complete means every declared candidate on this slice was inspected for this slice's declared reference family; it does not mean the entire T05 inventory appears here. The reference is visual/style/feature authority, not a demand for scene-content identity. A close-detail candidate is not required to contain its surrounding environment. T05 is a static authored visual/socket foundation. Fishing, conveyor motion, customer service, payments, combat, upgrades, actors and animations are later tasks and MUST NOT be scored as missing behavior. Context actors are scale markers, not T05 defects. 'Shipping' means release/build use and is not an in-scene device or object. Preserve approved T01-T04 environment and camera. Do not infer missing catalog metadata, hidden sockets, bounds, controls, behavior, or HUD from pixels; deterministic audits cover those requirements. Primitive-looking unfinished art, default/debug materials, visible penetrations, floating contact, broken silhouettes, indistinguishable visible pad variants, or inconsistent supplied views remain defects only when visibly localized in a declared candidate. {role_prompt} Inspect every labelled candidate. Use 2-4 concise observations and no more than 4 concise defects. Each defect must have one matching defect_evidence entry naming a declared candidate path, applicable dimension, visible region, and precise visible description. A score at or below 9.0 must have matching localized defect evidence for that dimension. Defects and defect_evidence must both be [] when clean. Every requested score is 0-10. PASS requires each applicable score strictly above 9.0 unrounded, zero defects, slice-local complete coverage and medium/high confidence. Do not average, round, excuse a visible defect, or penalize unlisted content. Return JSON only."""
+    return base + "\nCURRENT SLICE SCOPE (binding JSON): " + json.dumps(contract["slice_scope"], sort_keys=True)
 
 
 def build_review_schema(role: str, candidate_paths: list[str], reference_path: str) -> dict:
-    score_properties = {name: {"type": "number", "minimum": 0, "maximum": 10} for name in ROLE_DIMENSIONS[role]}
+    dimensions = applicable_dimensions(role, candidate_paths)
+    score_properties = {name: {"type": "number", "minimum": 0, "maximum": 10} for name in dimensions}
     return {
         "type": "object",
         "properties": {
             "observations": {"type": "array", "items": {"type": "string"}, "minItems": 2, "maxItems": 4},
             "defects": {"type": "array", "items": {"type": "string"}, "maxItems": 4},
+            "defect_evidence": {"type": "array", "items": {
+                "type": "object",
+                "properties": {
+                    "candidate_path": {"type": "string", "enum": candidate_paths},
+                    "dimension": {"type": "string", "enum": dimensions},
+                    "visible_region": {"type": "string", "minLength": 3},
+                    "description": {"type": "string", "minLength": 8},
+                },
+                "required": ["candidate_path", "dimension", "visible_region", "description"],
+                "additionalProperties": False,
+            }, "maxItems": 4},
             "coverage_complete": {"type": "boolean"},
             "reviewed_candidate_paths": {"type": "array", "items": {"type": "string", "enum": candidate_paths}, "minItems": 1, "maxItems": 2},
             "reference_path_used": {"type": "string", "enum": [reference_path]},
             "unseen_assets_out_of_scope_acknowledged": {"type": "boolean"},
             "confidence": {"type": "string", "enum": ["low", "medium", "high"]},
-            "scores": {"type": "object", "properties": score_properties, "required": ROLE_DIMENSIONS[role], "additionalProperties": False},
+            "scores": {"type": "object", "properties": score_properties, "required": dimensions, "additionalProperties": False},
         },
-        "required": ["observations", "defects", "coverage_complete", "reviewed_candidate_paths", "reference_path_used", "unseen_assets_out_of_scope_acknowledged", "confidence", "scores"],
+        "required": ["observations", "defects", "defect_evidence", "coverage_complete", "reviewed_candidate_paths", "reference_path_used", "unseen_assets_out_of_scope_acknowledged", "confidence", "scores"],
         "additionalProperties": False,
     }
+
+
+def review_integrity_errors(review: dict, role: str, candidate_paths: list[str]) -> list[str]:
+    """Reject unsupported scores and defects before they can become a vote."""
+    errors = []
+    dimensions = set(applicable_dimensions(role, candidate_paths))
+    scores = review.get("scores", {})
+    if set(scores) != dimensions or any(
+        isinstance(value, bool) or not isinstance(value, (int, float))
+        or not math.isfinite(value) or not 0 <= value <= 10
+        for value in scores.values()
+    ):
+        return ["scores do not match the slice's applicable dimensions"]
+    defects = review.get("defects")
+    evidence = review.get("defect_evidence")
+    if not isinstance(defects, list) or not all(isinstance(value, str) and value.strip() for value in defects):
+        errors.append("defects must be a list of non-empty descriptions")
+        defects = []
+    if not isinstance(evidence, list):
+        errors.append("defect_evidence must be a list")
+        evidence = []
+    descriptions = []
+    evidenced_dimensions = set()
+    for item in evidence:
+        if not isinstance(item, dict) or set(item) != {"candidate_path", "dimension", "visible_region", "description"}:
+            errors.append("defect evidence has an invalid structure")
+            continue
+        if item["candidate_path"] not in candidate_paths or item["dimension"] not in dimensions:
+            errors.append("defect evidence is outside the bound slice scope")
+        if not isinstance(item["visible_region"], str) or len(item["visible_region"].strip()) < 3:
+            errors.append("defect evidence lacks a visible region")
+        if not isinstance(item["description"], str) or len(item["description"].strip()) < 8:
+            errors.append("defect evidence lacks a precise description")
+        descriptions.append(item.get("description"))
+        evidenced_dimensions.add(item.get("dimension"))
+    if defects != descriptions:
+        errors.append("defects must exactly match ordered defect-evidence descriptions")
+    for dimension, score in scores.items():
+        if score <= 9.0 and dimension not in evidenced_dimensions:
+            errors.append("score at or below 9.0 lacks localized defect evidence for " + dimension)
+    for dimension in evidenced_dimensions:
+        if scores.get(dimension, 10.0) > 9.0:
+            errors.append("localized defect evidence is inconsistent with a passing score for " + str(dimension))
+    return errors
 
 
 def expected_request_settings(role: str, attempt: str, seed: int) -> dict:
@@ -237,7 +343,7 @@ def write_incomplete_group_bundle(
     group: str, slices: list[dict], failed_slice: dict | None,
 ) -> dict:
     payload = {
-        "schema_version": 3, "task": "T05", "source": source, "critic_id": role,
+        "schema_version": 4, "task": "T05", "source": source, "critic_id": role,
         "attempt": attempt, "seed": seed, "group": group,
         "aggregation": "incomplete; no score produced",
         "execution_complete": False, "slices": slices,

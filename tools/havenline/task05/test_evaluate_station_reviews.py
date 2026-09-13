@@ -4,12 +4,16 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from PIL import Image
+
 from evaluate_station_reviews import DIMS, SOURCE_GROUPS, evaluate
 from final_gate import EXPECTED_DIMENSIONS, MEASUREMENT_NAMES, build_gate
 from review_protocol import (
-    FILES, GROUP_FAMILIES, build_review_prompt, build_review_schema,
+    FILES, GROUP_FAMILIES, PROTOCOL, REFERENCE_FOCUS_BOXES,
+    applicable_dimensions, build_review_prompt, build_review_schema,
     build_slice_contract, build_slice_plan, expected_request_settings,
-    persist_model_response, review_exit_code, write_incomplete_group_bundle,
+    persist_model_response, review_exit_code, review_integrity_errors,
+    write_incomplete_group_bundle,
 )
 
 
@@ -47,6 +51,7 @@ def row(role, group, passed=True, attempt="primary", seed=1):
         "review": {
             "scores": scores, "observations": ["Observed all panels."],
             "defects": [] if passed else ["Visible production defect."],
+            "defect_evidence": [],
             "coverage_complete": True, "confidence": "high",
         },
     }
@@ -64,6 +69,7 @@ def write_result(root: Path, role: str, attempt: str, rows: list[dict]):
         raw_slices = []
         board_inputs = {}
         slice_scopes = {}
+        intended_pass = item["review"]["defects"] == []
         for index, scope in enumerate(plan, 1):
             family = scope["reference_family"]
             slice_name = f"{group}-board-{index:02d}.jpg"
@@ -72,29 +78,63 @@ def write_result(root: Path, role: str, attempt: str, rows: list[dict]):
             (folder / slice_name).write_bytes(slice_bytes)
             candidate_paths = scope["candidate_paths"]
             reference_path = scope["reference_path"]
+            focus_name = f"reference-focus-{family}.png"
+            source_name = f"reference-source-{family}.png"
+            source_path = folder / source_name
+            focus_path = folder / focus_name
+            if not source_path.exists():
+                Image.new("L", (1080, 1950), 80).save(source_path)
+            if not focus_path.exists():
+                with Image.open(source_path) as source_image:
+                    source_image.crop(tuple(REFERENCE_FOCUS_BOXES[family])).save(focus_path)
+            source_hash = hashlib.sha256(source_path.read_bytes()).hexdigest()
+            focus_hash = hashlib.sha256(focus_path.read_bytes()).hexdigest()
             board_inputs[slice_name] = slice_hash
             slice_scopes[slice_name] = {
                 "reference_family": family, "reference_path": reference_path,
                 "candidate_paths": candidate_paths, "comparison_mode": scope["comparison_mode"],
                 "unseen_assets_out_of_scope": True,
+                "reference_source_path": source_name,
+                "reference_source_sha256": source_hash,
+                "reference_focus_path": focus_name,
+                "reference_focus_sha256": focus_hash,
+                "reference_focus_crop_box": REFERENCE_FOCUS_BOXES[family],
             }
             slices.append({
                 "path": slice_name, "sha256": slice_hash, "canvas_size": [1600, 1200],
                 "reference_path": reference_path, "reference_family": family,
                 "comparison_mode": scope["comparison_mode"], "unseen_assets_out_of_scope": True,
                 "reviewed_candidate_paths": candidate_paths,
-                "reference_display_size": [420, 980],
+                "reference_display_size": [500, 650],
+                "reference_source_path": source_name,
+                "reference_source_sha256": source_hash,
+                "reference_focus_path": focus_name,
+                "reference_focus_sha256": focus_hash,
+                "reference_focus_crop_box": REFERENCE_FOCUS_BOXES[family],
                 "candidates": [{"path": candidate_path, "display_size": [900, 480]} for candidate_path in candidate_paths],
             })
 
             prefix = f"{group}-slice-{index:02d}"
             raw_name, request_name, answer_name = prefix + "-raw.json", prefix + "-request.json", prefix + "-answer.json"
-            slice_review = json.loads(json.dumps(item["review"]))
-            slice_review.update({
+            dimensions = applicable_dimensions(role, candidate_paths)
+            is_dissent_slice = not intended_pass and index == 1
+            defect_evidence = [
+                {
+                    "candidate_path": candidate_paths[0], "dimension": dimension,
+                    "visible_region": "center fixture", "description": f"Visible {dimension} production defect.",
+                }
+                for dimension in dimensions
+            ] if is_dissent_slice else []
+            slice_review = {
+                "scores": {dimension: (8.9 if is_dissent_slice else 10.0) for dimension in dimensions},
+                "observations": ["Observed all panels."],
+                "defects": [evidence["description"] for evidence in defect_evidence],
+                "defect_evidence": defect_evidence,
+                "coverage_complete": True, "confidence": "high",
                 "reviewed_candidate_paths": candidate_paths,
                 "reference_path_used": reference_path,
                 "unseen_assets_out_of_scope_acknowledged": True,
-            })
+            }
             raw_slice = json.dumps({
                 "id": f"{role}:{group}:{attempt}:{item['seed']}:{index}",
                 "choices": [{"finish_reason": "stop", "message": {"content": json.dumps(slice_review)}}],
@@ -123,14 +163,36 @@ def write_result(root: Path, role: str, attempt: str, rows: list[dict]):
                 "review": slice_review,
             })
 
+        defect_evidence = []
+        seen_evidence = set()
+        for slice_data in raw_slices:
+            for evidence in slice_data["review"]["defect_evidence"]:
+                key = json.dumps(evidence, sort_keys=True)
+                if key not in seen_evidence:
+                    seen_evidence.add(key)
+                    defect_evidence.append(evidence)
+        item["review"] = {
+            "scores": {
+                dimension: min(
+                    slice_data["review"]["scores"][dimension]
+                    for slice_data in raw_slices if dimension in slice_data["review"]["scores"]
+                )
+                for dimension in DIMS[role]
+            },
+            "observations": ["Observed all panels."],
+            "defects": [evidence["description"] for evidence in defect_evidence],
+            "defect_evidence": defect_evidence,
+            "coverage_complete": True, "confidence": "high",
+        }
+
         board_payload = {
-            "schema_version": 3, "protocol": "family-matched-local-scope-v3",
+            "schema_version": 4, "protocol": PROTOCOL,
             "task": "T05", "source": SOURCE, "group": group,
             "required_reference_families": list(GROUP_FAMILIES[group]),
             "reference_bindings": reference_bindings,
             "layout_contract": {
                 "canvas_size": [1600, 1200], "maximum_model_input": [1664, 1664],
-                "minimum_reference_display_width": 420, "minimum_candidate_display_height": 480,
+                "minimum_reference_display_width": 500, "minimum_candidate_display_height": 480,
                 "maximum_candidates_per_board": 2, "coverage_complete_is_slice_local": True,
                 "unlisted_assets_may_not_be_scored_as_missing": True,
             },
@@ -146,7 +208,10 @@ def write_result(root: Path, role: str, attempt: str, rows: list[dict]):
             "board_sha256": board_hash, "inputs": candidate_inputs,
             "pixel_manifest": {
                 "candidate_inputs": candidate_inputs,
-                "reference_inputs": {f"reference/{family}.png": "e" * 64 for family in GROUP_FAMILIES[group]},
+                "reference_inputs": {
+                    f"reference/{family}.png": hashlib.sha256((folder / f"reference-source-{family}.png").read_bytes()).hexdigest()
+                    for family in GROUP_FAMILIES[group]
+                },
                 "reference_bindings": reference_bindings,
                 "slice_scopes": slice_scopes,
                 "reference_coverage_sha256": "f" * 64,
@@ -157,7 +222,7 @@ def write_result(root: Path, role: str, attempt: str, rows: list[dict]):
         }, sort_keys=True) + "\n").encode()
         (folder / manifest_name).write_bytes(manifest)
         raw_payload = {
-            "schema_version": 3, "task": "T05", "source": SOURCE, "critic_id": role,
+            "schema_version": 4, "task": "T05", "source": SOURCE, "critic_id": role,
             "attempt": attempt, "seed": item["seed"], "group": group,
             "execution_complete": True, "slices": raw_slices,
             "aggregate_review": item["review"],
@@ -324,6 +389,49 @@ class VisualQuorumTests(unittest.TestCase):
             seen.extend(candidates)
         self.assertEqual(len(seen), 77)
         self.assertEqual(len(seen), len(set(seen)))
+
+    def test_single_candidate_slice_omits_cross_view_dimension(self):
+        candidates = ["component/camp-night-front.png"]
+        self.assertEqual(
+            applicable_dimensions("C1", candidates),
+            ["reference_fidelity", "visual_language"],
+        )
+        schema = build_review_schema("C1", candidates, "reference/B-008.00.png")
+        self.assertNotIn("cross_view_consistency", schema["properties"]["scores"]["properties"])
+
+    def test_low_score_without_localized_defect_evidence_is_invalid(self):
+        candidates = ["component/camp-night-front.png"]
+        review = {
+            "scores": {"reference_fidelity": 8.9, "visual_language": 9.7},
+            "defects": [], "defect_evidence": [],
+        }
+        errors = review_integrity_errors(review, "C1", candidates)
+        self.assertIn("lacks localized defect evidence", " ".join(errors))
+
+    def test_defect_evidence_must_bind_declared_candidate_and_dimension(self):
+        candidates = ["component/camp-night-front.png"]
+        description = "Visible base penetration at the lower-left contact plate."
+        review = {
+            "scores": {"reference_fidelity": 8.9, "visual_language": 9.7},
+            "defects": [description],
+            "defect_evidence": [{
+                "candidate_path": "component/not-on-this-slice.png",
+                "dimension": "reference_fidelity", "visible_region": "lower left",
+                "description": description,
+            }],
+        }
+        errors = review_integrity_errors(review, "C1", candidates)
+        self.assertIn("outside the bound slice scope", " ".join(errors))
+
+    def test_changed_reference_focus_crop_is_rejected(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.primaries(root)
+            focus_path = next(root.rglob("reference-focus-*.png"))
+            focus_path.write_bytes(b"changed-focus")
+            report = evaluate(root, SOURCE, None)
+            self.assertFalse(report["passed"])
+            self.assertIn("reference focus crop", " ".join(report["errors"]))
 
     def test_wrong_family_reference_is_rejected(self):
         with tempfile.TemporaryDirectory() as tmp:

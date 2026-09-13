@@ -20,9 +20,11 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 from review_protocol import (
-    FILES, GROUP_FAMILIES, PROTOCOL, ROLE_DIMENSIONS, build_review_prompt,
+    FILES, GROUP_DISPLAY_NAMES, GROUP_FAMILIES, PROTOCOL, REFERENCE_FOCUS_BOXES, ROLE_DIMENSIONS,
+    applicable_dimensions, build_review_prompt,
     build_review_schema, build_slice_contract, build_slice_plan, expected_request_settings,
-    persist_model_response, review_exit_code, write_incomplete_group_bundle,
+    persist_model_response, review_exit_code, review_integrity_errors,
+    write_incomplete_group_bundle,
 )
 
 
@@ -206,7 +208,7 @@ def build_probe() -> Path:
 
 
 def build_boards(group: str) -> tuple[list[Path], Path]:
-    """Build protocol-v3 boards with local, family-matched slice scope."""
+    """Build protocol-v4 boards with local scope and checksum-bound reference focus."""
     reference_paths = {
         family: [str(path.relative_to(ROOT)) for path in reference_frames.get(family, [])]
         for family in GROUP_FAMILIES[group]
@@ -217,25 +219,34 @@ def build_boards(group: str) -> tuple[list[Path], Path]:
     for index, scope in enumerate(slice_plan):
         candidate_names = scope["candidate_paths"]
         ref_path = ROOT / scope["reference_path"]
-        ref_label = "REFERENCE %s: %s" % (scope["reference_family"], ref_path.name)
+        family = scope["reference_family"]
+        ref_label = "FOCUSED REFERENCE %s: %s" % (family, ref_path.name)
 
         board = Image.new("RGB", (1600, 1200), (20, 29, 38))
         draw = ImageDraw.Draw(board)
-        draw.text((18, 10), f"T05 {group} — slice {index + 1}/{len(slice_plan)}", fill="white", font=TITLE_FONT)
+        draw.text((18, 10), f"T05 {GROUP_DISPLAY_NAMES[group]} — slice {index + 1}/{len(slice_plan)}", fill="white", font=TITLE_FONT)
         draw.text((18, 42), ref_label, fill="white", font=LABEL_FONT)
-        ref_image = Image.open(ref_path).convert("RGB")
-        ref_image.thumbnail((420, 1080), Image.Resampling.LANCZOS)
-        ref_position = (18 + (420 - ref_image.width) // 2, 78 + (1080 - ref_image.height) // 2)
+        ref_source = Image.open(ref_path).convert("RGB")
+        crop_box = REFERENCE_FOCUS_BOXES[family]
+        assert 0 <= crop_box[0] < crop_box[2] <= ref_source.width
+        assert 0 <= crop_box[1] < crop_box[3] <= ref_source.height
+        ref_source_artifact = OUT / f"reference-source-{family}.png"
+        ref_source_artifact.write_bytes(ref_path.read_bytes())
+        ref_focus_path = OUT / f"reference-focus-{family}.png"
+        ref_source.crop(tuple(crop_box)).save(ref_focus_path)
+        ref_image = Image.open(ref_focus_path).convert("RGB")
+        ref_image.thumbnail((500, 1080), Image.Resampling.LANCZOS)
+        ref_position = (18 + (500 - ref_image.width) // 2, 78 + (1080 - ref_image.height) // 2)
         board.paste(ref_image, ref_position)
 
         candidate_rows = []
         cell_height = 550 if len(candidate_names) == 2 else 1100
         for candidate_index, name in enumerate(candidate_names):
             y0 = 58 + candidate_index * cell_height
-            draw.text((468, y0), "SOURCE-BOUND CANDIDATE: " + name, fill="white", font=LABEL_FONT)
+            draw.text((548, y0), "SOURCE-BOUND CANDIDATE: " + name, fill="white", font=LABEL_FONT)
             candidate = Image.open(ROOT / name).convert("RGB")
-            candidate.thumbnail((1120, cell_height - 42), Image.Resampling.LANCZOS)
-            position = (468 + (1120 - candidate.width) // 2, y0 + 32 + (cell_height - 42 - candidate.height) // 2)
+            candidate.thumbnail((1034, cell_height - 42), Image.Resampling.LANCZOS)
+            position = (548 + (1034 - candidate.width) // 2, y0 + 32 + (cell_height - 42 - candidate.height) // 2)
             board.paste(candidate, position)
             candidate_rows.append({"path": name, "display_size": list(candidate.size), "position": list(position)})
 
@@ -245,7 +256,12 @@ def build_boards(group: str) -> tuple[list[Path], Path]:
         board_rows.append({
             "path": path.name, "sha256": digest(path), "canvas_size": list(board.size),
             "reference_path": str(ref_path.relative_to(ROOT)),
-            "reference_family": scope["reference_family"],
+            "reference_family": family,
+            "reference_source_path": ref_source_artifact.name,
+            "reference_source_sha256": digest(ref_source_artifact),
+            "reference_focus_path": ref_focus_path.name,
+            "reference_focus_sha256": digest(ref_focus_path),
+            "reference_focus_crop_box": crop_box,
             "comparison_mode": scope["comparison_mode"],
             "unseen_assets_out_of_scope": True,
             "reviewed_candidate_paths": candidate_names,
@@ -255,13 +271,13 @@ def build_boards(group: str) -> tuple[list[Path], Path]:
 
     manifest = OUT / f"{group}-board-manifest.json"
     manifest.write_text(json.dumps({
-        "schema_version": 3, "task": "T05", "source": SOURCE, "group": group,
+        "schema_version": 4, "task": "T05", "source": SOURCE, "group": group,
         "protocol": PROTOCOL,
         "required_reference_families": list(GROUP_FAMILIES[group]),
         "reference_bindings": reference_paths,
         "layout_contract": {
             "canvas_size": [1600, 1200], "maximum_model_input": [1664, 1664],
-            "minimum_reference_display_width": 420, "minimum_candidate_display_height": 480,
+            "minimum_reference_display_width": 500, "minimum_candidate_display_height": 480,
             "maximum_candidates_per_board": 2, "all_group_candidates_present_once": True,
             "all_required_reference_families_present_at_least_once": True,
             "coverage_complete_is_slice_local": True,
@@ -345,6 +361,11 @@ def write_input_manifest(group: str, board_manifest: Path) -> tuple[str, str]:
                     "candidate_paths": row["reviewed_candidate_paths"],
                     "comparison_mode": row["comparison_mode"],
                     "unseen_assets_out_of_scope": row["unseen_assets_out_of_scope"],
+                    "reference_source_path": row["reference_source_path"],
+                    "reference_source_sha256": row["reference_source_sha256"],
+                    "reference_focus_path": row["reference_focus_path"],
+                    "reference_focus_sha256": row["reference_focus_sha256"],
+                    "reference_focus_crop_box": row["reference_focus_crop_box"],
                 }
                 for row in board_payload["slices"]
             },
@@ -448,6 +469,8 @@ try:
                 assert review["reviewed_candidate_paths"] == scope["reviewed_candidate_paths"], "reviewed candidate path acknowledgment mismatch"
                 assert review["reference_path_used"] == scope["reference_path"], "reference path acknowledgment mismatch"
                 assert review["unseen_assets_out_of_scope_acknowledged"] is True, "unseen-asset scope was not acknowledged"
+                integrity_errors = review_integrity_errors(review, ROLE, scope["reviewed_candidate_paths"])
+                assert not integrity_errors, "; ".join(integrity_errors)
                 slice_reviews.append({
                     "slice": slice_index, "board_path": board.name, "board_sha256": digest(board),
                     "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
@@ -458,16 +481,31 @@ try:
                     "elapsed_seconds": elapsed, "review": review,
                 })
             confidence_order = {"low": 0, "medium": 1, "high": 2}
+            unique_defect_evidence = []
+            seen_defect_evidence = set()
+            for part in slice_reviews:
+                for evidence in part["review"]["defect_evidence"]:
+                    key = json.dumps(evidence, sort_keys=True)
+                    if key not in seen_defect_evidence:
+                        seen_defect_evidence.add(key)
+                        unique_defect_evidence.append(evidence)
             review = {
                 "observations": list(dict.fromkeys(item for part in slice_reviews for item in part["review"]["observations"])),
-                "defects": list(dict.fromkeys(item for part in slice_reviews for item in part["review"]["defects"])),
+                "defects": [evidence["description"] for evidence in unique_defect_evidence],
+                "defect_evidence": unique_defect_evidence,
                 "coverage_complete": all(part["review"]["coverage_complete"] is True for part in slice_reviews),
                 "confidence": min((part["review"]["confidence"] for part in slice_reviews), key=confidence_order.get),
-                "scores": {dimension: min(part["review"]["scores"][dimension] for part in slice_reviews) for dimension in DIMS[ROLE]},
+                "scores": {
+                    dimension: min(
+                        part["review"]["scores"][dimension]
+                        for part in slice_reviews if dimension in part["review"]["scores"]
+                    )
+                    for dimension in DIMS[ROLE]
+                },
             }
             elapsed = round(sum(part["elapsed_seconds"] for part in slice_reviews), 3)
             raw_path.write_text(json.dumps({
-                "schema_version": 3, "task": "T05", "source": SOURCE, "critic_id": ROLE,
+                "schema_version": 4, "task": "T05", "source": SOURCE, "critic_id": ROLE,
                 "attempt": ATTEMPT, "seed": SEED, "group": group,
                 "aggregation": "minimum score; union defects; all slices require coverage; lowest confidence",
                 "execution_complete": True, "slices": slice_reviews, "aggregate_review": review,
@@ -475,7 +513,8 @@ try:
             scores = review["scores"]
             assert set(scores) == set(DIMS[ROLE])
             assert all(not isinstance(value, bool) and isinstance(value, (int, float)) and math.isfinite(value) and 0 <= value <= 10 for value in scores.values())
-            assert isinstance(review["defects"], list) and isinstance(review["coverage_complete"], bool)
+            assert isinstance(review["defects"], list) and isinstance(review["defect_evidence"], list)
+            assert isinstance(review["coverage_complete"], bool)
             row.update({
                 "independent_execution": True, "execution_complete": True,
                 "review": review, "minimum": min(scores.values()),

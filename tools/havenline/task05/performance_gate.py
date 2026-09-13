@@ -11,7 +11,10 @@ import struct
 import subprocess
 from pathlib import Path
 
-from performance_protocol import REPEAT_STABILITY_LIMIT, repeat_mean, repeat_spread
+from performance_protocol import (
+    COUNTERBALANCED_ORDER, EQUAL_WARMUP_SECONDS, REPEAT_STABILITY_LIMIT,
+    repeat_mean, repeat_spread, valid_warmup_record, validate_counterbalanced_order,
+)
 
 
 def read_json(path: Path) -> dict:
@@ -79,6 +82,7 @@ parser.add_argument("--candidate-benchmark", type=Path, action="append", require
 parser.add_argument("--baseline-benchmark", type=Path, action="append", required=True)
 parser.add_argument("--candidate-rss-kb", type=int, action="append", required=True)
 parser.add_argument("--baseline-rss-kb", type=int, action="append", required=True)
+parser.add_argument("--warmup", type=Path, action="append", required=True)
 parser.add_argument("--evidence", type=Path, required=True)
 parser.add_argument("--baseline-evidence", type=Path, required=True)
 parser.add_argument("--output", type=Path, required=True)
@@ -87,6 +91,8 @@ args = parser.parse_args()
 errors: list[str] = []
 if not all(len(values) == 2 for values in (args.candidate_benchmark, args.baseline_benchmark, args.candidate_rss_kb, args.baseline_rss_kb)):
     parser.error("counterbalanced C6 requires exactly two candidate and two baseline repeats")
+if len(args.warmup) != 4 or not validate_counterbalanced_order([path.parent.name.removeprefix("warmup-") for path in args.warmup]):
+    parser.error("counterbalanced C6 requires four equal warm-ups in B-A-A-B order")
 if [path.parent.name for path in args.candidate_benchmark] != ["candidate-a", "candidate-b"]:
     errors.append("candidate benchmark order must be candidate-a then candidate-b")
 if [path.parent.name for path in args.baseline_benchmark] != ["baseline-a", "baseline-b"]:
@@ -106,6 +112,7 @@ base_native = read_json(args.baseline_evidence / "native4k/capture.json")
 preflight = read_json(args.evidence / "performance-preflight.json")
 candidate_benchmarks = [read_json(path) for path in args.candidate_benchmark]
 baseline_benchmarks = [read_json(path) for path in args.baseline_benchmark]
+warmup_benchmarks = [read_json(path) for path in args.warmup]
 catalog_path = args.candidate_root / "HavenlineGodot/assets/stations_v2/catalog.json"
 catalog = read_json(catalog_path)
 
@@ -115,6 +122,13 @@ for folder in [path.parent for path in args.baseline_benchmark + args.candidate_
         path = folder / name
         if not path.is_file():
             errors.append(f"missing raw measurement file: {folder.name}/{name}")
+        else:
+            measurement_paths.append(path)
+for folder in [path.parent for path in args.warmup]:
+    for name in ("benchmark.json", "run.log", "start-native.png", "end-native.png"):
+        path = folder / name
+        if not path.is_file():
+            errors.append(f"missing raw warm-up file: {folder.name}/{name}")
         else:
             measurement_paths.append(path)
 measurement_files = {f"{path.parent.name}/{path.name}": digest(path) for path in measurement_paths}
@@ -161,6 +175,16 @@ condition_keys = ("renderer", "display_driver", "gpu", "software_renderer", "req
 conditions = [tuple(benchmark.get(key) for key in condition_keys) for _, benchmark in all_benchmarks]
 if len(set(conditions)) != 1:
     errors.append("counterbalanced benchmark conditions differ")
+warmup_condition_keys = ("renderer", "display_driver", "gpu", "software_renderer")
+all_conditions = [
+    tuple(benchmark.get(key) for key in warmup_condition_keys)
+    for benchmark in warmup_benchmarks + [value for _, value in all_benchmarks]
+]
+if len(set(all_conditions)) != 1:
+    errors.append("warm-up and measured benchmark conditions differ")
+for label, benchmark in zip(COUNTERBALANCED_ORDER, warmup_benchmarks):
+    if not valid_warmup_record(benchmark):
+        errors.append(f"warmup-{label} is not an equal native-4K warm-up")
 if any(value <= 0 for value in args.candidate_rss_kb + args.baseline_rss_kb):
     errors.append("measured maximum RSS is unavailable")
 
@@ -250,7 +274,7 @@ record = {
     "storage_download_mb": kit_storage_bytes / (1024 * 1024),
     "cpu_frame_ms": None, "gpu_frame_ms_where_measurable": None,
     "engine_frame_p99_ms": candidate_benchmark["p99_ms"],
-    "measurement_method": "Same Ubuntu runner, pinned Godot 4.7.2, Mobile Vulkan, Xvfb native 4K scale 1, counterbalanced B-A-A-B real elapsed 20-minute runs; two T04 baseline and two T05 candidate repeats; GNU time maximum RSS with <=5% within-role repeat-spread gate; exact matched capture counters; GLB JSON/catalog inspection.",
+    "measurement_method": "Same Ubuntu runner, pinned Godot 4.7.2, Mobile Vulkan, Xvfb native 4K scale 1, equal discarded B-A-A-B 30-second warm-ups followed by counterbalanced B-A-A-B real elapsed 20-minute runs; two T04 baseline and two T05 candidate repeats; GNU time maximum RSS with <=5% within-role repeat-spread gate; exact matched capture counters; GLB JSON/catalog inspection.",
     "incremental_record": True, "matched_frames": 23,
     "draw_call_delta_min": min(draw_deltas), "draw_call_delta_max": max(draw_deltas),
     "primitive_delta_min": min(primitive_deltas), "primitive_delta_max": max(primitive_deltas),
@@ -259,6 +283,8 @@ record = {
     "baseline_benchmark_aggregate": baseline_benchmark,
     "candidate_benchmark_repeats": candidate_benchmarks,
     "baseline_benchmark_repeats": baseline_benchmarks,
+    "discarded_equal_warmup_order": list(COUNTERBALANCED_ORDER),
+    "discarded_equal_warmup_benchmarks": warmup_benchmarks,
     "candidate_rss_kib_repeats": args.candidate_rss_kb,
     "baseline_rss_kib_repeats": args.baseline_rss_kb,
     "candidate_rss_repeat_spread": candidate_rss_spread,
