@@ -70,10 +70,10 @@ func lakeshore_stage() -> void:
 	clear_stage_accents()
 	var water := PlaneMesh.new()
 	water.size = Vector2(34.0, 8.2)
-	stage_mesh(water, material(Color("1a91b9"), 0.22, 0.08), Vector3(0.0, -0.16, -7.2))
+	stage_mesh(water, material(Color("1a91b9"), 0.22, 0.08), Vector3(0.0, -0.07, -7.2))
 	var bank := BoxMesh.new()
 	bank.size = Vector3(29.0, 0.10, 1.8)
-	stage_mesh(bank, material(Color("aacfdc"), 0.86), Vector3(0.0, -0.07, -11.8))
+	stage_mesh(bank, material(Color("aacfdc"), 0.86), Vector3(0.0, -0.03, -11.8))
 
 func visit_meshes(node: Node, output_meshes: Array) -> void:
 	if node is MeshInstance3D:

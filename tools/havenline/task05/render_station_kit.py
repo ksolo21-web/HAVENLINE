@@ -108,8 +108,8 @@ def stage_geometry(kind: str):
     if kind == "camp":
         result += quad(-11.8, -2.9, 11.8, 8.5, -0.03, np.array([0.57, 0.31, 0.20]))
     elif kind == "lakeshore":
-        result += quad(-17, -11.3, 17, -3.1, -0.16, np.array([0.05, 0.44, 0.65]))
-        result += quad(-14.5, -12.7, 14.5, -10.9, -0.02, np.array([0.52, 0.72, 0.80]))
+        result += quad(-17, -11.3, 17, -3.1, -0.07, np.array([0.05, 0.44, 0.65]))
+        result += quad(-14.5, -12.7, 14.5, -10.9, 0.02, np.array([0.52, 0.72, 0.80]))
     return result
 
 
