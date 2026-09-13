@@ -3,7 +3,7 @@ HERE=pathlib.Path(__file__).resolve()
 PROD=HERE.parents[1]
 sys.path.insert(0,str(PROD))
 from lib import DOCS, load_json, ensure_score_strictly_above_nine
-from workstream import registry_errors
+from workstream import registry_errors, governance_only_drift
 from change_impact import calculate
 
 class GovernanceTests(unittest.TestCase):
@@ -47,6 +47,12 @@ class GovernanceTests(unittest.TestCase):
 
     def test_registry_has_no_active_ownership_collision(self):
         self.assertEqual(registry_errors(),[])
+
+    def test_governance_only_candidate_drift_does_not_force_rebase(self):
+        self.assertTrue(governance_only_drift(["Docs/Production/WORKSTREAM_REGISTRY.json"]))
+        self.assertTrue(governance_only_drift(["tools/havenline/production/test_placeholder.py"]))
+        self.assertFalse(governance_only_drift(["HavenlineGodot/scripts/camera_composition.gd"]))
+        self.assertFalse(governance_only_drift(["HavenlineGodot/scripts/unregistered_future_runtime.gd"]))
 
     def test_critic_matrix(self):
         c=load_json(DOCS/"CRITIC_MATRIX.json")
