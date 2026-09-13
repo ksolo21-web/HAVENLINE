@@ -61,6 +61,33 @@ Mark every applicable gate REQUIRED or N/A with rationale.
 - G13 SCORE (>9.0 unrounded in every mandatory dimension; target 10/10)
 - G14 INTEGRATION
 
+## Resource / tool / actor / animation contract
+Mark REQUIRED or N/A from `RESOURCE_ACTION_REGISTRY.json`.
+
+When REQUIRED, record:
+- `RESOURCE_ACTION_REGISTRY.json` SHA256:
+- `ACTOR_CAPABILITY_MATRIX.json` SHA256:
+- `ANIMATION_ACTION_MATRIX.json` SHA256:
+- Resources this task must resolve/prove:
+- Introduced resource IDs:
+- Actor capability keys this task must prove:
+- Animation profiles this task must prove:
+- Whether this task introduces a new actor action/animation (`animation_delta`):
+- Resource/actor contract validator output:
+- Validator output SHA256:
+
+Rules:
+- No resource may enter production without a valid collection method/tool/action.
+- Human helpers/survivors require role-distinct work/combat animations.
+- Animals may not use human-tool fallbacks.
+- Combat-capable animals require species-specific attack animations.
+- T44-T52 must register every newly introduced biome resource before `INTEGRATION_READY`.
+- C5 is additionally mandatory for T09/T16/T19/T21/T23 and for T44-T52 whenever `animation_delta=true`.
+- The already assigned T05 frozen scope is not expanded by this forward standard.
+
+Run:
+`python3 tools/havenline/production/resource_actor_contract.py --task TASK_ID --manifest <candidate-manifest> --output <proof.json>`
+
 ## Required tests
 - Universal baseline:
 - Task-specific:
@@ -68,6 +95,7 @@ Mark every applicable gate REQUIRED or N/A with rationale.
 - Save-state matrix cases:
 - Device/layout cases:
 - Performance metrics:
+- Resource/tool/actor contract validation where applicable:
 
 ## Required evidence
 - Exact candidate commit/hash.
@@ -79,11 +107,14 @@ Mark every applicable gate REQUIRED or N/A with rationale.
 - Relevant day/night/weather.
 - Native 3840×2160 scale-1 where applicable.
 - Motion cycles/transitions/contact/clipping where applicable.
+- Resource/tool contact, impact timing and carry/delivery states where applicable.
+- Human helper/survivor distinct-motion proof where applicable.
+- Species-specific pet locomotion/attack/work proof where applicable.
 - Logs, performance records and persistence records.
 - Raw critic inputs and outputs.
 
 ## Required critics
-List exact critic IDs from `CRITIC_MATRIX.json`.
+List exact critic IDs from `CRITIC_MATRIX.json` plus any automatic C5 requirement added by the resource/actor contract.
 
 -
 
@@ -100,6 +131,7 @@ runtime. Builder self-review is recorded separately and cannot satisfy them.
 - Candidate commit:
 - Candidate artifact hash:
 - Evidence package:
+- Resource/actor contract proof:
 - Known failures:
 - Unresolved mandatory defects:
 - Reconcile/rebase status against current integration head:

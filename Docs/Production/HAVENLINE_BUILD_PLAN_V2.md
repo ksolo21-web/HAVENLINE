@@ -21,6 +21,27 @@ Controls remain one primary movement joystick with auto collect, auto gather/har
 
 Launch remains Level 1–100 across a connected world, with practical visual progression every level, noticeable visual improvement at least every ~3 levels, major milestones approximately every 10 levels, spend-blind adaptive Challenge Director, seven companions (guardian dog, gray wolf, fox, owl, male lion, white tiger, brown bear), weather/day-night, survivor rescue/workers, production, defense, physical carrying, world transformation, monetization/VIP, LiveOps, security, adaptive phone/tablet/foldable support, and the existing final native-4K/60 physical-device target.
 
+## Automatic resource / tool / actor / animation contract
+
+`Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md` and its machine-readable registries are mandatory forward-governance inputs:
+
+- `RESOURCE_ACTION_REGISTRY.json`
+- `ACTOR_CAPABILITY_MATRIX.json`
+- `ANIMATION_ACTION_MATRIX.json`
+- `TASK_SCOPE_OVERRIDES.json`
+
+No production resource may become valid without a registered acquisition method, appropriate tool/method, carry presentation, destination and applicable actor/animation proof. Any resource introduced by T44-T52 must be registered and resolved before the introducing region can become `INTEGRATION_READY`.
+
+Human helpers and rescued survivors may gather, carry, deposit, build, repair, guard and attack when their registered role permits it, but they must use role-distinct authored work/combat motion rather than simply replaying the selected player's animation. Logical impacts remain synchronized to the same authoritative gameplay beat.
+
+All seven animal companion tasks require species-appropriate motion. Combat-capable companions require species-specific attack animation; animals do not silently use human tools. T27 additionally requires authored owl flight, takeoff, landing, wing-clearance, aerial navigation and dive-attack proof.
+
+The existing orbiting/swiveling placeholder gather/attack presentation is explicitly non-final: T09 owns removal/replacement of the gathering-side presentation, while T21 owns removal/replacement of the combat-side presentation and weapon progression. T06 and T59-T61 prove character-specific tool/weapon contact and motion compatibility.
+
+This contract is fail-closed in task-packet generation and candidate closure. C5 Motion/Rigging becomes additionally mandatory for T09, T16, T19, T21 and T23, and for T44-T52 whenever a candidate introduces a new actor action or animation profile.
+
+**Non-disruption:** T05 was already assigned before this contract. Its frozen scope is not expanded or invalidated. If a later harvesting/combat task requires a physical tool asset T05 did not author, the later task owns it within authorized paths or raises a structured change request.
+
 ## Monetization and LiveOps rules
 
 No energy wall, mandatory payment, fake discount, hidden spend-based difficulty, or intentionally miserable F2P path. Challenge Director may never consume purchase history, VIP, or spend signals. Purchases retain advertised value. Use one primary premium currency. VIP is permanent and transparent. Level 1–100 must remain realistically completable at $0. Launch LiveOps includes The First Thaw, weekly gameplay and sale rotation, seasonal/holiday frameworks, server-authoritative time, automatic validated scheduling, pre-approved composition, and a remote kill switch.
@@ -129,7 +150,7 @@ Only the integration owner may integrate production candidates into the integrat
 | T69 | Sustained native 4K/60 tablet/foldable evidence | LOCKED |
 | T70 | Final production release handoff | LOCKED |
 
-Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. T01–T04 accepted records remain authoritative; T05 scope is frozen in `Docs/Production/T05/FROZEN_SCOPE.md`.
+Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. Mandatory forward scope overlays for resource/tool/actor/animation behavior are machine-authoritative in `TASK_SCOPE_OVERRIDES.json` and the three contract registries. T01–T04 accepted records remain authoritative; T05 scope is frozen in `Docs/Production/T05/FROZEN_SCOPE.md` and is not expanded by the new forward contract.
 
 ## Parallel Wave 1 after T03 approval
 
@@ -143,6 +164,8 @@ These workstreams may build in parallel only after T03 is APPROVED and the regis
 ## Evidence and review
 
 Every frozen candidate package contains exact source/commit hashes, changed-file list, test logs, deterministic screenshots/videos, performance records, raw critic inputs/outputs, known failures and dispositions. Relevant visual evidence includes front, rear, left, right, 3/4, gameplay-scale, close detail, overhead, applicable day/night/weather, and native 3840×2160 scale-1. Motion tasks additionally require real-time and slow cycles, turns/transitions, feet/toes/knees/hands, gear and animal appendage/contact views. Save and device matrices run early rather than waiting for final release.
+
+Applicable resource/tool/actor tasks must additionally prove actual tool contact, animation impact timing, carry/delivery behavior, role-distinct helper/survivor motion, and species-specific companion work/attack motion. The candidate manifest stores hashes for the resource/action, actor-capability and animation-action registries so stale or selectively bypassed contracts fail closure.
 
 ## Performance rule
 

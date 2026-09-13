@@ -4,6 +4,15 @@ import argparse, json, pathlib
 from lib import ROOT, DOCS, load_json, ensure_score_strictly_above_nine, sha256_file
 
 ALL_GATES=[f"G{i}" for i in range(1,15)]
+RESOURCE_REGISTRY=DOCS/"RESOURCE_ACTION_REGISTRY.json"
+ACTOR_MATRIX=DOCS/"ACTOR_CAPABILITY_MATRIX.json"
+ANIMATION_MATRIX=DOCS/"ANIMATION_ACTION_MATRIX.json"
+
+def has_placeholder(value,tokens):
+    if isinstance(value,str):return any(token in value for token in tokens)
+    if isinstance(value,list):return any(has_placeholder(v,tokens) for v in value)
+    if isinstance(value,dict):return any(has_placeholder(v,tokens) for v in value.values())
+    return False
 
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("manifest");a=ap.parse_args()
@@ -12,6 +21,7 @@ def main():
     d=json.loads(p.read_text());errors=[]
     task=d.get("task_id");candidate=d.get("candidate_commit");base=d.get("base_commit")
     graph=load_json(DOCS/"DEPENDENCY_GRAPH.json");critcfg=load_json(DOCS/"CRITIC_MATRIX.json");execfg=load_json(DOCS/"CRITIC_EXECUTION.json")
+    resources=load_json(RESOURCE_REGISTRY);actors=load_json(ACTOR_MATRIX);animations=load_json(ANIMATION_MATRIX)
     if task not in graph["tasks"]:errors.append("unknown task")
     for dep in graph["tasks"].get(task,{}).get("dependencies",[]):
         if graph["tasks"][dep]["status"]!="APPROVED":errors.append("dependency not approved: "+dep)
@@ -36,7 +46,68 @@ def main():
             fp=root/rel
             if not fp.exists() or sha256_file(fp)!=h:errors.append("evidence hash mismatch "+rel)
     if d.get("unresolved_mandatory_defects"):errors.append("unresolved mandatory defects")
-    required=critcfg["task_applicability"].get(task,[]);critics=d.get("critics",{})
+
+    policy=resources.get("task_policy",{})
+    contract_applicable=task in policy.get("applicable_tasks",[])
+    contract=d.get("resource_actor_contract",{})
+    contract_c5_required=False
+    if contract_applicable:
+        if contract.get("applicable") is not True:errors.append("resource/actor contract not marked applicable")
+        if contract.get("validation_passed") is not True:errors.append("resource/actor contract validation not passed")
+        expected_hashes={
+            "resource_action_registry":sha256_file(RESOURCE_REGISTRY),
+            "actor_capability_matrix":sha256_file(ACTOR_MATRIX),
+            "animation_action_matrix":sha256_file(ANIMATION_MATRIX),
+        }
+        got_hashes=contract.get("registry_hashes",{})
+        for key,value in expected_hashes.items():
+            if got_hashes.get(key)!=value:errors.append("resource/actor registry hash mismatch: "+key)
+
+        introduced=set(contract.get("introduced_resource_ids",[]))
+        covered_resources=set(contract.get("resource_ids_covered",[]))
+        tokens=resources.get("placeholder_tokens",[])
+        required_resources=set(policy.get("resource_resolution_tasks",{}).get(task,[]))
+        for rid in sorted(required_resources|introduced):
+            row=resources.get("resources",{}).get(rid)
+            if not row:
+                errors.append("unregistered resource: "+rid);continue
+            if row.get("production_ready") is not True:errors.append("resource not production_ready: "+rid)
+            if has_placeholder(row,tokens):errors.append("resource still unresolved: "+rid)
+            if rid not in covered_resources:errors.append("resource missing contract coverage: "+rid)
+
+        covered_actors=set(contract.get("actor_keys_covered",[]))
+        for actor_key in actors.get("required_actor_keys_by_task",{}).get(task,[]):
+            if actor_key not in covered_actors:errors.append("actor capability missing contract coverage: "+actor_key)
+
+        covered_profiles=set(contract.get("animation_profiles_covered",[]))
+        for profile_id in animations.get("required_profiles_by_task",{}).get(task,[]):
+            if profile_id not in covered_profiles:errors.append("animation profile missing contract coverage: "+profile_id)
+
+        animation_delta=bool(contract.get("animation_delta"))
+        contract_c5_required=(task in policy.get("always_motion_critic_tasks",[]) or
+            (task in policy.get("conditional_motion_critic_tasks",[]) and animation_delta))
+
+        proof_path=contract.get("validator_output_path")
+        proof_hash=contract.get("validator_output_sha256")
+        if not proof_path or not proof_hash:
+            errors.append("resource/actor validator proof missing")
+        else:
+            fp=(ROOT/proof_path).resolve()
+            if not fp.exists() or sha256_file(fp)!=proof_hash:
+                errors.append("resource/actor validator proof hash mismatch")
+            else:
+                proof=json.loads(fp.read_text())
+                if proof.get("passed") is not True or proof.get("task_id")!=task:
+                    errors.append("resource/actor validator proof failed/stale")
+                proof_candidate=proof.get("candidate_commit")
+                if proof_candidate and proof_candidate!=candidate:
+                    errors.append("resource/actor validator candidate mismatch")
+    elif contract and contract.get("applicable") is True:
+        errors.append("resource/actor contract incorrectly marked applicable for task")
+
+    required=list(critcfg["task_applicability"].get(task,[]))
+    if contract_c5_required and "C5" not in required:required.append("C5")
+    critics=d.get("critics",{})
     for cid in required:
         row=critics.get(cid)
         if not row:errors.append("missing critic "+cid);continue

@@ -1,16 +1,26 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import datetime, pathlib, sys
-from lib import DOCS, ROOT, load_json, expand_alias
+import datetime, sys
+from lib import DOCS, ROOT, load_json, expand_alias, sha256_file
+
+RESOURCE_REGISTRY = DOCS / "RESOURCE_ACTION_REGISTRY.json"
+ACTOR_MATRIX = DOCS / "ACTOR_CAPABILITY_MATRIX.json"
+ANIMATION_MATRIX = DOCS / "ANIMATION_ACTION_MATRIX.json"
 
 def main():
     if len(sys.argv)!=2:raise SystemExit("usage: task_packet.py T04")
     task_id=sys.argv[1].upper();graph=load_json(DOCS/"DEPENDENCY_GRAPH.json");registry=load_json(DOCS/"WORKSTREAM_REGISTRY.json");ownership=load_json(DOCS/"PATH_OWNERSHIP.json");critics=load_json(DOCS/"CRITIC_MATRIX.json");execution=load_json(DOCS/"CRITIC_EXECUTION.json")
+    resources=load_json(RESOURCE_REGISTRY);actors=load_json(ACTOR_MATRIX);animations=load_json(ANIMATION_MATRIX)
     if task_id not in graph["tasks"]:raise SystemExit(f"unknown task {task_id}")
     task=graph["tasks"][task_id];ws=next((w for w in registry["workstreams"] if w["task_id"]==task_id),None)
     owned=expand_alias(ws.get("owned_paths",[]),ownership) if ws else [];protected=expand_alias(ws.get("protected_paths",[]),ownership) if ws else []
     branch=ws.get("branch") if ws else None;base=ws.get("base_commit") if ws else None;owner=ws.get("owner") if ws else None;workstream=ws.get("workstream_id") if ws else None
-    required=critics["task_applicability"].get(task_id,[]);gates=[f"G{i}" for i in range(1,15)]
+    required=list(critics["task_applicability"].get(task_id,[]))
+    policy=resources.get("task_policy",{})
+    contract_applicable=task_id in policy.get("applicable_tasks",[])
+    conditional_c5=task_id in policy.get("conditional_motion_critic_tasks",[])
+    if task_id in policy.get("always_motion_critic_tasks",[]) and "C5" not in required: required.append("C5")
+    gates=[f"G{i}" for i in range(1,15)]
     text=f"""# Havenline frozen task packet — {task_id}
 
 Generated: {datetime.datetime.now(datetime.timezone.utc).isoformat()}
@@ -39,6 +49,23 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
         if row.get('capture_runner'):text+=f"  - required capture harness: `{row['capture_runner']}`\n"
         if row.get('device_runner'):text+=f"  - device/layout harness: `{row['device_runner']}`\n"
         if row.get('required_categories'):text+=f"  - evidence categories: {', '.join(row['required_categories'])}\n"
+    if contract_applicable:
+        text+="\n## Resource / tool / actor / animation contract\n"
+        text+="- REQUIRED by `Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md`.\n"
+        text+=f"- Resource registry SHA256: `{sha256_file(RESOURCE_REGISTRY)}`\n"
+        text+=f"- Actor capability matrix SHA256: `{sha256_file(ACTOR_MATRIX)}`\n"
+        text+=f"- Animation action matrix SHA256: `{sha256_file(ANIMATION_MATRIX)}`\n"
+        rr=policy.get("resource_resolution_tasks",{}).get(task_id,[])
+        ra=actors.get("required_actor_keys_by_task",{}).get(task_id,[])
+        rp=animations.get("required_profiles_by_task",{}).get(task_id,[])
+        text+=f"- Resources this task must resolve/prove: {', '.join(rr) or 'none predeclared; any introduced resource must still be registered'}\n"
+        text+=f"- Actor capability keys this task must prove: {', '.join(ra) or 'none predeclared'}\n"
+        text+=f"- Animation profiles this task must prove: {', '.join(rp) or 'none predeclared'}\n"
+        text+="- Run `python3 tools/havenline/production/resource_actor_contract.py --task %s --manifest <candidate-manifest> --output <proof.json>` before closure.\n" % task_id
+        if conditional_c5:
+            text+="- C5 becomes mandatory if this candidate introduces any new actor action or animation profile (`animation_delta=true`).\n"
+    else:
+        text+="\n## Resource / tool / actor / animation contract\n- N/A for this task under the current forward policy. Do not expand frozen scope merely because the contract exists.\n"
     text+="""
 
 ## Score rule
