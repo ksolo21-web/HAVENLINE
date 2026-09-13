@@ -24,7 +24,10 @@ const Scenery = preload("res://scripts/scenery_batch.gd")
 const ReferenceForest = preload("res://scripts/reference_forest.gd")
 var reference_forest_evidence: Dictionary = {}
 const CampBoundaryView = preload("res://scripts/camp_boundary_view.gd")
+const StationKit = preload("res://scripts/station_kit.gd")
 var camp_boundary_view: Node3D
+var camp_station_kit: HavenlineStationKit
+var lakeshore_station_kit: HavenlineStationKit
 const DeviceBenchmark = preload("res://scripts/device_benchmark.gd")
 var device_benchmark: PanelContainer
 const FrameRecord = preload("res://scripts/performance_record.gd")
@@ -248,14 +251,28 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 func build_world():
 	# The sculpted OutpostView surface replaces the flat terrain render only.
 	# All original GLB source assets are retained unchanged.
-	furnace = model("world/furnace", world, xyz(Simulation.point(sim.contract.world.furnace)))
+	# T05 replaces only presentation. Existing coordinates, proximity actions,
+	# heat behavior, inventory and save contracts remain authoritative.
+	camp_station_kit = StationKit.new()
+	camp_station_kit.name = "T05CampStationKit"
+	world.add_child(camp_station_kit)
+	lakeshore_station_kit = StationKit.new()
+	lakeshore_station_kit.name = "T05LakeshoreStationKit"
+	world.add_child(lakeshore_station_kit)
+	var station_ground := func(point: Vector2) -> float: return Surface.height_at(point)
+	camp_station_kit.build_arrangement("camp", Vector3.ZERO, station_ground, ["hearth_vessel"])
+	lakeshore_station_kit.build_arrangement("lakeshore", Vector3.ZERO, station_ground)
+	furnace = camp_station_kit.instantiate_asset("hearth_vessel", world)
+	furnace.position = xyz(Simulation.point(sim.contract.world.furnace))
 	heat_light = OmniLight3D.new()
 	heat_light.position = Vector3(0, 1.2, 0.6)
 	heat_light.light_color = Color("ff913d")
 	heat_light.light_energy = 3
 	heat_light.omni_range = 5
 	furnace.add_child(heat_light)
-	model("world/storage", world, xyz(Simulation.point(sim.contract.world.storage)))
+	var storage_visual: Node3D = camp_station_kit.instantiate_asset("cargo_crate", world)
+	storage_visual.name = "T05StorageCargoCrate"
+	storage_visual.position = xyz(Simulation.point(sim.contract.world.storage))
 	for key in ["leftTent","rightTent"]:
 		var shelter_point := Simulation.point(sim.contract.world[key])
 		var shelter := model("world/shelter", world, xyz(shelter_point))
@@ -690,6 +707,14 @@ func _process(dt: float):
 		report["npc_population"] = population_view.evidence()
 		report["outpost"] = outpost_view.evidence(sim)
 		report["task03_boundary"] = camp_boundary_view.descriptor
+		report["task05_station_kit"] = {
+			"authority_id": StationKit.AUTHORITY_ID,
+			"camp": camp_station_kit.descriptor(),
+			"lakeshore": lakeshore_station_kit.descriptor(),
+			"gameplay_logic_changed": false,
+			"furnace_contract_position": sim.contract.world.furnace,
+			"storage_contract_position": sim.contract.world.storage
+		}
 		report["capture_scenario"] = capture_scenario
 		report["scenario_is_test_fixture"] = capture_scenario != "opening"
 		report["action_readout"] = action_readout.descriptor
