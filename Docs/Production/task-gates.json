@@ -79,9 +79,10 @@
   "approved_tasks": [
     "T01",
     "T02",
-    "T03"
+    "T03",
+    "T04"
   ],
-  "approved_task_count": 3,
+  "approved_task_count": 4,
   "legacy_approval_policy": {
     "T01_T02_not_retroactively_revoked": true
   },
@@ -93,17 +94,17 @@
     "all_applicable_gates_must_pass": true,
     "no_unresolved_mandatory_defects": true
   },
-  "active_task": "T04",
-  "active_task_title": "Reference camera and automatic screen composition",
-  "active_status": "INTEGRATING",
-  "active_frozen_scope": "Docs/Production/T04/FROZEN_SCOPE.md",
-  "active_task_packet": "Docs/Production/T04/TASK_PACKET.md",
-  "active_base_integration_commit": "5135cddf96123afb962f4046f41e5ac0e510428a",
-  "active_candidate_source": "7c3f6e1c43871a424a78ed7590e3c0b153ef9d62",
-  "active_candidate_run": 34738403369,
-  "active_tests": "PASS: 17 suites / 848 checks",
-  "active_evidence": "artifact:10311871879; 23 source-bound images; automated framing and manual quick-look PASS",
-  "active_critic_state": "BLOCKED until integrated-source render and second manual quick-look pass",
+  "active_task": null,
+  "active_task_title": null,
+  "active_status": null,
+  "active_frozen_scope": null,
+  "active_task_packet": null,
+  "active_base_integration_commit": null,
+  "active_candidate_source": null,
+  "active_candidate_run": null,
+  "active_tests": null,
+  "active_evidence": null,
+  "active_critic_state": null,
   "task04_plus_runtime_locked": false,
   "task05_plus_runtime_locked": true,
   "states": [
@@ -155,16 +156,28 @@
       "adjudicated_closeout_run": 34735423968,
       "record": "Docs/Production/T03/verified-completion.json",
       "later_regression_reopens_task": true
+    },
+    "T04": {
+      "status": "APPROVED",
+      "accepted_source": "e08fd37e9a999d878644c03089c4b4b253bd7472",
+      "score": 9.5,
+      "minimum_mandatory_dimension_score": 9.5,
+      "gate_operator": "> 9.0",
+      "visual_status": "PASS_BY_CORROBORATED_EVIDENCE",
+      "evidence_run": 34738864775,
+      "closeout_run": 34745334414,
+      "record": "Docs/Production/T04/verified-completion.json",
+      "later_regression_reopens_task": true
     }
   },
   "next_post_t03_wave": [
     {
       "task": "T04",
       "branch": "havenline/T04-camera",
-      "state": "ASSIGNED",
-      "owner": "camera-composition-builder",
+      "state": "APPROVED",
+      "owner": "primary-integration-owner",
       "base_commit": "5135cddf96123afb962f4046f41e5ac0e510428a",
-      "reason": "T03 is approved and the isolated T04 packet, owner and path reservation are prepared."
+      "reason": "Integrated source e08fd37e9a999d878644c03089c4b4b253bd7472 passed 852 checks, source-bound pixels, C1+C2 and C6."
     },
     {
       "task": "T05",

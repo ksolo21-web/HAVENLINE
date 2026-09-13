@@ -102,6 +102,16 @@ def main():
             if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must have no active task while T04 is locked")
         elif t04_status=="APPROVED":
             if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task after T04 approval")
+            t04_completion=DOCS/"T04/verified-completion.json"
+            if not t04_completion.exists():errors.append("T04 verified completion record missing")
+            else:
+                record=load_json(t04_completion)
+                if record.get("status")!="PASS" or record.get("accepted_gameplay_source")!="e08fd37e9a999d878644c03089c4b4b253bd7472":
+                    errors.append("T04 verified completion record is not bound to the accepted source")
+                if record.get("visual_review",{}).get("status")!="PASS_BY_CORROBORATED_EVIDENCE" or record.get("performance_critic",{}).get("passed") is not True:
+                    errors.append("T04 verified completion gates are incomplete")
+                if record.get("pixel_signoff",{}).get("unresolved_mandatory_task_defects")!=[]:
+                    errors.append("T04 final pixel signoff is incomplete")
         else:
             if tg.get("active_task")!="T04" or tg.get("active_status")!=t04_status:errors.append("task-gates must match active T04 state")
             packet=DOCS/"T04/TASK_PACKET.md";scope=DOCS/"T04/FROZEN_SCOPE.md"

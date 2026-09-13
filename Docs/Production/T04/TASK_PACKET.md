@@ -84,10 +84,12 @@ Integration-only paths:
 
 ## Candidate handoff
 
-- Candidate commit: `7c3f6e1c43871a424a78ed7590e3c0b153ef9d62`
-- Evidence package: run `34738403369`, artifact `10311871879`
-- Tests: 17 suites / 848 checks, all passing
-- Quick-look: PASS after repairing target occlusion, transient cutaway capture and LFS reference materialization before critics
-- Known failures: none on the authoritative isolated candidate
-- Unresolved mandatory defects: none before integration
-- Integration wiring request: approved in `Docs/Production/ChangeRequests/T04-main-camera.json`
+- Accepted gameplay source: `e08fd37e9a999d878644c03089c4b4b253bd7472`
+- Integrated evidence: run `34738864775`, artifact `10312061966`
+- Tests: 17 suites / 852 checks, all passing
+- Quick-look and final pixel signoff: PASS on all 23 source-bound frames
+- C1+C2: PASS_BY_CORROBORATED_EVIDENCE, minimum mandatory score 9.5
+- C6: PASS, minimum mandatory score 9.8; all 23 matched frames have no positive draw/primitive regression
+- Final closeout: run `34745334414`, all jobs passed
+- Unresolved mandatory defects: none
+- Completion record: `Docs/Production/T04/verified-completion.json`

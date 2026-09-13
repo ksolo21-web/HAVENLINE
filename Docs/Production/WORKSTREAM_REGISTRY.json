@@ -99,27 +99,30 @@
     {
       "task_id": "T04",
       "task_name": "Reference camera and automatic screen composition",
-      "status": "INTEGRATING",
-      "owner": "camera-composition-builder",
+      "status": "APPROVED",
+      "owner": "primary-integration-owner",
       "workstream_id": "wave1-camera",
-      "branch": "havenline/T04-camera",
+      "branch": "codex/havenline-sequential-task-01",
       "base_commit": "5135cddf96123afb962f4046f41e5ac0e510428a",
       "dependencies": ["T03"],
       "owned_paths": ["@reservation:T04"],
       "protected_paths": ["@protected:approved", "@integration-only"],
-      "candidate_commit": "7c3f6e1c43871a424a78ed7590e3c0b153ef9d62",
-      "candidate_hash_or_artifact": "precritic-run:34738403369 artifact:10311871879 digest:sha256:b2a1d1b230a52682fa8c97dc21aa6c0aa7677739793aaf819c950732c0553ea0",
+      "candidate_commit": "e08fd37e9a999d878644c03089c4b4b253bd7472",
+      "candidate_hash_or_artifact": "integrated-evidence-run:34738864775 artifact:10312061966 closeout-run:34745334414",
       "tests": {
         "suites": 17,
-        "checks": 848,
+        "checks": 852,
         "result": "PASS"
       },
       "evidence_path": "Docs/Production/Evidence/T04/",
       "critic_requirements": ["C1", "C2", "C6"],
-      "critic_status": {},
-      "integration_status": "integration-owner wiring authorized by Docs/Production/ChangeRequests/T04-main-camera.json",
+      "critic_status": {
+        "C1+C2": "PASS_BY_CORROBORATED_EVIDENCE; minimum mandatory score 9.5; no score averaging; unsupported claims retained and objectively resolved",
+        "C6": "PASS; minimum mandatory dimension 9.8"
+      },
+      "integration_status": "APPROVED; accepted gameplay source e08fd37e9a999d878644c03089c4b4b253bd7472",
       "known_blockers": [],
-      "next_action": "Integrate the authorized main.gd call site, regenerate exact-source evidence, quick-look it, then run C1+C2+C6."
+      "next_action": "Preserve T04; prepare and assign the isolated T05 production-station and prop-kit packet."
     },
     {
       "task_id": "T05",
