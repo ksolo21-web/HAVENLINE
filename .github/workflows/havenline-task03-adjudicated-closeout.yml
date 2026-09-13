@@ -1,0 +1,185 @@
+name: Havenline T03 adjudicated closeout
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task03-adjudicated-closeout.yml'
+      - 'tools/havenline/production/evaluate_visual_quorum.py'
+      - 'tools/havenline/production/review_visual_supplement.py'
+      - 'tools/havenline/production/test_visual_quorum.py'
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  ACCEPTED_SOURCE: '5df9726e0b1c33f0f8865385b1c49aca229fd461'
+  PRIMARY_RUN_ID: '34730602238'
+  GROUPS: 'perimeter,north-gate,side-gates,river-gates,south-fence,central-lane,cross-shelter-lanes,bank-lane,detail-contact,gameplay,conditions'
+
+jobs:
+  focused-visual-resolution:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      EXPECTED_SOURCE: '${{ env.ACCEPTED_SOURCE }}'
+      REVIEWS_ROOT: 'original-reviews'
+      SUPPLEMENT_OUT: 'supplemental-review'
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          pattern: 'havenline-t03-v2-*-*-${{ env.PRIMARY_RUN_ID }}'
+          path: 'original-reviews'
+      - uses: actions/cache/restore@v4
+        with:
+          path: '~/.cache/havenline-t01-qwen35'
+          key: 'havenline-t01-qwen35-9b-q5-20260908-v1'
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Validate adjudication policy implementation
+        run: python3 -m unittest tools/havenline/production/test_visual_quorum.py
+      - name: Classify primary judgments without averaging
+        run: |
+          set +e
+          python3 tools/havenline/production/evaluate_visual_quorum.py \
+            --reviews original-reviews \
+            --source "$EXPECTED_SOURCE" \
+            --groups "$GROUPS" \
+            --output primary-decision.json
+          code=$?
+          set -e
+          test "$code" -eq 2
+          python3 - <<'PY'
+          import json
+          report=json.load(open('primary-decision.json'))
+          assert report['judgments_expected']==22 and report['judgments_present']==22,report
+          assert set(report['incomplete_judgments'])=={'reference-fidelity/gameplay','visual-integrity/bank-lane'},report
+          assert set(report['dissent_judgments'])=={'visual-integrity/conditions','visual-integrity/river-gates'},report
+          assert report['strict_rule']=='>9.0 unrounded; no score averaging',report
+          PY
+      - name: Retry incomplete outputs and adjudicate split groups
+        run: python3 -u tools/havenline/production/review_visual_supplement.py
+      - name: Enforce per-group two-of-three quorum
+        run: |
+          python3 tools/havenline/production/evaluate_visual_quorum.py \
+            --reviews original-reviews \
+            --supplemental supplemental-review/supplemental-reviews.json \
+            --source "$EXPECTED_SOURCE" \
+            --groups "$GROUPS" \
+            --output supplemental-review/final-visual-decision.json
+          python3 - <<'PY'
+          import json
+          report=json.load(open('supplemental-review/final-visual-decision.json'))
+          assert report['passed'] is True,report
+          assert report['status'] in ('PASS','PASS_BY_QUORUM'),report
+          assert not report['incomplete_judgments'],report
+          assert {q['group'] for q in report['quorums']}=={'conditions','river-gates'},report
+          assert all(q['clean_votes']==2 and q['total_votes']==3 for q in report['quorums']),report
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t03-adjudicated-visual-${{ github.run_id }}'
+          path: |
+            primary-decision.json
+            supplemental-review/
+          retention-days: 30
+          if-no-files-found: error
+
+  performance-review:
+    needs: focused-visual-resolution
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      EXPECTED_SOURCE: '${{ env.ACCEPTED_SOURCE }}'
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '${{ env.ACCEPTED_SOURCE }}'
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: 'havenline-t03-v2-evidence-${{ env.PRIMARY_RUN_ID }}'
+          path: 'task03-evidence'
+      - uses: actions/cache/restore@v4
+        with:
+          path: '~/.cache/havenline-t01-qwen35'
+          key: 'havenline-t01-qwen35-9b-q5-20260908-v1'
+          fail-on-cache-miss: true
+      - run: python3 -u tools/havenline/production/review_t03_performance_local.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t03-adjudicated-C6-${{ github.run_id }}'
+          path: 'task03-performance-review/'
+          retention-days: 30
+          if-no-files-found: error
+
+  final-gate:
+    needs: [focused-visual-resolution, performance-review]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: 'havenline-t03-v2-evidence-${{ env.PRIMARY_RUN_ID }}'
+          path: 'evidence'
+      - uses: actions/download-artifact@v4
+        with:
+          name: 'havenline-t03-adjudicated-visual-${{ github.run_id }}'
+          path: 'visual'
+      - uses: actions/download-artifact@v4
+        with:
+          name: 'havenline-t03-adjudicated-C6-${{ github.run_id }}'
+          path: 'performance'
+      - name: Bind source, visual quorum, regression, and C6
+        env:
+          SOURCE: '${{ env.ACCEPTED_SOURCE }}'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,math,os
+          source=os.environ['SOURCE'];errors=[]
+          provenance=json.loads(Path('evidence/provenance.json').read_text())
+          tests=json.loads(Path('evidence/tests.json').read_text())
+          gate=json.loads(Path('evidence/gate-preflight.json').read_text())
+          cheap=json.loads(Path('evidence/performance-preflight.json').read_text())
+          visual=json.loads(next(Path('visual').rglob('final-visual-decision.json')).read_text())
+          supplement=json.loads(next(Path('visual').rglob('provenance.json')).read_text())
+          c6=json.loads(next(Path('performance').rglob('result.json')).read_text())
+          if provenance.get('source')!=source or provenance.get('capture_image_count')!=69 or provenance.get('all_required_images_verified') is not True:errors.append('source-bound evidence')
+          if tests.get('source')!=source or tests.get('all_passed') is not True or tests.get('suite_count')!=16 or tests.get('total_checks')!=807:errors.append('regression')
+          if gate.get('source')!=source or gate.get('passed') is not True or gate.get('required_evidence_count')!=12 or gate.get('visual_clearance_pass') is not True:errors.append('river gate preflight')
+          if cheap.get('source')!=source or cheap.get('passed') is not True:errors.append('cheap performance preflight')
+          if visual.get('source')!=source or visual.get('passed') is not True or visual.get('judgments_expected')!=22:errors.append('visual quorum')
+          if visual.get('status')=='PASS_BY_QUORUM' and {q.get('group') for q in visual.get('quorums',[])}!={'conditions','river-gates'}:errors.append('quorum coverage')
+          if supplement.get('source')!=source or supplement.get('completed_low_scores_retried') is not False or supplement.get('score_averaging') is not False:errors.append('supplement provenance')
+          scores=c6.get('mandatory_dimensions',{})
+          if c6.get('candidate_commit')!=source or c6.get('independent') is not True or c6.get('passed') is not True:errors.append('C6 provenance/result')
+          if not scores or any(isinstance(value,bool) or not isinstance(value,(int,float)) or not math.isfinite(value) or value<=9.0 for value in scores.values()):errors.append('C6 strict scores')
+          if c6.get('defects')!=[] or c6.get('confidence') not in ('medium','high'):errors.append('C6 defects/confidence')
+          result={'task':'T03','source':source,'primary_run_id':os.environ.get('PRIMARY_RUN_ID'),'passed':not errors,'strict_rule':'>9.0 unrounded; no averaging; per-group 2-of-3 adjudication','visual_status':visual.get('status'),'quorums':visual.get('quorums',[]),'C6_present':True,'ready_for_final_pixel_signoff':not errors,'final_pixel_signoff_required':True,'task_approved':False,'physical4k60_verified':False,'errors':errors}
+          Path('gate-report').mkdir();Path('gate-report/final-gate.json').write_text(json.dumps(result,indent=2)+'\n')
+          print(json.dumps(result,indent=2));raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t03-adjudicated-final-gate-${{ github.run_id }}'
+          path: 'gate-report/'
+          retention-days: 30
+
+# T03 runtime source remains ACCEPTED_SOURCE. This workflow changes governance only.
