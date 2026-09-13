@@ -147,6 +147,13 @@ class CriticLoopRegressionTests(unittest.TestCase):
             self.assertIn("cancel-in-progress: true", workflow, rel)
             self.assertIn("github.event.pull_request.head.ref || github.ref_name", workflow, rel)
 
+    def test_production_governance_is_not_frozen_to_t03_integration(self):
+        workflow = (ROOT / ".github/workflows/havenline-production-governance.yml").read_text()
+        self.assertIn("validate_integration_scope.py", workflow)
+        self.assertIn("lifecycle-valid task integration impact", workflow)
+        self.assertNotIn("CAUSALLY_GOVERNED_T03_REPAIR", workflow)
+        self.assertNotIn("allowed=ownership['aliases']['@ownership:T03']", workflow)
+
     def test_repair_policy_blocks_evidence_only_loop_after_real_defect(self):
         policy = (PRODUCTION / "validate_repair_cycle.py").read_text()
         self.assertIn("two-strike rule blocks evidence-only rerun", policy)
