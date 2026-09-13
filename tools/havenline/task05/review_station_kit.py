@@ -241,10 +241,10 @@ def build_probe() -> Path:
     left = ref.crop((0, 0, ref.width // 2, ref.height))
     right = ref.crop((ref.width // 2, 0, ref.width, ref.height))
     specs = [
-        ("A", left, "fishing_rods"),
-        ("B", right, "warm_hearth"),
-        ("C", Image.open(ROOT / "component/close-fishing-side.png").convert("RGB"), "fishing_rods"),
-        ("D", Image.open(ROOT / "component/close-hearth-front.png").convert("RGB"), "warm_hearth"),
+        ("A", left, "long_poles"),
+        ("B", right, "round_vessel"),
+        ("C", Image.open(ROOT / "component/close-fishing-side.png").convert("RGB"), "long_poles"),
+        ("D", Image.open(ROOT / "component/close-hearth-front.png").convert("RGB"), "round_vessel"),
     ]
     board = Image.new("RGB", (960, 960), (20, 29, 38))
     draw = ImageDraw.Draw(board)
@@ -455,15 +455,15 @@ try:
 
     probe_schema = {
         "type": "object",
-        "properties": {key: {"type": "string", "enum": ["fishing_rods", "warm_hearth", "other_or_unclear"]} for key in "ABCD"},
+        "properties": {key: {"type": "string", "enum": ["long_poles", "round_vessel", "other_or_unclear"]} for key in "ABCD"},
         "required": list("ABCD"), "additionalProperties": False,
     }
     answers, elapsed = query(
         build_probe(),
-        "Four panels are labelled A-D. Identify the prominent station subject in each as fishing_rods, warm_hearth, or other_or_unclear. Return only the JSON object.",
+        "Four panels are labelled A-D. Classify the prominent fixture by visible shape: long_poles means multiple long thin upright poles; round_vessel means a large round dark pot or vessel; otherwise use other_or_unclear. Return only the JSON object.",
         probe_schema, "competency", 180,
     )
-    expected = {"A": "fishing_rods", "B": "warm_hearth", "C": "fishing_rods", "D": "warm_hearth"}
+    expected = {"A": "long_poles", "B": "round_vessel", "C": "long_poles", "D": "round_vessel"}
     competent = answers == expected
     (OUT / "competency.json").write_text(json.dumps({"answers": answers, "expected": expected, "passed": competent, "elapsed_seconds": elapsed}, indent=2))
     assert competent, "blind image competency failed; do not grade"

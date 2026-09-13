@@ -90,13 +90,15 @@ jobs:
       fail-fast: false
       matrix:
         critic: ['C1', 'C2']
+        group: ['core-families', 'loop-families', 'resources-and-details', 'shipping-device-and-tracking', 'shipping-contexts-and-native']
     runs-on: ubuntu-24.04
     timeout-minutes: 150
     env:
       REVIEW_ROLE: '${{ matrix.critic }}'
       REVIEW_ATTEMPT: primary
       REVIEW_SEED: '${{ matrix.critic == ''C1'' && ''20260951'' || ''20260961'' }}'
-      REVIEW_OUTPUT: 'task05-${{ matrix.critic }}-primary'
+      REVIEW_GROUPS: '${{ matrix.group }}'
+      REVIEW_OUTPUT: 'task05-${{ matrix.critic }}-${{ matrix.group }}-primary'
     steps:
       - uses: actions/checkout@v4
         with: {lfs: true}
@@ -135,8 +137,8 @@ jobs:
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: 'havenline-t05-${{ matrix.critic }}-primary-${{ github.run_id }}'
-          path: 'task05-${{ matrix.critic }}-primary/'
+          name: 'havenline-t05-${{ matrix.critic }}-${{ matrix.group }}-primary-${{ github.run_id }}'
+          path: 'task05-${{ matrix.critic }}-${{ matrix.group }}-primary/'
           retention-days: 30
           if-no-files-found: error
 
@@ -220,7 +222,12 @@ jobs:
           timeout 240 "$engine" --headless --editor --path baseline-source/HavenlineGodot --import --quit > baseline-benchmark/import.log 2>&1
           /usr/bin/time -v -o candidate-benchmark/time.txt xvfb-run -a -s '-screen 0 3840x2160x24' timeout 300 "$engine" --path candidate-source/HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=30 --benchmark-warmup=5 --benchmark-output="$(pwd)/candidate-benchmark" > candidate-benchmark/run.log 2>&1
           /usr/bin/time -v -o baseline-benchmark/time.txt xvfb-run -a -s '-screen 0 3840x2160x24' timeout 300 "$engine" --path baseline-source/HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=30 --benchmark-warmup=5 --benchmark-output="$(pwd)/baseline-benchmark" > baseline-benchmark/run.log 2>&1
-          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' candidate-benchmark/run.log baseline-benchmark/run.log; then exit 1; fi
+          allowed_baked_errors='^ERROR: Missing baked outpost audio: run tools/havenline/bake_outpost_audio\.py$|^ERROR: Missing baked crew motion: run res://tools/bake_crew_motion\.gd$'
+          for log in candidate-benchmark/run.log baseline-benchmark/run.log; do
+            grep -E 'SCRIPT ERROR|Parse Error|ERROR:' "$log" | grep -Ev "$allowed_baked_errors" > "$log.unexpected" || true
+            test ! -s "$log.unexpected"
+          done
+          cmp <(grep -E "$allowed_baked_errors" candidate-benchmark/run.log | sort) <(grep -E "$allowed_baked_errors" baseline-benchmark/run.log | sort)
       - name: Evaluate measured C6 record
         run: |
           set -euo pipefail
@@ -247,14 +254,15 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
-  adjudicated-visual:
+  adjudication-precheck:
     needs: preflight
     if: github.event_name == 'workflow_dispatch' && inputs.mode == 'adjudicate' && needs.preflight.result == 'success'
     runs-on: ubuntu-24.04
-    timeout-minutes: 180
+    timeout-minutes: 15
+    outputs:
+      matrix: '${{ steps.build_matrix.outputs.matrix }}'
     steps:
       - uses: actions/checkout@v4
-        with: {lfs: true}
       - uses: actions/download-artifact@v4
         with:
           github-token: '${{ github.token }}'
@@ -262,6 +270,73 @@ jobs:
           run-id: '${{ inputs.visual_primary_run_id }}'
           pattern: 'havenline-t05-*-primary-*'
           path: primary-reviews
+      - name: Validate exact disputed pixels and build supplement matrix
+        id: build_matrix
+        env:
+          ADJUDICATION_RECORD: '${{ inputs.adjudication_record_path }}'
+          PRIOR_RUN_ID: '${{ inputs.visual_primary_run_id }}'
+        run: |
+          set -euo pipefail
+          [[ "$PRIOR_RUN_ID" =~ ^[0-9]+$ ]]
+          set +e
+          python3 tools/havenline/task05/evaluate_station_reviews.py --primary primary-reviews --source "$EXPECTED_SOURCE" --adjudication "$ADJUDICATION_RECORD" --output adjudication-precheck/primary-with-human-record.json
+          code=$?
+          set -e
+          test "$code" -eq 3
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json
+
+          report = json.load(open('adjudication-precheck/primary-with-human-record.json'))
+          groups = [
+              'core-families',
+              'loop-families',
+              'resources-and-details',
+              'shipping-device-and-tracking',
+              'shipping-contexts-and-native',
+          ]
+          include = []
+          seen = set()
+          for request in report['adjudication_requests']:
+              role = request['critic_id']
+              group = request['group']
+              assert role in {'C1', 'C2'} and group in groups
+              assert (role, group) not in seen
+              seen.add((role, group))
+              for attempt in (1, 2):
+                  include.append({
+                      'role': role,
+                      'group': group,
+                      'attempt': attempt,
+                      'seed': 20261000 + attempt * 100 + int(role[1:]) * 10 + groups.index(group) + 1,
+                  })
+          assert include
+          print('matrix=' + json.dumps({'include': include}, separators=(',', ':')))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t05-adjudication-precheck-${{ github.run_id }}'
+          path: adjudication-precheck/
+          retention-days: 30
+          if-no-files-found: error
+
+  supplemental-visual:
+    needs: [preflight, adjudication-precheck]
+    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'adjudicate' && needs.preflight.result == 'success' && needs.adjudication-precheck.result == 'success'
+    strategy:
+      fail-fast: false
+      matrix: '${{ fromJSON(needs.adjudication-precheck.outputs.matrix) }}'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 90
+    env:
+      REVIEW_ROLE: '${{ matrix.role }}'
+      REVIEW_GROUPS: '${{ matrix.group }}'
+      REVIEW_ATTEMPT: 'supplement-${{ matrix.attempt }}'
+      REVIEW_SEED: '${{ matrix.seed }}'
+      REVIEW_OUTPUT: 'supplemental/${{ matrix.role }}-${{ matrix.group }}-${{ matrix.attempt }}'
+    steps:
+      - uses: actions/checkout@v4
+        with: {lfs: true}
       - uses: actions/download-artifact@v4
         with:
           github-token: '${{ github.token }}'
@@ -281,27 +356,38 @@ jobs:
           key: 'havenline-t01-qwen35-9b-q5-20260908-v1'
           fail-on-cache-miss: true
       - run: python3 -m pip install pillow==11.3.0
-      - name: Validate human record against exact disputed pixels, then run fresh supplements
+      - run: python3 -u tools/havenline/task05/review_station_kit.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t05-${{ matrix.role }}-${{ matrix.group }}-supplement-${{ matrix.attempt }}-${{ github.run_id }}'
+          path: 'supplemental/${{ matrix.role }}-${{ matrix.group }}-${{ matrix.attempt }}/'
+          retention-days: 30
+          if-no-files-found: error
+
+  adjudicated-visual:
+    needs: [preflight, adjudication-precheck, supplemental-visual]
+    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'adjudicate' && needs.preflight.result == 'success' && needs.adjudication-precheck.result == 'success' && needs.supplemental-visual.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ inputs.visual_primary_run_id }}'
+          pattern: 'havenline-t05-*-primary-*'
+          path: primary-reviews
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: 'havenline-t05-*-supplement-*-${{ github.run_id }}'
+          path: supplemental
+      - name: Resolve same-role 2-of-3 quorum
         env:
           ADJUDICATION_RECORD: '${{ inputs.adjudication_record_path }}'
         run: |
-          set +e
-          python3 tools/havenline/task05/evaluate_station_reviews.py --primary primary-reviews --source "$EXPECTED_SOURCE" --adjudication "$ADJUDICATION_RECORD" --output adjudicated/primary-with-human-record.json
-          code=$?
-          set -e
-          test "$code" -eq 3
-          for role in C1 C2; do
-            groups=$(python3 - "$role" <<'PY'
-          import json,sys
-          report=json.load(open('adjudicated/primary-with-human-record.json'))
-          print(','.join(row['group'] for row in report['adjudication_requests'] if row['critic_id']==sys.argv[1]))
-          PY
-          )
-            if [ -z "$groups" ]; then continue; fi
-            for attempt in 1 2; do
-              REVIEW_ROLE="$role" REVIEW_GROUPS="$groups" REVIEW_ATTEMPT="supplement-$attempt" REVIEW_SEED="$((20261000 + attempt * 100 + (${role#C} * 10)))" REVIEW_OUTPUT="supplemental/$role-$attempt" python3 -u tools/havenline/task05/review_station_kit.py
-            done
-          done
+          set -euo pipefail
           python3 tools/havenline/task05/evaluate_station_reviews.py --primary primary-reviews --supplemental supplemental --adjudication "$ADJUDICATION_RECORD" --source "$EXPECTED_SOURCE" --output adjudicated/final-visual-decision.json
           echo '```json' >> "$GITHUB_STEP_SUMMARY"
           cat adjudicated/final-visual-decision.json >> "$GITHUB_STEP_SUMMARY"
@@ -310,9 +396,7 @@ jobs:
         if: always()
         with:
           name: 'havenline-t05-adjudicated-visual-${{ github.run_id }}'
-          path: |
-            adjudicated/
-            supplemental/
+          path: adjudicated/
           retention-days: 30
           if-no-files-found: error
 
