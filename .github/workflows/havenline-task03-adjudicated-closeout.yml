@@ -105,8 +105,6 @@ jobs:
       OMP_NUM_THREADS: '4'
     steps:
       - uses: actions/checkout@v4
-        with:
-          ref: '5df9726e0b1c33f0f8865385b1c49aca229fd461'
       - uses: actions/download-artifact@v4
         with:
           github-token: '${{ github.token }}'
