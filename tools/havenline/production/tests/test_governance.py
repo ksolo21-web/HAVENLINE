@@ -1,9 +1,11 @@
 import pathlib, sys, unittest
+from types import SimpleNamespace
+from unittest.mock import patch
 HERE=pathlib.Path(__file__).resolve()
 PROD=HERE.parents[1]
 sys.path.insert(0,str(PROD))
 from lib import DOCS, load_json, ensure_score_strictly_above_nine
-from workstream import registry_errors, governance_only_drift
+from workstream import registry_errors, governance_only_drift, candidate_scope_assessment
 from change_impact import calculate
 
 class GovernanceTests(unittest.TestCase):
@@ -53,6 +55,23 @@ class GovernanceTests(unittest.TestCase):
         self.assertTrue(governance_only_drift(["tools/havenline/production/test_placeholder.py"]))
         self.assertFalse(governance_only_drift(["HavenlineGodot/scripts/camera_composition.gd"]))
         self.assertFalse(governance_only_drift(["HavenlineGodot/scripts/unregistered_future_runtime.gd"]))
+
+    def test_candidate_scope_excludes_shared_assignment_checkpoint(self):
+        completed=lambda stdout="": SimpleNamespace(returncode=0,stdout=stdout,stderr="")
+        with patch("workstream.subprocess.run",side_effect=[completed("claim-commit\n"),completed()]), \
+             patch("workstream.changed_files",return_value=["HavenlineGodot/scripts/camera_composition.gd"]) as changed:
+            scope=candidate_scope_assessment("pre-claim","candidate","integration")
+        self.assertEqual(scope["branch_point"],"claim-commit")
+        self.assertEqual(scope["changed_files"],["HavenlineGodot/scripts/camera_composition.gd"])
+        changed.assert_called_once_with("claim-commit","candidate")
+
+    def test_candidate_scope_falls_back_when_branch_point_predates_registry_base(self):
+        completed=lambda code=0,stdout="": SimpleNamespace(returncode=code,stdout=stdout,stderr="")
+        with patch("workstream.subprocess.run",side_effect=[completed(stdout="older\n"),completed(code=1)]), \
+             patch("workstream.changed_files",return_value=["foreign.txt"]) as changed:
+            scope=candidate_scope_assessment("pre-claim","candidate","integration")
+        self.assertEqual(scope["branch_point"],"pre-claim")
+        changed.assert_called_once_with("pre-claim","candidate")
 
     def test_critic_matrix(self):
         c=load_json(DOCS/"CRITIC_MATRIX.json")
