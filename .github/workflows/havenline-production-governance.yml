@@ -16,6 +16,9 @@ on:
   workflow_dispatch:
 permissions:
   contents: read
+concurrency:
+  group: havenline-production-governance-${{ github.event.pull_request.head.ref || github.ref_name }}
+  cancel-in-progress: true
 jobs:
   validate:
     runs-on: ubuntu-24.04
@@ -38,30 +41,21 @@ jobs:
         run: |
           python3 tools/havenline/production/task_packet.py T03
           test -s Docs/Production/Evidence/T03/TASK_PACKET.md
-      - name: Classify governance-only or causally governed T03 repair impact
+      - name: Classify governance-only or lifecycle-valid task integration impact
         run: |
           set -euo pipefail
           base=$(git rev-parse HEAD^)
           python3 tools/havenline/production/change_impact.py --base "$base" --head HEAD > /tmp/impact.json
-          if jq -e '.governance_only == true' /tmp/impact.json >/dev/null; then
-            jq -e '.unknown_production_fallback == false' /tmp/impact.json >/dev/null
-          else
-            python3 - <<'PY'
-          from pathlib import Path
-          import fnmatch,json,subprocess
-          changed=set(subprocess.check_output(['git','diff','--name-only','HEAD^','HEAD'],text=True).splitlines())
-          ownership=json.loads(Path('Docs/Production/PATH_OWNERSHIP.json').read_text())
-          allowed=ownership['aliases']['@ownership:T03']+ownership['aliases']['@ownership:QA-GOV']
-          def matches(path,patterns):
-            return any(fnmatch.fnmatch(path,g) or (g.endswith('/**') and path.startswith(g[:-3])) for g in patterns)
-          assert changed and all(matches(path,allowed) for path in changed),(sorted(changed),allowed)
-          print(json.dumps({'classification':'CAUSALLY_GOVERNED_T03_REPAIR','changed_files':sorted(changed)},indent=2))
-          PY
+          python3 tools/havenline/production/validate_integration_scope.py --base "$base" --head HEAD --output /tmp/integration-scope.json
+          # T03 is already approved and has a historical defect ledger, so any
+          # later T03-owned runtime repair retains the stricter anti-loop check.
+          if jq -e '.task_id == "T03" and (.task_files.T03 | length > 0)' /tmp/integration-scope.json >/dev/null; then
             python3 tools/havenline/production/validate_repair_cycle.py \
               --ledger Docs/Production/T03/DEFECT_LEDGER.json \
               --base e89818070603399cce27b595ff1116e40b8b3b2a \
               --head HEAD
           fi
           cat /tmp/impact.json
-# Full V2 state is validated every run; diff-scope checks are commit-local so prior legitimate gameplay history cannot create false governance failures.
-# Governance/QA only. This workflow cannot award a task critic score, approve T03, or start T04+ runtime work.
+          cat /tmp/integration-scope.json
+# Full V2 state is validated every run; commit-local integration scope is lifecycle/ownership based rather than frozen to a task number.
+# Governance/QA only. This workflow cannot award a task critic score, approve gameplay, or bypass task-specific review.

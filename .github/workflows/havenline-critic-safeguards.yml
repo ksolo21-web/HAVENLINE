@@ -13,6 +13,9 @@ on:
 permissions:
   contents: read
   actions: read
+concurrency:
+  group: havenline-critic-safeguards-${{ github.event.pull_request.head.ref || github.ref_name }}
+  cancel-in-progress: true
 jobs:
   deterministic-safeguards:
     runs-on: ubuntu-24.04

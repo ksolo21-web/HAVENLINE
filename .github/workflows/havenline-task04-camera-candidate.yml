@@ -32,7 +32,10 @@ jobs:
       - name: Verify scope and prepare deterministic fixtures
         run: |
           set -euo pipefail
-          mapfile -t changed < <(git diff --name-only fd9303958d0b683d11cf14b0a4038cd89646bab3 "$GITHUB_SHA")
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          branch_point=$(git merge-base "$GITHUB_SHA" "$integration")
+          mapfile -t changed < <(git diff --name-only "$branch_point" "$GITHUB_SHA")
+          echo "candidate_branch_point=$branch_point" | tee task04-evidence/candidate-scope.txt
           printf '%s\n' "${changed[@]}" | tee task04-evidence/changed-files.txt
           test "${#changed[@]}" -gt 0
           for path in "${changed[@]}"; do
