@@ -78,9 +78,10 @@
   ],
   "approved_tasks": [
     "T01",
-    "T02"
+    "T02",
+    "T03"
   ],
-  "approved_task_count": 2,
+  "approved_task_count": 3,
   "legacy_approval_policy": {
     "T01_T02_not_retroactively_revoked": true
   },
@@ -92,42 +93,15 @@
     "all_applicable_gates_must_pass": true,
     "no_unresolved_mandatory_defects": true
   },
-  "active_task": "T03",
-  "active_task_title": "Fences, gates and navigable work lanes",
-  "active_status": "FIX_REQUIRED",
-  "active_frozen_scope": "Docs/Production/T03/FROZEN_SCOPE.md",
-  "active_candidate_source": "6947849f581db9cfa53a17ff9202ecde1c0ee80c",
-  "active_candidate_run": 34632784857,
-  "active_tests": {
-    "suites": 16,
-    "checks": 807,
-    "result": "PASS",
-    "tree_geometry_checks": 9
-  },
-  "active_evidence": {
-    "actual_source_bound_pngs": 61,
-    "native3840x2160_scale1_pngs": 11,
-    "evidence_artifact": 10277539118,
-    "source_artifact": 10277374176
-  },
-  "active_critic_state": {
-    "C1": {
-      "status": "FAIL",
-      "latest_group": "river-gates",
-      "latest_role_minimum": 4,
-      "run": 34632784857
-    },
-    "C2": {
-      "status": "FAIL",
-      "latest_group": "river-gates",
-      "latest_role_minimum": 2,
-      "run": 34632784857
-    },
-    "C6": {
-      "status": "PENDING_V2",
-      "reason": "New V2 performance critic/gate required before T03 approval."
-    }
-  },
+  "active_task": null,
+  "active_task_title": null,
+  "active_status": null,
+  "active_frozen_scope": null,
+  "active_candidate_source": null,
+  "active_candidate_run": null,
+  "active_tests": null,
+  "active_evidence": null,
+  "active_critic_state": null,
   "task04_plus_runtime_locked": true,
   "states": [
     "LOCKED",
@@ -166,23 +140,38 @@
       "record": "Docs/Production/T02/river-verified-completion.json",
       "river_layout_version": "river_v1_mapspan",
       "later_regression_reopens_task": true
+    },
+    "T03": {
+      "status": "APPROVED",
+      "accepted_source": "5df9726e0b1c33f0f8865385b1c49aca229fd461",
+      "score": 9.5,
+      "minimum_mandatory_dimension_score": 9.5,
+      "gate_operator": "> 9.0",
+      "visual_status": "PASS_BY_QUORUM",
+      "primary_run": 34730602238,
+      "adjudicated_closeout_run": 34735423968,
+      "record": "Docs/Production/T03/verified-completion.json",
+      "later_regression_reopens_task": true
     }
   },
   "next_post_t03_wave": [
     {
       "task": "T04",
       "branch": "havenline/T04-camera",
-      "state": "LOCKED"
+      "state": "LOCKED",
+      "reason": "T03 dependency is approved; task packet and owner are not yet prepared."
     },
     {
       "task": "T05",
       "branch": "havenline/T05-props",
-      "state": "LOCKED"
+      "state": "LOCKED",
+      "reason": "T03 dependency is approved; task packet and owner are not yet prepared."
     },
     {
       "task": "T06",
       "branch": "havenline/T06-character1",
-      "state": "LOCKED"
+      "state": "LOCKED",
+      "reason": "T03 dependency is approved; task packet and owner are not yet prepared."
     }
   ],
   "whole_game_approved": false,

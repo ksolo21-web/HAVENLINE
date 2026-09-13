@@ -39,7 +39,7 @@
     {
       "task_id": "T03",
       "task_name": "Fences, gates and navigable work lanes",
-      "status": "FIX_REQUIRED",
+      "status": "APPROVED",
       "owner": "primary-integration-owner",
       "workstream_id": "T03-legacy-integrated",
       "branch": "codex/havenline-sequential-task-01",
@@ -47,8 +47,8 @@
       "dependencies": ["T02"],
       "owned_paths": ["@ownership:T03"],
       "protected_paths": ["@protected:T01", "@protected:T02"],
-      "candidate_commit": "6947849f581db9cfa53a17ff9202ecde1c0ee80c",
-      "candidate_hash_or_artifact": "run:34632784857 evidence:10277539118 source:10277374176",
+      "candidate_commit": "5df9726e0b1c33f0f8865385b1c49aca229fd461",
+      "candidate_hash_or_artifact": "primary-run:34730602238 closeout-run:34735423968 evidence:10308254512 source:10308369258",
       "tests": {
         "suites": 16,
         "checks": 807,
@@ -58,16 +58,12 @@
       "evidence_path": "Docs/Production/Evidence/T03/",
       "critic_requirements": ["C1", "C2", "C6"],
       "critic_status": {
-        "C1": "FAIL river-gates; role minimum 4 in latest combined gate",
-        "C2": "FAIL river-gates; role minimum 2 in latest combined gate",
-        "C6": "PENDING under operational V2 safeguard system"
+        "C1+C2": "PASS_BY_QUORUM; 18 clean primary judgments and focused 2-of-3 quorums for conditions and river-gates",
+        "C6": "PASS; minimum mandatory dimension 9.5"
       },
-      "integration_status": "already integrated before governance migration; grandfathered only for finishing T03",
-      "known_blockers": [
-        "Latest combined critic gate run 34632784857 rejects river-gates in both C1 and C2.",
-        "V2 requires C6 performance-budget review before T03 approval."
-      ],
-      "next_action": "Resume the preserved scoped river-gate repair, run impact regression, fresh evidence, C1+C2+C6, then strict V2 closure validation."
+      "integration_status": "APPROVED; accepted gameplay source 5df9726e0b1c33f0f8865385b1c49aca229fd461",
+      "known_blockers": [],
+      "next_action": "Preserve T03; prepare and assign isolated T04/T05/T06 task packets before runtime work begins."
     },
     {
       "task_id": "QA-GOV",
@@ -118,8 +114,8 @@
       "critic_requirements": ["C1", "C2", "C6"],
       "critic_status": {},
       "integration_status": "not started",
-      "known_blockers": ["T03 not APPROVED"],
-      "next_action": "Prepare/assign only after T03 APPROVED."
+      "known_blockers": ["Task packet and owner not yet prepared"],
+      "next_action": "Prepare the isolated T04 packet, assign an owner, and validate ownership before changing runtime."
     },
     {
       "task_id": "T05",
@@ -139,8 +135,8 @@
       "critic_requirements": ["C1", "C2", "C6"],
       "critic_status": {},
       "integration_status": "not started",
-      "known_blockers": ["T03 not APPROVED"],
-      "next_action": "Prepare/assign only after T03 APPROVED."
+      "known_blockers": ["Task packet and owner not yet prepared"],
+      "next_action": "Prepare the isolated T05 packet, assign an owner, and validate ownership before changing runtime."
     },
     {
       "task_id": "T06",
@@ -160,13 +156,13 @@
       "critic_requirements": ["C1", "C2", "C5", "C6"],
       "critic_status": {},
       "integration_status": "not started",
-      "known_blockers": ["T03 not APPROVED"],
-      "next_action": "Prepare/assign only after T03 APPROVED."
+      "known_blockers": ["Task packet and owner not yet prepared"],
+      "next_action": "Prepare the isolated T06 packet, assign an owner, and validate ownership before changing runtime."
     }
   ],
   "notes": [
-    "T03 is grandfathered as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
-    "No T04+ runtime work may begin until T03 is APPROVED.",
+    "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
+    "T03 is APPROVED; T04+ runtime work remains locked until its isolated task packet, owner and ownership validation are prepared.",
     "All future runtime builders use isolated branches and cannot approve themselves.",
     "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them."
   ]

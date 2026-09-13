@@ -52,8 +52,9 @@ def main():
         visiting.remove(t);done.add(t)
     for t in ids:visit(t)
     if graph["tasks"]["T01"]["status"]!="APPROVED" or graph["tasks"]["T02"]["status"]!="APPROVED":errors.append("T01/T02 approval lost")
-    if graph["tasks"]["T03"]["status"]!="FIX_REQUIRED":errors.append("T03 recovered state must be FIX_REQUIRED")
-    if any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[3:]):errors.append("T04+ must remain LOCKED during migration")
+    t03_status=graph["tasks"]["T03"]["status"]
+    if t03_status not in {"FIX_REQUIRED","APPROVED"}:errors.append("T03 must be FIX_REQUIRED or APPROVED")
+    if any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[3:]):errors.append("T04+ must remain LOCKED until separately prepared")
     acc=graph["acceptance_rule"]
     if acc.get("mandatory_dimension_operator")!=">" or acc.get("mandatory_dimension_threshold")!=9.0 or acc.get("unrounded") is not True:
         errors.append("forward strict >9.0 rule missing")
@@ -80,8 +81,20 @@ def main():
     for t in ids:
         if f"| {t} |" not in plan:errors.append("build plan missing "+t)
     tg=load_json(DOCS/"task-gates.json")
-    if tg.get("active_task")!="T03" or tg.get("active_status")!="FIX_REQUIRED":errors.append("task-gates current T03 state not recovered")
-    if tg.get("approved_tasks")!=["T01","T02"]:errors.append("task-gates approvals changed")
+    if t03_status=="APPROVED":
+        if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must have no active task after T03 closure")
+        if tg.get("approved_tasks")!=["T01","T02","T03"]:errors.append("task-gates must record T01-T03 approved")
+        completion=DOCS/"T03/verified-completion.json"
+        if not completion.exists():errors.append("T03 verified completion record missing")
+        else:
+            record=load_json(completion)
+            if record.get("status")!="PASS" or record.get("accepted_gameplay_source")!="5df9726e0b1c33f0f8865385b1c49aca229fd461":
+                errors.append("T03 verified completion record is not bound to the accepted source")
+            if record.get("visual_review",{}).get("status")!="PASS_BY_QUORUM" or record.get("performance_critic",{}).get("passed") is not True:
+                errors.append("T03 verified completion gates are incomplete")
+    else:
+        if tg.get("active_task")!="T03" or tg.get("active_status")!="FIX_REQUIRED":errors.append("task-gates current T03 state not recovered")
+        if tg.get("approved_tasks")!=["T01","T02"]:errors.append("task-gates approvals changed")
     result={"passed":not errors,"errors":errors,"checked_tasks":70,"checked_critics":11,"migration_base":a.base}
     print(json.dumps(result,indent=2))
     if errors:raise SystemExit(1)

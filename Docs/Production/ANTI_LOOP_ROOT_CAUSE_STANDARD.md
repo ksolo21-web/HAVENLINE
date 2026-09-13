@@ -63,7 +63,52 @@ is new, matched-camera proof is preserved, affected regression passed and the
 repair strategy is not another evidence-only attempt. Any failure blocks the
 critic job.
 
+## Quick-look visual gate
+
+Before the expensive critic matrix, produce one source-bound quick-look packet
+containing the whole-task contact sheet, normal gameplay views, every repaired
+object, and matched-camera before/after frames. Run deterministic coverage,
+duplicate-frame, aperture, route-continuity, contact-margin and delivered-board
+contrast checks first.
+
+Two low-cost visual scouts may inspect the compact packet in parallel. A
+finding shared by both scouts, or corroborated by a deterministic check, blocks
+the expensive matrix and returns the candidate to diagnosis. A lone scout
+finding is `NEEDS_MANUAL_TRIAGE`; it is inspected against full-resolution
+pixels before the matrix starts and cannot be hidden with a camera change.
+
+The quick-look gate is defect discovery only. It can reject a visibly weak
+candidate early, but it can never approve a task or replace the full critics.
+
+## Isolated dissent adjudication
+
+Do not average scores. A completed score at or below the threshold normally
+remains a failure. The only exception is a formally isolated dissent within
+one evidence group:
+
+- exactly one of the two primary judgments for that evidence group is below
+  the threshold;
+- the paired role for the same evidence group is strictly above 9.0 in every
+  mandatory dimension with no defect and medium/high confidence;
+- source binding, coverage, mechanical gates and evidence integrity all pass;
+- full-resolution manual inspection does not corroborate the alleged defect.
+
+An eligible dissent becomes `ADJUDICATION_REQUIRED`, not an automatic task
+failure. Preserve the original low verdict unchanged, then run one focused
+fresh adjudicator against the exact disputed source-bound pixels and the same
+scoring rubric. Use a separately recorded seed and do not disclose the earlier
+scores. If the adjudicator is strictly above 9.0 in every dimension with no
+defect and medium/high confidence, that group passes by a documented
+two-of-three quorum. If the adjudicator corroborates any mandatory defect or
+scores at or below 9.0, the candidate fails and requires a production repair.
+Several split groups may be adjudicated independently in one focused run; every
+split group must earn its own two-of-three quorum.
+
+Missing, truncated, malformed, low-confidence or source-mismatched responses
+are tooling failures, not votes. Retry only the incomplete judgment. Two
+completed critics failing the same evidence group, any hard mechanical failure,
+or any missing required view can never be outvoted.
+
 The required loop is:
 
 `FIND DEFECT -> DIAGNOSE -> REPAIR PRODUCT -> PROVE -> CRITIQUE`
-
