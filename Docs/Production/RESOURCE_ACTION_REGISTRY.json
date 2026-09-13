@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "authority": "Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md",
+  "rule": "No production resource may ship without a registered acquisition method, tool/method profile, actor permissions, animation proof requirements, carry presentation and destination.",
+  "task_policy": {
+    "applicable_tasks": ["T06","T07","T08","T09","T16","T18","T19","T21","T23","T24","T25","T26","T27","T28","T29","T30","T31","T32","T44","T45","T46","T47","T48","T49","T50","T51","T52","T59","T60","T61","T62","T67","T70"],
+    "resource_resolution_tasks": {
+      "T09": ["wood","stone","metal","fuel"],
+      "T16": ["fish"],
+      "T19": ["wheat"]
+    },
+    "always_motion_critic_tasks": ["T09","T16","T19","T21","T23"],
+    "conditional_motion_critic_tasks": ["T44","T45","T46","T47","T48","T49","T50","T51","T52"]
+  },
+  "placeholder_tokens": ["T09_FREEZE_REQUIRED","T16_FREEZE_REQUIRED","T19_FREEZE_REQUIRED","TASK_FREEZE_REQUIRED","UNRESOLVED"],
+  "resources": {
+    "wood": {
+      "status": "RESOLVED_BASELINE",
+      "production_ready": true,
+      "resource_class": "natural",
+      "collection_method": "chop",
+      "tool_profile": "axe",
+      "player_animation_profile": "human_player_chop",
+      "helper_animation_profile": "human_helper_chop",
+      "survivor_animation_profile": "human_survivor_chop",
+      "carry_visual": "visible_wood_stack",
+      "delivery_destination": "contextual_storage_furnace_build",
+      "required_by_tasks": ["T09","T32"]
+    },
+    "stone": {
+      "status": "RESOLVED_BASELINE",
+      "production_ready": true,
+      "resource_class": "natural",
+      "collection_method": "mine",
+      "tool_profile": "pickaxe",
+      "player_animation_profile": "human_player_mine",
+      "helper_animation_profile": "human_helper_mine",
+      "survivor_animation_profile": "human_survivor_mine",
+      "carry_visual": "visible_stone_stack",
+      "delivery_destination": "contextual_storage_furnace_build",
+      "required_by_tasks": ["T09","T32"]
+    },
+    "metal": {
+      "status": "T09_FREEZE_REQUIRED",
+      "production_ready": false,
+      "resource_class": "salvage_or_ore",
+      "collection_method": "mine_or_dismantle",
+      "tool_profile": "T09_FREEZE_REQUIRED",
+      "player_animation_profile": "T09_FREEZE_REQUIRED",
+      "helper_animation_profile": "T09_FREEZE_REQUIRED",
+      "survivor_animation_profile": "T23_FREEZE_REQUIRED",
+      "carry_visual": "visible_metal_stack",
+      "delivery_destination": "contextual_storage_processing_build",
+      "required_by_tasks": ["T09","T32"]
+    },
+    "fuel": {
+      "status": "T09_FREEZE_REQUIRED",
+      "production_ready": false,
+      "resource_class": "fuel_or_salvage",
+      "collection_method": "extract_or_salvage",
+      "tool_profile": "T09_FREEZE_REQUIRED",
+      "player_animation_profile": "T09_FREEZE_REQUIRED",
+      "helper_animation_profile": "T09_FREEZE_REQUIRED",
+      "survivor_animation_profile": "T23_FREEZE_REQUIRED",
+      "carry_visual": "visible_fuel_stack",
+      "delivery_destination": "contextual_furnace_storage",
+      "required_by_tasks": ["T09","T32"]
+    },
+    "fish": {
+      "status": "T16_FREEZE_REQUIRED",
+      "production_ready": false,
+      "resource_class": "food",
+      "collection_method": "fishing",
+      "tool_profile": "T16_FREEZE_REQUIRED",
+      "player_animation_profile": "T16_FREEZE_REQUIRED",
+      "helper_animation_profile": "T16_FREEZE_REQUIRED",
+      "survivor_animation_profile": "T23_FREEZE_REQUIRED",
+      "carry_visual": "T16_FREEZE_REQUIRED",
+      "delivery_destination": "food_processing",
+      "required_by_tasks": ["T16","T18","T32"]
+    },
+    "wheat": {
+      "status": "T19_FREEZE_REQUIRED",
+      "production_ready": false,
+      "resource_class": "crop",
+      "collection_method": "crop_harvest",
+      "tool_profile": "T19_FREEZE_REQUIRED",
+      "player_animation_profile": "T19_FREEZE_REQUIRED",
+      "helper_animation_profile": "T19_FREEZE_REQUIRED",
+      "survivor_animation_profile": "T23_FREEZE_REQUIRED",
+      "carry_visual": "T19_FREEZE_REQUIRED",
+      "delivery_destination": "food_processing",
+      "required_by_tasks": ["T19","T32"]
+    }
+  },
+  "future_resource_rule": {
+    "required_fields": ["status","production_ready","resource_class","collection_method","tool_profile","player_animation_profile","helper_animation_profile","survivor_animation_profile","carry_visual","delivery_destination","required_by_tasks"],
+    "rule": "Any resource introduced by T44-T52 or later content must be added here and production_ready=true before that introducing task may become INTEGRATION_READY.",
+    "no_generic_fallback": true
+  }
+}
