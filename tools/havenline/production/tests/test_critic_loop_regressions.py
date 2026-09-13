@@ -121,6 +121,20 @@ class CriticLoopRegressionTests(unittest.TestCase):
         self.assertIn("python3 tools/havenline/release_gate.py", workflow)
         self.assertIn("validator regression tests remain mandatory", workflow)
 
+    def test_governance_checkpoint_assertions_are_lifecycle_aware(self):
+        governance = (ROOT / "tools/havenline/production/tests/test_governance.py").read_text()
+        self.assertIn("registry_tasks", governance)
+        self.assertIn('if node["status"]!="LOCKED"', governance)
+        self.assertIn("unlocked before", governance)
+        self.assertNotIn("range(4,71)", governance)
+
+    def test_governance_only_changes_do_not_launch_full_native_review(self):
+        workflow = (ROOT / ".github/workflows/havenline-godot-android.yml").read_text()
+        self.assertEqual(workflow.count("!tools/havenline/production/**"), 2)
+        self.assertIn("'HavenlineGodot/**'", workflow)
+        self.assertIn("'tools/havenline/**'", workflow)
+        self.assertIn("'.github/workflows/havenline-godot-android.yml'", workflow)
+
     def test_repair_policy_blocks_evidence_only_loop_after_real_defect(self):
         policy = (PRODUCTION / "validate_repair_cycle.py").read_text()
         self.assertIn("two-strike rule blocks evidence-only rerun", policy)
