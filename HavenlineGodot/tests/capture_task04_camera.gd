@@ -50,7 +50,14 @@ func apply_composition(
 	game.camera.size = row.full_height
 	game.camera.position = row.camera_position
 	game.camera.look_at(row.focus)
-	game.update_foreground_visibility(world_at(player, 0.95), delta)
+	# A snap stands in for an already-settled shipping camera. Let the existing
+	# opaque-dither pine cutaway reach that stable state instead of recording a
+	# misleading single-frame transition pattern after a QA teleport.
+	if snap_camera:
+		for _step in range(6):
+			game.update_foreground_visibility(world_at(player, 0.95), 0.05)
+	else:
+		game.update_foreground_visibility(world_at(player, 0.95), delta)
 	game.outpost_view.sync(game.sim, delta, false)
 	return row
 
@@ -114,14 +121,16 @@ func capture_target_and_transitions() -> void:
 	var wide := Vector2(2400,1080)
 	var inner := Vector2(2208,1768)
 	controller = Composition.new()
-	var row := apply_composition(Vector2(-5.8,-2.8), Vector2.ZERO, Vector2(-1,0), Vector2(-9.0,-6.5), wide, true)
-	await snap("target-inclusion-shelter-route", wide, row, Vector2(-9.0,-6.5))
-	row = apply_composition(Vector2(-5.8,-2.8), Vector2.ZERO, Vector2(-1,0), null, wide, false)
+	var player := Vector2(-7.5,-5.0)
+	var wood_target := Vector2(-8.1,-6.4)
+	var row := apply_composition(player, Vector2.ZERO, Vector2(-1,0), wood_target, wide, true)
+	await snap("target-inclusion-wood-node", wide, row, wood_target)
+	row = apply_composition(player, Vector2.ZERO, Vector2(-1,0), null, wide, false)
 	await snap("target-release-damped", wide, row)
-	row = apply_composition(Vector2(-5.8,-2.8), Vector2.ZERO, Vector2(-1,0), null, inner, false)
+	row = apply_composition(player, Vector2.ZERO, Vector2(-1,0), null, inner, false)
 	await snap("resize-fold-inner-safe", inner, row)
 	for _i in range(45):
-		row = apply_composition(Vector2(-5.8,-2.8), Vector2.ZERO, Vector2(-1,0), null, inner, false)
+		row = apply_composition(player, Vector2.ZERO, Vector2(-1,0), null, inner, false)
 	await snap("resize-fold-inner-settled", inner, row)
 
 func capture_gameplay_context() -> void:
