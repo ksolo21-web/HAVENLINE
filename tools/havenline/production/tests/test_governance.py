@@ -15,7 +15,7 @@ class GovernanceTests(unittest.TestCase):
         self.assertEqual(list(g["tasks"]),[f"T{i:02d}" for i in range(1,71)])
         self.assertEqual(g["tasks"]["T01"]["status"],"APPROVED")
         self.assertEqual(g["tasks"]["T02"]["status"],"APPROVED")
-        self.assertEqual(g["tasks"]["T03"]["status"],"FIX_REQUIRED")
+        self.assertEqual(g["tasks"]["T03"]["status"],"APPROVED")
         self.assertTrue(all(g["tasks"][f"T{i:02d}"]["status"]=="LOCKED" for i in range(4,71)))
     def test_graph_is_acyclic(self):
         g=load_json(DOCS/"DEPENDENCY_GRAPH.json")["tasks"];seen=set();stack=set()
@@ -63,8 +63,12 @@ class GovernanceTests(unittest.TestCase):
     def test_current_registry_checkpoint(self):
         r=load_json(DOCS/"WORKSTREAM_REGISTRY.json")
         t3=next(w for w in r["workstreams"] if w["task_id"]=="T03")
-        self.assertEqual(t3["status"],"FIX_REQUIRED")
-        self.assertEqual(t3["candidate_commit"],"6947849f581db9cfa53a17ff9202ecde1c0ee80c")
+        self.assertEqual(t3["status"],"APPROVED")
+        self.assertEqual(t3["candidate_commit"],"5df9726e0b1c33f0f8865385b1c49aca229fd461")
         self.assertEqual(t3["tests"]["checks"],807)
+        self.assertEqual(t3["tests"]["result"],"PASS")
+        self.assertEqual(t3["known_blockers"],[])
+        self.assertIn("PASS_BY_QUORUM",t3["critic_status"]["C1+C2"])
+        self.assertIn("PASS",t3["critic_status"]["C6"])
 
 if __name__=="__main__":unittest.main()
