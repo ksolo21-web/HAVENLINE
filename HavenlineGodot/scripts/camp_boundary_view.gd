@@ -14,8 +14,12 @@ const GATE_HINGE_OVERLAP := 0.12
 const GATE_LEAF_ROOT_SINK := 0.50
 const TERRAIN_SEAT_SAMPLES := 7
 const GATE_POST_ROOT_SINK := 0.30
-const WORK_GATE_POST_SCALE := 1.20
-const RIVER_GATE_POST_SCALE := 1.70
+const MAIN_GATE_POST_SCALE := 1.15
+const MAIN_GATE_POST_HEIGHT_SCALE := 1.55
+const WORK_GATE_POST_SCALE := 1.18
+const WORK_GATE_POST_HEIGHT_SCALE := 1.65
+const RIVER_GATE_POST_SCALE := 1.24
+const RIVER_GATE_POST_HEIGHT_SCALE := 1.85
 var fence_batch:MultiMeshInstance3D
 var post_batch:MultiMeshInstance3D
 var descriptor:Dictionary={}
@@ -54,9 +58,9 @@ func _segment_transform(a:Vector2,b:Vector2,overlap:=0.0,root_sink:=FENCE_ROOT_S
 	var basis:=Basis(x_axis,y_axis,z_axis).scaled(Vector3(length/Boundary.PANEL_SOURCE_LENGTH,1.0,1.0))
 	return Transform3D(basis,(pa+pb)*.5)
 
-func _post_transform(p:Vector2,tangent:Vector2,visual_scale:=1.0)->Transform3D:
+func _post_transform(p:Vector2,tangent:Vector2,visual_scale:=1.0,height_scale:=1.0)->Transform3D:
 	var angle:=atan2(tangent.y,tangent.x)
-	var basis:=Basis(Vector3.UP,-angle).scaled(Vector3.ONE*visual_scale)
+	var basis:=Basis(Vector3.UP,-angle).scaled(Vector3(visual_scale,height_scale,visual_scale))
 	return Transform3D(basis,Vector3(p.x,Surface.height_at(p)-GATE_POST_ROOT_SINK,p.y))
 
 func configure(game):
@@ -73,9 +77,10 @@ func configure(game):
 	var post_transforms:Array[Transform3D]=[]
 	for gate in Boundary.gate_specs():
 		var tangent:Vector2=gate.tangent
-		var post_scale:=RIVER_GATE_POST_SCALE if gate.kind=="river" else (WORK_GATE_POST_SCALE if gate.kind=="work" else 1.0)
-		post_transforms.append(_post_transform(gate.a,tangent,post_scale))
-		post_transforms.append(_post_transform(gate.b,tangent,post_scale))
+		var post_scale:=RIVER_GATE_POST_SCALE if gate.kind=="river" else (WORK_GATE_POST_SCALE if gate.kind=="work" else MAIN_GATE_POST_SCALE)
+		var post_height:=RIVER_GATE_POST_HEIGHT_SCALE if gate.kind=="river" else (WORK_GATE_POST_HEIGHT_SCALE if gate.kind=="work" else MAIN_GATE_POST_HEIGHT_SCALE)
+		post_transforms.append(_post_transform(gate.a,tangent,post_scale,post_height))
+		post_transforms.append(_post_transform(gate.b,tangent,post_scale,post_height))
 	post_batch=Scenery.instances(_mesh(game,"world/lantern_post"),post_transforms,self)
 	post_batch.name="GateLanternPosts"
 	descriptor=Boundary.evidence()
@@ -95,8 +100,12 @@ func configure(game):
 	descriptor["terrain_seat_samples"]=TERRAIN_SEAT_SAMPLES
 	descriptor["terrain_crown_applied_to_gate_leaves_only"]=true
 	descriptor["gate_post_root_sink"]=GATE_POST_ROOT_SINK
+	descriptor["main_gate_post_scale"]=MAIN_GATE_POST_SCALE
+	descriptor["main_gate_post_height_scale"]=MAIN_GATE_POST_HEIGHT_SCALE
 	descriptor["river_gate_post_scale"]=RIVER_GATE_POST_SCALE
+	descriptor["river_gate_post_height_scale"]=RIVER_GATE_POST_HEIGHT_SCALE
 	descriptor["work_gate_post_scale"]=WORK_GATE_POST_SCALE
+	descriptor["work_gate_post_height_scale"]=WORK_GATE_POST_HEIGHT_SCALE
 	descriptor["lane_compression_depth"]=Surface.T03_LANE_COMPRESSION_DEPTH
 	descriptor["lane_rut_depth"]=Surface.T03_LANE_RUT_DEPTH
 	descriptor["lane_shoulder_height"]=Surface.T03_LANE_SHOULDER_HEIGHT

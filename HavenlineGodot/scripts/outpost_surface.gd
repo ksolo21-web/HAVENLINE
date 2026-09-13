@@ -10,8 +10,8 @@ const LAND_MARGIN := River.DEFAULT_DRY_MARGIN
 const WORK_CENTER := Vector2(0.0, 2.8)
 const WORK_HALF := Vector2(9.75, 4.3)
 const T03_LANE_COMPRESSION_DEPTH := 0.075
-const T03_LANE_RUT_DEPTH := 0.045
-const T03_LANE_SHOULDER_HEIGHT := 0.065
+const T03_LANE_RUT_DEPTH := 0.055
+const T03_LANE_SHOULDER_HEIGHT := 0.075
 static var _mesh: ArrayMesh
 static var _water_mesh: ArrayMesh
 static var _heights := PackedFloat32Array()

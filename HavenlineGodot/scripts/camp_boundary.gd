@@ -7,31 +7,31 @@ const River = preload("res://scripts/river_geometry.gd")
 const SIDE_X := 12.4
 const NORTH_Z := 8.8
 const SIDE_GATE_Z := 2.4
-const NORTH_GATE_HALF := 1.8
-const SIDE_GATE_HALF := 1.7
-const RIVER_GATE_HALF := 2.0
+const NORTH_GATE_HALF := 2.15
+const SIDE_GATE_HALF := 2.05
+const RIVER_GATE_HALF := 2.70
 const COLLISION_RADIUS := 0.32
 const PANEL_TARGET := 2.72
 const PANEL_SOURCE_LENGTH := 2.95
 # T03 polish revision: the prior .92-unit leaves were physically present but
 # too short to read unmistakably as opened gates from normal oblique views.
-# Gate openings/collision widths remain unchanged; only the authored open-leaf
-# presentation becomes more legible.
-const GATE_LEAF_LENGTH := 1.35
-const GATE_OPEN_ANGLE := 1.18
+# Wider real openings and longer leaves keep the portals readable at gameplay
+# scale while preserving comfortable traversable clearance.
+const GATE_LEAF_LENGTH := 1.85
+const GATE_OPEN_ANGLE := 1.34
 # River-facing entrances need stronger visual hierarchy because snow/river-bank
 # colors reduce contrast. These are visual open leaves only; collision openings
 # and future crossing reserves remain exactly unchanged.
-const RIVER_GATE_LEAF_LENGTH := 1.85
-# A wider four-unit opening lets the authored leaves sit at a visibly open
-# angle instead of disappearing edge-on. The resulting pixel aperture remains
+const RIVER_GATE_LEAF_LENGTH := 2.25
+# A wider opening lets the authored leaves sit at a visibly open angle instead
+# of disappearing edge-on. The resulting pixel aperture remains
 # independently wider than the locked three-unit crossing reserve.
-const RIVER_GATE_OPEN_ANGLE := 1.42
+const RIVER_GATE_OPEN_ANGLE := 1.13
 const RIVER_RESERVED_CORRIDOR := 3.0
 const RIVER_VISUAL_CLEARANCE_MIN := 3.20
 # River approaches need a broader worn threshold than ordinary camp lanes so
 # the three future-crossing entrances read as intentional gates in snow.
-const RIVER_LANE_HALF := 1.55
+const RIVER_LANE_HALF := 1.30
 const RIVER_APRON_INSET := 0.55
 const RIVER_APPROACH_MARGIN := River.DEFAULT_DRY_MARGIN
 const SOUTH_FENCE_MARGIN := River.WET_EDGE+River.BANK_RUN+River.SNOW_SHOULDER+River.BUILD_SETBACK

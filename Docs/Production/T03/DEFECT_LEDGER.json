@@ -58,6 +58,11 @@
       "commit": "991a6389fe9c636b21b63359383c65a2070cd534",
       "status": "REJECTED",
       "reason": "run 34721142869: all deterministic gates and manual pixel review passed, but both critics still read the river lane as a flat snow/grey plane without continuous threshold wear and visual-integrity still found shallow river fence/post contact; other reported groups scored 10"
+    },
+    {
+      "commit": "e59dcadfd5661787cba11897a07049cd55100997",
+      "status": "REJECTED",
+      "reason": "run 34723989502: deterministic evidence and repair validation passed, but reference-fidelity gameplay scored 8.0 for uniform north/work gate wear while visual-integrity scored river-gates 7.0, north-gate 5.0 and side-gates 9.0 because short fence-derived leaves, small threshold posts and a broad smooth lane bed did not remain categorically readable at delivered critic-board scale"
     }
   ],
   "repair_range": {
@@ -215,6 +220,23 @@
       "verification_evidence": ["river-gate/west/river-side-approach", "river-gate/centre/threshold-three-quarter", "river-gate/east/camp-side-outward", "river-gate/centre/gameplay-scale"],
       "status": "READY_FOR_VERIFICATION",
       "counters": {"review_round_count": 7, "same_root_cause_count": 7, "evidence_only_attempt_count": 1, "production_repair_count": 6}
+    },
+    {
+      "defect_id": "T03-PORTAL-007",
+      "critic_source": "run 34723989502 / reference-fidelity gameplay + visual-integrity river-gates, north-gate and side-gates",
+      "visible_symptom": "short leaves blend into ordinary fence runs, small north/work threshold posts lose portal hierarchy, and the smooth grey packed bed dominates its rut detail at critic-board and gameplay scale",
+      "triage": "VALID_PRODUCTION_DEFECT",
+      "affected_production_object": "all six real gate openings, authored open leaves and lantern posts, plus the continuous terrain wear material",
+      "probable_root_cause": "incremental scale and tint adjustments never created a categorical silhouette/material distinction between ordinary perimeter fence and an active worn gateway",
+      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary.gd", "HavenlineGodot/scripts/camp_boundary_view.gd", "HavenlineGodot/scripts/outpost_surface.gd", "HavenlineGodot/shaders/outpost_snow.gdshader"],
+      "evidence_files_showing_defect": ["gallery/north-gate-front.png", "gallery/west-work-gate.png", "gallery/east-work-gate.png", "gallery/river-gate-west.png", "gallery/river-gate-centre.png", "gallery/river-gate-east.png", "gallery/gameplay-north-gate.png", "gallery/gameplay-west-gate.png"],
+      "production_change": "widen all six actual openings, lengthen and visibly swing the existing authored timber leaves, make every threshold use tall slender paired lantern markers, return the compressed bed toward snowy tones, and reserve strong contrast and physical depth for irregular twin ruts plus center footfall churn across snow and warm floor",
+      "expected_visible_result": "at full and delivered-board scale, every entrance reads as ordinary fence ending at paired tall posts, two clearly swung timber leaves, and an embedded used route continuing through the threshold",
+      "required_proof": ["river-gates", "north-gate", "side-gates", "gameplay", "detail-contact"],
+      "repair_commit": "SELF",
+      "verification_evidence": ["gallery/north-gate-front.png", "gallery/west-work-gate.png", "gallery/east-work-gate.png", "river-gate/west/threshold-three-quarter", "river-gate/centre/threshold-three-quarter", "river-gate/east/threshold-three-quarter"],
+      "status": "READY_FOR_VERIFICATION",
+      "counters": {"review_round_count": 8, "same_root_cause_count": 8, "evidence_only_attempt_count": 1, "production_repair_count": 7}
     }
   ]
 }
