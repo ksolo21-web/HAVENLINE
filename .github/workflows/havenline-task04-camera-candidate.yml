@@ -130,7 +130,8 @@ jobs:
           sheet=Image.new('RGB',(1360,math.ceil(len(thumbs)/4)*215),'#080d12')
           for index,tile in enumerate(thumbs):sheet.paste(tile,((index%4)*340,(index//4)*215))
           sheet.save(root/'contact-sheet.jpg',quality=90)
-          provenance={'task':'T04-reference-camera-v1','source':'${{ github.sha }}','base':'fd9303958d0b683d11cf14b0a4038cd89646bab3','captures':hashes,'actual_images':23,'gallery_images':20,'native3840x2160_scale1_frames':3,'automated_framing_gate_passed':True,'manual_quick_look_required_before_critics':True,'task_approved':False,'physical_4k60_verified':False}
+          branch_point=(root/'candidate-scope.txt').read_text().strip().split('=',1)[1]
+          provenance={'task':'T04-reference-camera-v1','source':'${{ github.sha }}','registry_base':'5135cddf96123afb962f4046f41e5ac0e510428a','candidate_branch_point':branch_point,'captures':hashes,'actual_images':23,'gallery_images':20,'native3840x2160_scale1_frames':3,'automated_framing_gate_passed':True,'manual_quick_look_required_before_critics':True,'task_approved':False,'physical_4k60_verified':False}
           (root/'provenance.json').write_text(json.dumps(provenance,indent=2))
           print(json.dumps({k:v for k,v in provenance.items() if k!='captures'}))
           PY
