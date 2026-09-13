@@ -99,11 +99,11 @@
     {
       "task_id": "T04",
       "task_name": "Reference camera and automatic screen composition",
-      "status": "LOCKED",
-      "owner": null,
+      "status": "ASSIGNED",
+      "owner": "camera-composition-builder",
       "workstream_id": "wave1-camera",
       "branch": "havenline/T04-camera",
-      "base_commit": null,
+      "base_commit": "5135cddf96123afb962f4046f41e5ac0e510428a",
       "dependencies": ["T03"],
       "owned_paths": ["@reservation:T04"],
       "protected_paths": ["@protected:approved", "@integration-only"],
@@ -113,9 +113,9 @@
       "evidence_path": "Docs/Production/Evidence/T04/",
       "critic_requirements": ["C1", "C2", "C6"],
       "critic_status": {},
-      "integration_status": "not started",
-      "known_blockers": ["Task packet and owner not yet prepared"],
-      "next_action": "Prepare the isolated T04 packet, assign an owner, and validate ownership before changing runtime."
+      "integration_status": "isolated construction authorized; integration-only wiring remains prohibited to builder",
+      "known_blockers": [],
+      "next_action": "Build and test the frozen camera-composition candidate only within @reservation:T04, then request integration-only main.gd wiring."
     },
     {
       "task_id": "T05",

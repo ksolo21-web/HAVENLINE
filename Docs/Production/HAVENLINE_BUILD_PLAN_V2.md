@@ -6,7 +6,8 @@
 
 - Integration branch remains `codex/havenline-sequential-task-01`; T03 is grandfathered to finish there because its runtime work was already integrated before this migration.
 - T01 and T02 remain APPROVED at their recorded accepted sources. Their approvals are not revoked by the stricter forward score rule.
-- T03 remains ACTIVE/FIX_REQUIRED at its existing frozen scope in `Docs/Production/T03/FROZEN_SCOPE.md`; no T04+ runtime work begins until T03 is APPROVED.
+- T03 is APPROVED at accepted gameplay source `5df9726e0b1c33f0f8865385b1c49aca229fd461`.
+- T04 is assigned as the next isolated workstream at `Docs/Production/T04/FROZEN_SCOPE.md`; T05+ remains locked until separately prepared and assigned.
 - Forward intermediate PASS requires every applicable mandatory reviewed dimension to be **strictly > 9.0 unrounded**, every mandatory gate to pass, and zero unresolved mandatory defects. Target remains 10/10.
 
 ## Permanent Havenline product contract
@@ -58,8 +59,8 @@ Only the integration owner may integrate production candidates into the integrat
 |---|---|---|
 | T01 | Reference snow-covered trees and forest framing | APPROVED |
 | T02 | Terrain, snow, warm work-floor and lakeshore | APPROVED |
-| T03 | Fences, gates and navigable work lanes | FIX_REQUIRED / ACTIVE |
-| T04 | Reference camera and automatic screen composition | LOCKED |
+| T03 | Fences, gates and navigable work lanes | APPROVED |
+| T04 | Reference camera and automatic screen composition | ASSIGNED / ACTIVE |
 | T05 | Production station and prop kit | LOCKED |
 | T06 | Character 1 complete movement/interactions | LOCKED |
 | T07 | Havenline Simple Control & Context Director | LOCKED |
@@ -127,7 +128,7 @@ Only the integration owner may integrate production candidates into the integrat
 | T69 | Sustained native 4K/60 tablet/foldable evidence | LOCKED |
 | T70 | Final production release handoff | LOCKED |
 
-Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. T01/T02 accepted records remain authoritative; T03 frozen detail remains in `Docs/Production/T03/FROZEN_SCOPE.md`.
+Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. T01–T03 accepted records remain authoritative; T04 scope is frozen in `Docs/Production/T04/FROZEN_SCOPE.md`.
 
 ## Parallel Wave 1 after T03 approval
 

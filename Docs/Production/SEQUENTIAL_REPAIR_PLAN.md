@@ -13,19 +13,12 @@ integration-owner-controlled production integration.
 - Integration branch: `codex/havenline-sequential-task-01`.
 - T01: APPROVED at `45ba7905cd468c229cd61364f4d1ac45b14d3e5e`.
 - T02: APPROVED at `1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff`.
-- T03: ACTIVE / FIX_REQUIRED. Frozen scope remains
-  `Docs/Production/T03/FROZEN_SCOPE.md`.
-- T03 exact latest reviewed runtime/evidence candidate before this governance
-  migration: `6947849f581db9cfa53a17ff9202ecde1c0ee80c`.
-- Latest T03 build/capture passed 16 suites / 807 checks and produced 61
-  source-bound renders, but run `34632784857` still failed the combined critic
-  gate because the `river-gates` group scored below the required threshold in
-  both C1 and C2. T03 is therefore NOT APPROVED.
-- T04+ runtime production remains LOCKED until T03 is APPROVED.
-
-The stale pre-migration top-level `task-gates.json` fields that said T03 was
-`READY_NOT_STARTED` are superseded by this recovered checkpoint and the V2
-registry.
+- T03: APPROVED at accepted gameplay source
+  `5df9726e0b1c33f0f8865385b1c49aca229fd461`; verified closure is recorded in
+  `Docs/Production/T03/verified-completion.json`.
+- T04: ASSIGNED on isolated branch `havenline/T04-camera` from integration base
+  `5135cddf96123afb962f4046f41e5ac0e510428a`.
+- T05+ runtime production remains LOCKED until separately prepared and assigned.
 
 ## Forward acceptance rule
 
@@ -100,9 +93,10 @@ paid critic dependency.
 
 ## Wave 1 after T03 approval
 
-Only after T03 becomes APPROVED may the registry assign:
+T03 is approved. The registry may now assign these workstreams individually
+after each packet and owner are prepared:
 
-- `havenline/T04-camera` — T04 camera/composition.
+- `havenline/T04-camera` — T04 camera/composition (currently assigned).
 - `havenline/T05-props` — T05 station/prop kit.
 - `havenline/T06-character1` — T06 Character 1 motion.
 - QA/integration infrastructure may continue separately.

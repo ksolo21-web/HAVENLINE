@@ -19,20 +19,20 @@ Read in this order before any Havenline production work:
 
 Inspect current source/evidence for newer work. `Docs/AI/UnityProjectContext.md` is historical.
 
-## Current migration checkpoint
+## Current production checkpoint
 
-T01 and T02 are APPROVED at their recorded accepted sources. Do not restart or
-retroactively revoke them merely because the forward gate is stricter.
+T01, T02 and T03 are APPROVED at their recorded accepted sources. Do not
+restart or retroactively revoke them merely because the forward gate is
+stricter. T03 is accepted at
+`5df9726e0b1c33f0f8865385b1c49aca229fd461`; its verified record is
+`Docs/Production/T03/verified-completion.json`.
 
-T03 is ACTIVE / FIX_REQUIRED at `Docs/Production/T03/FROZEN_SCOPE.md`. Its
-latest reviewed exact candidate before V2 migration is
-`6947849f581db9cfa53a17ff9202ecde1c0ee80c`; 16 suites / 807 checks passed,
-but the latest combined C1/C2 gate still rejected the `river-gates` group.
-T04+ runtime production remains LOCKED until T03 is APPROVED.
+T04 is the active isolated workstream at `Docs/Production/T04/FROZEN_SCOPE.md`
+and `Docs/Production/T04/TASK_PACKET.md`. T05+ runtime production remains
+LOCKED until separately prepared and assigned.
 
-T03 is the only legacy task grandfathered to finish directly on
-`codex/havenline-sequential-task-01` because its runtime work was already
-integrated before this governance migration. All future runtime work uses
+T03 was the final legacy task grandfathered to finish directly on
+`codex/havenline-sequential-task-01`. T04 and all later runtime work use
 isolated task branches.
 
 ## Forward acceptance rule
