@@ -534,11 +534,15 @@ ARRANGEMENTS = {
         ("defense_platform", (3.5,0,6.6), 0),
     ],
     "lakeshore": [
-        ("fishing_rack", (-4.8,0,0), math.pi), ("pad_build", (-4.8,0,2.2), 0),
-        ("intake_machine", (-1.7,0,0), 0), ("conveyor_straight", (1.2,0,0), 0),
-        ("cooker_processor", (4.2,0,0), 0), ("pad_input", (-1.7,0,2.4), 0),
-        ("pad_output", (4.2,0,2.3), 0), ("fish_crate", (-3.0,0,-2.0), 0),
-        ("cooked_food_stack", (5.8,0,-1.8), 0), ("cargo_crate", (2.0,0,-2.1), 0),
+        # South-bank bays are split around all three T02/T03 crossing reserves.
+        # The spaces are intentional: later bridges retain their full approach
+        # corridors while the station line still reads together at T04 scale.
+        ("fishing_rack", (-5.6,0,-13.0), 0), ("pad_build", (-6.3,0,-15.1), 0),
+        ("intake_machine", (-2.5,0,-13.0), 0), ("pad_input", (-3.8,0,-15.1), 0),
+        ("fish_crate", (-1.3,0,-15.1), 0),
+        ("conveyor_straight", (4.9,0,-13.0), 0), ("cargo_crate", (7.5,0,-12.8), 0),
+        ("pad_output", (4.3,0,-15.1), 0), ("cooker_processor", (7.1,0,-15.0), 0),
+        ("cooked_food_stack", (12.6,0,-14.6), 0),
     ],
 }
 

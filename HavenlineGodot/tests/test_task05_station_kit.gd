@@ -2,6 +2,7 @@ extends SceneTree
 
 const StationKit = preload("res://scripts/station_kit.gd")
 const Boundary = preload("res://scripts/camp_boundary.gd")
+const River = preload("res://scripts/river_geometry.gd")
 
 var checks: Array = []
 var failures: Array = []
@@ -55,6 +56,35 @@ func minimum_lane_clearance(placement: Dictionary, row: Dictionary) -> float:
 			result = minf(result, Boundary.lane_signed_distance(centre + rotated))
 	return result
 
+func footprint_samples(placement: Dictionary, row: Dictionary) -> Array[Vector2]:
+	var centre := Vector2(float(placement.position[0]), float(placement.position[2]))
+	var half := Vector2(float(row.footprint[0]), float(row.footprint[1])) * 0.5
+	var angle := float(placement.rotation_y)
+	var result: Array[Vector2] = []
+	for x_step in range(5):
+		for z_step in range(5):
+			var local := Vector2(lerpf(-half.x, half.x, float(x_step) / 4.0), lerpf(-half.y, half.y, float(z_step) / 4.0))
+			result.append(centre + Vector2(local.x * cos(angle) + local.y * sin(angle), -local.x * sin(angle) + local.y * cos(angle)))
+	return result
+
+func minimum_shore_clearance(placement: Dictionary, row: Dictionary) -> float:
+	var result := INF
+	for point in footprint_samples(placement, row):
+		result = minf(result, River.shore_distance(point))
+	return result
+
+func inside_current_movement_bounds(placement: Dictionary, row: Dictionary) -> bool:
+	for point in footprint_samples(placement, row):
+		if absf(point.x) > 14.2 or absf(point.y) > 16.2:
+			return false
+	return true
+
+func leaves_crossing_reserves_open(placement: Dictionary, row: Dictionary) -> bool:
+	for point in footprint_samples(placement, row):
+		if River.crossing_reserved(point):
+			return false
+	return true
+
 func placement_inside_fence(placement: Dictionary, row: Dictionary) -> bool:
 	var centre := Vector2(float(placement.position[0]), float(placement.position[2]))
 	var half := Vector2(float(row.footprint[0]), float(row.footprint[1])) * 0.5
@@ -78,6 +108,7 @@ func run() -> void:
 	root.add_child(kit)
 	var catalog := StationKit.read_catalog()
 	var descriptor := kit.descriptor()
+	var lakeshore_lane_clearances := {}
 	check("Station authority is versioned", descriptor.authority_id == "T05-station-kit-v1")
 	check("Catalog contains the frozen 22-asset kit", descriptor.asset_count == 22)
 	check("Camp and lakeshore arrangements are both declared", descriptor.arrangement_count == 2)
@@ -132,6 +163,15 @@ func run() -> void:
 		if str(placement.id) != "hearth_vessel":
 			check(str(placement.id) + " leaves the T03 travel lanes visibly open", minimum_lane_clearance(placement, row) >= 0.05)
 	check("Heated vessel remains the intended central-lane destination", minimum_lane_clearance(catalog.arrangements.camp[0], kit.entries.hearth_vessel) < 0.0)
+	for placement: Dictionary in catalog.arrangements.lakeshore:
+		var asset_id := str(placement.id)
+		var row: Dictionary = kit.entries[asset_id]
+		var lane_clearance := minimum_lane_clearance(placement, row)
+		lakeshore_lane_clearances[asset_id] = lane_clearance
+		check(asset_id + " lakeshore placement leaves T03 routes open", lane_clearance >= 0.05)
+		check(asset_id + " lakeshore placement leaves all T02 crossing reserves open", leaves_crossing_reserves_open(placement, row))
+		check(asset_id + " lakeshore placement remains on traversable dry bank", minimum_shore_clearance(placement, row) >= River.DEFAULT_DRY_MARGIN - 0.001)
+		check(asset_id + " lakeshore placement remains inside current movement bounds", inside_current_movement_bounds(placement, row))
 
 	var camp := kit.build_arrangement("camp")
 	check("Camp arrangement deterministically places 11 assets", camp.size() == 11)
@@ -158,6 +198,7 @@ func run() -> void:
 		"asset_count": descriptor.asset_count,
 		"catalog_triangles": descriptor.total_catalog_triangles,
 		"catalog_bytes": total_bytes,
+		"lakeshore_lane_clearances": lakeshore_lane_clearances,
 		"independent_critic": false,
 		"physical_4k60_verified": false
 	}))

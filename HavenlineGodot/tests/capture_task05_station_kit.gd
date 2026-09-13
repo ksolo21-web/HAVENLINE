@@ -46,7 +46,7 @@ func stage_mesh(mesh: Mesh, mat: Material, position: Vector3) -> MeshInstance3D:
 
 func build_stage() -> void:
 	var snow := PlaneMesh.new()
-	snow.size = Vector2(34.0, 28.0)
+	snow.size = Vector2(38.0, 36.0)
 	stage_mesh(snow, material(Color("d8eaf1"), 0.92), Vector3(0.0, -0.10, 0.0))
 
 func clear_stage_accents() -> void:
@@ -69,11 +69,11 @@ func camp_stage() -> void:
 func lakeshore_stage() -> void:
 	clear_stage_accents()
 	var water := PlaneMesh.new()
-	water.size = Vector2(28.0, 8.5)
-	stage_mesh(water, material(Color("1a91b9"), 0.22, 0.08), Vector3(0.0, -0.02, -6.4))
+	water.size = Vector2(34.0, 8.2)
+	stage_mesh(water, material(Color("1a91b9"), 0.22, 0.08), Vector3(0.0, -0.16, -7.2))
 	var bank := BoxMesh.new()
-	bank.size = Vector3(24.0, 0.08, 2.0)
-	stage_mesh(bank, material(Color("aacfdc"), 0.86), Vector3(0.0, -0.06, -2.7))
+	bank.size = Vector3(29.0, 0.10, 1.8)
+	stage_mesh(bank, material(Color("aacfdc"), 0.86), Vector3(0.0, -0.07, -11.8))
 
 func visit_meshes(node: Node, output_meshes: Array) -> void:
 	if node is MeshInstance3D:
@@ -181,8 +181,8 @@ func capture_arrangement(frame_id: String, arrangement: String, condition: Strin
 		set_camera(Vector3(0.0, 0.0, 2.8), view, 14.3)
 	else:
 		lakeshore_stage()
-		scale_actor.position = Vector3(-0.1, 0.0, 3.8)
-		set_camera(Vector3(0.2, 0.0, 0.0), view, 9.6)
+		scale_actor.position = Vector3(-8.1, 0.0, -13.5)
+		set_camera(Vector3(3.0, 0.0, -14.0), view, 15.3)
 	scale_actor.visible = true
 	set_condition(condition)
 	await snap(frame_id, arrangement, condition, view)

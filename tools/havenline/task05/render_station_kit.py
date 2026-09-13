@@ -104,12 +104,12 @@ def stage_geometry(kind: str):
         c = np.array([x1, y, z1]); d = np.array([x0, y, z1])
         return [(np.array([a, d, c]), color), (np.array([a, c, b]), color)]
 
-    result = quad(-18, -14, 18, 14, -0.10, np.array([0.78, 0.88, 0.92]))
+    result = quad(-20, -20, 20, 20, -0.10, np.array([0.78, 0.88, 0.92]))
     if kind == "camp":
         result += quad(-11.8, -2.9, 11.8, 8.5, -0.03, np.array([0.57, 0.31, 0.20]))
     elif kind == "lakeshore":
-        result += quad(-15, -11, 15, -3.0, -0.02, np.array([0.05, 0.44, 0.65]))
-        result += quad(-15, -3.3, 15, -2.4, -0.01, np.array([0.52, 0.72, 0.80]))
+        result += quad(-17, -11.3, 17, -3.1, -0.16, np.array([0.05, 0.44, 0.65]))
+        result += quad(-14.5, -12.7, 14.5, -10.9, -0.02, np.array([0.52, 0.72, 0.80]))
     return result
 
 
@@ -223,9 +223,9 @@ def main():
         ("camp-day-reverse", "camp", "day", "reverse", arrangements["camp"], 14.3),
         ("camp-night-front", "camp", "night", "front", arrangements["camp"], 14.3),
         ("camp-blizzard-side", "camp", "blizzard", "side", arrangements["camp"], 14.3),
-        ("lakeshore-day-front", "lakeshore", "day", "front", arrangements["lakeshore"], 9.6),
-        ("lakeshore-day-reverse", "lakeshore", "day", "reverse", arrangements["lakeshore"], 9.6),
-        ("lakeshore-night-front", "lakeshore", "night", "front", arrangements["lakeshore"], 9.6),
+        ("lakeshore-day-front", "lakeshore", "day", "front", arrangements["lakeshore"], 15.3),
+        ("lakeshore-day-reverse", "lakeshore", "day", "reverse", arrangements["lakeshore"], 15.3),
+        ("lakeshore-night-front", "lakeshore", "night", "front", arrangements["lakeshore"], 15.3),
         ("close-hearth-front", "camp", "day", "front", singles("hearth_vessel"), 4.4),
         ("close-counter-reverse", "camp", "day", "reverse", singles("service_counter"), 4.2),
         ("close-fishing-side", "lakeshore", "day", "side", singles("fishing_rack"), 4.4),
@@ -234,7 +234,12 @@ def main():
     ]
     report = {"task": "T05-station-kit-v1", "capture_kind": "deterministic-cpu-quick-look", "acceptance_evidence": False, "frames": []}
     for frame_id, kind, condition, view, placements, height in frames:
-        camera_target = (0.0, 0.7, 2.8) if kind == "camp" and not frame_id.startswith("close-") else (0.0, 0.7, 0.0)
+        if kind == "camp" and not frame_id.startswith("close-"):
+            camera_target = (0.0, 0.7, 2.8)
+        elif kind == "lakeshore" and not frame_id.startswith("close-"):
+            camera_target = (3.0, 0.7, -14.0)
+        else:
+            camera_target = (0.0, 0.7, 0.0)
         camera = view_camera(view, height, camera_target)
         render_frame(args.out, frame_id, kind, condition, view, placements, cache, camera, rows)
         report["frames"].append({"id": frame_id, "arrangement": kind, "condition": condition, "view": view, "path": frame_id + ".png"})
