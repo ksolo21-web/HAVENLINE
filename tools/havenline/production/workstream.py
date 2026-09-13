@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, datetime, json, pathlib
+import argparse, datetime, json, pathlib, subprocess
 from lib import DOCS, ROOT, load_json, expand_alias, any_match, changed_files, json_dump, fail
+from change_impact import calculate as calculate_impact
 
 ACTIVE_STATES = {"PREPARED","ASSIGNED","BUILDING_ISOLATED","BUILT_PENDING_DEPENDENCY","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","BLOCKED"}
 ALLOWED_STATES = {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","BUILT_PENDING_DEPENDENCY","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}
@@ -15,6 +16,27 @@ def approved_change_requests(task_id: str) -> set[str]:
         if d.get("requesting_task")==task_id and d.get("status")=="APPROVED" and d.get("integration_owner_disposition")=="AUTHORIZED":
             result.add(d.get("target_path",""))
     return result
+
+def governance_only_drift(files: list[str]) -> bool:
+    impact=calculate_impact(files)
+    return impact["governance_only"] and not impact["unknown_production_fallback"]
+
+def integration_drift_assessment(base: str, integration_head: str|None):
+    if not integration_head or base==integration_head:
+        return {"base":base,"integration_head":integration_head,"changed_files":[],"governance_only":True,"requires_reconcile":False,"reason":"no integration drift"}
+    ancestor=subprocess.run(["git","merge-base","--is-ancestor",base,integration_head],cwd=ROOT).returncode==0
+    if not ancestor:
+        return {"base":base,"integration_head":integration_head,"changed_files":[],"governance_only":False,"requires_reconcile":True,"reason":"candidate base is not an ancestor of integration head"}
+    drift=changed_files(base,integration_head)
+    safe=governance_only_drift(drift)
+    return {
+        "base":base,
+        "integration_head":integration_head,
+        "changed_files":drift,
+        "governance_only":safe,
+        "requires_reconcile":not safe,
+        "reason":"governance-only integration drift is safe" if safe else "production/runtime integration drift requires reconciliation",
+    }
 
 def registry_errors(registry=None):
     registry=registry or load_json(DOCS/"WORKSTREAM_REGISTRY.json")
@@ -82,7 +104,9 @@ def validate_candidate(task_id: str, base: str, head: str, integration_head: str
     expected_base=ws.get("base_commit")
     if expected_base and base!=expected_base:errors.append(f"base mismatch: registry {expected_base}, candidate {base}")
     for dep in deps_approved(task_id,graph):errors.append(f"dependency not approved: {dep}")
-    if integration_head and base!=integration_head:errors.append(f"stale base: candidate {base}, current integration {integration_head}; reconcile before integration")
+    drift=integration_drift_assessment(base,integration_head)
+    if drift["requires_reconcile"]:
+        errors.append(f"stale base: candidate {base}, current integration {integration_head}; {drift['reason']}")
     owned=expand_alias(ws.get("owned_paths",[]),ownership);protected=expand_alias(ws.get("protected_paths",[]),ownership);authorized=approved_change_requests(task_id)
     foreign=[]
     for other in registry["workstreams"]:
@@ -93,7 +117,7 @@ def validate_candidate(task_id: str, base: str, head: str, integration_head: str
         if not(any_match(path,owned) or path in authorized):errors.append(f"unauthorized path for {task_id}: {path}")
         if any_match(path,foreign) and path not in authorized:errors.append(f"foreign-owned path for {task_id}: {path}")
         if any_match(path,protected) and not any_match(path,owned) and path not in authorized:errors.append(f"protected path for {task_id}: {path}")
-    result={"task_id":task_id,"base":base,"head":head,"integration_head":integration_head,"changed_files":files,"authorized_change_requests":sorted(authorized),"passed":not errors,"errors":errors}
+    result={"task_id":task_id,"base":base,"head":head,"integration_head":integration_head,"integration_drift":drift,"changed_files":files,"authorized_change_requests":sorted(authorized),"passed":not errors,"errors":errors}
     print(json.dumps(result,indent=2))
     if errors:raise SystemExit(1)
 
