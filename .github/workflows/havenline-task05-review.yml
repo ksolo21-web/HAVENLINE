@@ -1,0 +1,364 @@
+name: Havenline T05 strict review
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task05-review.yml'
+      - 'tools/havenline/task05/review_station_kit.py'
+      - 'tools/havenline/task05/evaluate_station_reviews.py'
+      - 'tools/havenline/task05/test_evaluate_station_reviews.py'
+      - 'tools/havenline/task05/performance_gate.py'
+      - 'tools/havenline/task05/final_gate.py'
+      - 'Docs/Production/Evidence/T05/**'
+      - 'Docs/Production/T05/ReferenceFrames/**'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'Run fresh primaries or resume an isolated dissent after human inspection'
+        type: choice
+        options: [primary, adjudicate]
+        default: primary
+      visual_primary_run_id:
+        description: 'Prior T05 strict-review run ID; required only for adjudicate mode'
+        type: string
+        required: false
+      adjudication_record_path:
+        description: 'Committed full-resolution human adjudication JSON'
+        type: string
+        default: 'Docs/Production/Evidence/T05/FULL_RESOLUTION_ADJUDICATION.json'
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  EXPECTED_SOURCE: '8c9da476ca93a7a826d51eae892449fd20e9c105'
+  PRIMARY_RUN_ID: '34762404417'
+  T04_BASELINE_RUN_ID: '34738864775'
+  T04_BASELINE_SOURCE: 'e08fd37e9a999d878644c03089c4b4b253bd7472'
+  OMP_NUM_THREADS: '4'
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with: {lfs: true}
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: 'task05-integrated-precritic-${{ env.EXPECTED_SOURCE }}'
+          path: task05-evidence
+      - name: Add checksum-bound family-complete reference frames
+        run: |
+          mkdir -p task05-evidence/reference
+          cp Docs/Production/T05/ReferenceFrames/*.png task05-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/coverage.json task05-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/extraction-report.json task05-evidence/reference/
+      - name: Enforce frozen source, evidence and manual quick-look
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          source=os.environ['EXPECTED_SOURCE']
+          q=json.load(open('Docs/Production/Evidence/T05/INTEGRATED_QUICK_LOOK.json'))
+          p=json.load(open('task05-evidence/provenance.json'))
+          t=json.load(open('task05-evidence/tests.json'))
+          assert q['candidate_source']==p['source']==t['source']==source
+          assert q['manual_quick_look']=='PASS' and q['critics_authorized'] is True
+          assert q['artifact_digest']=='sha256:f050b2f9835063b83166a537e0769fd045dc7bd6998d42e397e8e6648ba938df'
+          assert p['actual_images']==77 and p['family_view_contract_complete'] is True
+          assert p['shipping_main_call_site_exercised'] is True
+          assert p['cheap_pixel_gate_passed'] is True and p['cheap_performance_gate_passed'] is True
+          assert t['suite_count']==18 and t['total_checks']>=1117 and t['all_passed'] is True
+          assert hashlib.sha256(Path('task05-evidence/reference-ground.webp').read_bytes()).hexdigest()=='3c424b0df53c1c6de49018278779a4ef1ced58562e5b9dbb54fe276d13aa2ddb'
+          assert len(list(Path('task05-evidence').glob('component/*.png')))==12
+          assert len(list(Path('task05-evidence').glob('families/*.png')))==42
+          assert len(list(Path('task05-evidence').glob('gameplay/*.png')))==20
+          assert len(list(Path('task05-evidence').glob('native4k/*.png')))==3
+          PY
+      - run: python3 -m unittest discover -s tools/havenline/task05 -p 'test_evaluate_station_reviews.py'
+
+  primary-visual:
+    needs: preflight
+    if: github.event_name != 'workflow_dispatch' || inputs.mode == 'primary'
+    strategy:
+      fail-fast: false
+      matrix:
+        critic: ['C1', 'C2']
+    runs-on: ubuntu-24.04
+    timeout-minutes: 150
+    env:
+      REVIEW_ROLE: '${{ matrix.critic }}'
+      REVIEW_ATTEMPT: primary
+      REVIEW_SEED: '${{ matrix.critic == ''C1'' && ''20260951'' || ''20260961'' }}'
+      REVIEW_OUTPUT: 'task05-${{ matrix.critic }}-primary'
+    steps:
+      - uses: actions/checkout@v4
+        with: {lfs: true}
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: 'task05-integrated-precritic-${{ env.EXPECTED_SOURCE }}'
+          path: task05-evidence
+      - name: Add checksum-bound family-complete reference frames
+        run: |
+          mkdir -p task05-evidence/reference
+          cp Docs/Production/T05/ReferenceFrames/*.png task05-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/coverage.json task05-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/extraction-report.json task05-evidence/reference/
+      - uses: actions/cache/restore@v4
+        with:
+          path: '~/.cache/havenline-t01-qwen35'
+          key: 'havenline-t01-qwen35-9b-q5-20260908-v1'
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow==11.3.0
+      - run: python3 -u tools/havenline/task05/review_station_kit.py
+      - name: Publish primary verdict
+        if: always()
+        run: |
+          if [ -f "${REVIEW_OUTPUT}/review-result.json" ]; then
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            python3 - "$REVIEW_OUTPUT/review-result.json" >> "$GITHUB_STEP_SUMMARY" <<'PY'
+          import json,sys
+          data=json.load(open(sys.argv[1]))
+          print(json.dumps({'task':data.get('task'),'source':data.get('source'),'critic_id':data.get('critic_id'),'attempt':data.get('attempt'),'competency_passed':data.get('competency_passed'),'error':data.get('error'),'passed':data.get('passed'),'reviews':[{'group':r.get('group'),'passed':r.get('passed'),'minimum':r.get('minimum'),'review':r.get('review'),'error':r.get('error')} for r in data.get('reviews',[])]},indent=2))
+          PY
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t05-${{ matrix.critic }}-primary-${{ github.run_id }}'
+          path: 'task05-${{ matrix.critic }}-primary/'
+          retention-days: 30
+          if-no-files-found: error
+
+  visual-resolution:
+    needs: [preflight, primary-visual]
+    if: always() && needs.preflight.result == 'success' && (github.event_name != 'workflow_dispatch' || inputs.mode == 'primary')
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: 'havenline-t05-*-primary-${{ github.run_id }}'
+          path: primary-reviews
+      - name: Classify primaries; stop for full-resolution human adjudication on isolated dissent
+        run: |
+          set +e
+          python3 tools/havenline/task05/evaluate_station_reviews.py --primary primary-reviews --source "$EXPECTED_SOURCE" --output visual-review/primary-decision.json
+          code=$?
+          set -e
+          cp visual-review/primary-decision.json visual-review/final-visual-decision.json
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat visual-review/final-visual-decision.json >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+          exit "$code"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t05-visual-resolution-${{ github.run_id }}'
+          path: |
+            visual-review/
+          retention-days: 30
+          if-no-files-found: error
+
+  performance:
+    needs: preflight
+    if: github.event_name != 'workflow_dispatch' || inputs.mode == 'primary'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 0}
+      - uses: actions/checkout@v4
+        with:
+          ref: '${{ env.EXPECTED_SOURCE }}'
+          fetch-depth: 0
+          path: candidate-source
+      - uses: actions/checkout@v4
+        with:
+          ref: '${{ env.T04_BASELINE_SOURCE }}'
+          fetch-depth: 0
+          path: baseline-source
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: 'task05-integrated-precritic-${{ env.EXPECTED_SOURCE }}'
+          path: task05-evidence
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.T04_BASELINE_RUN_ID }}'
+          name: 'task04-camera-precritic-${{ env.T04_BASELINE_SOURCE }}'
+          path: task04-baseline
+      - name: Run same-runner real elapsed native-4K benchmarks
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine" candidate-benchmark baseline-benchmark
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          cmp candidate-source/HavenlineGodot/tests/benchmark_environment.gd baseline-source/HavenlineGodot/tests/benchmark_environment.gd
+          cmp candidate-source/HavenlineGodot/scripts/performance_record.gd baseline-source/HavenlineGodot/scripts/performance_record.gd
+          timeout 240 "$engine" --headless --editor --path candidate-source/HavenlineGodot --import --quit > candidate-benchmark/import.log 2>&1
+          timeout 240 "$engine" --headless --editor --path baseline-source/HavenlineGodot --import --quit > baseline-benchmark/import.log 2>&1
+          /usr/bin/time -v -o candidate-benchmark/time.txt xvfb-run -a -s '-screen 0 3840x2160x24' timeout 300 "$engine" --path candidate-source/HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=30 --benchmark-warmup=5 --benchmark-output="$(pwd)/candidate-benchmark" > candidate-benchmark/run.log 2>&1
+          /usr/bin/time -v -o baseline-benchmark/time.txt xvfb-run -a -s '-screen 0 3840x2160x24' timeout 300 "$engine" --path baseline-source/HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=30 --benchmark-warmup=5 --benchmark-output="$(pwd)/baseline-benchmark" > baseline-benchmark/run.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' candidate-benchmark/run.log baseline-benchmark/run.log; then exit 1; fi
+      - name: Evaluate measured C6 record
+        run: |
+          set -euo pipefail
+          candidate_rss=$(awk -F: '/Maximum resident set size/{gsub(/^[ \t]+/,"",$2); print $2}' candidate-benchmark/time.txt)
+          baseline_rss=$(awk -F: '/Maximum resident set size/{gsub(/^[ \t]+/,"",$2); print $2}' baseline-benchmark/time.txt)
+          test -n "$candidate_rss" && test -n "$baseline_rss"
+          python3 tools/havenline/task05/performance_gate.py --candidate "$EXPECTED_SOURCE" --baseline-source "$T04_BASELINE_SOURCE" --candidate-root candidate-source --baseline-root baseline-source --candidate-benchmark candidate-benchmark/benchmark.json --baseline-benchmark baseline-benchmark/benchmark.json --candidate-rss-kb "$candidate_rss" --baseline-rss-kb "$baseline_rss" --evidence task05-evidence --baseline-evidence task04-baseline --output task05-C6
+      - name: Publish C6 verdict
+        if: always()
+        run: |
+          if [ -f task05-C6/result.json ]; then
+            echo '```json' >> "$GITHUB_STEP_SUMMARY"
+            cat task05-C6/result.json >> "$GITHUB_STEP_SUMMARY"
+            echo '```' >> "$GITHUB_STEP_SUMMARY"
+          fi
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t05-C6-${{ github.run_id }}'
+          path: |
+            task05-C6/
+            candidate-benchmark/
+            baseline-benchmark/
+          retention-days: 30
+          if-no-files-found: error
+
+  adjudicated-visual:
+    needs: preflight
+    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'adjudicate' && needs.preflight.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@v4
+        with: {lfs: true}
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ inputs.visual_primary_run_id }}'
+          pattern: 'havenline-t05-*-primary-*'
+          path: primary-reviews
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: 'task05-integrated-precritic-${{ env.EXPECTED_SOURCE }}'
+          path: task05-evidence
+      - name: Add checksum-bound family-complete reference frames
+        run: |
+          mkdir -p task05-evidence/reference
+          cp Docs/Production/T05/ReferenceFrames/*.png task05-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/coverage.json task05-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/extraction-report.json task05-evidence/reference/
+      - uses: actions/cache/restore@v4
+        with:
+          path: '~/.cache/havenline-t01-qwen35'
+          key: 'havenline-t01-qwen35-9b-q5-20260908-v1'
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow==11.3.0
+      - name: Validate human record against exact disputed pixels, then run fresh supplements
+        env:
+          ADJUDICATION_RECORD: '${{ inputs.adjudication_record_path }}'
+        run: |
+          set +e
+          python3 tools/havenline/task05/evaluate_station_reviews.py --primary primary-reviews --source "$EXPECTED_SOURCE" --adjudication "$ADJUDICATION_RECORD" --output adjudicated/primary-with-human-record.json
+          code=$?
+          set -e
+          test "$code" -eq 3
+          for role in C1 C2; do
+            groups=$(python3 - "$role" <<'PY'
+          import json,sys
+          report=json.load(open('adjudicated/primary-with-human-record.json'))
+          print(','.join(row['group'] for row in report['adjudication_requests'] if row['critic_id']==sys.argv[1]))
+          PY
+          )
+            if [ -z "$groups" ]; then continue; fi
+            for attempt in 1 2; do
+              REVIEW_ROLE="$role" REVIEW_GROUPS="$groups" REVIEW_ATTEMPT="supplement-$attempt" REVIEW_SEED="$((20261000 + attempt * 100 + (${role#C} * 10)))" REVIEW_OUTPUT="supplemental/$role-$attempt" python3 -u tools/havenline/task05/review_station_kit.py
+            done
+          done
+          python3 tools/havenline/task05/evaluate_station_reviews.py --primary primary-reviews --supplemental supplemental --adjudication "$ADJUDICATION_RECORD" --source "$EXPECTED_SOURCE" --output adjudicated/final-visual-decision.json
+          echo '```json' >> "$GITHUB_STEP_SUMMARY"
+          cat adjudicated/final-visual-decision.json >> "$GITHUB_STEP_SUMMARY"
+          echo '```' >> "$GITHUB_STEP_SUMMARY"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t05-adjudicated-visual-${{ github.run_id }}'
+          path: |
+            adjudicated/
+            supplemental/
+          retention-days: 30
+          if-no-files-found: error
+
+  final-machine-gate:
+    needs: [visual-resolution, performance]
+    if: always() && needs.visual-resolution.result == 'success' && needs.performance.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t05-visual-resolution-${{ github.run_id }}', path: visual}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t05-C6-${{ github.run_id }}', path: performance}
+      - name: Bind C1, C2 and C6 before closure
+        run: python3 tools/havenline/task05/final_gate.py --visual visual --performance performance --source "$EXPECTED_SOURCE" --baseline "$T04_BASELINE_SOURCE" --output final-gate/final-machine-gate.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t05-final-machine-gate-${{ github.run_id }}'
+          path: final-gate/
+          retention-days: 30
+
+  adjudicated-final-machine-gate:
+    needs: adjudicated-visual
+    if: always() && github.event_name == 'workflow_dispatch' && inputs.mode == 'adjudicate' && needs.adjudicated-visual.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: 'havenline-t05-adjudicated-visual-${{ github.run_id }}'
+          path: visual
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ inputs.visual_primary_run_id }}'
+          name: 'havenline-t05-C6-${{ inputs.visual_primary_run_id }}'
+          path: performance
+      - name: Bind adjudicated C1/C2 to the prior primary run's C6 evidence
+        run: python3 tools/havenline/task05/final_gate.py --visual visual --performance performance --source "$EXPECTED_SOURCE" --baseline "$T04_BASELINE_SOURCE" --output final-gate/final-machine-gate.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t05-final-machine-gate-${{ github.run_id }}'
+          path: final-gate/
+          retention-days: 30
