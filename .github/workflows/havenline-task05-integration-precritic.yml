@@ -119,14 +119,22 @@ jobs:
           assert hashlib.sha256((root/'reference-ground.webp').read_bytes()).hexdigest()=='3c424b0df53c1c6de49018278779a4ef1ced58562e5b9dbb54fe276d13aa2ddb'
           budgets=json.loads(Path('Docs/Production/PERFORMANCE_BUDGETS.json').read_text())['global_soft_budgets']
           perf_errors=[];draw=[];primitives=[];hashes={}
+          declared_sizes={}
+          for folder,manifest in [('component',component),('families',families)]:
+              for row in manifest['captures']:
+                  declared_sizes[f"{folder}/{row['path']}"]=tuple(map(int,row['size']))
+          for folder,manifest in [('gameplay',gameplay),('native4k',native)]:
+              for row in manifest['captures']:
+                  declared_sizes[f"{folder}/{row['name']}.png"]=tuple(map(int,row['internal_size']))
           pngs=[]
           for folder in ['component','families','gameplay','native4k']:
               pngs.extend(sorted((root/folder).glob('*.png')))
           assert len(pngs)==77,len(pngs)
+          assert set(declared_sizes)=={str(path.relative_to(root)) for path in pngs}
           for path in pngs:
               with Image.open(path) as source:
                   image=source.convert('RGB')
-                  expected=(3840,2160) if path.parent.name=='native4k' else (1280,720)
+                  expected=declared_sizes[str(path.relative_to(root))]
                   assert image.size==expected,(path,image.size)
                   assert max(ImageStat.Stat(image).stddev)>=12.0,path
                   assert len(image.getcolors(maxcolors=image.width*image.height) or [])>=128,path
