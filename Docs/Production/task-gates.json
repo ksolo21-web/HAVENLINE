@@ -95,12 +95,12 @@
     "all_applicable_gates_must_pass": true,
     "no_unresolved_mandatory_defects": true
   },
-  "active_task": null,
-  "active_task_title": null,
-  "active_status": null,
-  "active_frozen_scope": null,
-  "active_task_packet": null,
-  "active_base_integration_commit": null,
+  "active_task": "T06",
+  "active_task_title": "Character 1 complete movement/interactions",
+  "active_status": "ASSIGNED",
+  "active_frozen_scope": "Docs/Production/T06/FROZEN_SCOPE.md",
+  "active_task_packet": "Docs/Production/T06/TASK_PACKET.md",
+  "active_base_integration_commit": "f9d815a7d05c4e811d22d620c6b0c00c768ce6c5",
   "active_candidate_source": null,
   "active_candidate_run": null,
   "active_tests": null,
@@ -108,7 +108,8 @@
   "active_critic_state": null,
   "task04_plus_runtime_locked": false,
   "task05_plus_runtime_locked": false,
-  "task06_plus_runtime_locked": true,
+  "task06_plus_runtime_locked": false,
+  "task07_plus_runtime_locked": true,
   "states": [
     "LOCKED",
     "PREPARED",
@@ -207,8 +208,10 @@
     {
       "task": "T06",
       "branch": "havenline/T06-character1",
-      "state": "LOCKED",
-      "reason": "T03 dependency is approved, but the T06 task packet and owner are not yet prepared; T05 approval does not bypass those rules."
+      "state": "ASSIGNED",
+      "owner": "character1-motion-builder",
+      "base_commit": "f9d815a7d05c4e811d22d620c6b0c00c768ce6c5",
+      "reason": "T03 dependency is approved; the T06 frozen scope, packet, owner, isolated branch, path reservation, critics and exact integration base are prepared."
     }
   ],
   "whole_game_approved": false,

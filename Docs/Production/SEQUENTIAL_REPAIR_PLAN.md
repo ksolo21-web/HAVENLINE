@@ -24,7 +24,9 @@ integration-owner-controlled production integration.
   `Docs/Production/T05/verified-completion.json` after 18 suites / 1119 checks,
   77 source-bound frames, strict C1+C2 PASS, C6 minimum 9.1, final pixel
   signoff and G1-G14.
-- T06+ runtime production remains LOCKED until separately prepared and assigned.
+- T06 is ASSIGNED on `havenline/T06-character1` from exact integration base
+  `f9d815a7d05c4e811d22d620c6b0c00c768ce6c5`; its frozen scope and packet are
+  under `Docs/Production/T06/`. T07+ remains LOCKED until separately prepared.
 
 ## Forward acceptance rule
 
@@ -104,7 +106,8 @@ after each packet and owner are prepared:
 
 - T04 camera/composition is complete and APPROVED.
 - T05 station/prop kit is complete and APPROVED at `fa6fa70f154f3757d22303522ca3f6de2c3d391f`.
-- `havenline/T06-character1` — T06 Character 1 motion.
+- `havenline/T06-character1` — T06 Character 1 motion/contact foundation is
+  ASSIGNED; preserve the source GLB and build only inside `@reservation:T06`.
 - QA/integration infrastructure may continue separately.
 
 Those workstreams are isolated and path-disjoint. Shared wiring remains

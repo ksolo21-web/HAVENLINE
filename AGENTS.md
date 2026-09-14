@@ -31,10 +31,14 @@ T04 is APPROVED at accepted gameplay source
 `e08fd37e9a999d878644c03089c4b4b253bd7472`; its verified record is
 `Docs/Production/T04/verified-completion.json`.
 
-T05 is the active isolated workstream at `Docs/Production/T05/FROZEN_SCOPE.md`
-and `Docs/Production/T05/TASK_PACKET.md`, assigned on
-`havenline/T05-props` from integration base
-`746c3e8757ccaf2a279a6184b6ed109a143d5b3a`. T06+ runtime production remains
+T05 is APPROVED at accepted gameplay source
+`fa6fa70f154f3757d22303522ca3f6de2c3d391f`; its verified record is
+`Docs/Production/T05/verified-completion.json`.
+
+T06 is the active isolated workstream at `Docs/Production/T06/FROZEN_SCOPE.md`
+and `Docs/Production/T06/TASK_PACKET.md`, assigned on
+`havenline/T06-character1` from integration base
+`f9d815a7d05c4e811d22d620c6b0c00c768ce6c5`. T07+ runtime production remains
 LOCKED until separately prepared and assigned.
 
 T03 was the final legacy task grandfathered to finish directly on

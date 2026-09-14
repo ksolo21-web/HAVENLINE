@@ -137,7 +137,14 @@ def main():
         else:
             if t05_status not in {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}:
                 errors.append("invalid T05 post-T04 state")
-            if any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[5:]):errors.append("T06+ must remain LOCKED until separately prepared")
+            t06_status=graph["tasks"]["T06"]["status"]
+            if t05_status=="APPROVED":
+                if t06_status not in {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}:
+                    errors.append("invalid T06 post-T05 state")
+                if t06_status!="APPROVED" and any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[6:]):
+                    errors.append("T07+ must remain LOCKED until T06 is approved and each later task is separately prepared")
+            elif any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[5:]):
+                errors.append("T06+ must remain LOCKED until T05 is approved and T06 is separately prepared")
     acc=graph["acceptance_rule"]
     if acc.get("mandatory_dimension_operator")!=">" or acc.get("mandatory_dimension_threshold")!=9.0 or acc.get("unrounded") is not True:
         errors.append("forward strict >9.0 rule missing")
@@ -195,13 +202,21 @@ def main():
             if t05_status=="LOCKED":
                 if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task while T05 is locked")
             elif t05_status=="APPROVED":
-                if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task after T05 approval")
                 t05_completion=DOCS/"T05/verified-completion.json"
                 t05_ledger=DOCS/"T05/DEFECT_LEDGER.json"
                 if not t05_completion.exists() or not t05_ledger.exists():
                     errors.append("T05 verified completion record or defect ledger missing")
                 else:
                     errors += t05_completion_errors(load_json(t05_completion),load_json(t05_ledger))
+                t06_status=graph["tasks"]["T06"]["status"]
+                if t06_status=="LOCKED":
+                    if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task while T06 is locked")
+                elif t06_status=="APPROVED":
+                    if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task after T06 approval")
+                else:
+                    if tg.get("active_task")!="T06" or tg.get("active_status")!=t06_status:errors.append("task-gates must match active T06 state")
+                    packet=DOCS/"T06/TASK_PACKET.md";scope=DOCS/"T06/FROZEN_SCOPE.md"
+                    if not packet.exists() or not scope.exists():errors.append("active T06 packet/frozen scope missing")
             else:
                 if tg.get("active_task")!="T05" or tg.get("active_status")!=t05_status:errors.append("task-gates must match active T05 state")
                 packet=DOCS/"T05/TASK_PACKET.md";scope=DOCS/"T05/FROZEN_SCOPE.md"

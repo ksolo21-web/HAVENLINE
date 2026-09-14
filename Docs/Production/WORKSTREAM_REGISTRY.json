@@ -173,11 +173,11 @@
     {
       "task_id": "T06",
       "task_name": "Character 1 complete movement/interactions",
-      "status": "LOCKED",
-      "owner": null,
+      "status": "ASSIGNED",
+      "owner": "character1-motion-builder",
       "workstream_id": "wave1-character1",
       "branch": "havenline/T06-character1",
-      "base_commit": null,
+      "base_commit": "f9d815a7d05c4e811d22d620c6b0c00c768ce6c5",
       "dependencies": ["T03"],
       "owned_paths": ["@reservation:T06"],
       "protected_paths": ["@protected:approved", "@integration-only", "@protected:C1-model"],
@@ -188,13 +188,13 @@
       "critic_requirements": ["C1", "C2", "C5", "C6"],
       "critic_status": {},
       "integration_status": "not started",
-      "known_blockers": ["Task packet and owner not yet prepared"],
-      "next_action": "Prepare the isolated T06 packet, assign an owner, and validate ownership before changing runtime."
+      "known_blockers": [],
+      "next_action": "Build the isolated Character 1 motion/contact candidate on havenline/T06-character1; preserve the source GLB and all approved runtime paths."
     }
   ],
   "notes": [
     "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
-    "T03 is APPROVED; T04+ runtime work remains locked until its isolated task packet, owner and ownership validation are prepared.",
+    "T03-T05 are APPROVED. T06 is separately packeted and assigned; T07+ runtime work remains locked until its own prerequisites and ownership are prepared.",
     "All future runtime builders use isolated branches and cannot approve themselves.",
     "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them."
   ]
