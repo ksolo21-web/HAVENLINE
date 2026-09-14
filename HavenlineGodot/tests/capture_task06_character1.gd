@@ -259,10 +259,28 @@ func ensure_overlay() -> void:
 		sphere.material = material
 		marker.mesh = sphere
 		overlay_root.add_child(marker)
+	var target := MeshInstance3D.new()
+	target.name = "ContactTarget"
+	var target_mesh := BoxMesh.new()
+	target_mesh.size = Vector3(0.16,0.16,0.16)
+	var target_material := StandardMaterial3D.new()
+	target_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	target_material.albedo_color = Color("#76ff65")
+	target_material.emission_enabled = true
+	target_material.emission = target_material.albedo_color
+	target_mesh.material = target_material
+	target.mesh = target_mesh
+	target.visible = false
+	overlay_root.add_child(target)
 
-func update_overlay() -> void:
+func update_overlay(clip := "") -> void:
 	ensure_overlay()
 	for marker in overlay_root.get_children():
+		if marker.name == "ContactTarget":
+			marker.visible = clip in Motion.ACTION_CLIPS
+			if marker.visible:
+				marker.global_position = actor.to_global(Motion.ACTION_SPECS[clip].target)
+			continue
 		var index := skeleton.find_bone(marker.name)
 		marker.global_position = skeleton.to_global(skeleton.get_bone_global_pose(index).origin)
 
@@ -285,7 +303,7 @@ func capture_overlay_review() -> void:
 		player.seek(animation.length * phase, true)
 		player.advance(0.0)
 		skeleton.force_update_all_bone_transforms()
-		update_overlay()
+		update_overlay(clip)
 		set_view("three-quarter", "body")
 		await snap("overlay/%s-contact.png" % clip,clip,phase,"bone_overlay","body")
 	for clip in ["turn_left_030","turn_right_030","turn_left_090","turn_right_090","turn_left_180","turn_right_180"]:
