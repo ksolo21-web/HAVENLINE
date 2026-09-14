@@ -15,6 +15,53 @@ ALLOWED_MIGRATION_PATTERNS=[
 "HavenlineGodot/tests/production_capture_harness.gd","HavenlineGodot/tests/production_motion_capture.gd"
 ]
 
+T05_ACCEPTED_SOURCE="fa6fa70f154f3757d22303522ca3f6de2c3d391f"
+
+def _strict_score_errors(label,scores):
+    errors=[]
+    if not isinstance(scores,dict) or not scores:
+        return [f"{label} scores missing"]
+    for dimension,value in scores.items():
+        if isinstance(value,bool) or not isinstance(value,(int,float)) or value<=9.0:
+            errors.append(f"{label} score must be strictly above 9.0: {dimension}={value}")
+    return errors
+
+def t05_completion_errors(record,ledger):
+    """Fail closed on the complete, exact-source T05 approval contract."""
+    errors=[]
+    if record.get("status")!="PASS" or record.get("accepted_gameplay_source")!=T05_ACCEPTED_SOURCE:
+        errors.append("T05 verified completion record is not bound to the accepted source")
+    acceptance=record.get("acceptance_rule",{})
+    if acceptance.get("mandatory_dimension_operator")!=">" or acceptance.get("mandatory_dimension_threshold")!=9.0 or acceptance.get("unrounded") is not True or acceptance.get("score_averaging_used") is not False:
+        errors.append("T05 verified completion strict acceptance rule is incomplete")
+    mechanical=record.get("mechanical_evidence",{})
+    if mechanical.get("all_passed") is not True or mechanical.get("functional_suites")!=18 or mechanical.get("total_assertions_checks",0)<1119 or mechanical.get("source_bound_images",0)<77:
+        errors.append("T05 mechanical or integration regression evidence is incomplete")
+    visual=record.get("visual_review",{})
+    if visual.get("passed") is not True or visual.get("status") not in {"PASS","PASS_BY_QUORUM"} or visual.get("source")!=T05_ACCEPTED_SOURCE or visual.get("score_averaging_used") is not False or visual.get("valid_unresolved_defects")!=[]:
+        errors.append("T05 C1/C2 visual closure is incomplete")
+    for critic,scores in visual.get("scores",{}).items():
+        errors += _strict_score_errors(f"T05 {critic}",scores)
+    if set(visual.get("scores",{}))!={"C1","C2"}:
+        errors.append("T05 C1/C2 score sets are incomplete")
+    performance=record.get("performance_critic",{})
+    if performance.get("critic")!="C6" or performance.get("passed") is not True or performance.get("coverage_complete") is not True or performance.get("candidate_source")!=T05_ACCEPTED_SOURCE or performance.get("defects")!=[]:
+        errors.append("T05 C6 closure is incomplete")
+    errors += _strict_score_errors("T05 C6",performance.get("scores"))
+    final_gate=record.get("final_gate",{})
+    if final_gate.get("passed") is not True or final_gate.get("source")!=T05_ACCEPTED_SOURCE or final_gate.get("ready_for_final_pixel_signoff") is not True or final_gate.get("errors")!=[]:
+        errors.append("T05 final machine gate is incomplete")
+    signoff=record.get("pixel_signoff",{})
+    if signoff.get("performed_against_accepted_gameplay_source") is not True or signoff.get("unresolved_mandatory_task_defects")!=[]:
+        errors.append("T05 final pixel signoff is incomplete")
+    if ledger.get("task_id")!="T05" or ledger.get("candidate_commit")!=T05_ACCEPTED_SOURCE:
+        errors.append("T05 defect ledger is not bound to the accepted source")
+    allowed={"VERIFIED_CLOSED","REJECTED_AS_INVALID_FINDING"}
+    unresolved=[row.get("id") for row in ledger.get("defects",[]) if row.get("status") not in allowed]
+    if unresolved:
+        errors.append("T05 defect ledger has unresolved entries: "+",".join(str(x) for x in unresolved))
+    return errors
+
 def git_blob_sha(path:pathlib.Path)->str:
     data=path.read_bytes()
     return hashlib.sha1(b"blob "+str(len(data)).encode()+b"\0"+data).hexdigest()
@@ -94,7 +141,11 @@ def main():
         if f"| {t} |" not in plan:errors.append("build plan missing "+t)
     tg=load_json(DOCS/"task-gates.json")
     if t03_status=="APPROVED":
-        expected_approved=["T01","T02","T03","T04"] if t04_status=="APPROVED" else ["T01","T02","T03"]
+        expected_approved=(
+            ["T01","T02","T03","T04","T05"] if t05_status=="APPROVED" else
+            ["T01","T02","T03","T04"] if t04_status=="APPROVED" else
+            ["T01","T02","T03"]
+        )
         if tg.get("approved_tasks")!=expected_approved:errors.append("task-gates approved list does not match T04 state")
         completion=DOCS/"T03/verified-completion.json"
         if not completion.exists():errors.append("T03 verified completion record missing")
@@ -121,6 +172,12 @@ def main():
                 if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task while T05 is locked")
             elif t05_status=="APPROVED":
                 if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task after T05 approval")
+                t05_completion=DOCS/"T05/verified-completion.json"
+                t05_ledger=DOCS/"T05/DEFECT_LEDGER.json"
+                if not t05_completion.exists() or not t05_ledger.exists():
+                    errors.append("T05 verified completion record or defect ledger missing")
+                else:
+                    errors += t05_completion_errors(load_json(t05_completion),load_json(t05_ledger))
             else:
                 if tg.get("active_task")!="T05" or tg.get("active_status")!=t05_status:errors.append("task-gates must match active T05 state")
                 packet=DOCS/"T05/TASK_PACKET.md";scope=DOCS/"T05/FROZEN_SCOPE.md"
