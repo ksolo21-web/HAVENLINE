@@ -80,8 +80,8 @@ def main() -> int:
     entries = catalog["entries"]
     assert len(entries) == 22
     assert len({row["id"] for row in entries}) == 22
-    assert sum(int(row["triangles"]) for row in entries) == 25516
-    assert sum((ASSET_DIR / f"{row['id']}.glb").stat().st_size for row in entries) == 830372
+    assert sum(int(row["triangles"]) for row in entries) == 24928
+    assert sum((ASSET_DIR / f"{row['id']}.glb").stat().st_size for row in entries) == 826604
     assert sum((ASSET_DIR / f"{row['id']}.glb").stat().st_size for row in entries) <= 15 * 1024 * 1024
     palette = {material for row in entries for material in row["materials"]}
     assert palette == {"snow", "cream", "wood", "wood_light", "metal", "blue", "cyan", "orange", "yellow", "green", "red", "dark"}
@@ -92,6 +92,10 @@ def main() -> int:
     }
 
     by_id = {row["id"]: row for row in entries}
+    pad_variants = [by_id[f"pad_{kind}"]["visual_variant"] for kind in ("build", "upgrade", "input", "output", "stock", "payment")]
+    assert len({row["silhouette"] for row in pad_variants}) == 6
+    assert len({row["icon"] for row in pad_variants}) == 6
+    assert [row["trim"] for row in pad_variants] == ["yellow", "orange", "cyan", "blue", "cream", "green"]
     for row in entries:
         path = ASSET_DIR / f"{row['id']}.glb"
         assert path.exists() and row["asset"] == f"res://assets/stations_v2/{path.name}"
@@ -106,7 +110,7 @@ def main() -> int:
 
     arrangements = catalog["arrangements"]
     assert {name: len(rows) for name, rows in arrangements.items()} == {"camp": 11, "lakeshore": 10}
-    expected_triangles = {"camp": 12900, "lakeshore": 10020}
+    expected_triangles = {"camp": 12876, "lakeshore": 9456}
     expected_surfaces = {"camp": 12, "lakeshore": 10}
     for name, placements in arrangements.items():
         assert len({row["id"] for row in placements}) == len(placements)

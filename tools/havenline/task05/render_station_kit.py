@@ -218,6 +218,11 @@ def main():
     for name, placements in catalog["arrangements"].items():
         arrangements[name] = [(row["id"], row["position"], row["rotation_y"]) for row in placements]
     singles = lambda asset: [(asset, [0.0, 0.0, 0.0], 0.0)]
+    pads = [
+        ("pad_build", [-3.6, 0.0, -1.2], 0.0), ("pad_upgrade", [-1.2, 0.0, -1.2], 0.0),
+        ("pad_input", [1.2, 0.0, -1.2], 0.0), ("pad_output", [3.6, 0.0, -1.2], 0.0),
+        ("pad_stock", [-1.2, 0.0, 1.3], 0.0), ("pad_payment", [1.2, 0.0, 1.3], 0.0),
+    ]
     frames = [
         ("camp-day-front", "camp", "day", "front", arrangements["camp"], 14.3),
         ("camp-day-reverse", "camp", "day", "reverse", arrangements["camp"], 14.3),
@@ -231,6 +236,8 @@ def main():
         ("close-fishing-side", "lakeshore", "day", "side", singles("fishing_rack"), 4.4),
         ("close-processing-front", "lakeshore", "day", "front", singles("cooker_processor"), 4.4),
         ("close-defense-reverse", "camp", "day", "reverse", singles("defense_platform"), 4.8),
+        ("close-pads-front", "camp", "day", "front", pads, 7.2),
+        ("close-pads-reverse", "camp", "day", "reverse", pads, 7.2),
     ]
     report = {"task": "T05-station-kit-v1", "capture_kind": "deterministic-cpu-quick-look", "acceptance_evidence": False, "frames": []}
     for frame_id, kind, condition, view, placements, height in frames:

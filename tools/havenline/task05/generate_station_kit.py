@@ -34,6 +34,15 @@ MATERIALS = {
     "dark": ((0.035, 0.07, 0.11, 1.0), 0.18, 0.42),
 }
 
+PAD_VISUAL_VARIANTS = {
+    "pad_build": {"silhouette": "diamond", "trim": "yellow", "icon": "construction-frame"},
+    "pad_upgrade": {"silhouette": "triangle", "trim": "orange", "icon": "upgrade-chevron"},
+    "pad_input": {"silhouette": "pentagon-forward", "trim": "cyan", "icon": "inbound-arrows"},
+    "pad_output": {"silhouette": "pentagon-reverse", "trim": "blue", "icon": "outbound-arrows"},
+    "pad_stock": {"silhouette": "soft-rectangle", "trim": "cream", "icon": "stock-crate"},
+    "pad_payment": {"silhouette": "round", "trim": "green", "icon": "coin-cluster"},
+}
+
 
 def vadd(a, b):
     return (a[0] + b[0], a[1] + b[1], a[2] + b[2])
@@ -304,9 +313,35 @@ def add_arrow(b, material, center, direction=1.0, pair=False):
 
 def build_pad(kind, material):
     b = MeshBuilder("pad_" + kind)
-    b.cylinder("wood", (0, .07, 0), 1.02, .14, 12)
-    b.cylinder(material, (0, .16, 0), .92, .12, 12)
-    b.cylinder("cream", (0, .235, 0), .70, .05, 12)
+    # T05-R03 requires the pad purpose to survive gameplay-scale viewing by
+    # silhouette as well as by trim and iconography.  Keep the shared shallow,
+    # timber-backed construction while giving every variant a purpose-shaped
+    # plan profile.  Input/output deliberately mirror their directional
+    # pentagons so their flow remains readable even without color.
+    if kind == "build":
+        layers = (("cylinder", 1.02, 4, math.pi / 4), ("cylinder", .90, 4, math.pi / 4), ("cylinder", .67, 4, math.pi / 4))
+    elif kind == "upgrade":
+        layers = (("cylinder", 1.02, 3, math.pi / 2), ("cylinder", .88, 3, math.pi / 2), ("cylinder", .64, 3, math.pi / 2))
+    elif kind == "input":
+        layers = (("cylinder", 1.02, 5, math.pi / 2), ("cylinder", .90, 5, math.pi / 2), ("cylinder", .67, 5, math.pi / 2))
+    elif kind == "output":
+        layers = (("cylinder", 1.02, 5, -math.pi / 2), ("cylinder", .90, 5, -math.pi / 2), ("cylinder", .67, 5, -math.pi / 2))
+    elif kind == "stock":
+        layers = (("box", (1.96, 1.62), 0, 0), ("box", (1.78, 1.44), 0, 0), ("box", (1.34, 1.02), 0, 0))
+    elif kind == "payment":
+        layers = (("cylinder", 1.02, 16, 0), ("cylinder", .90, 16, 0), ("cylinder", .67, 16, 0))
+    else:
+        raise ValueError(f"unknown pad kind {kind}")
+
+    center_material = "blue" if kind == "stock" else "cream"
+    for index, (shape, size, segments, rotation_y) in enumerate(layers):
+        layer_material = ("wood", material, center_material)[index]
+        center_y = (.07, .16, .235)[index]
+        height = (.14, .12, .05)[index]
+        if shape == "box":
+            b.beveled_box(layer_material, (0, center_y, 0), (size[0], height, size[1]), min(.08, height * .45))
+        else:
+            b.cylinder(layer_material, (0, center_y, 0), size, height, segments, rotation=(0, rotation_y, 0))
     y = .30
     if kind == "build":
         for x in (-.23, .23): b.beveled_box(material, (x, y, 0), (.25, .10, .58), .035)
@@ -320,7 +355,7 @@ def build_pad(kind, material):
     elif kind == "stock":
         for z in (-.20, .20): b.beveled_box(material, (0, y, z), (.82, .10, .22), .04)
         for x in (-.31, .31): b.beveled_box(material, (x, y, 0), (.20, .10, .62), .04)
-    else:
+    elif kind == "payment":
         for x, z, s in [(-.27, -.16, .26), (.02, .12, .30), (.30, -.10, .22)]:
             b.cylinder(material, (x, y + s * .14, z), s, s * .20, 16)
             b.cylinder("cream", (x, y + s * .25, z), s * .55, s * .06, 12)
@@ -473,7 +508,7 @@ def build_money():
 
 
 def asset_specs():
-    pads = {"pad_" + k: build_pad("pad_" + k, m) for k, m in {
+    pads = {"pad_" + k: build_pad(k, m) for k, m in {
         "build":"yellow", "upgrade":"orange", "input":"cyan",
         "output":"blue", "stock":"cream", "payment":"green"
     }.items()}
@@ -598,14 +633,17 @@ def main():
     for asset_id in sorted(assets):
         builder=assets[asset_id]; path=OUT/(asset_id+".glb"); pack_glb(builder,path)
         footprint, requirement, later_task, sockets=METADATA[asset_id]
-        entries.append({
+        entry = {
             "id":asset_id,"asset":"res://assets/stations_v2/"+path.name,
             "sha256":hashlib.sha256(path.read_bytes()).hexdigest(),
             "requirement":requirement,"later_task":later_task,
             "footprint":[footprint[0],footprint[1]],"clearance":0.55,
             "sockets":{name:list(value) for name,value in sockets.items()},
             "triangles":builder.triangle_count(),"materials":sorted(builder.surfaces),
-        })
+        }
+        if asset_id in PAD_VISUAL_VARIANTS:
+            entry["visual_variant"] = PAD_VISUAL_VARIANTS[asset_id]
+        entries.append(entry)
     catalog={
         "schema_version":1,"authority_id":"T05-station-kit-v1","generator":"tools/havenline/task05/generate_station_kit.py",
         "art_language":"bright sculpted winter production kit; shared blue/orange/yellow machinery with warm timber and snow contact",
