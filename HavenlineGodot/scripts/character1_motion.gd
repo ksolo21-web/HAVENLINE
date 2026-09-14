@@ -148,9 +148,17 @@ static func _curve(points: Array, phase: float) -> float:
 			return lerpf(a.y, b.y, inverse_lerp(a.x, b.x, p))
 	return float(points[-1].y)
 
+static func _remove_scale_tracks(animation: Animation) -> void:
+	# The imported source carries redundant animated scale channels on its root.
+	# Runtime motion uses the scene's authored rest scale and never deforms it.
+	for track in range(animation.get_track_count() - 1, -1, -1):
+		if animation.track_get_type(track) == Animation.TYPE_SCALE_3D:
+			animation.remove_track(track)
+
 static func _tune_locomotion(source: Animation, running: bool) -> Animation:
 	var clip: Animation = source.duplicate(true)
 	clip.loop_mode = Animation.LOOP_LINEAR
+	_remove_scale_tracks(clip)
 	var foot_curve := [
 		Vector2(0.00, -8.0), Vector2(0.10, 0.0), Vector2(0.34, 7.0),
 		Vector2(0.49, 16.0), Vector2(0.64, -13.0), Vector2(0.86, -7.0),
@@ -331,6 +339,7 @@ static func install(root: Node3D, role := "player_lead") -> Dictionary:
 		player.remove_animation_library(LIBRARY)
 	var idle: Animation = player.get_animation(source_names.idle).duplicate(true)
 	idle.loop_mode = Animation.LOOP_LINEAR
+	_remove_scale_tracks(idle)
 	var walk := _tune_locomotion(player.get_animation(source_names.walk), false)
 	var run := _tune_locomotion(player.get_animation(source_names.run), true)
 	var library := AnimationLibrary.new()
