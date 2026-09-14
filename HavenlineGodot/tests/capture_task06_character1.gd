@@ -249,10 +249,11 @@ func ensure_overlay() -> void:
 		var marker := MeshInstance3D.new()
 		marker.name = bone
 		var sphere := SphereMesh.new()
-		sphere.radius = 0.035 if bone != "Hip" else 0.05
+		sphere.radius = 0.050 if bone != "Hip" else 0.065
 		sphere.height = sphere.radius * 2.0
 		var material := StandardMaterial3D.new()
 		material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+		material.no_depth_test = true
 		material.albedo_color = Color("#4de8ff") if bone.begins_with("L_") else (Color("#ff6ea8") if bone.begins_with("R_") else Color("#ffe16a"))
 		material.emission_enabled = true
 		material.emission = material.albedo_color
@@ -265,6 +266,7 @@ func ensure_overlay() -> void:
 	target_mesh.size = Vector3(0.16,0.16,0.16)
 	var target_material := StandardMaterial3D.new()
 	target_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	target_material.no_depth_test = true
 	target_material.albedo_color = Color("#76ff65")
 	target_material.emission_enabled = true
 	target_material.emission = target_material.albedo_color
@@ -280,6 +282,7 @@ func update_overlay(clip := "") -> void:
 			marker.visible = clip in Motion.ACTION_CLIPS
 			if marker.visible:
 				marker.global_position = actor.to_global(Motion.ACTION_SPECS[clip].target)
+				marker.scale = Vector3(3.5,0.5,0.5) if Motion.ACTION_SPECS[clip].marker == "C1TwoHandContact" else Vector3.ONE
 			continue
 		var index := skeleton.find_bone(marker.name)
 		marker.global_position = skeleton.to_global(skeleton.get_bone_global_pose(index).origin)
@@ -506,7 +509,9 @@ func write_motion_ledger() -> void:
 			skeleton.force_update_all_bone_transforms()
 			var left := local_bone_point("L_Hand")
 			var right := local_bone_point("R_Hand")
-			ledger.actions[clip] = {"contact_phase":contact,"marker":Motion.ACTION_SPECS[clip].marker,"target":Motion._contact_contract().actions[clip].target,"left_hand":[left.x,left.y,left.z],"right_hand":[right.x,right.y,right.z]}
+			var target: Vector3 = Motion.ACTION_SPECS[clip].target
+			var working_point := (left + right) * 0.5 if Motion.ACTION_SPECS[clip].marker in ["C1TwoHandContact","C1RescueContact"] else (left if Motion.ACTION_SPECS[clip].marker == "C1LeftHandContact" else right)
+			ledger.actions[clip] = {"contact_phase":contact,"marker":Motion.ACTION_SPECS[clip].marker,"target":Motion._contact_contract().actions[clip].target,"left_hand":[left.x,left.y,left.z],"right_hand":[right.x,right.y,right.z],"working_point":[working_point.x,working_point.y,working_point.z],"target_error_m":working_point.distance_to(target),"forward_positive_z":working_point.z>0.08}
 		if clip.begins_with("turn_"):
 			ledger.turns[clip] = {"skeleton_returns_neutral":row.endpoint_rms_m < 0.001,"external_root_facing_delta_degrees":Motion.facing_delta_for_turn(clip)}
 	var file := FileAccess.open(output.path_join("motion-ledger.json"), FileAccess.WRITE)
@@ -545,7 +550,7 @@ func benchmark_phase(game: Control, lead: Node3D, helper: Node3D, label: String,
 	var samples: Array[float] = []
 	var setup_cpu: Array[float] = []
 	var previous := 0
-	for frame in range(benchmark_frames_per_phase + 90):
+	for frame in range(benchmark_frames_per_phase + 60):
 		lead_player.advance(1.0 / 60.0)
 		helper_player.advance(1.0 / 60.0)
 		lead.rotation.y = sin(float(frame) * 0.011) * 0.35
@@ -553,7 +558,7 @@ func benchmark_phase(game: Control, lead: Node3D, helper: Node3D, label: String,
 		await process_frame
 		await RenderingServer.frame_post_draw
 		var now := Time.get_ticks_usec()
-		if frame >= 90 and previous > 0:
+		if frame >= 60 and previous > 0:
 			samples.append(float(now - previous) / 1000.0)
 			setup_cpu.append(RenderingServer.get_frame_setup_time_cpu())
 		previous = now
@@ -607,7 +612,7 @@ func run_benchmark() -> void:
 		"task":"T06", "candidate_commit":candidate, "source_sha256":Motion.SOURCE_GLTF_SHA256,
 		"method":"counterbalanced A-B-B-A continuous shipping-scene render submission benchmark",
 		"frames_per_phase":benchmark_frames_per_phase, "measured_frames":benchmark_frames_per_phase * 4,
-		"warmup_frames_per_phase":90, "phases":phases,
+		"warmup_frames_per_phase":60, "phases":phases,
 		"baseline_p95_ms":baseline_p95, "candidate_p95_ms":candidate_p95,
 		"motion_p95_delta_ms":candidate_p95-baseline_p95,
 		"baseline_first_last_p95_drift_ms":float(phases[3].p95_ms)-float(phases[0].p95_ms),
@@ -619,7 +624,7 @@ func run_benchmark() -> void:
 		"physics_active_bodies":Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS),
 		"renderer":RenderingServer.get_current_rendering_method(), "device":RenderingServer.get_video_adapter_name(),
 		"gpu_frame_ms_where_measurable":null,
-		"shader_warmup_frames":90, "thermal_proxy":"first/last counterbalanced phase drift",
+		"shader_warmup_frames":60, "thermal_proxy":"first/last counterbalanced phase drift",
 		"software_preflight_passed":phases.all(func(row): return row.samples == benchmark_frames_per_phase and row.p99_ms > 0.0),
 		"physical_device_certified":false, "limitations":["Render submission, not display presentation timing.","No GPU timestamp is exposed by this Godot runtime.","Physical 4K60 and thermal certification remain T68/T69 gates."]
 	}

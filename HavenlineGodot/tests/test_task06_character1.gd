@@ -206,7 +206,7 @@ func run() -> void:
 		var left := skeleton.get_bone_global_pose(skeleton.find_bone("L_Hand")).origin
 		var right := skeleton.get_bone_global_pose(skeleton.find_bone("R_Hand")).origin
 		var closest := left if absf(left.x) < absf(right.x) else right
-		check(id + " reaches in front of the torso", minf(left.z, right.z) < -0.08)
+		check(id + " reaches in front of the torso", maxf(left.z, right.z) > 0.08)
 		check(id + " brings a working hand toward center", absf(closest.x) < 0.23)
 		action_signatures.append((left + right) * 0.5)
 	var distinct_pairs := 0

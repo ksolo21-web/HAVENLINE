@@ -26,15 +26,15 @@ const ACTION_CLIPS := [
 ]
 
 const ACTION_SPECS := {
-	"chop": {"duration": 0.92, "contact": 0.56, "profile": "human_player_chop", "marker": "C1TwoHandContact", "target": Vector3(0.0, 0.74, -0.54)},
-	"mine": {"duration": 1.02, "contact": 0.58, "profile": "human_player_mine", "marker": "C1TwoHandContact", "target": Vector3(0.0, 0.48, -0.50)},
-	"dismantle": {"duration": 1.08, "contact": 0.61, "profile": "human_player_dismantle", "marker": "C1RightHandContact", "target": Vector3(-0.10, 0.66, -0.48)},
-	"deposit": {"duration": 0.78, "contact": 0.63, "profile": "human_player_deposit", "marker": "C1TwoHandContact", "target": Vector3(0.0, 0.58, -0.40)},
-	"build": {"duration": 0.96, "contact": 0.57, "profile": "human_player_build", "marker": "C1RightHandContact", "target": Vector3(-0.08, 0.78, -0.53)},
-	"repair": {"duration": 0.88, "contact": 0.55, "profile": "human_player_repair", "marker": "C1LeftHandContact", "target": Vector3(0.09, 0.68, -0.48)},
-	"rescue": {"duration": 1.18, "contact": 0.68, "profile": "human_player_rescue", "marker": "C1RescueContact", "target": Vector3(0.0, 0.26, -0.48)},
-	"service": {"duration": 0.82, "contact": 0.61, "profile": "human_player_service", "marker": "C1RightHandContact", "target": Vector3(-0.10, 0.66, -0.42)},
-	"attack_contact": {"duration": 0.74, "contact": 0.49, "profile": "human_player_attack_foundation", "marker": "C1ForwardImpact", "target": Vector3(0.0, 0.92, -0.72)}
+	"chop": {"duration": 0.92, "contact": 0.56, "profile": "human_player_chop", "marker": "C1TwoHandContact", "target": Vector3(-0.01, 0.86, 0.40)},
+	"mine": {"duration": 1.02, "contact": 0.58, "profile": "human_player_mine", "marker": "C1TwoHandContact", "target": Vector3(-0.02, 0.88, 0.43)},
+	"dismantle": {"duration": 1.08, "contact": 0.61, "profile": "human_player_dismantle", "marker": "C1RightHandContact", "target": Vector3(-0.30, 0.81, 0.45)},
+	"deposit": {"duration": 0.78, "contact": 0.63, "profile": "human_player_deposit", "marker": "C1TwoHandContact", "target": Vector3(0.0, 0.72, 0.30)},
+	"build": {"duration": 0.96, "contact": 0.57, "profile": "human_player_build", "marker": "C1RightHandContact", "target": Vector3(-0.43, 0.88, 0.36)},
+	"repair": {"duration": 0.88, "contact": 0.55, "profile": "human_player_repair", "marker": "C1LeftHandContact", "target": Vector3(0.43, 0.94, 0.32)},
+	"rescue": {"duration": 1.18, "contact": 0.68, "profile": "human_player_rescue", "marker": "C1RescueContact", "target": Vector3(0.0, 0.69, 0.30)},
+	"service": {"duration": 0.82, "contact": 0.61, "profile": "human_player_service", "marker": "C1RightHandContact", "target": Vector3(-0.37, 0.84, 0.25)},
+	"attack_contact": {"duration": 0.74, "contact": 0.49, "profile": "human_player_attack_foundation", "marker": "C1ForwardImpact", "target": Vector3(-0.12, 0.86, 0.59)}
 }
 
 # Local additive rotations in degrees. Deliberately bounded angles preserve the
@@ -42,66 +42,66 @@ const ACTION_SPECS := {
 const ACTION_POSES := {
 	"chop": {
 		"Hip": Vector3(-8, 0, 0), "Waist": Vector3(-10, 0, -5),
-		"Spine01": Vector3(-12, 0, 0), "L_Upperarm": Vector3(-58, -7, 55),
-		"R_Upperarm": Vector3(-68, 9, -55), "L_Forearm": Vector3(-32, 0, 28),
-		"R_Forearm": Vector3(-42, 0, -28), "L_Hand": Vector3(-14, 0, 0),
-		"R_Hand": Vector3(-18, 0, 0), "L_Thigh": Vector3(8, 0, 3),
+		"Spine01": Vector3(-12, 0, 0), "L_Upperarm": Vector3(58, -7, 55),
+		"R_Upperarm": Vector3(68, 9, -55), "L_Forearm": Vector3(32, 0, 28),
+		"R_Forearm": Vector3(42, 0, -28), "L_Hand": Vector3(14, 0, 0),
+		"R_Hand": Vector3(18, 0, 0), "L_Thigh": Vector3(8, 0, 3),
 		"R_Thigh": Vector3(11, 0, -3), "L_Calf": Vector3(-10, 0, 0),
 		"R_Calf": Vector3(-13, 0, 0)
 	},
 	"mine": {
 		"Hip": Vector3(-13, 0, 0), "Waist": Vector3(-15, 0, 0),
-		"Spine01": Vector3(-17, 0, 0), "L_Upperarm": Vector3(-72, -8, 52),
-		"R_Upperarm": Vector3(-78, 8, -52), "L_Forearm": Vector3(-50, 0, 24),
-		"R_Forearm": Vector3(-54, 0, -24), "L_Thigh": Vector3(13, 0, 3),
+		"Spine01": Vector3(-17, 0, 0), "L_Upperarm": Vector3(72, -8, 52),
+		"R_Upperarm": Vector3(78, 8, -52), "L_Forearm": Vector3(50, 0, 24),
+		"R_Forearm": Vector3(54, 0, -24), "L_Thigh": Vector3(13, 0, 3),
 		"R_Thigh": Vector3(16, 0, -3), "L_Calf": Vector3(-18, 0, 0),
 		"R_Calf": Vector3(-20, 0, 0)
 	},
 	"dismantle": {
 		"Waist": Vector3(-9, 8, 0), "Spine01": Vector3(-11, 7, 0),
-		"L_Upperarm": Vector3(-18, -10, 24), "R_Upperarm": Vector3(-62, 15, -56),
-		"L_Forearm": Vector3(-28, 0, 12), "R_Forearm": Vector3(-58, 0, -22),
-		"L_Hand": Vector3(-19, 0, 0), "R_Hand": Vector3(22, 0, 0)
+		"L_Upperarm": Vector3(18, -10, 24), "R_Upperarm": Vector3(62, 15, -56),
+		"L_Forearm": Vector3(28, 0, 12), "R_Forearm": Vector3(58, 0, -22),
+		"L_Hand": Vector3(19, 0, 0), "R_Hand": Vector3(-22, 0, 0)
 	},
 	"deposit": {
 		"Hip": Vector3(-8, 0, 0), "Waist": Vector3(-12, 0, 0),
-		"Spine01": Vector3(-14, 0, 0), "L_Upperarm": Vector3(-42, -8, 58),
-		"R_Upperarm": Vector3(-42, 8, -58), "L_Forearm": Vector3(-48, 0, 26),
-		"R_Forearm": Vector3(-48, 0, -26), "L_Thigh": Vector3(10, 0, 2),
+		"Spine01": Vector3(-14, 0, 0), "L_Upperarm": Vector3(42, -8, 58),
+		"R_Upperarm": Vector3(42, 8, -58), "L_Forearm": Vector3(48, 0, 26),
+		"R_Forearm": Vector3(48, 0, -26), "L_Thigh": Vector3(10, 0, 2),
 		"R_Thigh": Vector3(10, 0, -2), "L_Calf": Vector3(-15, 0, 0),
 		"R_Calf": Vector3(-15, 0, 0)
 	},
 	"build": {
 		"Waist": Vector3(-11, -7, 0), "Spine01": Vector3(-12, -6, 0),
-		"L_Upperarm": Vector3(-18, -4, 18), "R_Upperarm": Vector3(-70, 8, -52),
-		"L_Forearm": Vector3(-26, 0, 10), "R_Forearm": Vector3(-48, 0, -24),
-		"R_Hand": Vector3(-20, 0, 0)
+		"L_Upperarm": Vector3(18, -4, 18), "R_Upperarm": Vector3(70, 8, -52),
+		"L_Forearm": Vector3(26, 0, 10), "R_Forearm": Vector3(48, 0, -24),
+		"R_Hand": Vector3(20, 0, 0)
 	},
 	"repair": {
 		"Waist": Vector3(-8, 8, 0), "Spine01": Vector3(-10, 9, 0),
-		"L_Upperarm": Vector3(-66, -7, 54), "R_Upperarm": Vector3(-24, 12, -22),
-		"L_Forearm": Vector3(-55, 0, 24), "R_Forearm": Vector3(-30, 0, -10),
-		"L_Hand": Vector3(-18, 0, 0), "R_Hand": Vector3(18, 0, 0)
+		"L_Upperarm": Vector3(66, -7, 54), "R_Upperarm": Vector3(24, 12, -22),
+		"L_Forearm": Vector3(55, 0, 24), "R_Forearm": Vector3(30, 0, -10),
+		"L_Hand": Vector3(18, 0, 0), "R_Hand": Vector3(-18, 0, 0)
 	},
 	"rescue": {
 		"Hip": Vector3(-18, 0, 0), "Waist": Vector3(-24, 0, 0),
-		"Spine01": Vector3(-20, 0, 0), "L_Upperarm": Vector3(-52, -6, 58),
-		"R_Upperarm": Vector3(-52, 6, -58), "L_Forearm": Vector3(-58, 0, 26),
-		"R_Forearm": Vector3(-58, 0, -26), "L_Thigh": Vector3(28, 0, 3),
+		"Spine01": Vector3(-20, 0, 0), "L_Upperarm": Vector3(52, -6, 58),
+		"R_Upperarm": Vector3(52, 6, -58), "L_Forearm": Vector3(58, 0, 26),
+		"R_Forearm": Vector3(58, 0, -26), "L_Thigh": Vector3(28, 0, 3),
 		"R_Thigh": Vector3(18, 0, -3), "L_Calf": Vector3(-48, 0, 0),
 		"R_Calf": Vector3(-28, 0, 0)
 	},
 	"service": {
 		"Waist": Vector3(-5, -9, 0), "Spine01": Vector3(-4, -8, 0),
-		"L_Upperarm": Vector3(-18, -10, 22), "R_Upperarm": Vector3(-52, 14, -58),
-		"L_Forearm": Vector3(-32, 0, 12), "R_Forearm": Vector3(-56, 0, -28),
-		"R_Hand": Vector3(-12, 0, 0)
+		"L_Upperarm": Vector3(18, -10, 22), "R_Upperarm": Vector3(52, 14, -58),
+		"L_Forearm": Vector3(32, 0, 12), "R_Forearm": Vector3(56, 0, -28),
+		"R_Hand": Vector3(12, 0, 0)
 	},
 	"attack_contact": {
 		"Hip": Vector3(-8, 12, 0), "Waist": Vector3(-12, 18, 0),
-		"Spine01": Vector3(-10, 14, 0), "L_Upperarm": Vector3(-24, -12, 38),
-		"R_Upperarm": Vector3(-88, 18, -48), "L_Forearm": Vector3(-34, 0, 18),
-		"R_Forearm": Vector3(-32, 0, -20), "L_Thigh": Vector3(12, 0, 4),
+		"Spine01": Vector3(-10, 14, 0), "L_Upperarm": Vector3(24, -12, 38),
+		"R_Upperarm": Vector3(72, 18, -56), "L_Forearm": Vector3(34, 0, 18),
+		"R_Forearm": Vector3(30, 0, -24), "L_Thigh": Vector3(12, 0, 4),
 		"R_Thigh": Vector3(18, 0, -4), "L_Calf": Vector3(-18, 0, 0),
 		"R_Calf": Vector3(-22, 0, 0)
 	}
@@ -213,9 +213,16 @@ static func _extract_gait_cycle(source: Animation, duration: float) -> Animation
 			var source_time := source.length * phase * 0.5
 			var time := duration * phase
 			if kind == Animation.TYPE_ROTATION_3D:
-				clip.rotation_track_insert_key(track, time, source.rotation_track_interpolate(source_track, source_time).normalized())
+				var value := source.rotation_track_interpolate(source_track, source_time).normalized()
+				if phase > 0.80:
+					var first := source.rotation_track_interpolate(source_track, 0.0).normalized()
+					value = value.slerp(first, smoothstep(0.80, 1.0, phase)).normalized()
+				clip.rotation_track_insert_key(track, time, value)
 			else:
-				clip.position_track_insert_key(track, time, source.position_track_interpolate(source_track, source_time))
+				var value := source.position_track_interpolate(source_track, source_time)
+				if phase > 0.80:
+					value = value.lerp(source.position_track_interpolate(source_track, 0.0), smoothstep(0.80, 1.0, phase))
+				clip.position_track_insert_key(track, time, value)
 	return clip
 
 static func _tune_locomotion(source: Animation, running: bool) -> Animation:

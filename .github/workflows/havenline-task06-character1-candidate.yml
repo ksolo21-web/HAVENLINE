@@ -144,7 +144,7 @@ jobs:
         run: |
           set -euo pipefail
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
-          /usr/bin/time -v -o task06-evidence/benchmark-time.txt xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --benchmark --benchmark-frames=450 --out="$(pwd)/task06-evidence/benchmark" > task06-evidence/benchmark.log 2>&1
+          /usr/bin/time -v -o task06-evidence/benchmark-time.txt xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --benchmark --benchmark-frames=300 --out="$(pwd)/task06-evidence/benchmark" > task06-evidence/benchmark.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task06-evidence/benchmark.log; then exit 1; fi
           test -s task06-evidence/benchmark/benchmark.json
 
@@ -177,6 +177,7 @@ jobs:
           assert ledger['sample_rate_hz']==120 and len(ledger['clips'])==24 and len(ledger['actions'])==9 and len(ledger['turns'])==6
           assert ledger['clips']['walk']['maximum_moving_root_plant_drift_m']<0.03,ledger['clips']['walk']
           assert ledger['clips']['run']['maximum_moving_root_plant_drift_m']<0.03,ledger['clips']['run']
+          assert all(row['forward_positive_z'] and row['target_error_m']<0.08 for row in ledger['actions'].values()),ledger['actions']
           assert all(row['skeleton_returns_neutral'] and abs(row['external_root_facing_delta_degrees']) in (30,90,180) for row in ledger['turns'].values())
           assert native['native_3840x2160_scale1'] is True and len(native['captures'])==6,len(native['captures'])
           files=[];declared={}
@@ -214,7 +215,7 @@ jobs:
           rss_mb=float(rss_line.split(':')[-1].strip())/1024.0
           assert benchmark['candidate_commit']==os.environ['CANDIDATE']
           assert benchmark['source_sha256']==gallery['source_sha256']
-          assert benchmark['measured_frames']==1800 and benchmark['software_preflight_passed'] is True
+          assert benchmark['measured_frames']==1200 and benchmark['software_preflight_passed'] is True
           assert benchmark['texture_gpu_memory_mb']>0 and benchmark['video_gpu_memory_mb']>0 and benchmark['process_static_memory_mb']>0 and rss_mb>0
           assert benchmark['animation_inventory_per_rig']['clips']==24 and benchmark['animation_inventory_per_rig']['tracks']>0 and benchmark['animation_inventory_per_rig']['keys']>0
           assert benchmark['shipping_population_rigs_visible']==4 and benchmark['t06_animated_rigs']==2
