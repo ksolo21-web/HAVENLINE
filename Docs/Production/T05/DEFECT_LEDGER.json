@@ -150,6 +150,21 @@
       "proof_contract": "Layout unit tests plus fresh C1 and C2 shipping-device-and-tracking recovery artifacts whose manifests, requests, and resolver validation all satisfy the unchanged strict resolution contract.",
       "counters": {"review_round": 4, "same_family_strikes": 0},
       "status": "READY_FOR_VERIFICATION"
+    },
+    {
+      "id": "T05-D09",
+      "source_run": 34837172675,
+      "visible_symptom": "The repaired C1 and C2 shipping-device recovery jobs stopped before slice 1 with an empty assertion error and produced no critic vote.",
+      "triage": ["TOOLING_FIX", "EVIDENCE_FIX"],
+      "affected_production_object": null,
+      "probable_root_cause": "Recovery correctly downloaded the prior incomplete checkpoint, but load_resume_prefix asserted that every old 1600-pixel board hash matched the intentionally repaired 1664-pixel board. The expected layout mismatch therefore aborted before the fresh-slice loop instead of invalidating the stale prefix.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Preflight the prior slice layout against the current board path, hash, candidate list, and reference binding. A source/role/attempt identity mismatch still fails closed, while a causal board-layout mismatch discards the complete stale prefix and runs the group from fresh source-bound boards.",
+      "expected_visible_result": "Both shipping-device critics start at slice 1 on the repaired 1664-pixel boards, preserve the 480-pixel candidate floor, and emit complete independent verdicts without reusing stale pixels.",
+      "proof_contract": "Resume-layout regression test plus fresh C1 and C2 shipping-device recovery artifacts with nine completed slices each, current board hashes, valid raw/request/answer bindings, and every mandatory dimension strictly above 9.0.",
+      "counters": {"review_round": 4, "same_family_strikes": 0},
+      "status": "READY_FOR_VERIFICATION"
     }
   ],
   "counters": {

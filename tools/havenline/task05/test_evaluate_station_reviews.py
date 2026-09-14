@@ -14,7 +14,7 @@ from review_protocol import (
     applicable_dimensions, build_review_prompt, build_review_schema,
     build_primary_matrix, build_slice_contract, build_slice_plan, expected_request_settings,
     contained_display_size, materialize_defect_summary, persist_model_response,
-    review_exit_code, review_integrity_errors,
+    resume_layout_compatible, review_exit_code, review_integrity_errors,
     slice_retry_seed, valid_slice_retry_seed,
     write_incomplete_group_bundle,
 )
@@ -33,6 +33,16 @@ class BoardLayoutTests(unittest.TestCase):
     def test_board_canvas_stays_within_pinned_model_input(self):
         self.assertEqual(BOARD_CANVAS_SIZE, [1664, 1200])
         self.assertLessEqual(max(BOARD_CANVAS_SIZE), 1664)
+
+    def test_repaired_board_layout_invalidates_stale_resume_prefix(self):
+        current=[{
+            "slice":1,"board_path":"board-01.jpg","board_sha256":"b"*64,
+            "reviewed_candidate_paths":["wide.png"],"reference_family":"hearth",
+            "reference_path":"reference/B-008.00.png",
+        }]
+        prior=[dict(current[0],board_sha256="a"*64)]
+        self.assertFalse(resume_layout_compatible(prior,current))
+        self.assertTrue(resume_layout_compatible(current,current))
 
 
 def row(role, group, passed=True, attempt="primary", seed=1):

@@ -116,6 +116,17 @@ def contained_display_size(source_size: tuple[int, int], bounds: tuple[int, int]
     return max(1, round(width * scale)), max(1, round(height * scale))
 
 
+def resume_layout_compatible(prior_slices: object,current_slices: list[dict]) -> bool:
+    """Return false when a repaired board contract makes a checkpoint stale."""
+    if not isinstance(prior_slices,list) or len(prior_slices)>len(current_slices):
+        return False
+    keys=("slice","board_path","board_sha256","reviewed_candidate_paths","reference_family","reference_path")
+    return all(
+        isinstance(prior,dict) and all(prior.get(key)==current.get(key) for key in keys)
+        for prior,current in zip(prior_slices,current_slices)
+    )
+
+
 def slice_retry_seed(base_seed: int, retry_index: int) -> int:
     """Return a deterministic fresh seed for an invalid (non-vote) response retry."""
     if not isinstance(base_seed, int) or isinstance(base_seed, bool):

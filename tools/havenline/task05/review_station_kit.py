@@ -28,7 +28,8 @@ from review_protocol import (
     applicable_dimensions, build_review_prompt,
     build_review_schema, build_slice_contract, build_slice_plan, expected_request_settings,
     materialize_defect_summary, persist_model_response, review_exit_code, review_integrity_errors,
-    slice_retry_seed, valid_slice_retry_seed, write_incomplete_group_bundle,
+    resume_layout_compatible, slice_retry_seed, valid_slice_retry_seed,
+    write_incomplete_group_bundle,
 )
 
 
@@ -370,6 +371,22 @@ def load_resume_prefix(group: str, boards: list[Path], board_payload: dict) -> l
     assert bundle.get("source") == SOURCE and bundle.get("critic_id") == ROLE
     assert bundle.get("attempt") == ATTEMPT and bundle.get("seed") == SEED
     assert bundle.get("group") == group
+    current_slices = [
+        {
+            "slice": index,
+            "board_path": board.name,
+            "board_sha256": digest(board),
+            "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
+            "reference_family": scope["reference_family"],
+            "reference_path": scope["reference_path"],
+        }
+        for index,(board,scope) in enumerate(zip(boards,board_payload["slices"]),1)
+    ]
+    # A causal evidence-layout repair deliberately invalidates old board hashes.
+    # In that case the safe recovery behavior is a full fresh group, not an
+    # assertion before slice 1 and not reuse of any stale pixels.
+    if not resume_layout_compatible(bundle.get("slices",[]),current_slices):
+        return []
     resumed = []
     for expected_index, part in enumerate(bundle.get("slices", []), 1):
         assert expected_index <= len(boards)
