@@ -80,9 +80,10 @@
     "T01",
     "T02",
     "T03",
-    "T04"
+    "T04",
+    "T05"
   ],
-  "approved_task_count": 4,
+  "approved_task_count": 5,
   "legacy_approval_policy": {
     "T01_T02_not_retroactively_revoked": true
   },
@@ -94,17 +95,17 @@
     "all_applicable_gates_must_pass": true,
     "no_unresolved_mandatory_defects": true
   },
-  "active_task": "T05",
-  "active_task_title": "Production station and prop kit",
-  "active_status": "UNDER_REVIEW",
-  "active_frozen_scope": "Docs/Production/T05/FROZEN_SCOPE.md",
-  "active_task_packet": "Docs/Production/T05/TASK_PACKET.md",
-  "active_base_integration_commit": "746c3e8757ccaf2a279a6184b6ed109a143d5b3a",
-  "active_candidate_source": "8c9da476ca93a7a826d51eae892449fd20e9c105",
-  "active_candidate_run": 34762404417,
-  "active_tests": "18 suites / 1117 checks PASS on exact integrated source",
-  "active_evidence": "77 source-bound images in artifact 10319911117; automated pixel/performance gates and manual quick-look PASS",
-  "active_critic_state": "C1+C2 authorized; single dissent routes to same-role 2-of-3 adjudication; C6 follows visual resolution",
+  "active_task": null,
+  "active_task_title": null,
+  "active_status": null,
+  "active_frozen_scope": null,
+  "active_task_packet": null,
+  "active_base_integration_commit": null,
+  "active_candidate_source": null,
+  "active_candidate_run": null,
+  "active_tests": null,
+  "active_evidence": null,
+  "active_critic_state": null,
   "task04_plus_runtime_locked": false,
   "task05_plus_runtime_locked": false,
   "task06_plus_runtime_locked": true,
@@ -169,6 +170,21 @@
       "closeout_run": 34745334414,
       "record": "Docs/Production/T04/verified-completion.json",
       "later_regression_reopens_task": true
+    },
+    "T05": {
+      "status": "APPROVED",
+      "accepted_source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+      "score": 9.1,
+      "minimum_mandatory_dimension_score": 9.1,
+      "visual_minimum_mandatory_dimension_score": 9.3,
+      "gate_operator": "> 9.0",
+      "visual_status": "PASS",
+      "integrated_evidence_run": 34824259431,
+      "primary_review_run": 34825220341,
+      "recovery_and_closeout_run": 34839506095,
+      "integration_regression_run": 34838425141,
+      "record": "Docs/Production/T05/verified-completion.json",
+      "later_regression_reopens_task": true
     }
   },
   "next_post_t03_wave": [
@@ -183,16 +199,16 @@
     {
       "task": "T05",
       "branch": "havenline/T05-props",
-      "state": "UNDER_REVIEW",
+      "state": "APPROVED",
       "owner": "station-prop-builder",
       "base_commit": "746c3e8757ccaf2a279a6184b6ed109a143d5b3a",
-      "reason": "Integrated source 8c9da476ca93a7a826d51eae892449fd20e9c105 passed 18 suites / 1117 checks, all 77 precritic frames, the cheap performance gate, and manual quick-look; C1+C2+C6 review is authorized."
+      "reason": "Accepted gameplay source fa6fa70f154f3757d22303522ca3f6de2c3d391f passed 18 suites / 1119 checks, 77 exact-source images, all C1/C2 mandatory dimensions strictly above 9.0, C6 minimum 9.1, final pixel signoff, and G1-G14."
     },
     {
       "task": "T06",
       "branch": "havenline/T06-character1",
       "state": "LOCKED",
-      "reason": "T03 dependency is approved; task packet and owner are not yet prepared."
+      "reason": "T03 dependency is approved, but the T06 task packet and owner are not yet prepared; T05 approval does not bypass those rules."
     }
   ],
   "whole_game_approved": false,

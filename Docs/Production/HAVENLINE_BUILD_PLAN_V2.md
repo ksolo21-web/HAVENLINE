@@ -8,7 +8,7 @@
 - T01 and T02 remain APPROVED at their recorded accepted sources. Their approvals are not revoked by the stricter forward score rule.
 - T03 is APPROVED at accepted gameplay source `5df9726e0b1c33f0f8865385b1c49aca229fd461`.
 - T04 is APPROVED at accepted gameplay source `e08fd37e9a999d878644c03089c4b4b253bd7472`.
-- T05 integrated source `8c9da476ca93a7a826d51eae892449fd20e9c105` passed the full precritic and manual quick-look and is now UNDER_REVIEW under `Docs/Production/T05/FROZEN_SCOPE.md`; T06+ remains locked until separately prepared and assigned.
+- T05 is APPROVED at accepted gameplay source `fa6fa70f154f3757d22303522ca3f6de2c3d391f`; 18 suites / 1119 checks, 77 source-bound frames, strict C1+C2 PASS, C6 minimum 9.1, final pixel signoff and G1-G14 passed. T06+ remains locked until separately prepared and assigned.
 - Forward intermediate PASS requires every applicable mandatory reviewed dimension to be **strictly > 9.0 unrounded**, every mandatory gate to pass, and zero unresolved mandatory defects. Target remains 10/10.
 
 ## Permanent Havenline product contract
@@ -83,7 +83,7 @@ Only the integration owner may integrate production candidates into the integrat
 | T02 | Terrain, snow, warm work-floor and lakeshore | APPROVED |
 | T03 | Fences, gates and navigable work lanes | APPROVED |
 | T04 | Reference camera and automatic screen composition | APPROVED |
-| T05 | Production station and prop kit | UNDER_REVIEW / ACTIVE |
+| T05 | Production station and prop kit | APPROVED |
 | T06 | Character 1 complete movement/interactions | LOCKED |
 | T07 | Havenline Simple Control & Context Director | LOCKED |
 | T08 | Visible inventory, physical carrying and transfers | LOCKED |
@@ -150,12 +150,12 @@ Only the integration owner may integrate production candidates into the integrat
 | T69 | Sustained native 4K/60 tablet/foldable evidence | LOCKED |
 | T70 | Final production release handoff | LOCKED |
 
-Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. Mandatory forward scope overlays for resource/tool/actor/animation behavior are machine-authoritative in `TASK_SCOPE_OVERRIDES.json` and the three contract registries. T01–T04 accepted records remain authoritative; T05 scope is frozen in `Docs/Production/T05/FROZEN_SCOPE.md` and is not expanded by the new forward contract.
+Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. Mandatory forward scope overlays for resource/tool/actor/animation behavior are machine-authoritative in `TASK_SCOPE_OVERRIDES.json` and the three contract registries. T01–T05 accepted records remain authoritative; T05 closure is recorded in `Docs/Production/T05/verified-completion.json`.
 
 ## Parallel Wave 1 after T03 approval
 
 - **Completed A / T04** — approved camera/composition; preserve its accepted source.
-- **Workstream B / `havenline/T05-props`** — T05 station/prop kit integrated source under C1+C2+C6 review.
+- **Completed B / T05** — approved station/prop kit; preserve accepted source `fa6fa70f154f3757d22303522ca3f6de2c3d391f`.
 - **Workstream C / `havenline/T06-character1`** — T06 Character 1 motion only; original C1 model is protected.
 - **Workstream Q** — QA/automation/integration infrastructure only.
 
