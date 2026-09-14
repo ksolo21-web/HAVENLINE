@@ -433,10 +433,12 @@ static func _attachment(skeleton: Skeleton3D, root: Node3D, name: String, bone: 
 static func _install_contacts(root: Node3D, skeleton: Skeleton3D) -> void:
 	_attachment(skeleton, root, "C1RightHandContact", "R_Hand", Vector3(0.0, 0.085, 0.0))
 	_attachment(skeleton, root, "C1LeftHandContact", "L_Hand", Vector3(0.0, 0.085, 0.0))
-	_attachment(skeleton, root, "C1TwoHandContact", "Waist", Vector3(0.0, 0.36, -0.24))
+	# Character 1 faces local +Z. Keep the abstract multi-hand/rescue/impact
+	# proxies on that same side of the body as the measured hand targets.
+	_attachment(skeleton, root, "C1TwoHandContact", "Waist", Vector3(0.0, 0.36, 0.40))
 	_attachment(skeleton, root, "C1CarryContact", "Waist", Vector3(0.0, 0.30, -0.42))
-	_attachment(skeleton, root, "C1RescueContact", "Waist", Vector3(0.0, 0.18, -0.48))
-	_attachment(skeleton, root, "C1ForwardImpact", "", Vector3(0.0, 0.92, -0.72))
+	_attachment(skeleton, root, "C1RescueContact", "Waist", Vector3(0.0, 0.18, 0.30))
+	_attachment(skeleton, root, "C1ForwardImpact", "", ACTION_SPECS.attack_contact.target)
 
 static func install(root: Node3D, role := "player_lead") -> Dictionary:
 	var player := _find_animation_player(root)

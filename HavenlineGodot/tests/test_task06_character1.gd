@@ -169,6 +169,12 @@ func run() -> void:
 	check("all actions declare a spatial target and contact marker", REQUIRED_ACTIONS.all(func(id): return contract.actions[id].target.size() == 3 and not String(contract.actions[id].marker).is_empty()))
 	for marker in contract.contacts.values():
 		check("contact marker exists: " + marker, actor.find_child(marker, true, false) != null)
+	var two_hand_tip: Node3D = actor.find_child("C1TwoHandContact", true, false).find_child("Contact", true, false)
+	var rescue_tip: Node3D = actor.find_child("C1RescueContact", true, false).find_child("Contact", true, false)
+	var forward_impact: Node3D = actor.find_child("C1ForwardImpact", true, false)
+	check("two-hand proxy is on Character 1 forward side", two_hand_tip.position.z > 0.20)
+	check("rescue proxy is on Character 1 forward side", rescue_tip.position.z > 0.20)
+	check("impact proxy matches the declared forward target", forward_impact.position.is_equal_approx(Motion.ACTION_SPECS.attack_contact.target))
 	check("wood proximity maps to chop", Motion.motion_for_action({"kind":"gather","id":"wood0"}) == "chop")
 	check("stone proximity maps to mine", Motion.motion_for_action({"kind":"gather","id":"stone1"}) == "mine")
 	check("fuel proximity maps to dismantle foundation", Motion.motion_for_action({"kind":"gather","id":"fuel"}) == "dismantle")
