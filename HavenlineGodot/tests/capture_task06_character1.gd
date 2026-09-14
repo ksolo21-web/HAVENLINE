@@ -549,19 +549,21 @@ func benchmark_phase(game: Control, lead: Node3D, helper: Node3D, label: String,
 	helper_player.speed_scale = 1.0
 	var samples: Array[float] = []
 	var setup_cpu: Array[float] = []
-	var previous := 0
-	for frame in range(benchmark_frames_per_phase + 20):
+	for frame in range(benchmark_frames_per_phase + 60):
+		var started := Time.get_ticks_usec()
 		lead_player.advance(1.0 / 60.0)
 		helper_player.advance(1.0 / 60.0)
 		lead.rotation.y = sin(float(frame) * 0.011) * 0.35
 		helper.rotation.y = -0.18 + cos(float(frame) * 0.013) * 0.35
 		await process_frame
-		await RenderingServer.frame_post_draw
+		# A frame_post_draw await can stall forever on software Vulkan when no
+		# presentation signal is emitted. Force the actual render submission and
+		# measure its completed wall interval instead.
+		RenderingServer.force_draw(false, 0.0)
 		var now := Time.get_ticks_usec()
-		if frame >= 20 and previous > 0:
-			samples.append(float(now - previous) / 1000.0)
+		if frame >= 60:
+			samples.append(float(now - started) / 1000.0)
 			setup_cpu.append(RenderingServer.get_frame_setup_time_cpu())
-		previous = now
 	return {
 		"label":label, "candidate_motion":candidate_motion, "samples":samples.size(),
 		"p50_ms":percentile(samples,0.50), "p95_ms":percentile(samples,0.95),
@@ -614,7 +616,7 @@ func run_benchmark() -> void:
 		"task":"T06", "candidate_commit":candidate, "source_sha256":Motion.SOURCE_GLTF_SHA256,
 		"method":"counterbalanced A-B-B-A continuous shipping-scene render submission benchmark",
 		"frames_per_phase":benchmark_frames_per_phase, "measured_frames":benchmark_frames_per_phase * 4,
-		"warmup_frames_per_phase":20, "phases":phases,
+		"warmup_frames_per_phase":60, "phases":phases,
 		"baseline_p95_ms":baseline_p95, "candidate_p95_ms":candidate_p95,
 		"motion_p95_delta_ms":candidate_p95-baseline_p95,
 		"baseline_first_last_p95_drift_ms":float(phases[3].p95_ms)-float(phases[0].p95_ms),
@@ -626,7 +628,7 @@ func run_benchmark() -> void:
 		"physics_active_bodies":Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS),
 		"renderer":RenderingServer.get_current_rendering_method(), "device":RenderingServer.get_video_adapter_name(),
 		"gpu_frame_ms_where_measurable":null,
-		"shader_warmup_frames":20, "thermal_proxy":"first/last counterbalanced phase drift",
+		"shader_warmup_frames":60, "thermal_proxy":"first/last counterbalanced phase drift",
 		"software_preflight_passed":phases.all(func(row): return row.samples == benchmark_frames_per_phase and row.p99_ms > 0.0),
 		"physical_device_certified":false, "limitations":["Render submission, not display presentation timing.","No GPU timestamp is exposed by this Godot runtime.","Physical 4K60 and thermal certification remain T68/T69 gates."]
 	}
