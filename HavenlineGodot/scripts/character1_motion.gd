@@ -217,7 +217,7 @@ static func _transition_clip(from_clip: Animation, to_clip: Animation, duration:
 			var bone := String(path).get_slice(":", String(path).get_slice_count(":") - 1)
 			var turn := Quaternion.IDENTITY
 			if bone in ["Hip", "Waist", "Spine01", "Spine02"]:
-				var share := {"Hip": 0.18, "Waist": 0.32, "Spine01": 0.28, "Spine02": 0.22}[bone]
+				var share: float = float({"Hip": 0.18, "Waist": 0.32, "Spine01": 0.28, "Spine02": 0.22}[bone])
 				turn = Quaternion(Vector3.UP, deg_to_rad(turn_degrees * share))
 			clip.rotation_track_insert_key(track, 0.0, start)
 			clip.rotation_track_insert_key(track, duration * 0.52, (start.slerp(finish, 0.52) * turn).normalized())
