@@ -75,7 +75,8 @@ jobs:
           python3 tools/havenline/bake_outpost_audio.py > task06-evidence/tests/audio-fixture.json
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task06-evidence/tests/import.log 2>&1
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task06-evidence/tests/motion-fixture.log 2>&1
-          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary test_task04_camera test_task05_station_kit test_task06_character1; do
+          timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task06_character1.gd > task06-evidence/tests/test_task06_character1.log 2>&1
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary test_task04_camera test_task05_station_kit; do
             timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task06-evidence/tests/$suite.log" 2>&1
           done
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task06-evidence/tests/*.log; then exit 1; fi
