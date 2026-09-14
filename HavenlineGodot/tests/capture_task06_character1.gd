@@ -550,7 +550,7 @@ func benchmark_phase(game: Control, lead: Node3D, helper: Node3D, label: String,
 	var samples: Array[float] = []
 	var setup_cpu: Array[float] = []
 	var previous := 0
-	for frame in range(benchmark_frames_per_phase + 30):
+	for frame in range(benchmark_frames_per_phase + 20):
 		lead_player.advance(1.0 / 60.0)
 		helper_player.advance(1.0 / 60.0)
 		lead.rotation.y = sin(float(frame) * 0.011) * 0.35
@@ -558,7 +558,7 @@ func benchmark_phase(game: Control, lead: Node3D, helper: Node3D, label: String,
 		await process_frame
 		await RenderingServer.frame_post_draw
 		var now := Time.get_ticks_usec()
-		if frame >= 30 and previous > 0:
+		if frame >= 20 and previous > 0:
 			samples.append(float(now - previous) / 1000.0)
 			setup_cpu.append(RenderingServer.get_frame_setup_time_cpu())
 		previous = now
@@ -602,7 +602,9 @@ func run_benchmark() -> void:
 	set_shipping_camera(game, lead, game.xyz(Vector2(0.0, 0.2)))
 	var phases := []
 	for row in [["baseline-a",false],["candidate-a",true],["candidate-b",true],["baseline-b",false]]:
-		phases.append(await benchmark_phase(game, lead, helper, row[0], row[1]))
+		var phase: Dictionary = await benchmark_phase(game, lead, helper, row[0], row[1])
+		phases.append(phase)
+		print(JSON.stringify({"task":"T06","benchmark_phase_complete":phase.label,"samples":phase.samples,"p95_ms":phase.p95_ms}))
 	var texture_mb := Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED) / (1024.0 * 1024.0)
 	var video_mb := Performance.get_monitor(Performance.RENDER_VIDEO_MEM_USED) / (1024.0 * 1024.0)
 	var static_mb := Performance.get_monitor(Performance.MEMORY_STATIC) / (1024.0 * 1024.0)
@@ -612,7 +614,7 @@ func run_benchmark() -> void:
 		"task":"T06", "candidate_commit":candidate, "source_sha256":Motion.SOURCE_GLTF_SHA256,
 		"method":"counterbalanced A-B-B-A continuous shipping-scene render submission benchmark",
 		"frames_per_phase":benchmark_frames_per_phase, "measured_frames":benchmark_frames_per_phase * 4,
-		"warmup_frames_per_phase":30, "phases":phases,
+		"warmup_frames_per_phase":20, "phases":phases,
 		"baseline_p95_ms":baseline_p95, "candidate_p95_ms":candidate_p95,
 		"motion_p95_delta_ms":candidate_p95-baseline_p95,
 		"baseline_first_last_p95_drift_ms":float(phases[3].p95_ms)-float(phases[0].p95_ms),
@@ -624,7 +626,7 @@ func run_benchmark() -> void:
 		"physics_active_bodies":Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS),
 		"renderer":RenderingServer.get_current_rendering_method(), "device":RenderingServer.get_video_adapter_name(),
 		"gpu_frame_ms_where_measurable":null,
-		"shader_warmup_frames":30, "thermal_proxy":"first/last counterbalanced phase drift",
+		"shader_warmup_frames":20, "thermal_proxy":"first/last counterbalanced phase drift",
 		"software_preflight_passed":phases.all(func(row): return row.samples == benchmark_frames_per_phase and row.p99_ms > 0.0),
 		"physical_device_certified":false, "limitations":["Render submission, not display presentation timing.","No GPU timestamp is exposed by this Godot runtime.","Physical 4K60 and thermal certification remain T68/T69 gates."]
 	}
