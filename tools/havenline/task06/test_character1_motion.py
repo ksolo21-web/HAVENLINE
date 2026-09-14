@@ -24,7 +24,8 @@ REQUIRED_BONES = {
     "L_Calf", "R_Calf", "L_Foot", "R_Foot", "L_ToeBase", "R_ToeBase",
 }
 REQUIRED_RUNTIME_CLIPS = {
-    "idle", "walk", "run", "start_walk", "start_run", "stop",
+    "idle", "walk", "run", "start_walk", "start_run", "stop_walk", "stop_run",
+    "walk_to_run", "run_to_walk",
     "turn_left_030", "turn_right_030", "turn_left_090", "turn_right_090",
     "turn_left_180", "turn_right_180", "chop", "mine", "dismantle",
     "deposit", "build", "repair", "rescue", "service", "attack_contact",
@@ -84,12 +85,17 @@ def main() -> None:
     check("runtime pins immutable source", EXPECTED_SHA in source)
     check("both Character1 roles declared", all(role in source for role in ("player_lead", "core_human_companion")))
     check("simulation authority explicit", '"simulation_authoritative": true' in source)
+    check("root facing remains simulation-owned", '"root_facing_authority": "simulation_external"' in source)
     check("duplicate impacts forbidden", '"duplicate_gameplay_impacts_allowed": false' in source)
     check("finished tools and weapons excluded", '"finished_tool_or_weapon_assets_included": false' in source)
     runtime_clips = set(re.findall(r'"([a-z0-9_]+)"', source))
     check("required motion vocabulary present", REQUIRED_RUNTIME_CLIPS <= runtime_clips, sorted(REQUIRED_RUNTIME_CLIPS - runtime_clips))
     check("feet and toes explicitly tuned", 'for side in ["L", "R"]' in source and 'side + "_Foot"' in source and 'side + "_ToeBase"' in source)
-    check("knees receive bounded thigh correction", "opposing thigh correction" in source and 'side + "_Thigh"' in source)
+    check("knees receive bounded phase-aware correction", "Phase-aware hip/calf shaping" in source and 'side + "_Thigh"' in source and 'side + "_Calf"' in source)
+    check("source double cycle is reduced to one readable gait", "_extract_gait_cycle" in source and "phase * 0.5" in source)
+    check("every source loop receives 120 Hz seam closure", "_close_loop(idle)" in source and "_close_loop(clip)" in source and "1.0 / 120.0" in source)
+    check("turns use planted support and free-foot pivot", "_turn_transition" in source and "free_side" in source and "facing_delta_for_turn" in source)
+    check("walk and run transitions are distinct", all(name in source for name in ("stop_walk", "stop_run", "walk_to_run", "run_to_walk")))
     check("all contact markers declared", all(marker in source for marker in (
         "C1RightHandContact", "C1LeftHandContact", "C1TwoHandContact",
         "C1CarryContact", "C1RescueContact", "C1ForwardImpact",

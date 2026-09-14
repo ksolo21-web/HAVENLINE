@@ -3,7 +3,8 @@ extends SceneTree
 const Motion = preload("res://scripts/character1_motion.gd")
 const REQUIRED_LOOPS := ["idle", "walk", "run"]
 const REQUIRED_TRANSITIONS := [
-	"start_walk", "start_run", "stop", "turn_left_030", "turn_right_030",
+	"start_walk", "start_run", "stop_walk", "stop_run", "walk_to_run", "run_to_walk",
+	"turn_left_030", "turn_right_030",
 	"turn_left_090", "turn_right_090", "turn_left_180", "turn_right_180"
 ]
 const REQUIRED_ACTIONS := [
@@ -93,6 +94,30 @@ func validate_locomotion_feet(library: AnimationLibrary, id: String, minimum_deg
 		var last: Quaternion = animation.track_get_key_value(track, animation.track_get_key_count(track) - 1)
 		check(id + " closes " + bone + " cycle", rad_to_deg(first.angle_to(last)) < 0.5)
 
+func validate_loop_seam(library: AnimationLibrary, id: String) -> void:
+	var animation := library.get_animation(id)
+	var step := minf(1.0 / 120.0, animation.length * 0.02)
+	var closed := true
+	var velocity_matched := true
+	for track in animation.get_track_count():
+		var kind := animation.track_get_type(track)
+		if kind == Animation.TYPE_ROTATION_3D:
+			var start := animation.rotation_track_interpolate(track, 0.0).normalized()
+			var after := animation.rotation_track_interpolate(track, step).normalized()
+			var before := animation.rotation_track_interpolate(track, animation.length - step).normalized()
+			var finish := animation.rotation_track_interpolate(track, animation.length).normalized()
+			closed = closed and rad_to_deg(start.angle_to(finish)) < 0.1
+			velocity_matched = velocity_matched and absf(start.angle_to(after) - before.angle_to(finish)) < 0.001
+		elif kind == Animation.TYPE_POSITION_3D:
+			var start := animation.position_track_interpolate(track, 0.0)
+			var after := animation.position_track_interpolate(track, step)
+			var before := animation.position_track_interpolate(track, animation.length - step)
+			var finish := animation.position_track_interpolate(track, animation.length)
+			closed = closed and start.distance_to(finish) < 0.0001
+			velocity_matched = velocity_matched and absf(start.distance_to(after) - before.distance_to(finish)) < 0.0001
+	check(id + " closes every transform track", closed)
+	check(id + " matches 120 Hz seam velocity", velocity_matched)
+
 func _initialize() -> void:
 	call_deferred("run")
 
@@ -129,14 +154,19 @@ func run() -> void:
 	check("T06 exposes the exact required clip inventory", Array(library.get_animation_list()).size() == expected.size() and expected.all(func(id): return library.has_animation(id)))
 	for id in expected:
 		validate_animation(id, library.get_animation(id), id in REQUIRED_LOOPS)
+	for id in REQUIRED_LOOPS:
+		validate_loop_seam(library, id)
 	validate_locomotion_feet(library, "walk", 8.0)
 	validate_locomotion_feet(library, "run", 14.0)
 	var contract: Dictionary = result.contract
 	check("contact contract binds immutable source", contract.source_gltf_sha256 == Motion.SOURCE_GLTF_SHA256)
 	check("contact contract supports both Character1 roles", contract.roles == ["player_lead", "core_human_companion"])
 	check("motion never grants gameplay impacts", contract.simulation_authoritative and not contract.duplicate_gameplay_impacts_allowed)
+	check("simulation exclusively owns final root facing", contract.root_facing_authority == "simulation_external")
+	check("companion has disclosed visual-only phase offset", is_equal_approx(contract.companion_visual_phase_offset, 0.37))
 	check("T06 does not claim finished tools or weapons", not contract.finished_tool_or_weapon_assets_included)
 	check("all action beats are normalized and complete", REQUIRED_ACTIONS.all(func(id): return contract.actions.has(id) and contract.actions[id].contact > 0.0 and contract.actions[id].contact < 1.0))
+	check("all actions declare a spatial target and contact marker", REQUIRED_ACTIONS.all(func(id): return contract.actions[id].target.size() == 3 and not String(contract.actions[id].marker).is_empty()))
 	for marker in contract.contacts.values():
 		check("contact marker exists: " + marker, actor.find_child(marker, true, false) != null)
 	check("wood proximity maps to chop", Motion.motion_for_action({"kind":"gather","id":"wood0"}) == "chop")
@@ -155,8 +185,36 @@ func run() -> void:
 	var run_state := Motion.update_actor(actor, 5.6, {}, 0.50, "player_lead")
 	check("run cadence is distance synchronized", run_state.state == "run" and run_state.speed_scale >= 0.78 and run_state.speed_scale <= 1.55)
 	var turn_state := Motion.update_actor(actor, 0.0, {}, 0.016, "player_lead", -95.0)
-	check("turn selector preserves direction and bucket", turn_state.state == "turn_left_090")
+	check("turn selector preserves direction and bucket", turn_state.state == "turn_left_090" and turn_state.facing_delta_degrees == -90.0)
+	check("turn reports external facing authority", turn_state.root_facing_authority == "simulation_external")
 	var skeleton := find_skeleton(actor)
+	for turn_id in ["turn_left_030", "turn_right_030", "turn_left_090", "turn_right_090", "turn_left_180", "turn_right_180"]:
+		var turn_animation := library.get_animation(turn_id)
+		var side := "L" if turn_id.contains("left") else "R"
+		var foot_track := track_for_bone(turn_animation, side + "_Foot")
+		var first: Quaternion = turn_animation.rotation_track_interpolate(foot_track, 0.0)
+		var middle: Quaternion = turn_animation.rotation_track_interpolate(foot_track, turn_animation.length * 0.52)
+		var last: Quaternion = turn_animation.rotation_track_interpolate(foot_track, turn_animation.length)
+		check(turn_id + " uses a free-foot pivot", rad_to_deg(first.angle_to(middle)) >= 5.0)
+		check(turn_id + " returns the skeleton neutral", rad_to_deg(first.angle_to(last)) < 0.1)
+	var action_signatures: Array[Vector3] = []
+	for id in REQUIRED_ACTIONS:
+		var action_animation := library.get_animation(id)
+		player.play(Motion.LIBRARY + "/" + id, 0.0)
+		player.seek(action_animation.length * float(Motion.ACTION_SPECS[id].contact), true)
+		skeleton.force_update_all_bone_transforms()
+		var left := skeleton.get_bone_global_pose(skeleton.find_bone("L_Hand")).origin
+		var right := skeleton.get_bone_global_pose(skeleton.find_bone("R_Hand")).origin
+		var closest := left if absf(left.x) < absf(right.x) else right
+		check(id + " reaches in front of the torso", minf(left.z, right.z) < -0.08)
+		check(id + " brings a working hand toward center", absf(closest.x) < 0.23)
+		action_signatures.append((left + right) * 0.5)
+	var distinct_pairs := 0
+	for left_index in action_signatures.size():
+		for right_index in range(left_index + 1, action_signatures.size()):
+			if action_signatures[left_index].distance_to(action_signatures[right_index]) > 0.018:
+				distinct_pairs += 1
+	check("action contact poses are spatially distinct", distinct_pairs >= 30)
 	var pose_valid := true
 	for id in REQUIRED_LOOPS + REQUIRED_ACTIONS:
 		var animation := library.get_animation(id)

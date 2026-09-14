@@ -34,9 +34,9 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          sudo apt-get install -y xvfb mesa-vulkan-drivers ffmpeg
           python3 -m pip install --disable-pip-version-check pillow
-          mkdir -p "$RUNNER_TEMP/engine" task06-evidence/tests task06-evidence/gallery task06-evidence/native4k task06-evidence/reference task06-evidence/matrices
+          mkdir -p "$RUNNER_TEMP/engine" task06-evidence/tests task06-evidence/gallery task06-evidence/native4k task06-evidence/reference task06-evidence/matrices task06-evidence/videos/realtime task06-evidence/videos/slow
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
@@ -68,6 +68,14 @@ jobs:
           Path('task06-evidence/candidate-manifest.json').write_text(json.dumps(manifest,indent=2))
           PY
           python3 tools/havenline/production/resource_actor_contract.py --task T06 --manifest task06-evidence/candidate-manifest.json --output task06-evidence/resource-actor-contract.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          matrix=json.loads(Path('Docs/Production/CRITIC_MATRIX.json').read_text())
+          required=matrix['task_requirements']['T06']
+          assert 'C5' in required,required
+          Path('task06-evidence/critic-requirements.json').write_text(json.dumps({'task':'T06','required':required,'c5_mandatory':True},indent=2))
+          PY
 
       - name: Import and run inherited plus T06 suites
         run: |
@@ -117,6 +125,29 @@ jobs:
           cp Docs/Production/T05/ReferenceFrames/*.png task06-evidence/reference/
           cp Docs/Production/T05/ReferenceFrames/coverage.json task06-evidence/reference/
 
+      - name: Encode every clip at real time and quarter speed
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          xvfb-run -a -s '-screen 0 960x540x24' timeout 1200 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 960x540 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --video-sequences --out="$(pwd)/task06-evidence/videos" > task06-evidence/videos.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task06-evidence/videos.log; then exit 1; fi
+          for frames in task06-evidence/videos/video-frames/*; do
+            clip=$(basename "$frames")
+            ffmpeg -hide_banner -loglevel error -framerate 30 -i "$frames/frame-%05d.jpg" -c:v libx264 -preset veryfast -crf 22 -pix_fmt yuv420p -movflags +faststart "task06-evidence/videos/realtime/$clip.mp4"
+            ffmpeg -hide_banner -loglevel error -framerate 7.5 -i "$frames/frame-%05d.jpg" -c:v libx264 -preset veryfast -crf 22 -pix_fmt yuv420p -movflags +faststart "task06-evidence/videos/slow/$clip.mp4"
+          done
+          rm -rf task06-evidence/videos/video-frames
+          test "$(find task06-evidence/videos/realtime -name '*.mp4' | wc -l)" -eq 24
+          test "$(find task06-evidence/videos/slow -name '*.mp4' | wc -l)" -eq 24
+
+      - name: Run counterbalanced shipping-scene motion benchmark
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          /usr/bin/time -v -o task06-evidence/benchmark-time.txt xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --benchmark --benchmark-frames=450 --out="$(pwd)/task06-evidence/benchmark" > task06-evidence/benchmark.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task06-evidence/benchmark.log; then exit 1; fi
+          test -s task06-evidence/benchmark/benchmark.json
+
       - name: Enforce pixel provenance and preflight performance gates
         env:
           CANDIDATE: ${{ github.sha }}
@@ -129,6 +160,8 @@ jobs:
           root=Path('task06-evidence')
           gallery=json.loads((root/'gallery/capture.json').read_text())
           native=json.loads((root/'native4k/capture.json').read_text())
+          benchmark=json.loads((root/'benchmark/benchmark.json').read_text())
+          ledger=json.loads((root/'gallery/motion-ledger.json').read_text())
           for manifest in (gallery,native):
               assert manifest['task']=='T06-character1-motion-v1'
               assert manifest['candidate_commit']==os.environ['CANDIDATE']
@@ -138,13 +171,20 @@ jobs:
               assert manifest['visible_meshes']==manifest['visible_materials']==2
               assert manifest['animated_rigs_active']==1
               assert manifest['physics_active_bodies']==manifest['npc_companion_active_population']==0
-          assert gallery['full_review'] is True and len(gallery['captures'])==369,len(gallery['captures'])
+          assert gallery['full_review'] is True and len(gallery['captures'])==422,len(gallery['captures'])
+          assert len(gallery['gameplay_captures'])==11,len(gallery['gameplay_captures'])
+          assert all(row['camera_authority']=='T04-reference-camera-v1' and row['shipping_context'].startswith('T04 camera + T05') for row in gallery['gameplay_captures'])
+          assert ledger['sample_rate_hz']==120 and len(ledger['clips'])==24 and len(ledger['actions'])==9 and len(ledger['turns'])==6
+          assert ledger['clips']['walk']['maximum_moving_root_plant_drift_m']<0.03,ledger['clips']['walk']
+          assert ledger['clips']['run']['maximum_moving_root_plant_drift_m']<0.03,ledger['clips']['run']
+          assert all(row['skeleton_returns_neutral'] and abs(row['external_root_facing_delta_degrees']) in (30,90,180) for row in ledger['turns'].values())
           assert native['native_3840x2160_scale1'] is True and len(native['captures'])==6,len(native['captures'])
           files=[];declared={}
           for folder,manifest in [('gallery',gallery),('native4k',native)]:
-              for row in manifest['captures']:
+              rows=manifest['captures']+manifest.get('gameplay_captures',[])
+              for row in rows:
                   key=f"{folder}/{row['file']}"; declared[key]=tuple(row['resolution']); files.append(root/key)
-          assert len(files)==375 and len(set(files))==375
+          assert len(files)==439 and len(set(files))==439
           budgets=json.loads(Path('Docs/Production/PERFORMANCE_BUDGETS.json').read_text())['global_soft_budgets']
           hashes={};draw=[];primitives=[];thumbs=[]
           for path in files:
@@ -160,7 +200,7 @@ jobs:
                   if path.parts[-3]=='gallery' and len(thumbs)<80:
                       image.thumbnail((256,144));tile=Image.new('RGB',(276,174),'#0b1117');tile.paste(image,((276-image.width)//2,5));ImageDraw.Draw(tile).text((8,153),path.stem[:38],fill='white');thumbs.append(tile)
               hashes[str(path.relative_to(root))]=hashlib.sha256(path.read_bytes()).hexdigest()
-          for row in gallery['captures']+native['captures']:
+          for row in gallery['captures']+gallery['gameplay_captures']+native['captures']:
               draw.append(int(row['draw_calls']));primitives.append(int(row['submitted_primitives']))
           assert max(draw)<=budgets['draw_calls'],max(draw)
           assert max(primitives)<=budgets['visible_triangles'],max(primitives)
@@ -170,18 +210,30 @@ jobs:
           reference={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root/'reference').glob('*.png'))}
           assert len(reference)==7
           storage_mb=sum(p.stat().st_size for p in [Path('HavenlineGodot/scripts/character1_motion.gd'),Path('HavenlineGodot/tests/test_task06_character1.gd')])/(1024*1024)
+          rss_line=next(line for line in (root/'benchmark-time.txt').read_text().splitlines() if 'Maximum resident set size' in line)
+          rss_mb=float(rss_line.split(':')[-1].strip())/1024.0
+          assert benchmark['candidate_commit']==os.environ['CANDIDATE']
+          assert benchmark['source_sha256']==gallery['source_sha256']
+          assert benchmark['measured_frames']==1800 and benchmark['software_preflight_passed'] is True
+          assert benchmark['texture_gpu_memory_mb']>0 and benchmark['video_gpu_memory_mb']>0 and benchmark['process_static_memory_mb']>0 and rss_mb>0
+          assert benchmark['animation_inventory_per_rig']['clips']==24 and benchmark['animation_inventory_per_rig']['tracks']>0 and benchmark['animation_inventory_per_rig']['keys']>0
+          assert benchmark['shipping_population_rigs_visible']==4 and benchmark['t06_animated_rigs']==2
           performance={
               'task':'T06','candidate_commit':os.environ['CANDIDATE'],'passed':True,
-              'visible_triangles':max(primitives),'draw_calls':max(draw),'materials_visible':2,
-              'texture_gpu_memory_mb':None,'cpu_frame_ms':None,'gpu_frame_ms_where_measurable':None,
-              'physics_active_bodies':0,'animated_rigs_active':1,'npc_companion_active_population':0,
-              'process_memory_mb':None,'storage_download_mb':storage_mb,
-              'measurement_method':'Godot Viewport visible counters across 375 rendered frames; exact scene/source inventory; authored file byte size',
-              'known_unmeasured_fields':['texture_gpu_memory_mb','cpu_frame_ms','gpu_frame_ms_where_measurable','process_memory_mb'],
+              'visible_triangles':max(max(primitives),max(row['submitted_primitives'] for row in benchmark['phases'])),'draw_calls':max(max(draw),max(row['draw_calls'] for row in benchmark['phases'])),'materials_visible':2,
+              'texture_gpu_memory_mb':benchmark['texture_gpu_memory_mb'],'video_gpu_memory_mb':benchmark['video_gpu_memory_mb'],
+              'cpu_frame_p95_ms':benchmark['candidate_p95_ms'],'cpu_frame_baseline_p95_ms':benchmark['baseline_p95_ms'],'motion_p95_delta_ms':benchmark['motion_p95_delta_ms'],'gpu_frame_ms_where_measurable':None,
+              'physics_active_bodies':benchmark['physics_active_bodies'],'animated_rigs_active':benchmark['t06_animated_rigs'],'shipping_population_rigs_visible':benchmark['shipping_population_rigs_visible'],
+              'process_memory_mb':rss_mb,'process_static_memory_mb':benchmark['process_static_memory_mb'],'storage_download_mb':storage_mb,
+              'animation_install_usec_two_rigs':benchmark['animation_install_usec_two_rigs'],'animation_inventory_per_rig':benchmark['animation_inventory_per_rig'],
+              'measurement_method':'Counterbalanced A-B-B-A shipping-scene render benchmark over 1,800 measured frames; Godot GPU-memory counters; process maximum RSS; exact animation inventory',
+              'known_unmeasured_fields':['gpu_frame_ms_where_measurable'],
               'physical_device_certification':False,'errors':[]
           }
           (root/'performance-preflight.json').write_text(json.dumps(performance,indent=2))
-          provenance={'task':'T06-character1-motion-v1','source':os.environ['CANDIDATE'],'source_gltf_sha256':gallery['source_sha256'],'actual_images':375,'full_cycle_images':369,'native3840x2160_scale1_frames':6,'reference_video_frames':reference,'captures':hashes,'pixel_gate_passed':True,'performance_preflight_passed':True,'manual_quick_look_required_before_critics':True,'critics_executed':False,'task_approved':False,'physical_4k60_verified':False}
+          videos=list((root/'videos/realtime').glob('*.mp4'))+list((root/'videos/slow').glob('*.mp4'))
+          assert len(videos)==48
+          provenance={'task':'T06-character1-motion-v1','source':os.environ['CANDIDATE'],'source_gltf_sha256':gallery['source_sha256'],'actual_images':439,'full_cycle_images':399,'bone_overlay_images':23,'gameplay_context_images':11,'native3840x2160_scale1_frames':6,'continuous_motion_videos':48,'reference_video_frames':reference,'captures':hashes,'pixel_gate_passed':True,'performance_preflight_passed':True,'manual_quick_look_required_before_critics':True,'critics_executed':False,'task_approved':False,'physical_4k60_verified':False}
           (root/'provenance.json').write_text(json.dumps(provenance,indent=2))
           print(json.dumps({k:v for k,v in provenance.items() if k not in ('captures','reference_video_frames')},indent=2))
           PY

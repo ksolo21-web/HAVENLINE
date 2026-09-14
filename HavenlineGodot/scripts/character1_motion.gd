@@ -7,12 +7,15 @@ extends RefCounted
 const SOURCE_GLTF_SHA256 := "95e4fed3a2778656cdf8b73affd2eb3feda8a32f82f4a0c3f76d90c82633c099"
 const LIBRARY := "t06"
 const BLEND_SECONDS := 0.16
-const WALK_STRIDE_METERS := 1.72
-const RUN_STRIDE_METERS := 3.62
+const WALK_STRIDE_METERS := 1.55
+const RUN_STRIDE_METERS := 2.15
+const WALK_CYCLE_SECONDS := 0.82
+const RUN_CYCLE_SECONDS := 0.56
 
 const LOOP_CLIPS := ["idle", "walk", "run"]
 const TRANSITION_CLIPS := [
-	"start_walk", "start_run", "stop",
+	"start_walk", "start_run", "stop_walk", "stop_run",
+	"walk_to_run", "run_to_walk",
 	"turn_left_030", "turn_right_030",
 	"turn_left_090", "turn_right_090",
 	"turn_left_180", "turn_right_180"
@@ -23,15 +26,15 @@ const ACTION_CLIPS := [
 ]
 
 const ACTION_SPECS := {
-	"chop": {"duration": 0.92, "contact": 0.56, "profile": "human_player_chop"},
-	"mine": {"duration": 1.02, "contact": 0.58, "profile": "human_player_mine"},
-	"dismantle": {"duration": 1.08, "contact": 0.61, "profile": "human_player_dismantle"},
-	"deposit": {"duration": 0.78, "contact": 0.63, "profile": "human_player_deposit"},
-	"build": {"duration": 0.96, "contact": 0.57, "profile": "human_player_build"},
-	"repair": {"duration": 0.88, "contact": 0.55, "profile": "human_player_repair"},
-	"rescue": {"duration": 1.18, "contact": 0.68, "profile": "human_player_rescue"},
-	"service": {"duration": 0.82, "contact": 0.61, "profile": "human_player_service"},
-	"attack_contact": {"duration": 0.74, "contact": 0.49, "profile": "human_player_attack_foundation"}
+	"chop": {"duration": 0.92, "contact": 0.56, "profile": "human_player_chop", "marker": "C1TwoHandContact", "target": Vector3(0.0, 0.74, -0.54)},
+	"mine": {"duration": 1.02, "contact": 0.58, "profile": "human_player_mine", "marker": "C1TwoHandContact", "target": Vector3(0.0, 0.48, -0.50)},
+	"dismantle": {"duration": 1.08, "contact": 0.61, "profile": "human_player_dismantle", "marker": "C1RightHandContact", "target": Vector3(-0.10, 0.66, -0.48)},
+	"deposit": {"duration": 0.78, "contact": 0.63, "profile": "human_player_deposit", "marker": "C1TwoHandContact", "target": Vector3(0.0, 0.58, -0.40)},
+	"build": {"duration": 0.96, "contact": 0.57, "profile": "human_player_build", "marker": "C1RightHandContact", "target": Vector3(-0.08, 0.78, -0.53)},
+	"repair": {"duration": 0.88, "contact": 0.55, "profile": "human_player_repair", "marker": "C1LeftHandContact", "target": Vector3(0.09, 0.68, -0.48)},
+	"rescue": {"duration": 1.18, "contact": 0.68, "profile": "human_player_rescue", "marker": "C1RescueContact", "target": Vector3(0.0, 0.26, -0.48)},
+	"service": {"duration": 0.82, "contact": 0.61, "profile": "human_player_service", "marker": "C1RightHandContact", "target": Vector3(-0.10, 0.66, -0.42)},
+	"attack_contact": {"duration": 0.74, "contact": 0.49, "profile": "human_player_attack_foundation", "marker": "C1ForwardImpact", "target": Vector3(0.0, 0.92, -0.72)}
 }
 
 # Local additive rotations in degrees. Deliberately bounded angles preserve the
@@ -39,66 +42,66 @@ const ACTION_SPECS := {
 const ACTION_POSES := {
 	"chop": {
 		"Hip": Vector3(-8, 0, 0), "Waist": Vector3(-10, 0, -5),
-		"Spine01": Vector3(-12, 0, 0), "L_Upperarm": Vector3(-44, -7, 18),
-		"R_Upperarm": Vector3(-62, 9, -16), "L_Forearm": Vector3(-34, 0, 5),
-		"R_Forearm": Vector3(-48, 0, -6), "L_Hand": Vector3(-14, 0, 0),
+		"Spine01": Vector3(-12, 0, 0), "L_Upperarm": Vector3(-58, -7, 55),
+		"R_Upperarm": Vector3(-68, 9, -55), "L_Forearm": Vector3(-32, 0, 28),
+		"R_Forearm": Vector3(-42, 0, -28), "L_Hand": Vector3(-14, 0, 0),
 		"R_Hand": Vector3(-18, 0, 0), "L_Thigh": Vector3(8, 0, 3),
 		"R_Thigh": Vector3(11, 0, -3), "L_Calf": Vector3(-10, 0, 0),
 		"R_Calf": Vector3(-13, 0, 0)
 	},
 	"mine": {
 		"Hip": Vector3(-13, 0, 0), "Waist": Vector3(-15, 0, 0),
-		"Spine01": Vector3(-17, 0, 0), "L_Upperarm": Vector3(-52, -8, 14),
-		"R_Upperarm": Vector3(-68, 8, -14), "L_Forearm": Vector3(-46, 0, 4),
-		"R_Forearm": Vector3(-52, 0, -4), "L_Thigh": Vector3(13, 0, 3),
+		"Spine01": Vector3(-17, 0, 0), "L_Upperarm": Vector3(-72, -8, 52),
+		"R_Upperarm": Vector3(-78, 8, -52), "L_Forearm": Vector3(-50, 0, 24),
+		"R_Forearm": Vector3(-54, 0, -24), "L_Thigh": Vector3(13, 0, 3),
 		"R_Thigh": Vector3(16, 0, -3), "L_Calf": Vector3(-18, 0, 0),
 		"R_Calf": Vector3(-20, 0, 0)
 	},
 	"dismantle": {
 		"Waist": Vector3(-9, 8, 0), "Spine01": Vector3(-11, 7, 0),
-		"L_Upperarm": Vector3(-34, -10, 16), "R_Upperarm": Vector3(-55, 15, -12),
-		"L_Forearm": Vector3(-42, 0, 0), "R_Forearm": Vector3(-58, 0, 0),
+		"L_Upperarm": Vector3(-18, -10, 24), "R_Upperarm": Vector3(-62, 15, -56),
+		"L_Forearm": Vector3(-28, 0, 12), "R_Forearm": Vector3(-58, 0, -22),
 		"L_Hand": Vector3(-19, 0, 0), "R_Hand": Vector3(22, 0, 0)
 	},
 	"deposit": {
 		"Hip": Vector3(-8, 0, 0), "Waist": Vector3(-12, 0, 0),
-		"Spine01": Vector3(-14, 0, 0), "L_Upperarm": Vector3(-38, -8, 12),
-		"R_Upperarm": Vector3(-38, 8, -12), "L_Forearm": Vector3(-50, 0, 0),
-		"R_Forearm": Vector3(-50, 0, 0), "L_Thigh": Vector3(10, 0, 2),
+		"Spine01": Vector3(-14, 0, 0), "L_Upperarm": Vector3(-42, -8, 58),
+		"R_Upperarm": Vector3(-42, 8, -58), "L_Forearm": Vector3(-48, 0, 26),
+		"R_Forearm": Vector3(-48, 0, -26), "L_Thigh": Vector3(10, 0, 2),
 		"R_Thigh": Vector3(10, 0, -2), "L_Calf": Vector3(-15, 0, 0),
 		"R_Calf": Vector3(-15, 0, 0)
 	},
 	"build": {
 		"Waist": Vector3(-11, -7, 0), "Spine01": Vector3(-12, -6, 0),
-		"L_Upperarm": Vector3(-25, -4, 14), "R_Upperarm": Vector3(-61, 8, -12),
-		"L_Forearm": Vector3(-36, 0, 0), "R_Forearm": Vector3(-48, 0, 0),
+		"L_Upperarm": Vector3(-18, -4, 18), "R_Upperarm": Vector3(-70, 8, -52),
+		"L_Forearm": Vector3(-26, 0, 10), "R_Forearm": Vector3(-48, 0, -24),
 		"R_Hand": Vector3(-20, 0, 0)
 	},
 	"repair": {
 		"Waist": Vector3(-8, 8, 0), "Spine01": Vector3(-10, 9, 0),
-		"L_Upperarm": Vector3(-42, -7, 12), "R_Upperarm": Vector3(-30, 12, -10),
-		"L_Forearm": Vector3(-55, 0, 0), "R_Forearm": Vector3(-38, 0, 0),
+		"L_Upperarm": Vector3(-66, -7, 54), "R_Upperarm": Vector3(-24, 12, -22),
+		"L_Forearm": Vector3(-55, 0, 24), "R_Forearm": Vector3(-30, 0, -10),
 		"L_Hand": Vector3(-18, 0, 0), "R_Hand": Vector3(18, 0, 0)
 	},
 	"rescue": {
 		"Hip": Vector3(-18, 0, 0), "Waist": Vector3(-24, 0, 0),
-		"Spine01": Vector3(-20, 0, 0), "L_Upperarm": Vector3(-42, -6, 18),
-		"R_Upperarm": Vector3(-42, 6, -18), "L_Forearm": Vector3(-58, 0, 0),
-		"R_Forearm": Vector3(-58, 0, 0), "L_Thigh": Vector3(28, 0, 3),
+		"Spine01": Vector3(-20, 0, 0), "L_Upperarm": Vector3(-52, -6, 58),
+		"R_Upperarm": Vector3(-52, 6, -58), "L_Forearm": Vector3(-58, 0, 26),
+		"R_Forearm": Vector3(-58, 0, -26), "L_Thigh": Vector3(28, 0, 3),
 		"R_Thigh": Vector3(18, 0, -3), "L_Calf": Vector3(-48, 0, 0),
 		"R_Calf": Vector3(-28, 0, 0)
 	},
 	"service": {
 		"Waist": Vector3(-5, -9, 0), "Spine01": Vector3(-4, -8, 0),
-		"L_Upperarm": Vector3(-26, -10, 14), "R_Upperarm": Vector3(-36, 14, -12),
-		"L_Forearm": Vector3(-48, 0, 0), "R_Forearm": Vector3(-56, 0, 0),
+		"L_Upperarm": Vector3(-18, -10, 22), "R_Upperarm": Vector3(-52, 14, -58),
+		"L_Forearm": Vector3(-32, 0, 12), "R_Forearm": Vector3(-56, 0, -28),
 		"R_Hand": Vector3(-12, 0, 0)
 	},
 	"attack_contact": {
 		"Hip": Vector3(-8, 12, 0), "Waist": Vector3(-12, 18, 0),
-		"Spine01": Vector3(-10, 14, 0), "L_Upperarm": Vector3(-24, -12, 18),
-		"R_Upperarm": Vector3(-68, 18, -18), "L_Forearm": Vector3(-34, 0, 0),
-		"R_Forearm": Vector3(-32, 0, 0), "L_Thigh": Vector3(12, 0, 4),
+		"Spine01": Vector3(-10, 14, 0), "L_Upperarm": Vector3(-24, -12, 38),
+		"R_Upperarm": Vector3(-88, 18, -48), "L_Forearm": Vector3(-34, 0, 18),
+		"R_Forearm": Vector3(-32, 0, -20), "L_Thigh": Vector3(12, 0, 4),
 		"R_Thigh": Vector3(18, 0, -4), "L_Calf": Vector3(-18, 0, 0),
 		"R_Calf": Vector3(-22, 0, 0)
 	}
@@ -135,9 +138,14 @@ static func _track_for_bone(animation: Animation, bone: String, kind: int) -> in
 	return -1
 
 static func _euler_offset(degrees: Vector3) -> Quaternion:
-	return Basis.from_euler(Vector3(
-		deg_to_rad(degrees.x), deg_to_rad(degrees.y), deg_to_rad(degrees.z)
-	)).get_rotation_quaternion()
+	# Apply reach and bend before the centering swing. The source arm bases are
+	# strongly abducted; making local Z the final operation keeps hands in front
+	# of the chest instead of letting X/Y composition splay them back outward.
+	return (
+		Quaternion(Vector3.FORWARD, deg_to_rad(degrees.z))
+		* Quaternion(Vector3.RIGHT, deg_to_rad(degrees.x))
+		* Quaternion(Vector3.UP, deg_to_rad(degrees.y))
+	).normalized()
 
 static func _curve(points: Array, phase: float) -> float:
 	var p := fposmod(phase, 1.0)
@@ -155,10 +163,63 @@ static func _remove_scale_tracks(animation: Animation) -> void:
 		if animation.track_get_type(track) == Animation.TYPE_SCALE_3D:
 			animation.remove_track(track)
 
-static func _tune_locomotion(source: Animation, running: bool) -> Animation:
-	var clip: Animation = source.duplicate(true)
+static func _insert_transform_key(animation: Animation, track: int, time: float, value: Variant) -> void:
+	var kind := animation.track_get_type(track)
+	for key in animation.track_get_key_count(track):
+		if absf(animation.track_get_key_time(track, key) - time) < 0.0001:
+			animation.track_set_key_value(track, key, value)
+			return
+	if kind == Animation.TYPE_ROTATION_3D:
+		animation.rotation_track_insert_key(track, time, value)
+	elif kind == Animation.TYPE_POSITION_3D:
+		animation.position_track_insert_key(track, time, value)
+
+static func _close_loop(animation: Animation) -> void:
+	# Every transform channel gets an explicit neutral seam. Matching the first,
+	# 1/120 s, penultimate and terminal samples also makes seam velocity zero on
+	# both sides under cubic interpolation; no hidden root or limb snap remains.
+	var seam := minf(1.0 / 120.0, animation.length * 0.02)
+	for track in animation.get_track_count():
+		var kind := animation.track_get_type(track)
+		if kind not in [Animation.TYPE_ROTATION_3D, Animation.TYPE_POSITION_3D]:
+			continue
+		animation.track_set_interpolation_type(track, Animation.INTERPOLATION_LINEAR)
+		var first: Variant
+		if kind == Animation.TYPE_ROTATION_3D:
+			first = animation.rotation_track_interpolate(track, 0.0).normalized()
+		else:
+			first = animation.position_track_interpolate(track, 0.0)
+		_insert_transform_key(animation, track, 0.0, first)
+		_insert_transform_key(animation, track, seam, first)
+		_insert_transform_key(animation, track, animation.length - seam, first)
+		_insert_transform_key(animation, track, animation.length, first)
+
+static func _extract_gait_cycle(source: Animation, duration: float) -> Animation:
+	# Both supplied locomotion takes contain two repeated gait cycles. Extracting
+	# one source-authored cycle avoids the original slow four-step shuffle while
+	# retaining the supplied full-body performance and exact rig.
+	var clip := Animation.new()
+	clip.length = duration
 	clip.loop_mode = Animation.LOOP_LINEAR
-	_remove_scale_tracks(clip)
+	for source_track in source.get_track_count():
+		var kind := source.track_get_type(source_track)
+		if kind not in [Animation.TYPE_ROTATION_3D, Animation.TYPE_POSITION_3D]:
+			continue
+		var track := clip.add_track(kind)
+		clip.track_set_path(track, source.track_get_path(source_track))
+		clip.track_set_interpolation_type(track, Animation.INTERPOLATION_LINEAR)
+		for sample in range(61):
+			var phase := float(sample) / 60.0
+			var source_time := source.length * phase * 0.5
+			var time := duration * phase
+			if kind == Animation.TYPE_ROTATION_3D:
+				clip.rotation_track_insert_key(track, time, source.rotation_track_interpolate(source_track, source_time).normalized())
+			else:
+				clip.position_track_insert_key(track, time, source.position_track_interpolate(source_track, source_time))
+	return clip
+
+static func _tune_locomotion(source: Animation, running: bool) -> Animation:
+	var clip := _extract_gait_cycle(source, RUN_CYCLE_SECONDS if running else WALK_CYCLE_SECONDS)
 	var foot_curve := [
 		Vector2(0.00, -8.0), Vector2(0.10, 0.0), Vector2(0.34, 7.0),
 		Vector2(0.49, 16.0), Vector2(0.64, -13.0), Vector2(0.86, -7.0),
@@ -181,10 +242,11 @@ static func _tune_locomotion(source: Animation, running: bool) -> Animation:
 				var angle := _curve(toe_curve if bone.ends_with("ToeBase") else foot_curve, phase) * multiplier
 				var base: Quaternion = clip.track_get_key_value(track, key)
 				clip.track_set_key_value(track, key, (base * Quaternion(Vector3.RIGHT, deg_to_rad(angle))).normalized())
-	# A small opposing thigh correction keeps knees tracking over the feet under
-	# the authored wide winter stance without changing limb length.
+	# Phase-aware hip/calf shaping gives the shortened cycle a readable step
+	# length while the lateral correction keeps knees over the winter boots.
 	for side in ["L", "R"]:
 		var thigh := _track_for_bone(clip, side + "_Thigh", Animation.TYPE_ROTATION_3D)
+		var calf := _track_for_bone(clip, side + "_Calf", Animation.TYPE_ROTATION_3D)
 		if thigh < 0:
 			continue
 		var sign := 1.0 if side == "L" else -1.0
@@ -192,7 +254,15 @@ static func _tune_locomotion(source: Animation, running: bool) -> Animation:
 			var phase := fposmod(clip.track_get_key_time(thigh, key) / maxf(clip.length, 0.001) + (0.0 if side == "L" else 0.5), 1.0)
 			var correction := sign * _curve([Vector2(0, 2.0), Vector2(0.5, 4.0), Vector2(1, 2.0)], phase)
 			var base: Quaternion = clip.track_get_key_value(thigh, key)
-			clip.track_set_key_value(thigh, key, (base * Quaternion(Vector3.FORWARD, deg_to_rad(correction))).normalized())
+			var stride_swing := sin(phase * TAU) * (36.0 if running else 42.0)
+			clip.track_set_key_value(thigh, key, (base * _euler_offset(Vector3(stride_swing, 0.0, correction))).normalized())
+		if calf >= 0:
+			for key in clip.track_get_key_count(calf):
+				var phase := fposmod(clip.track_get_key_time(calf, key) / maxf(clip.length, 0.001) + (0.0 if side == "L" else 0.5), 1.0)
+				var flex := _curve([Vector2(0.0, 4.0), Vector2(0.18, 8.0), Vector2(0.52, 34.0 if running else 24.0), Vector2(0.76, 12.0), Vector2(1.0, 4.0)], phase)
+				var base: Quaternion = clip.track_get_key_value(calf, key)
+				clip.track_set_key_value(calf, key, (base * Quaternion(Vector3.RIGHT, deg_to_rad(-flex))).normalized())
+	_close_loop(clip)
 	return clip
 
 static func _sample_rotation(animation: Animation, path: NodePath, time: float) -> Quaternion:
@@ -207,7 +277,7 @@ static func _sample_position(animation: Animation, path: NodePath, time: float) 
 		return Vector3.ZERO
 	return animation.position_track_interpolate(track, clampf(time, 0.0, animation.length))
 
-static func _transition_clip(from_clip: Animation, to_clip: Animation, duration: float, turn_degrees := 0.0) -> Animation:
+static func _transition_clip(from_clip: Animation, to_clip: Animation, duration: float) -> Animation:
 	var clip := Animation.new()
 	clip.length = duration
 	clip.loop_mode = Animation.LOOP_NONE
@@ -222,17 +292,58 @@ static func _transition_clip(from_clip: Animation, to_clip: Animation, duration:
 		if kind == Animation.TYPE_ROTATION_3D:
 			var start := _sample_rotation(from_clip, path, 0.0)
 			var finish := _sample_rotation(to_clip, path, minf(to_clip.length * 0.12, 0.16))
-			var bone := String(path).get_slice(":", String(path).get_slice_count(":") - 1)
-			var turn := Quaternion.IDENTITY
-			if bone in ["Hip", "Waist", "Spine01", "Spine02"]:
-				var share: float = float({"Hip": 0.18, "Waist": 0.32, "Spine01": 0.28, "Spine02": 0.22}[bone])
-				turn = Quaternion(Vector3.UP, deg_to_rad(turn_degrees * share))
 			clip.rotation_track_insert_key(track, 0.0, start)
-			clip.rotation_track_insert_key(track, duration * 0.52, (start.slerp(finish, 0.52) * turn).normalized())
+			clip.rotation_track_insert_key(track, duration * 0.52, start.slerp(finish, 0.52).normalized())
 			clip.rotation_track_insert_key(track, duration, finish)
 		else:
 			clip.position_track_insert_key(track, 0.0, _sample_position(from_clip, path, 0.0))
 			clip.position_track_insert_key(track, duration, _sample_position(to_clip, path, minf(to_clip.length * 0.12, 0.16)))
+	return clip
+
+static func _turn_transition(idle: Animation, duration: float, degrees: int, direction: float) -> Animation:
+	# The animation provides a planted support leg and a free-foot step/pivot.
+	# It deliberately returns to a neutral skeleton: the simulation applies the
+	# declared facing delta to the actor root and remains the sole authority.
+	var clip := Animation.new()
+	clip.length = duration
+	clip.loop_mode = Animation.LOOP_NONE
+	var magnitude := clampf(float(degrees) / 90.0, 0.34, 1.35)
+	var free_side := "L" if direction < 0.0 else "R"
+	for source_track in idle.get_track_count():
+		var kind := idle.track_get_type(source_track)
+		if kind not in [Animation.TYPE_ROTATION_3D, Animation.TYPE_POSITION_3D]:
+			continue
+		var path := idle.track_get_path(source_track)
+		var track := clip.add_track(kind)
+		clip.track_set_path(track, path)
+		clip.track_set_interpolation_type(track, Animation.INTERPOLATION_CUBIC)
+		var bone := String(path).get_slice(":", String(path).get_slice_count(":") - 1)
+		if kind == Animation.TYPE_POSITION_3D:
+			var base_position := _sample_position(idle, path, 0.0)
+			for phase in [0.0, 0.24, 0.52, 0.78, 1.0]:
+				var position := base_position
+				if bone == "Hip":
+					position.y += sin(phase * PI) * 0.014 * magnitude
+					position.x += direction * sin(phase * PI) * 0.010 * magnitude
+				clip.position_track_insert_key(track, phase * duration, position)
+		else:
+			var base_rotation := _sample_rotation(idle, path, 0.0)
+			for phase in [0.0, 0.24, 0.52, 0.78, 1.0]:
+				var envelope := sin(phase * PI)
+				var offset := Vector3.ZERO
+				if bone == free_side + "_Thigh":
+					offset = Vector3(-13.0 * magnitude, direction * 5.0, direction * 4.0)
+				elif bone == free_side + "_Calf":
+					offset = Vector3(-22.0 * magnitude, 0.0, 0.0)
+				elif bone == free_side + "_Foot":
+					offset = Vector3(-15.0 * magnitude, -direction * 24.0 * magnitude, 0.0)
+				elif bone == free_side + "_ToeBase":
+					offset = Vector3(18.0 * magnitude, 0.0, 0.0)
+				elif bone.ends_with("_Thigh"):
+					offset = Vector3(4.0 * magnitude, 0.0, -direction * 3.0)
+				elif bone in ["Hip", "Waist"]:
+					offset = Vector3(-2.0 * magnitude, direction * 4.0 * magnitude, 0.0)
+				clip.rotation_track_insert_key(track, phase * duration, (base_rotation * _euler_offset(offset * envelope)).normalized())
 	return clip
 
 static func _action_factor(phase: float) -> float:
@@ -272,13 +383,18 @@ static func _action_clip(id: String, idle: Animation) -> Animation:
 static func _contact_contract() -> Dictionary:
 	var actions := {}
 	for id in ACTION_CLIPS:
-		actions[id] = ACTION_SPECS[id].duplicate(true)
+		var spec: Dictionary = ACTION_SPECS[id].duplicate(true)
+		var target: Vector3 = spec.target
+		spec.target = [target.x, target.y, target.z]
+		actions[id] = spec
 	return {
-		"schema_version": 1,
+		"schema_version": 2,
 		"source_gltf_sha256": SOURCE_GLTF_SHA256,
 		"roles": ["player_lead", "core_human_companion"],
 		"simulation_authoritative": true,
+		"root_facing_authority": "simulation_external",
 		"duplicate_gameplay_impacts_allowed": false,
+		"companion_visual_phase_offset": 0.37,
 		"finished_tool_or_weapon_assets_included": false,
 		"contacts": {
 			"right_hand": "C1RightHandContact", "left_hand": "C1LeftHandContact",
@@ -340,6 +456,7 @@ static func install(root: Node3D, role := "player_lead") -> Dictionary:
 	var idle: Animation = player.get_animation(source_names.idle).duplicate(true)
 	idle.loop_mode = Animation.LOOP_LINEAR
 	_remove_scale_tracks(idle)
+	_close_loop(idle)
 	var walk := _tune_locomotion(player.get_animation(source_names.walk), false)
 	var run := _tune_locomotion(player.get_animation(source_names.run), true)
 	var library := AnimationLibrary.new()
@@ -348,11 +465,14 @@ static func install(root: Node3D, role := "player_lead") -> Dictionary:
 	library.add_animation("run", run)
 	library.add_animation("start_walk", _transition_clip(idle, walk, 0.34))
 	library.add_animation("start_run", _transition_clip(idle, run, 0.30))
-	library.add_animation("stop", _transition_clip(walk, idle, 0.32))
+	library.add_animation("stop_walk", _transition_clip(walk, idle, 0.32))
+	library.add_animation("stop_run", _transition_clip(run, idle, 0.38))
+	library.add_animation("walk_to_run", _transition_clip(walk, run, 0.28))
+	library.add_animation("run_to_walk", _transition_clip(run, walk, 0.30))
 	for degrees in [30, 90, 180]:
 		var duration := 0.30 if degrees == 30 else (0.44 if degrees == 90 else 0.62)
-		library.add_animation("turn_left_%03d" % degrees, _transition_clip(idle, idle, duration, -degrees))
-		library.add_animation("turn_right_%03d" % degrees, _transition_clip(idle, idle, duration, degrees))
+		library.add_animation("turn_left_%03d" % degrees, _turn_transition(idle, duration, degrees, -1.0))
+		library.add_animation("turn_right_%03d" % degrees, _turn_transition(idle, duration, degrees, 1.0))
 	for id in ACTION_CLIPS:
 		library.add_animation(id, _action_clip(id, idle))
 	player.add_animation_library(LIBRARY, library)
@@ -392,6 +512,13 @@ static func motion_for_action(action: Dictionary) -> String:
 static func _qualified(id: String) -> StringName:
 	return StringName(LIBRARY + "/" + id)
 
+static func cadence_scale(id: String, speed: float, animation: Animation) -> float:
+	if id == "walk":
+		return clampf(speed * animation.length / WALK_STRIDE_METERS, 0.60, 2.20)
+	if id == "run":
+		return clampf(speed * animation.length / RUN_STRIDE_METERS, 0.78, 2.20)
+	return 1.0
+
 static func _play(player: AnimationPlayer, root: Node3D, id: String, blend := BLEND_SECONDS) -> void:
 	var qualified := _qualified(id)
 	if not player.has_animation(qualified):
@@ -404,6 +531,15 @@ static func _turn_clip(turn_degrees: float) -> String:
 	var amount := absf(turn_degrees)
 	var bucket := 30 if amount < 60 else (90 if amount < 135 else 180)
 	return "turn_%s_%03d" % ["left" if turn_degrees < 0 else "right", bucket]
+
+static func facing_delta_for_turn(id: String) -> float:
+	if not id.begins_with("turn_"):
+		return 0.0
+	var parts := id.split("_")
+	if parts.size() != 3:
+		return 0.0
+	var amount := float(parts[2].to_int())
+	return -amount if parts[1] == "left" else amount
 
 static func update_actor(root: Node3D, speed: float, action: Dictionary, dt: float, role := "player_lead", turn_degrees := 0.0) -> Dictionary:
 	if not root.has_meta("t06_motion_player"):
@@ -424,7 +560,7 @@ static func update_actor(root: Node3D, speed: float, action: Dictionary, dt: flo
 		var turn := _turn_clip(turn_degrees)
 		_play(player, root, turn)
 		player.speed_scale = 1.0
-		return {"passed": true, "state": turn, "role": role, "simulation_authoritative": true}
+		return {"passed": true, "state": turn, "role": role, "simulation_authoritative": true, "root_facing_authority": "simulation_external", "facing_delta_degrees": facing_delta_for_turn(turn)}
 	var state := "run" if speed > 4.3 else ("walk" if speed > 0.15 else "idle")
 	var previous := String(root.get_meta("t06_locomotion_state", "idle"))
 	var remaining := maxf(0.0, float(root.get_meta("t06_transition_remaining", 0.0)) - maxf(dt, 0.0))
@@ -434,8 +570,14 @@ static func update_actor(root: Node3D, speed: float, action: Dictionary, dt: flo
 			transition = "start_walk"
 		elif previous == "idle" and state == "run":
 			transition = "start_run"
-		elif state == "idle":
-			transition = "stop"
+		elif previous == "walk" and state == "run":
+			transition = "walk_to_run"
+		elif previous == "run" and state == "walk":
+			transition = "run_to_walk"
+		elif state == "idle" and previous == "walk":
+			transition = "stop_walk"
+		elif state == "idle" and previous == "run":
+			transition = "stop_run"
 		root.set_meta("t06_locomotion_state", state)
 		if not transition.is_empty():
 			remaining = player.get_animation(_qualified(transition)).length
@@ -446,12 +588,10 @@ static func update_actor(root: Node3D, speed: float, action: Dictionary, dt: flo
 		player.speed_scale = 1.0
 		return {"passed": true, "state": String(root.get_meta("t06_active_clip", "")), "transition_target": state, "role": role, "simulation_authoritative": true}
 	root.set_meta("t06_transition_remaining", 0.0)
+	var clip_changed := String(root.get_meta("t06_active_clip", "")) != state
 	_play(player, root, state)
 	var animation := player.get_animation(_qualified(state))
-	if state == "walk":
-		player.speed_scale = clampf(speed * animation.length / WALK_STRIDE_METERS, 0.60, 1.55)
-	elif state == "run":
-		player.speed_scale = clampf(speed * animation.length / RUN_STRIDE_METERS, 0.78, 1.55)
-	else:
-		player.speed_scale = 1.0
+	if clip_changed and role == "core_human_companion" and state in LOOP_CLIPS:
+		player.seek(animation.length * float(root.get_meta("t06_motion_contract").companion_visual_phase_offset), true)
+	player.speed_scale = cadence_scale(state, speed, animation)
 	return {"passed": true, "state": state, "speed_scale": player.speed_scale, "role": role, "simulation_authoritative": true}
