@@ -388,6 +388,10 @@ func capture_runtime_boundary_sequences() -> void:
 				actor.rotation.y = deg_to_rad(turn_degrees * stage_phase)
 			player.advance(1.0 / 30.0)
 			skeleton.force_update_all_bone_transforms()
+			# Let Skeleton3D submit the new skin matrices before the synchronous
+			# render readback. frame_post_draw is intentionally avoided because it
+			# can deadlock software/headless renderers.
+			await process_frame
 			RenderingServer.force_draw(false, 0.0)
 			var image: Image = get_root().get_texture().get_image()
 			assert(image.save_jpg(folder.path_join("frame-%05d.jpg" % frame), 0.88) == OK)
