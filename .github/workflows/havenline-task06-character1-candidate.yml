@@ -72,7 +72,7 @@ jobs:
           import json
           from pathlib import Path
           matrix=json.loads(Path('Docs/Production/CRITIC_MATRIX.json').read_text())
-          required=matrix['task_requirements']['T06']
+          required=matrix['task_applicability']['T06']
           assert 'C5' in required,required
           Path('task06-evidence/critic-requirements.json').write_text(json.dumps({'task':'T06','required':required,'c5_mandatory':True},indent=2))
           PY
