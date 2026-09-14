@@ -27,8 +27,8 @@ from review_protocol import (
     REFERENCE_PANEL_WIDTH, REFERENCE_PANEL_X, ROLE_DIMENSIONS,
     applicable_dimensions, build_review_prompt,
     build_review_schema, build_slice_contract, build_slice_plan, expected_request_settings,
-    materialize_defect_summary, persist_model_response, review_exit_code, review_integrity_errors,
-    resume_layout_compatible, slice_retry_seed, valid_slice_retry_seed,
+    classify_resume_bundle, materialize_defect_summary, persist_model_response,
+    review_exit_code, review_integrity_errors, slice_retry_seed, valid_slice_retry_seed,
     write_incomplete_group_bundle,
 )
 
@@ -366,11 +366,6 @@ def load_resume_prefix(group: str, boards: list[Path], board_payload: dict) -> l
     if not raw_path.is_file():
         return []
     bundle = json.loads(raw_path.read_text())
-    assert bundle.get("schema_version") == 4
-    assert bundle.get("execution_complete") is False
-    assert bundle.get("source") == SOURCE and bundle.get("critic_id") == ROLE
-    assert bundle.get("attempt") == ATTEMPT and bundle.get("seed") == SEED
-    assert bundle.get("group") == group
     current_slices = [
         {
             "slice": index,
@@ -385,7 +380,8 @@ def load_resume_prefix(group: str, boards: list[Path], board_payload: dict) -> l
     # A causal evidence-layout repair deliberately invalidates old board hashes.
     # In that case the safe recovery behavior is a full fresh group, not an
     # assertion before slice 1 and not reuse of any stale pixels.
-    if not resume_layout_compatible(bundle.get("slices",[]),current_slices):
+    identity={"source":SOURCE,"critic_id":ROLE,"attempt":ATTEMPT,"seed":SEED,"group":group}
+    if classify_resume_bundle(bundle,identity,current_slices)=="fresh":
         return []
     resumed = []
     for expected_index, part in enumerate(bundle.get("slices", []), 1):

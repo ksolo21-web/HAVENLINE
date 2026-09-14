@@ -13,7 +13,7 @@ from review_protocol import (
     MIN_CANDIDATE_DISPLAY_HEIGHT, PROTOCOL, REFERENCE_FOCUS_BOXES,
     applicable_dimensions, build_review_prompt, build_review_schema,
     build_primary_matrix, build_slice_contract, build_slice_plan, expected_request_settings,
-    contained_display_size, materialize_defect_summary, persist_model_response,
+    classify_resume_bundle, contained_display_size, materialize_defect_summary, persist_model_response,
     resume_layout_compatible, review_exit_code, review_integrity_errors,
     slice_retry_seed, valid_slice_retry_seed,
     write_incomplete_group_bundle,
@@ -43,6 +43,19 @@ class BoardLayoutTests(unittest.TestCase):
         prior=[dict(current[0],board_sha256="a"*64)]
         self.assertFalse(resume_layout_compatible(prior,current))
         self.assertTrue(resume_layout_compatible(current,current))
+
+    def test_completed_stale_bundle_runs_fresh_but_completed_matching_bundle_cannot_retry(self):
+        current=[{
+            "slice":1,"board_path":"board-01.jpg","board_sha256":"b"*64,
+            "reviewed_candidate_paths":["wide.png"],"reference_family":"hearth",
+            "reference_path":"reference/B-008.00.png",
+        }]
+        identity={"source":SOURCE,"critic_id":"C1","attempt":"primary","seed":7,"group":"shipping-device-and-tracking"}
+        stale={"schema_version":4,"execution_complete":True,"slices":[dict(current[0],board_sha256="a"*64)],**identity}
+        self.assertEqual(classify_resume_bundle(stale,identity,current),"fresh")
+        matching={**stale,"slices":current}
+        with self.assertRaises(AssertionError):
+            classify_resume_bundle(matching,identity,current)
 
 
 def row(role, group, passed=True, attempt="primary", seed=1):

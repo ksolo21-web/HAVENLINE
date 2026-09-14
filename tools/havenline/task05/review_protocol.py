@@ -127,6 +127,19 @@ def resume_layout_compatible(prior_slices: object,current_slices: list[dict]) ->
     )
 
 
+def classify_resume_bundle(bundle: dict,identity: dict,current_slices: list[dict]) -> str:
+    """Classify an exact-identity checkpoint as resumable or layout-stale."""
+    assert bundle.get("schema_version")==4
+    for key,value in identity.items():
+        assert bundle.get(key)==value
+    if not resume_layout_compatible(bundle.get("slices",[]),current_slices):
+        return "fresh"
+    # A compatible completed vote must never be retried. Recovery is reserved
+    # for incomplete execution or evidence invalidated by a causal layout fix.
+    assert bundle.get("execution_complete") is False
+    return "resume"
+
+
 def slice_retry_seed(base_seed: int, retry_index: int) -> int:
     """Return a deterministic fresh seed for an invalid (non-vote) response retry."""
     if not isinstance(base_seed, int) or isinstance(base_seed, bool):
