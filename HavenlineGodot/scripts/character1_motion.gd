@@ -634,7 +634,11 @@ static func update_actor(root: Node3D, speed: float, action: Dictionary, dt: flo
 		var clip := player.get_animation(_qualified(action_clip))
 		var progress := clampf(float(action.get("progress", 0.0)), 0.0, 1.0)
 		player.seek(clip.length * progress, true)
-		player.speed_scale = 0.0
+		# A zero speed scale also freezes AnimationPlayer's blend clock, leaving
+		# the actor visually stuck in the previous state. Re-seeking every update
+		# keeps simulation progress authoritative while a live clock completes the
+		# configured 0.16 s boundary blend.
+		player.speed_scale = 1.0
 		return {"passed": true, "state": action_clip, "progress": progress, "role": role, "simulation_authoritative": true}
 	if absf(turn_degrees) >= 15.0 and speed < 0.20:
 		var turn := _turn_clip(turn_degrees)

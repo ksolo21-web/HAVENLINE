@@ -355,7 +355,9 @@ func capture_runtime_boundary_sequences() -> void:
 		assert(installed.passed, str(installed.errors))
 		player = installed.player
 		skeleton = installed.skeleton
-		player.process_mode = Node.PROCESS_MODE_DISABLED
+		player.stop()
+		var prior_callback_mode := player.callback_mode_process
+		player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
 		actor.rotation.y = 0.0
 		var total_seconds := 0.0
 		for stage_row in scenario.stages:
@@ -397,7 +399,7 @@ func capture_runtime_boundary_sequences() -> void:
 			"role":scenario.role, "stages":scenario.stages, "runtime_state_trace":trace,
 			"simulation_position_authoritative":true, "external_root_facing":scenario.id == "runtime_turn_right_090"
 		})
-	player.process_mode = Node.PROCESS_MODE_INHERIT
+		player.callback_mode_process = prior_callback_mode
 
 func capture_full_review() -> void:
 	for clip in Motion.LOOP_CLIPS:

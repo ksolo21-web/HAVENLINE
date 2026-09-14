@@ -181,7 +181,22 @@ func run() -> void:
 	check("defense repair maps to repair", Motion.motion_for_action({"kind":"defense_repair"}) == "repair")
 	check("enemy contact maps to attack foundation", Motion.motion_for_action({"kind":"enemy"}) == "attack_contact")
 	var action_state := Motion.update_actor(actor, 0.0, {"kind":"gather","id":"wood0","progress":0.56}, 0.016, "player_lead")
-	check("action progress selects and synchronizes the clip", action_state.state == "chop" and is_equal_approx(action_state.progress, 0.56) and player.speed_scale == 0.0)
+	check("action progress selects and synchronizes the clip", action_state.state == "chop" and is_equal_approx(action_state.progress, 0.56) and player.speed_scale == 1.0)
+	var runtime_skeleton := find_skeleton(actor)
+	player.play(Motion.LIBRARY + "/idle", 0.0)
+	player.seek(library.get_animation("idle").length * 0.5, true)
+	runtime_skeleton.force_update_all_bone_transforms()
+	var idle_right_hand := runtime_skeleton.get_bone_global_pose(runtime_skeleton.find_bone("R_Hand")).origin
+	actor.set_meta("t06_active_clip", "idle")
+	var prior_callback_mode := player.callback_mode_process
+	player.callback_mode_process = AnimationMixer.ANIMATION_CALLBACK_MODE_PROCESS_MANUAL
+	for frame in 12:
+		Motion.update_actor(actor, 0.0, {"kind":"gather","id":"wood0","progress":0.56 * float(frame + 1) / 12.0}, 1.0 / 60.0, "player_lead")
+		player.advance(1.0 / 60.0)
+	runtime_skeleton.force_update_all_bone_transforms()
+	var blended_right_hand := runtime_skeleton.get_bone_global_pose(runtime_skeleton.find_bone("R_Hand")).origin
+	check("runtime action blend reaches authored motion", idle_right_hand.distance_to(blended_right_hand) > 0.08)
+	player.callback_mode_process = prior_callback_mode
 	var helper_state := Motion.update_actor(actor, 0.0, {"kind":"deposit","progress":0.63}, 0.016, "core_human_companion")
 	check("Character1 companion role uses the motion foundation", helper_state.state == "deposit" and helper_state.role == "core_human_companion")
 	Motion.update_actor(actor, 2.2, {}, 0.016, "player_lead")

@@ -132,6 +132,24 @@ jobs:
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
           xvfb-run -a -s '-screen 0 960x540x24' timeout 1200 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 960x540 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --video-sequences --out="$(pwd)/task06-evidence/videos" > task06-evidence/videos.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task06-evidence/videos.log; then exit 1; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image,ImageChops,ImageStat
+          import hashlib,math
+          for folder in sorted(Path('task06-evidence/videos/video-frames').iterdir()):
+              frames=sorted(folder.glob('frame-*.jpg'))
+              assert frames,(folder,'no source frames')
+              if folder.name.startswith('boundary_'):
+                  hashes={hashlib.sha256(path.read_bytes()).hexdigest() for path in frames}
+                  first=Image.open(frames[0]).convert('RGB')
+                  maximum_rms=0.0
+                  for path in frames[1:]:
+                      current=Image.open(path).convert('RGB')
+                      rms=ImageStat.Stat(ImageChops.difference(first,current)).rms
+                      maximum_rms=max(maximum_rms,math.sqrt(sum(value*value for value in rms)/3.0))
+                  assert len(hashes)>=math.ceil(len(frames)*0.50),(folder,len(frames),len(hashes))
+                  assert maximum_rms>=2.0,(folder,maximum_rms)
+          PY
           for frames in task06-evidence/videos/video-frames/*; do
             clip=$(basename "$frames")
             ffmpeg -hide_banner -loglevel error -framerate 30 -i "$frames/frame-%05d.jpg" -c:v libx264 -preset veryfast -crf 22 -pix_fmt yuv420p -movflags +faststart "task06-evidence/videos/realtime/$clip.mp4"
