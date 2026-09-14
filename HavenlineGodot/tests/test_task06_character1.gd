@@ -61,17 +61,20 @@ func validate_animation(id: String, animation: Animation, should_loop: bool) -> 
 	check(id + " loop mode matches contract", (animation.loop_mode == Animation.LOOP_LINEAR) == should_loop)
 	var has_motion := false
 	var valid := true
-	var has_scale := false
+	var has_scale_deformation := false
 	for track in animation.get_track_count():
 		if animation.track_get_type(track) == Animation.TYPE_SCALE_3D:
-			has_scale = true
+			var first_scale: Vector3 = animation.track_get_key_value(track, 0)
+			for key in animation.track_get_key_count(track):
+				var scale: Vector3 = animation.track_get_key_value(track, key)
+				has_scale_deformation = has_scale_deformation or not scale.is_finite() or not scale.is_equal_approx(first_scale)
 		if animation.track_get_type(track) == Animation.TYPE_ROTATION_3D:
 			for key in animation.track_get_key_count(track):
 				var q: Quaternion = animation.track_get_key_value(track, key)
 				valid = valid and finite_quaternion(q)
 				if key > 0 and q.angle_to(animation.track_get_key_value(track, key - 1)) > 0.001:
 					has_motion = true
-	check(id + " contains no scale deformation", not has_scale)
+	check(id + " contains no animated scale deformation", not has_scale_deformation)
 	check(id + " has finite normalized rotations", valid)
 	check(id + " contains authored motion", has_motion or id == "idle")
 
