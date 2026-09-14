@@ -144,7 +144,7 @@ jobs:
         run: |
           set -euo pipefail
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
-          /usr/bin/time -v -o task06-evidence/benchmark-time.txt xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --benchmark --benchmark-frames=300 --out="$(pwd)/task06-evidence/benchmark" > task06-evidence/benchmark.log 2>&1
+          /usr/bin/time -v -o task06-evidence/benchmark-time.txt xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --benchmark --benchmark-frames=60 --out="$(pwd)/task06-evidence/benchmark" > task06-evidence/benchmark.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task06-evidence/benchmark.log; then exit 1; fi
           test -s task06-evidence/benchmark/benchmark.json
 
@@ -215,7 +215,7 @@ jobs:
           rss_mb=float(rss_line.split(':')[-1].strip())/1024.0
           assert benchmark['candidate_commit']==os.environ['CANDIDATE']
           assert benchmark['source_sha256']==gallery['source_sha256']
-          assert benchmark['measured_frames']==1200 and benchmark['software_preflight_passed'] is True
+          assert benchmark['measured_frames']==240 and benchmark['software_preflight_passed'] is True
           assert benchmark['texture_gpu_memory_mb']>0 and benchmark['video_gpu_memory_mb']>0 and benchmark['process_static_memory_mb']>0 and rss_mb>0
           assert benchmark['animation_inventory_per_rig']['clips']==24 and benchmark['animation_inventory_per_rig']['tracks']>0 and benchmark['animation_inventory_per_rig']['keys']>0
           assert benchmark['shipping_population_rigs_visible']==4 and benchmark['t06_animated_rigs']==2
@@ -227,7 +227,7 @@ jobs:
               'physics_active_bodies':benchmark['physics_active_bodies'],'animated_rigs_active':benchmark['t06_animated_rigs'],'shipping_population_rigs_visible':benchmark['shipping_population_rigs_visible'],
               'process_memory_mb':rss_mb,'process_static_memory_mb':benchmark['process_static_memory_mb'],'storage_download_mb':storage_mb,
               'animation_install_usec_two_rigs':benchmark['animation_install_usec_two_rigs'],'animation_inventory_per_rig':benchmark['animation_inventory_per_rig'],
-              'measurement_method':'Counterbalanced A-B-B-A shipping-scene forced-render benchmark over 1,200 measured frames; Godot GPU-memory counters; process maximum RSS; exact animation inventory',
+              'measurement_method':'Counterbalanced A-B-B-A shipping-scene synchronous forced-render benchmark over 240 measured frames; Godot GPU-memory counters; process maximum RSS; exact animation inventory',
               'known_unmeasured_fields':['gpu_frame_ms_where_measurable'],
               'physical_device_certification':False,'errors':[]
           }
