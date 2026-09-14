@@ -16,6 +16,11 @@ ALLOWED_MIGRATION_PATTERNS=[
 ]
 
 T05_ACCEPTED_SOURCE="fa6fa70f154f3757d22303522ca3f6de2c3d391f"
+T05_SCORE_DIMENSIONS={
+    "C1":{"reference_fidelity","visual_language","cross_view_consistency"},
+    "C2":{"geometry_contact","clipping_seams","intentional_gap_integrity","cross_view_integrity"},
+    "C6":{"frame_time","draw_calls","geometry","texture_memory","shader_cost","physics","animation","population","thermal_risk"},
+}
 
 def _strict_score_errors(label,scores):
     errors=[]
@@ -44,16 +49,35 @@ def t05_completion_errors(record,ledger):
         errors += _strict_score_errors(f"T05 {critic}",scores)
     if set(visual.get("scores",{}))!={"C1","C2"}:
         errors.append("T05 C1/C2 score sets are incomplete")
+    else:
+        for critic in ("C1","C2"):
+            if set(visual["scores"][critic])!=T05_SCORE_DIMENSIONS[critic]:
+                errors.append(f"T05 {critic} mandatory dimensions are incomplete")
     performance=record.get("performance_critic",{})
     if performance.get("critic")!="C6" or performance.get("passed") is not True or performance.get("coverage_complete") is not True or performance.get("candidate_source")!=T05_ACCEPTED_SOURCE or performance.get("defects")!=[]:
         errors.append("T05 C6 closure is incomplete")
     errors += _strict_score_errors("T05 C6",performance.get("scores"))
+    if set(performance.get("scores",{}))!=T05_SCORE_DIMENSIONS["C6"]:
+        errors.append("T05 C6 mandatory dimensions are incomplete")
     final_gate=record.get("final_gate",{})
     if final_gate.get("passed") is not True or final_gate.get("source")!=T05_ACCEPTED_SOURCE or final_gate.get("ready_for_final_pixel_signoff") is not True or final_gate.get("errors")!=[]:
         errors.append("T05 final machine gate is incomplete")
     signoff=record.get("pixel_signoff",{})
     if signoff.get("performed_against_accepted_gameplay_source") is not True or signoff.get("unresolved_mandatory_task_defects")!=[]:
         errors.append("T05 final pixel signoff is incomplete")
+    gates=record.get("gates",{})
+    if set(gates)!={f"G{i}" for i in range(1,15)} or any(value is not True for value in gates.values()):
+        errors.append("T05 G1-G14 closure is incomplete")
+    artifacts=record.get("artifacts",{})
+    required_artifacts={"integrated_precritic","visual_resolution","C6","final_gate"}
+    digest_pattern=re.compile(r"^sha256:[0-9a-f]{64}$")
+    if set(artifacts)<required_artifacts:
+        errors.append("T05 required artifact identities are incomplete")
+    else:
+        for name in required_artifacts:
+            artifact=artifacts[name]
+            if not isinstance(artifact.get("id"),int) or artifact["id"]<=0 or not digest_pattern.fullmatch(str(artifact.get("digest",""))):
+                errors.append(f"T05 {name} artifact identity is invalid")
     if ledger.get("task_id")!="T05" or ledger.get("candidate_commit")!=T05_ACCEPTED_SOURCE:
         errors.append("T05 defect ledger is not bound to the accepted source")
     allowed={"VERIFIED_CLOSED","REJECTED_AS_INVALID_FINDING"}
