@@ -1,7 +1,7 @@
 name: Havenline T05 strict review
 
 concurrency:
-  group: 'havenline-t05-strict-${{ github.ref }}'
+  group: 'havenline-t05-strict-${{ github.ref }}-${{ inputs.mode || ''preflight'' }}'
   cancel-in-progress: true
 
 on:
@@ -36,6 +36,20 @@ on:
         default: '[]'
       adjudication_record_path:
         description: 'Committed full-resolution human adjudication JSON'
+        type: string
+        default: 'Docs/Production/Evidence/T05/FULL_RESOLUTION_ADJUDICATION.json'
+  workflow_call:
+    inputs:
+      mode:
+        type: string
+        required: true
+      visual_primary_run_id:
+        type: string
+        required: false
+      recovery_targets:
+        type: string
+        default: '[]'
+      adjudication_record_path:
         type: string
         default: 'Docs/Production/Evidence/T05/FULL_RESOLUTION_ADJUDICATION.json'
 
@@ -98,7 +112,7 @@ jobs:
       - run: python3 -m unittest discover -s tools/havenline/task05 -p 'test_evaluate_station_reviews.py'
       - run: python3 -m unittest discover -s tools/havenline/task05 -p 'test_performance_protocol.py'
       - name: Validate bounded recovery request
-        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'recover'
+        if: inputs.mode == 'recover'
         env:
           PRIOR_RUN_ID: '${{ inputs.visual_primary_run_id }}'
           RECOVERY_TARGETS: '${{ inputs.recovery_targets }}'
@@ -113,7 +127,7 @@ jobs:
       - name: Build exact primary matrix
         id: review_matrix
         env:
-          MODE: '${{ github.event_name == ''workflow_dispatch'' && inputs.mode || ''primary'' }}'
+          MODE: '${{ inputs.mode || ''primary'' }}'
           RECOVERY_TARGETS: '${{ inputs.recovery_targets }}'
         run: |
           python3 - <<'PY' >> "$GITHUB_OUTPUT"
@@ -126,7 +140,7 @@ jobs:
 
   primary-visual:
     needs: preflight
-    if: github.event_name == 'workflow_dispatch' && needs.preflight.result == 'success' && (inputs.mode == 'primary' || inputs.mode == 'recover')
+    if: needs.preflight.result == 'success' && (inputs.mode == 'primary' || inputs.mode == 'recover')
     strategy:
       fail-fast: false
       matrix: '${{ fromJSON(needs.preflight.outputs.visual_matrix) }}'
@@ -184,14 +198,14 @@ jobs:
 
   visual-resolution:
     needs: [preflight, primary-visual]
-    if: always() && github.event_name == 'workflow_dispatch' && needs.preflight.result == 'success' && (inputs.mode == 'primary' || inputs.mode == 'recover')
+    if: always() && needs.preflight.result == 'success' && (inputs.mode == 'primary' || inputs.mode == 'recover')
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - run: python3 -m pip install pillow==11.3.0
       - name: Download prior primary artifacts for recovery
-        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'recover'
+        if: inputs.mode == 'recover'
         uses: actions/download-artifact@v4
         with:
           github-token: '${{ github.token }}'
@@ -200,7 +214,7 @@ jobs:
           pattern: 'havenline-t05-*-primary-${{ inputs.visual_primary_run_id }}'
           path: primary-reviews
       - name: Remove superseded prior targets
-        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'recover'
+        if: inputs.mode == 'recover'
         env:
           PRIOR_RUN_ID: '${{ inputs.visual_primary_run_id }}'
           RECOVERY_TARGETS: '${{ inputs.recovery_targets }}'
@@ -243,7 +257,7 @@ jobs:
 
   performance:
     needs: preflight
-    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'primary'
+    if: inputs.mode == 'primary'
     runs-on: ubuntu-24.04
     timeout-minutes: 110
     steps:
@@ -354,7 +368,7 @@ jobs:
 
   adjudication-precheck:
     needs: preflight
-    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'adjudicate' && needs.preflight.result == 'success'
+    if: inputs.mode == 'adjudicate' && needs.preflight.result == 'success'
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     outputs:
@@ -421,7 +435,7 @@ jobs:
 
   supplemental-visual:
     needs: [preflight, adjudication-precheck]
-    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'adjudicate' && needs.preflight.result == 'success' && needs.adjudication-precheck.result == 'success'
+    if: inputs.mode == 'adjudicate' && needs.preflight.result == 'success' && needs.adjudication-precheck.result == 'success'
     strategy:
       fail-fast: false
       matrix: '${{ fromJSON(needs.adjudication-precheck.outputs.matrix) }}'
@@ -467,7 +481,7 @@ jobs:
 
   adjudicated-visual:
     needs: [preflight, adjudication-precheck, supplemental-visual]
-    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'adjudicate' && needs.preflight.result == 'success' && needs.adjudication-precheck.result == 'success' && needs.supplemental-visual.result == 'success'
+    if: inputs.mode == 'adjudicate' && needs.preflight.result == 'success' && needs.adjudication-precheck.result == 'success' && needs.supplemental-visual.result == 'success'
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     steps:
@@ -506,7 +520,7 @@ jobs:
     if: >-
       always() && needs.visual-resolution.result == 'success' &&
       (needs.performance.result == 'success' ||
-      (github.event_name == 'workflow_dispatch' && inputs.mode == 'recover'))
+      inputs.mode == 'recover')
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
@@ -518,7 +532,7 @@ jobs:
         uses: actions/download-artifact@v4
         with: {name: 'havenline-t05-C6-${{ github.run_id }}', path: performance}
       - name: Reuse prior successful C6 evidence
-        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'recover'
+        if: inputs.mode == 'recover'
         uses: actions/download-artifact@v4
         with:
           github-token: '${{ github.token }}'
@@ -537,7 +551,7 @@ jobs:
 
   adjudicated-final-machine-gate:
     needs: adjudicated-visual
-    if: always() && github.event_name == 'workflow_dispatch' && inputs.mode == 'adjudicate' && needs.adjudicated-visual.result == 'success'
+    if: always() && inputs.mode == 'adjudicate' && needs.adjudicated-visual.result == 'success'
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
