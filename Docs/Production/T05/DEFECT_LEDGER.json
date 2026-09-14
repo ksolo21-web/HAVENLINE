@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "task_id": "T05",
-  "candidate_commit": "8c9da476ca93a7a826d51eae892449fd20e9c105",
+  "candidate_commit": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
   "defects": [
     {
       "id": "T05-D01",
@@ -70,12 +70,62 @@
         "same_family_strikes": 0
       },
       "status": "READY_FOR_VERIFICATION"
+    },
+    {
+      "id": "T05-D05",
+      "source_run": 34799398759,
+      "visible_symptom": "The resources-and-details slice asserted that visible blue/cyan markings and a white rim were missing even though those features were present in the checksum-bound candidate image, and its numeric scores contradicted the written defect claim.",
+      "triage": [
+        "EVIDENCE_FIX",
+        "TOOLING_FIX"
+      ],
+      "affected_production_object": null,
+      "probable_root_cause": "A syntactically valid but internally inconsistent critic response could pass parsing because the protocol did not retry invalid semantic evidence or retain each failed attempt for resolver audit.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Add bounded deterministic retries only for invalid responses, preserve every request/raw/answer attempt, validate retry seeds and artifacts, and resume only a checksum-bound valid prefix during recovery.",
+      "expected_visible_result": "Invalid or internally contradictory responses remain non-votes and produce inspectable evidence; a valid low score is never retried away.",
+      "proof_contract": "Thirty-seven evaluator/protocol tests plus a fresh complete review whose accepted rows bind every blocking claim to a visible candidate region.",
+      "counters": {
+        "review_round": 3,
+        "same_family_strikes": 0
+      },
+      "status": "REJECTED_AS_INVALID_FINDING"
+    },
+    {
+      "id": "T05-D06",
+      "source_run": 34799398759,
+      "visible_symptom": "All six purpose pads shared the same round silhouette and payment-style three-disc glyph; the stock glyph also had insufficient contrast against its cream center.",
+      "triage": [
+        "PRODUCTION_FIX"
+      ],
+      "affected_production_object": "T05-R03 ground-pad family",
+      "probable_root_cause": "asset_specs prefixed each pad kind before calling build_pad, so every value missed the build/input/output/stock branches and fell through to the payment icon; the shared cylinder stack also provided no silhouette-level purpose cue.",
+      "implicated_production_files": [
+        "tools/havenline/task05/generate_station_kit.py",
+        "HavenlineGodot/assets/stations_v2/catalog.json",
+        "HavenlineGodot/assets/stations_v2/pad_build.glb",
+        "HavenlineGodot/assets/stations_v2/pad_upgrade.glb",
+        "HavenlineGodot/assets/stations_v2/pad_input.glb",
+        "HavenlineGodot/assets/stations_v2/pad_output.glb",
+        "HavenlineGodot/assets/stations_v2/pad_stock.glb",
+        "HavenlineGodot/assets/stations_v2/pad_payment.glb"
+      ],
+      "causal_production_change": "Source commit fa6fa70f154f3757d22303522ca3f6de2c3d391f passes the unprefixed kind into build_pad, gives all six pads distinct plan silhouettes and icons, and uses a blue stock center for high-contrast cream markings.",
+      "tooling_change": "Generator and Godot tests now require six unique silhouette identifiers and six unique icon identifiers; CPU quick-look evidence includes front and reverse pad-family views.",
+      "expected_visible_result": "Build, upgrade, input, output, stock, and payment pads remain immediately distinguishable by shape, direction, icon, and trim from front and reverse gameplay-scale views.",
+      "proof_contract": "Fresh source-bound integrated evidence, complete C1/C2 review with every applicable dimension strictly above 9.0, and a passed final machine gate on source fa6fa70f154f3757d22303522ca3f6de2c3d391f.",
+      "counters": {
+        "review_round": 3,
+        "same_family_strikes": 0
+      },
+      "status": "READY_FOR_VERIFICATION"
     }
   ],
   "counters": {
-    "review_round_count": 2,
-    "evidence_only_attempt_count": 3,
-    "production_repair_count": 0
+    "review_round_count": 3,
+    "evidence_only_attempt_count": 4,
+    "production_repair_count": 1
   },
   "rule": "Every mandatory finding follows CRITIC SYMPTOM -> ROOT CAUSE -> PRODUCTION CHANGE -> EXPECTED VISIBLE RESULT -> REQUIRED PROOF."
 }

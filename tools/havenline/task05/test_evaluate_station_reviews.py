@@ -13,6 +13,7 @@ from review_protocol import (
     applicable_dimensions, build_review_prompt, build_review_schema,
     build_primary_matrix, build_slice_contract, build_slice_plan, expected_request_settings,
     materialize_defect_summary, persist_model_response, review_exit_code, review_integrity_errors,
+    slice_retry_seed, valid_slice_retry_seed,
     write_incomplete_group_bundle,
 )
 
@@ -278,6 +279,14 @@ def mutate_bound_request(result_path: Path, mutate) -> None:
 
 
 class VisualQuorumTests(unittest.TestCase):
+    def test_invalid_response_retry_seeds_are_bounded_and_deterministic(self):
+        self.assertEqual([slice_retry_seed(100, index) for index in range(3)], [100, 1109, 2118])
+        self.assertTrue(all(valid_slice_retry_seed(100, seed) for seed in (100, 1109, 2118)))
+        self.assertFalse(valid_slice_retry_seed(100, 3127))
+        self.assertFalse(valid_slice_retry_seed(100, True))
+        with self.assertRaises(ValueError):
+            slice_retry_seed(100, 3)
+
     def test_recovery_matrix_runs_only_exact_valid_targets(self):
         targets = ["C1:core-families", "C2:resources-and-details"]
         self.assertEqual(build_primary_matrix("recover", json.dumps(targets)), {"include": [
@@ -628,6 +637,39 @@ class VisualQuorumTests(unittest.TestCase):
             report = evaluate(primary, SOURCE, supplemental, write_adjudication(root, "C1", target))
             self.assertFalse(report["passed"])
             self.assertIn("claimed role, attempt, and seed", " ".join(report["errors"]))
+
+    def test_checksum_bound_invalid_response_retry_is_accepted(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.primaries(root)
+            result_path = next(root.rglob("review-result.json"))
+            result = json.loads(result_path.read_text())
+            row_data = result["reviews"][0]
+            folder = result_path.parent
+            bundle_path = folder / row_data["raw_output_path"]
+            bundle = json.loads(bundle_path.read_text())
+            slice_data = bundle["slices"][0]
+            base_seed = row_data["seed"]
+            invalid_path = folder / "preserved-invalid-request.json"
+            invalid_path.write_text(json.dumps({"seed": base_seed, "invalid_non_vote": True}))
+            slice_data["invalid_attempts"] = [{
+                "retry_index": 0, "seed": base_seed, "error": "internally inconsistent response",
+                "request_path": invalid_path.name,
+                "request_sha256": hashlib.sha256(invalid_path.read_bytes()).hexdigest(),
+            }]
+            retry_seed = slice_retry_seed(base_seed, 1)
+            slice_data["seed"] = retry_seed
+            request_path = folder / slice_data["request_path"]
+            request = json.loads(request_path.read_text())
+            request["seed"] = retry_seed
+            request["request_settings"] = expected_request_settings(row_data["critic_id"], row_data["attempt"], retry_seed)
+            request_path.write_text(json.dumps(request))
+            slice_data["request_sha256"] = hashlib.sha256(request_path.read_bytes()).hexdigest()
+            bundle_path.write_text(json.dumps(bundle))
+            row_data["raw_output_sha256"] = hashlib.sha256(bundle_path.read_bytes()).hexdigest()
+            result_path.write_text(json.dumps(result))
+            report = evaluate(root, SOURCE, None)
+            self.assertTrue(report["passed"], report["errors"])
 
     def test_incomplete_row_reports_exact_truncation_without_path_noise(self):
         with tempfile.TemporaryDirectory() as tmp:

@@ -15,6 +15,7 @@ from review_protocol import (
     build_review_prompt, build_review_schema, build_slice_contract,
     expected_request_settings, materialize_defect_summary,
     reference_family_for, review_integrity_errors,
+    slice_retry_seed, valid_slice_retry_seed,
 )
 
 
@@ -215,6 +216,9 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
         raw_board_paths = []
         bound_output_paths = []
         for slice_index, item in enumerate(raw_slices, 1):
+            slice_seed = item.get("seed", row.get("seed"))
+            if not valid_slice_retry_seed(row.get("seed"), slice_seed):
+                errors.append("slice seed is outside the bounded invalid-response retry policy")
             raw_board_paths.append(item.get("board_path"))
             if board_hashes.get(item.get("board_path")) != item.get("board_sha256"):
                 errors.append("raw-output slice is not bound to its board")
@@ -242,14 +246,14 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
                             slice_index, len(raw_slices), scope,
                         )
                         expected_schema = build_review_schema(role, scope.get("reviewed_candidate_paths"), scope.get("reference_path"))
-                        expected_settings = expected_request_settings(role, row.get("attempt"), row.get("seed"))
+                        expected_settings = expected_request_settings(role, row.get("attempt"), slice_seed)
                         if request.get("request_contract") != expected_contract:
                             errors.append("model request contract does not match exact protocol slice scope")
                         if request.get("prompt") != build_review_prompt(row.get("source"), role, expected_contract):
                             errors.append("model request does not contain the exact protocol prompt")
                         if request.get("schema") != expected_schema:
                             errors.append("model request does not contain the exact dynamic response schema")
-                        if request.get("request_settings") != expected_settings or request.get("model") != expected_settings["model"] or request.get("seed") != row.get("seed"):
+                        if request.get("request_settings") != expected_settings or request.get("model") != expected_settings["model"] or request.get("seed") != slice_seed:
                             errors.append("model request settings do not match claimed role, attempt, and seed")
                     except Exception:
                         errors.append("invalid bound slice request JSON")
@@ -269,6 +273,40 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
                         errors.append("invalid bound slice answer JSON")
             if raw_review != answer_review:
                 errors.append("bound raw model response does not match parsed slice answer")
+            invalid_attempts = item.get("invalid_attempts", [])
+            if not isinstance(invalid_attempts, list):
+                errors.append("invalid-response attempts must be a list")
+                invalid_attempts = []
+            try:
+                if slice_seed != slice_retry_seed(row.get("seed"), len(invalid_attempts)):
+                    errors.append("final slice seed does not follow its preserved invalid-response attempts")
+            except (TypeError, ValueError):
+                errors.append("invalid-response retry count exceeds the bounded policy")
+            for retry_index, invalid in enumerate(invalid_attempts):
+                if not isinstance(invalid, dict):
+                    errors.append("invalid-response attempt record must be an object")
+                    continue
+                try:
+                    expected_invalid_seed = slice_retry_seed(row.get("seed"), retry_index)
+                except (TypeError, ValueError):
+                    expected_invalid_seed = None
+                if invalid.get("retry_index") != retry_index or invalid.get("seed") != expected_invalid_seed or not isinstance(invalid.get("error"), str) or not invalid["error"]:
+                    errors.append("invalid-response attempt identity is inconsistent")
+                preserved_count = 0
+                for path_key, hash_key in (("raw_output_path", "raw_output_sha256"), ("request_path", "request_sha256"), ("answer_path", "answer_sha256")):
+                    name = invalid.get(path_key)
+                    if name is None:
+                        continue
+                    preserved_count += 1
+                    bound_output_paths.append(name)
+                    if not isinstance(name, str) or Path(name).name != name:
+                        errors.append("invalid preserved response output path")
+                        continue
+                    path = folder / name
+                    if not path.is_file() or digest(path) != invalid.get(hash_key):
+                        errors.append("missing or changed preserved invalid response output")
+                if preserved_count == 0:
+                    errors.append("invalid-response attempt did not preserve any bound artifact")
             recorded_review = answer_review
             defect_summary_derived = False
             if isinstance(answer_review, dict):

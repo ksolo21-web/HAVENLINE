@@ -12,6 +12,7 @@ import io
 import json
 import math
 import os
+import shutil
 import subprocess
 import time
 import urllib.request
@@ -20,11 +21,12 @@ from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont
 
 from review_protocol import (
-    FILES, GROUP_DISPLAY_NAMES, GROUP_FAMILIES, PROTOCOL, REFERENCE_FOCUS_BOXES, ROLE_DIMENSIONS,
+    FILES, GROUP_DISPLAY_NAMES, GROUP_FAMILIES, MAX_INVALID_RESPONSE_RETRIES, PROTOCOL,
+    REFERENCE_FOCUS_BOXES, ROLE_DIMENSIONS,
     applicable_dimensions, build_review_prompt,
     build_review_schema, build_slice_contract, build_slice_plan, expected_request_settings,
     materialize_defect_summary, persist_model_response, review_exit_code, review_integrity_errors,
-    write_incomplete_group_bundle,
+    slice_retry_seed, valid_slice_retry_seed, write_incomplete_group_bundle,
 )
 
 
@@ -34,6 +36,8 @@ ATTEMPT = os.environ.get("REVIEW_ATTEMPT", "primary")
 SEED = int(os.environ.get("REVIEW_SEED", "20260951"))
 ROOT = Path(os.environ.get("EVIDENCE_ROOT", "task05-evidence"))
 OUT = Path(os.environ.get("REVIEW_OUTPUT", "task05-station-review"))
+RESUME_ROOT = Path(os.environ["REVIEW_RESUME_ROOT"]) if os.environ.get("REVIEW_RESUME_ROOT") else None
+RESUME_RUN_ID = os.environ.get("REVIEW_RESUME_RUN_ID")
 CACHE = Path.home() / ".cache/havenline-t01-qwen35"
 OUT.mkdir(parents=True, exist_ok=True)
 
@@ -290,7 +294,11 @@ def build_boards(group: str) -> tuple[list[Path], Path]:
     return boards, manifest
 
 
-def query(image_path: Path, prompt: str, schema: dict, name: str, max_tokens: int, request_contract: dict | None = None) -> tuple[dict, float]:
+def query(
+    image_path: Path, prompt: str, schema: dict, name: str, max_tokens: int,
+    request_contract: dict | None = None, request_seed: int | None = None,
+) -> tuple[dict, float]:
+    request_seed = SEED if request_seed is None else request_seed
     image = Image.open(image_path).convert("RGB")
     original = image.size
     image.thumbnail((1664, 1664), Image.Resampling.LANCZOS)
@@ -306,7 +314,7 @@ def query(image_path: Path, prompt: str, schema: dict, name: str, max_tokens: in
         "max_tokens": max_tokens,
         "temperature": 0.2,
         "top_p": 0.9,
-        "seed": SEED,
+        "seed": request_seed,
         "repeat_penalty": 1.12,
         "chat_template_kwargs": {"enable_thinking": False},
         "response_format": {"type": "json_object", "schema": schema},
@@ -323,7 +331,7 @@ def query(image_path: Path, prompt: str, schema: dict, name: str, max_tokens: in
         "request_contract": request_contract, "request_settings": request_settings,
         "source_image_path": image_path.name, "source_image_sha256": digest(image_path),
         "image_sha256": hashlib.sha256(payload).hexdigest(),
-        "original_size": original, "input_size": image.size, "seed": SEED,
+        "original_size": original, "input_size": image.size, "seed": request_seed,
         "inference_timeout_seconds": SLICE_TIMEOUT_SECONDS,
     }, indent=2, default=list))
     began = time.monotonic()
@@ -337,6 +345,83 @@ def query(image_path: Path, prompt: str, schema: dict, name: str, max_tokens: in
         raw_bytes, OUT / (name + "-raw.json"), OUT / (name + "-answer.json"), name,
     )
     return parsed, round(time.monotonic() - began, 3)
+
+
+def load_resume_prefix(group: str, boards: list[Path], board_payload: dict) -> list[dict]:
+    """Reuse only a fully bound, valid prefix from an incomplete prior group artifact."""
+    if RESUME_ROOT is None:
+        return []
+    raw_path = RESUME_ROOT / (group + "-raw-bundle.json")
+    if not raw_path.is_file():
+        return []
+    bundle = json.loads(raw_path.read_text())
+    assert bundle.get("schema_version") == 4
+    assert bundle.get("execution_complete") is False
+    assert bundle.get("source") == SOURCE and bundle.get("critic_id") == ROLE
+    assert bundle.get("attempt") == ATTEMPT and bundle.get("seed") == SEED
+    assert bundle.get("group") == group
+    resumed = []
+    for expected_index, part in enumerate(bundle.get("slices", []), 1):
+        assert expected_index <= len(boards)
+        board = boards[expected_index - 1]
+        scope = board_payload["slices"][expected_index - 1]
+        assert part.get("slice") == expected_index
+        assert part.get("board_path") == board.name and part.get("board_sha256") == digest(board)
+        assert part.get("reviewed_candidate_paths") == scope["reviewed_candidate_paths"]
+        assert part.get("reference_family") == scope["reference_family"]
+        assert part.get("reference_path") == scope["reference_path"]
+        review = part.get("review")
+        assert isinstance(review, dict)
+        assert review.get("reviewed_candidate_paths") == scope["reviewed_candidate_paths"]
+        assert review.get("reference_path_used") == scope["reference_path"]
+        assert review.get("unseen_assets_out_of_scope_acknowledged") is True
+        assert not review_integrity_errors(review, ROLE, scope["reviewed_candidate_paths"])
+        part_seed = part.get("seed", SEED)
+        assert valid_slice_retry_seed(SEED, part_seed)
+        request_contract = build_slice_contract(SOURCE, ROLE, ATTEMPT, group, expected_index, len(boards), scope)
+        request_schema = build_review_schema(ROLE, scope["reviewed_candidate_paths"], scope["reference_path"])
+        copied = dict(part)
+        for path_key, hash_key in (
+            ("raw_output_path", "raw_output_sha256"),
+            ("request_path", "request_sha256"),
+            ("answer_path", "answer_sha256"),
+        ):
+            name = part.get(path_key)
+            assert isinstance(name, str) and Path(name).name == name
+            source_path = RESUME_ROOT / name
+            assert source_path.is_file() and digest(source_path) == part.get(hash_key)
+            shutil.copy2(source_path, OUT / name)
+        request = json.loads((OUT / part["request_path"]).read_text())
+        assert request.get("request_contract") == request_contract
+        assert request.get("schema") == request_schema
+        assert request.get("prompt") == build_review_prompt(SOURCE, ROLE, request_contract)
+        assert request.get("request_settings") == expected_request_settings(ROLE, ATTEMPT, part_seed)
+        assert request.get("seed") == part_seed
+        raw_response = json.loads((OUT / part["raw_output_path"]).read_text())
+        assert raw_response["choices"][0].get("finish_reason") == "stop"
+        assert json.loads(raw_response["choices"][0]["message"]["content"]) == json.loads((OUT / part["answer_path"]).read_text())
+        copied["seed"] = part_seed
+        copied["resumed_from_run_id"] = RESUME_RUN_ID
+        resumed.append(copied)
+    return resumed
+
+
+def preserve_invalid_attempt(name: str, retry_index: int, request_seed: int, error: Exception) -> dict:
+    """Retain every invalid non-vote response before a fresh-seed retry."""
+    prefix = f"{name}-invalid-{retry_index + 1:02d}"
+    record = {"retry_index": retry_index, "seed": request_seed, "error": str(error)}
+    for path_key, suffix in (
+        ("raw_output_path", "-raw.json"),
+        ("request_path", "-request.json"),
+        ("answer_path", "-answer.json"),
+    ):
+        source_path = OUT / (name + suffix)
+        if source_path.is_file():
+            preserved_path = OUT / (prefix + suffix)
+            source_path.replace(preserved_path)
+            record[path_key] = preserved_path.name
+            record[path_key.replace("path", "sha256")] = digest(preserved_path)
+    return record
 
 
 def write_input_manifest(group: str, board_manifest: Path) -> tuple[str, str]:
@@ -447,65 +532,74 @@ try:
         failed_slice = None
         try:
             board_payload = json.loads(board_manifest.read_text())
+            slice_reviews = load_resume_prefix(group, boards, board_payload)
+            for resumed_part in slice_reviews:
+                print(json.dumps({
+                    "event": "slice_resumed", "critic_id": ROLE, "group": group,
+                    "slice": resumed_part["slice"], "slice_count": len(boards),
+                    "resume_run_id": RESUME_RUN_ID,
+                }), flush=True)
             for slice_index, board in enumerate(boards, 1):
+                if slice_index <= len(slice_reviews):
+                    continue
                 name = f"{group}-slice-{slice_index:02d}"
                 scope = board_payload["slices"][slice_index - 1]
                 request_contract = build_slice_contract(SOURCE, ROLE, ATTEMPT, group, slice_index, len(boards), scope)
                 slice_schema = build_review_schema(ROLE, scope["reviewed_candidate_paths"], scope["reference_path"])
                 slice_prompt = build_review_prompt(SOURCE, ROLE, request_contract)
-                assert expected_request_settings(ROLE, ATTEMPT, SEED)["max_tokens"] == 1150
                 print(json.dumps({
                     "event": "slice_started", "critic_id": ROLE, "group": group,
                     "slice": slice_index, "slice_count": len(boards),
                     "timeout_seconds": SLICE_TIMEOUT_SECONDS,
                 }), flush=True)
-                try:
-                    review, elapsed = query(board, slice_prompt, slice_schema, name, 1150, request_contract)
-                except Exception as error:
-                    failed_slice = {
-                        "slice": slice_index, "board_path": board.name, "board_sha256": digest(board),
-                        "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
-                        "reference_family": scope["reference_family"], "reference_path": scope["reference_path"],
-                        "error": str(error),
-                    }
-                    for path_key, suffix in (("raw_output_path", "-raw.json"), ("request_path", "-request.json"), ("answer_path", "-answer.json")):
-                        partial = OUT / (name + suffix)
-                        if partial.is_file():
-                            failed_slice[path_key] = partial.name
-                            failed_slice[path_key.replace("path", "sha256")] = digest(partial)
-                    print(json.dumps({
-                        "event": "slice_failed", "critic_id": ROLE, "group": group,
-                        "slice": slice_index, "slice_count": len(boards), "error": str(error),
-                    }), flush=True)
-                    raise
-                try:
-                    review, defect_summary_derived = materialize_defect_summary(review)
-                    assert review["reviewed_candidate_paths"] == scope["reviewed_candidate_paths"], "reviewed candidate path acknowledgment mismatch"
-                    assert review["reference_path_used"] == scope["reference_path"], "reference path acknowledgment mismatch"
-                    assert review["unseen_assets_out_of_scope_acknowledged"] is True, "unseen-asset scope was not acknowledged"
-                    integrity_errors = review_integrity_errors(review, ROLE, scope["reviewed_candidate_paths"])
-                    assert not integrity_errors, "; ".join(integrity_errors)
-                except Exception as error:
-                    failed_slice = {
-                        "slice": slice_index, "board_path": board.name, "board_sha256": digest(board),
-                        "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
-                        "reference_family": scope["reference_family"], "reference_path": scope["reference_path"],
-                        "error": str(error),
-                    }
-                    for path_key, suffix in (("raw_output_path", "-raw.json"), ("request_path", "-request.json"), ("answer_path", "-answer.json")):
-                        partial = OUT / (name + suffix)
-                        if partial.is_file():
-                            failed_slice[path_key] = partial.name
-                            failed_slice[path_key.replace("path", "sha256")] = digest(partial)
-                    print(json.dumps({
-                        "event": "slice_failed", "critic_id": ROLE, "group": group,
-                        "slice": slice_index, "slice_count": len(boards), "error": str(error),
-                    }), flush=True)
-                    raise
+                invalid_attempts = []
+                elapsed = 0.0
+                for retry_index in range(MAX_INVALID_RESPONSE_RETRIES + 1):
+                    request_seed = slice_retry_seed(SEED, retry_index)
+                    assert expected_request_settings(ROLE, ATTEMPT, request_seed)["max_tokens"] == 1150
+                    attempt_began = time.monotonic()
+                    try:
+                        review, _attempt_elapsed = query(
+                            board, slice_prompt, slice_schema, name, 1150, request_contract,
+                            request_seed=request_seed,
+                        )
+                        review, defect_summary_derived = materialize_defect_summary(review)
+                        assert review["reviewed_candidate_paths"] == scope["reviewed_candidate_paths"], "reviewed candidate path acknowledgment mismatch"
+                        assert review["reference_path_used"] == scope["reference_path"], "reference path acknowledgment mismatch"
+                        assert review["unseen_assets_out_of_scope_acknowledged"] is True, "unseen-asset scope was not acknowledged"
+                        integrity_errors = review_integrity_errors(review, ROLE, scope["reviewed_candidate_paths"])
+                        assert not integrity_errors, "; ".join(integrity_errors)
+                        elapsed += time.monotonic() - attempt_began
+                        break
+                    except Exception as error:
+                        elapsed += time.monotonic() - attempt_began
+                        invalid_attempts.append(preserve_invalid_attempt(name, retry_index, request_seed, error))
+                        if retry_index < MAX_INVALID_RESPONSE_RETRIES:
+                            print(json.dumps({
+                                "event": "slice_invalid_retry", "critic_id": ROLE, "group": group,
+                                "slice": slice_index, "slice_count": len(boards),
+                                "retry_index": retry_index + 1,
+                                "next_seed": slice_retry_seed(SEED, retry_index + 1),
+                                "error": str(error),
+                            }), flush=True)
+                            continue
+                        failed_slice = {
+                            "slice": slice_index, "board_path": board.name, "board_sha256": digest(board),
+                            "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
+                            "reference_family": scope["reference_family"], "reference_path": scope["reference_path"],
+                            "seed": request_seed, "invalid_attempts": invalid_attempts, "error": str(error),
+                        }
+                        print(json.dumps({
+                            "event": "slice_failed", "critic_id": ROLE, "group": group,
+                            "slice": slice_index, "slice_count": len(boards), "error": str(error),
+                        }), flush=True)
+                        raise
+                elapsed = round(elapsed, 3)
                 slice_reviews.append({
                     "slice": slice_index, "board_path": board.name, "board_sha256": digest(board),
                     "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
                     "reference_family": scope["reference_family"], "reference_path": scope["reference_path"],
+                    "seed": request_seed, "invalid_attempts": invalid_attempts,
                     "raw_output_path": name + "-raw.json", "raw_output_sha256": digest(OUT / (name + "-raw.json")),
                     "request_path": name + "-request.json", "request_sha256": digest(OUT / (name + "-request.json")),
                     "answer_path": name + "-answer.json", "answer_sha256": digest(OUT / (name + "-answer.json")),

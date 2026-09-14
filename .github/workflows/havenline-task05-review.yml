@@ -58,8 +58,8 @@ permissions:
   actions: read
 
 env:
-  EXPECTED_SOURCE: '8c9da476ca93a7a826d51eae892449fd20e9c105'
-  PRIMARY_RUN_ID: '34762404417'
+  EXPECTED_SOURCE: 'fa6fa70f154f3757d22303522ca3f6de2c3d391f'
+  PRIMARY_RUN_ID: '34824259431'
   T04_BASELINE_RUN_ID: '34738864775'
   T04_BASELINE_SOURCE: 'e08fd37e9a999d878644c03089c4b4b253bd7472'
   OMP_NUM_THREADS: '4'
@@ -97,11 +97,11 @@ jobs:
           t=json.load(open('task05-evidence/tests.json'))
           assert q['candidate_source']==p['source']==t['source']==source
           assert q['manual_quick_look']=='PASS' and q['critics_authorized'] is True
-          assert q['artifact_digest']=='sha256:f050b2f9835063b83166a537e0769fd045dc7bd6998d42e397e8e6648ba938df'
+          assert q['artifact_digest']=='sha256:76f6a0237e2676abf86eeac7b82a1005a8bba0dd951b03a14a8022626d982da1'
           assert p['actual_images']==77 and p['family_view_contract_complete'] is True
           assert p['shipping_main_call_site_exercised'] is True
           assert p['cheap_pixel_gate_passed'] is True and p['cheap_performance_gate_passed'] is True
-          assert t['suite_count']==18 and t['total_checks']>=1117 and t['all_passed'] is True
+          assert t['suite_count']==18 and t['total_checks']>=1119 and t['all_passed'] is True
           assert hashlib.sha256(Path('task05-evidence/reference-ground.webp').read_bytes()).hexdigest()=='3c424b0df53c1c6de49018278779a4ef1ced58562e5b9dbb54fe276d13aa2ddb'
           assert len(list(Path('task05-evidence').glob('component/*.png')))==12
           assert len(list(Path('task05-evidence').glob('families/*.png')))==42
@@ -153,6 +153,8 @@ jobs:
       REVIEW_GROUPS: '${{ matrix.group }}'
       REVIEW_OUTPUT: 'task05-${{ matrix.critic }}-${{ matrix.group }}-primary'
       REVIEW_SLICE_TIMEOUT_SECONDS: '900'
+      REVIEW_RESUME_ROOT: '${{ inputs.mode == ''recover'' && ''task05-resume'' || '''' }}'
+      REVIEW_RESUME_RUN_ID: '${{ inputs.visual_primary_run_id }}'
     steps:
       - uses: actions/checkout@v4
         with: {lfs: true}
@@ -163,6 +165,15 @@ jobs:
           run-id: '${{ env.PRIMARY_RUN_ID }}'
           name: 'task05-integrated-precritic-${{ env.EXPECTED_SOURCE }}'
           path: task05-evidence
+      - name: Download the prior checksum-bound group checkpoint
+        if: inputs.mode == 'recover'
+        uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ inputs.visual_primary_run_id }}'
+          name: 'havenline-t05-${{ matrix.critic }}-${{ matrix.group }}-primary-${{ inputs.visual_primary_run_id }}'
+          path: task05-resume
       - name: Add checksum-bound family-complete reference frames
         run: |
           mkdir -p task05-evidence/reference

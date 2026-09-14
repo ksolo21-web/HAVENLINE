@@ -10,6 +10,8 @@ from pathlib import Path
 
 VIEWS = ["front", "rear", "left", "right", "three-quarter", "detail"]
 PROTOCOL = "family-focus-local-scope-v4"
+MAX_INVALID_RESPONSE_RETRIES = 2
+INVALID_RESPONSE_RETRY_SEED_STRIDE = 1009
 ROLE_DIMENSIONS = {
     "C1": ["reference_fidelity", "visual_language", "cross_view_consistency"],
     "C2": ["geometry_contact", "clipping_seams", "intentional_gap_integrity", "cross_view_integrity"],
@@ -95,6 +97,27 @@ FILES = {
 }
 
 REVIEW_ROLES = ("C1", "C2")
+
+
+def slice_retry_seed(base_seed: int, retry_index: int) -> int:
+    """Return a deterministic fresh seed for an invalid (non-vote) response retry."""
+    if not isinstance(base_seed, int) or isinstance(base_seed, bool):
+        raise ValueError("base seed must be an integer")
+    if not isinstance(retry_index, int) or isinstance(retry_index, bool) or not 0 <= retry_index <= MAX_INVALID_RESPONSE_RETRIES:
+        raise ValueError("invalid response retry index is outside the bounded policy")
+    return base_seed + retry_index * INVALID_RESPONSE_RETRY_SEED_STRIDE
+
+
+def valid_slice_retry_seed(base_seed: int, candidate_seed: int) -> bool:
+    """Accept only the base seed or one of the bounded deterministic retry seeds."""
+    return (
+        isinstance(base_seed, int) and not isinstance(base_seed, bool)
+        and isinstance(candidate_seed, int) and not isinstance(candidate_seed, bool)
+        and candidate_seed in {
+            slice_retry_seed(base_seed, retry_index)
+            for retry_index in range(MAX_INVALID_RESPONSE_RETRIES + 1)
+        }
+    )
 
 
 def build_primary_matrix(mode: str, recovery_targets_json: str = "[]") -> dict:
