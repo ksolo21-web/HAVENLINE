@@ -145,14 +145,14 @@ jobs:
       fail-fast: false
       matrix: '${{ fromJSON(needs.preflight.outputs.visual_matrix) }}'
     runs-on: ubuntu-24.04
-    timeout-minutes: 200
+    timeout-minutes: 340
     env:
       REVIEW_ROLE: '${{ matrix.critic }}'
       REVIEW_ATTEMPT: primary
       REVIEW_SEED: '${{ matrix.critic == ''C1'' && ''20260951'' || ''20260961'' }}'
       REVIEW_GROUPS: '${{ matrix.group }}'
       REVIEW_OUTPUT: 'task05-${{ matrix.critic }}-${{ matrix.group }}-primary'
-      REVIEW_SLICE_TIMEOUT_SECONDS: '900'
+      REVIEW_SLICE_TIMEOUT_SECONDS: '1800'
       REVIEW_RESUME_ROOT: '${{ inputs.mode == ''recover'' && ''task05-resume'' || '''' }}'
       REVIEW_RESUME_RUN_ID: '${{ inputs.visual_primary_run_id }}'
     steps:
@@ -451,14 +451,14 @@ jobs:
       fail-fast: false
       matrix: '${{ fromJSON(needs.adjudication-precheck.outputs.matrix) }}'
     runs-on: ubuntu-24.04
-    timeout-minutes: 200
+    timeout-minutes: 340
     env:
       REVIEW_ROLE: '${{ matrix.role }}'
       REVIEW_GROUPS: '${{ matrix.group }}'
       REVIEW_ATTEMPT: 'supplement-${{ matrix.attempt }}'
       REVIEW_SEED: '${{ matrix.seed }}'
       REVIEW_OUTPUT: 'supplemental/${{ matrix.role }}-${{ matrix.group }}-${{ matrix.attempt }}'
-      REVIEW_SLICE_TIMEOUT_SECONDS: '900'
+      REVIEW_SLICE_TIMEOUT_SECONDS: '1800'
     steps:
       - uses: actions/checkout@v4
         with: {lfs: true}

@@ -120,11 +120,26 @@
         "same_family_strikes": 0
       },
       "status": "READY_FOR_VERIFICATION"
+    },
+    {
+      "id": "T05-D07",
+      "source_run": 34825220341,
+      "visible_symptom": "The C1 shipping-contexts-and-native primary job timed out on slice 1 in all three deterministic attempts before producing any critic response, leaving mandatory visual coverage incomplete.",
+      "triage": ["TOOLING_FIX", "EVIDENCE_FIX"],
+      "affected_production_object": null,
+      "probable_root_cause": "The checksum-bound 1600x1200 reference/candidate board requires roughly twelve minutes of multimodal prompt ingestion on the pinned four-thread CPU runner before answer generation, while the per-slice HTTP deadline was only fifteen minutes; the server log records task cancellation at that exact deadline with no raw answer artifact.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Raise the primary and supplemental critic per-slice inference deadline from 900 to 1800 seconds and their enclosing job budget from 200 to 340 minutes without changing the model, evidence resolution, review prompt, strict score threshold, or bounded invalid-response retry rule.",
+      "expected_visible_result": "The pinned critic has enough time to finish each full-resolution slice and emit a checksum-bound response; genuine scores and localized defects remain unchanged and enforceable.",
+      "proof_contract": "A fresh source-bound primary or bounded recovery run must complete every affected C1/C2 group with valid raw/request/answer artifacts and every mandatory dimension strictly above 9.0.",
+      "counters": {"review_round": 4, "same_family_strikes": 0},
+      "status": "READY_FOR_VERIFICATION"
     }
   ],
   "counters": {
-    "review_round_count": 3,
-    "evidence_only_attempt_count": 4,
+    "review_round_count": 4,
+    "evidence_only_attempt_count": 5,
     "production_repair_count": 1
   },
   "rule": "Every mandatory finding follows CRITIC SYMPTOM -> ROOT CAUSE -> PRODUCTION CHANGE -> EXPECTED VISIBLE RESULT -> REQUIRED PROOF."
