@@ -122,6 +122,7 @@ jobs:
           xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --out="$(pwd)/task06-evidence/gallery" > task06-evidence/gallery.log 2>&1
           xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --native-4k --out="$(pwd)/task06-evidence/native4k" > task06-evidence/native4k.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task06-evidence/gallery.log task06-evidence/native4k.log; then exit 1; fi
+          python3 tools/havenline/task06/runtime_review_gate.py --glb task06-evidence/gallery/review/Character1-T06-runtime.glb --motion-ledger task06-evidence/gallery/motion-ledger.json --candidate "$GITHUB_SHA" --output task06-evidence/runtime-review-gate.json
           cp Docs/Production/T05/ReferenceFrames/*.png task06-evidence/reference/
           cp Docs/Production/T05/ReferenceFrames/coverage.json task06-evidence/reference/
 
@@ -137,8 +138,8 @@ jobs:
             ffmpeg -hide_banner -loglevel error -framerate 7.5 -i "$frames/frame-%05d.jpg" -c:v libx264 -preset veryfast -crf 22 -pix_fmt yuv420p -movflags +faststart "task06-evidence/videos/slow/$clip.mp4"
           done
           rm -rf task06-evidence/videos/video-frames
-          test "$(find task06-evidence/videos/realtime -name '*.mp4' | wc -l)" -eq 24
-          test "$(find task06-evidence/videos/slow -name '*.mp4' | wc -l)" -eq 24
+          test "$(find task06-evidence/videos/realtime -name '*.mp4' | wc -l)" -eq 30
+          test "$(find task06-evidence/videos/slow -name '*.mp4' | wc -l)" -eq 30
 
       - name: Run counterbalanced shipping-scene motion benchmark
         run: |
@@ -156,7 +157,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           from PIL import Image,ImageDraw,ImageStat
-          import hashlib,json,math,os
+          import hashlib,json,math,os,struct
           root=Path('task06-evidence')
           gallery=json.loads((root/'gallery/capture.json').read_text())
           native=json.loads((root/'native4k/capture.json').read_text())
@@ -171,10 +172,24 @@ jobs:
               assert manifest['visible_meshes']==manifest['visible_materials']==2
               assert manifest['animated_rigs_active']==1
               assert manifest['physics_active_bodies']==manifest['npc_companion_active_population']==0
-          assert gallery['full_review'] is True and len(gallery['captures'])==422,len(gallery['captures'])
+          assert gallery['full_review'] is True and len(gallery['captures'])==953,len(gallery['captures'])
           assert len(gallery['gameplay_captures'])==11,len(gallery['gameplay_captures'])
+          assert gallery['six_view_temporal_frames']==507,gallery['six_view_temporal_frames']
+          assert gallery['six_view_angles']==['front','front-three-quarter','left','rear','rear-three-quarter','right'],gallery['six_view_angles']
+          assert gallery['runtime_review_candidate']['shipping_asset'] is False
+          review_glb=root/'gallery'/gallery['runtime_review_candidate']['path']
+          assert review_glb.is_file() and hashlib.sha256(review_glb.read_bytes()).hexdigest()==gallery['runtime_review_candidate']['sha256']
+          review_bytes=review_glb.read_bytes();json_size,json_kind=struct.unpack_from('<II',review_bytes,12)
+          assert json_kind==0x4E4F534A
+          review_model=json.loads(review_bytes[20:20+json_size])
+          review_clips=[row['name'] for row in review_model['animations']]
+          assert len(review_clips)==24 and all(name.startswith('t06_') for name in review_clips),review_clips
+          assert len(review_model['skins'])==1 and len(review_model['skins'][0]['joints'])==66
           assert all(row['camera_authority']=='T04-reference-camera-v1' and row['shipping_context'].startswith('T04 camera + T05') for row in gallery['gameplay_captures'])
           assert ledger['sample_rate_hz']==120 and len(ledger['clips'])==24 and len(ledger['actions'])==9 and len(ledger['turns'])==6
+          assert ledger['skin_joint_count']==66 and len(ledger['skin_joint_inventory'])==66
+          assert sum(len(row['joints']) for row in ledger['semantic_parts'])==66
+          assert all(row['skin_joints_sampled']==66 and row['all_joint_transforms_finite'] and row['maximum_joint_scale_error']<0.001 and len(row['joint_metrics'])==66 for row in ledger['clips'].values())
           assert ledger['clips']['walk']['maximum_moving_root_plant_drift_m']<0.03,ledger['clips']['walk']
           assert ledger['clips']['run']['maximum_moving_root_plant_drift_m']<0.03,ledger['clips']['run']
           assert all(row['forward_positive_z'] and row['target_error_m']<0.08 for row in ledger['actions'].values()),ledger['actions']
@@ -185,7 +200,7 @@ jobs:
               rows=manifest['captures']+manifest.get('gameplay_captures',[])
               for row in rows:
                   key=f"{folder}/{row['file']}"; declared[key]=tuple(row['resolution']); files.append(root/key)
-          assert len(files)==439 and len(set(files))==439
+          assert len(files)==970 and len(set(files))==970
           budgets=json.loads(Path('Docs/Production/PERFORMANCE_BUDGETS.json').read_text())['global_soft_budgets']
           hashes={};draw=[];primitives=[];thumbs=[]
           for path in files:
@@ -219,24 +234,48 @@ jobs:
           assert benchmark['texture_gpu_memory_mb']>0 and benchmark['video_gpu_memory_mb']>0 and benchmark['process_static_memory_mb']>0 and rss_mb>0
           assert benchmark['animation_inventory_per_rig']['clips']==24 and benchmark['animation_inventory_per_rig']['tracks']>0 and benchmark['animation_inventory_per_rig']['keys']>0
           assert benchmark['shipping_population_rigs_visible']==4 and benchmark['t06_animated_rigs']==2
+          whole_scene_triangles=max(row['submitted_primitives'] for row in benchmark['phases'])
+          whole_scene_draw_calls=max(row['draw_calls'] for row in benchmark['phases'])
           performance={
-              'task':'T06','candidate_commit':os.environ['CANDIDATE'],'passed':True,
-              'visible_triangles':max(max(primitives),max(row['submitted_primitives'] for row in benchmark['phases'])),'draw_calls':max(max(draw),max(row['draw_calls'] for row in benchmark['phases'])),'materials_visible':2,
+              'task':'T06','candidate_commit':os.environ['CANDIDATE'],'passed':False,
+              'scene_state':benchmark['scene_state'],'resolution':benchmark['resolution'],'renderer':benchmark['renderer'],
+              'visible_triangles':whole_scene_triangles,'triangles_or_primitives':whole_scene_triangles,
+              'draw_calls':whole_scene_draw_calls,
+              'materials_visible':benchmark['materials_visible_whole_scene'],'materials':benchmark['materials_visible_whole_scene'],
+              'unique_shader_resources_visible':benchmark['unique_shader_resources_visible'],
+              't06_incremental_materials':benchmark['t06_incremental_materials'],'t06_incremental_shaders':benchmark['t06_incremental_shaders'],
               'texture_gpu_memory_mb':benchmark['texture_gpu_memory_mb'],'video_gpu_memory_mb':benchmark['video_gpu_memory_mb'],
-              'cpu_frame_p95_ms':benchmark['candidate_p95_ms'],'cpu_frame_baseline_p95_ms':benchmark['baseline_p95_ms'],'motion_p95_delta_ms':benchmark['motion_p95_delta_ms'],'gpu_frame_ms_where_measurable':None,
-              'physics_active_bodies':benchmark['physics_active_bodies'],'animated_rigs_active':benchmark['t06_animated_rigs'],'shipping_population_rigs_visible':benchmark['shipping_population_rigs_visible'],
+              'texture_memory_if_measurable':benchmark['texture_gpu_memory_mb'],
+              'cpu_frame_ms':None,'cpu_frame_time_if_measurable':None,
+              'render_submission_p95_ms':benchmark['candidate_p95_ms'],'render_submission_baseline_p95_ms':benchmark['baseline_p95_ms'],'motion_render_submission_p95_delta_ms':benchmark['motion_p95_delta_ms'],'gpu_frame_ms_where_measurable':None,'gpu_frame_time_if_measurable':None,
+              'physics_active_bodies':benchmark['physics_active_bodies'],'physics_body_count':benchmark['physics_active_bodies'],
+              'animated_rigs_active':benchmark['t06_animated_rigs'],'animation_count':benchmark['animation_inventory_per_rig']['clips'],
+              'shipping_population_rigs_visible':benchmark['shipping_population_rigs_visible'],'population_count':benchmark['shipping_population_rigs_visible'],
+              'npc_companion_active_population':benchmark['npc_companion_active_population'],'npc_companion_active_population_definition':benchmark['npc_companion_active_population_definition'],
               'process_memory_mb':rss_mb,'process_static_memory_mb':benchmark['process_static_memory_mb'],'storage_download_mb':storage_mb,
-              'animation_install_usec_two_rigs':benchmark['animation_install_usec_two_rigs'],'animation_inventory_per_rig':benchmark['animation_inventory_per_rig'],
-              'measurement_method':'Counterbalanced A-B-B-A shipping-scene synchronous forced-render benchmark over 240 measured frames; Godot GPU-memory counters; process maximum RSS; exact animation inventory',
-              'known_unmeasured_fields':['gpu_frame_ms_where_measurable'],
+              'process_memory_if_measurable':rss_mb,'storage_delta':storage_mb,
+              'animation_install_usec_two_rigs':benchmark['animation_install_usec_two_rigs'],'animation_static_memory_delta_mb_two_rigs':benchmark['animation_static_memory_delta_mb_two_rigs'],'animation_inventory_per_rig':benchmark['animation_inventory_per_rig'],
+              'measurement_method':'Counterbalanced A-B-B-A shipping-scene synchronous forced-render benchmark over 240 measured frames with retained raw samples; measured scene resource/population inventory; Godot GPU-memory counters; process maximum RSS; isolated install static-memory delta; exact animation inventory',
+              'known_unmeasured_fields':['cpu_frame_ms','gpu_frame_ms_where_measurable','direct_gpu_shader_time_ms'],
               'physical_device_certification':False,'errors':[]
           }
           (root/'performance-preflight.json').write_text(json.dumps(performance,indent=2))
           videos=list((root/'videos/realtime').glob('*.mp4'))+list((root/'videos/slow').glob('*.mp4'))
-          assert len(videos)==48
-          provenance={'task':'T06-character1-motion-v1','source':os.environ['CANDIDATE'],'source_gltf_sha256':gallery['source_sha256'],'actual_images':439,'full_cycle_images':399,'bone_overlay_images':23,'gameplay_context_images':11,'native3840x2160_scale1_frames':6,'continuous_motion_videos':48,'reference_video_frames':reference,'captures':hashes,'pixel_gate_passed':True,'performance_preflight_passed':True,'manual_quick_look_required_before_critics':True,'critics_executed':False,'task_approved':False,'physical_4k60_verified':False}
+          assert len(videos)==60
+          provenance={'task':'T06-character1-motion-v1','source':os.environ['CANDIDATE'],'source_gltf_sha256':gallery['source_sha256'],'runtime_review_glb_sha256':gallery['runtime_review_candidate']['sha256'],'actual_images':970,'full_cycle_images':906,'six_view_temporal_images':507,'bone_overlay_images':47,'gameplay_context_images':11,'native3840x2160_scale1_frames':6,'continuous_motion_videos':60,'standalone_clip_videos':48,'runtime_boundary_videos':12,'reference_video_frames':reference,'captures':hashes,'pixel_gate_passed':True,'performance_preflight_passed':False,'manual_quick_look_required_before_critics':True,'critics_executed':False,'task_approved':False,'physical_4k60_verified':False}
           (root/'provenance.json').write_text(json.dumps(provenance,indent=2))
           print(json.dumps({k:v for k,v in provenance.items() if k not in ('captures','reference_video_frames')},indent=2))
+          PY
+          python3 tools/havenline/production/critic_harness.py performance --candidate "$CANDIDATE" --record task06-evidence/performance-preflight.json | tee task06-evidence/performance-gate.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          gate=json.loads(Path('task06-evidence/performance-gate.json').read_text())
+          assert gate['passed'] is True,gate
+          performance=Path('task06-evidence/performance-preflight.json')
+          record=json.loads(performance.read_text());record['passed']=True;performance.write_text(json.dumps(record,indent=2))
+          provenance=Path('task06-evidence/provenance.json')
+          record=json.loads(provenance.read_text());record['performance_preflight_passed']=True;provenance.write_text(json.dumps(record,indent=2))
           PY
 
       - uses: actions/upload-artifact@v4
