@@ -193,7 +193,7 @@ jobs:
               with Image.open(path) as raw:
                   image=raw.convert('RGB')
                   assert image.size==declared[str(path.relative_to(root))],(path,image.size)
-                  expected=(3840,2160) if path.parts[-3]=='native4k' else (1280,720)
+                  expected=(3840,2160) if path.parts[-3]=='native4k' or path.parts[-2]=='gameplay' else (1280,720)
                   assert image.size==expected,(path,image.size)
                   stat=ImageStat.Stat(image)
                   assert max(stat.stddev)>=10.0,(path,stat.stddev)
