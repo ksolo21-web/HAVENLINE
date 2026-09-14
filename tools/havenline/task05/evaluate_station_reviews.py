@@ -1,593 +1,720 @@
 #!/usr/bin/env python3
-"""Resolve T05 C1/C2 judgments under the strict isolated-dissent rule."""
+"""Exact-source independent C1/C2 review for the integrated T05 station kit.
+
+Each execution owns one formal critic role. Completed low judgments are never
+retried here; the workflow applies the repository's isolated-dissent policy.
+"""
 from __future__ import annotations
 
-import argparse
+import base64
 import hashlib
+import io
 import json
 import math
+import os
+import shutil
+import subprocess
+import time
+import urllib.request
 from pathlib import Path
 
-from PIL import Image, ImageChops
+from PIL import Image, ImageDraw, ImageFont
 
 from review_protocol import (
-    FILES, GROUP_FAMILIES, PROTOCOL, REFERENCE_FOCUS_BOXES,
-    build_review_prompt, build_review_schema, build_slice_contract,
-    expected_request_settings, materialize_defect_summary,
-    reference_family_for, review_integrity_errors,
-    slice_retry_seed, valid_slice_retry_seed,
+    BOARD_CANVAS_SIZE, CANDIDATE_PANEL_WIDTH, CANDIDATE_PANEL_X,
+    FILES, GROUP_DISPLAY_NAMES, GROUP_FAMILIES, MAX_INVALID_RESPONSE_RETRIES,
+    MIN_CANDIDATE_DISPLAY_HEIGHT, PROTOCOL, REFERENCE_FOCUS_BOXES,
+    REFERENCE_PANEL_WIDTH, REFERENCE_PANEL_X, ROLE_DIMENSIONS,
+    applicable_dimensions, build_review_prompt,
+    build_review_schema, build_slice_contract, build_slice_plan, expected_request_settings,
+    materialize_defect_summary, persist_model_response, review_exit_code, review_integrity_errors,
+    slice_retry_seed, valid_slice_retry_seed, write_incomplete_group_bundle,
 )
 
 
-SOURCE_GROUPS = {
-    "core-families",
-    "loop-families",
-    "resources-and-details",
-    "shipping-device-and-tracking",
-    "shipping-contexts-and-native",
-}
-DIMS = {
-    "C1": {"reference_fidelity", "visual_language", "cross_view_consistency"},
-    "C2": {"geometry_contact", "clipping_seams", "intentional_gap_integrity", "cross_view_integrity"},
-}
-EXPECTED_PROVIDER = "local-checksum-pinned-public-model"
-EXPECTED_MODEL = "Qwen/Qwen3.5-9B"
-EXPECTED_MODEL_REVISION = "3885219b6810b007914f3a7950a8d1b469d598a5"
+SOURCE = os.environ["EXPECTED_SOURCE"]
+ROLE = os.environ["REVIEW_ROLE"]
+ATTEMPT = os.environ.get("REVIEW_ATTEMPT", "primary")
+SEED = int(os.environ.get("REVIEW_SEED", "20260951"))
+ROOT = Path(os.environ.get("EVIDENCE_ROOT", "task05-evidence"))
+OUT = Path(os.environ.get("REVIEW_OUTPUT", "task05-station-review"))
+RESUME_ROOT = Path(os.environ["REVIEW_RESUME_ROOT"]) if os.environ.get("REVIEW_RESUME_ROOT") else None
+RESUME_RUN_ID = os.environ.get("REVIEW_RESUME_RUN_ID")
+CACHE = Path.home() / ".cache/havenline-t01-qwen35"
+OUT.mkdir(parents=True, exist_ok=True)
 
+assert len(SOURCE) == 40
+assert ROLE in ("C1", "C2")
+RUN_ID = os.environ.get("GITHUB_RUN_ID", "local")
+RUN_ATTEMPT = os.environ.get("GITHUB_RUN_ATTEMPT", "0")
+RUN_JOB = os.environ.get("GITHUB_JOB", "local")
+TITLE_FONT = ImageFont.load_default(size=26)
+LABEL_FONT = ImageFont.load_default(size=22)
+
+DIMS = ROLE_DIMENSIONS
+
+GROUPS = [name for name in os.environ.get("REVIEW_GROUPS", ",".join(FILES)).split(",") if name]
+assert GROUPS and set(GROUPS) <= set(FILES)
+SLICE_TIMEOUT_SECONDS = int(os.environ.get("REVIEW_SLICE_TIMEOUT_SECONDS", "900"))
+assert 60 <= SLICE_TIMEOUT_SECONDS <= 1800
 
 def digest(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
+    value = hashlib.sha256()
+    with path.open("rb") as handle:
+        for block in iter(lambda: handle.read(4 * 1024 * 1024), b""):
+            value.update(block)
+    return value.hexdigest()
 
 
-def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[str]:
-    errors = []
-    if row.get("execution_complete") is not True or row.get("error") is not None:
-        return ["critic row incomplete: " + str(row.get("error") or "execution_complete is false")]
-    required_equal = {
-        "provider": EXPECTED_PROVIDER,
-        "model": EXPECTED_MODEL,
-        "model_revision": EXPECTED_MODEL_REVISION,
+provenance = json.loads((ROOT / "provenance.json").read_text())
+tests = json.loads((ROOT / "tests.json").read_text())
+component = json.loads((ROOT / "component/capture.json").read_text())
+families = json.loads((ROOT / "families/capture.json").read_text())
+gameplay = json.loads((ROOT / "gameplay/capture.json").read_text())
+native = json.loads((ROOT / "native4k/capture.json").read_text())
+assert provenance["source"] == tests["source"] == SOURCE
+assert provenance["actual_images"] == 77
+assert provenance["family_view_contract_complete"] is True
+assert provenance["shipping_main_call_site_exercised"] is True
+assert provenance["cheap_pixel_gate_passed"] is True
+assert provenance["cheap_performance_gate_passed"] is True
+assert tests["all_passed"] is True and tests["suite_count"] == 18 and tests["total_checks"] >= 1117
+assert component["task"] == families["task"] == "T05-station-kit-v1"
+assert len(component["captures"]) == 12 and len(families["captures"]) == 42
+assert gameplay["shipping_main_call_site_exercised"] is True
+assert native["shipping_main_call_site_exercised"] is True
+assert len(gameplay["captures"]) == 20 and len(native["captures"]) == 3
+for name, expected in provenance["captures"].items():
+    assert digest(ROOT / name) == expected, "changed evidence " + name
+
+all_review_files = [name for names in FILES.values() for name in names]
+assert len(all_review_files) == 77
+assert len(set(all_review_files)) == 77
+assert set(all_review_files) == set(provenance["captures"])
+
+reference = ROOT / "reference-ground.webp"
+assert digest(reference) == "3c424b0df53c1c6de49018278779a4ef1ced58562e5b9dbb54fe276d13aa2ddb"
+
+
+def validate_reference_coverage() -> tuple[bool, str | None, dict[str, list[Path]]]:
+    """Require actual authoritative pixels for every T05 family before C1 can pass."""
+    coverage_path = ROOT / "reference/coverage.json"
+    if not coverage_path.is_file():
+        return False, "missing reference/coverage.json with family-complete authoritative video frames", {}
+    try:
+        coverage = json.loads(coverage_path.read_text())
+        required = {"hearth", "counters", "pads", "fishing", "processing", "defense", "resources"}
+        locked_path = Path("Docs/Design/ReferenceVideoLock/reference-video-sources.json")
+        locked = json.loads(locked_path.read_text())
+        if coverage.get("source_manifest_sha256") != digest(locked_path):
+            return False, "reference coverage is not bound to the locked source manifest", {}
+        locked_sources = {source["id"]: source for source in locked["sources"]}
+        extraction_path = ROOT / "reference/extraction-report.json"
+        if not extraction_path.is_file() or coverage.get("extraction_report_sha256") != digest(extraction_path):
+            return False, "reference coverage lacks its checksum-bound extraction report", {}
+        extraction = json.loads(extraction_path.read_text())
+        if extraction.get("source_manifest_sha256") != digest(locked_path) or extraction.get("extracted_sample_count") != 44:
+            return False, "reference extraction report is not the complete locked 44-frame set", {}
+        if {row.get("id"): row.get("sha256") for row in extraction.get("sources", [])} != {key: value["sha256"] for key, value in locked_sources.items()}:
+            return False, "reference extraction report source hashes do not match the lock", {}
+        expected_extractions = {
+            (source_id, timestamp)
+            for source_id, source in locked_sources.items()
+            for timestamp in source["selected_seek_seconds"]
+        }
+        extracted = {(row.get("source"), row.get("requested_seek_seconds")): row for row in extraction.get("samples", [])}
+        if len(extraction.get("samples", [])) != len(expected_extractions) or set(extracted) != expected_extractions:
+            return False, "reference extraction report does not contain the exact locked source/timestamp set", {}
+        items = coverage.get("items", [])
+        present = {item.get("family") for item in items}
+        if coverage.get("authoritative_user_video_pixels") is not True or present != required:
+            return False, "authoritative reference pixels do not cover every T05 station/prop family", {}
+        paths: dict[str, list[Path]] = {}
+        identities = set()
+        relative_paths = set()
+        pixel_hashes = set()
+        for item in items:
+            source = locked_sources.get(item.get("source_id"))
+            timestamp = item.get("seek_seconds")
+            identity = (item.get("source_id"), timestamp)
+            if source is None or item.get("source_video_sha256") != source["sha256"] or timestamp not in source["selected_seek_seconds"]:
+                return False, "reference frame lacks original-video hash/timestamp provenance", {}
+            sample = extracted.get(identity)
+            if sample is None or sample.get("filename") != Path(item.get("path", "")).name or sample.get("extracted_png_sha256") != item.get("sha256"):
+                return False, "reference frame is not bound to its locked-video extraction record", {}
+            if identity in identities or item.get("path") in relative_paths or item.get("sha256") in pixel_hashes:
+                return False, "reference families must use unique locked frames, paths and pixel hashes", {}
+            identities.add(identity)
+            relative_paths.add(item.get("path"))
+            pixel_hashes.add(item.get("sha256"))
+            path = ROOT / item["path"]
+            if not path.is_file() or digest(path) != item.get("sha256"):
+                return False, "reference coverage contains a missing or changed frame: " + item.get("path", "<unknown>"), {}
+            with Image.open(path) as frame:
+                if frame.size != (source["width"], source["height"]):
+                    return False, "reference coverage frame is not an original-resolution locked frame", {}
+                frame.verify()
+            paths.setdefault(item["family"], []).append(path)
+        return True, None, paths
+    except Exception as error:
+        return False, "invalid reference coverage manifest: " + str(error), {}
+
+
+reference_scope_complete, reference_scope_error, reference_frames = validate_reference_coverage()
+if ROLE == "C1" and not reference_scope_complete:
+    blocked = {
+        "task": "T05", "source": SOURCE, "candidate_hash": SOURCE,
+        "critic_id": ROLE, "attempt": ATTEMPT, "groups": GROUPS, "reviews": [],
+        "competency_passed": False, "error": reference_scope_error, "passed": False,
+        "reference_scope_complete": False, "reference_scope_error": reference_scope_error,
+        "independent_runtime": False, "strict_rule": ">9.0 unrounded",
+        "task_approved": False, "physical_4k60_verified": False,
     }
-    for key, expected in required_equal.items():
-        if row.get(key) != expected or result.get(key) != expected:
-            errors.append(f"invalid {key}")
-    for key in ("runtime_release_sha256", "request_or_run_id"):
-        if not isinstance(row.get(key), str) or not row[key]:
-            errors.append(f"missing {key}")
-    if row.get("runtime_release_sha256") != result.get("runtime_release_sha256"):
-        errors.append("runtime release mismatch")
-    for key in ("runtime_release_sha256", "input_manifest_hash", "board_sha256", "raw_output_sha256"):
-        value = row.get(key)
-        if not isinstance(value, str) or len(value) != 64:
-            errors.append(f"invalid {key}")
-    bound_files = (
-        ("raw_output_path", "raw_output_sha256", "raw output"),
-        ("input_manifest_path", "input_manifest_hash", "input manifest"),
-        ("board_path", "board_sha256", "review board"),
+    (OUT / "review-result.json").write_text(json.dumps(blocked, indent=2) + "\n")
+    (OUT / "provenance.json").write_text(json.dumps({
+        "source": SOURCE, "critic_id": ROLE, "attempt": ATTEMPT, "seed": SEED,
+        "evidence_provenance_sha256": digest(ROOT / "provenance.json"),
+        "reference_sha256": digest(reference), "blocked_before_inference": True,
+        "blocker": reference_scope_error,
+    }, indent=2) + "\n")
+    print(json.dumps(blocked), flush=True)
+    raise SystemExit(2)
+manifest = json.loads((CACHE / "manifest.json").read_text())
+assert manifest["publisher"] == "unsloth/Qwen3.5-9B-GGUF"
+assert manifest["base_model"] == "Qwen/Qwen3.5-9B"
+for item in manifest["files"]:
+    assert digest(CACHE / item["filename"]) == item["sha256"], "bad reviewer runtime bytes"
+servers = list((CACHE / "runtime").rglob("llama-server"))
+assert len(servers) == 1
+server = servers[0]
+
+
+def build_probe() -> Path:
+    ref = Image.open(reference).convert("RGB")
+    left = ref.crop((0, 0, ref.width // 2, ref.height))
+    right = ref.crop((ref.width // 2, 0, ref.width, ref.height))
+    specs = [
+        ("A", left, True),
+        ("B", right, False),
+        ("C", Image.open(ROOT / "component/close-fishing-side.png").convert("RGB"), True),
+        ("D", Image.open(ROOT / "component/close-hearth-front.png").convert("RGB"), False),
+    ]
+    board = Image.new("RGB", (960, 960), (20, 29, 38))
+    draw = ImageDraw.Draw(board)
+    sources = []
+    for index, (label, source, expected) in enumerate(specs):
+        source.thumbnail((450, 410), Image.Resampling.LANCZOS)
+        x = (index % 2) * 480 + (480 - source.width) // 2
+        y = (index // 2) * 480 + 45 + (410 - source.height) // 2
+        board.paste(source, (x, y))
+        draw.text(((index % 2) * 480 + 16, (index // 2) * 480 + 12), label, fill="white", font=TITLE_FONT)
+        sources.append({"panel": label, "expected": expected})
+    path = OUT / "blind-competency.jpg"
+    board.save(path, quality=94)
+    (OUT / "competency-sources.json").write_text(json.dumps(sources, indent=2))
+    return path
+
+
+def build_boards(group: str) -> tuple[list[Path], Path]:
+    """Build protocol-v4 boards with local scope and checksum-bound reference focus."""
+    reference_paths = {
+        family: [str(path.relative_to(ROOT)) for path in reference_frames.get(family, [])]
+        for family in GROUP_FAMILIES[group]
+    }
+    slice_plan = build_slice_plan(group, reference_paths)
+    boards: list[Path] = []
+    board_rows = []
+    for index, scope in enumerate(slice_plan):
+        candidate_names = scope["candidate_paths"]
+        ref_path = ROOT / scope["reference_path"]
+        family = scope["reference_family"]
+        ref_label = "FOCUSED REFERENCE %s: %s" % (family, ref_path.name)
+
+        board = Image.new("RGB", tuple(BOARD_CANVAS_SIZE), (20, 29, 38))
+        draw = ImageDraw.Draw(board)
+        draw.text((18, 10), f"T05 {GROUP_DISPLAY_NAMES[group]} — slice {index + 1}/{len(slice_plan)}", fill="white", font=TITLE_FONT)
+        draw.text((18, 42), ref_label, fill="white", font=LABEL_FONT)
+        ref_source = Image.open(ref_path).convert("RGB")
+        crop_box = REFERENCE_FOCUS_BOXES[family]
+        assert 0 <= crop_box[0] < crop_box[2] <= ref_source.width
+        assert 0 <= crop_box[1] < crop_box[3] <= ref_source.height
+        ref_source_artifact = OUT / f"reference-source-{family}.png"
+        ref_source_artifact.write_bytes(ref_path.read_bytes())
+        ref_focus_path = OUT / f"reference-focus-{family}.png"
+        ref_source.crop(tuple(crop_box)).save(ref_focus_path)
+        ref_image = Image.open(ref_focus_path).convert("RGB")
+        ref_image.thumbnail((REFERENCE_PANEL_WIDTH, 1080), Image.Resampling.LANCZOS)
+        ref_position = (
+            REFERENCE_PANEL_X + (REFERENCE_PANEL_WIDTH - ref_image.width) // 2,
+            78 + (1080 - ref_image.height) // 2,
+        )
+        board.paste(ref_image, ref_position)
+
+        candidate_rows = []
+        cell_height = 550 if len(candidate_names) == 2 else 1100
+        for candidate_index, name in enumerate(candidate_names):
+            y0 = 58 + candidate_index * cell_height
+            draw.text((CANDIDATE_PANEL_X, y0), "SOURCE-BOUND CANDIDATE: " + name, fill="white", font=LABEL_FONT)
+            candidate = Image.open(ROOT / name).convert("RGB")
+            candidate.thumbnail((CANDIDATE_PANEL_WIDTH, cell_height - 42), Image.Resampling.LANCZOS)
+            assert candidate.height >= MIN_CANDIDATE_DISPLAY_HEIGHT, f"candidate panel below strict resolution floor: {name}"
+            position = (
+                CANDIDATE_PANEL_X + (CANDIDATE_PANEL_WIDTH - candidate.width) // 2,
+                y0 + 32 + (cell_height - 42 - candidate.height) // 2,
+            )
+            board.paste(candidate, position)
+            candidate_rows.append({"path": name, "display_size": list(candidate.size), "position": list(position)})
+
+        path = OUT / f"{group}-board-{index + 1:02d}.jpg"
+        board.save(path, quality=95, subsampling=0)
+        boards.append(path)
+        board_rows.append({
+            "path": path.name, "sha256": digest(path), "canvas_size": list(board.size),
+            "reference_path": str(ref_path.relative_to(ROOT)),
+            "reference_family": family,
+            "reference_source_path": ref_source_artifact.name,
+            "reference_source_sha256": digest(ref_source_artifact),
+            "reference_focus_path": ref_focus_path.name,
+            "reference_focus_sha256": digest(ref_focus_path),
+            "reference_focus_crop_box": crop_box,
+            "comparison_mode": scope["comparison_mode"],
+            "unseen_assets_out_of_scope": True,
+            "reviewed_candidate_paths": candidate_names,
+            "reference_display_size": list(ref_image.size), "reference_position": list(ref_position),
+            "candidates": candidate_rows,
+        })
+
+    manifest = OUT / f"{group}-board-manifest.json"
+    manifest.write_text(json.dumps({
+        "schema_version": 4, "task": "T05", "source": SOURCE, "group": group,
+        "protocol": PROTOCOL,
+        "required_reference_families": list(GROUP_FAMILIES[group]),
+        "reference_bindings": reference_paths,
+        "layout_contract": {
+            "canvas_size": BOARD_CANVAS_SIZE, "maximum_model_input": [1664, 1664],
+            "minimum_reference_display_width": REFERENCE_PANEL_WIDTH,
+            "minimum_candidate_display_height": MIN_CANDIDATE_DISPLAY_HEIGHT,
+            "maximum_candidates_per_board": 2, "all_group_candidates_present_once": True,
+            "all_required_reference_families_present_at_least_once": True,
+            "coverage_complete_is_slice_local": True,
+            "unlisted_assets_may_not_be_scored_as_missing": True,
+        },
+        "slices": board_rows,
+    }, indent=2, sort_keys=True) + "\n")
+    return boards, manifest
+
+
+def query(
+    image_path: Path, prompt: str, schema: dict, name: str, max_tokens: int,
+    request_contract: dict | None = None, request_seed: int | None = None,
+) -> tuple[dict, float]:
+    request_seed = SEED if request_seed is None else request_seed
+    image = Image.open(image_path).convert("RGB")
+    original = image.size
+    image.thumbnail((1664, 1664), Image.Resampling.LANCZOS)
+    buffer = io.BytesIO()
+    image.save(buffer, format="JPEG", quality=92)
+    payload = buffer.getvalue()
+    request = {
+        "model": "T05-" + ROLE + "-" + ATTEMPT,
+        "messages": [{"role": "user", "content": [
+            {"type": "image_url", "image_url": {"url": "data:image/jpeg;base64," + base64.b64encode(payload).decode()}},
+            {"type": "text", "text": prompt},
+        ]}],
+        "max_tokens": max_tokens,
+        "temperature": 0.2,
+        "top_p": 0.9,
+        "seed": request_seed,
+        "repeat_penalty": 1.12,
+        "chat_template_kwargs": {"enable_thinking": False},
+        "response_format": {"type": "json_object", "schema": schema},
+        "cache_prompt": False,
+    }
+    request_settings = {
+        "model": request["model"], "max_tokens": max_tokens,
+        "temperature": request["temperature"], "top_p": request["top_p"], "seed": request["seed"],
+        "repeat_penalty": request["repeat_penalty"], "chat_template_kwargs": request["chat_template_kwargs"],
+        "response_format_type": request["response_format"]["type"], "cache_prompt": request["cache_prompt"],
+    }
+    (OUT / (name + "-request.json")).write_text(json.dumps({
+        "model": request["model"], "prompt": prompt, "schema": schema,
+        "request_contract": request_contract, "request_settings": request_settings,
+        "source_image_path": image_path.name, "source_image_sha256": digest(image_path),
+        "image_sha256": hashlib.sha256(payload).hexdigest(),
+        "original_size": original, "input_size": image.size, "seed": request_seed,
+        "inference_timeout_seconds": SLICE_TIMEOUT_SECONDS,
+    }, indent=2, default=list))
+    began = time.monotonic()
+    call = urllib.request.Request(
+        "http://127.0.0.1:8080/v1/chat/completions",
+        data=json.dumps(request).encode(), headers={"Content-Type": "application/json"}, method="POST",
     )
-    input_manifest = None
-    board_manifest = None
-    raw_bundle = None
-    for path_key, hash_key, label in bound_files:
-        name = row.get(path_key)
-        if not isinstance(name, str) or Path(name).name != name:
-            errors.append(f"invalid {path_key}")
-            continue
-        path = folder / name
-        if not path.is_file() or digest(path) != row.get(hash_key):
-            errors.append(f"missing or changed {label}")
-        elif path_key == "input_manifest_path":
-            try:
-                input_manifest = json.loads(path.read_text())
-                row["_input_manifest"] = input_manifest
-                if input_manifest.get("candidate_commit") != row.get("source") or input_manifest.get("critic_id") != role or input_manifest.get("group") != row.get("group"):
-                    errors.append("input manifest identity mismatch")
-                if input_manifest.get("board_sha256") != row.get("board_sha256") or input_manifest.get("pixel_manifest", {}).get("board_sha256") != row.get("board_sha256"):
-                    errors.append("input manifest board mismatch")
-            except Exception:
-                errors.append("invalid input manifest JSON")
-        elif path_key == "board_path":
-            try:
-                board_manifest = json.loads(path.read_text())
-            except Exception:
-                errors.append("invalid board manifest JSON")
-        elif path_key == "raw_output_path":
-            try:
-                raw_bundle = json.loads(path.read_text())
-            except Exception:
-                errors.append("invalid raw-output bundle JSON")
-    if board_manifest is not None:
-        slices = board_manifest.get("slices", [])
-        contract = board_manifest.get("layout_contract", {})
-        if board_manifest.get("schema_version") != 4 or board_manifest.get("protocol") != PROTOCOL or board_manifest.get("task") != "T05" or board_manifest.get("source") != row.get("source") or board_manifest.get("group") != row.get("group"):
-            errors.append("board manifest identity mismatch")
-        if not slices or contract.get("canvas_size") != [1600, 1200] or contract.get("maximum_model_input") != [1664, 1664]:
-            errors.append("invalid board resolution contract")
-        if contract.get("minimum_reference_display_width", 0) < 500 or contract.get("minimum_candidate_display_height", 0) < 480 or contract.get("maximum_candidates_per_board") != 2:
-            errors.append("review panels are too small for strict visual grading")
-        board_inputs = {}
-        candidates = []
-        references = set()
-        reference_families = set()
-        validated_focus_pairs = set()
-        expected_scopes = {}
-        bindings = board_manifest.get("reference_bindings", {})
-        required_families = set(GROUP_FAMILIES.get(row.get("group"), ()))
-        if set(board_manifest.get("required_reference_families", [])) != required_families or set(bindings) != required_families:
-            errors.append("wrong or incomplete reference-family bindings")
-        for item in slices:
-            name = item.get("path")
-            if not isinstance(name, str) or Path(name).name != name or not isinstance(item.get("sha256"), str):
-                errors.append("invalid board slice identity")
-                continue
-            slice_path = folder / name
-            if not slice_path.is_file() or digest(slice_path) != item["sha256"]:
-                errors.append("missing or changed board slice")
-            board_inputs[name] = item["sha256"]
-            if item.get("canvas_size") != [1600, 1200] or item.get("reference_display_size", [0])[0] < 500:
-                errors.append("board slice violates reference resolution contract")
-            reference_path = item.get("reference_path")
-            reference_family = item.get("reference_family")
-            references.add(reference_path)
-            reference_families.add(reference_family)
-            if reference_family not in required_families or reference_path not in bindings.get(reference_family, []):
-                errors.append("wrong-family reference on board slice")
-            source_name = item.get("reference_source_path")
-            source_path = folder / str(source_name)
-            source_hash = item.get("reference_source_sha256")
-            if (
-                not isinstance(source_name, str) or Path(source_name).name != source_name
-                or not source_path.is_file() or digest(source_path) != source_hash
-                or input_manifest is None
-                or source_hash != input_manifest.get("pixel_manifest", {}).get("reference_inputs", {}).get(reference_path)
-            ):
-                errors.append("reference focus crop is not bound to its original reference pixels")
-            focus_name = item.get("reference_focus_path")
-            focus_path = folder / str(focus_name)
-            if (
-                not isinstance(focus_name, str) or Path(focus_name).name != focus_name
-                or not focus_path.is_file() or digest(focus_path) != item.get("reference_focus_sha256")
-                or item.get("reference_focus_crop_box") != REFERENCE_FOCUS_BOXES.get(reference_family)
-            ):
-                errors.append("missing or changed checksum-bound reference focus crop")
-            elif (source_name, focus_name, reference_family) not in validated_focus_pairs:
-                try:
-                    with Image.open(source_path) as source_image, Image.open(focus_path) as focus_image:
-                        expected_focus = source_image.convert("RGB").crop(tuple(REFERENCE_FOCUS_BOXES[reference_family]))
-                        actual_focus = focus_image.convert("RGB")
-                        if expected_focus.size != actual_focus.size or ImageChops.difference(expected_focus, actual_focus).getbbox() is not None:
-                            errors.append("reference focus pixels do not match the declared source crop")
-                        validated_focus_pairs.add((source_name, focus_name, reference_family))
-                except Exception:
-                    errors.append("reference focus source or crop is not a valid image")
-            if item.get("unseen_assets_out_of_scope") is not True or item.get("comparison_mode") not in ("direct_family_reference", "style_feature_authority_not_scene_identity"):
-                errors.append("missing local unseen-asset scope guard")
-            candidate_paths = [candidate.get("path") for candidate in item.get("candidates", [])]
-            if item.get("reviewed_candidate_paths") != candidate_paths or not candidate_paths:
-                errors.append("board slice candidate scope mismatch")
-            for candidate_path in candidate_paths:
-                try:
-                    if candidate_path not in FILES[row.get("group")] or reference_family_for(candidate_path) != reference_family:
-                        errors.append("candidate is not paired with its protocol-declared reference family")
-                except (KeyError, TypeError, ValueError):
-                    errors.append("candidate path is outside the declared protocol")
-            expected_scopes[name] = {
-                "reference_family": reference_family,
-                "reference_path": reference_path,
-                "candidate_paths": candidate_paths,
-                "comparison_mode": item.get("comparison_mode"),
-                "unseen_assets_out_of_scope": True,
-                "reference_source_path": item.get("reference_source_path"),
-                "reference_source_sha256": item.get("reference_source_sha256"),
-                "reference_focus_path": item.get("reference_focus_path"),
-                "reference_focus_sha256": item.get("reference_focus_sha256"),
-                "reference_focus_crop_box": item.get("reference_focus_crop_box"),
-            }
-            for candidate in item.get("candidates", []):
-                candidates.append(candidate.get("path"))
-                size = candidate.get("display_size", [0, 0])
-                if len(size) != 2 or size[1] < 480:
-                    errors.append("board slice violates candidate resolution contract")
-        if input_manifest is None or input_manifest.get("pixel_manifest", {}).get("board_inputs") != board_inputs:
-            errors.append("input manifest does not bind all board slices")
-        if input_manifest is not None:
-            if len(candidates) != len(set(candidates)) or set(candidates) != set(FILES.get(row.get("group"), [])):
-                errors.append("board slices do not cover the exact protocol candidate set once")
-            if set(candidates) != set(input_manifest.get("inputs", {})):
-                errors.append("board slices do not cover every candidate exactly once")
-            if references != set(input_manifest.get("pixel_manifest", {}).get("reference_inputs", {})):
-                errors.append("board slices do not cover every required reference")
-            if reference_families != required_families:
-                errors.append("board slices do not cover every required reference family")
-            pixel_manifest = input_manifest.get("pixel_manifest", {})
-            if pixel_manifest.get("reference_bindings") != bindings or pixel_manifest.get("slice_scopes") != expected_scopes:
-                errors.append("input manifest does not bind local slice scope")
-    if raw_bundle is not None:
-        if raw_bundle.get("schema_version") != 4 or raw_bundle.get("execution_complete") is not True or raw_bundle.get("source") != row.get("source") or raw_bundle.get("critic_id") != role or raw_bundle.get("group") != row.get("group") or raw_bundle.get("attempt") != row.get("attempt") or raw_bundle.get("seed") != row.get("seed"):
-            errors.append("raw-output bundle identity mismatch")
-        raw_slices = raw_bundle.get("slices", [])
-        if raw_bundle.get("aggregate_review") != row.get("review"):
-            errors.append("row review does not match bound raw-output aggregate")
-        if board_manifest is None or len(raw_slices) != len(board_manifest.get("slices", [])):
-            errors.append("raw-output bundle does not cover every board slice")
-        board_hashes = {item.get("path"): item.get("sha256") for item in (board_manifest or {}).get("slices", [])}
-        board_scopes = {item.get("path"): item for item in (board_manifest or {}).get("slices", [])}
-        bound_reviews = []
-        raw_board_paths = []
-        bound_output_paths = []
-        for slice_index, item in enumerate(raw_slices, 1):
-            slice_seed = item.get("seed", row.get("seed"))
-            if not valid_slice_retry_seed(row.get("seed"), slice_seed):
-                errors.append("slice seed is outside the bounded invalid-response retry policy")
-            raw_board_paths.append(item.get("board_path"))
-            if board_hashes.get(item.get("board_path")) != item.get("board_sha256"):
-                errors.append("raw-output slice is not bound to its board")
-            scope = board_scopes.get(item.get("board_path"), {})
-            if item.get("reviewed_candidate_paths") != scope.get("reviewed_candidate_paths") or item.get("reference_family") != scope.get("reference_family") or item.get("reference_path") != scope.get("reference_path"):
-                errors.append("raw-output slice scope mismatch")
-            answer_review = None
-            raw_review = None
-            for path_key, hash_key in (("raw_output_path", "raw_output_sha256"), ("request_path", "request_sha256"), ("answer_path", "answer_sha256")):
-                name = item.get(path_key)
-                bound_output_paths.append(name)
-                if not isinstance(name, str) or Path(name).name != name:
-                    errors.append("invalid bound slice output path")
-                    continue
-                path = folder / name
-                if not path.is_file() or digest(path) != item.get(hash_key):
-                    errors.append("missing or changed bound slice output")
-                elif path_key == "request_path":
-                    try:
-                        request = json.loads(path.read_text())
-                        if request.get("source_image_path") != item.get("board_path") or request.get("source_image_sha256") != item.get("board_sha256") or request.get("original_size") != [1600, 1200] or request.get("input_size") != [1600, 1200]:
-                            errors.append("model request is not bound to the full-resolution board slice")
-                        expected_contract = build_slice_contract(
-                            row.get("source"), role, row.get("attempt"), row.get("group"),
-                            slice_index, len(raw_slices), scope,
-                        )
-                        expected_schema = build_review_schema(role, scope.get("reviewed_candidate_paths"), scope.get("reference_path"))
-                        expected_settings = expected_request_settings(role, row.get("attempt"), slice_seed)
-                        if request.get("request_contract") != expected_contract:
-                            errors.append("model request contract does not match exact protocol slice scope")
-                        if request.get("prompt") != build_review_prompt(row.get("source"), role, expected_contract):
-                            errors.append("model request does not contain the exact protocol prompt")
-                        if request.get("schema") != expected_schema:
-                            errors.append("model request does not contain the exact dynamic response schema")
-                        if request.get("request_settings") != expected_settings or request.get("model") != expected_settings["model"] or request.get("seed") != slice_seed:
-                            errors.append("model request settings do not match claimed role, attempt, and seed")
-                    except Exception:
-                        errors.append("invalid bound slice request JSON")
-                elif path_key == "raw_output_path":
-                    try:
-                        raw_response = json.loads(path.read_text())
-                        choice = raw_response["choices"][0]
-                        if choice.get("finish_reason") != "stop":
-                            errors.append("bound model response was truncated")
-                        raw_review = json.loads(choice["message"]["content"])
-                    except Exception:
-                        errors.append("invalid bound raw model response JSON")
-                elif path_key == "answer_path":
-                    try:
-                        answer_review = json.loads(path.read_text())
-                    except Exception:
-                        errors.append("invalid bound slice answer JSON")
-            if raw_review != answer_review:
-                errors.append("bound raw model response does not match parsed slice answer")
-            invalid_attempts = item.get("invalid_attempts", [])
-            if not isinstance(invalid_attempts, list):
-                errors.append("invalid-response attempts must be a list")
-                invalid_attempts = []
-            try:
-                if slice_seed != slice_retry_seed(row.get("seed"), len(invalid_attempts)):
-                    errors.append("final slice seed does not follow its preserved invalid-response attempts")
-            except (TypeError, ValueError):
-                errors.append("invalid-response retry count exceeds the bounded policy")
-            for retry_index, invalid in enumerate(invalid_attempts):
-                if not isinstance(invalid, dict):
-                    errors.append("invalid-response attempt record must be an object")
-                    continue
-                try:
-                    expected_invalid_seed = slice_retry_seed(row.get("seed"), retry_index)
-                except (TypeError, ValueError):
-                    expected_invalid_seed = None
-                if invalid.get("retry_index") != retry_index or invalid.get("seed") != expected_invalid_seed or not isinstance(invalid.get("error"), str) or not invalid["error"]:
-                    errors.append("invalid-response attempt identity is inconsistent")
-                preserved_count = 0
-                for path_key, hash_key in (("raw_output_path", "raw_output_sha256"), ("request_path", "request_sha256"), ("answer_path", "answer_sha256")):
-                    name = invalid.get(path_key)
-                    if name is None:
-                        continue
-                    preserved_count += 1
-                    bound_output_paths.append(name)
-                    if not isinstance(name, str) or Path(name).name != name:
-                        errors.append("invalid preserved response output path")
-                        continue
-                    path = folder / name
-                    if not path.is_file() or digest(path) != invalid.get(hash_key):
-                        errors.append("missing or changed preserved invalid response output")
-                if preserved_count == 0:
-                    errors.append("invalid-response attempt did not preserve any bound artifact")
-            recorded_review = answer_review
-            defect_summary_derived = False
-            if isinstance(answer_review, dict):
-                recorded_review, defect_summary_derived = materialize_defect_summary(answer_review)
-            marker = item.get("defect_summary_derived")
-            if defect_summary_derived and marker is not True:
-                errors.append("derived defect summary lacks an explicit provenance marker")
-            if not defect_summary_derived and marker not in (None, False):
-                errors.append("defect-summary provenance marker is inconsistent")
-            if recorded_review != item.get("review"):
-                errors.append("bound slice answer does not match recorded slice review")
-            elif isinstance(recorded_review, dict):
-                if recorded_review.get("reviewed_candidate_paths") != scope.get("reviewed_candidate_paths"):
-                    errors.append("model did not acknowledge exact candidate paths")
-                if recorded_review.get("reference_path_used") != scope.get("reference_path"):
-                    errors.append("model did not acknowledge exact reference path")
-                if recorded_review.get("unseen_assets_out_of_scope_acknowledged") is not True:
-                    errors.append("model did not acknowledge unseen-asset scope")
-                for integrity_error in review_integrity_errors(recorded_review, role, scope.get("reviewed_candidate_paths", [])):
-                    errors.append("invalid slice review: " + integrity_error)
-                bound_reviews.append(recorded_review)
-        if len(raw_board_paths) != len(set(raw_board_paths)) or set(raw_board_paths) != set(board_hashes):
-            errors.append("raw-output slices do not map one-to-one onto every board slice")
-        if len(bound_output_paths) != len(set(bound_output_paths)):
-            errors.append("bound raw/request/answer paths must be unique per slice")
+    with urllib.request.urlopen(call, timeout=SLICE_TIMEOUT_SECONDS) as response:
+        raw_bytes = response.read()
+    parsed = persist_model_response(
+        raw_bytes, OUT / (name + "-raw.json"), OUT / (name + "-answer.json"), name,
+    )
+    return parsed, round(time.monotonic() - began, 3)
+
+
+def load_resume_prefix(group: str, boards: list[Path], board_payload: dict) -> list[dict]:
+    """Reuse only a fully bound, valid prefix from an incomplete prior group artifact."""
+    if RESUME_ROOT is None:
+        return []
+    raw_path = RESUME_ROOT / (group + "-raw-bundle.json")
+    if not raw_path.is_file():
+        return []
+    bundle = json.loads(raw_path.read_text())
+    assert bundle.get("schema_version") == 4
+    assert bundle.get("execution_complete") is False
+    assert bundle.get("source") == SOURCE and bundle.get("critic_id") == ROLE
+    assert bundle.get("attempt") == ATTEMPT and bundle.get("seed") == SEED
+    assert bundle.get("group") == group
+    resumed = []
+    for expected_index, part in enumerate(bundle.get("slices", []), 1):
+        assert expected_index <= len(boards)
+        board = boards[expected_index - 1]
+        scope = board_payload["slices"][expected_index - 1]
+        assert part.get("slice") == expected_index
+        assert part.get("board_path") == board.name and part.get("board_sha256") == digest(board)
+        assert part.get("reviewed_candidate_paths") == scope["reviewed_candidate_paths"]
+        assert part.get("reference_family") == scope["reference_family"]
+        assert part.get("reference_path") == scope["reference_path"]
+        review = part.get("review")
+        assert isinstance(review, dict)
+        assert review.get("reviewed_candidate_paths") == scope["reviewed_candidate_paths"]
+        assert review.get("reference_path_used") == scope["reference_path"]
+        assert review.get("unseen_assets_out_of_scope_acknowledged") is True
+        assert not review_integrity_errors(review, ROLE, scope["reviewed_candidate_paths"])
+        part_seed = part.get("seed", SEED)
+        assert valid_slice_retry_seed(SEED, part_seed)
+        request_contract = build_slice_contract(SOURCE, ROLE, ATTEMPT, group, expected_index, len(boards), scope)
+        request_schema = build_review_schema(ROLE, scope["reviewed_candidate_paths"], scope["reference_path"])
+        copied = dict(part)
+        for path_key, hash_key in (
+            ("raw_output_path", "raw_output_sha256"),
+            ("request_path", "request_sha256"),
+            ("answer_path", "answer_sha256"),
+        ):
+            name = part.get(path_key)
+            assert isinstance(name, str) and Path(name).name == name
+            source_path = RESUME_ROOT / name
+            assert source_path.is_file() and digest(source_path) == part.get(hash_key)
+            shutil.copy2(source_path, OUT / name)
+        request = json.loads((OUT / part["request_path"]).read_text())
+        assert request.get("request_contract") == request_contract
+        assert request.get("schema") == request_schema
+        assert request.get("prompt") == build_review_prompt(SOURCE, ROLE, request_contract)
+        assert request.get("request_settings") == expected_request_settings(ROLE, ATTEMPT, part_seed)
+        assert request.get("seed") == part_seed
+        raw_response = json.loads((OUT / part["raw_output_path"]).read_text())
+        assert raw_response["choices"][0].get("finish_reason") == "stop"
+        assert json.loads(raw_response["choices"][0]["message"]["content"]) == json.loads((OUT / part["answer_path"]).read_text())
+        copied["seed"] = part_seed
+        copied["resumed_from_run_id"] = RESUME_RUN_ID
+        resumed.append(copied)
+    return resumed
+
+
+def preserve_invalid_attempt(name: str, retry_index: int, request_seed: int, error: Exception) -> dict:
+    """Retain every invalid non-vote response before a fresh-seed retry."""
+    prefix = f"{name}-invalid-{retry_index + 1:02d}"
+    record = {"retry_index": retry_index, "seed": request_seed, "error": str(error)}
+    for path_key, suffix in (
+        ("raw_output_path", "-raw.json"),
+        ("request_path", "-request.json"),
+        ("answer_path", "-answer.json"),
+    ):
+        source_path = OUT / (name + suffix)
+        if source_path.is_file():
+            preserved_path = OUT / (prefix + suffix)
+            source_path.replace(preserved_path)
+            record[path_key] = preserved_path.name
+            record[path_key.replace("path", "sha256")] = digest(preserved_path)
+    return record
+
+
+def write_input_manifest(group: str, board_manifest: Path) -> tuple[str, str]:
+    candidate_inputs = {name: digest(ROOT / name) for name in FILES[group]}
+    board_payload = json.loads(board_manifest.read_text())
+    reference_names = {row["reference_path"] for row in board_payload["slices"]}
+    reference_inputs = {name: digest(ROOT / name) for name in sorted(reference_names)}
+    payload = {
+        "candidate_commit": SOURCE,
+        "critic_id": ROLE,
+        "attempt": ATTEMPT,
+        "seed": SEED,
+        "group": group,
+        "evidence_provenance_sha256": digest(ROOT / "provenance.json"),
+        "reference_sha256": digest(reference), "board_sha256": digest(board_manifest),
+        "inputs": candidate_inputs,
+        "pixel_manifest": {
+            "candidate_inputs": candidate_inputs,
+            "reference_inputs": reference_inputs,
+            "reference_bindings": board_payload["reference_bindings"],
+            "slice_scopes": {
+                row["path"]: {
+                    "reference_family": row["reference_family"],
+                    "reference_path": row["reference_path"],
+                    "candidate_paths": row["reviewed_candidate_paths"],
+                    "comparison_mode": row["comparison_mode"],
+                    "unseen_assets_out_of_scope": row["unseen_assets_out_of_scope"],
+                    "reference_source_path": row["reference_source_path"],
+                    "reference_source_sha256": row["reference_source_sha256"],
+                    "reference_focus_path": row["reference_focus_path"],
+                    "reference_focus_sha256": row["reference_focus_sha256"],
+                    "reference_focus_crop_box": row["reference_focus_crop_box"],
+                }
+                for row in board_payload["slices"]
+            },
+            "reference_coverage_sha256": digest(ROOT / "reference/coverage.json") if reference_scope_complete else None,
+            "reference_extraction_sha256": digest(ROOT / "reference/extraction-report.json") if reference_scope_complete else None,
+            "board_sha256": digest(board_manifest),
+            "board_inputs": {
+                row["path"]: row["sha256"]
+                for row in board_payload["slices"]
+            },
+        },
+    }
+    path = OUT / (group + "-input-manifest.json")
+    path.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")
+    return path.name, digest(path)
+
+
+environment = dict(os.environ)
+environment["LD_LIBRARY_PATH"] = str(server.parent) + ":" + environment.get("LD_LIBRARY_PATH", "")
+log = (OUT / "inference.log").open("w")
+command = [
+    str(server), "-m", str(CACHE / manifest["model_file"]), "--mmproj", str(CACHE / manifest["projector_file"]),
+    "--host", "127.0.0.1", "--port", "8080", "-c", "8192", "-t", "4", "-tb", "4",
+    "-ngl", "0", "--no-mmproj-offload", "--parallel", "1", "--jinja",
+    "--image-min-tokens", "1024", "--image-max-tokens", "2048",
+]
+process = subprocess.Popen(command, stdout=log, stderr=subprocess.STDOUT, env=environment)
+rows = []
+failure = None
+competent = False
+try:
+    for _ in range(150):
+        if process.poll() is not None:
+            raise RuntimeError("local reviewer runtime exited")
         try:
+            if json.load(urllib.request.urlopen("http://127.0.0.1:8080/health", timeout=3)).get("status") == "ok":
+                break
+        except Exception:
+            pass
+        time.sleep(2)
+    else:
+        raise RuntimeError("local reviewer runtime not ready")
+
+    probe_schema = {
+        "type": "object",
+        "properties": {key: {"type": "boolean"} for key in "ABCD"},
+        "required": list("ABCD"), "additionalProperties": False,
+    }
+    answers, elapsed = query(
+        build_probe(),
+        "Four panels are labelled A-D. For each panel, return true if the image visibly contains at least three long, thin, roughly parallel yellow poles. Return false when it instead shows a large round station or vessel without three yellow poles. Return only the JSON object.",
+        probe_schema, "competency", 180,
+    )
+    expected = {"A": True, "B": False, "C": True, "D": False}
+    competent = answers == expected
+    (OUT / "competency.json").write_text(json.dumps({"answers": answers, "expected": expected, "passed": competent, "elapsed_seconds": elapsed}, indent=2))
+    assert competent, "blind image competency failed; do not grade"
+
+    for group in GROUPS:
+        boards, board_manifest = build_boards(group)
+        raw_path = OUT / (group + "-raw-bundle.json")
+        input_manifest_path, input_manifest_hash = write_input_manifest(group, board_manifest)
+        row = {
+            "task": "T05", "source": SOURCE, "candidate_hash": SOURCE,
+            "critic_id": ROLE, "group": group, "attempt": ATTEMPT, "seed": SEED,
+            "provider": "local-checksum-pinned-public-model", "model": manifest["base_model"],
+            "model_revision": manifest["revision"], "runtime_release_sha256": digest(server),
+            "request_or_run_id": ":".join((RUN_ID, RUN_ATTEMPT, RUN_JOB, ROLE, ATTEMPT, group)),
+            "input_manifest_path": input_manifest_path, "input_manifest_hash": input_manifest_hash,
+            "board_path": board_manifest.name, "board_sha256": digest(board_manifest),
+            "independent_execution": False, "execution_complete": False, "passed": False,
+            "reference_scope_complete": reference_scope_complete if ROLE == "C1" else True,
+            "reference_scope_error": reference_scope_error if ROLE == "C1" else None,
+        }
+        slice_reviews = []
+        failed_slice = None
+        try:
+            board_payload = json.loads(board_manifest.read_text())
+            slice_reviews = load_resume_prefix(group, boards, board_payload)
+            for resumed_part in slice_reviews:
+                print(json.dumps({
+                    "event": "slice_resumed", "critic_id": ROLE, "group": group,
+                    "slice": resumed_part["slice"], "slice_count": len(boards),
+                    "resume_run_id": RESUME_RUN_ID,
+                }), flush=True)
+            for slice_index, board in enumerate(boards, 1):
+                if slice_index <= len(slice_reviews):
+                    continue
+                name = f"{group}-slice-{slice_index:02d}"
+                scope = board_payload["slices"][slice_index - 1]
+                request_contract = build_slice_contract(SOURCE, ROLE, ATTEMPT, group, slice_index, len(boards), scope)
+                slice_schema = build_review_schema(ROLE, scope["reviewed_candidate_paths"], scope["reference_path"])
+                slice_prompt = build_review_prompt(SOURCE, ROLE, request_contract)
+                print(json.dumps({
+                    "event": "slice_started", "critic_id": ROLE, "group": group,
+                    "slice": slice_index, "slice_count": len(boards),
+                    "timeout_seconds": SLICE_TIMEOUT_SECONDS,
+                }), flush=True)
+                invalid_attempts = []
+                elapsed = 0.0
+                for retry_index in range(MAX_INVALID_RESPONSE_RETRIES + 1):
+                    request_seed = slice_retry_seed(SEED, retry_index)
+                    assert expected_request_settings(ROLE, ATTEMPT, request_seed)["max_tokens"] == 1150
+                    attempt_began = time.monotonic()
+                    try:
+                        review, _attempt_elapsed = query(
+                            board, slice_prompt, slice_schema, name, 1150, request_contract,
+                            request_seed=request_seed,
+                        )
+                        review, defect_summary_derived = materialize_defect_summary(review)
+                        assert review["reviewed_candidate_paths"] == scope["reviewed_candidate_paths"], "reviewed candidate path acknowledgment mismatch"
+                        assert review["reference_path_used"] == scope["reference_path"], "reference path acknowledgment mismatch"
+                        assert review["unseen_assets_out_of_scope_acknowledged"] is True, "unseen-asset scope was not acknowledged"
+                        integrity_errors = review_integrity_errors(review, ROLE, scope["reviewed_candidate_paths"])
+                        assert not integrity_errors, "; ".join(integrity_errors)
+                        elapsed += time.monotonic() - attempt_began
+                        break
+                    except Exception as error:
+                        elapsed += time.monotonic() - attempt_began
+                        invalid_attempts.append(preserve_invalid_attempt(name, retry_index, request_seed, error))
+                        if retry_index < MAX_INVALID_RESPONSE_RETRIES:
+                            print(json.dumps({
+                                "event": "slice_invalid_retry", "critic_id": ROLE, "group": group,
+                                "slice": slice_index, "slice_count": len(boards),
+                                "retry_index": retry_index + 1,
+                                "next_seed": slice_retry_seed(SEED, retry_index + 1),
+                                "error": str(error),
+                            }), flush=True)
+                            continue
+                        failed_slice = {
+                            "slice": slice_index, "board_path": board.name, "board_sha256": digest(board),
+                            "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
+                            "reference_family": scope["reference_family"], "reference_path": scope["reference_path"],
+                            "seed": request_seed, "invalid_attempts": invalid_attempts, "error": str(error),
+                        }
+                        print(json.dumps({
+                            "event": "slice_failed", "critic_id": ROLE, "group": group,
+                            "slice": slice_index, "slice_count": len(boards), "error": str(error),
+                        }), flush=True)
+                        raise
+                elapsed = round(elapsed, 3)
+                slice_reviews.append({
+                    "slice": slice_index, "board_path": board.name, "board_sha256": digest(board),
+                    "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
+                    "reference_family": scope["reference_family"], "reference_path": scope["reference_path"],
+                    "seed": request_seed, "invalid_attempts": invalid_attempts,
+                    "raw_output_path": name + "-raw.json", "raw_output_sha256": digest(OUT / (name + "-raw.json")),
+                    "request_path": name + "-request.json", "request_sha256": digest(OUT / (name + "-request.json")),
+                    "answer_path": name + "-answer.json", "answer_sha256": digest(OUT / (name + "-answer.json")),
+                    "elapsed_seconds": elapsed, "defect_summary_derived": defect_summary_derived,
+                    "review": review,
+                })
+                write_incomplete_group_bundle(
+                    raw_path, source=SOURCE, role=ROLE, attempt=ATTEMPT, seed=SEED,
+                    group=group, slices=slice_reviews, failed_slice=None,
+                )
+                print(json.dumps({
+                    "event": "slice_completed", "critic_id": ROLE, "group": group,
+                    "slice": slice_index, "slice_count": len(boards),
+                    "elapsed_seconds": elapsed, "checkpoint_path": raw_path.name,
+                    "defect_summary_derived": defect_summary_derived,
+                }), flush=True)
             confidence_order = {"low": 0, "medium": 1, "high": 2}
-            defect_evidence = []
+            unique_defect_evidence = []
             seen_defect_evidence = set()
-            for part in bound_reviews:
-                for evidence in part["defect_evidence"]:
+            for part in slice_reviews:
+                for evidence in part["review"]["defect_evidence"]:
                     key = json.dumps(evidence, sort_keys=True)
                     if key not in seen_defect_evidence:
                         seen_defect_evidence.add(key)
-                        defect_evidence.append(evidence)
-            recomputed = {
-                "observations": list(dict.fromkeys(value for part in bound_reviews for value in part["observations"])),
-                "defects": [evidence["description"] for evidence in defect_evidence],
-                "defect_evidence": defect_evidence,
-                "coverage_complete": len(bound_reviews) == len(raw_slices) and all(part["coverage_complete"] is True for part in bound_reviews),
-                "confidence": min((part["confidence"] for part in bound_reviews), key=confidence_order.get),
+                        unique_defect_evidence.append(evidence)
+            review = {
+                "observations": list(dict.fromkeys(item for part in slice_reviews for item in part["review"]["observations"])),
+                "defects": [evidence["description"] for evidence in unique_defect_evidence],
+                "defect_evidence": unique_defect_evidence,
+                "coverage_complete": all(part["review"]["coverage_complete"] is True for part in slice_reviews),
+                "confidence": min((part["review"]["confidence"] for part in slice_reviews), key=confidence_order.get),
                 "scores": {
-                    dimension: min(part["scores"][dimension] for part in bound_reviews if dimension in part["scores"])
-                    for dimension in DIMS[role]
+                    dimension: min(
+                        part["review"]["scores"][dimension]
+                        for part in slice_reviews if dimension in part["review"]["scores"]
+                    )
+                    for dimension in DIMS[ROLE]
                 },
             }
-            if recomputed != raw_bundle.get("aggregate_review"):
-                errors.append("aggregate review was not recomputed conservatively from every slice")
-        except Exception:
-            errors.append("invalid slice reviews for conservative aggregation")
-    if row.get("candidate_hash") != row.get("source") or result.get("candidate_hash") != row.get("source"):
-        errors.append("candidate hash mismatch")
-    if result.get("independent_runtime") is not True or result.get("request_or_run_id") in (None, ""):
-        errors.append("unverified independent execution")
-    if role == "C1" and row.get("reference_scope_complete") is not True:
-        errors.append("family-complete authoritative reference pixels unavailable")
-    return errors
-
-
-def classify(row: dict, source: str, role: str, group: str) -> str:
-    if row.get("source") != source or row.get("critic_id") != role or row.get("group") != group:
-        return "INCOMPLETE"
-    if row.get("independent_execution") is not True or row.get("execution_complete") is not True or row.get("error") is not None or row.get("_provenance_errors"):
-        return "INCOMPLETE"
-    review = row.get("review", {})
-    scores = review.get("scores", {})
-    if set(scores) != DIMS[role] or any(
-        isinstance(value, bool) or not isinstance(value, (int, float))
-        or not math.isfinite(value) or not 0 <= value <= 10
-        for value in scores.values()
-    ):
-        return "INCOMPLETE"
-    if not review.get("observations") or review.get("coverage_complete") is not True:
-        return "INCOMPLETE"
-    if review.get("confidence") not in ("medium", "high") or not isinstance(review.get("defects"), list):
-        return "INCOMPLETE"
-    if review_integrity_errors(review, role, FILES[group]):
-        return "INCOMPLETE"
-    return "PASS" if all(value > 9.0 for value in scores.values()) and review["defects"] == [] else "DISSENT"
-
-
-def load_rows(root: Path | None, source: str, attempts: set[str]) -> dict[tuple[str, str], list[dict]]:
-    rows: dict[tuple[str, str], list[dict]] = {}
-    if root is None:
-        return rows
-    for path in root.rglob("review-result.json"):
-        result = json.loads(path.read_text())
-        role = result.get("critic_id")
-        if result.get("source") != source or role not in DIMS or result.get("attempt") not in attempts:
-            continue
-        if result.get("competency_passed") is not True:
-            for group in result.get("groups", []):
-                rows.setdefault((role, group), []).append({
-                    "source": source, "critic_id": role, "group": group,
-                    "error": result.get("error") or "invalid critic execution",
-                    "_provenance_errors": [result.get("error") or "invalid critic execution"],
-                })
-            continue
-        for row in result.get("reviews", []):
-            if row.get("error") is not None or row.get("execution_complete") is not True:
-                row["_provenance_errors"] = ["critic row incomplete: " + str(row.get("error") or "execution_complete is false")]
-            else:
-                row["_provenance_errors"] = provenance_errors(row, result, path.parent, role)
-            rows.setdefault((role, row.get("group")), []).append(row)
-    return rows
-
-
-def compact_vote(row: dict, state: str) -> dict:
-    review = row.get("review", {})
-    return {
-        "state": state,
-        "scores": review.get("scores", {}),
-        "minimum": min(review.get("scores", {}).values()) if review.get("scores") else None,
-        "defects": review.get("defects", []),
-        "observations": review.get("observations", []),
-        "confidence": review.get("confidence"),
-        "attempt": row.get("attempt"),
-        "seed": row.get("seed"),
-        "request_or_run_id": row.get("request_or_run_id"),
-        "raw_output_sha256": row.get("raw_output_sha256"),
-        "provenance_errors": row.get("_provenance_errors", []),
+            elapsed = round(sum(part["elapsed_seconds"] for part in slice_reviews), 3)
+            raw_path.write_text(json.dumps({
+                "schema_version": 4, "task": "T05", "source": SOURCE, "critic_id": ROLE,
+                "attempt": ATTEMPT, "seed": SEED, "group": group,
+                "aggregation": "minimum score; union defects; all slices require coverage; lowest confidence",
+                "execution_complete": True, "slices": slice_reviews, "aggregate_review": review,
+            }, indent=2, sort_keys=True) + "\n")
+            scores = review["scores"]
+            assert set(scores) == set(DIMS[ROLE])
+            assert all(not isinstance(value, bool) and isinstance(value, (int, float)) and math.isfinite(value) and 0 <= value <= 10 for value in scores.values())
+            assert isinstance(review["defects"], list) and isinstance(review["defect_evidence"], list)
+            assert isinstance(review["coverage_complete"], bool)
+            row.update({
+                "independent_execution": True, "execution_complete": True,
+                "review": review, "minimum": min(scores.values()),
+                "elapsed_seconds": elapsed,
+                "raw_output_path": raw_path.name, "raw_output_sha256": digest(raw_path), "error": None,
+            })
+            row["passed"] = (
+                row["minimum"] > 9.0 and review["defects"] == []
+                and review["coverage_complete"] is True and review["confidence"] in ("medium", "high")
+                and row["reference_scope_complete"] is True
+            )
+        except Exception as error:
+            row["error"] = str(error)
+            write_incomplete_group_bundle(
+                raw_path, source=SOURCE, role=ROLE, attempt=ATTEMPT, seed=SEED,
+                group=group, slices=slice_reviews, failed_slice=failed_slice,
+            )
+            row.update({"raw_output_path": raw_path.name, "raw_output_sha256": digest(raw_path)})
+        rows.append(row)
+        (OUT / (group + "-review.json")).write_text(json.dumps(row, indent=2))
+        print(json.dumps(row), flush=True)
+except Exception as error:
+    failure = str(error)
+finally:
+    incomplete_groups = [row.get("group") for row in rows if row.get("execution_complete") is not True or row.get("error") is not None]
+    execution_complete = competent and failure is None and len(rows) == len(GROUPS) and not incomplete_groups
+    result = {
+        "task": "T05", "source": SOURCE, "critic_id": ROLE, "attempt": ATTEMPT,
+        "groups": GROUPS, "reviews": rows, "competency_passed": competent,
+        "error": failure, "execution_complete": execution_complete,
+        "incomplete_groups": incomplete_groups,
+        "passed": execution_complete and all(row["passed"] for row in rows),
+        "provider": "local-checksum-pinned-public-model", "model": manifest["base_model"],
+        "model_revision": manifest["revision"], "runtime_release_sha256": digest(server),
+        "request_or_run_id": ":".join((RUN_ID, RUN_ATTEMPT, RUN_JOB, ROLE, ATTEMPT)),
+        "candidate_hash": SOURCE, "independent_runtime": True,
+        "reference_scope_complete": reference_scope_complete if ROLE == "C1" else True,
+        "reference_scope_error": reference_scope_error if ROLE == "C1" else None,
+        "strict_rule": ">9.0 unrounded", "score_averaging": False,
+        "task_approved": False, "physical_4k60_verified": False,
     }
-
-
-def validate_human_adjudication(path: Path | None, source: str, requests: list[dict], primary_rows: dict[tuple[str, str], dict]) -> tuple[list[str], str | None]:
-    if not requests:
-        return [], None
-    if path is None or not path.is_file():
-        return ["full-resolution human adjudication record is required before supplemental votes"], None
+    (OUT / "review-result.json").write_text(json.dumps(result, indent=2) + "\n")
+    (OUT / "provenance.json").write_text(json.dumps({
+        "source": SOURCE, "critic_id": ROLE, "attempt": ATTEMPT, "seed": SEED,
+        "evidence_provenance_sha256": digest(ROOT / "provenance.json"),
+        "reference_sha256": digest(reference), "script_sha256": digest(Path(__file__)),
+        "slice_timeout_seconds": SLICE_TIMEOUT_SECONDS,
+        "completed_low_scores_retried": False, "score_averaging": False,
+    }, indent=2) + "\n")
+    print(json.dumps(result), flush=True)
+    process.terminate()
     try:
-        record = json.loads(path.read_text())
-    except Exception as error:
-        return ["invalid human adjudication record: " + str(error)], None
-    errors = []
-    if record.get("candidate_source") != source or record.get("inspection_method") != "full_resolution_original_pixels":
-        errors.append("human adjudication is not exact-source/full-resolution bound")
-    if record.get("inspector_kind") != "human" or not isinstance(record.get("inspector"), str) or not record["inspector"].strip():
-        errors.append("named human inspector is required")
-    if not isinstance(record.get("inspected_at_utc"), str) or not record["inspected_at_utc"].endswith("Z"):
-        errors.append("UTC human inspection timestamp is required")
-    decisions = {(row.get("critic_id"), row.get("group")): row for row in record.get("decisions", [])}
-    required_keys = {(row["critic_id"], row["group"]) for row in requests}
-    if set(decisions) != required_keys:
-        errors.append("human adjudication decision set does not exactly match isolated dissents")
-    for key in required_keys & set(decisions):
-        decision = decisions[key]
-        if decision.get("disposition") != "not_corroborated":
-            errors.append(f"human inspection corroborated or did not clear {key[0]}/{key[1]}")
-        expected_inputs = primary_rows[key].get("_input_manifest", {}).get("pixel_manifest")
-        if decision.get("inspected_items") != expected_inputs or not expected_inputs:
-            errors.append(f"human inspection pixels do not exactly match {key[0]}/{key[1]}")
-    return errors, digest(path)
-
-
-def evaluate(primary_root: Path, source: str, supplemental_root: Path | None, adjudication_path: Path | None = None) -> dict:
-    primary = load_rows(primary_root, source, {"primary"})
-    supplemental = load_rows(supplemental_root, source, {"supplement-1", "supplement-2"})
-    errors: list[str] = []
-    primary_rows: dict[tuple[str, str], dict] = {}
-    states: dict[tuple[str, str], str] = {}
-    decisions: list[dict] = []
-    requests: list[dict] = []
-    quorums: list[dict] = []
-
-    for role in sorted(DIMS):
-        for group in sorted(SOURCE_GROUPS):
-            key = (role, group)
-            found = primary.get(key, [])
-            if len(found) != 1:
-                errors.append(f"expected one primary {role}/{group}, got {len(found)}")
-                continue
-            primary_rows[key] = found[0]
-            states[key] = classify(found[0], source, role, group)
-            if states[key] == "INCOMPLETE":
-                details = found[0].get("_provenance_errors", [])
-                suffix = ": " + "; ".join(details) if details else ""
-                errors.append(f"incomplete primary {role}/{group}{suffix}")
-
-    for group in sorted(SOURCE_GROUPS):
-        c1 = states.get(("C1", group))
-        c2 = states.get(("C2", group))
-        if c1 is None or c2 is None or "INCOMPLETE" in (c1, c2):
-            continue
-        votes = {
-            "C1": compact_vote(primary_rows[("C1", group)], c1),
-            "C2": compact_vote(primary_rows[("C2", group)], c2),
-        }
-        if c1 == c2 == "PASS":
-            decisions.append({"group": group, "status": "PASS", "primary": votes})
-            continue
-        if c1 == c2 == "DISSENT":
-            decisions.append({"group": group, "status": "FAIL", "reason": "both required primary roles found defects", "primary": votes})
-            continue
-
-        dissent_role = "C1" if c1 == "DISSENT" else "C2"
-        requests.append({"critic_id": dissent_role, "group": group})
-        if supplemental_root is None:
-            decisions.append({"group": group, "status": "ADJUDICATION_REQUIRED", "dissent_role": dissent_role, "primary": votes})
-            continue
-        extra = supplemental.get((dissent_role, group), [])
-        if len(extra) != 2:
-            errors.append(f"expected two supplemental judgments {dissent_role}/{group}, got {len(extra)}")
-            continue
-        extra_states = [classify(row, source, dissent_role, group) for row in extra]
-        if "INCOMPLETE" in extra_states:
-            details = [
-                detail
-                for row, state in zip(extra, extra_states)
-                if state == "INCOMPLETE"
-                for detail in row.get("_provenance_errors", [])
-            ]
-            suffix = ": " + "; ".join(details) if details else ""
-            errors.append(f"incomplete supplemental judgment {dissent_role}/{group}{suffix}")
-            continue
-        attempts = {row.get("attempt") for row in extra}
-        seeds = {row.get("seed") for row in extra}
-        request_ids = {row.get("request_or_run_id") for row in extra}
-        raw_hashes = {row.get("raw_output_sha256") for row in extra}
-        primary_row = primary_rows[(dissent_role, group)]
-        primary_inputs = primary_row.get("_input_manifest", {}).get("pixel_manifest")
-        if any(row.get("_input_manifest", {}).get("pixel_manifest") != primary_inputs for row in extra) or not primary_inputs:
-            errors.append(f"supplemental pixel set mismatch {dissent_role}/{group}")
-            continue
-        if attempts != {"supplement-1", "supplement-2"} or len(seeds) != 2 or len(request_ids) != 2 or len(raw_hashes) != 2:
-            errors.append(f"supplemental freshness/identity failure {dissent_role}/{group}")
-            continue
-        if primary_row.get("seed") in seeds or primary_row.get("request_or_run_id") in request_ids or primary_row.get("raw_output_sha256") in raw_hashes:
-            errors.append(f"supplement duplicates primary execution {dissent_role}/{group}")
-            continue
-        supplement_votes = [compact_vote(row, state) for row, state in zip(extra, extra_states)]
-        if extra_states.count("PASS") == 2:
-            decisions.append({
-                "group": group, "status": "PASS_BY_QUORUM", "dissent_role": dissent_role,
-                "primary": votes, "supplemental": supplement_votes,
-            })
-            quorums.append({
-                "critic_id": dissent_role, "group": group,
-                "primary": "DISSENT", "supplemental": extra_states,
-                "clean_votes": 2, "total_votes": 3,
-            })
-        else:
-            decisions.append({
-                "group": group, "status": "FAIL", "reason": "same-role 2-of-3 quorum not achieved",
-                "dissent_role": dissent_role, "primary": votes, "supplemental": supplement_votes,
-            })
-
-    should_validate_adjudication = supplemental_root is not None or adjudication_path is not None
-    adjudication_errors, adjudication_hash = validate_human_adjudication(
-        adjudication_path if should_validate_adjudication else None, source,
-        requests if should_validate_adjudication else [], primary_rows,
-    )
-    errors.extend(adjudication_errors)
-    failed = any(row["status"] == "FAIL" for row in decisions)
-    pending = supplemental_root is None and bool(requests) and not failed and not errors
-    passed = not errors and not failed and not pending and len(decisions) == len(SOURCE_GROUPS)
-    status = "PASS_BY_QUORUM" if passed and quorums else "PASS" if passed else "ADJUDICATION_REQUIRED" if pending else "FAIL"
-    return {
-        "task": "T05", "source": source, "status": status, "passed": passed,
-        "strict_rule": ">9.0 unrounded; no averaging; only one-role dissent may use same-role 2-of-3 quorum",
-        "decisions": decisions, "adjudication_requests": requests, "quorums": quorums,
-        "errors": errors, "completed_low_scores_retried": False, "score_averaging": False,
-        "human_adjudication_sha256": adjudication_hash,
-    }
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--primary", type=Path, required=True)
-    parser.add_argument("--source", required=True)
-    parser.add_argument("--supplemental", type=Path)
-    parser.add_argument("--adjudication", type=Path)
-    parser.add_argument("--output", type=Path, required=True)
-    args = parser.parse_args()
-    report = evaluate(args.primary, args.source, args.supplemental, args.adjudication)
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(report, indent=2) + "\n")
-    print(json.dumps(report, indent=2))
-    if report["passed"]:
-        return 0
-    return 3 if report["status"] == "ADJUDICATION_REQUIRED" else 2
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+        process.wait(timeout=15)
+    except subprocess.TimeoutExpired:
+        process.kill()
+    log.close()
+raise SystemExit(review_exit_code(result["execution_complete"]))
