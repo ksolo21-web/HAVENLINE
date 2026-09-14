@@ -11,8 +11,8 @@ from final_gate import EXPECTED_DIMENSIONS, MEASUREMENT_NAMES, build_gate
 from review_protocol import (
     FILES, GROUP_FAMILIES, PROTOCOL, REFERENCE_FOCUS_BOXES,
     applicable_dimensions, build_review_prompt, build_review_schema,
-    build_slice_contract, build_slice_plan, expected_request_settings,
-    persist_model_response, review_exit_code, review_integrity_errors,
+    build_primary_matrix, build_slice_contract, build_slice_plan, expected_request_settings,
+    materialize_defect_summary, persist_model_response, review_exit_code, review_integrity_errors,
     write_incomplete_group_bundle,
 )
 
@@ -278,6 +278,56 @@ def mutate_bound_request(result_path: Path, mutate) -> None:
 
 
 class VisualQuorumTests(unittest.TestCase):
+    def test_recovery_matrix_runs_only_exact_valid_targets(self):
+        targets = ["C1:core-families", "C2:resources-and-details"]
+        self.assertEqual(build_primary_matrix("recover", json.dumps(targets)), {"include": [
+            {"critic": "C1", "group": "core-families"},
+            {"critic": "C2", "group": "resources-and-details"},
+        ]})
+        with self.assertRaises(ValueError):
+            build_primary_matrix("recover", "[]")
+        with self.assertRaises(ValueError):
+            build_primary_matrix("recover", '["C1:not-a-group"]')
+        with self.assertRaises(ValueError):
+            build_primary_matrix("recover", '["C1:core-families","C1:core-families"]')
+        with self.assertRaises(ValueError):
+            build_primary_matrix("unknown")
+
+    def test_defect_summary_is_derived_without_dropping_evidence(self):
+        review = {
+            "defects": ["Second label", "First label"],
+            "defect_evidence": [
+                {"candidate_path": "a", "dimension": "x", "visible_region": "left", "description": "First visible defect"},
+                {"candidate_path": "b", "dimension": "y", "visible_region": "right", "description": "Second visible defect"},
+            ],
+            "scores": {"x": 8.9, "y": 8.8},
+        }
+        normalized, changed = materialize_defect_summary(review)
+        self.assertTrue(changed)
+        self.assertEqual(normalized["defects"], ["First visible defect", "Second visible defect"])
+        self.assertEqual(normalized["defect_evidence"], review["defect_evidence"])
+        self.assertEqual(normalized["scores"], review["scores"])
+        self.assertEqual(len(normalized["defects"]), len(review["defect_evidence"]))
+
+    def test_nonempty_label_is_safely_replaced_by_nonempty_evidence_description(self):
+        review = {
+            "defects": ["A visible defect"],
+            "defect_evidence": [{"description": "A different visible defect"}],
+        }
+        normalized, changed = materialize_defect_summary(review)
+        self.assertTrue(changed)
+        self.assertEqual(normalized["defects"], ["A different visible defect"])
+
+    def test_defect_summary_derivation_fails_closed_on_missing_or_extra_evidence(self):
+        for review in (
+            {"defects": ["Visible defect"], "defect_evidence": []},
+            {"defects": [], "defect_evidence": [{"description": "Visible defect"}]},
+            {"defects": ["One", "Two"], "defect_evidence": [{"description": "Visible defect"}]},
+        ):
+            normalized, changed = materialize_defect_summary(review)
+            self.assertFalse(changed)
+            self.assertIs(normalized, review)
+
     def primaries(self, root: Path, dissent=None):
         dissent = dissent or set()
         for role in DIMS:
@@ -292,6 +342,40 @@ class VisualQuorumTests(unittest.TestCase):
             report = evaluate(root, SOURCE, None)
             self.assertTrue(report["passed"])
             self.assertEqual(report["status"], "PASS")
+
+    def test_derived_defect_summary_preserves_raw_answer_and_provenance(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            target = sorted(SOURCE_GROUPS)[0]
+            self.primaries(root, {("C2", target)})
+            result_path = root / "C2-primary/review-result.json"
+            result = json.loads(result_path.read_text())
+            row_data = next(item for item in result["reviews"] if item["group"] == target)
+            bundle_path = result_path.parent / row_data["raw_output_path"]
+            bundle = json.loads(bundle_path.read_text())
+            slice_data = bundle["slices"][0]
+            raw_path = result_path.parent / slice_data["raw_output_path"]
+            answer_path = result_path.parent / slice_data["answer_path"]
+            raw_response = json.loads(raw_path.read_text())
+            raw_review = json.loads(raw_response["choices"][0]["message"]["content"])
+            self.assertTrue(raw_review["defects"])
+            raw_review["defects"] = [f"defect_label_{index}" for index in range(len(raw_review["defects"]))]
+            raw_response["choices"][0]["message"]["content"] = json.dumps(raw_review)
+            raw_bytes = json.dumps(raw_response).encode()
+            answer_bytes = json.dumps(raw_review).encode()
+            raw_path.write_bytes(raw_bytes)
+            answer_path.write_bytes(answer_bytes)
+            slice_data["raw_output_sha256"] = hashlib.sha256(raw_bytes).hexdigest()
+            slice_data["answer_sha256"] = hashlib.sha256(answer_bytes).hexdigest()
+            slice_data["defect_summary_derived"] = True
+            bundle_bytes = (json.dumps(bundle, indent=2, sort_keys=True) + "\n").encode()
+            bundle_path.write_bytes(bundle_bytes)
+            row_data["raw_output_sha256"] = hashlib.sha256(bundle_bytes).hexdigest()
+            result_path.write_text(json.dumps(result))
+
+            report = evaluate(root, SOURCE, None)
+            self.assertEqual(report["status"], "ADJUDICATION_REQUIRED")
+            self.assertEqual(report["errors"], [])
 
     def test_single_role_dissent_can_pass_same_role_quorum(self):
         with tempfile.TemporaryDirectory() as tmp:

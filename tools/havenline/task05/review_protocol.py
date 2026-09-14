@@ -94,6 +94,28 @@ FILES = {
     ],
 }
 
+REVIEW_ROLES = ("C1", "C2")
+
+
+def build_primary_matrix(mode: str, recovery_targets_json: str = "[]") -> dict:
+    """Build an exact, validated matrix for full or selected primary execution."""
+    if mode not in {"primary", "recover", "adjudicate"}:
+        raise ValueError("unknown review mode")
+    all_pairs = [(role, group) for role in REVIEW_ROLES for group in FILES]
+    if mode == "recover":
+        targets = json.loads(recovery_targets_json)
+        allowed = {f"{role}:{group}" for role, group in all_pairs}
+        if not isinstance(targets, list) or not targets:
+            raise ValueError("recover mode requires at least one target")
+        if not all(isinstance(target, str) for target in targets):
+            raise ValueError("recovery targets must be strings")
+        if len(targets) != len(set(targets)) or not set(targets) <= allowed:
+            raise ValueError("invalid or duplicate recovery target")
+        pairs = [target.split(":", 1) for target in targets]
+    else:
+        pairs = all_pairs
+    return {"include": [{"critic": role, "group": group} for role, group in pairs]}
+
 GROUP_FAMILIES = {
     "core-families": ("hearth", "counters", "pads"),
     "loop-families": ("fishing", "processing", "defense"),
@@ -245,11 +267,8 @@ def build_review_prompt(source: str, role: str, contract: dict) -> str:
 def build_review_schema(role: str, candidate_paths: list[str], reference_path: str) -> dict:
     dimensions = applicable_dimensions(role, candidate_paths)
     score_properties = {name: {"type": "number", "minimum": 0, "maximum": 10} for name in dimensions}
-    return {
-        "type": "object",
-        "properties": {
+    properties = {
             "observations": {"type": "array", "items": {"type": "string"}, "minItems": 2, "maxItems": 4},
-            "defects": {"type": "array", "items": {"type": "string"}, "maxItems": 4},
             "defect_evidence": {"type": "array", "items": {
                 "type": "object",
                 "properties": {
@@ -267,8 +286,13 @@ def build_review_schema(role: str, candidate_paths: list[str], reference_path: s
             "unseen_assets_out_of_scope_acknowledged": {"type": "boolean"},
             "confidence": {"type": "string", "enum": ["low", "medium", "high"]},
             "scores": {"type": "object", "properties": score_properties, "required": dimensions, "additionalProperties": False},
-        },
-        "required": ["observations", "defects", "defect_evidence", "coverage_complete", "reviewed_candidate_paths", "reference_path_used", "unseen_assets_out_of_scope_acknowledged", "confidence", "scores"],
+    }
+    properties = {"observations": properties.pop("observations"), "defects": {"type": "array", "items": {"type": "string"}, "maxItems": 4}, **properties}
+    required = ["observations", "defects", "defect_evidence", "coverage_complete", "reviewed_candidate_paths", "reference_path_used", "unseen_assets_out_of_scope_acknowledged", "confidence", "scores"]
+    return {
+        "type": "object",
+        "properties": properties,
+        "required": required,
         "additionalProperties": False,
     }
 
@@ -317,6 +341,36 @@ def review_integrity_errors(review: dict, role: str, candidate_paths: list[str])
     return errors
 
 
+def materialize_defect_summary(review: dict) -> tuple[dict, bool]:
+    """Derive the redundant defect summary from authoritative localized evidence.
+
+    The exact model answer remains preserved separately. The derived list has the
+    same cardinality as defect_evidence, so it cannot hide evidence or turn a
+    failing visual judgment into a passing one.
+    """
+    defects = review.get("defects")
+    evidence = review.get("defect_evidence")
+    if not isinstance(defects, list) or not isinstance(evidence, list):
+        return review, False
+    descriptions = [
+        item.get("description") if isinstance(item, dict) else None
+        for item in evidence
+    ]
+    if not all(isinstance(value, str) and value.strip() for value in defects):
+        return review, False
+    if not all(isinstance(value, str) and value.strip() for value in descriptions):
+        if defects == descriptions == []:
+            return review, False
+        return review, False
+    if not defects and not evidence:
+        return review, False
+    if not defects or not evidence or len(defects) != len(evidence):
+        return review, False
+    materialized = dict(review)
+    materialized["defects"] = descriptions
+    return materialized, defects != descriptions
+
+
 def expected_request_settings(role: str, attempt: str, seed: int) -> dict:
     return {
         "model": f"T05-{role}-{attempt}", "max_tokens": 1150,
@@ -341,9 +395,10 @@ def persist_model_response(raw_bytes: bytes, raw_path: Path, answer_path: Path, 
 def write_incomplete_group_bundle(
     path: Path, *, source: str, role: str, attempt: str, seed: int,
     group: str, slices: list[dict], failed_slice: dict | None,
+    schema_version: int = 4,
 ) -> dict:
     payload = {
-        "schema_version": 4, "task": "T05", "source": source, "critic_id": role,
+        "schema_version": schema_version, "task": "T05", "source": source, "critic_id": role,
         "attempt": attempt, "seed": seed, "group": group,
         "aggregation": "incomplete; no score produced",
         "execution_complete": False, "slices": slices,

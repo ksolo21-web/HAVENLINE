@@ -13,7 +13,8 @@ from PIL import Image, ImageChops
 from review_protocol import (
     FILES, GROUP_FAMILIES, PROTOCOL, REFERENCE_FOCUS_BOXES,
     build_review_prompt, build_review_schema, build_slice_contract,
-    expected_request_settings, reference_family_for, review_integrity_errors,
+    expected_request_settings, materialize_defect_summary,
+    reference_family_for, review_integrity_errors,
 )
 
 
@@ -268,18 +269,27 @@ def provenance_errors(row: dict, result: dict, folder: Path, role: str) -> list[
                         errors.append("invalid bound slice answer JSON")
             if raw_review != answer_review:
                 errors.append("bound raw model response does not match parsed slice answer")
-            if answer_review != item.get("review"):
+            recorded_review = answer_review
+            defect_summary_derived = False
+            if isinstance(answer_review, dict):
+                recorded_review, defect_summary_derived = materialize_defect_summary(answer_review)
+            marker = item.get("defect_summary_derived")
+            if defect_summary_derived and marker is not True:
+                errors.append("derived defect summary lacks an explicit provenance marker")
+            if not defect_summary_derived and marker not in (None, False):
+                errors.append("defect-summary provenance marker is inconsistent")
+            if recorded_review != item.get("review"):
                 errors.append("bound slice answer does not match recorded slice review")
-            elif isinstance(answer_review, dict):
-                if answer_review.get("reviewed_candidate_paths") != scope.get("reviewed_candidate_paths"):
+            elif isinstance(recorded_review, dict):
+                if recorded_review.get("reviewed_candidate_paths") != scope.get("reviewed_candidate_paths"):
                     errors.append("model did not acknowledge exact candidate paths")
-                if answer_review.get("reference_path_used") != scope.get("reference_path"):
+                if recorded_review.get("reference_path_used") != scope.get("reference_path"):
                     errors.append("model did not acknowledge exact reference path")
-                if answer_review.get("unseen_assets_out_of_scope_acknowledged") is not True:
+                if recorded_review.get("unseen_assets_out_of_scope_acknowledged") is not True:
                     errors.append("model did not acknowledge unseen-asset scope")
-                for integrity_error in review_integrity_errors(answer_review, role, scope.get("reviewed_candidate_paths", [])):
+                for integrity_error in review_integrity_errors(recorded_review, role, scope.get("reviewed_candidate_paths", [])):
                     errors.append("invalid slice review: " + integrity_error)
-                bound_reviews.append(answer_review)
+                bound_reviews.append(recorded_review)
         if len(raw_board_paths) != len(set(raw_board_paths)) or set(raw_board_paths) != set(board_hashes):
             errors.append("raw-output slices do not map one-to-one onto every board slice")
         if len(bound_output_paths) != len(set(bound_output_paths)):

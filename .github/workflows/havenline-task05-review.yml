@@ -1,5 +1,9 @@
 name: Havenline T05 strict review
 
+concurrency:
+  group: 'havenline-t05-strict-${{ github.ref }}'
+  cancel-in-progress: true
+
 on:
   push:
     branches: ['codex/havenline-sequential-task-01']
@@ -18,14 +22,18 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'Run fresh primaries or resume an isolated dissent after human inspection'
+        description: 'Run fresh primaries, recover selected primaries, or adjudicate inspected dissent'
         type: choice
-        options: [primary, adjudicate]
+        options: [primary, recover, adjudicate]
         default: primary
       visual_primary_run_id:
-        description: 'Prior T05 strict-review run ID; required only for adjudicate mode'
+        description: 'Prior T05 strict-review run ID; required for recover/adjudicate'
         type: string
         required: false
+      recovery_targets:
+        description: 'JSON list of exact critic:group primaries to rerun in recover mode'
+        type: string
+        default: '[]'
       adjudication_record_path:
         description: 'Committed full-resolution human adjudication JSON'
         type: string
@@ -46,6 +54,8 @@ jobs:
   preflight:
     runs-on: ubuntu-24.04
     timeout-minutes: 12
+    outputs:
+      visual_matrix: '${{ steps.review_matrix.outputs.matrix }}'
     steps:
       - uses: actions/checkout@v4
         with: {lfs: true}
@@ -87,23 +97,48 @@ jobs:
       - run: python3 -m pip install pillow==11.3.0
       - run: python3 -m unittest discover -s tools/havenline/task05 -p 'test_evaluate_station_reviews.py'
       - run: python3 -m unittest discover -s tools/havenline/task05 -p 'test_performance_protocol.py'
+      - name: Validate bounded recovery request
+        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'recover'
+        env:
+          PRIOR_RUN_ID: '${{ inputs.visual_primary_run_id }}'
+          RECOVERY_TARGETS: '${{ inputs.recovery_targets }}'
+        run: |
+          python3 - <<'PY'
+          import os
+          from tools.havenline.task05.review_protocol import build_primary_matrix
+
+          assert os.environ['PRIOR_RUN_ID'].isdigit(), 'recover mode requires a numeric prior run ID'
+          build_primary_matrix('recover', os.environ['RECOVERY_TARGETS'])
+          PY
+      - name: Build exact primary matrix
+        id: review_matrix
+        env:
+          MODE: '${{ github.event_name == ''workflow_dispatch'' && inputs.mode || ''primary'' }}'
+          RECOVERY_TARGETS: '${{ inputs.recovery_targets }}'
+        run: |
+          python3 - <<'PY' >> "$GITHUB_OUTPUT"
+          import json, os
+          from tools.havenline.task05.review_protocol import build_primary_matrix
+
+          matrix = build_primary_matrix(os.environ['MODE'], os.environ['RECOVERY_TARGETS'] or '[]')
+          print('matrix=' + json.dumps(matrix, separators=(',', ':')))
+          PY
 
   primary-visual:
     needs: preflight
-    if: github.event_name != 'workflow_dispatch' || inputs.mode == 'primary'
+    if: github.event_name == 'workflow_dispatch' && needs.preflight.result == 'success' && (inputs.mode == 'primary' || inputs.mode == 'recover')
     strategy:
       fail-fast: false
-      matrix:
-        critic: ['C1', 'C2']
-        group: ['core-families', 'loop-families', 'resources-and-details', 'shipping-device-and-tracking', 'shipping-contexts-and-native']
+      matrix: '${{ fromJSON(needs.preflight.outputs.visual_matrix) }}'
     runs-on: ubuntu-24.04
-    timeout-minutes: 240
+    timeout-minutes: 200
     env:
       REVIEW_ROLE: '${{ matrix.critic }}'
       REVIEW_ATTEMPT: primary
       REVIEW_SEED: '${{ matrix.critic == ''C1'' && ''20260951'' || ''20260961'' }}'
       REVIEW_GROUPS: '${{ matrix.group }}'
       REVIEW_OUTPUT: 'task05-${{ matrix.critic }}-${{ matrix.group }}-primary'
+      REVIEW_SLICE_TIMEOUT_SECONDS: '900'
     steps:
       - uses: actions/checkout@v4
         with: {lfs: true}
@@ -149,13 +184,40 @@ jobs:
 
   visual-resolution:
     needs: [preflight, primary-visual]
-    if: always() && needs.preflight.result == 'success' && (github.event_name != 'workflow_dispatch' || inputs.mode == 'primary')
+    if: always() && github.event_name == 'workflow_dispatch' && needs.preflight.result == 'success' && (inputs.mode == 'primary' || inputs.mode == 'recover')
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
       - uses: actions/checkout@v4
       - run: python3 -m pip install pillow==11.3.0
-      - uses: actions/download-artifact@v4
+      - name: Download prior primary artifacts for recovery
+        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'recover'
+        uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ inputs.visual_primary_run_id }}'
+          pattern: 'havenline-t05-*-primary-${{ inputs.visual_primary_run_id }}'
+          path: primary-reviews
+      - name: Remove superseded prior targets
+        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'recover'
+        env:
+          PRIOR_RUN_ID: '${{ inputs.visual_primary_run_id }}'
+          RECOVERY_TARGETS: '${{ inputs.recovery_targets }}'
+        run: |
+          python3 - <<'PY'
+          import json, os, shutil
+          from pathlib import Path
+
+          root = Path('primary-reviews')
+          for target in json.loads(os.environ['RECOVERY_TARGETS']):
+              role, group = target.split(':', 1)
+              path = root / f'havenline-t05-{role}-{group}-primary-{os.environ["PRIOR_RUN_ID"]}'
+              if path.exists():
+                  shutil.rmtree(path)
+          PY
+      - name: Download this run's primary artifacts
+        uses: actions/download-artifact@v4
         with:
           pattern: 'havenline-t05-*-primary-${{ github.run_id }}'
           path: primary-reviews
@@ -181,7 +243,7 @@ jobs:
 
   performance:
     needs: preflight
-    if: github.event_name != 'workflow_dispatch' || inputs.mode == 'primary'
+    if: github.event_name == 'workflow_dispatch' && inputs.mode == 'primary'
     runs-on: ubuntu-24.04
     timeout-minutes: 110
     steps:
@@ -364,13 +426,14 @@ jobs:
       fail-fast: false
       matrix: '${{ fromJSON(needs.adjudication-precheck.outputs.matrix) }}'
     runs-on: ubuntu-24.04
-    timeout-minutes: 240
+    timeout-minutes: 200
     env:
       REVIEW_ROLE: '${{ matrix.role }}'
       REVIEW_GROUPS: '${{ matrix.group }}'
       REVIEW_ATTEMPT: 'supplement-${{ matrix.attempt }}'
       REVIEW_SEED: '${{ matrix.seed }}'
       REVIEW_OUTPUT: 'supplemental/${{ matrix.role }}-${{ matrix.group }}-${{ matrix.attempt }}'
+      REVIEW_SLICE_TIMEOUT_SECONDS: '900'
     steps:
       - uses: actions/checkout@v4
         with: {lfs: true}
@@ -440,15 +503,29 @@ jobs:
 
   final-machine-gate:
     needs: [visual-resolution, performance]
-    if: always() && needs.visual-resolution.result == 'success' && needs.performance.result == 'success'
+    if: >-
+      always() && needs.visual-resolution.result == 'success' &&
+      (needs.performance.result == 'success' ||
+      (github.event_name == 'workflow_dispatch' && inputs.mode == 'recover'))
     runs-on: ubuntu-24.04
     timeout-minutes: 8
     steps:
       - uses: actions/checkout@v4
       - uses: actions/download-artifact@v4
         with: {name: 'havenline-t05-visual-resolution-${{ github.run_id }}', path: visual}
-      - uses: actions/download-artifact@v4
+      - name: Download current C6 evidence
+        if: inputs.mode == 'primary'
+        uses: actions/download-artifact@v4
         with: {name: 'havenline-t05-C6-${{ github.run_id }}', path: performance}
+      - name: Reuse prior successful C6 evidence
+        if: github.event_name == 'workflow_dispatch' && inputs.mode == 'recover'
+        uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ inputs.visual_primary_run_id }}'
+          name: 'havenline-t05-C6-${{ inputs.visual_primary_run_id }}'
+          path: performance
       - name: Bind C1, C2 and C6 before closure
         run: python3 tools/havenline/task05/final_gate.py --visual visual --performance performance --source "$EXPECTED_SOURCE" --baseline "$T04_BASELINE_SOURCE" --output final-gate/final-machine-gate.json
       - uses: actions/upload-artifact@v4

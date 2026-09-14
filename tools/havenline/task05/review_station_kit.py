@@ -23,7 +23,7 @@ from review_protocol import (
     FILES, GROUP_DISPLAY_NAMES, GROUP_FAMILIES, PROTOCOL, REFERENCE_FOCUS_BOXES, ROLE_DIMENSIONS,
     applicable_dimensions, build_review_prompt,
     build_review_schema, build_slice_contract, build_slice_plan, expected_request_settings,
-    persist_model_response, review_exit_code, review_integrity_errors,
+    materialize_defect_summary, persist_model_response, review_exit_code, review_integrity_errors,
     write_incomplete_group_bundle,
 )
 
@@ -49,6 +49,8 @@ DIMS = ROLE_DIMENSIONS
 
 GROUPS = [name for name in os.environ.get("REVIEW_GROUPS", ",".join(FILES)).split(",") if name]
 assert GROUPS and set(GROUPS) <= set(FILES)
+SLICE_TIMEOUT_SECONDS = int(os.environ.get("REVIEW_SLICE_TIMEOUT_SECONDS", "900"))
+assert 60 <= SLICE_TIMEOUT_SECONDS <= 1800
 
 def digest(path: Path) -> str:
     value = hashlib.sha256()
@@ -322,13 +324,14 @@ def query(image_path: Path, prompt: str, schema: dict, name: str, max_tokens: in
         "source_image_path": image_path.name, "source_image_sha256": digest(image_path),
         "image_sha256": hashlib.sha256(payload).hexdigest(),
         "original_size": original, "input_size": image.size, "seed": SEED,
+        "inference_timeout_seconds": SLICE_TIMEOUT_SECONDS,
     }, indent=2, default=list))
     began = time.monotonic()
     call = urllib.request.Request(
         "http://127.0.0.1:8080/v1/chat/completions",
         data=json.dumps(request).encode(), headers={"Content-Type": "application/json"}, method="POST",
     )
-    with urllib.request.urlopen(call, timeout=1800) as response:
+    with urllib.request.urlopen(call, timeout=SLICE_TIMEOUT_SECONDS) as response:
         raw_bytes = response.read()
     parsed = persist_model_response(
         raw_bytes, OUT / (name + "-raw.json"), OUT / (name + "-answer.json"), name,
@@ -451,6 +454,11 @@ try:
                 slice_schema = build_review_schema(ROLE, scope["reviewed_candidate_paths"], scope["reference_path"])
                 slice_prompt = build_review_prompt(SOURCE, ROLE, request_contract)
                 assert expected_request_settings(ROLE, ATTEMPT, SEED)["max_tokens"] == 1150
+                print(json.dumps({
+                    "event": "slice_started", "critic_id": ROLE, "group": group,
+                    "slice": slice_index, "slice_count": len(boards),
+                    "timeout_seconds": SLICE_TIMEOUT_SECONDS,
+                }), flush=True)
                 try:
                     review, elapsed = query(board, slice_prompt, slice_schema, name, 1150, request_contract)
                 except Exception as error:
@@ -465,12 +473,35 @@ try:
                         if partial.is_file():
                             failed_slice[path_key] = partial.name
                             failed_slice[path_key.replace("path", "sha256")] = digest(partial)
+                    print(json.dumps({
+                        "event": "slice_failed", "critic_id": ROLE, "group": group,
+                        "slice": slice_index, "slice_count": len(boards), "error": str(error),
+                    }), flush=True)
                     raise
-                assert review["reviewed_candidate_paths"] == scope["reviewed_candidate_paths"], "reviewed candidate path acknowledgment mismatch"
-                assert review["reference_path_used"] == scope["reference_path"], "reference path acknowledgment mismatch"
-                assert review["unseen_assets_out_of_scope_acknowledged"] is True, "unseen-asset scope was not acknowledged"
-                integrity_errors = review_integrity_errors(review, ROLE, scope["reviewed_candidate_paths"])
-                assert not integrity_errors, "; ".join(integrity_errors)
+                try:
+                    review, defect_summary_derived = materialize_defect_summary(review)
+                    assert review["reviewed_candidate_paths"] == scope["reviewed_candidate_paths"], "reviewed candidate path acknowledgment mismatch"
+                    assert review["reference_path_used"] == scope["reference_path"], "reference path acknowledgment mismatch"
+                    assert review["unseen_assets_out_of_scope_acknowledged"] is True, "unseen-asset scope was not acknowledged"
+                    integrity_errors = review_integrity_errors(review, ROLE, scope["reviewed_candidate_paths"])
+                    assert not integrity_errors, "; ".join(integrity_errors)
+                except Exception as error:
+                    failed_slice = {
+                        "slice": slice_index, "board_path": board.name, "board_sha256": digest(board),
+                        "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
+                        "reference_family": scope["reference_family"], "reference_path": scope["reference_path"],
+                        "error": str(error),
+                    }
+                    for path_key, suffix in (("raw_output_path", "-raw.json"), ("request_path", "-request.json"), ("answer_path", "-answer.json")):
+                        partial = OUT / (name + suffix)
+                        if partial.is_file():
+                            failed_slice[path_key] = partial.name
+                            failed_slice[path_key.replace("path", "sha256")] = digest(partial)
+                    print(json.dumps({
+                        "event": "slice_failed", "critic_id": ROLE, "group": group,
+                        "slice": slice_index, "slice_count": len(boards), "error": str(error),
+                    }), flush=True)
+                    raise
                 slice_reviews.append({
                     "slice": slice_index, "board_path": board.name, "board_sha256": digest(board),
                     "reviewed_candidate_paths": scope["reviewed_candidate_paths"],
@@ -478,8 +509,19 @@ try:
                     "raw_output_path": name + "-raw.json", "raw_output_sha256": digest(OUT / (name + "-raw.json")),
                     "request_path": name + "-request.json", "request_sha256": digest(OUT / (name + "-request.json")),
                     "answer_path": name + "-answer.json", "answer_sha256": digest(OUT / (name + "-answer.json")),
-                    "elapsed_seconds": elapsed, "review": review,
+                    "elapsed_seconds": elapsed, "defect_summary_derived": defect_summary_derived,
+                    "review": review,
                 })
+                write_incomplete_group_bundle(
+                    raw_path, source=SOURCE, role=ROLE, attempt=ATTEMPT, seed=SEED,
+                    group=group, slices=slice_reviews, failed_slice=None,
+                )
+                print(json.dumps({
+                    "event": "slice_completed", "critic_id": ROLE, "group": group,
+                    "slice": slice_index, "slice_count": len(boards),
+                    "elapsed_seconds": elapsed, "checkpoint_path": raw_path.name,
+                    "defect_summary_derived": defect_summary_derived,
+                }), flush=True)
             confidence_order = {"low": 0, "medium": 1, "high": 2}
             unique_defect_evidence = []
             seen_defect_evidence = set()
@@ -561,6 +603,7 @@ finally:
         "source": SOURCE, "critic_id": ROLE, "attempt": ATTEMPT, "seed": SEED,
         "evidence_provenance_sha256": digest(ROOT / "provenance.json"),
         "reference_sha256": digest(reference), "script_sha256": digest(Path(__file__)),
+        "slice_timeout_seconds": SLICE_TIMEOUT_SECONDS,
         "completed_low_scores_retried": False, "score_averaging": False,
     }, indent=2) + "\n")
     print(json.dumps(result), flush=True)
