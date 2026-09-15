@@ -73,10 +73,10 @@
       "causal_production_change": "Added a task-owned exact-GLB CPU skinning evaluator that samples every vertex and triangle at 120 Hz, records neutral topological/contact exclusions, detects new non-adjacent triangle intersections with exact witnesses, checks finite/floor/non-collapse metrics per semantic part and clip, and runs as a fail-closed candidate-workflow gate. Heel, ball, and toe IDs are now selected once from the neutral idle sole and reused unchanged for both gait clips.",
       "expected_visible_result": "Every semantic region remains finite, non-collapsed, non-inverted, above the floor where applicable, and clear of non-adjacent surface regions through every 120 Hz clip sample, with any threshold breach tied to an exact clip, time, part, and vertex/triangle witness.",
       "proof_contract": "Run a fail-closed 120 Hz CPU skinning audit over the exact runtime-review GLB for all 66 joints, all deformed vertices, all triangles, all 16 semantic parts, and all 24 clips; retain per-part/per-clip minima and exact breach witnesses; combine with existing textured multi-angle evidence and obtain independent C2 re-review.",
-      "latest_verification_note": "Exact candidate 60a16ef0 exposed that the report-level passed flag did not aggregate per-clip part failures even though the workflow's final gate did. The evaluator now fails its own report whenever any clip row fails, preserving fail-closed consistency and naming the exact failed clips.",
+      "latest_verification_note": "Exact candidate 60a16ef0 exposed that the report-level passed flag did not aggregate per-clip part failures even though the workflow's final gate did. The evaluator now fails its own report whenever any clip row fails, preserving fail-closed consistency and naming the exact failed clips. Once production gates were green, exact candidate 490fd7b5 reached a latent preflight KeyError: the motion ledger exports derived_low-contact_stride_median but the workflow queried an underscore spelling. Both walk and run assertions now use the exact exported key.",
       "counters": {
-        "review_round": 2,
-        "same_family_strikes": 2
+        "review_round": 3,
+        "same_family_strikes": 3
       },
       "status": "READY_FOR_VERIFICATION"
     }

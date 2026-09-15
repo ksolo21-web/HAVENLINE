@@ -219,8 +219,8 @@ jobs:
           assert len(surface['gait_sole_landmarks'])==2 and all(row['passed'] and row['cycles']>=3 for row in surface['gait_sole_landmarks'])
           assert ledger['clips']['walk']['maximum_moving_root_plant_drift_m']<0.03,ledger['clips']['walk']
           assert ledger['clips']['run']['maximum_moving_root_plant_drift_m']<0.03,ledger['clips']['run']
-          assert ledger['clips']['walk']['derived_low_contact_stride_median']>0.0,ledger['clips']['walk']
-          assert ledger['clips']['run']['derived_low_contact_stride_median']>0.0,ledger['clips']['run']
+          assert ledger['clips']['walk']['derived_low-contact_stride_median']>0.0,ledger['clips']['walk']
+          assert ledger['clips']['run']['derived_low-contact_stride_median']>0.0,ledger['clips']['run']
           assert all(row['forward_positive_z'] and row['target_error_m']<0.08 for row in ledger['actions'].values()),ledger['actions']
           assert all(row['skeleton_returns_neutral'] and abs(row['external_root_facing_delta_degrees']) in (30,90,180) for row in ledger['turns'].values())
           assert native['native_3840x2160_scale1'] is True and len(native['captures'])==6,len(native['captures'])
