@@ -220,8 +220,15 @@ static func _match_cyclic_seam(animation: Animation) -> void:
 			continue
 		animation.track_set_interpolation_type(track, Animation.INTERPOLATION_LINEAR)
 		var key_count := animation.track_get_key_count(track)
-		assert(key_count >= 3)
+		# Imported clips may keep constant channels as one key (or an endpoint
+		# pair). They already have zero velocity on both sides of the seam. Only
+		# channels with a real forward sample need the mirrored incoming sample.
+		if key_count <= 1:
+			continue
 		var first: Variant = animation.track_get_key_value(track, 0)
+		if key_count == 2:
+			animation.track_set_key_value(track, 1, first)
+			continue
 		var forward: Variant = animation.track_get_key_value(track, 1)
 		if kind == Animation.TYPE_ROTATION_3D:
 			var first_rotation: Quaternion = first
