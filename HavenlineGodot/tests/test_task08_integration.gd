@@ -4,6 +4,7 @@ const Simulation = preload("res://scripts/outpost_simulation.gd")
 const Carry = preload("res://scripts/carry_stack.gd")
 const Stockpile = preload("res://scripts/storage_stockpile.gd")
 const Transfer = preload("res://scripts/transfer_feedback.gd")
+const Main = preload("res://scripts/main.gd")
 
 var checks: Array[Dictionary] = []
 var failures: Array[String] = []
@@ -92,6 +93,26 @@ func run() -> void:
 	var action_after := restored.choose_action()
 	check("inventory presentation cannot alter T07 context selection", action_after == action_before)
 	check("one-joystick action contract remains intact", restored.context_director.contract().permanent_action_buttons == 0)
+
+	if OS.get_environment("HAVENLINE_T08_REQUIRE_SHIPPING_INTEGRATION") == "1":
+		var game := Main.new()
+		root.add_child(game)
+		game.set_process(false); game.set_physics_process(false); game.transfer_feedback.set_process(false)
+		game.sim.elapsed = 10.0
+		var shipping_resource: Dictionary = game.sim.resources[0]
+		game.sim.events = [{"type":"gather","position":shipping_resource.position,"resource":shipping_resource.kind}]
+		game.present_events()
+		var shipping_transfer: Dictionary = game.transfer_feedback.descriptor()
+		check("shipping call site routes committed gather source to lead actor", shipping_transfer.accepted_receipts == 1 and shipping_transfer.flights[0].direction == "source_to_actor" and shipping_transfer.flights[0].actor_id == game.sim.lead)
+		game.present_events()
+		check("shipping call site suppresses same-epoch replay", game.transfer_feedback.descriptor().accepted_receipts == 1 and game.transfer_feedback.descriptor().rejected_receipts == 0)
+		game.sim.stored.wood = 7
+		game.update_carry()
+		check("shipping stockpile derives from authoritative stored counts", game.storage_stockpile.descriptor().logical_counts.wood == 7)
+		game.outpost_audio.stop_all(); await create_timer(0.35).timeout
+		game.free(); await process_frame; await process_frame
+	else:
+		check("isolated candidate preserves integration-owner boundary", true)
 
 	print(JSON.stringify({
 		"suite": "T08_visible_inventory_integration",

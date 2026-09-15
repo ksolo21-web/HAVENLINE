@@ -34,6 +34,7 @@ var device_benchmark: PanelContainer
 const FrameRecord = preload("res://scripts/performance_record.gd")
 const CarryStack = preload("res://scripts/carry_stack.gd")
 const TransferFeedback = preload("res://scripts/transfer_feedback.gd")
+const StorageStockpile = preload("res://scripts/storage_stockpile.gd")
 const RenderPolicy = preload("res://scripts/render_policy.gd")
 const AdaptiveLayout = preload("res://scripts/adaptive_layout.gd")
 var hud_safe_rect := Rect2()
@@ -56,6 +57,8 @@ var player_rig: Node3D
 var carry_root: Node3D
 var carry_stacks: Dictionary = {}
 var transfer_feedback: Node3D
+var storage_stockpile: Node3D
+var last_presented_event_epoch := -1.0
 var menu_column: VBoxContainer
 var camp_button: Button
 var carry_count := -1
@@ -274,6 +277,11 @@ func build_world():
 	var storage_visual: Node3D = camp_station_kit.instantiate_asset("cargo_crate", world)
 	storage_visual.name = "T05StorageCargoCrate"
 	storage_visual.position = xyz(Simulation.point(sim.contract.world.storage))
+	storage_stockpile = StorageStockpile.new()
+	storage_stockpile.name = "T08CampStorageStockpile"
+	storage_stockpile.position = storage_visual.position + Vector3(0.8, 0.05, 0.25)
+	world.add_child(storage_stockpile)
+	storage_stockpile.configure("camp_storage", sim.stored)
 	for key in ["leftTent","rightTent"]:
 		var shelter_point := Simulation.point(sim.contract.world[key])
 		var shelter := model("world/shelter", world, xyz(shelter_point))
@@ -397,19 +405,30 @@ func update_carry():
 		var inventory := {"wood":0,"stone":0,"metal":0,"fuel":0}
 		inventory[companion.get("cargo_kind","wood")] = companion.get("cargo",0)
 		carry_stacks[companion.id].update_inventory(inventory)
+	if is_instance_valid(storage_stockpile): storage_stockpile.sync(sim.stored)
 
 func present_events():
+	if is_equal_approx(last_presented_event_epoch, sim.elapsed): return
+	last_presented_event_epoch = sim.elapsed
 	action_readout.consume(sim.events)
 	outpost_audio.consume(sim.events)
-	for event in sim.events:
+	for event_index in sim.events.size():
+		var event: Dictionary = sim.events[event_index]
 		var kind: String = event.get("resource", "")
 		if kind.is_empty(): continue
 		var target: Vector3 = xyz(event.get("target",event.position)) + Vector3(0,.75,0)
 		var origin := xyz(sim.position) + Vector3(0,1.0,-.35)
 		if event.has("actor_id"): origin = xyz(event.position) + Vector3(0,1.0,-.35)
-		if event.type in ["gather","worker_gather"]: transfer_feedback.transfer(kind,target,origin)
+		var actor_id := int(event.get("actor_id", sim.lead))
+		var receipt_id := "%.6f:%d:%s:%s:%d" % [sim.elapsed, event_index, String(event.type), kind, actor_id]
+		if event.type in ["gather","worker_gather"]:
+			transfer_feedback.transfer(kind,target,origin,receipt_id,"source_to_actor",actor_id,"actor:%d" % actor_id)
 		elif event.type in ["deposit","worker_deposit","build","worker_build","repair","worker_repair","customer_sale"]:
-			transfer_feedback.transfer(kind,origin,target)
+			var destination_id := "camp_storage"
+			if event.type in ["build","worker_build"]: destination_id = "defense"
+			elif event.type in ["repair","worker_repair"]: destination_id = "repair_target"
+			elif event.type == "customer_sale": destination_id = "customer"
+			transfer_feedback.transfer(kind,origin,target,receipt_id,"actor_to_destination",actor_id,destination_id)
 
 func text_label(text: String, font_size: int, parent: Control) -> Label:
 	var label := Label.new()

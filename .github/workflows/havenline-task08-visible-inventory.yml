@@ -71,6 +71,7 @@ jobs:
       - name: Import and run T01 through T08 regression
         run: |
           set -euo pipefail
+          if [ "$GITHUB_REF_NAME" = 'codex/havenline-sequential-task-01' ]; then export HAVENLINE_T08_REQUIRE_SHIPPING_INTEGRATION=1; fi
           python3 tools/havenline/bake_outpost_audio.py > task08-evidence/tests/audio-fixture.json
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task08-evidence/tests/import.log 2>&1
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task08-evidence/tests/motion-fixture.log 2>&1

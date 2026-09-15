@@ -58,8 +58,13 @@ func commit_gather(actor_id: int, helper := false) -> void:
 				break
 	else:
 		game.sim.inventory[String(resource.kind)] += 1
-	game.transfer_feedback.transfer(String(resource.kind), source_point(), actor_point(actor_id),
-		"capture:gather:%d:%d" % [actor_id, records.size()], "source_to_actor", actor_id, "actor:%d" % actor_id)
+	if integrated:
+		game.sim.elapsed += 1.0
+		game.sim.events = [{"type":"worker_gather" if helper else "gather", "actor_id":actor_id, "position":game.sim.companions[0].position if helper else resource.position, "target":resource.position, "resource":String(resource.kind)}]
+		game.present_events()
+	else:
+		game.transfer_feedback.transfer(String(resource.kind), source_point(), actor_point(actor_id),
+			"capture:gather:%d:%d" % [actor_id, records.size()], "source_to_actor", actor_id, "actor:%d" % actor_id)
 
 func commit_deposit(actor_id: int, helper := false) -> void:
 	var kind := "wood"
@@ -73,8 +78,13 @@ func commit_deposit(actor_id: int, helper := false) -> void:
 		if int(game.sim.inventory[kind]) <= 0: return
 		game.sim.inventory[kind] -= 1
 	game.sim.stored[kind] += 1
-	game.transfer_feedback.transfer(kind, actor_point(actor_id), destination_point(),
-		"capture:deposit:%d:%d" % [actor_id, records.size()], "actor_to_destination", actor_id, "camp_storage")
+	if integrated:
+		game.sim.elapsed += 1.0
+		game.sim.events = [{"type":"worker_deposit" if helper else "deposit", "actor_id":actor_id, "position":game.sim.companions[0].position if helper else game.sim.position, "target":game.sim.point(game.sim.contract.world.storage), "resource":kind}]
+		game.present_events()
+	else:
+		game.transfer_feedback.transfer(kind, actor_point(actor_id), destination_point(),
+			"capture:deposit:%d:%d" % [actor_id, records.size()], "actor_to_destination", actor_id, "camp_storage")
 
 func average(values: Array) -> float:
 	if values.is_empty(): return 0.0
