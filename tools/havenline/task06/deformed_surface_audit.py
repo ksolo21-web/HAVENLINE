@@ -479,6 +479,9 @@ def audit(runtime: RuntimeGLB, ledger: dict, candidate: str, rate: int) -> dict:
         errors.append("candidate commit does not match motion ledger")
     if set(runtime.animations) != {"t06_" + clip for clip in ledger["clips"]}:
         errors.append("runtime animation inventory does not match motion ledger")
+    failed_clips = [clip for clip, row in clip_rows.items() if not row["passed"]]
+    if failed_clips:
+        errors.append(f"deformed surface clip audit failed: {', '.join(failed_clips)}")
     if violations:
         errors.append(f"deformed surface audit found {len(violations)} violations")
     if not all(row["passed"] for row in gait):
