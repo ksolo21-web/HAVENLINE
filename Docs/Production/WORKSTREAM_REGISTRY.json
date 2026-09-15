@@ -210,7 +210,7 @@
     {
       "task_id": "T07",
       "task_name": "Havenline Simple Control & Context Director",
-      "status": "ASSIGNED",
+      "status": "INTEGRATING",
       "owner": "simple-control-context-builder",
       "workstream_id": "wave2-context-director",
       "branch": "havenline/T07-context-director",
@@ -226,9 +226,9 @@
         "@protected:approved",
         "@integration-only"
       ],
-      "candidate_commit": null,
-      "candidate_hash_or_artifact": null,
-      "tests": {},
+      "candidate_commit": "0a30dc0859541626eb6aa9a9bb749abc93dcb355",
+      "candidate_hash_or_artifact": "github:ksolo21-web/HAVENLINE@0a30dc0859541626eb6aa9a9bb749abc93dcb355",
+      "tests": {"isolated_engine_checks": 84, "isolated_static_checks": 36, "source_ready": true},
       "evidence_path": "Docs/Production/Evidence/T07/",
       "critic_requirements": [
         "C2",
@@ -238,9 +238,9 @@
         "C11"
       ],
       "critic_status": {},
-      "integration_status": "not started",
+      "integration_status": "INTEGRATING; authorized shipping call-site wiring and exact integrated evidence pending",
       "known_blockers": [],
-      "next_action": "Build the isolated deterministic context director on havenline/T07-context-director; preserve the one-joystick control contract and approved T01-T06 runtime."
+      "next_action": "Complete exact integrated T01-T07 regression, device/save/resource/performance/capture gates, then obtain strict C2/C3/C4/C6/C11 approval."
     }
   ],
   "notes": [

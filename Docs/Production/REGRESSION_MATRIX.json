@@ -29,6 +29,10 @@
     ],
     "T06": [
       "test_task06_character1"
+    ],
+    "T07": [
+      "test_task07_context_director",
+      "test_task07_integration"
     ]
   },
   "impact_rules": [
@@ -94,11 +98,14 @@
     {
       "patterns": [
         "HavenlineGodot/scripts/context_director.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/scripts/population_simulation.gd",
         "HavenlineGodot/tests/test_task07_context_director.gd",
+        "HavenlineGodot/tests/test_task07_integration.gd",
         "HavenlineGodot/tests/capture_task07_context_director.gd"
       ],
       "tasks": ["T04","T06","T07"],
-      "suites": ["test_adaptive_devices","test_outpost_runtime","test_task04_camera","test_task06_character1","test_task07_context_director"]
+      "suites": ["test_adaptive_devices","test_outpost_runtime","test_task04_camera","test_task06_character1","test_task07_context_director","test_task07_integration"]
     },
     {
       "patterns": [

@@ -618,7 +618,7 @@ func _physics_process(dt: float):
 		Saves.write_state(sim.snapshot())
 
 func camera_action_target() -> Variant:
-	if sim.action.is_empty(): return null
+	if sim.action.is_empty() or String(sim.action.get("kind", "")).is_empty(): return null
 	var target: Variant = sim.action.get("position")
 	return xyz(target) if target is Vector2 else null
 
@@ -628,7 +628,8 @@ func _process(dt: float):
 	player_rig.position = xyz(sim.position)
 	if sim.velocity.length() > .1:
 		player_rig.rotation.y = lerp_angle(player_rig.rotation.y, atan2(sim.facing.x, sim.facing.y), 1 - exp(-16 * dt))
-	animate(player_rig, sim.velocity.length(), dt, sim.action, "player_lead")
+	var player_action: Dictionary = sim.action if bool(sim.action.get("actionable", false)) else {}
+	animate(player_rig, sim.velocity.length(), dt, player_action, "player_lead")
 	for companion in sim.companions:
 		if not actors.has(companion.id): continue # Additional NPC art remains a release blocker.
 		var root: Node3D = actors[companion.id]
@@ -694,9 +695,12 @@ func _process(dt: float):
 	elif not sim.rescued: objective.text = "Warmth restored · approach the survivor" if sim.rescue_enabled else "Warmth restored · rescue art pending"
 	elif not sim.defenses.north.built: objective.text = "Build the north defense   ·   8 wood + 3 stone"
 	else: objective.text = "Outpost restored · threat art pending"
-	if not sim.action.is_empty():
-		hint.text = {"gather":"Gathering", "deposit":"Delivering", "build":"Building", "repair":"Repairing", "defense_repair":"Repairing", "rescue":"Rescuing", "enemy":"Defending", "npc_rescue":"Welcoming a companion", "customer_service":"Serving a customer"}.get(sim.action.kind, "")
-	else: hint.text = ""
+	var context_display: Dictionary = sim.context_director.presentation()
+	hint.text = String(context_display.status_text) if bool(context_display.visible) else ""
+	var context_state := String(context_display.state)
+	hint.add_theme_color_override("font_color",
+		Color("ffd27a") if bool(context_display.cancelled) or bool(context_display.blocked)
+		else (Color("a9dcff") if context_state == "acquiring" else Color("d9ffd2")))
 	# Presentation capability gates live in simulation, not frame-rate-dependent
 	# timer rewrites. Active saved encounters remain intact but cannot hurt invisibly.
 	measure_frame()
