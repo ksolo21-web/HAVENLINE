@@ -174,6 +174,7 @@ func capture_sequence() -> void:
 		await sample(frame)
 		if frame % 3 == 0: await capture_jpg(frame)
 		if frame in [0, 24, 66, 108, 150, 179]: await capture_png("sequence-%03d" % frame)
+	for frame in range(180, 184): await sample(frame)
 
 func capture_routes() -> void:
 	DirAccess.make_dir_recursive_absolute(output.path_join("frames"))
@@ -191,6 +192,7 @@ func capture_routes() -> void:
 		await sample(frame)
 		if frame % 3 == 0: await capture_jpg(frame)
 		if frame in [0, 30, 72, 114, 156, 198, 240, 263]: await capture_png("routes-%03d" % frame)
+	for frame in range(264, 268): await sample(frame)
 
 func actor_stack_totals() -> Dictionary:
 	var result := {}

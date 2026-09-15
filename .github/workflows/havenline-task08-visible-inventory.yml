@@ -168,10 +168,10 @@ jobs:
                   digest=hashlib.sha256(image_path.read_bytes()).hexdigest(); assert digest not in hashes,image_path
                   hashes.add(digest); images.append(str(image_path))
           sequence=json.loads((root/'captures/sequence/capture.json').read_text())
-          assert len(sequence['trace'])==180 and len(list((root/'captures/sequence/frames').glob('*.jpg')))==60
+          assert len(sequence['trace'])==184 and len(list((root/'captures/sequence/frames').glob('*.jpg')))==60
           final=sequence['transfers']; assert final['accepted_receipts']==4 and final['completed_receipts']==4 and final['rejected_receipts']==0,final
           routes=json.loads((root/'captures/routes/capture.json').read_text())
-          assert len(routes['trace'])==264 and len(list((root/'captures/routes/frames').glob('*.jpg')))==88
+          assert len(routes['trace'])==268 and len(list((root/'captures/routes/frames').glob('*.jpg')))==88
           route_final=routes['transfers']; assert route_final['accepted_receipts']==6 and route_final['completed_receipts']==6 and route_final['rejected_receipts']==0,route_final
           route_rows=[flight for row in routes['trace'] for flight in row['transfers']['flights']]
           assert {flight['destination_id'] for flight in route_rows}=={'furnace_storage','camp_storage','defense:north','defense:south','repair:furnace','repair:north'}
