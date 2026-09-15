@@ -334,7 +334,7 @@ func capture_translated_locomotion_cycles() -> void:
 	# same simulation-owned stride used by the fixed sole-vertex audit. The camera
 	# tracks the actor so the textured ground remains the contact reference.
 	for clip in ["walk", "run"]:
-		var qualified := Motion.LIBRARY + "/" + clip
+		var qualified: String = Motion.LIBRARY + "/" + clip
 		var animation := player.get_animation(qualified)
 		var stride := Motion.WALK_STRIDE_METERS if clip == "walk" else Motion.RUN_STRIDE_METERS
 		var total_seconds := animation.length * 3.0
