@@ -1,0 +1,145 @@
+{
+  "task": "T06",
+  "title": "Character 1 complete movement/interactions",
+  "status": "PASS",
+  "accepted_gameplay_source": "47f86fae25b099abb5c7096c37ca7495453b2b8f",
+  "integrated_source": "91f35f331aaabe2b1785b10c0d911f20da6f12d9",
+  "review_runs": {
+    "isolated_exact_source": 34934399997,
+    "integrated_exact_source": 34970154124
+  },
+  "acceptance_rule": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9.0,
+    "unrounded": true,
+    "score_averaging_used": false,
+    "target": 10.0,
+    "defect_rule": "Every mandatory defect is verified closed; no score was invented for deterministic C6 measurements."
+  },
+  "source_identity": {
+    "immutable_character1_glb_sha256": "95e4fed3a2778656cdf8b73affd2eb3feda8a32f82f4a0c3f76d90c82633c099",
+    "runtime_review_glb_sha256": "739a7abf669194ac656ce9f05b864a3e5c4cd666b64a84f1db045de5e7982738",
+    "reviewed_source_is_integrated_ancestor": true,
+    "reviewed_runtime_and_gate_files_byte_identical": true,
+    "shipping_main_call_site_exercised": true
+  },
+  "mechanical_evidence": {
+    "functional_suites": 19,
+    "total_assertions_checks": 1345,
+    "all_passed": true,
+    "task_images": 970,
+    "continuous_motion_videos": 76,
+    "runtime_clips": 24,
+    "surface_sample_rate_hz": 120,
+    "surface_vertices": 52898,
+    "surface_triangles": 96001,
+    "skin_joints": 66,
+    "semantic_parts": 16,
+    "surface_violations": 0,
+    "coverage_required_rows": 1612,
+    "coverage_nonpass_rows": 0,
+    "save_matrix_passed": true,
+    "adaptive_device_matrix_passed": true,
+    "native_3840x2160_scale1_evidence": true
+  },
+  "independent_reviews": {
+    "source": "47f86fae25b099abb5c7096c37ca7495453b2b8f",
+    "integrated_source": "91f35f331aaabe2b1785b10c0d911f20da6f12d9",
+    "status": "PASS",
+    "minimum_mandatory_dimension_score": 9.31,
+    "score_averaging_used": false,
+    "carry_forward_basis": "The integrated run proved the reviewed source is an ancestor, every task-owned runtime/gate file is byte-identical, and the runtime-review GLB SHA-256 exactly matches the independent-review input.",
+    "scores": {
+      "C1": 9.42,
+      "C2": 9.42,
+      "C5": 9.31
+    },
+    "critic_blockers": [],
+    "valid_unresolved_defects": []
+  },
+  "performance_critic": {
+    "critic": "C6",
+    "candidate_source": "91f35f331aaabe2b1785b10c0d911f20da6f12d9",
+    "run_id": 34970154124,
+    "passed": true,
+    "counterbalanced_shipping_scene_measurement": true,
+    "resolution": [3840, 2160],
+    "renderer": "mobile",
+    "visible_triangles": 584878,
+    "draw_calls": 50,
+    "materials_visible": 77,
+    "animated_rigs_active": 2,
+    "shipping_population_rigs_visible": 4,
+    "motion_render_submission_p95_delta_ms": -44.7585,
+    "animation_static_memory_delta_mb_two_rigs": 1.08415412902832,
+    "physical_device_certification": false,
+    "errors": []
+  },
+  "motion_verification": {
+    "floor_penetration_m": 0.0,
+    "walk_worst_fixed_landmark_slip_m": 0.005254279397281181,
+    "run_worst_fixed_landmark_slip_m": 0.019196026925216048,
+    "walk_root_plant_drift_m": 0.0290575870058753,
+    "run_root_plant_drift_m": 0.0190879614914166,
+    "maximum_loop_seam_velocity_rotation_delta_degrees": 0.0559529096807445
+  },
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true,
+    "G7": true,
+    "G8": true,
+    "G9": true,
+    "G10": true,
+    "G11": true,
+    "G12": true,
+    "G13": true,
+    "G14": true
+  },
+  "gate_dispositions": {
+    "G1": "PASS — T03 dependency and inherited T01-T05 approvals are satisfied.",
+    "G2": "PASS — isolated changes stayed in @reservation:T06; shipping wiring was integration-owner-only.",
+    "G3": "PASS — the frozen Character 1 body-motion/contact scope is complete without T07/T08/T09/T21 expansion.",
+    "G4": "PASS — import, parser, resource, source-integrity and runtime-review gates passed.",
+    "G5": "PASS — locomotion, transitions, role use and nine interaction foundations passed.",
+    "G6": "PASS — the combined T01-T06 regression passed 19 suites / 1345 checks.",
+    "G7": "PASS — exact source, reviewed-byte identity, runtime GLB hash and archive digest are verified.",
+    "G8": "PASS — fresh integrated C6 shipping-scene gate passed within assigned headroom.",
+    "G9": "PASS — save/reload and adaptive-device matrices passed; T06 adds no saved field.",
+    "G10": "PASS_NOT_APPLICABLE — T06 adds no economy, entitlement, cloud, LiveOps or competitive-value system.",
+    "G11": "PASS — phone/tablet/foldable framing and native-4K evidence passed without new UI.",
+    "G12": "PASS — C1, C2, C5 and C6 coverage is complete.",
+    "G13": "PASS — C1 9.42, C2 9.42 and C5 9.31 are strictly above 9.0; deterministic C6 passed; zero unresolved defects.",
+    "G14": "PASS — merged integration source 91f35f331aaabe2b1785b10c0d911f20da6f12d9 passed fresh evidence and regression."
+  },
+  "artifacts": {
+    "isolated_review": {
+      "digest": "sha256:506243ad7ee9c267dab4eb3e227a9b9bacccbe2d3037fe8376e24f11e181b98a",
+      "run_id": 34934399997
+    },
+    "integrated_regression_and_evidence": {
+      "id": 10397129519,
+      "digest": "sha256:751a23d978ffc9f5e18754a0830c6c79f766dcf49e1a5501dc1464574245ae13",
+      "run_id": 34970154124
+    }
+  },
+  "scope_limits": {
+    "whole_game_approved": false,
+    "physical_phone_tablet_native_4k60_verified": false,
+    "unfinished_apk_delivery_allowed": false,
+    "notes": [
+      "In-place clips; simulation owns world travel and final facing.",
+      "Physical-device native-4K/60 certification remains T68/T69.",
+      "Finished tools, weapons and their gameplay systems remain T09/T21."
+    ]
+  },
+  "dependent_unlock": {
+    "T07_prerequisites_satisfied": true,
+    "T07_packet_and_ownership_prepared": true,
+    "T07_assigned": true,
+    "T08_plus_locked": true
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "requesting_task": "T04",
+  "target_path": "HavenlineGodot/scripts/main.gd",
+  "requested_change": "Preload and instantiate the T04 camera-composition authority, resolve the active simulation action position, and apply its bounded camera state during normal gameplay while preserving disclosed QA-only viewpoints.",
+  "reason": "The isolated camera policy cannot ship until the integration-only main loop delegates normal gameplay framing to it.",
+  "dependency": "T04 isolated candidate 7c3f6e1c43871a424a78ed7590e3c0b153ef9d62; T03 remains approved.",
+  "expected_behavior": "The selected lead, movement/facing look-ahead, and nearby contextual target are composed automatically across supported landscape aspect ratios without changing T01-T03 content.",
+  "tests_required": [
+    "test_task04_camera",
+    "test_adaptive_devices",
+    "test_environment",
+    "test_task02_river",
+    "test_task03_boundary"
+  ],
+  "status": "APPROVED",
+  "integration_owner_disposition": "AUTHORIZED"
+}

@@ -1,0 +1,138 @@
+{
+  "task": "T07",
+  "title": "Havenline Simple Control & Context Director",
+  "status": "PASS",
+  "accepted_isolated_source": "0a30dc0859541626eb6aa9a9bb749abc93dcb355",
+  "integrated_source": "94b3f6c5097356a3857ebd13a77fb1e316eb06ae",
+  "integration_base": "91f35f331aaabe2b1785b10c0d911f20da6f12d9",
+  "review_runs": {
+    "isolated_exact_source": 34986065852,
+    "integrated_exact_source": 34991148246,
+    "native_android": 34991155514,
+    "phone_tablet_delivery": 34991155565
+  },
+  "acceptance_rule": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9.0,
+    "unrounded": true,
+    "score_averaging_used": false,
+    "target": 10.0,
+    "defect_rule": "Every mandatory defect is verified closed and every mandatory critic score is independently issued against the exact integrated artifact."
+  },
+  "source_identity": {
+    "shipping_call_site_exercised": true,
+    "simulation_remains_outcome_authority": true,
+    "choose_action_is_pure_preview": true,
+    "context_focus_is_ephemeral": true,
+    "save_schema_changed": false,
+    "exact_artifact_index_hashes_verified": 156,
+    "exact_artifact_index_hash_mismatches": 0
+  },
+  "mechanical_evidence": {
+    "functional_suites": 21,
+    "total_assertions_checks": 1441,
+    "all_passed": true,
+    "isolated_component_checks": 84,
+    "isolated_static_checks": 36,
+    "integration_checks": 12,
+    "save_matrix_cases": 7,
+    "save_matrix_passed": true,
+    "adaptive_device_cases": 6,
+    "adaptive_device_matrix_passed": true,
+    "capture_manifests": 14,
+    "unique_pngs": 19,
+    "sequence_jpegs": 60,
+    "sequence_video_frames": 60,
+    "sequence_video_seconds": 3.0,
+    "sequence_states": ["blocked_movement", "acquiring", "active"],
+    "sequence_switch_count": 2,
+    "render_log_errors": 0,
+    "native_3840x2160_scale1_evidence": true,
+    "physical_device_native_4k60_certified": false
+  },
+  "performance_critic": {
+    "critic": "C6",
+    "candidate_source": "94b3f6c5097356a3857ebd13a77fb1e316eb06ae",
+    "run_id": 34991148246,
+    "score": 9.53,
+    "passed": true,
+    "input_candidates": 128,
+    "iterations": 2000,
+    "mean_microseconds": 1849.4655,
+    "p95_microseconds": 1869.0,
+    "maximum_microseconds": 3558.0,
+    "process_rss_delta_kib": 64,
+    "retained_object_delta": 0,
+    "switch_frequency_hz": 0.0,
+    "integrated_active_minus_blocked_cpu_microseconds": -456.8430656934306,
+    "integrated_draw_call_delta": 3.350364963503651,
+    "integrated_primitive_delta": 23740.339010543423,
+    "physical_device_certification": false,
+    "errors": []
+  },
+  "independent_reviews": {
+    "status": "PASS",
+    "integrated_source": "94b3f6c5097356a3857ebd13a77fb1e316eb06ae",
+    "workflow_run": 34991148246,
+    "artifact_id": 10405978547,
+    "artifact_digest": "sha256:c243bb1df0625a7fabce9c6a842d88a76e08bca89d416f88ad0ea0a972ec0ada",
+    "minimum_mandatory_dimension_score": 9.18,
+    "score_averaging_used": false,
+    "scores": {"C2": 9.46, "C3": 9.68, "C4": 9.24, "C6": 9.53, "C11": 9.18},
+    "critic_blockers": [],
+    "valid_unresolved_defects": [],
+    "record": "Docs/Production/T07/independent-critic-review.json"
+  },
+  "repair_cycle": {
+    "rejected_integrated_run": 34988772768,
+    "rejected_artifact_id": 10405267609,
+    "rejected_artifact_digest": "sha256:f5a253569ec1aa8e6229406f0aa661a9c2b6b38b65693fa80704399885c0a350",
+    "rejection_reasons": [
+      "Transient invalid capture geometry emitted render-texture allocation errors.",
+      "The sequence occupied only about 853x480 of its 1280x720 raster, leaving 55.57291666666666 percent navy padding.",
+      "Screenshot wait time polluted the shipping CPU metric and the failed step did not encode an MP4."
+    ],
+    "verified_repairs": [
+      "Capture-space size is fixed before parenting and no transient full-rect anchor resize occurs.",
+      "Project desktop stretch is neutralized for exact device rasters and uniform-edge padding is rejected.",
+      "Shipping CPU time is sampled before render waits; MP4 and full-frame gates pass."
+    ]
+  },
+  "gates": {"G1": true, "G2": true, "G3": true, "G4": true, "G5": true, "G6": true, "G7": true, "G8": true, "G9": true, "G10": true, "G11": true, "G12": true, "G13": true, "G14": true},
+  "gate_dispositions": {
+    "G1": "PASS — T04 and T06 dependencies are approved at the declared integration base.",
+    "G2": "PASS — isolated work stayed in @reservation:T07 and protected shipping wiring used three authorized change requests.",
+    "G3": "PASS — T07 implements contextual selection/presentation without T08+ inventory, harvesting, combat, economy or finished-tool scope.",
+    "G4": "PASS — parser, import, resource, workflow and native Android gates passed on the exact integrated source.",
+    "G5": "PASS — stopped dwell, movement cancellation, stable focus, urgent preemption and one authoritative impact path passed.",
+    "G6": "PASS — combined T01-T07 regression passed 21 suites / 1441 checks.",
+    "G7": "PASS — exact commit, run, artifact digest and all 156 indexed evidence hashes were independently verified.",
+    "G8": "PASS — component and integrated shipping-scene C6 measurements are within all declared budgets.",
+    "G9": "PASS — 7/7 save/reload/migration/recovery cases passed and T07 adds no saved field.",
+    "G10": "PASS — selector inputs are spend-blind and T07 adds no economy, purchase, entitlement, cloud or competitive-value system.",
+    "G11": "PASS — 6/6 device states, 19 unique PNGs, full-frame sequence/video and native-4K scale-1 evidence passed.",
+    "G12": "PASS — C2, C3, C4, C6 and C11 reviewed current complete evidence.",
+    "G13": "PASS — C2 9.46, C3 9.68, C4 9.24, C6 9.53 and C11 9.18 are each strictly above 9.0; zero mandatory defects remain.",
+    "G14": "PASS — exact merged integration source 94b3f6c5097356a3857ebd13a77fb1e316eb06ae passed fresh regression, matrices, capture, performance and native delivery."
+  },
+  "artifacts": {
+    "isolated_candidate": {"id": 10403708623, "digest": "sha256:03871cafb53025ba1f610326ca0994781e3cc09da9ba56359b0c26f48f1940d5", "run_id": 34986065852},
+    "integrated_regression_and_evidence": {"id": 10405978547, "digest": "sha256:c243bb1df0625a7fabce9c6a842d88a76e08bca89d416f88ad0ea0a972ec0ada", "run_id": 34991148246}
+  },
+  "scope_limits": {
+    "whole_game_approved": false,
+    "physical_phone_tablet_native_4k60_verified": false,
+    "unfinished_apk_delivery_allowed": false,
+    "notes": [
+      "Physical-device native-4K/60 certification remains T68/T69.",
+      "Finished gathering/tool presentation remains T09; finished enemy/combat presentation remains T21.",
+      "T08 remains locked until separately packeted, assigned and ownership-validated."
+    ]
+  },
+  "dependent_unlock": {
+    "T08_dependencies_satisfied": true,
+    "T08_packet_and_ownership_prepared": false,
+    "T08_assigned": false,
+    "T08_plus_locked": true
+  }
+}

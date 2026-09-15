@@ -1,0 +1,348 @@
+{
+  "schema_version": 1,
+  "integration_owner": "primary-integration-owner",
+  "integration_branch": "codex/havenline-sequential-task-01",
+  "migration_start_head": "f26b3d6d5a788c03192f593936bfe8ce5ccfc5bc",
+  "runtime_candidate_before_migration": "6947849f581db9cfa53a17ff9202ecde1c0ee80c",
+  "allowed_states": [
+    "LOCKED",
+    "PREPARED",
+    "ASSIGNED",
+    "BUILDING_ISOLATED",
+    "BUILT_PENDING_DEPENDENCY",
+    "INTEGRATION_READY",
+    "INTEGRATING",
+    "UNDER_REVIEW",
+    "FIX_REQUIRED",
+    "APPROVED",
+    "BLOCKED"
+  ],
+  "forward_score_rule": {
+    "operator": ">",
+    "threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0
+  },
+  "legacy_approvals": {
+    "T01": {
+      "status": "APPROVED",
+      "accepted_source": "45ba7905cd468c229cd61364f4d1ac45b14d3e5e",
+      "grandfathered": true
+    },
+    "T02": {
+      "status": "APPROVED",
+      "accepted_source": "1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff",
+      "grandfathered": true
+    }
+  },
+  "workstreams": [
+    {
+      "task_id": "T03",
+      "task_name": "Fences, gates and navigable work lanes",
+      "status": "APPROVED",
+      "owner": "primary-integration-owner",
+      "workstream_id": "T03-legacy-integrated",
+      "branch": "codex/havenline-sequential-task-01",
+      "base_commit": "1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff",
+      "dependencies": [
+        "T02"
+      ],
+      "owned_paths": [
+        "@ownership:T03"
+      ],
+      "protected_paths": [
+        "@protected:T01",
+        "@protected:T02"
+      ],
+      "candidate_commit": "5df9726e0b1c33f0f8865385b1c49aca229fd461",
+      "candidate_hash_or_artifact": "primary-run:34730602238 closeout-run:34735423968 evidence:10308254512 source:10308369258",
+      "tests": {
+        "suites": 16,
+        "checks": 807,
+        "result": "PASS",
+        "tree_geometry_checks": 9
+      },
+      "evidence_path": "Docs/Production/Evidence/T03/",
+      "critic_requirements": [
+        "C1",
+        "C2",
+        "C6"
+      ],
+      "critic_status": {
+        "C1+C2": "PASS_BY_QUORUM; 18 clean primary judgments and focused 2-of-3 quorums for conditions and river-gates",
+        "C6": "PASS; minimum mandatory dimension 9.5"
+      },
+      "integration_status": "APPROVED; accepted gameplay source 5df9726e0b1c33f0f8865385b1c49aca229fd461",
+      "known_blockers": [],
+      "next_action": "Preserve T03; prepare and assign isolated T04/T05/T06 task packets before runtime work begins."
+    },
+    {
+      "task_id": "QA-GOV",
+      "task_name": "Parallel-production governance and build accelerator",
+      "status": "APPROVED",
+      "owner": "primary-integration-owner",
+      "workstream_id": "QA-GOV-20260911",
+      "branch": "codex/havenline-sequential-task-01",
+      "base_commit": "f26b3d6d5a788c03192f593936bfe8ce5ccfc5bc",
+      "dependencies": [],
+      "owned_paths": [
+        "@ownership:QA-GOV"
+      ],
+      "protected_paths": [
+        "@protected:runtime-approved"
+      ],
+      "candidate_commit": "4e851ce496e077342e6369b18b78ca27e4724849",
+      "candidate_hash_or_artifact": "governance-run:34652626961 critic-readiness-run:34652627066",
+      "tests": {
+        "governance_and_safeguard_unit_tests": 20,
+        "unit_test_failures": 0,
+        "critic_readiness": "PASS",
+        "independent_runtime_smoke": "PASS",
+        "pinned_revision_and_hash_checks": "PASS",
+        "runtime_game_files_changed": 0
+      },
+      "evidence_path": "Docs/Production/Evidence/GovernanceMigration/",
+      "critic_requirements": [],
+      "critic_status": {
+        "C1-C11 execution readiness": "PASS",
+        "self_healing_independent_runtime": "PASS"
+      },
+      "integration_status": "APPROVED and integrated on codex/havenline-sequential-task-01",
+      "known_blockers": [],
+      "next_action": "Maintain governance and critic-readiness gates; do not weaken them from gameplay workstreams."
+    },
+    {
+      "task_id": "T04",
+      "task_name": "Reference camera and automatic screen composition",
+      "status": "APPROVED",
+      "owner": "primary-integration-owner",
+      "workstream_id": "wave1-camera",
+      "branch": "codex/havenline-sequential-task-01",
+      "base_commit": "5135cddf96123afb962f4046f41e5ac0e510428a",
+      "dependencies": [
+        "T03"
+      ],
+      "owned_paths": [
+        "@reservation:T04"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only"
+      ],
+      "candidate_commit": "e08fd37e9a999d878644c03089c4b4b253bd7472",
+      "candidate_hash_or_artifact": "integrated-evidence-run:34738864775 artifact:10312061966 closeout-run:34745334414",
+      "tests": {
+        "suites": 17,
+        "checks": 852,
+        "result": "PASS"
+      },
+      "evidence_path": "Docs/Production/Evidence/T04/",
+      "critic_requirements": [
+        "C1",
+        "C2",
+        "C6"
+      ],
+      "critic_status": {
+        "C1+C2": "PASS_BY_CORROBORATED_EVIDENCE; minimum mandatory score 9.5; no score averaging; unsupported claims retained and objectively resolved",
+        "C6": "PASS; minimum mandatory dimension 9.8"
+      },
+      "integration_status": "APPROVED; accepted gameplay source e08fd37e9a999d878644c03089c4b4b253bd7472",
+      "known_blockers": [],
+      "next_action": "Preserve T04; prepare and assign the isolated T05 production-station and prop-kit packet."
+    },
+    {
+      "task_id": "T05",
+      "task_name": "Production station and prop kit",
+      "status": "APPROVED",
+      "owner": "station-prop-builder",
+      "workstream_id": "wave1-props",
+      "branch": "havenline/T05-props",
+      "base_commit": "746c3e8757ccaf2a279a6184b6ed109a143d5b3a",
+      "dependencies": [
+        "T03"
+      ],
+      "owned_paths": [
+        "@reservation:T05"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only"
+      ],
+      "candidate_commit": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+      "candidate_hash_or_artifact": "integrated-precritic-run:34824259431 artifact:10339801250 sha256:76f6a0237e2676abf86eeac7b82a1005a8bba0dd951b03a14a8022626d982da1; strict-review-primary-run:34825220341; recovery-and-final-gate-run:34839506095; visual-resolution-artifact:10348819805; C6-artifact:10343330715; final-gate-artifact:10349650771",
+      "tests": {
+        "suites": 18,
+        "checks": 1119,
+        "result": "PASS",
+        "component_views": 12,
+        "formal_family_views": 42,
+        "integrated_gameplay_views": 20,
+        "native_4k_views": 3,
+        "total_source_bound_images": 77,
+        "integration_regression_run": 34838425141
+      },
+      "evidence_path": "Docs/Production/Evidence/T05/",
+      "critic_requirements": [
+        "C1",
+        "C2",
+        "C6"
+      ],
+      "critic_status": {
+        "C1": "PASS; all five groups complete; minimum mandatory dimension 9.3; no defects",
+        "C2": "PASS; all five groups complete; minimum mandatory dimension 9.5; no defects",
+        "C6": "PASS; all nine mandatory dimensions strictly above 9.0; minimum 9.1; no defects"
+      },
+      "integration_status": "APPROVED; accepted gameplay source fa6fa70f154f3757d22303522ca3f6de2c3d391f; 18 suites / 1119 checks and 77 source-bound images passed; strict C1+C2 resolution PASS; C6 PASS; final machine gate PASS",
+      "known_blockers": [],
+      "next_action": "Preserve T05 accepted source and verified completion. T06 remains LOCKED until its separate task packet and owner are prepared."
+    },
+    {
+      "task_id": "T06",
+      "task_name": "Character 1 complete movement/interactions",
+      "status": "APPROVED",
+      "owner": "character1-motion-builder",
+      "workstream_id": "wave1-character1",
+      "branch": "havenline/T06-character1",
+      "base_commit": "f9d815a7d05c4e811d22d620c6b0c00c768ce6c5",
+      "dependencies": [
+        "T03"
+      ],
+      "owned_paths": [
+        "@reservation:T06"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only",
+        "@protected:C1-model"
+      ],
+      "candidate_commit": "47f86fae25b099abb5c7096c37ca7495453b2b8f",
+      "candidate_hash_or_artifact": "isolated-run:34934399997 artifact-sha256:506243ad7ee9c267dab4eb3e227a9b9bacccbe2d3037fe8376e24f11e181b98a; integrated-source:91f35f331aaabe2b1785b10c0d911f20da6f12d9 integrated-run:34970154124 artifact:10397129519 artifact-sha256:751a23d978ffc9f5e18754a0830c6c79f766dcf49e1a5501dc1464574245ae13 runtime-glb-sha256:739a7abf669194ac656ce9f05b864a3e5c4cd666b64a84f1db045de5e7982738",
+      "tests": {
+        "suites": 19,
+        "checks": 1345,
+        "result": "PASS",
+        "surface_sample_rate_hz": 120,
+        "surface_vertices": 52898,
+        "surface_triangles": 96001,
+        "surface_violations": 0,
+        "source_bound_images": 970,
+        "continuous_motion_videos": 76,
+        "integration_regression_run": 34970154124
+      },
+      "evidence_path": "Docs/Production/Evidence/T06/",
+      "critic_requirements": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ],
+      "critic_status": {
+        "C1": "PASS; score 9.42; carried forward only after exact reviewed runtime GLB and task-owned bytes matched",
+        "C2": "PASS; score 9.42; 1612/1612 required coverage rows passed; zero surface violations",
+        "C5": "PASS; score 9.31; whole-rig and lower-limb release gates passed",
+        "C6": "PASS; fresh integrated shipping-scene performance gate in run 34970154124"
+      },
+      "integration_status": "APPROVED; accepted isolated source 47f86fae25b099abb5c7096c37ca7495453b2b8f integrated at 91f35f331aaabe2b1785b10c0d911f20da6f12d9; 19 suites / 1345 checks and exact-source evidence passed",
+      "known_blockers": [],
+      "next_action": "Preserve T06 accepted and integrated sources; T07 may consume only the published deterministic motion-selector contract."
+    },
+    {
+      "task_id": "T07",
+      "task_name": "Havenline Simple Control & Context Director",
+      "status": "APPROVED",
+      "owner": "simple-control-context-builder",
+      "workstream_id": "wave2-context-director",
+      "branch": "havenline/T07-context-director",
+      "base_commit": "91f35f331aaabe2b1785b10c0d911f20da6f12d9",
+      "dependencies": [
+        "T04",
+        "T06"
+      ],
+      "owned_paths": [
+        "@reservation:T07"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only"
+      ],
+      "candidate_commit": "0a30dc0859541626eb6aa9a9bb749abc93dcb355",
+      "candidate_hash_or_artifact": "isolated-source:0a30dc0859541626eb6aa9a9bb749abc93dcb355 isolated-run:34986065852; integrated-source:94b3f6c5097356a3857ebd13a77fb1e316eb06ae integrated-run:34991148246 artifact:10405978547 artifact-sha256:c243bb1df0625a7fabce9c6a842d88a76e08bca89d416f88ad0ea0a972ec0ada",
+      "tests": {
+        "suites": 21,
+        "checks": 1441,
+        "result": "PASS",
+        "isolated_engine_checks": 84,
+        "isolated_static_checks": 36,
+        "integration_checks": 12,
+        "save_matrix_cases": 7,
+        "device_matrix_cases": 6,
+        "capture_manifests": 14,
+        "integration_regression_run": 34991148246
+      },
+      "evidence_path": "Docs/Production/Evidence/T07/",
+      "critic_requirements": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C11"
+      ],
+      "critic_status": {
+        "C2": "PASS; score 9.46",
+        "C3": "PASS; score 9.68",
+        "C4": "PASS; score 9.24",
+        "C6": "PASS; score 9.53; fresh component and integrated shipping-scene budgets",
+        "C11": "PASS; score 9.18"
+      },
+      "integration_status": "APPROVED; accepted isolated source 0a30dc0859541626eb6aa9a9bb749abc93dcb355 integrated at 94b3f6c5097356a3857ebd13a77fb1e316eb06ae; 21 suites / 1441 checks, exact-source evidence, all required critics and G1-G14 passed",
+      "known_blockers": [],
+      "next_action": "Preserve T07 accepted and integrated sources. T08 remains LOCKED until its separate packet, owner and path reservation are prepared and validated."
+    },
+    {
+      "task_id": "T08",
+      "task_name": "Visible inventory, physical carrying and transfers",
+      "workstream_id": "T08-physical-inventory-builder",
+      "status": "INTEGRATION_READY",
+      "owner": "physical-inventory-builder",
+      "branch": "havenline/T08-visible-inventory",
+      "base_commit": "7744b9f6a063da3385ce10992ef732ba2c669890",
+      "dependencies": [
+        "T05",
+        "T06",
+        "T07"
+      ],
+      "owned_paths": [
+        "@reservation:T08"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only"
+      ],
+      "candidate_commit": "258f2c9a53f8b5460fb54a7f298fbb887c5aba1e",
+      "candidate_hash_or_artifact": "tree f1f119aed7199e5278bc76dc1623641ae52ec3de",
+      "tests": {
+        "local_combined_regression": "23 suites / 1517 checks passed",
+        "source_contract": "19 checks passed",
+        "governance": "15 checks passed"
+      },
+      "evidence_path": "Docs/Production/Evidence/T08/",
+      "critic_requirements": [
+        "C2",
+        "C3",
+        "C4",
+        "C6"
+      ],
+      "critic_status": {},
+      "integration_status": "integration candidate published; fresh lifecycle-valid evidence commit pending",
+      "known_blockers": [],
+      "next_action": "Publish a fresh lifecycle-valid integration evidence commit, then run exact-source evidence and independent C2/C3/C4/C6 review.",
+      "status_updated_at": "2026-09-15T18:09:00.061131+00:00"
+    }
+  ],
+  "notes": [
+    "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
+    "T03-T07 are APPROVED. T08+ runtime work remains locked until its own packet, owner and path reservation are prepared.",
+    "All future runtime builders use isolated branches and cannot approve themselves.",
+    "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them."
+  ]
+}

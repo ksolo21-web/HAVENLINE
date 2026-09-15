@@ -1,0 +1,54 @@
+name: Havenline T01 publish actual review evidence
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-publish-evidence.yml']
+  workflow_dispatch:
+permissions:
+  contents: write
+  actions: read
+jobs:
+  preserve-evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-palette-evidence-34253307899
+          run-id: 34253307899
+          github-token: ${{ github.token }}
+          path: received-evidence/
+      - name: Verify and publish only original render/reference pixels and their verification records
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib,shutil
+          e=Path('received-evidence');pro=json.loads((e/'provenance.json').read_text())
+          assert pro['source']=='ae1b487748510f4a9d83706e51f30ff7174bc879' and pro['revision']==9
+          assert len(pro['captures'])==63
+          out=Path('Docs/Production/T01/ActualReview/R9');out.mkdir(parents=True,exist_ok=True)
+          for name,h in pro['captures'].items():
+              p=Path(name);assert not p.is_absolute() and '..' not in p.parts and p.suffix=='.png'
+              assert hashlib.sha256((e/p).read_bytes()).hexdigest()==h
+              destination=out/p;destination.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(e/p,destination)
+          for name in ('provenance.json','mechanical-review.json','geometry-audit.json','reference-detail.webp','protected-before.json','gallery/capture.json','clearance/clearance.json','native4k/render-evidence.json'):
+              destination=out/name;destination.parent.mkdir(parents=True,exist_ok=True);shutil.copyfile(e/name,destination)
+          assert hashlib.sha256((out/'reference-detail.webp').read_bytes()).hexdigest()=='25b0e78c93f13ddadb8b815e7e19daf68485471d2be3fed0dd99bde8d00c48af'
+          references={'A':{'video_sha256':'62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca','time_seconds':5,'crop_xyxy':[0,390,220,690]},'B':{'video_sha256':'4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2','time_seconds':2,'crop_xyxy':[400,880,620,1150]},'operation':'Actual original gameplay crops, side-by-side; no synthetic reference. Original full phone recordings are not published here.'}
+          (out/'reference-provenance.json').write_text(json.dumps(references,indent=2)+'\n')
+          text='# T01 actual source-bound review evidence\n\nGame source: `'+pro['source']+'`. These are the exact unretouched Godot Mobile/software-Vulkan pixels, not concept art. No physical FPS claim. Only Task1 snow trees/forest framing is under review; other scenery is unfinished and does not obtain approval.\n\nRead `Docs/Production/SEQUENTIAL_REPAIR_PLAN.md` for frozen T01 scope. Inspect original reference pixels alongside all three variants, camera sequences, integration and visibility/depletion states. Score every required dimension >=9 for advancement, target10; do not average away a failure. Raw model reports are advisory and need factual verification.\n\n`provenance.json` binds all63 PNGs and the three tree assets to the exact source. `mechanical-review.json` records676 engine checks and52 evidence checks; `geometry-audit.json` records9 topology checks. All30 original GLBs are unchanged. Neither tests nor this publication award visual approval.\n\nReference crops:\n\n![Original reference crops](reference-detail.webp)\n\n## Required actual images\n\n'
+          for name in sorted(pro['captures']):text+='### '+name+'\n\n!['+name+']('+name+')\n\n'
+          (out/'README.md').write_text(text)
+          PY
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Docs/Production/T01/ActualReview/R9
+          if ! git diff --cached --quiet; then
+            test "$(git ls-remote origin refs/heads/codex/havenline-sequential-task-01 | cut -f1)" = "$GITHUB_SHA"
+            git commit -m 'Preserve exact R9 reference and runtime pixels for independent T01 review; not art approval'
+            git push origin HEAD:refs/heads/codex/havenline-sequential-task-01
+          fi
+# Source game files and review scores are not modified. No APK or full screen-recording upload.

@@ -1,0 +1,139 @@
+name: Havenline T02 terrain build and actual Mobile evidence
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  terrain-build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.source.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+      - name: Install the pinned Unity-free engine and actual Mobile Vulkan renderer
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install numpy pillow
+          mkdir -p "$RUNNER_TEMP/engine" task02-evidence/tests
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+      - name: Apply only the documented legacy-test amendments and preserve approved assets
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/adapt_task02_legacy_tests.py
+          git fetch --no-tags --depth=1 origin 459505adde85b126e38a2313d535b0267d31048b
+          python3 - <<'PY'
+          from pathlib import Path
+          import subprocess,hashlib,json
+          baseline='459505adde85b126e38a2313d535b0267d31048b'
+          files=subprocess.check_output(['git','ls-tree','-r','--name-only',baseline,'HavenlineGodot'],text=True).splitlines()
+          protected=[p for p in files if p.endswith('.glb')]+['HavenlineGodot/scripts/main.gd','HavenlineGodot/scripts/reference_forest.gd','HavenlineGodot/shaders/evergreen.gdshader']
+          records={}
+          for name in protected:
+              old=subprocess.check_output(['git','show',baseline+':'+name]);new=Path(name).read_bytes()
+              assert old==new,'Changed protected file '+name
+              records[name]=hashlib.sha256(new).hexdigest()
+          assert len([x for x in records if x.endswith('.glb')])==33
+          Path('task02-evidence/protected.json').write_text(json.dumps({'baseline':baseline,'files':records,'all_unchanged':True},indent=2))
+          PY
+          python3 tools/havenline/bake_outpost_audio.py > task02-evidence/audio-fixture.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task02-evidence/import.log 2>&1
+          timeout 100 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task02-evidence/motion-fixture.log 2>&1
+      - name: Execute existing and active-task regressions
+        run: |
+          set -euo pipefail
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain; do
+            timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task02-evidence/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task02-evidence/tests/*.log; then exit 1; fi
+          python3 tools/havenline/audit_task01_geometry.py > task02-evidence/tree-geometry.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          rows=[]
+          for p in sorted(Path('task02-evidence/tests').glob('test_*.log')):
+              r=[json.loads(x) for x in p.read_text().splitlines() if x.startswith('{')][-1]
+              assert r['passed'] is True and not r.get('failures')
+              assert all(c['passed'] is True for c in r['checks'])
+              rows.append({'suite':p.stem,'checks':len(r['checks']),'passed':True})
+          assert len(rows)==12 and sum(r['checks'] for r in rows)==705
+          Path('task02-evidence/tests.json').write_text(json.dumps({'suites':rows,'total_checks':705,'all_passed':True,'independent_critic':False,'physical_4k60_verified':False},indent=2))
+          PY
+      - name: Preserve exact tested source, with no force push or approval
+        id: source
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add HavenlineGodot/tests/test_outpost.gd
+          if ! git diff --cached --quiet; then
+            test "$(git ls-remote origin refs/heads/codex/havenline-sequential-task-01 | cut -f1)" = "$GITHUB_SHA"
+            git commit -m 'T02: retain tested lake topology and dry-snow slope checks; no critic approval'
+            git push origin HEAD:refs/heads/codex/havenline-sequential-task-01
+          fi
+          source=$(git rev-parse HEAD)
+          echo "source=$source" >> "$GITHUB_OUTPUT"
+          echo "$source" > task02-evidence/SOURCE.txt
+      - name: Render the actual terrain, sequences, native 4K and approved-tree clearance
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          mkdir -p task02-evidence/gallery task02-evidence/native4k task02-evidence/tree-clearance
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 360 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task02.gd -- --out="$(pwd)/task02-evidence/gallery" > task02-evidence/gallery.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task02.gd -- --native-4k --out="$(pwd)/task02-evidence/native4k" > task02-evidence/native4k.log 2>&1
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 240 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task01_clearance.gd -- --out="$(pwd)/task02-evidence/tree-clearance" > task02-evidence/tree-clearance.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task02-evidence/*.log; then exit 1; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          from PIL import Image
+          e=Path('task02-evidence');source=(e/'SOURCE.txt').read_text().strip()
+          reports={name:json.loads((e/name/'capture.json').read_text()) for name in ('gallery','native4k')}
+          for name,r in reports.items():
+              assert r['renderer']=='mobile','Fallback renderer cannot be passed as Mobile'
+              assert r['forest']['instances']==586
+              assert len(r['captures'])==(3 if name=='native4k' else 24)
+              for c in r['captures']:
+                  with Image.open(e/name/(c['name']+'.png')) as im:assert list(im.size)==c['size']
+                  assert c['render_scale']==1
+                  if name=='native4k':assert c['size'][0]>=3840 and c['size'][1]>=2160
+          clearance=json.loads((e/'tree-clearance/clearance.json').read_text())
+          assert clearance['renderer']=='mobile' and clearance['depleted_tree_hidden'] and clearance['original_units_restored'] and clearance['restored_tree_visible']
+          captures={str(p.relative_to(e)):hashlib.sha256(p.read_bytes()).hexdigest() for p in e.rglob('*.png')}
+          runtime={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('HavenlineGodot').rglob('*') if p.is_file() and p.suffix in ('.gd','.gdshader','.glb') and '.godot' not in p.parts}
+          report={'task':'T02','source':source,'captures':captures,'runtime_files':runtime,'renderer':'mobile','device':reports['gallery']['device'],'task_approved':False,'independent_critic':False,'physical_phone_tablet_4k60_verified':False,'sampled_motion_not_frame_rate_evidence':True,'protected_original_glbs':33,'tree_clearance_rechecked':True}
+          (e/'provenance.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps({'source':source,'captures':len(captures),'tests':705,'critic_approval':False,'physical_4k60':False}))
+          PY
+          mkdir -p source-snapshot
+          git archive --format=tar.gz --output=source-snapshot/source.tar.gz HEAD HavenlineGodot tools/havenline Docs AGENTS.md .github
+          git rev-parse HEAD > source-snapshot/SOURCE.txt
+          sha256sum source-snapshot/source.tar.gz > source-snapshot/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-terrain-evidence-${{ github.run_id }}
+          path: task02-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-terrain-source-${{ github.run_id }}
+          path: source-snapshot/
+          retention-days: 30
+          if-no-files-found: error
+# No APK, no Task 3 implementation, and no visual or physical-performance approval.

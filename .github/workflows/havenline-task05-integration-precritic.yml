@@ -1,0 +1,167 @@
+name: Havenline Task 5 integrated precritic
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - 'HavenlineGodot/assets/stations_v2/**'
+      - 'HavenlineGodot/scripts/station_kit.gd'
+      - 'HavenlineGodot/scripts/main.gd'
+      - 'HavenlineGodot/tests/test_task05_station_kit.gd'
+      - 'HavenlineGodot/tests/capture_task05_station_kit.gd'
+      - 'Docs/Production/T05/**'
+      - 'tools/havenline/task05/**'
+      - '.github/workflows/havenline-task05-*.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: havenline-task05-integrated-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  integrated-precritic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Prepare pinned Godot and evidence dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install pillow numpy
+          mkdir -p "$RUNNER_TEMP/engine" task05-integrated/tests task05-integrated/component task05-integrated/families task05-integrated/gameplay task05-integrated/native4k
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          git lfs fetch origin "$GITHUB_SHA" --include=Docs/Production/T02/reference-ground.webp --exclude=''
+          git lfs checkout Docs/Production/T02/reference-ground.webp
+          echo '3c424b0df53c1c6de49018278779a4ef1ced58562e5b9dbb54fe276d13aa2ddb  Docs/Production/T02/reference-ground.webp' | sha256sum -c -
+      - name: Validate authorized integration surface and fixtures
+        run: |
+          set -euo pipefail
+          base='${{ github.event.before }}'
+          if [ -z "$base" ] || [ "$base" = '0000000000000000000000000000000000000000' ]; then base=$(git rev-parse "$GITHUB_SHA^"); fi
+          git diff --name-only "$base" "$GITHUB_SHA" | tee task05-integrated/changed-files.txt
+          python3 - <<'PY'
+          from pathlib import Path
+          source=Path('HavenlineGodot/scripts/main.gd').read_text()
+          required=[
+            'const StationKit = preload("res://scripts/station_kit.gd")',
+            'build_arrangement("camp"', 'build_arrangement("lakeshore"',
+            'instantiate_asset("hearth_vessel"', 'instantiate_asset("cargo_crate"'
+          ]
+          assert all(token in source for token in required),required
+          forbidden=['sim.contract.world.furnace =','sim.contract.world.storage =']
+          assert not any(token in source for token in forbidden),forbidden
+          PY
+          python3 tools/havenline/bake_outpost_audio.py > task05-integrated/tests/audio-fixture.json
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task05-integrated/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task05-integrated/tests/motion-fixture.log 2>&1
+      - name: Run inherited and T05 acceptance suites
+        run: |
+          set -euo pipefail
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary test_task04_camera test_task05_station_kit; do
+            timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task05-integrated/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task05-integrated/tests/test_*.log; then exit 1; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          rows=[]
+          for path in sorted(Path('task05-integrated/tests').glob('test_*.log')):
+              reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
+              assert reports,path
+              report=reports[-1]
+              assert report.get('passed') is True and not report.get('failures'),(path,report.get('failures'))
+              checks=report.get('checks',[])
+              rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks)})
+          total=sum(row['checks'] for row in rows)
+          assert len(rows)==18 and total>=1117,(len(rows),total)
+          Path('task05-integrated/tests.json').write_text(json.dumps({'task':'T05-station-kit-v1','source':'${{ github.sha }}','suite_count':len(rows),'total_checks':total,'suites':rows,'all_passed':True,'task_approved':False},indent=2))
+          PY
+      - name: Render component, family and exact shipping-scene quick looks
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task05_station_kit.gd -- --out="$(pwd)/task05-integrated/component" > task05-integrated/component.log 2>&1
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task05_station_kit.gd -- --family-gallery --out="$(pwd)/task05-integrated/families" > task05-integrated/families.log 2>&1
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task04_camera.gd -- --out="$(pwd)/task05-integrated/gameplay" > task05-integrated/gameplay.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task04_camera.gd -- --native-4k --out="$(pwd)/task05-integrated/native4k" > task05-integrated/native4k.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task05-integrated/*.log; then exit 1; fi
+          cp Docs/Production/T02/reference-ground.webp task05-integrated/reference-ground.webp
+      - name: Enforce cheap integrated pixel, coverage and performance gates
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image,ImageDraw,ImageStat
+          import hashlib,json,math
+          root=Path('task05-integrated')
+          component=json.loads((root/'component/capture.json').read_text())
+          families=json.loads((root/'families/capture.json').read_text())
+          gameplay=json.loads((root/'gameplay/capture.json').read_text())
+          native=json.loads((root/'native4k/capture.json').read_text())
+          assert component['task']==families['task']=='T05-station-kit-v1'
+          assert component['capture_kind']=='isolated-component-quick-look' and len(component['captures'])==12
+          assert families['capture_kind']=='isolated-family-coverage' and len(families['captures'])==42
+          expected_families={'hearth','counters','pads','fishing','processing','defense','resources'}
+          expected_views={'front','rear','left','right','three-quarter','detail'}
+          observed={(row['arrangement'],row['view']) for row in families['captures']}
+          assert observed=={(family,view) for family in expected_families for view in expected_views}
+          assert gameplay['task']==native['task']=='T04-reference-camera-v1'
+          assert gameplay['shipping_main_call_site_exercised'] is True and native['shipping_main_call_site_exercised'] is True
+          assert gameplay['source_bound'] and native['source_bound']
+          assert len(gameplay['captures'])==20 and len(native['captures'])==3
+          assert hashlib.sha256((root/'reference-ground.webp').read_bytes()).hexdigest()=='3c424b0df53c1c6de49018278779a4ef1ced58562e5b9dbb54fe276d13aa2ddb'
+          budgets=json.loads(Path('Docs/Production/PERFORMANCE_BUDGETS.json').read_text())['global_soft_budgets']
+          perf_errors=[];draw=[];primitives=[];hashes={}
+          declared_sizes={}
+          for folder,manifest in [('component',component),('families',families)]:
+              for row in manifest['captures']:
+                  declared_sizes[f"{folder}/{row['path']}"]=tuple(map(int,row['size']))
+          for folder,manifest in [('gameplay',gameplay),('native4k',native)]:
+              for row in manifest['captures']:
+                  declared_sizes[f"{folder}/{row['name']}.png"]=tuple(map(int,row['internal_size']))
+          pngs=[]
+          for folder in ['component','families','gameplay','native4k']:
+              pngs.extend(sorted((root/folder).glob('*.png')))
+          assert len(pngs)==77,len(pngs)
+          assert set(declared_sizes)=={str(path.relative_to(root)) for path in pngs}
+          for path in pngs:
+              with Image.open(path) as source:
+                  image=source.convert('RGB')
+                  expected=declared_sizes[str(path.relative_to(root))]
+                  assert image.size==expected,(path,image.size)
+                  assert max(ImageStat.Stat(image).stddev)>=12.0,path
+                  assert len(image.getcolors(maxcolors=image.width*image.height) or [])>=128,path
+              hashes[str(path.relative_to(root))]=hashlib.sha256(path.read_bytes()).hexdigest()
+          for row in gameplay['captures']+native['captures']:
+              draw.append(int(row['draw_calls']));primitives.append(int(row['submitted_primitives']))
+              if int(row['draw_calls'])>int(budgets['draw_calls']):perf_errors.append('draw '+row['name'])
+              if int(row['submitted_primitives'])>int(budgets['visible_triangles']):perf_errors.append('primitives '+row['name'])
+          assert not perf_errors,perf_errors
+          for folder,name in [('families','family-contact-sheet.jpg'),('gameplay','gameplay-contact-sheet.jpg')]:
+              thumbs=[]
+              for path in sorted((root/folder).glob('*.png')):
+                  image=Image.open(path).convert('RGB');image.thumbnail((320,180))
+                  tile=Image.new('RGB',(340,215),'#111820');tile.paste(image,((340-image.width)//2,8));ImageDraw.Draw(tile).text((10,190),path.stem,fill='white');thumbs.append(tile)
+              sheet=Image.new('RGB',(1360,math.ceil(len(thumbs)/4)*215),'#080d12')
+              for index,tile in enumerate(thumbs):sheet.paste(tile,((index%4)*340,(index//4)*215))
+              sheet.save(root/name,quality=91)
+          perf={'task':'T05','source':'${{ github.sha }}','passed':True,'frames_checked':23,'max_draw_calls':max(draw),'draw_call_budget':budgets['draw_calls'],'max_submitted_primitives':max(primitives),'submitted_primitive_proxy_budget':budgets['visible_triangles'],'physical_device_certification':False,'errors':[]}
+          (root/'performance-preflight.json').write_text(json.dumps(perf,indent=2))
+          provenance={'task':'T05-station-kit-v1','source':'${{ github.sha }}','actual_images':77,'component_images':12,'family_images':42,'integrated_gameplay_images':20,'native3840x2160_scale1_frames':3,'family_view_contract_complete':True,'shipping_main_call_site_exercised':True,'cheap_pixel_gate_passed':True,'cheap_performance_gate_passed':True,'manual_quick_look_required_before_critics':True,'critics_executed':False,'task_approved':False,'physical_4k60_verified':False,'captures':hashes}
+          (root/'provenance.json').write_text(json.dumps(provenance,indent=2))
+          print(json.dumps({k:v for k,v in provenance.items() if k!='captures'},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: task05-integrated-precritic-${{ github.sha }}
+          path: task05-integrated
+          if-no-files-found: error
+          retention-days: 14

@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "task_id": "T08",
+  "candidate_commit": "12e76b85302d0818b3e96a68edea3c0e10cb6d67",
+  "integrated_commit": "c94b2a4c9fdeb6afb5d2fae0d18ae3073ad50e53",
+  "acceptance_threshold": ">9.0 unrounded in every mandatory dimension",
+  "cycle": "independent-critic-repair-2",
+  "defects": [
+    {
+      "id": "T08-D001",
+      "severity": "mandatory-governance",
+      "summary": "Candidate workflow passed the assignment checkpoint as the runtime base instead of the registry's approved T07 base.",
+      "status": "RESOLVED",
+      "resolution": "Pin --base to 7744b9f6a063da3385ce10992ef732ba2c669890 and use c4e4e73108406d951c1635df20e10ac9208526af only as governance integration head."
+    },
+    {
+      "id": "T08-D002",
+      "severity": "mandatory-governance",
+      "summary": "First integration commit ran while the workstream still reported ASSIGNED.",
+      "status": "RESOLVED",
+      "resolution": "Advance registry and dependency state to INTEGRATION_READY and publish a fresh integration commit with expanded source-to-actor and actor-to-destination shipping assertions."
+    },
+    {
+      "id": "T08-D003",
+      "severity": "mandatory-visual",
+      "requirements": ["T08-R03", "T08-R04", "T08-R08", "T08-R11"],
+      "summary": "Actor loads read as tiny loose ground clutter instead of attached, upright physical stacks at gameplay scale.",
+      "status": "FIX_IMPLEMENTED_PENDING_RETEST",
+      "resolution": "Round one raised the rack but remained visually ambiguous. Round two builds one compact three-column vertical tower across kinds with larger authored pieces; fresh integrated pixels and critic retest are pending."
+    },
+    {
+      "id": "T08-D004",
+      "severity": "mandatory-visual",
+      "requirements": ["T08-R05", "T08-R11"],
+      "summary": "Transfer pieces and arcs were too small, short and low-contrast to make direction readable from pixels.",
+      "status": "FIX_IMPLEMENTED_PENDING_RETEST",
+      "resolution": "Round one enlarged and lengthened the flight. Round two raises the authored piece to 2.3x and adds cyan/amber emissive three-sample direction trails in two bounded draw calls; fresh integrated motion review is pending."
+    },
+    {
+      "id": "T08-D005",
+      "severity": "mandatory-evidence",
+      "requirements": ["T08-R05", "T08-R07", "T08-R08"],
+      "summary": "The first artifact omitted furnace/build/repair and lead-switch/hidden-actor proof and its integrated capture reported an overlapping duplicate stockpile.",
+      "status": "RESOLVED",
+      "resolution": "Add player/helper furnace, storage, build and repair routes; add lead-switch and hidden-actor checks/captures; and report the shipping game.storage_stockpile in integrated mode.",
+      "verified_by_round_two_critic": true
+    },
+    {
+      "id": "T08-D006",
+      "severity": "mandatory-contract",
+      "requirements": ["T08-R02"],
+      "summary": "Unsupported inventory keys were silently ignored instead of failing closed.",
+      "status": "FIX_IMPLEMENTED_PENDING_RETEST",
+      "resolution": "Reject every non-string or unsupported inventory key before normalization, preserve transactional state on rejection, and add behavioral unit plus static-contract regression coverage."
+    }
+  ],
+  "unresolved_mandatory_count": 3,
+  "critic_scores": {"C2": 8.74, "C3": 8.67, "C4": 8.52, "C6": 9.61},
+  "critic_source": "50b07e60ac2b6d2a98e80732f62f66a14e15cec4",
+  "critic_history": [
+    {"cycle":"initial-independent-review","source":"76e11b2296bc8447f7ffd2e2bcbcb48245ad4f5f","scores":{"C2":7.85,"C3":7.62,"C4":6.84,"C6":9.27},"verdict":"BLOCKED"},
+    {"cycle":"round-two-independent-review","source":"50b07e60ac2b6d2a98e80732f62f66a14e15cec4","scores":{"C2":8.74,"C3":8.67,"C4":8.52,"C6":9.61},"verdict":"BLOCKED"}
+  ],
+  "evidence_retest_requested": true,
+  "critic_approval_pending": true,
+  "task_approved": false
+}

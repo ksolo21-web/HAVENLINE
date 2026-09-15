@@ -4,6 +4,7 @@ extends RefCounted
 # Deterministic, engine-independent gameplay state. Vector2 stores world X/Z.
 # Rendering consumes events; it cannot invent inventory or progression.
 const CrewWork = preload("res://scripts/crew_work.gd")
+const ContextDirector = preload("res://scripts/context_director.gd")
 const KINDS = ["wood", "stone", "metal", "fuel"]
 var contract: Dictionary
 var tuning: Dictionary
@@ -38,6 +39,7 @@ var threat_serial := 0
 var threats_enabled := true
 var rescue_enabled := true
 var presented_actor_ids: Array = []
+var context_director = ContextDirector.new()
 
 func _init(data: Dictionary = {}, chosen_lead: int = 1):
 	contract = data if not data.is_empty() else JSON.parse_string(FileAccess.get_file_as_string("res://data/reference-contract.json"))
@@ -106,36 +108,11 @@ func candidate(kind: String, id: String, p: Vector2, radius: float, priority: fl
 	return {"kind": kind, "id": id, "position": p, "score": priority + (1.0 - distance / radius) * tuning.automaticActionDistanceScoreWeight + alignment * tuning.automaticActionFacingWeight + (1.5 if current else 0.0)}
 
 func choose_action() -> Dictionary:
-	var options: Array = []
-	var p: Dictionary = contract.player
-	for enemy in enemies:
-		if threats_enabled and enemy.health > 0:
-			options.append(candidate("enemy", enemy.id, enemy.position, p.combatRadius, 200))
-	var furnace := point(contract.world.furnace)
-	if durability < tuning.furnaceMaxDurability and inventory.wood > 0:
-		options.append(candidate("repair", "furnace", furnace, p.depositRadius, 130))
-	elif carried() > 0 and durability > 0:
-		options.append(candidate("deposit", "furnace", furnace, p.depositRadius, 95))
-	if carried() > 0 and durability > 0:
-		options.append(candidate("deposit", "storage", point(contract.world.storage), p.depositRadius, 95))
-	if rescue_enabled and not rescued and level >= 2 and durability > 0:
-		options.append(candidate("rescue", "survivor", point(contract.world.survivor), p.rescueRadius, 110))
-	for side in defenses:
-		var d: Dictionary = defenses[side]
-		if not d.built:
-			var need: Dictionary = tuning[side + "BarricadeBuild"]
-			if (d.delivered.wood < need.wood and inventory.wood > 0) or (d.delivered.stone < need.stone and inventory.stone > 0):
-				options.append(candidate("build", side, d.position, p.buildRadius, 80))
-		elif d.health < 160 and inventory.wood > 0:
-			options.append(candidate("defense_repair", side, d.position, p.buildRadius, 129))
-	for resource in resources:
-		if resource.units > 0:
-			options.append(candidate("gather", resource.id, resource.position, p.interactionRadius, 30))
-	var selected: Dictionary = {}
-	for option in options:
-		if not option.is_empty() and (selected.is_empty() or option.score > selected.score):
-			selected = option
-	return selected
+	# Compatibility surface for tests and read-only consumers. Runtime state is
+	# advanced exactly once by step() below.
+	return ContextDirector.preview(position, facing, "player_lead",
+		ContextDirector.build_simulation_candidates(self),
+		presented_actor_ids.is_empty() or lead in presented_actor_ids, true)
 
 func step(dt: float, input_vector: Vector2, sprint := false):
 	if dt <= 0 or not is_finite(dt):
@@ -153,9 +130,11 @@ func step(dt: float, input_vector: Vector2, sprint := false):
 	position.y = clampf(position.y, -contract.world.boundZ, contract.world.boundZ)
 	if moving:
 		facing = input.normalized()
-	action = choose_action()
-	if not moving and velocity.length() < 0.2 and not action.is_empty():
-		perform_action(dt)
+	action = context_director.advance(dt, position, facing, input, velocity,
+		"player_lead", ContextDirector.build_simulation_candidates(self),
+		presented_actor_ids.is_empty() or lead in presented_actor_ids, true)
+	if bool(action.get("actionable", false)):
+		perform_action(dt + clampf(float(action.get("activation_credit_seconds", 0.0)), 0.0, ContextDirector.ACQUIRE_DWELL_SECONDS))
 	step_companions(dt)
 	step_threats(dt)
 	step_climate(dt)
@@ -259,6 +238,7 @@ func select_lead(id: int) -> bool:
 		velocity = Vector2.ZERO
 		action = {}
 		action_clocks.clear()
+		context_director.reset()
 		return true
 	return false
 
@@ -473,6 +453,7 @@ func restore(data: Dictionary) -> bool:
 	action_clocks = data.get("action_clocks", {}).duplicate()
 	facing = Vector2(data.get("facing", [0, 1])[0], data.get("facing", [0, 1])[1]).normalized()
 	events.clear()
+	context_director.reset()
 	return true
 
 static func valid_number(value, allow_negative := false) -> bool:

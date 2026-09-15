@@ -1,0 +1,220 @@
+name: Havenline T01 repaired forest quality cycle
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-final-review.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-and-capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.commit.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Apply only checksum-bound Task 1 fixes
+        run: |
+          set -euo pipefail
+          mkdir -p task01-evidence
+          python3 - <<'PY'
+          from pathlib import Path
+          import base64,gzip,hashlib,json
+          root=Path('Docs/Production/T01');out=Path('task01-evidence')
+          raw=base64.b64decode(''.join((root/f'revision3-code.part{i}.b64').read_text().strip() for i in (1,2)),validate=True)
+          assert hashlib.sha256(raw).hexdigest()=='3599fa0f7e0012f24a7f8da0e320ecd901f5daa99870e950fa3027390137dd7e','Code transfer checksum mismatch'
+          package=json.loads(gzip.decompress(raw));assert package['task']=='T01' and not package['approved']
+          files=package['files'];main=package['main_patch']
+          allowed={'tools/havenline/bake_reference_forest.py','HavenlineGodot/scripts/reference_forest.gd','HavenlineGodot/shaders/evergreen.gdshader','HavenlineGodot/tests/capture_task01.gd','HavenlineGodot/tests/capture_task01_clearance.gd','HavenlineGodot/tests/test_reference_forest_acceptance.gd','tools/havenline/review_task01_cached.py','tools/havenline/verify_task01_evidence.py'}
+          assert {x['path'] for x in files}==allowed and main['path']=='HavenlineGodot/scripts/main.gd'
+          for item in files+[main]:
+              p=Path(item['path']);actual=hashlib.sha256(p.read_bytes()).hexdigest() if p.exists() else None
+              assert actual in (item['before_sha256'],item['after_sha256']),f'Concurrent edit: {p}'
+          original={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('HavenlineGodot/assets').rglob('*.glb') if 'reference_forest' not in p.parts}
+          assert len(original)==30
+          (out/'protected-before.json').write_text(json.dumps(original,indent=2))
+          for item in files:
+              p=Path(item['path']);p.parent.mkdir(parents=True,exist_ok=True);p.write_text(item['text'])
+              assert hashlib.sha256(p.read_bytes()).hexdigest()==item['after_sha256']
+          p=Path(main['path'])
+          if hashlib.sha256(p.read_bytes()).hexdigest()!=main['after_sha256']:
+              s=p.read_text();assert s.count(main['anchor'])==1;p.write_text(s.replace(main['anchor'],main['anchor']+main['insert_before']))
+          assert hashlib.sha256(p.read_bytes()).hexdigest()==main['after_sha256']
+          (out/'changed-files.json').write_text(json.dumps(sorted(allowed|{main['path']})))
+          reference=base64.b64decode((root/'reference-detail.webp.b64').read_text())
+          assert hashlib.sha256(reference).hexdigest()=='25b0e78c93f13ddadb8b815e7e19daf68485471d2be3fed0dd99bde8d00c48af','Reference transfer mismatch'
+          (out/'reference-detail.webp').write_bytes(reference)
+          (out/'reference-provenance.json').write_text(json.dumps({'sources':[{'id':'A','sha256':'62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca','requested_seek_seconds':5,'crop_xyxy':[0,390,220,690]},{'id':'B','sha256':'4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2','requested_seek_seconds':2,'crop_xyxy':[400,880,620,1150]}],'operation':'cropped original decoded frames, side-by-side labels, WebP compression; no synthesis','size':[440,322],'image_sha256':hashlib.sha256(reference).hexdigest()},indent=2))
+          PY
+      - name: Prepare pinned engine and Mobile software Vulkan
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install numpy scipy pillow
+          mkdir -p "$RUNNER_TEMP/engine"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+      - name: Bake only Task 1 assets and execute every existing regression
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/bake_reference_forest.py > task01-evidence/bake.json
+          python3 tools/havenline/audit_task01_geometry.py > task01-evidence/geometry-audit.json
+          python3 tools/havenline/bake_outpost_audio.py > task01-evidence/audio-fixtures.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task01-evidence/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task01-evidence/motion-fixtures.log 2>&1
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance; do
+            timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task01-evidence/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task01-evidence/*.log; then exit 1; fi
+          python3 - <<'PY'
+          import pathlib,json,hashlib
+          root=pathlib.Path('task01-evidence');checks=[]
+          for p in root.glob('test_*.log'):
+              result=[json.loads(l) for l in p.read_text().splitlines() if l.startswith('{')][-1]
+              assert result['passed'] and not result.get('failures');assert all(c['passed'] for c in result['checks']);checks+=result['checks']
+          assert len(checks)==676
+          protected=json.loads((root/'protected-before.json').read_text());assert all(hashlib.sha256(pathlib.Path(p).read_bytes()).hexdigest()==h for p,h in protected.items())
+          print('676 engine assertions passed; original 30 GLBs unchanged.')
+          PY
+      - name: Commit exact tested source and generated tree assets without force-pushing
+        id: commit
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          python3 - <<'PY'
+          import subprocess,json,pathlib
+          files=json.loads(pathlib.Path('task01-evidence/changed-files.json').read_text())
+          files += [str(p) for p in pathlib.Path('HavenlineGodot/assets/reference_forest').glob('*.glb')]
+          files += ['HavenlineGodot/assets/reference_forest/manifest.json']
+          subprocess.run(['git','add','--',*files],check=True)
+          PY
+          if ! git diff --cached --quiet; then
+            test "$(git ls-remote origin refs/heads/codex/havenline-sequential-task-01 | cut -f1)" = "$GITHUB_SHA"
+            git commit -m 'T01: tested layered reference trees, seated trunks and per-instance player clearance; pending independent review'
+            git push origin HEAD:refs/heads/codex/havenline-sequential-task-01
+          fi
+          source=$(git rev-parse HEAD)
+          echo "$source" > task01-evidence/SOURCE.txt
+          echo "source=$source" >> "$GITHUB_OUTPUT"
+      - name: Capture actual tree angles, integration motion, clearance and native 4K
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          mkdir -p task01-evidence/gallery task01-evidence/clearance task01-evidence/native4k
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 420 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task01.gd -- --out="$(pwd)/task01-evidence/gallery" > task01-evidence/mobile-gallery.log 2>&1
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 160 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task01_clearance.gd -- --out="$(pwd)/task01-evidence/clearance" > task01-evidence/clearance.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 240 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --fixed-fps 60 -- --capture="$(pwd)/task01-evidence/native4k" > task01-evidence/native4k.log 2>&1
+          python3 tools/havenline/verify_task01_evidence.py task01-evidence
+          python3 - <<'PY'
+          import pathlib,json,hashlib
+          e=pathlib.Path('task01-evidence');r=json.loads((e/'gallery/capture.json').read_text());n=json.loads((e/'native4k/render-evidence.json').read_text())
+          captures={str(p.relative_to(e)):hashlib.sha256(p.read_bytes()).hexdigest() for p in e.rglob('*.png')}
+          assert len(captures)==62
+          assets={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in pathlib.Path('HavenlineGodot/assets/reference_forest').glob('*.glb')}
+          result={'task':'T01','source':(e/'SOURCE.txt').read_text().strip(),'captures':captures,'assets':assets,'renderer':'mobile','device':r['device'],'capture_count':len(captures),'camera_pose_frames':24,'integration_pose_frames':12,'native_dimensions':n['internal_render'],'render_scale':n['render_scale'],'fixed_step_capture_is_not_fps_evidence':True,'task_approved':False,'physical_4k60_verified':False}
+          (e/'provenance.json').write_text(json.dumps(result,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-repaired-evidence-${{ github.run_id }}
+          path: task01-evidence/
+          retention-days: 30
+          if-no-files-found: error
+  independent-critics:
+    needs: build-and-capture
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        shard: [0, 1, 2]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 38
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_SHARD: ${{ matrix.shard }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build-and-capture.outputs.source }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-repaired-evidence-${{ github.run_id }}
+          path: task01-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-vision
+          key: havenline-qwen3vl8b-f982a075-b10809-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Independently inspect assigned views against the actual source pixels
+        run: python3 -u tools/havenline/review_task01_cached.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-independent-${{ matrix.role }}-${{ matrix.shard }}-${{ github.run_id }}
+          path: critic-results/
+          retention-days: 30
+          if-no-files-found: error
+  mechanical-and-critic-gate:
+    needs: [build-and-capture, independent-critics]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      SOURCE: ${{ needs.build-and-capture.outputs.source }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-T01-independent-*-${{ github.run_id }}
+          path: reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-repaired-evidence-${{ github.run_id }}
+          path: evidence/
+      - name: Reject missing, failed, stale or incomplete independent reviews
+        run: |
+          python3 - <<'PY'
+          import pathlib,json,os,math
+          out=pathlib.Path('gate-report');out.mkdir(exist_ok=True)
+          expected={'variant-1','variant-2','variant-3','forest','clearance','camera-motion'}
+          reports=[];errors=[];scores={};source=os.environ['SOURCE']
+          try:
+              m=json.loads(pathlib.Path('evidence/mechanical-review.json').read_text())
+              if m['source']!=source or not m['passed']:errors.append('Mechanical/source checks failed')
+          except Exception as e:errors.append('Missing mechanical evidence: '+str(e))
+          for role in ('reference-fidelity','visual-integrity'):
+              rows=[]
+              for p in pathlib.Path('reviews').glob('*'+role+'*/shard-review.json'):
+                  r=json.loads(p.read_text());rows+=r['reviews']
+                  if r['role']!=role or r['source']!=source:errors.append('Stale/mismatched '+role)
+              if {r['group'] for r in rows}!=expected or len(rows)!=6:errors.append('Incomplete/duplicate coverage '+role)
+              for r in rows:
+                  s=r.get('review',{}).get('scores',{})
+                  if not r.get('independent_execution') or not r.get('passed') or r['source']!=source:errors.append('Review not passing: '+role+'/'+r['group'])
+                  if len(s)!=5 or any(type(v) not in (int,float) or not math.isfinite(v) or v<9 or v>10 for v in s.values()):errors.append('Invalid/below-nine scores: '+role+'/'+r['group'])
+              scores[role]=min((r.get('lowest_score',0) for r in rows),default=None)
+              reports+=rows
+          result={'task':'T01','source':source,'minimum_score':9,'target':10,'mechanical_and_critics_passed':not errors,'role_lowest_scores':scores,'reviews':reports,'errors':errors,'requires_final_actual_pixel_verification':True,'task_approved':False,'next_task_started':False,'game_complete':False,'physical_4k60_verified':False}
+          (out/'T01-model-and-mechanical-gate.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2))
+          raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-repaired-gate-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# Only Task 1. No APK export/handoff, no final-game approval, no Task 2 implementation.

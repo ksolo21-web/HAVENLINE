@@ -1,0 +1,108 @@
+{
+  "schema_version": 1,
+  "score_rule": {
+    "operator": ">",
+    "threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "no_average_waiver": true,
+    "no_unresolved_mandatory_defect": true
+  },
+  "cost_policy": "No paid APIs or paid critic services.",
+  "local_independent_runtime": {
+    "provider": "unsloth/Qwen3.5-9B-GGUF",
+    "base_model": "Qwen/Qwen3.5-9B",
+    "model_revision": "3885219b6810b007914f3a7950a8d1b469d598a5",
+    "cache_path": "~/.cache/havenline-t01-qwen35",
+    "cache_key": "havenline-t01-qwen35-9b-q5-20260908-v1",
+    "runner": "tools/havenline/production/specialist_critic_runner.py",
+    "independence_requirement": "Run in a separate CI review job from the builder/integration job. Persona changes or builder self-review do not qualify."
+  },
+  "evidence_manifest_schema": {
+    "required_top_level": ["task_id", "critic_id", "candidate_commit", "groups"],
+    "group_required": ["id", "items"],
+    "item_required": ["path", "kind", "category", "sha256", "description"],
+    "allowed_item_kinds": ["image", "motion_frame", "json", "text"]
+  },
+  "critics": {
+    "C1": {
+      "execution_type": "independent_visual_model",
+      "runner": "existing task-scoped C1 reviewer",
+      "status": "OPERATIONAL",
+      "dimensions": ["reference_fidelity", "visual_language", "cross_view_consistency"]
+    },
+    "C2": {
+      "execution_type": "independent_visual_model",
+      "runner": "existing task-scoped C2 reviewer",
+      "status": "OPERATIONAL",
+      "dimensions": ["geometry_contact", "clipping_seams", "intentional_gap_integrity", "cross_view_integrity"]
+    },
+    "C3": {
+      "execution_type": "independent_specialist_model",
+      "runner": "tools/havenline/production/specialist_critic_runner.py",
+      "status": "OPERATIONAL",
+      "dimensions": ["havenline_identity", "simple_context_controls", "physical_core_loop", "complexity_discipline", "world_response_readability"],
+      "required_categories": ["gameplay_state", "control_state", "loop_evidence"]
+    },
+    "C4": {
+      "execution_type": "independent_specialist_model",
+      "runner": "tools/havenline/production/specialist_critic_runner.py",
+      "status": "OPERATIONAL",
+      "dimensions": ["interactable_clarity", "danger_clarity", "collection_feedback", "resource_destination", "world_change_clarity", "next_action_clarity"],
+      "required_categories": ["gameplay_state", "feedback_state"]
+    },
+    "C5": {
+      "execution_type": "independent_motion_model",
+      "runner": "tools/havenline/production/specialist_critic_runner.py",
+      "capture_runner": "tools/havenline/production/motion_capture.py",
+      "status": "OPERATIONAL",
+      "dimensions": ["full_cycle", "foot_contact", "lower_body_mechanics", "upper_body_mechanics", "weight_transfer", "transitions", "clipping", "secondary_motion_contact"],
+      "required_categories": ["motion_cycle", "motion_transition", "contact_detail"]
+    },
+    "C6": {
+      "execution_type": "quantitative_specialist_gate",
+      "runner": "tools/havenline/production/critic_harness.py performance",
+      "status": "OPERATIONAL",
+      "dimensions": ["frame_time", "draw_calls", "geometry", "texture_memory", "shader_cost", "physics", "animation", "population", "thermal_risk"]
+    },
+    "C7": {
+      "execution_type": "independent_specialist_model_plus_deterministic_gate",
+      "runner": "tools/havenline/production/specialist_critic_runner.py",
+      "deterministic_runner": "tools/havenline/production/domain_safeguard_gate.py progression",
+      "status": "OPERATIONAL",
+      "dimensions": ["difficulty_growth", "challenge_variety", "spike_control", "pacing", "upgrade_meaning", "director_bounds"],
+      "required_categories": ["progression_simulation", "difficulty_curve", "upgrade_curve"]
+    },
+    "C8": {
+      "execution_type": "independent_specialist_model_plus_deterministic_gate",
+      "runner": "tools/havenline/production/specialist_critic_runner.py",
+      "deterministic_runner": "tools/havenline/production/domain_safeguard_gate.py economy",
+      "status": "OPERATIONAL",
+      "dimensions": ["f2p_viability", "sources_sinks", "inflation_control", "vip_fairness", "purchase_value", "paywall_risk", "overall_fairness"],
+      "required_categories": ["economy_simulation", "f2p_path", "monetization_contract"]
+    },
+    "C9": {
+      "execution_type": "deterministic_adversarial_harness",
+      "runner": "tools/havenline/production/security_exploit_harness.py",
+      "status": "OPERATIONAL",
+      "dimensions": ["save_modification", "clock_manipulation", "replay", "duplicate_grants", "fake_purchase", "fake_premium_balance", "vip_manipulation", "event_fraud", "rollback", "leaderboard_fabrication"]
+    },
+    "C10": {
+      "execution_type": "independent_specialist_model_plus_deterministic_gate",
+      "runner": "tools/havenline/production/specialist_critic_runner.py",
+      "deterministic_runner": "tools/havenline/production/domain_safeguard_gate.py liveops",
+      "status": "OPERATIONAL",
+      "dimensions": ["requirement_feasibility", "event_collision", "reward_integrity", "f2p_feasibility", "duplicate_reward_control", "pricing_sales_integrity", "timing_integrity", "asset_localization_readiness"],
+      "required_categories": ["event_schedule", "reward_table", "f2p_event_simulation"]
+    },
+    "C11": {
+      "execution_type": "independent_specialist_model_plus_deterministic_gate",
+      "runner": "tools/havenline/production/specialist_critic_runner.py",
+      "deterministic_runner": "tools/havenline/production/domain_safeguard_gate.py accessibility",
+      "device_runner": "tools/havenline/production/device_matrix.py",
+      "status": "OPERATIONAL",
+      "dimensions": ["touch_targets", "ui_scale", "text_readability", "color_differentiation", "reduced_motion", "subtitles", "joystick_layout", "controller_state", "adaptive_layout"],
+      "required_categories": ["adaptive_ui", "accessibility_metrics", "device_matrix"]
+    }
+  }
+}

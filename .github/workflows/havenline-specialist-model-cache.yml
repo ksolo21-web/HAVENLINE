@@ -1,0 +1,46 @@
+name: Havenline specialist reviewer runtime cache
+on:
+  workflow_dispatch:
+  push:
+    branches: ['havenline/QA-integration','codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-specialist-model-cache.yml'
+      - 'tools/havenline/production/prepare_specialist_runtime.py'
+      - 'Docs/Production/CRITIC_EXECUTION.json'
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Ensure exact pinned public reviewer runtime exists
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          mkdir -p runtime-evidence
+          python3 tools/havenline/production/prepare_specialist_runtime.py | tee runtime-evidence/preparation.json
+          cp "$HOME/.cache/havenline-t01-qwen35/manifest.json" runtime-evidence/manifest.json
+      - uses: actions/cache/save@v4
+        if: steps.cache.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-specialist-runtime-metadata-${{ github.run_id }}
+          path: runtime-evidence/
+          retention-days: 30
+          if-no-files-found: error
+# Public open-weight model only. Exact publisher revision and blob hashes are enforced by prepare_specialist_runtime.py.
+# No paid API, account secret, game change, task score, or automatic approval.

@@ -1,0 +1,82 @@
+name: Havenline T02 public reviewer factual competency
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-provider-competency.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  factual-probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-bank-evidence-34528232295
+          run-id: 34528232295
+          github-token: ${{ github.token }}
+          path: evidence/
+      - name: Install the public Gradio client without account authentication
+        run: |
+          python3 -m pip install 'gradio_client>=1.12,<2' pillow
+          mkdir -p provider-competency
+          python3 -m pip freeze > provider-competency/installed-versions.txt
+      - name: One blind image-recognition request through the model publisher's public demo
+        env:
+          HF_HUB_DISABLE_TELEMETRY: '1'
+          HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib,re,html,time,urllib.request
+          from PIL import Image,ImageDraw
+          from gradio_client import Client,handle_file
+          out=Path('provider-competency');e=Path('evidence');source='96f8d396a5015e136c590dc496214a689adb1e43'
+          p=json.loads((e/'provenance.json').read_text());assert p['source']==source
+          board=Image.new('RGB',(720,780),(24,37,52));draw=ImageDraw.Draw(board);inputs=[]
+          names=['clearance-enabled','clearance-disabled','clearance-disabled','clearance-baseline']
+          for i,name in enumerate(names):
+              rel='tree-clearance/'+name+'.png';file=e/rel
+              assert hashlib.sha256(file.read_bytes()).hexdigest()==p['captures'][rel]
+              box=(490,235,790,555);im=Image.open(file).convert('RGB').crop(box);im.thumbnail((360,360))
+              x=(i%2)*360;y=(i//2)*390;board.paste(im,(x+(360-im.width)//2,y+26));draw.text((x+9,y+7),'ABCD'[i],fill='white')
+              inputs.append({'panel':'ABCD'[i],'source':rel,'source_sha256':p['captures'][rel],'crop':box})
+          image=out/'blind-factual-probe.png';board.save(image)
+          result={'task':'T02','source':source,'purpose':'A larger published reviewer is tested for factual recognition because earlier reports confused ordinary cast shadows, day/night conditions and ground geometry. This probe has no art score.','provider':'Qwen/Qwen3-VL-235B-A22B-Instruct-Demo','model_as_declared_by_public_application':'qwen3-vl-235b-a22b-instruct','inputs':inputs,'input_sha256':hashlib.sha256(image.read_bytes()).hexdigest(),'user_account_token_used':False,'billing_settings_changed':False,'task_approved':False,'inference_executed':False}
+          prompt='Four image panels are labelled A, B, C and D. For EACH panel identify the prominent subject nearest the centre: human_character, snow_tree, or other_or_unclear. Judge the actual visible pixels, not the panel letter. Return ONLY a JSON object with keys A, B, C and D and those string values. This is an image-recognition check, not an art score.'
+          (out/'prompt.txt').write_text(prompt)
+          try:
+              info=json.load(urllib.request.urlopen('https://huggingface.co/api/spaces/Qwen/Qwen3-VL-235B-A22B-Instruct-Demo',timeout=30))
+              result['public_space_revision']=info['sha'];result['public_space_runtime']=info.get('runtime')
+              client=Client('Qwen/Qwen3-VL-235B-A22B-Instruct-Demo',hf_token=False,verbose=False)
+              api=client.view_api(return_format='dict',print_info=False);(out/'published-api.json').write_text(json.dumps(api,indent=2))
+              required={'/add_file':['history','file'],'/add_text':['history','text'],'/predict':['_chatbot']}
+              for name,params in required.items():
+                  actual=[v['parameter_name'] for v in api['named_endpoints'][name]['parameters']]
+                  assert actual==params,(name,actual)
+              history=client.predict(history=[],file=handle_file(str(image)),api_name='/add_file')
+              history=client.predict(history=history,text=prompt,api_name='/add_text')
+              started=time.monotonic();reply=client.submit(_chatbot=history,api_name='/predict').result(timeout=180)
+              result['elapsed_seconds']=time.monotonic()-started;result['inference_executed']=True
+              (out/'raw-provider-response.json').write_text(json.dumps(reply,indent=2,default=str))
+              text=reply[-1][1];assert isinstance(text,str),'Unexpected public API output type'
+              (out/'raw-provider-response.txt').write_text(text)
+              clean=html.unescape(re.sub(r'<[^>]+>','\n',text));start=clean.find('{');assert start>=0
+              parsed,end=json.JSONDecoder().raw_decode(clean[start:]);expected={'A':'human_character','B':'snow_tree','C':'snow_tree','D':'human_character'}
+              result['answers']=parsed;result['expected_answers_not_sent_to_model']=expected;result['competency_passed']=parsed==expected
+          except Exception as exc:
+              result['error']=str(exc);result['competency_passed']=False
+          (out/'result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-provider-competency-${{ github.run_id }}
+          path: provider-competency/
+          retention-days: 30
+          if-no-files-found: error
+# Uses the publisher's public UI API normally, without any user/provider secret.
+# Honor service refusal/rate limits; no identity rotation, quota bypass, or billing setup.
+# No game changes, score injection, task progression, APK or performance claim.
