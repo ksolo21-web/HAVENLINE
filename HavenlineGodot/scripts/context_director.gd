@@ -203,7 +203,7 @@ static func preview(actor_position: Vector2, facing: Vector2, role: String,
 	var sanitized := _sanitize(candidates, actor_position, facing, capabilities_for_role(role))
 	var best: Dictionary = {}
 	for option in sanitized.valid:
-		if _better(option, best):
+		if float(option.distance) <= float(option.radius) and _better(option, best):
 			best = option
 	if best.is_empty():
 		return _blocked(role, "idle", "no_eligible_context", sanitized.metrics)

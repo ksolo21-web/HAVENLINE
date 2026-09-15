@@ -64,6 +64,8 @@ func run() -> void:
 	])
 	check("duplicate stable identities are rejected", duplicate_result.kind.is_empty())
 	check("duplicate identity is disclosed", duplicate_result.metrics.duplicate_identities == ["gather:wood0"])
+	var preview_outside := selected([option("gather", "release_only", Vector2(0, 4.2), "gather_with_tools", 0.0, 0.0, 4.0)])
+	check("preview cannot acquire inside release-only margin", preview_outside.state == "idle" and preview_outside.kind.is_empty())
 
 	var eligibility_result := selected([
 		option("enemy", "wolf0", Vector2(0, 0.3), "attack", 0.0, 1.0, 4.0, 0.0, false),

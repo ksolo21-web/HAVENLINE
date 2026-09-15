@@ -50,8 +50,11 @@ def validate(candidate: str) -> dict:
     check("all required actor roles are represented", all(role in source for role in required_roles), required_roles)
     for role in required_roles:
         capabilities = matrix["actors"][role]["capabilities"]
-        check(f"{role} capabilities match registry", all(f'"{capability}"' in source for capability in capabilities), capabilities)
+        match = re.search(rf'"{re.escape(role)}": \[(.*?)\]', source)
+        observed = re.findall(r'"([^"]+)"', match.group(1)) if match else []
+        check(f"{role} capabilities match registry", observed == capabilities, {"expected": capabilities, "observed": observed})
     check("test covers malformed and duplicate input", "malformed candidates fail closed" in tests and "duplicate stable identities are rejected" in tests)
+    check("test covers acquire versus release-only radius", "preview cannot acquire inside release-only margin" in tests)
     check("test covers all ranking dimensions", all(phrase in tests for phrase in ("declared priority", "distance precedes", "target relevance", "facing resolves", "stable identity")))
     check("test covers hysteresis hold and urgent preemption", "minimum hold timing" in tests and "prevents nearby target thrash" in tests and "urgent interrupt bypasses" in tests)
     check("test covers movement cancel and reacquire", "movement does not secretly accrue" in tests and "deterministically reacquires" in tests)
