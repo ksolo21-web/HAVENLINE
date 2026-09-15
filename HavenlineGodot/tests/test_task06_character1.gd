@@ -14,6 +14,7 @@ const REQUIRED_ACTIONS := [
 
 var failures: Array[String] = []
 var checks: Array[Dictionary] = []
+var loop_seam_metrics: Dictionary = {}
 
 func check(label: String, passed: bool) -> void:
 	checks.append({"name": label, "passed": passed})
@@ -100,6 +101,10 @@ func validate_loop_seam(library: AnimationLibrary, id: String) -> void:
 	var closed := true
 	var velocity_matched := true
 	var maximum_seam_motion := 0.0
+	var maximum_rotation_error_degrees := 0.0
+	var maximum_position_error_meters := 0.0
+	var worst_rotation_track := ""
+	var worst_position_track := ""
 	for track in animation.get_track_count():
 		var kind := animation.track_get_type(track)
 		if kind == Animation.TYPE_ROTATION_3D:
@@ -110,7 +115,11 @@ func validate_loop_seam(library: AnimationLibrary, id: String) -> void:
 			closed = closed and rad_to_deg(start.angle_to(finish)) < 0.1
 			var incoming_delta := before.inverse() * finish
 			var outgoing_delta := start.inverse() * after
-			velocity_matched = velocity_matched and rad_to_deg(incoming_delta.angle_to(outgoing_delta)) < 0.03
+			var rotation_error := rad_to_deg(incoming_delta.angle_to(outgoing_delta))
+			if rotation_error > maximum_rotation_error_degrees:
+				maximum_rotation_error_degrees = rotation_error
+				worst_rotation_track = String(animation.track_get_path(track))
+			velocity_matched = velocity_matched and rotation_error < 0.03
 			maximum_seam_motion = maxf(maximum_seam_motion, rad_to_deg(start.angle_to(after)))
 		elif kind == Animation.TYPE_POSITION_3D:
 			var start := animation.position_track_interpolate(track, 0.0)
@@ -118,8 +127,19 @@ func validate_loop_seam(library: AnimationLibrary, id: String) -> void:
 			var before := animation.position_track_interpolate(track, animation.length - step)
 			var finish := animation.position_track_interpolate(track, animation.length)
 			closed = closed and start.distance_to(finish) < 0.0001
-			velocity_matched = velocity_matched and ((finish - before) - (after - start)).length() < 0.0001
+			var position_error := ((finish - before) - (after - start)).length()
+			if position_error > maximum_position_error_meters:
+				maximum_position_error_meters = position_error
+				worst_position_track = String(animation.track_get_path(track))
+			velocity_matched = velocity_matched and position_error < 0.0001
 			maximum_seam_motion = maxf(maximum_seam_motion, start.distance_to(after) * 100.0)
+	loop_seam_metrics[id] = {
+		"maximum_rotation_error_degrees": maximum_rotation_error_degrees,
+		"worst_rotation_track": worst_rotation_track,
+		"maximum_position_error_meters": maximum_position_error_meters,
+		"worst_position_track": worst_position_track,
+		"maximum_seam_motion": maximum_seam_motion,
+	}
 	check(id + " closes every transform track", closed)
 	check(id + " matches 120 Hz seam velocity direction and magnitude", velocity_matched)
 	if id in ["walk", "run"]:
@@ -259,6 +279,6 @@ func run() -> void:
 	print(JSON.stringify({
 		"suite":"task06_character1", "passed":failures.is_empty(), "checks":checks,
 		"failures":failures, "check_count":checks.size(), "source_sha256":Motion.SOURCE_GLTF_SHA256,
-		"required_clips":expected, "critic_approval":false
+		"required_clips":expected, "loop_seam_metrics":loop_seam_metrics, "critic_approval":false
 	}))
 	quit(0 if failures.is_empty() else 1)
