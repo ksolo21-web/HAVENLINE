@@ -63,11 +63,12 @@ T07 is APPROVED at accepted isolated source
 `94b3f6c5097356a3857ebd13a77fb1e316eb06ae`; its verified record is
 `Docs/Production/T07/verified-completion.json`.
 
-T08 is the active isolated workstream at `Docs/Production/T08/FROZEN_SCOPE.md`
-and `Docs/Production/T08/TASK_PACKET.md`, assigned on
-`havenline/T08-visible-inventory` from exact integration base
-`7744b9f6a063da3385ce10992ef732ba2c669890`. T09+ runtime production remains
-LOCKED.
+T08 is the active INTEGRATION_READY workstream at
+`Docs/Production/T08/FROZEN_SCOPE.md` and `Docs/Production/T08/TASK_PACKET.md`.
+Its isolated source is `258f2c9a53f8b5460fb54a7f298fbb887c5aba1e` from exact
+integration base `7744b9f6a063da3385ce10992ef732ba2c669890`; exact-source
+evidence and independent C2/C3/C4/C6 review remain mandatory. T09+ runtime
+production remains LOCKED.
 
 T03 was the final legacy task grandfathered to finish directly on
 `codex/havenline-sequential-task-01`. T04 and all later runtime work use

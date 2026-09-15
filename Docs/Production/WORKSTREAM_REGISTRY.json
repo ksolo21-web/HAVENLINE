@@ -302,7 +302,7 @@
       "task_id": "T08",
       "task_name": "Visible inventory, physical carrying and transfers",
       "workstream_id": "T08-physical-inventory-builder",
-      "status": "ASSIGNED",
+      "status": "INTEGRATION_READY",
       "owner": "physical-inventory-builder",
       "branch": "havenline/T08-visible-inventory",
       "base_commit": "7744b9f6a063da3385ce10992ef732ba2c669890",
@@ -318,9 +318,13 @@
         "@protected:approved",
         "@integration-only"
       ],
-      "candidate_commit": null,
-      "candidate_hash_or_artifact": null,
-      "tests": {},
+      "candidate_commit": "258f2c9a53f8b5460fb54a7f298fbb887c5aba1e",
+      "candidate_hash_or_artifact": "tree f1f119aed7199e5278bc76dc1623641ae52ec3de",
+      "tests": {
+        "local_combined_regression": "23 suites / 1517 checks passed",
+        "source_contract": "19 checks passed",
+        "governance": "15 checks passed"
+      },
       "evidence_path": "Docs/Production/Evidence/T08/",
       "critic_requirements": [
         "C2",
@@ -329,9 +333,10 @@
         "C6"
       ],
       "critic_status": {},
-      "integration_status": "not integrated",
+      "integration_status": "integration candidate published; fresh lifecycle-valid evidence commit pending",
       "known_blockers": [],
-      "next_action": "Build isolated candidate only after ASSIGNED."
+      "next_action": "Publish a fresh lifecycle-valid integration evidence commit, then run exact-source evidence and independent C2/C3/C4/C6 review.",
+      "status_updated_at": "2026-09-15T18:09:00.061131+00:00"
     }
   ],
   "notes": [

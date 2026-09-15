@@ -1,11 +1,26 @@
 {
   "schema_version": 1,
   "task_id": "T08",
-  "candidate_commit": null,
-  "integrated_commit": null,
+  "candidate_commit": "258f2c9a53f8b5460fb54a7f298fbb887c5aba1e",
+  "integrated_commit": "pending fresh lifecycle-valid evidence commit",
   "acceptance_threshold": ">9.0 unrounded in every mandatory dimension",
-  "cycle": "pre-build",
-  "defects": [],
+  "cycle": "integration-ready-recovery",
+  "defects": [
+    {
+      "id": "T08-D001",
+      "severity": "mandatory-governance",
+      "summary": "Candidate workflow passed the assignment checkpoint as the runtime base instead of the registry's approved T07 base.",
+      "status": "RESOLVED",
+      "resolution": "Pin --base to 7744b9f6a063da3385ce10992ef732ba2c669890 and use c4e4e73108406d951c1635df20e10ac9208526af only as governance integration head."
+    },
+    {
+      "id": "T08-D002",
+      "severity": "mandatory-governance",
+      "summary": "First integration commit ran while the workstream still reported ASSIGNED.",
+      "status": "RESOLVED",
+      "resolution": "Advance registry and dependency state to INTEGRATION_READY and publish a fresh integration commit with expanded source-to-actor and actor-to-destination shipping assertions."
+    }
+  ],
   "unresolved_mandatory_count": 0,
   "critic_scores": {},
   "critic_approval_pending": true,

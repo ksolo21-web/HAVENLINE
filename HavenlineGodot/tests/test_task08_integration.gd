@@ -106,6 +106,12 @@ func run() -> void:
 		check("shipping call site routes committed gather source to lead actor", shipping_transfer.accepted_receipts == 1 and shipping_transfer.flights[0].direction == "source_to_actor" and shipping_transfer.flights[0].actor_id == game.sim.lead)
 		game.present_events()
 		check("shipping call site suppresses same-epoch replay", game.transfer_feedback.descriptor().accepted_receipts == 1 and game.transfer_feedback.descriptor().rejected_receipts == 0)
+		game.transfer_feedback._process(Transfer.DURATION_SECONDS)
+		game.sim.elapsed = 11.0
+		game.sim.events = [{"type":"deposit","position":game.sim.point(game.sim.contract.world.storage),"resource":"wood"}]
+		game.present_events()
+		shipping_transfer = game.transfer_feedback.descriptor()
+		check("shipping call site routes committed deposit from lead to storage", shipping_transfer.accepted_receipts == 2 and shipping_transfer.flights[0].direction == "actor_to_destination" and shipping_transfer.flights[0].destination_id == "camp_storage")
 		game.sim.stored.wood = 7
 		game.update_carry()
 		check("shipping stockpile derives from authoritative stored counts", game.storage_stockpile.descriptor().logical_counts.wood == 7)

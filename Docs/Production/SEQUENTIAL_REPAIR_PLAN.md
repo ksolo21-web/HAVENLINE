@@ -34,9 +34,9 @@ integration-owner-controlled production integration.
   `0a30dc0859541626eb6aa9a9bb749abc93dcb355`, integrated at
   `94b3f6c5097356a3857ebd13a77fb1e316eb06ae`; its verified closure is recorded
   in `Docs/Production/T07/verified-completion.json` after 21 suites / 1441
-  checks and strict C2/C3/C4/C6/C11 review. T08 is ASSIGNED on
-  `havenline/T08-visible-inventory` from exact base
-  `7744b9f6a063da3385ce10992ef732ba2c669890`; T09+ remains LOCKED.
+  checks and strict C2/C3/C4/C6/C11 review. T08 is INTEGRATION_READY at
+  isolated source `258f2c9a53f8b5460fb54a7f298fbb887c5aba1e` on
+  `havenline/T08-visible-inventory`; T09+ remains LOCKED.
 
 ## Forward acceptance rule
 
@@ -120,8 +120,9 @@ after each packet and owner are prepared:
   its accepted and integrated sources.
 - T07 deterministic simple-control/context director is complete and APPROVED;
   preserve its accepted and integrated sources.
-- T08 is ASSIGNED to `physical-inventory-builder` with frozen scope and
-  `@reservation:T08`; build only on `havenline/T08-visible-inventory`.
+- T08 is INTEGRATION_READY at isolated source
+  `258f2c9a53f8b5460fb54a7f298fbb887c5aba1e`; exact-source evidence and
+  independent C2/C3/C4/C6 review remain mandatory.
 - T09+ remains LOCKED.
 - QA/integration infrastructure may continue separately.
 
