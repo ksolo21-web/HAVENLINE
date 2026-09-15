@@ -14,11 +14,11 @@ const ASSETS := {
 	"metal": "res://assets/stations_v2/metal_stack.glb",
 	"fuel": "res://assets/stations_v2/fuel_canister.glb",
 }
-const PIECE_SCALE := {"wood": 0.165, "stone": 0.18, "metal": 0.175, "fuel": 0.2}
-const CARRY_BASE_HEIGHT := 0.48
-const CARRY_COLUMN_SPACING := 0.1
-const CARRY_KIND_SPACING := 0.34
-const CARRY_TIER_HEIGHT := 0.16
+const PIECE_SCALE := {"wood": 0.22, "stone": 0.22, "metal": 0.22, "fuel": 0.24}
+const CARRY_BASE_HEIGHT := 0.28
+const CARRY_COLUMN_SPACING := 0.18
+const CARRY_COLUMNS := 3
+const CARRY_TIER_HEIGHT := 0.2
 
 var loader: Callable # Compatibility fallback only; authored T05 assets are preferred.
 var grounded := false
@@ -42,6 +42,9 @@ static func contract() -> Dictionary:
 	}
 
 static func valid_inventory(inventory: Dictionary) -> bool:
+	for key in inventory:
+		if not (key is String or key is StringName) or String(key) not in KINDS:
+			return false
 	for kind in KINDS:
 		var value: Variant = inventory.get(kind, 0)
 		if not (value is int or value is float):
@@ -108,11 +111,14 @@ static func layout_for(inventory: Dictionary, is_grounded := false, budget := VI
 				position = Vector3((kind_index - (nonzero.size() - 1) * 0.5) * 0.82 + (column - 1.5) * 0.13,
 					row * 0.12, (column % 2) * 0.12)
 			else:
-				# A raised, narrow rack keeps every authored piece visibly attached to
-				# the actor instead of reading as loose ground clutter. Four columns
-				# preserve the exact-small-load contract; rows become visible tiers.
-				position = Vector3((kind_index - (nonzero.size() - 1) * 0.5) * CARRY_KIND_SPACING + (column - 1.5) * CARRY_COLUMN_SPACING,
-					CARRY_BASE_HEIGHT + row * CARRY_TIER_HEIGHT, (column % 2) * 0.085)
+				# Build one compact carrier-bound tower across resource kinds. Global
+				# slot tiers remain visibly vertical even for a small mixed load, while
+				# the authored pieces and exact represented counts remain unchanged.
+				var carrier_slot := layout.size()
+				var carrier_column := carrier_slot % CARRY_COLUMNS
+				var carrier_tier := carrier_slot / CARRY_COLUMNS
+				position = Vector3((carrier_column - (CARRY_COLUMNS - 1) * 0.5) * CARRY_COLUMN_SPACING,
+					CARRY_BASE_HEIGHT + carrier_tier * CARRY_TIER_HEIGHT, (carrier_column % 2) * 0.07)
 			layout.append({
 				"kind": kind,
 				"logical_count": count,

@@ -52,6 +52,7 @@ func run() -> void:
 	check("fractional inventory fails closed", not Carry.valid_inventory({"wood": 1.5}))
 	check("nonfinite inventory fails closed", not Carry.valid_inventory({"wood": INF}))
 	check("non-numeric inventory fails closed", not Carry.valid_inventory({"wood": "7"}))
+	check("unknown inventory key fails closed", not Carry.valid_inventory({"wood": 1, "fish": 1}))
 	check("missing kinds normalize to zero", Carry.normalized_counts({"wood": 2}) == {"wood": 2, "stone": 0, "metal": 0, "fuel": 0})
 
 	var empty := Carry.layout_for({})
@@ -59,7 +60,7 @@ func run() -> void:
 	var exact := Carry.layout_for({"wood": 2, "stone": 1, "metal": 1, "fuel": 0})
 	check("small load shows one authored piece per unit", exact.size() == 4 and represented(exact) == 4)
 	check("small mixed load preserves deterministic kind order", exact.map(func(row): return row.kind) == ["wood", "wood", "stone", "metal"])
-	check("actor load is raised into a readable attached rack", exact.all(func(row): return row.position.y >= Carry.CARRY_BASE_HEIGHT - 0.001 and absf(row.position.x) <= 0.8), exact)
+	check("actor load is a narrow vertical attached tower", exact.all(func(row): return row.position.y >= Carry.CARRY_BASE_HEIGHT - 0.001 and absf(row.position.x) <= Carry.CARRY_COLUMN_SPACING + 0.001) and exact[3].position.y > exact[0].position.y, exact)
 	var huge_counts := {"wood": 1000000000000, "stone": 2000000000000, "metal": 3000000000000, "fuel": 4000000000000}
 	var huge := Carry.layout_for(huge_counts)
 	check("huge logical load stays inside physical instance budget", huge.size() == Carry.VISIBLE_BUDGET)
@@ -83,6 +84,7 @@ func run() -> void:
 	var rebuilds := carry.rebuild_count
 	check("unchanged counts do not rebuild presentation", carry.update_inventory(live_counts) and carry.rebuild_count == rebuilds)
 	check("invalid update is transactional", not carry.update_inventory({"wood": -1}) and carry.descriptor() == first_descriptor)
+	check("unknown resource update is transactional", not carry.update_inventory({"wood": 1, "fish": 1}) and carry.descriptor() == first_descriptor)
 	carry.update_inventory(huge_counts)
 	check("runtime huge count remains exact while instances stay bounded", carry.descriptor().logical_total == 10000000000000 and carry.descriptor().visible_instances == Carry.VISIBLE_BUDGET)
 
@@ -97,7 +99,7 @@ func run() -> void:
 	root.add_child(transfer)
 	var transfer_contract := Transfer.contract()
 	check("transfer authority and two directions are exact", transfer_contract.authority_id == "T08-transfer-feedback-v1" and transfer_contract.directions == ["source_to_actor", "actor_to_destination"])
-	check("transfer presentation exposes readable duration scale and arc", transfer_contract.duration_seconds >= 0.7 and transfer_contract.flight_scale_multiplier >= 1.7 and transfer_contract.arc_height >= 1.0)
+	check("transfer presentation exposes readable duration scale arc and trails", transfer_contract.duration_seconds >= 0.7 and transfer_contract.flight_scale_multiplier >= 2.2 and transfer_contract.arc_height >= 1.1 and transfer_contract.trail_samples >= 3 and transfer_contract.trail_draw_calls <= 2)
 	check("transfer presentation cannot mutate inventory", transfer_contract.simulation_authoritative and not transfer_contract.mutates_inventory)
 	check("unknown resource transfer fails closed", not transfer.transfer("fish", Vector3.ZERO, Vector3.ONE, "bad-kind"))
 	check("zero-length transfer fails closed", not transfer.transfer("wood", Vector3.ZERO, Vector3.ZERO, "bad-route"))
@@ -107,6 +109,7 @@ func run() -> void:
 	check("committed actor-to-destination receipt starts", transfer.transfer("stone", Vector3(1, 1, 1), Vector3(2, 0, 2), "deposit:2", "actor_to_destination", 1, "furnace"))
 	var active := transfer.descriptor()
 	check("active flights retain direction actor and destination", active.active_flights == 2 and active.flights[0].direction == "source_to_actor" and active.flights[1].destination_id == "furnace")
+	check("direction trails are active and draw-call bounded", transfer.gather_trail.multimesh.visible_instance_count == Transfer.TRAIL_SAMPLES and transfer.destination_trail.multimesh.visible_instance_count == Transfer.TRAIL_SAMPLES)
 	transfer._process(Transfer.DURATION_SECONDS)
 	var completed := transfer.descriptor()
 	check("completed transfers return to pools", completed.active_flights == 0 and completed.completed_receipts == 2 and transfer.pools.wood.size() == 1 and transfer.pools.stone.size() == 1)

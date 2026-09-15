@@ -50,6 +50,7 @@ def validate(candidate: str) -> dict:
     check("unchanged actor stacks avoid rebuilds", "if next_signature == signature:" in sources["carry"])
     check("authored nodes are pooled", "pools" in sources["carry"] and "pools" in sources["transfer"])
     check("future resources have no generic primitive fallback", not re.search(r"\b(BoxMesh|SphereMesh|CylinderMesh|CSGBox3D)\b", combined))
+    check("unsupported inventory keys fail closed behaviorally", "if not (key is String or key is StringName)" in sources["carry"] and "unknown inventory key fails closed" in tests and "unknown resource update is transactional" in tests)
     check("transfer directions are exact", '["source_to_actor", "actor_to_destination"]' in sources["transfer"])
     check("transfer flights expose readability geometry", "FLIGHT_SCALE_MULTIPLIER :=" in sources["transfer"] and "ARC_HEIGHT :=" in sources["transfer"] and "DURATION_SECONDS := 0.72" in sources["transfer"])
     check("receipt replay is rejected", "if receipts.has(receipt_id):" in sources["transfer"] and "RECEIPT_WINDOW := 256" in sources["transfer"])
