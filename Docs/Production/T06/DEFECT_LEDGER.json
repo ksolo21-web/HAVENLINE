@@ -45,12 +45,12 @@
         "tools/havenline/task06/deformed_surface_audit.py",
         ".github/workflows/havenline-task06-character1-candidate.yml"
       ],
-      "causal_production_change": "Reversed the full supplied gait and all phase-aware lower-limb tuning so planted soles move toward actor-local -Z against +Z controller travel; preserved signed joint drift; added fixed heel/ball/toe IDs sampled at 120 Hz through three translated cycles and four-view repeated-cycle videos. Exact exported-surface measurements recalibrated walk travel to 1.20 m. Each stance is now baked against the immutable rig: foot and toe global orientation flatten to the neutral sole while the foot origin moves exactly opposite the declared controller stride, with smooth cyclic entry and exit. This direct lock permits the required 2.15 m run stride to retain the gameplay cadence bound without skating. The first render verification also exposed an inferred Variant/String ambiguity in the new capture loop, which now uses an explicit String animation identifier.",
+      "causal_production_change": "Reversed the full supplied gait and all phase-aware lower-limb tuning so planted soles move toward actor-local -Z against +Z controller travel; preserved signed joint drift; added fixed heel/ball/toe IDs sampled at 120 Hz through three translated cycles and four-view repeated-cycle videos. Exact exported-surface measurements recalibrated walk travel to 1.20 m. Each stance is now baked against the immutable rig: foot and toe global orientation flatten to the neutral sole while the foot origin moves exactly opposite the declared controller stride, with smooth cyclic entry and exit. This direct lock permits the required 2.15 m run stride to retain the gameplay cadence bound without skating. Exact GLB verification exposed that Godot exports bone transform-track values as absolute local transforms; the bake now writes absolute local rotations and blends positions from the bone rest origin instead of treating them as rest-relative offsets. The first render verification also exposed an inferred Variant/String ambiguity in the new capture loop, which now uses an explicit String animation identifier.",
       "expected_visible_result": "Fixed heel, ball, and toe surface landmarks on both boots remain above the floor and within the accepted horizontal-slip tolerance during stance across at least three controller-translated cycles.",
       "proof_contract": "Export 120 Hz world-space tracks for fixed heel, ball, and toe material vertices on both feet through at least three repeated walk and run cycles with real controller translation, including vertical clearance, penetration, horizontal slip, stance windows, and controller-relative error, then obtain independent C5 re-review.",
       "counters": {
-        "review_round": 4,
-        "same_family_strikes": 4
+        "review_round": 5,
+        "same_family_strikes": 5
       },
       "status": "PRODUCTION_FIX_IMPLEMENTED"
     },

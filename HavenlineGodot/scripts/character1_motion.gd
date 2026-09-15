@@ -363,7 +363,7 @@ static func _stabilize_gait_feet(player: AnimationPlayer, skeleton: Skeleton3D, 
 			_sample_skeleton(player, skeleton, gait_id, time)
 			var parent_global := skeleton.get_bone_global_pose(skeleton.get_bone_parent(foot_index))
 			var desired_local_basis := parent_global.basis.inverse() * neutral_foot_global.basis
-			var desired_pose := (skeleton.get_bone_rest(foot_index).basis.inverse() * desired_local_basis).get_rotation_quaternion().normalized()
+			var desired_pose := desired_local_basis.get_rotation_quaternion().normalized()
 			var original: Quaternion = clip.track_get_key_value(foot_rotation_track, key)
 			clip.track_set_key_value(foot_rotation_track, key, original.slerp(desired_pose, _stance_weight(phase, centre)).normalized())
 		for key in clip.track_get_key_count(toe_rotation_track):
@@ -371,7 +371,7 @@ static func _stabilize_gait_feet(player: AnimationPlayer, skeleton: Skeleton3D, 
 			var phase := time / clip.length
 			_sample_skeleton(player, skeleton, gait_id, time)
 			var desired_local_basis := skeleton.get_bone_global_pose(foot_index).basis.inverse() * neutral_toe_global.basis
-			var desired_pose := (skeleton.get_bone_rest(toe_index).basis.inverse() * desired_local_basis).get_rotation_quaternion().normalized()
+			var desired_pose := desired_local_basis.get_rotation_quaternion().normalized()
 			var original: Quaternion = clip.track_get_key_value(toe_rotation_track, key)
 			clip.track_set_key_value(toe_rotation_track, key, original.slerp(desired_pose, _stance_weight(phase, centre)).normalized())
 		var position_track := _track_for_bone(clip, side + "_Foot", Animation.TYPE_POSITION_3D)
@@ -387,8 +387,7 @@ static func _stabilize_gait_feet(player: AnimationPlayer, skeleton: Skeleton3D, 
 			var desired_global_origin := neutral_foot_global.origin + Vector3(0.0, 0.0, -stride * _cyclic_phase_delta(phase, centre))
 			var desired_local_origin := parent_global.affine_inverse() * desired_global_origin
 			var rest := skeleton.get_bone_rest(foot_index)
-			var desired_pose_position := rest.basis.inverse() * (desired_local_origin - rest.origin)
-			clip.position_track_insert_key(position_track, time, desired_pose_position * _stance_weight(phase, centre))
+			clip.position_track_insert_key(position_track, time, rest.origin.lerp(desired_local_origin, _stance_weight(phase, centre)))
 
 static func _sample_rotation(animation: Animation, path: NodePath, time: float) -> Quaternion:
 	var track := animation.find_track(path, Animation.TYPE_ROTATION_3D)
