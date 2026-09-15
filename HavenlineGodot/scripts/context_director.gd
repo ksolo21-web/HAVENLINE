@@ -49,6 +49,7 @@ const URGENT_KINDS := ["enemy", "rescue", "npc_rescue"]
 var current_identity := ""
 var current_candidate: Dictionary = {}
 var focus_elapsed := 0.0
+var focus_actionable := false
 var action_token := 0
 var switch_count := 0
 var last_descriptor: Dictionary = {}
@@ -143,6 +144,7 @@ static func _blocked(role: String, state: String, reason: String, metrics: Dicti
 	return {
 		"kind": "", "id": "", "position": Vector2.ZERO, "progress": 0.0,
 		"state": state, "reason": reason, "actionable": false,
+		"activation_credit_seconds": 0.0,
 		"role": role, "identity": "", "action_token": 0,
 		"simulation_authoritative": true, "emits_gameplay_event": false,
 		"metrics": metrics,
@@ -256,6 +258,7 @@ func _clear_focus() -> void:
 	current_identity = ""
 	current_candidate = {}
 	focus_elapsed = 0.0
+	focus_actionable = false
 
 func _should_switch(best: Dictionary, current: Dictionary) -> bool:
 	if current.is_empty():
@@ -301,17 +304,27 @@ func advance(dt: float, actor_position: Vector2, facing: Vector2,
 		current_identity = String(best.identity)
 		current_candidate = best.duplicate(true)
 		focus_elapsed = 0.0
+		focus_actionable = false
 		action_token += 1
 		switch_count += 1
 	else:
 		current_candidate = best.duplicate(true)
 	var moving := movement_input.length() > MOVEMENT_CANCEL_THRESHOLD or velocity.length() >= STOP_SPEED
+	var credited_step_seconds := minf(dt, 0.1)
 	if moving:
 		focus_elapsed = 0.0
+		focus_actionable = false
 	else:
-		focus_elapsed += minf(dt, 0.1)
+		focus_elapsed += credited_step_seconds
 	var urgent := String(best.kind) in URGENT_KINDS
 	var actionable := not moving and (urgent or focus_elapsed + 0.000001 >= ACQUIRE_DWELL_SECONDS)
+	# On the single acquiring->active edge, disclose only already-observed
+	# stopped time. The simulation may credit it once when it authoritatively
+	# advances an outcome; the director still emits no gameplay event itself.
+	var activation_credit_seconds := 0.0
+	if actionable and not focus_actionable and not urgent:
+		activation_credit_seconds = maxf(0.0, focus_elapsed - credited_step_seconds)
+	focus_actionable = actionable
 	var state := "blocked_movement" if moving else ("active" if actionable else "acquiring")
 	var reason := "movement_owns_locomotion" if moving else ("urgent_preemption" if urgent and switched else ("focus_stable" if actionable else "acquire_dwell"))
 	last_metrics["switch_count"] = switch_count
@@ -319,6 +332,7 @@ func advance(dt: float, actor_position: Vector2, facing: Vector2,
 		"kind": String(best.kind), "id": String(best.id), "position": Vector2(best.position),
 		"progress": clampf(float(best.get("progress", 0.0)), 0.0, 1.0),
 		"state": state, "reason": reason, "actionable": actionable,
+		"activation_credit_seconds": activation_credit_seconds,
 		"cancelled": moving, "cancel_reason": reason if moving else "",
 		"role": role, "identity": current_identity, "action_token": action_token,
 		"simulation_authoritative": true, "emits_gameplay_event": false,

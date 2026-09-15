@@ -37,6 +37,10 @@ Duplicate canonical identities reject all ambiguous copies.
 - Frozen danger/rescue interrupts can preempt ordinary work immediately.
 - `action_token` changes only when canonical focus identity changes; it is
   presentation metadata and is not persisted.
+- On the single ordinary acquiring-to-active edge, `activation_credit_seconds`
+  discloses the already-observed stopped dwell time. The simulation may consume
+  that value once to preserve established outcome timing; moving time is never
+  credited and the director still emits no impact.
 
 ## Bounded evaluation
 

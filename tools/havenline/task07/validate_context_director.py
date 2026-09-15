@@ -61,6 +61,7 @@ def validate(candidate: str) -> dict:
     check("test covers hysteresis hold and urgent preemption", "minimum hold timing" in tests and "prevents nearby target thrash" in tests and "urgent interrupt bypasses" in tests)
     check("same-band priority cannot bypass anti-thrash", "tiny same-band priority oscillation cannot bypass switch margin" in tests)
     check("test covers movement cancel and reacquire", "movement does not secretly accrue" in tests and "deterministically reacquires" in tests)
+    check("test covers one-shot stopped-time credit", "acquisition time is credited only once" in tests and "activation_credit_seconds" in source)
     check("test covers no duplicate impact contract", "descriptor declares no emitted impact" in tests)
     check("test covers T06 compatibility", "compatible with T06 selector" in tests)
     check("test covers visible population context and fail-closed actors", "visible survivor rescue is a canonical context" in tests and "unpresented survivor cannot become an invisible context" in tests)
