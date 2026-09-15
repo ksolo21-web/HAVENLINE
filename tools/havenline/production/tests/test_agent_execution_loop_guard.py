@@ -7,9 +7,10 @@ ROOT = pathlib.Path(__file__).resolve().parents[4]
 class AgentExecutionLoopGuardTests(unittest.TestCase):
     def test_agents_has_status_fast_path(self):
         agents = (ROOT / "AGENTS.md").read_text()
+        normalized = " ".join(agents.split())
         self.assertIn("Status/continuity fast path", agents)
         self.assertIn("AGENT_EXECUTION_LOOP_GUARD.md", agents)
-        self.assertIn("MUST NOT automatically trigger the full production reading order", agents)
+        self.assertIn("MUST NOT automatically trigger the full production reading order", normalized)
         self.assertIn("Three consecutive retrievals", agents)
 
     def test_guard_has_hard_terminal_conditions(self):
