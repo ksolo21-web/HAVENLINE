@@ -344,8 +344,11 @@ static func _sample_skeleton(player: AnimationPlayer, skeleton: Skeleton3D, clip
 static func _stabilize_gait_feet(player: AnimationPlayer, skeleton: Skeleton3D, clip: Animation, gait_id: String) -> void:
 	# Bake a neutral-global sole orientation and simulation-relative foot origin
 	# during each stance. The controller keeps +Z root authority while the planted
-	# boot moves by the exact opposite amount inside the skeleton.
+	# boot moves by the exact opposite amount inside the skeleton. Bone poses are
+	# authored before Character1's normalization scale, so convert world-metre
+	# controller travel back into skeleton-local units before baking it.
 	var stride := WALK_STRIDE_METERS if gait_id == "walk" else RUN_STRIDE_METERS
+	var skeleton_stride := stride / NORMALIZED_SOURCE_SCALE
 	for side in ["L", "R"]:
 		var foot_index := skeleton.find_bone(side + "_Foot")
 		var toe_index := skeleton.find_bone(side + "_ToeBase")
@@ -384,7 +387,7 @@ static func _stabilize_gait_feet(player: AnimationPlayer, skeleton: Skeleton3D, 
 			var time := clip.length * phase
 			_sample_skeleton(player, skeleton, gait_id, time)
 			var parent_global := skeleton.get_bone_global_pose(skeleton.get_bone_parent(foot_index))
-			var desired_global_origin := neutral_foot_global.origin + Vector3(0.0, 0.0, -stride * _cyclic_phase_delta(phase, centre))
+			var desired_global_origin := neutral_foot_global.origin + Vector3(0.0, 0.0, -skeleton_stride * _cyclic_phase_delta(phase, centre))
 			var desired_local_origin := parent_global.affine_inverse() * desired_global_origin
 			var rest := skeleton.get_bone_rest(foot_index)
 			clip.position_track_insert_key(position_track, time, rest.origin.lerp(desired_local_origin, _stance_weight(phase, centre)))

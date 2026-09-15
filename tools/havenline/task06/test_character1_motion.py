@@ -95,7 +95,7 @@ def main() -> None:
     check("complete source gait is retimed without a neutral reset", "_extract_gait_cycle" in source and "source.length * (1.0 - phase)" in source and "smoothstep(0.80" not in source)
     check("gait support travels opposite positive-Z controller motion", source.count("fposmod(1.0 - clip.track_get_key_time") >= 3)
     check("every source loop receives cyclic pose and velocity matching", all(f"_match_cyclic_seam({clip})" in source for clip in ("idle", "walk", "run")) and "forward_delta.inverse()" in source)
-    check("gait stance locks neutral soles against controller travel", "_stabilize_gait_feet" in source and "neutral_foot_global" in source and "-stride * _cyclic_phase_delta" in source)
+    check("gait stance locks neutral soles against controller travel", "_stabilize_gait_feet" in source and "neutral_foot_global" in source and "skeleton_stride := stride / NORMALIZED_SOURCE_SCALE" in source and "-skeleton_stride * _cyclic_phase_delta" in source)
     check("turns use planted support and free-foot pivot", "_turn_transition" in source and "free_side" in source and "facing_delta_for_turn" in source)
     check("walk and run transitions are distinct", all(name in source for name in ("stop_walk", "stop_run", "walk_to_run", "run_to_walk")))
     check("all contact markers declared", all(marker in source for marker in (
