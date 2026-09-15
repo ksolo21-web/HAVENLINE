@@ -49,10 +49,21 @@ jobs:
           PY
           cat /tmp/resolve.env >> "$GITHUB_ENV"
           cat /tmp/resolve.env
+      - name: Detect empty branch initialization
+        shell: bash
+        run: |
+          if git diff --quiet "$INTEGRATION_HEAD" HEAD; then
+            echo 'NO_CANDIDATE_CHANGES=true' >> "$GITHUB_ENV"
+            echo 'Branch initialization matches the integration checkpoint; no candidate exists yet.'
+          else
+            echo 'NO_CANDIDATE_CHANGES=false' >> "$GITHUB_ENV"
+          fi
       - name: Reject foreign/protected paths and stale candidate base
+        if: env.NO_CANDIDATE_CHANGES != 'true'
         run: |
           python3 tools/havenline/production/workstream.py validate-candidate "$TASK" --base "$BASE" --head HEAD --integration-head "$INTEGRATION_HEAD"
       - name: Calculate mandatory impact regression plan
+        if: env.NO_CANDIDATE_CHANGES != 'true'
         run: |
           mkdir -p Docs/Production/Evidence/CandidateGuard
           python3 tools/havenline/production/change_impact.py --base "$BASE" --head HEAD | tee Docs/Production/Evidence/CandidateGuard/impact.json

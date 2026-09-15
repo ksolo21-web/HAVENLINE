@@ -29,6 +29,19 @@ class IntegrationScopeTests(unittest.TestCase):
         self.assertEqual(report["classification"], "GOVERNANCE_ONLY")
         self.assertIsNone(report["task_id"])
 
+    def test_task_closeout_and_dependent_packet_are_governance(self):
+        files = [
+            "Docs/Production/T06/verified-completion.json",
+            "Docs/Production/T06/DEFECT_LEDGER.json",
+            "Docs/Production/T07/FROZEN_SCOPE.md",
+            "Docs/Production/T07/TASK_PACKET.md",
+            ".github/workflows/havenline-task06-character1-candidate.yml",
+        ]
+        report = evaluate(files, self.registry, self.ownership)
+        self.assertTrue(report["passed"])
+        self.assertEqual(report["classification"], "GOVERNANCE_ONLY")
+        self.assertEqual(report["task_files"], {})
+
     def test_assigned_t04_runtime_cannot_integrate_early(self):
         registry = self.registry_with("T04", "ASSIGNED")
         report = evaluate(["HavenlineGodot/scripts/camera_composition.gd"], registry, self.ownership)

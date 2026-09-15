@@ -10,6 +10,10 @@ from lib import DOCS, any_match, changed_files, expand_alias, load_json
 from workstream import approved_change_requests
 
 INTEGRATION_STATES = {"INTEGRATION_READY", "INTEGRATING", "UNDER_REVIEW", "FIX_REQUIRED", "APPROVED"}
+TASK_ADMIN_PATTERNS = [
+    "Docs/Production/T[0-9][0-9]/**",
+    ".github/workflows/havenline-task[0-9][0-9]-*.yml",
+]
 
 
 def evaluate(files: list[str], registry: dict, ownership: dict, authorized: dict[str, set[str]] | None = None) -> dict:
@@ -24,6 +28,14 @@ def evaluate(files: list[str], registry: dict, ownership: dict, authorized: dict
 
     for path in files:
         if any_match(path, qa_patterns):
+            governance_files.append(path)
+            continue
+        # Task packets, ledgers, completion records and task CI are lifecycle
+        # governance. They may close one task and prepare its dependent in the
+        # same checkpoint; only HavenlineGodot production paths identify a
+        # runtime integration owner here. Isolated candidate scope remains
+        # independently enforced by workstream.py and the candidate guard.
+        if any_match(path, TASK_ADMIN_PATTERNS):
             governance_files.append(path)
             continue
         if any_match(path, integration_only):
