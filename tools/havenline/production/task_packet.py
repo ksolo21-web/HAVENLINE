@@ -1,15 +1,20 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import datetime, sys
+import datetime, pathlib, sys
 from lib import DOCS, ROOT, load_json, expand_alias, sha256_file
 
 RESOURCE_REGISTRY = DOCS / "RESOURCE_ACTION_REGISTRY.json"
 ACTOR_MATRIX = DOCS / "ACTOR_CAPABILITY_MATRIX.json"
 ANIMATION_MATRIX = DOCS / "ANIMATION_ACTION_MATRIX.json"
 
+def _contract_file(rel):
+    if not rel:return None
+    p=ROOT/rel
+    return p if p.exists() else None
+
 def main():
     if len(sys.argv)!=2:raise SystemExit("usage: task_packet.py T04")
-    task_id=sys.argv[1].upper();graph=load_json(DOCS/"DEPENDENCY_GRAPH.json");registry=load_json(DOCS/"WORKSTREAM_REGISTRY.json");ownership=load_json(DOCS/"PATH_OWNERSHIP.json");critics=load_json(DOCS/"CRITIC_MATRIX.json");execution=load_json(DOCS/"CRITIC_EXECUTION.json")
+    task_id=sys.argv[1].upper();graph=load_json(DOCS/"DEPENDENCY_GRAPH.json");registry=load_json(DOCS/"WORKSTREAM_REGISTRY.json");ownership=load_json(DOCS/"PATH_OWNERSHIP.json");critics=load_json(DOCS/"CRITIC_MATRIX.json");execution=load_json(DOCS/"CRITIC_EXECUTION.json");task_gates=load_json(DOCS/"task-gates.json")
     resources=load_json(RESOURCE_REGISTRY);actors=load_json(ACTOR_MATRIX);animations=load_json(ANIMATION_MATRIX)
     if task_id not in graph["tasks"]:raise SystemExit(f"unknown task {task_id}")
     task=graph["tasks"][task_id];ws=next((w for w in registry["workstreams"] if w["task_id"]==task_id),None)
@@ -62,10 +67,26 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
         text+=f"- Actor capability keys this task must prove: {', '.join(ra) or 'none predeclared'}\n"
         text+=f"- Animation profiles this task must prove: {', '.join(rp) or 'none predeclared'}\n"
         text+="- Run `python3 tools/havenline/production/resource_actor_contract.py --task %s --manifest <candidate-manifest> --output <proof.json>` before closure.\n" % task_id
-        if conditional_c5:
-            text+="- C5 becomes mandatory if this candidate introduces any new actor action or animation profile (`animation_delta=true`).\n"
+        if conditional_c5:text+="- C5 becomes mandatory if this candidate introduces any new actor action or animation profile (`animation_delta=true`).\n"
     else:
         text+="\n## Resource / tool / actor / animation contract\n- N/A for this task under the current forward policy. Do not expand frozen scope merely because the contract exists.\n"
+
+    text+="\n## Registered forward contracts\n"
+    matched=[]
+    for contract_id,row in task_gates.get("forward_contracts",{}).items():
+        if task_id not in row.get("applicable_tasks",[]):continue
+        matched.append(contract_id)
+        text+=f"- **{contract_id}**: REQUIRED for {task_id}.\n"
+        for field in ("standard","policy"):
+            rel=row.get(field);fp=_contract_file(rel)
+            if rel:text+=f"  - {field}: `{rel}`"+(f"; SHA256 `{sha256_file(fp)}`" if fp else "; MISSING")+"\n"
+        policy_path=_contract_file(row.get("policy"))
+        if policy_path:
+            cfg=load_json(policy_path)
+            flags=cfg.get("task_policy",{}).get("required_proof_flags_by_task",{}).get(task_id,[])
+            if flags:text+=f"  - required proof flags: {', '.join(flags)}\n"
+    if not matched:text+="- none registered for this task.\n"
+
     text+="""
 
 ## Score rule
