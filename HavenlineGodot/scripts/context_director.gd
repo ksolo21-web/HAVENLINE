@@ -8,7 +8,7 @@ const MAX_INPUT_CANDIDATES := 128
 const MAX_ELIGIBLE_CANDIDATES := 96
 const ACQUIRE_DWELL_SECONDS := 0.12
 const MINIMUM_HOLD_SECONDS := 0.18
-const MOVEMENT_CANCEL_THRESHOLD := 0.10
+const MOVEMENT_CANCEL_THRESHOLD := 0.0
 const STOP_SPEED := 0.20
 const RELEASE_MARGIN := 0.55
 const SWITCH_MARGIN := 0.16
@@ -112,7 +112,9 @@ static func _ranked(candidate: Dictionary, actor_position: Vector2, facing: Vect
 	var facing_score := clampf(normalized_facing.dot(direction), -1.0, 1.0)
 	var relevance := clampf(float(candidate.get("target_relevance", 0.0)), -1.0, 1.0)
 	var declared := clampf(float(candidate.priority), -100.0, 100.0)
-	var row := candidate.duplicate(true)
+	# Candidate fields are scalar values or Vector2 values, so a shallow copy is
+	# sufficient and avoids recursively duplicating arbitrary producer metadata.
+	var row := candidate.duplicate(false)
 	row["identity"] = _identity(candidate)
 	row["distance"] = distance
 	row["priority_band"] = int(KIND_PRIORITY[String(candidate.kind)])
@@ -122,7 +124,7 @@ static func _ranked(candidate: Dictionary, actor_position: Vector2, facing: Vect
 	row["facing_score"] = facing_score
 	# rank_score is a trace value with the same precedence as _better().
 	row["rank_score"] = float(row.priority_band) * 100000000.0 + declared * 1000000.0 + distance_score * 10000.0 + relevance * 100.0 + facing_score
-	row["switch_score"] = distance_score * 2.0 + relevance * 0.8 + facing_score * 0.2
+	row["switch_score"] = declared * 0.01 + distance_score * 2.0 + relevance * 0.8 + facing_score * 0.2
 	return row
 
 static func _better(left: Dictionary, right: Dictionary) -> bool:
@@ -131,7 +133,9 @@ static func _better(left: Dictionary, right: Dictionary) -> bool:
 	for key in ["priority_band", "declared_priority", "distance_score", "target_relevance", "facing_score"]:
 		var a := float(left[key])
 		var b := float(right[key])
-		if not is_equal_approx(a, b):
+		# Exact finite comparison makes this a strict total ordering suitable for
+		# adversarial near-equal inputs. Approximate equality is not transitive.
+		if a != b:
 			return a > b
 	return String(left.identity) < String(right.identity)
 
@@ -145,9 +149,19 @@ static func _blocked(role: String, state: String, reason: String, metrics: Dicti
 	}
 
 static func _sanitize(candidates: Array, actor_position: Vector2, facing: Vector2,
-		capabilities: Array) -> Dictionary:
+		capabilities: Array, retained_identity := "") -> Dictionary:
 	var counts := {}
-	var inspected := mini(candidates.size(), MAX_INPUT_CANDIDATES)
+	if candidates.size() > MAX_INPUT_CANDIDATES:
+		return {
+			"best": {}, "retained": {},
+			"metrics": {
+				"input_count": candidates.size(), "inspected_count": 0,
+				"eligible_input_count": 0, "eligible_count": 0,
+				"invalid_count": 0, "duplicate_identities": [],
+				"input_overflow": true, "eligible_capped": false,
+			}
+		}
+	var inspected := candidates.size()
 	var invalid := 0
 	for index in inspected:
 		var candidate: Variant = candidates[index]
@@ -156,15 +170,15 @@ static func _sanitize(candidates: Array, actor_position: Vector2, facing: Vector
 			continue
 		var identity := _identity(candidate)
 		counts[identity] = int(counts.get(identity, 0)) + 1
-	var valid: Array = []
+	var best: Dictionary = {}
+	var retained: Dictionary = {}
+	var eligible_input_count := 0
 	var duplicates: Array = []
 	for identity in counts:
 		if counts[identity] > 1:
 			duplicates.append(identity)
 	duplicates.sort()
 	for index in inspected:
-		if valid.size() >= MAX_ELIGIBLE_CANDIDATES:
-			break
 		var candidate: Variant = candidates[index]
 		if not _valid_candidate(candidate):
 			continue
@@ -177,18 +191,28 @@ static func _sanitize(candidates: Array, actor_position: Vector2, facing: Vector
 		if expected.is_empty() or expected != String(candidate.capability):
 			continue
 		var ranked := _ranked(candidate, actor_position, facing)
-		if ranked.distance <= float(ranked.radius) + RELEASE_MARGIN:
-			valid.append(ranked)
+		if identity == retained_identity and float(ranked.distance) <= float(ranked.radius) + RELEASE_MARGIN:
+			retained = ranked
+		# Release-only rows cannot consume the acquire population. All in-range
+		# rows are inspected so the winning result is independent of producer
+		# order; only the winner and an optional retained focus are materialized.
+		if float(ranked.distance) <= float(ranked.radius):
+			eligible_input_count += 1
+			if _better(ranked, best):
+				best = ranked
 	return {
-		"valid": valid,
+		"best": best,
+		"retained": retained,
 		"metrics": {
 			"input_count": candidates.size(),
 			"inspected_count": inspected,
-			"eligible_count": valid.size(),
+			"eligible_input_count": eligible_input_count,
+			"eligible_count": mini(eligible_input_count, MAX_ELIGIBLE_CANDIDATES),
+			"materialized_rank_count": int(not best.is_empty()) + int(not retained.is_empty() and retained_identity != String(best.get("identity", ""))),
 			"invalid_count": invalid,
 			"duplicate_identities": duplicates,
-			"input_capped": candidates.size() > MAX_INPUT_CANDIDATES,
-			"eligible_capped": valid.size() >= MAX_ELIGIBLE_CANDIDATES,
+			"input_overflow": false,
+			"eligible_capped": eligible_input_count > MAX_ELIGIBLE_CANDIDATES,
 		}
 	}
 
@@ -201,10 +225,9 @@ static func preview(actor_position: Vector2, facing: Vector2, role: String,
 	if not actor_ready:
 		return _blocked(role, "blocked_actor", "actor_not_ready")
 	var sanitized := _sanitize(candidates, actor_position, facing, capabilities_for_role(role))
-	var best: Dictionary = {}
-	for option in sanitized.valid:
-		if float(option.distance) <= float(option.radius) and _better(option, best):
-			best = option
+	if bool(sanitized.metrics.input_overflow):
+		return _blocked(role, "blocked_input", "candidate_input_overflow", sanitized.metrics)
+	var best: Dictionary = sanitized.best
 	if best.is_empty():
 		return _blocked(role, "idle", "no_eligible_context", sanitized.metrics)
 	return {
@@ -223,23 +246,22 @@ static func preview(actor_position: Vector2, facing: Vector2, role: String,
 	}
 
 func reset() -> void:
-	current_identity = ""
-	current_candidate = {}
-	focus_elapsed = 0.0
+	_clear_focus()
 	action_token = 0
 	switch_count = 0
 	last_descriptor = {}
 	last_metrics = {}
+
+func _clear_focus() -> void:
+	current_identity = ""
+	current_candidate = {}
+	focus_elapsed = 0.0
 
 func _should_switch(best: Dictionary, current: Dictionary) -> bool:
 	if current.is_empty():
 		return true
 	if int(best.priority_band) != int(current.priority_band):
 		return int(best.priority_band) > int(current.priority_band)
-	if not is_equal_approx(float(best.declared_priority), float(current.declared_priority)):
-		return float(best.declared_priority) > float(current.declared_priority)
-	if String(best.kind) in URGENT_KINDS and String(current.kind) not in URGENT_KINDS:
-		return true
 	if focus_elapsed < MINIMUM_HOLD_SECONDS:
 		return false
 	return float(best.switch_score) > float(current.switch_score) + SWITCH_MARGIN
@@ -248,33 +270,30 @@ func advance(dt: float, actor_position: Vector2, facing: Vector2,
 		movement_input: Vector2, velocity: Vector2, role: String, candidates: Array,
 		actor_present := true, actor_ready := true) -> Dictionary:
 	if not is_finite(dt) or dt < 0.0 or not actor_position.is_finite() or not facing.is_finite() or not movement_input.is_finite() or not velocity.is_finite():
+		_clear_focus()
 		last_descriptor = _blocked(role, "blocked_input", "non_finite_input")
 		return last_descriptor
 	if not ROLE_CAPABILITIES.has(role):
+		_clear_focus()
 		last_descriptor = _blocked(role, "blocked_role", "unregistered_role")
 		return last_descriptor
 	if not actor_present or not actor_ready:
-		current_identity = ""
-		current_candidate = {}
-		focus_elapsed = 0.0
+		_clear_focus()
 		last_descriptor = _blocked(role, "blocked_actor", "actor_not_presented" if not actor_present else "actor_not_ready")
 		return last_descriptor
-	var sanitized := _sanitize(candidates, actor_position, facing, capabilities_for_role(role))
+	var sanitized := _sanitize(candidates, actor_position, facing, capabilities_for_role(role), current_identity)
+	if bool(sanitized.metrics.input_overflow):
+		_clear_focus()
+		last_descriptor = _blocked(role, "blocked_input", "candidate_input_overflow", sanitized.metrics)
+		return last_descriptor
 	last_metrics = sanitized.metrics.duplicate(true)
 	last_metrics["switch_count"] = switch_count
-	var best: Dictionary = {}
-	var retained: Dictionary = {}
-	for option in sanitized.valid:
-		if String(option.identity) == current_identity and float(option.distance) <= float(option.radius) + RELEASE_MARGIN:
-			retained = option
-		if float(option.distance) <= float(option.radius) and _better(option, best):
-			best = option
+	var best: Dictionary = sanitized.best
+	var retained: Dictionary = sanitized.retained
 	if not retained.is_empty() and (best.is_empty() or not _should_switch(best, retained)):
 		best = retained
 	if best.is_empty():
-		current_identity = ""
-		current_candidate = {}
-		focus_elapsed = 0.0
+		_clear_focus()
 		last_descriptor = _blocked(role, "idle", "no_eligible_context", last_metrics)
 		return last_descriptor
 	var switched := String(best.identity) != current_identity
@@ -300,6 +319,7 @@ func advance(dt: float, actor_position: Vector2, facing: Vector2,
 		"kind": String(best.kind), "id": String(best.id), "position": Vector2(best.position),
 		"progress": clampf(float(best.get("progress", 0.0)), 0.0, 1.0),
 		"state": state, "reason": reason, "actionable": actionable,
+		"cancelled": moving, "cancel_reason": reason if moving else "",
 		"role": role, "identity": current_identity, "action_token": action_token,
 		"simulation_authoritative": true, "emits_gameplay_event": false,
 		"rank": {
@@ -315,17 +335,38 @@ func advance(dt: float, actor_position: Vector2, facing: Vector2,
 func presentation() -> Dictionary:
 	var descriptor := last_descriptor
 	var kind := String(descriptor.get("kind", ""))
+	var state := String(descriptor.get("state", "idle"))
+	var reason := String(descriptor.get("reason", "no_eligible_context"))
 	var label: String = {
 		"gather": "Gathering", "deposit": "Delivering", "build": "Building",
 		"repair": "Repairing", "defense_repair": "Repairing",
 		"rescue": "Rescuing", "npc_rescue": "Welcoming",
 		"enemy": "Defending", "customer_service": "Serving",
 	}.get(kind, "")
+	var blocked := state.begins_with("blocked")
+	var cancelled := bool(descriptor.get("cancelled", false))
+	var status_text := label
+	if cancelled:
+		status_text = (label + " paused — stop moving") if not label.is_empty() else "Action paused — stop moving"
+	elif state == "acquiring":
+		status_text = label + " ready"
+	elif state == "active" and not label.is_empty():
+		status_text = label + " · %d%%" % int(round(clampf(float(descriptor.get("progress", 0.0)), 0.0, 1.0) * 100.0))
+	elif state == "blocked_actor":
+		status_text = "Actor unavailable"
+	elif state == "blocked_role":
+		status_text = "Action unavailable"
+	elif state == "blocked_input":
+		status_text = "Context unavailable"
 	return {
-		"visible": not kind.is_empty(),
+		"visible": not kind.is_empty() or blocked,
 		"label": label,
-		"state": String(descriptor.get("state", "idle")),
-		"reason": String(descriptor.get("reason", "no_eligible_context")),
+		"status_text": status_text,
+		"state": state,
+		"reason": reason,
+		"blocked": blocked,
+		"cancelled": cancelled,
+		"cancel_reason": String(descriptor.get("cancel_reason", "")),
 		"progress": clampf(float(descriptor.get("progress", 0.0)), 0.0, 1.0),
 		"permanent_action_buttons": 0,
 		"movement_control": "one_primary_joystick",

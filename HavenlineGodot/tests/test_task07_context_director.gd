@@ -25,6 +25,19 @@ func option(kind: String, id: String, position: Vector2, capability: String,
 func selected(candidates: Array, role := "player_lead", facing := Vector2.DOWN) -> Dictionary:
 	return Director.preview(Vector2.ZERO, facing, role, candidates)
 
+func process_rss_kib() -> int:
+	var status := FileAccess.open("/proc/self/status", FileAccess.READ)
+	if status == null:
+		return -1
+	while not status.eof_reached():
+		var line := status.get_line()
+		if line.begins_with("VmRSS:"):
+			var fields := line.split(" ", false)
+			status.close()
+			return int(fields[1]) if fields.size() >= 2 else -1
+	status.close()
+	return -1
+
 func _initialize() -> void:
 	call_deferred("run")
 
@@ -157,12 +170,23 @@ func run() -> void:
 			option("gather", "wood1", Vector2(0, 1.04), "gather_with_tools", 0.0, 0.5, 2.0),
 		])
 	check("switch margin prevents nearby target thrash", active.identity == "gather:wood0" and active.action_token == stable_token and director.switch_count == 1)
+	var declared_director := Director.new()
+	var declared_a := option("gather", "declared_a", Vector2(0, 1.0), "gather_with_tools")
+	var declared_b := option("gather", "declared_b", Vector2(0, 1.0), "gather_with_tools")
+	declared_director.advance(0.13, Vector2.ZERO, Vector2.DOWN, Vector2.ZERO, Vector2.ZERO, "player_lead", [declared_a, declared_b])
+	for frame in 120:
+		declared_a.priority = 0.01 if frame % 2 == 0 else 0.0
+		declared_b.priority = 0.0 if frame % 2 == 0 else 0.01
+		declared_director.advance(1.0 / 60.0, Vector2.ZERO, Vector2.DOWN, Vector2.ZERO, Vector2.ZERO, "player_lead", [declared_a, declared_b])
+	check("tiny same-band priority oscillation cannot bypass switch margin", declared_director.switch_count == 1, declared_director.switch_count)
 	var released := director.advance(0.01, Vector2(0, -2.7), Vector2.DOWN, Vector2.ZERO, Vector2.ZERO, "player_lead", work)
 	check("release margin is bounded", released.state == "idle")
 
 	director.reset()
 	var moving := director.advance(0.2, Vector2.ZERO, Vector2.DOWN, Vector2(0, 0.2), Vector2.ZERO, "player_lead", work)
 	check("nonzero movement blocks contextual action", moving.state == "blocked_movement" and not moving.actionable and moving.reason == "movement_owns_locomotion")
+	var cancelled_display := director.presentation()
+	check("movement cancellation is explicit and readable", moving.cancelled and moving.cancel_reason == "movement_owns_locomotion" and cancelled_display.visible and cancelled_display.cancelled and cancelled_display.status_text.contains("stop moving"))
 	var stopped_first := director.advance(0.06, Vector2.ZERO, Vector2.DOWN, Vector2.ZERO, Vector2.ZERO, "player_lead", work)
 	check("movement does not secretly accrue acquire dwell", stopped_first.state == "acquiring")
 	var stopped_second := director.advance(0.07, Vector2.ZERO, Vector2.DOWN, Vector2.ZERO, Vector2.ZERO, "player_lead", work)
@@ -182,24 +206,81 @@ func run() -> void:
 	check("presentation adds no permanent action buttons", display.permanent_action_buttons == 0)
 	check("presentation keeps the one-joystick language", display.movement_control == "one_primary_joystick")
 	director.advance(0.01, Vector2.ZERO, Vector2.DOWN, Vector2.ZERO, Vector2.ZERO, "player_lead", [], false, true)
-	check("actor readiness failure is exposed in presentation", director.presentation().state == "blocked_actor")
+	var blocked_actor_display := director.presentation()
+	check("actor readiness failure is exposed in presentation", blocked_actor_display.state == "blocked_actor" and blocked_actor_display.visible and blocked_actor_display.blocked and blocked_actor_display.status_text == "Actor unavailable")
 
 	var many: Array = []
-	for index in 160:
+	for index in 128:
 		many.append(option("gather", "node%03d" % index, Vector2(0, 0.5), "gather_with_tools"))
 	var capped := selected(many)
-	check("oversized candidate input is capped", capped.metrics.input_count == 160 and capped.metrics.inspected_count == 128 and capped.metrics.input_capped)
-	check("eligible candidate list is capped", capped.metrics.eligible_count == 96 and capped.metrics.eligible_capped)
+	check("maximum candidate input is fully inspected", capped.metrics.input_count == 128 and capped.metrics.inspected_count == 128 and not capped.metrics.input_overflow)
+	check("eligible candidate list is canonically capped", capped.metrics.eligible_input_count == 128 and capped.metrics.eligible_count == 96 and capped.metrics.eligible_capped)
 	check("cap retains deterministic identity ordering", capped.identity == "gather:node000")
+	var release_annulus: Array = []
+	for index in 96:
+		release_annulus.append(option("rescue", "release%03d" % index, Vector2(0, 1.25), "rescue", 0.0, 0.0, 1.0))
+	release_annulus.append(option("gather", "inside", Vector2(0, 0.5), "gather_with_tools", 0.0, 0.0, 1.0))
+	check("release-only rows cannot evict an acquirable context", selected(release_annulus).identity == "gather:inside")
+	var reversed_many := many.duplicate(true)
+	reversed_many.reverse()
+	check("eligible cap is independent of producer order", selected(reversed_many).identity == "gather:node000")
+	var urgent_after_cap := many.duplicate(true)
+	urgent_after_cap[127] = option("rescue", "survivor", Vector2(0, 3.5), "rescue", -100.0, -1.0, 4.0)
+	check("urgent candidate after eligible cap still preempts", selected(urgent_after_cap).identity == "rescue:survivor")
+	var duplicate_at_cap := many.duplicate(true)
+	duplicate_at_cap[127] = option("gather", "node000", Vector2(0, 0.4), "gather_with_tools")
+	var duplicate_at_cap_result := selected(duplicate_at_cap)
+	check("duplicate across full input cap is rejected", duplicate_at_cap_result.identity == "gather:node001" and duplicate_at_cap_result.metrics.duplicate_identities == ["gather:node000"])
+	var overflow := many.duplicate(true)
+	overflow.append(option("enemy", "wolf_overflow", Vector2.ZERO, "attack"))
+	var overflow_result := selected(overflow)
+	check("input overflow fails closed before order can matter", overflow_result.state == "blocked_input" and overflow_result.reason == "candidate_input_overflow" and overflow_result.metrics.inspected_count == 0)
 	var benchmark_iterations := 2000
+	var benchmark_samples: Array[float] = []
 	var benchmark_start := Time.get_ticks_usec()
+	var memory_static_before := int(Performance.get_monitor(Performance.MEMORY_STATIC))
+	var object_count_before := int(Performance.get_monitor(Performance.OBJECT_COUNT))
+	var process_rss_before_kib := process_rss_kib()
 	for iteration in benchmark_iterations:
+		var sample_start := Time.get_ticks_usec()
 		Director.preview(Vector2(float(iteration % 7) * 0.001, 0), Vector2.DOWN, "player_lead", many)
+		benchmark_samples.append(float(Time.get_ticks_usec() - sample_start))
 	var benchmark_elapsed_usec := Time.get_ticks_usec() - benchmark_start
 	var benchmark_usec_per_evaluation := float(benchmark_elapsed_usec) / float(benchmark_iterations)
+	benchmark_samples.sort()
+	var benchmark_p95_usec := benchmark_samples[int(floor(float(benchmark_samples.size() - 1) * 0.95))]
+	var benchmark_max_usec := benchmark_samples[-1]
+	var memory_static_after := int(Performance.get_monitor(Performance.MEMORY_STATIC))
+	var object_count_after := int(Performance.get_monitor(Performance.OBJECT_COUNT))
+	var process_rss_after_kib := process_rss_kib()
+	var memory_static_delta := memory_static_after - memory_static_before
+	var retained_object_delta := object_count_after - object_count_before
+	var process_rss_delta_kib := process_rss_after_kib - process_rss_before_kib if process_rss_before_kib >= 0 and process_rss_after_kib >= 0 else -1
 	check("worst-population selection remains bounded", benchmark_usec_per_evaluation < 2500.0, benchmark_usec_per_evaluation)
+	check("worst-population p95 remains bounded", benchmark_p95_usec < 3500.0, benchmark_p95_usec)
+	check("worst-population single evaluation remains bounded", benchmark_max_usec < 20000.0, benchmark_max_usec)
+	check("benchmark retains no engine objects", retained_object_delta == 0, retained_object_delta)
+	check("benchmark static memory growth remains bounded", memory_static_delta < 8 * 1024 * 1024, memory_static_delta)
+	check("benchmark process RSS growth remains bounded", process_rss_delta_kib < 16 * 1024 if process_rss_delta_kib >= 0 else true, process_rss_delta_kib)
+	var switch_director := Director.new()
+	var switch_frames := 600
+	for frame in switch_frames:
+		var jitter := 0.012 if frame % 2 == 0 else -0.012
+		switch_director.advance(1.0 / 60.0, Vector2(jitter, 0), Vector2.DOWN, Vector2.ZERO, Vector2.ZERO, "player_lead", [
+			option("gather", "stable_a", Vector2(-0.02, 1.0), "gather_with_tools", 0.0, 0.5, 2.0),
+			option("gather", "stable_b", Vector2(0.02, 1.0), "gather_with_tools", 0.0, 0.5, 2.0),
+		])
+	var target_switches := maxi(0, switch_director.switch_count - 1)
+	var switch_frequency_hz := float(target_switches) / (float(switch_frames) / 60.0)
+	check("steady jitter does not thrash contextual focus", target_switches == 0, switch_director.switch_count)
 	var non_finite := director.advance(0.01, Vector2.INF, Vector2.DOWN, Vector2.ZERO, Vector2.ZERO, "player_lead", work)
 	check("non-finite runtime input fails closed", non_finite.state == "blocked_input")
+	var after_invalid := director.advance(0.06, Vector2.ZERO, Vector2.DOWN, Vector2.ZERO, Vector2.ZERO, "player_lead", work)
+	check("valid recovery after invalid input must reacquire", after_invalid.state == "acquiring" and not after_invalid.actionable)
+	var tiny_movement := director.advance(0.2, Vector2.ZERO, Vector2.DOWN, Vector2(0.0001, 0), Vector2.ZERO, "player_lead", work)
+	check("every finite nonzero movement input blocks action", tiny_movement.state == "blocked_movement" and not tiny_movement.actionable)
+	var after_bad_role := director.advance(0.2, Vector2.ZERO, Vector2.DOWN, Vector2.ZERO, Vector2.ZERO, "unregistered", work)
+	check("unregistered role clears current focus", after_bad_role.state == "blocked_role" and director.current_identity.is_empty())
 
 	var sim := Simulation.new()
 	var sim_candidates := Director.build_simulation_candidates(sim)
@@ -233,7 +314,32 @@ func run() -> void:
 		"suite": "task07_context_director", "passed": failures.is_empty(),
 		"checks": checks, "failures": failures,
 		"contract": contract,
-		"performance": {"iterations": benchmark_iterations, "input_candidates": many.size(), "microseconds_per_evaluation": benchmark_usec_per_evaluation, "budget_microseconds": 2500.0},
+		"performance": {
+			"iterations": benchmark_iterations,
+			"input_candidates": many.size(),
+			"microseconds_per_evaluation": benchmark_usec_per_evaluation,
+			"budget_microseconds": 2500.0,
+			"p95_microseconds": benchmark_p95_usec,
+			"p95_budget_microseconds": 3500.0,
+			"maximum_microseconds": benchmark_max_usec,
+			"maximum_budget_microseconds": 20000.0,
+			"switch_frames": switch_frames,
+			"target_switches": target_switches,
+			"switch_frequency_hz": switch_frequency_hz,
+			"switch_frequency_budget_hz": 0.1,
+			"allocation_proxy": "retained Performance.OBJECT_COUNT delta after 2000 evaluations",
+			"retained_object_delta": retained_object_delta,
+			"retained_object_budget": 0,
+			"memory_static_before_bytes": memory_static_before,
+			"memory_static_after_bytes": memory_static_after,
+			"memory_static_delta_bytes": memory_static_delta,
+			"memory_static_delta_budget_bytes": 8 * 1024 * 1024,
+			"process_rss_before_kib": process_rss_before_kib,
+			"process_rss_after_kib": process_rss_after_kib,
+			"process_rss_delta_kib": process_rss_delta_kib,
+			"process_rss_delta_budget_kib": 16 * 1024,
+			"shipping_scene_frame_submission_delta": "required_after_integration",
+		},
 		"selection_trace": {
 			"priority": priority_result, "distance": distance_result,
 			"relevance": relevance_result, "facing": facing_result,

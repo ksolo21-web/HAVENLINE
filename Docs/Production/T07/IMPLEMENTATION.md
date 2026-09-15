@@ -29,7 +29,8 @@ Duplicate canonical identities reject all ambiguous copies.
 
 - Ordinary context requires 0.12 seconds of stopped acquire dwell.
 - Equal-priority ordinary context is held for at least 0.18 seconds.
-- Nonzero movement or residual speed blocks entry and resets acquire dwell.
+- Every finite nonzero movement input, or residual speed at/above 0.20, blocks
+  entry and resets acquire dwell.
 - The current candidate can remain within a bounded 0.55-world-unit release
   margin.
 - Same-band switches require a 0.16 normalized advantage.
@@ -39,10 +40,17 @@ Duplicate canonical identities reject all ambiguous copies.
 
 ## Bounded evaluation
 
-At most 128 input candidates are inspected and at most 96 eligible candidates
-are ranked. Metrics disclose the original population and whether either cap was
-reached. The engine test benchmarks 2,000 worst-population evaluations and the
-deterministic C6 gate rejects an average at or above 2,500 microseconds.
+Inputs above 128 candidates fail closed before evaluation. Within that bound,
+all canonical identities are inspected, duplicate identities are rejected, and
+the deterministic ranking is applied before retaining the best 96 eligible
+candidates. Metrics disclose the original population and cap state. The engine
+test benchmarks 2,000 worst-population evaluations and the deterministic C6
+gate rejects an average at or above 2,500 microseconds, a p95 at or above 3,500
+microseconds, or any sample at or above 20,000 microseconds. It also records a
+ten-second focus-jitter switch rate, retained engine-object delta, static-memory
+delta and Linux process-RSS delta against explicit budgets. Shipping-scene
+frame/submission deltas remain a required integration-owner measurement and
+cannot be satisfied by the isolated component benchmark.
 
 ## Integration-owner call-site request
 

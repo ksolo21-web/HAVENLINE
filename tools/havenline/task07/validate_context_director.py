@@ -38,8 +38,9 @@ def validate(candidate: str) -> dict:
     check("context is ephemeral", '"saved_fields": []' in source and "FileAccess" not in source)
     check("input and eligible caps are explicit", "MAX_INPUT_CANDIDATES := 128" in source and "MAX_ELIGIBLE_CANDIDATES := 96" in source)
     check("acquire hold release and switch controls exist", all(token in source for token in ("ACQUIRE_DWELL_SECONDS", "MINIMUM_HOLD_SECONDS", "RELEASE_MARGIN", "SWITCH_MARGIN")))
-    check("movement blocks and resets acquire dwell", "movement_owns_locomotion" in source and re.search(r"if moving:\s+focus_elapsed = 0\.0", source) is not None)
+    check("every nonzero movement blocks and resets acquire dwell", "MOVEMENT_CANCEL_THRESHOLD := 0.0" in source and "movement_owns_locomotion" in source and re.search(r"if moving:\s+focus_elapsed = 0\.0", source) is not None)
     check("stable identity is final comparator", 'return String(left.identity) < String(right.identity)' in source)
+    check("ranking comparator is strict", "if a != b:" in source and "is_equal_approx(a, b)" not in source)
     ordered = '["priority_band", "declared_priority", "distance_score", "target_relevance", "facing_score"]'
     check("ranking order is frozen", ordered in source)
     check("urgent actions are explicit", 'const URGENT_KINDS := ["enemy", "rescue", "npc_rescue"]' in source)
@@ -55,14 +56,20 @@ def validate(candidate: str) -> dict:
         check(f"{role} capabilities match registry", observed == capabilities, {"expected": capabilities, "observed": observed})
     check("test covers malformed and duplicate input", "malformed candidates fail closed" in tests and "duplicate stable identities are rejected" in tests)
     check("test covers acquire versus release-only radius", "preview cannot acquire inside release-only margin" in tests)
+    check("release-only rows cannot consume acquire cap", "release-only rows cannot evict an acquirable context" in tests)
     check("test covers all ranking dimensions", all(phrase in tests for phrase in ("declared priority", "distance precedes", "target relevance", "facing resolves", "stable identity")))
     check("test covers hysteresis hold and urgent preemption", "minimum hold timing" in tests and "prevents nearby target thrash" in tests and "urgent interrupt bypasses" in tests)
+    check("same-band priority cannot bypass anti-thrash", "tiny same-band priority oscillation cannot bypass switch margin" in tests)
     check("test covers movement cancel and reacquire", "movement does not secretly accrue" in tests and "deterministically reacquires" in tests)
     check("test covers no duplicate impact contract", "descriptor declares no emitted impact" in tests)
     check("test covers T06 compatibility", "compatible with T06 selector" in tests)
     check("test covers visible population context and fail-closed actors", "visible survivor rescue is a canonical context" in tests and "unpresented survivor cannot become an invisible context" in tests)
     check("test covers persistence reconstruction", "context reconstructs deterministically after reload" in tests)
+    check("test covers deterministic caps and overflow", all(phrase in tests for phrase in ("cap is independent of producer order", "urgent candidate after eligible cap", "duplicate across full input cap", "input overflow fails closed")))
+    check("test covers invalid recovery and strict movement", "valid recovery after invalid input must reacquire" in tests and "every finite nonzero movement input blocks action" in tests)
+    check("test covers visible blocked and cancellation feedback", "actor readiness failure is exposed in presentation" in tests and "movement cancellation is explicit and readable" in tests)
     check("test covers population cap performance", "worst-population selection remains bounded" in tests)
+    check("test covers complete isolated C6 metrics", all(phrase in tests for phrase in ("worst-population p95", "retains no engine objects", "process RSS growth", "steady jitter does not thrash")))
 
     return {
         "task": "T07",
