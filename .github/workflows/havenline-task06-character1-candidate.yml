@@ -35,7 +35,7 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y xvfb mesa-vulkan-drivers ffmpeg
-          python3 -m pip install --disable-pip-version-check pillow
+          python3 -m pip install --disable-pip-version-check pillow numpy==2.3.5 scipy==1.17.0
           mkdir -p "$RUNNER_TEMP/engine" task06-evidence/tests task06-evidence/gallery task06-evidence/native4k task06-evidence/reference task06-evidence/matrices task06-evidence/videos/realtime task06-evidence/videos/slow
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
@@ -123,6 +123,7 @@ jobs:
           xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --native-4k --out="$(pwd)/task06-evidence/native4k" > task06-evidence/native4k.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task06-evidence/gallery.log task06-evidence/native4k.log; then exit 1; fi
           python3 tools/havenline/task06/runtime_review_gate.py --glb task06-evidence/gallery/review/Character1-T06-runtime.glb --motion-ledger task06-evidence/gallery/motion-ledger.json --candidate "$GITHUB_SHA" --output task06-evidence/runtime-review-gate.json
+          python3 tools/havenline/task06/deformed_surface_audit.py --glb task06-evidence/gallery/review/Character1-T06-runtime.glb --motion-ledger task06-evidence/gallery/motion-ledger.json --candidate "$GITHUB_SHA" --output task06-evidence/deformed-surface-audit.json
           cp Docs/Production/T05/ReferenceFrames/*.png task06-evidence/reference/
           cp Docs/Production/T05/ReferenceFrames/coverage.json task06-evidence/reference/
 
@@ -156,8 +157,8 @@ jobs:
             ffmpeg -hide_banner -loglevel error -framerate 7.5 -i "$frames/frame-%05d.jpg" -c:v libx264 -preset veryfast -crf 22 -pix_fmt yuv420p -movflags +faststart "task06-evidence/videos/slow/$clip.mp4"
           done
           rm -rf task06-evidence/videos/video-frames
-          test "$(find task06-evidence/videos/realtime -name '*.mp4' | wc -l)" -eq 30
-          test "$(find task06-evidence/videos/slow -name '*.mp4' | wc -l)" -eq 30
+          test "$(find task06-evidence/videos/realtime -name '*.mp4' | wc -l)" -eq 38
+          test "$(find task06-evidence/videos/slow -name '*.mp4' | wc -l)" -eq 38
 
       - name: Run counterbalanced shipping-scene motion benchmark
         run: |
@@ -181,6 +182,7 @@ jobs:
           native=json.loads((root/'native4k/capture.json').read_text())
           benchmark=json.loads((root/'benchmark/benchmark.json').read_text())
           ledger=json.loads((root/'gallery/motion-ledger.json').read_text())
+          surface=json.loads((root/'deformed-surface-audit.json').read_text())
           for manifest in (gallery,native):
               assert manifest['task']=='T06-character1-motion-v1'
               assert manifest['candidate_commit']==os.environ['CANDIDATE']
@@ -208,8 +210,17 @@ jobs:
           assert ledger['skin_joint_count']==66 and len(ledger['skin_joint_inventory'])==66
           assert sum(len(row['joints']) for row in ledger['semantic_parts'])==66
           assert all(row['skin_joints_sampled']==66 and row['all_joint_transforms_finite'] and row['maximum_joint_scale_error']<0.001 and len(row['joint_metrics'])==66 for row in ledger['clips'].values())
+          assert all(ledger['clips'][clip]['loop_seam']['pose_and_velocity_matched'] for clip in ('idle','walk','run'))
+          assert all(ledger['clips'][clip]['loop_seam']['nonzero_motion_through_seam'] for clip in ('walk','run'))
+          assert surface['passed'] is True and surface['sample_rate_hz']==120,surface.get('errors')
+          assert surface['runtime_glb_sha256']==gallery['runtime_review_candidate']['sha256']
+          assert surface['vertex_count']==52898 and surface['triangle_count']==96001 and surface['skin_joint_count']==66
+          assert len(surface['clips'])==24 and all(row['passed'] for row in surface['clips'].values())
+          assert len(surface['gait_sole_landmarks'])==2 and all(row['passed'] and row['cycles']>=3 for row in surface['gait_sole_landmarks'])
           assert ledger['clips']['walk']['maximum_moving_root_plant_drift_m']<0.03,ledger['clips']['walk']
           assert ledger['clips']['run']['maximum_moving_root_plant_drift_m']<0.03,ledger['clips']['run']
+          assert ledger['clips']['walk']['derived_low_contact_stride_median']>0.0,ledger['clips']['walk']
+          assert ledger['clips']['run']['derived_low_contact_stride_median']>0.0,ledger['clips']['run']
           assert all(row['forward_positive_z'] and row['target_error_m']<0.08 for row in ledger['actions'].values()),ledger['actions']
           assert all(row['skeleton_returns_neutral'] and abs(row['external_root_facing_delta_degrees']) in (30,90,180) for row in ledger['turns'].values())
           assert native['native_3840x2160_scale1'] is True and len(native['captures'])==6,len(native['captures'])
@@ -279,8 +290,8 @@ jobs:
           }
           (root/'performance-preflight.json').write_text(json.dumps(performance,indent=2))
           videos=list((root/'videos/realtime').glob('*.mp4'))+list((root/'videos/slow').glob('*.mp4'))
-          assert len(videos)==60
-          provenance={'task':'T06-character1-motion-v1','source':os.environ['CANDIDATE'],'source_gltf_sha256':gallery['source_sha256'],'runtime_review_glb_sha256':gallery['runtime_review_candidate']['sha256'],'actual_images':970,'full_cycle_images':906,'six_view_temporal_images':507,'bone_overlay_images':47,'gameplay_context_images':11,'native3840x2160_scale1_frames':6,'continuous_motion_videos':60,'standalone_clip_videos':48,'runtime_boundary_videos':12,'reference_video_frames':reference,'captures':hashes,'pixel_gate_passed':True,'performance_preflight_passed':False,'manual_quick_look_required_before_critics':True,'critics_executed':False,'task_approved':False,'physical_4k60_verified':False}
+          assert len(videos)==76
+          provenance={'task':'T06-character1-motion-v1','source':os.environ['CANDIDATE'],'source_gltf_sha256':gallery['source_sha256'],'runtime_review_glb_sha256':gallery['runtime_review_candidate']['sha256'],'actual_images':970,'full_cycle_images':906,'six_view_temporal_images':507,'bone_overlay_images':47,'gameplay_context_images':11,'native3840x2160_scale1_frames':6,'continuous_motion_videos':76,'standalone_clip_videos':48,'translated_three_cycle_locomotion_videos':16,'runtime_boundary_videos':12,'reference_video_frames':reference,'captures':hashes,'pixel_gate_passed':True,'performance_preflight_passed':False,'manual_quick_look_required_before_critics':True,'critics_executed':False,'task_approved':False,'physical_4k60_verified':False}
           (root/'provenance.json').write_text(json.dumps(provenance,indent=2))
           print(json.dumps({k:v for k,v in provenance.items() if k not in ('captures','reference_video_frames')},indent=2))
           PY

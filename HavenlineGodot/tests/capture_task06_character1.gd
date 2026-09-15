@@ -318,6 +318,7 @@ func capture_video_review() -> void:
 			"representative_speed":representative_speed, "cadence_scale":cadence_scale,
 			"external_root_facing":Motion.facing_delta_for_turn(clip), "sequence_type":"standalone_clip"
 		})
+	await capture_translated_locomotion_cycles()
 	await capture_runtime_boundary_sequences()
 	var file := FileAccess.open(output.path_join("video-sequences.json"), FileAccess.WRITE)
 	file.store_string(JSON.stringify({
@@ -327,6 +328,48 @@ func capture_video_review() -> void:
 		"source_frames_are_shared_between_encodes":true
 	}, "\t"))
 	file.close()
+
+func capture_translated_locomotion_cycles() -> void:
+	# Three uninterrupted cycles expose the loop seam while the actor follows the
+	# same simulation-owned stride used by the fixed sole-vertex audit. The camera
+	# tracks the actor so the textured ground remains the contact reference.
+	for clip in ["walk", "run"]:
+		var qualified := Motion.LIBRARY + "/" + clip
+		var animation := player.get_animation(qualified)
+		var stride := Motion.WALK_STRIDE_METERS if clip == "walk" else Motion.RUN_STRIDE_METERS
+		var total_seconds := animation.length * 3.0
+		var frame_count := ceili(total_seconds * 30.0) + 1
+		for view in ["front", "rear", "left", "right"]:
+			set_view(view)
+			var initial_actor_position := actor.position
+			var initial_camera_position := camera.position
+			var folder_name := "locomotion_%s_%s_3cycles" % [clip, view]
+			var folder := output.path_join("video-frames/" + folder_name)
+			DirAccess.make_dir_recursive_absolute(folder)
+			player.play(qualified, 0.0)
+			for frame in frame_count:
+				var elapsed := minf(total_seconds, float(frame) / 30.0)
+				var phase := fposmod(elapsed / animation.length, 1.0)
+				var travel := stride * elapsed / animation.length
+				actor.position = initial_actor_position + Vector3(0.0, 0.0, travel)
+				camera.position = initial_camera_position + Vector3(0.0, 0.0, travel)
+				player.seek(animation.length * phase, true)
+				player.speed_scale = 0.0
+				player.advance(0.0)
+				skeleton.force_update_all_bone_transforms()
+				await process_frame
+				await RenderingServer.frame_post_draw
+				var image: Image = get_root().get_texture().get_image()
+				assert(image.save_jpg(folder.path_join("frame-%05d.jpg" % frame), 0.88) == OK)
+			actor.position = initial_actor_position
+			camera.position = initial_camera_position
+			video_manifest.append({
+				"clip":folder_name, "source_clip":clip, "sequence_type":"translated_locomotion_three_cycles",
+				"source_duration_seconds":animation.length, "playback_duration_seconds":total_seconds,
+				"cycles":3, "view":view, "fps":30, "frame_count":frame_count,
+				"controller_stride_m_per_cycle":stride, "controller_axis":"+Z",
+				"simulation_position_authoritative":true
+			})
 
 func capture_runtime_boundary_sequences() -> void:
 	var scenarios := [
@@ -639,6 +682,49 @@ func local_bone_point(bone: String) -> Vector3:
 	var pose := skeleton.get_bone_global_pose(skeleton.find_bone(bone)).origin
 	return actor.to_local(skeleton.to_global(pose))
 
+func loop_seam_metrics(animation: Animation) -> Dictionary:
+	var step := minf(1.0 / 120.0, animation.length * 0.02)
+	var metrics := {
+		"sample_step_seconds":step,
+		"maximum_endpoint_rotation_delta_degrees":0.0,
+		"maximum_endpoint_position_delta_m":0.0,
+		"maximum_velocity_rotation_delta_degrees":0.0,
+		"maximum_velocity_position_delta_m":0.0,
+		"maximum_outgoing_rotation_step_degrees":0.0,
+		"maximum_outgoing_position_step_m":0.0
+	}
+	for track in animation.get_track_count():
+		var kind := animation.track_get_type(track)
+		if kind == Animation.TYPE_ROTATION_3D:
+			var start := animation.rotation_track_interpolate(track, 0.0).normalized()
+			var after := animation.rotation_track_interpolate(track, step).normalized()
+			var before := animation.rotation_track_interpolate(track, animation.length - step).normalized()
+			var finish := animation.rotation_track_interpolate(track, animation.length).normalized()
+			var incoming_delta := before.inverse() * finish
+			var outgoing_delta := start.inverse() * after
+			metrics.maximum_endpoint_rotation_delta_degrees = maxf(metrics.maximum_endpoint_rotation_delta_degrees, rad_to_deg(start.angle_to(finish)))
+			metrics.maximum_velocity_rotation_delta_degrees = maxf(metrics.maximum_velocity_rotation_delta_degrees, rad_to_deg(incoming_delta.angle_to(outgoing_delta)))
+			metrics.maximum_outgoing_rotation_step_degrees = maxf(metrics.maximum_outgoing_rotation_step_degrees, rad_to_deg(start.angle_to(after)))
+		elif kind == Animation.TYPE_POSITION_3D:
+			var start := animation.position_track_interpolate(track, 0.0)
+			var after := animation.position_track_interpolate(track, step)
+			var before := animation.position_track_interpolate(track, animation.length - step)
+			var finish := animation.position_track_interpolate(track, animation.length)
+			metrics.maximum_endpoint_position_delta_m = maxf(metrics.maximum_endpoint_position_delta_m, start.distance_to(finish))
+			metrics.maximum_velocity_position_delta_m = maxf(metrics.maximum_velocity_position_delta_m, ((finish - before) - (after - start)).length())
+			metrics.maximum_outgoing_position_step_m = maxf(metrics.maximum_outgoing_position_step_m, start.distance_to(after))
+	metrics["pose_and_velocity_matched"] = (
+		metrics.maximum_endpoint_rotation_delta_degrees < 0.1
+		and metrics.maximum_endpoint_position_delta_m < 0.0001
+		and metrics.maximum_velocity_rotation_delta_degrees < 0.03
+		and metrics.maximum_velocity_position_delta_m < 0.0001
+	)
+	metrics["nonzero_motion_through_seam"] = (
+		metrics.maximum_outgoing_rotation_step_degrees > 0.05
+		or metrics.maximum_outgoing_position_step_m > 0.0005
+	)
+	return metrics
+
 func write_motion_ledger() -> void:
 	var all_bones: Array[String] = []
 	for bone_index in skeleton.get_bone_count():
@@ -726,6 +812,7 @@ func write_motion_ledger() -> void:
 		for track in animation.get_track_count():
 			row.keys += animation.track_get_key_count(track)
 		if clip in Motion.LOOP_CLIPS:
+			row["loop_seam"] = loop_seam_metrics(animation)
 			var stride := Motion.WALK_STRIDE_METERS if clip == "walk" else (Motion.RUN_STRIDE_METERS if clip == "run" else 0.0)
 			var estimates: Array[float] = []
 			var maximum_plant_drift := 0.0
@@ -744,7 +831,10 @@ func write_motion_ledger() -> void:
 							var run_end := index - 1
 							if run_end - run_start >= 4:
 								var phase_delta: float = samples[run_end][0] - samples[run_start][0]
-								var local_delta: float = absf(samples[run_end][2] - samples[run_start][2])
+								# Actor travel is +Z, so a planted point must move -Z in
+								# actor-local space. Preserve the sign so reversed skating
+								# cannot pass by matching only displacement magnitude.
+								var local_delta: float = samples[run_start][2] - samples[run_end][2]
 								estimates.append(local_delta / maxf(phase_delta, 0.0001))
 								maximum_plant_drift = maxf(maximum_plant_drift, absf(local_delta - stride * phase_delta))
 							run_start = -1

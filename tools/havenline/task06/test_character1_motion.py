@@ -92,8 +92,9 @@ def main() -> None:
     check("required motion vocabulary present", REQUIRED_RUNTIME_CLIPS <= runtime_clips, sorted(REQUIRED_RUNTIME_CLIPS - runtime_clips))
     check("feet and toes explicitly tuned", 'for side in ["L", "R"]' in source and 'side + "_Foot"' in source and 'side + "_ToeBase"' in source)
     check("knees receive bounded phase-aware correction", "Phase-aware hip/calf shaping" in source and 'side + "_Thigh"' in source and 'side + "_Calf"' in source)
-    check("source double cycle is reduced to one readable gait", "_extract_gait_cycle" in source and "phase * 0.5" in source)
-    check("every source loop receives 120 Hz seam closure", "_close_loop(idle)" in source and "_close_loop(clip)" in source and "1.0 / 120.0" in source)
+    check("complete source gait is retimed without a neutral reset", "_extract_gait_cycle" in source and "source.length * (1.0 - phase)" in source and "smoothstep(0.80" not in source)
+    check("gait support travels opposite positive-Z controller motion", source.count("fposmod(1.0 - clip.track_get_key_time") >= 3)
+    check("every source loop receives cyclic pose and velocity matching", "_match_cyclic_seam(idle)" in source and "_match_cyclic_seam(clip)" in source and "forward_delta.inverse()" in source)
     check("turns use planted support and free-foot pivot", "_turn_transition" in source and "free_side" in source and "facing_delta_for_turn" in source)
     check("walk and run transitions are distinct", all(name in source for name in ("stop_walk", "stop_run", "walk_to_run", "run_to_walk")))
     check("all contact markers declared", all(marker in source for marker in (

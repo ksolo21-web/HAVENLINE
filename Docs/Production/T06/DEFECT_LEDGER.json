@@ -1,7 +1,82 @@
 {
   "schema_version": 1,
   "task_id": "T06",
-  "candidate_commit": null,
+  "candidate_commit": "aa456c8fdf8147be357af2f25154f1d239073f29",
   "acceptance_threshold": ">9.0 unrounded in every mandatory dimension",
-  "defects": []
+  "defects": [
+    {
+      "id": "T06-D01",
+      "source_critic": "C5",
+      "source_review": "/workspace/scratch/9aa9fdfa8644/t06-review/critic/c5-motion-review.json",
+      "visible_symptom": "Walk and run visibly pause on a duplicated neutral pose at every loop seam, interrupting cadence under continuous simulation-owned travel.",
+      "triage": [
+        "PRODUCTION_FIX"
+      ],
+      "affected_production_object": "T06 walk/run animation loops",
+      "probable_root_cause": "_extract_gait_cycle blends the last 20 percent of each shortened take back to the first pose, then _close_loop duplicates that pose at the first, 1/120-second, penultimate, and terminal samples. This forces zero seam velocity instead of preserving cyclic pose and velocity.",
+      "implicated_production_files": [
+        "HavenlineGodot/scripts/character1_motion.gd",
+        "HavenlineGodot/tests/test_task06_character1.gd"
+      ],
+      "causal_production_change": "Retimed the complete supplied gait take, removed the last-20-percent neutral blend and duplicate seam holds, and matched the terminal pose plus incoming/outgoing quaternion and position deltas without zeroing motion.",
+      "expected_visible_result": "Walk and run cross every repeated-loop seam with continuous nonzero limb motion and no cadence hitch or neutral reset.",
+      "proof_contract": "Fresh exact-candidate real-time and quarter-speed captures of at least three uninterrupted walk and run cycles from front, rear, left, and right, plus a 120 Hz pose-and-velocity seam audit and independent C5 re-review.",
+      "counters": {
+        "review_round": 1,
+        "same_family_strikes": 1
+      },
+      "status": "PRODUCTION_FIX_IMPLEMENTED"
+    },
+    {
+      "id": "T06-D02",
+      "source_critic": "C5",
+      "source_review": "/workspace/scratch/9aa9fdfa8644/t06-review/critic/c5-motion-review.json",
+      "visible_symptom": "Walk/run foot planting and skating remain unverified because existing measurements follow foot-joint origins rather than fixed heel, ball, and toe surface landmarks under translating repeated playback.",
+      "triage": [
+        "PRODUCTION_FIX",
+        "EVIDENCE_FIX",
+        "TEST_FIX"
+      ],
+      "affected_production_object": "T06 walk/run foot mechanics",
+      "probable_root_cause": "The motion ledger sampled L_Foot and R_Foot bone origins, discarded displacement sign, and captured only one in-place cycle. The fixed-vertex baseline audit then proved the gait was phased in the same +Z direction as controller travel instead of opposing it during support, so the magnitude-only joint metric hid real skating.",
+      "implicated_production_files": [
+        "HavenlineGodot/scripts/character1_motion.gd",
+        "HavenlineGodot/tests/capture_task06_character1.gd",
+        "tools/havenline/task06/deformed_surface_audit.py",
+        ".github/workflows/havenline-task06-character1-candidate.yml"
+      ],
+      "causal_production_change": "Reversed the full supplied gait and all phase-aware lower-limb tuning so planted soles move toward actor-local -Z against +Z controller travel; calibrated the walk stride to fixed sole motion; preserved signed joint drift; added fixed heel/ball/toe IDs sampled at 120 Hz through three translated cycles and four-view repeated-cycle videos.",
+      "expected_visible_result": "Fixed heel, ball, and toe surface landmarks on both boots remain above the floor and within the accepted horizontal-slip tolerance during stance across at least three controller-translated cycles.",
+      "proof_contract": "Export 120 Hz world-space tracks for fixed heel, ball, and toe material vertices on both feet through at least three repeated walk and run cycles with real controller translation, including vertical clearance, penetration, horizontal slip, stance windows, and controller-relative error, then obtain independent C5 re-review.",
+      "counters": {
+        "review_round": 1,
+        "same_family_strikes": 1
+      },
+      "status": "PRODUCTION_FIX_IMPLEMENTED"
+    },
+    {
+      "id": "T06-D03",
+      "source_critic": "C2",
+      "source_review": "/workspace/scratch/9aa9fdfa8644/t06-review/critic/c2-integrity-review.json",
+      "visible_symptom": "No visible deformation defect was confirmed, but all 384 semantic-part-by-clip clearance checks remain unverified because the evidence does not scan the deformed textured surface at 120 Hz.",
+      "triage": [
+        "EVIDENCE_FIX",
+        "TEST_FIX"
+      ],
+      "affected_production_object": "T06 whole-rig deformation and clearance evidence",
+      "probable_root_cause": "The current ledger samples skeleton joints and exports selected textured and bone-overlay frames, but has no deterministic deformed-vertex evaluator for floor penetration, triangle collapse/inversion, or non-adjacent surface clearance across every clip sample.",
+      "implicated_production_files": [
+        "tools/havenline/task06/deformed_surface_audit.py",
+        ".github/workflows/havenline-task06-character1-candidate.yml"
+      ],
+      "causal_production_change": "Added a task-owned exact-GLB CPU skinning evaluator that samples every vertex and triangle at 120 Hz, records neutral topological/contact exclusions, detects new non-adjacent triangle intersections with exact witnesses, checks finite/floor/non-collapse metrics per semantic part and clip, and runs as a fail-closed candidate-workflow gate.",
+      "expected_visible_result": "Every semantic region remains finite, non-collapsed, non-inverted, above the floor where applicable, and clear of non-adjacent surface regions through every 120 Hz clip sample, with any threshold breach tied to an exact clip, time, part, and vertex/triangle witness.",
+      "proof_contract": "Run a fail-closed 120 Hz CPU skinning audit over the exact runtime-review GLB for all 66 joints, all deformed vertices, all triangles, all 16 semantic parts, and all 24 clips; retain per-part/per-clip minima and exact breach witnesses; combine with existing textured multi-angle evidence and obtain independent C2 re-review.",
+      "counters": {
+        "review_round": 1,
+        "same_family_strikes": 1
+      },
+      "status": "READY_FOR_VERIFICATION"
+    }
+  ]
 }

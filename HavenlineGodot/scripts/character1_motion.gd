@@ -7,7 +7,7 @@ extends RefCounted
 const SOURCE_GLTF_SHA256 := "95e4fed3a2778656cdf8b73affd2eb3feda8a32f82f4a0c3f76d90c82633c099"
 const LIBRARY := "t06"
 const BLEND_SECONDS := 0.16
-const WALK_STRIDE_METERS := 1.55
+const WALK_STRIDE_METERS := 2.00
 const RUN_STRIDE_METERS := 2.15
 const WALK_CYCLE_SECONDS := 0.82
 const RUN_CYCLE_SECONDS := 0.56
@@ -209,41 +209,37 @@ static func _remove_scale_tracks(animation: Animation) -> void:
 		if animation.track_get_type(track) == Animation.TYPE_SCALE_3D:
 			animation.remove_track(track)
 
-static func _insert_transform_key(animation: Animation, track: int, time: float, value: Variant) -> void:
-	var kind := animation.track_get_type(track)
-	for key in animation.track_get_key_count(track):
-		if absf(animation.track_get_key_time(track, key) - time) < 0.0001:
-			animation.track_set_key_value(track, key, value)
-			return
-	if kind == Animation.TYPE_ROTATION_3D:
-		animation.rotation_track_insert_key(track, time, value)
-	elif kind == Animation.TYPE_POSITION_3D:
-		animation.position_track_insert_key(track, time, value)
-
-static func _close_loop(animation: Animation) -> void:
-	# Every transform channel gets an explicit neutral seam. Matching the first,
-	# 1/120 s, penultimate and terminal samples also makes seam velocity zero on
-	# both sides under cubic interpolation; no hidden root or limb snap remains.
-	var seam := minf(1.0 / 120.0, animation.length * 0.02)
+static func _match_cyclic_seam(animation: Animation) -> void:
+	# Close each channel without inserting a neutral hold. The final pose matches
+	# the first, while the penultimate sample mirrors the first forward sample.
+	# Linear playback therefore crosses the seam with the same non-zero pose
+	# delta on both sides instead of stopping once per cycle.
 	for track in animation.get_track_count():
 		var kind := animation.track_get_type(track)
 		if kind not in [Animation.TYPE_ROTATION_3D, Animation.TYPE_POSITION_3D]:
 			continue
 		animation.track_set_interpolation_type(track, Animation.INTERPOLATION_LINEAR)
-		var first: Variant
+		var key_count := animation.track_get_key_count(track)
+		assert(key_count >= 3)
+		var first: Variant = animation.track_get_key_value(track, 0)
+		var forward: Variant = animation.track_get_key_value(track, 1)
 		if kind == Animation.TYPE_ROTATION_3D:
-			first = animation.rotation_track_interpolate(track, 0.0).normalized()
+			var first_rotation: Quaternion = first
+			var forward_rotation: Quaternion = forward
+			first = first_rotation.normalized()
+			forward = forward_rotation.normalized()
+			var forward_delta: Quaternion = (first as Quaternion).inverse() * (forward as Quaternion)
+			animation.track_set_key_value(track, key_count - 2, ((first as Quaternion) * forward_delta.inverse()).normalized())
 		else:
-			first = animation.position_track_interpolate(track, 0.0)
-		_insert_transform_key(animation, track, 0.0, first)
-		_insert_transform_key(animation, track, seam, first)
-		_insert_transform_key(animation, track, animation.length - seam, first)
-		_insert_transform_key(animation, track, animation.length, first)
+			var first_position: Vector3 = first
+			var forward_position: Vector3 = forward
+			animation.track_set_key_value(track, key_count - 2, first_position - (forward_position - first_position))
+		animation.track_set_key_value(track, key_count - 1, first)
 
 static func _extract_gait_cycle(source: Animation, duration: float) -> Animation:
-	# Both supplied locomotion takes contain two repeated gait cycles. Extracting
-	# one source-authored cycle avoids the original slow four-step shuffle while
-	# retaining the supplied full-body performance and exact rig.
+	# Retiming the supplied take preserves its complete left/right gait cycle.
+	# Sampling only the first half loses the authored arm cycle and previously
+	# required a visible last-20-percent reset to close the clip.
 	var clip := Animation.new()
 	clip.length = duration
 	clip.loop_mode = Animation.LOOP_LINEAR
@@ -256,18 +252,15 @@ static func _extract_gait_cycle(source: Animation, duration: float) -> Animation
 		clip.track_set_interpolation_type(track, Animation.INTERPOLATION_LINEAR)
 		for sample in range(61):
 			var phase := float(sample) / 60.0
-			var source_time := source.length * phase * 0.5
+			# Character 1 faces actor-local +Z. Reverse the supplied gait take so a
+			# planted sole travels toward -Z and cancels +Z controller motion.
+			var source_time := source.length * (1.0 - phase)
 			var time := duration * phase
 			if kind == Animation.TYPE_ROTATION_3D:
 				var value := source.rotation_track_interpolate(source_track, source_time).normalized()
-				if phase > 0.80:
-					var first := source.rotation_track_interpolate(source_track, 0.0).normalized()
-					value = value.slerp(first, smoothstep(0.80, 1.0, phase)).normalized()
 				clip.rotation_track_insert_key(track, time, value)
 			else:
 				var value := source.position_track_interpolate(source_track, source_time)
-				if phase > 0.80:
-					value = value.lerp(source.position_track_interpolate(source_track, 0.0), smoothstep(0.80, 1.0, phase))
 				clip.position_track_insert_key(track, time, value)
 	return clip
 
@@ -291,7 +284,7 @@ static func _tune_locomotion(source: Animation, running: bool) -> Animation:
 			if track < 0:
 				continue
 			for key in clip.track_get_key_count(track):
-				var phase := fposmod(clip.track_get_key_time(track, key) / maxf(clip.length, 0.001) + offset, 1.0)
+				var phase := fposmod(1.0 - clip.track_get_key_time(track, key) / maxf(clip.length, 0.001) + offset, 1.0)
 				var angle := _curve(toe_curve if bone.ends_with("ToeBase") else foot_curve, phase) * multiplier
 				var base: Quaternion = clip.track_get_key_value(track, key)
 				clip.track_set_key_value(track, key, (base * Quaternion(Vector3.RIGHT, deg_to_rad(angle))).normalized())
@@ -304,14 +297,14 @@ static func _tune_locomotion(source: Animation, running: bool) -> Animation:
 			continue
 		var sign := 1.0 if side == "L" else -1.0
 		for key in clip.track_get_key_count(thigh):
-			var phase := fposmod(clip.track_get_key_time(thigh, key) / maxf(clip.length, 0.001) + (0.0 if side == "L" else 0.5), 1.0)
+			var phase := fposmod(1.0 - clip.track_get_key_time(thigh, key) / maxf(clip.length, 0.001) + (0.0 if side == "L" else 0.5), 1.0)
 			var correction := sign * _curve([Vector2(0, 2.0), Vector2(0.5, 4.0), Vector2(1, 2.0)], phase)
 			var base: Quaternion = clip.track_get_key_value(thigh, key)
 			var stride_swing := sin(phase * TAU) * (36.0 if running else 42.0)
 			clip.track_set_key_value(thigh, key, (base * _euler_offset(Vector3(stride_swing, 0.0, correction))).normalized())
 		if calf >= 0:
 			for key in clip.track_get_key_count(calf):
-				var phase := fposmod(clip.track_get_key_time(calf, key) / maxf(clip.length, 0.001) + (0.0 if side == "L" else 0.5), 1.0)
+				var phase := fposmod(1.0 - clip.track_get_key_time(calf, key) / maxf(clip.length, 0.001) + (0.0 if side == "L" else 0.5), 1.0)
 				var flex := _curve([Vector2(0.0, 4.0), Vector2(0.18, 8.0), Vector2(0.52, 34.0 if running else 24.0), Vector2(0.76, 12.0), Vector2(1.0, 4.0)], phase)
 				var base: Quaternion = clip.track_get_key_value(calf, key)
 				clip.track_set_key_value(calf, key, (base * Quaternion(Vector3.RIGHT, deg_to_rad(-flex))).normalized())
@@ -325,7 +318,7 @@ static func _tune_locomotion(source: Animation, running: bool) -> Animation:
 		# Hip's imported local +Z maps to character-global +Y.
 		position.z += maxf(float(left_lifts[key]), float(right_lifts[key])) / NORMALIZED_SOURCE_SCALE
 		clip.track_set_key_value(position_track, key, position)
-	_close_loop(clip)
+	_match_cyclic_seam(clip)
 	return clip
 
 static func _sample_rotation(animation: Animation, path: NodePath, time: float) -> Quaternion:
@@ -536,7 +529,7 @@ static func install(root: Node3D, role := "player_lead") -> Dictionary:
 	var idle: Animation = player.get_animation(source_names.idle).duplicate(true)
 	idle.loop_mode = Animation.LOOP_LINEAR
 	_remove_scale_tracks(idle)
-	_close_loop(idle)
+	_match_cyclic_seam(idle)
 	var walk := _tune_locomotion(player.get_animation(source_names.walk), false)
 	var run := _tune_locomotion(player.get_animation(source_names.run), true)
 	var library := AnimationLibrary.new()
