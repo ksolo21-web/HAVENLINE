@@ -17,6 +17,7 @@ const GAIT_STANCE_CENTERS := {
 	"run": {"L": 0.18, "R": 0.60},
 }
 const GAIT_STANCE_INNER_RADIUS := 0.13
+const RUN_STANCE_INNER_RADIUS := 0.18
 const GAIT_STANCE_OUTER_RADIUS := 0.24
 const RUN_LEFT_TOE_OFF_CLEARANCE := {
 	20: 0.038, 21: 0.048, 22: 0.052, 23: 0.048,
@@ -215,13 +216,13 @@ static func _curve(points: Array, phase: float) -> float:
 static func _cyclic_phase_delta(phase: float, centre: float) -> float:
 	return fposmod(phase - centre + 0.5, 1.0) - 0.5
 
-static func _stance_weight(phase: float, centre: float) -> float:
+static func _stance_weight(phase: float, centre: float, inner_radius: float = GAIT_STANCE_INNER_RADIUS) -> float:
 	var distance := absf(_cyclic_phase_delta(phase, centre))
-	if distance <= GAIT_STANCE_INNER_RADIUS:
+	if distance <= inner_radius:
 		return 1.0
 	if distance >= GAIT_STANCE_OUTER_RADIUS:
 		return 0.0
-	var amount := inverse_lerp(GAIT_STANCE_OUTER_RADIUS, GAIT_STANCE_INNER_RADIUS, distance)
+	var amount := inverse_lerp(GAIT_STANCE_OUTER_RADIUS, inner_radius, distance)
 	return amount * amount * (3.0 - 2.0 * amount)
 
 static func _remove_scale_tracks(animation: Animation) -> void:
@@ -356,6 +357,7 @@ static func _stabilize_gait_feet(player: AnimationPlayer, skeleton: Skeleton3D, 
 	# controller travel back into skeleton-local units before baking it.
 	var stride := WALK_STRIDE_METERS if gait_id == "walk" else RUN_STRIDE_METERS
 	var skeleton_stride := stride / NORMALIZED_SOURCE_SCALE
+	var inner_radius := RUN_STANCE_INNER_RADIUS if gait_id == "run" else GAIT_STANCE_INNER_RADIUS
 	for side in ["L", "R"]:
 		var foot_index := skeleton.find_bone(side + "_Foot")
 		var toe_index := skeleton.find_bone(side + "_ToeBase")
@@ -375,7 +377,7 @@ static func _stabilize_gait_feet(player: AnimationPlayer, skeleton: Skeleton3D, 
 			var desired_local_basis := parent_global.basis.inverse() * neutral_foot_global.basis
 			var desired_pose := desired_local_basis.get_rotation_quaternion().normalized()
 			var original: Quaternion = clip.track_get_key_value(foot_rotation_track, key)
-			clip.track_set_key_value(foot_rotation_track, key, original.slerp(desired_pose, _stance_weight(phase, centre)).normalized())
+			clip.track_set_key_value(foot_rotation_track, key, original.slerp(desired_pose, _stance_weight(phase, centre, inner_radius)).normalized())
 		for key in clip.track_get_key_count(toe_rotation_track):
 			var time := clip.track_get_key_time(toe_rotation_track, key)
 			var phase := time / clip.length
@@ -383,7 +385,7 @@ static func _stabilize_gait_feet(player: AnimationPlayer, skeleton: Skeleton3D, 
 			var desired_local_basis := skeleton.get_bone_global_pose(foot_index).basis.inverse() * neutral_toe_global.basis
 			var desired_pose := desired_local_basis.get_rotation_quaternion().normalized()
 			var original: Quaternion = clip.track_get_key_value(toe_rotation_track, key)
-			clip.track_set_key_value(toe_rotation_track, key, original.slerp(desired_pose, _stance_weight(phase, centre)).normalized())
+			clip.track_set_key_value(toe_rotation_track, key, original.slerp(desired_pose, _stance_weight(phase, centre, inner_radius)).normalized())
 		var position_track := _track_for_bone(clip, side + "_Foot", Animation.TYPE_POSITION_3D)
 		if position_track < 0:
 			position_track = clip.add_track(Animation.TYPE_POSITION_3D)
@@ -397,7 +399,7 @@ static func _stabilize_gait_feet(player: AnimationPlayer, skeleton: Skeleton3D, 
 			var desired_global_origin := neutral_foot_global.origin + Vector3(0.0, 0.0, -skeleton_stride * _cyclic_phase_delta(phase, centre))
 			var desired_local_origin := parent_global.affine_inverse() * desired_global_origin
 			var rest := skeleton.get_bone_rest(foot_index)
-			clip.position_track_insert_key(position_track, time, rest.origin.lerp(desired_local_origin, _stance_weight(phase, centre)))
+			clip.position_track_insert_key(position_track, time, rest.origin.lerp(desired_local_origin, _stance_weight(phase, centre, inner_radius)))
 
 static func _sample_rotation(animation: Animation, path: NodePath, time: float) -> Quaternion:
 	var track := animation.find_track(path, Animation.TYPE_ROTATION_3D)
