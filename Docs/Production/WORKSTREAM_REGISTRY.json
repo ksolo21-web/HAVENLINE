@@ -44,9 +44,16 @@
       "workstream_id": "T03-legacy-integrated",
       "branch": "codex/havenline-sequential-task-01",
       "base_commit": "1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff",
-      "dependencies": ["T02"],
-      "owned_paths": ["@ownership:T03"],
-      "protected_paths": ["@protected:T01", "@protected:T02"],
+      "dependencies": [
+        "T02"
+      ],
+      "owned_paths": [
+        "@ownership:T03"
+      ],
+      "protected_paths": [
+        "@protected:T01",
+        "@protected:T02"
+      ],
       "candidate_commit": "5df9726e0b1c33f0f8865385b1c49aca229fd461",
       "candidate_hash_or_artifact": "primary-run:34730602238 closeout-run:34735423968 evidence:10308254512 source:10308369258",
       "tests": {
@@ -56,7 +63,11 @@
         "tree_geometry_checks": 9
       },
       "evidence_path": "Docs/Production/Evidence/T03/",
-      "critic_requirements": ["C1", "C2", "C6"],
+      "critic_requirements": [
+        "C1",
+        "C2",
+        "C6"
+      ],
       "critic_status": {
         "C1+C2": "PASS_BY_QUORUM; 18 clean primary judgments and focused 2-of-3 quorums for conditions and river-gates",
         "C6": "PASS; minimum mandatory dimension 9.5"
@@ -74,8 +85,12 @@
       "branch": "codex/havenline-sequential-task-01",
       "base_commit": "f26b3d6d5a788c03192f593936bfe8ce5ccfc5bc",
       "dependencies": [],
-      "owned_paths": ["@ownership:QA-GOV"],
-      "protected_paths": ["@protected:runtime-approved"],
+      "owned_paths": [
+        "@ownership:QA-GOV"
+      ],
+      "protected_paths": [
+        "@protected:runtime-approved"
+      ],
       "candidate_commit": "4e851ce496e077342e6369b18b78ca27e4724849",
       "candidate_hash_or_artifact": "governance-run:34652626961 critic-readiness-run:34652627066",
       "tests": {
@@ -104,9 +119,16 @@
       "workstream_id": "wave1-camera",
       "branch": "codex/havenline-sequential-task-01",
       "base_commit": "5135cddf96123afb962f4046f41e5ac0e510428a",
-      "dependencies": ["T03"],
-      "owned_paths": ["@reservation:T04"],
-      "protected_paths": ["@protected:approved", "@integration-only"],
+      "dependencies": [
+        "T03"
+      ],
+      "owned_paths": [
+        "@reservation:T04"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only"
+      ],
       "candidate_commit": "e08fd37e9a999d878644c03089c4b4b253bd7472",
       "candidate_hash_or_artifact": "integrated-evidence-run:34738864775 artifact:10312061966 closeout-run:34745334414",
       "tests": {
@@ -115,7 +137,11 @@
         "result": "PASS"
       },
       "evidence_path": "Docs/Production/Evidence/T04/",
-      "critic_requirements": ["C1", "C2", "C6"],
+      "critic_requirements": [
+        "C1",
+        "C2",
+        "C6"
+      ],
       "critic_status": {
         "C1+C2": "PASS_BY_CORROBORATED_EVIDENCE; minimum mandatory score 9.5; no score averaging; unsupported claims retained and objectively resolved",
         "C6": "PASS; minimum mandatory dimension 9.8"
@@ -178,9 +204,17 @@
       "workstream_id": "wave1-character1",
       "branch": "havenline/T06-character1",
       "base_commit": "f9d815a7d05c4e811d22d620c6b0c00c768ce6c5",
-      "dependencies": ["T03"],
-      "owned_paths": ["@reservation:T06"],
-      "protected_paths": ["@protected:approved", "@integration-only", "@protected:C1-model"],
+      "dependencies": [
+        "T03"
+      ],
+      "owned_paths": [
+        "@reservation:T06"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only",
+        "@protected:C1-model"
+      ],
       "candidate_commit": "47f86fae25b099abb5c7096c37ca7495453b2b8f",
       "candidate_hash_or_artifact": "isolated-run:34934399997 artifact-sha256:506243ad7ee9c267dab4eb3e227a9b9bacccbe2d3037fe8376e24f11e181b98a; integrated-source:91f35f331aaabe2b1785b10c0d911f20da6f12d9 integrated-run:34970154124 artifact:10397129519 artifact-sha256:751a23d978ffc9f5e18754a0830c6c79f766dcf49e1a5501dc1464574245ae13 runtime-glb-sha256:739a7abf669194ac656ce9f05b864a3e5c4cd666b64a84f1db045de5e7982738",
       "tests": {
@@ -196,7 +230,12 @@
         "integration_regression_run": 34970154124
       },
       "evidence_path": "Docs/Production/Evidence/T06/",
-      "critic_requirements": ["C1", "C2", "C5", "C6"],
+      "critic_requirements": [
+        "C1",
+        "C2",
+        "C5",
+        "C6"
+      ],
       "critic_status": {
         "C1": "PASS; score 9.42; carried forward only after exact reviewed runtime GLB and task-owned bytes matched",
         "C2": "PASS; score 9.42; 1612/1612 required coverage rows passed; zero surface violations",
@@ -258,6 +297,41 @@
       "integration_status": "APPROVED; accepted isolated source 0a30dc0859541626eb6aa9a9bb749abc93dcb355 integrated at 94b3f6c5097356a3857ebd13a77fb1e316eb06ae; 21 suites / 1441 checks, exact-source evidence, all required critics and G1-G14 passed",
       "known_blockers": [],
       "next_action": "Preserve T07 accepted and integrated sources. T08 remains LOCKED until its separate packet, owner and path reservation are prepared and validated."
+    },
+    {
+      "task_id": "T08",
+      "task_name": "Visible inventory, physical carrying and transfers",
+      "workstream_id": "T08-physical-inventory-builder",
+      "status": "ASSIGNED",
+      "owner": "physical-inventory-builder",
+      "branch": "havenline/T08-visible-inventory",
+      "base_commit": "7744b9f6a063da3385ce10992ef732ba2c669890",
+      "dependencies": [
+        "T05",
+        "T06",
+        "T07"
+      ],
+      "owned_paths": [
+        "@reservation:T08"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only"
+      ],
+      "candidate_commit": null,
+      "candidate_hash_or_artifact": null,
+      "tests": {},
+      "evidence_path": "Docs/Production/Evidence/T08/",
+      "critic_requirements": [
+        "C2",
+        "C3",
+        "C4",
+        "C6"
+      ],
+      "critic_status": {},
+      "integration_status": "not integrated",
+      "known_blockers": [],
+      "next_action": "Build isolated candidate only after ASSIGNED."
     }
   ],
   "notes": [

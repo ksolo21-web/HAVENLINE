@@ -138,8 +138,14 @@ class GovernanceTests(unittest.TestCase):
         self.assertIn(t7["status"],{"ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED"})
         if t7["status"]=="APPROVED":
             self.assertIn("T07",gates["approved_tasks"])
-            self.assertIsNone(gates["active_task"])
-            self.assertEqual(graph["T08"]["status"],"LOCKED")
+            self.assertIn(graph["T08"]["status"],{"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"})
+            if graph["T08"]["status"] == "LOCKED":
+                self.assertIsNone(gates["active_task"])
+            elif graph["T08"]["status"] != "APPROVED":
+                self.assertEqual(gates["active_task"],"T08")
+                self.assertEqual(gates["active_status"],graph["T08"]["status"])
+                self.assertTrue((DOCS/"T08/FROZEN_SCOPE.md").exists())
+                self.assertTrue((DOCS/"T08/TASK_PACKET.md").exists())
             completion7=load_json(DOCS/"T07/verified-completion.json")
             ledger7=load_json(DOCS/"T07/defect-ledger.json")
             review7=load_json(DOCS/"T07/independent-critic-review.json")
