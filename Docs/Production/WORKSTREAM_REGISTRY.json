@@ -173,7 +173,7 @@
     {
       "task_id": "T06",
       "task_name": "Character 1 complete movement/interactions",
-      "status": "ASSIGNED",
+      "status": "APPROVED",
       "owner": "character1-motion-builder",
       "workstream_id": "wave1-character1",
       "branch": "havenline/T06-character1",
@@ -181,20 +181,71 @@
       "dependencies": ["T03"],
       "owned_paths": ["@reservation:T06"],
       "protected_paths": ["@protected:approved", "@integration-only", "@protected:C1-model"],
+      "candidate_commit": "47f86fae25b099abb5c7096c37ca7495453b2b8f",
+      "candidate_hash_or_artifact": "isolated-run:34934399997 artifact-sha256:506243ad7ee9c267dab4eb3e227a9b9bacccbe2d3037fe8376e24f11e181b98a; integrated-source:91f35f331aaabe2b1785b10c0d911f20da6f12d9 integrated-run:34970154124 artifact:10397129519 artifact-sha256:751a23d978ffc9f5e18754a0830c6c79f766dcf49e1a5501dc1464574245ae13 runtime-glb-sha256:739a7abf669194ac656ce9f05b864a3e5c4cd666b64a84f1db045de5e7982738",
+      "tests": {
+        "suites": 19,
+        "checks": 1345,
+        "result": "PASS",
+        "surface_sample_rate_hz": 120,
+        "surface_vertices": 52898,
+        "surface_triangles": 96001,
+        "surface_violations": 0,
+        "source_bound_images": 970,
+        "continuous_motion_videos": 76,
+        "integration_regression_run": 34970154124
+      },
+      "evidence_path": "Docs/Production/Evidence/T06/",
+      "critic_requirements": ["C1", "C2", "C5", "C6"],
+      "critic_status": {
+        "C1": "PASS; score 9.42; carried forward only after exact reviewed runtime GLB and task-owned bytes matched",
+        "C2": "PASS; score 9.42; 1612/1612 required coverage rows passed; zero surface violations",
+        "C5": "PASS; score 9.31; whole-rig and lower-limb release gates passed",
+        "C6": "PASS; fresh integrated shipping-scene performance gate in run 34970154124"
+      },
+      "integration_status": "APPROVED; accepted isolated source 47f86fae25b099abb5c7096c37ca7495453b2b8f integrated at 91f35f331aaabe2b1785b10c0d911f20da6f12d9; 19 suites / 1345 checks and exact-source evidence passed",
+      "known_blockers": [],
+      "next_action": "Preserve T06 accepted and integrated sources; T07 may consume only the published deterministic motion-selector contract."
+    },
+    {
+      "task_id": "T07",
+      "task_name": "Havenline Simple Control & Context Director",
+      "status": "ASSIGNED",
+      "owner": "simple-control-context-builder",
+      "workstream_id": "wave2-context-director",
+      "branch": "havenline/T07-context-director",
+      "base_commit": "91f35f331aaabe2b1785b10c0d911f20da6f12d9",
+      "dependencies": [
+        "T04",
+        "T06"
+      ],
+      "owned_paths": [
+        "@reservation:T07"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only"
+      ],
       "candidate_commit": null,
       "candidate_hash_or_artifact": null,
       "tests": {},
-      "evidence_path": "Docs/Production/Evidence/T06/",
-      "critic_requirements": ["C1", "C2", "C5", "C6"],
+      "evidence_path": "Docs/Production/Evidence/T07/",
+      "critic_requirements": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C11"
+      ],
       "critic_status": {},
       "integration_status": "not started",
       "known_blockers": [],
-      "next_action": "Build the isolated Character 1 motion/contact candidate on havenline/T06-character1; preserve the source GLB and all approved runtime paths."
+      "next_action": "Build the isolated deterministic context director on havenline/T07-context-director; preserve the one-joystick control contract and approved T01-T06 runtime."
     }
   ],
   "notes": [
     "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
-    "T03-T05 are APPROVED. T06 is separately packeted and assigned; T07+ runtime work remains locked until its own prerequisites and ownership are prepared.",
+    "T03-T06 are APPROVED. T07 is separately packeted and assigned; T08+ runtime work remains locked until its own prerequisites and ownership are prepared.",
     "All future runtime builders use isolated branches and cannot approve themselves.",
     "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them."
   ]

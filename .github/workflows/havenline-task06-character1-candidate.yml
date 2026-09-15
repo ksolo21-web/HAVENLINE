@@ -24,6 +24,7 @@ concurrency:
 
 jobs:
   build-test-capture:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.ref_name != 'codex/havenline-sequential-task-01' || !contains(github.event.head_commit.message, '[governance-only]') }}
     runs-on: ubuntu-24.04
     timeout-minutes: 55
     steps:

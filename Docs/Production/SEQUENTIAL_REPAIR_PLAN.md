@@ -24,9 +24,15 @@ integration-owner-controlled production integration.
   `Docs/Production/T05/verified-completion.json` after 18 suites / 1119 checks,
   77 source-bound frames, strict C1+C2 PASS, C6 minimum 9.1, final pixel
   signoff and G1-G14.
-- T06 is ASSIGNED on `havenline/T06-character1` from exact integration base
-  `f9d815a7d05c4e811d22d620c6b0c00c768ce6c5`; its frozen scope and packet are
-  under `Docs/Production/T06/`. T07+ remains LOCKED until separately prepared.
+- T06 is APPROVED at accepted isolated source
+  `47f86fae25b099abb5c7096c37ca7495453b2b8f`, integrated at
+  `91f35f331aaabe2b1785b10c0d911f20da6f12d9`; its verified closure is recorded
+  in `Docs/Production/T06/verified-completion.json` after 19 suites / 1345
+  checks, exact evidence identity, exhaustive motion/surface gates and required
+  C1/C2/C5/C6 review.
+- T07 is ASSIGNED on `havenline/T07-context-director` from runtime integration
+  base `91f35f331aaabe2b1785b10c0d911f20da6f12d9`; its frozen scope and packet are
+  under `Docs/Production/T07/`. T08+ remains LOCKED until separately prepared.
 
 ## Forward acceptance rule
 
@@ -99,15 +105,17 @@ separate $0 reviewer is available, useful construction/testing continues but
 the critic gate remains `BLOCKED`. Never manufacture a pass and never add a
 paid critic dependency.
 
-## Wave 1 after T03 approval
+## Current wave after T06 approval
 
 T03 is approved. The registry may now assign these workstreams individually
 after each packet and owner are prepared:
 
 - T04 camera/composition is complete and APPROVED.
 - T05 station/prop kit is complete and APPROVED at `fa6fa70f154f3757d22303522ca3f6de2c3d391f`.
-- `havenline/T06-character1` — T06 Character 1 motion/contact foundation is
-  ASSIGNED; preserve the source GLB and build only inside `@reservation:T06`.
+- T06 Character 1 motion/contact foundation is complete and APPROVED; preserve
+  its accepted and integrated sources.
+- `havenline/T07-context-director` — T07 deterministic simple-control/context
+  director is ASSIGNED; build only inside `@reservation:T07`.
 - QA/integration infrastructure may continue separately.
 
 Those workstreams are isolated and path-disjoint. Shared wiring remains

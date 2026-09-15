@@ -26,6 +26,9 @@
     ],
     "T05": [
       "test_task05_station_kit"
+    ],
+    "T06": [
+      "test_task06_character1"
     ]
   },
   "impact_rules": [
@@ -87,6 +90,15 @@
       ],
       "tasks": ["T06"],
       "suites": ["test_motion_and_performance","test_population"]
+    },
+    {
+      "patterns": [
+        "HavenlineGodot/scripts/context_director.gd",
+        "HavenlineGodot/tests/test_task07_context_director.gd",
+        "HavenlineGodot/tests/capture_task07_context_director.gd"
+      ],
+      "tasks": ["T04","T06","T07"],
+      "suites": ["test_adaptive_devices","test_outpost_runtime","test_task04_camera","test_task06_character1","test_task07_context_director"]
     },
     {
       "patterns": [

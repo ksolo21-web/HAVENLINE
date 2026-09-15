@@ -120,4 +120,25 @@ class GovernanceTests(unittest.TestCase):
         self.assertIn("PASS_BY_QUORUM",t3["critic_status"]["C1+C2"])
         self.assertIn("PASS",t3["critic_status"]["C6"])
 
+    def test_t06_closeout_and_t07_assignment_checkpoint(self):
+        graph=load_json(DOCS/"DEPENDENCY_GRAPH.json")["tasks"]
+        registry=load_json(DOCS/"WORKSTREAM_REGISTRY.json")
+        gates=load_json(DOCS/"task-gates.json")
+        t6=next(w for w in registry["workstreams"] if w["task_id"]=="T06")
+        t7=next(w for w in registry["workstreams"] if w["task_id"]=="T07")
+        completion=load_json(DOCS/"T06/verified-completion.json")
+        ledger=load_json(DOCS/"T06/DEFECT_LEDGER.json")
+        self.assertEqual(graph["T06"]["status"],"APPROVED")
+        self.assertEqual(t6["candidate_commit"],"47f86fae25b099abb5c7096c37ca7495453b2b8f")
+        self.assertEqual(t6["tests"]["checks"],1345)
+        self.assertEqual(completion["integrated_source"],"91f35f331aaabe2b1785b10c0d911f20da6f12d9")
+        self.assertTrue(completion["source_identity"]["reviewed_runtime_and_gate_files_byte_identical"])
+        self.assertEqual({row["status"] for row in ledger["defects"]},{"VERIFIED_CLOSED"})
+        self.assertEqual(graph["T07"]["status"],"ASSIGNED")
+        self.assertEqual(t7["status"],"ASSIGNED")
+        self.assertEqual(gates["active_task"],"T07")
+        self.assertEqual(gates["approved_tasks"],["T01","T02","T03","T04","T05","T06"])
+        self.assertTrue((DOCS/"T07/FROZEN_SCOPE.md").exists())
+        self.assertTrue((DOCS/"T07/TASK_PACKET.md").exists())
+
 if __name__=="__main__":unittest.main()

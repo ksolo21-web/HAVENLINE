@@ -1,7 +1,9 @@
 {
   "schema_version": 1,
   "task_id": "T06",
-  "candidate_commit": "aa456c8fdf8147be357af2f25154f1d239073f29",
+  "candidate_commit": "47f86fae25b099abb5c7096c37ca7495453b2b8f",
+  "integrated_commit": "91f35f331aaabe2b1785b10c0d911f20da6f12d9",
+  "integrated_verification_run": 34970154124,
   "acceptance_threshold": ">9.0 unrounded in every mandatory dimension",
   "defects": [
     {
@@ -25,7 +27,8 @@
         "review_round": 5,
         "same_family_strikes": 5
       },
-      "status": "PRODUCTION_FIX_IMPLEMENTED"
+      "verification_disposition": "Verified closed by exact-source isolated review and byte-identical integrated run: continuous real-time/slow repeated cycles, 120 Hz seam audit and independent C5 PASS at 9.31.",
+      "status": "VERIFIED_CLOSED"
     },
     {
       "id": "T06-D02",
@@ -53,7 +56,8 @@
         "review_round": 11,
         "same_family_strikes": 11
       },
-      "status": "PRODUCTION_FIX_IMPLEMENTED"
+      "verification_disposition": "Verified closed by fixed heel/ball/toe landmark tracks through translated repeated playback; isolated and integrated runtime GLB hashes match and C5 passed at 9.31.",
+      "status": "VERIFIED_CLOSED"
     },
     {
       "id": "T06-D03",
@@ -78,7 +82,8 @@
         "review_round": 3,
         "same_family_strikes": 3
       },
-      "status": "READY_FOR_VERIFICATION"
+      "verification_disposition": "Verified closed by exhaustive 120 Hz CPU skinning over 52,898 vertices, 96,001 triangles, 16 semantic parts and all 24 clips with zero violations; C2 passed 1,612/1,612 coverage rows at 9.42.",
+      "status": "VERIFIED_CLOSED"
     }
   ]
 }

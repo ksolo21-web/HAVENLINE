@@ -16,6 +16,8 @@ ALLOWED_MIGRATION_PATTERNS=[
 ]
 
 T05_ACCEPTED_SOURCE="fa6fa70f154f3757d22303522ca3f6de2c3d391f"
+T06_ACCEPTED_SOURCE="47f86fae25b099abb5c7096c37ca7495453b2b8f"
+T06_INTEGRATED_SOURCE="91f35f331aaabe2b1785b10c0d911f20da6f12d9"
 T05_SCORE_DIMENSIONS={
     "C1":{"reference_fidelity","visual_language","cross_view_consistency"},
     "C2":{"geometry_contact","clipping_seams","intentional_gap_integrity","cross_view_integrity"},
@@ -86,6 +88,45 @@ def t05_completion_errors(record,ledger):
         errors.append("T05 defect ledger has unresolved entries: "+",".join(str(x) for x in unresolved))
     return errors
 
+def t06_completion_errors(record,ledger):
+    """Fail closed on T06 exact-source integration, critic and defect closure."""
+    errors=[]
+    if record.get("status")!="PASS" or record.get("accepted_gameplay_source")!=T06_ACCEPTED_SOURCE or record.get("integrated_source")!=T06_INTEGRATED_SOURCE:
+        errors.append("T06 verified completion record is not bound to accepted and integrated sources")
+    acceptance=record.get("acceptance_rule",{})
+    if acceptance.get("mandatory_dimension_operator")!=">" or acceptance.get("mandatory_dimension_threshold")!=9.0 or acceptance.get("unrounded") is not True or acceptance.get("score_averaging_used") is not False:
+        errors.append("T06 verified completion strict acceptance rule is incomplete")
+    identity=record.get("source_identity",{})
+    if identity.get("immutable_character1_glb_sha256")!="95e4fed3a2778656cdf8b73affd2eb3feda8a32f82f4a0c3f76d90c82633c099" or identity.get("runtime_review_glb_sha256")!="739a7abf669194ac656ce9f05b864a3e5c4cd666b64a84f1db045de5e7982738" or identity.get("reviewed_source_is_integrated_ancestor") is not True or identity.get("reviewed_runtime_and_gate_files_byte_identical") is not True or identity.get("shipping_main_call_site_exercised") is not True:
+        errors.append("T06 exact-source or shipping integration identity is incomplete")
+    mechanical=record.get("mechanical_evidence",{})
+    if mechanical.get("all_passed") is not True or mechanical.get("functional_suites")!=19 or mechanical.get("total_assertions_checks",0)<1345 or mechanical.get("surface_violations")!=0 or mechanical.get("coverage_nonpass_rows")!=0 or mechanical.get("task_images",0)<970 or mechanical.get("continuous_motion_videos",0)<76:
+        errors.append("T06 mechanical, surface, coverage or integration evidence is incomplete")
+    reviews=record.get("independent_reviews",{})
+    if reviews.get("status")!="PASS" or reviews.get("source")!=T06_ACCEPTED_SOURCE or reviews.get("integrated_source")!=T06_INTEGRATED_SOURCE or reviews.get("score_averaging_used") is not False or reviews.get("critic_blockers")!=[] or reviews.get("valid_unresolved_defects")!=[]:
+        errors.append("T06 independent critic closure is incomplete")
+    scores=reviews.get("scores",{})
+    if set(scores)!={"C1","C2","C5"}:
+        errors.append("T06 C1/C2/C5 score set is incomplete")
+    else:
+        errors += _strict_score_errors("T06 critics",scores)
+    performance=record.get("performance_critic",{})
+    if performance.get("critic")!="C6" or performance.get("candidate_source")!=T06_INTEGRATED_SOURCE or performance.get("run_id")!=34970154124 or performance.get("passed") is not True or performance.get("errors")!=[]:
+        errors.append("T06 fresh integrated C6 closure is incomplete")
+    gates=record.get("gates",{})
+    if set(gates)!={f"G{i}" for i in range(1,15)} or any(value is not True for value in gates.values()):
+        errors.append("T06 G1-G14 closure is incomplete")
+    artifact=record.get("artifacts",{}).get("integrated_regression_and_evidence",{})
+    if artifact.get("id")!=10397129519 or artifact.get("run_id")!=34970154124 or artifact.get("digest")!="sha256:751a23d978ffc9f5e18754a0830c6c79f766dcf49e1a5501dc1464574245ae13":
+        errors.append("T06 integrated artifact identity is invalid")
+    if ledger.get("task_id")!="T06" or ledger.get("candidate_commit")!=T06_ACCEPTED_SOURCE or ledger.get("integrated_commit")!=T06_INTEGRATED_SOURCE:
+        errors.append("T06 defect ledger is not bound to accepted and integrated sources")
+    allowed={"VERIFIED_CLOSED","REJECTED_AS_INVALID_FINDING"}
+    unresolved=[row.get("id") for row in ledger.get("defects",[]) if row.get("status") not in allowed]
+    if unresolved:
+        errors.append("T06 defect ledger has unresolved entries: "+",".join(str(x) for x in unresolved))
+    return errors
+
 def git_blob_sha(path:pathlib.Path)->str:
     data=path.read_bytes()
     return hashlib.sha1(b"blob "+str(len(data)).encode()+b"\0"+data).hexdigest()
@@ -126,6 +167,8 @@ def main():
     t03_status=graph["tasks"]["T03"]["status"]
     t04_status=graph["tasks"]["T04"]["status"]
     t05_status=graph["tasks"]["T05"]["status"]
+    t06_status=graph["tasks"]["T06"]["status"]
+    t07_status=graph["tasks"]["T07"]["status"]
     if t03_status not in {"FIX_REQUIRED","APPROVED"}:errors.append("T03 must be FIX_REQUIRED or APPROVED")
     if t03_status=="FIX_REQUIRED":
         if any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[3:]):errors.append("T04+ must remain LOCKED until T03 approval")
@@ -137,12 +180,16 @@ def main():
         else:
             if t05_status not in {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}:
                 errors.append("invalid T05 post-T04 state")
-            t06_status=graph["tasks"]["T06"]["status"]
             if t05_status=="APPROVED":
                 if t06_status not in {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}:
                     errors.append("invalid T06 post-T05 state")
                 if t06_status!="APPROVED" and any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[6:]):
                     errors.append("T07+ must remain LOCKED until T06 is approved and each later task is separately prepared")
+                if t06_status=="APPROVED":
+                    if t07_status not in {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}:
+                        errors.append("invalid T07 post-T06 state")
+                    if t07_status!="APPROVED" and any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[7:]):
+                        errors.append("T08+ must remain LOCKED until T07 is approved and each later task is separately prepared")
             elif any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[5:]):
                 errors.append("T06+ must remain LOCKED until T05 is approved and T06 is separately prepared")
     acc=graph["acceptance_rule"]
@@ -173,11 +220,12 @@ def main():
     tg=load_json(DOCS/"task-gates.json")
     if t03_status=="APPROVED":
         expected_approved=(
+            ["T01","T02","T03","T04","T05","T06"] if t06_status=="APPROVED" else
             ["T01","T02","T03","T04","T05"] if t05_status=="APPROVED" else
             ["T01","T02","T03","T04"] if t04_status=="APPROVED" else
             ["T01","T02","T03"]
         )
-        if tg.get("approved_tasks")!=expected_approved:errors.append("task-gates approved list does not match T04 state")
+        if tg.get("approved_tasks")!=expected_approved:errors.append("task-gates approved list does not match dependency graph state")
         completion=DOCS/"T03/verified-completion.json"
         if not completion.exists():errors.append("T03 verified completion record missing")
         else:
@@ -208,11 +256,21 @@ def main():
                     errors.append("T05 verified completion record or defect ledger missing")
                 else:
                     errors += t05_completion_errors(load_json(t05_completion),load_json(t05_ledger))
-                t06_status=graph["tasks"]["T06"]["status"]
                 if t06_status=="LOCKED":
                     if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task while T06 is locked")
                 elif t06_status=="APPROVED":
-                    if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task after T06 approval")
+                    t06_completion=DOCS/"T06/verified-completion.json"
+                    t06_ledger=DOCS/"T06/DEFECT_LEDGER.json"
+                    if not t06_completion.exists() or not t06_ledger.exists():
+                        errors.append("T06 verified completion record or defect ledger missing")
+                    else:
+                        errors += t06_completion_errors(load_json(t06_completion),load_json(t06_ledger))
+                    if t07_status=="LOCKED":
+                        if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task while T07 is locked")
+                    else:
+                        if tg.get("active_task")!="T07" or tg.get("active_status")!=t07_status:errors.append("task-gates must match active T07 state")
+                        packet=DOCS/"T07/TASK_PACKET.md";scope=DOCS/"T07/FROZEN_SCOPE.md"
+                        if not packet.exists() or not scope.exists():errors.append("active T07 packet/frozen scope missing")
                 else:
                     if tg.get("active_task")!="T06" or tg.get("active_status")!=t06_status:errors.append("task-gates must match active T06 state")
                     packet=DOCS/"T06/TASK_PACKET.md";scope=DOCS/"T06/FROZEN_SCOPE.md"
