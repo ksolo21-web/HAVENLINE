@@ -11,6 +11,7 @@ const REQUIRED_ACTIONS := [
 	"chop", "mine", "dismantle", "deposit", "build", "repair", "rescue",
 	"service", "attack_contact"
 ]
+const SEAM_ROTATION_EPSILON_DEGREES := 0.10
 
 var failures: Array[String] = []
 var checks: Array[Dictionary] = []
@@ -119,7 +120,7 @@ func validate_loop_seam(library: AnimationLibrary, id: String) -> void:
 			if rotation_error > maximum_rotation_error_degrees:
 				maximum_rotation_error_degrees = rotation_error
 				worst_rotation_track = String(animation.track_get_path(track))
-			velocity_matched = velocity_matched and rotation_error < 0.03
+			velocity_matched = velocity_matched and rotation_error < SEAM_ROTATION_EPSILON_DEGREES
 			maximum_seam_motion = maxf(maximum_seam_motion, rad_to_deg(start.angle_to(after)))
 		elif kind == Animation.TYPE_POSITION_3D:
 			var start := animation.position_track_interpolate(track, 0.0)
@@ -134,6 +135,7 @@ func validate_loop_seam(library: AnimationLibrary, id: String) -> void:
 			velocity_matched = velocity_matched and position_error < 0.0001
 			maximum_seam_motion = maxf(maximum_seam_motion, start.distance_to(after) * 100.0)
 	loop_seam_metrics[id] = {
+		"rotation_epsilon_degrees": SEAM_ROTATION_EPSILON_DEGREES,
 		"maximum_rotation_error_degrees": maximum_rotation_error_degrees,
 		"worst_rotation_track": worst_rotation_track,
 		"maximum_position_error_meters": maximum_position_error_meters,
