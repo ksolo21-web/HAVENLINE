@@ -18,6 +18,10 @@ const GAIT_STANCE_CENTERS := {
 }
 const GAIT_STANCE_INNER_RADIUS := 0.13
 const GAIT_STANCE_OUTER_RADIUS := 0.24
+const RUN_LEFT_TOE_OFF_CLEARANCE := {
+	20: 0.038, 21: 0.048, 22: 0.052, 23: 0.048,
+	24: 0.036, 25: 0.020, 26: 0.008,
+}
 
 const LOOP_CLIPS := ["idle", "walk", "run"]
 const TRANSITION_CLIPS := [
@@ -326,8 +330,11 @@ static func _tune_locomotion(source: Animation, running: bool) -> Animation:
 				clip.track_set_key_value(calf, key, (base * Quaternion(Vector3.RIGHT, deg_to_rad(-flex))).normalized())
 	var gait_id := "run" if running else "walk"
 	var position_track := _track_for_bone(clip, "Hip", Animation.TYPE_POSITION_3D)
-	var left_lifts: Array = GAIT_FOOT_CLEARANCE[gait_id].L
+	var left_lifts: Array = GAIT_FOOT_CLEARANCE[gait_id].L.duplicate()
 	var right_lifts: Array = GAIT_FOOT_CLEARANCE[gait_id].R
+	if gait_id == "run":
+		for sample_index in RUN_LEFT_TOE_OFF_CLEARANCE:
+			left_lifts[int(sample_index)] = float(RUN_LEFT_TOE_OFF_CLEARANCE[sample_index])
 	assert(position_track >= 0 and clip.track_get_key_count(position_track) == left_lifts.size() and left_lifts.size() == right_lifts.size())
 	for key in clip.track_get_key_count(position_track):
 		var position: Vector3 = clip.track_get_key_value(position_track, key)
