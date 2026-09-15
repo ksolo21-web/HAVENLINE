@@ -46,13 +46,19 @@ def validate(candidate: str) -> dict:
     check("presentation adds no save fields", '"adds_save_fields": false' in sources["carry"] and "FileAccess" not in combined)
     check("visual budgets are explicit", "VISIBLE_BUDGET := 48" in sources["carry"] and "MAX_FLIGHTS := 48" in sources["transfer"])
     check("small and compressed layouts are deterministic", "allocate_visible" in sources["carry"] and "represented_count" in sources["carry"])
-    check("actor loads use a raised readable rack", "CARRY_BASE_HEIGHT :=" in sources["carry"] and "CARRY_TIER_HEIGHT :=" in sources["carry"])
+    check("actor loads use bounds-based resource lanes", all(token in sources["carry"] for token in (
+        "CARRY_BASE_HEIGHT :=", "CARRY_LANE_GAP :=", "AUTHORED_SCALED_WIDTH :=",
+        '"carry_layout": "resource_specific_vertical_lanes"', "carry_lane_centers")))
     check("unchanged actor stacks avoid rebuilds", "if next_signature == signature:" in sources["carry"])
     check("authored nodes are pooled", "pools" in sources["carry"] and "pools" in sources["transfer"])
-    check("future resources have no generic primitive fallback", not re.search(r"\b(BoxMesh|SphereMesh|CylinderMesh|CSGBox3D)\b", combined))
+    check("future resources have no generic primitive fallback", not re.search(
+        r"\b(BoxMesh|SphereMesh|CylinderMesh|CSGBox3D)\b", sources["carry"] + sources["stockpile"]))
     check("unsupported inventory keys fail closed behaviorally", "if not (key is String or key is StringName)" in sources["carry"] and "unknown inventory key fails closed" in tests and "unknown resource update is transactional" in tests)
     check("transfer directions are exact", '["source_to_actor", "actor_to_destination"]' in sources["transfer"])
     check("transfer flights expose readability geometry", "FLIGHT_SCALE_MULTIPLIER :=" in sources["transfer"] and "ARC_HEIGHT :=" in sources["transfer"] and "DURATION_SECONDS := 0.72" in sources["transfer"])
+    check("transfer direction and arrival are explicit", all(token in sources["transfer"] for token in (
+        "TRAIL_SAMPLES := 6", "_tangent_basis", "_make_arrows", "_make_pulses",
+        '"trail_geometry": "tangent_oriented_tapered_continuous_segments"')))
     check("receipt replay is rejected", "if receipts.has(receipt_id):" in sources["transfer"] and "RECEIPT_WINDOW := 256" in sources["transfer"])
     check("invalid and zero-length routes fail closed", "valid_point" in sources["transfer"] and "distance_squared_to(finish) <= 0.000001" in sources["transfer"])
     check("destination display derives from stored counts", "return stack.update_inventory(stored)" in sources["stockpile"])

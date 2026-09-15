@@ -16,9 +16,23 @@ const ASSETS := {
 }
 const PIECE_SCALE := {"wood": 0.22, "stone": 0.22, "metal": 0.22, "fuel": 0.24}
 const CARRY_BASE_HEIGHT := 0.28
-const CARRY_COLUMN_SPACING := 0.18
-const CARRY_COLUMNS := 3
-const CARRY_TIER_HEIGHT := 0.2
+const CARRY_LANE_GAP := 0.09
+const CARRY_TIER_GAP := 0.035
+# Measured from the POSITION accessors in the locked T05 authored GLBs, then
+# multiplied by PIECE_SCALE. Keeping these dimensions explicit makes the rack
+# deterministic and prevents unlike resources from interpenetrating.
+const AUTHORED_SCALED_WIDTH := {
+	"wood": 0.374,
+	"stone": 0.3831835199656715,
+	"metal": 0.385,
+	"fuel": 0.276,
+}
+const AUTHORED_SCALED_HEIGHT := {
+	"wood": 0.2068,
+	"stone": 0.2631162694184485,
+	"metal": 0.1848,
+	"fuel": 0.289460285112867,
+}
 
 var loader: Callable # Compatibility fallback only; authored T05 assets are preferred.
 var grounded := false
@@ -34,6 +48,10 @@ static func contract() -> Dictionary:
 		"kinds": KINDS.duplicate(),
 		"authored_assets": ASSETS.duplicate(),
 		"visible_budget": VISIBLE_BUDGET,
+		"carry_layout": "resource_specific_vertical_lanes",
+		"lane_gap": CARRY_LANE_GAP,
+		"authored_scaled_width": AUTHORED_SCALED_WIDTH.duplicate(),
+		"authored_scaled_height": AUTHORED_SCALED_HEIGHT.duplicate(),
 		"unlimited_logical_inventory": true,
 		"mutates_inventory": false,
 		"adds_save_fields": false,
@@ -88,6 +106,18 @@ static func allocate_visible(counts: Dictionary, budget := VISIBLE_BUDGET) -> Di
 		result[best_kind] += 1
 	return result
 
+static func carry_lane_centers(nonzero: Array[String]) -> Dictionary:
+	var result := {}
+	var total_width := maxf(0.0, float(nonzero.size() - 1) * CARRY_LANE_GAP)
+	for kind in nonzero:
+		total_width += float(AUTHORED_SCALED_WIDTH[kind])
+	var cursor := -total_width * 0.5
+	for kind in nonzero:
+		var width := float(AUTHORED_SCALED_WIDTH[kind])
+		result[kind] = cursor + width * 0.5
+		cursor += width + CARRY_LANE_GAP
+	return result
+
 static func layout_for(inventory: Dictionary, is_grounded := false, budget := VISIBLE_BUDGET) -> Array[Dictionary]:
 	if not valid_inventory(inventory) or budget <= 0:
 		return []
@@ -98,6 +128,7 @@ static func layout_for(inventory: Dictionary, is_grounded := false, budget := VI
 	for kind in KINDS:
 		if int(counts[kind]) > 0:
 			nonzero.append(kind)
+	var lane_centers := carry_lane_centers(nonzero)
 	for kind_index in nonzero.size():
 		var kind := nonzero[kind_index]
 		var shown := int(visible[kind])
@@ -111,21 +142,22 @@ static func layout_for(inventory: Dictionary, is_grounded := false, budget := VI
 				position = Vector3((kind_index - (nonzero.size() - 1) * 0.5) * 0.82 + (column - 1.5) * 0.13,
 					row * 0.12, (column % 2) * 0.12)
 			else:
-				# Build one compact carrier-bound tower across resource kinds. Global
-				# slot tiers remain visibly vertical even for a small mixed load, while
-				# the authored pieces and exact represented counts remain unchanged.
-				var carrier_slot := layout.size()
-				var carrier_column := carrier_slot % CARRY_COLUMNS
-				var carrier_tier := carrier_slot / CARRY_COLUMNS
-				position = Vector3((carrier_column - (CARRY_COLUMNS - 1) * 0.5) * CARRY_COLUMN_SPACING,
-					CARRY_BASE_HEIGHT + carrier_tier * CARRY_TIER_HEIGHT, (carrier_column % 2) * 0.07)
+				# Each resource owns one vertical lane sized from the authored mesh.
+				# Fixed yaw and a positive bounds-based gap make silhouettes separable
+				# from every review angle and match the locked reference's clean towers.
+				position = Vector3(float(lane_centers[kind]),
+					CARRY_BASE_HEIGHT + float(index) * (float(AUTHORED_SCALED_HEIGHT[kind]) + CARRY_TIER_GAP),
+					0.0)
 			layout.append({
 				"kind": kind,
 				"logical_count": count,
 				"represented_count": represented,
 				"asset": ASSETS[kind],
 				"position": position,
-				"rotation_y": float((index * 37 + kind_index * 19) % 360) * PI / 180.0,
+				"lane": kind,
+				"authored_width": float(AUTHORED_SCALED_WIDTH[kind]),
+				"authored_height": float(AUTHORED_SCALED_HEIGHT[kind]),
+				"rotation_y": float((index * 37 + kind_index * 19) % 360) * PI / 180.0 if is_grounded else 0.0,
 				"scale": float(PIECE_SCALE[kind]) * (1.55 if is_grounded else 1.0),
 			})
 	return layout

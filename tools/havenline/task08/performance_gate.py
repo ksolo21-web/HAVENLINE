@@ -41,7 +41,8 @@ def main() -> None:
         "huge_logical_total":report.get("huge_logical_total"),
         "benchmark":performance,
         "unchanged_update_rebuild_delta":0,
-        "integrated_shipping_scene_delta_pending":True,
+        "integrated_shipping_scene_delta_reported_separately":True,
+        "integrated_shipping_scene_record":"integrated-performance.json",
         "physical_device_native_4k60_certified":False,
         "passed":not failures,"failures":failures,
     }

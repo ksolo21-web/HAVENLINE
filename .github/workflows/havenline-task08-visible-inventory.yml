@@ -39,10 +39,12 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y xvfb mesa-vulkan-drivers ffmpeg
           python3 -m pip install --disable-pip-version-check pillow
-          mkdir -p "$RUNNER_TEMP/engine" task08-evidence/tests task08-evidence/matrices task08-evidence/captures task08-evidence/native4k task08-evidence/video
+          mkdir -p "$RUNNER_TEMP/engine" task08-evidence/tests task08-evidence/matrices task08-evidence/captures task08-evidence/native4k task08-evidence/video task08-evidence/reference
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          cp Docs/Production/T05/ReferenceFrames/*.png task08-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/coverage.json Docs/Production/T05/ReferenceFrames/extraction-report.json task08-evidence/reference/
 
       - name: Verify ownership and source contracts
         env:
@@ -110,9 +112,11 @@ jobs:
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1); test -n "$VK_ICD_FILENAMES"
           extra=(); if [ "$GITHUB_REF_NAME" = 'codex/havenline-sequential-task-01' ]; then extra+=(--integrated); fi
           mkdir -p task08-evidence/captures/sequence
-          xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task08_inventory.gd -- --candidate="$CANDIDATE" --state=sequence --device=review_16_9 --view=front --out="$(pwd)/task08-evidence/captures/sequence" "${extra[@]}" > task08-evidence/captures/sequence.log 2>&1
+          /usr/bin/time -v -o task08-evidence/captures/sequence-time.txt xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task08_inventory.gd -- --candidate="$CANDIDATE" --state=sequence --device=review_16_9 --view=front --out="$(pwd)/task08-evidence/captures/sequence" "${extra[@]}" > task08-evidence/captures/sequence.log 2>&1
           mkdir -p task08-evidence/captures/routes
           xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task08_inventory.gd -- --candidate="$CANDIDATE" --state=routes --device=review_16_9 --view=front --out="$(pwd)/task08-evidence/captures/routes" "${extra[@]}" > task08-evidence/captures/routes.log 2>&1
+          mkdir -p task08-evidence/captures/route-proofs
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task08_inventory.gd -- --candidate="$CANDIDATE" --state=route-proofs --device=review_16_9 --view=three-quarter --out="$(pwd)/task08-evidence/captures/route-proofs" "${extra[@]}" > task08-evidence/captures/route-proofs.log 2>&1
           mkdir -p task08-evidence/captures/integrity
           xvfb-run -a -s '-screen 0 1280x720x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task08_inventory.gd -- --candidate="$CANDIDATE" --state=integrity --device=review_16_9 --view=front --out="$(pwd)/task08-evidence/captures/integrity" "${extra[@]}" > task08-evidence/captures/integrity.log 2>&1
           for view in front side left rear three-quarter overhead; do
@@ -136,6 +140,7 @@ jobs:
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task08-evidence/captures/*.log task08-evidence/native4k.log; then exit 1; fi
           ffmpeg -hide_banner -loglevel error -framerate 20 -i task08-evidence/captures/sequence/frames/frame-%05d.jpg -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p -movflags +faststart task08-evidence/video/resource-loop.mp4
           ffmpeg -hide_banner -loglevel error -framerate 20 -i task08-evidence/captures/routes/frames/frame-%05d.jpg -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p -movflags +faststart task08-evidence/video/build-repair-loop.mp4
+          ffmpeg -hide_banner -loglevel error -framerate 20 -i task08-evidence/captures/route-proofs/frames/frame-%05d.jpg -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p -movflags +faststart task08-evidence/video/destination-route-loop.mp4
 
       - name: Enforce capture provenance, conservation and content
         env:
@@ -147,7 +152,7 @@ jobs:
           from PIL import Image,ImageStat
           import hashlib,json,os
           root=Path('task08-evidence'); manifests=list((root/'captures').glob('*/capture.json'))+[root/'native4k/capture.json']
-          assert len(manifests)==17,len(manifests)
+          assert len(manifests)==18,len(manifests)
           hashes=set(); images=[]
           for path in manifests:
               report=json.loads(path.read_text()); assert report['task']=='T08-visible-inventory-v1'
@@ -158,6 +163,8 @@ jobs:
               assert report['player_stack']['logical_total']==sum(report['trace'][-1]['inventory'].values()) and report['player_stack']['visible_instances']<=48
               assert report['helper_stack']['visible_instances']<=48 and report['stockpile']['visible_instances']<=48
               assert report['transfers']['active_flights']<=48 and report['physical_device_native_4k60_certified'] is False
+              assert report['carry_contract']['carry_layout']=='resource_specific_vertical_lanes'
+              assert report['transfer_contract']['trail_samples']>=5 and report['transfer_contract']['arrowheads'] is True and report['transfer_contract']['feedback_draw_calls']<=6
               w,h=report['window']; assert report['game_rect']==[0.0,0.0,w,h]
               for rect in report['layout_rects'].values():
                   x,y,rw,rh=rect; assert x>=0 and y>=0 and x+rw<=w+0.01 and y+rh<=h+0.01,(path,rect)
@@ -176,14 +183,21 @@ jobs:
           route_rows=[flight for row in routes['trace'] for flight in row['transfers']['flights']]
           assert {flight['destination_id'] for flight in route_rows}=={'furnace_storage','camp_storage','defense:north','defense:south','repair:furnace','repair:north'}
           assert {flight['actor_id'] for flight in route_rows}=={1,2}
+          proofs=json.loads((root/'captures/route-proofs/capture.json').read_text())
+          assert len(proofs['trace'])==268 and len(list((root/'captures/route-proofs/frames').glob('*.jpg')))==88
+          proof_final=proofs['transfers']; assert proof_final['accepted_receipts']==6 and proof_final['completed_receipts']==6 and proof_final['rejected_receipts']==0,proof_final
+          proof_rows=[row for row in proofs['trace'] if row['route_camera']['active']]
+          assert proof_rows and all(row['route_camera']['mode']=='midpoint_endpoints' and row['route_camera']['endpoints_visible'] for row in proof_rows)
+          assert {row['route_camera']['destination_id'] for row in proof_rows}=={'furnace_storage','camp_storage','defense:north','defense:south','repair:furnace','repair:north'}
           integrity=json.loads((root/'captures/integrity/capture.json').read_text())['actor_integrity']
           assert integrity['switch_succeeded'] is True and integrity['selected_lead']==2
           assert sum(integrity['before'].values())==sum(integrity['after_switch'].values())
           assert integrity['hidden_actor_visible'] is False and integrity['hidden_stack_visible'] is False and integrity['hidden_stack_logical_total']==0
           directions={flight['direction'] for report in (sequence,routes) for row in report['trace'] for flight in row['transfers']['flights']}
           assert directions=={'source_to_actor','actor_to_destination'},directions
-          assert (root/'video/resource-loop.mp4').stat().st_size>10000 and (root/'video/build-repair-loop.mp4').stat().st_size>10000 and len(images)>=31,len(images)
-          result={'task':'T08','candidate_commit':os.environ['CANDIDATE'],'manifest_count':len(manifests),'png_count':len(images),'unique_png_hashes':len(hashes),'sequence_frames':60,'route_sequence_frames':88,'transfer_directions':sorted(directions),'route_destinations':sorted({flight['destination_id'] for flight in route_rows}),'actor_integrity':integrity,'conservation_held':True,'passed':True}
+          videos=[root/'video/resource-loop.mp4',root/'video/build-repair-loop.mp4',root/'video/destination-route-loop.mp4']
+          assert all(path.stat().st_size>10000 for path in videos) and len(images)>=39,len(images)
+          result={'task':'T08','candidate_commit':os.environ['CANDIDATE'],'manifest_count':len(manifests),'png_count':len(images),'unique_png_hashes':len(hashes),'sequence_frames':60,'route_sequence_frames':88,'destination_proof_frames':88,'destination_endpoints_visible':True,'transfer_directions':sorted(directions),'route_destinations':sorted({flight['destination_id'] for flight in route_rows}),'actor_integrity':integrity,'conservation_held':True,'passed':True}
           (root/'capture-gate.json').write_text(json.dumps(result,indent=2)); print(json.dumps(result))
           PY
 
@@ -193,23 +207,45 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import json,os,statistics
-          rows=json.loads(Path('task08-evidence/captures/sequence/capture.json').read_text())['trace']
+          report=json.loads(Path('task08-evidence/captures/sequence/capture.json').read_text()); rows=report['trace']
           baseline=rows[:12]; active=[row for row in rows if row['transfers']['active_flights']>0]
-          assert baseline and active
+          assert report['performance_warmup_frames']==90 and baseline and active
           def mean(rows,key): return statistics.fmean(float(row[key]) for row in rows)
+          def percentile(values,ratio):
+              values=sorted(float(value) for value in values); return values[max(0,min(len(values)-1,int(len(values)*ratio+0.999999)-1))]
+          def stats(rows,key):
+              values=[float(row[key]) for row in rows]
+              return {'mean':statistics.fmean(values),'p50':percentile(values,.50),'p95':percentile(values,.95),'p99':percentile(values,.99),'maximum':max(values),'samples':len(values)}
           before={k:mean(baseline,k) for k in ('frame_usec','draw_calls','primitives')}
           during={k:mean(active,k) for k in before}; delta={k:during[k]-before[k] for k in before}
+          baseline_stats={k:stats(baseline,k) for k in before}; active_stats={k:stats(active,k) for k in before}
           budgets={'maximum_frame_usec_increase':8000.0,'absolute_draw_call_delta':16.0,'absolute_primitive_delta':400000.0}
           failures=[]
-          # Startup/warm-up frames can make the pre-transfer baseline slower than
-          # the active window. Only a positive frame-time increase is overhead;
-          # treating a speed-up as a regression creates a runner-timing false fail.
-          if delta['frame_usec']>budgets['maximum_frame_usec_increase']: failures.append('frame-time increase')
+          p95_frame_increase=active_stats['frame_usec']['p95']-baseline_stats['frame_usec']['p95']
+          if p95_frame_increase>budgets['maximum_frame_usec_increase']: failures.append('p95 frame-time increase')
           if abs(delta['draw_calls'])>budgets['absolute_draw_call_delta']: failures.append('draw-call delta')
           if abs(delta['primitives'])>budgets['absolute_primitive_delta']: failures.append('primitive delta')
-          out={'task':'T08','candidate_commit':os.environ['GITHUB_SHA'],'baseline':before,'active_transfer':during,'delta':delta,'budgets':budgets,'passed':not failures,'failures':failures,'physical_device_native_4k60_certified':False}
+          metrics=report['shipping_scene_metrics']
+          rss_line=next(line for line in Path('task08-evidence/captures/sequence-time.txt').read_text().splitlines() if 'Maximum resident set size' in line)
+          rss_mb=float(rss_line.split(':')[-1].strip())/1024.0
+          source_paths=[Path('HavenlineGodot/scripts/carry_stack.gd'),Path('HavenlineGodot/scripts/storage_stockpile.gd'),Path('HavenlineGodot/scripts/transfer_feedback.gd')]
+          storage_mb=sum(path.stat().st_size for path in source_paths)/(1024*1024)
+          out={'task':'T08','candidate_commit':os.environ['GITHUB_SHA'],'scene_state':'shipping main scene; 90-frame warm-up; matched inactive and active transfer windows','resolution':{'window':report['window'],'internal_render':report['internal_render']},'renderer':report['renderer'],
+              'baseline':before,'active_transfer':during,'baseline_stats':baseline_stats,'active_transfer_stats':active_stats,'delta':delta,'p95_frame_usec_increase':p95_frame_increase,'budgets':budgets,
+              'draw_calls':int(max(row['draw_calls'] for row in active)),'visible_triangles':int(max(row['primitives'] for row in active)),'triangles_or_primitives':int(max(row['primitives'] for row in active)),
+              'materials_visible':int(metrics['materials_visible']),'materials':int(metrics['materials_visible']),
+              'texture_gpu_memory_mb':float(metrics['texture_memory_bytes'])/(1024*1024),'texture_memory_if_measurable':float(metrics['texture_memory_bytes'])/(1024*1024),'video_gpu_memory_mb':float(metrics['video_memory_bytes'])/(1024*1024),
+              'cpu_frame_ms':None,'cpu_frame_time_if_measurable':None,'cpu_script_update_p95_ms':active_stats['frame_usec']['p95']/1000.0,'gpu_frame_ms_where_measurable':None,'gpu_frame_time_if_measurable':None,
+              'physics_active_bodies':int(metrics['physics_body_count']),'physics_body_count':int(metrics['physics_body_count']),'animated_rigs_active':int(metrics['animation_player_count']),'animation_count':int(metrics['animation_player_count']),
+              'npc_companion_active_population':int(metrics['population_count']),'population_count':int(metrics['population_count']),
+              'process_memory_mb':rss_mb,'process_memory_if_measurable':rss_mb,'process_static_memory_mb':float(metrics['process_static_memory_bytes'])/(1024*1024),
+              'storage_download_mb':storage_mb,'storage_delta':storage_mb,
+              'measurement_method':'Pinned Godot 4.7.2 Mobile Vulkan shipping scene; 90 discarded warm-up frames; matched inactive/active trace windows with retained raw samples; Godot visible draw, primitive, texture/video-memory and scene inventory counters; GNU time maximum RSS; exact T08 source byte delta.',
+              'known_unmeasured_fields':['full_cpu_frame_ms','gpu_frame_ms_where_measurable','direct_gpu_shader_time_ms','physical_display_presentation','physical_device_thermal_behavior'],
+              'passed':not failures,'failures':failures,'physical_device_native_4k60_certified':False}
           Path('task08-evidence/integrated-performance.json').write_text(json.dumps(out,indent=2)); print(json.dumps(out)); assert not failures,failures
           PY
+          python3 tools/havenline/production/critic_harness.py performance --candidate "$GITHUB_SHA" --record task08-evidence/integrated-performance.json | tee task08-evidence/integrated-performance-gate.json
 
       - name: Build evidence index
         run: |

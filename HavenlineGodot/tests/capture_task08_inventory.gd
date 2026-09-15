@@ -20,6 +20,12 @@ var draw_calls: Array[int] = []
 var primitives: Array[int] = []
 var sink_units := 0
 var integrity_evidence := {}
+var route_camera_active := false
+var route_camera_focus := Vector3.ZERO
+var route_camera_size := 0.0
+var route_camera_start := Vector3.ZERO
+var route_camera_finish := Vector3.ZERO
+var route_camera_destination := ""
 
 func _initialize() -> void:
 	for argument in OS.get_cmdline_user_args():
@@ -55,6 +61,50 @@ func destination_point() -> Vector3:
 func target_point(target: Vector2) -> Vector3:
 	return game.xyz(target) + Vector3.UP * 0.9
 
+func configure_route_camera(start: Vector3, finish: Vector3, destination_id: String) -> void:
+	route_camera_active = true
+	route_camera_start = start
+	route_camera_finish = finish
+	route_camera_destination = destination_id
+	route_camera_focus = start.lerp(finish, 0.5) + Vector3.UP * 0.3
+	route_camera_size = clampf(start.distance_to(finish) * 0.88 + 5.5, 8.0, 34.0)
+
+func apply_route_camera() -> void:
+	if not route_camera_active:
+		return
+	game.camera.keep_aspect = Camera3D.KEEP_HEIGHT
+	game.camera.size = route_camera_size
+	game.camera.position = route_camera_focus + Vector3(10.0, 8.0, 11.0).normalized() * 30.0
+	game.camera.look_at(route_camera_focus)
+	# Expand only when projection proves an endpoint would be cropped. This keeps
+	# actor, destination, route and arrival pulse together without guesswork.
+	for attempt in 4:
+		var start_screen: Vector2 = game.camera.unproject_position(route_camera_start)
+		var finish_screen: Vector2 = game.camera.unproject_position(route_camera_finish)
+		var viewport_size := Vector2(game.scene_view.size)
+		var margin := viewport_size * 0.08
+		if start_screen.x >= margin.x and start_screen.y >= margin.y and start_screen.x <= viewport_size.x - margin.x and start_screen.y <= viewport_size.y - margin.y and finish_screen.x >= margin.x and finish_screen.y >= margin.y and finish_screen.x <= viewport_size.x - margin.x and finish_screen.y <= viewport_size.y - margin.y:
+			break
+		game.camera.size *= 1.22
+	route_camera_size = game.camera.size
+
+func route_camera_descriptor() -> Dictionary:
+	if not route_camera_active:
+		return {"active":false}
+	var start_screen: Vector2 = game.camera.unproject_position(route_camera_start)
+	var finish_screen: Vector2 = game.camera.unproject_position(route_camera_finish)
+	var viewport_size := Vector2(game.scene_view.size)
+	var margin := viewport_size * 0.06
+	var endpoints_visible: bool = not game.camera.is_position_behind(route_camera_start) and not game.camera.is_position_behind(route_camera_finish)
+	for point in [start_screen, finish_screen]:
+		endpoints_visible = endpoints_visible and point.x >= margin.x and point.y >= margin.y and point.x <= viewport_size.x - margin.x and point.y <= viewport_size.y - margin.y
+	return {
+		"active":true, "mode":"midpoint_endpoints", "destination_id":route_camera_destination,
+		"size":route_camera_size, "endpoints_visible":endpoints_visible,
+		"start_screen":[start_screen.x,start_screen.y], "finish_screen":[finish_screen.x,finish_screen.y],
+		"viewport":[viewport_size.x,viewport_size.y],
+	}
+
 func spend_actor(kind: String, actor_id: int, helper: bool) -> bool:
 	if helper:
 		for companion in game.sim.companions:
@@ -68,6 +118,10 @@ func spend_actor(kind: String, actor_id: int, helper: bool) -> bool:
 
 func commit_route(route: String, actor_id: int, helper: bool, target: Vector2, destination_id: String, kind := "wood") -> void:
 	if not spend_actor(kind, actor_id, helper): return
+	var flight_start := actor_point(actor_id)
+	var flight_finish := target_point(target)
+	if state == "route-proofs":
+		configure_route_camera(flight_start, flight_finish, destination_id)
 	if route == "deposit": game.sim.stored[kind] += 1
 	elif route == "build":
 		var side := destination_id.trim_prefix("defense:")
@@ -84,7 +138,7 @@ func commit_route(route: String, actor_id: int, helper: bool, target: Vector2, d
 			"target":target, "resource":kind, "destination_id":destination_id}]
 		game.present_events()
 	else:
-		game.transfer_feedback.transfer(kind, actor_point(actor_id), target_point(target),
+		game.transfer_feedback.transfer(kind, flight_start, flight_finish,
 			"capture:%s:%d:%d" % [route, actor_id, records.size()], "actor_to_destination", actor_id, destination_id)
 
 func commit_gather(actor_id: int, helper := false) -> void:
@@ -128,6 +182,18 @@ func maximum(values: Array) -> float:
 	for value in values: result = maxf(result, float(value))
 	return result
 
+func visible_material_count() -> int:
+	var materials := {}
+	for candidate in game.world.find_children("*", "MeshInstance3D", true, false):
+		var mesh_instance := candidate as MeshInstance3D
+		if mesh_instance == null or not mesh_instance.is_visible_in_tree() or mesh_instance.mesh == null:
+			continue
+		for surface in mesh_instance.mesh.get_surface_count():
+			var material := mesh_instance.get_active_material(surface)
+			if material != null:
+				materials[material.get_rid().get_id()] = true
+	return materials.size()
+
 func layout_rects() -> Dictionary:
 	var result := {}
 	for key in game.layout_snapshot.get("rects", {}):
@@ -149,6 +215,8 @@ func sample(frame: int) -> void:
 	game.transfer_feedback._process(1.0 / 60.0)
 	game._process(1.0 / 60.0)
 	stockpile.sync(game.sim.stored)
+	if state == "route-proofs":
+		apply_route_camera()
 	var elapsed_usec := float(Time.get_ticks_usec() - started)
 	await process_frame
 	await RenderingServer.frame_post_draw
@@ -161,11 +229,21 @@ func sample(frame: int) -> void:
 		"player_stack":game.carry_stacks[game.sim.lead].descriptor(),
 		"helper_stack":game.carry_stacks[2].descriptor(), "stockpile":stockpile.descriptor(),
 		"transfers":game.transfer_feedback.descriptor(),
+		"route_camera":route_camera_descriptor(),
 		"frame_usec":elapsed_usec, "draw_calls":draws, "primitives":prims,
 	})
 
+func warm_scene(frame_count: int) -> void:
+	for frame in frame_count:
+		game.transfer_feedback._process(1.0 / 60.0)
+		game._process(1.0 / 60.0)
+		stockpile.sync(game.sim.stored)
+		await process_frame
+		await RenderingServer.frame_post_draw
+
 func capture_sequence() -> void:
 	DirAccess.make_dir_recursive_absolute(output.path_join("frames"))
+	await warm_scene(90)
 	for frame in 180:
 		if frame == 12: commit_gather(game.sim.lead)
 		elif frame == 54: commit_deposit(game.sim.lead)
@@ -253,6 +331,7 @@ func run() -> void:
 	# isolated harness even though the subsequent event routes differ.
 	if state == "sequence": game.sim.position += Vector2(-0.35, 0.0)
 	elif state == "routes": game.sim.position += Vector2(0.35, 0.0)
+	elif state == "route-proofs": game.sim.position += Vector2(0.55, 0.0)
 	game.sim.inventory = {"wood":8,"stone":4,"metal":2,"fuel":2}
 	game.sim.stored = {"wood":9,"stone":6,"metal":3,"fuel":2}
 	for companion in game.sim.companions:
@@ -260,6 +339,7 @@ func run() -> void:
 			companion.position = Vector2(-0.1, 1.9)
 			if state == "sequence": companion.position += Vector2(0.0, -0.2)
 			elif state == "routes": companion.position += Vector2(0.0, 0.2)
+			elif state == "route-proofs": companion.position += Vector2(0.0, 0.35)
 			companion.cargo_kind = "wood"; companion.cargo = 4
 		elif state == "integrity" and int(companion.id) == 3:
 			companion.cargo_kind = "metal"; companion.cargo = 3
@@ -274,7 +354,7 @@ func run() -> void:
 	game.update_carry()
 	var initial_total := total_authority()
 	if state == "sequence": await capture_sequence()
-	elif state == "routes": await capture_routes()
+	elif state in ["routes", "route-proofs"]: await capture_routes()
 	elif state == "integrity": await capture_integrity()
 	else: await capture_static()
 	var all_totals := records.map(func(row): return int(row.authority_total))
@@ -291,12 +371,13 @@ func run() -> void:
 		"candidate_components_applied_directly_because_stockpile_call_site_is_integration_only":not integrated,
 		"qa_evidence_banner_present":false, "permanent_action_buttons":0, "movement_control":"one_primary_joystick",
 		"layout_rects":layout_rects(), "trace":records, "initial_authority_total":initial_total,
+		"performance_warmup_frames":90 if state == "sequence" else 0,
 		"conservation_held":all_totals.all(func(value): return value == initial_total),
 		"player_stack":game.carry_stacks[game.sim.lead].descriptor(), "helper_stack":game.carry_stacks[2].descriptor(),
 		"stockpile":stockpile.descriptor(), "transfers":game.transfer_feedback.descriptor(),
 		"carry_contract":Carry.contract(), "transfer_contract":Transfer.contract(),
 		"sink_units":sink_units, "actor_integrity":integrity_evidence,
-		"shipping_scene_metrics":{"average_frame_usec":average(frame_usec),"maximum_frame_usec":maximum(frame_usec),"average_draw_calls":average(draw_calls),"maximum_draw_calls":int(maximum(draw_calls)),"average_primitives":average(primitives),"maximum_primitives":int(maximum(primitives))},
+		"shipping_scene_metrics":{"average_frame_usec":average(frame_usec),"maximum_frame_usec":maximum(frame_usec),"average_draw_calls":average(draw_calls),"maximum_draw_calls":int(maximum(draw_calls)),"average_primitives":average(primitives),"maximum_primitives":int(maximum(primitives)),"texture_memory_bytes":RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TEXTURE_MEM_USED),"video_memory_bytes":RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_VIDEO_MEM_USED),"process_static_memory_bytes":OS.get_static_memory_usage(),"materials_visible":visible_material_count(),"physics_body_count":game.world.find_children("*","PhysicsBody3D",true,false).size(),"animation_player_count":game.world.find_children("*","AnimationPlayer",true,false).size(),"population_count":game.actors.values().filter(func(actor): return is_instance_valid(actor) and actor.visible).size()},
 		"physical_device_native_4k60_certified":false,
 	}
 	var file := FileAccess.open(output.path_join("capture.json"),FileAccess.WRITE)
