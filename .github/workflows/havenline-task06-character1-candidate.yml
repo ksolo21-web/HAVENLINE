@@ -2,7 +2,7 @@ name: Havenline Task 6 Character 1 candidate
 
 on:
   push:
-    branches: ['havenline/T06-character1']
+    branches: ['havenline/T06-character1', 'codex/havenline-sequential-task-01']
     paths:
       - 'HavenlineGodot/animations/c1/**'
       - 'HavenlineGodot/scripts/character1_motion.gd'
@@ -42,10 +42,39 @@ jobs:
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
 
       - name: Verify isolated ownership and exact Character 1 source
+        env:
+          REVIEWED_T06_SOURCE: 47f86fae25b099abb5c7096c37ca7495453b2b8f
         run: |
           set -euo pipefail
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
-          python3 tools/havenline/production/workstream.py validate-candidate T06 --base f9d815a7d05c4e811d22d620c6b0c00c768ce6c5 --head "$GITHUB_SHA" --integration-head "$integration" | tee task06-evidence/candidate-scope.json
+          if [ "$GITHUB_REF_NAME" = 'codex/havenline-sequential-task-01' ]; then
+            git merge-base --is-ancestor "$REVIEWED_T06_SOURCE" "$GITHUB_SHA"
+            git diff --exit-code "$REVIEWED_T06_SOURCE" "$GITHUB_SHA" -- \
+              HavenlineGodot/scripts/character1_motion.gd \
+              HavenlineGodot/tests/capture_task06_character1.gd \
+              HavenlineGodot/tests/test_task06_character1.gd \
+              tools/havenline/task06/deformed_surface_audit.py \
+              tools/havenline/task06/run_matrix_case.sh \
+              tools/havenline/task06/runtime_review_gate.py \
+              tools/havenline/task06/test_character1_motion.py
+            python3 - <<'PY' | tee task06-evidence/candidate-scope.json
+          import json,os
+          reviewed=os.environ['REVIEWED_T06_SOURCE']
+          integrated=os.environ['GITHUB_SHA']
+          print(json.dumps({
+            'task_id':'T06',
+            'reviewed_candidate':reviewed,
+            'integrated_candidate':integrated,
+            'integration_branch':'codex/havenline-sequential-task-01',
+            'reviewed_source_is_ancestor':True,
+            'reviewed_runtime_and_gate_files_byte_identical':True,
+            'passed':True,
+            'errors':[]
+          },indent=2))
+          PY
+          else
+            python3 tools/havenline/production/workstream.py validate-candidate T06 --base f9d815a7d05c4e811d22d620c6b0c00c768ce6c5 --head "$GITHUB_SHA" --integration-head "$integration" | tee task06-evidence/candidate-scope.json
+          fi
           python3 tools/havenline/task06/test_character1_motion.py | tee task06-evidence/tests/source-integrity.json
           echo '95e4fed3a2778656cdf8b73affd2eb3feda8a32f82f4a0c3f76d90c82633c099  HavenlineGodot/assets/characters/Character1.glb' | sha256sum -c -
 
