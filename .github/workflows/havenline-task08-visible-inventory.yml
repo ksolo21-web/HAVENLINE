@@ -49,9 +49,8 @@ jobs:
           CANDIDATE: ${{ github.sha }}
         run: |
           set -euo pipefail
-          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
           if [ "$GITHUB_REF_NAME" != 'codex/havenline-sequential-task-01' ]; then
-            python3 tools/havenline/production/workstream.py validate-candidate T08 --base c4e4e73108406d951c1635df20e10ac9208526af --head "$CANDIDATE" --integration-head "$integration" | tee task08-evidence/candidate-scope.json
+            python3 tools/havenline/production/workstream.py validate-candidate T08 --base 7744b9f6a063da3385ce10992ef732ba2c669890 --head "$CANDIDATE" --integration-head c4e4e73108406d951c1635df20e10ac9208526af | tee task08-evidence/candidate-scope.json
           fi
           python3 tools/havenline/task08/validate_inventory.py --candidate "$CANDIDATE" --output task08-evidence/source-contract.json
           python3 - <<'PY'
