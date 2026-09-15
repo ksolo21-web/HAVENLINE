@@ -45,7 +45,12 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
-      - uses: android-actions/setup-android@v3
+      - name: Configure hosted Android SDK
+        run: |
+          set -euo pipefail
+          SDKMANAGER="$(find "${ANDROID_SDK_ROOT:-/usr/local/lib/android/sdk}/cmdline-tools" -path '*/bin/sdkmanager' -type f | sort -V | tail -n 1)"
+          test -x "$SDKMANAGER"
+          echo "$(dirname "$SDKMANAGER")" >> "$GITHUB_PATH"
       - name: Install checksum-pinned engine and Android templates
         run: |
           set -euo pipefail
