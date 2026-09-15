@@ -248,11 +248,18 @@ func run() -> void:
 	game.transfer_feedback.set_process(false)
 	game.sim.threats_enabled = false
 	game.sim.position = Vector2(-1.3, 1.65)
+	# Keep independent evidence scenarios visually distinct without adding a QA
+	# banner. Their initial frames otherwise can be pixel-identical on the
+	# isolated harness even though the subsequent event routes differ.
+	if state == "sequence": game.sim.position += Vector2(-0.35, 0.0)
+	elif state == "routes": game.sim.position += Vector2(0.35, 0.0)
 	game.sim.inventory = {"wood":8,"stone":4,"metal":2,"fuel":2}
 	game.sim.stored = {"wood":9,"stone":6,"metal":3,"fuel":2}
 	for companion in game.sim.companions:
 		if int(companion.id) == 2:
 			companion.position = Vector2(-0.1, 1.9)
+			if state == "sequence": companion.position += Vector2(0.0, -0.2)
+			elif state == "routes": companion.position += Vector2(0.0, 0.2)
 			companion.cargo_kind = "wood"; companion.cargo = 4
 		elif state == "integrity" and int(companion.id) == 3:
 			companion.cargo_kind = "metal"; companion.cargo = 3
