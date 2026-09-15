@@ -1,21 +1,39 @@
 # HAVENLINE Agent Instructions — V2 Controlled Parallel Production
 
-## Required starting point
+## Status/continuity fast path — apply before the full production bootstrap
+
+For a read-only question such as "update on T06", "where did we leave off?",
+"what failed?", "what is blocked?", or "what is the next action?", first read
+`Docs/Production/AGENT_EXECUTION_LOOP_GUARD.md` and use its authoritative
+status fast path.
+
+A simple status/continuity request MUST NOT automatically trigger the full
+production reading order below. When the repository/task are already known,
+do not rediscover the repository, enumerate unrelated branches, repeatedly
+search commits, or widen retrieval merely because more history exists. Stop
+retrieving as soon as the current state, last verified milestone, blocker and
+next action are supportable.
+
+The full production bootstrap becomes mandatory when the user asks to build,
+modify, integrate, review, repair or otherwise change production work.
+
+## Required starting point for production work
 
 Read in this order before any Havenline production work:
 
 1. `Docs/Production/HAVENLINE_BUILD_PLAN_V2.md`
-2. `Docs/Production/ANTI_LOOP_ROOT_CAUSE_STANDARD.md`
-3. `Docs/Production/SEQUENTIAL_REPAIR_PLAN.md`
-4. `Docs/Production/task-gates.json`
-5. `Docs/Production/WORKSTREAM_REGISTRY.json`
-6. `Docs/Production/DEPENDENCY_GRAPH.json`
-7. `Docs/Production/PATH_OWNERSHIP.json`
-8. `Docs/Production/CRITIC_MATRIX.json`
-9. `Docs/Production/PERFORMANCE_BUDGETS.json`
-10. the active task packet/frozen scope
-11. `Docs/AI/HavenlineProjectContext.md`
-12. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
+2. `Docs/Production/AGENT_EXECUTION_LOOP_GUARD.md`
+3. `Docs/Production/ANTI_LOOP_ROOT_CAUSE_STANDARD.md`
+4. `Docs/Production/SEQUENTIAL_REPAIR_PLAN.md`
+5. `Docs/Production/task-gates.json`
+6. `Docs/Production/WORKSTREAM_REGISTRY.json`
+7. `Docs/Production/DEPENDENCY_GRAPH.json`
+8. `Docs/Production/PATH_OWNERSHIP.json`
+9. `Docs/Production/CRITIC_MATRIX.json`
+10. `Docs/Production/PERFORMANCE_BUDGETS.json`
+11. the active task packet/frozen scope
+12. `Docs/AI/HavenlineProjectContext.md`
+13. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
 
 Inspect current source/evidence for newer work. `Docs/AI/UnityProjectContext.md` is historical.
 
@@ -214,6 +232,9 @@ verified milestones with current stage, completed/total count, latest verified
 result and next blocker/action. Do not fabricate time-based percentages or
 promise unscheduled background work.
 
+For simple status/continuity requests, do not turn progress reporting into a
+retrieval loop. If the status is already answerable, answer it.
+
 ## Failure handling
 
 Work through genuine failures: diagnose, preserve working checkpoints, change
@@ -225,3 +246,8 @@ Every critic-driven repair must satisfy
 `Docs/Production/ANTI_LOOP_ROOT_CAUSE_STANDARD.md`. Production defects require
 causal production changes and unchanged matched-camera proof before another
 critic run. Evidence-only changes cannot resolve them.
+
+Every retrieval/status investigation must satisfy
+`Docs/Production/AGENT_EXECUTION_LOOP_GUARD.md`. Three consecutive retrievals
+that add no material fact require immediate synthesis/stop; repeating equivalent
+searches is prohibited.
