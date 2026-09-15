@@ -14,7 +14,11 @@ const ASSETS := {
 	"metal": "res://assets/stations_v2/metal_stack.glb",
 	"fuel": "res://assets/stations_v2/fuel_canister.glb",
 }
-const PIECE_SCALE := {"wood": 0.105, "stone": 0.12, "metal": 0.115, "fuel": 0.14}
+const PIECE_SCALE := {"wood": 0.165, "stone": 0.18, "metal": 0.175, "fuel": 0.2}
+const CARRY_BASE_HEIGHT := 0.48
+const CARRY_COLUMN_SPACING := 0.1
+const CARRY_KIND_SPACING := 0.34
+const CARRY_TIER_HEIGHT := 0.16
 
 var loader: Callable # Compatibility fallback only; authored T05 assets are preferred.
 var grounded := false
@@ -104,8 +108,11 @@ static func layout_for(inventory: Dictionary, is_grounded := false, budget := VI
 				position = Vector3((kind_index - (nonzero.size() - 1) * 0.5) * 0.82 + (column - 1.5) * 0.13,
 					row * 0.12, (column % 2) * 0.12)
 			else:
-				position = Vector3((kind_index - (nonzero.size() - 1) * 0.5) * 0.28 + (column - 1.5) * 0.07,
-					row * 0.105, (column % 2) * 0.055)
+				# A raised, narrow rack keeps every authored piece visibly attached to
+				# the actor instead of reading as loose ground clutter. Four columns
+				# preserve the exact-small-load contract; rows become visible tiers.
+				position = Vector3((kind_index - (nonzero.size() - 1) * 0.5) * CARRY_KIND_SPACING + (column - 1.5) * CARRY_COLUMN_SPACING,
+					CARRY_BASE_HEIGHT + row * CARRY_TIER_HEIGHT, (column % 2) * 0.085)
 			layout.append({
 				"kind": kind,
 				"logical_count": count,

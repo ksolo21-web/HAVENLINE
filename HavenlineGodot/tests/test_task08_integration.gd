@@ -93,6 +93,27 @@ func run() -> void:
 	check("inventory presentation cannot alter T07 context selection", action_after == action_before)
 	check("one-joystick action contract remains intact", restored.context_director.contract().permanent_action_buttons == 0)
 
+	var route_transfer := Transfer.new()
+	root.add_child(route_transfer)
+	check("routes committed build from player to exact defense", route_transfer.transfer("wood", Vector3.ZERO, Vector3(3, 1, 2), "build:lead", "actor_to_destination", 1, "defense:north"))
+	check("routes committed build from helper without identity loss", route_transfer.transfer("stone", Vector3.ONE, Vector3(-3, 1, 2), "build:helper", "actor_to_destination", 2, "defense:south"))
+	check("routes committed repair from player and helper", route_transfer.transfer("wood", Vector3.ZERO, Vector3(0, 1, 0.2), "repair:lead", "actor_to_destination", 1, "repair:furnace") and route_transfer.transfer("wood", Vector3.ONE, Vector3(3, 1, 2), "repair:helper", "actor_to_destination", 2, "repair:north"))
+	var route_rows: Array = route_transfer.descriptor().flights
+	check("build repair routes retain actor and destination identities", route_rows.map(func(row): return row.destination_id) == ["defense:north","defense:south","repair:furnace","repair:north"] and route_rows.map(func(row): return row.actor_id) == [1,2,1,2])
+
+	var switch_sim := Simulation.new()
+	switch_sim.inventory = {"wood":2,"stone":1,"metal":0,"fuel":0}
+	var incoming: Dictionary = switch_sim.companions[0]
+	incoming.cargo_kind = "wood"; incoming.cargo = 3
+	var authority_before_switch := int(switch_sim.inventory.wood) + int(switch_sim.inventory.stone) + int(incoming.cargo)
+	check("lead switch cannot duplicate visible or logical cargo", switch_sim.select_lead(2) and switch_sim.lead == 2 and int(switch_sim.inventory.wood) + int(switch_sim.inventory.stone) == authority_before_switch and int(incoming.cargo) == 0)
+	var hidden_stack := Carry.new()
+	root.add_child(hidden_stack)
+	hidden_stack.update_inventory({"wood":4,"stone":0,"metal":0,"fuel":0})
+	hidden_stack.visible = false
+	hidden_stack.update_inventory({"wood":0,"stone":0,"metal":0,"fuel":0})
+	check("hidden actor stack fails closed without secret cargo", not hidden_stack.visible and hidden_stack.descriptor().logical_total == 0)
+
 	print(JSON.stringify({
 		"suite": "T08_visible_inventory_integration",
 		"checks": checks,

@@ -7,7 +7,9 @@ extends Node3D
 const KINDS := ["wood", "stone", "metal", "fuel"]
 const MAX_FLIGHTS := 48
 const RECEIPT_WINDOW := 256
-const DURATION_SECONDS := 0.42
+const DURATION_SECONDS := 0.72
+const FLIGHT_SCALE_MULTIPLIER := 1.75
+const ARC_HEIGHT := 1.05
 const AUTHORITY_ID := "T08-transfer-feedback-v1"
 const ASSETS := HavenlineCarryStack.ASSETS
 
@@ -27,6 +29,8 @@ static func contract() -> Dictionary:
 		"maximum_flights": MAX_FLIGHTS,
 		"receipt_window": RECEIPT_WINDOW,
 		"duration_seconds": DURATION_SECONDS,
+		"flight_scale_multiplier": FLIGHT_SCALE_MULTIPLIER,
+		"arc_height": ARC_HEIGHT,
 		"simulation_authoritative": true,
 		"mutates_inventory": false,
 		"directions": ["source_to_actor", "actor_to_destination"],
@@ -79,7 +83,7 @@ func transfer(kind: String, start: Vector3, finish: Vector3, receipt_id := "",
 		return false
 	_remember_receipt(receipt_id)
 	node.visible = true
-	node.scale = Vector3.ONE * float(HavenlineCarryStack.PIECE_SCALE[kind]) * 0.92
+	node.scale = Vector3.ONE * float(HavenlineCarryStack.PIECE_SCALE[kind]) * FLIGHT_SCALE_MULTIPLIER
 	node.position = start
 	node.set_meta("t08_receipt_id", receipt_id)
 	flights.append({
@@ -97,7 +101,10 @@ func _process(dt: float) -> void:
 		var item: Dictionary = flights[index]
 		item.time += dt
 		var t := minf(1.0, float(item.time) / DURATION_SECONDS)
-		item.node.position = item.start.lerp(item.finish, t) + Vector3.UP * sin(t * PI) * 0.65
+		# Smoothstep separation and a taller arc keep origin, travel direction,
+		# and destination readable at the approved gameplay camera scale.
+		var eased := t * t * (3.0 - 2.0 * t)
+		item.node.position = item.start.lerp(item.finish, eased) + Vector3.UP * sin(t * PI) * ARC_HEIGHT
 		item.node.rotation.y += dt * 3.2
 		if t >= 1.0:
 			item.node.position = item.finish
