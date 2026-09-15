@@ -193,6 +193,9 @@ jobs:
                   sample=image.resize((160,90))
                   black=sum(1 for pixel in sample.getdata() if max(pixel)<12)/float(160*90)
                   assert black<0.08,(image_path,black)
+                  right_std=max(ImageStat.Stat(sample.crop((140,0,160,90))).stddev)
+                  bottom_std=max(ImageStat.Stat(sample.crop((0,75,160,90))).stddev)
+                  assert not (right_std<3.0 and bottom_std<3.0),(image_path,'uniform edge padding',right_std,bottom_std)
                   digest=hashlib.sha256(image_path.read_bytes()).hexdigest()
                   assert digest not in hashes,image_path
                   hashes.add(digest);images.append(str(image_path))

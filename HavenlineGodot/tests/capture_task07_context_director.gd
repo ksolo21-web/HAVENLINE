@@ -70,10 +70,11 @@ func step_shipping(frame: int, movement: Vector2) -> Dictionary:
 	var started := Time.get_ticks_usec()
 	game.sim.step(1.0 / 60.0, movement, false)
 	game._process(1.0 / 60.0)
+	var shipping_cpu_usec := float(Time.get_ticks_usec() - started)
 	await process_frame
 	await RenderingServer.frame_post_draw
 	var descriptor: Dictionary = game.sim.action
-	record(frame, descriptor, float(Time.get_ticks_usec() - started))
+	record(frame, descriptor, shipping_cpu_usec)
 	return descriptor
 
 func capture_sequence() -> void:
@@ -131,14 +132,16 @@ func layout_rects() -> Dictionary:
 
 func run() -> void:
 	DirAccess.make_dir_recursive_absolute(output)
+	# Evidence is captured at the requested physical device size. Neutralize the
+	# project's desktop override so canvas coordinates cover the full raster.
+	root.content_scale_size = root.size
 	game = Main.new()
 	game.qa_mode = true
 	game.render_review = not native_4k
 	game.capture_frames = -10000
-	root.add_child(game)
-	game.set_anchors_and_offsets_preset(Control.PRESET_FULL_RECT)
 	game.position = Vector2.ZERO
 	game.size = Vector2(root.size)
+	root.add_child(game)
 	game.resize_render()
 	game.apply_hud_layout(Rect2(Vector2.ZERO, game.size), 1.0)
 	game.set_process(false)
