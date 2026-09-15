@@ -26,14 +26,16 @@ Read in this order before any Havenline production work:
 3. `Docs/Production/ANTI_LOOP_ROOT_CAUSE_STANDARD.md`
 4. `Docs/Production/SEQUENTIAL_REPAIR_PLAN.md`
 5. `Docs/Production/task-gates.json`
-6. `Docs/Production/WORKSTREAM_REGISTRY.json`
-7. `Docs/Production/DEPENDENCY_GRAPH.json`
-8. `Docs/Production/PATH_OWNERSHIP.json`
-9. `Docs/Production/CRITIC_MATRIX.json`
-10. `Docs/Production/PERFORMANCE_BUDGETS.json`
-11. the active task packet/frozen scope
-12. `Docs/AI/HavenlineProjectContext.md`
-13. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
+6. `Docs/Production/GAME_MASTER_ACCOUNT_STANDARD.md`
+7. `Docs/Production/GAME_MASTER_POLICY.json`
+8. `Docs/Production/WORKSTREAM_REGISTRY.json`
+9. `Docs/Production/DEPENDENCY_GRAPH.json`
+10. `Docs/Production/PATH_OWNERSHIP.json`
+11. `Docs/Production/CRITIC_MATRIX.json`
+12. `Docs/Production/PERFORMANCE_BUDGETS.json`
+13. the active task packet/frozen scope
+14. `Docs/AI/HavenlineProjectContext.md`
+15. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
 
 Inspect current source/evidence for newer work. `Docs/AI/UnityProjectContext.md` is historical.
 
@@ -181,6 +183,19 @@ completable at $0.
 Launch LiveOps retains The First Thaw, weekly gameplay event, weekly sale
 rotation, seasonal/holiday frameworks, server-authoritative time, automatic
 validated scheduling, pre-approved event composition and remote kill switch.
+
+## Game Master owner accounts
+
+`GAME_MASTER_POLICY.json` is a mandatory forward contract for T13, T33-T37,
+T41-T43, T64-T66 and T70. It does not reopen T01-T08.
+
+- Exactly two owner slots exist. Personal Google account identifiers stay out of public source.
+- T43 binds both owner slots through verified Google Sign-In and proves the exact shipping package + release-signing OAuth identity, account switching and device/reinstall recovery.
+- `GAME_MASTER` is permanent, owner-only and above public max VIP while inheriting all public VIP perks at maximum.
+- All approved shop SKUs are zero-cost for Game Master accounts and normal-player prices remain unchanged.
+- T13 owns `GM_CHALLENGE`, which is intentionally harder but selected only from the owner role—not from VIP, purchases or spend history.
+- Game Master activity is separately tagged from normal revenue/F2P/purchase-fairness evidence and normal public competitive ranking.
+- Candidate manifests for applicable tasks must include the `game_master_contract` proof block defined by `CANDIDATE_MANIFEST_TEMPLATE.json`; `closure_validator.py` rejects missing/stale Game Master proofs.
 
 ## Evidence and critics
 

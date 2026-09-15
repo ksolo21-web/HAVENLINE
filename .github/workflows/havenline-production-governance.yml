@@ -62,6 +62,9 @@ jobs:
       - name: Validate resource/tool/actor registry schema
         run: |
           python3 tools/havenline/production/resource_actor_contract.py --task T05 --schema-only
+      - name: Validate Game Master policy schema
+        run: |
+          python3 tools/havenline/production/game_master_contract.py --task T08 --schema-only
       - name: Classify governance-only or lifecycle-valid task integration impact
         run: |
           set -euo pipefail

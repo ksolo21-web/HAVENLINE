@@ -88,6 +88,31 @@ Rules:
 Run:
 `python3 tools/havenline/production/resource_actor_contract.py --task TASK_ID --manifest <candidate-manifest> --output <proof.json>`
 
+## Game Master owner-account contract
+Mark REQUIRED or N/A from `GAME_MASTER_POLICY.json`.
+
+When REQUIRED, record:
+- `GAME_MASTER_POLICY.json` SHA256:
+- Required proof flags for this task:
+- Proof flags actually satisfied:
+- Owner-slot binding count when T43/T70 applies:
+- Server-side binding proof hash when T43/T70 applies:
+- Game Master contract validator output:
+- Validator output SHA256:
+
+Forward rules:
+- Exactly two owner Game Master slots exist; personal account identifiers stay outside public source.
+- T43 binds the two designated owner accounts using verified Google Sign-In identity and must prove the exact shipping package + release-signing OAuth configuration.
+- `GAME_MASTER` is permanent, owner-only and above public max VIP while inheriting every public VIP perk at maximum value.
+- Every approved shop SKU is zero-cost for Game Master accounts; the Game Master claim path does not invoke real-money checkout and does not change normal-player prices.
+- T13 implements `GM_CHALLENGE`, an elevated role-selected difficulty profile that remains independent from VIP, purchases, shop claims and spend history.
+- Game Master activity is isolated from normal F2P/revenue/purchase-fairness populations and normal public competitive ranking.
+- Applicable tasks are T13, T33-T37, T41-T43, T64-T66 and T70 as defined by `GAME_MASTER_POLICY.json`.
+- This contract is forward-only and does not reopen T01-T08.
+
+Run:
+`python3 tools/havenline/production/game_master_contract.py --task TASK_ID --manifest <candidate-manifest> --output <proof.json>`
+
 ## Required tests
 - Universal baseline:
 - Task-specific:
@@ -96,6 +121,7 @@ Run:
 - Device/layout cases:
 - Performance metrics:
 - Resource/tool/actor contract validation where applicable:
+- Game Master policy/contract validation where applicable:
 
 ## Required evidence
 - Exact candidate commit/hash.
@@ -110,6 +136,7 @@ Run:
 - Resource/tool contact, impact timing and carry/delivery states where applicable.
 - Human helper/survivor distinct-motion proof where applicable.
 - Species-specific pet locomotion/attack/work proof where applicable.
+- Google identity/recovery and Game Master entitlement/difficulty/fairness evidence where applicable.
 - Logs, performance records and persistence records.
 - Raw critic inputs and outputs.
 
@@ -132,6 +159,7 @@ runtime. Builder self-review is recorded separately and cannot satisfy them.
 - Candidate artifact hash:
 - Evidence package:
 - Resource/actor contract proof:
+- Game Master contract proof:
 - Known failures:
 - Unresolved mandatory defects:
 - Reconcile/rebase status against current integration head:
