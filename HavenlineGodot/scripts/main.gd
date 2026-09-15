@@ -13,6 +13,7 @@ const Surface = preload("res://scripts/outpost_surface.gd")
 const ActionReadout = preload("res://scripts/action_readout.gd")
 const OutpostAudio = preload("res://scripts/outpost_audio.gd")
 const CameraComposition = preload("res://scripts/camera_composition.gd")
+const Character1Motion = preload("res://scripts/character1_motion.gd")
 var outpost_view: Node3D
 var outpost_audio: Node
 var action_readout: Control
@@ -336,6 +337,8 @@ func actor(id: int) -> Node3D:
 				animation.get_animation(clip).loop_mode = Animation.LOOP_LINEAR
 		root.set_meta("animation", animation)
 	root.set_meta("visual", visual)
+	if id == 1:
+		root.set_meta("t06_character1", true)
 	return root
 
 func find_skeleton(node: Node) -> Skeleton3D:
@@ -366,7 +369,12 @@ func build_crew():
 	player_rig = actors[sim.lead]
 	carry_root = carry_stacks[sim.lead]
 
-func animate(root: Node3D, speed: float):
+func animate(root: Node3D, speed: float, dt: float, action := {}, role := "player_lead"):
+	if bool(root.get_meta("t06_character1", false)):
+		var state := Character1Motion.update_actor(root, speed, action, dt, role)
+		if not bool(state.get("passed", false)):
+			push_error("Character 1 T06 motion integration failed: " + str(state.get("errors", [])))
+		return
 	if not root.has_meta("animation"): return
 	var animation: AnimationPlayer = root.get_meta("animation")
 	var desired := "run" if speed > 4.3 else ("walk" if speed > .15 else "idle")
@@ -620,7 +628,7 @@ func _process(dt: float):
 	player_rig.position = xyz(sim.position)
 	if sim.velocity.length() > .1:
 		player_rig.rotation.y = lerp_angle(player_rig.rotation.y, atan2(sim.facing.x, sim.facing.y), 1 - exp(-16 * dt))
-	animate(player_rig, sim.velocity.length())
+	animate(player_rig, sim.velocity.length(), dt, sim.action, "player_lead")
 	for companion in sim.companions:
 		if not actors.has(companion.id): continue # Additional NPC art remains a release blocker.
 		var root: Node3D = actors[companion.id]
@@ -628,7 +636,7 @@ func _process(dt: float):
 		var motion := target - root.position
 		root.position = target
 		if motion.length() > .005: root.rotation.y = lerp_angle(root.rotation.y, atan2(motion.x, motion.z), .15)
-		animate(root, motion.length() / maxf(dt, .001))
+		animate(root, motion.length() / maxf(dt, .001), dt, {}, "core_human_companion")
 	for node in sim.resources:
 		resource_visuals[node.id].visible = node.units > 0
 	for side in sim.defenses:
