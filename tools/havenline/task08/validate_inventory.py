@@ -46,10 +46,12 @@ def validate(candidate: str) -> dict:
     check("presentation adds no save fields", '"adds_save_fields": false' in sources["carry"] and "FileAccess" not in combined)
     check("visual budgets are explicit", "VISIBLE_BUDGET := 48" in sources["carry"] and "MAX_FLIGHTS := 48" in sources["transfer"])
     check("small and compressed layouts are deterministic", "allocate_visible" in sources["carry"] and "represented_count" in sources["carry"])
+    check("actor loads use a raised readable rack", "CARRY_BASE_HEIGHT :=" in sources["carry"] and "CARRY_TIER_HEIGHT :=" in sources["carry"])
     check("unchanged actor stacks avoid rebuilds", "if next_signature == signature:" in sources["carry"])
     check("authored nodes are pooled", "pools" in sources["carry"] and "pools" in sources["transfer"])
     check("future resources have no generic primitive fallback", not re.search(r"\b(BoxMesh|SphereMesh|CylinderMesh|CSGBox3D)\b", combined))
     check("transfer directions are exact", '["source_to_actor", "actor_to_destination"]' in sources["transfer"])
+    check("transfer flights expose readability geometry", "FLIGHT_SCALE_MULTIPLIER :=" in sources["transfer"] and "ARC_HEIGHT :=" in sources["transfer"] and "DURATION_SECONDS := 0.72" in sources["transfer"])
     check("receipt replay is rejected", "if receipts.has(receipt_id):" in sources["transfer"] and "RECEIPT_WINDOW := 256" in sources["transfer"])
     check("invalid and zero-length routes fail closed", "valid_point" in sources["transfer"] and "distance_squared_to(finish) <= 0.000001" in sources["transfer"])
     check("destination display derives from stored counts", "return stack.update_inventory(stored)" in sources["stockpile"])
@@ -58,6 +60,7 @@ def validate(candidate: str) -> dict:
     check("tests cover conservation and visual non-authority", "cannot mutate caller inventory" in tests and "cannot duplicate logical value" in tests)
     check("tests cover save-derived reconstruction", "rebuild without saved presentation state" in tests and "T08 adds no save field" in tests)
     check("tests preserve T07 one-joystick context", "one-joystick action contract remains intact" in tests)
+    check("tests cover build repair helper and actor visibility", all(token in tests for token in ("routes committed build", "routes committed repair", "lead switch cannot duplicate", "hidden actor stack fails closed")))
 
     return {
         "task": "T08", "candidate_commit": candidate,

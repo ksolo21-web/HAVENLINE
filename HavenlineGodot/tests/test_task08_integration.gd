@@ -94,6 +94,27 @@ func run() -> void:
 	check("inventory presentation cannot alter T07 context selection", action_after == action_before)
 	check("one-joystick action contract remains intact", restored.context_director.contract().permanent_action_buttons == 0)
 
+	var route_transfer := Transfer.new()
+	root.add_child(route_transfer)
+	check("routes committed build from player to exact defense", route_transfer.transfer("wood", Vector3.ZERO, Vector3(3, 1, 2), "build:lead", "actor_to_destination", 1, "defense:north"))
+	check("routes committed build from helper without identity loss", route_transfer.transfer("stone", Vector3.ONE, Vector3(-3, 1, 2), "build:helper", "actor_to_destination", 2, "defense:south"))
+	check("routes committed repair from player and helper", route_transfer.transfer("wood", Vector3.ZERO, Vector3(0, 1, 0.2), "repair:lead", "actor_to_destination", 1, "repair:furnace") and route_transfer.transfer("wood", Vector3.ONE, Vector3(3, 1, 2), "repair:helper", "actor_to_destination", 2, "repair:north"))
+	var route_rows: Array = route_transfer.descriptor().flights
+	check("build repair routes retain actor and destination identities", route_rows.map(func(row): return row.destination_id) == ["defense:north","defense:south","repair:furnace","repair:north"] and route_rows.map(func(row): return row.actor_id) == [1,2,1,2])
+
+	var switch_sim := Simulation.new()
+	switch_sim.inventory = {"wood":2,"stone":1,"metal":0,"fuel":0}
+	var incoming: Dictionary = switch_sim.companions[0]
+	incoming.cargo_kind = "wood"; incoming.cargo = 3
+	var authority_before_switch := int(switch_sim.inventory.wood) + int(switch_sim.inventory.stone) + int(incoming.cargo)
+	check("lead switch cannot duplicate visible or logical cargo", switch_sim.select_lead(2) and switch_sim.lead == 2 and int(switch_sim.inventory.wood) + int(switch_sim.inventory.stone) == authority_before_switch and int(incoming.cargo) == 0)
+	var hidden_stack := Carry.new()
+	root.add_child(hidden_stack)
+	hidden_stack.update_inventory({"wood":4,"stone":0,"metal":0,"fuel":0})
+	hidden_stack.visible = false
+	hidden_stack.update_inventory({"wood":0,"stone":0,"metal":0,"fuel":0})
+	check("hidden actor stack fails closed without secret cargo", not hidden_stack.visible and hidden_stack.descriptor().logical_total == 0)
+
 	if OS.get_environment("HAVENLINE_T08_REQUIRE_SHIPPING_INTEGRATION") == "1":
 		var game := Main.new()
 		root.add_child(game)
@@ -112,9 +133,61 @@ func run() -> void:
 		game.present_events()
 		shipping_transfer = game.transfer_feedback.descriptor()
 		check("shipping call site routes committed deposit from lead to storage", shipping_transfer.accepted_receipts == 2 and shipping_transfer.flights[0].direction == "actor_to_destination" and shipping_transfer.flights[0].destination_id == "camp_storage")
+		game.transfer_feedback._process(Transfer.DURATION_SECONDS)
+		game.sim.elapsed = 12.0
+		game.sim.events = [{"type":"deposit","position":game.sim.point(game.sim.contract.world.furnace),"resource":"stone"}]
+		game.present_events()
+		shipping_transfer = game.transfer_feedback.descriptor()
+		check("shipping call site distinguishes explicit furnace delivery", shipping_transfer.accepted_receipts == 3 and shipping_transfer.flights[0].destination_id == "furnace_storage")
+		game.transfer_feedback._process(Transfer.DURATION_SECONDS)
+		var helper: Dictionary = game.sim.companions[0]
+		game.sim.elapsed = 13.0
+		game.sim.events = [{"type":"worker_gather","actor_id":2,"position":helper.position,"target":shipping_resource.position,"resource":"wood"}]
+		game.present_events()
+		shipping_transfer = game.transfer_feedback.descriptor()
+		check("shipping helper gather retains separate actor identity", shipping_transfer.accepted_receipts == 4 and shipping_transfer.flights[0].direction == "source_to_actor" and shipping_transfer.flights[0].actor_id == 2 and shipping_transfer.flights[0].destination_id == "actor:2")
+		game.transfer_feedback._process(Transfer.DURATION_SECONDS)
+		game.sim.elapsed = 14.0
+		game.sim.events = [{"type":"build","position":game.sim.defenses.north.position,"resource":"wood"}]
+		game.present_events()
+		shipping_transfer = game.transfer_feedback.descriptor()
+		check("shipping routes committed build from lead to exact defense", shipping_transfer.accepted_receipts == 5 and shipping_transfer.flights[0].destination_id == "defense:north" and shipping_transfer.flights[0].actor_id == game.sim.lead)
+		game.transfer_feedback._process(Transfer.DURATION_SECONDS)
+		game.sim.elapsed = 15.0
+		game.sim.events = [{"type":"worker_build","actor_id":2,"position":helper.position,"target":game.sim.defenses.south.position,"resource":"wood"}]
+		game.present_events()
+		shipping_transfer = game.transfer_feedback.descriptor()
+		check("shipping routes committed helper build without identity loss", shipping_transfer.accepted_receipts == 6 and shipping_transfer.flights[0].destination_id == "defense:south" and shipping_transfer.flights[0].actor_id == 2)
+		game.transfer_feedback._process(Transfer.DURATION_SECONDS)
+		game.sim.elapsed = 16.0
+		game.sim.events = [{"type":"repair","position":game.sim.point(game.sim.contract.world.furnace),"resource":"wood"}]
+		game.present_events()
+		shipping_transfer = game.transfer_feedback.descriptor()
+		check("shipping routes committed repair to exact furnace", shipping_transfer.accepted_receipts == 7 and shipping_transfer.flights[0].destination_id == "repair:furnace")
+		game.transfer_feedback._process(Transfer.DURATION_SECONDS)
+		game.sim.elapsed = 17.0
+		game.sim.events = [{"type":"worker_repair","actor_id":2,"position":helper.position,"target":game.sim.defenses.north.position,"resource":"wood"}]
+		game.present_events()
+		shipping_transfer = game.transfer_feedback.descriptor()
+		check("shipping routes committed repair from helper to exact defense", shipping_transfer.accepted_receipts == 8 and shipping_transfer.flights[0].destination_id == "repair:north" and shipping_transfer.flights[0].actor_id == 2)
 		game.sim.stored.wood = 7
 		game.update_carry()
 		check("shipping stockpile derives from authoritative stored counts", game.storage_stockpile.descriptor().logical_counts.wood == 7)
+		game.sim.inventory = {"wood":2,"stone":1,"metal":0,"fuel":0}
+		helper.cargo_kind = "wood"; helper.cargo = 3
+		game.update_carry()
+		var cargo_before_switch: int = game.carry_stacks.values().reduce(func(total, stack): return total + int(stack.descriptor().logical_total), 0)
+		var switched: bool = game.sim.select_lead(2)
+		game.carry_root = game.carry_stacks[game.sim.lead]; game.player_rig = game.actors[game.sim.lead]
+		game.update_carry()
+		var cargo_after_switch: int = game.carry_stacks.values().reduce(func(total, stack): return total + int(stack.descriptor().logical_total), 0)
+		check("shipping lead switch cannot duplicate visible or logical cargo", switched and game.sim.lead == 2 and cargo_after_switch == cargo_before_switch and game.carry_stacks[2].descriptor().logical_total == 6)
+		for companion in game.sim.companions:
+			if int(companion.id) == 3: companion.cargo_kind = "metal"; companion.cargo = 4
+		game.actors[3].visible = false
+		game.sim.presented_actor_ids.erase(3)
+		game.update_carry()
+		check("shipping hidden actor stack fails closed without secret cargo", not game.carry_stacks[3].visible and game.carry_stacks[3].descriptor().logical_total == 0)
 		game.outpost_audio.stop_all(); await create_timer(0.35).timeout
 		game.free(); await process_frame; await process_frame
 	else:

@@ -59,6 +59,7 @@ func run() -> void:
 	var exact := Carry.layout_for({"wood": 2, "stone": 1, "metal": 1, "fuel": 0})
 	check("small load shows one authored piece per unit", exact.size() == 4 and represented(exact) == 4)
 	check("small mixed load preserves deterministic kind order", exact.map(func(row): return row.kind) == ["wood", "wood", "stone", "metal"])
+	check("actor load is raised into a readable attached rack", exact.all(func(row): return row.position.y >= Carry.CARRY_BASE_HEIGHT - 0.001 and absf(row.position.x) <= 0.8), exact)
 	var huge_counts := {"wood": 1000000000000, "stone": 2000000000000, "metal": 3000000000000, "fuel": 4000000000000}
 	var huge := Carry.layout_for(huge_counts)
 	check("huge logical load stays inside physical instance budget", huge.size() == Carry.VISIBLE_BUDGET)
@@ -96,6 +97,7 @@ func run() -> void:
 	root.add_child(transfer)
 	var transfer_contract := Transfer.contract()
 	check("transfer authority and two directions are exact", transfer_contract.authority_id == "T08-transfer-feedback-v1" and transfer_contract.directions == ["source_to_actor", "actor_to_destination"])
+	check("transfer presentation exposes readable duration scale and arc", transfer_contract.duration_seconds >= 0.7 and transfer_contract.flight_scale_multiplier >= 1.7 and transfer_contract.arc_height >= 1.0)
 	check("transfer presentation cannot mutate inventory", transfer_contract.simulation_authoritative and not transfer_contract.mutates_inventory)
 	check("unknown resource transfer fails closed", not transfer.transfer("fish", Vector3.ZERO, Vector3.ONE, "bad-kind"))
 	check("zero-length transfer fails closed", not transfer.transfer("wood", Vector3.ZERO, Vector3.ZERO, "bad-route"))

@@ -112,6 +112,10 @@ jobs:
           extra=(); if [ "$GITHUB_REF_NAME" = 'codex/havenline-sequential-task-01' ]; then extra+=(--integrated); fi
           mkdir -p task08-evidence/captures/sequence
           xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task08_inventory.gd -- --candidate="$CANDIDATE" --state=sequence --device=review_16_9 --view=front --out="$(pwd)/task08-evidence/captures/sequence" "${extra[@]}" > task08-evidence/captures/sequence.log 2>&1
+          mkdir -p task08-evidence/captures/routes
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task08_inventory.gd -- --candidate="$CANDIDATE" --state=routes --device=review_16_9 --view=front --out="$(pwd)/task08-evidence/captures/routes" "${extra[@]}" > task08-evidence/captures/routes.log 2>&1
+          mkdir -p task08-evidence/captures/integrity
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task08_inventory.gd -- --candidate="$CANDIDATE" --state=integrity --device=review_16_9 --view=front --out="$(pwd)/task08-evidence/captures/integrity" "${extra[@]}" > task08-evidence/captures/integrity.log 2>&1
           for view in front side left rear three-quarter overhead; do
             mkdir -p "task08-evidence/captures/view-$view"
             xvfb-run -a -s '-screen 0 1280x720x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task08_inventory.gd -- --candidate="$CANDIDATE" --state=carrying --device=review_16_9 --view="$view" --out="$(pwd)/task08-evidence/captures/view-$view" "${extra[@]}" > "task08-evidence/captures/view-$view.log" 2>&1
@@ -132,6 +136,7 @@ jobs:
           xvfb-run -a -s '-screen 0 3840x2160x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task08_inventory.gd -- --candidate="$CANDIDATE" --state=carrying --device=native4k --view=front --native-4k --out="$(pwd)/task08-evidence/native4k" "${extra[@]}" > task08-evidence/native4k.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task08-evidence/captures/*.log task08-evidence/native4k.log; then exit 1; fi
           ffmpeg -hide_banner -loglevel error -framerate 20 -i task08-evidence/captures/sequence/frames/frame-%05d.jpg -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p -movflags +faststart task08-evidence/video/resource-loop.mp4
+          ffmpeg -hide_banner -loglevel error -framerate 20 -i task08-evidence/captures/routes/frames/frame-%05d.jpg -c:v libx264 -preset veryfast -crf 20 -pix_fmt yuv420p -movflags +faststart task08-evidence/video/build-repair-loop.mp4
 
       - name: Enforce capture provenance, conservation and content
         env:
@@ -143,11 +148,12 @@ jobs:
           from PIL import Image,ImageStat
           import hashlib,json,os
           root=Path('task08-evidence'); manifests=list((root/'captures').glob('*/capture.json'))+[root/'native4k/capture.json']
-          assert len(manifests)==15,len(manifests)
+          assert len(manifests)==17,len(manifests)
           hashes=set(); images=[]
           for path in manifests:
               report=json.loads(path.read_text()); assert report['task']=='T08-visible-inventory-v1'
               assert report['candidate_commit']==os.environ['CANDIDATE'] and report['shipping_main_scene_rendered'] is True
+              assert report['shipping_stockpile_instance_reported'] is True
               assert report['conservation_held'] is True and report['permanent_action_buttons']==0
               assert report['movement_control']=='one_primary_joystick' and report['qa_evidence_banner_present'] is False
               assert report['player_stack']['logical_total']==sum(report['trace'][-1]['inventory'].values()) and report['player_stack']['visible_instances']<=48
@@ -165,10 +171,20 @@ jobs:
           sequence=json.loads((root/'captures/sequence/capture.json').read_text())
           assert len(sequence['trace'])==180 and len(list((root/'captures/sequence/frames').glob('*.jpg')))==60
           final=sequence['transfers']; assert final['accepted_receipts']==4 and final['completed_receipts']==4 and final['rejected_receipts']==0,final
-          directions={flight['direction'] for row in sequence['trace'] for flight in row['transfers']['flights']}
+          routes=json.loads((root/'captures/routes/capture.json').read_text())
+          assert len(routes['trace'])==264 and len(list((root/'captures/routes/frames').glob('*.jpg')))==88
+          route_final=routes['transfers']; assert route_final['accepted_receipts']==6 and route_final['completed_receipts']==6 and route_final['rejected_receipts']==0,route_final
+          route_rows=[flight for row in routes['trace'] for flight in row['transfers']['flights']]
+          assert {flight['destination_id'] for flight in route_rows}=={'furnace_storage','camp_storage','defense:north','defense:south','repair:furnace','repair:north'}
+          assert {flight['actor_id'] for flight in route_rows}=={1,2}
+          integrity=json.loads((root/'captures/integrity/capture.json').read_text())['actor_integrity']
+          assert integrity['switch_succeeded'] is True and integrity['selected_lead']==2
+          assert sum(integrity['before'].values())==sum(integrity['after_switch'].values())
+          assert integrity['hidden_actor_visible'] is False and integrity['hidden_stack_visible'] is False and integrity['hidden_stack_logical_total']==0
+          directions={flight['direction'] for report in (sequence,routes) for row in report['trace'] for flight in row['transfers']['flights']}
           assert directions=={'source_to_actor','actor_to_destination'},directions
-          assert (root/'video/resource-loop.mp4').stat().st_size>10000 and len(images)>=20,len(images)
-          result={'task':'T08','candidate_commit':os.environ['CANDIDATE'],'manifest_count':len(manifests),'png_count':len(images),'unique_png_hashes':len(hashes),'sequence_frames':60,'transfer_directions':sorted(directions),'conservation_held':True,'passed':True}
+          assert (root/'video/resource-loop.mp4').stat().st_size>10000 and (root/'video/build-repair-loop.mp4').stat().st_size>10000 and len(images)>=31,len(images)
+          result={'task':'T08','candidate_commit':os.environ['CANDIDATE'],'manifest_count':len(manifests),'png_count':len(images),'unique_png_hashes':len(hashes),'sequence_frames':60,'route_sequence_frames':88,'transfer_directions':sorted(directions),'route_destinations':sorted({flight['destination_id'] for flight in route_rows}),'actor_integrity':integrity,'conservation_held':True,'passed':True}
           (root/'capture-gate.json').write_text(json.dumps(result,indent=2)); print(json.dumps(result))
           PY
 

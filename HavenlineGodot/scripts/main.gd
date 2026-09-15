@@ -399,13 +399,54 @@ func animate(root: Node3D, speed: float, dt: float, action := {}, role := "playe
 			return
 
 func update_carry():
-	carry_stacks[sim.lead].update_inventory(sim.inventory)
+	var empty := {"wood":0,"stone":0,"metal":0,"fuel":0}
+	for stack in carry_stacks.values(): stack.visible = false
+	var lead_ready: bool = carry_stacks.has(sim.lead) and actors.has(sim.lead) and actors[sim.lead].visible and (sim.presented_actor_ids.is_empty() or sim.lead in sim.presented_actor_ids)
+	if lead_ready:
+		carry_stacks[sim.lead].visible = true
+		carry_stacks[sim.lead].update_inventory(sim.inventory)
+	elif carry_stacks.has(sim.lead): carry_stacks[sim.lead].update_inventory(empty)
 	for companion in sim.companions:
 		if not carry_stacks.has(companion.id): continue
 		var inventory := {"wood":0,"stone":0,"metal":0,"fuel":0}
-		inventory[companion.get("cargo_kind","wood")] = companion.get("cargo",0)
+		var actor_ready: bool = actors.has(companion.id) and actors[companion.id].visible and (sim.presented_actor_ids.is_empty() or companion.id in sim.presented_actor_ids)
+		if actor_ready:
+			inventory[companion.get("cargo_kind","wood")] = companion.get("cargo",0)
+			carry_stacks[companion.id].visible = true
 		carry_stacks[companion.id].update_inventory(inventory)
 	if is_instance_valid(storage_stockpile): storage_stockpile.sync(sim.stored)
+
+func event_point_2d(value: Variant) -> Vector2:
+	if value is Vector2: return value
+	if value is Vector3: return Vector2(value.x, value.z)
+	return Vector2.ZERO
+
+func transfer_destination_id(event: Dictionary) -> String:
+	var explicit := String(event.get("destination_id", ""))
+	if not explicit.is_empty(): return explicit
+	var event_type := String(event.get("type", ""))
+	var point := event_point_2d(event.get("target", event.get("position", Vector2.ZERO)))
+	if event_type in ["deposit", "worker_deposit"]:
+		var furnace_point: Vector2 = sim.point(sim.contract.world.furnace)
+		var storage_point: Vector2 = sim.point(sim.contract.world.storage)
+		return "furnace_storage" if point.distance_squared_to(furnace_point) <= point.distance_squared_to(storage_point) else "camp_storage"
+	if event_type in ["build", "worker_build"]:
+		var build_side := ""
+		var build_distance := INF
+		for side in sim.defenses:
+			var distance := point.distance_squared_to(sim.defenses[side].position)
+			if distance < build_distance: build_distance = distance; build_side = String(side)
+		return "defense:" + build_side if not build_side.is_empty() else "defense"
+	if event_type in ["repair", "worker_repair", "defense_repair", "worker_defense_repair"]:
+		var furnace_distance := point.distance_squared_to(sim.point(sim.contract.world.furnace))
+		var repair_side := ""
+		var repair_distance := INF
+		for side in sim.defenses:
+			var distance := point.distance_squared_to(sim.defenses[side].position)
+			if distance < repair_distance: repair_distance = distance; repair_side = String(side)
+		return "repair:" + repair_side if repair_distance < furnace_distance else "repair:furnace"
+	if event_type == "customer_sale": return "customer"
+	return "destination"
 
 func present_events():
 	if is_equal_approx(last_presented_event_epoch, sim.elapsed): return
@@ -423,11 +464,8 @@ func present_events():
 		var receipt_id := "%.6f:%d:%s:%s:%d" % [sim.elapsed, event_index, String(event.type), kind, actor_id]
 		if event.type in ["gather","worker_gather"]:
 			transfer_feedback.transfer(kind,target,origin,receipt_id,"source_to_actor",actor_id,"actor:%d" % actor_id)
-		elif event.type in ["deposit","worker_deposit","build","worker_build","repair","worker_repair","customer_sale"]:
-			var destination_id := "camp_storage"
-			if event.type in ["build","worker_build"]: destination_id = "defense"
-			elif event.type in ["repair","worker_repair"]: destination_id = "repair_target"
-			elif event.type == "customer_sale": destination_id = "customer"
+		elif event.type in ["deposit","worker_deposit","build","worker_build","repair","worker_repair","defense_repair","worker_defense_repair","customer_sale"]:
+			var destination_id := transfer_destination_id(event)
 			transfer_feedback.transfer(kind,origin,target,receipt_id,"actor_to_destination",actor_id,destination_id)
 
 func text_label(text: String, font_size: int, parent: Control) -> Label:

@@ -1,7 +1,9 @@
 extends SceneTree
 
 const Main = preload("res://scripts/main.gd")
+const Carry = preload("res://scripts/carry_stack.gd")
 const Stockpile = preload("res://scripts/storage_stockpile.gd")
+const Transfer = preload("res://scripts/transfer_feedback.gd")
 
 var output := "user://task08-inventory"
 var candidate := "local-working-tree"
@@ -16,6 +18,8 @@ var records: Array = []
 var frame_usec: Array[float] = []
 var draw_calls: Array[int] = []
 var primitives: Array[int] = []
+var sink_units := 0
+var integrity_evidence := {}
 
 func _initialize() -> void:
 	for argument in OS.get_cmdline_user_args():
@@ -34,7 +38,9 @@ func total_authority() -> int:
 	for value in game.sim.stored.values(): total += int(value)
 	for resource in game.sim.resources: total += int(resource.units)
 	for companion in game.sim.companions: total += int(companion.get("cargo", 0))
-	return total
+	for defense in game.sim.defenses.values():
+		for value in defense.delivered.values(): total += int(value)
+	return total + sink_units
 
 func actor_point(id: int) -> Vector3:
 	if game.actors.has(id): return game.actors[id].global_position + Vector3(0.0, 1.0, -0.35)
@@ -45,6 +51,41 @@ func source_point(index := 0) -> Vector3:
 
 func destination_point() -> Vector3:
 	return game.xyz(game.sim.point(game.sim.contract.world.storage)) + Vector3.UP * 0.75
+
+func target_point(target: Vector2) -> Vector3:
+	return game.xyz(target) + Vector3.UP * 0.9
+
+func spend_actor(kind: String, actor_id: int, helper: bool) -> bool:
+	if helper:
+		for companion in game.sim.companions:
+			if int(companion.id) == actor_id and String(companion.get("cargo_kind", "")) == kind and int(companion.get("cargo", 0)) > 0:
+				companion.cargo -= 1
+				return true
+		return false
+	if int(game.sim.inventory.get(kind, 0)) <= 0: return false
+	game.sim.inventory[kind] -= 1
+	return true
+
+func commit_route(route: String, actor_id: int, helper: bool, target: Vector2, destination_id: String, kind := "wood") -> void:
+	if not spend_actor(kind, actor_id, helper): return
+	if route == "deposit": game.sim.stored[kind] += 1
+	elif route == "build":
+		var side := destination_id.trim_prefix("defense:")
+		game.sim.defenses[side].delivered[kind] += 1
+	elif route == "repair": sink_units += 1
+	var event_type := "worker_" + route if helper else route
+	var actor_position: Vector2 = game.sim.position
+	if helper:
+		for companion in game.sim.companions:
+			if int(companion.id) == actor_id: actor_position = companion.position
+	if integrated:
+		game.sim.elapsed += 1.0
+		game.sim.events = [{"type":event_type, "actor_id":actor_id, "position":actor_position,
+			"target":target, "resource":kind, "destination_id":destination_id}]
+		game.present_events()
+	else:
+		game.transfer_feedback.transfer(kind, actor_point(actor_id), target_point(target),
+			"capture:%s:%d:%d" % [route, actor_id, records.size()], "actor_to_destination", actor_id, destination_id)
 
 func commit_gather(actor_id: int, helper := false) -> void:
 	var resource: Dictionary = game.sim.resources[0]
@@ -144,6 +185,56 @@ func capture_sequence() -> void:
 		if frame % 3 == 0: await capture_jpg(frame)
 		if frame in [0, 24, 66, 108, 150, 179]: await capture_png("sequence-%03d" % frame)
 
+func capture_routes() -> void:
+	DirAccess.make_dir_recursive_absolute(output.path_join("frames"))
+	var furnace: Vector2 = game.sim.point(game.sim.contract.world.furnace)
+	var storage: Vector2 = game.sim.point(game.sim.contract.world.storage)
+	var north: Vector2 = game.sim.defenses.north.position
+	var south: Vector2 = game.sim.defenses.south.position
+	for frame in 264:
+		if frame == 12: commit_route("deposit", game.sim.lead, false, furnace, "furnace_storage")
+		elif frame == 54: commit_route("deposit", 2, true, storage, "camp_storage")
+		elif frame == 96: commit_route("build", game.sim.lead, false, north, "defense:north")
+		elif frame == 138: commit_route("build", 2, true, south, "defense:south")
+		elif frame == 180: commit_route("repair", game.sim.lead, false, furnace, "repair:furnace")
+		elif frame == 222: commit_route("repair", 2, true, north, "repair:north")
+		await sample(frame)
+		if frame % 3 == 0: await capture_jpg(frame)
+		if frame in [0, 30, 72, 114, 156, 198, 240, 263]: await capture_png("routes-%03d" % frame)
+
+func actor_stack_totals() -> Dictionary:
+	var result := {}
+	for id in game.carry_stacks: result[str(id)] = game.carry_stacks[id].descriptor().logical_total
+	return result
+
+func capture_integrity() -> void:
+	await sample(0)
+	var before := actor_stack_totals()
+	await capture_png("integrity-before-switch")
+	var switched: bool = game.sim.select_lead(2)
+	game.carry_root = game.carry_stacks[game.sim.lead]
+	game.player_rig = game.actors[game.sim.lead]
+	game.update_carry()
+	await sample(1)
+	var after_switch := actor_stack_totals()
+	await capture_png("integrity-after-switch")
+	game.actors[3].visible = false
+	game.sim.presented_actor_ids.erase(3)
+	game.update_carry()
+	if not integrated:
+		game.carry_stacks[3].visible = false
+		game.carry_stacks[3].update_inventory({"wood":0,"stone":0,"metal":0,"fuel":0})
+	await sample(2)
+	if not integrated:
+		game.carry_stacks[3].visible = false
+		game.carry_stacks[3].update_inventory({"wood":0,"stone":0,"metal":0,"fuel":0})
+	var after_hide := actor_stack_totals()
+	await capture_png("integrity-hidden-actor")
+	integrity_evidence = {"switch_succeeded":switched, "before":before, "after_switch":after_switch,
+		"after_hide":after_hide, "selected_lead":game.sim.lead, "hidden_actor_id":3,
+		"hidden_actor_visible":game.actors[3].visible, "hidden_stack_visible":game.carry_stacks[3].visible,
+		"hidden_stack_logical_total":game.carry_stacks[3].descriptor().logical_total}
+
 func capture_static() -> void:
 	if state == "transfer": commit_gather(game.sim.lead)
 	for frame in 18: await sample(frame)
@@ -170,15 +261,22 @@ func run() -> void:
 	for companion in game.sim.companions:
 		if int(companion.id) == 2:
 			companion.position = Vector2(-0.1, 1.9)
-			companion.cargo_kind = "stone"; companion.cargo = 4
-	stockpile = Stockpile.new()
-	stockpile.name = "T08CampStorageStockpile"
-	stockpile.position = game.xyz(game.sim.point(game.sim.contract.world.storage)) + Vector3(0.8, 0.05, 0.25)
-	game.world.add_child(stockpile)
-	stockpile.configure("camp_storage", game.sim.stored)
+			companion.cargo_kind = "wood"; companion.cargo = 4
+		elif state == "integrity" and int(companion.id) == 3:
+			companion.cargo_kind = "metal"; companion.cargo = 3
+	if integrated:
+		stockpile = game.storage_stockpile
+	else:
+		stockpile = Stockpile.new()
+		stockpile.name = "T08CampStorageStockpile"
+		stockpile.position = game.xyz(game.sim.point(game.sim.contract.world.storage)) + Vector3(0.8, 0.05, 0.25)
+		game.world.add_child(stockpile)
+		stockpile.configure("camp_storage", game.sim.stored)
 	game.update_carry()
 	var initial_total := total_authority()
 	if state == "sequence": await capture_sequence()
+	elif state == "routes": await capture_routes()
+	elif state == "integrity": await capture_integrity()
 	else: await capture_static()
 	var all_totals := records.map(func(row): return int(row.authority_total))
 	var report := {
@@ -190,12 +288,15 @@ func run() -> void:
 		"native_3840x2160_scale1":native_4k and root.size == Vector2i(3840,2160) and is_equal_approx(game.scene_view.scaling_3d_scale,1.0),
 		"shipping_main_scene_rendered":true,
 		"shipping_call_site_exercised":integrated,
+		"shipping_stockpile_instance_reported":not integrated or stockpile == game.storage_stockpile,
 		"candidate_components_applied_directly_because_stockpile_call_site_is_integration_only":not integrated,
 		"qa_evidence_banner_present":false, "permanent_action_buttons":0, "movement_control":"one_primary_joystick",
 		"layout_rects":layout_rects(), "trace":records, "initial_authority_total":initial_total,
 		"conservation_held":all_totals.all(func(value): return value == initial_total),
 		"player_stack":game.carry_stacks[game.sim.lead].descriptor(), "helper_stack":game.carry_stacks[2].descriptor(),
 		"stockpile":stockpile.descriptor(), "transfers":game.transfer_feedback.descriptor(),
+		"carry_contract":Carry.contract(), "transfer_contract":Transfer.contract(),
+		"sink_units":sink_units, "actor_integrity":integrity_evidence,
 		"shipping_scene_metrics":{"average_frame_usec":average(frame_usec),"maximum_frame_usec":maximum(frame_usec),"average_draw_calls":average(draw_calls),"maximum_draw_calls":int(maximum(draw_calls)),"average_primitives":average(primitives),"maximum_primitives":int(maximum(primitives))},
 		"physical_device_native_4k60_certified":false,
 	}

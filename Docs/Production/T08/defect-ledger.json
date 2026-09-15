@@ -2,9 +2,9 @@
   "schema_version": 1,
   "task_id": "T08",
   "candidate_commit": "258f2c9a53f8b5460fb54a7f298fbb887c5aba1e",
-  "integrated_commit": "pending fresh lifecycle-valid evidence commit",
+  "integrated_commit": "76e11b2296bc8447f7ffd2e2bcbcb48245ad4f5f (rejected); repaired source pending publication",
   "acceptance_threshold": ">9.0 unrounded in every mandatory dimension",
-  "cycle": "integration-ready-recovery",
+  "cycle": "independent-critic-repair-1",
   "defects": [
     {
       "id": "T08-D001",
@@ -19,10 +19,35 @@
       "summary": "First integration commit ran while the workstream still reported ASSIGNED.",
       "status": "RESOLVED",
       "resolution": "Advance registry and dependency state to INTEGRATION_READY and publish a fresh integration commit with expanded source-to-actor and actor-to-destination shipping assertions."
+    },
+    {
+      "id": "T08-D003",
+      "severity": "mandatory-visual",
+      "requirements": ["T08-R03", "T08-R04", "T08-R08", "T08-R11"],
+      "summary": "Actor loads read as tiny loose ground clutter instead of attached, upright physical stacks at gameplay scale.",
+      "status": "FIX_IMPLEMENTED_PENDING_RETEST",
+      "resolution": "Raise and narrow the actor rack, enlarge the authored resource pieces, retain deterministic vertical tiers, and regenerate every angle/device capture."
+    },
+    {
+      "id": "T08-D004",
+      "severity": "mandatory-visual",
+      "requirements": ["T08-R05", "T08-R11"],
+      "summary": "Transfer pieces and arcs were too small, short and low-contrast to make direction readable from pixels.",
+      "status": "FIX_IMPLEMENTED_PENDING_RETEST",
+      "resolution": "Enlarge authored flight pieces, extend duration to 0.72 seconds, raise the arc, use smoothstep travel, and regenerate normal-speed route videos."
+    },
+    {
+      "id": "T08-D005",
+      "severity": "mandatory-evidence",
+      "requirements": ["T08-R05", "T08-R07", "T08-R08"],
+      "summary": "The first artifact omitted furnace/build/repair and lead-switch/hidden-actor proof and its integrated capture reported an overlapping duplicate stockpile.",
+      "status": "FIX_IMPLEMENTED_PENDING_RETEST",
+      "resolution": "Add player/helper furnace, storage, build and repair routes; add lead-switch and hidden-actor checks/captures; and report the shipping game.storage_stockpile in integrated mode."
     }
   ],
-  "unresolved_mandatory_count": 0,
-  "critic_scores": {},
+  "unresolved_mandatory_count": 3,
+  "critic_scores": {"C2": 7.85, "C3": 7.62, "C4": 6.84, "C6": 9.27},
+  "critic_source": "76e11b2296bc8447f7ffd2e2bcbcb48245ad4f5f",
   "critic_approval_pending": true,
   "task_approved": false
 }
