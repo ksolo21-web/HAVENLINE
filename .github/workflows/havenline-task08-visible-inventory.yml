@@ -199,9 +199,12 @@ jobs:
           def mean(rows,key): return statistics.fmean(float(row[key]) for row in rows)
           before={k:mean(baseline,k) for k in ('frame_usec','draw_calls','primitives')}
           during={k:mean(active,k) for k in before}; delta={k:during[k]-before[k] for k in before}
-          budgets={'absolute_frame_usec_delta':8000.0,'absolute_draw_call_delta':16.0,'absolute_primitive_delta':400000.0}
+          budgets={'maximum_frame_usec_increase':8000.0,'absolute_draw_call_delta':16.0,'absolute_primitive_delta':400000.0}
           failures=[]
-          if abs(delta['frame_usec'])>budgets['absolute_frame_usec_delta']: failures.append('frame delta')
+          # Startup/warm-up frames can make the pre-transfer baseline slower than
+          # the active window. Only a positive frame-time increase is overhead;
+          # treating a speed-up as a regression creates a runner-timing false fail.
+          if delta['frame_usec']>budgets['maximum_frame_usec_increase']: failures.append('frame-time increase')
           if abs(delta['draw_calls'])>budgets['absolute_draw_call_delta']: failures.append('draw-call delta')
           if abs(delta['primitives'])>budgets['absolute_primitive_delta']: failures.append('primitive delta')
           out={'task':'T08','candidate_commit':os.environ['GITHUB_SHA'],'baseline':before,'active_transfer':during,'delta':delta,'budgets':budgets,'passed':not failures,'failures':failures,'physical_device_native_4k60_certified':False}
