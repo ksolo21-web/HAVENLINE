@@ -194,7 +194,7 @@ func run() -> void:
 		Director.preview(Vector2(float(iteration % 7) * 0.001, 0), Vector2.DOWN, "player_lead", many)
 	var benchmark_elapsed_usec := Time.get_ticks_usec() - benchmark_start
 	var benchmark_usec_per_evaluation := float(benchmark_elapsed_usec) / float(benchmark_iterations)
-	check("worst-population selection remains bounded", benchmark_usec_per_evaluation < 5000.0, benchmark_usec_per_evaluation)
+	check("worst-population selection remains bounded", benchmark_usec_per_evaluation < 2500.0, benchmark_usec_per_evaluation)
 	var non_finite := director.advance(0.01, Vector2.INF, Vector2.DOWN, Vector2.ZERO, Vector2.ZERO, "player_lead", work)
 	check("non-finite runtime input fails closed", non_finite.state == "blocked_input")
 
