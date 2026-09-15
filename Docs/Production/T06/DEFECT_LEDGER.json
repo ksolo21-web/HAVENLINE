@@ -18,12 +18,12 @@
         "HavenlineGodot/scripts/character1_motion.gd",
         "HavenlineGodot/tests/test_task06_character1.gd"
       ],
-      "causal_production_change": "Retimed the complete supplied gait take, removed the last-20-percent neutral blend and duplicate seam holds, and matched the terminal pose plus incoming/outgoing quaternion and position deltas without zeroing motion. The first verification attempt exposed imported constant channels with fewer than three keys; those channels now preserve their constant seam while only genuinely animated channels receive a mirrored incoming sample.",
+      "causal_production_change": "Retimed the complete supplied gait take and removed the last-20-percent neutral blend and duplicate seam holds. Verification exposed both constant imported channels and source-key-spacing sensitivity, so every transform channel now receives explicit outgoing and mirrored incoming samples at the required 120 Hz proof interval plus the matching terminal pose.",
       "expected_visible_result": "Walk and run cross every repeated-loop seam with continuous nonzero limb motion and no cadence hitch or neutral reset.",
       "proof_contract": "Fresh exact-candidate real-time and quarter-speed captures of at least three uninterrupted walk and run cycles from front, rear, left, and right, plus a 120 Hz pose-and-velocity seam audit and independent C5 re-review.",
       "counters": {
-        "review_round": 2,
-        "same_family_strikes": 2
+        "review_round": 3,
+        "same_family_strikes": 3
       },
       "status": "PRODUCTION_FIX_IMPLEMENTED"
     },

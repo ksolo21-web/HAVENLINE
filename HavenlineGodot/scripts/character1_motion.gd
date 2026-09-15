@@ -210,38 +210,29 @@ static func _remove_scale_tracks(animation: Animation) -> void:
 			animation.remove_track(track)
 
 static func _match_cyclic_seam(animation: Animation) -> void:
-	# Close each channel without inserting a neutral hold. The final pose matches
-	# the first, while the penultimate sample mirrors the first forward sample.
-	# Linear playback therefore crosses the seam with the same non-zero pose
-	# delta on both sides instead of stopping once per cycle.
+	# Author explicit samples on both sides of the required 120 Hz proof interval.
+	# The terminal pose matches the first and the incoming sample mirrors the
+	# outgoing sample, so neither irregular source-key spacing nor a duplicated
+	# neutral pose can create a cadence hitch at the loop boundary.
+	var step := minf(1.0 / 120.0, animation.length * 0.02)
 	for track in animation.get_track_count():
 		var kind := animation.track_get_type(track)
 		if kind not in [Animation.TYPE_ROTATION_3D, Animation.TYPE_POSITION_3D]:
 			continue
 		animation.track_set_interpolation_type(track, Animation.INTERPOLATION_LINEAR)
-		var key_count := animation.track_get_key_count(track)
-		# Imported clips may keep constant channels as one key (or an endpoint
-		# pair). They already have zero velocity on both sides of the seam. Only
-		# channels with a real forward sample need the mirrored incoming sample.
-		if key_count <= 1:
-			continue
-		var first: Variant = animation.track_get_key_value(track, 0)
-		if key_count == 2:
-			animation.track_set_key_value(track, 1, first)
-			continue
-		var forward: Variant = animation.track_get_key_value(track, 1)
 		if kind == Animation.TYPE_ROTATION_3D:
-			var first_rotation: Quaternion = first
-			var forward_rotation: Quaternion = forward
-			first = first_rotation.normalized()
-			forward = forward_rotation.normalized()
-			var forward_delta: Quaternion = (first as Quaternion).inverse() * (forward as Quaternion)
-			animation.track_set_key_value(track, key_count - 2, ((first as Quaternion) * forward_delta.inverse()).normalized())
+			var first := animation.rotation_track_interpolate(track, 0.0).normalized()
+			var forward := animation.rotation_track_interpolate(track, step).normalized()
+			var forward_delta := first.inverse() * forward
+			animation.rotation_track_insert_key(track, step, forward)
+			animation.rotation_track_insert_key(track, animation.length - step, (first * forward_delta.inverse()).normalized())
+			animation.rotation_track_insert_key(track, animation.length, first)
 		else:
-			var first_position: Vector3 = first
-			var forward_position: Vector3 = forward
-			animation.track_set_key_value(track, key_count - 2, first_position - (forward_position - first_position))
-		animation.track_set_key_value(track, key_count - 1, first)
+			var first := animation.position_track_interpolate(track, 0.0)
+			var forward := animation.position_track_interpolate(track, step)
+			animation.position_track_insert_key(track, step, forward)
+			animation.position_track_insert_key(track, animation.length - step, first - (forward - first))
+			animation.position_track_insert_key(track, animation.length, first)
 
 static func _extract_gait_cycle(source: Animation, duration: float) -> Animation:
 	# Retiming the supplied take preserves its complete left/right gait cycle.
