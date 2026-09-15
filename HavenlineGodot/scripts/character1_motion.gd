@@ -7,11 +7,17 @@ extends RefCounted
 const SOURCE_GLTF_SHA256 := "95e4fed3a2778656cdf8b73affd2eb3feda8a32f82f4a0c3f76d90c82633c099"
 const LIBRARY := "t06"
 const BLEND_SECONDS := 0.16
-const WALK_STRIDE_METERS := 2.00
-const RUN_STRIDE_METERS := 2.15
+const WALK_STRIDE_METERS := 1.20
+const RUN_STRIDE_METERS := 1.00
 const WALK_CYCLE_SECONDS := 0.82
 const RUN_CYCLE_SECONDS := 0.56
 const NORMALIZED_SOURCE_SCALE := 1.78630495
+const GAIT_STANCE_CENTERS := {
+	"walk": {"L": 0.10, "R": 0.58},
+	"run": {"L": 0.18, "R": 0.60},
+}
+const GAIT_STANCE_INNER_RADIUS := 0.07
+const GAIT_STANCE_OUTER_RADIUS := 0.24
 
 const LOOP_CLIPS := ["idle", "walk", "run"]
 const TRANSITION_CLIPS := [
@@ -202,6 +208,18 @@ static func _curve(points: Array, phase: float) -> float:
 			return lerpf(a.y, b.y, inverse_lerp(a.x, b.x, p))
 	return float(points[-1].y)
 
+static func _cyclic_phase_delta(phase: float, centre: float) -> float:
+	return fposmod(phase - centre + 0.5, 1.0) - 0.5
+
+static func _stance_weight(phase: float, centre: float) -> float:
+	var distance := absf(_cyclic_phase_delta(phase, centre))
+	if distance <= GAIT_STANCE_INNER_RADIUS:
+		return 1.0
+	if distance >= GAIT_STANCE_OUTER_RADIUS:
+		return 0.0
+	var amount := inverse_lerp(GAIT_STANCE_OUTER_RADIUS, GAIT_STANCE_INNER_RADIUS, distance)
+	return amount * amount * (3.0 - 2.0 * amount)
+
 static func _remove_scale_tracks(animation: Animation) -> void:
 	# The imported source carries redundant animated scale channels on its root.
 	# Runtime motion uses the scene's authored rest scale and never deforms it.
@@ -316,8 +334,61 @@ static func _tune_locomotion(source: Animation, running: bool) -> Animation:
 		# Hip's imported local +Z maps to character-global +Y.
 		position.z += maxf(float(left_lifts[key]), float(right_lifts[key])) / NORMALIZED_SOURCE_SCALE
 		clip.track_set_key_value(position_track, key, position)
-	_match_cyclic_seam(clip)
 	return clip
+
+static func _sample_skeleton(player: AnimationPlayer, skeleton: Skeleton3D, clip_id: String, time: float) -> void:
+	player.play(LIBRARY + "/" + clip_id, 0.0)
+	player.seek(time, true)
+	skeleton.force_update_all_bone_transforms()
+
+static func _stabilize_gait_feet(player: AnimationPlayer, skeleton: Skeleton3D, clip: Animation, gait_id: String) -> void:
+	# Bake a neutral-global sole orientation and simulation-relative foot origin
+	# during each stance. The controller keeps +Z root authority while the planted
+	# boot moves by the exact opposite amount inside the skeleton.
+	var stride := WALK_STRIDE_METERS if gait_id == "walk" else RUN_STRIDE_METERS
+	for side in ["L", "R"]:
+		var foot_index := skeleton.find_bone(side + "_Foot")
+		var toe_index := skeleton.find_bone(side + "_ToeBase")
+		assert(foot_index >= 0 and toe_index >= 0)
+		_sample_skeleton(player, skeleton, "idle", 0.0)
+		var neutral_foot_global := skeleton.get_bone_global_pose(foot_index)
+		var neutral_toe_global := skeleton.get_bone_global_pose(toe_index)
+		var centre := float(GAIT_STANCE_CENTERS[gait_id][side])
+		var foot_rotation_track := _track_for_bone(clip, side + "_Foot", Animation.TYPE_ROTATION_3D)
+		var toe_rotation_track := _track_for_bone(clip, side + "_ToeBase", Animation.TYPE_ROTATION_3D)
+		assert(foot_rotation_track >= 0 and toe_rotation_track >= 0)
+		for key in clip.track_get_key_count(foot_rotation_track):
+			var time := clip.track_get_key_time(foot_rotation_track, key)
+			var phase := time / clip.length
+			_sample_skeleton(player, skeleton, gait_id, time)
+			var parent_global := skeleton.get_bone_global_pose(skeleton.get_bone_parent(foot_index))
+			var desired_local_basis := parent_global.basis.inverse() * neutral_foot_global.basis
+			var desired_pose := (skeleton.get_bone_rest(foot_index).basis.inverse() * desired_local_basis).get_rotation_quaternion().normalized()
+			var original: Quaternion = clip.track_get_key_value(foot_rotation_track, key)
+			clip.track_set_key_value(foot_rotation_track, key, original.slerp(desired_pose, _stance_weight(phase, centre)).normalized())
+		for key in clip.track_get_key_count(toe_rotation_track):
+			var time := clip.track_get_key_time(toe_rotation_track, key)
+			var phase := time / clip.length
+			_sample_skeleton(player, skeleton, gait_id, time)
+			var desired_local_basis := skeleton.get_bone_global_pose(foot_index).basis.inverse() * neutral_toe_global.basis
+			var desired_pose := (skeleton.get_bone_rest(toe_index).basis.inverse() * desired_local_basis).get_rotation_quaternion().normalized()
+			var original: Quaternion = clip.track_get_key_value(toe_rotation_track, key)
+			clip.track_set_key_value(toe_rotation_track, key, original.slerp(desired_pose, _stance_weight(phase, centre)).normalized())
+		var position_track := _track_for_bone(clip, side + "_Foot", Animation.TYPE_POSITION_3D)
+		if position_track < 0:
+			position_track = clip.add_track(Animation.TYPE_POSITION_3D)
+			clip.track_set_path(position_track, clip.track_get_path(foot_rotation_track))
+		clip.track_set_interpolation_type(position_track, Animation.INTERPOLATION_LINEAR)
+		for key in 61:
+			var phase := float(key) / 60.0
+			var time := clip.length * phase
+			_sample_skeleton(player, skeleton, gait_id, time)
+			var parent_global := skeleton.get_bone_global_pose(skeleton.get_bone_parent(foot_index))
+			var desired_global_origin := neutral_foot_global.origin + Vector3(0.0, 0.0, -stride * _cyclic_phase_delta(phase, centre))
+			var desired_local_origin := parent_global.affine_inverse() * desired_global_origin
+			var rest := skeleton.get_bone_rest(foot_index)
+			var desired_pose_position := rest.basis.inverse() * (desired_local_origin - rest.origin)
+			clip.position_track_insert_key(position_track, time, desired_pose_position * _stance_weight(phase, centre))
 
 static func _sample_rotation(animation: Animation, path: NodePath, time: float) -> Quaternion:
 	var track := animation.find_track(path, Animation.TYPE_ROTATION_3D)
@@ -534,6 +605,11 @@ static func install(root: Node3D, role := "player_lead") -> Dictionary:
 	library.add_animation("idle", idle)
 	library.add_animation("walk", walk)
 	library.add_animation("run", run)
+	player.add_animation_library(LIBRARY, library)
+	_stabilize_gait_feet(player, skeleton, walk, "walk")
+	_stabilize_gait_feet(player, skeleton, run, "run")
+	_match_cyclic_seam(walk)
+	_match_cyclic_seam(run)
 	library.add_animation("start_walk", _transition_clip(idle, walk, 0.34, "start_walk"))
 	library.add_animation("start_run", _transition_clip(idle, run, 0.30, "start_run"))
 	library.add_animation("stop_walk", _transition_clip(walk, idle, 0.32, "stop_walk"))
@@ -546,7 +622,6 @@ static func install(root: Node3D, role := "player_lead") -> Dictionary:
 		library.add_animation("turn_right_%03d" % degrees, _turn_transition(idle, duration, degrees, 1.0))
 	for id in ACTION_CLIPS:
 		library.add_animation(id, _action_clip(id, idle))
-	player.add_animation_library(LIBRARY, library)
 	for from_clip in library.get_animation_list():
 		for to_clip in library.get_animation_list():
 			if from_clip != to_clip:

@@ -45,12 +45,12 @@
         "tools/havenline/task06/deformed_surface_audit.py",
         ".github/workflows/havenline-task06-character1-candidate.yml"
       ],
-      "causal_production_change": "Reversed the full supplied gait and all phase-aware lower-limb tuning so planted soles move toward actor-local -Z against +Z controller travel; calibrated the walk stride to fixed sole motion; preserved signed joint drift; added fixed heel/ball/toe IDs sampled at 120 Hz through three translated cycles and four-view repeated-cycle videos. The first render verification also exposed an inferred Variant/String ambiguity in the new capture loop, which now uses an explicit String animation identifier.",
+      "causal_production_change": "Reversed the full supplied gait and all phase-aware lower-limb tuning so planted soles move toward actor-local -Z against +Z controller travel; preserved signed joint drift; added fixed heel/ball/toe IDs sampled at 120 Hz through three translated cycles and four-view repeated-cycle videos. Exact exported-surface measurements showed the initial 2.00 m walk and 2.15 m run strides exceeded the supplied sole travel, so they are recalibrated to 1.20 m and 1.00 m. Each stance is now baked against the immutable rig: foot and toe global orientation flatten to the neutral sole while the foot origin moves exactly opposite simulation +Z travel, with smooth cyclic entry and exit. The first render verification also exposed an inferred Variant/String ambiguity in the new capture loop, which now uses an explicit String animation identifier.",
       "expected_visible_result": "Fixed heel, ball, and toe surface landmarks on both boots remain above the floor and within the accepted horizontal-slip tolerance during stance across at least three controller-translated cycles.",
       "proof_contract": "Export 120 Hz world-space tracks for fixed heel, ball, and toe material vertices on both feet through at least three repeated walk and run cycles with real controller translation, including vertical clearance, penetration, horizontal slip, stance windows, and controller-relative error, then obtain independent C5 re-review.",
       "counters": {
-        "review_round": 2,
-        "same_family_strikes": 2
+        "review_round": 3,
+        "same_family_strikes": 3
       },
       "status": "PRODUCTION_FIX_IMPLEMENTED"
     },
@@ -69,7 +69,7 @@
         "tools/havenline/task06/deformed_surface_audit.py",
         ".github/workflows/havenline-task06-character1-candidate.yml"
       ],
-      "causal_production_change": "Added a task-owned exact-GLB CPU skinning evaluator that samples every vertex and triangle at 120 Hz, records neutral topological/contact exclusions, detects new non-adjacent triangle intersections with exact witnesses, checks finite/floor/non-collapse metrics per semantic part and clip, and runs as a fail-closed candidate-workflow gate.",
+      "causal_production_change": "Added a task-owned exact-GLB CPU skinning evaluator that samples every vertex and triangle at 120 Hz, records neutral topological/contact exclusions, detects new non-adjacent triangle intersections with exact witnesses, checks finite/floor/non-collapse metrics per semantic part and clip, and runs as a fail-closed candidate-workflow gate. Heel, ball, and toe IDs are now selected once from the neutral idle sole and reused unchanged for both gait clips.",
       "expected_visible_result": "Every semantic region remains finite, non-collapsed, non-inverted, above the floor where applicable, and clear of non-adjacent surface regions through every 120 Hz clip sample, with any threshold breach tied to an exact clip, time, part, and vertex/triangle witness.",
       "proof_contract": "Run a fail-closed 120 Hz CPU skinning audit over the exact runtime-review GLB for all 66 joints, all deformed vertices, all triangles, all 16 semantic parts, and all 24 clips; retain per-part/per-clip minima and exact breach witnesses; combine with existing textured multi-angle evidence and obtain independent C2 re-review.",
       "counters": {

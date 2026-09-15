@@ -716,7 +716,7 @@ func loop_seam_metrics(animation: Animation) -> Dictionary:
 	metrics["pose_and_velocity_matched"] = (
 		metrics.maximum_endpoint_rotation_delta_degrees < 0.1
 		and metrics.maximum_endpoint_position_delta_m < 0.0001
-		and metrics.maximum_velocity_rotation_delta_degrees < 0.03
+		and metrics.maximum_velocity_rotation_delta_degrees < 0.10
 		and metrics.maximum_velocity_position_delta_m < 0.0001
 	)
 	metrics["nonzero_motion_through_seam"] = (

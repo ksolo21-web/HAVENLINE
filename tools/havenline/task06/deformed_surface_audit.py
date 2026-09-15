@@ -327,13 +327,9 @@ def choose_landmarks(vertices: np.ndarray, indices: np.ndarray) -> dict[str, int
     return result
 
 
-def gait_audit(runtime: RuntimeGLB, clip: str, stride: float, vertices_by_part: dict[str, np.ndarray], rate: int) -> dict:
+def gait_audit(runtime: RuntimeGLB, clip: str, stride: float, vertices_by_part: dict[str, np.ndarray], rate: int,
+               landmarks: dict[str, dict[str, int]]) -> dict:
     duration = runtime.duration(clip)
-    first = runtime.deform(clip, 0.0)
-    landmarks = {}
-    for side in ("left", "right"):
-        part = f"{side}_foot_toe_boot"
-        landmarks[side] = choose_landmarks(first, vertices_by_part[part])
     selected = np.array([landmarks[side][label] for side in ("left", "right") for label in ("heel", "ball", "toe")])
     count = math.ceil(duration * 3 * rate) + 1
     tracks = np.empty((count, len(selected), 3), dtype=np.float64)
@@ -471,9 +467,12 @@ def audit(runtime: RuntimeGLB, ledger: dict, candidate: str, rate: int) -> dict:
         clip_rows[clip] = {"duration_seconds": duration, "sample_rate_hz": rate, "sample_count": sample_count,
                            "parts": part_rows, "passed": all(row["passed"] for row in part_rows.values())}
         print(f"audited {clip}: {sample_count} samples, passed={clip_rows[clip]['passed']}", flush=True)
+    neutral_vertices = runtime.deform("t06_idle", 0.0)
+    sole_landmarks = {side: choose_landmarks(neutral_vertices, vertices_by_part[f"{side}_foot_toe_boot"])
+                      for side in ("left", "right")}
     gait = [
-        gait_audit(runtime, "t06_walk", float(ledger["clips"]["walk"]["controller_stride_m"]), vertices_by_part, rate),
-        gait_audit(runtime, "t06_run", float(ledger["clips"]["run"]["controller_stride_m"]), vertices_by_part, rate),
+        gait_audit(runtime, "t06_walk", float(ledger["clips"]["walk"]["controller_stride_m"]), vertices_by_part, rate, sole_landmarks),
+        gait_audit(runtime, "t06_run", float(ledger["clips"]["run"]["controller_stride_m"]), vertices_by_part, rate, sole_landmarks),
     ]
     errors = []
     if candidate != ledger.get("candidate_commit"):
