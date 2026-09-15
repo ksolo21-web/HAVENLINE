@@ -3,6 +3,7 @@ extends SceneTree
 const Director = preload("res://scripts/context_director.gd")
 const Motion = preload("res://scripts/character1_motion.gd")
 const Simulation = preload("res://scripts/simulation.gd")
+const PopulationSimulation = preload("res://scripts/population_simulation.gd")
 
 var checks: Array[Dictionary] = []
 var failures: Array[String] = []
@@ -203,6 +204,22 @@ func run() -> void:
 	var sim := Simulation.new()
 	var sim_candidates := Director.build_simulation_candidates(sim)
 	check("approved simulation adapter produces canonical candidates", not sim_candidates.is_empty() and sim_candidates.all(func(row): return Director.preview(sim.position, sim.facing, "player_lead", [row]).has("kind")))
+	var population_sim := PopulationSimulation.new()
+	population_sim.level = 2
+	var encounter_id := population_sim.population.add_encounter("survivor_male_01", population_sim.position + Vector2(0, 1))
+	population_sim.population.spawn_customer()
+	var customer: Dictionary = population_sim.population.customers[0]
+	customer.state = "waiting"
+	customer.position = Vector2(5.4, 2.8)
+	population_sim.inventory[String(customer.order_kind)] = 1
+	var population_candidates := Director.build_simulation_candidates(population_sim)
+	check("visible survivor rescue is a canonical context", population_candidates.any(func(row): return row.kind == "npc_rescue" and row.id == str(encounter_id)))
+	check("visible customer service is a canonical context", population_candidates.any(func(row): return row.kind == "customer_service" and row.id == str(customer.id)))
+	population_sim.population.presentation_required = true
+	population_sim.population.presented_ids = []
+	var gated_population_candidates := Director.build_simulation_candidates(population_sim)
+	check("unpresented survivor cannot become an invisible context", not gated_population_candidates.any(func(row): return row.kind == "npc_rescue"))
+	check("unpresented customer cannot become an invisible context", not gated_population_candidates.any(func(row): return row.kind == "customer_service"))
 	var sim_snapshot := sim.snapshot()
 	check("approved save snapshot contains no T07 context state", not sim_snapshot.has("context") and not sim_snapshot.has("focus") and not sim_snapshot.has("action_token"))
 	var restore_sim := Simulation.new()

@@ -60,6 +60,7 @@ def validate(candidate: str) -> dict:
     check("test covers movement cancel and reacquire", "movement does not secretly accrue" in tests and "deterministically reacquires" in tests)
     check("test covers no duplicate impact contract", "descriptor declares no emitted impact" in tests)
     check("test covers T06 compatibility", "compatible with T06 selector" in tests)
+    check("test covers visible population context and fail-closed actors", "visible survivor rescue is a canonical context" in tests and "unpresented survivor cannot become an invisible context" in tests)
     check("test covers persistence reconstruction", "context reconstructs deterministically after reload" in tests)
     check("test covers population cap performance", "worst-population selection remains bounded" in tests)
 

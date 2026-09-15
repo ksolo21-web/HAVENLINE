@@ -337,6 +337,9 @@ static func _progress(sim: Variant, kind: String, id: String, duration: float) -
 		return 0.0
 	return clampf(float(sim.action_clocks.get(kind + ":" + id, 0.0)) / duration, 0.0, 1.0)
 
+static func _has_property(value: Object, property_name: String) -> bool:
+	return value.get_property_list().any(func(row): return String(row.name) == property_name)
+
 static func build_simulation_candidates(sim: Variant) -> Array:
 	# Read-only adapter over the approved simulation. It creates possibilities;
 	# it never performs an action or mutates gameplay state.
@@ -369,4 +372,14 @@ static func build_simulation_candidates(sim: Variant) -> Array:
 			var id := String(resource.id)
 			var resource_kind := String(resource.kind)
 			options.append({"kind":kind, "id":id, "position":Vector2(resource.position), "eligible":true, "priority":0.0, "capability":"gather_with_tools", "radius":float(player.interactionRadius), "target_relevance":0.5 if resource_kind in ["wood","stone"] else 0.25, "progress":_progress(sim,kind,id,float(sim.tuning.gatherSecondsPerUnit[resource_kind]))})
+	if _has_property(sim, "population"):
+		var population: Variant = sim.get("population")
+		if sim.level >= 2 and sim.durability > 0:
+			for encounter in population.encounters:
+				var encounter_id := int(encounter.id)
+				if population.visible(encounter_id):
+					options.append({"kind":"npc_rescue", "id":str(encounter_id), "position":Vector2(encounter.position), "eligible":true, "priority":0.0, "capability":"rescue", "radius":float(player.rescueRadius), "target_relevance":1.0, "progress":clampf(float(population.rescue_clocks.get(str(encounter_id), 0.0)) / 2.2, 0.0, 1.0)})
+			var customer: Dictionary = population.active_customer()
+			if not customer.is_empty() and sim.inventory.get(String(customer.order_kind), 0) > 0:
+				options.append({"kind":"customer_service", "id":str(customer.id), "position":Vector2(5.4, 2.8), "eligible":true, "priority":0.0, "capability":"deposit", "radius":1.8, "target_relevance":1.0, "progress":clampf(float(population.service_clock) / 0.4, 0.0, 1.0)})
 	return options

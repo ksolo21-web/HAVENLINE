@@ -60,6 +60,11 @@ After isolated acceptance, the integration owner should:
 7. Re-run all T01–T07 suites, save/device/resource/performance gates and fresh
    visual evidence on the integrated commit.
 
+The adapter also consumes the approved population simulation's already-visible
+survivor-rescue and customer-service possibilities. Its existing presentation
+gate remains authoritative: an encounter/customer omitted from `presented_ids`
+cannot produce a contextual action.
+
 No `outpost_simulation.gd`, `outpost_view.gd`, reference contract, asset,
 economy, tool, weapon, transfer, construction-upgrade or future-task change is
 requested.
