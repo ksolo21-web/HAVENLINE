@@ -178,17 +178,36 @@ jobs:
           assert len(sequence['trace'])==184 and len(list((root/'captures/sequence/frames').glob('*.jpg')))==60
           final=sequence['transfers']; assert final['accepted_receipts']==4 and final['completed_receipts']==4 and final['rejected_receipts']==0,final
           routes=json.loads((root/'captures/routes/capture.json').read_text())
-          assert len(routes['trace'])==268 and len(list((root/'captures/routes/frames').glob('*.jpg')))==88
-          route_final=routes['transfers']; assert route_final['accepted_receipts']==6 and route_final['completed_receipts']==6 and route_final['rejected_receipts']==0,route_final
+          assert len(routes['trace'])==448 and len(list((root/'captures/routes/frames').glob('*.jpg')))==148
+          route_final=routes['transfers']; assert route_final['accepted_receipts']==6 and route_final['completed_receipts']==6 and route_final['rejected_receipts']==0 and route_final['active_arrival_pulses']==0,route_final
           route_rows=[flight for row in routes['trace'] for flight in row['transfers']['flights']]
-          assert {flight['destination_id'] for flight in route_rows}=={'furnace_storage','camp_storage','defense:north','defense:south','repair:furnace','repair:north'}
+          destinations=['furnace_storage','camp_storage','defense:north','defense:south','repair:furnace','repair:north']
+          assert {flight['destination_id'] for flight in route_rows}==set(destinations)
           assert {flight['actor_id'] for flight in route_rows}=={1,2}
           proofs=json.loads((root/'captures/route-proofs/capture.json').read_text())
-          assert len(proofs['trace'])==268 and len(list((root/'captures/route-proofs/frames').glob('*.jpg')))==88
-          proof_final=proofs['transfers']; assert proof_final['accepted_receipts']==6 and proof_final['completed_receipts']==6 and proof_final['rejected_receipts']==0,proof_final
+          assert len(proofs['trace'])==448 and len(list((root/'captures/route-proofs/frames').glob('*.jpg')))==148
+          proof_final=proofs['transfers']; assert proof_final['accepted_receipts']==6 and proof_final['completed_receipts']==6 and proof_final['rejected_receipts']==0 and proof_final['active_arrival_pulses']==0,proof_final
           proof_rows=[row for row in proofs['trace'] if row['route_camera']['active']]
           assert proof_rows and all(row['route_camera']['mode']=='midpoint_endpoints' and row['route_camera']['endpoints_visible'] for row in proof_rows)
-          assert {row['route_camera']['destination_id'] for row in proof_rows}=={'furnace_storage','camp_storage','defense:north','defense:south','repair:furnace','repair:north'}
+          assert {row['route_camera']['destination_id'] for row in proof_rows}==set(destinations)
+          first_camera={destination:next(row['frame'] for row in proof_rows if row['route_camera']['destination_id']==destination) for destination in destinations}
+          assert first_camera==dict(zip(destinations,[12,84,156,228,300,372])),first_camera
+          pulse_rows={destination:[] for destination in destinations}
+          for row in proofs['trace']:
+              for pulse in row['transfers']['arrival_pulses']:
+                  if pulse['destination_id'] in pulse_rows:
+                      pulse_rows[pulse['destination_id']].append((row['frame'],float(pulse['normalized_age'])))
+          for destination in destinations:
+              samples=pulse_rows[destination]
+              assert len(samples)>=24,(destination,len(samples))
+              ages=[age for _,age in samples]
+              assert min(ages)<=1e-6 and max(ages)>0.9,(destination,min(ages),max(ages))
+          for previous,current in zip(destinations,destinations[1:]):
+              assert pulse_rows[previous][-1][0] < first_camera[current],(previous,current,pulse_rows[previous][-1],first_camera[current])
+          assert pulse_rows[destinations[-1]][-1][0] < proofs['trace'][-1]['frame']
+          arrival_names=['arrival-furnace-storage','arrival-camp-storage','arrival-defense-north','arrival-defense-south','arrival-repair-furnace','arrival-repair-north']
+          for directory in (root/'captures/routes',root/'captures/route-proofs'):
+              assert all((directory/f'{name}.png').is_file() for name in arrival_names),directory
           integrity=json.loads((root/'captures/integrity/capture.json').read_text())['actor_integrity']
           assert integrity['switch_succeeded'] is True and integrity['selected_lead']==2
           assert sum(integrity['before'].values())==sum(integrity['after_switch'].values())
@@ -197,7 +216,7 @@ jobs:
           assert directions=={'source_to_actor','actor_to_destination'},directions
           videos=[root/'video/resource-loop.mp4',root/'video/build-repair-loop.mp4',root/'video/destination-route-loop.mp4']
           assert all(path.stat().st_size>10000 for path in videos) and len(images)>=39,len(images)
-          result={'task':'T08','candidate_commit':os.environ['CANDIDATE'],'manifest_count':len(manifests),'png_count':len(images),'unique_png_hashes':len(hashes),'sequence_frames':60,'route_sequence_frames':88,'destination_proof_frames':88,'destination_endpoints_visible':True,'transfer_directions':sorted(directions),'route_destinations':sorted({flight['destination_id'] for flight in route_rows}),'actor_integrity':integrity,'conservation_held':True,'passed':True}
+          result={'task':'T08','candidate_commit':os.environ['CANDIDATE'],'manifest_count':len(manifests),'png_count':len(images),'unique_png_hashes':len(hashes),'sequence_frames':60,'route_sequence_frames':148,'destination_proof_frames':148,'arrival_pulse_samples':{key:len(value) for key,value in pulse_rows.items()},'destination_endpoints_visible':True,'transfer_directions':sorted(directions),'route_destinations':sorted({flight['destination_id'] for flight in route_rows}),'actor_integrity':integrity,'conservation_held':True,'passed':True}
           (root/'capture-gate.json').write_text(json.dumps(result,indent=2)); print(json.dumps(result))
           PY
 
@@ -208,8 +227,8 @@ jobs:
           from pathlib import Path
           import json,os,statistics
           report=json.loads(Path('task08-evidence/captures/sequence/capture.json').read_text()); rows=report['trace']
-          baseline=rows[:12]; active=[row for row in rows if row['transfers']['active_flights']>0]
-          assert report['performance_warmup_frames']==90 and baseline and active
+          baseline=rows[:12]; active_available=[row for row in rows if row['transfers']['active_flights']>0]; active=active_available[:len(baseline)]
+          assert report['performance_warmup_frames']==90 and len(baseline)==len(active)==12
           def mean(rows,key): return statistics.fmean(float(row[key]) for row in rows)
           def percentile(values,ratio):
               values=sorted(float(value) for value in values); return values[max(0,min(len(values)-1,int(len(values)*ratio+0.999999)-1))]
@@ -230,8 +249,9 @@ jobs:
           rss_mb=float(rss_line.split(':')[-1].strip())/1024.0
           source_paths=[Path('HavenlineGodot/scripts/carry_stack.gd'),Path('HavenlineGodot/scripts/storage_stockpile.gd'),Path('HavenlineGodot/scripts/transfer_feedback.gd')]
           storage_mb=sum(path.stat().st_size for path in source_paths)/(1024*1024)
-          out={'task':'T08','candidate_commit':os.environ['GITHUB_SHA'],'scene_state':'shipping main scene; 90-frame warm-up; matched inactive and active transfer windows','resolution':{'window':report['window'],'internal_render':report['internal_render']},'renderer':report['renderer'],
+          out={'task':'T08','candidate_commit':os.environ['GITHUB_SHA'],'scene_state':'shipping main scene; 90-frame warm-up; equal adjacent 12-frame inactive and active transfer windows','resolution':{'window':report['window'],'internal_render':report['internal_render']},'renderer':report['renderer'],
               'baseline':before,'active_transfer':during,'baseline_stats':baseline_stats,'active_transfer_stats':active_stats,'delta':delta,'p95_frame_usec_increase':p95_frame_increase,'budgets':budgets,
+              'sample_window':{'baseline_samples':len(baseline),'active_samples':len(active),'active_available_samples':len(active_available),'selection':'first active window after adjacent inactive baseline'},
               'draw_calls':int(max(row['draw_calls'] for row in active)),'visible_triangles':int(max(row['primitives'] for row in active)),'triangles_or_primitives':int(max(row['primitives'] for row in active)),
               'materials_visible':int(metrics['materials_visible']),'materials':int(metrics['materials_visible']),
               'texture_gpu_memory_mb':float(metrics['texture_memory_bytes'])/(1024*1024),'texture_memory_if_measurable':float(metrics['texture_memory_bytes'])/(1024*1024),'video_gpu_memory_mb':float(metrics['video_memory_bytes'])/(1024*1024),
@@ -240,7 +260,7 @@ jobs:
               'npc_companion_active_population':int(metrics['population_count']),'population_count':int(metrics['population_count']),
               'process_memory_mb':rss_mb,'process_memory_if_measurable':rss_mb,'process_static_memory_mb':float(metrics['process_static_memory_bytes'])/(1024*1024),
               'storage_download_mb':storage_mb,'storage_delta':storage_mb,
-              'measurement_method':'Pinned Godot 4.7.2 Mobile Vulkan shipping scene; 90 discarded warm-up frames; matched inactive/active trace windows with retained raw samples; Godot visible draw, primitive, texture/video-memory and scene inventory counters; GNU time maximum RSS; exact T08 source byte delta.',
+              'measurement_method':'Pinned Godot 4.7.2 Mobile Vulkan shipping scene; 90 discarded warm-up frames; equal adjacent 12-frame inactive/active trace windows with retained raw samples; Godot visible draw, primitive, texture/video-memory and scene inventory counters; GNU time maximum RSS; exact T08 source byte delta.',
               'known_unmeasured_fields':['full_cpu_frame_ms','gpu_frame_ms_where_measurable','direct_gpu_shader_time_ms','physical_display_presentation','physical_device_thermal_behavior'],
               'passed':not failures,'failures':failures,'physical_device_native_4k60_certified':False}
           Path('task08-evidence/integrated-performance.json').write_text(json.dumps(out,indent=2)); print(json.dumps(out)); assert not failures,failures

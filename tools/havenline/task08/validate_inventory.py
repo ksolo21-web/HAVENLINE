@@ -58,7 +58,8 @@ def validate(candidate: str) -> dict:
     check("transfer flights expose readability geometry", "FLIGHT_SCALE_MULTIPLIER :=" in sources["transfer"] and "ARC_HEIGHT :=" in sources["transfer"] and "DURATION_SECONDS := 0.72" in sources["transfer"])
     check("transfer direction and arrival are explicit", all(token in sources["transfer"] for token in (
         "TRAIL_SAMPLES := 6", "_tangent_basis", "_make_arrows", "_make_pulses",
-        '"trail_geometry": "tangent_oriented_tapered_continuous_segments"')))
+        '"trail_geometry": "tangent_oriented_tapered_continuous_segments"',
+        '"arrival_pulses": pulses.map')))
     check("receipt replay is rejected", "if receipts.has(receipt_id):" in sources["transfer"] and "RECEIPT_WINDOW := 256" in sources["transfer"])
     check("invalid and zero-length routes fail closed", "valid_point" in sources["transfer"] and "distance_squared_to(finish) <= 0.000001" in sources["transfer"])
     check("destination display derives from stored counts", "return stack.update_inventory(stored)" in sources["stockpile"])

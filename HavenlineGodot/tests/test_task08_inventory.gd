@@ -126,6 +126,14 @@ func run() -> void:
 	var completed := transfer.descriptor()
 	check("completed transfers return to pools", completed.active_flights == 0 and completed.completed_receipts == 2 and transfer.pools.wood.size() == 1 and transfer.pools.stone.size() == 1)
 	check("arrival creates a destination pulse for both directions", completed.active_arrival_pulses == 2 and completed.arrival_pulse_instances.source_to_actor == 1 and completed.arrival_pulse_instances.actor_to_destination == 1)
+	var gather_arrival := false
+	var destination_arrival := false
+	var arrival_ages_are_fresh := true
+	for pulse in completed.arrival_pulses:
+		gather_arrival = gather_arrival or (pulse.destination_id == "actor:1" and pulse.direction == "source_to_actor")
+		destination_arrival = destination_arrival or (pulse.destination_id == "furnace" and pulse.direction == "actor_to_destination")
+		arrival_ages_are_fresh = arrival_ages_are_fresh and is_finite(float(pulse.normalized_age)) and is_zero_approx(float(pulse.normalized_age))
+	check("arrival descriptors bind destination direction and normalized age", completed.arrival_pulses.size() == 2 and gather_arrival and destination_arrival and arrival_ages_are_fresh)
 	transfer._process(Transfer.ARRIVAL_PULSE_SECONDS)
 	check("arrival pulses expire inside their bounded lifetime", transfer.descriptor().active_arrival_pulses == 0)
 	check("receipt history survives visual completion", not transfer.transfer("stone", Vector3.ZERO, Vector3.ONE, "deposit:2", "source_to_actor"))

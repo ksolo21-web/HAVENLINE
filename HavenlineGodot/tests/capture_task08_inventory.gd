@@ -260,17 +260,23 @@ func capture_routes() -> void:
 	var storage: Vector2 = game.sim.point(game.sim.contract.world.storage)
 	var north: Vector2 = game.sim.defenses.north.position
 	var south: Vector2 = game.sim.defenses.south.position
-	for frame in 264:
+	var arrival_frames := {
+		60:"arrival-furnace-storage", 132:"arrival-camp-storage",
+		204:"arrival-defense-north", 276:"arrival-defense-south",
+		348:"arrival-repair-furnace", 420:"arrival-repair-north",
+	}
+	for frame in 444:
 		if frame == 12: commit_route("deposit", game.sim.lead, false, furnace, "furnace_storage")
-		elif frame == 54: commit_route("deposit", 2, true, storage, "camp_storage")
-		elif frame == 96: commit_route("build", game.sim.lead, false, north, "defense:north")
-		elif frame == 138: commit_route("build", 2, true, south, "defense:south")
-		elif frame == 180: commit_route("repair", game.sim.lead, false, furnace, "repair:furnace")
-		elif frame == 222: commit_route("repair", 2, true, north, "repair:north")
+		elif frame == 84: commit_route("deposit", 2, true, storage, "camp_storage")
+		elif frame == 156: commit_route("build", game.sim.lead, false, north, "defense:north")
+		elif frame == 228: commit_route("build", 2, true, south, "defense:south")
+		elif frame == 300: commit_route("repair", game.sim.lead, false, furnace, "repair:furnace")
+		elif frame == 372: commit_route("repair", 2, true, north, "repair:north")
 		await sample(frame)
 		if frame % 3 == 0: await capture_jpg(frame)
-		if frame in [0, 30, 72, 114, 156, 198, 240, 263]: await capture_png("routes-%03d" % frame)
-	for frame in range(264, 268): await sample(frame)
+		if frame == 0 or frame == 443: await capture_png("routes-%03d" % frame)
+		elif arrival_frames.has(frame): await capture_png(String(arrival_frames[frame]))
+	for frame in range(444, 448): await sample(frame)
 
 func actor_stack_totals() -> Dictionary:
 	var result := {}

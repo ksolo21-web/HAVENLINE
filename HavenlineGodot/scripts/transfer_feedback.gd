@@ -319,6 +319,11 @@ func descriptor() -> Dictionary:
 			"source_to_actor": gather_pulses.multimesh.visible_instance_count if is_instance_valid(gather_pulses) else 0,
 			"actor_to_destination": destination_pulses.multimesh.visible_instance_count if is_instance_valid(destination_pulses) else 0,
 		},
+		"arrival_pulses": pulses.map(func(pulse): return {
+			"destination_id": pulse.destination_id,
+			"direction": pulse.direction,
+			"normalized_age": clampf(float(pulse.time) / ARRIVAL_PULSE_SECONDS, 0.0, 1.0),
+		}),
 		"flights": flights.map(func(item): return {
 			"kind": item.kind, "receipt_id": item.receipt_id, "direction": item.direction,
 			"actor_id": item.actor_id, "destination_id": item.destination_id,
