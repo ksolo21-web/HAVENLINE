@@ -61,15 +61,15 @@
   "critics": {
     "C1": {"name":"Reference Fidelity Critic","operational":true,"execution":"existing independent visual reviewer","production_review_history_exists":true},
     "C2": {"name":"Technical / Visual Integrity Critic","operational":true,"execution":"existing independent visual reviewer","production_review_history_exists":true},
-    "C3": {"name":"Havenline Gameplay Identity Critic","operational":true,"execution":"independent specialist local model","production_candidate_score_executed_yet":false},
-    "C4": {"name":"Gameplay UX / Readability Critic","operational":true,"execution":"independent specialist local model","production_candidate_score_executed_yet":false},
+    "C3": {"name":"Havenline Gameplay Identity Critic","operational":true,"execution":"independent specialist local model","production_candidate_score_executed_yet":true},
+    "C4": {"name":"Gameplay UX / Readability Critic","operational":true,"execution":"independent specialist local model","production_candidate_score_executed_yet":true},
     "C5": {"name":"Motion / Rigging Critic","operational":true,"execution":"independent specialist local model plus motion capture harness","production_candidate_score_executed_yet":false},
-    "C6": {"name":"Performance Critic","operational":true,"execution":"quantitative budget gate","final_physical_4k60_substitute":false},
+    "C6": {"name":"Performance Critic","operational":true,"execution":"quantitative budget gate","production_candidate_score_executed_yet":true,"final_physical_4k60_substitute":false},
     "C7": {"name":"Progression / Difficulty Critic","operational":true,"execution":"independent specialist local model plus deterministic progression gate","production_candidate_score_executed_yet":false},
     "C8": {"name":"Economy / Fairness Critic","operational":true,"execution":"independent specialist local model plus deterministic economy gate","production_candidate_score_executed_yet":false},
     "C9": {"name":"Security / Exploit Critic","operational":true,"execution":"10-attack deterministic adversarial harness","secure_and_vulnerable_mock_paths_tested":true,"production_system_attack_run_yet":false},
     "C10": {"name":"LiveOps Critic","operational":true,"execution":"independent specialist local model plus deterministic LiveOps gate","production_candidate_score_executed_yet":false},
-    "C11": {"name":"Accessibility Critic","operational":true,"execution":"independent specialist local model plus deterministic accessibility and device-layout gates","production_candidate_score_executed_yet":false}
+    "C11": {"name":"Accessibility Critic","operational":true,"execution":"independent specialist local model plus deterministic accessibility and device-layout gates","production_candidate_score_executed_yet":true}
   },
   "negative_fixture_proofs": [
     "exact score 9.0 is rejected",
@@ -91,7 +91,9 @@
     "T03": "APPROVED",
     "T04": "APPROVED",
     "T05": "APPROVED",
-    "T06_plus_runtime": "LOCKED"
+    "T06": "APPROVED",
+    "T07": "APPROVED",
+    "T08_plus_runtime": "LOCKED"
   },
-  "next_step": "Preserve accepted T01-T05 sources. T06 remains LOCKED; prepare its isolated packet, assign an owner, and validate ownership before changing runtime."
+  "next_step": "Preserve accepted T01-T07 sources. T08 remains LOCKED; prepare its isolated packet, assign an owner, and validate ownership before changing runtime."
 }

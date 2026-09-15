@@ -10,7 +10,7 @@
 - T04 is APPROVED at accepted gameplay source `e08fd37e9a999d878644c03089c4b4b253bd7472`.
 - T05 is APPROVED at accepted gameplay source `fa6fa70f154f3757d22303522ca3f6de2c3d391f`; 18 suites / 1119 checks, 77 source-bound frames, strict C1+C2 PASS, C6 minimum 9.1, final pixel signoff and G1-G14 passed.
 - T06 is APPROVED at accepted isolated source `47f86fae25b099abb5c7096c37ca7495453b2b8f`, integrated at `91f35f331aaabe2b1785b10c0d911f20da6f12d9`; 19 suites / 1345 checks, exact runtime-review identity, exhaustive motion/surface evidence, C1 9.42, C2 9.42, C5 9.31 and fresh C6 passed.
-- T07 is ASSIGNED on `havenline/T07-context-director` from runtime integration base `91f35f331aaabe2b1785b10c0d911f20da6f12d9`; T08+ remains locked until separately prepared and assigned.
+- T07 is APPROVED at accepted isolated source `0a30dc0859541626eb6aa9a9bb749abc93dcb355`, integrated at `94b3f6c5097356a3857ebd13a77fb1e316eb06ae`; 21 suites / 1441 checks, exact-source visual/device/save/performance evidence, C2 9.46, C3 9.68, C4 9.24, C6 9.53 and C11 9.18 passed. T08+ remains locked until separately prepared and assigned.
 - Forward intermediate PASS requires every applicable mandatory reviewed dimension to be **strictly > 9.0 unrounded**, every mandatory gate to pass, and zero unresolved mandatory defects. Target remains 10/10.
 
 ## Permanent Havenline product contract
@@ -87,7 +87,7 @@ Only the integration owner may integrate production candidates into the integrat
 | T04 | Reference camera and automatic screen composition | APPROVED |
 | T05 | Production station and prop kit | APPROVED |
 | T06 | Character 1 complete movement/interactions | APPROVED |
-| T07 | Havenline Simple Control & Context Director | ASSIGNED |
+| T07 | Havenline Simple Control & Context Director | APPROVED |
 | T08 | Visible inventory, physical carrying and transfers | LOCKED |
 | T09 | Harvesting and automatic acquisition | LOCKED |
 | T10 | World Transformation Framework | LOCKED |
@@ -154,12 +154,12 @@ Only the integration owner may integrate production candidates into the integrat
 
 Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. Mandatory forward scope overlays for resource/tool/actor/animation behavior are machine-authoritative in `TASK_SCOPE_OVERRIDES.json` and the three contract registries. T01–T06 accepted records remain authoritative; T06 closure is recorded in `Docs/Production/T06/verified-completion.json`.
 
-## Wave checkpoint after T06 approval
+## Wave checkpoint after T07 approval
 
 - **Completed A / T04** — approved camera/composition; preserve its accepted source.
 - **Completed B / T05** — approved station/prop kit; preserve accepted source `fa6fa70f154f3757d22303522ca3f6de2c3d391f`.
 - **Completed C / T06** — approved Character 1 motion/contact foundation; preserve accepted source `47f86fae25b099abb5c7096c37ca7495453b2b8f` and integrated source `91f35f331aaabe2b1785b10c0d911f20da6f12d9`.
-- **Active D / `havenline/T07-context-director`** — deterministic simple-control/context director is separately packeted and ASSIGNED; T08+ remains locked.
+- **Completed D / T07** — deterministic simple-control/context director is APPROVED; preserve accepted source `0a30dc0859541626eb6aa9a9bb749abc93dcb355` and integrated source `94b3f6c5097356a3857ebd13a77fb1e316eb06ae`. T08+ remains locked until separately prepared.
 - **Workstream Q** — QA/automation/integration infrastructure only.
 
 These workstreams may build in parallel only after T03 is APPROVED and the registry assigns disjoint path ownership. Integration remains serial and integration-owner-controlled.

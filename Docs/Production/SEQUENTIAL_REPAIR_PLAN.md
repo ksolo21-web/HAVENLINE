@@ -30,9 +30,12 @@ integration-owner-controlled production integration.
   in `Docs/Production/T06/verified-completion.json` after 19 suites / 1345
   checks, exact evidence identity, exhaustive motion/surface gates and required
   C1/C2/C5/C6 review.
-- T07 is ASSIGNED on `havenline/T07-context-director` from runtime integration
-  base `91f35f331aaabe2b1785b10c0d911f20da6f12d9`; its frozen scope and packet are
-  under `Docs/Production/T07/`. T08+ remains LOCKED until separately prepared.
+- T07 is APPROVED at accepted isolated source
+  `0a30dc0859541626eb6aa9a9bb749abc93dcb355`, integrated at
+  `94b3f6c5097356a3857ebd13a77fb1e316eb06ae`; its verified closure is recorded
+  in `Docs/Production/T07/verified-completion.json` after 21 suites / 1441
+  checks and strict C2/C3/C4/C6/C11 review. T08+ remains LOCKED until separately
+  prepared.
 
 ## Forward acceptance rule
 
@@ -105,7 +108,7 @@ separate $0 reviewer is available, useful construction/testing continues but
 the critic gate remains `BLOCKED`. Never manufacture a pass and never add a
 paid critic dependency.
 
-## Current wave after T06 approval
+## Current wave after T07 approval
 
 T03 is approved. The registry may now assign these workstreams individually
 after each packet and owner are prepared:
@@ -114,8 +117,10 @@ after each packet and owner are prepared:
 - T05 station/prop kit is complete and APPROVED at `fa6fa70f154f3757d22303522ca3f6de2c3d391f`.
 - T06 Character 1 motion/contact foundation is complete and APPROVED; preserve
   its accepted and integrated sources.
-- `havenline/T07-context-director` — T07 deterministic simple-control/context
-  director is ASSIGNED; build only inside `@reservation:T07`.
+- T07 deterministic simple-control/context director is complete and APPROVED;
+  preserve its accepted and integrated sources.
+- T08 remains LOCKED until a separate packet, owner and path reservation are
+  prepared and validated.
 - QA/integration infrastructure may continue separately.
 
 Those workstreams are isolated and path-disjoint. Shared wiring remains

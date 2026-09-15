@@ -82,9 +82,10 @@
     "T03",
     "T04",
     "T05",
-    "T06"
+    "T06",
+    "T07"
   ],
-  "approved_task_count": 6,
+  "approved_task_count": 7,
   "legacy_approval_policy": {
     "T01_T02_not_retroactively_revoked": true
   },
@@ -96,13 +97,13 @@
     "all_applicable_gates_must_pass": true,
     "no_unresolved_mandatory_defects": true
   },
-  "active_task": "T07",
-  "active_task_title": "Havenline Simple Control & Context Director",
-  "active_status": "INTEGRATING",
-  "active_frozen_scope": "Docs/Production/T07/FROZEN_SCOPE.md",
-  "active_task_packet": "Docs/Production/T07/TASK_PACKET.md",
-  "active_base_integration_commit": "91f35f331aaabe2b1785b10c0d911f20da6f12d9",
-  "active_candidate_source": "0a30dc0859541626eb6aa9a9bb749abc93dcb355",
+  "active_task": null,
+  "active_task_title": null,
+  "active_status": null,
+  "active_frozen_scope": null,
+  "active_task_packet": null,
+  "active_base_integration_commit": null,
+  "active_candidate_source": null,
   "active_candidate_run": null,
   "active_tests": null,
   "active_evidence": null,
@@ -201,6 +202,20 @@
       "integrated_evidence_run": 34970154124,
       "record": "Docs/Production/T06/verified-completion.json",
       "later_regression_reopens_task": true
+    },
+    "T07": {
+      "status": "APPROVED",
+      "accepted_source": "0a30dc0859541626eb6aa9a9bb749abc93dcb355",
+      "integrated_source": "94b3f6c5097356a3857ebd13a77fb1e316eb06ae",
+      "score": 9.18,
+      "minimum_mandatory_dimension_score": 9.18,
+      "gate_operator": "> 9.0",
+      "visual_status": "PASS",
+      "isolated_review_run": 34986065852,
+      "integrated_evidence_run": 34991148246,
+      "native_android_run": 34991155514,
+      "record": "Docs/Production/T07/verified-completion.json",
+      "later_regression_reopens_task": true
     }
   },
   "next_post_t03_wave": [
@@ -228,14 +243,14 @@
       "base_commit": "f9d815a7d05c4e811d22d620c6b0c00c768ce6c5",
       "reason": "Accepted isolated source 47f86fae25b099abb5c7096c37ca7495453b2b8f is integrated at 91f35f331aaabe2b1785b10c0d911f20da6f12d9; 19 suites / 1345 checks, exact runtime-review identity, exhaustive surface evidence, C1/C2/C5 and fresh C6 passed."
     },
-    {
-      "task": "T07",
-      "branch": "havenline/T07-context-director",
-      "state": "INTEGRATING",
-      "owner": "simple-control-context-builder",
-      "base_commit": "91f35f331aaabe2b1785b10c0d911f20da6f12d9",
-      "reason": "T04 and T06 are approved; T07 frozen scope, packet, disjoint path reservation, critics and exact integration base are prepared."
-    }
+        {
+            "task": "T07",
+            "branch": "havenline/T07-context-director",
+            "state": "APPROVED",
+            "owner": "simple-control-context-builder",
+            "base_commit": "91f35f331aaabe2b1785b10c0d911f20da6f12d9",
+            "reason": "Accepted isolated source 0a30dc0859541626eb6aa9a9bb749abc93dcb355 is integrated at 94b3f6c5097356a3857ebd13a77fb1e316eb06ae; 21 suites / 1441 checks, exact-source evidence, G1-G14 and strict C2/C3/C4/C6/C11 review passed."
+        }
   ],
   "whole_game_approved": false,
   "physical_phone_tablet_native_4k60_verified": false,

@@ -46,8 +46,9 @@ Duplicate canonical identities reject all ambiguous copies.
 
 Inputs above 128 candidates fail closed before evaluation. Within that bound,
 all canonical identities are inspected, duplicate identities are rejected, and
-the deterministic ranking is applied before retaining the best 96 eligible
-candidates. Metrics disclose the original population and cap state. The engine
+the deterministic ranking selects one winner plus an optional release-only
+retained focus. Telemetry saturates `eligible_count` at 96 and separately
+discloses the uncapped eligible input count and cap state. The engine
 test benchmarks 2,000 worst-population evaluations and the deterministic C6
 gate rejects an average at or above 2,500 microseconds, a p95 at or above 3,500
 microseconds, or any sample at or above 20,000 microseconds. It also records a

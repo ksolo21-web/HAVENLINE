@@ -210,7 +210,7 @@
     {
       "task_id": "T07",
       "task_name": "Havenline Simple Control & Context Director",
-      "status": "INTEGRATING",
+      "status": "APPROVED",
       "owner": "simple-control-context-builder",
       "workstream_id": "wave2-context-director",
       "branch": "havenline/T07-context-director",
@@ -227,8 +227,19 @@
         "@integration-only"
       ],
       "candidate_commit": "0a30dc0859541626eb6aa9a9bb749abc93dcb355",
-      "candidate_hash_or_artifact": "github:ksolo21-web/HAVENLINE@0a30dc0859541626eb6aa9a9bb749abc93dcb355",
-      "tests": {"isolated_engine_checks": 84, "isolated_static_checks": 36, "source_ready": true},
+      "candidate_hash_or_artifact": "isolated-source:0a30dc0859541626eb6aa9a9bb749abc93dcb355 isolated-run:34986065852; integrated-source:94b3f6c5097356a3857ebd13a77fb1e316eb06ae integrated-run:34991148246 artifact:10405978547 artifact-sha256:c243bb1df0625a7fabce9c6a842d88a76e08bca89d416f88ad0ea0a972ec0ada",
+      "tests": {
+        "suites": 21,
+        "checks": 1441,
+        "result": "PASS",
+        "isolated_engine_checks": 84,
+        "isolated_static_checks": 36,
+        "integration_checks": 12,
+        "save_matrix_cases": 7,
+        "device_matrix_cases": 6,
+        "capture_manifests": 14,
+        "integration_regression_run": 34991148246
+      },
       "evidence_path": "Docs/Production/Evidence/T07/",
       "critic_requirements": [
         "C2",
@@ -237,15 +248,21 @@
         "C6",
         "C11"
       ],
-      "critic_status": {},
-      "integration_status": "INTEGRATING; authorized shipping call-site wiring and exact integrated evidence pending",
+      "critic_status": {
+        "C2": "PASS; score 9.46",
+        "C3": "PASS; score 9.68",
+        "C4": "PASS; score 9.24",
+        "C6": "PASS; score 9.53; fresh component and integrated shipping-scene budgets",
+        "C11": "PASS; score 9.18"
+      },
+      "integration_status": "APPROVED; accepted isolated source 0a30dc0859541626eb6aa9a9bb749abc93dcb355 integrated at 94b3f6c5097356a3857ebd13a77fb1e316eb06ae; 21 suites / 1441 checks, exact-source evidence, all required critics and G1-G14 passed",
       "known_blockers": [],
-      "next_action": "Complete exact integrated T01-T07 regression, device/save/resource/performance/capture gates, then obtain strict C2/C3/C4/C6/C11 approval."
+      "next_action": "Preserve T07 accepted and integrated sources. T08 remains LOCKED until its separate packet, owner and path reservation are prepared and validated."
     }
   ],
   "notes": [
     "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
-    "T03-T06 are APPROVED. T07 is separately packeted and assigned; T08+ runtime work remains locked until its own prerequisites and ownership are prepared.",
+    "T03-T07 are APPROVED. T08+ runtime work remains locked until its own packet, owner and path reservation are prepared.",
     "All future runtime builders use isolated branches and cannot approve themselves.",
     "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them."
   ]

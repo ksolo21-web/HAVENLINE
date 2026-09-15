@@ -138,6 +138,16 @@ class GovernanceTests(unittest.TestCase):
         self.assertIn(t7["status"],{"ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED"})
         if t7["status"]=="APPROVED":
             self.assertIn("T07",gates["approved_tasks"])
+            self.assertIsNone(gates["active_task"])
+            self.assertEqual(graph["T08"]["status"],"LOCKED")
+            completion7=load_json(DOCS/"T07/verified-completion.json")
+            ledger7=load_json(DOCS/"T07/defect-ledger.json")
+            review7=load_json(DOCS/"T07/independent-critic-review.json")
+            self.assertEqual(completion7["integrated_source"],"94b3f6c5097356a3857ebd13a77fb1e316eb06ae")
+            self.assertEqual(completion7["mechanical_evidence"]["total_assertions_checks"],1441)
+            self.assertTrue(all(score>9.0 for score in review7["scores"].values()))
+            self.assertEqual(review7["unresolved_mandatory_defects"],[])
+            self.assertEqual({row["status"] for row in ledger7["defects"]},{"VERIFIED_CLOSED"})
         else:
             self.assertEqual(gates["active_task"],"T07")
             self.assertEqual(gates["active_status"],t7["status"])

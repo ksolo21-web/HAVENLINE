@@ -18,6 +18,11 @@ ALLOWED_MIGRATION_PATTERNS=[
 T05_ACCEPTED_SOURCE="fa6fa70f154f3757d22303522ca3f6de2c3d391f"
 T06_ACCEPTED_SOURCE="47f86fae25b099abb5c7096c37ca7495453b2b8f"
 T06_INTEGRATED_SOURCE="91f35f331aaabe2b1785b10c0d911f20da6f12d9"
+T07_ACCEPTED_SOURCE="0a30dc0859541626eb6aa9a9bb749abc93dcb355"
+T07_INTEGRATED_SOURCE="94b3f6c5097356a3857ebd13a77fb1e316eb06ae"
+T07_INTEGRATED_RUN=34991148246
+T07_ARTIFACT_ID=10405978547
+T07_ARTIFACT_DIGEST="sha256:c243bb1df0625a7fabce9c6a842d88a76e08bca89d416f88ad0ea0a972ec0ada"
 T05_SCORE_DIMENSIONS={
     "C1":{"reference_fidelity","visual_language","cross_view_consistency"},
     "C2":{"geometry_contact","clipping_seams","intentional_gap_integrity","cross_view_integrity"},
@@ -127,6 +132,47 @@ def t06_completion_errors(record,ledger):
         errors.append("T06 defect ledger has unresolved entries: "+",".join(str(x) for x in unresolved))
     return errors
 
+def t07_completion_errors(record,ledger,critic_review):
+    """Fail closed on T07 exact integrated evidence and independent review."""
+    errors=[]
+    if record.get("status")!="PASS" or record.get("accepted_isolated_source")!=T07_ACCEPTED_SOURCE or record.get("integrated_source")!=T07_INTEGRATED_SOURCE:
+        errors.append("T07 verified completion record is not bound to accepted and integrated sources")
+    acceptance=record.get("acceptance_rule",{})
+    if acceptance.get("mandatory_dimension_operator")!=">" or acceptance.get("mandatory_dimension_threshold")!=9.0 or acceptance.get("unrounded") is not True or acceptance.get("score_averaging_used") is not False:
+        errors.append("T07 verified completion strict acceptance rule is incomplete")
+    identity=record.get("source_identity",{})
+    if identity.get("shipping_call_site_exercised") is not True or identity.get("simulation_remains_outcome_authority") is not True or identity.get("choose_action_is_pure_preview") is not True or identity.get("context_focus_is_ephemeral") is not True or identity.get("save_schema_changed") is not False or identity.get("exact_artifact_index_hashes_verified")!=156 or identity.get("exact_artifact_index_hash_mismatches")!=0:
+        errors.append("T07 source, authority, persistence or evidence identity is incomplete")
+    mechanical=record.get("mechanical_evidence",{})
+    if mechanical.get("all_passed") is not True or mechanical.get("functional_suites")!=21 or mechanical.get("total_assertions_checks",0)<1441 or mechanical.get("save_matrix_cases")!=7 or mechanical.get("adaptive_device_cases")!=6 or mechanical.get("capture_manifests")!=14 or mechanical.get("unique_pngs")!=19 or mechanical.get("sequence_video_frames")!=60 or mechanical.get("render_log_errors")!=0 or mechanical.get("native_3840x2160_scale1_evidence") is not True:
+        errors.append("T07 regression, matrix, capture or native evidence is incomplete")
+    reviews=record.get("independent_reviews",{})
+    scores=reviews.get("scores",{})
+    if reviews.get("status")!="PASS" or reviews.get("integrated_source")!=T07_INTEGRATED_SOURCE or reviews.get("workflow_run")!=T07_INTEGRATED_RUN or reviews.get("artifact_id")!=T07_ARTIFACT_ID or reviews.get("artifact_digest")!=T07_ARTIFACT_DIGEST or reviews.get("score_averaging_used") is not False or reviews.get("critic_blockers")!=[] or reviews.get("valid_unresolved_defects")!=[] or set(scores)!={"C2","C3","C4","C6","C11"}:
+        errors.append("T07 independent critic closure is incomplete")
+    else:
+        errors += _strict_score_errors("T07 critics",scores)
+    performance=record.get("performance_critic",{})
+    if performance.get("critic")!="C6" or performance.get("candidate_source")!=T07_INTEGRATED_SOURCE or performance.get("run_id")!=T07_INTEGRATED_RUN or performance.get("score")!=9.53 or performance.get("passed") is not True or performance.get("errors")!=[]:
+        errors.append("T07 fresh integrated C6 closure is incomplete")
+    gates=record.get("gates",{})
+    if set(gates)!={f"G{i}" for i in range(1,15)} or any(value is not True for value in gates.values()):
+        errors.append("T07 G1-G14 closure is incomplete")
+    artifact=record.get("artifacts",{}).get("integrated_regression_and_evidence",{})
+    if artifact.get("id")!=T07_ARTIFACT_ID or artifact.get("run_id")!=T07_INTEGRATED_RUN or artifact.get("digest")!=T07_ARTIFACT_DIGEST:
+        errors.append("T07 integrated artifact identity is invalid")
+    if ledger.get("task_id")!="T07" or ledger.get("candidate_commit")!=T07_ACCEPTED_SOURCE or ledger.get("integrated_commit")!=T07_INTEGRATED_SOURCE or ledger.get("integrated_verification_run")!=T07_INTEGRATED_RUN or ledger.get("unresolved_mandatory_count")!=0 or ledger.get("critic_approval_pending") is not False or ledger.get("task_approved") is not True:
+        errors.append("T07 defect ledger is not bound to completed sources")
+    unresolved=[row.get("id") for row in ledger.get("defects",[]) if row.get("status") not in {"VERIFIED_CLOSED","REJECTED_AS_INVALID_FINDING"}]
+    if unresolved:
+        errors.append("T07 defect ledger has unresolved entries: "+",".join(str(x) for x in unresolved))
+    review_scores=critic_review.get("scores",{})
+    if critic_review.get("status")!="PASS" or critic_review.get("approval") is not True or critic_review.get("integrated_source")!=T07_INTEGRATED_SOURCE or critic_review.get("workflow_run")!=T07_INTEGRATED_RUN or critic_review.get("artifact_id")!=T07_ARTIFACT_ID or critic_review.get("artifact_digest")!=T07_ARTIFACT_DIGEST or critic_review.get("indexed_files_verified")!=156 or critic_review.get("indexed_hash_mismatches")!=0 or critic_review.get("unresolved_mandatory_defects")!=[] or set(review_scores)!={"C2","C3","C4","C6","C11"}:
+        errors.append("T07 independent critic record is incomplete")
+    else:
+        errors += _strict_score_errors("T07 recorded critics",review_scores)
+    return errors
+
 def git_blob_sha(path:pathlib.Path)->str:
     data=path.read_bytes()
     return hashlib.sha1(b"blob "+str(len(data)).encode()+b"\0"+data).hexdigest()
@@ -220,6 +266,7 @@ def main():
     tg=load_json(DOCS/"task-gates.json")
     if t03_status=="APPROVED":
         expected_approved=(
+            ["T01","T02","T03","T04","T05","T06","T07"] if t07_status=="APPROVED" else
             ["T01","T02","T03","T04","T05","T06"] if t06_status=="APPROVED" else
             ["T01","T02","T03","T04","T05"] if t05_status=="APPROVED" else
             ["T01","T02","T03","T04"] if t04_status=="APPROVED" else
@@ -267,6 +314,18 @@ def main():
                         errors += t06_completion_errors(load_json(t06_completion),load_json(t06_ledger))
                     if t07_status=="LOCKED":
                         if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task while T07 is locked")
+                    elif t07_status=="APPROVED":
+                        t07_completion=DOCS/"T07/verified-completion.json"
+                        t07_ledger=DOCS/"T07/defect-ledger.json"
+                        t07_review=DOCS/"T07/independent-critic-review.json"
+                        if not t07_completion.exists() or not t07_ledger.exists() or not t07_review.exists():
+                            errors.append("T07 verified completion, defect ledger or critic record missing")
+                        else:
+                            errors += t07_completion_errors(load_json(t07_completion),load_json(t07_ledger),load_json(t07_review))
+                        if graph["tasks"]["T08"]["status"]=="LOCKED":
+                            if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task while T08 is locked")
+                        elif tg.get("active_task")!="T08" or tg.get("active_status")!=graph["tasks"]["T08"]["status"]:
+                            errors.append("task-gates must match active T08 state")
                     else:
                         if tg.get("active_task")!="T07" or tg.get("active_status")!=t07_status:errors.append("task-gates must match active T07 state")
                         packet=DOCS/"T07/TASK_PACKET.md";scope=DOCS/"T07/FROZEN_SCOPE.md"
