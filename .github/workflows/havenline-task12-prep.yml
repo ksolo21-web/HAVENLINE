@@ -32,6 +32,7 @@ jobs:
           python -m py_compile tools/havenline/task12/prepare_activation.py
           python -m py_compile tools/havenline/task12/validate_progression_contract.py
           python -m py_compile tools/havenline/task12/validate_level_matrix.py
+          python -m py_compile tools/havenline/task12/verify_binding_resolution.py
 
       - name: Validate T12 JSON artifacts
         run: |
@@ -39,6 +40,7 @@ jobs:
           python -m json.tool Docs/Production/T12/PREBUILD_CONTRACT.json >/dev/null
           python -m json.tool Docs/Production/T12/UPSTREAM_BINDINGS.json >/dev/null
           python -m json.tool Docs/Production/T12/LEVEL_1_100_MATRIX.json >/dev/null
+          python -m json.tool Docs/Production/T12/BINDING_RESOLUTION_TEMPLATE.json >/dev/null
           python -m json.tool Docs/Production/T12/defect-ledger.json >/dev/null
 
       - name: Validate T12 preparation contract
@@ -46,6 +48,9 @@ jobs:
 
       - name: Validate concrete non-shipping Level 1-100 matrix
         run: python tools/havenline/task12/validate_level_matrix.py
+
+      - name: Verify upstream resolution remains blank before activation
+        run: python tools/havenline/task12/verify_binding_resolution.py
 
       - name: Run T12 progression/preparation unit tests
         run: python -m unittest discover -s tools/havenline/task12/tests -p 'test_*.py' -v
