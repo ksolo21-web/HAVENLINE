@@ -43,9 +43,6 @@ func add_snow_stage() -> void:
 	snow.material_override = material(Color("dcecf2"), 0.96)
 	snow.position = Vector3(0.0, -0.055, 2.0)
 	world.add_child(snow)
-
-	# Subtle packed-snow approach strips are review staging derived from approved
-	# lane directions. They are not T03 geometry and are never saved as shipping content.
 	for row in [
 		{"position": Vector3(0.0, -0.045, 5.0), "size": Vector3(2.0, 0.03, 8.0)},
 		{"position": Vector3(0.0, -0.045, 2.25), "size": Vector3(19.5, 0.03, 1.45)},
@@ -146,6 +143,7 @@ func snap(frame_id: String, state_id: String, lifecycle: String, view_id: String
 		"camera_profile": "t04-reference-camera-v1" if view_id == "gameplay" else "isolated-review-angle",
 		"status_color": status.color,
 		"status_scale": status.scale,
+		"status_spire_scale": status.spire_scale,
 		"stage_node_count": view.stage_node_count(),
 		"draw_calls": viewport.get_render_info(Viewport.RENDER_INFO_TYPE_VISIBLE, Viewport.RENDER_INFO_DRAW_CALLS_IN_FRAME),
 		"submitted_primitives": viewport.get_render_info(Viewport.RENDER_INFO_TYPE_VISIBLE, Viewport.RENDER_INFO_PRIMITIVES_IN_FRAME),
@@ -168,10 +166,8 @@ func setup_world() -> bool:
 	viewport.msaa_3d = Viewport.MSAA_2X
 	viewport.scaling_3d_scale = 1.0
 	root.add_child(viewport)
-
 	world = Node3D.new()
 	viewport.add_child(world)
-
 	environment = Environment.new()
 	environment.background_mode = Environment.BG_COLOR
 	environment.tonemap_mode = Environment.TONE_MAPPER_ACES
@@ -181,26 +177,22 @@ func setup_world() -> bool:
 	var sky := WorldEnvironment.new()
 	sky.environment = environment
 	world.add_child(sky)
-
 	sun = DirectionalLight3D.new()
 	sun.rotation_degrees = Vector3(-52.0, -34.0, 0.0)
 	sun.shadow_enabled = true
 	sun.directional_shadow_max_distance = 45.0
 	world.add_child(sun)
-
 	fill = DirectionalLight3D.new()
 	fill.rotation_degrees = Vector3(-35.0, 142.0, 0.0)
 	fill.shadow_enabled = false
 	world.add_child(fill)
 	set_lighting()
-
 	camera = Camera3D.new()
 	camera.projection = Camera3D.PROJECTION_ORTHOGONAL
 	camera.near = 0.05
 	camera.far = 120.0
 	world.add_child(camera)
 	camera.current = true
-
 	add_snow_stage()
 	scale_actor = build_scale_actor()
 	view = View.new()
