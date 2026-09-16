@@ -74,7 +74,7 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y xvfb mesa-vulkan-drivers
-          mkdir -p "$RUNNER_TEMP/engine" task10-prebuild-evidence/tests task10-prebuild-evidence/capture
+          mkdir -p "$RUNNER_TEMP/engine" task10-prebuild-evidence/tests task10-prebuild-evidence/capture task10-prebuild-evidence/device-layout
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
@@ -167,6 +167,61 @@ jobs:
           assert len(files)==10 and len(hashes)==10,(len(files),len(hashes))
           evidence={'task':'T10','candidate':report['candidate'],'capture_passed':True,'fixture_only':True,'view_owns_lifecycle_visuals':True,'record_count':10,'unique_image_count':10,'files':files,'task_approved':False}
           Path('task10-prebuild-evidence/capture-evidence.json').write_text(json.dumps(evidence,indent=2))
+          print(json.dumps(evidence))
+          PY
+
+      - name: Validate T10 view across Havenline device layout matrix
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          python3 - <<'PY' > /tmp/t10-device-matrix.tsv
+          import json
+          from pathlib import Path
+          matrix=json.loads(Path('Docs/Production/DEVICE_LAYOUT_MATRIX.json').read_text())
+          assert matrix.get('landscape_required') is True
+          for row in matrix['states']:
+              width,height=row['logical_size']
+              print(f"{row['id']}\t{width}\t{height}\t{row['class']}\t{row['fold_state']}")
+          PY
+          while IFS=$'\t' read -r device width height class fold_state; do
+            out="$(pwd)/task10-prebuild-evidence/device-layout/$device"
+            mkdir -p "$out"
+            xvfb-run -a -s "-screen 0 ${width}x${height}x24" timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution "${width}x${height}" --script res://tests/capture_task10_world_transform.gd -- --candidate="$CANDIDATE" --device-check --device-id="$device" --width="$width" --height="$height" --out="$out" > "$out/capture.log" 2>&1
+            if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' "$out/capture.log"; then exit 1; fi
+          done < /tmp/t10-device-matrix.tsv
+          python3 - <<'PY'
+          import hashlib,json,struct
+          from pathlib import Path
+          matrix=json.loads(Path('Docs/Production/DEVICE_LAYOUT_MATRIX.json').read_text())
+          root=Path('task10-prebuild-evidence/device-layout')
+          rows=[]; hashes=set()
+          for state in matrix['states']:
+              device=state['id']; expected=state['logical_size']
+              manifest_path=root/device/'manifest.json'
+              assert manifest_path.exists(),manifest_path
+              report=json.loads(manifest_path.read_text())
+              assert report.get('passed') is True,report
+              assert report.get('device_id') == device,report
+              assert report.get('logical_size') == expected,report
+              assert report.get('states') == ['preview','committing'],report
+              assert report.get('angles') == ['front'] and report.get('record_count') == 2,report
+              assert report.get('view_owns_lifecycle_visuals') is True and report.get('target_color_static') is True,report
+              assert report.get('view_visual_node_count') == 4 and report.get('view_visual_build_count') == 1,report
+              for record in report['records']:
+                  p=root/device/record['file']; data=p.read_bytes()
+                  assert len(data)>1024,(p,len(data))
+                  assert data[:8] == b'\x89PNG\r\n\x1a\n',p
+                  width,height=struct.unpack('>II',data[16:24])
+                  assert [width,height] == expected,(p,width,height,expected)
+                  digest=hashlib.sha256(data).hexdigest(); hashes.add(digest)
+                  rows.append({'device_id':device,'class':state['class'],'fold_state':state['fold_state'],'state':record['state'],'file':str(p.relative_to(root)),'size':[width,height],'bytes':len(data),'sha256':digest})
+          assert len(rows)==len(matrix['states'])*2,(len(rows),len(matrix['states']))
+          assert len(hashes)==len(rows),(len(hashes),len(rows))
+          evidence={'task':'T10','matrix_source':'Docs/Production/DEVICE_LAYOUT_MATRIX.json','landscape_required':True,'device_count':len(matrix['states']),'capture_count':len(rows),'classes':sorted(set(x['class'] for x in matrix['states'])),'all_unique':True,'rows':rows,'fixture_only':True,'real_t09_adapter_bound':False,'task_approved':False,'passed':True}
+          Path('task10-prebuild-evidence/device-layout-evidence.json').write_text(json.dumps(evidence,indent=2))
           print(json.dumps(evidence))
           PY
 
