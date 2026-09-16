@@ -43,6 +43,38 @@ jobs:
             tools.havenline.task11.tests.test_t10_binding_reconciler \
             -v
 
+      - name: Reconcile against current isolated T10 semantic surface
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin \
+            refs/heads/havenline/T10-world-transformation:refs/remotes/origin/havenline/T10-world-transformation
+          t10_source="$(git rev-parse refs/remotes/origin/havenline/T10-world-transformation)"
+          git show "$t10_source:HavenlineGodot/data/world_transform_recipes.json" > "$RUNNER_TEMP/t10-world-transform-recipes.json"
+          git show "$t10_source:HavenlineGodot/scripts/world_transform.gd" > "$RUNNER_TEMP/t10-world-transform.gd"
+          python3 tools/havenline/task11/reconcile_t10_binding.py \
+            --mode semantic \
+            --t10-catalog "$RUNNER_TEMP/t10-world-transform-recipes.json" \
+            --t10-script "$RUNNER_TEMP/t10-world-transform.gd" \
+            --t10-source "$t10_source" \
+            --output t11-current-t10-semantic-reconciliation.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('t11-current-t10-semantic-reconciliation.json').read_text())
+          assert report['passed'] is True, report['errors']
+          assert report['semantic_compatible'] is True
+          assert report['binding_count'] == 2
+          assert report['t11_local_cost_authority'] is False
+          assert report['task_approved'] is False
+          print(json.dumps({
+              't10_source': report['expected_t10_source'],
+              'binding_count': report['binding_count'],
+              'semantic_compatible': report['semantic_compatible'],
+              'warnings': report['warnings'],
+              'task_approved': report['task_approved'],
+          }, indent=2))
+          PY
+
       - name: Validate ordinary build-pending preparation remains legal
         run: |
           set -euo pipefail
