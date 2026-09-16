@@ -9,7 +9,7 @@
 ## Planned owned paths
 - `HavenlineGodot/tests/acceptance/t62_level100/**`
 - `Docs/Production/T62/**`
-- `Docs/Production/Evidence/T62/**`
+- `Docs/Production/T62/Evidence/**`
 - `tools/havenline/task62/**`
 - `.github/workflows/havenline-task62-*.yml`
 
