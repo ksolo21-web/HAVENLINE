@@ -1,0 +1,108 @@
+{
+  "art_language": "bright sculpted winter work tools with warm wood, dark metal, blue structure, orange grips and cyan contact accents",
+  "authority_id": "T09-harvesting-tools-v1",
+  "entries": [
+    {
+      "action": "chop",
+      "animation_profile": "human_player_chop",
+      "asset": "res://assets/harvesting_v1/axe.glb",
+      "contact_marker": "C1TwoHandContact",
+      "grip_offset": [
+        0.0,
+        -0.08,
+        0.0
+      ],
+      "id": "axe",
+      "impact_socket": [
+        0.46,
+        0.56,
+        0.0
+      ],
+      "materials": [
+        "blue",
+        "cyan",
+        "metal",
+        "orange",
+        "wood",
+        "wood_light"
+      ],
+      "resources": [
+        "wood"
+      ],
+      "sha256": "b2f9f18f7857d39a1dabddbbf25896da085b1acd461ea26a0f50985ecf302b96",
+      "triangles": 456
+    },
+    {
+      "action": "mine",
+      "animation_profile": "human_player_mine",
+      "asset": "res://assets/harvesting_v1/pickaxe.glb",
+      "contact_marker": "C1TwoHandContact",
+      "grip_offset": [
+        0.0,
+        -0.06,
+        0.0
+      ],
+      "id": "pickaxe",
+      "impact_socket": [
+        0.57,
+        0.59,
+        0.0
+      ],
+      "materials": [
+        "blue",
+        "cyan",
+        "metal",
+        "orange",
+        "wood",
+        "wood_light"
+      ],
+      "resources": [
+        "stone",
+        "metal"
+      ],
+      "sha256": "4f6ed2bc94b26a6d71233202e49d0da28662b0b87ecfde10dde32b35d23c12ff",
+      "triangles": 620
+    },
+    {
+      "action": "dismantle",
+      "animation_profile": "human_player_dismantle",
+      "asset": "res://assets/harvesting_v1/salvage_pry_tool.glb",
+      "contact_marker": "C1RightHandContact",
+      "grip_offset": [
+        0.0,
+        -0.3,
+        0.0
+      ],
+      "id": "salvage_pry_tool",
+      "impact_socket": [
+        0.42,
+        0.61,
+        0.0
+      ],
+      "materials": [
+        "blue",
+        "cyan",
+        "dark",
+        "metal",
+        "orange"
+      ],
+      "resources": [
+        "fuel"
+      ],
+      "sha256": "c63ab886922fc502174e86687346de324e44a4de53cb6435d76bee4c4af27ac6",
+      "triangles": 476
+    }
+  ],
+  "generator": "tools/havenline/task09/generate_harvesting_tools.py",
+  "mutates_inventory": false,
+  "performance_contract": {
+    "active_physics": 0,
+    "materials_max_per_tool": 6,
+    "skeletons": 0,
+    "tool_instances_per_presented_actor": 1,
+    "triangles_max_per_tool": 2500
+  },
+  "runtime_logic_included": false,
+  "schema_version": 1,
+  "simulation_authoritative": true
+}
