@@ -79,6 +79,23 @@ static func lifecycle_scale(lifecycle: String) -> float:
 		_:
 			return 1.0
 
+static func lifecycle_spire_scale(lifecycle: String) -> float:
+	match lifecycle:
+		"blocked":
+			return 0.52
+		"ready":
+			return 0.86
+		"preview":
+			return 1.12
+		"committing":
+			return 1.52
+		"complete":
+			return 0.40
+		"error":
+			return 1.30
+		_:
+			return 1.0
+
 static func lifecycle_emission(lifecycle: String) -> float:
 	return 2.25 if lifecycle in ["ready", "preview", "committing", "error"] else 1.35
 
@@ -134,7 +151,6 @@ func _ensure_status_visual() -> void:
 	spire.height = STATUS_SPIRE_HEIGHT
 	spire.radial_segments = 12
 	status_spire.mesh = spire
-	status_spire.position.y = STATUS_SPIRE_HEIGHT * 0.55
 	status_spire.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	status_root.add_child(status_spire)
 
@@ -149,12 +165,15 @@ func _update_status_visual() -> void:
 	var material := _make_status_material(color, lifecycle_emission(current_lifecycle))
 	status_ring.material_override = material
 	status_spire.material_override = material
-	var visual_scale := lifecycle_scale(current_lifecycle)
-	status_ring.scale = Vector3.ONE * visual_scale
-	status_spire.scale = Vector3(1.0, 0.72 if current_lifecycle == "complete" else 1.0, 1.0)
+	var ring_scale := lifecycle_scale(current_lifecycle)
+	var spire_scale := lifecycle_spire_scale(current_lifecycle)
+	status_ring.scale = Vector3.ONE * ring_scale
+	status_spire.scale = Vector3(1.0, spire_scale, 1.0)
+	status_spire.position.y = STATUS_SPIRE_HEIGHT * spire_scale * 0.55
 	status_root.set_meta("t11_lifecycle", current_lifecycle)
 	status_root.set_meta("t11_lifecycle_color", color.to_html(false))
-	status_root.set_meta("t11_lifecycle_scale", visual_scale)
+	status_root.set_meta("t11_lifecycle_scale", ring_scale)
+	status_root.set_meta("t11_lifecycle_spire_scale", spire_scale)
 
 func set_lifecycle(lifecycle: String) -> bool:
 	if lifecycle not in LIFECYCLES:
@@ -220,6 +239,7 @@ func status_descriptor() -> Dictionary:
 		"anchor": status_root.position if is_instance_valid(status_root) else Vector3.ZERO,
 		"color": lifecycle_color(current_lifecycle).to_html(false),
 		"scale": lifecycle_scale(current_lifecycle),
+		"spire_scale": lifecycle_spire_scale(current_lifecycle),
 		"presentation_only": true,
 	}
 
