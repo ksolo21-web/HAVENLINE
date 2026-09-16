@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "task_id": "T11",
+  "task_name": "Camp construction and visual upgrade system",
+  "preparation_status": "PREPARED_GOVERNANCE_ONLY",
+  "prepared_branch": "havenline/governance-t11-prep",
+  "prepared_from_branch": "havenline/governance-t10-prep",
+  "prepared_from_commit": "e5691c4a1ac6fcd606e6a6aecce285d1c017db4d",
+  "future_builder_branch": "havenline/T11-camp-construction",
+  "future_owner": "camp-construction-builder",
+  "dependencies": ["T05", "T10"],
+  "activation_requires_all_dependencies_approved": true,
+  "activation_base_rule": "exact current integration head that records T10 APPROVED and integrated",
+  "planned_owned_alias": "@reservation:T11",
+  "planned_owned_paths": [
+    "HavenlineGodot/scripts/camp_construction.gd",
+    "HavenlineGodot/scripts/camp_construction_view.gd",
+    "HavenlineGodot/data/camp_upgrade_recipes.json",
+    "HavenlineGodot/assets/camp_upgrades_v1/**",
+    "HavenlineGodot/tests/test_task11_camp_construction.gd",
+    "HavenlineGodot/tests/test_task11_integration.gd",
+    "HavenlineGodot/tests/capture_task11_camp_upgrade.gd",
+    "Docs/Production/T11/**",
+    "tools/havenline/task11/**",
+    ".github/workflows/havenline-task11-*.yml"
+  ],
+  "forbidden_overlap_examples": [
+    "HavenlineGodot/scripts/world_transform.gd",
+    "HavenlineGodot/scripts/world_transform_view.gd",
+    "HavenlineGodot/data/world_transform_recipes.json",
+    "HavenlineGodot/assets/world_transform_v1/**",
+    "HavenlineGodot/tests/test_task10_world_transform.gd",
+    "HavenlineGodot/tests/test_task10_integration.gd",
+    "HavenlineGodot/tests/capture_task10_world_transform.gd",
+    "HavenlineGodot/scripts/main.gd",
+    "HavenlineGodot/scripts/simulation.gd"
+  ],
+  "required_critics": ["C2", "C3", "C4", "C6"],
+  "acceptance": {
+    "operator": ">",
+    "threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "zero_unresolved_mandatory_defects": true
+  },
+  "activation_steps": [
+    "Verify authoritative integration branch is codex/havenline-sequential-task-01.",
+    "Verify T05 and T10 are APPROVED in dependency graph, workstream registry and task gates.",
+    "Verify the current integration head contains the accepted T10 completion/integration record.",
+    "Verify T10 is no longer listed as an active owner before T11 activation.",
+    "Run tools/havenline/task11/prepare_activation.py --activate --base <current-integration-head>.",
+    "Apply the emitted @reservation:T11 PATH_OWNERSHIP patch through the integration owner.",
+    "Claim T11 with workstream.py as ASSIGNED using the exact current integration head and @reservation:T11.",
+    "Set T11 dependency-graph/task-gate active state consistently through integration-owner governance update.",
+    "Validate registry and planned ownership collision checks.",
+    "Create havenline/T11-camp-construction from the exact post-activation integration head.",
+    "Require candidate guard PASS before shipping T11 runtime/assets expand."
+  ],
+  "claim_template": "python3 tools/havenline/production/workstream.py claim T11 --owner camp-construction-builder --branch havenline/T11-camp-construction --base <POST_T10_INTEGRATION_SHA> --owned-alias @reservation:T11 --status ASSIGNED",
+  "runtime_build_allowed_before_activation": false,
+  "notes": [
+    "T11 governance/tooling preparation may continue while T09/T10 runtime work is unfinished; shipping T11 runtime/assets remain dependency-gated.",
+    "T11 consumes the T10 public transform contract and may not change its transaction semantics.",
+    "T11 must not invent shipping camp prices from unrelated video labels or historical costs.",
+    "T12/T13 own progression/difficulty, T14 owns global persistence, T15+ own customer/production/combat/defense systems."
+  ]
+}
