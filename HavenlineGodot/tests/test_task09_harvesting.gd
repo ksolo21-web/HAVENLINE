@@ -90,7 +90,7 @@ func run() -> void:
 	root.add_child(source_visual)
 	check("source presentation binds without owning units", harvest.bind_source("tree:0","wood",source_visual,3))
 	var authored_surface := Harvest.source_contact_target(source_visual,Transform3D(Basis.IDENTITY,Vector3(2.0,2.0,1.0)),Harvest.profile_for_resource("wood"),Vector3(2.0,1.0,1.0))
-	check("wood source anchor lands on the visible trunk face", authored_surface.distance_to(Vector3(2.0,1.84,2.76)) < 0.001,authored_surface)
+	check("wood source anchor lands on the narrow visible trunk face", authored_surface.distance_to(Vector3(2.0,1.84,2.90)) < 0.001,authored_surface)
 	check("empty and unknown actions fail closed", not harvest.begin_action({}) and not harvest.begin_action(action("fish",1,0.5)))
 	var wrong_role := action("wood",1,0.5)
 	wrong_role.role = "core_human_companion"
@@ -112,6 +112,9 @@ func run() -> void:
 	check("raw simulation progress is remapped as presentation only", is_equal_approx(wood_state.raw_progress,0.56) and wood_state.progress < 0.56 and not wood_state.contact_ready)
 	check("first cycle reaches contact exactly at commit", is_equal_approx(Harvest.presentation_progress("wood",1.0,false),0.56))
 	check("live tool exposes authored asset identity", String(harvest.tool_nodes.axe.get_meta("t09_authored_asset","")).ends_with("axe.glb"))
+	var axe_mesh := harvest.tool_nodes.axe.find_children("*","MeshInstance3D",true,false)[0] as MeshInstance3D
+	var palette := axe_mesh.material_override as StandardMaterial3D
+	check("shipping tool consumes the authored vertex palette in one shared material",is_instance_valid(palette) and palette.resource_name == "T09_shared_vertex_palette" and palette.vertex_color_use_as_albedo and palette.vertex_color_is_srgb)
 	check("unarmed committed receipt cannot bypass the integration beat", not harvest.accept_committed_impact(receipt("wood",10,"unarmed","tree:0")))
 	var wood_contact := harvest.synchronize_committed_contact(input,Transform3D.IDENTITY,wood_target,7)
 	check("committed axe solves both hands and impact sockets", wood_contact.contact_alignment_valid and wood_contact.grip_error_m < 0.001 and wood_contact.secondary_grip_error_m < 0.001 and wood_contact.impact_error_m < 0.001,wood_contact)

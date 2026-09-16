@@ -73,6 +73,13 @@ func source_cutaway() -> float:
 		if value is float: return value
 	return 0.0
 
+func source_harvest_reveal() -> float:
+	var selected_visual: Node3D = game.resource_visuals[String(source.id)]
+	if selected_visual is GeometryInstance3D:
+		var value: Variant = (selected_visual as GeometryInstance3D).get_instance_shader_parameter("harvest_reveal")
+		if value is float: return value
+	return 0.0
+
 func source_contact_surface_opaque() -> bool:
 	if resource_kind != "wood": return true
 	var selected_visual: Node3D = game.resource_visuals[String(source.id)]
@@ -82,7 +89,7 @@ func source_contact_surface_opaque() -> bool:
 		var material: Material = selected_mesh.surface_get_material(surface_index)
 		if material is ShaderMaterial and material.resource_name.to_lower() == "trunk":
 			var shader_material := material as ShaderMaterial
-			return shader_material.shader.code.contains("wood_contact_surface_cutaway") and shader_material.shader.code.contains("harvest_contact_band") and is_equal_approx(float(shader_material.get_shader_parameter("harvest_contact_surface")),1.0)
+			return shader_material.shader.code.contains("local_harvest_reveal") and shader_material.shader.code.contains("harvest_reveal_side") and shader_material.shader.code.contains("harvest_contact_band") and is_equal_approx(float(shader_material.get_shader_parameter("harvest_contact_surface")),1.0)
 	return false
 
 func configure_review_frame(frame: int) -> void:
@@ -201,7 +208,7 @@ func sample_shipping(frame: int, input: Vector2, phase: String) -> Dictionary:
 		"inventory_before":before_inventory,"inventory_after":int(game.sim.inventory[resource_kind]),
 		"source_units":int(source.units), "inventory":int(game.sim.inventory[resource_kind]),
 		"source_visible":game.resource_visuals[String(source.id)].visible,
-		"source_cutaway":source_cutaway(),
+		"source_cutaway":source_cutaway(), "source_harvest_reveal":source_harvest_reveal(),
 		"source_contact_surface_opaque":source_contact_surface_opaque(),
 		"context":game.sim.context_director.presentation(),
 		"harvest":game.harvest_presentation.descriptor(),
@@ -228,7 +235,7 @@ func sample(frame: int, progress: float) -> void:
 		"frame":frame, "raw_progress":progress,
 		"source_units":int(source.units), "inventory":int(game.sim.inventory[resource_kind]),
 		"source_visible":game.resource_visuals[String(source.id)].visible,
-		"source_cutaway":source_cutaway(),
+		"source_cutaway":source_cutaway(), "source_harvest_reveal":source_harvest_reveal(),
 		"source_contact_surface_opaque":source_contact_surface_opaque(),
 		"harvest":game.harvest_presentation.descriptor(),
 		"transfer":game.transfer_feedback.descriptor(),
@@ -273,7 +280,7 @@ func sample_cancelled(frame: int) -> void:
 		"frame":frame, "cancelled":true, "reason":"movement_owns_locomotion",
 		"source_units":int(source.units), "inventory":int(game.sim.inventory[resource_kind]),
 		"source_visible":game.resource_visuals[String(source.id)].visible,
-		"source_cutaway":source_cutaway(),
+		"source_cutaway":source_cutaway(), "source_harvest_reveal":source_harvest_reveal(),
 		"source_contact_surface_opaque":source_contact_surface_opaque(),
 		"harvest":game.harvest_presentation.descriptor(),
 		"frame_update_usec":update_usec, "draw_calls":draws, "primitives":prims,

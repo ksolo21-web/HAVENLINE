@@ -32,7 +32,7 @@ const RESOURCE_PROFILES := {
 		"primary_grip_marker":"C1RightHandContact", "secondary_grip_marker":"C1LeftHandContact",
 		"impact_progress":0.56, "effect":"wood_chips", "fragment_count":2,
 		"grip_socket":Vector3(0.0, -0.10, 0.0), "second_hand_socket":Vector3(0.0, -0.26, 0.0),
-		"impact_socket":Vector3(0.29, 0.13, 0.0), "source_contact_height":0.84, "source_contact_radius":0.24,
+		"impact_socket":Vector3(0.29, 0.13, 0.0), "source_contact_height":0.84, "source_contact_radius":0.10,
 		"impact_height_offset":0.0, "impact_surface_offset":0.34, "maximum_surface_adjust":0.0, "two_hand_grip_lift":0.0, "effect_color":Color("b96f38"),
 	},
 	"stone": {
@@ -69,6 +69,7 @@ const RESOURCE_PROFILES := {
 var loader: Callable
 var active: Dictionary = {}
 var tool_nodes: Dictionary = {}
+var tool_palette_material: StandardMaterial3D
 var receipts: Dictionary = {}
 var receipt_order: Array[String] = []
 var highest_action_identity := ""
@@ -582,11 +583,21 @@ func _instantiate_tool(tool_id: String, asset_path: String) -> Node3D:
 	node.visible = false
 	node.set_meta("t09_authored_asset", asset_path)
 	node.set_meta("t09_tool_profile", tool_id)
+	if not is_instance_valid(tool_palette_material):
+		tool_palette_material = StandardMaterial3D.new()
+		tool_palette_material.resource_name = "T09_shared_vertex_palette"
+		tool_palette_material.albedo_color = Color.WHITE
+		tool_palette_material.vertex_color_use_as_albedo = true
+		tool_palette_material.vertex_color_is_srgb = true
+		tool_palette_material.metallic = 0.18
+		tool_palette_material.roughness = 0.42
 	# The hand-sized tool is already shaded by the scene lights. Submitting its
 	# palette surface again for the large world shadow map adds measurable cost
 	# without a readable shadow at the shipping camera scale.
 	for child in node.find_children("*", "MeshInstance3D", true, false):
-		(child as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+		var geometry := child as GeometryInstance3D
+		geometry.material_override = tool_palette_material
+		geometry.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(node)
 	tool_nodes[tool_id] = node
 	return node

@@ -115,9 +115,16 @@ def main() -> None:
     if not all(token in main_source for token in [
         'active_harvest_source := String(harvest_state.get("source_id",""))',
         "harvest_selected = active_harvest_source == String(r.id)",
-        "harvest_selected or (depth_front and covers)",
+        "local_harvest_reveal", "harvest_reveal_side",
+        'set_instance_shader_parameter("harvest_reveal",1.0 if harvest_selected else 0.0)',
     ]):
-        errors.append("active wood source does not force full crown/lip contact reveal")
+        errors.append("active wood source does not preserve a bounded lateral crown/contact reveal")
+    presentation_source = SCRIPT.read_text(encoding="utf-8") if SCRIPT.exists() else ""
+    if not all(token in presentation_source for token in [
+        "vertex_color_use_as_albedo = true", "T09_shared_vertex_palette",
+        '"source_contact_radius":0.10',
+    ]):
+        errors.append("tool palette consumption or visible wood surface contact is incomplete")
     capture_source = CAPTURE.read_text(encoding="utf-8") if CAPTURE.exists() else ""
     if not all(token in capture_source for token in [
         'if resource_kind in ["stone","metal","fuel"]',

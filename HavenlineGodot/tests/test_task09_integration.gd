@@ -117,8 +117,8 @@ func run() -> void:
 			var pine_material: ShaderMaterial = pine_mesh.surface_get_material(surface_index)
 			surface_names.append(pine_material.resource_name.to_lower())
 			contact_surface_values.append(float(pine_material.get_shader_parameter("harvest_contact_surface")))
-			wood_contact_opaque = wood_contact_opaque and pine_material.shader.code.contains("wood_contact_surface_cutaway") and pine_material.shader.code.contains("harvest_contact_band") and pine_material.shader.code.contains("harvest_contact_surface")
-		check("wood variant %d preserves only the authored trunk as opaque contact" % pine_variant,wood_contact_opaque and surface_names == ["trunk","crown","lip"] and contact_surface_values == [1.0,0.0,0.0],[surface_names,contact_surface_values])
+			wood_contact_opaque = wood_contact_opaque and pine_material.shader.code.contains("local_harvest_reveal") and pine_material.shader.code.contains("harvest_reveal_side") and pine_material.shader.code.contains("harvest_contact_band")
+		check("wood variant %d preserves trunk and far-side crown around the local reveal" % pine_variant,wood_contact_opaque and surface_names == ["trunk","crown","lip"] and contact_surface_values == [1.0,0.0,0.0],[surface_names,contact_surface_values])
 	var shipping_source: Dictionary = game.sim.resources[0]
 	shipping_source.units = 2
 	game.sim.position = shipping_source.position + Vector2(0.0,1.0)
@@ -134,7 +134,7 @@ func run() -> void:
 	for reveal_step in 3:
 		game.update_foreground_visibility(game.xyz(game.sim.position)+Vector3.UP*0.95,0.10)
 	var shipping_tree := game.resource_visuals[shipping_source.id] as GeometryInstance3D
-	check("active wood harvesting fully clears crown/lip around the opaque trunk band",is_equal_approx(float(shipping_tree.get_instance_shader_parameter("cutaway")),1.0),shipping_tree.get_instance_shader_parameter("cutaway"))
+	check("active wood harvesting uses a local reveal instead of deleting the full crown",is_zero_approx(float(shipping_tree.get_instance_shader_parameter("cutaway"))) and is_equal_approx(float(shipping_tree.get_instance_shader_parameter("harvest_reveal")),1.0),[shipping_tree.get_instance_shader_parameter("cutaway"),shipping_tree.get_instance_shader_parameter("harvest_reveal")])
 	for commit_index in 2:
 		game.sim.action = {
 			"kind":"gather", "id":String(shipping_source.id), "position":shipping_source.position,

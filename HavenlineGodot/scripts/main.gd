@@ -241,20 +241,20 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 			if asset.begins_with("world/pine_"):
 				var evergreen_shader: Shader = load("res://shaders/evergreen.gdshader")
 				var forest_varying := "varying float forest_clearance;"
-				var bounded_varying := "varying float forest_clearance;\nvarying float harvest_contact_band;"
+				var bounded_varying := "varying float forest_clearance;\nvarying float harvest_contact_band;\nvarying float harvest_reveal_side;"
 				var roughness_uniform := "uniform float surface_roughness = 0.95;"
-				var contact_uniform := "uniform float surface_roughness = 0.95;\nuniform float harvest_contact_surface = 0.0;"
+				var contact_uniform := "uniform float surface_roughness = 0.95;\nuniform float harvest_contact_surface = 0.0;\ninstance uniform float harvest_reveal = 0.0;\ninstance uniform vec2 harvest_reveal_direction = vec2(0.0,1.0);"
 				var forest_vertex := "void vertex() {\n forest_clearance = 0.0;"
-				var bounded_vertex := "void vertex() {\n forest_clearance = 0.0;\n harvest_contact_band = 1.0-smoothstep(1.35,1.75,VERTEX.y);"
+				var bounded_vertex := "void vertex() {\n forest_clearance = 0.0;\n harvest_contact_band = 1.0-smoothstep(1.35,1.75,VERTEX.y);\n harvest_reveal_side = dot(VERTEX.xz,harvest_reveal_direction);"
 				if not evergreen_shader.code.contains("harvest_contact_band"):
 					evergreen_shader.code = evergreen_shader.code.replace(forest_varying,bounded_varying)
 					evergreen_shader.code = evergreen_shader.code.replace(roughness_uniform,contact_uniform)
 					evergreen_shader.code = evergreen_shader.code.replace(forest_vertex,bounded_vertex)
 				var whole_tree_cutaway := "void fragment() {\n float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));\n if (coverage < max(cutaway,forest_clearance)) { discard; }\n vec3 surface_color = texture(albedo_texture,UV).rgb;\n float wood = step(surface_color.b*1.25,surface_color.r);"
-				var crown_only_cutaway := "void fragment() {\n float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));\n float wood_contact_surface_cutaway = max(cutaway,forest_clearance)*(1.0-harvest_contact_surface*harvest_contact_band);\n if (coverage < wood_contact_surface_cutaway) { discard; }\n vec3 surface_color = texture(albedo_texture,UV).rgb;\n float wood = step(surface_color.b*1.25,surface_color.r);"
+				var crown_only_cutaway := "void fragment() {\n float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));\n float bounded_contact_mask = 1.0-harvest_contact_surface*harvest_contact_band;\n float wood_contact_surface_cutaway = max(cutaway,forest_clearance)*bounded_contact_mask;\n float local_harvest_reveal = harvest_reveal*step(0.0,harvest_reveal_side)*bounded_contact_mask;\n if (local_harvest_reveal > 0.5 || coverage < wood_contact_surface_cutaway) { discard; }\n vec3 surface_color = texture(albedo_texture,UV).rgb;\n float wood = step(surface_color.b*1.25,surface_color.r);"
 				if evergreen_shader.code.contains(whole_tree_cutaway):
 					evergreen_shader.code = evergreen_shader.code.replace(whole_tree_cutaway,crown_only_cutaway)
-				assert(evergreen_shader.code.contains("wood_contact_surface_cutaway") and evergreen_shader.code.contains("harvest_contact_band") and evergreen_shader.code.contains("harvest_contact_surface"),"Evergreen shader must preserve only the authored bounded opaque harvest contact surface")
+				assert(evergreen_shader.code.contains("local_harvest_reveal") and evergreen_shader.code.contains("harvest_reveal_side") and evergreen_shader.code.contains("harvest_contact_band"),"Evergreen shader must preserve a far-side crown silhouette around the bounded opaque harvest contact surface")
 				for i in merged_cache[asset].get_surface_count():
 					var source_material: Material = merged_cache[asset].surface_get_material(i)
 					if source_material is BaseMaterial3D:
@@ -1035,8 +1035,8 @@ func build_environment_dressing():
 func update_foreground_visibility(focus: Vector3, dt: float):
 	ReferenceForest.set_player_clearance(self, focus + Vector3(0,.05,0))
 	# Smooth opaque-dither cutaway for ordinary crowns hiding the lead. An active
-	# harvested pine uses the full cutaway value so its crown/lip surfaces discard
-	# completely while the shader's authored lower-trunk contact band stays opaque.
+	# harvested pine instead removes only the actor-facing crown half while keeping
+	# its far-side crown silhouette and authored lower-trunk contact band opaque.
 	# Gameplay nodes remain alive; visibility is not a change to resource state.
 	foreground_faded = 0
 	var harvest_state: Dictionary = harvest_presentation.descriptor() if is_instance_valid(harvest_presentation) else {}
@@ -1057,11 +1057,17 @@ func update_foreground_visibility(focus: Vector3, dt: float):
 			if resource_visuals.get(r.id) == tree:
 				depleted = r.units <= 0
 				harvest_selected = active_harvest_source == String(r.id)
-		var target_cutaway := 1.0 if harvest_selected or (depth_front and covers) else 0.0
+		var target_cutaway := 0.0 if harvest_selected else (1.0 if depth_front and covers else 0.0)
 		scenery_cutaway[i]=move_toward(scenery_cutaway[i],target_cutaway,clampf(dt,0,.10)*4.0)
 		tree.set_instance_shader_parameter("cutaway",scenery_cutaway[i])
+		var local_focus := tree.global_basis.inverse()*(focus-tree.global_position)
+		var reveal_direction := Vector2(local_focus.x,local_focus.z)
+		if reveal_direction.length_squared() <= 0.000001:
+			reveal_direction = Vector2.UP
+		tree.set_instance_shader_parameter("harvest_reveal",1.0 if harvest_selected else 0.0)
+		tree.set_instance_shader_parameter("harvest_reveal_direction",reveal_direction.normalized())
 		tree.visible = not depleted
-		if scenery_cutaway[i] > .01: foreground_faded += 1
+		if harvest_selected or scenery_cutaway[i] > .01: foreground_faded += 1
 
 func start_device_benchmark():
 	if is_instance_valid(device_benchmark): device_benchmark.queue_free()
