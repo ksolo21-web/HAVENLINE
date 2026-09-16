@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "status": "PREPARATION_TEMPLATE_UNRESOLVED",
+  "purpose": "Fail-closed handoff template for reconciling exact accepted T10/T11 public IDs after those dependencies are approved and integrated. Blank fields are intentional before activation.",
+  "dependencies": {
+    "T10": {
+      "accepted_integrated_source": "",
+      "verified_completion_path": "Docs/Production/T10/verified-completion.json",
+      "resolved_public_ids": []
+    },
+    "T11": {
+      "accepted_integrated_source": "",
+      "verified_completion_path": "Docs/Production/T11/verified-completion.json",
+      "resolved_public_ids": []
+    }
+  },
+  "resolved_public_id_shape": {
+    "id": "exact accepted upstream identifier",
+    "kind": "semantic kind such as transform_state, transform_recipe, camp_state, camp_recipe_binding",
+    "source_path": "repository-relative JSON source containing the identifier",
+    "json_pointer": "RFC6901-style pointer resolving to the exact identifier value"
+  },
+  "rules": [
+    "Do not populate accepted_integrated_source until the dependency has an accepted integrated completion record.",
+    "Every resolved ID must be proven by repository source_path plus exact JSON pointer; prose-only evidence is insufficient.",
+    "No provisional/prepared/example/debug/test-only identifier may be promoted as a shipping progression binding.",
+    "Resolution is read-only proof. T12 may consume accepted IDs but may not mutate T10/T11 source files or semantics.",
+    "Any missing or ambiguous required ID blocks T12 activation rather than being guessed."
+  ],
+  "promotion_allowed": false
+}
