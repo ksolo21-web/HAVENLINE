@@ -3,9 +3,9 @@
 
 This is a future pre-disposition gate, not a preparation approval. It requires a
 resolved candidate-evidence packet, resolved per-dimension critic records, exact
-engine-parity output, resolved T10/T11 binding record, and the real shipping data
-files. It refuses candidate/hash/provenance mismatches across otherwise-valid
-artifacts.
+engine-parity output, complete evidence digest index, resolved T10/T11 binding
+record, and the real shipping data files. It refuses candidate/hash/provenance
+mismatches across otherwise-valid artifacts.
 """
 from __future__ import annotations
 
@@ -34,6 +34,7 @@ def load_module(name: str, filename: str):
 candidate_validator = load_module("t12_candidate_evidence", "validate_candidate_evidence.py")
 critic_validator = load_module("t12_critic_reviews", "validate_critic_review_records.py")
 parity_comparator = load_module("t12_engine_parity", "compare_engine_parity.py")
+evidence_index_validator = load_module("t12_evidence_index", "validate_evidence_index.py")
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -44,6 +45,7 @@ def validate_consistency(
     candidate: dict[str, Any],
     critic_records: dict[str, Any],
     parity_output: dict[str, Any],
+    evidence_index: dict[str, Any],
     binding_resolution: dict[str, Any],
     *,
     levels_sha256: str,
@@ -66,6 +68,15 @@ def validate_consistency(
     if not parity_result["passed"]:
         errors.append("engine parity output failed: " + json.dumps(parity_result["errors"]))
 
+    evidence_index_result = evidence_index_validator.validate_index(
+        evidence_index,
+        require_resolved=True,
+        candidate=candidate,
+        critics=critic_records,
+    )
+    if not evidence_index_result["passed"]:
+        errors.append("complete evidence digest index failed: " + json.dumps(evidence_index_result["errors"]))
+
     source = candidate.get("exact_source", {}) if isinstance(candidate.get("exact_source"), dict) else {}
     candidate_sha = source.get("candidate_source")
     if not isinstance(candidate_sha, str) or SHA40.fullmatch(candidate_sha) is None:
@@ -75,6 +86,8 @@ def validate_consistency(
         errors.append("critic records candidate_source does not match candidate evidence")
     if parity_output.get("candidate_source") != candidate_sha:
         errors.append("engine parity candidate_source does not match candidate evidence")
+    if evidence_index.get("candidate_source") != candidate_sha:
+        errors.append("evidence index candidate_source does not match candidate evidence")
 
     hashes = source.get("shipping_data_hashes", {}) if isinstance(source.get("shipping_data_hashes"), dict) else {}
     expected_hashes = {
@@ -142,6 +155,9 @@ def validate_consistency(
         "candidate_packet_passed": candidate_result["passed"],
         "critic_records_passed": critic_result["passed"],
         "engine_parity_passed": parity_result["passed"],
+        "evidence_index_passed": evidence_index_result["passed"],
+        "evidence_index_entry_count": evidence_index_result.get("entry_count"),
+        "evidence_index_required_ref_count": evidence_index_result.get("required_ref_count"),
         "global_minimum_mandatory_dimension_score": critic_result.get("global_minimum_mandatory_dimension_score"),
         "score_averaging_used": False,
         "errors": errors,
@@ -153,6 +169,7 @@ def main() -> None:
     ap.add_argument("--candidate-evidence", required=True)
     ap.add_argument("--critic-records", required=True)
     ap.add_argument("--engine-parity", required=True)
+    ap.add_argument("--evidence-index", required=True)
     ap.add_argument("--binding-resolution", required=True)
     ap.add_argument("--levels", required=True)
     ap.add_argument("--milestones", required=True)
@@ -164,6 +181,7 @@ def main() -> None:
         "candidate": ROOT / args.candidate_evidence,
         "critics": ROOT / args.critic_records,
         "parity": ROOT / args.engine_parity,
+        "evidence_index": ROOT / args.evidence_index,
         "binding": ROOT / args.binding_resolution,
         "levels": ROOT / args.levels,
         "milestones": ROOT / args.milestones,
@@ -179,6 +197,7 @@ def main() -> None:
         json.loads(paths["candidate"].read_text()),
         json.loads(paths["critics"].read_text()),
         json.loads(paths["parity"].read_text()),
+        json.loads(paths["evidence_index"].read_text()),
         json.loads(binding_bytes.decode("utf-8")),
         levels_sha256=sha256_bytes(paths["levels"].read_bytes()),
         milestones_sha256=sha256_bytes(paths["milestones"].read_bytes()),
