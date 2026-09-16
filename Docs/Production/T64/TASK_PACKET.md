@@ -9,7 +9,7 @@
 ## Planned owned paths
 - `HavenlineGodot/tests/acceptance/t64_purchase_fairness/**`
 - `Docs/Production/T64/**`
-- `Docs/Production/Evidence/T64/**`
+- `Docs/Production/T64/Evidence/**`
 - `tools/havenline/task64/**`
 - `.github/workflows/havenline-task64-*.yml`
 

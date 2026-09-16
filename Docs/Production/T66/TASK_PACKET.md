@@ -9,7 +9,7 @@
 ## Planned owned paths
 - `HavenlineGodot/tests/security/t66_attack_review/**`
 - `Docs/Production/T66/**`
-- `Docs/Production/Evidence/T66/**`
+- `Docs/Production/T66/Evidence/**`
 - `tools/havenline/task66/**`
 - `.github/workflows/havenline-task66-*.yml`
 

@@ -8,7 +8,7 @@
 
 ## Planned owned paths
 - `Docs/Production/T70/**`
-- `Docs/Production/Evidence/T70/**`
+- `Docs/Production/T70/Evidence/**`
 - `tools/havenline/task70/**`
 - `.github/workflows/havenline-task70-*.yml`
 

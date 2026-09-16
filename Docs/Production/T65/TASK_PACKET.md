@@ -9,7 +9,7 @@
 ## Planned owned paths
 - `HavenlineGodot/tests/acceptance/t65_liveops_rehearsal/**`
 - `Docs/Production/T65/**`
-- `Docs/Production/Evidence/T65/**`
+- `Docs/Production/T65/Evidence/**`
 - `tools/havenline/task65/**`
 - `.github/workflows/havenline-task65-*.yml`
 
