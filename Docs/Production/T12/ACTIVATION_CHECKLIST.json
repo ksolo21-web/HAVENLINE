@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "task_name": "Level 1–100 progression architecture",
+  "preparation_status": "PREPARED_GOVERNANCE_ONLY",
+  "prepared_branch": "havenline/governance-t12-prep",
+  "prepared_from_branch": "havenline/governance-t11-prep",
+  "prepared_from_commit": "b383e450594d60b172d43ed2d60bda535ca9f225",
+  "future_builder_branch": "havenline/T12-progression-architecture",
+  "future_owner": "progression-architecture-builder",
+  "dependencies": ["T07", "T08", "T10", "T11"],
+  "activation_requires_all_dependencies_approved": true,
+  "activation_base_rule": "exact current integration head that records T10 and T11 APPROVED and integrated",
+  "planned_owned_alias": "@reservation:T12",
+  "planned_owned_paths": [
+    "HavenlineGodot/scripts/progression_architecture.gd",
+    "HavenlineGodot/data/progression_levels_v1.json",
+    "HavenlineGodot/data/progression_milestones_v1.json",
+    "HavenlineGodot/tests/test_task12_progression_architecture.gd",
+    "HavenlineGodot/tests/test_task12_integration.gd",
+    "HavenlineGodot/tests/capture_task12_progression.gd",
+    "Docs/Production/T12/**",
+    "tools/havenline/task12/**",
+    ".github/workflows/havenline-task12-*.yml"
+  ],
+  "forbidden_overlap_examples": [
+    "HavenlineGodot/scripts/camp_construction.gd",
+    "HavenlineGodot/scripts/camp_construction_view.gd",
+    "HavenlineGodot/data/camp_upgrade_recipes.json",
+    "HavenlineGodot/assets/camp_upgrades_v1/**",
+    "HavenlineGodot/scripts/world_transform.gd",
+    "HavenlineGodot/scripts/world_transform_view.gd",
+    "HavenlineGodot/data/world_transform_recipes.json",
+    "HavenlineGodot/scripts/main.gd",
+    "HavenlineGodot/scripts/simulation.gd",
+    "HavenlineGodot/scripts/challenge_director.gd",
+    "HavenlineGodot/data/challenge_director*.json"
+  ],
+  "prepared_support_artifacts": [
+    "Docs/Production/T12/FROZEN_SCOPE.md",
+    "Docs/Production/T12/TASK_PACKET.md",
+    "Docs/Production/T12/PREBUILD_CONTRACT.json",
+    "Docs/Production/T12/defect-ledger.json",
+    "tools/havenline/task12/prepare_activation.py"
+  ],
+  "required_critics": ["C2", "C3", "C4", "C6", "C7"],
+  "acceptance": {
+    "operator": ">",
+    "threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "zero_unresolved_mandatory_defects": true
+  },
+  "activation_steps": [
+    "Verify authoritative integration branch is codex/havenline-sequential-task-01.",
+    "Verify T07, T08, T10 and T11 are APPROVED in dependency graph, workstream registry and task gates.",
+    "Verify the current integration head contains accepted T10 and T11 completion/integration records.",
+    "Verify T10 and T11 are no longer listed as active owners before T12 activation.",
+    "Reconcile PREBUILD_CONTRACT/TASK_PACKET assumptions against the exact accepted T10/T11 public interfaces and stable IDs.",
+    "Run tools/havenline/task12/prepare_activation.py --activate --base <current-integration-head>.",
+    "Apply the emitted @reservation:T12 PATH_OWNERSHIP patch through the integration owner.",
+    "Claim T12 with workstream.py as ASSIGNED using the exact current integration head and @reservation:T12.",
+    "Set T12 dependency-graph/task-gate active state consistently through integration-owner governance update.",
+    "Validate registry and planned ownership collision checks.",
+    "Create havenline/T12-progression-architecture from the exact post-activation integration head.",
+    "Require candidate guard PASS before shipping T12 runtime/data expands."
+  ],
+  "claim_template": "python3 tools/havenline/production/workstream.py claim T12 --owner progression-architecture-builder --branch havenline/T12-progression-architecture --base <POST_T11_INTEGRATION_SHA> --owned-alias @reservation:T12 --status ASSIGNED",
+  "runtime_build_allowed_before_activation": false,
+  "notes": [
+    "T12 governance/tooling preparation may continue while T09/T10/T11 runtime work is unfinished; shipping T12 runtime/data remain dependency-gated.",
+    "T12 owns Level 1–100 progression topology and cadence contracts; T13 owns adaptive difficulty/Challenge Director behavior.",
+    "T12 may consume T10/T11 public transform/camp-state IDs after approval but may not change their transaction or content semantics.",
+    "T14 owns global persistence/versioning; T33+ own economy/monetization; T44-T52 own authored connected-region content.",
+    "Parallel production is allowed only with disjoint path ownership; integration remains serial and integration-owner controlled."
+  ]
+}
