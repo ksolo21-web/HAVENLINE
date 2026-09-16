@@ -4,6 +4,7 @@ const Harvest = preload("res://scripts/harvest_presentation.gd")
 const Director = preload("res://scripts/context_director.gd")
 const Motion = preload("res://scripts/character1_motion.gd")
 const Transfer = preload("res://scripts/transfer_feedback.gd")
+const Main = preload("res://scripts/main.gd")
 
 var checks: Array[Dictionary] = []
 var failures: Array[String] = []
@@ -85,6 +86,44 @@ func run() -> void:
 	check("hidden actor immediately clears equipped tool", not harvest.descriptor().active and harvest.descriptor().last_cancel_reason == "actor_not_presented")
 	check("T09 preserves one-joystick zero-action-button language", Director.contract().one_primary_movement_joystick and Harvest.contract().permanent_action_buttons == 0)
 	check("T09 adds no persistence field", not Harvest.contract().adds_save_fields)
+
+	var game := Main.new()
+	game.size = Vector2(1280,720)
+	root.add_child(game)
+	for frame in 4:
+		await process_frame
+	game.set_process(false)
+	game.set_physics_process(false)
+	var shipping_source: Dictionary = game.sim.resources[0]
+	shipping_source.units = 1
+	game.sim.position = shipping_source.position + Vector2(0.0,1.0)
+	game.sim.velocity = Vector2.ZERO
+	game.sim.action = {
+		"kind":"gather", "id":String(shipping_source.id), "position":shipping_source.position,
+		"action_token":1, "progress":0.99, "role":"player_lead", "actionable":true,
+	}
+	game._process(1.0 / 60.0)
+	var shipping_inventory_before := int(game.sim.inventory.wood)
+	game.sim.events.clear()
+	game.sim.perform_action(0.60)
+	game.sim.elapsed += 0.60
+	game.present_events()
+	game._process(1.0 / 60.0)
+	var shipping_harvest: Dictionary = game.harvest_presentation.descriptor()
+	var shipping_transfer: Dictionary = game.transfer_feedback.descriptor()
+	check("shipping simulation commits exactly one wood unit", int(shipping_source.units) == 0 and int(game.sim.inventory.wood) == shipping_inventory_before + 1)
+	check("shipping commit drives one T09 impact and one T08 transfer", shipping_harvest.accepted_impacts == 1 and shipping_transfer.accepted_receipts == 1,[shipping_harvest,shipping_transfer])
+	check("shipping depletion hides the bound source", not game.resource_visuals[shipping_source.id].visible)
+	game.present_events()
+	check("shipping event epoch cannot replay either presentation", game.harvest_presentation.descriptor().accepted_impacts == 1 and game.transfer_feedback.descriptor().accepted_receipts == 1)
+	shipping_source.units = int(game.sim.tuning.woodUnitsPerNode)
+	shipping_source.respawn = 0.0
+	game._process(1.0 / 60.0)
+	check("shipping respawn restores the same bound source", game.resource_visuals[shipping_source.id].visible)
+	if is_instance_valid(game.outpost_audio):
+		game.outpost_audio.stop_all()
+	game.free()
+	await process_frame
 
 	print(JSON.stringify({
 		"suite":"T09_harvesting_integration", "checks":checks,
