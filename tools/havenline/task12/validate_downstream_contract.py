@@ -27,6 +27,11 @@ REQUIRED_SHARED_OUTPUTS = {
 }
 
 
+def semantic_blob(value: Any) -> str:
+    """Serialize semantic text without escaping Unicode punctuation such as 1–100."""
+    return json.dumps(value, ensure_ascii=False, sort_keys=True).lower()
+
+
 def validate_contract(data: dict[str, Any]) -> dict[str, Any]:
     errors: list[str] = []
     if data.get("task_id") != "T12":
@@ -62,19 +67,19 @@ def validate_contract(data: dict[str, Any]) -> dict[str, Any]:
             errors.append(f"{task}: boundary must explicitly retain authored region/content ownership outside T12")
 
     t13 = consumers.get("T13", {}) if isinstance(consumers.get("T13"), dict) else {}
-    t13_blob = json.dumps(t13).lower()
+    t13_blob = semantic_blob(t13)
     for token in ("difficulty", "purchase", "vip", "payer"):
         if token not in t13_blob:
             errors.append(f"T13 boundary must explicitly cover {token}")
 
     t14 = consumers.get("T14", {}) if isinstance(consumers.get("T14"), dict) else {}
-    t14_blob = json.dumps(t14).lower()
+    t14_blob = semantic_blob(t14)
     for token in ("global save", "migration", "version"):
         if token not in t14_blob:
             errors.append(f"T14 boundary must explicitly retain {token} ownership outside T12")
 
     t62 = consumers.get("T62", {}) if isinstance(consumers.get("T62"), dict) else {}
-    t62_blob = json.dumps(t62).lower()
+    t62_blob = semantic_blob(t62)
     if "full level 1–100 acceptance" not in t62_blob and "complete level 1–100 acceptance" not in t62_blob:
         errors.append("T62 boundary must retain full Level 1–100 acceptance outside T12")
     if "release certification" not in t62_blob:
