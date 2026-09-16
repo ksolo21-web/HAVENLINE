@@ -87,6 +87,55 @@ func capture_jpg(frame: int) -> void:
 	await process_frame
 	root.get_texture().get_image().save_jpg(output.path_join("frames/frame-%05d.jpg" % int(frame / 2)),0.91)
 
+func sample_shipping(frame: int, input: Vector2, phase: String) -> Dictionary:
+	var started := Time.get_ticks_usec()
+	var before_units := int(source.units)
+	var before_inventory := int(game.sim.inventory[resource_kind])
+	var before_distance: float = game.sim.position.distance_to(Vector2(source.position))
+	# Advance the same shipping simulation/T07 call site used by _physics_process.
+	# Node physics stays disabled so this deterministic evidence step cannot run
+	# twice; no action, focus, progress, event, unit or inventory value is forged.
+	game.sim.step(1.0 / 60.0,input)
+	var shipping_events: Array = game.sim.events.duplicate(true)
+	game.present_events()
+	game._process(1.0 / 60.0)
+	game.harvest_presentation._process(1.0 / 60.0)
+	game.transfer_feedback._process(1.0 / 60.0)
+	configure_camera(frame)
+	var update_usec := float(Time.get_ticks_usec() - started)
+	await process_frame
+	var draws := int(RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME))
+	var prims := int(RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME))
+	frame_usec.append(update_usec); draw_calls.append(draws); primitives.append(prims)
+	var action: Dictionary = game.sim.action.duplicate(true)
+	var authoritative_event := shipping_events.any(func(event): return String(event.get("type", "")) == "gather" and String(event.get("resource", "")) == resource_kind)
+	var row := {
+		"frame":frame, "phase":phase, "input":[input.x,input.y],
+		"actor_position":[game.sim.position.x,game.sim.position.y],
+		"distance_before":before_distance,
+		"distance_after":game.sim.position.distance_to(Vector2(source.position)),
+		"action_kind":String(action.get("kind", "")),
+		"action_identity":String(action.get("identity", "")),
+		"action_state":String(action.get("state", "idle")),
+		"action_reason":String(action.get("reason", "")),
+		"actionable":bool(action.get("actionable", false)),
+		"action_token":int(action.get("action_token", 0)),
+		"raw_progress":float(action.get("progress", 0.0)),
+		"commit":authoritative_event,
+		"authority":"outpost_simulation.step/context_director.advance",
+		"authoritative_event":authoritative_event,
+		"units_before":before_units,"units_after":int(source.units),
+		"inventory_before":before_inventory,"inventory_after":int(game.sim.inventory[resource_kind]),
+		"source_units":int(source.units), "inventory":int(game.sim.inventory[resource_kind]),
+		"context":game.sim.context_director.presentation(),
+		"harvest":game.harvest_presentation.descriptor(),
+		"transfer":game.transfer_feedback.descriptor(),
+		"carry":game.carry_stacks[game.sim.lead].descriptor(),
+		"frame_update_usec":update_usec, "draw_calls":draws, "primitives":prims,
+	}
+	records.append(row)
+	return row
+
 func sample(frame: int, progress: float) -> void:
 	var started := Time.get_ticks_usec()
 	game.sim.action = canonical_action(progress)
@@ -149,19 +198,81 @@ func sample_cancelled(frame: int) -> void:
 
 func capture_sequence() -> void:
 	DirAccess.make_dir_recursive_absolute(output.path_join("frames"))
-	for frame in 72:
-		var progress := float(frame) / 30.0 if frame < 30 else (float(frame-30)/11.0*0.32 if frame < 42 else float(frame-48)/23.0)
-		if frame == 30:
-			commit(frame)
-			progress = 0.0 # The committed token remains at its exact contact beat.
-		if frame == 48: action_token += 1 # Re-entry is a new T07 action context.
-		if frame >= 42 and frame < 48: await sample_cancelled(frame)
-		else: await sample(frame,clampf(progress,0.0,1.0))
+	var frame := 0
+	var target_identity := "gather:" + String(source.id)
+	var interaction_radius := float(game.sim.contract.player.interactionRadius)
+	var first_token := 0
+	var approach_observed := false
+	var focus_observed := false
+	var commit_observed := false
+	var focus_still := false
+	while frame < 240 and not commit_observed:
+		var delta: Vector2 = Vector2(source.position) - game.sim.position
+		var input := delta.normalized() if delta.length() > interaction_radius * 0.70 else Vector2.ZERO
+		var phase := "approach" if not input.is_zero_approx() else ("anticipation" if focus_observed else "focus_acquisition")
+		var row: Dictionary = await sample_shipping(frame,input,phase)
+		approach_observed = approach_observed or (phase == "approach" and float(row.distance_before) > interaction_radius and String(row.action_identity).is_empty())
+		if String(row.action_identity) == target_identity and String(row.action_state) in ["acquiring","active"]:
+			focus_observed = true
+			if first_token == 0: first_token = int(row.action_token)
+			if not focus_still:
+				focus_still = true
+				await capture_png("%s-focus-acquired" % resource_kind)
+		commit_observed = commit_observed or bool(row.authoritative_event)
 		if frame % 2 == 0: await capture_jpg(frame)
-		if frame in [0,21,30,41,42,48,71]:
-			await capture_png("%s-%03d" % [resource_kind,frame])
+		if frame == 0: await capture_png("%s-approach" % resource_kind)
+		if bool(row.authoritative_event): await capture_png("%s-committed-contact" % resource_kind)
+		frame += 1
+	if not approach_observed or not focus_observed or not commit_observed or first_token <= 0:
+		push_error("T09 shipping approach/focus/commit evidence incomplete for " + resource_kind)
+		return
+
+	# Keep the committed T07 token visible through a bounded recovery window.
+	for recovery_index in 18:
+		var row: Dictionary = await sample_shipping(frame,Vector2.ZERO,"recovery")
+		if frame % 2 == 0: await capture_jpg(frame)
+		if recovery_index == 17: await capture_png("%s-recovery" % resource_kind)
+		frame += 1
+
+	# Move outside T07's release annulus so cancellation clears focus, then
+	# approach again through the same shipping selector. Re-entry must receive a
+	# new director-issued action token rather than a capture-authored token.
+	var cancelled_observed := false
+	var focus_cleared := false
+	for cancel_index in 120:
+		var away: Vector2 = (game.sim.position - Vector2(source.position)).normalized()
+		if away.is_zero_approx(): away = Vector2.DOWN
+		var row: Dictionary = await sample_shipping(frame,away,"cancellation")
+		cancelled_observed = cancelled_observed or bool(row.context.get("cancelled",false)) or String(row.action_state) == "blocked_movement"
+		focus_cleared = focus_cleared or String(row.action_identity).is_empty()
+		if frame % 2 == 0: await capture_jpg(frame)
+		if cancel_index == 0: await capture_png("%s-cancelled" % resource_kind)
+		frame += 1
+		if cancelled_observed and focus_cleared: break
+	var reentry_token := 0
+	var reentry_active := false
+	var reentry_active_frames := 0
+	for reentry_index in 240:
+		var delta: Vector2 = Vector2(source.position) - game.sim.position
+		var input := delta.normalized() if delta.length() > interaction_radius * 0.70 else Vector2.ZERO
+		var row: Dictionary = await sample_shipping(frame,input,"reentry")
+		if String(row.action_identity) == target_identity and bool(row.actionable):
+			reentry_token = int(row.action_token)
+			reentry_active = reentry_token > first_token
+			reentry_active_frames += 1
+		if frame % 2 == 0: await capture_jpg(frame)
+		if reentry_active and reentry_active_frames == 1: await capture_png("%s-reentry" % resource_kind)
+		frame += 1
+		if reentry_active and reentry_active_frames >= 18: break
+	if not cancelled_observed or not focus_cleared or not reentry_active:
+		push_error("T09 shipping cancellation/re-entry evidence incomplete for " + resource_kind)
+		return
+	action_token = reentry_token + 1
+	if frame % 2 == 1:
+		await sample_shipping(frame,Vector2.ZERO,"reentry")
+		frame += 1
 	# Finish depletion only through the same simulation authority as shipping.
-	var lifecycle_frame := 72
+	var lifecycle_frame := frame
 	while int(source.units) > 0:
 		commit(lifecycle_frame)
 		game._process(1.0 / 60.0)
@@ -170,7 +281,7 @@ func capture_sequence() -> void:
 	game._process(1.0 / 60.0)
 	records.append({"frame":lifecycle_frame,"depleted":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
 	await capture_png("%s-depleted" % resource_kind)
-	for frame in range(72,80,2): await capture_jpg(frame)
+	for video_frame in range(lifecycle_frame,lifecycle_frame+8,2): await capture_jpg(video_frame)
 	# Let the unchanged 90-second simulation timer perform the respawn while the
 	# lead is away from all harvest targets, then restore the evidence framing.
 	var evidence_position: Vector2 = game.sim.position
@@ -183,7 +294,7 @@ func capture_sequence() -> void:
 	game._process(1.0 / 60.0)
 	records.append({"frame":lifecycle_frame+1,"respawned":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
 	await capture_png("%s-respawned" % resource_kind)
-	for frame in range(80,88,2): await capture_jpg(frame)
+	for video_frame in range(lifecycle_frame+8,lifecycle_frame+16,2): await capture_jpg(video_frame)
 
 func capture_tool_view() -> void:
 	await sample(0,1.0)
@@ -267,7 +378,8 @@ func write_report() -> void:
 		"logical_size":[game.size.x,game.size.y], "internal_render":[game.scene_view.size.x,game.scene_view.size.y],
 		"render_scale":game.scene_view.scaling_3d_scale, "native_4k_render":native_4k and game.scene_view.size.x >= 3840 and game.scene_view.size.y >= 2160,
 		"physical_4k60_verified":false, "scenario_is_test_fixture":true,
-		"capture_progress_driver":"presentation_fixture",
+		"capture_progress_driver":"shipping_simulation_step" if mode == "sequence" else "presentation_fixture",
+		"t07_selection_authority":"context_director.advance" if mode == "sequence" else "fixture_not_claimed",
 		"commit_authority":"outpost_simulation.perform_action",
 		"simulation_authoritative":records.any(func(record): return bool(record.get("commit",false)) and bool(record.get("authoritative_event",false))),
 		"harvest_contract":Harvest.contract(),
@@ -305,7 +417,17 @@ func run() -> void:
 		quit(3)
 		return
 	action_token += ["wood","stone","metal","fuel"].find(resource_kind) * 100
-	game.sim.position = source.position + Vector2(0.0,1.12)
+	# Opening sources sit outside the protected camp fence. Start on their camp
+	# side and approach outward so T03 collision remains active and the actor can
+	# reach the interaction annulus without teleporting across a boundary.
+	var approach_axis := -Vector2(source.position).normalized() if mode == "sequence" else Vector2(source.position).normalized()
+	if mode == "sequence" and resource_kind == "metal":
+		# The ore source is on the dry far bank. Begin farther along that same bank
+		# so the evidence shows a traversable approach without crossing the frozen
+		# river or teleporting directly into the interaction annulus.
+		approach_axis = Vector2(0.0,-1.0)
+	if approach_axis.is_zero_approx(): approach_axis = Vector2.DOWN
+	game.sim.position = Vector2(source.position) + approach_axis * (float(game.sim.contract.player.interactionRadius) + (2.2 if mode == "sequence" else -0.73))
 	game.sim.facing = (source.position - game.sim.position).normalized()
 	game.sim.velocity = Vector2.ZERO
 	game.player_rig.position = game.xyz(game.sim.position)
