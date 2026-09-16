@@ -46,6 +46,17 @@ jobs:
           set -euo pipefail
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
           python3 tools/havenline/production/workstream.py validate-candidate T09 --base 7492074e40a0b061f31d8c32602b7a581b2610f3 --head "$CANDIDATE" --integration-head "$integration" | tee task09-evidence/candidate-scope.json
+          python3 tools/havenline/production/change_impact.py --base "$integration" --head "$CANDIDATE" > task09-evidence/change-impact.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          impact=json.loads(Path('task09-evidence/change-impact.json').read_text())
+          assert impact['unknown_production_fallback'] is False,impact['unknown_production_files']
+          suites=impact['required_suites']
+          assert suites and all(not suite.endswith('.py') for suite in suites),suites
+          Path('task09-evidence/required-godot-suites.txt').write_text('\n'.join(suites)+'\n')
+          print(json.dumps({'required_suites':suites,'unknown_production_fallback':False}))
+          PY
           python3 tools/havenline/task09/validate_harvesting.py --candidate "$CANDIDATE" --output task09-evidence/source-contract.json
           before=$(sha256sum HavenlineGodot/assets/harvesting_v1/* | sha256sum)
           python3 tools/havenline/task09/generate_harvesting_tools.py > task09-evidence/generator.json
@@ -73,7 +84,8 @@ jobs:
           python3 tools/havenline/bake_outpost_audio.py > task09-evidence/tests/audio-fixture.json
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task09-evidence/tests/import.log 2>&1
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task09-evidence/tests/motion-fixture.log 2>&1
-          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_outpost test_outpost_runtime test_environment test_reference_forest test_task02_river test_task03_boundary test_adaptive_devices test_task06_character1 test_task07_context_director test_task07_integration test_task08_inventory test_task08_integration test_task09_harvesting test_task09_integration; do
+          mapfile -t suites < task09-evidence/required-godot-suites.txt
+          for suite in "${suites[@]}"; do
             timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task09-evidence/tests/$suite.log" 2>&1
           done
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task09-evidence/tests/*.log; then exit 1; fi
@@ -88,7 +100,8 @@ jobs:
               assert report.get('passed') is True and not report.get('failures'),(path,report.get('failures'))
               checks=report.get('checks',[])
               rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
-          assert len(rows)==17,len(rows)
+          required=Path('task09-evidence/required-godot-suites.txt').read_text().splitlines()
+          assert {row['suite'] for row in rows}==set(required),(rows,required)
           output={'task':'T09-integrated-candidate','source':os.environ['GITHUB_SHA'],'suite_count':len(rows),'total_checks':sum(row['checks'] for row in rows),'suites':rows,'all_passed':True,'task_approved':False}
           Path('task09-evidence/tests.json').write_text(json.dumps(output,indent=2)); print(json.dumps(output))
           PY
