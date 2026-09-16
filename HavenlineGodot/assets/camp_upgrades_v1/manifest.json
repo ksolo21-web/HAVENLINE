@@ -1,7 +1,22 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "authority_id": "T11-camp-upgrades-v1",
   "build_pending_dependency": true,
+  "authored_assets": {
+    "warm_work_floor": {
+      "mesh": "res://assets/camp_upgrades_v1/camp_workfloor.obj",
+      "material": "res://assets/camp_upgrades_v1/camp_workfloor.mtl",
+      "role": "warm work-zone ground contrast"
+    },
+    "counter_canopy": {
+      "mesh": "res://assets/camp_upgrades_v1/camp_canopy.obj",
+      "material": "res://assets/camp_upgrades_v1/camp_canopy.mtl",
+      "role": "first visible camp upgrade; paired counter shelter",
+      "local_half_extents_xz": [2.45, 1.25],
+      "height": 3.22,
+      "shipping_behavior": false
+    }
+  },
   "stages": {
     "site_unbuilt": {
       "scene": "res://assets/camp_upgrades_v1/site_unbuilt.tscn",
@@ -22,7 +37,17 @@
       "presentation_key": "camp_reinforced_upgrade",
       "interaction_anchor_xz": [-3.0, -0.8],
       "route_clearance_profile": "t03-camp-lanes-v3",
-      "camera_readability_profile": "t04-reference-camera-v1"
+      "camera_readability_profile": "t04-reference-camera-v1",
+      "required_visible_upgrade_nodes": [
+        "UpgradeCanopyWest",
+        "UpgradeCanopyEast",
+        "UpgradeLanternNW",
+        "UpgradeLanternNE",
+        "UpgradeLanternSW",
+        "UpgradeLanternSE",
+        "UpgradeTimberWest",
+        "UpgradeTimberEast"
+      ]
     }
   },
   "content_boundaries": {
