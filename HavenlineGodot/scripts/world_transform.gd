@@ -29,6 +29,9 @@ static func contract() -> Dictionary:
 		"exactly_once_transaction_receipts": true,
 		"one_inflight_transaction_per_target": true,
 		"receipt_must_match_prepared_transaction": true,
+		"authority_idempotency_key_is_request_scoped": true,
+		"bounded_receipt_history_per_target": true,
+		"receipt_history_policy": "latest_completed_receipt_per_target",
 		"presentation_may_not_grant_resources": true,
 		"global_save_versioning_owned_by_t14": true,
 		"t09_adapter_required_before_integration": true,
@@ -187,6 +190,9 @@ func preview_transform(recipe_id: String, target_id: String, inventory: Dictiona
 static func _request_identity(recipe_id: String, target_id: String, source_state: String, target_state: String) -> String:
 	return "%s|%s|%s|%s" % [recipe_id, target_id, source_state, target_state]
 
+static func _authority_transaction_key(request_identity: String, target_revision: int) -> String:
+	return "T10|%s|revision:%d" % [request_identity, target_revision]
+
 func _collision_or_replay(transaction_id: String, recipe_id: String, target_id: String, table: Dictionary, completed: bool) -> Dictionary:
 	if transaction_id not in table:
 		return {}
@@ -237,9 +243,12 @@ func commit_transform(transaction_id: String, recipe_id: String, target_id: Stri
 			"replayed": false,
 		}
 
+	var request_identity := _request_identity(recipe_id, target_id, String(preview.source_state), String(preview.target_state))
+	var next_revision := int(preview.target_revision) + 1
 	var intent := {
 		"transaction_id": transaction_id,
-		"request_identity": _request_identity(recipe_id, target_id, String(preview.source_state), String(preview.target_state)),
+		"authority_transaction_key": _authority_transaction_key(request_identity, next_revision),
+		"request_identity": request_identity,
 		"recipe_id": recipe_id,
 		"target_id": target_id,
 		"source_state": String(preview.source_state),
@@ -247,7 +256,7 @@ func commit_transform(transaction_id: String, recipe_id: String, target_id: Stri
 		"debits": preview.costs.duplicate(true),
 		"progression_tags": preview.progression_tags.duplicate(),
 		"presentation_key": String(preview.presentation_key),
-		"target_revision": int(preview.target_revision) + 1,
+		"target_revision": next_revision,
 		"passed": true,
 		"replayed": false,
 		"submit_debit_transaction": true,
@@ -261,10 +270,12 @@ static func _valid_transaction_row(transaction_id: String, row: Variant) -> bool
 		return false
 	if String(row.get("transaction_id", "")) != transaction_id:
 		return false
-	for field in ["request_identity", "recipe_id", "target_id", "source_state", "target_state", "presentation_key"]:
+	for field in ["authority_transaction_key", "request_identity", "recipe_id", "target_id", "source_state", "target_state", "presentation_key"]:
 		if String(row.get(field, "")).is_empty():
 			return false
 	if not _valid_nonnegative_integer(row.get("target_revision", null)) or int(row.target_revision) <= 0:
+		return false
+	if String(row.authority_transaction_key) != _authority_transaction_key(String(row.request_identity), int(row.target_revision)):
 		return false
 	var debits: Variant = row.get("debits")
 	if not (debits is Dictionary) or debits.is_empty():
@@ -275,7 +286,7 @@ static func _valid_transaction_row(transaction_id: String, row: Variant) -> bool
 	return _duplicate_free_strings(row.get("progression_tags", []))
 
 static func _receipt_matches_prepared(receipt: Dictionary, intent: Dictionary) -> bool:
-	for field in ["transaction_id", "request_identity", "recipe_id", "target_id", "source_state", "target_state", "presentation_key", "target_revision"]:
+	for field in ["transaction_id", "authority_transaction_key", "request_identity", "recipe_id", "target_id", "source_state", "target_state", "presentation_key", "target_revision"]:
 		if receipt.get(field) != intent.get(field):
 			return false
 	return receipt.get("debits", {}) == intent.get("debits", {}) and receipt.get("progression_tags", []) == intent.get("progression_tags", [])
@@ -323,6 +334,13 @@ func accept_authoritative_receipt(receipt: Dictionary) -> Dictionary:
 	canonical["submit_debit_transaction"] = false
 	canonical["authoritative_applied"] = true
 	canonical["accepted_by_world_transform"] = true
+	var stale_receipts: Array[String] = []
+	for prior_transaction_id in receipts:
+		var prior: Dictionary = receipts[prior_transaction_id]
+		if String(prior.get("target_id", "")) == String(receipt.target_id) and String(prior_transaction_id) != transaction_id:
+			stale_receipts.append(String(prior_transaction_id))
+	for stale_transaction_id in stale_receipts:
+		receipts.erase(stale_transaction_id)
 	receipts[transaction_id] = canonical.duplicate(true)
 	prepared.erase(transaction_id)
 	return canonical
@@ -370,15 +388,17 @@ func import_component_state(state: Dictionary) -> bool:
 		var pending_target: Dictionary = next_targets[pending_target_id]
 		if int(pending.target_revision) != int(pending_target.revision) + 1:
 			return false
+	var receipt_targets := {}
 	for transaction_id in next_receipts:
 		if not _valid_transaction_row(String(transaction_id), next_receipts[transaction_id]):
 			return false
 		var row: Dictionary = next_receipts[transaction_id]
 		var target_id := String(row.target_id)
-		if target_id not in next_targets:
+		if target_id not in next_targets or target_id in receipt_targets:
 			return false
+		receipt_targets[target_id] = true
 		var target: Dictionary = next_targets[target_id]
-		if int(row.target_revision) > int(target.revision):
+		if int(row.target_revision) != int(target.revision):
 			return false
 	targets = next_targets.duplicate(true)
 	prepared = next_prepared.duplicate(true)
@@ -392,6 +412,7 @@ func descriptor() -> Dictionary:
 		"target_count": targets.size(),
 		"prepared_count": prepared.size(),
 		"receipt_count": receipts.size(),
+		"receipt_history_bound": targets.size(),
 		"targets": targets.duplicate(true),
 		"simulation_owns_resource_counts": true,
 		"integration_dependency_t09": "pending",
