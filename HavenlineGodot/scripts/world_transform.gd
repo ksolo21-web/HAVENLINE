@@ -32,6 +32,8 @@ static func contract() -> Dictionary:
 		"authority_idempotency_key_is_request_scoped": true,
 		"bounded_receipt_history_per_target": true,
 		"receipt_history_policy": "latest_completed_receipt_per_target",
+		"recipe_graph_is_monotonic_except_explicit_inverse_pairs": true,
+		"reversible_pairs_require_reciprocal_inverse_metadata": true,
 		"presentation_may_not_grant_resources": true,
 		"global_save_versioning_owned_by_t14": true,
 		"t09_adapter_required_before_integration": true,
@@ -89,16 +91,123 @@ static func validate_recipe(recipe: Dictionary) -> bool:
 	for field in required:
 		if field not in recipe:
 			return false
-	if String(recipe.recipe_id).is_empty() or String(recipe.source_state).is_empty() or String(recipe.target_state).is_empty():
+	var recipe_id := String(recipe.recipe_id)
+	var source_state := String(recipe.source_state)
+	var target_state := String(recipe.target_state)
+	if recipe_id.is_empty() or source_state.is_empty() or target_state.is_empty():
 		return false
-	if recipe.source_state == recipe.target_state and not bool(recipe.get("allow_self_transition", false)):
+	var self_transition_value: Variant = recipe.get("allow_self_transition", false)
+	if typeof(self_transition_value) != TYPE_BOOL:
+		return false
+	if source_state == target_state and not bool(self_transition_value):
 		return false
 	if String(recipe.presentation_key).is_empty():
 		return false
 	if not _duplicate_free_strings(recipe.prerequisites) or not _duplicate_free_strings(recipe.progression_tags):
 		return false
+	var reversible_value: Variant = recipe.get("reversible", false)
+	if typeof(reversible_value) != TYPE_BOOL:
+		return false
+	var reversible := bool(reversible_value)
+	var inverse_recipe_id := String(recipe.get("inverse_recipe_id", ""))
+	if reversible:
+		if inverse_recipe_id.is_empty() or inverse_recipe_id == recipe_id or source_state == target_state:
+			return false
+	elif not inverse_recipe_id.is_empty():
+		return false
 	var normalized := _normalized_costs(recipe.costs)
 	return not normalized.is_empty() and normalized.size() == recipe.costs.size()
+
+static func _state_root(parent: Dictionary, state: String) -> String:
+	var current := state
+	var guard := 0
+	while String(parent.get(current, current)) != current:
+		current = String(parent.get(current, current))
+		guard += 1
+		if guard > parent.size():
+			return ""
+	return current
+
+static func _union_states(parent: Dictionary, a: String, b: String) -> bool:
+	if a not in parent:
+		parent[a] = a
+	if b not in parent:
+		parent[b] = b
+	var root_a := _state_root(parent, a)
+	var root_b := _state_root(parent, b)
+	if root_a.is_empty() or root_b.is_empty():
+		return false
+	if root_a != root_b:
+		parent[root_b] = root_a
+	return true
+
+static func _visit_state_graph(node: String, graph: Dictionary, marks: Dictionary) -> bool:
+	var mark := int(marks.get(node, 0))
+	if mark == 1:
+		return true
+	if mark == 2:
+		return false
+	marks[node] = 1
+	for neighbor: Variant in graph.get(node, []):
+		if _visit_state_graph(String(neighbor), graph, marks):
+			return true
+	marks[node] = 2
+	return false
+
+static func _validate_recipe_graph(catalog: Dictionary) -> bool:
+	var parent := {}
+	for recipe_id in catalog:
+		var recipe: Dictionary = catalog[recipe_id]
+		var source_state := String(recipe.source_state)
+		var target_state := String(recipe.target_state)
+		if source_state not in parent:
+			parent[source_state] = source_state
+		if target_state not in parent:
+			parent[target_state] = target_state
+
+	# Explicit reversibility is legal only as a reciprocal pair with exact
+	# reversed endpoints. Collapse those two states into one progression group;
+	# all other recipe edges must form an acyclic graph between groups.
+	for recipe_id in catalog:
+		var recipe: Dictionary = catalog[recipe_id]
+		if not bool(recipe.get("reversible", false)):
+			continue
+		var inverse_recipe_id := String(recipe.get("inverse_recipe_id", ""))
+		if inverse_recipe_id not in catalog:
+			return false
+		var inverse: Dictionary = catalog[inverse_recipe_id]
+		if not bool(inverse.get("reversible", false)):
+			return false
+		if String(inverse.get("inverse_recipe_id", "")) != String(recipe_id):
+			return false
+		if String(inverse.source_state) != String(recipe.target_state) or String(inverse.target_state) != String(recipe.source_state):
+			return false
+		if not _union_states(parent, String(recipe.source_state), String(recipe.target_state)):
+			return false
+
+	var graph := {}
+	for recipe_id in catalog:
+		var recipe: Dictionary = catalog[recipe_id]
+		if bool(recipe.get("reversible", false)) or String(recipe.source_state) == String(recipe.target_state):
+			continue
+		var source_root := _state_root(parent, String(recipe.source_state))
+		var target_root := _state_root(parent, String(recipe.target_state))
+		if source_root.is_empty() or target_root.is_empty() or source_root == target_root:
+			return false
+		if source_root not in graph:
+			graph[source_root] = []
+		if target_root not in graph:
+			graph[target_root] = []
+		var edges: Array = graph[source_root]
+		if target_root not in edges:
+			edges.append(target_root)
+		graph[source_root] = edges
+
+	var marks := {}
+	for node in graph:
+		if _visit_state_graph(String(node), graph, marks):
+			return false
+	return true
 
 func configure(catalog: Dictionary) -> bool:
 	var rows: Variant = catalog.get("recipes")
@@ -113,7 +222,12 @@ func configure(catalog: Dictionary) -> bool:
 			return false
 		var copy: Dictionary = row.duplicate(true)
 		copy["normalized_costs"] = _normalized_costs(copy.costs)
+		copy["reversible"] = bool(copy.get("reversible", false))
+		copy["inverse_recipe_id"] = String(copy.get("inverse_recipe_id", ""))
+		copy["allow_self_transition"] = bool(copy.get("allow_self_transition", false))
 		next[recipe_id] = copy
+	if not _validate_recipe_graph(next):
+		return false
 	recipes = next
 	return true
 
@@ -183,6 +297,8 @@ func preview_transform(recipe_id: String, target_id: String, inventory: Dictiona
 		"shortfalls": shortfalls,
 		"progression_tags": recipe.progression_tags.duplicate(),
 		"presentation_key": String(recipe.presentation_key),
+		"reversible": bool(recipe.get("reversible", false)),
+		"inverse_recipe_id": String(recipe.get("inverse_recipe_id", "")),
 		"target_revision": int(target.revision),
 		"mutated": false,
 	}
