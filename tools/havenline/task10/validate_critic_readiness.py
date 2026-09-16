@@ -1,0 +1,197 @@
+#!/usr/bin/env python3
+"""Validate that the isolated T10 candidate has complete critic-input evidence.
+
+This is deliberately NOT a critic and does not assign C1/C2/C3/C4/C6/C7 scores.
+It proves that the evidence each required critic needs has been captured and bound
+to the isolated candidate, while preserving the post-T09 integration boundary.
+"""
+from __future__ import annotations
+
+import argparse
+import json
+from pathlib import Path
+
+REQUIRED_CRITICS = ["C1", "C2", "C3", "C4", "C6", "C7"]
+REQUIRED_STATES = ["ready", "blocked", "preview", "committing", "complete"]
+REQUIRED_ANGLES = ["front", "side", "three-quarter", "overhead", "gameplay", "detail"]
+
+
+def load(path: Path):
+    if not path.exists():
+        raise AssertionError(f"missing evidence: {path}")
+    return json.loads(path.read_text())
+
+
+def check_names(report: dict) -> set[str]:
+    return {str(row.get("name")) for row in report.get("checks", []) if row.get("passed") is True}
+
+
+def main() -> None:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--evidence-root", required=True)
+    ap.add_argument("--candidate", required=True)
+    ap.add_argument("--output", required=True)
+    args = ap.parse_args()
+
+    root = Path(args.evidence_root)
+    domain = load(root / "domain-tests.json")
+    integration = load(root / "integration-tests.json")
+    source = load(root / "source-contract.json")
+    lifecycle = load(root / "capture" / "manifest.json")
+    devices = load(root / "device-layout-evidence.json")
+    native4k = load(root / "native4k" / "manifest.json")
+    native4k_index = load(root / "native4k-evidence.json")
+
+    errors: list[str] = []
+    candidate = args.candidate
+
+    if source.get("candidate") != candidate:
+        errors.append(f"source contract candidate mismatch: {source.get('candidate')} != {candidate}")
+    if lifecycle.get("candidate") != candidate:
+        errors.append(f"lifecycle candidate mismatch: {lifecycle.get('candidate')} != {candidate}")
+    if native4k.get("candidate") != candidate:
+        errors.append(f"native4k candidate mismatch: {native4k.get('candidate')} != {candidate}")
+    if native4k_index.get("candidate") != candidate:
+        errors.append(f"native4k index candidate mismatch: {native4k_index.get('candidate')} != {candidate}")
+
+    if not domain.get("passed") or domain.get("failures"):
+        errors.append("domain suite is not clean")
+    if int(domain.get("check_count", 0)) < 130:
+        errors.append("domain suite has fewer than 130 checks")
+    if domain.get("stress_targets") != 512 or domain.get("stress_transactions") != 1024:
+        errors.append("domain stress cardinality mismatch")
+    if domain.get("stress_retained_receipts") != 512:
+        errors.append("bounded receipt history proof missing")
+    if domain.get("preview_stress_iterations") != 5000 or domain.get("reject_stress_iterations") != 5000:
+        errors.append("preview/reject stress proof missing")
+    if domain.get("catalog_stress_recipes") != 258:
+        errors.append("large recipe catalog proof missing")
+
+    if not integration.get("passed") or integration.get("failures"):
+        errors.append("fixture integration suite is not clean")
+    if int(integration.get("check_count", 0)) < 60:
+        errors.append("fixture integration suite has fewer than 60 checks")
+    if integration.get("fixture_simulation_only") is not True or integration.get("real_t09_adapter_bound") is not False:
+        errors.append("fixture authority boundary is not explicit")
+    if integration.get("r11_world_response_tested") is not True:
+        errors.append("R11 world-response proof missing")
+    if integration.get("visual_node_budget") != 4 or integration.get("visual_build_count") != 1 or integration.get("visual_node_count") != 4:
+        errors.append("bounded presentation proof missing")
+
+    if not source.get("passed"):
+        errors.append("source contract is not clean")
+    if lifecycle.get("passed") is not True or lifecycle.get("record_count") != 10:
+        errors.append("baseline lifecycle evidence is incomplete")
+    if lifecycle.get("states") != REQUIRED_STATES or lifecycle.get("angles") != ["front", "three-quarter"]:
+        errors.append("baseline lifecycle state/angle contract mismatch")
+
+    if devices.get("passed") is not True or devices.get("device_count") != 6 or devices.get("capture_count") != 12:
+        errors.append("device-layout matrix evidence is incomplete")
+
+    if native4k.get("passed") is not True or native4k.get("native_scale_1") is not True:
+        errors.append("native 4K scale-1 manifest is not clean")
+    if native4k.get("capture_resolution") != [3840, 2160] or native4k.get("record_count") != 30:
+        errors.append("native 4K capture cardinality/resolution mismatch")
+    if native4k.get("states") != REQUIRED_STATES or native4k.get("angles") != REQUIRED_ANGLES:
+        errors.append("native 4K state/angle coverage mismatch")
+    if native4k_index.get("passed") is not True or native4k_index.get("unique_capture_count") != 30:
+        errors.append("native 4K uniqueness/index proof missing")
+
+    domain_names = check_names(domain)
+    integration_names = check_names(integration)
+
+    required_domain_markers = {
+        "preview purity is explicit",
+        "one in-flight transaction per target is explicit",
+        "completed receipt history is bounded per target",
+        "5000 repeated previews all succeed",
+        "5000 rejected commits all fail closed",
+        "256 bulk recipe previews remain deterministic",
+        "512-target two-stage stress completes without semantic failure",
+        "stress snapshot round-trips exactly",
+    }
+    missing_domain = sorted(required_domain_markers - domain_names)
+    if missing_domain:
+        errors.append("missing domain critic markers: " + ", ".join(missing_domain))
+
+    required_integration_markers = {
+        "second transaction against same target is blocked before debit",
+        "unsolicited but well-formed simulation receipt is rejected",
+        "pending state restores after crash",
+        "different targets can prepare concurrently",
+        "blocked world response preserves exact reasons and shortfalls",
+        "committing beacon pulse changes shape without rebuilding nodes",
+        "repeated lifecycle calls create zero visual node growth",
+        "view remains presentation-only after full lifecycle",
+    }
+    missing_integration = sorted(required_integration_markers - integration_names)
+    if missing_integration:
+        errors.append("missing integration critic markers: " + ", ".join(missing_integration))
+
+    coverage = {
+        "C1": {
+            "focus": "reference/world-response fidelity",
+            "isolated_inputs": ["30-frame native-4K multi-angle lifecycle set", "gameplay/overhead/side/three-quarter/detail coverage", "neutral T11-safe fixture"],
+            "input_ready": not errors,
+            "production_review_blocked_by": ["real post-T09 integrated candidate", "final integration provenance"],
+        },
+        "C2": {
+            "focus": "technical and visual integrity",
+            "isolated_inputs": ["native-4K multi-angle set", "10-frame baseline set", "4-node/1-build presentation bound", "cross-state deterministic manifest"],
+            "input_ready": not errors,
+            "production_review_blocked_by": ["post-T09 recapture if integration changes affected visuals"],
+        },
+        "C3": {
+            "focus": "Havenline gameplay identity",
+            "isolated_inputs": ["presentation-only authority checks", "fixture simulation exact-once flow", "no T09/T08 mutation boundary"],
+            "input_ready": not errors,
+            "production_review_blocked_by": ["real T09/T08 authority binding", "impacted gameplay regression"],
+        },
+        "C4": {
+            "focus": "gameplay UX and readability",
+            "isolated_inputs": ["blocked/ready/preview/committing/complete states", "exact blocked reasons/shortfalls", "6-device/12-frame layout matrix", "native-4K gameplay/detail views"],
+            "input_ready": not errors,
+            "production_review_blocked_by": ["post-T09 integrated gameplay capture"],
+        },
+        "C6": {
+            "focus": "performance and bounded growth",
+            "isolated_inputs": ["512 targets/1024 transforms", "5000 previews", "5000 rejected commits", "258 recipes", "bounded receipt history", "zero visual-node growth"],
+            "input_ready": not errors,
+            "production_review_blocked_by": ["post-integration performance regression", "physical-device certification remains T68/T69"],
+        },
+        "C7": {
+            "focus": "progression/state integrity",
+            "isolated_inputs": ["branching recipe coverage", "prerequisite enforcement", "stale/out-of-order rejection", "exact snapshot/recovery"],
+            "input_ready": not errors,
+            "production_review_blocked_by": ["real integrated progression inputs after T09"],
+        },
+    }
+
+    report = {
+        "task": "T10",
+        "candidate": candidate,
+        "required_critics": REQUIRED_CRITICS,
+        "isolated_critic_input_ready": not errors,
+        "production_critic_execution_allowed": False,
+        "integration_allowed": False,
+        "task_approved": False,
+        "real_t09_adapter_bound": False,
+        "coverage": coverage,
+        "remaining_integration_blockers": [
+            "T09 APPROVED and integrated",
+            "reconcile T10 onto exact post-T09 integration head",
+            "bind real approved T09/T08 authority interface",
+            "rerun impacted T01-T09 regression and affected captures",
+            "execute required C1/C2/C3/C4/C6/C7 production reviews with every mandatory dimension >9.0 unrounded",
+        ],
+        "errors": errors,
+        "passed": not errors,
+    }
+    Path(args.output).write_text(json.dumps(report, indent=2) + "\n")
+    print(json.dumps(report, indent=2))
+    if errors:
+        raise SystemExit(1)
+
+
+if __name__ == "__main__":
+    main()
