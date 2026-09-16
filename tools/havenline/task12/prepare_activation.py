@@ -12,15 +12,27 @@ import argparse
 import json
 import pathlib
 import subprocess
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 DOCS = ROOT / "Docs" / "Production"
-CHECKLIST_PATH = DOCS / "T12" / "ACTIVATION_CHECKLIST.json"
+T12_DOCS = DOCS / "T12"
+CHECKLIST_PATH = T12_DOCS / "ACTIVATION_CHECKLIST.json"
 GRAPH_PATH = DOCS / "DEPENDENCY_GRAPH.json"
 REGISTRY_PATH = DOCS / "WORKSTREAM_REGISTRY.json"
 OWNERSHIP_PATH = DOCS / "PATH_OWNERSHIP.json"
 CRITICS_PATH = DOCS / "CRITIC_MATRIX.json"
 GATES_PATH = DOCS / "task-gates.json"
+MATRIX_PATH = T12_DOCS / "LEVEL_1_100_MATRIX.json"
+RESOLUTION_TEMPLATE_PATH = T12_DOCS / "BINDING_RESOLUTION_TEMPLATE.json"
+RESOLUTION_PATH = T12_DOCS / "BINDING_RESOLUTION.json"
+RUNTIME_CONTRACT_PATH = T12_DOCS / "RUNTIME_INTERFACE_CONTRACT.json"
+TRACEABILITY_PATH = T12_DOCS / "ACCEPTANCE_TRACEABILITY.json"
+MATRIX_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_level_matrix.py"
+BINDING_VERIFIER = ROOT / "tools" / "havenline" / "task12" / "verify_binding_resolution.py"
+RUNTIME_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_runtime_interface.py"
+TRACEABILITY_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_traceability.py"
+PROGRESSION_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_progression_contract.py"
 
 
 def load(path: pathlib.Path):
@@ -54,6 +66,18 @@ def registry_status(registry, task_id: str):
         return "APPROVED"
     row = next((x for x in registry.get("workstreams", []) if x.get("task_id") == task_id), None)
     return (row or {}).get("status")
+
+
+def run_read_only_tool(args: list[str]) -> tuple[bool, str]:
+    proc = subprocess.run(
+        [sys.executable, *args],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    return proc.returncode == 0, proc.stdout.strip()
 
 
 def validate_preparation():
@@ -122,16 +146,55 @@ def validate_preparation():
     if t11_collisions:
         errors.append("planned T12 reservation collides with T11: " + json.dumps(t11_collisions))
 
-    required = [
-        DOCS / "T12" / "FROZEN_SCOPE.md",
-        DOCS / "T12" / "TASK_PACKET.md",
-        DOCS / "T12" / "PREBUILD_CONTRACT.json",
-        DOCS / "T12" / "defect-ledger.json",
-        CHECKLIST_PATH,
-    ]
+    support = checklist.get("prepared_support_artifacts")
+    if not isinstance(support, list) or not support:
+        errors.append("prepared_support_artifacts must be a non-empty list")
+        support = []
+    if len(support) != len(set(support)):
+        errors.append("prepared_support_artifacts contains duplicate paths")
+    required = [ROOT / path for path in support] + [CHECKLIST_PATH]
     for path in required:
-        if not path.exists() or not path.read_text().strip():
-            errors.append(f"missing/empty preparation artifact: {path.relative_to(ROOT)}")
+        try:
+            relative = path.relative_to(ROOT)
+        except ValueError:
+            errors.append(f"required preparation artifact escapes repository root: {path}")
+            continue
+        if not path.exists() or not path.is_file() or not path.read_text().strip():
+            errors.append(f"missing/empty preparation artifact: {relative}")
+
+    matrix_passed = False
+    resolution_blank_passed = False
+    runtime_contract_passed = False
+    traceability_passed = False
+
+    if MATRIX_VALIDATOR.exists() and MATRIX_PATH.exists():
+        matrix_passed, output = run_read_only_tool([str(MATRIX_VALIDATOR), "--input", str(MATRIX_PATH)])
+        if not matrix_passed:
+            errors.append("non-shipping Level 1-100 matrix validation failed: " + output)
+    if BINDING_VERIFIER.exists() and RESOLUTION_TEMPLATE_PATH.exists():
+        resolution_blank_passed, output = run_read_only_tool([
+            str(BINDING_VERIFIER),
+            "--resolution",
+            str(RESOLUTION_TEMPLATE_PATH),
+        ])
+        if not resolution_blank_passed:
+            errors.append("pre-activation T10/T11 binding template guard failed: " + output)
+    if RUNTIME_VALIDATOR.exists() and RUNTIME_CONTRACT_PATH.exists():
+        runtime_contract_passed, output = run_read_only_tool([
+            str(RUNTIME_VALIDATOR),
+            "--input",
+            str(RUNTIME_CONTRACT_PATH),
+        ])
+        if not runtime_contract_passed:
+            errors.append("prepared T12 runtime-interface authority validation failed: " + output)
+    if TRACEABILITY_VALIDATOR.exists() and TRACEABILITY_PATH.exists():
+        traceability_passed, output = run_read_only_tool([
+            str(TRACEABILITY_VALIDATOR),
+            "--input",
+            str(TRACEABILITY_PATH),
+        ])
+        if not traceability_passed:
+            errors.append("T12 R01-R16 acceptance traceability validation failed: " + output)
 
     shipping_paths = [
         ROOT / "HavenlineGodot" / "scripts" / "progression_architecture.gd",
@@ -155,9 +218,14 @@ def validate_preparation():
         "t10_current_graph_status": graph.get("tasks", {}).get("T10", {}).get("status"),
         "t11_current_graph_status": graph.get("tasks", {}).get("T11", {}).get("status"),
         "planned_owned_path_count": len(planned),
+        "required_support_artifact_count": len(support),
         "integration_only_collision_count": len(collisions),
         "active_ownership_collision_count": len(active_collisions),
         "t11_collision_count": len(t11_collisions),
+        "level_matrix_validation_passed": matrix_passed,
+        "blank_binding_resolution_guard_passed": resolution_blank_passed,
+        "runtime_interface_validation_passed": runtime_contract_passed,
+        "acceptance_traceability_validation_passed": traceability_passed,
         "required_critics": expected_critics,
         "runtime_build_allowed": False,
         "passed": not errors,
@@ -203,6 +271,31 @@ def validate_activation(base: str):
     if graph.get("tasks", {}).get("T12", {}).get("status") not in ("LOCKED", "PREPARED"):
         errors.append(f"unexpected pre-activation T12 graph state: {graph.get('tasks', {}).get('T12', {}).get('status')}")
 
+    binding_resolution_passed = False
+    if not RESOLUTION_PATH.exists():
+        errors.append("T10/T11 exact binding reconciliation is missing: Docs/Production/T12/BINDING_RESOLUTION.json")
+    else:
+        binding_resolution_passed, output = run_read_only_tool([
+            str(BINDING_VERIFIER),
+            "--resolution",
+            str(RESOLUTION_PATH),
+            "--require-resolved",
+        ])
+        if not binding_resolution_passed:
+            errors.append("T10/T11 exact binding reconciliation failed: " + output)
+
+    matrix_passed, matrix_output = run_read_only_tool([str(MATRIX_VALIDATOR), "--input", str(MATRIX_PATH)])
+    if not matrix_passed:
+        errors.append("activation-time Level 1-100 matrix revalidation failed: " + matrix_output)
+
+    runtime_passed, runtime_output = run_read_only_tool([str(RUNTIME_VALIDATOR), "--input", str(RUNTIME_CONTRACT_PATH)])
+    if not runtime_passed:
+        errors.append("activation-time runtime authority/interface revalidation failed: " + runtime_output)
+
+    traceability_passed, traceability_output = run_read_only_tool([str(TRACEABILITY_VALIDATOR), "--input", str(TRACEABILITY_PATH)])
+    if not traceability_passed:
+        errors.append("activation-time R01-R16 traceability revalidation failed: " + traceability_output)
+
     return {
         "task_id": "T12",
         "mode": "activation-preflight",
@@ -212,6 +305,10 @@ def validate_activation(base: str):
         "future_branch": checklist["future_builder_branch"],
         "owner": checklist["future_owner"],
         "owned_alias": checklist["planned_owned_alias"],
+        "level_matrix_validation_passed": matrix_passed,
+        "runtime_interface_validation_passed": runtime_passed,
+        "acceptance_traceability_validation_passed": traceability_passed,
+        "binding_resolution_passed": binding_resolution_passed,
         "reservation_patch": {
             "alias": checklist["planned_owned_alias"],
             "paths": checklist["planned_owned_paths"]
