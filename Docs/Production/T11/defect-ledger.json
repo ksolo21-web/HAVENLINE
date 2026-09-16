@@ -4,10 +4,9 @@
   "review_scope": "parallel preparation readiness only; not gameplay completion or approval",
   "prepared_branch": "havenline/governance-t11-prep",
   "prepared_from_t10_checkpoint": "7e95338e339fb331a5d6b094874c15d5a7e96e16",
-  "latest_verified_preflight_source": "b0b20c97f30ffb0ebfe44144b045b0b2bd834aa7",
-  "latest_verified_preflight_run": 35078197049,
-  "latest_verified_preparation_run": 35078197044,
-  "latest_verified_governance_run": 35078197138,
+  "latest_verified_preflight_source": "0acb8dd120b23547163083c6a1e8d6da6d1f776d",
+  "latest_verified_preflight_run": 35079612038,
+  "latest_verified_preparation_run": 35079612010,
   "internal_review": {
     "reviewer_type": "internal review; no separate critic runtime claimed",
     "preparation_readiness_score": 10.0,
@@ -26,7 +25,12 @@
       {"id":"P10","name":"Activation tooling and candidate validator exist before runtime implementation","status":"PASS"},
       {"id":"P11","name":"Automated negative test proves T11 activation fails closed while T10 remains unfinished","status":"PASS"},
       {"id":"P12","name":"Automated T05 binding tests fail on asset/path/hash/socket/owner drift","status":"PASS"},
-      {"id":"P13","name":"Latest preflight, preparation, and production-governance CI passed and exact source audit confirms no HavenlineGodot runtime changes","status":"PASS"}
+      {"id":"P13","name":"Exact source audit confirms no HavenlineGodot runtime changes in T11 preparation","status":"PASS"},
+      {"id":"P14","name":"Spatial baseline binds exact approved T02 river, T03 gate/lane, T04 camera and T05 camp authorities","status":"PASS"},
+      {"id":"P15","name":"Automated spatial tests verify T05 camp hard footprints against river build setback, fixed camp bounds and T03 lane corridors with only explicit approved center-zone exemptions","status":"PASS"},
+      {"id":"P16","name":"Construction pad and upgrade pad remain inside T04 contextual-target and base composition envelope","status":"PASS"},
+      {"id":"P17","name":"Spatial contract leaves shipping prices and T10 recipe IDs unresolved rather than inventing dependency-owned values","status":"PASS"},
+      {"id":"P18","name":"Latest T11 preflight and preparation CI both pass on source 0acb8dd120b23547163083c6a1e8d6da6d1f776d","status":"PASS"}
     ]
   },
   "mandatory_prep_defects": [],
@@ -39,7 +43,7 @@
     }
   ],
   "remaining_after_dependency_resolves": [
-    "Reconcile T11 prep against the exact accepted T10 public interface and completion source.",
+    "Reconcile T11 prep and SPATIAL_BASELINE.json against the exact accepted T10 public interface and completion source.",
     "Run activation preflight against exact post-T10 integration head.",
     "Stage and validate T11 ownership/registry/dependency/task-gate activation.",
     "Commit activation governance and cut havenline/T11-camp-construction from that checkpoint.",
@@ -47,5 +51,5 @@
     "Capture exact-source construction/upgrade/route/adaptive evidence.",
     "Run C2/C3/C4/C6 review, fix defects and retest until every mandatory dimension is strictly >9.0 with zero unresolved mandatory defects."
   ],
-  "resume_from": "Docs/Production/T11/FROZEN_SCOPE.md + TASK_PACKET.md + PREBUILD_CONTRACT.json + T05_REUSE_BINDINGS.json + ACTIVATION_CHECKLIST.json + tools/havenline/task11/prepare_activation.py"
+  "resume_from": "Docs/Production/T11/FROZEN_SCOPE.md + TASK_PACKET.md + PREBUILD_CONTRACT.json + T05_REUSE_BINDINGS.json + SPATIAL_BASELINE.json + ACTIVATION_CHECKLIST.json + tools/havenline/task11/prepare_activation.py"
 }
