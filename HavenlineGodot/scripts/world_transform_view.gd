@@ -3,7 +3,7 @@ extends Node3D
 
 ## T10 presentation lifecycle shell. It never grants resources, advances
 ## progression, or owns the authoritative transform transaction. Completion is
-## allowed only after simulation confirms the debit transaction was applied.
+## allowed only after T10 validates a simulation-confirmed debit receipt.
 
 const AUTHORITY_ID := "T10-world-transform-view-v1"
 const LIFECYCLE := ["locked", "ready", "preview", "committing", "complete"]
@@ -25,6 +25,7 @@ static func contract() -> Dictionary:
 		"mutates_resources": false,
 		"advances_progression": false,
 		"complete_requires_simulation_receipt": true,
+		"complete_requires_world_transform_acceptance": true,
 		"t11_owns_final_camp_content": true,
 	}
 
@@ -71,6 +72,8 @@ func mark_complete(receipt: Dictionary) -> bool:
 	if lifecycle != "committing":
 		return false
 	if not bool(receipt.get("authority_applied", false)) or String(receipt.get("authority_source", "")) != "simulation":
+		return false
+	if not bool(receipt.get("accepted_by_world_transform", false)):
 		return false
 	if String(receipt.get("transaction_id", "")) != transaction_id:
 		return false
