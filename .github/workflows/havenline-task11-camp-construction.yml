@@ -164,14 +164,18 @@ jobs:
           assert len(native_png) == 3, len(native_png)
           assert all(row['size']==[1280,720] for row in standard['captures'])
           assert all(row['size']==[3840,2160] for row in native['captures'])
-          lifecycle={row['lifecycle']:row['status_color'] for row in standard['captures'] if row['camp_state_id']=='site_unbuilt' and row['view']=='gameplay'}
-          assert len(lifecycle)==6 and len(set(lifecycle.values()))==6,lifecycle
+          lifecycle_rows=[row for row in standard['captures'] if row['camp_state_id']=='site_unbuilt' and row['view']=='gameplay']
+          lifecycle_colors={row['lifecycle']:row['status_color'] for row in lifecycle_rows}
+          lifecycle_spires={row['lifecycle']:row['status_spire_scale'] for row in lifecycle_rows}
+          assert len(lifecycle_colors)==6 and len(set(lifecycle_colors.values()))==6,lifecycle_colors
+          assert len(lifecycle_spires)==6 and len(set(lifecycle_spires.values()))==6,lifecycle_spires
           report={
             'task':'T11',
             'kind':'isolated-source-bound-rendered-evidence',
             'standard_frames':len(standard_png),
             'native_4k_frames':len(native_png),
-            'lifecycle_colors':lifecycle,
+            'lifecycle_colors':lifecycle_colors,
+            'lifecycle_spire_scales':lifecycle_spires,
             'gameplay_camera_profile':'t04-reference-camera-v1',
             'physical_4k60_verified':False,
             'final_visual_critic_evidence':False,
