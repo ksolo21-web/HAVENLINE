@@ -27,6 +27,8 @@ static func contract() -> Dictionary:
 		"commit_prepares_idempotent_debit_transaction": true,
 		"state_advances_only_after_authoritative_receipt": true,
 		"exactly_once_transaction_receipts": true,
+		"one_inflight_transaction_per_target": true,
+		"receipt_must_match_prepared_transaction": true,
 		"presentation_may_not_grant_resources": true,
 		"global_save_versioning_owned_by_t14": true,
 		"t09_adapter_required_before_integration": true,
@@ -199,6 +201,13 @@ func _collision_or_replay(transaction_id: String, recipe_id: String, target_id: 
 	replay["authoritative_applied"] = completed
 	return replay
 
+func _pending_transaction_for_target(target_id: String) -> String:
+	for transaction_id in prepared:
+		var row: Dictionary = prepared[transaction_id]
+		if String(row.get("target_id", "")) == target_id:
+			return String(transaction_id)
+	return ""
+
 func commit_transform(transaction_id: String, recipe_id: String, target_id: String, inventory: Dictionary, available_prerequisites: Array = []) -> Dictionary:
 	if transaction_id.is_empty():
 		return {"passed": false, "errors": ["invalid_transaction_id"], "submit_debit_transaction": false, "replayed": false}
@@ -208,6 +217,15 @@ func commit_transform(transaction_id: String, recipe_id: String, target_id: Stri
 	var pending := _collision_or_replay(transaction_id, recipe_id, target_id, prepared, false)
 	if not pending.is_empty():
 		return pending
+	var target_pending := _pending_transaction_for_target(target_id)
+	if not target_pending.is_empty():
+		return {
+			"passed": false,
+			"errors": ["target_transaction_pending"],
+			"pending_transaction_id": target_pending,
+			"submit_debit_transaction": false,
+			"replayed": false,
+		}
 
 	var preview := preview_transform(recipe_id, target_id, inventory, available_prerequisites)
 	if not bool(preview.passed):
@@ -256,6 +274,12 @@ static func _valid_transaction_row(transaction_id: String, row: Variant) -> bool
 			return false
 	return _duplicate_free_strings(row.get("progression_tags", []))
 
+static func _receipt_matches_prepared(receipt: Dictionary, intent: Dictionary) -> bool:
+	for field in ["transaction_id", "request_identity", "recipe_id", "target_id", "source_state", "target_state", "presentation_key", "target_revision"]:
+		if receipt.get(field) != intent.get(field):
+			return false
+	return receipt.get("debits", {}) == intent.get("debits", {}) and receipt.get("progression_tags", []) == intent.get("progression_tags", [])
+
 func accept_authoritative_receipt(receipt: Dictionary) -> Dictionary:
 	var transaction_id := String(receipt.get("transaction_id", ""))
 	if transaction_id.is_empty() or not bool(receipt.get("authority_applied", false)) or String(receipt.get("authority_source", "")) != "simulation":
@@ -271,6 +295,11 @@ func accept_authoritative_receipt(receipt: Dictionary) -> Dictionary:
 		return replay
 	if not _valid_transaction_row(transaction_id, receipt):
 		return {"passed": false, "errors": ["malformed_authoritative_receipt"], "applied": false, "replayed": false}
+	if transaction_id not in prepared:
+		return {"passed": false, "errors": ["missing_prepared_transaction"], "applied": false, "replayed": false}
+	var intent: Dictionary = prepared[transaction_id]
+	if not _receipt_matches_prepared(receipt, intent):
+		return {"passed": false, "errors": ["prepared_receipt_mismatch"], "applied": false, "replayed": false}
 
 	var recipe := _recipe(String(receipt.recipe_id))
 	var target := _target(String(receipt.target_id))
@@ -283,8 +312,6 @@ func accept_authoritative_receipt(receipt: Dictionary) -> Dictionary:
 		return {"passed": false, "errors": ["receipt_debit_mismatch"], "applied": false, "replayed": false}
 	if String(target.state) != String(recipe.source_state) or int(receipt.target_revision) != int(target.revision) + 1:
 		return {"passed": false, "errors": ["receipt_state_mismatch"], "applied": false, "replayed": false}
-	if transaction_id in prepared and String(prepared[transaction_id].request_identity) != String(receipt.request_identity):
-		return {"passed": false, "errors": ["prepared_receipt_collision"], "applied": false, "replayed": false}
 
 	target["state"] = String(recipe.target_state)
 	target["revision"] = int(receipt.target_revision)
@@ -331,13 +358,16 @@ func import_component_state(state: Dictionary) -> bool:
 	for target_id in next_targets:
 		if String(target_id).is_empty() or not _valid_target_row(next_targets[target_id]):
 			return false
+	var pending_targets := {}
 	for transaction_id in next_prepared:
 		if transaction_id in next_receipts or not _valid_transaction_row(String(transaction_id), next_prepared[transaction_id]):
 			return false
 		var pending: Dictionary = next_prepared[transaction_id]
-		if String(pending.target_id) not in next_targets:
+		var pending_target_id := String(pending.target_id)
+		if pending_target_id not in next_targets or pending_target_id in pending_targets:
 			return false
-		var pending_target: Dictionary = next_targets[String(pending.target_id)]
+		pending_targets[pending_target_id] = true
+		var pending_target: Dictionary = next_targets[pending_target_id]
 		if int(pending.target_revision) != int(pending_target.revision) + 1:
 			return false
 	for transaction_id in next_receipts:
