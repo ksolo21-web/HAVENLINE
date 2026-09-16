@@ -6,6 +6,9 @@ const TransformView = preload("res://scripts/world_transform_view.gd")
 const STRESS_TARGETS := 512
 const STRESS_TIME_BUDGET_MS := 5000.0
 const STRESS_MEMORY_BUDGET_BYTES := 64 * 1024 * 1024
+const PREVIEW_STRESS_ITERATIONS := 5000
+const REJECT_STRESS_ITERATIONS := 5000
+const CATALOG_STRESS_RECIPES := 256
 
 var checks: Array[Dictionary] = []
 var failures: Array[String] = []
@@ -39,6 +42,9 @@ func run() -> void:
 	check("commit prepares an idempotent debit transaction", contract.commit_prepares_idempotent_debit_transaction)
 	check("world state waits for authoritative resource receipt", contract.state_advances_only_after_authoritative_receipt)
 	check("exact-once receipts are explicit", contract.exactly_once_transaction_receipts)
+	check("one in-flight transaction per target is explicit", contract.one_inflight_transaction_per_target)
+	check("simulation idempotency key is request scoped", contract.authority_idempotency_key_is_request_scoped)
+	check("completed receipt history is bounded per target", contract.bounded_receipt_history_per_target and contract.receipt_history_policy == "latest_completed_receipt_per_target")
 	check("T14 global save/versioning boundary is preserved", contract.global_save_versioning_owned_by_t14)
 	check("T09 adapter remains required before integration", contract.t09_adapter_required_before_integration)
 
@@ -71,12 +77,14 @@ func run() -> void:
 	var first := engine.commit_transform("tx-001", "framework_anchor_seed_to_foundation", "anchor-A", inventory)
 	check("first transaction prepares exactly one debit intent", first.passed and first.submit_debit_transaction and not first.replayed and not first.authoritative_applied, first)
 	check("prepared debit intent is exact", first.debits == {"wood": 8, "stone": 4}, first)
+	check("prepared debit carries request-scoped authority key", String(first.authority_transaction_key).contains(first.request_identity) and String(first.authority_transaction_key).ends_with("revision:1"), first)
 	check("framework never mutates caller inventory", inventory == inventory_before)
 	check("prepared intent does not advance world state", engine.descriptor().targets["anchor-A"].state == "seed" and engine.descriptor().targets["anchor-A"].revision == 0)
 	check("prepared intent is retained until authority replies", engine.descriptor().prepared_count == 1 and engine.descriptor().receipt_count == 0)
 
 	var pending_replay := engine.commit_transform("tx-001", "framework_anchor_seed_to_foundation", "anchor-A", inventory)
 	check("same pending transaction is idempotent retry", pending_replay.passed and pending_replay.replayed and pending_replay.submit_debit_transaction and not pending_replay.authoritative_applied, pending_replay)
+	check("pending retry preserves identical authority idempotency key", pending_replay.authority_transaction_key == first.authority_transaction_key)
 	check("pending retry cannot advance target", engine.descriptor().targets["anchor-A"].state == "seed" and engine.descriptor().targets["anchor-A"].revision == 0)
 	check("pending retry cannot duplicate prepared transaction", engine.descriptor().prepared_count == 1 and engine.descriptor().receipt_count == 0)
 	var pending_collision := engine.commit_transform("tx-001", "framework_anchor_foundation_to_reinforced", "anchor-A", inventory, ["harvesting_online"])
@@ -112,11 +120,17 @@ func run() -> void:
 	check("second-stage preview succeeds with prerequisite", second_preview.passed and second_preview.costs == {"wood": 12, "stone": 8, "metal": 2}, second_preview)
 	var second := engine.commit_transform("tx-002", "framework_anchor_foundation_to_reinforced", "anchor-A", inventory, ["harvesting_online"])
 	check("second-stage transaction prepares debit", second.passed and second.submit_debit_transaction and second.target_revision == 2, second)
+	check("second-stage authority key differs from first stage", second.authority_transaction_key != first.authority_transaction_key and String(second.authority_transaction_key).ends_with("revision:2"))
 	check("second-stage prepare still leaves foundation visible", engine.descriptor().targets["anchor-A"].state == "foundation" and engine.descriptor().prepared_count == 1)
 	var second_accepted := engine.accept_authoritative_receipt(simulation_ack(second))
 	check("second-stage authoritative receipt commits", second_accepted.passed and second_accepted.applied and second_accepted.target_revision == 2, second_accepted)
-	check("second-stage state is deterministic after authority", engine.descriptor().targets["anchor-A"].state == "reinforced" and engine.descriptor().receipt_count == 2)
+	check("second-stage state is deterministic after authority", engine.descriptor().targets["anchor-A"].state == "reinforced")
+	check("completed receipt history is pruned to latest receipt for target", engine.descriptor().receipt_count == 1 and not engine.receipts.has("tx-001") and engine.receipts.has("tx-002"), engine.receipts)
 	check("out-of-order source-state transform is blocked", not engine.preview_transform("framework_anchor_seed_to_foundation", "anchor-A", inventory).passed)
+	var old_receipt_after_advance := engine.accept_authoritative_receipt(first_ack)
+	check("pruned old authoritative receipt fails closed after later state", not old_receipt_after_advance.passed and old_receipt_after_advance.errors.has("missing_prepared_transaction"))
+	var old_commit_after_advance := engine.commit_transform("tx-001", "framework_anchor_seed_to_foundation", "anchor-A", inventory)
+	check("pruned old commit cannot resubmit debit after later state", not old_commit_after_advance.passed and not old_commit_after_advance.get("submit_debit_transaction", false))
 
 	var crash_engine := Transform.new()
 	crash_engine.configure_from_file()
@@ -128,7 +142,7 @@ func run() -> void:
 	check("crash restore loads same recipes", crash_restored.configure_from_file())
 	check("crash restore imports pending transaction", crash_restored.import_component_state(crash_snapshot))
 	var retry_after_crash := crash_restored.commit_transform("tx-crash", "framework_anchor_seed_to_foundation", "crash-anchor", inventory)
-	check("pending debit intent survives crash for idempotent resubmission", retry_after_crash.passed and retry_after_crash.replayed and retry_after_crash.submit_debit_transaction, retry_after_crash)
+	check("pending debit intent survives crash for idempotent resubmission", retry_after_crash.passed and retry_after_crash.replayed and retry_after_crash.submit_debit_transaction and retry_after_crash.authority_transaction_key == crash_intent.authority_transaction_key, retry_after_crash)
 	check("crash restore still does not advance before authority", crash_restored.descriptor().targets["crash-anchor"].state == "seed")
 	var accepted_after_crash := crash_restored.accept_authoritative_receipt(simulation_ack(crash_intent))
 	check("authoritative receipt closes recovered pending transaction", accepted_after_crash.passed and accepted_after_crash.applied and crash_restored.descriptor().targets["crash-anchor"].state == "foundation")
@@ -139,7 +153,7 @@ func run() -> void:
 	check("completed component state imports after reload", restored.import_component_state(exported))
 	check("component recovery preserves exact completed state", restored.export_component_state() == exported)
 	var replay_after_reload := restored.commit_transform("tx-002", "framework_anchor_foundation_to_reinforced", "anchor-A", inventory, ["harvesting_online"])
-	check("completed receipt replay protection survives reload", replay_after_reload.passed and replay_after_reload.replayed and not replay_after_reload.submit_debit_transaction)
+	check("latest completed receipt replay protection survives reload", replay_after_reload.passed and replay_after_reload.replayed and not replay_after_reload.submit_debit_transaction)
 	var before_bad_import := restored.export_component_state()
 	var malformed := before_bad_import.duplicate(true)
 	malformed["schema_version"] = 999
@@ -174,9 +188,18 @@ func run() -> void:
 	var negative_debit := before_bad_import.duplicate(true)
 	negative_debit.receipts["tx-002"].debits["wood"] = -1
 	expect_import_rejected("receipt with negative debit is rejected", before_bad_import, negative_debit)
+	var forged_key := before_bad_import.duplicate(true)
+	forged_key.receipts["tx-002"].authority_transaction_key = "forged-key"
+	expect_import_rejected("receipt with forged authority idempotency key is rejected", before_bad_import, forged_key)
 	var overlap := crash_snapshot.duplicate(true)
 	overlap.receipts["tx-crash"] = overlap.prepared["tx-crash"].duplicate(true)
 	expect_import_rejected("same transaction cannot be pending and completed", crash_snapshot, overlap)
+	var duplicate_receipt_target := before_bad_import.duplicate(true)
+	var duplicate_receipt := duplicate_receipt_target.receipts["tx-002"].duplicate(true)
+	duplicate_receipt.transaction_id = "duplicate-latest"
+	duplicate_receipt.authority_transaction_key = "T10|%s|revision:%d" % [duplicate_receipt.request_identity, int(duplicate_receipt.target_revision)]
+	duplicate_receipt_target.receipts["duplicate-latest"] = duplicate_receipt
+	expect_import_rejected("component state cannot retain two completed receipts for one target", before_bad_import, duplicate_receipt_target)
 
 	var view_contract := TransformView.contract()
 	check("view lifecycle contains all frozen states", view_contract.lifecycle == ["locked", "ready", "preview", "committing", "complete"])
@@ -210,6 +233,63 @@ func run() -> void:
 	check("identical authoritative receipts produce identical accepted receipts", accepted_a == accepted_b)
 	check("identical authoritative receipts produce identical completed component state", deterministic_a.export_component_state() == deterministic_b.export_component_state())
 
+	# R12 repeated preview and rejected-commit stress must create no history growth.
+	var bounded := Transform.new()
+	check("bounded-history stress engine loads recipes", bounded.configure_from_file())
+	check("bounded-history stress target registers", bounded.register_target("bounded", "seed"))
+	var bounded_before := bounded.export_component_state()
+	var preview_started := Time.get_ticks_usec()
+	var preview_stress_ok := true
+	for iteration in PREVIEW_STRESS_ITERATIONS:
+		var repeated := bounded.preview_transform("framework_anchor_seed_to_foundation", "bounded", inventory)
+		preview_stress_ok = preview_stress_ok and repeated.passed
+	var preview_elapsed_ms := float(Time.get_ticks_usec() - preview_started) / 1000.0
+	check("5000 repeated previews all succeed", preview_stress_ok)
+	check("repeated previews create zero component history growth", bounded.export_component_state() == bounded_before)
+	var reject_started := Time.get_ticks_usec()
+	var reject_stress_ok := true
+	for iteration in REJECT_STRESS_ITERATIONS:
+		var rejected := bounded.commit_transform("reject-%d" % iteration, "framework_anchor_seed_to_foundation", "bounded", {"wood": 0, "stone": 0})
+		reject_stress_ok = reject_stress_ok and not rejected.passed and not rejected.get("submit_debit_transaction", false)
+	var reject_elapsed_ms := float(Time.get_ticks_usec() - reject_started) / 1000.0
+	check("5000 rejected commits all fail closed", reject_stress_ok)
+	check("rejected commits create zero prepared/receipt history", bounded.descriptor().prepared_count == 0 and bounded.descriptor().receipt_count == 0 and bounded.export_component_state() == bounded_before)
+	check("preview/reject stress stays inside conservative prebuild ceiling", preview_elapsed_ms + reject_elapsed_ms <= STRESS_TIME_BUDGET_MS, {"preview_ms": preview_elapsed_ms, "reject_ms": reject_elapsed_ms, "budget_ms": STRESS_TIME_BUDGET_MS})
+
+	# R10/R12 branching + many-recipe catalog fixture without shipping T11 content.
+	var catalog_rows: Array = []
+	for index in CATALOG_STRESS_RECIPES:
+		catalog_rows.append({
+			"recipe_id": "bulk-%03d" % index,
+			"source_state": "bulk-source-%03d" % index,
+			"target_state": "bulk-target-%03d" % index,
+			"costs": [{"resource_id": "wood", "quantity": 1 + index % 3}],
+			"prerequisites": [],
+			"progression_tags": ["bulk-tag-%03d" % index],
+			"presentation_key": "bulk-fixture",
+		})
+	# Two explicit branches from the same neutral source prove branching semantics.
+	catalog_rows.append({"recipe_id":"branch-left","source_state":"branch-root","target_state":"branch-left-state","costs":[{"resource_id":"stone","quantity":2}],"prerequisites":[],"progression_tags":["branch-left"],"presentation_key":"branch-fixture"})
+	catalog_rows.append({"recipe_id":"branch-right","source_state":"branch-root","target_state":"branch-right-state","costs":[{"resource_id":"metal","quantity":1}],"prerequisites":[],"progression_tags":["branch-right"],"presentation_key":"branch-fixture"})
+	var catalog_engine := Transform.new()
+	var catalog_started := Time.get_ticks_usec()
+	check("258-recipe neutral stress catalog configures", catalog_engine.configure({"recipes": catalog_rows}) and catalog_engine.recipes.size() == CATALOG_STRESS_RECIPES + 2)
+	var catalog_preview_ok := true
+	for index in CATALOG_STRESS_RECIPES:
+		var target_id := "bulk-target-instance-%03d" % index
+		catalog_preview_ok = catalog_preview_ok and catalog_engine.register_target(target_id, "bulk-source-%03d" % index)
+		var bulk_preview := catalog_engine.preview_transform("bulk-%03d" % index, target_id, {"wood": 3})
+		catalog_preview_ok = catalog_preview_ok and bulk_preview.passed
+	catalog_engine.register_target("branch-A", "branch-root")
+	catalog_engine.register_target("branch-B", "branch-root")
+	var branch_left := catalog_engine.preview_transform("branch-left", "branch-A", {"stone": 2})
+	var branch_right := catalog_engine.preview_transform("branch-right", "branch-B", {"metal": 1})
+	var catalog_elapsed_ms := float(Time.get_ticks_usec() - catalog_started) / 1000.0
+	check("256 bulk recipe previews remain deterministic", catalog_preview_ok)
+	check("neutral branching recipes can diverge from one source without semantic changes", branch_left.passed and branch_right.passed and branch_left.target_state != branch_right.target_state)
+	check("large recipe catalog preview produces no receipt/prepared history", catalog_engine.descriptor().prepared_count == 0 and catalog_engine.descriptor().receipt_count == 0)
+	check("258-recipe catalog configure/preview stays bounded", catalog_elapsed_ms <= STRESS_TIME_BUDGET_MS, {"elapsed_ms": catalog_elapsed_ms, "budget_ms": STRESS_TIME_BUDGET_MS})
+
 	# Bounded stress: two complete transformations for hundreds of independent targets.
 	var stress := Transform.new()
 	check("stress engine loads recipes", stress.configure_from_file())
@@ -232,7 +312,7 @@ func run() -> void:
 	var memory_delta := maxi(0, OS.get_static_memory_usage() - memory_before)
 	var stress_descriptor := stress.descriptor()
 	check("512-target two-stage stress completes without semantic failure", stress_ok)
-	check("stress creates exact target and receipt cardinality", stress_descriptor.target_count == STRESS_TARGETS and stress_descriptor.receipt_count == STRESS_TARGETS * 2 and stress_descriptor.prepared_count == 0, stress_descriptor)
+	check("stress creates exact target cardinality with bounded latest-receipt history", stress_descriptor.target_count == STRESS_TARGETS and stress_descriptor.receipt_count == STRESS_TARGETS and stress_descriptor.prepared_count == 0 and stress_descriptor.receipt_history_bound == STRESS_TARGETS, stress_descriptor)
 	var every_reinforced := true
 	for target_id in stress_descriptor.targets:
 		every_reinforced = every_reinforced and String(stress_descriptor.targets[target_id].state) == "reinforced" and int(stress_descriptor.targets[target_id].revision) == 2
@@ -240,6 +320,7 @@ func run() -> void:
 	check("stress runtime stays inside conservative prebuild ceiling", stress_elapsed_ms <= STRESS_TIME_BUDGET_MS, {"elapsed_ms": stress_elapsed_ms, "budget_ms": STRESS_TIME_BUDGET_MS})
 	check("stress static-memory growth stays bounded", memory_delta <= STRESS_MEMORY_BUDGET_BYTES, {"memory_delta_bytes": memory_delta, "budget_bytes": STRESS_MEMORY_BUDGET_BYTES})
 	var stress_snapshot := stress.export_component_state()
+	check("stress snapshot keeps no more than one completed receipt per target", stress_snapshot.receipts.size() == STRESS_TARGETS)
 	var stress_restored := Transform.new()
 	check("stress snapshot reload configures recipes", stress_restored.configure_from_file())
 	check("stress snapshot round-trips exactly", stress_restored.import_component_state(stress_snapshot) and stress_restored.export_component_state() == stress_snapshot)
@@ -252,8 +333,15 @@ func run() -> void:
 		"check_count": checks.size(),
 		"prepared_count": engine.descriptor().prepared_count,
 		"receipt_count": engine.descriptor().receipt_count,
+		"preview_stress_iterations": PREVIEW_STRESS_ITERATIONS,
+		"reject_stress_iterations": REJECT_STRESS_ITERATIONS,
+		"catalog_stress_recipes": CATALOG_STRESS_RECIPES + 2,
+		"preview_stress_elapsed_ms": preview_elapsed_ms,
+		"reject_stress_elapsed_ms": reject_elapsed_ms,
+		"catalog_stress_elapsed_ms": catalog_elapsed_ms,
 		"stress_targets": STRESS_TARGETS,
 		"stress_transactions": STRESS_TARGETS * 2,
+		"stress_retained_receipts": stress_descriptor.receipt_count,
 		"stress_elapsed_ms": stress_elapsed_ms,
 		"stress_memory_delta_bytes": memory_delta,
 		"integration_allowed": false,
