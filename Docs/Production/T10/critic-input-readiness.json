@@ -2,11 +2,11 @@
   "schema_version": 1,
   "task_id": "T10",
   "state": "BUILT_PENDING_DEPENDENCY",
-  "candidate": "f5283f56d96af3ddad9c3adb87db286bbadb73ec",
-  "isolated_workflow_run": 35104414502,
-  "evidence_artifact": 10449387994,
-  "evidence_artifact_sha256": "61acbbe1c29a65873d8bcaa22c07228256bf6785966cf6465f50660f27d34665",
-  "evidence_artifact_bytes": 9648859,
+  "candidate": "dfda7767cf945b7e093438a1b795e14cd18bc304",
+  "isolated_workflow_run": 35106463541,
+  "evidence_artifact": 10449888887,
+  "evidence_artifact_sha256": "5e7cdc437d7f10f14a7fa90b50b610e36b19d5e90428ec6a8c9abd6cfec0c9f7",
+  "evidence_artifact_bytes": 10527040,
   "required_critics": ["C1", "C2", "C3", "C4", "C6", "C7"],
   "isolated_critic_input_ready": true,
   "production_critic_execution_allowed": false,
@@ -16,7 +16,7 @@
   "real_t09_adapter_bound": false,
   "evidence_summary": {
     "domain_checks": 154,
-    "integration_r11_checks": 60,
+    "integration_r06_r11_checks": 75,
     "baseline_lifecycle_renders": 10,
     "device_matrix_configurations": 6,
     "device_matrix_renders": 12,
@@ -33,7 +33,11 @@
     "catalog_stress_recipes": 258,
     "visual_node_budget": 4,
     "visual_build_count": 1,
-    "r01_r07_recipe_graph_hardening": true
+    "r01_r07_recipe_graph_hardening": true,
+    "r06_carried_vs_stored_delivery": true,
+    "r06_stored_only_transform_debit": true,
+    "r06_bounded_simulation_receipt_history": true,
+    "post_t09_adapter_contract_prepared": true
   },
   "coverage": {
     "C1": {
@@ -50,9 +54,9 @@
     },
     "C3": {
       "focus": "Havenline gameplay identity",
-      "isolated_inputs": ["presentation-only authority checks", "fixture simulation exact-once flow", "no T09/T08 mutation boundary"],
+      "isolated_inputs": ["presentation-only authority checks", "fixture simulation exact-once flow", "carried inventory versus delivered stored-resource separation", "stored-only transform debit", "no T09/T08 mutation boundary"],
       "input_ready": true,
-      "production_review_blocked_by": ["real T09/T08 authority binding", "impacted gameplay regression"]
+      "production_review_blocked_by": ["real T09/T08/simulation authority binding", "impacted gameplay regression"]
     },
     "C4": {
       "focus": "gameplay UX and readability",
@@ -62,13 +66,13 @@
     },
     "C6": {
       "focus": "performance and bounded growth",
-      "isolated_inputs": ["512 targets/1024 transforms", "5000 previews", "5000 rejected commits", "258 recipes", "bounded receipt history", "zero visual-node growth"],
+      "isolated_inputs": ["512 targets/1024 transforms", "5000 previews", "5000 rejected commits", "258 recipes", "bounded T10 receipt history", "bounded simulation authority receipt history by target", "zero visual-node growth"],
       "input_ready": true,
       "production_review_blocked_by": ["post-integration performance regression", "physical-device certification remains T68/T69"]
     },
     "C7": {
       "focus": "progression/state integrity",
-      "isolated_inputs": ["branching recipe coverage", "prerequisite enforcement", "stale/out-of-order rejection", "exact snapshot/recovery", "malformed/duplicate recipe rejection", "undeclared cycle rejection", "reciprocal reversible/inverse execution"],
+      "isolated_inputs": ["branching recipe coverage", "prerequisite enforcement", "stale/out-of-order rejection", "exact snapshot/recovery", "malformed/duplicate recipe rejection", "undeclared cycle rejection", "reciprocal reversible/inverse execution", "stale lower-revision authority rejection"],
       "input_ready": true,
       "production_review_blocked_by": ["real integrated progression inputs after T09"]
     }
@@ -76,14 +80,16 @@
   "remaining_integration_blockers": [
     "T09 APPROVED and integrated",
     "reconcile T10 onto exact post-T09 integration head",
-    "bind real approved T09/T08 authority interface",
+    "integration owner applies prepared simulation.stored authoritative debit adapter",
+    "bind real approved T09/T08/simulation authority interface",
     "rerun impacted T01-T09 regression and affected captures",
     "execute required C1/C2/C3/C4/C6/C7 production reviews with every mandatory dimension >9.0 unrounded"
   ],
   "notes": [
     "This packet proves critic input readiness only. It is not a critic result and contains no critic score.",
     "The native 4K evidence is software-rendered isolated functional/evidence validation; physical-device performance certification remains T68/T69.",
-    "The real T09 adapter is intentionally not certified by this isolated packet."
+    "The real T09 adapter is intentionally not certified by this isolated packet.",
+    "The isolated R06 fixture now mirrors the shipping carried inventory versus delivered stored-resource ownership split and requires T10 to debit stored only."
   ],
   "passed": true
 }
