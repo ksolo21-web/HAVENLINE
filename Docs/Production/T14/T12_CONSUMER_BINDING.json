@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "consumer_task": "T14",
+  "contract_path": "Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json",
+  "prepared_contract_git_blob_sha": "46d8c6c265f7c17922ec9fdc8a9c52ef924b0882",
+  "may_read": ["progression_snapshot", "completed_level_ids", "completed_milestone_ids"],
+  "must_not_require_from_T12": ["global save version", "migration orchestration", "cloud identity", "rollback policy"],
+  "boundary": "T12 supplies stable IDs and deterministic component-local state; T14 owns global persistence/versioning/migration.",
+  "activation_rule": "Fail closed if the current T12 downstream consumer contract blob or T14 consumer row differs; reconcile through a structured interface/change request before activation."
+}
