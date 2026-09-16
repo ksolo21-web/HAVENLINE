@@ -94,7 +94,10 @@ func configure_camera(frame := 0) -> void:
 	var angle := TAU * float(angle_index) / 8.0
 	var distance := 8.0 if mode == "device" else 5.6
 	var orbit_direction := (-forward*cos(angle)+right*sin(angle)).normalized()
-	if mode == "sequence": orbit_direction = (-forward+right*0.72).normalized()
+	if mode in ["sequence","device"]:
+		# Read the complete hand-handle-source line in profile; rear framing lets
+		# the actor's head and torso hide the grip through most of the swing.
+		orbit_direction = (right-forward*0.20).normalized()
 	var offset := orbit_direction*distance+Vector3.UP*(4.0 if mode == "device" else 3.2)
 	game.camera.keep_aspect = Camera3D.KEEP_HEIGHT
 	if mode == "sequence":
