@@ -27,17 +27,61 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Compile T12 activation preflight
-        run: python -m py_compile tools/havenline/task12/prepare_activation.py
+      - name: Compile T12 preparation tools
+        run: |
+          python -m py_compile tools/havenline/task12/prepare_activation.py
+          python -m py_compile tools/havenline/task12/validate_progression_contract.py
+          python -m py_compile tools/havenline/task12/validate_level_matrix.py
+          python -m py_compile tools/havenline/task12/verify_binding_resolution.py
+          python -m py_compile tools/havenline/task12/validate_runtime_interface.py
+          python -m py_compile tools/havenline/task12/validate_traceability.py
+          python -m py_compile tools/havenline/task12/validate_downstream_contract.py
 
       - name: Validate T12 JSON artifacts
         run: |
           python -m json.tool Docs/Production/T12/ACTIVATION_CHECKLIST.json >/dev/null
           python -m json.tool Docs/Production/T12/PREBUILD_CONTRACT.json >/dev/null
+          python -m json.tool Docs/Production/T12/UPSTREAM_BINDINGS.json >/dev/null
+          python -m json.tool Docs/Production/T12/LEVEL_1_100_MATRIX.json >/dev/null
+          python -m json.tool Docs/Production/T12/BINDING_RESOLUTION_TEMPLATE.json >/dev/null
+          python -m json.tool Docs/Production/T12/RUNTIME_INTERFACE_CONTRACT.json >/dev/null
+          python -m json.tool Docs/Production/T12/ACCEPTANCE_TRACEABILITY.json >/dev/null
+          python -m json.tool Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json >/dev/null
           python -m json.tool Docs/Production/T12/defect-ledger.json >/dev/null
 
       - name: Validate T12 preparation contract
         run: python tools/havenline/task12/prepare_activation.py
+
+      - name: Validate concrete non-shipping Level 1-100 matrix
+        run: python tools/havenline/task12/validate_level_matrix.py
+
+      - name: Verify upstream resolution remains blank before activation
+        run: python tools/havenline/task12/verify_binding_resolution.py
+
+      - name: Validate prepared T12 runtime interface and authority boundaries
+        run: python tools/havenline/task12/validate_runtime_interface.py
+
+      - name: Validate R01-R16 acceptance traceability coverage
+        run: python tools/havenline/task12/validate_traceability.py
+
+      - name: Validate downstream consumer boundaries
+        run: python tools/havenline/task12/validate_downstream_contract.py
+
+      - name: Run T12 progression/preparation unit tests
+        run: python -m unittest discover -s tools/havenline/task12/tests -p 'test_*.py' -v
+
+      - name: Prove activation fails closed while T10 or T11 is unfinished
+        shell: bash
+        run: |
+          set +e
+          python tools/havenline/task12/prepare_activation.py --activate --base "$(git rev-parse HEAD)" > /tmp/t12-activation.json 2>&1
+          status=$?
+          cat /tmp/t12-activation.json
+          if [ "$status" -eq 0 ]; then
+            echo "ERROR: T12 activation unexpectedly passed before all dependencies are approved/integrated."
+            exit 1
+          fi
+          grep -Eq 'T10|T11|dependency' /tmp/t12-activation.json
 
       - name: Confirm shipping T12 runtime is still absent
         run: |
