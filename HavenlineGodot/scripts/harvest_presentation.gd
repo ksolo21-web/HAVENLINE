@@ -181,6 +181,14 @@ func bind_actor(actor: Node3D) -> bool:
 	bound_actor = actor
 	return is_instance_valid(contact_node(actor,"C1RightHandContact")) and is_instance_valid(contact_node(actor,"C1LeftHandContact"))
 
+func prepare_actor_contact(actor: Node3D) -> bool:
+	# Sample attachment transforms from the animation pose, never from the arm
+	# overrides left by the previous harvest frame or committed impact.
+	if not bind_actor(actor):
+		return false
+	_clear_grip_pose()
+	return true
+
 func _bound_skeleton() -> Skeleton3D:
 	if not is_instance_valid(bound_actor) or not bound_actor.has_meta("t06_motion_skeleton"):
 		return null

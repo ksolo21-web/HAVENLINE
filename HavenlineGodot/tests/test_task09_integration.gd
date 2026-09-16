@@ -109,29 +109,30 @@ func run() -> void:
 	game.set_process(false)
 	game.set_physics_process(false)
 	var shipping_source: Dictionary = game.sim.resources[0]
-	shipping_source.units = 1
+	shipping_source.units = 2
 	game.sim.position = shipping_source.position + Vector2(0.0,1.0)
 	game.sim.velocity = Vector2.ZERO
-	game.sim.action = {
-		"kind":"gather", "id":String(shipping_source.id), "position":shipping_source.position,
-		"action_token":1, "progress":0.99, "role":"player_lead", "actionable":true,
-	}
-	game._process(1.0 / 60.0)
 	var shipping_impacts_before := int(game.harvest_presentation.descriptor().accepted_impacts)
 	var shipping_receipts_before := int(game.transfer_feedback.descriptor().accepted_receipts)
 	var shipping_inventory_before := int(game.sim.inventory.wood)
-	game.sim.events.clear()
-	game.sim.perform_action(0.60)
-	game.sim.elapsed += 0.60
-	game.present_events()
-	game._process(1.0 / 60.0)
+	for commit_index in 2:
+		game.sim.action = {
+			"kind":"gather", "id":String(shipping_source.id), "position":shipping_source.position,
+			"action_token":commit_index+1, "progress":0.99, "role":"player_lead", "actionable":true,
+		}
+		game._process(1.0 / 60.0)
+		game.sim.events.clear()
+		game.sim.perform_action(0.60)
+		game.sim.elapsed += 0.60
+		game.present_events()
+		game._process(1.0 / 60.0)
 	var shipping_harvest: Dictionary = game.harvest_presentation.descriptor()
 	var shipping_transfer: Dictionary = game.transfer_feedback.descriptor()
-	check("shipping simulation commits exactly one wood unit", int(shipping_source.units) == 0 and int(game.sim.inventory.wood) == shipping_inventory_before + 1)
-	check("shipping commit drives one T09 impact and one T08 transfer", shipping_harvest.accepted_impacts == shipping_impacts_before+1 and shipping_transfer.accepted_receipts == shipping_receipts_before+1,[shipping_harvest,shipping_transfer])
+	check("shipping simulation commits two consecutive wood units", int(shipping_source.units) == 0 and int(game.sim.inventory.wood) == shipping_inventory_before + 2)
+	check("back-to-back shipping commits each drive one T09 impact and T08 transfer", shipping_harvest.accepted_impacts == shipping_impacts_before+2 and shipping_transfer.accepted_receipts == shipping_receipts_before+2,[shipping_harvest,shipping_transfer])
 	check("shipping depletion hides the bound source", not game.resource_visuals[shipping_source.id].visible)
 	game.present_events()
-	check("shipping event epoch cannot replay either presentation", game.harvest_presentation.descriptor().accepted_impacts == shipping_impacts_before+1 and game.transfer_feedback.descriptor().accepted_receipts == shipping_receipts_before+1)
+	check("shipping event epoch cannot replay either presentation", game.harvest_presentation.descriptor().accepted_impacts == shipping_impacts_before+2 and game.transfer_feedback.descriptor().accepted_receipts == shipping_receipts_before+2)
 	shipping_source.units = int(game.sim.tuning.woodUnitsPerNode)
 	shipping_source.respawn = 0.0
 	game._process(1.0 / 60.0)

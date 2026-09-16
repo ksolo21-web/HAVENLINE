@@ -475,7 +475,7 @@ func present_events():
 			if event.type == "gather" and is_instance_valid(harvest_presentation):
 				var harvest_action := HarvestPresentation.canonical_action(sim.action)
 				var profile := HarvestPresentation.profile_for_resource(kind)
-				harvest_presentation.bind_actor(player_rig)
+				harvest_presentation.prepare_actor_contact(player_rig)
 				var contact := HarvestPresentation.contact_node(player_rig,String(profile.get("contact_marker", "")))
 				if not harvest_action.is_empty() and String(harvest_action.resource) == kind and is_instance_valid(contact):
 					var contact_transform := HarvestPresentation.attachment_transform(player_rig,profile)
@@ -716,7 +716,7 @@ func _process(dt: float):
 	animate(player_rig, sim.velocity.length(), dt, player_action, "player_lead")
 	if not harvest_action.is_empty() and bool(harvest_action.actionable):
 		var harvest_profile := HarvestPresentation.profile_for_resource(String(harvest_action.resource))
-		harvest_presentation.bind_actor(player_rig)
+		harvest_presentation.prepare_actor_contact(player_rig)
 		var harvest_contact := HarvestPresentation.contact_node(player_rig,String(harvest_profile.get("contact_marker", "")))
 		if is_instance_valid(harvest_contact):
 			if harvest_presentation.begin_action(harvest_action,sim.lead):
