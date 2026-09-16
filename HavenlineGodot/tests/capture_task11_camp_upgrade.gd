@@ -213,7 +213,7 @@ func setup_world() -> bool:
 	boundary_view.name = "ApprovedT03BoundaryContext"
 	world.add_child(boundary_view)
 	boundary_view.configure(self)
-	if boundary_view.descriptor.get("visual_collision_share_panel_authority") is not true:
+	if not bool(boundary_view.descriptor.get("visual_collision_share_panel_authority", false)):
 		capture_errors.append("t03_boundary_authority_mismatch")
 	scale_actor = build_scale_actor()
 	view = View.new()
