@@ -35,6 +35,17 @@
     "HavenlineGodot/scripts/main.gd",
     "HavenlineGodot/scripts/simulation.gd"
   ],
+  "prepared_support_artifacts": [
+    "Docs/Production/T11/FROZEN_SCOPE.md",
+    "Docs/Production/T11/TASK_PACKET.md",
+    "Docs/Production/T11/PREBUILD_CONTRACT.json",
+    "Docs/Production/T11/T05_REUSE_BINDINGS.json",
+    "Docs/Production/T11/defect-ledger.json",
+    "tools/havenline/task11/prepare_activation.py",
+    "tools/havenline/task11/validate_camp_construction.py",
+    "tools/havenline/task11/tests/test_preparation.py",
+    "tools/havenline/task11/tests/test_t05_bindings.py"
+  ],
   "required_critics": ["C2", "C3", "C4", "C6"],
   "acceptance": {
     "operator": ">",
@@ -48,6 +59,7 @@
     "Verify T05 and T10 are APPROVED in dependency graph, workstream registry and task gates.",
     "Verify the current integration head contains the accepted T10 completion/integration record.",
     "Verify T10 is no longer listed as an active owner before T11 activation.",
+    "Reconcile PREBUILD_CONTRACT/TASK_PACKET assumptions against the exact accepted T10 public interface and completion source.",
     "Run tools/havenline/task11/prepare_activation.py --activate --base <current-integration-head>.",
     "Apply the emitted @reservation:T11 PATH_OWNERSHIP patch through the integration owner.",
     "Claim T11 with workstream.py as ASSIGNED using the exact current integration head and @reservation:T11.",
@@ -61,6 +73,7 @@
   "notes": [
     "T11 governance/tooling preparation may continue while T09/T10 runtime work is unfinished; shipping T11 runtime/assets remain dependency-gated.",
     "T11 consumes the T10 public transform contract and may not change its transaction semantics.",
+    "T11 direct approved T05 bindings are hearth_vessel, pad_build and pad_upgrade; T05 source bytes remain immutable from T11.",
     "T11 must not invent shipping camp prices from unrelated video labels or historical costs.",
     "T12/T13 own progression/difficulty, T14 owns global persistence, T15+ own customer/production/combat/defense systems."
   ]
