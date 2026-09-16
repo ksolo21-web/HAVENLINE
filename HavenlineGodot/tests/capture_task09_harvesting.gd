@@ -452,6 +452,8 @@ func run() -> void:
 	game.set_physics_process(false)
 	game.harvest_presentation.set_process(false)
 	game.transfer_feedback.set_process(false)
+	# Discard incidental startup presentation before measuring this isolated source.
+	game.harvest_presentation.reset()
 	for candidate_source in game.sim.resources:
 		if String(candidate_source.kind) == resource_kind:
 			source = candidate_source

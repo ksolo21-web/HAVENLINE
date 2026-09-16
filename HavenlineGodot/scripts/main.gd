@@ -479,7 +479,8 @@ func present_events():
 				var contact := HarvestPresentation.contact_node(player_rig,String(profile.get("contact_marker", "")))
 				if not harvest_action.is_empty() and String(harvest_action.resource) == kind and is_instance_valid(contact):
 					var contact_transform := HarvestPresentation.attachment_transform(player_rig,profile)
-					var harvest_target := HarvestPresentation.contact_target(target,contact_transform,profile)
+					var source_visual: Node3D = resource_visuals.get(String(harvest_action.source_id))
+					var harvest_target := HarvestPresentation.source_contact_target(source_visual,contact_transform,profile,player_rig.global_position)
 					harvest_presentation.synchronize_committed_contact(harvest_action,contact_transform,harvest_target,actor_id)
 					harvest_presentation.accept_committed_impact({
 						"committed":true, "resource":kind, "source_id":String(harvest_action.source_id),
@@ -720,9 +721,9 @@ func _process(dt: float):
 		var harvest_contact := HarvestPresentation.contact_node(player_rig,String(harvest_profile.get("contact_marker", "")))
 		if is_instance_valid(harvest_contact):
 			if harvest_presentation.begin_action(harvest_action,sim.lead):
-				var source_center := xyz(sim.action.position) + Vector3(0,.75,0)
 				var harvest_contact_transform := HarvestPresentation.attachment_transform(player_rig,harvest_profile)
-				var harvest_target := HarvestPresentation.contact_target(source_center,harvest_contact_transform,harvest_profile)
+				var source_visual: Node3D = resource_visuals.get(String(harvest_action.source_id))
+				var harvest_target := HarvestPresentation.source_contact_target(source_visual,harvest_contact_transform,harvest_profile,player_rig.global_position)
 				harvest_presentation.update_action(harvest_action,harvest_contact_transform,harvest_target,player_rig.visible and (sim.presented_actor_ids.is_empty() or sim.lead in sim.presented_actor_ids))
 	else:
 		harvest_presentation.cancel(String(sim.action.get("reason", "context_inactive")))

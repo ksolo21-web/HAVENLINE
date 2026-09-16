@@ -55,39 +55,40 @@ def _wedge(builder, material, center, width, height, depth, reverse=False):
 
 def build_axe():
     b = MeshBuilder("t09_harvest_axe")
-    b.cylinder("wood_light", (0.0, 0.02, 0.0), 0.055, 1.18, 14)
-    b.cylinder("wood", (0.0, -0.43, 0.0), 0.069, 0.30, 14)
-    b.cylinder("blue", (0.0, -0.29, 0.0), 0.073, 0.045, 14)
-    b.cylinder("metal", (0.0, 0.56, 0.0), 0.115, 0.22, 16, rotation=(0.0, 0.0, math.pi / 2.0))
-    _wedge(b, "metal", (0.25, 0.56, 0.0), 0.50, 0.38, 0.12)
-    b.beveled_box("orange", (-0.14, 0.56, 0.0), (0.13, 0.22, 0.14), 0.025)
-    b.beveled_box("cyan", (0.24, 0.56, 0.061), (0.31, 0.035, 0.018), 0.006)
+    b.cylinder("wood_light", (0.0, -0.08, 0.0), 0.055, 0.70, 14)
+    b.cylinder("wood", (0.0, -0.35, 0.0), 0.069, 0.18, 14)
+    b.cylinder("orange", (0.0, -0.10, 0.0), 0.071, 0.10, 14)
+    b.cylinder("blue", (0.0, -0.26, 0.0), 0.073, 0.10, 14)
+    b.cylinder("metal", (0.0, 0.13, 0.0), 0.095, 0.16, 16, rotation=(0.0, 0.0, math.pi / 2.0))
+    _wedge(b, "metal", (0.17, 0.13, 0.0), 0.28, 0.25, 0.12)
+    b.beveled_box("orange", (-0.10, 0.13, 0.0), (0.10, 0.16, 0.14), 0.025)
+    b.beveled_box("cyan", (0.18, 0.13, 0.061), (0.20, 0.035, 0.018), 0.006)
     return b
 
 
 def build_pickaxe():
     b = MeshBuilder("t09_harvest_pickaxe")
-    b.cylinder("wood_light", (0.0, -0.02, 0.0), 0.052, 1.24, 14)
-    b.cylinder("wood", (0.0, -0.47, 0.0), 0.068, 0.27, 14)
-    b.cylinder("orange", (0.0, -0.33, 0.0), 0.072, 0.045, 14)
-    b.beveled_box("metal", (0.0, 0.59, 0.0), (0.34, 0.18, 0.16), 0.035)
-    b.cylinder("metal", (-0.31, 0.59, 0.0), 0.115, 0.52, 16, rotation=(0.0, 0.0, math.pi / 2.0), top_radius=0.018)
-    b.cylinder("metal", (0.31, 0.59, 0.0), 0.018, 0.52, 16, rotation=(0.0, 0.0, math.pi / 2.0), top_radius=0.115)
-    b.beveled_box("blue", (0.0, 0.59, 0.085), (0.23, 0.07, 0.025), 0.008)
-    b.beveled_box("cyan", (0.0, 0.59, -0.085), (0.23, 0.07, 0.025), 0.008)
+    b.cylinder("wood_light", (0.0, -0.08, 0.0), 0.052, 0.78, 14)
+    b.cylinder("wood", (0.0, -0.39, 0.0), 0.068, 0.20, 14)
+    b.cylinder("orange", (0.0, -0.08, 0.0), 0.072, 0.10, 14)
+    b.cylinder("blue", (0.0, -0.24, 0.0), 0.072, 0.10, 14)
+    b.beveled_box("metal", (0.0, 0.14, 0.0), (0.20, 0.15, 0.16), 0.035)
+    b.cylinder("metal", (-0.19, 0.14, 0.0), 0.09, 0.28, 16, rotation=(0.0, 0.0, math.pi / 2.0), top_radius=0.018)
+    b.cylinder("metal", (0.19, 0.14, 0.0), 0.018, 0.28, 16, rotation=(0.0, 0.0, math.pi / 2.0), top_radius=0.09)
+    b.beveled_box("cyan", (0.0, 0.14, -0.085), (0.16, 0.05, 0.025), 0.008)
     return b
 
 
 def build_salvage_pry_tool():
     b = MeshBuilder("t09_harvest_salvage_pry")
-    b.cylinder("metal", (0.0, 0.05, 0.0), 0.045, 1.02, 14)
-    b.cylinder("orange", (0.0, -0.31, 0.0), 0.072, 0.34, 16)
-    b.cylinder("dark", (0.0, -0.49, 0.0), 0.078, 0.055, 16)
-    b.cylinder("blue", (0.0, -0.13, 0.0), 0.074, 0.05, 16)
-    b.rod_between("metal", (0.0, 0.55, 0.0), (0.16, 0.69, 0.0), 0.048, 14)
-    b.rod_between("metal", (0.16, 0.69, 0.0), (0.28, 0.63, 0.0), 0.048, 14)
-    _wedge(b, "metal", (0.33, 0.61, 0.0), 0.20, 0.18, 0.095)
-    b.beveled_box("cyan", (0.17, 0.69, 0.052), (0.16, 0.035, 0.018), 0.006)
+    b.cylinder("metal", (0.0, -0.01, 0.0), 0.045, 0.82, 14)
+    b.cylinder("orange", (0.0, -0.20, 0.0), 0.086, 0.36, 16)
+    b.cylinder("dark", (0.0, -0.40, 0.0), 0.078, 0.055, 16)
+    b.cylinder("blue", (0.0, -0.01, 0.0), 0.074, 0.05, 16)
+    b.rod_between("metal", (0.0, 0.38, 0.0), (0.11, 0.46, 0.0), 0.048, 14)
+    b.rod_between("metal", (0.11, 0.46, 0.0), (0.22, 0.43, 0.0), 0.048, 14)
+    _wedge(b, "metal", (0.25, 0.43, 0.0), 0.13, 0.14, 0.095)
+    b.beveled_box("cyan", (0.12, 0.46, 0.052), (0.13, 0.035, 0.018), 0.006)
     return b
 
 
@@ -98,9 +99,9 @@ TOOLS = {
         "action": "chop",
         "animation_profile": "human_player_chop",
         "contact_marker": "C1TwoHandContact",
-        "grip_socket": [0.0, -0.30, 0.0],
-        "second_hand_socket": [0.0, -0.20, 0.0],
-        "impact_socket": [0.46, 0.56, 0.0],
+        "grip_socket": [0.0, -0.10, 0.0],
+        "second_hand_socket": [0.0, -0.26, 0.0],
+        "impact_socket": [0.29, 0.13, 0.0],
     },
     "pickaxe": {
         "builder": build_pickaxe,
@@ -108,9 +109,9 @@ TOOLS = {
         "action": "mine",
         "animation_profile": "human_player_mine",
         "contact_marker": "C1TwoHandContact",
-        "grip_socket": [0.0, -0.14, 0.0],
-        "second_hand_socket": [0.0, -0.32, 0.0],
-        "impact_socket": [0.57, 0.59, 0.0],
+        "grip_socket": [0.0, -0.08, 0.0],
+        "second_hand_socket": [0.0, -0.24, 0.0],
+        "impact_socket": [0.28, 0.14, 0.0],
     },
     "salvage_pry_tool": {
         "builder": build_salvage_pry_tool,
@@ -118,9 +119,9 @@ TOOLS = {
         "action": "dismantle",
         "animation_profile": "human_player_dismantle",
         "contact_marker": "C1RightHandContact",
-        "grip_socket": [0.0, -0.10, 0.0],
+        "grip_socket": [0.0, -0.20, 0.0],
         "second_hand_socket": [],
-        "impact_socket": [0.42, 0.61, 0.0],
+        "impact_socket": [0.28, 0.43, 0.0],
     },
 }
 
