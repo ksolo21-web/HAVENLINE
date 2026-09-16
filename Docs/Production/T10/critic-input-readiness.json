@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "state": "BUILT_PENDING_DEPENDENCY",
+  "candidate": "f5283f56d96af3ddad9c3adb87db286bbadb73ec",
+  "isolated_workflow_run": 35104414502,
+  "evidence_artifact": 10449387994,
+  "evidence_artifact_sha256": "61acbbe1c29a65873d8bcaa22c07228256bf6785966cf6465f50660f27d34665",
+  "evidence_artifact_bytes": 9648859,
+  "required_critics": ["C1", "C2", "C3", "C4", "C6", "C7"],
+  "isolated_critic_input_ready": true,
+  "production_critic_execution_allowed": false,
+  "critic_scores_recorded": false,
+  "integration_allowed": false,
+  "task_approved": false,
+  "real_t09_adapter_bound": false,
+  "evidence_summary": {
+    "domain_checks": 154,
+    "integration_r11_checks": 60,
+    "baseline_lifecycle_renders": 10,
+    "device_matrix_configurations": 6,
+    "device_matrix_renders": 12,
+    "native_scale1_resolution": [3840, 2160],
+    "native_scale1_renders": 30,
+    "native_scale1_unique_renders": 30,
+    "native_states": ["ready", "blocked", "preview", "committing", "complete"],
+    "native_cameras": ["front", "side", "three-quarter", "overhead", "gameplay", "detail"],
+    "stress_targets": 512,
+    "stress_transactions": 1024,
+    "retained_receipts": 512,
+    "preview_stress_iterations": 5000,
+    "rejected_commit_stress_iterations": 5000,
+    "catalog_stress_recipes": 258,
+    "visual_node_budget": 4,
+    "visual_build_count": 1,
+    "r01_r07_recipe_graph_hardening": true
+  },
+  "coverage": {
+    "C1": {
+      "focus": "reference/world-response fidelity",
+      "isolated_inputs": ["30-frame native-4K multi-angle lifecycle set", "gameplay/overhead/side/three-quarter/detail coverage", "neutral T11-safe fixture"],
+      "input_ready": true,
+      "production_review_blocked_by": ["real post-T09 integrated candidate", "final integration provenance"]
+    },
+    "C2": {
+      "focus": "technical and visual integrity",
+      "isolated_inputs": ["native-4K multi-angle set", "10-frame baseline set", "4-node/1-build presentation bound", "cross-state deterministic manifest"],
+      "input_ready": true,
+      "production_review_blocked_by": ["post-T09 recapture if integration changes affected visuals"]
+    },
+    "C3": {
+      "focus": "Havenline gameplay identity",
+      "isolated_inputs": ["presentation-only authority checks", "fixture simulation exact-once flow", "no T09/T08 mutation boundary"],
+      "input_ready": true,
+      "production_review_blocked_by": ["real T09/T08 authority binding", "impacted gameplay regression"]
+    },
+    "C4": {
+      "focus": "gameplay UX and readability",
+      "isolated_inputs": ["blocked/ready/preview/committing/complete states", "exact blocked reasons/shortfalls", "6-device/12-frame layout matrix", "native-4K gameplay/detail views"],
+      "input_ready": true,
+      "production_review_blocked_by": ["post-T09 integrated gameplay capture"]
+    },
+    "C6": {
+      "focus": "performance and bounded growth",
+      "isolated_inputs": ["512 targets/1024 transforms", "5000 previews", "5000 rejected commits", "258 recipes", "bounded receipt history", "zero visual-node growth"],
+      "input_ready": true,
+      "production_review_blocked_by": ["post-integration performance regression", "physical-device certification remains T68/T69"]
+    },
+    "C7": {
+      "focus": "progression/state integrity",
+      "isolated_inputs": ["branching recipe coverage", "prerequisite enforcement", "stale/out-of-order rejection", "exact snapshot/recovery", "malformed/duplicate recipe rejection", "undeclared cycle rejection", "reciprocal reversible/inverse execution"],
+      "input_ready": true,
+      "production_review_blocked_by": ["real integrated progression inputs after T09"]
+    }
+  },
+  "remaining_integration_blockers": [
+    "T09 APPROVED and integrated",
+    "reconcile T10 onto exact post-T09 integration head",
+    "bind real approved T09/T08 authority interface",
+    "rerun impacted T01-T09 regression and affected captures",
+    "execute required C1/C2/C3/C4/C6/C7 production reviews with every mandatory dimension >9.0 unrounded"
+  ],
+  "notes": [
+    "This packet proves critic input readiness only. It is not a critic result and contains no critic score.",
+    "The native 4K evidence is software-rendered isolated functional/evidence validation; physical-device performance certification remains T68/T69.",
+    "The real T09 adapter is intentionally not certified by this isolated packet."
+  ],
+  "passed": true
+}
