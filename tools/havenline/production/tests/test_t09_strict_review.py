@@ -13,6 +13,7 @@ C2 = ROOT / "tools/havenline/production/t09_c2_visual_review.py"
 C6 = ROOT / "tools/havenline/production/t09_c6_performance_review.py"
 INPUT_BUILDER = ROOT / "tools/havenline/production/t09_build_specialist_input.py"
 CLOSEOUT = ROOT / "tools/havenline/production/t09_closeout_preflight.py"
+STAGE_READY = ROOT / "tools/havenline/production/t09_stage_integration_ready.py"
 OWNERSHIP = ROOT / "Docs/Production/PATH_OWNERSHIP.json"
 SOURCE = "da52ff403cb766308e8f5112f04a0e7d2c7dec16"
 RUN_ID = "35134329102"
@@ -75,6 +76,21 @@ class T09StrictReviewGovernanceTests(unittest.TestCase):
         self.assertIn('validate-candidate', text)
         self.assertNotIn('set-status', text)
         self.assertNotIn('"APPROVED"', text)
+
+    def test_integration_ready_staging_is_fail_closed_and_not_approval(self) -> None:
+        text = STAGE_READY.read_text()
+        self.assertIn('"target_state": "INTEGRATION_READY"', text)
+        self.assertIn('"approved_state_allowed": False', text)
+        self.assertIn('"runtime_merge_performed": False', text)
+        self.assertIn('"approval_mutation_performed": False', text)
+        self.assertIn('value != "ASSIGNED"', text)
+        self.assertIn('value != "INTEGRATION_READY"', text)
+        self.assertIn('if args.write:', text)
+        self.assertIn('validate-registry', text)
+        self.assertIn('validate_migration.py', text)
+        self.assertNotIn('"status"] = "APPROVED"', text)
+        self.assertNotIn('approved_tasks"].append', text)
+        self.assertNotIn('completed_task_records"]["T09"', text)
 
     def test_c6_accepts_exact_limits_and_rejects_regression(self) -> None:
         good = {
