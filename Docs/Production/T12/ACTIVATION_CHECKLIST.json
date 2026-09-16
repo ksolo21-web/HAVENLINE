@@ -47,6 +47,8 @@
     "Docs/Production/T12/RUNTIME_INTERFACE_CONTRACT.json",
     "Docs/Production/T12/ACCEPTANCE_TRACEABILITY.json",
     "Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json",
+    "Docs/Production/T12/PROGRESSION_DATA_SCHEMA.json",
+    "Docs/Production/T12/PREBUILD_PERFORMANCE_BUDGET.json",
     "Docs/Production/T12/REVIEW_EVIDENCE_PLAN.md",
     "Docs/Production/T12/ACTIVATION_HANDOFF.md",
     "Docs/Production/T12/defect-ledger.json",
@@ -57,11 +59,15 @@
     "tools/havenline/task12/validate_runtime_interface.py",
     "tools/havenline/task12/validate_traceability.py",
     "tools/havenline/task12/validate_downstream_contract.py",
+    "tools/havenline/task12/validate_data_schema.py",
+    "tools/havenline/task12/fuzz_progression_contract.py",
+    "tools/havenline/task12/benchmark_prebuild_validators.py",
     "tools/havenline/task12/tests/test_progression_contract.py",
     "tools/havenline/task12/tests/test_level_matrix.py",
     "tools/havenline/task12/tests/test_runtime_interface.py",
     "tools/havenline/task12/tests/test_traceability.py",
     "tools/havenline/task12/tests/test_downstream_contract.py",
+    "tools/havenline/task12/tests/test_data_schema.py",
     ".github/workflows/havenline-task12-prep.yml"
   ],
   "required_critics": ["C2", "C3", "C4", "C6", "C7"],
@@ -84,6 +90,9 @@
     "Run python tools/havenline/task12/validate_runtime_interface.py and require PASS so T12-owned API/authority boundaries remain frozen.",
     "Run python tools/havenline/task12/validate_traceability.py and require PASS so every T12-R01..R16 requirement retains tests/evidence/critic coverage.",
     "Run python tools/havenline/task12/validate_downstream_contract.py and require PASS so T13/T14/T32/T44-T52/T62 consumer boundaries remain frozen.",
+    "Run python tools/havenline/task12/validate_data_schema.py and require PASS so future shipping progression/milestone structure and authority boundaries remain frozen.",
+    "Run python tools/havenline/task12/fuzz_progression_contract.py and require PASS so representative malformed progressions continue failing closed.",
+    "Run python tools/havenline/task12/benchmark_prebuild_validators.py and require PASS as a preparation-tooling hygiene check only; this never substitutes for shipping C6.",
     "Run python -m unittest discover -s tools/havenline/task12/tests -p 'test_*.py' -v and require PASS.",
     "Run tools/havenline/task12/prepare_activation.py --activate --base <current-integration-head>.",
     "Apply the emitted @reservation:T12 PATH_OWNERSHIP patch through the integration owner.",
@@ -102,6 +111,7 @@
     "T12 may consume T10/T11 public transform/camp-state IDs after approval but may not change their transaction or content semantics.",
     "T14 owns global persistence/versioning; T33+ own economy/monetization; T44-T52 own authored connected-region content.",
     "Parallel production is allowed only with disjoint path ownership; integration remains serial and integration-owner controlled.",
-    "The non-shipping cadence blueprint, concrete 100-level matrix, runtime interface contract, downstream consumer contract, exact-binding template, acceptance traceability and validators/tests are preparation accelerators, not evidence that T12 production implementation has started."
+    "The non-shipping cadence blueprint, concrete 100-level matrix, runtime interface contract, downstream consumer contract, progression-data schema, exact-binding template, acceptance traceability, fuzz/performance hardening and validators/tests are preparation accelerators, not evidence that T12 production implementation has started.",
+    "PREBUILD_PERFORMANCE_BUDGET.json governs preparation tooling only; final C6 remains mandatory against the activated shipping candidate/integrated artifact."
   ]
 }
