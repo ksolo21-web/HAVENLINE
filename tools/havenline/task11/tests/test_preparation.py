@@ -35,18 +35,20 @@ def run(*args: str):
 
 
 class T11PreparationTests(unittest.TestCase):
-    def test_default_preparation_validation_passes(self):
+    def test_default_build_pending_preparation_validation_passes(self):
         proc = run()
         self.assertEqual(proc.returncode, 0, proc.stdout + proc.stderr)
         payload = json.loads(proc.stdout)
         self.assertTrue(payload["passed"])
-        self.assertFalse(payload["runtime_build_allowed"])
+        self.assertTrue(payload["isolated_build_allowed"])
+        self.assertEqual(payload["maximum_pre_dependency_state"], "BUILT_PENDING_DEPENDENCY")
+        self.assertFalse(payload["final_integration_allowed"])
         self.assertEqual(payload["required_critics"], ["C2", "C3", "C4", "C6"])
 
-    def test_activation_fails_closed_while_t10_unapproved(self):
+    def test_final_promotion_fails_closed_while_t10_unapproved(self):
         head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
         proc = run("--activate", "--base", head)
-        self.assertNotEqual(proc.returncode, 0, "T11 activation unexpectedly passed before T10 approval")
+        self.assertNotEqual(proc.returncode, 0, "T11 final promotion unexpectedly passed before T10 approval")
         payload = json.loads(proc.stdout)
         self.assertFalse(payload["passed"])
         joined = "\n".join(payload["errors"])
@@ -65,6 +67,9 @@ class T11PreparationTests(unittest.TestCase):
         self.assertEqual(contract["task_id"], "T11")
         self.assertEqual(contract["dependency_gate"]["required_approved"], ["T05", "T10"])
         self.assertFalse(contract["dependency_gate"]["runtime_allowed_before_gate"])
+        self.assertTrue(checklist["build_pending_policy"]["isolated_build_allowed_before_t10_approval"])
+        self.assertEqual(checklist["build_pending_policy"]["maximum_state_before_t10_approval"], "BUILT_PENDING_DEPENDENCY")
+        self.assertFalse(checklist["build_pending_policy"]["may_claim_integration_ready"])
         self.assertEqual(
             contract["authoritative_sources"]["reference_b_sha256"],
             "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
@@ -86,7 +91,6 @@ class T11PreparationTests(unittest.TestCase):
         self.assertIn("price_source", rule)
         self.assertIn("tuning_record", rule)
         self.assertIn("may not be generalized", rule)
-        self.assertTrue(contract["explicitly_not_implemented_during_prep"])
         self.assertIn("shipping prices", contract["explicitly_not_implemented_during_prep"])
 
     def test_t11_planned_paths_do_not_overlap_t10_or_integration_only(self):
@@ -110,7 +114,7 @@ class T11PreparationTests(unittest.TestCase):
         runtime = [path for path in changed if path.startswith("HavenlineGodot/")]
         self.assertEqual(runtime, [], runtime)
 
-    def test_defect_ledger_is_truthful_about_current_blocker(self):
+    def test_defect_ledger_is_truthful_about_dependency_blocker(self):
         ledger = load(DEFECTS)
         self.assertFalse(ledger["internal_review"]["task_approval_claimed"])
         self.assertEqual(ledger["mandatory_prep_defects"], [])
