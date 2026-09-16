@@ -12,15 +12,23 @@ import argparse
 import json
 import pathlib
 import subprocess
+import sys
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 DOCS = ROOT / "Docs" / "Production"
-CHECKLIST_PATH = DOCS / "T12" / "ACTIVATION_CHECKLIST.json"
+T12_DOCS = DOCS / "T12"
+CHECKLIST_PATH = T12_DOCS / "ACTIVATION_CHECKLIST.json"
 GRAPH_PATH = DOCS / "DEPENDENCY_GRAPH.json"
 REGISTRY_PATH = DOCS / "WORKSTREAM_REGISTRY.json"
 OWNERSHIP_PATH = DOCS / "PATH_OWNERSHIP.json"
 CRITICS_PATH = DOCS / "CRITIC_MATRIX.json"
 GATES_PATH = DOCS / "task-gates.json"
+MATRIX_PATH = T12_DOCS / "LEVEL_1_100_MATRIX.json"
+RESOLUTION_TEMPLATE_PATH = T12_DOCS / "BINDING_RESOLUTION_TEMPLATE.json"
+RESOLUTION_PATH = T12_DOCS / "BINDING_RESOLUTION.json"
+MATRIX_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_level_matrix.py"
+BINDING_VERIFIER = ROOT / "tools" / "havenline" / "task12" / "verify_binding_resolution.py"
+PROGRESSION_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_progression_contract.py"
 
 
 def load(path: pathlib.Path):
@@ -54,6 +62,18 @@ def registry_status(registry, task_id: str):
         return "APPROVED"
     row = next((x for x in registry.get("workstreams", []) if x.get("task_id") == task_id), None)
     return (row or {}).get("status")
+
+
+def run_read_only_tool(args: list[str]) -> tuple[bool, str]:
+    proc = subprocess.run(
+        [sys.executable, *args],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    return proc.returncode == 0, proc.stdout.strip()
 
 
 def validate_preparation():
@@ -123,15 +143,41 @@ def validate_preparation():
         errors.append("planned T12 reservation collides with T11: " + json.dumps(t11_collisions))
 
     required = [
-        DOCS / "T12" / "FROZEN_SCOPE.md",
-        DOCS / "T12" / "TASK_PACKET.md",
-        DOCS / "T12" / "PREBUILD_CONTRACT.json",
-        DOCS / "T12" / "defect-ledger.json",
+        T12_DOCS / "FROZEN_SCOPE.md",
+        T12_DOCS / "TASK_PACKET.md",
+        T12_DOCS / "PREBUILD_CONTRACT.json",
+        T12_DOCS / "UPSTREAM_BINDINGS.json",
+        T12_DOCS / "LEVEL_CADENCE_BLUEPRINT.md",
+        MATRIX_PATH,
+        RESOLUTION_TEMPLATE_PATH,
+        T12_DOCS / "REVIEW_EVIDENCE_PLAN.md",
+        T12_DOCS / "defect-ledger.json",
         CHECKLIST_PATH,
+        MATRIX_VALIDATOR,
+        BINDING_VERIFIER,
+        PROGRESSION_VALIDATOR,
+        ROOT / "tools" / "havenline" / "task12" / "tests" / "test_progression_contract.py",
+        ROOT / "tools" / "havenline" / "task12" / "tests" / "test_level_matrix.py",
+        ROOT / ".github" / "workflows" / "havenline-task12-prep.yml",
     ]
     for path in required:
         if not path.exists() or not path.read_text().strip():
             errors.append(f"missing/empty preparation artifact: {path.relative_to(ROOT)}")
+
+    matrix_passed = False
+    resolution_blank_passed = False
+    if MATRIX_VALIDATOR.exists() and MATRIX_PATH.exists():
+        matrix_passed, output = run_read_only_tool([str(MATRIX_VALIDATOR), "--input", str(MATRIX_PATH)])
+        if not matrix_passed:
+            errors.append("non-shipping Level 1-100 matrix validation failed: " + output)
+    if BINDING_VERIFIER.exists() and RESOLUTION_TEMPLATE_PATH.exists():
+        resolution_blank_passed, output = run_read_only_tool([
+            str(BINDING_VERIFIER),
+            "--resolution",
+            str(RESOLUTION_TEMPLATE_PATH),
+        ])
+        if not resolution_blank_passed:
+            errors.append("pre-activation T10/T11 binding template guard failed: " + output)
 
     shipping_paths = [
         ROOT / "HavenlineGodot" / "scripts" / "progression_architecture.gd",
@@ -158,6 +204,8 @@ def validate_preparation():
         "integration_only_collision_count": len(collisions),
         "active_ownership_collision_count": len(active_collisions),
         "t11_collision_count": len(t11_collisions),
+        "level_matrix_validation_passed": matrix_passed,
+        "blank_binding_resolution_guard_passed": resolution_blank_passed,
         "required_critics": expected_critics,
         "runtime_build_allowed": False,
         "passed": not errors,
@@ -203,6 +251,23 @@ def validate_activation(base: str):
     if graph.get("tasks", {}).get("T12", {}).get("status") not in ("LOCKED", "PREPARED"):
         errors.append(f"unexpected pre-activation T12 graph state: {graph.get('tasks', {}).get('T12', {}).get('status')}")
 
+    binding_resolution_passed = False
+    if not RESOLUTION_PATH.exists():
+        errors.append("T10/T11 exact binding reconciliation is missing: Docs/Production/T12/BINDING_RESOLUTION.json")
+    else:
+        binding_resolution_passed, output = run_read_only_tool([
+            str(BINDING_VERIFIER),
+            "--resolution",
+            str(RESOLUTION_PATH),
+            "--require-resolved",
+        ])
+        if not binding_resolution_passed:
+            errors.append("T10/T11 exact binding reconciliation failed: " + output)
+
+    matrix_passed, matrix_output = run_read_only_tool([str(MATRIX_VALIDATOR), "--input", str(MATRIX_PATH)])
+    if not matrix_passed:
+        errors.append("activation-time Level 1-100 matrix revalidation failed: " + matrix_output)
+
     return {
         "task_id": "T12",
         "mode": "activation-preflight",
@@ -212,6 +277,8 @@ def validate_activation(base: str):
         "future_branch": checklist["future_builder_branch"],
         "owner": checklist["future_owner"],
         "owned_alias": checklist["planned_owned_alias"],
+        "level_matrix_validation_passed": matrix_passed,
+        "binding_resolution_passed": binding_resolution_passed,
         "reservation_patch": {
             "alias": checklist["planned_owned_alias"],
             "paths": checklist["planned_owned_paths"]
