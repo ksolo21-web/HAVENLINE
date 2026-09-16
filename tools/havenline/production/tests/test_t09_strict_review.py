@@ -11,6 +11,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[4]
 WORKFLOW = ROOT / ".github/workflows/havenline-task09-review.yml"
 C2 = ROOT / "tools/havenline/production/t09_c2_visual_review.py"
 C6 = ROOT / "tools/havenline/production/t09_c6_performance_review.py"
+INPUT_BUILDER = ROOT / "tools/havenline/production/t09_build_specialist_input.py"
 OWNERSHIP = ROOT / "Docs/Production/PATH_OWNERSHIP.json"
 SOURCE = "da52ff403cb766308e8f5112f04a0e7d2c7dec16"
 RUN_ID = "35134329102"
@@ -28,6 +29,8 @@ class T09StrictReviewGovernanceTests(unittest.TestCase):
         self.assertIn("all(float(score)>9.0", text)
         self.assertIn("row['defects']==[]", text)
         self.assertIn("task_approved':False", text)
+        self.assertIn("c5_full_cycle_groups", text)
+        self.assertIn("len(cycle_groups)>=15", text)
 
     def test_review_workflow_is_qa_governance_owned(self) -> None:
         ownership = json.loads(OWNERSHIP.read_text())
@@ -46,6 +49,16 @@ class T09StrictReviewGovernanceTests(unittest.TestCase):
         self.assertIn("not defects", text)
         self.assertIn("blind-vision-probe", text)
         self.assertIn("local-checksum-pinned-public-model", text)
+
+    def test_c5_builder_uses_every_contiguous_frame_and_respects_group_limit(self) -> None:
+        text = INPUT_BUILDER.read_text()
+        self.assertIn('for resource in ("wood", "stone", "fuel")', text)
+        self.assertIn('if len(frames) < 80', text)
+        self.assertIn('if actual != expected', text)
+        self.assertIn('for index, source in enumerate(frames)', text)
+        self.assertIn('index // 18 + 1', text)
+        self.assertIn('"c5_uses_every_captured_frame": True', text)
+        self.assertIn('> 18', text)
 
     def test_c6_accepts_exact_limits_and_rejects_regression(self) -> None:
         good = {
