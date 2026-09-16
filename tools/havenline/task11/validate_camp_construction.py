@@ -20,6 +20,8 @@ VIEW = ROOT / "HavenlineGodot" / "scripts" / "camp_construction_view.gd"
 RECIPES = ROOT / "HavenlineGodot" / "data" / "camp_upgrade_recipes.json"
 MANIFEST = ROOT / "HavenlineGodot" / "assets" / "camp_upgrades_v1" / "manifest.json"
 WORKFLOOR = ROOT / "HavenlineGodot" / "assets" / "camp_upgrades_v1" / "camp_workfloor.obj"
+CANOPY = ROOT / "HavenlineGodot" / "assets" / "camp_upgrades_v1" / "camp_canopy.obj"
+CANOPY_MTL = ROOT / "HavenlineGodot" / "assets" / "camp_upgrades_v1" / "camp_canopy.mtl"
 STAGES = [
     ROOT / "HavenlineGodot" / "assets" / "camp_upgrades_v1" / "site_unbuilt.tscn",
     ROOT / "HavenlineGodot" / "assets" / "camp_upgrades_v1" / "camp_initial.tscn",
@@ -77,6 +79,16 @@ FORBIDDEN_VIEW_MUTATORS = (
     "commit_camp_upgrade",
 )
 REQUIRED_STAGES = {"site_unbuilt", "camp_initial", "camp_upgraded_01"}
+REQUIRED_UPGRADE_NODES = {
+    "UpgradeCanopyWest",
+    "UpgradeCanopyEast",
+    "UpgradeLanternNW",
+    "UpgradeLanternNE",
+    "UpgradeLanternSW",
+    "UpgradeLanternSE",
+    "UpgradeTimberWest",
+    "UpgradeTimberEast",
+}
 
 
 def emit(payload, output: pathlib.Path | None):
@@ -100,7 +112,7 @@ def main():
     output = pathlib.Path(args.output) if args.output else None
 
     errors: list[str] = []
-    required = [SCRIPT, VIEW, RECIPES, MANIFEST, WORKFLOOR, *STAGES, TEST_DOMAIN, TEST_INTEGRATION, CAPTURE]
+    required = [SCRIPT, VIEW, RECIPES, MANIFEST, WORKFLOOR, CANOPY, CANOPY_MTL, *STAGES, TEST_DOMAIN, TEST_INTEGRATION, CAPTURE]
     for path in required:
         if not path.exists() or not path.read_text().strip():
             errors.append(f"missing or empty required T11 file: {path.relative_to(ROOT)}")
@@ -220,12 +232,21 @@ def main():
         errors.append("manifest must preserve T03 perimeter authority")
     if manifest.get("content_boundaries", {}).get("shipping_prices_included") is not False:
         errors.append("build-pending manifest may not claim shipping prices")
+    canopy_row = manifest.get("authored_assets", {}).get("counter_canopy", {})
+    if canopy_row.get("mesh") != "res://assets/camp_upgrades_v1/camp_canopy.obj":
+        errors.append("manifest must lock the T11-authored counter canopy mesh")
+    if canopy_row.get("shipping_behavior") is not False:
+        errors.append("counter canopy must remain presentation-only in T11")
     for state, row in stages.items():
         scene_path = row.get("scene")
         if not isinstance(scene_path, str) or not scene_path.startswith("res://assets/camp_upgrades_v1/"):
             errors.append(f"stage {state} must use a T11-owned scene")
+    upgrade_nodes = set(stages.get("camp_upgraded_01", {}).get("required_visible_upgrade_nodes", []))
+    if upgrade_nodes != REQUIRED_UPGRADE_NODES:
+        errors.append(f"camp_upgraded_01 visible nodes must equal {sorted(REQUIRED_UPGRADE_NODES)}, got {sorted(upgrade_nodes)}")
 
     stage_text = "\n".join(path.read_text() for path in STAGES)
+    upgraded_text = STAGES[-1].read_text()
     if "defense_platform.glb" in stage_text:
         errors.append("T11 may not pre-spawn T22 defense platform")
     if "barricade.glb" in stage_text:
@@ -235,6 +256,11 @@ def main():
             errors.append(f"authored T11 stages missing required approved T05 asset: {required_asset}")
     if "WarmWorkFloor" not in stage_text:
         errors.append("constructed T11 stages must include authored warm work floor")
+    if "camp_canopy.obj" not in upgraded_text:
+        errors.append("first visible upgrade must include authored canopy geometry")
+    for node in REQUIRED_UPGRADE_NODES:
+        if f'name="{node}"' not in upgraded_text:
+            errors.append(f"first visible upgrade missing required authored node: {node}")
 
     if errors:
         fail(errors, output, args.candidate)
@@ -248,6 +274,7 @@ def main():
         "test_only_recipe_count": test_only_count,
         "camp_state_ids": sorted(seen_states),
         "authored_stage_ids": sorted(stages),
+        "required_visible_upgrade_nodes": sorted(REQUIRED_UPGRADE_NODES),
         "required_file_count": len(required),
         "required_files": [str(p.relative_to(ROOT)) for p in required],
         "domain_contract_markers": list(REQUIRED_DOMAIN_MARKERS),
