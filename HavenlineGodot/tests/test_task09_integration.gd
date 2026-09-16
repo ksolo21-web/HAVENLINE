@@ -122,13 +122,20 @@ func run() -> void:
 	check("shipping respawn restores the same bound source", game.resource_visuals[shipping_source.id].visible)
 	if is_instance_valid(game.outpost_audio):
 		game.outpost_audio.stop_all()
+	game.harvest_presentation.reset()
 	game.free()
+	await process_frame
+	var standalone_transfer_count: int = int(transfer.descriptor().active_flights)
+	harvest.reset()
+	harvest.free()
+	transfer.free()
+	source_visual.free()
 	await process_frame
 
 	print(JSON.stringify({
 		"suite":"T09_harvesting_integration", "checks":checks,
 		"failures":failures, "passed":failures.is_empty(),
-		"t08_active_transfers":transfer.descriptor().active_flights,
+		"t08_active_transfers":standalone_transfer_count,
 		"independent_critic":false, "physical_4k60_verified":false,
 	}))
 	quit(0 if failures.is_empty() else 1)
