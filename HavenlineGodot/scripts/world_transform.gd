@@ -2,9 +2,9 @@ class_name HavenlineWorldTransform
 extends RefCounted
 
 ## T10 dependency-independent transformation core.
-## Resource quantities remain simulation-owned. This framework produces exact,
-## deterministic debit intents and owns only transform target state + receipt
-## replay protection. Integration with T09/T08 happens after T09 is approved.
+## Resource quantities remain simulation-owned. This framework prepares exact,
+## deterministic debit transactions and advances transform state only after an
+## authoritative simulation receipt confirms that the debit committed.
 
 const AUTHORITY_ID := "T10-world-transform-v1"
 const RECIPE_PATH := "res://data/world_transform_recipes.json"
@@ -14,6 +14,7 @@ const COMPONENT_SCHEMA_VERSION := 1
 
 var recipes: Dictionary = {}
 var targets: Dictionary = {}
+var prepared: Dictionary = {}
 var receipts: Dictionary = {}
 
 static func contract() -> Dictionary:
@@ -23,6 +24,8 @@ static func contract() -> Dictionary:
 		"resource_ids": RESOURCE_IDS.duplicate(),
 		"simulation_owns_resource_counts": true,
 		"preview_is_pure": true,
+		"commit_prepares_idempotent_debit_transaction": true,
+		"state_advances_only_after_authoritative_receipt": true,
 		"exactly_once_transaction_receipts": true,
 		"presentation_may_not_grant_resources": true,
 		"global_save_versioning_owned_by_t14": true,
@@ -182,22 +185,29 @@ func preview_transform(recipe_id: String, target_id: String, inventory: Dictiona
 static func _request_identity(recipe_id: String, target_id: String, source_state: String, target_state: String) -> String:
 	return "%s|%s|%s|%s" % [recipe_id, target_id, source_state, target_state]
 
+func _collision_or_replay(transaction_id: String, recipe_id: String, target_id: String, table: Dictionary, completed: bool) -> Dictionary:
+	if transaction_id not in table:
+		return {}
+	var existing: Dictionary = table[transaction_id]
+	var identity := _request_identity(recipe_id, target_id, String(existing.get("source_state", "")), String(existing.get("target_state", "")))
+	if identity != String(existing.get("request_identity", "")):
+		return {"passed": false, "errors": ["transaction_id_collision"], "replayed": false, "submit_debit_transaction": false}
+	var replay := existing.duplicate(true)
+	replay["passed"] = true
+	replay["replayed"] = true
+	replay["submit_debit_transaction"] = not completed
+	replay["authoritative_applied"] = completed
+	return replay
+
 func commit_transform(transaction_id: String, recipe_id: String, target_id: String, inventory: Dictionary, available_prerequisites: Array = []) -> Dictionary:
 	if transaction_id.is_empty():
-		return {"passed": false, "errors": ["invalid_transaction_id"], "apply_debits": false, "replayed": false}
-	if transaction_id in receipts:
-		var existing: Dictionary = receipts[transaction_id]
-		var recipe := _recipe(recipe_id)
-		var source_state := String(existing.get("source_state", ""))
-		var target_state := String(existing.get("target_state", ""))
-		var identity := _request_identity(recipe_id, target_id, source_state, target_state)
-		if recipe.is_empty() or identity != String(existing.get("request_identity", "")):
-			return {"passed": false, "errors": ["transaction_id_collision"], "apply_debits": false, "replayed": false}
-		var replay := existing.duplicate(true)
-		replay["passed"] = true
-		replay["replayed"] = true
-		replay["apply_debits"] = false
-		return replay
+		return {"passed": false, "errors": ["invalid_transaction_id"], "submit_debit_transaction": false, "replayed": false}
+	var completed := _collision_or_replay(transaction_id, recipe_id, target_id, receipts, true)
+	if not completed.is_empty():
+		return completed
+	var pending := _collision_or_replay(transaction_id, recipe_id, target_id, prepared, false)
+	if not pending.is_empty():
+		return pending
 
 	var preview := preview_transform(recipe_id, target_id, inventory, available_prerequisites)
 	if not bool(preview.passed):
@@ -205,13 +215,11 @@ func commit_transform(transaction_id: String, recipe_id: String, target_id: Stri
 			"passed": false,
 			"errors": preview.errors.duplicate(),
 			"shortfalls": preview.shortfalls.duplicate(true),
-			"apply_debits": false,
+			"submit_debit_transaction": false,
 			"replayed": false,
 		}
 
-	var target: Dictionary = targets[target_id]
-	var next_revision := int(target.revision) + 1
-	var receipt := {
+	var intent := {
 		"transaction_id": transaction_id,
 		"request_identity": _request_identity(recipe_id, target_id, String(preview.source_state), String(preview.target_state)),
 		"recipe_id": recipe_id,
@@ -221,35 +229,16 @@ func commit_transform(transaction_id: String, recipe_id: String, target_id: Stri
 		"debits": preview.costs.duplicate(true),
 		"progression_tags": preview.progression_tags.duplicate(),
 		"presentation_key": String(preview.presentation_key),
-		"target_revision": next_revision,
+		"target_revision": int(preview.target_revision) + 1,
 		"passed": true,
 		"replayed": false,
-		"apply_debits": true,
+		"submit_debit_transaction": true,
+		"authoritative_applied": false,
 	}
-	target["state"] = String(preview.target_state)
-	target["revision"] = next_revision
-	targets[target_id] = target
-	receipts[transaction_id] = receipt.duplicate(true)
-	return receipt
+	prepared[transaction_id] = intent.duplicate(true)
+	return intent
 
-func export_component_state() -> Dictionary:
-	return {
-		"schema_version": COMPONENT_SCHEMA_VERSION,
-		"authority_id": AUTHORITY_ID,
-		"targets": targets.duplicate(true),
-		"receipts": receipts.duplicate(true),
-	}
-
-static func _valid_target_row(row: Variant) -> bool:
-	if not (row is Dictionary):
-		return false
-	if String(row.get("state", "")).is_empty():
-		return false
-	if not _valid_nonnegative_integer(row.get("revision", null)):
-		return false
-	return _duplicate_free_strings(row.get("progression_tags", []))
-
-static func _valid_receipt_row(transaction_id: String, row: Variant) -> bool:
+static func _valid_transaction_row(transaction_id: String, row: Variant) -> bool:
 	if transaction_id.is_empty() or not (row is Dictionary):
 		return false
 	if String(row.get("transaction_id", "")) != transaction_id:
@@ -267,20 +256,84 @@ static func _valid_receipt_row(transaction_id: String, row: Variant) -> bool:
 			return false
 	return _duplicate_free_strings(row.get("progression_tags", []))
 
+func accept_authoritative_receipt(receipt: Dictionary) -> Dictionary:
+	var transaction_id := String(receipt.get("transaction_id", ""))
+	if transaction_id.is_empty() or not bool(receipt.get("authority_applied", false)) or String(receipt.get("authority_source", "")) != "simulation":
+		return {"passed": false, "errors": ["invalid_authoritative_receipt"], "applied": false, "replayed": false}
+	if transaction_id in receipts:
+		var existing: Dictionary = receipts[transaction_id]
+		if String(existing.get("request_identity", "")) != String(receipt.get("request_identity", "")):
+			return {"passed": false, "errors": ["transaction_id_collision"], "applied": false, "replayed": false}
+		return {"passed": true, "errors": [], "applied": false, "replayed": true, "transaction_id": transaction_id}
+	if not _valid_transaction_row(transaction_id, receipt):
+		return {"passed": false, "errors": ["malformed_authoritative_receipt"], "applied": false, "replayed": false}
+
+	var recipe := _recipe(String(receipt.recipe_id))
+	var target := _target(String(receipt.target_id))
+	if recipe.is_empty() or target.is_empty():
+		return {"passed": false, "errors": ["unknown_recipe_or_target"], "applied": false, "replayed": false}
+	var expected_identity := _request_identity(String(receipt.recipe_id), String(receipt.target_id), String(recipe.source_state), String(recipe.target_state))
+	if String(receipt.request_identity) != expected_identity:
+		return {"passed": false, "errors": ["receipt_identity_mismatch"], "applied": false, "replayed": false}
+	if receipt.debits != recipe.normalized_costs:
+		return {"passed": false, "errors": ["receipt_debit_mismatch"], "applied": false, "replayed": false}
+	if String(target.state) != String(recipe.source_state) or int(receipt.target_revision) != int(target.revision) + 1:
+		return {"passed": false, "errors": ["receipt_state_mismatch"], "applied": false, "replayed": false}
+	if transaction_id in prepared and String(prepared[transaction_id].request_identity) != String(receipt.request_identity):
+		return {"passed": false, "errors": ["prepared_receipt_collision"], "applied": false, "replayed": false}
+
+	target["state"] = String(recipe.target_state)
+	target["revision"] = int(receipt.target_revision)
+	targets[String(receipt.target_id)] = target
+	var canonical := receipt.duplicate(true)
+	canonical["submit_debit_transaction"] = false
+	canonical["authoritative_applied"] = true
+	receipts[transaction_id] = canonical
+	prepared.erase(transaction_id)
+	return {"passed": true, "errors": [], "applied": true, "replayed": false, "transaction_id": transaction_id, "target_revision": int(target.revision), "target_state": String(target.state)}
+
+func export_component_state() -> Dictionary:
+	return {
+		"schema_version": COMPONENT_SCHEMA_VERSION,
+		"authority_id": AUTHORITY_ID,
+		"targets": targets.duplicate(true),
+		"prepared": prepared.duplicate(true),
+		"receipts": receipts.duplicate(true),
+	}
+
+static func _valid_target_row(row: Variant) -> bool:
+	if not (row is Dictionary):
+		return false
+	if String(row.get("state", "")).is_empty():
+		return false
+	if not _valid_nonnegative_integer(row.get("revision", null)):
+		return false
+	return _duplicate_free_strings(row.get("progression_tags", []))
+
 func import_component_state(state: Dictionary) -> bool:
 	if int(state.get("schema_version", -1)) != COMPONENT_SCHEMA_VERSION:
 		return false
 	if String(state.get("authority_id", "")) != AUTHORITY_ID:
 		return false
 	var next_targets: Variant = state.get("targets")
+	var next_prepared: Variant = state.get("prepared")
 	var next_receipts: Variant = state.get("receipts")
-	if not (next_targets is Dictionary) or not (next_receipts is Dictionary):
+	if not (next_targets is Dictionary) or not (next_prepared is Dictionary) or not (next_receipts is Dictionary):
 		return false
 	for target_id in next_targets:
 		if String(target_id).is_empty() or not _valid_target_row(next_targets[target_id]):
 			return false
+	for transaction_id in next_prepared:
+		if transaction_id in next_receipts or not _valid_transaction_row(String(transaction_id), next_prepared[transaction_id]):
+			return false
+		var pending: Dictionary = next_prepared[transaction_id]
+		if String(pending.target_id) not in next_targets:
+			return false
+		var pending_target: Dictionary = next_targets[String(pending.target_id)]
+		if int(pending.target_revision) != int(pending_target.revision) + 1:
+			return false
 	for transaction_id in next_receipts:
-		if not _valid_receipt_row(String(transaction_id), next_receipts[transaction_id]):
+		if not _valid_transaction_row(String(transaction_id), next_receipts[transaction_id]):
 			return false
 		var row: Dictionary = next_receipts[transaction_id]
 		var target_id := String(row.target_id)
@@ -290,6 +343,7 @@ func import_component_state(state: Dictionary) -> bool:
 		if int(row.target_revision) > int(target.revision):
 			return false
 	targets = next_targets.duplicate(true)
+	prepared = next_prepared.duplicate(true)
 	receipts = next_receipts.duplicate(true)
 	return true
 
@@ -298,6 +352,7 @@ func descriptor() -> Dictionary:
 		"authority_id": AUTHORITY_ID,
 		"recipe_count": recipes.size(),
 		"target_count": targets.size(),
+		"prepared_count": prepared.size(),
 		"receipt_count": receipts.size(),
 		"targets": targets.duplicate(true),
 		"simulation_owns_resource_counts": true,
