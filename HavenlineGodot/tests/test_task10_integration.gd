@@ -14,13 +14,16 @@ class FakeSimulationAuthority:
 		if not bool(intent.get("passed", false)) or not bool(intent.get("submit_debit_transaction", false)):
 			return {"passed": false, "errors": ["invalid_debit_intent"]}
 		var transaction_id := String(intent.get("transaction_id", ""))
-		if transaction_id in receipts:
-			var replay: Dictionary = receipts[transaction_id].duplicate(true)
+		var authority_key := String(intent.get("authority_transaction_key", ""))
+		if transaction_id.is_empty() or authority_key.is_empty():
+			return {"passed": false, "errors": ["invalid_authority_transaction_key"]}
+		if authority_key in receipts:
+			var replay: Dictionary = receipts[authority_key].duplicate(true)
 			replay["simulation_replayed"] = true
 			return replay
 		for resource_id in intent.debits:
 			if int(inventory.get(resource_id, 0)) < int(intent.debits[resource_id]):
-				return {"passed": false, "errors": ["insufficient_authoritative_inventory"], "transaction_id": transaction_id}
+				return {"passed": false, "errors": ["insufficient_authoritative_inventory"], "transaction_id": transaction_id, "authority_transaction_key": authority_key}
 		for resource_id in intent.debits:
 			inventory[resource_id] = int(inventory.get(resource_id, 0)) - int(intent.debits[resource_id])
 		debit_count += 1
@@ -28,7 +31,7 @@ class FakeSimulationAuthority:
 		receipt["authority_source"] = "simulation"
 		receipt["authority_applied"] = true
 		receipt["simulation_replayed"] = false
-		receipts[transaction_id] = receipt.duplicate(true)
+		receipts[authority_key] = receipt.duplicate(true)
 		return receipt
 
 var checks: Array[Dictionary] = []
@@ -52,13 +55,15 @@ func run() -> void:
 	var contract := Transform.contract()
 	check("contract locks one in-flight transaction per target", contract.one_inflight_transaction_per_target)
 	check("contract requires matching prepared transaction for receipts", contract.receipt_must_match_prepared_transaction)
+	check("contract publishes request-scoped simulation idempotency key", contract.authority_idempotency_key_is_request_scoped)
+	check("contract bounds completed receipt history per target", contract.bounded_receipt_history_per_target)
 
 	var inventory := {"wood": 100, "stone": 100, "metal": 100, "fuel": 100}
 	var engine := configured_engine()
 	check("target A registers", engine.register_target("target-A", "seed"))
 	var simulation := FakeSimulationAuthority.new(inventory)
 	var first := engine.commit_transform("A-1", "framework_anchor_seed_to_foundation", "target-A", simulation.inventory)
-	check("target A prepares first debit", first.passed and first.submit_debit_transaction, first)
+	check("target A prepares first debit", first.passed and first.submit_debit_transaction and not String(first.authority_transaction_key).is_empty(), first)
 	var racing := engine.commit_transform("A-2", "framework_anchor_seed_to_foundation", "target-A", simulation.inventory)
 	check("second transaction against same target is blocked before debit", not racing.passed and racing.errors.has("target_transaction_pending") and not racing.submit_debit_transaction, racing)
 	check("blocked target race has not touched simulation", simulation.debit_count == 0 and simulation.inventory == inventory)
@@ -69,7 +74,7 @@ func run() -> void:
 	check("T10 accepts matching authoritative receipt", accepted.passed and accepted.applied and accepted.accepted_by_world_transform, accepted)
 	check("target A advances after authoritative debit", engine.descriptor().targets["target-A"].state == "foundation" and engine.descriptor().targets["target-A"].revision == 1)
 	var simulation_replay := simulation.submit(first)
-	check("simulation retry is idempotent and cannot debit twice", simulation_replay.simulation_replayed and simulation.debit_count == 1 and simulation.inventory.wood == 92 and simulation.inventory.stone == 96)
+	check("simulation retry uses authority key and cannot debit twice", simulation_replay.simulation_replayed and simulation.debit_count == 1 and simulation.inventory.wood == 92 and simulation.inventory.stone == 96)
 	var t10_replay := engine.accept_authoritative_receipt(simulation_replay)
 	check("T10 duplicate receipt is idempotent", t10_replay.passed and t10_replay.replayed and not t10_replay.applied)
 
@@ -114,7 +119,7 @@ func run() -> void:
 	check("restored T10 accepts already-applied simulation receipt without resubmitting debit", post_crash_accept.passed and post_crash_accept.applied and crash_sim.debit_count == 1)
 	check("restored target D advances exactly once", restored.descriptor().targets["target-D"].state == "foundation" and restored.descriptor().targets["target-D"].revision == 1)
 	var post_crash_sim_retry := crash_sim.submit(crash_intent)
-	check("simulation also replays crash-window transaction without second debit", post_crash_sim_retry.simulation_replayed and crash_sim.debit_count == 1)
+	check("simulation also replays crash-window authority key without second debit", post_crash_sim_retry.simulation_replayed and crash_sim.debit_count == 1)
 
 	# Different targets may be in-flight together and receipts may return out of order.
 	var multi := configured_engine()
@@ -123,7 +128,7 @@ func run() -> void:
 	var multi_sim := FakeSimulationAuthority.new(inventory)
 	var e_intent := multi.commit_transform("E-1", "framework_anchor_seed_to_foundation", "target-E", multi_sim.inventory)
 	var f_intent := multi.commit_transform("F-1", "framework_anchor_seed_to_foundation", "target-F", multi_sim.inventory)
-	check("different targets can prepare concurrently", e_intent.passed and f_intent.passed and multi.descriptor().prepared_count == 2)
+	check("different targets can prepare concurrently", e_intent.passed and f_intent.passed and multi.descriptor().prepared_count == 2 and e_intent.authority_transaction_key != f_intent.authority_transaction_key)
 	var e_ack := multi_sim.submit(e_intent)
 	var f_ack := multi_sim.submit(f_intent)
 	var f_first := multi.accept_authoritative_receipt(f_ack)
@@ -131,12 +136,15 @@ func run() -> void:
 	var e_second := multi.accept_authoritative_receipt(e_ack)
 	check("target E later receipt still commits independently", e_second.passed and e_second.applied and multi.descriptor().targets["target-E"].state == "foundation")
 	check("multi-target authoritative debit count is exact", multi_sim.debit_count == 2)
+	check("completed receipt history remains one per completed target", multi.descriptor().receipt_count == 2 and multi.descriptor().receipt_count <= multi.descriptor().receipt_history_bound)
 
 	# Persisted state may never contain two pending transactions for one target.
 	var malicious := multi.export_component_state()
+	var malicious_identity := "framework_anchor_foundation_to_reinforced|target-E|foundation|reinforced"
 	malicious.prepared["evil-1"] = {
 		"transaction_id": "evil-1",
-		"request_identity": "framework_anchor_foundation_to_reinforced|target-E|foundation|reinforced",
+		"authority_transaction_key": "T10|%s|revision:2" % malicious_identity,
+		"request_identity": malicious_identity,
 		"recipe_id": "framework_anchor_foundation_to_reinforced",
 		"target_id": "target-E",
 		"source_state": "foundation",
@@ -161,6 +169,8 @@ func run() -> void:
 		"failures": failures,
 		"passed": failures.is_empty(),
 		"check_count": checks.size(),
+		"simulation_uses_authority_transaction_key": true,
+		"bounded_completed_history": true,
 		"real_t09_adapter_bound": false,
 		"fixture_simulation_only": true,
 		"integration_allowed": false,
