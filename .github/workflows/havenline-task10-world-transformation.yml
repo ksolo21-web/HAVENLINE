@@ -110,7 +110,31 @@ jobs:
           python3 tools/havenline/bake_outpost_audio.py > task10-evidence/tests/audio-fixture.json
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task10-evidence/tests/import.log 2>&1
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task10-evidence/tests/motion-fixture.log 2>&1
-          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_outpost_runtime test_adaptive_devices test_task06_character1 test_task07_context_director test_task07_integration test_task08_inventory test_task08_integration test_task09_harvesting test_task09_integration test_task10_world_transform test_task10_integration; do
+
+          suites=(
+            test_simulation
+            test_crew_and_persistence
+            test_motion_and_performance
+            test_outpost_runtime
+            test_adaptive_devices
+            test_task06_character1
+            test_task07_context_director
+            test_task07_integration
+            test_task08_inventory
+            test_task08_integration
+            test_task10_world_transform
+            test_task10_integration
+          )
+          # The isolated/preactivation branch deliberately predates T09 runtime.
+          # Once T10 is formally activated on the exact post-T09 integration base,
+          # registered mode must include the real T09 suites in this regression.
+          if [ "$T10_CANDIDATE_MODE" = "registered" ]; then
+            suites+=(test_task09_harvesting test_task09_integration)
+          fi
+          printf '%s\n' "${suites[@]}" > task10-evidence/tests/required-suites.txt
+
+          for suite in "${suites[@]}"; do
+            test -s "HavenlineGodot/tests/$suite.gd"
             timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task10-evidence/tests/$suite.log" 2>&1
           done
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task10-evidence/tests/*.log; then exit 1; fi
@@ -118,14 +142,17 @@ jobs:
           from pathlib import Path
           import json,os
           rows=[]
-          for path in sorted(Path('task10-evidence/tests').glob('test_*.log')):
+          required=Path('task10-evidence/tests/required-suites.txt').read_text().splitlines()
+          for suite in required:
+              path=Path('task10-evidence/tests')/(suite+'.log')
               reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
               assert reports,path
               report=reports[-1]
               assert report.get('passed') is True and not report.get('failures'),(path,report.get('failures'))
               checks=report.get('checks',[])
-              rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
-          assert len(rows)==14,len(rows)
+              rows.append({'suite':suite,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
+          expected=12 if os.environ['T10_CANDIDATE_MODE']=='preactivation' else 14
+          assert len(rows)==expected,(len(rows),expected,required)
           output={'task':'T10-first-builder-milestone','source':os.environ['GITHUB_SHA'],'candidate_mode':os.environ['T10_CANDIDATE_MODE'],'suite_count':len(rows),'total_checks':sum(row['checks'] for row in rows),'suites':rows,'all_passed':True,'task_approved':False}
           Path('task10-evidence/tests.json').write_text(json.dumps(output,indent=2)); print(json.dumps(output))
           PY
