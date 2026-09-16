@@ -5,6 +5,10 @@ const TransformView = preload("res://scripts/world_transform_view.gd")
 
 var output := "user://task10-world-transform"
 var candidate := "local-working-tree"
+var capture_width := 1280
+var capture_height := 720
+var device_id := "baseline"
+var device_check := false
 var engine
 var view
 var world: Node3D
@@ -20,6 +24,14 @@ func _initialize() -> void:
 			output = argument.trim_prefix("--out=")
 		elif argument.begins_with("--candidate="):
 			candidate = argument.trim_prefix("--candidate=")
+		elif argument.begins_with("--width="):
+			capture_width = int(argument.trim_prefix("--width="))
+		elif argument.begins_with("--height="):
+			capture_height = int(argument.trim_prefix("--height="))
+		elif argument.begins_with("--device-id="):
+			device_id = argument.trim_prefix("--device-id=")
+		elif argument == "--device-check":
+			device_check = true
 	call_deferred("run")
 
 func simulation_ack(intent: Dictionary) -> Dictionary:
@@ -96,9 +108,10 @@ func configure_camera(angle: String) -> void:
 		camera.position = Vector3(5.6, 3.8, 6.2)
 	camera.look_at(Vector3(0.0, 0.9, 0.0), Vector3.UP)
 
-func capture_state(name: String, descriptor: Dictionary) -> bool:
+func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front", "three-quarter"]) -> bool:
 	state_label.text = "T10 • %s" % String(descriptor.lifecycle).to_upper()
-	for angle in ["front", "three-quarter"]:
+	for raw_angle in angles:
+		var angle := String(raw_angle)
 		configure_camera(angle)
 		await process_frame
 		await RenderingServer.frame_post_draw
@@ -118,9 +131,62 @@ func capture_state(name: String, descriptor: Dictionary) -> bool:
 		})
 	return true
 
+func write_manifest(manifest: Dictionary) -> bool:
+	var file := FileAccess.open(output.path_join("manifest.json"), FileAccess.WRITE)
+	if file == null:
+		return false
+	file.store_string(JSON.stringify(manifest, "  "))
+	return true
+
+func run_device_check(inventory: Dictionary) -> void:
+	view.set_ready()
+	var preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
+	if not preview.passed or not view.show_preview(preview) or not await capture_state("preview", view.descriptor(), ["front"]):
+		print(JSON.stringify({"passed": false, "error": "device_preview_capture_failed", "device_id": device_id}))
+		quit(1)
+		return
+
+	var intent: Dictionary = engine.commit_transform("device-%s-tx" % device_id, "framework_anchor_seed_to_foundation", "capture-anchor", inventory)
+	if not intent.passed or not view.show_commit(intent) or not await capture_state("committing", view.descriptor(), ["front"]):
+		print(JSON.stringify({"passed": false, "error": "device_commit_capture_failed", "device_id": device_id}))
+		quit(1)
+		return
+
+	var final_view: Dictionary = view.descriptor()
+	var manifest := {
+		"task_id": "T10",
+		"candidate": candidate,
+		"mode": "dependency-independent-device-layout-fixture",
+		"device_id": device_id,
+		"logical_size": [capture_width, capture_height],
+		"fixture_only": true,
+		"t11_content": false,
+		"target_color_static": true,
+		"view_owns_lifecycle_visuals": true,
+		"real_t09_adapter_bound": false,
+		"record_count": records.size(),
+		"states": ["preview", "committing"],
+		"angles": ["front"],
+		"records": records,
+		"view_visual_node_count": int(final_view.visual_node_count),
+		"view_visual_build_count": int(final_view.visual_build_count),
+		"integration_allowed": false,
+		"task_approved": false,
+		"passed": records.size() == 2 and int(final_view.visual_node_count) == 4 and int(final_view.visual_build_count) == 1,
+	}
+	if not write_manifest(manifest):
+		manifest["passed"] = false
+		manifest["error"] = "device_manifest_write_failed"
+	print(JSON.stringify(manifest))
+	quit(0 if manifest.passed else 1)
+
 func run() -> void:
+	if capture_width <= 0 or capture_height <= 0:
+		print(JSON.stringify({"passed": false, "error": "invalid_capture_size"}))
+		quit(1)
+		return
 	DirAccess.make_dir_recursive_absolute(output)
-	root.size = Vector2i(1280, 720)
+	root.size = Vector2i(capture_width, capture_height)
 	world = Node3D.new()
 	root.add_child(world)
 	add_environment()
@@ -144,6 +210,10 @@ func run() -> void:
 		return
 
 	var inventory := {"wood": 20, "stone": 12, "metal": 2, "fuel": 1}
+	if device_check:
+		await run_device_check(inventory)
+		return
+
 	view.set_ready()
 	if not await capture_state("ready", view.descriptor()):
 		print(JSON.stringify({"passed": false, "error": "ready_capture_failed"}))
@@ -196,8 +266,8 @@ func run() -> void:
 		"task_approved": false,
 		"passed": records.size() == 10 and int(final_view.visual_node_count) == 4 and int(final_view.visual_build_count) == 1 and engine.descriptor().targets["capture-anchor"].state == "foundation",
 	}
-	var file := FileAccess.open(output.path_join("manifest.json"), FileAccess.WRITE)
-	if file:
-		file.store_string(JSON.stringify(manifest, "  "))
+	if not write_manifest(manifest):
+		manifest["passed"] = false
+		manifest["error"] = "manifest_write_failed"
 	print(JSON.stringify(manifest))
 	quit(0 if manifest.passed else 1)
