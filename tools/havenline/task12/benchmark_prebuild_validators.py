@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 """Benchmark the complete T12 preparation validation surface.
 
-This is a prebuild hygiene gate only. It cannot satisfy shipping C6.
+This is a prebuild hygiene gate only. It cannot satisfy shipping C6. Timing and
+memory instrumentation are intentionally separate so tracemalloc overhead is not
+misreported as validator latency.
 """
 from __future__ import annotations
 
@@ -45,7 +47,7 @@ SYNTHETIC_MANIFEST = fuzz_module.valid_manifest()
 
 
 def validate_once() -> list[dict[str, Any]]:
-    results = [
+    return [
         progression.validate_manifest(SYNTHETIC_MANIFEST),
         matrix_validator.validate_matrix(MATRIX),
         schema_validator.validate_schema(SCHEMA),
@@ -53,13 +55,16 @@ def validate_once() -> list[dict[str, Any]]:
         trace_validator.validate_traceability(TRACE),
         downstream_validator.validate_contract(DOWNSTREAM),
     ]
-    return results
 
 
 def percentile95(values: list[float]) -> float:
     ordered = sorted(values)
     index = max(0, min(len(ordered) - 1, int((len(ordered) - 1) * 0.95)))
     return ordered[index]
+
+
+def all_pass(results: list[dict[str, Any]]) -> bool:
+    return all(result.get("passed") for result in results)
 
 
 def main() -> None:
@@ -70,28 +75,38 @@ def main() -> None:
         raise SystemExit(1)
 
     iterations = int(BUDGET["iterations"])
+    memory_iterations = int(BUDGET["memory_iterations"])
     durations_ms: list[float] = []
-    gc.collect()
-    tracemalloc.start()
-    baseline_current, _ = tracemalloc.get_traced_memory()
-
     errors: list[str] = []
+
+    # Latency pass: no tracemalloc instrumentation.
+    gc.collect()
     for _ in range(iterations):
         started = time.perf_counter_ns()
         results = validate_once()
         elapsed_ms = (time.perf_counter_ns() - started) / 1_000_000.0
         durations_ms.append(elapsed_ms)
-        if not all(result.get("passed") for result in results):
-            errors.append("validator returned failure during benchmark")
+        if not all_pass(results):
+            errors.append("validator returned failure during timing benchmark")
             break
-
-    gc.collect()
-    final_current, peak = tracemalloc.get_traced_memory()
-    tracemalloc.stop()
 
     mean_ms = statistics.fmean(durations_ms) if durations_ms else float("inf")
     p95_ms = percentile95(durations_ms) if durations_ms else float("inf")
     maximum_ms = max(durations_ms) if durations_ms else float("inf")
+
+    # Separate memory pass under tracemalloc. Its runtime is intentionally not
+    # mixed into the latency metrics above.
+    gc.collect()
+    tracemalloc.start()
+    baseline_current, _ = tracemalloc.get_traced_memory()
+    for _ in range(memory_iterations):
+        results = validate_once()
+        if not all_pass(results):
+            errors.append("validator returned failure during memory benchmark")
+            break
+    gc.collect()
+    final_current, peak = tracemalloc.get_traced_memory()
+    tracemalloc.stop()
     retained_growth_kib = max(0.0, (final_current - baseline_current) / 1024.0)
     peak_kib = peak / 1024.0
 
@@ -109,7 +124,10 @@ def main() -> None:
     result = {
         "passed": not errors,
         "shipping_c6_satisfied": False,
+        "timing_instrumentation": "perf_counter_ns without tracemalloc",
+        "memory_instrumentation": "separate tracemalloc pass",
         "iterations": len(durations_ms),
+        "memory_iterations": memory_iterations,
         "validators_per_iteration": 6,
         "mean_ms": round(mean_ms, 6),
         "p95_ms": round(p95_ms, 6),
