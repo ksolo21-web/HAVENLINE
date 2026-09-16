@@ -195,7 +195,7 @@ func run() -> void:
 	overlap.receipts["tx-crash"] = overlap.prepared["tx-crash"].duplicate(true)
 	expect_import_rejected("same transaction cannot be pending and completed", crash_snapshot, overlap)
 	var duplicate_receipt_target := before_bad_import.duplicate(true)
-	var duplicate_receipt := duplicate_receipt_target.receipts["tx-002"].duplicate(true)
+	var duplicate_receipt: Dictionary = duplicate_receipt_target.receipts["tx-002"].duplicate(true)
 	duplicate_receipt.transaction_id = "duplicate-latest"
 	duplicate_receipt.authority_transaction_key = "T10|%s|revision:%d" % [duplicate_receipt.request_identity, int(duplicate_receipt.target_revision)]
 	duplicate_receipt_target.receipts["duplicate-latest"] = duplicate_receipt
