@@ -11,6 +11,7 @@ ROOT = pathlib.Path(__file__).resolve().parents[4]
 TOOL_PATH = ROOT / "tools/havenline/task12/final_candidate_gate.py"
 CANDIDATE_TEMPLATE = json.loads((ROOT / "Docs/Production/T12/CANDIDATE_EVIDENCE_TEMPLATE.json").read_text())
 CRITIC_TEMPLATE = json.loads((ROOT / "Docs/Production/T12/CRITIC_REVIEW_RECORD_TEMPLATE.json").read_text())
+EVIDENCE_INDEX_TEMPLATE = json.loads((ROOT / "Docs/Production/T12/EVIDENCE_INDEX_TEMPLATE.json").read_text())
 VECTORS = json.loads((ROOT / "Docs/Production/T12/ENGINE_TEST_VECTORS.json").read_text())
 PARITY_SCHEMA = json.loads((ROOT / "Docs/Production/T12/ENGINE_PARITY_OUTPUT_SCHEMA.json").read_text())
 
@@ -136,13 +137,34 @@ class T12FinalCandidateGateTests(unittest.TestCase):
             "promotion_allowed": True,
         }
 
-    def validate(self, candidate=None, records=None, parity=None, binding=None, levels_digest=None):
+    def evidence_index(self, candidate, records):
+        data = copy.deepcopy(EVIDENCE_INDEX_TEMPLATE)
+        data["status"] = "EVIDENCE_INDEX_COMPLETE"
+        data["candidate_source"] = self.candidate_sha
+        refs = sorted(gate.evidence_index_validator.required_refs(candidate, records))
+        data["entries"] = [
+            {
+                "artifact_id": f"evidence-{index:03d}",
+                "category": "static_report",
+                "uri": uri,
+                "sha256": f"{index + 1:064x}",
+                "candidate_source": self.candidate_sha,
+                "producer": "synthetic-final-gate-test",
+                "content_verified": True,
+            }
+            for index, uri in enumerate(refs)
+        ]
+        return data
+
+    def validate(self, candidate=None, records=None, parity=None, evidence_index=None, binding=None, levels_digest=None):
         records = records if records is not None else self.critic_records()
         candidate = candidate if candidate is not None else self.candidate_packet(records)
+        evidence_index = evidence_index if evidence_index is not None else self.evidence_index(candidate, records)
         return gate.validate_consistency(
             candidate,
             records,
             parity if parity is not None else self.parity_output(),
+            evidence_index,
             binding if binding is not None else self.binding(),
             levels_sha256=levels_digest if levels_digest is not None else self.levels_digest,
             milestones_sha256=self.milestones_digest,
@@ -155,14 +177,17 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         result = self.validate()
         self.assertTrue(result["passed"], result["errors"])
         self.assertEqual(result["candidate_source"], self.candidate_sha)
+        self.assertTrue(result["evidence_index_passed"])
+        self.assertEqual(result["evidence_index_entry_count"], result["evidence_index_required_ref_count"])
         self.assertFalse(result["score_averaging_used"])
         self.assertGreater(result["global_minimum_mandatory_dimension_score"], 9.0)
 
     def test_critic_candidate_mismatch_fails(self):
         records = self.critic_records()
         candidate = self.candidate_packet(records)
+        evidence = self.evidence_index(candidate, records)
         records["candidate_source"] = "e" * 40
-        result = self.validate(candidate=candidate, records=records)
+        result = self.validate(candidate=candidate, records=records, evidence_index=evidence)
         self.assertFalse(result["passed"])
         self.assertTrue(any("critic records candidate_source" in error for error in result["errors"]))
 
@@ -181,16 +206,18 @@ class T12FinalCandidateGateTests(unittest.TestCase):
     def test_candidate_minimum_must_match_dimension_record(self):
         records = self.critic_records()
         candidate = self.candidate_packet(records)
+        evidence = self.evidence_index(candidate, records)
         candidate["critic_reviews"]["C3"]["minimum_mandatory_dimension_score"] = 9.99
-        result = self.validate(candidate=candidate, records=records)
+        result = self.validate(candidate=candidate, records=records, evidence_index=evidence)
         self.assertFalse(result["passed"])
         self.assertTrue(any("C3 candidate packet minimum" in error for error in result["errors"]))
 
     def test_reviewer_runtime_mismatch_fails(self):
         records = self.critic_records()
         candidate = self.candidate_packet(records)
+        evidence = self.evidence_index(candidate, records)
         candidate["critic_reviews"]["C2"]["reviewer_runtime_id"] = "different-runtime"
-        result = self.validate(candidate=candidate, records=records)
+        result = self.validate(candidate=candidate, records=records, evidence_index=evidence)
         self.assertFalse(result["passed"])
         self.assertTrue(any("C2 reviewer_runtime_id mismatch" in error for error in result["errors"]))
 
@@ -200,6 +227,15 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         result = self.validate(parity=parity)
         self.assertFalse(result["passed"])
         self.assertTrue(any("engine parity candidate_source" in error for error in result["errors"]))
+
+    def test_missing_evidence_reference_fails(self):
+        records = self.critic_records()
+        candidate = self.candidate_packet(records)
+        evidence = self.evidence_index(candidate, records)
+        evidence["entries"].pop()
+        result = self.validate(candidate=candidate, records=records, evidence_index=evidence)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("complete evidence digest index failed" in error for error in result["errors"]))
 
 
 if __name__ == "__main__":
