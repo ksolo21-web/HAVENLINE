@@ -1,60 +1,79 @@
 {
   "schema_version": 1,
   "task_id": "T10",
-  "review_scope": "parallel preparation plus dependency-independent prebuild readiness; not production integration or approval",
-  "prepared_branch": "prebuild/T10-world-transform",
+  "review_scope": "isolated World Transformation Framework build through BUILT_PENDING_DEPENDENCY; production integration/critics/approval remain dependency-gated",
+  "builder_branch": "havenline/T10-world-transformation",
   "source_integration_checkpoint": "0427a7f8f11ca2afe1866ee972657b631b3e3c50",
-  "latest_verified_source": "2c8987d0351536cd00c6031d4eada4a8c12bae00",
-  "latest_verified_run": 35082800871,
-  "latest_verified_artifact": 10441032206,
-  "latest_verified_artifact_sha256": "8532c23a88df4b4a4dc11da6722d7a9233f4d3511a5684a5f0b5fe4575c91a91",
+  "latest_observed_integration_head": "5f45c8429312ae8469be185321bf1b5d9b98a915",
+  "latest_verified_source": "f5283f56d96af3ddad9c3adb87db286bbadb73ec",
+  "latest_verified_run": 35104414502,
+  "latest_verified_artifact": 10449387994,
+  "latest_verified_artifact_sha256": "61acbbe1c29a65873d8bcaa22c07228256bf6785966cf6465f50660f27d34665",
+  "isolated_state": "BUILT_PENDING_DEPENDENCY",
+  "integration_allowed": false,
+  "task_approved": false,
+  "real_t09_adapter_bound": false,
+  "isolated_critic_input_ready": true,
   "internal_review": {
     "reviewer_type": "internal review; no separate critic runtime claimed",
-    "preparation_readiness_score": 10.0,
-    "dependency_independent_prebuild_score": 10.0,
-    "pass_rule": "> 9.0 with all mandatory checks for the reviewed scope passing",
+    "isolated_build_score": 10.0,
+    "pass_rule": "> 9.0 with all mandatory checks for the reviewed isolated scope passing",
+    "production_critic_scores_claimed": false,
     "task_approval_claimed": false,
     "checks": [
-      {"id":"P01","name":"T10 frozen scope exists and separates T10 framework from T11 camp content","status":"PASS"},
-      {"id":"P02","name":"Dependencies fixed to T05/T08/T09 and production activation refuses unresolved dependency state","status":"PASS"},
-      {"id":"P03","name":"T10 prebuild ownership remains disjoint from active T09 reservation","status":"PASS"},
-      {"id":"P04","name":"T10 prebuild excludes integration-only main/simulation paths","status":"PASS"},
-      {"id":"P05","name":"C1/C2/C3/C4/C6/C7 production critic contract remains unchanged","status":"PASS"},
-      {"id":"P06","name":"Two-phase transaction waits for simulation-authoritative debit receipt before world-state advancement","status":"PASS"},
-      {"id":"P07","name":"Pending/completed replay, crash recovery, altered receipt rejection and component-state fail-closed import pass","status":"PASS"},
-      {"id":"P08","name":"One in-flight transaction per target prevents same-revision double-debit race","status":"PASS"},
-      {"id":"P09","name":"Authoritative receipts must match a T10-prepared transaction; unsolicited receipts fail closed","status":"PASS"},
-      {"id":"P10","name":"Request-scoped authority transaction keys preserve authoritative debit idempotency independently of caller labels","status":"PASS"},
-      {"id":"P11","name":"R12 bounded history retains only latest completed receipt per target; 5000 previews + 5000 rejected commits add no history","status":"PASS"},
-      {"id":"P12","name":"512 targets / 1024 two-stage transactions pass with exactly 512 retained receipts and exact snapshot round-trip","status":"PASS"},
-      {"id":"P13","name":"258-recipe neutral catalog and branching fixtures remain bounded and deterministic","status":"PASS"},
-      {"id":"P14","name":"Fixture simulation integration passes same-target race, stale-authority, crash-window and out-of-order multi-target receipt cases","status":"PASS"},
-      {"id":"P15","name":"R11 reusable presentation remains presentation-only, builds exactly four visual nodes once, and exposes bounded readability scaling","status":"PASS"},
-      {"id":"P16","name":"Blocked/readiness payloads, preview volume, committing pulse and complete-state world response pass direct executable checks","status":"PASS"},
-      {"id":"P17","name":"Ten 1280x720 view-owned lifecycle renders are distinct and readable while the neutral target remains unchanged","status":"PASS"},
-      {"id":"P18","name":"Six Havenline device-matrix configurations produce twelve exact-size preview/committing renders with per-device lifecycle distinction","status":"PASS"},
-      {"id":"P19","name":"Full frozen source-contract validator passes with formal domain/integration/capture files present","status":"PASS"},
-      {"id":"P20","name":"Governance, migration and production-tool regression pass on the exact verified prebuild source","status":"PASS"}
+      {"id":"P01","name":"T10 frozen scope separates framework ownership from T11 final camp content","status":"PASS"},
+      {"id":"P02","name":"Isolated T10 ownership remains disjoint from active T09 and integration-only paths","status":"PASS"},
+      {"id":"P03","name":"C1/C2/C3/C4/C6/C7 production critic contract remains unchanged","status":"PASS"},
+      {"id":"P04","name":"Two-phase transaction waits for simulation-authoritative debit receipt before world-state advancement","status":"PASS"},
+      {"id":"P05","name":"Pending/completed replay, crash recovery, altered receipt rejection and fail-closed component import pass","status":"PASS"},
+      {"id":"P06","name":"One in-flight transaction per target prevents same-revision double-debit race","status":"PASS"},
+      {"id":"P07","name":"Authoritative receipts must match an exact T10-prepared transaction; unsolicited receipts fail closed","status":"PASS"},
+      {"id":"P08","name":"Request-scoped authority transaction keys preserve authoritative debit idempotency independently of caller labels","status":"PASS"},
+      {"id":"P09","name":"R12 bounded history retains only latest completed receipt per target; repeated preview/reject stress adds no history","status":"PASS"},
+      {"id":"P10","name":"512 targets / 1024 two-stage transactions pass with exactly 512 retained receipts and exact snapshot round-trip","status":"PASS"},
+      {"id":"P11","name":"258-recipe neutral catalog and branching fixtures remain bounded and deterministic","status":"PASS"},
+      {"id":"P12","name":"Fixture simulation integration passes same-target race, stale-authority, crash-window and out-of-order multi-target receipt cases","status":"PASS"},
+      {"id":"P13","name":"R11 reusable presentation remains presentation-only, builds exactly four visual nodes once, and exposes bounded readability scaling","status":"PASS"},
+      {"id":"P14","name":"Blocked/readiness payloads, preview volume, committing pulse and complete-state world response pass direct executable checks","status":"PASS"},
+      {"id":"P15","name":"Ten 1280x720 view-owned lifecycle renders are distinct/readable while the neutral target remains unchanged","status":"PASS"},
+      {"id":"P16","name":"Six Havenline device-matrix configurations produce twelve exact-size preview/committing renders","status":"PASS"},
+      {"id":"P17","name":"Thirty unique native 3840x2160 scale-1 lifecycle renders cover five states across six critic camera classes","status":"PASS"},
+      {"id":"P18","name":"Native 4K detail framing was visually rechecked after repair; state title/disclaimer remain inside frame","status":"PASS"},
+      {"id":"P19","name":"R01 recipe validation rejects duplicate IDs, malformed states/costs/prerequisites and illegal inverse metadata","status":"PASS"},
+      {"id":"P20","name":"R07 recipe graph rejects undeclared two-state/multi-state cycles and requires reciprocal explicit inverse pairs","status":"PASS"},
+      {"id":"P21","name":"Explicit reversible fixture commits forward and inverse transitions with declared costs and monotonic revisions","status":"PASS"},
+      {"id":"P22","name":"Failed cyclic catalog reconfiguration is transactional and preserves the prior valid recipe catalog","status":"PASS"},
+      {"id":"P23","name":"Critic-input readiness validator finds complete isolated inputs for C1/C2/C3/C4/C6/C7 without assigning scores","status":"PASS"},
+      {"id":"P24","name":"Full frozen source-contract validator passes with formal domain/integration/capture files present","status":"PASS"},
+      {"id":"P25","name":"Governance, migration and production-tool regression pass on the exact verified isolated source","status":"PASS"}
     ],
     "verified_metrics": {
-      "domain_checks": 130,
+      "domain_checks": 154,
       "integration_and_r11_checks": 60,
       "preview_stress_iterations": 5000,
+      "preview_stress_elapsed_ms": 48.285,
       "rejected_commit_stress_iterations": 5000,
+      "rejected_commit_stress_elapsed_ms": 66.807,
       "catalog_stress_recipes": 258,
+      "catalog_stress_elapsed_ms": 6.837,
       "stress_targets": 512,
       "stress_transactions": 1024,
       "stress_retained_receipts": 512,
-      "stress_elapsed_ms": 131.676,
+      "stress_elapsed_ms": 168.374,
       "stress_static_memory_delta_bytes": 2341652,
       "baseline_render_count": 10,
       "device_matrix_configurations": 6,
       "device_matrix_render_count": 12,
+      "native_scale1_resolution": [3840, 2160],
+      "native_scale1_render_count": 30,
+      "native_scale1_unique_render_count": 30,
+      "native_scale1_state_count": 5,
+      "native_scale1_camera_count": 6,
       "visual_node_budget": 4,
       "visual_build_count": 1
     }
   },
-  "resolved_prebuild_defects": [
+  "resolved_isolated_defects": [
     {
       "id": "D01",
       "severity": "mandatory",
@@ -76,7 +95,7 @@
       "severity": "mandatory",
       "defect": "Two different transaction IDs could be prepared against the same target revision before the first receipt returned.",
       "risk": "Both intents could debit resources even though only one world-state receipt could later win.",
-      "repair": "Enforced one_inflight_transaction_per_target and reject later target transactions with target_transaction_pending until the first resolves.",
+      "repair": "Enforced one in-flight transaction per target and reject later target transactions with target_transaction_pending until the first resolves.",
       "verification": "Fixture integration proves the second same-target request is rejected before the simulation debit count changes."
     },
     {
@@ -93,41 +112,58 @@
       "defect": "Initial lifecycle capture harness used untyped local inference from dynamically typed engine calls and failed GDScript parsing.",
       "risk": "Rendered evidence could not be produced even though domain/integration gates passed.",
       "repair": "Added explicit Dictionary typing for preview, intent and accepted receipt locals.",
-      "verification": "Exact-source Xvfb + software Vulkan/mobile capture produces the verified lifecycle evidence."
+      "verification": "Exact-source software-Vulkan/mobile capture produces the verified lifecycle evidence."
     },
     {
       "id": "D06",
       "severity": "mandatory",
       "defect": "The first completed-transaction design retained every full receipt indefinitely.",
       "risk": "Receipt/event history grew linearly with transaction count and violated frozen R12 bounded-history requirements.",
-      "repair": "Added request-scoped authority_transaction_key semantics and prune completed history to the latest accepted receipt per target. Old/pruned retries fail closed after later target advancement.",
-      "verification": "5000 previews plus 5000 rejected commits add zero history; 1024 successful transforms across 512 targets retain exactly 512 completed receipts, remain under the conservative runtime/memory budget, and round-trip component state exactly."
+      "repair": "Added request-scoped authority_transaction_key semantics and prune completed history to the latest accepted receipt per target.",
+      "verification": "5000 previews plus 5000 rejected commits add zero history; 1024 successful transforms across 512 targets retain exactly 512 receipts and round-trip component state exactly."
     },
     {
       "id": "D07",
       "severity": "tooling",
       "defect": "The first device-matrix evidence gate required all twelve rendered PNG hashes to be globally unique.",
-      "risk": "Two valid matrix rows that intentionally share the same logical viewport could create a false CI failure despite correct framing.",
-      "repair": "Allow pixel duplicates only when both logical size and lifecycle state are identical; continue to require preview and committing to differ within every device and reject duplicates across different sizes or lifecycle states.",
-      "verification": "The corrected gate passes all six project matrix entries and twelve exact-size renders. The only permitted duplicate group is phone_16_9/phone_20_9 preview at their shared 2400x1080 viewport."
+      "risk": "Two valid matrix rows sharing the same logical viewport could create a false CI failure.",
+      "repair": "Allow pixel duplicates only when both logical size and lifecycle state are identical; still require preview/committing distinction per device and reject cross-size/cross-state duplicates.",
+      "verification": "Corrected matrix gate passes all six project configurations and twelve exact-size renders."
+    },
+    {
+      "id": "D08",
+      "severity": "evidence",
+      "defect": "The first native-4K detail camera was too tight and clipped the state title in all lifecycle states.",
+      "risk": "Critic evidence would look incomplete/sloppy despite correct underlying T10 geometry/state.",
+      "repair": "Moved/widened the detail camera while preserving close geometry inspection and regenerated all native-4K evidence.",
+      "verification": "Exact-source 30-frame native-4K gate passes and internal pixel review confirms title/disclaimer are fully inside the repaired detail frames for all five states."
+    },
+    {
+      "id": "D09",
+      "severity": "mandatory",
+      "defect": "The recipe parser accepted arbitrary acyclic-looking rows independently and did not validate whole-catalog progression cycles or explicit reversible/inverse semantics.",
+      "risk": "Future content could register undeclared downgrade/cycle paths or malformed inverse relationships, violating R01/R07 progression integrity.",
+      "repair": "Added whole-catalog graph validation. Reversible recipes require reciprocal inverse metadata with exactly reversed endpoints; reversible state pairs are collapsed and every ordinary edge between groups must form an acyclic graph. Added fail-closed validation for malformed/duplicate recipe metadata and transactional catalog reconfiguration.",
+      "verification": "154/154 exact-source domain/adversarial checks pass, including duplicate/malformed recipe rejection, undeclared 2-state/3-state cycle rejection, nonreciprocal/wrong-endpoint inverse rejection, valid forward+inverse execution, and rollback after failed cyclic reconfiguration."
     }
   ],
-  "mandatory_prep_defects": [],
+  "unresolved_mandatory_isolated_defects": [],
   "runtime_blockers": [
     {
       "id": "B01",
       "blocker": "T09 is not APPROVED/integrated yet",
-      "effect": "T10 dependency-independent prebuild may remain isolated, but T10 may not be production-integrated or approved and the real T09 adapter cannot be certified yet.",
-      "resolution": "Complete T09, then run prepare_activation.py --activate --base <exact-post-T09-integration-head>; reconcile the prebuild and bind the real approved T09/T08 simulation interfaces."
+      "effect": "T10 remains BUILT_PENDING_DEPENDENCY; real T09/T08 binding, production critic execution, INTEGRATION_READY, integration and approval remain blocked.",
+      "resolution": "Complete T09, reconcile T10 to the exact post-T09 integration head, bind real authority interfaces, rerun affected regression/evidence and execute required production critics."
     }
   ],
   "remaining_after_dependency_resolves": [
-    "Reconcile this prebuild onto the exact post-T09 integration head.",
-    "Run T10 activation preflight and stage validated ownership/registry/dependency/task-gate activation.",
-    "Replace FakeSimulationAuthority/fixture assumptions with the real approved T09/T08 simulation adapter and rerun the formal integration suite.",
-    "Run impacted T01-T09 regressions and repeat integrated save/recovery/device/performance evidence and production capture.",
+    "Reconcile this isolated candidate onto the exact post-T09 integration head.",
+    "Run T10 activation/integration preflight and register ownership/base consistently in integration governance.",
+    "Replace fixture-authority assumptions with the real approved T09/T08 simulation adapter and rerun formal integration tests.",
+    "Run impacted T01-T09 regressions and repeat affected save/recovery/device/performance/native evidence after reconciliation.",
     "Bind final transformation content/assets without taking T11 camp-construction ownership.",
-    "Run independent required C1/C2/C3/C4/C6/C7 reviews and fix/retest until every mandatory dimension is strictly >9.0 unrounded."
+    "Execute independent required C1/C2/C3/C4/C6/C7 production reviews and fix/retest until every mandatory dimension is strictly >9.0 unrounded.",
+    "Promote to INTEGRATION_READY only after those dependency-sensitive gates pass."
   ],
-  "resume_from": "Docs/Production/T10/PREBUILD_STATUS.md + TASK_PACKET.md + ACTIVATION_CHECKLIST.json + tools/havenline/task10/prepare_activation.py"
+  "resume_from": "Docs/Production/T10/PREBUILD_STATUS.md + TASK_PACKET.md + ACTIVATION_CHECKLIST.json + tools/havenline/task10/prepare_activation.py + tools/havenline/task10/validate_critic_readiness.py"
 }
