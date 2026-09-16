@@ -14,6 +14,12 @@ on:
       - 'Docs/Production/T10/**'
       - 'tools/havenline/task10/**'
       - '.github/workflows/havenline-task10-*.yml'
+  pull_request:
+    branches: ['havenline/T10-world-transformation']
+    paths:
+      - 'Docs/Production/T10/**'
+      - 'tools/havenline/task10/**'
+      - '.github/workflows/havenline-task10-*.yml'
   workflow_dispatch:
 
 permissions:
@@ -40,23 +46,15 @@ jobs:
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
           branch_point=$(git merge-base "$integration" HEAD)
           python3 - <<'PY' "$branch_point" "$integration" | tee task10-isolated-evidence/scope.json
-          import json, subprocess, sys
+          import fnmatch,json,subprocess,sys
           from pathlib import Path
           branch_point,integration=sys.argv[1],sys.argv[2]
           changed=subprocess.check_output(['git','diff','--name-only',branch_point,'HEAD'],text=True).splitlines()
-          allowed={
-            'HavenlineGodot/scripts/world_transform.gd',
-            'HavenlineGodot/scripts/world_transform_view.gd',
-            'HavenlineGodot/data/world_transform_recipes.json',
-            'HavenlineGodot/tests/test_task10_world_transform.gd',
-            'HavenlineGodot/tests/test_task10_integration.gd',
-            'HavenlineGodot/tests/capture_task10_world_transform.gd',
-            '.github/workflows/havenline-task10-prebuild.yml',
-            '.github/workflows/havenline-task10-isolated.yml',
-            '.github/workflows/havenline-task10-adapter-preflight.yml',
-          }
-          prefixes=('HavenlineGodot/assets/world_transform_v1/','Docs/Production/T10/','tools/havenline/task10/')
-          bad=[p for p in changed if p not in allowed and not p.startswith(prefixes)]
+          checklist=json.loads(Path('Docs/Production/T10/ACTIVATION_CHECKLIST.json').read_text())
+          planned=checklist.get('planned_owned_paths',[])
+          assert checklist.get('task_id')=='T10'
+          assert isinstance(planned,list) and planned and len(planned)==len(set(planned)),planned
+          bad=[p for p in changed if not any(fnmatch.fnmatchcase(p,pattern) for pattern in planned)]
           assert not bad,bad
           forbidden=(
             'HavenlineGodot/assets/harvesting_v1/',
@@ -74,7 +72,9 @@ jobs:
           print(json.dumps({
             'task':'T10','mode':'BUILDING_ISOLATED','candidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             'branch_point':branch_point,'integration_head':integration,'t09_status':t09,
-            'changed_files':changed,'integration_allowed':False,'task_approved':False,'passed':True
+            'reservation_source':'Docs/Production/T10/ACTIVATION_CHECKLIST.json',
+            'planned_owned_paths':planned,'changed_files':changed,
+            'integration_allowed':False,'task_approved':False,'passed':True
           },indent=2))
           PY
 
@@ -85,6 +85,7 @@ jobs:
           python3 tools/havenline/production/workstream.py validate-registry | tee task10-isolated-evidence/registry.json
           python3 tools/havenline/production/validate_migration.py > task10-isolated-evidence/migration.json
           python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > task10-isolated-evidence/tests/production-tools.log 2>&1
+          python3 -m unittest discover -s tools/havenline/task10/tests -p 'test_*.py' > task10-isolated-evidence/tests/task10-tooling.log 2>&1
 
       - name: Prepare pinned Godot and software render path
         run: |
