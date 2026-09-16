@@ -1,0 +1,108 @@
+name: Havenline Task 10 dependency-independent prebuild
+
+on:
+  push:
+    branches: ['prebuild/T10-world-transform']
+    paths:
+      - 'HavenlineGodot/scripts/world_transform.gd'
+      - 'HavenlineGodot/scripts/world_transform_view.gd'
+      - 'HavenlineGodot/data/world_transform_recipes.json'
+      - 'HavenlineGodot/tests/test_task10_prebuild.gd'
+      - 'Docs/Production/T10/**'
+      - 'tools/havenline/task10/**'
+      - '.github/workflows/havenline-task10-prebuild.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-task10-prebuild-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  dependency-independent-core:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Enforce prebuild boundary
+        run: |
+          set -euo pipefail
+          mkdir -p task10-prebuild-evidence
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          python3 - <<'PY' "$integration" | tee task10-prebuild-evidence/scope.json
+          import json, subprocess, sys
+          from pathlib import Path
+          base=sys.argv[1]
+          changed=subprocess.check_output(['git','diff','--name-only',base,'HEAD'],text=True).splitlines()
+          allowed=(
+            'HavenlineGodot/scripts/world_transform.gd',
+            'HavenlineGodot/scripts/world_transform_view.gd',
+            'HavenlineGodot/data/world_transform_recipes.json',
+            'HavenlineGodot/tests/test_task10_prebuild.gd',
+            '.github/workflows/havenline-task10-prebuild.yml',
+          )
+          prefixes=('Docs/Production/T10/','tools/havenline/task10/')
+          bad=[p for p in changed if p not in allowed and not p.startswith(prefixes)]
+          assert not bad, bad
+          forbidden_prefixes=(
+            'HavenlineGodot/assets/harvesting_v1/',
+            'HavenlineGodot/scripts/harvest_presentation.gd',
+            'HavenlineGodot/tests/test_task09_',
+            'Docs/Production/T09/',
+            'tools/havenline/task09/',
+          )
+          assert not [p for p in changed if p.startswith(forbidden_prefixes)], changed
+          graph=json.loads(Path('Docs/Production/DEPENDENCY_GRAPH.json').read_text())
+          assert graph['tasks']['T09']['status'] != 'APPROVED', 'prebuild lane is only for pending dependency work'
+          print(json.dumps({'task':'T10','mode':'dependency-independent-prebuild','base':base,'changed_files':changed,'t09_status':graph['tasks']['T09']['status'],'integration_allowed':False,'passed':True},indent=2))
+          PY
+
+      - name: Prepare pinned Godot
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/engine" task10-prebuild-evidence/tests
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+
+      - name: Import and test isolated T10 core
+        run: |
+          set -euo pipefail
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task10-prebuild-evidence/tests/import.log 2>&1
+          timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_prebuild.gd > task10-prebuild-evidence/tests/test_task10_prebuild.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task10-prebuild-evidence/tests/*.log; then exit 1; fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('task10-prebuild-evidence/tests/test_task10_prebuild.log')
+          reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
+          assert reports, path
+          report=reports[-1]
+          assert report.get('passed') is True and not report.get('failures'), report
+          report['integration_allowed']=False
+          report['task_approved']=False
+          Path('task10-prebuild-evidence/tests.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report))
+          PY
+
+      - name: Governance regression
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task10/prepare_activation.py | tee task10-prebuild-evidence/preparation.json
+          python3 tools/havenline/production/workstream.py validate-registry | tee task10-prebuild-evidence/registry.json
+          python3 tools/havenline/production/validate_migration.py > task10-prebuild-evidence/migration.json
+          python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > task10-prebuild-evidence/tests/production-tools.log 2>&1
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task10-prebuild-${{ github.sha }}
+          path: task10-prebuild-evidence
+          if-no-files-found: error
+          retention-days: 14
