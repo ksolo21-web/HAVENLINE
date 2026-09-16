@@ -1,0 +1,46 @@
+name: Havenline T12 preparation gate
+
+on:
+  push:
+    branches:
+      - havenline/governance-t12-prep
+    paths:
+      - 'Docs/Production/T12/**'
+      - 'tools/havenline/task12/**'
+      - '.github/workflows/havenline-task12-prep.yml'
+  pull_request:
+    paths:
+      - 'Docs/Production/T12/**'
+      - 'tools/havenline/task12/**'
+      - '.github/workflows/havenline-task12-prep.yml'
+
+jobs:
+  validate-t12-preparation:
+    name: Validate T12 dependency-safe preparation
+    runs-on: ubuntu-24.04
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - name: Compile T12 activation preflight
+        run: python -m py_compile tools/havenline/task12/prepare_activation.py
+
+      - name: Validate T12 JSON artifacts
+        run: |
+          python -m json.tool Docs/Production/T12/ACTIVATION_CHECKLIST.json >/dev/null
+          python -m json.tool Docs/Production/T12/PREBUILD_CONTRACT.json >/dev/null
+          python -m json.tool Docs/Production/T12/defect-ledger.json >/dev/null
+
+      - name: Validate T12 preparation contract
+        run: python tools/havenline/task12/prepare_activation.py
+
+      - name: Confirm shipping T12 runtime is still absent
+        run: |
+          test ! -e HavenlineGodot/scripts/progression_architecture.gd
+          test ! -e HavenlineGodot/data/progression_levels_v1.json
+          test ! -e HavenlineGodot/data/progression_milestones_v1.json
