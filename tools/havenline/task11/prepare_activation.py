@@ -18,6 +18,7 @@ import subprocess
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 DOCS = ROOT / "Docs" / "Production"
 CHECKLIST_PATH = DOCS / "T11" / "ACTIVATION_CHECKLIST.json"
+BUILD_PENDING_PATH = DOCS / "T11" / "BUILD_PENDING_CANDIDATE.json"
 GRAPH_PATH = DOCS / "DEPENDENCY_GRAPH.json"
 REGISTRY_PATH = DOCS / "WORKSTREAM_REGISTRY.json"
 OWNERSHIP_PATH = DOCS / "PATH_OWNERSHIP.json"
@@ -64,6 +65,89 @@ def registry_status(registry, task_id: str):
         return "APPROVED"
     row = next((x for x in registry.get("workstreams", []) if x.get("task_id") == task_id), None)
     return (row or {}).get("status")
+
+
+def checkpoint_source(checkpoint: dict) -> str:
+    return str(
+        checkpoint.get("runtime_and_evidence_candidate_source")
+        or checkpoint.get("runtime_candidate_source")
+        or ""
+    )
+
+
+def validate_build_pending_checkpoint(errors: list[str]) -> dict:
+    if not BUILD_PENDING_PATH.exists() or not BUILD_PENDING_PATH.read_text().strip():
+        errors.append("missing/empty T11 BUILD_PENDING_CANDIDATE.json")
+        return {}
+    try:
+        checkpoint = load(BUILD_PENDING_PATH)
+    except Exception as exc:
+        errors.append(f"T11 BUILD_PENDING_CANDIDATE.json is invalid JSON: {exc}")
+        return {}
+
+    if checkpoint.get("task_id") != "T11":
+        errors.append("build-pending checkpoint task_id must be T11")
+    if checkpoint.get("state") != "BUILT_PENDING_DEPENDENCY":
+        errors.append(f"build-pending checkpoint state must be BUILT_PENDING_DEPENDENCY, got {checkpoint.get('state')}")
+    if checkpoint.get("final_integration_ready") is not False:
+        errors.append("build-pending checkpoint must not claim final integration readiness")
+    if checkpoint.get("task_approved") is not False:
+        errors.append("build-pending checkpoint must not claim task approval")
+    if checkpoint.get("unresolved_mandatory_build_defects") != []:
+        errors.append("build-pending checkpoint must have zero unresolved mandatory build defects")
+
+    source = checkpoint_source(checkpoint)
+    if len(source) != 40:
+        errors.append(f"build-pending checkpoint needs an exact 40-char candidate source SHA, got {source!r}")
+
+    run = checkpoint.get("build_pending_test_run", {})
+    if not isinstance(run, dict):
+        errors.append("build_pending_test_run must be an object")
+        run = {}
+    if run.get("source") != source:
+        errors.append(f"build-pending run source does not match candidate source: run={run.get('source')} candidate={source}")
+    if run.get("conclusion") != "success":
+        errors.append(f"build-pending test run conclusion must be success, got {run.get('conclusion')}")
+    if not isinstance(run.get("workflow_run"), int) or int(run.get("workflow_run", 0)) <= 0:
+        errors.append("build-pending checkpoint must record a workflow_run id")
+    if not isinstance(run.get("artifact_id"), int) or int(run.get("artifact_id", 0)) <= 0:
+        errors.append("build-pending checkpoint must record an artifact_id")
+    artifact_sha = str(run.get("artifact_sha256", ""))
+    if len(artifact_sha) != 64:
+        errors.append("build-pending checkpoint must record a 64-char artifact_sha256")
+
+    tests = checkpoint.get("build_pending_tests", {})
+    if not isinstance(tests, dict):
+        errors.append("build_pending_tests must be an object")
+        tests = {}
+    if tests.get("all_passed") is not True:
+        errors.append("build-pending checkpoint tests must all pass")
+    if int(tests.get("suite_count", 0)) < 1 or int(tests.get("check_count", 0)) < 1:
+        errors.append("build-pending checkpoint must record non-zero suite/check counts")
+    for key in ("godot_import", "source_contract", "production_governance_regression", "rendered_evidence_gate"):
+        if tests.get(key) != "PASS":
+            errors.append(f"build-pending checkpoint {key} must be PASS, got {tests.get(key)}")
+
+    evidence = checkpoint.get("rendered_evidence", {})
+    if not isinstance(evidence, dict):
+        errors.append("rendered_evidence must be an object")
+        evidence = {}
+    if int(evidence.get("standard_frame_count", 0)) < 1 or int(evidence.get("native_4k_frame_count", 0)) < 1:
+        errors.append("build-pending checkpoint must include standard and native-4K rendered evidence")
+    if evidence.get("approved_t03_boundary_rendered") is not True:
+        errors.append("build-pending rendered evidence must include approved T03 boundary context")
+    if evidence.get("lifecycle_beacon_readable_at_gameplay_scale") is not True:
+        errors.append("build-pending rendered evidence must record gameplay-scale lifecycle readability")
+    if evidence.get("final_visual_critic_evidence") is not False:
+        errors.append("build-pending checkpoint must not claim final visual critic evidence")
+    if evidence.get("physical_4k60_verified") is not False:
+        errors.append("build-pending checkpoint must not claim physical 4K60 verification")
+
+    blockers = checkpoint.get("blocked_before_integration_ready")
+    if not isinstance(blockers, list) or not blockers:
+        errors.append("build-pending checkpoint must preserve blockers before INTEGRATION_READY")
+
+    return checkpoint
 
 
 def validate_preparation():
@@ -189,6 +273,10 @@ def validate_activation(base: str):
     gates = load(GATES_PATH)
     errors: list[str] = []
 
+    checkpoint = validate_build_pending_checkpoint(errors)
+    candidate_source = checkpoint_source(checkpoint)
+    run = checkpoint.get("build_pending_test_run", {}) if checkpoint else {}
+
     head = git_head()
     if head != base:
         errors.append(f"activation base must equal checked-out HEAD: head={head} base={base}")
@@ -222,6 +310,10 @@ def validate_activation(base: str):
         "builder_branch": checklist["builder_branch"],
         "owner": checklist["future_owner"],
         "owned_alias": checklist["planned_owned_alias"],
+        "build_pending_candidate_source": candidate_source,
+        "build_pending_workflow_run": run.get("workflow_run"),
+        "build_pending_artifact_id": run.get("artifact_id"),
+        "fresh_reconciliation_required": True,
         "passed": not errors,
         "errors": errors,
     }
@@ -233,6 +325,7 @@ def stage_activation(base: str):
         fail(json.dumps(result, indent=2))
 
     checklist = load(CHECKLIST_PATH)
+    checkpoint = load(BUILD_PENDING_PATH)
     graph = load(GRAPH_PATH)
     registry = load(REGISTRY_PATH)
     ownership = load(OWNERSHIP_PATH)
@@ -243,6 +336,11 @@ def stage_activation(base: str):
     owner = checklist["future_owner"]
     branch = checklist["builder_branch"]
     critics = checklist["required_critics"]
+    candidate_source = checkpoint_source(checkpoint)
+    run = checkpoint["build_pending_test_run"]
+    tests = checkpoint["build_pending_tests"]
+    blockers = list(checkpoint.get("blocked_before_integration_ready", []))
+    artifact_identity = f"github-actions:{run['artifact_id']}:sha256:{run['artifact_sha256']}"
 
     existing_alias = ownership.setdefault("aliases", {}).get(alias)
     if existing_alias is not None and existing_alias != paths:
@@ -278,15 +376,15 @@ def stage_activation(base: str):
         "dependencies": graph["tasks"]["T11"]["dependencies"],
         "owned_paths": [alias],
         "protected_paths": ["@protected:approved", "@integration-only"],
-        "candidate_commit": None,
-        "candidate_hash_or_artifact": None,
-        "tests": {},
+        "candidate_commit": candidate_source,
+        "candidate_hash_or_artifact": artifact_identity,
+        "tests": tests,
         "evidence_path": "Docs/Production/Evidence/T11/",
         "critic_requirements": critics,
         "critic_status": {},
-        "integration_status": "not integrated",
-        "known_blockers": [],
-        "next_action": "Reconcile the build-pending T11 candidate to the exact accepted T10 source, rerun dependency-sensitive tests/evidence, then advance to INTEGRATION_READY.",
+        "integration_status": "not integrated; reconciliation required",
+        "known_blockers": blockers,
+        "next_action": "Reconcile the preserved build-pending T11 candidate to the exact accepted T10 source, rerun dependency-sensitive tests/evidence, then advance to INTEGRATION_READY.",
     }
     if row:
         row.clear(); row.update(new_row)
@@ -294,7 +392,7 @@ def stage_activation(base: str):
         registry.setdefault("workstreams", []).append(new_row)
 
     notes = registry.setdefault("notes", [])
-    activation_note = "T03-T10 are APPROVED. T11 build-pending candidate may now be reconciled and promoted toward integration under its frozen scope and disjoint reservation."
+    activation_note = "T03-T10 are APPROVED. Preserve the tested T11 build-pending candidate, reconcile it to the exact accepted T10 source, and require fresh dependency-sensitive evidence before INTEGRATION_READY."
     if activation_note not in notes:
         notes.append(activation_note)
 
@@ -304,11 +402,11 @@ def stage_activation(base: str):
     gates["active_frozen_scope"] = "Docs/Production/T11/FROZEN_SCOPE.md"
     gates["active_task_packet"] = "Docs/Production/T11/TASK_PACKET.md"
     gates["active_base_integration_commit"] = base
-    gates["active_candidate_source"] = None
-    gates["active_candidate_run"] = None
-    gates["active_tests"] = None
+    gates["active_candidate_source"] = candidate_source
+    gates["active_candidate_run"] = run.get("workflow_run")
+    gates["active_tests"] = tests
     gates["active_evidence"] = "Docs/Production/Evidence/T11/"
-    gates["active_critic_state"] = "PENDING_RECONCILIATION_BUILD_AND_INDEPENDENT_REVIEW"
+    gates["active_critic_state"] = "PENDING_EXACT_T10_RECONCILIATION_AND_INDEPENDENT_REVIEW"
 
     wave = gates.setdefault("next_post_t03_wave", [])
     wave[:] = [x for x in wave if x.get("task") != "T11"]
@@ -318,7 +416,8 @@ def stage_activation(base: str):
         "state": "ASSIGNED",
         "owner": owner,
         "base_commit": base,
-        "reason": "T05/T10 are approved; reconcile the existing build-pending T11 candidate to the exact T10 interface before integration readiness.",
+        "candidate_commit": candidate_source,
+        "reason": "T05/T10 are approved; preserve and reconcile the existing build-pending T11 candidate to the exact accepted T10 interface before integration readiness.",
     })
 
     dump(OWNERSHIP_PATH, ownership)
@@ -329,6 +428,9 @@ def stage_activation(base: str):
     return {
         **result,
         "written": True,
+        "preserved_candidate_source": candidate_source,
+        "preserved_workflow_run": run.get("workflow_run"),
+        "preserved_artifact_id": run.get("artifact_id"),
         "mutated_files": [
             str(OWNERSHIP_PATH.relative_to(ROOT)),
             str(GRAPH_PATH.relative_to(ROOT)),
@@ -339,8 +441,8 @@ def stage_activation(base: str):
             "Run: python3 tools/havenline/production/workstream.py validate-registry",
             "Run production governance/migration tests.",
             "Commit promotion governance on the integration branch.",
-            "Rebase/reconcile havenline/T11-camp-construction to that exact post-T10 governance commit.",
-            "Require dependency-sensitive candidate guards, regression and fresh evidence before INTEGRATION_READY.",
+            "Rebase/reconcile havenline/T11-camp-construction to that exact post-T10 governance commit while preserving the tested build-pending source as the comparison anchor.",
+            "Require exact accepted-T10 contract diff, dependency-sensitive candidate guards, regression and fresh evidence before INTEGRATION_READY.",
         ],
     }
 
