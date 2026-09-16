@@ -31,6 +31,8 @@ TRACEABILITY_PATH = T12_DOCS / "ACCEPTANCE_TRACEABILITY.json"
 DOWNSTREAM_CONTRACT_PATH = T12_DOCS / "DOWNSTREAM_CONSUMER_CONTRACT.json"
 DATA_SCHEMA_PATH = T12_DOCS / "PROGRESSION_DATA_SCHEMA.json"
 ENGINE_VECTORS_PATH = T12_DOCS / "ENGINE_TEST_VECTORS.json"
+CANDIDATE_EVIDENCE_TEMPLATE_PATH = T12_DOCS / "CANDIDATE_EVIDENCE_TEMPLATE.json"
+CRITIC_REVIEW_TEMPLATE_PATH = T12_DOCS / "CRITIC_REVIEW_RECORD_TEMPLATE.json"
 MATRIX_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_level_matrix.py"
 BINDING_VERIFIER = ROOT / "tools" / "havenline" / "task12" / "verify_binding_resolution.py"
 RUNTIME_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_runtime_interface.py"
@@ -38,6 +40,8 @@ TRACEABILITY_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_tra
 DOWNSTREAM_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_downstream_contract.py"
 DATA_SCHEMA_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_data_schema.py"
 REFERENCE_ORACLE = ROOT / "tools" / "havenline" / "task12" / "reference_progression_oracle.py"
+CANDIDATE_EVIDENCE_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_candidate_evidence.py"
+CRITIC_REVIEW_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_critic_review_records.py"
 FUZZ_GATE = ROOT / "tools" / "havenline" / "task12" / "fuzz_progression_contract.py"
 PREBUILD_BENCHMARK = ROOT / "tools" / "havenline" / "task12" / "benchmark_prebuild_validators.py"
 
@@ -176,6 +180,8 @@ def validate_preparation():
     downstream_contract_passed = False
     data_schema_passed = False
     engine_parity_passed = False
+    candidate_evidence_template_passed = False
+    critic_review_template_passed = False
 
     if MATRIX_VALIDATOR.exists() and MATRIX_PATH.exists():
         matrix_passed, output = run_read_only_tool([str(MATRIX_VALIDATOR), "--input", str(MATRIX_PATH)])
@@ -229,6 +235,22 @@ def validate_preparation():
         ])
         if not engine_parity_passed:
             errors.append("T12 non-shipping engine parity vector validation failed: " + output)
+    if CANDIDATE_EVIDENCE_VALIDATOR.exists() and CANDIDATE_EVIDENCE_TEMPLATE_PATH.exists():
+        candidate_evidence_template_passed, output = run_read_only_tool([
+            str(CANDIDATE_EVIDENCE_VALIDATOR),
+            "--input",
+            str(CANDIDATE_EVIDENCE_TEMPLATE_PATH),
+        ])
+        if not candidate_evidence_template_passed:
+            errors.append("T12 candidate-evidence template validation failed: " + output)
+    if CRITIC_REVIEW_VALIDATOR.exists() and CRITIC_REVIEW_TEMPLATE_PATH.exists():
+        critic_review_template_passed, output = run_read_only_tool([
+            str(CRITIC_REVIEW_VALIDATOR),
+            "--input",
+            str(CRITIC_REVIEW_TEMPLATE_PATH),
+        ])
+        if not critic_review_template_passed:
+            errors.append("T12 per-dimension critic-review template validation failed: " + output)
 
     shipping_paths = [
         ROOT / "HavenlineGodot" / "scripts" / "progression_architecture.gd",
@@ -263,6 +285,8 @@ def validate_preparation():
         "downstream_consumer_validation_passed": downstream_contract_passed,
         "data_schema_validation_passed": data_schema_passed,
         "engine_parity_validation_passed": engine_parity_passed,
+        "candidate_evidence_template_validation_passed": candidate_evidence_template_passed,
+        "critic_review_template_validation_passed": critic_review_template_passed,
         "required_critics": expected_critics,
         "runtime_build_allowed": False,
         "passed": not errors,
