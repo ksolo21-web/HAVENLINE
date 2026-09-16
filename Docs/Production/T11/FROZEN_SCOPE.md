@@ -22,7 +22,7 @@ T11 is content and presentation work. T10 remains the authority for transform el
 - **T11-R12 — Recovery-compatible content identity.** Camp state/recipe/presentation IDs are stable and deterministic so T10 component snapshots and later T14 persistence can reconstruct the same authored camp stage without duplicate spawning or asset ambiguity.
 - **T11-R13 — Adaptive readable evidence.** Required evidence covers gameplay, overhead, side/three-quarter and detail views, the construction/upgrade sequence, blocked/ready states and adaptive phone/tablet/foldable layouts. Native 3840x2160 scale-1 capture is required where the current development evidence pipeline supports it; it is not physical-device certification.
 - **T11-R14 — Bounded presentation cost.** Static completed camp stages do not rebuild every frame. Construction effects, pad indicators, materials, geometry and collision stay within published performance/headroom budgets and release cleanly after transitions.
-- **T11-R15 — Dependency truth.** T11 production implementation may not enter `ASSIGNED`/`BUILDING_ISOLATED` until T05 and T10 are both `APPROVED`, with T10 integrated on the authoritative branch. Governance packet/tooling/workflow preparation may complete while T09/T10 runtime work is unfinished.
+- **T11-R15 — Dependency truth / build-pending policy.** T11 may enter isolated contract-bound build and test work before T10 is approved, provided it uses only T11-owned paths, the frozen T10 semantic contract, approved T05/T03/T04/T07 interfaces and explicit mocks/adapters for unavailable T10 runtime. Such a candidate may advance only through `BUILDING_ISOLATED` to `BUILT_PENDING_DEPENDENCY`. It may **not** become `INTEGRATION_READY`, `INTEGRATING`, `UNDER_REVIEW` for final approval, or `APPROVED` until T10 is approved/integrated on the authoritative branch, the T11 candidate is reconciled to T10's exact accepted interface and source, dependency G1 passes, affected tests/evidence are rerun, and integration G14 passes. No build-pending evidence may be represented as proof of final T10 compatibility.
 - **T11-R16 — Acceptance gate.** Required critics are C2/C3/C4/C6 exactly as registered. Every mandatory dimension must be strictly greater than 9.0 unrounded, target 10/10; all applicable G1-G14 gates and impacted approved-task regression must pass with zero unresolved mandatory defects.
 
 ## Explicit exclusions
@@ -36,7 +36,7 @@ T11 is content and presentation work. T10 remains the authority for transform el
 
 ## Planned ownership reservation
 
-The T11 isolated builder will own only the following disjoint paths once activation is legal:
+The T11 isolated builder owns only the following disjoint paths during contract-bound build-pending work and after final dependency activation:
 
 - `HavenlineGodot/scripts/camp_construction.gd`
 - `HavenlineGodot/scripts/camp_construction_view.gd`
@@ -51,16 +51,31 @@ The T11 isolated builder will own only the following disjoint paths once activat
 
 T11 may reference but not mutate approved T05 assets and T10 runtime. Shared shipping wiring (`main.gd`, `simulation.gd`, canonical registries) remains integration-owner work.
 
-## Required acceptance evidence after activation
+## Build-pending evidence allowed before T10 approval
 
-- Exact post-T10 integration base, candidate hash and authorized changed-file manifest.
+The isolated candidate may complete and test all dependency-independent work now, including:
+
+- camp-state/asset manifests and authored stage composition;
+- `camp_construction.gd` content-domain adapter against a semantic T10 mock/port;
+- `camp_construction_view.gd` presentation behavior and no-authority guarantees;
+- route/camera/context regressions against approved T03/T04/T07 contracts;
+- T05 exact asset binding and drift tests;
+- test-only non-shipping recipe fixtures and price-provenance rejection tests;
+- build/import/parser tests, deterministic state mapping, duplicate/replay presentation protection, unchanged-state no-rebuild tests and transition-cleanup tests;
+- exact-source candidate manifests and source-bound evidence that do not require real T10 transaction execution.
+
+Build-pending work may not claim final dependency compatibility, final shipping prices, T10 exact-once transaction proof, final T08/T09-through-T10 conservation, final critics, integration regression or task approval.
+
+## Required acceptance evidence after T10 reconciliation
+
+- Exact post-T10 integration base, reconciled candidate hash and authorized changed-file manifest.
 - Machine-readable camp-state/recipe/presentation manifest with stable IDs and shipping-vs-test pricing provenance.
 - Initial field/pad state and fully constructed first-camp state matching the authoritative camp visual language.
-- At least one complete structural visual-upgrade sequence using the T10 lifecycle, with every registered shipping stage represented in evidence.
-- Exact-once proof for proximity re-entry, repeated trigger, duplicate transaction, stale state and reload/reconstruction cases.
+- At least one complete structural visual-upgrade sequence using the accepted T10 lifecycle, with every registered shipping stage represented in evidence.
+- Exact-once proof for proximity re-entry, repeated trigger, duplicate transaction, stale state and reload/reconstruction cases through the accepted T10 implementation.
 - Route/collision matrix proving player/helper lanes, gates and pads remain reachable through every state.
 - T04 camera and T07 contextual-control regression; no new required action button/menu.
-- T08/T09 resource conservation compatibility through T10 commit paths.
+- T08/T09 resource conservation compatibility through accepted T10 commit paths.
 - Gameplay, overhead, side/three-quarter, detail, blocked, ready, transition and complete views; adaptive phone/tablet/foldable coverage and native 3840x2160 scale-1 evidence where applicable.
 - Geometry/material/collision/performance metrics for all authored camp states and transition cleanup.
 - Full impacted T01-T10 regression after integration.
