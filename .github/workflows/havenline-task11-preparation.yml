@@ -1,0 +1,96 @@
+name: Havenline Task 11 preparation gate
+
+on:
+  push:
+    branches: ['havenline/governance-t11-prep']
+    paths:
+      - 'Docs/Production/T11/**'
+      - 'tools/havenline/task11/**'
+      - '.github/workflows/havenline-task11-*.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-task11-preparation-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate-preparation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Python syntax and frozen preparation contract
+        run: |
+          set -euo pipefail
+          mkdir -p task11-prep-evidence
+          python3 -m py_compile tools/havenline/task11/prepare_activation.py tools/havenline/task11/validate_camp_construction.py
+          python3 tools/havenline/task11/prepare_activation.py | tee task11-prep-evidence/preparation.json
+
+      - name: Verify T11/T10 separation and critic contract
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | tee task11-prep-evidence/static-contract.json
+          import json
+          from pathlib import Path
+
+          checklist=json.loads(Path('Docs/Production/T11/ACTIVATION_CHECKLIST.json').read_text())
+          t10=json.loads(Path('Docs/Production/T10/ACTIVATION_CHECKLIST.json').read_text())
+          graph=json.loads(Path('Docs/Production/DEPENDENCY_GRAPH.json').read_text())
+          critics=json.loads(Path('Docs/Production/CRITIC_MATRIX.json').read_text())
+
+          assert checklist['dependencies']==['T05','T10']
+          assert graph['tasks']['T11']['dependencies']==checklist['dependencies']
+          assert checklist['required_critics']==['C2','C3','C4','C6']
+          assert graph['tasks']['T11']['critics']==checklist['required_critics']
+          assert critics['task_applicability']['T11']==checklist['required_critics']
+          policy=checklist['build_pending_policy']
+          assert policy['isolated_build_allowed_before_t10_approval'] is True
+          assert policy['maximum_state_before_t10_approval']=='BUILT_PENDING_DEPENDENCY'
+          assert policy['may_claim_integration_ready'] is False
+          assert policy['may_integrate'] is False
+          assert checklist['runtime_build_allowed_before_final_activation'] is True
+          assert checklist['final_integration_allowed_before_dependencies'] is False
+
+          t10_paths=set(t10['planned_owned_paths'])
+          t11_paths=set(checklist['planned_owned_paths'])
+          assert not (t10_paths & t11_paths), sorted(t10_paths & t11_paths)
+          assert 'HavenlineGodot/scripts/main.gd' not in t11_paths
+          assert 'HavenlineGodot/scripts/simulation.gd' not in t11_paths
+
+          result={
+            'task':'T11-preparation',
+            't10_status':graph['tasks']['T10']['status'],
+            't11_status':graph['tasks']['T11']['status'],
+            'dependency_contract':checklist['dependencies'],
+            'critic_contract':checklist['required_critics'],
+            'planned_paths':len(t11_paths),
+            'exact_path_intersections_with_t10':0,
+            'isolated_build_allowed':True,
+            'maximum_pre_dependency_state':'BUILT_PENDING_DEPENDENCY',
+            'final_integration_allowed':False,
+            'passed':True,
+          }
+          print(json.dumps(result,indent=2))
+          PY
+
+      - name: Production governance regression
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/workstream.py validate-registry | tee task11-prep-evidence/registry.json
+          python3 tools/havenline/production/validate_migration.py > task11-prep-evidence/migration.json
+          python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > task11-prep-evidence/production-tools.log 2>&1
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task11-preparation-${{ github.sha }}
+          path: task11-prep-evidence
+          if-no-files-found: error
+          retention-days: 14

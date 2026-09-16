@@ -1,0 +1,107 @@
+{
+  "schema_version": 2,
+  "task_id": "T11",
+  "task_name": "Camp construction and visual upgrade system",
+  "preparation_status": "PREPARED_FOR_CONTRACT_BOUND_BUILD",
+  "prepared_branch": "havenline/governance-t11-prep",
+  "prepared_from_branch": "havenline/governance-t10-prep",
+  "prepared_from_commit": "7e95338e339fb331a5d6b094874c15d5a7e96e16",
+  "builder_branch": "havenline/T11-camp-construction",
+  "future_owner": "camp-construction-builder",
+  "dependencies": ["T05", "T10"],
+  "build_pending_policy": {
+    "isolated_build_allowed_before_t10_approval": true,
+    "maximum_state_before_t10_approval": "BUILT_PENDING_DEPENDENCY",
+    "requires_frozen_t10_semantic_contract": true,
+    "requires_disjoint_t11_paths": true,
+    "requires_mock_or_adapter_for_unavailable_t10_runtime": true,
+    "may_claim_final_t10_compatibility": false,
+    "may_claim_integration_ready": false,
+    "may_integrate": false,
+    "may_run_final_critics": false
+  },
+  "integration_promotion": {
+    "requires_all_dependencies_approved": true,
+    "base_rule": "exact current integration head that records T10 APPROVED and integrated",
+    "requires_reconcile_to_exact_t10_interface": true,
+    "requires_affected_test_and_evidence_refresh": true,
+    "requires_g1_dependency_pass": true,
+    "requires_g14_integration_pass": true
+  },
+  "planned_owned_alias": "@reservation:T11",
+  "planned_owned_paths": [
+    "HavenlineGodot/scripts/camp_construction.gd",
+    "HavenlineGodot/scripts/camp_construction_view.gd",
+    "HavenlineGodot/data/camp_upgrade_recipes.json",
+    "HavenlineGodot/assets/camp_upgrades_v1/**",
+    "HavenlineGodot/tests/test_task11_camp_construction.gd",
+    "HavenlineGodot/tests/test_task11_integration.gd",
+    "HavenlineGodot/tests/capture_task11_camp_upgrade.gd",
+    "Docs/Production/T11/**",
+    "tools/havenline/task11/**",
+    ".github/workflows/havenline-task11-*.yml"
+  ],
+  "forbidden_overlap_examples": [
+    "HavenlineGodot/scripts/world_transform.gd",
+    "HavenlineGodot/scripts/world_transform_view.gd",
+    "HavenlineGodot/data/world_transform_recipes.json",
+    "HavenlineGodot/assets/world_transform_v1/**",
+    "HavenlineGodot/tests/test_task10_world_transform.gd",
+    "HavenlineGodot/tests/test_task10_integration.gd",
+    "HavenlineGodot/tests/capture_task10_world_transform.gd",
+    "HavenlineGodot/scripts/main.gd",
+    "HavenlineGodot/scripts/simulation.gd"
+  ],
+  "prepared_support_artifacts": [
+    "Docs/Production/T11/FROZEN_SCOPE.md",
+    "Docs/Production/T11/TASK_PACKET.md",
+    "Docs/Production/T11/PREBUILD_CONTRACT.json",
+    "Docs/Production/T11/T05_REUSE_BINDINGS.json",
+    "Docs/Production/T11/SPATIAL_BASELINE.json",
+    "Docs/Production/T11/defect-ledger.json",
+    "tools/havenline/task11/prepare_activation.py",
+    "tools/havenline/task11/validate_camp_construction.py",
+    "tools/havenline/task11/tests/test_preparation.py",
+    "tools/havenline/task11/tests/test_t05_bindings.py",
+    "tools/havenline/task11/tests/test_spatial_baseline.py"
+  ],
+  "required_critics": ["C2", "C3", "C4", "C6"],
+  "acceptance": {
+    "operator": ">",
+    "threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "zero_unresolved_mandatory_defects": true
+  },
+  "early_build_steps": [
+    "Verify authoritative V2 plan includes BUILT_PENDING_DEPENDENCY.",
+    "Verify frozen T10 semantic contract is present at the prepared checkpoint.",
+    "Verify T11 planned paths are disjoint from T09/T10 and integration-only ownership.",
+    "Create havenline/T11-camp-construction from the verified T11 preparation checkpoint.",
+    "Build only T11-owned runtime/content/test paths against a semantic T10 mock/adapter.",
+    "Run T11 component, route/camera/context, build/import and performance-budget tests.",
+    "Record exact candidate source and unresolved dependency-sensitive tests.",
+    "Stop at BUILT_PENDING_DEPENDENCY until T10 is approved/integrated."
+  ],
+  "integration_promotion_steps": [
+    "Verify authoritative integration branch is codex/havenline-sequential-task-01.",
+    "Verify T05 and T10 are APPROVED in dependency graph, workstream registry and task gates.",
+    "Verify the current integration head contains the accepted T10 completion/integration record.",
+    "Verify T10 is no longer listed as an active owner before T11 promotion.",
+    "Reconcile T11 build-pending adapter/recipes/tests against the exact accepted T10 public interface and completion source.",
+    "Run tools/havenline/task11/prepare_activation.py --activate --base <current-integration-head>.",
+    "Apply the emitted @reservation:T11 PATH_OWNERSHIP patch through the integration owner.",
+    "Rebase or rebuild havenline/T11-camp-construction on the exact post-T10 integration head without losing approved T11 work.",
+    "Rerun dependency-sensitive integration tests, evidence, impacted regression and candidate guards.",
+    "Only then advance T11 to INTEGRATION_READY."
+  ],
+  "runtime_build_allowed_before_final_activation": true,
+  "final_integration_allowed_before_dependencies": false,
+  "notes": [
+    "Build-pending is not approval. Canonical integration remains dependency-gated until T10 is accepted.",
+    "T11 consumes the T10 public transform contract and may not change its transaction semantics.",
+    "T11 direct approved T05 bindings are hearth_vessel, pad_build and pad_upgrade; T05 source bytes remain immutable from T11.",
+    "T11 must not invent shipping camp prices from unrelated video labels or historical costs.",
+    "T12/T13 own progression/difficulty, T14 owns global persistence, T15+ own customer/production/combat/defense systems."
+  ]
+}
