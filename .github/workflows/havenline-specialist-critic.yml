@@ -18,13 +18,17 @@ on:
       output_artifact:
         required: true
         type: string
+      timeout_minutes:
+        required: false
+        default: 85
+        type: number
 permissions:
   contents: read
   actions: read
 jobs:
   independent-specialist-review:
     runs-on: ubuntu-24.04
-    timeout-minutes: 85
+    timeout-minutes: ${{ inputs.timeout_minutes }}
     env:
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
@@ -83,4 +87,5 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 # C3/C4/C5/C7/C8/C10/C11 use this workflow. It is branch-independent: a missing cache causes exact pinned runtime preparation, never a silent reviewer downgrade.
+# The default budget remains 85 minutes; callers with materially larger source-bound evidence may request a larger timeout without changing critic logic or thresholds.
 # C1/C2 keep their reference-specific visual review; C6/C9 are deterministic specialist gates.
