@@ -26,7 +26,7 @@ concurrency:
 jobs:
   built-pending-dependency:
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 40
     steps:
       - uses: actions/checkout@v4
         with:
@@ -36,7 +36,7 @@ jobs:
       - name: Enforce isolated ownership and dependency boundary
         run: |
           set -euo pipefail
-          mkdir -p task10-isolated-evidence/tests task10-isolated-evidence/capture task10-isolated-evidence/device-layout
+          mkdir -p task10-isolated-evidence/tests task10-isolated-evidence/capture task10-isolated-evidence/device-layout task10-isolated-evidence/native4k
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
           branch_point=$(git merge-base "$integration" HEAD)
           python3 - <<'PY' "$branch_point" "$integration" | tee task10-isolated-evidence/scope.json
@@ -149,6 +149,7 @@ jobs:
           set -euo pipefail
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
           xvfb-run -a -s '-screen 0 1280x720x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task10_world_transform.gd -- --candidate="$CANDIDATE" --out="$(pwd)/task10-isolated-evidence/capture" > task10-isolated-evidence/capture/capture.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-isolated-evidence/capture/capture.log; then exit 1; fi
           python3 - <<'PY'
           import hashlib,json,struct
           from pathlib import Path
@@ -204,6 +205,41 @@ jobs:
           Path('task10-isolated-evidence/device-layout-evidence.json').write_text(json.dumps({'device_count':6,'capture_count':12,'passed':True,'integration_allowed':False,'task_approved':False,'rows':rows},indent=2))
           PY
 
+      - name: Capture critic-ready native 4K multi-angle evidence
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task10_world_transform.gd -- --candidate="$CANDIDATE" --production-evidence --width=3840 --height=2160 --out="$(pwd)/task10-isolated-evidence/native4k" > task10-isolated-evidence/native4k/capture.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-isolated-evidence/native4k/capture.log; then exit 1; fi
+          python3 - <<'PY'
+          import hashlib,json,struct
+          from pathlib import Path
+          root=Path('task10-isolated-evidence/native4k'); m=json.loads((root/'manifest.json').read_text())
+          expected_states=['ready','blocked','preview','committing','complete']
+          expected_angles=['front','side','three-quarter','overhead','gameplay','detail']
+          assert m.get('passed') is True,m
+          assert m.get('native_scale_1') is True and m.get('capture_resolution') == [3840,2160],m
+          assert m.get('record_count') == 30 and m.get('states') == expected_states and m.get('angles') == expected_angles,m
+          assert m.get('view_visual_node_count') == 4 and m.get('view_visual_build_count') == 1,m
+          assert m.get('real_t09_adapter_bound') is False and m.get('integration_allowed') is False and m.get('task_approved') is False,m
+          files=[]; hashes=set()
+          for row in m['records']:
+              p=root/row['file']; data=p.read_bytes()
+              assert len(data)>4096,(p,len(data)); assert data[:8] == b'\x89PNG\r\n\x1a\n',p
+              w,h=struct.unpack('>II',data[16:24]); assert (w,h)==(3840,2160),(p,w,h)
+              digest=hashlib.sha256(data).hexdigest(); hashes.add(digest)
+              files.append({'file':row['file'],'state':row['state'],'angle':row['angle'],'size':[w,h],'bytes':len(data),'sha256':digest})
+          assert len(files)==30 and len(hashes)==30,(len(files),len(hashes))
+          Path('task10-isolated-evidence/native4k-evidence.json').write_text(json.dumps({
+              'task':'T10','candidate':m['candidate'],'native_scale_1':True,'resolution':[3840,2160],
+              'state_count':5,'angle_count':6,'capture_count':30,'unique_capture_count':30,
+              'states':expected_states,'angles':expected_angles,'files':files,
+              'integration_allowed':False,'real_t09_adapter_bound':False,'task_approved':False,'passed':True
+          },indent=2))
+          PY
+
       - name: Declare isolated candidate state
         run: |
           set -euo pipefail
@@ -214,6 +250,9 @@ jobs:
           print(json.dumps({
             'task':'T10','candidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             'isolated_state':'BUILT_PENDING_DEPENDENCY','dependency':'T09','dependency_status':graph['tasks']['T09']['status'],
+            'critic_ready_native4k_evidence':True,
+            'critic_evidence_states':['ready','blocked','preview','committing','complete'],
+            'critic_evidence_angles':['front','side','three-quarter','overhead','gameplay','detail'],
             'integration_allowed':False,'real_t09_adapter_bound':False,'task_approved':False,'passed':True
           },indent=2))
           PY
