@@ -141,12 +141,15 @@ jobs:
           PY
 
       - name: Render source-bound T11 evidence
+        env:
+          LIBGL_ALWAYS_SOFTWARE: '1'
         run: |
           set -euo pipefail
+          command -v xvfb-run
           standard="$GITHUB_WORKSPACE/task11-evidence/rendered/standard"
           native="$GITHUB_WORKSPACE/task11-evidence/rendered/native-4k"
-          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/capture_task11_camp_upgrade.gd -- --out="$standard" > task11-evidence/tests/capture-task11-standard.log 2>&1
-          timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/capture_task11_camp_upgrade.gd -- --native-4k --out="$native" > task11-evidence/tests/capture-task11-native-4k.log 2>&1
+          timeout 240 xvfb-run -a -s "-screen 0 1920x1080x24" Godot_v4.7.2-stable_linux.x86_64 --display-driver x11 --rendering-method gl_compatibility --audio-driver Dummy --path HavenlineGodot --script res://tests/capture_task11_camp_upgrade.gd -- --out="$standard" > task11-evidence/tests/capture-task11-standard.log 2>&1
+          timeout 300 xvfb-run -a -s "-screen 0 4096x2304x24" Godot_v4.7.2-stable_linux.x86_64 --display-driver x11 --rendering-method gl_compatibility --audio-driver Dummy --path HavenlineGodot --script res://tests/capture_task11_camp_upgrade.gd -- --native-4k --out="$native" > task11-evidence/tests/capture-task11-native-4k.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task11-evidence/tests/capture-task11-*.log; then exit 1; fi
           python3 - <<'PY' | tee task11-evidence/rendered-evidence.json
           from pathlib import Path
