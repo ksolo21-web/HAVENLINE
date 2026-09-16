@@ -6,6 +6,7 @@ extends Node3D
 ## so T11 can attach final camp/build content without changing T10 semantics.
 
 const AUTHORITY_ID := "T10-world-transform-view-v1"
+const CORE_LIFECYCLE := ["locked", "ready", "preview", "committing", "complete"]
 const LIFECYCLE := ["locked", "ready", "preview", "committing", "complete", "blocked"]
 const VISUAL_NODE_BUDGET := 4
 const READABILITY_MIN := 0.85
@@ -47,7 +48,8 @@ var _beacon_material: StandardMaterial3D
 static func contract() -> Dictionary:
 	return {
 		"authority_id": AUTHORITY_ID,
-		"lifecycle": LIFECYCLE.duplicate(),
+		"lifecycle": CORE_LIFECYCLE.duplicate(),
+		"blocked_lifecycle": "blocked",
 		"presentation_only": true,
 		"mutates_resources": false,
 		"advances_progression": false,
@@ -112,7 +114,8 @@ func show_blocked(preview: Dictionary) -> bool:
 	block_reasons.clear()
 	for error in errors:
 		block_reasons.append(String(error))
-	blocked_shortfalls = preview.get("shortfalls", {}).duplicate(true) if preview.get("shortfalls", {}) is Dictionary else {}
+	var shortfalls: Variant = preview.get("shortfalls", {})
+	blocked_shortfalls = shortfalls.duplicate(true) if shortfalls is Dictionary else {}
 	presentation_key = String(preview.get("presentation_key", presentation_key))
 	source_state = String(preview.get("source_state", source_state))
 	target_state = String(preview.get("target_state", target_state))
