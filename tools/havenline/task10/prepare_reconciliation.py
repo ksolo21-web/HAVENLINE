@@ -3,35 +3,21 @@
 
 This tool never mutates refs/files. It inspects an exact integration base and exact
 isolated candidate, validates dependency closure from the base itself, verifies T10
-changed-path ownership, detects base drift that overlaps T10-owned paths, and emits a
-machine-readable handoff plan. It is useful before rebasing/cherry-picking the already-
-built T10 candidate after T09 closes.
+changed-path ownership against the candidate's authoritative activation checklist,
+detects base drift that overlaps T10-owned paths, and emits a machine-readable
+handoff plan. It is useful before rebasing/cherry-picking the already-built T10
+candidate after T09 closes.
 """
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import json
 import pathlib
 import subprocess
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 INTEGRATION_BRANCH = "codex/havenline-sequential-task-01"
-T10_ALLOWED_EXACT = {
-    "HavenlineGodot/scripts/world_transform.gd",
-    "HavenlineGodot/scripts/world_transform_view.gd",
-    "HavenlineGodot/data/world_transform_recipes.json",
-    "HavenlineGodot/tests/test_task10_world_transform.gd",
-    "HavenlineGodot/tests/test_task10_integration.gd",
-    "HavenlineGodot/tests/capture_task10_world_transform.gd",
-    ".github/workflows/havenline-task10-prebuild.yml",
-    ".github/workflows/havenline-task10-isolated.yml",
-    ".github/workflows/havenline-task10-adapter-preflight.yml",
-}
-T10_ALLOWED_PREFIXES = (
-    "HavenlineGodot/assets/world_transform_v1/",
-    "Docs/Production/T10/",
-    "tools/havenline/task10/",
-)
 T10_RUNTIME_PREFIXES = (
     "HavenlineGodot/scripts/world_transform.gd",
     "HavenlineGodot/scripts/world_transform_view.gd",
@@ -55,8 +41,9 @@ def show_json(ref: str, path: str) -> dict:
     return json.loads(git("show", f"{ref}:{path}"))
 
 
-def allowed_t10_path(path: str) -> bool:
-    return path in T10_ALLOWED_EXACT or path.startswith(T10_ALLOWED_PREFIXES)
+def matches_reservation(path: str, patterns: list[str] | tuple[str, ...]) -> bool:
+    """Return whether a repo path is owned by one authoritative reservation pattern."""
+    return any(fnmatch.fnmatchcase(path, pattern) for pattern in patterns)
 
 
 def overlaps_t10_runtime(path: str) -> bool:
@@ -86,6 +73,17 @@ def main() -> None:
     registry = show_json(base, "Docs/Production/WORKSTREAM_REGISTRY.json")
     gates = show_json(base, "Docs/Production/task-gates.json")
     ownership = show_json(base, "Docs/Production/PATH_OWNERSHIP.json")
+    candidate_checklist = show_json(candidate, "Docs/Production/T10/ACTIVATION_CHECKLIST.json")
+    planned_paths = candidate_checklist.get("planned_owned_paths", [])
+
+    reservation_errors: list[str] = []
+    if candidate_checklist.get("task_id") != "T10":
+        reservation_errors.append("candidate activation checklist is not T10")
+    if not isinstance(planned_paths, list) or not planned_paths:
+        reservation_errors.append("candidate activation checklist has no planned_owned_paths")
+        planned_paths = []
+    elif len(planned_paths) != len(set(planned_paths)):
+        reservation_errors.append("candidate activation checklist has duplicate planned_owned_paths")
 
     dependency_state = {}
     dependency_errors: list[str] = []
@@ -107,10 +105,13 @@ def main() -> None:
         dependency_errors.append("T09 still active owner at integration base")
 
     candidate_changes = git_lines("diff", "--name-only", merge_base, candidate)
-    unauthorized = [path for path in candidate_changes if not allowed_t10_path(path)]
+    unauthorized = [path for path in candidate_changes if not matches_reservation(path, planned_paths)]
 
     base_drift = git_lines("diff", "--name-only", merge_base, base)
-    overlapping_drift = [path for path in base_drift if allowed_t10_path(path) or overlaps_t10_runtime(path)]
+    overlapping_drift = [
+        path for path in base_drift
+        if matches_reservation(path, planned_paths) or overlaps_t10_runtime(path)
+    ]
     shared_integration_drift = [
         path for path in base_drift
         if path in {
@@ -123,7 +124,7 @@ def main() -> None:
         }
     ]
 
-    errors: list[str] = []
+    errors: list[str] = list(reservation_errors)
     if unauthorized:
         errors.append("isolated candidate contains unauthorized paths: " + ", ".join(unauthorized))
     if overlapping_drift:
@@ -132,7 +133,7 @@ def main() -> None:
         errors.extend(dependency_errors)
 
     deps_ready = not dependency_errors
-    path_reconcile_clean = not unauthorized and not overlapping_drift
+    path_reconcile_clean = not reservation_errors and not unauthorized and not overlapping_drift
     handoff_ready = deps_ready and path_reconcile_clean
 
     report = {
@@ -141,6 +142,9 @@ def main() -> None:
         "integration_base": base,
         "isolated_candidate": candidate,
         "merge_base": merge_base,
+        "reservation_source": "candidate:Docs/Production/T10/ACTIVATION_CHECKLIST.json",
+        "planned_owned_paths": planned_paths,
+        "reservation_errors": reservation_errors,
         "dependency_state": dependency_state,
         "dependencies_fully_approved": deps_ready,
         "dependency_errors": dependency_errors,
@@ -165,7 +169,7 @@ def main() -> None:
                 "Run validate_post_t09_adapter.py --require-bound and the full T10 real-integration/regression/evidence/critic chain.",
             ] if handoff_ready else [
                 "Do not integrate T10 yet.",
-                "Resolve dependency closure and/or reported overlapping drift, then rerun this exact preflight.",
+                "Resolve dependency closure and/or reported reservation/base drift, then rerun this exact preflight.",
             ]
         ),
         "errors": errors,
