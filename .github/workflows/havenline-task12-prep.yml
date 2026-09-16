@@ -27,17 +27,23 @@ jobs:
         with:
           python-version: '3.12'
 
-      - name: Compile T12 activation preflight
-        run: python -m py_compile tools/havenline/task12/prepare_activation.py
+      - name: Compile T12 preparation tools
+        run: |
+          python -m py_compile tools/havenline/task12/prepare_activation.py
+          python -m py_compile tools/havenline/task12/validate_progression_contract.py
 
       - name: Validate T12 JSON artifacts
         run: |
           python -m json.tool Docs/Production/T12/ACTIVATION_CHECKLIST.json >/dev/null
           python -m json.tool Docs/Production/T12/PREBUILD_CONTRACT.json >/dev/null
+          python -m json.tool Docs/Production/T12/UPSTREAM_BINDINGS.json >/dev/null
           python -m json.tool Docs/Production/T12/defect-ledger.json >/dev/null
 
       - name: Validate T12 preparation contract
         run: python tools/havenline/task12/prepare_activation.py
+
+      - name: Run T12 progression/preparation unit tests
+        run: python -m unittest discover -s tools/havenline/task12/tests -p 'test_*.py' -v
 
       - name: Confirm shipping T12 runtime is still absent
         run: |
