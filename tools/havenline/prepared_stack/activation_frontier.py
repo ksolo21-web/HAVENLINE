@@ -42,7 +42,6 @@ def dependency_state(task_id: str, graph: dict, registry: dict, gates: dict, own
         (owner for owner in ownership.get("active_owners", []) if owner.get("task_id") == task_id),
         None,
     )
-
     blockers = []
     if graph_row is None:
         blockers.append("missing_dependency_graph_row")
@@ -54,7 +53,6 @@ def dependency_state(task_id: str, graph: dict, registry: dict, gates: dict, own
         blockers.append("task_gate_not_approved")
     if active_owner is not None:
         blockers.append(f"active_path_owner:{active_owner.get('owner') or active_owner.get('paths_alias') or 'present'}")
-
     return {
         "task_id": task_id,
         "graph_status": graph_status,
@@ -75,11 +73,9 @@ def validate_prepared_task(task_id: str, graph: dict):
         return None, None, ["missing ACTIVATION_CHECKLIST.json"]
     if not prebuild_path.exists():
         return None, None, ["missing PREBUILD_CONTRACT.json"]
-
     checklist = load(checklist_path)
     prebuild = load(prebuild_path)
     graph_row = graph.get("tasks", {}).get(task_id, {})
-
     if checklist.get("task_id") != task_id:
         errors.append("checklist task_id mismatch")
     if prebuild.get("task_id") != task_id:
@@ -106,40 +102,37 @@ def validate_prepared_task(task_id: str, graph: dict):
         errors.append("future owner missing")
     if not checklist.get("planned_owned_paths"):
         errors.append("planned owned paths missing")
-
     return checklist, prebuild, errors
 
 
 def hypothetical_internal_waves(graph: dict):
     """Layer T13-T70 assuming all dependencies outside this range have cleared.
 
-    This is ordering information only. It is explicitly not current approval.
+    Missing graph rows are never treated as dependency-free; they remain
+    unresolved. This is sequencing guidance only, not current approval.
     """
-    approved = {
-        task_id
-        for task_id, row in graph.get("tasks", {}).items()
-        if row.get("status") == "APPROVED"
-    }
-    approved.update(task_id for task_id in graph.get("tasks", {}) if task_id not in TASK_SET)
-
+    rows = graph.get("tasks", {})
+    missing = {task_id for task_id in TASKS if task_id not in rows}
+    approved = {task_id for task_id, row in rows.items() if row.get("status") == "APPROVED"}
+    approved.update(task_id for task_id in rows if task_id not in TASK_SET)
     remaining = {
         task_id
         for task_id in TASKS
-        if graph.get("tasks", {}).get(task_id, {}).get("status") != "APPROVED"
+        if task_id in rows and rows[task_id].get("status") != "APPROVED"
     }
     waves = []
     while remaining:
         wave = sorted(
             task_id
             for task_id in remaining
-            if all(dep in approved for dep in graph.get("tasks", {}).get(task_id, {}).get("dependencies", []))
+            if all(dep in approved for dep in rows[task_id].get("dependencies", []))
         )
         if not wave:
             break
         waves.append(wave)
         approved.update(wave)
         remaining.difference_update(wave)
-    return waves, sorted(remaining)
+    return waves, sorted(missing | remaining)
 
 
 def build_report():
@@ -147,7 +140,6 @@ def build_report():
     registry = load(DOCS / "WORKSTREAM_REGISTRY.json")
     gates = load(DOCS / "task-gates.json")
     ownership = load(DOCS / "PATH_OWNERSHIP.json")
-
     structural_errors = []
     rows = []
     frontier_now = []
@@ -159,7 +151,6 @@ def build_report():
         checklist, _prebuild, prep_errors = validate_prepared_task(task_id, graph)
         if prep_errors:
             structural_errors.extend(f"{task_id}: {error}" for error in prep_errors)
-
         graph_row = graph.get("tasks", {}).get(task_id, {})
         graph_status = graph_row.get("status")
         dependencies = graph_row.get("dependencies", [])
@@ -172,10 +163,7 @@ def build_report():
         for blocker in blockers:
             for reason in blocker["reasons"]:
                 blocker_counts[reason.split(":", 1)[0]] += 1
-
-        own_active = any(
-            owner.get("task_id") == task_id for owner in ownership.get("active_owners", [])
-        )
+        own_active = any(owner.get("task_id") == task_id for owner in ownership.get("active_owners", []))
         if graph_status == "APPROVED":
             state = "APPROVED"
             already_approved.append(task_id)
@@ -192,19 +180,16 @@ def build_report():
         else:
             state = "ACTIVATABLE_NOW"
             frontier_now.append(task_id)
-
-        rows.append(
-            {
-                "task_id": task_id,
-                "state": state,
-                "graph_status": graph_status,
-                "dependencies": dependencies,
-                "dependency_blockers": blockers,
-                "future_builder_branch": (checklist or {}).get("future_builder_branch"),
-                "future_owner": (checklist or {}).get("future_owner"),
-                "activation_rule": "Create/claim only from the exact current integration head after every dependency is approved and released from active ownership.",
-            }
-        )
+        rows.append({
+            "task_id": task_id,
+            "state": state,
+            "graph_status": graph_status,
+            "dependencies": dependencies,
+            "dependency_blockers": blockers,
+            "future_builder_branch": (checklist or {}).get("future_builder_branch"),
+            "future_owner": (checklist or {}).get("future_owner"),
+            "activation_rule": "Create/claim only from the exact current integration head after every dependency is approved and released from active ownership.",
+        })
 
     waves, unresolved = hypothetical_internal_waves(graph)
     return {
@@ -247,12 +232,7 @@ def write_step_summary(report: dict):
     for wave in waves:
         lines.append(f"- Wave {wave['wave']}: {', '.join(wave['tasks'])}")
     if report["hypothetical_unresolved_after_external_clearance"]:
-        lines.extend([
-            "",
-            "## Unresolved graph nodes",
-            "",
-            ", ".join(report["hypothetical_unresolved_after_external_clearance"]),
-        ])
+        lines.extend(["", "## Unresolved graph nodes", "", ", ".join(report["hypothetical_unresolved_after_external_clearance"])])
     pathlib.Path(path).write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
