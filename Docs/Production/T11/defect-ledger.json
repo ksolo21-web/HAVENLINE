@@ -4,6 +4,8 @@
   "review_scope": "parallel preparation readiness only; not gameplay completion or approval",
   "prepared_branch": "havenline/governance-t11-prep",
   "prepared_from_t10_checkpoint": "7e95338e339fb331a5d6b094874c15d5a7e96e16",
+  "latest_prep_source": "f9f66d40384ffd543b7a9ae5f2310ea54d4297e1",
+  "latest_verified_preflight_run": 35077838088,
   "internal_review": {
     "reviewer_type": "internal review; no separate critic runtime claimed",
     "preparation_readiness_score": 10.0,
@@ -14,13 +16,15 @@
       {"id":"P02","name":"Dependencies fixed to T05/T10 and runtime activation refuses unresolved dependency state","status":"PASS"},
       {"id":"P03","name":"Planned T11 ownership is disjoint from T10 prepared reservation and integration-only paths","status":"PASS"},
       {"id":"P04","name":"Reference B construction/upgrade moments are mapped into a machine-readable prebuild contract","status":"PASS"},
-      {"id":"P05","name":"T05 approved reusable asset families are identified without mutating T05 source assets","status":"PASS"},
-      {"id":"P06","name":"Shipping price provenance rule prevents invented camp costs and test-fixture leakage","status":"PASS"},
-      {"id":"P07","name":"C2/C3/C4/C6 critic contract matches dependency graph and critic matrix","status":"PASS"},
-      {"id":"P08","name":"Required capture groups cover preconstruction, initial construction, upgrades, routes and adaptive layouts","status":"PASS"},
-      {"id":"P09","name":"Activation tooling and candidate validator exist before runtime implementation","status":"PASS"},
-      {"id":"P10","name":"T11 preparation and production-governance workflows passed on exact prep source before this extension","status":"PASS"},
-      {"id":"P11","name":"No HavenlineGodot runtime files are modified by T11 preparation work","status":"PASS"}
+      {"id":"P05","name":"Exact approved T05 asset IDs/hashes/footprints/sockets are bound for T11 reuse without source mutation","status":"PASS"},
+      {"id":"P06","name":"Later T16/T17/T22 behavior boundaries remain excluded from T11 despite passive visual reuse where permitted","status":"PASS"},
+      {"id":"P07","name":"Shipping price provenance rule prevents invented camp costs and test-fixture leakage","status":"PASS"},
+      {"id":"P08","name":"C2/C3/C4/C6 critic contract matches dependency graph and critic matrix","status":"PASS"},
+      {"id":"P09","name":"Required capture groups cover preconstruction, initial construction, upgrades, routes and adaptive layouts","status":"PASS"},
+      {"id":"P10","name":"Activation tooling and candidate validator exist before runtime implementation","status":"PASS"},
+      {"id":"P11","name":"Automated negative test proves T11 activation fails closed while T10 remains unfinished","status":"PASS"},
+      {"id":"P12","name":"Automated T05 binding tests fail on asset/path/hash/socket/owner drift","status":"PASS"},
+      {"id":"P13","name":"Latest preflight CI passed and exact source audit confirms no HavenlineGodot runtime changes","status":"PASS"}
     ]
   },
   "mandatory_prep_defects": [],
@@ -41,5 +45,5 @@
     "Capture exact-source construction/upgrade/route/adaptive evidence.",
     "Run C2/C3/C4/C6 review, fix defects and retest until every mandatory dimension is strictly >9.0 with zero unresolved mandatory defects."
   ],
-  "resume_from": "Docs/Production/T11/FROZEN_SCOPE.md + TASK_PACKET.md + PREBUILD_CONTRACT.json + ACTIVATION_CHECKLIST.json + tools/havenline/task11/prepare_activation.py"
+  "resume_from": "Docs/Production/T11/FROZEN_SCOPE.md + TASK_PACKET.md + PREBUILD_CONTRACT.json + T05_REUSE_BINDINGS.json + ACTIVATION_CHECKLIST.json + tools/havenline/task11/prepare_activation.py"
 }
