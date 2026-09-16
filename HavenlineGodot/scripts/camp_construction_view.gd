@@ -8,9 +8,11 @@ extends Node3D
 const MANIFEST_PATH := "res://assets/camp_upgrades_v1/manifest.json"
 const AUTHORITY_ID := "T11-camp-construction-view-v1"
 const LIFECYCLES := ["blocked", "ready", "preview", "committing", "complete", "error"]
-const STATUS_RING_INNER_RADIUS := 0.82
-const STATUS_RING_OUTER_RADIUS := 1.04
-const STATUS_SPIRE_HEIGHT := 0.42
+const STATUS_RING_INNER_RADIUS := 0.74
+const STATUS_RING_OUTER_RADIUS := 1.12
+const STATUS_SPIRE_HEIGHT := 0.90
+const STATUS_BEACON_OFFSET := Vector3(0.92, 0.0, 0.0)
+const STATUS_ORB_RADIUS := 0.22
 
 var manifest: Dictionary = {}
 var current_stage_id := ""
@@ -19,6 +21,7 @@ var stage_root: Node3D = null
 var status_root: Node3D = null
 var status_ring: MeshInstance3D = null
 var status_spire: MeshInstance3D = null
+var status_orb: MeshInstance3D = null
 var rebuild_count := 0
 var lifecycle_changes := 0
 
@@ -48,56 +51,56 @@ static func validate_manifest(value: Dictionary) -> bool:
 static func lifecycle_color(lifecycle: String) -> Color:
 	match lifecycle:
 		"blocked":
-			return Color("79869a")
+			return Color("68788f")
 		"ready":
-			return Color("f2c14e")
+			return Color("f0bd32")
 		"preview":
-			return Color("67c7e6")
+			return Color("36b8e3")
 		"committing":
-			return Color("f79445")
+			return Color("f17c2f")
 		"complete":
-			return Color("79c889")
+			return Color("4fbd72")
 		"error":
-			return Color("df5f63")
+			return Color("dd454f")
 		_:
 			return Color.WHITE
 
 static func lifecycle_scale(lifecycle: String) -> float:
 	match lifecycle:
 		"blocked":
-			return 0.76
+			return 0.80
 		"ready":
 			return 1.0
 		"preview":
 			return 1.08
 		"committing":
-			return 1.16
+			return 1.17
 		"complete":
-			return 0.68
+			return 0.72
 		"error":
-			return 1.0
+			return 1.02
 		_:
 			return 1.0
 
 static func lifecycle_spire_scale(lifecycle: String) -> float:
 	match lifecycle:
 		"blocked":
-			return 0.52
+			return 0.55
 		"ready":
-			return 0.86
+			return 0.90
 		"preview":
-			return 1.12
+			return 1.20
 		"committing":
-			return 1.52
+			return 1.80
 		"complete":
-			return 0.40
+			return 0.42
 		"error":
-			return 1.30
+			return 1.45
 		_:
 			return 1.0
 
 static func lifecycle_emission(lifecycle: String) -> float:
-	return 2.25 if lifecycle in ["ready", "preview", "committing", "error"] else 1.35
+	return 0.95 if lifecycle in ["ready", "preview", "committing", "error"] else 0.55
 
 func configure(value: Dictionary) -> bool:
 	if not validate_manifest(value):
@@ -116,8 +119,8 @@ func _clear_stage() -> void:
 func _make_status_material(color: Color, emission_energy: float) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
 	material.albedo_color = color
-	material.roughness = 0.42
-	material.metallic = 0.08
+	material.roughness = 0.36
+	material.metallic = 0.04
 	material.emission_enabled = true
 	material.emission = color
 	material.emission_energy_multiplier = emission_energy
@@ -137,8 +140,8 @@ func _ensure_status_visual() -> void:
 	var ring := TorusMesh.new()
 	ring.inner_radius = STATUS_RING_INNER_RADIUS
 	ring.outer_radius = STATUS_RING_OUTER_RADIUS
-	ring.rings = 32
-	ring.ring_segments = 12
+	ring.rings = 36
+	ring.ring_segments = 14
 	status_ring.mesh = ring
 	status_ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	status_root.add_child(status_ring)
@@ -146,13 +149,24 @@ func _ensure_status_visual() -> void:
 	status_spire = MeshInstance3D.new()
 	status_spire.name = "LifecycleSpire"
 	var spire := CylinderMesh.new()
-	spire.top_radius = 0.08
-	spire.bottom_radius = 0.13
+	spire.top_radius = 0.11
+	spire.bottom_radius = 0.18
 	spire.height = STATUS_SPIRE_HEIGHT
-	spire.radial_segments = 12
+	spire.radial_segments = 16
 	status_spire.mesh = spire
 	status_spire.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	status_root.add_child(status_spire)
+
+	status_orb = MeshInstance3D.new()
+	status_orb.name = "LifecycleOrb"
+	var orb := SphereMesh.new()
+	orb.radius = STATUS_ORB_RADIUS
+	orb.height = STATUS_ORB_RADIUS * 2.0
+	orb.radial_segments = 20
+	orb.rings = 10
+	status_orb.mesh = orb
+	status_orb.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	status_root.add_child(status_orb)
 
 func _update_status_visual() -> void:
 	_ensure_status_visual()
@@ -160,16 +174,18 @@ func _update_status_visual() -> void:
 		status_root.visible = false
 		return
 	status_root.visible = true
-	status_root.position = interaction_anchor() + Vector3(0.0, 0.035, 0.0)
+	status_root.position = interaction_anchor() + Vector3(0.0, 0.045, 0.0)
 	var color := lifecycle_color(current_lifecycle)
 	var material := _make_status_material(color, lifecycle_emission(current_lifecycle))
 	status_ring.material_override = material
 	status_spire.material_override = material
+	status_orb.material_override = material
 	var ring_scale := lifecycle_scale(current_lifecycle)
 	var spire_scale := lifecycle_spire_scale(current_lifecycle)
 	status_ring.scale = Vector3.ONE * ring_scale
 	status_spire.scale = Vector3(1.0, spire_scale, 1.0)
-	status_spire.position.y = STATUS_SPIRE_HEIGHT * spire_scale * 0.55
+	status_spire.position = STATUS_BEACON_OFFSET + Vector3(0.0, STATUS_SPIRE_HEIGHT * spire_scale * 0.5, 0.0)
+	status_orb.position = STATUS_BEACON_OFFSET + Vector3(0.0, STATUS_SPIRE_HEIGHT * spire_scale + STATUS_ORB_RADIUS * 1.15, 0.0)
 	status_root.set_meta("t11_lifecycle", current_lifecycle)
 	status_root.set_meta("t11_lifecycle_color", color.to_html(false))
 	status_root.set_meta("t11_lifecycle_scale", ring_scale)
@@ -240,6 +256,8 @@ func status_descriptor() -> Dictionary:
 		"color": lifecycle_color(current_lifecycle).to_html(false),
 		"scale": lifecycle_scale(current_lifecycle),
 		"spire_scale": lifecycle_spire_scale(current_lifecycle),
+		"beacon_offset": STATUS_BEACON_OFFSET,
+		"orb_radius": STATUS_ORB_RADIUS,
 		"presentation_only": true,
 	}
 
