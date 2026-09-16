@@ -45,8 +45,142 @@ func run() -> void:
 	check("one in-flight transaction per target is explicit", contract.one_inflight_transaction_per_target)
 	check("simulation idempotency key is request scoped", contract.authority_idempotency_key_is_request_scoped)
 	check("completed receipt history is bounded per target", contract.bounded_receipt_history_per_target and contract.receipt_history_policy == "latest_completed_receipt_per_target")
+	check("recipe graph is monotonic except explicit inverse pairs", contract.recipe_graph_is_monotonic_except_explicit_inverse_pairs)
+	check("reversible pairs require reciprocal inverse metadata", contract.reversible_pairs_require_reciprocal_inverse_metadata)
 	check("T14 global save/versioning boundary is preserved", contract.global_save_versioning_owned_by_t14)
 	check("T09 adapter remains required before integration", contract.t09_adapter_required_before_integration)
+
+	# R01/R07 catalog validation must fail closed before any runtime target exists.
+	var base_forward: Dictionary = {
+		"recipe_id": "guard-forward",
+		"source_state": "guard-a",
+		"target_state": "guard-b",
+		"costs": [{"resource_id": "wood", "quantity": 2}],
+		"prerequisites": [],
+		"progression_tags": ["guard-forward"],
+		"presentation_key": "guard-fixture",
+	}
+	var duplicate_recipe: Dictionary = base_forward.duplicate(true)
+	var duplicate_guard := Transform.new()
+	check("duplicate recipe IDs are rejected", not duplicate_guard.configure({"recipes": [base_forward, duplicate_recipe]}))
+
+	var missing_state: Dictionary = base_forward.duplicate(true)
+	missing_state.erase("target_state")
+	var missing_state_guard := Transform.new()
+	check("recipe missing target state is rejected", not missing_state_guard.configure({"recipes": [missing_state]}))
+
+	var zero_cost: Dictionary = base_forward.duplicate(true)
+	zero_cost.costs = [{"resource_id": "wood", "quantity": 0}]
+	var zero_cost_guard := Transform.new()
+	check("zero recipe cost is rejected", not zero_cost_guard.configure({"recipes": [zero_cost]}))
+
+	var negative_cost: Dictionary = base_forward.duplicate(true)
+	negative_cost.costs = [{"resource_id": "wood", "quantity": -1}]
+	var negative_cost_guard := Transform.new()
+	check("negative recipe cost is rejected", not negative_cost_guard.configure({"recipes": [negative_cost]}))
+
+	var duplicate_cost: Dictionary = base_forward.duplicate(true)
+	duplicate_cost.costs = [{"resource_id": "wood", "quantity": 1}, {"resource_id": "wood", "quantity": 1}]
+	var duplicate_cost_guard := Transform.new()
+	check("duplicate resource cost rows are rejected", not duplicate_cost_guard.configure({"recipes": [duplicate_cost]}))
+
+	var duplicate_prerequisite: Dictionary = base_forward.duplicate(true)
+	duplicate_prerequisite.prerequisites = ["same", "same"]
+	var duplicate_prerequisite_guard := Transform.new()
+	check("duplicate recipe prerequisites are rejected", not duplicate_prerequisite_guard.configure({"recipes": [duplicate_prerequisite]}))
+
+	var self_transition: Dictionary = base_forward.duplicate(true)
+	self_transition.recipe_id = "guard-self"
+	self_transition.source_state = "guard-self-state"
+	self_transition.target_state = "guard-self-state"
+	var self_guard := Transform.new()
+	check("implicit self transition is rejected", not self_guard.configure({"recipes": [self_transition]}))
+	self_transition.allow_self_transition = true
+	var explicit_self_guard := Transform.new()
+	check("explicit self transition may be modeled", explicit_self_guard.configure({"recipes": [self_transition]}))
+
+	var undeclared_inverse: Dictionary = base_forward.duplicate(true)
+	undeclared_inverse.inverse_recipe_id = "something"
+	var undeclared_inverse_guard := Transform.new()
+	check("inverse metadata without reversible opt-in is rejected", not undeclared_inverse_guard.configure({"recipes": [undeclared_inverse]}))
+
+	var missing_inverse: Dictionary = base_forward.duplicate(true)
+	missing_inverse.reversible = true
+	missing_inverse.inverse_recipe_id = "guard-reverse"
+	var missing_inverse_guard := Transform.new()
+	check("reversible recipe with missing inverse is rejected", not missing_inverse_guard.configure({"recipes": [missing_inverse]}))
+
+	var cycle_forward: Dictionary = base_forward.duplicate(true)
+	cycle_forward.recipe_id = "cycle-a-b"
+	cycle_forward.source_state = "cycle-a"
+	cycle_forward.target_state = "cycle-b"
+	var cycle_back: Dictionary = base_forward.duplicate(true)
+	cycle_back.recipe_id = "cycle-b-a"
+	cycle_back.source_state = "cycle-b"
+	cycle_back.target_state = "cycle-a"
+	var two_cycle_guard := Transform.new()
+	check("undeclared two-state progression cycle is rejected", not two_cycle_guard.configure({"recipes": [cycle_forward, cycle_back]}))
+
+	var cycle_mid: Dictionary = base_forward.duplicate(true)
+	cycle_mid.recipe_id = "cycle-b-c"
+	cycle_mid.source_state = "cycle-b"
+	cycle_mid.target_state = "cycle-c"
+	var cycle_close: Dictionary = base_forward.duplicate(true)
+	cycle_close.recipe_id = "cycle-c-a"
+	cycle_close.source_state = "cycle-c"
+	cycle_close.target_state = "cycle-a"
+	var three_cycle_guard := Transform.new()
+	check("undeclared multi-state progression cycle is rejected", not three_cycle_guard.configure({"recipes": [cycle_forward, cycle_mid, cycle_close]}))
+
+	var reversible_forward: Dictionary = {
+		"recipe_id": "warm-up",
+		"source_state": "cold",
+		"target_state": "warm",
+		"costs": [{"resource_id": "wood", "quantity": 2}],
+		"prerequisites": [],
+		"progression_tags": ["warming"],
+		"presentation_key": "reversible-fixture",
+		"reversible": true,
+		"inverse_recipe_id": "cool-down",
+	}
+	var reversible_inverse: Dictionary = {
+		"recipe_id": "cool-down",
+		"source_state": "warm",
+		"target_state": "cold",
+		"costs": [{"resource_id": "stone", "quantity": 1}],
+		"prerequisites": [],
+		"progression_tags": ["cooling"],
+		"presentation_key": "reversible-fixture",
+		"reversible": true,
+		"inverse_recipe_id": "warm-up",
+	}
+	var nonreciprocal_inverse: Dictionary = reversible_inverse.duplicate(true)
+	nonreciprocal_inverse.inverse_recipe_id = "not-warm-up"
+	var nonreciprocal_guard := Transform.new()
+	check("nonreciprocal inverse declaration is rejected", not nonreciprocal_guard.configure({"recipes": [reversible_forward, nonreciprocal_inverse]}))
+	var wrong_endpoint_inverse: Dictionary = reversible_inverse.duplicate(true)
+	wrong_endpoint_inverse.source_state = "other-state"
+	var endpoint_guard := Transform.new()
+	check("inverse declaration with wrong endpoints is rejected", not endpoint_guard.configure({"recipes": [reversible_forward, wrong_endpoint_inverse]}))
+
+	var reversible_engine := Transform.new()
+	check("explicit reciprocal reversible pair configures", reversible_engine.configure({"recipes": [reversible_forward, reversible_inverse]}))
+	check("reversible target registers", reversible_engine.register_target("reversible-target", "cold"))
+	var reversible_preview := reversible_engine.preview_transform("warm-up", "reversible-target", {"wood": 2})
+	check("reversible forward preview exposes inverse contract", reversible_preview.passed and reversible_preview.reversible and reversible_preview.inverse_recipe_id == "cool-down")
+	var reversible_intent := reversible_engine.commit_transform("reversible-up", "warm-up", "reversible-target", {"wood": 2})
+	var reversible_forward_result := reversible_engine.accept_authoritative_receipt(simulation_ack(reversible_intent))
+	check("reversible forward transition commits once", reversible_forward_result.passed and reversible_engine.descriptor().targets["reversible-target"].state == "warm" and reversible_engine.descriptor().targets["reversible-target"].revision == 1)
+	var inverse_preview := reversible_engine.preview_transform("cool-down", "reversible-target", {"stone": 1})
+	check("explicit inverse preview uses declared inverse cost", inverse_preview.passed and inverse_preview.costs == {"stone": 1} and inverse_preview.inverse_recipe_id == "warm-up")
+	var inverse_intent := reversible_engine.commit_transform("reversible-down", "cool-down", "reversible-target", {"stone": 1})
+	var inverse_result := reversible_engine.accept_authoritative_receipt(simulation_ack(inverse_intent))
+	check("explicit inverse returns to source without skipping revision", inverse_result.passed and reversible_engine.descriptor().targets["reversible-target"].state == "cold" and reversible_engine.descriptor().targets["reversible-target"].revision == 2)
+
+	var transactional_guard := Transform.new()
+	check("valid recipe configuration establishes transactional baseline", transactional_guard.configure({"recipes": [base_forward]}))
+	var transactional_before := transactional_guard.recipes.duplicate(true)
+	check("failed cyclic reconfiguration preserves prior catalog", not transactional_guard.configure({"recipes": [cycle_forward, cycle_back]}) and transactional_guard.recipes == transactional_before)
 
 	var engine := Transform.new()
 	check("formal recipe catalog loads", engine.configure_from_file())
