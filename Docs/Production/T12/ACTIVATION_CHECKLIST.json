@@ -42,11 +42,16 @@
     "Docs/Production/T12/PREBUILD_CONTRACT.json",
     "Docs/Production/T12/UPSTREAM_BINDINGS.json",
     "Docs/Production/T12/LEVEL_CADENCE_BLUEPRINT.md",
+    "Docs/Production/T12/LEVEL_1_100_MATRIX.json",
+    "Docs/Production/T12/BINDING_RESOLUTION_TEMPLATE.json",
     "Docs/Production/T12/REVIEW_EVIDENCE_PLAN.md",
     "Docs/Production/T12/defect-ledger.json",
     "tools/havenline/task12/prepare_activation.py",
     "tools/havenline/task12/validate_progression_contract.py",
+    "tools/havenline/task12/validate_level_matrix.py",
+    "tools/havenline/task12/verify_binding_resolution.py",
     "tools/havenline/task12/tests/test_progression_contract.py",
+    "tools/havenline/task12/tests/test_level_matrix.py",
     ".github/workflows/havenline-task12-prep.yml"
   ],
   "required_critics": ["C2", "C3", "C4", "C6", "C7"],
@@ -63,6 +68,9 @@
     "Verify the current integration head contains accepted T10 and T11 completion/integration records.",
     "Verify T10 and T11 are no longer listed as active owners before T12 activation.",
     "Reconcile UPSTREAM_BINDINGS/PREBUILD_CONTRACT/TASK_PACKET assumptions against the exact accepted T10/T11 public interfaces and stable IDs.",
+    "Create Docs/Production/T12/BINDING_RESOLUTION.json from BINDING_RESOLUTION_TEMPLATE.json, populate exact accepted T10/T11 integrated sources and repository-backed public-ID pointer evidence, set status RESOLVED_FOR_ACTIVATION and promotion_allowed true only when complete.",
+    "Run python tools/havenline/task12/verify_binding_resolution.py --resolution Docs/Production/T12/BINDING_RESOLUTION.json --require-resolved and require PASS.",
+    "Run python tools/havenline/task12/validate_level_matrix.py and require PASS; LEVEL_1_100_MATRIX.json remains preparation input and is never copied directly into shipping data.",
     "Run tools/havenline/task12/prepare_activation.py --activate --base <current-integration-head>.",
     "Apply the emitted @reservation:T12 PATH_OWNERSHIP patch through the integration owner.",
     "Claim T12 with workstream.py as ASSIGNED using the exact current integration head and @reservation:T12.",
@@ -80,6 +88,6 @@
     "T12 may consume T10/T11 public transform/camp-state IDs after approval but may not change their transaction or content semantics.",
     "T14 owns global persistence/versioning; T33+ own economy/monetization; T44-T52 own authored connected-region content.",
     "Parallel production is allowed only with disjoint path ownership; integration remains serial and integration-owner controlled.",
-    "The non-shipping cadence blueprint and validator/tests are preparation accelerators, not evidence that T12 production implementation has started."
+    "The non-shipping cadence blueprint, concrete 100-level matrix, binding-resolution template and validators/tests are preparation accelerators, not evidence that T12 production implementation has started."
   ]
 }
