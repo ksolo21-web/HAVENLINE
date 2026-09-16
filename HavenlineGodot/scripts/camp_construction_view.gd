@@ -3,15 +3,22 @@ extends Node3D
 
 ## T11 presentation-only authored camp stage switcher. This node owns no
 ## inventory, economy, progression, transform authority or gameplay controls.
+## Lifecycle feedback is an in-world pad-adjacent presentation layer only.
 
 const MANIFEST_PATH := "res://assets/camp_upgrades_v1/manifest.json"
 const AUTHORITY_ID := "T11-camp-construction-view-v1"
 const LIFECYCLES := ["blocked", "ready", "preview", "committing", "complete", "error"]
+const STATUS_RING_INNER_RADIUS := 0.82
+const STATUS_RING_OUTER_RADIUS := 1.04
+const STATUS_SPIRE_HEIGHT := 0.42
 
 var manifest: Dictionary = {}
 var current_stage_id := ""
 var current_lifecycle := "blocked"
 var stage_root: Node3D = null
+var status_root: Node3D = null
+var status_ring: MeshInstance3D = null
+var status_spire: MeshInstance3D = null
 var rebuild_count := 0
 var lifecycle_changes := 0
 
@@ -38,6 +45,43 @@ static func validate_manifest(value: Dictionary) -> bool:
 			return false
 	return true
 
+static func lifecycle_color(lifecycle: String) -> Color:
+	match lifecycle:
+		"blocked":
+			return Color("79869a")
+		"ready":
+			return Color("f2c14e")
+		"preview":
+			return Color("67c7e6")
+		"committing":
+			return Color("f79445")
+		"complete":
+			return Color("79c889")
+		"error":
+			return Color("df5f63")
+		_:
+			return Color.WHITE
+
+static func lifecycle_scale(lifecycle: String) -> float:
+	match lifecycle:
+		"blocked":
+			return 0.76
+		"ready":
+			return 1.0
+		"preview":
+			return 1.08
+		"committing":
+			return 1.16
+		"complete":
+			return 0.68
+		"error":
+			return 1.0
+		_:
+			return 1.0
+
+static func lifecycle_emission(lifecycle: String) -> float:
+	return 2.25 if lifecycle in ["ready", "preview", "committing", "error"] else 1.35
+
 func configure(value: Dictionary) -> bool:
 	if not validate_manifest(value):
 		return false
@@ -52,6 +96,66 @@ func _clear_stage() -> void:
 		stage_root.free()
 	stage_root = null
 
+func _make_status_material(color: Color, emission_energy: float) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.roughness = 0.42
+	material.metallic = 0.08
+	material.emission_enabled = true
+	material.emission = color
+	material.emission_energy_multiplier = emission_energy
+	return material
+
+func _ensure_status_visual() -> void:
+	if is_instance_valid(status_root):
+		return
+	status_root = Node3D.new()
+	status_root.name = "LifecycleStatus"
+	status_root.set_meta("t11_presentation_only", true)
+	status_root.set_meta("t11_status_contract", "in_world_pad_adjacent")
+	add_child(status_root)
+
+	status_ring = MeshInstance3D.new()
+	status_ring.name = "LifecycleRing"
+	var ring := TorusMesh.new()
+	ring.inner_radius = STATUS_RING_INNER_RADIUS
+	ring.outer_radius = STATUS_RING_OUTER_RADIUS
+	ring.rings = 32
+	ring.ring_segments = 12
+	status_ring.mesh = ring
+	status_ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	status_root.add_child(status_ring)
+
+	status_spire = MeshInstance3D.new()
+	status_spire.name = "LifecycleSpire"
+	var spire := CylinderMesh.new()
+	spire.top_radius = 0.08
+	spire.bottom_radius = 0.13
+	spire.height = STATUS_SPIRE_HEIGHT
+	spire.radial_segments = 12
+	status_spire.mesh = spire
+	status_spire.position.y = STATUS_SPIRE_HEIGHT * 0.55
+	status_spire.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	status_root.add_child(status_spire)
+
+func _update_status_visual() -> void:
+	_ensure_status_visual()
+	if current_stage_id.is_empty() or manifest.is_empty() or current_stage_id not in manifest.get("stages", {}):
+		status_root.visible = false
+		return
+	status_root.visible = true
+	status_root.position = interaction_anchor() + Vector3(0.0, 0.035, 0.0)
+	var color := lifecycle_color(current_lifecycle)
+	var material := _make_status_material(color, lifecycle_emission(current_lifecycle))
+	status_ring.material_override = material
+	status_spire.material_override = material
+	var visual_scale := lifecycle_scale(current_lifecycle)
+	status_ring.scale = Vector3.ONE * visual_scale
+	status_spire.scale = Vector3(1.0, 0.72 if current_lifecycle == "complete" else 1.0, 1.0)
+	status_root.set_meta("t11_lifecycle", current_lifecycle)
+	status_root.set_meta("t11_lifecycle_color", color.to_html(false))
+	status_root.set_meta("t11_lifecycle_scale", visual_scale)
+
 func set_lifecycle(lifecycle: String) -> bool:
 	if lifecycle not in LIFECYCLES:
 		return false
@@ -59,6 +163,7 @@ func set_lifecycle(lifecycle: String) -> bool:
 		lifecycle_changes += 1
 	current_lifecycle = lifecycle
 	set_meta("t11_lifecycle", lifecycle)
+	_update_status_visual()
 	return true
 
 func apply_stage(camp_state_id: String, lifecycle := "complete") -> Dictionary:
@@ -71,6 +176,7 @@ func apply_stage(camp_state_id: String, lifecycle := "complete") -> Dictionary:
 		return {"passed": false, "errors": ["unknown_camp_state"], "rebuilt": false}
 	set_lifecycle(lifecycle)
 	if current_stage_id == camp_state_id and is_instance_valid(stage_root):
+		_update_status_visual()
 		return {"passed": true, "camp_state_id": current_stage_id, "lifecycle": current_lifecycle, "rebuilt": false, "rebuild_count": rebuild_count}
 	var row: Dictionary = stages[camp_state_id]
 	var packed := load(String(row.scene)) as PackedScene
@@ -87,6 +193,7 @@ func apply_stage(camp_state_id: String, lifecycle := "complete") -> Dictionary:
 	add_child(stage_root)
 	current_stage_id = camp_state_id
 	rebuild_count += 1
+	_update_status_visual()
 	return {"passed": true, "camp_state_id": current_stage_id, "lifecycle": current_lifecycle, "rebuilt": true, "rebuild_count": rebuild_count}
 
 func interaction_anchor() -> Vector3:
@@ -106,6 +213,16 @@ func _count_nodes(node: Node) -> int:
 		total += _count_nodes(child)
 	return total
 
+func status_descriptor() -> Dictionary:
+	return {
+		"visible": is_instance_valid(status_root) and status_root.visible,
+		"lifecycle": current_lifecycle,
+		"anchor": status_root.position if is_instance_valid(status_root) else Vector3.ZERO,
+		"color": lifecycle_color(current_lifecycle).to_html(false),
+		"scale": lifecycle_scale(current_lifecycle),
+		"presentation_only": true,
+	}
+
 func descriptor() -> Dictionary:
 	return {
 		"authority_id": AUTHORITY_ID,
@@ -116,6 +233,7 @@ func descriptor() -> Dictionary:
 		"stage_node_count": stage_node_count(),
 		"required_controls": [],
 		"interaction_mode": "movement_proximity_context",
+		"lifecycle_visual": status_descriptor(),
 		"owns_resources": false,
 		"owns_progression": false,
 		"owns_economy": false,
