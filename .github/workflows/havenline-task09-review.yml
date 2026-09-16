@@ -8,6 +8,7 @@ on:
       - 'tools/havenline/production/t09_c2_visual_review.py'
       - 'tools/havenline/production/t09_c6_performance_review.py'
       - 'tools/havenline/production/t09_build_specialist_input.py'
+      - 'tools/havenline/production/t09_closeout_preflight.py'
       - 'Docs/Production/PATH_OWNERSHIP.json'
   workflow_dispatch:
 
@@ -237,13 +238,56 @@ jobs:
           c5=rows['C5']
           cycle_groups=[g for g in c5.get('groups',[]) if '-cycle-' in g.get('group','')]
           assert len(cycle_groups)>=15, 'C5 full-cycle group coverage missing'
-          result={'task':'T09','candidate':source,'required_critics':['C2','C3','C4','C5','C6'],'strict_rule':'>9.0 unrounded; zero unresolved mandatory defects; no averaging waiver','c5_full_cycle_groups':len(cycle_groups),'critics':rows,'passed':True,'task_approved':False}
+          result={'task':'T09','candidate':source,'source_run_id':os.environ['PRIMARY_RUN_ID'],'required_critics':['C2','C3','C4','C5','C6'],'strict_rule':'>9.0 unrounded; zero unresolved mandatory defects; no averaging waiver','c5_full_cycle_groups':len(cycle_groups),'critics':rows,'passed':True,'task_approved':False}
           Path('t09-strict-review-decision.json').write_text(json.dumps(result,indent=2)+'\n')
-          print(json.dumps({'task':'T09','candidate':source,'passed':True,'critics':list(rows),'c5_full_cycle_groups':len(cycle_groups)},indent=2))
+          print(json.dumps({'task':'T09','candidate':source,'source_run_id':os.environ['PRIMARY_RUN_ID'],'passed':True,'critics':list(rows),'c5_full_cycle_groups':len(cycle_groups)},indent=2))
           PY
       - uses: actions/upload-artifact@v4
         with:
           name: 'havenline-t09-strict-review-${{ needs.preflight.outputs.candidate }}'
           path: t09-strict-review-decision.json
+          retention-days: 30
+          if-no-files-found: error
+
+  closeout-preflight:
+    needs: [preflight, strict-review-gate]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: '${{ env.SOURCE_ARTIFACT }}'
+          path: task09-evidence
+      - uses: actions/download-artifact@v4
+        with:
+          name: 'havenline-t09-strict-review-${{ needs.preflight.outputs.candidate }}'
+          path: strict-review
+      - name: Prove T09 is ready only for integration-owner closeout
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/t09_closeout_preflight.py \
+            --candidate '${{ needs.preflight.outputs.candidate }}' \
+            --source-run-id "$PRIMARY_RUN_ID" \
+            --evidence-root task09-evidence \
+            --strict-review strict-review/t09-strict-review-decision.json \
+            --integration-head HEAD \
+            --out t09-closeout-preflight.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          row=json.loads(Path('t09-closeout-preflight.json').read_text())
+          assert row['passed'] is True and row['ready_for_integration_owner_closeout'] is True,row
+          assert row['approval_mutation_performed'] is False and row['integration_mutation_performed'] is False,row
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'havenline-t09-closeout-preflight-${{ needs.preflight.outputs.candidate }}'
+          path: t09-closeout-preflight.json
           retention-days: 30
           if-no-files-found: error
