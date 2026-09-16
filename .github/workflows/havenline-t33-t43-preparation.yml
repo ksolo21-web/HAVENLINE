@@ -1,0 +1,33 @@
+name: Havenline T33-T43 Parallel Preparation
+
+on:
+  pull_request:
+    paths:
+      - 'Docs/Production/T33/**'
+      - 'Docs/Production/T34/**'
+      - 'Docs/Production/T35/**'
+      - 'Docs/Production/T36/**'
+      - 'Docs/Production/T37/**'
+      - 'Docs/Production/T38/**'
+      - 'Docs/Production/T39/**'
+      - 'Docs/Production/T40/**'
+      - 'Docs/Production/T41/**'
+      - 'Docs/Production/T42/**'
+      - 'Docs/Production/T43/**'
+      - 'Docs/Production/T33_T43_PARALLEL_PREP_MANIFEST.json'
+      - 'tools/havenline/t33_t43/**'
+      - '.github/workflows/havenline-t33-t43-preparation.yml'
+  workflow_dispatch:
+
+jobs:
+  validate-parallel-preparation:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile activation preflight
+        run: python -m py_compile tools/havenline/t33_t43/prepare_activation.py
+      - name: Validate T33-T43 preparation
+        run: python tools/havenline/t33_t43/prepare_activation.py --all
