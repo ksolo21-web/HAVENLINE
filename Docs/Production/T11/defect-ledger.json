@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "task_id": "T11",
+  "review_scope": "parallel preparation readiness only; not gameplay completion or approval",
+  "prepared_branch": "havenline/governance-t11-prep",
+  "prepared_from_t10_checkpoint": "7e95338e339fb331a5d6b094874c15d5a7e96e16",
+  "internal_review": {
+    "reviewer_type": "internal review; no separate critic runtime claimed",
+    "preparation_readiness_score": 10.0,
+    "pass_rule": "> 9.0 with all mandatory preparation checks passing",
+    "task_approval_claimed": false,
+    "checks": [
+      {"id":"P01","name":"Frozen T11 scope separates camp content from T10 transaction/state authority","status":"PASS"},
+      {"id":"P02","name":"Dependencies fixed to T05/T10 and runtime activation refuses unresolved dependency state","status":"PASS"},
+      {"id":"P03","name":"Planned T11 ownership is disjoint from T10 prepared reservation and integration-only paths","status":"PASS"},
+      {"id":"P04","name":"Reference B construction/upgrade moments are mapped into a machine-readable prebuild contract","status":"PASS"},
+      {"id":"P05","name":"T05 approved reusable asset families are identified without mutating T05 source assets","status":"PASS"},
+      {"id":"P06","name":"Shipping price provenance rule prevents invented camp costs and test-fixture leakage","status":"PASS"},
+      {"id":"P07","name":"C2/C3/C4/C6 critic contract matches dependency graph and critic matrix","status":"PASS"},
+      {"id":"P08","name":"Required capture groups cover preconstruction, initial construction, upgrades, routes and adaptive layouts","status":"PASS"},
+      {"id":"P09","name":"Activation tooling and candidate validator exist before runtime implementation","status":"PASS"},
+      {"id":"P10","name":"T11 preparation and production-governance workflows passed on exact prep source before this extension","status":"PASS"},
+      {"id":"P11","name":"No HavenlineGodot runtime files are modified by T11 preparation work","status":"PASS"}
+    ]
+  },
+  "mandatory_prep_defects": [],
+  "runtime_blockers": [
+    {
+      "id": "B01",
+      "blocker": "T10 is not APPROVED/integrated yet",
+      "effect": "T11 may remain prepared but may not be assigned/built as a shipping runtime candidate",
+      "resolution": "Complete/integrate T10, then run prepare_activation.py --activate --base <exact-post-T10-integration-head>; only a passing preflight may stage T11 activation."
+    }
+  ],
+  "remaining_after_dependency_resolves": [
+    "Reconcile T11 prep against the exact accepted T10 public interface and completion source.",
+    "Run activation preflight against exact post-T10 integration head.",
+    "Stage and validate T11 ownership/registry/dependency/task-gate activation.",
+    "Commit activation governance and cut havenline/T11-camp-construction from that checkpoint.",
+    "Implement authored camp runtime/assets and shipping recipe registrations without inventing prices.",
+    "Capture exact-source construction/upgrade/route/adaptive evidence.",
+    "Run C2/C3/C4/C6 review, fix defects and retest until every mandatory dimension is strictly >9.0 with zero unresolved mandatory defects."
+  ],
+  "resume_from": "Docs/Production/T11/FROZEN_SCOPE.md + TASK_PACKET.md + PREBUILD_CONTRACT.json + ACTIVATION_CHECKLIST.json + tools/havenline/task11/prepare_activation.py"
+}
