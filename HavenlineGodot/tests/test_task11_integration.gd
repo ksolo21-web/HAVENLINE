@@ -30,7 +30,8 @@ func run() -> void:
 	check("preconstruction site uses approved build pad", view.stage_root.get_node_or_null("BuildPad") != null)
 	var blocked_status := view.status_descriptor()
 	check("blocked lifecycle has visible in-world status", blocked_status.visible and blocked_status.lifecycle == "blocked", blocked_status)
-	check("blocked status is anchored to construction pad", Vector3(blocked_status.anchor).distance_to(view.interaction_anchor() + Vector3(0.0, 0.035, 0.0)) < 0.001, blocked_status)
+	check("blocked status is anchored to construction pad", Vector3(blocked_status.anchor).distance_to(view.interaction_anchor() + Vector3(0.0, 0.045, 0.0)) < 0.001, blocked_status)
+	check("lifecycle status includes collision-free side beacon and orb", view.status_root.get_node_or_null("LifecycleSpire") != null and view.status_root.get_node_or_null("LifecycleOrb") != null and Vector3(blocked_status.beacon_offset).x >= 0.9 and float(blocked_status.orb_radius) >= 0.2, blocked_status)
 	var site_count := view.rebuild_count
 	var ready_same := view.apply_stage("site_unbuilt", "ready")
 	check("lifecycle-only update does not rebuild unchanged stage", bool(ready_same.get("passed", false)) and not ready_same.get("rebuilt", true) and view.rebuild_count == site_count, ready_same)
@@ -38,15 +39,21 @@ func run() -> void:
 	check("ready lifecycle visibly differs from blocked", ready_status.color != blocked_status.color and not is_equal_approx(float(ready_status.scale), float(blocked_status.scale)), {"blocked": blocked_status, "ready": ready_status})
 
 	var lifecycle_signatures := {}
+	var lifecycle_spires := {}
 	for lifecycle in View.LIFECYCLES:
 		check("lifecycle %s applies without geometry rebuild" % lifecycle, view.set_lifecycle(lifecycle) and view.rebuild_count == site_count)
 		var status := view.status_descriptor()
 		lifecycle_signatures[lifecycle] = "%s|%.3f" % [String(status.color), float(status.scale)]
-		check("lifecycle %s stays visibly anchored" % lifecycle, bool(status.visible) and Vector3(status.anchor).distance_to(view.interaction_anchor() + Vector3(0.0, 0.035, 0.0)) < 0.001, status)
+		lifecycle_spires[lifecycle] = float(status.spire_scale)
+		check("lifecycle %s stays visibly anchored" % lifecycle, bool(status.visible) and Vector3(status.anchor).distance_to(view.interaction_anchor() + Vector3(0.0, 0.045, 0.0)) < 0.001, status)
 	var unique_signatures := {}
 	for signature in lifecycle_signatures.values():
 		unique_signatures[signature] = true
-	check("all six lifecycle states have distinct visible signatures", unique_signatures.size() == View.LIFECYCLES.size(), lifecycle_signatures)
+	var unique_spires := {}
+	for spire_scale in lifecycle_spires.values():
+		unique_spires[spire_scale] = true
+	check("all six lifecycle states have distinct visible color/ring signatures", unique_signatures.size() == View.LIFECYCLES.size(), lifecycle_signatures)
+	check("all six lifecycle states have distinct beacon heights", unique_spires.size() == View.LIFECYCLES.size(), lifecycle_spires)
 
 	var initial := view.apply_stage("camp_initial", "complete")
 	check("constructed camp stage builds", bool(initial.get("passed", false)) and initial.get("rebuilt", false), initial)
@@ -56,7 +63,7 @@ func run() -> void:
 	check("T22 defense platform is not pre-spawned by T11", view.stage_root.get_node_or_null("DefensePlatform") == null)
 	check("T16/T17 context assets are explicitly passive", bool(view.stage_root.get_node("ProcessingCounter").get_meta("t11_passive_only", false)) and bool(view.stage_root.get_node("PaymentPad").get_meta("t11_passive_only", false)))
 	var initial_status := view.status_descriptor()
-	check("constructed camp status moves to upgrade pad", Vector3(initial_status.anchor).distance_to(view.interaction_anchor() + Vector3(0.0, 0.035, 0.0)) < 0.001 and view.interaction_anchor() == Vector3(-3.0, 0.0, -0.8), initial_status)
+	check("constructed camp status moves to upgrade pad", Vector3(initial_status.anchor).distance_to(view.interaction_anchor() + Vector3(0.0, 0.045, 0.0)) < 0.001 and view.interaction_anchor() == Vector3(-3.0, 0.0, -0.8), initial_status)
 	var initial_node_count := view.stage_node_count()
 
 	var upgraded := view.apply_stage("camp_upgraded_01", "complete")
@@ -103,6 +110,7 @@ func run() -> void:
 		"initial_stage_node_count": initial_node_count,
 		"final_stage_node_count": view.stage_node_count(),
 		"lifecycle_signature_count": unique_signatures.size(),
+		"lifecycle_beacon_height_count": unique_spires.size(),
 		"build_pending_dependency": true,
 		"final_t10_compatibility_claimed": false,
 		"task_approved": false,
