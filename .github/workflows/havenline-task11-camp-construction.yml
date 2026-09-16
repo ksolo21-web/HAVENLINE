@@ -1,4 +1,4 @@
-name: Havenline Task 11 camp construction candidate
+name: Havenline Task 11 build-pending candidate
 
 on:
   push:
@@ -9,6 +9,7 @@ on:
       - 'HavenlineGodot/data/camp_upgrade_recipes.json'
       - 'HavenlineGodot/assets/camp_upgrades_v1/**'
       - 'HavenlineGodot/tests/test_task11_*.gd'
+      - 'HavenlineGodot/tests/capture_task11_camp_upgrade.gd'
       - 'Docs/Production/T11/**'
       - 'tools/havenline/task11/**'
       - '.github/workflows/havenline-task11-*.yml'
@@ -18,11 +19,11 @@ permissions:
   contents: read
 
 concurrency:
-  group: havenline-task11-camp-construction-${{ github.ref }}
+  group: havenline-task11-build-pending-${{ github.ref }}
   cancel-in-progress: true
 
 jobs:
-  first-builder-milestone:
+  build-pending-candidate:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     steps:
@@ -39,67 +40,144 @@ jobs:
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
 
-      - name: Verify activation, candidate scope and source contract
+      - name: Verify isolated build-pending scope and source contract
         env:
           CANDIDATE: ${{ github.sha }}
+          BUILDER_BASE: 113a08953070aeca0caac80e1411587870388746
         run: |
           set -euo pipefail
-          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
-          base=$(python3 - <<'PY'
-          import json
-          r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
-          row=next(x for x in r['workstreams'] if x['task_id']=='T11')
-          assert row['status'] not in ('LOCKED','PREPARED','APPROVED'), row['status']
-          print(row['base_commit'])
-          PY
+          python3 - <<'PY' | tee task11-evidence/candidate-scope.json
+          import json, os, subprocess
+          base=os.environ['BUILDER_BASE']; head=os.environ['CANDIDATE']
+          changed=subprocess.check_output(['git','diff','--name-only',f'{base}..{head}'],text=True).splitlines()
+          exact={
+            'HavenlineGodot/scripts/camp_construction.gd',
+            'HavenlineGodot/scripts/camp_construction_view.gd',
+            'HavenlineGodot/data/camp_upgrade_recipes.json',
+            'HavenlineGodot/tests/test_task11_camp_construction.gd',
+            'HavenlineGodot/tests/test_task11_integration.gd',
+            'HavenlineGodot/tests/capture_task11_camp_upgrade.gd',
+          }
+          prefixes=(
+            'HavenlineGodot/assets/camp_upgrades_v1/',
+            'Docs/Production/T11/',
+            'tools/havenline/task11/',
+            '.github/workflows/havenline-task11-',
           )
-          python3 tools/havenline/production/workstream.py validate-candidate T11 --base "$base" --head "$CANDIDATE" --integration-head "$integration" | tee task11-evidence/candidate-scope.json
+          illegal=[p for p in changed if p not in exact and not any(p.startswith(q) for q in prefixes)]
+          forbidden=[p for p in changed if p.startswith('HavenlineGodot/scripts/world_transform') or p.startswith('HavenlineGodot/data/world_transform') or p.startswith('HavenlineGodot/assets/world_transform_v1/') or p.startswith('HavenlineGodot/scripts/main.gd') or p.startswith('HavenlineGodot/scripts/simulation.gd') or p.startswith('HavenlineGodot/assets/stations_v2/')]
+          assert not illegal, illegal
+          assert not forbidden, forbidden
+          print(json.dumps({
+            'task':'T11', 'mode':'BUILT_PENDING_DEPENDENCY candidate',
+            'builder_base':base, 'candidate':head,
+            'changed_file_count':len(changed), 'changed_files':changed,
+            'illegal_paths':illegal, 'forbidden_paths':forbidden,
+            'integration_ready':False, 'task_approved':False, 'passed':True
+          },indent=2))
+          PY
           python3 tools/havenline/task11/validate_camp_construction.py --candidate "$CANDIDATE" --output task11-evidence/source-contract.json
           python3 tools/havenline/production/validate_migration.py > task11-evidence/governance.json
           python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > task11-evidence/tests/production-tools.log 2>&1
 
-      - name: Import and run impacted regression
+      - name: Import authored T11 content
         run: |
           set -euo pipefail
           python3 tools/havenline/bake_outpost_audio.py > task11-evidence/tests/audio-fixture.json
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task11-evidence/tests/import.log 2>&1
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task11-evidence/tests/motion-fixture.log 2>&1
-          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_outpost_runtime test_adaptive_devices test_task06_character1 test_task07_context_director test_task07_integration test_task08_inventory test_task08_integration test_task09_harvesting test_task09_integration test_task10_world_transform test_task10_integration test_task11_camp_construction test_task11_integration; do
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task11-evidence/tests/import.log task11-evidence/tests/motion-fixture.log; then exit 1; fi
+
+      - name: Run approved-baseline and T11 build-pending regression
+        run: |
+          set -euo pipefail
+          suites=(
+            test_simulation
+            test_crew_and_persistence
+            test_motion_and_performance
+            test_outpost_runtime
+            test_adaptive_devices
+            test_task02_river
+            test_task03_boundary
+            test_task04_camera
+            test_task05_station_kit
+            test_task06_character1
+            test_task07_context_director
+            test_task07_integration
+            test_task08_inventory
+            test_task08_integration
+            test_task11_camp_construction
+            test_task11_integration
+          )
+          for suite in "${suites[@]}"; do
             timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task11-evidence/tests/$suite.log" 2>&1
           done
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/capture_task11_camp_upgrade.gd > task11-evidence/tests/capture_task11_camp_upgrade.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task11-evidence/tests/*.log; then exit 1; fi
           python3 - <<'PY'
           from pathlib import Path
-          import json,os
+          import json, os
           rows=[]
           for path in sorted(Path('task11-evidence/tests').glob('test_*.log')):
-              reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
+              reports=[]
+              for line in path.read_text().splitlines():
+                  line=line.strip()
+                  if not line.startswith('{'): continue
+                  try: reports.append(json.loads(line))
+                  except json.JSONDecodeError: pass
               assert reports,path
               report=reports[-1]
               assert report.get('passed') is True and not report.get('failures'),(path,report.get('failures'))
               checks=report.get('checks',[])
               rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
           assert len(rows)==16,len(rows)
-          output={'task':'T11-first-builder-milestone','source':os.environ['GITHUB_SHA'],'suite_count':len(rows),'total_checks':sum(row['checks'] for row in rows),'suites':rows,'all_passed':True,'task_approved':False}
+          capture_reports=[]
+          for line in Path('task11-evidence/tests/capture_task11_camp_upgrade.log').read_text().splitlines():
+              line=line.strip()
+              if not line.startswith('{'): continue
+              try: capture_reports.append(json.loads(line))
+              except json.JSONDecodeError: pass
+          assert capture_reports and capture_reports[-1].get('configured') is True,capture_reports
+          output={
+            'task':'T11-build-pending', 'source':os.environ['GITHUB_SHA'],
+            'suite_count':len(rows), 'total_checks':sum(row['checks'] for row in rows),
+            'suites':rows, 'all_passed':True,
+            'build_pending_dependency':True, 'integration_ready':False,
+            'final_t10_compatibility_claimed':False, 'task_approved':False
+          }
           Path('task11-evidence/tests.json').write_text(json.dumps(output,indent=2)); print(json.dumps(output))
           PY
 
-      - name: Assert critic contract is unchanged
+      - name: Record dependency-sensitive blockers and critic contract
         run: |
           set -euo pipefail
-          python3 - <<'PY' | tee task11-evidence/critic-contract.json
+          python3 - <<'PY' | tee task11-evidence/build-pending-status.json
           import json
           from pathlib import Path
           matrix=json.loads(Path('Docs/Production/CRITIC_MATRIX.json').read_text())
           required=['C2','C3','C4','C6']
           assert matrix['task_applicability']['T11']==required
-          print(json.dumps({'task':'T11','required_critics':required,'minimum_operator':'>','threshold':9.0,'target':10.0,'task_approved':False},indent=2))
+          print(json.dumps({
+            'task':'T11', 'state':'BUILT_PENDING_DEPENDENCY',
+            'required_critics_after_reconciliation':required,
+            'minimum_operator':'>', 'threshold':9.0, 'target':10.0,
+            'blocked_before_integration_ready':[
+              'T09 completion as prerequisite to accepted T10',
+              'T10 APPROVED and integrated',
+              'reconcile T11 adapter and recipe IDs to exact accepted T10 source',
+              'authoritative shipping price/tuning provenance',
+              'dependency-sensitive T10 exact-once and T08/T09-through-T10 conservation tests',
+              'G1 and G14',
+              'final independent C2/C3/C4/C6 review'
+            ],
+            'integration_ready':False, 'task_approved':False
+          },indent=2))
           PY
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: havenline-task11-first-milestone-${{ github.sha }}
+          name: havenline-task11-build-pending-${{ github.sha }}
           path: task11-evidence
           if-no-files-found: error
           retention-days: 14

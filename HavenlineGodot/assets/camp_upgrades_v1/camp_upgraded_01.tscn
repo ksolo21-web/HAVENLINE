@@ -1,0 +1,100 @@
+[gd_scene load_steps=14 format=3]
+
+[ext_resource type="ArrayMesh" path="res://assets/camp_upgrades_v1/camp_workfloor.obj" id="1_floor"]
+[ext_resource type="PackedScene" path="res://assets/stations_v2/hearth_vessel.glb" id="2_hearth"]
+[ext_resource type="PackedScene" path="res://assets/stations_v2/pad_upgrade.glb" id="3_upgrade"]
+[ext_resource type="PackedScene" path="res://assets/stations_v2/service_counter.glb" id="4_service"]
+[ext_resource type="PackedScene" path="res://assets/stations_v2/processing_counter.glb" id="5_processing"]
+[ext_resource type="PackedScene" path="res://assets/stations_v2/pad_stock.glb" id="6_stock"]
+[ext_resource type="PackedScene" path="res://assets/stations_v2/pad_payment.glb" id="7_payment"]
+[ext_resource type="PackedScene" path="res://assets/stations_v2/wood_stack.glb" id="8_wood"]
+[ext_resource type="PackedScene" path="res://assets/stations_v2/stone_stack.glb" id="9_stone"]
+[ext_resource type="PackedScene" path="res://assets/stations_v2/metal_stack.glb" id="10_metal"]
+[ext_resource type="PackedScene" path="res://assets/stations_v2/fuel_canister.glb" id="11_fuel"]
+[ext_resource type="PackedScene" path="res://assets/environment_v2/lantern_post.glb" id="12_lantern"]
+[ext_resource type="PackedScene" path="res://assets/environment_v2/log.glb" id="13_log"]
+
+[node name="T11CampUpgraded01" type="Node3D"]
+metadata/t11_stage = "camp_upgraded_01"
+metadata/t11_build_pending = true
+metadata/t03_perimeter_external = true
+
+[node name="WarmWorkFloor" type="MeshInstance3D" parent="."]
+mesh = ExtResource("1_floor")
+metadata/t11_role = "warm_work_floor"
+
+[node name="HearthVessel" parent="." instance=ExtResource("2_hearth")]
+position = Vector3(0, 0, 0.2)
+metadata/t05_asset_id = "hearth_vessel"
+metadata/t11_role = "central_heated_station"
+
+[node name="UpgradePad" parent="." instance=ExtResource("3_upgrade")]
+position = Vector3(-3, 0, -0.8)
+metadata/t05_asset_id = "pad_upgrade"
+metadata/t11_role = "upgrade_pad"
+
+[node name="ServiceCounter" parent="." instance=ExtResource("4_service")]
+position = Vector3(7.8, 0, 5.1)
+metadata/t05_asset_id = "service_counter"
+metadata/t11_passive_only = true
+
+[node name="ProcessingCounter" parent="." instance=ExtResource("5_processing")]
+position = Vector3(-7.8, 0, 5.1)
+metadata/t05_asset_id = "processing_counter"
+metadata/t11_passive_only = true
+
+[node name="StockPad" parent="." instance=ExtResource("6_stock")]
+position = Vector3(7.8, 0, 7.2)
+metadata/t05_asset_id = "pad_stock"
+metadata/t11_passive_only = true
+
+[node name="PaymentPad" parent="." instance=ExtResource("7_payment")]
+position = Vector3(10.7, 0, 7.1)
+metadata/t05_asset_id = "pad_payment"
+metadata/t11_passive_only = true
+
+[node name="WoodStack" parent="." instance=ExtResource("8_wood")]
+position = Vector3(-10.8, 0, 7.4)
+metadata/t05_asset_id = "wood_stack"
+metadata/t11_passive_only = true
+
+[node name="StoneStack" parent="." instance=ExtResource("9_stone")]
+position = Vector3(-4.8, 0, 7.4)
+metadata/t05_asset_id = "stone_stack"
+metadata/t11_passive_only = true
+
+[node name="MetalStack" parent="." instance=ExtResource("10_metal")]
+position = Vector3(-10.8, 0, 4.8)
+metadata/t05_asset_id = "metal_stack"
+metadata/t11_passive_only = true
+
+[node name="FuelCanister" parent="." instance=ExtResource("11_fuel")]
+position = Vector3(10.8, 0, 4.8)
+metadata/t05_asset_id = "fuel_canister"
+metadata/t11_passive_only = true
+
+[node name="UpgradeLanternNW" parent="." instance=ExtResource("12_lantern")]
+position = Vector3(-9.5, 0, 6.2)
+metadata/t11_upgrade_detail = true
+
+[node name="UpgradeLanternNE" parent="." instance=ExtResource("12_lantern")]
+position = Vector3(9.5, 0, 6.2)
+metadata/t11_upgrade_detail = true
+
+[node name="UpgradeLanternSW" parent="." instance=ExtResource("12_lantern")]
+position = Vector3(-9.5, 0, -2.3)
+metadata/t11_upgrade_detail = true
+
+[node name="UpgradeLanternSE" parent="." instance=ExtResource("12_lantern")]
+position = Vector3(9.5, 0, -2.3)
+metadata/t11_upgrade_detail = true
+
+[node name="UpgradeTimberWest" parent="." instance=ExtResource("13_log")]
+position = Vector3(-5.8, 0, 6.5)
+rotation = Vector3(0, 1.5708, 0)
+metadata/t11_upgrade_detail = true
+
+[node name="UpgradeTimberEast" parent="." instance=ExtResource("13_log")]
+position = Vector3(5.8, 0, 6.5)
+rotation = Vector3(0, 1.5708, 0)
+metadata/t11_upgrade_detail = true

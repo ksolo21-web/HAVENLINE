@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "authority_id": "T11-camp-upgrade-recipes-build-pending-v1",
+  "build_pending_dependency": true,
+  "final_t10_reconciliation_required": true,
+  "shipping_recipe_count": 0,
+  "notes": [
+    "These rows bind T11 content states to T10 prebuild fixture IDs observed on the unfinished T10 branch.",
+    "No numeric resource cost is duplicated into T11. T10 remains cost/debit authority.",
+    "All rows are non-shipping/test-only until T10 is accepted and authoritative camp-price provenance exists."
+  ],
+  "recipes": [
+    {
+      "camp_state_id": "camp_initial",
+      "t10_recipe_id": "framework_anchor_seed_to_foundation",
+      "source_camp_state": "site_unbuilt",
+      "target_camp_state": "camp_initial",
+      "t10_source_state": "seed",
+      "t10_target_state": "foundation",
+      "presentation_key": "camp_initial_construct",
+      "asset_manifest_key": "camp_initial",
+      "shipping": false,
+      "test_only": true,
+      "binding_status": "t10_prebuild_fixture_unapproved",
+      "route_clearance_profile": "t03-camp-lanes-v3",
+      "camera_readability_profile": "t04-reference-camera-v1"
+    },
+    {
+      "camp_state_id": "camp_upgraded_01",
+      "t10_recipe_id": "framework_anchor_foundation_to_reinforced",
+      "source_camp_state": "camp_initial",
+      "target_camp_state": "camp_upgraded_01",
+      "t10_source_state": "foundation",
+      "t10_target_state": "reinforced",
+      "presentation_key": "camp_reinforced_upgrade",
+      "asset_manifest_key": "camp_upgraded_01",
+      "shipping": false,
+      "test_only": true,
+      "binding_status": "t10_prebuild_fixture_unapproved",
+      "route_clearance_profile": "t03-camp-lanes-v3",
+      "camera_readability_profile": "t04-reference-camera-v1"
+    }
+  ]
+}

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "task_id": "T11",
+  "task_name": "Camp construction and visual upgrade system",
+  "branch": "havenline/T11-camp-construction",
+  "builder_base": "113a08953070aeca0caac80e1411587870388746",
+  "state": "BUILDING_ISOLATED",
+  "target_pre_dependency_state": "BUILT_PENDING_DEPENDENCY",
+  "final_integration_ready": false,
+  "task_approved": false,
+  "observed_unapproved_t10": {
+    "branch": "havenline/T10-world-transformation",
+    "source": "55674b8fc5b03be6ad72a3493fece526de52b5c0",
+    "reported_checkpoint": "BUILT_PENDING_DEPENDENCY",
+    "interface_methods_used_semantically": [
+      "preview_transform",
+      "commit_transform",
+      "accept_authoritative_receipt"
+    ],
+    "fixture_recipe_ids": [
+      "framework_anchor_seed_to_foundation",
+      "framework_anchor_foundation_to_reinforced"
+    ],
+    "accepted_or_integrated": false,
+    "reconciliation_required": true
+  },
+  "shipping": {
+    "shipping_recipe_count": 0,
+    "authoritative_camp_price_source_available": false,
+    "test_fixture_policy": "All current T11 recipe rows are shipping:false + test_only:true and contain no local numeric resource costs."
+  },
+  "implemented_scope": [
+    "dependency-injected camp content-domain adapter",
+    "receipt-gated authored camp state mapping",
+    "presentation-only authored camp stage switcher",
+    "preconstruction, initial camp and first visible upgrade authored stages",
+    "T05 exact asset reuse without source mutation",
+    "T03 perimeter/gate authority preserved rather than duplicated",
+    "build-pending domain and integration tests",
+    "source-bound build-pending capture metadata harness"
+  ],
+  "blocked_before_integration_ready": [
+    "T09 must complete so T10 can finish its dependency-sensitive integration",
+    "T10 must be APPROVED and integrated on the authoritative integration branch",
+    "T11 adapter/recipe IDs must be reconciled to exact accepted T10 source",
+    "any shipping recipe needs authoritative price_source or approved tuning_record",
+    "T10 exact-once plus T08/T09-through-T10 conservation tests must be rerun",
+    "G1 and G14 must pass",
+    "final independent C2/C3/C4/C6 review must pass strict >9.0 unrounded"
+  ],
+  "candidate_source": null,
+  "build_pending_test_run": null,
+  "build_pending_tests": null,
+  "unresolved_mandatory_build_defects": null
+}

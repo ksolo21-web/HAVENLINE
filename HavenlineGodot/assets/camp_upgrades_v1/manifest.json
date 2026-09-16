@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "authority_id": "T11-camp-upgrades-v1",
+  "build_pending_dependency": true,
+  "stages": {
+    "site_unbuilt": {
+      "scene": "res://assets/camp_upgrades_v1/site_unbuilt.tscn",
+      "presentation_key": "camp_site_unbuilt",
+      "interaction_anchor_xz": [0.0, 0.2],
+      "route_clearance_profile": "t03-camp-lanes-v3",
+      "camera_readability_profile": "t04-reference-camera-v1"
+    },
+    "camp_initial": {
+      "scene": "res://assets/camp_upgrades_v1/camp_initial.tscn",
+      "presentation_key": "camp_initial_construct",
+      "interaction_anchor_xz": [-3.0, -0.8],
+      "route_clearance_profile": "t03-camp-lanes-v3",
+      "camera_readability_profile": "t04-reference-camera-v1"
+    },
+    "camp_upgraded_01": {
+      "scene": "res://assets/camp_upgrades_v1/camp_upgraded_01.tscn",
+      "presentation_key": "camp_reinforced_upgrade",
+      "interaction_anchor_xz": [-3.0, -0.8],
+      "route_clearance_profile": "t03-camp-lanes-v3",
+      "camera_readability_profile": "t04-reference-camera-v1"
+    }
+  },
+  "content_boundaries": {
+    "t03_perimeter_reused_not_duplicated": true,
+    "t05_source_assets_immutable": true,
+    "t16_processing_behavior_included": false,
+    "t17_customer_payment_behavior_included": false,
+    "t22_defense_behavior_included": false,
+    "shipping_prices_included": false
+  }
+}
