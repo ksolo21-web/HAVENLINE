@@ -21,7 +21,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Compile cross-wave auditor
-        run: python -m py_compile tools/havenline/prepared_stack/audit_t13_t70.py
+      - name: Compile cross-wave auditors
+        run: |
+          python -m py_compile tools/havenline/prepared_stack/audit_t13_t70.py
+          python -m py_compile tools/havenline/prepared_stack/test_forward_path_guards.py
+      - name: Verify forward ownership regression guards
+        run: python tools/havenline/prepared_stack/test_forward_path_guards.py
       - name: Audit T13-T70 prepared stack
         run: python tools/havenline/prepared_stack/audit_t13_t70.py
