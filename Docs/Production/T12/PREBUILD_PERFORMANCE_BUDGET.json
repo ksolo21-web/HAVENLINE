@@ -6,11 +6,13 @@
   "static_validation_budget": {
     "reference_machine_class": "github-actions ubuntu-24.04 python-3.12",
     "iterations": 500,
+    "memory_iterations": 100,
     "maximum_mean_ms": 8.0,
     "maximum_p95_ms": 15.0,
     "maximum_single_ms": 75.0,
     "maximum_retained_growth_kib": 512,
-    "input_shape": "100 levels + 10 milestones + all preparation contract checks"
+    "input_shape": "100 levels + 10 milestones + six preparation validators",
+    "measurement_rule": "Timing is measured without tracemalloc instrumentation. Retained/peak traced memory is measured in a separate bounded pass so allocation tracing overhead is not mistaken for validator latency."
   },
   "fuzz_budget": {
     "deterministic_seed": 1200,
