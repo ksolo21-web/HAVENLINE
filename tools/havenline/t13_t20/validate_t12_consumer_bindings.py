@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Fail closed if T13/T14 preparation drifts from T12's downstream consumer contract."""
+"""Validate T13/T14 local upstream binding snapshots; rebind to T12 only at activation."""
 from __future__ import annotations
 import json
 import pathlib
@@ -8,6 +8,7 @@ import subprocess
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 DOCS = ROOT / "Docs" / "Production"
 CONTRACT_PATH = DOCS / "T12" / "DOWNSTREAM_CONSUMER_CONTRACT.json"
+EXPECTED_CONTRACT_PATH = "Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json"
 TASKS = ("T13", "T14")
 
 
@@ -21,34 +22,41 @@ def git_blob_sha(path: pathlib.Path) -> str:
 
 def main() -> int:
     errors = []
-    contract = load(CONTRACT_PATH)
+    contract_present = CONTRACT_PATH.exists()
+    contract = load(CONTRACT_PATH) if contract_present else {}
     consumers = contract.get("consumers", {})
-    current_sha = git_blob_sha(CONTRACT_PATH)
+    current_sha = git_blob_sha(CONTRACT_PATH) if contract_present else None
     results = []
     for tid in TASKS:
         binding_path = DOCS / tid / "T12_CONSUMER_BINDING.json"
-        if not binding_path.exists():
-            errors.append(f"{tid}: missing T12_CONSUMER_BINDING.json")
-            continue
-        binding = load(binding_path)
-        row = consumers.get(tid)
-        if row is None:
-            errors.append(f"{tid}: missing from T12 downstream consumer contract")
-            continue
         task_errors = []
-        if binding.get("contract_path") != "Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json":
-            task_errors.append("contract path mismatch")
-        if binding.get("prepared_contract_git_blob_sha") != current_sha:
-            task_errors.append(
-                f"stale T12 contract binding: prepared={binding.get('prepared_contract_git_blob_sha')} current={current_sha}"
-            )
-        for key in ("may_read", "must_not_require_from_T12", "boundary"):
-            if binding.get(key) != row.get(key):
-                task_errors.append(f"consumer field mismatch: {key}")
+        if not binding_path.exists():
+            task_errors.append("missing T12_CONSUMER_BINDING.json")
+        else:
+            binding = load(binding_path)
+            if binding.get("consumer_task") != tid:
+                task_errors.append("consumer_task mismatch")
+            if binding.get("contract_path") != EXPECTED_CONTRACT_PATH:
+                task_errors.append("contract path mismatch")
+            prepared = binding.get("prepared_contract_git_blob_sha")
+            if not isinstance(prepared, str) or len(prepared) != 40:
+                task_errors.append("prepared upstream contract blob SHA missing/invalid")
+            if not binding.get("activation_rule"):
+                task_errors.append("activation-time fail-closed rebind rule missing")
+            if contract_present:
+                row = consumers.get(tid)
+                if row is None:
+                    task_errors.append("missing from current T12 downstream consumer contract")
+                else:
+                    if prepared != current_sha:
+                        task_errors.append(f"stale T12 binding: prepared={prepared} current={current_sha}")
+                    for key in ("may_read", "must_not_require_from_T12", "boundary"):
+                        if binding.get(key) != row.get(key):
+                            task_errors.append(f"consumer field mismatch: {key}")
         errors.extend(f"{tid}: {e}" for e in task_errors)
-        results.append({"task_id": tid, "contract_blob_sha": current_sha, "passed": not task_errors, "errors": task_errors})
-    out = {"contract": str(CONTRACT_PATH.relative_to(ROOT)), "contract_blob_sha": current_sha, "results": results, "passed": not errors, "errors": errors}
-    print(json.dumps(out, indent=2))
+        results.append({"task_id":tid,"upstream_contract_present":contract_present,"activation_rebind_required":not contract_present,"contract_blob_sha":current_sha,"passed":not task_errors,"errors":task_errors})
+    out={"contract":EXPECTED_CONTRACT_PATH,"upstream_contract_present":contract_present,"activation_rebind_required":not contract_present,"results":results,"passed":not errors,"errors":errors}
+    print(json.dumps(out,indent=2))
     return 0 if not errors else 1
 
 
