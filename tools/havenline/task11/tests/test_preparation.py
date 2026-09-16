@@ -65,8 +65,12 @@ class T11PreparationTests(unittest.TestCase):
         critics = load(CRITICS)
 
         self.assertEqual(contract["task_id"], "T11")
-        self.assertEqual(contract["dependency_gate"]["required_approved"], ["T05", "T10"])
-        self.assertFalse(contract["dependency_gate"]["runtime_allowed_before_gate"])
+        gate = contract["dependency_gate"]
+        self.assertEqual(gate["required_approved_for_final_integration"], ["T05", "T10"])
+        self.assertTrue(gate["isolated_build_allowed_before_t10_approval"])
+        self.assertEqual(gate["maximum_state_before_t10_approval"], "BUILT_PENDING_DEPENDENCY")
+        self.assertFalse(gate["final_integration_allowed_before_gate"])
+        self.assertTrue(gate["reconcile_to_exact_t10_before_integration_ready"])
         self.assertTrue(checklist["build_pending_policy"]["isolated_build_allowed_before_t10_approval"])
         self.assertEqual(checklist["build_pending_policy"]["maximum_state_before_t10_approval"], "BUILT_PENDING_DEPENDENCY")
         self.assertFalse(checklist["build_pending_policy"]["may_claim_integration_ready"])
@@ -92,6 +96,8 @@ class T11PreparationTests(unittest.TestCase):
         self.assertIn("tuning_record", rule)
         self.assertIn("may not be generalized", rule)
         self.assertIn("shipping prices", contract["explicitly_not_implemented_during_prep"])
+        blocked = contract["build_pending_contract"]["blocked_until_t10_accepted"]
+        self.assertIn("shipping prices without authoritative provenance", blocked)
 
     def test_t11_planned_paths_do_not_overlap_t10_or_integration_only(self):
         t11 = load(CHECKLIST)
@@ -121,6 +127,8 @@ class T11PreparationTests(unittest.TestCase):
         blockers = ledger["runtime_blockers"]
         self.assertEqual(len(blockers), 1)
         self.assertIn("T10", blockers[0]["blocker"])
+        self.assertIn("Does not block isolated T11 build/test", blockers[0]["effect"])
+        self.assertIn("BUILT_PENDING_DEPENDENCY", blockers[0]["effect"])
 
 
 if __name__ == "__main__":
