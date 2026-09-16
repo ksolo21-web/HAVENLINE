@@ -5,10 +5,10 @@
   "builder_branch": "havenline/T10-world-transformation",
   "source_integration_checkpoint": "0427a7f8f11ca2afe1866ee972657b631b3e3c50",
   "latest_observed_integration_head": "5f45c8429312ae8469be185321bf1b5d9b98a915",
-  "latest_verified_source": "f5283f56d96af3ddad9c3adb87db286bbadb73ec",
-  "latest_verified_run": 35104414502,
-  "latest_verified_artifact": 10449387994,
-  "latest_verified_artifact_sha256": "61acbbe1c29a65873d8bcaa22c07228256bf6785966cf6465f50660f27d34665",
+  "latest_verified_source": "dfda7767cf945b7e093438a1b795e14cd18bc304",
+  "latest_verified_run": 35106463541,
+  "latest_verified_artifact": 10449888887,
+  "latest_verified_artifact_sha256": "5e7cdc437d7f10f14a7fa90b50b610e36b19d5e90428ec6a8c9abd6cfec0c9f7",
   "isolated_state": "BUILT_PENDING_DEPENDENCY",
   "integration_allowed": false,
   "task_approved": false,
@@ -45,22 +45,23 @@
       {"id":"P22","name":"Failed cyclic catalog reconfiguration is transactional and preserves the prior valid recipe catalog","status":"PASS"},
       {"id":"P23","name":"Critic-input readiness validator finds complete isolated inputs for C1/C2/C3/C4/C6/C7 without assigning scores","status":"PASS"},
       {"id":"P24","name":"Full frozen source-contract validator passes with formal domain/integration/capture files present","status":"PASS"},
-      {"id":"P25","name":"Governance, migration and production-tool regression pass on the exact verified isolated source","status":"PASS"}
+      {"id":"P25","name":"Governance, migration and production-tool regression pass on the exact verified isolated source","status":"PASS"},
+      {"id":"P26","name":"R06 fixture separates carried inventory from delivered stored resources and carried-only resources cannot satisfy transformation affordability","status":"PASS"},
+      {"id":"P27","name":"Deposit moves resources to delivered stored balance and T10 authoritative debit consumes stored only without mutating carried inventory","status":"PASS"},
+      {"id":"P28","name":"Fixture simulation receipt ledger is bounded latest-per-target and crash restore/retry performs zero second debit","status":"PASS"},
+      {"id":"P29","name":"Higher target revision replaces the bounded simulation receipt while stale lower revision requests fail closed","status":"PASS"},
+      {"id":"P30","name":"Prepared post-T09 simulation.stored adapter contract, change-request template and fast preflight preserve the integration-owner boundary","status":"PASS"},
+      {"id":"P31","name":"Critic-input readiness requires the hardened R06 delivered-resource/idempotency markers in addition to R01/R07/R11 evidence","status":"PASS"}
     ],
     "verified_metrics": {
       "domain_checks": 154,
-      "integration_and_r11_checks": 60,
+      "integration_r06_r11_checks": 75,
       "preview_stress_iterations": 5000,
-      "preview_stress_elapsed_ms": 48.285,
       "rejected_commit_stress_iterations": 5000,
-      "rejected_commit_stress_elapsed_ms": 66.807,
       "catalog_stress_recipes": 258,
-      "catalog_stress_elapsed_ms": 6.837,
       "stress_targets": 512,
       "stress_transactions": 1024,
       "stress_retained_receipts": 512,
-      "stress_elapsed_ms": 168.374,
-      "stress_static_memory_delta_bytes": 2341652,
       "baseline_render_count": 10,
       "device_matrix_configurations": 6,
       "device_matrix_render_count": 12,
@@ -70,7 +71,10 @@
       "native_scale1_state_count": 5,
       "native_scale1_camera_count": 6,
       "visual_node_budget": 4,
-      "visual_build_count": 1
+      "visual_build_count": 1,
+      "r06_carried_vs_stored_delivery": true,
+      "r06_stored_only_debit": true,
+      "r06_bounded_simulation_receipt_history_by_target": true
     }
   },
   "resolved_isolated_defects": [
@@ -141,7 +145,7 @@
     {
       "id": "D09",
       "severity": "mandatory",
-      "defect": "The recipe parser accepted arbitrary acyclic-looking rows independently and did not validate whole-catalog progression cycles or explicit reversible/inverse semantics.",
+      "defect": "The recipe parser accepted arbitrary rows independently and did not validate whole-catalog progression cycles or explicit reversible/inverse semantics.",
       "risk": "Future content could register undeclared downgrade/cycle paths or malformed inverse relationships, violating R01/R07 progression integrity.",
       "repair": "Added whole-catalog graph validation. Reversible recipes require reciprocal inverse metadata with exactly reversed endpoints; reversible state pairs are collapsed and every ordinary edge between groups must form an acyclic graph. Added fail-closed validation for malformed/duplicate recipe metadata and transactional catalog reconfiguration.",
       "verification": "154/154 exact-source domain/adversarial checks pass, including duplicate/malformed recipe rejection, undeclared 2-state/3-state cycle rejection, nonreciprocal/wrong-endpoint inverse rejection, valid forward+inverse execution, and rollback after failed cyclic reconfiguration."
@@ -152,18 +156,20 @@
     {
       "id": "B01",
       "blocker": "T09 is not APPROVED/integrated yet",
-      "effect": "T10 remains BUILT_PENDING_DEPENDENCY; real T09/T08 binding, production critic execution, INTEGRATION_READY, integration and approval remain blocked.",
-      "resolution": "Complete T09, reconcile T10 to the exact post-T09 integration head, bind real authority interfaces, rerun affected regression/evidence and execute required production critics."
+      "effect": "T10 remains BUILT_PENDING_DEPENDENCY; real T09/T08/simulation binding, production critic execution, INTEGRATION_READY, integration and approval remain blocked.",
+      "resolution": "Complete T09, reconcile T10 to the exact post-T09 integration head, have the integration owner apply the prepared simulation.stored debit adapter, rerun affected regression/evidence and execute required production critics."
     }
   ],
   "remaining_after_dependency_resolves": [
     "Reconcile this isolated candidate onto the exact post-T09 integration head.",
     "Run T10 activation/integration preflight and register ownership/base consistently in integration governance.",
-    "Replace fixture-authority assumptions with the real approved T09/T08 simulation adapter and rerun formal integration tests.",
+    "Integration owner applies Docs/Production/T10/POST_T09_CHANGE_REQUEST_TEMPLATE.json to simulation.gd if the exact post-T09 contract still matches.",
+    "Run tools/havenline/task10/validate_post_t09_adapter.py --require-bound.",
+    "Replace fixture-authority assumptions with the real approved T09/T08/simulation adapter and rerun formal integration tests.",
     "Run impacted T01-T09 regressions and repeat affected save/recovery/device/performance/native evidence after reconciliation.",
     "Bind final transformation content/assets without taking T11 camp-construction ownership.",
     "Execute independent required C1/C2/C3/C4/C6/C7 production reviews and fix/retest until every mandatory dimension is strictly >9.0 unrounded.",
     "Promote to INTEGRATION_READY only after those dependency-sensitive gates pass."
   ],
-  "resume_from": "Docs/Production/T10/PREBUILD_STATUS.md + TASK_PACKET.md + ACTIVATION_CHECKLIST.json + tools/havenline/task10/prepare_activation.py + tools/havenline/task10/validate_critic_readiness.py"
+  "resume_from": "Docs/Production/T10/PREBUILD_STATUS.md + TASK_PACKET.md + ACTIVATION_CHECKLIST.json + POST_T09_ADAPTER_CONTRACT.json + tools/havenline/task10/prepare_activation.py + tools/havenline/task10/validate_post_t09_adapter.py + tools/havenline/task10/validate_critic_readiness.py"
 }
