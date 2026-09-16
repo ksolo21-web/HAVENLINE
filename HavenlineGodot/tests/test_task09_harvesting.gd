@@ -17,11 +17,15 @@ func action(resource: String, token: int, progress: float, source := "source") -
 		"actionable":true,
 	}
 
+func contact_target(resource: String) -> Vector3:
+	var profile := Harvest.profile_for_resource(resource)
+	return Vector3(profile.impact_socket) - Vector3(profile.grip_socket)
+
 func receipt(resource: String, token: int, receipt_id: String, source := "source", actor_id := 7) -> Dictionary:
 	return {
 		"committed":true, "resource":resource, "source_id":source,
 		"action_token":token, "receipt_id":receipt_id,
-		"target_position":Vector3(1.0, 0.8, 2.0), "actor_id":actor_id,
+		"target_position":contact_target(resource), "actor_id":actor_id,
 	}
 
 func _initialize() -> void:
@@ -59,7 +63,8 @@ func run() -> void:
 	check("catalog contains exactly three finished tools", catalog.entries.size() == 3 and catalog.entries.map(func(row): return row.id) == ["axe","pickaxe","salvage_pry_tool"])
 	for row: Dictionary in catalog.entries:
 		check(row.id + " uses bounded authored geometry", int(row.triangles) > 300 and int(row.triangles) <= 2500 and row.materials.size() >= 5, row)
-		check(row.id + " has explicit grip and impact sockets", row.grip_offset.size() == 3 and row.impact_socket.size() == 3)
+		check(row.id + " has explicit grip and impact sockets", row.grip_socket.size() == 3 and row.impact_socket.size() == 3)
+		check(row.id + " declares the second-hand boundary", row.has("second_hand_socket") and row.second_hand_socket.size() in [0,3])
 
 	var harvest := Harvest.new()
 	root.add_child(harvest)
@@ -77,16 +82,19 @@ func run() -> void:
 	var before := input.duplicate(true)
 	check("valid wood action equips authored axe", harvest.begin_action(input,7))
 	check("begin cannot mutate caller action", input == before)
-	var wood_state := harvest.update_action(input,Transform3D.IDENTITY,Vector3(1.0,0.8,2.0))
+	var wood_target := contact_target("wood")
+	var wood_state := harvest.update_action(input,Transform3D.IDENTITY,wood_target)
 	check("axe binds to T06 two-hand contact", wood_state.active and wood_state.tool == "axe" and wood_state.contact_marker == "C1TwoHandContact")
 	check("raw simulation progress is remapped as presentation only", is_equal_approx(wood_state.raw_progress,0.56) and wood_state.progress < 0.56 and not wood_state.contact_ready)
 	check("first cycle reaches contact exactly at commit", is_equal_approx(Harvest.presentation_progress("wood",1.0,false),0.56))
 	check("live tool exposes authored asset identity", String(harvest.tool_nodes.axe.get_meta("t09_authored_asset","")).ends_with("axe.glb"))
 	check("unarmed committed receipt cannot bypass the integration beat", not harvest.accept_committed_impact(receipt("wood",10,"unarmed","tree:0")))
-	harvest.synchronize_committed_contact(input,Transform3D.IDENTITY,Vector3(1.0,0.8,2.0),7)
+	var wood_contact := harvest.synchronize_committed_contact(input,Transform3D.IDENTITY,wood_target,7)
+	check("committed axe solves grip and impact sockets", wood_contact.contact_alignment_valid and wood_contact.grip_error_m < 0.001 and wood_contact.impact_error_m < 0.001,wood_contact)
+	check("axe socket pixels are bound to hand and target authority", (harvest.tool_nodes.axe.global_transform * Vector3(Harvest.profile_for_resource("wood").grip_socket)).distance_to(Vector3.ZERO) < 0.001 and (harvest.tool_nodes.axe.global_transform * Vector3(Harvest.profile_for_resource("wood").impact_socket)).distance_to(wood_target) < 0.001)
 	check("committed wood impact is accepted once", harvest.accept_committed_impact(receipt("wood",10,"gather:wood:10","tree:0")))
 	check("same receipt cannot replay", not harvest.accept_committed_impact(receipt("wood",10,"gather:wood:10","tree:0")))
-	harvest.synchronize_committed_contact(input,Transform3D.IDENTITY,Vector3(1.0,0.8,2.0),7)
+	harvest.synchronize_committed_contact(input,Transform3D.IDENTITY,wood_target,7)
 	check("same active context accepts a later committed unit with a new receipt", harvest.accept_committed_impact(receipt("wood",10,"gather:wood:10b","tree:0")))
 	check("post-commit cycle recovers then returns to contact", is_equal_approx(Harvest.presentation_progress("wood",0.0,true),0.56) and is_equal_approx(Harvest.presentation_progress("wood",Harvest.RECOVERY_PORTION,true),1.0) and is_equal_approx(Harvest.presentation_progress("wood",1.0,true),0.56))
 
@@ -97,9 +105,11 @@ func run() -> void:
 		var source := resource + ":0"
 		var current := action(resource,token,float(profile.impact_progress),source)
 		check(resource + " action begins", harvest.begin_action(current,7))
-		var state := harvest.update_action(current,Transform3D.IDENTITY,Vector3(1.0,0.8,2.0))
+		var target := contact_target(resource)
+		var state := harvest.update_action(current,Transform3D.IDENTITY,target)
 		check(resource + " uses exact tool and contact contract", state.tool == profile.tool and state.contact_marker == profile.contact_marker and not state.contact_ready)
-		harvest.synchronize_committed_contact(current,Transform3D.IDENTITY,Vector3(1.0,0.8,2.0),7)
+		var contact := harvest.synchronize_committed_contact(current,Transform3D.IDENTITY,target,7)
+		check(resource + " socket solve stays inside contact tolerance", contact.contact_alignment_valid and contact.grip_error_m <= 0.25 and contact.impact_error_m <= 0.25,contact)
 		check(resource + " committed impact is accepted", harvest.accept_committed_impact(receipt(resource,token,"gather:%s:%d" % [resource,token],source)))
 		token += 1
 	var effects := harvest.fragment_descriptors.map(func(row): return row.effect)
@@ -125,11 +135,12 @@ func run() -> void:
 	check("same token cannot be rebound to another source or actor", not harvest.begin_action(action("stone",90,0.58,"stone:rebound"),8))
 	var bound := action("metal",100,0.58,"metal:bound")
 	check("new higher action token starts", harvest.begin_action(bound,7))
-	harvest.update_action(bound,Transform3D.IDENTITY,Vector3(1.0,0.8,2.0))
-	harvest.synchronize_committed_contact(bound,Transform3D.IDENTITY,Vector3(1.0,0.8,2.0),7)
+	var bound_target := contact_target("metal")
+	harvest.update_action(bound,Transform3D.IDENTITY,bound_target)
+	harvest.synchronize_committed_contact(bound,Transform3D.IDENTITY,bound_target,7)
 	check("committed receipt must match the presented actor", not harvest.accept_committed_impact(receipt("metal",100,"actor:mismatch","metal:bound",8)))
 	var displaced := receipt("metal",100,"target:mismatch","metal:bound",7)
-	displaced.target_position = Vector3(20.0,0.8,20.0)
+	displaced.target_position = bound_target + Vector3(20.0,0.0,20.0)
 	check("committed receipt must match the presented source position", not harvest.accept_committed_impact(displaced))
 	check("matching actor receipt remains accepted", harvest.accept_committed_impact(receipt("metal",100,"actor:match","metal:bound",7)))
 	var advances_valid := true

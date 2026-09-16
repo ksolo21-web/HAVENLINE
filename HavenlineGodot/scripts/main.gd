@@ -477,11 +477,12 @@ func present_events():
 				var profile := HarvestPresentation.profile_for_resource(kind)
 				var contact := HarvestPresentation.contact_node(player_rig,String(profile.get("contact_marker", "")))
 				if not harvest_action.is_empty() and String(harvest_action.resource) == kind and is_instance_valid(contact):
-					harvest_presentation.synchronize_committed_contact(harvest_action,contact.global_transform,target,actor_id)
+					var harvest_target := HarvestPresentation.contact_target(target,contact.global_transform,profile)
+					harvest_presentation.synchronize_committed_contact(harvest_action,contact.global_transform,harvest_target,actor_id)
 					harvest_presentation.accept_committed_impact({
 						"committed":true, "resource":kind, "source_id":String(harvest_action.source_id),
 						"action_token":int(harvest_action.action_token), "receipt_id":receipt_id,
-						"target_position":target, "actor_id":actor_id,
+						"target_position":harvest_target, "actor_id":actor_id,
 					})
 			transfer_feedback.transfer(kind,target,origin,receipt_id,"source_to_actor",actor_id,"actor:%d" % actor_id)
 		elif event.type in ["deposit","worker_deposit","build","worker_build","repair","worker_repair","defense_repair","worker_defense_repair","customer_sale"]:
@@ -716,7 +717,9 @@ func _process(dt: float):
 		var harvest_contact := HarvestPresentation.contact_node(player_rig,String(harvest_profile.get("contact_marker", "")))
 		if is_instance_valid(harvest_contact):
 			if harvest_presentation.begin_action(harvest_action,sim.lead):
-				harvest_presentation.update_action(harvest_action,harvest_contact.global_transform,xyz(sim.action.position)+Vector3(0,.75,0),player_rig.visible and (sim.presented_actor_ids.is_empty() or sim.lead in sim.presented_actor_ids))
+				var source_center := xyz(sim.action.position) + Vector3(0,.75,0)
+				var harvest_target := HarvestPresentation.contact_target(source_center,harvest_contact.global_transform,harvest_profile)
+				harvest_presentation.update_action(harvest_action,harvest_contact.global_transform,harvest_target,player_rig.visible and (sim.presented_actor_ids.is_empty() or sim.lead in sim.presented_actor_ids))
 	else:
 		harvest_presentation.cancel(String(sim.action.get("reason", "context_inactive")))
 	for companion in sim.companions:

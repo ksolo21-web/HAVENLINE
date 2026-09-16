@@ -4,7 +4,7 @@ const Main = preload("res://scripts/main.gd")
 const Harvest = preload("res://scripts/harvest_presentation.gd")
 
 const DEVICE_SIZES := {
-	"phone_16_9":Vector2(2400,1080), "phone_20_9":Vector2(2400,1080),
+	"phone_16_9":Vector2(1920,1080), "phone_20_9":Vector2(2400,1080),
 	"tablet_16_10":Vector2(2560,1600), "tablet_4_3":Vector2(2732,2048),
 	"foldable_outer":Vector2(2520,1080), "foldable_inner":Vector2(2208,1768),
 }
@@ -175,6 +175,7 @@ func commit(frame: int) -> void:
 		"authoritative_event":authoritative_event,
 		"units_before":before_units,"units_after":int(source.units),
 		"inventory_before":before_inventory,"inventory_after":int(game.sim.inventory[resource_kind]),
+		"harvest":game.harvest_presentation.descriptor(),
 	})
 
 func sample_cancelled(frame: int) -> void:

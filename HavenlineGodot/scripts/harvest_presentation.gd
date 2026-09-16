@@ -16,31 +16,38 @@ const IMPACT_TARGET_TOLERANCE_METERS := 0.25
 const RECOVERY_PORTION := 0.32
 const SOURCE_RESPONSE_SECONDS := 0.34
 const RESPAWN_RESPONSE_SECONDS := 0.42
+const SOCKET_CONTACT_TOLERANCE_METERS := 0.25
+const CONTACT_ALIGNMENT_WINDOW := 0.20
+const MAX_SOURCE_SURFACE_INSET_METERS := 0.55
 
 const RESOURCE_PROFILES := {
 	"wood": {
 		"method":"chop", "tool":"axe", "asset":"res://assets/harvesting_v1/axe.glb",
 		"animation_profile":"human_player_chop", "contact_marker":"C1TwoHandContact",
 		"impact_progress":0.56, "effect":"wood_chips", "fragment_count":6,
-		"grip_offset":Vector3(0.0, -0.08, 0.0), "effect_color":Color("b96f38"),
+		"grip_socket":Vector3(0.0, -0.30, 0.0), "second_hand_socket":Vector3(0.0, 0.05, 0.0),
+		"impact_socket":Vector3(0.46, 0.56, 0.0), "effect_color":Color("b96f38"),
 	},
 	"stone": {
 		"method":"mine", "tool":"pickaxe", "asset":"res://assets/harvesting_v1/pickaxe.glb",
 		"animation_profile":"human_player_mine", "contact_marker":"C1TwoHandContact",
 		"impact_progress":0.58, "effect":"stone_shards", "fragment_count":5,
-		"grip_offset":Vector3(0.0, -0.06, 0.0), "effect_color":Color("b8c4d1"),
+		"grip_socket":Vector3(0.0, -0.32, 0.0), "second_hand_socket":Vector3(0.0, 0.04, 0.0),
+		"impact_socket":Vector3(0.57, 0.59, 0.0), "effect_color":Color("b8c4d1"),
 	},
 	"metal": {
 		"method":"mine", "tool":"pickaxe", "asset":"res://assets/harvesting_v1/pickaxe.glb",
 		"animation_profile":"human_player_mine", "contact_marker":"C1TwoHandContact",
 		"impact_progress":0.58, "effect":"ore_glint", "fragment_count":4,
-		"grip_offset":Vector3(0.0, -0.06, 0.0), "effect_color":Color("69e6ff"),
+		"grip_socket":Vector3(0.0, -0.32, 0.0), "second_hand_socket":Vector3(0.0, 0.04, 0.0),
+		"impact_socket":Vector3(0.57, 0.59, 0.0), "effect_color":Color("69e6ff"),
 	},
 	"fuel": {
 		"method":"dismantle", "tool":"salvage_pry_tool", "asset":"res://assets/harvesting_v1/salvage_pry_tool.glb",
 		"animation_profile":"human_player_dismantle", "contact_marker":"C1RightHandContact",
 		"impact_progress":0.61, "effect":"salvage_sparks", "fragment_count":3,
-		"grip_offset":Vector3(0.0, -0.30, 0.0), "effect_color":Color("ffad4d"),
+		"grip_socket":Vector3(0.0, -0.38, 0.0), "second_hand_socket":Vector3.ZERO,
+		"impact_socket":Vector3(0.42, 0.61, 0.0), "effect_color":Color("ffad4d"),
 	},
 }
 
@@ -73,6 +80,7 @@ static func contract() -> Dictionary:
 		"maximum_impact_pulses":MAX_IMPACT_PULSES,
 		"receipt_window":RECEIPT_WINDOW,
 		"impact_target_tolerance_meters":IMPACT_TARGET_TOLERANCE_METERS,
+		"socket_contact_tolerance_meters":SOCKET_CONTACT_TOLERANCE_METERS,
 		"recovery_portion":RECOVERY_PORTION,
 		"action_token_policy":"monotonic_with_same_identity_reentry",
 		"exactly_once_key":"authoritative_receipt_id",
@@ -132,6 +140,63 @@ static func contact_node(actor: Node3D, marker_name: String) -> Node3D:
 		return null
 	var tip := marker.find_child("Contact", false, false) as Node3D
 	return tip if is_instance_valid(tip) else marker
+
+static func _contact_weight(progress: float, impact_progress: float) -> float:
+	var proximity := 1.0 - clampf(absf(progress - impact_progress) / CONTACT_ALIGNMENT_WINDOW, 0.0, 1.0)
+	return proximity * proximity * (3.0 - 2.0 * proximity)
+
+static func contact_target(source_center: Vector3, attachment_transform: Transform3D,
+		profile: Dictionary) -> Vector3:
+	if not source_center.is_finite() or profile.is_empty():
+		return source_center
+	var local_reach: Vector3 = Vector3(profile.impact_socket) - Vector3(profile.grip_socket)
+	var toward_hand := attachment_transform.origin - source_center
+	if toward_hand.length_squared() <= 0.000001 or local_reach.length_squared() <= 0.000001:
+		return source_center
+	# Resolve the visual hit on the near source surface rather than its center.
+	# The inset is bounded so the simulation source remains the target authority.
+	var inset := clampf(toward_hand.length() - local_reach.length(), 0.0, MAX_SOURCE_SURFACE_INSET_METERS)
+	return source_center + toward_hand.normalized() * inset
+
+static func _socket_solution(attachment_transform: Transform3D, target_position: Vector3,
+		profile: Dictionary, force_contact := false) -> Dictionary:
+	var grip_socket: Vector3 = profile.grip_socket
+	var impact_socket: Vector3 = profile.impact_socket
+	var hand_basis := attachment_transform.basis.orthonormalized()
+	var base_transform := Transform3D(hand_basis, attachment_transform.origin - hand_basis * grip_socket)
+	var local_reach := impact_socket - grip_socket
+	var world_reach := target_position - attachment_transform.origin
+	if local_reach.length_squared() <= 0.000001 or world_reach.length_squared() <= 0.000001:
+		return {"transform":base_transform,"grip_error_m":0.0,"impact_error_m":INF,"alignment_valid":false}
+	var target_in_hand_space := hand_basis.inverse() * world_reach.normalized()
+	var alignment := Basis(Quaternion(local_reach.normalized(), target_in_hand_space)).orthonormalized()
+	var solved_basis := (hand_basis * alignment).orthonormalized()
+	# The least-squares origin keeps the authored grip and impact sockets equally
+	# close to their two authorities without scaling or deforming the finished tool.
+	var grip_origin := attachment_transform.origin - solved_basis * grip_socket
+	var impact_origin := target_position - solved_basis * impact_socket
+	var solved_transform := Transform3D(solved_basis, (grip_origin + impact_origin) * 0.5)
+	var weight := 1.0 if force_contact else _contact_weight(float(profile.get("presented_progress", 0.0)), float(profile.impact_progress))
+	var presented := base_transform.interpolate_with(solved_transform, weight)
+	var grip_error := (presented * grip_socket).distance_to(attachment_transform.origin)
+	var impact_error := (presented * impact_socket).distance_to(target_position)
+	return {
+		"transform":presented,
+		"grip_error_m":grip_error,
+		"impact_error_m":impact_error,
+		"alignment_valid":grip_error <= SOCKET_CONTACT_TOLERANCE_METERS and impact_error <= SOCKET_CONTACT_TOLERANCE_METERS,
+	}
+
+func _apply_tool_contact(tool: Node3D, attachment_transform: Transform3D,
+		target_position: Vector3, profile: Dictionary, force_contact := false) -> Dictionary:
+	var posed_profile := profile.duplicate(true)
+	posed_profile.presented_progress = float(active.get("progress", 0.0))
+	var solution := _socket_solution(attachment_transform,target_position,posed_profile,force_contact)
+	tool.global_transform = solution.transform
+	active.grip_error_m = float(solution.grip_error_m)
+	active.impact_error_m = float(solution.impact_error_m)
+	active.contact_alignment_valid = bool(solution.alignment_valid)
+	return solution
 
 static func _finite_progress(value: Variant) -> bool:
 	return (value is int or value is float) and is_finite(float(value)) and float(value) >= 0.0 and float(value) <= 1.0
@@ -323,12 +388,11 @@ func update_action(action: Dictionary, attachment_transform: Transform3D,
 		return descriptor()
 	var profile: Dictionary = active.profile
 	var tool: Node3D = active.tool
-	var grip_offset: Vector3 = profile.grip_offset
-	tool.global_transform = attachment_transform * Transform3D(Basis.IDENTITY, grip_offset)
 	active.raw_progress = float(action.progress)
 	active.progress = presentation_progress(String(active.resource), float(action.progress), bool(active.get("has_committed", false)))
 	active.target_position = target_position
-	active.contact_ready = absf(float(active.progress) - float(profile.impact_progress)) <= CONTACT_TOLERANCE
+	var solution := _apply_tool_contact(tool,attachment_transform,target_position,profile)
+	active.contact_ready = absf(float(active.progress) - float(profile.impact_progress)) <= CONTACT_TOLERANCE and bool(solution.alignment_valid)
 	active.commit_contact_armed = false
 	attachment_updates += 1
 	return descriptor()
@@ -342,12 +406,12 @@ func synchronize_committed_contact(action: Dictionary, attachment_transform: Tra
 			return descriptor()
 	var profile: Dictionary = active.profile
 	var tool: Node3D = active.tool
-	tool.global_transform = attachment_transform * Transform3D(Basis.IDENTITY, Vector3(profile.grip_offset))
 	active.raw_progress = float(action.progress)
 	active.progress = float(profile.impact_progress)
 	active.target_position = target_position
-	active.contact_ready = true
-	active.commit_contact_armed = true
+	var solution := _apply_tool_contact(tool,attachment_transform,target_position,profile,true)
+	active.contact_ready = bool(solution.alignment_valid)
+	active.commit_contact_armed = bool(solution.alignment_valid)
 	attachment_updates += 1
 	return descriptor()
 
@@ -524,6 +588,9 @@ func descriptor() -> Dictionary:
 		"contact_marker":String(active.get("profile", {}).get("contact_marker", "")),
 		"contact_ready":bool(active.get("contact_ready", false)),
 		"commit_contact_armed":bool(active.get("commit_contact_armed", false)),
+		"contact_alignment_valid":bool(active.get("contact_alignment_valid", false)),
+		"grip_error_m":float(active.get("grip_error_m", INF)),
+		"impact_error_m":float(active.get("impact_error_m", INF)),
 		"has_committed_in_context":bool(active.get("has_committed", false)),
 		"last_cancel_reason":String(active.get("last_cancel_reason", "")),
 		"active_fragment_descriptors":fragment_descriptors.size(),

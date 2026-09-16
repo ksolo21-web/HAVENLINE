@@ -58,6 +58,14 @@ jobs:
           print(json.dumps({'required_suites':suites,'unknown_production_fallback':False}))
           PY
           python3 tools/havenline/task09/validate_harvesting.py --candidate "$CANDIDATE" --output task09-evidence/source-contract.json
+          mkdir -p task09-evidence/reference
+          cp Docs/Production/T09/reference-selection.json task09-evidence/reference/
+          cp Docs/Design/ReferenceVideoLock/reference-video-sources.json task09-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/coverage.json task09-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/extraction-report.json task09-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/A-003.00.png task09-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/A-016.00.png task09-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/B-028.00.png task09-evidence/reference/
           before=$(sha256sum HavenlineGodot/assets/harvesting_v1/* | sha256sum)
           python3 tools/havenline/task09/generate_harvesting_tools.py > task09-evidence/generator.json
           after=$(sha256sum HavenlineGodot/assets/harvesting_v1/* | sha256sum)
@@ -134,7 +142,7 @@ jobs:
             done
           done
           declare -A widths=( [phone_16_9]=1280 [phone_20_9]=1280 [tablet_16_10]=1280 [tablet_4_3]=1024 [foldable_outer]=1280 [foldable_inner]=1104 )
-          declare -A heights=( [phone_16_9]=576 [phone_20_9]=576 [tablet_16_10]=800 [tablet_4_3]=768 [foldable_outer]=549 [foldable_inner]=884 )
+          declare -A heights=( [phone_16_9]=720 [phone_20_9]=576 [tablet_16_10]=800 [tablet_4_3]=768 [foldable_outer]=549 [foldable_inner]=884 )
           for device in phone_16_9 phone_20_9 tablet_16_10 tablet_4_3 foldable_outer foldable_inner; do
             out="task09-evidence/captures/device-$device"
             xvfb-run -a "${godot[@]}" --resolution "${widths[$device]}x${heights[$device]}" --script res://tests/capture_task09_harvesting.gd -- --render-review --out="$PWD/$out" --resource=wood --mode=device --device="$device" --candidate="$CANDIDATE"
@@ -164,6 +172,7 @@ jobs:
               assert report['final_transfer']['accepted_receipts']==len(commits),report['resource']
               assert all(row['authority'] in ('outpost_simulation.step/context_director.advance','outpost_simulation.perform_action') and row['authoritative_event'] for row in commits)
               assert all(row['units_before']-row['units_after']==1 and row['inventory_after']-row['inventory_before']==1 for row in commits)
+              assert all(row['harvest']['contact_alignment_valid'] and row['harvest']['grip_error_m']<=0.25 and row['harvest']['impact_error_m']<=0.25 for row in commits)
               cancelled=[row for row in report['samples'] if row.get('phase')=='cancellation' and row.get('context',{}).get('cancelled') and row.get('action_state')=='blocked_movement']
               depleted=[row for row in report['samples'] if row.get('depleted')]
               respawned=[row for row in report['samples'] if row.get('respawned')]
@@ -176,6 +185,7 @@ jobs:
           assert len(assets)==30 and len({(r['resource'],r['view']) for r in assets})==30
           devices=[r for r in reports if r['mode']=='device']
           assert len(devices)==6 and len({r['device_state'] for r in devices})==6
+          assert len({tuple(r['window']) for r in devices})==6
           for report in devices:
               commits=[row for row in report['samples'] if row.get('commit')]
               samples=[row for row in report['samples'] if 'harvest' in row]
