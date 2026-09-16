@@ -41,6 +41,7 @@ jobs:
           python -m py_compile tools/havenline/task12/compare_engine_parity.py
           python -m py_compile tools/havenline/task12/validate_candidate_evidence.py
           python -m py_compile tools/havenline/task12/initialize_candidate_evidence.py
+          python -m py_compile tools/havenline/task12/validate_critic_review_records.py
           python -m py_compile tools/havenline/task12/fuzz_progression_contract.py
           python -m py_compile tools/havenline/task12/benchmark_prebuild_validators.py
 
@@ -59,6 +60,7 @@ jobs:
           python -m json.tool Docs/Production/T12/ENGINE_TEST_VECTORS.json >/dev/null
           python -m json.tool Docs/Production/T12/ENGINE_PARITY_OUTPUT_SCHEMA.json >/dev/null
           python -m json.tool Docs/Production/T12/CANDIDATE_EVIDENCE_TEMPLATE.json >/dev/null
+          python -m json.tool Docs/Production/T12/CRITIC_REVIEW_RECORD_TEMPLATE.json >/dev/null
           python -m json.tool Docs/Production/T12/defect-ledger.json >/dev/null
 
       - name: Validate T12 preparation contract
@@ -87,6 +89,9 @@ jobs:
 
       - name: Validate future candidate evidence packet template
         run: python tools/havenline/task12/validate_candidate_evidence.py
+
+      - name: Validate per-dimension critic review template
+        run: python tools/havenline/task12/validate_critic_review_records.py
 
       - name: Fuzz T12 progression contract fail-closed behavior
         run: python tools/havenline/task12/fuzz_progression_contract.py
