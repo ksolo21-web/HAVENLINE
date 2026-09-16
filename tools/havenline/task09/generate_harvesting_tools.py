@@ -108,8 +108,8 @@ TOOLS = {
         "action": "mine",
         "animation_profile": "human_player_mine",
         "contact_marker": "C1TwoHandContact",
-        "grip_socket": [0.0, -0.32, 0.0],
-        "second_hand_socket": [0.0, -0.14, 0.0],
+        "grip_socket": [0.0, -0.14, 0.0],
+        "second_hand_socket": [0.0, -0.32, 0.0],
         "impact_socket": [0.57, 0.59, 0.0],
     },
     "salvage_pry_tool": {

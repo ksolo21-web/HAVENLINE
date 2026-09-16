@@ -37,7 +37,7 @@ const RESOURCE_PROFILES := {
 		"animation_profile":"human_player_mine", "contact_marker":"C1TwoHandContact",
 		"primary_grip_marker":"C1RightHandContact", "secondary_grip_marker":"C1LeftHandContact",
 		"impact_progress":0.58, "effect":"stone_shards", "fragment_count":5,
-		"grip_socket":Vector3(0.0, -0.32, 0.0), "second_hand_socket":Vector3(0.0, -0.14, 0.0),
+		"grip_socket":Vector3(0.0, -0.14, 0.0), "second_hand_socket":Vector3(0.0, -0.32, 0.0),
 		"impact_socket":Vector3(0.57, 0.59, 0.0), "impact_height_offset":0.0, "impact_surface_offset":0.30, "effect_color":Color("b8c4d1"),
 	},
 	"metal": {
@@ -45,7 +45,7 @@ const RESOURCE_PROFILES := {
 		"animation_profile":"human_player_mine", "contact_marker":"C1TwoHandContact",
 		"primary_grip_marker":"C1RightHandContact", "secondary_grip_marker":"C1LeftHandContact",
 		"impact_progress":0.58, "effect":"ore_glint", "fragment_count":4,
-		"grip_socket":Vector3(0.0, -0.32, 0.0), "second_hand_socket":Vector3(0.0, -0.14, 0.0),
+		"grip_socket":Vector3(0.0, -0.14, 0.0), "second_hand_socket":Vector3(0.0, -0.32, 0.0),
 		"impact_socket":Vector3(0.57, 0.59, 0.0), "impact_height_offset":0.0, "impact_surface_offset":0.30, "effect_color":Color("69e6ff"),
 	},
 	"fuel": {
@@ -334,9 +334,14 @@ static func _socket_solution(attachment_transform: Transform3D, target_position:
 		var handle_axis := (Vector3(profile.second_hand_socket)-grip_socket).normalized()
 		var current_roll := _safe_perpendicular(world_direction,solved_basis*handle_axis)
 		# The shorter axe grip follows Character 1's authored lateral chop hold;
-		# the longer pickaxe stacks hands vertically so it cannot cross the chest
-		# and head in oblique views.
-		var roll_reference := -attachment_transform.basis.x.normalized() if String(profile.get("tool","")) == "axe" else Vector3.UP
+		# the longer pickaxe stacks hands vertically on the production skeleton so
+		# it cannot cross the chest and head in oblique views. Marker-only rigs keep
+		# their authored roll because they have no arm chain for the contact solve.
+		var roll_reference := current_roll
+		if String(profile.get("tool","")) == "axe":
+			roll_reference = -attachment_transform.basis.x.normalized()
+		elif bool(profile.get("vertical_pickaxe_roll",false)):
+			roll_reference = Vector3.UP
 		var desired_roll := _safe_perpendicular(world_direction,roll_reference)
 		var roll_angle := current_roll.signed_angle_to(desired_roll,world_direction)
 		solved_basis = (Basis(world_direction,roll_angle)*solved_basis).orthonormalized()
@@ -361,6 +366,7 @@ func _apply_tool_contact(tool: Node3D, attachment_transform: Transform3D,
 		target_position: Vector3, profile: Dictionary, force_contact := false) -> Dictionary:
 	var posed_profile := profile.duplicate(true)
 	posed_profile.presented_progress = float(active.get("progress", 0.0))
+	posed_profile.vertical_pickaxe_roll = String(profile.get("tool","")) == "pickaxe" and is_instance_valid(_bound_skeleton())
 	var solution := _socket_solution(attachment_transform,target_position,posed_profile,force_contact)
 	tool.global_transform = solution.transform
 	var primary_error := 0.0
