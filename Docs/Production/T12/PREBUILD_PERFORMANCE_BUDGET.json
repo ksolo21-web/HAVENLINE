@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "status": "PREPARATION_ONLY_BUDGET",
+  "purpose": "Provide deterministic prebuild budgets for T12 static validators and synthetic progression-query reference tooling. These are not substitutes for post-activation C6 shipping measurements.",
+  "static_validation_budget": {
+    "reference_machine_class": "github-actions ubuntu-24.04 python-3.12",
+    "iterations": 500,
+    "memory_iterations": 100,
+    "maximum_mean_ms": 8.0,
+    "maximum_p95_ms": 15.0,
+    "maximum_single_ms": 75.0,
+    "maximum_retained_growth_kib": 512,
+    "input_shape": "100 levels + 10 milestones + nine preparation validators including candidate-evidence, critic-review and complete-evidence-index templates",
+    "measurement_rule": "Timing is measured without tracemalloc instrumentation. Retained/peak traced memory is measured in a separate bounded pass so allocation tracing overhead is not mistaken for validator latency."
+  },
+  "fuzz_budget": {
+    "deterministic_seed": 1200,
+    "cases": 250,
+    "maximum_total_seconds": 8.0,
+    "minimum_rejected_mutations": 240,
+    "mutation_classes": [
+      "missing_level",
+      "duplicate_level_id",
+      "cycle",
+      "unreachable_level",
+      "missing_prerequisite",
+      "empty_progression_effect",
+      "visible_cadence_gap",
+      "missing_major_milestone",
+      "duplicate_one_time_event",
+      "spend_gate",
+      "energy_gate",
+      "provisional_upstream_id"
+    ]
+  },
+  "shipping_c6_boundary": {
+    "required_after_activation": true,
+    "critics": ["C6"],
+    "must_measure": [
+      "shipping data load/parse/validation",
+      "eligibility query latency",
+      "milestone query latency",
+      "authoritative-fact observation cost",
+      "repeated identical query stability",
+      "retained allocation/object growth",
+      "integrated frame-time/draw-call/primitive impact where presentation exists"
+    ],
+    "rule": "Prebuild Python timings cannot approve or waive shipping C6. Shipping thresholds must be measured on the accepted T12 candidate/integrated artifact using the production engine evidence pipeline."
+  }
+}

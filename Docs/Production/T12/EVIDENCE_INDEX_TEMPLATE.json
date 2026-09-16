@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "status": "PREPARATION_ONLY_EVIDENCE_INDEX_TEMPLATE",
+  "candidate_source": "<T12_CANDIDATE_SHA>",
+  "purpose": "Future exact-candidate evidence digest index. Every acceptance-critical evidence URI referenced by the candidate packet or critic records must appear exactly once here with a verified SHA-256.",
+  "allowed_categories": [
+    "authorized_changed_files",
+    "static_report",
+    "engine_parity_output",
+    "engine_parity_comparator",
+    "regression",
+    "functional_sequence",
+    "adaptive_readability",
+    "performance_c6",
+    "critic_review",
+    "critic_dimension",
+    "binding_resolution"
+  ],
+  "entry_contract": {
+    "required_fields": ["artifact_id", "category", "uri", "sha256", "candidate_source", "producer", "content_verified"],
+    "artifact_id_rule": "unique stable non-empty identifier",
+    "uri_rule": "unique non-empty evidence reference exactly matching a reference used by the candidate/critic records",
+    "sha256_rule": "exact lowercase 64-hex digest of the referenced evidence bytes",
+    "candidate_source_rule": "exact same 40-hex T12 candidate SHA for every candidate-specific item",
+    "producer_rule": "non-empty workflow/reviewer/tool identity",
+    "content_verified_rule": "must be true before final candidate disposition"
+  },
+  "entries": [],
+  "acceptance_rules": [
+    "No duplicate artifact_id or uri.",
+    "Every entry category must be allowed.",
+    "Every final entry has exact SHA-256, exact candidate source, non-empty producer and content_verified=true.",
+    "Every evidence reference required by the resolved candidate packet and resolved critic records appears exactly once.",
+    "Unknown extra evidence may be indexed, but it cannot replace any required reference.",
+    "The evidence index cannot make a failed report, critic dimension, gate or defect pass; it only proves completeness and byte identity."
+  ]
+}
