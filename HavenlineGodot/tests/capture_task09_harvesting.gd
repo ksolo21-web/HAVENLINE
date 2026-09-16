@@ -118,10 +118,12 @@ func canonical_action(progress: float) -> Dictionary:
 	}
 
 func capture_png(name: String) -> void:
+	if mode != "asset": focus_review_visibility()
 	await process_frame
 	root.get_texture().get_image().save_png(output.path_join(name + ".png"))
 
 func capture_jpg(frame: int) -> void:
+	focus_review_visibility()
 	await process_frame
 	root.get_texture().get_image().save_jpg(output.path_join("frames/frame-%05d.jpg" % int(frame / 2)),0.91)
 
