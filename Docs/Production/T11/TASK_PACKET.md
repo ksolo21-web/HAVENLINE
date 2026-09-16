@@ -6,7 +6,7 @@
 - **Production status target now:** governance prepared only; T11 remains `LOCKED` in authoritative production state until T10 is approved/integrated.
 - **Production implementation gate:** T05 + T10 must both be `APPROVED` on the authoritative integration branch.
 - **Prepared branch:** `havenline/governance-t11-prep`.
-- **Prepared on top of:** `havenline/governance-t10-prep` so T11 is bound to the prepared T10 public contract without claiming T10 runtime completion.
+- **Prepared on top of:** reviewed T10 prep checkpoint `7e95338e339fb331a5d6b094874c15d5a7e96e16`, so T11 is bound to the prepared T10 public contract without claiming T10 runtime completion.
 - **Future isolated builder branch:** `havenline/T11-camp-construction`.
 - **Future owner:** `camp-construction-builder`.
 - **Activation base:** the exact integration commit that records T10 approval/integration.
@@ -14,12 +14,27 @@
 - **Evidence path after activation:** `Docs/Production/Evidence/T11/`.
 - **Required critics:** C2, C3, C4, C6.
 - **Forward gate:** every mandatory dimension strictly `> 9.0` unrounded, target `10.0`, all applicable G1-G14 and impacted regression PASS, zero unresolved mandatory defects.
+- **Machine-readable preparation:** `PREBUILD_CONTRACT.json` locks reference moments, capture groups, route checks, critic coverage and shipping-price provenance.
+- **Exact T05 reuse:** `T05_REUSE_BINDINGS.json` pins approved T05 asset IDs, source paths, SHA-256 values, footprints, sockets and later-task behavior boundaries.
+- **Preparation QA:** `tools/havenline/task11/tests/` proves fail-closed activation, exact T05 binding integrity and zero `HavenlineGodot/` runtime changes during preparation.
 
 ## Builder objective after activation
 
 Use the approved T10 World Transformation Framework to implement Havenline's authored camp construction and visible upgrade content without duplicating transaction logic. T11 must create readable in-world construction pads, the actual first camp state and later camp visual upgrades while preserving navigation, automatic contextual controls, resource truth and reference-grounded presentation.
 
 The authoritative visual anchor is Reference B: winter field + construction pad -> fenced warm work area with a central heated vessel/fire zone, stock/counter area, readable gates/lanes and visible subsequent camp improvement. T11 must not absorb customer, combat, defense, progression or persistence ownership from later tasks.
+
+## Approved T05 content available to T11
+
+Direct T11 bindings already authored and approved by T05 are:
+
+- `hearth_vessel` — central heated-vessel/fire visual anchor, with `fx_heat`, `input`, `upgrade`, and `worker` sockets;
+- `pad_build` — yellow diamond construction pad with `icon` and `interaction` sockets;
+- `pad_upgrade` — orange triangular upgrade pad with `icon` and `interaction` sockets.
+
+Their exact approved paths, hashes, footprints, triangle counts, sockets and visual variants are pinned in `T05_REUSE_BINDINGS.json`. T11 may reference/place them but may not modify the approved `stations_v2` source assets.
+
+T05 also contains counters/stock-pad assets that can be used only as passive composition/readability fixtures where appropriate. T11 does **not** receive their later T16/T17 behavior. T08 remains authoritative for real resource-stack quantities; T11 may not create fake duplicate stockpiles merely for visuals.
 
 ## Required source contract
 
@@ -97,7 +112,8 @@ Validation rejects duplicate state IDs, duplicate recipe binding, missing source
 - T11 only calls the published T10 preview/commit/state contract;
 - T11 does not edit/debit T08 or T09 resource state directly;
 - exact-once charge/state behavior remains owned and verified by T10;
-- T05 approved station/prop assets can be referenced without source mutation;
+- exact T11-direct T05 bindings are verified against the approved catalog before use;
+- passive counter/stock-pad composition never activates T16/T17 behavior;
 - approved T01-T10 regression remains clean;
 - later T12/T13/T15/T21/T22 can consume T11 state without T11 pre-implementing their systems.
 
@@ -146,7 +162,10 @@ Allowed now:
 - freeze T11 scope and task packet;
 - define future disjoint ownership paths;
 - define camp-state/recipe/presentation contracts;
+- bind exact approved T05 reusable asset IDs/hashes/footprints/sockets and behavior-owner boundaries;
+- map authoritative reference moments and future capture groups;
 - prepare validation and candidate CI scaffolding;
+- test that activation fails closed while T10 is unfinished;
 - prepare an activation tool that refuses activation until T05/T10 are APPROVED and T10 is integrated;
 - static collision/review against T05/T08/T09/T10 and integration-only paths.
 
@@ -159,6 +178,6 @@ Not allowed now:
 
 ## Activation handoff
 
-When T10 is integrated and marked APPROVED, run the T11 activation preflight against the exact new integration head. It must fail on stale base, unapproved dependency, stale T10 owner, conflicting reservation or missing T10 completion record. After a clean preflight, apply `@reservation:T11`, claim T11 as `ASSIGNED`, cut `havenline/T11-camp-construction` from the exact post-T10 governance checkpoint, run registry/candidate guards, then begin the builder/critic loop.
+When T10 is integrated and marked APPROVED, run the T11 activation preflight against the exact new integration head. It must fail on stale base, unapproved dependency, stale T10 owner, conflicting reservation or missing T10 completion record. Reconcile the prepared T11 interface assumptions against T10's exact accepted public contract. After a clean preflight, apply `@reservation:T11`, claim T11 as `ASSIGNED`, cut `havenline/T11-camp-construction` from the exact post-T10 governance checkpoint, run registry/candidate guards, then begin the builder/critic loop.
 
-See `ACTIVATION_CHECKLIST.json` and `tools/havenline/task11/prepare_activation.py`.
+See `ACTIVATION_CHECKLIST.json`, `PREBUILD_CONTRACT.json`, `T05_REUSE_BINDINGS.json`, `defect-ledger.json`, and `tools/havenline/task11/prepare_activation.py`.
