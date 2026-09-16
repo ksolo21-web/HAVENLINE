@@ -68,9 +68,11 @@ func run() -> void:
 	check("authored catalog is readable", catalog is Dictionary and catalog.authority_id == "T09-harvesting-tools-v1")
 	check("catalog contains exactly three finished tools", catalog.entries.size() == 3 and catalog.entries.map(func(row): return row.id) == ["axe","pickaxe","salvage_pry_tool"])
 	for row: Dictionary in catalog.entries:
-		check(row.id + " uses bounded authored geometry", int(row.triangles) > 300 and int(row.triangles) <= 2500 and row.materials.size() >= 5, row)
+		check(row.id + " uses bounded authored geometry and one palette draw surface", int(row.triangles) > 300 and int(row.triangles) <= 2500 and row.materials.size() >= 5 and int(row.render_materials) == 1 and bool(row.vertex_color_palette), row)
 		check(row.id + " has explicit grip and impact sockets", row.grip_socket.size() == 3 and row.impact_socket.size() == 3)
 		check(row.id + " declares the second-hand boundary", row.has("second_hand_socket") and row.second_hand_socket.size() in [0,3])
+	check("micro-tool shadows are disabled without disabling scene shading", contract.equipped_tool_shadow_mode == "disabled_micro_prop")
+	check("impact effects use a brief non-occluding contact burst", contract.effect_readability == "brief_non_occluding_contact_burst" and Harvest.EFFECT_LIFETIME_SECONDS <= 0.12)
 
 	var harvest := Harvest.new()
 	root.add_child(harvest)

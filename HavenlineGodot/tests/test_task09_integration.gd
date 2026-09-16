@@ -111,12 +111,14 @@ func run() -> void:
 	for pine_variant in range(1,4):
 		var pine_mesh: ArrayMesh = game.merged_cache["world/pine_%d" % pine_variant]
 		var surface_names: Array[String] = []
+		var contact_surface_values: Array[float] = []
 		var wood_contact_opaque := true
 		for surface_index in pine_mesh.get_surface_count():
 			var pine_material: ShaderMaterial = pine_mesh.surface_get_material(surface_index)
 			surface_names.append(pine_material.resource_name.to_lower())
-			wood_contact_opaque = wood_contact_opaque and pine_material.shader.code.contains("wood_contact_surface_cutaway") and pine_material.shader.code.contains("harvest_contact_band")
-		check("wood variant %d preserves authored surfaces with opaque trunk contact" % pine_variant,wood_contact_opaque and surface_names == ["trunk","crown","lip"],surface_names)
+			contact_surface_values.append(float(pine_material.get_shader_parameter("harvest_contact_surface")))
+			wood_contact_opaque = wood_contact_opaque and pine_material.shader.code.contains("wood_contact_surface_cutaway") and pine_material.shader.code.contains("harvest_contact_band") and pine_material.shader.code.contains("harvest_contact_surface")
+		check("wood variant %d preserves only the authored trunk as opaque contact" % pine_variant,wood_contact_opaque and surface_names == ["trunk","crown","lip"] and contact_surface_values == [1.0,0.0,0.0],[surface_names,contact_surface_values])
 	var shipping_source: Dictionary = game.sim.resources[0]
 	shipping_source.units = 2
 	game.sim.position = shipping_source.position + Vector2(0.0,1.0)

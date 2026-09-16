@@ -81,7 +81,8 @@ func source_contact_surface_opaque() -> bool:
 	for surface_index in selected_mesh.get_surface_count():
 		var material: Material = selected_mesh.surface_get_material(surface_index)
 		if material is ShaderMaterial and material.resource_name.to_lower() == "trunk":
-			return (material as ShaderMaterial).shader.code.contains("wood_contact_surface_cutaway") and (material as ShaderMaterial).shader.code.contains("harvest_contact_band")
+			var shader_material := material as ShaderMaterial
+			return shader_material.shader.code.contains("wood_contact_surface_cutaway") and shader_material.shader.code.contains("harvest_contact_band") and is_equal_approx(float(shader_material.get_shader_parameter("harvest_contact_surface")),1.0)
 	return false
 
 func configure_review_frame(frame: int) -> void:

@@ -10,7 +10,7 @@ const CATALOG_PATH := "res://assets/harvesting_v1/catalog.json"
 const MAX_FRAGMENT_DESCRIPTORS := 32
 const MAX_IMPACT_PULSES := 8
 const RECEIPT_WINDOW := 256
-const EFFECT_LIFETIME_SECONDS := 0.48
+const EFFECT_LIFETIME_SECONDS := 0.12
 const CONTACT_TOLERANCE := 0.035
 const IMPACT_TARGET_TOLERANCE_METERS := 0.25
 const RECOVERY_PORTION := 0.32
@@ -30,7 +30,7 @@ const RESOURCE_PROFILES := {
 		"method":"chop", "tool":"axe", "asset":"res://assets/harvesting_v1/axe.glb",
 		"animation_profile":"human_player_chop", "contact_marker":"C1TwoHandContact",
 		"primary_grip_marker":"C1RightHandContact", "secondary_grip_marker":"C1LeftHandContact",
-		"impact_progress":0.56, "effect":"wood_chips", "fragment_count":6,
+		"impact_progress":0.56, "effect":"wood_chips", "fragment_count":2,
 		"grip_socket":Vector3(0.0, -0.10, 0.0), "second_hand_socket":Vector3(0.0, -0.26, 0.0),
 		"impact_socket":Vector3(0.29, 0.13, 0.0), "source_contact_height":0.84, "source_contact_radius":0.24,
 		"impact_height_offset":0.0, "impact_surface_offset":0.34, "maximum_surface_adjust":0.0, "two_hand_grip_lift":0.0, "effect_color":Color("b96f38"),
@@ -39,7 +39,7 @@ const RESOURCE_PROFILES := {
 		"method":"mine", "tool":"pickaxe", "asset":"res://assets/harvesting_v1/pickaxe.glb",
 		"animation_profile":"human_player_mine", "contact_marker":"C1TwoHandContact",
 		"primary_grip_marker":"C1RightHandContact", "secondary_grip_marker":"C1LeftHandContact",
-		"impact_progress":0.58, "effect":"stone_shards", "fragment_count":5,
+		"impact_progress":0.58, "effect":"stone_shards", "fragment_count":2,
 		"grip_socket":Vector3(0.0, -0.08, 0.0), "second_hand_socket":Vector3(0.0, -0.24, 0.0),
 		"second_hand_grip_range":Vector2(-0.44,-0.22),
 		"impact_socket":Vector3(0.28, 0.14, 0.0), "source_contact_height":0.56, "source_contact_radius":0.84,
@@ -49,7 +49,7 @@ const RESOURCE_PROFILES := {
 		"method":"mine", "tool":"pickaxe", "asset":"res://assets/harvesting_v1/pickaxe.glb",
 		"animation_profile":"human_player_mine", "contact_marker":"C1TwoHandContact",
 		"primary_grip_marker":"C1RightHandContact", "secondary_grip_marker":"C1LeftHandContact",
-		"impact_progress":0.58, "effect":"ore_glint", "fragment_count":4,
+		"impact_progress":0.58, "effect":"ore_glint", "fragment_count":1,
 		"grip_socket":Vector3(0.0, -0.08, 0.0), "second_hand_socket":Vector3(0.0, -0.24, 0.0),
 		"second_hand_grip_range":Vector2(-0.44,-0.22),
 		"impact_socket":Vector3(0.28, 0.14, 0.0), "source_contact_height":0.56, "source_contact_radius":0.84,
@@ -59,7 +59,7 @@ const RESOURCE_PROFILES := {
 		"method":"dismantle", "tool":"salvage_pry_tool", "asset":"res://assets/harvesting_v1/salvage_pry_tool.glb",
 		"animation_profile":"human_player_dismantle", "contact_marker":"C1RightHandContact",
 		"primary_grip_marker":"C1RightHandContact", "secondary_grip_marker":"",
-		"impact_progress":0.61, "effect":"salvage_sparks", "fragment_count":3,
+		"impact_progress":0.61, "effect":"salvage_sparks", "fragment_count":1,
 		"grip_socket":Vector3(0.0, -0.20, 0.0), "second_hand_socket":Vector3.ZERO,
 		"impact_socket":Vector3(0.28, 0.43, 0.0), "source_contact_height":0.52, "source_contact_radius":0.68,
 		"impact_height_offset":0.0, "impact_surface_offset":0.22, "effect_color":Color("ffad4d"),
@@ -112,6 +112,8 @@ static func contract() -> Dictionary:
 		"authoritative_commit_arming_required":true,
 		"source_visibility_authority":"simulation_units_and_respawn_only",
 		"effect_geometry":"bounded_visible_mesh_pools",
+		"effect_readability":"brief_non_occluding_contact_burst",
+		"equipped_tool_shadow_mode":"disabled_micro_prop",
 		"simulation_authoritative":true,
 		"emits_gameplay_events":false,
 		"mutates_inventory":false,
@@ -580,6 +582,11 @@ func _instantiate_tool(tool_id: String, asset_path: String) -> Node3D:
 	node.visible = false
 	node.set_meta("t09_authored_asset", asset_path)
 	node.set_meta("t09_tool_profile", tool_id)
+	# The hand-sized tool is already shaded by the scene lights. Submitting its
+	# palette surface again for the large world shadow map adds measurable cost
+	# without a readable shadow at the shipping camera scale.
+	for child in node.find_children("*", "MeshInstance3D", true, false):
+		(child as GeometryInstance3D).cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
 	add_child(node)
 	tool_nodes[tool_id] = node
 	return node

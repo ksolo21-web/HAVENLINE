@@ -67,10 +67,15 @@ def main() -> None:
         if not 300 <= int(row.get("triangles", 0)) <= 2500:
             errors.append(f"triangle budget mismatch: {tool_id}")
         if len(row.get("materials", [])) < 5 or len(row.get("materials", [])) > 6:
-            errors.append(f"material budget mismatch: {tool_id}")
+            errors.append(f"palette role budget mismatch: {tool_id}")
+        json_length, json_type = struct.unpack("<I4s", raw[12:20])
+        document = json.loads(raw[20:20 + json_length]) if json_type == b"JSON" else {}
+        primitives = [primitive for mesh in document.get("meshes", []) for primitive in mesh.get("primitives", [])]
+        if row.get("render_materials") != 1 or row.get("vertex_color_palette") is not True or len(document.get("materials", [])) != 1 or len(primitives) != 1 or "COLOR_0" not in primitives[0].get("attributes", {}):
+            errors.append(f"single-draw vertex palette mismatch: {tool_id}")
         if len(row.get("grip_socket", [])) != 3 or len(row.get("impact_socket", [])) != 3:
             errors.append(f"socket metadata missing: {tool_id}")
-        asset_rows.append({"id": tool_id, "sha256": digest, "bytes": len(raw), "triangles": row.get("triangles")})
+        asset_rows.append({"id": tool_id, "sha256": digest, "bytes": len(raw), "triangles": row.get("triangles"), "render_materials": row.get("render_materials")})
 
     registry = json.loads(REGISTRY.read_text(encoding="utf-8"))["resources"]
     expected_resource_tools = {"wood": "axe", "stone": "pickaxe", "metal": "pickaxe", "fuel": "salvage_pry_tool"}
