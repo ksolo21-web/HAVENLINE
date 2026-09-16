@@ -43,12 +43,28 @@ The implementation was repaired to a two-phase transaction: prepare idempotent d
 
 The repaired exact source then passed 82/82 checks and all prebuild governance gates. Internal prebuild-core review score: **10.0/10 for this dependency-independent scope only**. This is not an independent C1/C2/C3/C4/C6/C7 production approval and does not approve T10.
 
+## Formal-suite hardening while T09 remains active
+
+The temporary `HavenlineGodot/tests/test_task10_prebuild.gd` path has been retired. Coverage has been promoted into the frozen production reservation path `HavenlineGodot/tests/test_task10_world_transform.gd`, so the prebuild no longer carries a future unauthorized test path.
+
+The formal suite retains the existing transaction/recovery/presentation coverage and adds:
+
+- 512 independent transformation targets.
+- 1,024 successful two-phase transactions across two progression stages.
+- Exact final target/receipt cardinality checks.
+- Conservative prebuild runtime and static-memory ceilings.
+- Full 512-target component snapshot/import round-trip.
+- Hostile component-state import cases for forged authority, empty state, duplicate tags, missing targets, unknown resources, negative debits, and a transaction appearing simultaneously as pending and completed.
+- Formal prebuild source-contract validation in CI.
+
+An intermediate CI commit correctly failed the ownership guard because the old temporary test path still existed in that commit. The temporary path was then deleted before this verification trigger. The clean-head formal suite must pass before this section becomes a verified checkpoint.
+
 ## Required after T09 becomes APPROVED
 
 1. Reconcile this prebuild onto the **exact post-T09 integration head**.
 2. Run T10 activation preflight and register the production T10 builder/base/reservation.
 3. Replace fixture assumptions with the real approved T09/T08 simulation adapter and authoritative debit/harvest interfaces.
-4. Convert/extend the prebuild test into the formal T10 world-transform + integration suites.
+4. Extend the formal T10 world-transform test with the real T09 integration suite and final capture harness.
 5. Add final transformation presentation/evidence without stealing T11 camp-building content.
 6. Run full impacted T01-T09 regression, save/recovery/device/performance evidence, and exact-source capture.
 7. Run required C1/C2/C3/C4/C6/C7 critics; every mandatory dimension must be strictly >9.0 unrounded with zero unresolved mandatory defects.
