@@ -1,41 +1,89 @@
 {
   "schema_version": 1,
   "task_id": "T10",
-  "review_scope": "parallel preparation readiness only; not gameplay completion or approval",
-  "prepared_branch": "havenline/governance-t10-prep",
-  "source_integration_checkpoint": "f342e807786d1f9d582a75dd3a2fc9f656143116",
+  "review_scope": "parallel preparation plus dependency-independent prebuild readiness; not production integration or approval",
+  "prepared_branch": "prebuild/T10-world-transform",
+  "source_integration_checkpoint": "0427a7f8f11ca2afe1866ee972657b631b3e3c50",
   "internal_review": {
     "reviewer_type": "internal review; no separate critic runtime claimed",
     "preparation_readiness_score": 10.0,
-    "pass_rule": "> 9.0 with all mandatory preparation checks passing",
+    "dependency_independent_prebuild_score": 10.0,
+    "pass_rule": "> 9.0 with all mandatory checks for the reviewed scope passing",
     "task_approval_claimed": false,
     "checks": [
       {"id":"P01","name":"T10 frozen scope exists and separates T10 framework from T11 camp content","status":"PASS"},
-      {"id":"P02","name":"Dependencies fixed to T05/T08/T09 and runtime activation refuses unresolved dependency state","status":"PASS"},
-      {"id":"P03","name":"Planned T10 ownership is disjoint from active T09 reservation","status":"PASS"},
-      {"id":"P04","name":"Planned T10 ownership excludes integration-only main.gd and simulation.gd","status":"PASS"},
-      {"id":"P05","name":"C1/C2/C3/C4/C6/C7 critic contract matches dependency graph and critic matrix","status":"PASS"},
-      {"id":"P06","name":"Exact-once atomic transaction, replay protection, preview purity and progression integrity are mandatory requirements","status":"PASS"},
-      {"id":"P07","name":"T14 global save/versioning boundary preserved while component recovery contract is defined","status":"PASS"},
-      {"id":"P08","name":"Activation tooling syntax and preparation validation pass in GitHub Actions","status":"PASS"},
-      {"id":"P09","name":"Production registry validation, migration validation and production-tool regression pass in GitHub Actions","status":"PASS"},
-      {"id":"P10","name":"Future isolated candidate workflow is present and cannot run T10 production without an activated registry/base","status":"PASS"}
+      {"id":"P02","name":"Dependencies fixed to T05/T08/T09 and production activation refuses unresolved dependency state","status":"PASS"},
+      {"id":"P03","name":"T10 prebuild ownership remains disjoint from active T09 reservation","status":"PASS"},
+      {"id":"P04","name":"T10 prebuild excludes integration-only main/simulation paths","status":"PASS"},
+      {"id":"P05","name":"C1/C2/C3/C4/C6/C7 production critic contract remains unchanged","status":"PASS"},
+      {"id":"P06","name":"Two-phase transaction waits for simulation-authoritative debit receipt before world-state advancement","status":"PASS"},
+      {"id":"P07","name":"Pending/completed replay, crash recovery, altered receipt rejection and component-state fail-closed import pass","status":"PASS"},
+      {"id":"P08","name":"One in-flight transaction per target prevents same-revision double-debit race","status":"PASS"},
+      {"id":"P09","name":"Authoritative receipts must match a T10-prepared transaction; unsolicited receipts fail closed","status":"PASS"},
+      {"id":"P10","name":"512 targets / 1024 two-stage transactions pass bounded stress and exact snapshot round-trip","status":"PASS"},
+      {"id":"P11","name":"Fixture simulation integration passes same-target race, stale-authority, crash-window and out-of-order multi-target receipt cases","status":"PASS"},
+      {"id":"P12","name":"Full frozen source-contract validator passes with formal domain/integration/capture files present","status":"PASS"},
+      {"id":"P13","name":"Eight 1280x720 lifecycle fixture renders are distinct and readable across front and three-quarter views","status":"PASS"},
+      {"id":"P14","name":"Governance, migration and production-tool regression pass on the exact verified prebuild source","status":"PASS"}
     ]
   },
+  "resolved_prebuild_defects": [
+    {
+      "id": "D01",
+      "severity": "mandatory",
+      "defect": "Initial commit_transform advanced world state before the simulation-authoritative resource debit was confirmed.",
+      "risk": "A debit failure or crash could split inventory state from world transformation state.",
+      "repair": "Converted to two-phase prepare -> simulation debit -> T10 receipt validation -> world advancement; pending transactions persist and replay idempotently.",
+      "verification": "Repaired core passed the formal domain, crash/recovery and fixture integration suites."
+    },
+    {
+      "id": "D02",
+      "severity": "mandatory",
+      "defect": "Presentation could have trusted a merely simulation-shaped receipt before T10 accepted it.",
+      "risk": "Visual completion could get ahead of authoritative world state.",
+      "repair": "Presentation completion requires a receipt stamped accepted_by_world_transform by T10.",
+      "verification": "Raw simulation receipts are rejected by the completion lifecycle test; T10-accepted receipts complete successfully."
+    },
+    {
+      "id": "D03",
+      "severity": "mandatory",
+      "defect": "Two different transaction IDs could be prepared against the same target revision before the first receipt returned.",
+      "risk": "Both intents could debit resources even though only one world-state receipt could later win.",
+      "repair": "Enforced one_inflight_transaction_per_target and reject later target transactions with target_transaction_pending until the first resolves.",
+      "verification": "Fixture integration proves the second same-target request is rejected before the simulation debit count changes."
+    },
+    {
+      "id": "D04",
+      "severity": "mandatory",
+      "defect": "A well-formed simulation receipt for a transaction T10 never prepared could be accepted.",
+      "risk": "Out-of-band authoritative-looking input could advance T10 world state.",
+      "repair": "accept_authoritative_receipt now requires the exact transaction in prepared and exact prepared-intent field equality.",
+      "verification": "Fixture integration rejects unsolicited valid-looking simulation receipts with missing_prepared_transaction."
+    },
+    {
+      "id": "D05",
+      "severity": "tooling",
+      "defect": "Initial lifecycle capture harness used untyped local inference from dynamically typed engine calls and failed GDScript parsing.",
+      "risk": "Rendered evidence could not be produced even though domain/integration gates passed.",
+      "repair": "Added explicit Dictionary typing for preview, intent and accepted receipt locals.",
+      "verification": "Exact-source Xvfb + software Vulkan/mobile capture produced eight unique 1280x720 PNGs and a passing manifest."
+    }
+  ],
   "mandatory_prep_defects": [],
   "runtime_blockers": [
     {
       "id": "B01",
       "blocker": "T09 is not APPROVED/integrated yet",
-      "effect": "T10 may remain prepared but may not be assigned/built as a production runtime candidate",
-      "resolution": "Complete T09, then run prepare_activation.py --activate --base <exact-post-T09-integration-head>; only a passing preflight may stage T10 activation."
+      "effect": "T10 dependency-independent prebuild may remain isolated, but T10 may not be production-integrated or approved and the real T09 adapter cannot be certified yet.",
+      "resolution": "Complete T09, then run prepare_activation.py --activate --base <exact-post-T09-integration-head>; reconcile the prebuild and bind the real approved T09/T08 simulation interfaces."
     }
   ],
   "remaining_after_dependency_resolves": [
-    "Run activation preflight against exact post-T09 integration head.",
-    "Stage and validate T10 ownership/registry/dependency/task-gate activation.",
-    "Commit activation governance and cut havenline/T10-world-transformation from that checkpoint.",
-    "Build/test/review/fix/retest T10 runtime candidate under C1/C2/C3/C4/C6/C7 and strict >9.0 acceptance."
+    "Reconcile this prebuild onto the exact post-T09 integration head.",
+    "Run T10 activation preflight and stage validated ownership/registry/dependency/task-gate activation.",
+    "Replace FakeSimulationAuthority/fixture assumptions with the real approved T09/T08 simulation adapter and rerun the formal integration suite.",
+    "Run impacted T01-T09 regressions, final save/recovery/device/performance evidence and production capture.",
+    "Run independent required C1/C2/C3/C4/C6/C7 reviews and fix/retest until every mandatory dimension is strictly >9.0 unrounded."
   ],
-  "resume_from": "Docs/Production/T10/TASK_PACKET.md + ACTIVATION_CHECKLIST.json + tools/havenline/task10/prepare_activation.py"
+  "resume_from": "Docs/Production/T10/PREBUILD_STATUS.md + TASK_PACKET.md + ACTIVATION_CHECKLIST.json + tools/havenline/task10/prepare_activation.py"
 }
