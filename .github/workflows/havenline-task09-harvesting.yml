@@ -169,9 +169,20 @@ jobs:
           assert len(assets)==30 and len({(r['resource'],r['view']) for r in assets})==30
           devices=[r for r in reports if r['mode']=='device']
           assert len(devices)==6 and len({r['device_state'] for r in devices})==6
+          for report in devices:
+              commits=[row for row in report['samples'] if row.get('commit')]
+              samples=[row for row in report['samples'] if 'harvest' in row]
+              depleted=[row for row in report['samples'] if row.get('depleted')]
+              respawned=[row for row in report['samples'] if row.get('respawned')]
+              assert report['simulation_authoritative'] is True and commits
+              assert any(row['harvest']['accepted_impacts']>=1 and row['transfer']['accepted_receipts']>=1 and row['carry']['logical_total']>=1 for row in samples)
+              assert len(depleted)==1 and depleted[0]['source_visible'] is False
+              assert len(respawned)==1 and respawned[0]['source_visible'] is True
           native=[r for r in reports if r['native_4k_render']]
           assert len(native)==1 and native[0]['internal_render']==[3840,2160] and native[0]['render_scale']==1.0
           pngs=list(root.glob('*/*.png'))
+          sequence_frames=list(root.glob('sequence-*/frames/frame-*.jpg'))
+          assert len(sequence_frames)==176,len(sequence_frames)
           assert pngs
           for path in pngs:
               with path.open('rb') as stream:

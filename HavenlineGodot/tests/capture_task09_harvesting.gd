@@ -104,6 +104,7 @@ func sample(frame: int, progress: float) -> void:
 		"source_units":int(source.units), "inventory":int(game.sim.inventory[resource_kind]),
 		"harvest":game.harvest_presentation.descriptor(),
 		"transfer":game.transfer_feedback.descriptor(),
+		"carry":game.carry_stacks[game.sim.lead].descriptor(),
 		"frame_update_usec":update_usec, "draw_calls":draws, "primitives":prims,
 	})
 
@@ -126,7 +127,6 @@ func commit(frame: int) -> void:
 		"units_before":before_units,"units_after":int(source.units),
 		"inventory_before":before_inventory,"inventory_after":int(game.sim.inventory[resource_kind]),
 	})
-	action_token += 1
 
 func sample_cancelled(frame: int) -> void:
 	var started := Time.get_ticks_usec()
@@ -150,8 +150,11 @@ func sample_cancelled(frame: int) -> void:
 func capture_sequence() -> void:
 	DirAccess.make_dir_recursive_absolute(output.path_join("frames"))
 	for frame in 72:
-		var progress := float(frame) / 30.0 if frame <= 30 else float(frame - 48) / 23.0
-		if frame == 30: commit(frame)
+		var progress := float(frame) / 30.0 if frame < 30 else (float(frame-30)/11.0*0.32 if frame < 42 else float(frame-48)/23.0)
+		if frame == 30:
+			commit(frame)
+			progress = 0.0 # The committed token remains at its exact contact beat.
+		if frame == 48: action_token += 1 # Re-entry is a new T07 action context.
 		if frame >= 42 and frame < 48: await sample_cancelled(frame)
 		else: await sample(frame,clampf(progress,0.0,1.0))
 		if frame % 2 == 0: await capture_jpg(frame)
@@ -162,10 +165,12 @@ func capture_sequence() -> void:
 	while int(source.units) > 0:
 		commit(lifecycle_frame)
 		game._process(1.0 / 60.0)
+		action_token += 1
 		lifecycle_frame += 1
 	game._process(1.0 / 60.0)
 	records.append({"frame":lifecycle_frame,"depleted":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
 	await capture_png("%s-depleted" % resource_kind)
+	for frame in range(72,80,2): await capture_jpg(frame)
 	# Let the unchanged 90-second simulation timer perform the respawn while the
 	# lead is away from all harvest targets, then restore the evidence framing.
 	var evidence_position: Vector2 = game.sim.position
@@ -178,6 +183,7 @@ func capture_sequence() -> void:
 	game._process(1.0 / 60.0)
 	records.append({"frame":lifecycle_frame+1,"respawned":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
 	await capture_png("%s-respawned" % resource_kind)
+	for frame in range(80,88,2): await capture_jpg(frame)
 
 func capture_tool_view() -> void:
 	await sample(0,1.0)
@@ -229,8 +235,30 @@ func capture_asset_view() -> void:
 
 func capture_device_view() -> void:
 	await sample(0,0.82)
-	await sample(1,0.86)
-	await capture_png("device-%s-%s" % [device_id,resource_kind])
+	await capture_png("device-%s-%s-preimpact" % [device_id,resource_kind])
+	commit(1)
+	await sample(1,0.0)
+	await capture_png("device-%s-%s-impact-transfer-carry" % [device_id,resource_kind])
+	action_token += 1
+	var lifecycle_frame := 2
+	while int(source.units) > 0:
+		commit(lifecycle_frame)
+		game._process(1.0/60.0)
+		action_token += 1
+		lifecycle_frame += 1
+	game._process(1.0/60.0)
+	records.append({"frame":lifecycle_frame,"depleted":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
+	await capture_png("device-%s-%s-depleted" % [device_id,resource_kind])
+	var evidence_position: Vector2 = game.sim.position
+	game.sim.position = Vector2(float(game.sim.contract.world.boundX),float(game.sim.contract.world.boundZ))
+	game.sim.velocity = Vector2.ZERO
+	for tick in 901: game.sim.step(0.1,Vector2.ZERO)
+	game.sim.position = evidence_position
+	game.sim.velocity = Vector2.ZERO
+	game.player_rig.position = game.xyz(evidence_position)
+	game._process(1.0/60.0)
+	records.append({"frame":lifecycle_frame+1,"respawned":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
+	await capture_png("device-%s-%s-respawned" % [device_id,resource_kind])
 
 func write_report() -> void:
 	var report := {
