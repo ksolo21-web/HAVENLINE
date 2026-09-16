@@ -12,6 +12,17 @@ on:
       - 'Docs/Production/T10/**'
       - 'tools/havenline/task10/**'
       - '.github/workflows/havenline-task10-*.yml'
+  pull_request:
+    branches: ['havenline/T10-world-transformation']
+    paths:
+      - 'HavenlineGodot/scripts/world_transform.gd'
+      - 'HavenlineGodot/scripts/world_transform_view.gd'
+      - 'HavenlineGodot/data/world_transform_recipes.json'
+      - 'HavenlineGodot/assets/world_transform_v1/**'
+      - 'HavenlineGodot/tests/test_task10_*.gd'
+      - 'Docs/Production/T10/**'
+      - 'tools/havenline/task10/**'
+      - '.github/workflows/havenline-task10-*.yml'
   workflow_dispatch:
 
 permissions:
@@ -39,24 +50,59 @@ jobs:
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
 
-      - name: Verify activation, candidate scope and source contract
+      - name: Verify activation or legal preactivation scope and source contract
         env:
           CANDIDATE: ${{ github.sha }}
         run: |
           set -euo pipefail
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
-          base=$(python3 - <<'PY'
+          python3 tools/havenline/task10/prepare_activation.py | tee task10-evidence/isolated-governance.json
+          python3 - <<'PY' > /tmp/t10-candidate-mode.env
           import json
           r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
-          row=next(x for x in r['workstreams'] if x['task_id']=='T10')
-          assert row['status'] not in ('LOCKED','PREPARED','APPROVED'), row['status']
-          print(row['base_commit'])
+          row=next((x for x in r.get('workstreams',[]) if x.get('task_id')=='T10'),None)
+          if row is None or row.get('status') in ('LOCKED','PREPARED'):
+              print('T10_CANDIDATE_MODE=preactivation')
+              print('T10_REGISTERED_BASE=')
+          elif row.get('status') == 'APPROVED':
+              raise SystemExit('T10 is already APPROVED and may not produce another candidate')
+          else:
+              base=row.get('base_commit')
+              if not base:
+                  raise SystemExit('registered T10 candidate has no base_commit')
+              print('T10_CANDIDATE_MODE=registered')
+              print('T10_REGISTERED_BASE='+base)
           PY
-          )
-          python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$CANDIDATE" --integration-head "$integration" | tee task10-evidence/candidate-scope.json
+          cat /tmp/t10-candidate-mode.env >> "$GITHUB_ENV"
+          cat /tmp/t10-candidate-mode.env
+
+          if [ "$(grep '^T10_CANDIDATE_MODE=' /tmp/t10-candidate-mode.env | cut -d= -f2)" = "registered" ]; then
+            base=$(grep '^T10_REGISTERED_BASE=' /tmp/t10-candidate-mode.env | cut -d= -f2-)
+            python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$CANDIDATE" --integration-head "$integration" | tee task10-evidence/candidate-scope.json
+          else
+            python3 tools/havenline/task10/prepare_reconciliation.py \
+              --integration-base "$integration" \
+              --isolated-candidate "$CANDIDATE" \
+              --output task10-evidence/candidate-scope.json
+            python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('task10-evidence/candidate-scope.json').read_text())
+          assert report['passed'] is True, report
+          assert report['path_reconciliation_clean'] is True, report
+          assert not report['unauthorized_isolated_paths'], report
+          assert report['integration_allowed'] is False, report
+          assert report['task_approved'] is False, report
+          # Once all dependencies are closed, T10 must be formally activated and
+          # registered rather than continuing indefinitely in preactivation mode.
+          assert report['dependencies_fully_approved'] is False, 'dependency closure requires T10 activation/registration'
+          PY
+          fi
+
           python3 tools/havenline/task10/validate_world_transform.py --candidate "$CANDIDATE" --output task10-evidence/source-contract.json
           python3 tools/havenline/production/validate_migration.py > task10-evidence/governance.json
           python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > task10-evidence/tests/production-tools.log 2>&1
+          python3 -m unittest discover -s tools/havenline/task10/tests -p 'test_*.py' > task10-evidence/tests/task10-tooling.log 2>&1
 
       - name: Import and run impacted regression
         run: |
@@ -80,7 +126,7 @@ jobs:
               checks=report.get('checks',[])
               rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
           assert len(rows)==14,len(rows)
-          output={'task':'T10-first-builder-milestone','source':os.environ['GITHUB_SHA'],'suite_count':len(rows),'total_checks':sum(row['checks'] for row in rows),'suites':rows,'all_passed':True,'task_approved':False}
+          output={'task':'T10-first-builder-milestone','source':os.environ['GITHUB_SHA'],'candidate_mode':os.environ['T10_CANDIDATE_MODE'],'suite_count':len(rows),'total_checks':sum(row['checks'] for row in rows),'suites':rows,'all_passed':True,'task_approved':False}
           Path('task10-evidence/tests.json').write_text(json.dumps(output,indent=2)); print(json.dumps(output))
           PY
 
