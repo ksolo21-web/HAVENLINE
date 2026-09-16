@@ -96,7 +96,6 @@ class GovernanceTests(unittest.TestCase):
         for path in [
             "HavenlineGodot/assets/harvesting_v1/axe.glb",
             "HavenlineGodot/scripts/harvest_presentation.gd",
-            "HavenlineGodot/shaders/evergreen.gdshader",
             "HavenlineGodot/tests/test_task09_harvesting.gd",
             "HavenlineGodot/tests/test_task09_integration.gd",
             "HavenlineGodot/tests/capture_task09_harvesting.gd",

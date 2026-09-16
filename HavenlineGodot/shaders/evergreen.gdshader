@@ -3,7 +3,6 @@ render_mode diffuse_burley, specular_schlick_ggx, cull_back, shadows_disabled;
 uniform sampler2D albedo_texture : source_color, filter_linear_mipmap, repeat_enable;
 uniform sampler2D normal_texture : hint_normal, filter_linear_mipmap, repeat_enable;
 uniform float surface_roughness = 0.95;
-uniform bool crown_cutaway = false;
 instance uniform float cutaway : instance_index(0) = 0.0;
 uniform bool player_clearance_enabled = false;
 uniform vec3 player_focus_world = vec3(0.0);
@@ -24,8 +23,7 @@ void vertex() {
 }
 void fragment() {
  float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));
- float cutaway_coverage = crown_cutaway ? max(cutaway,forest_clearance) : 0.0;
- if (coverage < cutaway_coverage) { discard; }
+ if (coverage < max(cutaway,forest_clearance)) { discard; }
  vec3 surface_color = texture(albedo_texture,UV).rgb;
  float wood = step(surface_color.b*1.25,surface_color.r);
  // Tree-only stylized palette calibration in linear light. It compensates

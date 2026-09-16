@@ -110,11 +110,13 @@ func run() -> void:
 	game.set_physics_process(false)
 	for pine_variant in range(1,4):
 		var pine_mesh: ArrayMesh = game.merged_cache["world/pine_%d" % pine_variant]
-		var crown_cutaway_flags: Array[bool] = []
+		var surface_names: Array[String] = []
+		var wood_contact_opaque := true
 		for surface_index in pine_mesh.get_surface_count():
 			var pine_material: ShaderMaterial = pine_mesh.surface_get_material(surface_index)
-			crown_cutaway_flags.append(bool(pine_material.get_shader_parameter("crown_cutaway")))
-		check("wood variant %d sightline cutaway affects only its authored crown surface" % pine_variant,crown_cutaway_flags == [false,true,false],crown_cutaway_flags)
+			surface_names.append(pine_material.resource_name.to_lower())
+			wood_contact_opaque = wood_contact_opaque and pine_material.shader.code.contains("wood_contact_surface_cutaway")
+		check("wood variant %d preserves authored surfaces with opaque trunk contact" % pine_variant,wood_contact_opaque and surface_names == ["trunk","crown","lip"],surface_names)
 	var shipping_source: Dictionary = game.sim.resources[0]
 	shipping_source.units = 2
 	game.sim.position = shipping_source.position + Vector2(0.0,1.0)

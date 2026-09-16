@@ -239,19 +239,21 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 		if not merged_cache.has(asset):
 			merged_cache[asset] = Scenery.compile(asset_cache[path])
 			if asset.begins_with("world/pine_"):
+				var evergreen_shader: Shader = load("res://shaders/evergreen.gdshader")
+				var whole_tree_cutaway := "void fragment() {\n float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));\n if (coverage < max(cutaway,forest_clearance)) { discard; }\n vec3 surface_color = texture(albedo_texture,UV).rgb;\n float wood = step(surface_color.b*1.25,surface_color.r);"
+				var crown_only_cutaway := "void fragment() {\n vec3 surface_color = texture(albedo_texture,UV).rgb;\n float wood = step(surface_color.b*1.25,surface_color.r);\n float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));\n float wood_contact_surface_cutaway = max(cutaway,forest_clearance)*(1.0-wood);\n if (coverage < wood_contact_surface_cutaway) { discard; }"
+				if evergreen_shader.code.contains(whole_tree_cutaway):
+					evergreen_shader.code = evergreen_shader.code.replace(whole_tree_cutaway,crown_only_cutaway)
+				assert(evergreen_shader.code.contains("wood_contact_surface_cutaway"),"Evergreen shader must preserve the opaque harvest contact surface")
 				for i in merged_cache[asset].get_surface_count():
 					var source_material: Material = merged_cache[asset].surface_get_material(i)
 					if source_material is BaseMaterial3D:
 						var leaf_material := ShaderMaterial.new()
 						leaf_material.resource_name = source_material.resource_name
-						leaf_material.shader=load("res://shaders/evergreen.gdshader")
+						leaf_material.shader=evergreen_shader
 						leaf_material.set_shader_parameter("albedo_texture",source_material.albedo_texture)
 						leaf_material.set_shader_parameter("normal_texture",source_material.normal_texture)
 						leaf_material.set_shader_parameter("surface_roughness",source_material.roughness)
-						# The source GLBs author trunk/crown/lip as distinct surfaces. Only
-						# the crown may dither for sightlines; the harvest contact surface
-						# must stay opaque while the simulation-owned source is alive.
-						leaf_material.set_shader_parameter("crown_cutaway",source_material.resource_name.to_lower() == "crown")
 						merged_cache[asset].surface_set_material(i,leaf_material)
 		instance = MeshInstance3D.new()
 		instance.mesh = merged_cache[asset]

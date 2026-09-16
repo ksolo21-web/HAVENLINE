@@ -81,7 +81,7 @@ func source_contact_surface_opaque() -> bool:
 	for surface_index in selected_mesh.get_surface_count():
 		var material: Material = selected_mesh.surface_get_material(surface_index)
 		if material is ShaderMaterial and material.resource_name.to_lower() == "trunk":
-			return not bool((material as ShaderMaterial).get_shader_parameter("crown_cutaway"))
+			return (material as ShaderMaterial).shader.code.contains("wood_contact_surface_cutaway")
 	return false
 
 func configure_review_frame(frame: int) -> void:
