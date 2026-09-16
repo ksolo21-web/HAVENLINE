@@ -170,6 +170,7 @@ jobs:
       evidence_artifact: '${{ needs.preflight.outputs.specialist_artifact }}'
       manifest_name: C5-manifest.json
       output_artifact: 'havenline-t09-C5-${{ needs.preflight.outputs.candidate }}'
+      timeout_minutes: 180
 
   c6:
     needs: preflight
