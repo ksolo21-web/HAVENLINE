@@ -7,6 +7,7 @@ on:
       - '.github/workflows/havenline-task09-review.yml'
       - 'tools/havenline/production/t09_c2_visual_review.py'
       - 'tools/havenline/production/t09_c6_performance_review.py'
+      - 'tools/havenline/production/t09_build_specialist_input.py'
       - 'Docs/Production/PATH_OWNERSHIP.json'
   workflow_dispatch:
 
@@ -24,7 +25,7 @@ env:
 jobs:
   preflight:
     runs-on: ubuntu-24.04
-    timeout-minutes: 15
+    timeout-minutes: 20
     outputs:
       candidate: '${{ steps.identity.outputs.candidate }}'
       specialist_artifact: '${{ steps.identity.outputs.specialist_artifact }}'
@@ -60,84 +61,24 @@ jobs:
               assert report['candidate']==source and final['contact_alignment_valid'] is True
               assert final['grip_error_m']<=0.025 and final['impact_error_m']<=0.025 and final['secondary_grip_error_m']<=0.045
           PY
-      - name: Materialize source-bound specialist input
+      - name: Materialize complete source-bound specialist input
         run: |
           set -euo pipefail
-          rm -rf critic-input
-          mkdir -p critic-input
+          python3 tools/havenline/production/t09_build_specialist_input.py \
+            --evidence-root task09-evidence \
+            --out critic-input \
+            --candidate "$EXPECTED_SOURCE" | tee task09-specialist-input-summary.json
+          for critic in C3 C4 C5; do
+            python3 tools/havenline/production/specialist_evidence_manifest.py validate "critic-input/$critic-manifest.json"
+          done
           python3 - <<'PY'
+          import json
           from pathlib import Path
-          import shutil
-          src=Path('task09-evidence'); dst=Path('critic-input')
-          paths={
-            'device-impact.png':'captures/device-phone_16_9/device-phone_16_9-wood-impact-transfer-carry.png',
-            'device-preimpact.png':'captures/device-phone_16_9/device-phone_16_9-wood-preimpact.png',
-            'device-depleted.png':'captures/device-phone_16_9/device-phone_16_9-wood-depleted.png',
-            'device-respawned.png':'captures/device-phone_16_9/device-phone_16_9-wood-respawned.png',
-            'wood-report.json':'captures/sequence-wood/capture-report.json',
-            'wood-focus.png':'captures/sequence-wood/wood-focus-acquired.png',
-            'wood-contact.png':'captures/sequence-wood/wood-committed-contact.png',
-            'wood-recovery.png':'captures/sequence-wood/wood-recovery.png',
-            'wood-cancelled.png':'captures/sequence-wood/wood-cancelled.png',
-            'wood-depleted.png':'captures/sequence-wood/wood-depleted.png',
-            'wood-respawned.png':'captures/sequence-wood/wood-respawned.png',
-            'stone-contact.png':'captures/sequence-stone/stone-committed-contact.png',
-            'metal-contact.png':'captures/sequence-metal/metal-committed-contact.png',
-            'fuel-contact.png':'captures/sequence-fuel/fuel-committed-contact.png',
-            'wood-detail.png':'captures/tool-wood-detail/tool-wood-detail.png',
-            'stone-detail.png':'captures/tool-stone-detail/tool-stone-detail.png',
-            'fuel-detail.png':'captures/tool-fuel-detail/tool-fuel-detail.png',
-          }
-          for out, rel in paths.items():
-              source=src/rel
-              assert source.is_file(), rel
-              shutil.copy2(source,dst/out)
-          for resource in ('wood','stone','fuel'):
-              for frame in (0,20,40,60):
-                  source=src/f'captures/sequence-{resource}/frames/frame-{frame:05d}.jpg'
-                  assert source.is_file(), source
-                  shutil.copy2(source,dst/f'{resource}-frame-{frame:05d}.jpg')
+          s=json.loads(Path('critic-input/input-summary.json').read_text())
+          assert s['c5_uses_every_captured_frame'] is True
+          assert min(s['full_cycle_frame_counts'].values())>=80
+          assert s['max_visual_items_per_group']<=18
           PY
-          python3 tools/havenline/production/specialist_evidence_manifest.py build \
-            --task T09 --critic C3 --candidate "$EXPECTED_SOURCE" --out critic-input/C3-manifest.json \
-            --item 'gameplay|gameplay_state|image|critic-input/device-impact.png|Phone gameplay state at authoritative harvest transfer/carry feedback.' \
-            --item 'controls|control_state|json|critic-input/wood-report.json|Shipping T07/T09 action-state and authority trace across approach, focus, commit, recovery and reentry.' \
-            --item 'loop|loop_evidence|image|critic-input/wood-focus.png|Focused contextual gather state.' \
-            --item 'loop|loop_evidence|image|critic-input/wood-contact.png|Authoritative committed harvest contact.' \
-            --item 'loop|loop_evidence|image|critic-input/wood-depleted.png|Visible depleted source state.' \
-            --item 'loop|loop_evidence|image|critic-input/wood-respawned.png|Visible respawned source state.'
-          python3 tools/havenline/production/specialist_evidence_manifest.py build \
-            --task T09 --critic C4 --candidate "$EXPECTED_SOURCE" --out critic-input/C4-manifest.json \
-            --item 'gameplay|gameplay_state|image|critic-input/device-preimpact.png|Gameplay immediately before harvest impact.' \
-            --item 'feedback|feedback_state|image|critic-input/device-impact.png|Impact plus transfer and carried-resource feedback.' \
-            --item 'feedback|feedback_state|image|critic-input/device-depleted.png|Source depletion feedback.' \
-            --item 'feedback|feedback_state|image|critic-input/device-respawned.png|Source respawn feedback.' \
-            --item 'feedback|feedback_state|image|critic-input/wood-contact.png|Close authoritative harvest-contact feedback.'
-          python3 tools/havenline/production/specialist_evidence_manifest.py build \
-            --task T09 --critic C5 --candidate "$EXPECTED_SOURCE" --out critic-input/C5-manifest.json \
-            --item 'wood-cycle|motion_cycle|motion_frame|critic-input/wood-frame-00000.jpg|Wood harvesting cycle frame 0.' \
-            --item 'wood-cycle|motion_cycle|motion_frame|critic-input/wood-frame-00020.jpg|Wood harvesting cycle frame 20.' \
-            --item 'wood-cycle|motion_cycle|motion_frame|critic-input/wood-frame-00040.jpg|Wood harvesting cycle frame 40.' \
-            --item 'wood-cycle|motion_cycle|motion_frame|critic-input/wood-frame-00060.jpg|Wood harvesting cycle frame 60.' \
-            --item 'stone-cycle|motion_cycle|motion_frame|critic-input/stone-frame-00000.jpg|Stone mining cycle frame 0.' \
-            --item 'stone-cycle|motion_cycle|motion_frame|critic-input/stone-frame-00020.jpg|Stone mining cycle frame 20.' \
-            --item 'stone-cycle|motion_cycle|motion_frame|critic-input/stone-frame-00040.jpg|Stone mining cycle frame 40.' \
-            --item 'stone-cycle|motion_cycle|motion_frame|critic-input/stone-frame-00060.jpg|Stone mining cycle frame 60.' \
-            --item 'fuel-cycle|motion_cycle|motion_frame|critic-input/fuel-frame-00000.jpg|Fuel dismantle cycle frame 0.' \
-            --item 'fuel-cycle|motion_cycle|motion_frame|critic-input/fuel-frame-00020.jpg|Fuel dismantle cycle frame 20.' \
-            --item 'fuel-cycle|motion_cycle|motion_frame|critic-input/fuel-frame-00040.jpg|Fuel dismantle cycle frame 40.' \
-            --item 'fuel-cycle|motion_cycle|motion_frame|critic-input/fuel-frame-00060.jpg|Fuel dismantle cycle frame 60.' \
-            --item 'transition|motion_transition|image|critic-input/wood-focus.png|Focus-acquisition transition into harvesting.' \
-            --item 'transition|motion_transition|image|critic-input/wood-recovery.png|Recovery state after committed contact.' \
-            --item 'transition|motion_transition|image|critic-input/wood-cancelled.png|Movement-owned cancellation transition.' \
-            --item 'contact|contact_detail|image|critic-input/wood-detail.png|Axe hand/tool contact detail.' \
-            --item 'contact|contact_detail|image|critic-input/stone-detail.png|Pickaxe hand/tool contact detail.' \
-            --item 'contact|contact_detail|image|critic-input/fuel-detail.png|Pry-tool hand/contact detail.' \
-            --item 'contact|contact_detail|image|critic-input/wood-contact.png|Wood authoritative impact contact.' \
-            --item 'contact|contact_detail|image|critic-input/stone-contact.png|Stone authoritative impact contact.' \
-            --item 'contact|contact_detail|image|critic-input/metal-contact.png|Metal authoritative impact contact.' \
-            --item 'contact|contact_detail|image|critic-input/fuel-contact.png|Fuel authoritative impact contact.'
-          for critic in C3 C4 C5; do python3 tools/havenline/production/specialist_evidence_manifest.py validate "critic-input/$critic-manifest.json"; done
       - id: identity
         run: |
           echo "candidate=$EXPECTED_SOURCE" >> "$GITHUB_OUTPUT"
@@ -292,9 +233,12 @@ jobs:
                   assert row['passed'] is True and row['coverage_complete'] is True and row['defects']==[]
                   assert row['confidence'] in ('medium','high')
                   assert row['scores'] and all(float(score)>9.0 for score in row['scores'].values())
-          result={'task':'T09','candidate':source,'required_critics':['C2','C3','C4','C5','C6'],'strict_rule':'>9.0 unrounded; zero unresolved mandatory defects; no averaging waiver','critics':rows,'passed':True,'task_approved':False}
+          c5=rows['C5']
+          cycle_groups=[g for g in c5.get('groups',[]) if '-cycle-' in g.get('group','')]
+          assert len(cycle_groups)>=15, 'C5 full-cycle group coverage missing'
+          result={'task':'T09','candidate':source,'required_critics':['C2','C3','C4','C5','C6'],'strict_rule':'>9.0 unrounded; zero unresolved mandatory defects; no averaging waiver','c5_full_cycle_groups':len(cycle_groups),'critics':rows,'passed':True,'task_approved':False}
           Path('t09-strict-review-decision.json').write_text(json.dumps(result,indent=2)+'\n')
-          print(json.dumps({'task':'T09','candidate':source,'passed':True,'critics':list(rows)},indent=2))
+          print(json.dumps({'task':'T09','candidate':source,'passed':True,'critics':list(rows),'c5_full_cycle_groups':len(cycle_groups)},indent=2))
           PY
       - uses: actions/upload-artifact@v4
         with:
