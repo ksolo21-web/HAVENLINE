@@ -13,6 +13,7 @@ ROOT = Path(__file__).resolve().parents[3]
 ASSETS = ROOT / "HavenlineGodot" / "assets" / "harvesting_v1"
 SCRIPT = ROOT / "HavenlineGodot" / "scripts" / "harvest_presentation.gd"
 MAIN = ROOT / "HavenlineGodot" / "scripts" / "main.gd"
+CAPTURE = ROOT / "HavenlineGodot" / "tests" / "capture_task09_harvesting.gd"
 REGISTRY = ROOT / "Docs" / "Production" / "RESOURCE_ACTION_REGISTRY.json"
 REFERENCE_SELECTION = ROOT / "Docs" / "Production" / "T09" / "reference-selection.json"
 
@@ -111,6 +112,13 @@ def main() -> None:
     ])
     if not runtime_wiring:
         errors.append("shipping T09 runtime wiring is incomplete")
+    capture_source = CAPTURE.read_text(encoding="utf-8") if CAPTURE.exists() else ""
+    if not all(token in capture_source for token in [
+        'if resource_kind in ["stone","metal","fuel"]',
+        "detail_direction = (right+forward*0.85).normalized()",
+        "var detail_direction := (right-forward*0.22).normalized()",
+    ]):
+        errors.append("resource-specific non-occluding detail camera is missing")
     result = {
         "task": "T09",
         "candidate_commit": args.candidate,

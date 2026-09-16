@@ -109,11 +109,16 @@ func configure_camera(frame := 0) -> void:
 		game.camera.look_at(focus)
 		return
 	if view_id == "detail":
-		# Use a lateral, slightly actor-side view so the bounded trunk edge, axe
-		# head, handle and both hands remain separately readable at contact.
+		# Wood needs a lateral actor-side view to separate the bounded trunk edge,
+		# axe head, handle and both hands. The compact stone/metal/fuel sources need
+		# the opposite source-side oblique: their actor-side view puts the authored
+		# impact face between the camera and the tool even though contact is valid.
+		var detail_direction := (right-forward*0.22).normalized()
+		if resource_kind in ["stone","metal","fuel"]:
+			detail_direction = (right+forward*0.85).normalized()
 		game.camera.keep_aspect = Camera3D.KEEP_HEIGHT
 		game.camera.size = 2.65
-		game.camera.global_position = focus+right*3.3+Vector3.UP*2.25-forward*0.75
+		game.camera.global_position = focus+detail_direction*3.65+Vector3.UP*2.20
 		game.camera.look_at(focus+Vector3.UP*0.10)
 		return
 	var angle_index := VIEWS.find(view_id)
