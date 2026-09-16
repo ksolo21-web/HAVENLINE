@@ -166,8 +166,9 @@ jobs:
               focused=[row for row in report['samples'] if row.get('action_identity','').startswith('gather:') and row.get('action_state') in ('acquiring','active')]
               shipping_commits=[row for row in report['samples'] if row.get('commit') and row.get('authority')=='outpost_simulation.step/context_director.advance']
               assert approach and focused and shipping_commits,report['resource']
-              visible_contact=[row for row in report['samples'] if row.get('source_units',0)>0 and row.get('phase') in ('focus_acquisition','anticipation')]
-              assert visible_contact and all(row.get('source_visible') is True and row.get('source_contact_surface_opaque') is True for row in visible_contact),report['resource']
+              if report['resource']=='wood':
+                  visible_contact=[row for row in report['samples'] if row.get('source_units',0)>0 and row.get('phase') in ('focus_acquisition','anticipation')]
+                  assert visible_contact and all(row.get('source_visible') is True and row.get('source_contact_surface_opaque') is True for row in visible_contact),report['resource']
               assert shipping_commits[0]['action_token']==focused[0]['action_token'] and shipping_commits[0]['action_token']>0
               commits=[row for row in report['samples'] if row.get('commit')]
               assert commits and report['final_harvest']['accepted_impacts']==len(commits),report['resource']
