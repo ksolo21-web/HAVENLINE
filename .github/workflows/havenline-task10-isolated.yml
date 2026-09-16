@@ -240,6 +240,14 @@ jobs:
           },indent=2))
           PY
 
+      - name: Validate critic input readiness
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task10/validate_critic_readiness.py \
+            --evidence-root task10-isolated-evidence \
+            --candidate "$GITHUB_SHA" \
+            --output task10-isolated-evidence/critic-readiness.json
+
       - name: Declare isolated candidate state
         run: |
           set -euo pipefail
@@ -247,10 +255,12 @@ jobs:
           import json,subprocess
           from pathlib import Path
           graph=json.loads(Path('Docs/Production/DEPENDENCY_GRAPH.json').read_text())
+          critic=json.loads(Path('task10-isolated-evidence/critic-readiness.json').read_text())
+          assert critic.get('passed') is True and critic.get('isolated_critic_input_ready') is True,critic
           print(json.dumps({
             'task':'T10','candidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             'isolated_state':'BUILT_PENDING_DEPENDENCY','dependency':'T09','dependency_status':graph['tasks']['T09']['status'],
-            'critic_ready_native4k_evidence':True,
+            'critic_ready_native4k_evidence':True,'isolated_critic_input_ready':True,
             'critic_evidence_states':['ready','blocked','preview','committing','complete'],
             'critic_evidence_angles':['front','side','three-quarter','overhead','gameplay','detail'],
             'integration_allowed':False,'real_t09_adapter_bound':False,'task_approved':False,'passed':True
