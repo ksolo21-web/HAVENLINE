@@ -44,8 +44,7 @@ jobs:
         run: |
           set -euo pipefail
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
-          builder_candidate=$(git log -1 --format=%H "$CANDIDATE" -- HavenlineGodot/tests/capture_task09_harvesting.gd)
-          python3 tools/havenline/production/workstream.py validate-candidate T09 --base 7492074e40a0b061f31d8c32602b7a581b2610f3 --head "$builder_candidate" --integration-head "$integration" | tee task09-evidence/candidate-scope.json
+          python3 tools/havenline/production/workstream.py validate-candidate T09 --base 7492074e40a0b061f31d8c32602b7a581b2610f3 --head "$CANDIDATE" --integration-head "$integration" | tee task09-evidence/candidate-scope.json
           python3 tools/havenline/task09/validate_harvesting.py --candidate "$CANDIDATE" --output task09-evidence/source-contract.json
           before=$(sha256sum HavenlineGodot/assets/harvesting_v1/* | sha256sum)
           python3 tools/havenline/task09/generate_harvesting_tools.py > task09-evidence/generator.json
@@ -73,7 +72,7 @@ jobs:
           python3 tools/havenline/bake_outpost_audio.py > task09-evidence/tests/audio-fixture.json
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task09-evidence/tests/import.log 2>&1
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task09-evidence/tests/motion-fixture.log 2>&1
-          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_outpost_runtime test_adaptive_devices test_task06_character1 test_task07_context_director test_task07_integration test_task08_inventory test_task08_integration test_task09_harvesting test_task09_integration; do
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_outpost test_outpost_runtime test_environment test_reference_forest test_task02_river test_task03_boundary test_adaptive_devices test_task06_character1 test_task07_context_director test_task07_integration test_task08_inventory test_task08_integration test_task09_harvesting test_task09_integration; do
             timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task09-evidence/tests/$suite.log" 2>&1
           done
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task09-evidence/tests/*.log; then exit 1; fi
@@ -88,7 +87,7 @@ jobs:
               assert report.get('passed') is True and not report.get('failures'),(path,report.get('failures'))
               checks=report.get('checks',[])
               rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
-          assert len(rows)==12,len(rows)
+          assert len(rows)==17,len(rows)
           output={'task':'T09-integrated-candidate','source':os.environ['GITHUB_SHA'],'suite_count':len(rows),'total_checks':sum(row['checks'] for row in rows),'suites':rows,'all_passed':True,'task_approved':False}
           Path('task09-evidence/tests.json').write_text(json.dumps(output,indent=2)); print(json.dumps(output))
           PY
@@ -109,9 +108,15 @@ jobs:
             ffmpeg -hide_banner -loglevel error -y -framerate 30 -i "$out/frames/frame-%05d.jpg" -vf 'setpts=2.0*PTS' -r 30 -c:v libx264 -pix_fmt yuv420p "$out/$resource-slow-motion.mp4"
           done
           for resource in wood stone fuel; do
-            for view in front front-right right rear-right rear rear-left left front-left; do
+            for view in front front-right right rear-right rear rear-left left front-left overhead detail; do
               out="task09-evidence/captures/tool-$resource-$view"
               xvfb-run -a "${godot[@]}" --resolution 960x540 --script res://tests/capture_task09_harvesting.gd -- --render-review --out="$PWD/$out" --resource="$resource" --mode=tool --view="$view" --candidate="$CANDIDATE"
+            done
+          done
+          for resource in wood stone fuel; do
+            for view in front front-right right rear-right rear rear-left left front-left overhead detail; do
+              out="task09-evidence/captures/asset-$resource-$view"
+              xvfb-run -a "${godot[@]}" --resolution 960x540 --script res://tests/capture_task09_harvesting.gd -- --render-review --out="$PWD/$out" --resource="$resource" --mode=asset --view="$view" --candidate="$CANDIDATE"
             done
           done
           declare -A widths=( [phone_16_9]=1280 [phone_20_9]=1280 [tablet_16_10]=1280 [tablet_4_3]=1024 [foldable_outer]=1280 [foldable_inner]=1104 )
@@ -127,17 +132,27 @@ jobs:
           from pathlib import Path
           root=Path('task09-evidence/captures')
           reports=[json.loads(p.read_text()) for p in root.glob('*/capture-report.json')]
-          assert len(reports)==35,len(reports)
+          assert len(reports)==71,len(reports)
           sequences=[r for r in reports if r['mode']=='sequence']
           assert len(sequences)==4 and {r['resource'] for r in sequences}=={'wood','stone','metal','fuel'}
           for report in sequences:
-              assert report['final_harvest']['accepted_impacts']==1,report['resource']
-              assert report['final_transfer']['accepted_receipts']==1,report['resource']
+              assert report['simulation_authoritative'] is True
+              assert report['commit_authority']=='outpost_simulation.perform_action'
               commits=[row for row in report['samples'] if row.get('commit')]
-              assert len(commits)==1 and commits[0]['units_before']-commits[0]['units_after']==1
-              assert commits[0]['inventory_after']-commits[0]['inventory_before']==1
+              assert commits and report['final_harvest']['accepted_impacts']==len(commits),report['resource']
+              assert report['final_transfer']['accepted_receipts']==len(commits),report['resource']
+              assert all(row['authority']=='outpost_simulation.perform_action' and row['authoritative_event'] for row in commits)
+              assert all(row['units_before']-row['units_after']==1 and row['inventory_after']-row['inventory_before']==1 for row in commits)
+              cancelled=[row for row in report['samples'] if row.get('cancelled')]
+              depleted=[row for row in report['samples'] if row.get('depleted')]
+              respawned=[row for row in report['samples'] if row.get('respawned')]
+              assert cancelled and all(not row['harvest']['active'] for row in cancelled)
+              assert len(depleted)==1 and depleted[0]['source_units']==0 and depleted[0]['source_visible'] is False
+              assert len(respawned)==1 and respawned[0]['source_units']>0 and respawned[0]['source_visible'] is True
           tools=[r for r in reports if r['mode']=='tool' and not r['native_4k_render']]
-          assert len(tools)==24 and len({(r['resource'],r['view']) for r in tools})==24
+          assert len(tools)==30 and len({(r['resource'],r['view']) for r in tools})==30
+          assets=[r for r in reports if r['mode']=='asset']
+          assert len(assets)==30 and len({(r['resource'],r['view']) for r in assets})==30
           devices=[r for r in reports if r['mode']=='device']
           assert len(devices)==6 and len({r['device_state'] for r in devices})==6
           native=[r for r in reports if r['native_4k_render']]
@@ -151,8 +166,41 @@ jobs:
                   assert stream.read(4)==b'IHDR' and length==13
                   width,height=struct.unpack('>II',stream.read(8))
                   assert width>0 and height>0,(path,width,height)
-          summary={'candidate':reports[0]['candidate'],'reports':len(reports),'pngs':len(pngs),'sequence_videos':len(list(root.glob('sequence-*/*.mp4'))),'native_4k_internal':[3840,2160],'physical_4k60_verified':False,'passed':True}
+          summary={'candidate':reports[0]['candidate'],'reports':len(reports),'pngs':len(pngs),'sequence_videos':len(list(root.glob('sequence-*/*.mp4'))),'in_hand_views':len(tools),'isolated_tool_turntables':len(assets),'native_4k_internal':[3840,2160],'physical_4k60_verified':False,'passed':True}
           Path('task09-evidence/capture-summary.json').write_text(json.dumps(summary,indent=2)); print(json.dumps(summary))
+          PY
+
+      - name: Measure exact-base performance delta
+        env:
+          CANDIDATE: ${{ github.sha }}
+          BASE: 7492074e40a0b061f31d8c32602b7a581b2610f3
+        run: |
+          set -euo pipefail
+          base_dir="$RUNNER_TEMP/t09-exact-base"
+          git worktree add --detach "$base_dir" "$BASE"
+          cp HavenlineGodot/tests/capture_task09_performance.gd "$base_dir/HavenlineGodot/tests/capture_task09_performance.gd"
+          (cd "$base_dir" && python3 tools/havenline/bake_outpost_audio.py >/dev/null)
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path "$base_dir/HavenlineGodot" --import --quit > task09-evidence/tests/exact-base-import.log 2>&1
+          mkdir -p task09-evidence/performance/exact-base task09-evidence/performance/candidate
+          xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method gl_compatibility --resolution 1280x720 --path "$base_dir/HavenlineGodot" --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/exact-base" --candidate="$BASE" --expect-base
+          xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method gl_compatibility --resolution 1280x720 --path HavenlineGodot --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/candidate" --candidate="$CANDIDATE"
+          git worktree remove --force "$base_dir"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          base=json.loads(Path('task09-evidence/performance/exact-base/performance.json').read_text())
+          candidate=json.loads(Path('task09-evidence/performance/candidate/performance.json').read_text())
+          assert base['candidate']==os.environ['BASE'] and base['integrated'] is False
+          assert candidate['candidate']==os.environ['CANDIDATE'] and candidate['integrated'] is True
+          delta={key:candidate[key]-base[key] for key in ['p95_ms','p99_ms','average_draw_calls','average_primitives','process_static_memory_mb','materials_visible','unique_shader_resources','physics_active_bodies','animation_players','active_animations','visible_rigs','npc_companion_active_population']}
+          result={'task':'T09','exact_base':os.environ['BASE'],'candidate':os.environ['CANDIDATE'],'method':candidate['method'],'base':base,'integrated':candidate,'delta':delta,'limits':{'p95_ms':10.0,'draw_calls':12.0,'primitives':5000.0,'memory_mb':32.0,'materials':6,'shaders':0,'physics_bodies':0,'animation_players':0},'physical_4k60_verified':False,'thermal_certified':False}
+          assert candidate['measured_frames']==180 and candidate['unchanged_active_state_node_count_stable'] is True
+          assert candidate['maximum_fragment_descriptors']<=32 and candidate['maximum_impact_pulses']<=8
+          assert delta['p95_ms']<=result['limits']['p95_ms'] and delta['average_draw_calls']<=result['limits']['draw_calls'] and delta['average_primitives']<=result['limits']['primitives']
+          assert delta['process_static_memory_mb']<=result['limits']['memory_mb'] and delta['materials_visible']<=result['limits']['materials'] and delta['unique_shader_resources']<=result['limits']['shaders']
+          assert delta['physics_active_bodies']<=0 and delta['animation_players']<=0 and delta['active_animations']<=0
+          result['passed']=True
+          Path('task09-evidence/performance/delta.json').write_text(json.dumps(result,indent=2)); print(json.dumps({'task':'T09','performance_delta':delta,'passed':True}))
           PY
 
       - uses: actions/upload-artifact@v4

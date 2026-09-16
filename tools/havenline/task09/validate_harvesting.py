@@ -12,6 +12,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[3]
 ASSETS = ROOT / "HavenlineGodot" / "assets" / "harvesting_v1"
 SCRIPT = ROOT / "HavenlineGodot" / "scripts" / "harvest_presentation.gd"
+MAIN = ROOT / "HavenlineGodot" / "scripts" / "main.gd"
 REGISTRY = ROOT / "Docs" / "Production" / "RESOURCE_ACTION_REGISTRY.json"
 
 EXPECTED = {
@@ -80,6 +81,14 @@ def main() -> None:
     for token in ["simulation_authoritative", "emits_gameplay_events", "mutates_inventory", "RECEIPT_WINDOW", "MAX_FRAGMENT_DESCRIPTORS", "MAX_IMPACT_PULSES"]:
         if token not in source:
             errors.append(f"presentation contract token missing: {token}")
+    main_source = MAIN.read_text(encoding="utf-8") if MAIN.exists() else ""
+    runtime_wiring = all(token in main_source for token in [
+        "HarvestPresentation.new()", "harvest_presentation.bind_source(",
+        "harvest_presentation.synchronize_committed_contact(",
+        "harvest_presentation.accept_committed_impact(",
+    ])
+    if not runtime_wiring:
+        errors.append("shipping T09 runtime wiring is incomplete")
     result = {
         "task": "T09",
         "candidate_commit": args.candidate,
@@ -88,7 +97,7 @@ def main() -> None:
         "catalog_sha256": sha256(catalog_path) if catalog_path.exists() else None,
         "presentation_sha256": sha256(SCRIPT) if SCRIPT.exists() else None,
         "assets": asset_rows,
-        "runtime_wiring_included": False,
+        "runtime_wiring_included": runtime_wiring,
         "task_approved": False,
     }
     output = json.dumps(result, indent=2)

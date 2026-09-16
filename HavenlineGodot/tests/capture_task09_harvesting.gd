@@ -8,7 +8,7 @@ const DEVICE_SIZES := {
 	"tablet_16_10":Vector2(2560,1600), "tablet_4_3":Vector2(2732,2048),
 	"foldable_outer":Vector2(2520,1080), "foldable_inner":Vector2(2208,1768),
 }
-const VIEWS := ["front","front-right","right","rear-right","rear","rear-left","left","front-left"]
+const VIEWS := ["front","front-right","right","rear-right","rear","rear-left","left","front-left","overhead","detail"]
 
 var output := "user://task09-harvesting"
 var resource_kind := "wood"
@@ -23,6 +23,7 @@ var records: Array[Dictionary] = []
 var frame_usec: Array[float] = []
 var draw_calls: Array[int] = []
 var primitives: Array[int] = []
+var action_token := 901
 
 func _initialize() -> void:
 	for argument in OS.get_cmdline_user_args():
@@ -54,13 +55,19 @@ func actor_point() -> Vector3:
 
 func configure_camera(frame := 0) -> void:
 	var focus := actor_point().lerp(source_point(),0.55)
+	if view_id == "overhead":
+		game.camera.size = 5.2
+		game.camera.global_position = focus + Vector3(0.001,9.0,0.001)
+		game.camera.look_at(focus)
+		return
 	var angle_index := VIEWS.find(view_id)
 	if angle_index < 0: angle_index = 0
-	var angle := TAU * float(angle_index) / float(VIEWS.size())
-	var distance := 13.0 if mode == "device" else 8.2
+	angle_index = mini(7,angle_index)
+	var angle := TAU * float(angle_index) / 8.0
+	var distance := 13.0 if mode == "device" else (4.8 if view_id == "detail" else 8.2)
 	var offset := Vector3(sin(angle) * distance,5.0,cos(angle) * distance)
 	game.camera.keep_aspect = Camera3D.KEEP_HEIGHT
-	game.camera.size = 13.5 if mode == "device" else 6.4
+	game.camera.size = 13.5 if mode == "device" else (3.4 if view_id == "detail" else 6.4)
 	game.camera.global_position = focus + offset
 	game.camera.look_at(focus + Vector3.UP * (0.08 * sin(float(frame) * 0.03)))
 
@@ -68,7 +75,7 @@ func canonical_action(progress: float) -> Dictionary:
 	return {
 		"kind":"gather", "id":String(source.id), "position":source.position,
 		"resource":resource_kind, "source_id":String(source.id),
-		"action_token":901 + ["wood","stone","metal","fuel"].find(resource_kind),
+		"action_token":action_token,
 		"progress":clampf(progress,0.0,1.0), "role":"player_lead", "actionable":true,
 	}
 
@@ -104,28 +111,121 @@ func commit(frame: int) -> void:
 	var before_units := int(source.units)
 	var before_inventory := int(game.sim.inventory[resource_kind])
 	if before_units <= 0: return
-	source.units = before_units - 1
-	game.sim.inventory[resource_kind] = before_inventory + 1
-	game.sim.action = canonical_action(0.0)
-	game.sim.events = [{"type":"gather","position":source.position,"resource":resource_kind}]
+	# Exercise the shipping simulation authority. The capture harness may pose the
+	# presentation timeline, but it must never fabricate resource or inventory
+	# mutations, nor invent the event consumed by T09/T08.
+	game.sim.action = canonical_action(1.0)
+	game.sim.events.clear()
+	game.sim.perform_action(float(game.sim.tuning.gatherSecondsPerUnit[resource_kind]))
 	game.sim.elapsed += 1.0 / 60.0
 	game.present_events()
-	records.append({"frame":frame,"commit":true,"units_before":before_units,"units_after":int(source.units),"inventory_before":before_inventory,"inventory_after":int(game.sim.inventory[resource_kind])})
+	var authoritative_event: bool = game.sim.events.size() == 1 and String(game.sim.events[0].get("type", "")) == "gather" and String(game.sim.events[0].get("resource", "")) == resource_kind
+	records.append({
+		"frame":frame, "commit":true, "authority":"outpost_simulation.perform_action",
+		"authoritative_event":authoritative_event,
+		"units_before":before_units,"units_after":int(source.units),
+		"inventory_before":before_inventory,"inventory_after":int(game.sim.inventory[resource_kind]),
+	})
+	action_token += 1
+
+func sample_cancelled(frame: int) -> void:
+	var started := Time.get_ticks_usec()
+	game.sim.action = {"kind":"", "id":"", "position":source.position, "actionable":false, "reason":"movement_owns_locomotion"}
+	game._process(1.0 / 60.0)
+	game.harvest_presentation._process(1.0 / 60.0)
+	game.transfer_feedback._process(1.0 / 60.0)
+	configure_camera(frame)
+	var update_usec := float(Time.get_ticks_usec() - started)
+	await process_frame
+	var draws := int(RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME))
+	var prims := int(RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_PRIMITIVES_IN_FRAME))
+	frame_usec.append(update_usec); draw_calls.append(draws); primitives.append(prims)
+	records.append({
+		"frame":frame, "cancelled":true, "reason":"movement_owns_locomotion",
+		"source_units":int(source.units), "inventory":int(game.sim.inventory[resource_kind]),
+		"harvest":game.harvest_presentation.descriptor(),
+		"frame_update_usec":update_usec, "draw_calls":draws, "primitives":prims,
+	})
 
 func capture_sequence() -> void:
 	DirAccess.make_dir_recursive_absolute(output.path_join("frames"))
 	for frame in 72:
-		var progress := float(frame) / 30.0 if frame <= 30 else float(frame - 30) / 41.0
+		var progress := float(frame) / 30.0 if frame <= 30 else float(frame - 48) / 23.0
 		if frame == 30: commit(frame)
-		await sample(frame,progress)
+		if frame >= 42 and frame < 48: await sample_cancelled(frame)
+		else: await sample(frame,clampf(progress,0.0,1.0))
 		if frame % 2 == 0: await capture_jpg(frame)
-		if frame in [0,21,30,41,71]:
+		if frame in [0,21,30,41,42,48,71]:
 			await capture_png("%s-%03d" % [resource_kind,frame])
+	# Finish depletion only through the same simulation authority as shipping.
+	var lifecycle_frame := 72
+	while int(source.units) > 0:
+		commit(lifecycle_frame)
+		game._process(1.0 / 60.0)
+		lifecycle_frame += 1
+	game._process(1.0 / 60.0)
+	records.append({"frame":lifecycle_frame,"depleted":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
+	await capture_png("%s-depleted" % resource_kind)
+	# Let the unchanged 90-second simulation timer perform the respawn while the
+	# lead is away from all harvest targets, then restore the evidence framing.
+	var evidence_position: Vector2 = game.sim.position
+	game.sim.position = Vector2(float(game.sim.contract.world.boundX),float(game.sim.contract.world.boundZ))
+	game.sim.velocity = Vector2.ZERO
+	for tick in 901: game.sim.step(0.1,Vector2.ZERO)
+	game.sim.position = evidence_position
+	game.sim.velocity = Vector2.ZERO
+	game.player_rig.position = game.xyz(evidence_position)
+	game._process(1.0 / 60.0)
+	records.append({"frame":lifecycle_frame+1,"respawned":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
+	await capture_png("%s-respawned" % resource_kind)
 
 func capture_tool_view() -> void:
 	await sample(0,1.0)
 	await sample(1,1.0)
 	await capture_png("tool-%s-%s" % [resource_kind,view_id])
+
+func hide_visuals(node: Node) -> void:
+	if node is VisualInstance3D and not (node is Light3D): (node as VisualInstance3D).visible = false
+	for child in node.get_children(): hide_visuals(child)
+
+func gather_bounds(node: Node, bounds: Dictionary) -> void:
+	if node is MeshInstance3D and (node as MeshInstance3D).mesh:
+		var mesh_node := node as MeshInstance3D
+		var box: AABB = mesh_node.global_transform * mesh_node.get_aabb()
+		bounds.value = box if not bounds.set else (bounds.value as AABB).merge(box)
+		bounds.set = true
+	for child in node.get_children(): gather_bounds(child,bounds)
+
+func capture_asset_view() -> void:
+	hide_visuals(game.world)
+	for child in game.get_children():
+		if child is Control and not (child is TextureRect): (child as Control).visible = false
+	var profile: Dictionary = Harvest.profile_for_resource(resource_kind)
+	var packed: PackedScene = load(String(profile.asset))
+	var stage := Node3D.new()
+	stage.name = "T09IsolatedToolTurntable"
+	game.world.add_child(stage)
+	var tool := packed.instantiate() as Node3D
+	stage.add_child(tool)
+	await process_frame
+	var bounds := {"set":false,"value":AABB()}
+	gather_bounds(tool,bounds)
+	var box: AABB = bounds.value
+	var scale_factor := 2.4 / maxf(0.01,maxf(box.size.x,maxf(box.size.y,box.size.z)))
+	tool.scale = Vector3.ONE * scale_factor
+	tool.position = -box.get_center() * scale_factor
+	var angle_index := mini(7,maxi(0,VIEWS.find(view_id)))
+	var angle := TAU * float(angle_index) / 8.0
+	var focus := Vector3.ZERO
+	var offset := Vector3(sin(angle)*4.2,2.8,cos(angle)*4.2)
+	if view_id == "overhead": offset = Vector3(0.001,6.0,0.001)
+	elif view_id == "detail": offset = Vector3(2.3,1.7,2.3)
+	game.camera.keep_aspect = Camera3D.KEEP_HEIGHT
+	game.camera.size = 2.7 if view_id != "detail" else 1.8
+	game.camera.global_position = focus + offset
+	game.camera.look_at(focus)
+	await process_frame
+	await capture_png("asset-%s-%s" % [String(profile.tool),view_id])
 
 func capture_device_view() -> void:
 	await sample(0,0.82)
@@ -139,7 +239,10 @@ func write_report() -> void:
 		"logical_size":[game.size.x,game.size.y], "internal_render":[game.scene_view.size.x,game.scene_view.size.y],
 		"render_scale":game.scene_view.scaling_3d_scale, "native_4k_render":native_4k and game.scene_view.size.x >= 3840 and game.scene_view.size.y >= 2160,
 		"physical_4k60_verified":false, "scenario_is_test_fixture":true,
-		"simulation_authoritative":true, "harvest_contract":Harvest.contract(),
+		"capture_progress_driver":"presentation_fixture",
+		"commit_authority":"outpost_simulation.perform_action",
+		"simulation_authoritative":records.any(func(record): return bool(record.get("commit",false)) and bool(record.get("authoritative_event",false))),
+		"harvest_contract":Harvest.contract(),
 		"final_harvest":game.harvest_presentation.descriptor(), "final_transfer":game.transfer_feedback.descriptor(),
 		"samples":records, "performance":{
 			"sample_count":frame_usec.size(), "average_update_usec":average(frame_usec), "maximum_update_usec":maximum(frame_usec),
@@ -152,7 +255,7 @@ func write_report() -> void:
 	file.close()
 
 func run() -> void:
-	if resource_kind not in ["wood","stone","metal","fuel"] or mode not in ["sequence","tool","device"]:
+	if resource_kind not in ["wood","stone","metal","fuel"] or mode not in ["sequence","tool","asset","device"]:
 		push_error("Invalid T09 capture request")
 		quit(2)
 		return
@@ -173,7 +276,7 @@ func run() -> void:
 		push_error("T09 capture source missing: " + resource_kind)
 		quit(3)
 		return
-	source.units = maxi(2,int(source.units))
+	action_token += ["wood","stone","metal","fuel"].find(resource_kind) * 100
 	game.sim.position = source.position + Vector2(0.0,1.12)
 	game.sim.facing = (source.position - game.sim.position).normalized()
 	game.sim.velocity = Vector2.ZERO
@@ -181,9 +284,12 @@ func run() -> void:
 	game.player_rig.rotation.y = atan2(game.sim.facing.x,game.sim.facing.y)
 	if mode == "sequence": await capture_sequence()
 	elif mode == "tool": await capture_tool_view()
+	elif mode == "asset": await capture_asset_view()
 	else: await capture_device_view()
 	write_report()
 	if is_instance_valid(game.outpost_audio): game.outpost_audio.stop_all()
+	await create_timer(0.35).timeout
 	game.free()
+	await process_frame
 	await process_frame
 	quit(0)

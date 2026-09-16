@@ -120,10 +120,32 @@ func run() -> void:
 	shipping_source.respawn = 0.0
 	game._process(1.0 / 60.0)
 	check("shipping respawn restores the same bound source", game.resource_visuals[shipping_source.id].visible)
+	var snapshot: Dictionary = game.sim.snapshot()
+	var restored_sim = game.sim.get_script().new()
+	check("save snapshot restores through the unchanged simulation schema", restored_sim.restore(snapshot))
+	var restored_source: Dictionary = restored_sim.resources.filter(func(item): return String(item.id) == String(shipping_source.id))[0]
+	check("save/reload preserves simulation quantities without T09 fields", int(restored_source.units) == int(shipping_source.units) and int(restored_sim.inventory.wood) == int(game.sim.inventory.wood) and not snapshot.has("harvest_presentation") and not snapshot.has("equipped_tool"))
+	var original_lead := int(game.sim.lead)
+	var switched := game.sim.select_lead(2)
+	game._process(1.0 / 60.0)
+	check("lead switch clears the previous actor tool immediately", switched and game.harvest_actor_id == 2 and not game.harvest_presentation.descriptor().active)
+	check("lead switch does not duplicate inventory", int(game.sim.inventory.wood) == int(restored_sim.inventory.wood))
+	game.sim.select_lead(original_lead)
+	game._process(1.0 / 60.0)
+	var recovered := Harvest.new()
+	root.add_child(recovered)
+	recovered.bind_source(String(shipping_source.id),String(shipping_source.kind),game.resource_visuals[shipping_source.id],int(shipping_source.units))
+	check("fresh presentation reconstructs safely from current simulation state", not recovered.descriptor().active and recovered.sync_source(String(shipping_source.id),int(shipping_source.units),float(shipping_source.respawn)) and game.resource_visuals[shipping_source.id].visible == (int(shipping_source.units) > 0))
+	recovered.free()
 	if is_instance_valid(game.outpost_audio):
 		game.outpost_audio.stop_all()
 	game.harvest_presentation.reset()
+	# Godot's audio mixer retires active WAV playbacks asynchronously. Give it
+	# the same bounded drain window used by the established shipping tests before
+	# freeing Main, otherwise a just-played gather clip survives process exit.
+	await create_timer(0.35).timeout
 	game.free()
+	await process_frame
 	await process_frame
 	var standalone_transfer_count: int = int(transfer.descriptor().active_flights)
 	harvest.reset()
