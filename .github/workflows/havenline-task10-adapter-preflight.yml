@@ -8,6 +8,16 @@ on:
       - 'Docs/Production/T10/POST_T09_CHANGE_REQUEST_TEMPLATE.json'
       - 'tools/havenline/task10/validate_post_t09_adapter.py'
       - 'tools/havenline/task10/prepare_reconciliation.py'
+      - 'tools/havenline/task10/tests/**'
+      - '.github/workflows/havenline-task10-adapter-preflight.yml'
+  pull_request:
+    branches: ['havenline/T10-world-transformation']
+    paths:
+      - 'Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json'
+      - 'Docs/Production/T10/POST_T09_CHANGE_REQUEST_TEMPLATE.json'
+      - 'tools/havenline/task10/validate_post_t09_adapter.py'
+      - 'tools/havenline/task10/prepare_reconciliation.py'
+      - 'tools/havenline/task10/tests/**'
       - '.github/workflows/havenline-task10-adapter-preflight.yml'
   workflow_dispatch:
 
@@ -32,6 +42,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p task10-adapter-preflight
+          python3 -m unittest discover -s tools/havenline/task10/tests -p 'test_*.py'
           python3 tools/havenline/task10/validate_post_t09_adapter.py \
             --output task10-adapter-preflight/adapter-contract.json
           python3 - <<'PY'
@@ -61,11 +72,13 @@ jobs:
           report=json.loads(Path('task10-adapter-preflight/reconciliation.json').read_text())
           assert report['passed'] is True, report
           assert report['path_reconciliation_clean'] is True, report
+          assert not report['reservation_errors'], report
           assert not report['unauthorized_isolated_paths'], report
           assert not report['overlapping_t10_drift'], report
           # Dependency readiness may legitimately be false before T09 closes.
           assert report['handoff_ready_for_reconcile'] == report['dependencies_fully_approved'], report
           assert report['integration_allowed'] is False, report
+          assert report['task_approved'] is False, report
           PY
 
       - name: Summarize live handoff state
@@ -84,6 +97,7 @@ jobs:
             'integration_base':reconcile['integration_base'],
             'integration_t09_state':t09,
             'prepared_adapter_contract_valid':adapter['prepared_contract_valid'],
+            'reservation_source':reconcile['reservation_source'],
             'path_reconciliation_clean':reconcile['path_reconciliation_clean'],
             'dependencies_fully_approved':reconcile['dependencies_fully_approved'],
             'handoff_ready_for_reconcile':ready,
