@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "status": "PREPARATION_ONLY_TEST_VECTORS",
+  "purpose": "Freeze small synthetic behavior vectors for future Godot T12 parity tests without creating shipping progression data or using unfinished T10/T11 IDs.",
+  "semantic_rules": [
+    "A level is eligible only when it is not completed, every prerequisite_level_id is completed, and every required_fact_id has been observed.",
+    "Eligibility queries are pure and deterministic; eligible results are sorted by numeric level then lexical level_id.",
+    "Observed authoritative facts use set semantics; observing the same fact twice cannot change eligibility after the first observation.",
+    "A one_time_event_id may be proposed only once; an event already present in emitted_event_ids is never proposed again.",
+    "The reference oracle never grants inventory, commits transforms, mutates camp state, tunes difficulty or writes global save state."
+  ],
+  "vectors": [
+    {
+      "id": "first-level-eligible",
+      "levels": [
+        {"level": 1, "level_id": "t12.level.001", "prerequisite_level_ids": [], "required_fact_ids": [], "one_time_event_ids": ["t12.event.level_001"]}
+      ],
+      "state": {"completed_level_ids": [], "observed_fact_ids": [], "emitted_event_ids": []},
+      "expected": {"eligible_level_ids": ["t12.level.001"], "new_one_time_event_ids": ["t12.event.level_001"]}
+    },
+    {
+      "id": "prerequisite-blocks",
+      "levels": [
+        {"level": 2, "level_id": "t12.level.002", "prerequisite_level_ids": ["t12.level.001"], "required_fact_ids": [], "one_time_event_ids": ["t12.event.level_002"]}
+      ],
+      "state": {"completed_level_ids": [], "observed_fact_ids": [], "emitted_event_ids": []},
+      "expected": {"eligible_level_ids": [], "new_one_time_event_ids": []}
+    },
+    {
+      "id": "prerequisite-unlocks",
+      "levels": [
+        {"level": 2, "level_id": "t12.level.002", "prerequisite_level_ids": ["t12.level.001"], "required_fact_ids": [], "one_time_event_ids": ["t12.event.level_002"]}
+      ],
+      "state": {"completed_level_ids": ["t12.level.001"], "observed_fact_ids": [], "emitted_event_ids": []},
+      "expected": {"eligible_level_ids": ["t12.level.002"], "new_one_time_event_ids": ["t12.event.level_002"]}
+    },
+    {
+      "id": "authoritative-fact-blocks",
+      "levels": [
+        {"level": 3, "level_id": "t12.level.003", "prerequisite_level_ids": ["t12.level.002"], "required_fact_ids": ["prepared.fact.world_transform_completed"], "one_time_event_ids": ["t12.event.level_003"]}
+      ],
+      "state": {"completed_level_ids": ["t12.level.001", "t12.level.002"], "observed_fact_ids": [], "emitted_event_ids": []},
+      "expected": {"eligible_level_ids": [], "new_one_time_event_ids": []}
+    },
+    {
+      "id": "authoritative-fact-unlocks",
+      "levels": [
+        {"level": 3, "level_id": "t12.level.003", "prerequisite_level_ids": ["t12.level.002"], "required_fact_ids": ["prepared.fact.world_transform_completed"], "one_time_event_ids": ["t12.event.level_003"]}
+      ],
+      "state": {"completed_level_ids": ["t12.level.001", "t12.level.002"], "observed_fact_ids": ["prepared.fact.world_transform_completed"], "emitted_event_ids": []},
+      "expected": {"eligible_level_ids": ["t12.level.003"], "new_one_time_event_ids": ["t12.event.level_003"]}
+    },
+    {
+      "id": "completed-level-is-filtered",
+      "levels": [
+        {"level": 2, "level_id": "t12.level.002", "prerequisite_level_ids": ["t12.level.001"], "required_fact_ids": [], "one_time_event_ids": ["t12.event.level_002"]}
+      ],
+      "state": {"completed_level_ids": ["t12.level.001", "t12.level.002"], "observed_fact_ids": [], "emitted_event_ids": []},
+      "expected": {"eligible_level_ids": [], "new_one_time_event_ids": []}
+    },
+    {
+      "id": "stable-order-for-multiple-eligible-levels",
+      "levels": [
+        {"level": 3, "level_id": "t12.level.003", "prerequisite_level_ids": ["t12.level.001"], "required_fact_ids": [], "one_time_event_ids": ["t12.event.level_003"]},
+        {"level": 2, "level_id": "t12.level.002", "prerequisite_level_ids": ["t12.level.001"], "required_fact_ids": [], "one_time_event_ids": ["t12.event.level_002"]}
+      ],
+      "state": {"completed_level_ids": ["t12.level.001"], "observed_fact_ids": [], "emitted_event_ids": []},
+      "expected": {"eligible_level_ids": ["t12.level.002", "t12.level.003"], "new_one_time_event_ids": ["t12.event.level_002", "t12.event.level_003"]}
+    },
+    {
+      "id": "one-time-event-replay-is-suppressed",
+      "levels": [
+        {"level": 2, "level_id": "t12.level.002", "prerequisite_level_ids": ["t12.level.001"], "required_fact_ids": [], "one_time_event_ids": ["t12.event.level_002"]}
+      ],
+      "state": {"completed_level_ids": ["t12.level.001"], "observed_fact_ids": [], "emitted_event_ids": ["t12.event.level_002"]},
+      "expected": {"eligible_level_ids": ["t12.level.002"], "new_one_time_event_ids": []}
+    },
+    {
+      "id": "duplicate-observed-fact-has-set-semantics",
+      "levels": [
+        {"level": 4, "level_id": "t12.level.004", "prerequisite_level_ids": ["t12.level.003"], "required_fact_ids": ["prepared.fact.camp_state_completed"], "one_time_event_ids": ["t12.event.level_004"]}
+      ],
+      "state": {"completed_level_ids": ["t12.level.001", "t12.level.002", "t12.level.003"], "observed_fact_ids": ["prepared.fact.camp_state_completed", "prepared.fact.camp_state_completed"], "emitted_event_ids": []},
+      "expected": {"eligible_level_ids": ["t12.level.004"], "new_one_time_event_ids": ["t12.event.level_004"]}
+    }
+  ],
+  "shipping_boundary": "Future Godot tests may consume these semantics after activation, but this file itself is non-shipping and cannot prove T10/T11 integration, engine performance, device behavior or critic acceptance."
+}
