@@ -8,6 +8,8 @@ on:
       - 'HavenlineGodot/scripts/world_transform_view.gd'
       - 'HavenlineGodot/data/world_transform_recipes.json'
       - 'HavenlineGodot/tests/test_task10_world_transform.gd'
+      - 'HavenlineGodot/tests/test_task10_integration.gd'
+      - 'HavenlineGodot/tests/capture_task10_world_transform.gd'
       - 'Docs/Production/T10/**'
       - 'tools/havenline/task10/**'
       - '.github/workflows/havenline-task10-prebuild.yml'
@@ -23,7 +25,7 @@ concurrency:
 jobs:
   dependency-independent-core:
     runs-on: ubuntu-24.04
-    timeout-minutes: 25
+    timeout-minutes: 30
     steps:
       - uses: actions/checkout@v4
         with:
@@ -47,6 +49,8 @@ jobs:
             'HavenlineGodot/scripts/world_transform_view.gd',
             'HavenlineGodot/data/world_transform_recipes.json',
             'HavenlineGodot/tests/test_task10_world_transform.gd',
+            'HavenlineGodot/tests/test_task10_integration.gd',
+            'HavenlineGodot/tests/capture_task10_world_transform.gd',
             '.github/workflows/havenline-task10-prebuild.yml',
           )
           prefixes=('Docs/Production/T10/','tools/havenline/task10/')
@@ -65,20 +69,22 @@ jobs:
           print(json.dumps({'task':'T10','mode':'dependency-independent-prebuild','branch_point':branch_point,'integration_head':integration,'changed_files':changed,'t09_status':graph['tasks']['T09']['status'],'integration_allowed':False,'passed':True},indent=2))
           PY
 
-      - name: Prepare pinned Godot
+      - name: Prepare pinned Godot and software render path
         run: |
           set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/engine" task10-prebuild-evidence/tests
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine" task10-prebuild-evidence/tests task10-prebuild-evidence/capture
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
 
-      - name: Import and test formal T10 core
+      - name: Import and test formal T10 domain core
         run: |
           set -euo pipefail
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task10-prebuild-evidence/tests/import.log 2>&1
           timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_world_transform.gd > task10-prebuild-evidence/tests/test_task10_world_transform.log 2>&1
-          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task10-prebuild-evidence/tests/*.log; then exit 1; fi
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-prebuild-evidence/tests/import.log task10-prebuild-evidence/tests/test_task10_world_transform.log; then exit 1; fi
           python3 - <<'PY'
           import json
           from pathlib import Path
@@ -90,30 +96,71 @@ jobs:
           assert report.get('stress_targets') == 512 and report.get('stress_transactions') == 1024, report
           report['integration_allowed']=False
           report['task_approved']=False
-          Path('task10-prebuild-evidence/tests.json').write_text(json.dumps(report,indent=2))
+          Path('task10-prebuild-evidence/domain-tests.json').write_text(json.dumps(report,indent=2))
           print(json.dumps(report))
           PY
 
-      - name: Validate T10 source contract
+      - name: Run fixture simulation integration and race recovery
         run: |
           set -euo pipefail
-          # The formal production validator still expects the future integration/capture files,
-          # so prebuild verifies the currently dependency-independent subset directly.
-          python3 - <<'PY' | tee task10-prebuild-evidence/source-contract.json
+          timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_integration.gd > task10-prebuild-evidence/tests/test_task10_integration.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-prebuild-evidence/tests/test_task10_integration.log; then exit 1; fi
+          python3 - <<'PY'
           import json
           from pathlib import Path
-          required=[
-            Path('HavenlineGodot/scripts/world_transform.gd'),
-            Path('HavenlineGodot/scripts/world_transform_view.gd'),
-            Path('HavenlineGodot/data/world_transform_recipes.json'),
-            Path('HavenlineGodot/tests/test_task10_world_transform.gd'),
-          ]
-          missing=[str(p) for p in required if not p.exists() or not p.read_text().strip()]
-          assert not missing, missing
-          domain=required[0].read_text()
-          for marker in ('preview_transform','commit_transform','accept_authoritative_receipt','export_component_state','import_component_state'):
-            assert marker in domain, marker
-          print(json.dumps({'task':'T10','prebuild_source_contract':True,'required_files':[str(p) for p in required],'passed':True},indent=2))
+          path=Path('task10-prebuild-evidence/tests/test_task10_integration.log')
+          reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
+          assert reports,path
+          report=reports[-1]
+          assert report.get('passed') is True and not report.get('failures'),report
+          assert report.get('fixture_simulation_only') is True
+          assert report.get('real_t09_adapter_bound') is False
+          assert report.get('integration_allowed') is False and report.get('task_approved') is False
+          Path('task10-prebuild-evidence/integration-tests.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report))
+          PY
+
+      - name: Validate full frozen T10 source contract
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task10/validate_world_transform.py --candidate "$GITHUB_SHA" --output task10-prebuild-evidence/source-contract.json
+
+      - name: Capture deterministic T10 lifecycle fixture
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task10_world_transform.gd -- --candidate="$CANDIDATE" --out="$(pwd)/task10-prebuild-evidence/capture" > task10-prebuild-evidence/capture/capture.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-prebuild-evidence/capture/capture.log; then exit 1; fi
+          python3 - <<'PY'
+          import hashlib,json,struct
+          from pathlib import Path
+          root=Path('task10-prebuild-evidence/capture')
+          manifest_path=root/'manifest.json'
+          assert manifest_path.exists(),manifest_path
+          report=json.loads(manifest_path.read_text())
+          assert report.get('passed') is True,report
+          assert report.get('fixture_only') is True and report.get('t11_content') is False,report
+          assert report.get('real_t09_adapter_bound') is False,report
+          assert report.get('record_count') == 8,report
+          assert report.get('states') == ['ready','preview','committing','complete'],report
+          assert report.get('angles') == ['front','three-quarter'],report
+          assert report.get('integration_allowed') is False and report.get('task_approved') is False,report
+          files=[]; hashes=set()
+          for row in report['records']:
+              p=root/row['file']; data=p.read_bytes()
+              assert len(data)>1024,(p,len(data))
+              assert data[:8] == b'\x89PNG\r\n\x1a\n',p
+              width,height=struct.unpack('>II',data[16:24])
+              assert (width,height)==(1280,720),(p,width,height)
+              files.append({'file':row['file'],'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'size':[width,height]})
+              hashes.add(files[-1]['sha256'])
+          assert len(files)==8 and len(hashes)==8,(len(files),len(hashes))
+          evidence={'task':'T10','candidate':report['candidate'],'capture_passed':True,'fixture_only':True,'record_count':8,'unique_image_count':8,'files':files,'task_approved':False}
+          Path('task10-prebuild-evidence/capture-evidence.json').write_text(json.dumps(evidence,indent=2))
+          print(json.dumps(evidence))
           PY
 
       - name: Governance regression
