@@ -1,13 +1,17 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "task_id": "T10",
   "task_name": "World Transformation Framework",
-  "preparation_status": "PREPARED_GOVERNANCE_ONLY",
-  "prepared_branch": "havenline/governance-t10-prep",
+  "isolated_build_status": "BUILDING_ISOLATED_TO_BUILT_PENDING_DEPENDENCY_ALLOWED",
+  "prepared_branch": "prebuild/T10-world-transform",
+  "builder_branch": "havenline/T10-world-transformation",
   "prepared_from_integration_commit": "f342e807786d1f9d582a75dd3a2fc9f656143116",
   "future_builder_branch": "havenline/T10-world-transformation",
   "future_owner": "world-transformation-builder",
   "dependencies": ["T05", "T08", "T09"],
+  "isolated_build_allowed_before_all_dependencies_approved": true,
+  "built_pending_dependency_allowed": true,
+  "integration_activation_requires_all_dependencies_approved": true,
   "activation_requires_all_dependencies_approved": true,
   "activation_base_rule": "exact current integration head that records T09 APPROVED and integrated",
   "planned_owned_alias": "@reservation:T10",
@@ -43,22 +47,33 @@
     "target": 10.0,
     "zero_unresolved_mandatory_defects": true
   },
-  "activation_steps": [
+  "built_pending_dependency_requirements": [
+    "All changes stay inside the frozen T10 reservation and do not touch T08/T09/integration-only runtime paths.",
+    "Formal T10 domain/adversarial suite passes on the exact isolated candidate.",
+    "Fixture-authority integration/race/recovery suite passes without claiming the real T09 adapter is certified.",
+    "Frozen T10 source-contract validator passes.",
+    "Lifecycle capture and authoritative device-layout matrix evidence pass.",
+    "Stress/performance/history bounds pass with zero unresolved mandatory isolated-build defects.",
+    "integration_allowed remains false and task_approved remains false while T09 is not APPROVED."
+  ],
+  "integration_activation_steps": [
     "Verify authoritative integration branch is codex/havenline-sequential-task-01.",
-    "Verify T05, T08 and T09 are APPROVED in both dependency graph and workstream registry.",
-    "Verify the current integration head contains the accepted T09 integration/approval record.",
-    "Run tools/havenline/task10/prepare_activation.py --base <current-integration-head>.",
-    "Apply the emitted @reservation:T10 PATH_OWNERSHIP patch through the integration owner.",
-    "Claim T10 with workstream.py as ASSIGNED using the exact current integration head and @reservation:T10.",
-    "Set T10 dependency-graph/task-gate active state consistently through integration-owner governance update.",
-    "Validate registry and planned ownership collision checks.",
-    "Create havenline/T10-world-transformation from the exact post-activation integration head.",
-    "Push an empty initialization or first authorized T10 candidate and require candidate guard PASS before broader implementation."
+    "Verify T05, T08 and T09 are APPROVED in dependency graph, workstream registry and task-gates.",
+    "Verify the current integration head contains the accepted T09 integration/approval record and T09 is no longer an active owner.",
+    "Run tools/havenline/task10/prepare_activation.py --activate --base <current-integration-head>.",
+    "Apply/confirm @reservation:T10 PATH_OWNERSHIP through the integration owner.",
+    "Register/confirm T10 ownership and reconcile havenline/T10-world-transformation onto the exact current integration head.",
+    "Bind the real approved T09/T08 authority adapter and remove fixture-only assumptions from production integration tests.",
+    "Run registry validation, migration/governance tests and candidate guard.",
+    "Run full real integration and impacted T01-T09 regression.",
+    "Recapture affected evidence and required critics before promoting to INTEGRATION_READY."
   ],
   "claim_template": "python3 tools/havenline/production/workstream.py claim T10 --owner world-transformation-builder --branch havenline/T10-world-transformation --base <POST_T09_INTEGRATION_SHA> --owned-alias @reservation:T10 --status ASSIGNED",
-  "runtime_build_allowed_before_activation": false,
+  "runtime_build_allowed_before_activation": true,
+  "integration_allowed_before_activation": false,
   "notes": [
-    "PREPARED work may continue while T09 is active; T10 runtime implementation remains dependency-gated.",
+    "T10 may build/test to BUILT_PENDING_DEPENDENCY while T09 is active; dependency closure blocks INTEGRATION_READY and integration, not isolated construction.",
+    "FixtureSimulationAuthority may model the frozen T09/T08-shaped contract before T09 closure but never certifies the real adapter.",
     "T11 owns final camp structures and camp upgrade visuals; T10 owns reusable transformation transaction/state semantics.",
     "T14 owns global save/versioning; T10 may only expose deterministic component snapshot/import state."
   ]
