@@ -166,6 +166,8 @@ jobs:
               focused=[row for row in report['samples'] if row.get('action_identity','').startswith('gather:') and row.get('action_state') in ('acquiring','active')]
               shipping_commits=[row for row in report['samples'] if row.get('commit') and row.get('authority')=='outpost_simulation.step/context_director.advance']
               assert approach and focused and shipping_commits,report['resource']
+              visible_contact=[row for row in report['samples'] if row.get('source_units',0)>0 and row.get('phase') in ('focus_acquisition','anticipation')]
+              assert visible_contact and all(row.get('source_visible') is True and row.get('source_contact_surface_opaque') is True for row in visible_contact),report['resource']
               assert shipping_commits[0]['action_token']==focused[0]['action_token'] and shipping_commits[0]['action_token']>0
               commits=[row for row in report['samples'] if row.get('commit')]
               assert commits and report['final_harvest']['accepted_impacts']==len(commits),report['resource']
@@ -228,6 +230,7 @@ jobs:
           cp HavenlineGodot/tests/capture_task09_performance.gd "$base_dir/HavenlineGodot/tests/capture_task09_performance.gd"
           (cd "$base_dir" && python3 tools/havenline/bake_outpost_audio.py >/dev/null)
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path "$base_dir/HavenlineGodot" --import --quit > task09-evidence/tests/exact-base-import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path "$base_dir/HavenlineGodot" --script res://tools/bake_crew_motion.gd > task09-evidence/tests/exact-base-motion-fixture.log 2>&1
           mkdir -p task09-evidence/performance/exact-base task09-evidence/performance/candidate
           xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method gl_compatibility --resolution 1280x720 --path "$base_dir/HavenlineGodot" --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/exact-base" --candidate="$BASE" --expect-base
           xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method gl_compatibility --resolution 1280x720 --path HavenlineGodot --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/candidate" --candidate="$CANDIDATE"

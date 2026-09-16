@@ -63,8 +63,34 @@ func focus_review_visibility() -> void:
 		selected_visual, game.transfer_feedback, game.harvest_presentation,
 	]
 	for child in game.world.get_children():
-		if child is Node3D and child not in visible_roots:
+		if child is Node3D and not child is WorldEnvironment and child not in visible_roots:
 			(child as Node3D).visible = false
+
+func source_cutaway() -> float:
+	var selected_visual: Node3D = game.resource_visuals[String(source.id)]
+	if selected_visual is GeometryInstance3D:
+		var value: Variant = (selected_visual as GeometryInstance3D).get_instance_shader_parameter("cutaway")
+		if value is float: return value
+	return 0.0
+
+func source_contact_surface_opaque() -> bool:
+	if resource_kind != "wood": return true
+	var selected_visual: Node3D = game.resource_visuals[String(source.id)]
+	if not selected_visual is MeshInstance3D: return false
+	var selected_mesh: Mesh = (selected_visual as MeshInstance3D).mesh
+	for surface_index in selected_mesh.get_surface_count():
+		var material: Material = selected_mesh.surface_get_material(surface_index)
+		if material is ShaderMaterial and material.resource_name.to_lower() == "trunk":
+			return not bool((material as ShaderMaterial).get_shader_parameter("crown_cutaway"))
+	return false
+
+func configure_review_frame(frame: int) -> void:
+	configure_camera(frame)
+	# The shipping process updates foreground cutaway before this disclosed review
+	# camera is installed. Re-evaluate the unchanged cutaway policy against the
+	# camera that will actually produce the evidence frame, otherwise a selected
+	# pine can retain a stale fully-discarded state from the gameplay camera.
+	game.update_foreground_visibility(actor_point(),0.25)
 
 func configure_camera(frame := 0) -> void:
 	var actor := actor_point()
@@ -81,11 +107,11 @@ func configure_camera(frame := 0) -> void:
 		game.camera.look_at(focus)
 		return
 	if view_id == "detail":
-		# A side-on grip view keeps the actor, both hands, handle and source face
-		# simultaneously visible instead of placing the source between camera/tool.
+		# Look back from the source side so crown-only sightline clearance exposes
+		# the opaque trunk, axe head, handle and both hands in one contact view.
 		game.camera.keep_aspect = Camera3D.KEEP_HEIGHT
 		game.camera.size = 2.65
-		game.camera.global_position = focus+right*3.2+Vector3.UP*2.25-forward*0.35
+		game.camera.global_position = focus+right*1.1+Vector3.UP*2.25+forward*3.5
 		game.camera.look_at(focus+Vector3.UP*0.10)
 		return
 	var angle_index := VIEWS.find(view_id)
@@ -95,9 +121,9 @@ func configure_camera(frame := 0) -> void:
 	var distance := 8.0 if mode == "device" else 5.6
 	var orbit_direction := (-forward*cos(angle)+right*sin(angle)).normalized()
 	if mode in ["sequence","device"]:
-		# Read the complete hand-handle-source line in profile; rear framing lets
-		# the actor's head and torso hide the grip through most of the swing.
-		orbit_direction = (right-forward*0.20).normalized()
+		# Read the complete hand-handle-trunk line from the source side. This uses
+		# the shipping crown-only sightline cutaway while the trunk stays opaque.
+		orbit_direction = (forward+right*0.32).normalized()
 	var offset := orbit_direction*distance+Vector3.UP*(4.0 if mode == "device" else 3.2)
 	game.camera.keep_aspect = Camera3D.KEEP_HEIGHT
 	if mode == "sequence":
@@ -141,7 +167,7 @@ func sample_shipping(frame: int, input: Vector2, phase: String) -> Dictionary:
 	game._process(1.0 / 60.0)
 	game.harvest_presentation._process(1.0 / 60.0)
 	game.transfer_feedback._process(1.0 / 60.0)
-	configure_camera(frame)
+	configure_review_frame(frame)
 	var update_usec := float(Time.get_ticks_usec() - started)
 	await process_frame
 	var draws := int(RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME))
@@ -182,7 +208,7 @@ func sample(frame: int, progress: float) -> void:
 	game._process(1.0 / 60.0)
 	game.harvest_presentation._process(1.0 / 60.0)
 	game.transfer_feedback._process(1.0 / 60.0)
-	configure_camera(frame)
+	configure_review_frame(frame)
 	var update_usec := float(Time.get_ticks_usec() - started)
 	await process_frame
 	var draws := int(RenderingServer.get_rendering_info(RenderingServer.RENDERING_INFO_TOTAL_DRAW_CALLS_IN_FRAME))
@@ -191,6 +217,9 @@ func sample(frame: int, progress: float) -> void:
 	records.append({
 		"frame":frame, "raw_progress":progress,
 		"source_units":int(source.units), "inventory":int(game.sim.inventory[resource_kind]),
+		"source_visible":game.resource_visuals[String(source.id)].visible,
+		"source_cutaway":source_cutaway(),
+		"source_contact_surface_opaque":source_contact_surface_opaque(),
 		"harvest":game.harvest_presentation.descriptor(),
 		"transfer":game.transfer_feedback.descriptor(),
 		"carry":game.carry_stacks[game.sim.lead].descriptor(),
@@ -233,6 +262,9 @@ func sample_cancelled(frame: int) -> void:
 	records.append({
 		"frame":frame, "cancelled":true, "reason":"movement_owns_locomotion",
 		"source_units":int(source.units), "inventory":int(game.sim.inventory[resource_kind]),
+		"source_visible":game.resource_visuals[String(source.id)].visible,
+		"source_cutaway":source_cutaway(),
+		"source_contact_surface_opaque":source_contact_surface_opaque(),
 		"harvest":game.harvest_presentation.descriptor(),
 		"frame_update_usec":update_usec, "draw_calls":draws, "primitives":prims,
 	})

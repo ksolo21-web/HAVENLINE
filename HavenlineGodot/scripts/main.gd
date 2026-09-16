@@ -243,10 +243,15 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 					var source_material: Material = merged_cache[asset].surface_get_material(i)
 					if source_material is BaseMaterial3D:
 						var leaf_material := ShaderMaterial.new()
+						leaf_material.resource_name = source_material.resource_name
 						leaf_material.shader=load("res://shaders/evergreen.gdshader")
 						leaf_material.set_shader_parameter("albedo_texture",source_material.albedo_texture)
 						leaf_material.set_shader_parameter("normal_texture",source_material.normal_texture)
 						leaf_material.set_shader_parameter("surface_roughness",source_material.roughness)
+						# The source GLBs author trunk/crown/lip as distinct surfaces. Only
+						# the crown may dither for sightlines; the harvest contact surface
+						# must stay opaque while the simulation-owned source is alive.
+						leaf_material.set_shader_parameter("crown_cutaway",source_material.resource_name.to_lower() == "crown")
 						merged_cache[asset].surface_set_material(i,leaf_material)
 		instance = MeshInstance3D.new()
 		instance.mesh = merged_cache[asset]
