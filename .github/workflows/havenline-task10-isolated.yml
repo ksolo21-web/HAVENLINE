@@ -53,6 +53,7 @@ jobs:
             'HavenlineGodot/tests/capture_task10_world_transform.gd',
             '.github/workflows/havenline-task10-prebuild.yml',
             '.github/workflows/havenline-task10-isolated.yml',
+            '.github/workflows/havenline-task10-adapter-preflight.yml',
           }
           prefixes=('HavenlineGodot/assets/world_transform_v1/','Docs/Production/T10/','tools/havenline/task10/')
           bad=[p for p in changed if p not in allowed and not p.startswith(prefixes)]
