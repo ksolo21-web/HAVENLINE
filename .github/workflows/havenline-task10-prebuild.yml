@@ -94,6 +94,9 @@ jobs:
           report=reports[-1]
           assert report.get('passed') is True and not report.get('failures'), report
           assert report.get('stress_targets') == 512 and report.get('stress_transactions') == 1024, report
+          assert report.get('stress_retained_receipts') == 512, report
+          assert report.get('preview_stress_iterations') == 5000 and report.get('reject_stress_iterations') == 5000, report
+          assert report.get('catalog_stress_recipes') == 258, report
           report['integration_allowed']=False
           report['task_approved']=False
           Path('task10-prebuild-evidence/domain-tests.json').write_text(json.dumps(report,indent=2))
@@ -115,6 +118,8 @@ jobs:
           assert report.get('passed') is True and not report.get('failures'),report
           assert report.get('fixture_simulation_only') is True
           assert report.get('real_t09_adapter_bound') is False
+          assert report.get('r11_world_response_tested') is True
+          assert report.get('visual_node_budget') == 4 and report.get('visual_build_count') == 1 and report.get('visual_node_count') == 4,report
           assert report.get('integration_allowed') is False and report.get('task_approved') is False
           Path('task10-prebuild-evidence/integration-tests.json').write_text(json.dumps(report,indent=2))
           print(json.dumps(report))
@@ -125,7 +130,7 @@ jobs:
           set -euo pipefail
           python3 tools/havenline/task10/validate_world_transform.py --candidate "$GITHUB_SHA" --output task10-prebuild-evidence/source-contract.json
 
-      - name: Capture deterministic T10 lifecycle fixture
+      - name: Capture deterministic T10 view-owned lifecycle fixture
         env:
           CANDIDATE: ${{ github.sha }}
         run: |
@@ -143,10 +148,12 @@ jobs:
           report=json.loads(manifest_path.read_text())
           assert report.get('passed') is True,report
           assert report.get('fixture_only') is True and report.get('t11_content') is False,report
+          assert report.get('target_color_static') is True and report.get('view_owns_lifecycle_visuals') is True,report
           assert report.get('real_t09_adapter_bound') is False,report
-          assert report.get('record_count') == 8,report
-          assert report.get('states') == ['ready','preview','committing','complete'],report
+          assert report.get('record_count') == 10,report
+          assert report.get('states') == ['ready','blocked','preview','committing','complete'],report
           assert report.get('angles') == ['front','three-quarter'],report
+          assert report.get('view_visual_node_count') == 4 and report.get('view_visual_build_count') == 1,report
           assert report.get('integration_allowed') is False and report.get('task_approved') is False,report
           files=[]; hashes=set()
           for row in report['records']:
@@ -155,10 +162,10 @@ jobs:
               assert data[:8] == b'\x89PNG\r\n\x1a\n',p
               width,height=struct.unpack('>II',data[16:24])
               assert (width,height)==(1280,720),(p,width,height)
-              files.append({'file':row['file'],'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'size':[width,height]})
+              files.append({'file':row['file'],'state':row['state'],'angle':row['angle'],'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'size':[width,height]})
               hashes.add(files[-1]['sha256'])
-          assert len(files)==8 and len(hashes)==8,(len(files),len(hashes))
-          evidence={'task':'T10','candidate':report['candidate'],'capture_passed':True,'fixture_only':True,'record_count':8,'unique_image_count':8,'files':files,'task_approved':False}
+          assert len(files)==10 and len(hashes)==10,(len(files),len(hashes))
+          evidence={'task':'T10','candidate':report['candidate'],'capture_passed':True,'fixture_only':True,'view_owns_lifecycle_visuals':True,'record_count':10,'unique_image_count':10,'files':files,'task_approved':False}
           Path('task10-prebuild-evidence/capture-evidence.json').write_text(json.dumps(evidence,indent=2))
           print(json.dumps(evidence))
           PY
