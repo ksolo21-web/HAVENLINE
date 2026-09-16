@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3]
+[gd_scene load_steps=15 format=3]
 
 [ext_resource type="ArrayMesh" path="res://assets/camp_upgrades_v1/camp_workfloor.obj" id="1_floor"]
 [ext_resource type="PackedScene" path="res://assets/stations_v2/hearth_vessel.glb" id="2_hearth"]
@@ -13,6 +13,7 @@
 [ext_resource type="PackedScene" path="res://assets/stations_v2/fuel_canister.glb" id="11_fuel"]
 [ext_resource type="PackedScene" path="res://assets/environment_v2/lantern_post.glb" id="12_lantern"]
 [ext_resource type="PackedScene" path="res://assets/environment_v2/log.glb" id="13_log"]
+[ext_resource type="ArrayMesh" path="res://assets/camp_upgrades_v1/camp_canopy.obj" id="14_canopy"]
 
 [node name="T11CampUpgraded01" type="Node3D"]
 metadata/t11_stage = "camp_upgraded_01"
@@ -72,6 +73,20 @@ metadata/t11_passive_only = true
 position = Vector3(10.8, 0, 4.8)
 metadata/t05_asset_id = "fuel_canister"
 metadata/t11_passive_only = true
+
+[node name="UpgradeCanopyWest" type="MeshInstance3D" parent="."]
+position = Vector3(-7.1, 0, 5.6)
+mesh = ExtResource("14_canopy")
+metadata/t11_upgrade_detail = true
+metadata/t11_role = "counter_shelter_upgrade"
+metadata/t11_route_clear = true
+
+[node name="UpgradeCanopyEast" type="MeshInstance3D" parent="."]
+position = Vector3(7.1, 0, 5.6)
+mesh = ExtResource("14_canopy")
+metadata/t11_upgrade_detail = true
+metadata/t11_role = "counter_shelter_upgrade"
+metadata/t11_route_clear = true
 
 [node name="UpgradeLanternNW" parent="." instance=ExtResource("12_lantern")]
 position = Vector3(-9.5, 0, 6.2)
