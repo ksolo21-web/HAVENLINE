@@ -26,6 +26,11 @@ T07_ARTIFACT_DIGEST="sha256:c243bb1df0625a7fabce9c6a842d88a76e08bca89d416f88ad0e
 T08_INTEGRATED_SOURCE="9d56ea8ae972d0a0705ff8b985e13fab31dde493"
 T08_INTEGRATED_RUN=35035980827
 T08_ARTIFACT_ID=10423956033
+T09_OWNER="harvesting-acquisition-builder"
+T09_BRANCH="havenline/T09-harvesting"
+T09_BASE="7492074e40a0b061f31d8c32602b7a581b2610f3"
+T09_ALIAS="@reservation:T09"
+T09_WORKSTREAM="T09-harvesting-acquisition-builder"
 T08_ARTIFACT_DIGEST="sha256:d2e58a9b4736e690b3b9817536b90940fb605e25b47a3ae24146aa8f9440c5c7"
 T08_EVIDENCE_INDEX_SHA256="17f27e449466524f9838cc592d4f637738f8e4cafd9475f1dc25bc7c2ca72c16"
 T05_SCORE_DIMENSIONS={
@@ -291,6 +296,8 @@ def main():
                             errors.append("T09+ must remain LOCKED until T08 is approved and each later task is separately prepared")
                         if t08_status=="APPROVED" and t09_status not in {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}:
                             errors.append("invalid T09 post-T08 state")
+                        if t09_status!="APPROVED" and any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[9:]):
+                            errors.append("T10+ must remain LOCKED until T09 is approved and each later task is separately prepared")
             elif any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[5:]):
                 errors.append("T06+ must remain LOCKED until T05 is approved and T06 is separately prepared")
     acc=graph["acceptance_rule"]
@@ -302,6 +309,48 @@ def main():
     if set(critics["critics"])!={f"C{i}" for i in range(1,12)}:errors.append("C1-C11 definitions incomplete")
     if set(critics["task_applicability"])!=set(ids):errors.append("critic applicability not mapped for all 70 tasks")
     if critics["task_applicability"]["T03"]!=["C1","C2","C6"]:errors.append("T03 V2 critics must be C1+C2+C6")
+    if t09_status!="LOCKED":
+        required_t09_critics={"C2","C3","C4","C5","C6"}
+        if set(critics["task_applicability"]["T09"])!=required_t09_critics:
+            errors.append("T09 critics must be C2+C3+C4+C5+C6")
+        if set(graph["tasks"]["T09"].get("critics",[]))!=required_t09_critics:
+            errors.append("T09 dependency graph critics must include C2+C3+C4+C5+C6")
+        packet=DOCS/"T09/TASK_PACKET.md";scope=DOCS/"T09/FROZEN_SCOPE.md"
+        if not packet.exists() or not scope.exists():
+            errors.append("active T09 packet/frozen scope missing")
+        registry=load_json(DOCS/"WORKSTREAM_REGISTRY.json")
+        t09_rows=[row for row in registry.get("workstreams",[]) if row.get("task_id")=="T09"]
+        if len(t09_rows)!=1 or t09_rows[0].get("status")!=t09_status:
+            errors.append("T09 workstream registration missing or status mismatch")
+        elif (t09_rows[0].get("workstream_id"),t09_rows[0].get("owner"),t09_rows[0].get("branch"),t09_rows[0].get("base_commit"),t09_rows[0].get("owned_paths")) != (T09_WORKSTREAM,T09_OWNER,T09_BRANCH,T09_BASE,[T09_ALIAS]):
+            errors.append("T09 workstream owner/branch/base/path identity mismatch")
+        ownership=load_json(DOCS/"PATH_OWNERSHIP.json")
+        if T09_ALIAS not in ownership.get("aliases",{}):
+            errors.append("T09 path reservation alias missing")
+        t09_owners=[row for row in ownership.get("active_owners",[]) if row.get("task_id")=="T09"]
+        if len(t09_owners)!=1 or t09_owners[0].get("status")!=t09_status:
+            errors.append("T09 active owner missing or status mismatch")
+        elif (t09_owners[0].get("workstream"),t09_owners[0].get("owner"),t09_owners[0].get("branch"),t09_owners[0].get("base_commit"),t09_owners[0].get("paths_alias")) != (T09_WORKSTREAM,T09_OWNER,T09_BRANCH,T09_BASE,T09_ALIAS):
+            errors.append("T09 path owner identity mismatch")
+        resources=load_json(DOCS/"RESOURCE_ACTION_REGISTRY.json")
+        expected_resources={
+            "wood": ("RESOLVED_BASELINE","natural","chop","axe","human_player_chop","human_helper_chop","visible_wood_stack","contextual_storage_furnace_build"),
+            "stone": ("RESOLVED_BASELINE","natural","mine","pickaxe","human_player_mine","human_helper_mine","visible_stone_stack","contextual_storage_furnace_build"),
+            "metal": ("T09_FROZEN_ORE","ore","mine","pickaxe","human_player_mine","human_helper_mine","visible_metal_stack","contextual_storage_processing_build"),
+            "fuel": ("T09_FROZEN_SALVAGE","fuel_salvage","dismantle","salvage_pry_tool","human_player_dismantle","human_helper_dismantle","visible_fuel_stack","contextual_furnace_storage"),
+        }
+        for rid,expected in expected_resources.items():
+            row=resources.get("resources",{}).get(rid,{})
+            actual=tuple(row.get(field) for field in ("status","resource_class","collection_method","tool_profile","player_animation_profile","helper_animation_profile","carry_visual","delivery_destination"))
+            if row.get("production_ready") is not True or actual!=expected:
+                errors.append(f"T09 frozen resource mapping mismatch for {rid}")
+        packet_text=packet.read_text() if packet.exists() else ""
+        registry_hash=hashlib.sha256((DOCS/"RESOURCE_ACTION_REGISTRY.json").read_bytes()).hexdigest()
+        if registry_hash not in packet_text:
+            errors.append("T09 packet is not bound to the exact resource registry hash")
+        for token in (T09_WORKSTREAM,T09_OWNER,T09_BRANCH,T09_BASE,T09_ALIAS):
+            if token not in packet_text:
+                errors.append(f"T09 packet identity missing {token}")
     budgets=load_json(DOCS/"PERFORMANCE_BUDGETS.json")
     needed={"visible_triangles","draw_calls","materials_visible","texture_gpu_memory_mb","cpu_frame_ms","gpu_frame_ms_where_measurable","physics_active_bodies","animated_rigs_active","npc_companion_active_population","process_memory_mb","storage_download_mb"}
     if not needed.issubset(budgets["global_soft_budgets"]):errors.append("performance budgets incomplete")
@@ -389,7 +438,15 @@ def main():
                             else:
                                 errors += t08_completion_errors(load_json(t08_completion),load_json(t08_ledger),load_json(t08_review))
                             if tg.get("active_task")!="T09" or tg.get("active_status")!=graph["tasks"]["T09"]["status"]:
-                                errors.append("task-gates must identify T09 as the locked next task after T08 approval")
+                                errors.append("task-gates must identify T09 and match its post-T08 state")
+                            if t09_status!="LOCKED":
+                                t09_gate_rows=[row for row in tg.get("next_post_t03_wave",[]) if row.get("task")=="T09"]
+                                if len(t09_gate_rows)!=1 or (tg.get("active_base_integration_commit"),t09_gate_rows[0].get("owner"),t09_gate_rows[0].get("branch"),t09_gate_rows[0].get("base_commit")) != (T09_BASE,T09_OWNER,T09_BRANCH,T09_BASE):
+                                    errors.append("task-gates T09 owner/branch/base identity mismatch")
+                                if tg.get("active_frozen_scope")!="Docs/Production/T09/FROZEN_SCOPE.md":
+                                    errors.append("task-gates active T09 frozen scope mismatch")
+                                if tg.get("active_task_packet")!="Docs/Production/T09/TASK_PACKET.md":
+                                    errors.append("task-gates active T09 packet mismatch")
                         elif tg.get("active_task")!="T08" or tg.get("active_status")!=graph["tasks"]["T08"]["status"]:
                             errors.append("task-gates must match active T08 state")
                     else:

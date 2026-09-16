@@ -11,7 +11,8 @@
 - T05 is APPROVED at accepted gameplay source `fa6fa70f154f3757d22303522ca3f6de2c3d391f`; 18 suites / 1119 checks, 77 source-bound frames, strict C1+C2 PASS, C6 minimum 9.1, final pixel signoff and G1-G14 passed.
 - T06 is APPROVED at accepted isolated source `47f86fae25b099abb5c7096c37ca7495453b2b8f`, integrated at `91f35f331aaabe2b1785b10c0d911f20da6f12d9`; 19 suites / 1345 checks, exact runtime-review identity, exhaustive motion/surface evidence, C1 9.42, C2 9.42, C5 9.31 and fresh C6 passed.
 - T07 is APPROVED at accepted isolated source `0a30dc0859541626eb6aa9a9bb749abc93dcb355`, integrated at `94b3f6c5097356a3857ebd13a77fb1e316eb06ae`; 21 suites / 1441 checks, exact-source visual/device/save/performance evidence, C2 9.46, C3 9.68, C4 9.24, C6 9.53 and C11 9.18 passed.
-- T08 is APPROVED at exact integrated source `9d56ea8ae972d0a0705ff8b985e13fab31dde493`; 23 suites / 1535 checks, 44/44 locked frames, both locked recordings, exact route/conservation evidence, C2 9.55, C3 9.48, C4 9.52 and C6 9.61 passed. T09 dependencies are satisfied, but T09+ remains locked pending a separate packet, owner and path reservation.
+- T08 is APPROVED at exact integrated source `9d56ea8ae972d0a0705ff8b985e13fab31dde493`; 23 suites / 1535 checks, 44/44 locked frames, both locked recordings, exact route/conservation evidence, C2 9.55, C3 9.48, C4 9.52 and C6 9.61 passed.
+- T09 is ASSIGNED to `harvesting-acquisition-builder` on isolated branch `havenline/T09-harvesting` from exact integration base `7492074e40a0b061f31d8c32602b7a581b2610f3`; its frozen scope, packet and disjoint path reservation are authoritative. T10+ remains locked.
 - Forward intermediate PASS requires every applicable mandatory reviewed dimension to be **strictly > 9.0 unrounded**, every mandatory gate to pass, and zero unresolved mandatory defects. Target remains 10/10.
 
 ## Permanent Havenline product contract
@@ -90,7 +91,7 @@ Only the integration owner may integrate production candidates into the integrat
 | T06 | Character 1 complete movement/interactions | APPROVED |
 | T07 | Havenline Simple Control & Context Director | APPROVED |
 | T08 | Visible inventory, physical carrying and transfers | APPROVED |
-| T09 | Harvesting and automatic acquisition | LOCKED |
+| T09 | Harvesting and automatic acquisition | ASSIGNED |
 | T10 | World Transformation Framework | LOCKED |
 | T11 | Camp construction and visual upgrade system | LOCKED |
 | T12 | Level 1–100 progression architecture | LOCKED |
@@ -162,7 +163,7 @@ Detailed dependencies and critic applicability are machine-authoritative in `DEP
 - **Completed C / T06** — approved Character 1 motion/contact foundation; preserve accepted source `47f86fae25b099abb5c7096c37ca7495453b2b8f` and integrated source `91f35f331aaabe2b1785b10c0d911f20da6f12d9`.
 - **Completed D / T07** — deterministic simple-control/context director is APPROVED; preserve accepted source `0a30dc0859541626eb6aa9a9bb749abc93dcb355` and integrated source `94b3f6c5097356a3857ebd13a77fb1e316eb06ae`.
 - **Completed E / T08** — visible inventory, carrying and transfers is APPROVED at exact integrated source `9d56ea8ae972d0a0705ff8b985e13fab31dde493`; preserve its 23-suite / 1535-check closure, complete locked-reference review and strict C2/C3/C4/C6 approval.
-- **Locked F / T09** — harvesting and automatic acquisition has satisfied dependencies but remains LOCKED until its separate frozen scope, task packet, owner and disjoint path reservation are prepared.
+- **Assigned F / T09** — harvesting and automatic acquisition is ASSIGNED to `harvesting-acquisition-builder` on `havenline/T09-harvesting` from exact base `7492074e40a0b061f31d8c32602b7a581b2610f3`; build and review against its frozen packet are next.
 - **Workstream Q** — QA/automation/integration infrastructure only.
 
 These workstreams may build in parallel only after T03 is APPROVED and the registry assigns disjoint path ownership. Integration remains serial and integration-owner-controlled.

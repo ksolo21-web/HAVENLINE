@@ -65,12 +65,19 @@ T07 is APPROVED at accepted isolated source
 `94b3f6c5097356a3857ebd13a77fb1e316eb06ae`; its verified record is
 `Docs/Production/T07/verified-completion.json`.
 
-T08 is the active INTEGRATION_READY workstream at
-`Docs/Production/T08/FROZEN_SCOPE.md` and `Docs/Production/T08/TASK_PACKET.md`.
-Its isolated source is `258f2c9a53f8b5460fb54a7f298fbb887c5aba1e` from exact
-integration base `7744b9f6a063da3385ce10992ef732ba2c669890`; exact-source
-evidence and independent C2/C3/C4/C6 review remain mandatory. T09+ runtime
-production remains LOCKED.
+T08 is APPROVED at exact integrated source
+`9d56ea8ae972d0a0705ff8b985e13fab31dde493`; its verified closure is recorded
+in `Docs/Production/T08/verified-completion.json` after 23 suites / 1535
+checks, all 44 locked frames, both locked recordings, G1-G14 and strict
+C2/C3/C4/C6 review.
+
+T09 is the active ASSIGNED workstream at
+`Docs/Production/T09/FROZEN_SCOPE.md` and `Docs/Production/T09/TASK_PACKET.md`.
+Its owner is `harvesting-acquisition-builder`, its isolated branch is
+`havenline/T09-harvesting`, and its exact integration base is
+`7492074e40a0b061f31d8c32602b7a581b2610f3`. T09 build, exact-source evidence
+and independent C2/C3/C4/C5/C6 review remain mandatory. T10+ runtime production
+remains LOCKED.
 
 T03 was the final legacy task grandfathered to finish directly on
 `codex/havenline-sequential-task-01`. T04 and all later runtime work use

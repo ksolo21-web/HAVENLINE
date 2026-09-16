@@ -351,11 +351,47 @@
       "known_blockers": [],
       "next_action": "Preserve T08 completion; prepare and assign T09 only after its separate packet, owner and disjoint path reservation exist.",
       "status_updated_at": "2026-09-16T02:18:53+00:00"
+    },
+    {
+      "task_id": "T09",
+      "task_name": "Harvesting and automatic acquisition",
+      "workstream_id": "T09-harvesting-acquisition-builder",
+      "status": "ASSIGNED",
+      "owner": "harvesting-acquisition-builder",
+      "branch": "havenline/T09-harvesting",
+      "base_commit": "7492074e40a0b061f31d8c32602b7a581b2610f3",
+      "dependencies": [
+        "T06",
+        "T07",
+        "T08"
+      ],
+      "owned_paths": [
+        "@reservation:T09"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only"
+      ],
+      "candidate_commit": null,
+      "candidate_hash_or_artifact": null,
+      "tests": {},
+      "evidence_path": "Docs/Production/Evidence/T09/",
+      "critic_requirements": [
+        "C2",
+        "C3",
+        "C4",
+        "C5",
+        "C6"
+      ],
+      "critic_status": {},
+      "integration_status": "not integrated",
+      "known_blockers": [],
+      "next_action": "Build isolated candidate only after ASSIGNED."
     }
   ],
   "notes": [
     "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
-    "T03-T07 are APPROVED. T08+ runtime work remains locked until its own packet, owner and path reservation are prepared.",
+    "T03-T08 are APPROVED. T09 is ASSIGNED with its own packet, owner and path reservation; T10+ runtime work remains locked.",
     "All future runtime builders use isolated branches and cannot approve themselves.",
     "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them."
   ]

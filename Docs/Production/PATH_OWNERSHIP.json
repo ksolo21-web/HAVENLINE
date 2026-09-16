@@ -23,9 +23,12 @@
     "@reservation:T05": ["HavenlineGodot/assets/stations_v2/**","HavenlineGodot/scripts/station_kit.gd","HavenlineGodot/tests/test_task05_station_kit.gd","HavenlineGodot/tests/capture_task05_station_kit.gd","Docs/Production/T05/**","tools/havenline/task05/**",".github/workflows/havenline-task05-*.yml"],
     "@reservation:T06": ["HavenlineGodot/animations/c1/**","HavenlineGodot/scripts/character1_motion.gd","HavenlineGodot/tests/test_task06_character1.gd","HavenlineGodot/tests/capture_task06_character1.gd","Docs/Production/T06/**","tools/havenline/task06/**",".github/workflows/havenline-task06-*.yml"],
     "@reservation:T07": ["HavenlineGodot/scripts/context_director.gd","HavenlineGodot/tests/test_task07_context_director.gd","HavenlineGodot/tests/test_task07_integration.gd","HavenlineGodot/tests/capture_task07_context_director.gd","Docs/Production/T07/**","tools/havenline/task07/**",".github/workflows/havenline-task07-*.yml"],
-    "@reservation:T08": ["HavenlineGodot/scripts/carry_stack.gd","HavenlineGodot/scripts/storage_stockpile.gd","HavenlineGodot/scripts/transfer_feedback.gd","HavenlineGodot/tests/test_task08_inventory.gd","HavenlineGodot/tests/test_task08_integration.gd","HavenlineGodot/tests/capture_task08_inventory.gd","Docs/Production/T08/**","tools/havenline/task08/**",".github/workflows/havenline-task08-*.yml"]
+    "@reservation:T08": ["HavenlineGodot/scripts/carry_stack.gd","HavenlineGodot/scripts/storage_stockpile.gd","HavenlineGodot/scripts/transfer_feedback.gd","HavenlineGodot/tests/test_task08_inventory.gd","HavenlineGodot/tests/test_task08_integration.gd","HavenlineGodot/tests/capture_task08_inventory.gd","Docs/Production/T08/**","tools/havenline/task08/**",".github/workflows/havenline-task08-*.yml"],
+    "@reservation:T09": ["HavenlineGodot/assets/harvesting_v1/**","HavenlineGodot/scripts/harvest_presentation.gd","HavenlineGodot/tests/test_task09_harvesting.gd","HavenlineGodot/tests/test_task09_integration.gd","HavenlineGodot/tests/capture_task09_harvesting.gd","Docs/Production/T09/**","tools/havenline/task09/**",".github/workflows/havenline-task09-*.yml"]
   },
-  "active_owners": [],
+  "active_owners": [
+    {"workstream":"T09-harvesting-acquisition-builder","task_id":"T09","owner":"harvesting-acquisition-builder","branch":"havenline/T09-harvesting","paths_alias":"@reservation:T09","status":"ASSIGNED","base_commit":"7492074e40a0b061f31d8c32602b7a581b2610f3"}
+  ],
   "completed_production_owners": [
     {"workstream":"T03-legacy-integrated","task_id":"T03","paths_alias":"@ownership:T03","status":"APPROVED","accepted_source":"5df9726e0b1c33f0f8865385b1c49aca229fd461"},
     {"workstream":"wave1-camera","task_id":"T04","paths_alias":"@reservation:T04","status":"APPROVED","accepted_source":"e08fd37e9a999d878644c03089c4b4b253bd7472"},
@@ -42,7 +45,8 @@
     {"task_id":"T05","branch":"havenline/T05-props","paths_alias":"@reservation:T05"},
     {"task_id":"T06","branch":"havenline/T06-character1","paths_alias":"@reservation:T06"},
     {"task_id":"T07","branch":"havenline/T07-context-director","paths_alias":"@reservation:T07"},
-    {"task_id":"T08","branch":"havenline/T08-visible-inventory","paths_alias":"@reservation:T08"}
+    {"task_id":"T08","branch":"havenline/T08-visible-inventory","paths_alias":"@reservation:T08"},
+    {"task_id":"T09","branch":"havenline/T09-harvesting","paths_alias":"@reservation:T09"}
   ],
   "change_request_required_fields": ["requesting_task","target_path","requested_change","reason","dependency","expected_behavior","tests_required","status","integration_owner_disposition"]
 }

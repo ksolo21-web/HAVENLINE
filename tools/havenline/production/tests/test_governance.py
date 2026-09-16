@@ -85,6 +85,27 @@ class GovernanceTests(unittest.TestCase):
         self.assertIn("T03",r["impacted_approved_tasks"])
         self.assertIn("test_task02_river",r["required_suites"])
 
+    def test_t09_change_impact_is_fail_closed(self):
+        expected_tasks={"T06","T07","T08","T09"}
+        expected_suites={
+            "test_motion_and_performance","test_task06_character1",
+            "test_task07_context_director","test_task07_integration",
+            "test_task08_inventory","test_task08_integration",
+            "test_task09_harvesting","test_task09_integration",
+        }
+        for path in [
+            "HavenlineGodot/assets/harvesting_v1/axe.glb",
+            "HavenlineGodot/scripts/harvest_presentation.gd",
+            "HavenlineGodot/tests/test_task09_harvesting.gd",
+            "HavenlineGodot/tests/test_task09_integration.gd",
+            "HavenlineGodot/tests/capture_task09_harvesting.gd",
+        ]:
+            result=calculate([path])
+            self.assertTrue(expected_tasks.issubset(result["impacted_approved_tasks"]),path)
+            self.assertTrue(expected_suites.issubset(result["required_suites"]),path)
+            self.assertFalse(result["governance_only"],path)
+            self.assertFalse(result["unknown_production_fallback"],path)
+
     def test_governance_only_change(self):
         r=calculate(["Docs/Production/WORKSTREAM_REGISTRY.json"])
         self.assertTrue(r["governance_only"])
@@ -167,6 +188,18 @@ class GovernanceTests(unittest.TestCase):
                 self.assertEqual({row["status"] for row in ledger8["defects"]},{"VERIFIED_CLOSED"})
                 self.assertEqual(gates["active_task"],"T09")
                 self.assertEqual(gates["active_status"],graph["T09"]["status"])
+                if graph["T09"]["status"] != "LOCKED":
+                    registry9=next(w for w in load_json(DOCS/"WORKSTREAM_REGISTRY.json")["workstreams"] if w["task_id"]=="T09")
+                    owner9=next(w for w in load_json(DOCS/"PATH_OWNERSHIP.json")["active_owners"] if w["task_id"]=="T09")
+                    expected=("harvesting-acquisition-builder","havenline/T09-harvesting","7492074e40a0b061f31d8c32602b7a581b2610f3")
+                    self.assertEqual((registry9["owner"],registry9["branch"],registry9["base_commit"]),expected)
+                    self.assertEqual((owner9["owner"],owner9["branch"],owner9["base_commit"]),expected)
+                    self.assertEqual(registry9["owned_paths"],["@reservation:T09"])
+                    self.assertEqual(owner9["paths_alias"],"@reservation:T09")
+                    self.assertEqual(gates["active_base_integration_commit"],expected[2])
+                    self.assertTrue((DOCS/"T09/FROZEN_SCOPE.md").exists())
+                    self.assertTrue((DOCS/"T09/TASK_PACKET.md").exists())
+                    self.assertEqual(set(graph["T09"]["critics"]),{"C2","C3","C4","C5","C6"})
         else:
             self.assertEqual(gates["active_task"],"T07")
             self.assertEqual(gates["active_status"],t7["status"])
