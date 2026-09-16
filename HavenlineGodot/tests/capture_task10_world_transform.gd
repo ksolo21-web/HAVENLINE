@@ -125,9 +125,11 @@ func configure_camera(angle: String) -> void:
 			camera.fov = 48.0
 			camera.look_at(Vector3(0.0, 0.75, 0.0), Vector3.UP)
 		"detail":
-			camera.position = Vector3(2.7, 2.35, 3.8)
-			camera.fov = 36.0
-			camera.look_at(Vector3(0.0, 0.95, 0.0), Vector3.UP)
+			# Keep this close enough to judge geometry but wide enough that the
+			# state/disclaimer evidence remains fully inside frame at native 4K.
+			camera.position = Vector3(3.5, 2.9, 5.2)
+			camera.fov = 40.0
+			camera.look_at(Vector3(0.0, 1.15, 0.0), Vector3.UP)
 		_:
 			camera.position = Vector3(5.6, 3.8, 6.2)
 			camera.look_at(Vector3(0.0, 0.9, 0.0), Vector3.UP)
