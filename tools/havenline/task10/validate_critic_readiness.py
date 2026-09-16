@@ -56,8 +56,8 @@ def main() -> None:
 
     if not domain.get("passed") or domain.get("failures"):
         errors.append("domain suite is not clean")
-    if int(domain.get("check_count", 0)) < 130:
-        errors.append("domain suite has fewer than 130 checks")
+    if int(domain.get("check_count", 0)) < 154:
+        errors.append("domain suite has fewer than 154 hardened checks")
     if domain.get("stress_targets") != 512 or domain.get("stress_transactions") != 1024:
         errors.append("domain stress cardinality mismatch")
     if domain.get("stress_retained_receipts") != 512:
@@ -69,10 +69,16 @@ def main() -> None:
 
     if not integration.get("passed") or integration.get("failures"):
         errors.append("fixture integration suite is not clean")
-    if int(integration.get("check_count", 0)) < 60:
-        errors.append("fixture integration suite has fewer than 60 checks")
+    if int(integration.get("check_count", 0)) < 75:
+        errors.append("fixture integration suite has fewer than 75 R06/R11-hardened checks")
     if integration.get("fixture_simulation_only") is not True or integration.get("real_t09_adapter_bound") is not False:
         errors.append("fixture authority boundary is not explicit")
+    if integration.get("simulation_models_carried_vs_stored_delivery") is not True:
+        errors.append("R06 carried-vs-stored delivery model proof missing")
+    if integration.get("simulation_debits_stored_only") is not True:
+        errors.append("R06 stored-only debit proof missing")
+    if integration.get("simulation_bounded_receipt_history_by_target") is not True:
+        errors.append("R06 bounded simulation receipt history proof missing")
     if integration.get("r11_world_response_tested") is not True:
         errors.append("R11 world-response proof missing")
     if integration.get("visual_node_budget") != 4 or integration.get("visual_build_count") != 1 or integration.get("visual_node_count") != 4:
@@ -104,6 +110,14 @@ def main() -> None:
         "preview purity is explicit",
         "one in-flight transaction per target is explicit",
         "completed receipt history is bounded per target",
+        "recipe graph is monotonic except explicit inverse pairs",
+        "reversible pairs require reciprocal inverse metadata",
+        "duplicate recipe IDs are rejected",
+        "undeclared two-state progression cycle is rejected",
+        "undeclared multi-state progression cycle is rejected",
+        "explicit reciprocal reversible pair configures",
+        "explicit inverse returns to source without skipping revision",
+        "failed cyclic reconfiguration preserves prior catalog",
         "5000 repeated previews all succeed",
         "5000 rejected commits all fail closed",
         "256 bulk recipe previews remain deterministic",
@@ -116,9 +130,22 @@ def main() -> None:
 
     required_integration_markers = {
         "second transaction against same target is blocked before debit",
+        "carried resources alone cannot satisfy T10 affordability",
+        "R06 preview does not mutate carried or stored resources",
+        "deposit moves wood from carried inventory to delivered stored",
+        "deposit moves stone from carried inventory to delivered stored",
+        "same transform becomes eligible only after deposit",
+        "authoritative transform debit consumes stored only",
+        "delivered-resource receipt advances T10 exactly once",
         "unsolicited but well-formed simulation receipt is rejected",
+        "simulation can reject stale delivered resource availability",
         "pending state restores after crash",
+        "simulation bounded receipt state restores after crash",
+        "restored simulation replays prior debit without second mutation",
         "different targets can prepare concurrently",
+        "simulation receipt history remains bounded one latest row per target",
+        "higher target revision replaces bounded simulation receipt",
+        "stale lower revision with old key fails closed after newer receipt",
         "blocked world response preserves exact reasons and shortfalls",
         "committing beacon pulse changes shape without rebuilding nodes",
         "repeated lifecycle calls create zero visual node growth",
@@ -143,7 +170,7 @@ def main() -> None:
         },
         "C3": {
             "focus": "Havenline gameplay identity",
-            "isolated_inputs": ["presentation-only authority checks", "fixture simulation exact-once flow", "no T09/T08 mutation boundary"],
+            "isolated_inputs": ["presentation-only authority checks", "fixture simulation exact-once flow", "carried inventory versus delivered stored-resource separation", "stored-only transform debit", "no T09/T08 mutation boundary"],
             "input_ready": not errors,
             "production_review_blocked_by": ["real T09/T08 authority binding", "impacted gameplay regression"],
         },
@@ -155,13 +182,13 @@ def main() -> None:
         },
         "C6": {
             "focus": "performance and bounded growth",
-            "isolated_inputs": ["512 targets/1024 transforms", "5000 previews", "5000 rejected commits", "258 recipes", "bounded receipt history", "zero visual-node growth"],
+            "isolated_inputs": ["512 targets/1024 transforms", "5000 previews", "5000 rejected commits", "258 recipes", "bounded T10 receipt history", "bounded simulation authority receipt history by target", "zero visual-node growth"],
             "input_ready": not errors,
             "production_review_blocked_by": ["post-integration performance regression", "physical-device certification remains T68/T69"],
         },
         "C7": {
             "focus": "progression/state integrity",
-            "isolated_inputs": ["branching recipe coverage", "prerequisite enforcement", "stale/out-of-order rejection", "exact snapshot/recovery"],
+            "isolated_inputs": ["branching recipe coverage", "prerequisite enforcement", "stale/out-of-order rejection", "exact snapshot/recovery", "malformed/duplicate recipe rejection", "undeclared cycle rejection", "reciprocal reversible/inverse execution", "stale lower-revision authority rejection"],
             "input_ready": not errors,
             "production_review_blocked_by": ["real integrated progression inputs after T09"],
         },
