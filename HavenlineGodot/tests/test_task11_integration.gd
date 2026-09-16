@@ -57,11 +57,18 @@ func run() -> void:
 	check("T16/T17 context assets are explicitly passive", bool(view.stage_root.get_node("ProcessingCounter").get_meta("t11_passive_only", false)) and bool(view.stage_root.get_node("PaymentPad").get_meta("t11_passive_only", false)))
 	var initial_status := view.status_descriptor()
 	check("constructed camp status moves to upgrade pad", Vector3(initial_status.anchor).distance_to(view.interaction_anchor() + Vector3(0.0, 0.035, 0.0)) < 0.001 and view.interaction_anchor() == Vector3(-3.0, 0.0, -0.8), initial_status)
+	var initial_node_count := view.stage_node_count()
 
 	var upgraded := view.apply_stage("camp_upgraded_01", "complete")
 	check("visible upgrade stage builds", bool(upgraded.get("passed", false)) and upgraded.get("rebuilt", false), upgraded)
+	check("visible upgrade adds authored paired counter canopies", view.stage_root.get_node_or_null("UpgradeCanopyWest") != null and view.stage_root.get_node_or_null("UpgradeCanopyEast") != null)
 	check("visible upgrade adds authored lantern detail", view.stage_root.get_node_or_null("UpgradeLanternNW") != null and view.stage_root.get_node_or_null("UpgradeLanternSE") != null)
 	check("visible upgrade adds timber detail", view.stage_root.get_node_or_null("UpgradeTimberWest") != null and view.stage_root.get_node_or_null("UpgradeTimberEast") != null)
+	check("upgrade is materially larger than initial camp presentation", view.stage_node_count() >= initial_node_count + 6, {"initial": initial_node_count, "upgraded": view.stage_node_count()})
+	var canopy_half_x := 2.45
+	var canopy_z_min := 5.6 - 1.25
+	check("paired canopies remain outside central-spine lane", 7.1 - canopy_half_x > Boundary.LANE_HALF)
+	check("paired canopies remain north of cross-camp lane clearance", canopy_z_min > 2.25 + Boundary.LANE_HALF)
 	var upgraded_count := view.rebuild_count
 	var repeated := view.apply_stage("camp_upgraded_01", "complete")
 	check("unchanged completed upgrade does not rebuild every frame", bool(repeated.get("passed", false)) and not repeated.get("rebuilt", true) and view.rebuild_count == upgraded_count, repeated)
@@ -93,6 +100,7 @@ func run() -> void:
 		"failures": failures,
 		"passed": failures.is_empty(),
 		"stage_rebuild_count": view.rebuild_count,
+		"initial_stage_node_count": initial_node_count,
 		"final_stage_node_count": view.stage_node_count(),
 		"lifecycle_signature_count": unique_signatures.size(),
 		"build_pending_dependency": true,
