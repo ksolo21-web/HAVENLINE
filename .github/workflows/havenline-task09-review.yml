@@ -1,0 +1,304 @@
+name: Havenline Task 9 strict critic review
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task09-review.yml'
+      - 'tools/havenline/production/t09_c2_visual_review.py'
+      - 'tools/havenline/production/t09_c6_performance_review.py'
+      - 'Docs/Production/PATH_OWNERSHIP.json'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  # Frozen exact-source review identity. Update before merge if the active T09
+  # candidate/run is superseded; never silently review "latest".
+  EXPECTED_SOURCE: 'da52ff403cb766308e8f5112f04a0e7d2c7dec16'
+  PRIMARY_RUN_ID: '35134329102'
+  SOURCE_ARTIFACT: 'havenline-task09-integrated-candidate-da52ff403cb766308e8f5112f04a0e7d2c7dec16'
+
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    outputs:
+      candidate: '${{ steps.identity.outputs.candidate }}'
+      specialist_artifact: '${{ steps.identity.outputs.specialist_artifact }}'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: '${{ env.SOURCE_ARTIFACT }}'
+          path: task09-evidence
+      - name: Prove exact-source candidate, tests, contact evidence and performance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          root=Path('task09-evidence'); source=os.environ['EXPECTED_SOURCE']
+          manifest=json.loads((root/'candidate-manifest.json').read_text())
+          tests=json.loads((root/'tests.json').read_text())
+          capture=json.loads((root/'capture-summary.json').read_text())
+          perf=json.loads((root/'performance/delta.json').read_text())
+          assert manifest['candidate_commit']==tests['source']==capture['candidate']==perf['candidate']==source
+          assert tests['all_passed'] is True
+          assert capture['passed'] is True and capture['reports']==71 and capture['in_hand_views']==30 and capture['isolated_tool_turntables']==30
+          assert min(capture['sequence_frame_counts'].values())>=80
+          assert perf['passed'] is True and perf['physical_4k60_verified'] is False and perf['thermal_certified'] is False
+          reports=[json.loads(p.read_text()) for p in root.glob('captures/tool-*/capture-report.json')]
+          assert len(reports)==30
+          for report in reports:
+              final=report['final_harvest']
+              assert report['candidate']==source and final['contact_alignment_valid'] is True
+              assert final['grip_error_m']<=0.025 and final['impact_error_m']<=0.025 and final['secondary_grip_error_m']<=0.045
+          PY
+      - name: Materialize source-bound specialist input
+        run: |
+          set -euo pipefail
+          rm -rf critic-input
+          mkdir -p critic-input
+          python3 - <<'PY'
+          from pathlib import Path
+          import shutil
+          src=Path('task09-evidence'); dst=Path('critic-input')
+          paths={
+            'device-impact.png':'captures/device-phone_16_9/device-phone_16_9-wood-impact-transfer-carry.png',
+            'device-preimpact.png':'captures/device-phone_16_9/device-phone_16_9-wood-preimpact.png',
+            'device-depleted.png':'captures/device-phone_16_9/device-phone_16_9-wood-depleted.png',
+            'device-respawned.png':'captures/device-phone_16_9/device-phone_16_9-wood-respawned.png',
+            'wood-report.json':'captures/sequence-wood/capture-report.json',
+            'wood-focus.png':'captures/sequence-wood/wood-focus-acquired.png',
+            'wood-contact.png':'captures/sequence-wood/wood-committed-contact.png',
+            'wood-recovery.png':'captures/sequence-wood/wood-recovery.png',
+            'wood-cancelled.png':'captures/sequence-wood/wood-cancelled.png',
+            'wood-depleted.png':'captures/sequence-wood/wood-depleted.png',
+            'wood-respawned.png':'captures/sequence-wood/wood-respawned.png',
+            'stone-contact.png':'captures/sequence-stone/stone-committed-contact.png',
+            'metal-contact.png':'captures/sequence-metal/metal-committed-contact.png',
+            'fuel-contact.png':'captures/sequence-fuel/fuel-committed-contact.png',
+            'wood-detail.png':'captures/tool-wood-detail/tool-wood-detail.png',
+            'stone-detail.png':'captures/tool-stone-detail/tool-stone-detail.png',
+            'fuel-detail.png':'captures/tool-fuel-detail/tool-fuel-detail.png',
+          }
+          for out, rel in paths.items():
+              source=src/rel
+              assert source.is_file(), rel
+              shutil.copy2(source,dst/out)
+          for resource in ('wood','stone','fuel'):
+              for frame in (0,20,40,60):
+                  source=src/f'captures/sequence-{resource}/frames/frame-{frame:05d}.jpg'
+                  assert source.is_file(), source
+                  shutil.copy2(source,dst/f'{resource}-frame-{frame:05d}.jpg')
+          PY
+          python3 tools/havenline/production/specialist_evidence_manifest.py build \
+            --task T09 --critic C3 --candidate "$EXPECTED_SOURCE" --out critic-input/C3-manifest.json \
+            --item 'gameplay|gameplay_state|image|critic-input/device-impact.png|Phone gameplay state at authoritative harvest transfer/carry feedback.' \
+            --item 'controls|control_state|json|critic-input/wood-report.json|Shipping T07/T09 action-state and authority trace across approach, focus, commit, recovery and reentry.' \
+            --item 'loop|loop_evidence|image|critic-input/wood-focus.png|Focused contextual gather state.' \
+            --item 'loop|loop_evidence|image|critic-input/wood-contact.png|Authoritative committed harvest contact.' \
+            --item 'loop|loop_evidence|image|critic-input/wood-depleted.png|Visible depleted source state.' \
+            --item 'loop|loop_evidence|image|critic-input/wood-respawned.png|Visible respawned source state.'
+          python3 tools/havenline/production/specialist_evidence_manifest.py build \
+            --task T09 --critic C4 --candidate "$EXPECTED_SOURCE" --out critic-input/C4-manifest.json \
+            --item 'gameplay|gameplay_state|image|critic-input/device-preimpact.png|Gameplay immediately before harvest impact.' \
+            --item 'feedback|feedback_state|image|critic-input/device-impact.png|Impact plus transfer and carried-resource feedback.' \
+            --item 'feedback|feedback_state|image|critic-input/device-depleted.png|Source depletion feedback.' \
+            --item 'feedback|feedback_state|image|critic-input/device-respawned.png|Source respawn feedback.' \
+            --item 'feedback|feedback_state|image|critic-input/wood-contact.png|Close authoritative harvest-contact feedback.'
+          python3 tools/havenline/production/specialist_evidence_manifest.py build \
+            --task T09 --critic C5 --candidate "$EXPECTED_SOURCE" --out critic-input/C5-manifest.json \
+            --item 'wood-cycle|motion_cycle|motion_frame|critic-input/wood-frame-00000.jpg|Wood harvesting cycle frame 0.' \
+            --item 'wood-cycle|motion_cycle|motion_frame|critic-input/wood-frame-00020.jpg|Wood harvesting cycle frame 20.' \
+            --item 'wood-cycle|motion_cycle|motion_frame|critic-input/wood-frame-00040.jpg|Wood harvesting cycle frame 40.' \
+            --item 'wood-cycle|motion_cycle|motion_frame|critic-input/wood-frame-00060.jpg|Wood harvesting cycle frame 60.' \
+            --item 'stone-cycle|motion_cycle|motion_frame|critic-input/stone-frame-00000.jpg|Stone mining cycle frame 0.' \
+            --item 'stone-cycle|motion_cycle|motion_frame|critic-input/stone-frame-00020.jpg|Stone mining cycle frame 20.' \
+            --item 'stone-cycle|motion_cycle|motion_frame|critic-input/stone-frame-00040.jpg|Stone mining cycle frame 40.' \
+            --item 'stone-cycle|motion_cycle|motion_frame|critic-input/stone-frame-00060.jpg|Stone mining cycle frame 60.' \
+            --item 'fuel-cycle|motion_cycle|motion_frame|critic-input/fuel-frame-00000.jpg|Fuel dismantle cycle frame 0.' \
+            --item 'fuel-cycle|motion_cycle|motion_frame|critic-input/fuel-frame-00020.jpg|Fuel dismantle cycle frame 20.' \
+            --item 'fuel-cycle|motion_cycle|motion_frame|critic-input/fuel-frame-00040.jpg|Fuel dismantle cycle frame 40.' \
+            --item 'fuel-cycle|motion_cycle|motion_frame|critic-input/fuel-frame-00060.jpg|Fuel dismantle cycle frame 60.' \
+            --item 'transition|motion_transition|image|critic-input/wood-focus.png|Focus-acquisition transition into harvesting.' \
+            --item 'transition|motion_transition|image|critic-input/wood-recovery.png|Recovery state after committed contact.' \
+            --item 'transition|motion_transition|image|critic-input/wood-cancelled.png|Movement-owned cancellation transition.' \
+            --item 'contact|contact_detail|image|critic-input/wood-detail.png|Axe hand/tool contact detail.' \
+            --item 'contact|contact_detail|image|critic-input/stone-detail.png|Pickaxe hand/tool contact detail.' \
+            --item 'contact|contact_detail|image|critic-input/fuel-detail.png|Pry-tool hand/contact detail.' \
+            --item 'contact|contact_detail|image|critic-input/wood-contact.png|Wood authoritative impact contact.' \
+            --item 'contact|contact_detail|image|critic-input/stone-contact.png|Stone authoritative impact contact.' \
+            --item 'contact|contact_detail|image|critic-input/metal-contact.png|Metal authoritative impact contact.' \
+            --item 'contact|contact_detail|image|critic-input/fuel-contact.png|Fuel authoritative impact contact.'
+          for critic in C3 C4 C5; do python3 tools/havenline/production/specialist_evidence_manifest.py validate "critic-input/$critic-manifest.json"; done
+      - id: identity
+        run: |
+          echo "candidate=$EXPECTED_SOURCE" >> "$GITHUB_OUTPUT"
+          echo "specialist_artifact=havenline-t09-specialist-input-$EXPECTED_SOURCE" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'havenline-t09-specialist-input-${{ env.EXPECTED_SOURCE }}'
+          path: critic-input
+          retention-days: 30
+          if-no-files-found: error
+
+  c2:
+    needs: preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 95
+    env:
+      EXPECTED_SOURCE: '${{ needs.preflight.outputs.candidate }}'
+      EVIDENCE_ROOT: task09-evidence
+      REVIEW_OUTPUT: t09-c2-review
+      REVIEW_TIMEOUT_SECONDS: '1200'
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: '${{ env.SOURCE_ARTIFACT }}'
+          path: task09-evidence
+      - uses: actions/cache/restore@v4
+        id: reviewer-cache
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Self-heal exact pinned reviewer runtime
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then sudo apt-get update -qq; sudo apt-get install -y aria2; fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > t09-c2-runtime-preparation.json
+      - uses: actions/cache/save@v4
+        if: steps.reviewer-cache.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - run: python3 -m pip install pillow==11.3.0
+      - run: python3 -u tools/havenline/production/t09_c2_visual_review.py
+      - name: Enforce raw C2 strict gate
+        if: always()
+        run: |
+          test -f t09-c2-review/critic-record.json
+          python3 tools/havenline/production/critic_harness.py validate-raw --critic C2 --candidate "$EXPECTED_SOURCE" --raw t09-c2-review/critic-record.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t09-C2-${{ needs.preflight.outputs.candidate }}'
+          path: |
+            t09-c2-review
+            t09-c2-runtime-preparation.json
+          retention-days: 30
+          if-no-files-found: error
+
+  c3:
+    needs: preflight
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C3
+      candidate: '${{ needs.preflight.outputs.candidate }}'
+      evidence_artifact: '${{ needs.preflight.outputs.specialist_artifact }}'
+      manifest_name: C3-manifest.json
+      output_artifact: 'havenline-t09-C3-${{ needs.preflight.outputs.candidate }}'
+
+  c4:
+    needs: preflight
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C4
+      candidate: '${{ needs.preflight.outputs.candidate }}'
+      evidence_artifact: '${{ needs.preflight.outputs.specialist_artifact }}'
+      manifest_name: C4-manifest.json
+      output_artifact: 'havenline-t09-C4-${{ needs.preflight.outputs.candidate }}'
+
+  c5:
+    needs: preflight
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C5
+      candidate: '${{ needs.preflight.outputs.candidate }}'
+      evidence_artifact: '${{ needs.preflight.outputs.specialist_artifact }}'
+      manifest_name: C5-manifest.json
+      output_artifact: 'havenline-t09-C5-${{ needs.preflight.outputs.candidate }}'
+
+  c6:
+    needs: preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_RUN_ID }}'
+          name: '${{ env.SOURCE_ARTIFACT }}'
+          path: task09-evidence
+      - run: python3 tools/havenline/production/t09_c6_performance_review.py --candidate '${{ needs.preflight.outputs.candidate }}' --record task09-evidence/performance/delta.json --out t09-c6/critic-record.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'havenline-t09-C6-${{ needs.preflight.outputs.candidate }}'
+          path: t09-c6
+          retention-days: 30
+          if-no-files-found: error
+
+  strict-review-gate:
+    needs: [preflight, c2, c3, c4, c5, c6]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t09-C2-${{ needs.preflight.outputs.candidate }}', path: review-C2}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t09-C3-${{ needs.preflight.outputs.candidate }}', path: review-C3}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t09-C4-${{ needs.preflight.outputs.candidate }}', path: review-C4}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t09-C5-${{ needs.preflight.outputs.candidate }}', path: review-C5}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t09-C6-${{ needs.preflight.outputs.candidate }}', path: review-C6}
+      - name: Require all exact-source critic records and strict thresholds
+        env:
+          CANDIDATE: '${{ needs.preflight.outputs.candidate }}'
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          source=os.environ['CANDIDATE']; rows={}
+          paths={
+            'C2':Path('review-C2/t09-c2-review/critic-record.json'),
+            'C3':Path('review-C3/specialist-review/critic-record.json'),
+            'C4':Path('review-C4/specialist-review/critic-record.json'),
+            'C5':Path('review-C5/specialist-review/critic-record.json'),
+            'C6':Path('review-C6/critic-record.json'),
+          }
+          for critic,path in paths.items():
+              assert path.is_file(), path
+              row=json.loads(path.read_text()); rows[critic]=row
+              if critic=='C6':
+                  assert row['candidate']==source and row['passed'] is True and not row['errors']
+              else:
+                  assert row['critic_id']==critic and row['candidate_hash']==source
+                  assert row['passed'] is True and row['coverage_complete'] is True and row['defects']==[]
+                  assert row['confidence'] in ('medium','high')
+                  assert row['scores'] and all(float(score)>9.0 for score in row['scores'].values())
+          result={'task':'T09','candidate':source,'required_critics':['C2','C3','C4','C5','C6'],'strict_rule':'>9.0 unrounded; zero unresolved mandatory defects; no averaging waiver','critics':rows,'passed':True,'task_approved':False}
+          Path('t09-strict-review-decision.json').write_text(json.dumps(result,indent=2)+'\n')
+          print(json.dumps({'task':'T09','candidate':source,'passed':True,'critics':list(rows)},indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'havenline-t09-strict-review-${{ needs.preflight.outputs.candidate }}'
+          path: t09-strict-review-decision.json
+          retention-days: 30
+          if-no-files-found: error
