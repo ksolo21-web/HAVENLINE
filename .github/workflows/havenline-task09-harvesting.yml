@@ -24,7 +24,7 @@ concurrency:
 jobs:
   integrated-candidate:
     runs-on: ubuntu-24.04
-    timeout-minutes: 80
+    timeout-minutes: 80 # Full 71-capture render plus equal-window base/candidate performance.
     steps:
       - uses: actions/checkout@v4
         with:
