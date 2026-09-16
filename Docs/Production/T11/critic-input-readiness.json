@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "task_id": "T11",
+  "state": "BUILT_PENDING_DEPENDENCY",
+  "candidate": "1bf2cc00f85c1bd780b7b62cda4ca2d574921435",
+  "runtime_and_evidence_source": "1bf2cc00f85c1bd780b7b62cda4ca2d574921435",
+  "isolated_workflow_run": 35108518669,
+  "evidence_artifact": 10450749775,
+  "evidence_artifact_sha256": "ec5896fed9e4339685fddba85ed7bb2a04e6507be27a7cd35c3736711c4feec1",
+  "evidence_artifact_bytes": 10501309,
+  "required_critics": ["C2", "C3", "C4", "C6"],
+  "isolated_critic_input_ready": true,
+  "production_critic_execution_allowed": false,
+  "critic_scores_recorded": false,
+  "integration_allowed": false,
+  "task_approved": false,
+  "final_t10_compatibility_claimed": false,
+  "evidence_summary": {
+    "suite_count": 16,
+    "total_checks": 1121,
+    "t11_domain_checks": 24,
+    "t11_integration_checks": 51,
+    "standard_render_count": 16,
+    "standard_resolution": [1280, 720],
+    "native_4k_render_count": 3,
+    "native_4k_resolution": [3840, 2160],
+    "lifecycle_gameplay_states": ["blocked", "ready", "preview", "committing", "complete", "error"],
+    "camp_initial_views": ["gameplay", "overhead", "side", "three-quarter", "detail"],
+    "camp_upgraded_views": ["gameplay", "overhead", "side", "three-quarter", "detail"],
+    "native_4k_views": ["site-ready-gameplay", "camp-initial-gameplay", "camp-upgraded-gameplay"],
+    "approved_t03_boundary_rendered": true,
+    "approved_t03_boundary_recreated_by_t11": false,
+    "approved_t05_assets_rendered": true,
+    "t04_gameplay_camera_profile_used": true,
+    "shipping_character_used_for_scale": true,
+    "six_lifecycle_colors_distinct": true,
+    "six_lifecycle_beacon_heights_distinct": true,
+    "draw_calls_recorded_per_capture": true,
+    "submitted_primitives_recorded_per_capture": true,
+    "stage_node_count_recorded_per_capture": true,
+    "review_stage_disclosed_non_shipping": true,
+    "physical_4k60_verified": false
+  },
+  "coverage": {
+    "C2": {
+      "name": "Technical / Visual Integrity Critic",
+      "focus": ["geometry/contact", "clipping/seams", "intentional gaps versus defects", "cross-view integrity"],
+      "isolated_inputs": [
+        "five initial-camp review angles",
+        "five upgraded-camp review angles",
+        "three native-4K gameplay-scale frames",
+        "approved T03 fence and open-gate presentation in the same evidence world",
+        "warm work-floor and paired canopy geometry visible from gameplay and three-quarter views",
+        "shipping Character1 used for scale"
+      ],
+      "input_ready": true,
+      "production_review_blocked_by": [
+        "exact accepted T10 source and post-T10 reconciliation",
+        "fresh integrated source-bound recapture if reconciliation changes presentation or placement"
+      ]
+    },
+    "C3": {
+      "name": "Havenline Gameplay Identity Critic",
+      "focus": ["Havenline feel", "one-joystick/simple-context philosophy", "core physical loop", "no unnecessary control complexity", "world response readability"],
+      "isolated_inputs": [
+        "movement/proximity contextual interaction with zero new gameplay controls",
+        "physical in-world construction and upgrade pads rather than management-menu substitution",
+        "authored site_unbuilt -> camp_initial -> camp_upgraded_01 world response",
+        "T03 lane/perimeter continuity",
+        "T05 physical station reuse",
+        "T11 presentation owns no resources, progression or economy"
+      ],
+      "input_ready": true,
+      "production_review_blocked_by": [
+        "accepted T10 exact-once transform binding",
+        "T08/T09-through-T10 integrated conservation regression",
+        "integrated gameplay evidence"
+      ]
+    },
+    "C4": {
+      "name": "Gameplay UX / Readability Critic",
+      "focus": ["interactable target clarity", "world change clarity", "next-action clarity"],
+      "isolated_inputs": [
+        "six gameplay-scale lifecycle states",
+        "distinct lifecycle color, ring size, beacon height and orb cues",
+        "construction-pad-adjacent status placement",
+        "initial and upgraded camp gameplay views",
+        "T04 gameplay camera profile",
+        "materially larger paired-canopy first upgrade"
+      ],
+      "input_ready": true,
+      "production_review_blocked_by": [
+        "post-T10 integrated interaction capture",
+        "final reconciled shipping recipe/progression context"
+      ]
+    },
+    "C6": {
+      "name": "Performance Critic",
+      "focus": ["frame time", "draw calls", "geometry", "texture/memory", "shader cost", "physics", "animation", "NPC load", "thermal-risk indicators"],
+      "isolated_inputs": [
+        "draw-call count stored for every rendered frame",
+        "submitted primitive count stored for every rendered frame",
+        "stage node count stored for every rendered frame",
+        "no continuous _process or _physics_process authority in T11 presentation",
+        "unchanged camp/lifecycle updates do not rebuild stage geometry",
+        "16-suite baseline plus T11 regression green at 1121 checks"
+      ],
+      "input_ready": true,
+      "production_review_blocked_by": [
+        "post-T10 integration performance regression",
+        "final integrated scene load",
+        "physical-device certification remains a later final-release requirement"
+      ]
+    }
+  },
+  "remaining_integration_blockers": [
+    "T09 APPROVED and integrated",
+    "T10 APPROVED and integrated",
+    "reconcile T11 adapter and recipe IDs to exact accepted T10 source",
+    "authoritative shipping price/tuning provenance for any shipping recipe",
+    "rerun T10 exact-once plus T08/T09-through-T10 conservation tests",
+    "G1 and G14",
+    "regenerate final source-bound evidence against reconciled candidate",
+    "execute required C2/C3/C4/C6 reviews with every mandatory dimension >9.0 unrounded"
+  ],
+  "notes": [
+    "This packet proves critic input readiness only. It is not a critic result and contains no critic score.",
+    "Independent C2/C3/C4 execution remains blocked until the dependency-reconciled candidate exists.",
+    "C6 quantitative inputs are prepared, but final integration and physical-device requirements are not satisfied by this isolated software-rendered packet.",
+    "The current observed T10 interface shows no known method or fixture recipe-ID drift, but T10 is still unapproved and must be reconciled again after acceptance."
+  ],
+  "passed": true
+}
