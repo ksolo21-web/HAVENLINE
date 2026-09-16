@@ -44,14 +44,21 @@
     "Docs/Production/T12/LEVEL_CADENCE_BLUEPRINT.md",
     "Docs/Production/T12/LEVEL_1_100_MATRIX.json",
     "Docs/Production/T12/BINDING_RESOLUTION_TEMPLATE.json",
+    "Docs/Production/T12/RUNTIME_INTERFACE_CONTRACT.json",
+    "Docs/Production/T12/ACCEPTANCE_TRACEABILITY.json",
     "Docs/Production/T12/REVIEW_EVIDENCE_PLAN.md",
+    "Docs/Production/T12/ACTIVATION_HANDOFF.md",
     "Docs/Production/T12/defect-ledger.json",
     "tools/havenline/task12/prepare_activation.py",
     "tools/havenline/task12/validate_progression_contract.py",
     "tools/havenline/task12/validate_level_matrix.py",
     "tools/havenline/task12/verify_binding_resolution.py",
+    "tools/havenline/task12/validate_runtime_interface.py",
+    "tools/havenline/task12/validate_traceability.py",
     "tools/havenline/task12/tests/test_progression_contract.py",
     "tools/havenline/task12/tests/test_level_matrix.py",
+    "tools/havenline/task12/tests/test_runtime_interface.py",
+    "tools/havenline/task12/tests/test_traceability.py",
     ".github/workflows/havenline-task12-prep.yml"
   ],
   "required_critics": ["C2", "C3", "C4", "C6", "C7"],
@@ -71,6 +78,9 @@
     "Create Docs/Production/T12/BINDING_RESOLUTION.json from BINDING_RESOLUTION_TEMPLATE.json, populate exact accepted T10/T11 integrated sources and repository-backed public-ID pointer evidence, set status RESOLVED_FOR_ACTIVATION and promotion_allowed true only when complete.",
     "Run python tools/havenline/task12/verify_binding_resolution.py --resolution Docs/Production/T12/BINDING_RESOLUTION.json --require-resolved and require PASS.",
     "Run python tools/havenline/task12/validate_level_matrix.py and require PASS; LEVEL_1_100_MATRIX.json remains preparation input and is never copied directly into shipping data.",
+    "Run python tools/havenline/task12/validate_runtime_interface.py and require PASS so T12-owned API/authority boundaries remain frozen.",
+    "Run python tools/havenline/task12/validate_traceability.py and require PASS so every T12-R01..R16 requirement retains tests/evidence/critic coverage.",
+    "Run python -m unittest discover -s tools/havenline/task12/tests -p 'test_*.py' -v and require PASS.",
     "Run tools/havenline/task12/prepare_activation.py --activate --base <current-integration-head>.",
     "Apply the emitted @reservation:T12 PATH_OWNERSHIP patch through the integration owner.",
     "Claim T12 with workstream.py as ASSIGNED using the exact current integration head and @reservation:T12.",
@@ -88,6 +98,6 @@
     "T12 may consume T10/T11 public transform/camp-state IDs after approval but may not change their transaction or content semantics.",
     "T14 owns global persistence/versioning; T33+ own economy/monetization; T44-T52 own authored connected-region content.",
     "Parallel production is allowed only with disjoint path ownership; integration remains serial and integration-owner controlled.",
-    "The non-shipping cadence blueprint, concrete 100-level matrix, binding-resolution template and validators/tests are preparation accelerators, not evidence that T12 production implementation has started."
+    "The non-shipping cadence blueprint, concrete 100-level matrix, runtime interface contract, exact-binding template, acceptance traceability and validators/tests are preparation accelerators, not evidence that T12 production implementation has started."
   ]
 }
