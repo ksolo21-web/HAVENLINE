@@ -38,9 +38,9 @@ func material(color: Color, roughness := 0.9, metallic := 0.0) -> StandardMateri
 func add_snow_stage() -> void:
 	var snow := MeshInstance3D.new()
 	var mesh := PlaneMesh.new()
-	mesh.size = Vector2(40.0, 36.0)
+	mesh.size = Vector2(80.0, 72.0)
 	snow.mesh = mesh
-	snow.material_override = material(Color("dcecf2"), 0.96)
+	snow.material_override = material(Color("cfe1ea"), 0.96)
 	snow.position = Vector3(0.0, -0.055, 2.0)
 	world.add_child(snow)
 	for row in [
@@ -51,7 +51,7 @@ func add_snow_stage() -> void:
 		var lane_mesh := BoxMesh.new()
 		lane_mesh.size = row.size
 		lane.mesh = lane_mesh
-		lane.material_override = material(Color("c7dce4"), 0.98)
+		lane.material_override = material(Color("b7d2df"), 0.98)
 		lane.position = row.position
 		world.add_child(lane)
 
@@ -113,23 +113,31 @@ func set_camera(view_id: String, state_id: String) -> void:
 
 func set_lighting() -> void:
 	environment.background_color = Color("648eaa")
-	environment.ambient_light_color = Color("c9ddea")
-	environment.ambient_light_energy = 0.54
+	environment.ambient_light_color = Color("b9d2e2")
+	environment.ambient_light_energy = 0.42
 	sun.light_color = Color("fff0d7")
-	sun.light_energy = 1.08
+	sun.light_energy = 0.96
 	fill.light_color = Color("8cc7e5")
-	fill.light_energy = 0.30
+	fill.light_energy = 0.24
 
 func snap(frame_id: String, state_id: String, lifecycle: String, view_id: String) -> void:
 	for _frame in range(5):
 		await process_frame
 	if DisplayServer.get_name() != "headless":
 		await RenderingServer.frame_post_draw
-	var image := viewport.get_texture().get_image()
+	var texture := viewport.get_texture()
+	if texture == null:
+		capture_errors.append("texture_unavailable:%s" % frame_id)
+		return
+	var image := texture.get_image()
+	if image == null or image.is_empty():
+		capture_errors.append("image_unavailable:%s" % frame_id)
+		return
 	var path := output.path_join(frame_id + ".png")
 	var save_error := image.save_png(path)
 	if save_error != OK:
 		capture_errors.append("save_failed:%s:%s" % [frame_id, error_string(save_error)])
+		return
 	var status := view.status_descriptor()
 	records.append({
 		"id": frame_id,
@@ -171,7 +179,7 @@ func setup_world() -> bool:
 	environment = Environment.new()
 	environment.background_mode = Environment.BG_COLOR
 	environment.tonemap_mode = Environment.TONE_MAPPER_ACES
-	environment.tonemap_exposure = 1.25
+	environment.tonemap_exposure = 0.95
 	environment.tonemap_white = 5.0
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	var sky := WorldEnvironment.new()
