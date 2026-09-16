@@ -69,6 +69,7 @@
     "tools/havenline/task12/validate_candidate_evidence.py",
     "tools/havenline/task12/initialize_candidate_evidence.py",
     "tools/havenline/task12/validate_critic_review_records.py",
+    "tools/havenline/task12/final_candidate_gate.py",
     "tools/havenline/task12/fuzz_progression_contract.py",
     "tools/havenline/task12/benchmark_prebuild_validators.py",
     "tools/havenline/task12/tests/test_progression_contract.py",
@@ -82,6 +83,7 @@
     "tools/havenline/task12/tests/test_candidate_evidence.py",
     "tools/havenline/task12/tests/test_candidate_evidence_initializer.py",
     "tools/havenline/task12/tests/test_critic_review_records.py",
+    "tools/havenline/task12/tests/test_final_candidate_gate.py",
     ".github/workflows/havenline-task12-prep.yml"
   ],
   "required_critics": ["C2", "C3", "C4", "C6", "C7"],
@@ -122,6 +124,7 @@
     "Once shipping progression data exists, seed candidate provenance only with initialize_candidate_evidence.py using the exact candidate/base, resolved T10/T11 bindings, authorized changed-file manifest reference and real shipping file hashes. The initializer must leave every acceptance field pending.",
     "Require completed critic records derived from CRITIC_REVIEW_RECORD_TEMPLATE.json to pass validate_critic_review_records.py --require-resolved. Every one of the 29 mandatory T12-specific dimensions must be individually >9.0 with evidence and no unresolved defect; no average can waive a failing dimension. C2/C3/C4/C7 require independent reviewer-runtime provenance; C6 remains quantitative specialist.",
     "Populate the resulting candidate evidence packet with real evidence and require validate_candidate_evidence.py --require-resolved PASS before final candidate disposition.",
+    "Run final_candidate_gate.py with the resolved candidate evidence packet, critic records, exact engine-parity output, resolved binding record and actual shipping level/milestone files. Require PASS so candidate identity, shipping hashes, T10/T11 sources, critic minima/provenance and parity identity are cross-file consistent before disposition.",
     "Run validate_progression_contract.py against every shipping progression dataset revision before candidate review."
   ],
   "claim_template": "python3 tools/havenline/production/workstream.py claim T12 --owner progression-architecture-builder --branch havenline/T12-progression-architecture --base <POST_T11_INTEGRATION_SHA> --owned-alias @reservation:T12 --status ASSIGNED",
@@ -132,7 +135,7 @@
     "T12 may consume T10/T11 public transform/camp-state IDs after approval but may not change their transaction or content semantics.",
     "T14 owns global persistence/versioning; T33+ own economy/monetization; T44-T52 own authored connected-region content.",
     "Parallel production is allowed only with disjoint path ownership; integration remains serial and integration-owner controlled.",
-    "The non-shipping cadence blueprint, concrete 100-level matrix, runtime interface contract, downstream consumer contract, progression-data schema, engine parity vectors/oracle/comparator, candidate-evidence template/validator/initializer, per-dimension critic record template/validator, exact-binding template, acceptance traceability, fuzz/performance hardening and validators/tests are preparation accelerators, not evidence that T12 production implementation has started.",
+    "The non-shipping cadence blueprint, concrete 100-level matrix, runtime interface contract, downstream consumer contract, progression-data schema, engine parity vectors/oracle/comparator, candidate-evidence template/validator/initializer, per-dimension critic record template/validator, cross-file final candidate gate, exact-binding template, acceptance traceability, fuzz/performance hardening and validators/tests are preparation accelerators, not evidence that T12 production implementation has started.",
     "PREBUILD_PERFORMANCE_BUDGET.json governs preparation tooling only; final C6 remains mandatory against the activated shipping candidate/integrated artifact."
   ]
 }
