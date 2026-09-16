@@ -33,8 +33,8 @@ def reg_status(reg,tid):
 def prep(tid):
     errs=[]; d=DOCS/tid
     for n in ("FROZEN_SCOPE.md","TASK_PACKET.md","PREBUILD_CONTRACT.json","defect-ledger.json","ACTIVATION_CHECKLIST.json"):
-        p=d/n
-        if not p.exists() or not p.read_text(encoding="utf-8").strip(): errs.append(f"missing/empty {p.relative_to(ROOT)}")
+        file=d/n
+        if not file.exists() or not file.read_text(encoding="utf-8").strip(): errs.append(f"missing/empty {file.relative_to(ROOT)}")
     if errs: return {"task_id":tid,"passed":False,"errors":errs}
     c=load(d/"ACTIVATION_CHECKLIST.json"); p=load(d/"PREBUILD_CONTRACT.json"); defect=load(d/"defect-ledger.json"); graph=load(DOCS/"DEPENDENCY_GRAPH.json"); own=load(DOCS/"PATH_OWNERSHIP.json"); row=graph.get("tasks",{}).get(tid,{})
     if c.get("dependencies")!=row.get("dependencies"): errs.append("dependency mismatch")
@@ -52,7 +52,14 @@ def prep(tid):
     if tid=="T70":
         if c.get("owner_slot_count_required")!=2 or p.get("owner_slot_count_required")!=2: errs.append("T70 requires exactly two owner slots")
         if c.get("physical_certifications_must_match_release_candidate") is not True: errs.append("T70 exact-candidate physical certification binding missing")
-    paths=c.get("planned_owned_paths",[])
+    paths=c.get("planned_owned_paths",[]); prebuild_paths=p.get("planned_owned_paths",[])
+    if paths!=prebuild_paths: errs.append("checklist/prebuild planned_owned_paths mismatch")
+    forbidden_root="Docs/Production/Evidence/"
+    if any(x.startswith(forbidden_root) for x in paths): errs.append("final-wave task may not claim QA-GOV global evidence namespace")
+    packet=(d/"TASK_PACKET.md").read_text(encoding="utf-8")
+    if forbidden_root in packet: errs.append("task packet references QA-GOV global evidence namespace")
+    required_evidence=f"Docs/Production/{tid}/Evidence/**"
+    if required_evidence not in paths: errs.append(f"missing task-local evidence reservation {required_evidence}")
     for cand in paths:
         for protected in own.get("aliases",{}).get("@integration-only",[]):
             if overlap(cand,protected): errs.append(f"integration-only collision {cand} vs {protected}")
@@ -60,7 +67,7 @@ def prep(tid):
             for foreign in own.get("aliases",{}).get(owner.get("paths_alias"),[]):
                 if overlap(cand,foreign): errs.append(f"active collision {cand} vs {owner.get('task_id')}:{foreign}")
     if defect.get("unresolved_preparation_defects"): errs.append("unresolved preparation defects")
-    return {"task_id":tid,"graph_status":row.get("status"),"paths":len(paths),"acceptance_only":True,"game_master_local_contract":local_gm,"external_policy_rebind_required_at_activation":bool(local_gm),"passed":not errs,"errors":errs}
+    return {"task_id":tid,"graph_status":row.get("status"),"paths":len(paths),"acceptance_only":True,"game_master_local_contract":local_gm,"external_policy_rebind_required_at_activation":bool(local_gm),"evidence_root":f"Docs/Production/{tid}/Evidence/","passed":not errs,"errors":errs}
 def cross():
     c={t:load(DOCS/t/"ACTIVATION_CHECKLIST.json") for t in TASKS}; out=[]
     for i,a in enumerate(TASKS):
