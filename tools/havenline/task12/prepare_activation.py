@@ -30,12 +30,14 @@ RUNTIME_CONTRACT_PATH = T12_DOCS / "RUNTIME_INTERFACE_CONTRACT.json"
 TRACEABILITY_PATH = T12_DOCS / "ACCEPTANCE_TRACEABILITY.json"
 DOWNSTREAM_CONTRACT_PATH = T12_DOCS / "DOWNSTREAM_CONSUMER_CONTRACT.json"
 DATA_SCHEMA_PATH = T12_DOCS / "PROGRESSION_DATA_SCHEMA.json"
+ENGINE_VECTORS_PATH = T12_DOCS / "ENGINE_TEST_VECTORS.json"
 MATRIX_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_level_matrix.py"
 BINDING_VERIFIER = ROOT / "tools" / "havenline" / "task12" / "verify_binding_resolution.py"
 RUNTIME_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_runtime_interface.py"
 TRACEABILITY_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_traceability.py"
 DOWNSTREAM_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_downstream_contract.py"
 DATA_SCHEMA_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_data_schema.py"
+REFERENCE_ORACLE = ROOT / "tools" / "havenline" / "task12" / "reference_progression_oracle.py"
 FUZZ_GATE = ROOT / "tools" / "havenline" / "task12" / "fuzz_progression_contract.py"
 PREBUILD_BENCHMARK = ROOT / "tools" / "havenline" / "task12" / "benchmark_prebuild_validators.py"
 
@@ -173,6 +175,7 @@ def validate_preparation():
     traceability_passed = False
     downstream_contract_passed = False
     data_schema_passed = False
+    engine_parity_passed = False
 
     if MATRIX_VALIDATOR.exists() and MATRIX_PATH.exists():
         matrix_passed, output = run_read_only_tool([str(MATRIX_VALIDATOR), "--input", str(MATRIX_PATH)])
@@ -218,6 +221,14 @@ def validate_preparation():
         ])
         if not data_schema_passed:
             errors.append("T12 future shipping-data schema validation failed: " + output)
+    if REFERENCE_ORACLE.exists() and ENGINE_VECTORS_PATH.exists():
+        engine_parity_passed, output = run_read_only_tool([
+            str(REFERENCE_ORACLE),
+            "--input",
+            str(ENGINE_VECTORS_PATH),
+        ])
+        if not engine_parity_passed:
+            errors.append("T12 non-shipping engine parity vector validation failed: " + output)
 
     shipping_paths = [
         ROOT / "HavenlineGodot" / "scripts" / "progression_architecture.gd",
@@ -251,6 +262,7 @@ def validate_preparation():
         "acceptance_traceability_validation_passed": traceability_passed,
         "downstream_consumer_validation_passed": downstream_contract_passed,
         "data_schema_validation_passed": data_schema_passed,
+        "engine_parity_validation_passed": engine_parity_passed,
         "required_critics": expected_critics,
         "runtime_build_allowed": False,
         "passed": not errors,
@@ -337,6 +349,14 @@ def validate_activation(base: str):
     if not schema_passed:
         errors.append("activation-time future shipping-data schema revalidation failed: " + schema_output)
 
+    engine_parity_passed, oracle_output = run_read_only_tool([
+        str(REFERENCE_ORACLE),
+        "--input",
+        str(ENGINE_VECTORS_PATH),
+    ])
+    if not engine_parity_passed:
+        errors.append("activation-time engine parity oracle failed: " + oracle_output)
+
     fuzz_passed, fuzz_output = run_read_only_tool([str(FUZZ_GATE)])
     if not fuzz_passed:
         errors.append("activation-time deterministic progression fuzz gate failed: " + fuzz_output)
@@ -359,6 +379,7 @@ def validate_activation(base: str):
         "acceptance_traceability_validation_passed": traceability_passed,
         "downstream_consumer_validation_passed": downstream_passed,
         "data_schema_validation_passed": schema_passed,
+        "engine_parity_validation_passed": engine_parity_passed,
         "fuzz_gate_passed": fuzz_passed,
         "prebuild_benchmark_passed": prebuild_benchmark_passed,
         "shipping_c6_satisfied_by_prebuild_benchmark": False,
