@@ -1,0 +1,10 @@
+{
+  "schema_version": 1,
+  "consumer_task": "T62",
+  "contract_path": "Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json",
+  "prepared_contract_git_blob_sha": "46d8c6c265f7c17922ec9fdc8a9c52ef924b0882",
+  "may_read": ["current_level_id", "completed_level_ids", "completed_milestone_ids", "progression_intents"],
+  "must_not_require_from_T12": ["claim that all Levels 1–100 authored content is complete", "release certification"],
+  "boundary": "T12 proves progression architecture; T62 later owns complete Level 1–100 acceptance across authored content/systems.",
+  "activation_rule": "Fail closed if the current T12 downstream consumer contract blob or T62 consumer row differs; reconcile through a structured interface/change request before activation."
+}
