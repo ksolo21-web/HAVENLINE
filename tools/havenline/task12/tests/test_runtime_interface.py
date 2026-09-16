@@ -89,7 +89,7 @@ class T12RuntimeInterfaceTests(unittest.TestCase):
             contract["activation_rule"] = "Implement after activation."
         result = self.validate(mutate)
         self.assertFalse(result["passed"])
-        self.assertTrue(any("BINDING_RESOLUTION.json" in error for error in result["errors"]))
+        self.assertTrue(any("activation rule" in error and "exact-resolution" in error for error in result["errors"]))
 
 
 if __name__ == "__main__":
