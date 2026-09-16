@@ -66,6 +66,7 @@
     "tools/havenline/task12/reference_progression_oracle.py",
     "tools/havenline/task12/compare_engine_parity.py",
     "tools/havenline/task12/validate_candidate_evidence.py",
+    "tools/havenline/task12/initialize_candidate_evidence.py",
     "tools/havenline/task12/fuzz_progression_contract.py",
     "tools/havenline/task12/benchmark_prebuild_validators.py",
     "tools/havenline/task12/tests/test_progression_contract.py",
@@ -77,6 +78,7 @@
     "tools/havenline/task12/tests/test_reference_oracle.py",
     "tools/havenline/task12/tests/test_engine_parity_comparator.py",
     "tools/havenline/task12/tests/test_candidate_evidence.py",
+    "tools/havenline/task12/tests/test_candidate_evidence_initializer.py",
     ".github/workflows/havenline-task12-prep.yml"
   ],
   "required_critics": ["C2", "C3", "C4", "C6", "C7"],
@@ -113,7 +115,8 @@
     "Create havenline/T12-progression-architecture from the exact post-activation integration head.",
     "Require candidate guard PASS before shipping T12 runtime/data expands.",
     "Require the future Godot T12 test harness to emit ENGINE_PARITY_OUTPUT_SCHEMA.json-shaped results for the exact candidate SHA and pass compare_engine_parity.py against ENGINE_TEST_VECTORS.json before candidate review.",
-    "Populate a candidate evidence packet from CANDIDATE_EVIDENCE_TEMPLATE.json and require validate_candidate_evidence.py --require-resolved PASS before independent critic/final candidate disposition. C2/C3/C4/C7 require independent reviewer provenance; C6 remains the quantitative specialist gate.",
+    "Once shipping progression data exists, seed candidate provenance only with initialize_candidate_evidence.py using the exact candidate/base, resolved T10/T11 bindings, authorized changed-file manifest reference and real shipping file hashes. The initializer must leave every acceptance field pending.",
+    "Populate the resulting candidate evidence packet with real evidence and require validate_candidate_evidence.py --require-resolved PASS before final candidate disposition. C2/C3/C4/C7 require independent reviewer provenance; C6 remains the quantitative specialist gate.",
     "Run validate_progression_contract.py against every shipping progression dataset revision before candidate review."
   ],
   "claim_template": "python3 tools/havenline/production/workstream.py claim T12 --owner progression-architecture-builder --branch havenline/T12-progression-architecture --base <POST_T11_INTEGRATION_SHA> --owned-alias @reservation:T12 --status ASSIGNED",
@@ -124,7 +127,7 @@
     "T12 may consume T10/T11 public transform/camp-state IDs after approval but may not change their transaction or content semantics.",
     "T14 owns global persistence/versioning; T33+ own economy/monetization; T44-T52 own authored connected-region content.",
     "Parallel production is allowed only with disjoint path ownership; integration remains serial and integration-owner controlled.",
-    "The non-shipping cadence blueprint, concrete 100-level matrix, runtime interface contract, downstream consumer contract, progression-data schema, engine parity vectors/oracle/comparator, candidate-evidence template/validator, exact-binding template, acceptance traceability, fuzz/performance hardening and validators/tests are preparation accelerators, not evidence that T12 production implementation has started.",
+    "The non-shipping cadence blueprint, concrete 100-level matrix, runtime interface contract, downstream consumer contract, progression-data schema, engine parity vectors/oracle/comparator, candidate-evidence template/validator/initializer, exact-binding template, acceptance traceability, fuzz/performance hardening and validators/tests are preparation accelerators, not evidence that T12 production implementation has started.",
     "PREBUILD_PERFORMANCE_BUDGET.json governs preparation tooling only; final C6 remains mandatory against the activated shipping candidate/integrated artifact."
   ]
 }
