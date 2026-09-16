@@ -3,8 +3,9 @@
 
 This validator never approves T11 and never proves final T10 compatibility.
 It verifies that the isolated candidate contains the frozen camp-content files,
-uses authored stages, keeps build-pending recipes non-shipping, and respects
-T10/later-task authority boundaries before engine/runtime/visual review.
+uses authored stages, keeps build-pending recipes non-shipping, exposes truthful
+in-world lifecycle presentation, produces real rendered evidence, and respects
+T10/later-task authority boundaries before final integration review.
 """
 from __future__ import annotations
 
@@ -50,6 +51,23 @@ REQUIRED_DOMAIN_MARKERS = (
     "transform_port",
 )
 REQUIRED_VIEW_MARKERS = ("blocked", "ready", "preview", "committing", "complete", "error")
+REQUIRED_VIEW_VISUAL_MARKERS = (
+    "LifecycleStatus",
+    "LifecycleRing",
+    "LifecycleSpire",
+    "lifecycle_color",
+    "status_descriptor",
+    "t11_presentation_only",
+)
+REQUIRED_CAPTURE_MARKERS = (
+    "SubViewport",
+    "save_png",
+    "--native-4k",
+    "3840, 2160",
+    "CameraPolicy.VIEW_OFFSET",
+    "source_bound",
+    "final_visual_critic_evidence",
+)
 FORBIDDEN_VIEW_MUTATORS = (
     "grant_resource",
     "set_resource_count",
@@ -91,6 +109,7 @@ def main():
 
     domain = SCRIPT.read_text()
     view = VIEW.read_text()
+    capture = CAPTURE.read_text()
     for marker in REQUIRED_DOMAIN_MARKERS:
         if marker not in domain:
             errors.append(f"camp_construction.gd missing frozen contract marker: {marker}")
@@ -99,9 +118,19 @@ def main():
     for marker in REQUIRED_VIEW_MARKERS:
         if marker not in view:
             errors.append(f"camp_construction_view.gd missing lifecycle marker: {marker}")
+    for marker in REQUIRED_VIEW_VISUAL_MARKERS:
+        if marker not in view:
+            errors.append(f"camp_construction_view.gd missing visible lifecycle contract marker: {marker}")
     for marker in FORBIDDEN_VIEW_MUTATORS:
         if re.search(rf"\b{re.escape(marker)}\b", view):
             errors.append(f"presentation contains forbidden authority marker: {marker}")
+    if "func _process" in view or "func _physics_process" in view:
+        errors.append("T11 lifecycle presentation may not add continuous per-frame rebuild/update authority")
+    for marker in REQUIRED_CAPTURE_MARKERS:
+        if marker not in capture:
+            errors.append(f"capture harness missing real rendered-evidence marker: {marker}")
+    if "real_t11_stage_scenes" not in capture or "review_snow_and_lane_stage_is_not_shipping_content" not in capture:
+        errors.append("capture harness must disclose real T11 stages and non-shipping review staging")
 
     try:
         raw = json.loads(RECIPES.read_text())
@@ -223,6 +252,8 @@ def main():
         "required_files": [str(p.relative_to(ROOT)) for p in required],
         "domain_contract_markers": list(REQUIRED_DOMAIN_MARKERS),
         "view_lifecycle_markers": list(REQUIRED_VIEW_MARKERS),
+        "view_visual_contract_markers": list(REQUIRED_VIEW_VISUAL_MARKERS),
+        "rendered_capture_contract_markers": list(REQUIRED_CAPTURE_MARKERS),
         "build_pending_dependency": True,
         "final_t10_compatibility_claimed": False,
         "task_approved": False,
