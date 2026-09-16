@@ -35,11 +35,13 @@ jobs:
           set -euo pipefail
           mkdir -p task10-prebuild-evidence
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
-          python3 - <<'PY' "$integration" | tee task10-prebuild-evidence/scope.json
+          branch_point=$(git merge-base "$integration" HEAD)
+          python3 - <<'PY' "$branch_point" "$integration" | tee task10-prebuild-evidence/scope.json
           import json, subprocess, sys
           from pathlib import Path
-          base=sys.argv[1]
-          changed=subprocess.check_output(['git','diff','--name-only',base,'HEAD'],text=True).splitlines()
+          branch_point=sys.argv[1]
+          integration=sys.argv[2]
+          changed=subprocess.check_output(['git','diff','--name-only',branch_point,'HEAD'],text=True).splitlines()
           allowed=(
             'HavenlineGodot/scripts/world_transform.gd',
             'HavenlineGodot/scripts/world_transform_view.gd',
@@ -60,7 +62,7 @@ jobs:
           assert not [p for p in changed if p.startswith(forbidden_prefixes)], changed
           graph=json.loads(Path('Docs/Production/DEPENDENCY_GRAPH.json').read_text())
           assert graph['tasks']['T09']['status'] != 'APPROVED', 'prebuild lane is only for pending dependency work'
-          print(json.dumps({'task':'T10','mode':'dependency-independent-prebuild','base':base,'changed_files':changed,'t09_status':graph['tasks']['T09']['status'],'integration_allowed':False,'passed':True},indent=2))
+          print(json.dumps({'task':'T10','mode':'dependency-independent-prebuild','branch_point':branch_point,'integration_head':integration,'changed_files':changed,'t09_status':graph['tasks']['T09']['status'],'integration_allowed':False,'passed':True},indent=2))
           PY
 
       - name: Prepare pinned Godot
