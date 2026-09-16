@@ -126,6 +126,15 @@ func run() -> void:
 	var shipping_impacts_before := int(game.harvest_presentation.descriptor().accepted_impacts)
 	var shipping_receipts_before := int(game.transfer_feedback.descriptor().accepted_receipts)
 	var shipping_inventory_before := int(game.sim.inventory.wood)
+	game.sim.action = {
+		"kind":"gather", "id":String(shipping_source.id), "position":shipping_source.position,
+		"action_token":1, "progress":0.48, "role":"player_lead", "actionable":true,
+	}
+	game._process(1.0 / 60.0)
+	for reveal_step in 3:
+		game.update_foreground_visibility(game.xyz(game.sim.position)+Vector3.UP*0.95,0.10)
+	var shipping_tree := game.resource_visuals[shipping_source.id] as GeometryInstance3D
+	check("active wood harvesting fully clears crown/lip around the opaque trunk band",is_equal_approx(float(shipping_tree.get_instance_shader_parameter("cutaway")),1.0),shipping_tree.get_instance_shader_parameter("cutaway"))
 	for commit_index in 2:
 		game.sim.action = {
 			"kind":"gather", "id":String(shipping_source.id), "position":shipping_source.position,

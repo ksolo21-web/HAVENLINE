@@ -112,6 +112,12 @@ def main() -> None:
     ])
     if not runtime_wiring:
         errors.append("shipping T09 runtime wiring is incomplete")
+    if not all(token in main_source for token in [
+        'active_harvest_source := String(harvest_state.get("source_id",""))',
+        "harvest_selected = active_harvest_source == String(r.id)",
+        "harvest_selected or (depth_front and covers)",
+    ]):
+        errors.append("active wood source does not force full crown/lip contact reveal")
     capture_source = CAPTURE.read_text(encoding="utf-8") if CAPTURE.exists() else ""
     if not all(token in capture_source for token in [
         'if resource_kind in ["stone","metal","fuel"]',

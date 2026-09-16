@@ -1034,9 +1034,13 @@ func build_environment_dressing():
 
 func update_foreground_visibility(focus: Vector3, dt: float):
 	ReferenceForest.set_player_clearance(self, focus + Vector3(0,.05,0))
-	# Smooth opaque-dither cutaway for crowns hiding the lead; no transparent sorting.
+	# Smooth opaque-dither cutaway for ordinary crowns hiding the lead. An active
+	# harvested pine uses the full cutaway value so its crown/lip surfaces discard
+	# completely while the shader's authored lower-trunk contact band stays opaque.
 	# Gameplay nodes remain alive; visibility is not a change to resource state.
 	foreground_faded = 0
+	var harvest_state: Dictionary = harvest_presentation.descriptor() if is_instance_valid(harvest_presentation) else {}
+	var active_harvest_source := String(harvest_state.get("source_id","")) if bool(harvest_state.get("active",false)) else ""
 	var view := camera.global_transform.affine_inverse()
 	var target := view * (focus + Vector3(0,.05,0))
 	for i in range(scenery_instances.size()):
@@ -1048,9 +1052,12 @@ func update_foreground_visibility(focus: Vector3, dt: float):
 		var covers := absf(base.x-target.x) < 2.0 and target.y > minf(base.y,top.y)-.65 and target.y < maxf(base.y,top.y)+.65
 		# A depleted resource stays hidden even when camera occlusion changes.
 		var depleted := false
+		var harvest_selected := false
 		for r in sim.resources:
-			if resource_visuals.get(r.id) == tree and r.units <= 0: depleted = true
-		var target_cutaway := 1.0 if depth_front and covers else 0.0
+			if resource_visuals.get(r.id) == tree:
+				depleted = r.units <= 0
+				harvest_selected = active_harvest_source == String(r.id)
+		var target_cutaway := 1.0 if harvest_selected or (depth_front and covers) else 0.0
 		scenery_cutaway[i]=move_toward(scenery_cutaway[i],target_cutaway,clampf(dt,0,.10)*4.0)
 		tree.set_instance_shader_parameter("cutaway",scenery_cutaway[i])
 		tree.visible = not depleted
