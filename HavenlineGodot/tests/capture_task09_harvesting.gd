@@ -53,6 +53,19 @@ func source_point() -> Vector3:
 func actor_point() -> Vector3:
 	return game.xyz(game.sim.position) + Vector3.UP * 0.95
 
+func focus_review_visibility() -> void:
+	# Review captures exercise the shipping simulation and world positions, but
+	# unrelated foreground art must not hide the selected actor, source, tool,
+	# carry, transfer, or impact pixels. The authored terrain and lighting remain.
+	var selected_visual: Node3D = game.resource_visuals[String(source.id)]
+	var visible_roots: Array[Node] = [
+		game.sun, game.camera, game.outpost_view, game.player_rig,
+		selected_visual, game.transfer_feedback, game.harvest_presentation,
+	]
+	for child in game.world.get_children():
+		if child is Node3D and child not in visible_roots:
+			(child as Node3D).visible = false
+
 func configure_camera(frame := 0) -> void:
 	var actor := actor_point()
 	var target := source_point()
@@ -63,7 +76,7 @@ func configure_camera(frame := 0) -> void:
 	forward = forward.normalized()
 	var right := Vector3(forward.z,0.0,-forward.x)
 	if view_id == "overhead":
-		game.camera.size = 4.6
+		game.camera.size = 4.0
 		game.camera.global_position = focus + Vector3(0.001,9.0,0.001)
 		game.camera.look_at(focus)
 		return
@@ -79,12 +92,17 @@ func configure_camera(frame := 0) -> void:
 	if angle_index < 0: angle_index = 0
 	angle_index = mini(7,angle_index)
 	var angle := TAU * float(angle_index) / 8.0
-	var distance := 10.8 if mode == "device" else 7.0
+	var distance := 8.0 if mode == "device" else 5.6
 	var orbit_direction := (-forward*cos(angle)+right*sin(angle)).normalized()
 	if mode == "sequence": orbit_direction = (-forward+right*0.72).normalized()
-	var offset := orbit_direction*distance+Vector3.UP*(4.4 if mode == "device" else 3.8)
+	var offset := orbit_direction*distance+Vector3.UP*(4.0 if mode == "device" else 3.2)
 	game.camera.keep_aspect = Camera3D.KEEP_HEIGHT
-	game.camera.size = 9.8 if mode == "device" else 5.0
+	if mode == "sequence":
+		game.camera.size = maxf(4.0,actor.distance_to(target)*0.92)
+	elif mode == "device":
+		game.camera.size = 5.6
+	else:
+		game.camera.size = 3.8
 	game.camera.global_position = focus + offset
 	game.camera.look_at(focus + Vector3.UP * (0.08 * sin(float(frame) * 0.03)))
 
@@ -398,6 +416,7 @@ func write_report() -> void:
 		"logical_size":[game.size.x,game.size.y], "internal_render":[game.scene_view.size.x,game.scene_view.size.y],
 		"render_scale":game.scene_view.scaling_3d_scale, "native_4k_render":native_4k and game.scene_view.size.x >= 3840 and game.scene_view.size.y >= 2160,
 		"physical_4k60_verified":false, "scenario_is_test_fixture":true,
+		"review_visibility_policy":"selected_actor_source_effects_on_shipping_surface",
 		"capture_progress_driver":"shipping_simulation_step" if mode == "sequence" else "presentation_fixture",
 		"t07_selection_authority":"context_director.advance" if mode == "sequence" else "fixture_not_claimed",
 		"commit_authority":"outpost_simulation.perform_action",
@@ -436,6 +455,7 @@ func run() -> void:
 		push_error("T09 capture source missing: " + resource_kind)
 		quit(3)
 		return
+	focus_review_visibility()
 	action_token += ["wood","stone","metal","fuel"].find(resource_kind) * 100
 	# Opening sources sit outside the protected camp fence. Start on their camp
 	# side and approach outward so T03 collision remains active and the actor can
