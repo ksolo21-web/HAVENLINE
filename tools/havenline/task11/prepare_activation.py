@@ -1,10 +1,12 @@
 #!/usr/bin/env python3
-"""Validate T11 parallel preparation and stage activation only after T10 approval.
+"""Validate T11 build-pending preparation and final integration promotion.
 
-Default mode is read-only preparation validation. `--activate --base <sha>` is
-also read-only and proves that T11 may activate from the exact integration head.
-`--write` stages coordination-file mutations only after every activation check
-passes. This tool never creates the builder branch or edits gameplay/runtime.
+Default mode validates that an isolated T11 build may proceed against the frozen
+T10 semantic contract while final integration remains dependency-gated.
+`--activate --base <sha>` is the read-only final-promotion preflight and must
+still fail until T10 is APPROVED/integrated on the authoritative branch.
+`--write` stages coordination-file mutations only after every final-promotion
+check passes. This tool never creates the builder branch or edits gameplay.
 """
 from __future__ import annotations
 
@@ -87,8 +89,17 @@ def validate_preparation():
     if critics.get("task_applicability", {}).get("T11") != expected_critics:
         errors.append(f"T11 critic mismatch in CRITIC_MATRIX.json: {critics.get('task_applicability', {}).get('T11')}")
 
-    if checklist.get("runtime_build_allowed_before_activation") is not False:
-        errors.append("runtime_build_allowed_before_activation must remain false")
+    policy = checklist.get("build_pending_policy", {})
+    if policy.get("isolated_build_allowed_before_t10_approval") is not True:
+        errors.append("isolated build-pending policy must allow T11 build before T10 approval")
+    if policy.get("maximum_state_before_t10_approval") != "BUILT_PENDING_DEPENDENCY":
+        errors.append("maximum pre-T10 T11 state must be BUILT_PENDING_DEPENDENCY")
+    if policy.get("may_claim_integration_ready") is not False or policy.get("may_integrate") is not False:
+        errors.append("build-pending policy must keep INTEGRATION_READY/integration blocked")
+    if checklist.get("runtime_build_allowed_before_final_activation") is not True:
+        errors.append("runtime_build_allowed_before_final_activation must be true")
+    if checklist.get("final_integration_allowed_before_dependencies") is not False:
+        errors.append("final_integration_allowed_before_dependencies must remain false")
 
     planned = checklist["planned_owned_paths"]
     if len(planned) != len(set(planned)):
@@ -144,20 +155,23 @@ def validate_preparation():
 
     row = next((x for x in registry.get("workstreams", []) if x.get("task_id") == "T11"), None)
     if row and row.get("status") not in ("LOCKED", "PREPARED"):
-        errors.append(f"pre-activation registry T11 status must be LOCKED/PREPARED, got {row.get('status')}")
+        errors.append(f"canonical pre-promotion registry T11 status must be LOCKED/PREPARED, got {row.get('status')}")
 
     return {
         "task_id": "T11",
-        "mode": "preparation",
+        "mode": "build-pending-preparation",
         "integration_branch": registry.get("integration_branch", "codex/havenline-sequential-task-01"),
         "prepared_from_branch": checklist.get("prepared_from_branch"),
         "prepared_from_commit": checklist.get("prepared_from_commit"),
+        "builder_branch": checklist.get("builder_branch"),
         "t10_current_graph_status": graph.get("tasks", {}).get("T10", {}).get("status"),
         "planned_owned_path_count": len(planned),
         "t10_collision_count": len(t10_collisions),
         "active_ownership_collision_count": len(active_collisions),
         "required_critics": expected_critics,
-        "runtime_build_allowed": False,
+        "isolated_build_allowed": True,
+        "maximum_pre_dependency_state": "BUILT_PENDING_DEPENDENCY",
+        "final_integration_allowed": False,
         "passed": not errors,
         "errors": errors,
     }
@@ -194,18 +208,18 @@ def validate_activation(base: str):
 
     stale_t10_owner = [x for x in ownership.get("active_owners", []) if x.get("task_id") == "T10"]
     if stale_t10_owner:
-        errors.append("T10 is still listed as an active owner; finish T10 closeout before T11 activation")
+        errors.append("T10 is still listed as an active owner; finish T10 closeout before T11 promotion")
 
     if graph.get("tasks", {}).get("T11", {}).get("status") not in ("LOCKED", "PREPARED"):
-        errors.append(f"unexpected pre-activation T11 graph state: {graph.get('tasks', {}).get('T11', {}).get('status')}")
+        errors.append(f"unexpected canonical pre-promotion T11 graph state: {graph.get('tasks', {}).get('T11', {}).get('status')}")
 
     return {
         "task_id": "T11",
-        "mode": "activation-preflight",
+        "mode": "integration-promotion-preflight",
         "base": base,
         "head": head,
         "dependencies": checklist["dependencies"],
-        "future_branch": checklist["future_builder_branch"],
+        "builder_branch": checklist["builder_branch"],
         "owner": checklist["future_owner"],
         "owned_alias": checklist["planned_owned_alias"],
         "passed": not errors,
@@ -227,7 +241,7 @@ def stage_activation(base: str):
     alias = checklist["planned_owned_alias"]
     paths = checklist["planned_owned_paths"]
     owner = checklist["future_owner"]
-    branch = checklist["future_builder_branch"]
+    branch = checklist["builder_branch"]
     critics = checklist["required_critics"]
 
     existing_alias = ownership.setdefault("aliases", {}).get(alias)
@@ -272,7 +286,7 @@ def stage_activation(base: str):
         "critic_status": {},
         "integration_status": "not integrated",
         "known_blockers": [],
-        "next_action": "Create the isolated T11 builder branch from the activation governance checkpoint and begin the frozen camp-construction candidate.",
+        "next_action": "Reconcile the build-pending T11 candidate to the exact accepted T10 source, rerun dependency-sensitive tests/evidence, then advance to INTEGRATION_READY.",
     }
     if row:
         row.clear(); row.update(new_row)
@@ -280,8 +294,7 @@ def stage_activation(base: str):
         registry.setdefault("workstreams", []).append(new_row)
 
     notes = registry.setdefault("notes", [])
-    activation_note = "T03-T10 are APPROVED. T11 is ASSIGNED with frozen scope, owner and disjoint reservation; T12+ runtime remains dependency-gated."
-    notes[:] = [n for n in notes if not ("T10 is ASSIGNED" in n and "T11" in n)]
+    activation_note = "T03-T10 are APPROVED. T11 build-pending candidate may now be reconciled and promoted toward integration under its frozen scope and disjoint reservation."
     if activation_note not in notes:
         notes.append(activation_note)
 
@@ -295,7 +308,7 @@ def stage_activation(base: str):
     gates["active_candidate_run"] = None
     gates["active_tests"] = None
     gates["active_evidence"] = "Docs/Production/Evidence/T11/"
-    gates["active_critic_state"] = "PENDING_BUILD_AND_INDEPENDENT_REVIEW"
+    gates["active_critic_state"] = "PENDING_RECONCILIATION_BUILD_AND_INDEPENDENT_REVIEW"
 
     wave = gates.setdefault("next_post_t03_wave", [])
     wave[:] = [x for x in wave if x.get("task") != "T11"]
@@ -305,7 +318,7 @@ def stage_activation(base: str):
         "state": "ASSIGNED",
         "owner": owner,
         "base_commit": base,
-        "reason": "T05/T10 are approved; T11 frozen scope, activation preflight and disjoint reservation are complete. Build and independent C2/C3/C4/C6 review remain pending.",
+        "reason": "T05/T10 are approved; reconcile the existing build-pending T11 candidate to the exact T10 interface before integration readiness.",
     })
 
     dump(OWNERSHIP_PATH, ownership)
@@ -325,18 +338,18 @@ def stage_activation(base: str):
         "next_actions": [
             "Run: python3 tools/havenline/production/workstream.py validate-registry",
             "Run production governance/migration tests.",
-            "Commit activation governance on the integration branch.",
-            "Create havenline/T11-camp-construction from that exact governance commit.",
-            "Require candidate guard PASS before T11 runtime/assets expand.",
+            "Commit promotion governance on the integration branch.",
+            "Rebase/reconcile havenline/T11-camp-construction to that exact post-T10 governance commit.",
+            "Require dependency-sensitive candidate guards, regression and fresh evidence before INTEGRATION_READY.",
         ],
     }
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("--activate", action="store_true", help="Require all T11 dependencies approved and exact base/head match")
-    ap.add_argument("--base", help="Exact post-T10 integration head used for T11 activation")
-    ap.add_argument("--write", action="store_true", help="Stage T11 ASSIGNED coordination files after passing activation preflight")
+    ap.add_argument("--activate", action="store_true", help="Require all T11 dependencies approved for final integration promotion")
+    ap.add_argument("--base", help="Exact post-T10 integration head used for T11 promotion")
+    ap.add_argument("--write", action="store_true", help="Stage T11 promotion coordination files after passing final preflight")
     args = ap.parse_args()
 
     if args.write and not args.activate:
