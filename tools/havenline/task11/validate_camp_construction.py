@@ -67,6 +67,9 @@ REQUIRED_CAPTURE_MARKERS = (
     "--native-4k",
     "3840, 2160",
     "CameraPolicy.VIEW_OFFSET",
+    "CampBoundaryView",
+    "Boundary.GATE_AUTHORITY_ID",
+    "approved_t03_boundary_rendered",
     "source_bound",
     "final_visual_critic_evidence",
 )
@@ -143,6 +146,8 @@ def main():
             errors.append(f"capture harness missing real rendered-evidence marker: {marker}")
     if "real_t11_stage_scenes" not in capture or "review_snow_and_lane_stage_is_not_shipping_content" not in capture:
         errors.append("capture harness must disclose real T11 stages and non-shipping review staging")
+    if "CampBoundaryView.new()" not in capture or "boundary_view.configure(self)" not in capture:
+        errors.append("capture harness must instantiate the approved T03 boundary presentation rather than recreating perimeter geometry")
 
     try:
         raw = json.loads(RECIPES.read_text())
@@ -281,6 +286,7 @@ def main():
         "view_lifecycle_markers": list(REQUIRED_VIEW_MARKERS),
         "view_visual_contract_markers": list(REQUIRED_VIEW_VISUAL_MARKERS),
         "rendered_capture_contract_markers": list(REQUIRED_CAPTURE_MARKERS),
+        "approved_t03_boundary_required_in_rendered_evidence": True,
         "build_pending_dependency": True,
         "final_t10_compatibility_claimed": False,
         "task_approved": False,
