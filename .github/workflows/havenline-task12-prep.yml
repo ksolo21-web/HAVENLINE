@@ -35,6 +35,7 @@ jobs:
           python -m py_compile tools/havenline/task12/verify_binding_resolution.py
           python -m py_compile tools/havenline/task12/validate_runtime_interface.py
           python -m py_compile tools/havenline/task12/validate_traceability.py
+          python -m py_compile tools/havenline/task12/validate_downstream_contract.py
 
       - name: Validate T12 JSON artifacts
         run: |
@@ -45,6 +46,7 @@ jobs:
           python -m json.tool Docs/Production/T12/BINDING_RESOLUTION_TEMPLATE.json >/dev/null
           python -m json.tool Docs/Production/T12/RUNTIME_INTERFACE_CONTRACT.json >/dev/null
           python -m json.tool Docs/Production/T12/ACCEPTANCE_TRACEABILITY.json >/dev/null
+          python -m json.tool Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json >/dev/null
           python -m json.tool Docs/Production/T12/defect-ledger.json >/dev/null
 
       - name: Validate T12 preparation contract
@@ -61,6 +63,9 @@ jobs:
 
       - name: Validate R01-R16 acceptance traceability coverage
         run: python tools/havenline/task12/validate_traceability.py
+
+      - name: Validate downstream consumer boundaries
+        run: python tools/havenline/task12/validate_downstream_contract.py
 
       - name: Run T12 progression/preparation unit tests
         run: python -m unittest discover -s tools/havenline/task12/tests -p 'test_*.py' -v
