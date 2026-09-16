@@ -4,36 +4,92 @@ const Transform = preload("res://scripts/world_transform.gd")
 const TransformView = preload("res://scripts/world_transform_view.gd")
 
 class FakeSimulationAuthority:
+	# Mirrors the shipping simulation authority split:
+	# - inventory = carried/not-yet-delivered resources
+	# - stored = delivered resources eligible for T10 affordability/debit
 	var inventory: Dictionary
-	var receipts: Dictionary = {}
+	var stored: Dictionary
+	var receipts_by_target: Dictionary = {}
 	var debit_count := 0
 
-	func _init(initial_inventory: Dictionary):
+	func _init(initial_stored: Dictionary, initial_inventory: Dictionary = {}):
+		stored = initial_stored.duplicate(true)
 		inventory = initial_inventory.duplicate(true)
+
+	func available_for_transform() -> Dictionary:
+		return stored.duplicate(true)
+
+	func harvest_to_carried(resource_id: String, quantity: int) -> bool:
+		if resource_id.is_empty() or quantity <= 0:
+			return false
+		inventory[resource_id] = int(inventory.get(resource_id, 0)) + quantity
+		return true
+
+	func deposit(resource_id: String, quantity: int) -> bool:
+		if resource_id.is_empty() or quantity <= 0 or int(inventory.get(resource_id, 0)) < quantity:
+			return false
+		inventory[resource_id] = int(inventory.get(resource_id, 0)) - quantity
+		stored[resource_id] = int(stored.get(resource_id, 0)) + quantity
+		return true
 
 	func submit(intent: Dictionary) -> Dictionary:
 		if not bool(intent.get("passed", false)) or not bool(intent.get("submit_debit_transaction", false)):
 			return {"passed": false, "errors": ["invalid_debit_intent"]}
 		var transaction_id := String(intent.get("transaction_id", ""))
 		var authority_key := String(intent.get("authority_transaction_key", ""))
-		if transaction_id.is_empty() or authority_key.is_empty():
+		var target_id := String(intent.get("target_id", ""))
+		var target_revision := int(intent.get("target_revision", 0))
+		if transaction_id.is_empty() or authority_key.is_empty() or target_id.is_empty() or target_revision <= 0:
 			return {"passed": false, "errors": ["invalid_authority_transaction_key"]}
-		if authority_key in receipts:
-			var replay: Dictionary = receipts[authority_key].duplicate(true)
-			replay["simulation_replayed"] = true
-			return replay
+		if target_id in receipts_by_target:
+			var prior: Dictionary = receipts_by_target[target_id]
+			if String(prior.get("authority_transaction_key", "")) == authority_key:
+				var replay: Dictionary = prior.duplicate(true)
+				replay["simulation_replayed"] = true
+				return replay
+			if target_revision <= int(prior.get("target_revision", 0)):
+				return {
+					"passed": false,
+					"errors": ["stale_authority_transaction"],
+					"transaction_id": transaction_id,
+					"authority_transaction_key": authority_key,
+					"authority_applied": false,
+				}
 		for resource_id in intent.debits:
-			if int(inventory.get(resource_id, 0)) < int(intent.debits[resource_id]):
-				return {"passed": false, "errors": ["insufficient_authoritative_inventory"], "transaction_id": transaction_id, "authority_transaction_key": authority_key}
+			if int(stored.get(resource_id, 0)) < int(intent.debits[resource_id]):
+				return {
+					"passed": false,
+					"errors": ["insufficient_authoritative_stored"],
+					"transaction_id": transaction_id,
+					"authority_transaction_key": authority_key,
+					"authority_applied": false,
+				}
 		for resource_id in intent.debits:
-			inventory[resource_id] = int(inventory.get(resource_id, 0)) - int(intent.debits[resource_id])
+			stored[resource_id] = int(stored.get(resource_id, 0)) - int(intent.debits[resource_id])
 		debit_count += 1
 		var receipt := intent.duplicate(true)
 		receipt["authority_source"] = "simulation"
 		receipt["authority_applied"] = true
 		receipt["simulation_replayed"] = false
-		receipts[authority_key] = receipt.duplicate(true)
+		receipts_by_target[target_id] = receipt.duplicate(true)
 		return receipt
+
+	func export_receipt_state() -> Dictionary:
+		return receipts_by_target.duplicate(true)
+
+	func import_receipt_state(state: Dictionary) -> bool:
+		var next := {}
+		for target_id in state:
+			var row: Variant = state[target_id]
+			if String(target_id).is_empty() or not (row is Dictionary):
+				return false
+			if String(row.get("target_id", "")) != String(target_id):
+				return false
+			if String(row.get("authority_transaction_key", "")).is_empty() or int(row.get("target_revision", 0)) <= 0:
+				return false
+			next[String(target_id)] = row.duplicate(true)
+		receipts_by_target = next
+		return true
 
 var checks: Array[Dictionary] = []
 var failures: Array[String] = []
@@ -59,76 +115,105 @@ func run() -> void:
 	check("contract publishes request-scoped simulation idempotency key", contract.authority_idempotency_key_is_request_scoped)
 	check("contract bounds completed receipt history per target", contract.bounded_receipt_history_per_target)
 
-	var inventory := {"wood": 100, "stone": 100, "metal": 100, "fuel": 100}
+	var delivered := {"wood": 100, "stone": 100, "metal": 100, "fuel": 100}
 	var engine := configured_engine()
 	check("target A registers", engine.register_target("target-A", "seed"))
-	var simulation := FakeSimulationAuthority.new(inventory)
-	var first := engine.commit_transform("A-1", "framework_anchor_seed_to_foundation", "target-A", simulation.inventory)
+	var simulation := FakeSimulationAuthority.new(delivered)
+	var first := engine.commit_transform("A-1", "framework_anchor_seed_to_foundation", "target-A", simulation.available_for_transform())
 	check("target A prepares first debit", first.passed and first.submit_debit_transaction and not String(first.authority_transaction_key).is_empty(), first)
-	var racing := engine.commit_transform("A-2", "framework_anchor_seed_to_foundation", "target-A", simulation.inventory)
+	var racing := engine.commit_transform("A-2", "framework_anchor_seed_to_foundation", "target-A", simulation.available_for_transform())
 	check("second transaction against same target is blocked before debit", not racing.passed and racing.errors.has("target_transaction_pending") and not racing.submit_debit_transaction, racing)
-	check("blocked target race has not touched simulation", simulation.debit_count == 0 and simulation.inventory == inventory)
+	check("blocked target race has not touched simulation", simulation.debit_count == 0 and simulation.stored == delivered)
 
 	var ack := simulation.submit(first)
-	check("simulation applies exact first debit", ack.get("authority_applied", false) and simulation.debit_count == 1 and simulation.inventory.wood == 92 and simulation.inventory.stone == 96, simulation.inventory)
+	check("simulation applies exact first debit to delivered stored resources", ack.get("authority_applied", false) and simulation.debit_count == 1 and simulation.stored.wood == 92 and simulation.stored.stone == 96, simulation.stored)
 	var accepted := engine.accept_authoritative_receipt(ack)
 	check("T10 accepts matching authoritative receipt", accepted.passed and accepted.applied and accepted.accepted_by_world_transform, accepted)
 	check("target A advances after authoritative debit", engine.descriptor().targets["target-A"].state == "foundation" and engine.descriptor().targets["target-A"].revision == 1)
 	var simulation_replay := simulation.submit(first)
-	check("simulation retry uses authority key and cannot debit twice", simulation_replay.simulation_replayed and simulation.debit_count == 1 and simulation.inventory.wood == 92 and simulation.inventory.stone == 96)
+	check("simulation retry uses authority key and cannot debit twice", simulation_replay.simulation_replayed and simulation.debit_count == 1 and simulation.stored.wood == 92 and simulation.stored.stone == 96)
 	var t10_replay := engine.accept_authoritative_receipt(simulation_replay)
 	check("T10 duplicate receipt is idempotent", t10_replay.passed and t10_replay.replayed and not t10_replay.applied)
+
+	# R06: harvested/carried resources cannot pay for transformation until delivered.
+	var delivery_engine := configured_engine()
+	check("R06 delivered-resource target registers", delivery_engine.register_target("target-delivery", "seed"))
+	var delivery_sim := FakeSimulationAuthority.new(
+		{"wood": 0, "stone": 0, "metal": 0, "fuel": 0},
+		{"wood": 8, "stone": 4, "metal": 0, "fuel": 0}
+	)
+	var carried_before := delivery_sim.inventory.duplicate(true)
+	var stored_before := delivery_sim.stored.duplicate(true)
+	var carried_only_preview := delivery_engine.preview_transform("framework_anchor_seed_to_foundation", "target-delivery", delivery_sim.available_for_transform())
+	check("carried resources alone cannot satisfy T10 affordability", not carried_only_preview.passed and carried_only_preview.errors.has("insufficient_resources") and carried_only_preview.shortfalls == {"wood": 8, "stone": 4})
+	check("R06 preview does not mutate carried or stored resources", delivery_sim.inventory == carried_before and delivery_sim.stored == stored_before)
+	check("deposit moves wood from carried inventory to delivered stored", delivery_sim.deposit("wood", 8) and delivery_sim.inventory.wood == 0 and delivery_sim.stored.wood == 8)
+	check("deposit moves stone from carried inventory to delivered stored", delivery_sim.deposit("stone", 4) and delivery_sim.inventory.stone == 0 and delivery_sim.stored.stone == 4)
+	var delivered_preview := delivery_engine.preview_transform("framework_anchor_seed_to_foundation", "target-delivery", delivery_sim.available_for_transform())
+	check("same transform becomes eligible only after deposit", delivered_preview.passed and delivered_preview.costs == {"wood": 8, "stone": 4}, delivered_preview)
+	var delivery_intent := delivery_engine.commit_transform("delivery-1", "framework_anchor_seed_to_foundation", "target-delivery", delivery_sim.available_for_transform())
+	var carried_at_debit := delivery_sim.inventory.duplicate(true)
+	var delivery_ack := delivery_sim.submit(delivery_intent)
+	check("authoritative transform debit consumes stored only", delivery_ack.get("authority_applied", false) and delivery_sim.stored.wood == 0 and delivery_sim.stored.stone == 0 and delivery_sim.inventory == carried_at_debit)
+	var delivery_accept := delivery_engine.accept_authoritative_receipt(delivery_ack)
+	check("delivered-resource receipt advances T10 exactly once", delivery_accept.passed and delivery_accept.applied and delivery_engine.descriptor().targets["target-delivery"].state == "foundation")
 
 	# A valid simulation receipt that T10 never prepared must not advance a target.
 	check("target B registers", engine.register_target("target-B", "seed"))
 	var foreign := configured_engine()
 	foreign.register_target("target-B", "seed")
-	var foreign_sim := FakeSimulationAuthority.new(inventory)
-	var foreign_intent := foreign.commit_transform("foreign-1", "framework_anchor_seed_to_foundation", "target-B", foreign_sim.inventory)
+	var foreign_sim := FakeSimulationAuthority.new(delivered)
+	var foreign_intent := foreign.commit_transform("foreign-1", "framework_anchor_seed_to_foundation", "target-B", foreign_sim.available_for_transform())
 	var foreign_ack := foreign_sim.submit(foreign_intent)
 	var unsolicited := engine.accept_authoritative_receipt(foreign_ack)
 	check("unsolicited but well-formed simulation receipt is rejected", not unsolicited.passed and unsolicited.errors.has("missing_prepared_transaction"), unsolicited)
 	check("unsolicited receipt cannot advance target B", engine.descriptor().targets["target-B"].state == "seed" and engine.descriptor().targets["target-B"].revision == 0)
 
-	# Preview/prepare can race a later authoritative inventory drop. T10 must stay pending.
+	# Preview/prepare can race a later authoritative stored-balance drop. T10 must stay pending.
 	check("target C registers", engine.register_target("target-C", "seed"))
 	var stale_snapshot := {"wood": 20, "stone": 20, "metal": 0, "fuel": 0}
 	var depleted_sim := FakeSimulationAuthority.new({"wood": 0, "stone": 0, "metal": 0, "fuel": 0})
 	var stale_intent := engine.commit_transform("C-1", "framework_anchor_seed_to_foundation", "target-C", stale_snapshot)
 	check("stale snapshot can only prepare an intent", stale_intent.passed and stale_intent.submit_debit_transaction and engine.descriptor().targets["target-C"].state == "seed")
 	var rejected_debit := depleted_sim.submit(stale_intent)
-	check("simulation can reject stale resource availability", not rejected_debit.passed and rejected_debit.errors.has("insufficient_authoritative_inventory"))
+	check("simulation can reject stale delivered resource availability", not rejected_debit.passed and rejected_debit.errors.has("insufficient_authoritative_stored"))
 	check("failed authoritative debit leaves target C pending and unchanged", engine.descriptor().targets["target-C"].state == "seed" and engine.descriptor().prepared_count == 1)
-	depleted_sim.inventory.wood = 20
-	depleted_sim.inventory.stone = 20
+	depleted_sim.stored.wood = 20
+	depleted_sim.stored.stone = 20
 	var recovered_ack := depleted_sim.submit(stale_intent)
 	var recovered_accept := engine.accept_authoritative_receipt(recovered_ack)
-	check("same pending transaction can succeed after authoritative resources recover", recovered_accept.passed and recovered_accept.applied and engine.descriptor().targets["target-C"].state == "foundation")
+	check("same pending transaction can succeed after authoritative stored resources recover", recovered_accept.passed and recovered_accept.applied and engine.descriptor().targets["target-C"].state == "foundation")
 
 	# Crash after simulation debit but before T10 accepts the receipt.
 	var crash_engine := configured_engine()
 	crash_engine.register_target("target-D", "seed")
-	var crash_sim := FakeSimulationAuthority.new(inventory)
-	var crash_intent := crash_engine.commit_transform("D-1", "framework_anchor_seed_to_foundation", "target-D", crash_sim.inventory)
+	var crash_sim := FakeSimulationAuthority.new(delivered)
+	var crash_intent := crash_engine.commit_transform("D-1", "framework_anchor_seed_to_foundation", "target-D", crash_sim.available_for_transform())
 	var crash_ack := crash_sim.submit(crash_intent)
 	check("simulation debit occurs before crash point", crash_sim.debit_count == 1 and crash_ack.authority_applied)
 	var pending_snapshot := crash_engine.export_component_state()
+	var simulation_receipt_snapshot := crash_sim.export_receipt_state()
 	check("crash snapshot keeps debit intent pending", pending_snapshot.prepared.has("D-1") and pending_snapshot.targets["target-D"].state == "seed")
+	check("simulation crash snapshot retains latest bounded debit receipt", simulation_receipt_snapshot.size() == 1 and simulation_receipt_snapshot.has("target-D"))
 	var restored := configured_engine()
 	check("pending state restores after crash", restored.import_component_state(pending_snapshot))
-	var post_crash_accept := restored.accept_authoritative_receipt(crash_ack)
-	check("restored T10 accepts already-applied simulation receipt without resubmitting debit", post_crash_accept.passed and post_crash_accept.applied and crash_sim.debit_count == 1)
+	var restored_sim := FakeSimulationAuthority.new(crash_sim.stored)
+	check("simulation bounded receipt state restores after crash", restored_sim.import_receipt_state(simulation_receipt_snapshot))
+	var post_crash_retry_receipt := restored_sim.submit(crash_intent)
+	check("restored simulation replays prior debit without second mutation", post_crash_retry_receipt.get("simulation_replayed", false) and restored_sim.debit_count == 0 and restored_sim.stored == crash_sim.stored)
+	var post_crash_accept := restored.accept_authoritative_receipt(post_crash_retry_receipt)
+	check("restored T10 accepts already-applied simulation receipt without resubmitting debit", post_crash_accept.passed and post_crash_accept.applied)
 	check("restored target D advances exactly once", restored.descriptor().targets["target-D"].state == "foundation" and restored.descriptor().targets["target-D"].revision == 1)
-	var post_crash_sim_retry := crash_sim.submit(crash_intent)
-	check("simulation also replays crash-window authority key without second debit", post_crash_sim_retry.simulation_replayed and crash_sim.debit_count == 1)
+	var post_crash_sim_retry := restored_sim.submit(crash_intent)
+	check("simulation also replays crash-window authority key without second debit", post_crash_sim_retry.simulation_replayed and restored_sim.debit_count == 0)
 
 	# Different targets may be in-flight together and receipts may return out of order.
 	var multi := configured_engine()
 	multi.register_target("target-E", "seed")
 	multi.register_target("target-F", "seed")
-	var multi_sim := FakeSimulationAuthority.new(inventory)
-	var e_intent := multi.commit_transform("E-1", "framework_anchor_seed_to_foundation", "target-E", multi_sim.inventory)
-	var f_intent := multi.commit_transform("F-1", "framework_anchor_seed_to_foundation", "target-F", multi_sim.inventory)
+	var multi_sim := FakeSimulationAuthority.new(delivered)
+	var e_intent := multi.commit_transform("E-1", "framework_anchor_seed_to_foundation", "target-E", multi_sim.available_for_transform())
+	var f_intent := multi.commit_transform("F-1", "framework_anchor_seed_to_foundation", "target-F", multi_sim.available_for_transform())
 	check("different targets can prepare concurrently", e_intent.passed and f_intent.passed and multi.descriptor().prepared_count == 2 and e_intent.authority_transaction_key != f_intent.authority_transaction_key)
 	var e_ack := multi_sim.submit(e_intent)
 	var f_ack := multi_sim.submit(f_intent)
@@ -137,7 +222,23 @@ func run() -> void:
 	var e_second := multi.accept_authoritative_receipt(e_ack)
 	check("target E later receipt still commits independently", e_second.passed and e_second.applied and multi.descriptor().targets["target-E"].state == "foundation")
 	check("multi-target authoritative debit count is exact", multi_sim.debit_count == 2)
+	check("simulation receipt history remains bounded one latest row per target", multi_sim.receipts_by_target.size() == 2)
 	check("completed receipt history remains one per completed target", multi.descriptor().receipt_count == 2 and multi.descriptor().receipt_count <= multi.descriptor().receipt_history_bound)
+
+	# A higher revision for a target may replace its simulation receipt; stale lower/equal revisions fail closed.
+	var revision_engine := configured_engine()
+	revision_engine.register_target("target-revision", "seed")
+	var revision_sim := FakeSimulationAuthority.new(delivered)
+	var revision_one := revision_engine.commit_transform("rev-1", "framework_anchor_seed_to_foundation", "target-revision", revision_sim.available_for_transform())
+	var revision_one_ack := revision_sim.submit(revision_one)
+	var revision_one_accept := revision_engine.accept_authoritative_receipt(revision_one_ack)
+	check("first target revision commits through bounded simulation ledger", revision_one_accept.passed and revision_sim.receipts_by_target.size() == 1)
+	var revision_two := revision_engine.commit_transform("rev-2", "framework_anchor_foundation_to_reinforced", "target-revision", revision_sim.available_for_transform(), ["harvesting_online"])
+	var revision_two_ack := revision_sim.submit(revision_two)
+	var revision_two_accept := revision_engine.accept_authoritative_receipt(revision_two_ack)
+	check("higher target revision replaces bounded simulation receipt", revision_two_accept.passed and revision_sim.receipts_by_target.size() == 1 and revision_sim.receipts_by_target["target-revision"].target_revision == 2)
+	var stale_revision_result := revision_sim.submit(revision_one)
+	check("stale lower revision with old key fails closed after newer receipt", not stale_revision_result.passed and stale_revision_result.errors.has("stale_authority_transaction") and revision_sim.debit_count == 2)
 
 	# Persisted state may never contain two pending transactions for one target.
 	var malicious := multi.export_component_state()
@@ -230,6 +331,9 @@ func run() -> void:
 		"passed": failures.is_empty(),
 		"check_count": checks.size(),
 		"simulation_uses_authority_transaction_key": true,
+		"simulation_models_carried_vs_stored_delivery": true,
+		"simulation_debits_stored_only": true,
+		"simulation_bounded_receipt_history_by_target": true,
 		"bounded_completed_history": true,
 		"r11_world_response_tested": true,
 		"visual_node_budget": view_contract.visual_node_budget,
