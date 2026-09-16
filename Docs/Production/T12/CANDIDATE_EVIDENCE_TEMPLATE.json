@@ -70,11 +70,11 @@
     "score": null
   },
   "critic_reviews": {
-    "C2": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null},
-    "C3": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null},
-    "C4": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null},
-    "C6": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null},
-    "C7": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null}
+    "C2": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independence_required": true, "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null},
+    "C3": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independence_required": true, "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null},
+    "C4": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independence_required": true, "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null},
+    "C6": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independence_required": false, "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null},
+    "C7": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independence_required": true, "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null}
   },
   "gates": {
     "G1": null,
@@ -103,13 +103,16 @@
     "target": 10.0,
     "zero_unresolved_mandatory_defects": true,
     "all_G1_G14_required": true,
-    "all_required_critics_exact_candidate": true
+    "all_required_critics_exact_candidate": true,
+    "independent_critic_set": ["C2", "C3", "C4", "C7"],
+    "quantitative_specialist_set": ["C6"]
   },
   "scope_limits": {
     "this_packet_can_approve_t12_only": true,
     "whole_game_approved": false,
     "physical_phone_tablet_native_4k60_certified_by_t12": false,
     "notes": [
+      "C2/C3/C4/C7 require genuinely independent reviewer-runtime provenance. C6 is the quantitative specialist gate and is not misrepresented as an independent-model review.",
       "Independent critic identity/evidence must be verified by the review pipeline; a JSON boolean alone is not sufficient provenance.",
       "T68/T69 retain physical-device/release performance certification.",
       "T62 retains full Level 1–100 acceptance outside T12 component approval."
