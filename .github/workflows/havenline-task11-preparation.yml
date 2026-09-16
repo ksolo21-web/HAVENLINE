@@ -50,7 +50,13 @@ jobs:
           assert checklist['required_critics']==['C2','C3','C4','C6']
           assert graph['tasks']['T11']['critics']==checklist['required_critics']
           assert critics['task_applicability']['T11']==checklist['required_critics']
-          assert checklist['runtime_build_allowed_before_activation'] is False
+          policy=checklist['build_pending_policy']
+          assert policy['isolated_build_allowed_before_t10_approval'] is True
+          assert policy['maximum_state_before_t10_approval']=='BUILT_PENDING_DEPENDENCY'
+          assert policy['may_claim_integration_ready'] is False
+          assert policy['may_integrate'] is False
+          assert checklist['runtime_build_allowed_before_final_activation'] is True
+          assert checklist['final_integration_allowed_before_dependencies'] is False
 
           t10_paths=set(t10['planned_owned_paths'])
           t11_paths=set(checklist['planned_owned_paths'])
@@ -66,7 +72,9 @@ jobs:
             'critic_contract':checklist['required_critics'],
             'planned_paths':len(t11_paths),
             'exact_path_intersections_with_t10':0,
-            'runtime_build_allowed':False,
+            'isolated_build_allowed':True,
+            'maximum_pre_dependency_state':'BUILT_PENDING_DEPENDENCY',
+            'final_integration_allowed':False,
             'passed':True,
           }
           print(json.dumps(result,indent=2))
