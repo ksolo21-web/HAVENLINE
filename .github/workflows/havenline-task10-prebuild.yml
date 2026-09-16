@@ -194,10 +194,11 @@ jobs:
           done < /tmp/t10-device-matrix.tsv
           python3 - <<'PY'
           import hashlib,json,struct
+          from collections import defaultdict
           from pathlib import Path
           matrix=json.loads(Path('Docs/Production/DEVICE_LAYOUT_MATRIX.json').read_text())
           root=Path('task10-prebuild-evidence/device-layout')
-          rows=[]; hashes=set()
+          rows=[]; by_hash=defaultdict(list); by_device=defaultdict(dict)
           for state in matrix['states']:
               device=state['id']; expected=state['logical_size']
               manifest_path=root/device/'manifest.json'
@@ -216,11 +217,27 @@ jobs:
                   assert data[:8] == b'\x89PNG\r\n\x1a\n',p
                   width,height=struct.unpack('>II',data[16:24])
                   assert [width,height] == expected,(p,width,height,expected)
-                  digest=hashlib.sha256(data).hexdigest(); hashes.add(digest)
-                  rows.append({'device_id':device,'class':state['class'],'fold_state':state['fold_state'],'state':record['state'],'file':str(p.relative_to(root)),'size':[width,height],'bytes':len(data),'sha256':digest})
+                  digest=hashlib.sha256(data).hexdigest()
+                  row={'device_id':device,'class':state['class'],'fold_state':state['fold_state'],'safe_area_test':bool(state.get('safe_area_test',False)),'state':record['state'],'file':str(p.relative_to(root)),'size':[width,height],'bytes':len(data),'sha256':digest}
+                  rows.append(row); by_hash[digest].append(row); by_device[device][record['state']]=digest
           assert len(rows)==len(matrix['states'])*2,(len(rows),len(matrix['states']))
-          assert len(hashes)==len(rows),(len(hashes),len(rows))
-          evidence={'task':'T10','matrix_source':'Docs/Production/DEVICE_LAYOUT_MATRIX.json','landscape_required':True,'device_count':len(matrix['states']),'capture_count':len(rows),'classes':sorted(set(x['class'] for x in matrix['states'])),'all_unique':True,'rows':rows,'fixture_only':True,'real_t09_adapter_bound':False,'task_approved':False,'passed':True}
+          # Every device must visibly distinguish preview from committing.
+          for state in matrix['states']:
+              device=state['id']
+              assert by_device[device]['preview'] != by_device[device]['committing'],device
+          # Duplicate pixels are allowed only when the matrix intentionally gives two
+          # entries the same logical viewport and lifecycle state (phone_16_9 and
+          # phone_20_9 currently both use 2400x1080). A duplicate across different
+          # sizes or different states would indicate a broken capture/layout gate.
+          duplicate_groups=[]
+          for digest,group in by_hash.items():
+              if len(group) <= 1:
+                  continue
+              signatures={(tuple(row['size']),row['state']) for row in group}
+              assert len(signatures)==1,(digest,group)
+              duplicate_groups.append({'sha256':digest,'members':[{'device_id':row['device_id'],'state':row['state'],'size':row['size']} for row in group]})
+          safe_area_cases=[row['id'] for row in matrix['states'] if row.get('safe_area_test')]
+          evidence={'task':'T10','matrix_source':'Docs/Production/DEVICE_LAYOUT_MATRIX.json','landscape_required':True,'device_count':len(matrix['states']),'capture_count':len(rows),'classes':sorted(set(x['class'] for x in matrix['states'])),'safe_area_flagged_devices':safe_area_cases,'duplicate_policy':'allowed only for identical logical size + identical lifecycle state','duplicate_groups':duplicate_groups,'per_device_lifecycle_distinct':True,'rows':rows,'fixture_only':True,'real_t09_adapter_bound':False,'task_approved':False,'passed':True}
           Path('task10-prebuild-evidence/device-layout-evidence.json').write_text(json.dumps(evidence,indent=2))
           print(json.dumps(evidence))
           PY
