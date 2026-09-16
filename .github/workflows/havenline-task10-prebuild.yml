@@ -7,7 +7,7 @@ on:
       - 'HavenlineGodot/scripts/world_transform.gd'
       - 'HavenlineGodot/scripts/world_transform_view.gd'
       - 'HavenlineGodot/data/world_transform_recipes.json'
-      - 'HavenlineGodot/tests/test_task10_prebuild.gd'
+      - 'HavenlineGodot/tests/test_task10_world_transform.gd'
       - 'Docs/Production/T10/**'
       - 'tools/havenline/task10/**'
       - '.github/workflows/havenline-task10-prebuild.yml'
@@ -46,7 +46,7 @@ jobs:
             'HavenlineGodot/scripts/world_transform.gd',
             'HavenlineGodot/scripts/world_transform_view.gd',
             'HavenlineGodot/data/world_transform_recipes.json',
-            'HavenlineGodot/tests/test_task10_prebuild.gd',
+            'HavenlineGodot/tests/test_task10_world_transform.gd',
             '.github/workflows/havenline-task10-prebuild.yml',
           )
           prefixes=('Docs/Production/T10/','tools/havenline/task10/')
@@ -73,24 +73,47 @@ jobs:
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
 
-      - name: Import and test isolated T10 core
+      - name: Import and test formal T10 core
         run: |
           set -euo pipefail
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task10-prebuild-evidence/tests/import.log 2>&1
-          timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_prebuild.gd > task10-prebuild-evidence/tests/test_task10_prebuild.log 2>&1
+          timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_world_transform.gd > task10-prebuild-evidence/tests/test_task10_world_transform.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task10-prebuild-evidence/tests/*.log; then exit 1; fi
           python3 - <<'PY'
           import json
           from pathlib import Path
-          path=Path('task10-prebuild-evidence/tests/test_task10_prebuild.log')
+          path=Path('task10-prebuild-evidence/tests/test_task10_world_transform.log')
           reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
           assert reports, path
           report=reports[-1]
           assert report.get('passed') is True and not report.get('failures'), report
+          assert report.get('stress_targets') == 512 and report.get('stress_transactions') == 1024, report
           report['integration_allowed']=False
           report['task_approved']=False
           Path('task10-prebuild-evidence/tests.json').write_text(json.dumps(report,indent=2))
           print(json.dumps(report))
+          PY
+
+      - name: Validate T10 source contract
+        run: |
+          set -euo pipefail
+          # The formal production validator still expects the future integration/capture files,
+          # so prebuild verifies the currently dependency-independent subset directly.
+          python3 - <<'PY' | tee task10-prebuild-evidence/source-contract.json
+          import json
+          from pathlib import Path
+          required=[
+            Path('HavenlineGodot/scripts/world_transform.gd'),
+            Path('HavenlineGodot/scripts/world_transform_view.gd'),
+            Path('HavenlineGodot/data/world_transform_recipes.json'),
+            Path('HavenlineGodot/tests/test_task10_world_transform.gd'),
+          ]
+          missing=[str(p) for p in required if not p.exists() or not p.read_text().strip()]
+          assert not missing, missing
+          domain=required[0].read_text()
+          for marker in ('preview_transform','commit_transform','accept_authoritative_receipt','export_component_state','import_component_state'):
+            assert marker in domain, marker
+          print(json.dumps({'task':'T10','prebuild_source_contract':True,'required_files':[str(p) for p in required],'passed':True},indent=2))
           PY
 
       - name: Governance regression
