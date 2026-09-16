@@ -298,8 +298,6 @@ func accept_authoritative_receipt(receipt: Dictionary) -> Dictionary:
 	if transaction_id not in prepared:
 		return {"passed": false, "errors": ["missing_prepared_transaction"], "applied": false, "replayed": false}
 	var intent: Dictionary = prepared[transaction_id]
-	if not _receipt_matches_prepared(receipt, intent):
-		return {"passed": false, "errors": ["prepared_receipt_mismatch"], "applied": false, "replayed": false}
 
 	var recipe := _recipe(String(receipt.recipe_id))
 	var target := _target(String(receipt.target_id))
@@ -312,6 +310,8 @@ func accept_authoritative_receipt(receipt: Dictionary) -> Dictionary:
 		return {"passed": false, "errors": ["receipt_debit_mismatch"], "applied": false, "replayed": false}
 	if String(target.state) != String(recipe.source_state) or int(receipt.target_revision) != int(target.revision) + 1:
 		return {"passed": false, "errors": ["receipt_state_mismatch"], "applied": false, "replayed": false}
+	if not _receipt_matches_prepared(receipt, intent):
+		return {"passed": false, "errors": ["prepared_receipt_mismatch"], "applied": false, "replayed": false}
 
 	target["state"] = String(recipe.target_state)
 	target["revision"] = int(receipt.target_revision)
