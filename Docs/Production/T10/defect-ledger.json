@@ -4,6 +4,10 @@
   "review_scope": "parallel preparation plus dependency-independent prebuild readiness; not production integration or approval",
   "prepared_branch": "prebuild/T10-world-transform",
   "source_integration_checkpoint": "0427a7f8f11ca2afe1866ee972657b631b3e3c50",
+  "latest_verified_source": "2c8987d0351536cd00c6031d4eada4a8c12bae00",
+  "latest_verified_run": 35082800871,
+  "latest_verified_artifact": 10441032206,
+  "latest_verified_artifact_sha256": "8532c23a88df4b4a4dc11da6722d7a9233f4d3511a5684a5f0b5fe4575c91a91",
   "internal_review": {
     "reviewer_type": "internal review; no separate critic runtime claimed",
     "preparation_readiness_score": 10.0,
@@ -20,12 +24,35 @@
       {"id":"P07","name":"Pending/completed replay, crash recovery, altered receipt rejection and component-state fail-closed import pass","status":"PASS"},
       {"id":"P08","name":"One in-flight transaction per target prevents same-revision double-debit race","status":"PASS"},
       {"id":"P09","name":"Authoritative receipts must match a T10-prepared transaction; unsolicited receipts fail closed","status":"PASS"},
-      {"id":"P10","name":"512 targets / 1024 two-stage transactions pass bounded stress and exact snapshot round-trip","status":"PASS"},
-      {"id":"P11","name":"Fixture simulation integration passes same-target race, stale-authority, crash-window and out-of-order multi-target receipt cases","status":"PASS"},
-      {"id":"P12","name":"Full frozen source-contract validator passes with formal domain/integration/capture files present","status":"PASS"},
-      {"id":"P13","name":"Eight 1280x720 lifecycle fixture renders are distinct and readable across front and three-quarter views","status":"PASS"},
-      {"id":"P14","name":"Governance, migration and production-tool regression pass on the exact verified prebuild source","status":"PASS"}
-    ]
+      {"id":"P10","name":"Request-scoped authority transaction keys preserve authoritative debit idempotency independently of caller labels","status":"PASS"},
+      {"id":"P11","name":"R12 bounded history retains only latest completed receipt per target; 5000 previews + 5000 rejected commits add no history","status":"PASS"},
+      {"id":"P12","name":"512 targets / 1024 two-stage transactions pass with exactly 512 retained receipts and exact snapshot round-trip","status":"PASS"},
+      {"id":"P13","name":"258-recipe neutral catalog and branching fixtures remain bounded and deterministic","status":"PASS"},
+      {"id":"P14","name":"Fixture simulation integration passes same-target race, stale-authority, crash-window and out-of-order multi-target receipt cases","status":"PASS"},
+      {"id":"P15","name":"R11 reusable presentation remains presentation-only, builds exactly four visual nodes once, and exposes bounded readability scaling","status":"PASS"},
+      {"id":"P16","name":"Blocked/readiness payloads, preview volume, committing pulse and complete-state world response pass direct executable checks","status":"PASS"},
+      {"id":"P17","name":"Ten 1280x720 view-owned lifecycle renders are distinct and readable while the neutral target remains unchanged","status":"PASS"},
+      {"id":"P18","name":"Six Havenline device-matrix configurations produce twelve exact-size preview/committing renders with per-device lifecycle distinction","status":"PASS"},
+      {"id":"P19","name":"Full frozen source-contract validator passes with formal domain/integration/capture files present","status":"PASS"},
+      {"id":"P20","name":"Governance, migration and production-tool regression pass on the exact verified prebuild source","status":"PASS"}
+    ],
+    "verified_metrics": {
+      "domain_checks": 130,
+      "integration_and_r11_checks": 60,
+      "preview_stress_iterations": 5000,
+      "rejected_commit_stress_iterations": 5000,
+      "catalog_stress_recipes": 258,
+      "stress_targets": 512,
+      "stress_transactions": 1024,
+      "stress_retained_receipts": 512,
+      "stress_elapsed_ms": 131.676,
+      "stress_static_memory_delta_bytes": 2341652,
+      "baseline_render_count": 10,
+      "device_matrix_configurations": 6,
+      "device_matrix_render_count": 12,
+      "visual_node_budget": 4,
+      "visual_build_count": 1
+    }
   },
   "resolved_prebuild_defects": [
     {
@@ -34,7 +61,7 @@
       "defect": "Initial commit_transform advanced world state before the simulation-authoritative resource debit was confirmed.",
       "risk": "A debit failure or crash could split inventory state from world transformation state.",
       "repair": "Converted to two-phase prepare -> simulation debit -> T10 receipt validation -> world advancement; pending transactions persist and replay idempotently.",
-      "verification": "Repaired core passed the formal domain, crash/recovery and fixture integration suites."
+      "verification": "Formal domain, crash/recovery and fixture integration suites pass."
     },
     {
       "id": "D02",
@@ -57,7 +84,7 @@
       "severity": "mandatory",
       "defect": "A well-formed simulation receipt for a transaction T10 never prepared could be accepted.",
       "risk": "Out-of-band authoritative-looking input could advance T10 world state.",
-      "repair": "accept_authoritative_receipt now requires the exact transaction in prepared and exact prepared-intent field equality.",
+      "repair": "accept_authoritative_receipt requires the exact transaction in prepared and exact prepared-intent field equality.",
       "verification": "Fixture integration rejects unsolicited valid-looking simulation receipts with missing_prepared_transaction."
     },
     {
@@ -66,7 +93,23 @@
       "defect": "Initial lifecycle capture harness used untyped local inference from dynamically typed engine calls and failed GDScript parsing.",
       "risk": "Rendered evidence could not be produced even though domain/integration gates passed.",
       "repair": "Added explicit Dictionary typing for preview, intent and accepted receipt locals.",
-      "verification": "Exact-source Xvfb + software Vulkan/mobile capture produced eight unique 1280x720 PNGs and a passing manifest."
+      "verification": "Exact-source Xvfb + software Vulkan/mobile capture produces the verified lifecycle evidence."
+    },
+    {
+      "id": "D06",
+      "severity": "mandatory",
+      "defect": "The first completed-transaction design retained every full receipt indefinitely.",
+      "risk": "Receipt/event history grew linearly with transaction count and violated frozen R12 bounded-history requirements.",
+      "repair": "Added request-scoped authority_transaction_key semantics and prune completed history to the latest accepted receipt per target. Old/pruned retries fail closed after later target advancement.",
+      "verification": "5000 previews plus 5000 rejected commits add zero history; 1024 successful transforms across 512 targets retain exactly 512 completed receipts, remain under the conservative runtime/memory budget, and round-trip component state exactly."
+    },
+    {
+      "id": "D07",
+      "severity": "tooling",
+      "defect": "The first device-matrix evidence gate required all twelve rendered PNG hashes to be globally unique.",
+      "risk": "Two valid matrix rows that intentionally share the same logical viewport could create a false CI failure despite correct framing.",
+      "repair": "Allow pixel duplicates only when both logical size and lifecycle state are identical; continue to require preview and committing to differ within every device and reject duplicates across different sizes or lifecycle states.",
+      "verification": "The corrected gate passes all six project matrix entries and twelve exact-size renders. The only permitted duplicate group is phone_16_9/phone_20_9 preview at their shared 2400x1080 viewport."
     }
   ],
   "mandatory_prep_defects": [],
@@ -82,7 +125,8 @@
     "Reconcile this prebuild onto the exact post-T09 integration head.",
     "Run T10 activation preflight and stage validated ownership/registry/dependency/task-gate activation.",
     "Replace FakeSimulationAuthority/fixture assumptions with the real approved T09/T08 simulation adapter and rerun the formal integration suite.",
-    "Run impacted T01-T09 regressions, final save/recovery/device/performance evidence and production capture.",
+    "Run impacted T01-T09 regressions and repeat integrated save/recovery/device/performance evidence and production capture.",
+    "Bind final transformation content/assets without taking T11 camp-construction ownership.",
     "Run independent required C1/C2/C3/C4/C6/C7 reviews and fix/retest until every mandatory dimension is strictly >9.0 unrounded."
   ],
   "resume_from": "Docs/Production/T10/PREBUILD_STATUS.md + TASK_PACKET.md + ACTIVATION_CHECKLIST.json + tools/havenline/task10/prepare_activation.py"
