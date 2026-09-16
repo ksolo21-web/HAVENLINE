@@ -240,11 +240,18 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 			merged_cache[asset] = Scenery.compile(asset_cache[path])
 			if asset.begins_with("world/pine_"):
 				var evergreen_shader: Shader = load("res://shaders/evergreen.gdshader")
+				var forest_varying := "varying float forest_clearance;"
+				var bounded_varying := "varying float forest_clearance;\nvarying float harvest_contact_band;"
+				var forest_vertex := "void vertex() {\n forest_clearance = 0.0;"
+				var bounded_vertex := "void vertex() {\n forest_clearance = 0.0;\n harvest_contact_band = 1.0-smoothstep(1.35,1.75,VERTEX.y);"
+				if not evergreen_shader.code.contains("harvest_contact_band"):
+					evergreen_shader.code = evergreen_shader.code.replace(forest_varying,bounded_varying)
+					evergreen_shader.code = evergreen_shader.code.replace(forest_vertex,bounded_vertex)
 				var whole_tree_cutaway := "void fragment() {\n float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));\n if (coverage < max(cutaway,forest_clearance)) { discard; }\n vec3 surface_color = texture(albedo_texture,UV).rgb;\n float wood = step(surface_color.b*1.25,surface_color.r);"
-				var crown_only_cutaway := "void fragment() {\n vec3 surface_color = texture(albedo_texture,UV).rgb;\n float wood = step(surface_color.b*1.25,surface_color.r);\n float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));\n float wood_contact_surface_cutaway = max(cutaway,forest_clearance)*(1.0-wood);\n if (coverage < wood_contact_surface_cutaway) { discard; }"
+				var crown_only_cutaway := "void fragment() {\n vec3 surface_color = texture(albedo_texture,UV).rgb;\n float wood = step(surface_color.b*1.25,surface_color.r);\n float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));\n float wood_contact_surface_cutaway = max(cutaway,forest_clearance)*(1.0-wood*harvest_contact_band);\n if (coverage < wood_contact_surface_cutaway) { discard; }"
 				if evergreen_shader.code.contains(whole_tree_cutaway):
 					evergreen_shader.code = evergreen_shader.code.replace(whole_tree_cutaway,crown_only_cutaway)
-				assert(evergreen_shader.code.contains("wood_contact_surface_cutaway"),"Evergreen shader must preserve the opaque harvest contact surface")
+				assert(evergreen_shader.code.contains("wood_contact_surface_cutaway") and evergreen_shader.code.contains("harvest_contact_band"),"Evergreen shader must preserve only the bounded opaque harvest contact surface")
 				for i in merged_cache[asset].get_surface_count():
 					var source_material: Material = merged_cache[asset].surface_get_material(i)
 					if source_material is BaseMaterial3D:

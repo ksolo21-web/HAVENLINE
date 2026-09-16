@@ -81,7 +81,7 @@ func source_contact_surface_opaque() -> bool:
 	for surface_index in selected_mesh.get_surface_count():
 		var material: Material = selected_mesh.surface_get_material(surface_index)
 		if material is ShaderMaterial and material.resource_name.to_lower() == "trunk":
-			return (material as ShaderMaterial).shader.code.contains("wood_contact_surface_cutaway")
+			return (material as ShaderMaterial).shader.code.contains("wood_contact_surface_cutaway") and (material as ShaderMaterial).shader.code.contains("harvest_contact_band")
 	return false
 
 func configure_review_frame(frame: int) -> void:
@@ -90,7 +90,8 @@ func configure_review_frame(frame: int) -> void:
 	# camera is installed. Re-evaluate the unchanged cutaway policy against the
 	# camera that will actually produce the evidence frame, otherwise a selected
 	# pine can retain a stale fully-discarded state from the gameplay camera.
-	game.update_foreground_visibility(actor_point(),0.25)
+	for visibility_step in 3:
+		game.update_foreground_visibility(actor_point(),0.10)
 
 func configure_camera(frame := 0) -> void:
 	var actor := actor_point()
@@ -107,11 +108,11 @@ func configure_camera(frame := 0) -> void:
 		game.camera.look_at(focus)
 		return
 	if view_id == "detail":
-		# Look back from the source side so crown-only sightline clearance exposes
-		# the opaque trunk, axe head, handle and both hands in one contact view.
+		# Use a lateral, slightly actor-side view so the bounded trunk edge, axe
+		# head, handle and both hands remain separately readable at contact.
 		game.camera.keep_aspect = Camera3D.KEEP_HEIGHT
 		game.camera.size = 2.65
-		game.camera.global_position = focus+right*1.1+Vector3.UP*2.25+forward*3.5
+		game.camera.global_position = focus+right*3.3+Vector3.UP*2.25-forward*0.75
 		game.camera.look_at(focus+Vector3.UP*0.10)
 		return
 	var angle_index := VIEWS.find(view_id)
@@ -121,9 +122,9 @@ func configure_camera(frame := 0) -> void:
 	var distance := 8.0 if mode == "device" else 5.6
 	var orbit_direction := (-forward*cos(angle)+right*sin(angle)).normalized()
 	if mode in ["sequence","device"]:
-		# Read the complete hand-handle-trunk line from the source side. This uses
-		# the shipping crown-only sightline cutaway while the trunk stays opaque.
-		orbit_direction = (forward+right*0.32).normalized()
+		# Read the hand-handle-trunk line laterally instead of placing the source
+		# between the review camera and tool. Shipping crown cutaway stays active.
+		orbit_direction = (right-forward*0.18).normalized()
 	var offset := orbit_direction*distance+Vector3.UP*(4.0 if mode == "device" else 3.2)
 	game.camera.keep_aspect = Camera3D.KEEP_HEIGHT
 	if mode == "sequence":
