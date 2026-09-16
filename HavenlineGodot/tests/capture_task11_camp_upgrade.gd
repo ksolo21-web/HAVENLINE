@@ -1,11 +1,14 @@
 extends SceneTree
 
 ## T11 isolated build-pending renderer. It uses the real authored T11 stage
-## scenes and approved T05 assets. The snow floor/lighting are disclosed review
-## staging only; final integrated gameplay evidence still waits for accepted T10.
+## scenes, approved T05 assets, and the approved T03 perimeter presentation.
+## The snow/lighting are disclosed review staging only; final integrated
+## gameplay evidence still waits for accepted T10.
 
 const View = preload("res://scripts/camp_construction_view.gd")
 const CameraPolicy = preload("res://scripts/camera_composition.gd")
+const CampBoundaryView = preload("res://scripts/camp_boundary_view.gd")
+const Boundary = preload("res://scripts/camp_boundary.gd")
 
 var output := "user://task11-camp-capture"
 var native_4k := false
@@ -16,7 +19,9 @@ var environment: Environment
 var sun: DirectionalLight3D
 var fill: DirectionalLight3D
 var view: HavenlineCampConstructionView
+var boundary_view: HavenlineCampBoundaryView
 var scale_actor: Node3D
+var merged_cache: Dictionary = {}
 var records: Array[Dictionary] = []
 var capture_errors: Array[String] = []
 
@@ -153,6 +158,8 @@ func snap(frame_id: String, state_id: String, lifecycle: String, view_id: String
 		"status_scale": status.scale,
 		"status_spire_scale": status.spire_scale,
 		"stage_node_count": view.stage_node_count(),
+		"t03_fence_visual_instances": int(boundary_view.descriptor.get("fence_visual_instances", 0)),
+		"t03_open_gate_leaf_instances": int(boundary_view.descriptor.get("open_gate_leaf_instances", 0)),
 		"draw_calls": viewport.get_render_info(Viewport.RENDER_INFO_TYPE_VISIBLE, Viewport.RENDER_INFO_DRAW_CALLS_IN_FRAME),
 		"submitted_primitives": viewport.get_render_info(Viewport.RENDER_INFO_TYPE_VISIBLE, Viewport.RENDER_INFO_PRIMITIVES_IN_FRAME),
 	})
@@ -202,11 +209,17 @@ func setup_world() -> bool:
 	world.add_child(camera)
 	camera.current = true
 	add_snow_stage()
+	boundary_view = CampBoundaryView.new()
+	boundary_view.name = "ApprovedT03BoundaryContext"
+	world.add_child(boundary_view)
+	boundary_view.configure(self)
+	if boundary_view.descriptor.get("visual_collision_share_panel_authority") is not true:
+		capture_errors.append("t03_boundary_authority_mismatch")
 	scale_actor = build_scale_actor()
 	view = View.new()
 	view.name = "T11BuildPendingCandidate"
 	world.add_child(view)
-	return view.configure_from_file()
+	return view.configure_from_file() and capture_errors.is_empty()
 
 func run() -> void:
 	DirAccess.make_dir_recursive_absolute(output)
@@ -231,6 +244,9 @@ func run() -> void:
 		"source_bound": true,
 		"real_t11_stage_scenes": true,
 		"approved_t05_assets_rendered": true,
+		"approved_t03_boundary_rendered": is_instance_valid(boundary_view),
+		"t03_boundary_authority_id": Boundary.GATE_AUTHORITY_ID,
+		"t03_boundary_descriptor": boundary_view.descriptor if is_instance_valid(boundary_view) else {},
 		"existing_shipping_character_used_for_scale": true,
 		"review_snow_and_lane_stage_is_not_shipping_content": true,
 		"gameplay_view_uses_t04_profile": true,
@@ -253,6 +269,7 @@ func run() -> void:
 		"configured": configured,
 		"capture_count": records.size(),
 		"capture_errors": capture_errors,
+		"approved_t03_boundary_rendered": is_instance_valid(boundary_view),
 		"native_4k": native_4k,
 		"build_pending_dependency": true,
 		"task_approved": false,
