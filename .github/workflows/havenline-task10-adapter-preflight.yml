@@ -1,0 +1,62 @@
+name: Havenline Task 10 post-T09 adapter preflight
+
+on:
+  push:
+    branches: ['havenline/T10-world-transformation']
+    paths:
+      - 'Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json'
+      - 'Docs/Production/T10/POST_T09_CHANGE_REQUEST_TEMPLATE.json'
+      - 'tools/havenline/task10/validate_post_t09_adapter.py'
+      - '.github/workflows/havenline-task10-adapter-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  prepared-adapter-contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Validate prepared contract and preserve dependency boundary
+        run: |
+          set -euo pipefail
+          mkdir -p task10-adapter-preflight
+          python3 tools/havenline/task10/validate_post_t09_adapter.py \
+            --output task10-adapter-preflight/report.json
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          report=json.loads(Path('task10-adapter-preflight/report.json').read_text())
+          assert report['passed'] is True, report
+          assert report['prepared_contract_valid'] is True, report
+          # Until the integration owner applies the post-T09 shared-runtime CR,
+          # this builder branch must remain unbound and non-integratable.
+          assert report['real_adapter_bound'] is False, report
+          assert report['integration_allowed'] is False, report
+          integration='origin/codex/havenline-sequential-task-01'
+          subprocess.run(['git','fetch','origin','codex/havenline-sequential-task-01'],check=True,stdout=subprocess.DEVNULL)
+          graph=json.loads(subprocess.check_output(['git','show',f'{integration}:Docs/Production/DEPENDENCY_GRAPH.json'],text=True))
+          t09=graph['tasks']['T09']['status']
+          result={
+            'task':'T10',
+            'candidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+            'integration_t09_status':t09,
+            'prepared_adapter_contract_valid':True,
+            'real_adapter_bound':False,
+            'integration_allowed':False,
+            'handoff_action':'wait_for_exact_post_T09_integration_head_then_integration_owner_applies_CR',
+            'passed':True,
+          }
+          Path('task10-adapter-preflight/summary.json').write_text(json.dumps(result,indent=2)+'\n')
+          print(json.dumps(result,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: havenline-task10-adapter-preflight-${{ github.sha }}
+          path: task10-adapter-preflight
+          if-no-files-found: error
+          retention-days: 14
