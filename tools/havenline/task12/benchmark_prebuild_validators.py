@@ -37,6 +37,7 @@ trace_validator = load_module("t12_trace", "validate_traceability.py")
 downstream_validator = load_module("t12_downstream", "validate_downstream_contract.py")
 candidate_validator = load_module("t12_candidate_evidence", "validate_candidate_evidence.py")
 critic_validator = load_module("t12_critic_reviews", "validate_critic_review_records.py")
+evidence_index_validator = load_module("t12_evidence_index", "validate_evidence_index.py")
 fuzz_module = load_module("t12_fuzz", "fuzz_progression_contract.py")
 
 MATRIX = json.loads((DOCS / "LEVEL_1_100_MATRIX.json").read_text())
@@ -46,6 +47,7 @@ TRACE = json.loads((DOCS / "ACCEPTANCE_TRACEABILITY.json").read_text())
 DOWNSTREAM = json.loads((DOCS / "DOWNSTREAM_CONSUMER_CONTRACT.json").read_text())
 CANDIDATE_TEMPLATE = json.loads((DOCS / "CANDIDATE_EVIDENCE_TEMPLATE.json").read_text())
 CRITIC_TEMPLATE = json.loads((DOCS / "CRITIC_REVIEW_RECORD_TEMPLATE.json").read_text())
+EVIDENCE_INDEX_TEMPLATE = json.loads((DOCS / "EVIDENCE_INDEX_TEMPLATE.json").read_text())
 BUDGET = json.loads((DOCS / "PREBUILD_PERFORMANCE_BUDGET.json").read_text())["static_validation_budget"]
 SYNTHETIC_MANIFEST = fuzz_module.valid_manifest()
 
@@ -60,6 +62,7 @@ def validate_once() -> list[dict[str, Any]]:
         downstream_validator.validate_contract(DOWNSTREAM),
         candidate_validator.validate_packet(CANDIDATE_TEMPLATE, require_resolved=False),
         critic_validator.validate_record(CRITIC_TEMPLATE, require_resolved=False),
+        evidence_index_validator.validate_index(EVIDENCE_INDEX_TEMPLATE, require_resolved=False),
     ]
 
 
@@ -85,7 +88,6 @@ def main() -> None:
     durations_ms: list[float] = []
     errors: list[str] = []
 
-    # Latency pass: no tracemalloc instrumentation.
     gc.collect()
     for _ in range(iterations):
         started = time.perf_counter_ns()
@@ -100,8 +102,6 @@ def main() -> None:
     p95_ms = percentile95(durations_ms) if durations_ms else float("inf")
     maximum_ms = max(durations_ms) if durations_ms else float("inf")
 
-    # Separate memory pass under tracemalloc. Its runtime is intentionally not
-    # mixed into the latency metrics above.
     gc.collect()
     tracemalloc.start()
     baseline_current, _ = tracemalloc.get_traced_memory()
@@ -134,7 +134,7 @@ def main() -> None:
         "memory_instrumentation": "separate tracemalloc pass",
         "iterations": len(durations_ms),
         "memory_iterations": memory_iterations,
-        "validators_per_iteration": 8,
+        "validators_per_iteration": 9,
         "mean_ms": round(mean_ms, 6),
         "p95_ms": round(p95_ms, 6),
         "maximum_ms": round(maximum_ms, 6),
