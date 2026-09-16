@@ -3,6 +3,7 @@ name: Havenline T21-T32 Parallel Preparation
 on:
   pull_request:
     paths:
+      - 'Docs/Production/T12/**'
       - 'Docs/Production/T21/**'
       - 'Docs/Production/T22/**'
       - 'Docs/Production/T23/**'
@@ -28,7 +29,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Compile activation preflight
-        run: python -m py_compile tools/havenline/t21_t32/prepare_activation.py
+      - name: Compile preparation validators
+        run: |
+          python -m py_compile tools/havenline/t21_t32/prepare_activation.py
+          python -m py_compile tools/havenline/t21_t32/validate_t12_consumer_binding.py
       - name: Validate T21-T32 preparation
         run: python tools/havenline/t21_t32/prepare_activation.py --all
+      - name: Validate T32 current T12 consumer binding
+        run: python tools/havenline/t21_t32/validate_t12_consumer_binding.py
