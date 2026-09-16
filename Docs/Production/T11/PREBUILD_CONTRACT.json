@@ -1,8 +1,8 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "task_id": "T11",
   "task_name": "Camp construction and visual upgrade system",
-  "purpose": "Machine-readable prebuild contract for dependency-safe T11 preparation. This file does not activate or approve T11 runtime work.",
+  "purpose": "Machine-readable contract for dependency-safe T11 preparation plus isolated build-pending work. It does not authorize final integration or approval before T10 is accepted.",
   "authoritative_sources": {
     "reference_lock": "Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md",
     "reference_b_file": "Screen_Recording_20260817_124510_YouTube.mp4",
@@ -12,13 +12,41 @@
     "t05_exact_reuse_bindings": "Docs/Production/T11/T05_REUSE_BINDINGS.json",
     "t10_prepared_contract": "Docs/Production/T10/FROZEN_SCOPE.md",
     "t10_prepared_checkpoint": "7e95338e339fb331a5d6b094874c15d5a7e96e16",
-    "t11_frozen_scope": "Docs/Production/T11/FROZEN_SCOPE.md"
+    "t11_frozen_scope": "Docs/Production/T11/FROZEN_SCOPE.md",
+    "build_pending_policy": "Docs/Production/T11/BUILD_PENDING_POLICY.md"
   },
   "dependency_gate": {
-    "required_approved": ["T05", "T10"],
-    "runtime_allowed_before_gate": false,
-    "activation_base": "exact integration head containing T10 APPROVED/integrated completion record",
-    "stale_base_fails_closed": true
+    "required_approved_for_final_integration": ["T05", "T10"],
+    "isolated_build_allowed_before_t10_approval": true,
+    "maximum_state_before_t10_approval": "BUILT_PENDING_DEPENDENCY",
+    "final_integration_allowed_before_gate": false,
+    "final_activation_base": "exact integration head containing T10 APPROVED/integrated completion record",
+    "stale_base_fails_closed": true,
+    "reconcile_to_exact_t10_before_integration_ready": true
+  },
+  "build_pending_contract": {
+    "t10_binding_mode": "semantic mock/adapter against frozen T10 public contract",
+    "allowed": [
+      "T11-owned runtime/content/tests",
+      "authored camp stage composition",
+      "deterministic content-state adapter",
+      "presentation lifecycle",
+      "route/camera/context regression",
+      "build/import/parser validation",
+      "test-only non-shipping recipe fixtures",
+      "performance and unchanged-state rebuild checks",
+      "source-bound evidence not claiming final T10 compatibility"
+    ],
+    "blocked_until_t10_accepted": [
+      "INTEGRATION_READY",
+      "INTEGRATING",
+      "final UNDER_REVIEW",
+      "APPROVED",
+      "final T10 exact-once compatibility evidence",
+      "final T08/T09 through-T10 resource conservation evidence",
+      "shipping prices without authoritative provenance",
+      "final independent critic approval"
+    ]
   },
   "reference_acceptance_moments": [
     {
@@ -32,14 +60,14 @@
       "id": "RB-0006-0010",
       "time": "00:06-00:10",
       "observed": "A fenced warm/brown-floor camp appears with central heated vessel/fire, stock pads/counter area and separated approaches.",
-      "t11_acceptance": "Initial constructed camp visibly changes the playable area and contains authored fence/work-floor/gate/station composition with clear access lanes.",
-      "scope_boundary": "T05 assets may be reused; T11 does not rewrite their source art."
+      "t11_acceptance": "Initial constructed camp visibly changes the playable area and contains authored work-floor/station composition with clear access lanes while preserving the approved T03 perimeter/gates.",
+      "scope_boundary": "T05 assets may be reused; T11 does not rewrite their source art or duplicate T03 perimeter authority."
     },
     {
       "id": "RB-0010-0016",
       "time": "00:10-00:16",
       "observed": "Stock delivery, payments, pad spending, upgrade burst and a larger/more numerous orbiting axe attack.",
-      "t11_acceptance": "T11 must prove the ground-pad spend/commit causes a visible camp/world upgrade with truthful before/transition/after presentation.",
+      "t11_acceptance": "T11 must prove the ground-pad commit can drive a visible camp/world upgrade with truthful before/transition/after presentation.",
       "scope_boundary": "Payment/customer logic is later work; weapon/attack upgrade is T21, not T11."
     },
     {
@@ -58,8 +86,8 @@
     },
     {
       "role": "camp_boundary_and_gate",
-      "source_family": "T11 authored camp assets with approved T03 route compatibility",
-      "requirements": ["fenced work area", "clear gate", "no player/helper trapping", "camera-safe footprint"]
+      "source_family": "approved T03 perimeter/gate authority",
+      "requirements": ["preserve existing fenced work area", "clear gates", "no player/helper trapping", "no duplicated perimeter authority"]
     },
     {
       "role": "warm_work_floor",
@@ -78,8 +106,8 @@
     },
     {
       "role": "visual_upgrade_stage",
-      "source_family": "T05 exact direct binding pad_upgrade + T11 authored camp upgrade assets",
-      "requirements": ["meaningful visible geometry/material/composition change", "T10 recipe binding", "exact-once presentation", "no hidden stat-only upgrade"]
+      "source_family": "T05 exact direct binding pad_upgrade + T11 authored camp upgrade content",
+      "requirements": ["meaningful visible geometry/material/composition change", "T10 semantic recipe binding", "exact-once presentation", "no hidden stat-only upgrade"]
     }
   ],
   "camp_recipe_schema": {
@@ -96,7 +124,7 @@
     ],
     "shipping_price_rule": "Every shipping recipe must contain price_source or tuning_record provenance. Observable video labels and unrelated historical furnace/barricade costs may not be generalized into T11 prices.",
     "test_fixture_rule": "Non-shipping fixture costs must be explicitly marked test-only and cannot be silently promoted to shipping content.",
-    "t10_authority_rule": "T11 may bind to T10 recipe IDs but may not implement alternate debit, atomicity, idempotency or transform-state authority."
+    "t10_authority_rule": "T11 may bind build-pending fixtures to semantic T10 contract IDs but may not implement alternate debit, atomicity, idempotency or transform-state authority. Exact accepted T10 IDs/interfaces must be reconciled before INTEGRATION_READY."
   },
   "required_capture_groups": [
     {
@@ -120,13 +148,13 @@
     {
       "id": "route-and-camera",
       "views": ["gameplay", "overhead", "phone-layout", "tablet-layout", "foldable-layout", "native-3840x2160-scale1"],
-      "conditions": ["each shipping camp stage"],
+      "conditions": ["each candidate camp stage"],
       "critics": ["C2", "C4", "C6"]
     }
   ],
   "required_route_checks": [
     "player can enter/exit through required gate in every camp state",
-    "required work lanes remain traversable",
+    "required T03 work lanes remain traversable",
     "construction/upgrade pads remain reachable",
     "approved T04 camera does not clip or hide the actionable pad/result",
     "T07 contextual control behavior remains single-joystick/proximity driven",
@@ -139,11 +167,10 @@
     "unrounded": true,
     "target": 10.0,
     "zero_unresolved_mandatory_defects": true,
-    "builder_self_review_is_independent_critic": false
+    "builder_self_review_is_independent_critic": false,
+    "final_critic_approval_requires_t10_reconciliation": true
   },
   "explicitly_not_implemented_during_prep": [
-    "shipping camp runtime scripts",
-    "shipping camp meshes/materials",
     "shipping prices",
     "T10 transaction/state semantics",
     "customer/payment behavior",
