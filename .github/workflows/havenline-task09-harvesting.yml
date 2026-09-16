@@ -172,7 +172,7 @@ jobs:
               assert report['final_transfer']['accepted_receipts']==len(commits),report['resource']
               assert all(row['authority'] in ('outpost_simulation.step/context_director.advance','outpost_simulation.perform_action') and row['authoritative_event'] for row in commits)
               assert all(row['units_before']-row['units_after']==1 and row['inventory_after']-row['inventory_before']==1 for row in commits)
-              assert all(row['harvest']['contact_alignment_valid'] and row['harvest']['grip_error_m']<=0.25 and row['harvest']['impact_error_m']<=0.25 for row in commits)
+              assert all(row['harvest']['contact_alignment_valid'] and row['harvest']['grip_error_m']<=0.025 and row['harvest']['impact_error_m']<=0.025 and row['harvest']['secondary_grip_error_m']<=0.045 for row in commits)
               cancelled=[row for row in report['samples'] if row.get('phase')=='cancellation' and row.get('context',{}).get('cancelled') and row.get('action_state')=='blocked_movement']
               depleted=[row for row in report['samples'] if row.get('depleted')]
               respawned=[row for row in report['samples'] if row.get('respawned')]

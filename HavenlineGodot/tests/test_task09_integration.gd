@@ -33,6 +33,19 @@ func run() -> void:
 	var transfer := Transfer.new()
 	root.add_child(harvest)
 	root.add_child(transfer)
+	var actor := Node3D.new()
+	root.add_child(actor)
+	var right_hand := Marker3D.new()
+	right_hand.name = "C1RightHandContact"
+	actor.add_child(right_hand)
+	var left_hand := Marker3D.new()
+	left_hand.name = "C1LeftHandContact"
+	actor.add_child(left_hand)
+	var wood_profile := Harvest.profile_for_resource("wood")
+	var wood_anchor := (Vector3(wood_profile.grip_socket)+Vector3(wood_profile.second_hand_socket))*0.5
+	right_hand.position = Vector3(wood_profile.grip_socket)-wood_anchor
+	left_hand.position = Vector3(wood_profile.second_hand_socket)-wood_anchor
+	harvest.bind_actor(actor)
 	var source_visual := Node3D.new()
 	root.add_child(source_visual)
 	check("T09 binds the simulation-owned source visual", harvest.bind_source("wood:source:0","wood",source_visual,2))
@@ -52,7 +65,8 @@ func run() -> void:
 		"role":"player_lead", "actionable":bool(selected.actionable),
 	}
 	check("T09 accepts canonical T07 identity plus authoritative resource", harvest.begin_action(action,1))
-	var presented := harvest.update_action(action,Transform3D.IDENTITY,Vector3(0,0.8,1.0))
+	var synthetic_target := Vector3(wood_profile.impact_socket)-wood_anchor
+	var presented := harvest.update_action(action,Transform3D.IDENTITY,synthetic_target)
 	check("T09 equips the T06 chop contact without pre-commit impact", not presented.contact_ready and presented.tool == "axe" and presented.contact_marker == "C1TwoHandContact")
 	var motion_action := harvest.motion_action(action)
 	check("T09 remaps presentation progress without changing the T07 action", float(motion_action.progress) < float(action.progress) and float(action.progress) == float(selected.progress))
@@ -60,9 +74,9 @@ func run() -> void:
 	var committed := {
 		"committed":true, "resource":"wood", "source_id":String(selected.id),
 		"action_token":int(selected.action_token), "receipt_id":"simulation:gather:1",
-		"target_position":Vector3(0,0.8,1.0), "actor_id":1,
+		"target_position":synthetic_target, "actor_id":1,
 	}
-	presented = harvest.synchronize_committed_contact(action,Transform3D.IDENTITY,Vector3(0,0.8,1.0),1)
+	presented = harvest.synchronize_committed_contact(action,Transform3D.IDENTITY,synthetic_target,1)
 	check("authoritative commit arms exact T06 contact", presented.contact_ready and presented.commit_contact_armed and is_equal_approx(presented.progress,0.56))
 	check("authoritative committed impact activates T09 feedback", harvest.accept_committed_impact(committed))
 	check("the same committed receipt starts one T08 source-to-actor transfer", transfer.transfer("wood",Vector3(0,0.8,1.0),Vector3(0,1.2,0),String(committed.receipt_id),"source_to_actor",1,"actor:1"))
@@ -103,6 +117,8 @@ func run() -> void:
 		"action_token":1, "progress":0.99, "role":"player_lead", "actionable":true,
 	}
 	game._process(1.0 / 60.0)
+	var shipping_impacts_before := int(game.harvest_presentation.descriptor().accepted_impacts)
+	var shipping_receipts_before := int(game.transfer_feedback.descriptor().accepted_receipts)
 	var shipping_inventory_before := int(game.sim.inventory.wood)
 	game.sim.events.clear()
 	game.sim.perform_action(0.60)
@@ -112,10 +128,10 @@ func run() -> void:
 	var shipping_harvest: Dictionary = game.harvest_presentation.descriptor()
 	var shipping_transfer: Dictionary = game.transfer_feedback.descriptor()
 	check("shipping simulation commits exactly one wood unit", int(shipping_source.units) == 0 and int(game.sim.inventory.wood) == shipping_inventory_before + 1)
-	check("shipping commit drives one T09 impact and one T08 transfer", shipping_harvest.accepted_impacts == 1 and shipping_transfer.accepted_receipts == 1,[shipping_harvest,shipping_transfer])
+	check("shipping commit drives one T09 impact and one T08 transfer", shipping_harvest.accepted_impacts == shipping_impacts_before+1 and shipping_transfer.accepted_receipts == shipping_receipts_before+1,[shipping_harvest,shipping_transfer])
 	check("shipping depletion hides the bound source", not game.resource_visuals[shipping_source.id].visible)
 	game.present_events()
-	check("shipping event epoch cannot replay either presentation", game.harvest_presentation.descriptor().accepted_impacts == 1 and game.transfer_feedback.descriptor().accepted_receipts == 1)
+	check("shipping event epoch cannot replay either presentation", game.harvest_presentation.descriptor().accepted_impacts == shipping_impacts_before+1 and game.transfer_feedback.descriptor().accepted_receipts == shipping_receipts_before+1)
 	shipping_source.units = int(game.sim.tuning.woodUnitsPerNode)
 	shipping_source.respawn = 0.0
 	game._process(1.0 / 60.0)
@@ -151,6 +167,7 @@ func run() -> void:
 	harvest.reset()
 	harvest.free()
 	transfer.free()
+	actor.free()
 	source_visual.free()
 	await process_frame
 

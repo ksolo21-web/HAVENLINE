@@ -16,38 +16,45 @@ const IMPACT_TARGET_TOLERANCE_METERS := 0.25
 const RECOVERY_PORTION := 0.32
 const SOURCE_RESPONSE_SECONDS := 0.34
 const RESPAWN_RESPONSE_SECONDS := 0.42
-const SOCKET_CONTACT_TOLERANCE_METERS := 0.25
+const SOCKET_CONTACT_TOLERANCE_METERS := 0.025
+const SECOND_HAND_TOLERANCE_METERS := 0.045
+const TWO_HAND_GRIP_LIFT_METERS := 0.07
+const MAX_GRIP_SETTLE_METERS := 0.12
 const CONTACT_ALIGNMENT_WINDOW := 0.20
-const MAX_SOURCE_SURFACE_INSET_METERS := 0.55
+const MAX_SOURCE_SURFACE_INSET_METERS := 0.75
 
 const RESOURCE_PROFILES := {
 	"wood": {
 		"method":"chop", "tool":"axe", "asset":"res://assets/harvesting_v1/axe.glb",
 		"animation_profile":"human_player_chop", "contact_marker":"C1TwoHandContact",
+		"primary_grip_marker":"C1RightHandContact", "secondary_grip_marker":"C1LeftHandContact",
 		"impact_progress":0.56, "effect":"wood_chips", "fragment_count":6,
-		"grip_socket":Vector3(0.0, -0.30, 0.0), "second_hand_socket":Vector3(0.0, 0.05, 0.0),
-		"impact_socket":Vector3(0.46, 0.56, 0.0), "effect_color":Color("b96f38"),
+		"grip_socket":Vector3(0.0, -0.30, 0.0), "second_hand_socket":Vector3(0.0, -0.12, 0.0),
+		"impact_socket":Vector3(0.46, 0.56, 0.0), "impact_height_offset":0.0, "effect_color":Color("b96f38"),
 	},
 	"stone": {
 		"method":"mine", "tool":"pickaxe", "asset":"res://assets/harvesting_v1/pickaxe.glb",
 		"animation_profile":"human_player_mine", "contact_marker":"C1TwoHandContact",
+		"primary_grip_marker":"C1RightHandContact", "secondary_grip_marker":"C1LeftHandContact",
 		"impact_progress":0.58, "effect":"stone_shards", "fragment_count":5,
-		"grip_socket":Vector3(0.0, -0.32, 0.0), "second_hand_socket":Vector3(0.0, 0.04, 0.0),
-		"impact_socket":Vector3(0.57, 0.59, 0.0), "effect_color":Color("b8c4d1"),
+		"grip_socket":Vector3(0.0, -0.32, 0.0), "second_hand_socket":Vector3(0.0, -0.14, 0.0),
+		"impact_socket":Vector3(0.57, 0.59, 0.0), "impact_height_offset":0.0, "effect_color":Color("b8c4d1"),
 	},
 	"metal": {
 		"method":"mine", "tool":"pickaxe", "asset":"res://assets/harvesting_v1/pickaxe.glb",
 		"animation_profile":"human_player_mine", "contact_marker":"C1TwoHandContact",
+		"primary_grip_marker":"C1RightHandContact", "secondary_grip_marker":"C1LeftHandContact",
 		"impact_progress":0.58, "effect":"ore_glint", "fragment_count":4,
-		"grip_socket":Vector3(0.0, -0.32, 0.0), "second_hand_socket":Vector3(0.0, 0.04, 0.0),
-		"impact_socket":Vector3(0.57, 0.59, 0.0), "effect_color":Color("69e6ff"),
+		"grip_socket":Vector3(0.0, -0.32, 0.0), "second_hand_socket":Vector3(0.0, -0.14, 0.0),
+		"impact_socket":Vector3(0.57, 0.59, 0.0), "impact_height_offset":0.0, "effect_color":Color("69e6ff"),
 	},
 	"fuel": {
 		"method":"dismantle", "tool":"salvage_pry_tool", "asset":"res://assets/harvesting_v1/salvage_pry_tool.glb",
 		"animation_profile":"human_player_dismantle", "contact_marker":"C1RightHandContact",
+		"primary_grip_marker":"C1RightHandContact", "secondary_grip_marker":"",
 		"impact_progress":0.61, "effect":"salvage_sparks", "fragment_count":3,
 		"grip_socket":Vector3(0.0, -0.38, 0.0), "second_hand_socket":Vector3.ZERO,
-		"impact_socket":Vector3(0.42, 0.61, 0.0), "effect_color":Color("ffad4d"),
+		"impact_socket":Vector3(0.42, 0.61, 0.0), "impact_height_offset":0.0, "effect_color":Color("ffad4d"),
 	},
 }
 
@@ -68,6 +75,7 @@ var rejected_impacts := 0
 var attachment_updates := 0
 var cancellation_count := 0
 var highest_action_token := 0
+var bound_actor: Node3D
 
 static func contract() -> Dictionary:
 	return {
@@ -81,6 +89,8 @@ static func contract() -> Dictionary:
 		"receipt_window":RECEIPT_WINDOW,
 		"impact_target_tolerance_meters":IMPACT_TARGET_TOLERANCE_METERS,
 		"socket_contact_tolerance_meters":SOCKET_CONTACT_TOLERANCE_METERS,
+		"second_hand_tolerance_meters":SECOND_HAND_TOLERANCE_METERS,
+		"maximum_grip_settle_meters":MAX_GRIP_SETTLE_METERS,
 		"recovery_portion":RECOVERY_PORTION,
 		"action_token_policy":"monotonic_with_same_identity_reentry",
 		"exactly_once_key":"authoritative_receipt_id",
@@ -141,44 +151,184 @@ static func contact_node(actor: Node3D, marker_name: String) -> Node3D:
 	var tip := marker.find_child("Contact", false, false) as Node3D
 	return tip if is_instance_valid(tip) else marker
 
+static func contact_transform(actor: Node3D, marker_name: String) -> Transform3D:
+	var marker := contact_node(actor,marker_name)
+	if not is_instance_valid(marker):
+		return Transform3D.IDENTITY
+	if actor.has_meta("t06_motion_skeleton") and marker_name in ["C1RightHandContact","C1LeftHandContact"]:
+		var skeleton: Variant = actor.get_meta("t06_motion_skeleton")
+		if skeleton is Skeleton3D:
+			var bone_name := "R_Hand" if marker_name == "C1RightHandContact" else "L_Hand"
+			var bone: int = skeleton.find_bone(bone_name)
+			if bone >= 0:
+				return skeleton.global_transform * skeleton.get_bone_global_pose(bone) * Transform3D(Basis.IDENTITY,Vector3(0.0,0.085,0.0))
+	return marker.global_transform
+
+static func attachment_transform(actor: Node3D, profile: Dictionary) -> Transform3D:
+	var result := contact_transform(actor,String(profile.get("contact_marker","")))
+	if not String(profile.get("secondary_grip_marker","")).is_empty():
+		var primary := contact_transform(actor,String(profile.get("primary_grip_marker","")))
+		var secondary := contact_transform(actor,String(profile.get("secondary_grip_marker","")))
+		# Palm contacts sit below the mitten center. Lift the shared handle axis by
+		# the measured palm radius so both gloves close around, rather than under, it.
+		result.origin = (primary.origin+secondary.origin)*0.5+Vector3.UP*TWO_HAND_GRIP_LIFT_METERS
+	return result
+
+func bind_actor(actor: Node3D) -> bool:
+	if not is_instance_valid(actor):
+		bound_actor = null
+		return false
+	bound_actor = actor
+	return is_instance_valid(contact_node(actor,"C1RightHandContact")) and is_instance_valid(contact_node(actor,"C1LeftHandContact"))
+
+func _bound_skeleton() -> Skeleton3D:
+	if not is_instance_valid(bound_actor) or not bound_actor.has_meta("t06_motion_skeleton"):
+		return null
+	var value: Variant = bound_actor.get_meta("t06_motion_skeleton")
+	return value as Skeleton3D if value is Skeleton3D else null
+
+func _clear_grip_pose() -> void:
+	var skeleton := _bound_skeleton()
+	if is_instance_valid(skeleton):
+		skeleton.clear_bones_global_pose_override()
+
+static func _safe_perpendicular(direction: Vector3, preferred: Vector3) -> Vector3:
+	var result := preferred - direction * preferred.dot(direction)
+	if result.length_squared() <= 0.000001:
+		result = Vector3.UP.cross(direction)
+	if result.length_squared() <= 0.000001:
+		result = Vector3.RIGHT.cross(direction)
+	return result.normalized()
+
+func _pose_arm_contact(side: String, target_world: Vector3, weight: float) -> void:
+	var skeleton := _bound_skeleton()
+	if not is_instance_valid(skeleton) or weight <= 0.0001:
+		return
+	var upper := skeleton.find_bone(side + "_Upperarm")
+	var forearm := skeleton.find_bone(side + "_Forearm")
+	var hand := skeleton.find_bone(side + "_Hand")
+	var marker := contact_node(bound_actor,"C1RightHandContact" if side == "R" else "C1LeftHandContact")
+	if upper < 0 or forearm < 0 or hand < 0 or not is_instance_valid(marker):
+		return
+	var skeleton_inverse := skeleton.global_transform.affine_inverse()
+	var upper_pose := skeleton.get_bone_global_pose(upper)
+	var forearm_pose := skeleton.get_bone_global_pose(forearm)
+	var hand_pose := skeleton.get_bone_global_pose(hand)
+	var current_contact := skeleton_inverse * contact_transform(bound_actor,"C1RightHandContact" if side == "R" else "C1LeftHandContact").origin
+	var target_contact := skeleton_inverse * target_world
+	target_contact = current_contact.lerp(target_contact,clampf(weight,0.0,1.0))
+	var contact_offset_local := hand_pose.basis.inverse() * (current_contact-hand_pose.origin)
+	var target_wrist := target_contact - hand_pose.basis*contact_offset_local
+	var shoulder := upper_pose.origin
+	var elbow := forearm_pose.origin
+	var wrist := hand_pose.origin
+	var upper_length := shoulder.distance_to(elbow)
+	var lower_length := elbow.distance_to(wrist)
+	var reach := target_wrist - shoulder
+	var distance := clampf(reach.length(),absf(upper_length-lower_length)+0.0001,upper_length+lower_length-0.0001)
+	if distance <= 0.0001 or upper_length <= 0.0001 or lower_length <= 0.0001:
+		return
+	var direction := reach.normalized()
+	var bend := _safe_perpendicular(direction,elbow-shoulder)
+	var along := (upper_length*upper_length-lower_length*lower_length+distance*distance)/(2.0*distance)
+	var height := sqrt(maxf(0.0,upper_length*upper_length-along*along))
+	for iteration in 3:
+		var solved_elbow := shoulder + direction*along + bend*height
+		var upper_rotation := Quaternion((elbow-shoulder).normalized(),(solved_elbow-shoulder).normalized())
+		var solved_upper := Transform3D(Basis(upper_rotation)*upper_pose.basis,shoulder)
+		skeleton.set_bone_global_pose_override(upper,solved_upper,1.0,true)
+		skeleton.force_update_all_bone_transforms()
+		var moved_forearm := skeleton.get_bone_global_pose(forearm)
+		var moved_hand := skeleton.get_bone_global_pose(hand)
+		var lower_direction := (moved_hand.origin-moved_forearm.origin).normalized()
+		var desired_lower := (target_wrist-moved_forearm.origin).normalized()
+		if lower_direction.length_squared() <= 0.000001 or desired_lower.length_squared() <= 0.000001:
+			return
+		var forearm_rotation := Quaternion(lower_direction,desired_lower)
+		var solved_forearm := Transform3D(Basis(forearm_rotation)*moved_forearm.basis,moved_forearm.origin)
+		skeleton.set_bone_global_pose_override(forearm,solved_forearm,1.0,true)
+		skeleton.force_update_all_bone_transforms()
+		var solved_hand := skeleton.get_bone_global_pose(hand)
+		var solved_contact := solved_hand.origin + solved_hand.basis*contact_offset_local
+		var residual := target_contact-solved_contact
+		if residual.length() <= 0.0005:
+			break
+		target_wrist += residual
+		reach = target_wrist-shoulder
+		distance = clampf(reach.length(),absf(upper_length-lower_length)+0.0001,upper_length+lower_length-0.0001)
+		direction = reach.normalized()
+		bend = _safe_perpendicular(direction,elbow-shoulder)
+		along = (upper_length*upper_length-lower_length*lower_length+distance*distance)/(2.0*distance)
+		height = sqrt(maxf(0.0,upper_length*upper_length-along*along))
+	# Distribute the small remaining mitten/palm offset across the sleeve and hand.
+	# Larger unreachable targets are left untouched and fail the socket gate.
+	var settled_hand := skeleton.get_bone_global_pose(hand)
+	var settled_contact := settled_hand.origin+settled_hand.basis*contact_offset_local
+	var settle_residual := target_contact-settled_contact
+	var world_residual := skeleton.global_transform.basis*settle_residual
+	if world_residual.length() <= MAX_GRIP_SETTLE_METERS:
+		var settled_forearm := skeleton.get_bone_global_pose(forearm)
+		settled_forearm.origin += settle_residual*0.5
+		skeleton.set_bone_global_pose_override(forearm,settled_forearm,1.0,true)
+		skeleton.force_update_all_bone_transforms()
+		settled_hand = skeleton.get_bone_global_pose(hand)
+		settled_contact = settled_hand.origin+settled_hand.basis*contact_offset_local
+		settled_hand.origin += target_contact-settled_contact
+		skeleton.set_bone_global_pose_override(hand,settled_hand,1.0,true)
+		skeleton.force_update_all_bone_transforms()
+
 static func _contact_weight(progress: float, impact_progress: float) -> float:
 	var proximity := 1.0 - clampf(absf(progress - impact_progress) / CONTACT_ALIGNMENT_WINDOW, 0.0, 1.0)
 	return proximity * proximity * (3.0 - 2.0 * proximity)
+
+static func _anchor_socket(profile: Dictionary) -> Vector3:
+	var grip: Vector3 = profile.grip_socket
+	return (grip+Vector3(profile.second_hand_socket))*0.5 if not String(profile.get("secondary_grip_marker","")).is_empty() else grip
 
 static func contact_target(source_center: Vector3, attachment_transform: Transform3D,
 		profile: Dictionary) -> Vector3:
 	if not source_center.is_finite() or profile.is_empty():
 		return source_center
-	var local_reach: Vector3 = Vector3(profile.impact_socket) - Vector3(profile.grip_socket)
-	var toward_hand := attachment_transform.origin - source_center
+	var target_center := source_center+Vector3.UP*float(profile.get("impact_height_offset",0.0))
+	var local_reach: Vector3 = Vector3(profile.impact_socket)-_anchor_socket(profile)
+	var toward_hand := attachment_transform.origin-target_center
 	if toward_hand.length_squared() <= 0.000001 or local_reach.length_squared() <= 0.000001:
-		return source_center
+		return target_center
 	# Resolve the visual hit on the near source surface rather than its center.
 	# The inset is bounded so the simulation source remains the target authority.
 	var inset := clampf(toward_hand.length() - local_reach.length(), 0.0, MAX_SOURCE_SURFACE_INSET_METERS)
-	return source_center + toward_hand.normalized() * inset
+	return target_center+toward_hand.normalized()*inset
 
 static func _socket_solution(attachment_transform: Transform3D, target_position: Vector3,
 		profile: Dictionary, force_contact := false) -> Dictionary:
 	var grip_socket: Vector3 = profile.grip_socket
 	var impact_socket: Vector3 = profile.impact_socket
+	var anchor_socket := _anchor_socket(profile)
 	var hand_basis := attachment_transform.basis.orthonormalized()
-	var base_transform := Transform3D(hand_basis, attachment_transform.origin - hand_basis * grip_socket)
-	var local_reach := impact_socket - grip_socket
+	var base_transform := Transform3D(hand_basis,attachment_transform.origin-hand_basis*anchor_socket)
+	var local_reach := impact_socket-anchor_socket
 	var world_reach := target_position - attachment_transform.origin
 	if local_reach.length_squared() <= 0.000001 or world_reach.length_squared() <= 0.000001:
 		return {"transform":base_transform,"grip_error_m":0.0,"impact_error_m":INF,"alignment_valid":false}
-	var target_in_hand_space := hand_basis.inverse() * world_reach.normalized()
-	var alignment := Basis(Quaternion(local_reach.normalized(), target_in_hand_space)).orthonormalized()
-	var solved_basis := (hand_basis * alignment).orthonormalized()
-	# The least-squares origin keeps the authored grip and impact sockets equally
-	# close to their two authorities without scaling or deforming the finished tool.
-	var grip_origin := attachment_transform.origin - solved_basis * grip_socket
-	var impact_origin := target_position - solved_basis * impact_socket
-	var solved_transform := Transform3D(solved_basis, (grip_origin + impact_origin) * 0.5)
+	# Build the socket axis directly in world space. Using a hand-space delta here
+	# would compose the rotation twice and put both handle sockets on one side.
+	var world_direction := world_reach.normalized()
+	var solved_basis := Basis(Quaternion(local_reach.normalized(),world_direction)).orthonormalized()
+	if not String(profile.get("secondary_grip_marker","")).is_empty():
+		var handle_axis := (Vector3(profile.second_hand_socket)-grip_socket).normalized()
+		var current_roll := _safe_perpendicular(world_direction,solved_basis*handle_axis)
+		# Character 1's anatomical right is local -X in the imported rig.
+		var desired_roll := _safe_perpendicular(world_direction,-attachment_transform.basis.x.normalized())
+		var roll_angle := current_roll.signed_angle_to(desired_roll,world_direction)
+		solved_basis = (Basis(world_direction,roll_angle)*solved_basis).orthonormalized()
+	# The live one/two-hand attachment is absolute. Any authored reach mismatch is
+	# exposed at the impact socket and fails closed; midpoint error is never hidden.
+	var anchor_position := attachment_transform.origin
+	var solved_origin := anchor_position-solved_basis*anchor_socket
+	var solved_transform := Transform3D(solved_basis,solved_origin)
 	var weight := 1.0 if force_contact else _contact_weight(float(profile.get("presented_progress", 0.0)), float(profile.impact_progress))
 	var presented := base_transform.interpolate_with(solved_transform, weight)
-	var grip_error := (presented * grip_socket).distance_to(attachment_transform.origin)
+	var grip_error := (presented*anchor_socket).distance_to(anchor_position)
 	var impact_error := (presented * impact_socket).distance_to(target_position)
 	return {
 		"transform":presented,
@@ -193,9 +343,29 @@ func _apply_tool_contact(tool: Node3D, attachment_transform: Transform3D,
 	posed_profile.presented_progress = float(active.get("progress", 0.0))
 	var solution := _socket_solution(attachment_transform,target_position,posed_profile,force_contact)
 	tool.global_transform = solution.transform
-	active.grip_error_m = float(solution.grip_error_m)
+	var primary_error := 0.0
+	var secondary_error := 0.0
+	var secondary_name := String(profile.get("secondary_grip_marker",""))
+	var second_socket: Vector3 = profile.get("second_hand_socket",Vector3.ZERO)
+	var primary_name := String(profile.get("primary_grip_marker",""))
+	var primary_target: Vector3 = tool.global_transform*Vector3(profile.grip_socket)
+	var weight := 1.0 if force_contact else _contact_weight(float(posed_profile.presented_progress),float(profile.impact_progress))
+	if not secondary_name.is_empty():
+		_pose_arm_contact("R",primary_target,weight)
+	var primary := contact_node(bound_actor,primary_name) if is_instance_valid(bound_actor) else null
+	primary_error = contact_transform(bound_actor,primary_name).origin.distance_to(primary_target) if is_instance_valid(primary) else float(solution.grip_error_m)
+	if not secondary_name.is_empty():
+		var secondary_target: Vector3 = tool.global_transform * second_socket
+		_pose_arm_contact("L",secondary_target,weight)
+		var secondary := contact_node(bound_actor,secondary_name) if is_instance_valid(bound_actor) else null
+		secondary_error = contact_transform(bound_actor,secondary_name).origin.distance_to(secondary_target) if is_instance_valid(secondary) else INF
+	active.grip_error_m = primary_error
 	active.impact_error_m = float(solution.impact_error_m)
-	active.contact_alignment_valid = bool(solution.alignment_valid)
+	active.secondary_grip_error_m = secondary_error
+	active.contact_alignment_valid = float(solution.impact_error_m) <= SOCKET_CONTACT_TOLERANCE_METERS and primary_error <= SOCKET_CONTACT_TOLERANCE_METERS and secondary_error <= SECOND_HAND_TOLERANCE_METERS
+	solution.grip_error_m = primary_error
+	solution.secondary_grip_error_m = secondary_error
+	solution.alignment_valid = active.contact_alignment_valid
 	return solution
 
 static func _finite_progress(value: Variant) -> bool:
@@ -374,6 +544,7 @@ func begin_action(action: Dictionary, actor_id := -1) -> bool:
 
 func update_action(action: Dictionary, attachment_transform: Transform3D,
 		target_position: Vector3, actor_present := true) -> Dictionary:
+	_clear_grip_pose()
 	if not actor_present:
 		cancel("actor_not_presented")
 		return descriptor()
@@ -399,6 +570,7 @@ func update_action(action: Dictionary, attachment_transform: Transform3D,
 
 func synchronize_committed_contact(action: Dictionary, attachment_transform: Transform3D,
 		target_position: Vector3, actor_id: int) -> Dictionary:
+	_clear_grip_pose()
 	if not valid_action(action) or actor_id < 0 or not target_position.is_finite():
 		return descriptor()
 	if active.is_empty() or int(active.get("action_token", -1)) != int(action.action_token) or String(active.get("source_id", "")) != String(action.source_id) or int(active.get("actor_id", -1)) != actor_id:
@@ -503,12 +675,14 @@ func accept_committed_impact(receipt: Dictionary) -> bool:
 	return true
 
 func cancel(reason := "cancelled") -> void:
+	_clear_grip_pose()
 	if not active.is_empty():
 		cancellation_count += 1
 	_hide_tools()
 	active = {"last_cancel_reason":reason} if not reason.is_empty() else {}
 
 func reset() -> void:
+	_clear_grip_pose()
 	_hide_tools()
 	active = {}
 	fragment_descriptors.clear()
@@ -586,11 +760,14 @@ func descriptor() -> Dictionary:
 		"raw_progress":float(active.get("raw_progress", 0.0)),
 		"tool":String(active.get("profile", {}).get("tool", "")),
 		"contact_marker":String(active.get("profile", {}).get("contact_marker", "")),
+		"primary_grip_marker":String(active.get("profile", {}).get("primary_grip_marker", "")),
+		"secondary_grip_marker":String(active.get("profile", {}).get("secondary_grip_marker", "")),
 		"contact_ready":bool(active.get("contact_ready", false)),
 		"commit_contact_armed":bool(active.get("commit_contact_armed", false)),
 		"contact_alignment_valid":bool(active.get("contact_alignment_valid", false)),
 		"grip_error_m":float(active.get("grip_error_m", INF)),
 		"impact_error_m":float(active.get("impact_error_m", INF)),
+		"secondary_grip_error_m":float(active.get("secondary_grip_error_m", INF)),
 		"has_committed_in_context":bool(active.get("has_committed", false)),
 		"last_cancel_reason":String(active.get("last_cancel_reason", "")),
 		"active_fragment_descriptors":fragment_descriptors.size(),

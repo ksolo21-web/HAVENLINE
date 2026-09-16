@@ -19,7 +19,8 @@ func action(resource: String, token: int, progress: float, source := "source") -
 
 func contact_target(resource: String) -> Vector3:
 	var profile := Harvest.profile_for_resource(resource)
-	return Vector3(profile.impact_socket) - Vector3(profile.grip_socket)
+	var anchor := (Vector3(profile.grip_socket)+Vector3(profile.second_hand_socket))*0.5 if not String(profile.secondary_grip_marker).is_empty() else Vector3(profile.grip_socket)
+	return Vector3(profile.impact_socket)-anchor
 
 func receipt(resource: String, token: int, receipt_id: String, source := "source", actor_id := 7) -> Dictionary:
 	return {
@@ -40,6 +41,8 @@ func run() -> void:
 	check("one equipped tool is the hard limit", contract.maximum_equipped_tools == 1)
 	check("effect descriptor pools are bounded", contract.maximum_fragment_descriptors == 32 and contract.maximum_impact_pulses == 8)
 	check("committed impact must stay on its presented source", contract.impact_target_tolerance_meters == 0.25)
+	check("real hand sockets use centimeter-scale tolerances", contract.socket_contact_tolerance_meters == 0.025 and contract.second_hand_tolerance_meters == 0.045)
+	check("bounded palm settle cannot hide an unreachable tool", contract.maximum_grip_settle_meters == 0.12)
 	check("only an authoritative integration beat may arm impact", contract.authoritative_commit_arming_required)
 	check("source visibility follows simulation state only", contract.source_visibility_authority == "simulation_units_and_respawn_only")
 	check("impact effects use bounded visible geometry", contract.effect_geometry == "bounded_visible_mesh_pools")
@@ -68,6 +71,15 @@ func run() -> void:
 
 	var harvest := Harvest.new()
 	root.add_child(harvest)
+	var actor := Node3D.new()
+	root.add_child(actor)
+	var right_hand := Marker3D.new()
+	right_hand.name = "C1RightHandContact"
+	actor.add_child(right_hand)
+	var left_hand := Marker3D.new()
+	left_hand.name = "C1LeftHandContact"
+	actor.add_child(left_hand)
+	check("actual primary and secondary hand contacts bind",harvest.bind_actor(actor))
 	var source_visual := Node3D.new()
 	root.add_child(source_visual)
 	check("source presentation binds without owning units", harvest.bind_source("tree:0","wood",source_visual,3))
@@ -79,6 +91,10 @@ func run() -> void:
 	check("valid action requires a bound presented actor", not harvest.begin_action(action("wood",1,0.56)))
 
 	var input := action("wood",10,0.56,"tree:0")
+	var wood_profile := Harvest.profile_for_resource("wood")
+	var wood_anchor := (Vector3(wood_profile.grip_socket)+Vector3(wood_profile.second_hand_socket))*0.5
+	right_hand.position = Vector3(wood_profile.grip_socket)-wood_anchor
+	left_hand.position = Vector3(wood_profile.second_hand_socket)-wood_anchor
 	var before := input.duplicate(true)
 	check("valid wood action equips authored axe", harvest.begin_action(input,7))
 	check("begin cannot mutate caller action", input == before)
@@ -90,8 +106,8 @@ func run() -> void:
 	check("live tool exposes authored asset identity", String(harvest.tool_nodes.axe.get_meta("t09_authored_asset","")).ends_with("axe.glb"))
 	check("unarmed committed receipt cannot bypass the integration beat", not harvest.accept_committed_impact(receipt("wood",10,"unarmed","tree:0")))
 	var wood_contact := harvest.synchronize_committed_contact(input,Transform3D.IDENTITY,wood_target,7)
-	check("committed axe solves grip and impact sockets", wood_contact.contact_alignment_valid and wood_contact.grip_error_m < 0.001 and wood_contact.impact_error_m < 0.001,wood_contact)
-	check("axe socket pixels are bound to hand and target authority", (harvest.tool_nodes.axe.global_transform * Vector3(Harvest.profile_for_resource("wood").grip_socket)).distance_to(Vector3.ZERO) < 0.001 and (harvest.tool_nodes.axe.global_transform * Vector3(Harvest.profile_for_resource("wood").impact_socket)).distance_to(wood_target) < 0.001)
+	check("committed axe solves both hands and impact sockets", wood_contact.contact_alignment_valid and wood_contact.grip_error_m < 0.001 and wood_contact.secondary_grip_error_m < 0.001 and wood_contact.impact_error_m < 0.001,wood_contact)
+	check("axe socket pixels are bound to both hand and target authorities", (harvest.tool_nodes.axe.global_transform*Vector3(wood_profile.grip_socket)).distance_to(right_hand.global_position) < 0.001 and (harvest.tool_nodes.axe.global_transform*Vector3(wood_profile.second_hand_socket)).distance_to(left_hand.global_position) < 0.001 and (harvest.tool_nodes.axe.global_transform*Vector3(wood_profile.impact_socket)).distance_to(wood_target) < 0.001)
 	check("committed wood impact is accepted once", harvest.accept_committed_impact(receipt("wood",10,"gather:wood:10","tree:0")))
 	check("same receipt cannot replay", not harvest.accept_committed_impact(receipt("wood",10,"gather:wood:10","tree:0")))
 	harvest.synchronize_committed_contact(input,Transform3D.IDENTITY,wood_target,7)
@@ -102,6 +118,9 @@ func run() -> void:
 	for resource_value in ["stone","metal","fuel"]:
 		var resource := String(resource_value)
 		var profile := Harvest.profile_for_resource(resource)
+		var anchor := (Vector3(profile.grip_socket)+Vector3(profile.second_hand_socket))*0.5 if not String(profile.secondary_grip_marker).is_empty() else Vector3(profile.grip_socket)
+		right_hand.position = Vector3(profile.grip_socket)-anchor
+		left_hand.position = Vector3(profile.second_hand_socket)-anchor
 		var source := resource + ":0"
 		var current := action(resource,token,float(profile.impact_progress),source)
 		check(resource + " action begins", harvest.begin_action(current,7))
@@ -109,7 +128,7 @@ func run() -> void:
 		var state := harvest.update_action(current,Transform3D.IDENTITY,target)
 		check(resource + " uses exact tool and contact contract", state.tool == profile.tool and state.contact_marker == profile.contact_marker and not state.contact_ready)
 		var contact := harvest.synchronize_committed_contact(current,Transform3D.IDENTITY,target,7)
-		check(resource + " socket solve stays inside contact tolerance", contact.contact_alignment_valid and contact.grip_error_m <= 0.25 and contact.impact_error_m <= 0.25,contact)
+		check(resource + " socket solve stays inside strict contact tolerance", contact.contact_alignment_valid and contact.grip_error_m <= Harvest.SOCKET_CONTACT_TOLERANCE_METERS and contact.impact_error_m <= Harvest.SOCKET_CONTACT_TOLERANCE_METERS and contact.secondary_grip_error_m <= Harvest.SECOND_HAND_TOLERANCE_METERS,contact)
 		check(resource + " committed impact is accepted", harvest.accept_committed_impact(receipt(resource,token,"gather:%s:%d" % [resource,token],source)))
 		token += 1
 	var effects := harvest.fragment_descriptors.map(func(row): return row.effect)
@@ -135,6 +154,10 @@ func run() -> void:
 	check("same token cannot be rebound to another source or actor", not harvest.begin_action(action("stone",90,0.58,"stone:rebound"),8))
 	var bound := action("metal",100,0.58,"metal:bound")
 	check("new higher action token starts", harvest.begin_action(bound,7))
+	var bound_profile := Harvest.profile_for_resource("metal")
+	var bound_anchor := (Vector3(bound_profile.grip_socket)+Vector3(bound_profile.second_hand_socket))*0.5
+	right_hand.position = Vector3(bound_profile.grip_socket)-bound_anchor
+	left_hand.position = Vector3(bound_profile.second_hand_socket)-bound_anchor
 	var bound_target := contact_target("metal")
 	harvest.update_action(bound,Transform3D.IDENTITY,bound_target)
 	harvest.synchronize_committed_contact(bound,Transform3D.IDENTITY,bound_target,7)

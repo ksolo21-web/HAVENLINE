@@ -95,7 +95,7 @@ def main() -> None:
                 reference_rows.append({"source_id": row.get("source_id"), "path": row.get("path"), "sha256": row.get("sha256")})
 
     source = SCRIPT.read_text(encoding="utf-8") if SCRIPT.exists() else ""
-    for token in ["simulation_authoritative", "emits_gameplay_events", "mutates_inventory", "RECEIPT_WINDOW", "MAX_FRAGMENT_DESCRIPTORS", "MAX_IMPACT_PULSES", "SOCKET_CONTACT_TOLERANCE_METERS", "impact_socket", "grip_socket"]:
+    for token in ["simulation_authoritative", "emits_gameplay_events", "mutates_inventory", "RECEIPT_WINDOW", "MAX_FRAGMENT_DESCRIPTORS", "MAX_IMPACT_PULSES", "SOCKET_CONTACT_TOLERANCE_METERS", "SECOND_HAND_TOLERANCE_METERS", "MAX_GRIP_SETTLE_METERS", "impact_socket", "grip_socket", "second_hand_socket", "primary_grip_marker", "secondary_grip_marker"]:
         if token not in source:
             errors.append(f"presentation contract token missing: {token}")
     main_source = MAIN.read_text(encoding="utf-8") if MAIN.exists() else ""

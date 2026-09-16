@@ -99,7 +99,7 @@ TOOLS = {
         "animation_profile": "human_player_chop",
         "contact_marker": "C1TwoHandContact",
         "grip_socket": [0.0, -0.30, 0.0],
-        "second_hand_socket": [0.0, 0.05, 0.0],
+        "second_hand_socket": [0.0, -0.12, 0.0],
         "impact_socket": [0.46, 0.56, 0.0],
     },
     "pickaxe": {
@@ -109,7 +109,7 @@ TOOLS = {
         "animation_profile": "human_player_mine",
         "contact_marker": "C1TwoHandContact",
         "grip_socket": [0.0, -0.32, 0.0],
-        "second_hand_socket": [0.0, 0.04, 0.0],
+        "second_hand_socket": [0.0, -0.14, 0.0],
         "impact_socket": [0.57, 0.59, 0.0],
     },
     "salvage_pry_tool": {
