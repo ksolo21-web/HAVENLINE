@@ -3,6 +3,7 @@ name: Havenline T44-T52 Connected Region Preparation
 on:
   pull_request:
     paths:
+      - 'Docs/Production/T12/**'
       - 'Docs/Production/T44/**'
       - 'Docs/Production/T45/**'
       - 'Docs/Production/T46/**'
@@ -13,6 +14,7 @@ on:
       - 'Docs/Production/T51/**'
       - 'Docs/Production/T52/**'
       - 'Docs/Production/T44_T52_PARALLEL_PREP_MANIFEST.json'
+      - 'Docs/Production/T44_T52_T12_CONSUMER_BINDINGS.json'
       - 'tools/havenline/t44_t52/**'
       - '.github/workflows/havenline-t44-t52-preparation.yml'
   workflow_dispatch:
@@ -25,7 +27,11 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
-      - name: Compile activation preflight
-        run: python -m py_compile tools/havenline/t44_t52/prepare_activation.py
+      - name: Compile preparation validators
+        run: |
+          python -m py_compile tools/havenline/t44_t52/prepare_activation.py
+          python -m py_compile tools/havenline/t44_t52/validate_t12_region_bindings.py
       - name: Validate T44-T52 preparation
         run: python tools/havenline/t44_t52/prepare_activation.py --all
+      - name: Validate T44-T52 current T12 region bindings
+        run: python tools/havenline/t44_t52/validate_t12_region_bindings.py
