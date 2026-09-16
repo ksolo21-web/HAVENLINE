@@ -23,6 +23,11 @@ T07_INTEGRATED_SOURCE="94b3f6c5097356a3857ebd13a77fb1e316eb06ae"
 T07_INTEGRATED_RUN=34991148246
 T07_ARTIFACT_ID=10405978547
 T07_ARTIFACT_DIGEST="sha256:c243bb1df0625a7fabce9c6a842d88a76e08bca89d416f88ad0ea0a972ec0ada"
+T08_INTEGRATED_SOURCE="9d56ea8ae972d0a0705ff8b985e13fab31dde493"
+T08_INTEGRATED_RUN=35035980827
+T08_ARTIFACT_ID=10423956033
+T08_ARTIFACT_DIGEST="sha256:d2e58a9b4736e690b3b9817536b90940fb605e25b47a3ae24146aa8f9440c5c7"
+T08_EVIDENCE_INDEX_SHA256="17f27e449466524f9838cc592d4f637738f8e4cafd9475f1dc25bc7c2ca72c16"
 T05_SCORE_DIMENSIONS={
     "C1":{"reference_fidelity","visual_language","cross_view_consistency"},
     "C2":{"geometry_contact","clipping_seams","intentional_gap_integrity","cross_view_integrity"},
@@ -173,6 +178,47 @@ def t07_completion_errors(record,ledger,critic_review):
         errors += _strict_score_errors("T07 recorded critics",review_scores)
     return errors
 
+def t08_completion_errors(record,ledger,critic_review):
+    """Fail closed on T08 exact integrated evidence and complete-reference review."""
+    errors=[]
+    if record.get("status")!="PASS" or record.get("accepted_source")!=T08_INTEGRATED_SOURCE or record.get("integrated_source")!=T08_INTEGRATED_SOURCE:
+        errors.append("T08 verified completion record is not bound to the exact integrated source")
+    acceptance=record.get("acceptance_rule",{})
+    if acceptance.get("mandatory_dimension_operator")!=">" or acceptance.get("mandatory_dimension_threshold")!=9.0 or acceptance.get("unrounded") is not True or acceptance.get("score_averaging_used") is not False:
+        errors.append("T08 verified completion strict acceptance rule is incomplete")
+    identity=record.get("source_identity",{})
+    if identity.get("shipping_call_site_exercised") is not True or identity.get("simulation_remains_inventory_authority") is not True or identity.get("t07_remains_action_selector") is not True or identity.get("t06_remains_character_motion_authority") is not True or identity.get("save_schema_changed") is not False or identity.get("exact_artifact_index_hashes_verified")!=534 or identity.get("exact_artifact_index_hash_mismatches")!=0 or identity.get("locked_reference_frames_verified")!=44 or identity.get("locked_source_recordings_verified")!=2:
+        errors.append("T08 source authority or complete evidence identity is incomplete")
+    mechanical=record.get("mechanical_evidence",{})
+    if mechanical.get("all_passed") is not True or mechanical.get("functional_suites")!=23 or mechanical.get("total_assertions_checks",0)<1535 or mechanical.get("source_contract_checks")!=24 or mechanical.get("save_matrix_cases")!=7 or mechanical.get("adaptive_device_cases")!=6 or mechanical.get("capture_manifests")!=18 or mechanical.get("unique_pngs")!=39 or mechanical.get("candidate_video_frames")!=[60,148,148] or mechanical.get("route_trace_rows")!=448 or mechanical.get("routes_accepted")!=6 or mechanical.get("routes_completed")!=6 or mechanical.get("routes_rejected")!=0 or mechanical.get("active_transfers_at_end")!=0 or mechanical.get("destination_pulse_samples_per_route")!=26 or mechanical.get("conservation_passed") is not True or mechanical.get("render_log_errors")!=0 or mechanical.get("native_3840x2160_scale1_evidence") is not True or mechanical.get("physical_device_native_4k60_certified") is not False:
+        errors.append("T08 regression, route, conservation, matrix or capture evidence is incomplete")
+    reviews=record.get("independent_reviews",{})
+    scores=reviews.get("scores",{})
+    if reviews.get("status")!="PASS" or reviews.get("integrated_source")!=T08_INTEGRATED_SOURCE or reviews.get("workflow_run")!=T08_INTEGRATED_RUN or reviews.get("artifact_id")!=T08_ARTIFACT_ID or reviews.get("artifact_digest")!=T08_ARTIFACT_DIGEST or reviews.get("complete_evidence_index_sha256")!=T08_EVIDENCE_INDEX_SHA256 or reviews.get("score_averaging_used") is not False or reviews.get("critic_blockers")!=[] or reviews.get("valid_unresolved_defects")!=[] or set(scores)!={"C2","C3","C4","C6"}:
+        errors.append("T08 independent critic closure is incomplete")
+    else:
+        errors += _strict_score_errors("T08 critics",scores)
+    performance=record.get("performance_critic",{})
+    if performance.get("critic")!="C6" or performance.get("candidate_source")!=T08_INTEGRATED_SOURCE or performance.get("run_id")!=T08_INTEGRATED_RUN or performance.get("score")!=9.61 or performance.get("passed") is not True or performance.get("post_warmup_equal_adjacent_windows_passed")!=12 or performance.get("post_warmup_equal_adjacent_windows_total")!=12 or performance.get("errors")!=[]:
+        errors.append("T08 fresh integrated C6 closure is incomplete")
+    gates=record.get("gates",{})
+    if set(gates)!={f"G{i}" for i in range(1,15)} or any(value is not True for value in gates.values()):
+        errors.append("T08 G1-G14 closure is incomplete")
+    artifact=record.get("artifacts",{}).get("integrated_regression_and_evidence",{})
+    if artifact.get("id")!=T08_ARTIFACT_ID or artifact.get("run_id")!=T08_INTEGRATED_RUN or artifact.get("digest")!=T08_ARTIFACT_DIGEST:
+        errors.append("T08 integrated artifact identity is invalid")
+    if ledger.get("task_id")!="T08" or ledger.get("candidate_commit")!=T08_INTEGRATED_SOURCE or ledger.get("integrated_commit")!=T08_INTEGRATED_SOURCE or ledger.get("integrated_verification_run")!=T08_INTEGRATED_RUN or ledger.get("unresolved_mandatory_count")!=0 or ledger.get("critic_approval_pending") is not False or ledger.get("task_approved") is not True:
+        errors.append("T08 defect ledger is not bound to the completed source")
+    unresolved=[row.get("id") for row in ledger.get("defects",[]) if row.get("status") not in {"VERIFIED_CLOSED","REJECTED_AS_INVALID_FINDING"}]
+    if unresolved:
+        errors.append("T08 defect ledger has unresolved entries: "+",".join(str(x) for x in unresolved))
+    review_scores=critic_review.get("scores",{})
+    if critic_review.get("status")!="PASS" or critic_review.get("approval") is not True or critic_review.get("integrated_source")!=T08_INTEGRATED_SOURCE or critic_review.get("workflow_run")!=T08_INTEGRATED_RUN or critic_review.get("artifact_id")!=T08_ARTIFACT_ID or critic_review.get("artifact_digest")!=T08_ARTIFACT_DIGEST or critic_review.get("complete_evidence_index_sha256")!=T08_EVIDENCE_INDEX_SHA256 or critic_review.get("indexed_files_verified")!=534 or critic_review.get("indexed_hash_mismatches")!=0 or critic_review.get("unresolved_mandatory_defects")!=[] or set(review_scores)!={"C2","C3","C4","C6"}:
+        errors.append("T08 independent critic record is incomplete")
+    else:
+        errors += _strict_score_errors("T08 recorded critics",review_scores)
+    return errors
+
 def git_blob_sha(path:pathlib.Path)->str:
     data=path.read_bytes()
     return hashlib.sha1(b"blob "+str(len(data)).encode()+b"\0"+data).hexdigest()
@@ -215,6 +261,8 @@ def main():
     t05_status=graph["tasks"]["T05"]["status"]
     t06_status=graph["tasks"]["T06"]["status"]
     t07_status=graph["tasks"]["T07"]["status"]
+    t08_status=graph["tasks"]["T08"]["status"]
+    t09_status=graph["tasks"]["T09"]["status"]
     if t03_status not in {"FIX_REQUIRED","APPROVED"}:errors.append("T03 must be FIX_REQUIRED or APPROVED")
     if t03_status=="FIX_REQUIRED":
         if any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[3:]):errors.append("T04+ must remain LOCKED until T03 approval")
@@ -236,6 +284,13 @@ def main():
                         errors.append("invalid T07 post-T06 state")
                     if t07_status!="APPROVED" and any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[7:]):
                         errors.append("T08+ must remain LOCKED until T07 is approved and each later task is separately prepared")
+                    if t07_status=="APPROVED":
+                        if t08_status not in {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}:
+                            errors.append("invalid T08 post-T07 state")
+                        if t08_status!="APPROVED" and any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[8:]):
+                            errors.append("T09+ must remain LOCKED until T08 is approved and each later task is separately prepared")
+                        if t08_status=="APPROVED" and t09_status not in {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}:
+                            errors.append("invalid T09 post-T08 state")
             elif any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[5:]):
                 errors.append("T06+ must remain LOCKED until T05 is approved and T06 is separately prepared")
     acc=graph["acceptance_rule"]
@@ -266,6 +321,7 @@ def main():
     tg=load_json(DOCS/"task-gates.json")
     if t03_status=="APPROVED":
         expected_approved=(
+            ["T01","T02","T03","T04","T05","T06","T07","T08"] if t08_status=="APPROVED" else
             ["T01","T02","T03","T04","T05","T06","T07"] if t07_status=="APPROVED" else
             ["T01","T02","T03","T04","T05","T06"] if t06_status=="APPROVED" else
             ["T01","T02","T03","T04","T05"] if t05_status=="APPROVED" else
@@ -324,6 +380,16 @@ def main():
                             errors += t07_completion_errors(load_json(t07_completion),load_json(t07_ledger),load_json(t07_review))
                         if graph["tasks"]["T08"]["status"]=="LOCKED":
                             if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must clear active task while T08 is locked")
+                        elif graph["tasks"]["T08"]["status"]=="APPROVED":
+                            t08_completion=DOCS/"T08/verified-completion.json"
+                            t08_ledger=DOCS/"T08/defect-ledger.json"
+                            t08_review=DOCS/"T08/independent-critic-review.json"
+                            if not t08_completion.exists() or not t08_ledger.exists() or not t08_review.exists():
+                                errors.append("T08 verified completion, defect ledger or critic record missing")
+                            else:
+                                errors += t08_completion_errors(load_json(t08_completion),load_json(t08_ledger),load_json(t08_review))
+                            if tg.get("active_task")!="T09" or tg.get("active_status")!=graph["tasks"]["T09"]["status"]:
+                                errors.append("task-gates must identify T09 as the locked next task after T08 approval")
                         elif tg.get("active_task")!="T08" or tg.get("active_status")!=graph["tasks"]["T08"]["status"]:
                             errors.append("task-gates must match active T08 state")
                     else:

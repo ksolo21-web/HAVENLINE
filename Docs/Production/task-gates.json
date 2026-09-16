@@ -7,8 +7,8 @@
   "ordered_tasks": [
     "T01","T02","T03","T04","T05","T06","T07","T08","T09","T10","T11","T12","T13","T14","T15","T16","T17","T18","T19","T20","T21","T22","T23","T24","T25","T26","T27","T28","T29","T30","T31","T32","T33","T34","T35","T36","T37","T38","T39","T40","T41","T42","T43","T44","T45","T46","T47","T48","T49","T50","T51","T52","T53","T54","T55","T56","T57","T58","T59","T60","T61","T62","T63","T64","T65","T66","T67","T68","T69","T70"
   ],
-  "approved_tasks": ["T01","T02","T03","T04","T05","T06","T07"],
-  "approved_task_count": 7,
+  "approved_tasks": ["T01","T02","T03","T04","T05","T06","T07","T08"],
+  "approved_task_count": 8,
   "legacy_approval_policy": {
     "T01_T02_not_retroactively_revoked": true
   },
@@ -20,22 +20,23 @@
     "all_applicable_gates_must_pass": true,
     "no_unresolved_mandatory_defects": true
   },
-  "active_task": "T08",
-  "active_task_title": "Visible inventory, physical carrying and transfers",
-  "active_status": "INTEGRATION_READY",
-  "active_frozen_scope": "Docs/Production/T08/FROZEN_SCOPE.md",
-  "active_task_packet": "Docs/Production/T08/TASK_PACKET.md",
-  "active_base_integration_commit": "7744b9f6a063da3385ce10992ef732ba2c669890",
-  "active_candidate_source": "258f2c9a53f8b5460fb54a7f298fbb887c5aba1e",
+  "active_task": "T09",
+  "active_task_title": "Harvesting and automatic acquisition",
+  "active_status": "LOCKED",
+  "active_frozen_scope": null,
+  "active_task_packet": null,
+  "active_base_integration_commit": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
+  "active_candidate_source": null,
   "active_candidate_run": null,
-  "active_tests": "Local combined T01-T08 regression: 23 suites / 1517 checks passed; exact remote evidence rerun pending",
-  "active_evidence": "Docs/Production/Evidence/T08/",
-  "active_critic_state": "PENDING_EXACT_SOURCE_EVIDENCE_AND_INDEPENDENT_REVIEW",
+  "active_tests": "T08 closure passed 23 suites / 1535 checks; T09 is not packeted, assigned or authorized to build",
+  "active_evidence": "Docs/Production/Evidence/T09/",
+  "active_critic_state": "LOCKED_PENDING_PACKET_OWNER_AND_PATH_RESERVATION",
   "task04_plus_runtime_locked": false,
   "task05_plus_runtime_locked": false,
   "task06_plus_runtime_locked": false,
   "task07_plus_runtime_locked": false,
   "task08_plus_runtime_locked": false,
+  "task09_plus_runtime_locked": true,
   "states": ["LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","BUILT_PENDING_DEPENDENCY","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"],
   "coordination_files": {
     "dependency_graph": "Docs/Production/DEPENDENCY_GRAPH.json",
@@ -63,13 +64,15 @@
     "T04": {"status":"APPROVED","accepted_source":"e08fd37e9a999d878644c03089c4b4b253bd7472","score":9.5,"minimum_mandatory_dimension_score":9.5,"gate_operator":"> 9.0","visual_status":"PASS_BY_CORROBORATED_EVIDENCE","evidence_run":34738864775,"closeout_run":34745334414,"record":"Docs/Production/T04/verified-completion.json","later_regression_reopens_task":true},
     "T05": {"status":"APPROVED","accepted_source":"fa6fa70f154f3757d22303522ca3f6de2c3d391f","score":9.1,"minimum_mandatory_dimension_score":9.1,"visual_minimum_mandatory_dimension_score":9.3,"gate_operator":"> 9.0","visual_status":"PASS","integrated_evidence_run":34824259431,"primary_review_run":34825220341,"recovery_and_closeout_run":34839506095,"integration_regression_run":34838425141,"record":"Docs/Production/T05/verified-completion.json","later_regression_reopens_task":true},
     "T06": {"status":"APPROVED","accepted_source":"47f86fae25b099abb5c7096c37ca7495453b2b8f","integrated_source":"91f35f331aaabe2b1785b10c0d911f20da6f12d9","score":9.31,"minimum_mandatory_dimension_score":9.31,"gate_operator":"> 9.0","visual_status":"PASS","isolated_review_run":34934399997,"integrated_evidence_run":34970154124,"record":"Docs/Production/T06/verified-completion.json","later_regression_reopens_task":true},
-    "T07": {"status":"APPROVED","accepted_source":"0a30dc0859541626eb6aa9a9bb749abc93dcb355","integrated_source":"94b3f6c5097356a3857ebd13a77fb1e316eb06ae","score":9.18,"minimum_mandatory_dimension_score":9.18,"gate_operator":"> 9.0","visual_status":"PASS","isolated_review_run":34986065852,"integrated_evidence_run":34991148246,"native_android_run":34991155514,"record":"Docs/Production/T07/verified-completion.json","later_regression_reopens_task":true}
+    "T07": {"status":"APPROVED","accepted_source":"0a30dc0859541626eb6aa9a9bb749abc93dcb355","integrated_source":"94b3f6c5097356a3857ebd13a77fb1e316eb06ae","score":9.18,"minimum_mandatory_dimension_score":9.18,"gate_operator":"> 9.0","visual_status":"PASS","isolated_review_run":34986065852,"integrated_evidence_run":34991148246,"native_android_run":34991155514,"record":"Docs/Production/T07/verified-completion.json","later_regression_reopens_task":true},
+    "T08": {"status":"APPROVED","accepted_source":"9d56ea8ae972d0a0705ff8b985e13fab31dde493","integrated_source":"9d56ea8ae972d0a0705ff8b985e13fab31dde493","score":9.48,"minimum_mandatory_dimension_score":9.48,"gate_operator":"> 9.0","visual_status":"PASS","integrated_evidence_run":35035980827,"artifact_id":10423956033,"record":"Docs/Production/T08/verified-completion.json","later_regression_reopens_task":true}
   },
   "next_post_t03_wave": [
     {"task":"T04","branch":"havenline/T04-camera","state":"APPROVED","owner":"primary-integration-owner","base_commit":"5135cddf96123afb962f4046f41e5ac0e510428a","reason":"Integrated source e08fd37e9a999d878644c03089c4b4b253bd7472 passed 852 checks, source-bound pixels, C1+C2 and C6."},
     {"task":"T05","branch":"havenline/T05-props","state":"APPROVED","owner":"station-prop-builder","base_commit":"746c3e8757ccaf2a279a6184b6ed109a143d5b3a","reason":"Accepted gameplay source fa6fa70f154f3757d22303522ca3f6de2c3d391f passed 18 suites / 1119 checks, 77 exact-source images, all C1/C2 mandatory dimensions strictly above 9.0, C6 minimum 9.1, final pixel signoff, and G1-G14."},
     {"task":"T06","branch":"havenline/T06-character1","state":"APPROVED","owner":"character1-motion-builder","base_commit":"f9d815a7d05c4e811d22d620c6b0c00c768ce6c5","reason":"Accepted isolated source 47f86fae25b099abb5c7096c37ca7495453b2b8f is integrated at 91f35f331aaabe2b1785b10c0d911f20da6f12d9; 19 suites / 1345 checks, exact runtime-review identity, exhaustive surface evidence, C1/C2/C5 and fresh C6 passed."},
-    {"task":"T07","branch":"havenline/T07-context-director","state":"APPROVED","owner":"simple-control-context-builder","base_commit":"91f35f331aaabe2b1785b10c0d911f20da6f12d9","reason":"Accepted isolated source 0a30dc0859541626eb6aa9a9bb749abc93dcb355 is integrated at 94b3f6c5097356a3857ebd13a77fb1e316eb06ae; 21 suites / 1441 checks, exact-source evidence, G1-G14 and strict C2/C3/C4/C6/C11 review passed."}
+    {"task":"T07","branch":"havenline/T07-context-director","state":"APPROVED","owner":"simple-control-context-builder","base_commit":"91f35f331aaabe2b1785b10c0d911f20da6f12d9","reason":"Accepted isolated source 0a30dc0859541626eb6aa9a9bb749abc93dcb355 is integrated at 94b3f6c5097356a3857ebd13a77fb1e316eb06ae; 21 suites / 1441 checks, exact-source evidence, G1-G14 and strict C2/C3/C4/C6/C11 review passed."},
+    {"task":"T08","branch":"havenline/T08-visible-inventory","state":"APPROVED","owner":"physical-inventory-builder","base_commit":"7744b9f6a063da3385ce10992ef732ba2c669890","reason":"Exact integrated source 9d56ea8ae972d0a0705ff8b985e13fab31dde493 passed 23 suites / 1535 checks, 44/44 locked reference frames, both locked recordings, G1-G14 and strict C2 9.55 / C3 9.48 / C4 9.52 / C6 9.61 review."}
   ],
   "whole_game_approved": false,
   "physical_phone_tablet_native_4k60_verified": false,

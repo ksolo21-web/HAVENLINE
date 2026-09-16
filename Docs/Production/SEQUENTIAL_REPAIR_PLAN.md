@@ -34,9 +34,14 @@ integration-owner-controlled production integration.
   `0a30dc0859541626eb6aa9a9bb749abc93dcb355`, integrated at
   `94b3f6c5097356a3857ebd13a77fb1e316eb06ae`; its verified closure is recorded
   in `Docs/Production/T07/verified-completion.json` after 21 suites / 1441
-  checks and strict C2/C3/C4/C6/C11 review. T08 is INTEGRATION_READY at
-  isolated source `258f2c9a53f8b5460fb54a7f298fbb887c5aba1e` on
-  `havenline/T08-visible-inventory`; T09+ remains LOCKED.
+  checks and strict C2/C3/C4/C6/C11 review.
+- T08 is APPROVED at exact integrated source
+  `9d56ea8ae972d0a0705ff8b985e13fab31dde493`; its verified closure is recorded
+  in `Docs/Production/T08/verified-completion.json` after 23 suites / 1535
+  checks, all 44 locked frames and both locked recordings, G1-G14, and strict
+  C2 9.55 / C3 9.48 / C4 9.52 / C6 9.61 independent review.
+- T09 dependencies are satisfied but T09+ remains LOCKED until a separate frozen
+  scope, task packet, owner and disjoint path reservation are prepared.
 
 ## Forward acceptance rule
 
@@ -109,7 +114,7 @@ separate $0 reviewer is available, useful construction/testing continues but
 the critic gate remains `BLOCKED`. Never manufacture a pass and never add a
 paid critic dependency.
 
-## Current wave after T07 approval
+## Current wave after T08 approval
 
 T03 is approved. The registry may now assign these workstreams individually
 after each packet and owner are prepared:
@@ -120,10 +125,11 @@ after each packet and owner are prepared:
   its accepted and integrated sources.
 - T07 deterministic simple-control/context director is complete and APPROVED;
   preserve its accepted and integrated sources.
-- T08 is INTEGRATION_READY at isolated source
-  `258f2c9a53f8b5460fb54a7f298fbb887c5aba1e`; exact-source evidence and
-  independent C2/C3/C4/C6 review remain mandatory.
-- T09+ remains LOCKED.
+- T08 visible inventory, carrying and transfers is complete and APPROVED;
+  preserve exact integrated source
+  `9d56ea8ae972d0a0705ff8b985e13fab31dde493` and its verified closure.
+- T09 dependencies are satisfied, but T09+ remains LOCKED pending its separate
+  frozen scope, task packet, owner and disjoint path reservation.
 - QA/integration infrastructure may continue separately.
 
 Those workstreams are isolated and path-disjoint. Shared wiring remains

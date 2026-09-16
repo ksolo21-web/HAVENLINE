@@ -302,7 +302,7 @@
       "task_id": "T08",
       "task_name": "Visible inventory, physical carrying and transfers",
       "workstream_id": "T08-physical-inventory-builder",
-      "status": "INTEGRATION_READY",
+      "status": "APPROVED",
       "owner": "physical-inventory-builder",
       "branch": "havenline/T08-visible-inventory",
       "base_commit": "7744b9f6a063da3385ce10992ef732ba2c669890",
@@ -318,12 +318,21 @@
         "@protected:approved",
         "@integration-only"
       ],
-      "candidate_commit": "258f2c9a53f8b5460fb54a7f298fbb887c5aba1e",
-      "candidate_hash_or_artifact": "tree f1f119aed7199e5278bc76dc1623641ae52ec3de",
+      "candidate_commit": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
+      "candidate_hash_or_artifact": "integrated-source:9d56ea8ae972d0a0705ff8b985e13fab31dde493 tree:661617e7fb67400317718fce986c2968cfa4eb12 run:35035980827 artifact:10423956033 artifact-sha256:d2e58a9b4736e690b3b9817536b90940fb605e25b47a3ae24146aa8f9440c5c7 complete-evidence-index-sha256:17f27e449466524f9838cc592d4f637738f8e4cafd9475f1dc25bc7c2ca72c16",
       "tests": {
-        "local_combined_regression": "23 suites / 1517 checks passed",
-        "source_contract": "19 checks passed",
-        "governance": "15 checks passed"
+        "suites": 23,
+        "checks": 1535,
+        "result": "PASS",
+        "source_contract_checks": 24,
+        "save_matrix_cases": 7,
+        "device_matrix_cases": 6,
+        "capture_manifests": 18,
+        "unique_pngs": 39,
+        "candidate_video_frames": [60, 148, 148],
+        "locked_reference_frames": 44,
+        "locked_source_recordings": 2,
+        "integration_regression_run": 35035980827
       },
       "evidence_path": "Docs/Production/Evidence/T08/",
       "critic_requirements": [
@@ -332,11 +341,16 @@
         "C4",
         "C6"
       ],
-      "critic_status": {},
-      "integration_status": "integration candidate published; fresh lifecycle-valid evidence commit pending",
+      "critic_status": {
+        "C2": "PASS; score 9.55; attached resource lanes and exact integrated geometry/contact evidence approved",
+        "C3": "PASS; score 9.48; automatic conserved source-to-actor and actor-to-destination loop approved",
+        "C4": "PASS; score 9.52; direction trails, arrowheads, held route proofs and pulses approved",
+        "C6": "PASS; score 9.61; 12/12 equal adjacent post-warm-up windows and integrated budgets passed"
+      },
+      "integration_status": "APPROVED; exact integrated source 9d56ea8ae972d0a0705ff8b985e13fab31dde493 passed G1-G14, complete locked-reference review and all mandatory scores strictly above 9.0",
       "known_blockers": [],
-      "next_action": "Publish a fresh lifecycle-valid integration evidence commit, then run exact-source evidence and independent C2/C3/C4/C6 review.",
-      "status_updated_at": "2026-09-15T18:09:00.061131+00:00"
+      "next_action": "Preserve T08 completion; prepare and assign T09 only after its separate packet, owner and disjoint path reservation exist.",
+      "status_updated_at": "2026-09-16T02:18:53+00:00"
     }
   ],
   "notes": [
