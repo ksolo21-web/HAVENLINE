@@ -45,6 +45,19 @@ jobs:
       - name: Run T12 progression/preparation unit tests
         run: python -m unittest discover -s tools/havenline/task12/tests -p 'test_*.py' -v
 
+      - name: Prove activation fails closed while T10 or T11 is unfinished
+        shell: bash
+        run: |
+          set +e
+          python tools/havenline/task12/prepare_activation.py --activate --base "$(git rev-parse HEAD)" > /tmp/t12-activation.json 2>&1
+          status=$?
+          cat /tmp/t12-activation.json
+          if [ "$status" -eq 0 ]; then
+            echo "ERROR: T12 activation unexpectedly passed before all dependencies are approved/integrated."
+            exit 1
+          fi
+          grep -Eq 'T10|T11|dependency' /tmp/t12-activation.json
+
       - name: Confirm shipping T12 runtime is still absent
         run: |
           test ! -e HavenlineGodot/scripts/progression_architecture.gd
