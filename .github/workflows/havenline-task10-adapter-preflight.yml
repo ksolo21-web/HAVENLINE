@@ -7,6 +7,7 @@ on:
       - 'Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json'
       - 'Docs/Production/T10/POST_T09_CHANGE_REQUEST_TEMPLATE.json'
       - 'tools/havenline/task10/validate_post_t09_adapter.py'
+      - 'tools/havenline/task10/prepare_reconciliation.py'
       - '.github/workflows/havenline-task10-adapter-preflight.yml'
   workflow_dispatch:
 
@@ -21,39 +22,84 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
+
+      - name: Fetch authoritative integration branch
+        run: |
+          set -euo pipefail
+          git fetch origin codex/havenline-sequential-task-01
+
       - name: Validate prepared contract and preserve dependency boundary
         run: |
           set -euo pipefail
           mkdir -p task10-adapter-preflight
           python3 tools/havenline/task10/validate_post_t09_adapter.py \
-            --output task10-adapter-preflight/report.json
+            --output task10-adapter-preflight/adapter-contract.json
           python3 - <<'PY'
-          import json, subprocess
+          import json
           from pathlib import Path
-          report=json.loads(Path('task10-adapter-preflight/report.json').read_text())
+          report=json.loads(Path('task10-adapter-preflight/adapter-contract.json').read_text())
           assert report['passed'] is True, report
           assert report['prepared_contract_valid'] is True, report
           # Until the integration owner applies the post-T09 shared-runtime CR,
           # this builder branch must remain unbound and non-integratable.
           assert report['real_adapter_bound'] is False, report
           assert report['integration_allowed'] is False, report
-          integration='origin/codex/havenline-sequential-task-01'
-          subprocess.run(['git','fetch','origin','codex/havenline-sequential-task-01'],check=True,stdout=subprocess.DEVNULL)
-          graph=json.loads(subprocess.check_output(['git','show',f'{integration}:Docs/Production/DEPENDENCY_GRAPH.json'],text=True))
-          t09=graph['tasks']['T09']['status']
+          PY
+
+      - name: Validate isolated candidate reconciliation shape
+        run: |
+          set -euo pipefail
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          candidate=$(git rev-parse HEAD)
+          python3 tools/havenline/task10/prepare_reconciliation.py \
+            --integration-base "$integration" \
+            --isolated-candidate "$candidate" \
+            --output task10-adapter-preflight/reconciliation.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('task10-adapter-preflight/reconciliation.json').read_text())
+          assert report['passed'] is True, report
+          assert report['path_reconciliation_clean'] is True, report
+          assert not report['unauthorized_isolated_paths'], report
+          assert not report['overlapping_t10_drift'], report
+          # Dependency readiness may legitimately be false before T09 closes.
+          assert report['handoff_ready_for_reconcile'] == report['dependencies_fully_approved'], report
+          assert report['integration_allowed'] is False, report
+          PY
+
+      - name: Summarize live handoff state
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          adapter=json.loads(Path('task10-adapter-preflight/adapter-contract.json').read_text())
+          reconcile=json.loads(Path('task10-adapter-preflight/reconciliation.json').read_text())
+          t09=reconcile['dependency_state']['T09']
+          ready=bool(reconcile['handoff_ready_for_reconcile'])
           result={
             'task':'T10',
             'candidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
-            'integration_t09_status':t09,
-            'prepared_adapter_contract_valid':True,
-            'real_adapter_bound':False,
+            'integration_base':reconcile['integration_base'],
+            'integration_t09_state':t09,
+            'prepared_adapter_contract_valid':adapter['prepared_contract_valid'],
+            'path_reconciliation_clean':reconcile['path_reconciliation_clean'],
+            'dependencies_fully_approved':reconcile['dependencies_fully_approved'],
+            'handoff_ready_for_reconcile':ready,
+            'real_adapter_bound':adapter['real_adapter_bound'],
             'integration_allowed':False,
-            'handoff_action':'wait_for_exact_post_T09_integration_head_then_integration_owner_applies_CR',
+            'handoff_action':(
+              'run strict post-T09 activation/reconciliation and integration-owner adapter change'
+              if ready else
+              'remain BUILT_PENDING_DEPENDENCY until exact dependency closure'
+            ),
             'passed':True,
           }
           Path('task10-adapter-preflight/summary.json').write_text(json.dumps(result,indent=2)+'\n')
           print(json.dumps(result,indent=2))
           PY
+
       - uses: actions/upload-artifact@v4
         with:
           name: havenline-task10-adapter-preflight-${{ github.sha }}
