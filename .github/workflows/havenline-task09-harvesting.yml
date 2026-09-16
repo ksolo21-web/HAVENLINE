@@ -191,6 +191,9 @@ jobs:
           sequence_frames=list(root.glob('sequence-*/frames/frame-*.jpg'))
           frame_counts={resource:len(list((root/('sequence-'+resource)/'frames').glob('frame-*.jpg'))) for resource in ('wood','stone','metal','fuel')}
           assert min(frame_counts.values())>=80,frame_counts
+          for resource,count in frame_counts.items():
+              indices=sorted(int(path.stem.split('-')[-1]) for path in (root/('sequence-'+resource)/'frames').glob('frame-*.jpg'))
+              assert indices==list(range(count)),(resource,indices)
           assert pngs
           for path in pngs:
               with path.open('rb') as stream:

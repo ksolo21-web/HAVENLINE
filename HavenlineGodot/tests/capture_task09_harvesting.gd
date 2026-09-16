@@ -272,6 +272,8 @@ func capture_sequence() -> void:
 		await sample_shipping(frame,Vector2.ZERO,"reentry")
 		frame += 1
 	# Finish depletion only through the same simulation authority as shipping.
+	# Keep the video cursor contiguous while logical commit records advance.
+	var video_frame_cursor := frame
 	var lifecycle_frame := frame
 	while int(source.units) > 0:
 		commit(lifecycle_frame)
@@ -281,7 +283,7 @@ func capture_sequence() -> void:
 	game._process(1.0 / 60.0)
 	records.append({"frame":lifecycle_frame,"depleted":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
 	await capture_png("%s-depleted" % resource_kind)
-	for video_frame in range(lifecycle_frame,lifecycle_frame+8,2): await capture_jpg(video_frame)
+	for video_frame in range(video_frame_cursor,video_frame_cursor+8,2): await capture_jpg(video_frame)
 	# Let the unchanged 90-second simulation timer perform the respawn while the
 	# lead is away from all harvest targets, then restore the evidence framing.
 	var evidence_position: Vector2 = game.sim.position
@@ -294,7 +296,7 @@ func capture_sequence() -> void:
 	game._process(1.0 / 60.0)
 	records.append({"frame":lifecycle_frame+1,"respawned":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
 	await capture_png("%s-respawned" % resource_kind)
-	for video_frame in range(lifecycle_frame+8,lifecycle_frame+16,2): await capture_jpg(video_frame)
+	for video_frame in range(video_frame_cursor+8,video_frame_cursor+16,2): await capture_jpg(video_frame)
 
 func capture_tool_view() -> void:
 	await sample(0,1.0)
