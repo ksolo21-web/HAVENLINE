@@ -151,19 +151,19 @@ func run() -> void:
 		quit(1)
 		return
 
-	var preview := engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
+	var preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
 	if not preview.passed or not view.show_preview(preview) or not await capture_state("preview", view.descriptor()):
 		print(JSON.stringify({"passed": false, "error": "preview_capture_failed"}))
 		quit(1)
 		return
 
-	var intent := engine.commit_transform("capture-tx", "framework_anchor_seed_to_foundation", "capture-anchor", inventory)
+	var intent: Dictionary = engine.commit_transform("capture-tx", "framework_anchor_seed_to_foundation", "capture-anchor", inventory)
 	if not intent.passed or not view.show_commit(intent) or not await capture_state("committing", view.descriptor()):
 		print(JSON.stringify({"passed": false, "error": "commit_capture_failed"}))
 		quit(1)
 		return
 
-	var accepted := engine.accept_authoritative_receipt(simulation_ack(intent))
+	var accepted: Dictionary = engine.accept_authoritative_receipt(simulation_ack(intent))
 	if not accepted.passed or not view.mark_complete(accepted) or not await capture_state("complete", view.descriptor()):
 		print(JSON.stringify({"passed": false, "error": "complete_capture_failed"}))
 		quit(1)
