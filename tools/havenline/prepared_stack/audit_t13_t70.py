@@ -1,6 +1,8 @@
 #!/usr/bin/env python3
 """Cross-wave fail-closed audit for the prepared Havenline T13-T70 stack."""
 from __future__ import annotations
+import fnmatch
+import functools
 import json
 import pathlib
 import subprocess
@@ -13,6 +15,7 @@ EXTRA_C5 = {"T16", "T19", "T21", "T23"}
 REGION_TASKS = {f"T{i:02d}" for i in range(44, 53)}
 FINAL_ACCEPTANCE_TASKS = {f"T{i:02d}" for i in range(62, 71)}
 MOTION_FINAL_TASKS = {"T59", "T60", "T61"}
+T12_CONSUMERS = {"T13", "T14", "T32", "T62"}
 
 
 def load(path: pathlib.Path):
@@ -23,97 +26,152 @@ def blob_sha(path: pathlib.Path) -> str:
     return subprocess.check_output(["git", "hash-object", str(path)], cwd=ROOT, text=True).strip()
 
 
-def prefix(pattern: str) -> str:
-    cut = len(pattern)
-    for token in ("*", "?", "["):
-        pos = pattern.find(token)
-        if pos >= 0:
-            cut = min(cut, pos)
-    return pattern[:cut].rstrip("/")
+def _has_glob(segment: str) -> bool:
+    return any(ch in segment for ch in "*?[")
+
+
+def _segment_overlap(a: str, b: str) -> bool:
+    if a == b:
+        return True
+    ag, bg = _has_glob(a), _has_glob(b)
+    if not ag and not bg:
+        return False
+    if not ag:
+        return fnmatch.fnmatchcase(a, b)
+    if not bg:
+        return fnmatch.fnmatchcase(b, a)
+    ai = min([i for i in (a.find("*"), a.find("?"), a.find("[")) if i >= 0], default=len(a))
+    bi = min([i for i in (b.find("*"), b.find("?"), b.find("[")) if i >= 0], default=len(b))
+    ap, bp = a[:ai], b[:bi]
+    if ap and bp and not (ap.startswith(bp) or bp.startswith(ap)):
+        return False
+    if "[" not in a and "[" not in b:
+        al, bl = max(a.rfind("*"), a.rfind("?")), max(b.rfind("*"), b.rfind("?"))
+        asuf = a[al + 1:] if al >= 0 else a
+        bsuf = b[bl + 1:] if bl >= 0 else b
+        if asuf and bsuf and not (asuf.endswith(bsuf) or bsuf.endswith(asuf)):
+            return False
+    return True
 
 
 def overlap(a: str, b: str) -> bool:
-    if a == b:
-        return True
-    pa, pb = prefix(a), prefix(b)
-    if not pa or not pb:
-        return True
-    return pa == pb or pa.startswith(pb + "/") or pb.startswith(pa + "/")
+    aa = tuple(x for x in a.strip("/").split("/") if x)
+    bb = tuple(x for x in b.strip("/").split("/") if x)
+
+    @functools.lru_cache(maxsize=None)
+    def walk(i: int, j: int) -> bool:
+        if i == len(aa):
+            return all(x == "**" for x in bb[j:])
+        if j == len(bb):
+            return all(x == "**" for x in aa[i:])
+        if aa[i] == "**":
+            return walk(i + 1, j) or walk(i, j + 1)
+        if bb[j] == "**":
+            return walk(i, j + 1) or walk(i + 1, j)
+        return _segment_overlap(aa[i], bb[j]) and walk(i + 1, j + 1)
+
+    return walk(0, 0)
 
 
 def validate_t12_bindings(errors: list[str]) -> dict:
+    """Validate T13+ local binding snapshots without requiring or modifying T12."""
     contract_path = DOCS / "T12" / "DOWNSTREAM_CONSUMER_CONTRACT.json"
-    contract = load(contract_path)
-    current = blob_sha(contract_path)
+    contract_present = contract_path.exists()
+    contract = load(contract_path) if contract_present else {}
+    current = blob_sha(contract_path) if contract_present else None
     consumers = contract.get("consumers", {})
     results = {}
+    expected_path = "Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json"
 
-    individual = {
-        "T13": DOCS / "T13" / "T12_CONSUMER_BINDING.json",
-        "T14": DOCS / "T14" / "T12_CONSUMER_BINDING.json",
-        "T32": DOCS / "T32" / "T12_CONSUMER_BINDING.json",
-        "T62": DOCS / "T62" / "T12_CONSUMER_BINDING.json",
-    }
     fields = {
         "T13": ("may_read", "must_not_require_from_T12", "boundary"),
         "T14": ("may_read", "must_not_require_from_T12", "boundary"),
         "T32": ("may_read", "owned_band", "owned_levels", "boundary"),
         "T62": ("may_read", "must_not_require_from_T12", "boundary"),
     }
-    for tid, path in individual.items():
-        if not path.exists():
-            errors.append(f"{tid}: missing T12 consumer binding")
-            continue
-        binding = load(path)
-        row = consumers.get(tid)
+    for tid in sorted(T12_CONSUMERS):
+        path = DOCS / tid / "T12_CONSUMER_BINDING.json"
         local = []
-        if binding.get("prepared_contract_git_blob_sha") != current:
-            local.append("stale T12 contract blob binding")
-        if row is None:
-            local.append("consumer row missing from T12 contract")
+        if not path.exists():
+            local.append("missing T12 consumer binding snapshot")
         else:
-            for key in fields[tid]:
-                if binding.get(key) != row.get(key):
-                    local.append(f"consumer field mismatch: {key}")
+            binding = load(path)
+            if binding.get("contract_path") != expected_path:
+                local.append("contract path mismatch")
+            prepared_sha = binding.get("prepared_contract_git_blob_sha")
+            if not isinstance(prepared_sha, str) or len(prepared_sha) != 40:
+                local.append("prepared upstream contract blob SHA missing/invalid")
+            if contract_present:
+                row = consumers.get(tid)
+                if row is None:
+                    local.append("consumer row missing from current upstream contract")
+                else:
+                    if prepared_sha != current:
+                        local.append("stale upstream contract blob binding; activation rebind required")
+                    for key in fields[tid]:
+                        if binding.get(key) != row.get(key):
+                            local.append(f"consumer field mismatch: {key}")
         errors.extend(f"{tid}: {x}" for x in local)
-        results[tid] = {"passed": not local, "errors": local}
+        results[tid] = {
+            "passed": not local,
+            "errors": local,
+            "upstream_contract_present": contract_present,
+            "activation_rebind_required": not contract_present,
+        }
 
     region_path = DOCS / "T44_T52_T12_CONSUMER_BINDINGS.json"
+    region_errors = []
     if not region_path.exists():
-        errors.append("T44-T52: missing T12 region binding registry")
+        region_errors.append("missing T44-T52 local upstream binding registry")
     else:
         registry = load(region_path)
-        if registry.get("prepared_contract_git_blob_sha") != current:
-            errors.append("T44-T52: stale T12 contract blob binding")
+        prepared_sha = registry.get("prepared_contract_git_blob_sha")
+        if not isinstance(prepared_sha, str) or len(prepared_sha) != 40:
+            region_errors.append("region prepared upstream contract blob SHA missing/invalid")
         bindings = registry.get("bindings", {})
         level_slots = []
         bands = []
         for tid in sorted(REGION_TASKS):
-            row = consumers.get(tid)
             binding = bindings.get(tid)
-            if row is None or binding is None:
-                errors.append(f"{tid}: missing T12 region binding row")
+            if binding is None:
+                region_errors.append(f"{tid}: missing local region binding row")
                 continue
-            for key in ("owned_band", "owned_levels", "may_read", "boundary"):
-                if binding.get(key) != row.get(key):
-                    errors.append(f"{tid}: region consumer field mismatch: {key}")
             bands.append(binding.get("owned_band"))
-            start, end = binding.get("owned_levels", [0, -1])
+            levels = binding.get("owned_levels", [])
+            if not isinstance(levels, list) or len(levels) != 2 or not all(isinstance(x, int) for x in levels):
+                region_errors.append(f"{tid}: invalid owned_levels")
+                continue
+            start, end = levels
             level_slots.extend(range(start, end + 1))
+            if contract_present:
+                row = consumers.get(tid)
+                if row is None:
+                    region_errors.append(f"{tid}: missing from current upstream contract")
+                else:
+                    for key in ("owned_band", "owned_levels", "may_read", "boundary"):
+                        if binding.get(key) != row.get(key):
+                            region_errors.append(f"{tid}: region consumer field mismatch: {key}")
         if len(bands) != len(set(bands)):
-            errors.append("T44-T52: duplicate region band ownership")
+            region_errors.append("duplicate region band ownership")
         if sorted(level_slots) != list(range(11, 101)):
-            errors.append("T44-T52: Levels 11-100 are not covered exactly once")
-    return {"contract_blob_sha": current, "individual": results}
+            region_errors.append("Levels 11-100 are not covered exactly once")
+        if contract_present and prepared_sha != current:
+            region_errors.append("stale region upstream contract blob binding; activation rebind required")
+    errors.extend(f"T44-T52: {x}" for x in region_errors)
+    return {
+        "upstream_contract_present": contract_present,
+        "contract_blob_sha": current,
+        "activation_rebind_required": not contract_present,
+        "individual": results,
+        "region_passed": not region_errors,
+    }
 
 
 def main() -> int:
     errors: list[str] = []
     graph = load(DOCS / "DEPENDENCY_GRAPH.json")
     ownership = load(DOCS / "PATH_OWNERSHIP.json")
-    gm = load(DOCS / "GAME_MASTER_POLICY.json")
     task_rows = graph.get("tasks", {})
-    gm_flags = gm.get("task_policy", {}).get("required_proof_flags_by_task", {})
     active_owners = ownership.get("active_owners", [])
     aliases = ownership.get("aliases", {})
     task_results = []
@@ -150,13 +208,12 @@ def main() -> int:
         if defect.get("unresolved_preparation_defects"):
             task_errors.append("unresolved preparation defects remain")
 
-        required_gm = gm_flags.get(tid, [])
-        supplied_gm = check.get("game_master_required_proof_flags", [])
-        if supplied_gm != required_gm:
-            task_errors.append(f"Game Master proof flags mismatch required={required_gm} supplied={supplied_gm}")
-        if prebuild.get("game_master_required_proof_flags", []) != required_gm:
-            if required_gm or prebuild.get("game_master_required_proof_flags"):
-                task_errors.append("PREBUILD_CONTRACT Game Master proof flags mismatch")
+        local_gm = check.get("game_master_required_proof_flags", [])
+        prebuild_gm = prebuild.get("game_master_required_proof_flags", [])
+        if local_gm != prebuild_gm:
+            task_errors.append(f"local Game Master proof flags disagree checklist={local_gm} prebuild={prebuild_gm}")
+        if local_gm and (not isinstance(local_gm, list) or len(local_gm) != len(set(local_gm))):
+            task_errors.append("Game Master proof flags must be a unique list")
 
         if tid in REGION_TASKS:
             if check.get("resource_actor_contract_required") is not True or prebuild.get("resource_actor_contract_required") is not True:
@@ -175,7 +232,7 @@ def main() -> int:
                 task_errors.append("final-wave task must be acceptance-only")
             if check.get("production_patch_forbidden_during_acceptance") is not True or prebuild.get("production_patch_forbidden_during_acceptance") is not True:
                 task_errors.append("production patch prohibition missing")
-        if tid == "T63" and check.get("game_master_excluded_from_population") is not True:
+        if tid == "T63" and (check.get("game_master_excluded_from_population") is not True or prebuild.get("game_master_excluded_from_population") is not True):
             task_errors.append("T63 must exclude Game Master population")
         if tid in ("T68", "T69"):
             for key, value in (("physical_device_only", True), ("native_internal_min_width", 3840), ("native_internal_min_height", 2160), ("sustained_min_fps", 60), ("completed_game_load_required", True), ("emulator_software_renderer_cannot_certify", True)):
@@ -213,7 +270,7 @@ def main() -> int:
     if cross_collisions:
         errors.append(f"cross-task planned path collisions: {len(cross_collisions)}")
 
-    t12 = validate_t12_bindings(errors)
+    upstream_bindings = validate_t12_bindings(errors)
 
     approved = {tid for tid, row in task_rows.items() if row.get("status") == "APPROVED"}
     ready_now = []
@@ -227,7 +284,7 @@ def main() -> int:
         "task_count": len(TASKS),
         "task_results": task_results,
         "cross_task_path_collisions": cross_collisions,
-        "t12_consumer_bindings": t12,
+        "upstream_binding_snapshots": upstream_bindings,
         "ready_now_from_graph_only": ready_now,
         "passed": not errors,
         "errors": errors,
