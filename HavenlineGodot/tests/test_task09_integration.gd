@@ -32,6 +32,9 @@ func run() -> void:
 	var transfer := Transfer.new()
 	root.add_child(harvest)
 	root.add_child(transfer)
+	var source_visual := Node3D.new()
+	root.add_child(source_visual)
+	check("T09 binds the simulation-owned source visual", harvest.bind_source("wood:source:0","wood",source_visual,2))
 	var director := Director.new()
 	var inventory := {"wood":0,"stone":0,"metal":0,"fuel":0}
 	var inventory_before := inventory.duplicate(true)
@@ -49,17 +52,23 @@ func run() -> void:
 	}
 	check("T09 accepts canonical T07 identity plus authoritative resource", harvest.begin_action(action,1))
 	var presented := harvest.update_action(action,Transform3D.IDENTITY,Vector3(0,0.8,1.0))
-	check("T09 contact is synchronized to T06 chop progress", presented.contact_ready and presented.tool == "axe" and presented.contact_marker == "C1TwoHandContact")
+	check("T09 equips the T06 chop contact without pre-commit impact", not presented.contact_ready and presented.tool == "axe" and presented.contact_marker == "C1TwoHandContact")
+	var motion_action := harvest.motion_action(action)
+	check("T09 remaps presentation progress without changing the T07 action", float(motion_action.progress) < float(action.progress) and float(action.progress) == float(selected.progress))
 
 	var committed := {
 		"committed":true, "resource":"wood", "source_id":String(selected.id),
 		"action_token":int(selected.action_token), "receipt_id":"simulation:gather:1",
 		"target_position":Vector3(0,0.8,1.0), "actor_id":1,
 	}
+	presented = harvest.synchronize_committed_contact(action,Transform3D.IDENTITY,Vector3(0,0.8,1.0),1)
+	check("authoritative commit arms exact T06 contact", presented.contact_ready and presented.commit_contact_armed and is_equal_approx(presented.progress,0.56))
 	check("authoritative committed impact activates T09 feedback", harvest.accept_committed_impact(committed))
 	check("the same committed receipt starts one T08 source-to-actor transfer", transfer.transfer("wood",Vector3(0,0.8,1.0),Vector3(0,1.2,0),String(committed.receipt_id),"source_to_actor",1,"actor:1"))
 	check("replayed commit fails in both T09 and T08", not harvest.accept_committed_impact(committed) and not transfer.transfer("wood",Vector3(0,0.8,1.0),Vector3(0,1.2,0),String(committed.receipt_id),"source_to_actor",1,"actor:1"))
 	check("presentation modules cannot mutate logical inventory", inventory == inventory_before and not harvest.descriptor().mutates_inventory and not transfer.descriptor().mutates_inventory)
+	check("depletion visibility follows authoritative units", harvest.sync_source("wood:source:0",0,0.0) and not source_visual.visible)
+	check("respawn visibility follows authoritative units", harvest.sync_source("wood:source:0",2,0.0) and source_visual.visible)
 
 	var moving := director.advance(0.01,Vector2.ZERO,Vector2.DOWN,Vector2(0,0.2),Vector2.ZERO,"player_lead",[option("wood",0.56)])
 	if bool(moving.get("cancelled",false)):
