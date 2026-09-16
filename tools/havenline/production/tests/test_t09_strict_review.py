@@ -92,6 +92,69 @@ class T09StrictReviewGovernanceTests(unittest.TestCase):
         self.assertNotIn('approved_tasks"].append', text)
         self.assertNotIn('completed_task_records"]["T09"', text)
 
+    def test_integration_ready_dry_run_targets_all_states_without_mutation(self) -> None:
+        current_head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+        closeout = {
+            "task": "T09",
+            "mode": "read-only-closeout-preflight",
+            "passed": True,
+            "ready_for_integration_owner_closeout": True,
+            "approval_mutation_performed": False,
+            "integration_mutation_performed": False,
+            "integration_head": current_head,
+            "candidate": SOURCE,
+            "source_run_id": RUN_ID,
+        }
+        critics = {}
+        for critic in ("C2", "C3", "C4", "C5"):
+            critics[critic] = {
+                "critic_id": critic,
+                "candidate_hash": SOURCE,
+                "passed": True,
+                "coverage_complete": True,
+                "confidence": "high",
+                "scores": {"mandatory": 9.5},
+                "defects": [],
+            }
+        critics["C6"] = {"critic_id": "C6", "candidate": SOURCE, "passed": True, "errors": []}
+        review = {
+            "task": "T09",
+            "candidate": SOURCE,
+            "source_run_id": RUN_ID,
+            "required_critics": ["C2", "C3", "C4", "C5", "C6"],
+            "passed": True,
+            "task_approved": False,
+            "c5_full_cycle_groups": 18,
+            "critics": critics,
+        }
+        coordination = [
+            ROOT / "Docs/Production/DEPENDENCY_GRAPH.json",
+            ROOT / "Docs/Production/WORKSTREAM_REGISTRY.json",
+            ROOT / "Docs/Production/PATH_OWNERSHIP.json",
+            ROOT / "Docs/Production/task-gates.json",
+        ]
+        before = {path: path.read_bytes() for path in coordination}
+        with tempfile.TemporaryDirectory() as td:
+            td = pathlib.Path(td)
+            closeout_path, review_path, out = td / "closeout.json", td / "review.json", td / "plan.json"
+            closeout_path.write_text(json.dumps(closeout))
+            review_path.write_text(json.dumps(review))
+            run = subprocess.run(
+                [sys.executable, str(STAGE_READY), "--closeout", str(closeout_path), "--strict-review", str(review_path), "--out", str(out)],
+                cwd=ROOT,
+                text=True,
+                capture_output=True,
+            )
+            self.assertEqual(run.returncode, 0, run.stderr + run.stdout)
+            plan = json.loads(out.read_text())
+            self.assertTrue(plan["passed"])
+            self.assertFalse(plan["write_requested"])
+            self.assertFalse(plan["runtime_merge_performed"])
+            self.assertFalse(plan["approval_mutation_performed"])
+            self.assertEqual(set(plan["target_states"].values()), {"INTEGRATION_READY"})
+        after = {path: path.read_bytes() for path in coordination}
+        self.assertEqual(before, after)
+
     def test_c6_accepts_exact_limits_and_rejects_regression(self) -> None:
         good = {
             "task": "T09",
