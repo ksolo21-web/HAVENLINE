@@ -36,6 +36,9 @@ jobs:
           python -m py_compile tools/havenline/task12/validate_runtime_interface.py
           python -m py_compile tools/havenline/task12/validate_traceability.py
           python -m py_compile tools/havenline/task12/validate_downstream_contract.py
+          python -m py_compile tools/havenline/task12/validate_data_schema.py
+          python -m py_compile tools/havenline/task12/fuzz_progression_contract.py
+          python -m py_compile tools/havenline/task12/benchmark_prebuild_validators.py
 
       - name: Validate T12 JSON artifacts
         run: |
@@ -47,6 +50,8 @@ jobs:
           python -m json.tool Docs/Production/T12/RUNTIME_INTERFACE_CONTRACT.json >/dev/null
           python -m json.tool Docs/Production/T12/ACCEPTANCE_TRACEABILITY.json >/dev/null
           python -m json.tool Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json >/dev/null
+          python -m json.tool Docs/Production/T12/PROGRESSION_DATA_SCHEMA.json >/dev/null
+          python -m json.tool Docs/Production/T12/PREBUILD_PERFORMANCE_BUDGET.json >/dev/null
           python -m json.tool Docs/Production/T12/defect-ledger.json >/dev/null
 
       - name: Validate T12 preparation contract
@@ -66,6 +71,15 @@ jobs:
 
       - name: Validate downstream consumer boundaries
         run: python tools/havenline/task12/validate_downstream_contract.py
+
+      - name: Validate future shipping-data schema contract
+        run: python tools/havenline/task12/validate_data_schema.py
+
+      - name: Fuzz T12 progression contract fail-closed behavior
+        run: python tools/havenline/task12/fuzz_progression_contract.py
+
+      - name: Benchmark complete T12 prebuild validation surface
+        run: python tools/havenline/task12/benchmark_prebuild_validators.py
 
       - name: Run T12 progression/preparation unit tests
         run: python -m unittest discover -s tools/havenline/task12/tests -p 'test_*.py' -v
