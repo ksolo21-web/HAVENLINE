@@ -9,6 +9,7 @@
     "reference_b_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
     "t05_verified_completion": "Docs/Production/T05/verified-completion.json",
     "t05_accepted_source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+    "t05_exact_reuse_bindings": "Docs/Production/T11/T05_REUSE_BINDINGS.json",
     "t10_prepared_contract": "Docs/Production/T10/FROZEN_SCOPE.md",
     "t10_prepared_checkpoint": "7e95338e339fb331a5d6b094874c15d5a7e96e16",
     "t11_frozen_scope": "Docs/Production/T11/FROZEN_SCOPE.md"
@@ -52,7 +53,7 @@
   "required_content_roles": [
     {
       "role": "construction_pad",
-      "source_family": "T05 ground-pad family",
+      "source_family": "T05 exact direct binding: pad_build",
       "requirements": ["readable at gameplay scale", "contextual proximity use", "no large menu dependency", "blocked/ready state legible"]
     },
     {
@@ -67,17 +68,17 @@
     },
     {
       "role": "central_heated_station",
-      "source_family": "T05 heated vessel/furnace family",
-      "requirements": ["reuse approved family", "readable central role", "no T05 source mutation"]
+      "source_family": "T05 exact direct binding: hearth_vessel",
+      "requirements": ["reuse approved asset/hash/sockets", "readable central role", "no T05 source mutation"]
     },
     {
       "role": "stock_counter_zone",
-      "source_family": "T05 counter/ground-pad/resource families",
-      "requirements": ["clear stock and service surfaces", "future customer/helper approach clearance", "no customer logic in T11"]
+      "source_family": "T05 passive composition bindings where needed; behavior remains later-owner controlled",
+      "requirements": ["clear stock and service surfaces", "future customer/helper approach clearance", "no customer/payment/processing behavior in T11"]
     },
     {
       "role": "visual_upgrade_stage",
-      "source_family": "T11 authored camp upgrade assets",
+      "source_family": "T05 exact direct binding pad_upgrade + T11 authored camp upgrade assets",
       "requirements": ["meaningful visible geometry/material/composition change", "T10 recipe binding", "exact-once presentation", "no hidden stat-only upgrade"]
     }
   ],
