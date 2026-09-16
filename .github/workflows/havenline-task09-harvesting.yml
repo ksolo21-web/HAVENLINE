@@ -114,6 +114,43 @@ jobs:
           Path('task09-evidence/tests.json').write_text(json.dumps(output,indent=2)); print(json.dumps(output))
           PY
 
+      - name: Measure exact-base performance delta
+        env:
+          CANDIDATE: ${{ github.sha }}
+          BASE: 7492074e40a0b061f31d8c32602b7a581b2610f3
+        run: |
+          set -euo pipefail
+          base_dir="$RUNNER_TEMP/t09-exact-base"
+          git worktree add --detach "$base_dir" "$BASE"
+          cp HavenlineGodot/tests/capture_task09_performance.gd "$base_dir/HavenlineGodot/tests/capture_task09_performance.gd"
+          (cd "$base_dir" && python3 tools/havenline/bake_outpost_audio.py >/dev/null)
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path "$base_dir/HavenlineGodot" --import --quit > task09-evidence/tests/exact-base-import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path "$base_dir/HavenlineGodot" --script res://tools/bake_crew_motion.gd > task09-evidence/tests/exact-base-motion-fixture.log 2>&1
+          mkdir -p task09-evidence/performance/exact-base task09-evidence/performance/candidate
+          xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method gl_compatibility --resolution 1280x720 --path "$base_dir/HavenlineGodot" --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/exact-base" --candidate="$BASE" --expect-base
+          xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method gl_compatibility --resolution 1280x720 --path HavenlineGodot --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/candidate" --candidate="$CANDIDATE"
+          git worktree remove --force "$base_dir"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          base=json.loads(Path('task09-evidence/performance/exact-base/performance.json').read_text())
+          candidate=json.loads(Path('task09-evidence/performance/candidate/performance.json').read_text())
+          assert base['candidate']==os.environ['BASE'] and base['integrated'] is False
+          assert candidate['candidate']==os.environ['CANDIDATE'] and candidate['integrated'] is True
+          delta={key:candidate[key]-base[key] for key in ['p95_ms','p99_ms','average_draw_calls','average_primitives','process_static_memory_mb','materials_visible','unique_shader_resources','physics_active_bodies','animation_players','active_animations','visible_rigs','npc_companion_active_population']}
+          result={'task':'T09','exact_base':os.environ['BASE'],'candidate':os.environ['CANDIDATE'],'method':candidate['method'],'base':base,'integrated':candidate,'delta':delta,'limits':{'p95_ms':10.0,'draw_calls':12.0,'primitives':5000.0,'memory_mb':32.0,'materials':6,'shaders':0,'physics_bodies':0,'animation_players':0},'physical_4k60_verified':False,'thermal_certified':False}
+          Path('task09-evidence/performance/delta-diagnostic.json').write_text(json.dumps(result,indent=2))
+          print(json.dumps({'task':'T09','performance_delta':delta,'diagnostic':True}))
+          assert candidate['measured_frames']==180 and candidate['unchanged_active_state_node_count_stable'] is True
+          assert candidate['maximum_fragment_descriptors']<=32 and candidate['maximum_impact_pulses']<=8
+          assert delta['p95_ms']<=result['limits']['p95_ms'] and delta['average_draw_calls']<=result['limits']['draw_calls'] and delta['average_primitives']<=result['limits']['primitives']
+          assert delta['process_static_memory_mb']<=result['limits']['memory_mb'] and delta['materials_visible']<=result['limits']['materials'] and delta['unique_shader_resources']<=result['limits']['shaders']
+          assert delta['physics_active_bodies']<=0 and delta['animation_players']<=0 and delta['active_animations']<=0
+          result['passed']=True
+          Path('task09-evidence/performance/delta.json').write_text(json.dumps(result,indent=2)); print(json.dumps({'task':'T09','performance_delta':delta,'passed':True}))
+          PY
+
+
       - name: Render T09 review and native-4K evidence
         env:
           CANDIDATE: ${{ github.sha }}
@@ -220,41 +257,6 @@ jobs:
           Path('task09-evidence/capture-summary.json').write_text(json.dumps(summary,indent=2)); print(json.dumps(summary))
           PY
 
-      - name: Measure exact-base performance delta
-        env:
-          CANDIDATE: ${{ github.sha }}
-          BASE: 7492074e40a0b061f31d8c32602b7a581b2610f3
-        run: |
-          set -euo pipefail
-          base_dir="$RUNNER_TEMP/t09-exact-base"
-          git worktree add --detach "$base_dir" "$BASE"
-          cp HavenlineGodot/tests/capture_task09_performance.gd "$base_dir/HavenlineGodot/tests/capture_task09_performance.gd"
-          (cd "$base_dir" && python3 tools/havenline/bake_outpost_audio.py >/dev/null)
-          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path "$base_dir/HavenlineGodot" --import --quit > task09-evidence/tests/exact-base-import.log 2>&1
-          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path "$base_dir/HavenlineGodot" --script res://tools/bake_crew_motion.gd > task09-evidence/tests/exact-base-motion-fixture.log 2>&1
-          mkdir -p task09-evidence/performance/exact-base task09-evidence/performance/candidate
-          xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method gl_compatibility --resolution 1280x720 --path "$base_dir/HavenlineGodot" --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/exact-base" --candidate="$BASE" --expect-base
-          xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method gl_compatibility --resolution 1280x720 --path HavenlineGodot --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/candidate" --candidate="$CANDIDATE"
-          git worktree remove --force "$base_dir"
-          python3 - <<'PY'
-          import json,os
-          from pathlib import Path
-          base=json.loads(Path('task09-evidence/performance/exact-base/performance.json').read_text())
-          candidate=json.loads(Path('task09-evidence/performance/candidate/performance.json').read_text())
-          assert base['candidate']==os.environ['BASE'] and base['integrated'] is False
-          assert candidate['candidate']==os.environ['CANDIDATE'] and candidate['integrated'] is True
-          delta={key:candidate[key]-base[key] for key in ['p95_ms','p99_ms','average_draw_calls','average_primitives','process_static_memory_mb','materials_visible','unique_shader_resources','physics_active_bodies','animation_players','active_animations','visible_rigs','npc_companion_active_population']}
-          result={'task':'T09','exact_base':os.environ['BASE'],'candidate':os.environ['CANDIDATE'],'method':candidate['method'],'base':base,'integrated':candidate,'delta':delta,'limits':{'p95_ms':10.0,'draw_calls':12.0,'primitives':5000.0,'memory_mb':32.0,'materials':6,'shaders':0,'physics_bodies':0,'animation_players':0},'physical_4k60_verified':False,'thermal_certified':False}
-          Path('task09-evidence/performance/delta-diagnostic.json').write_text(json.dumps(result,indent=2))
-          print(json.dumps({'task':'T09','performance_delta':delta,'diagnostic':True}))
-          assert candidate['measured_frames']==180 and candidate['unchanged_active_state_node_count_stable'] is True
-          assert candidate['maximum_fragment_descriptors']<=32 and candidate['maximum_impact_pulses']<=8
-          assert delta['p95_ms']<=result['limits']['p95_ms'] and delta['average_draw_calls']<=result['limits']['draw_calls'] and delta['average_primitives']<=result['limits']['primitives']
-          assert delta['process_static_memory_mb']<=result['limits']['memory_mb'] and delta['materials_visible']<=result['limits']['materials'] and delta['unique_shader_resources']<=result['limits']['shaders']
-          assert delta['physics_active_bodies']<=0 and delta['animation_players']<=0 and delta['active_animations']<=0
-          result['passed']=True
-          Path('task09-evidence/performance/delta.json').write_text(json.dumps(result,indent=2)); print(json.dumps({'task':'T09','performance_delta':delta,'passed':True}))
-          PY
 
       - uses: actions/upload-artifact@v4
         if: always()
