@@ -2,6 +2,8 @@
 """Validate T13-T20 parallel prep and perform read-only activation preflight."""
 from __future__ import annotations
 import argparse
+import fnmatch
+import functools
 import json
 import pathlib
 import subprocess
@@ -15,22 +17,50 @@ def load(path: pathlib.Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def prefix(pattern: str) -> str:
-    cut = len(pattern)
-    for token in ("*", "?", "["):
-        pos = pattern.find(token)
-        if pos >= 0:
-            cut = min(cut, pos)
-    return pattern[:cut].rstrip("/")
+def _has_glob(segment: str) -> bool:
+    return any(ch in segment for ch in "*?[")
+
+
+def _segment_overlap(a: str, b: str) -> bool:
+    if a == b:
+        return True
+    ag, bg = _has_glob(a), _has_glob(b)
+    if not ag and not bg:
+        return False
+    if not ag:
+        return fnmatch.fnmatchcase(a, b)
+    if not bg:
+        return fnmatch.fnmatchcase(b, a)
+    ap = a[:min([i for i in (a.find("*"), a.find("?"), a.find("[")) if i >= 0], default=len(a))]
+    bp = b[:min([i for i in (b.find("*"), b.find("?"), b.find("[")) if i >= 0], default=len(b))]
+    if ap and bp and not (ap.startswith(bp) or bp.startswith(ap)):
+        return False
+    if "[" not in a and "[" not in b:
+        ai = max(a.rfind("*"), a.rfind("?")); bi = max(b.rfind("*"), b.rfind("?"))
+        asuf = a[ai + 1:] if ai >= 0 else a; bsuf = b[bi + 1:] if bi >= 0 else b
+        if asuf and bsuf and not (asuf.endswith(bsuf) or bsuf.endswith(asuf)):
+            return False
+    return True
 
 
 def may_overlap(a: str, b: str) -> bool:
-    if a == b:
-        return True
-    pa, pb = prefix(a), prefix(b)
-    if not pa or not pb:
-        return True
-    return pa == pb or pa.startswith(pb + "/") or pb.startswith(pa + "/")
+    """Conservative segment-aware glob intersection; avoids prefix-only false positives."""
+    aa = tuple(x for x in a.strip("/").split("/") if x)
+    bb = tuple(x for x in b.strip("/").split("/") if x)
+
+    @functools.lru_cache(maxsize=None)
+    def walk(i: int, j: int) -> bool:
+        if i == len(aa):
+            return all(x == "**" for x in bb[j:])
+        if j == len(bb):
+            return all(x == "**" for x in aa[i:])
+        if aa[i] == "**":
+            return walk(i + 1, j) or walk(i, j + 1)
+        if bb[j] == "**":
+            return walk(i, j + 1) or walk(i + 1, j)
+        return _segment_overlap(aa[i], bb[j]) and walk(i + 1, j + 1)
+
+    return walk(0, 0)
 
 
 def registry_status(registry: dict, task_id: str):
