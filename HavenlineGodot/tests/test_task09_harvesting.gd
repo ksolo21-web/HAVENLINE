@@ -42,7 +42,7 @@ func run() -> void:
 	check("effect descriptor pools are bounded", contract.maximum_fragment_descriptors == 32 and contract.maximum_impact_pulses == 8)
 	check("committed impact must stay on its presented source", contract.impact_target_tolerance_meters == 0.25)
 	check("real hand sockets use centimeter-scale tolerances", contract.socket_contact_tolerance_meters == 0.025 and contract.second_hand_tolerance_meters == 0.045)
-	check("bounded palm settle cannot hide an unreachable tool", contract.maximum_grip_settle_meters == 0.12)
+	check("bounded palm settle cannot hide an unreachable tool", contract.maximum_grip_settle_meters == 0.16)
 	check("only an authoritative integration beat may arm impact", contract.authoritative_commit_arming_required)
 	check("source visibility follows simulation state only", contract.source_visibility_authority == "simulation_units_and_respawn_only")
 	check("impact effects use bounded visible geometry", contract.effect_geometry == "bounded_visible_mesh_pools")

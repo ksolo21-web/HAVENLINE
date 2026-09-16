@@ -181,6 +181,7 @@ jobs:
               assert len(respawned)==1 and respawned[0]['source_units']>0 and respawned[0]['source_visible'] is True
           tools=[r for r in reports if r['mode']=='tool' and not r['native_4k_render']]
           assert len(tools)==30 and len({(r['resource'],r['view']) for r in tools})==30
+          assert all(r['final_harvest']['contact_alignment_valid'] and r['final_harvest']['grip_error_m']<=0.025 and r['final_harvest']['impact_error_m']<=0.025 and r['final_harvest']['secondary_grip_error_m']<=0.045 for r in tools)
           assets=[r for r in reports if r['mode']=='asset']
           assert len(assets)==30 and len({(r['resource'],r['view']) for r in assets})==30
           devices=[r for r in reports if r['mode']=='device']

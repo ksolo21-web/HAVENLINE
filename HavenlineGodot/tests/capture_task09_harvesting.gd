@@ -54,20 +54,37 @@ func actor_point() -> Vector3:
 	return game.xyz(game.sim.position) + Vector3.UP * 0.95
 
 func configure_camera(frame := 0) -> void:
-	var focus := actor_point().lerp(source_point(),0.55)
+	var actor := actor_point()
+	var target := source_point()
+	var focus := actor.lerp(target,0.55)
+	var forward := target-actor
+	forward.y = 0.0
+	if forward.length_squared() <= 0.000001: forward = Vector3.FORWARD
+	forward = forward.normalized()
+	var right := Vector3(forward.z,0.0,-forward.x)
 	if view_id == "overhead":
-		game.camera.size = 5.2
+		game.camera.size = 4.6
 		game.camera.global_position = focus + Vector3(0.001,9.0,0.001)
 		game.camera.look_at(focus)
+		return
+	if view_id == "detail":
+		# A side-on grip view keeps the actor, both hands, handle and source face
+		# simultaneously visible instead of placing the source between camera/tool.
+		game.camera.keep_aspect = Camera3D.KEEP_HEIGHT
+		game.camera.size = 2.65
+		game.camera.global_position = focus+right*3.2+Vector3.UP*2.25-forward*0.35
+		game.camera.look_at(focus+Vector3.UP*0.10)
 		return
 	var angle_index := VIEWS.find(view_id)
 	if angle_index < 0: angle_index = 0
 	angle_index = mini(7,angle_index)
 	var angle := TAU * float(angle_index) / 8.0
-	var distance := 13.0 if mode == "device" else (4.8 if view_id == "detail" else 8.2)
-	var offset := Vector3(sin(angle) * distance,5.0,cos(angle) * distance)
+	var distance := 10.8 if mode == "device" else 7.0
+	var orbit_direction := (-forward*cos(angle)+right*sin(angle)).normalized()
+	if mode == "sequence": orbit_direction = (-forward+right*0.72).normalized()
+	var offset := orbit_direction*distance+Vector3.UP*(4.4 if mode == "device" else 3.8)
 	game.camera.keep_aspect = Camera3D.KEEP_HEIGHT
-	game.camera.size = 13.5 if mode == "device" else (3.4 if view_id == "detail" else 6.4)
+	game.camera.size = 9.8 if mode == "device" else 5.0
 	game.camera.global_position = focus + offset
 	game.camera.look_at(focus + Vector3.UP * (0.08 * sin(float(frame) * 0.03)))
 

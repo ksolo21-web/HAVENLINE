@@ -99,7 +99,7 @@ TOOLS = {
         "animation_profile": "human_player_chop",
         "contact_marker": "C1TwoHandContact",
         "grip_socket": [0.0, -0.30, 0.0],
-        "second_hand_socket": [0.0, -0.12, 0.0],
+        "second_hand_socket": [0.0, -0.20, 0.0],
         "impact_socket": [0.46, 0.56, 0.0],
     },
     "pickaxe": {
@@ -118,7 +118,7 @@ TOOLS = {
         "action": "dismantle",
         "animation_profile": "human_player_dismantle",
         "contact_marker": "C1RightHandContact",
-        "grip_socket": [0.0, -0.38, 0.0],
+        "grip_socket": [0.0, -0.10, 0.0],
         "second_hand_socket": [],
         "impact_socket": [0.42, 0.61, 0.0],
     },
