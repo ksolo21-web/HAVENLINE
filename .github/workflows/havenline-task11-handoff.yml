@@ -26,15 +26,22 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
 
-      - name: Compile T11 promotion tooling
+      - name: Compile T11 promotion and reconciliation tooling
         run: |
           set -euo pipefail
-          python3 -m py_compile tools/havenline/task11/prepare_activation.py tools/havenline/task11/tests/test_build_pending_handoff.py
+          python3 -m py_compile \
+            tools/havenline/task11/prepare_activation.py \
+            tools/havenline/task11/reconcile_t10_binding.py \
+            tools/havenline/task11/tests/test_build_pending_handoff.py \
+            tools/havenline/task11/tests/test_t10_binding_reconciler.py
 
       - name: Validate build-pending checkpoint and fail-closed promotion
         run: |
           set -euo pipefail
-          python3 -m unittest tools.havenline.task11.tests.test_build_pending_handoff -v
+          python3 -m unittest \
+            tools.havenline.task11.tests.test_build_pending_handoff \
+            tools.havenline.task11.tests.test_t10_binding_reconciler \
+            -v
 
       - name: Validate ordinary build-pending preparation remains legal
         run: |
