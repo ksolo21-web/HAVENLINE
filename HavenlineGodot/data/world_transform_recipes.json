@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "authority_id": "T10-world-transform-recipes-v1",
+  "prebuild_fixtures": true,
+  "shipping_binding_required_after_t09": true,
+  "recipes": [
+    {
+      "recipe_id": "framework_anchor_seed_to_foundation",
+      "source_state": "seed",
+      "target_state": "foundation",
+      "costs": [
+        {"resource_id": "wood", "quantity": 8},
+        {"resource_id": "stone", "quantity": 4}
+      ],
+      "prerequisites": [],
+      "progression_tags": ["opening_transform"],
+      "presentation_key": "framework_foundation",
+      "reversible": false
+    },
+    {
+      "recipe_id": "framework_anchor_foundation_to_reinforced",
+      "source_state": "foundation",
+      "target_state": "reinforced",
+      "costs": [
+        {"resource_id": "wood", "quantity": 12},
+        {"resource_id": "stone", "quantity": 8},
+        {"resource_id": "metal", "quantity": 2}
+      ],
+      "prerequisites": ["harvesting_online"],
+      "progression_tags": ["opening_transform", "reinforcement"],
+      "presentation_key": "framework_reinforced",
+      "reversible": false
+    }
+  ]
+}
