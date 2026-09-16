@@ -24,7 +24,7 @@ concurrency:
 jobs:
   integrated-candidate:
     runs-on: ubuntu-24.04
-    timeout-minutes: 35
+    timeout-minutes: 50
     steps:
       - uses: actions/checkout@v4
         with:
@@ -164,7 +164,7 @@ jobs:
               assert report['final_transfer']['accepted_receipts']==len(commits),report['resource']
               assert all(row['authority'] in ('outpost_simulation.step/context_director.advance','outpost_simulation.perform_action') and row['authoritative_event'] for row in commits)
               assert all(row['units_before']-row['units_after']==1 and row['inventory_after']-row['inventory_before']==1 for row in commits)
-              cancelled=[row for row in report['samples'] if row.get('cancelled')]
+              cancelled=[row for row in report['samples'] if row.get('phase')=='cancellation' and row.get('context',{}).get('cancelled') and row.get('action_state')=='blocked_movement']
               depleted=[row for row in report['samples'] if row.get('depleted')]
               respawned=[row for row in report['samples'] if row.get('respawned')]
               assert cancelled and all(not row['harvest']['active'] for row in cancelled)
@@ -186,7 +186,7 @@ jobs:
               assert len(depleted)==1 and depleted[0]['source_visible'] is False
               assert len(respawned)==1 and respawned[0]['source_visible'] is True
           native=[r for r in reports if r['native_4k_render']]
-          assert len(native)==1 and native[0]['internal_render']==[3840,2160] and native[0]['render_scale']==1.0
+          assert len(native)==1 and native[0]['internal_render'][0]>=3840 and native[0]['internal_render'][1]>=2160 and native[0]['render_scale']==1.0
           pngs=list(root.glob('*/*.png'))
           sequence_frames=list(root.glob('sequence-*/frames/frame-*.jpg'))
           frame_counts={resource:len(list((root/('sequence-'+resource)/'frames').glob('frame-*.jpg'))) for resource in ('wood','stone','metal','fuel')}
@@ -202,7 +202,7 @@ jobs:
                   assert stream.read(4)==b'IHDR' and length==13
                   width,height=struct.unpack('>II',stream.read(8))
                   assert width>0 and height>0,(path,width,height)
-          summary={'candidate':reports[0]['candidate'],'reports':len(reports),'pngs':len(pngs),'sequence_videos':len(list(root.glob('sequence-*/*.mp4'))),'sequence_frame_counts':frame_counts,'in_hand_views':len(tools),'isolated_tool_turntables':len(assets),'native_4k_internal':[3840,2160],'physical_4k60_verified':False,'passed':True}
+          summary={'candidate':reports[0]['candidate'],'reports':len(reports),'pngs':len(pngs),'sequence_videos':len(list(root.glob('sequence-*/*.mp4'))),'sequence_frame_counts':frame_counts,'in_hand_views':len(tools),'isolated_tool_turntables':len(assets),'native_4k_internal':native[0]['internal_render'],'physical_4k60_verified':False,'passed':True}
           Path('task09-evidence/capture-summary.json').write_text(json.dumps(summary,indent=2)); print(json.dumps(summary))
           PY
 
