@@ -37,6 +37,7 @@ jobs:
           python -m py_compile tools/havenline/task12/validate_traceability.py
           python -m py_compile tools/havenline/task12/validate_downstream_contract.py
           python -m py_compile tools/havenline/task12/validate_data_schema.py
+          python -m py_compile tools/havenline/task12/reference_progression_oracle.py
           python -m py_compile tools/havenline/task12/fuzz_progression_contract.py
           python -m py_compile tools/havenline/task12/benchmark_prebuild_validators.py
 
@@ -52,6 +53,7 @@ jobs:
           python -m json.tool Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json >/dev/null
           python -m json.tool Docs/Production/T12/PROGRESSION_DATA_SCHEMA.json >/dev/null
           python -m json.tool Docs/Production/T12/PREBUILD_PERFORMANCE_BUDGET.json >/dev/null
+          python -m json.tool Docs/Production/T12/ENGINE_TEST_VECTORS.json >/dev/null
           python -m json.tool Docs/Production/T12/defect-ledger.json >/dev/null
 
       - name: Validate T12 preparation contract
@@ -74,6 +76,9 @@ jobs:
 
       - name: Validate future shipping-data schema contract
         run: python tools/havenline/task12/validate_data_schema.py
+
+      - name: Validate non-shipping engine parity vectors
+        run: python tools/havenline/task12/reference_progression_oracle.py
 
       - name: Fuzz T12 progression contract fail-closed behavior
         run: python tools/havenline/task12/fuzz_progression_contract.py
