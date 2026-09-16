@@ -35,6 +35,8 @@ schema_validator = load_module("t12_schema", "validate_data_schema.py")
 runtime_validator = load_module("t12_runtime", "validate_runtime_interface.py")
 trace_validator = load_module("t12_trace", "validate_traceability.py")
 downstream_validator = load_module("t12_downstream", "validate_downstream_contract.py")
+candidate_validator = load_module("t12_candidate_evidence", "validate_candidate_evidence.py")
+critic_validator = load_module("t12_critic_reviews", "validate_critic_review_records.py")
 fuzz_module = load_module("t12_fuzz", "fuzz_progression_contract.py")
 
 MATRIX = json.loads((DOCS / "LEVEL_1_100_MATRIX.json").read_text())
@@ -42,6 +44,8 @@ SCHEMA = json.loads((DOCS / "PROGRESSION_DATA_SCHEMA.json").read_text())
 RUNTIME = json.loads((DOCS / "RUNTIME_INTERFACE_CONTRACT.json").read_text())
 TRACE = json.loads((DOCS / "ACCEPTANCE_TRACEABILITY.json").read_text())
 DOWNSTREAM = json.loads((DOCS / "DOWNSTREAM_CONSUMER_CONTRACT.json").read_text())
+CANDIDATE_TEMPLATE = json.loads((DOCS / "CANDIDATE_EVIDENCE_TEMPLATE.json").read_text())
+CRITIC_TEMPLATE = json.loads((DOCS / "CRITIC_REVIEW_RECORD_TEMPLATE.json").read_text())
 BUDGET = json.loads((DOCS / "PREBUILD_PERFORMANCE_BUDGET.json").read_text())["static_validation_budget"]
 SYNTHETIC_MANIFEST = fuzz_module.valid_manifest()
 
@@ -54,6 +58,8 @@ def validate_once() -> list[dict[str, Any]]:
         runtime_validator.validate_contract(RUNTIME),
         trace_validator.validate_traceability(TRACE),
         downstream_validator.validate_contract(DOWNSTREAM),
+        candidate_validator.validate_packet(CANDIDATE_TEMPLATE, require_resolved=False),
+        critic_validator.validate_record(CRITIC_TEMPLATE, require_resolved=False),
     ]
 
 
@@ -128,7 +134,7 @@ def main() -> None:
         "memory_instrumentation": "separate tracemalloc pass",
         "iterations": len(durations_ms),
         "memory_iterations": memory_iterations,
-        "validators_per_iteration": 6,
+        "validators_per_iteration": 8,
         "mean_ms": round(mean_ms, 6),
         "p95_ms": round(p95_ms, 6),
         "maximum_ms": round(maximum_ms, 6),
