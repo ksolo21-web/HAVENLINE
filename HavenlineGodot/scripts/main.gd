@@ -34,6 +34,7 @@ var device_benchmark: PanelContainer
 const FrameRecord = preload("res://scripts/performance_record.gd")
 const CarryStack = preload("res://scripts/carry_stack.gd")
 const TransferFeedback = preload("res://scripts/transfer_feedback.gd")
+const HarvestPresentation = preload("res://scripts/harvest_presentation.gd")
 const StorageStockpile = preload("res://scripts/storage_stockpile.gd")
 const RenderPolicy = preload("res://scripts/render_policy.gd")
 const AdaptiveLayout = preload("res://scripts/adaptive_layout.gd")
@@ -57,6 +58,8 @@ var player_rig: Node3D
 var carry_root: Node3D
 var carry_stacks: Dictionary = {}
 var transfer_feedback: Node3D
+var harvest_presentation: HavenlineHarvestPresentation
+var harvest_actor_id := -1
 var storage_stockpile: Node3D
 var last_presented_event_epoch := -1.0
 var menu_column: VBoxContainer
@@ -146,6 +149,12 @@ func _ready():
 	transfer_feedback = TransferFeedback.new()
 	transfer_feedback.loader = resource_piece
 	world.add_child(transfer_feedback)
+	harvest_presentation = HarvestPresentation.new()
+	harvest_presentation.name = "T09HarvestPresentation"
+	world.add_child(harvest_presentation)
+	for resource in sim.resources:
+		harvest_presentation.bind_source(String(resource.id),String(resource.kind),resource_visuals[resource.id],int(resource.units))
+	harvest_actor_id = sim.lead
 	build_hud()
 	action_readout = ActionReadout.new()
 	add_child(action_readout)
@@ -463,6 +472,17 @@ func present_events():
 		var actor_id := int(event.get("actor_id", sim.lead))
 		var receipt_id := "%.6f:%d:%s:%s:%d" % [sim.elapsed, event_index, String(event.type), kind, actor_id]
 		if event.type in ["gather","worker_gather"]:
+			if event.type == "gather" and is_instance_valid(harvest_presentation):
+				var harvest_action := HarvestPresentation.canonical_action(sim.action)
+				var profile := HarvestPresentation.profile_for_resource(kind)
+				var contact := HarvestPresentation.contact_node(player_rig,String(profile.get("contact_marker", "")))
+				if not harvest_action.is_empty() and String(harvest_action.resource) == kind and is_instance_valid(contact):
+					harvest_presentation.synchronize_committed_contact(harvest_action,contact.global_transform,target,actor_id)
+					harvest_presentation.accept_committed_impact({
+						"committed":true, "resource":kind, "source_id":String(harvest_action.source_id),
+						"action_token":int(harvest_action.action_token), "receipt_id":receipt_id,
+						"target_position":target, "actor_id":actor_id,
+					})
 			transfer_feedback.transfer(kind,target,origin,receipt_id,"source_to_actor",actor_id,"actor:%d" % actor_id)
 		elif event.type in ["deposit","worker_deposit","build","worker_build","repair","worker_repair","defense_repair","worker_defense_repair","customer_sale"]:
 			var destination_id := transfer_destination_id(event)
@@ -685,8 +705,20 @@ func _process(dt: float):
 	player_rig.position = xyz(sim.position)
 	if sim.velocity.length() > .1:
 		player_rig.rotation.y = lerp_angle(player_rig.rotation.y, atan2(sim.facing.x, sim.facing.y), 1 - exp(-16 * dt))
-	var player_action: Dictionary = sim.action if bool(sim.action.get("actionable", false)) else {}
+	if harvest_actor_id != sim.lead:
+		harvest_presentation.reset()
+		harvest_actor_id = sim.lead
+	var harvest_action := HarvestPresentation.canonical_action(sim.action)
+	var player_action: Dictionary = harvest_presentation.motion_action(harvest_action) if not harvest_action.is_empty() and bool(harvest_action.actionable) else (sim.action if bool(sim.action.get("actionable", false)) else {})
 	animate(player_rig, sim.velocity.length(), dt, player_action, "player_lead")
+	if not harvest_action.is_empty() and bool(harvest_action.actionable):
+		var harvest_profile := HarvestPresentation.profile_for_resource(String(harvest_action.resource))
+		var harvest_contact := HarvestPresentation.contact_node(player_rig,String(harvest_profile.get("contact_marker", "")))
+		if is_instance_valid(harvest_contact):
+			if harvest_presentation.begin_action(harvest_action,sim.lead):
+				harvest_presentation.update_action(harvest_action,harvest_contact.global_transform,xyz(sim.action.position)+Vector3(0,.75,0),player_rig.visible and (sim.presented_actor_ids.is_empty() or sim.lead in sim.presented_actor_ids))
+	else:
+		harvest_presentation.cancel(String(sim.action.get("reason", "context_inactive")))
 	for companion in sim.companions:
 		if not actors.has(companion.id): continue # Additional NPC art remains a release blocker.
 		var root: Node3D = actors[companion.id]
@@ -696,7 +728,7 @@ func _process(dt: float):
 		if motion.length() > .005: root.rotation.y = lerp_angle(root.rotation.y, atan2(motion.x, motion.z), .15)
 		animate(root, motion.length() / maxf(dt, .001), dt, {}, "core_human_companion")
 	for node in sim.resources:
-		resource_visuals[node.id].visible = node.units > 0
+		harvest_presentation.sync_source(String(node.id),int(node.units),float(node.respawn))
 	for side in sim.defenses:
 		var d: Dictionary = sim.defenses[side]
 		var progress:=int(d.delivered.wood)+int(d.delivered.stone)

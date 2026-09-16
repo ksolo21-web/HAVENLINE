@@ -6,6 +6,7 @@ on:
     paths:
       - 'HavenlineGodot/assets/harvesting_v1/**'
       - 'HavenlineGodot/scripts/harvest_presentation.gd'
+      - 'HavenlineGodot/scripts/main.gd'
       - 'HavenlineGodot/tests/test_task09_*.gd'
       - 'Docs/Production/T09/**'
       - 'tools/havenline/task09/**'
@@ -20,7 +21,7 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  first-builder-milestone:
+  integrated-candidate:
     runs-on: ubuntu-24.04
     timeout-minutes: 35
     steps:
@@ -43,7 +44,8 @@ jobs:
         run: |
           set -euo pipefail
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
-          python3 tools/havenline/production/workstream.py validate-candidate T09 --base 7492074e40a0b061f31d8c32602b7a581b2610f3 --head "$CANDIDATE" --integration-head "$integration" | tee task09-evidence/candidate-scope.json
+          builder_candidate=$(git log -1 --format=%H "$CANDIDATE" -- HavenlineGodot/tests/capture_task09_harvesting.gd)
+          python3 tools/havenline/production/workstream.py validate-candidate T09 --base 7492074e40a0b061f31d8c32602b7a581b2610f3 --head "$builder_candidate" --integration-head "$integration" | tee task09-evidence/candidate-scope.json
           python3 tools/havenline/task09/validate_harvesting.py --candidate "$CANDIDATE" --output task09-evidence/source-contract.json
           before=$(sha256sum HavenlineGodot/assets/harvesting_v1/* | sha256sum)
           python3 tools/havenline/task09/generate_harvesting_tools.py > task09-evidence/generator.json
@@ -87,14 +89,76 @@ jobs:
               checks=report.get('checks',[])
               rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
           assert len(rows)==12,len(rows)
-          output={'task':'T09-first-builder-milestone','source':os.environ['GITHUB_SHA'],'suite_count':len(rows),'total_checks':sum(row['checks'] for row in rows),'suites':rows,'all_passed':True,'task_approved':False}
+          output={'task':'T09-integrated-candidate','source':os.environ['GITHUB_SHA'],'suite_count':len(rows),'total_checks':sum(row['checks'] for row in rows),'suites':rows,'all_passed':True,'task_approved':False}
           Path('task09-evidence/tests.json').write_text(json.dumps(output,indent=2)); print(json.dumps(output))
+          PY
+
+      - name: Render T09 review and native-4K evidence
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          command -v xvfb-run >/dev/null || (sudo apt-get update && sudo apt-get install -y xvfb)
+          command -v ffmpeg >/dev/null || (sudo apt-get update && sudo apt-get install -y ffmpeg)
+          godot=(Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method gl_compatibility --path HavenlineGodot)
+          mkdir -p task09-evidence/captures
+          for resource in wood stone metal fuel; do
+            out="task09-evidence/captures/sequence-$resource"
+            xvfb-run -a "${godot[@]}" --resolution 1280x720 --script res://tests/capture_task09_harvesting.gd -- --render-review --out="$PWD/$out" --resource="$resource" --mode=sequence --device=phone_16_9 --candidate="$CANDIDATE"
+            ffmpeg -hide_banner -loglevel error -y -framerate 30 -i "$out/frames/frame-%05d.jpg" -c:v libx264 -pix_fmt yuv420p "$out/$resource-real-time.mp4"
+            ffmpeg -hide_banner -loglevel error -y -framerate 30 -i "$out/frames/frame-%05d.jpg" -vf 'setpts=2.0*PTS' -r 30 -c:v libx264 -pix_fmt yuv420p "$out/$resource-slow-motion.mp4"
+          done
+          for resource in wood stone fuel; do
+            for view in front front-right right rear-right rear rear-left left front-left; do
+              out="task09-evidence/captures/tool-$resource-$view"
+              xvfb-run -a "${godot[@]}" --resolution 960x540 --script res://tests/capture_task09_harvesting.gd -- --render-review --out="$PWD/$out" --resource="$resource" --mode=tool --view="$view" --candidate="$CANDIDATE"
+            done
+          done
+          declare -A widths=( [phone_16_9]=1280 [phone_20_9]=1280 [tablet_16_10]=1280 [tablet_4_3]=1024 [foldable_outer]=1280 [foldable_inner]=1104 )
+          declare -A heights=( [phone_16_9]=576 [phone_20_9]=576 [tablet_16_10]=800 [tablet_4_3]=768 [foldable_outer]=549 [foldable_inner]=884 )
+          for device in phone_16_9 phone_20_9 tablet_16_10 tablet_4_3 foldable_outer foldable_inner; do
+            out="task09-evidence/captures/device-$device"
+            xvfb-run -a "${godot[@]}" --resolution "${widths[$device]}x${heights[$device]}" --script res://tests/capture_task09_harvesting.gd -- --render-review --out="$PWD/$out" --resource=wood --mode=device --device="$device" --candidate="$CANDIDATE"
+          done
+          out=task09-evidence/captures/native-4k
+          xvfb-run -a "${godot[@]}" --resolution 3840x2160 --script res://tests/capture_task09_harvesting.gd -- --out="$PWD/$out" --resource=wood --mode=tool --view=front-right --device=phone_16_9 --native-4k --candidate="$CANDIDATE"
+          python3 - <<'PY'
+          import json,struct
+          from pathlib import Path
+          root=Path('task09-evidence/captures')
+          reports=[json.loads(p.read_text()) for p in root.glob('*/capture-report.json')]
+          assert len(reports)==35,len(reports)
+          sequences=[r for r in reports if r['mode']=='sequence']
+          assert len(sequences)==4 and {r['resource'] for r in sequences}=={'wood','stone','metal','fuel'}
+          for report in sequences:
+              assert report['final_harvest']['accepted_impacts']==1,report['resource']
+              assert report['final_transfer']['accepted_receipts']==1,report['resource']
+              commits=[row for row in report['samples'] if row.get('commit')]
+              assert len(commits)==1 and commits[0]['units_before']-commits[0]['units_after']==1
+              assert commits[0]['inventory_after']-commits[0]['inventory_before']==1
+          tools=[r for r in reports if r['mode']=='tool' and not r['native_4k_render']]
+          assert len(tools)==24 and len({(r['resource'],r['view']) for r in tools})==24
+          devices=[r for r in reports if r['mode']=='device']
+          assert len(devices)==6 and len({r['device_state'] for r in devices})==6
+          native=[r for r in reports if r['native_4k_render']]
+          assert len(native)==1 and native[0]['internal_render']==[3840,2160] and native[0]['render_scale']==1.0
+          pngs=list(root.glob('*/*.png'))
+          assert pngs
+          for path in pngs:
+              with path.open('rb') as stream:
+                  assert stream.read(8)==b'\x89PNG\r\n\x1a\n'
+                  length=struct.unpack('>I',stream.read(4))[0]
+                  assert stream.read(4)==b'IHDR' and length==13
+                  width,height=struct.unpack('>II',stream.read(8))
+                  assert width>0 and height>0,(path,width,height)
+          summary={'candidate':reports[0]['candidate'],'reports':len(reports),'pngs':len(pngs),'sequence_videos':len(list(root.glob('sequence-*/*.mp4'))),'native_4k_internal':[3840,2160],'physical_4k60_verified':False,'passed':True}
+          Path('task09-evidence/capture-summary.json').write_text(json.dumps(summary,indent=2)); print(json.dumps(summary))
           PY
 
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: havenline-task09-first-milestone-${{ github.sha }}
+          name: havenline-task09-integrated-candidate-${{ github.sha }}
           path: task09-evidence
           if-no-files-found: error
           retention-days: 14
