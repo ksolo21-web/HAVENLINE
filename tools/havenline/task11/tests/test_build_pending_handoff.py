@@ -10,6 +10,8 @@ import unittest
 ROOT = pathlib.Path(__file__).resolve().parents[4]
 SCRIPT = ROOT / "tools" / "havenline" / "task11" / "prepare_activation.py"
 CHECKPOINT = ROOT / "Docs" / "Production" / "T11" / "BUILD_PENDING_CANDIDATE.json"
+CRITIC_READINESS = ROOT / "Docs" / "Production" / "T11" / "critic-input-readiness.json"
+CRITIC_MATRIX = ROOT / "Docs" / "Production" / "CRITIC_MATRIX.json"
 
 spec = importlib.util.spec_from_file_location("t11_prepare_activation", SCRIPT)
 module = importlib.util.module_from_spec(spec)
@@ -47,6 +49,35 @@ class T11BuildPendingHandoffTests(unittest.TestCase):
         self.assertTrue(evidence["lifecycle_beacon_readable_at_gameplay_scale"])
         self.assertFalse(evidence["final_visual_critic_evidence"])
         self.assertFalse(evidence["physical_4k60_verified"])
+
+    def test_critic_readiness_is_bound_to_checkpoint_and_matrix(self):
+        checkpoint = json.loads(CHECKPOINT.read_text())
+        critic = json.loads(CRITIC_READINESS.read_text())
+        matrix = json.loads(CRITIC_MATRIX.read_text())
+        source = module.checkpoint_source(checkpoint)
+        run = checkpoint["build_pending_test_run"]
+
+        required = ["C2", "C3", "C4", "C6"]
+        self.assertEqual(matrix["task_applicability"]["T11"], required)
+        self.assertEqual(critic["required_critics"], required)
+        self.assertEqual(set(critic["coverage"]), set(required))
+        self.assertTrue(all(critic["coverage"][critic_id]["input_ready"] for critic_id in required))
+
+        self.assertEqual(critic["state"], "BUILT_PENDING_DEPENDENCY")
+        self.assertEqual(critic["candidate"], source)
+        self.assertEqual(critic["runtime_and_evidence_source"], source)
+        self.assertEqual(critic["isolated_workflow_run"], run["workflow_run"])
+        self.assertEqual(critic["evidence_artifact"], run["artifact_id"])
+        self.assertEqual(critic["evidence_artifact_sha256"], run["artifact_sha256"])
+        self.assertTrue(critic["isolated_critic_input_ready"])
+        self.assertFalse(critic["production_critic_execution_allowed"])
+        self.assertFalse(critic["critic_scores_recorded"])
+        self.assertFalse(critic["integration_allowed"])
+        self.assertFalse(critic["task_approved"])
+        self.assertFalse(critic["final_t10_compatibility_claimed"])
+        self.assertFalse(critic["evidence_summary"]["physical_4k60_verified"])
+        self.assertTrue(critic["remaining_integration_blockers"])
+        self.assertTrue(any("not a critic result" in note for note in critic["notes"]))
 
     def test_activation_still_fails_closed_until_t10_is_approved(self):
         head = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
