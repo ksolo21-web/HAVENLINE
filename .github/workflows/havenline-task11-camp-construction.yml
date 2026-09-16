@@ -35,7 +35,7 @@ jobs:
       - name: Prepare pinned Godot
         run: |
           set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/engine" task11-evidence/tests
+          mkdir -p "$RUNNER_TEMP/engine" task11-evidence/tests task11-evidence/rendered/standard task11-evidence/rendered/native-4k
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
@@ -112,7 +112,6 @@ jobs:
           for suite in "${suites[@]}"; do
             timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task11-evidence/tests/$suite.log" 2>&1
           done
-          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/capture_task11_camp_upgrade.gd > task11-evidence/tests/capture_task11_camp_upgrade.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task11-evidence/tests/*.log; then exit 1; fi
           python3 - <<'PY'
           from pathlib import Path
@@ -131,13 +130,6 @@ jobs:
               checks=report.get('checks',[])
               rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
           assert len(rows)==16,len(rows)
-          capture_reports=[]
-          for line in Path('task11-evidence/tests/capture_task11_camp_upgrade.log').read_text().splitlines():
-              line=line.strip()
-              if not line.startswith('{'): continue
-              try: capture_reports.append(json.loads(line))
-              except json.JSONDecodeError: pass
-          assert capture_reports and capture_reports[-1].get('configured') is True,capture_reports
           output={
             'task':'T11-build-pending', 'source':os.environ['GITHUB_SHA'],
             'suite_count':len(rows), 'total_checks':sum(row['checks'] for row in rows),
@@ -146,6 +138,48 @@ jobs:
             'final_t10_compatibility_claimed':False, 'task_approved':False
           }
           Path('task11-evidence/tests.json').write_text(json.dumps(output,indent=2)); print(json.dumps(output))
+          PY
+
+      - name: Render source-bound T11 evidence
+        run: |
+          set -euo pipefail
+          standard="$GITHUB_WORKSPACE/task11-evidence/rendered/standard"
+          native="$GITHUB_WORKSPACE/task11-evidence/rendered/native-4k"
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/capture_task11_camp_upgrade.gd -- --out="$standard" > task11-evidence/tests/capture-task11-standard.log 2>&1
+          timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/capture_task11_camp_upgrade.gd -- --native-4k --out="$native" > task11-evidence/tests/capture-task11-native-4k.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task11-evidence/tests/capture-task11-*.log; then exit 1; fi
+          python3 - <<'PY' | tee task11-evidence/rendered-evidence.json
+          from pathlib import Path
+          import json
+          root=Path('task11-evidence/rendered')
+          standard=json.loads((root/'standard/capture.json').read_text())
+          native=json.loads((root/'native-4k/capture.json').read_text())
+          assert standard['configured'] is True and not standard['capture_errors'], standard.get('capture_errors')
+          assert native['configured'] is True and not native['capture_errors'], native.get('capture_errors')
+          assert len(standard['captures']) == 16, len(standard['captures'])
+          assert len(native['captures']) == 3, len(native['captures'])
+          standard_png=list((root/'standard').glob('*.png'))
+          native_png=list((root/'native-4k').glob('*.png'))
+          assert len(standard_png) == 16, len(standard_png)
+          assert len(native_png) == 3, len(native_png)
+          assert all(row['size']==[1280,720] for row in standard['captures'])
+          assert all(row['size']==[3840,2160] for row in native['captures'])
+          lifecycle={row['lifecycle']:row['status_color'] for row in standard['captures'] if row['camp_state_id']=='site_unbuilt' and row['view']=='gameplay'}
+          assert len(lifecycle)==6 and len(set(lifecycle.values()))==6,lifecycle
+          report={
+            'task':'T11',
+            'kind':'isolated-source-bound-rendered-evidence',
+            'standard_frames':len(standard_png),
+            'native_4k_frames':len(native_png),
+            'lifecycle_colors':lifecycle,
+            'gameplay_camera_profile':'t04-reference-camera-v1',
+            'physical_4k60_verified':False,
+            'final_visual_critic_evidence':False,
+            'build_pending_dependency':True,
+            'task_approved':False,
+            'passed':True,
+          }
+          print(json.dumps(report,indent=2))
           PY
 
       - name: Record dependency-sensitive blockers and critic contract
