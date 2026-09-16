@@ -11,7 +11,7 @@
     "maximum_p95_ms": 15.0,
     "maximum_single_ms": 75.0,
     "maximum_retained_growth_kib": 512,
-    "input_shape": "100 levels + 10 milestones + eight preparation validators including candidate-evidence and critic-review templates",
+    "input_shape": "100 levels + 10 milestones + nine preparation validators including candidate-evidence, critic-review and complete-evidence-index templates",
     "measurement_rule": "Timing is measured without tracemalloc instrumentation. Retained/peak traced memory is measured in a separate bounded pass so allocation tracing overhead is not mistaken for validator latency."
   },
   "fuzz_budget": {
