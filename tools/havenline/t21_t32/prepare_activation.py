@@ -1,21 +1,36 @@
 #!/usr/bin/env python3
 """Fail-closed Havenline T21-T32 preparation and read-only activation preflight."""
 from __future__ import annotations
-import argparse, json, pathlib, subprocess
+import argparse, fnmatch, functools, json, pathlib, subprocess
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 DOCS = ROOT / "Docs" / "Production"
 TASKS = [f"T{i:02d}" for i in range(21, 33)]
 
 def load(p): return json.loads(pathlib.Path(p).read_text(encoding="utf-8"))
-def prefix(p):
-    cut=len(p)
-    for t in ("*","?","["):
-        x=p.find(t)
-        if x>=0: cut=min(cut,x)
-    return p[:cut].rstrip("/")
+def _has_glob(s): return any(ch in s for ch in "*?[")
+def _segment_overlap(a,b):
+    if a==b: return True
+    ag,bg=_has_glob(a),_has_glob(b)
+    if not ag and not bg: return False
+    if not ag: return fnmatch.fnmatchcase(a,b)
+    if not bg: return fnmatch.fnmatchcase(b,a)
+    ai=min([i for i in (a.find("*"),a.find("?"),a.find("[")) if i>=0],default=len(a)); bi=min([i for i in (b.find("*"),b.find("?"),b.find("[")) if i>=0],default=len(b))
+    ap,bp=a[:ai],b[:bi]
+    if ap and bp and not (ap.startswith(bp) or bp.startswith(ap)): return False
+    if "[" not in a and "[" not in b:
+        al=max(a.rfind("*"),a.rfind("?")); bl=max(b.rfind("*"),b.rfind("?")); asuf=a[al+1:] if al>=0 else a; bsuf=b[bl+1:] if bl>=0 else b
+        if asuf and bsuf and not (asuf.endswith(bsuf) or bsuf.endswith(asuf)): return False
+    return True
 def overlap(a,b):
-    pa,pb=prefix(a),prefix(b)
-    return a==b or not pa or not pb or pa==pb or pa.startswith(pb+"/") or pb.startswith(pa+"/")
+    aa=tuple(x for x in a.strip("/").split("/") if x); bb=tuple(x for x in b.strip("/").split("/") if x)
+    @functools.lru_cache(maxsize=None)
+    def walk(i,j):
+        if i==len(aa): return all(x=="**" for x in bb[j:])
+        if j==len(bb): return all(x=="**" for x in aa[i:])
+        if aa[i]=="**": return walk(i+1,j) or walk(i,j+1)
+        if bb[j]=="**": return walk(i,j+1) or walk(i+1,j)
+        return _segment_overlap(aa[i],bb[j]) and walk(i+1,j+1)
+    return walk(0,0)
 def registry_status(reg,tid):
     if tid in reg.get("legacy_approvals",{}): return "APPROVED"
     row=next((x for x in reg.get("workstreams",[]) if x.get("task_id")==tid),None)
