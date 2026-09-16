@@ -245,6 +245,8 @@ jobs:
           assert candidate['candidate']==os.environ['CANDIDATE'] and candidate['integrated'] is True
           delta={key:candidate[key]-base[key] for key in ['p95_ms','p99_ms','average_draw_calls','average_primitives','process_static_memory_mb','materials_visible','unique_shader_resources','physics_active_bodies','animation_players','active_animations','visible_rigs','npc_companion_active_population']}
           result={'task':'T09','exact_base':os.environ['BASE'],'candidate':os.environ['CANDIDATE'],'method':candidate['method'],'base':base,'integrated':candidate,'delta':delta,'limits':{'p95_ms':10.0,'draw_calls':12.0,'primitives':5000.0,'memory_mb':32.0,'materials':6,'shaders':0,'physics_bodies':0,'animation_players':0},'physical_4k60_verified':False,'thermal_certified':False}
+          Path('task09-evidence/performance/delta-diagnostic.json').write_text(json.dumps(result,indent=2))
+          print(json.dumps({'task':'T09','performance_delta':delta,'diagnostic':True}))
           assert candidate['measured_frames']==180 and candidate['unchanged_active_state_node_count_stable'] is True
           assert candidate['maximum_fragment_descriptors']<=32 and candidate['maximum_impact_pulses']<=8
           assert delta['p95_ms']<=result['limits']['p95_ms'] and delta['average_draw_calls']<=result['limits']['draw_calls'] and delta['average_primitives']<=result['limits']['primitives']
