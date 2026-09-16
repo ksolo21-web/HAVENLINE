@@ -1,5 +1,5 @@
 {
-  "schema_version": 2,
+  "schema_version": 3,
   "task_id": "T11",
   "task_name": "Camp construction and visual upgrade system",
   "branch": "havenline/T11-camp-construction",
@@ -7,20 +7,23 @@
   "state": "BUILT_PENDING_DEPENDENCY",
   "final_integration_ready": false,
   "task_approved": false,
-  "runtime_candidate_source": "db988ed013691ce29e8dc910035df41742835ec2",
+  "runtime_and_evidence_candidate_source": "58e6a5c5b5ac4a77545fb711763699b163f64f32",
   "observed_unapproved_t10": {
     "branch": "havenline/T10-world-transformation",
-    "source": "55674b8fc5b03be6ad72a3493fece526de52b5c0",
-    "reported_checkpoint": "BUILT_PENDING_DEPENDENCY",
-    "interface_methods_used_semantically": [
+    "source": "9ad946c226132ebedd34ff1d9298e192fa3f2990",
+    "message": "Gate T10 reconciliation handoff shape",
+    "interface_methods_verified": [
       "preview_transform",
       "commit_transform",
       "accept_authoritative_receipt"
     ],
-    "fixture_recipe_ids": [
+    "fixture_recipe_ids_verified": [
       "framework_anchor_seed_to_foundation",
       "framework_anchor_foundation_to_reinforced"
     ],
+    "known_interface_drift_against_t11": false,
+    "recipe_catalog_still_prebuild_fixtures": true,
+    "shipping_binding_required_after_t09": true,
     "accepted_or_integrated": false,
     "reconciliation_required": true
   },
@@ -35,39 +38,64 @@
     "presentation-only authored camp stage switcher",
     "preconstruction, initial camp and first visible upgrade authored stages",
     "authored warm camp work-floor geometry/material",
+    "paired authored timber/blue-roof counter canopies for the first visible upgrade",
     "T05 exact asset reuse without source mutation",
-    "T03 perimeter/gate authority preserved rather than duplicated",
-    "T04 camera and T07 contextual-control continuity assertions",
+    "approved T03 perimeter/gate presentation reused directly rather than duplicated",
+    "T04 gameplay camera and T07 contextual-control continuity assertions",
+    "six truthful lifecycle states with color, ring size and side-beacon height/orb cues",
     "build-pending domain and integration tests",
-    "source-bound build-pending capture metadata harness"
+    "source-bound rendered multi-angle and native-4K evidence"
   ],
   "build_pending_test_run": {
-    "workflow_run": 35093341701,
-    "source": "db988ed013691ce29e8dc910035df41742835ec2",
+    "workflow_run": 35107114263,
+    "source": "58e6a5c5b5ac4a77545fb711763699b163f64f32",
     "conclusion": "success",
-    "artifact_id": 10445326713,
-    "artifact_sha256": "1346c4b62e423dc61b58c42f0775f64d6d3ab5a2de9feddf470738f3abf726da"
+    "artifact_id": 10450279939,
+    "artifact_sha256": "3d9260cc2d9789ed61c93d513dd6a6d9b2a8cf6257adb2ce71e661e71a46c214"
   },
   "build_pending_tests": {
     "suite_count": 16,
-    "check_count": 1097,
+    "check_count": 1121,
     "all_passed": true,
     "t11_domain_checks": 24,
-    "t11_integration_checks": 27,
+    "t11_integration_checks": 51,
     "godot_import": "PASS",
     "source_contract": "PASS",
     "production_governance_regression": "PASS",
+    "rendered_evidence_gate": "PASS",
     "t11_lfs_packaging_warning": "FIXED",
     "remaining_checkout_pointer_warning": "pre-existing Assets/TutorialInfo/Icons/URP.png only; outside T11 scope"
   },
+  "rendered_evidence": {
+    "standard_frame_count": 16,
+    "standard_dimensions": [1280, 720],
+    "native_4k_frame_count": 3,
+    "native_4k_dimensions": [3840, 2160],
+    "render_method": "gl_compatibility under Xvfb/software OpenGL",
+    "gameplay_camera_profile": "t04-reference-camera-v1",
+    "approved_t03_boundary_rendered": true,
+    "t03_boundary_recreated_by_t11": false,
+    "approved_t05_assets_rendered": true,
+    "shipping_character_used_for_scale": true,
+    "warm_work_floor_visible": true,
+    "paired_canopy_roofs_visible": true,
+    "six_lifecycle_colors_distinct": true,
+    "six_lifecycle_beacon_heights_distinct": true,
+    "lifecycle_beacon_readable_at_gameplay_scale": true,
+    "review_snow_and_lane_stage_is_shipping_content": false,
+    "physical_4k60_verified": false,
+    "final_visual_critic_evidence": false
+  },
   "internal_build_pending_review": {
-    "reviewer_type": "internal engineering review; not an independent final critic",
-    "readiness_score": 10.0,
-    "scope": "isolated build/test readiness through BUILT_PENDING_DEPENDENCY only",
+    "reviewer_type": "internal engineering and visual review; not an independent final critic",
+    "scope": "isolated build/test/evidence readiness through BUILT_PENDING_DEPENDENCY only",
+    "readiness_score": 9.8,
+    "pass_rule": "> 9.0 for this internal build-pending review with zero unresolved mandatory build defects",
     "final_c2_c3_c4_c6_score_claimed": false,
     "checks": [
       {"name": "T11 changed paths remain isolated from T09/T10/integration-only runtime", "status": "PASS"},
-      {"name": "T10 semantic interface is dependency-injected and no unfinished T10 runtime is preloaded", "status": "PASS"},
+      {"name": "T10 semantic interface is dependency-injected and unfinished T10 runtime is not preloaded", "status": "PASS"},
+      {"name": "Latest observed T10 method surface and fixture recipe IDs show no known drift", "status": "PASS"},
       {"name": "Authored camp state advances only after authoritative receipt", "status": "PASS"},
       {"name": "Duplicate receipt/replay cannot duplicate authored camp progression", "status": "PASS"},
       {"name": "No T11-local resource cost/debit authority exists", "status": "PASS"},
@@ -75,19 +103,22 @@
       {"name": "T22 defense functionality is not pre-spawned", "status": "PASS"},
       {"name": "T16/T17 station context remains presentation-only/passive", "status": "PASS"},
       {"name": "Unchanged completed camp state produces zero repeat rebuild", "status": "PASS"},
-      {"name": "Authored work-floor packaging follows local reviewed-text attribute exception", "status": "PASS"},
-      {"name": "16-suite approved-baseline plus T11 regression is green", "status": "PASS"}
+      {"name": "Warm work floor, paired canopy upgrade and approved T03 fence/gates are visibly readable across evidence views", "status": "PASS"},
+      {"name": "Lifecycle ready/error/committing states are visibly readable at gameplay scale by color and beacon height", "status": "PASS"},
+      {"name": "16-suite approved-baseline plus T11 regression is green at 1121 checks", "status": "PASS"},
+      {"name": "16 standard and 3 native-4K source-bound rendered frames pass automated evidence validation", "status": "PASS"}
     ]
   },
   "unresolved_mandatory_build_defects": [],
   "blocked_before_integration_ready": [
     "T09 must complete so T10 can finish its dependency-sensitive integration",
     "T10 must be APPROVED and integrated on the authoritative integration branch",
-    "T11 adapter/recipe IDs must be reconciled to exact accepted T10 source",
+    "T11 adapter/recipe IDs must be reconciled to the exact accepted T10 source even though no current drift is known",
     "any shipping recipe needs authoritative price_source or approved tuning_record",
     "T10 exact-once plus T08/T09-through-T10 conservation tests must be rerun",
     "G1 and G14 must pass",
-    "final source-bound visual evidence packet must be produced against the reconciled candidate",
-    "final independent C2/C3/C4/C6 review must pass strict >9.0 unrounded"
+    "final source-bound evidence must be regenerated against the reconciled post-T10 candidate",
+    "final independent C2/C3/C4/C6 review must pass strict >9.0 unrounded",
+    "physical device/native 4K60 evidence remains a later final-release requirement where applicable"
   ]
 }
