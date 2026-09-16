@@ -264,7 +264,11 @@ func accept_authoritative_receipt(receipt: Dictionary) -> Dictionary:
 		var existing: Dictionary = receipts[transaction_id]
 		if String(existing.get("request_identity", "")) != String(receipt.get("request_identity", "")):
 			return {"passed": false, "errors": ["transaction_id_collision"], "applied": false, "replayed": false}
-		return {"passed": true, "errors": [], "applied": false, "replayed": true, "transaction_id": transaction_id}
+		var replay := existing.duplicate(true)
+		replay["passed"] = true
+		replay["applied"] = false
+		replay["replayed"] = true
+		return replay
 	if not _valid_transaction_row(transaction_id, receipt):
 		return {"passed": false, "errors": ["malformed_authoritative_receipt"], "applied": false, "replayed": false}
 
@@ -286,11 +290,15 @@ func accept_authoritative_receipt(receipt: Dictionary) -> Dictionary:
 	target["revision"] = int(receipt.target_revision)
 	targets[String(receipt.target_id)] = target
 	var canonical := receipt.duplicate(true)
+	canonical["passed"] = true
+	canonical["applied"] = true
+	canonical["replayed"] = false
 	canonical["submit_debit_transaction"] = false
 	canonical["authoritative_applied"] = true
-	receipts[transaction_id] = canonical
+	canonical["accepted_by_world_transform"] = true
+	receipts[transaction_id] = canonical.duplicate(true)
 	prepared.erase(transaction_id)
-	return {"passed": true, "errors": [], "applied": true, "replayed": false, "transaction_id": transaction_id, "target_revision": int(target.revision), "target_state": String(target.state)}
+	return canonical
 
 func export_component_state() -> Dictionary:
 	return {
