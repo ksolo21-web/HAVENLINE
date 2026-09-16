@@ -188,7 +188,7 @@ jobs:
           assert len({tuple(r['window']) for r in devices})==6
           for report in devices:
               commits=[row for row in report['samples'] if row.get('commit')]
-              samples=[row for row in report['samples'] if 'harvest' in row]
+              samples=[row for row in report['samples'] if all(key in row for key in ('harvest','transfer','carry'))]
               depleted=[row for row in report['samples'] if row.get('depleted')]
               respawned=[row for row in report['samples'] if row.get('respawned')]
               assert report['simulation_authoritative'] is True and commits
