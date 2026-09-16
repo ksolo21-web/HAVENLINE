@@ -1,0 +1,70 @@
+name: Havenline Task 11 preflight tests
+
+on:
+  push:
+    branches: ['havenline/governance-t11-prep']
+    paths:
+      - 'Docs/Production/T11/**'
+      - 'tools/havenline/task11/**'
+      - '.github/workflows/havenline-task11-preflight-tests.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-task11-preflight-tests-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  preflight-tests:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Validate T11 preparation and fail-closed dependency behavior
+        run: |
+          set -euo pipefail
+          mkdir -p task11-preflight-evidence
+          python3 -m py_compile \
+            tools/havenline/task11/prepare_activation.py \
+            tools/havenline/task11/validate_camp_construction.py \
+            tools/havenline/task11/tests/test_preparation.py
+          python3 tools/havenline/task11/prepare_activation.py | tee task11-preflight-evidence/preparation.json
+          python3 -m unittest discover -s tools/havenline/task11/tests -p 'test_*.py' -v 2>&1 | tee task11-preflight-evidence/unit-tests.log
+
+      - name: Record exact preparation source and changed paths
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | tee task11-preflight-evidence/source-audit.json
+          import json, subprocess
+          from pathlib import Path
+
+          checklist=json.loads(Path('Docs/Production/T11/ACTIVATION_CHECKLIST.json').read_text())
+          head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          base=checklist['prepared_from_commit']
+          changed=subprocess.check_output(['git','diff','--name-only',f'{base}..{head}'],text=True).splitlines()
+          runtime=[p for p in changed if p.startswith('HavenlineGodot/')]
+          assert not runtime,runtime
+          print(json.dumps({
+            'task':'T11-preparation',
+            'base':base,
+            'head':head,
+            'changed_file_count':len(changed),
+            'runtime_changed_files':runtime,
+            'runtime_change_count':len(runtime),
+            'passed':True
+          },indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task11-preflight-${{ github.sha }}
+          path: task11-preflight-evidence
+          if-no-files-found: error
+          retention-days: 14
