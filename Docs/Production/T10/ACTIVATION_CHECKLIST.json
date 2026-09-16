@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "task_name": "World Transformation Framework",
+  "preparation_status": "PREPARED_GOVERNANCE_ONLY",
+  "prepared_branch": "havenline/governance-t10-prep",
+  "prepared_from_integration_commit": "f342e807786d1f9d582a75dd3a2fc9f656143116",
+  "future_builder_branch": "havenline/T10-world-transformation",
+  "future_owner": "world-transformation-builder",
+  "dependencies": ["T05", "T08", "T09"],
+  "activation_requires_all_dependencies_approved": true,
+  "activation_base_rule": "exact current integration head that records T09 APPROVED and integrated",
+  "planned_owned_alias": "@reservation:T10",
+  "planned_owned_paths": [
+    "HavenlineGodot/scripts/world_transform.gd",
+    "HavenlineGodot/scripts/world_transform_view.gd",
+    "HavenlineGodot/data/world_transform_recipes.json",
+    "HavenlineGodot/assets/world_transform_v1/**",
+    "HavenlineGodot/tests/test_task10_world_transform.gd",
+    "HavenlineGodot/tests/test_task10_integration.gd",
+    "HavenlineGodot/tests/capture_task10_world_transform.gd",
+    "Docs/Production/T10/**",
+    "tools/havenline/task10/**",
+    ".github/workflows/havenline-task10-*.yml"
+  ],
+  "forbidden_overlap_examples": [
+    "HavenlineGodot/assets/harvesting_v1/**",
+    "HavenlineGodot/scripts/harvest_presentation.gd",
+    "HavenlineGodot/tests/test_task09_harvesting.gd",
+    "HavenlineGodot/tests/test_task09_integration.gd",
+    "HavenlineGodot/tests/capture_task09_harvesting.gd",
+    "Docs/Production/T09/**",
+    "tools/havenline/task09/**",
+    ".github/workflows/havenline-task09-*.yml",
+    "HavenlineGodot/scripts/main.gd",
+    "HavenlineGodot/scripts/simulation.gd"
+  ],
+  "required_critics": ["C1", "C2", "C3", "C4", "C6", "C7"],
+  "acceptance": {
+    "operator": ">",
+    "threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "zero_unresolved_mandatory_defects": true
+  },
+  "activation_steps": [
+    "Verify authoritative integration branch is codex/havenline-sequential-task-01.",
+    "Verify T05, T08 and T09 are APPROVED in both dependency graph and workstream registry.",
+    "Verify the current integration head contains the accepted T09 integration/approval record.",
+    "Run tools/havenline/task10/prepare_activation.py --base <current-integration-head>.",
+    "Apply the emitted @reservation:T10 PATH_OWNERSHIP patch through the integration owner.",
+    "Claim T10 with workstream.py as ASSIGNED using the exact current integration head and @reservation:T10.",
+    "Set T10 dependency-graph/task-gate active state consistently through integration-owner governance update.",
+    "Validate registry and planned ownership collision checks.",
+    "Create havenline/T10-world-transformation from the exact post-activation integration head.",
+    "Push an empty initialization or first authorized T10 candidate and require candidate guard PASS before broader implementation."
+  ],
+  "claim_template": "python3 tools/havenline/production/workstream.py claim T10 --owner world-transformation-builder --branch havenline/T10-world-transformation --base <POST_T09_INTEGRATION_SHA> --owned-alias @reservation:T10 --status ASSIGNED",
+  "runtime_build_allowed_before_activation": false,
+  "notes": [
+    "PREPARED work may continue while T09 is active; T10 runtime implementation remains dependency-gated.",
+    "T11 owns final camp structures and camp upgrade visuals; T10 owns reusable transformation transaction/state semantics.",
+    "T14 owns global save/versioning; T10 may only expose deterministic component snapshot/import state."
+  ]
+}
