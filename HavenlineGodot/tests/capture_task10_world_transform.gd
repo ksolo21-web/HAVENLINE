@@ -9,6 +9,7 @@ var capture_width := 1280
 var capture_height := 720
 var device_id := "baseline"
 var device_check := false
+var production_evidence := false
 var engine
 var view
 var world: Node3D
@@ -32,6 +33,8 @@ func _initialize() -> void:
 			device_id = argument.trim_prefix("--device-id=")
 		elif argument == "--device-check":
 			device_check = true
+		elif argument == "--production-evidence":
+			production_evidence = true
 	call_deferred("run")
 
 func simulation_ack(intent: Dictionary) -> Dictionary:
@@ -102,11 +105,32 @@ func add_fixture_scene() -> void:
 	world.add_child(camera)
 
 func configure_camera(angle: String) -> void:
-	if angle == "front":
-		camera.position = Vector3(0.0, 3.5, 7.5)
-	else:
-		camera.position = Vector3(5.6, 3.8, 6.2)
-	camera.look_at(Vector3(0.0, 0.9, 0.0), Vector3.UP)
+	camera.fov = 44.0
+	match angle:
+		"front":
+			camera.position = Vector3(0.0, 3.5, 7.5)
+			camera.look_at(Vector3(0.0, 0.9, 0.0), Vector3.UP)
+		"side":
+			camera.position = Vector3(7.5, 3.5, 0.0)
+			camera.look_at(Vector3(0.0, 0.9, 0.0), Vector3.UP)
+		"three-quarter":
+			camera.position = Vector3(5.6, 3.8, 6.2)
+			camera.look_at(Vector3(0.0, 0.9, 0.0), Vector3.UP)
+		"overhead":
+			camera.position = Vector3(0.0, 9.0, 0.05)
+			camera.fov = 40.0
+			camera.look_at(Vector3(0.0, 0.8, 0.0), Vector3.FORWARD)
+		"gameplay":
+			camera.position = Vector3(5.2, 7.0, 8.7)
+			camera.fov = 48.0
+			camera.look_at(Vector3(0.0, 0.75, 0.0), Vector3.UP)
+		"detail":
+			camera.position = Vector3(2.7, 2.35, 3.8)
+			camera.fov = 36.0
+			camera.look_at(Vector3(0.0, 0.95, 0.0), Vector3.UP)
+		_:
+			camera.position = Vector3(5.6, 3.8, 6.2)
+			camera.look_at(Vector3(0.0, 0.9, 0.0), Vector3.UP)
 
 func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front", "three-quarter"]) -> bool:
 	state_label.text = "T10 • %s" % String(descriptor.lifecycle).to_upper()
@@ -180,6 +204,70 @@ func run_device_check(inventory: Dictionary) -> void:
 	print(JSON.stringify(manifest))
 	quit(0 if manifest.passed else 1)
 
+func run_production_evidence(inventory: Dictionary) -> void:
+	var evidence_angles: Array = ["front", "side", "three-quarter", "overhead", "gameplay", "detail"]
+
+	view.set_ready()
+	if not await capture_state("ready", view.descriptor(), evidence_angles):
+		print(JSON.stringify({"passed": false, "error": "production_ready_capture_failed"}))
+		quit(1)
+		return
+
+	var blocked_preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", {"wood": 7, "stone": 3})
+	if blocked_preview.passed or not view.show_blocked(blocked_preview) or not await capture_state("blocked", view.descriptor(), evidence_angles):
+		print(JSON.stringify({"passed": false, "error": "production_blocked_capture_failed"}))
+		quit(1)
+		return
+
+	view.set_ready()
+	var preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
+	if not preview.passed or not view.show_preview(preview) or not await capture_state("preview", view.descriptor(), evidence_angles):
+		print(JSON.stringify({"passed": false, "error": "production_preview_capture_failed"}))
+		quit(1)
+		return
+
+	var intent: Dictionary = engine.commit_transform("capture-production-tx", "framework_anchor_seed_to_foundation", "capture-anchor", inventory)
+	if not intent.passed or not view.show_commit(intent) or not await capture_state("committing", view.descriptor(), evidence_angles):
+		print(JSON.stringify({"passed": false, "error": "production_commit_capture_failed"}))
+		quit(1)
+		return
+
+	var accepted: Dictionary = engine.accept_authoritative_receipt(simulation_ack(intent))
+	if not accepted.passed or not view.mark_complete(accepted) or not await capture_state("complete", view.descriptor(), evidence_angles):
+		print(JSON.stringify({"passed": false, "error": "production_complete_capture_failed"}))
+		quit(1)
+		return
+
+	var final_view: Dictionary = view.descriptor()
+	var final_target: Dictionary = engine.descriptor().targets["capture-anchor"].duplicate(true)
+	var manifest := {
+		"task_id": "T10",
+		"candidate": candidate,
+		"mode": "isolated-critic-ready-native-scale1-evidence",
+		"fixture_only": true,
+		"t11_content": false,
+		"capture_resolution": [capture_width, capture_height],
+		"native_scale_1": capture_width == 3840 and capture_height == 2160,
+		"target_color_static": true,
+		"view_owns_lifecycle_visuals": true,
+		"real_t09_adapter_bound": false,
+		"record_count": records.size(),
+		"states": ["ready", "blocked", "preview", "committing", "complete"],
+		"angles": evidence_angles,
+		"records": records,
+		"view_visual_node_count": int(final_view.visual_node_count),
+		"view_visual_build_count": int(final_view.visual_build_count),
+		"final_target": final_target,
+		"integration_allowed": false,
+		"task_approved": false,
+		"passed": records.size() == 30 and capture_width == 3840 and capture_height == 2160 and int(final_view.visual_node_count) == 4 and int(final_view.visual_build_count) == 1 and final_target.state == "foundation",
+	}
+	if not write_manifest(manifest):
+		manifest["passed"] = false
+		manifest["error"] = "production_manifest_write_failed"
+	print(JSON.stringify(manifest))
+	quit(0 if manifest.passed else 1)
+
 func run() -> void:
 	if capture_width <= 0 or capture_height <= 0:
 		print(JSON.stringify({"passed": false, "error": "invalid_capture_size"}))
@@ -212,6 +300,9 @@ func run() -> void:
 	var inventory := {"wood": 20, "stone": 12, "metal": 2, "fuel": 1}
 	if device_check:
 		await run_device_check(inventory)
+		return
+	if production_evidence:
+		await run_production_evidence(inventory)
 		return
 
 	view.set_ready()
