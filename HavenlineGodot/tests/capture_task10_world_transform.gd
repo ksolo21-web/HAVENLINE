@@ -56,18 +56,21 @@ func add_fixture_scene() -> void:
 	floor.material_override = floor_material
 	world.add_child(floor)
 
+	# Neutral target stays visually constant. Lifecycle state must come from
+	# world_transform_view.gd, not from the capture harness recoloring the target.
 	target_mesh = MeshInstance3D.new()
 	var box := BoxMesh.new()
 	box.size = Vector3(2.4, 1.4, 2.4)
 	target_mesh.mesh = box
 	target_mesh.position = Vector3(0.0, 0.72, 0.0)
 	target_material = StandardMaterial3D.new()
+	target_material.albedo_color = Color("8e98a3")
 	target_material.roughness = 0.58
 	target_mesh.material_override = target_material
 	world.add_child(target_mesh)
 
 	state_label = Label3D.new()
-	state_label.position = Vector3(0.0, 2.25, 0.0)
+	state_label.position = Vector3(0.0, 2.45, 0.0)
 	state_label.font_size = 56
 	state_label.outline_size = 10
 	state_label.modulate = Color.WHITE
@@ -75,10 +78,10 @@ func add_fixture_scene() -> void:
 	world.add_child(state_label)
 
 	var disclaimer := Label3D.new()
-	disclaimer.position = Vector3(0.0, 1.88, 0.0)
+	disclaimer.position = Vector3(0.0, 2.08, 0.0)
 	disclaimer.font_size = 30
 	disclaimer.outline_size = 7
-	disclaimer.text = "LIFECYCLE EVIDENCE — NOT T11 CAMP CONTENT"
+	disclaimer.text = "VIEW-OWNED LIFECYCLE EVIDENCE — NOT T11 CAMP CONTENT"
 	world.add_child(disclaimer)
 
 	camera = Camera3D.new()
@@ -91,18 +94,9 @@ func configure_camera(angle: String) -> void:
 		camera.position = Vector3(0.0, 3.5, 7.5)
 	else:
 		camera.position = Vector3(5.6, 3.8, 6.2)
-	camera.look_at(Vector3(0.0, 0.85, 0.0), Vector3.UP)
-
-func lifecycle_color(lifecycle: String) -> Color:
-	match lifecycle:
-		"ready": return Color("4f6b7a")
-		"preview": return Color("e7a64a")
-		"committing": return Color("5fa8d3")
-		"complete": return Color("66b86a")
-		_: return Color("777777")
+	camera.look_at(Vector3(0.0, 0.9, 0.0), Vector3.UP)
 
 func capture_state(name: String, descriptor: Dictionary) -> bool:
-	target_material.albedo_color = lifecycle_color(String(descriptor.lifecycle))
 	state_label.text = "T10 • %s" % String(descriptor.lifecycle).to_upper()
 	for angle in ["front", "three-quarter"]:
 		configure_camera(angle)
@@ -138,9 +132,14 @@ func run() -> void:
 		quit(1)
 		return
 	view = TransformView.new()
-	world.add_child(view)
 	if not view.configure("capture-anchor"):
 		print(JSON.stringify({"passed": false, "error": "view_setup_failed"}))
+		quit(1)
+		return
+	world.add_child(view)
+	await process_frame
+	if not view.configure_readability(1.0):
+		print(JSON.stringify({"passed": false, "error": "readability_setup_failed"}))
 		quit(1)
 		return
 
@@ -151,6 +150,13 @@ func run() -> void:
 		quit(1)
 		return
 
+	var blocked_preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", {"wood": 7, "stone": 3})
+	if blocked_preview.passed or not view.show_blocked(blocked_preview) or not await capture_state("blocked", view.descriptor()):
+		print(JSON.stringify({"passed": false, "error": "blocked_capture_failed"}))
+		quit(1)
+		return
+
+	view.set_ready()
 	var preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
 	if not preview.passed or not view.show_preview(preview) or not await capture_state("preview", view.descriptor()):
 		print(JSON.stringify({"passed": false, "error": "preview_capture_failed"}))
@@ -169,21 +175,26 @@ func run() -> void:
 		quit(1)
 		return
 
+	var final_view: Dictionary = view.descriptor()
 	var manifest := {
 		"task_id": "T10",
 		"candidate": candidate,
-		"mode": "dependency-independent-lifecycle-fixture",
+		"mode": "dependency-independent-view-owned-lifecycle-fixture",
 		"fixture_only": true,
 		"t11_content": false,
+		"target_color_static": true,
+		"view_owns_lifecycle_visuals": true,
 		"real_t09_adapter_bound": false,
 		"record_count": records.size(),
-		"states": ["ready", "preview", "committing", "complete"],
+		"states": ["ready", "blocked", "preview", "committing", "complete"],
 		"angles": ["front", "three-quarter"],
 		"records": records,
+		"view_visual_node_count": int(final_view.visual_node_count),
+		"view_visual_build_count": int(final_view.visual_build_count),
 		"final_target": engine.descriptor().targets["capture-anchor"].duplicate(true),
 		"integration_allowed": false,
 		"task_approved": false,
-		"passed": records.size() == 8 and engine.descriptor().targets["capture-anchor"].state == "foundation",
+		"passed": records.size() == 10 and int(final_view.visual_node_count) == 4 and int(final_view.visual_build_count) == 1 and engine.descriptor().targets["capture-anchor"].state == "foundation",
 	}
 	var file := FileAccess.open(output.path_join("manifest.json"), FileAccess.WRITE)
 	if file:
