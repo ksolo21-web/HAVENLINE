@@ -1,6 +1,7 @@
 extends SceneTree
 
 const Transform = preload("res://scripts/world_transform.gd")
+const TransformView = preload("res://scripts/world_transform_view.gd")
 
 class FakeSimulationAuthority:
 	var inventory: Dictionary
@@ -163,6 +164,65 @@ func run() -> void:
 	var malicious_restore := configured_engine()
 	check("component import rejects two in-flight transactions for one target", not malicious_restore.import_component_state(malicious))
 
+	# R11 neutral reusable world-response layer: visuals are bounded and presentation-only.
+	var view_contract := TransformView.contract()
+	check("view retains frozen five-state core lifecycle", view_contract.lifecycle == ["locked", "ready", "preview", "committing", "complete"])
+	check("view exposes explicit blocked lifecycle", view_contract.blocked_lifecycle == "blocked")
+	check("view remains neutral and T11-safe", view_contract.neutral_framework_visuals_only and view_contract.t11_owns_final_camp_content)
+	check("view uses shape and color redundancy", view_contract.shape_and_color_redundancy and view_contract.world_response_shapes == ["perimeter_ring", "preview_volume", "status_beacon"])
+	check("view declares strict four-node visual budget", view_contract.visual_node_budget == 4)
+	check("view exposes bounded readability range", view_contract.readability_scale_range == [0.85, 1.35])
+
+	var visual_engine := configured_engine()
+	check("visual fixture target registers", visual_engine.register_target("visual-A", "seed"))
+	var view := TransformView.new()
+	check("visual view target configures", view.configure("visual-A"))
+	root.add_child(view)
+	await process_frame
+	var visual_root := view.get_node_or_null("T10WorldResponse")
+	var ring := view.get_node_or_null("T10WorldResponse/StateRing") as MeshInstance3D
+	var ghost := view.get_node_or_null("T10WorldResponse/PreviewVolume") as MeshInstance3D
+	var beacon := view.get_node_or_null("T10WorldResponse/StatusBeacon") as MeshInstance3D
+	var initial_view := view.descriptor()
+	check("world-response visuals build exactly once", initial_view.visual_build_count == 1 and initial_view.visual_node_count == 4 and visual_root != null and visual_root.get_child_count() == 3, initial_view)
+	check("locked lifecycle hides response geometry", not ring.visible and not ghost.visible and not beacon.visible)
+	check("readability below minimum is rejected", not view.configure_readability(0.5) and is_equal_approx(float(view.descriptor().readability_scale), 1.0))
+	check("readability above maximum is rejected", not view.configure_readability(2.0) and is_equal_approx(float(view.descriptor().readability_scale), 1.0))
+	check("minimum readability scale applies without rebuild", view.configure_readability(0.85) and is_equal_approx(float(view.descriptor().readability_scale), 0.85) and view.descriptor().visual_build_count == 1)
+	check("maximum readability scale applies without rebuild", view.configure_readability(1.35) and is_equal_approx(float(view.descriptor().readability_scale), 1.35) and view.descriptor().visual_build_count == 1)
+	check("default readability scale restores without rebuild", view.configure_readability(1.0) and is_equal_approx(float(view.descriptor().readability_scale), 1.0) and view.descriptor().visual_build_count == 1)
+
+	view.set_ready()
+	check("ready lifecycle shows ring and beacon without ghost", view.descriptor().lifecycle == "ready" and ring.visible and beacon.visible and not ghost.visible)
+	var blocked_preview := visual_engine.preview_transform("framework_anchor_seed_to_foundation", "visual-A", {"wood": 7, "stone": 3})
+	check("blocked fixture preview is authoritative failure", not blocked_preview.passed and blocked_preview.errors.has("insufficient_resources") and blocked_preview.shortfalls == {"wood": 1, "stone": 1})
+	check("blocked world response preserves exact reasons and shortfalls", view.show_blocked(blocked_preview) and view.descriptor().lifecycle == "blocked" and view.descriptor().block_reasons.has("insufficient_resources") and view.descriptor().blocked_shortfalls == {"wood": 1, "stone": 1})
+	check("blocked lifecycle uses ring plus flattened beacon without preview ghost", ring.visible and beacon.visible and not ghost.visible and beacon.scale.x > 1.3 and beacon.scale.y < 0.6)
+	view.set_ready()
+	check("leaving blocked state clears failure payload", view.descriptor().block_reasons.is_empty() and view.descriptor().blocked_shortfalls.is_empty())
+
+	var visual_inventory := {"wood": 20, "stone": 12, "metal": 2, "fuel": 1}
+	var visual_preview := visual_engine.preview_transform("framework_anchor_seed_to_foundation", "visual-A", visual_inventory)
+	check("preview world response shows ring plus translucent preview volume", view.show_preview(visual_preview) and ring.visible and ghost.visible and not beacon.visible)
+	var visual_intent := visual_engine.commit_transform("visual-tx", "framework_anchor_seed_to_foundation", "visual-A", visual_inventory)
+	check("committing world response shows all three shapes", view.show_commit(visual_intent) and ring.visible and ghost.visible and beacon.visible)
+	var beacon_before_pulse := beacon.scale
+	view._process(0.12)
+	check("committing beacon pulse changes shape without rebuilding nodes", beacon.scale != beacon_before_pulse and view.descriptor().visual_build_count == 1 and view.descriptor().visual_node_count == 4)
+	var visual_ack := visual_intent.duplicate(true)
+	visual_ack["authority_source"] = "simulation"
+	visual_ack["authority_applied"] = true
+	var visual_accepted := visual_engine.accept_authoritative_receipt(visual_ack)
+	check("complete world response requires accepted authority receipt", view.mark_complete(visual_accepted) and view.descriptor().lifecycle == "complete")
+	check("complete lifecycle removes preview ghost and emphasizes beacon", ring.visible and not ghost.visible and beacon.visible and beacon.scale.x >= 1.24)
+	var builds_before_repeat := int(view.descriptor().visual_build_count)
+	var children_before_repeat := int(view.descriptor().visual_node_count)
+	for iteration in 250:
+		view.set_ready()
+		view.set_ready()
+	check("repeated lifecycle calls create zero visual node growth", view.descriptor().visual_build_count == builds_before_repeat and view.descriptor().visual_node_count == children_before_repeat and children_before_repeat == 4)
+	check("view remains presentation-only after full lifecycle", view.descriptor().presentation_only and not view.descriptor().mutates_resources and not view.descriptor().advances_progression)
+
 	print(JSON.stringify({
 		"suite": "T10_fixture_simulation_integration",
 		"checks": checks,
@@ -171,6 +231,10 @@ func run() -> void:
 		"check_count": checks.size(),
 		"simulation_uses_authority_transaction_key": true,
 		"bounded_completed_history": true,
+		"r11_world_response_tested": true,
+		"visual_node_budget": view_contract.visual_node_budget,
+		"visual_build_count": view.descriptor().visual_build_count,
+		"visual_node_count": view.descriptor().visual_node_count,
 		"real_t09_adapter_bound": false,
 		"fixture_simulation_only": true,
 		"integration_allowed": false,
