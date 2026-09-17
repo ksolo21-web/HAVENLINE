@@ -4,11 +4,17 @@ from unittest.mock import patch
 HERE=pathlib.Path(__file__).resolve()
 PROD=HERE.parents[1]
 sys.path.insert(0,str(PROD))
-from lib import DOCS, load_json, ensure_score_strictly_above_nine
+from lib import DOCS, load_json, ensure_score_strictly_above_nine, any_match
+from validate_migration import ALLOWED_MIGRATION_PATTERNS
 from workstream import registry_errors, governance_only_drift, candidate_scope_assessment
 from change_impact import calculate
 
 class GovernanceTests(unittest.TestCase):
+    def test_t09_closeout_workflow_is_exactly_allowlisted(self):
+        self.assertTrue(any_match(".github/workflows/havenline-task09-harvesting.yml",ALLOWED_MIGRATION_PATTERNS))
+        self.assertFalse(any_match(".github/workflows/havenline-task10-world-transformation.yml",ALLOWED_MIGRATION_PATTERNS))
+        self.assertFalse(any_match("HavenlineGodot/scripts/world_transformation.gd",ALLOWED_MIGRATION_PATTERNS))
+
     def test_strict_score_rule(self):
         self.assertTrue(ensure_score_strictly_above_nine({"x":9.0}))
         self.assertEqual(ensure_score_strictly_above_nine({"x":9.000001}),[])
