@@ -142,6 +142,8 @@ def main() -> None:
     if not all(token in motion_fixture_source for token in [
         'preload("res://assets/characters/Character1.glb")',
         'Character1Motion.install(self,"player_lead")',
+        "MOTION_REVIEW_HEIGHT_METERS := 4.5",
+        'set_meta("t09_motion_review_height_m",MOTION_REVIEW_HEIGHT_METERS)',
         '"human_player_chop"', '"human_player_mine"', '"human_player_dismantle"',
     ]) or "t09_motion_fixture.gd" not in motion_scene_source:
         errors.append("C5 motion fixture does not use shipping Character 1 motion profiles")

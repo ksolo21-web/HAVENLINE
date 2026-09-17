@@ -2,6 +2,7 @@ extends Node3D
 
 const Character1Motion = preload("res://scripts/character1_motion.gd")
 const CHARACTER_SCENE = preload("res://assets/characters/Character1.glb")
+const MOTION_REVIEW_HEIGHT_METERS := 4.5
 
 func gather_meshes(node: Node, meshes: Array[MeshInstance3D]) -> void:
 	if node is MeshInstance3D:
@@ -25,10 +26,15 @@ func _ready() -> void:
 		bounds = box if first else bounds.merge(box)
 		first = false
 	assert(not first and bounds.size.y > 0.01, "T09 C5 fixture requires Character 1 render geometry")
-	var scale_factor := 1.75/bounds.size.y
+	# The generic production motion harness uses a deliberately wide, fixed
+	# camera so it can accept arbitrary scenes. Enlarge this QA-only fixture to
+	# make hands, knees, feet and contact silhouettes critic-readable without
+	# changing Character 1's shipping mesh, rig, clips or gameplay scale.
+	var scale_factor := MOTION_REVIEW_HEIGHT_METERS/bounds.size.y
 	visual.scale *= scale_factor
 	visual.position = Vector3(-bounds.get_center().x,-bounds.position.y,-bounds.get_center().z)*scale_factor
 	var installed := Character1Motion.install(self,"player_lead")
 	assert(bool(installed.get("passed",false)), "T09 C5 fixture failed to install shipping Character 1 motion")
 	set_meta("t09_qa_only",true)
+	set_meta("t09_motion_review_height_m",MOTION_REVIEW_HEIGHT_METERS)
 	set_meta("t09_motion_profiles",["human_player_chop","human_player_mine","human_player_dismantle"])
