@@ -149,10 +149,16 @@ def main() -> None:
         errors.append("C5 motion fixture does not use shipping Character 1 motion profiles")
     if not all(token in workflow_source for token in [
         "tools/havenline/production/motion_capture.py",
+        "capture_task09_motion.gd",
         "t09_motion_fixture.tscn",
         "t06/chop,t06/mine,t06/dismantle",
+        "production_motion_v2",
+        "initialization_settle_frames",
+        "turn-neg-135",
+        "close-upper-opposite",
+        "close-lower-rear",
         "motion-hashes.json",
-        "len(motion_pngs)>=180",
+        "len(motion_pngs)>=220",
         "c6-performance.json",
         "critic_harness.py performance",
         "--rendering-method mobile --rendering-driver vulkan",
