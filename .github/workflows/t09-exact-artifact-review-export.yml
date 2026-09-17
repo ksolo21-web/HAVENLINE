@@ -183,6 +183,32 @@ jobs:
           (dst/'review-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
           PY
 
+      - name: Record runtime provenance
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          out=Path(os.environ['REVIEW_ROOT'])/'runtime-provenance.json'
+          out.write_text(json.dumps({
+              'ImageOS':os.environ.get('ImageOS'),
+              'ImageVersion':os.environ.get('ImageVersion'),
+              'RUNNER_OS':os.environ.get('RUNNER_OS'),
+              'RUNNER_ARCH':os.environ.get('RUNNER_ARCH'),
+              'source_artifact_id':10494819142,
+              'accepted_source':os.environ['EXPECTED_SOURCE'],
+          },indent=2)+'\n')
+          PY
+
+      - name: Preserve exact review evidence for 90 days
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: havenline-task09-review-evidence-9bc735502b265bfdd365004fb863b19c613e27dd
+          path: ${{ runner.temp }}/t09-artifact
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 0
+
       - name: Commit review export
         run: |
           set -euo pipefail
