@@ -2,7 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED  
-**Prepared from:** `havenline/governance-t13-t20-prep` @ `06e47b0a13656003073a27f362558938699843c5`
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Introduce visible hostiles and hunting through Havenline's simple contextual combat language: move, auto-target/auto-attack in valid context, visible impact, carry/deliver rewards, and progression without button-heavy RPG combat.

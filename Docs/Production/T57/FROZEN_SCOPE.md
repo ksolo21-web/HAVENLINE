@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Add a basic shareable milestone system for approved progression achievements without leaking account identifiers, privileged state, private cloud data or sensitive telemetry.

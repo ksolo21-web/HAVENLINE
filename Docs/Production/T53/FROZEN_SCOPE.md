@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Connect all approved regions through coherent transportation/inter-region continuity without breaking player/cargo/state continuity.

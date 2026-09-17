@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Author the connected underground Levels 81–90 region on the T44 interface with readable camera/composition, collision-safe navigation and clear production/defense loops.

@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Accept or reject the complete Level 1–100 progression as one integrated product, not as disconnected task approvals.

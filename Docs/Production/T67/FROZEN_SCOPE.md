@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Perform the final full-game reference/regression acceptance after progression, F2P, purchase fairness, LiveOps rehearsal and security attack review all pass.

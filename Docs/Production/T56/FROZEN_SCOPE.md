@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Implement transparent Performance, Quality, Balanced and Battery modes that change rendering/performance budgets without changing gameplay rules, economy, difficulty, hit logic or progression.

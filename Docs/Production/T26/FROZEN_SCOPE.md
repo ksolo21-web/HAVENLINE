@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 Production fox companion with species-specific locomotion, retrieve/scout behavior and dart/pounce/bite attack motion. Preserve the corrected Havenline fox visual identity and winter-survival companion language. Prove paw/ground contact, quick direction changes, spine/tail/ear behavior, gear clearance and attack contact through complete cycles/transitions.
