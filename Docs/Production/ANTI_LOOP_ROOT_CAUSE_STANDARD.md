@@ -4,6 +4,20 @@ This standard applies to every Havenline critic repair cycle. Evidence exists
 to reveal the product; it may not be optimized as a substitute for repairing
 the product.
 
+## C0 diagnosis before another repair round
+
+After any mandatory task validation, candidate guard, critic, integration,
+evidence, performance or closure failure, run the non-voting C0 Root-Cause
+Advisor before a builder starts another repair. C0 must classify the failure as
+product, tooling, governance, evidence, infrastructure, superseded, or mixed;
+return the complete currently knowable blocker set; identify unexecuted checks;
+protect approved files/contracts; and provide a dependency-ordered proof
+contract. See `C0_ROOT_CAUSE_STANDARD.md`.
+
+A cancelled/superseded run is not a product judgment. A red UI state is not a
+root cause. `FIX_REQUIRED` repair candidates must satisfy
+`BUILDER_REPAIR_STANDARD.md` and `builder_repair_gate.py`.
+
 ## Required defect ledger
 
 Every mandatory critic finding creates or updates a structured defect record.
@@ -63,6 +77,14 @@ is new, matched-camera proof is preserved, affected regression passed and the
 repair strategy is not another evidence-only attempt. Any failure blocks the
 critic job.
 
+## Candidate freeze
+
+Once a repaired candidate begins full validation, that exact SHA is frozen for
+the judgment. A later commit may wait as the next candidate, but it must not
+cancel the already-running SHA. Let the running SHA finish so its evidence is
+usable by C0 even when a newer candidate exists. If a run is cancelled anyway,
+classify it `SUPERSEDED` and do not assign a product or critic failure from it.
+
 ## Quick-look visual gate
 
 Before the expensive critic matrix, produce one source-bound quick-look packet
@@ -74,8 +96,8 @@ contrast checks first.
 Two low-cost visual scouts may inspect the compact packet in parallel. A
 finding shared by both scouts, or corroborated by a deterministic check, blocks
 the expensive matrix and returns the candidate to diagnosis. A lone scout
-finding is `NEEDS_MANUAL_TRIAGE`; it is inspected against full-resolution
-pixels before the matrix starts and cannot be hidden with a camera change.
+finding is `NEEDS_MANUAL_TRIAGE`; it is inspected against full-resolution pixels
+before the matrix starts and cannot be hidden with a camera change.
 
 The quick-look gate is defect discovery only. It can reject a visibly weak
 candidate early, but it can never approve a task or replace the full critics.
@@ -111,4 +133,4 @@ or any missing required view can never be outvoted.
 
 The required loop is:
 
-`FIND DEFECT -> DIAGNOSE -> REPAIR PRODUCT -> PROVE -> CRITIQUE`
+`FAILURE -> C0 DIAGNOSE COMPLETE BLOCKER SET -> BUILDER REPAIR PLAN -> CAUSAL REPAIR -> ROOT-CAUSE PREFLIGHT -> FREEZE SHA -> PROVE -> C1-C11 CRITIQUE`
