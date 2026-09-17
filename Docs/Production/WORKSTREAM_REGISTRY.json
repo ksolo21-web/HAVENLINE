@@ -356,7 +356,7 @@
       "task_id": "T09",
       "task_name": "Harvesting and automatic acquisition",
       "workstream_id": "T09-harvesting-acquisition-builder",
-      "status": "ASSIGNED",
+      "status": "INTEGRATION_READY",
       "owner": "harvesting-acquisition-builder",
       "branch": "havenline/T09-harvesting",
       "base_commit": "7492074e40a0b061f31d8c32602b7a581b2610f3",
@@ -372,9 +372,16 @@
         "@protected:approved",
         "@integration-only"
       ],
-      "candidate_commit": null,
-      "candidate_hash_or_artifact": null,
-      "tests": {},
+      "candidate_commit": "69593a19f56df3105a7b9657a76533e274e2eed6",
+      "candidate_hash_or_artifact": "tree 8f7dcbd0f66717b0e5040b883f5fdc53ac83791a; run 35180691636; artifact 10480384742; digest sha256:3c7a39529c7c77518cc7040e023ac7868ee74590843affac3856bc1555968982; evidence index ba3c0b334561b248178df583e13dd9114c22714530532d77a2a0b72a3a893dcb",
+      "tests": {
+        "source_contract": "PASS",
+        "production_tools": "68 tests passed",
+        "godot_regression": "17 suites / 997 checks passed",
+        "save_state_matrix": "7/7 passed",
+        "device_layout_matrix": "6/6 passed",
+        "native_android_review": "run 35180693280 passed"
+      },
       "evidence_path": "Docs/Production/Evidence/T09/",
       "critic_requirements": [
         "C2",
@@ -384,14 +391,15 @@
         "C6"
       ],
       "critic_status": {},
-      "integration_status": "not integrated",
+      "integration_status": "exact isolated candidate accepted by integration owner; governance reconciliation and fresh candidate rerun required before integration",
       "known_blockers": [],
-      "next_action": "Build isolated candidate only after ASSIGNED."
+      "next_action": "Reconcile candidate 69593a19f56df3105a7b9657a76533e274e2eed6 with this readiness checkpoint, rerun exact-source CI, then integrate only the passing reconciled source.",
+      "status_updated_at": "2026-09-17T04:58:55+00:00"
     }
   ],
   "notes": [
     "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
-    "T03-T08 are APPROVED. T09 is ASSIGNED with its own packet, owner and path reservation; T10+ runtime work remains locked.",
+    "T03-T08 are APPROVED. T09 is INTEGRATION_READY after exact isolated evidence; reconciliation, fresh CI, integration and independent C2/C3/C4/C5/C6 review remain required. T10+ runtime work remains locked.",
     "All future runtime builders use isolated branches and cannot approve themselves.",
     "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them."
   ]

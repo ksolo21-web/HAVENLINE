@@ -1,6 +1,41 @@
 {
   "schema_version": 1,
   "task_id": "T09",
-  "candidate_commit": null,
-  "defects": []
+  "candidate_commit": "69593a19f56df3105a7b9657a76533e274e2eed6",
+  "integrated_commit": null,
+  "acceptance_threshold": ">9.0 unrounded in every mandatory dimension",
+  "cycle": "integration-ready",
+  "defects": [
+    {
+      "id": "T09-D001",
+      "severity": "mandatory-evidence",
+      "summary": "Initial visual sequence evidence did not preserve the validated wood contact surface and crown throughout the full action.",
+      "status": "RESOLVED",
+      "resolution": "The shipping presenter and sequence harness now preserve the visible contact surface, crown and authoritative impact through recovery; exact sequence evidence and contact metrics pass."
+    },
+    {
+      "id": "T09-D002",
+      "severity": "mandatory-ci",
+      "summary": "The C6 runner could fall back to an unaccepted renderer or lack a software Vulkan ICD on the hosted runner.",
+      "status": "RESOLVED",
+      "resolution": "The workflow provisions Mesa Vulkan only when absent, pins Lavapipe, validates the ICD, and fails closed unless Godot reports the Mobile renderer."
+    },
+    {
+      "id": "T09-D003",
+      "severity": "mandatory-C5-evidence",
+      "summary": "The generic motion-capture camera framed Character 1 too small for strict hands, knees, feet and contact review.",
+      "status": "RESOLVED",
+      "resolution": "The QA-only fixture normalizes review height to 4.5 m without changing shipping mesh, rig, clips or gameplay scale; the exact artifact's C5 frames were visually inspected at critic-readable scale."
+    }
+  ],
+  "unresolved_mandatory_count": 0,
+  "critic_scores": {},
+  "critic_approval_pending": true,
+  "evidence": {
+    "workflow_run": 35180691636,
+    "artifact_id": 10480384742,
+    "artifact_digest": "sha256:3c7a39529c7c77518cc7040e023ac7868ee74590843affac3856bc1555968982",
+    "complete_evidence_index_sha256": "ba3c0b334561b248178df583e13dd9114c22714530532d77a2a0b72a3a893dcb"
+  },
+  "next_action": "Reconcile this accepted isolated candidate with the readiness checkpoint, rerun exact-source CI, integrate, recapture integrated evidence, and obtain independent C2/C3/C4/C5/C6 scores strictly above 9.0."
 }
