@@ -4,7 +4,7 @@ HERE=pathlib.Path(__file__).resolve();PROD=HERE.parents[1];sys.path.insert(0,str
 from architecture_v31 import validate as validate_v31
 from flake_intelligence import classify_records
 from pipeline_telemetry import summarize,validate as validate_telemetry
-from ci_toolchain_lock import validate as validate_toolchain
+from ci_toolchain_lock import validate as validate_toolchain,validate_workflow_action_pins,load as load_toolchain
 from evidence_retention import validate_manifest,validate_policy as validate_retention
 from runtime_dependency_learning import learned_impact,validate as validate_runtime
 from task_state_snapshot import snapshot,validate as validate_snapshot
@@ -32,6 +32,14 @@ class ArchitectureV31Tests(unittest.TestCase):
         r=validate_invalidation();self.assertTrue(r['passed'],r['errors']);self.assertGreaterEqual(r['contract_override_count'],10)
     def test_ci_action_and_toolchain_lock_is_valid(self):
         r=validate_toolchain();self.assertTrue(r['passed'],r['errors']);self.assertGreaterEqual(r['critical_workflow_count'],8)
+    def test_ci_lock_rejects_mutable_subpath_action(self):
+        pins=load_toolchain()['action_pins']
+        bad=validate_workflow_action_pins('- uses: actions/cache/restore@v4\n',pins,'fixture.yml')
+        self.assertTrue(bad)
+        self.assertIn('actions/cache/restore',bad[0])
+        exact=pins['actions/cache']
+        good=validate_workflow_action_pins(f'- uses: actions/cache/restore@{exact}\n- uses: actions/cache/save@{exact}\n',pins,'fixture.yml')
+        self.assertEqual(good,[])
     def test_environment_sensitive_gate_policy_remains_safe(self):
         r=validate_fingerprint();self.assertTrue(r['passed'],r['errors'])
     def test_complete_v31_validation_passes(self):
