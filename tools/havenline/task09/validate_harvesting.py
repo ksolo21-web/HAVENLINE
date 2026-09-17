@@ -152,7 +152,7 @@ def main() -> None:
     ]) or "t09_motion_fixture.gd" not in motion_scene_source:
         errors.append("C5 motion fixture does not use shipping Character 1 motion profiles")
     if not all(token in motion_capture_source for token in [
-        "production_motion_v2", "INITIALIZATION_SETTLE_FRAMES:=2",
+        "production_motion_v2", "INITIALIZATION_SETTLE_FRAMES:=8",
         "FIRST_USE_WARMUP_FRAMES:=8", "player.advance(0.0)", '"upper-opposite"', '"lower-rear"',
         "pose_signature", "get_bone_global_pose", '"initialization_pose_schema":"skeleton_global_pose_v1"',
     ]) or not all(token in motion_runner_source for token in [
@@ -161,6 +161,20 @@ def main() -> None:
         "final_skeleton_pose_transform_v1", "pose_delta", "sha256_file",
     ]):
         errors.append("T09 C5 capture lacks final-skeleton initialization or contact-region coverage")
+    def motion_function_body(name: str) -> str:
+        marker = f"func {name}("
+        if marker not in motion_capture_source:
+            return ""
+        return motion_capture_source.split(marker, 1)[1].split("\nfunc ", 1)[0]
+    settle_body = motion_function_body("settle_pose")
+    warm_body = motion_function_body("warm_pose")
+    cycle_body = motion_function_body("capture_cycle")
+    if (
+        settle_body.count("set_pose(anim,t)") != 1
+        or warm_body.count("set_pose(anim,t)") != 1
+        or "if i>0:set_pose(anim,t)" not in cycle_body
+    ):
+        errors.append("C5 pose convergence must not be discarded by a post-settle animation restart")
     # Whole-render byte/pixel identity is not a valid animation-pose invariant.
     # Keep hashes for provenance, but fail closed if an image-equivalence gate is reintroduced.
     forbidden_motion_gate_tokens=["normalized_rmse(", "png_pixels(", "START_EQUIVALENCE_MAX_RMSE", "FIRST_STEP_MAX_RMSE"]

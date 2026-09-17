@@ -95,7 +95,7 @@ def main():
     if p.returncode:raise SystemExit(p.returncode)
     meta=json.loads((out/"motion.json").read_text())
     if meta.get("candidate_commit")!=a.candidate:raise SystemExit("candidate mismatch")
-    if meta.get("harness")!="production_motion_v2" or meta.get("initialization_settle_frames",0)<2 or meta.get("first_use_warmup_frames",0)<8:
+    if meta.get("harness")!="production_motion_v2" or meta.get("initialization_settle_frames",0)<8 or meta.get("first_use_warmup_frames",0)<8:
         raise SystemExit("motion initialization pre-roll metadata missing")
     if meta.get("initialization_pose_schema")!="skeleton_global_pose_v1":
         raise SystemExit("final skeleton pose schema missing")
