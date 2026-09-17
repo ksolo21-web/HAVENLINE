@@ -26,7 +26,7 @@ def run_canaries():
     results.append({'id':'CANARY-PROOF-FRESH','rejected':fresh})
     cap=resolve_capabilities('T68');results.append({'id':'CANARY-CAPABILITY-UNKNOWN','rejected':not cap['runtime_activation_allowed'] and cap['capabilities']['physical_phone_4k60']['state']=='UNVERIFIED'})
     hist=query('T24','C5','pixel RMSE pose identity mismatch');advisory=bool(hist.get('matches')) and all(m.get('advisory_only') for m in hist['matches']);results.append({'id':'CANARY-HISTORY-AUTHORITY','rejected':advisory})
-    state=snapshot('T10');results.append({'id':'CANARY-TASK-STATE-AUTHORITY','rejected':validate_snapshot(state)['passed'] and state['snapshot_is_derived_not_authority']})
+    state=snapshot('T10');results.append({'id':'CANARY-TASK-STATE-AUTHORITY','rejected':validate_snapshot(state)['passed'] and state['snapshot_is_derived_not_authority'] and state['lifecycle_status']=='LOCKED' and 'lifecycle_status_LOCKED' in state['blockers'] and 'ownership_not_assigned' in state['blockers']})
     matrix=json.loads(MATRIX.read_text());expected={x['id'] for x in matrix['canaries']};actual={x['id'] for x in results};errors=[]
     if actual!=expected:errors.append(f'canary coverage mismatch missing={sorted(expected-actual)} extra={sorted(actual-expected)}')
     errors += [r['id']+' failed to reject mutation' for r in results if not r['rejected']]
