@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 import argparse, json, pathlib
+from datetime import datetime,timezone
 from lib import ROOT, DOCS, load_json, ensure_score_strictly_above_nine, sha256_file
 from evidence_retention import validate_manifest as validate_retention_manifest
 from task_state_snapshot import validate as validate_task_state
@@ -37,7 +38,7 @@ def main():
             errors.append(f"missing {label} evidence manifest")
             continue
         retained=load_json(path)
-        check=validate_retention_manifest(retained,path=path if label=="approval" else None)
+        check=validate_retention_manifest(retained,path=path)
         errors += [f"{label} evidence: {x}" for x in check.get("errors",[])]
         if retained.get("task_id")!=task or retained.get("accepted_source")!=candidate:
             errors.append(f"{label} evidence source/task mismatch")
@@ -57,6 +58,35 @@ def main():
     provenance=next((row for row in provenance_rows if row.get("record_type")=="exact_source_provenance" and row.get("task_id")==task and row.get("candidate")==candidate and row.get("result")=="PASS"),None)
     if not provenance or provenance.get("reuse_eligible") is not False:
         errors.append("missing non-reusable exact-source provenance record")
+    if task=="T09":
+        future=[tid for tid in (f"T{i:02d}" for i in range(10,71)) if graph["tasks"].get(tid,{}).get("status")!="LOCKED"]
+        if future:errors.append("T10+ must remain LOCKED after T09 closeout: "+",".join(future))
+        ownership=load_json(DOCS/"PATH_OWNERSHIP.json")
+        active_future=[row.get("task_id") for row in ownership.get("active_owners",[]) if str(row.get("task_id",""))>="T10"]
+        if active_future:errors.append("T10+ active ownership exists before explicit activation")
+        task_gates=load_json(DOCS/"task-gates.json")
+        if task_gates.get("active_task") is not None or task_gates.get("active_status") is not None:
+            errors.append("task-gates active state must be clear after T09 closeout")
+    review_record=load_json(DOCS/str(task)/"independent-critic-review.json")
+    approved_at=review_record.get("approved_at")
+    try:
+        approved_time=datetime.fromisoformat(str(approved_at).replace("Z","+00:00"))
+        if approved_time>datetime.now(timezone.utc):errors.append("critic approval timestamp is in the future")
+    except ValueError:errors.append("critic approval timestamp is invalid")
+    review_manifest=load_json(review_path) if review_path.is_file() else {}
+    retained_review=d.get("retained_review_evidence",{})
+    review_rows=review_manifest.get("records",[])
+    if len(review_rows)!=1:
+        errors.append("review evidence must have exactly one retained artifact record")
+    else:
+        rr=review_rows[0];identity=rr.get("content_identity",{});pe=(provenance or {}).get("evidence",{})
+        expected_locator=f"github-actions://ksolo21-web/HAVENLINE/runs/{retained_review.get('run_id')}/artifacts/{retained_review.get('artifact_id')}"
+        if rr.get("locator")!=expected_locator or rr.get("sha256")!=str(retained_review.get("digest","")).removeprefix("sha256:") or rr.get("expires_at")!=retained_review.get("expires_at"):
+            errors.append("retained review artifact identity mismatch")
+        if (rr.get("retention_days"),identity.get("original_run_id"),identity.get("original_artifact_id"),identity.get("original_artifact_sha256"),identity.get("complete_evidence_index_sha256"),identity.get("indexed_files_verified"))!=(90,d.get("workflow_run_id"),d.get("artifact_id"),d.get("artifact_sha256"),d.get("evidence",{}).get("provenance_hash"),913):
+            errors.append("retained review content identity mismatch")
+        if (pe.get("retained_artifact_id"),pe.get("retained_artifact_sha256"),pe.get("retained_until"))!=(retained_review.get("artifact_id"),str(retained_review.get("digest","")).removeprefix("sha256:"),retained_review.get("expires_at")):
+            errors.append("retained review provenance index mismatch")
     pv=d.get("path_validation",{})
     if pv.get("passed") is not True or pv.get("candidate")!=candidate or pv.get("base")!=base:errors.append("missing/invalid exact-candidate path validation")
     gates=d.get("gates",{})
@@ -197,6 +227,8 @@ def main():
             if len(row.get("scores",{}))!=10:errors.append("C9 attack coverage incomplete")
         raw_rel=row.get("raw_record_path")
         raw_hash=row.get("raw_record_sha256")
+        if raw_rel!=f"Docs/Production/{task}/CriticRaw/{cid}.json":
+            errors.append("raw critic record path is not canonical "+cid)
         if not raw_rel or not raw_hash:
             errors.append("raw critic record missing "+cid)
         else:
@@ -217,6 +249,18 @@ def main():
                     errors.append("raw critic disposition incomplete "+cid)
                 if raw.get("scores")!=row.get("scores"):
                     errors.append("raw/aggregate critic score mismatch "+cid)
+                if raw.get("artifact_sha256")!=d.get("artifact_sha256"):
+                    errors.append("raw critic artifact digest mismatch "+cid)
+                confidence=raw.get("confidence")
+                if not isinstance(confidence,(int,float)) or isinstance(confidence,bool) or not 0<confidence<=1:
+                    errors.append("raw critic confidence invalid "+cid)
+                if raw.get("score_reuse") is not False:
+                    errors.append("raw critic score reuse must be false "+cid)
+                raw_scores=raw.get("scores",{})
+                if not raw_scores or raw.get("minimum_dimension_score")!=min(raw_scores.values()):
+                    errors.append("raw critic minimum score mismatch "+cid)
+                if not isinstance(raw.get("review_export_commit"),str) or len(raw.get("review_export_commit"))!=40:
+                    errors.append("raw critic review export provenance incomplete "+cid)
                 if not all(raw.get(k) for k in ("provider","model","request_or_run_id")):
                     errors.append("raw critic provider provenance incomplete "+cid)
                 for item in raw.get("evidence",[]):
