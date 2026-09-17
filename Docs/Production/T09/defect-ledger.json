@@ -91,10 +91,30 @@
         "All three clips pass the unchanged skeleton-global start and first-step limits.",
         "The complete exact-source T09 workflow, evidence index and independent C5 review pass."
       ]
+    },
+    {
+      "id": "T09-D007",
+      "severity": "mandatory-ci-governance",
+      "summary": "The T09 workflow called the C0 diagnostic reusable workflow without granting its required actions: read permission, causing an exact-source startup_failure before any T09 job was created.",
+      "status": "READY_FOR_VERIFICATION",
+      "classification": [
+        "TOOLING_FIX",
+        "TEST_FIX"
+      ],
+      "failed_candidate": "6ceebbfe0cc9db25f4e4fa6d51b58b16eddd9d07",
+      "failed_workflow_run": 35212701311,
+      "visible_symptom": "GitHub resolved havenline-c0-root-cause.yml but completed the T09 run as startup_failure with zero jobs.",
+      "root_cause": "Reusable workflows cannot elevate GITHUB_TOKEN permissions above the caller. The T09 caller granted contents: read only, while the C0 diagnostic requires actions: read to retrieve failed-run evidence.",
+      "causal_tooling_change": "Grant actions: read at the T09 workflow top level and make the T09 source validator require the C0 job, reusable workflow reference, and actions: read permission together.",
+      "proof_contract": [
+        "The exact integrated T09 workflow creates and starts its integrated-candidate job.",
+        "The fail-closed T09 source validator passes with the C0 permission contract present.",
+        "No write permission is added."
+      ]
     }
   ],
   "unresolved_mandatory_count": 0,
-  "unresolved_tooling_count": 2,
+  "unresolved_tooling_count": 3,
   "critic_scores": {},
   "critic_approval_pending": true,
   "evidence": {
@@ -103,5 +123,5 @@
     "artifact_digest": "sha256:3c7a39529c7c77518cc7040e023ac7868ee74590843affac3856bc1555968982",
     "complete_evidence_index_sha256": "ba3c0b334561b248178df583e13dd9114c22714530532d77a2a0b72a3a893dcb"
   },
-  "next_action": "Run exact-source T09 CI on the integrated frozen-clock candidate. Close T09-D004 and T09-D006 only after unchanged C5 pose limits, impacted regression, save/device matrices, C6 and the complete evidence index pass on the same source; then complete fresh independent C2/C3/C4/C5/C6 review."
+  "next_action": "Run exact-source T09 CI after the C0 caller-permission repair. Close T09-D004, T09-D006 and T09-D007 only after workflow startup, unchanged C5 pose limits, impacted regression, save/device matrices, C6 and the complete evidence index pass on the same source; then complete fresh independent C2/C3/C4/C5/C6 review."
 }

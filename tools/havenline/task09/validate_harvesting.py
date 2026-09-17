@@ -197,6 +197,7 @@ def main() -> None:
     ]):
         errors.append("T09 workflow C5 summary is not bound to the final-skeleton pose metric schema")
     if not all(token in workflow_source for token in [
+        "actions: read", "c0-diagnose:", "havenline-c0-root-cause.yml",
         "tools/havenline/task09/motion_capture.py",
         "t09_motion_fixture.tscn",
         "t06/chop,t06/mine,t06/dismantle",
