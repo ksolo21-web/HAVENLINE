@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0",
+  "name": "Root-Cause Advisor",
+  "status": "OPERATIONAL",
+  "non_voting": true,
+  "approval_critic": false,
+  "trigger": "mandatory task/gate/critic/integration failure before another repair round",
+  "runner": "tools/havenline/production/c0_root_cause_advisor.py",
+  "workflow": ".github/workflows/havenline-c0-root-cause.yml",
+  "independent_runtime": "same checksum-pinned local $0 specialist runtime, separate advisory job",
+  "required_outputs": [
+    "terminal_class",
+    "complete_known_blocker_set",
+    "blockers",
+    "unexecuted_checks",
+    "builder_action",
+    "candidate_freeze",
+    "summary",
+    "confidence"
+  ],
+  "failure_classes": [
+    "PRODUCT_DEFECT",
+    "TOOLING_DEFECT",
+    "GOVERNANCE_DEFECT",
+    "EVIDENCE_DEFECT",
+    "INFRASTRUCTURE_FAILURE",
+    "SUPERSEDED",
+    "MIXED"
+  ],
+  "candidate_freeze_policy": "finish_running_sha",
+  "may_score_gameplay": false,
+  "may_approve_task": false,
+  "may_lower_C1_C11_thresholds": false
+}
