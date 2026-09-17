@@ -9,6 +9,7 @@ const DEVICE_SIZES := {
 	"foldable_outer":Vector2(2520,1080), "foldable_inner":Vector2(2208,1768),
 }
 const VIEWS := ["front","front-right","right","rear-right","rear","rear-left","left","front-left","overhead","detail"]
+const COMMIT_CONTACT_SETTLE_FRAMES := 18
 
 var output := "user://task09-harvesting"
 var resource_kind := "wood"
@@ -252,6 +253,11 @@ func commit(frame: int) -> void:
 	# presentation timeline, but it must never fabricate resource or inventory
 	# mutations, nor invent the event consumed by T09/T08.
 	game.sim.action = canonical_action(1.0)
+	for contact_settle_frame in COMMIT_CONTACT_SETTLE_FRAMES:
+		game._process(1.0 / 60.0)
+	var precommit_contact: Dictionary = game.harvest_presentation.descriptor()
+	if not bool(precommit_contact.get("contact_ready", false)):
+		push_error("T09 capture commit did not reach validated contact before authoritative mutation")
 	game.sim.events.clear()
 	game.sim.perform_action(float(game.sim.tuning.gatherSecondsPerUnit[resource_kind]))
 	game.sim.elapsed += 1.0 / 60.0
@@ -262,6 +268,7 @@ func commit(frame: int) -> void:
 		"authoritative_event":authoritative_event,
 		"units_before":before_units,"units_after":int(source.units),
 		"inventory_before":before_inventory,"inventory_after":int(game.sim.inventory[resource_kind]),
+		"precommit_contact_ready":bool(precommit_contact.get("contact_ready", false)),
 		"harvest":game.harvest_presentation.descriptor(),
 	})
 
