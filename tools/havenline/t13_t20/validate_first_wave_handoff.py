@@ -22,26 +22,14 @@ EXPECTED = {
         "owner": "challenge-director-builder",
         "dependencies": ["T12"],
         "critics": ["C2", "C3", "C4", "C6", "C7"],
-        "required_markers": [
-            "spend-blind",
-            "deterministic",
-            "bounded",
-            "GM_CHALLENGE",
-            "recovery",
-        ],
+        "required_markers": ["spend-blind", "deterministic", "bounded", "GM_CHALLENGE", "recovery"],
     },
     "T14": {
         "branch": "havenline/T14-save-versioning",
         "owner": "save-versioning-builder",
         "dependencies": ["T08", "T10", "T12"],
         "critics": ["C2", "C9"],
-        "required_markers": [
-            "atomic",
-            "migration",
-            "corruption",
-            "interruption",
-            "round-trip",
-        ],
+        "required_markers": ["atomic", "migration", "corruption", "interruption", "round-trip"],
     },
 }
 
@@ -63,6 +51,14 @@ def load_json(path: pathlib.Path):
 
 def norm_list(values):
     return list(values or [])
+
+
+def packet_forbids_runtime_before_activation(packet: str) -> bool:
+    """Accept explicit semantic equivalents; do not depend on one magic sentence."""
+    text = " ".join(packet.lower().replace("*", "").split())
+    canonical = "runtime build before activation: forbidden"
+    alternate = "runtime implementation may not begin before activation"
+    return canonical in text or alternate in text
 
 
 def validate_task(task: str, cfg: dict) -> list[str]:
@@ -124,11 +120,11 @@ def validate_task(task: str, cfg: dict) -> list[str]:
     if "Fail closed" not in str(binding.get("activation_rule", "")):
         errors.append(f"{task}: T12 consumer binding is not fail-closed")
 
+    support = norm_list(checklist.get("prepared_support_artifacts"))
     for required_path in (
         f"Docs/Production/{task}/IMPLEMENTATION_BLUEPRINT.md",
         f"Docs/Production/{task}/TEST_EVIDENCE_PLAN.md",
     ):
-        support = norm_list(checklist.get("prepared_support_artifacts"))
         if required_path not in support:
             errors.append(f"{task}: checklist missing support artifact {required_path}")
         if required_path not in packet:
@@ -138,7 +134,7 @@ def validate_task(task: str, cfg: dict) -> list[str]:
         errors.append(f"{task}: task packet branch mismatch")
     if cfg["owner"] not in packet:
         errors.append(f"{task}: task packet owner mismatch")
-    if "runtime implementation may not begin" not in packet.lower():
+    if not packet_forbids_runtime_before_activation(packet):
         errors.append(f"{task}: task packet missing explicit no-runtime-before-activation rule")
 
     combined = "\n".join((scope, packet, blueprint, test_plan)).lower()
@@ -146,9 +142,10 @@ def validate_task(task: str, cfg: dict) -> list[str]:
         if marker.lower() not in combined:
             errors.append(f"{task}: handoff is missing required marker {marker!r}")
 
-    if ">9.0" not in combined and '"threshold":9.0' not in (task_dir / "ACTIVATION_CHECKLIST.json").read_text(encoding="utf-8"):
+    checklist_text = (task_dir / "ACTIVATION_CHECKLIST.json").read_text(encoding="utf-8")
+    if ">9.0" not in combined and '"threshold":9.0' not in checklist_text:
         errors.append(f"{task}: strict >9.0 acceptance is not represented")
-    if "10/10" not in combined and '"target":10.0' not in (task_dir / "ACTIVATION_CHECKLIST.json").read_text(encoding="utf-8"):
+    if "10/10" not in combined and '"target":10.0' not in checklist_text:
         errors.append(f"{task}: 10/10 target is not represented")
 
     return errors
