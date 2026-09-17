@@ -1,6 +1,5 @@
 extends SceneTree
-# T09-owned C5 capture. It evaluates the immutable shipping Character 1 clips
-# while adding fail-closed initialization and contact-region review coverage.
+# T09-owned C5 capture of immutable shipping Character 1 clips.
 var output="user://motion-capture"
 var candidate=""
 var task_id=""
@@ -53,16 +52,11 @@ func set_camera(position:Vector3,target:Vector3):
 	camera.position=position;camera.look_at(target)
 
 func set_pose(anim:String,t:float):
-	player.stop()
-	player.play(anim,0.0)
-	player.seek(t,true)
-	player.advance(0.0)
+	player.stop();player.play(anim,0.0);player.seek(t,true);player.advance(0.0)
 
 func settle_pose(anim:String,t:float):
 	for _frame in range(INITIALIZATION_SETTLE_FRAMES):
-		set_pose(anim,t)
-		await process_frame
-		await RenderingServer.frame_post_draw
+		set_pose(anim,t);await process_frame;await RenderingServer.frame_post_draw
 	set_pose(anim,t)
 
 func snap(folder:String,name:String,evidence_type:String,animation:String,t:float,speed:float,turn:float):
@@ -75,11 +69,9 @@ func snap(folder:String,name:String,evidence_type:String,animation:String,t:floa
 func capture_cycle(anim:String,speed:float,label:String):
 	var a=player.get_animation(anim);assert(a)
 	var length=maxf(a.length,.033);var fps=30.0;var count=maxi(2,ceili(length*fps))
-	set_camera(REVIEW_CAMERA_POSITION,REVIEW_CAMERA_TARGET)
-	await settle_pose(anim,0.0)
+	set_camera(REVIEW_CAMERA_POSITION,REVIEW_CAMERA_TARGET);await settle_pose(anim,0.0)
 	for i in range(count+1):
-		var t=minf(length,float(i)/fps)
-		set_pose(anim,t)
+		var t=minf(length,float(i)/fps);set_pose(anim,t)
 		await snap(anim+"/"+label,"%04d"%i,label,anim,t,speed,subject.rotation_degrees.y)
 
 func turn_name(turn:float)->String:
@@ -94,19 +86,16 @@ func capture_close_contacts(anim:String,mid:float):
 		{"name":"lower-rear","position":Vector3(2.0,.85,2.8),"target":Vector3(0,.55,0),"turn":-135.0},
 	]
 	for view in views:
-		subject.rotation_degrees.y=view.turn
-		set_camera(view.position,view.target)
+		subject.rotation_degrees.y=view.turn;set_camera(view.position,view.target)
 		await settle_pose(anim,mid)
 		await snap(anim+"/close-contacts",view.name,"close-"+view.name,anim,mid,1.0,view.turn)
-	subject.rotation_degrees.y=0.0
-	set_camera(REVIEW_CAMERA_POSITION,REVIEW_CAMERA_TARGET)
+	subject.rotation_degrees.y=0.0;set_camera(REVIEW_CAMERA_POSITION,REVIEW_CAMERA_TARGET)
 
 func run():
 	DirAccess.make_dir_recursive_absolute(output);setup_scene()
 	for anim in animations:
 		assert(player.has_animation(anim),"missing animation "+anim)
-		await capture_cycle(anim,1.0,"real-time-cycle")
-		await capture_cycle(anim,.25,"slow-review-cycle")
+		await capture_cycle(anim,1.0,"real-time-cycle");await capture_cycle(anim,.25,"slow-review-cycle")
 		var a=player.get_animation(anim);var mid=a.length*.5
 		for turn in TURN_ANGLES:
 			subject.rotation_degrees.y=turn;set_pose(anim,mid)

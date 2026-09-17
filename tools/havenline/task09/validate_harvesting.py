@@ -16,6 +16,8 @@ MAIN = ROOT / "HavenlineGodot" / "scripts" / "main.gd"
 CAPTURE = ROOT / "HavenlineGodot" / "tests" / "capture_task09_harvesting.gd"
 MOTION_FIXTURE = ASSETS / "t09_motion_fixture.gd"
 MOTION_SCENE = ASSETS / "t09_motion_fixture.tscn"
+MOTION_CAPTURE = ASSETS / "t09_motion_capture.gd"
+MOTION_RUNNER = ROOT / "tools" / "havenline" / "task09" / "motion_capture.py"
 WORKFLOW = ROOT / ".github" / "workflows" / "havenline-task09-harvesting.yml"
 REGISTRY = ROOT / "Docs" / "Production" / "RESOURCE_ACTION_REGISTRY.json"
 REFERENCE_SELECTION = ROOT / "Docs" / "Production" / "T09" / "reference-selection.json"
@@ -138,6 +140,8 @@ def main() -> None:
         errors.append("resource-specific non-occluding detail camera is missing")
     motion_fixture_source = MOTION_FIXTURE.read_text(encoding="utf-8") if MOTION_FIXTURE.exists() else ""
     motion_scene_source = MOTION_SCENE.read_text(encoding="utf-8") if MOTION_SCENE.exists() else ""
+    motion_capture_source = MOTION_CAPTURE.read_text(encoding="utf-8") if MOTION_CAPTURE.exists() else ""
+    motion_runner_source = MOTION_RUNNER.read_text(encoding="utf-8") if MOTION_RUNNER.exists() else ""
     workflow_source = WORKFLOW.read_text(encoding="utf-8") if WORKFLOW.exists() else ""
     if not all(token in motion_fixture_source for token in [
         'preload("res://assets/characters/Character1.glb")',
@@ -147,9 +151,15 @@ def main() -> None:
         '"human_player_chop"', '"human_player_mine"', '"human_player_dismantle"',
     ]) or "t09_motion_fixture.gd" not in motion_scene_source:
         errors.append("C5 motion fixture does not use shipping Character 1 motion profiles")
+    if not all(token in motion_capture_source for token in [
+        "production_motion_v2", "INITIALIZATION_SETTLE_FRAMES:=2",
+        "player.advance(0.0)", "close-upper-opposite", "close-lower-rear",
+    ]) or not all(token in motion_runner_source for token in [
+        "t09_motion_capture.gd", "t=0 evidence is inconsistent after initialization",
+    ]):
+        errors.append("T09 C5 capture lacks deterministic initialization or contact-region coverage")
     if not all(token in workflow_source for token in [
-        "tools/havenline/production/motion_capture.py",
-        "capture_task09_motion.gd",
+        "tools/havenline/task09/motion_capture.py",
         "t09_motion_fixture.tscn",
         "t06/chop,t06/mine,t06/dismantle",
         "production_motion_v2",

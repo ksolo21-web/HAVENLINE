@@ -248,9 +248,8 @@ jobs:
           done
           out=task09-evidence/captures/native-4k
           xvfb-run -a "${godot[@]}" --resolution 3840x2160 --script res://tests/capture_task09_harvesting.gd -- --out="$PWD/$out" --resource=wood --mode=tool --view=front-right --device=phone_16_9 --native-4k --candidate="$CANDIDATE"
-          xvfb-run -a python3 tools/havenline/production/motion_capture.py \
+          xvfb-run -a python3 tools/havenline/task09/motion_capture.py \
             --candidate "$CANDIDATE" --task T09 \
-            --script res://tests/capture_task09_motion.gd \
             --scene res://assets/harvesting_v1/t09_motion_fixture.tscn \
             --subject-path . --animation-player-path Character1Visual/AnimationPlayer \
             --animations t06/chop,t06/mine,t06/dismantle \
