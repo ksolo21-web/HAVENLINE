@@ -76,6 +76,16 @@ def main():
             fp=root/rel
             if not fp.exists() or sha256_file(fp)!=h:errors.append("evidence hash mismatch "+rel)
     if d.get("unresolved_mandatory_defects"):errors.append("unresolved mandatory defects")
+    durable_index_path=DOCS/"Evidence"/str(task)/"complete-evidence-index.json"
+    durable_index={}
+    if not durable_index_path.is_file():
+        errors.append("missing durable complete evidence index")
+    else:
+        durable_index=load_json(durable_index_path)
+        if sha256_file(durable_index_path)!=evidence.get("provenance_hash"):
+            errors.append("durable evidence index hash mismatch")
+        if durable_index.get("task_id")!=task or durable_index.get("candidate_commit")!=candidate:
+            errors.append("durable evidence index source/task mismatch")
 
     policy=resources.get("task_policy",{})
     contract_applicable=task in policy.get("applicable_tasks",[])
@@ -185,6 +195,34 @@ def main():
             if supplement.get("passed") is not True or supplement.get("candidate_commit")!=candidate:errors.append("deterministic supplement missing/failed "+cid)
         if cid=="C9":
             if len(row.get("scores",{}))!=10:errors.append("C9 attack coverage incomplete")
+        raw_rel=row.get("raw_record_path")
+        raw_hash=row.get("raw_record_sha256")
+        if not raw_rel or not raw_hash:
+            errors.append("raw critic record missing "+cid)
+        else:
+            raw_path=(ROOT/raw_rel).resolve();raw_root=(DOCS/str(task)/"CriticRaw").resolve()
+            if raw_path.parent!=raw_root or raw_path.is_symlink():
+                errors.append("raw critic path escapes canonical directory "+cid)
+            elif not raw_path.is_file() or sha256_file(raw_path)!=raw_hash:
+                errors.append("raw critic record hash mismatch "+cid)
+            else:
+                raw=load_json(raw_path)
+                if raw.get("task_id")!=task or raw.get("critic_id")!=cid or raw.get("candidate_commit")!=candidate:
+                    errors.append("raw critic identity mismatch "+cid)
+                if raw.get("workflow_run_id")!=d.get("workflow_run_id") or raw.get("artifact_id")!=d.get("artifact_id"):
+                    errors.append("raw critic run/artifact mismatch "+cid)
+                if raw.get("complete_evidence_index_sha256")!=evidence.get("provenance_hash") or raw.get("input_manifest_sha256")!=evidence.get("provenance_hash"):
+                    errors.append("raw critic input manifest mismatch "+cid)
+                if raw.get("status")!="PASS" or raw.get("passed") is not True or raw.get("coverage_complete") is not True or raw.get("defects"):
+                    errors.append("raw critic disposition incomplete "+cid)
+                if raw.get("scores")!=row.get("scores"):
+                    errors.append("raw/aggregate critic score mismatch "+cid)
+                if not all(raw.get(k) for k in ("provider","model","request_or_run_id")):
+                    errors.append("raw critic provider provenance incomplete "+cid)
+                for item in raw.get("evidence",[]):
+                    rel=item.get("path");h=item.get("sha256")
+                    if not rel or not h or durable_index.get("files",{}).get(rel)!=h:
+                        errors.append("raw critic indexed evidence mismatch "+cid+": "+str(rel))
     integ=d.get("integration",{})
     if integ.get("candidate_commit")!=candidate or integ.get("regression_passed") is not True:errors.append("integration candidate regression missing")
     result={"task_id":task,"candidate_commit":candidate,"passed":not errors,"errors":errors,"approval_allowed":not errors}
