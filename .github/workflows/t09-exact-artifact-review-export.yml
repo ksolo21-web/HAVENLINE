@@ -1,0 +1,192 @@
+name: T09 exact artifact review export
+
+on:
+  push:
+    branches: ['codex/t09-evidence-review-9bc73550']
+    paths:
+      - '.github/workflows/t09-exact-artifact-review-export.yml'
+
+permissions:
+  actions: read
+  contents: write
+
+jobs:
+  export:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      EXPECTED_SOURCE: 9bc735502b265bfdd365004fb863b19c613e27dd
+      EXPECTED_ZIP_SHA256: 0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1
+      EXPECTED_INDEX_SHA256: 7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76
+      ARTIFACT_ID: '10494819142'
+      REVIEW_ROOT: review/t09-exact-9bc73550
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: codex/t09-evidence-review-9bc73550
+          fetch-depth: 1
+
+      - name: Download and verify exact artifact
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          zip_path="$RUNNER_TEMP/t09.zip"
+          extract_root="$RUNNER_TEMP/t09-artifact"
+          curl -fsSL --retry 3 \
+            -H "Authorization: Bearer $GH_TOKEN" \
+            -H "Accept: application/vnd.github+json" \
+            -H "X-GitHub-Api-Version: 2022-11-28" \
+            "https://api.github.com/repos/$GITHUB_REPOSITORY/actions/artifacts/$ARTIFACT_ID/zip" \
+            -o "$zip_path"
+          echo "$EXPECTED_ZIP_SHA256  $zip_path" | sha256sum -c -
+          mkdir -p "$extract_root"
+          ZIP_PATH="$zip_path" EXTRACT_ROOT="$extract_root" python3 - <<'PY'
+          import os, stat, zipfile
+          from pathlib import Path
+          archive=Path(os.environ['ZIP_PATH'])
+          root=Path(os.environ['EXTRACT_ROOT']).resolve()
+          with zipfile.ZipFile(archive) as zf:
+              for info in zf.infolist():
+                  target=(root / info.filename).resolve()
+                  assert target == root or root in target.parents, info.filename
+                  mode=(info.external_attr >> 16) & 0o170000
+                  assert mode != stat.S_IFLNK, info.filename
+              zf.extractall(root)
+          PY
+
+      - name: Verify complete evidence index
+        run: |
+          set -euo pipefail
+          EXTRACT_ROOT="$RUNNER_TEMP/t09-artifact" python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          root=Path(os.environ['EXTRACT_ROOT'])
+          index_path=root/'complete-evidence-index.json'
+          actual_index=hashlib.sha256(index_path.read_bytes()).hexdigest()
+          assert actual_index==os.environ['EXPECTED_INDEX_SHA256'],(actual_index,os.environ['EXPECTED_INDEX_SHA256'])
+          index=json.loads(index_path.read_text())
+          assert index['task_id']=='T09'
+          assert index['candidate_commit']==os.environ['EXPECTED_SOURCE']
+          assert index['file_count']==913
+          assert len(index['files'])==913
+          mismatches=[]
+          missing=[]
+          for rel,expected in index['files'].items():
+              path=root/rel
+              if not path.is_file():
+                  missing.append(rel)
+                  continue
+              actual=hashlib.sha256(path.read_bytes()).hexdigest()
+              if actual!=expected:
+                  mismatches.append({'path':rel,'expected':expected,'actual':actual})
+          known=json.loads((root/'known-failures.json').read_text())
+          assert not known['known_failures']
+          assert not known['unresolved_mandatory_defects']
+          assert not missing and not mismatches,(missing,mismatches)
+          result={
+              'task_id':'T09',
+              'candidate_commit':os.environ['EXPECTED_SOURCE'],
+              'workflow_run_id':35213007340,
+              'artifact_id':10494819142,
+              'artifact_zip_sha256':os.environ['EXPECTED_ZIP_SHA256'],
+              'complete_evidence_index_sha256':actual_index,
+              'indexed_files_verified':len(index['files']),
+              'missing':missing,
+              'hash_mismatches':mismatches,
+              'known_failures':known['known_failures'],
+              'unresolved_mandatory_defects':known['unresolved_mandatory_defects'],
+              'passed':True,
+          }
+          out=Path(os.environ['GITHUB_WORKSPACE'])/os.environ['REVIEW_ROOT']
+          out.mkdir(parents=True,exist_ok=True)
+          (out/'artifact-verification.json').write_text(json.dumps(result,indent=2)+'\n')
+          print(json.dumps(result))
+          PY
+
+      - name: Export reports and review images
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq imagemagick
+          EXTRACT_ROOT="$RUNNER_TEMP/t09-artifact" python3 - <<'PY'
+          import json, os, shutil, subprocess
+          from pathlib import Path
+          src=Path(os.environ['EXTRACT_ROOT'])
+          dst=Path(os.environ['GITHUB_WORKSPACE'])/os.environ['REVIEW_ROOT']
+          reports=dst/'reports'
+          fullres=dst/'fullres'
+          sheets=dst/'contact-sheets'
+          staging=Path(os.environ['RUNNER_TEMP'])/'t09-sheet-inputs'
+          for path in src.rglob('*'):
+              if path.is_file() and path.suffix.lower() in {'.json','.sha256','.txt','.log'}:
+                  rel=path.relative_to(src)
+                  target=reports/rel
+                  target.parent.mkdir(parents=True,exist_ok=True)
+                  shutil.copy2(path,target)
+          selected=[]
+          for path in src.rglob('*.png'):
+              selected.append(path)
+          for path in sorted(src.glob('captures/sequence-*/frames/frame-*.jpg')):
+              try:
+                  frame=int(path.stem.rsplit('-',1)[-1])
+              except ValueError:
+                  continue
+              if frame % 4 == 0:
+                  selected.append(path)
+          for path in selected:
+              rel=path.relative_to(src)
+              target=fullres/rel
+              target.parent.mkdir(parents=True,exist_ok=True)
+              shutil.copy2(path,target)
+          categories={}
+          for path in selected:
+              rel=path.relative_to(src).as_posix()
+              low=rel.lower()
+              if '/motion-c5/' in '/'+low:
+                  if 'chop' in low: key='motion-chop'
+                  elif 'mine' in low: key='motion-mine'
+                  elif 'dismantle' in low: key='motion-dismantle'
+                  else: key='motion-other'
+              elif 'sequence-wood/' in low: key='sequence-wood'
+              elif 'sequence-stone/' in low: key='sequence-stone'
+              elif 'sequence-metal/' in low: key='sequence-metal'
+              elif 'sequence-fuel/' in low: key='sequence-fuel'
+              elif '/tool-' in '/'+low: key='tools-in-hand'
+              elif '/asset-' in '/'+low: key='tools-isolated'
+              elif '/device-' in '/'+low: key='device-matrix'
+              elif '/native-4k/' in '/'+low: key='native-4k'
+              else: key='other-captures'
+              categories.setdefault(key,[]).append(path)
+          sheets.mkdir(parents=True,exist_ok=True)
+          staging.mkdir(parents=True,exist_ok=True)
+          manifest={'candidate_commit':os.environ['EXPECTED_SOURCE'],'selected_full_resolution_images':len(selected),'categories':{}}
+          for key,paths in sorted(categories.items()):
+              paths=sorted(paths)
+              manifest['categories'][key]={'images':len(paths),'sheets':[]}
+              for page,start in enumerate(range(0,len(paths),25),1):
+                  chunk=paths[start:start+25]
+                  page_dir=staging/f'{key}-{page:02d}'
+                  page_dir.mkdir(parents=True,exist_ok=True)
+                  flat=[]
+                  for index,path in enumerate(chunk):
+                      rel=path.relative_to(src).as_posix()
+                      safe='__'.join(path.relative_to(src).parts)
+                      target=page_dir/f'{index:02d}__{safe}'
+                      shutil.copy2(path,target)
+                      flat.append(target)
+                  output=sheets/f'{key}-{page:02d}.jpg'
+                  cmd=['montage',*[str(p) for p in flat],'-auto-orient','-thumbnail','640x360>','-tile','5x5','-geometry','+8+28','-background','#111111','-fill','white','-pointsize','14','-set','label','%t','-quality','88',str(output)]
+                  subprocess.run(cmd,check=True)
+                  manifest['categories'][key]['sheets'].append({'path':str(output.relative_to(dst)),'source_images':[str(p.relative_to(src)) for p in chunk]})
+          (dst/'review-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+          PY
+
+      - name: Commit review export
+        run: |
+          set -euo pipefail
+          git config user.name "havenline-ci"
+          git config user.email "actions@users.noreply.github.com"
+          git add "$REVIEW_ROOT"
+          git commit -m "chore(t09): expose exact artifact for independent review [skip ci]"
+          git push origin HEAD:codex/t09-evidence-review-9bc73550
