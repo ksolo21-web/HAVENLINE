@@ -153,9 +153,9 @@ def main() -> None:
         errors.append("C5 motion fixture does not use shipping Character 1 motion profiles")
     if not all(token in motion_capture_source for token in [
         "production_motion_v2", "INITIALIZATION_SETTLE_FRAMES:=2",
-        "player.advance(0.0)", '"upper-opposite"', '"lower-rear"',
+        "FIRST_USE_WARMUP_FRAMES:=8", "player.advance(0.0)", '"upper-opposite"', '"lower-rear"',
     ]) or not all(token in motion_runner_source for token in [
-        "t09_motion_capture.gd", "t=0 evidence is inconsistent after initialization",
+        "t09_motion_capture.gd", "START_EQUIVALENCE_MAX_RMSE", "FIRST_STEP_MAX_RMSE",
     ]):
         errors.append("T09 C5 capture lacks deterministic initialization or contact-region coverage")
     if not all(token in workflow_source for token in [
@@ -164,6 +164,8 @@ def main() -> None:
         "t06/chop,t06/mine,t06/dismantle",
         "production_motion_v2",
         "initialization_settle_frames",
+        "first_use_warmup_frames",
+        "initialization_validation",
         "turn-neg-135",
         "close-upper-opposite",
         "close-lower-rear",
