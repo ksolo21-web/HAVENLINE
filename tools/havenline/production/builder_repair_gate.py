@@ -17,7 +17,7 @@ def load(path:pathlib.Path)->dict:
     return json.loads(path.read_text())
 
 
-def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None)->list[str]:
+def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:str|None=None)->list[str]:
     errors=[]
     if c0.get("critic_id")!="C0" or c0.get("non_voting") is not True or c0.get("validated") is not True:
         errors.append("validated non-voting C0 report required")
@@ -33,6 +33,11 @@ def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None)->list[str]:
         errors.append("repair plan diagnosis id mismatch")
     if plan.get("c0_report_sha256")!=c0.get("report_sha256"):
         errors.append("repair plan C0 hash mismatch")
+    repair_base=plan.get("repair_base")
+    if not isinstance(repair_base,str) or len(repair_base)!=40:
+        errors.append("repair plan repair_base must be an exact 40-char SHA")
+    if actual_base is not None and repair_base!=actual_base:
+        errors.append("post-build validation base does not match repair plan repair_base")
     if plan.get("full_blocker_set_acknowledged") is not True:
         errors.append("repair plan must acknowledge full blocker set")
     if plan.get("candidate_freeze_after_build") is not True or plan.get("validation_concurrency_policy")!="finish_running_sha":
@@ -77,8 +82,8 @@ def main()->int:
     c0_copy=dict(c0);c0_copy["report_sha256"]=digest(c0_path)
     if "c0_report_sha256" not in plan:plan["c0_report_sha256"]=""
     actual=changed_files(a.base,a.head) if a.base else None
-    errors=validate(c0_copy,plan,actual)
-    result={"schema_version":1,"task_id":c0.get("task_id"),"diagnosis_id":c0.get("diagnosis_id"),"passed":not errors,"mode":"post-build" if actual is not None else "pre-build","actual_changed_files":actual or [],"errors":errors}
+    errors=validate(c0_copy,plan,actual,a.base)
+    result={"schema_version":1,"task_id":c0.get("task_id"),"diagnosis_id":c0.get("diagnosis_id"),"passed":not errors,"mode":"post-build" if actual is not None else "pre-build","repair_base":plan.get("repair_base"),"actual_changed_files":actual or [],"errors":errors}
     text=json.dumps(result,indent=2)+"\n"
     if a.output:
         p=(ROOT/a.output).resolve();p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text)
