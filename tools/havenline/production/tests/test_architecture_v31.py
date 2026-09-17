@@ -12,6 +12,7 @@ from task_state_snapshot import snapshot,validate as validate_snapshot
 from mutation_canary import run_canaries
 from proof_invalidation import invalidate_contract,validate_policy as validate_invalidation
 from gate_fingerprint import validate_policy as validate_fingerprint
+from closure_validator import validate_raw_critic_record
 
 class ArchitectureV31Tests(unittest.TestCase):
     def test_flake_history_never_waives_mandatory_gate(self):
@@ -46,6 +47,14 @@ class ArchitectureV31Tests(unittest.TestCase):
         self.assertIn('ownership_not_assigned',r['task_state']['blockers'])
         self.assertFalse(r['runtime_activation_allowed'])
         self.assertNotIn('BLOCKED',ACTIVE_RUNTIME_STATES)
+    def test_t09_raw_critic_semantics_are_fail_closed(self):
+        raw=load_json(DOCS/'T09/CriticRaw/C2.json')
+        args=('C2','T09',raw['candidate_commit'],raw['workflow_run_id'],raw['artifact_id'],raw['artifact_sha256'],raw['complete_evidence_index_sha256'],raw['scores'])
+        self.assertEqual(validate_raw_critic_record(raw,*args),[])
+        mutations=[]
+        for key,value in (('confidence',0),('score_reuse',True),('minimum_dimension_score',9.99),('artifact_sha256','0'*64),('review_export_commit','bad'),('acceptance_rule','>=9')):
+            bad=copy.deepcopy(raw);bad[key]=value;mutations.append(bad)
+        for bad in mutations:self.assertTrue(validate_raw_critic_record(bad,*args))
     def test_runtime_dependency_learning_is_additive_only(self):
         data={'schema_version':1,'policy':{'minimum_observations_for_enforcement':3,'minimum_distinct_sources':2,'learned_edges_are_additive_only':True,'static_mandatory_coverage_may_be_removed_automatically':False},'edges':[{'path_pattern':'HavenlineGodot/scripts/foo.gd','affected_task':'T10','suites':['test_t10'],'observation_count':4,'distinct_sources':2}]};r=learned_impact(['HavenlineGodot/scripts/foo.gd'],data);self.assertEqual(r['coverage_mode'],'ADDITIVE_ONLY');self.assertIn('test_t10',r['required_suites']);self.assertTrue(validate_runtime()['passed'])
     def test_task_snapshot_remains_derived(self):
