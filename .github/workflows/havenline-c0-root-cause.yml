@@ -114,6 +114,24 @@ jobs:
           (root/'c0-input/failure-packet.json').write_text(json.dumps(packet,indent=2)+'\n')
           PY
 
+      - name: Attach V3 historical failure intelligence when candidate supports it
+        run: |
+          set -euo pipefail
+          if [ -f tools/havenline/production/failure_intelligence.py ] && [ -f Docs/Production/FAILURE_INTELLIGENCE.json ]; then
+            python3 tools/havenline/production/failure_intelligence.py packet c0-input/failure-packet.json > c0-input/failure-intelligence.json
+          else
+            printf '%s\n' '{"matches":[],"historical_match_is_advisory_only":true,"availability":"candidate_predates_v3"}' > c0-input/failure-intelligence.json
+          fi
+          python3 - <<'PY'
+          import json,pathlib
+          packet_path=pathlib.Path('c0-input/failure-packet.json')
+          packet=json.loads(packet_path.read_text())
+          prior=json.loads(pathlib.Path('c0-input/failure-intelligence.json').read_text())
+          packet['historical_failure_intelligence']=prior
+          packet['historical_failure_intelligence_rule']='ADVISORY_ONLY; current evidence must independently confirm or reject every historical match; history never authorizes a repair.'
+          packet_path.write_text(json.dumps(packet,indent=2)+'\n')
+          PY
+
       - uses: actions/cache/restore@v4
         id: reviewer-cache
         with:
@@ -147,9 +165,11 @@ jobs:
           name: havenline-C0-${{ inputs.task_id }}-${{ inputs.failed_candidate }}-${{ github.run_id }}
           path: |
             c0-input/failure-packet.json
+            c0-input/failure-intelligence.json
             c0-output/
           retention-days: 30
           if-no-files-found: error
 
 # C0 is diagnostic-only. It cannot approve a task, score gameplay, lower C1-C11 thresholds,
-# mutate a candidate, or treat a cancelled/superseded run as a product failure.
+# mutate a candidate, or treat a cancelled/superseded run as a product failure. Historical
+# failure intelligence is advisory only and must be confirmed against the current run evidence.
