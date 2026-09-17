@@ -6,6 +6,7 @@ import unittest
 
 HERE = pathlib.Path(__file__).resolve()
 PROD = HERE.parents[1]
+ROOT = HERE.parents[4]
 sys.path.insert(0, str(PROD))
 
 from architecture_v3 import task_readiness, validate as validate_v3
@@ -59,6 +60,7 @@ class ArchitectureV3Tests(unittest.TestCase):
         self.assertTrue(result["matches"])
         self.assertEqual(result["matches"][0]["id"], "FI-T09-001")
         self.assertTrue(result["matches"][0]["advisory_only"])
+        self.assertTrue(result["historical_match_is_advisory_only"])
 
     def test_failure_intelligence_schema_is_valid(self):
         self.assertTrue(validate_failure_intelligence()["passed"])
@@ -77,6 +79,49 @@ class ArchitectureV3Tests(unittest.TestCase):
         self.assertEqual(report["risk"], "NO_DRIFT")
         self.assertFalse(report["requires_reconcile"])
         self.assertEqual(report["candidate"], report["integration_head"])
+
+    def test_v3_is_mandatory_in_agent_bootstrap_and_owned_by_governance(self):
+        agents = (ROOT / "AGENTS.md").read_text()
+        for marker in (
+            "Docs/Production/PRODUCTION_ARCHITECTURE_V3.md",
+            "Docs/Production/TASK_CAPABILITY_MATRIX.json",
+            "Docs/Production/CAPABILITY_STATUS.json",
+            "Docs/Production/PRODUCTION_SCHEDULER_POLICY.json",
+            "Docs/Production/GATE_FINGERPRINT_POLICY.json",
+            "Docs/Production/CONTRACT_REGISTRY.json",
+            "Docs/Production/FAILURE_INTELLIGENCE.json",
+            "architecture_v3.py readiness",
+            "synthetic_merge_forecast.py",
+        ):
+            self.assertIn(marker, agents)
+        ownership = (ROOT / "Docs/Production/PATH_OWNERSHIP.json").read_text()
+        for marker in (
+            "PRODUCTION_ARCHITECTURE_V3.md",
+            "TASK_CAPABILITY_MATRIX.json",
+            "CAPABILITY_STATUS.json",
+            "PRODUCTION_SCHEDULER_POLICY.json",
+            "GATE_FINGERPRINT_POLICY.json",
+            "GATE_RESULT_INDEX.json",
+            "CONTRACT_REGISTRY.json",
+            "FAILURE_INTELLIGENCE.json",
+        ):
+            self.assertIn(marker, ownership)
+
+    def test_forward_packet_exposes_v3_and_blocks_unready_runtime(self):
+        packet_source = (ROOT / "tools/havenline/production/task_packet.py").read_text()
+        self.assertIn("Production Architecture V3 — machine resolved", packet_source)
+        self.assertIn("Runtime activation allowed now", packet_source)
+        self.assertIn("DO NOT start runtime implementation", packet_source)
+        self.assertIn("synthetic_merge_forecast.py", packet_source)
+        self.assertIn("gate_fingerprint.py", packet_source)
+
+    def test_c0_historical_intelligence_is_advisory_and_backward_compatible(self):
+        workflow = (ROOT / ".github/workflows/havenline-c0-root-cause.yml").read_text()
+        self.assertIn("failure_intelligence.py packet", workflow)
+        self.assertIn("candidate_predates_v3", workflow)
+        self.assertIn("ADVISORY_ONLY", workflow)
+        self.assertIn("current evidence must independently confirm or reject", workflow)
+        self.assertIn("actions: read", workflow)
 
     def test_combined_v3_validation_passes(self):
         report = validate_v3()
