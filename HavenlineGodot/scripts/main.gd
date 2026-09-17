@@ -243,9 +243,9 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 				var forest_varying := "varying float forest_clearance;"
 				var bounded_varying := "varying float forest_clearance;\nvarying float harvest_contact_band;\nvarying float harvest_reveal_side;"
 				var roughness_uniform := "uniform float surface_roughness = 0.95;"
-				var contact_uniform := "uniform float surface_roughness = 0.95;\nuniform float harvest_contact_surface = 0.0;\ninstance uniform float harvest_reveal = 0.0;\ninstance uniform vec2 harvest_reveal_direction = vec2(0.0,1.0);"
+				var contact_uniform := "uniform float surface_roughness = 0.95;\nuniform float harvest_contact_surface = 0.0;\ninstance uniform float harvest_reveal = 0.0;\ninstance uniform vec2 harvest_reveal_direction = vec2(0.0,1.0);\ninstance uniform vec2 harvest_reveal_center = vec2(0.0);"
 				var forest_vertex := "void vertex() {\n forest_clearance = 0.0;"
-				var bounded_vertex := "void vertex() {\n forest_clearance = 0.0;\n harvest_contact_band = 1.0-smoothstep(1.35,1.75,VERTEX.y);\n harvest_reveal_side = dot(VERTEX.xz,harvest_reveal_direction);"
+				var bounded_vertex := "void vertex() {\n forest_clearance = 0.0;\n harvest_contact_band = 1.0-smoothstep(1.35,1.75,VERTEX.y);\n harvest_reveal_side = dot(VERTEX.xz-harvest_reveal_center,harvest_reveal_direction);"
 				if not evergreen_shader.code.contains("harvest_contact_band"):
 					evergreen_shader.code = evergreen_shader.code.replace(forest_varying,bounded_varying)
 					evergreen_shader.code = evergreen_shader.code.replace(roughness_uniform,contact_uniform)
@@ -273,6 +273,8 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 	parent.add_child(instance)
 	instance.position = p
 	if asset.begins_with("world/pine_") and instance is GeometryInstance3D:
+		var pine_center: Vector3 = instance.mesh.get_aabb().get_center()
+		instance.set_instance_shader_parameter("harvest_reveal_center",Vector2(pine_center.x,pine_center.z))
 		scenery_instances.append(instance)
 		scenery_origins.append(p)
 		scenery_heights.append(instance.mesh.get_aabb().end.y)
@@ -493,7 +495,11 @@ func present_events():
 			if event.type == "gather" and is_instance_valid(harvest_presentation):
 				var harvest_action := HarvestPresentation.canonical_action(sim.action)
 				var profile := HarvestPresentation.profile_for_resource(kind)
-				harvest_presentation.prepare_actor_contact(player_rig)
+				# The authoritative event lands one physics tick after the validated
+				# pre-impact presentation. Keep that same actor/contact pose available
+				# to the commit synchronizer; it clears and solves from the authored
+				# animation when the action identity is new or was not contact-ready.
+				harvest_presentation.bind_actor(player_rig)
 				var contact := HarvestPresentation.contact_node(player_rig,String(profile.get("contact_marker", "")))
 				if not harvest_action.is_empty() and String(harvest_action.resource) == kind and is_instance_valid(contact):
 					var contact_transform := HarvestPresentation.attachment_transform(player_rig,profile)

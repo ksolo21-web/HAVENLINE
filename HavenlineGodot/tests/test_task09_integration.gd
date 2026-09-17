@@ -117,8 +117,9 @@ func run() -> void:
 			var pine_material: ShaderMaterial = pine_mesh.surface_get_material(surface_index)
 			surface_names.append(pine_material.resource_name.to_lower())
 			contact_surface_values.append(float(pine_material.get_shader_parameter("harvest_contact_surface")))
-			wood_contact_opaque = wood_contact_opaque and pine_material.shader.code.contains("local_harvest_reveal") and pine_material.shader.code.contains("harvest_reveal_side") and pine_material.shader.code.contains("harvest_contact_band")
-		check("wood variant %d preserves trunk and far-side crown around the local reveal" % pine_variant,wood_contact_opaque and surface_names == ["trunk","crown","lip"] and contact_surface_values == [1.0,0.0,0.0],[surface_names,contact_surface_values])
+			wood_contact_opaque = wood_contact_opaque and pine_material.shader.code.contains("local_harvest_reveal") and pine_material.shader.code.contains("VERTEX.xz-harvest_reveal_center") and pine_material.shader.code.contains("harvest_contact_band")
+		var reveal_center: Variant = (game.scenery_instances[pine_variant-1] as GeometryInstance3D).get_instance_shader_parameter("harvest_reveal_center")
+		check("wood variant %d preserves trunk and a mesh-centered far-side crown" % pine_variant,wood_contact_opaque and reveal_center is Vector2 and reveal_center.is_finite() and surface_names == ["trunk","crown","lip"] and contact_surface_values == [1.0,0.0,0.0],[surface_names,contact_surface_values,reveal_center])
 	var shipping_source: Dictionary = game.sim.resources[0]
 	shipping_source.units = 2
 	game.sim.position = shipping_source.position + Vector2(0.0,1.0)
@@ -140,7 +141,11 @@ func run() -> void:
 			"kind":"gather", "id":String(shipping_source.id), "position":shipping_source.position,
 			"action_token":commit_index+1, "progress":0.99, "role":"player_lead", "actionable":true,
 		}
-		game._process(1.0 / 60.0)
+		# Mirror the shipping loop's bounded anticipation window so the authored
+		# chop pose reaches its validated visible-surface contact before commit.
+		for contact_settle_frame in 18:
+			game._process(1.0 / 60.0)
+		check("shipping wood commit begins from a validated visible-surface contact", game.harvest_presentation.descriptor().contact_ready,game.harvest_presentation.descriptor())
 		game.sim.events.clear()
 		game.sim.perform_action(0.60)
 		game.sim.elapsed += 0.60

@@ -770,10 +770,13 @@ func update_action(action: Dictionary, attachment_transform: Transform3D,
 
 func synchronize_committed_contact(action: Dictionary, attachment_transform: Transform3D,
 		target_position: Vector3, actor_id: int) -> Dictionary:
-	_clear_grip_pose()
 	if not valid_action(action) or actor_id < 0 or not target_position.is_finite():
 		return descriptor()
-	if active.is_empty() or int(active.get("action_token", -1)) != int(action.action_token) or String(active.get("source_id", "")) != String(action.source_id) or int(active.get("actor_id", -1)) != actor_id:
+	var same_identity := not active.is_empty() and int(active.get("action_token", -1)) == int(action.action_token) and String(active.get("source_id", "")) == String(action.source_id) and int(active.get("actor_id", -1)) == actor_id
+	var preserve_validated_pose := same_identity and bool(active.get("contact_ready", false)) and bool(active.get("contact_alignment_valid", false))
+	if not preserve_validated_pose:
+		_clear_grip_pose()
+	if not same_identity:
 		if not begin_action(action, actor_id):
 			return descriptor()
 	var profile: Dictionary = active.profile

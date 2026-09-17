@@ -115,7 +115,8 @@ def main() -> None:
     if not all(token in main_source for token in [
         'active_harvest_source := String(harvest_state.get("source_id",""))',
         "harvest_selected = active_harvest_source == String(r.id)",
-        "local_harvest_reveal", "harvest_reveal_side",
+        "local_harvest_reveal", "harvest_reveal_side", "harvest_reveal_center",
+        "VERTEX.xz-harvest_reveal_center",
         'set_instance_shader_parameter("harvest_reveal",1.0 if harvest_selected else 0.0)',
     ]):
         errors.append("active wood source does not preserve a bounded lateral crown/contact reveal")
