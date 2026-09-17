@@ -1,0 +1,80 @@
+name: Havenline T13-T70 Provenance Hardening
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - havenline/t13-t70-provenance-hardening
+    paths:
+      - 'Docs/Production/T1[3-9]/FROZEN_SCOPE.md'
+      - 'Docs/Production/T[2-6][0-9]/FROZEN_SCOPE.md'
+      - 'Docs/Production/T70/FROZEN_SCOPE.md'
+      - 'tools/havenline/prepared_stack/normalize_provenance.py'
+      - 'tools/havenline/prepared_stack/test_provenance_normalizer.py'
+      - '.github/workflows/havenline-t13-t70-provenance-hardening.yml'
+  pull_request:
+    paths:
+      - 'Docs/Production/T1[3-9]/FROZEN_SCOPE.md'
+      - 'Docs/Production/T[2-6][0-9]/FROZEN_SCOPE.md'
+      - 'Docs/Production/T70/FROZEN_SCOPE.md'
+      - 'tools/havenline/prepared_stack/normalize_provenance.py'
+      - 'tools/havenline/prepared_stack/test_provenance_normalizer.py'
+      - '.github/workflows/havenline-t13-t70-provenance-hardening.yml'
+
+permissions:
+  contents: write
+
+jobs:
+  provenance-hardening:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 1
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile provenance tools
+        run: |
+          python -m py_compile tools/havenline/prepared_stack/normalize_provenance.py
+          python -m py_compile tools/havenline/prepared_stack/test_provenance_normalizer.py
+      - name: Run focused regression tests
+        run: python tools/havenline/prepared_stack/test_provenance_normalizer.py
+      - name: Normalize T13-T70 scopes locally
+        run: python tools/havenline/prepared_stack/normalize_provenance.py --apply
+      - name: Verify exact normalized scope set
+        run: python tools/havenline/prepared_stack/normalize_provenance.py --check
+      - name: Refuse any out-of-scope generated diff
+        run: |
+          python - <<'PY'
+          import pathlib, subprocess, sys
+          allowed = {f'Docs/Production/T{i:02d}/FROZEN_SCOPE.md' for i in range(13, 71)}
+          changed = set(filter(None, subprocess.check_output(['git','diff','--name-only'], text=True).splitlines()))
+          unexpected = sorted(changed - allowed)
+          if unexpected:
+              print({'passed': False, 'unexpected_generated_paths': unexpected})
+              sys.exit(1)
+          print({'passed': True, 'generated_diff_count': len(changed)})
+          PY
+      - name: Commit normalized provenance on repair branch
+        if: github.event_name == 'push' && github.ref_name == 'havenline/t13-t70-provenance-hardening'
+        run: |
+          if git diff --quiet -- Docs/Production; then
+            echo 'No scope normalization commit needed.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Docs/Production/T*/FROZEN_SCOPE.md
+          python - <<'PY'
+          import subprocess, sys
+          allowed = {f'Docs/Production/T{i:02d}/FROZEN_SCOPE.md' for i in range(13, 71)}
+          staged = set(filter(None, subprocess.check_output(['git','diff','--cached','--name-only'], text=True).splitlines()))
+          unexpected = sorted(staged - allowed)
+          if unexpected or not staged:
+              print({'passed': False, 'unexpected_staged_paths': unexpected, 'staged_count': len(staged)})
+              sys.exit(1)
+          print({'passed': True, 'staged_count': len(staged)})
+          PY
+          git commit -m 'T13-T70: normalize forward preparation provenance'
+          git push origin HEAD:${GITHUB_REF_NAME}
