@@ -52,6 +52,21 @@ def provenance():
     return {"ImageOS": "ubuntu24", "ImageVersion": "20260907.300.1", "RUNNER_OS": "Linux", "RUNNER_ARCH": "X64"}
 
 
+def trace(source=SHA):
+    return {
+        "schema_version": 1,
+        "source_sha": source,
+        "task_id": "T10",
+        "observer": "fixture-runtime-harness",
+        "events": [{
+            "path": "HavenlineGodot/scripts/foo.gd",
+            "affected_task": "T10",
+            "suites": ["test_t10_world"],
+            "kind": "runtime_call",
+        }],
+    }
+
+
 class FactoryObserverTests(unittest.TestCase):
     def test_exact_environment_emits_telemetry_flakes_and_task_state(self):
         result = observe(run_doc(), jobs_doc(), {"artifacts": [{"size_in_bytes": 4096}]}, provenance=provenance())
@@ -76,18 +91,34 @@ class FactoryObserverTests(unittest.TestCase):
         self.assertEqual(result["flake_observations"], [])
         self.assertEqual(result["telemetry"]["terminal_class"], "FAILURE")
 
-    def test_runtime_dependency_trace_must_match_exact_source(self):
+    def test_runtime_dependency_trace_must_be_source_bound_and_schema_valid(self):
         with tempfile.TemporaryDirectory() as td:
             root = pathlib.Path(td)
             good = root / "a" / "runtime-dependency-trace.json"
             good.parent.mkdir()
-            good.write_text(json.dumps({"source_sha": SHA, "events": [{"path": "HavenlineGodot/scripts/foo.gd"}]}))
-            bad = root / "b" / "runtime-dependency-trace.json"
-            bad.parent.mkdir()
-            bad.write_text(json.dumps({"source_sha": "b" * 40, "events": [{"path": "wrong"}]}))
+            good.write_text(json.dumps(trace()))
             result = observe(run_doc(), jobs_doc(), provenance=provenance(), artifact_root=root)
+            self.assertTrue(result["passed"], result["errors"])
             self.assertEqual(len(result["runtime_dependency_traces"]), 1)
-            self.assertEqual(result["runtime_dependency_traces"][0]["trace"]["source_sha"], SHA)
+            self.assertTrue(result["runtime_dependency_traces"][0]["validation"]["passed"])
+
+    def test_wrong_source_dependency_trace_blocks_bundle(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = pathlib.Path(td)
+            bad = root / "runtime-dependency-trace.json"
+            bad.write_text(json.dumps(trace("b" * 40)))
+            result = observe(run_doc(), jobs_doc(), provenance=provenance(), artifact_root=root)
+            self.assertFalse(result["passed"])
+            self.assertTrue(any("trace source does not match observed run" in error for error in result["errors"]))
+
+    def test_invalid_dependency_trace_cannot_be_learned(self):
+        with tempfile.TemporaryDirectory() as td:
+            root = pathlib.Path(td)
+            bad = trace(); bad["events"][0]["path"] = "Docs/not-runtime.md"
+            (root / "runtime-dependency-trace.json").write_text(json.dumps(bad))
+            result = observe(run_doc(), jobs_doc(), provenance=provenance(), artifact_root=root)
+            self.assertFalse(result["passed"])
+            self.assertTrue(any("path must be observed HavenlineGodot runtime path" in error for error in result["errors"]))
 
     def test_ambiguous_artifact_provenance_fails_closed_for_flake_fingerprint(self):
         with tempfile.TemporaryDirectory() as td:
