@@ -19,9 +19,8 @@ def has_placeholder(value,tokens):
     return False
 
 RAW_ACCEPTANCE_RULE=">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects"
-T09_REVIEW_EXPORT_COMMIT="3dc86b8f0ed8f6364e78d29e6fd1d0ccd0a76014"
 
-def validate_raw_critic_record(raw,cid,task,candidate,workflow_run_id,artifact_id,artifact_sha,evidence_hash,scores):
+def validate_raw_critic_record(raw,cid,task,candidate,workflow_run_id,artifact_id,artifact_sha,evidence_hash,scores,review_export_commit):
     errors=[]
     if raw.get("task_id")!=task or raw.get("critic_id")!=cid or raw.get("candidate_commit")!=candidate:errors.append("identity mismatch")
     if raw.get("workflow_run_id")!=workflow_run_id or raw.get("artifact_id")!=artifact_id:errors.append("run/artifact mismatch")
@@ -35,7 +34,7 @@ def validate_raw_critic_record(raw,cid,task,candidate,workflow_run_id,artifact_i
     if raw.get("score_reuse") is not False:errors.append("score reuse must be false")
     raw_scores=raw.get("scores",{})
     if not raw_scores or raw.get("minimum_dimension_score")!=min(raw_scores.values()):errors.append("minimum score mismatch")
-    if raw.get("review_export_commit")!=T09_REVIEW_EXPORT_COMMIT:errors.append("review export provenance mismatch")
+    if not re.fullmatch(r"[0-9a-f]{40}",str(review_export_commit or "")) or raw.get("review_export_commit")!=review_export_commit:errors.append("review export provenance mismatch")
     if raw.get("acceptance_rule")!=RAW_ACCEPTANCE_RULE:errors.append("acceptance rule mismatch")
     if not all(raw.get(k) for k in ("provider","model","request_or_run_id")):errors.append("provider provenance incomplete")
     return errors
@@ -128,7 +127,7 @@ def main():
         expected_locator=f"github-actions://ksolo21-web/HAVENLINE/runs/{retained_review.get('run_id')}/artifacts/{retained_review.get('artifact_id')}"
         if rr.get("locator")!=expected_locator or rr.get("sha256")!=str(retained_review.get("digest","")).removeprefix("sha256:") or rr.get("expires_at")!=retained_review.get("expires_at"):
             errors.append("retained review artifact identity mismatch")
-        if (rr.get("retention_days"),identity.get("original_run_id"),identity.get("original_artifact_id"),identity.get("original_artifact_sha256"),identity.get("complete_evidence_index_sha256"),identity.get("indexed_files_verified"))!=(90,d.get("workflow_run_id"),d.get("artifact_id"),d.get("artifact_sha256"),d.get("evidence",{}).get("provenance_hash"),913):
+        if (rr.get("retention_days"),identity.get("original_run_id"),identity.get("original_artifact_id"),identity.get("original_artifact_sha256"),identity.get("complete_evidence_index_sha256"),identity.get("indexed_files_verified"))!=(90,d.get("workflow_run_id"),d.get("artifact_id"),d.get("artifact_sha256"),d.get("evidence",{}).get("provenance_hash"),load_json(DOCS/"Evidence"/str(task)/"complete-evidence-index.json").get("file_count")):
             errors.append("retained review content identity mismatch")
         if (pe.get("retained_artifact_id"),pe.get("retained_artifact_sha256"),pe.get("retained_until"))!=(retained_review.get("artifact_id"),str(retained_review.get("digest","")).removeprefix("sha256:"),retained_review.get("expires_at")):
             errors.append("retained review provenance index mismatch")
@@ -307,7 +306,7 @@ def main():
                 errors.append("raw critic record hash mismatch "+cid)
             else:
                 raw=load_json(raw_path)
-                errors += [f"{cid}: {x}" for x in validate_raw_critic_record(raw,cid,task,candidate,d.get("workflow_run_id"),d.get("artifact_id"),d.get("artifact_sha256"),evidence.get("provenance_hash"),row.get("scores",{}))]
+                errors += [f"{cid}: {x}" for x in validate_raw_critic_record(raw,cid,task,candidate,d.get("workflow_run_id"),d.get("artifact_id"),d.get("artifact_sha256"),evidence.get("provenance_hash"),row.get("scores",{}),d.get("critic_review_export_commit"))]
                 aggregate_row=aggregate.get("critics",{}).get(cid,{})
                 if aggregate_row.get("status")!="PASS" or aggregate_row.get("coverage_complete") is not True or aggregate_row.get("scores")!=row.get("scores") or aggregate_row.get("minimum_dimension_score")!=min(row.get("scores",{}).values()) or aggregate_row.get("raw_record_path")!=raw_rel or aggregate_row.get("raw_record_sha256")!=raw_hash or aggregate_row.get("defects"):
                     errors.append("independent critic aggregate mismatch "+cid)
