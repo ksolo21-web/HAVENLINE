@@ -33,19 +33,21 @@
       "summary": "C5 initialization validation repeatedly treated separately rendered PNG identity as animation-pose identity, creating false failures after otherwise successful T09 validation.",
       "status": "READY_FOR_VERIFICATION",
       "classification": ["TOOLING_FIX", "TEST_FIX"],
-      "failed_candidate": "2a9a88ba931bc943bf55e91dbaac3b606c1393e3",
-      "failed_workflow_run": 35195377822,
-      "visible_symptom": "Run 50 passed scope/contracts, 17 impacted suites with 997 checks, save/device matrices and C6, then failed in C5 evidence with 't06/chop t=0 evidence is inconsistent after initialization'.",
+      "failed_candidate": "1ff5780f9539be6dbf1d521b23fe49384d3d9c18",
+      "failed_workflow_run": 35205184308,
+      "prior_failed_candidate": "2a9a88ba931bc943bf55e91dbaac3b606c1393e3",
+      "prior_failed_workflow_run": 35195377822,
+      "visible_symptom": "Run 35205184308 passed scope/contracts, 17 impacted suites with 997 checks, save/device matrices and C6, then failed before visual fan-out because repeated t=0 final-skeleton probes differed by 1.037-1.471 degrees against the strict 1-degree start limit.",
       "triage": "The shipping T06 chop/mine/dismantle clips were not disproven. The failure occurred in the T09 evidence harness and is classified as tooling/test failure rather than a production-motion defect.",
       "affected_production_object": "T09 C5 evidence harness only; shipping Character 1 mesh, rig and T06 clips remain unchanged.",
-      "probable_root_cause": "Independent render sessions were compared by exact PNG SHA and then whole-image pixel RMSE. Camera/render/AA/lighting or first-use SkeletonModifier3D convergence can change pixels without changing the final animation pose.",
+      "probable_root_cause": "The pose-space replacement exposed a second harness defect: settle_pose restarted the animation on every settle frame and warm_pose restarted it once more after warming, discarding the SkeletonModifier3D convergence they were intended to establish. capture_cycle then restarted t=0 again immediately before frame 0000.",
       "implicated_files": [
         "HavenlineGodot/assets/harvesting_v1/t09_motion_capture.gd",
         "tools/havenline/task09/motion_capture.py",
         "tools/havenline/task09/validate_harvesting.py",
         ".github/workflows/havenline-task09-harvesting.yml"
       ],
-      "causal_tooling_change": "Warm the shipping skeleton modifier, emit source-bound final Skeleton3D bone transforms for initialization probes, compare translation/rotation deltas in pose space, keep PNG hashes only for provenance, and fail C5 before the long visual fan-out.",
+      "causal_tooling_change": "Start each sampled pose once, advance eight convergence frames without restarting, preserve the settled t=0 pose for frame 0000, keep the strict 5 mm / 1 degree limits, and make the source contract reject any return of the post-settle restart pattern.",
       "expected_visible_result": "Rendered C5 evidence remains visually unchanged; equivalent t=0 poses no longer fail because unrelated pixels differ, while a real post-warm-up skeleton discontinuity still fails closed.",
       "proof_contract": [
         "T09 static source validation rejects PNG equality/RMSE as a C5 pose invariant.",
@@ -54,6 +56,15 @@
         "Frame SHA-256 hashes remain preserved for evidence provenance.",
         "Impacted regression, save/device matrices and C6 remain green on the exact repaired candidate."
       ]
+    },
+    {
+      "id": "T09-D005",
+      "severity": "mandatory-ci-governance",
+      "summary": "New C0/builder governance files were omitted from QA-GOV ownership, so exact integrated T09 scope validation rejected them as unowned paths.",
+      "status": "RESOLVED",
+      "failed_candidate": "39315e59250f22087321ca07f1302d77af9b45fe",
+      "failed_workflow_run": 35208413468,
+      "resolution": "Integration commit 8f971724d6ba7331530a4b502328ce1625df2082 adds the complete C0/builder control-plane packet to @ownership:QA-GOV; the reproduced T09 integration-scope comparison passes with zero ownership errors."
     }
   ],
   "unresolved_mandatory_count": 0,
@@ -66,5 +77,5 @@
     "artifact_digest": "sha256:3c7a39529c7c77518cc7040e023ac7868ee74590843affac3856bc1555968982",
     "complete_evidence_index_sha256": "ba3c0b334561b248178df583e13dd9114c22714530532d77a2a0b72a3a893dcb"
   },
-  "next_action": "Run exact-source T09 CI on the pose-space tooling repair. Close T09-D004 only after C5 pose initialization/continuity, impacted regression, save/device matrices, C6 and the complete evidence index pass on the same repaired candidate; then resume fresh independent C2/C3/C4/C5/C6 review."
+  "next_action": "Run exact-source T09 CI after the settled-pose repair and C0 ownership reconciliation. Close T09-D004 only after C5 pose initialization/continuity, impacted regression, save/device matrices, C6 and the complete evidence index pass on the same integrated candidate; then resume fresh independent C2/C3/C4/C5/C6 review."
 }
