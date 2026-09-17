@@ -200,8 +200,8 @@ def main():
         if not raw_rel or not raw_hash:
             errors.append("raw critic record missing "+cid)
         else:
-            raw_path=(ROOT/raw_rel).resolve();raw_root=(DOCS/str(task)/"CriticRaw").resolve()
-            if raw_path.parent!=raw_root or raw_path.is_symlink():
+            raw_candidate=ROOT/raw_rel;raw_path=raw_candidate.resolve();raw_root=(DOCS/str(task)/"CriticRaw").resolve()
+            if raw_path.parent!=raw_root or raw_candidate.is_symlink():
                 errors.append("raw critic path escapes canonical directory "+cid)
             elif not raw_path.is_file() or sha256_file(raw_path)!=raw_hash:
                 errors.append("raw critic record hash mismatch "+cid)
