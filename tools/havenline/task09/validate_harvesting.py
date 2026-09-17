@@ -156,6 +156,7 @@ def main() -> None:
         "--rendering-method mobile --rendering-driver vulkan",
         "VK_ICD_FILENAMES",
         "*lvp*json",
+        "mesa-vulkan-drivers",
         "timeout 900 Godot_v4.7.2-stable_linux.x86_64",
         "complete-evidence-index.json",
         "known-failures.json",
