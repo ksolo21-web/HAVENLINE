@@ -27,8 +27,8 @@ jobs:
 
       - name: Validate candidate-guard tooling
         run: |
-          python -m py_compile tools/havenline/production/preactivation_candidate.py
-          python -m unittest tools.havenline.production.tests.test_preactivation_candidate
+          python -m py_compile tools/havenline/production/preactivation_candidate.py tools/havenline/production/builder_repair_gate.py
+          python -m unittest tools.havenline.production.tests.test_preactivation_candidate tools.havenline.production.tests.test_c0_builder
 
       - name: Resolve candidate mode and exact registered base
         id: resolve
@@ -53,12 +53,14 @@ jobs:
               base=ws.get('base_commit')
               if not base: raise SystemExit(f'{task} has no recorded base_commit')
               print('CANDIDATE_MODE=registered')
+              print('TASK_STATUS='+ws['status'])
               print('BASE='+base)
           else:
               checklist=pathlib.Path('Docs/Production')/task/'ACTIVATION_CHECKLIST.json'
               if not checklist.exists():
                   raise SystemExit(f'{task} is not registered and has no activation checklist for a pre-activation lane')
               print('CANDIDATE_MODE=preactivation')
+              print('TASK_STATUS=PREACTIVATION')
               print('BASE=')
           PY
           cat /tmp/resolve.env >> "$GITHUB_ENV"
@@ -80,6 +82,30 @@ jobs:
         run: |
           python3 tools/havenline/production/workstream.py validate-candidate "$TASK" --base "$BASE" --head HEAD --integration-head "$INTEGRATION_HEAD"
 
+      - name: Require complete C0 diagnosis and bounded repair diff
+        if: env.CANDIDATE_MODE == 'registered' && env.TASK_STATUS == 'FIX_REQUIRED' && env.NO_CANDIDATE_CHANGES != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          c0="Docs/Production/$TASK/C0_ROOT_CAUSE.json"
+          plan="Docs/Production/$TASK/REPAIR_PLAN.json"
+          test -s "$c0"
+          test -s "$plan"
+          repair_base=$(python3 - <<'PY'
+          import json,os
+          task=os.environ['TASK']
+          plan=json.load(open(f'Docs/Production/{task}/REPAIR_PLAN.json'))
+          base=plan.get('repair_base','')
+          if len(base)!=40:raise SystemExit('REPAIR_PLAN repair_base must be an exact 40-char SHA')
+          print(base)
+          PY
+          )
+          git merge-base --is-ancestor "$repair_base" HEAD
+          mkdir -p Docs/Production/Evidence/CandidateGuard
+          python3 tools/havenline/production/builder_repair_gate.py \
+            --c0 "$c0" --plan "$plan" --base "$repair_base" --head HEAD \
+            --output Docs/Production/Evidence/CandidateGuard/builder-repair.json
+
       - name: Validate explicitly authorized pre-activation build-pending candidate
         if: env.CANDIDATE_MODE == 'preactivation'
         run: |
@@ -98,5 +124,6 @@ jobs:
           python3 tools/havenline/production/regression_runner.py --base "$BASE" --head HEAD --plan-only | tee Docs/Production/Evidence/CandidateGuard/regression-plan.json
 
 # Passing registered mode means assignment/base/path/impact rules are valid; it never approves a task.
+# FIX_REQUIRED candidates additionally require a source-bound C0 diagnosis plus a machine-bounded repair plan.
 # Passing preactivation mode means only explicitly authorized isolated construction may continue to
 # BUILT_PENDING_DEPENDENCY. It never grants INTEGRATION_READY, integration, critic approval, or task approval.
