@@ -31,6 +31,15 @@ jobs:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 1
+      - name: Snapshot pre-existing checkout dirt
+        run: |
+          python - <<'PY'
+          import os, pathlib, subprocess
+          changed = subprocess.check_output(['git','diff','--name-only'], text=True).splitlines()
+          target = pathlib.Path(os.environ['RUNNER_TEMP']) / 'havenline-preexisting-diff.txt'
+          target.write_text('\n'.join(changed) + ('\n' if changed else ''), encoding='utf-8')
+          print({'preexisting_checkout_dirt': changed})
+          PY
       - uses: actions/setup-python@v5
         with:
           python-version: '3.12'
@@ -47,14 +56,17 @@ jobs:
       - name: Refuse any out-of-scope generated diff
         run: |
           python - <<'PY'
-          import pathlib, subprocess, sys
+          import os, pathlib, subprocess, sys
           allowed = {f'Docs/Production/T{i:02d}/FROZEN_SCOPE.md' for i in range(13, 71)}
+          baseline_path = pathlib.Path(os.environ['RUNNER_TEMP']) / 'havenline-preexisting-diff.txt'
+          preexisting = set(filter(None, baseline_path.read_text(encoding='utf-8').splitlines()))
           changed = set(filter(None, subprocess.check_output(['git','diff','--name-only'], text=True).splitlines()))
-          unexpected = sorted(changed - allowed)
+          generated = changed - preexisting
+          unexpected = sorted(generated - allowed)
           if unexpected:
-              print({'passed': False, 'unexpected_generated_paths': unexpected})
+              print({'passed': False, 'preexisting_paths': sorted(preexisting), 'unexpected_generated_paths': unexpected})
               sys.exit(1)
-          print({'passed': True, 'generated_diff_count': len(changed)})
+          print({'passed': True, 'preexisting_paths': sorted(preexisting), 'generated_diff_count': len(generated), 'generated_paths': sorted(generated)})
           PY
       - name: Commit normalized provenance on repair branch
         if: github.event_name == 'push' && github.ref_name == 'havenline/t13-t70-provenance-hardening'
