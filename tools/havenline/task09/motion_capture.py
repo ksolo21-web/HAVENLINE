@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, json, math, os, shutil, struct, subprocess, sys, zlib
+import argparse, json, math, os, shutil, subprocess, sys
 from pathlib import Path
 
 ROOT=Path(__file__).resolve().parents[3]
@@ -8,44 +8,72 @@ sys.path.insert(0,str(ROOT/"tools"/"havenline"/"production"))
 from lib import sha256_file
 
 REQUIRED={"real-time-cycle","slow-review-cycle","turn-neg-135","turn-neg-090","turn-neg-045","turn-000","turn-030","turn-045","turn-090","turn-135","turn-180","transition-start","transition-end","close-upper-front","close-upper-opposite","close-waist-rear","close-lower-front","close-lower-rear"}
-START_EQUIVALENCE_MAX_RMSE=0.012
-FIRST_STEP_MAX_RMSE=0.045
+# Initialization identity is checked in final skeleton-transform space. These
+# tolerances are deliberately much tighter than visible C5 quality judgments.
+START_MAX_TRANSLATION_M=0.005
+START_MAX_ROTATION_DEG=1.0
+# First-step continuity only rejects a gross initialization jump. C5 still owns
+# the actual motion-quality verdict from the preserved rendered evidence.
+FIRST_STEP_MAX_TRANSLATION_M=0.40
+FIRST_STEP_MAX_ROTATION_DEG=55.0
 
-def _paeth(a:int,b:int,c:int)->int:
-    p=a+b-c;pa=abs(p-a);pb=abs(p-b);pc=abs(p-c)
-    return a if pa<=pb and pa<=pc else b if pb<=pc else c
 
-def png_pixels(path:Path)->bytes:
-    raw=path.read_bytes()
-    if raw[:8]!=b"\x89PNG\r\n\x1a\n":raise SystemExit(f"invalid PNG signature: {path}")
-    pos=8;idat=[];width=height=channels=None
-    while pos<len(raw):
-        length=struct.unpack(">I",raw[pos:pos+4])[0];kind=raw[pos+4:pos+8];data=raw[pos+8:pos+8+length];pos+=12+length
-        if kind==b"IHDR":
-            width,height,depth,color,compression,filter_method,interlace=struct.unpack(">IIBBBBB",data)
-            channels={2:3,6:4}.get(color)
-            if depth!=8 or channels is None or compression or filter_method or interlace:
-                raise SystemExit(f"unsupported PNG encoding: {path}")
-        elif kind==b"IDAT":idat.append(data)
-        elif kind==b"IEND":break
-    if width is None or height is None or channels is None:raise SystemExit(f"PNG header missing: {path}")
-    decoded=zlib.decompress(b"".join(idat));stride=width*channels;offset=0;prior=bytearray(stride);pixels=bytearray()
-    for _ in range(height):
-        mode=decoded[offset];offset+=1;scan=bytearray(decoded[offset:offset+stride]);offset+=stride
-        for i,value in enumerate(scan):
-            left=scan[i-channels] if i>=channels else 0;up=prior[i];upper_left=prior[i-channels] if i>=channels else 0
-            if mode==1:scan[i]=(value+left)&255
-            elif mode==2:scan[i]=(value+up)&255
-            elif mode==3:scan[i]=(value+((left+up)//2))&255
-            elif mode==4:scan[i]=(value+_paeth(left,up,upper_left))&255
-            elif mode!=0:raise SystemExit(f"unsupported PNG filter: {mode}")
-        pixels.extend(scan);prior=scan
-    return bytes(pixels)
+def _capture(meta:dict,animation:str,evidence_type:str,file_suffix:str)->dict:
+    rows=[row for row in meta.get("captures",[]) if row.get("animation")==animation and row.get("evidence_type")==evidence_type and str(row.get("file","")).endswith(file_suffix)]
+    if len(rows)!=1:
+        raise SystemExit(f"expected exactly one {animation} {evidence_type} {file_suffix} capture, found {len(rows)}")
+    if not rows[0].get("pose_signature"):
+        raise SystemExit(f"pose signature missing: {animation} {evidence_type} {file_suffix}")
+    return rows[0]
 
-def normalized_rmse(a:Path,b:Path)->float:
-    left=png_pixels(a);right=png_pixels(b)
-    if len(left)!=len(right):raise SystemExit(f"PNG dimensions differ: {a} {b}")
-    return math.sqrt(sum((x-y)**2 for x,y in zip(left,right))/(len(left)*255.0*255.0))
+
+def _pose_map(row:dict)->dict[tuple[str,int],tuple[list[float],list[float],str]]:
+    result={}
+    for bone in row.get("pose_signature",[]):
+        key=(str(bone.get("skeleton","")),int(bone.get("bone_index",-1)))
+        origin=[float(v) for v in bone.get("origin",[])]
+        rotation=[float(v) for v in bone.get("rotation",[])]
+        if key in result or len(origin)!=3 or len(rotation)!=4 or key[1]<0:
+            raise SystemExit(f"invalid pose signature row: {bone}")
+        result[key]=(origin,rotation,str(bone.get("bone","")))
+    if not result:
+        raise SystemExit("empty pose signature")
+    return result
+
+
+def _distance(a:list[float],b:list[float])->float:
+    return math.sqrt(sum((x-y)**2 for x,y in zip(a,b)))
+
+
+def _rotation_delta_deg(a:list[float],b:list[float])->float:
+    # q and -q represent the same orientation, hence abs(dot).
+    dot=abs(sum(x*y for x,y in zip(a,b)))
+    dot=max(-1.0,min(1.0,dot))
+    return math.degrees(2.0*math.acos(dot))
+
+
+def pose_delta(left:dict,right:dict)->dict:
+    a=_pose_map(left);b=_pose_map(right)
+    if set(a)!=set(b):
+        missing_left=sorted(set(b)-set(a));missing_right=sorted(set(a)-set(b))
+        raise SystemExit(f"pose bone sets differ; left_missing={missing_left} right_missing={missing_right}")
+    translations=[];rotations=[];worst_translation=None;worst_rotation=None
+    for key in sorted(a):
+        ao,aq,name=a[key];bo,bq,_=b[key]
+        translation=_distance(ao,bo);rotation=_rotation_delta_deg(aq,bq)
+        translations.append(translation);rotations.append(rotation)
+        if worst_translation is None or translation>worst_translation[0]:worst_translation=(translation,name,key)
+        if worst_rotation is None or rotation>worst_rotation[0]:worst_rotation=(rotation,name,key)
+    return {
+        "bone_count":len(a),
+        "max_translation_m":max(translations),
+        "rms_translation_m":math.sqrt(sum(v*v for v in translations)/len(translations)),
+        "max_rotation_deg":max(rotations),
+        "rms_rotation_deg":math.sqrt(sum(v*v for v in rotations)/len(rotations)),
+        "worst_translation_bone":worst_translation[1],
+        "worst_rotation_bone":worst_rotation[1],
+    }
+
 
 def main():
     ap=argparse.ArgumentParser()
@@ -69,23 +97,45 @@ def main():
     if meta.get("candidate_commit")!=a.candidate:raise SystemExit("candidate mismatch")
     if meta.get("harness")!="production_motion_v2" or meta.get("initialization_settle_frames",0)<2 or meta.get("first_use_warmup_frames",0)<8:
         raise SystemExit("motion initialization pre-roll metadata missing")
+    if meta.get("initialization_pose_schema")!="skeleton_global_pose_v1":
+        raise SystemExit("final skeleton pose schema missing")
     present={row["evidence_type"] for row in meta["captures"]}
     missing=REQUIRED-present
     if missing:raise SystemExit("motion evidence types missing: "+",".join(sorted(missing)))
     frames=sorted(out.rglob("*.png"))
+    # Frame hashes bind evidence bytes to this run. They are provenance only and
+    # are intentionally NOT used as an animation-pose equivalence gate.
     hashes={str(path.relative_to(out)):sha256_file(path) for path in frames}
-    initialization_validation={"start_equivalence_max_rmse":START_EQUIVALENCE_MAX_RMSE,"first_step_max_rmse":FIRST_STEP_MAX_RMSE,"animations":{},"passed":True}
+    initialization_validation={
+        "method":"final_skeleton_pose_transform_v1",
+        "start_limits":{"max_translation_m":START_MAX_TRANSLATION_M,"max_rotation_deg":START_MAX_ROTATION_DEG},
+        "first_step_limits":{"max_translation_m":FIRST_STEP_MAX_TRANSLATION_M,"max_rotation_deg":FIRST_STEP_MAX_ROTATION_DEG},
+        "animations":{},"passed":True,
+    }
     failed=[]
     for animation in a.animations.split(","):
-        starts=[out/animation/"real-time-cycle/0000.png",out/animation/"slow-review-cycle/0000.png",out/animation/"transitions/start.png"]
-        start_rmse=max(normalized_rmse(starts[0],starts[1]),normalized_rmse(starts[0],starts[2]),normalized_rmse(starts[1],starts[2]))
-        first_step_rmse=normalized_rmse(starts[0],out/animation/"real-time-cycle/0001.png")
-        initialization_validation["animations"][animation]={"start_max_normalized_rmse":start_rmse,"first_step_normalized_rmse":first_step_rmse}
-        if start_rmse>START_EQUIVALENCE_MAX_RMSE or first_step_rmse>FIRST_STEP_MAX_RMSE:
+        real0=_capture(meta,animation,"real-time-cycle","/0000.png")
+        slow0=_capture(meta,animation,"slow-review-cycle","/0000.png")
+        transition0=_capture(meta,animation,"transition-start","/start.png")
+        real1=_capture(meta,animation,"real-time-cycle","/0001.png")
+        start_pairs={
+            "real_vs_slow":pose_delta(real0,slow0),
+            "real_vs_transition":pose_delta(real0,transition0),
+            "slow_vs_transition":pose_delta(slow0,transition0),
+        }
+        first_step=pose_delta(real0,real1)
+        start_translation=max(row["max_translation_m"] for row in start_pairs.values())
+        start_rotation=max(row["max_rotation_deg"] for row in start_pairs.values())
+        row={"start_pairs":start_pairs,"start_max_translation_m":start_translation,"start_max_rotation_deg":start_rotation,"first_step":first_step}
+        initialization_validation["animations"][animation]=row
+        if start_translation>START_MAX_TRANSLATION_M or start_rotation>START_MAX_ROTATION_DEG or first_step["max_translation_m"]>FIRST_STEP_MAX_TRANSLATION_M or first_step["max_rotation_deg"]>FIRST_STEP_MAX_ROTATION_DEG:
             initialization_validation["passed"]=False
-            failed.append(f"{animation} start={start_rmse:.6f} first_step={first_step_rmse:.6f}")
+            failed.append(
+                f"{animation} start_translation={start_translation:.6f}m start_rotation={start_rotation:.3f}deg "
+                f"first_step_translation={first_step['max_translation_m']:.6f}m first_step_rotation={first_step['max_rotation_deg']:.3f}deg"
+            )
     (out/"motion-hashes.json").write_text(json.dumps({"candidate":a.candidate,"frames":hashes,"initialization_validation":initialization_validation},indent=2)+"\n")
-    if failed:raise SystemExit("t=0 pose or first-step continuity is inconsistent after initialization: "+"; ".join(failed))
-    print(json.dumps({"passed":True,"frames":len(frames),"out":str(out.relative_to(ROOT))},indent=2))
+    if failed:raise SystemExit("C5 final skeleton pose initialization/continuity is inconsistent after warm-up: "+"; ".join(failed))
+    print(json.dumps({"passed":True,"frames":len(frames),"initialization_method":initialization_validation["method"],"out":str(out.relative_to(ROOT))},indent=2))
 
 if __name__=="__main__":main()
