@@ -2,6 +2,8 @@
 from __future__ import annotations
 import argparse, json, pathlib
 from lib import ROOT, DOCS, load_json, ensure_score_strictly_above_nine, sha256_file
+from evidence_retention import validate_manifest as validate_retention_manifest
+from task_state_snapshot import validate as validate_task_state
 
 ALL_GATES=[f"G{i}" for i in range(1,15)]
 RESOURCE_REGISTRY=DOCS/"RESOURCE_ACTION_REGISTRY.json"
@@ -28,6 +30,33 @@ def main():
         if graph["tasks"][dep]["status"]!="APPROVED":errors.append("dependency not approved: "+dep)
     if not candidate or len(candidate)!=40:errors.append("invalid candidate commit")
     if not base or len(base)!=40:errors.append("invalid base commit")
+    approval_path=DOCS/"Evidence"/str(task)/"APPROVAL_EVIDENCE_MANIFEST.json"
+    review_path=DOCS/"Evidence"/str(task)/"REVIEW_EVIDENCE_MANIFEST.json"
+    for label,path,tier in (("approval",approval_path,"approval_provenance"),("review",review_path,"review_evidence")):
+        if not path.is_file():
+            errors.append(f"missing {label} evidence manifest")
+            continue
+        retained=load_json(path)
+        check=validate_retention_manifest(retained,path=path if label=="approval" else None)
+        errors += [f"{label} evidence: {x}" for x in check.get("errors",[])]
+        if retained.get("task_id")!=task or retained.get("accepted_source")!=candidate:
+            errors.append(f"{label} evidence source/task mismatch")
+        if retained.get("retention_class")!=tier:
+            errors.append(f"{label} evidence retention class mismatch")
+    state_path=DOCS/str(task)/"task-state.json"
+    if not state_path.is_file():
+        errors.append("missing final derived task-state snapshot")
+    else:
+        state=load_json(state_path);state_check=validate_task_state(state)
+        errors += ["task state: "+x for x in state_check.get("errors",[])]
+        if state.get("task_id")!=task or state.get("candidate_commit")!=candidate:
+            errors.append("task-state exact candidate mismatch")
+        if state.get("lifecycle_status")!="APPROVED" or state.get("blockers"):
+            errors.append("task-state is not final APPROVED with zero blockers")
+    provenance_rows=load_json(DOCS/"GATE_RESULT_INDEX.json").get("records",[])
+    provenance=next((row for row in provenance_rows if row.get("record_type")=="exact_source_provenance" and row.get("task_id")==task and row.get("candidate")==candidate and row.get("result")=="PASS"),None)
+    if not provenance or provenance.get("reuse_eligible") is not False:
+        errors.append("missing non-reusable exact-source provenance record")
     pv=d.get("path_validation",{})
     if pv.get("passed") is not True or pv.get("candidate")!=candidate or pv.get("base")!=base:errors.append("missing/invalid exact-candidate path validation")
     gates=d.get("gates",{})
