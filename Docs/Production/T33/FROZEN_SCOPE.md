@@ -2,7 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED  
-**Prepared from:** `havenline/governance-t21-t32-prep` @ `2ae94607166b9c64b2e1621f5d7bc2a2d1ee9122`
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Define the launch economy and $0 progression path for Level 1–100 with no energy wall, no mandatory payment, no fake discounts, and no intentionally miserable F2P route.

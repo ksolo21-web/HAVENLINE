@@ -2,7 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED  
-**Prepared from:** `havenline/governance-t12-prep` @ `66efe083a57573b35fe4e6a3e8c9ab378d680796`
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Add wheat and additional food-production resources through registered gather/carry/deliver/transform loops.

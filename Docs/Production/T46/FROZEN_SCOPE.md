@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Author the connected underwater Levels 31–40 region against T44's connected-region interface without breaking simple controls, camera readability, carrying, contextual interactions or save/cloud continuity.

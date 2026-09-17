@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 Production brown-bear companion with species-specific locomotion, heavy-haul/approved obstacle-break behavior and charge/swipe/bite attack animation. Preserve Havenline's chunky powerful stylized winter-survival visual language. Prove weight transfer, paws/grounding, shoulders/spine, carry/haul contact, obstacle interaction, attack contact, gear clearance and transitions across full cycles.

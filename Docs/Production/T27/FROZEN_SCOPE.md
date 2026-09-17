@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 Production owl companion with authored flight, takeoff, landing, wing-clearance, aerial navigation, retrieve/scout behavior and dive/talon attack animation. Preserve Havenline's expressive stylized winter-survival companion design while ensuring wings/gear remain clear through complete cycles and transitions. Prove aerial obstacle clearance, altitude transitions, perch/landing contact, talon impact timing and camera readability.

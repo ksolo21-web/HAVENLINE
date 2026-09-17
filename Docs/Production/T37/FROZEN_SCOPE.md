@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Define a server-authoritative LiveOps Director with server time, validated schedules, pre-approved composition, rollback/kill-switch behavior, and no client authority over competitive/economic value.

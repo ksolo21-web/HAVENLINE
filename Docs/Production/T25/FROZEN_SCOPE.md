@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 Production gray-wolf companion with species-specific locomotion/retrieve behavior and pursuit/pounce/bite attack motion. Preserve Havenline's stylized winter-survival companion language and prove ground contact, paw placement, spine/neck/jaw/tail behavior, gear clearance, turns/transitions and attack contact across full cycles. No human-tool misuse.

@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Define minimal-purpose telemetry for gameplay health, spend-blind difficulty analytics, performance/crash diagnostics, and LiveOps quality without turning telemetry into gameplay authority.

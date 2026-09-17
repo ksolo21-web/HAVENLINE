@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Author the connected desert Levels 21–30 region on the approved T44 connected-region interface while preserving Level 1–100 cadence, F2P fairness, cloud/save continuity and simple controls.

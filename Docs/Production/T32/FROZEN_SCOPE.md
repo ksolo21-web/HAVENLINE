@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Deliver the complete opening frozen-region Levels 1–10 production loop as one integrated player experience using approved progression, difficulty, persistence, fishing/food, customer service, mechanization, wheat/additional food, vehicle service, combat, defenses, survivors and companion systems.

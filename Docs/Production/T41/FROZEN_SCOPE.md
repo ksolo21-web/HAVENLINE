@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Establish fail-closed authority boundaries for economy, purchases, VIP, LiveOps, privileged operations, replay/idempotency, tamper detection, and competitive-value isolation.

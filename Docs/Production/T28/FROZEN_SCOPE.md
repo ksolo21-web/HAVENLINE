@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 Production male-lion companion with species-specific locomotion and charge/pounce/claw/bite attack animation. Preserve Havenline's stylized winter-survival companion language: strong readable silhouette, sculpted mane/fur, expressive face and practical gear without clipping. Prove paws/grounding, shoulder/spine/mane motion, turns, pounce landings, claw/bite contact and gear clearance across complete cycles.

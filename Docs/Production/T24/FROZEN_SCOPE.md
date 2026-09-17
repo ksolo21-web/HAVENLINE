@@ -2,6 +2,7 @@
 
 **Preparation status:** PREPARED_GOVERNANCE_ONLY  
 **Authoritative runtime status:** LOCKED
+**Forward preparation baseline:** `havenline/QA-integration` @ `ac54e55fcf034673b97a1fcb02aba833a3ad2989`  
 
 ## Required outcome
 - Deliver the guardian dog as a production companion with species-specific idle/walk/run/turn behavior, retrieve/work behavior, and lunge/bite/intercept attack motion.
