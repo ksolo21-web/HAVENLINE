@@ -53,7 +53,9 @@ func set_camera(position:Vector3,target:Vector3):
 	camera.position=position;camera.look_at(target)
 
 func set_pose(anim:String,t:float):
-	player.stop();player.play(anim,0.0);player.seek(t,true);player.advance(0.0)
+	# The capture harness samples explicit animation times. Freeze the playback
+	# clock so render-settle frames cannot silently advance beyond that sample.
+	player.stop();player.speed_scale=0.0;player.play(anim,0.0);player.seek(t,true);player.advance(0.0)
 
 func settle_pose(anim:String,t:float,frames:int=INITIALIZATION_SETTLE_FRAMES):
 	# Start the requested sample once, then let final SkeletonModifier3D output
