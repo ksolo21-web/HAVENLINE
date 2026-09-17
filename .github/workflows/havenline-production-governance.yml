@@ -33,7 +33,10 @@ permissions:
   contents: read
 concurrency:
   group: havenline-production-governance-${{ github.event.pull_request.head.ref || github.ref_name }}
-  cancel-in-progress: true
+  # Finish the SHA already under governance review. Newer governance commits
+  # queue behind it so failed-run diagnostics remain usable instead of being
+  # erased by a superseding commit.
+  cancel-in-progress: false
 jobs:
   validate:
     runs-on: ubuntu-24.04
@@ -50,6 +53,21 @@ jobs:
         run: python3 tools/havenline/production/workstream.py validate-registry
       - name: Validate complete V2 state
         run: python3 tools/havenline/production/validate_migration.py
+      - name: Validate T10-T70 forward execution architecture
+        run: |
+          python3 tools/havenline/production/forward_execution.py validate
+          python3 tools/havenline/production/forward_execution.py plan T10 > /tmp/t10-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T14 > /tmp/t14-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T24 > /tmp/t24-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T33 > /tmp/t33-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T58 > /tmp/t58-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T62 > /tmp/t62-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T68 > /tmp/t68-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T70 > /tmp/t70-plan.json
+          jq -e '.execution_mode == "build" and (.ordered_gates | index("integration")) != null' /tmp/t10-plan.json
+          jq -e '.execution_mode == "validation_only" and (.ordered_gates | index("integration")) == null' /tmp/t62-plan.json
+          jq -e '.execution_mode == "certification_only" and (.ordered_gates | index("physical_device")) != null' /tmp/t68-plan.json
+          jq -e '.execution_mode == "release_only" and (.ordered_gates | index("release_manifest")) != null' /tmp/t70-plan.json
       - name: Require C1-C11 execution readiness
         run: python3 tools/havenline/production/validate_critic_readiness.py
       - name: Smoke-test frozen task packet generation
