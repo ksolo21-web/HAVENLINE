@@ -95,11 +95,14 @@ jobs:
           jq -e '.passed == true and .record_count >= 4' /tmp/v3-failures.json
           jq -e '.risk == "NO_DRIFT" and .requires_reconcile == false' /tmp/v3-merge.json
       - name: Validate Production Architecture V3.1 factory hardening
+        shell: bash
         run: |
           set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then base="${{ github.event.pull_request.base.sha }}"; else base=$(git rev-parse HEAD^); fi
           python3 tools/havenline/production/architecture_v31.py validate > /tmp/v31-validation.json
           python3 tools/havenline/production/architecture_v31.py readiness T10 > /tmp/v31-t10.json
           python3 tools/havenline/production/architecture_v31.py readiness T68 > /tmp/v31-t68.json
+          python3 tools/havenline/production/factory_observer_contract.py > /tmp/v31-factory-observer-contract.json
           python3 tools/havenline/production/flake_intelligence.py validate > /tmp/v31-flake.json
           python3 tools/havenline/production/pipeline_telemetry.py validate > /tmp/v31-telemetry.json
           python3 tools/havenline/production/ci_toolchain_lock.py validate > /tmp/v31-toolchain.json
@@ -110,9 +113,11 @@ jobs:
           python3 tools/havenline/production/mutation_canary.py > /tmp/v31-canaries.json
           python3 tools/havenline/production/proof_invalidation.py validate > /tmp/v31-invalidation.json
           python3 tools/havenline/production/proof_invalidation.py contract persistence_schema > /tmp/v31-persistence-invalidation.json
+          python3 tools/havenline/production/proof_invalidation.py diff --base "$base" --head HEAD --output /tmp/v31-contract-diff.json > /tmp/v31-contract-diff.stdout.json
           python3 tools/havenline/production/task_state_snapshot.py T10 --output /tmp/v31-t10-state.json > /tmp/v31-t10-state.stdout.json
-          jq -e '.passed == true and .task_count == 62 and .snapshot_count == 62' /tmp/v31-validation.json
-          jq -e '.v3.feasibility.activation_state == "READY_NOW" and .v3.runtime_activation_allowed == true and .task_state.lifecycle_status == "LOCKED" and (.task_state.blockers | index("lifecycle_status_LOCKED")) != null and (.task_state.blockers | index("ownership_not_assigned")) != null and .runtime_activation_allowed == false' /tmp/v31-t10.json
+          jq -e '.passed == true and .task_count == 62 and .snapshot_count == 62 and .components.factory_observer_consumption.passed == true' /tmp/v31-validation.json
+          jq -e '.v31_controls.automatic_factory_observation == "ENFORCED" and .v31_controls.ci_toolchain_lock == "ENFORCED_NODE24" and .v31_controls.runtime_dependency_learning == "ADDITIVE_ONLY_SOURCE_BOUND" and .v31_controls.transitive_proof_invalidation == "ENFORCED_AUTOMATIC_DIFF"' /tmp/v31-t10.json
+          jq -e '.passed == true and .automatic_failure_observation == true and .forward_closeout_observation_required == true and .factory_observation_is_not_authority == true and .quality_thresholds_unchanged == true' /tmp/v31-factory-observer-contract.json
           jq -e '.passed == true and .critical_workflow_count == 8 and .retired_workflow_count == 1 and .action_pin_count >= 7 and .action_runtime == "node24"' /tmp/v31-toolchain.json
           jq -e '.provenance_complete == true and .RUNNER_OS == "Linux"' /tmp/v31-runner-provenance.json
           jq -e '.passed == true and ([.results[] | select(.rejected == true)] | length) == (.results | length)' /tmp/v31-canaries.json
@@ -121,6 +126,7 @@ jobs:
           jq -e '.passed == true' /tmp/v31-runtime-deps.json
           jq -e '.passed == true' /tmp/v31-invalidation.json
           jq -e '.proof_reuse_blocked == true and .automatic_approval_revocation == false and (.invalidated_tasks | index("T15")) != null and (.invalidated_tasks | index("T70")) != null and (.invalidated_gates | index("save_matrix")) != null' /tmp/v31-persistence-invalidation.json
+          jq -e '.passed == true and ((.contract_change_detected == false and .proof_reuse_blocked == false and .integration_owner_disposition_required == false) or (.contract_change_detected == true and .proof_reuse_blocked == true and .integration_owner_disposition_required == true))' /tmp/v31-contract-diff.json
           jq -e '.validation.passed == true and .snapshot_is_derived_not_authority == true and .lifecycle_status == "LOCKED" and (.blockers | index("lifecycle_status_LOCKED")) != null and (.blockers | index("ownership_not_assigned")) != null' /tmp/v31-t10-state.json
       - name: Require C1-C11 execution readiness
         run: python3 tools/havenline/production/validate_critic_readiness.py
@@ -143,6 +149,9 @@ jobs:
           grep -q 'synthetic_merge_forecast.py' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'task_state_snapshot.py' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'proof_invalidation.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'factory_observer.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'factory_closeout_gate.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'factory-observation.json' Docs/Production/Evidence/T10/TASK_PACKET.md
       - name: Validate resource/tool/actor registry schema
         run: python3 tools/havenline/production/resource_actor_contract.py --task T05 --schema-only
       - name: Validate Game Master policy schema
