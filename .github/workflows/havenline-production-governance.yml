@@ -40,9 +40,9 @@ concurrency:
 jobs:
   validate:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 14
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           fetch-depth: 0
       - name: Compile production accelerator and specialist critic tooling
@@ -90,6 +90,29 @@ jobs:
           jq -e '.passed == true' /tmp/v3-contracts.json
           jq -e '.passed == true and .record_count >= 4' /tmp/v3-failures.json
           jq -e '.risk == "NO_DRIFT" and .requires_reconcile == false' /tmp/v3-merge.json
+      - name: Validate Production Architecture V3.1 factory hardening
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/architecture_v31.py validate > /tmp/v31-validation.json
+          python3 tools/havenline/production/architecture_v31.py readiness T10 > /tmp/v31-t10.json
+          python3 tools/havenline/production/architecture_v31.py readiness T68 > /tmp/v31-t68.json
+          python3 tools/havenline/production/flake_intelligence.py validate > /tmp/v31-flake.json
+          python3 tools/havenline/production/pipeline_telemetry.py validate > /tmp/v31-telemetry.json
+          python3 tools/havenline/production/ci_toolchain_lock.py validate > /tmp/v31-toolchain.json
+          python3 tools/havenline/production/ci_toolchain_lock.py provenance --output /tmp/v31-runner-provenance.json
+          python3 tools/havenline/production/evidence_retention.py validate-policy > /tmp/v31-retention.json
+          python3 tools/havenline/production/runtime_dependency_learning.py validate > /tmp/v31-runtime-deps.json
+          python3 tools/havenline/production/mutation_canary.py > /tmp/v31-canaries.json
+          python3 tools/havenline/production/proof_invalidation.py validate > /tmp/v31-invalidation.json
+          python3 tools/havenline/production/task_state_snapshot.py T10 --output /tmp/v31-t10-state.json > /tmp/v31-t10-state.stdout.json
+          jq -e '.passed == true and .task_count == 61 and .snapshot_count == 61' /tmp/v31-validation.json
+          jq -e '.passed == true and .critical_workflow_count >= 8 and .action_pin_count >= 7' /tmp/v31-toolchain.json
+          jq -e '.provenance_complete == true and .RUNNER_OS == "Linux"' /tmp/v31-runner-provenance.json
+          jq -e '.passed == true and ([.results[] | select(.rejected == true)] | length) == (.results | length)' /tmp/v31-canaries.json
+          jq -e '.passed == true' /tmp/v31-retention.json
+          jq -e '.passed == true' /tmp/v31-runtime-deps.json
+          jq -e '.passed == true' /tmp/v31-invalidation.json
+          jq -e '.validation.passed == true and .snapshot_is_derived_not_authority == true' /tmp/v31-t10-state.json
       - name: Require C1-C11 execution readiness
         run: python3 tools/havenline/production/validate_critic_readiness.py
       - name: Smoke-test frozen task packet generation
@@ -99,17 +122,20 @@ jobs:
           # T05 predates the resource/actor contract and must remain N/A.
           python3 tools/havenline/production/task_packet.py T05
           grep -q 'N/A for this task' Docs/Production/Evidence/T05/TASK_PACKET.md
-          # T10+ packets must expose both fail-fast V2-forward and V3 intelligence.
+          # T10+ packets must expose fail-fast, V3 intelligence and V3.1 factory hardening.
           python3 tools/havenline/production/task_packet.py T10
           grep -q 'Forward execution profile — machine resolved' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'Execution mode: `build`' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'Ordered fail-fast gates' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'Terminal-failure disposition: C0' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'Production Architecture V3 — machine resolved' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Production Architecture V3.1 — machine resolved' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'Feasibility state:' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'Runtime activation allowed now:' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'DO NOT start runtime implementation' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'synthetic_merge_forecast.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'task_state_snapshot.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'proof_invalidation.py' Docs/Production/Evidence/T10/TASK_PACKET.md
       - name: Validate resource/tool/actor registry schema
         run: |
           python3 tools/havenline/production/resource_actor_contract.py --task T05 --schema-only
@@ -137,5 +163,5 @@ jobs:
           fi
           cat /tmp/impact.json
           cat /tmp/integration-scope.json
-# Full V2/V3 state is validated every run; commit-local integration scope is lifecycle/ownership based rather than frozen to a task number.
+# Full V2/V3/V3.1 state is validated every run; integration scope remains lifecycle/ownership based rather than frozen to a task number.
 # Governance/QA only. This workflow cannot award a task critic score, approve gameplay, or bypass task-specific review.
