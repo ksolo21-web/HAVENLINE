@@ -32,7 +32,7 @@ def complete_c0():
 def plan():
     return {
         "schema_version":1,"task_id":"T09","failed_candidate":"a"*40,"diagnosis_id":"C0-T09-123","c0_report_sha256":"d"*64,
-        "full_blocker_set_acknowledged":True,"candidate_freeze_after_build":True,"validation_concurrency_policy":"finish_running_sha",
+        "repair_base":"e"*40,"full_blocker_set_acknowledged":True,"candidate_freeze_after_build":True,"validation_concurrency_policy":"finish_running_sha",
         "must_not_change":["HavenlineGodot/assets/characters/Character1.glb"],
         "fixes":[{"blocker_id":"C0-B001","files":["tools/havenline/task09/motion_capture.py"],"causal_change":"compare skeleton transforms","verification":["pose-space preflight passes"]}],
         "blast_radius_checks":["T06 regression"],"plan_path":"Docs/Production/T09/REPAIR_PLAN.json"
@@ -60,8 +60,12 @@ class C0BuilderTests(unittest.TestCase):
         self.assertTrue(any("must_not_change" in e or "exceeds" in e for e in errors))
 
     def test_post_build_extra_file_is_rejected(self):
-        errors=validate_builder(complete_c0(),plan(),["tools/havenline/task09/motion_capture.py","HavenlineGodot/scripts/main.gd"])
+        p=plan();errors=validate_builder(complete_c0(),p,["tools/havenline/task09/motion_capture.py","HavenlineGodot/scripts/main.gd"],p["repair_base"])
         self.assertTrue(any("exceeds authorized surface" in e for e in errors))
+
+    def test_post_build_wrong_base_is_rejected(self):
+        p=plan();errors=validate_builder(complete_c0(),p,["tools/havenline/task09/motion_capture.py"],"f"*40)
+        self.assertTrue(any("repair_base" in e for e in errors))
 
     def test_superseded_report_cannot_authorize_builder_repair(self):
         p=packet("cancelled");r=superseded_report(p);r["validated"]=True;r["report_sha256"]="d"*64
