@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import re
 import subprocess
 from pathlib import Path
 from typing import Any
@@ -119,6 +120,16 @@ def validate_policy() -> dict[str, Any]:
     index=load_json(INDEX)
     if not isinstance(index.get("records"),list):errors.append("gate result index records must be a list")
     for row in index.get('records',[]):
+        if row.get('record_type')=='exact_source_provenance':
+            if row.get('result')!='PASS' or row.get('reuse_eligible') is not False:errors.append('exact-source provenance must be PASS and non-reusable')
+            if len(str(row.get('candidate','')))!=40:errors.append('exact-source provenance candidate must be exact SHA')
+            evidence=row.get('evidence',{})
+            for key in ('original_artifact_sha256','complete_evidence_index_sha256','retained_artifact_sha256'):
+                if not re.fullmatch(r'[0-9a-f]{64}',str(evidence.get(key,''))):errors.append('exact-source provenance invalid '+key)
+            provenance=row.get('runner_provenance',{})
+            for key in ('ImageOS','ImageVersion','RUNNER_OS','RUNNER_ARCH'):
+                if not provenance.get(key):errors.append('exact-source provenance missing '+key)
+            continue
         if row.get('gate') in set(lock.get('environment_sensitive_reuse_gates',[])) and row.get('result')=='PASS' and not row.get('environment_fingerprint'):errors.append(f"environment-sensitive PASS record missing environment_fingerprint: {row.get('task_id')} {row.get('gate')}")
     return {"passed":not errors,"gate_count":len(policy.get("gates",{})),"errors":errors}
 

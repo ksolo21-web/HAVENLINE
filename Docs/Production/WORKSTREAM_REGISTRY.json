@@ -19,9 +19,9 @@
   ],
   "forward_score_rule": {
     "operator": ">",
-    "threshold": 9.0,
+    "threshold": 9,
     "unrounded": true,
-    "target": 10.0
+    "target": 10
   },
   "legacy_approvals": {
     "T01": {
@@ -329,7 +329,11 @@
         "device_matrix_cases": 6,
         "capture_manifests": 18,
         "unique_pngs": 39,
-        "candidate_video_frames": [60, 148, 148],
+        "candidate_video_frames": [
+          60,
+          148,
+          148
+        ],
         "locked_reference_frames": 44,
         "locked_source_recordings": 2,
         "integration_regression_run": 35035980827
@@ -356,7 +360,7 @@
       "task_id": "T09",
       "task_name": "Harvesting and automatic acquisition",
       "workstream_id": "T09-harvesting-acquisition-builder",
-      "status": "INTEGRATION_READY",
+      "status": "APPROVED",
       "owner": "harvesting-acquisition-builder",
       "branch": "havenline/T09-harvesting",
       "base_commit": "7492074e40a0b061f31d8c32602b7a581b2610f3",
@@ -372,15 +376,16 @@
         "@protected:approved",
         "@integration-only"
       ],
-      "candidate_commit": "69593a19f56df3105a7b9657a76533e274e2eed6",
-      "candidate_hash_or_artifact": "tree 8f7dcbd0f66717b0e5040b883f5fdc53ac83791a; run 35180691636; artifact 10480384742; digest sha256:3c7a39529c7c77518cc7040e023ac7868ee74590843affac3856bc1555968982; evidence index ba3c0b334561b248178df583e13dd9114c22714530532d77a2a0b72a3a893dcb",
+      "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "candidate_hash_or_artifact": "integrated-source:9bc735502b265bfdd365004fb863b19c613e27dd; run:35213007340; job:105174766456; artifact:10494819142; artifact-sha256:0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1; complete-evidence-index-sha256:7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
       "tests": {
         "source_contract": "PASS",
-        "production_tools": "68 tests passed",
+        "production_tools": "PASS",
         "godot_regression": "17 suites / 997 checks passed",
         "save_state_matrix": "7/7 passed",
         "device_layout_matrix": "6/6 passed",
-        "native_android_review": "run 35180693280 passed"
+        "performance_gate": "PASS; 180 measured frames",
+        "evidence_index": "913/913 hashes verified"
       },
       "evidence_path": "Docs/Production/Evidence/T09/",
       "critic_requirements": [
@@ -390,16 +395,22 @@
         "C5",
         "C6"
       ],
-      "critic_status": {},
-      "integration_status": "exact isolated candidate accepted by integration owner; governance reconciliation and fresh candidate rerun required before integration",
+      "critic_status": {
+        "C2": "PASS; minimum mandatory dimension 9.33; zero defects",
+        "C3": "PASS; minimum mandatory dimension 9.276; zero defects",
+        "C4": "PASS; minimum mandatory dimension 9.127; zero defects",
+        "C5": "PASS; minimum mandatory dimension 9.3274; zero defects; 238 motion images inspected",
+        "C6": "PASS; minimum mandatory dimension 9.11; zero defects"
+      },
+      "integration_status": "APPROVED; exact integrated source 9bc735502b265bfdd365004fb863b19c613e27dd passed G1-G14, full exact-source evidence verification, and fresh strict C2-C6 review",
       "known_blockers": [],
-      "next_action": "Reconcile candidate 69593a19f56df3105a7b9657a76533e274e2eed6 with this readiness checkpoint, rerun exact-source CI, then integrate only the passing reconciled source.",
-      "status_updated_at": "2026-09-17T04:58:55+00:00"
+      "next_action": "Preserve T09 completion; T10 remains LOCKED pending explicit preparation, ownership, and activation.",
+      "status_updated_at": "2026-09-17T12:20:00Z"
     }
   ],
   "notes": [
     "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
-    "T03-T08 are APPROVED. T09 is INTEGRATION_READY after exact isolated evidence; reconciliation, fresh CI, integration and independent C2/C3/C4/C5/C6 review remain required. T10+ runtime work remains locked.",
+    "T03-T09 are APPROVED. T09 exact integrated source 9bc735502b265bfdd365004fb863b19c613e27dd passed G1-G14 and fresh strict C2/C3/C4/C5/C6 review; T10+ runtime work remains locked until explicit activation and ownership.",
     "All future runtime builders use isolated branches and cannot approve themselves.",
     "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them."
   ]

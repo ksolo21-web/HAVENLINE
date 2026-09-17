@@ -49,7 +49,11 @@ jobs:
       - name: Validate workstream registry and ownership collisions
         run: python3 tools/havenline/production/workstream.py validate-registry
       - name: Validate complete V2 state
-        run: python3 tools/havenline/production/validate_migration.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then base="${{ github.event.pull_request.base.sha }}"; else base=$(git rev-parse HEAD^); fi
+          python3 tools/havenline/production/validate_migration.py --base "$base"
       - name: Validate T10-T70 forward execution architecture
         run: |
           python3 tools/havenline/production/forward_execution.py validate
@@ -79,7 +83,8 @@ jobs:
           python3 tools/havenline/production/failure_intelligence.py validate > /tmp/v3-failures.json
           python3 tools/havenline/production/synthetic_merge_forecast.py --candidate HEAD --integration HEAD --output /tmp/v3-merge.json
           jq -e '.passed == true and .task_count == 61' /tmp/v3-validation.json
-          jq -e '.feasibility.activation_state != "READY_NOW" and .feasibility.runtime_activation_allowed == false' /tmp/v3-t10.json
+          jq -e '.feasibility.dependencies_approved == true and .feasibility.activation_state == "READY_NOW" and .feasibility.runtime_activation_allowed == true' /tmp/v3-t10.json
+          jq -e '.tasks.T10.status == "LOCKED"' Docs/Production/DEPENDENCY_GRAPH.json
           jq -e '.feasibility.capability_blockers | index("google_play_billing_sandbox") != null' /tmp/v3-t35.json
           jq -e '.feasibility.capability_blockers | index("physical_phone_4k60") != null' /tmp/v3-t68.json
           jq -e '.scheduler_is_advisory == true and .integration_owner_slots == 1' /tmp/v3-schedule.json
@@ -98,20 +103,23 @@ jobs:
           python3 tools/havenline/production/ci_toolchain_lock.py validate > /tmp/v31-toolchain.json
           python3 tools/havenline/production/ci_toolchain_lock.py provenance --output /tmp/v31-runner-provenance.json
           python3 tools/havenline/production/evidence_retention.py validate-policy > /tmp/v31-retention.json
+          python3 tools/havenline/production/closure_validator.py Docs/Production/T09/verified-completion.json > /tmp/t09-closure.json
           python3 tools/havenline/production/runtime_dependency_learning.py validate > /tmp/v31-runtime-deps.json
           python3 tools/havenline/production/mutation_canary.py > /tmp/v31-canaries.json
           python3 tools/havenline/production/proof_invalidation.py validate > /tmp/v31-invalidation.json
           python3 tools/havenline/production/proof_invalidation.py contract persistence_schema > /tmp/v31-persistence-invalidation.json
           python3 tools/havenline/production/task_state_snapshot.py T10 --output /tmp/v31-t10-state.json > /tmp/v31-t10-state.stdout.json
-          jq -e '.passed == true and .task_count == 61 and .snapshot_count == 61' /tmp/v31-validation.json
+          jq -e '.passed == true and .task_count == 62 and .snapshot_count == 62' /tmp/v31-validation.json
+          jq -e '.v3.feasibility.activation_state == "READY_NOW" and .v3.runtime_activation_allowed == true and .task_state.lifecycle_status == "LOCKED" and (.task_state.blockers | index("lifecycle_status_LOCKED")) != null and (.task_state.blockers | index("ownership_not_assigned")) != null and .runtime_activation_allowed == false' /tmp/v31-t10.json
           jq -e '.passed == true and .critical_workflow_count >= 8 and .action_pin_count >= 7' /tmp/v31-toolchain.json
           jq -e '.provenance_complete == true and .RUNNER_OS == "Linux"' /tmp/v31-runner-provenance.json
           jq -e '.passed == true and ([.results[] | select(.rejected == true)] | length) == (.results | length)' /tmp/v31-canaries.json
           jq -e '.passed == true' /tmp/v31-retention.json
+          jq -e '.passed == true and .approval_allowed == true' /tmp/t09-closure.json
           jq -e '.passed == true' /tmp/v31-runtime-deps.json
           jq -e '.passed == true' /tmp/v31-invalidation.json
           jq -e '.proof_reuse_blocked == true and .automatic_approval_revocation == false and (.invalidated_tasks | index("T15")) != null and (.invalidated_tasks | index("T70")) != null and (.invalidated_gates | index("save_matrix")) != null' /tmp/v31-persistence-invalidation.json
-          jq -e '.validation.passed == true and .snapshot_is_derived_not_authority == true' /tmp/v31-t10-state.json
+          jq -e '.validation.passed == true and .snapshot_is_derived_not_authority == true and .lifecycle_status == "LOCKED" and (.blockers | index("lifecycle_status_LOCKED")) != null and (.blockers | index("ownership_not_assigned")) != null' /tmp/v31-t10-state.json
       - name: Require C1-C11 execution readiness
         run: python3 tools/havenline/production/validate_critic_readiness.py
       - name: Smoke-test frozen task packet generation

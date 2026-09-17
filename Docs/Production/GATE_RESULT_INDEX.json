@@ -1,5 +1,43 @@
 {
   "schema_version": 1,
   "policy": "Docs/Production/GATE_FINGERPRINT_POLICY.json",
-  "records": []
+  "records": [
+    {
+      "record_type": "exact_source_provenance",
+      "task_id": "T09",
+      "gate_family": "integrated_candidate_g1_g14",
+      "candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "result": "PASS",
+      "reuse_eligible": false,
+      "recorded_at": "2026-09-17T12:06:21Z",
+      "workflow_run_id": 35213007340,
+      "workflow_job_id": 105174766456,
+      "evidence": {
+        "original_artifact_id": 10494819142,
+        "original_artifact_sha256": "0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1",
+        "complete_evidence_index_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
+        "indexed_files": 913,
+        "retained_artifact_id": 10495254920,
+        "retained_artifact_sha256": "7578527f171ab526147ebb7f4aa59c07278a3d68c46cf805f749539791e0c42a",
+        "retained_until": "2026-12-16T12:05:19Z"
+      },
+      "runner_provenance": {
+        "runner_version": "2.337.0",
+        "hosted_compute_agent_version": "20260828.587",
+        "hosted_compute_agent_commit": "abac92662cab4cc7352de4f9f9d2e2419aad9c29",
+        "ImageOS": "ubuntu-24.04",
+        "ImageVersion": "20260907.300.1",
+        "RUNNER_OS": "Linux",
+        "RUNNER_ARCH": "X64",
+        "operating_system": "Ubuntu 24.04.5 LTS",
+        "region": "eastus",
+        "source": "workflow job log 105174766456"
+      },
+      "resolved_actions": {
+        "actions/checkout": "11d5960a326750d5838078e36cf38b85af677262",
+        "actions/upload-artifact": "ea165f8d65b6e75b540449e92b4886f43607fa02"
+      },
+      "statement": "Durable, non-reusable provenance for the exact integrated T09 proof created before V3.1 activation. This record does not grant cross-source proof reuse."
+    }
+  ]
 }

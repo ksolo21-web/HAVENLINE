@@ -1,37 +1,37 @@
 {
   "schema_version": 1,
   "task_id": "T09",
-  "candidate_commit": "69593a19f56df3105a7b9657a76533e274e2eed6",
-  "integrated_commit": null,
+  "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+  "integrated_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
   "acceptance_threshold": ">9.0 unrounded in every mandatory dimension",
-  "cycle": "tooling-fix-verification",
+  "cycle": "verified-closeout",
   "defects": [
     {
       "id": "T09-D001",
       "severity": "mandatory-evidence",
       "summary": "Initial visual sequence evidence did not preserve the validated wood contact surface and crown throughout the full action.",
-      "status": "RESOLVED",
+      "status": "VERIFIED_CLOSED",
       "resolution": "The shipping presenter and sequence harness now preserve the visible contact surface, crown and authoritative impact through recovery; exact sequence evidence and contact metrics pass."
     },
     {
       "id": "T09-D002",
       "severity": "mandatory-ci",
       "summary": "The C6 runner could fall back to an unaccepted renderer or lack a software Vulkan ICD on the hosted runner.",
-      "status": "RESOLVED",
+      "status": "VERIFIED_CLOSED",
       "resolution": "The workflow provisions Mesa Vulkan only when absent, pins Lavapipe, validates the ICD, and fails closed unless Godot reports the Mobile renderer."
     },
     {
       "id": "T09-D003",
       "severity": "mandatory-C5-evidence",
       "summary": "The generic motion-capture camera framed Character 1 too small for strict hands, knees, feet and contact review.",
-      "status": "RESOLVED",
+      "status": "VERIFIED_CLOSED",
       "resolution": "The QA-only fixture normalizes review height to 4.5 m without changing shipping mesh, rig, clips or gameplay scale; the exact artifact's C5 frames were visually inspected at critic-readable scale."
     },
     {
       "id": "T09-D004",
       "severity": "mandatory-C5-tooling",
       "summary": "C5 initialization validation repeatedly treated separately rendered PNG identity as animation-pose identity, creating false failures after otherwise successful T09 validation.",
-      "status": "READY_FOR_VERIFICATION",
+      "status": "VERIFIED_CLOSED",
       "classification": [
         "TOOLING_FIX",
         "TEST_FIX"
@@ -58,13 +58,17 @@
         "All three clips pass bounded t=0 final-skeleton equivalence and first-step continuity before gameplay/device visual fan-out.",
         "Frame SHA-256 hashes remain preserved for evidence provenance.",
         "Impacted regression, save/device matrices and C6 remain green on the exact repaired candidate."
-      ]
+      ],
+      "resolution": "Exact integrated candidate 9bc735502b265bfdd365004fb863b19c613e27dd passed workflow run 35213007340 (job 105174766456), artifact 10494819142, digest sha256:0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1, complete evidence index 7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76. All 17 suites / 997 checks, unchanged C5 limits, save/device matrices, C6, and fresh C2-C6 reviews passed.",
+      "verified_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "verified_workflow_run": 35213007340,
+      "verified_artifact_id": 10494819142
     },
     {
       "id": "T09-D005",
       "severity": "mandatory-ci-governance",
       "summary": "New C0/builder governance files were omitted from QA-GOV ownership, so exact integrated T09 scope validation rejected them as unowned paths.",
-      "status": "RESOLVED",
+      "status": "VERIFIED_CLOSED",
       "failed_candidate": "39315e59250f22087321ca07f1302d77af9b45fe",
       "failed_workflow_run": 35208413468,
       "resolution": "Integration commit 8f971724d6ba7331530a4b502328ce1625df2082 adds the complete C0/builder control-plane packet to @ownership:QA-GOV; the reproduced T09 integration-scope comparison passes with zero ownership errors."
@@ -73,7 +77,7 @@
       "id": "T09-D006",
       "severity": "mandatory-C5-tooling",
       "summary": "C5 settle frames advanced the live AnimationPlayer clock after an explicit seek, so the recorded start pose was a later real-time animation sample.",
-      "status": "READY_FOR_VERIFICATION",
+      "status": "VERIFIED_CLOSED",
       "classification": [
         "TOOLING_FIX",
         "TEST_FIX"
@@ -90,13 +94,17 @@
         "Exact integrated candidate contains the frozen-clock sampler and early C5 root-cause preflight.",
         "All three clips pass the unchanged skeleton-global start and first-step limits.",
         "The complete exact-source T09 workflow, evidence index and independent C5 review pass."
-      ]
+      ],
+      "resolution": "Exact integrated candidate 9bc735502b265bfdd365004fb863b19c613e27dd passed workflow run 35213007340 (job 105174766456), artifact 10494819142, digest sha256:0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1, complete evidence index 7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76. All 17 suites / 997 checks, unchanged C5 limits, save/device matrices, C6, and fresh C2-C6 reviews passed.",
+      "verified_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "verified_workflow_run": 35213007340,
+      "verified_artifact_id": 10494819142
     },
     {
       "id": "T09-D007",
       "severity": "mandatory-ci-governance",
       "summary": "The T09 workflow called the C0 diagnostic reusable workflow without granting its required actions: read permission, causing an exact-source startup_failure before any T09 job was created.",
-      "status": "READY_FOR_VERIFICATION",
+      "status": "VERIFIED_CLOSED",
       "classification": [
         "TOOLING_FIX",
         "TEST_FIX"
@@ -110,18 +118,30 @@
         "The exact integrated T09 workflow creates and starts its integrated-candidate job.",
         "The fail-closed T09 source validator passes with the C0 permission contract present.",
         "No write permission is added."
-      ]
+      ],
+      "resolution": "Exact integrated candidate 9bc735502b265bfdd365004fb863b19c613e27dd passed workflow run 35213007340 (job 105174766456), artifact 10494819142, digest sha256:0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1, complete evidence index 7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76. All 17 suites / 997 checks, unchanged C5 limits, save/device matrices, C6, and fresh C2-C6 reviews passed.",
+      "verified_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "verified_workflow_run": 35213007340,
+      "verified_artifact_id": 10494819142
     }
   ],
   "unresolved_mandatory_count": 0,
-  "unresolved_tooling_count": 3,
-  "critic_scores": {},
-  "critic_approval_pending": true,
-  "evidence": {
-    "workflow_run": 35180691636,
-    "artifact_id": 10480384742,
-    "artifact_digest": "sha256:3c7a39529c7c77518cc7040e023ac7868ee74590843affac3856bc1555968982",
-    "complete_evidence_index_sha256": "ba3c0b334561b248178df583e13dd9114c22714530532d77a2a0b72a3a893dcb"
+  "unresolved_tooling_count": 0,
+  "critic_scores": {
+    "C2": 9.33,
+    "C3": 9.276,
+    "C4": 9.127,
+    "C5": 9.3274,
+    "C6": 9.11
   },
-  "next_action": "Run exact-source T09 CI after the C0 caller-permission repair. Close T09-D004, T09-D006 and T09-D007 only after workflow startup, unchanged C5 pose limits, impacted regression, save/device matrices, C6 and the complete evidence index pass on the same source; then complete fresh independent C2/C3/C4/C5/C6 review."
+  "critic_approval_pending": false,
+  "evidence": {
+    "workflow_run": 35213007340,
+    "workflow_job": 105174766456,
+    "artifact_id": 10494819142,
+    "artifact_digest": "sha256:0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1",
+    "complete_evidence_index_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
+    "retained_review_artifact_id": 10495254920
+  },
+  "next_action": "T09 closeout complete. Preserve accepted source and evidence; T10 remains LOCKED until separately activated and assigned."
 }

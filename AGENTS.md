@@ -90,16 +90,13 @@ in `Docs/Production/T08/verified-completion.json` after 23 suites / 1535
 checks, all 44 locked frames, both locked recordings, G1-G14 and strict
 C2/C3/C4/C6 review.
 
-T09 is the active INTEGRATION_READY workstream at
-`Docs/Production/T09/FROZEN_SCOPE.md` and `Docs/Production/T09/TASK_PACKET.md`.
-Its owner is `harvesting-acquisition-builder`, its isolated branch is
-`havenline/T09-harvesting`, and its exact integration base is
-`7492074e40a0b061f31d8c32602b7a581b2610f3`. T10+ runtime production remains
-LOCKED. Exact isolated candidate
-`69593a19f56df3105a7b9657a76533e274e2eed6` passed its integration-owner
-evidence review; it must be reconciled with the current integration-governance
-head and rerun before integration. Fresh integrated evidence and independent
-C2/C3/C4/C5/C6 review remain mandatory before approval.
+T09 is APPROVED at exact integrated source
+`9bc735502b265bfdd365004fb863b19c613e27dd`; its verified closure is recorded
+in `Docs/Production/T09/verified-completion.json`. Exact-source workflow run
+35213007340 passed 17 suites / 997 checks, 7/7 save cases, 6/6 device cases,
+913/913 evidence hashes, G1-G14, and fresh strict C2/C3/C4/C5/C6 review with
+all mandatory dimensions above 9.0 and zero defects. T10+ runtime production
+remains LOCKED pending separate preparation, ownership, and activation.
 
 T03 was the final legacy task grandfathered to finish directly on
 `codex/havenline-sequential-task-01`. T04 and all later runtime work use

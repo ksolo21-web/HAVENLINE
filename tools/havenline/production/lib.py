@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import fnmatch, hashlib, json, os, pathlib, subprocess, sys
+import fnmatch, hashlib, json, math, os, pathlib, subprocess, sys
 from typing import Iterable
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
@@ -65,9 +65,13 @@ def fail(message: str, code: int = 2):
 
 def ensure_score_strictly_above_nine(scores: dict) -> list[str]:
     errors = []
+    if not isinstance(scores, dict) or not scores:
+        return ["score map is empty"]
     for name, value in scores.items():
         if isinstance(value, bool) or not isinstance(value, (int, float)):
             errors.append(f"{name}: non-numeric score")
-        elif not value > 9.0:
-            errors.append(f"{name}: {value} is not strictly > 9.0")
+        elif not math.isfinite(value):
+            errors.append(f"{name}: score must be finite")
+        elif not 9.0 < value <= 10.0:
+            errors.append(f"{name}: {value} must be strictly > 9.0 and <= 10.0")
     return errors
