@@ -153,7 +153,7 @@ def main() -> None:
         errors.append("C5 motion fixture does not use shipping Character 1 motion profiles")
     if not all(token in motion_capture_source for token in [
         "production_motion_v2", "INITIALIZATION_SETTLE_FRAMES:=2",
-        "player.advance(0.0)", "close-upper-opposite", "close-lower-rear",
+        "player.advance(0.0)", '"upper-opposite"', '"lower-rear"',
     ]) or not all(token in motion_runner_source for token in [
         "t09_motion_capture.gd", "t=0 evidence is inconsistent after initialization",
     ]):
