@@ -49,7 +49,11 @@ jobs:
       - name: Validate workstream registry and ownership collisions
         run: python3 tools/havenline/production/workstream.py validate-registry
       - name: Validate complete V2 state
-        run: python3 tools/havenline/production/validate_migration.py
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then base="${{ github.event.pull_request.base.sha }}"; else base=$(git rev-parse HEAD^); fi
+          python3 tools/havenline/production/validate_migration.py --base "$base"
       - name: Validate T10-T70 forward execution architecture
         run: |
           python3 tools/havenline/production/forward_execution.py validate
