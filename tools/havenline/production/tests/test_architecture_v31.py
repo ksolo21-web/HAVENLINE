@@ -49,11 +49,14 @@ class ArchitectureV31Tests(unittest.TestCase):
         self.assertNotIn('BLOCKED',ACTIVE_RUNTIME_STATES)
     def test_t09_raw_critic_semantics_are_fail_closed(self):
         raw=load_json(DOCS/'T09/CriticRaw/C2.json')
-        args=('C2','T09',raw['candidate_commit'],raw['workflow_run_id'],raw['artifact_id'],raw['artifact_sha256'],raw['complete_evidence_index_sha256'],raw['scores'])
+        args=('C2','T09',raw['candidate_commit'],raw['workflow_run_id'],raw['artifact_id'],raw['artifact_sha256'],raw['complete_evidence_index_sha256'],raw['scores'],raw['review_export_commit'])
         self.assertEqual(validate_raw_critic_record(raw,*args),[])
         mutations=[]
         for key,value in (('confidence',0),('score_reuse',True),('minimum_dimension_score',9.99),('artifact_sha256','0'*64),('review_export_commit','bad'),('review_export_commit','f'*40),('acceptance_rule','>=9')):
             bad=copy.deepcopy(raw);bad[key]=value;mutations.append(bad)
+        infinite=copy.deepcopy(raw);infinite['scores']['geometry_contact']=float('inf');mutations.append(infinite)
+        too_high=copy.deepcopy(raw);too_high['scores']['geometry_contact']=10.0001;mutations.append(too_high)
+        empty=copy.deepcopy(raw);empty['scores']={};mutations.append(empty)
         for bad in mutations:self.assertTrue(validate_raw_critic_record(bad,*args))
     def test_t09_aggregate_and_defect_ledger_are_fail_closed(self):
         completion=load_json(DOCS/'T09/verified-completion.json');aggregate=load_json(DOCS/'T09/independent-critic-review.json');ledger=load_json(DOCS/'T09/defect-ledger.json')
