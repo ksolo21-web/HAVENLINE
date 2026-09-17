@@ -5,18 +5,19 @@ on:
   push:
     branches:
       - havenline/t13-t70-provenance-hardening
+      - havenline/t13-t70-metadata-hardening
     paths:
-      - 'Docs/Production/T1[3-9]/FROZEN_SCOPE.md'
-      - 'Docs/Production/T[2-6][0-9]/FROZEN_SCOPE.md'
-      - 'Docs/Production/T70/FROZEN_SCOPE.md'
+      - 'Docs/Production/T1[3-9]/**'
+      - 'Docs/Production/T[2-6][0-9]/**'
+      - 'Docs/Production/T70/**'
       - 'tools/havenline/prepared_stack/normalize_provenance.py'
       - 'tools/havenline/prepared_stack/test_provenance_normalizer.py'
       - '.github/workflows/havenline-t13-t70-provenance-hardening.yml'
   pull_request:
     paths:
-      - 'Docs/Production/T1[3-9]/FROZEN_SCOPE.md'
-      - 'Docs/Production/T[2-6][0-9]/FROZEN_SCOPE.md'
-      - 'Docs/Production/T70/FROZEN_SCOPE.md'
+      - 'Docs/Production/T1[3-9]/**'
+      - 'Docs/Production/T[2-6][0-9]/**'
+      - 'Docs/Production/T70/**'
       - 'tools/havenline/prepared_stack/normalize_provenance.py'
       - 'tools/havenline/prepared_stack/test_provenance_normalizer.py'
       - '.github/workflows/havenline-t13-t70-provenance-hardening.yml'
@@ -49,15 +50,19 @@ jobs:
           python -m py_compile tools/havenline/prepared_stack/test_provenance_normalizer.py
       - name: Run focused regression tests
         run: python tools/havenline/prepared_stack/test_provenance_normalizer.py
-      - name: Normalize T13-T70 scopes locally
+      - name: Normalize T13-T70 packet provenance locally
         run: python tools/havenline/prepared_stack/normalize_provenance.py --apply
-      - name: Verify exact normalized scope set
+      - name: Verify exact normalized packet set
         run: python tools/havenline/prepared_stack/normalize_provenance.py --check
       - name: Refuse any out-of-scope generated diff
         run: |
           python - <<'PY'
           import os, pathlib, subprocess, sys
-          allowed = {f'Docs/Production/T{i:02d}/FROZEN_SCOPE.md' for i in range(13, 71)}
+          allowed = set()
+          for i in range(13, 71):
+              task = f'T{i:02d}'
+              for name in ('FROZEN_SCOPE.md','ACTIVATION_CHECKLIST.json','PREBUILD_CONTRACT.json'):
+                  allowed.add(f'Docs/Production/{task}/{name}')
           baseline_path = pathlib.Path(os.environ['RUNNER_TEMP']) / 'havenline-preexisting-diff.txt'
           preexisting = set(filter(None, baseline_path.read_text(encoding='utf-8').splitlines()))
           changed = set(filter(None, subprocess.check_output(['git','diff','--name-only'], text=True).splitlines()))
@@ -69,24 +74,34 @@ jobs:
           print({'passed': True, 'preexisting_paths': sorted(preexisting), 'generated_diff_count': len(generated), 'generated_paths': sorted(generated)})
           PY
       - name: Commit normalized provenance on repair branch
-        if: github.event_name == 'push' && github.ref_name == 'havenline/t13-t70-provenance-hardening'
+        if: github.event_name == 'push' && (github.ref_name == 'havenline/t13-t70-provenance-hardening' || github.ref_name == 'havenline/t13-t70-metadata-hardening')
         run: |
           if git diff --quiet -- Docs/Production; then
-            echo 'No scope normalization commit needed.'
+            echo 'No packet provenance normalization commit needed.'
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add Docs/Production/T*/FROZEN_SCOPE.md
+          for i in $(seq 13 70); do
+            task=$(printf 'T%02d' "$i")
+            git add -- \
+              "Docs/Production/${task}/FROZEN_SCOPE.md" \
+              "Docs/Production/${task}/ACTIVATION_CHECKLIST.json" \
+              "Docs/Production/${task}/PREBUILD_CONTRACT.json"
+          done
           python - <<'PY'
           import subprocess, sys
-          allowed = {f'Docs/Production/T{i:02d}/FROZEN_SCOPE.md' for i in range(13, 71)}
+          allowed = set()
+          for i in range(13, 71):
+              task = f'T{i:02d}'
+              for name in ('FROZEN_SCOPE.md','ACTIVATION_CHECKLIST.json','PREBUILD_CONTRACT.json'):
+                  allowed.add(f'Docs/Production/{task}/{name}')
           staged = set(filter(None, subprocess.check_output(['git','diff','--cached','--name-only'], text=True).splitlines()))
           unexpected = sorted(staged - allowed)
           if unexpected or not staged:
               print({'passed': False, 'unexpected_staged_paths': unexpected, 'staged_count': len(staged)})
               sys.exit(1)
-          print({'passed': True, 'staged_count': len(staged)})
+          print({'passed': True, 'staged_count': len(staged), 'staged_paths': sorted(staged)})
           PY
-          git commit -m 'T13-T70: normalize forward preparation provenance'
+          git commit -m 'T13-T70: normalize forward preparation metadata'
           git push origin HEAD:${GITHUB_REF_NAME}
