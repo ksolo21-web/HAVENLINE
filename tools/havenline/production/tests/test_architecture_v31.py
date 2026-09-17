@@ -12,7 +12,7 @@ from task_state_snapshot import snapshot,validate as validate_snapshot
 from mutation_canary import run_canaries
 from proof_invalidation import invalidate_contract,validate_policy as validate_invalidation
 from gate_fingerprint import validate_policy as validate_fingerprint
-from closure_validator import validate_raw_critic_record
+from closure_validator import validate_raw_critic_record,validate_critic_aggregate,validate_defect_ledger
 
 class ArchitectureV31Tests(unittest.TestCase):
     def test_flake_history_never_waives_mandatory_gate(self):
@@ -52,9 +52,29 @@ class ArchitectureV31Tests(unittest.TestCase):
         args=('C2','T09',raw['candidate_commit'],raw['workflow_run_id'],raw['artifact_id'],raw['artifact_sha256'],raw['complete_evidence_index_sha256'],raw['scores'])
         self.assertEqual(validate_raw_critic_record(raw,*args),[])
         mutations=[]
-        for key,value in (('confidence',0),('score_reuse',True),('minimum_dimension_score',9.99),('artifact_sha256','0'*64),('review_export_commit','bad'),('acceptance_rule','>=9')):
+        for key,value in (('confidence',0),('score_reuse',True),('minimum_dimension_score',9.99),('artifact_sha256','0'*64),('review_export_commit','bad'),('review_export_commit','f'*40),('acceptance_rule','>=9')):
             bad=copy.deepcopy(raw);bad[key]=value;mutations.append(bad)
         for bad in mutations:self.assertTrue(validate_raw_critic_record(bad,*args))
+    def test_t09_aggregate_and_defect_ledger_are_fail_closed(self):
+        completion=load_json(DOCS/'T09/verified-completion.json');aggregate=load_json(DOCS/'T09/independent-critic-review.json');ledger=load_json(DOCS/'T09/defect-ledger.json')
+        required=['C2','C3','C4','C5','C6'];retained=completion['retained_review_evidence']
+        args=(required,completion['candidate_commit'],completion['workflow_run_id'],completion['artifact_id'],completion['artifact_sha256'],completion['evidence']['provenance_hash'],retained,completion['critics'])
+        self.assertEqual(validate_critic_aggregate(aggregate,*args),[])
+        for mutate in ('status','coverage','minimum','retained'):
+            bad=copy.deepcopy(aggregate)
+            if mutate=='status':bad['critics']['C2']['status']='FAIL'
+            elif mutate=='coverage':bad['critics']['C3']['coverage_complete']=False
+            elif mutate=='minimum':bad['critics']['C4']['minimum_dimension_score']=9.99
+            else:bad['retained_review_evidence']['artifact_id']=0
+            self.assertTrue(validate_critic_aggregate(bad,*args))
+        self.assertEqual(validate_defect_ledger(ledger,completion['candidate_commit'],aggregate,required),[])
+        for mutate in ('status','unresolved','candidate','minima'):
+            bad=copy.deepcopy(ledger)
+            if mutate=='status':bad['defects'][0]['status']='OPEN'
+            elif mutate=='unresolved':bad['unresolved_mandatory_count']=1
+            elif mutate=='candidate':bad['candidate_commit']='f'*40
+            else:bad['critic_scores']['C2']=9.99
+            self.assertTrue(validate_defect_ledger(bad,completion['candidate_commit'],aggregate,required))
     def test_runtime_dependency_learning_is_additive_only(self):
         data={'schema_version':1,'policy':{'minimum_observations_for_enforcement':3,'minimum_distinct_sources':2,'learned_edges_are_additive_only':True,'static_mandatory_coverage_may_be_removed_automatically':False},'edges':[{'path_pattern':'HavenlineGodot/scripts/foo.gd','affected_task':'T10','suites':['test_t10'],'observation_count':4,'distinct_sources':2}]};r=learned_impact(['HavenlineGodot/scripts/foo.gd'],data);self.assertEqual(r['coverage_mode'],'ADDITIVE_ONLY');self.assertIn('test_t10',r['required_suites']);self.assertTrue(validate_runtime()['passed'])
     def test_task_snapshot_remains_derived(self):
