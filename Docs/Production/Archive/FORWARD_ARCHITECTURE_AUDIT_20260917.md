@@ -86,9 +86,11 @@ Therefore:
 
 The first hosted governance run against the combined forward architecture, run 300 on `2e98ffbb4e401746a185ed6899910d85f349fb89`, showed that all newly added forward-execution unit tests passed, including the 61/61 coverage test and representative T10/T14/T24/T33/T37/T58/T62/T68/T70 assertions. It then failed one **legacy regression assertion** that still required production governance to use `cancel-in-progress: true`.
 
-That obsolete assertion has been repaired to distinguish diagnostic governance (must finish its SHA) from disposable readiness checks (may cancel stale runs). No forward task profile or critic threshold was weakened.
+That obsolete assertion was repaired to distinguish diagnostic governance (must finish its SHA) from disposable readiness checks (may cancel stale runs). No forward task profile or critic threshold was weakened.
 
-**Current hosted verification status for this audit commit: PENDING.** Do not mark the architecture approved until the complete production-governance workflow passes on this combined source state.
+**Hosted architecture verification: PASSED.** Production-governance run **301** (`35211945785`) completed successfully on exact combined source SHA `ce53e5db1a6fe3ed5f63dadde44300a285574ebc`. The hosted run passed compilation, the complete governance/safeguard unit suite, workstream ownership validation, full V2 migration validation, T10–T70 forward execution validation, C1–C11 readiness, T10 forward-packet smoke generation, resource/tool/actor schema validation, Game Master policy validation, and governance-only integration-impact classification.
+
+The audit-result update itself is documentation-only and uses `[skip ci]`; it does not alter the verified architecture source.
 
 ## Approval rule
 
@@ -101,3 +103,5 @@ Architecture approval requires:
 - task sentinel precedes expensive fan-out;
 - strict >9.0 task critic policy remains unchanged;
 - hosted production-governance workflow passes on the combined architecture source.
+
+All architecture-level requirements above passed on the verified SHA recorded in this audit.
