@@ -19,6 +19,7 @@ def has_placeholder(value,tokens):
     return False
 
 RAW_ACCEPTANCE_RULE=">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects"
+T09_REVIEW_EXPORT_COMMIT="3dc86b8f0ed8f6364e78d29e6fd1d0ccd0a76014"
 
 def validate_raw_critic_record(raw,cid,task,candidate,workflow_run_id,artifact_id,artifact_sha,evidence_hash,scores):
     errors=[]
@@ -34,7 +35,7 @@ def validate_raw_critic_record(raw,cid,task,candidate,workflow_run_id,artifact_i
     if raw.get("score_reuse") is not False:errors.append("score reuse must be false")
     raw_scores=raw.get("scores",{})
     if not raw_scores or raw.get("minimum_dimension_score")!=min(raw_scores.values()):errors.append("minimum score mismatch")
-    if not re.fullmatch(r"[0-9a-f]{40}",str(raw.get("review_export_commit",""))):errors.append("review export provenance incomplete")
+    if raw.get("review_export_commit")!=T09_REVIEW_EXPORT_COMMIT:errors.append("review export provenance mismatch")
     if raw.get("acceptance_rule")!=RAW_ACCEPTANCE_RULE:errors.append("acceptance rule mismatch")
     if not all(raw.get(k) for k in ("provider","model","request_or_run_id")):errors.append("provider provenance incomplete")
     return errors
@@ -86,8 +87,8 @@ def main():
         active_future=[row.get("task_id") for row in ownership.get("active_owners",[]) if str(row.get("task_id",""))>="T10"]
         if active_future:errors.append("T10+ active ownership exists before explicit activation")
         task_gates=load_json(DOCS/"task-gates.json")
-        if task_gates.get("active_task") is not None or task_gates.get("active_status") is not None:
-            errors.append("task-gates active state must be clear after T09 closeout")
+        active_values={key:value for key,value in task_gates.items() if key.startswith("active_") and value not in (None,[],{})}
+        if active_values:errors.append("all task-gates active_* fields must be clear after T09 closeout")
     review_record=load_json(DOCS/str(task)/"independent-critic-review.json")
     approved_at=review_record.get("approved_at")
     try:
@@ -238,6 +239,19 @@ def main():
     aggregate_scores=[score for cid in required for score in aggregate.get("critics",{}).get(cid,{}).get("scores",{}).values()]
     if not aggregate_scores or aggregate.get("minimum_mandatory_dimension_score")!=min(aggregate_scores):
         errors.append("independent critic aggregate minimum score mismatch")
+    aggregate_retained=aggregate.get("retained_review_evidence",{})
+    if (aggregate_retained.get("workflow_run_id"),aggregate_retained.get("artifact_id"),aggregate_retained.get("artifact_sha256"),aggregate_retained.get("expires_at"))!=(retained_review.get("run_id"),retained_review.get("artifact_id"),str(retained_review.get("digest","")).removeprefix("sha256:"),retained_review.get("expires_at")):
+        errors.append("independent critic aggregate retained evidence mismatch")
+    ledger=load_json(DOCS/str(task)/"defect-ledger.json")
+    if ledger.get("candidate_commit")!=candidate or ledger.get("integrated_commit")!=candidate:
+        errors.append("defect ledger source identity mismatch")
+    if ledger.get("unresolved_mandatory_count")!=0 or ledger.get("unresolved_tooling_count")!=0 or ledger.get("critic_approval_pending") is not False:
+        errors.append("defect ledger unresolved state mismatch")
+    if not ledger.get("defects") or any(row.get("status")!="VERIFIED_CLOSED" for row in ledger.get("defects",[])):
+        errors.append("defect ledger contains non-closed defect")
+    expected_critic_minima={cid:min(aggregate.get("critics",{}).get(cid,{}).get("scores",{}).values()) for cid in required if aggregate.get("critics",{}).get(cid,{}).get("scores")}
+    if ledger.get("critic_scores")!=expected_critic_minima:
+        errors.append("defect ledger critic minima mismatch")
     for cid in required:
         row=critics.get(cid)
         if not row:errors.append("missing critic "+cid);continue
@@ -270,7 +284,7 @@ def main():
                 raw=load_json(raw_path)
                 errors += [f"{cid}: {x}" for x in validate_raw_critic_record(raw,cid,task,candidate,d.get("workflow_run_id"),d.get("artifact_id"),d.get("artifact_sha256"),evidence.get("provenance_hash"),row.get("scores",{}))]
                 aggregate_row=aggregate.get("critics",{}).get(cid,{})
-                if aggregate_row.get("scores")!=row.get("scores") or aggregate_row.get("raw_record_path")!=raw_rel or aggregate_row.get("raw_record_sha256")!=raw_hash or aggregate_row.get("defects"):
+                if aggregate_row.get("status")!="PASS" or aggregate_row.get("coverage_complete") is not True or aggregate_row.get("scores")!=row.get("scores") or aggregate_row.get("minimum_dimension_score")!=min(row.get("scores",{}).values()) or aggregate_row.get("raw_record_path")!=raw_rel or aggregate_row.get("raw_record_sha256")!=raw_hash or aggregate_row.get("defects"):
                     errors.append("independent critic aggregate mismatch "+cid)
                 if raw.get("task_id")!=task or raw.get("critic_id")!=cid or raw.get("candidate_commit")!=candidate:
                     errors.append("raw critic identity mismatch "+cid)
