@@ -21,7 +21,7 @@ jobs:
       ARTIFACT_ID: '10494819142'
       REVIEW_ROOT: review/t09-exact-9bc73550
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with:
           ref: codex/t09-evidence-review-9bc73550
           fetch-depth: 1
@@ -59,7 +59,7 @@ jobs:
         run: |
           set -euo pipefail
           EXTRACT_ROOT="$RUNNER_TEMP/t09-artifact" python3 - <<'PY'
-          import hashlib, json, os
+          import hashlib, json, os, shutil
           from pathlib import Path
           root=Path(os.environ['EXTRACT_ROOT'])
           index_path=root/'complete-evidence-index.json'
@@ -99,6 +99,7 @@ jobs:
               'passed':True,
           }
           out=Path(os.environ['GITHUB_WORKSPACE'])/os.environ['REVIEW_ROOT']
+          shutil.rmtree(out,ignore_errors=True)
           out.mkdir(parents=True,exist_ok=True)
           (out/'artifact-verification.json').write_text(json.dumps(result,indent=2)+'\n')
           print(json.dumps(result))
@@ -187,6 +188,10 @@ jobs:
           set -euo pipefail
           git config user.name "havenline-ci"
           git config user.email "actions@users.noreply.github.com"
+          cp .gitattributes "$RUNNER_TEMP/gitattributes.backup"
+          printf '\n%s/** -filter -diff -merge -text\n' "$REVIEW_ROOT" >> .gitattributes
           git add "$REVIEW_ROOT"
+          cp "$RUNNER_TEMP/gitattributes.backup" .gitattributes
+          git diff --quiet -- .gitattributes
           git commit -m "chore(t09): expose exact artifact for independent review [skip ci]"
           git push origin HEAD:codex/t09-evidence-review-9bc73550
