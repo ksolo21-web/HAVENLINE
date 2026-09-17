@@ -2,6 +2,7 @@
 from __future__ import annotations
 import datetime, pathlib, sys
 from lib import DOCS, ROOT, load_json, expand_alias, sha256_file
+from forward_execution import resolve_task
 
 RESOURCE_REGISTRY = DOCS / "RESOURCE_ACTION_REGISTRY.json"
 ACTOR_MATRIX = DOCS / "ACTOR_CAPABILITY_MATRIX.json"
@@ -86,6 +87,25 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
             flags=cfg.get("task_policy",{}).get("required_proof_flags_by_task",{}).get(task_id,[])
             if flags:text+=f"  - required proof flags: {', '.join(flags)}\n"
     if not matched:text+="- none registered for this task.\n"
+
+    if task_id.startswith("T") and task_id[1:].isdigit() and int(task_id[1:]) >= 10:
+        forward=resolve_task(task_id)
+        text+="\n## Forward execution profile — machine resolved\n"
+        text+=f"- Standard: `Docs/Production/FORWARD_EXECUTION_STANDARD.md`\n"
+        text+=f"- Resolver: `python3 tools/havenline/production/forward_execution.py plan {task_id}`\n"
+        text+=f"- Archetype: `{forward['archetype']}`\n"
+        text+=f"- Execution mode: `{forward['execution_mode']}`\n"
+        text+=f"- Dependency states: `{', '.join(f'{k}={v}' for k,v in forward['dependency_status'].items()) or 'none'}`\n"
+        text+=f"- Dependencies currently approved: `{str(forward['dependencies_approved']).lower()}`\n"
+        text+=f"- Canonical packet currently present: `{str(forward['canonical_packet_present']).lower()}`\n"
+        text+=f"- Activation ready now: `{str(forward['activation_ready']).lower()}`\n"
+        text+=f"- Early sentinel: {forward['early_sentinel']}\n"
+        text+="- Ordered fail-fast gates:\n"+"\n".join(f"  {idx+1}. `{gate}`" for idx,gate in enumerate(forward['ordered_gates']))+"\n"
+        text+=f"- Terminal-failure disposition: {forward['failure_disposition']}\n"
+        text+="- Exact-SHA rule: finish the candidate already under review; newer candidates queue. Do not use `cancel-in-progress: true` for task candidate review.\n"
+        text+="- Do not run expensive downstream evidence after an earlier required gate fails. Preserve the exact failure and invoke C0.\n"
+        if forward['execution_mode'] != 'build':
+            text+="- This task is not a runtime-repair owner. A discovered runtime defect must be routed through C0/change request to the owning build task.\n"
 
     text+="""
 
