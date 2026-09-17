@@ -6,7 +6,10 @@
     "Docs/Production/FORWARD_EXECUTION_PROFILES.json",
     "Docs/Production/FORWARD_GATE_RUNNERS.json",
     "Docs/Production/CRITIC_MATRIX.json",
-    "Docs/Production/CONTRACT_REGISTRY.json"
+    "Docs/Production/CONTRACT_REGISTRY.json",
+    "Docs/Production/CI_TOOLCHAIN_LOCK.json",
+    "Docs/Production/RUNTIME_DEPENDENCY_OBSERVATIONS.json",
+    "Docs/Production/PROOF_INVALIDATION_POLICY.json"
   ],
   "task_inputs": [
     "Docs/Production/{task}/FROZEN_SCOPE.md",
@@ -33,8 +36,8 @@
     "critic_review": {"reuse": "exact_source_required", "extra_inputs": ["Docs/Production/CRITIC_EXECUTION.json", ".github/workflows/havenline-specialist-critic.yml"]},
     "integration": {"reuse": "exact_source_required", "extra_inputs": ["Docs/Production/PATH_OWNERSHIP.json"]},
     "post_integration_regression": {"reuse": "exact_source_required", "extra_inputs": ["Docs/Production/REGRESSION_MATRIX.json", "tools/havenline/production/regression_runner.py"]},
-    "closeout": {"reuse": "exact_source_required", "extra_inputs": ["tools/havenline/production/closure_validator.py"]},
-    "release_manifest": {"reuse": "exact_source_required", "extra_inputs": ["Docs/Production/CANDIDATE_MANIFEST_TEMPLATE.json"]}
+    "closeout": {"reuse": "exact_source_required", "extra_inputs": ["tools/havenline/production/closure_validator.py", "Docs/Production/EVIDENCE_RETENTION_POLICY.json"]},
+    "release_manifest": {"reuse": "exact_source_required", "extra_inputs": ["Docs/Production/CANDIDATE_MANIFEST_TEMPLATE.json", "Docs/Production/EVIDENCE_RETENTION_POLICY.json"]}
   },
   "allowed_reuse_values": ["deterministic_reusable", "rebind_with_provenance", "exact_source_required"],
   "fail_result_reuse": "forbidden",
