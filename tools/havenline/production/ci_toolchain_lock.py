@@ -3,7 +3,17 @@ from __future__ import annotations
 import argparse,json,re,os
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[3];DOCS=ROOT/'Docs/Production';LOCK=DOCS/'CI_TOOLCHAIN_LOCK.json'
+ACTION_USE_RE=re.compile(r'uses:\s*([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+(?:/[A-Za-z0-9_./-]+)?)@([^\s#]+)')
 def load():return json.loads(LOCK.read_text())
+def validate_workflow_action_pins(text:str,pins:dict[str,str],rel:str='<memory>')->list[str]:
+    errors=[]
+    for full_action,ref in ACTION_USE_RE.findall(text):
+        parts=full_action.split('/')
+        base='/'.join(parts[:2])
+        expected=pins.get(base)
+        if expected is None:errors.append(f'{rel}: unregistered external action {full_action}@{ref}')
+        elif ref!=expected:errors.append(f'{rel}: {full_action} must pin base action {base} to {expected}, found {ref}')
+    return errors
 def validate():
     cfg=load();errors=[];pins=cfg.get('action_pins',{})
     if cfg.get('schema_version')!=1:errors.append('schema_version must be 1')
@@ -11,16 +21,11 @@ def validate():
     for rel in cfg.get('critical_workflows',[]):
         p=ROOT/rel
         if not p.exists():errors.append('missing critical workflow '+rel);continue
-        text=p.read_text()
-        for action,ref in re.findall(r'uses:\s*([A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+)@([^\s#]+)',text):
-            expected=pins.get(action)
-            if expected is None:errors.append(f'{rel}: unregistered external action {action}@{ref}')
-            elif ref!=expected:errors.append(f'{rel}: {action} must pin {expected}, found {ref}')
+        text=p.read_text();errors+=validate_workflow_action_pins(text,pins,rel)
         for m in re.findall(r'runs-on:\s*([^\s#]+)',text):
             if m.startswith('${{'):continue
             if m!=cfg['runner']['required_label']:errors.append(f'{rel}: runner {m} != {cfg["runner"]["required_label"]}')
-    native=(ROOT/'.github/workflows/havenline-godot-android.yml').read_text()
-    tools=cfg['tools']
+    native=(ROOT/'.github/workflows/havenline-godot-android.yml').read_text();tools=cfg['tools']
     for token in (tools['godot'],tools['godot_editor_sha512'],tools['godot_templates_sha512'],tools['android_build_tools']):
         if token not in native:errors.append('native workflow missing tool lock '+token[:24])
     release=(ROOT/'.github/workflows/havenline-device-release-gate.yml').read_text()
