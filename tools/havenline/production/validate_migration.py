@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 import argparse, hashlib, json, pathlib, re, subprocess, sys
+from datetime import datetime,timezone
 from lib import ROOT, DOCS, load_json, git, any_match, ensure_score_strictly_above_nine
 from workstream import registry_errors
 
@@ -324,6 +325,11 @@ def main():
             errors.append("T09 workstream registration missing or status mismatch")
         elif (t09_rows[0].get("workstream_id"),t09_rows[0].get("owner"),t09_rows[0].get("branch"),t09_rows[0].get("base_commit"),t09_rows[0].get("owned_paths")) != (T09_WORKSTREAM,T09_OWNER,T09_BRANCH,T09_BASE,[T09_ALIAS]):
             errors.append("T09 workstream owner/branch/base/path identity mismatch")
+        if t09_rows:
+            try:
+                updated=datetime.fromisoformat(str(t09_rows[0].get("status_updated_at")).replace("Z","+00:00"))
+                if updated>datetime.now(timezone.utc):errors.append("T09 status_updated_at is in the future")
+            except ValueError:errors.append("T09 status_updated_at is invalid")
         ownership=load_json(DOCS/"PATH_OWNERSHIP.json")
         if T09_ALIAS not in ownership.get("aliases",{}):
             errors.append("T09 path reservation alias missing")
