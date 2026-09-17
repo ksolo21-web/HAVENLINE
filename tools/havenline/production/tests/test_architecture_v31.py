@@ -24,6 +24,8 @@ class ArchitectureV31Tests(unittest.TestCase):
         data={'schema_version':1,'policy':{'minimum_observations_for_enforcement':3,'minimum_distinct_sources':2,'learned_edges_are_additive_only':True,'static_mandatory_coverage_may_be_removed_automatically':False},'edges':[{'path_pattern':'HavenlineGodot/scripts/foo.gd','affected_task':'T10','suites':['test_t10'],'observation_count':4,'distinct_sources':2}]};r=learned_impact(['HavenlineGodot/scripts/foo.gd'],data);self.assertEqual(r['coverage_mode'],'ADDITIVE_ONLY');self.assertIn('test_t10',r['required_suites']);self.assertTrue(validate_runtime()['passed'])
     def test_task_snapshot_remains_derived(self):
         r=snapshot('T10');self.assertTrue(validate_snapshot(r)['passed']);self.assertTrue(r['snapshot_is_derived_not_authority'])
+    def test_t09_snapshot_includes_produced_contract(self):
+        r=snapshot('T09');self.assertTrue(validate_snapshot(r)['passed']);self.assertIn('harvest_resource_identity',r['contracts']['produces'])
     def test_mutation_canaries_all_reject_bad_inputs(self):
         r=run_canaries();self.assertTrue(r['passed'],r['errors']);self.assertTrue(all(x['rejected'] for x in r['results']))
     def test_transitive_invalidation_blocks_reuse_without_auto_revocation(self):
@@ -43,5 +45,5 @@ class ArchitectureV31Tests(unittest.TestCase):
     def test_environment_sensitive_gate_policy_remains_safe(self):
         r=validate_fingerprint();self.assertTrue(r['passed'],r['errors'])
     def test_complete_v31_validation_passes(self):
-        r=validate_v31();self.assertTrue(r['passed'],r['errors']);self.assertEqual(r['task_count'],61);self.assertEqual(r['snapshot_count'],61)
+        r=validate_v31();self.assertTrue(r['passed'],r['errors']);self.assertEqual(r['task_count'],62);self.assertEqual(r['snapshot_count'],62)
 if __name__=='__main__':unittest.main(verbosity=2)
