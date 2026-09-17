@@ -91,7 +91,8 @@ class ArchitectureV31Tests(unittest.TestCase):
     def test_contract_override_ids_match_registry(self):
         r=validate_invalidation();self.assertTrue(r['passed'],r['errors']);self.assertGreaterEqual(r['contract_override_count'],10)
     def test_ci_action_and_toolchain_lock_is_valid(self):
-        r=validate_toolchain();self.assertTrue(r['passed'],r['errors']);self.assertGreaterEqual(r['critical_workflow_count'],8)
+        r=validate_toolchain();self.assertTrue(r['passed'],r['errors']);self.assertGreaterEqual(r['critical_workflow_count'],8);self.assertEqual(r['action_runtime'],'node24');self.assertEqual(r['retired_workflow_count'],1)
+        cfg=load_toolchain();self.assertNotIn('.github/workflows/havenline-task09-harvesting.yml',cfg['critical_workflows']);self.assertFalse(cfg['retired_workflows']['.github/workflows/havenline-task09-harvesting.yml']['forward_execution_allowed'])
     def test_ci_lock_rejects_mutable_subpath_action(self):
         pins=load_toolchain()['action_pins']
         bad=validate_workflow_action_pins('- uses: actions/cache/restore@v4\n',pins,'fixture.yml')
