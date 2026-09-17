@@ -48,12 +48,14 @@ jobs:
         run: python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' -v
       - name: Validate workstream registry and ownership collisions
         run: python3 tools/havenline/production/workstream.py validate-registry
-      - name: Validate complete V2 state
+      - name: Validate complete V2 state and base-authoritative migration scope
         shell: bash
         run: |
           set -euo pipefail
           if [ "${{ github.event_name }}" = "pull_request" ]; then base="${{ github.event.pull_request.base.sha }}"; else base=$(git rev-parse HEAD^); fi
-          python3 tools/havenline/production/validate_migration.py --base "$base"
+          python3 tools/havenline/production/validate_migration.py
+          python3 tools/havenline/production/validate_migration_scope.py --base "$base" --head HEAD --output /tmp/migration-scope.json
+          cat /tmp/migration-scope.json
       - name: Validate T10-T70 forward execution architecture
         run: |
           python3 tools/havenline/production/forward_execution.py validate
