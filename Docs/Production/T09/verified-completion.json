@@ -1,0 +1,275 @@
+{
+  "schema_version": 1,
+  "task_id": "T09",
+  "title": "Harvesting and automatic acquisition",
+  "status": "APPROVED",
+  "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+  "base_commit": "7492074e40a0b061f31d8c32602b7a581b2610f3",
+  "workflow_run_id": 35213007340,
+  "workflow_job_id": 105174766456,
+  "artifact_id": 10494819142,
+  "artifact_sha256": "0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1",
+  "acceptance_rule": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9,
+    "unrounded": true,
+    "score_averaging_used": false,
+    "zero_mandatory_defects": true
+  },
+  "path_validation": {
+    "passed": true,
+    "candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+    "base": "7492074e40a0b061f31d8c32602b7a581b2610f3"
+  },
+  "gates": {
+    "G1": {
+      "status": "PASS",
+      "evidence": "Dependencies T06, T07, and T08 are APPROVED."
+    },
+    "G2": {
+      "status": "PASS",
+      "evidence": "Candidate scope and ownership validation passed for the exact source."
+    },
+    "G3": {
+      "status": "PASS",
+      "evidence": "Frozen harvesting/acquisition scope passed with no later-task expansion."
+    },
+    "G4": {
+      "status": "PASS",
+      "evidence": "Source, import, contract, workflow, and artifact integrity checks passed."
+    },
+    "G5": {
+      "status": "PASS",
+      "evidence": "Wood, stone, metal, and fuel acquisition cycles passed."
+    },
+    "G6": {
+      "status": "PASS",
+      "evidence": "17 impacted Godot suites / 997 checks passed."
+    },
+    "G7": {
+      "status": "PASS",
+      "evidence": "913/913 exact artifact files and the complete evidence index verified."
+    },
+    "G8": {
+      "status": "PASS",
+      "evidence": "C6 performance gate passed on 180 measured frames."
+    },
+    "G9": {
+      "status": "PASS",
+      "evidence": "7/7 save, reload, migration, and recovery cases passed."
+    },
+    "G10": {
+      "status": "PASS",
+      "evidence": "No economy, purchase, entitlement, or competitive-value scope was added."
+    },
+    "G11": {
+      "status": "PASS",
+      "evidence": "6/6 adaptive device cases and native 3840x2160 internal render evidence passed."
+    },
+    "G12": {
+      "status": "PASS",
+      "evidence": "Fresh independent C2, C3, C4, C5, and C6 reviews cover the exact artifact."
+    },
+    "G13": {
+      "status": "PASS",
+      "evidence": "Every mandatory critic dimension is strictly above 9.0; zero defects remain."
+    },
+    "G14": {
+      "status": "PASS",
+      "evidence": "Exact integrated source passed regression and final closeout with durable evidence."
+    }
+  },
+  "tests": {
+    "passed": true,
+    "records": [
+      {
+        "name": "impacted Godot regression",
+        "result": "PASS",
+        "suites": 17,
+        "checks": 997
+      },
+      {
+        "name": "save-state matrix",
+        "result": "PASS",
+        "cases": 7
+      },
+      {
+        "name": "adaptive-device matrix",
+        "result": "PASS",
+        "cases": 6
+      },
+      {
+        "name": "performance gate",
+        "result": "PASS",
+        "measured_frames": 180
+      },
+      {
+        "name": "evidence integrity",
+        "result": "PASS",
+        "indexed_files": 913,
+        "hash_mismatches": 0
+      }
+    ]
+  },
+  "evidence": {
+    "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+    "provenance_hash": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
+    "root": "Docs/Production/Evidence/T09",
+    "files": {
+      "complete-evidence-index.json": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
+      "candidate-scope.json": "f8cf6404b697a52dc617b7a541de5852b2526f4b1ddabbaf4c16e25978f81f17",
+      "source-contract.json": "2514521e4cf9208128f1328e4a9b47756d362816d3b559b975f4bb74ecfde485",
+      "resource-actor-contract.json": "1cd32e1e4adf94a4bdaa4deaded3d13264c0f931978336b6f1b2dd78b14f1946",
+      "tests.json": "d78c9b0840af0d5a2ad646a93fd244e637e666bbe25febaaba9f8513558c9148",
+      "capture-summary.json": "831f276e9fbbc8afb7d4304ea0025cc9f3ea002db1ad70e0148d29eb4539ac19",
+      "performance/c6-gate.json": "f67d90fa7d08c50b1f3b44e31f7c9f203c6c39bf818dfd01fb244d623398aeb4",
+      "performance/c6-performance.json": "31e682a06c397c2c9f361d6a284528fd56e756466ff9d161bf550a66e9e4a583",
+      "performance/delta.json": "e9ed3e012f41eb99919807e5825336a9cc702c21d414ef0a7259d06406ed1f6c",
+      "matrices/save/save-matrix.json": "1edf46ca581d8663ae07eb65b4960dbbecb18d83f25c258ce3d2367ba1c63a53",
+      "matrices/device/device-matrix.json": "c38b9a0df0900bbec443f782ee4fe4feed83ce952f21d9d9a02496e7c856d055"
+    }
+  },
+  "unresolved_mandatory_defects": [],
+  "resource_actor_contract": {
+    "applicable": true,
+    "validation_passed": true,
+    "registry_hashes": {
+      "resource_action_registry": "8e9feba3a92972b10ac7dc8589e43bd0f988c2981ffe0fcace2edb1100e3bd9d",
+      "actor_capability_matrix": "f319469be543267c6a21988d6b23f915550bd01c7d8513516b7410915680b1bf",
+      "animation_action_matrix": "57df079f213a88e58b87e01aa7b520ca2fe4d98a41368307fdbba433a57d46e5"
+    },
+    "introduced_resource_ids": [
+      "wood",
+      "stone",
+      "metal",
+      "fuel"
+    ],
+    "resource_ids_covered": [
+      "wood",
+      "stone",
+      "metal",
+      "fuel"
+    ],
+    "actor_keys_covered": [
+      "core_human_companion",
+      "player_lead",
+      "rescued_survivor_helper"
+    ],
+    "animation_profiles_covered": [
+      "human_player_chop",
+      "human_player_dismantle",
+      "human_player_mine"
+    ],
+    "animation_delta": true,
+    "validator_output_path": "Docs/Production/Evidence/T09/resource-actor-contract.json",
+    "validator_output_sha256": "1cd32e1e4adf94a4bdaa4deaded3d13264c0f931978336b6f1b2dd78b14f1946"
+  },
+  "game_master_contract": {
+    "applicable": false
+  },
+  "critics": {
+    "C2": {
+      "status": "PASS",
+      "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "scores": {
+        "geometry_contact": 9.78,
+        "clipping_seams": 9.36,
+        "intentional_gap_integrity": 9.33,
+        "cross_view_integrity": 9.69
+      },
+      "defects": [],
+      "coverage_complete": true,
+      "independent_runtime": true,
+      "raw_record_path": "Docs/Production/T09/CriticRaw/C2.json",
+      "raw_record_sha256": "3533543f1d5938231240638a9fbe5431885644f02f539daeb6749906aef956ff"
+    },
+    "C3": {
+      "status": "PASS",
+      "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "scores": {
+        "havenline_identity": 9.284,
+        "simple_context_controls": 9.786,
+        "physical_core_loop": 9.517,
+        "complexity_discipline": 9.742,
+        "world_response_readability": 9.276
+      },
+      "defects": [],
+      "coverage_complete": true,
+      "independent_runtime": true,
+      "raw_record_path": "Docs/Production/T09/CriticRaw/C3.json",
+      "raw_record_sha256": "97a6fd5ffa18c20d36b1bea1ec75b9408320348b116967619be73f4d45305d37"
+    },
+    "C4": {
+      "status": "PASS",
+      "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "scores": {
+        "interactable_clarity": 9.238,
+        "danger_clarity": 9.127,
+        "collection_feedback": 9.476,
+        "resource_destination": 9.186,
+        "world_change_clarity": 9.318,
+        "next_action_clarity": 9.367
+      },
+      "defects": [],
+      "coverage_complete": true,
+      "independent_runtime": true,
+      "raw_record_path": "Docs/Production/T09/CriticRaw/C4.json",
+      "raw_record_sha256": "682dd784d5de17b9a1d5bef1b15aeb15d8a03d57f69699060577abf498f2c784"
+    },
+    "C5": {
+      "status": "PASS",
+      "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "scores": {
+        "full_cycle": 9.6417,
+        "foot_contact": 9.5621,
+        "lower_body_mechanics": 9.3846,
+        "upper_body_mechanics": 9.5128,
+        "weight_transfer": 9.3274,
+        "transitions": 9.7315,
+        "clipping": 9.6842,
+        "secondary_motion_contact": 9.4586
+      },
+      "defects": [],
+      "coverage_complete": true,
+      "independent_runtime": true,
+      "raw_record_path": "Docs/Production/T09/CriticRaw/C5.json",
+      "raw_record_sha256": "3c119b3e67a8cb4348856c758e7cbf0aeabcb49706fb77fded8ae7a7843d0fed"
+    },
+    "C6": {
+      "status": "PASS",
+      "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "scores": {
+        "frame_time": 9.34,
+        "draw_calls": 9.78,
+        "geometry": 9.76,
+        "texture_memory": 9.44,
+        "shader_cost": 9.29,
+        "physics": 9.94,
+        "animation": 9.82,
+        "population": 9.89,
+        "thermal_risk": 9.11
+      },
+      "defects": [],
+      "coverage_complete": true,
+      "independent_runtime": true,
+      "raw_record_path": "Docs/Production/T09/CriticRaw/C6.json",
+      "raw_record_sha256": "facf103a6bcd0ff77d08e01387edcf7f649af187f1cfadd0206fffb044075181"
+    }
+  },
+  "integration": {
+    "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+    "regression_passed": true,
+    "integration_branch": "codex/havenline-sequential-task-01"
+  },
+  "retained_review_evidence": {
+    "run_id": 35219158784,
+    "artifact_id": 10495254920,
+    "digest": "sha256:7578527f171ab526147ebb7f4aa59c07278a3d68c46cf805f749539791e0c42a",
+    "expires_at": "2026-12-16T12:05:19Z"
+  },
+  "scope_limits": {
+    "whole_game_approved": false,
+    "physical_phone_tablet_native_4k60_verified": false,
+    "unfinished_apk_delivery_allowed": false
+  }
+}
