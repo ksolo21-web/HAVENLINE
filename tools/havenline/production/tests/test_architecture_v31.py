@@ -27,7 +27,9 @@ class ArchitectureV31Tests(unittest.TestCase):
     def test_mutation_canaries_all_reject_bad_inputs(self):
         r=run_canaries();self.assertTrue(r['passed'],r['errors']);self.assertTrue(all(x['rejected'] for x in r['results']))
     def test_transitive_invalidation_blocks_reuse_without_auto_revocation(self):
-        self.assertTrue(validate_invalidation()['passed']);r=invalidate_contract('persistence_schema');self.assertTrue(r['proof_reuse_blocked']);self.assertFalse(r['automatic_approval_revocation']);self.assertIn('T14',r['invalidated_tasks'])
+        self.assertTrue(validate_invalidation()['passed']);r=invalidate_contract('persistence_schema');self.assertTrue(r['proof_reuse_blocked']);self.assertFalse(r['automatic_approval_revocation']);self.assertIn('T14',r['invalidated_tasks']);self.assertIn('T15',r['invalidated_tasks']);self.assertIn('T70',r['invalidated_tasks']);self.assertIn('save_matrix',r['invalidated_gates'])
+    def test_contract_override_ids_match_registry(self):
+        r=validate_invalidation();self.assertTrue(r['passed'],r['errors']);self.assertGreaterEqual(r['contract_override_count'],10)
     def test_ci_action_and_toolchain_lock_is_valid(self):
         r=validate_toolchain();self.assertTrue(r['passed'],r['errors']);self.assertGreaterEqual(r['critical_workflow_count'],8)
     def test_environment_sensitive_gate_policy_remains_safe(self):
