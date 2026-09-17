@@ -53,7 +53,7 @@ jobs:
       GH_TOKEN: ${{ github.token }}
       HAVENLINE_C0_INDEPENDENT_JOB: '1'
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           ref: ${{ inputs.failed_candidate }}
           fetch-depth: 0
@@ -132,7 +132,7 @@ jobs:
           packet_path.write_text(json.dumps(packet,indent=2)+'\n')
           PY
 
-      - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
         id: reviewer-cache
         with:
           path: ~/.cache/havenline-t01-qwen35
@@ -147,7 +147,7 @@ jobs:
           fi
           python3 tools/havenline/production/prepare_specialist_runtime.py > c0-output/runtime-preparation.json
 
-      - uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+      - uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
         if: steps.reviewer-cache.outputs.cache-hit != 'true'
         with:
           path: ~/.cache/havenline-t01-qwen35
@@ -159,7 +159,7 @@ jobs:
             --packet c0-input/failure-packet.json \
             --out c0-output
 
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
           name: havenline-C0-${{ inputs.task_id }}-${{ inputs.failed_candidate }}-${{ github.run_id }}
