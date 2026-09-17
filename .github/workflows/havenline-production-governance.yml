@@ -39,7 +39,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 14
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           fetch-depth: 0
       - name: Compile production accelerator and specialist critic tooling
@@ -113,7 +113,7 @@ jobs:
           python3 tools/havenline/production/task_state_snapshot.py T10 --output /tmp/v31-t10-state.json > /tmp/v31-t10-state.stdout.json
           jq -e '.passed == true and .task_count == 62 and .snapshot_count == 62' /tmp/v31-validation.json
           jq -e '.v3.feasibility.activation_state == "READY_NOW" and .v3.runtime_activation_allowed == true and .task_state.lifecycle_status == "LOCKED" and (.task_state.blockers | index("lifecycle_status_LOCKED")) != null and (.task_state.blockers | index("ownership_not_assigned")) != null and .runtime_activation_allowed == false' /tmp/v31-t10.json
-          jq -e '.passed == true and .critical_workflow_count >= 8 and .action_pin_count >= 7' /tmp/v31-toolchain.json
+          jq -e '.passed == true and .critical_workflow_count == 8 and .retired_workflow_count == 1 and .action_pin_count >= 7 and .action_runtime == "node24"' /tmp/v31-toolchain.json
           jq -e '.provenance_complete == true and .RUNNER_OS == "Linux"' /tmp/v31-runner-provenance.json
           jq -e '.passed == true and ([.results[] | select(.rejected == true)] | length) == (.results | length)' /tmp/v31-canaries.json
           jq -e '.passed == true' /tmp/v31-retention.json
