@@ -32,7 +32,10 @@
       "severity": "mandatory-C5-tooling",
       "summary": "C5 initialization validation repeatedly treated separately rendered PNG identity as animation-pose identity, creating false failures after otherwise successful T09 validation.",
       "status": "READY_FOR_VERIFICATION",
-      "classification": ["TOOLING_FIX", "TEST_FIX"],
+      "classification": [
+        "TOOLING_FIX",
+        "TEST_FIX"
+      ],
       "failed_candidate": "1ff5780f9539be6dbf1d521b23fe49384d3d9c18",
       "failed_workflow_run": 35205184308,
       "prior_failed_candidate": "2a9a88ba931bc943bf55e91dbaac3b606c1393e3",
@@ -65,10 +68,33 @@
       "failed_candidate": "39315e59250f22087321ca07f1302d77af9b45fe",
       "failed_workflow_run": 35208413468,
       "resolution": "Integration commit 8f971724d6ba7331530a4b502328ce1625df2082 adds the complete C0/builder control-plane packet to @ownership:QA-GOV; the reproduced T09 integration-scope comparison passes with zero ownership errors."
+    },
+    {
+      "id": "T09-D006",
+      "severity": "mandatory-C5-tooling",
+      "summary": "C5 settle frames advanced the live AnimationPlayer clock after an explicit seek, so the recorded start pose was a later real-time animation sample.",
+      "status": "READY_FOR_VERIFICATION",
+      "classification": [
+        "TOOLING_FIX",
+        "TEST_FIX"
+      ],
+      "failed_candidate": "4b303eeb26c19ecb475f893711f5f84800d12781",
+      "failed_workflow_run": 35208966996,
+      "failed_job": 105161573932,
+      "partial_artifact_id": 10492231049,
+      "partial_artifact_digest": "sha256:836d6292e3a7855581ad27b57cc9695d2a061b2d4bdcb7387c32e1ada96d94db",
+      "visible_symptom": "All scope/contracts, 17 suites / 997 checks, save/device matrices and C6 passed, then the C5 preflight measured start drift of 0.079358-0.095225 m and 23.328-28.325 degrees; chop first-step drift reached 0.153894 m / 56.060 degrees.",
+      "root_cause": "set_pose sought the requested sample but left AnimationPlayer running. Eight render-settle frames advanced real time by about 0.13 seconds, invalidating the explicit t=0 proof.",
+      "causal_tooling_change": "Freeze AnimationPlayer.speed_scale at 0.0 before play/seek/advance(0.0), retain settle frames for SkeletonModifier3D convergence, and require the frozen-clock token in the fail-closed T09 source validator. C5 limits remain unchanged.",
+      "proof_contract": [
+        "Exact integrated candidate contains the frozen-clock sampler and early C5 root-cause preflight.",
+        "All three clips pass the unchanged skeleton-global start and first-step limits.",
+        "The complete exact-source T09 workflow, evidence index and independent C5 review pass."
+      ]
     }
   ],
   "unresolved_mandatory_count": 0,
-  "unresolved_tooling_count": 1,
+  "unresolved_tooling_count": 2,
   "critic_scores": {},
   "critic_approval_pending": true,
   "evidence": {
@@ -77,5 +103,5 @@
     "artifact_digest": "sha256:3c7a39529c7c77518cc7040e023ac7868ee74590843affac3856bc1555968982",
     "complete_evidence_index_sha256": "ba3c0b334561b248178df583e13dd9114c22714530532d77a2a0b72a3a893dcb"
   },
-  "next_action": "Run exact-source T09 CI after the settled-pose repair and C0 ownership reconciliation. Close T09-D004 only after C5 pose initialization/continuity, impacted regression, save/device matrices, C6 and the complete evidence index pass on the same integrated candidate; then resume fresh independent C2/C3/C4/C5/C6 review."
+  "next_action": "Run exact-source T09 CI on the integrated frozen-clock candidate. Close T09-D004 and T09-D006 only after unchanged C5 pose limits, impacted regression, save/device matrices, C6 and the complete evidence index pass on the same source; then complete fresh independent C2/C3/C4/C5/C6 review."
 }
