@@ -248,7 +248,7 @@ jobs:
           done
           out=task09-evidence/captures/native-4k
           xvfb-run -a "${godot[@]}" --resolution 3840x2160 --script res://tests/capture_task09_harvesting.gd -- --out="$PWD/$out" --resource=wood --mode=tool --view=front-right --device=phone_16_9 --native-4k --candidate="$CANDIDATE"
-          xvfb-run -a python3 tools/havenline/production/motion_capture.py \
+          xvfb-run -a python3 tools/havenline/task09/motion_capture.py \
             --candidate "$CANDIDATE" --task T09 \
             --scene res://assets/harvesting_v1/t09_motion_fixture.tscn \
             --subject-path . --animation-player-path Character1Visual/AnimationPlayer \
@@ -310,10 +310,15 @@ jobs:
           motion_hashes=json.loads((root/'motion-c5/motion-hashes.json').read_text())
           assert motion['candidate_commit']==reports[0]['candidate'] and motion['task_id']=='T09'
           assert {row['animation'] for row in motion['captures']}=={'t06/chop','t06/mine','t06/dismantle'}
-          assert {'real-time-cycle','slow-review-cycle','turn-0','turn-30','turn-90','turn-180','transition-start','transition-end'}<={row['evidence_type'] for row in motion['captures']}
+          assert motion['harness']=='production_motion_v2' and motion['initialization_settle_frames']>=2
+          required_motion={'real-time-cycle','slow-review-cycle','turn-neg-135','turn-neg-090','turn-neg-045','turn-000','turn-030','turn-045','turn-090','turn-135','turn-180','transition-start','transition-end','close-upper-front','close-upper-opposite','close-waist-rear','close-lower-front','close-lower-rear'}
+          assert required_motion<={row['evidence_type'] for row in motion['captures']}
           motion_pngs=list((root/'motion-c5').rglob('*.png'))
-          assert len(motion_pngs)>=180 and len(motion_hashes['frames'])==len(motion_pngs)
+          assert len(motion_pngs)>=220 and len(motion_hashes['frames'])==len(motion_pngs)
           assert all(motion_hashes['frames'][str(path.relative_to(root/'motion-c5'))]==hashlib.sha256(path.read_bytes()).hexdigest() for path in motion_pngs)
+          for animation in ('t06/chop','t06/mine','t06/dismantle'):
+              starts=[root/'motion-c5'/animation/'real-time-cycle/0000.png',root/'motion-c5'/animation/'slow-review-cycle/0000.png',root/'motion-c5'/animation/'transitions/start.png']
+              assert len({hashlib.sha256(path.read_bytes()).hexdigest() for path in starts})==1,animation
           pngs=list(root.glob('*/*.png'))
           sequence_frames=list(root.glob('sequence-*/frames/frame-*.jpg'))
           frame_counts={resource:len(list((root/('sequence-'+resource)/'frames').glob('frame-*.jpg'))) for resource in ('wood','stone','metal','fuel')}
