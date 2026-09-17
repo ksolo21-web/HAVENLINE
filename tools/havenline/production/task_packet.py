@@ -138,6 +138,7 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
         text+="- Mutation canaries must pass before architecture closeout.\n"
         text+=f"- If this task or a consumed contract is reopened, run `python3 tools/havenline/production/proof_invalidation.py task {task_id}` or the affected contract form before reusing downstream proof.\n"
         text+=f"- V3.1 runtime activation allowed now: `{str(v31['runtime_activation_allowed']).lower()}`\n"
+        if not v31['runtime_activation_allowed']:text+="- **DO NOT start runtime implementation from this packet yet.** V3 capabilities may be ready, but V3.1 lifecycle, ownership, or canonical-state blockers must clear first.\n"
 
     text+="""
 
