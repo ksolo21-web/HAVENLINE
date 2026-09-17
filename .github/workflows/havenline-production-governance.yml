@@ -79,7 +79,8 @@ jobs:
           python3 tools/havenline/production/failure_intelligence.py validate > /tmp/v3-failures.json
           python3 tools/havenline/production/synthetic_merge_forecast.py --candidate HEAD --integration HEAD --output /tmp/v3-merge.json
           jq -e '.passed == true and .task_count == 61' /tmp/v3-validation.json
-          jq -e '.feasibility.activation_state != "READY_NOW" and .feasibility.runtime_activation_allowed == false' /tmp/v3-t10.json
+          jq -e '.feasibility.dependencies_approved == true and .feasibility.activation_state == "READY_NOW" and .feasibility.runtime_activation_allowed == true' /tmp/v3-t10.json
+          jq -e '.tasks.T10.status == "LOCKED"' Docs/Production/DEPENDENCY_GRAPH.json
           jq -e '.feasibility.capability_blockers | index("google_play_billing_sandbox") != null' /tmp/v3-t35.json
           jq -e '.feasibility.capability_blockers | index("physical_phone_4k60") != null' /tmp/v3-t68.json
           jq -e '.scheduler_is_advisory == true and .integration_owner_slots == 1' /tmp/v3-schedule.json
