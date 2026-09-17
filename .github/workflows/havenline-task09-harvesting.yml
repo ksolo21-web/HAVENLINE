@@ -44,9 +44,23 @@ jobs:
           CANDIDATE: ${{ github.sha }}
         run: |
           set -euo pipefail
+          frozen_base=7492074e40a0b061f31d8c32602b7a581b2610f3
+          preintegration_head=d3b5260de0a57830f10e276f3368ad96f6e7a32a
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
-          python3 tools/havenline/production/workstream.py validate-candidate T09 --base 7492074e40a0b061f31d8c32602b7a581b2610f3 --head "$CANDIDATE" --integration-head "$integration" | tee task09-evidence/candidate-scope.json
-          python3 tools/havenline/production/change_impact.py --base "$integration" --head "$CANDIDATE" > task09-evidence/change-impact.json
+          impact_base="$integration"
+          if [[ "$integration" = "$CANDIDATE" ]]; then
+            # Fresh post-integration verification must review the integrated T09
+            # delta, not compare the integration head to itself.
+            impact_base="$preintegration_head"
+            python3 tools/havenline/production/validate_integration_scope.py \
+              --base "$preintegration_head" --head "$CANDIDATE" \
+              --output task09-evidence/candidate-scope.json
+          else
+            python3 tools/havenline/production/workstream.py validate-candidate T09 \
+              --base "$frozen_base" --head "$CANDIDATE" \
+              --integration-head "$integration" | tee task09-evidence/candidate-scope.json
+          fi
+          python3 tools/havenline/production/change_impact.py --base "$impact_base" --head "$CANDIDATE" > task09-evidence/change-impact.json
           python3 - <<'PY'
           import json
           from pathlib import Path
