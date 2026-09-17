@@ -33,9 +33,6 @@ permissions:
   contents: read
 concurrency:
   group: havenline-production-governance-${{ github.event.pull_request.head.ref || github.ref_name }}
-  # Finish the SHA already under governance review. Newer governance commits
-  # queue behind it so failed-run diagnostics remain usable instead of being
-  # erased by a superseding commit.
   cancel-in-progress: false
 jobs:
   validate:
@@ -104,6 +101,7 @@ jobs:
           python3 tools/havenline/production/runtime_dependency_learning.py validate > /tmp/v31-runtime-deps.json
           python3 tools/havenline/production/mutation_canary.py > /tmp/v31-canaries.json
           python3 tools/havenline/production/proof_invalidation.py validate > /tmp/v31-invalidation.json
+          python3 tools/havenline/production/proof_invalidation.py contract persistence_schema > /tmp/v31-persistence-invalidation.json
           python3 tools/havenline/production/task_state_snapshot.py T10 --output /tmp/v31-t10-state.json > /tmp/v31-t10-state.stdout.json
           jq -e '.passed == true and .task_count == 61 and .snapshot_count == 61' /tmp/v31-validation.json
           jq -e '.passed == true and .critical_workflow_count >= 8 and .action_pin_count >= 7' /tmp/v31-toolchain.json
@@ -112,6 +110,7 @@ jobs:
           jq -e '.passed == true' /tmp/v31-retention.json
           jq -e '.passed == true' /tmp/v31-runtime-deps.json
           jq -e '.passed == true' /tmp/v31-invalidation.json
+          jq -e '.proof_reuse_blocked == true and .automatic_approval_revocation == false and (.invalidated_tasks | index("T15")) != null and (.invalidated_tasks | index("T70")) != null and (.invalidated_gates | index("save_matrix")) != null' /tmp/v31-persistence-invalidation.json
           jq -e '.validation.passed == true and .snapshot_is_derived_not_authority == true' /tmp/v31-t10-state.json
       - name: Require C1-C11 execution readiness
         run: python3 tools/havenline/production/validate_critic_readiness.py
@@ -119,10 +118,8 @@ jobs:
         run: |
           python3 tools/havenline/production/task_packet.py T03
           test -s Docs/Production/Evidence/T03/TASK_PACKET.md
-          # T05 predates the resource/actor contract and must remain N/A.
           python3 tools/havenline/production/task_packet.py T05
           grep -q 'N/A for this task' Docs/Production/Evidence/T05/TASK_PACKET.md
-          # T10+ packets must expose fail-fast, V3 intelligence and V3.1 factory hardening.
           python3 tools/havenline/production/task_packet.py T10
           grep -q 'Forward execution profile — machine resolved' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'Execution mode: `build`' Docs/Production/Evidence/T10/TASK_PACKET.md
@@ -137,29 +134,17 @@ jobs:
           grep -q 'task_state_snapshot.py' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'proof_invalidation.py' Docs/Production/Evidence/T10/TASK_PACKET.md
       - name: Validate resource/tool/actor registry schema
-        run: |
-          python3 tools/havenline/production/resource_actor_contract.py --task T05 --schema-only
+        run: python3 tools/havenline/production/resource_actor_contract.py --task T05 --schema-only
       - name: Validate Game Master policy schema
-        run: |
-          python3 tools/havenline/production/game_master_contract.py --task T08 --schema-only
+        run: python3 tools/havenline/production/game_master_contract.py --task T08 --schema-only
       - name: Classify governance-only or lifecycle-valid task integration impact
         run: |
           set -euo pipefail
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            base="${{ github.event.pull_request.base.sha }}"
-          else
-            base=$(git rev-parse HEAD^)
-          fi
+          if [ "${{ github.event_name }}" = "pull_request" ]; then base="${{ github.event.pull_request.base.sha }}"; else base=$(git rev-parse HEAD^); fi
           python3 tools/havenline/production/change_impact.py --base "$base" --head HEAD > /tmp/impact.json
           python3 tools/havenline/production/validate_integration_scope.py --base "$base" --head HEAD --output /tmp/integration-scope.json
-          # T03 is already approved. Only a real T03 runtime change should reopen
-          # the strict repair-cycle validator; workflow/docs-only maintenance is
-          # governance and must not replay the historical T03 repair range.
           if jq -e '.task_id == "T03" and ([.task_files.T03[]? | select(startswith("HavenlineGodot/"))] | length > 0)' /tmp/integration-scope.json >/dev/null; then
-            python3 tools/havenline/production/validate_repair_cycle.py \
-              --ledger Docs/Production/T03/DEFECT_LEDGER.json \
-              --base e89818070603399cce27b595ff1116e40b8b3b2a \
-              --head HEAD
+            python3 tools/havenline/production/validate_repair_cycle.py --ledger Docs/Production/T03/DEFECT_LEDGER.json --base e89818070603399cce27b595ff1116e40b8b3b2a --head HEAD
           fi
           cat /tmp/impact.json
           cat /tmp/integration-scope.json
