@@ -582,9 +582,10 @@ func capture_device_view() -> void:
 	drag.position = touch_position+Vector2(game.joystick_radius*0.38,-game.joystick_radius*0.24)
 	game._gui_input(drag)
 	assert(game.joystick_id == 77,"T09 device proof must exercise shipping touch input")
-	var joystick_extent := Vector2.ONE * (game.joystick_radius + 2.0)
-	var joystick_bounds := Rect2(game.joystick_origin - joystick_extent,joystick_extent * 2.0)
-	var capture_canvas := Rect2(Vector2.ZERO,Vector2(root.size))
+	var joystick_radius: float = float(game.joystick_radius)
+	var joystick_extent: Vector2 = Vector2.ONE * (joystick_radius + 2.0)
+	var joystick_bounds: Rect2 = Rect2(game.joystick_origin - joystick_extent,joystick_extent * 2.0)
+	var capture_canvas: Rect2 = Rect2(Vector2.ZERO,Vector2(root.size))
 	assert(capture_canvas.encloses(joystick_bounds),"T09 joystick circle must be fully inside the captured canvas")
 	var contact_frame := await advance_fixture_to_shipping_contact(true)
 	if contact_frame < 0: return
