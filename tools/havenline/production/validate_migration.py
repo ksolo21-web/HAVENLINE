@@ -339,6 +339,10 @@ def main():
                 errors.append("T09 completed owner missing or status mismatch")
             elif (t09_owners[0].get("workstream"),t09_owners[0].get("paths_alias"),t09_owners[0].get("accepted_source"),t09_owners[0].get("integrated_source")) != (T09_WORKSTREAM,T09_ALIAS,"9bc735502b265bfdd365004fb863b19c613e27dd","9bc735502b265bfdd365004fb863b19c613e27dd"):
                 errors.append("T09 completed path owner identity mismatch")
+            unlocked=[tid for tid in ids[9:] if graph["tasks"][tid]["status"]!="LOCKED"]
+            if unlocked:errors.append("T10+ must remain LOCKED after T09 approval: "+",".join(unlocked))
+            active_future=[row.get("task_id") for row in ownership.get("active_owners",[]) if str(row.get("task_id",""))>="T10"]
+            if active_future:errors.append("T10+ active ownership exists before explicit activation")
         else:
             t09_owners=[row for row in ownership.get("active_owners",[]) if row.get("task_id")=="T09"]
             if len(t09_owners)!=1 or t09_owners[0].get("status")!=t09_status:
