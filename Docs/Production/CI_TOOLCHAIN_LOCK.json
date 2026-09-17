@@ -1,14 +1,15 @@
 {
   "schema_version": 1,
   "critical_workflows": [
-    ".github/workflows/havenline-production-governance.yml",
+    ".github/workflows/havenline-c0-root-cause.yml",
     ".github/workflows/havenline-candidate-guard.yml",
     ".github/workflows/havenline-critic-safeguards.yml",
-    ".github/workflows/havenline-c0-root-cause.yml",
+    ".github/workflows/havenline-device-release-gate.yml",
+    ".github/workflows/havenline-godot-android.yml",
+    ".github/workflows/havenline-production-governance.yml",
     ".github/workflows/havenline-specialist-critic.yml",
     ".github/workflows/havenline-specialist-model-cache.yml",
-    ".github/workflows/havenline-device-release-gate.yml",
-    ".github/workflows/havenline-godot-android.yml"
+    ".github/workflows/havenline-task09-harvesting.yml"
   ],
   "action_pins": {
     "actions/checkout": "11d5960a326750d5838078e36cf38b85af677262",
@@ -23,7 +24,12 @@
     "required_label": "ubuntu-24.04",
     "immutable_digest_available": false,
     "runtime_provenance_required": true,
-    "required_runtime_fields": ["ImageOS", "ImageVersion", "RUNNER_OS", "RUNNER_ARCH"],
+    "required_runtime_fields": [
+      "ImageOS",
+      "ImageVersion",
+      "RUNNER_OS",
+      "RUNNER_ARCH"
+    ],
     "drift_policy": "runner image drift invalidates reusable environment-sensitive proof and requires fresh validation"
   },
   "environment_sensitive_reuse_gates": [
