@@ -2,115 +2,27 @@
   "schema_version": 1,
   "purpose": "Bind every T10-T70 forward execution gate to one reusable execution contract so task workflows do not improvise duplicate or contradictory harnesses.",
   "gates": {
-    "scope_dependency": {
-      "execution": "generic",
-      "runner": "tools/havenline/production/forward_execution.py plan <TASK>",
-      "rule": "Fail before checkout/build fan-out when dependencies are not APPROVED or the task plan does not resolve."
-    },
-    "ownership": {
-      "execution": "generic",
-      "runner": "tools/havenline/production/workstream.py validate-candidate <TASK> ...",
-      "rule": "Foreign/protected/integration-only edits fail closed; use ChangeRequests instead."
-    },
-    "reference_lock": {
-      "execution": "task_adapter",
-      "runner": "task packet reference manifest + exact source hashes",
-      "rule": "Freeze authoritative reference inputs before visual implementation; C1 tasks require both reference lock and final source-bound visual evidence."
-    },
-    "source_contract": {
-      "execution": "task_adapter",
-      "runner": "tools/havenline/taskNN/source_contract.py or task-specific equivalent",
-      "rule": "Validate frozen task semantics and required registries before expensive testing."
-    },
-    "focused_unit": {
-      "execution": "task_adapter",
-      "runner": "task-owned focused Godot/Python tests",
-      "rule": "Run the smallest deterministic tests that can reject the candidate before integrated fan-out."
-    },
-    "task_sentinel": {
-      "execution": "task_adapter_required",
-      "runner": "tools/havenline/taskNN/sentinel.py or task-specific equivalent",
-      "rule": "Implement the profile's named high-information sentinel before broad production implementation; a task may not enter full fan-out without it."
-    },
-    "motion_preflight": {
-      "execution": "generic_plus_task_adapter",
-      "runner": "tools/havenline/production/motion_capture.py + task-owned capture adapter",
-      "rule": "Validate full-cycle/transition/contact initialization before long visual fan-out; preserve final-skeleton evidence rather than using screenshot identity as motion identity."
-    },
-    "progression_sim": {
-      "execution": "generic_validator_plus_task_record",
-      "runner": "tools/havenline/production/domain_safeguard_gate.py progression --candidate <SHA> --record <record>",
-      "rule": "Task simulation produces the source-bound record; the shared gate enforces Level-100/F2P/difficulty invariants."
-    },
-    "economy_sim": {
-      "execution": "generic_validator_plus_task_record",
-      "runner": "tools/havenline/production/domain_safeguard_gate.py economy --candidate <SHA> --record <record>",
-      "rule": "Task simulation produces the source-bound record; the shared gate enforces F2P/store/VIP/paywall invariants."
-    },
-    "save_matrix": {
-      "execution": "generic_plus_task_adapter",
-      "runner": "tools/havenline/production/save_state_matrix.py --adapter <task adapter>",
-      "rule": "Use canonical fresh/current/previous/interrupted/reload/migration/rollback cases where applicable."
-    },
-    "device_matrix": {
-      "execution": "generic_plus_task_adapter",
-      "runner": "tools/havenline/production/device_matrix.py --adapter <task adapter>",
-      "rule": "Exercise phone/tablet/foldable functional states before physical release certification."
-    },
-    "security_attack": {
-      "execution": "generic_plus_task_adapter",
-      "runner": "tools/havenline/production/security_exploit_harness.py",
-      "rule": "Use adversarial attack cases; never replace C9 with prose review."
-    },
-    "liveops_sim": {
-      "execution": "generic_validator_plus_task_record",
-      "runner": "tools/havenline/production/domain_safeguard_gate.py liveops --candidate <SHA> --record <record>",
-      "rule": "Task rehearsal produces the source-bound record; the shared gate enforces scheduling/collision/reward/kill-switch/F2P invariants."
-    },
-    "impacted_regression": {
-      "execution": "generic",
-      "runner": "tools/havenline/production/change_impact.py + tools/havenline/production/regression_runner.py",
-      "rule": "Run universal plus impacted suites; unknown production changes fall back to full mandatory coverage."
-    },
-    "performance": {
-      "execution": "generic_plus_task_record",
-      "runner": "tools/havenline/production/critic_harness.py performance --candidate <SHA> --record <record>",
-      "rule": "Measure after cheaper functional/specialist preflights pass; do not use this as T68/T69 physical certification."
-    },
-    "visual_evidence": {
-      "execution": "generic_plus_task_adapter",
-      "runner": "tools/havenline/production/evidence_capture.py + tools/havenline/production/specialist_evidence_manifest.py",
-      "rule": "Produce one hash-bound evidence bundle per SHA and reuse it across critics when inputs are unchanged."
-    },
-    "physical_device": {
-      "execution": "physical_hardware_only",
-      "runner": "T68/T69 named physical-device certification procedure",
-      "rule": "No emulator, desktop render, engine counter or screenshot substitution for sustained physical 4K/60 and thermal evidence."
-    },
-    "critic_review": {
-      "execution": "generic_independent_runtime",
-      "runner": ".github/workflows/havenline-specialist-critic.yml + deterministic C6/C9 gates",
-      "rule": "C1-C11 applicability comes from CRITIC_MATRIX; C0 is non-voting."
-    },
-    "integration": {
-      "execution": "integration_owner_only",
-      "runner": "workstream/integration-owner controlled integration",
-      "rule": "Build-mode tasks only; candidate builders cannot self-integrate or self-approve."
-    },
-    "post_integration_regression": {
-      "execution": "generic",
-      "runner": "tools/havenline/production/change_impact.py + tools/havenline/production/regression_runner.py on integrated SHA",
-      "rule": "Fresh integration evidence is required; isolated evidence cannot substitute after integration changes the source SHA."
-    },
-    "closeout": {
-      "execution": "generic",
-      "runner": "tools/havenline/production/closure_validator.py",
-      "rule": "No closeout with missing critic records, unresolved mandatory defects, stale hashes or incomplete forward contracts."
-    },
-    "release_manifest": {
-      "execution": "release_owner_only",
-      "runner": "T70 release manifest/provenance closure",
-      "rule": "Bind accepted sources, artifact hashes, physical certifications, rollback/recovery and zero open mandatory defects."
-    }
+    "scope_dependency": {"execution":"generic","runner":"tools/havenline/production/forward_execution.py plan <TASK>","rule":"Fail before checkout/build fan-out when dependencies are not APPROVED or the task plan does not resolve."},
+    "ownership": {"execution":"generic","runner":"tools/havenline/production/workstream.py validate-candidate <TASK> ...","rule":"Foreign/protected/integration-only edits fail closed; use ChangeRequests instead."},
+    "reference_lock": {"execution":"task_adapter","runner":"task packet reference manifest + exact source hashes","rule":"Freeze authoritative reference inputs before visual implementation; C1 tasks require both reference lock and final source-bound visual evidence."},
+    "source_contract": {"execution":"task_adapter","runner":"tools/havenline/taskNN/source_contract.py or task-specific equivalent","rule":"Validate frozen task semantics and required registries before expensive testing."},
+    "focused_unit": {"execution":"task_adapter","runner":"task-owned focused Godot/Python tests","rule":"Run the smallest deterministic tests that can reject the candidate before integrated fan-out."},
+    "task_sentinel": {"execution":"task_adapter_required","runner":"tools/havenline/taskNN/sentinel.py or task-specific equivalent","rule":"Implement the profile's named high-information sentinel before broad production implementation; a task may not enter full fan-out without it."},
+    "motion_preflight": {"execution":"generic_plus_task_adapter","runner":"tools/havenline/production/motion_capture.py + task-owned capture adapter","rule":"Validate full-cycle/transition/contact initialization before long visual fan-out; preserve final-skeleton evidence rather than using screenshot identity as motion identity."},
+    "progression_sim": {"execution":"generic_validator_plus_task_record","runner":"tools/havenline/production/domain_safeguard_gate.py progression --candidate <SHA> --record <record>","rule":"Task simulation produces the source-bound record; the shared gate enforces Level-100/F2P/difficulty invariants."},
+    "economy_sim": {"execution":"generic_validator_plus_task_record","runner":"tools/havenline/production/domain_safeguard_gate.py economy --candidate <SHA> --record <record>","rule":"Task simulation produces the source-bound record; the shared gate enforces F2P/store/VIP/paywall invariants."},
+    "save_matrix": {"execution":"generic_plus_task_adapter","runner":"tools/havenline/production/save_state_matrix.py --adapter <task adapter>","rule":"Use canonical fresh/current/previous/interrupted/reload/migration/rollback cases where applicable."},
+    "device_matrix": {"execution":"generic_plus_task_adapter","runner":"tools/havenline/production/device_matrix.py --adapter <task adapter>","rule":"Exercise phone/tablet/foldable functional states before physical release certification."},
+    "security_attack": {"execution":"generic_plus_task_adapter","runner":"tools/havenline/production/security_exploit_harness.py","rule":"Use adversarial attack cases; never replace C9 with prose review."},
+    "liveops_sim": {"execution":"generic_validator_plus_task_record","runner":"tools/havenline/production/domain_safeguard_gate.py liveops --candidate <SHA> --record <record>","rule":"Task rehearsal produces the source-bound record; the shared gate enforces scheduling/collision/reward/kill-switch/F2P invariants."},
+    "impacted_regression": {"execution":"generic","runner":"tools/havenline/production/change_impact.py + tools/havenline/production/regression_runner.py","rule":"Run universal plus impacted suites; unknown production changes fall back to full mandatory coverage; V3.1 learned runtime dependencies may add but never subtract suites."},
+    "performance": {"execution":"generic_plus_task_record","runner":"tools/havenline/production/critic_harness.py performance --candidate <SHA> --record <record>","rule":"Measure after cheaper functional/specialist preflights pass; do not use this as T68/T69 physical certification."},
+    "visual_evidence": {"execution":"generic_plus_task_adapter","runner":"tools/havenline/production/evidence_capture.py + tools/havenline/production/specialist_evidence_manifest.py","rule":"Produce one hash-bound evidence bundle per SHA and reuse it across critics only when fingerprint and environment/provenance rules permit."},
+    "physical_device": {"execution":"physical_hardware_only","runner":"T68/T69 named physical-device certification procedure","rule":"No emulator, desktop render, engine counter or screenshot substitution for sustained physical 4K/60 and thermal evidence."},
+    "critic_review": {"execution":"generic_independent_runtime","runner":".github/workflows/havenline-specialist-critic.yml + deterministic C6/C9 gates","rule":"C1-C11 applicability comes from CRITIC_MATRIX; C0 is non-voting."},
+    "integration": {"execution":"integration_owner_only","runner":"workstream/integration-owner controlled integration","rule":"Build-mode tasks only; candidate builders cannot self-integrate or self-approve."},
+    "post_integration_regression": {"execution":"generic","runner":"tools/havenline/production/change_impact.py + tools/havenline/production/regression_runner.py on integrated SHA","rule":"Fresh integration evidence is required; isolated evidence cannot substitute after integration changes the source SHA."},
+    "closeout": {"execution":"generic","runner":"tools/havenline/production/closure_validator.py + tools/havenline/production/evidence_retention.py + tools/havenline/production/task_state_snapshot.py","rule":"No closeout with missing critic records, unresolved mandatory defects, stale hashes, incomplete forward contracts, missing durable approval provenance, or missing final derived task-state snapshot."},
+    "release_manifest": {"execution":"release_owner_only","runner":"T70 release manifest/provenance closure + V3.1 evidence retention and proof-invalidation check","rule":"Bind accepted sources, artifact hashes, physical certifications, rollback/recovery, durable provenance and zero open mandatory defects."}
   }
 }
