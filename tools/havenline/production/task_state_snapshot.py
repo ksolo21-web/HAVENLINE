@@ -17,7 +17,14 @@ def snapshot(task_id:str,last_gate:str='UNKNOWN',candidate:str|None=None):
     consumed=[k for k,v in contracts.get('contracts',{}).items() if task_id in v.get('consumers',[])]
     blockers=list(ws.get('known_blockers',[])) if ws else []
     v3=task_readiness(task_id) if task_readiness and task_id.startswith('T') and task_id[1:].isdigit() and int(task_id[1:])>=10 else None
-    if v3 and not v3.get('activation_ready',False):blockers+=v3.get('blockers',[])
+    if v3:
+        feasibility=v3.get('feasibility',{})
+        if not v3.get('runtime_activation_allowed',False):
+            blockers+=feasibility.get('capability_blockers',[])
+            if not feasibility.get('dependencies_approved'):blockers.append('dependencies_not_approved')
+            if not feasibility.get('canonical_packet_present'):blockers.append('canonical_packet_missing')
+        if node.get('status')=='LOCKED':blockers.append('lifecycle_status_LOCKED')
+        if not ws or not ws.get('branch') or not owned:blockers.append('ownership_not_assigned')
     next_action=ws.get('next_action') if ws else ('Generate/freeze task packet and claim ownership when dependencies/capabilities permit.' if node['status']=='LOCKED' else 'Resolve current lifecycle state.')
     return {
       'schema_version':1,'task_id':task_id,'lifecycle_status':node['status'],'integration_branch':reg['integration_branch'],'task_branch':ws.get('branch'),'base_commit':ws.get('base_commit'),'candidate_commit':candidate or ws.get('candidate_commit'),'dependencies':{d:graph['tasks'][d]['status'] for d in node.get('dependencies',[])},'owned_paths':owned,'last_verified_gate':last_gate,'blockers':sorted(set(blockers)),'v3_readiness':v3,'contracts':{'produces':produced,'consumes':consumed},'next_executable_action':next_action,'snapshot_is_derived_not_authority':True
