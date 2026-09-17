@@ -20,6 +20,11 @@ class ArchitectureV31Tests(unittest.TestCase):
         self.assertTrue(validate_telemetry()['passed']);self.assertEqual(summarize()['records'],0)
     def test_irreplaceable_evidence_requires_persistent_locator(self):
         self.assertTrue(validate_retention()['passed']);bad={'task_id':'T68','accepted_source':'a'*40,'retention_class':'irreplaceable','records':[{'kind':'physical','sha256':'b'*64,'locator':'','reproducible':False}],'regeneration_contract':'not exact'};self.assertFalse(validate_manifest(bad)['passed'])
+    def test_retention_duration_and_repo_provenance_are_enforced(self):
+        good={'task_id':'T09','accepted_source':'a'*40,'retention_class':'approval_provenance','records':[{'kind':'critic-records','sha256':'b'*64,'locator':'repo://Docs/Production/T09/CriticRaw','reproducible':True,'retention_days':3650}],'regeneration_contract':{'workflow':'t09'}}
+        self.assertTrue(validate_manifest(good)['passed'])
+        short={'task_id':'T09','accepted_source':'a'*40,'retention_class':'review_evidence','records':[{'kind':'artifact','sha256':'b'*64,'locator':'github-actions://artifact/1','reproducible':True,'retention_days':89}],'regeneration_contract':'rerun'}
+        self.assertFalse(validate_manifest(short)['passed'])
     def test_runtime_dependency_learning_is_additive_only(self):
         data={'schema_version':1,'policy':{'minimum_observations_for_enforcement':3,'minimum_distinct_sources':2,'learned_edges_are_additive_only':True,'static_mandatory_coverage_may_be_removed_automatically':False},'edges':[{'path_pattern':'HavenlineGodot/scripts/foo.gd','affected_task':'T10','suites':['test_t10'],'observation_count':4,'distinct_sources':2}]};r=learned_impact(['HavenlineGodot/scripts/foo.gd'],data);self.assertEqual(r['coverage_mode'],'ADDITIVE_ONLY');self.assertIn('test_t10',r['required_suites']);self.assertTrue(validate_runtime()['passed'])
     def test_task_snapshot_remains_derived(self):
