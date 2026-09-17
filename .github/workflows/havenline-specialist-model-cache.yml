@@ -14,8 +14,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 25
     steps:
-      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
-      - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
         id: cache
         with:
           path: ~/.cache/havenline-t01-qwen35
@@ -30,12 +30,12 @@ jobs:
           mkdir -p runtime-evidence
           python3 tools/havenline/production/prepare_specialist_runtime.py | tee runtime-evidence/preparation.json
           cp "$HOME/.cache/havenline-t01-qwen35/manifest.json" runtime-evidence/manifest.json
-      - uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
+      - uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
         if: steps.cache.outputs.cache-hit != 'true'
         with:
           path: ~/.cache/havenline-t01-qwen35
           key: havenline-t01-qwen35-9b-q5-20260908-v1
-      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
           name: havenline-specialist-runtime-metadata-${{ github.run_id }}
