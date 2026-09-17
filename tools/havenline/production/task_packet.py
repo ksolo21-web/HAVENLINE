@@ -4,6 +4,7 @@ import datetime, pathlib, sys
 from lib import DOCS, ROOT, load_json, expand_alias, sha256_file
 from forward_execution import resolve_task
 from architecture_v3 import task_readiness
+from architecture_v31 import task_readiness as task_readiness_v31
 
 RESOURCE_REGISTRY = DOCS / "RESOURCE_ACTION_REGISTRY.json"
 ACTOR_MATRIX = DOCS / "ACTOR_CAPABILITY_MATRIX.json"
@@ -115,16 +116,28 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
         text+=f"- Feasibility state: `{feas['activation_state']}`\n"
         text+=f"- Runtime activation allowed now: `{str(feas['runtime_activation_allowed']).lower()}`\n"
         text+=f"- Capability blockers: {', '.join(feas['capability_blockers']) or 'none'}\n"
-        if sched:
-            text+=f"- Scheduler class: `{sched['classification']}`; deterministic priority score: `{sched['priority_score']}` (scheduling heuristic only, never an acceptance score).\n"
+        if sched:text+=f"- Scheduler class: `{sched['classification']}`; deterministic priority score: `{sched['priority_score']}` (scheduling heuristic only, never an acceptance score).\n"
         text+=f"- Produces versioned contracts: {', '.join(x['contract_id'] for x in contracts['produces']) or 'none'}\n"
         text+=f"- Consumes versioned contracts: {', '.join(x['contract_id'] for x in contracts['consumes']) or 'none'}\n"
         text+="- Before runtime activation: resolve all required capabilities; unknown external/hardware prerequisites are not READY.\n"
         text+="- Before integration: run `synthetic_merge_forecast.py` against the current integration head and validate any affected shared contract change.\n"
         text+="- Gate proof reuse is allowed only through `gate_fingerprint.py`; exact-source-only gates remain fresh and failed results can never be reused as PASS.\n"
         text+="- C0 must query `FAILURE_INTELLIGENCE.json` before repair; historical matches are advisory and require confirmation from current evidence.\n"
-        if not feas['runtime_activation_allowed']:
-            text+="- **DO NOT start runtime implementation from this packet yet.** Preparation is allowed, but the recorded V3 activation blocker(s) must clear first.\n"
+        if not feas['runtime_activation_allowed']:text+="- **DO NOT start runtime implementation from this packet yet.** Preparation is allowed, but the recorded V3 activation blocker(s) must clear first.\n"
+
+        v31=task_readiness_v31(task_id)
+        text+="\n## Production Architecture V3.1 — machine resolved\n"
+        text+="- Standard: `Docs/Production/PRODUCTION_ARCHITECTURE_V31_STANDARD.md`\n"
+        text+=f"- V3.1 readiness: `python3 tools/havenline/production/architecture_v31.py readiness {task_id}`\n"
+        text+=f"- Canonical task-state snapshot: `python3 tools/havenline/production/task_state_snapshot.py {task_id}`\n"
+        text+="- Persistent flake history may change diagnosis/retry routing only; a mandatory flaky gate still blocks approval.\n"
+        text+="- Pipeline telemetry records queue/run/gate cost for factory optimization; it cannot change quality thresholds.\n"
+        text+="- Environment-sensitive proof reuse requires matching runner/toolchain provenance under `CI_TOOLCHAIN_LOCK.json`.\n"
+        text+="- Approval closeout must satisfy `EVIDENCE_RETENTION_POLICY.json`; artifact expiry cannot erase approval provenance.\n"
+        text+="- Runtime-observed dependencies are additive only and may add regression suites, never remove static mandatory coverage.\n"
+        text+="- Mutation canaries must pass before architecture closeout.\n"
+        text+=f"- If this task or a consumed contract is reopened, run `python3 tools/havenline/production/proof_invalidation.py task {task_id}` or the affected contract form before reusing downstream proof.\n"
+        text+=f"- V3.1 runtime activation allowed now: `{str(v31['runtime_activation_allowed']).lower()}`\n"
 
     text+="""
 
@@ -136,7 +149,7 @@ Target 10/10. No averaging and no unresolved mandatory defects.
 C1/C2 and every specialist critic marked independent-model-required must run in a separate review job/runtime. A builder prompt, persona swap, or self-review never qualifies. If the zero-cost independent runtime is unavailable, construction/testing may continue but approval remains BLOCKED.
 
 ## Evidence
-Exact-source hashes, changed-file manifest, deterministic engine views, performance records, applicable save/device matrices, raw critic inputs/outputs, deterministic supplements, known failures and final dispositions are mandatory before APPROVED. Use `specialist_evidence_manifest.py` for C3/C4/C5/C7/C8/C10/C11; C9 uses `security_exploit_harness.py`.
+Exact-source hashes, changed-file manifest, deterministic engine views, performance records, applicable save/device matrices, raw critic inputs/outputs, deterministic supplements, known failures and final dispositions are mandatory before APPROVED. Use `specialist_evidence_manifest.py` for C3/C4/C5/C7/C8/C10/C11; C9 uses `security_exploit_harness.py`. Approval provenance must also satisfy the V3.1 retention policy.
 
 ## Scope
 Use the authoritative task-specific frozen scope when present. This generated packet does not expand runtime scope.
