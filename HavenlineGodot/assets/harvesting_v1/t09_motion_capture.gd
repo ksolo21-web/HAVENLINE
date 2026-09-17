@@ -12,7 +12,7 @@ var root3d:Node3D
 var subject:Node3D
 var player:AnimationPlayer
 var camera:Camera3D
-const INITIALIZATION_SETTLE_FRAMES:=2
+const INITIALIZATION_SETTLE_FRAMES:=8
 const FIRST_USE_WARMUP_FRAMES:=8
 const TURN_ANGLES:=[-135.0,-90.0,-45.0,0.0,30.0,45.0,90.0,135.0,180.0]
 const REVIEW_CAMERA_POSITION:=Vector3(4.5,2.8,6.5)
@@ -56,9 +56,11 @@ func set_pose(anim:String,t:float):
 	player.stop();player.play(anim,0.0);player.seek(t,true);player.advance(0.0)
 
 func settle_pose(anim:String,t:float,frames:int=INITIALIZATION_SETTLE_FRAMES):
-	for _frame in range(frames):
-		set_pose(anim,t);await process_frame;await RenderingServer.frame_post_draw
+	# Start the requested sample once, then let final SkeletonModifier3D output
+	# converge without restarting the animation on every settle frame.
 	set_pose(anim,t)
+	for _frame in range(frames):
+		player.advance(0.0);await process_frame;await RenderingServer.frame_post_draw
 
 func warm_pose(anim:String,t:float,frames:int):
 	# Do not restart the player between warm-up frames. This allows skeleton
@@ -66,7 +68,6 @@ func warm_pose(anim:String,t:float,frames:int):
 	set_pose(anim,t)
 	for _frame in range(frames):
 		player.advance(0.0);await process_frame;await RenderingServer.frame_post_draw
-	set_pose(anim,t)
 
 func _append_skeleton_pose(node:Node,rows:Array):
 	if node is Skeleton3D:
@@ -110,7 +111,10 @@ func capture_cycle(anim:String,speed:float,label:String):
 	var length=maxf(a.length,.033);var fps=30.0;var count=maxi(2,ceili(length*fps))
 	set_camera(REVIEW_CAMERA_POSITION,REVIEW_CAMERA_TARGET);await settle_pose(anim,0.0)
 	for i in range(count+1):
-		var t=minf(length,float(i)/fps);set_pose(anim,t)
+		var t=minf(length,float(i)/fps)
+		# Preserve the converged t=0 pose established above. Restarting it here
+		# would discard the settle work immediately before the first capture.
+		if i>0:set_pose(anim,t)
 		await snap(anim+"/"+label,"%04d"%i,label,anim,t,speed,subject.rotation_degrees.y)
 
 func turn_name(turn:float)->String:
