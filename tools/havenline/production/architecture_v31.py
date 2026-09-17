@@ -10,6 +10,7 @@ from runtime_dependency_learning import validate as validate_runtime_dependencie
 from task_state_snapshot import snapshot,validate as validate_snapshot
 from mutation_canary import run_canaries
 from proof_invalidation import validate_policy as validate_invalidation
+from prepare_specialist_runtime import validate_runtime_lock
 
 ACTIVE_RUNTIME_STATES={'ASSIGNED','BUILDING_ISOLATED','BUILT_PENDING_DEPENDENCY','INTEGRATION_READY','INTEGRATING','UNDER_REVIEW' ,'FIX_REQUIRED'}
 
@@ -24,9 +25,9 @@ def task_readiness(task_id:str):
     if not packet_ready:blockers.append('canonical_packet_missing')
     if not lifecycle_ready:blockers.append('lifecycle_not_activated')
     if not ownership_ready:blockers.append('ownership_not_assigned')
-    return {'schema_version':1,'task_id':task_id,'v3':v3,'task_state':state,'v31_controls':{'flake_intelligence':'ENABLED','pipeline_telemetry':'ENABLED','ci_toolchain_lock':'ENFORCED','evidence_retention':'ENFORCED','runtime_dependency_learning':'ADDITIVE_ONLY','canonical_task_state':'ENABLED','mutation_canaries':'ENFORCED','transitive_proof_invalidation':'ENFORCED'},'activation_blockers':blockers,'runtime_activation_allowed':not blockers}
+    return {'schema_version':1,'task_id':task_id,'v3':v3,'task_state':state,'v31_controls':{'flake_intelligence':'ENABLED','pipeline_telemetry':'ENABLED','ci_toolchain_lock':'ENFORCED','critic_runtime_lock':'ENFORCED_CACHE_FIRST','evidence_retention':'ENFORCED','runtime_dependency_learning':'ADDITIVE_ONLY','canonical_task_state':'ENABLED','mutation_canaries':'ENFORCED','transitive_proof_invalidation':'ENFORCED'},'activation_blockers':blockers,'runtime_activation_allowed':not blockers}
 def validate():
-    components={'v3':validate_v3(),'flake':validate_flakes(),'telemetry':validate_telemetry(),'toolchain':validate_toolchain(),'retention':validate_retention(),'runtime_dependencies':validate_runtime_dependencies(),'mutation_canaries':run_canaries(),'proof_invalidation':validate_invalidation()};errors=[]
+    components={'v3':validate_v3(),'flake':validate_flakes(),'telemetry':validate_telemetry(),'toolchain':validate_toolchain(),'critic_runtime_lock':validate_runtime_lock(),'retention':validate_retention(),'runtime_dependencies':validate_runtime_dependencies(),'mutation_canaries':run_canaries(),'proof_invalidation':validate_invalidation()};errors=[]
     for name,row in components.items():
         if not row.get('passed',True):errors.append(name+': '+', '.join(row.get('errors',[])))
     snapshots=[]
