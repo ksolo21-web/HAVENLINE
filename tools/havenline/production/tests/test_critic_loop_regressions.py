@@ -135,9 +135,19 @@ class CriticLoopRegressionTests(unittest.TestCase):
         self.assertIn("'tools/havenline/**'", workflow)
         self.assertIn("'.github/workflows/havenline-godot-android.yml'", workflow)
 
-    def test_superseded_validation_runs_are_cancelled_per_branch(self):
+    def test_diagnostic_governance_finishes_running_sha(self):
+        # Governance and task-candidate validation produce root-cause evidence.
+        # A newer commit must queue instead of destroying the running SHA's
+        # diagnostic value. This is intentionally different from disposable
+        # UI/release-readiness checks that may still cancel stale runs.
+        workflow = (ROOT / ".github/workflows/havenline-production-governance.yml").read_text()
+        self.assertIn("concurrency:", workflow)
+        self.assertIn("cancel-in-progress: false", workflow)
+        self.assertIn("github.event.pull_request.head.ref || github.ref_name", workflow)
+        self.assertIn("Finish the SHA already under governance review", workflow)
+
+    def test_disposable_readiness_checks_may_cancel_stale_branch_runs(self):
         workflows = [
-            ".github/workflows/havenline-production-governance.yml",
             ".github/workflows/havenline-critic-safeguards.yml",
             ".github/workflows/havenline-device-release-gate.yml",
         ]
