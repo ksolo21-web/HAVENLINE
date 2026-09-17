@@ -11,7 +11,7 @@ from task_state_snapshot import snapshot,validate as validate_snapshot
 from mutation_canary import run_canaries
 from proof_invalidation import validate_policy as validate_invalidation
 
-ACTIVE_RUNTIME_STATES={'ASSIGNED','BUILDING_ISOLATED','BUILT_PENDING_DEPENDENCY','INTEGRATION_READY','INTEGRATING','UNDER_REVIEW','FIX_REQUIRED','BLOCKED'}
+ACTIVE_RUNTIME_STATES={'ASSIGNED','BUILDING_ISOLATED','BUILT_PENDING_DEPENDENCY','INTEGRATION_READY','INTEGRATING','UNDER_REVIEW' ,'FIX_REQUIRED'}
 
 def task_readiness(task_id:str):
     task_id=task_id.upper();v3=v3_readiness(task_id);state=snapshot(task_id)
