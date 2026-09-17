@@ -21,7 +21,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
         with: {fetch-depth: 0}
       - run: python3 -m pip install pyyaml
       - name: Prove QA work did not alter game runtime
@@ -43,7 +43,7 @@ jobs:
             d=yaml.safe_load(pathlib.Path(rel).read_text());assert isinstance(d,dict) and ('on' in d or True in d) and 'jobs' in d,rel
           print('workflow YAML parse: PASS')
           PY
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
           name: havenline-critic-deterministic-readiness-${{ github.run_id }}
@@ -54,8 +54,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 85
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/cache/restore@v4
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
         id: reviewer-cache
         with:
           path: ~/.cache/havenline-t01-qwen35
@@ -68,14 +68,14 @@ jobs:
             sudo apt-get install -y aria2
           fi
           python3 tools/havenline/production/prepare_specialist_runtime.py | tee specialist-runtime-preparation.json
-      - uses: actions/cache/save@v4
+      - uses: actions/cache/save@0057852bfaa89a56745cba8c7296529d2fc39830
         if: steps.reviewer-cache.outputs.cache-hit != 'true'
         with:
           path: ~/.cache/havenline-t01-qwen35
           key: havenline-t01-qwen35-9b-q5-20260908-v1
       - name: Start checksum-pinned local independent reviewer and require structured response
         run: python3 -u tools/havenline/production/specialist_runtime_smoke.py
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         if: always()
         with:
           name: havenline-specialist-runtime-smoke-${{ github.run_id }}
@@ -97,7 +97,7 @@ jobs:
           cat > readiness.json <<EOF
           {"candidate":"${GITHUB_SHA}","deterministic_safeguards":"PASS","independent_local_model_runtime":"PASS","self_healing_cache":"PASS","critics_C1_through_C11":"OPERATIONAL","future_runtime_tasks_started":false}
           EOF
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
         with:
           name: havenline-critic-readiness-gate-${{ github.run_id }}
           path: readiness.json
