@@ -128,6 +128,28 @@ static func profile_for_resource(resource: String) -> Dictionary:
 	var value: Variant = RESOURCE_PROFILES.get(resource, {})
 	return value.duplicate(true) if value is Dictionary else {}
 
+static func create_tool_palette_material() -> StandardMaterial3D:
+	# The authored GLBs intentionally use one vertex-colour surface so an equipped
+	# tool costs one material submission. Godot's glTF importer preserves COLOR_0,
+	# but a StandardMaterial must explicitly consume it in both shipping and review
+	# scenes; otherwise the same finished asset renders as a white silhouette.
+	var material := StandardMaterial3D.new()
+	material.resource_name = "T09_shared_vertex_palette"
+	material.albedo_color = Color.WHITE
+	material.vertex_color_use_as_albedo = true
+	material.vertex_color_is_srgb = true
+	material.metallic = 0.18
+	material.roughness = 0.42
+	return material
+
+static func apply_tool_palette(node: Node, material: StandardMaterial3D) -> void:
+	if not is_instance_valid(node) or not is_instance_valid(material):
+		return
+	for child in node.find_children("*", "MeshInstance3D", true, false):
+		var geometry := child as GeometryInstance3D
+		geometry.material_override = material
+		geometry.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+
 static func resource_for_source_id(source_id: String) -> String:
 	var lowered := source_id.to_lower()
 	for resource in RESOURCE_PROFILES:
@@ -584,20 +606,11 @@ func _instantiate_tool(tool_id: String, asset_path: String) -> Node3D:
 	node.set_meta("t09_authored_asset", asset_path)
 	node.set_meta("t09_tool_profile", tool_id)
 	if not is_instance_valid(tool_palette_material):
-		tool_palette_material = StandardMaterial3D.new()
-		tool_palette_material.resource_name = "T09_shared_vertex_palette"
-		tool_palette_material.albedo_color = Color.WHITE
-		tool_palette_material.vertex_color_use_as_albedo = true
-		tool_palette_material.vertex_color_is_srgb = true
-		tool_palette_material.metallic = 0.18
-		tool_palette_material.roughness = 0.42
+		tool_palette_material = create_tool_palette_material()
 	# The hand-sized tool is already shaded by the scene lights. Submitting its
 	# palette surface again for the large world shadow map adds measurable cost
 	# without a readable shadow at the shipping camera scale.
-	for child in node.find_children("*", "MeshInstance3D", true, false):
-		var geometry := child as GeometryInstance3D
-		geometry.material_override = tool_palette_material
-		geometry.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	apply_tool_palette(node,tool_palette_material)
 	add_child(node)
 	tool_nodes[tool_id] = node
 	return node

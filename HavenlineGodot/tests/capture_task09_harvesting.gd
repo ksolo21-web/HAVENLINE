@@ -25,6 +25,9 @@ var frame_usec: Array[float] = []
 var draw_calls: Array[int] = []
 var primitives: Array[int] = []
 var action_token := 901
+var review_stage: Node3D
+var default_source_units := 0
+var visual_review_source_units := 0
 
 func _initialize() -> void:
 	for argument in OS.get_cmdline_user_args():
@@ -60,12 +63,117 @@ func focus_review_visibility() -> void:
 	# carry, transfer, or impact pixels. The authored terrain and lighting remain.
 	var selected_visual: Node3D = game.resource_visuals[String(source.id)]
 	var visible_roots: Array[Node] = [
-		game.sun, game.camera, game.outpost_view, game.player_rig,
+		game.sun, game.camera, game.player_rig, review_stage,
 		selected_visual, game.transfer_feedback, game.harvest_presentation,
 	]
 	for child in game.world.get_children():
 		if child is Node3D and not child is WorldEnvironment and child not in visible_roots:
 			(child as Node3D).visible = false
+	# Some protected scenery systems group render nodes beneath non-Node3D
+	# managers, so direct-child hiding alone can leave a bright unrelated crown in
+	# frame. Resolve every render leaf against the explicit review allow-list.
+	for candidate in game.world.find_children("*","VisualInstance3D",true,false):
+		var visual := candidate as VisualInstance3D
+		var keep := false
+		var belongs_to_selected_source := selected_visual == visual or selected_visual.is_ancestor_of(visual)
+		for visible_root in visible_roots:
+			if is_instance_valid(visible_root) and (visible_root == visual or visible_root.is_ancestor_of(visual)):
+				keep = true
+				break
+		# Isolation must never resurrect an authoritatively depleted target.
+		visual.visible = keep and not (belongs_to_selected_source and int(source.units) <= 0)
+
+func review_material(color: Color, roughness := 0.90, metallic := 0.0) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.roughness = roughness
+	material.metallic = metallic
+	return material
+
+func source_review_material(surface_name: String) -> StandardMaterial3D:
+	# Evidence must preserve the authored source geometry, but the protected
+	# forest shader was tuned for a different exposure and destroys resource
+	# identity in close inspection. Surface-name palette overrides are local to
+	# this disclosed QA stage and never touch the shared mesh or shipping material.
+	var key := surface_name.to_lower()
+	var color := Color("546a78")
+	var metallic := 0.04
+	if key in ["trunk","bark"]: color = Color("74462d")
+	elif key in ["crown","needles","needles_light"]: color = Color("2f6b5c",0.58)
+	elif key == "lip": color = Color("b9d2d7",0.45)
+	elif key in ["stone_dark","stone"]: color = Color("4a5b68")
+	elif key == "ore":
+		color = Color("c68136")
+		metallic = 0.58
+	elif key == "coal": color = Color("202a33")
+	elif key == "snow": color = Color("c8dce2")
+	var material := review_material(color,0.82,metallic)
+	material.resource_name = "T09_review_"+key
+	if color.a < 0.99:
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+		material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
+	return material
+
+func apply_selected_source_review_palette() -> void:
+	var selected_visual: Node3D = game.resource_visuals[String(source.id)]
+	var mesh_instances: Array[MeshInstance3D] = []
+	if selected_visual is MeshInstance3D:
+		mesh_instances.append(selected_visual as MeshInstance3D)
+	for child in selected_visual.find_children("*","MeshInstance3D",true,false):
+		mesh_instances.append(child as MeshInstance3D)
+	var surface_count := 0
+	for mesh_instance in mesh_instances:
+		if mesh_instance.mesh == null:
+			continue
+		for surface_index in range(mesh_instance.mesh.get_surface_count()):
+			var source_material := mesh_instance.mesh.surface_get_material(surface_index)
+			var surface_name := String(source_material.resource_name) if source_material != null else resource_kind
+			mesh_instance.set_surface_override_material(surface_index,source_review_material(surface_name))
+			surface_count += 1
+	assert(surface_count > 0,"T09 review palette requires the selected authored source mesh")
+
+func configure_review_stage() -> void:
+	# The approved T02/T03 terrain shader is outside T09 ownership and is not a
+	# useful background for close tool/contact inspection. Keep the real shipping
+	# actor, source, simulation, T07 selection and T08 transfer/carry nodes, while
+	# placing them over a disclosed neutral snow inspection floor. This prevents
+	# unrelated lane contrast from masking T09 pixels without altering gameplay.
+	game.environment.background_color = Color("18344d")
+	game.environment.ambient_light_color = Color("d7ecff")
+	game.environment.ambient_light_energy = 0.34
+	game.environment.tonemap_mode = Environment.TONE_MAPPER_LINEAR
+	game.environment.tonemap_exposure = 0.82
+	game.environment.tonemap_white = 6.0
+	game.environment.fog_enabled = false
+	game.sun.light_color = Color("eef7ff")
+	game.sun.light_energy = 0.72
+	if mode == "asset" or is_instance_valid(review_stage):
+		return
+	apply_selected_source_review_palette()
+	review_stage = Node3D.new()
+	review_stage.name = "T09DisclosedNeutralSnowStage"
+	game.world.add_child(review_stage)
+	var actor_ground: Vector3 = game.xyz(game.sim.position)
+	var target_ground: Vector3 = game.xyz(source.position)
+	var center: Vector3 = actor_ground.lerp(target_ground,0.5)
+	center.y = minf(actor_ground.y,target_ground.y)-0.025
+	var floor := MeshInstance3D.new()
+	var plane := PlaneMesh.new()
+	plane.size = Vector2(13.0,13.0)
+	floor.mesh = plane
+	floor.material_override = review_material(Color("7797a8"))
+	floor.position = center
+	review_stage.add_child(floor)
+	var source_pad := MeshInstance3D.new()
+	var pad := CylinderMesh.new()
+	pad.top_radius = 1.28
+	pad.bottom_radius = 1.38
+	pad.height = 0.035
+	pad.radial_segments = 48
+	source_pad.mesh = pad
+	source_pad.material_override = review_material(Color("456778"),0.82)
+	source_pad.position = target_ground-Vector3.UP*0.01
+	review_stage.add_child(source_pad)
 
 func source_cutaway() -> float:
 	var selected_visual: Node3D = game.resource_visuals[String(source.id)]
@@ -102,6 +210,10 @@ func configure_review_frame(frame: int) -> void:
 	# pine can retain a stale fully-discarded state from the gameplay camera.
 	for visibility_step in 3:
 		game.update_foreground_visibility(actor_point(),0.10)
+	# The protected cutaway updater legitimately restores non-depleted scenery for
+	# gameplay. Reapply the disclosed evidence allow-list after that update so it
+	# cannot resurrect unrelated trees inside this isolated review frame.
+	focus_review_visibility()
 
 func configure_camera(frame := 0) -> void:
 	var actor := actor_point()
@@ -160,7 +272,9 @@ func canonical_action(progress: float) -> Dictionary:
 	}
 
 func capture_png(name: String) -> void:
-	if mode != "asset": focus_review_visibility()
+	if mode != "asset":
+		var frame := int(records[-1].get("frame",0)) if not records.is_empty() else 0
+		configure_review_frame(frame)
 	await process_frame
 	root.get_texture().get_image().save_png(output.path_join(name + ".png"))
 
@@ -450,6 +564,8 @@ func capture_asset_view() -> void:
 	game.world.add_child(stage)
 	var tool := packed.instantiate() as Node3D
 	stage.add_child(tool)
+	var turntable_material := Harvest.create_tool_palette_material()
+	Harvest.apply_tool_palette(tool,turntable_material)
 	await process_frame
 	var bounds := {"set":false,"value":AABB()}
 	gather_bounds(tool,bounds)
@@ -471,6 +587,19 @@ func capture_asset_view() -> void:
 	await capture_png("asset-%s-%s" % [String(profile.tool),view_id])
 
 func capture_device_view() -> void:
+	# Show the only movement control in the adaptive evidence. Harvesting itself
+	# remains automatic and introduces no button.
+	# Main's joystick is drawn by its parent Control. Put the existing scene
+	# TextureRect behind that parent draw only in this disclosed QA capture so the
+	# shipping joystick renderer is visible instead of being covered by the opaque
+	# 3D child. No control or input behavior is added by the fixture.
+	for child in game.get_children():
+		if child is TextureRect and (child as TextureRect).texture == game.scene_view.get_texture():
+			(child as TextureRect).show_behind_parent = true
+	game.joystick_id = -2
+	game.joystick_origin = Vector2(game.hud_safe_rect.position.x+game.joystick_radius+22.0,game.hud_safe_rect.end.y-game.joystick_radius-22.0)
+	game.joystick_current = game.joystick_origin+Vector2(game.joystick_radius*0.38,-game.joystick_radius*0.24)
+	game.queue_redraw()
 	var contact_frame := await advance_fixture_to_shipping_contact(true)
 	if contact_frame < 0: return
 	var committed_row: Dictionary = await sample_shipping(contact_frame,Vector2.ZERO,"fixture_commit")
@@ -500,13 +629,38 @@ func capture_device_view() -> void:
 	await capture_png("device-%s-%s-respawned" % [device_id,resource_kind])
 
 func write_report() -> void:
+	var visible_review_visuals: Array[String] = []
+	for candidate_visual in game.world.find_children("*","VisualInstance3D",true,false):
+		var visual := candidate_visual as VisualInstance3D
+		if visual.is_visible_in_tree():
+			visible_review_visuals.append(String(game.world.get_path_to(visual)))
+	var review_root_paths := {
+		"selected_source":String(game.world.get_path_to(game.resource_visuals[String(source.id)])),
+		"player_rig":String(game.world.get_path_to(game.player_rig)),
+		"transfer_feedback":String(game.world.get_path_to(game.transfer_feedback)),
+		"harvest_presentation":String(game.world.get_path_to(game.harvest_presentation)),
+		"review_stage":String(game.world.get_path_to(review_stage)) if is_instance_valid(review_stage) else "",
+	}
+	var device_control_evidence := {
+		"joystick_active":game.joystick_id != -1,
+		"joystick_origin":[game.joystick_origin.x,game.joystick_origin.y],
+		"joystick_current":[game.joystick_current.x,game.joystick_current.y],
+		"joystick_radius":game.joystick_radius,
+		"permanent_action_buttons":int(Harvest.contract().permanent_action_buttons),
+	} if mode == "device" else {}
 	var report := {
 		"task_id":"T09", "candidate":candidate, "mode":mode, "resource":resource_kind,
 		"view":view_id, "device_state":device_id, "window":[root.size.x,root.size.y],
 		"logical_size":[game.size.x,game.size.y], "internal_render":[game.scene_view.size.x,game.scene_view.size.y],
 		"render_scale":game.scene_view.scaling_3d_scale, "native_4k_render":native_4k and game.scene_view.size.x >= 3840 and game.scene_view.size.y >= 2160,
 		"physical_4k60_verified":false, "scenario_is_test_fixture":true,
+		"review_stage":"disclosed_neutral_snow_stage_with_shipping_actor_source_and_systems" if mode != "asset" else "isolated_tool_turntable",
+		"device_review_canvas":"shipping_joystick_draw_revealed_above_scene_texture" if mode == "device" else "not_applicable",
+		"device_control_evidence":device_control_evidence,
+		"default_source_units":default_source_units, "visual_review_source_units":visual_review_source_units,
 		"review_visibility_policy":"selected_actor_source_effects_on_shipping_surface",
+		"review_root_paths":review_root_paths,
+		"review_visible_visual_paths":visible_review_visuals,
 		"capture_progress_driver":"presentation_fixture" if mode == "asset" else "shipping_simulation_step",
 		"t07_selection_authority":"fixture_not_claimed" if mode == "asset" else "context_director.advance",
 		"commit_authority":"outpost_simulation.perform_action",
@@ -547,6 +701,15 @@ func run() -> void:
 		push_error("T09 capture source missing: " + resource_kind)
 		quit(3)
 		return
+	default_source_units = int(source.units)
+	# Two units are sufficient to prove a normal commit followed by authoritative
+	# depletion/respawn. Keeping the review fixture bounded prevents seventeen
+	# overlapping transfer flights and a four-metre evidence-only carry tower from
+	# hiding the actor, target and tool. Default yields remain tested unchanged.
+	if mode in ["sequence","device"]:
+		source.units = mini(2,int(source.units))
+		game.harvest_presentation.sync_source(String(source.id),int(source.units),float(source.respawn))
+	visual_review_source_units = int(source.units)
 	focus_review_visibility()
 	action_token += ["wood","stone","metal","fuel"].find(resource_kind) * 100
 	# Opening sources sit outside the protected camp fence. Start on their camp
@@ -569,6 +732,7 @@ func run() -> void:
 	game.sim.velocity = Vector2.ZERO
 	game.player_rig.position = game.xyz(game.sim.position)
 	game.player_rig.rotation.y = atan2(game.sim.facing.x,game.sim.facing.y)
+	configure_review_stage()
 	if mode == "sequence": await capture_sequence()
 	elif mode == "tool": await capture_tool_view()
 	elif mode == "asset": await capture_asset_view()

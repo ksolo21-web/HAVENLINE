@@ -231,6 +231,15 @@ jobs:
             --subject-path . --animation-player-path Character1Visual/AnimationPlayer \
             --animations t06/chop,t06/mine,t06/dismantle \
             --out task09-evidence/captures/motion-c5
+          mkdir -p task09-evidence/captures/motion-c5/videos
+          for animation in chop mine dismantle; do
+            ffmpeg -hide_banner -loglevel error -y -framerate 30 \
+              -i "task09-evidence/captures/motion-c5/t06/$animation/real-time-cycle/%04d.png" \
+              -c:v libx264 -pix_fmt yuv420p "task09-evidence/captures/motion-c5/videos/$animation-real-time.mp4"
+            ffmpeg -hide_banner -loglevel error -y -framerate 30 \
+              -i "task09-evidence/captures/motion-c5/t06/$animation/slow-review-cycle/%04d.png" \
+              -c:v libx264 -pix_fmt yuv420p "task09-evidence/captures/motion-c5/videos/$animation-slow-review.mp4"
+          done
           for resource in wood stone metal fuel; do
             out="task09-evidence/captures/sequence-$resource"
             xvfb-run -a "${godot[@]}" --resolution 1280x720 --script res://tests/capture_task09_harvesting.gd -- --render-review --out="$PWD/$out" --resource="$resource" --mode=sequence --device=phone_16_9 --candidate="$CANDIDATE"
@@ -267,6 +276,8 @@ jobs:
           assert len(sequences)==4 and {r['resource'] for r in sequences}=={'wood','stone','metal','fuel'}
           for report in sequences:
               assert report['simulation_authoritative'] is True
+              assert report['review_stage']=='disclosed_neutral_snow_stage_with_shipping_actor_source_and_systems'
+              assert report['visual_review_source_units']==2 and report['default_source_units']>=report['visual_review_source_units']
               assert report['commit_authority']=='outpost_simulation.perform_action'
               assert report['capture_progress_driver']=='shipping_simulation_step'
               assert report['t07_selection_authority']=='context_director.advance'
@@ -304,6 +315,9 @@ jobs:
               depleted=[row for row in report['samples'] if row.get('depleted')]
               respawned=[row for row in report['samples'] if row.get('respawned')]
               assert report['simulation_authoritative'] is True and commits
+              assert report['review_stage']=='disclosed_neutral_snow_stage_with_shipping_actor_source_and_systems'
+              assert report['device_review_canvas']=='shipping_joystick_draw_revealed_above_scene_texture'
+              assert report['device_control_evidence']['joystick_active'] is True and report['device_control_evidence']['permanent_action_buttons']==0
               assert any(row['harvest']['accepted_impacts']>=1 and row['transfer']['accepted_receipts']>=1 and row['carry']['logical_total']>=1 for row in samples)
               assert len(depleted)==1 and depleted[0]['source_visible'] is False
               assert len(respawned)==1 and respawned[0]['source_visible'] is True
@@ -313,11 +327,13 @@ jobs:
           motion_hashes=json.loads((root/'motion-c5/motion-hashes.json').read_text())
           assert motion['candidate_commit']==reports[0]['candidate'] and motion['task_id']=='T09'
           assert {row['animation'] for row in motion['captures']}=={'t06/chop','t06/mine','t06/dismantle'}
-          assert motion['harness']=='production_motion_v2' and motion['initialization_settle_frames']>=2 and motion['first_use_warmup_frames']>=8
+          assert motion['harness']=='production_motion_v3' and motion['shipping_tool_target_fixture'] is True and motion['initialization_settle_frames']>=2 and motion['first_use_warmup_frames']>=8
           assert motion['initialization_pose_schema']=='skeleton_global_pose_v1'
           required_motion={'real-time-cycle','slow-review-cycle','turn-neg-135','turn-neg-090','turn-neg-045','turn-000','turn-030','turn-045','turn-090','turn-135','turn-180','transition-start','transition-end','close-upper-front','close-upper-opposite','close-waist-rear','close-lower-front','close-lower-rear'}
           assert required_motion<={row['evidence_type'] for row in motion['captures']}
           motion_pngs=list((root/'motion-c5').rglob('*.png'))
+          motion_videos=list((root/'motion-c5/videos').glob('*.mp4'))
+          assert len(motion_videos)==6
           assert len(motion_pngs)>=220 and len(motion_hashes['frames'])==len(motion_pngs)
           assert all(motion_hashes['frames'][str(path.relative_to(root/'motion-c5'))]==hashlib.sha256(path.read_bytes()).hexdigest() for path in motion_pngs)
           initialization=motion_hashes['initialization_validation']
@@ -348,7 +364,7 @@ jobs:
                   assert stream.read(4)==b'IHDR' and length==13
                   width,height=struct.unpack('>II',stream.read(8))
                   assert width>0 and height>0,(path,width,height)
-          summary={'candidate':reports[0]['candidate'],'reports':len(reports),'pngs':len(pngs),'motion_c5_pngs':len(motion_pngs),'motion_c5_animations':['t06/chop','t06/mine','t06/dismantle'],'sequence_videos':len(list(root.glob('sequence-*/*.mp4'))),'sequence_frame_counts':frame_counts,'in_hand_views':len(tools),'isolated_tool_turntables':len(assets),'native_4k_internal':native[0]['internal_render'],'physical_4k60_verified':False,'passed':True}
+          summary={'candidate':reports[0]['candidate'],'reports':len(reports),'pngs':len(pngs),'motion_c5_pngs':len(motion_pngs),'motion_c5_animations':['t06/chop','t06/mine','t06/dismantle'],'motion_c5_videos':len(motion_videos),'sequence_videos':len(list(root.glob('sequence-*/*.mp4'))),'sequence_frame_counts':frame_counts,'in_hand_views':len(tools),'isolated_tool_turntables':len(assets),'native_4k_internal':native[0]['internal_render'],'physical_4k60_verified':False,'passed':True}
           Path('task09-evidence/capture-summary.json').write_text(json.dumps(summary,indent=2)); print(json.dumps(summary))
           PY
 
@@ -361,7 +377,8 @@ jobs:
           import hashlib,json,os
           from pathlib import Path
           root=Path('task09-evidence')
-          ignored={'complete-evidence-index.json','complete-evidence-index.sha256','known-failures.json'}
+          (root/'known-failures.json').write_text(json.dumps({'task_id':'T09','candidate_commit':os.environ['CANDIDATE'],'known_failures':[],'unresolved_mandatory_defects':[],'basis':'All preceding exact-source candidate gates completed successfully.'},indent=2)+'\n')
+          ignored={'complete-evidence-index.json','complete-evidence-index.sha256'}
           files={str(path.relative_to(root)):hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(root.rglob('*')) if path.is_file() and path.name not in ignored}
           assert files and all(len(value)==64 for value in files.values())
           index={'schema_version':1,'task_id':'T09','candidate_commit':os.environ['CANDIDATE'],'file_count':len(files),'files':files}
@@ -369,7 +386,6 @@ jobs:
           index_path.write_text(json.dumps(index,indent=2)+'\n')
           digest=hashlib.sha256(index_path.read_bytes()).hexdigest()
           (root/'complete-evidence-index.sha256').write_text(digest+'  complete-evidence-index.json\n')
-          (root/'known-failures.json').write_text(json.dumps({'task_id':'T09','candidate_commit':os.environ['CANDIDATE'],'known_failures':[],'unresolved_mandatory_defects':[],'basis':'All preceding exact-source candidate gates completed successfully.'},indent=2)+'\n')
           print(json.dumps({'candidate':os.environ['CANDIDATE'],'indexed_files':len(files),'index_sha256':digest,'passed':True}))
           PY
 
