@@ -98,16 +98,18 @@ jobs:
           python3 tools/havenline/production/ci_toolchain_lock.py validate > /tmp/v31-toolchain.json
           python3 tools/havenline/production/ci_toolchain_lock.py provenance --output /tmp/v31-runner-provenance.json
           python3 tools/havenline/production/evidence_retention.py validate-policy > /tmp/v31-retention.json
+          python3 tools/havenline/production/closure_validator.py Docs/Production/T09/verified-completion.json > /tmp/t09-closure.json
           python3 tools/havenline/production/runtime_dependency_learning.py validate > /tmp/v31-runtime-deps.json
           python3 tools/havenline/production/mutation_canary.py > /tmp/v31-canaries.json
           python3 tools/havenline/production/proof_invalidation.py validate > /tmp/v31-invalidation.json
           python3 tools/havenline/production/proof_invalidation.py contract persistence_schema > /tmp/v31-persistence-invalidation.json
           python3 tools/havenline/production/task_state_snapshot.py T10 --output /tmp/v31-t10-state.json > /tmp/v31-t10-state.stdout.json
-          jq -e '.passed == true and .task_count == 61 and .snapshot_count == 61' /tmp/v31-validation.json
+          jq -e '.passed == true and .task_count == 62 and .snapshot_count == 62' /tmp/v31-validation.json
           jq -e '.passed == true and .critical_workflow_count >= 8 and .action_pin_count >= 7' /tmp/v31-toolchain.json
           jq -e '.provenance_complete == true and .RUNNER_OS == "Linux"' /tmp/v31-runner-provenance.json
           jq -e '.passed == true and ([.results[] | select(.rejected == true)] | length) == (.results | length)' /tmp/v31-canaries.json
           jq -e '.passed == true' /tmp/v31-retention.json
+          jq -e '.passed == true and .approval_allowed == true' /tmp/t09-closure.json
           jq -e '.passed == true' /tmp/v31-runtime-deps.json
           jq -e '.passed == true' /tmp/v31-invalidation.json
           jq -e '.proof_reuse_blocked == true and .automatic_approval_revocation == false and (.invalidated_tasks | index("T15")) != null and (.invalidated_tasks | index("T70")) != null and (.invalidated_gates | index("save_matrix")) != null' /tmp/v31-persistence-invalidation.json
