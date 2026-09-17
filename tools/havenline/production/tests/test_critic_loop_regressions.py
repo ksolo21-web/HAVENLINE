@@ -136,15 +136,13 @@ class CriticLoopRegressionTests(unittest.TestCase):
         self.assertIn("'.github/workflows/havenline-godot-android.yml'", workflow)
 
     def test_diagnostic_governance_finishes_running_sha(self):
-        # Governance and task-candidate validation produce root-cause evidence.
-        # A newer commit must queue instead of destroying the running SHA's
-        # diagnostic value. This is intentionally different from disposable
-        # UI/release-readiness checks that may still cancel stale runs.
+        # Assert the executable concurrency contract, not comment wording. A
+        # prose/comment edit must never turn a healthy diagnostic workflow red.
         workflow = (ROOT / ".github/workflows/havenline-production-governance.yml").read_text()
         self.assertIn("concurrency:", workflow)
+        self.assertIn("group: havenline-production-governance-${{ github.event.pull_request.head.ref || github.ref_name }}", workflow)
         self.assertIn("cancel-in-progress: false", workflow)
-        self.assertIn("github.event.pull_request.head.ref || github.ref_name", workflow)
-        self.assertIn("Finish the SHA already under governance review", workflow)
+        self.assertNotIn("cancel-in-progress: true", workflow)
 
     def test_disposable_readiness_checks_may_cancel_stale_branch_runs(self):
         workflows = [
