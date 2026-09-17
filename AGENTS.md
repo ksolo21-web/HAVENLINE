@@ -1,4 +1,4 @@
-# HAVENLINE Agent Instructions — V2 Controlled Parallel Production
+# HAVENLINE Agent Instructions — V3 Controlled Parallel Production
 
 ## Status/continuity fast path — apply before the full production bootstrap
 
@@ -28,17 +28,24 @@ Read in this order before any Havenline production work:
 5. `Docs/Production/FORWARD_EXECUTION_STANDARD.md`
 6. `Docs/Production/FORWARD_EXECUTION_PROFILES.json`
 7. `Docs/Production/FORWARD_GATE_RUNNERS.json`
-8. `Docs/Production/task-gates.json`
-9. `Docs/Production/GAME_MASTER_ACCOUNT_STANDARD.md`
-10. `Docs/Production/GAME_MASTER_POLICY.json`
-11. `Docs/Production/WORKSTREAM_REGISTRY.json`
-12. `Docs/Production/DEPENDENCY_GRAPH.json`
-13. `Docs/Production/PATH_OWNERSHIP.json`
-14. `Docs/Production/CRITIC_MATRIX.json`
-15. `Docs/Production/PERFORMANCE_BUDGETS.json`
-16. the active task packet/frozen scope
-17. `Docs/AI/HavenlineProjectContext.md`
-18. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
+8. `Docs/Production/PRODUCTION_ARCHITECTURE_V3.md`
+9. `Docs/Production/TASK_CAPABILITY_MATRIX.json`
+10. `Docs/Production/CAPABILITY_STATUS.json`
+11. `Docs/Production/PRODUCTION_SCHEDULER_POLICY.json`
+12. `Docs/Production/GATE_FINGERPRINT_POLICY.json`
+13. `Docs/Production/CONTRACT_REGISTRY.json`
+14. `Docs/Production/FAILURE_INTELLIGENCE.json`
+15. `Docs/Production/task-gates.json`
+16. `Docs/Production/GAME_MASTER_ACCOUNT_STANDARD.md`
+17. `Docs/Production/GAME_MASTER_POLICY.json`
+18. `Docs/Production/WORKSTREAM_REGISTRY.json`
+19. `Docs/Production/DEPENDENCY_GRAPH.json`
+20. `Docs/Production/PATH_OWNERSHIP.json`
+21. `Docs/Production/CRITIC_MATRIX.json`
+22. `Docs/Production/PERFORMANCE_BUDGETS.json`
+23. the active task packet/frozen scope
+24. `Docs/AI/HavenlineProjectContext.md`
+25. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
 
 Inspect current source/evidence for newer work. `Docs/AI/UnityProjectContext.md` is historical.
 
@@ -101,14 +108,48 @@ desired number, invented scores, or unresolved mandatory defects. Missing,
 invalid, truncated, low-confidence or incomplete required evidence blocks
 approval.
 
+## Production Architecture V3 rule
+
+For T10+ runtime activation, do not infer readiness from dependency status
+alone. Run:
+
+`python3 tools/havenline/production/architecture_v3.py readiness Txx`
+
+Runtime implementation may begin only when the authoritative dependency state,
+canonical packet/scope, ownership claim, and V3 capability feasibility all
+permit it. External/hardware prerequisites marked `UNVERIFIED`, `UNAVAILABLE`,
+`DEFERRED` or `MISSING_LOCAL` are not READY.
+
+Use `critical_path_scheduler.py plan` to choose useful safe preparation and
+ready work. The scheduler is advisory; it cannot grant ownership, unlock a task,
+integrate a candidate or approve production.
+
+Use `gate_fingerprint.py` for proof-reuse decisions. A matching fingerprint may
+avoid a redundant deterministic rerun only when the registered reuse class
+allows it. Heavy evidence marked `rebind_with_provenance` requires a bridge
+record. Physical certification, critic review, integration, post-integration
+regression, closeout and release remain exact-source/fresh. A prior FAIL can
+never become a PASS through reuse.
+
+Before integrating an isolated candidate, run a non-mutating
+`synthetic_merge_forecast.py` against the current integration head and validate
+any affected contract in `CONTRACT_REGISTRY.json`. A clean forecast does not
+replace integration-owner review or fresh post-integration regression.
+
+C0 consults `FAILURE_INTELLIGENCE.json` before repair. Historical matches are
+advisory only: current evidence must independently confirm or reject the prior
+root cause. Never auto-repair merely because a failure resembles an older one.
+
 ## Controlled parallel-production rule
 
 Production flow is:
 
-DEPENDENCY GRAPH -> TASK PACKET -> CLAIM DISJOINT PATHS -> BUILD ISOLATED ->
-TEST -> PACKAGE CANDIDATE -> INTEGRATION OWNER REVIEW -> RECONCILE STALE BASE ->
-INTEGRATE -> IMPACT REGRESSION -> FRESH INTEGRATION EVIDENCE -> APPLICABLE
-CRITICS -> FIX/RETEST -> APPROVE -> UNLOCK DEPENDENTS.
+DEPENDENCY GRAPH -> V3 SCHEDULER/PREACTIVATION FEASIBILITY -> TASK PACKET ->
+CLAIM DISJOINT PATHS -> BUILD ISOLATED -> CHEAP SENTINELS/SPECIALIST PREFLIGHTS ->
+TEST -> PACKAGE CANDIDATE -> SYNTHETIC MERGE + CONTRACT FORECAST -> INTEGRATION
+OWNER REVIEW -> RECONCILE STALE BASE -> INTEGRATE -> IMPACT REGRESSION -> FRESH
+INTEGRATION EVIDENCE -> APPLICABLE CRITICS -> FIX/RETEST -> APPROVE -> UNLOCK
+DEPENDENTS.
 
 Only the integration owner may integrate production candidates onto the
 integration branch. A builder may reach `INTEGRATION_READY` but may never
@@ -285,6 +326,12 @@ Every critic-driven repair must satisfy
 `Docs/Production/ANTI_LOOP_ROOT_CAUSE_STANDARD.md`. Production defects require
 causal production changes and unchanged matched-camera proof before another
 critic run. Evidence-only changes cannot resolve them.
+
+Before a repair, query `Docs/Production/FAILURE_INTELLIGENCE.json` through
+`failure_intelligence.py` and give the matches to C0. A historical match is
+never a diagnosis by itself; current evidence must confirm it. Record newly
+verified reusable failure knowledge after closure so later tasks do not repeat
+the same investigation.
 
 Every retrieval/status investigation must satisfy
 `Docs/Production/AGENT_EXECUTION_LOOP_GUARD.md`. Three consecutive retrievals
