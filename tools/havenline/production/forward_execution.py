@@ -11,6 +11,7 @@ DOCS = ROOT / "Docs" / "Production"
 PROFILE_PATH = DOCS / "FORWARD_EXECUTION_PROFILES.json"
 GRAPH_PATH = DOCS / "DEPENDENCY_GRAPH.json"
 CRITIC_PATH = DOCS / "CRITIC_MATRIX.json"
+RUNNER_PATH = DOCS / "FORWARD_GATE_RUNNERS.json"
 VALID_MODES = {"build", "validation_only", "certification_only", "release_only"}
 EXPENSIVE_GATES = {"performance", "visual_evidence", "physical_device", "critic_review"}
 
@@ -19,8 +20,8 @@ def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text())
 
 
-def authorities() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any]]:
-    return load_json(PROFILE_PATH), load_json(GRAPH_PATH), load_json(CRITIC_PATH)
+def authorities() -> tuple[dict[str, Any], dict[str, Any], dict[str, Any], dict[str, Any]]:
+    return load_json(PROFILE_PATH), load_json(GRAPH_PATH), load_json(CRITIC_PATH), load_json(RUNNER_PATH)
 
 
 def _critic_gates(critics: list[str], profile: dict[str, Any], mode: str) -> set[str]:
@@ -39,8 +40,8 @@ def _critic_gates(critics: list[str], profile: dict[str, Any], mode: str) -> set
             elif critic == "C11":
                 required.add("physical_device" if mode == "certification_only" else "device_matrix")
             elif critic == "C1":
-                # Reference fidelity is cheapest to protect by locking the
-                # reference before building, then proving final pixels later.
+                # Reference fidelity is protected at both ends: lock the
+                # authority before building and prove source-bound pixels later.
                 required.update({"reference_lock", "visual_evidence"})
             else:
                 required.add(any_of[0])
@@ -48,7 +49,7 @@ def _critic_gates(critics: list[str], profile: dict[str, Any], mode: str) -> set
 
 
 def resolve_task(task_id: str) -> dict[str, Any]:
-    profile, graph, matrix = authorities()
+    profile, graph, matrix, runner_registry = authorities()
     task_id = task_id.upper()
     if task_id not in profile["tasks"]:
         raise ValueError(f"no forward execution profile for {task_id}")
@@ -81,12 +82,23 @@ def resolve_task(task_id: str) -> dict[str, Any]:
     unknown = sorted(gates - set(order))
     if unknown:
         raise ValueError(f"{task_id} uses unknown gates: {unknown}")
+    missing_runners = sorted(gates - set(runner_registry.get("gates", {})))
+    if missing_runners:
+        raise ValueError(f"{task_id} gates lack execution contracts: {missing_runners}")
     ordered = sorted(gates, key=order.__getitem__)
     dependencies = list(graph_task.get("dependencies", []))
     dependency_status = {dep: graph["tasks"][dep]["status"] for dep in dependencies}
     packet_dir = DOCS / task_id
     packet_present = packet_dir.is_dir() and (packet_dir / "TASK_PACKET.md").is_file()
     dependencies_approved = all(status == "APPROVED" for status in dependency_status.values())
+    gate_execution = {
+        gate: {
+            "execution": runner_registry["gates"][gate]["execution"],
+            "runner": runner_registry["gates"][gate]["runner"],
+            "rule": runner_registry["gates"][gate]["rule"],
+        }
+        for gate in ordered
+    }
     return {
         "task_id": task_id,
         "task_name": graph_task["name"],
@@ -99,6 +111,7 @@ def resolve_task(task_id: str) -> dict[str, Any]:
         "critics": list(critics),
         "early_sentinel": row["sentinel"],
         "ordered_gates": ordered,
+        "gate_execution": gate_execution,
         "canonical_packet_present": packet_present,
         "activation_ready": dependencies_approved and packet_present,
         "failure_disposition": (
@@ -109,7 +122,7 @@ def resolve_task(task_id: str) -> dict[str, Any]:
 
 
 def validate_all() -> dict[str, Any]:
-    profile, graph, matrix = authorities()
+    profile, graph, matrix, runner_registry = authorities()
     errors: list[str] = []
     expected = {f"T{i:02d}" for i in range(10, 71)}
     actual = set(profile.get("tasks", {}))
@@ -134,6 +147,24 @@ def validate_all() -> dict[str, Any]:
         errors.append("same failure fingerprint must block after one repeated occurrence")
     if global_rules.get("infra_retry_without_code_change_max") != 1:
         errors.append("infrastructure retry budget must be exactly one no-code retry")
+
+    gate_order = list(profile.get("gate_order", []))
+    gate_contracts = runner_registry.get("gates", {})
+    missing_gate_contracts = sorted(set(gate_order) - set(gate_contracts))
+    extra_gate_contracts = sorted(set(gate_contracts) - set(gate_order))
+    if missing_gate_contracts:
+        errors.append(f"forward gates without runner contracts: {missing_gate_contracts}")
+    if extra_gate_contracts:
+        errors.append(f"runner contracts reference unknown forward gates: {extra_gate_contracts}")
+    for gate in gate_order:
+        row = gate_contracts.get(gate, {})
+        for field in ("execution", "runner", "rule"):
+            if not str(row.get(field, "")).strip():
+                errors.append(f"gate {gate} missing runner-contract field {field}")
+    if gate_contracts.get("task_sentinel", {}).get("execution") != "task_adapter_required":
+        errors.append("task_sentinel must require a task-owned adapter before broad build")
+    if gate_contracts.get("physical_device", {}).get("execution") != "physical_hardware_only":
+        errors.append("physical_device gate must remain physical_hardware_only")
 
     mode_counts = {mode: 0 for mode in VALID_MODES}
     archetype_counts: dict[str, int] = {}
@@ -169,6 +200,8 @@ def validate_all() -> dict[str, Any]:
             continue
         gates = plan["ordered_gates"]
         gate_set = set(gates)
+        if set(plan["gate_execution"]) != gate_set:
+            errors.append(f"{task_id} gate execution mapping incomplete")
         # Critic-specific proof gates are mandatory and cannot be silently
         # omitted by a task packet or builder workflow.
         if "C1" in matrix_critics and not {"reference_lock", "visual_evidence"} <= gate_set:
@@ -221,6 +254,8 @@ def validate_all() -> dict[str, Any]:
         "passed": not errors,
         "task_count": len(actual),
         "expected_task_count": 61,
+        "gate_runner_contract_count": len(gate_contracts),
+        "expected_gate_runner_contract_count": len(gate_order),
         "archetype_counts": dict(sorted(archetype_counts.items())),
         "mode_counts": mode_counts,
         "errors": errors,
