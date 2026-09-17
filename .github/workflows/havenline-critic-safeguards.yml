@@ -104,4 +104,5 @@ jobs:
           name: havenline-critic-readiness-gate-${{ github.run_id }}
           path: readiness.json
           retention-days: 30
+# Node24-native exact action pins are enforced by Docs/Production/CI_TOOLCHAIN_LOCK.json.
 # This readiness gate proves tooling/runtime availability only; it never grants a gameplay task critic score or task approval.
