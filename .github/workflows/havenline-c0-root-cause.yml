@@ -72,6 +72,7 @@ jobs:
           mkdir -p c0-input c0-output
           gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${FAILED_RUN_ID}" > c0-input/run.json
           gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${FAILED_RUN_ID}/jobs?per_page=100" > c0-input/jobs.json
+          gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${FAILED_RUN_ID}/artifacts?per_page=100" > c0-input/artifacts.json
           gh run view "$FAILED_RUN_ID" --log-failed > c0-input/failed.log 2>&1 || gh run view "$FAILED_RUN_ID" --log > c0-input/failed.log 2>&1 || true
           gh run download "$FAILED_RUN_ID" -D c0-input/artifacts >/dev/null 2>&1 || true
           python3 - <<'PY'
@@ -113,6 +114,23 @@ jobs:
           }
           (root/'c0-input/failure-packet.json').write_text(json.dumps(packet,indent=2)+'\n')
           PY
+
+      - name: Record V3.1 factory observation when candidate supports it
+        run: |
+          set -euo pipefail
+          if [ -f tools/havenline/production/factory_observer.py ]; then
+            python3 tools/havenline/production/factory_observer.py \
+              --run c0-input/run.json \
+              --jobs c0-input/jobs.json \
+              --artifacts c0-input/artifacts.json \
+              --task "$TASK_ID" \
+              --artifact-root c0-input/artifacts \
+              --c0-cycles 1 \
+              --output-dir c0-output/factory-observation
+          else
+            mkdir -p c0-output/factory-observation
+            printf '%s\n' '{"schema_version":1,"availability":"candidate_predates_v3_1","bundle_is_observation_not_authority":true,"quality_thresholds_unchanged":true}' > c0-output/factory-observation/factory-observation.json
+          fi
 
       - name: Attach V3 historical failure intelligence when candidate supports it
         run: |
@@ -166,6 +184,7 @@ jobs:
           path: |
             c0-input/failure-packet.json
             c0-input/failure-intelligence.json
+            c0-input/artifacts.json
             c0-output/
           retention-days: 30
           if-no-files-found: error
