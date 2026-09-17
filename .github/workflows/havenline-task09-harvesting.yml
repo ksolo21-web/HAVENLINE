@@ -380,3 +380,16 @@ jobs:
           path: task09-evidence
           if-no-files-found: error
           retention-days: 14
+
+  c0-diagnose:
+    name: C0 diagnosis after terminal T09 failure
+    needs: integrated-candidate
+    if: ${{ always() && needs.integrated-candidate.result != 'success' }}
+    uses: ./.github/workflows/havenline-c0-root-cause.yml
+    with:
+      task_id: T09
+      failed_run_id: ${{ github.run_id }}
+      failed_candidate: ${{ github.sha }}
+      task_branch: havenline/T09-harvesting
+
+# C0 is diagnostic-only and non-voting. Successful T09 validation proceeds to the normal C2/C3/C4/C5/C6 review path.
