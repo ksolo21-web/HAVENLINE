@@ -171,6 +171,16 @@ def main() -> None:
     if motion_call<0 or fanout<0 or motion_call>fanout:
         errors.append("C5 motion preflight must run before the long T09 visual fan-out")
     if not all(token in workflow_source for token in [
+        "initialization_pose_schema", "skeleton_global_pose_v1",
+        "final_skeleton_pose_transform_v1", "start_limits", "first_step_limits",
+        "start_max_translation_m", "start_max_rotation_deg",
+        "max_translation_m", "max_rotation_deg",
+    ]) or any(token in workflow_source for token in [
+        "start_max_normalized_rmse", "start_equivalence_max_rmse",
+        "first_step_normalized_rmse", "first_step_max_rmse",
+    ]):
+        errors.append("T09 workflow C5 summary is not bound to the final-skeleton pose metric schema")
+    if not all(token in workflow_source for token in [
         "tools/havenline/task09/motion_capture.py",
         "t09_motion_fixture.tscn",
         "t06/chop,t06/mine,t06/dismantle",

@@ -313,6 +313,7 @@ jobs:
           assert motion['candidate_commit']==reports[0]['candidate'] and motion['task_id']=='T09'
           assert {row['animation'] for row in motion['captures']}=={'t06/chop','t06/mine','t06/dismantle'}
           assert motion['harness']=='production_motion_v2' and motion['initialization_settle_frames']>=2 and motion['first_use_warmup_frames']>=8
+          assert motion['initialization_pose_schema']=='skeleton_global_pose_v1'
           required_motion={'real-time-cycle','slow-review-cycle','turn-neg-135','turn-neg-090','turn-neg-045','turn-000','turn-030','turn-045','turn-090','turn-135','turn-180','transition-start','transition-end','close-upper-front','close-upper-opposite','close-waist-rear','close-lower-front','close-lower-rear'}
           assert required_motion<={row['evidence_type'] for row in motion['captures']}
           motion_pngs=list((root/'motion-c5').rglob('*.png'))
@@ -320,8 +321,17 @@ jobs:
           assert all(motion_hashes['frames'][str(path.relative_to(root/'motion-c5'))]==hashlib.sha256(path.read_bytes()).hexdigest() for path in motion_pngs)
           initialization=motion_hashes['initialization_validation']
           assert initialization['passed'] is True
+          assert initialization['method']=='final_skeleton_pose_transform_v1'
           assert set(initialization['animations'])=={'t06/chop','t06/mine','t06/dismantle'}
-          assert all(row['start_max_normalized_rmse']<=initialization['start_equivalence_max_rmse'] and row['first_step_normalized_rmse']<=initialization['first_step_max_rmse'] for row in initialization['animations'].values())
+          start_limits=initialization['start_limits']
+          first_step_limits=initialization['first_step_limits']
+          assert all(
+              row['start_max_translation_m']<=start_limits['max_translation_m']
+              and row['start_max_rotation_deg']<=start_limits['max_rotation_deg']
+              and row['first_step']['max_translation_m']<=first_step_limits['max_translation_m']
+              and row['first_step']['max_rotation_deg']<=first_step_limits['max_rotation_deg']
+              for row in initialization['animations'].values()
+          )
           pngs=list(root.glob('*/*.png'))
           sequence_frames=list(root.glob('sequence-*/frames/frame-*.jpg'))
           frame_counts={resource:len(list((root/('sequence-'+resource)/'frames').glob('frame-*.jpg'))) for resource in ('wood','stone','metal','fuel')}
