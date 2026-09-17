@@ -55,12 +55,14 @@ jobs:
     timeout-minutes: 85
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+      - name: Validate repository-pinned reviewer runtime lock
+        run: python3 tools/havenline/production/prepare_specialist_runtime.py --validate-lock
       - uses: actions/cache/restore@0057852bfaa89a56745cba8c7296529d2fc39830
         id: reviewer-cache
         with:
           path: ~/.cache/havenline-t01-qwen35
           key: havenline-t01-qwen35-9b-q5-20260908-v1
-      - name: Self-heal exact reviewer runtime if cache is unavailable on this branch
+      - name: Verify cached reviewer runtime or self-heal from pinned bytes
         run: |
           set -euo pipefail
           if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
