@@ -13,6 +13,7 @@ var subject:Node3D
 var player:AnimationPlayer
 var camera:Camera3D
 const INITIALIZATION_SETTLE_FRAMES:=2
+const FIRST_USE_WARMUP_FRAMES:=8
 const TURN_ANGLES:=[-135.0,-90.0,-45.0,0.0,30.0,45.0,90.0,135.0,180.0]
 const REVIEW_CAMERA_POSITION:=Vector3(4.5,2.8,6.5)
 const REVIEW_CAMERA_TARGET:=Vector3(0,1,0)
@@ -54,9 +55,17 @@ func set_camera(position:Vector3,target:Vector3):
 func set_pose(anim:String,t:float):
 	player.stop();player.play(anim,0.0);player.seek(t,true);player.advance(0.0)
 
-func settle_pose(anim:String,t:float):
-	for _frame in range(INITIALIZATION_SETTLE_FRAMES):
+func settle_pose(anim:String,t:float,frames:int=INITIALIZATION_SETTLE_FRAMES):
+	for _frame in range(frames):
 		set_pose(anim,t);await process_frame;await RenderingServer.frame_post_draw
+	set_pose(anim,t)
+
+func warm_pose(anim:String,t:float,frames:int):
+	# Do not restart the player between warm-up frames. This allows skeleton
+	# modifiers installed by the shipping Character 1 fixture to converge.
+	set_pose(anim,t)
+	for _frame in range(frames):
+		player.advance(0.0);await process_frame;await RenderingServer.frame_post_draw
 	set_pose(anim,t)
 
 func snap(folder:String,name:String,evidence_type:String,animation:String,t:float,speed:float,turn:float):
@@ -95,6 +104,9 @@ func run():
 	DirAccess.make_dir_recursive_absolute(output);setup_scene()
 	for anim in animations:
 		assert(player.has_animation(anim),"missing animation "+anim)
+		# The first animation evaluated after scene construction can require more
+		# than two rendered frames for SkeletonModifier3D state to converge.
+		await warm_pose(anim,0.0,FIRST_USE_WARMUP_FRAMES)
 		await capture_cycle(anim,1.0,"real-time-cycle");await capture_cycle(anim,.25,"slow-review-cycle")
 		var a=player.get_animation(anim);var mid=a.length*.5
 		for turn in TURN_ANGLES:
@@ -106,5 +118,5 @@ func run():
 		await settle_pose(anim,a.length);await snap(anim+"/transitions","end","transition-end",anim,a.length,1,0)
 		await capture_close_contacts(anim,mid)
 	var f=FileAccess.open(output.path_join("motion.json"),FileAccess.WRITE)
-	f.store_string(JSON.stringify({"harness":"production_motion_v2","candidate_commit":candidate,"task_id":task_id,"scene":scene_path,"subject_path":subject_path,"animation_player_path":player_path,"initialization_settle_frames":INITIALIZATION_SETTLE_FRAMES,"turn_angles_degrees":TURN_ANGLES,"captures":captures,"body_checks_for_critic":["feet","toes","knees","hips","hands","cuffs","belt/pouches","inner legs","boots","gear","ground contact","clipping"]},"\t"));f.close()
+	f.store_string(JSON.stringify({"harness":"production_motion_v2","candidate_commit":candidate,"task_id":task_id,"scene":scene_path,"subject_path":subject_path,"animation_player_path":player_path,"initialization_settle_frames":INITIALIZATION_SETTLE_FRAMES,"first_use_warmup_frames":FIRST_USE_WARMUP_FRAMES,"turn_angles_degrees":TURN_ANGLES,"captures":captures,"body_checks_for_critic":["feet","toes","knees","hips","hands","cuffs","belt/pouches","inner legs","boots","gear","ground contact","clipping"]},"\t"));f.close()
 	quit()
