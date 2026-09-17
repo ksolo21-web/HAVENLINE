@@ -1,11 +1,12 @@
 from __future__ import annotations
-import pathlib,sys,unittest
+import copy,pathlib,sys,unittest
 HERE=pathlib.Path(__file__).resolve();PROD=HERE.parents[1];sys.path.insert(0,str(PROD))
-from architecture_v31 import validate as validate_v31
+from architecture_v31 import validate as validate_v31,task_readiness as v31_readiness,ACTIVE_RUNTIME_STATES
 from flake_intelligence import classify_records
 from pipeline_telemetry import summarize,validate as validate_telemetry
 from ci_toolchain_lock import validate as validate_toolchain,validate_workflow_action_pins,load as load_toolchain
 from evidence_retention import validate_manifest,validate_policy as validate_retention
+from lib import DOCS,load_json
 from runtime_dependency_learning import learned_impact,validate as validate_runtime
 from task_state_snapshot import snapshot,validate as validate_snapshot
 from mutation_canary import run_canaries
@@ -21,10 +22,30 @@ class ArchitectureV31Tests(unittest.TestCase):
     def test_irreplaceable_evidence_requires_persistent_locator(self):
         self.assertTrue(validate_retention()['passed']);bad={'task_id':'T68','accepted_source':'a'*40,'retention_class':'irreplaceable','records':[{'kind':'physical','sha256':'b'*64,'locator':'','reproducible':False}],'regeneration_contract':'not exact'};self.assertFalse(validate_manifest(bad)['passed'])
     def test_retention_duration_and_repo_provenance_are_enforced(self):
-        good={'task_id':'T09','accepted_source':'a'*40,'retention_class':'approval_provenance','records':[{'kind':'critic-records','sha256':'b'*64,'locator':'repo://Docs/Production/T09/CriticRaw','reproducible':True,'retention_days':3650}],'regeneration_contract':{'workflow':'t09'}}
+        good={'task_id':'T09','accepted_source':'a'*40,'retention_class':'approval_provenance','records':[{'kind':'critic-records','sha256':'b'*64,'locator':'repo://Docs/Production/T09/CriticRaw','reproducible':True,'retention_days':3650}],'regeneration_contract':{'exact_source':'a'*40,'workflow':'t09','source_run_id':1,'source_artifact_id':2,'complete_evidence_index_sha256':'c'*64}}
         self.assertTrue(validate_manifest(good)['passed'])
         short={'task_id':'T09','accepted_source':'a'*40,'retention_class':'review_evidence','records':[{'kind':'artifact','sha256':'b'*64,'locator':'github-actions://artifact/1','reproducible':True,'retention_days':89}],'regeneration_contract':'rerun'}
         self.assertFalse(validate_manifest(short)['passed'])
+    def test_t09_approval_manifest_hashes_and_required_set_are_fail_closed(self):
+        path=DOCS/'Evidence/T09/APPROVAL_EVIDENCE_MANIFEST.json';manifest=load_json(path)
+        self.assertTrue(validate_manifest(manifest,path=path)['passed'])
+        cases=[]
+        wrong_hash=copy.deepcopy(manifest);wrong_hash['records'][0]['sha256']='0'*64;cases.append(wrong_hash)
+        empty_hash=copy.deepcopy(manifest);empty_hash['records'][0]['sha256']='';cases.append(empty_hash)
+        duplicate=copy.deepcopy(manifest);duplicate['records'].append(copy.deepcopy(duplicate['records'][0]));cases.append(duplicate)
+        missing=copy.deepcopy(manifest);missing['records'].pop();cases.append(missing)
+        escape=copy.deepcopy(manifest);escape['records'][0]['locator']='repo://../../etc/passwd';cases.append(escape)
+        wrong_source=copy.deepcopy(manifest);wrong_source['regeneration_contract']['exact_source']='f'*40;cases.append(wrong_source)
+        wrong_index=copy.deepcopy(manifest);wrong_index['regeneration_contract']['complete_evidence_index_sha256']='f'*64;cases.append(wrong_index)
+        for case in cases:self.assertFalse(validate_manifest(case,path=path)['passed'])
+    def test_v31_readiness_requires_lifecycle_and_ownership(self):
+        r=v31_readiness('T10')
+        self.assertEqual(r['v3']['feasibility']['activation_state'],'READY_NOW')
+        self.assertEqual(r['task_state']['lifecycle_status'],'LOCKED')
+        self.assertIn('lifecycle_status_LOCKED',r['task_state']['blockers'])
+        self.assertIn('ownership_not_assigned',r['task_state']['blockers'])
+        self.assertFalse(r['runtime_activation_allowed'])
+        self.assertNotIn('BLOCKED',ACTIVE_RUNTIME_STATES)
     def test_runtime_dependency_learning_is_additive_only(self):
         data={'schema_version':1,'policy':{'minimum_observations_for_enforcement':3,'minimum_distinct_sources':2,'learned_edges_are_additive_only':True,'static_mandatory_coverage_may_be_removed_automatically':False},'edges':[{'path_pattern':'HavenlineGodot/scripts/foo.gd','affected_task':'T10','suites':['test_t10'],'observation_count':4,'distinct_sources':2}]};r=learned_impact(['HavenlineGodot/scripts/foo.gd'],data);self.assertEqual(r['coverage_mode'],'ADDITIVE_ONLY');self.assertIn('test_t10',r['required_suites']);self.assertTrue(validate_runtime()['passed'])
     def test_task_snapshot_remains_derived(self):
