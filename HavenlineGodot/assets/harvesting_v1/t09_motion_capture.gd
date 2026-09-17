@@ -68,12 +68,42 @@ func warm_pose(anim:String,t:float,frames:int):
 		player.advance(0.0);await process_frame;await RenderingServer.frame_post_draw
 	set_pose(anim,t)
 
+func _append_skeleton_pose(node:Node,rows:Array):
+	if node is Skeleton3D:
+		var skeleton:=node as Skeleton3D
+		var skeleton_path:=str(subject.get_path_to(skeleton))
+		for bone_index in range(skeleton.get_bone_count()):
+			var pose:=skeleton.get_bone_global_pose(bone_index)
+			var rotation:=pose.basis.get_rotation_quaternion().normalized()
+			rows.append({
+				"skeleton":skeleton_path,
+				"bone_index":bone_index,
+				"bone":str(skeleton.get_bone_name(bone_index)),
+				"origin":[pose.origin.x,pose.origin.y,pose.origin.z],
+				"rotation":[rotation.x,rotation.y,rotation.z,rotation.w],
+			})
+	for child in node.get_children():
+		_append_skeleton_pose(child,rows)
+
+func pose_signature()->Array:
+	# Deterministic initialization checks operate on final skeleton transforms,
+	# not whole rendered PNG bytes. Camera, AA and lighting are evidence concerns,
+	# not animation-pose identity.
+	var rows:Array=[]
+	_append_skeleton_pose(subject,rows)
+	assert(not rows.is_empty(),"C5 pose signature requires a Skeleton3D")
+	return rows
+
 func snap(folder:String,name:String,evidence_type:String,animation:String,t:float,speed:float,turn:float):
 	var dir=output.path_join(folder);DirAccess.make_dir_recursive_absolute(dir)
 	await process_frame;await RenderingServer.frame_post_draw
 	var img=get_root().get_texture().get_image()
 	var path=dir.path_join(name+".png");img.save_png(path)
-	captures.append({"file":folder+"/"+name+".png","evidence_type":evidence_type,"animation":animation,"time":t,"speed":speed,"turn_degrees":turn,"camera_position":str(camera.position),"resolution":[img.get_width(),img.get_height()]})
+	var row={"file":folder+"/"+name+".png","evidence_type":evidence_type,"animation":animation,"time":t,"speed":speed,"turn_degrees":turn,"camera_position":str(camera.position),"resolution":[img.get_width(),img.get_height()]}
+	var initialization_probe=(evidence_type in ["real-time-cycle","slow-review-cycle"] and name in ["0000","0001"]) or evidence_type=="transition-start"
+	if initialization_probe:
+		row["pose_signature"]=pose_signature()
+	captures.append(row)
 
 func capture_cycle(anim:String,speed:float,label:String):
 	var a=player.get_animation(anim);assert(a)
@@ -118,5 +148,5 @@ func run():
 		await settle_pose(anim,a.length);await snap(anim+"/transitions","end","transition-end",anim,a.length,1,0)
 		await capture_close_contacts(anim,mid)
 	var f=FileAccess.open(output.path_join("motion.json"),FileAccess.WRITE)
-	f.store_string(JSON.stringify({"harness":"production_motion_v2","candidate_commit":candidate,"task_id":task_id,"scene":scene_path,"subject_path":subject_path,"animation_player_path":player_path,"initialization_settle_frames":INITIALIZATION_SETTLE_FRAMES,"first_use_warmup_frames":FIRST_USE_WARMUP_FRAMES,"turn_angles_degrees":TURN_ANGLES,"captures":captures,"body_checks_for_critic":["feet","toes","knees","hips","hands","cuffs","belt/pouches","inner legs","boots","gear","ground contact","clipping"]},"\t"));f.close()
+	f.store_string(JSON.stringify({"harness":"production_motion_v2","candidate_commit":candidate,"task_id":task_id,"scene":scene_path,"subject_path":subject_path,"animation_player_path":player_path,"initialization_settle_frames":INITIALIZATION_SETTLE_FRAMES,"first_use_warmup_frames":FIRST_USE_WARMUP_FRAMES,"initialization_pose_schema":"skeleton_global_pose_v1","turn_angles_degrees":TURN_ANGLES,"captures":captures,"body_checks_for_critic":["feet","toes","knees","hips","hands","cuffs","belt/pouches","inner legs","boots","gear","ground contact","clipping"]},"\t"));f.close()
 	quit()

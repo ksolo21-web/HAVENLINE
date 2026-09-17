@@ -154,10 +154,22 @@ def main() -> None:
     if not all(token in motion_capture_source for token in [
         "production_motion_v2", "INITIALIZATION_SETTLE_FRAMES:=2",
         "FIRST_USE_WARMUP_FRAMES:=8", "player.advance(0.0)", '"upper-opposite"', '"lower-rear"',
+        "pose_signature", "get_bone_global_pose", '"initialization_pose_schema":"skeleton_global_pose_v1"',
     ]) or not all(token in motion_runner_source for token in [
-        "t09_motion_capture.gd", "START_EQUIVALENCE_MAX_RMSE", "FIRST_STEP_MAX_RMSE",
+        "t09_motion_capture.gd", "START_MAX_TRANSLATION_M", "START_MAX_ROTATION_DEG",
+        "FIRST_STEP_MAX_TRANSLATION_M", "FIRST_STEP_MAX_ROTATION_DEG",
+        "final_skeleton_pose_transform_v1", "pose_delta", "sha256_file",
     ]):
-        errors.append("T09 C5 capture lacks deterministic initialization or contact-region coverage")
+        errors.append("T09 C5 capture lacks final-skeleton initialization or contact-region coverage")
+    # Whole-render byte/pixel identity is not a valid animation-pose invariant.
+    # Keep hashes for provenance, but fail closed if an image-equivalence gate is reintroduced.
+    forbidden_motion_gate_tokens=["normalized_rmse(", "png_pixels(", "START_EQUIVALENCE_MAX_RMSE", "FIRST_STEP_MAX_RMSE"]
+    if any(token in motion_runner_source for token in forbidden_motion_gate_tokens):
+        errors.append("C5 initialization must use skeleton pose transforms, not rendered PNG equality/RMSE")
+    motion_call=workflow_source.find("tools/havenline/task09/motion_capture.py")
+    fanout=workflow_source.find("for resource in wood stone metal fuel")
+    if motion_call<0 or fanout<0 or motion_call>fanout:
+        errors.append("C5 motion preflight must run before the long T09 visual fan-out")
     if not all(token in workflow_source for token in [
         "tools/havenline/task09/motion_capture.py",
         "t09_motion_fixture.tscn",

@@ -4,7 +4,7 @@
   "candidate_commit": "69593a19f56df3105a7b9657a76533e274e2eed6",
   "integrated_commit": null,
   "acceptance_threshold": ">9.0 unrounded in every mandatory dimension",
-  "cycle": "integration-ready",
+  "cycle": "tooling-fix-verification",
   "defects": [
     {
       "id": "T09-D001",
@@ -26,9 +26,38 @@
       "summary": "The generic motion-capture camera framed Character 1 too small for strict hands, knees, feet and contact review.",
       "status": "RESOLVED",
       "resolution": "The QA-only fixture normalizes review height to 4.5 m without changing shipping mesh, rig, clips or gameplay scale; the exact artifact's C5 frames were visually inspected at critic-readable scale."
+    },
+    {
+      "id": "T09-D004",
+      "severity": "mandatory-C5-tooling",
+      "summary": "C5 initialization validation repeatedly treated separately rendered PNG identity as animation-pose identity, creating false failures after otherwise successful T09 validation.",
+      "status": "READY_FOR_VERIFICATION",
+      "classification": ["TOOLING_FIX", "TEST_FIX"],
+      "failed_candidate": "2a9a88ba931bc943bf55e91dbaac3b606c1393e3",
+      "failed_workflow_run": 35195377822,
+      "visible_symptom": "Run 50 passed scope/contracts, 17 impacted suites with 997 checks, save/device matrices and C6, then failed in C5 evidence with 't06/chop t=0 evidence is inconsistent after initialization'.",
+      "triage": "The shipping T06 chop/mine/dismantle clips were not disproven. The failure occurred in the T09 evidence harness and is classified as tooling/test failure rather than a production-motion defect.",
+      "affected_production_object": "T09 C5 evidence harness only; shipping Character 1 mesh, rig and T06 clips remain unchanged.",
+      "probable_root_cause": "Independent render sessions were compared by exact PNG SHA and then whole-image pixel RMSE. Camera/render/AA/lighting or first-use SkeletonModifier3D convergence can change pixels without changing the final animation pose.",
+      "implicated_files": [
+        "HavenlineGodot/assets/harvesting_v1/t09_motion_capture.gd",
+        "tools/havenline/task09/motion_capture.py",
+        "tools/havenline/task09/validate_harvesting.py",
+        ".github/workflows/havenline-task09-harvesting.yml"
+      ],
+      "causal_tooling_change": "Warm the shipping skeleton modifier, emit source-bound final Skeleton3D bone transforms for initialization probes, compare translation/rotation deltas in pose space, keep PNG hashes only for provenance, and fail C5 before the long visual fan-out.",
+      "expected_visible_result": "Rendered C5 evidence remains visually unchanged; equivalent t=0 poses no longer fail because unrelated pixels differ, while a real post-warm-up skeleton discontinuity still fails closed.",
+      "proof_contract": [
+        "T09 static source validation rejects PNG equality/RMSE as a C5 pose invariant.",
+        "C5 metadata reports initialization_pose_schema=skeleton_global_pose_v1 and final_skeleton_pose_transform_v1 validation.",
+        "All three clips pass bounded t=0 final-skeleton equivalence and first-step continuity before gameplay/device visual fan-out.",
+        "Frame SHA-256 hashes remain preserved for evidence provenance.",
+        "Impacted regression, save/device matrices and C6 remain green on the exact repaired candidate."
+      ]
     }
   ],
   "unresolved_mandatory_count": 0,
+  "unresolved_tooling_count": 1,
   "critic_scores": {},
   "critic_approval_pending": true,
   "evidence": {
@@ -37,5 +66,5 @@
     "artifact_digest": "sha256:3c7a39529c7c77518cc7040e023ac7868ee74590843affac3856bc1555968982",
     "complete_evidence_index_sha256": "ba3c0b334561b248178df583e13dd9114c22714530532d77a2a0b72a3a893dcb"
   },
-  "next_action": "Reconcile this accepted isolated candidate with the readiness checkpoint, rerun exact-source CI, integrate, recapture integrated evidence, and obtain independent C2/C3/C4/C5/C6 scores strictly above 9.0."
+  "next_action": "Run exact-source T09 CI on the pose-space tooling repair. Close T09-D004 only after C5 pose initialization/continuity, impacted regression, save/device matrices, C6 and the complete evidence index pass on the same repaired candidate; then resume fresh independent C2/C3/C4/C5/C6 review."
 }
