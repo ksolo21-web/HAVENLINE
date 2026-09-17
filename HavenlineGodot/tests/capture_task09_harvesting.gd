@@ -245,6 +245,33 @@ func sample(frame: int, progress: float) -> void:
 		"frame_update_usec":update_usec, "draw_calls":draws, "primitives":prims,
 	})
 
+func advance_fixture_to_shipping_contact(capture_preimpact := false) -> int:
+	# Tool/device evidence must enter contact through the same simulation and T07
+	# progression as gameplay. Jumping a fixture directly to raw progress 1.0 can
+	# skip Character 1's asymmetric two-hand transition and leave the axe handle
+	# visibly outside the primary glove even after its animation blend has settled.
+	var frame := 0
+	var preimpact_captured := false
+	var interaction_radius := float(game.sim.contract.player.interactionRadius)
+	while frame < 240:
+		var delta: Vector2 = Vector2(source.position)-game.sim.position
+		var input := delta.normalized() if delta.length() > interaction_radius*0.70 else Vector2.ZERO
+		var row: Dictionary = await sample_shipping(frame,input,"fixture_contact")
+		var selected := String(row.get("action_identity", "")) == "gather:"+String(source.id)
+		if capture_preimpact and not preimpact_captured and selected and float(row.get("raw_progress",0.0)) >= 0.82 and not bool(row.get("authoritative_event",false)):
+			preimpact_captured = true
+			await capture_png("device-%s-%s-preimpact" % [device_id,resource_kind])
+		if selected and bool(row.harvest.get("contact_ready",false)) and not bool(row.get("authoritative_event",false)):
+			if capture_preimpact and not preimpact_captured:
+				await capture_png("device-%s-%s-preimpact" % [device_id,resource_kind])
+			return frame+1
+		if bool(row.get("authoritative_event",false)):
+			push_error("T09 fixture crossed authoritative commit before validated contact")
+			return -1
+		frame += 1
+	push_error("T09 fixture did not reach shipping contact")
+	return -1
+
 func commit(frame: int) -> void:
 	var before_units := int(source.units)
 	var before_inventory := int(game.sim.inventory[resource_kind])
@@ -397,8 +424,7 @@ func capture_sequence() -> void:
 	for video_frame in range(video_frame_cursor+8,video_frame_cursor+16,2): await capture_jpg(video_frame)
 
 func capture_tool_view() -> void:
-	await sample(0,1.0)
-	await sample(1,1.0)
+	if await advance_fixture_to_shipping_contact() < 0: return
 	await capture_png("tool-%s-%s" % [resource_kind,view_id])
 
 func hide_visuals(node: Node) -> void:
@@ -445,13 +471,15 @@ func capture_asset_view() -> void:
 	await capture_png("asset-%s-%s" % [String(profile.tool),view_id])
 
 func capture_device_view() -> void:
-	await sample(0,0.82)
-	await capture_png("device-%s-%s-preimpact" % [device_id,resource_kind])
-	commit(1)
-	await sample(1,0.0)
+	var contact_frame := await advance_fixture_to_shipping_contact(true)
+	if contact_frame < 0: return
+	var committed_row: Dictionary = await sample_shipping(contact_frame,Vector2.ZERO,"fixture_commit")
+	if not bool(committed_row.get("authoritative_event",false)):
+		push_error("T09 device fixture did not commit through shipping authority")
+		return
 	await capture_png("device-%s-%s-impact-transfer-carry" % [device_id,resource_kind])
-	action_token += 1
-	var lifecycle_frame := 2
+	action_token = int(committed_row.get("action_token",0))+1
+	var lifecycle_frame := contact_frame+1
 	while int(source.units) > 0:
 		commit(lifecycle_frame)
 		game._process(1.0/60.0)
@@ -479,8 +507,8 @@ func write_report() -> void:
 		"render_scale":game.scene_view.scaling_3d_scale, "native_4k_render":native_4k and game.scene_view.size.x >= 3840 and game.scene_view.size.y >= 2160,
 		"physical_4k60_verified":false, "scenario_is_test_fixture":true,
 		"review_visibility_policy":"selected_actor_source_effects_on_shipping_surface",
-		"capture_progress_driver":"shipping_simulation_step" if mode == "sequence" else "presentation_fixture",
-		"t07_selection_authority":"context_director.advance" if mode == "sequence" else "fixture_not_claimed",
+		"capture_progress_driver":"presentation_fixture" if mode == "asset" else "shipping_simulation_step",
+		"t07_selection_authority":"fixture_not_claimed" if mode == "asset" else "context_director.advance",
 		"commit_authority":"outpost_simulation.perform_action",
 		"simulation_authoritative":records.any(func(record): return bool(record.get("commit",false)) and bool(record.get("authoritative_event",false))),
 		"harvest_contract":Harvest.contract(),
@@ -524,14 +552,19 @@ func run() -> void:
 	# Opening sources sit outside the protected camp fence. Start on their camp
 	# side and approach outward so T03 collision remains active and the actor can
 	# reach the interaction annulus without teleporting across a boundary.
-	var approach_axis := -Vector2(source.position).normalized() if mode == "sequence" else Vector2(source.position).normalized()
+	# Keep every evidence fixture on the same camp-side approach axis as shipping.
+	# Placing still/device fixtures on the far side reverses Character 1's authored
+	# asymmetric two-hand chop relative to the pine and cannot reach the validated
+	# handle grip, even though the actor remains inside the interaction radius.
+	var approach_axis := -Vector2(source.position).normalized()
 	if mode == "sequence" and resource_kind == "metal":
 		# The ore source is on the dry far bank. Begin farther along that same bank
 		# so the evidence shows a traversable approach without crossing the frozen
 		# river or teleporting directly into the interaction annulus.
 		approach_axis = Vector2(0.0,-1.0)
 	if approach_axis.is_zero_approx(): approach_axis = Vector2.DOWN
-	game.sim.position = Vector2(source.position) + approach_axis * (float(game.sim.contract.player.interactionRadius) + (2.2 if mode == "sequence" else -0.73))
+	var uses_shipping_approach := mode in ["sequence","tool","device"]
+	game.sim.position = Vector2(source.position) + approach_axis * (float(game.sim.contract.player.interactionRadius) + (2.2 if uses_shipping_approach else -0.73))
 	game.sim.facing = (source.position - game.sim.position).normalized()
 	game.sim.velocity = Vector2.ZERO
 	game.player_rig.position = game.xyz(game.sim.position)
