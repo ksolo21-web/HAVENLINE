@@ -29,6 +29,16 @@ var review_stage: Node3D
 var default_source_units := 0
 var visual_review_source_units := 0
 var target_device_logical_size := Vector2.ZERO
+var capture_canvas_transform: Transform2D = Transform2D.IDENTITY
+var capture_logical_size := Vector2.ZERO
+
+func projected_game_canvas_size() -> Vector2:
+	return (capture_canvas_transform * game.size) - (capture_canvas_transform * Vector2.ZERO)
+
+func game_canvas_fully_covers_capture_canvas() -> bool:
+	var projected_origin: Vector2 = capture_canvas_transform * Vector2.ZERO
+	var projected_size: Vector2 = projected_game_canvas_size()
+	return projected_origin.distance_to(Vector2.ZERO) <= 1.0 and projected_size.distance_to(Vector2(root.size)) <= 1.0
 
 func _initialize() -> void:
 	for argument in OS.get_cmdline_user_args():
@@ -583,10 +593,13 @@ func capture_device_view() -> void:
 	game._gui_input(drag)
 	assert(game.joystick_id == 77,"T09 device proof must exercise shipping touch input")
 	var joystick_radius: float = float(game.joystick_radius)
-	var joystick_extent: Vector2 = Vector2.ONE * (joystick_radius + 2.0)
-	var joystick_bounds: Rect2 = Rect2(game.joystick_origin - joystick_extent,joystick_extent * 2.0)
+	var capture_scale: Vector2 = capture_canvas_transform.get_scale().abs()
+	var joystick_origin_pixels: Vector2 = capture_canvas_transform * game.joystick_origin
+	var joystick_extent: Vector2 = capture_scale * (joystick_radius + 2.0)
+	var joystick_bounds: Rect2 = Rect2(joystick_origin_pixels - joystick_extent,joystick_extent * 2.0)
 	var capture_canvas: Rect2 = Rect2(Vector2.ZERO,Vector2(root.size))
 	assert(capture_canvas.encloses(joystick_bounds),"T09 joystick circle must be fully inside the captured canvas")
+	assert(game_canvas_fully_covers_capture_canvas(),"T09 game canvas must fully cover the captured canvas")
 	var contact_frame := await advance_fixture_to_shipping_contact(true)
 	if contact_frame < 0: return
 	var committed_row: Dictionary = await sample_shipping(contact_frame,Vector2.ZERO,"fixture_commit")
@@ -634,15 +647,21 @@ func write_report() -> void:
 		"joystick_origin":[game.joystick_origin.x,game.joystick_origin.y],
 		"joystick_current":[game.joystick_current.x,game.joystick_current.y],
 		"joystick_radius":game.joystick_radius,
+		"joystick_origin_capture_pixels":[(capture_canvas_transform * game.joystick_origin).x,(capture_canvas_transform * game.joystick_origin).y],
+		"joystick_radius_capture_pixels":game.joystick_radius*capture_canvas_transform.get_scale().abs().x,
 		"capture_canvas_size":[root.size.x,root.size.y],
+		"capture_canvas_transform_scale":[capture_canvas_transform.get_scale().abs().x,capture_canvas_transform.get_scale().abs().y],
+		"game_logical_canvas_size":[game.size.x,game.size.y],
+		"projected_game_canvas_size":[projected_game_canvas_size().x,projected_game_canvas_size().y],
+		"game_canvas_fully_covers_capture_canvas":game_canvas_fully_covers_capture_canvas(),
 		"target_device_logical_size":[target_device_logical_size.x,target_device_logical_size.y],
-		"joystick_circle_fully_inside_capture_canvas":Rect2(Vector2.ZERO,Vector2(root.size)).encloses(Rect2(game.joystick_origin-Vector2.ONE*(game.joystick_radius+2.0),Vector2.ONE*(game.joystick_radius+2.0)*2.0)),
+		"joystick_circle_fully_inside_capture_canvas":Rect2(Vector2.ZERO,Vector2(root.size)).encloses(Rect2(capture_canvas_transform*game.joystick_origin-capture_canvas_transform.get_scale().abs()*(game.joystick_radius+2.0),capture_canvas_transform.get_scale().abs()*(game.joystick_radius+2.0)*2.0)),
 		"permanent_action_buttons":int(Harvest.contract().permanent_action_buttons),
 	} if mode == "device" else {}
 	var report := {
 		"task_id":"T09", "candidate":candidate, "mode":mode, "resource":resource_kind,
 		"view":view_id, "device_state":device_id, "window":[root.size.x,root.size.y],
-		"logical_size":[target_device_logical_size.x,target_device_logical_size.y], "capture_canvas_size":[game.size.x,game.size.y], "internal_render":[game.scene_view.size.x,game.scene_view.size.y],
+		"logical_size":[target_device_logical_size.x,target_device_logical_size.y], "capture_canvas_size":[root.size.x,root.size.y], "game_logical_canvas_size":[game.size.x,game.size.y], "internal_render":[game.scene_view.size.x,game.scene_view.size.y],
 		"render_scale":game.scene_view.scaling_3d_scale, "native_4k_render":native_4k and game.scene_view.size.x >= 3840 and game.scene_view.size.y >= 2160,
 		"physical_4k60_verified":false, "scenario_is_test_fixture":true,
 		"review_stage":"disclosed_neutral_snow_stage_with_shipping_actor_source_and_systems" if mode != "asset" else "isolated_tool_turntable",
@@ -678,10 +697,15 @@ func run() -> void:
 	game = Main.new()
 	target_device_logical_size = DEVICE_SIZES.get(device_id,Vector2(2400,1080))
 	# The review window is a downscaled, aspect-matched stand-in for the target
-	# device. Main must occupy that visible canvas exactly, just as it does in the
-	# shipping window. Assigning the larger target pixel dimensions directly to
-	# the Control placed the bottom-left joystick below tall review viewports.
-	game.size = Vector2(root.size)
+	# device. Main must occupy the complete captured pixel canvas. Hosted X11 may
+	# apply a HiDPI canvas transform, so root.size alone can shrink Main and leave
+	# dark right/bottom bands. Invert that transform to obtain the local Control
+	# size that projects exactly onto the root texture.
+	capture_canvas_transform = root.get_final_transform()
+	var capture_scale: Vector2 = capture_canvas_transform.get_scale().abs()
+	assert(capture_scale.x > 0.0 and capture_scale.y > 0.0,"T09 capture canvas transform must be invertible")
+	capture_logical_size = Vector2(root.size) / capture_scale
+	game.size = capture_logical_size
 	root.add_child(game)
 	for frame in 5: await process_frame
 	game.set_process(false)

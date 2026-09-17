@@ -325,6 +325,8 @@ jobs:
               assert report['device_control_evidence']['joystick_active'] is True and report['device_control_evidence']['permanent_action_buttons']==0
               assert report['device_control_evidence']['shipping_scene_layering'] is True and report['device_control_evidence']['joystick_input_path'].startswith('Main._gui_input/')
               assert report['device_control_evidence']['joystick_circle_fully_inside_capture_canvas'] is True
+              assert report['device_control_evidence']['game_canvas_fully_covers_capture_canvas'] is True
+              assert all(abs(float(a)-float(b))<=1.0 for a,b in zip(report['device_control_evidence']['projected_game_canvas_size'],report['window']))
               assert report['device_control_evidence']['capture_canvas_size']==report['window']
               assert report['capture_canvas_size']==report['window']
               assert any(row['harvest']['accepted_impacts']>=1 and row['transfer']['accepted_receipts']>=1 and row['carry']['logical_total']>=1 for row in samples)

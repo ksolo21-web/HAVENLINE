@@ -165,20 +165,24 @@
       "id": "T09-D013",
       "severity": "mandatory-device-evidence",
       "summary": "Device screenshots did not visibly prove the one-joystick, zero-action-button interaction language.",
-      "status": "FIX_REQUIRED",
+      "status": "VERIFIED_CLOSED",
       "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
       "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
       "resolution": "Run 35256227258 proved real Main._gui_input touch/drag and zero action buttons, but independent pixel review found the joystick outside all tablet_16_10, tablet_4_3 and foldable_inner captures because the harness sized Main to target native pixels instead of the visible review canvas. The repair now binds Main to root.size, records the target size separately, asserts the entire joystick circle is inside the captured canvas and adds all three tall profiles to integration regression.",
       "failed_review_source": "754fdde8d21f944cab15365a20a785f6ca887ff6",
       "failed_review_run": 35256227258,
       "failed_artifact_id": 10515324426,
-      "failed_pixel_count": 12
+      "failed_pixel_count": 12,
+      "verification_source": "905ba1b4535902961610b238b14d6392914755d8",
+      "verification_run": 35270024497,
+      "verification_artifact_id": 10520649116,
+      "verification": "All 24 device screenshots visibly contain the single joystick, and every device report proves real shipping touch input, zero action buttons and the full joystick circle inside the captured canvas."
     },
     {
       "id": "T09-D014",
       "severity": "mandatory-evidence-tooling",
       "summary": "The repaired device capture script relied on Variant-derived local type inference that Godot 4.7.2 rejected before rendering the first sequence.",
-      "status": "RESOLVED",
+      "status": "VERIFIED_CLOSED",
       "classification": [
         "TOOLING_FIX",
         "TEST_FIX"
@@ -196,7 +200,27 @@
         "The T09 static source validator rejects removal of the explicit device-geometry types.",
         "A fresh exact-source workflow completes the full render and indexed artifact."
       ],
-      "resolution": "The capture-only geometry locals are explicitly typed and the fail-closed source validator requires the typed declarations; exact-source CI retest remains required."
+      "resolution": "Exact-source run 35270024497 parsed and executed the repaired capture script, completed all 71 reports and sealed the complete indexed artifact; the typed declarations remain fail-closed in source validation."
+    },
+    {
+      "id": "T09-D015",
+      "severity": "mandatory-device-visual",
+      "summary": "The first joystick-visible repair sized Main in logical points without compensating for the hosted X11 HiDPI canvas transform, leaving dark right and bottom bands in all 24 device screenshots.",
+      "status": "FIX_REQUIRED",
+      "failed_candidate": "905ba1b4535902961610b238b14d6392914755d8",
+      "failed_workflow_run": 35270024497,
+      "failed_artifact_id": 10520649116,
+      "failed_artifact_digest": "sha256:46ad89ba5b7d3958a8393a9608ab0799aabc46f2cb5c99a36d9b8d3d7a64e433",
+      "failed_complete_evidence_index_sha256": "97f08c609ee0748898780a866c1efa94c8ca534141cc321f5ed52b96a62994fe",
+      "visible_symptom": "The scene and HUD covered only about two-thirds of each physical output while the remainder showed the dark clear color; the joystick itself was visible in every device frame.",
+      "root_cause": "root.size is expressed before the hosted HiDPI final canvas transform, but root.get_texture().get_image() is saved at physical pixel dimensions. Assigning root.size directly to Main therefore projected a smaller Control into the output texture.",
+      "causal_tooling_change": "Invert root.get_final_transform() scale when deriving Main's local canvas size, transform joystick geometry into capture pixels, and fail closed unless Main's projected canvas covers the entire output within one pixel.",
+      "proof_contract": [
+        "All 24 device screenshots show the gameplay canvas filling the complete output with no dark right/bottom bands.",
+        "Every device report records the canvas transform, local canvas size and projected canvas size.",
+        "The projected Main canvas matches the physical capture window within one pixel and the transformed joystick circle remains fully inside it.",
+        "A fresh independent C2/C3/C4/C5/C6 review approves the exact indexed artifact."
+      ]
     }
   ],
   "unresolved_mandatory_count": 1,
@@ -230,5 +254,5 @@
     "artifact_digest": "sha256:d4e917008130e2259b0feb3bcc45d5b4b99bd86a07aad6b8d518acdf1e4804d5",
     "complete_evidence_index_sha256": "23b0e20637c71fe1c4de0bd6f3f2e5a42d5e7d3d2dd2868c73360e87a8cd3dc7"
   },
-  "next_action": "Publish the evidence-harness parser repair, run fresh exact-source T09 CI, and close T09-D013/T09-D014 only after the complete indexed artifact contains all 24 visible single-joystick device captures and a fresh independent C2/C3/C4/C5/C6 review scores strictly above 9.0 in every mandatory dimension."
+  "next_action": "Publish the HiDPI full-canvas repair, run fresh exact-source T09 CI, and close T09-D015 only after all 24 device pixels show a full-frame gameplay canvas plus the single joystick and a fresh independent C2/C3/C4/C5/C6 review scores strictly above 9.0 in every mandatory dimension."
 }
