@@ -156,8 +156,15 @@ def main() -> None:
         "--rendering-method mobile --rendering-driver vulkan",
         "complete-evidence-index.json",
         "known-failures.json",
+        "tools/havenline/production/save_state_matrix.py",
+        "tools/havenline/production/device_matrix.py",
+        "tools/havenline/task09/run_matrix_case.sh",
+        "HAVENLINE_T09_MATRIX_MODE=save",
+        "HAVENLINE_T09_MATRIX_MODE=device",
+        "task09-evidence/matrices/save",
+        "task09-evidence/matrices/device",
     ]):
-        errors.append("C5/C6 production evidence or complete indexing gate is incomplete")
+        errors.append("C5/C6, matrix, or complete indexing evidence gate is incomplete")
     result = {
         "task": "T09",
         "candidate_commit": args.candidate,

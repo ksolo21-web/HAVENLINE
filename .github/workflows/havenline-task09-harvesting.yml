@@ -114,6 +114,21 @@ jobs:
           Path('task09-evidence/tests.json').write_text(json.dumps(output,indent=2)); print(json.dumps(output))
           PY
 
+      - name: Run canonical save-state and device matrices
+        env:
+          CANDIDATE: ${{ github.sha }}
+          GODOT_BIN: Godot_v4.7.2-stable_linux.x86_64
+        run: |
+          set -euo pipefail
+          HAVENLINE_T09_MATRIX_MODE=save python3 tools/havenline/production/save_state_matrix.py \
+            --candidate "$CANDIDATE" --task T09 \
+            --adapter 'bash tools/havenline/task09/run_matrix_case.sh' \
+            --out task09-evidence/matrices/save
+          HAVENLINE_T09_MATRIX_MODE=device python3 tools/havenline/production/device_matrix.py \
+            --candidate "$CANDIDATE" --task T09 \
+            --adapter 'bash tools/havenline/task09/run_matrix_case.sh' \
+            --out task09-evidence/matrices/device
+
       - name: Measure exact-base performance delta
         env:
           CANDIDATE: ${{ github.sha }}
