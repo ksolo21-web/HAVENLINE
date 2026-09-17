@@ -1,0 +1,68 @@
+{
+  "harness": "save_state_matrix_v1",
+  "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+  "task_id": "T09",
+  "cases": [
+    {
+      "case": "fresh_save",
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/save/fresh_save.log",
+      "log_sha256": "e4ceb6257ff090cff5aa7f2bf28555271dec6ef9000b92f85ed81f97f7d78f9a"
+    },
+    {
+      "case": "existing_current_save",
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/save/existing_current_save.log",
+      "log_sha256": "5e01bf1fd01cb6f65a125b5ffa852097714e48651946b9cab1f2bcad1f078e83"
+    },
+    {
+      "case": "previous_version_save",
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/save/previous_version_save.log",
+      "log_sha256": "d623cef8c322f0185d58b6ba1477591c02a633c312e1a86c02bb31c6b788cd76"
+    },
+    {
+      "case": "interrupted_save",
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/save/interrupted_save.log",
+      "log_sha256": "259cd1ab902932e584f481b7dc84de509235b27009f731ef21823ba499c4a1d2"
+    },
+    {
+      "case": "reload",
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/save/reload.log",
+      "log_sha256": "5171d7a108c12c8b213c7ca5539f395ea13c8169e0108d3feacc791137d6b364"
+    },
+    {
+      "case": "migration",
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/save/migration.log",
+      "log_sha256": "e897a62301a96cf718d6ce5e2e3074963b2e147fb734245886be5a5037050a36"
+    },
+    {
+      "case": "rollback_recovery",
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/save/rollback_recovery.log",
+      "log_sha256": "3de0a7eedbdbffc4679b30abca616663431f418e7d5257d521053c3ecebaae6e"
+    }
+  ],
+  "invariants": [
+    "inventory conserved",
+    "identity conserved",
+    "jobs/assignments conserved",
+    "level/progression conserved",
+    "entitlements conserved when applicable",
+    "invalid world positions recover safely",
+    "no duplicate grants",
+    "schema version explicit"
+  ],
+  "passed": true,
+  "failures": []
+}
