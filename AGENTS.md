@@ -1,4 +1,4 @@
-# HAVENLINE Agent Instructions — V3 Controlled Parallel Production
+# HAVENLINE Agent Instructions — V3.1 Controlled Parallel Production
 
 ## Status/continuity fast path — apply before the full production bootstrap
 
@@ -29,23 +29,32 @@ Read in this order before any Havenline production work:
 6. `Docs/Production/FORWARD_EXECUTION_PROFILES.json`
 7. `Docs/Production/FORWARD_GATE_RUNNERS.json`
 8. `Docs/Production/PRODUCTION_ARCHITECTURE_V3.md`
-9. `Docs/Production/TASK_CAPABILITY_MATRIX.json`
-10. `Docs/Production/CAPABILITY_STATUS.json`
-11. `Docs/Production/PRODUCTION_SCHEDULER_POLICY.json`
-12. `Docs/Production/GATE_FINGERPRINT_POLICY.json`
-13. `Docs/Production/CONTRACT_REGISTRY.json`
-14. `Docs/Production/FAILURE_INTELLIGENCE.json`
-15. `Docs/Production/task-gates.json`
-16. `Docs/Production/GAME_MASTER_ACCOUNT_STANDARD.md`
-17. `Docs/Production/GAME_MASTER_POLICY.json`
-18. `Docs/Production/WORKSTREAM_REGISTRY.json`
-19. `Docs/Production/DEPENDENCY_GRAPH.json`
-20. `Docs/Production/PATH_OWNERSHIP.json`
-21. `Docs/Production/CRITIC_MATRIX.json`
-22. `Docs/Production/PERFORMANCE_BUDGETS.json`
-23. the active task packet/frozen scope
-24. `Docs/AI/HavenlineProjectContext.md`
-25. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
+9. `Docs/Production/PRODUCTION_ARCHITECTURE_V31_STANDARD.md`
+10. `Docs/Production/TASK_CAPABILITY_MATRIX.json`
+11. `Docs/Production/CAPABILITY_STATUS.json`
+12. `Docs/Production/PRODUCTION_SCHEDULER_POLICY.json`
+13. `Docs/Production/GATE_FINGERPRINT_POLICY.json`
+14. `Docs/Production/CONTRACT_REGISTRY.json`
+15. `Docs/Production/FAILURE_INTELLIGENCE.json`
+16. `Docs/Production/FLAKE_REGISTRY.json`
+17. `Docs/Production/PIPELINE_TELEMETRY_POLICY.json`
+18. `Docs/Production/CI_TOOLCHAIN_LOCK.json`
+19. `Docs/Production/EVIDENCE_RETENTION_POLICY.json`
+20. `Docs/Production/RUNTIME_DEPENDENCY_OBSERVATIONS.json`
+21. `Docs/Production/TASK_STATE_SCHEMA.json`
+22. `Docs/Production/MUTATION_CANARY_MATRIX.json`
+23. `Docs/Production/PROOF_INVALIDATION_POLICY.json`
+24. `Docs/Production/task-gates.json`
+25. `Docs/Production/GAME_MASTER_ACCOUNT_STANDARD.md`
+26. `Docs/Production/GAME_MASTER_POLICY.json`
+27. `Docs/Production/WORKSTREAM_REGISTRY.json`
+28. `Docs/Production/DEPENDENCY_GRAPH.json`
+29. `Docs/Production/PATH_OWNERSHIP.json`
+30. `Docs/Production/CRITIC_MATRIX.json`
+31. `Docs/Production/PERFORMANCE_BUDGETS.json`
+32. the active task packet/frozen scope
+33. `Docs/AI/HavenlineProjectContext.md`
+34. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
 
 Inspect current source/evidence for newer work. `Docs/AI/UnityProjectContext.md` is historical.
 
@@ -140,16 +149,30 @@ C0 consults `FAILURE_INTELLIGENCE.json` before repair. Historical matches are
 advisory only: current evidence must independently confirm or reject the prior
 root cause. Never auto-repair merely because a failure resembles an older one.
 
+## Production Architecture V3.1 hardening rule
+
+Run `python3 tools/havenline/production/architecture_v31.py readiness Txx` for
+T10+ work. V3.1 does not replace V3; it adds factory hardening.
+
+- Query `flake_intelligence.py` before treating repeated pass/fail behavior as a product defect. A `FLAKY` mandatory gate still blocks approval.
+- Record queue/run/gate timing in the pipeline telemetry ledger. Telemetry may optimize scheduling but may never lower quality thresholds.
+- Production-critical GitHub Actions must match `CI_TOOLCHAIN_LOCK.json`. Mutable action tags are forbidden. Runner image provenance is part of environment-sensitive proof reuse.
+- Approval evidence must follow `EVIDENCE_RETENTION_POLICY.json`; temporary artifact expiry may not erase durable approval provenance.
+- `change_impact.py` includes runtime-observed dependency edges additively. Learned coverage may add suites but never silently remove static mandatory suites.
+- Generate/read a canonical task state with `task_state_snapshot.py Txx` before rediscovering task history across chats.
+- `mutation_canary.py` must remain green so validators prove they can reject deliberately bad synthetic inputs.
+- If an approved task/contract is reopened, run `proof_invalidation.py` and treat affected downstream proof as stale until integration-owner disposition/revalidation.
+
 ## Controlled parallel-production rule
 
 Production flow is:
 
-DEPENDENCY GRAPH -> V3 SCHEDULER/PREACTIVATION FEASIBILITY -> TASK PACKET ->
+DEPENDENCY GRAPH -> V3/V3.1 SCHEDULER + PREACTIVATION FEASIBILITY -> TASK PACKET ->
 CLAIM DISJOINT PATHS -> BUILD ISOLATED -> CHEAP SENTINELS/SPECIALIST PREFLIGHTS ->
 TEST -> PACKAGE CANDIDATE -> SYNTHETIC MERGE + CONTRACT FORECAST -> INTEGRATION
 OWNER REVIEW -> RECONCILE STALE BASE -> INTEGRATE -> IMPACT REGRESSION -> FRESH
-INTEGRATION EVIDENCE -> APPLICABLE CRITICS -> FIX/RETEST -> APPROVE -> UNLOCK
-DEPENDENTS.
+INTEGRATION EVIDENCE -> APPLICABLE CRITICS -> FIX/RETEST -> RETENTION/STATE CLOSEOUT ->
+APPROVE -> UNLOCK DEPENDENTS.
 
 Only the integration owner may integrate production candidates onto the
 integration branch. A builder may reach `INTEGRATION_READY` but may never
@@ -269,7 +292,8 @@ or attack evidence and cannot be hand-waved.
 Run `tools/havenline/production/change_impact.py` on candidate changes, then
 `regression_runner.py` for the union of universal and impacted mandatory
 suites. Unknown production changes fall back to the full current mandatory
-suite set.
+suite set. Runtime-observed dependency learning may add coverage; it cannot
+automatically remove static coverage.
 
 Run `workstream.py validate-candidate` before integration. Unauthorized
 foreign/protected path modifications fail G2. A needed shared-path edit becomes
@@ -289,6 +313,11 @@ camera, renderer, resolution, build/run ID and timestamp. Visual tasks capture
 front/rear/left/right/3/4/gameplay/detail/overhead/conditions/native-4K where
 applicable. Motion tasks capture full real-time/slow cycles, turns, transitions,
 feet/toes/knees/hands, gear, tails/wings/mane and contact/clipping states.
+
+Approval provenance follows `EVIDENCE_RETENTION_POLICY.json`. Temporary CI
+artifact expiration may not erase accepted source hashes, critic dispositions,
+run identities, regeneration instructions, or persistent locators for
+irreplaceable evidence.
 
 ## Performance and release
 
@@ -332,6 +361,10 @@ Before a repair, query `Docs/Production/FAILURE_INTELLIGENCE.json` through
 never a diagnosis by itself; current evidence must confirm it. Record newly
 verified reusable failure knowledge after closure so later tasks do not repeat
 the same investigation.
+
+If the same exact gate/test/environment alternates PASS/FAIL, consult the
+persistent flake registry before changing product code. Flakiness never grants
+a waiver: the mandatory gate remains blocked until a stable valid result exists.
 
 Every retrieval/status investigation must satisfy
 `Docs/Production/AGENT_EXECUTION_LOOP_GUARD.md`. Three consecutive retrievals
