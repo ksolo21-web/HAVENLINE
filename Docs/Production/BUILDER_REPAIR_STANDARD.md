@@ -24,6 +24,7 @@ If C0 classifies a run `SUPERSEDED`, `INFRASTRUCTURE_FAILURE`, or `EVIDENCE_DEFE
 
 - task id and failed candidate SHA;
 - exact C0 report path/hash and diagnosis id;
+- exact 40-character `repair_base` SHA from which this repair diff starts; this may be a reconciled current integration branch point while the original failed candidate remains preserved as history;
 - `full_blocker_set_acknowledged=true`;
 - one fix entry for every C0 blocker;
 - causal change, permitted files and verification steps for each fix;
@@ -31,6 +32,8 @@ If C0 classifies a run `SUPERSEDED`, `INFRASTRUCTURE_FAILURE`, or `EVIDENCE_DEFE
 - blast-radius regression checks;
 - `candidate_freeze_after_build=true`;
 - `validation_concurrency_policy="finish_running_sha"`.
+
+The historical task assignment base is never rewritten merely to make a repair candidate appear current. `repair_base` records the new repair branch point while the registry retains the original assignment provenance.
 
 One fix may resolve multiple blockers only when C0 states they share the same causal root. No blocker may disappear from the repair plan without a recorded C0 disposition.
 
@@ -47,7 +50,7 @@ One fix may resolve multiple blockers only when C0 states they share the same ca
 
 ## Post-build repair gate
 
-Before expensive validation begins, `builder_repair_gate.py` compares the actual diff with the accepted repair plan. It fails closed when:
+Before expensive validation begins, `builder_repair_gate.py` compares the actual diff from `repair_base` with the accepted repair plan. It fails closed when:
 
 - a known C0 blocker is not addressed;
 - a changed file is outside the authorized repair surface;
