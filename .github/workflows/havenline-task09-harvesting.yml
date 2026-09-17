@@ -127,16 +127,17 @@ jobs:
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path "$base_dir/HavenlineGodot" --import --quit > task09-evidence/tests/exact-base-import.log 2>&1
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path "$base_dir/HavenlineGodot" --script res://tools/bake_crew_motion.gd > task09-evidence/tests/exact-base-motion-fixture.log 2>&1
           mkdir -p task09-evidence/performance/exact-base task09-evidence/performance/candidate
-          xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method gl_compatibility --resolution 1280x720 --path "$base_dir/HavenlineGodot" --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/exact-base" --candidate="$BASE" --expect-base
-          xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method gl_compatibility --resolution 1280x720 --path HavenlineGodot --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/candidate" --candidate="$CANDIDATE"
+          xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method mobile --rendering-driver vulkan --resolution 1280x720 --path "$base_dir/HavenlineGodot" --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/exact-base" --candidate="$BASE" --expect-base
+          /usr/bin/time -v -o task09-evidence/performance/candidate/time.txt xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method mobile --rendering-driver vulkan --resolution 1280x720 --path HavenlineGodot --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/candidate" --candidate="$CANDIDATE"
           git worktree remove --force "$base_dir"
           python3 - <<'PY'
-          import json,os
+          import json,os,subprocess
           from pathlib import Path
           base=json.loads(Path('task09-evidence/performance/exact-base/performance.json').read_text())
           candidate=json.loads(Path('task09-evidence/performance/candidate/performance.json').read_text())
           assert base['candidate']==os.environ['BASE'] and base['integrated'] is False
           assert candidate['candidate']==os.environ['CANDIDATE'] and candidate['integrated'] is True
+          assert base['renderer']=='mobile' and candidate['renderer']=='mobile'
           delta={key:candidate[key]-base[key] for key in ['p95_ms','p99_ms','average_draw_calls','average_primitives','process_static_memory_mb','materials_visible','unique_shader_resources','physics_active_bodies','animation_players','active_animations','visible_rigs','npc_companion_active_population']}
           result={'task':'T09','exact_base':os.environ['BASE'],'candidate':os.environ['CANDIDATE'],'method':candidate['method'],'base':base,'integrated':candidate,'delta':delta,'limits':{'p95_ms':10.0,'draw_calls':12.0,'primitives':5000.0,'memory_mb':32.0,'materials':6,'shaders':0,'physics_bodies':0,'animation_players':0},'physical_4k60_verified':False,'thermal_certified':False}
           Path('task09-evidence/performance/delta-diagnostic.json').write_text(json.dumps(result,indent=2))
@@ -148,7 +149,31 @@ jobs:
           assert delta['physics_active_bodies']<=0 and delta['animation_players']<=0 and delta['active_animations']<=0
           result['passed']=True
           Path('task09-evidence/performance/delta.json').write_text(json.dumps(result,indent=2)); print(json.dumps({'task':'T09','performance_delta':delta,'passed':True}))
+          rss_line=next(line for line in Path('task09-evidence/performance/candidate/time.txt').read_text().splitlines() if 'Maximum resident set size' in line)
+          rss_mb=float(rss_line.split(':')[-1].strip())/1024.0
+          changed=subprocess.check_output(['git','diff','--name-only',os.environ['BASE'],os.environ['CANDIDATE']],text=True).splitlines()
+          storage_paths=[Path(path) for path in changed if Path(path).is_file() and path.startswith(('HavenlineGodot/assets/harvesting_v1/','HavenlineGodot/scripts/'))]
+          storage_mb=sum(path.stat().st_size for path in storage_paths)/(1024.0*1024.0)
+          c6={
+            'task':'T09','candidate_commit':os.environ['CANDIDATE'],'passed':True,
+            'scene_state':'shipping main scene; 30-frame warm-up; 180 measured active-harvest forced-render submissions',
+            'resolution':candidate['resolution'],'renderer':candidate['renderer'],'gpu':candidate['gpu'],
+            'visible_triangles':int(candidate['maximum_primitives']),'draw_calls':int(candidate['maximum_draw_calls']),
+            'materials_visible':int(candidate['materials_visible']),'texture_gpu_memory_mb':float(candidate['texture_gpu_memory_mb']),
+            'process_memory_mb':rss_mb,'process_static_memory_mb':float(candidate['process_static_memory_mb']),
+            'physics_active_bodies':int(candidate['physics_active_bodies']),'animated_rigs_active':int(candidate['visible_rigs']),
+            'npc_companion_active_population':int(candidate['npc_companion_active_population']),'storage_download_mb':storage_mb,
+            'cpu_frame_ms':None,'gpu_frame_ms_where_measurable':None,
+            'render_submission_p95_ms':float(candidate['p95_ms']),'render_submission_p99_ms':float(candidate['p99_ms']),
+            'exact_base_delta':delta,'maximum_fragment_descriptors':int(candidate['maximum_fragment_descriptors']),
+            'maximum_impact_pulses':int(candidate['maximum_impact_pulses']),
+            'measurement_method':'Pinned Godot 4.7.2 same-script exact-base/candidate forced-render comparison; Godot visible draw/primitive/GPU-memory and scene inventory counters; GNU time maximum RSS; exact T09 runtime asset/source byte delta.',
+            'known_unmeasured_fields':['full_cpu_frame_ms','gpu_frame_ms_where_measurable','direct_gpu_shader_time_ms','physical_display_presentation','physical_device_thermal_behavior'],
+            'physical_device_certification':False,'thermal_certified':False,'errors':[],
+          }
+          Path('task09-evidence/performance/c6-performance.json').write_text(json.dumps(c6,indent=2))
           PY
+          python3 tools/havenline/production/critic_harness.py performance --candidate "$CANDIDATE" --record task09-evidence/performance/c6-performance.json | tee task09-evidence/performance/c6-gate.json
 
 
       - name: Render T09 review and native-4K evidence
@@ -269,6 +294,27 @@ jobs:
                   assert width>0 and height>0,(path,width,height)
           summary={'candidate':reports[0]['candidate'],'reports':len(reports),'pngs':len(pngs),'motion_c5_pngs':len(motion_pngs),'motion_c5_animations':['t06/chop','t06/mine','t06/dismantle'],'sequence_videos':len(list(root.glob('sequence-*/*.mp4'))),'sequence_frame_counts':frame_counts,'in_hand_views':len(tools),'isolated_tool_turntables':len(assets),'native_4k_internal':native[0]['internal_render'],'physical_4k60_verified':False,'passed':True}
           Path('task09-evidence/capture-summary.json').write_text(json.dumps(summary,indent=2)); print(json.dumps(summary))
+          PY
+
+      - name: Build complete T09 evidence index
+        if: success()
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path('task09-evidence')
+          ignored={'complete-evidence-index.json','complete-evidence-index.sha256','known-failures.json'}
+          files={str(path.relative_to(root)):hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(root.rglob('*')) if path.is_file() and path.name not in ignored}
+          assert files and all(len(value)==64 for value in files.values())
+          index={'schema_version':1,'task_id':'T09','candidate_commit':os.environ['CANDIDATE'],'file_count':len(files),'files':files}
+          index_path=root/'complete-evidence-index.json'
+          index_path.write_text(json.dumps(index,indent=2)+'\n')
+          digest=hashlib.sha256(index_path.read_bytes()).hexdigest()
+          (root/'complete-evidence-index.sha256').write_text(digest+'  complete-evidence-index.json\n')
+          (root/'known-failures.json').write_text(json.dumps({'task_id':'T09','candidate_commit':os.environ['CANDIDATE'],'known_failures':[],'unresolved_mandatory_defects':[],'basis':'All preceding exact-source candidate gates completed successfully.'},indent=2)+'\n')
+          print(json.dumps({'candidate':os.environ['CANDIDATE'],'indexed_files':len(files),'index_sha256':digest,'passed':True}))
           PY
 
 

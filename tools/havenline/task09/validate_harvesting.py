@@ -151,8 +151,13 @@ def main() -> None:
         "t06/chop,t06/mine,t06/dismantle",
         "motion-hashes.json",
         "len(motion_pngs)>=180",
+        "c6-performance.json",
+        "critic_harness.py performance",
+        "--rendering-method mobile --rendering-driver vulkan",
+        "complete-evidence-index.json",
+        "known-failures.json",
     ]):
-        errors.append("C5 production motion capture and hashed-frame gate are incomplete")
+        errors.append("C5/C6 production evidence or complete indexing gate is incomplete")
     result = {
         "task": "T09",
         "candidate_commit": args.candidate,
