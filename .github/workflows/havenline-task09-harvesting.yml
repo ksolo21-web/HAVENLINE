@@ -324,6 +324,9 @@ jobs:
               assert report['device_review_canvas']=='shipping_joystick_draw_above_scene_texture'
               assert report['device_control_evidence']['joystick_active'] is True and report['device_control_evidence']['permanent_action_buttons']==0
               assert report['device_control_evidence']['shipping_scene_layering'] is True and report['device_control_evidence']['joystick_input_path'].startswith('Main._gui_input/')
+              assert report['device_control_evidence']['joystick_circle_fully_inside_capture_canvas'] is True
+              assert report['device_control_evidence']['capture_canvas_size']==report['window']
+              assert report['capture_canvas_size']==report['window']
               assert any(row['harvest']['accepted_impacts']>=1 and row['transfer']['accepted_receipts']>=1 and row['carry']['logical_total']>=1 for row in samples)
               assert len(depleted)==1 and depleted[0]['source_visible'] is False and depleted[0]['depletion_settled'] is True
               assert not depleted[0]['action_identity'] and depleted[0]['harvest']['active'] is False

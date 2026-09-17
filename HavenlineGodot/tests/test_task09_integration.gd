@@ -146,6 +146,19 @@ func run() -> void:
 	check("shipping touch path activates the single movement joystick",game.joystick_id==81 and game.joystick_origin==shipping_touch.position and Harvest.contract().permanent_action_buttons==0)
 	shipping_touch.pressed = false
 	game._gui_input(shipping_touch)
+	for tall_canvas in [Vector2(1280,800),Vector2(1024,768),Vector2(1104,884)]:
+		game.size = tall_canvas
+		game.apply_hud_layout(Rect2(Vector2.ZERO,tall_canvas),1.0)
+		var tall_touch := InputEventScreenTouch.new()
+		tall_touch.index = 82
+		tall_touch.position = Vector2(game.hud_safe_rect.position.x+game.joystick_radius+22.0,game.hud_safe_rect.end.y-game.joystick_radius-22.0)
+		tall_touch.pressed = true
+		game._gui_input(tall_touch)
+		var joystick_extent := Vector2.ONE*(game.joystick_radius+2.0)
+		var joystick_bounds := Rect2(game.joystick_origin-joystick_extent,joystick_extent*2.0)
+		check("shipping joystick circle stays inside tall canvas %s" % str(tall_canvas),Rect2(Vector2.ZERO,tall_canvas).encloses(joystick_bounds),[joystick_bounds,tall_canvas])
+		tall_touch.pressed = false
+		game._gui_input(tall_touch)
 	for pine_variant in range(1,4):
 		var pine_mesh: ArrayMesh = game.merged_cache["world/pine_%d" % pine_variant]
 		var surface_names: Array[String] = []

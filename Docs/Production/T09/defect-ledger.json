@@ -119,60 +119,64 @@
       "id": "T09-D008",
       "severity": "mandatory-visual",
       "summary": "Authored tool GLBs rendered as white silhouettes in isolated evidence because the turntable did not consume COLOR_0.",
-      "status": "READY_FOR_VERIFICATION",
+      "status": "VERIFIED_CLOSED",
       "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
       "critic_score": 3.6,
       "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
-      "resolution": "Shipping and isolated review now share the same one-surface vertex-palette material helper; local axe and pickaxe turntables show the authored blue, cyan, metal, orange and wood roles."
+      "resolution": "Exact artifact 10515324426 / run 35256227258 independently verified the shared one-surface vertex-palette material in shipping and isolated views; axe, pickaxe and pry-tool colors are visible across the complete turntables."
     },
     {
       "id": "T09-D009",
       "severity": "mandatory-C5-evidence",
       "summary": "C5 evidence showed a body-only fixture with no harvesting tool or target, and its slow review repeated the real-time sample cadence.",
-      "status": "READY_FOR_VERIFICATION",
+      "status": "VERIFIED_CLOSED",
       "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
       "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
-      "resolution": "C5 v3 instantiates the shipping presenter, exact resource tool, authored source geometry and contact solver for all three clips. The pine fixture now matches shipping trunk-contact reach instead of sharing the broad-rock origin; exact-beat integration tests pass for chop, mine and dismantle. Every turn/close row must pass contact alignment and centimeter-scale grip/impact limits, every cycle must contain a validated contact frame, and slow review records four times as many frames at 0.25 speed across six MP4s."
+      "resolution": "Exact artifact 10515324426 / run 35256227258 independently verified all six C5 videos, 510 C5 records, authored tools and targets, aligned contact in every cycle/turn/close view, and genuine approximately 0.25x slow review."
     },
     {
       "id": "T09-D010",
       "severity": "mandatory-visual",
       "summary": "Gameplay evidence was blown out by protected terrain/source exposure, hiding material identity and contact readability.",
-      "status": "READY_FOR_VERIFICATION",
+      "status": "VERIFIED_CLOSED",
       "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
       "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
-      "resolution": "A disclosed T09-only neutral snow inspection stage preserves the shipping actor, unchanged shipping source materials, simulation, T07 selection and T08/T09 nodes under controlled linear lighting. The capture-only source palette and pad were removed; the production presenter now supplies one bounded resource-color selection ring so wood, stone, metal and fuel identity is part of shipping gameplay rather than manufactured evidence."
+      "resolution": "Exact artifact 10515324426 / run 35256227258 independently verified the disclosed neutral stage, unchanged shipping source materials and bounded shipping resource-color ring across wood, stone, metal and fuel."
     },
     {
       "id": "T09-D011",
       "severity": "mandatory-visual",
       "summary": "The evidence fixture depleted full default resource yields, creating overlapping transfers and oversized carry stacks that occluded the tool and target.",
-      "status": "READY_FOR_VERIFICATION",
+      "status": "VERIFIED_CLOSED",
       "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
       "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
-      "resolution": "Sequence and device review fixtures use two authoritative units—enough to prove commit, depletion and respawn—while reporting the unchanged default yield. After depletion the real T07/T08/T09 systems advance until action/tool/flight/pulse presentation is clear; the screenshot is rejected unless the source is absent, action identity is empty, the tool is hidden and all transfer effects are complete."
+      "resolution": "Exact artifact 10515324426 / run 35256227258 independently verified bounded two-unit fixtures, authoritative commit/depletion/respawn, hidden settled tool/action and zero retained fragments, pulses or transfer flights."
     },
     {
       "id": "T09-D012",
       "severity": "mandatory-evidence-integrity",
       "summary": "known-failures.json was written after complete-evidence-index.json and was therefore omitted from the supposedly complete manifest.",
-      "status": "READY_FOR_VERIFICATION",
+      "status": "VERIFIED_CLOSED",
       "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
       "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
-      "resolution": "The workflow writes known-failures.json before hashing and excludes only the self-referential index and checksum, so the new exact artifact must bind the disclosure file."
+      "resolution": "Exact artifact 10515324426 independently recomputed to 1,192 indexed payload files with zero missing, mismatched or unindexed files; known-failures.json is bound by index 23b0e20637c71fe1c4de0bd6f3f2e5a42d5e7d3d2dd2868c73360e87a8cd3dc7."
     },
     {
       "id": "T09-D013",
       "severity": "mandatory-device-evidence",
       "summary": "Device screenshots did not visibly prove the one-joystick, zero-action-button interaction language.",
-      "status": "READY_FOR_VERIFICATION",
+      "status": "FIX_REQUIRED",
       "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
       "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
-      "resolution": "Shipping Main now keeps its opaque scene viewport behind the parent's joystick draw on every adaptive layout. The device harness no longer changes canvas layering or assigns joystick state; it exercises Main._gui_input with real ScreenTouch and ScreenDrag events, records the shipping input path and proves zero permanent action buttons."
+      "resolution": "Run 35256227258 proved real Main._gui_input touch/drag and zero action buttons, but independent pixel review found the joystick outside all tablet_16_10, tablet_4_3 and foldable_inner captures because the harness sized Main to target native pixels instead of the visible review canvas. The repair now binds Main to root.size, records the target size separately, asserts the entire joystick circle is inside the captured canvas and adds all three tall profiles to integration regression.",
+      "failed_review_source": "754fdde8d21f944cab15365a20a785f6ca887ff6",
+      "failed_review_run": 35256227258,
+      "failed_artifact_id": 10515324426,
+      "failed_pixel_count": 12
     }
   ],
-  "unresolved_mandatory_count": 6,
-  "unresolved_tooling_count": 1,
+  "unresolved_mandatory_count": 1,
+  "unresolved_tooling_count": 0,
   "critic_scores": {
     "pre_repair_independent_review": {
       "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
@@ -184,14 +188,23 @@
       "passed": false,
       "final_acceptance": false,
       "disposition": "D009/D010/D011/D013 concrete blockers repaired; exact indexed CI artifact and fresh final review still required"
+    },
+    "exact_artifact_review_35256227258": {
+      "candidate_commit": "754fdde8d21f944cab15365a20a785f6ca887ff6",
+      "scores": {"C2": 8.94, "C3": 9.46, "C4": 8.72, "C5": 9.38, "C6": 9.52},
+      "minimum_mandatory_dimension_score": 8.72,
+      "passed": false,
+      "approval": false,
+      "unresolved_mandatory_defects": ["T09-D013"],
+      "disposition": "D008-D012 verified closed; D013 remains open because the joystick is absent from 12/24 required tall-device captures."
     }
   },
   "critic_approval_pending": true,
   "evidence": {
-    "workflow_run": 35180691636,
-    "artifact_id": 10480384742,
-    "artifact_digest": "sha256:3c7a39529c7c77518cc7040e023ac7868ee74590843affac3856bc1555968982",
-    "complete_evidence_index_sha256": "ba3c0b334561b248178df583e13dd9114c22714530532d77a2a0b72a3a893dcb"
+    "workflow_run": 35256227258,
+    "artifact_id": 10515324426,
+    "artifact_digest": "sha256:d4e917008130e2259b0feb3bcc45d5b4b99bd86a07aad6b8d518acdf1e4804d5",
+    "complete_evidence_index_sha256": "23b0e20637c71fe1c4de0bd6f3f2e5a42d5e7d3d2dd2868c73360e87a8cd3dc7"
   },
-  "next_action": "Run exact-source T09 CI for repair candidate 7dffcdfb761e180a356a0546a824e939e4dd149b (plus this ledger commit). Close T09-D008 through T09-D013 only after the complete indexed artifact passes and a fresh independent C2/C3/C4/C5/C6 review scores strictly above 9.0 in every mandatory dimension."
+  "next_action": "Publish the tall-device canvas repair, run fresh exact-source T09 CI, and close T09-D013 only after all 24 device pixels visibly contain the single joystick and a fresh independent C2/C3/C4/C5/C6 review scores strictly above 9.0 in every mandatory dimension."
 }

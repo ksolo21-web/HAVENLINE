@@ -28,6 +28,7 @@ var action_token := 901
 var review_stage: Node3D
 var default_source_units := 0
 var visual_review_source_units := 0
+var target_device_logical_size := Vector2.ZERO
 
 func _initialize() -> void:
 	for argument in OS.get_cmdline_user_args():
@@ -581,6 +582,10 @@ func capture_device_view() -> void:
 	drag.position = touch_position+Vector2(game.joystick_radius*0.38,-game.joystick_radius*0.24)
 	game._gui_input(drag)
 	assert(game.joystick_id == 77,"T09 device proof must exercise shipping touch input")
+	var joystick_extent := Vector2.ONE * (game.joystick_radius + 2.0)
+	var joystick_bounds := Rect2(game.joystick_origin - joystick_extent,joystick_extent * 2.0)
+	var capture_canvas := Rect2(Vector2.ZERO,Vector2(root.size))
+	assert(capture_canvas.encloses(joystick_bounds),"T09 joystick circle must be fully inside the captured canvas")
 	var contact_frame := await advance_fixture_to_shipping_contact(true)
 	if contact_frame < 0: return
 	var committed_row: Dictionary = await sample_shipping(contact_frame,Vector2.ZERO,"fixture_commit")
@@ -628,12 +633,15 @@ func write_report() -> void:
 		"joystick_origin":[game.joystick_origin.x,game.joystick_origin.y],
 		"joystick_current":[game.joystick_current.x,game.joystick_current.y],
 		"joystick_radius":game.joystick_radius,
+		"capture_canvas_size":[root.size.x,root.size.y],
+		"target_device_logical_size":[target_device_logical_size.x,target_device_logical_size.y],
+		"joystick_circle_fully_inside_capture_canvas":Rect2(Vector2.ZERO,Vector2(root.size)).encloses(Rect2(game.joystick_origin-Vector2.ONE*(game.joystick_radius+2.0),Vector2.ONE*(game.joystick_radius+2.0)*2.0)),
 		"permanent_action_buttons":int(Harvest.contract().permanent_action_buttons),
 	} if mode == "device" else {}
 	var report := {
 		"task_id":"T09", "candidate":candidate, "mode":mode, "resource":resource_kind,
 		"view":view_id, "device_state":device_id, "window":[root.size.x,root.size.y],
-		"logical_size":[game.size.x,game.size.y], "internal_render":[game.scene_view.size.x,game.scene_view.size.y],
+		"logical_size":[target_device_logical_size.x,target_device_logical_size.y], "capture_canvas_size":[game.size.x,game.size.y], "internal_render":[game.scene_view.size.x,game.scene_view.size.y],
 		"render_scale":game.scene_view.scaling_3d_scale, "native_4k_render":native_4k and game.scene_view.size.x >= 3840 and game.scene_view.size.y >= 2160,
 		"physical_4k60_verified":false, "scenario_is_test_fixture":true,
 		"review_stage":"disclosed_neutral_snow_stage_with_shipping_actor_source_and_systems" if mode != "asset" else "isolated_tool_turntable",
@@ -667,7 +675,12 @@ func run() -> void:
 		return
 	DirAccess.make_dir_recursive_absolute(output)
 	game = Main.new()
-	game.size = DEVICE_SIZES.get(device_id,Vector2(2400,1080))
+	target_device_logical_size = DEVICE_SIZES.get(device_id,Vector2(2400,1080))
+	# The review window is a downscaled, aspect-matched stand-in for the target
+	# device. Main must occupy that visible canvas exactly, just as it does in the
+	# shipping window. Assigning the larger target pixel dimensions directly to
+	# the Control placed the bottom-left joystick below tall review viewports.
+	game.size = Vector2(root.size)
 	root.add_child(game)
 	for frame in 5: await process_frame
 	game.set_process(false)
