@@ -277,6 +277,7 @@ jobs:
           for report in sequences:
               assert report['simulation_authoritative'] is True
               assert report['review_stage']=='disclosed_neutral_snow_stage_with_shipping_actor_source_and_systems'
+              assert report['source_material_policy']=='shipping_materials_unchanged'
               assert report['visual_review_source_units']==2 and report['default_source_units']>=report['visual_review_source_units']
               assert report['commit_authority']=='outpost_simulation.perform_action'
               assert report['capture_progress_driver']=='shipping_simulation_step'
@@ -285,6 +286,7 @@ jobs:
               focused=[row for row in report['samples'] if row.get('action_identity','').startswith('gather:') and row.get('action_state') in ('acquiring','active')]
               shipping_commits=[row for row in report['samples'] if row.get('commit') and row.get('authority')=='outpost_simulation.step/context_director.advance']
               assert approach and focused and shipping_commits,report['resource']
+              assert any(row['harvest']['source_selection_visible'] for row in focused),report['resource']
               if report['resource']=='wood':
                   visible_contact=[row for row in report['samples'] if row.get('source_units',0)>0 and row.get('phase') in ('focus_acquisition','anticipation')]
                   assert visible_contact and all(row.get('source_visible') is True and row.get('source_contact_surface_opaque') is True for row in visible_contact),report['resource']
@@ -299,7 +301,9 @@ jobs:
               depleted=[row for row in report['samples'] if row.get('depleted')]
               respawned=[row for row in report['samples'] if row.get('respawned')]
               assert cancelled and all(not row['harvest']['active'] for row in cancelled)
-              assert len(depleted)==1 and depleted[0]['source_units']==0 and depleted[0]['source_visible'] is False
+              assert len(depleted)==1 and depleted[0]['source_units']==0 and depleted[0]['source_visible'] is False and depleted[0]['depletion_settled'] is True
+              assert not depleted[0]['action_identity'] and depleted[0]['harvest']['active'] is False
+              assert depleted[0]['transfer']['active_flights']==0 and depleted[0]['transfer']['active_arrival_pulses']==0
               assert len(respawned)==1 and respawned[0]['source_units']>0 and respawned[0]['source_visible'] is True
           tools=[r for r in reports if r['mode']=='tool' and not r['native_4k_render']]
           assert len(tools)==30 and len({(r['resource'],r['view']) for r in tools})==30
@@ -316,10 +320,14 @@ jobs:
               respawned=[row for row in report['samples'] if row.get('respawned')]
               assert report['simulation_authoritative'] is True and commits
               assert report['review_stage']=='disclosed_neutral_snow_stage_with_shipping_actor_source_and_systems'
-              assert report['device_review_canvas']=='shipping_joystick_draw_revealed_above_scene_texture'
+              assert report['source_material_policy']=='shipping_materials_unchanged'
+              assert report['device_review_canvas']=='shipping_joystick_draw_above_scene_texture'
               assert report['device_control_evidence']['joystick_active'] is True and report['device_control_evidence']['permanent_action_buttons']==0
+              assert report['device_control_evidence']['shipping_scene_layering'] is True and report['device_control_evidence']['joystick_input_path'].startswith('Main._gui_input/')
               assert any(row['harvest']['accepted_impacts']>=1 and row['transfer']['accepted_receipts']>=1 and row['carry']['logical_total']>=1 for row in samples)
-              assert len(depleted)==1 and depleted[0]['source_visible'] is False
+              assert len(depleted)==1 and depleted[0]['source_visible'] is False and depleted[0]['depletion_settled'] is True
+              assert not depleted[0]['action_identity'] and depleted[0]['harvest']['active'] is False
+              assert depleted[0]['transfer']['active_flights']==0 and depleted[0]['transfer']['active_arrival_pulses']==0
               assert len(respawned)==1 and respawned[0]['source_visible'] is True
           native=[r for r in reports if r['native_4k_render']]
           assert len(native)==1 and native[0]['internal_render'][0]>=3840 and native[0]['internal_render'][1]>=2160 and native[0]['render_scale']==1.0
@@ -331,6 +339,11 @@ jobs:
           assert motion['initialization_pose_schema']=='skeleton_global_pose_v1'
           required_motion={'real-time-cycle','slow-review-cycle','turn-neg-135','turn-neg-090','turn-neg-045','turn-000','turn-030','turn-045','turn-090','turn-135','turn-180','transition-start','transition-end','close-upper-front','close-upper-opposite','close-waist-rear','close-lower-front','close-lower-rear'}
           assert required_motion<={row['evidence_type'] for row in motion['captures']}
+          for animation in ('t06/chop','t06/mine','t06/dismantle'):
+              rows=[row for row in motion['captures'] if row['animation']==animation]
+              contact=[row for row in rows if row['evidence_type'].startswith(('turn-','close-'))]
+              assert contact and all(row['contact_ready'] and row['contact_alignment_valid'] and row['grip_error_m']<=0.025 and row['impact_error_m']<=0.025 and row['secondary_grip_error_m']<=0.045 for row in contact),animation
+              assert any(row['contact_ready'] for row in rows if row['evidence_type'] in ('real-time-cycle','slow-review-cycle')),animation
           motion_pngs=list((root/'motion-c5').rglob('*.png'))
           motion_videos=list((root/'motion-c5/videos').glob('*.mp4'))
           assert len(motion_videos)==6
@@ -401,7 +414,10 @@ jobs:
   c0-diagnose:
     name: C0 diagnosis after terminal T09 failure
     needs: integrated-candidate
-    if: ${{ always() && needs.integrated-candidate.result != 'success' }}
+    # A newer SHA can cancel a superseded validation. That is not a product
+    # failure and must not launch an 85-minute advisor job that blocks the frozen
+    # replacement SHA behind the same workflow concurrency group.
+    if: ${{ always() && needs.integrated-candidate.result == 'failure' }}
     uses: ./.github/workflows/havenline-c0-root-cause.yml
     with:
       task_id: T09

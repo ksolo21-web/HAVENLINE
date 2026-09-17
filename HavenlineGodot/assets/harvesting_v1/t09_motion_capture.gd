@@ -118,6 +118,11 @@ func snap(folder:String,name:String,evidence_type:String,animation:String,t:floa
 		row["fixture_has_tool_and_target"]=bool(fixture_sample.get("fixture_has_tool_and_target",false))
 		row["tool"]=String(fixture_sample.get("tool",""))
 		row["contact_ready"]=bool(fixture_sample.get("contact_ready",false))
+		row["contact_alignment_valid"]=bool(fixture_sample.get("contact_alignment_valid",false))
+		row["grip_error_m"]=float(fixture_sample.get("grip_error_m",INF))
+		row["secondary_grip_error_m"]=float(fixture_sample.get("secondary_grip_error_m",INF))
+		row["impact_error_m"]=float(fixture_sample.get("impact_error_m",INF))
+		row["fixture_presented_progress"]=float(fixture_sample.get("fixture_presented_progress",-1.0))
 	var initialization_probe=(evidence_type in ["real-time-cycle","slow-review-cycle"] and name in ["0000","0001"]) or evidence_type=="transition-start"
 	if initialization_probe:
 		row["pose_signature"]=pose_signature()

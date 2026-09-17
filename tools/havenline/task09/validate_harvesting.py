@@ -128,7 +128,8 @@ def main() -> None:
     presentation_source = SCRIPT.read_text(encoding="utf-8") if SCRIPT.exists() else ""
     if not all(token in presentation_source for token in [
         "vertex_color_use_as_albedo = true", "T09_shared_vertex_palette",
-        '"source_contact_radius":0.10',
+        '"source_contact_radius":0.10', '"source_selection_indicator":"single_shipping_resource_color_ring"',
+        'source_selection_ring.name = "T09ShippingSourceSelectionRing"',
     ]):
         errors.append("tool palette consumption or visible wood surface contact is incomplete")
     capture_source = CAPTURE.read_text(encoding="utf-8") if CAPTURE.exists() else ""
@@ -136,12 +137,12 @@ def main() -> None:
         'if resource_kind in ["stone","metal","fuel"]',
         "detail_direction = (right+forward*0.85).normalized()",
         "var detail_direction := (right-forward*0.22).normalized()",
-        "apply_selected_source_review_palette()",
         "T09DisclosedNeutralSnowStage",
         "visual_review_source_units",
-        "show_behind_parent = true",
+        '"joystick_input_path":"Main._gui_input/InputEventScreenTouch+InputEventScreenDrag"',
+        '"source_material_policy":"shipping_materials_unchanged"',
         '"permanent_action_buttons":int(Harvest.contract().permanent_action_buttons)',
-    ]):
+    ]) or "display.show_behind_parent = true" not in main_source:
         errors.append("resource-specific non-occluding detail camera is missing")
     motion_fixture_source = MOTION_FIXTURE.read_text(encoding="utf-8") if MOTION_FIXTURE.exists() else ""
     motion_scene_source = MOTION_SCENE.read_text(encoding="utf-8") if MOTION_SCENE.exists() else ""
@@ -162,10 +163,11 @@ def main() -> None:
         "FIRST_USE_WARMUP_FRAMES:=8", "player.advance(0.0)", '"upper-opposite"', '"lower-rear"',
         "pose_signature", "get_bone_global_pose", '"initialization_pose_schema":"skeleton_global_pose_v1"',
         "length/maxf(speed,.01)*fps", "float(i)/fps*speed", "contact_time(anim,a.length)",
+        'row["contact_alignment_valid"]', 'row["impact_error_m"]',
     ]) or not all(token in motion_runner_source for token in [
         "t09_motion_capture.gd", "START_MAX_TRANSLATION_M", "START_MAX_ROTATION_DEG",
         "FIRST_STEP_MAX_TRANSLATION_M", "FIRST_STEP_MAX_ROTATION_DEG",
-        "final_skeleton_pose_transform_v1", "pose_delta", "sha256_file",
+        "final_skeleton_pose_transform_v1", "pose_delta", "sha256_file", "contact_review_rows", "cycle_contact_rows",
     ]):
         errors.append("T09 C5 capture lacks final-skeleton initialization or contact-region coverage")
     def motion_function_body(name: str) -> str:
@@ -218,7 +220,7 @@ def main() -> None:
         "motion-hashes.json",
         "len(motion_pngs)>=220",
         "motion_c5_videos",
-        "shipping_joystick_draw_revealed_above_scene_texture",
+        "shipping_joystick_draw_above_scene_texture",
         "visual_review_source_units",
         "c6-performance.json",
         "critic_harness.py performance",

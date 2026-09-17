@@ -129,6 +129,11 @@ func _ready():
 	display.stretch_mode = TextureRect.STRETCH_SCALE
 	display.texture = scene_view.get_texture()
 	display.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# The primary joystick is drawn by this parent Control. Keep the opaque 3D
+	# viewport behind the parent's draw pass so the shipping joystick is visible
+	# during touch/drag input on every adaptive layout. Harvesting remains
+	# automatic and adds no action button.
+	display.show_behind_parent = true
 	add_child(display)
 	world = Node3D.new()
 	scene_view.add_child(world)

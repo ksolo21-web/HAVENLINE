@@ -123,6 +123,15 @@ def main():
         slow_rows=[row for row in animation_rows if row.get("evidence_type")=="slow-review-cycle"]
         if len(slow_rows)<len(real_rows)*3.8 or not all(row.get("speed")==1.0 for row in real_rows) or not all(row.get("speed")==0.25 for row in slow_rows):
             raise SystemExit(f"{animation} slow review is not a true quarter-speed four-times-duration capture")
+        contact_rows=[row for row in animation_rows if str(row.get("evidence_type","")).startswith(("turn-","close-"))]
+        cycle_contact_rows=[row for row in real_rows+slow_rows if row.get("contact_ready") is True]
+        if not contact_rows or not all(
+            row.get("contact_ready") is True and row.get("contact_alignment_valid") is True
+            and row.get("grip_error_m",999.0)<=0.025 and row.get("impact_error_m",999.0)<=0.025
+            and row.get("secondary_grip_error_m",999.0)<=0.045
+            for row in contact_rows
+        ) or not cycle_contact_rows:
+            raise SystemExit(f"{animation} lacks shipping-synchronized tool/target contact proof")
         real0=_capture(meta,animation,"real-time-cycle","/0000.png")
         slow0=_capture(meta,animation,"slow-review-cycle","/0000.png")
         transition0=_capture(meta,animation,"transition-start","/start.png")
@@ -135,7 +144,8 @@ def main():
         first_step=pose_delta(real0,real1)
         start_translation=max(row["max_translation_m"] for row in start_pairs.values())
         start_rotation=max(row["max_rotation_deg"] for row in start_pairs.values())
-        row={"start_pairs":start_pairs,"start_max_translation_m":start_translation,"start_max_rotation_deg":start_rotation,"first_step":first_step}
+        row={"start_pairs":start_pairs,"start_max_translation_m":start_translation,"start_max_rotation_deg":start_rotation,"first_step":first_step,
+             "contact_review_rows":len(contact_rows),"cycle_contact_rows":len(cycle_contact_rows),"contact_passed":True}
         initialization_validation["animations"][animation]=row
         if start_translation>START_MAX_TRANSLATION_M or start_rotation>START_MAX_ROTATION_DEG or first_step["max_translation_m"]>FIRST_STEP_MAX_TRANSLATION_M or first_step["max_rotation_deg"]>FIRST_STEP_MAX_ROTATION_DEG:
             initialization_validation["passed"]=False

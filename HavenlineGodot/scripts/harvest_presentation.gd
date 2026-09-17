@@ -89,6 +89,15 @@ var last_committed_pose_identity := ""
 var last_committed_tool_transform := Transform3D.IDENTITY
 var last_rejected_impact_reason := ""
 var last_commit_solution: Dictionary = {}
+var source_selection_ring: MeshInstance3D
+var source_selection_material: StandardMaterial3D
+
+const RESOURCE_SELECTION_COLORS := {
+	"wood":Color("d58b48"),
+	"stone":Color("91a9ba"),
+	"metal":Color("54d9f2"),
+	"fuel":Color("ffad4d"),
+}
 
 static func contract() -> Dictionary:
 	return {
@@ -114,6 +123,7 @@ static func contract() -> Dictionary:
 		"source_visibility_authority":"simulation_units_and_respawn_only",
 		"effect_geometry":"bounded_visible_mesh_pools",
 		"effect_readability":"brief_non_occluding_contact_burst",
+		"source_selection_indicator":"single_shipping_resource_color_ring",
 		"equipped_tool_shadow_mode":"disabled_micro_prop",
 		"simulation_authoritative":true,
 		"emits_gameplay_events":false,
@@ -620,6 +630,45 @@ func _hide_tools() -> void:
 		if is_instance_valid(node):
 			node.visible = false
 
+func _ensure_source_selection_ring() -> void:
+	if is_instance_valid(source_selection_ring):
+		return
+	source_selection_ring = MeshInstance3D.new()
+	source_selection_ring.name = "T09ShippingSourceSelectionRing"
+	var ring := TorusMesh.new()
+	ring.inner_radius = 0.82
+	ring.outer_radius = 0.94
+	ring.rings = 24
+	ring.ring_segments = 8
+	source_selection_material = StandardMaterial3D.new()
+	source_selection_material.resource_name = "T09_shipping_source_identity_ring"
+	source_selection_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	source_selection_material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
+	source_selection_material.albedo_color = Color(1.0,1.0,1.0,0.68)
+	source_selection_material.emission_enabled = true
+	source_selection_material.emission_energy_multiplier = 0.72
+	ring.material = source_selection_material
+	source_selection_ring.mesh = ring
+	source_selection_ring.cast_shadow = GeometryInstance3D.SHADOW_CASTING_SETTING_OFF
+	source_selection_ring.visible = false
+	add_child(source_selection_ring)
+
+func _show_source_selection(source_id: String, resource: String) -> void:
+	_ensure_source_selection_ring()
+	if not source_bindings.has(source_id):
+		source_selection_ring.visible = false
+		return
+	var binding: Dictionary = source_bindings[source_id]
+	var visual: Node3D = binding.visual
+	if not is_instance_valid(visual) or int(binding.units) <= 0:
+		source_selection_ring.visible = false
+		return
+	var color: Color = RESOURCE_SELECTION_COLORS.get(resource,Color.WHITE)
+	source_selection_material.albedo_color = Color(color.r,color.g,color.b,0.68)
+	source_selection_material.emission = color
+	source_selection_ring.global_position = visual.global_position + Vector3.UP*0.035
+	source_selection_ring.visible = true
+
 func _effect_material(color: Color, emissive := false) -> StandardMaterial3D:
 	var material := StandardMaterial3D.new()
 	material.albedo_color = color
@@ -720,6 +769,8 @@ func sync_source(source_id: String, units: int, respawn: float) -> bool:
 	visual.visible = units > 0
 	if units <= 0:
 		visual.transform = binding.base_transform
+		if is_instance_valid(source_selection_ring) and String(active.get("source_id","")) == source_id:
+			source_selection_ring.visible = false
 	source_bindings[source_id] = binding
 	return true
 
@@ -747,6 +798,7 @@ func begin_action(action: Dictionary, actor_id := -1) -> bool:
 		"tool":tool, "last_cancel_reason":"", "has_committed":committed_before,
 		"commit_contact_armed":false,
 	}
+	_show_source_selection(String(action.source_id),String(action.resource))
 	if action_token > highest_action_token:
 		highest_action_token = action_token
 		highest_action_identity = token_identity
@@ -933,11 +985,13 @@ func cancel(reason := "cancelled") -> void:
 	if not active.is_empty():
 		cancellation_count += 1
 	_hide_tools()
+	if is_instance_valid(source_selection_ring): source_selection_ring.visible = false
 	active = {"last_cancel_reason":reason} if not reason.is_empty() else {}
 
 func reset() -> void:
 	_clear_grip_pose()
 	_hide_tools()
+	if is_instance_valid(source_selection_ring): source_selection_ring.visible = false
 	active = {}
 	fragment_descriptors.clear()
 	impact_pulses.clear()
@@ -1055,6 +1109,7 @@ func descriptor() -> Dictionary:
 		"bound_sources":source_bindings.size(),
 		"visible_fragment_nodes":fragment_descriptors.size(),
 		"visible_pulse_nodes":impact_pulses.size(),
+		"source_selection_visible":is_instance_valid(source_selection_ring) and source_selection_ring.visible,
 		"mutates_inventory":false,
 		"emits_gameplay_events":false,
 	}

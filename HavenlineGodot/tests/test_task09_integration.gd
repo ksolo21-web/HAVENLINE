@@ -5,6 +5,7 @@ const Director = preload("res://scripts/context_director.gd")
 const Motion = preload("res://scripts/character1_motion.gd")
 const Transfer = preload("res://scripts/transfer_feedback.gd")
 const Main = preload("res://scripts/main.gd")
+const MotionFixture = preload("res://assets/harvesting_v1/t09_motion_fixture.tscn")
 
 var checks: Array[Dictionary] = []
 var failures: Array[String] = []
@@ -65,6 +66,7 @@ func run() -> void:
 		"role":"player_lead", "actionable":bool(selected.actionable),
 	}
 	check("T09 accepts canonical T07 identity plus authoritative resource", harvest.begin_action(action,1))
+	check("T09 presents one shipping resource-identity ring",harvest.descriptor().source_selection_visible and Harvest.contract().source_selection_indicator=="single_shipping_resource_color_ring")
 	var synthetic_target := Vector3(wood_profile.impact_socket)-wood_anchor
 	var presented := harvest.update_action(action,Transform3D.IDENTITY,synthetic_target)
 	check("T09 equips the T06 chop contact without pre-commit impact", not presented.contact_ready and presented.tool == "axe" and presented.contact_marker == "C1TwoHandContact")
@@ -101,6 +103,28 @@ func run() -> void:
 	check("T09 preserves one-joystick zero-action-button language", Director.contract().one_primary_movement_joystick and Harvest.contract().permanent_action_buttons == 0)
 	check("T09 adds no persistence field", not Harvest.contract().adds_save_fields)
 
+	var motion_fixture = MotionFixture.instantiate()
+	root.add_child(motion_fixture)
+	await process_frame
+	var fixture_player: AnimationPlayer = motion_fixture.get_node("Character1Visual/AnimationPlayer")
+	for motion_case in [
+		{"animation":"t06/chop","resource":"wood"},
+		{"animation":"t06/mine","resource":"stone"},
+		{"animation":"t06/dismantle","resource":"fuel"},
+	]:
+		var fixture_animation: Animation = fixture_player.get_animation(String(motion_case.animation))
+		var profile: Dictionary = Harvest.profile_for_resource(String(motion_case.resource))
+		var fixture_contact_time := fixture_animation.length*float(profile.impact_progress)
+		fixture_player.stop()
+		fixture_player.play(String(motion_case.animation),0.0)
+		fixture_player.seek(fixture_contact_time,true)
+		fixture_player.advance(0.0)
+		await process_frame
+		var contact_sample: Dictionary = motion_fixture.configure_harvest_sample(String(motion_case.animation),fixture_contact_time,fixture_animation.length)
+		check("C5 %s exact beat uses shipping-synchronized tool/target contact" % String(motion_case.resource),bool(contact_sample.get("fixture_has_tool_and_target",false)) and bool(contact_sample.get("contact_ready",false)) and bool(contact_sample.get("contact_alignment_valid",false)) and float(contact_sample.get("grip_error_m",999.0))<=0.025 and float(contact_sample.get("impact_error_m",999.0))<=0.025 and float(contact_sample.get("secondary_grip_error_m",999.0))<=0.045,contact_sample)
+	motion_fixture.free()
+	await process_frame
+
 	var game := Main.new()
 	game.size = Vector2(1280,720)
 	root.add_child(game)
@@ -108,6 +132,20 @@ func run() -> void:
 		await process_frame
 	game.set_process(false)
 	game.set_physics_process(false)
+	var shipping_display: TextureRect
+	for child in game.get_children():
+		if child is TextureRect and (child as TextureRect).texture == game.scene_view.get_texture():
+			shipping_display = child as TextureRect
+			break
+	check("shipping joystick draw is layered above the opaque scene viewport",is_instance_valid(shipping_display) and shipping_display.show_behind_parent)
+	var shipping_touch := InputEventScreenTouch.new()
+	shipping_touch.index = 81
+	shipping_touch.position = Vector2(game.hud_safe_rect.position.x+game.joystick_radius+16.0,game.hud_safe_rect.end.y-game.joystick_radius-16.0)
+	shipping_touch.pressed = true
+	game._gui_input(shipping_touch)
+	check("shipping touch path activates the single movement joystick",game.joystick_id==81 and game.joystick_origin==shipping_touch.position and Harvest.contract().permanent_action_buttons==0)
+	shipping_touch.pressed = false
+	game._gui_input(shipping_touch)
 	for pine_variant in range(1,4):
 		var pine_mesh: ArrayMesh = game.merged_cache["world/pine_%d" % pine_variant]
 		var surface_names: Array[String] = []

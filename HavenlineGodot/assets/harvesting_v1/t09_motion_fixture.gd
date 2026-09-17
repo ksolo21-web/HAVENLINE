@@ -115,7 +115,11 @@ func _ready() -> void:
 		assert(packed is PackedScene,"T09 C5 fixture target asset missing: "+resource)
 		var target := (packed as PackedScene).instantiate() as Node3D
 		target.name = "Target_"+resource
-		target.position = Vector3(0.0,0.0,1.42)
+		# Match each profile's shipping interaction/contact reach. A pine's narrow
+		# trunk contact radius is much smaller than the broad stone/fuel surfaces;
+		# placing every asset at the same origin leaves the chop target outside the
+		# validated two-hand reach even though its rendered trunk looks nearby.
+		target.position = Vector3(0.0,0.0,1.05 if resource == "wood" else 1.42)
 		target.visible = false
 		add_child(target)
 		configure_contact_cutaway(resource,target)
@@ -159,12 +163,21 @@ func configure_harvest_sample(animation: String, time: float, length: float) -> 
 	presenter.prepare_actor_contact(self)
 	if not presenter.begin_action(action,1):
 		return {"passed":false,"resource":resource}
-	if post_contact:
-		presenter.active["has_committed"] = true
-		presenter.begin_action(action,1)
 	var attachment := Harvest.attachment_transform(self,profile)
 	var target_position := Harvest.source_contact_target(target,attachment,profile,global_position)
-	var descriptor := presenter.update_action(action,attachment,target_position,true)
+	var contact_window := absf(presented_progress-impact) <= Harvest.CONTACT_TOLERANCE
+	var descriptor: Dictionary
+	if contact_window:
+		# Shipping commits call the same forced-contact synchronizer immediately
+		# before the authoritative simulation mutation. Sample that exact pose for
+		# C5 rather than asking the pre-commit interpolator to infer it.
+		descriptor = presenter.synchronize_committed_contact(action,attachment,target_position,1)
+	elif post_contact:
+		presenter.active["has_committed"] = true
+		presenter.begin_action(action,1)
+		descriptor = presenter.update_action(action,attachment,target_position,true)
+	else:
+		descriptor = presenter.update_action(action,attachment,target_position,true)
 	descriptor["passed"] = true
 	descriptor["fixture_resource"] = resource
 	descriptor["fixture_presented_progress"] = presented_progress

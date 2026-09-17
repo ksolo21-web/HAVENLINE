@@ -90,48 +90,6 @@ func review_material(color: Color, roughness := 0.90, metallic := 0.0) -> Standa
 	material.metallic = metallic
 	return material
 
-func source_review_material(surface_name: String) -> StandardMaterial3D:
-	# Evidence must preserve the authored source geometry, but the protected
-	# forest shader was tuned for a different exposure and destroys resource
-	# identity in close inspection. Surface-name palette overrides are local to
-	# this disclosed QA stage and never touch the shared mesh or shipping material.
-	var key := surface_name.to_lower()
-	var color := Color("546a78")
-	var metallic := 0.04
-	if key in ["trunk","bark"]: color = Color("74462d")
-	elif key in ["crown","needles","needles_light"]: color = Color("2f6b5c",0.58)
-	elif key == "lip": color = Color("b9d2d7",0.45)
-	elif key in ["stone_dark","stone"]: color = Color("4a5b68")
-	elif key == "ore":
-		color = Color("c68136")
-		metallic = 0.58
-	elif key == "coal": color = Color("202a33")
-	elif key == "snow": color = Color("c8dce2")
-	var material := review_material(color,0.82,metallic)
-	material.resource_name = "T09_review_"+key
-	if color.a < 0.99:
-		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
-		material.shading_mode = BaseMaterial3D.SHADING_MODE_PER_PIXEL
-	return material
-
-func apply_selected_source_review_palette() -> void:
-	var selected_visual: Node3D = game.resource_visuals[String(source.id)]
-	var mesh_instances: Array[MeshInstance3D] = []
-	if selected_visual is MeshInstance3D:
-		mesh_instances.append(selected_visual as MeshInstance3D)
-	for child in selected_visual.find_children("*","MeshInstance3D",true,false):
-		mesh_instances.append(child as MeshInstance3D)
-	var surface_count := 0
-	for mesh_instance in mesh_instances:
-		if mesh_instance.mesh == null:
-			continue
-		for surface_index in range(mesh_instance.mesh.get_surface_count()):
-			var source_material := mesh_instance.mesh.surface_get_material(surface_index)
-			var surface_name := String(source_material.resource_name) if source_material != null else resource_kind
-			mesh_instance.set_surface_override_material(surface_index,source_review_material(surface_name))
-			surface_count += 1
-	assert(surface_count > 0,"T09 review palette requires the selected authored source mesh")
-
 func configure_review_stage() -> void:
 	# The approved T02/T03 terrain shader is outside T09 ownership and is not a
 	# useful background for close tool/contact inspection. Keep the real shipping
@@ -149,7 +107,9 @@ func configure_review_stage() -> void:
 	game.sun.light_energy = 0.72
 	if mode == "asset" or is_instance_valid(review_stage):
 		return
-	apply_selected_source_review_palette()
+	# Preserve the shipping source materials in the review packet. Controlled
+	# lighting and the neutral floor isolate T09 without replacing the authored
+	# resource surface, so source identity remains production-derived.
 	review_stage = Node3D.new()
 	review_stage.name = "T09DisclosedNeutralSnowStage"
 	game.world.add_child(review_stage)
@@ -164,16 +124,6 @@ func configure_review_stage() -> void:
 	floor.material_override = review_material(Color("7797a8"))
 	floor.position = center
 	review_stage.add_child(floor)
-	var source_pad := MeshInstance3D.new()
-	var pad := CylinderMesh.new()
-	pad.top_radius = 1.28
-	pad.bottom_radius = 1.38
-	pad.height = 0.035
-	pad.radial_segments = 48
-	source_pad.mesh = pad
-	source_pad.material_override = review_material(Color("456778"),0.82)
-	source_pad.position = target_ground-Vector3.UP*0.01
-	review_stage.add_child(source_pad)
 
 func source_cutaway() -> float:
 	var selected_visual: Node3D = game.resource_visuals[String(source.id)]
@@ -413,6 +363,35 @@ func commit(frame: int) -> void:
 		"harvest":game.harvest_presentation.descriptor(),
 	})
 
+func settle_depleted_state(frame: int) -> int:
+	# A depletion still must show the authoritative result, not the preceding
+	# contact pose or an in-flight T08 receipt. Advance the real shipping systems
+	# until T07 has cleared the unavailable action and the bounded transfer/pulse
+	# presentation has completed. Inventory/carry state remains untouched.
+	var settled_row: Dictionary = {}
+	for settle_index in 120:
+		settled_row = await sample_shipping(frame,Vector2.ZERO,"depletion_settle")
+		frame += 1
+		var transfer: Dictionary = settled_row.transfer
+		var harvest: Dictionary = settled_row.harvest
+		var action_clear := String(settled_row.action_identity).is_empty() and not bool(harvest.get("active",false))
+		var transfer_clear := int(transfer.get("active_flights",0)) == 0 and int(transfer.get("active_arrival_pulses",0)) == 0
+		if settle_index >= 72 and action_clear and transfer_clear:
+			break
+	var final_transfer: Dictionary = game.transfer_feedback.descriptor()
+	var final_harvest: Dictionary = game.harvest_presentation.descriptor()
+	assert(String(game.sim.action.get("identity","")).is_empty(),"depleted proof requires cleared T07 action")
+	assert(not bool(final_harvest.get("active",false)),"depleted proof requires hidden T09 tool")
+	assert(int(final_transfer.get("active_flights",0)) == 0 and int(final_transfer.get("active_arrival_pulses",0)) == 0,"depleted proof requires completed T08 transfer")
+	records.append({
+		"frame":frame,"depleted":true,"depletion_settled":true,
+		"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible,
+		"action_identity":String(game.sim.action.get("identity","")),
+		"harvest":final_harvest,"transfer":final_transfer,
+		"carry":game.carry_stacks[game.sim.lead].descriptor(),
+	})
+	return frame+1
+
 func sample_cancelled(frame: int) -> void:
 	var started := Time.get_ticks_usec()
 	game.sim.action = {"kind":"", "id":"", "position":source.position, "actionable":false, "reason":"movement_owns_locomotion"}
@@ -519,8 +498,7 @@ func capture_sequence() -> void:
 		game._process(1.0 / 60.0)
 		action_token += 1
 		lifecycle_frame += 1
-	game._process(1.0 / 60.0)
-	records.append({"frame":lifecycle_frame,"depleted":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
+	lifecycle_frame = await settle_depleted_state(lifecycle_frame)
 	await capture_png("%s-depleted" % resource_kind)
 	for video_frame in range(video_frame_cursor,video_frame_cursor+8,2): await capture_jpg(video_frame)
 	# Let the unchanged 90-second simulation timer perform the respawn while the
@@ -589,17 +567,20 @@ func capture_asset_view() -> void:
 func capture_device_view() -> void:
 	# Show the only movement control in the adaptive evidence. Harvesting itself
 	# remains automatic and introduces no button.
-	# Main's joystick is drawn by its parent Control. Put the existing scene
-	# TextureRect behind that parent draw only in this disclosed QA capture so the
-	# shipping joystick renderer is visible instead of being covered by the opaque
-	# 3D child. No control or input behavior is added by the fixture.
-	for child in game.get_children():
-		if child is TextureRect and (child as TextureRect).texture == game.scene_view.get_texture():
-			(child as TextureRect).show_behind_parent = true
-	game.joystick_id = -2
-	game.joystick_origin = Vector2(game.hud_safe_rect.position.x+game.joystick_radius+22.0,game.hud_safe_rect.end.y-game.joystick_radius-22.0)
-	game.joystick_current = game.joystick_origin+Vector2(game.joystick_radius*0.38,-game.joystick_radius*0.24)
-	game.queue_redraw()
+	# Exercise Main's real touch handler; do not fabricate joystick state in the
+	# capture harness. The scene viewport is already behind Main's parent draw in
+	# shipping code, so the screenshot proves the production layering as well.
+	var touch_position := Vector2(game.hud_safe_rect.position.x+game.joystick_radius+22.0,game.hud_safe_rect.end.y-game.joystick_radius-22.0)
+	var touch := InputEventScreenTouch.new()
+	touch.index = 77
+	touch.position = touch_position
+	touch.pressed = true
+	game._gui_input(touch)
+	var drag := InputEventScreenDrag.new()
+	drag.index = 77
+	drag.position = touch_position+Vector2(game.joystick_radius*0.38,-game.joystick_radius*0.24)
+	game._gui_input(drag)
+	assert(game.joystick_id == 77,"T09 device proof must exercise shipping touch input")
 	var contact_frame := await advance_fixture_to_shipping_contact(true)
 	if contact_frame < 0: return
 	var committed_row: Dictionary = await sample_shipping(contact_frame,Vector2.ZERO,"fixture_commit")
@@ -614,8 +595,7 @@ func capture_device_view() -> void:
 		game._process(1.0/60.0)
 		action_token += 1
 		lifecycle_frame += 1
-	game._process(1.0/60.0)
-	records.append({"frame":lifecycle_frame,"depleted":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
+	lifecycle_frame = await settle_depleted_state(lifecycle_frame)
 	await capture_png("device-%s-%s-depleted" % [device_id,resource_kind])
 	var evidence_position: Vector2 = game.sim.position
 	game.sim.position = Vector2(float(game.sim.contract.world.boundX),float(game.sim.contract.world.boundZ))
@@ -643,6 +623,8 @@ func write_report() -> void:
 	}
 	var device_control_evidence := {
 		"joystick_active":game.joystick_id != -1,
+		"joystick_input_path":"Main._gui_input/InputEventScreenTouch+InputEventScreenDrag",
+		"shipping_scene_layering":true,
 		"joystick_origin":[game.joystick_origin.x,game.joystick_origin.y],
 		"joystick_current":[game.joystick_current.x,game.joystick_current.y],
 		"joystick_radius":game.joystick_radius,
@@ -655,10 +637,11 @@ func write_report() -> void:
 		"render_scale":game.scene_view.scaling_3d_scale, "native_4k_render":native_4k and game.scene_view.size.x >= 3840 and game.scene_view.size.y >= 2160,
 		"physical_4k60_verified":false, "scenario_is_test_fixture":true,
 		"review_stage":"disclosed_neutral_snow_stage_with_shipping_actor_source_and_systems" if mode != "asset" else "isolated_tool_turntable",
-		"device_review_canvas":"shipping_joystick_draw_revealed_above_scene_texture" if mode == "device" else "not_applicable",
+		"device_review_canvas":"shipping_joystick_draw_above_scene_texture" if mode == "device" else "not_applicable",
 		"device_control_evidence":device_control_evidence,
 		"default_source_units":default_source_units, "visual_review_source_units":visual_review_source_units,
 		"review_visibility_policy":"selected_actor_source_effects_on_shipping_surface",
+		"source_material_policy":"shipping_materials_unchanged",
 		"review_root_paths":review_root_paths,
 		"review_visible_visual_paths":visible_review_visuals,
 		"capture_progress_driver":"presentation_fixture" if mode == "asset" else "shipping_simulation_step",
