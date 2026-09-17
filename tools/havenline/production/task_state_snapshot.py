@@ -13,7 +13,7 @@ def snapshot(task_id:str,last_gate:str='UNKNOWN',candidate:str|None=None):
     task_id=task_id.upper();reg=load_json(DOCS/'WORKSTREAM_REGISTRY.json');graph=load_json(DOCS/'DEPENDENCY_GRAPH.json');own=load_json(DOCS/'PATH_OWNERSHIP.json');contracts=load_json(DOCS/'CONTRACT_REGISTRY.json') if (DOCS/'CONTRACT_REGISTRY.json').exists() else {'contracts':{}}
     node=graph['tasks'][task_id];ws=next((w for w in reg['workstreams'] if w.get('task_id')==task_id),{})
     owned=expand_alias(ws.get('owned_paths',[]),own) if ws else []
-    produced=[k for k,v in contracts.get('contracts',{}).items() if v.get('owner_task')==task_id]
+    produced=[k for k,v in contracts.get('contracts',{}).items() if (v.get('owner_task') or v.get('owner'))==task_id]
     consumed=[k for k,v in contracts.get('contracts',{}).items() if task_id in v.get('consumers',[])]
     blockers=list(ws.get('known_blockers',[])) if ws else []
     v3=task_readiness(task_id) if task_readiness and task_id.startswith('T') and task_id[1:].isdigit() and int(task_id[1:])>=10 else None
