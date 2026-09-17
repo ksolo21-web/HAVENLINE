@@ -142,8 +142,10 @@ jobs:
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path "$base_dir/HavenlineGodot" --import --quit > task09-evidence/tests/exact-base-import.log 2>&1
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path "$base_dir/HavenlineGodot" --script res://tools/bake_crew_motion.gd > task09-evidence/tests/exact-base-motion-fixture.log 2>&1
           mkdir -p task09-evidence/performance/exact-base task09-evidence/performance/candidate
-          xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method mobile --rendering-driver vulkan --resolution 1280x720 --path "$base_dir/HavenlineGodot" --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/exact-base" --candidate="$BASE" --expect-base
-          /usr/bin/time -v -o task09-evidence/performance/candidate/time.txt xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method mobile --rendering-driver vulkan --resolution 1280x720 --path HavenlineGodot --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/candidate" --candidate="$CANDIDATE"
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method mobile --rendering-driver vulkan --resolution 1280x720 --path "$base_dir/HavenlineGodot" --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/exact-base" --candidate="$BASE" --expect-base
+          /usr/bin/time -v -o task09-evidence/performance/candidate/time.txt xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method mobile --rendering-driver vulkan --resolution 1280x720 --path HavenlineGodot --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/candidate" --candidate="$CANDIDATE"
           git worktree remove --force "$base_dir"
           python3 - <<'PY'
           import json,os,subprocess
