@@ -14,6 +14,9 @@ ASSETS = ROOT / "HavenlineGodot" / "assets" / "harvesting_v1"
 SCRIPT = ROOT / "HavenlineGodot" / "scripts" / "harvest_presentation.gd"
 MAIN = ROOT / "HavenlineGodot" / "scripts" / "main.gd"
 CAPTURE = ROOT / "HavenlineGodot" / "tests" / "capture_task09_harvesting.gd"
+MOTION_FIXTURE = ASSETS / "t09_motion_fixture.gd"
+MOTION_SCENE = ASSETS / "t09_motion_fixture.tscn"
+WORKFLOW = ROOT / ".github" / "workflows" / "havenline-task09-harvesting.yml"
 REGISTRY = ROOT / "Docs" / "Production" / "RESOURCE_ACTION_REGISTRY.json"
 REFERENCE_SELECTION = ROOT / "Docs" / "Production" / "T09" / "reference-selection.json"
 
@@ -133,6 +136,23 @@ def main() -> None:
         "var detail_direction := (right-forward*0.22).normalized()",
     ]):
         errors.append("resource-specific non-occluding detail camera is missing")
+    motion_fixture_source = MOTION_FIXTURE.read_text(encoding="utf-8") if MOTION_FIXTURE.exists() else ""
+    motion_scene_source = MOTION_SCENE.read_text(encoding="utf-8") if MOTION_SCENE.exists() else ""
+    workflow_source = WORKFLOW.read_text(encoding="utf-8") if WORKFLOW.exists() else ""
+    if not all(token in motion_fixture_source for token in [
+        'preload("res://assets/characters/Character1.glb")',
+        'Character1Motion.install(self,"player_lead")',
+        '"human_player_chop"', '"human_player_mine"', '"human_player_dismantle"',
+    ]) or "t09_motion_fixture.gd" not in motion_scene_source:
+        errors.append("C5 motion fixture does not use shipping Character 1 motion profiles")
+    if not all(token in workflow_source for token in [
+        "tools/havenline/production/motion_capture.py",
+        "t09_motion_fixture.tscn",
+        "t06/chop,t06/mine,t06/dismantle",
+        "motion-hashes.json",
+        "len(motion_pngs)>=180",
+    ]):
+        errors.append("C5 production motion capture and hashed-frame gate are incomplete")
     result = {
         "task": "T09",
         "candidate_commit": args.candidate,

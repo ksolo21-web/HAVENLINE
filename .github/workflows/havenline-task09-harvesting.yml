@@ -186,8 +186,14 @@ jobs:
           done
           out=task09-evidence/captures/native-4k
           xvfb-run -a "${godot[@]}" --resolution 3840x2160 --script res://tests/capture_task09_harvesting.gd -- --out="$PWD/$out" --resource=wood --mode=tool --view=front-right --device=phone_16_9 --native-4k --candidate="$CANDIDATE"
+          xvfb-run -a python3 tools/havenline/production/motion_capture.py \
+            --candidate "$CANDIDATE" --task T09 \
+            --scene res://assets/harvesting_v1/t09_motion_fixture.tscn \
+            --subject-path . --animation-player-path Character1Visual/AnimationPlayer \
+            --animations t06/chop,t06/mine,t06/dismantle \
+            --out task09-evidence/captures/motion-c5
           python3 - <<'PY'
-          import json,struct
+          import hashlib,json,struct
           from pathlib import Path
           root=Path('task09-evidence/captures')
           reports=[json.loads(p.read_text()) for p in root.glob('*/capture-report.json')]
@@ -238,6 +244,14 @@ jobs:
               assert len(respawned)==1 and respawned[0]['source_visible'] is True
           native=[r for r in reports if r['native_4k_render']]
           assert len(native)==1 and native[0]['internal_render'][0]>=3840 and native[0]['internal_render'][1]>=2160 and native[0]['render_scale']==1.0
+          motion=json.loads((root/'motion-c5/motion.json').read_text())
+          motion_hashes=json.loads((root/'motion-c5/motion-hashes.json').read_text())
+          assert motion['candidate_commit']==reports[0]['candidate'] and motion['task_id']=='T09'
+          assert {row['animation'] for row in motion['captures']}=={'t06/chop','t06/mine','t06/dismantle'}
+          assert {'real-time-cycle','slow-review-cycle','turn-0','turn-30','turn-90','turn-180','transition-start','transition-end'}<={row['evidence_type'] for row in motion['captures']}
+          motion_pngs=list((root/'motion-c5').rglob('*.png'))
+          assert len(motion_pngs)>=180 and len(motion_hashes['frames'])==len(motion_pngs)
+          assert all(motion_hashes['frames'][str(path.relative_to(root/'motion-c5'))]==hashlib.sha256(path.read_bytes()).hexdigest() for path in motion_pngs)
           pngs=list(root.glob('*/*.png'))
           sequence_frames=list(root.glob('sequence-*/frames/frame-*.jpg'))
           frame_counts={resource:len(list((root/('sequence-'+resource)/'frames').glob('frame-*.jpg'))) for resource in ('wood','stone','metal','fuel')}
@@ -253,7 +267,7 @@ jobs:
                   assert stream.read(4)==b'IHDR' and length==13
                   width,height=struct.unpack('>II',stream.read(8))
                   assert width>0 and height>0,(path,width,height)
-          summary={'candidate':reports[0]['candidate'],'reports':len(reports),'pngs':len(pngs),'sequence_videos':len(list(root.glob('sequence-*/*.mp4'))),'sequence_frame_counts':frame_counts,'in_hand_views':len(tools),'isolated_tool_turntables':len(assets),'native_4k_internal':native[0]['internal_render'],'physical_4k60_verified':False,'passed':True}
+          summary={'candidate':reports[0]['candidate'],'reports':len(reports),'pngs':len(pngs),'motion_c5_pngs':len(motion_pngs),'motion_c5_animations':['t06/chop','t06/mine','t06/dismantle'],'sequence_videos':len(list(root.glob('sequence-*/*.mp4'))),'sequence_frame_counts':frame_counts,'in_hand_views':len(tools),'isolated_tool_turntables':len(assets),'native_4k_internal':native[0]['internal_render'],'physical_4k60_verified':False,'passed':True}
           Path('task09-evidence/capture-summary.json').write_text(json.dumps(summary,indent=2)); print(json.dumps(summary))
           PY
 
