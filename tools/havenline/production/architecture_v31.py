@@ -18,10 +18,10 @@ def validate():
     for name,row in components.items():
         if not row.get('passed',True):errors.append(name+': '+', '.join(row.get('errors',[])))
     snapshots=[]
-    for i in range(10,71):
+    for i in range(9,71):
         s=snapshot(f'T{i:02d}');v=validate_snapshot(s);snapshots.append(s)
         if not v['passed']:errors.append(f'T{i:02d} task snapshot invalid: '+', '.join(v['errors']))
-    return {'passed':not errors,'schema_version':1,'task_count':61,'components':components,'snapshot_count':len(snapshots),'errors':errors}
+    return {'passed':not errors,'schema_version':1,'task_count':62,'components':components,'snapshot_count':len(snapshots),'errors':errors}
 def main():
     ap=argparse.ArgumentParser();sub=ap.add_subparsers(dest='cmd',required=True);sub.add_parser('validate');r=sub.add_parser('readiness');r.add_argument('task_id');a=ap.parse_args();out=validate() if a.cmd=='validate' else task_readiness(a.task_id);print(json.dumps(out,indent=2));raise SystemExit(0 if out.get('passed',True) else 2)
 if __name__=='__main__':main()
