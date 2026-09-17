@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "critical_workflows": [
+    ".github/workflows/havenline-production-governance.yml",
+    ".github/workflows/havenline-candidate-guard.yml",
+    ".github/workflows/havenline-critic-safeguards.yml",
+    ".github/workflows/havenline-c0-root-cause.yml",
+    ".github/workflows/havenline-specialist-critic.yml",
+    ".github/workflows/havenline-specialist-model-cache.yml",
+    ".github/workflows/havenline-device-release-gate.yml",
+    ".github/workflows/havenline-godot-android.yml"
+  ],
+  "action_pins": {
+    "actions/checkout": "11d5960a326750d5838078e36cf38b85af677262",
+    "actions/setup-python": "a26af69be951a213d495a4c3e4e4022e16d87065",
+    "actions/upload-artifact": "ea165f8d65b6e75b540449e92b4886f43607fa02",
+    "actions/download-artifact": "d3f86a106a0bac45b974a628896c90dbdf5c8093",
+    "actions/cache": "0057852bfaa89a56745cba8c7296529d2fc39830",
+    "actions/setup-java": "cf277c60eb25467037889841efdb72551f06f6c3",
+    "android-actions/setup-android": "9fc6c4e9069bf8d3d10b2204b1fb8f6ef7065407"
+  },
+  "runner": {
+    "required_label": "ubuntu-24.04",
+    "immutable_digest_available": false,
+    "runtime_provenance_required": true,
+    "required_runtime_fields": ["ImageOS", "ImageVersion", "RUNNER_OS", "RUNNER_ARCH"],
+    "drift_policy": "runner image drift invalidates reusable environment-sensitive proof and requires fresh validation"
+  },
+  "tools": {
+    "python": "3.12",
+    "java": "17",
+    "android_build_tools": "35.0.1",
+    "godot": "4.7.2.stable",
+    "godot_editor_sha512": "9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65",
+    "godot_templates_sha512": "ca4d71c4d7b81dfc15d1a98baa07534aa95b03fdda78a0075b06672e1648d2e5f40980c9adc28d23e1b92e732ee7bf3461997aa804af74ec2fcd7a93ccb84079"
+  },
+  "mutable_action_tags_forbidden": true,
+  "lock_change_requires_new_hosted_governance_pass": true
+}
