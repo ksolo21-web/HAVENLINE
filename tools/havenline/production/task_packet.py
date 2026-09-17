@@ -3,6 +3,7 @@ from __future__ import annotations
 import datetime, pathlib, sys
 from lib import DOCS, ROOT, load_json, expand_alias, sha256_file
 from forward_execution import resolve_task
+from architecture_v3 import task_readiness
 
 RESOURCE_REGISTRY = DOCS / "RESOURCE_ACTION_REGISTRY.json"
 ACTOR_MATRIX = DOCS / "ACTOR_CAPABILITY_MATRIX.json"
@@ -106,6 +107,24 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
         text+="- Do not run expensive downstream evidence after an earlier required gate fails. Preserve the exact failure and invoke C0.\n"
         if forward['execution_mode'] != 'build':
             text+="- This task is not a runtime-repair owner. A discovered runtime defect must be routed through C0/change request to the owning build task.\n"
+
+        v3=task_readiness(task_id);feas=v3['feasibility'];sched=v3.get('scheduler') or {};contracts=v3['contracts']
+        text+="\n## Production Architecture V3 — machine resolved\n"
+        text+="- Standard: `Docs/Production/PRODUCTION_ARCHITECTURE_V3.md`\n"
+        text+=f"- V3 readiness: `python3 tools/havenline/production/architecture_v3.py readiness {task_id}`\n"
+        text+=f"- Feasibility state: `{feas['activation_state']}`\n"
+        text+=f"- Runtime activation allowed now: `{str(feas['runtime_activation_allowed']).lower()}`\n"
+        text+=f"- Capability blockers: {', '.join(feas['capability_blockers']) or 'none'}\n"
+        if sched:
+            text+=f"- Scheduler class: `{sched['classification']}`; deterministic priority score: `{sched['priority_score']}` (scheduling heuristic only, never an acceptance score).\n"
+        text+=f"- Produces versioned contracts: {', '.join(x['contract_id'] for x in contracts['produces']) or 'none'}\n"
+        text+=f"- Consumes versioned contracts: {', '.join(x['contract_id'] for x in contracts['consumes']) or 'none'}\n"
+        text+="- Before runtime activation: resolve all required capabilities; unknown external/hardware prerequisites are not READY.\n"
+        text+="- Before integration: run `synthetic_merge_forecast.py` against the current integration head and validate any affected shared contract change.\n"
+        text+="- Gate proof reuse is allowed only through `gate_fingerprint.py`; exact-source-only gates remain fresh and failed results can never be reused as PASS.\n"
+        text+="- C0 must query `FAILURE_INTELLIGENCE.json` before repair; historical matches are advisory and require confirmation from current evidence.\n"
+        if not feas['runtime_activation_allowed']:
+            text+="- **DO NOT start runtime implementation from this packet yet.** Preparation is allowed, but the recorded V3 activation blocker(s) must clear first.\n"
 
     text+="""
 
