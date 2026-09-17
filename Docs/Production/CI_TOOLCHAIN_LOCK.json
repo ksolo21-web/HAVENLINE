@@ -26,6 +26,20 @@
     "required_runtime_fields": ["ImageOS", "ImageVersion", "RUNNER_OS", "RUNNER_ARCH"],
     "drift_policy": "runner image drift invalidates reusable environment-sensitive proof and requires fresh validation"
   },
+  "environment_sensitive_reuse_gates": [
+    "focused_unit",
+    "task_sentinel",
+    "motion_preflight",
+    "progression_sim",
+    "economy_sim",
+    "save_matrix",
+    "device_matrix",
+    "security_attack",
+    "liveops_sim",
+    "impacted_regression",
+    "performance",
+    "visual_evidence"
+  ],
   "tools": {
     "python": "3.12",
     "java": "17",
