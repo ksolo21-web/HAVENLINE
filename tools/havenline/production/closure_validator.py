@@ -40,6 +40,29 @@ def validate_raw_critic_record(raw,cid,task,candidate,workflow_run_id,artifact_i
     if not all(raw.get(k) for k in ("provider","model","request_or_run_id")):errors.append("provider provenance incomplete")
     return errors
 
+def validate_critic_aggregate(aggregate,required,candidate,workflow_run_id,artifact_id,artifact_sha,evidence_hash,retained_review,critics):
+    errors=[]
+    if aggregate.get("status")!="PASS" or aggregate.get("disposition")!="APPROVED" or aggregate.get("coverage_complete") is not True or aggregate.get("unresolved_mandatory_defects"):errors.append("disposition incomplete")
+    if (aggregate.get("candidate_commit"),aggregate.get("workflow_run_id"),aggregate.get("artifact_id"),aggregate.get("artifact_sha256"),aggregate.get("complete_evidence_index_sha256"))!=(candidate,workflow_run_id,artifact_id,artifact_sha,evidence_hash):errors.append("source identity mismatch")
+    scores=[score for cid in required for score in aggregate.get("critics",{}).get(cid,{}).get("scores",{}).values()]
+    if not scores or aggregate.get("minimum_mandatory_dimension_score")!=min(scores):errors.append("minimum score mismatch")
+    ar=aggregate.get("retained_review_evidence",{})
+    if (ar.get("workflow_run_id"),ar.get("artifact_id"),ar.get("artifact_sha256"),ar.get("expires_at"))!=(retained_review.get("run_id"),retained_review.get("artifact_id"),str(retained_review.get("digest","")).removeprefix("sha256:"),retained_review.get("expires_at")):errors.append("retained evidence mismatch")
+    for cid in required:
+        row=aggregate.get("critics",{}).get(cid,{});expected=critics.get(cid,{})
+        expected_scores=expected.get("scores",{})
+        if row.get("status")!="PASS" or row.get("coverage_complete") is not True or row.get("defects") or row.get("scores")!=expected_scores or not expected_scores or row.get("minimum_dimension_score")!=min(expected_scores.values()) or row.get("raw_record_path")!=expected.get("raw_record_path") or row.get("raw_record_sha256")!=expected.get("raw_record_sha256"):errors.append("critic row mismatch "+cid)
+    return errors
+
+def validate_defect_ledger(ledger,candidate,aggregate,required):
+    errors=[]
+    if ledger.get("candidate_commit")!=candidate or ledger.get("integrated_commit")!=candidate:errors.append("source identity mismatch")
+    if ledger.get("unresolved_mandatory_count")!=0 or ledger.get("unresolved_tooling_count")!=0 or ledger.get("critic_approval_pending") is not False:errors.append("unresolved state mismatch")
+    if not ledger.get("defects") or any(row.get("status")!="VERIFIED_CLOSED" for row in ledger.get("defects",[])):errors.append("non-closed defect")
+    minima={cid:min(aggregate.get("critics",{}).get(cid,{}).get("scores",{}).values()) for cid in required if aggregate.get("critics",{}).get(cid,{}).get("scores")}
+    if ledger.get("critic_scores")!=minima:errors.append("critic minima mismatch")
+    return errors
+
 def main():
     ap=argparse.ArgumentParser();ap.add_argument("manifest");a=ap.parse_args()
     p=pathlib.Path(a.manifest)
@@ -242,7 +265,9 @@ def main():
     aggregate_retained=aggregate.get("retained_review_evidence",{})
     if (aggregate_retained.get("workflow_run_id"),aggregate_retained.get("artifact_id"),aggregate_retained.get("artifact_sha256"),aggregate_retained.get("expires_at"))!=(retained_review.get("run_id"),retained_review.get("artifact_id"),str(retained_review.get("digest","")).removeprefix("sha256:"),retained_review.get("expires_at")):
         errors.append("independent critic aggregate retained evidence mismatch")
+    errors += ["critic aggregate: "+x for x in validate_critic_aggregate(aggregate,required,candidate,d.get("workflow_run_id"),d.get("artifact_id"),d.get("artifact_sha256"),evidence.get("provenance_hash"),retained_review,critics)]
     ledger=load_json(DOCS/str(task)/"defect-ledger.json")
+    errors += ["defect ledger: "+x for x in validate_defect_ledger(ledger,candidate,aggregate,required)]
     if ledger.get("candidate_commit")!=candidate or ledger.get("integrated_commit")!=candidate:
         errors.append("defect ledger source identity mismatch")
     if ledger.get("unresolved_mandatory_count")!=0 or ledger.get("unresolved_tooling_count")!=0 or ledger.get("critic_approval_pending") is not False:
