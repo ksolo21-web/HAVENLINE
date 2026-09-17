@@ -25,17 +25,20 @@ Read in this order before any Havenline production work:
 2. `Docs/Production/AGENT_EXECUTION_LOOP_GUARD.md`
 3. `Docs/Production/ANTI_LOOP_ROOT_CAUSE_STANDARD.md`
 4. `Docs/Production/SEQUENTIAL_REPAIR_PLAN.md`
-5. `Docs/Production/task-gates.json`
-6. `Docs/Production/GAME_MASTER_ACCOUNT_STANDARD.md`
-7. `Docs/Production/GAME_MASTER_POLICY.json`
-8. `Docs/Production/WORKSTREAM_REGISTRY.json`
-9. `Docs/Production/DEPENDENCY_GRAPH.json`
-10. `Docs/Production/PATH_OWNERSHIP.json`
-11. `Docs/Production/CRITIC_MATRIX.json`
-12. `Docs/Production/PERFORMANCE_BUDGETS.json`
-13. the active task packet/frozen scope
-14. `Docs/AI/HavenlineProjectContext.md`
-15. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
+5. `Docs/Production/FORWARD_EXECUTION_STANDARD.md`
+6. `Docs/Production/FORWARD_EXECUTION_PROFILES.json`
+7. `Docs/Production/FORWARD_GATE_RUNNERS.json`
+8. `Docs/Production/task-gates.json`
+9. `Docs/Production/GAME_MASTER_ACCOUNT_STANDARD.md`
+10. `Docs/Production/GAME_MASTER_POLICY.json`
+11. `Docs/Production/WORKSTREAM_REGISTRY.json`
+12. `Docs/Production/DEPENDENCY_GRAPH.json`
+13. `Docs/Production/PATH_OWNERSHIP.json`
+14. `Docs/Production/CRITIC_MATRIX.json`
+15. `Docs/Production/PERFORMANCE_BUDGETS.json`
+16. the active task packet/frozen scope
+17. `Docs/AI/HavenlineProjectContext.md`
+18. `Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md`, its source manifest, and actual reference pixels.
 
 Inspect current source/evidence for newer work. `Docs/AI/UnityProjectContext.md` is historical.
 
