@@ -169,12 +169,14 @@ def main() -> None:
     settle_body = motion_function_body("settle_pose")
     warm_body = motion_function_body("warm_pose")
     cycle_body = motion_function_body("capture_cycle")
+    set_pose_body = motion_function_body("set_pose")
     if (
-        settle_body.count("set_pose(anim,t)") != 1
+        set_pose_body.count("player.speed_scale=0.0") != 1
+        or settle_body.count("set_pose(anim,t)") != 1
         or warm_body.count("set_pose(anim,t)") != 1
         or "if i>0:set_pose(anim,t)" not in cycle_body
     ):
-        errors.append("C5 pose convergence must not be discarded by a post-settle animation restart")
+        errors.append("C5 pose sampling must freeze playback and preserve convergence without a post-settle restart")
     # Whole-render byte/pixel identity is not a valid animation-pose invariant.
     # Keep hashes for provenance, but fail closed if an image-equivalence gate is reintroduced.
     forbidden_motion_gate_tokens=["normalized_rmse(", "png_pixels(", "START_EQUIVALENCE_MAX_RMSE", "FIRST_STEP_MAX_RMSE"]
