@@ -12,7 +12,7 @@ EXPECTED_TOOLS={
 }
 ALLOWED_MIGRATION_PATTERNS=[
 "Docs/Production/**","tools/havenline/production/**","AGENTS.md",
-".github/workflows/havenline-production-governance.yml",".github/workflows/havenline-candidate-guard.yml",".github/workflows/havenline-apply-governance-v2.yml",
+".github/workflows/havenline-production-governance.yml",".github/workflows/havenline-candidate-guard.yml",".github/workflows/havenline-apply-governance-v2.yml",".github/workflows/havenline-task09-harvesting.yml",
 "HavenlineGodot/tests/production_capture_harness.gd","HavenlineGodot/tests/production_motion_capture.gd"
 ]
 
