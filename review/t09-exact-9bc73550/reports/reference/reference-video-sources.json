@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "purpose": "Authoritative Havenline reference selection, not release approval",
+  "sources": [
+    {
+      "id": "A",
+      "filename": "Screen_Recording_20260817_124839_YouTube.mp4",
+      "conversation_file_id": "file_00000000f36c81f5bed89613ab4ae05d",
+      "sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+      "bytes": 74486197,
+      "duration_seconds": 62.551689,
+      "width": 1080,
+      "height": 2520,
+      "has_audio": false,
+      "selected_seek_seconds": [0, 3, 5, 7, 9, 11, 13, 16, 20, 24, 28, 32, 35, 37, 40, 43, 47, 50, 53, 56, 60],
+      "notes": "Fishing, food production, crowds, helpers and reinvestment. Approximately 59 seconds onward repeats earlier footage; not a gameplay reset."
+    },
+    {
+      "id": "B",
+      "filename": "Screen_Recording_20260817_124510_YouTube.mp4",
+      "conversation_file_id": "file_00000000359881f5ba922247378c4f07",
+      "sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "bytes": 74298526,
+      "duration_seconds": 58.755567,
+      "width": 1080,
+      "height": 2520,
+      "has_audio": true,
+      "selected_seek_seconds": [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 24, 28, 30, 32, 34, 36, 40, 44, 48, 50, 52, 56],
+      "notes": "Harvesting, hunting, camp, customer supply and defenses. Approximately 53 seconds onward is non-gameplay promotional material. Audio not audited."
+    }
+  ],
+  "sample_count": 44,
+  "required_comparison_scenarios": [
+    "A_fishing_pickup",
+    "A_fish_processing",
+    "A_queue_service_cash",
+    "A_intake_conveyor_upgrade",
+    "A_wheat_bread_chain",
+    "A_concurrent_helpers_production_vehicle_service",
+    "B_harvesting_carried_stacks",
+    "B_camp_construction",
+    "B_counter_payment",
+    "B_weapon_upgrade_field_combat",
+    "B_stockpiles_gate",
+    "B_defensive_towers"
+  ],
+  "review_policy": {
+    "actual_reference_pixels_required": true,
+    "source_bound_candidate_screenshots_and_motion_required": true,
+    "mandatory_dimension_score": 10.0,
+    "score_averaging_allowed": false,
+    "unreviewed_area_blocks_release": true,
+    "default_debug_primitive_standins_allowed": false,
+    "independent_critic_executed_by_this_reference_audit": false
+  },
+  "device_policy": {
+    "automatic_phone_and_tablet_layout": true,
+    "landscape": true,
+    "native_internal_minimum_width": 3840,
+    "native_internal_minimum_height": 2160,
+    "render_scale": 1.0,
+    "minimum_sustained_fps": 60,
+    "minimum_physical_run_minutes": 30,
+    "named_physical_phone_and_tablet_evidence_required": true,
+    "presented_frame_pacing_and_thermal_evidence_required": true,
+    "kaleb_playtest_required": false,
+    "unfinished_apk_handoff_allowed": false
+  },
+  "audit_status": "REFERENCE_TARGET_LOCKED_NOT_GAME_APPROVED",
+  "runtime_modified_by_reference_audit": false,
+  "native_android_4k60_certified": false
+}
