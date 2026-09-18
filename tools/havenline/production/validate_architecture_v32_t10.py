@@ -24,6 +24,21 @@ FAILURE_REQUEST = "Docs/Production/ChangeRequests/T10-failure-packet-log-compati
 FAILURE_REQUEST_SHA256 = "d388a6fe33d1a45a2c475c2874b039ef1d136c6bc61c5119b8159e83c54006f9"
 
 
+BUILDER = "tools/havenline/production/builder_repair_gate.py"
+BUILDER_REQUEST = "Docs/Production/ChangeRequests/T10-builder-repair-causal-bookkeeping.json"
+BUILDER_REQUEST_SHA256 = "92986f20ded72d4b22fb6ebe1e82d01d2dd2003e1f453b02b8ae392bd5d438c7"
+BUILDER_DELTAS = [('    errors=[]\n', '    errors=[]\n    task=c0.get("task_id")\n    canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"\n    canonical_plan=f"Docs/Production/{task}/REPAIR_PLAN.json"\n    bookkeeping={canonical_c0,canonical_plan}\n    if plan.get("c0_report_path")!=canonical_c0 or plan.get("plan_path")!=canonical_plan:\n        errors.append("canonical C0 and repair plan paths required")\n'), ('        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n', '        if set(files)&bookkeeping:errors.append(f"{bid} bookkeeping cannot be causal files")\n        causal_files=set(files)-bookkeeping\n        if not causal_files:errors.append(f"{bid} non-bookkeeping causal files required")\n        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n'), ('        allowed.update(files)\n', '        allowed.update(causal_files)\n'), ('        plan_path=plan.get("plan_path")\n        allowed_actual=set(allowed)\n        if isinstance(plan_path,str) and plan_path:allowed_actual.add(plan_path)\n', '        allowed_actual=set(allowed)|bookkeeping\n'), ('            if not set(fix.get("files",[]))&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n', '            if not (set(fix.get("files",[]))-bookkeeping)&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n')]
+
+
+def builder_delta_errors(accepted: str, current: str) -> list[str]:
+    expected = accepted
+    for old, new in BUILDER_DELTAS:
+        if expected.count(old) != 1:
+            return ["V3.1 builder causal bookkeeping anchor missing"]
+        expected = expected.replace(old, new, 1)
+    return [] if current == expected else ["Only the authorized causal bookkeeping builder delta is permitted"]
+
+
 def failure_delta_errors(accepted: str, current: str) -> list[str]:
     old = 'packet.get("failure_excerpt", packet.get("logs", ""))'
     new = 'packet.get("failure_excerpt", packet.get("failed_logs", packet.get("logs", "")))'
@@ -59,9 +74,14 @@ def validate() -> dict:
         f"V3.1 locked file changed: {CANARY}",
         f"V3.1 locked file changed: {FORWARD}",
         f"V3.1 locked file changed: {FAILURE}",
+        f"V3.1 locked file changed: {BUILDER}",
     }
     errors = [error for error in baseline["errors"] if error not in allowed]
     try:
+        accepted_builder = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{BUILDER}").stdout.decode()
+        errors += builder_delta_errors(accepted_builder, (v31.ROOT / BUILDER).read_text())
+        if hashlib.sha256((v31.ROOT / BUILDER_REQUEST).read_bytes()).hexdigest() != BUILDER_REQUEST_SHA256:
+            errors.append("Bounded builder causal bookkeeping authorization changed or missing")
         accepted_failure = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{FAILURE}").stdout.decode()
         errors += failure_delta_errors(accepted_failure, (v31.ROOT / FAILURE).read_text())
         if hashlib.sha256((v31.ROOT / FAILURE_REQUEST).read_bytes()).hexdigest() != FAILURE_REQUEST_SHA256:
@@ -92,14 +112,15 @@ def validate() -> dict:
     return {
         "passed": not errors,
         "architecture_version": "3.2",
-        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner and exact C0 failure packet log compatibility",
+        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner exact C0 failure packet log compatibility and causal repair bookkeeping",
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
-        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE],
+        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE, BUILDER],
         "authorization_record": REQUEST,
         "c7_authorization_record": C7_REQUEST,
         "failure_packet_authorization_record": FAILURE_REQUEST,
+        "builder_authorization_record": BUILDER_REQUEST,
         "errors": errors,
     }
 

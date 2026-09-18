@@ -31,6 +31,7 @@ def complete_c0():
 
 def plan():
     return {
+        "c0_report_path":"Docs/Production/T09/C0_ROOT_CAUSE.json",
         "schema_version":1,"task_id":"T09","failed_candidate":"a"*40,"diagnosis_id":"C0-T09-123","c0_report_sha256":"d"*64,
         "repair_base":"e"*40,"full_blocker_set_acknowledged":True,"candidate_freeze_after_build":True,"validation_concurrency_policy":"finish_running_sha",
         "must_not_change":["HavenlineGodot/assets/characters/Character1.glb"],
@@ -71,5 +72,46 @@ class C0BuilderTests(unittest.TestCase):
         p=packet("cancelled");r=superseded_report(p);r["validated"]=True;r["report_sha256"]="d"*64
         errors=validate_builder(r,plan())
         self.assertTrue(any("superseded" in e for e in errors))
+
+class CausalBookkeepingTests(unittest.TestCase):
+    def test_documents_cannot_satisfy_causal_change(self):
+        p=plan();c=complete_c0();docs=[p['c0_report_path'],p['plan_path']]
+        for changed in [docs,docs[:1],docs[1:]]:
+            errors=validate_builder(c,p,changed,p['repair_base'])
+            self.assertTrue(any('causal files did not change' in e for e in errors))
+        causal=p['fixes'][0]['files']
+        self.assertEqual(validate_builder(c,p,causal+docs,p['repair_base']),[])
+    def test_bookkeeping_in_fix_is_rejected(self):
+        import copy
+        p=plan();c=complete_c0()
+        for document in [p['c0_report_path'],p['plan_path']]:
+            bad=copy.deepcopy(p);bad['fixes'][0]['files'].append(document)
+            c['blockers'][0]['files_to_change'].append(document)
+            self.assertTrue(any('bookkeeping' in e for e in validate_builder(c,bad)))
+        p['fixes'][0]['files']=[]
+        self.assertTrue(any('non-bookkeeping causal' in e for e in validate_builder(c,p)))
+    def test_canonical_paths_required(self):
+        for key in ['c0_report_path','plan_path']:
+            for value in [None,'Docs/Production/T10/REPAIR_PLAN.json','../escape']:
+                p=plan();p[key]=value
+                self.assertTrue(any('canonical' in e for e in validate_builder(complete_c0(),p)))
+            p=plan();del p[key]
+            self.assertTrue(any('canonical' in e for e in validate_builder(complete_c0(),p)))
+    def test_each_blocker_needs_its_own_causal_touch(self):
+        import copy
+        c=complete_c0();p=plan()
+        b=copy.deepcopy(c['blockers'][0]);b['id']='C0-B002';b['files_to_change']=['second.py'];c['blockers'].append(b)
+        fix=copy.deepcopy(p['fixes'][0]);fix['blocker_id']='C0-B002';fix['files']=['second.py'];p['fixes'].append(fix)
+        actual=p['fixes'][0]['files']+[p['c0_report_path'],p['plan_path']]
+        self.assertTrue(any('C0-B002 causal files did not change' in e for e in validate_builder(c,p,actual,p['repair_base'])))
+        self.assertEqual(validate_builder(c,p,actual+['second.py'],p['repair_base']),[])
+    def test_exact_locked_delta(self):
+        import validate_architecture_release_lock as v31
+        from validate_architecture_v32_t10 import BUILDER,builder_delta_errors
+        accepted=v31._git('show',f'{v31.ACCEPTED_SOURCE}:{BUILDER}').stdout.decode()
+        current=(v31.ROOT/BUILDER).read_text()
+        self.assertEqual(builder_delta_errors(accepted,current),[])
+        self.assertTrue(builder_delta_errors(accepted,current+'\n# drift\n'))
+        self.assertTrue(builder_delta_errors(accepted,accepted))
 
 if __name__=="__main__":unittest.main(verbosity=2)
