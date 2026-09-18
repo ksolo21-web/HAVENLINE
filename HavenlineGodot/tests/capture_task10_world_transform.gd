@@ -22,6 +22,7 @@ var records: Array[Dictionary] = []
 var simulation := Simulation.new()
 var debit_verified := false
 var performance_peaks := {}
+var motion_segments: Array[Dictionary] = []
 
 func _initialize() -> void:
 	for argument in OS.get_cmdline_user_args():
@@ -85,12 +86,15 @@ func add_fixture_scene() -> void:
 	var overlay := CanvasLayer.new()
 	root.add_child(overlay)
 	state_label = Label.new()
-	state_label.position = Vector2(24, 16)
-	state_label.add_theme_font_size_override("font_size", maxi(20, capture_height / 36))
+	overlay.add_child(state_label)
+	state_label.position = Vector2(16, 0)
+	state_label.set_anchors_and_offsets_preset(Control.PRESET_BOTTOM_LEFT)
+	state_label.offset_left = 16
+	state_label.offset_top = -62
+	state_label.add_theme_font_size_override("font_size", 20)
 	state_label.add_theme_color_override("font_color", Color.WHITE)
 	state_label.add_theme_constant_override("outline_size", 6)
 	state_label.add_theme_color_override("font_outline_color", Color("101820"))
-	overlay.add_child(state_label)
 
 	camera = Camera3D.new()
 	camera.current = true
@@ -152,10 +156,13 @@ func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front
 	return true
 
 func measure_performance() -> void:
-	var rss_mb := -1.0
-	for line in FileAccess.get_file_as_string("/proc/self/status").split("\n"):
-		if line.begins_with("VmRSS:"):
-			rss_mb = float(line.trim_prefix("VmRSS:").strip_edges().split(" ", false)[0].to_int()) / 1024.0
+	var rss_output: Array = []
+	var rss_status := OS.execute("ps", ["-o", "rss=", "-p", str(OS.get_process_id())], rss_output)
+	var rss_mb := float(String(rss_output[0]).strip_edges().to_int()) / 1024.0 if rss_status == 0 and not rss_output.is_empty() else -1.0
+	if rss_mb <= 0.0:
+		push_error("Missing positive measured process RSS")
+		quit(1)
+		return
 	var metrics := {
 		"visible_triangles": Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),
 		"draw_calls": Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
@@ -177,33 +184,38 @@ func write_manifest(manifest: Dictionary) -> bool:
 	file.store_string(JSON.stringify(manifest, "  "))
 	return true
 
-func hold_motion() -> void:
+func hold_motion(state: String) -> void:
 	if device_check or production_evidence: return
 	# Baseline is recorded at fixed 30 fps by Godot Movie Maker. Thirty frames
 	# preserve one full second, including more than a full 1.4Hz pulse cycle.
 	configure_camera("front")
+	var start_frame := Engine.get_frames_drawn()
 	for frame in 30:
 		await process_frame
 		await RenderingServer.frame_post_draw
 
+	motion_segments.append({"state": state, "start_frame": start_frame, "end_frame": Engine.get_frames_drawn(), "fps": 30, "start_seconds": start_frame / 30.0, "end_seconds": Engine.get_frames_drawn() / 30.0})
+
 func capture_lifecycle(inventory: Dictionary) -> void:
 	var angles: Array = ["front"] if device_check else (["front", "side", "three-quarter", "overhead", "gameplay", "detail"] if production_evidence else ["front", "three-quarter"])
 	var states := ["ready", "blocked", "preview", "committing", "complete", "replay"]
-	view.set_ready()
+	var ready_offer: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
+	view.set_ready(ready_offer)
 	if not await capture_state("ready", view.descriptor(), angles): quit(1); return
-	await hold_motion()
+	await hold_motion("ready")
 	var blocked: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", {"wood": 7, "stone": 3})
 	if blocked.passed or not view.show_blocked(blocked) or not await capture_state("blocked", view.descriptor(), angles): quit(1); return
-	await hold_motion()
+	await hold_motion("blocked")
 	var preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
 	if not preview.passed or not view.show_preview(preview) or not await capture_state("preview", view.descriptor(), angles): quit(1); return
-	await hold_motion()
+	await hold_motion("preview")
 	var intent: Dictionary = engine.commit_transform("capture-tx", "framework_anchor_seed_to_foundation", "capture-anchor", inventory)
 	if not intent.passed or not view.show_commit(intent) or not await capture_state("committing", view.descriptor(), angles): quit(1); return
-	await hold_motion()
+	await hold_motion("committing")
 	var accepted: Dictionary = engine.accept_authoritative_receipt(authoritative_debit(intent))
-	if not accepted.passed or not view.mark_complete(accepted) or not await capture_state("complete", view.descriptor(), angles): quit(1); return
-	await hold_motion()
+	var next_offer: Dictionary = engine.preview_transform("framework_anchor_foundation_to_reinforced", "capture-anchor", simulation.stored)
+	if not accepted.passed or not view.mark_complete(accepted, next_offer) or not await capture_state("complete", view.descriptor(), angles): quit(1); return
+	await hold_motion("complete")
 	var stored_before := simulation.stored.duplicate(true)
 	var component_before: Dictionary = engine.export_component_state()
 	var view_before: Dictionary = view.descriptor()
@@ -211,7 +223,7 @@ func capture_lifecycle(inventory: Dictionary) -> void:
 	var replay: Dictionary = engine.accept_authoritative_receipt(replay_receipt)
 	var replay_verified: bool = replay_receipt.get("simulation_replayed", false) and replay.get("replayed", false) and simulation.stored == stored_before and engine.export_component_state() == component_before and view.descriptor() == view_before
 	if not replay_verified or not await capture_state("replay", view.descriptor(), angles): quit(1); return
-	await hold_motion()
+	await hold_motion("replay")
 	var final_view: Dictionary = view.descriptor()
 	var manifest := {
 		"task_id": "T10", "candidate": candidate,
@@ -224,7 +236,10 @@ func capture_lifecycle(inventory: Dictionary) -> void:
 		"real_t09_adapter_bound": true, "exact_debit_verified": debit_verified,
 		"exact_replay_verified": replay_verified,
 		"performance_peaks": performance_peaks,
-		"performance_scope": "neutral fixture; zero rigs/actors by construction; materials upper-bound from submitted draw calls; Linux VmRSS; no physical certification",
+		"renderer": RenderingServer.get_current_rendering_method() + "/" + RenderingServer.get_video_adapter_name(),
+		"render_scale": root.scaling_3d_scale,
+		"performance_scope": "neutral fixture; zero rigs/actors by construction; materials upper-bound from submitted draw calls; ps RSS for exact Godot PID; no physical certification",
+		"motion_segments": motion_segments,
 		"motion_frames_per_state": 30 if not device_check and not production_evidence else 0,
 		"record_count": records.size(), "states": states, "angles": angles, "records": records,
 		"view_visual_node_count": int(final_view.visual_node_count),

@@ -128,6 +128,13 @@ def main() -> None:
     if not lifecycle.get("exact_replay_verified") or lifecycle.get("motion_frames_per_state") != 30 or not (root / "capture/lifecycle.mp4").is_file():
         errors.append("continuous lifecycle and exact replay evidence required")
 
+    saves = load(root / "save-matrix" / "save-matrix.json")
+    if saves.get("candidate_commit") != candidate or saves.get("passed") is not True or len(saves.get("cases", [])) != 7 or any(x.get("passed") is not True for x in saves.get("cases", [])):
+        errors.append("exact-source seven-case save matrix required")
+    c6 = load(root / "C6.json")
+    if c6.get("candidate") != candidate or c6.get("passed") is not True:
+        errors.append("quantitative C6 required")
+
     domain_names = check_names(domain)
     integration_names = check_names(integration)
 

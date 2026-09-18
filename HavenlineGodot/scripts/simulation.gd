@@ -446,6 +446,7 @@ func restore(data: Dictionary) -> bool:
 	# Validate the whole envelope before changing live gameplay state.
 	if not valid_world_transform_receipts(data.get("world_transform_debit_receipts", {})): return false
 	if data.get("schema") != 1 or not valid_count(data.get("lead")): return false
+	if not valid_count(data.get("level")) or int(data.level) not in [1, 2, 3, 4]: return false
 	if int(data.lead) not in [1, 2] or float(data.lead) != float(int(data.lead)): return false
 	for name in ["inventory", "stored", "defenses"]:
 		if not data.get(name) is Dictionary: return false
@@ -504,7 +505,8 @@ func restore(data: Dictionary) -> bool:
 	for kind in KINDS:
 		inventory[kind] = int(data.inventory[kind])
 		stored[kind] = int(data.stored[kind])
-	level = 1
+	# Earned progression survives delivered-stock spending by T10.
+	level = int(data.level)
 	update_level()
 	durability = clampf(data.durability, 0, tuning.furnaceMaxDurability)
 	health = clampf(data.health, 0, 100)

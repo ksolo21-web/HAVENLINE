@@ -2,7 +2,7 @@ name: Havenline Task 10 isolated build pending dependency
 
 on:
   push:
-    branches: ['havenline/T10-world-transformation']
+    branches: ['havenline/T10-world-transformation', 'codex/havenline-sequential-task-01']
     paths:
       - 'HavenlineGodot/scripts/world_transform.gd'
       - 'HavenlineGodot/scripts/world_transform_view.gd'
@@ -12,6 +12,9 @@ on:
       - 'HavenlineGodot/tests/test_task10_integration.gd'
       - 'HavenlineGodot/tests/capture_task10_world_transform.gd'
       - 'Docs/Production/T10/**'
+      - '!Docs/Production/T10/verified-completion.json'
+      - '!Docs/Production/T10/Evidence/**'
+      - '!Docs/Production/T10/task-state.json'
       - 'tools/havenline/task10/**'
       - '.github/workflows/havenline-task10-*.yml'
   pull_request:
@@ -46,7 +49,17 @@ jobs:
           mkdir -p task10-isolated-evidence/tests task10-isolated-evidence/capture task10-isolated-evidence/device-layout task10-isolated-evidence/native4k
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
           base=$(python3 -c "import json; r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json')); print(next(x['base_commit'] for x in r['workstreams'] if x['task_id']=='T10'))")
-          python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$GITHUB_SHA" --integration-head "$integration" | tee task10-isolated-evidence/scope.json
+          if [ "$GITHUB_SHA" = "$integration" ]; then
+            python3 - <<'PYCODE'
+          import json
+          r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
+          assert next(x['status'] for x in r['workstreams'] if x['task_id']=='T10') in ['INTEGRATION_READY','INTEGRATING','UNDER_REVIEW']
+          PYCODE
+            python3 tools/havenline/production/validate_integration_scope.py --base "$GITHUB_SHA^" --head "$GITHUB_SHA" --output task10-isolated-evidence/scope.json
+            python3 tools/havenline/production/validate_integration_scope.py --base c1768dbba7bacbbc5d0174e6b9b661b6dbdbbc11 --head "$GITHUB_SHA" --output task10-isolated-evidence/recovery-scope.json
+          else
+            python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$GITHUB_SHA" --integration-head "$integration" | tee task10-isolated-evidence/scope.json
+          fi
           python3 tools/havenline/task10/validate_post_t09_adapter.py --require-bound
 
       - name: Validate isolated-build governance
@@ -67,6 +80,15 @@ jobs:
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          python3 - <<'PYCODE'
+          import json,os
+          from pathlib import Path
+          fields=['ImageOS','ImageVersion','RUNNER_OS','RUNNER_ARCH']
+          record={k:os.environ.get(k,'') for k in fields}
+          assert all(record.values()),record
+          record.update(candidate_commit=os.environ['GITHUB_SHA'],godot='4.7.2.stable.official.ed1daf0bf')
+          Path('task10-isolated-evidence/runtime-provenance.json').write_text(json.dumps(record,indent=2))
+          PYCODE
 
       - name: Import and run formal T10 domain stress
         run: |
@@ -140,7 +162,8 @@ jobs:
           assert m['exact_replay_verified'] and m['motion_frames_per_state']==30
           PY
           ffmpeg -y -i task10-isolated-evidence/capture/lifecycle.avi -c:v libx264 -crf 18 -pix_fmt yuv420p task10-isolated-evidence/capture/lifecycle.mp4
-          ffmpeg -y -i task10-isolated-evidence/capture/lifecycle.mp4 -vf fps=2 task10-isolated-evidence/capture/motion-%03d.png
+          ffmpeg -y -i task10-isolated-evidence/capture/lifecycle.mp4 -vf "select='not(mod(n,15))'" -vsync vfr task10-isolated-evidence/capture/motion-%03d.png
+          ffprobe -v error -show_streams -show_format -of json task10-isolated-evidence/capture/lifecycle.mp4 > task10-isolated-evidence/capture/motion-probe.json
           rm task10-isolated-evidence/capture/lifecycle.avi
 
       - name: Validate authoritative Havenline device matrix
@@ -223,6 +246,7 @@ jobs:
         run: |
           set -euo pipefail
           python3 tools/havenline/task10/validate_progression.py --candidate "$GITHUB_SHA" --output task10-isolated-evidence/progression.json
+          python3 tools/havenline/production/save_state_matrix.py --candidate "$GITHUB_SHA" --task T10 --adapter "python3 tools/havenline/task10/save_matrix_adapter.py" --out task10-isolated-evidence/save-matrix > task10-isolated-evidence/save-matrix-summary.json
           python3 tools/havenline/task10/build_critic_evidence.py --candidate "$GITHUB_SHA" --evidence-root task10-isolated-evidence
           python3 tools/havenline/production/critic_harness.py performance --candidate "$GITHUB_SHA" --record critic-input/performance.json > task10-isolated-evidence/C6.json
 

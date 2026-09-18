@@ -45,6 +45,8 @@ var _beacon: Label3D
 var _ring_material: StandardMaterial3D
 var _ghost_material: StandardMaterial3D
 var displayed_costs: Dictionary = {}
+var next_preview: Dictionary = {}
+var _last_visual_signature: Array = []
 
 static func contract() -> Dictionary:
 	return {
@@ -90,7 +92,18 @@ func set_locked() -> void:
 	_clear_blocked()
 	_set_lifecycle("locked")
 
-func set_ready() -> void:
+func set_ready(preview: Dictionary = {}) -> void:
+	if preview.is_empty() and lifecycle == "complete":
+		source_state = target_state
+		target_state = ""
+		displayed_costs.clear()
+		next_preview.clear()
+	if not preview.is_empty() and String(preview.get("target_id", "")) == target_id:
+		displayed_costs = preview.get("costs", {}).duplicate(true)
+		source_state = String(preview.get("source_state", source_state))
+		target_state = String(preview.get("target_state", target_state))
+		presentation_key = String(preview.get("presentation_key", presentation_key))
+		target_revision = int(preview.get("target_revision", 0)) + 1
 	_clear_blocked()
 	_set_lifecycle("ready")
 
@@ -145,7 +158,7 @@ func show_commit(intent: Dictionary) -> bool:
 	_set_lifecycle("committing")
 	return true
 
-func mark_complete(receipt: Dictionary) -> bool:
+func mark_complete(receipt: Dictionary, next_offer: Dictionary = {}) -> bool:
 	if lifecycle != "committing":
 		return false
 	if not bool(receipt.get("authority_applied", false)) or String(receipt.get("authority_source", "")) != "simulation":
@@ -156,6 +169,7 @@ func mark_complete(receipt: Dictionary) -> bool:
 		return false
 	if String(receipt.get("target_id", "")) != target_id or int(receipt.get("target_revision", -1)) != target_revision:
 		return false
+	next_preview = next_offer.duplicate(true) if String(next_offer.get("target_id", "")) == target_id else {}
 	_accepted_scale = _target_form_scale()
 	_clear_blocked()
 	_set_lifecycle("complete")
@@ -218,13 +232,17 @@ func _ensure_visuals() -> void:
 	_visual_root.scale = Vector3.ONE * readability_scale
 	visual_build_count += 1
 
+func _visual_signature() -> Array:
+	return [lifecycle, presentation_key, source_state, target_state, target_revision, transaction_id, block_reasons.duplicate(), blocked_shortfalls.duplicate(true), displayed_costs.duplicate(true), next_preview.duplicate(true)]
+
 func _set_lifecycle(next: String) -> void:
-	if next not in LIFECYCLE or next == lifecycle:
-		return
-	lifecycle = next
-	update_count += 1
-	_pulse_time = 0.0
-	_apply_visuals()
+	if next not in LIFECYCLE: return
+	if next != lifecycle:
+		lifecycle = next
+		update_count += 1
+		_pulse_time = 0.0
+	if _visual_signature() != _last_visual_signature:
+		_apply_visuals()
 
 func _apply_visuals() -> void:
 	_ensure_visuals()
@@ -244,6 +262,7 @@ func _apply_visuals() -> void:
 	_beacon.visible = lifecycle != "locked"
 	_beacon.text = feedback_text()
 	set_process(lifecycle == "committing")
+	_last_visual_signature = _visual_signature()
 	visual_apply_count += 1
 
 func _process(delta: float) -> void:
@@ -252,6 +271,7 @@ func _process(delta: float) -> void:
 	_pulse_time = fmod(_pulse_time + delta, 10.0)
 	var pulse := 1.0 + sin(_pulse_time * TAU * PULSE_HZ) * 0.18
 	_ghost.scale = _target_form_scale() * pulse
+	_ghost.position.y = 0.08 + 0.75 * _ghost.scale.y
 
 func _target_form_scale() -> Vector3:
 	return Vector3(1.0, minf(1.35, 1.0 + 0.25 * maxi(0, target_revision - 1)), 1.0)
@@ -264,8 +284,13 @@ func _quantities(values: Dictionary) -> String:
 
 func feedback_text() -> String:
 	var transition := "%s > %s" % [source_state.capitalize(), target_state.capitalize()] if not target_state.is_empty() else "Approach to preview transformation"
-	var cost := "Cost: " + _quantities(displayed_costs) if not displayed_costs.is_empty() else ""
-	if lifecycle == "complete": return target_state.capitalize() + " complete\nPaid: " + _quantities(displayed_costs) + "\nContinue to the next target"
+	var cost := "Cost from delivered stock: " + _quantities(displayed_costs) if not displayed_costs.is_empty() else ""
+	if lifecycle == "complete":
+		var text := target_state.capitalize() + " complete\nPaid: " + _quantities(displayed_costs)
+		if not next_preview.is_empty():
+			text += "\nNext: " + String(next_preview.get("target_state", "")).capitalize()
+			text += " · " + ("ready to preview" if next_preview.get("passed", false) else " / ".join(next_preview.get("errors", [])).replace("missing_prerequisite:", "requires ").replace("_", " "))
+		return text
 	if lifecycle == "blocked":
 		var reason := " / ".join(block_reasons).replace("_", " ").replace(":", ": ")
 		return transition + "\n" + cost + "\n" + reason + ("\nDeliver " + _quantities(blocked_shortfalls) if not blocked_shortfalls.is_empty() else "")

@@ -300,6 +300,13 @@ func run() -> void:
 	var blocked_preview := visual_engine.preview_transform("framework_anchor_seed_to_foundation", "visual-A", {"wood": 7, "stone": 3})
 	check("blocked fixture preview is authoritative failure", not blocked_preview.passed and blocked_preview.errors.has("insufficient_resources") and blocked_preview.shortfalls == {"wood": 1, "stone": 1})
 	check("blocked world response preserves exact reasons and shortfalls", view.show_blocked(blocked_preview) and view.descriptor().lifecycle == "blocked" and view.descriptor().block_reasons.has("insufficient_resources") and view.descriptor().blocked_shortfalls == {"wood": 1, "stone": 1})
+	var changed_blocked := visual_engine.preview_transform("framework_anchor_seed_to_foundation", "visual-A", {"wood": 0, "stone": 0})
+	view.show_blocked(changed_blocked)
+	check("same blocked state refreshes exact shortfall label", beacon.text.contains("Deliver 8 wood + 4 stone"))
+	view.show_blocked(blocked_preview)
+	var applies_before_noop := view.visual_apply_count
+	view.show_blocked(blocked_preview)
+	check("identical blocked payload does not reapply visuals", view.visual_apply_count == applies_before_noop)
 	check("blocked lifecycle renders exact costs and shortfalls", ring.visible and beacon.visible and ghost.visible and beacon.text.contains("8 wood + 4 stone") and beacon.text.contains("Deliver 1 wood + 1 stone"))
 	view.set_ready()
 	check("leaving blocked state clears failure payload", view.descriptor().block_reasons.is_empty() and view.descriptor().blocked_shortfalls.is_empty())
@@ -312,6 +319,7 @@ func run() -> void:
 	var beacon_before_pulse := ghost.scale
 	view._process(0.12)
 	check("committing target pulse changes shape without rebuilding nodes", ghost.scale != beacon_before_pulse and view.descriptor().visual_build_count == 1 and view.descriptor().visual_node_count == 4)
+	check("committing pulse stays anchored to support", is_equal_approx(ghost.position.y - 0.75 * ghost.scale.y, 0.08))
 	var visual_ack := visual_intent.duplicate(true)
 	visual_ack["authority_source"] = "simulation"
 	visual_ack["authority_applied"] = true

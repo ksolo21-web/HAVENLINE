@@ -99,5 +99,66 @@ class T10ActivationValidationTests(unittest.TestCase):
         self.assertTrue(any("dependencies are not all APPROVED" in error for error in self.errors(tuple(state))))
 
 
+class T10WorkflowActivationTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        workflow = (PRODUCTION.parents[2] / ".github/workflows/havenline-production-governance.yml").read_text()
+        start = workflow.index("          cat > /tmp/t10_activation_check.py <<'PY'\n")
+        body = workflow[start:].split("\n", 1)[1].split("          PY\n", 1)[0]
+        code = "\n".join(line[10:] for line in body.splitlines())
+        namespace = {"__name__": "workflow_fixture"}
+        exec(compile(code, "workflow_activation_helper", "exec"), namespace)
+        cls.check = staticmethod(namespace["validate_t10_activation"])
+        cls.active_states = namespace["ACTIVE_RUNTIME_STATES"]
+
+    def fixture(self, status="ASSIGNED"):
+        graph, registry, ownership, _, _ = T10ActivationValidationTests().state()
+        graph["tasks"]["T10"]["status"] = status
+        registry["workstreams"][0]["status"] = status
+        snapshot = {"task_id": "T10", "lifecycle_status": status,
+                    "task_branch": registry["workstreams"][0]["branch"],
+                    "owned_paths": ownership["aliases"]["@reservation:T10"],
+                    "validation": {"passed": True}, "snapshot_is_derived_not_authority": True,
+                    "blockers": []}
+        return [graph, registry, ownership, snapshot, "Active packet"]
+
+    def test_all_canonical_active_states(self):
+        for status in self.active_states:
+            with self.subTest(status=status):
+                self.assertEqual(self.check(*self.fixture(status)), status)
+
+    def test_completed_is_not_runtime_activation(self):
+        data = self.fixture("APPROVED")
+        data[-1] = "DO NOT start runtime implementation"
+        self.assertEqual(self.check(*data), "APPROVED")
+
+    def test_inactive_states_reject(self):
+        for status in ("LOCKED", "PREPARED", "BLOCKED"):
+            with self.subTest(status=status), self.assertRaises(AssertionError):
+                self.check(*self.fixture(status))
+
+    def test_mismatch_or_missing_ownership_rejects(self):
+        for field, value in (("status", "BUILDING_ISOLATED"), ("branch", ""), ("owned_paths", [])):
+            data = self.fixture()
+            data[1]["workstreams"][0][field] = value
+            with self.subTest(field=field), self.assertRaises(AssertionError):
+                self.check(*data)
+
+    def test_invalid_stale_unowned_snapshot_rejects(self):
+        for field, value in (("validation", {"passed": False}), ("snapshot_is_derived_not_authority", False),
+                             ("lifecycle_status", "LOCKED"), ("task_branch", "wrong"), ("owned_paths", []),
+                             ("blockers", ["ownership_not_assigned"]), ("blockers", ["lifecycle_status_LOCKED"])):
+            data = self.fixture()
+            data[3][field] = value
+            with self.subTest(field=field, value=value), self.assertRaises(AssertionError):
+                self.check(*data)
+
+    def test_stop_warned_active_packet_rejects(self):
+        data = self.fixture()
+        data[-1] = "DO NOT start runtime implementation"
+        with self.assertRaises(AssertionError):
+            self.check(*data)
+
+
 if __name__ == "__main__":
     unittest.main(verbosity=2)

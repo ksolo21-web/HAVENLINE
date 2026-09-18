@@ -2,7 +2,7 @@ name: Havenline Task 10 world transformation candidate
 
 on:
   push:
-    branches: ['havenline/T10-world-transformation']
+    branches: ['havenline/T10-world-transformation', 'codex/havenline-sequential-task-01']
     paths:
       - 'HavenlineGodot/scripts/world_transform.gd'
       - 'HavenlineGodot/scripts/world_transform_view.gd'
@@ -10,6 +10,9 @@ on:
       - 'HavenlineGodot/assets/world_transform_v1/**'
       - 'HavenlineGodot/tests/test_task10_*.gd'
       - 'Docs/Production/T10/**'
+      - '!Docs/Production/T10/verified-completion.json'
+      - '!Docs/Production/T10/Evidence/**'
+      - '!Docs/Production/T10/task-state.json'
       - 'tools/havenline/task10/**'
       - '.github/workflows/havenline-task10-*.yml'
   pull_request:
@@ -49,6 +52,15 @@ jobs:
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          python3 - <<'PYCODE'
+          import json,os
+          from pathlib import Path
+          fields=['ImageOS','ImageVersion','RUNNER_OS','RUNNER_ARCH']
+          record={k:os.environ.get(k,'') for k in fields}
+          assert all(record.values()),record
+          record.update(candidate_commit=os.environ['GITHUB_SHA'],godot='4.7.2.stable.official.ed1daf0bf')
+          Path('task10-evidence/runtime-provenance.json').write_text(json.dumps(record,indent=2))
+          PYCODE
 
       - name: Verify activation or legal preactivation scope and source contract
         env:
@@ -78,7 +90,17 @@ jobs:
 
           if [ "$(grep '^T10_CANDIDATE_MODE=' /tmp/t10-candidate-mode.env | cut -d= -f2)" = "registered" ]; then
             base=$(grep '^T10_REGISTERED_BASE=' /tmp/t10-candidate-mode.env | cut -d= -f2-)
-            python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$CANDIDATE" --integration-head "$integration" | tee task10-evidence/candidate-scope.json
+            if [ "$CANDIDATE" = "$integration" ]; then
+              python3 - <<'PYCODE'
+          import json
+          r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
+          assert next(x['status'] for x in r['workstreams'] if x['task_id']=='T10') in ['INTEGRATION_READY','INTEGRATING','UNDER_REVIEW']
+          PYCODE
+              python3 tools/havenline/production/validate_integration_scope.py --base "$CANDIDATE^" --head "$CANDIDATE" --output task10-evidence/candidate-scope.json
+              python3 tools/havenline/production/validate_integration_scope.py --base c1768dbba7bacbbc5d0174e6b9b661b6dbdbbc11 --head "$CANDIDATE" --output task10-evidence/recovery-scope.json
+            else
+              python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$CANDIDATE" --integration-head "$integration" | tee task10-evidence/candidate-scope.json
+            fi
           else
             python3 tools/havenline/task10/prepare_reconciliation.py \
               --integration-base "$integration" \
@@ -112,8 +134,10 @@ jobs:
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task10-evidence/tests/import.log 2>&1
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task10-evidence/tests/motion-fixture.log 2>&1
           python3 tools/havenline/task10/validate_progression.py --candidate "$GITHUB_SHA" --output task10-evidence/progression.json
+          python3 tools/havenline/production/save_state_matrix.py --candidate "$GITHUB_SHA" --task T10 --adapter "python3 tools/havenline/task10/save_matrix_adapter.py" --out task10-evidence/save-matrix > task10-evidence/save-matrix-summary.json
 
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          if [ "$GITHUB_SHA" = "$integration" ]; then integration=$(git rev-parse "$GITHUB_SHA^"); fi
           python3 tools/havenline/production/regression_runner.py --base "$integration" --head "$GITHUB_SHA" --godot "$(command -v Godot_v4.7.2-stable_linux.x86_64)" --out task10-evidence/impact-regression.json
 
           suites=(

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, json, pathlib, re
+import argparse, hashlib, json, pathlib, re, subprocess
 from datetime import datetime,timezone
 from lib import ROOT, DOCS, load_json, ensure_score_strictly_above_nine, sha256_file
 from evidence_retention import validate_manifest as validate_retention_manifest
@@ -12,6 +12,38 @@ RESOURCE_REGISTRY=DOCS/"RESOURCE_ACTION_REGISTRY.json"
 ACTOR_MATRIX=DOCS/"ACTOR_CAPABILITY_MATRIX.json"
 ANIMATION_MATRIX=DOCS/"ANIMATION_ACTION_MATRIX.json"
 GAME_MASTER_POLICY=DOCS/"GAME_MASTER_POLICY.json"
+
+
+T09_CLOSURE_CHECKPOINT="62f5a13753968c77a0feb47a18d93c82d8c5b581"
+T09_COMPLETION_SHA256="2b69ffad9979b1620d3a48a77f049dc7756b85e1c7a6ee33c8c3dd75254c0059"
+
+def t09_historical_lifecycle_errors(completion_bytes):
+    """Bind closeout-time invariants to immutable history; all other checks stay current."""
+    errors=[]
+    try:
+        def historical(name):
+            return subprocess.check_output(["git","show",T09_CLOSURE_CHECKPOINT+":Docs/Production/"+name],cwd=ROOT,stderr=subprocess.PIPE)
+        recorded=historical("T09/verified-completion.json")
+        if recorded!=completion_bytes or hashlib.sha256(recorded).hexdigest()!=T09_COMPLETION_SHA256:
+            return ["T09 completion differs from pinned historical closure"]
+        completion=json.loads(recorded)
+        if completion.get("task_id")!="T09":return ["historical closure task mismatch"]
+        graph=json.loads(historical("DEPENDENCY_GRAPH.json"))
+        ownership=json.loads(historical("PATH_OWNERSHIP.json"))
+        task_gates=json.loads(historical("task-gates.json"))
+        if graph["tasks"]["T09"]["status"]!="APPROVED":errors.append("historical T09 closure is not APPROVED")
+        future=[tid for tid in (f"T{i:02d}" for i in range(10,71)) if graph["tasks"][tid]["status"]!="LOCKED"]
+        if future:errors.append("T10+ must remain LOCKED at T09 historical closeout: "+",".join(future))
+        active_future=[row["task_id"] for row in ownership["active_owners"] if str(row["task_id"])>="T10"]
+        if active_future:errors.append("T10+ active ownership exists at T09 historical closeout")
+        active_keys={key for key in task_gates if key.startswith("active_")}
+        if not {"active_task","active_status","active_base_integration_commit"}<=active_keys:
+            errors.append("historical task-gates activation fields missing")
+        active_values={key:task_gates[key] for key in active_keys if task_gates[key] not in (None,[],{})}
+        if active_values:errors.append("all task-gates active_* fields must be clear at T09 historical closeout")
+    except (OSError,subprocess.SubprocessError,ValueError,KeyError,TypeError,AttributeError) as exc:
+        errors.append("invalid or unavailable T09 historical closure: "+str(exc))
+    return errors
 
 def has_placeholder(value,tokens):
     if isinstance(value,str):return any(token in value for token in tokens)
@@ -104,14 +136,7 @@ def main():
     if not provenance or provenance.get("reuse_eligible") is not False:
         errors.append("missing non-reusable exact-source provenance record")
     if task=="T09":
-        future=[tid for tid in (f"T{i:02d}" for i in range(10,71)) if graph["tasks"].get(tid,{}).get("status")!="LOCKED"]
-        if future:errors.append("T10+ must remain LOCKED after T09 closeout: "+",".join(future))
-        ownership=load_json(DOCS/"PATH_OWNERSHIP.json")
-        active_future=[row.get("task_id") for row in ownership.get("active_owners",[]) if str(row.get("task_id",""))>="T10"]
-        if active_future:errors.append("T10+ active ownership exists before explicit activation")
-        task_gates=load_json(DOCS/"task-gates.json")
-        active_values={key:value for key,value in task_gates.items() if key.startswith("active_") and value not in (None,[],{})}
-        if active_values:errors.append("all task-gates active_* fields must be clear after T09 closeout")
+        errors += t09_historical_lifecycle_errors(p.read_bytes())
     review_record=load_json(DOCS/str(task)/"independent-critic-review.json")
     approved_at=review_record.get("approved_at")
     try:

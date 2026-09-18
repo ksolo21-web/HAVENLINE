@@ -97,7 +97,46 @@ jobs:
           python3 tools/havenline/production/synthetic_merge_forecast.py --candidate HEAD --integration HEAD --output /tmp/v3-merge.json
           jq -e '.passed == true and .task_count == 61' /tmp/v3-validation.json
           jq -e '.feasibility.dependencies_approved == true and .feasibility.activation_state == "READY_NOW" and .feasibility.runtime_activation_allowed == true' /tmp/v3-t10.json
-          jq -e '.tasks.T10.status == "LOCKED"' Docs/Production/DEPENDENCY_GRAPH.json
+          # B022: validate canonical activation without rewriting lifecycle authority.
+          cat > /tmp/t10_activation_check.py <<'PY'
+          import argparse
+          import json
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, str(Path.cwd() / "tools/havenline/production"))
+          from architecture_v31 import ACTIVE_RUNTIME_STATES
+          from lib import expand_alias
+
+          def validate_t10_activation(graph, registry, ownership, snapshot=None, packet=None):
+              status = graph["tasks"]["T10"]["status"]
+              rows = [w for w in registry["workstreams"] if w.get("task_id") == "T10"]
+              assert len(rows) == 1, "T10 needs exactly one registered workstream"
+              ws = rows[0]
+              assert ws["status"] == status, "T10 graph/registry mismatch"
+              assert status in ACTIVE_RUNTIME_STATES or status == "APPROVED", "T10 is not activated or completed"
+              owned = expand_alias(ws.get("owned_paths", []), ownership)
+              assert ws.get("branch") and owned, "T10 ownership missing"
+              if snapshot is not None:
+                  assert snapshot.get("validation", {}).get("passed") is True, "invalid derived snapshot"
+                  assert snapshot.get("snapshot_is_derived_not_authority") is True
+                  assert snapshot.get("task_id") == "T10" and snapshot.get("lifecycle_status") == status
+                  assert snapshot.get("task_branch") == ws["branch"] and snapshot.get("owned_paths") == owned
+                  assert not {"lifecycle_status_LOCKED", "ownership_not_assigned"}.intersection(snapshot.get("blockers", []))
+              if packet is not None and status in ACTIVE_RUNTIME_STATES:
+                  assert "DO NOT start runtime implementation" not in packet, "active T10 packet incorrectly stops runtime"
+              return status
+
+          if __name__ == "__main__":
+              parser = argparse.ArgumentParser()
+              parser.add_argument("stage", choices=["graph", "snapshot", "packet"])
+              args = parser.parse_args()
+              docs = Path("Docs/Production")
+              read = lambda name: json.loads((docs / name).read_text())
+              snapshot = json.loads(Path("/tmp/v31-t10-state.json").read_text()) if args.stage != "graph" else None
+              packet = (docs / "Evidence/T10/TASK_PACKET.md").read_text() if args.stage == "packet" else None
+              print(validate_t10_activation(read("DEPENDENCY_GRAPH.json"), read("WORKSTREAM_REGISTRY.json"), read("PATH_OWNERSHIP.json"), snapshot, packet))
+          PY
+          python3 /tmp/t10_activation_check.py graph
           jq -e '.feasibility.capability_blockers | index("google_play_billing_sandbox") != null' /tmp/v3-t35.json
           jq -e '.feasibility.capability_blockers | index("physical_phone_4k60") != null' /tmp/v3-t68.json
           jq -e '.scheduler_is_advisory == true and .integration_owner_slots == 1' /tmp/v3-schedule.json
@@ -142,7 +181,7 @@ jobs:
           jq -e '.passed == true' /tmp/v31-invalidation.json
           jq -e '.proof_reuse_blocked == true and .automatic_approval_revocation == false and (.invalidated_tasks | index("T15")) != null and (.invalidated_tasks | index("T70")) != null and (.invalidated_gates | index("save_matrix")) != null' /tmp/v31-persistence-invalidation.json
           jq -e '.passed == true and ((.contract_change_detected == false and .proof_reuse_blocked == false and .integration_owner_disposition_required == false) or (.contract_change_detected == true and .proof_reuse_blocked == true and .integration_owner_disposition_required == true))' /tmp/v31-contract-diff.json
-          jq -e '.validation.passed == true and .snapshot_is_derived_not_authority == true and .lifecycle_status == "LOCKED" and (.blockers | index("lifecycle_status_LOCKED")) != null and (.blockers | index("ownership_not_assigned")) != null' /tmp/v31-t10-state.json
+          python3 /tmp/t10_activation_check.py snapshot
       - name: Require C1-C11 execution readiness
         run: python3 tools/havenline/production/validate_critic_readiness.py
       - name: Smoke-test frozen task packet generation
@@ -160,7 +199,7 @@ jobs:
           grep -q 'Production Architecture V3.1 — machine resolved' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'Feasibility state:' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'Runtime activation allowed now:' Docs/Production/Evidence/T10/TASK_PACKET.md
-          grep -q 'DO NOT start runtime implementation' Docs/Production/Evidence/T10/TASK_PACKET.md
+          python3 /tmp/t10_activation_check.py packet
           grep -q 'synthetic_merge_forecast.py' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'task_state_snapshot.py' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'proof_invalidation.py' Docs/Production/Evidence/T10/TASK_PACKET.md
