@@ -12,12 +12,18 @@ class ResponseBoundsTests(unittest.TestCase):
         self.assertEqual(schema['properties']['observations'],{'type':'array','items':{'type':'string','maxLength':160},'minItems':2,'maxItems':2})
         self.assertEqual(schema['properties']['defects']['maxItems'],5)
         self.assertEqual(schema['properties']['defects']['items']['maxLength'],160)
+        self.assertEqual(2,len(schema['oneOf']))
+        passing=schema['oneOf'][0]
+        self.assertEqual(0,passing['properties']['defects']['maxItems'])
+        self.assertEqual(9.0,passing['properties']['scores']['properties']['one']['exclusiveMinimum'])
+        self.assertEqual(1,schema['oneOf'][1]['properties']['defects']['minItems'])
         self.assertFalse(schema['additionalProperties'])
     def test_other_tasks_unchanged(self):
         for task in ['T09','T11',None]:
             schema=response_schema(task,['a'])
             self.assertEqual(schema['properties']['observations'],{'type':'array','items':{'type':'string'},'minItems':2,'maxItems':5})
             self.assertEqual(schema['properties']['defects'],{'type':'array','items':{'type':'string'},'maxItems':5})
+            self.assertNotIn('oneOf',schema)
             self.assertEqual(response_bounds_errors(task,{}),[])
     def test_hostile_response_bounds(self):
         valid={'observations':['a'*160,'b'],'defects':['c'*160]*5}
@@ -26,6 +32,16 @@ class ResponseBoundsTests(unittest.TestCase):
             broken=copy.deepcopy(valid);broken[field]=values
             self.assertTrue(response_bounds_errors('T10',broken),(field,values))
         self.assertTrue(response_bounds_errors('T10',{}))
+    def test_t10_low_score_requires_actionable_defect(self):
+        base={'observations':['a','b'],'scores':{'one':9.1},'defects':[]}
+        self.assertEqual([],response_bounds_errors('T10',base))
+        for score in (0,9.0):
+            broken=copy.deepcopy(base);broken['scores']['one']=score
+            self.assertIn('T10 score at or below 9.0 requires a concrete actionable defect',response_bounds_errors('T10',broken))
+            broken['defects']=['specific causal defect']
+            self.assertEqual([],response_bounds_errors('T10',broken))
+        with_defect=copy.deepcopy(base);with_defect['defects']=['specific causal defect']
+        self.assertEqual([],response_bounds_errors('T10',with_defect))
 
 class RequestRetentionTests(unittest.TestCase):
     def run_request(self, text, image=False):

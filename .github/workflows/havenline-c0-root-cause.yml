@@ -76,7 +76,7 @@ jobs:
           python3 tools/havenline/production/collect_failure_job_logs.py --run c0-input/run.json --jobs c0-input/jobs.json --run-id "$FAILED_RUN_ID" --repository "$GITHUB_REPOSITORY" --output c0-input/failed.log
           gh run download "$FAILED_RUN_ID" -D c0-input/artifacts >/dev/null 2>&1 || true
           python3 - <<'PY'
-          import json,os,pathlib,subprocess
+          import hashlib,json,os,pathlib,subprocess
           root=pathlib.Path('.')
           task=os.environ['TASK_ID'];candidate=os.environ['FAILED_CANDIDATE'];run_id=int(os.environ['FAILED_RUN_ID'])
           registry=json.loads((root/'Docs/Production/WORKSTREAM_REGISTRY.json').read_text())
@@ -104,11 +104,22 @@ jobs:
           scope=root/'Docs/Production'/task/'FROZEN_SCOPE.md';ledger_candidates=[root/'Docs/Production'/task/'defect-ledger.json',root/'Docs/Production'/task/'DEFECT_LEDGER.json']
           ledger=next((p for p in ledger_candidates if p.exists()),None)
           log=(root/'c0-input/failed.log').read_text(errors='replace') if (root/'c0-input/failed.log').exists() else ''
+          records=[]
+          for path in sorted((root/'c0-input/artifacts').rglob('critic-record.json')):
+              raw=path.read_bytes()
+              if len(raw)>200000:raise SystemExit(f'critic record exceeds bounded size: {path}')
+              value=json.loads(raw)
+              if not isinstance(value,dict):raise SystemExit(f'critic record is not an object: {path}')
+              value=dict(value);value.update(path=str(path.relative_to(root)),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+              records.append(value)
+          if len(records)>20:raise SystemExit('too many critic records in failed run artifacts')
+          log_bytes=log.encode('utf-8')
           packet={
             'schema_version':1,'task_id':task,'failed_run_id':run_id,'failed_candidate':candidate,'integration_head':integration,
             'integration_branch':integration_branch,'task_branch':task_branch,'current_branch_head':current,'run_conclusion':run.get('conclusion'),
             'run_status':run.get('status'),'workflow_name':run.get('name'),'event':run.get('event'),'steps':steps,'unexecuted_checks':unexecuted,
-            'changed_files':changed,'failed_logs':log[-60000:],'task_scope':scope.read_text(errors='replace')[:30000] if scope.exists() else '',
+            'changed_files':changed,'failed_logs':log,'failed_logs_bytes':len(log_bytes),'failed_logs_sha256':hashlib.sha256(log_bytes).hexdigest(),
+            'structured_failure_records':records,'task_scope':scope.read_text(errors='replace')[:30000] if scope.exists() else '',
             'defect_ledger':ledger.read_text(errors='replace')[:30000] if ledger else '',
             'protected_files':[],
           }
