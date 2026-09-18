@@ -24,6 +24,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: havenline-task10-isolated-${{ github.ref }}
@@ -61,7 +62,7 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          sudo apt-get install -y ffmpeg xvfb mesa-vulkan-drivers
           mkdir -p "$RUNNER_TEMP/engine"
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
@@ -122,21 +123,25 @@ jobs:
         run: |
           set -euo pipefail
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
-          xvfb-run -a -s '-screen 0 1280x720x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task10_world_transform.gd -- --candidate="$CANDIDATE" --out="$(pwd)/task10-isolated-evidence/capture" > task10-isolated-evidence/capture/capture.log 2>&1
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --fixed-fps 30 --write-movie "$(pwd)/task10-isolated-evidence/capture/lifecycle.avi" --script res://tests/capture_task10_world_transform.gd -- --candidate="$CANDIDATE" --out="$(pwd)/task10-isolated-evidence/capture" > task10-isolated-evidence/capture/capture.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-isolated-evidence/capture/capture.log; then exit 1; fi
           python3 - <<'PY'
           import hashlib,json,struct
           from pathlib import Path
           root=Path('task10-isolated-evidence/capture'); m=json.loads((root/'manifest.json').read_text())
-          assert m.get('passed') is True and m.get('record_count') == 10,m
-          assert m.get('states') == ['ready','blocked','preview','committing','complete'],m
+          assert m.get('passed') is True and m.get('record_count') == 12,m
+          assert m.get('states') == ['ready','blocked','preview','committing','complete','replay'],m
           assert m.get('angles') == ['front','three-quarter'],m
           hashes=set()
           for row in m['records']:
               data=(root/row['file']).read_bytes(); w,h=struct.unpack('>II',data[16:24])
               assert (w,h)==(1280,720); hashes.add(hashlib.sha256(data).hexdigest())
-          assert len(hashes)==10
+          assert len(hashes)==12
+          assert m['exact_replay_verified'] and m['motion_frames_per_state']==30
           PY
+          ffmpeg -y -i task10-isolated-evidence/capture/lifecycle.avi -c:v libx264 -crf 18 -pix_fmt yuv420p task10-isolated-evidence/capture/lifecycle.mp4
+          ffmpeg -y -i task10-isolated-evidence/capture/lifecycle.mp4 -vf fps=2 task10-isolated-evidence/capture/motion-%03d.png
+          rm task10-isolated-evidence/capture/lifecycle.avi
 
       - name: Validate authoritative Havenline device matrix
         env:
@@ -165,18 +170,18 @@ jobs:
           for state in matrix['states']:
               device=state['id']; expected=state['logical_size']; m=json.loads((root/device/'manifest.json').read_text())
               assert m.get('passed') is True and m.get('logical_size') == expected,m
-              assert m.get('states') == ['preview','committing'] and m.get('record_count') == 2,m
+              assert m.get('states') == ['ready','blocked','preview','committing','complete','replay'] and m.get('record_count') == 6,m
               for record in m['records']:
                   data=(root/device/record['file']).read_bytes(); w,h=struct.unpack('>II',data[16:24]); assert [w,h]==expected
                   digest=hashlib.sha256(data).hexdigest(); row={'device':device,'state':record['state'],'size':[w,h],'sha256':digest}
                   rows.append(row); by_hash[digest].append(row); by_device[device][record['state']]=digest
-          assert len(rows)==12
+          assert len(rows)==36
           for state in matrix['states']:
               d=state['id']; assert by_device[d]['preview'] != by_device[d]['committing'],d
           for digest,group in by_hash.items():
               if len(group)>1:
                   assert len({(tuple(x['size']),x['state']) for x in group})==1,(digest,group)
-          Path('task10-isolated-evidence/device-layout-evidence.json').write_text(json.dumps({'device_count':6,'capture_count':12,'passed':True,'integration_allowed':False,'task_approved':False,'rows':rows},indent=2))
+          Path('task10-isolated-evidence/device-layout-evidence.json').write_text(json.dumps({'device_count':6,'capture_count':36,'passed':True,'integration_allowed':False,'task_approved':False,'rows':rows},indent=2))
           PY
 
       - name: Capture critic-ready native 4K multi-angle evidence
@@ -191,11 +196,11 @@ jobs:
           import hashlib,json,struct
           from pathlib import Path
           root=Path('task10-isolated-evidence/native4k'); m=json.loads((root/'manifest.json').read_text())
-          expected_states=['ready','blocked','preview','committing','complete']
+          expected_states=['ready','blocked','preview','committing','complete','replay']
           expected_angles=['front','side','three-quarter','overhead','gameplay','detail']
           assert m.get('passed') is True,m
           assert m.get('native_scale_1') is True and m.get('capture_resolution') == [3840,2160],m
-          assert m.get('record_count') == 30 and m.get('states') == expected_states and m.get('angles') == expected_angles,m
+          assert m.get('record_count') == 36 and m.get('states') == expected_states and m.get('angles') == expected_angles,m
           assert m.get('view_visual_node_count') == 4 and m.get('view_visual_build_count') == 1,m
           assert m.get('real_t09_adapter_bound') is True and m.get('exact_debit_verified') is True and m.get('integration_allowed') is False and m.get('task_approved') is False,m
           files=[]; hashes=set()
@@ -205,14 +210,28 @@ jobs:
               w,h=struct.unpack('>II',data[16:24]); assert (w,h)==(3840,2160),(p,w,h)
               digest=hashlib.sha256(data).hexdigest(); hashes.add(digest)
               files.append({'file':row['file'],'state':row['state'],'angle':row['angle'],'size':[w,h],'bytes':len(data),'sha256':digest})
-          assert len(files)==30 and len(hashes)==30,(len(files),len(hashes))
+          assert len(files)==36 and len(hashes)==36,(len(files),len(hashes))
           Path('task10-isolated-evidence/native4k-evidence.json').write_text(json.dumps({
               'task':'T10','candidate':m['candidate'],'native_scale_1':True,'resolution':[3840,2160],
-              'state_count':5,'angle_count':6,'capture_count':30,'unique_capture_count':30,
+              'state_count':6,'angle_count':6,'capture_count':36,'unique_capture_count':36,
               'states':expected_states,'angles':expected_angles,'files':files,
               'integration_allowed':False,'real_t09_adapter_bound':True,'exact_debit_verified':True,'task_approved':False,'passed':True
           },indent=2))
           PY
+
+      - name: Package source-bound specialist inputs and quantitative C6
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task10/validate_progression.py --candidate "$GITHUB_SHA" --output task10-isolated-evidence/progression.json
+          python3 tools/havenline/task10/build_critic_evidence.py --candidate "$GITHUB_SHA" --evidence-root task10-isolated-evidence
+          python3 tools/havenline/production/critic_harness.py performance --candidate "$GITHUB_SHA" --record critic-input/performance.json > task10-isolated-evidence/C6.json
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task10-critic-input-${{ github.sha }}
+          path: critic-input
+          if-no-files-found: error
+          retention-days: 30
 
       - name: Validate critic input readiness
         run: |
@@ -235,7 +254,7 @@ jobs:
             'task':'T10','candidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
             'isolated_state':'BUILDING_ISOLATED','dependency':'T09','dependency_status':graph['tasks']['T09']['status'],
             'critic_ready_native4k_evidence':True,'isolated_critic_input_ready':True,
-            'critic_evidence_states':['ready','blocked','preview','committing','complete'],
+            'critic_evidence_states':['ready','blocked','preview','committing','complete','replay'],
             'critic_evidence_angles':['front','side','three-quarter','overhead','gameplay','detail'],
             'integration_allowed':False,'real_t09_adapter_bound':True,'task_approved':False,'passed':True
           },indent=2))
@@ -248,3 +267,33 @@ jobs:
           path: task10-isolated-evidence
           if-no-files-found: error
           retention-days: 14
+
+  review-c3:
+    needs: built-pending-dependency
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C3
+      candidate: ${{ github.sha }}
+      evidence_artifact: havenline-task10-critic-input-${{ github.sha }}
+      manifest_name: C3-manifest.json
+      output_artifact: havenline-task10-C3-${{ github.sha }}
+
+  review-c4:
+    needs: built-pending-dependency
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C4
+      candidate: ${{ github.sha }}
+      evidence_artifact: havenline-task10-critic-input-${{ github.sha }}
+      manifest_name: C4-manifest.json
+      output_artifact: havenline-task10-C4-${{ github.sha }}
+
+  review-c7:
+    needs: built-pending-dependency
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C7
+      candidate: ${{ github.sha }}
+      evidence_artifact: havenline-task10-critic-input-${{ github.sha }}
+      manifest_name: C7-manifest.json
+      output_artifact: havenline-task10-C7-${{ github.sha }}

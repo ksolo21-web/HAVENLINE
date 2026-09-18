@@ -17,10 +17,11 @@ var world: Node3D
 var camera: Camera3D
 var target_mesh: MeshInstance3D
 var target_material: StandardMaterial3D
-var state_label: Label3D
+var state_label: Label
 var records: Array[Dictionary] = []
 var simulation := Simulation.new()
 var debit_verified := false
+var performance_peaks := {}
 
 func _initialize() -> void:
 	for argument in OS.get_cmdline_user_args():
@@ -79,33 +80,17 @@ func add_fixture_scene() -> void:
 	floor.material_override = floor_material
 	world.add_child(floor)
 
-	# Neutral target stays visually constant. Lifecycle state must come from
-	# world_transform_view.gd, not from the capture harness recoloring the target.
-	target_mesh = MeshInstance3D.new()
-	var box := BoxMesh.new()
-	box.size = Vector3(2.4, 1.4, 2.4)
-	target_mesh.mesh = box
-	target_mesh.position = Vector3(0.0, 0.72, 0.0)
-	target_material = StandardMaterial3D.new()
-	target_material.albedo_color = Color("8e98a3")
-	target_material.roughness = 0.58
-	target_mesh.material_override = target_material
-	world.add_child(target_mesh)
-
-	state_label = Label3D.new()
-	state_label.position = Vector3(0.0, 2.45, 0.0)
-	state_label.font_size = 56
-	state_label.outline_size = 10
-	state_label.modulate = Color.WHITE
-	state_label.text = "T10 FRAMEWORK FIXTURE"
-	world.add_child(state_label)
-
-	var disclaimer := Label3D.new()
-	disclaimer.position = Vector3(0.0, 2.08, 0.0)
-	disclaimer.font_size = 30
-	disclaimer.outline_size = 7
-	disclaimer.text = "VIEW-OWNED LIFECYCLE EVIDENCE — NOT T11 CAMP CONTENT"
-	world.add_child(disclaimer)
+	# All target geometry and actionable feedback are owned by the real view.
+	# This screen-space caption identifies evidence without masking the target.
+	var overlay := CanvasLayer.new()
+	root.add_child(overlay)
+	state_label = Label.new()
+	state_label.position = Vector2(24, 16)
+	state_label.add_theme_font_size_override("font_size", maxi(20, capture_height / 36))
+	state_label.add_theme_color_override("font_color", Color.WHITE)
+	state_label.add_theme_constant_override("outline_size", 6)
+	state_label.add_theme_color_override("font_outline_color", Color("101820"))
+	overlay.add_child(state_label)
 
 	camera = Camera3D.new()
 	camera.current = true
@@ -143,12 +128,13 @@ func configure_camera(angle: String) -> void:
 			camera.look_at(Vector3(0.0, 0.9, 0.0), Vector3.UP)
 
 func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front", "three-quarter"]) -> bool:
-	state_label.text = "T10 • %s" % String(descriptor.lifecycle).to_upper()
+	state_label.text = "T10 NEUTRAL FRAMEWORK | %s\nReal delivered-resource authority | Not T11 content" % name.to_upper()
 	for raw_angle in angles:
 		var angle := String(raw_angle)
 		configure_camera(angle)
 		await process_frame
 		await RenderingServer.frame_post_draw
+		measure_performance()
 		var image := root.get_texture().get_image()
 		if image == null or image.is_empty():
 			return false
@@ -165,6 +151,25 @@ func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front
 		})
 	return true
 
+func measure_performance() -> void:
+	var rss_mb := -1.0
+	for line in FileAccess.get_file_as_string("/proc/self/status").split("\n"):
+		if line.begins_with("VmRSS:"):
+			rss_mb = float(line.trim_prefix("VmRSS:").strip_edges().split(" ", false)[0].to_int()) / 1024.0
+	var metrics := {
+		"visible_triangles": Performance.get_monitor(Performance.RENDER_TOTAL_PRIMITIVES_IN_FRAME),
+		"draw_calls": Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
+		# Draw calls conservatively bound distinct submitted materials, including
+		# internal Label3D font passes not exposed as scene material resources.
+		"materials_visible": Performance.get_monitor(Performance.RENDER_TOTAL_DRAW_CALLS_IN_FRAME),
+		"texture_gpu_memory_mb": Performance.get_monitor(Performance.RENDER_TEXTURE_MEM_USED) / 1048576.0,
+		"process_memory_mb": rss_mb,
+		"physics_active_bodies": Performance.get_monitor(Performance.PHYSICS_3D_ACTIVE_OBJECTS),
+		"animated_rigs_active": 0,
+		"npc_companion_active_population": 0,
+	}
+	for key in metrics: performance_peaks[key] = maxf(float(performance_peaks.get(key, 0.0)), float(metrics[key]))
+
 func write_manifest(manifest: Dictionary) -> bool:
 	var file := FileAccess.open(output.path_join("manifest.json"), FileAccess.WRITE)
 	if file == null:
@@ -172,110 +177,63 @@ func write_manifest(manifest: Dictionary) -> bool:
 	file.store_string(JSON.stringify(manifest, "  "))
 	return true
 
-func run_device_check(inventory: Dictionary) -> void:
+func hold_motion() -> void:
+	if device_check or production_evidence: return
+	# Baseline is recorded at fixed 30 fps by Godot Movie Maker. Thirty frames
+	# preserve one full second, including more than a full 1.4Hz pulse cycle.
+	configure_camera("front")
+	for frame in 30:
+		await process_frame
+		await RenderingServer.frame_post_draw
+
+func capture_lifecycle(inventory: Dictionary) -> void:
+	var angles: Array = ["front"] if device_check else (["front", "side", "three-quarter", "overhead", "gameplay", "detail"] if production_evidence else ["front", "three-quarter"])
+	var states := ["ready", "blocked", "preview", "committing", "complete", "replay"]
 	view.set_ready()
+	if not await capture_state("ready", view.descriptor(), angles): quit(1); return
+	await hold_motion()
+	var blocked: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", {"wood": 7, "stone": 3})
+	if blocked.passed or not view.show_blocked(blocked) or not await capture_state("blocked", view.descriptor(), angles): quit(1); return
+	await hold_motion()
 	var preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
-	if not preview.passed or not view.show_preview(preview) or not await capture_state("preview", view.descriptor(), ["front"]):
-		print(JSON.stringify({"passed": false, "error": "device_preview_capture_failed", "device_id": device_id}))
-		quit(1)
-		return
-
-	var intent: Dictionary = engine.commit_transform("device-%s-tx" % device_id, "framework_anchor_seed_to_foundation", "capture-anchor", inventory)
-	if not intent.passed or not view.show_commit(intent) or not await capture_state("committing", view.descriptor(), ["front"]):
-		print(JSON.stringify({"passed": false, "error": "device_commit_capture_failed", "device_id": device_id}))
-		quit(1)
-		return
-
-	var final_view: Dictionary = view.descriptor()
-	var manifest := {
-		"task_id": "T10",
-		"candidate": candidate,
-		"mode": "dependency-independent-device-layout-fixture",
-		"device_id": device_id,
-		"logical_size": [capture_width, capture_height],
-		"fixture_only": true,
-		"t11_content": false,
-		"target_color_static": true,
-		"view_owns_lifecycle_visuals": true,
-		"real_t09_adapter_bound": false,
-		"record_count": records.size(),
-		"states": ["preview", "committing"],
-		"angles": ["front"],
-		"records": records,
-		"view_visual_node_count": int(final_view.visual_node_count),
-		"view_visual_build_count": int(final_view.visual_build_count),
-		"integration_allowed": false,
-		"task_approved": false,
-		"passed": records.size() == 2 and int(final_view.visual_node_count) == 4 and int(final_view.visual_build_count) == 1,
-	}
-	if not write_manifest(manifest):
-		manifest["passed"] = false
-		manifest["error"] = "device_manifest_write_failed"
-	print(JSON.stringify(manifest))
-	quit(0 if manifest.passed else 1)
-
-func run_production_evidence(inventory: Dictionary) -> void:
-	var evidence_angles: Array = ["front", "side", "three-quarter", "overhead", "gameplay", "detail"]
-
-	view.set_ready()
-	if not await capture_state("ready", view.descriptor(), evidence_angles):
-		print(JSON.stringify({"passed": false, "error": "production_ready_capture_failed"}))
-		quit(1)
-		return
-
-	var blocked_preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", {"wood": 7, "stone": 3})
-	if blocked_preview.passed or not view.show_blocked(blocked_preview) or not await capture_state("blocked", view.descriptor(), evidence_angles):
-		print(JSON.stringify({"passed": false, "error": "production_blocked_capture_failed"}))
-		quit(1)
-		return
-
-	view.set_ready()
-	var preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
-	if not preview.passed or not view.show_preview(preview) or not await capture_state("preview", view.descriptor(), evidence_angles):
-		print(JSON.stringify({"passed": false, "error": "production_preview_capture_failed"}))
-		quit(1)
-		return
-
-	var intent: Dictionary = engine.commit_transform("capture-production-tx", "framework_anchor_seed_to_foundation", "capture-anchor", inventory)
-	if not intent.passed or not view.show_commit(intent) or not await capture_state("committing", view.descriptor(), evidence_angles):
-		print(JSON.stringify({"passed": false, "error": "production_commit_capture_failed"}))
-		quit(1)
-		return
-
+	if not preview.passed or not view.show_preview(preview) or not await capture_state("preview", view.descriptor(), angles): quit(1); return
+	await hold_motion()
+	var intent: Dictionary = engine.commit_transform("capture-tx", "framework_anchor_seed_to_foundation", "capture-anchor", inventory)
+	if not intent.passed or not view.show_commit(intent) or not await capture_state("committing", view.descriptor(), angles): quit(1); return
+	await hold_motion()
 	var accepted: Dictionary = engine.accept_authoritative_receipt(authoritative_debit(intent))
-	if not accepted.passed or not view.mark_complete(accepted) or not await capture_state("complete", view.descriptor(), evidence_angles):
-		print(JSON.stringify({"passed": false, "error": "production_complete_capture_failed"}))
-		quit(1)
-		return
-
+	if not accepted.passed or not view.mark_complete(accepted) or not await capture_state("complete", view.descriptor(), angles): quit(1); return
+	await hold_motion()
+	var stored_before := simulation.stored.duplicate(true)
+	var component_before: Dictionary = engine.export_component_state()
+	var view_before: Dictionary = view.descriptor()
+	var replay_receipt: Dictionary = simulation.commit_world_transform_debit(intent)
+	var replay: Dictionary = engine.accept_authoritative_receipt(replay_receipt)
+	var replay_verified: bool = replay_receipt.get("simulation_replayed", false) and replay.get("replayed", false) and simulation.stored == stored_before and engine.export_component_state() == component_before and view.descriptor() == view_before
+	if not replay_verified or not await capture_state("replay", view.descriptor(), angles): quit(1); return
+	await hold_motion()
 	var final_view: Dictionary = view.descriptor()
-	var final_target: Dictionary = engine.descriptor().targets["capture-anchor"].duplicate(true)
 	var manifest := {
-		"task_id": "T10",
-		"candidate": candidate,
-		"mode": "real-authority-neutral-fixture-native-scale1-evidence",
-		"fixture_only": false,
-		"t11_content": false,
+		"task_id": "T10", "candidate": candidate,
+		"mode": "real-authority-neutral-fixture", "device_id": device_id,
+		"logical_size": [capture_width, capture_height],
 		"capture_resolution": [capture_width, capture_height],
 		"native_scale_1": capture_width == 3840 and capture_height == 2160,
-		"target_color_static": true,
-		"view_owns_lifecycle_visuals": true,
-		"real_t09_adapter_bound": true,
-		"exact_debit_verified": debit_verified,
-		"record_count": records.size(),
-		"states": ["ready", "blocked", "preview", "committing", "complete"],
-		"angles": evidence_angles,
-		"records": records,
+		"fixture_only": false, "t11_content": false,
+		"target_color_static": true, "view_owns_lifecycle_visuals": true,
+		"real_t09_adapter_bound": true, "exact_debit_verified": debit_verified,
+		"exact_replay_verified": replay_verified,
+		"performance_peaks": performance_peaks,
+		"performance_scope": "neutral fixture; zero rigs/actors by construction; materials upper-bound from submitted draw calls; Linux VmRSS; no physical certification",
+		"motion_frames_per_state": 30 if not device_check and not production_evidence else 0,
+		"record_count": records.size(), "states": states, "angles": angles, "records": records,
 		"view_visual_node_count": int(final_view.visual_node_count),
 		"view_visual_build_count": int(final_view.visual_build_count),
-		"final_target": final_target,
-		"integration_allowed": false,
-		"task_approved": false,
-		"passed": records.size() == 30 and capture_width == 3840 and capture_height == 2160 and int(final_view.visual_node_count) == 4 and int(final_view.visual_build_count) == 1 and final_target.state == "foundation",
+		"final_target": engine.descriptor().targets["capture-anchor"].duplicate(true),
+		"integration_allowed": false, "task_approved": false,
+		"passed": records.size() == states.size() * angles.size() and int(final_view.visual_node_count) == 4 and int(final_view.visual_build_count) == 1 and debit_verified and replay_verified,
 	}
-	if not write_manifest(manifest):
-		manifest["passed"] = false
-		manifest["error"] = "production_manifest_write_failed"
+	if not write_manifest(manifest): quit(1); return
 	print(JSON.stringify(manifest))
 	quit(0 if manifest.passed else 1)
 
@@ -313,68 +271,4 @@ func run() -> void:
 	# exercised separately by the real-authority integration suite.
 	simulation.stored = inventory.duplicate(true)
 	inventory = simulation.stored.duplicate(true)
-	if device_check:
-		await run_device_check(inventory)
-		return
-	if production_evidence:
-		await run_production_evidence(inventory)
-		return
-
-	view.set_ready()
-	if not await capture_state("ready", view.descriptor()):
-		print(JSON.stringify({"passed": false, "error": "ready_capture_failed"}))
-		quit(1)
-		return
-
-	var blocked_preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", {"wood": 7, "stone": 3})
-	if blocked_preview.passed or not view.show_blocked(blocked_preview) or not await capture_state("blocked", view.descriptor()):
-		print(JSON.stringify({"passed": false, "error": "blocked_capture_failed"}))
-		quit(1)
-		return
-
-	view.set_ready()
-	var preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
-	if not preview.passed or not view.show_preview(preview) or not await capture_state("preview", view.descriptor()):
-		print(JSON.stringify({"passed": false, "error": "preview_capture_failed"}))
-		quit(1)
-		return
-
-	var intent: Dictionary = engine.commit_transform("capture-tx", "framework_anchor_seed_to_foundation", "capture-anchor", inventory)
-	if not intent.passed or not view.show_commit(intent) or not await capture_state("committing", view.descriptor()):
-		print(JSON.stringify({"passed": false, "error": "commit_capture_failed"}))
-		quit(1)
-		return
-
-	var accepted: Dictionary = engine.accept_authoritative_receipt(authoritative_debit(intent))
-	if not accepted.passed or not view.mark_complete(accepted) or not await capture_state("complete", view.descriptor()):
-		print(JSON.stringify({"passed": false, "error": "complete_capture_failed"}))
-		quit(1)
-		return
-
-	var final_view: Dictionary = view.descriptor()
-	var manifest := {
-		"task_id": "T10",
-		"candidate": candidate,
-		"mode": "real-authority-view-owned-neutral-fixture",
-		"fixture_only": false,
-		"t11_content": false,
-		"target_color_static": true,
-		"view_owns_lifecycle_visuals": true,
-		"real_t09_adapter_bound": true,
-		"exact_debit_verified": debit_verified,
-		"record_count": records.size(),
-		"states": ["ready", "blocked", "preview", "committing", "complete"],
-		"angles": ["front", "three-quarter"],
-		"records": records,
-		"view_visual_node_count": int(final_view.visual_node_count),
-		"view_visual_build_count": int(final_view.visual_build_count),
-		"final_target": engine.descriptor().targets["capture-anchor"].duplicate(true),
-		"integration_allowed": false,
-		"task_approved": false,
-		"passed": records.size() == 10 and int(final_view.visual_node_count) == 4 and int(final_view.visual_build_count) == 1 and engine.descriptor().targets["capture-anchor"].state == "foundation",
-	}
-	if not write_manifest(manifest):
-		manifest["passed"] = false
-		manifest["error"] = "manifest_write_failed"
-	print(JSON.stringify(manifest))
-	quit(0 if manifest.passed else 1)
+	await capture_lifecycle(inventory)

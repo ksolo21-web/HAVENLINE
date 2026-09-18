@@ -1,168 +1,143 @@
 {
   "schema_version": 1,
   "task_id": "T10",
-  "failed_candidate": "70d3bc015f78846698704c10070b0677543f259b",
-  "diagnosis_id": "C0-T10-70d3bc0-REAL-AUTHORITY",
-  "c0_report_sha256": "df7d37f4524390c3b63b459764fb2261179287095fc0c4cc7ed8328ebd898e6d",
-  "repair_base": "70d3bc015f78846698704c10070b0677543f259b",
+  "failed_candidate": "fc5f1d0a687768bb6e36f84e3a8db954e15b4de7",
+  "diagnosis_id": "C0-T10-FC5F1D0-FINAL-SOURCE",
+  "c0_report_path": "Docs/Production/T10/C0-final-source-fc5f1d0.json",
+  "c0_report_sha256": "7f6bfd72a869444261160d866cac362be58b423abfc042fc8192540c02900651",
+  "repair_base": "a0ee8bc6d1247f163f43558691538511be317edb",
   "full_blocker_set_acknowledged": true,
   "candidate_freeze_after_build": true,
   "validation_concurrency_policy": "finish_running_sha",
   "plan_path": "Docs/Production/T10/REPAIR_PLAN.json",
   "must_not_change": [
+    "HavenlineGodot/scripts/simulation.gd",
     "HavenlineGodot/scripts/main.gd",
-    "HavenlineGodot/data/reference-contract.json"
+    "HavenlineGodot/data/reference-contract.json",
+    "Docs/Production/DEVICE_LAYOUT_MATRIX.json",
+    "Docs/Production/CRITIC_MATRIX.json",
+    "Docs/Production/CRITIC_EXECUTION.json",
+    "Docs/Production/PERFORMANCE_BUDGETS.json",
+    "Docs/Production/CI_TOOLCHAIN_LOCK.json",
+    "Docs/Production/ChangeRequests/T10-post-T09-simulation-authority-adapter.json",
+    ".github/workflows/havenline-specialist-critic.yml",
+    "tools/havenline/production/validate_integration_scope.py",
+    "tools/havenline/production/regression_runner.py",
+    "tools/havenline/production/specialist_critic_runner.py",
+    "tools/havenline/production/critic_harness.py",
+    "tools/havenline/audit_task01_geometry.py"
   ],
   "blast_radius_checks": [
-    "Full change_impact/regression_runner suite union plus T09 harvesting and integration",
-    "Real T10 JSON recovery, bounds and hostile payload tests"
+    "Run both hostile recovery probes and the complete T10 domain/real-authority suites before expensive regression.",
+    "Run the exact T10 C7 transactional progression proof with the new mandatory recovery checks.",
+    "Run the complete change-impact suite union from integration head to frozen candidate after installing numpy==2.3.5; retain the JSON and every suite log even on failure.",
+    "Recapture matched-camera native evidence, full lifecycle/replay motion and all six canonical device layouts from the exact frozen source.",
+    "Run quantitative C6 and fresh independent C1/C2/C3/C4/C7; enforce every mandatory dimension strictly above 9.0 unrounded with zero defects.",
+    "Before integration, validate parent-to-final scope and c1768dbba7bacbbc5d0174e6b9b661b6dbdbbc11-to-final recovery scope, then run final-source regression, factory observation and G1-G14 closure."
   ],
   "fixes": [
     {
-      "blocker_id": "C0-T10-B001",
-      "files": [
-        "Docs/Production/T10/C0-real-authority-70d3bc0.json",
-        "HavenlineGodot/scripts/simulation.gd",
-        "HavenlineGodot/scripts/world_transform.gd",
-        "HavenlineGodot/tests/test_task10_integration.gd",
-        "HavenlineGodot/tests/test_task10_world_transform.gd"
-      ],
-      "causal_change": "Validate and canonicalize both sides of the authority handshake: convert target revisions and every validated resource quantity to int, rebuild deterministic KINDS-ordered debit dictionaries, whitelist required fields, and retain canonical targets/prepared/receipts on import before exact comparison.",
-      "verification": [
-        "JSON-round-trip both simulation snapshot and T10 component state after debit but before acceptance",
-        "Exact retry returns simulation_replayed=true with zero second debit",
-        "Recovered T10 accepts once and duplicate acceptance is idempotent",
-        "Mixed int/whole-float persisted revisions and debit values normalize to the same canonical state",
-        "Malformed fractional, negative, non-finite, or out-of-range numeric values still fail atomically"
-      ]
-    },
-    {
-      "blocker_id": "C0-T10-B002",
-      "files": [
-        "HavenlineGodot/scripts/simulation.gd",
-        "HavenlineGodot/tests/test_task10_integration.gd"
-      ],
-      "causal_change": "Compare the complete canonical required intent, including transaction_id, before returning a replay. A different transaction ID must fail with zero stored or ledger mutation.",
-      "verification": [
-        "Exact same canonical intent replays without debit",
-        "Different transaction_id with the same authority key rejects without mutation",
-        "Returned replay preserves the original authoritative transaction identity"
-      ]
-    },
-    {
-      "blocker_id": "C0-T10-B003",
+      "blocker_id": "C0-T10-B009",
       "files": [
         "HavenlineGodot/scripts/world_transform.gd",
-        "HavenlineGodot/scripts/simulation.gd",
         "HavenlineGodot/tests/test_task10_world_transform.gd",
         "HavenlineGodot/tests/test_task10_integration.gd",
-        "Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json"
+        "tools/havenline/task10/validate_progression.py",
+        "tools/havenline/task10/tests/test_validate_progression.py"
       ],
-      "causal_change": "Define one stable canonical request encoding and bind the key to every authority-relevant required field, including transaction identity, exact ordered debits, progression tags, presentation key, states, target, recipe, and revision. Use the same implementation on preparation and authority validation.",
+      "causal_change": "Bind imported prepared and completed rows to configured recipe semantics and require exactly one matching latest receipt for every positive-revision target before atomically replacing live component state.",
       "verification": [
-        "Fresh-target mutation of each bound field rejects before debit",
-        "Canonical equivalent input produces one stable key before and after JSON round trip",
-        "Delimiter-bearing identifiers cannot collide with a different field tuple",
-        "The normal prepared T10 request still commits and replays exactly"
+        "Orphan foundation/revision1 without receipt rejects and cannot unlock the next stage.",
+        "Rekeyed reduced-cost pending import rejects before simulation and cannot partially charge resources.",
+        "Each recipe-bound field mutation rejects atomically while valid revision-zero, pending, completed, next-pending, crash/replay and JSON states still pass.",
+        "The C7 runner requires and passes the new named hostile recovery checks."
       ]
     },
     {
-      "blocker_id": "C0-T10-B004",
+      "blocker_id": "C0-T10-B010",
       "files": [
-        "HavenlineGodot/scripts/simulation.gd",
-        "HavenlineGodot/tests/test_task10_integration.gd",
-        "Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json"
-      ],
-      "causal_change": "For an existing target require the exact next revision and prior-target-state continuity before checking or mutating balances. Define and validate the first-use registration/initial-revision rule so arbitrary positive starting revisions cannot poison the ledger.",
-      "verification": [
-        "Exact next revision with continuous source state succeeds",
-        "Revision jump, equal/lower revision, source discontinuity, and invalid first revision all reject with zero mutation",
-        "A rejected future revision cannot replace the latest bounded receipt or block the legitimate next revision"
-      ]
-    },
-    {
-      "blocker_id": "C0-T10-B005",
-      "files": [
-        "HavenlineGodot/scripts/simulation.gd",
-        "HavenlineGodot/scripts/world_transform.gd",
-        "HavenlineGodot/tests/test_task10_integration.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
         "HavenlineGodot/tests/test_task10_world_transform.gd",
-        "Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json"
+        "HavenlineGodot/tests/test_task10_integration.gd",
+        "tools/havenline/task10/validate_world_transform.py",
+        "tools/havenline/task10/tests/test_validate_world_transform.py"
       ],
-      "causal_change": "Persist only a canonical whitelist, require stored simulation_replayed=false, enforce unique transaction IDs, bounded identifiers/tags, and a finite registered-target allowlist or documented hard maximum. Reject over-limit or unregistered input before resource or ledger mutation.",
+      "causal_change": "Within the existing four-node/one-build bound, replace the status-only fixture with a presentation-owned neutral source/preview/committing/completed geometry mapping and a camera-facing status readout for exact cost, blocked reason, prerequisite and next action; remove the static capture box that masks the world response.",
       "verification": [
-        "Unknown receipt fields are not retained",
-        "Persisted replay=true and duplicate transaction IDs reject atomically",
-        "Oversized identifiers, duplicate or oversized tags, unregistered targets, and target-count overflow reject without mutation",
-        "Stress at the documented maximum retains exactly one fixed-shape canonical receipt per registered target",
-        "Failed restore leaves the complete prior simulation state unchanged"
+        "Matched cameras show low source form, translucent target preview/commit and solid target only after accepted real authority.",
+        "Duplicate replay remains solid and causes no rebuild or new transition.",
+        "Blocked and actionable states display truthful exact costs/reasons/next state and remain readable from all required views.",
+        "Node count remains four including root, build count remains one, and no T11 content is added."
       ]
     },
     {
-      "blocker_id": "C0-T10-B006",
+      "blocker_id": "C0-T10-B011",
       "files": [
         "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        ".github/workflows/havenline-task10-isolated.yml",
         "tools/havenline/task10/validate_world_transform.py",
         "tools/havenline/task10/tests/test_validate_world_transform.py",
         "tools/havenline/task10/validate_critic_readiness.py",
-        "tools/havenline/task10/tests/test_validate_critic_readiness.py"
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
       ],
-      "causal_change": "Replace fabricated capture acknowledgment with real simulation debit and exact stored-resource conservation assertions; fail the source validator on fixture-only production acknowledgment.",
+      "causal_change": "Extend the existing task-isolated capture/device/native workflow to capture an exact-source real-authority lifecycle and duplicate replay as ordered motion evidence with a full pulse cycle, use non-overlapping screen-space evidence annotation, and cover ready/blocked/preview/committing/complete/replay on every canonical device layout without duplicating its capture path in the primary workflow.",
       "verification": [
-        "Capture binds the real simulation adapter",
-        "Validator rejects fabricated capture receipt helper",
-        "Production capture checks exact debit and authority"
+        "Motion manifest proves timing, one full committing pulse, accepted completion, replay and stable completed persistence.",
+        "All six canonical layout IDs contain every required lifecycle/replay state and readable costs/reasons.",
+        "Validators reject missing frames/states, annotation collisions, fixture authority, source mismatch and false physical-device claims."
       ]
     },
     {
-      "blocker_id": "C0-T10-B007",
+      "blocker_id": "C0-T10-B012",
       "files": [
-        ".github/workflows/havenline-task10-adapter-preflight.yml",
-        ".github/workflows/havenline-task10-prebuild.yml",
-        ".github/workflows/havenline-task10-isolated.yml",
-        ".github/workflows/havenline-task10-preparation.yml",
         ".github/workflows/havenline-task10-world-transformation.yml",
         "tools/havenline/task10/tests/test_task10_workflows.py"
       ],
-      "causal_change": "Pin task workflow actions, preserve running SHA, replace stale adapter assertions and use shared impact regression with bake-before-import prerequisites.",
+      "causal_change": "Install the existing exact numpy==2.3.5 prerequisite before the shared calculated regression and preserve its JSON plus per-suite logs in an always-running collection path.",
       "verification": [
-        "Task workflow tests reject mutable tags and cancellation",
-        "Bound adapter assertions and shared regression are mandatory",
-        "No shared CI lock or runner modifications"
+        "Workflow canaries require the exact pin before regression and log/report retention after an injected failure.",
+        "The frozen-source suite union passes audit_task01_geometry.py and all required Godot suites.",
+        "No shared runner, audit or dependency-lock file changes."
       ]
     },
     {
-      "blocker_id": "C0-T10-B008",
+      "blocker_id": "C0-T10-B013",
       "files": [
-        ".github/workflows/havenline-production-governance.yml",
         ".github/workflows/havenline-task10-world-transformation.yml",
-        "Docs/Production/ChangeRequests/T10-C7-transactional-progression.json",
-        "tools/havenline/production/closure_validator.py",
-        "tools/havenline/production/critic_harness.py",
-        "tools/havenline/production/critic_profile.py",
-        "tools/havenline/production/forward_execution.py",
-        "tools/havenline/production/specialist_critic_runner.py",
-        "tools/havenline/production/specialist_evidence_manifest.py",
-        "tools/havenline/production/task_packet.py",
-        "tools/havenline/production/tests/test_architecture_release_lock.py",
-        "tools/havenline/production/tests/test_critic_profile.py",
-        "tools/havenline/production/tests/test_forward_execution.py",
-        "tools/havenline/production/validate_architecture_v32_t10.py",
+        ".github/workflows/havenline-task10-isolated.yml",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/review_visual.py",
         "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/validate_world_transform.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_review_visual.py",
         "tools/havenline/task10/tests/test_validate_critic_readiness.py",
-        "tools/havenline/task10/tests/test_validate_progression.py",
-        "tools/havenline/task10/validate_progression.py"
+        "tools/havenline/task10/tests/test_validate_world_transform.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
       ],
-      "causal_change": "Keep progression_sim, C7 applicability, every other gate, and the strict score contract unchanged; apply an exact T10-only forward runner override; resolve the T10 C7 transactional dimensions and evidence categories through every consumer; require exact task identity; bind the authorization request digest; and execute the real domain and integration suites through a candidate- and engine-bound task runner. Every other task retains the generic full-progression interpretation.",
+      "causal_change": "Build exact-source critic manifests from real images/motion and test/progression evidence; wire the existing task-isolated capture/device/native workflow to thin unchanged-reusable-workflow calls for C3/C4/C7 rather than duplicating capture jobs in the primary workflow; add a separate locked task-specific independent visual path for C1/C2, measured neutral-fixture C6 output through the unchanged performance harness, and fail-closed final record aggregation.",
       "verification": [
-        "T10 retains the progression_sim gate and independent C7 while its runner is exactly tools/havenline/task10/validate_progression.py",
-        "The task runner requires the exact checked-out candidate, rejects tracked source drift, requires Godot 4.7.2 stable official ed1daf0bf, executes both real T10 suites, enforces mandatory named checks, and rejects fixture authority",
-        "The T10-specific critic dimensions and evidence categories resolve consistently in manifest loading, specialist execution, evidence validation, raw critic validation, task packet generation, and closure validation",
-        "Every non-T10 task and every non-C7 critic resolves byte-equivalent to the global authority defaults",
-        "The V3.2 validator permits exactly the three locked V3.1 deltas and rejects any other forward_execution.py change; the hosted assertion expects 47 unchanged locked files and those exact three changes",
-        "The authorization record digest is 8f24a3216fa5d4d87f88227a4eb64074b8efea2f6d71b2218f5a3157061aebe1",
-        "All 178 authority production tests pass and the frozen task C7 proof passes 320 checks",
-        "Critic applicability, >9.0 unrounded thresholds, target 10.0, G1-G14, and zero-unresolved-defect requirements remain unchanged"
+        "Every manifest item is hash-bound to the frozen candidate and complete required categories.",
+        "C1/C2/C3/C4/C7 records come from separate independent jobs with raw-output provenance; C6 contains all required measured fields and passes the unchanged harness.",
+        "Aggregation rejects missing critics, candidate mismatch, incomplete coverage, non-independent required reviews, scores at or below 9.0, defects or missing raw evidence.",
+        "No builder self-review, score retry, shared specialist edit or T68/T69 physical/thermal claim."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B014",
+      "files": [
+        "Docs/Production/T10/C0-final-source-fc5f1d0.json",
+        "Docs/Production/T10/INTEGRATION_RECOVERY_FC5F1D0.json"
+      ],
+      "causal_change": "Record a0cf1d2/run35330549220 as failed and define the no-waiver recovery: complete all source/evidence/critic repairs first, reach INTEGRATION_READY through existing authority, integrate one exact frozen source, and retain commit-local plus last-approved-base scope evidence.",
+      "verification": [
+        "Recovery documentation never marks a0cf1d2 approved and authorizes no standalone simulation rollback.",
+        "No lifecycle promotion occurs until B009-B013, full regression, C6 and strict independent critic gates pass.",
+        "Parent-to-final and c1768db-to-final integration-scope records pass before final regression/factory/G1-G14 closure."
       ]
     }
   ]

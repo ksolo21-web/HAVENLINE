@@ -32,6 +32,8 @@ class WorkflowTests(unittest.TestCase):
     def test_shared_regression_and_prerequisite_order(self):
         source = (WORKFLOWS / 'havenline-task10-world-transformation.yml').read_text()
         self.assertIn('production/regression_runner.py --base', source)
+        self.assertIn('python3 -m pip install numpy==2.3.5', source)
+        self.assertIn('Preserve regression logs on success or failure\n        if: always()', source)
         self.assertIn('--head "$GITHUB_SHA"', source)
         self.assertLess(source.index('bake_outpost_audio.py'), source.index('--import --quit'))
         self.assertLess(source.index('--import --quit'), source.index('production/regression_runner.py'))

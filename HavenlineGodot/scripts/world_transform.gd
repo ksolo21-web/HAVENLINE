@@ -532,6 +532,12 @@ static func _valid_target_row(row: Variant) -> bool:
 		return false
 	return _duplicate_free_strings(row.get("progression_tags", []))
 
+func _matches_configured_recipe(row: Dictionary) -> bool:
+	var recipe := _recipe(String(row.recipe_id))
+	if recipe.is_empty(): return false
+	var canonical := _canonical_transaction(row)
+	return canonical.source_state == recipe.source_state and canonical.target_state == recipe.target_state and canonical.debits == recipe.normalized_costs and canonical.progression_tags == recipe.progression_tags and canonical.presentation_key == recipe.presentation_key and canonical.request_identity == _request_identity(String(row.recipe_id), String(row.target_id), String(recipe.source_state), String(recipe.target_state))
+
 func import_component_state(state: Dictionary) -> bool:
 	if state.size() != 5 or not _valid_nonnegative_integer(state.get("schema_version")) or state.schema_version != COMPONENT_SCHEMA_VERSION:
 		return false
@@ -552,7 +558,7 @@ func import_component_state(state: Dictionary) -> bool:
 		if not _valid_identifier(transaction_id) or transaction_id in next_receipts or not _valid_transaction_row(transaction_id, next_prepared[transaction_id]):
 			return false
 		var pending: Dictionary = next_prepared[transaction_id]
-		if not _valid_persisted_role(pending, false): return false
+		if not _valid_persisted_role(pending, false) or not _matches_configured_recipe(pending): return false
 		var pending_target_id := String(pending.target_id)
 		if pending_target_id not in next_targets or pending_target_id in pending_targets:
 			return false
@@ -565,13 +571,18 @@ func import_component_state(state: Dictionary) -> bool:
 		if not _valid_identifier(transaction_id) or not _valid_transaction_row(transaction_id, next_receipts[transaction_id]):
 			return false
 		var row: Dictionary = next_receipts[transaction_id]
-		if not _valid_persisted_role(row, true): return false
+		if not _valid_persisted_role(row, true) or not _matches_configured_recipe(row): return false
 		var target_id := String(row.target_id)
 		if target_id not in next_targets or target_id in receipt_targets:
 			return false
 		receipt_targets[target_id] = true
 		var target: Dictionary = next_targets[target_id]
 		if int(row.target_revision) != int(target.revision) or row.target_state != target.state:
+			return false
+	# A latest receipt is mandatory for every advanced target, not merely valid
+	# when supplied. Validate the entire restore before replacing live state.
+	for target_id in next_targets:
+		if (int(next_targets[target_id].revision) > 0) != receipt_targets.has(target_id):
 			return false
 	targets = {}
 	for target_id in next_targets:

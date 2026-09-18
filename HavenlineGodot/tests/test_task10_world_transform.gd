@@ -336,6 +336,31 @@ func run() -> void:
 	check("malformed import preserves populated component atomically", not json_restored.import_component_state(oversized_tags) and json_restored.export_component_state() == preserved)
 	var replay_after_reload := restored.commit_transform("tx-002", "framework_anchor_foundation_to_reinforced", "anchor-A", inventory, ["harvesting_online"])
 	check("latest completed receipt replay protection survives reload", replay_after_reload.passed and replay_after_reload.replayed and not replay_after_reload.submit_debit_transaction)
+	var orphan := exported.duplicate(true)
+	orphan.receipts.clear()
+	expect_import_rejected("advanced target requires latest completed receipt", exported, orphan)
+	var populated_before := restored.export_component_state()
+	check("orphan restore preserves populated state atomically", not restored.import_component_state(orphan) and restored.export_component_state() == populated_before)
+	for table in ["prepared", "receipts"]:
+		var baseline: Dictionary = crash_snapshot if table == "prepared" else exported
+		var tx: String = "tx-crash" if table == "prepared" else "tx-002"
+		for field in ["recipe_id", "source_state", "target_state", "debits", "progression_tags", "presentation_key"]:
+			var altered := baseline.duplicate(true)
+			var row: Dictionary = altered[table][tx]
+			if field == "debits": row.debits = {"wood": 1}
+			elif field == "progression_tags": row.progression_tags = ["forged"]
+			else: row[field] = "forged"
+			row.request_identity = Transform._request_identity(row.recipe_id, row.target_id, row.source_state, row.target_state)
+			row.authority_transaction_key = Transform._authority_transaction_key(row)
+			expect_import_rejected("recipe-bound " + table + " rejects rekeyed " + field, baseline, altered)
+	var next_pending_engine := Transform.new()
+	next_pending_engine.configure_from_file()
+	check("advanced receipt restores before next pending", next_pending_engine.import_component_state(crash_restored.export_component_state()))
+	var next_pending := next_pending_engine.commit_transform("next-recovery", "framework_anchor_foundation_to_reinforced", "crash-anchor", {"wood": 20, "stone": 12, "metal": 2, "fuel": 1}, ["harvesting_online"])
+	var next_pending_restore := Transform.new()
+	next_pending_restore.configure_from_file()
+	check("advanced receipt plus next pending roundtrips", next_pending.passed and next_pending_restore.import_component_state(JSON.parse_string(JSON.stringify(next_pending_engine.export_component_state()))))
+
 	var before_bad_import := restored.export_component_state()
 	var malformed := before_bad_import.duplicate(true)
 	malformed["schema_version"] = 999

@@ -36,14 +36,15 @@ var visual_apply_count := 0
 var visual_build_count := 0
 var readability_scale := 1.0
 var _pulse_time := 0.0
+var _accepted_scale := Vector3(0.65, 0.12, 0.65)
 
 var _visual_root: Node3D
 var _ring: MeshInstance3D
 var _ghost: MeshInstance3D
-var _beacon: MeshInstance3D
+var _beacon: Label3D
 var _ring_material: StandardMaterial3D
 var _ghost_material: StandardMaterial3D
-var _beacon_material: StandardMaterial3D
+var displayed_costs: Dictionary = {}
 
 static func contract() -> Dictionary:
 	return {
@@ -57,7 +58,7 @@ static func contract() -> Dictionary:
 		"complete_requires_world_transform_acceptance": true,
 		"t11_owns_final_camp_content": true,
 		"neutral_framework_visuals_only": true,
-		"world_response_shapes": ["perimeter_ring", "preview_volume", "status_beacon"],
+		"world_response_shapes": ["perimeter_ring", "preview_volume", "status_label"],
 		"shape_and_color_redundancy": true,
 		"visual_node_budget": VISUAL_NODE_BUDGET,
 		"readability_scale_range": [READABILITY_MIN, READABILITY_MAX],
@@ -96,10 +97,11 @@ func set_ready() -> void:
 func show_preview(preview: Dictionary) -> bool:
 	if not bool(preview.get("passed", false)) or String(preview.get("target_id", "")) != target_id:
 		return false
+	displayed_costs = preview.get("costs", {}).duplicate(true)
 	presentation_key = String(preview.get("presentation_key", ""))
 	source_state = String(preview.get("source_state", ""))
 	target_state = String(preview.get("target_state", ""))
-	target_revision = int(preview.get("target_revision", 0))
+	target_revision = int(preview.get("target_revision", 0)) + 1
 	transaction_id = ""
 	_clear_blocked()
 	_set_lifecycle("preview")
@@ -116,6 +118,7 @@ func show_blocked(preview: Dictionary) -> bool:
 		block_reasons.append(String(error))
 	var shortfalls: Variant = preview.get("shortfalls", {})
 	blocked_shortfalls = shortfalls.duplicate(true) if shortfalls is Dictionary else {}
+	displayed_costs = preview.get("costs", {}).duplicate(true)
 	presentation_key = String(preview.get("presentation_key", presentation_key))
 	source_state = String(preview.get("source_state", source_state))
 	target_state = String(preview.get("target_state", target_state))
@@ -132,6 +135,7 @@ func show_commit(intent: Dictionary) -> bool:
 	var next_transaction_id := String(intent.get("transaction_id", ""))
 	if next_transaction_id.is_empty() or not bool(intent.get("submit_debit_transaction", false)):
 		return false
+	displayed_costs = intent.get("debits", {}).duplicate(true)
 	presentation_key = String(intent.get("presentation_key", ""))
 	source_state = String(intent.get("source_state", ""))
 	target_state = String(intent.get("target_state", ""))
@@ -152,6 +156,7 @@ func mark_complete(receipt: Dictionary) -> bool:
 		return false
 	if String(receipt.get("target_id", "")) != target_id or int(receipt.get("target_revision", -1)) != target_revision:
 		return false
+	_accepted_scale = _target_form_scale()
 	_clear_blocked()
 	_set_lifecycle("complete")
 	return true
@@ -200,15 +205,14 @@ func _ensure_visuals() -> void:
 	_ghost.material_override = _ghost_material
 	_visual_root.add_child(_ghost)
 
-	_beacon = MeshInstance3D.new()
-	_beacon.name = "StatusBeacon"
-	var beacon_mesh := SphereMesh.new()
-	beacon_mesh.radius = 0.24
-	beacon_mesh.height = 0.48
-	_beacon.mesh = beacon_mesh
-	_beacon.position.y = 1.85
-	_beacon_material = _material(STATE_COLORS.ready)
-	_beacon.material_override = _beacon_material
+	_beacon = Label3D.new()
+	_beacon.name = "StatusLabel"
+	_beacon.position.y = 2.8
+	_beacon.font_size = 38
+	_beacon.outline_size = 9
+	_beacon.pixel_size = 0.006
+	_beacon.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_beacon.no_depth_test = true
 	_visual_root.add_child(_beacon)
 
 	_visual_root.scale = Vector3.ONE * readability_scale
@@ -228,19 +232,17 @@ func _apply_visuals() -> void:
 	var ring_color := color
 	ring_color.a = 0.78 if lifecycle != "complete" else 0.92
 	_ring_material.albedo_color = ring_color
-	_beacon_material.albedo_color = color
 	var ghost_color := color
-	ghost_color.a = 0.17 if lifecycle == "preview" else 0.11
+	ghost_color.a = 0.30 if lifecycle in ["preview", "committing"] else 1.0
 	_ghost_material.albedo_color = ghost_color
-
+	_ghost_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA if ghost_color.a < 1.0 else BaseMaterial3D.TRANSPARENCY_DISABLED
 	_ring.visible = lifecycle != "locked"
-	_ghost.visible = lifecycle in ["preview", "committing"]
-	_beacon.visible = lifecycle in ["ready", "committing", "complete", "blocked"]
-	_beacon.scale = Vector3.ONE
-	if lifecycle == "blocked":
-		_beacon.scale = Vector3(1.35, 0.55, 1.35)
-	elif lifecycle == "complete":
-		_beacon.scale = Vector3.ONE * 1.25
+	_ghost.visible = lifecycle != "locked"
+	var target_form := lifecycle in ["preview", "committing", "complete"]
+	_ghost.scale = _target_form_scale() if target_form else _accepted_scale
+	_ghost.position.y = 0.08 + 0.75 * _ghost.scale.y
+	_beacon.visible = lifecycle != "locked"
+	_beacon.text = feedback_text()
 	set_process(lifecycle == "committing")
 	visual_apply_count += 1
 
@@ -249,7 +251,26 @@ func _process(delta: float) -> void:
 		return
 	_pulse_time = fmod(_pulse_time + delta, 10.0)
 	var pulse := 1.0 + sin(_pulse_time * TAU * PULSE_HZ) * 0.18
-	_beacon.scale = Vector3.ONE * pulse
+	_ghost.scale = _target_form_scale() * pulse
+
+func _target_form_scale() -> Vector3:
+	return Vector3(1.0, minf(1.35, 1.0 + 0.25 * maxi(0, target_revision - 1)), 1.0)
+
+func _quantities(values: Dictionary) -> String:
+	var parts: Array[String] = []
+	for kind in ["wood", "stone", "metal", "fuel"]:
+		if values.has(kind): parts.append("%d %s" % [int(values[kind]), kind])
+	return " + ".join(parts)
+
+func feedback_text() -> String:
+	var transition := "%s > %s" % [source_state.capitalize(), target_state.capitalize()] if not target_state.is_empty() else "Approach to preview transformation"
+	var cost := "Cost: " + _quantities(displayed_costs) if not displayed_costs.is_empty() else ""
+	if lifecycle == "complete": return target_state.capitalize() + " complete\nPaid: " + _quantities(displayed_costs) + "\nContinue to the next target"
+	if lifecycle == "blocked":
+		var reason := " / ".join(block_reasons).replace("_", " ").replace(":", ": ")
+		return transition + "\n" + cost + "\n" + reason + ("\nDeliver " + _quantities(blocked_shortfalls) if not blocked_shortfalls.is_empty() else "")
+	if lifecycle == "committing": return transition + "\n" + cost + "\nApplying delivered resources..."
+	return transition + ("\n" + cost if not cost.is_empty() else "") + ("\nStay near the target" if lifecycle == "preview" else "")
 
 func descriptor() -> Dictionary:
 	return {
@@ -263,6 +284,8 @@ func descriptor() -> Dictionary:
 		"transaction_id": transaction_id,
 		"block_reasons": block_reasons.duplicate(),
 		"blocked_shortfalls": blocked_shortfalls.duplicate(true),
+		"displayed_costs": displayed_costs.duplicate(true),
+		"feedback_text": feedback_text(),
 		"update_count": update_count,
 		"visual_apply_count": visual_apply_count,
 		"visual_build_count": visual_build_count,

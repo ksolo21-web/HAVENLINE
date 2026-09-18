@@ -17,7 +17,7 @@ sys.path.insert(0, str(ROOT / "tools/havenline/production"))
 from critic_profile import resolve_critic
 
 REQUIRED_CRITICS = ["C1", "C2", "C3", "C4", "C6", "C7"]
-REQUIRED_STATES = ["ready", "blocked", "preview", "committing", "complete"]
+REQUIRED_STATES = ["ready", "blocked", "preview", "committing", "complete", "replay"]
 REQUIRED_ANGLES = ["front", "side", "three-quarter", "overhead", "gameplay", "detail"]
 
 
@@ -108,22 +108,25 @@ def main() -> None:
 
     if not source.get("passed"):
         errors.append("source contract is not clean")
-    if lifecycle.get("passed") is not True or lifecycle.get("record_count") != 10:
+    if lifecycle.get("passed") is not True or lifecycle.get("record_count") != 12:
         errors.append("baseline lifecycle evidence is incomplete")
     if lifecycle.get("states") != REQUIRED_STATES or lifecycle.get("angles") != ["front", "three-quarter"]:
         errors.append("baseline lifecycle state/angle contract mismatch")
 
-    if devices.get("passed") is not True or devices.get("device_count") != 6 or devices.get("capture_count") != 12:
+    if devices.get("passed") is not True or devices.get("device_count") != 6 or devices.get("capture_count") != 36:
         errors.append("device-layout matrix evidence is incomplete")
 
     if native4k.get("passed") is not True or native4k.get("native_scale_1") is not True:
         errors.append("native 4K scale-1 manifest is not clean")
-    if native4k.get("capture_resolution") != [3840, 2160] or native4k.get("record_count") != 30:
+    if native4k.get("capture_resolution") != [3840, 2160] or native4k.get("record_count") != 36:
         errors.append("native 4K capture cardinality/resolution mismatch")
     if native4k.get("states") != REQUIRED_STATES or native4k.get("angles") != REQUIRED_ANGLES:
         errors.append("native 4K state/angle coverage mismatch")
-    if native4k_index.get("passed") is not True or native4k_index.get("unique_capture_count") != 30:
+    if native4k_index.get("passed") is not True or native4k_index.get("unique_capture_count") != 36:
         errors.append("native 4K uniqueness/index proof missing")
+
+    if not lifecycle.get("exact_replay_verified") or lifecycle.get("motion_frames_per_state") != 30 or not (root / "capture/lifecycle.mp4").is_file():
+        errors.append("continuous lifecycle and exact replay evidence required")
 
     domain_names = check_names(domain)
     integration_names = check_names(integration)
@@ -169,7 +172,7 @@ def main() -> None:
         "higher target revision replaces bounded simulation receipt",
         "stale lower revision with old key fails closed after newer receipt",
         "blocked world response preserves exact reasons and shortfalls",
-        "committing beacon pulse changes shape without rebuilding nodes",
+        "committing target pulse changes shape without rebuilding nodes",
         "repeated lifecycle calls create zero visual node growth",
         "view remains presentation-only after full lifecycle",
     }
@@ -180,13 +183,13 @@ def main() -> None:
     coverage = {
         "C1": {
             "focus": "reference/world-response fidelity",
-            "isolated_inputs": ["30-frame native-4K multi-angle lifecycle set", "gameplay/overhead/side/three-quarter/detail coverage", "neutral T11-safe fixture"],
+            "isolated_inputs": ["36-frame native-4K multi-angle lifecycle set", "gameplay/overhead/side/three-quarter/detail coverage", "neutral T11-safe fixture"],
             "input_ready": not errors,
             "production_review_blocked_by": ["real post-T09 integrated candidate", "final integration provenance"],
         },
         "C2": {
             "focus": "technical and visual integrity",
-            "isolated_inputs": ["native-4K multi-angle set", "10-frame baseline set", "4-node/1-build presentation bound", "cross-state deterministic manifest"],
+            "isolated_inputs": ["native-4K multi-angle set", "12-frame baseline set", "4-node/1-build presentation bound", "cross-state deterministic manifest"],
             "input_ready": not errors,
             "production_review_blocked_by": ["post-T09 recapture if integration changes affected visuals"],
         },
@@ -198,7 +201,7 @@ def main() -> None:
         },
         "C4": {
             "focus": "gameplay UX and readability",
-            "isolated_inputs": ["blocked/ready/preview/committing/complete states", "exact blocked reasons/shortfalls", "6-device/12-frame layout matrix", "native-4K gameplay/detail views"],
+            "isolated_inputs": ["blocked/ready/preview/committing/complete states", "exact blocked reasons/shortfalls", "6-device/36-frame layout matrix", "native-4K gameplay/detail views"],
             "input_ready": not errors,
             "production_review_blocked_by": ["post-T09 integrated gameplay capture"],
         },
