@@ -26,6 +26,21 @@ class AuthorityReadinessTests(unittest.TestCase):
             rows[index]['candidate'] = 'b' * 40
             self.assertTrue(module.authority_errors(*rows, 'a' * 40))
 
+    def test_projected_readability_requires_every_unique_clear_record(self):
+        states=['ready','blocked'];angles=['front','overhead']
+        proof=dict(passed=True,overlap=False,fully_in_frame=True,priority_ok=True,clearance_px=24.0,required_clearance_px=20.0,label_rect=[1.0,2.0,3.0,4.0],response_rect=[10.0,20.0,30.0,40.0],frame_rect=[0.0,0.0,100.0,100.0])
+        report=dict(records=[dict(state=s,angle=a,projected_readability=copy.deepcopy(proof)) for s in states for a in angles])
+        self.assertEqual([],module.projected_readability_errors(report,states,angles))
+        for change in ('missing','overlap','offframe','priority','clearance','nonfinite'):
+            row=copy.deepcopy(report)
+            if change=='missing':row['records'].pop()
+            elif change=='overlap':row['records'][0]['projected_readability']['overlap']=True
+            elif change=='offframe':row['records'][0]['projected_readability']['fully_in_frame']=False
+            elif change=='priority':row['records'][0]['projected_readability']['priority_ok']=False
+            elif change=='clearance':row['records'][0]['projected_readability']['clearance_px']=1.0
+            else:row['records'][0]['projected_readability']['label_rect'][0]=float('nan')
+            with self.subTest(change=change):self.assertTrue(module.projected_readability_errors(row,states,angles))
+
     def test_fixture_or_missing_debit_rejects(self):
         for index, field in [(1, 'real_t09_adapter_bound'), (2, 'exact_debit_verified'), (3, 'real_t09_adapter_bound')]:
             rows = self.records()
@@ -48,10 +63,14 @@ class PackageBindingTests(unittest.TestCase):
             return dict(path='critic-input/'+name,category=category,kind=kind,description=description,sha256=hashlib.sha256((root/name).read_bytes()).hexdigest())
         required=['FROZEN_SCOPE.md','recipes.json','progression.json','domain-tests.json','integration-tests.json','review-summary.json','motion-timeline.json','save-matrix/save-matrix.json','benchmark/manifest.json','performance.json']
         for name in required:write(name,{})
+        domain=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in build.C7_ROWS['R05_domain']])
+        integration=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in build.C7_ROWS['R05_integration']+build.C7_ROWS['R06_integration']])
+        write('domain-tests.json',domain);write('integration-tests.json',integration)
         progression=dict(passed=True,executed=True,suites=[dict(suite=k,checks=len(v),required_checks=sorted(v),passed=True) for k,v in REQUIRED.items()])
         write('progression.json',progression);write('benchmark/manifest.json',fixture.BenchmarkEvidenceTests().fixture())
         write('scope-brief.txt',build.SCOPE_SYNOPSIS)
         write('progression-brief.txt',build.compact_progression(progression)+'\nRaw critic-input/progression.json SHA256 '+build.digest(root/'progression.json')+'\n')
+        write('c7-brief.txt',build.c7_context(domain,integration,candidate,build.digest(root/'domain-tests.json'),build.digest(root/'integration-tests.json')))
         write('review-output-contract.txt',build.REVIEW_OUTPUT_CONTRACT)
         images=['native4k/'+state+'-front.png' for state in module.REQUIRED_STATES]+['capture/motion-000.png','device-layout/phone/blocked-front.png','device-layout/phone/complete-front.png']
         for name in images:write(name,'pixel fixture')
@@ -60,13 +79,17 @@ class PackageBindingTests(unittest.TestCase):
         for cid in ('C3','C4','C6','C7'):
             if cid in ('C3','C4'):
                 categories=sorted(resolve_critic('T10',cid,execution,matrix)[0]['required_categories'])
-                items=[item(name,categories[i%len(categories)],'motion_frame' if name.startswith('capture/') else 'image') for i,name in enumerate(images)]
-                items += [item('scope-brief.txt','task_scope','text'),item('review-output-contract.txt','task_scope','text',build.REVIEW_OUTPUT_DESCRIPTION)]
+                visual_items=[item(name,categories[i%len(categories)],'motion_frame' if name.startswith('capture/') else 'image') for i,name in enumerate(images)]
+                groups=[]
+                for start in range(0,len(visual_items),6):
+                    items=visual_items[start:start+6]+[item('scope-brief.txt','task_scope','text'),item('review-output-contract.txt','task_scope','text',build.REVIEW_OUTPUT_DESCRIPTION)]
+                    groups.append(dict(id='fixture-'+str(start),items=items))
             elif cid=='C7':
                 categories=resolve_critic('T10',cid,execution,matrix)[0]['required_categories']
-                items=[item('domain-tests.json',category) for category in categories]
-            else:items=[item('performance.json','quantitative_budgets')]
-            write(cid+'-manifest.json',dict(candidate_commit=candidate,critic_id=cid,task_id='T10',preserved_sources=preserved,groups=[dict(id='fixture',items=items)]))
+                items=[item('c7-brief.txt',categories[0],'text')]+[item('domain-tests.json',category) for category in categories]
+                groups=[dict(id='fixture',items=items)]
+            else:groups=[dict(id='fixture',items=[item('performance.json','quantitative_budgets')])]
+            write(cid+'-manifest.json',dict(candidate_commit=candidate,critic_id=cid,task_id='T10',preserved_sources=preserved,groups=groups))
         write('evidence-index.json',dict(candidate=candidate,files={str(p.relative_to(root)):hashlib.sha256(p.read_bytes()).hexdigest() for p in root.rglob('*') if p.is_file()}))
         return candidate
 

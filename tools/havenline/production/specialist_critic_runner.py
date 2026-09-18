@@ -83,6 +83,22 @@ def response_schema(task_id, dimensions):
         schema['properties']['observations'].update(minItems=2, maxItems=2)
         for field in ('observations', 'defects'):
             schema['properties'][field]['items']['maxLength'] = 160
+        passing_scores={key:{'type':'number','exclusiveMinimum':9.0,'maximum':10} for key in dimensions}
+        schema['oneOf']=[
+            {
+                'properties':{
+                    'defects':{'type':'array','items':{'type':'string','maxLength':160},'maxItems':0},
+                    'scores':{'type':'object','properties':passing_scores,'required':dimensions,'additionalProperties':False},
+                },
+                'required':['defects','scores'],
+            },
+            {
+                'properties':{
+                    'defects':{'type':'array','items':{'type':'string','maxLength':160},'minItems':1,'maxItems':5},
+                },
+                'required':['defects'],
+            },
+        ]
     return schema
 
 
@@ -96,6 +112,11 @@ def response_bounds_errors(task_id, review):
             errors.append(field + ' count violates T10 response contract')
         elif any(not isinstance(value, str) or len(value) > 160 for value in values):
             errors.append(field + ' string violates T10 response contract')
+    scores=review.get('scores')
+    defects=review.get('defects')
+    if isinstance(scores,dict) and isinstance(defects,list) and not defects:
+        if any(not isinstance(value,(int,float)) or isinstance(value,bool) or value<=9.0 for value in scores.values()):
+            errors.append('T10 score at or below 9.0 requires a concrete actionable defect')
     return errors
 
 def main():

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "requesting_task": "T10",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "authorization": "Also when we find issues with the architecture and/or critics, we need to fix.",
+  "reviewer": "/root/t10_c0_critic",
+  "blocker": "C0-T10-B058",
+  "classification": "TOOLING_DEFECT",
+  "scope": [
+    "tools/havenline/production/specialist_critic_runner.py",
+    "tools/havenline/production/tests/test_specialist_critic_runner.py"
+  ],
+  "permitted_behavior_change": "T10 only: make an empty defect array valid only when every mandatory score is strictly greater than 9.0, and require at least one bounded concrete defect whenever any score is at or below 9.0. Preserve the existing downstream gate and all request/runtime settings.",
+  "preserved": [
+    "all six T10 critics and every mandatory dimension",
+    "strictly greater than 9.0 unrounded threshold",
+    "model, revision, runtime, context, 900-token budget, sampling and timeout",
+    "all non-T10 response schemas and downstream validation",
+    "independent critic authority and G1-G14"
+  ]
+}

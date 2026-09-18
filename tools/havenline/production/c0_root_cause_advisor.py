@@ -6,8 +6,10 @@ import hashlib
 import json
 import os
 import pathlib
+import re
 import subprocess
 import time
+import urllib.error
 import urllib.request
 from typing import Any
 
@@ -19,6 +21,17 @@ CLASSES={
 }
 BLOCKER_CLASSES=CLASSES-{"MIXED"}
 ACTIONS={"REPAIR","RETRY_INFRA","NO_PRODUCT_CHANGE","FREEZE_AND_VALIDATE","BLOCKED"}
+C0_CONTEXT_TOKENS=16384
+C0_MAX_TOKENS=2200
+C0_SAFETY_TOKENS=512
+# Every tokenizer token represents at least one input byte. Keeping the complete
+# serialized request below this byte ceiling is therefore a conservative,
+# tokenizer-independent upper bound that leaves both completion and safety
+# reserves inside the pinned context window.
+C0_MAX_REQUEST_BYTES=C0_CONTEXT_TOKENS-C0_MAX_TOKENS-C0_SAFETY_TOKENS
+FAIL_CONCLUSIONS={"failure","timed_out","cancelled","action_required","startup_failure"}
+ANSI_RE=re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
+SIGNAL_RE=re.compile(r"(?i)(critic|score|defect|error|fail|fatal|traceback|assert|coverage|confidence|timeout|exceed|blocked|unexecuted)")
 
 
 def digest(path:pathlib.Path)->str:
@@ -39,6 +52,200 @@ def load_packet(path:pathlib.Path)->dict:
         if not isinstance(data[key],str) or len(data[key])!=40:raise SystemExit(key+" must be exact 40-char commit")
     if not isinstance(data["steps"],list) or not isinstance(data["changed_files"],list):raise SystemExit("invalid packet collections")
     return data
+
+
+def stable_json_digest(value:Any)->str:
+    raw=json.dumps(value,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode()
+    return hashlib.sha256(raw).hexdigest()
+
+
+def bounded_lines(text:str,limit:int)->dict:
+    """Retain whole informative lines and explicit omission metadata."""
+    raw=text.encode("utf-8",errors="replace")
+    lines=[];used=0
+    for source in text.splitlines():
+        line=ANSI_RE.sub("",source).strip()
+        if not line or not SIGNAL_RE.search(line):continue
+        encoded=line.encode("utf-8",errors="replace")
+        if used+len(encoded)+1>limit:continue
+        lines.append(line);used+=len(encoded)+1
+    return {
+        "source_bytes":len(raw),"source_sha256":hashlib.sha256(raw).hexdigest(),
+        "retained_lines":lines,"retained_bytes":used,
+        "truncated":used<len(raw),
+    }
+
+
+def compact_failure_records(packet:dict,detail:int=2)->list[dict]:
+    rows=packet.get("structured_failure_records",[])
+    if not isinstance(rows,list):return []
+    compact=[]
+    for row in rows:
+        if not isinstance(row,dict):continue
+        source_groups=row.get("groups",[]) if isinstance(row.get("groups"),list) else []
+        groups=[];group_counts={}
+        for group in source_groups:
+            if not isinstance(group,dict):continue
+            disposition="pass" if group.get("passed") is True else "fail"
+            group_counts[disposition]=group_counts.get(disposition,0)+1
+            if group.get("passed") is True:continue
+            group_row={
+                "group":group.get("group"),"passed":group.get("passed"),
+                "lowest_score":group.get("lowest_score"),
+            }
+            if detail:group_row["errors"]=group.get("errors",[])
+            groups.append(group_row)
+        record={
+            "path":row.get("path"),"sha256":row.get("sha256"),"bytes":row.get("bytes"),
+            "critic_id":row.get("critic_id"),
+            "candidate_hash":row.get("candidate_hash"),"passed":row.get("passed"),
+            "scores":row.get("scores",{}),"defects":row.get("defects",[]),
+            "coverage_complete":row.get("coverage_complete"),"confidence":row.get("confidence"),
+            "fatal_error":row.get("fatal_error"),"group_count":len(source_groups),
+            "group_dispositions":group_counts,"groups_sha256":stable_json_digest(source_groups),
+            "failed_groups":groups,
+        }
+        if detail==0:
+            for key in ("path","bytes","candidate_hash","group_count","group_dispositions","groups_sha256"):record.pop(key,None)
+        compact.append(record)
+    return compact
+
+
+def compact_paths(paths:Any,detail:int=2)->dict:
+    rows=[str(path) for path in paths] if isinstance(paths,list) else []
+    def priority(path:str)->tuple:
+        order=("HavenlineGodot/scripts/","HavenlineGodot/data/","HavenlineGodot/assets/world_transform_v1/","tools/havenline/task","tools/havenline/production/","HavenlineGodot/tests/",".github/workflows/","Docs/")
+        return (next((i for i,prefix in enumerate(order) if path.startswith(prefix)),len(order)),path)
+    retained=sorted(rows,key=priority)[:({2:10,1:5}.get(detail,0))]
+    omitted=sorted(set(rows)-set(retained))
+    roots={}
+    for path in rows:
+        root=path.split("/",1)[0];roots[root]=roots.get(root,0)+1
+    return {"count":len(rows),"all_paths_sha256":stable_json_digest(rows),"root_counts":roots,
+            "diagnostic_paths":retained,"omitted_count":len(omitted),"omitted_paths_sha256":stable_json_digest(omitted)}
+
+
+def compact_history(value:Any,detail:int=2)->dict:
+    if not isinstance(value,dict):return {}
+    rows=[]
+    for match in value.get("matches",[]) if isinstance(value.get("matches"),list) else []:
+        if not isinstance(match,dict):continue
+        keys=("id","classification","root_cause") if detail else ("id","classification")
+        rows.append({key:match.get(key) for key in keys})
+    return {"matches":rows,"historical_match_is_advisory_only":value.get("historical_match_is_advisory_only")}
+
+
+def failure_log_projection(packet:dict,excerpt_bytes:int)->dict:
+    value=packet.get("failed_logs","")
+    if not isinstance(value,str):value=""
+    raw=value.encode("utf-8",errors="replace")
+    projection={
+        "envelope_bytes":len(raw),"envelope_sha256":hashlib.sha256(raw).hexdigest(),
+        "declared_bytes":packet.get("failed_logs_bytes"),
+        "declared_sha256":packet.get("failed_logs_sha256"),"valid_envelope":False,"jobs":[],
+    }
+    if projection["declared_bytes"] is not None and projection["declared_bytes"]!=len(raw):
+        raise ValueError("failed log envelope byte count mismatch")
+    if projection["declared_sha256"] is not None and projection["declared_sha256"]!=projection["envelope_sha256"]:
+        raise ValueError("failed log envelope digest mismatch")
+    try:envelope=json.loads(value)
+    except Exception:
+        projection["legacy_truncated_excerpt"]=bounded_lines(value,excerpt_bytes)
+        return projection
+    if not isinstance(envelope,dict) or not isinstance(envelope.get("jobs"),list):
+        raise ValueError("invalid failed log envelope")
+    projection["valid_envelope"]=True
+    projection["run_id"]=envelope.get("run_id")
+    projection["run_status"]=envelope.get("run_status")
+    projection["run_conclusion"]=envelope.get("run_conclusion")
+    projection["diagnostic_marker"]=envelope.get("diagnostic_marker")
+    for job in envelope["jobs"]:
+        if not isinstance(job,dict):raise ValueError("invalid failed log job")
+        raw_log=job.get("raw_log","")
+        if not isinstance(raw_log,str):raise ValueError("invalid failed log text")
+        projection["jobs"].append({
+            "job_id":job.get("job_id"),"name":job.get("name"),"conclusion":job.get("conclusion"),
+            "log_bytes":job.get("log_bytes"),"log_sha256":job.get("log_sha256"),
+            "excerpt":bounded_lines(raw_log,excerpt_bytes),
+        })
+    return projection
+
+
+def model_projection(packet:dict,packet_sha256:str,excerpt_bytes:int=640,detail:int=2)->dict:
+    steps=packet.get("steps",[])
+    failed=[];jobs={};counts={}
+    for row in steps:
+        if not isinstance(row,dict):continue
+        conclusion=row.get("conclusion")
+        counts[str(conclusion)]=counts.get(str(conclusion),0)+1
+        name=str(row.get("job") or "unknown")
+        summary=jobs.setdefault(name,{"step_count":0,"conclusions":{}})
+        summary["step_count"]+=1;summary["conclusions"][str(conclusion)]=summary["conclusions"].get(str(conclusion),0)+1
+        if conclusion in FAIL_CONCLUSIONS:failed.append(row)
+    changed=packet.get("changed_files",[])
+    protected=packet.get("protected_files",[])
+    scope=str(packet.get("task_scope") or "")
+    ledger=str(packet.get("defect_ledger") or "")
+    history=packet.get("historical_failure_intelligence",{})
+    return {
+        "schema_version":1,
+        "identity":{key:packet.get(key) for key in ("task_id","failed_run_id","failed_candidate","integration_head","integration_branch","task_branch","current_branch_head","run_conclusion","run_status","workflow_name","event")},
+        "source_bindings":{
+            "failure_packet_sha256":packet_sha256,
+            "steps_sha256":stable_json_digest(steps),"changed_files_sha256":stable_json_digest(changed),
+            "protected_files_sha256":stable_json_digest(protected),"task_scope_sha256":hashlib.sha256(scope.encode()).hexdigest(),
+            "defect_ledger_sha256":hashlib.sha256(ledger.encode()).hexdigest(),"historical_failure_intelligence_sha256":stable_json_digest(history),
+        },
+        "execution":{
+            "step_count":len(steps),"step_disposition_counts":counts,"all_steps_sha256":stable_json_digest(steps),
+            "failed_terminal_steps":failed,"job_dispositions":jobs,
+            "unexecuted_checks":packet.get("unexecuted_checks",[]),
+        },
+        "change_surface":{"changed_files":compact_paths(changed,detail),"protected_files":compact_paths(protected,detail)},
+        "structured_failure_records":compact_failure_records(packet,detail),
+        "failure_logs":failure_log_projection(packet,excerpt_bytes),
+        "task_scope_excerpt":bounded_lines(scope,excerpt_bytes),
+        "defect_ledger_excerpt":bounded_lines(ledger,excerpt_bytes),
+        "historical_failure_intelligence":compact_history(history,detail),
+        "projection_contract":{
+            "authoritative_packet_preserved_separately":True,"semantic_json_only":True,
+            "arbitrary_character_slice_used":False,"all_failed_terminal_steps_retained":True,
+            "all_unexecuted_checks_retained":True,"complete_change_surface_bound_by_digest":True,
+            "bounded_excerpts_have_source_hash_and_truncation_metadata":True,
+        },
+    }
+
+
+def build_model_request(packet:dict,packet_sha256:str,prompt:str,schema:dict)->tuple[dict,bytes,dict,dict]:
+    last=None
+    for excerpt_bytes,detail in ((640,2),(320,1),(0,0)):
+        projection=model_projection(packet,packet_sha256,excerpt_bytes,detail)
+        content=prompt+"\n\nFAILURE PACKET MODEL PROJECTION:\n"+json.dumps(projection,sort_keys=True,separators=(",",":"),ensure_ascii=False)
+        body={"model":"havenline-c0-local","messages":[{"role":"user","content":content}],"max_tokens":C0_MAX_TOKENS,"temperature":0.1,"top_p":0.9,"seed":20260917,"chat_template_kwargs":{"enable_thinking":False},"response_format":{"type":"json_object","schema":schema},"cache_prompt":False}
+        request_bytes=json.dumps(body,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode()
+        budget={
+            "context_tokens":C0_CONTEXT_TOKENS,"max_completion_tokens":C0_MAX_TOKENS,
+            "safety_tokens":C0_SAFETY_TOKENS,"request_bytes":len(request_bytes),
+            "max_request_bytes":C0_MAX_REQUEST_BYTES,"token_upper_bound":len(request_bytes),
+            "within_budget":len(request_bytes)<=C0_MAX_REQUEST_BYTES,"excerpt_bytes_per_source":excerpt_bytes,
+            "request_sha256":hashlib.sha256(request_bytes).hexdigest(),"projection_detail":detail,
+        }
+        last=(body,request_bytes,budget,projection)
+        if budget["within_budget"]:return last
+    raise RuntimeError("C0_REQUEST_BUDGET_EXCEEDED "+json.dumps(last[2],sort_keys=True))
+
+
+def retain_http_error(exc:urllib.error.HTTPError,out:pathlib.Path)->None:
+    limit=8192;body=exc.read(limit+1);kept=body[:limit]
+    allowed={"content-type","content-length","retry-after","server","date"}
+    headers={str(k).lower():str(v) for k,v in exc.headers.items() if str(k).lower() in allowed} if exc.headers else {}
+    report={
+        "status":exc.code,"reason":str(exc.reason),"headers":headers,
+        "body_bytes_retained":len(kept),"body_truncated":len(body)>limit,
+        "body_sha256_retained":hashlib.sha256(kept).hexdigest(),
+        "body":kept.decode("utf-8",errors="replace"),
+    }
+    (out/"http-error.json").write_text(json.dumps(report,indent=2)+"\n")
 
 
 def validate_report(report:dict,packet:dict)->list[str]:
@@ -121,30 +328,43 @@ def start_runtime(out:pathlib.Path):
     raise RuntimeError("C0 local reviewer runtime not ready")
 
 
-def model_report(packet:dict,out:pathlib.Path)->dict:
+def c0_response_schema()->dict:
+    blocker_props={
+        "id":{"type":"string"},"classification":{"type":"string","enum":sorted(BLOCKER_CLASSES)},"symptom":{"type":"string"},
+        "evidence":{"type":"array","items":{"type":"string"},"minItems":1,"maxItems":8},"root_cause":{"type":"string"},"affected_object":{"type":"string"},
+        "causal_fix":{"type":"string"},"files_to_change":{"type":"array","items":{"type":"string"},"maxItems":20},"files_not_to_change":{"type":"array","items":{"type":"string"},"maxItems":20},
+        "verification":{"type":"array","items":{"type":"string"},"minItems":1,"maxItems":12},
+    }
+    return {"type":"object","properties":{
+        "diagnosis_status":{"type":"string","enum":["DIAGNOSIS_COMPLETE","INSUFFICIENT_EVIDENCE"]},
+        "terminal_class":{"type":"string","enum":sorted(CLASSES)},"complete_known_blocker_set":{"type":"boolean"},
+        "blockers":{"type":"array","items":{"type":"object","properties":blocker_props,"required":list(blocker_props),"additionalProperties":False},"maxItems":12},
+        "unexecuted_checks":{"type":"array","items":{"type":"string"},"maxItems":20},"builder_action":{"type":"string","enum":sorted(ACTIONS)},
+        "summary":{"type":"string"},"confidence":{"type":"string","enum":["low","medium","high"]}
+    },"required":["diagnosis_status","terminal_class","complete_known_blocker_set","blockers","unexecuted_checks","builder_action","summary","confidence"],"additionalProperties":False}
+
+
+def model_report(packet:dict,out:pathlib.Path,packet_sha256:str)->dict:
     if os.environ.get("HAVENLINE_C0_INDEPENDENT_JOB")!="1":raise SystemExit("C0 model diagnosis must run in its separately declared advisory job")
     proc=log=manifest=None
     try:
         proc,log,manifest=start_runtime(out)
-        blocker_props={
-            "id":{"type":"string"},"classification":{"type":"string","enum":sorted(BLOCKER_CLASSES)},"symptom":{"type":"string"},
-            "evidence":{"type":"array","items":{"type":"string"},"minItems":1,"maxItems":8},"root_cause":{"type":"string"},"affected_object":{"type":"string"},
-            "causal_fix":{"type":"string"},"files_to_change":{"type":"array","items":{"type":"string"},"maxItems":20},"files_not_to_change":{"type":"array","items":{"type":"string"},"maxItems":20},
-            "verification":{"type":"array","items":{"type":"string"},"minItems":1,"maxItems":12},
-        }
-        schema={"type":"object","properties":{
-            "diagnosis_status":{"type":"string","enum":["DIAGNOSIS_COMPLETE","INSUFFICIENT_EVIDENCE"]},
-            "terminal_class":{"type":"string","enum":sorted(CLASSES)},"complete_known_blocker_set":{"type":"boolean"},
-            "blockers":{"type":"array","items":{"type":"object","properties":blocker_props,"required":list(blocker_props),"additionalProperties":False},"maxItems":12},
-            "unexecuted_checks":{"type":"array","items":{"type":"string"},"maxItems":20},"builder_action":{"type":"string","enum":sorted(ACTIONS)},
-            "summary":{"type":"string"},"confidence":{"type":"string","enum":["low","medium","high"]}
-        },"required":["diagnosis_status","terminal_class","complete_known_blocker_set","blockers","unexecuted_checks","builder_action","summary","confidence"],"additionalProperties":False}
-        packet_text=json.dumps(packet,indent=2,sort_keys=True)
+        schema=c0_response_schema()
         prompt="""You are C0, Havenline's non-voting Root-Cause Advisor. Diagnose the complete available failed run before any builder changes code. Do not score gameplay and do not approve the task. Distinguish PRODUCT_DEFECT, TOOLING_DEFECT, GOVERNANCE_DEFECT, EVIDENCE_DEFECT, INFRASTRUCTURE_FAILURE and SUPERSEDED. A red CI state is not a diagnosis. Inspect successful upstream steps as evidence too. Return every currently observable independent blocker, not only the first red line. Mark downstream steps that never executed as unexecuted_checks; do not invent their results. Protect already-approved work: if a harness/test/governance defect is supported and the product is not disproven, explicitly keep the approved production files in files_not_to_change. For every blocker give concrete evidence, root cause, smallest causal fix, exact files_to_change/files_not_to_change and dependency-ordered verification. Prefer a complete blocker set over serial symptom fixing. If evidence is insufficient, say so rather than guessing. Candidate validation must use finish_running_sha: a newer commit queues and does not cancel the running SHA."""
-        body={"model":"havenline-c0-local","messages":[{"role":"user","content":prompt+"\n\nFAILURE PACKET:\n"+packet_text[:60000]}],"max_tokens":2200,"temperature":0.1,"top_p":0.9,"seed":20260917,"chat_template_kwargs":{"enable_thinking":False},"response_format":{"type":"json_object","schema":schema},"cache_prompt":False}
-        (out/"request.json").write_text(json.dumps(body,indent=2)[:250000])
-        req=urllib.request.Request("http://127.0.0.1:8080/v1/chat/completions",data=json.dumps(body).encode(),headers={"Content-Type":"application/json"},method="POST")
-        with urllib.request.urlopen(req,timeout=1200) as response:raw=json.load(response)
+        try:body,request_bytes,budget,projection=build_model_request(packet,packet_sha256,prompt,schema)
+        except RuntimeError as exc:
+            diagnostic={"passed":False,"error":"request_budget_exceeded","detail":str(exc),"context_tokens":C0_CONTEXT_TOKENS,"max_completion_tokens":C0_MAX_TOKENS,"safety_tokens":C0_SAFETY_TOKENS,"max_request_bytes":C0_MAX_REQUEST_BYTES}
+            (out/"request-budget.json").write_text(json.dumps(diagnostic,indent=2)+"\n")
+            raise
+        (out/"model-projection.json").write_text(json.dumps(projection,sort_keys=True,separators=(",",":"),ensure_ascii=False))
+        (out/"request-budget.json").write_text(json.dumps(budget,indent=2)+"\n")
+        (out/"request.json").write_bytes(request_bytes)
+        req=urllib.request.Request("http://127.0.0.1:8080/v1/chat/completions",data=request_bytes,headers={"Content-Type":"application/json"},method="POST")
+        try:
+            with urllib.request.urlopen(req,timeout=1200) as response:raw=json.load(response)
+        except urllib.error.HTTPError as exc:
+            retain_http_error(exc,out)
+            raise RuntimeError(f"C0 model request HTTP {exc.code}; retained http-error.json") from exc
         (out/"raw-response.json").write_text(json.dumps(raw,indent=2))
         choice=raw["choices"][0]
         if choice.get("finish_reason")!="stop":raise RuntimeError("incomplete C0 response")
@@ -168,7 +388,8 @@ def main()->int:
     ap=argparse.ArgumentParser();ap.add_argument("--packet",required=True);ap.add_argument("--out",required=True);a=ap.parse_args()
     packet_path=(ROOT/a.packet).resolve();out=(ROOT/a.out).resolve();out.mkdir(parents=True,exist_ok=True)
     packet=load_packet(packet_path)
-    report=superseded_report(packet) if packet.get("run_conclusion")=="cancelled" else model_report(packet,out)
+    packet_sha256=digest(packet_path)
+    report=superseded_report(packet) if packet.get("run_conclusion")=="cancelled" else model_report(packet,out,packet_sha256)
     errors=validate_report(report,packet);report["validation_errors"]=errors;report["validated"]=not errors;report["input_packet_sha256"]=digest(packet_path)
     path=out/"c0-report.json";path.write_text(json.dumps(report,indent=2)+"\n")
     print(json.dumps(report,indent=2))

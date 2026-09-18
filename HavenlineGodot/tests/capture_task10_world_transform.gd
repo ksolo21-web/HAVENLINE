@@ -19,6 +19,7 @@ var target_mesh: MeshInstance3D
 var target_material: StandardMaterial3D
 var state_label: Label
 var records: Array[Dictionary] = []
+var projection_records: Array[Dictionary] = []
 var simulation := Simulation.new()
 var debit_verified := false
 var performance_peaks := {}
@@ -146,13 +147,29 @@ func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front
 		var error := image.save_png(output.path_join(filename))
 		if error != OK:
 			return false
+		var readability: Dictionary = view.projected_readability(camera)
+		if not readability.get("passed", false):
+			push_error("Projected readability failed for %s/%s: %s" % [name, angle, JSON.stringify(readability)])
+			return false
 		records.append({
 			"state": name,
 			"angle": angle,
 			"file": filename,
 			"size": [image.get_width(), image.get_height()],
 			"view": descriptor.duplicate(true),
+			"projected_readability": readability,
 		})
+		projection_records.append({"state": name, "angle": angle, "projected_readability": readability})
+	if device_check:
+		for supplemental_angle in ["side", "three-quarter", "overhead", "gameplay", "detail"]:
+			configure_camera(supplemental_angle)
+			await process_frame
+			await RenderingServer.frame_post_draw
+			var supplemental: Dictionary = view.projected_readability(camera)
+			if not supplemental.get("passed", false):
+				push_error("Projected device readability failed for %s/%s: %s" % [name, supplemental_angle, JSON.stringify(supplemental)])
+				return false
+			projection_records.append({"state": name, "angle": supplemental_angle, "projected_readability": supplemental})
 	return true
 
 func measure_performance() -> void:
@@ -242,11 +259,14 @@ func capture_lifecycle(inventory: Dictionary) -> void:
 		"motion_segments": motion_segments,
 		"motion_frames_per_state": 30 if not device_check and not production_evidence else 0,
 		"record_count": records.size(), "states": states, "angles": angles, "records": records,
+		"projection_angles": ["front", "side", "three-quarter", "overhead", "gameplay", "detail"] if device_check or production_evidence else angles,
+		"projection_record_count": projection_records.size(), "projection_records": projection_records,
 		"view_visual_node_count": int(final_view.visual_node_count),
 		"view_visual_build_count": int(final_view.visual_build_count),
 		"final_target": engine.descriptor().targets["capture-anchor"].duplicate(true),
 		"integration_allowed": false, "task_approved": false,
-		"passed": records.size() == states.size() * angles.size() and int(final_view.visual_node_count) == 4 and int(final_view.visual_build_count) == 1 and debit_verified and replay_verified,
+		"projected_readability_passed": projection_records.all(func(row): return row.get("projected_readability", {}).get("passed", false)),
+		"passed": records.size() == states.size() * angles.size() and projection_records.size() == states.size() * (6 if device_check or production_evidence else angles.size()) and projection_records.all(func(row): return row.get("projected_readability", {}).get("passed", false)) and int(final_view.visual_node_count) == 4 and int(final_view.visual_build_count) == 1 and debit_verified and replay_verified,
 	}
 	if not write_manifest(manifest): quit(1); return
 	print(JSON.stringify(manifest))

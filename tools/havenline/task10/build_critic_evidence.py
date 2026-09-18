@@ -39,6 +39,59 @@ R01 stable ordered recipes/costs/prerequisites/presentation keys. R02 pure eligi
 No added buttons, menus, grids, capacity walls, combat, danger, economy or population. Existing approach/context controls remain; no harvesting/carry-rule changes. Collection is delivered-stock debit, not new harvesting. No new danger system is in scope; judge truthful blocking/error feedback. Do not penalize absent T11 art or T14 global saves; do not waive any dimension.
 '''
 
+C7_DIMENSIONS = ['state_graph_integrity','prerequisite_integrity','transaction_ordering','exact_once_replay','recovery_integrity','bounded_state']
+C7_SCOPE_SYNOPSIS = '''T10 C7 transaction/state-integrity context. Requirement IDs R01-R14 are scope boundaries; they are not score dimensions. Score exactly these six unchanged C7 dimensions: state_graph_integrity, prerequisite_integrity, transaction_ordering, exact_once_replay, recovery_integrity, bounded_state.
+R01 stable ordered recipes/costs/prerequisites/presentation keys. R02 pure eligibility with exact blockers. R03 atomic authoritative debit and transition once. R04 stable identity rejects duplicate/stale/out-of-order commits. R05 truthful locked/ready/blocked/preview/committing/complete lifecycle; completion requires a T10-accepted authoritative receipt. R06 only physically delivered stored resources pay; carried harvest cannot. R07 monotonic branches, explicit reciprocal inverses only. R08 simulation owns resources, model owns state, view only presents. R09 deterministic component recovery rejects malformed state atomically; global saves belong to T14. R10 neutral branching fixtures; authored camp structures and main-loop binding belong to T11. R11 readable world response belongs to unchanged C1/C2/C3/C4 review and is not visually certified by C7 semantic rows. R12 bounded previews/events/nodes/history, unchanged state does not rebuild. R13 T05/T08/T09 approved and real authority bound; integration still requires owner acceptance. R14 C1/C2/C3/C4/C6/C7 every mandatory dimension >9.0 unrounded, G1-G14 and impacted regression, zero defects.
+T10 owns the local recipe/transaction progression. T11 owns authored camp binding, T12 global progression, T13 difficulty, and T14 global save integration. Preserve every genuine defect; this context does not direct a passing result.
+'''
+C7_ROWS = {
+    'R05_domain': [
+        'view lifecycle contains all frozen states','view enters ready lifecycle','valid preview enters preview lifecycle',
+        'prepared intent enters committing lifecycle','raw simulation receipt cannot complete before T10 accepts it','T10-accepted receipt completes lifecycle',
+    ],
+    'R05_integration': [
+        'locked lifecycle hides response geometry','view exposes explicit blocked lifecycle','blocked world response preserves exact reasons and shortfalls',
+        'same blocked state refreshes exact shortfall label','unaccepted receipt cannot stop pending flow or claim paid','accepted receipt stops flow and resets its bounded phase',
+    ],
+    'R06_integration': [
+        'real harvesting commits to carried inventory','real carried harvest cannot pay T10','real deposit conserves delivered resources',
+        'real simulation exact stored debit','real insufficient stock cannot partially charge',
+    ],
+}
+
+
+def c7_context(domain, integration, candidate, domain_sha256, integration_sha256):
+    def selected(report, names, report_name):
+        if report.get('candidate') != candidate or report.get('passed') is not True or report.get('failures'):
+            raise AssertionError(report_name+' report is stale or failed')
+        rows=[]
+        for name in names:
+            matches=[row for row in report.get('checks',[]) if row.get('name')==name]
+            if len(matches)!=1 or type(matches[0].get('passed')) is not bool or matches[0]['passed'] is not True:
+                raise AssertionError(report_name+' selected C7 row missing, duplicate or failed: '+name)
+            rows.append({'name':name,'passed':True})
+        return rows
+    sections={
+        'R05_domain':selected(domain,C7_ROWS['R05_domain'],'domain'),
+        'R05_integration':selected(integration,C7_ROWS['R05_integration'],'integration'),
+        'R06_integration':selected(integration,C7_ROWS['R06_integration'],'integration'),
+    }
+    payload={'candidate':candidate,'requirement_ids_are_score_dimensions':False,'c7_score_dimensions':C7_DIMENSIONS,
+             'source_reports':{'domain-tests.json':domain_sha256,'integration-tests.json':integration_sha256},'selected_source_rows':sections}
+    return C7_SCOPE_SYNOPSIS+'\nSOURCE-BOUND SELECTED ROWS\n'+json.dumps(payload,sort_keys=True,separators=(',',':'))+'\n'
+
+
+def visual_group_errors(manifest, maximum=6):
+    errors=[]
+    visual_kinds={'image','motion_frame'}
+    seen=[]
+    for group in manifest.get('groups',[]):
+        visuals=[item.get('path') for item in group.get('items',[]) if item.get('kind') in visual_kinds]
+        if len(visuals)>maximum: errors.append('visual group exceeds '+str(maximum)+': '+str(group.get('id')))
+        seen.extend(visuals)
+    if len(seen)!=len(set(seen)): errors.append('visual evidence duplicated across groups')
+    return errors
+
 
 REVIEW_OUTPUT_PATH = 'critic-input/review-output-contract.txt'
 REVIEW_OUTPUT_DESCRIPTION = 'Bounded reviewer response contract'
@@ -92,7 +145,7 @@ def rendered_group_text(group, root=ROOT):
 
 
 def prompt_errors(manifest, root=ROOT, *, path_mode='canonical'):
-    errors=output_contract_errors(manifest,root,path_mode=path_mode)
+    errors=output_contract_errors(manifest,root,path_mode=path_mode)+visual_group_errors(manifest)
     cid=manifest['critic_id']
     for group in manifest['groups']:
         try:
@@ -268,27 +321,29 @@ def main():
     proof=compact_progression(reports['progression.json'])
     proof+='\nRaw critic-input/progression.json SHA256 '+digest(out/'progression.json')+'\n'
     (out/'progression-brief.txt').write_text(proof)
+    (out/'c7-brief.txt').write_text(c7_context(reports['domain-tests.json'],reports['integration-tests.json'],a.candidate,digest(out/'domain-tests.json'),digest(out/'integration-tests.json')))
     save_brief='Seven actual save cases: '+json.dumps([{k:r[k] for k in ('case','passed') if k in r} for r in saves['cases']],separators=(',',':'))+'\nRaw critic-input/save-matrix/save-matrix.json SHA256 '+digest(out/'save-matrix/save-matrix.json')
     (out/'save-brief.txt').write_text(save_brief)
     for cid in ('C3','C4','C7'):
         groups=[]
         if cid=='C7':
-            groups=[dict(id='transaction-integrity',items=[item('critic-input/progression-brief.txt','progression_simulation','text'),item('critic-input/recipes.json','transaction_state_graph'),item('critic-input/save-brief.txt','recovery_evidence','text')])]
+            groups=[dict(id='transaction-integrity',items=[item('critic-input/c7-brief.txt','progression_simulation','text'),item('critic-input/progression-brief.txt','progression_simulation','text'),item('critic-input/recipes.json','transaction_state_graph'),item('critic-input/save-brief.txt','recovery_evidence','text')])]
         else:
             rows=[item('critic-input/visual-brief.txt','control_state' if cid=='C3' else 'feedback_state','text')]
             rows += [item('critic-input/native4k/'+state+'-front.png','gameplay_state','image',state+': neutral real-authority fixture') for state in capture['states']]
             groups.append(dict(id='full-lifecycle',items=rows))
             frames=sorted((out/'capture').glob('motion-*.png'))
             assert len(frames)>=12
-            for start in range(0,len(frames),12):
-                groups.append(dict(id='motion-'+str(start),items=[item(str(p.relative_to(ROOT)),'loop_evidence' if cid=='C3' else 'feedback_state','motion_frame','30fps video sampled every15 frames; '+timeline['sample_mapping'][i]['state']+' frame '+str(i*15)) for i,p in enumerate(frames) if start<=i<start+12]))
+            for start in range(0,len(frames),6):
+                groups.append(dict(id='motion-'+str(start),items=[item(str(p.relative_to(ROOT)),'loop_evidence' if cid=='C3' else 'feedback_state','motion_frame','30fps video sampled every15 frames; '+timeline['sample_mapping'][i]['state']+' frame '+str(i*15)) for i,p in enumerate(frames) if start<=i<start+6]))
             rows=[]
             for folder in sorted((out/'device-layout').iterdir()):
                 if folder.is_dir():
                     rows += [item(str((folder/(state+'-front.png')).relative_to(ROOT)),'control_state' if cid=='C3' else 'feedback_state','image',folder.name+' '+state+'; judge actual pixel aspect ratio') for state in ('blocked','complete')]
-            groups.append(dict(id='device-readability',items=rows))
+            for start in range(0,len(rows),6):
+                groups.append(dict(id='device-readability-'+str(start),items=rows[start:start+6]))
         for group in groups:
-            group['items'].append(item('critic-input/scope-brief.txt','task_scope','text'))
+            if cid!='C7': group['items'].append(item('critic-input/scope-brief.txt','task_scope','text'))
             if cid!='C7' and not any(i['path']=='critic-input/visual-brief.txt' for i in group['items']):
                 group['items'].append(item('critic-input/visual-brief.txt','control_state' if cid=='C3' else 'feedback_state','text'))
             if cid in ('C3','C4'):

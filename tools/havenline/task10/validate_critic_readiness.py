@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -44,8 +45,26 @@ def authority_errors(domain: dict, integration: dict, lifecycle: dict, native4k:
     return errors
 
 
+def projected_readability_errors(report: dict, expected_states: list[str], expected_angles: list[str]) -> list[str]:
+    errors=[]
+    records=report.get('projection_records',report.get('records',[]))
+    expected={(state,angle) for state in expected_states for angle in expected_angles}
+    actual={(row.get('state'),row.get('angle')) for row in records if isinstance(row,dict)}
+    if len(records)!=len(expected) or actual!=expected:
+        errors.append('projected readability state/angle coverage mismatch')
+    for row in records:
+        proof=row.get('projected_readability',{}) if isinstance(row,dict) else {}
+        scalars=[proof.get('clearance_px'),proof.get('required_clearance_px')]
+        rects=[proof.get(name) for name in ('label_rect','response_rect','frame_rect')]
+        if (proof.get('passed') is not True or proof.get('overlap') is not False or proof.get('fully_in_frame') is not True
+                or proof.get('priority_ok') is not True or any(not isinstance(v,(int,float)) or isinstance(v,bool) or not math.isfinite(v) for v in scalars)
+                or scalars[0]+.01<scalars[1] or any(not isinstance(rect,list) or len(rect)!=4 or any(not isinstance(v,(int,float)) or isinstance(v,bool) or not math.isfinite(v) for v in rect) for rect in rects)):
+            errors.append('invalid projected readability proof: '+str(row.get('state'))+'/'+str(row.get('angle')))
+    return errors
+
+
 def package_errors(root, candidate):
-    from build_critic_evidence import benchmark_errors, prompt_errors, compact_progression, digest, SCOPE_SYNOPSIS
+    from build_critic_evidence import benchmark_errors, prompt_errors, compact_progression, c7_context, digest, SCOPE_SYNOPSIS
     errors=[]
     try:
         index=load(root/'evidence-index.json')
@@ -55,6 +74,9 @@ def package_errors(root, candidate):
         assert (root/'scope-brief.txt').read_text()==SCOPE_SYNOPSIS
         proof=compact_progression(load(root/'progression.json'))
         assert (root/'progression-brief.txt').read_text()==proof+'\nRaw critic-input/progression.json SHA256 '+digest(root/'progression.json')+'\n'
+        domain=load(root/'domain-tests.json');integration=load(root/'integration-tests.json')
+        expected_c7=c7_context(domain,integration,candidate,digest(root/'domain-tests.json'),digest(root/'integration-tests.json'))
+        assert (root/'c7-brief.txt').read_text()==expected_c7, 'C7 source-bound context mismatch'
         errors.extend(benchmark_errors(load(root/'benchmark/manifest.json'),candidate))
         required={'FROZEN_SCOPE.md','recipes.json','progression.json','domain-tests.json','integration-tests.json','review-summary.json','motion-timeline.json','save-matrix/save-matrix.json','benchmark/manifest.json','performance.json'}
         for cid in ('C3','C4','C6','C7'):
@@ -164,8 +186,19 @@ def main() -> None:
         errors.append("native 4K capture cardinality/resolution mismatch")
     if native4k.get("states") != REQUIRED_STATES or native4k.get("angles") != REQUIRED_ANGLES:
         errors.append("native 4K state/angle coverage mismatch")
+    errors.extend(projected_readability_errors(native4k, REQUIRED_STATES, REQUIRED_ANGLES))
     if native4k_index.get("passed") is not True or native4k_index.get("unique_capture_count") != 36:
         errors.append("native 4K uniqueness/index proof missing")
+
+    device_manifests=[]
+    for path in sorted((root/'device-layout').glob('*/manifest.json')):
+        device_manifests.append(load(path))
+    if len(device_manifests)!=6:
+        errors.append('six device projected-readability manifests required')
+    for manifest in device_manifests:
+        if manifest.get('candidate')!=candidate:
+            errors.append('device projected-readability candidate mismatch')
+        errors.extend(projected_readability_errors(manifest,REQUIRED_STATES,REQUIRED_ANGLES))
 
     if not lifecycle.get("exact_replay_verified") or lifecycle.get("motion_frames_per_state") != 30 or not (root / "capture/lifecycle.mp4").is_file():
         errors.append("continuous lifecycle and exact replay evidence required")

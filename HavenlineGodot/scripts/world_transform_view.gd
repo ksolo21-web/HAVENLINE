@@ -12,6 +12,11 @@ const VISUAL_NODE_BUDGET := 4
 const READABILITY_MIN := 0.85
 const READABILITY_MAX := 1.35
 const PULSE_HZ := 1.4
+const LABEL_CAMERA_OFFSET := Vector2(0.0, -190.0)
+const LABEL_RENDER_PRIORITY := 100
+const LABEL_OUTLINE_RENDER_PRIORITY := 99
+const LABEL_MIN_CLEARANCE_PX := 12.0
+const LABEL_SAFE_INSET_RATIO := 0.025
 const RESOURCE_SYMBOLS = preload("res://assets/world_transform_v1/resource_symbols.tres")
 const RESOURCE_GLYPHS := {"wood": "", "stone": "", "metal": "", "fuel": ""}
 
@@ -67,6 +72,9 @@ static func contract() -> Dictionary:
 		"visual_node_budget": VISUAL_NODE_BUDGET,
 		"readability_scale_range": [READABILITY_MIN, READABILITY_MAX],
 		"committing_pulse_hz": PULSE_HZ,
+		"label_camera_offset": LABEL_CAMERA_OFFSET,
+		"label_render_priority": LABEL_RENDER_PRIORITY,
+		"label_outline_render_priority": LABEL_OUTLINE_RENDER_PRIORITY,
 	}
 
 func _ready() -> void:
@@ -249,6 +257,12 @@ func _ensure_visuals() -> void:
 	_beacon.pixel_size = 0.006
 	_beacon.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_beacon.no_depth_test = true
+	# Label3D.offset is evaluated in the billboard camera plane. Keeping the
+	# status lane above the maximum response envelope prevents the overhead
+	# camera from collapsing world-Y separation into the ring/ghost silhouette.
+	_beacon.offset = LABEL_CAMERA_OFFSET
+	_beacon.render_priority = LABEL_RENDER_PRIORITY
+	_beacon.outline_render_priority = LABEL_OUTLINE_RENDER_PRIORITY
 	_visual_root.add_child(_beacon)
 
 	_visual_root.scale = Vector3.ONE * readability_scale
@@ -288,12 +302,15 @@ func _apply_visuals() -> void:
 	_ghost.position.y = 0.08 + 0.75 * _ghost.scale.y
 	_beacon.visible = lifecycle != "locked"
 	_beacon.text = feedback_text()
-	set_process(lifecycle == "committing")
+	set_process(lifecycle != "locked")
 	_last_visual_signature = _visual_signature()
 	visual_apply_count += 1
 
 func _process(delta: float) -> void:
-	if lifecycle != "committing" or not is_instance_valid(_beacon):
+	if not is_instance_valid(_beacon):
+		return
+	_update_camera_lane()
+	if lifecycle != "committing":
 		return
 	_pulse_time = fmod(_pulse_time + delta, 10.0)
 	var flow_scale := 1.0 + fmod(_pulse_time, 1.0) * 3.0
@@ -302,6 +319,84 @@ func _process(delta: float) -> void:
 	var pulse := 1.0 + sin(_pulse_time * TAU * PULSE_HZ) * 0.18
 	_ghost.scale = _target_form_scale() * pulse
 	_ghost.position.y = 0.08 + 0.75 * _ghost.scale.y
+
+func _projected_response_rect(active_camera: Camera3D) -> Rect2:
+	var points: Array[Vector2] = []
+	var radius := 1.58
+	var top := 0.08 + 1.5 * _target_form_scale().y * 1.18
+	for x in [-radius, radius]:
+		for y in [0.0, top]:
+			for z in [-radius, radius]:
+				points.append(active_camera.unproject_position(_visual_root.to_global(Vector3(x, y, z))))
+	var minimum := points[0]
+	var maximum := points[0]
+	for point in points:
+		minimum = minimum.min(point)
+		maximum = maximum.max(point)
+	return Rect2(minimum, maximum - minimum)
+
+func _label_projection(active_camera: Camera3D) -> Dictionary:
+	var viewport_size := Vector2(get_viewport().get_visible_rect().size)
+	var base := active_camera.unproject_position(_beacon.global_position)
+	var camera_up := active_camera.global_transform.basis.y.normalized()
+	var probe := active_camera.unproject_position(_beacon.global_position + camera_up * _beacon.pixel_size * 100.0)
+	var pixels_per_label_unit := maxf(0.01, absf(probe.y - base.y) / 100.0)
+	var measured := _beacon.font.get_multiline_string_size(_beacon.text, HORIZONTAL_ALIGNMENT_CENTER, _beacon.width, _beacon.font_size)
+	var label_size := (measured + Vector2(_beacon.outline_size * 2.0, _beacon.outline_size * 2.0)) * pixels_per_label_unit
+	var response := _projected_response_rect(active_camera)
+	var gap := maxf(LABEL_MIN_CLEARANCE_PX, viewport_size.y * 0.015)
+	var inset := maxf(LABEL_MIN_CLEARANCE_PX, minf(viewport_size.x, viewport_size.y) * LABEL_SAFE_INSET_RATIO)
+	var desired := Vector2(response.get_center().x, response.position.y - gap - label_size.y * 0.5)
+	if desired.y - label_size.y * 0.5 < inset:
+		desired = Vector2(response.end.x + gap + label_size.x * 0.5, response.get_center().y)
+	if desired.x + label_size.x * 0.5 > viewport_size.x - inset:
+		desired.x = response.position.x - gap - label_size.x * 0.5
+	var next_offset := (desired - base) / pixels_per_label_unit
+	return {
+		"viewport": viewport_size,
+		"base": base,
+		"pixels_per_label_unit": pixels_per_label_unit,
+		"label_size": label_size,
+		"response_rect": response,
+		"desired_center": desired,
+		"offset": next_offset,
+		"gap": gap,
+		"safe_inset": inset,
+	}
+
+func _update_camera_lane() -> void:
+	var active_camera := get_viewport().get_camera_3d()
+	if active_camera == null or lifecycle == "locked":
+		return
+	var projection := _label_projection(active_camera)
+	_beacon.offset = projection.offset
+
+func projected_readability(active_camera: Camera3D) -> Dictionary:
+	if active_camera == null or not is_instance_valid(_beacon):
+		return {"passed": false, "error": "missing_camera_or_label"}
+	_update_camera_lane()
+	var projection := _label_projection(active_camera)
+	var label_rect := Rect2(projection.desired_center - projection.label_size * 0.5, projection.label_size)
+	var response_rect: Rect2 = projection.response_rect
+	var frame := Rect2(Vector2(projection.safe_inset, projection.safe_inset), projection.viewport - Vector2.ONE * projection.safe_inset * 2.0)
+	var horizontal_gap := maxf(maxf(response_rect.position.x - label_rect.end.x, label_rect.position.x - response_rect.end.x), 0.0)
+	var vertical_gap := maxf(maxf(response_rect.position.y - label_rect.end.y, label_rect.position.y - response_rect.end.y), 0.0)
+	var clearance := maxf(horizontal_gap, vertical_gap)
+	var overlap := label_rect.intersects(response_rect)
+	var in_frame := frame.encloses(label_rect)
+	var priority_ok := _beacon.render_priority == LABEL_RENDER_PRIORITY and _beacon.outline_render_priority == LABEL_OUTLINE_RENDER_PRIORITY
+	return {
+		"label_rect": [label_rect.position.x, label_rect.position.y, label_rect.size.x, label_rect.size.y],
+		"response_rect": [response_rect.position.x, response_rect.position.y, response_rect.size.x, response_rect.size.y],
+		"frame_rect": [frame.position.x, frame.position.y, frame.size.x, frame.size.y],
+		"clearance_px": clearance,
+		"required_clearance_px": projection.gap,
+		"overlap": overlap,
+		"fully_in_frame": in_frame,
+		"priority_ok": priority_ok,
+		"label_offset": [_beacon.offset.x, _beacon.offset.y],
+		"passed": not overlap and in_frame and clearance + 0.01 >= float(projection.gap) and priority_ok,
+	}
 
 func _target_form_scale() -> Vector3:
 	return Vector3(1.0, minf(1.35, 1.0 + 0.25 * maxi(0, target_revision - 1)), 1.0)
@@ -331,27 +426,36 @@ func _readable_reasons(reasons: Array, shortfalls: Dictionary = {}) -> String:
 
 func feedback_text() -> String:
 	var destination := target_state.capitalize() if not target_state.is_empty() else "Transformation"
-	var cost_context := destination + " · Cost: " + _quantities(displayed_costs) if not displayed_costs.is_empty() else destination
+	var cost_cues := _resource_cues(displayed_costs)
 	if lifecycle == "complete":
-		var text := destination + " complete\n\nPaid: " + _resource_cues(displayed_costs, "✓ ")
+		var text := "COMPLETE — %s" % destination
 		if not next_preview.is_empty():
-			text += "\nNext: " + String(next_preview.get("target_state", "")).capitalize()
+			var next_destination := String(next_preview.get("target_state", "")).capitalize()
 			var next_shortfalls: Dictionary = next_preview.get("shortfalls", {})
-			var next_action := "ready to preview" if next_preview.get("passed", false) else _readable_reasons(next_preview.get("errors", []), next_shortfalls)
-			if not next_shortfalls.is_empty():
-				next_action = "Deliver " + _quantities(next_shortfalls) + (" · " + next_action if not next_action.is_empty() else "")
-			text += " · " + next_action
+			var next_reason := _readable_reasons(next_preview.get("errors", []), next_shortfalls)
+			if next_preview.get("passed", false):
+				text = "NEXT — approach %s" % next_destination
+			elif not next_shortfalls.is_empty():
+				text = "NEXT — deliver missing resources\n" + _resource_cues(next_shortfalls)
+			elif not next_reason.is_empty():
+				text = "NEXT — " + next_reason
+			if not next_shortfalls.is_empty() and not next_reason.is_empty():
+				text += "\n" + next_reason
+		text += "\n✓ %s complete\nPaid: %s" % [destination, _resource_cues(displayed_costs)]
 		return text
 	if lifecycle == "blocked":
 		var reason := _readable_reasons(block_reasons, blocked_shortfalls)
 		if not blocked_shortfalls.is_empty():
-			return "Deliver " + _quantities(blocked_shortfalls) + "\n\nMissing: " + _resource_cues(blocked_shortfalls, "□ ") + "\n" + cost_context + ("\n" + reason if not reason.is_empty() else "")
-		return reason + "\n\n" + cost_context
+			var text := "BLOCKED — deliver missing resources\n" + _resource_cues(blocked_shortfalls)
+			if not reason.is_empty(): text += "\n" + reason
+			if not displayed_costs.is_empty(): text += "\n%s cost: %s" % [destination, cost_cues]
+			return text
+		return "BLOCKED — " + reason + ("\n%s cost: %s" % [destination, cost_cues] if not displayed_costs.is_empty() else "")
 	if lifecycle == "committing":
-		return "Applying delivered resources\n\n" + _resource_cues(displayed_costs) + " → " + destination + "\nAwaiting confirmation"
+		return "APPLYING → " + destination + "\nDelivered resources: " + cost_cues + "\nAwaiting confirmation"
 	if lifecycle == "preview":
-		return "Stay near the target\n\nDelivered stock: " + _resource_cues(displayed_costs) + " → " + destination
-	return "Approach the target\n\nDelivered stock: " + _resource_cues(displayed_costs) + "\n" + cost_context
+		return "PREVIEW — stay near " + destination + "\nCost from delivered stock:\n" + cost_cues
+	return "READY — approach " + destination + ("\nCost from delivered stock:\n" + cost_cues if not displayed_costs.is_empty() else "")
 
 func descriptor() -> Dictionary:
 	return {
@@ -372,6 +476,9 @@ func descriptor() -> Dictionary:
 		"visual_build_count": visual_build_count,
 		"visual_node_count": _visual_root.get_child_count() + 1 if is_instance_valid(_visual_root) else 0,
 		"readability_scale": readability_scale,
+		"label_camera_offset": [_beacon.offset.x, _beacon.offset.y] if is_instance_valid(_beacon) else [],
+		"label_render_priority": _beacon.render_priority if is_instance_valid(_beacon) else -1,
+		"label_outline_render_priority": _beacon.outline_render_priority if is_instance_valid(_beacon) else -1,
 		"presentation_only": true,
 		"mutates_resources": false,
 		"advances_progression": false,

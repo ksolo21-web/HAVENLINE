@@ -36,11 +36,54 @@ C0_REQUEST_SHA256 = 'abf213d874982c33c479c0c88e19383f7e3efae398046dbe78be501f0a3
 C0_LOG_OLD = '          gh run view "$FAILED_RUN_ID" --log-failed > c0-input/failed.log 2>&1 || gh run view "$FAILED_RUN_ID" --log > c0-input/failed.log 2>&1 || true\n'
 C0_LOG_NEW = '          python3 tools/havenline/production/collect_failure_job_logs.py --run c0-input/run.json --jobs c0-input/jobs.json --run-id "$FAILED_RUN_ID" --repository "$GITHUB_REPOSITORY" --output c0-input/failed.log\n'
 
+OWNER_BASE = "c1957696c6f716d3cd6f8528c95edbb7542cd4a6"
+SPECIALIST = "tools/havenline/production/specialist_critic_runner.py"
+SPECIALIST_BASE_SHA256 = "ddf0849d034033ae9df61d671953127e4e40bc80a0601ee735b9c68c9e2cdb00"
+SPECIALIST_CURRENT_SHA256 = "961d6daa2ae42297e703c17b16f34db540fbdee294dccbaebf29c81351c0f980"
+SPECIALIST_REQUEST = "Docs/Production/ChangeRequests/T10-specialist-actionable-defect-schema.json"
+SPECIALIST_REQUEST_SHA256 = "25c8544a37587fdbbd527de7606c0517e67781ee879fdb72e502b6fe2d1c513d"
+C0_ADVISOR = "tools/havenline/production/c0_root_cause_advisor.py"
+C0_ADVISOR_BASE_SHA256 = "d66e551eadf4dcdd1363da3da41d64e314a074292b2531cf99c0f5028a24beee"
+C0_ADVISOR_CURRENT_SHA256 = "c5c26657dd6f8936a6c3feb302377af5780c3712c997a96380311beb7f9015c2"
+C0_BOUNDED_REQUEST = "Docs/Production/ChangeRequests/T10-c0-bounded-model-packet.json"
+C0_BOUNDED_REQUEST_SHA256 = "c54e6bd4c572f71673272a4b4e20ca4ba54da7c353643a1268d17c66c575f94e"
+C0_PACKET_IMPORT_OLD = "          import json,os,pathlib,subprocess\n"
+C0_PACKET_IMPORT_NEW = "          import hashlib,json,os,pathlib,subprocess\n"
+C0_PACKET_LOG_OLD = "          log=(root/'c0-input/failed.log').read_text(errors='replace') if (root/'c0-input/failed.log').exists() else ''\n"
+C0_PACKET_LOG_NEW = C0_PACKET_LOG_OLD + """          records=[]
+          for path in sorted((root/'c0-input/artifacts').rglob('critic-record.json')):
+              raw=path.read_bytes()
+              if len(raw)>200000:raise SystemExit(f'critic record exceeds bounded size: {path}')
+              value=json.loads(raw)
+              if not isinstance(value,dict):raise SystemExit(f'critic record is not an object: {path}')
+              value=dict(value);value.update(path=str(path.relative_to(root)),bytes=len(raw),sha256=hashlib.sha256(raw).hexdigest())
+              records.append(value)
+          if len(records)>20:raise SystemExit('too many critic records in failed run artifacts')
+          log_bytes=log.encode('utf-8')
+"""
+C0_PACKET_ENTRY_OLD = "            'changed_files':changed,'failed_logs':log[-60000:],'task_scope':scope.read_text(errors='replace')[:30000] if scope.exists() else '',\n"
+C0_PACKET_ENTRY_NEW = "            'changed_files':changed,'failed_logs':log,'failed_logs_bytes':len(log_bytes),'failed_logs_sha256':hashlib.sha256(log_bytes).hexdigest(),\n            'structured_failure_records':records,'task_scope':scope.read_text(errors='replace')[:30000] if scope.exists() else '',\n"
+
 
 def c0_workflow_delta_errors(accepted: str, current: str) -> list[str]:
     if accepted.count(C0_LOG_OLD) != 1:
         return ["V3.1 C0 log collection anchor missing"]
-    return [] if current == accepted.replace(C0_LOG_OLD, C0_LOG_NEW, 1) else ["Only the authorized completed-job log collection delta is permitted"]
+    expected=accepted.replace(C0_LOG_OLD,C0_LOG_NEW,1)
+    for old,new,label in ((C0_PACKET_IMPORT_OLD,C0_PACKET_IMPORT_NEW,"packet import"),(C0_PACKET_LOG_OLD,C0_PACKET_LOG_NEW,"structured failure records"),(C0_PACKET_ENTRY_OLD,C0_PACKET_ENTRY_NEW,"complete packet evidence")):
+        if expected.count(old)!=1:return [f"V3.2 C0 {label} anchor missing"]
+        expected=expected.replace(old,new,1)
+    return [] if current == expected else ["Only the authorized completed-job collection and bounded complete C0 packet deltas are permitted"]
+
+
+def exact_owner_source_errors(path:str,base_sha256:str,current_sha256:str)->list[str]:
+    try:
+        base=v31._git("show",f"{OWNER_BASE}:{path}").stdout
+        current=(v31.ROOT/path).read_bytes()
+    except Exception as exc:return [str(exc)]
+    errors=[]
+    if hashlib.sha256(base).hexdigest()!=base_sha256:errors.append(f"{path} authorized base changed")
+    if hashlib.sha256(current).hexdigest()!=current_sha256:errors.append(f"{path} exceeds exact B058/B059 authorization")
+    return errors
 
 
 def builder_delta_errors(accepted: str, current: str) -> list[str]:
@@ -89,6 +132,7 @@ def validate() -> dict:
         f"V3.1 locked file changed: {FAILURE}",
         f"V3.1 locked file changed: {BUILDER}",
         f"V3.1 locked file changed: {C0_WORKFLOW}",
+        f"V3.1 locked file changed: {C0_ADVISOR}",
     }
     errors = [error for error in baseline["errors"] if error not in allowed]
     try:
@@ -96,6 +140,18 @@ def validate() -> dict:
         errors += c0_workflow_delta_errors(accepted_c0, (v31.ROOT / C0_WORKFLOW).read_text())
         if hashlib.sha256((v31.ROOT / C0_REQUEST).read_bytes()).hexdigest() != C0_REQUEST_SHA256:
             errors.append("Bounded C0 job log authorization changed or missing")
+        errors += exact_owner_source_errors(C0_ADVISOR,C0_ADVISOR_BASE_SHA256,C0_ADVISOR_CURRENT_SHA256)
+        errors += exact_owner_source_errors(SPECIALIST,SPECIALIST_BASE_SHA256,SPECIALIST_CURRENT_SHA256)
+        c0_bounded_request=json.loads((v31.ROOT/C0_BOUNDED_REQUEST).read_text())
+        if hashlib.sha256((v31.ROOT/C0_BOUNDED_REQUEST).read_bytes()).hexdigest()!=C0_BOUNDED_REQUEST_SHA256:
+            errors.append("Bounded C0 model packet authorization changed or missing")
+        if c0_bounded_request.get("status")!="AUTHORIZED" or c0_bounded_request.get("blocker")!="C0-T10-B059":
+            errors.append("Explicit B059 C0 model packet authorization missing")
+        specialist_request=json.loads((v31.ROOT/SPECIALIST_REQUEST).read_text())
+        if hashlib.sha256((v31.ROOT/SPECIALIST_REQUEST).read_bytes()).hexdigest()!=SPECIALIST_REQUEST_SHA256:
+            errors.append("Bounded actionable-defect schema authorization changed or missing")
+        if specialist_request.get("status")!="AUTHORIZED" or specialist_request.get("blocker")!="C0-T10-B058":
+            errors.append("Explicit B058 critic schema authorization missing")
         accepted_builder = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{BUILDER}").stdout.decode()
         errors += builder_delta_errors(accepted_builder, (v31.ROOT / BUILDER).read_text())
         if hashlib.sha256((v31.ROOT / BUILDER_REQUEST).read_bytes()).hexdigest() != BUILDER_REQUEST_SHA256:
@@ -130,16 +186,18 @@ def validate() -> dict:
     return {
         "passed": not errors,
         "architecture_version": "3.2",
-        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner exact C0 failure packet log compatibility and causal repair bookkeeping and exact completed-job C0 logs",
+        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, actionable critic defects and bounded C0 model packets",
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
-        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE, BUILDER, C0_WORKFLOW],
+        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE, BUILDER, C0_WORKFLOW, C0_ADVISOR, SPECIALIST],
         "authorization_record": REQUEST,
         "c7_authorization_record": C7_REQUEST,
         "failure_packet_authorization_record": FAILURE_REQUEST,
         "builder_authorization_record": BUILDER_REQUEST,
         "c0_job_log_authorization_record": C0_REQUEST,
+        "c0_bounded_packet_authorization_record": C0_BOUNDED_REQUEST,
+        "specialist_actionable_defect_authorization_record": SPECIALIST_REQUEST,
         "errors": errors,
     }
 

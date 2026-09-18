@@ -1,6 +1,6 @@
 import pathlib, sys, unittest
 HERE=pathlib.Path(__file__).resolve();PROD=HERE.parents[1];sys.path.insert(0,str(PROD))
-from c0_root_cause_advisor import superseded_report, validate_report
+from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, build_model_request, c0_response_schema, model_projection, retain_http_error, superseded_report, validate_report
 from builder_repair_gate import validate as validate_builder
 
 
@@ -113,5 +113,50 @@ class CausalBookkeepingTests(unittest.TestCase):
         self.assertEqual(builder_delta_errors(accepted,current),[])
         self.assertTrue(builder_delta_errors(accepted,current+'\n# drift\n'))
         self.assertTrue(builder_delta_errors(accepted,accepted))
+
+class C0BoundedModelPacketTests(unittest.TestCase):
+    def packet(self):
+        import hashlib,json
+        steps=[]
+        for index in range(70):
+            conclusion='failure' if index in (4,18,32,46,60) else (None if index>=61 else 'success')
+            steps.append({'job':f'job-{index//7}','name':f'step-{index}','status':'completed' if conclusion else 'queued','conclusion':conclusion})
+        jobs=[];records=[]
+        for index in range(5):
+            raw=f'critic C{index+1} failed\nscore: 8.{index}\ndefect: actionable-{index}\n';encoded=raw.encode()
+            jobs.append({'job_id':100+index,'name':f'C{index+1}','conclusion':'failure','log_bytes':len(encoded),'log_sha256':hashlib.sha256(encoded).hexdigest(),'raw_log':raw})
+            records.append({'path':f'artifacts/C{index+1}/critic-record.json','sha256':str(index)*64,'bytes':1000,'critic_id':f'C{index+1}','task_id':'T10','candidate_hash':'a'*40,'passed':False,'scores':{'dimension':8.5},'defects':[f'actionable-{index}'],'coverage_complete':True,'confidence':'high','fatal_error':None,'groups':[{'group':'g','passed':False,'errors':['unresolved defects'],'lowest_score':8.5,'review':{'defects':[f'actionable-{index}']}}]})
+        envelope={'schema_version':1,'run_id':123,'repository':'owner/repo','run_status':'completed','run_conclusion':'failure','diagnostic_marker':None,'jobs':jobs}
+        log=json.dumps(envelope,ensure_ascii=False)
+        return {'task_id':'T10','failed_run_id':123,'failed_candidate':'a'*40,'integration_head':'b'*40,'integration_branch':'integration','task_branch':'task','current_branch_head':'a'*40,'run_conclusion':'failure','run_status':'completed','workflow_name':'T10','event':'workflow_dispatch','steps':steps,'unexecuted_checks':[f'job-9: step-{i}' for i in range(61,70)],'changed_files':[f'tools/havenline/task10/file-{i}.py' for i in range(74)],'protected_files':['approved/runtime'],'failed_logs':log,'failed_logs_bytes':len(log.encode()),'failed_logs_sha256':hashlib.sha256(log.encode()).hexdigest(),'structured_failure_records':records,'task_scope':'mandatory scope\n'*500,'defect_ledger':'defect ledger\n'*500,'historical_failure_intelligence':{'matches':[],'historical_match_is_advisory_only':True}}
+
+    def test_exact_large_shape_fits_and_preserves_every_failure_boundary(self):
+        import hashlib,json
+        packet=self.packet();packet_sha=hashlib.sha256(json.dumps(packet,sort_keys=True).encode()).hexdigest()
+        body,request_bytes,budget,projection=build_model_request(packet,packet_sha,'diagnose complete blocker set',c0_response_schema())
+        self.assertLessEqual(len(request_bytes),C0_MAX_REQUEST_BYTES);self.assertTrue(budget['within_budget'])
+        self.assertEqual(request_bytes,json.dumps(body,sort_keys=True,separators=(',',':'),ensure_ascii=False).encode())
+        self.assertEqual(5,len(projection['execution']['failed_terminal_steps']))
+        self.assertEqual(packet['unexecuted_checks'],projection['execution']['unexecuted_checks'])
+        self.assertEqual(5,len(projection['failure_logs']['jobs']))
+        self.assertEqual(5,len(projection['structured_failure_records']))
+        self.assertFalse(projection['projection_contract']['arbitrary_character_slice_used'])
+
+    def test_log_digest_substitution_and_unbounded_core_fail_closed(self):
+        packet=self.packet();packet['failed_logs_sha256']='0'*64
+        with self.assertRaisesRegex(ValueError,'digest mismatch'):model_projection(packet,'f'*64)
+        packet=self.packet();packet['unexecuted_checks']=['x'*5000]*20
+        with self.assertRaisesRegex(RuntimeError,'C0_REQUEST_BUDGET_EXCEEDED'):build_model_request(packet,'f'*64,'prompt',c0_response_schema())
+
+    def test_http_400_status_body_and_safe_headers_are_retained(self):
+        import io,json,tempfile,urllib.error
+        from email.message import Message
+        headers=Message();headers['Content-Type']='application/json';headers['Authorization']='secret'
+        error=urllib.error.HTTPError('http://127.0.0.1',400,'Bad Request',headers,io.BytesIO(b'{"error":"context exceeded"}'))
+        with tempfile.TemporaryDirectory() as directory:
+            out=pathlib.Path(directory);retain_http_error(error,out)
+            retained=json.loads((out/'http-error.json').read_text())
+            self.assertEqual(400,retained['status']);self.assertIn('context exceeded',retained['body'])
+            self.assertEqual({'content-type':'application/json'},retained['headers'])
 
 if __name__=="__main__":unittest.main(verbosity=2)

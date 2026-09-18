@@ -49,8 +49,35 @@ class CompactEvidenceTests(unittest.TestCase):
   with tempfile.TemporaryDirectory() as t:
    root=Path(t);(root/'brief.txt').write_text('x'*2150)
    for cid in ('C3','C4'):
-    groups=[dict(id=g,items=[dict(path='brief.txt',kind='text',category='task_scope',description=''),dict(path='image.png',kind='image'),self.contract(root)]) for g in ('full-lifecycle','motion-0','motion-12','device-readability')]
+    groups=[dict(id=g,items=[dict(path='brief.txt',kind='text',category='task_scope',description=''),dict(path=g+'.png',kind='image'),self.contract(root)]) for g in ('full-lifecycle','motion-0','motion-12','device-readability')]
     self.assertEqual([],m.prompt_errors(dict(critic_id=cid,groups=groups),root))
+
+ def test_visual_groups_are_bounded_unique_and_complete(self):
+  manifest=dict(critic_id='C4',groups=[dict(id='a',items=[dict(path=str(i)+'.png',kind='image') for i in range(6)]),dict(id='b',items=[dict(path=str(i)+'.png',kind='motion_frame') for i in range(6,12)])])
+  self.assertEqual([],m.visual_group_errors(manifest))
+  manifest['groups'][0]['items'].append(dict(path='12.png',kind='image'))
+  self.assertTrue(m.visual_group_errors(manifest))
+  manifest['groups'][0]['items'].pop();manifest['groups'][1]['items'][0]['path']='0.png'
+  self.assertTrue(m.visual_group_errors(manifest))
+
+ def test_c7_context_binds_roles_dimensions_and_selected_rows(self):
+  candidate='a'*40
+  domain=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in m.C7_ROWS['R05_domain']])
+  integration=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in m.C7_ROWS['R05_integration']+m.C7_ROWS['R06_integration']])
+  text=m.c7_context(domain,integration,candidate,'1'*64,'2'*64)
+  for i in range(1,15):self.assertIn('R'+str(i).zfill(2),text)
+  for dimension in m.C7_DIMENSIONS:self.assertIn(dimension,text)
+  self.assertIn('Requirement IDs R01-R14 are scope boundaries; they are not score dimensions.',text)
+  self.assertIn('R05 truthful locked/ready/blocked/preview/committing/complete lifecycle',text)
+  self.assertIn('R06 only physically delivered stored resources pay',text)
+  for change in ('missing','duplicate','false','stale','failed'):
+   d=copy.deepcopy(domain);i=copy.deepcopy(integration)
+   if change=='missing':d['checks'].pop()
+   elif change=='duplicate':d['checks'].append(copy.deepcopy(d['checks'][0]))
+   elif change=='false':d['checks'][0]['passed']=False
+   elif change=='stale':d['candidate']='b'*40
+   else:i['failures']=['failure']
+   with self.subTest(change=change),self.assertRaises(AssertionError):m.c7_context(d,i,candidate,'1'*64,'2'*64)
 
  def test_contract_rejects_omission_duplicate_tampering_and_order(self):
   with tempfile.TemporaryDirectory() as t:

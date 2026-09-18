@@ -275,6 +275,7 @@ func run() -> void:
 	check("view uses shape and color redundancy", view_contract.shape_and_color_redundancy and view_contract.world_response_shapes == ["perimeter_ring", "preview_volume", "status_label"])
 	check("view declares strict four-node visual budget", view_contract.visual_node_budget == 4)
 	check("view exposes bounded readability range", view_contract.readability_scale_range == [0.85, 1.35])
+	check("view declares camera-plane clearance and explicit label ordering", view_contract.label_camera_offset == Vector2(0.0, -190.0) and view_contract.label_render_priority == 100 and view_contract.label_outline_render_priority == 99)
 
 	var visual_engine := configured_engine()
 	check("visual fixture target registers", visual_engine.register_target("visual-A", "seed"))
@@ -307,31 +308,31 @@ func run() -> void:
 	check("blocked world response preserves exact reasons and shortfalls", view.show_blocked(blocked_preview) and view.descriptor().lifecycle == "blocked" and view.descriptor().block_reasons.has("insufficient_resources") and view.descriptor().blocked_shortfalls == {"wood": 1, "stone": 1})
 	var changed_blocked := visual_engine.preview_transform("framework_anchor_seed_to_foundation", "visual-A", {"wood": 0, "stone": 0})
 	view.show_blocked(changed_blocked)
-	check("same blocked state refreshes exact shortfall label", beacon.text.contains("Deliver 8 wood + 4 stone"))
+	check("same blocked state refreshes exact shortfall label", beacon.text.contains("8 wood") and beacon.text.contains("4 stone"))
 	view.show_blocked(blocked_preview)
 	var applies_before_noop := view.visual_apply_count
 	view.show_blocked(blocked_preview)
 	check("identical blocked payload does not reapply visuals", view.visual_apply_count == applies_before_noop)
 	check("blocked lifecycle renders exact costs and shortfalls", ring.visible and beacon.visible and ghost.visible and beacon.text.contains("8 wood + 4 stone") and beacon.text.contains("Deliver 1 wood + 1 stone"))
-	check("blocked primary instruction leads and exact missing resource symbols render", beacon.text.begins_with("Deliver 1 wood + 1 stone\n") and beacon.text.contains("Missing:") and beacon.text.contains("\ue000") and beacon.text.contains("\ue001") and not view._ring_material.emission_enabled)
+	check("blocked primary instruction leads without repeating the shortfall", beacon.text.begins_with("BLOCKED — deliver missing resources\n") and beacon.text.count("1 wood") == 1 and beacon.text.count("1 stone") == 1 and beacon.text.contains("\ue000") and beacon.text.contains("\ue001") and not view._ring_material.emission_enabled)
 	var multi_block := blocked_preview.duplicate(true)
 	multi_block.shortfalls = {"wood": 1, "stone": 2, "metal": 3, "fuel": 4}
 	multi_block.errors = ["insufficient_resources", "missing_prerequisite:harvesting_online"]
 	view.show_blocked(multi_block)
-	check("all four resource shortfalls and additional prerequisite remain visible", beacon.text.begins_with("Deliver 1 wood + 2 stone + 3 metal + 4 fuel") and beacon.text.contains("harvesting online") and beacon.text.contains("\ue002") and beacon.text.contains("\ue003"))
+	check("all four resource shortfalls and additional prerequisite remain visible", beacon.text.begins_with("BLOCKED — deliver missing resources") and beacon.text.contains("1 wood") and beacon.text.contains("2 stone") and beacon.text.contains("3 metal") and beacon.text.contains("4 fuel") and beacon.text.contains("harvesting online") and beacon.text.contains("\ue002") and beacon.text.contains("\ue003"))
 	multi_block.shortfalls = {}
 	multi_block.errors = ["missing_prerequisite:harvesting_online"]
 	view.show_blocked(multi_block)
-	check("prerequisite-only block does not invent missing resources", beacon.text.begins_with("Requires harvesting online") and not beacon.text.contains("Missing:") and not beacon.text.contains("Deliver"))
+	check("prerequisite-only block does not invent missing resources", beacon.text.begins_with("BLOCKED — Requires harvesting online") and not beacon.text.contains("deliver missing resources"))
 	view.set_ready()
 	check("leaving blocked state clears failure payload", view.descriptor().block_reasons.is_empty() and view.descriptor().blocked_shortfalls.is_empty())
 
 	var visual_inventory := {"wood": 20, "stone": 12, "metal": 2, "fuel": 1}
 	var visual_preview := visual_engine.preview_transform("framework_anchor_seed_to_foundation", "visual-A", visual_inventory)
-	check("preview world response shows ring plus translucent preview volume", view.show_preview(visual_preview) and ring.visible and ghost.visible and beacon.visible and beacon.text.contains("Delivered stock:") and ghost.material_override.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA)
+	check("preview world response shows ring plus translucent preview volume", view.show_preview(visual_preview) and ring.visible and ghost.visible and beacon.visible and beacon.text.begins_with("PREVIEW — stay near") and beacon.text.contains("Cost from delivered stock:") and ghost.material_override.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA)
 	var visual_intent := visual_engine.commit_transform("visual-tx", "framework_anchor_seed_to_foundation", "visual-A", visual_inventory)
 	check("committing world response shows all three shapes", view.show_commit(visual_intent) and ring.visible and ghost.visible and beacon.visible)
-	check("pending resources have exact named source-to-target cues without premature payment", beacon.text.begins_with("Applying delivered resources") and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and beacon.text.contains("→ Foundation") and not beacon.text.contains("Paid:") and view._ring_material.emission_enabled)
+	check("pending resources have exact named source-to-target cues without premature payment", beacon.text.begins_with("APPLYING → Foundation") and beacon.text.contains("Delivered resources:") and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and not beacon.text.contains("Paid:") and view._ring_material.emission_enabled)
 	var ring_arrays: Array = ring.mesh.surface_get_arrays(0)
 	var ring_vertices: PackedVector3Array = ring_arrays[Mesh.ARRAY_VERTEX]
 	var ring_normals: PackedVector3Array = ring_arrays[Mesh.ARRAY_NORMAL]
@@ -362,9 +363,10 @@ func run() -> void:
 	var visual_accepted := visual_engine.accept_authoritative_receipt(visual_ack)
 	var next_blocked_offer := visual_engine.preview_transform("framework_anchor_foundation_to_reinforced", "visual-A", {"wood": 0, "stone": 0, "metal": 0})
 	check("complete world response requires accepted authority receipt", view.mark_complete(visual_accepted, next_blocked_offer) and view.descriptor().lifecycle == "complete")
-	check("completion preserves both next-stage shortfalls and prerequisite", beacon.text.contains("Next: Reinforced") and beacon.text.contains("Deliver 12 wood + 8 stone + 2 metal") and beacon.text.contains("harvesting online"))
+	check("completion puts next-stage shortfalls first and preserves prerequisite", beacon.text.begins_with("NEXT — deliver missing resources") and beacon.text.contains("12 wood") and beacon.text.contains("8 stone") and beacon.text.contains("2 metal") and beacon.text.contains("harvesting online"))
 	check("complete lifecycle solidifies accepted target form", ring.visible and ghost.visible and beacon.visible and ghost.scale == Vector3.ONE and ghost.material_override.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED and beacon.text.contains("Paid:") and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and view.displayed_costs == {"wood": 8, "stone": 4})
-	check("accepted receipt stops flow and resets its bounded phase", not view._ring_material.emission_enabled and view._ring_material.uv1_scale == Vector3.ONE and view._ring_material.uv1_offset == Vector3.ZERO and not view.is_processing())
+	check("label stays in its camera-plane lane above transparent response passes", beacon.offset == Vector2(0.0, -190.0) and beacon.render_priority == 100 and beacon.outline_render_priority == 99)
+	check("accepted receipt stops flow while retaining camera-lane maintenance", not view._ring_material.emission_enabled and view._ring_material.uv1_scale == Vector3.ONE and view._ring_material.uv1_offset == Vector3.ZERO and view.is_processing())
 	var completion_text := beacon.text
 	check("repeated completion does not replay debit feedback", not view.mark_complete(visual_accepted) and beacon.text == completion_text and not view._ring_material.emission_enabled)
 	var accepted_form := ghost.scale
