@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "requesting_task": "T10",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "authorization": "Also when we find issues with the architecture and/or critics, we need to fix.",
+  "standing_authorization": "Authorize the bounded V3.2 T10 canary repair.",
+  "reviewer": "/root/t10_c0_critic",
+  "blocker": "C0-T10-B038",
+  "scope": [
+    "tools/havenline/production/specialist_critic_runner.py",
+    "tools/havenline/production/tests/test_specialist_critic_runner.py"
+  ],
+  "permitted_behavior_change": "T10 only: exactly two observations of at most 160 characters and at most five defects of at most 160 characters, enforced in response schema and post-parse validation. Preserve all other task schemas and every score dimension, model, sampling parameter and token budget.",
+  "forbidden_changes": [
+    "historical V3.1 lock manifest",
+    "matching thresholds",
+    "critic applicability",
+    "critic dimensions",
+    "score thresholds",
+    "runtime",
+    "token budget",
+    "G1-G14"
+  ]
+}

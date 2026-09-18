@@ -75,6 +75,28 @@ def request_local(board,text,prompt,schema,out:pathlib.Path,label:str):
     if choice.get('finish_reason')!='stop':raise RuntimeError('incomplete reviewer response')
     parsed=json.loads(choice['message']['content']);(out/(label+'-raw.txt')).write_text(choice['message']['content']);return parsed
 
+def response_schema(task_id, dimensions):
+    score_props={k:{'type':'number','minimum':0,'maximum':10} for k in dimensions}
+    schema={'type':'object','properties':{'observations':{'type':'array','items':{'type':'string'},'minItems':2,'maxItems':5},'defects':{'type':'array','items':{'type':'string'},'maxItems':5},'coverage_complete':{'type':'boolean'},'confidence':{'type':'string','enum':['low','medium','high']},'scores':{'type':'object','properties':score_props,'required':dimensions,'additionalProperties':False}},'required':['observations','defects','coverage_complete','confidence','scores'],'additionalProperties':False}
+    if task_id == 'T10':
+        schema['properties']['observations'].update(minItems=2, maxItems=2)
+        for field in ('observations', 'defects'):
+            schema['properties'][field]['items']['maxLength'] = 160
+    return schema
+
+
+def response_bounds_errors(task_id, review):
+    if task_id != 'T10':
+        return []
+    errors = []
+    for field, minimum, maximum in (('observations', 2, 2), ('defects', 0, 5)):
+        values = review.get(field)
+        if not isinstance(values, list) or not minimum <= len(values) <= maximum:
+            errors.append(field + ' count violates T10 response contract')
+        elif any(not isinstance(value, str) or len(value) > 160 for value in values):
+            errors.append(field + ' string violates T10 response contract')
+    return errors
+
 def main():
     ap=argparse.ArgumentParser();ap.add_argument('--critic',required=True);ap.add_argument('--candidate',required=True);ap.add_argument('--manifest',required=True);ap.add_argument('--out',required=True);a=ap.parse_args()
     cid=a.critic.upper();candidate=a.candidate
@@ -107,12 +129,12 @@ def main():
             except Exception:pass
             time.sleep(2)
         else:raise RuntimeError('local reviewer runtime not ready')
-        score_props={k:{'type':'number','minimum':0,'maximum':10} for k in dimensions}
-        schema={'type':'object','properties':{'observations':{'type':'array','items':{'type':'string'},'minItems':2,'maxItems':5},'defects':{'type':'array','items':{'type':'string'},'maxItems':5},'coverage_complete':{'type':'boolean'},'confidence':{'type':'string','enum':['low','medium','high']},'scores':{'type':'object','properties':score_props,'required':dimensions,'additionalProperties':False}},'required':['observations','defects','coverage_complete','confidence','scores'],'additionalProperties':False}
+        schema=response_schema(manifest.get('task_id'), dimensions)
         base=f"""You are the independent {matrix['critics'][cid]['name']} for Havenline. You are reviewing exact candidate {candidate}. {HAVENLINE_CONTRACT}\nYour mandatory review checks are: {json.dumps(checks)}. Review only the supplied evidence and task scope; do not invent absent defects or silently excuse visible ones. Every mandatory dimension is scored 0-10. The forward PASS threshold is strictly ABOVE 9.0 unrounded, not >=9.0, and no average can hide a weak dimension. If any score is <=9.0, cite a concrete actionable defect in defects. If no actionable defect exists, defects MUST be [] exactly. Return JSON only. Do not claim physical-device 4K/60 unless the evidence explicitly contains physical certification."""
         for group in manifest['groups']:
             board=evidence_board(group,out);text=evidence_text(group);review=request_local(board,text,base+f"\nEvidence group: {group['id']}. Judge the complete group and every mandatory dimension.",schema,out,group['id'])
             scores=review.get('scores',{});errors=ensure_score_strictly_above_nine(scores)
+            errors += response_bounds_errors(manifest.get('task_id'), review)
             if set(scores)!=set(dimensions):errors.append('dimension coverage mismatch')
             if review.get('defects'):errors.append('unresolved defects')
             if review.get('coverage_complete') is not True:errors.append('coverage incomplete')

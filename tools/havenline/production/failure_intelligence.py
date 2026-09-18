@@ -59,7 +59,7 @@ def query(task_id: str | None, gate: str | None, text: str, limit: int = 5) -> d
 
 
 def query_packet(packet: dict[str, Any], limit: int = 5) -> dict[str, Any]:
-    text = json.dumps({"steps": packet.get("steps", []), "changed_files": packet.get("changed_files", []), "run_conclusion": packet.get("run_conclusion"), "logs": packet.get("failure_excerpt", packet.get("logs", ""))}, sort_keys=True)
+    text = json.dumps({"steps": packet.get("steps", []), "changed_files": packet.get("changed_files", []), "run_conclusion": packet.get("run_conclusion"), "logs": packet.get("failure_excerpt", packet.get("failed_logs", packet.get("logs", "")))}, sort_keys=True)
     gate = packet.get("failed_gate") or packet.get("failed_step")
     return query(packet.get("task_id"), gate, text, limit=limit)
 

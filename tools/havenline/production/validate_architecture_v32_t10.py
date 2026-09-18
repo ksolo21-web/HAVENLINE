@@ -19,6 +19,19 @@ C7_REQUEST_SHA256 = "8f24a3216fa5d4d87f88227a4eb64074b8efea2f6d71b2218f5a3157061
 C7_DELTA = "    # T10 owns transactional progression, while T12/T13 own Level 1-100 pacing.\n    # Keep C7 and progression_sim mandatory; specialize only its proof runner.\n    if task_id == \"T10\":\n        gate_execution[\"progression_sim\"] = {\n            \"execution\": \"task_adapter_required\",\n            \"runner\": \"python3 tools/havenline/task10/validate_progression.py --candidate <SHA> --output <record>\",\n            \"rule\": \"Source-bound executable recipe/state graph, prerequisites, exact-once debit, no-skip/replay, branching/inverse and recovery proof; independent C7 remains required.\",\n        }\n"
 
 
+FAILURE = "tools/havenline/production/failure_intelligence.py"
+FAILURE_REQUEST = "Docs/Production/ChangeRequests/T10-failure-packet-log-compatibility.json"
+FAILURE_REQUEST_SHA256 = "d388a6fe33d1a45a2c475c2874b039ef1d136c6bc61c5119b8159e83c54006f9"
+
+
+def failure_delta_errors(accepted: str, current: str) -> list[str]:
+    old = 'packet.get("failure_excerpt", packet.get("logs", ""))'
+    new = 'packet.get("failure_excerpt", packet.get("failed_logs", packet.get("logs", "")))'
+    if accepted.count(old) != 1:
+        return ["V3.1 failure packet log anchor missing"]
+    return [] if current == accepted.replace(old, new, 1) else ["Only the authorized failed_logs compatibility expression is permitted"]
+
+
 def c7_delta_errors(accepted: str, current: str) -> list[str]:
     anchor = "        for gate in ordered\n    }\n"
     if accepted.count(anchor) != 1:
@@ -45,9 +58,14 @@ def validate() -> dict:
         f"V3.1 locked file changed: {POLICY}",
         f"V3.1 locked file changed: {CANARY}",
         f"V3.1 locked file changed: {FORWARD}",
+        f"V3.1 locked file changed: {FAILURE}",
     }
     errors = [error for error in baseline["errors"] if error not in allowed]
     try:
+        accepted_failure = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{FAILURE}").stdout.decode()
+        errors += failure_delta_errors(accepted_failure, (v31.ROOT / FAILURE).read_text())
+        if hashlib.sha256((v31.ROOT / FAILURE_REQUEST).read_bytes()).hexdigest() != FAILURE_REQUEST_SHA256:
+            errors.append("Bounded failure packet authorization changed or missing")
         accepted_policy = json.loads(v31._git("show", f"{v31.ACCEPTED_SOURCE}:{POLICY}").stdout)
         current_policy = json.loads((v31.ROOT / POLICY).read_text())
         errors += policy_errors(accepted_policy, current_policy)
@@ -74,13 +92,14 @@ def validate() -> dict:
     return {
         "passed": not errors,
         "architecture_version": "3.2",
-        "scope": "T09 workflow reactivation, T10 authority canary and T10-only C7 transactional proof runner",
+        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner and exact C0 failure packet log compatibility",
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
-        "authorized_changes": [POLICY, CANARY, FORWARD],
+        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE],
         "authorization_record": REQUEST,
         "c7_authorization_record": C7_REQUEST,
+        "failure_packet_authorization_record": FAILURE_REQUEST,
         "errors": errors,
     }
 
