@@ -1,0 +1,74 @@
+name: Havenline T10 cheap pipeline diagnostic preflight
+on:
+  push:
+    branches: ['havenline/T10-pipeline-preflight']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-task10-pipeline-preflight-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  cheap-boundary-checks:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Actual validation entry points in a clean hosted checkout
+        run: |
+          set -euo pipefail
+          unset GIT_LFS_SKIP_SMUDGE
+          mkdir -p pipeline-preflight
+          python3 tools/havenline/task10/prepare_activation.py > pipeline-preflight/activation.json
+          python3 tools/havenline/task10/validate_world_transform.py --candidate "$GITHUB_SHA" --output pipeline-preflight/world-transform.json
+          python3 tools/havenline/production/validate_migration.py > pipeline-preflight/migration.json
+          python3 tools/havenline/task10/validate_post_t09_adapter.py --require-bound --output pipeline-preflight/adapter.json
+          git fetch origin codex/havenline-sequential-task-01
+          integration=$(git rev-parse FETCH_HEAD)
+          base=$(python3 -c "import json; print(next(r for r in json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))['workstreams'] if r['task_id']=='T10')['base_commit'])")
+          python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$GITHUB_SHA" --integration-head "$integration" > pipeline-preflight/scope.json
+          python3 tools/havenline/production/builder_repair_gate.py --c0 Docs/Production/T10/C0_ROOT_CAUSE.json --plan Docs/Production/T10/REPAIR_PLAN.json --base c7a18d002fe8d0f3978370f3e4567ba88bfe17e8 --head "$GITHUB_SHA" --output pipeline-preflight/repair.json
+          python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > pipeline-preflight/production-tests.log 2>&1
+          python3 -m unittest discover -s tools/havenline/task10/tests -p 'test_*.py' > pipeline-preflight/task-tests.log 2>&1
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task10-preflight-boundaries-${{ github.sha }}
+          path: pipeline-preflight
+          if-no-files-found: error
+          retention-days: 14
+  expected-diagnostic-failure:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Deliberate failure with real ANSI log bytes, never a product test
+        run: |
+          python3 - <<'PY'
+          import os
+          print('\x1b[31mT10_B052_EXPECTED_DIAGNOSTIC_FAILURE:'+os.environ['GITHUB_SHA']+':'+os.environ['GITHUB_RUN_ID']+'\x1b[0m', flush=True)
+          raise SystemExit(1)
+          PY
+  same-parent-log-probe:
+    needs: [cheap-boundary-checks, expected-diagnostic-failure]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+      - name: Collect exact failed job logs while this parent run is active
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: python3 tools/havenline/task10/pipeline_preflight.py --output pipeline-probe
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task10-preflight-log-probe-${{ github.sha }}
+          path: pipeline-probe
+          if-no-files-found: error
+          retention-days: 14

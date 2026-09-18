@@ -12,6 +12,7 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
+import re
 import subprocess
 from copy import deepcopy
 
@@ -71,6 +72,7 @@ def validate_preparation():
     registry = load(REGISTRY_PATH)
     ownership = load(OWNERSHIP_PATH)
     critics = load(CRITICS_PATH)
+    gates = load(GATES_PATH)
 
     errors: list[str] = []
     t10 = graph.get("tasks", {}).get("T10")
@@ -143,11 +145,81 @@ def validate_preparation():
 
     row = next((x for x in registry.get("workstreams", []) if x.get("task_id") == "T10"), None)
     legal_states = {
-        "LOCKED", "PREPARED", "ASSIGNED", "BUILDING_ISOLATED",
-        "BUILT_PENDING_DEPENDENCY",
+        "ASSIGNED", "BUILDING_ISOLATED",
+        "BUILT_PENDING_DEPENDENCY", "FIX_REQUIRED", "BLOCKED",
+        "INTEGRATION_READY", "INTEGRATING", "UNDER_REVIEW",
     }
-    if row and row.get("status") not in legal_states:
-        errors.append(f"pre-integration registry T10 status is illegal: {row.get('status')}")
+    owners = [x for x in ownership.get("active_owners", []) if x.get("task_id") == "T10"]
+    rows = [x for x in registry.get("workstreams", []) if x.get("task_id") == "T10"]
+    states = {
+        "graph": t10.get("status"),
+        "registry": (row or {}).get("status"),
+        "ownership": owners[0].get("status") if len(owners) == 1 else None,
+        "gates": gates.get("active_status") if gates.get("active_task") == "T10" else None,
+    }
+    inactive_preparation = (
+        states["graph"] in {"LOCKED", "PREPARED"}
+        and not rows and not owners
+        and all(value is None for key, value in gates.items() if key.startswith("active_"))
+    )
+    if states["graph"] in {"LOCKED", "PREPARED"} and not inactive_preparation:
+        errors.append("LOCKED/PREPARED requires inactive unregistered topology with all gate active pointers cleared")
+    alias = checklist["planned_owned_alias"]
+    actual_reservation = ownership.get("aliases", {}).get(alias)
+    if actual_reservation != planned and (actual_reservation is not None or not inactive_preparation):
+        errors.append("T10 ownership differs from frozen planned reservation")
+    waves = [wave for wave in gates.get("next_post_t03_wave", []) if wave.get("task") == "T10"]
+    if inactive_preparation:
+        if waves:
+            errors.append("inactive T10 preparation cannot contain an activation wave")
+    else:
+        if len(rows) != 1 or len(owners) != 1:
+            errors.append("T10 requires exactly one registry row and one ownership row")
+        if any(state not in legal_states for state in states.values()):
+            errors.append("illegal T10 validation state: " + json.dumps(states))
+        if len(set(states.values())) != 1:
+            errors.append("T10 four-authority state disagreement: " + json.dumps(states))
+        for key, expected in {
+            "owner": checklist["future_owner"],
+            "branch": checklist["future_builder_branch"],
+            "owned_paths": [alias],
+        }.items():
+            if (row or {}).get(key) != expected:
+                errors.append("T10 registry frozen ownership mismatch: " + key)
+        if gates.get("active_frozen_scope") != "Docs/Production/T10/FROZEN_SCOPE.md" or gates.get("active_task_packet") != "Docs/Production/T10/TASK_PACKET.md":
+            errors.append("T10 gate scope/packet identity mismatch")
+        bases = [(row or {}).get("base_commit"), owners[0].get("base_commit") if len(owners) == 1 else None, gates.get("active_base_integration_commit")]
+        if any(not isinstance(base, str) or not re.fullmatch(r"[0-9a-f]{40}", base) for base in bases) or len(set(bases)) != 1:
+            errors.append("T10 registered frozen base disagreement or invalid exact SHA")
+        # The preparation ancestor is deliberately not an activation-base lock.
+        for key in ("activated_base_commit", "activated_base_integration_commit", "activation_base_commit"):
+            if key in checklist and (not isinstance(checklist[key], str) or not re.fullmatch(r"[0-9a-f]{40}", checklist[key]) or any(base != checklist[key] for base in bases)):
+                errors.append("T10 checklist activated base mismatch: " + key)
+        if len(waves) != 1:
+            errors.append("registered T10 requires exactly one activation wave")
+        elif waves[0].get("state") != states["graph"] or waves[0].get("base_commit") != bases[0]:
+            errors.append("T10 gate wave state/base disagreement")
+    if "T10" in gates.get("approved_tasks", []) or "T10" in gates.get("completed_task_records", {}):
+        errors.append("T10 validation cannot accept approval or completed-task records")
+
+    def future(task):
+        return isinstance(task, str) and re.fullmatch(r"T\d+", task) and int(task[1:]) > 10
+
+    for task, data in graph.get("tasks", {}).items():
+        if future(task) and data.get("status") != "LOCKED":
+            errors.append("future task must remain LOCKED in graph: " + task)
+    for stream in registry.get("workstreams", []):
+        if future(stream.get("task_id")) and stream.get("status") != "LOCKED":
+            errors.append("future task must remain LOCKED in registry: " + stream["task_id"])
+    for active in ownership.get("active_owners", []):
+        if future(active.get("task_id")):
+            errors.append("future task cannot hold active ownership: " + active["task_id"])
+    for task in list(gates.get("approved_tasks", [])) + list(gates.get("completed_task_records", {})):
+        if future(task):
+            errors.append("future task cannot be approved/completed: " + task)
+    for wave in gates.get("next_post_t03_wave", []):
+        if future(wave.get("task")) and wave.get("state") != "LOCKED":
+            errors.append("future task must remain LOCKED in gate wave: " + wave["task"])
 
     t09_status = graph.get("tasks", {}).get("T09", {}).get("status")
     result = {

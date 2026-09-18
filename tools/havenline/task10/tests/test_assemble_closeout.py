@@ -8,6 +8,7 @@ The public entry point explicitly rejects the same diagnostic provenance.
 import copy
 import hashlib
 import json
+import os
 from pathlib import Path
 import shutil
 import subprocess
@@ -27,6 +28,53 @@ class CloseoutTests(unittest.TestCase):
                       {'test_fixture': 'yes'}, {'fixture_only': True}):
             with self.subTest(value=value), self.assertRaisesRegex(ValueError, 'diagnostic'):
                 m.reject_diagnostic(value)
+
+    def test_actual_canonical_c0_history_is_not_approval_proof(self):
+        path=m.ROOT/m.TASK/'C0_ROOT_CAUSE.json'
+        original=path.read_bytes();value=json.loads(original)
+        self.assertIn('diagnostic-only',original.decode())
+        ref=dict(path=str(path),sha256=m.digest(original))
+        self.assertEqual((value,original),m.read_c0_reference(ref))
+        # Generic proof handling remains strict for the identical historical bytes.
+        with self.assertRaisesRegex(ValueError,'diagnostic'):m.read_reference(ref)
+        with tempfile.TemporaryDirectory() as temporary:
+            temporary=Path(temporary)
+            gates=temporary/'gates.json';gates.write_bytes(m.encoded(dict(diagnostic_only=True)))
+            candidate=self.git(m.ROOT,'rev-parse','HEAD')
+            spec=dict(candidate=candidate,base=candidate,integration_head=candidate,export_commit=candidate,
+                      approved_at='2026-09-18T00:00:00Z',c0_report=ref,
+                      gates=dict(path=str(gates),sha256=m.digest(gates.read_bytes())))
+            # Exercise the real public input sequence without a diagnostic patch:
+            # actual canonical C0 succeeds, the next diagnostic proof still fails.
+            from unittest.mock import patch
+            with patch.object(m,'read_c0_reference',wraps=m.read_c0_reference) as read_c0:
+                with self.assertRaisesRegex(ValueError,'diagnostic inputs'):m.verify_inputs(spec)
+                read_c0.assert_called_once_with(ref)
+            altered=temporary/'c0.json'
+            mutations=[('task_id','T11'),('critic_id','C1'),('non_voting',False),('non_voting',1),
+                       ('validated',False),('complete_known_blocker_set',False),('diagnosis_status','PENDING'),
+                       ('approval_claimed',True),('score_assigned',True),('summary','changed historical narrative'),
+                       ('nested',dict(diagnostic_only=True)),('nested',[dict(test_fixture=True)])]
+            for key,replacement in mutations:
+                with self.subTest(key=key,replacement=replacement):
+                    changed=copy.deepcopy(value);changed[key]=replacement
+                    altered.write_bytes(m.encoded(changed))
+                    with self.assertRaises(ValueError):m.read_c0_reference(dict(path=str(altered),sha256=m.digest(altered.read_bytes())))
+            with self.assertRaisesRegex(ValueError,'hash mismatch'):m.read_c0_reference(dict(ref,sha256='0'*64))
+            link=temporary/'linked.json';link.symlink_to(path)
+            with self.assertRaisesRegex(ValueError,'non-symlink'):m.read_c0_reference(dict(ref,path=str(link)))
+
+    def test_lfs_skip_is_child_only_with_ambient_unset(self):
+        from unittest.mock import patch
+        with patch.dict(os.environ):
+            os.environ.pop('GIT_LFS_SKIP_SMUDGE',None)
+            child=m.checkout_environment()
+            self.assertEqual('1',child['GIT_LFS_SKIP_SMUDGE'])
+            self.assertNotIn('GIT_LFS_SKIP_SMUDGE',os.environ)
+            observed=subprocess.check_output([sys.executable,'-c',
+                'import os; print(os.environ["GIT_LFS_SKIP_SMUDGE"])'],env=child,text=True).strip()
+            self.assertEqual('1',observed)
+            self.assertNotIn('GIT_LFS_SKIP_SMUDGE',os.environ)
 
     def test_source_result_cannot_hide_failure(self):
         for value in ({'passed': True, 'candidate': 'b'*40}, {'passed': False, 'status': 'PASS', 'candidate': 'a'*40},
@@ -74,7 +122,9 @@ class CloseoutTests(unittest.TestCase):
 
     def prepare_repo(self, target):
         repo = target / 'repo'
-        subprocess.run(['git', 'clone', '--quiet', '--shared', str(m.ROOT), str(repo)], check=True)
+        ambient = os.environ.get('GIT_LFS_SKIP_SMUDGE')
+        subprocess.run(['git', 'clone', '--quiet', '--shared', str(m.ROOT), str(repo)], check=True, env=m.checkout_environment())
+        self.assertEqual(ambient, os.environ.get('GIT_LFS_SKIP_SMUDGE'))
         self.git(repo, 'remote', 'remove', 'origin')
         self.assertFalse(self.git(repo, 'remote'))
         self.git(repo, 'config', 'user.name', 'Disposable synthetic rehearsal')
@@ -82,6 +132,13 @@ class CloseoutTests(unittest.TestCase):
         # Include current uncommitted consumer repairs, only inside disposable repo.
         for directory in ('tools', 'Docs/Production', '.github/workflows'):
             shutil.copytree(m.ROOT / directory, repo / directory, dirs_exist_ok=True)
+        # Include actual authorized pending runtime repairs as well as tools;
+        # never invent a changed file merely to satisfy a blocker disposition.
+        c0=m.load(m.ROOT/m.TASK/'C0_ROOT_CAUSE.json')
+        causal_paths=sorted({path for blocker in c0['blockers'] for path in blocker['files_to_change'] if (m.ROOT/path).is_file()})
+        for rel in causal_paths:
+            target_path=repo/rel;target_path.parent.mkdir(parents=True,exist_ok=True)
+            shutil.copy2(m.ROOT/rel,target_path)
         docs = repo / 'Docs/Production'
         registry = m.load(docs / 'WORKSTREAM_REGISTRY.json')
         ws = next(r for r in registry['workstreams'] if r['task_id'] == 'T10')
@@ -93,7 +150,7 @@ class CloseoutTests(unittest.TestCase):
         own = m.load(docs / 'PATH_OWNERSHIP.json')
         next(r for r in own['active_owners'] if r['task_id'] == 'T10')['status'] = 'UNDER_REVIEW'
         m.write(repo, 'Docs/Production/PATH_OWNERSHIP.json', own)
-        self.git(repo, 'add', 'tools', 'Docs/Production', '.github/workflows')
+        self.git(repo, 'add', 'tools', 'Docs/Production', '.github/workflows', *causal_paths)
         self.git(repo, 'commit', '--quiet', '-m', 'DIAGNOSTIC ONLY: disposable consumer rehearsal')
         return repo, base, self.git(repo, 'rev-parse', 'HEAD')
 

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "requesting_task": "T10",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "authorization": "Also when we find issues with the architecture and/or critics, we need to fix.",
+  "reviewer": "/root/t10_c0_critic",
+  "blocker": "C0-T10-B052",
+  "classification": "TOOLING_DEFECT",
+  "runner_before_sha256": "48482bfa79bf0e5cc16cf942b93925af68bfa5c85c83faa66304da59ccf82261",
+  "scope": [
+    "tools/havenline/production/collect_failure_job_logs.py",
+    "tools/havenline/production/tests/test_failure_job_log_collection.py"
+  ],
+  "permitted_behavior_change": "Use gh api --allow-escape-sequences for exact completed-job log bytes; report bounded sanitized return code and stderr on failure. Preserve atomic output and strict identity, state, cancellation and startup contracts. No retries or fallback. Prove same-parent hosted transport before expensive validation.",
+  "preserved": [
+    "all critics, dimensions, thresholds, model/runtime/budgets",
+    "locked reusable workflows",
+    "approval authority",
+    "shipping runtime"
+  ]
+}

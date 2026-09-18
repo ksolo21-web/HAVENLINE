@@ -11,6 +11,20 @@ import subprocess
 import tempfile
 
 
+def sanitized_error(raw):
+    text = raw.decode('utf-8', errors='replace')
+    # Redact credentials before truncation, including ambient authentication values.
+    for key in ('GH_TOKEN', 'GITHUB_TOKEN', 'GH_ENTERPRISE_TOKEN'):
+        value = os.environ.get(key)
+        if value:
+            text = text.replace(value, '[REDACTED]')
+    text = re.sub(r'https?://[^\s<>]+', '[URL REDACTED]', text)
+    text = re.sub(r'(?i)(?:bearer|token|authorization)\s*[:=]?\s+\S+', '[AUTH REDACTED]', text)
+    text = re.sub(r'(?:gh[pousr]_[A-Za-z0-9_]+|github_pat_[A-Za-z0-9_]+)', '[TOKEN REDACTED]', text)
+    text = re.sub(r'\x1b\[[0-?]*[ -/]*[@-~]', '', text)
+    return ''.join(c for c in text if c.isprintable() or c in '\n\t')[:1500]
+
+
 def collect(run, jobs, run_id, repository, output):
     if not re.fullmatch(r'[A-Za-z0-9_.-]+/[A-Za-z0-9_.-]+', repository):
         raise ValueError('canonical owner/repository required')
@@ -53,9 +67,9 @@ def collect(run, jobs, run_id, repository, output):
                 'run_cancelled': cancelled, 'non_product_diagnostic': cancelled or marker is not None,
                 'diagnostic_marker': marker, 'jobs': []}
     for job in sorted(selected, key=lambda row: row['id']):
-        result = subprocess.run(['gh', 'api', f"repos/{repository}/actions/jobs/{job['id']}/logs"], capture_output=True)
+        result = subprocess.run(['gh', 'api', '--allow-escape-sequences', f"repos/{repository}/actions/jobs/{job['id']}/logs"], capture_output=True)
         if result.returncode or not result.stdout.strip():
-            raise ValueError(f"job {job['id']} log retrieval failed or empty")
+            raise ValueError(json.dumps({"error": "job log retrieval failed or empty", "job_id": job["id"], "returncode": result.returncode, "stdout_bytes": len(result.stdout), "stderr": sanitized_error(result.stderr)}))
         raw = result.stdout
         envelope['jobs'].append({'job_id': job['id'], 'name': job.get('name'),
             'conclusion': job['conclusion'], 'log_bytes': len(raw),

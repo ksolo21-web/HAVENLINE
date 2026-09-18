@@ -9,6 +9,14 @@
   "failed_run_id": 35353927324,
   "failed_job_id": 105628493430,
   "integration_head": "82518322a8e0dc9ee6ef12a759bf4ca723c8a490",
+  "failed_candidate_role": "CUMULATIVE_REPAIR_CYCLE_ROOT",
+  "latest_failed_candidate": "48cc9060e45204b7376a90818b758bf4f4143469",
+  "latest_failed_run_ids": [
+    35384188010,
+    35384188651,
+    35384188659
+  ],
+  "latest_failed_integration_head": "8950fbd53744d20b98b5c0cec992f542c09617ac",
   "diagnosis_status": "DIAGNOSIS_COMPLETE",
   "terminal_class": "MIXED",
   "complete_known_blocker_set": true,
@@ -487,12 +495,168 @@
         "Run the unchanged benchmark and all task/domain/integration/save/regression checks. Do not raise node, material, texture, memory, timing, reviewer or score thresholds.",
         "Require fresh exact-source C1/C2/C3/C4/C6/C7 reviews on the repaired frozen candidate; the historical C4 failure and every original score/defect remain immutable and non-reusable."
       ]
+    },
+    {
+      "id": "C0-T10-B049",
+      "classification": "TOOLING_DEFECT",
+      "symptom": "The staged closeout assembler rejects the genuine canonical C0 report before validating any approval proof because its recursive diagnostic-provenance scan treats narrative history containing the words `diagnostic-only` as reusable diagnostic evidence.",
+      "evidence": [
+        "Calling assemble_closeout.reject_diagnostic on the current canonical Docs/Production/T10/C0_ROOT_CAUSE.json raises `diagnostic provenance cannot become production closeout` solely from B039's causal narrative phrase `diagnostic-only reviewer canary`.",
+        "verify_inputs currently calls the generic read_reference for the C0 report, and read_reference performs the recursive lexical diagnostic scan before the later exact canonical-byte comparison.",
+        "The C0 report is a non-voting diagnosis and historical authority, not a scored approval proof. Its explicit fields require non_voting=true, approval_claimed=false and score_assigned=false, so truthful diagnostic history must remain expressible without making downstream critic, gate or disposition proofs reusable.",
+        "The independent closure-boundary reproduction confirmed that the canonical report fails at this boundary while a later diagnostic approval proof must still reject."
+      ],
+      "root_cause": "assemble_closeout uses one evidence-provenance reader for two different trust domains: exact canonical C0 diagnosis and reusable approval proof. A broad lexical safeguard appropriate for approval evidence is therefore applied to descriptive root-cause prose and rejects truthful history before exact canonical identity can be checked.",
+      "affected_object": "T10 canonical C0 diagnosis ingestion at staged closeout",
+      "causal_fix": "Separate only the canonical C0 read path. Add a hash-bound JSON primitive and a dedicated reader that requires exact byte equality with the repository canonical C0 plus C0/non-voting/validated/complete/DIAGNOSIS_COMPLETE/no-approval/no-score identity, while rejecting truthy structured diagnostic/fixture markers. Permit diagnostic vocabulary only in this exact canonical narrative. Keep the existing recursive structured and lexical rejection unchanged for every critic, gate, verification, disposition, export and factory proof.",
+      "files_to_change": [
+        "tools/havenline/task10/assemble_closeout.py",
+        "tools/havenline/task10/tests/test_assemble_closeout.py",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "The actual unmodified canonical C0 report is accepted by the dedicated reader, after which verify_inputs reaches and rejects a deliberately diagnostic approval proof.",
+        "Wrong hash, byte-altered or relocated canonical copy, wrong critic/task identity, incomplete diagnosis, voting mode, approval claim or assigned score all reject.",
+        "Truthy structured diagnostic/fixture markers still reject in the canonical C0 reader, and every ordinary read_reference caller continues to reject both structured markers and diagnostic lexical provenance.",
+        "No score, disposition, lifecycle, approval manifest or completion record is created by this reader."
+      ]
+    },
+    {
+      "id": "C0-T10-B050",
+      "classification": "TOOLING_DEFECT",
+      "symptom": "Both 48cc primary validation lanes stop before tests because default prepare_activation validation rejects the canonical T10 FIX_REQUIRED lifecycle; the same hard-coded list would later reject INTEGRATION_READY, INTEGRATING and UNDER_REVIEW.",
+      "evidence": [
+        "Run 35384188651 job 105727103368 and run 35384188659 job 105727104600 both report exactly `pre-integration registry T10 status is illegal: FIX_REQUIRED` from prepare_activation.py.",
+        "validate_preparation currently recognizes only LOCKED, PREPARED, ASSIGNED, BUILDING_ISOLATED and BUILT_PENDING_DEPENDENCY even though the registered workflow invokes it in repair and integration-review phases.",
+        "The four current T10 authorities agree on FIX_REQUIRED: dependency graph, workstream registry, active ownership and task-gates active_status. The validator rejects the name rather than an authority mismatch.",
+        "The task workflows also run on the final integration branch before closure, so INTEGRATION_READY, INTEGRATING and UNDER_REVIEW are currently knowable serial failures."
+      ],
+      "root_cause": "A preparation-era validation-state allowlist was reused as the lifecycle allowlist for the long-lived registered validation command. It was never composed with repair and integration-review states and does not verify that active authority records remain synchronized.",
+      "affected_object": "T10 validation-only lifecycle handling in prepare_activation",
+      "causal_fix": "Expand only default validation to recognize LOCKED, PREPARED, ASSIGNED, BUILDING_ISOLATED, BUILT_PENDING_DEPENDENCY, BLOCKED, FIX_REQUIRED, INTEGRATION_READY, INTEGRATING and UNDER_REVIEW. For active states require consistent graph, registry, active-owner and task-gate identity/status plus frozen owner, branch, alias and base. Keep integration_allowed=false and task_approved=false. Do not add APPROVED, broaden `--activate --write`, change transition authority or erase repair history.",
+      "files_to_change": [
+        "tools/havenline/task10/prepare_activation.py",
+        "tools/havenline/task10/tests/test_prepare_activation_validation.py",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "Replay the actual current FIX_REQUIRED checkout through the exact prepare_activation CLI and require passed=true with integration_allowed=false and task_approved=false.",
+        "Disposable fixtures prove every allowed validation state, including INTEGRATION_READY, INTEGRATING and UNDER_REVIEW, while preserving exact T10 owner/branch/alias/base and four-authority agreement.",
+        "Hostile partial-state, wrong owner/branch/alias/base, missing active pointer, APPROVED, unknown state and future-task activation fixtures fail closed.",
+        "Separate tests prove `--activate --write` transition legality is unchanged and no validation-only state grants integration or approval."
+      ]
+    },
+    {
+      "id": "C0-T10-B051",
+      "classification": "TOOLING_DEFECT",
+      "symptom": "The 48cc adapter lane fails two closeout-assembler tests in a clean hosted runner because their disposable local clone attempts to smudge an unrelated historical T01 LFS object that is absent from the remote object store.",
+      "evidence": [
+        "Run 35384188010 job 105727103664 shows git-lfs trying to download Docs/Production/T01/ActualReview/R9/clearance/clearance-baseline.png and failing with `remote missing object`, before either closeout test can execute its assertions.",
+        "test_assemble_closeout.prepare_repo uses `git clone --shared` with an immediate checkout, and production assemble uses `git clone --shared --no-checkout` followed by `git checkout`; neither supplies an explicit child-process LFS policy.",
+        "The earlier local 93-test pass depended on ambient GIT_LFS_SKIP_SMUDGE behavior, so it was not a hermetic proof of the hosted path.",
+        "The staged closeout reads governance, task tools and bounded ReviewExports bytes only; it neither requires nor validates historical T01 rendered assets."
+      ],
+      "root_cause": "Disposable closeout repositories inherit ambient Git LFS smudge behavior. Checkout therefore expands every historical LFS pointer even though the consumer never reads those assets, making an irrelevant missing binary a prerequisite and allowing local ambient configuration to mask the hosted failure.",
+      "affected_object": "Hermetic disposable-git closeout rehearsal and staged assembler checkout",
+      "causal_fix": "Pass an explicit child-only GIT_LFS_SKIP_SMUDGE=1 environment to the assembler clone and checkout and to the test fixture clone. Preserve normal repository/global attributes, the task-local ReviewExports native-Git override, exact committed-blob verification and every closeout consumer. Do not change or fetch historical LFS content and do not set a process-global or workflow-global bypass.",
+      "files_to_change": [
+        "tools/havenline/task10/assemble_closeout.py",
+        "tools/havenline/task10/tests/test_assemble_closeout.py",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "With ambient GIT_LFS_SKIP_SMUDGE explicitly absent, the disposable clone and actual assembler checkout complete while unrelated historical LFS files remain pointer bytes and are never consumed.",
+        "The real two-stage closeout rehearsal still requires exact git-show bytes for every bounded ReviewExports ZIP and rejects pointer blobs, missing local override, wrong digest and out-of-scope ZIPs.",
+        "A hosted clean-checkout preflight executes the actual task tests and closeout rehearsal before another full T10 candidate run.",
+        "No repository-wide .gitattributes, historical artifact, runtime asset or LFS object is modified."
+      ]
+    },
+    {
+      "id": "C0-T10-B052",
+      "classification": "TOOLING_DEFECT",
+      "symptom": "Both reusable C0 jobs for 48cc fail while collecting already-completed source-job logs and discard the command return code and stderr, leaving the automated root-cause system without the very failure evidence it is meant to analyze.",
+      "evidence": [
+        "Jobs 105727186455 and 105727203500 fail in collect_failure_job_logs.py with only `job ... log retrieval failed or empty` after source jobs 105727103368 and 105727104600 are complete.",
+        "The helper invokes `gh api .../logs` with capture_output but drops returncode-specific context and stderr on failure, so the retained C0 artifact cannot distinguish terminal-escape rejection, authentication, authorization, redirect or transient availability failures.",
+        "The externally retained 48cc job logs contain ANSI escape bytes. The official gh api interface requires `--allow-escape-sequences` to emit such bytes, and the GitHub job-log endpoint returns a redirect to a plain-text log; this makes omitted escape handling the leading causal explanation, subject to hosted same-parent proof.",
+        "The existing local unit suite mocks successful bytes and never exercises the real same-parent GitHub CLI/API boundary. Repeated full T10 pushes therefore discovered orchestration defects serially before expensive review could start."
+      ],
+      "root_cause": "The job-log collector assumes arbitrary log bytes are printable through gh's default output guard and erases diagnostic details when that assumption fails. The repair system also lacks a cheap hosted preflight that exercises exact lifecycle, LFS, canonical-C0, closeout and same-parent log boundaries before triggering the full benchmark and six critics.",
+      "affected_object": "T10 failure-evidence collection and hosted anti-loop preflight",
+      "causal_fix": "In the integration-owned collector, fetch exact job logs with gh api --allow-escape-sequences, preserve raw bytes, and report bounded sanitized return code/stderr on failure without exposing credentials or signed URLs; keep strict run/job selection, cancellation/startup semantics and atomic output. Add a task-owned dedicated preflight branch/workflow that runs clean-checkout preparation, scope/adapter, production/task suites, canonical-C0 and closeout rehearsal, then proves same-parent completed-job log retrieval with an exact sentinel and repository/run/job identity. Add no retry unless that proof identifies one bounded transient status; authentication and permission failures remain immediate. Preflight output is diagnostic only and cannot become critic or approval evidence.",
+      "files_to_change": [
+        "tools/havenline/production/collect_failure_job_logs.py",
+        "tools/havenline/production/tests/test_failure_job_log_collection.py",
+        "Docs/Production/ChangeRequests/T10-c0-job-log-verbatim-retrieval.json",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "tools/havenline/production/tests/test_t10_activation_validation.py",
+        ".github/workflows/havenline-task10-pipeline-preflight.yml",
+        "tools/havenline/task10/pipeline_preflight.py",
+        "tools/havenline/task10/tests/test_pipeline_preflight.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "Collector tests require the exact allow-escape command, byte-preserving JSON output, deterministic job order, bounded sanitized return-code/stderr diagnostics and atomic failure without partial replacement; credential-like values and signed URL parameters never appear.",
+        "All existing wrong-run/repository, duplicate/cross-run/inconsistent-job, empty-response, cancellation, timeout and startup-failure tests remain fail-closed. No broad fallback or swallowed error is added.",
+        "The preflight is pinned, non-cancelling and branch-isolated. It uses a clean checkout with no ambient LFS skip, executes actual preparation/scope/adapter, production and task suites, canonical-C0 reader and closeout rehearsal, and performs no Godot benchmark, model review, scoring, aggregation, lifecycle approval or publication.",
+        "A dedicated producer job emits a unique ANSI sentinel and then fails intentionally; a dependent `if: always()` probe requires the cheap-boundary job to pass, verifies exact API metadata and fetches exactly that completed failed job's log while the parent run is active through the production collector primitive. The diagnostic workflow is expected to conclude failure, while the probe result is explicitly non-voting and non-reusable. Missing sentinel, wrong job/run/repository, incomplete metadata, API failure and empty bytes all reject.",
+        "Only the exact commit/tree that passes hosted preflight may be promoted to the T10 branch. The normal primary/isolated workflows then run once and every job for that SHA finishes; preflight output is never reused as specialist or closeout approval evidence."
+      ]
     }
   ],
   "failure_intelligence_query": {
     "task_id": "T10",
-    "gate": "C4",
-    "query": "blocked state text density obscures next action missing resource visual indicators committing progress resource transfer",
+    "gate": null,
+    "query": "canonical C0 narrative diagnostic token prepare activation FIX_REQUIRED INTEGRATION_READY LFS smudge clean checkout failed job logs gh api escape sequences same parent preflight",
     "matches": [],
     "no_current_t10_match": true,
     "historical_match_is_advisory_only": true
@@ -513,16 +677,22 @@
     "/workspace/scratch/59b74b9aed55/t10-c7-visual-diagnosis/C4-cohesive-repair-proposal.md",
     "/workspace/scratch/59b74b9aed55/t10-interface-audit-visual/AUDIT.md",
     "/workspace/scratch/59b74b9aed55/T10-closure-boundary-audit-0aa940f.md",
-    "Local unpublished B037 commit 0aa940f831106bed1b62a77486fc5bfcbf6df361"
+    "Local unpublished B037 commit 0aa940f831106bed1b62a77486fc5bfcbf6df361",
+    "GitHub Actions run 35384188651 job 105727103368 and /workspace/scratch/59b74b9aed55/t10-48cc-job-105727103368.log",
+    "GitHub Actions run 35384188659 job 105727104600 and /workspace/scratch/59b74b9aed55/t10-48cc-job-105727104600.log",
+    "GitHub Actions run 35384188010 job 105727103664 and /workspace/scratch/59b74b9aed55/t10-48cc-job-105727103664.log",
+    "Reusable C0 jobs 105727186455 and 105727203500 with retained logs /workspace/scratch/59b74b9aed55/t10-48cc-job-105727186455.log and /workspace/scratch/59b74b9aed55/t10-48cc-job-105727203500.log",
+    "GitHub Actions artifact 10562623813 for 48cc primary preparation failure",
+    "Official gh api contract exposes --allow-escape-sequences; official GitHub job-log endpoint returns redirected plain-text job logs"
   ],
   "unexecuted_checks": [
-    "The reconciled B037-B047 owner/task implementation has passed reported local production, task and post-build checks but has not yet been published as a new frozen task candidate.",
-    "B048's bounded world-response presentation repair and its direct tests have not yet been implemented or validated.",
-    "The B046 repair has a genuine larger-than-250000-byte mock-network byte-identity proof but has not yet executed in a fresh hosted exact-source specialist run.",
-    "Fresh exact-source C1/C2/C3/C4/C6/C7 reviews for a repaired frozen candidate have not executed.",
-    "The repaired closeout assembler has passed its disposable consumer rehearsal but has not yet been reconciled into and post-build validated on the next frozen task candidate.",
+    "The 48cc source contains B037-B048 and B048 direct Godot tests passed, but its primary, isolated and adapter workflows failed before capture, benchmark or critic review; it has no approval evidence.",
+    "B049-B052 are diagnosed and planned but have not yet been implemented, independently reviewed or exercised in the dedicated hosted preflight.",
+    "B046's full-request repair has not yet completed a fresh normal specialist run because 48cc stopped at preparation.",
+    "Fresh exact-source C1/C2/C3/C4/C6/C7 reviews for the repaired post-B052 source have not executed.",
+    "The closeout assembler has not yet passed its actual canonical-C0 path and clean-hosted-LFS rehearsal together.",
     "Final integration-scope validation, integrated-source evidence, factory closeout, G1-G14, retention, migration, lifecycle transition and APPROVED closure remain unexecuted.",
-    "No current specialist score or approval may be inferred from interface diagnostics or prior-source reviews."
+    "No preflight, diagnostic canary, historical reviewer score or prior-source artifact may be inferred as specialist approval."
   ],
   "builder_action": "REPAIR",
   "candidate_freeze": {
@@ -531,13 +701,14 @@
     "cancelled_run_product_judgment": false,
     "pre_full_validation_requirements": [
       "canonical FIX_REQUIRED lifecycle and builder gate active",
-      "all B037-B048 static/unit/production checks pass",
+      "all B037-B052 static/unit/production checks pass",
       "immutable c7a18 readiness replay passes",
       "diagnostic transport contracts pass while the historical C4 product failure remains failed and non-reusable",
-      "disposable full closeout rehearsal passes"
+      "disposable full closeout rehearsal passes with the actual canonical C0 and explicit LFS-skip child environment",
+      "the exact candidate tree passes the dedicated clean hosted pipeline preflight including same-parent raw job-log retrieval"
     ]
   },
-  "summary": "The completed anti-loop diagnostic proves eleven tooling/evidence/governance defects plus one genuine C4 product defect. Preserve the historical C4 failure, repair the bounded neutral four-node resource/action feedback together with the already proved control-plane fixes, then publish one new frozen candidate for full evidence and fresh independent review.",
+  "summary": "The cumulative repair cycle now contains fifteen tooling/evidence/governance defects plus the bounded B048 C4 product defect. Candidate 48cc proved the product patch and earlier control-plane work locally but exposed four deterministic orchestration boundaries before any expensive evidence ran. Repair B049-B052, prove the exact tree in one cheap hosted preflight, then promote that same tree for one full primary/isolated run and fresh independent review.",
   "confidence": "high",
   "approval_claimed": false,
   "score_assigned": false,

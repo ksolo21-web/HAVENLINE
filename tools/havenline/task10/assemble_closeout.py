@@ -28,6 +28,7 @@ import copy
 from datetime import datetime, timezone
 import hashlib
 import json
+import os
 from pathlib import Path
 import re
 import shutil
@@ -41,6 +42,7 @@ TASK = 'Docs/Production/T10'
 EVIDENCE = 'Docs/Production/Evidence/T10'
 PRODUCTION = 'tools/havenline/production'
 CRITICS = ('C1', 'C2', 'C3', 'C4', 'C6', 'C7')
+DIAGNOSTIC_FLAGS = {'diagnostic_only', 'synthetic', 'test_fixture', 'fixture_only'}
 AUTHORITIES = ('DEPENDENCY_GRAPH.json', 'WORKSTREAM_REGISTRY.json',
                'PATH_OWNERSHIP.json', 'task-gates.json', 'GATE_RESULT_INDEX.json')
 
@@ -65,7 +67,7 @@ def require(condition, message):
 def reject_diagnostic(value):
     if isinstance(value, dict):
         for key, item in value.items():
-            require(not (key.lower() in {'diagnostic_only', 'synthetic', 'test_fixture', 'fixture_only'} and item),
+            require(not (key.lower() in DIAGNOSTIC_FLAGS and item),
                     'diagnostic inputs cannot become production closeout')
             reject_diagnostic(item)
     elif isinstance(value, list):
@@ -77,15 +79,53 @@ def reject_diagnostic(value):
                 'diagnostic provenance cannot become production closeout')
 
 
-def read_reference(ref):
+def read_hash_bound_json(ref):
     require(isinstance(ref, dict) and set(ref) == {'path', 'sha256'}, 'hash-bound file reference required')
     path = Path(ref['path'])
     require(path.is_file() and not path.is_symlink(), 'proof must be a regular non-symlink file')
     data = path.read_bytes()
     require(digest(data) == ref['sha256'], 'proof hash mismatch: ' + str(path))
-    value = json.loads(data)
+    return json.loads(data), data
+
+
+def read_reference(ref):
+    value, data = read_hash_bound_json(ref)
     reject_diagnostic(value)
     return value, data
+
+
+def reject_structured_diagnostic(value):
+    if isinstance(value, dict):
+        for key, item in value.items():
+            require(not (key.lower() in DIAGNOSTIC_FLAGS and item),
+                    'diagnostic inputs cannot become production closeout')
+            reject_structured_diagnostic(item)
+    elif isinstance(value, list):
+        for item in value:
+            reject_structured_diagnostic(item)
+
+
+def read_c0_reference(ref):
+    # Non-voting diagnosis history may discuss diagnostic canaries. It is never
+    # scored approval proof; only this exact canonical authority has that context.
+    value, data = read_hash_bound_json(ref)
+    require(isinstance(value, dict), 'canonical C0 report must be an object')
+    reject_structured_diagnostic(value)
+    expected = dict(task_id='T10', critic_id='C0', non_voting=True, validated=True,
+                    complete_known_blocker_set=True, diagnosis_status='DIAGNOSIS_COMPLETE',
+                    approval_claimed=False, score_assigned=False)
+    for key, expected_value in expected.items():
+        require(type(value.get(key)) is type(expected_value) and value[key] == expected_value,
+                'canonical C0 metadata mismatch: ' + key)
+    canonical = (ROOT / TASK / 'C0_ROOT_CAUSE.json').read_bytes()
+    require(data == canonical, 'C0 input differs from canonical authority')
+    return value, data
+
+
+def checkout_environment():
+    # Avoid downloading unrelated historical LFS assets in local evidence clones.
+    # Return a child environment; never modify process, repository or global config.
+    return dict(os.environ, GIT_LFS_SKIP_SMUDGE='1')
 
 
 def source_pass(value, candidate, label):
@@ -253,10 +293,7 @@ def verify_inputs(spec):
         require(re.fullmatch('[0-9a-f]{40}', str(spec.get(name, ''))), 'exact ' + name + ' required')
     instant = datetime.fromisoformat(spec['approved_at'].replace('Z', '+00:00'))
     require(instant.tzinfo is not None and instant <= datetime.now(timezone.utc), 'valid nonfuture timestamp required')
-    c0, c0_bytes = read_reference(spec['c0_report'])
-    require(c0.get('task_id') == 'T10' and c0.get('complete_known_blocker_set') is True and c0.get('validated') is True, 'canonical complete C0 report required')
-    canonical = (ROOT / TASK / 'C0_ROOT_CAUSE.json').read_bytes()
-    require(canonical == c0_bytes, 'C0 input differs from canonical authority')
+    c0, c0_bytes = read_c0_reference(spec['c0_report'])
     inputs, proof_bytes = {}, {'C0_ROOT_CAUSE.json': c0_bytes}
     for label in ('gates', 'path_validation', 'tests', 'progression', 'factory_observation', 'defect_dispositions'):
         value, data = read_reference(spec[label])
@@ -352,9 +389,9 @@ def assemble(spec, out):
         reject_diagnostic(load(path))
     with tempfile.TemporaryDirectory(prefix='t10-proposed-') as temporary:
         repo = Path(temporary) / 'repo'
-        subprocess.run(['git', 'clone', '--quiet', '--shared', '--no-checkout', str(ROOT), str(repo)], check=True)
+        subprocess.run(['git', 'clone', '--quiet', '--shared', '--no-checkout', str(ROOT), str(repo)], check=True, env=checkout_environment())
         subprocess.run(['git', 'remote', 'remove', 'origin'], cwd=repo, check=True)
-        subprocess.run(['git', 'checkout', '--quiet', spec['export_commit']], cwd=repo, check=True)
+        subprocess.run(['git', 'checkout', '--quiet', spec['export_commit']], cwd=repo, check=True, env=checkout_environment())
         require(not subprocess.check_output(['git', 'remote'], cwd=repo).strip(), 'staging repository must have no remotes')
         verify_export_storage(repo)
         require((repo / TASK / 'C0_ROOT_CAUSE.json').read_bytes() == proof_bytes['C0_ROOT_CAUSE.json'], 'C0 authority differs from the immutable export checkout')

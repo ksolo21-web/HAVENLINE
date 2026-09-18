@@ -28,7 +28,7 @@ class FailureJobLogsTests(unittest.TestCase):
         result = self.invoke()
         self.assertEqual([2, 4], [row['job_id'] for row in result['jobs']])
         self.assertEqual(result, json.loads(self.output.read_text()))
-        self.assertEqual(['gh', 'api', 'repos/owner/repo/actions/jobs/2/logs'], api.call_args_list[0].args[0])
+        self.assertEqual(['gh', 'api', '--allow-escape-sequences', 'repos/owner/repo/actions/jobs/2/logs'], api.call_args_list[0].args[0])
         self.assertEqual('actual failure\n', result['jobs'][0]['raw_log'])
     @patch('collect_failure_job_logs.subprocess.run')
     def test_identity_and_inconsistent_states_fail_before_api(self, api):
@@ -86,3 +86,30 @@ class FailureJobLogsTests(unittest.TestCase):
         for conclusion in ['failure', 'timed_out', 'startup_failure']:
             self.run.update(status='completed', conclusion=conclusion)
             self.assertEqual([4], [row['job_id'] for row in self.invoke()['jobs']])
+
+    @patch('collect_failure_job_logs.subprocess.run')
+    def test_ansi_log_bytes_are_preserved(self, api):
+        import hashlib
+        raw = b'\x1b[31mactual failure\x1b[0m\n'
+        api.return_value = subprocess.CompletedProcess([], 0, raw, b'')
+        row = self.invoke()['jobs'][0]
+        self.assertEqual(raw.decode(), row['raw_log'])
+        self.assertEqual(hashlib.sha256(raw).hexdigest(), row['log_sha256'])
+        self.assertEqual(len(raw), row['log_bytes'])
+
+    @patch('collect_failure_job_logs.subprocess.run')
+    def test_error_is_bounded_sanitized_and_fail_closed(self, api):
+        import os
+        raw = b'HTTP 403 Forbidden https://signed.example/log?sig=secret Bearer sensitive ghp_secret github_pat_secret customsecret \x1b[31mdenied\x1b[0m ' + b'x' * 2000
+        api.return_value = subprocess.CompletedProcess([], 1, b'', raw)
+        with patch.dict(os.environ, GH_TOKEN='customsecret'):
+            with self.assertRaises(ValueError) as caught:
+                self.invoke()
+        report = json.loads(str(caught.exception))
+        self.assertEqual(1, report['returncode'])
+        self.assertIn('HTTP 403 Forbidden', report['stderr'])
+        self.assertLessEqual(len(report['stderr']), 1500)
+        for secret in ['secret', 'sensitive', 'https://', '\x1b']:
+            self.assertNotIn(secret, report['stderr'])
+        self.assertFalse(self.output.exists())
+        self.assertEqual(1, api.call_count)

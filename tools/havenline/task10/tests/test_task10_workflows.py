@@ -23,7 +23,7 @@ def workflow_errors(source):
 class WorkflowTests(unittest.TestCase):
     def test_all_task_actions_are_pinned_and_finish_sha(self):
         paths = list(WORKFLOWS.glob('havenline-task10-*.yml'))
-        self.assertEqual(6, len(paths))
+        self.assertEqual(7, len(paths))
         for path in paths:
             self.assertEqual([], workflow_errors(path.read_text()), path.name)
 
