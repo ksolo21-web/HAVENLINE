@@ -115,4 +115,35 @@ class ArchitectureV31Tests(unittest.TestCase):
         r=validate_fingerprint();self.assertTrue(r['passed'],r['errors'])
     def test_complete_v31_validation_passes(self):
         r=validate_v31();self.assertTrue(r['passed'],r['errors']);self.assertEqual(r['task_count'],62);self.assertEqual(r['snapshot_count'],62)
+class HistoricalT09ClosureTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        import subprocess
+        from closure_validator import ROOT,T09_CLOSURE_CHECKPOINT
+        cls.objects={name:subprocess.check_output(['git','show',T09_CLOSURE_CHECKPOINT+':Docs/Production/'+name],cwd=ROOT) for name in ['T09/verified-completion.json','DEPENDENCY_GRAPH.json','PATH_OWNERSHIP.json','task-gates.json']}
+    def check(self,objects=None,completion=None):
+        from closure_validator import t09_historical_lifecycle_errors
+        rows=objects if objects is not None else self.objects
+        with patch('closure_validator.subprocess.check_output',side_effect=lambda args,**kwargs:rows[args[-1].split(':Docs/Production/')[1]]):
+            return t09_historical_lifecycle_errors(self.objects['T09/verified-completion.json'] if completion is None else completion)
+    def test_valid_historical_closeout_after_activation(self):
+        self.assertEqual([],self.check())
+    def test_changed_completion_rejects(self):
+        self.assertTrue(self.check(completion=self.objects['T09/verified-completion.json']+b' '))
+    def test_missing_or_malformed_objects_reject(self):
+        for name in self.objects:
+            with self.subTest(name=name):
+                rows=dict(self.objects);del rows[name];self.assertTrue(self.check(rows))
+                rows=dict(self.objects);rows[name]=b'{';self.assertTrue(self.check(rows))
+    def test_missing_git_history_rejects(self):
+        import subprocess
+        from closure_validator import t09_historical_lifecycle_errors
+        with patch('closure_validator.subprocess.check_output',side_effect=subprocess.CalledProcessError(128,['git'])):
+            self.assertTrue(t09_historical_lifecycle_errors(self.objects['T09/verified-completion.json']))
+    def test_historical_temporal_violations_reject(self):
+        import json
+        for name,change in [('DEPENDENCY_GRAPH.json',lambda x:x['tasks']['T09'].update(status='UNDER_REVIEW')),('DEPENDENCY_GRAPH.json',lambda x:x['tasks']['T10'].update(status='ASSIGNED')),('PATH_OWNERSHIP.json',lambda x:x['active_owners'].append({'task_id':'T10'})),('task-gates.json',lambda x:x.update(active_task='T10'))]:
+            with self.subTest(name=name):
+                rows=dict(self.objects);data=json.loads(rows[name]);change(data);rows[name]=json.dumps(data).encode();self.assertTrue(self.check(rows))
+
 if __name__=='__main__':unittest.main(verbosity=2)
