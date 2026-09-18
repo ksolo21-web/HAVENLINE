@@ -34,6 +34,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: havenline-task10-world-transformation-${{ github.ref }}
@@ -208,3 +209,14 @@ jobs:
           path: task10-evidence
           if-no-files-found: error
           retention-days: 14
+
+  c0-diagnose:
+    name: C0 diagnosis after failed T10 gates
+    needs: [first-builder-milestone]
+    if: ${{ always() && (needs.first-builder-milestone.result == 'failure') }}
+    uses: ./.github/workflows/havenline-c0-root-cause.yml
+    with:
+      task_id: T10
+      failed_run_id: ${{ github.run_id }}
+      failed_candidate: ${{ github.sha }}
+      task_branch: havenline/T10-world-transformation

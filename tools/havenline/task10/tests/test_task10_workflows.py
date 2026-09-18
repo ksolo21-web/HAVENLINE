@@ -5,6 +5,8 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[4]
 WORKFLOWS = ROOT / '.github/workflows'
 PINS = {'actions/checkout': 'fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09',
+        'actions/cache/restore': 'caa296126883cff596d87d8935842f9db880ef25',
+        'actions/cache/save': 'caa296126883cff596d87d8935842f9db880ef25',
         'actions/upload-artifact': 'b7c566a772e6b6bfb58ed0dc250532a479d7789f'}
 
 
@@ -21,7 +23,7 @@ def workflow_errors(source):
 class WorkflowTests(unittest.TestCase):
     def test_all_task_actions_are_pinned_and_finish_sha(self):
         paths = list(WORKFLOWS.glob('havenline-task10-*.yml'))
-        self.assertEqual(5, len(paths))
+        self.assertEqual(6, len(paths))
         for path in paths:
             self.assertEqual([], workflow_errors(path.read_text()), path.name)
 
@@ -136,3 +138,17 @@ class ClosurePathTests(unittest.TestCase):
                            source.replace("!Docs/Production/T10/CriticRaw/**","!Docs/Production/T10/**",1),
                            source.replace("      - 'tools/havenline/task10/**'\n",'',1)):
                 with self.assertRaises(AssertionError):self.check_paths(broken,name)
+
+class FailureObservationTests(unittest.TestCase):
+    def test_failed_lanes_invoke_c0_with_source_and_finish_running_sha(self):
+        for name,required in [('world-transformation',['first-builder-milestone']),('isolated',['built-pending-dependency','review-c3','review-c4','review-c7'])]:
+            source=(WORKFLOWS/('havenline-task10-'+name+'.yml')).read_text()
+            job=source.split('  c0-diagnose:',1)[1]
+            self.assertIn('always()',job)
+            self.assertIn('uses: ./.github/workflows/havenline-c0-root-cause.yml',job)
+            self.assertIn('failed_candidate: ${{ github.sha }}',job)
+            self.assertIn('failed_run_id: ${{ github.run_id }}',job)
+            self.assertIn('actions: read',source)
+            for dependency in required:
+                self.assertIn("needs."+dependency+".result == 'failure'",job)
+            self.assertNotIn("== 'cancelled'",job)

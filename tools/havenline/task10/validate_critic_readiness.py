@@ -63,6 +63,7 @@ def package_errors(root, candidate):
             entries=manifest['preserved_sources']
             assert {i['path'].removeprefix('critic-input/') for i in entries}==required
             for item in entries+[i for g in manifest['groups'] for i in g['items']]:
+                assert item['path'].startswith('critic-input/'), 'canonical package path required'
                 rel=item['path'].removeprefix('critic-input/')
                 assert rel in index['files'] and index['files'][rel]==item['sha256'], 'manifest/index mismatch '+rel
             if cid!='C6':
@@ -70,7 +71,7 @@ def package_errors(root, candidate):
                 transported=json.loads(json.dumps(manifest))
                 for group in transported['groups']:
                     for item in group['items']:item['path']=item['path'].removeprefix('critic-input/')
-                errors.extend(prompt_errors(transported,root))
+                errors.extend(prompt_errors(transported,root,path_mode='transported'))
                 categories={i['category'] for g in manifest['groups'] for i in g['items']}
                 spec,_=resolve_critic('T10',cid,load(ROOT/'Docs/Production/CRITIC_EXECUTION.json'),load(ROOT/'Docs/Production/CRITIC_MATRIX.json'))
                 assert set(spec['required_categories'])<=categories

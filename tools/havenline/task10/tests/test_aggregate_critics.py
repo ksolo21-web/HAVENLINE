@@ -5,12 +5,26 @@ class OriginalOutputTests(unittest.TestCase):
  def rows(self,cid='C1'):
   sha='a'*40
   raw=dict(scores={'fixture_dimension':9.5},defects=[],coverage_complete=True,confidence='high')
-  record=dict(raw,critic_id=cid,candidate_hash=sha,independent_runtime=True)
+  record=dict(raw,task_id='T10',critic_id=cid,candidate_hash=sha,input_manifest_hash='c'*64,provider='synthetic-provider',model='synthetic-model',request_or_run_id='synthetic-request',independent_runtime=True)
   manifest=dict(candidate_commit=sha,critic_id=cid,groups=[{'id':'fixture'}])
+  if cid in ('C1','C2'):raw.update({k:record[k] for k in ('task_id','candidate_hash','critic_id','input_manifest_hash','provider','model','request_or_run_id','independent_runtime')})
   if cid=='C3':raw=dict(candidate=sha,critic_id=cid,fatal_error=None,groups=[dict(group='fixture',passed=True,review=raw)])
   return [record,raw,manifest,cid,sha]
  def test_unchanged_visual_and_specialist_outputs(self):
-  for cid in ['C1','C3']:m.verify_original(*self.rows(cid))
+  for cid in ['C1','C2','C3']:m.verify_original(*self.rows(cid))
+ def test_visual_raw_identity_rejects_substitution_missing_and_null(self):
+  for cid in ('C1','C2'):
+   for key,wrong in [('task_id','T11'),('candidate_hash','b'*40),('critic_id','C2' if cid=='C1' else 'C1'),('input_manifest_hash','d'*64),('provider','wrong'),('model','wrong'),('request_or_run_id','wrong'),('independent_runtime',False)]:
+    for mode in ('substitute','missing','null'):
+     data=self.rows(cid)
+     if mode=='missing':del data[1][key]
+     else:data[1][key]=wrong if mode=='substitute' else None
+     with self.subTest(cid=cid,key=key,mode=mode),self.assertRaises(AssertionError):m.verify_original(*data)
+ def test_visual_matching_absent_manifest_hashes_do_not_pass(self):
+  for cid in ('C1','C2'):
+   for value in (None,''):
+    data=self.rows(cid);data[0]['input_manifest_hash']=value;data[1]['input_manifest_hash']=value
+    with self.subTest(cid=cid,value=value),self.assertRaises(AssertionError):m.verify_original(*data)
  def test_score_or_disposition_rewrite_rejects(self):
   for key,value in [('scores',{'fixture_dimension':10}),('defects',['actual defect']),('coverage_complete',False),('confidence','low'),('independent_runtime',False),('candidate_hash','b'*40)]:
    data=self.rows();data[0][key]=value

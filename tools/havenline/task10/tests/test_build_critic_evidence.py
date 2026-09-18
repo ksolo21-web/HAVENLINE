@@ -69,6 +69,28 @@ class CompactEvidenceTests(unittest.TestCase):
    self.assertEqual([],m.output_contract_errors(dict(critic_id='C7',groups=[dict(id='transaction',items=[])]),root))
    self.assertTrue(m.output_contract_errors(dict(critic_id='C7',groups=[dict(id='transaction',items=[contract])]),root))
 
+ def test_explicit_transport_mode_preserves_fail_closed_contract(self):
+  with tempfile.TemporaryDirectory() as t:
+   root=Path(t);canonical=self.contract(root)
+   relative=dict(canonical,path='review-output-contract.txt')
+   (root/relative['path']).write_text(m.REVIEW_OUTPUT_CONTRACT)
+   manifest=dict(critic_id='C3',groups=[dict(id='fixture',items=[relative])])
+   self.assertTrue(m.prompt_errors(manifest,root))
+   self.assertEqual([],m.prompt_errors(manifest,root,path_mode='transported'))
+   for mode in ('auto','',None,[], '../'):
+    with self.subTest(mode=mode):self.assertTrue(m.prompt_errors(manifest,root,path_mode=mode))
+   for change in ('canonical','missing','duplicate','not_last','content','hash','kind','category','description'):
+    row=copy.deepcopy(manifest);items=row['groups'][0]['items'];(root/relative['path']).write_text(m.REVIEW_OUTPUT_CONTRACT)
+    if change=='canonical':items[0]=canonical
+    elif change=='missing':items.clear()
+    elif change=='duplicate':items.append(copy.deepcopy(relative))
+    elif change=='not_last':items.append(dict(path='x.png',kind='image'))
+    elif change=='content':(root/relative['path']).write_text('changed')
+    else:items[0][change]='changed'
+    with self.subTest(change=change):self.assertTrue(m.output_contract_errors(row,root,path_mode='transported'))
+   for mode in ('canonical','transported'):
+    self.assertEqual([],m.output_contract_errors(dict(critic_id='C7',groups=[dict(id='transaction',items=[])]),root,path_mode=mode))
+
 class BenchmarkEvidenceTests(unittest.TestCase):
  def fixture(self):
   values=[16.667]*360

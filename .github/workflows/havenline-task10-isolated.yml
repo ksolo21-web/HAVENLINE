@@ -333,3 +333,14 @@ jobs:
       evidence_artifact: havenline-task10-critic-input-${{ github.sha }}
       manifest_name: C7-manifest.json
       output_artifact: havenline-task10-C7-${{ github.sha }}
+
+  c0-diagnose:
+    name: C0 diagnosis after failed T10 gates
+    needs: [built-pending-dependency, review-c3, review-c4, review-c7]
+    if: ${{ always() && (needs.built-pending-dependency.result == 'failure' || needs.review-c3.result == 'failure' || needs.review-c4.result == 'failure' || needs.review-c7.result == 'failure') }}
+    uses: ./.github/workflows/havenline-c0-root-cause.yml
+    with:
+      task_id: T10
+      failed_run_id: ${{ github.run_id }}
+      failed_candidate: ${{ github.sha }}
+      task_branch: havenline/T10-world-transformation

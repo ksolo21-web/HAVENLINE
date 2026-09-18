@@ -19,6 +19,12 @@ def load(path:pathlib.Path)->dict:
 
 def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:str|None=None)->list[str]:
     errors=[]
+    task=c0.get("task_id")
+    canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"
+    canonical_plan=f"Docs/Production/{task}/REPAIR_PLAN.json"
+    bookkeeping={canonical_c0,canonical_plan}
+    if plan.get("c0_report_path")!=canonical_c0 or plan.get("plan_path")!=canonical_plan:
+        errors.append("canonical C0 and repair plan paths required")
     if c0.get("critic_id")!="C0" or c0.get("non_voting") is not True or c0.get("validated") is not True:
         errors.append("validated non-voting C0 report required")
     if c0.get("diagnosis_status")!="DIAGNOSIS_COMPLETE" or c0.get("complete_known_blocker_set") is not True:
@@ -55,22 +61,23 @@ def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:st
         bid=fix.get("blocker_id");blocker=blockers.get(bid,{})
         files=fix.get("files",[]);proof=fix.get("verification",[])
         if not isinstance(files,list) or not files:errors.append(f"{bid} repair files missing")
+        if set(files)&bookkeeping:errors.append(f"{bid} bookkeeping cannot be causal files")
+        causal_files=set(files)-bookkeeping
+        if not causal_files:errors.append(f"{bid} non-bookkeeping causal files required")
         if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")
         if not isinstance(proof,list) or not proof:errors.append(f"{bid} verification missing")
         authorized=set(blocker.get("files_to_change",[]))
         if authorized and not set(files)<=authorized:errors.append(f"{bid} repair exceeds C0 files_to_change")
         if set(files)&must_not:errors.append(f"{bid} repair touches must_not_change")
-        allowed.update(files)
+        allowed.update(causal_files)
     blast=plan.get("blast_radius_checks",[])
     if not isinstance(blast,list) or not blast:errors.append("blast_radius_checks required")
     if actual_changed is not None:
-        plan_path=plan.get("plan_path")
-        allowed_actual=set(allowed)
-        if isinstance(plan_path,str) and plan_path:allowed_actual.add(plan_path)
+        allowed_actual=set(allowed)|bookkeeping
         extra=set(actual_changed)-allowed_actual
         if extra:errors.append("actual repair diff exceeds authorized surface: "+",".join(sorted(extra)))
         for fix in fixes:
-            if not set(fix.get("files",[]))&set(actual_changed):errors.append(f"{fix.get('blocker_id')} causal files did not change")
+            if not (set(fix.get("files",[]))-bookkeeping)&set(actual_changed):errors.append(f"{fix.get('blocker_id')} causal files did not change")
         touched=set(actual_changed)&must_not
         if touched:errors.append("actual repair changed protected files: "+",".join(sorted(touched)))
     return errors

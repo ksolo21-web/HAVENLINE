@@ -19,6 +19,34 @@ C7_REQUEST_SHA256 = "8f24a3216fa5d4d87f88227a4eb64074b8efea2f6d71b2218f5a3157061
 C7_DELTA = "    # T10 owns transactional progression, while T12/T13 own Level 1-100 pacing.\n    # Keep C7 and progression_sim mandatory; specialize only its proof runner.\n    if task_id == \"T10\":\n        gate_execution[\"progression_sim\"] = {\n            \"execution\": \"task_adapter_required\",\n            \"runner\": \"python3 tools/havenline/task10/validate_progression.py --candidate <SHA> --output <record>\",\n            \"rule\": \"Source-bound executable recipe/state graph, prerequisites, exact-once debit, no-skip/replay, branching/inverse and recovery proof; independent C7 remains required.\",\n        }\n"
 
 
+FAILURE = "tools/havenline/production/failure_intelligence.py"
+FAILURE_REQUEST = "Docs/Production/ChangeRequests/T10-failure-packet-log-compatibility.json"
+FAILURE_REQUEST_SHA256 = "d388a6fe33d1a45a2c475c2874b039ef1d136c6bc61c5119b8159e83c54006f9"
+
+
+BUILDER = "tools/havenline/production/builder_repair_gate.py"
+BUILDER_REQUEST = "Docs/Production/ChangeRequests/T10-builder-repair-causal-bookkeeping.json"
+BUILDER_REQUEST_SHA256 = "92986f20ded72d4b22fb6ebe1e82d01d2dd2003e1f453b02b8ae392bd5d438c7"
+BUILDER_DELTAS = [('    errors=[]\n', '    errors=[]\n    task=c0.get("task_id")\n    canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"\n    canonical_plan=f"Docs/Production/{task}/REPAIR_PLAN.json"\n    bookkeeping={canonical_c0,canonical_plan}\n    if plan.get("c0_report_path")!=canonical_c0 or plan.get("plan_path")!=canonical_plan:\n        errors.append("canonical C0 and repair plan paths required")\n'), ('        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n', '        if set(files)&bookkeeping:errors.append(f"{bid} bookkeeping cannot be causal files")\n        causal_files=set(files)-bookkeeping\n        if not causal_files:errors.append(f"{bid} non-bookkeeping causal files required")\n        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n'), ('        allowed.update(files)\n', '        allowed.update(causal_files)\n'), ('        plan_path=plan.get("plan_path")\n        allowed_actual=set(allowed)\n        if isinstance(plan_path,str) and plan_path:allowed_actual.add(plan_path)\n', '        allowed_actual=set(allowed)|bookkeeping\n'), ('            if not set(fix.get("files",[]))&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n', '            if not (set(fix.get("files",[]))-bookkeeping)&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n')]
+
+
+def builder_delta_errors(accepted: str, current: str) -> list[str]:
+    expected = accepted
+    for old, new in BUILDER_DELTAS:
+        if expected.count(old) != 1:
+            return ["V3.1 builder causal bookkeeping anchor missing"]
+        expected = expected.replace(old, new, 1)
+    return [] if current == expected else ["Only the authorized causal bookkeeping builder delta is permitted"]
+
+
+def failure_delta_errors(accepted: str, current: str) -> list[str]:
+    old = 'packet.get("failure_excerpt", packet.get("logs", ""))'
+    new = 'packet.get("failure_excerpt", packet.get("failed_logs", packet.get("logs", "")))'
+    if accepted.count(old) != 1:
+        return ["V3.1 failure packet log anchor missing"]
+    return [] if current == accepted.replace(old, new, 1) else ["Only the authorized failed_logs compatibility expression is permitted"]
+
+
 def c7_delta_errors(accepted: str, current: str) -> list[str]:
     anchor = "        for gate in ordered\n    }\n"
     if accepted.count(anchor) != 1:
@@ -45,9 +73,19 @@ def validate() -> dict:
         f"V3.1 locked file changed: {POLICY}",
         f"V3.1 locked file changed: {CANARY}",
         f"V3.1 locked file changed: {FORWARD}",
+        f"V3.1 locked file changed: {FAILURE}",
+        f"V3.1 locked file changed: {BUILDER}",
     }
     errors = [error for error in baseline["errors"] if error not in allowed]
     try:
+        accepted_builder = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{BUILDER}").stdout.decode()
+        errors += builder_delta_errors(accepted_builder, (v31.ROOT / BUILDER).read_text())
+        if hashlib.sha256((v31.ROOT / BUILDER_REQUEST).read_bytes()).hexdigest() != BUILDER_REQUEST_SHA256:
+            errors.append("Bounded builder causal bookkeeping authorization changed or missing")
+        accepted_failure = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{FAILURE}").stdout.decode()
+        errors += failure_delta_errors(accepted_failure, (v31.ROOT / FAILURE).read_text())
+        if hashlib.sha256((v31.ROOT / FAILURE_REQUEST).read_bytes()).hexdigest() != FAILURE_REQUEST_SHA256:
+            errors.append("Bounded failure packet authorization changed or missing")
         accepted_policy = json.loads(v31._git("show", f"{v31.ACCEPTED_SOURCE}:{POLICY}").stdout)
         current_policy = json.loads((v31.ROOT / POLICY).read_text())
         errors += policy_errors(accepted_policy, current_policy)
@@ -74,13 +112,15 @@ def validate() -> dict:
     return {
         "passed": not errors,
         "architecture_version": "3.2",
-        "scope": "T09 workflow reactivation, T10 authority canary and T10-only C7 transactional proof runner",
+        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner exact C0 failure packet log compatibility and causal repair bookkeeping",
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
-        "authorized_changes": [POLICY, CANARY, FORWARD],
+        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE, BUILDER],
         "authorization_record": REQUEST,
         "c7_authorization_record": C7_REQUEST,
+        "failure_packet_authorization_record": FAILURE_REQUEST,
+        "builder_authorization_record": BUILDER_REQUEST,
         "errors": errors,
     }
 

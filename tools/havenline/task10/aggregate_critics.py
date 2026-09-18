@@ -31,6 +31,11 @@ def verify_original(original, payload, manifest, cid, candidate):
   coverage=all(g['review']['coverage_complete'] is True for g in groups)
   confidence=min((g['review']['confidence'] for g in groups),key=lambda x:{'low':0,'medium':1,'high':2}[x])
  else:
+  if cid in ('C1','C2'):
+   assert original.get('task_id')=='T10', 'visual task identity mismatch'
+   for key in ('task_id','candidate_hash','critic_id','input_manifest_hash','provider','model','request_or_run_id','independent_runtime'):
+    assert original.get(key) and payload.get(key)==original[key], 'raw visual identity mismatch: '+key
+   assert payload.get('independent_runtime') is True, 'raw visual independence required'
   if cid=='C6':assert payload.get('candidate_hash')==candidate and payload.get('critic_id')==cid, 'raw C6 identity mismatch'
   expected=payload['scores'];defects=payload['defects'];coverage=payload['coverage_complete'];confidence=payload['confidence']
  assert original['scores']==expected, 'scores differ from original independent output'

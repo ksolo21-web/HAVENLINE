@@ -1,0 +1,434 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0",
+  "non_voting": true,
+  "validated": true,
+  "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
+  "task_id": "T10",
+  "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
+  "failed_run_id": 35353927324,
+  "failed_job_id": 105628493430,
+  "integration_head": "82518322a8e0dc9ee6ef12a759bf4ca723c8a490",
+  "diagnosis_status": "DIAGNOSIS_COMPLETE",
+  "terminal_class": "MIXED",
+  "complete_known_blocker_set": true,
+  "blockers": [
+    {
+      "id": "C0-T10-B037",
+      "classification": "TOOLING_DEFECT",
+      "symptom": "The correctly packaged c7a18 T10 critic input was rejected by readiness after all capture, benchmark, packaging and upload work passed, so C3, C4 and C7 were skipped.",
+      "evidence": [
+        "Run 35353927324 job 105628493430 failed only readiness with contract-missing errors after canonical critic-input paths had been normalized to transported relative paths.",
+        "Artifact 10551832949 has SHA256 d5b5c5d91b91f7db0ddde5b32a33e7cb7118f134e44907b21374d8ddf3fe7171; artifact 10551713101 has SHA256 3a1136c8b432353a80d2205605fa79af5726ca76377780b9275d4d4c2549545a.",
+        "The local 0aa940f repair replays the actual downloaded package through package_errors and the exact readiness CLI with passed=true, errors=[], without changing evidence bytes or review requirements."
+      ],
+      "root_cause": "B036 added a canonical critic-input/review-output-contract.txt assertion, while the readiness consumer validates index and hashes and then intentionally strips critic-input/ before prompt validation. The new helper hard-coded only the pre-transport representation and its tests omitted the real normalized consumer.",
+      "affected_object": "T10 critic-input readiness path resolution",
+      "causal_fix": "Retain the local B037 strict canonical/transported path-mode repair. Require an explicit enum, preserve canonical index/hash validation before normalization, reject invalid or mixed representations, and exercise the actual package consumer and CLI against immutable c7a18 artifacts.",
+      "files_to_change": [
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "Docs/Production/T10/C0-transported-contract-readiness-c7a18d0.json",
+        "Docs/Production/T10/REPAIR_PLAN-transported-contract-readiness-c7a18d0.json",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "Run canonical and transported positive/hostile path-mode unit tests, including invalid mode, mixed representation, duplicate, wrong order, wrong metadata, changed content and changed digest.",
+        "Replay artifact 10551832949 and the matching isolated evidence through package_errors and the exact readiness CLI; require passed=true and task_approved=false.",
+        "Require all canonical manifest paths and indexed hashes to validate before any transport normalization."
+      ]
+    },
+    {
+      "id": "C0-T10-B038",
+      "classification": "TOOLING_DEFECT",
+      "symptom": "B036's prompt-only response instruction does not deterministically prevent the pinned specialist model from spending all 900 output tokens repeating one schema-valid observation and returning finish_reason=length.",
+      "evidence": [
+        "Candidate 74b19 C4 full-lifecycle and C3 motion review requests reached the pinned runtime and returned length-truncated responses after repeating long observation text; mandatory later groups remained unexecuted.",
+        "specialist_critic_runner.py constrains observation/defect array counts but its string items have no maxLength, so the failed output remains valid under the response schema until the token ceiling is exhausted.",
+        "The 423-character B036 note is advisory prompt text. Candidate c7a18 never exercised it because B037 stopped readiness before all hosted specialists."
+      ],
+      "root_cause": "The machine-enforced specialist response schema leaves individual observation and defect strings unbounded. Natural-language brevity instructions cannot reliably constrain decoding under the unchanged 900-token limit.",
+      "affected_object": "T10 C3/C4/C7 specialist response generation",
+      "causal_fix": "In the integration-owned specialist runner, apply a T10-only schema profile requiring exactly two observations with maxLength 160 and zero to five defects with maxLength 160, then enforce the same limits after parsing. Preserve every required dimension, confidence, coverage, defect semantics, model/revision/runtime, sampling, 900-token budget and strict >9 threshold. Bind the exact diff in an owner change request.",
+      "files_to_change": [
+        "tools/havenline/production/specialist_critic_runner.py",
+        "tools/havenline/production/tests/test_specialist_critic_runner.py",
+        "Docs/Production/ChangeRequests/T10-specialist-response-bounds.json",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "Unit-test that only task_id T10 receives exact count/length bounds and matching post-parse rejection; non-T10 schemas and all scoring fields remain unchanged.",
+        "Run the exact pinned b10809/model/revision canary on every C3/C4/C7 group from artifact 10551832949 and require finish_reason=stop, complete JSON, exact observation count and bounded string lengths.",
+        "Reject any canary attempt to change token budget, runtime, model, dimensions, thresholds, evidence groups or defect reporting."
+      ]
+    },
+    {
+      "id": "C0-T10-B039",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "There is no inexpensive exact-runtime specialist canary that can prove reviewer/schema repairs on retained evidence before another full capture and benchmark candidate is published.",
+      "evidence": [
+        "The isolated workflow performs its 40-minute Godot evidence and benchmark job before invoking the reusable C3/C4/C7 reviews.",
+        "The exact model cache is not present locally, and the locked reusable specialist workflow only downloads artifacts from its current run, so it cannot directly test a repaired runner against c7a18 retained evidence.",
+        "The previous cycles discovered reviewer truncation and then readiness transport incompatibility only after expensive upstream work."
+      ],
+      "root_cause": "T10 has root-cause-specific offline package replay but lacks a task-owned diagnostic path that binds old evidence identity separately from new runner identity and executes the real pinned specialist runtime.",
+      "affected_object": "Pre-publication reviewer/runtime proof ordering",
+      "causal_fix": "Add a task-owned, diagnostic-only reviewer canary workflow on a dedicated branch. Download and verify the exact c7a18 artifact through the Actions API, including its terminal failure conclusion; record evidence and tool SHAs separately; run every C3/C4/C7 group with the unchanged pinned runtime; independently verify actual request max tokens, sampling, thinking/cache settings, exact score-schema dimensions and critic-record provider/model/revision/runtime identity; retain all raw requests/responses/logs; and prohibit aggregation, score reuse or approval.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-reviewer-canary.yml",
+        "tools/havenline/task10/reviewer_canary.py",
+        "tools/havenline/task10/tests/test_reviewer_canary.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "Workflow tests require actions:read, exact run/artifact/source/name/size/archive digest and failure-conclusion checks, pinned runtime preparation and complete C3/C4/C7 group execution.",
+        "Actual request and record tests require unchanged max_tokens=900, temperature=0.2, top_p=0.9, seed=20260911, thinking/cache settings, exact task-profile dimensions, provider/model revisions and b10809 runtime release.",
+        "Workflow tests require diagnostic/non-approval labeling, separate runner/evidence identities, raw output upload on failure, finish_running_sha behavior and no aggregate/export invocation.",
+        "The hosted canary must pass before any new full T10 primary/isolated candidate run begins."
+      ]
+    },
+    {
+      "id": "C0-T10-B040",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "Repeated failed T10 repair candidates remained ASSIGNED, so the canonical anti-loop builder gate was never activated and uniquely named reports did not constrain later diffs.",
+      "evidence": [
+        "WORKSTREAM_REGISTRY, DEPENDENCY_GRAPH, PATH_OWNERSHIP and task-gates all currently identify T10 as ASSIGNED; the registry has known_blockers=[] and a stale begin-candidate next action.",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json is absent and canonical REPAIR_PLAN.json remains bound to candidate 6999fed.",
+        "havenline-candidate-guard.yml invokes builder_repair_gate.py only when TASK_STATUS == FIX_REQUIRED."
+      ],
+      "root_cause": "The repair lifecycle was handled through ad hoc uniquely named review artifacts without transitioning all lifecycle authorities to FIX_REQUIRED and activating the canonical report/plan pair required by the architecture.",
+      "affected_object": "T10 repair lifecycle and machine-enforced repair scope",
+      "causal_fix": "Atomically set T10 FIX_REQUIRED across the four lifecycle authorities, populate the registry blocker list and next action, activate this canonical C0 report and repair plan, retain the original assignment base provenance, and require builder_repair_gate for every subsequent repair candidate. The canonical report may add independently confirmed B044 and B045 after the owner checkpoint without relabeling prior blockers.",
+      "files_to_change": [
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "Docs/Production/DEPENDENCY_GRAPH.json",
+        "Docs/Production/PATH_OWNERSHIP.json",
+        "Docs/Production/task-gates.json",
+        "tools/havenline/production/tests/test_t10_activation_validation.py",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "Validate exact T10 FIX_REQUIRED agreement across registry, graph, active owner, active task-gates status and T10 wave row while T01-T09 remain APPROVED and T11+ remain LOCKED.",
+        "Require the owner transition's nonempty known_blockers B037-B043 plus the subsequently confirmed canonical B044-B045 report/plan mappings before the repaired task candidate is frozen, with comprehensive next_action, original assignment base unchanged and no approval/integration claim.",
+        "Candidate guard must invoke builder_repair_gate against the canonical C0 and plan for the next nonempty T10 candidate."
+      ]
+    },
+    {
+      "id": "C0-T10-B041",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "The architecture's failure-observation and historical-intelligence path was not invoked by T10 failures, and the packet/query interface drops the failure log even when C0 is run.",
+      "evidence": [
+        "T10 primary and isolated workflows do not call the reusable C0 workflow after terminal failure; T09 provides the existing reference wiring.",
+        "closeout_evidence.py invokes factory observation only after all review inputs pass, so it cannot preserve failed-run observation by itself.",
+        "The C0 workflow writes packet key failed_logs, while failure_intelligence.query_packet reads failure_excerpt or logs. Confirmed failure text is therefore omitted from historical matching.",
+        "The current failure-intelligence query returned only advisory FI-T09-001 on identity and FI-T09-003 on path; neither is a causal match for the current T10 failures."
+      ],
+      "root_cause": "T10 omitted the standard C0 failure job, and a locked control-plane producer/consumer field-name mismatch prevents the historical matcher from seeing collected failure logs.",
+      "affected_object": "T10 failed-run C0/factory observation and cross-task failure intelligence",
+      "causal_fix": "Wire both task-owned T10 workflows to the unchanged reusable C0 workflow on explicit terminal failure. Add exact failed_logs compatibility to the locked failure-intelligence consumer under bounded V3.2 authorization, with precedence and hostile tests. After validation, add confirmed reusable signatures sourced to this canonical report; do not infer a defect from empty telemetry ledgers alone.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-isolated.yml",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "tools/havenline/production/failure_intelligence.py",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        "tools/havenline/production/tests/test_failure_intelligence_packet.py",
+        "tools/havenline/production/tests/test_architecture_release_lock.py",
+        "Docs/Production/ChangeRequests/T10-failure-packet-log-compatibility.json",
+        "Docs/Production/FAILURE_INTELLIGENCE.json",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "Workflow tests prove terminal failure invokes the locked reusable C0 workflow with exact task, run and candidate identities, while success and skipped/superseded states do not create a false product judgment.",
+        "Failure-intelligence tests prove failure_excerpt, failed_logs and legacy logs compatibility with explicit precedence, and prove unrelated packet fields cannot become match text.",
+        "The V3.2 validator permits only the authorized compatibility delta and rejects unrelated locked-file drift.",
+        "Query the repaired packet for the retained c7a18 failure and preserve advisory matches plus a factory observation artifact; neither result grants approval."
+      ]
+    },
+    {
+      "id": "C0-T10-B042",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "No executable producer proves that T10's transport critic aggregate and exported records can become the canonical closure records consumed by closure_validator and the atomic lifecycle closeout gates.",
+      "evidence": [
+        "aggregate_critics.py emits results, quantitative_c6 and passed; closure_validator.py requires status, disposition, a critics dictionary, retained evidence identity and exact raw-record hashes.",
+        "export_closure_records.py intentionally refuses to synthesize APPROVED state, lifecycle authority or G1-G14 records.",
+        "The current T10 defect ledger is stale/not closure-shaped, and existing unit tests validate individual helpers rather than the complete producer-to-consumer sequence.",
+        "The disposable rehearsal proved a concrete stage-two boundary: the repository's outer LFS ZIP rule stores ReviewExports original-bundle.zip as a pointer, while exporter stage two correctly requires git show E:path to equal the original ZIP bytes."
+      ],
+      "root_cause": "The closeout design has individually strict components but no deterministic task-owned assembler and disposable end-to-end rehearsal across their actual file-system and git-root interfaces. In addition, the task-owned ReviewExports directory lacks a narrow attribute override required for byte-exact native-Git retention of its bounded durable ZIPs.",
+      "affected_object": "T10 final closure assembly and atomic owner handoff",
+      "causal_fix": "Add a deterministic task-owned staged assembler that consumes only validated exact-source inputs, preserves original scores/confidence/raw bytes, creates proposed closure records in an isolated git root, and runs the unchanged real closure consumers. Add a directory-local ReviewExports .gitattributes rule `*.zip -filter -diff -merge` so bounded ZIPs are committed as byte-exact native Git blobs while the repository-wide LFS policy remains unchanged. Reject diagnostic, failed, stale, mismatched, oversized or unresolved inputs and never publish, mutate live lifecycle state or grant approval.",
+      "files_to_change": [
+        "tools/havenline/task10/assemble_closeout.py",
+        "tools/havenline/task10/tests/test_assemble_closeout.py",
+        "tools/havenline/task10/tests/test_export_closure_records.py",
+        "Docs/Production/T10/ReviewExports/.gitattributes",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "In a disposable repository, execute producer, original-byte export commit, canonical export, aggregate conversion, proposed lifecycle staging, canonical task snapshot, approval-retention construction and the real closure CLI sequence.",
+        "Require unchanged closure_validator, validate_migration, evidence retention, task-state, factory closeout, integration scope, V3/V3.1/V3.2 and applicable G1-G14 consumers to pass on the complete synthetic rehearsal only.",
+        "Hostile tests reject missing C7 supplement/independent-runtime flags, raw/index/ZIP mismatches, failed or stale runs, bad expiry or lineage, stale ownership/pointers, empty or unresolved defect ledger, wrong manifest record set and stale derived task-state.",
+        "A real temporary-git test with an outer LFS ZIP rule proves the inner ReviewExports override stores ZIP bytes natively and git show E:path is byte-identical; reject missing/overbroad overrides, LFS pointer blobs, files above 24 MiB and use outside ReviewExports.",
+        "Production mode must reject diagnostic markers and cannot create final records until fresh exact final-source reviews and actual API metadata exist."
+      ]
+    },
+    {
+      "id": "C0-T10-B043",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "The T10 critic aggregate accepts C1/C2 raw payloads whose embedded candidate, critic, task, manifest or reviewer provenance conflicts with the separately validated record.",
+      "evidence": [
+        "The independent interface canary changed C1/C2 raw candidate_hash, critic_id and input_manifest_hash while preserving scores/disposition; aggregate_critics.verify_original accepted both payloads. Direct inspection also shows task_id, provider, model, request_or_run_id and independent_runtime are present and equal in genuine raw/record pairs but currently unbound.",
+        "C3/C4/C7 and C6 have explicit raw identity checks, but the C1/C2 branch compares only scores, defects, coverage and confidence after record validation.",
+        "Existing retained C1/C2 records were not shown mismatched; this is a fail-open closure integrity gap, not a finding against their visual judgment."
+      ],
+      "root_cause": "The C1/C2 branch of verify_original omits complete raw-to-record-to-manifest task, identity and reviewer-provenance equality before comparing review content.",
+      "affected_object": "C1/C2 critic transport integrity",
+      "causal_fix": "Require C1/C2 raw and record task_id T10 plus exact equality for candidate_hash, critic_id, input_manifest_hash, provider, model, request_or_run_id and independent_runtime before accepting scores or disposition. Preserve original record bytes and keep path relocation normalization only in aggregate/export.",
+      "files_to_change": [
+        "tools/havenline/task10/aggregate_critics.py",
+        "tools/havenline/task10/tests/test_aggregate_critics.py",
+        "tools/havenline/task10/tests/test_export_closure_records.py",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "Positive tests accept exact C1/C2 raw-record-manifest identity without changing scores, confidence or defects.",
+        "Independent missing/null/substitution mutations of task_id, candidate_hash, critic_id, input_manifest_hash, provider, model, request_or_run_id, independent_runtime, raw digest and manifest digest each fail before score/disposition comparison.",
+        "Actual original records remain byte-exact; direct review_visual relocation failure is not bypassed or treated as approval."
+      ]
+    },
+    {
+      "id": "C0-T10-B044",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "Hosted owner governance run 35375796218 job 105700056549 passed the actual V3.2 validator and all preceding gates, then failed because the workflow's jq consumer still required the pre-B041 locked-file count and three-entry authorization list.",
+      "evidence": [
+        "validate_architecture_v32_t10.py now legitimately reports passed=true, unchanged_locked_files=46 and an exact four-entry authorized_changes list including tools/havenline/production/failure_intelligence.py.",
+        "havenline-production-governance.yml still hard-codes unchanged_locked_files==47 and the prior three-entry list, so its duplicate interface assertion rejects the correct report.",
+        "ARCHITECTURE_RELEASE_LOCK.json does not list havenline-production-governance.yml as byte-locked; no lock exception is required for this bounded consumer update."
+      ],
+      "root_cause": "B041 extended the authoritative V3.2 report under exact lock validation, but the serial hosted workflow consumer duplicated the old output cardinality and authorization list and was omitted from the B041 blast-radius audit.",
+      "affected_object": "Production-governance V3.2 report consumer",
+      "causal_fix": "Change only the workflow's V3.2 jq predicate to require unchanged_locked_files==46 and the exact ordered four-entry authorized_changes list. Add a test that extracts the real predicate and evaluates the real validator report plus hostile mutations, preventing producer/consumer drift without weakening any gate.",
+      "files_to_change": [
+        ".github/workflows/havenline-production-governance.yml",
+        "tools/havenline/production/tests/test_production_governance_v32_consumer.py",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/ARCHITECTURE_RELEASE_LOCK.json",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "At the B044 checkpoint, extract the actual jq expression and require it to accept the real 46/exact-four V3.2 validator report while hostile report mutations fail.",
+        "Hosted governance run 35376376731 passes B044 with full production tests; preserve that evidence as historical proof.",
+        "Any subsequent authorized locked-file addition must update the producer and consumer together under a separately diagnosed blocker; B045 supplies that composition for builder_repair_gate.py."
+      ]
+    },
+    {
+      "id": "C0-T10-B045",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "The canonical builder repair gate accepts a post-build diff containing only C0/repair-plan bookkeeping as if every independent blocker received a causal implementation.",
+      "evidence": [
+        "Against the canonical B037-B044 report/plan, builder_repair_gate.validate returned errors=[] for actual_changed containing only C0_ROOT_CAUSE.json plus REPAIR_PLAN.json, only C0_ROOT_CAUSE.json, and only REPAIR_PLAN.json.",
+        "Both canonical documentation paths were listed in every fix.files entry, and the gate's per-fix causal-touch check accepts any intersection with fix.files.",
+        "This is a directly reproduced fail-open in the root-cause system; the current combined implementation does contain real causal changes, but the gate does not prove that fact."
+      ],
+      "root_cause": "The builder gate does not distinguish canonical diagnosis/plan bookkeeping from blocker-specific causal files when authorizing the diff and checking that every fix changed.",
+      "affected_object": "Canonical FIX_REQUIRED builder repair enforcement",
+      "causal_fix": "Treat exact task-canonical C0_ROOT_CAUSE.json and REPAIR_PLAN.json as auto-allowed bookkeeping that is forbidden from every fix's causal file set. Require exact canonical plan/report paths, at least one non-bookkeeping causal file per fix, and an actual non-bookkeeping touched file for every blocker. Preserve every other scope, hash, protected-file, mapping, repair-base and freeze rule. Authorize the exact locked builder-gate delta through V3.2 and update the hosted V3.2 consumer to the resulting exact five-file authorization report.",
+      "files_to_change": [
+        "tools/havenline/production/builder_repair_gate.py",
+        "tools/havenline/production/tests/test_c0_builder.py",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        "tools/havenline/production/tests/test_architecture_release_lock.py",
+        ".github/workflows/havenline-production-governance.yml",
+        "tools/havenline/production/tests/test_production_governance_v32_consumer.py",
+        "Docs/Production/ChangeRequests/T10-builder-repair-causal-bookkeeping.json",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "Docs/Production/ARCHITECTURE_RELEASE_LOCK.json",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "C0-only, plan-only and both-bookkeeping-only actual diffs each fail every blocker causal-touch requirement.",
+        "Any fix listing a canonical bookkeeping path, any empty non-bookkeeping causal set, and any missing/wrong canonical c0_report_path or plan_path fail.",
+        "A complete diff containing every fix's real causal file plus canonical bookkeeping passes, while unplanned/protected paths still fail.",
+        "The V3.2 validator permits only the exact authorized builder-gate delta; hosted governance requires unchanged_locked_files=45 and the exact ordered five-file authorization list."
+      ]
+    }
+  ],
+  "failure_intelligence_query": {
+    "task_id": "T10",
+    "gate": "critic",
+    "query": "transported readiness path normalization specialist reviewer repeated observation output truncation canonical C0 FIX_REQUIRED failure logs closeout aggregate raw critic identity",
+    "matches": [
+      {
+        "id": "FI-T09-001",
+        "score": 6,
+        "matched_terms": [
+          "identity"
+        ],
+        "disposition": "ADVISORY_ONLY_NOT_CAUSAL_FOR_CURRENT_T10"
+      },
+      {
+        "id": "FI-T09-003",
+        "score": 6,
+        "matched_terms": [
+          "path"
+        ],
+        "disposition": "ADVISORY_ONLY_NOT_CAUSAL_FOR_CURRENT_T10"
+      }
+    ],
+    "no_current_t10_match": true,
+    "historical_match_is_advisory_only": true
+  },
+  "source_evidence": [
+    "GitHub run 35353927324 job 105628493430 and artifacts 10551832949/10551713101",
+    "/workspace/scratch/59b74b9aed55/t10-c7a18-critic-input",
+    "/workspace/scratch/59b74b9aed55/t10-c7a18-isolated",
+    "/workspace/scratch/59b74b9aed55/t10-74b19-reviews/C3",
+    "/workspace/scratch/59b74b9aed55/t10-74b19-reviews/C4",
+    "/workspace/scratch/59b74b9aed55/t10-interface-audit-visual/AUDIT.md",
+    "/workspace/scratch/59b74b9aed55/T10-closure-boundary-audit-0aa940f.md",
+    "Local unpublished B037 commit 0aa940f831106bed1b62a77486fc5bfcbf6df361"
+  ],
+  "unexecuted_checks": [
+    "The B045 locked builder-gate repair and updated hosted V3.2 consumer have not yet completed.",
+    "The B038 bounded response schema has not run on the exact pinned b10809 specialist runtime.",
+    "The diagnostic c7a18 C3/C4/C7 canary does not yet exist and has not executed.",
+    "Fresh exact-source C1/C2/C3/C4/C6/C7 reviews for a repaired frozen candidate have not executed.",
+    "The proposed closeout assembler and disposable real-consumer rehearsal do not yet exist and have not executed.",
+    "Final integration-scope validation, integrated-source evidence, factory closeout, G1-G14, retention, migration, lifecycle transition and APPROVED closure remain unexecuted.",
+    "No current specialist score or approval may be inferred from interface diagnostics or prior-source reviews."
+  ],
+  "builder_action": "REPAIR",
+  "candidate_freeze": {
+    "required": true,
+    "validation_concurrency_policy": "finish_running_sha",
+    "cancelled_run_product_judgment": false,
+    "pre_full_validation_requirements": [
+      "canonical FIX_REQUIRED lifecycle and builder gate active",
+      "all B037-B045 static/unit/production checks pass",
+      "immutable c7a18 readiness replay passes",
+      "pinned specialist runtime canary passes",
+      "disposable full closeout rehearsal passes"
+    ]
+  },
+  "summary": "The repeated T10 loop is caused by nine tooling, evidence and governance interface defects, not a newly proved gameplay defect. Repair the complete control-plane set, activate fail-closed canonical FIX_REQUIRED enforcement, prove reviewer and closure interfaces cheaply, and only then publish one frozen candidate for full evidence and independent review.",
+  "confidence": "high",
+  "approval_claimed": false,
+  "score_assigned": false,
+  "shipping_gameplay_runtime_change_authorized": false
+}

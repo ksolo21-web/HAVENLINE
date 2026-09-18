@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
+  "diagnosis_id": "C0-T10-c7a18d0-transported-contract-readiness",
+  "c0_report_path": "Docs/Production/T10/C0-transported-contract-readiness-c7a18d0.json",
+  "c0_report_sha256": "1f7bed71be4c893540ae32834528a607d260cd6a48cb113854d581081ba5dde1",
+  "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
+  "full_blocker_set_acknowledged": true,
+  "candidate_freeze_after_build": true,
+  "validation_concurrency_policy": "finish_running_sha",
+  "plan_path": "Docs/Production/T10/REPAIR_PLAN-transported-contract-readiness-c7a18d0.json",
+  "must_not_change": [
+    "HavenlineGodot/scripts/world_transform.gd",
+    "HavenlineGodot/scripts/world_transform_view.gd",
+    "HavenlineGodot/scripts/simulation.gd",
+    "HavenlineGodot/data/world_transform_recipes.json",
+    "HavenlineGodot/tests/capture_task10_world_transform.gd",
+    "tools/havenline/task10/benchmark_world_transform.gd",
+    "tools/havenline/task10/export_closure_records.py",
+    "tools/havenline/production/specialist_critic_runner.py",
+    "tools/havenline/production/specialist_evidence_manifest.py",
+    "tools/havenline/production/critic_harness.py",
+    "tools/havenline/production/critic_runtime_lock.json",
+    "Docs/Production/CRITIC_EXECUTION.json",
+    "Docs/Production/CRITIC_MATRIX.json",
+    ".github/workflows/havenline-task10-isolated.yml",
+    ".github/workflows/havenline-task10-world-transformation.yml",
+    "Docs/Production/WORKSTREAM_REGISTRY.json",
+    "Docs/Production/DEPENDENCY_GRAPH.json",
+    "Docs/Production/PATH_OWNERSHIP.json",
+    "Docs/Production/task-gates.json",
+    ".github/workflows/havenline-specialist-critic.yml"
+  ],
+  "blast_radius_checks": [
+    "Canonical default and explicit transported modes accept only their fixed exact contract paths; invalid modes and missing/duplicate/tampered/not-last/wrong-metadata contracts reject in both representations.",
+    "Real package_errors consumer validates canonical manifest/index/digests before transport normalization; complete positive package and path/hash/content/order mutations tested.",
+    "Replay immutable c7a18 downloaded critic-input through package_errors and exact readiness CLI with original isolated evidence. Require zero errors; this is tooling diagnosis only, not new source approval.",
+    "Run task10 and production tests, pre/post builder gates, exact six-file scope and independent C0 implementation review. Publish one frozen candidate; require all fresh exact-source gates and six critics."
+  ],
+  "fixes": [
+    {
+      "blocker_id": "C0-T10-B037",
+      "files": [
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "Docs/Production/T10/C0-transported-contract-readiness-c7a18d0.json",
+        "Docs/Production/T10/REPAIR_PLAN-transported-contract-readiness-c7a18d0.json"
+      ],
+      "causal_change": "Add keyword-only path_mode with exact canonical/transported enum mappings to output_contract_errors and prompt_errors. Default remains canonical. Invalid modes fail closed. Readiness retains canonical index/hash validation first, then calls transported prompt validation on its existing deep-copy normalization. No fallback or arbitrary path accepted. Require canonical critic-input/ prefixes during manifest/index validation before any transport normalization; reject noncanonical path mutations instead of accepting ambiguous representations.",
+      "verification": [
+        "Canonical default and explicit transported modes accept only their fixed exact contract paths; invalid modes and missing/duplicate/tampered/not-last/wrong-metadata contracts reject in both representations.",
+        "Real package_errors consumer validates canonical manifest/index/digests before transport normalization; complete positive package and path/hash/content/order mutations tested.",
+        "Replay immutable c7a18 downloaded critic-input through package_errors and exact readiness CLI with original isolated evidence. Require zero errors; this is tooling diagnosis only, not new source approval.",
+        "Run task10 and production tests, pre/post builder gates, exact six-file scope and independent C0 implementation review. Publish one frozen candidate; require all fresh exact-source gates and six critics."
+      ]
+    }
+  ]
+}
