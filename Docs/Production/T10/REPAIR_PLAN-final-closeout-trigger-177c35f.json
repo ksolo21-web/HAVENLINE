@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "failed_candidate": "177c35fd17a30a1c21c05b2634fe0ceee00e62f4",
+  "diagnosis_id": "C0-T10-177c35f-final-closeout-trigger",
+  "c0_report_path": "Docs/Production/T10/C0-final-closeout-trigger-177c35f.json",
+  "c0_report_sha256": "e7a9967441473f3135a4d2ce74a6ee49ff2520d819705af9d0d5f48312594be0",
+  "repair_base": "177c35fd17a30a1c21c05b2634fe0ceee00e62f4",
+  "full_blocker_set_acknowledged": true,
+  "candidate_freeze_after_build": true,
+  "validation_concurrency_policy": "finish_running_sha",
+  "plan_path": "Docs/Production/T10/REPAIR_PLAN-final-closeout-trigger-177c35f.json",
+  "pending_terminal_evidence": "All 177c35 work is terminal. Primary 35345760749 passed; capture/review 35345760987 failed only the unchanged total RSS packaging assertion after the nine-phase benchmark itself succeeded, so C3/C4/C7 were skipped. B034 is locally prepared; B035 and all fresh integrated-source evidence, factory closeout, export, G1-G14 and approval remain unexecuted.",
+  "must_not_change": [
+    "HavenlineGodot/scripts/world_transform.gd",
+    "HavenlineGodot/scripts/world_transform_view.gd",
+    "HavenlineGodot/scripts/simulation.gd",
+    "HavenlineGodot/data/world_transform_recipes.json",
+    "HavenlineGodot/tests/capture_task10_world_transform.gd",
+    "HavenlineGodot/tests/test_task10_world_transform.gd",
+    "HavenlineGodot/tests/test_task10_integration.gd",
+    "tools/havenline/task10/export_closure_records.py",
+    "tools/havenline/production/validate_integration_scope.py",
+    "tools/havenline/production/closure_validator.py",
+    "tools/havenline/production/evidence_retention.py",
+    "tools/havenline/production/factory_observer.py",
+    "tools/havenline/production/factory_closeout_gate.py",
+    "Docs/Production/CRITIC_MATRIX.json",
+    "Docs/Production/CRITIC_EXECUTION.json",
+    "Docs/Production/GATE_RESULT_INDEX.json",
+    "Docs/Production/WORKSTREAM_REGISTRY.json",
+    "Docs/Production/DEPENDENCY_GRAPH.json",
+    "Docs/Production/PATH_OWNERSHIP.json",
+    "Docs/Production/task-gates.json",
+    "Docs/Production/T10/C0-closeout-preparation-92028d4.json",
+    "Docs/Production/T10/REPAIR_PLAN-closeout-preparation-92028d4.json"
+  ],
+  "blast_radius_checks": [
+    "Validate the transferred report against C0_REPORT_SCHEMA.json and run builder_repair_gate.py pre-build and post-build against exact base 177c35fd17a30a1c21c05b2634fe0ceee00e62f4.",
+    "Require both active T10 push filters to exclude only ReviewExports/**, CriticRaw/**, independent-critic-review.json and defect-ledger.json in addition to existing completion exclusions; do not broaden to ordinary T10 documents, task tools, workflow files or runtime.",
+    "Run all task10 workflow-source tests, full task10 Python tests, candidate ownership/scope and production governance tests.",
+    "Run the real pinned-Godot benchmark after B035 and require exact cold-preallocation/conditioning records plus unchanged three-cycle, nine-phase, 120-warmup, 360-sample, <32 MiB RSS and <16 MiB static limits.",
+    "Prove all 3,240 dictionaries and nested scale records plus nine numeric buffer pairs are initialized before cold conditioning; measured loops may mutate fixed slots but may not append/allocate record containers.",
+    "Require two ordered conditioning sweeps over hidden/frozen/pulse with 360 frames per control at native 4K, record before/after preallocation and every control endpoint, and reject missing/reordered/short/nonfinite/forged conditioning evidence.",
+    "On final integration, require both T10 workflows to execute at the exact integrated source and require fresh C1/C2/C3/C4/C6/C7. No 177c35 critic score is reusable.",
+    "After final-source PASS, prove original-export, canonical-export and final-closeout-only commits do not launch T10 candidate workflows while production governance still runs.",
+    "Execute the report's ordered factory/export/APPROVED closeout sequence with unchanged retention, closure, migration and G1-G14 validators."
+  ],
+  "fixes": [
+    {
+      "blocker_id": "C0-T10-B034",
+      "files": [
+        ".github/workflows/havenline-task10-isolated.yml",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "Docs/Production/T10/C0-final-closeout-trigger-177c35f.json",
+        "Docs/Production/T10/REPAIR_PLAN-final-closeout-trigger-177c35f.json"
+      ],
+      "causal_change": "Add four exact closure-only negative push paths to both active T10 workflows: ReviewExports/**, CriticRaw/**, independent-critic-review.json and defect-ledger.json. Test exact symmetry and prove all production/tool/workflow/non-closeout document triggers remain. Make no runtime, exporter, shared-validator, lifecycle-state, critic or threshold change.",
+      "verification": [
+        "Both YAML push filters contain the exact four exclusions and retain every current positive production/tool/workflow/general-document path.",
+        "Source tests reject a missing exclusion, an overbroad Docs/Production/T10/** exclusion, or removal of any positive trigger.",
+        "Task10 tests, workflow parsing, production governance, candidate scope and builder post-build gate pass.",
+        "Final integrated source launches fresh workflows; evidence-only descendant pushes do not."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B035",
+      "files": [
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "Docs/Production/T10/C0-final-closeout-trigger-177c35f.json",
+        "Docs/Production/T10/REPAIR_PLAN-final-closeout-trigger-177c35f.json"
+      ],
+      "causal_change": "Before the steady baseline, record memory, preallocate every fixed nine-phase sample dictionary/nested scale array and numeric buffer, then execute and record two full 360-frame hidden/frozen/pulse conditioning sweeps. Reuse those records during the unchanged measured phases. Preserve cold growth as evidence and retain every existing sample, memory, identity, timing and nonphysical-reporting threshold.",
+      "verification": [
+        "Unit/source tests prove exact 9x360 preallocation including nested scale storage, fixed numeric buffers and no measured-loop dictionary/scale allocation or append.",
+        "Validator accepts only exact two-sweep hidden/frozen/pulse conditioning with 360 frames each, finite ordered RSS/static/elapsed endpoints and consistent preallocation counts; hostile omissions, reordering, undersampling and forged endpoints reject.",
+        "Real benchmark keeps 120 per-phase warmup, 360 samples, three cycles and nine phases, reports the cold initialization separately, and passes unchanged total <32 MiB RSS, <16 MiB static and all existing stability/identity checks.",
+        "No product runtime/view/capture, shared C6 harness, performance budget, critic definition or workflow timeout changes."
+      ]
+    }
+  ],
+  "ordered_final_closeout": [
+    "Preserve terminal 177c35 evidence and its B035 diagnosis; carry no score forward because C3/C4/C7 were skipped.",
+    "Repair B035 alongside the reviewed B034 in the dedicated future worktree, run focused real benchmark and bounded regression, then freeze one complete next candidate.",
+    "Record owner INTEGRATION_READY then INTEGRATING checkpoints and publish one exact integrated source containing task code plus B034/B035.",
+    "Run exact integrated-source primary/capture and all six fresh critics; transition governance-only to UNDER_REVIEW without source edits.",
+    "Preserve actual API-bound factory observation/closeout.",
+    "Commit exporter stage-one originals as the real export commit.",
+    "Generate stage-two canonical records and assemble one proposed APPROVED owner closeout tree with G1-G14, closed ledger, task state, retention manifests and non-reusable gate provenance.",
+    "Atomically update graph, registry, ownership and task-gates: T10 APPROVED, T11+ LOCKED, completed owner/source identity exact, approved/completed records exact and every active_* field null.",
+    "Run retention, closure, migration, task-state, factory and G1-G14 validation before commit; then require hosted production governance."
+  ]
+}

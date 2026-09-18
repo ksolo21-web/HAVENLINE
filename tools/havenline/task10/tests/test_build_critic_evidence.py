@@ -53,7 +53,8 @@ class BenchmarkEvidenceTests(unittest.TestCase):
        rss_start_mb=700,rss_end_mb=701,rss_endpoint_peak_mb=701,static_start_mb=100,static_end_mb=101,static_peak_mb=101,
        node_min=15,node_max=15,draw_min=9,draw_max=9,primitive_min=2200,primitive_max=2200,texture_min_mb=170,texture_max_mb=170,
        visual_build_count=1,visual_node_count=4,visual_apply_delta=0))
-  return dict(passed=True,task_id='T10',candidate_commit='a'*40,engine='4.7.2-stable (official)',engine_version=dict(major=4,minor=7,patch=2,status='stable',build='official',hash='ed1daf0bf001b61586d9930840f2f1394092c079',string='4.7.2-stable (official)'),renderer='mobile/llvmpipe',resolution=[3840,2160],render_scale=1,cycles=3,frame_cap=60,fixed_fps=False,measurement_io=False,physical_certification=False,phases=phases,active_seconds=18.00036,idle_seconds=18.00036,active_duty_fraction=.5,isolated_update=dict(batches=20,calls_per_batch=100,raw_gross_usec_per_call=[1]*20,raw_empty_usec_per_call=[0]*20,gross_usec_per_call=dict(stats(1),count=20),empty_usec_per_call=dict(stats(0),count=20)),active_minus_idle=[dict(cycle=i,frame_mean_ms=0,process_mean_ms=0,presentation_frame_mean_ms=0,presentation_process_mean_ms=0) for i in range(3)])
+  conditioning=dict(method='fixed_all_controls',adaptive=False,sweeps=2,frames_per_control=360,buffer_count=9,samples_per_buffer=360,before_preallocation=dict(rss_mb=600,static_mb=90),after_preallocation=dict(rss_mb=610,static_mb=93),phases=[dict(sweep=c,state=state,frames=360,elapsed_seconds=60,before=dict(rss_mb=610,static_mb=93),after=dict(rss_mb=700,static_mb=100),identity_before=copy.deepcopy(identity),identity_after=copy.deepcopy(identity)) for c in range(2) for state in ('hidden','frozen','pulse')])
+  return dict(conditioning=conditioning,passed=True,task_id='T10',candidate_commit='a'*40,engine='4.7.2-stable (official)',engine_version=dict(major=4,minor=7,patch=2,status='stable',build='official',hash='ed1daf0bf001b61586d9930840f2f1394092c079',string='4.7.2-stable (official)'),renderer='mobile/llvmpipe',resolution=[3840,2160],render_scale=1,cycles=3,frame_cap=60,fixed_fps=False,measurement_io=False,physical_certification=False,phases=phases,active_seconds=18.00036,idle_seconds=18.00036,active_duty_fraction=.5,isolated_update=dict(batches=20,calls_per_batch=100,raw_gross_usec_per_call=[1]*20,raw_empty_usec_per_call=[0]*20,gross_usec_per_call=dict(stats(1),count=20),empty_usec_per_call=dict(stats(0),count=20)),active_minus_idle=[dict(cycle=i,frame_mean_ms=0,process_mean_ms=0,presentation_frame_mean_ms=0,presentation_process_mean_ms=0) for i in range(3)])
  def test_finite_repeated_measurement(self):self.assertEqual([],m.benchmark_errors(self.fixture(),'a'*40))
  def test_missing_stale_nonphysical_and_forged_metrics_reject(self):
   for key,value in [('passed',False),('renderer','mobile/forged-hardware'),('render_scale',True),('active_seconds','bad'),('candidate_commit','b'*40),('physical_certification',True),('measurement_io',True),('resolution',[1280,720]),('active_duty_fraction',1)]:
@@ -99,3 +100,20 @@ class BenchmarkEvidenceTests(unittest.TestCase):
    elif change=='time':row['phases'][2]['raw_pulse_samples'][3]['time']=float('nan')
    else:row['phases'][2]['base_scale']=[2,2,2]
    with self.subTest(change=change):self.assertTrue(m.benchmark_errors(row,'a'*40))
+
+ def test_conditioning_is_fixed_complete_and_cold_cost_preserved(self):
+  for change in ('missing','adaptive','short','buffers','nan','identity','allocation','sweeps','growth'):
+   row=self.fixture();c=row['conditioning']
+   if change=='missing':del row['conditioning']
+   elif change=='adaptive':c['adaptive']=True
+   elif change=='short':c['phases'][0]['frames']=120
+   elif change=='buffers':c['buffer_count']=1
+   elif change=='nan':c['before_preallocation']['rss_mb']=float('nan')
+   elif change=='identity':c['phases'][0]['identity_after']['label_text']='changed'
+   elif change=='allocation':c['after_preallocation']['static_mb']=90
+   elif change=='sweeps':c['phases'].pop()
+   else:row['phases'][-1].update(rss_start_mb=734,rss_end_mb=734,rss_endpoint_peak_mb=734)
+   with self.subTest(change=change):self.assertTrue(m.benchmark_errors(row,'a'*40))
+  # Startup cost remains visible; it never replaces or relaxes the measured limit.
+  row=self.fixture();self.assertGreater(row['conditioning']['phases'][-1]['after']['rss_mb']-row['conditioning']['before_preallocation']['rss_mb'],32)
+  self.assertEqual([],m.benchmark_errors(row,'a'*40))

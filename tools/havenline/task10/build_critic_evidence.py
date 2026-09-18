@@ -91,6 +91,23 @@ def benchmark_errors(report, candidate):
     if report.get('cycles')!=3 or len(phases)!=9 or [(x.get('cycle'),x.get('state')) for x in phases]!=[(c,s) for c in range(3) for s in ('hidden','frozen','pulse')]: errors.append('benchmark repeated phases missing')
     try:
         identity=phases[0]['identity_before']
+        conditioning=report['conditioning']
+        assert conditioning['method']=='fixed_all_controls' and conditioning['adaptive'] is False
+        assert type(conditioning['sweeps']) is int and conditioning['sweeps']==2
+        assert type(conditioning['frames_per_control']) is int and conditioning['frames_per_control']==360
+        assert type(conditioning['buffer_count']) is int and conditioning['buffer_count']==9
+        assert type(conditioning['samples_per_buffer']) is int and conditioning['samples_per_buffer']==360
+        warm=conditioning['phases']
+        assert [(r['sweep'],r['state']) for r in warm]==[(c,s) for c in range(2) for s in ('hidden','frozen','pulse')]
+        points=[conditioning['before_preallocation'],conditioning['after_preallocation']]
+        for row in warm:
+            assert type(row['frames']) is int and row['frames']==360
+            assert finite(row['elapsed_seconds']) and row['elapsed_seconds']>0
+            assert row['identity_before']==row['identity_after']==identity
+            points.extend([row['before'],row['after']])
+        assert all(finite(point[k]) and point[k]>0 for point in points for k in ('rss_mb','static_mb'))
+        assert conditioning['after_preallocation']['static_mb']>conditioning['before_preallocation']['static_mb']
+
         assert identity['descriptor']['lifecycle']=='committing'
         assert all(identity.get(k) for k in ('view_id','ring_mesh','ghost_mesh','ring_material','ghost_material','label_text','camera_transform','camera_size'))
         for phase in phases:

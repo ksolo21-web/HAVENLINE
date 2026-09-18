@@ -4,6 +4,9 @@ extends "res://tests/capture_task10_world_transform.gd"
 const WARMUP := 120
 const SAMPLES := 360
 const CYCLES := 3
+const CONDITION_SWEEPS := 2
+const CONDITION_FRAMES := 360
+var sample_buffers: Array[Dictionary] = []
 
 func rss_mb() -> float:
 	var result: Array = []
@@ -26,12 +29,10 @@ func measure_phase(state: String, cycle: int) -> Dictionary:
 	for i in WARMUP:
 		await process_frame
 		await RenderingServer.frame_post_draw
-	var pulse_samples: Array = []
-	pulse_samples.resize(SAMPLES)
-	var intervals := PackedFloat64Array()
-	var process_ms := PackedFloat64Array()
-	intervals.resize(SAMPLES)
-	process_ms.resize(SAMPLES)
+	var buffer: Dictionary = sample_buffers[cycle * 3 + ["hidden", "frozen", "pulse"].find(state)]
+	var pulse_samples: Array = buffer.pulse_samples
+	var intervals: PackedFloat64Array = buffer.intervals
+	var process_ms: PackedFloat64Array = buffer.process_ms
 	var rss_start := rss_mb()
 	var static_start := Performance.get_monitor(Performance.MEMORY_STATIC) / 1048576.0
 	var static_peak := static_start
@@ -54,7 +55,12 @@ func measure_phase(state: String, cycle: int) -> Dictionary:
 		await process_frame
 		await RenderingServer.frame_post_draw
 		var now := Time.get_ticks_usec()
-		pulse_samples[i] = {"time": view._pulse_time, "scale": [view._ghost.scale.x, view._ghost.scale.y, view._ghost.scale.z], "y": view._ghost.position.y}
+		var sample: Dictionary = pulse_samples[i]
+		sample.time = view._pulse_time
+		sample.scale[0] = view._ghost.scale.x
+		sample.scale[1] = view._ghost.scale.y
+		sample.scale[2] = view._ghost.scale.z
+		sample.y = view._ghost.position.y
 		intervals[i] = (now - prior) / 1000.0
 		prior = now
 		process_ms[i] = Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
@@ -76,6 +82,48 @@ func measure_phase(state: String, cycle: int) -> Dictionary:
 	var rss_end := rss_mb()
 	var visual_after: Dictionary = view.descriptor()
 	return {"raw_pulse_samples": pulse_samples, "base_scale": [view._target_form_scale().x, view._target_form_scale().y, view._target_form_scale().z], "identity_before": identity_before, "identity_after": presentation_identity(), "view_visible": view.visible, "pulse_enabled": view.is_processing(), "state": state, "cycle": cycle, "warmup_frames": WARMUP, "samples": SAMPLES, "elapsed_seconds": elapsed, "frame_interval_ms": distribution(intervals), "process_proxy_ms": distribution(process_ms), "raw_frame_interval_ms": Array(intervals), "raw_process_proxy_ms": Array(process_ms), "rss_start_mb": rss_start, "rss_end_mb": rss_end, "rss_endpoint_peak_mb": maxf(rss_start, rss_end), "static_start_mb": static_start, "static_end_mb": static_end, "static_peak_mb": static_peak, "node_min": nodes_min, "node_max": nodes_max, "draw_min": draw_min, "draw_max": draw_max, "primitive_min": primitives_min, "primitive_max": primitives_max, "texture_min_mb": texture_min, "texture_max_mb": texture_max, "visual_build_count": visual_after.visual_build_count, "visual_node_count": visual_after.visual_node_count, "visual_apply_delta": visual_after.visual_apply_count - visual_before.visual_apply_count}
+
+func memory_point() -> Dictionary:
+	return {"rss_mb": rss_mb(), "static_mb": Performance.get_monitor(Performance.MEMORY_STATIC) / 1048576.0}
+
+func allocate_sample_buffers() -> void:
+	for phase in CYCLES * 3:
+		var intervals := PackedFloat64Array()
+		var process_ms := PackedFloat64Array()
+		intervals.resize(SAMPLES)
+		process_ms.resize(SAMPLES)
+		intervals.fill(0.0)
+		process_ms.fill(0.0)
+		var pulse_samples: Array = []
+		pulse_samples.resize(SAMPLES)
+		for i in SAMPLES:
+			pulse_samples[i] = {"time": 0.0, "scale": [0.0, 0.0, 0.0], "y": 0.0}
+		sample_buffers.append({"intervals": intervals, "process_ms": process_ms, "pulse_samples": pulse_samples})
+
+func configure_control(state: String) -> void:
+	view.set_process(false)
+	view._pulse_time = 0.0
+	view._process(0.0)
+	view.visible = state != "hidden"
+	view.set_process(state == "pulse")
+
+func condition_controls() -> Array[Dictionary]:
+	var rows: Array[Dictionary] = []
+	# Predetermined complete sweeps, never repeat until a memory result passes.
+	for sweep in CONDITION_SWEEPS:
+		for state in ["hidden", "frozen", "pulse"]:
+			configure_control(state)
+			var before := memory_point()
+			var identity := presentation_identity()
+			var started := Time.get_ticks_usec()
+			var frames := 0
+			for i in CONDITION_FRAMES:
+				await process_frame
+				await RenderingServer.frame_post_draw
+				frames += 1
+			var elapsed := (Time.get_ticks_usec() - started) / 1000000.0
+			rows.append({"sweep": sweep, "state": state, "frames": frames, "elapsed_seconds": elapsed, "before": before, "after": memory_point(), "identity_before": identity, "identity_after": presentation_identity()})
+	return rows
 
 func presentation_identity() -> Dictionary:
 	return {"descriptor": view.descriptor(), "view_id": view.get_instance_id(), "ring_mesh": view._ring.mesh.get_instance_id(), "ghost_mesh": view._ghost.mesh.get_instance_id(), "ring_material": view._ring_material.get_instance_id(), "ghost_material": view._ghost_material.get_instance_id(), "ring_color": str(view._ring_material.albedo_color), "ghost_color": str(view._ghost_material.albedo_color), "ghost_transparency": view._ghost_material.transparency, "label_text": view._beacon.text, "camera_transform": str(camera.global_transform), "camera_size": camera.size}
@@ -105,16 +153,17 @@ func capture_lifecycle(inventory: Dictionary) -> void:
 	state_label.text = "T10 matched committing performance controls"
 	var intent: Dictionary = engine.commit_transform("benchmark-tx", "framework_anchor_seed_to_foundation", "capture-anchor", inventory)
 	if not intent.passed or not view.show_commit(intent): quit(1); return
+	var before_allocation := memory_point()
+	allocate_sample_buffers()
+	var after_allocation := memory_point()
+	var conditioning_rows: Array[Dictionary] = await condition_controls()
+	var conditioning := {"method": "fixed_all_controls", "adaptive": false, "sweeps": CONDITION_SWEEPS, "frames_per_control": CONDITION_FRAMES, "buffer_count": sample_buffers.size(), "samples_per_buffer": SAMPLES, "before_preallocation": before_allocation, "after_preallocation": after_allocation, "phases": conditioning_rows}
 	var phases: Array[Dictionary] = []
 	var active_seconds := 0.0
 	var idle_seconds := 0.0
 	for cycle in CYCLES:
 		for state in ["hidden", "frozen", "pulse"]:
-			view.set_process(false)
-			view._pulse_time = 0.0
-			view._process(0.0)
-			view.visible = state != "hidden"
-			view.set_process(state == "pulse")
+			configure_control(state)
 			var measured: Dictionary = await measure_phase(state, cycle)
 			phases.append(measured)
 			if state == "pulse": active_seconds += measured.elapsed_seconds
@@ -127,7 +176,7 @@ func capture_lifecycle(inventory: Dictionary) -> void:
 		var pulse: Dictionary = phases[cycle * 3 + 2]
 		deltas.append({"cycle": cycle, "frame_mean_ms": pulse.frame_interval_ms.mean - frozen.frame_interval_ms.mean, "process_mean_ms": pulse.process_proxy_ms.mean - frozen.process_proxy_ms.mean, "presentation_frame_mean_ms": frozen.frame_interval_ms.mean - hidden.frame_interval_ms.mean, "presentation_process_mean_ms": frozen.process_proxy_ms.mean - hidden.process_proxy_ms.mean})
 	var isolated: Dictionary = await isolate_update_cost()
-	var report := {"task_id": "T10", "candidate_commit": candidate, "engine": Engine.get_version_info().string, "engine_version": Engine.get_version_info(), "renderer": RenderingServer.get_current_rendering_method() + "/" + RenderingServer.get_video_adapter_name(), "resolution": [capture_width, capture_height], "render_scale": root.scaling_3d_scale, "cycles": CYCLES, "frame_cap": 60, "fixed_fps": false, "measurement_io": false, "physical_certification": false, "cpu_frame_ms": null, "gpu_frame_ms_where_measurable": null, "method": "Warmed native4K software Vulkan matched committing fixture. Hidden baseline; visible frozen pulse-off; same presentation with pulse enabled. Pulse changes screen coverage, so pulse-minus-frozen includes rasterization, not pure CPU cost. Wall-clock post-draw intervals include pacing; TIME_PROCESS is a proxy. RSS endpoints via ps outside phases; static memory sampled each frame. No temperature, physical-device certification or hardware headroom claim.", "phases": phases, "isolated_update": isolated, "active_minus_idle": deltas, "active_seconds": active_seconds, "idle_seconds": idle_seconds, "active_duty_fraction": active_seconds / (active_seconds + idle_seconds), "passed": true}
+	var report := {"conditioning": conditioning, "task_id": "T10", "candidate_commit": candidate, "engine": Engine.get_version_info().string, "engine_version": Engine.get_version_info(), "renderer": RenderingServer.get_current_rendering_method() + "/" + RenderingServer.get_video_adapter_name(), "resolution": [capture_width, capture_height], "render_scale": root.scaling_3d_scale, "cycles": CYCLES, "frame_cap": 60, "fixed_fps": false, "measurement_io": false, "physical_certification": false, "cpu_frame_ms": null, "gpu_frame_ms_where_measurable": null, "method": "Warmed native4K software Vulkan matched committing fixture. All sample buffers allocated before fixed two 360-frame sweeps of every control; cold/preallocation/conditioning endpoints preserved separately, no adaptive warming. Hidden baseline; visible frozen pulse-off; same presentation with pulse enabled. Pulse changes screen coverage, so pulse-minus-frozen includes rasterization, not pure CPU cost. Wall-clock post-draw intervals include pacing; TIME_PROCESS is a proxy. RSS endpoints via ps outside phases; static memory sampled each frame. No temperature, physical-device certification or hardware headroom claim.", "phases": phases, "isolated_update": isolated, "active_minus_idle": deltas, "active_seconds": active_seconds, "idle_seconds": idle_seconds, "active_duty_fraction": active_seconds / (active_seconds + idle_seconds), "passed": true}
 	if not write_manifest(report): quit(1); return
 	print(JSON.stringify({"passed": true, "candidate_commit": candidate, "phases": phases.size()}))
 	quit(0)

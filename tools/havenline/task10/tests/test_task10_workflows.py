@@ -96,3 +96,43 @@ class AdapterRoutingTests(unittest.TestCase):
         self.assertEqual(1,source.count('retention-days: 90'))
         self.assertIn('timeout-minutes: 40',source)
         self.assertIn('timeout 1800 Godot',source)
+
+class ClosurePathTests(unittest.TestCase):
+    common = {'HavenlineGodot/scripts/world_transform.gd', 'HavenlineGodot/scripts/world_transform_view.gd',
+              'HavenlineGodot/data/world_transform_recipes.json', 'HavenlineGodot/assets/world_transform_v1/**',
+              'Docs/Production/T10/**', 'tools/havenline/task10/**', '.github/workflows/havenline-task10-*.yml'}
+    closure = {'ReviewExports/**', 'CriticRaw/**', 'independent-critic-review.json', 'defect-ledger.json',
+               'verified-completion.json', 'Evidence/**', 'task-state.json'}
+
+    @classmethod
+    def check_paths(cls, source, name):
+        block=source.split('  push:\n',1)[1].split('  pull_request:',1)[0]
+        paths=re.findall(r"^      - '([^']+)'$",block,re.M)
+        expected=cls.common | ({'HavenlineGodot/tests/test_task10_*.gd'} if name=='world-transformation' else {
+            'HavenlineGodot/tests/test_task10_world_transform.gd', 'HavenlineGodot/tests/test_task10_integration.gd',
+            'HavenlineGodot/tests/capture_task10_world_transform.gd'})
+        assert {p for p in paths if not p.startswith('!')}==expected
+        assert {p for p in paths if p.startswith('!')}=={'!Docs/Production/T10/'+p for p in cls.closure}
+        return paths
+
+    def test_only_closure_pushes_are_excluded(self):
+        from fnmatch import fnmatchcase
+        for name in ('isolated','world-transformation'):
+            paths=self.check_paths((WORKFLOWS/('havenline-task10-'+name+'.yml')).read_text(),name)
+            def triggered(file):
+                result=False
+                for pattern in paths:
+                    if fnmatchcase(file,pattern.lstrip('!')):result=not pattern.startswith('!')
+                return result
+            for file in ('ReviewExports/C3-original-bundle.zip','CriticRaw/C3.json','independent-critic-review.json','defect-ledger.json','verified-completion.json','task-state.json'):
+                self.assertFalse(triggered('Docs/Production/T10/'+file),file)
+            for file in ('Docs/Production/T10/FROZEN_SCOPE.md','Docs/Production/T10/C0-new-finding.json','tools/havenline/task10/export_closure_records.py','HavenlineGodot/scripts/world_transform.gd','.github/workflows/havenline-task10-isolated.yml'):
+                self.assertTrue(triggered(file),file)
+
+    def test_missing_exclusion_and_broad_suppression_reject(self):
+        for name in ('isolated','world-transformation'):
+            source=(WORKFLOWS/('havenline-task10-'+name+'.yml')).read_text()
+            for broken in (source.replace("      - '!Docs/Production/T10/CriticRaw/**'\n",'',1),
+                           source.replace("!Docs/Production/T10/CriticRaw/**","!Docs/Production/T10/**",1),
+                           source.replace("      - 'tools/havenline/task10/**'\n",'',1)):
+                with self.assertRaises(AssertionError):self.check_paths(broken,name)
