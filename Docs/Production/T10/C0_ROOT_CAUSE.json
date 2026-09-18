@@ -10,12 +10,12 @@
   "failed_job_id": 105628493430,
   "integration_head": "82518322a8e0dc9ee6ef12a759bf4ca723c8a490",
   "failed_candidate_role": "CUMULATIVE_REPAIR_CYCLE_ROOT",
-  "latest_failed_candidate": "0e83b1a7f07ad6128b25afa7d5484869511705fa",
+  "latest_failed_candidate": "a21075c33f071982d1778c045adf5d922055d1d0",
   "latest_failed_run_ids": [
-    35386826359,
-    35386826378
+    35397278342,
+    35397278160
   ],
-  "latest_failed_integration_head": "c1957696c6f716d3cd6f8528c95edbb7542cd4a6",
+  "latest_failed_integration_head": "710616b93fa65164e5e80bba9e151e12077b646a",
   "diagnosis_status": "DIAGNOSIS_COMPLETE",
   "terminal_class": "MIXED",
   "complete_known_blocker_set": true,
@@ -913,7 +913,8 @@
     "Exact-source C1/C2 critic records for 0e83: C1 9.3/8.8/8.5 and C2 9.5/8.7/9.5/8.5, both failing committing-overhead collision.",
     "C3 artifact 10567350315 SHA256 35f985d36a4dc2b288e28a8f728b7f4ae93bb56baf9149d4b21b41cf0bce1c8e; C4 artifact 10566951339 SHA256 6edd917c98b808bef67e074d922e81a5e805249c446e00b1b34e408cac002e4d.",
     "C7 artifact 10566236195 SHA256 d0ce759c13dbfbc776f718e9ef72ae7e72a82325c675191d0c32a31ec6b73921; C6 passed with minimum 9.2 and no repair authorized.",
-    "C0 run 35386826359 job 105756676039 artifact 10566412411 SHA256 da1caba052a07adacd35e4df3562b1a2e878043a496768524d2d0f19ed814889 retains the 29970-versus-16384 token failure."
+    "C0 run 35386826359 job 105756676039 artifact 10566412411 SHA256 da1caba052a07adacd35e4df3562b1a2e878043a496768524d2d0f19ed814889 retains the 29970-versus-16384 token failure.",
+    "Run 35397278342 passed activation/scope/import and 134 of 135 integration checks; the sole failure was the pre-repair B054 test still requiring removed duplicate prose although exact costs and shortfalls remained present. This is a B054 verification repair, not a new product blocker."
   ],
   "unexecuted_checks": [
     "The 48cc source contains B037-B048 and B048 direct Godot tests passed, but its primary, isolated and adapter workflows failed before capture, benchmark or critic review; it has no approval evidence.",
@@ -940,7 +941,7 @@
       "the exact candidate tree passes the dedicated clean hosted pipeline preflight including same-parent raw job-log retrieval"
     ]
   },
-  "summary": "The cumulative B037-B059 inventory now binds every known product, evidence and tooling failure from the latest exact candidate 0e83. B058/B059 are repaired on the integration branch; B053-B057 are one bounded task batch. No critic, dimension, model budget or strict threshold is weakened, and no prior score is reusable.",
+  "summary": "The cumulative B037-B059 inventory remains complete. Candidate a210 verified the owner prefix, integration ancestry, engine compilation and 134/135 integration checks; it exposed one stale B054 assertion that still required the deliberately removed duplicate prose. The test assertion is repaired within B054 before a new exact-source run. No critic, dimension, model budget or threshold changes.",
   "confidence": "high",
   "approval_claimed": false,
   "score_assigned": false,

@@ -313,7 +313,7 @@ func run() -> void:
 	var applies_before_noop := view.visual_apply_count
 	view.show_blocked(blocked_preview)
 	check("identical blocked payload does not reapply visuals", view.visual_apply_count == applies_before_noop)
-	check("blocked lifecycle renders exact costs and shortfalls", ring.visible and beacon.visible and ghost.visible and beacon.text.contains("8 wood + 4 stone") and beacon.text.contains("Deliver 1 wood + 1 stone"))
+	check("blocked lifecycle renders exact costs and shortfalls", ring.visible and beacon.visible and ghost.visible and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and beacon.text.contains("1 wood") and beacon.text.contains("1 stone"))
 	check("blocked primary instruction leads without repeating the shortfall", beacon.text.begins_with("BLOCKED — deliver missing resources\n") and beacon.text.count("1 wood") == 1 and beacon.text.count("1 stone") == 1 and beacon.text.contains("\ue000") and beacon.text.contains("\ue001") and not view._ring_material.emission_enabled)
 	var multi_block := blocked_preview.duplicate(true)
 	multi_block.shortfalls = {"wood": 1, "stone": 2, "metal": 3, "fuel": 4}
