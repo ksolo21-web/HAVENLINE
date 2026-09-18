@@ -1,0 +1,27 @@
+{
+  "requesting_task": "T10",
+  "target_paths": [
+    "tools/havenline/production/validate_migration.py",
+    "tools/havenline/production/tests/test_t10_activation_validation.py"
+  ],
+  "status": "APPROVED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "requested_change": "Add a distinct T10 APPROVED lifecycle branch requiring completed ownership/source identity, cleared active pointers, exact T01-T10 approved prefix and unchanged future locks.",
+  "reason": "C0-T10-B028: legitimate T10 closure is currently rejected by active-only migration validation and a prefix ending at T09.",
+  "authorization_basis": "Standing finish T10 and explicitly approved bounded T10 C7 governance repair, preserving all critics and thresholds; independently diagnosed by C0.",
+  "reviewer": "/root/t10_c0_critic",
+  "integration_base": "c7b280d0ce2189ba6f716c4f19537bb2b21845c2",
+  "preserved": [
+    "Current lifecycle/ownership/task-gates data",
+    "All critics, dimensions and strictly >9 unrounded thresholds",
+    "Generic closure validator and every evidence gate",
+    "T01-T09 histories and T11+ locks",
+    "All V3.1 byte locks"
+  ],
+  "tests_required": [
+    "Complete synthetic APPROVED state",
+    "Reject owner/pointer/source/status/prefix residue and future unlock",
+    "Full production suite and fresh hosted governance"
+  ],
+  "publication_policy": "Owner governance-only prefix. Does not approve T10 or integrate gameplay."
+}
