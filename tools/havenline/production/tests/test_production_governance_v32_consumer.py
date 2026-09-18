@@ -24,7 +24,7 @@ class GovernanceConsumerTests(unittest.TestCase):
         self.assertTrue(self.accepts(self.report))
     def test_hostile_contract_changes_fail(self):
         changes=self.report['authorized_changes']
-        for field,value in [('passed',False),('unchanged_locked_files',47),('unchanged_locked_files',46),('authorized_changes',changes[:-1]),('authorized_changes',changes+['unapproved']),('authorized_changes',list(reversed(changes))),('predecessor_accepted_source','0'*40),('predecessor_manifest_sha256','0'*64)]:
+        for field,value in [('passed',False),('unchanged_locked_files',47),('unchanged_locked_files',46),('unchanged_locked_files',45),('authorized_changes',changes[:-1]),('authorized_changes',changes+['unapproved']),('authorized_changes',list(reversed(changes))),('predecessor_accepted_source','0'*40),('predecessor_manifest_sha256','0'*64)]:
             with self.subTest(field=field,value=value):
                 bad=copy.deepcopy(self.report);bad[field]=value
                 self.assertFalse(self.accepts(bad))

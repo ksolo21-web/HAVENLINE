@@ -54,6 +54,19 @@ class T10ActivationValidationTests(unittest.TestCase):
     def errors(self, state):
         return t10_activation_errors(*state)
 
+    def test_active_repair_registry_tracks_complete_known_blocker_set(self):
+        import json
+        root = PRODUCTION.parents[2]
+        registry = json.loads((root / 'Docs/Production/WORKSTREAM_REGISTRY.json').read_text())
+        workstream = next(w for w in registry['workstreams'] if w['task_id'] == 'T10')
+        if workstream['status'] == 'FIX_REQUIRED':
+            self.assertEqual([f'C0-T10-B{i:03d}' for i in range(37, 49)], workstream['known_blockers'])
+            self.assertIn('B037-B048', workstream['next_action'])
+            canonical = root / 'Docs/Production/T10/C0_ROOT_CAUSE.json'
+            if canonical.exists():
+                report = json.loads(canonical.read_text())
+                self.assertEqual(workstream['known_blockers'], [b['id'] for b in report['blockers']])
+
     def test_exact_activated_state_passes(self):
         self.assertEqual(self.errors(self.state()), [])
 

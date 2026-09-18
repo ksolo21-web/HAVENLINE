@@ -68,8 +68,9 @@ def request_local(board,text,prompt,schema,out:pathlib.Path,label:str):
         content.append({'type':'image_url','image_url':{'url':'data:image/jpeg;base64,'+base64.b64encode(buf.getvalue()).decode()}})
     content.append({'type':'text','text':prompt+'\n\nSOURCE-BOUND STRUCTURED EVIDENCE:\n'+(text or '(visual evidence only)')})
     body={'model':'havenline-specialist-local','messages':[{'role':'user','content':content}], 'max_tokens':900,'temperature':0.2,'top_p':0.9,'seed':20260911,'chat_template_kwargs':{'enable_thinking':False},'response_format':{'type':'json_object','schema':schema},'cache_prompt':False}
-    (out/(label+'-request.json')).write_text(json.dumps(body,indent=2)[:250000])
-    req=urllib.request.Request('http://127.0.0.1:8080/v1/chat/completions',data=json.dumps(body).encode(),headers={'Content-Type':'application/json'},method='POST')
+    request_bytes=json.dumps(body).encode()
+    (out/(label+'-request.json')).write_bytes(request_bytes)
+    req=urllib.request.Request('http://127.0.0.1:8080/v1/chat/completions',data=request_bytes,headers={'Content-Type':'application/json'},method='POST')
     with urllib.request.urlopen(req,timeout=1200) as resp:raw=json.load(resp)
     (out/(label+'-raw.json')).write_text(json.dumps(raw,indent=2));choice=raw['choices'][0]
     if choice.get('finish_reason')!='stop':raise RuntimeError('incomplete reviewer response')
