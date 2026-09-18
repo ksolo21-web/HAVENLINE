@@ -26,6 +26,8 @@ func measure_phase(state: String, cycle: int) -> Dictionary:
 	for i in WARMUP:
 		await process_frame
 		await RenderingServer.frame_post_draw
+	var pulse_samples: Array = []
+	pulse_samples.resize(SAMPLES)
 	var intervals := PackedFloat64Array()
 	var process_ms := PackedFloat64Array()
 	intervals.resize(SAMPLES)
@@ -41,6 +43,7 @@ func measure_phase(state: String, cycle: int) -> Dictionary:
 	var primitives_max := 0.0
 	var texture_min := INF
 	var texture_max := 0.0
+	var identity_before := presentation_identity()
 	var visual_before: Dictionary = view.descriptor()
 	# Begin after external RSS query, excluding subprocess time.
 	await process_frame
@@ -51,6 +54,7 @@ func measure_phase(state: String, cycle: int) -> Dictionary:
 		await process_frame
 		await RenderingServer.frame_post_draw
 		var now := Time.get_ticks_usec()
+		pulse_samples[i] = {"time": view._pulse_time, "scale": [view._ghost.scale.x, view._ghost.scale.y, view._ghost.scale.z], "y": view._ghost.position.y}
 		intervals[i] = (now - prior) / 1000.0
 		prior = now
 		process_ms[i] = Performance.get_monitor(Performance.TIME_PROCESS) * 1000.0
@@ -71,43 +75,59 @@ func measure_phase(state: String, cycle: int) -> Dictionary:
 	static_peak = maxf(static_peak, static_end)
 	var rss_end := rss_mb()
 	var visual_after: Dictionary = view.descriptor()
-	return {"state": state, "cycle": cycle, "warmup_frames": WARMUP, "samples": SAMPLES, "elapsed_seconds": elapsed, "frame_interval_ms": distribution(intervals), "process_proxy_ms": distribution(process_ms), "raw_frame_interval_ms": Array(intervals), "raw_process_proxy_ms": Array(process_ms), "rss_start_mb": rss_start, "rss_end_mb": rss_end, "rss_endpoint_peak_mb": maxf(rss_start, rss_end), "static_start_mb": static_start, "static_end_mb": static_end, "static_peak_mb": static_peak, "node_min": nodes_min, "node_max": nodes_max, "draw_min": draw_min, "draw_max": draw_max, "primitive_min": primitives_min, "primitive_max": primitives_max, "texture_min_mb": texture_min, "texture_max_mb": texture_max, "visual_build_count": visual_after.visual_build_count, "visual_node_count": visual_after.visual_node_count, "visual_apply_delta": visual_after.visual_apply_count - visual_before.visual_apply_count}
+	return {"raw_pulse_samples": pulse_samples, "base_scale": [view._target_form_scale().x, view._target_form_scale().y, view._target_form_scale().z], "identity_before": identity_before, "identity_after": presentation_identity(), "view_visible": view.visible, "pulse_enabled": view.is_processing(), "state": state, "cycle": cycle, "warmup_frames": WARMUP, "samples": SAMPLES, "elapsed_seconds": elapsed, "frame_interval_ms": distribution(intervals), "process_proxy_ms": distribution(process_ms), "raw_frame_interval_ms": Array(intervals), "raw_process_proxy_ms": Array(process_ms), "rss_start_mb": rss_start, "rss_end_mb": rss_end, "rss_endpoint_peak_mb": maxf(rss_start, rss_end), "static_start_mb": static_start, "static_end_mb": static_end, "static_peak_mb": static_peak, "node_min": nodes_min, "node_max": nodes_max, "draw_min": draw_min, "draw_max": draw_max, "primitive_min": primitives_min, "primitive_max": primitives_max, "texture_min_mb": texture_min, "texture_max_mb": texture_max, "visual_build_count": visual_after.visual_build_count, "visual_node_count": visual_after.visual_node_count, "visual_apply_delta": visual_after.visual_apply_count - visual_before.visual_apply_count}
+
+func presentation_identity() -> Dictionary:
+	return {"descriptor": view.descriptor(), "view_id": view.get_instance_id(), "ring_mesh": view._ring.mesh.get_instance_id(), "ghost_mesh": view._ghost.mesh.get_instance_id(), "ring_material": view._ring_material.get_instance_id(), "ghost_material": view._ghost_material.get_instance_id(), "ring_color": str(view._ring_material.albedo_color), "ghost_color": str(view._ghost_material.albedo_color), "ghost_transparency": view._ghost_material.transparency, "label_text": view._beacon.text, "camera_transform": str(camera.global_transform), "camera_size": camera.size}
+
+func isolate_update_cost() -> Dictionary:
+	view.set_process(false)
+	var gross := PackedFloat64Array()
+	var empty := PackedFloat64Array()
+	var calls := 100
+	for batch in 20:
+		await process_frame
+		await RenderingServer.frame_post_draw
+		var start := Time.get_ticks_usec()
+		for i in calls:
+			pass
+		empty.append(float(Time.get_ticks_usec() - start) / calls)
+		start = Time.get_ticks_usec()
+		for i in calls:
+			view._process(1.0 / 60.0)
+		gross.append(float(Time.get_ticks_usec() - start) / calls)
+	return {"batches": 20, "calls_per_batch": calls, "raw_gross_usec_per_call": Array(gross), "raw_empty_usec_per_call": Array(empty), "gross_usec_per_call": distribution(gross), "empty_usec_per_call": distribution(empty), "method": "Direct view._process(1/60), including transform setters and render command submission, with empty-loop overhead separately measured. Frame awaits are outside batches; this is not whole-frame CPU or GPU time."}
 
 func capture_lifecycle(inventory: Dictionary) -> void:
 	Engine.max_fps = 60
 	DisplayServer.window_set_vsync_mode(DisplayServer.VSYNC_DISABLED)
 	configure_camera("front")
-	state_label.text = "T10 bounded steady-state performance fixture"
-	var preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
+	state_label.text = "T10 matched committing performance controls"
 	var intent: Dictionary = engine.commit_transform("benchmark-tx", "framework_anchor_seed_to_foundation", "capture-anchor", inventory)
-	if not preview.passed or not intent.passed: quit(1); return
-	# Warm both material/font states before sampling either.
-	view.set_ready(preview)
-	for i in WARMUP:
-		await process_frame
-		await RenderingServer.frame_post_draw
-	if not view.show_commit(intent): quit(1); return
-	for i in WARMUP:
-		await process_frame
-		await RenderingServer.frame_post_draw
+	if not intent.passed or not view.show_commit(intent): quit(1); return
 	var phases: Array[Dictionary] = []
 	var active_seconds := 0.0
 	var idle_seconds := 0.0
 	for cycle in CYCLES:
-		view.set_ready(preview)
-		var idle: Dictionary = await measure_phase("idle", cycle)
-		phases.append(idle)
-		idle_seconds += idle.elapsed_seconds
-		if not view.show_commit(intent): quit(1); return
-		var active: Dictionary = await measure_phase("committing", cycle)
-		phases.append(active)
-		active_seconds += active.elapsed_seconds
+		for state in ["hidden", "frozen", "pulse"]:
+			view.set_process(false)
+			view._pulse_time = 0.0
+			view._process(0.0)
+			view.visible = state != "hidden"
+			view.set_process(state == "pulse")
+			var measured: Dictionary = await measure_phase(state, cycle)
+			phases.append(measured)
+			if state == "pulse": active_seconds += measured.elapsed_seconds
+			elif state == "frozen": idle_seconds += measured.elapsed_seconds
+			print(JSON.stringify({"cycle": cycle, "completed_control": state}))
 	var deltas: Array[Dictionary] = []
 	for cycle in CYCLES:
-		var idle: Dictionary = phases[cycle * 2]
-		var active: Dictionary = phases[cycle * 2 + 1]
-		deltas.append({"cycle": cycle, "frame_mean_ms": active.frame_interval_ms.mean - idle.frame_interval_ms.mean, "process_mean_ms": active.process_proxy_ms.mean - idle.process_proxy_ms.mean})
-	var report := {"task_id": "T10", "candidate_commit": candidate, "engine": Engine.get_version_info().string, "renderer": RenderingServer.get_current_rendering_method() + "/" + RenderingServer.get_video_adapter_name(), "resolution": [capture_width, capture_height], "render_scale": root.scaling_3d_scale, "cycles": CYCLES, "frame_cap": 60, "fixed_fps": false, "measurement_io": false, "physical_certification": false, "cpu_frame_ms": null, "gpu_frame_ms_where_measurable": null, "method": "Warmed native4K software Vulkan fixture; wall-clock post-draw intervals include frame pacing; Godot TIME_PROCESS is a process proxy, not hardware CPU/GPU timing. RSS endpoints via ps outside each phase; static memory sampled each frame. No temperature or physical-device certification.", "phases": phases, "active_minus_idle": deltas, "active_seconds": active_seconds, "idle_seconds": idle_seconds, "active_duty_fraction": active_seconds / (active_seconds + idle_seconds), "passed": true}
+		var hidden: Dictionary = phases[cycle * 3]
+		var frozen: Dictionary = phases[cycle * 3 + 1]
+		var pulse: Dictionary = phases[cycle * 3 + 2]
+		deltas.append({"cycle": cycle, "frame_mean_ms": pulse.frame_interval_ms.mean - frozen.frame_interval_ms.mean, "process_mean_ms": pulse.process_proxy_ms.mean - frozen.process_proxy_ms.mean, "presentation_frame_mean_ms": frozen.frame_interval_ms.mean - hidden.frame_interval_ms.mean, "presentation_process_mean_ms": frozen.process_proxy_ms.mean - hidden.process_proxy_ms.mean})
+	var isolated: Dictionary = await isolate_update_cost()
+	var report := {"task_id": "T10", "candidate_commit": candidate, "engine": Engine.get_version_info().string, "engine_version": Engine.get_version_info(), "renderer": RenderingServer.get_current_rendering_method() + "/" + RenderingServer.get_video_adapter_name(), "resolution": [capture_width, capture_height], "render_scale": root.scaling_3d_scale, "cycles": CYCLES, "frame_cap": 60, "fixed_fps": false, "measurement_io": false, "physical_certification": false, "cpu_frame_ms": null, "gpu_frame_ms_where_measurable": null, "method": "Warmed native4K software Vulkan matched committing fixture. Hidden baseline; visible frozen pulse-off; same presentation with pulse enabled. Pulse changes screen coverage, so pulse-minus-frozen includes rasterization, not pure CPU cost. Wall-clock post-draw intervals include pacing; TIME_PROCESS is a proxy. RSS endpoints via ps outside phases; static memory sampled each frame. No temperature, physical-device certification or hardware headroom claim.", "phases": phases, "isolated_update": isolated, "active_minus_idle": deltas, "active_seconds": active_seconds, "idle_seconds": idle_seconds, "active_duty_fraction": active_seconds / (active_seconds + idle_seconds), "passed": true}
 	if not write_manifest(report): quit(1); return
 	print(JSON.stringify({"passed": true, "candidate_commit": candidate, "phases": phases.size()}))
 	quit(0)

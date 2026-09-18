@@ -1,4 +1,4 @@
-import copy,importlib.util,unittest
+import copy,importlib.util,unittest,math
 from pathlib import Path
 spec=importlib.util.spec_from_file_location('t10build',Path(__file__).parents[1]/'build_critic_evidence.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 class MotionEvidenceTests(unittest.TestCase):
@@ -42,13 +42,18 @@ class BenchmarkEvidenceTests(unittest.TestCase):
   def stats(v):return dict(count=360,mean=v,p95=v,p99=v,max=v,first_half_mean=v,last_half_mean=v,half_drift=0)
   phases=[]
   for cycle in range(3):
-   for state in ('idle','committing'):
-    phases.append(dict(state=state,cycle=cycle,warmup_frames=120,samples=360,elapsed_seconds=6.00012,
+   for state in ('hidden','frozen','pulse'):
+    identity=dict(descriptor=dict(lifecycle='committing',target_revision=1),view_id=1,ring_mesh=2,ghost_mesh=3,ring_material=4,ghost_material=5,label_text='Applying',camera_transform='fixed',camera_size=8)
+    motion=[]
+    for i in range(360):
+     t=(i/60)%10 if state=='pulse' else 0;pulse=1+math.sin(t*math.tau*1.4)*.18
+     motion.append(dict(time=t,scale=[pulse]*3,y=.08+.75*pulse))
+    phases.append(dict(raw_pulse_samples=motion,base_scale=[1,1,1],identity_before=identity,identity_after=copy.deepcopy(identity),view_visible=state!='hidden',pulse_enabled=state=='pulse',state=state,cycle=cycle,warmup_frames=120,samples=360,elapsed_seconds=6.00012,
        frame_interval_ms=stats(16.667),process_proxy_ms=stats(1),raw_frame_interval_ms=values.copy(),raw_process_proxy_ms=[1]*360,
        rss_start_mb=700,rss_end_mb=701,rss_endpoint_peak_mb=701,static_start_mb=100,static_end_mb=101,static_peak_mb=101,
        node_min=15,node_max=15,draw_min=9,draw_max=9,primitive_min=2200,primitive_max=2200,texture_min_mb=170,texture_max_mb=170,
        visual_build_count=1,visual_node_count=4,visual_apply_delta=0))
-  return dict(passed=True,task_id='T10',candidate_commit='a'*40,engine='4.7.2.stable.official.ed1daf0bf',renderer='mobile/llvmpipe',resolution=[3840,2160],render_scale=1,cycles=3,frame_cap=60,fixed_fps=False,measurement_io=False,physical_certification=False,phases=phases,active_seconds=18.00036,idle_seconds=18.00036,active_duty_fraction=.5,active_minus_idle=[dict(cycle=i,frame_mean_ms=0,process_mean_ms=0) for i in range(3)])
+  return dict(passed=True,task_id='T10',candidate_commit='a'*40,engine='4.7.2-stable (official)',engine_version=dict(major=4,minor=7,patch=2,status='stable',build='official',hash='ed1daf0bf001b61586d9930840f2f1394092c079',string='4.7.2-stable (official)'),renderer='mobile/llvmpipe',resolution=[3840,2160],render_scale=1,cycles=3,frame_cap=60,fixed_fps=False,measurement_io=False,physical_certification=False,phases=phases,active_seconds=18.00036,idle_seconds=18.00036,active_duty_fraction=.5,isolated_update=dict(batches=20,calls_per_batch=100,raw_gross_usec_per_call=[1]*20,raw_empty_usec_per_call=[0]*20,gross_usec_per_call=dict(stats(1),count=20),empty_usec_per_call=dict(stats(0),count=20)),active_minus_idle=[dict(cycle=i,frame_mean_ms=0,process_mean_ms=0,presentation_frame_mean_ms=0,presentation_process_mean_ms=0) for i in range(3)])
  def test_finite_repeated_measurement(self):self.assertEqual([],m.benchmark_errors(self.fixture(),'a'*40))
  def test_missing_stale_nonphysical_and_forged_metrics_reject(self):
   for key,value in [('passed',False),('renderer','mobile/forged-hardware'),('render_scale',True),('active_seconds','bad'),('candidate_commit','b'*40),('physical_certification',True),('measurement_io',True),('resolution',[1280,720]),('active_duty_fraction',1)]:
@@ -69,3 +74,28 @@ class BenchmarkEvidenceTests(unittest.TestCase):
   self.assertTrue(m.benchmark_errors(row,'a'*40))
   row=self.fixture();row['phases'][0]['rss_endpoint_peak_mb']=1
   self.assertTrue(m.benchmark_errors(row,'a'*40))
+
+ def test_structured_version_and_matched_controls_reject_forgery(self):
+  for key,value in [('major',True),('minor',8),('patch',3),('build','custom'),('status','dev'),('hash','ed1daf0bf'),('string','fake')]:
+   row=self.fixture();row['engine_version'][key]=value
+   with self.subTest(key=key):self.assertTrue(m.benchmark_errors(row,'a'*40))
+  for change in ('identity','visibility','processing','delta','cpu_missing','cpu_stats','cpu_short'):
+   row=self.fixture()
+   if change=='identity':row['phases'][2]['identity_after']['label_text']='different'
+   elif change=='visibility':row['phases'][0]['view_visible']=True
+   elif change=='processing':row['phases'][1]['pulse_enabled']=True
+   elif change=='delta':row['active_minus_idle'][0]['presentation_frame_mean_ms']=8
+   elif change=='cpu_missing':del row['isolated_update']
+   elif change=='cpu_stats':row['isolated_update']['gross_usec_per_call']['p99']=9
+   else:row['isolated_update']['calls_per_batch']=1
+   with self.subTest(change=change):self.assertTrue(m.benchmark_errors(row,'a'*40))
+
+ def test_controls_must_prove_actual_bounded_motion(self):
+  for change in ('pulse_still','frozen_moves','range','time','base'):
+   row=self.fixture()
+   if change=='pulse_still':row['phases'][2]['raw_pulse_samples']=copy.deepcopy(row['phases'][1]['raw_pulse_samples'])
+   elif change=='frozen_moves':row['phases'][1]['raw_pulse_samples']=copy.deepcopy(row['phases'][2]['raw_pulse_samples'])
+   elif change=='range':row['phases'][2]['raw_pulse_samples'][3]['scale'][0]=2
+   elif change=='time':row['phases'][2]['raw_pulse_samples'][3]['time']=float('nan')
+   else:row['phases'][2]['base_scale']=[2,2,2]
+   with self.subTest(change=change):self.assertTrue(m.benchmark_errors(row,'a'*40))

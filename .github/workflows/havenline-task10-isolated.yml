@@ -247,7 +247,7 @@ jobs:
           set -euo pipefail
           mkdir -p task10-isolated-evidence/benchmark
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
-          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script "$(pwd)/tools/havenline/task10/benchmark_world_transform.gd" -- --candidate="$GITHUB_SHA" --width=3840 --height=2160 --out="$(pwd)/task10-isolated-evidence/benchmark" > task10-isolated-evidence/benchmark/benchmark.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 1800 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script "$(pwd)/tools/havenline/task10/benchmark_world_transform.gd" -- --candidate="$GITHUB_SHA" --width=3840 --height=2160 --out="$(pwd)/task10-isolated-evidence/benchmark" > task10-isolated-evidence/benchmark/benchmark.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-isolated-evidence/benchmark/benchmark.log; then exit 1; fi
 
       - name: Package source-bound specialist inputs and quantitative C6
@@ -263,7 +263,7 @@ jobs:
           name: havenline-task10-critic-input-${{ github.sha }}
           path: critic-input
           if-no-files-found: error
-          retention-days: 30
+          retention-days: 90
 
       - name: Validate critic input readiness
         run: |

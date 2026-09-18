@@ -81,16 +81,39 @@ def benchmark_errors(report, candidate):
     if report.get('passed') is not True: errors.append('benchmark execution did not pass')
     if any(not finite(report.get(k)) for k in ('render_scale','frame_cap','cycles','active_seconds','idle_seconds','active_duty_fraction')):errors.append('invalid benchmark scalar')
     if report.get('candidate_commit')!=candidate or report.get('task_id')!='T10': errors.append('benchmark source mismatch')
-    if report.get('engine')!='4.7.2.stable.official.ed1daf0bf' or not re.fullmatch(r'mobile/llvmpipe(?: \(.+\))?',str(report.get('renderer',''))) or report.get('resolution')!=[3840,2160] or report.get('render_scale')!=1: errors.append('benchmark environment mismatch')
+    version=report.get('engine_version',{})
+    expected_version=dict(major=4,minor=7,patch=2,status='stable',build='official',hash='ed1daf0bf001b61586d9930840f2f1394092c079')
+    if not isinstance(version,dict) or any(type(version.get(k)) is not type(v) or version.get(k)!=v for k,v in expected_version.items()): errors.append('benchmark structured engine identity mismatch')
+    if report.get('engine')!='4.7.2-stable (official)' or version.get('string')!=report.get('engine') or not re.fullmatch(r'mobile/llvmpipe(?: \(.+\))?',str(report.get('renderer',''))) or report.get('resolution')!=[3840,2160] or report.get('render_scale')!=1: errors.append('benchmark environment mismatch')
     if report.get('physical_certification') is not False or report.get('measurement_io') is not False or report.get('fixed_fps') is not False or report.get('frame_cap')!=60: errors.append('benchmark method mismatch')
     if report.get('cpu_frame_ms') is not None or report.get('gpu_frame_ms_where_measurable') is not None: errors.append('physical timing claim forbidden')
     phases=report.get('phases',[])
-    if report.get('cycles')!=3 or len(phases)!=6 or [(x.get('cycle'),x.get('state')) for x in phases]!=[(c,s) for c in range(3) for s in ('idle','committing')]: errors.append('benchmark repeated phases missing')
+    if report.get('cycles')!=3 or len(phases)!=9 or [(x.get('cycle'),x.get('state')) for x in phases]!=[(c,s) for c in range(3) for s in ('hidden','frozen','pulse')]: errors.append('benchmark repeated phases missing')
     try:
+        identity=phases[0]['identity_before']
+        assert identity['descriptor']['lifecycle']=='committing'
+        assert all(identity.get(k) for k in ('view_id','ring_mesh','ghost_mesh','ring_material','ghost_material','label_text','camera_transform','camera_size'))
         for phase in phases:
+            assert phase['identity_before']==phase['identity_after']==identity
+            assert phase['view_visible'] is (phase['state']!='hidden') and phase['pulse_enabled'] is (phase['state']=='pulse')
             scalars=('cycle','warmup_frames','samples','elapsed_seconds','node_min','node_max','visual_build_count','visual_node_count','visual_apply_delta')
             assert all(finite(phase.get(k)) for k in scalars)
             assert phase['warmup_frames']>=120 and phase['samples']>=360 and phase['elapsed_seconds']>0
+            motion=phase['raw_pulse_samples'];base=phase['base_scale']
+            assert len(motion)==phase['samples'] and len(base)==3 and all(finite(v) and v>0 for v in base)
+            revision=identity['descriptor']['target_revision']
+            assert base==[1.0,min(1.35,1.0+0.25*max(0,revision-1)),1.0]
+            for sample in motion:
+                t=sample['time'];scale=sample['scale'];y=sample['y']
+                assert finite(t) and 0<=t<10 and len(scale)==3 and all(finite(v) for v in scale) and finite(y)
+                pulse=1+math.sin(t*math.tau*1.4)*.18
+                assert all(math.isclose(v,b*pulse,rel_tol=1e-5,abs_tol=1e-5) for v,b in zip(scale,base))
+                assert math.isclose(y,.08+.75*scale[1],rel_tol=1e-5,abs_tol=1e-5)
+                if phase['state']!='pulse':assert t==0 and all(math.isclose(v,b,abs_tol=1e-5) for v,b in zip(scale,base))
+            if phase['state']=='pulse':
+                assert len({s['time'] for s in motion})>100
+                assert max(s['scale'][0] for s in motion)-min(s['scale'][0] for s in motion)>.2
+
             for metric,raw in [('frame_interval_ms','raw_frame_interval_ms'),('process_proxy_ms','raw_process_proxy_ms')]:
                 values=phase[raw];stats=phase[metric];count=len(values)
                 assert finite(stats['count']) and count==phase['samples']==stats['count']
@@ -109,11 +132,24 @@ def benchmark_errors(report, candidate):
             assert phase['static_peak_mb']-phase['static_start_mb']<16 and phase['rss_end_mb']-phase['rss_start_mb']<32
         assert len(report['active_minus_idle'])==3
         for cycle in range(3):
-            idle,active=phases[cycle*2:cycle*2+2];delta=report['active_minus_idle'][cycle]
+            hidden,idle,active=phases[cycle*3:cycle*3+3];delta=report['active_minus_idle'][cycle]
             assert finite(delta['cycle']) and delta['cycle']==cycle
             for key,metric in [('frame_mean_ms','frame_interval_ms'),('process_mean_ms','process_proxy_ms')]:
                 assert finite(delta[key]) and math.isclose(delta[key],active[metric]['mean']-idle[metric]['mean'],rel_tol=1e-5,abs_tol=1e-4)
-        active=sum(p['elapsed_seconds'] for p in phases if p['state']=='committing');idle=sum(p['elapsed_seconds'] for p in phases if p['state']=='idle')
+            for key,metric in [('presentation_frame_mean_ms','frame_interval_ms'),('presentation_process_mean_ms','process_proxy_ms')]:
+                assert finite(delta[key]) and math.isclose(delta[key],idle[metric]['mean']-hidden[metric]['mean'],rel_tol=1e-5,abs_tol=1e-4)
+            for key in ('draw_min','primitive_min','texture_min_mb'):
+                assert idle[key]==active[key]
+        update=report['isolated_update']
+        assert type(update['batches']) is int and update['batches']>=20 and type(update['calls_per_batch']) is int and update['calls_per_batch']>=100
+        for name in ('gross','empty'):
+            values=update['raw_'+name+'_usec_per_call'];stats=update[name+'_usec_per_call'];n=len(values);half=n//2
+            assert n==update['batches']==stats['count'] and n%2==0 and all(finite(v) and v>=0 for v in values)
+            if name=='gross':assert max(values)>0
+            ordered=sorted(values)
+            expected={'mean':sum(values)/n,'p95':ordered[math.ceil(n*.95)-1],'p99':ordered[math.ceil(n*.99)-1],'max':max(values),'first_half_mean':sum(values[:half])/half,'last_half_mean':sum(values[half:])/half,'half_drift':(sum(values[half:])-sum(values[:half]))/half}
+            assert all(finite(stats[k]) and math.isclose(stats[k],v,rel_tol=1e-5,abs_tol=1e-4) for k,v in expected.items())
+        active=sum(p['elapsed_seconds'] for p in phases if p['state']=='pulse');idle=sum(p['elapsed_seconds'] for p in phases if p['state']=='frozen')
         assert math.isclose(report['active_seconds'],active,rel_tol=1e-5) and math.isclose(report['idle_seconds'],idle,rel_tol=1e-5)
         assert math.isclose(report['active_duty_fraction'],active/(active+idle),rel_tol=1e-5)
         assert phases[-1]['rss_end_mb']-phases[0]['rss_start_mb']<32

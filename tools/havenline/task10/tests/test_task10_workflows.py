@@ -90,3 +90,9 @@ class AdapterRoutingTests(unittest.TestCase):
         self.assertIn('benchmark_world_transform.gd',block)
         self.assertNotIn('--fixed-fps',block)
         self.assertNotIn('--write-movie',block)
+
+    def test_review_retention_and_bounded_control_timeout(self):
+        source=(WORKFLOWS/'havenline-task10-isolated.yml').read_text()
+        self.assertEqual(1,source.count('retention-days: 90'))
+        self.assertIn('timeout-minutes: 40',source)
+        self.assertIn('timeout 1800 Godot',source)
