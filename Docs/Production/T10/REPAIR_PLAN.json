@@ -4,10 +4,10 @@
   "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
   "c0_report_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
-  "c0_report_sha256": "f488482fa469675be8c29d59c8632df8c619d045ad97df241ecd9f82d71af5d3",
+  "c0_report_sha256": "e17b8f3714cbd3d2f5e16130980a92ec7a07ee625911bbc156672095b9b6743c",
   "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "repair_base_status": "CUMULATIVE_REPAIR_CYCLE_ROOT_WITH_LATEST_TERMINAL_FAILURE_BOUND",
-  "repair_base_rule": "Measure the complete reconciled B037-B059 owner-plus-task diff from cumulative repair root c7a18d002fe8d0f3978370f3e4567ba88bfe17e8. The latest terminal evidence is a21075c33f071982d1778c045adf5d922055d1d0; it is evidence only and no score is reusable.",
+  "repair_base_rule": "Measure the complete reconciled B037-B061 owner-plus-task diff from cumulative repair root c7a18d002fe8d0f3978370f3e4567ba88bfe17e8. The latest terminal evidence is 5fc87f4897597463d2f6b39229ef9479bd9bc776; it is evidence only and no score is reusable.",
   "full_blocker_set_acknowledged": true,
   "candidate_freeze_after_build": true,
   "validation_concurrency_policy": "finish_running_sha",
@@ -52,7 +52,9 @@
     "Require every C3/C4 visual group to contain at most six unique visual items while retaining the complete original visual set.",
     "Require all native state/angle projected-clearance records and all device manifests to be exact-source, finite, non-overlapping, in-frame and priority-bound.",
     "Require C7 context to preserve R01-R14, all six unchanged dimensions and exact source-bound R05/R06 rows; reject stale, missing, duplicate or failed rows.",
-    "Require exact-0e83-shaped C0 requests to fit the fixed context budget and HTTP failures to retain bounded diagnostics without emitting a diagnosis."
+    "Require exact-0e83-shaped C0 requests to fit the fixed context budget and HTTP failures to retain bounded diagnostics without emitting a diagnosis.",
+    "Require C0 artifact diagnostics to cite bounded exact source excerpts and every T10 causal path to exist in the tracked repository; reject fabricated, paraphrased or ungrounded diagnoses.",
+    "Require the 960-unit canonical label width contract and projected containment proof across every state, camera and device before any critic executes."
   ],
   "fixes": [
     {
@@ -315,7 +317,7 @@
     },
     {
       "blocker_id": "C0-T10-B053",
-      "causal_change": "Give the existing Label3D a deterministic camera-plane lane outside the maximum projected ring/ghost envelope and explicit glyph/outline priorities above transparent response passes. Preserve four nodes, one build, cameras, authority and lifecycle semantics.",
+      "causal_change": "Keep the deterministic camera-plane lane and explicit glyph/outline priorities, and cap the canonical label width at 960 world units so the exact phone overhead projection remains inside the safe frame with positive clearance. Preserve four nodes, one build, cameras, authority and lifecycle semantics.",
       "files": [
         "HavenlineGodot/scripts/world_transform_view.gd",
         "HavenlineGodot/tests/test_task10_integration.gd"
@@ -341,7 +343,7 @@
     },
     {
       "blocker_id": "C0-T10-B055",
-      "causal_change": "Record and validate finite projected label/response/frame rectangles, positive source-declared clearance, zero overlap, full containment and exact priority for every native state/angle capture.",
+      "causal_change": "Retain the finite projected label/response/frame, clearance, overlap, containment and priority checks for every native and device capture; reduce only the source-declared canonical label width to satisfy the already-strict invariant on phone 16:9 overhead.",
       "files": [
         "HavenlineGodot/tests/capture_task10_world_transform.gd",
         "tools/havenline/task10/validate_critic_readiness.py",
@@ -423,11 +425,50 @@
         "Full task and production suites pass with unchanged governance/critic thresholds.",
         "Fresh exact-source isolated and integrated critic runs are required; this plan claims no approval."
       ]
+    },
+    {
+      "blocker_id": "C0-T10-B060",
+      "files": [
+        "tools/havenline/production/collect_artifact_diagnostics.py",
+        ".github/workflows/havenline-c0-root-cause.yml",
+        "tools/havenline/production/c0_root_cause_advisor.py",
+        "tools/havenline/production/tests/test_c0_builder.py",
+        "Docs/Production/ChangeRequests/T10-c0-grounded-artifact-diagnostics.json",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        ".github/workflows/havenline-production-governance.yml",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "tools/havenline/production/tests/test_t10_activation_validation.py"
+      ],
+      "causal_change": "Scan downloaded text artifacts deterministically, retain only actual failed dispositions with source path, line and source hash, and include that bounded projection in the immutable packet and model request.",
+      "verification": [
+        "Collector tests prove bounded source path/line/hash extraction and exclude nested expected-negative fixture failures.",
+        "The exact a210 artifact yields the real failed integration disposition in the semantic projection.",
+        "Full production governance passes with all critics, budgets and thresholds unchanged."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B061",
+      "files": [
+        "tools/havenline/production/c0_root_cause_advisor.py",
+        "tools/havenline/production/tests/test_c0_builder.py",
+        ".github/workflows/havenline-c0-root-cause.yml",
+        "Docs/Production/ChangeRequests/T10-c0-grounded-artifact-diagnostics.json",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        ".github/workflows/havenline-production-governance.yml",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "tools/havenline/production/tests/test_t10_activation_validation.py"
+      ],
+      "causal_change": "For T10, require every evidence item to cite an exact retained SOURCE | EXACT_QUOTE and every files_to_change entry to equal a tracked repository path; reject the diagnosis before publication when either binding fails.",
+      "verification": [
+        "Hostile tests reject uncited/paraphrased evidence, missing source excerpts and untracked causal paths.",
+        "Valid diagnoses retain exact artifact excerpts and tracked paths without changing C0 model/runtime/token/timeouts.",
+        "Full production governance passes with C0 non-voting and every critic threshold unchanged."
+      ]
     }
   ],
   "verification_order": [
-    "CANONICAL CUMULATIVE B037-B059 ACTIVATION",
-    "PUBLISHED OWNER B058/B059 GOVERNANCE PREFIX",
+    "CANONICAL CUMULATIVE B037-B061 ACTIVATION",
+    "PUBLISHED OWNER B058-B061 GOVERNANCE PREFIX",
     "ONE B053-B057 PRODUCT AND EVIDENCE BATCH",
     "FOCUSED HOSTILE, GODOT, TASK AND PRODUCTION TESTS",
     "CHEAP HOSTED EXACT-SHA PREFLIGHT",

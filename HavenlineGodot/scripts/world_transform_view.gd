@@ -13,6 +13,7 @@ const READABILITY_MIN := 0.85
 const READABILITY_MAX := 1.35
 const PULSE_HZ := 1.4
 const LABEL_CAMERA_OFFSET := Vector2(0.0, -190.0)
+const LABEL_MAX_WIDTH := 960.0
 const LABEL_RENDER_PRIORITY := 100
 const LABEL_OUTLINE_RENDER_PRIORITY := 99
 const LABEL_MIN_CLEARANCE_PX := 12.0
@@ -73,6 +74,7 @@ static func contract() -> Dictionary:
 		"readability_scale_range": [READABILITY_MIN, READABILITY_MAX],
 		"committing_pulse_hz": PULSE_HZ,
 		"label_camera_offset": LABEL_CAMERA_OFFSET,
+		"label_max_width": LABEL_MAX_WIDTH,
 		"label_render_priority": LABEL_RENDER_PRIORITY,
 		"label_outline_render_priority": LABEL_OUTLINE_RENDER_PRIORITY,
 	}
@@ -252,7 +254,7 @@ func _ensure_visuals() -> void:
 	_beacon.font = resource_font
 	_beacon.font_size = 38
 	_beacon.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
-	_beacon.width = 1000.0
+	_beacon.width = LABEL_MAX_WIDTH
 	_beacon.outline_size = 9
 	_beacon.pixel_size = 0.006
 	_beacon.billboard = BaseMaterial3D.BILLBOARD_ENABLED
@@ -412,7 +414,9 @@ func _resource_cues(values: Dictionary, marker := "") -> String:
 	for kind in ["wood", "stone", "metal", "fuel"]:
 		if values.has(kind):
 			parts.append("%s%s %d %s" % [marker, RESOURCE_GLYPHS[kind], int(values[kind]), kind])
-	return "   ".join(parts)
+	# Two spaces keep resource tokens visually separate while preserving the
+	# camera-plane side lane on the narrowest canonical landscape viewport.
+	return "  ".join(parts)
 
 func _readable_reasons(reasons: Array, shortfalls: Dictionary = {}) -> String:
 	var readable: Array[String] = []

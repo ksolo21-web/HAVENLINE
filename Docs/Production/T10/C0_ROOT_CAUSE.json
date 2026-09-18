@@ -10,10 +10,9 @@
   "failed_job_id": 105628493430,
   "integration_head": "82518322a8e0dc9ee6ef12a759bf4ca723c8a490",
   "failed_candidate_role": "CUMULATIVE_REPAIR_CYCLE_ROOT",
-  "latest_failed_candidate": "a21075c33f071982d1778c045adf5d922055d1d0",
+  "latest_failed_candidate": "5fc87f4897597463d2f6b39229ef9479bd9bc776",
   "latest_failed_run_ids": [
-    35397278342,
-    35397278160
+    35397839956
   ],
   "latest_failed_integration_head": "710616b93fa65164e5e80bba9e151e12077b646a",
   "diagnosis_status": "DIAGNOSIS_COMPLETE",
@@ -638,9 +637,9 @@
       "id": "C0-T10-B053",
       "classification": "PRODUCT_DEFECT",
       "affected_object": "T10 presentation and critic evidence",
-      "symptom": "C1 and C2 independently reject committing-overhead for label/ring collision and washed-out outline.",
-      "root_cause": "The Label3D is separated from response geometry mainly in world Y, which collapses in the required overhead camera; the committing transparent/emissive ring also composites through its outline.",
-      "causal_fix": "Give the existing Label3D a deterministic camera-plane lane outside the maximum projected ring/ghost envelope and explicit glyph/outline priorities above transparent response passes. Preserve four nodes, one build, cameras, authority and lifecycle semantics.",
+      "symptom": "C1 and C2 independently rejected the original committing-overhead collision; after the camera-plane lane repair, exact candidate 5fc87f passed primary but its isolated phone 16:9 ready/overhead projection placed the label rectangle 20.006 px beyond the 27 px safe-frame inset.",
+      "root_cause": "The original Label3D separation collapsed in the required overhead camera. The first camera-plane repair removed response overlap but left the canonical label width unconstrained for the narrowest device projection.",
+      "causal_fix": "Keep the deterministic camera-plane lane and explicit glyph/outline priorities, and cap the canonical label width at 960 world units so the exact phone overhead projection remains inside the safe frame with positive clearance. Preserve four nodes, one build, cameras, authority and lifecycle semantics.",
       "files_to_change": [
         "HavenlineGodot/scripts/world_transform_view.gd",
         "HavenlineGodot/tests/test_task10_integration.gd",
@@ -658,7 +657,8 @@
         ".github/workflows/havenline-specialist-critic.yml"
       ],
       "evidence": [
-        "C1 and C2 independently reject committing-overhead for label/ring collision and washed-out outline."
+        "C1 and C2 independently rejected the original committing-overhead label/ring collision and washed-out outline.",
+        "Run 35397839956 artifact 10570168891, device-layout/phone_16_9/capture.log line 4: label_rect starts at x=6.99359130859375 while frame_rect starts at x=27.0; overlap=false, priority_ok=true, fully_in_frame=false."
       ],
       "verification": [
         "Run focused hostile tests for the exact causal boundary.",
@@ -702,9 +702,9 @@
       "id": "C0-T10-B055",
       "classification": "EVIDENCE_DEFECT",
       "affected_object": "T10 presentation and critic evidence",
-      "symptom": "The known overhead collision passed packaging and consumed all critic jobs.",
-      "root_cause": "Capture/readiness verifies files, states and hashes but has no projected label-clearance, frame-containment or render-priority invariant.",
-      "causal_fix": "Record and validate finite projected label/response/frame rectangles, positive source-declared clearance, zero overlap, full containment and exact priority for every native state/angle capture.",
+      "symptom": "The original overhead collision passed packaging and consumed critic jobs; the repaired 5fc projection invariant then correctly stopped the isolated run at the first out-of-frame phone overhead label before any critic executed.",
+      "root_cause": "The original capture/readiness path had no projected label-clearance, frame-containment or render-priority invariant. The new invariant works and exposed that the first lane repair retained a label width too large for the narrowest device safe frame.",
+      "causal_fix": "Retain the finite projected label/response/frame, clearance, overlap, containment and priority checks for every native and device capture; reduce only the source-declared canonical label width to satisfy the already-strict invariant on phone 16:9 overhead.",
       "files_to_change": [
         "HavenlineGodot/tests/capture_task10_world_transform.gd",
         "tools/havenline/task10/validate_critic_readiness.py",
@@ -725,7 +725,8 @@
         ".github/workflows/havenline-specialist-critic.yml"
       ],
       "evidence": [
-        "The known overhead collision passed packaging and consumed all critic jobs."
+        "Run 35397839956 stopped in device-layout/phone_16_9/capture.log before critic packaging: clearance_px=16.2000122070312, overlap=false, priority_ok=true, fully_in_frame=false.",
+        "Artifact 10570168891 SHA256 cc99ba3080c253a59acb0e988cac58e8d4bb1a5ea281d4e58d977a01c64d7623 retains the exact failed capture log; the log SHA256 is f46b704698a9584ce8a2f3fa86b9e1ef6caaacb9feb44f4f9585ef46722bf1a0."
       ],
       "verification": [
         "Run focused hostile tests for the exact causal boundary.",
@@ -877,6 +878,83 @@
         "Run the full T10 and production suites; preserve every critic, dimension, model budget and strict >9.0 threshold.",
         "Freeze a new exact source and require fresh isolated then fresh integrated critic evidence; prior scores are not reusable."
       ]
+    },
+    {
+      "id": "C0-T10-B060",
+      "classification": "TOOLING_DEFECT",
+      "affected_object": "T10 C0 artifact diagnosis",
+      "symptom": "C0 completed inside the B059 token budget but its diagnosis omitted the exact failed integration assertion already present in the downloaded a210 artifact.",
+      "root_cause": "The workflow hashed downloaded artifacts without extracting a bounded, source-addressed projection of nested text diagnostics into the immutable C0 packet.",
+      "causal_fix": "Scan downloaded text artifacts deterministically, retain only actual failed dispositions with source path, line and source hash, and include that bounded projection in the immutable packet and model request.",
+      "files_to_change": [
+        "tools/havenline/production/collect_artifact_diagnostics.py",
+        ".github/workflows/havenline-c0-root-cause.yml",
+        "tools/havenline/production/c0_root_cause_advisor.py",
+        "tools/havenline/production/tests/test_c0_builder.py",
+        "Docs/Production/ChangeRequests/T10-c0-grounded-artifact-diagnostics.json",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        ".github/workflows/havenline-production-governance.yml",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "tools/havenline/production/tests/test_t10_activation_validation.py",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "evidence": [
+        "C0 artifact 10569242248 omitted the downloaded integration log from its semantic projection even though progression-logs/test_task10_integration.log contained the exact failed disposition: blocked lifecycle renders exact costs and shortfalls."
+      ],
+      "verification": [
+        "Collector tests prove bounded source path/line/hash extraction and exclude nested expected-negative fixture failures.",
+        "The exact a210 artifact yields the real failed integration disposition in the semantic projection.",
+        "Full production governance passes with all critics, budgets and thresholds unchanged."
+      ]
+    },
+    {
+      "id": "C0-T10-B061",
+      "classification": "TOOLING_DEFECT",
+      "affected_object": "T10 C0 diagnosis grounding",
+      "symptom": "C0 contradicted the packet by claiming required_critics was empty and proposed nonexistent .github/workflows/task10_workflow.yml.",
+      "root_cause": "The T10 response validator checked schema shape but did not bind evidence to retained source excerpts or causal files to exact tracked repository paths.",
+      "causal_fix": "For T10, require every evidence item to cite an exact retained SOURCE | EXACT_QUOTE and every files_to_change entry to equal a tracked repository path; reject the diagnosis before publication when either binding fails.",
+      "files_to_change": [
+        "tools/havenline/production/c0_root_cause_advisor.py",
+        "tools/havenline/production/tests/test_c0_builder.py",
+        ".github/workflows/havenline-c0-root-cause.yml",
+        "Docs/Production/ChangeRequests/T10-c0-grounded-artifact-diagnostics.json",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        ".github/workflows/havenline-production-governance.yml",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "tools/havenline/production/tests/test_t10_activation_validation.py",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "evidence": [
+        "C0 artifact 10569242248 says required_critics is empty although its immutable packet contains C1, C2, C3, C4, C6 and C7, and names a workflow path absent from the repository."
+      ],
+      "verification": [
+        "Hostile tests reject uncited/paraphrased evidence, missing source excerpts and untracked causal paths.",
+        "Valid diagnoses retain exact artifact excerpts and tracked paths without changing C0 model/runtime/token/timeouts.",
+        "Full production governance passes with C0 non-voting and every critic threshold unchanged."
+      ]
     }
   ],
   "failure_intelligence_query": {
@@ -914,17 +992,20 @@
     "C3 artifact 10567350315 SHA256 35f985d36a4dc2b288e28a8f728b7f4ae93bb56baf9149d4b21b41cf0bce1c8e; C4 artifact 10566951339 SHA256 6edd917c98b808bef67e074d922e81a5e805249c446e00b1b34e408cac002e4d.",
     "C7 artifact 10566236195 SHA256 d0ce759c13dbfbc776f718e9ef72ae7e72a82325c675191d0c32a31ec6b73921; C6 passed with minimum 9.2 and no repair authorized.",
     "C0 run 35386826359 job 105756676039 artifact 10566412411 SHA256 da1caba052a07adacd35e4df3562b1a2e878043a496768524d2d0f19ed814889 retains the 29970-versus-16384 token failure.",
-    "Run 35397278342 passed activation/scope/import and 134 of 135 integration checks; the sole failure was the pre-repair B054 test still requiring removed duplicate prose although exact costs and shortfalls remained present. This is a B054 verification repair, not a new product blocker."
+    "Run 35397278342 passed activation/scope/import and 134 of 135 integration checks; the sole failure was the pre-repair B054 test still requiring removed duplicate prose although exact costs and shortfalls remained present. This is a B054 verification repair, not a new product blocker.",
+    "Run 35397839949 completed SUCCESS for exact candidate 5fc87f4897597463d2f6b39229ef9479bd9bc776; primary artifact 10569607542 SHA256 355819c8e1d05cab396216c694e2747403fffeb66a3c82a0d8cd88461b1f915d.",
+    "Run 35397839956 artifact 10570168891 SHA256 cc99ba3080c253a59acb0e988cac58e8d4bb1a5ea281d4e58d977a01c64d7623; device-layout/phone_16_9/capture.log line 4 proves the sole hosted failure was fully_in_frame=false at ready/overhead after prior structural gates passed.",
+    "C0 artifact 10569242248 SHA256 37b087f4417108f21ccaf16242480d26fe36b76d8c7450ea90db02f18df78968 proves B059 transport succeeded but B060/B061 grounding failed."
   ],
   "unexecuted_checks": [
-    "The 48cc source contains B037-B048 and B048 direct Godot tests passed, but its primary, isolated and adapter workflows failed before capture, benchmark or critic review; it has no approval evidence.",
-    "B049-B052 are diagnosed and planned but have not yet been implemented, independently reviewed or exercised in the dedicated hosted preflight.",
+    "Exact 5fc primary regression passed, while isolated validation stopped at the phone 16:9 ready/overhead containment invariant before the remaining five device rows, native 4K capture, benchmark, critic packaging or any fresh critic executed.",
+    "B060/B061 are implemented and locally validated but require the exact integration-owner governance commit and hosted governance proof.",
     "B046's full-request repair has not yet completed a fresh normal specialist run because 48cc stopped at preparation.",
     "Fresh exact-source C1/C2/C3/C4/C6/C7 reviews for the repaired post-B052 source have not executed.",
     "The closeout assembler has not yet passed its actual canonical-C0 path and clean-hosted-LFS rehearsal together.",
     "Final integration-scope validation, integrated-source evidence, factory closeout, G1-G14, retention, migration, lifecycle transition and APPROVED closure remain unexecuted.",
     "No preflight, diagnostic canary, historical reviewer score or prior-source artifact may be inferred as specialist approval.",
-    "B053-B059 require one new frozen candidate and fresh isolated C1/C2/C3/C4/C6/C7; no 0e83 score can be carried forward.",
+    "B053-B061 require one new frozen candidate and fresh isolated C1/C2/C3/C4/C6/C7; no 0e83 score can be carried forward.",
     "After isolated acceptance, integration and a fresh integrated-source six-critic closeout remain required."
   ],
   "builder_action": "REPAIR",
@@ -938,10 +1019,10 @@
       "immutable c7a18 readiness replay passes",
       "diagnostic transport contracts pass while the historical C4 product failure remains failed and non-reusable",
       "disposable full closeout rehearsal passes with the actual canonical C0 and explicit LFS-skip child environment",
-      "the exact candidate tree passes the dedicated clean hosted pipeline preflight including same-parent raw job-log retrieval"
+      "the exact candidate tree passes the dedicated clean hosted pipeline preflight including same-parent raw job-log retrieval and the B060/B061 grounded C0 architecture lock"
     ]
   },
-  "summary": "The cumulative B037-B059 inventory remains complete. Candidate a210 verified the owner prefix, integration ancestry, engine compilation and 134/135 integration checks; it exposed one stale B054 assertion that still required the deliberately removed duplicate prose. The test assertion is repaired within B054 before a new exact-source run. No critic, dimension, model budget or threshold changes.",
+  "summary": "The cumulative B037-B061 inventory is complete. Exact candidate 5fc passed the full primary pipeline and all isolated structural/logic gates through lifecycle capture; the projected-containment invariant correctly stopped phone 16:9 ready/overhead because the first B053 lane repair retained an overwide label. B053/B055 now cap only that label width. B060/B061 bind C0 to downloaded artifact excerpts and tracked paths so future repairs cannot follow invented evidence. No critic, dimension, model budget or threshold changes.",
   "confidence": "high",
   "approval_claimed": false,
   "score_assigned": false,

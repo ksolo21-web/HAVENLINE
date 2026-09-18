@@ -44,9 +44,13 @@ SPECIALIST_REQUEST = "Docs/Production/ChangeRequests/T10-specialist-actionable-d
 SPECIALIST_REQUEST_SHA256 = "25c8544a37587fdbbd527de7606c0517e67781ee879fdb72e502b6fe2d1c513d"
 C0_ADVISOR = "tools/havenline/production/c0_root_cause_advisor.py"
 C0_ADVISOR_BASE_SHA256 = "d66e551eadf4dcdd1363da3da41d64e314a074292b2531cf99c0f5028a24beee"
-C0_ADVISOR_CURRENT_SHA256 = "c5c26657dd6f8936a6c3feb302377af5780c3712c997a96380311beb7f9015c2"
+C0_ADVISOR_CURRENT_SHA256 = "5d6788905504c61bfeb3ddcd24a283614b58486c524e2f508f98de08dd2f1bab"
 C0_BOUNDED_REQUEST = "Docs/Production/ChangeRequests/T10-c0-bounded-model-packet.json"
 C0_BOUNDED_REQUEST_SHA256 = "c54e6bd4c572f71673272a4b4e20ca4ba54da7c353643a1268d17c66c575f94e"
+C0_GROUNDING_REQUEST = "Docs/Production/ChangeRequests/T10-c0-grounded-artifact-diagnostics.json"
+C0_GROUNDING_REQUEST_SHA256 = "42e4cc3e8dac7759d912196fe2eb4e8ef836ad82eb1cdafd8f3922a2188a490f"
+C0_DIAGNOSTICS = "tools/havenline/production/collect_artifact_diagnostics.py"
+C0_DIAGNOSTICS_SHA256 = "ad701a1a6c005ff45b6052c68886677dd9c513ad25fabb979a7b6cca2fa8993b"
 C0_PACKET_IMPORT_OLD = "          import json,os,pathlib,subprocess\n"
 C0_PACKET_IMPORT_NEW = "          import hashlib,json,os,pathlib,subprocess\n"
 C0_PACKET_LOG_OLD = "          log=(root/'c0-input/failed.log').read_text(errors='replace') if (root/'c0-input/failed.log').exists() else ''\n"
@@ -63,6 +67,24 @@ C0_PACKET_LOG_NEW = C0_PACKET_LOG_OLD + """          records=[]
 """
 C0_PACKET_ENTRY_OLD = "            'changed_files':changed,'failed_logs':log[-60000:],'task_scope':scope.read_text(errors='replace')[:30000] if scope.exists() else '',\n"
 C0_PACKET_ENTRY_NEW = "            'changed_files':changed,'failed_logs':log,'failed_logs_bytes':len(log_bytes),'failed_logs_sha256':hashlib.sha256(log_bytes).hexdigest(),\n            'structured_failure_records':records,'task_scope':scope.read_text(errors='replace')[:30000] if scope.exists() else '',\n"
+C0_GROUNDING_DELTAS = [
+    (
+        "          gh run download \"$FAILED_RUN_ID\" -D c0-input/artifacts >/dev/null 2>&1 || true\n          python3 - <<'PY'\n",
+        "          gh run download \"$FAILED_RUN_ID\" -D c0-input/artifacts >/dev/null 2>&1 || true\n          python3 tools/havenline/production/collect_artifact_diagnostics.py --root c0-input/artifacts --output c0-input/artifact-diagnostics.json\n          python3 - <<'PY'\n",
+    ),
+    (
+        "          log_bytes=log.encode('utf-8')\n          packet={\n",
+        "          log_bytes=log.encode('utf-8')\n          artifact_diagnostics=json.loads((root/'c0-input/artifact-diagnostics.json').read_text())\n          packet={\n",
+    ),
+    (
+        "            'defect_ledger':ledger.read_text(errors='replace')[:30000] if ledger else '',\n            'protected_files':[],\n",
+        "            'defect_ledger':ledger.read_text(errors='replace')[:30000] if ledger else '',\n            'artifact_diagnostics':artifact_diagnostics,'repository_paths':subprocess.check_output(['git','ls-files'],text=True).splitlines(),\n            'strict_evidence_grounding':task=='T10',\n            'protected_files':[],\n",
+    ),
+    (
+        "            c0-input/artifacts.json\n            c0-output/\n",
+        "            c0-input/artifacts.json\n            c0-input/artifact-diagnostics.json\n            c0-output/\n",
+    ),
+]
 
 
 def c0_workflow_delta_errors(accepted: str, current: str) -> list[str]:
@@ -71,6 +93,9 @@ def c0_workflow_delta_errors(accepted: str, current: str) -> list[str]:
     expected=accepted.replace(C0_LOG_OLD,C0_LOG_NEW,1)
     for old,new,label in ((C0_PACKET_IMPORT_OLD,C0_PACKET_IMPORT_NEW,"packet import"),(C0_PACKET_LOG_OLD,C0_PACKET_LOG_NEW,"structured failure records"),(C0_PACKET_ENTRY_OLD,C0_PACKET_ENTRY_NEW,"complete packet evidence")):
         if expected.count(old)!=1:return [f"V3.2 C0 {label} anchor missing"]
+        expected=expected.replace(old,new,1)
+    for old,new in C0_GROUNDING_DELTAS:
+        if expected.count(old)!=1:return ["V3.2 C0 grounded artifact diagnostic anchor missing"]
         expected=expected.replace(old,new,1)
     return [] if current == expected else ["Only the authorized completed-job collection and bounded complete C0 packet deltas are permitted"]
 
@@ -82,7 +107,7 @@ def exact_owner_source_errors(path:str,base_sha256:str,current_sha256:str)->list
     except Exception as exc:return [str(exc)]
     errors=[]
     if hashlib.sha256(base).hexdigest()!=base_sha256:errors.append(f"{path} authorized base changed")
-    if hashlib.sha256(current).hexdigest()!=current_sha256:errors.append(f"{path} exceeds exact B058/B059 authorization")
+    if hashlib.sha256(current).hexdigest()!=current_sha256:errors.append(f"{path} exceeds exact bounded T10 authorization")
     return errors
 
 
@@ -147,6 +172,13 @@ def validate() -> dict:
             errors.append("Bounded C0 model packet authorization changed or missing")
         if c0_bounded_request.get("status")!="AUTHORIZED" or c0_bounded_request.get("blocker")!="C0-T10-B059":
             errors.append("Explicit B059 C0 model packet authorization missing")
+        c0_grounding_request=json.loads((v31.ROOT/C0_GROUNDING_REQUEST).read_text())
+        if hashlib.sha256((v31.ROOT/C0_GROUNDING_REQUEST).read_bytes()).hexdigest()!=C0_GROUNDING_REQUEST_SHA256:
+            errors.append("Bounded C0 grounding authorization changed or missing")
+        if c0_grounding_request.get("status")!="AUTHORIZED" or c0_grounding_request.get("blockers")!=["C0-T10-B060","C0-T10-B061"]:
+            errors.append("Explicit B060/B061 C0 grounding authorization missing")
+        if hashlib.sha256((v31.ROOT/C0_DIAGNOSTICS).read_bytes()).hexdigest()!=C0_DIAGNOSTICS_SHA256:
+            errors.append("Bounded C0 artifact diagnostic collector changed or missing")
         specialist_request=json.loads((v31.ROOT/SPECIALIST_REQUEST).read_text())
         if hashlib.sha256((v31.ROOT/SPECIALIST_REQUEST).read_bytes()).hexdigest()!=SPECIALIST_REQUEST_SHA256:
             errors.append("Bounded actionable-defect schema authorization changed or missing")
@@ -186,17 +218,18 @@ def validate() -> dict:
     return {
         "passed": not errors,
         "architecture_version": "3.2",
-        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, actionable critic defects and bounded C0 model packets",
+        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, actionable critic defects, bounded C0 model packets and grounded artifact diagnostics",
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
-        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE, BUILDER, C0_WORKFLOW, C0_ADVISOR, SPECIALIST],
+        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE, BUILDER, C0_WORKFLOW, C0_ADVISOR, C0_DIAGNOSTICS, SPECIALIST],
         "authorization_record": REQUEST,
         "c7_authorization_record": C7_REQUEST,
         "failure_packet_authorization_record": FAILURE_REQUEST,
         "builder_authorization_record": BUILDER_REQUEST,
         "c0_job_log_authorization_record": C0_REQUEST,
         "c0_bounded_packet_authorization_record": C0_BOUNDED_REQUEST,
+        "c0_grounding_authorization_record": C0_GROUNDING_REQUEST,
         "specialist_actionable_defect_authorization_record": SPECIALIST_REQUEST,
         "errors": errors,
     }
