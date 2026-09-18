@@ -411,7 +411,7 @@
       "task_id": "T10",
       "task_name": "World Transformation Framework",
       "workstream_id": "T10-world-transformation-builder",
-      "status": "ASSIGNED",
+      "status": "FIX_REQUIRED",
       "owner": "world-transformation-builder",
       "branch": "havenline/T10-world-transformation",
       "base_commit": "62f5a13753968c77a0feb47a18d93c82d8c5b581",
@@ -427,7 +427,7 @@
         "@protected:approved",
         "@integration-only"
       ],
-      "candidate_commit": null,
+      "candidate_commit": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
       "candidate_hash_or_artifact": null,
       "tests": {},
       "evidence_path": "Docs/Production/Evidence/T10/",
@@ -441,14 +441,27 @@
       ],
       "critic_status": {},
       "integration_status": "not integrated",
-      "known_blockers": [],
-      "next_action": "Create the isolated T10 builder branch from the activation governance checkpoint and begin the frozen World Transformation Framework candidate."
+      "known_blockers": [
+        "C0-T10-B037",
+        "C0-T10-B038",
+        "C0-T10-B039",
+        "C0-T10-B040",
+        "C0-T10-B041",
+        "C0-T10-B042",
+        "C0-T10-B043",
+        "C0-T10-B044",
+        "C0-T10-B045",
+        "C0-T10-B046",
+        "C0-T10-B047",
+        "C0-T10-B048"
+      ],
+      "next_action": "Complete canonical C0 B037-B048 repair; preserve terminal historical canary failures, pass transport contracts, actual-artifact readiness and disposable closure rehearsal, then obtain fresh repaired-source reviews from all six required critics. No approval or runtime integration yet."
     }
   ],
   "notes": [
     "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
     "All future runtime builders use isolated branches and cannot approve themselves.",
     "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them.",
-    "T03-T09 are APPROVED. T10 is ASSIGNED with frozen scope, owner and disjoint reservation; T11+ runtime remains dependency-gated."
+    "T03-T09 are APPROVED. T10 is FIX_REQUIRED with frozen scope, owner and disjoint reservation; T11+ runtime remains dependency-gated."
   ]
 }

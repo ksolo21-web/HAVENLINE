@@ -73,7 +73,7 @@ jobs:
           gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${FAILED_RUN_ID}" > c0-input/run.json
           gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${FAILED_RUN_ID}/jobs?per_page=100" > c0-input/jobs.json
           gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${FAILED_RUN_ID}/artifacts?per_page=100" > c0-input/artifacts.json
-          gh run view "$FAILED_RUN_ID" --log-failed > c0-input/failed.log 2>&1 || gh run view "$FAILED_RUN_ID" --log > c0-input/failed.log 2>&1 || true
+          python3 tools/havenline/production/collect_failure_job_logs.py --run c0-input/run.json --jobs c0-input/jobs.json --run-id "$FAILED_RUN_ID" --repository "$GITHUB_REPOSITORY" --output c0-input/failed.log
           gh run download "$FAILED_RUN_ID" -D c0-input/artifacts >/dev/null 2>&1 || true
           python3 - <<'PY'
           import json,os,pathlib,subprocess

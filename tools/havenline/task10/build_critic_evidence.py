@@ -47,19 +47,23 @@ Return only the required complete JSON, without preamble or repeated text. Use e
 '''
 
 
-def output_contract_errors(manifest, root=ROOT):
+def output_contract_errors(manifest, root=ROOT, *, path_mode='canonical'):
+    paths={'canonical':REVIEW_OUTPUT_PATH,'transported':'review-output-contract.txt'}
+    if not isinstance(path_mode,str) or path_mode not in paths:
+        return ['invalid response contract path mode']
+    contract_path=paths[path_mode]
     errors=[]
     for group in manifest['groups']:
         items=group['items']
-        contracts=[i for i in items if i.get('path')==REVIEW_OUTPUT_PATH]
+        contracts=[i for i in items if i.get('path') in paths.values()]
         if manifest['critic_id'] not in ('C3','C4'):
             if contracts: errors.append('unexpected response contract: '+group['id'])
             continue
-        expected=dict(path=REVIEW_OUTPUT_PATH,kind='text',category='task_scope',description=REVIEW_OUTPUT_DESCRIPTION,sha256=hashlib.sha256(REVIEW_OUTPUT_CONTRACT.encode()).hexdigest())
+        expected=dict(path=contract_path,kind='text',category='task_scope',description=REVIEW_OUTPUT_DESCRIPTION,sha256=hashlib.sha256(REVIEW_OUTPUT_CONTRACT.encode()).hexdigest())
         if len(contracts)!=1 or not items or items[-1]!=expected:
             errors.append('response contract missing, duplicate, changed or not last: '+group['id'])
         try:
-            if (root/REVIEW_OUTPUT_PATH).read_bytes()!=REVIEW_OUTPUT_CONTRACT.encode():
+            if (root/contract_path).read_bytes()!=REVIEW_OUTPUT_CONTRACT.encode():
                 errors.append('response contract content mismatch: '+group['id'])
         except OSError:
             errors.append('response contract file missing: '+group['id'])
@@ -87,8 +91,8 @@ def rendered_group_text(group, root=ROOT):
     return '\n\n'.join(chunks)
 
 
-def prompt_errors(manifest, root=ROOT):
-    errors=output_contract_errors(manifest,root)
+def prompt_errors(manifest, root=ROOT, *, path_mode='canonical'):
+    errors=output_contract_errors(manifest,root,path_mode=path_mode)
     cid=manifest['critic_id']
     for group in manifest['groups']:
         try:

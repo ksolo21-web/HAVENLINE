@@ -79,6 +79,7 @@ class FullReviewExportTests(unittest.TestCase):
     manifest['groups'][0]['items']=[dict(path='critic-input/performance.json',kind='json',category='quantitative_budgets',sha256=hashlib.sha256(payload['performance.json']).hexdigest())]
    payload[cid+'-manifest.json']=m.encoded(manifest)
    record['input_manifest_hash']=hashlib.sha256(payload[cid+'-manifest.json']).hexdigest()
+   if cid in ('C1','C2'):raw.update({k:record[k] for k in ('task_id','candidate_hash','critic_id','input_manifest_hash','provider','model','request_or_run_id','independent_runtime')})
    (folder/'raw-output.json').write_bytes(m.encoded(raw));record['raw_output_hash']=m.sha(folder/'raw-output.json')
    (folder/'critic-record.json').write_bytes(m.encoded(record))
   return payload,candidate

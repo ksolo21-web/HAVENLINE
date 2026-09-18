@@ -289,6 +289,11 @@ func run() -> void:
 	var initial_view := view.descriptor()
 	check("world-response visuals build exactly once", initial_view.visual_build_count == 1 and initial_view.visual_node_count == 4 and visual_root != null and visual_root.get_child_count() == 3, initial_view)
 	check("locked lifecycle hides response geometry", not ring.visible and not ghost.visible and not beacon.visible)
+	for glyph in [0xe000, 0xe001, 0xe002, 0xe003]:
+		check("resource symbol is available through actual Godot font fallback: %s" % glyph, TransformView.RESOURCE_SYMBOLS.has_char(glyph) and beacon.font.has_char(glyph))
+	var flow_texture_id: int = view._ring_material.emission_texture.get_instance_id()
+	var ring_material_id: int = view._ring_material.get_instance_id()
+	check("locked presentation never implies resource application", not view._ring_material.emission_enabled)
 	check("readability below minimum is rejected", not view.configure_readability(0.5) and is_equal_approx(float(view.descriptor().readability_scale), 1.0))
 	check("readability above maximum is rejected", not view.configure_readability(2.0) and is_equal_approx(float(view.descriptor().readability_scale), 1.0))
 	check("minimum readability scale applies without rebuild", view.configure_readability(0.85) and is_equal_approx(float(view.descriptor().readability_scale), 0.85) and view.descriptor().visual_build_count == 1)
@@ -308,24 +313,60 @@ func run() -> void:
 	view.show_blocked(blocked_preview)
 	check("identical blocked payload does not reapply visuals", view.visual_apply_count == applies_before_noop)
 	check("blocked lifecycle renders exact costs and shortfalls", ring.visible and beacon.visible and ghost.visible and beacon.text.contains("8 wood + 4 stone") and beacon.text.contains("Deliver 1 wood + 1 stone"))
+	check("blocked primary instruction leads and exact missing resource symbols render", beacon.text.begins_with("Deliver 1 wood + 1 stone\n") and beacon.text.contains("Missing:") and beacon.text.contains("\ue000") and beacon.text.contains("\ue001") and not view._ring_material.emission_enabled)
+	var multi_block := blocked_preview.duplicate(true)
+	multi_block.shortfalls = {"wood": 1, "stone": 2, "metal": 3, "fuel": 4}
+	multi_block.errors = ["insufficient_resources", "missing_prerequisite:harvesting_online"]
+	view.show_blocked(multi_block)
+	check("all four resource shortfalls and additional prerequisite remain visible", beacon.text.begins_with("Deliver 1 wood + 2 stone + 3 metal + 4 fuel") and beacon.text.contains("harvesting online") and beacon.text.contains("\ue002") and beacon.text.contains("\ue003"))
+	multi_block.shortfalls = {}
+	multi_block.errors = ["missing_prerequisite:harvesting_online"]
+	view.show_blocked(multi_block)
+	check("prerequisite-only block does not invent missing resources", beacon.text.begins_with("Requires harvesting online") and not beacon.text.contains("Missing:") and not beacon.text.contains("Deliver"))
 	view.set_ready()
 	check("leaving blocked state clears failure payload", view.descriptor().block_reasons.is_empty() and view.descriptor().blocked_shortfalls.is_empty())
 
 	var visual_inventory := {"wood": 20, "stone": 12, "metal": 2, "fuel": 1}
 	var visual_preview := visual_engine.preview_transform("framework_anchor_seed_to_foundation", "visual-A", visual_inventory)
-	check("preview world response shows ring plus translucent preview volume", view.show_preview(visual_preview) and ring.visible and ghost.visible and beacon.visible and ghost.material_override.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA)
+	check("preview world response shows ring plus translucent preview volume", view.show_preview(visual_preview) and ring.visible and ghost.visible and beacon.visible and beacon.text.contains("Delivered stock:") and ghost.material_override.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA)
 	var visual_intent := visual_engine.commit_transform("visual-tx", "framework_anchor_seed_to_foundation", "visual-A", visual_inventory)
 	check("committing world response shows all three shapes", view.show_commit(visual_intent) and ring.visible and ghost.visible and beacon.visible)
+	check("pending resources have exact named source-to-target cues without premature payment", beacon.text.begins_with("Applying delivered resources") and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and beacon.text.contains("→ Foundation") and not beacon.text.contains("Paid:") and view._ring_material.emission_enabled)
+	var ring_arrays: Array = ring.mesh.surface_get_arrays(0)
+	var ring_vertices: PackedVector3Array = ring_arrays[Mesh.ARRAY_VERTEX]
+	var ring_normals: PackedVector3Array = ring_arrays[Mesh.ARRAY_NORMAL]
+	var ring_uvs: PackedVector2Array = ring_arrays[Mesh.ARRAY_TEX_UV]
+	var cap_center_uv := Vector2(-1.0, -1.0)
+	for vertex_index in ring_vertices.size():
+		if ring_normals[vertex_index].y > 0.9 and absf(ring_vertices[vertex_index].x) < 0.001 and absf(ring_vertices[vertex_index].z) < 0.001:
+			cap_center_uv = ring_uvs[vertex_index]
+	check("actual cylinder cap atlas maps to one centered clamped flow", cap_center_uv.is_equal_approx(Vector2(0.25, 0.75)) and not view._ring_material.texture_repeat and (cap_center_uv * Vector2(view._ring_material.uv1_scale.x, view._ring_material.uv1_scale.y) + Vector2(view._ring_material.uv1_offset.x, view._ring_material.uv1_offset.y)).is_equal_approx(Vector2(0.5, 0.5)))
+	var pending_text := beacon.text
+	var pending_apply_count := view.visual_apply_count
+	var forged_visual_ack := visual_intent.duplicate(true)
+	forged_visual_ack.authority_source = "simulation"
+	forged_visual_ack.authority_applied = true
+	forged_visual_ack.accepted_by_world_transform = false
+	check("unaccepted receipt cannot stop pending flow or claim paid", not view.mark_complete(forged_visual_ack) and view.lifecycle == "committing" and view._ring_material.emission_enabled and beacon.text == pending_text)
 	var beacon_before_pulse := ghost.scale
 	view._process(0.12)
 	check("committing target pulse changes shape without rebuilding nodes", ghost.scale != beacon_before_pulse and view.descriptor().visual_build_count == 1 and view.descriptor().visual_node_count == 4)
 	check("committing pulse stays anchored to support", is_equal_approx(ghost.position.y - 0.75 * ghost.scale.y, 0.08))
+	for pending_frame in 90:
+		view._process(1.0 / 60.0)
+	check("pending flow reuses material texture and text without visual rebuild", view._ring_material.uv1_scale.x > 1.0 and view._ring_material.get_instance_id() == ring_material_id and view._ring_material.emission_texture.get_instance_id() == flow_texture_id and beacon.text == pending_text and view.visual_apply_count == pending_apply_count and view.descriptor().visual_node_count == 4)
+	check("animated flow remains centered on actual top cap", (cap_center_uv * Vector2(view._ring_material.uv1_scale.x, view._ring_material.uv1_scale.y) + Vector2(view._ring_material.uv1_offset.x, view._ring_material.uv1_offset.y)).is_equal_approx(Vector2(0.5, 0.5)))
 	var visual_ack := visual_intent.duplicate(true)
 	visual_ack["authority_source"] = "simulation"
 	visual_ack["authority_applied"] = true
 	var visual_accepted := visual_engine.accept_authoritative_receipt(visual_ack)
-	check("complete world response requires accepted authority receipt", view.mark_complete(visual_accepted) and view.descriptor().lifecycle == "complete")
-	check("complete lifecycle solidifies accepted target form", ring.visible and ghost.visible and beacon.visible and ghost.scale == Vector3.ONE and ghost.material_override.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED and beacon.text.contains("Paid: 8 wood + 4 stone"))
+	var next_blocked_offer := visual_engine.preview_transform("framework_anchor_foundation_to_reinforced", "visual-A", {"wood": 0, "stone": 0, "metal": 0})
+	check("complete world response requires accepted authority receipt", view.mark_complete(visual_accepted, next_blocked_offer) and view.descriptor().lifecycle == "complete")
+	check("completion preserves both next-stage shortfalls and prerequisite", beacon.text.contains("Next: Reinforced") and beacon.text.contains("Deliver 12 wood + 8 stone + 2 metal") and beacon.text.contains("harvesting online"))
+	check("complete lifecycle solidifies accepted target form", ring.visible and ghost.visible and beacon.visible and ghost.scale == Vector3.ONE and ghost.material_override.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED and beacon.text.contains("Paid:") and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and view.displayed_costs == {"wood": 8, "stone": 4})
+	check("accepted receipt stops flow and resets its bounded phase", not view._ring_material.emission_enabled and view._ring_material.uv1_scale == Vector3.ONE and view._ring_material.uv1_offset == Vector3.ZERO and not view.is_processing())
+	var completion_text := beacon.text
+	check("repeated completion does not replay debit feedback", not view.mark_complete(visual_accepted) and beacon.text == completion_text and not view._ring_material.emission_enabled)
 	var accepted_form := ghost.scale
 	view.set_ready()
 	check("ready after completion preserves accepted world form", ghost.scale == accepted_form)

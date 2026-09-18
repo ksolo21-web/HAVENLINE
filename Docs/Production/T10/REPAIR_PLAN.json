@@ -1,136 +1,268 @@
 {
   "schema_version": 1,
   "task_id": "T10",
-  "failed_candidate": "6999fedfd9bd494c76710cb9604175eb07666c31",
-  "diagnosis_id": "C0-T10-35337231852-6999fed",
-  "c0_report_path": "Docs/Production/T10/C0-frozen-candidate-6999fed.json",
-  "c0_report_sha256": "98cf905bbb61992c6dcc0a5880cfe96f2bbb6369ab90b41515c69ef3d28f5678",
-  "repair_base": "6999fedfd9bd494c76710cb9604175eb07666c31",
+  "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
+  "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
+  "c0_report_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
+  "c0_report_sha256": "17be042ee10e1340ed7098e3b9adc809becac9b0e9f0654c51715fabdeec87f3",
+  "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
+  "repair_base_status": "RESOLVED_COMBINED_OWNER_TASK_DIFF",
+  "repair_base_rule": "Measure the complete reconciled B037-B048 owner-plus-task diff from failed candidate c7a18d002fe8d0f3978370f3e4567ba88bfe17e8 so every mapped blocker has an actual non-bookkeeping causal file change. Owner publishes only its bounded authority/code/test/change-request checkpoints; canonical T10 report/plan, task repairs and the B048 bounded presentation repair follow on one reconciled task branch. Diagnostic run 35377452576 is terminal: its response/transport findings may verify interfaces, but its historical C4 product failure remains failed and cannot become approval evidence.",
   "full_blocker_set_acknowledged": true,
   "candidate_freeze_after_build": true,
   "validation_concurrency_policy": "finish_running_sha",
   "plan_path": "Docs/Production/T10/REPAIR_PLAN.json",
-  "pending_terminal_evidence": "Frozen 6999 is terminal and incorporated. Fresh exact-source C1/C2/C3/C4/C6/C7, final factory observation, G1-G14 closure and integration-owner approval remain unexecuted for the bounded repair candidate.",
   "must_not_change": [
     "HavenlineGodot/scripts/world_transform.gd",
-    "HavenlineGodot/scripts/world_transform_view.gd",
     "HavenlineGodot/scripts/simulation.gd",
-    "HavenlineGodot/scripts/main.gd",
     "HavenlineGodot/data/world_transform_recipes.json",
     "HavenlineGodot/tests/capture_task10_world_transform.gd",
-    "HavenlineGodot/tests/test_task10_world_transform.gd",
-    "HavenlineGodot/tests/test_task10_integration.gd",
-    "tools/havenline/task10/prepare_reconciliation.py",
-    ".github/workflows/havenline-specialist-critic.yml",
-    "tools/havenline/production/workstream.py",
-    "tools/havenline/production/critic_harness.py",
-    "tools/havenline/production/specialist_critic_runner.py",
-    "tools/havenline/production/specialist_evidence_manifest.py",
-    "tools/havenline/production/closure_validator.py",
+    "tools/havenline/task10/benchmark_world_transform.gd",
     "Docs/Production/CRITIC_MATRIX.json",
     "Docs/Production/CRITIC_EXECUTION.json",
-    "Docs/Production/PERFORMANCE_BUDGETS.json",
-    "Docs/Production/T10/FROZEN_SCOPE.md",
-    "Docs/Production/PATH_OWNERSHIP.json",
-    "Docs/Production/WORKSTREAM_REGISTRY.json",
-    "Docs/Production/DEPENDENCY_GRAPH.json",
-    "Docs/Production/task-gates.json"
+    "tools/havenline/production/critic_runtime_lock.json",
+    ".github/workflows/havenline-specialist-critic.yml",
+    ".github/workflows/havenline-specialist-model-cache.yml",
+    "tools/havenline/production/prepare_specialist_runtime.py",
+    "tools/havenline/production/critic_harness.py",
+    "tools/havenline/production/closure_validator.py",
+    "tools/havenline/production/validate_migration.py",
+    "tools/havenline/production/factory_observer.py",
+    "tools/havenline/production/factory_closeout_gate.py",
+    ".github/workflows/havenline-candidate-guard.yml",
+    "Docs/Production/T01/verified-completion.json",
+    "Docs/Production/T02/verified-completion.json",
+    "Docs/Production/T03/verified-completion.json",
+    "Docs/Production/T04/verified-completion.json",
+    "Docs/Production/T05/verified-completion.json",
+    "Docs/Production/T06/verified-completion.json",
+    "Docs/Production/T07/verified-completion.json",
+    "Docs/Production/T08/verified-completion.json",
+    "Docs/Production/T09/verified-completion.json"
   ],
   "blast_radius_checks": [
-    "Validate the C0 report schema and run builder_repair_gate.py in pre-build and post-build mode against exact repair base 6999fedfd9bd494c76710cb9604175eb07666c31.",
-    "Run all task10 Python tests, the full production Python suite, workstream registry/candidate scope and migration validation.",
-    "Run the task-owned benchmark with pinned Godot 4.7.2 on the exact candidate and validate deterministic C6, compact critic manifests, preserved raw hashes and critic readiness.",
-    "Run fresh exact-source hosted adapter preflight, primary regression/canonical save matrix, capture/device/native-4K evidence and C1/C2/C3/C4/C6/C7 reviews without cancelling a running SHA.",
-    "Require every mandatory critic dimension strictly above 9.0 unrounded with no unresolved defect; no prior score or 6999 score may be carried forward.",
-    "After exact-source integration, run the existing integration-scope, factory observer/closeout, evidence retention, task-state snapshot and G1-G14 closure path."
+    "Run builder_repair_gate pre-build and post-build against the canonical report/plan and the final exact repair_base; reject every unplanned file and every missing blocker implementation.",
+    "Run the full production governance suite, including architecture release-lock/V3.2, migration, ownership, lifecycle, mutation-canary, factory-observer-contract and T01-T09 closure-history tests.",
+    "Run the full task10 Python suite plus real package consumer and exact CLI replay against immutable c7a18 artifacts.",
+    "Preserve the diagnostic canary's separate transport_passed and critic_result outcomes: all C3/C4 response contracts completed, but the historical C4 strict critic result remains failed with original scores and defects.",
+    "Run the disposable closeout producer-to-consumer rehearsal with all listed hostile interface mutations before final-source publication.",
+    "Prove the actual diff changes only the B048-authorized T10 neutral view presentation/runtime asset plus planned control-plane files; it must not change simulation/model authority, recipes, capture selection, critic applicability/dimension/threshold, model/runtime/sampling/token budget or accepted T01-T09 evidence.",
+    "After all cheap proofs pass, publish exactly one frozen candidate and allow every workflow for that SHA to finish; require full primary/isolated regression, save/device/performance evidence, fresh C1/C2/C3/C4/C6/C7 and final integrated-source closeout.",
+    "Do not reuse diagnostic canary results, historical reviewer scores or prior-source artifacts as approval evidence."
   ],
   "fixes": [
     {
-      "blocker_id": "C0-T10-B024",
+      "blocker_id": "C0-T10-B037",
       "files": [
-        ".github/workflows/havenline-task10-adapter-preflight.yml",
-        "tools/havenline/task10/tests/test_task10_workflows.py",
-        "Docs/Production/T10/C0-frozen-candidate-6999fed.json",
-        "Docs/Production/T10/REPAIR_PLAN.json"
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "Docs/Production/T10/C0-transported-contract-readiness-c7a18d0.json",
+        "Docs/Production/T10/REPAIR_PLAN-transported-contract-readiness-c7a18d0.json"
       ],
-      "causal_change": "Branch adapter preflight by authoritative T10 registry lifecycle: preserve unchanged strict preactivation reconciliation for missing/LOCKED/PREPARED state, reject APPROVED, and use canonical workstream validate-candidate with registry base plus current integration head for registered active build/repair states. Consume only the selected report schema and preserve false approval/integration flags.",
+      "causal_change": "Retain the local strict canonical/transported path-mode repair, with canonical index/hash validation before normalization, explicit enum selection, no autodetect/fallback and actual-package consumer coverage.",
       "verification": [
-        "Registered 6999-equivalent candidate plus exact approved simulation.gd CR passes; unauthorized shared or foreign paths fail.",
-        "Preactivation simulation.gd remains rejected by the unchanged reservation helper.",
-        "Workflow tests cover both modes, lifecycle/report mismatch, invalid registry state and terminal command failure without adding an allowlist or waiver."
+        "Run canonical/transported positive and hostile unit tests.",
+        "Replay immutable c7a18 artifact 10551832949 through package_errors and the exact readiness CLI with zero errors and task_approved=false.",
+        "Confirm the B036 contract bytes and all manifest/index hashes remain unchanged."
       ]
     },
     {
-      "blocker_id": "C0-T10-B025",
+      "blocker_id": "C0-T10-B038",
       "files": [
-        ".github/workflows/havenline-task10-isolated.yml",
-        "tools/havenline/task10/build_critic_evidence.py",
-        "tools/havenline/task10/review_performance.py",
-        "tools/havenline/task10/aggregate_critics.py",
-        "tools/havenline/task10/closeout_evidence.py",
-        "tools/havenline/task10/validate_critic_readiness.py",
-        "tools/havenline/task10/tests/test_build_critic_evidence.py",
-        "tools/havenline/task10/tests/test_review_performance.py",
-        "tools/havenline/task10/tests/test_aggregate_critics.py",
-        "tools/havenline/task10/tests/test_closeout_evidence.py",
-        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/production/specialist_critic_runner.py",
+        "tools/havenline/production/tests/test_specialist_critic_runner.py",
+        "Docs/Production/ChangeRequests/T10-specialist-response-bounds.json"
+      ],
+      "causal_change": "Add a T10-only machine-enforced response schema and post-parse contract: exactly two observations of at most 160 characters and at most five defects of at most 160 characters, without changing any review judgment field, evidence, runtime or threshold.",
+      "verification": [
+        "Focused schema tests prove exact T10 bounds, post-parse rejection and non-T10 behavior preservation.",
+        "Owner change request binds the exact runner/test delta and rejects unrelated integration-owned changes.",
+        "The hosted pinned-runtime diagnostic canary returns finish_reason=stop and complete valid JSON for every C3/C4/C7 group."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B039",
+      "files": [
+        ".github/workflows/havenline-task10-reviewer-canary.yml",
+        "tools/havenline/task10/reviewer_canary.py",
+        "tools/havenline/task10/tests/test_reviewer_canary.py",
         "tools/havenline/task10/tests/test_task10_workflows.py"
       ],
-      "causal_change": "Create source-bound C6 review input, ingest a fresh external reviewer record without assigning scores, validate all nine mandatory dimensions and provenance, and retain the unchanged quantitative C6 result as a separately required deterministic supplement through aggregation and closeout.",
+      "causal_change": "Add a diagnostic-only task-owned workflow and helper that download and verify the exact c7a18 evidence artifact including terminal conclusion, bind evidence and tool identities separately, execute all specialist groups on the unchanged pinned runtime, verify actual request/model/runtime/dimension/token contracts and prohibit approval reuse. Preserve unchanged strict critic_result separately from transport_passed so real product failure always keeps the diagnostic overall failed and non-reusable.",
       "verification": [
-        "Hostile scored-record fixtures reject missing dimensions, <=9.0, defects, stale source/manifest/raw hashes, incomplete coverage and invalid provenance.",
-        "Hostile supplement fixtures reject missing, failed or stale quantitative C6 even when scored C6 passes, and vice versa.",
-        "Fresh exact-source C6 review and deterministic gate both pass while physical_certification remains false and T68/T69 claims remain absent."
+        "Unit tests reject wrong run conclusion, artifact, source, name, size, digest, archive layout, group coverage, response length, finish reason, provider/model/revision/runtime, request sampling/token/schema fields and diagnostic labeling.",
+        "Workflow contract tests require actions:read, raw upload on failure, finish_running_sha and no aggregate/export/approval action.",
+        "Require transport/request contracts and B046 byte identity without converting a genuine retained-source critic failure into success; overall remains failed/non-reusable for C4's 8.5 result.",
+        "Do not rerun unchanged failed product evidence once the deterministic transport mechanism is proved; require fresh all-six review only after B048 is repaired."
       ]
     },
     {
-      "blocker_id": "C0-T10-B026",
+      "blocker_id": "C0-T10-B040",
       "files": [
-        ".github/workflows/havenline-task10-isolated.yml",
-        "tools/havenline/task10/build_critic_evidence.py",
-        "tools/havenline/task10/validate_critic_readiness.py",
-        "tools/havenline/task10/tests/test_build_critic_evidence.py",
-        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
-        "tools/havenline/task10/tests/test_task10_workflows.py"
-      ],
-      "causal_change": "Replace repeated verbose model-facing scope/report payloads with concise C3/C4 lifecycle, motion and device briefs and a compact C7 progression proof. Preserve the 14-rule synopsis, core authority/control boundaries, strict threshold, every named required check and raw path/SHA binding while retaining all full inputs outside the prompt.",
-      "verification": [
-        "C3/C4 rendered text is <=2800 characters per group; C7 is <=7500; conservative estimate 1000 + optional image 2048 + ceil(chars/2.5) is <=4200 tokens.",
-        "Readiness rejects truncation, stale/missing preserved-source hashes, missing suite/check/category/dimension coverage and any omitted full raw input from the evidence index.",
-        "Fresh C3/C4/C7 hosted jobs finish on the unchanged pinned model/context/timeout and emit actual judgments; no 6999 timeout is treated as a score."
-      ]
-    },
-    {
-      "blocker_id": "C0-T10-B027",
-      "files": [
-        ".github/workflows/havenline-task10-isolated.yml",
-        "tools/havenline/task10/benchmark_world_transform.gd",
-        "tools/havenline/task10/build_critic_evidence.py",
-        "tools/havenline/task10/validate_critic_readiness.py",
-        "tools/havenline/task10/tests/test_build_critic_evidence.py",
-        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
-        "tools/havenline/task10/tests/test_task10_workflows.py"
-      ],
-      "causal_change": "Run a task-owned subclass of the unchanged visual capture fixture that replaces lifecycle screenshots with warmed, repeated idle/committing no-I/O measurement phases. Record timing distributions/deltas, duty cycle, first/last drift and memory/node/render plateaus with exact source/environment provenance and explicit nonphysical limitations.",
-      "verification": [
-        "Real pinned-Godot benchmark has sufficient finite samples and repeated phases, no screenshot/movie/file I/O inside measurement, stable nodes/memory and exact candidate/engine/renderer/resolution binding.",
-        "Malformed, undersampled, missing-phase, non-finite, unstable or physical-certification fixtures fail readiness.",
-        "The unchanged C6 budget gate passes and the fresh C6 reviewer can score frame_time and bounded thermal_risk without hardware GPU/temperature invention."
-      ]
-    },
-    {
-      "blocker_id": "C0-T10-B028",
-      "files": [
-        "Docs/Production/ChangeRequests/T10-migration-approved-closeout.json",
-        "tools/havenline/production/validate_migration.py",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "Docs/Production/DEPENDENCY_GRAPH.json",
+        "Docs/Production/PATH_OWNERSHIP.json",
+        "Docs/Production/task-gates.json",
         "tools/havenline/production/tests/test_t10_activation_validation.py"
       ],
-      "causal_change": "Add an exact integration-owner-authorized T10 APPROVED branch to migration validation: preserve checklist/dependency/critic/reservation identity and T11+ locks; require matching approved registry, completed owner and completed-task source identity with no active T10 owner or active_* pointers; extend the approved prefix through T10 only in that terminal state. Do not mutate current lifecycle data or duplicate/relax generic closure evidence checks.",
+      "causal_change": "Atomically transition T10 from ASSIGNED to FIX_REQUIRED across every authority, keep registry known_blockers synchronized with the complete canonical B037-B048 inventory and comprehensive next action, activate canonical C0/plan enforcement and retain the original assignment base and all prior approvals.",
       "verification": [
-        "Current LOCKED/ASSIGNED/repair-state fixtures remain unchanged and a complete synthetic T10 APPROVED state passes with T01-T10 approved contiguously.",
-        "Hostile terminal fixtures reject active owner/pointer residue, missing or duplicate completed owner, source/record/status mismatch, unlocked T11 and missing or extra approved-task entries.",
-        "Full production tests and hosted governance pass while validate_migration_scope.py, closure_validator.py, critics, gates and thresholds remain unchanged."
+        "Lifecycle tests prove exact FIX_REQUIRED agreement and reject any partial transition, cleared active ownership, changed assignment base, advanced approval or unlocked T11+ task.",
+        "Registry known_blockers is exactly B037-B048 and next_action requires the bounded product repair plus cheap preflight/canary/closure rehearsal before full validation.",
+        "Candidate guard invokes builder_repair_gate for the next nonempty T10 repair candidate."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B041",
+      "files": [
+        ".github/workflows/havenline-task10-isolated.yml",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "tools/havenline/production/failure_intelligence.py",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        "tools/havenline/production/tests/test_failure_intelligence_packet.py",
+        "tools/havenline/production/tests/test_architecture_release_lock.py",
+        "Docs/Production/ChangeRequests/T10-failure-packet-log-compatibility.json",
+        "Docs/Production/FAILURE_INTELLIGENCE.json"
+      ],
+      "causal_change": "Invoke the unchanged reusable C0/factory observer after explicit T10 workflow failures; make the locked failure-intelligence consumer read failure_excerpt, then failed_logs, then legacy logs under an exact bounded V3.2 delta; record only confirmed reusable signatures after proof.",
+      "verification": [
+        "Workflow tests prove C0 invocation on terminal T10 failure and no false invocation/authority on success, skip, cancellation or supersession.",
+        "Packet tests prove explicit key precedence and that failed_logs reaches token matching while unrelated fields do not.",
+        "Architecture V3.2 tests allow only the authorized locked-file delta and reject unrelated drift.",
+        "Replay the retained c7a18 packet and preserve failure-intelligence plus factory-observation artifacts as advisory evidence."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B042",
+      "files": [
+        "tools/havenline/task10/assemble_closeout.py",
+        "tools/havenline/task10/tests/test_assemble_closeout.py",
+        "tools/havenline/task10/tests/test_export_closure_records.py",
+        "Docs/Production/T10/ReviewExports/.gitattributes"
+      ],
+      "causal_change": "Add a deterministic non-authoritative staged closeout assembler and disposable-git-root rehearsal that preserve exact independent records and exercise the unchanged real closure consumers without publishing or inventing approval data. Bind every disposition to its canonical C0 affected object, actual non-bookkeeping failed-candidate-to-candidate causal diff inside the authorized blocker surface, and verification proof carrying the same defect, command/gate and reviewer identity. Store only bounded T10 ReviewExports ZIPs as native Git bytes through a directory-local `*.zip -filter -diff -merge` override, preserving strict stage-two byte equality and the repository-wide LFS policy elsewhere.",
+      "verification": [
+        "Positive synthetic rehearsal executes original export commit, canonical export, aggregate conversion, proposed lifecycle staging, derived snapshot, approval retention and every real closure consumer.",
+        "Hostile tests reject all identity, lineage, retention, runtime, C7 supplement, defect-ledger, lifecycle, manifest-set and task-state mutations enumerated by C0, including rewritten affected objects, foreign/unchanged/duplicate/bookkeeping-only causal files and unrelated or identity-mismatched proofs.",
+        "A real temporary-git test with an outer LFS rule proves the inner ReviewExports override yields byte-exact git-show ZIP content and rejects missing/overbroad overrides, pointer blobs, files above 24 MiB and non-ReviewExports use.",
+        "Production mode rejects diagnostic fixtures and any incomplete, stale, failed, non-final-source or unresolved input."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B043",
+      "files": [
+        "tools/havenline/task10/aggregate_critics.py",
+        "tools/havenline/task10/tests/test_aggregate_critics.py",
+        "tools/havenline/task10/tests/test_export_closure_records.py"
+      ],
+      "causal_change": "Require C1/C2 raw and record task_id T10 plus exact equality for candidate_hash, critic_id, input_manifest_hash, provider, model, request_or_run_id and independent_runtime before comparing unchanged scores/disposition; update legitimate exporter fixtures with those real identity and provenance fields.",
+      "verification": [
+        "Positive aggregate/export fixtures contain and preserve exact raw identity fields.",
+        "Hostile missing/null/substitution changes to task, candidate, critic, manifest, provider, model, request, independent-runtime, raw-hash and manifest-hash fields fail before score/disposition comparison.",
+        "Original record and raw bytes remain unchanged and no path-relocation fallback is added to review_visual."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B044",
+      "files": [
+        ".github/workflows/havenline-production-governance.yml",
+        "tools/havenline/production/tests/test_production_governance_v32_consumer.py"
+      ],
+      "causal_change": "At the B044 checkpoint, update only the hosted production-governance V3.2 jq consumer from the prior 47/three-entry contract to the authoritative 46/exact-four-entry report and test the extracted real predicate against the real report and hostile interface mutations; B045 subsequently composes the additional authorized builder-gate path under its own exact checks.",
+      "verification": [
+        "The extracted workflow jq predicate accepts the actual passing V3.2 validator report.",
+        "At the B044 checkpoint, passed=false, wrong locked-file counts, missing/extra/reordered authorized paths and changed predecessor identities all fail.",
+        "Hosted governance run 35376376731 passes the exact B044 report; any later authorized list change is accepted only through a separately validated blocker such as B045."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B045",
+      "files": [
+        "tools/havenline/production/builder_repair_gate.py",
+        "tools/havenline/production/tests/test_c0_builder.py",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        "tools/havenline/production/tests/test_architecture_release_lock.py",
+        ".github/workflows/havenline-production-governance.yml",
+        "tools/havenline/production/tests/test_production_governance_v32_consumer.py",
+        "Docs/Production/ChangeRequests/T10-builder-repair-causal-bookkeeping.json"
+      ],
+      "causal_change": "Make exact canonical C0/plan paths auto-allowed bookkeeping but forbid them from fix.files and causal-touch credit. Require exact canonical paths, a non-bookkeeping causal set per blocker and an actually touched causal file per blocker; authorize only that locked delta and compose its fifth authorized path into the hosted V3.2 consumer.",
+      "verification": [
+        "C0-only, plan-only and both-doc-only diffs fail; bookkeeping listed in a fix and empty causal sets fail.",
+        "Complete real causal files plus canonical docs pass while extra/protected files, wrong base/hash/mapping/freeze and missing causal touches still fail.",
+        "Exact V3.2 delta/CR validation passes and unrelated builder-gate drift rejects.",
+        "Hosted governance consumer accepts only unchanged_locked_files=45 and the exact ordered five authorized paths; hostile interface mutations fail."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B046",
+      "files": [
+        "tools/havenline/production/specialist_critic_runner.py",
+        "tools/havenline/production/tests/test_specialist_critic_runner.py",
+        "Docs/Production/ChangeRequests/T10-specialist-request-retention.json"
+      ],
+      "causal_change": "Serialize each specialist request exactly once, persist the complete transmitted bytes, and use those identical bytes as urllib Request.data. Remove only the audit-copy truncation/double-serialization defect; preserve all request content and critic/runtime controls.",
+      "verification": [
+        "A mocked request larger than 250000 bytes produces valid recorded JSON whose bytes equal Request.data and whose parsed value equals the original logical body.",
+        "Encoded image content, prompt, schema, model, 900-token limit, sampling, seed, thinking/cache settings and timeout are unchanged; a small request retains exact identity too.",
+        "Write/network failures remain fail-closed, and run 35377452576 reaches a natural terminal state without becoming approval evidence.",
+        "The 282014-byte genuine-board mock-network proof establishes exact recorded/transmitted identity; the terminal historical canary preserves its B046 error and real C4 product failure. The next fresh repaired-source full run exercises the fixed retention path without another unchanged-product rerun."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B047",
+      "files": [
+        ".github/workflows/havenline-c0-root-cause.yml",
+        "tools/havenline/production/collect_failure_job_logs.py",
+        "tools/havenline/production/tests/test_failure_job_log_collection.py",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        "tools/havenline/production/tests/test_architecture_release_lock.py",
+        ".github/workflows/havenline-production-governance.yml",
+        "tools/havenline/production/tests/test_production_governance_v32_consumer.py",
+        "Docs/Production/ChangeRequests/T10-c0-in-progress-job-log-collection.json"
+      ],
+      "causal_change": "Replace same-run `gh run view` collection with a deterministic exact-job collector for completed failure/timed_out jobs, explicit cancelled/startup no-log metadata, atomic output and no swallowed error. Preserve cancellation supersession and infrastructure diagnosis, authorize only the locked C0 workflow delta, and compose the resulting six-path V3.2 report with its hosted consumer.",
+      "verification": [
+        "Authenticated evidence proves a completed job log is retrievable while its parent remains in_progress; unit tests prove deterministic failure/timed_out selection and exact job/run identity.",
+        "Wrong/cross-run/duplicate/inconsistent jobs, missing eligible jobs, API errors, empty logs and partial output reject; a legitimate in-progress C0 job with null conclusion is ignored.",
+        "Completed cancelled and startup_failure parents preserve explicit nonfabricated diagnostic markers and the unchanged superseded/infrastructure downstream semantics.",
+        "The exact V3.2 locked delta and hosted jq consumer require unchanged_locked_files=44 and the exact ordered six authorized paths; all unrelated locked drift rejects."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B048",
+      "files": [
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd",
+        "HavenlineGodot/assets/world_transform_v1/resource_symbols.tres",
+        "tools/havenline/task10/build_resource_symbols.py"
+      ],
+      "causal_change": "Repair only the neutral presentation layer: action-first concise copy, deterministic task-owned resource pictograms paired with names/exact quantities, truthful missing/applying/paid states, and a pending-only inward emission flow on the existing StandardMaterial3D ring. Keep four nodes, one build, the anchored target pulse, accepted-receipt completion, stable replay, all authority boundaries and all performance/critic thresholds.",
+      "verification": [
+        "Direct Godot tests cover blocked shortfall and prerequisite variants, same-state updates, ready/preview/committing/complete/replay semantics, exact resource data and no fabricated percentage/debit/payment.",
+        "Tests preserve four nodes, one build, StandardMaterial3D compatibility, one-time 64x64 texture/font setup, pending-only bounded material changes, no per-frame allocations and unchanged presentation-only authority.",
+        "The resource-symbol font is deterministically generated from task-owned original glyph definitions, digest-bound and rendered by Godot without platform emoji/fallback or external licensing dependency.",
+        "Unchanged capture and benchmark programs produce the full native/device/motion/performance evidence and pass existing bounds; all domain, integration, save and broad regressions pass.",
+        "Fresh exact-source C1/C2/C3/C4/C6/C7 all exceed unchanged thresholds with zero defects; no historical diagnostic score or artifact is reused."
       ]
     }
-  ]
+  ],
+  "verification_order": [
+    "OWNER FIX_REQUIRED LIFECYCLE AND CANONICAL C0 ACTIVATION",
+    "OWNER B038/B041 CHANGE REQUESTS AND LOCKED-SURFACE VALIDATION",
+    "STATIC CONTRACT AND ALL B037-B048 UNIT TESTS",
+    "PRODUCTION GOVERNANCE AND TASK10 FULL TEST SUITES",
+    "BUILDER REPAIR GATE PRE-BUILD/POST-BUILD AND EXACT DIFF",
+    "IMMUTABLE C7A18 READINESS PACKAGE/CLI REPLAY",
+    "DIAGNOSTIC TRANSPORT/STRICT-CRITIC SEPARATION AND B046 BYTE-IDENTITY PROOF",
+    "DISPOSABLE COMPLETE CLOSEOUT PRODUCER-TO-CONSUMER REHEARSAL",
+    "ONE FROZEN FULL CANDIDATE PRIMARY/ISOLATED VALIDATION",
+    "FRESH EXACT-SOURCE C1/C2/C3/C4/C6/C7",
+    "FINAL INTEGRATION, INTEGRATED-SOURCE EVIDENCE AND ATOMIC OWNER CLOSEOUT"
+  ],
+  "shipping_gameplay_runtime_change_authorized": true,
+  "approval_claimed": false
 }

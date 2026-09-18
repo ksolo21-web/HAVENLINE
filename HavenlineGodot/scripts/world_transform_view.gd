@@ -12,6 +12,8 @@ const VISUAL_NODE_BUDGET := 4
 const READABILITY_MIN := 0.85
 const READABILITY_MAX := 1.35
 const PULSE_HZ := 1.4
+const RESOURCE_SYMBOLS = preload("res://assets/world_transform_v1/resource_symbols.tres")
+const RESOURCE_GLYPHS := {"wood": "", "stone": "", "metal": "", "fuel": ""}
 
 const STATE_COLORS := {
 	"locked": Color("4a5159"),
@@ -206,6 +208,21 @@ func _ensure_visuals() -> void:
 	_ring.mesh = ring_mesh
 	_ring.position.y = 0.04
 	_ring_material = _material(STATE_COLORS.locked, 0.78)
+	# One tiny radial emission texture: pending activity, never transaction progress.
+	var flow_gradient := Gradient.new()
+	flow_gradient.offsets = PackedFloat32Array([0.0, 0.80, 0.88, 0.96, 1.0])
+	flow_gradient.colors = PackedColorArray([Color.BLACK, Color.BLACK, Color.WHITE, Color.BLACK, Color.BLACK])
+	var flow_texture := GradientTexture2D.new()
+	flow_texture.width = 64
+	flow_texture.height = 64
+	flow_texture.gradient = flow_gradient
+	flow_texture.fill = GradientTexture2D.FILL_RADIAL
+	flow_texture.fill_from = Vector2(0.5, 0.5)
+	flow_texture.fill_to = Vector2(1.0, 0.5)
+	_ring_material.texture_repeat = false
+	_ring_material.emission_texture = flow_texture
+	_ring_material.emission = Color("b9edff")
+	_ring_material.emission_energy_multiplier = 1.4
 	_ring.material_override = _ring_material
 	_visual_root.add_child(_ring)
 
@@ -222,7 +239,12 @@ func _ensure_visuals() -> void:
 	_beacon = Label3D.new()
 	_beacon.name = "StatusLabel"
 	_beacon.position.y = 2.8
+	var resource_font := ThemeDB.fallback_font.duplicate() as Font
+	resource_font.fallbacks = [RESOURCE_SYMBOLS]
+	_beacon.font = resource_font
 	_beacon.font_size = 38
+	_beacon.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_beacon.width = 1000.0
 	_beacon.outline_size = 9
 	_beacon.pixel_size = 0.006
 	_beacon.billboard = BaseMaterial3D.BILLBOARD_ENABLED
@@ -250,6 +272,11 @@ func _apply_visuals() -> void:
 	var ring_color := color
 	ring_color.a = 0.78 if lifecycle != "complete" else 0.92
 	_ring_material.albedo_color = ring_color
+	_ring_material.emission_enabled = lifecycle == "committing"
+	# CylinderMesh top-cap UV center is (.25, .75), with radius .25.
+	# Normalize that atlas quarter to the full clamped radial texture.
+	_ring_material.uv1_scale = Vector3(2.0, 2.0, 1.0) if lifecycle == "committing" else Vector3.ONE
+	_ring_material.uv1_offset = Vector3(0.0, -1.0, 0.0) if lifecycle == "committing" else Vector3.ZERO
 	var ghost_color := color
 	ghost_color.a = 0.30 if lifecycle in ["preview", "committing"] else 1.0
 	_ghost_material.albedo_color = ghost_color
@@ -269,6 +296,9 @@ func _process(delta: float) -> void:
 	if lifecycle != "committing" or not is_instance_valid(_beacon):
 		return
 	_pulse_time = fmod(_pulse_time + delta, 10.0)
+	var flow_scale := 1.0 + fmod(_pulse_time, 1.0) * 3.0
+	_ring_material.uv1_scale = Vector3(2.0 * flow_scale, 2.0 * flow_scale, 1.0)
+	_ring_material.uv1_offset = Vector3(0.5 - 0.5 * flow_scale, 0.5 - 1.5 * flow_scale, 0.0)
 	var pulse := 1.0 + sin(_pulse_time * TAU * PULSE_HZ) * 0.18
 	_ghost.scale = _target_form_scale() * pulse
 	_ghost.position.y = 0.08 + 0.75 * _ghost.scale.y
@@ -282,20 +312,46 @@ func _quantities(values: Dictionary) -> String:
 		if values.has(kind): parts.append("%d %s" % [int(values[kind]), kind])
 	return " + ".join(parts)
 
+func _resource_cues(values: Dictionary, marker := "") -> String:
+	var parts: Array[String] = []
+	for kind in ["wood", "stone", "metal", "fuel"]:
+		if values.has(kind):
+			parts.append("%s%s %d %s" % [marker, RESOURCE_GLYPHS[kind], int(values[kind]), kind])
+	return "   ".join(parts)
+
+func _readable_reasons(reasons: Array, shortfalls: Dictionary = {}) -> String:
+	var readable: Array[String] = []
+	for reason in reasons:
+		var text := String(reason)
+		if text == "insufficient_resources" and not shortfalls.is_empty():
+			continue # The exact delivery action already explains this reason.
+		var friendly := text.replace("missing_prerequisite:", "Requires ").replace("_", " ")
+		readable.append(friendly.left(1).to_upper() + friendly.substr(1))
+	return " / ".join(readable)
+
 func feedback_text() -> String:
-	var transition := "%s > %s" % [source_state.capitalize(), target_state.capitalize()] if not target_state.is_empty() else "Approach to preview transformation"
-	var cost := "Cost from delivered stock: " + _quantities(displayed_costs) if not displayed_costs.is_empty() else ""
+	var destination := target_state.capitalize() if not target_state.is_empty() else "Transformation"
+	var cost_context := destination + " · Cost: " + _quantities(displayed_costs) if not displayed_costs.is_empty() else destination
 	if lifecycle == "complete":
-		var text := target_state.capitalize() + " complete\nPaid: " + _quantities(displayed_costs)
+		var text := destination + " complete\n\nPaid: " + _resource_cues(displayed_costs, "✓ ")
 		if not next_preview.is_empty():
 			text += "\nNext: " + String(next_preview.get("target_state", "")).capitalize()
-			text += " · " + ("ready to preview" if next_preview.get("passed", false) else " / ".join(next_preview.get("errors", [])).replace("missing_prerequisite:", "requires ").replace("_", " "))
+			var next_shortfalls: Dictionary = next_preview.get("shortfalls", {})
+			var next_action := "ready to preview" if next_preview.get("passed", false) else _readable_reasons(next_preview.get("errors", []), next_shortfalls)
+			if not next_shortfalls.is_empty():
+				next_action = "Deliver " + _quantities(next_shortfalls) + (" · " + next_action if not next_action.is_empty() else "")
+			text += " · " + next_action
 		return text
 	if lifecycle == "blocked":
-		var reason := " / ".join(block_reasons).replace("_", " ").replace(":", ": ")
-		return transition + "\n" + cost + "\n" + reason + ("\nDeliver " + _quantities(blocked_shortfalls) if not blocked_shortfalls.is_empty() else "")
-	if lifecycle == "committing": return transition + "\n" + cost + "\nApplying delivered resources..."
-	return transition + ("\n" + cost if not cost.is_empty() else "") + ("\nStay near the target" if lifecycle == "preview" else "")
+		var reason := _readable_reasons(block_reasons, blocked_shortfalls)
+		if not blocked_shortfalls.is_empty():
+			return "Deliver " + _quantities(blocked_shortfalls) + "\n\nMissing: " + _resource_cues(blocked_shortfalls, "□ ") + "\n" + cost_context + ("\n" + reason if not reason.is_empty() else "")
+		return reason + "\n\n" + cost_context
+	if lifecycle == "committing":
+		return "Applying delivered resources\n\n" + _resource_cues(displayed_costs) + " → " + destination + "\nAwaiting confirmation"
+	if lifecycle == "preview":
+		return "Stay near the target\n\nDelivered stock: " + _resource_cues(displayed_costs) + " → " + destination
+	return "Approach the target\n\nDelivered stock: " + _resource_cues(displayed_costs) + "\n" + cost_context
 
 func descriptor() -> Dictionary:
 	return {
