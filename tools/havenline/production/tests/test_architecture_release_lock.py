@@ -27,14 +27,15 @@ from validate_architecture_release_lock import (
 class ArchitectureReleaseLockTests(unittest.TestCase):
     def test_current_v31_release_lock_passes(self):
         result = validate()
-        self.assertEqual(result["errors"], [
+        self.assertCountEqual(result["errors"], [
             "V3.1 locked file changed: Docs/Production/CI_TOOLCHAIN_LOCK.json",
+            "V3.1 locked file changed: tools/havenline/production/forward_execution.py",
             "V3.1 locked file changed: tools/havenline/production/mutation_canary.py",
         ])
         self.assertEqual(result["architecture_version"], "3.1")
         self.assertEqual(result["accepted_source"], ACCEPTED_SOURCE)
         self.assertEqual(result["manifest_sha256"], EXPECTED_MANIFEST_SHA256)
-        self.assertEqual(result["locked_file_count"] - 2, result["locked_files_matching"])
+        self.assertEqual(result["locked_file_count"] - 3, result["locked_files_matching"])
         self.assertTrue(result["external_branch_protection_required_for_admin_tamper_resistance"])
 
     def test_bounded_v32_t09_is_superseded_only_by_t10_canary_delta(self):
@@ -42,7 +43,7 @@ class ArchitectureReleaseLockTests(unittest.TestCase):
         import validate_architecture_release_lock as v31
         from validate_architecture_v32_t09 import validate as validate_v32, policy_errors, POLICY, WORKFLOW
         result = validate_v32()
-        self.assertEqual(result["errors"], ["V3.1 locked file changed: tools/havenline/production/mutation_canary.py"])
+        self.assertCountEqual(result["errors"], ["V3.1 locked file changed: tools/havenline/production/forward_execution.py", "V3.1 locked file changed: tools/havenline/production/mutation_canary.py"])
         accepted = json.loads(v31._git("show", f"{ACCEPTED_SOURCE}:{POLICY}").stdout)
         current = json.loads((v31.ROOT / POLICY).read_text())
         for field, value in (("mutable_action_tags_forbidden", False), ("tools", {}), ("action_pins", {})):
@@ -71,6 +72,14 @@ class ArchitectureReleaseLockTests(unittest.TestCase):
         cfg["architecture_version"] = NEXT_ARCHITECTURE_VERSION
         self.assertTrue(validate_manifest(cfg))
 
+    def test_c7_delta_rejects_other_task_and_threshold_changes(self):
+        import validate_architecture_release_lock as v31
+        from validate_architecture_v32_t10 import FORWARD, c7_delta_errors
+        accepted = v31._git("show", f"{ACCEPTED_SOURCE}:{FORWARD}").stdout.decode()
+        current = (v31.ROOT / FORWARD).read_text()
+        self.assertEqual([], c7_delta_errors(accepted, current))
+        self.assertTrue(c7_delta_errors(accepted, current.replace('task_id == "T10"', 'task_id == "T12"')))
+        self.assertTrue(c7_delta_errors(accepted, current + "\n# unauthorized drift\n"))
     def test_duplicate_or_unsafe_locked_paths_fail(self):
         cfg = copy.deepcopy(load_lock())
         cfg["locked_files"].append(cfg["locked_files"][0])

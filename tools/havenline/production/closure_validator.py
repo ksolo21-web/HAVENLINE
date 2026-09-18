@@ -5,6 +5,7 @@ from datetime import datetime,timezone
 from lib import ROOT, DOCS, load_json, ensure_score_strictly_above_nine, sha256_file
 from evidence_retention import validate_manifest as validate_retention_manifest
 from task_state_snapshot import validate as validate_task_state
+from critic_profile import resolve_critic
 
 ALL_GATES=[f"G{i}" for i in range(1,15)]
 RESOURCE_REGISTRY=DOCS/"RESOURCE_ACTION_REGISTRY.json"
@@ -281,11 +282,13 @@ def main():
         if not row:errors.append("missing critic "+cid);continue
         if row.get("status")!="PASS":errors.append("critic not PASS "+cid)
         if row.get("candidate_commit")!=candidate:errors.append("critic candidate mismatch "+cid)
+        if task=="T10" and cid=="C7" and row.get("task_id")!=task:errors.append("C7 task identity mismatch")
         errors += [f"{cid}: {x}" for x in ensure_score_strictly_above_nine(row.get("scores",{}))]
         if row.get("defects"):errors.append("critic defects "+cid)
         if row.get("coverage_complete") is not True:errors.append("critic incomplete "+cid)
         if critcfg["critics"][cid].get("independent_model_required") and row.get("independent_runtime") is not True:errors.append("independent runtime not proven "+cid)
-        expected=set(execfg["critics"].get(cid,{}).get("dimensions",[]))
+        spec,_=resolve_critic(task,cid,execfg,critcfg)
+        expected=set(spec.get("dimensions",[]))
         if expected and set(row.get("scores",{}))!=expected:errors.append("critic dimension coverage mismatch "+cid)
         if cid in ("C7","C8","C10","C11"):
             supplement=row.get("deterministic_supplement",{})

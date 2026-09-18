@@ -38,6 +38,21 @@ class ForwardExecutionTests(unittest.TestCase):
         self.assertIn("security_attack", plan["ordered_gates"])
         self.assertNotIn("motion_preflight", plan["ordered_gates"])
 
+    def test_only_t10_specializes_c7_runner(self):
+        _, _, matrix, registry = forward_execution.authorities()
+        for number in range(10, 71):
+            task = f"T{number:02d}"
+            plan = self.plan(task)
+            self.assertEqual(matrix["task_applicability"][task], plan["critics"])
+            if "progression_sim" not in plan["ordered_gates"]:
+                continue
+            runner = plan["gate_execution"]["progression_sim"]["runner"]
+            if task == "T10":
+                self.assertIn("task10/validate_progression.py", runner)
+                self.assertIn("C7", plan["critics"])
+            else:
+                self.assertEqual(registry["gates"]["progression_sim"]["runner"], runner, task)
+
     def test_t24_animal_requires_reference_motion_and_performance(self):
         plan = self.plan("T24")
         gates = set(plan["ordered_gates"])

@@ -2,6 +2,7 @@
 from __future__ import annotations
 import argparse, hashlib, json, pathlib
 from lib import ROOT, DOCS, load_json
+from critic_profile import resolve_critic
 
 ALLOWED_KINDS={"image","motion_frame","json","text"}
 
@@ -39,7 +40,8 @@ def validate(manifest:dict)->list[str]:
             if not p.is_file():errors.append('missing item '+item.get('path',''))
             elif sha256(p)!=item.get('sha256'):errors.append('hash mismatch '+item.get('path',''))
     if cid in cfg['critics']:
-        missing=set(cfg['critics'][cid].get('required_categories',[]))-categories
+        spec,_=resolve_critic(manifest.get('task_id'),cid,cfg,load_json(DOCS/"CRITIC_MATRIX.json"))
+        missing=set(spec.get('required_categories',[]))-categories
         if missing:errors.append('missing required categories: '+','.join(sorted(missing)))
     return errors
 

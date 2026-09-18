@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse, base64, hashlib, io, json, math, os, pathlib, subprocess, time, urllib.request
 from typing import Any
 from lib import ROOT, DOCS, load_json, ensure_score_strictly_above_nine
+from critic_profile import resolve_critic
 
 SUPPORTED={"C3","C4","C5","C7","C8","C10","C11"}
 HAVENLINE_CONTRACT="""Havenline's permanent gameplay language is MOVE -> AUTO-INTERACT -> GATHER -> VISIBLY CARRY -> DELIVER -> TRANSFORM -> RESCUE -> BUILD/UPGRADE -> EXPLORE -> DEFEND. Preserve one primary movement joystick, automatic collection/gather/attack/contextual unload/rescue, and minimal deliberate-choice controls. Do not drift into button-heavy RPG combat, 4X warfare, complicated manual inventory, energy walls, mandatory payment, hidden spend-based difficulty, fake discounts, or mandatory multiplayer. Difficulty/depth/scale may grow while control complexity stays simple. Level 100 is the launch cap. F2P completion must remain realistic."""
@@ -25,7 +26,8 @@ def load_manifest(path:pathlib.Path,cid:str,candidate:str)->dict:
             p=ROOT/item.get('path','');categories.add(item.get('category'))
             if not p.is_file():errors.append('missing '+item.get('path',''))
             elif digest(p)!=item.get('sha256'):errors.append('hash mismatch '+item.get('path',''))
-    missing=set(execution['critics'][cid].get('required_categories',[]))-categories
+    spec,_=resolve_critic(d.get('task_id'),cid,execution,load_json(DOCS/'CRITIC_MATRIX.json'))
+    missing=set(spec.get('required_categories',[]))-categories
     if missing:errors.append('missing required categories: '+','.join(sorted(missing)))
     if errors:raise SystemExit('\n'.join(errors))
     return d
@@ -81,7 +83,8 @@ def main():
     independent=os.environ.get('HAVENLINE_INDEPENDENT_REVIEW_JOB')=='1'
     if not independent:raise SystemExit('independent specialist critic must run in a separately declared review job')
     manifest_path=(ROOT/a.manifest).resolve();manifest=load_manifest(manifest_path,cid,candidate)
-    matrix=load_json(DOCS/'CRITIC_MATRIX.json');execution=load_json(DOCS/'CRITIC_EXECUTION.json');spec=execution['critics'][cid];dimensions=spec['dimensions'];checks=matrix['critics'][cid]['checks']
+    matrix=load_json(DOCS/'CRITIC_MATRIX.json');execution=load_json(DOCS/'CRITIC_EXECUTION.json')
+    spec,checks=resolve_critic(manifest.get('task_id'),cid,execution,matrix);dimensions=spec['dimensions']
     out=(ROOT/a.out).resolve();out.mkdir(parents=True,exist_ok=True)
     cache=pathlib.Path(os.path.expanduser(os.environ.get('HAVENLINE_SPECIALIST_CACHE',execution['local_independent_runtime']['cache_path'])))
     m=json.loads((cache/'manifest.json').read_text());runtime=execution['local_independent_runtime']
@@ -127,5 +130,6 @@ def main():
     raw={'critic_id':cid,'candidate':candidate,'groups':rows,'fatal_error':fatal};raw_path=out/'raw-output.json';raw_path.write_text(json.dumps(raw,indent=2)+'\n')
     passed=fatal is None and len(rows)==len(manifest['groups']) and all(r['passed'] for r in rows)
     record={'critic_id':cid,'provider':m['publisher'],'model':m['base_model'],'model_revision_expected':runtime['model_revision'],'model_revision_actual':m['revision'],'runtime_release':m.get('runtime_release'),'request_or_run_id':os.environ.get('GITHUB_RUN_ID','local')+'/'+os.environ.get('GITHUB_JOB','specialist'),'candidate_hash':candidate,'input_manifest_hash':digest(manifest_path),'raw_output_path':str(raw_path.relative_to(ROOT)),'raw_output_hash':digest(raw_path),'scores':dim_scores,'defects':defects,'coverage_complete':fatal is None and len(rows)==len(manifest['groups']) and all(r.get('review',{}).get('coverage_complete') is True for r in rows),'confidence':confidence,'independent_runtime':True,'groups':rows,'fatal_error':fatal,'passed':passed}
+    record['task_id']=manifest.get('task_id')
     (out/'critic-record.json').write_text(json.dumps(record,indent=2)+'\n');print(json.dumps(record,indent=2));raise SystemExit(0 if passed else 1)
 if __name__=='__main__':main()

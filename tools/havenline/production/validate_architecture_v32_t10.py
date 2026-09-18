@@ -1,7 +1,8 @@
 #!/usr/bin/env python3
-"""Authorized bounded V3.2 T10 canary repair over the immutable V3.1 baseline."""
+"""Exact authorized V3.2 policy, T10 canary and C7 deltas over immutable V3.1."""
 from __future__ import annotations
 import argparse
+import hashlib
 import json
 from pathlib import Path
 import validate_architecture_release_lock as v31
@@ -10,6 +11,20 @@ from validate_architecture_v32_t09 import POLICY, policy_errors
 CANARY = "tools/havenline/production/mutation_canary.py"
 REQUEST = "Docs/Production/ChangeRequests/T10-task-state-canary-reactivation.json"
 AUTHORIZATION = "Authorize the bounded V3.2 T10 canary repair."
+
+FORWARD = "tools/havenline/production/forward_execution.py"
+C7_REQUEST = "Docs/Production/ChangeRequests/T10-C7-transactional-progression.json"
+C7_AUTHORIZATION = "Approve the bounded T10 C7 governance repair, preserving all critics and thresholds."
+C7_REQUEST_SHA256 = "8f24a3216fa5d4d87f88227a4eb64074b8efea2f6d71b2218f5a3157061aebe1"
+C7_DELTA = "    # T10 owns transactional progression, while T12/T13 own Level 1-100 pacing.\n    # Keep C7 and progression_sim mandatory; specialize only its proof runner.\n    if task_id == \"T10\":\n        gate_execution[\"progression_sim\"] = {\n            \"execution\": \"task_adapter_required\",\n            \"runner\": \"python3 tools/havenline/task10/validate_progression.py --candidate <SHA> --output <record>\",\n            \"rule\": \"Source-bound executable recipe/state graph, prerequisites, exact-once debit, no-skip/replay, branching/inverse and recovery proof; independent C7 remains required.\",\n        }\n"
+
+
+def c7_delta_errors(accepted: str, current: str) -> list[str]:
+    anchor = "        for gate in ordered\n    }\n"
+    if accepted.count(anchor) != 1:
+        return ["V3.1 baseline lacks the expected forward execution anchor"]
+    expected = accepted.replace(anchor, anchor + C7_DELTA, 1)
+    return [] if current == expected else ["Only the authorized T10 C7 runner specialization is permitted"]
 
 
 def canary_delta_errors(accepted: str, current: str) -> list[str]:
@@ -29,6 +44,7 @@ def validate() -> dict:
     allowed = {
         f"V3.1 locked file changed: {POLICY}",
         f"V3.1 locked file changed: {CANARY}",
+        f"V3.1 locked file changed: {FORWARD}",
     }
     errors = [error for error in baseline["errors"] if error not in allowed]
     try:
@@ -38,6 +54,13 @@ def validate() -> dict:
         accepted_canary = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{CANARY}").stdout.decode()
         current_canary = (v31.ROOT / CANARY).read_text()
         errors += canary_delta_errors(accepted_canary, current_canary)
+        accepted_forward = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{FORWARD}").stdout.decode()
+        errors += c7_delta_errors(accepted_forward, (v31.ROOT / FORWARD).read_text())
+        c7_request = json.loads((v31.ROOT / C7_REQUEST).read_text())
+        if hashlib.sha256((v31.ROOT / C7_REQUEST).read_bytes()).hexdigest() != C7_REQUEST_SHA256:
+            errors.append("C7 authorization scope, forbidden changes or acceptance contract changed")
+        if c7_request.get("task_id") != "T10" or c7_request.get("status") != "AUTHORIZED" or c7_request.get("authorization") != C7_AUTHORIZATION:
+            errors.append("Explicit bounded T10 C7 authorization record missing")
         request = json.loads((v31.ROOT / REQUEST).read_text())
         if request.get("task_id") != "T10" or request.get("status") != "AUTHORIZED" or request.get("authorization") != AUTHORIZATION:
             errors.append("Explicit bounded V3.2 T10 authorization record missing")
@@ -51,12 +74,13 @@ def validate() -> dict:
     return {
         "passed": not errors,
         "architecture_version": "3.2",
-        "scope": "T09 workflow reactivation plus T10 lifecycle-independent authority canary repair",
+        "scope": "T09 workflow reactivation, T10 authority canary and T10-only C7 transactional proof runner",
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
-        "authorized_changes": [POLICY, CANARY],
+        "authorized_changes": [POLICY, CANARY, FORWARD],
         "authorization_record": REQUEST,
+        "c7_authorization_record": C7_REQUEST,
         "errors": errors,
     }
 

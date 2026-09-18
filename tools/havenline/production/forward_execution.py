@@ -99,6 +99,14 @@ def resolve_task(task_id: str) -> dict[str, Any]:
         }
         for gate in ordered
     }
+    # T10 owns transactional progression, while T12/T13 own Level 1-100 pacing.
+    # Keep C7 and progression_sim mandatory; specialize only its proof runner.
+    if task_id == "T10":
+        gate_execution["progression_sim"] = {
+            "execution": "task_adapter_required",
+            "runner": "python3 tools/havenline/task10/validate_progression.py --candidate <SHA> --output <record>",
+            "rule": "Source-bound executable recipe/state graph, prerequisites, exact-once debit, no-skip/replay, branching/inverse and recovery proof; independent C7 remains required.",
+        }
     return {
         "task_id": task_id,
         "task_name": graph_task["name"],

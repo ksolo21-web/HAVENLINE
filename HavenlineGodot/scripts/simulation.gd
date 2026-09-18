@@ -14,6 +14,26 @@ var facing := Vector2.DOWN
 var lead := 1
 var inventory := {"wood": 0, "stone": 0, "metal": 0, "fuel": 0}
 var stored := {"wood": 0, "stone": 0, "metal": 0, "fuel": 0}
+var world_transform_debit_receipts: Dictionary = {}
+const MAX_TRANSFORM_TARGETS := 4096
+const TRANSFORM_FIELDS := ["transaction_id", "authority_transaction_key", "request_identity", "recipe_id", "target_id", "source_state", "target_state", "presentation_key", "target_revision", "debits", "progression_tags"]
+
+static func transform_key(intent: Dictionary) -> String:
+	var costs: Array = []
+	for kind in KINDS:
+		if intent.debits.has(kind): costs.append([kind, int(intent.debits[kind])])
+	var payload := [intent.transaction_id, intent.recipe_id, intent.target_id, intent.source_state, intent.target_state, int(intent.target_revision), costs, intent.progression_tags, intent.presentation_key]
+	return "T10|%s|%s|revision:%d" % [intent.request_identity, JSON.stringify(payload).sha256_text(), int(intent.target_revision)]
+
+static func canonical_transform_intent(intent: Dictionary) -> Dictionary:
+	var result := {}
+	for field in TRANSFORM_FIELDS: result[field] = intent[field]
+	result.target_revision = int(intent.target_revision)
+	result.debits = {}
+	for kind in KINDS:
+		if intent.debits.has(kind): result.debits[kind] = int(intent.debits[kind])
+	result.progression_tags = intent.progression_tags.duplicate()
+	return result
 var resources: Array = []
 var level := 1
 var durability := 260.0
@@ -71,6 +91,62 @@ static func meets(have: Dictionary, need: Dictionary) -> bool:
 	for kind in need:
 		if have.get(kind, 0) < need[kind]:
 			return false
+	return true
+
+static func valid_world_transform_intent(intent: Dictionary) -> bool:
+	for field in intent:
+		if field not in TRANSFORM_FIELDS and field not in ["passed", "replayed", "submit_debit_transaction", "authoritative_applied", "authority_source", "authority_applied", "simulation_replayed"]: return false
+	for field in ["transaction_id", "authority_transaction_key", "request_identity", "recipe_id", "target_id", "source_state", "target_state", "presentation_key"]:
+		if not intent.get(field) is String or intent[field].is_empty(): return false
+		if intent[field].length() > (2048 if field == "authority_transaction_key" else 1024 if field == "request_identity" else 192): return false
+	if not valid_count(intent.get("target_revision")) or intent.target_revision < 1: return false
+	if not intent.get("debits") is Dictionary or intent.debits.is_empty(): return false
+	for kind in intent.debits:
+		if kind not in KINDS or not valid_count(intent.debits[kind]) or intent.debits[kind] < 1: return false
+	if not intent.get("progression_tags") is Array or intent.progression_tags.size() > 64: return false
+	var seen := {}
+	for tag in intent.progression_tags:
+		if not tag is String or tag.is_empty() or tag.length() > 192 or seen.has(tag): return false
+		seen[tag] = true
+	var identity := "%s|%s|%s|%s" % [intent.recipe_id, intent.target_id, intent.source_state, intent.target_state]
+	return intent.request_identity == identity and intent.authority_transaction_key == transform_key(intent)
+
+func commit_world_transform_debit(intent: Dictionary) -> Dictionary:
+	var failure := {"passed": false, "authority_source": "simulation", "authority_applied": false, "simulation_replayed": false}
+	if not valid_world_transform_intent(intent): return failure
+	intent = canonical_transform_intent(intent)
+	var prior: Dictionary = world_transform_debit_receipts.get(intent.target_id, {})
+	if not prior.is_empty():
+		if prior.authority_transaction_key == intent.authority_transaction_key:
+			# A key alone is not permission to change the debit or destination.
+			for field in TRANSFORM_FIELDS:
+				if prior[field] != intent[field]: return failure
+			var replay := prior.duplicate(true)
+			replay.simulation_replayed = true
+			return replay
+		if intent.target_revision != prior.target_revision + 1 or intent.source_state != prior.target_state: return failure
+	elif intent.target_revision != 1 or world_transform_debit_receipts.size() >= MAX_TRANSFORM_TARGETS: return failure
+	for other_target in world_transform_debit_receipts:
+		if other_target != intent.target_id and world_transform_debit_receipts[other_target].transaction_id == intent.transaction_id: return failure
+	for kind in intent.debits:
+		if stored.get(kind, 0) < intent.debits[kind]: return failure
+	var receipt := intent.duplicate(true)
+	receipt.merge({"passed": true, "authority_source": "simulation", "authority_applied": true, "simulation_replayed": false}, true)
+	for kind in intent.debits:
+		stored[kind] -= int(intent.debits[kind])
+	world_transform_debit_receipts[intent.target_id] = receipt.duplicate(true)
+	return receipt
+
+static func valid_world_transform_receipts(value: Variant) -> bool:
+	if not value is Dictionary or value.size() > MAX_TRANSFORM_TARGETS: return false
+	var transaction_ids := {}
+	for target_id in value:
+		var row = value[target_id]
+		if not row is Dictionary or not valid_world_transform_intent(row): return false
+		if target_id != row.target_id or row.get("authority_source") != "simulation": return false
+		if row.get("authority_applied") != true or row.get("passed") != true: return false
+		if row.get("simulation_replayed") != false or transaction_ids.has(row.transaction_id): return false
+		transaction_ids[row.transaction_id] = true
 	return true
 
 func carried() -> int:
@@ -364,10 +440,11 @@ func snapshot() -> Dictionary:
 	var crew: Array = []
 	for c in companions:
 		crew.append({"id": c.id, "position": [c.position.x, c.position.y], "cooldown": c.cooldown, "job": c.job, "cargo": c.get("cargo", 0), "cargo_kind": c.get("cargo_kind", "wood"), "resource_kind": c.get("resource_kind", "wood"), "delivering": c.get("delivering", false), "building": c.get("building", false), "work_clocks": c.get("work_clocks", {}).duplicate()})
-	return {"schema": 1, "action_clocks": action_clocks.duplicate(), "facing": [facing.x, facing.y], "lead": lead, "position": [position.x, position.y], "inventory": inventory.duplicate(), "stored": stored.duplicate(), "level": level, "durability": durability, "health": health, "temperature": temperature, "rescued": rescued, "resources": resource_state, "defenses": defense_state, "wave": wave, "completed_waves": completed_waves, "wave_timer": wave_timer, "wave_active": wave_active, "enemies": enemy_state, "threat_serial": threat_serial, "forest_unlocked": forest_unlocked, "elapsed": elapsed, "companions": crew}
+	return {"schema": 1, "world_transform_debit_receipts": world_transform_debit_receipts.duplicate(true), "action_clocks": action_clocks.duplicate(), "facing": [facing.x, facing.y], "lead": lead, "position": [position.x, position.y], "inventory": inventory.duplicate(), "stored": stored.duplicate(), "level": level, "durability": durability, "health": health, "temperature": temperature, "rescued": rescued, "resources": resource_state, "defenses": defense_state, "wave": wave, "completed_waves": completed_waves, "wave_timer": wave_timer, "wave_active": wave_active, "enemies": enemy_state, "threat_serial": threat_serial, "forest_unlocked": forest_unlocked, "elapsed": elapsed, "companions": crew}
 
 func restore(data: Dictionary) -> bool:
 	# Validate the whole envelope before changing live gameplay state.
+	if not valid_world_transform_receipts(data.get("world_transform_debit_receipts", {})): return false
 	if data.get("schema") != 1 or not valid_count(data.get("lead")): return false
 	if int(data.lead) not in [1, 2] or float(data.lead) != float(int(data.lead)): return false
 	for name in ["inventory", "stored", "defenses"]:
@@ -415,6 +492,11 @@ func restore(data: Dictionary) -> bool:
 	actual.sort()
 	if actual != expected: return false
 	lead = int(data.lead)
+	world_transform_debit_receipts = {}
+	for target_id in data.get("world_transform_debit_receipts", {}):
+		var canonical := canonical_transform_intent(data.world_transform_debit_receipts[target_id])
+		canonical.merge({"passed": true, "authority_source": "simulation", "authority_applied": true, "simulation_replayed": false})
+		world_transform_debit_receipts[target_id] = canonical
 	position = Vector2(data.position[0], data.position[1])
 	position.x = clampf(position.x, -contract.world.boundX, contract.world.boundX)
 	position.y = clampf(position.y, -contract.world.boundZ, contract.world.boundZ)

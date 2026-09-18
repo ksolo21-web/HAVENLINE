@@ -3,6 +3,7 @@ from __future__ import annotations
 import datetime, pathlib, sys
 from lib import DOCS, ROOT, load_json, expand_alias, sha256_file
 from forward_execution import resolve_task
+from critic_profile import resolve_critic
 from architecture_v3 import task_readiness
 from architecture_v31 import task_readiness as task_readiness_v31
 
@@ -52,7 +53,7 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
     text+="\n\n## Required critics and executable safeguards\n"
     if not required:text+="- none\n"
     for cid in required:
-        row=execution["critics"][cid];text+=f"- **{cid} — {critics['critics'][cid]['name']}**: `{row['runner']}`; dimensions: {', '.join(row['dimensions'])}.\n"
+        row,_=resolve_critic(task_id,cid,execution,critics);text+=f"- **{cid} — {critics['critics'][cid]['name']}**: `{row['runner']}`; dimensions: {', '.join(row['dimensions'])}.\n"
         if row.get('deterministic_runner'):text+=f"  - deterministic supplement: `{row['deterministic_runner']}`\n"
         if row.get('capture_runner'):text+=f"  - required capture harness: `{row['capture_runner']}`\n"
         if row.get('device_runner'):text+=f"  - device/layout harness: `{row['device_runner']}`\n"

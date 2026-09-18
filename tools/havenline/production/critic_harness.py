@@ -2,6 +2,7 @@
 from __future__ import annotations
 import argparse, json, pathlib
 from lib import ROOT, DOCS, load_json, ensure_score_strictly_above_nine, sha256_file
+from critic_profile import resolve_critic
 
 def validate_raw(path:pathlib.Path,critic_id:str,candidate:str):
     cfg=load_json(DOCS/"CRITIC_MATRIX.json");execution=load_json(DOCS/"CRITIC_EXECUTION.json")
@@ -13,7 +14,11 @@ def validate_raw(path:pathlib.Path,critic_id:str,candidate:str):
     if d.get("candidate_hash")!=candidate:errors.append("candidate hash mismatch")
     for k in ("provider","model","request_or_run_id","input_manifest_hash","raw_output_path","raw_output_hash"):
         if not d.get(k):errors.append("empty "+k)
-    expected=set(execution["critics"].get(critic_id,{}).get("dimensions",[]))
+    try:
+        spec,_=resolve_critic(d.get("task_id"),critic_id,execution,cfg)
+    except ValueError as exc:
+        errors.append(str(exc));spec=execution["critics"][critic_id]
+    expected=set(spec.get("dimensions",[]))
     if expected and set(d.get("scores",{}))!=expected:errors.append("mandatory dimension coverage mismatch")
     errors+=ensure_score_strictly_above_nine(d.get("scores",{}))
     if d.get("defects")!=[]:errors.append("unresolved defects present")
