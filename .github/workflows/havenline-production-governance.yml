@@ -50,14 +50,23 @@ jobs:
         run: python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' -v
       - name: Validate workstream registry and ownership collisions
         run: python3 tools/havenline/production/workstream.py validate-registry
-      - name: Validate complete V2 state and base-authoritative migration scope
+      - name: Validate complete V2 state and event-appropriate scope
         shell: bash
+        env:
+          SCOPE_EVENT: ${{ github.event_name }}
+          SCOPE_REF: ${{ github.ref_name }}
+          SCOPE_PR_BASE: ${{ github.event.pull_request.base.sha }}
         run: |
           set -euo pipefail
-          if [ "${{ github.event_name }}" = "pull_request" ]; then base="${{ github.event.pull_request.base.sha }}"; else base=$(git rev-parse HEAD^); fi
+          if [ "$SCOPE_EVENT" = "pull_request" ]; then base="$SCOPE_PR_BASE"; else base=$(git rev-parse HEAD^); fi
           python3 tools/havenline/production/validate_migration.py
-          python3 tools/havenline/production/validate_migration_scope.py --base "$base" --head HEAD --output /tmp/migration-scope.json
-          cat /tmp/migration-scope.json
+          integration_branch=$(python3 -c 'import json; print(json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json"))["integration_branch"])')
+          if [ "$SCOPE_EVENT" = "push" ] && [ "$SCOPE_REF" = "$integration_branch" ]; then
+            python3 tools/havenline/production/validate_integration_scope.py --base "$base" --head HEAD --output /tmp/governance-scope.json
+          else
+            python3 tools/havenline/production/validate_migration_scope.py --base "$base" --head HEAD --output /tmp/governance-scope.json
+          fi
+          cat /tmp/governance-scope.json
       - name: Validate T10-T70 forward execution architecture
         run: |
           python3 tools/havenline/production/forward_execution.py validate
