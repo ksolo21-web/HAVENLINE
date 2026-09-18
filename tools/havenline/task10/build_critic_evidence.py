@@ -40,6 +40,32 @@ No added buttons, menus, grids, capacity walls, combat, danger, economy or popul
 '''
 
 
+REVIEW_OUTPUT_PATH = 'critic-input/review-output-contract.txt'
+REVIEW_OUTPUT_DESCRIPTION = 'Bounded reviewer response contract'
+REVIEW_OUTPUT_CONTRACT = '''RESPONSE FORMAT ONLY; preserve your independent evidence judgment.
+Return only the required complete JSON, without preamble or repeated text. Use exactly 2 observations, each <=160 characters. Use 0-5 defects, each <=160 characters and concrete/actionable; [] only if none exist. Include coverage_complete, confidence and every mandatory score. Do not omit defects or fields to fit. Finish within 600 tokens; no narration.
+'''
+
+
+def output_contract_errors(manifest, root=ROOT):
+    errors=[]
+    for group in manifest['groups']:
+        items=group['items']
+        contracts=[i for i in items if i.get('path')==REVIEW_OUTPUT_PATH]
+        if manifest['critic_id'] not in ('C3','C4'):
+            if contracts: errors.append('unexpected response contract: '+group['id'])
+            continue
+        expected=dict(path=REVIEW_OUTPUT_PATH,kind='text',category='task_scope',description=REVIEW_OUTPUT_DESCRIPTION,sha256=hashlib.sha256(REVIEW_OUTPUT_CONTRACT.encode()).hexdigest())
+        if len(contracts)!=1 or not items or items[-1]!=expected:
+            errors.append('response contract missing, duplicate, changed or not last: '+group['id'])
+        try:
+            if (root/REVIEW_OUTPUT_PATH).read_bytes()!=REVIEW_OUTPUT_CONTRACT.encode():
+                errors.append('response contract content mismatch: '+group['id'])
+        except OSError:
+            errors.append('response contract file missing: '+group['id'])
+    return errors
+
+
 def compact_progression(report):
     from validate_progression import REQUIRED
     assert report.get('passed') is True and report.get('executed') is True
@@ -62,7 +88,7 @@ def rendered_group_text(group, root=ROOT):
 
 
 def prompt_errors(manifest, root=ROOT):
-    errors=[]
+    errors=output_contract_errors(manifest,root)
     cid=manifest['critic_id']
     for group in manifest['groups']:
         try:
@@ -230,6 +256,7 @@ def main():
     full_sources=['FROZEN_SCOPE.md','recipes.json','progression.json','domain-tests.json','integration-tests.json','review-summary.json','motion-timeline.json','save-matrix/save-matrix.json','benchmark/manifest.json','performance.json']
     preserved=[item('critic-input/'+p,'preserved_raw','text' if p.endswith('.md') else 'json') for p in full_sources]
     (out/'scope-brief.txt').write_text(SCOPE_SYNOPSIS)
+    (out/'review-output-contract.txt').write_text(REVIEW_OUTPUT_CONTRACT)
     context=('Exact source '+a.candidate+'. Executed domain '+str(reports['domain-tests.json']['check_count'])+' and integration '+str(reports['integration-tests.json']['check_count'])+' checks PASS; 7 save cases PASS. Real delivered authority/exact debit/replay verified. Four view nodes, one build, zero repeated-state rebuilds. READY states exact cost; BLOCKED states exact shortfall; COMPLETE states paid cost and next prerequisite.\n'
              +'30fps video '+str(timeline['frame_count'])+' frames: '+','.join(x['state']+' '+str(x['start_frame'])+'-'+str(x['end_frame']) for x in segments)+'. Motion images sampled every15 frames; full video preserved.\n'
              +'Full scope/proofs and hashes: preserved_sources in this source-bound manifest. Neutral fixture deliberately omits T11 camp art and main-loop wiring.\n')
@@ -260,6 +287,8 @@ def main():
             group['items'].append(item('critic-input/scope-brief.txt','task_scope','text'))
             if cid!='C7' and not any(i['path']=='critic-input/visual-brief.txt' for i in group['items']):
                 group['items'].append(item('critic-input/visual-brief.txt','control_state' if cid=='C3' else 'feedback_state','text'))
+            if cid in ('C3','C4'):
+                group['items'].append(item(REVIEW_OUTPUT_PATH,'task_scope','text',REVIEW_OUTPUT_DESCRIPTION))
         manifest=dict(schema_version=1,task_id='T10',critic_id=cid,candidate_commit=a.candidate,groups=groups,preserved_sources=preserved,prompt_budget_method='conservative estimate, not tokenizer: 1000 + image2048 + ceil(textchars/2.5) <=4200')
         errors=validate(manifest)+prompt_errors(manifest)
         if errors: raise SystemExit('\n'.join(errors))

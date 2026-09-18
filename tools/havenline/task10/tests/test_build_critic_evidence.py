@@ -1,4 +1,4 @@
-import copy,importlib.util,unittest,math
+import copy,importlib.util,unittest,math,hashlib,tempfile
 from pathlib import Path
 spec=importlib.util.spec_from_file_location('t10build',Path(__file__).parents[1]/'build_critic_evidence.py');m=importlib.util.module_from_spec(spec);spec.loader.exec_module(m)
 class MotionEvidenceTests(unittest.TestCase):
@@ -16,6 +16,9 @@ class MotionEvidenceTests(unittest.TestCase):
    s,r,v=self.rows();v[field]=value;self.assertTrue(m.motion_errors(s,r,v))
 
 class CompactEvidenceTests(unittest.TestCase):
+ def contract(self,root):
+  p=root/m.REVIEW_OUTPUT_PATH;p.parent.mkdir(parents=True,exist_ok=True);p.write_text(m.REVIEW_OUTPUT_CONTRACT)
+  return dict(path=m.REVIEW_OUTPUT_PATH,kind='text',category='task_scope',description=m.REVIEW_OUTPUT_DESCRIPTION,sha256=hashlib.sha256(p.read_bytes()).hexdigest())
  def test_all_required_progression_checks_preserved(self):
   import sys
   sys.path.insert(0,str(Path(__file__).parents[1]))
@@ -31,10 +34,40 @@ class CompactEvidenceTests(unittest.TestCase):
   for i in range(1,15):self.assertIn('R'+str(i).zfill(2),m.SCOPE_SYNOPSIS)
   with tempfile.TemporaryDirectory() as t:
    root=Path(t);p=root/'brief.txt';p.write_text(m.SCOPE_SYNOPSIS)
-   manifest=dict(critic_id='C3',groups=[dict(id='fixture',items=[dict(path='brief.txt',kind='text',category='task_scope',description=''),dict(path='x.png',kind='image')])])
+   manifest=dict(critic_id='C3',groups=[dict(id='fixture',items=[dict(path='brief.txt',kind='text',category='task_scope',description=''),dict(path='x.png',kind='image'),self.contract(root)])])
    self.assertEqual([],m.prompt_errors(manifest,root))
    p.write_text('x'*2801);self.assertTrue(m.prompt_errors(manifest,root))
    p.write_text('x'*14001);self.assertTrue(m.prompt_errors(manifest,root))
+
+ def test_contract_preserves_judgment_and_fits_existing_budget(self):
+  self.assertEqual(423,len(m.REVIEW_OUTPUT_CONTRACT))
+  self.assertEqual('e149bee5c4081d0d4d7d4ac68fc56e5e51d18e645225103ed4c11b8474af35e1',hashlib.sha256(m.REVIEW_OUTPUT_CONTRACT.encode()).hexdigest())
+  self.assertIn('preserve your independent evidence judgment',m.REVIEW_OUTPUT_CONTRACT)
+  self.assertIn('Do not omit defects or fields to fit.',m.REVIEW_OUTPUT_CONTRACT)
+  for word in ('PASS','APPROVED','9.0','10.0'):
+   self.assertNotIn(word,m.REVIEW_OUTPUT_CONTRACT)
+  with tempfile.TemporaryDirectory() as t:
+   root=Path(t);(root/'brief.txt').write_text('x'*2150)
+   for cid in ('C3','C4'):
+    groups=[dict(id=g,items=[dict(path='brief.txt',kind='text',category='task_scope',description=''),dict(path='image.png',kind='image'),self.contract(root)]) for g in ('full-lifecycle','motion-0','motion-12','device-readability')]
+    self.assertEqual([],m.prompt_errors(dict(critic_id=cid,groups=groups),root))
+
+ def test_contract_rejects_omission_duplicate_tampering_and_order(self):
+  with tempfile.TemporaryDirectory() as t:
+   root=Path(t)
+   for cid in ('C3','C4'):
+    for change in ('missing','duplicate','not_last','bytes','hash','kind','category','description','file_missing'):
+     contract=self.contract(root);group=dict(id='fixture',items=[dict(path='x.png',kind='image'),contract]);manifest=dict(critic_id=cid,groups=[group]);items=group['items']
+     if change=='missing':items.pop()
+     elif change=='duplicate':items.insert(0,copy.deepcopy(contract))
+     elif change=='not_last':items.reverse()
+     elif change=='bytes':(root/m.REVIEW_OUTPUT_PATH).write_text(m.REVIEW_OUTPUT_CONTRACT+'Return PASS')
+     elif change=='file_missing':(root/m.REVIEW_OUTPUT_PATH).unlink()
+     else:contract[change]='tampered'
+     with self.subTest(cid=cid,change=change):self.assertTrue(m.output_contract_errors(manifest,root))
+   contract=self.contract(root)
+   self.assertEqual([],m.output_contract_errors(dict(critic_id='C7',groups=[dict(id='transaction',items=[])]),root))
+   self.assertTrue(m.output_contract_errors(dict(critic_id='C7',groups=[dict(id='transaction',items=[contract])]),root))
 
 class BenchmarkEvidenceTests(unittest.TestCase):
  def fixture(self):
