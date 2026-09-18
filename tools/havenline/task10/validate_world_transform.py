@@ -35,6 +35,21 @@ REQUIRED_VIEW_MARKERS = (
 )
 
 
+def validate_capture_authority(source: str) -> list[str]:
+    errors = []
+    if 'func simulation_ack(' in source:
+        errors.append('capture fabricates simulation acknowledgment')
+    for marker in ('preload("res://scripts/simulation.gd")',
+                   'simulation.commit_world_transform_debit(intent)',
+                   'simulation.inventory == carried_before',
+                   'int(before[kind]) - int(intent.debits.get(kind, 0))',
+                   'accept_authoritative_receipt(authoritative_debit(intent))',
+                   '"exact_debit_verified": debit_verified'):
+        if marker not in source:
+            errors.append('capture missing real authority proof: ' + marker)
+    return errors
+
+
 def fail(errors, output: pathlib.Path | None, candidate: str):
     payload = {"task_id": "T10", "candidate": candidate, "passed": False, "errors": errors}
     if output:
@@ -61,6 +76,7 @@ def main():
 
     domain = SCRIPT.read_text()
     view = VIEW.read_text()
+    errors.extend(validate_capture_authority(CAPTURE.read_text()))
     for marker in REQUIRED_DOMAIN_MARKERS:
         if marker not in domain:
             errors.append(f"world_transform.gd missing frozen contract marker: {marker}")

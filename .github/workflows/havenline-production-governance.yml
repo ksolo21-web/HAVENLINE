@@ -6,6 +6,7 @@ on:
       - 'AGENTS.md'
       - 'Docs/Production/**'
       - 'tools/havenline/production/**'
+      - '.github/CODEOWNERS'
       - 'HavenlineGodot/tests/production_capture_harness.gd'
       - 'HavenlineGodot/tests/production_motion_capture.gd'
       - '.github/workflows/havenline-production-governance.yml'
@@ -20,6 +21,7 @@ on:
       - 'AGENTS.md'
       - 'Docs/Production/**'
       - 'tools/havenline/production/**'
+      - '.github/CODEOWNERS'
       - 'HavenlineGodot/tests/production_capture_harness.gd'
       - 'HavenlineGodot/tests/production_motion_capture.gd'
       - '.github/workflows/havenline-production-governance.yml'
@@ -33,13 +35,13 @@ permissions:
   contents: read
 concurrency:
   group: havenline-production-governance-${{ github.event.pull_request.head.ref || github.ref_name }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   validate:
     runs-on: ubuntu-24.04
-    timeout-minutes: 12
+    timeout-minutes: 14
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           fetch-depth: 0
       - name: Compile production accelerator and specialist critic tooling
@@ -48,43 +50,139 @@ jobs:
         run: python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' -v
       - name: Validate workstream registry and ownership collisions
         run: python3 tools/havenline/production/workstream.py validate-registry
-      - name: Validate complete V2 state
-        run: python3 tools/havenline/production/validate_migration.py
+      - name: Validate complete V2 state and event-appropriate scope
+        shell: bash
+        env:
+          SCOPE_EVENT: ${{ github.event_name }}
+          SCOPE_REF: ${{ github.ref_name }}
+          SCOPE_PR_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$SCOPE_EVENT" = "pull_request" ]; then base="$SCOPE_PR_BASE"; else base=$(git rev-parse HEAD^); fi
+          python3 tools/havenline/production/validate_migration.py
+          integration_branch=$(python3 -c 'import json; print(json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json"))["integration_branch"])')
+          if [ "$SCOPE_EVENT" = "push" ] && [ "$SCOPE_REF" = "$integration_branch" ]; then
+            python3 tools/havenline/production/validate_integration_scope.py --base "$base" --head HEAD --output /tmp/governance-scope.json
+          else
+            python3 tools/havenline/production/validate_migration_scope.py --base "$base" --head HEAD --output /tmp/governance-scope.json
+          fi
+          cat /tmp/governance-scope.json
+      - name: Validate T10-T70 forward execution architecture
+        run: |
+          python3 tools/havenline/production/forward_execution.py validate
+          python3 tools/havenline/production/forward_execution.py plan T10 > /tmp/t10-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T14 > /tmp/t14-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T24 > /tmp/t24-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T33 > /tmp/t33-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T58 > /tmp/t58-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T62 > /tmp/t62-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T68 > /tmp/t68-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T70 > /tmp/t70-plan.json
+          jq -e '.execution_mode == "build" and (.ordered_gates | index("integration")) != null and (.gate_execution.task_sentinel.execution == "task_adapter_required")' /tmp/t10-plan.json
+          jq -e '.execution_mode == "validation_only" and (.ordered_gates | index("integration")) == null' /tmp/t62-plan.json
+          jq -e '.execution_mode == "certification_only" and (.ordered_gates | index("physical_device")) != null and (.gate_execution.physical_device.execution == "physical_hardware_only")' /tmp/t68-plan.json
+          jq -e '.execution_mode == "release_only" and (.ordered_gates | index("release_manifest")) != null' /tmp/t70-plan.json
+      - name: Validate Production Architecture V3 intelligence layer
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/architecture_v3.py validate > /tmp/v3-validation.json
+          python3 tools/havenline/production/architecture_v3.py readiness T10 > /tmp/v3-t10.json
+          python3 tools/havenline/production/architecture_v3.py readiness T35 > /tmp/v3-t35.json
+          python3 tools/havenline/production/architecture_v3.py readiness T68 > /tmp/v3-t68.json
+          python3 tools/havenline/production/critical_path_scheduler.py validate > /tmp/v3-scheduler-validation.json
+          python3 tools/havenline/production/critical_path_scheduler.py plan > /tmp/v3-schedule.json
+          python3 tools/havenline/production/gate_fingerprint.py validate > /tmp/v3-fingerprint.json
+          python3 tools/havenline/production/contract_compatibility.py validate > /tmp/v3-contracts.json
+          python3 tools/havenline/production/failure_intelligence.py validate > /tmp/v3-failures.json
+          python3 tools/havenline/production/synthetic_merge_forecast.py --candidate HEAD --integration HEAD --output /tmp/v3-merge.json
+          jq -e '.passed == true and .task_count == 61' /tmp/v3-validation.json
+          jq -e '.feasibility.dependencies_approved == true and .feasibility.activation_state == "READY_NOW" and .feasibility.runtime_activation_allowed == true' /tmp/v3-t10.json
+          jq -e '.tasks.T10.status == "LOCKED"' Docs/Production/DEPENDENCY_GRAPH.json
+          jq -e '.feasibility.capability_blockers | index("google_play_billing_sandbox") != null' /tmp/v3-t35.json
+          jq -e '.feasibility.capability_blockers | index("physical_phone_4k60") != null' /tmp/v3-t68.json
+          jq -e '.scheduler_is_advisory == true and .integration_owner_slots == 1' /tmp/v3-schedule.json
+          jq -e '.passed == true' /tmp/v3-fingerprint.json
+          jq -e '.passed == true' /tmp/v3-contracts.json
+          jq -e '.passed == true and .record_count >= 4' /tmp/v3-failures.json
+          jq -e '.risk == "NO_DRIFT" and .requires_reconcile == false' /tmp/v3-merge.json
+      - name: Validate Production Architecture V3.1 factory hardening
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then base="${{ github.event.pull_request.base.sha }}"; else base=$(git rev-parse HEAD^); fi
+          echo '4858759f46b3c34d942082cb9fa9ea11a14eb0f871c131eb1f6eeeb26fb54c9d  Docs/Production/ARCHITECTURE_RELEASE_LOCK.json' | sha256sum -c -
+          # V3.2 composes validate_architecture_release_lock.py with only the exact authorized T09 policy, T10 canary and T10 C7 runner deltas.
+          python3 tools/havenline/production/validate_architecture_v32_t10.py --output /tmp/v32-release-lock.json
+          python3 tools/havenline/production/architecture_v31.py validate > /tmp/v31-validation.json
+          python3 tools/havenline/production/architecture_v31.py readiness T10 > /tmp/v31-t10.json
+          python3 tools/havenline/production/architecture_v31.py readiness T68 > /tmp/v31-t68.json
+          python3 tools/havenline/production/factory_observer_contract.py > /tmp/v31-factory-observer-contract.json
+          python3 tools/havenline/production/flake_intelligence.py validate > /tmp/v31-flake.json
+          python3 tools/havenline/production/pipeline_telemetry.py validate > /tmp/v31-telemetry.json
+          python3 tools/havenline/production/ci_toolchain_lock.py validate > /tmp/v31-toolchain.json
+          python3 tools/havenline/production/ci_toolchain_lock.py provenance --output /tmp/v31-runner-provenance.json
+          python3 tools/havenline/production/evidence_retention.py validate-policy > /tmp/v31-retention.json
+          python3 tools/havenline/production/closure_validator.py Docs/Production/T09/verified-completion.json > /tmp/t09-closure.json
+          python3 tools/havenline/production/runtime_dependency_learning.py validate > /tmp/v31-runtime-deps.json
+          python3 tools/havenline/production/mutation_canary.py > /tmp/v31-canaries.json
+          python3 tools/havenline/production/proof_invalidation.py validate > /tmp/v31-invalidation.json
+          python3 tools/havenline/production/proof_invalidation.py contract persistence_schema > /tmp/v31-persistence-invalidation.json
+          python3 tools/havenline/production/proof_invalidation.py diff --base "$base" --head HEAD --output /tmp/v31-contract-diff.json > /tmp/v31-contract-diff.stdout.json
+          python3 tools/havenline/production/task_state_snapshot.py T10 --output /tmp/v31-t10-state.json > /tmp/v31-t10-state.stdout.json
+          jq -e '.passed == true and .architecture_version == "3.2" and .predecessor_accepted_source == "673d7a7477cc94aef2b7bb8f3d788b1b3c47f902" and .predecessor_manifest_sha256 == "4858759f46b3c34d942082cb9fa9ea11a14eb0f871c131eb1f6eeeb26fb54c9d" and .unchanged_locked_files == 47 and .authorized_changes == ["Docs/Production/CI_TOOLCHAIN_LOCK.json", "tools/havenline/production/mutation_canary.py", "tools/havenline/production/forward_execution.py"]' /tmp/v32-release-lock.json
+          jq -e '.passed == true and .task_count == 62 and .snapshot_count == 62 and .components.factory_observer_consumption.passed == true' /tmp/v31-validation.json
+          jq -e '.v31_controls.automatic_factory_observation == "ENFORCED" and .v31_controls.ci_toolchain_lock == "ENFORCED_NODE24" and .v31_controls.runtime_dependency_learning == "ADDITIVE_ONLY_SOURCE_BOUND" and .v31_controls.transitive_proof_invalidation == "ENFORCED_AUTOMATIC_DIFF"' /tmp/v31-t10.json
+          jq -e '.passed == true and .automatic_failure_observation == true and .forward_closeout_observation_required == true and .factory_observation_is_not_authority == true and .quality_thresholds_unchanged == true' /tmp/v31-factory-observer-contract.json
+          jq -e '.passed == true and .critical_workflow_count == 9 and .retired_workflow_count == 0 and .action_pin_count >= 7 and .action_runtime == "node24"' /tmp/v31-toolchain.json
+          jq -e '.provenance_complete == true and .RUNNER_OS == "Linux"' /tmp/v31-runner-provenance.json
+          jq -e '.passed == true and ([.results[] | select(.rejected == true)] | length) == (.results | length)' /tmp/v31-canaries.json
+          jq -e '.passed == true' /tmp/v31-retention.json
+          jq -e '.passed == true and .approval_allowed == true' /tmp/t09-closure.json
+          jq -e '.passed == true' /tmp/v31-runtime-deps.json
+          jq -e '.passed == true' /tmp/v31-invalidation.json
+          jq -e '.proof_reuse_blocked == true and .automatic_approval_revocation == false and (.invalidated_tasks | index("T15")) != null and (.invalidated_tasks | index("T70")) != null and (.invalidated_gates | index("save_matrix")) != null' /tmp/v31-persistence-invalidation.json
+          jq -e '.passed == true and ((.contract_change_detected == false and .proof_reuse_blocked == false and .integration_owner_disposition_required == false) or (.contract_change_detected == true and .proof_reuse_blocked == true and .integration_owner_disposition_required == true))' /tmp/v31-contract-diff.json
+          jq -e '.validation.passed == true and .snapshot_is_derived_not_authority == true and .lifecycle_status == "LOCKED" and (.blockers | index("lifecycle_status_LOCKED")) != null and (.blockers | index("ownership_not_assigned")) != null' /tmp/v31-t10-state.json
       - name: Require C1-C11 execution readiness
         run: python3 tools/havenline/production/validate_critic_readiness.py
       - name: Smoke-test frozen task packet generation
         run: |
           python3 tools/havenline/production/task_packet.py T03
           test -s Docs/Production/Evidence/T03/TASK_PACKET.md
-          # T05 predates the resource/actor contract and must remain N/A.
           python3 tools/havenline/production/task_packet.py T05
           grep -q 'N/A for this task' Docs/Production/Evidence/T05/TASK_PACKET.md
+          python3 tools/havenline/production/task_packet.py T10
+          grep -q 'Forward execution profile — machine resolved' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Execution mode: `build`' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Ordered fail-fast gates' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Terminal-failure disposition: C0' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Production Architecture V3 — machine resolved' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Production Architecture V3.1 — machine resolved' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Feasibility state:' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Runtime activation allowed now:' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'DO NOT start runtime implementation' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'synthetic_merge_forecast.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'task_state_snapshot.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'proof_invalidation.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'factory_observer.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'factory_closeout_gate.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'factory-observation.json' Docs/Production/Evidence/T10/TASK_PACKET.md
       - name: Validate resource/tool/actor registry schema
-        run: |
-          python3 tools/havenline/production/resource_actor_contract.py --task T05 --schema-only
+        run: python3 tools/havenline/production/resource_actor_contract.py --task T05 --schema-only
       - name: Validate Game Master policy schema
-        run: |
-          python3 tools/havenline/production/game_master_contract.py --task T08 --schema-only
+        run: python3 tools/havenline/production/game_master_contract.py --task T08 --schema-only
       - name: Classify governance-only or lifecycle-valid task integration impact
         run: |
           set -euo pipefail
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            base="${{ github.event.pull_request.base.sha }}"
-          else
-            base=$(git rev-parse HEAD^)
-          fi
+          if [ "${{ github.event_name }}" = "pull_request" ]; then base="${{ github.event.pull_request.base.sha }}"; else base=$(git rev-parse HEAD^); fi
           python3 tools/havenline/production/change_impact.py --base "$base" --head HEAD > /tmp/impact.json
           python3 tools/havenline/production/validate_integration_scope.py --base "$base" --head HEAD --output /tmp/integration-scope.json
-          # T03 is already approved. Only a real T03 runtime change should reopen
-          # the strict repair-cycle validator; workflow/docs-only maintenance is
-          # governance and must not replay the historical T03 repair range.
           if jq -e '.task_id == "T03" and ([.task_files.T03[]? | select(startswith("HavenlineGodot/"))] | length > 0)' /tmp/integration-scope.json >/dev/null; then
-            python3 tools/havenline/production/validate_repair_cycle.py \
-              --ledger Docs/Production/T03/DEFECT_LEDGER.json \
-              --base e89818070603399cce27b595ff1116e40b8b3b2a \
-              --head HEAD
+            python3 tools/havenline/production/validate_repair_cycle.py --ledger Docs/Production/T03/DEFECT_LEDGER.json --base e89818070603399cce27b595ff1116e40b8b3b2a --head HEAD
           fi
           cat /tmp/impact.json
           cat /tmp/integration-scope.json
-# Full V2 state is validated every run; commit-local integration scope is lifecycle/ownership based rather than frozen to a task number.
+# Full V2/V3/V3.1 state is validated every run; integration scope remains lifecycle/ownership based rather than frozen to a task number.
+# V3.1 locked surfaces are byte-bound to accepted source 673d7a7477cc94aef2b7bb8f3d788b1b3c47f902; any change requires explicit V3.2 scope and a new hosted acceptance cycle.
+# GitHub CODEOWNERS routes architecture review but repository-admin ruleset/branch protection remains the external enforcement layer.
 # Governance/QA only. This workflow cannot award a task critic score, approve gameplay, or bypass task-specific review.

@@ -232,7 +232,7 @@ func run() -> void:
 	var wrong_debit := simulation_ack(first)
 	wrong_debit.debits["wood"] = 7
 	var wrong_debit_result := engine.accept_authoritative_receipt(wrong_debit)
-	check("authoritative receipt with altered debit fails closed", not wrong_debit_result.passed and wrong_debit_result.errors.has("receipt_debit_mismatch"), wrong_debit_result)
+	check("authoritative receipt with altered debit fails closed at bound key validation", not wrong_debit_result.passed and wrong_debit_result.errors.has("malformed_authoritative_receipt"), wrong_debit_result)
 	check("mismatched receipt cannot consume prepared state", engine.descriptor().prepared_count == 1 and engine.descriptor().receipt_count == 0)
 
 	var first_ack := simulation_ack(first)
@@ -286,6 +286,54 @@ func run() -> void:
 	check("restored engine loads same recipes", restored.configure_from_file())
 	check("completed component state imports after reload", restored.import_component_state(exported))
 	check("component recovery preserves exact completed state", restored.export_component_state() == exported)
+	for field in ["authority_source", "authority_applied", "accepted_by_world_transform", "applied", "authoritative_applied", "simulation_replayed"]:
+		var missing_flag := exported.duplicate(true)
+		missing_flag.receipts["tx-002"].erase(field)
+		expect_import_rejected("completed receipt requires " + field, exported, missing_flag)
+		var wrong_flag := exported.duplicate(true)
+		wrong_flag.receipts["tx-002"][field] = "forged" if field == "authority_source" else not bool(wrong_flag.receipts["tx-002"][field])
+		expect_import_rejected("completed receipt enforces " + field, exported, wrong_flag)
+	var completed_pending := crash_snapshot.duplicate(true)
+	completed_pending.prepared["tx-crash"].authoritative_applied = true
+	expect_import_rejected("pending record cannot claim completed authority", crash_snapshot, completed_pending)
+	var injected_pending := crash_snapshot.duplicate(true)
+	injected_pending.prepared["tx-crash"].authority_source = "simulation"
+	expect_import_rejected("pending record cannot carry authority receipt fields", crash_snapshot, injected_pending)
+	var json_restored := Transform.new()
+	json_restored.configure_from_file()
+	check("completed JSON recovery is canonical and exact", json_restored.import_component_state(JSON.parse_string(JSON.stringify(exported))) and json_restored.export_component_state() == exported)
+	check("completed JSON target revision retains integer type", typeof(json_restored.targets["anchor-A"].revision) == TYPE_INT)
+	for table in ["targets", "receipts"]:
+		var unknown := exported.duplicate(true)
+		var key: String = unknown[table].keys()[0]
+		unknown[table][key]["unbounded_extra"] = {"nested": ["payload"]}
+		expect_import_rejected("unknown nested " + table + " payload rejected", exported, unknown)
+	var unknown_pending := crash_snapshot.duplicate(true)
+	unknown_pending.prepared["tx-crash"]["unbounded_extra"] = ["payload"]
+	expect_import_rejected("unknown pending payload rejected", crash_snapshot, unknown_pending)
+	for bad_value in [42, "x".repeat(193)]:
+		var bad_state := exported.duplicate(true)
+		bad_state.targets["anchor-A"].state = bad_value
+		expect_import_rejected("non-string or oversized target state rejected " + str(bad_value).left(8), exported, bad_state)
+	var oversized_tags := exported.duplicate(true)
+	oversized_tags.targets["anchor-A"].progression_tags = ["x".repeat(193)]
+	expect_import_rejected("oversized component tag rejected", exported, oversized_tags)
+	var too_many_tags := exported.duplicate(true)
+	too_many_tags.targets["anchor-A"].progression_tags = []
+	for index in range(65): too_many_tags.targets["anchor-A"].progression_tags.append("tag-%d" % index)
+	expect_import_rejected("too many component tags rejected", exported, too_many_tags)
+	for table in ["targets", "prepared", "receipts"]:
+		var overflow := exported.duplicate(true)
+		overflow[table] = {}
+		for index in range(Transform.MAX_TARGETS + 1): overflow[table]["overflow-%d" % index] = {}
+		expect_import_rejected("component " + table + " overflow rejected", exported, overflow)
+	var bounded_registration := Transform.new()
+	var registrations_ok := true
+	for index in range(Transform.MAX_TARGETS): registrations_ok = bounded_registration.register_target("limit-%d" % index, "seed") and registrations_ok
+	check("4096 model targets register and overflow rejects", registrations_ok and not bounded_registration.register_target("overflow", "seed") and bounded_registration.targets.size() == Transform.MAX_TARGETS)
+	check("oversized live target rejects", not Transform.new().register_target("x".repeat(193), "seed"))
+	var preserved := json_restored.export_component_state()
+	check("malformed import preserves populated component atomically", not json_restored.import_component_state(oversized_tags) and json_restored.export_component_state() == preserved)
 	var replay_after_reload := restored.commit_transform("tx-002", "framework_anchor_foundation_to_reinforced", "anchor-A", inventory, ["harvesting_online"])
 	check("latest completed receipt replay protection survives reload", replay_after_reload.passed and replay_after_reload.replayed and not replay_after_reload.submit_debit_transaction)
 	var before_bad_import := restored.export_component_state()
@@ -331,7 +379,7 @@ func run() -> void:
 	var duplicate_receipt_target := before_bad_import.duplicate(true)
 	var duplicate_receipt: Dictionary = duplicate_receipt_target.receipts["tx-002"].duplicate(true)
 	duplicate_receipt.transaction_id = "duplicate-latest"
-	duplicate_receipt.authority_transaction_key = "T10|%s|revision:%d" % [duplicate_receipt.request_identity, int(duplicate_receipt.target_revision)]
+	duplicate_receipt.authority_transaction_key = Transform._authority_transaction_key(duplicate_receipt)
 	duplicate_receipt_target.receipts["duplicate-latest"] = duplicate_receipt
 	expect_import_rejected("component state cannot retain two completed receipts for one target", before_bad_import, duplicate_receipt_target)
 

@@ -2,6 +2,7 @@ extends SceneTree
 
 const Transform = preload("res://scripts/world_transform.gd")
 const TransformView = preload("res://scripts/world_transform_view.gd")
+const Simulation = preload("res://scripts/simulation.gd")
 
 var output := "user://task10-world-transform"
 var candidate := "local-working-tree"
@@ -18,6 +19,8 @@ var target_mesh: MeshInstance3D
 var target_material: StandardMaterial3D
 var state_label: Label3D
 var records: Array[Dictionary] = []
+var simulation := Simulation.new()
+var debit_verified := false
 
 func _initialize() -> void:
 	for argument in OS.get_cmdline_user_args():
@@ -37,10 +40,15 @@ func _initialize() -> void:
 			production_evidence = true
 	call_deferred("run")
 
-func simulation_ack(intent: Dictionary) -> Dictionary:
-	var receipt := intent.duplicate(true)
-	receipt["authority_source"] = "simulation"
-	receipt["authority_applied"] = true
+func authoritative_debit(intent: Dictionary) -> Dictionary:
+	var before := simulation.stored.duplicate(true)
+	var carried_before := simulation.inventory.duplicate(true)
+	var receipt: Dictionary = simulation.commit_world_transform_debit(intent)
+	debit_verified = receipt.get("authority_applied", false) and receipt.get("authority_source") == "simulation" and not receipt.get("simulation_replayed", true)
+	for kind in Simulation.KINDS:
+		debit_verified = debit_verified and int(simulation.stored[kind]) == int(before[kind]) - int(intent.debits.get(kind, 0))
+	debit_verified = debit_verified and simulation.inventory == carried_before
+	if not debit_verified: return {}
 	return receipt
 
 func add_environment() -> void:
@@ -234,7 +242,7 @@ func run_production_evidence(inventory: Dictionary) -> void:
 		quit(1)
 		return
 
-	var accepted: Dictionary = engine.accept_authoritative_receipt(simulation_ack(intent))
+	var accepted: Dictionary = engine.accept_authoritative_receipt(authoritative_debit(intent))
 	if not accepted.passed or not view.mark_complete(accepted) or not await capture_state("complete", view.descriptor(), evidence_angles):
 		print(JSON.stringify({"passed": false, "error": "production_complete_capture_failed"}))
 		quit(1)
@@ -245,14 +253,15 @@ func run_production_evidence(inventory: Dictionary) -> void:
 	var manifest := {
 		"task_id": "T10",
 		"candidate": candidate,
-		"mode": "isolated-critic-ready-native-scale1-evidence",
-		"fixture_only": true,
+		"mode": "real-authority-neutral-fixture-native-scale1-evidence",
+		"fixture_only": false,
 		"t11_content": false,
 		"capture_resolution": [capture_width, capture_height],
 		"native_scale_1": capture_width == 3840 and capture_height == 2160,
 		"target_color_static": true,
 		"view_owns_lifecycle_visuals": true,
-		"real_t09_adapter_bound": false,
+		"real_t09_adapter_bound": true,
+		"exact_debit_verified": debit_verified,
 		"record_count": records.size(),
 		"states": ["ready", "blocked", "preview", "committing", "complete"],
 		"angles": evidence_angles,
@@ -300,6 +309,10 @@ func run() -> void:
 		return
 
 	var inventory := {"wood": 20, "stone": 12, "metal": 2, "fuel": 1}
+	# Neutral scene uses a seeded delivered balance; acquisition/delivery is
+	# exercised separately by the real-authority integration suite.
+	simulation.stored = inventory.duplicate(true)
+	inventory = simulation.stored.duplicate(true)
 	if device_check:
 		await run_device_check(inventory)
 		return
@@ -332,7 +345,7 @@ func run() -> void:
 		quit(1)
 		return
 
-	var accepted: Dictionary = engine.accept_authoritative_receipt(simulation_ack(intent))
+	var accepted: Dictionary = engine.accept_authoritative_receipt(authoritative_debit(intent))
 	if not accepted.passed or not view.mark_complete(accepted) or not await capture_state("complete", view.descriptor()):
 		print(JSON.stringify({"passed": false, "error": "complete_capture_failed"}))
 		quit(1)
@@ -342,12 +355,13 @@ func run() -> void:
 	var manifest := {
 		"task_id": "T10",
 		"candidate": candidate,
-		"mode": "dependency-independent-view-owned-lifecycle-fixture",
-		"fixture_only": true,
+		"mode": "real-authority-view-owned-neutral-fixture",
+		"fixture_only": false,
 		"t11_content": false,
 		"target_color_static": true,
 		"view_owns_lifecycle_visuals": true,
-		"real_t09_adapter_bound": false,
+		"real_t09_adapter_bound": true,
+		"exact_debit_verified": debit_verified,
 		"record_count": records.size(),
 		"states": ["ready", "blocked", "preview", "committing", "complete"],
 		"angles": ["front", "three-quarter"],

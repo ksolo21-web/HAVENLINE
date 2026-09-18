@@ -69,6 +69,22 @@ def candidate_scope_assessment(base: str, head: str, integration_head: str|None)
         "reason":reason,
     }
 
+def candidate_reconcile_assessment(base: str, head: str, integration_head: str|None):
+    """Assess staleness from the candidate's real shared integration branch point.
+
+    ``base`` remains the immutable historical assignment base recorded in the
+    registry. Once that historical base is proven to be an ancestor of the
+    candidate/integration merge-base, later repairs must not be forced to
+    reconcile production changes that are already part of both histories.
+    Only drift *after* the shared branch point can make the candidate stale.
+    """
+    scope=candidate_scope_assessment(base,head,integration_head)
+    effective_base=scope["branch_point"]
+    drift=integration_drift_assessment(effective_base,integration_head)
+    drift["registry_base"]=base
+    drift["candidate_branch_point"]=effective_base
+    return scope,drift
+
 def registry_errors(registry=None):
     registry=registry or load_json(DOCS/"WORKSTREAM_REGISTRY.json")
     ownership=load_json(DOCS/"PATH_OWNERSHIP.json")
@@ -135,15 +151,14 @@ def validate_candidate(task_id: str, base: str, head: str, integration_head: str
     expected_base=ws.get("base_commit")
     if expected_base and base!=expected_base:errors.append(f"base mismatch: registry {expected_base}, candidate {base}")
     for dep in deps_approved(task_id,graph):errors.append(f"dependency not approved: {dep}")
-    drift=integration_drift_assessment(base,integration_head)
+    scope,drift=candidate_reconcile_assessment(base,head,integration_head)
     if drift["requires_reconcile"]:
-        errors.append(f"stale base: candidate {base}, current integration {integration_head}; {drift['reason']}")
+        errors.append(f"stale branch point: candidate {scope['branch_point']}, current integration {integration_head}; {drift['reason']}")
     owned=expand_alias(ws.get("owned_paths",[]),ownership);protected=expand_alias(ws.get("protected_paths",[]),ownership);authorized=approved_change_requests(task_id)
     foreign=[]
     for other in registry["workstreams"]:
         if other["task_id"]==task_id or other["status"] not in ACTIVE_STATES or not other.get("owner"):continue
         foreign+=expand_alias(other.get("owned_paths",[]),ownership)
-    scope=candidate_scope_assessment(base,head,integration_head)
     files=scope["changed_files"]
     if not files:errors.append("candidate contains no task changes after its integration branch point")
     for path in files:

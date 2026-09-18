@@ -29,14 +29,14 @@ jobs:
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           ref: ${{ inputs.candidate }}
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
           name: ${{ inputs.evidence_artifact }}
           path: critic-input/
-      - uses: actions/cache/restore@v4
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
         id: reviewer-cache
         with:
           path: ~/.cache/havenline-t01-qwen35
@@ -49,7 +49,7 @@ jobs:
             sudo apt-get install -y aria2
           fi
           python3 tools/havenline/production/prepare_specialist_runtime.py > specialist-runtime-preparation.json
-      - uses: actions/cache/save@v4
+      - uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
         if: steps.reviewer-cache.outputs.cache-hit != 'true'
         with:
           path: ~/.cache/havenline-t01-qwen35
@@ -73,7 +73,7 @@ jobs:
             --critic "${{ inputs.critic_id }}" \
             --candidate "${{ inputs.candidate }}" \
             --raw specialist-review/critic-record.json
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
           name: ${{ inputs.output_artifact }}

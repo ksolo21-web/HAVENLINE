@@ -20,17 +20,26 @@ permissions:
 
 concurrency:
   group: havenline-task10-prebuild-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   dependency-independent-core:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
+
+      - name: Reject activated forward use of historical preparation workflow
+        run: |
+          python3 - <<'PY'
+          import json
+          r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
+          t10=next((x for x in r['workstreams'] if x['task_id']=='T10'), {})
+          assert t10.get('status', 'LOCKED') in ('LOCKED', 'PREPARED'), 'Historical preparation only; use the registered T10 candidate workflows'
+          PY
 
       - name: Enforce prebuild boundary
         run: |
@@ -250,7 +259,7 @@ jobs:
           python3 tools/havenline/production/validate_migration.py > task10-prebuild-evidence/migration.json
           python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > task10-prebuild-evidence/tests/production-tools.log 2>&1
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
           name: havenline-task10-prebuild-${{ github.sha }}

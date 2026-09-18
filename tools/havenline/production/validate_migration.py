@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 import argparse, hashlib, json, pathlib, re, subprocess, sys
+from datetime import datetime,timezone
 from lib import ROOT, DOCS, load_json, git, any_match, ensure_score_strictly_above_nine
 from workstream import registry_errors
 
@@ -11,7 +12,7 @@ EXPECTED_TOOLS={
 }
 ALLOWED_MIGRATION_PATTERNS=[
 "Docs/Production/**","tools/havenline/production/**","AGENTS.md",
-".github/workflows/havenline-production-governance.yml",".github/workflows/havenline-candidate-guard.yml",".github/workflows/havenline-apply-governance-v2.yml",
+".github/workflows/havenline-production-governance.yml",".github/workflows/havenline-candidate-guard.yml",".github/workflows/havenline-apply-governance-v2.yml",".github/workflows/havenline-task09-harvesting.yml",
 "HavenlineGodot/tests/production_capture_harness.gd","HavenlineGodot/tests/production_motion_capture.gd"
 ]
 
@@ -31,6 +32,11 @@ T09_BRANCH="havenline/T09-harvesting"
 T09_BASE="7492074e40a0b061f31d8c32602b7a581b2610f3"
 T09_ALIAS="@reservation:T09"
 T09_WORKSTREAM="T09-harvesting-acquisition-builder"
+T10_OWNER="world-transformation-builder"
+T10_BRANCH="havenline/T10-world-transformation"
+T10_ALIAS="@reservation:T10"
+T10_WORKSTREAM="T10-world-transformation-builder"
+T10_ACTIVE_STATES={"PREPARED","ASSIGNED","BUILDING_ISOLATED","BUILT_PENDING_DEPENDENCY","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","BLOCKED"}
 T08_ARTIFACT_DIGEST="sha256:d2e58a9b4736e690b3b9817536b90940fb605e25b47a3ae24146aa8f9440c5c7"
 T08_EVIDENCE_INDEX_SHA256="17f27e449466524f9838cc592d4f637738f8e4cafd9475f1dc25bc7c2ca72c16"
 T05_SCORE_DIMENSIONS={
@@ -46,6 +52,76 @@ def _strict_score_errors(label,scores):
     for dimension,value in scores.items():
         if isinstance(value,bool) or not isinstance(value,(int,float)) or value<=9.0:
             errors.append(f"{label} score must be strictly above 9.0: {dimension}={value}")
+    return errors
+
+def t10_activation_errors(graph,registry,ownership,task_gates,checklist):
+    """Validate the explicit post-T09 T10 activation as one fail-closed unit."""
+    errors=[]
+    t10=graph.get("tasks",{}).get("T10",{})
+    status=t10.get("status")
+    future_ids=[f"T{i:02d}" for i in range(11,71)]
+    unlocked_future=[tid for tid in future_ids if graph.get("tasks",{}).get(tid,{}).get("status")!="LOCKED"]
+    if unlocked_future:
+        errors.append("T11+ must remain LOCKED during T10 activation: "+",".join(unlocked_future))
+    active_future=[row.get("task_id") for row in ownership.get("active_owners",[]) if row.get("task_id") in future_ids]
+    if active_future:
+        errors.append("T11+ active ownership exists during T10 activation: "+",".join(str(x) for x in active_future))
+    if status=="LOCKED":
+        active_t10=[row for row in ownership.get("active_owners",[]) if row.get("task_id")=="T10"]
+        if active_t10:
+            errors.append("T10 active ownership exists while T10 is LOCKED")
+        pointer_fields=("active_task","active_status","active_base_integration_commit","active_frozen_scope","active_task_packet","active_evidence","active_critic_state")
+        if any(task_gates.get(field) is not None for field in pointer_fields):
+            errors.append("task-gates must clear active pointers while T10 is LOCKED")
+        return errors
+    if status not in T10_ACTIVE_STATES:
+        errors.append(f"invalid active T10 lifecycle state: {status}")
+        return errors
+
+    expected_dependencies=checklist.get("dependencies")
+    expected_critics=checklist.get("required_critics")
+    expected_paths=checklist.get("planned_owned_paths")
+    if t10.get("dependencies")!=expected_dependencies:
+        errors.append("T10 dependency graph dependencies mismatch activation checklist")
+    if t10.get("critics")!=expected_critics:
+        errors.append("T10 dependency graph critics mismatch activation checklist")
+    if any(graph.get("tasks",{}).get(dep,{}).get("status")!="APPROVED" for dep in expected_dependencies or []):
+        errors.append("T10 activation dependencies are not all APPROVED")
+    if ownership.get("aliases",{}).get(T10_ALIAS)!=expected_paths:
+        errors.append("T10 path reservation alias mismatch activation checklist")
+
+    rows=[row for row in registry.get("workstreams",[]) if row.get("task_id")=="T10"]
+    if len(rows)!=1:
+        errors.append("T10 workstream registration missing or duplicated")
+        row={}
+    else:
+        row=rows[0]
+        expected=(T10_WORKSTREAM,status,T10_OWNER,T10_BRANCH,[T10_ALIAS],expected_dependencies,expected_critics,"Docs/Production/Evidence/T10/")
+        actual=(row.get("workstream_id"),row.get("status"),row.get("owner"),row.get("branch"),row.get("owned_paths"),row.get("dependencies"),row.get("critic_requirements"),row.get("evidence_path"))
+        if actual!=expected:
+            errors.append("T10 workstream activation identity mismatch")
+
+    owners=[owner for owner in ownership.get("active_owners",[]) if owner.get("task_id")=="T10"]
+    if len(owners)!=1:
+        errors.append("T10 active owner missing or duplicated")
+        owner={}
+    else:
+        owner=owners[0]
+        expected=(T10_WORKSTREAM,status,T10_OWNER,T10_BRANCH,T10_ALIAS,row.get("base_commit"))
+        actual=(owner.get("workstream"),owner.get("status"),owner.get("owner"),owner.get("branch"),owner.get("paths_alias"),owner.get("base_commit"))
+        if actual!=expected:
+            errors.append("T10 active owner identity mismatch")
+
+    base=row.get("base_commit")
+    if not isinstance(base,str) or not re.fullmatch(r"[0-9a-f]{40}",base):
+        errors.append("T10 activation base commit is invalid")
+    gate_identity=(task_gates.get("active_task"),task_gates.get("active_status"),task_gates.get("active_base_integration_commit"),task_gates.get("active_frozen_scope"),task_gates.get("active_task_packet"),task_gates.get("active_evidence"),task_gates.get("active_critic_state"))
+    expected_gate_identity=("T10",status,base,"Docs/Production/T10/FROZEN_SCOPE.md","Docs/Production/T10/TASK_PACKET.md","Docs/Production/Evidence/T10/","PENDING_BUILD_AND_INDEPENDENT_REVIEW")
+    if gate_identity!=expected_gate_identity:
+        errors.append("task-gates T10 activation identity mismatch")
+    gate_rows=[gate for gate in task_gates.get("next_post_t03_wave",[]) if gate.get("task")=="T10"]
+    if len(gate_rows)!=1 or (gate_rows[0].get("state"),gate_rows[0].get("owner"),gate_rows[0].get("branch"),gate_rows[0].get("base_commit"))!=(status,T10_OWNER,T10_BRANCH,base):
+        errors.append("task-gates T10 wave row mismatch")
     return errors
 
 def t05_completion_errors(record,ledger):
@@ -268,6 +344,7 @@ def main():
     t07_status=graph["tasks"]["T07"]["status"]
     t08_status=graph["tasks"]["T08"]["status"]
     t09_status=graph["tasks"]["T09"]["status"]
+    tg=load_json(DOCS/"task-gates.json")
     if t03_status not in {"FIX_REQUIRED","APPROVED"}:errors.append("T03 must be FIX_REQUIRED or APPROVED")
     if t03_status=="FIX_REQUIRED":
         if any(graph["tasks"][t]["status"]!="LOCKED" for t in ids[3:]):errors.append("T04+ must remain LOCKED until T03 approval")
@@ -324,14 +401,28 @@ def main():
             errors.append("T09 workstream registration missing or status mismatch")
         elif (t09_rows[0].get("workstream_id"),t09_rows[0].get("owner"),t09_rows[0].get("branch"),t09_rows[0].get("base_commit"),t09_rows[0].get("owned_paths")) != (T09_WORKSTREAM,T09_OWNER,T09_BRANCH,T09_BASE,[T09_ALIAS]):
             errors.append("T09 workstream owner/branch/base/path identity mismatch")
+        if t09_rows:
+            try:
+                updated=datetime.fromisoformat(str(t09_rows[0].get("status_updated_at")).replace("Z","+00:00"))
+                if updated>datetime.now(timezone.utc):errors.append("T09 status_updated_at is in the future")
+            except ValueError:errors.append("T09 status_updated_at is invalid")
         ownership=load_json(DOCS/"PATH_OWNERSHIP.json")
         if T09_ALIAS not in ownership.get("aliases",{}):
             errors.append("T09 path reservation alias missing")
-        t09_owners=[row for row in ownership.get("active_owners",[]) if row.get("task_id")=="T09"]
-        if len(t09_owners)!=1 or t09_owners[0].get("status")!=t09_status:
-            errors.append("T09 active owner missing or status mismatch")
-        elif (t09_owners[0].get("workstream"),t09_owners[0].get("owner"),t09_owners[0].get("branch"),t09_owners[0].get("base_commit"),t09_owners[0].get("paths_alias")) != (T09_WORKSTREAM,T09_OWNER,T09_BRANCH,T09_BASE,T09_ALIAS):
-            errors.append("T09 path owner identity mismatch")
+        if t09_status=="APPROVED":
+            t09_owners=[row for row in ownership.get("completed_production_owners",[]) if row.get("task_id")=="T09"]
+            if len(t09_owners)!=1 or t09_owners[0].get("status")!="APPROVED":
+                errors.append("T09 completed owner missing or status mismatch")
+            elif (t09_owners[0].get("workstream"),t09_owners[0].get("paths_alias"),t09_owners[0].get("accepted_source"),t09_owners[0].get("integrated_source")) != (T09_WORKSTREAM,T09_ALIAS,"5415d85838ecf4bea8b3c71662072670e61797a0","5415d85838ecf4bea8b3c71662072670e61797a0"):
+                errors.append("T09 completed path owner identity mismatch")
+            checklist=load_json(DOCS/"T10/ACTIVATION_CHECKLIST.json")
+            errors += t10_activation_errors(graph,registry,ownership,tg,checklist)
+        else:
+            t09_owners=[row for row in ownership.get("active_owners",[]) if row.get("task_id")=="T09"]
+            if len(t09_owners)!=1 or t09_owners[0].get("status")!=t09_status:
+                errors.append("T09 active owner missing or status mismatch")
+            elif (t09_owners[0].get("workstream"),t09_owners[0].get("owner"),t09_owners[0].get("branch"),t09_owners[0].get("base_commit"),t09_owners[0].get("paths_alias")) != (T09_WORKSTREAM,T09_OWNER,T09_BRANCH,T09_BASE,T09_ALIAS):
+                errors.append("T09 path owner identity mismatch")
         resources=load_json(DOCS/"RESOURCE_ACTION_REGISTRY.json")
         expected_resources={
             "wood": ("RESOLVED_BASELINE","natural","chop","axe","human_player_chop","human_helper_chop","visible_wood_stack","contextual_storage_furnace_build"),
@@ -367,9 +458,9 @@ def main():
     plan=(DOCS/"HAVENLINE_BUILD_PLAN_V2.md").read_text()
     for t in ids:
         if f"| {t} |" not in plan:errors.append("build plan missing "+t)
-    tg=load_json(DOCS/"task-gates.json")
     if t03_status=="APPROVED":
         expected_approved=(
+            ["T01","T02","T03","T04","T05","T06","T07","T08","T09"] if t09_status=="APPROVED" else
             ["T01","T02","T03","T04","T05","T06","T07","T08"] if t08_status=="APPROVED" else
             ["T01","T02","T03","T04","T05","T06","T07"] if t07_status=="APPROVED" else
             ["T01","T02","T03","T04","T05","T06"] if t06_status=="APPROVED" else
@@ -437,16 +528,23 @@ def main():
                                 errors.append("T08 verified completion, defect ledger or critic record missing")
                             else:
                                 errors += t08_completion_errors(load_json(t08_completion),load_json(t08_ledger),load_json(t08_review))
-                            if tg.get("active_task")!="T09" or tg.get("active_status")!=graph["tasks"]["T09"]["status"]:
-                                errors.append("task-gates must identify T09 and match its post-T08 state")
-                            if t09_status!="LOCKED":
-                                t09_gate_rows=[row for row in tg.get("next_post_t03_wave",[]) if row.get("task")=="T09"]
-                                if len(t09_gate_rows)!=1 or (tg.get("active_base_integration_commit"),t09_gate_rows[0].get("owner"),t09_gate_rows[0].get("branch"),t09_gate_rows[0].get("base_commit")) != (T09_BASE,T09_OWNER,T09_BRANCH,T09_BASE):
-                                    errors.append("task-gates T09 owner/branch/base identity mismatch")
-                                if tg.get("active_frozen_scope")!="Docs/Production/T09/FROZEN_SCOPE.md":
-                                    errors.append("task-gates active T09 frozen scope mismatch")
-                                if tg.get("active_task_packet")!="Docs/Production/T09/TASK_PACKET.md":
-                                    errors.append("task-gates active T09 packet mismatch")
+                            if t09_status=="APPROVED":
+                                t09_record=tg.get("completed_task_records",{}).get("T09",{})
+                                if t09_record.get("status")!="APPROVED" or t09_record.get("accepted_source")!="5415d85838ecf4bea8b3c71662072670e61797a0":
+                                    errors.append("task-gates T09 completion record mismatch")
+                                if not (DOCS/"T09/verified-completion.json").exists():
+                                    errors.append("T09 verified completion record missing")
+                            else:
+                                if tg.get("active_task")!="T09" or tg.get("active_status")!=graph["tasks"]["T09"]["status"]:
+                                    errors.append("task-gates must identify T09 and match its post-T08 state")
+                                if t09_status!="LOCKED":
+                                    t09_gate_rows=[row for row in tg.get("next_post_t03_wave",[]) if row.get("task")=="T09"]
+                                    if len(t09_gate_rows)!=1 or (tg.get("active_base_integration_commit"),t09_gate_rows[0].get("owner"),t09_gate_rows[0].get("branch"),t09_gate_rows[0].get("base_commit")) != (T09_BASE,T09_OWNER,T09_BRANCH,T09_BASE):
+                                        errors.append("task-gates T09 owner/branch/base identity mismatch")
+                                    if tg.get("active_frozen_scope")!="Docs/Production/T09/FROZEN_SCOPE.md":
+                                        errors.append("task-gates active T09 frozen scope mismatch")
+                                    if tg.get("active_task_packet")!="Docs/Production/T09/TASK_PACKET.md":
+                                        errors.append("task-gates active T09 packet mismatch")
                         elif tg.get("active_task")!="T08" or tg.get("active_status")!=graph["tasks"]["T08"]["status"]:
                             errors.append("task-gates must match active T08 state")
                     else:

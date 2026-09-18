@@ -2,6 +2,7 @@ extends SceneTree
 
 const Transform = preload("res://scripts/world_transform.gd")
 const TransformView = preload("res://scripts/world_transform_view.gd")
+const Simulation = preload("res://scripts/simulation.gd")
 
 class FakeSimulationAuthority:
 	# Mirrors the shipping simulation authority split:
@@ -109,6 +110,7 @@ func _initialize() -> void:
 	call_deferred("run")
 
 func run() -> void:
+	run_real_authority()
 	var contract := Transform.contract()
 	check("contract locks one in-flight transaction per target", contract.one_inflight_transaction_per_target)
 	check("contract requires matching prepared transaction for receipts", contract.receipt_must_match_prepared_transaction)
@@ -339,9 +341,114 @@ func run() -> void:
 		"visual_node_budget": view_contract.visual_node_budget,
 		"visual_build_count": view.descriptor().visual_build_count,
 		"visual_node_count": view.descriptor().visual_node_count,
-		"real_t09_adapter_bound": false,
-		"fixture_simulation_only": true,
+		"real_t09_adapter_bound": true,
+		"fixture_simulation_only": false,
 		"integration_allowed": false,
 		"task_approved": false,
 	}))
 	quit(0 if failures.is_empty() else 1)
+
+func run_real_authority() -> void:
+	var sim := Simulation.new()
+	var model := configured_engine()
+	model.register_target("real-delivery", "seed")
+	for kind in ["wood", "stone"]:
+		var quantity := 8 if kind == "wood" else 4
+		for i in quantity:
+			sim.action = {"kind": "gather", "id": kind + "0", "position": Vector2.ZERO}
+			sim.perform_action(float(sim.tuning.gatherSecondsPerUnit[kind]))
+	check("real harvesting commits to carried inventory", sim.inventory.wood == 8 and sim.inventory.stone == 4 and sim.stored.wood == 0)
+	check("real carried harvest cannot pay T10", not model.preview_transform("framework_anchor_seed_to_foundation", "real-delivery", sim.stored.duplicate(true)).passed)
+	for i in 12:
+		sim.action = {"kind": "deposit", "id": "furnace", "position": Vector2.ZERO}
+		sim.perform_action(float(sim.tuning.furnaceDepositSecondsPerUnit))
+	check("real deposit conserves delivered resources", sim.carried() == 0 and sim.stored.wood == 8 and sim.stored.stone == 4)
+	var intent := model.commit_transform("real-1", "framework_anchor_seed_to_foundation", "real-delivery", sim.stored.duplicate(true))
+	var pending: Dictionary = JSON.parse_string(JSON.stringify(model.export_component_state()))
+	var ack := sim.commit_world_transform_debit(intent)
+	check("real simulation exact stored debit", ack.get("authority_applied", false) and sim.stored.wood == 0 and sim.stored.stone == 0 and sim.carried() == 0)
+	var saved: Dictionary = JSON.parse_string(JSON.stringify(sim.snapshot()))
+	var recovered := Simulation.new()
+	check("real snapshot restores after debit before acceptance", recovered.restore(saved))
+	var restored_model := configured_engine()
+	check("real pending component restores", restored_model.import_component_state(pending))
+	var replay := recovered.commit_world_transform_debit(intent)
+	check("real crash retry does not debit again", replay.get("simulation_replayed", false) and recovered.stored == sim.stored)
+	var accepted := restored_model.accept_authoritative_receipt(replay)
+	check("real recovered receipt advances once", accepted.passed and accepted.applied)
+	check("real duplicate acceptance is idempotent", restored_model.accept_authoritative_receipt(replay).get("replayed", false))
+	var baseline := recovered.snapshot()
+	for field in ["authority_transaction_key", "request_identity", "debits", "target_revision", "progression_tags"]:
+		var forged := intent.duplicate(true)
+		if field == "debits": forged[field] = {"wood": 1}
+		elif field == "target_revision": forged[field] = 0
+		elif field == "progression_tags": forged[field] = [42]
+		else: forged[field] = "forged"
+		check("real forged intent rejected: " + field, not recovered.commit_world_transform_debit(forged).get("authority_applied", false) and recovered.snapshot() == baseline)
+	var malformed := saved.duplicate(true)
+	malformed.world_transform_debit_receipts["real-delivery"].debits = {"wood": -1}
+	check("real malformed receipt restore is atomic", not recovered.restore(malformed) and recovered.snapshot() == baseline)
+	var legacy := saved.duplicate(true)
+	legacy.erase("world_transform_debit_receipts")
+	var legacy_sim := Simulation.new()
+	check("legacy snapshot has empty component receipts", legacy_sim.restore(legacy) and legacy_sim.world_transform_debit_receipts.is_empty())
+	var insufficient := Simulation.new()
+	var before := insufficient.snapshot()
+	check("real insufficient stock cannot partially charge", not insufficient.commit_world_transform_debit(intent).get("authority_applied", false) and insufficient.snapshot() == before)
+	for field in ["transaction_id", "debits", "progression_tags", "presentation_key", "source_state", "target_revision"]:
+		var fresh := Simulation.new()
+		fresh.stored = {"wood": 100, "stone": 100, "metal": 100, "fuel": 100}
+		var forged := intent.duplicate(true)
+		if field == "debits": forged[field] = {"wood": 1}
+		elif field == "progression_tags": forged[field] = ["forged"]
+		elif field == "target_revision": forged[field] = 2
+		else: forged[field] = "forged"
+		var unchanged := fresh.snapshot()
+		check("fresh authority rejects changed payload with original key: " + field, not fresh.commit_world_transform_debit(forged).authority_applied and fresh.snapshot() == unchanged)
+	for revision in [3, 5]:
+		var jump := intent.duplicate(true)
+		jump.transaction_id = "jump-" + str(revision)
+		jump.target_revision = revision
+		jump.authority_transaction_key = Simulation.transform_key(jump)
+		check("authority rejects revision jump " + str(revision), not recovered.commit_world_transform_debit(jump).authority_applied and recovered.snapshot() == baseline)
+	var discontinuous := intent.duplicate(true)
+	discontinuous.transaction_id = "wrong-source"
+	discontinuous.target_revision = 2
+	discontinuous.authority_transaction_key = Simulation.transform_key(discontinuous)
+	check("authority rejects source discontinuity", not recovered.commit_world_transform_debit(discontinuous).authority_applied and recovered.snapshot() == baseline)
+	for mutation in ["replayed", "unknown", "tags", "oversized"]:
+		var invalid_save := saved.duplicate(true)
+		var row: Dictionary = invalid_save.world_transform_debit_receipts["real-delivery"]
+		if mutation == "replayed": row.simulation_replayed = true
+		elif mutation == "unknown": row["unexpected"] = {"unbounded": "payload"}
+		elif mutation == "tags": row.progression_tags = ["same", "same"]
+		else: row.presentation_key = "x".repeat(193)
+		check("restore rejects malformed bounded payload: " + mutation, not recovered.restore(invalid_save) and recovered.snapshot() == baseline)
+	var canonical_snapshot := recovered.snapshot()
+	check("restored receipt canonical debit is integer", canonical_snapshot.world_transform_debit_receipts["real-delivery"].debits.wood is int)
+	check("real ledger retains one canonical receipt", recovered.world_transform_debit_receipts.size() == 1 and not recovered.world_transform_debit_receipts["real-delivery"].has("submit_debit_transaction"))
+	recovered.stored = {"wood": 100, "stone": 100, "metal": 100, "fuel": 100}
+	var next_intent := restored_model.commit_transform("real-2", "framework_anchor_foundation_to_reinforced", "real-delivery", recovered.stored, ["harvesting_online"])
+	var next_receipt := recovered.commit_world_transform_debit(next_intent)
+	check("real exact next revision succeeds", next_receipt.get("authority_applied", false) and restored_model.accept_authoritative_receipt(next_receipt).passed)
+	var next_snapshot := recovered.snapshot()
+	check("real older revision remains rejected", not recovered.commit_world_transform_debit(intent).authority_applied and recovered.snapshot() == next_snapshot)
+	var bounded := Simulation.new()
+	bounded.stored = {"wood": 100000, "stone": 100000, "metal": 0, "fuel": 0}
+	var all_committed := true
+	for i in Simulation.MAX_TRANSFORM_TARGETS:
+		var bounded_intent := intent.duplicate(true)
+		bounded_intent.transaction_id = "bounded-" + str(i)
+		bounded_intent.target_id = "bounded-target-" + str(i)
+		bounded_intent.request_identity = "%s|%s|%s|%s" % [bounded_intent.recipe_id, bounded_intent.target_id, bounded_intent.source_state, bounded_intent.target_state]
+		bounded_intent.authority_transaction_key = Simulation.transform_key(bounded_intent)
+		all_committed = bounded.commit_world_transform_debit(bounded_intent).authority_applied and all_committed
+	check("real maximum target stress retains bounded receipts", all_committed and bounded.world_transform_debit_receipts.size() == Simulation.MAX_TRANSFORM_TARGETS)
+	var bounded_before := bounded.snapshot()
+	check("real target overflow rejects without mutation", not bounded.commit_world_transform_debit(intent).authority_applied and bounded.snapshot() == bounded_before)
+	check("stress retained serialized payload has finite budget", JSON.stringify(bounded.world_transform_debit_receipts).length() < Simulation.MAX_TRANSFORM_TARGETS * 2048)
+	var duplicate_save := bounded.snapshot()
+	var duplicate_row: Dictionary = duplicate_save.world_transform_debit_receipts["bounded-target-1"]
+	duplicate_row.transaction_id = "bounded-0"
+	duplicate_row.authority_transaction_key = Simulation.transform_key(duplicate_row)
+	check("duplicate retained transaction ids reject atomically", not bounded.restore(duplicate_save) and bounded.snapshot() == bounded_before)

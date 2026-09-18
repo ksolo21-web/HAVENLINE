@@ -34,6 +34,7 @@ var device_benchmark: PanelContainer
 const FrameRecord = preload("res://scripts/performance_record.gd")
 const CarryStack = preload("res://scripts/carry_stack.gd")
 const TransferFeedback = preload("res://scripts/transfer_feedback.gd")
+const HarvestPresentation = preload("res://scripts/harvest_presentation.gd")
 const StorageStockpile = preload("res://scripts/storage_stockpile.gd")
 const RenderPolicy = preload("res://scripts/render_policy.gd")
 const AdaptiveLayout = preload("res://scripts/adaptive_layout.gd")
@@ -57,6 +58,8 @@ var player_rig: Node3D
 var carry_root: Node3D
 var carry_stacks: Dictionary = {}
 var transfer_feedback: Node3D
+var harvest_presentation: HavenlineHarvestPresentation
+var harvest_actor_id := -1
 var storage_stockpile: Node3D
 var last_presented_event_epoch := -1.0
 var menu_column: VBoxContainer
@@ -126,6 +129,11 @@ func _ready():
 	display.stretch_mode = TextureRect.STRETCH_SCALE
 	display.texture = scene_view.get_texture()
 	display.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# The primary joystick is drawn by this parent Control. Keep the opaque 3D
+	# viewport behind the parent's draw pass so the shipping joystick is visible
+	# during touch/drag input on every adaptive layout. Harvesting remains
+	# automatic and adds no action button.
+	display.show_behind_parent = true
 	add_child(display)
 	world = Node3D.new()
 	scene_view.add_child(world)
@@ -146,6 +154,12 @@ func _ready():
 	transfer_feedback = TransferFeedback.new()
 	transfer_feedback.loader = resource_piece
 	world.add_child(transfer_feedback)
+	harvest_presentation = HarvestPresentation.new()
+	harvest_presentation.name = "T09HarvestPresentation"
+	world.add_child(harvest_presentation)
+	for resource in sim.resources:
+		harvest_presentation.bind_source(String(resource.id),String(resource.kind),resource_visuals[resource.id],int(resource.units))
+	harvest_actor_id = sim.lead
 	build_hud()
 	action_readout = ActionReadout.new()
 	add_child(action_readout)
@@ -230,14 +244,32 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 		if not merged_cache.has(asset):
 			merged_cache[asset] = Scenery.compile(asset_cache[path])
 			if asset.begins_with("world/pine_"):
+				var evergreen_shader: Shader = load("res://shaders/evergreen.gdshader")
+				var forest_varying := "varying float forest_clearance;"
+				var bounded_varying := "varying float forest_clearance;\nvarying float harvest_contact_band;\nvarying float harvest_reveal_side;"
+				var roughness_uniform := "uniform float surface_roughness = 0.95;"
+				var contact_uniform := "uniform float surface_roughness = 0.95;\nuniform float harvest_contact_surface = 0.0;\ninstance uniform float harvest_reveal = 0.0;\ninstance uniform vec2 harvest_reveal_direction = vec2(0.0,1.0);\ninstance uniform vec2 harvest_reveal_center = vec2(0.0);"
+				var forest_vertex := "void vertex() {\n forest_clearance = 0.0;"
+				var bounded_vertex := "void vertex() {\n forest_clearance = 0.0;\n harvest_contact_band = 1.0-smoothstep(1.35,1.75,VERTEX.y);\n harvest_reveal_side = dot(VERTEX.xz-harvest_reveal_center,harvest_reveal_direction);"
+				if not evergreen_shader.code.contains("harvest_contact_band"):
+					evergreen_shader.code = evergreen_shader.code.replace(forest_varying,bounded_varying)
+					evergreen_shader.code = evergreen_shader.code.replace(roughness_uniform,contact_uniform)
+					evergreen_shader.code = evergreen_shader.code.replace(forest_vertex,bounded_vertex)
+				var whole_tree_cutaway := "void fragment() {\n float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));\n if (coverage < max(cutaway,forest_clearance)) { discard; }\n vec3 surface_color = texture(albedo_texture,UV).rgb;\n float wood = step(surface_color.b*1.25,surface_color.r);"
+				var crown_only_cutaway := "void fragment() {\n float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));\n float bounded_contact_mask = 1.0-harvest_contact_surface*harvest_contact_band;\n float wood_contact_surface_cutaway = max(cutaway,forest_clearance)*bounded_contact_mask;\n float local_harvest_reveal = harvest_reveal*step(0.0,harvest_reveal_side)*bounded_contact_mask;\n if (local_harvest_reveal > 0.5 || coverage < wood_contact_surface_cutaway) { discard; }\n vec3 surface_color = texture(albedo_texture,UV).rgb;\n float wood = step(surface_color.b*1.25,surface_color.r);"
+				if evergreen_shader.code.contains(whole_tree_cutaway):
+					evergreen_shader.code = evergreen_shader.code.replace(whole_tree_cutaway,crown_only_cutaway)
+				assert(evergreen_shader.code.contains("local_harvest_reveal") and evergreen_shader.code.contains("harvest_reveal_side") and evergreen_shader.code.contains("harvest_contact_band"),"Evergreen shader must preserve a far-side crown silhouette around the bounded opaque harvest contact surface")
 				for i in merged_cache[asset].get_surface_count():
 					var source_material: Material = merged_cache[asset].surface_get_material(i)
 					if source_material is BaseMaterial3D:
 						var leaf_material := ShaderMaterial.new()
-						leaf_material.shader=load("res://shaders/evergreen.gdshader")
+						leaf_material.resource_name = source_material.resource_name
+						leaf_material.shader=evergreen_shader
 						leaf_material.set_shader_parameter("albedo_texture",source_material.albedo_texture)
 						leaf_material.set_shader_parameter("normal_texture",source_material.normal_texture)
 						leaf_material.set_shader_parameter("surface_roughness",source_material.roughness)
+						leaf_material.set_shader_parameter("harvest_contact_surface",1.0 if source_material.resource_name.to_lower() == "trunk" else 0.0)
 						merged_cache[asset].surface_set_material(i,leaf_material)
 		instance = MeshInstance3D.new()
 		instance.mesh = merged_cache[asset]
@@ -246,6 +278,8 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 	parent.add_child(instance)
 	instance.position = p
 	if asset.begins_with("world/pine_") and instance is GeometryInstance3D:
+		var pine_center: Vector3 = instance.mesh.get_aabb().get_center()
+		instance.set_instance_shader_parameter("harvest_reveal_center",Vector2(pine_center.x,pine_center.z))
 		scenery_instances.append(instance)
 		scenery_origins.append(p)
 		scenery_heights.append(instance.mesh.get_aabb().end.y)
@@ -463,6 +497,25 @@ func present_events():
 		var actor_id := int(event.get("actor_id", sim.lead))
 		var receipt_id := "%.6f:%d:%s:%s:%d" % [sim.elapsed, event_index, String(event.type), kind, actor_id]
 		if event.type in ["gather","worker_gather"]:
+			if event.type == "gather" and is_instance_valid(harvest_presentation):
+				var harvest_action := HarvestPresentation.canonical_action(sim.action)
+				var profile := HarvestPresentation.profile_for_resource(kind)
+				# The authoritative event lands one physics tick after the validated
+				# pre-impact presentation. Keep that same actor/contact pose available
+				# to the commit synchronizer; it clears and solves from the authored
+				# animation when the action identity is new or was not contact-ready.
+				harvest_presentation.bind_actor(player_rig)
+				var contact := HarvestPresentation.contact_node(player_rig,String(profile.get("contact_marker", "")))
+				if not harvest_action.is_empty() and String(harvest_action.resource) == kind and is_instance_valid(contact):
+					var contact_transform := HarvestPresentation.attachment_transform(player_rig,profile)
+					var source_visual: Node3D = resource_visuals.get(String(harvest_action.source_id))
+					var harvest_target := HarvestPresentation.source_contact_target(source_visual,contact_transform,profile,player_rig.global_position)
+					harvest_presentation.synchronize_committed_contact(harvest_action,contact_transform,harvest_target,actor_id)
+					harvest_presentation.accept_committed_impact({
+						"committed":true, "resource":kind, "source_id":String(harvest_action.source_id),
+						"action_token":int(harvest_action.action_token), "receipt_id":receipt_id,
+						"target_position":harvest_target, "actor_id":actor_id,
+					})
 			transfer_feedback.transfer(kind,target,origin,receipt_id,"source_to_actor",actor_id,"actor:%d" % actor_id)
 		elif event.type in ["deposit","worker_deposit","build","worker_build","repair","worker_repair","defense_repair","worker_defense_repair","customer_sale"]:
 			var destination_id := transfer_destination_id(event)
@@ -685,8 +738,24 @@ func _process(dt: float):
 	player_rig.position = xyz(sim.position)
 	if sim.velocity.length() > .1:
 		player_rig.rotation.y = lerp_angle(player_rig.rotation.y, atan2(sim.facing.x, sim.facing.y), 1 - exp(-16 * dt))
-	var player_action: Dictionary = sim.action if bool(sim.action.get("actionable", false)) else {}
+	if harvest_actor_id != sim.lead:
+		harvest_presentation.reset()
+		harvest_actor_id = sim.lead
+	var harvest_action := HarvestPresentation.canonical_action(sim.action)
+	var player_action: Dictionary = harvest_presentation.motion_action(harvest_action) if not harvest_action.is_empty() and bool(harvest_action.actionable) else (sim.action if bool(sim.action.get("actionable", false)) else {})
 	animate(player_rig, sim.velocity.length(), dt, player_action, "player_lead")
+	if not harvest_action.is_empty() and bool(harvest_action.actionable):
+		var harvest_profile := HarvestPresentation.profile_for_resource(String(harvest_action.resource))
+		harvest_presentation.prepare_actor_contact(player_rig)
+		var harvest_contact := HarvestPresentation.contact_node(player_rig,String(harvest_profile.get("contact_marker", "")))
+		if is_instance_valid(harvest_contact):
+			if harvest_presentation.begin_action(harvest_action,sim.lead):
+				var harvest_contact_transform := HarvestPresentation.attachment_transform(player_rig,harvest_profile)
+				var source_visual: Node3D = resource_visuals.get(String(harvest_action.source_id))
+				var harvest_target := HarvestPresentation.source_contact_target(source_visual,harvest_contact_transform,harvest_profile,player_rig.global_position)
+				harvest_presentation.update_action(harvest_action,harvest_contact_transform,harvest_target,player_rig.visible and (sim.presented_actor_ids.is_empty() or sim.lead in sim.presented_actor_ids))
+	else:
+		harvest_presentation.cancel(String(sim.action.get("reason", "context_inactive")))
 	for companion in sim.companions:
 		if not actors.has(companion.id): continue # Additional NPC art remains a release blocker.
 		var root: Node3D = actors[companion.id]
@@ -696,7 +765,7 @@ func _process(dt: float):
 		if motion.length() > .005: root.rotation.y = lerp_angle(root.rotation.y, atan2(motion.x, motion.z), .15)
 		animate(root, motion.length() / maxf(dt, .001), dt, {}, "core_human_companion")
 	for node in sim.resources:
-		resource_visuals[node.id].visible = node.units > 0
+		harvest_presentation.sync_source(String(node.id),int(node.units),float(node.respawn))
 	for side in sim.defenses:
 		var d: Dictionary = sim.defenses[side]
 		var progress:=int(d.delivered.wood)+int(d.delivered.stone)
@@ -976,9 +1045,13 @@ func build_environment_dressing():
 
 func update_foreground_visibility(focus: Vector3, dt: float):
 	ReferenceForest.set_player_clearance(self, focus + Vector3(0,.05,0))
-	# Smooth opaque-dither cutaway for crowns hiding the lead; no transparent sorting.
+	# Smooth opaque-dither cutaway for ordinary crowns hiding the lead. An active
+	# harvested pine instead removes only the actor-facing crown half while keeping
+	# its far-side crown silhouette and authored lower-trunk contact band opaque.
 	# Gameplay nodes remain alive; visibility is not a change to resource state.
 	foreground_faded = 0
+	var harvest_state: Dictionary = harvest_presentation.descriptor() if is_instance_valid(harvest_presentation) else {}
+	var active_harvest_source := String(harvest_state.get("source_id","")) if bool(harvest_state.get("active",false)) else ""
 	var view := camera.global_transform.affine_inverse()
 	var target := view * (focus + Vector3(0,.05,0))
 	for i in range(scenery_instances.size()):
@@ -990,13 +1063,22 @@ func update_foreground_visibility(focus: Vector3, dt: float):
 		var covers := absf(base.x-target.x) < 2.0 and target.y > minf(base.y,top.y)-.65 and target.y < maxf(base.y,top.y)+.65
 		# A depleted resource stays hidden even when camera occlusion changes.
 		var depleted := false
+		var harvest_selected := false
 		for r in sim.resources:
-			if resource_visuals.get(r.id) == tree and r.units <= 0: depleted = true
-		var target_cutaway := 1.0 if depth_front and covers else 0.0
+			if resource_visuals.get(r.id) == tree:
+				depleted = r.units <= 0
+				harvest_selected = active_harvest_source == String(r.id)
+		var target_cutaway := 0.0 if harvest_selected else (1.0 if depth_front and covers else 0.0)
 		scenery_cutaway[i]=move_toward(scenery_cutaway[i],target_cutaway,clampf(dt,0,.10)*4.0)
 		tree.set_instance_shader_parameter("cutaway",scenery_cutaway[i])
+		var local_focus := tree.global_basis.inverse()*(focus-tree.global_position)
+		var reveal_direction := Vector2(local_focus.x,local_focus.z)
+		if reveal_direction.length_squared() <= 0.000001:
+			reveal_direction = Vector2.UP
+		tree.set_instance_shader_parameter("harvest_reveal",1.0 if harvest_selected else 0.0)
+		tree.set_instance_shader_parameter("harvest_reveal_direction",reveal_direction.normalized())
 		tree.visible = not depleted
-		if scenery_cutaway[i] > .01: foreground_faded += 1
+		if harvest_selected or scenery_cutaway[i] > .01: foreground_faded += 1
 
 func start_device_benchmark():
 	if is_instance_valid(device_benchmark): device_benchmark.queue_free()

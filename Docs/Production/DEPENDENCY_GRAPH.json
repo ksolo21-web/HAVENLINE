@@ -4,9 +4,9 @@
   "integration_branch": "codex/havenline-sequential-task-01",
   "acceptance_rule": {
     "mandatory_dimension_operator": ">",
-    "mandatory_dimension_threshold": 9.0,
+    "mandatory_dimension_threshold": 9,
     "unrounded": true,
-    "target": 10.0,
+    "target": 10,
     "legacy_approved_tasks_grandfathered": [
       "T01",
       "T02"
@@ -89,12 +89,12 @@
         "C6"
       ]
     },
-  "T06": {
+    "T06": {
       "name": "Character 1 complete movement/interactions",
       "dependencies": [
         "T03"
       ],
-    "status": "APPROVED",
+      "status": "APPROVED",
       "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
       "critics": [
         "C1",
@@ -103,13 +103,13 @@
         "C6"
       ]
     },
-  "T07": {
+    "T07": {
       "name": "Havenline Simple Control & Context Director",
       "dependencies": [
         "T04",
         "T06"
       ],
-    "status": "APPROVED",
+      "status": "APPROVED",
       "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
       "critics": [
         "C2",
@@ -142,7 +142,7 @@
         "T07",
         "T08"
       ],
-      "status": "ASSIGNED",
+      "status": "APPROVED",
       "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
       "critics": [
         "C2",
@@ -159,7 +159,7 @@
         "T08",
         "T09"
       ],
-      "status": "LOCKED",
+      "status": "ASSIGNED",
       "unlock_when": "all dependencies APPROVED and ownership/packet PREPARED",
       "critics": [
         "C1",

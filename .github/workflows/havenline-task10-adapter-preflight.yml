@@ -24,11 +24,15 @@ on:
 permissions:
   contents: read
 
+concurrency:
+  group: havenline-task10-adapter-preflight-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   prepared-adapter-contract:
     runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
@@ -44,6 +48,7 @@ jobs:
           mkdir -p task10-adapter-preflight
           python3 -m unittest discover -s tools/havenline/task10/tests -p 'test_*.py'
           python3 tools/havenline/task10/validate_post_t09_adapter.py \
+            --require-bound \
             --output task10-adapter-preflight/adapter-contract.json
           python3 - <<'PY'
           import json
@@ -51,10 +56,9 @@ jobs:
           report=json.loads(Path('task10-adapter-preflight/adapter-contract.json').read_text())
           assert report['passed'] is True, report
           assert report['prepared_contract_valid'] is True, report
-          # Until the integration owner applies the post-T09 shared-runtime CR,
-          # this builder branch must remain unbound and non-integratable.
-          assert report['real_adapter_bound'] is False, report
-          assert report['integration_allowed'] is False, report
+          # Adapter presence is necessary but does not grant task approval.
+          assert report['real_adapter_bound'] is True, report
+          assert report['integration_allowed'] is not True, report
           PY
 
       - name: Validate isolated candidate reconciliation shape
@@ -114,7 +118,7 @@ jobs:
           print(json.dumps(result,indent=2))
           PY
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: havenline-task10-adapter-preflight-${{ github.sha }}
           path: task10-adapter-preflight

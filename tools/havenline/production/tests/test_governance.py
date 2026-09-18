@@ -4,11 +4,17 @@ from unittest.mock import patch
 HERE=pathlib.Path(__file__).resolve()
 PROD=HERE.parents[1]
 sys.path.insert(0,str(PROD))
-from lib import DOCS, load_json, ensure_score_strictly_above_nine
+from lib import DOCS, load_json, ensure_score_strictly_above_nine, any_match
+from validate_migration import ALLOWED_MIGRATION_PATTERNS
 from workstream import registry_errors, governance_only_drift, candidate_scope_assessment
 from change_impact import calculate
 
 class GovernanceTests(unittest.TestCase):
+    def test_t09_closeout_workflow_is_exactly_allowlisted(self):
+        self.assertTrue(any_match(".github/workflows/havenline-task09-harvesting.yml",ALLOWED_MIGRATION_PATTERNS))
+        self.assertFalse(any_match(".github/workflows/havenline-task10-world-transformation.yml",ALLOWED_MIGRATION_PATTERNS))
+        self.assertFalse(any_match("HavenlineGodot/scripts/world_transformation.gd",ALLOWED_MIGRATION_PATTERNS))
+
     def test_strict_score_rule(self):
         self.assertTrue(ensure_score_strictly_above_nine({"x":9.0}))
         self.assertEqual(ensure_score_strictly_above_nine({"x":9.000001}),[])
@@ -186,20 +192,46 @@ class GovernanceTests(unittest.TestCase):
                 self.assertTrue(all(score>9.0 for score in review8["scores"].values()))
                 self.assertEqual(review8["unresolved_mandatory_defects"],[])
                 self.assertEqual({row["status"] for row in ledger8["defects"]},{"VERIFIED_CLOSED"})
-                self.assertEqual(gates["active_task"],"T09")
-                self.assertEqual(gates["active_status"],graph["T09"]["status"])
-                if graph["T09"]["status"] != "LOCKED":
-                    registry9=next(w for w in load_json(DOCS/"WORKSTREAM_REGISTRY.json")["workstreams"] if w["task_id"]=="T09")
-                    owner9=next(w for w in load_json(DOCS/"PATH_OWNERSHIP.json")["active_owners"] if w["task_id"]=="T09")
-                    expected=("harvesting-acquisition-builder","havenline/T09-harvesting","7492074e40a0b061f31d8c32602b7a581b2610f3")
-                    self.assertEqual((registry9["owner"],registry9["branch"],registry9["base_commit"]),expected)
-                    self.assertEqual((owner9["owner"],owner9["branch"],owner9["base_commit"]),expected)
-                    self.assertEqual(registry9["owned_paths"],["@reservation:T09"])
-                    self.assertEqual(owner9["paths_alias"],"@reservation:T09")
-                    self.assertEqual(gates["active_base_integration_commit"],expected[2])
-                    self.assertTrue((DOCS/"T09/FROZEN_SCOPE.md").exists())
-                    self.assertTrue((DOCS/"T09/TASK_PACKET.md").exists())
-                    self.assertEqual(set(graph["T09"]["critics"]),{"C2","C3","C4","C5","C6"})
+                if graph["T09"]["status"]=="APPROVED":
+                    completion9=load_json(DOCS/"T09/verified-completion.json")
+                    ledger9=load_json(DOCS/"T09/defect-ledger.json")
+                    review9=load_json(DOCS/"T09/independent-critic-review.json")
+                    self.assertEqual(completion9["candidate_commit"],"5415d85838ecf4bea8b3c71662072670e61797a0")
+                    self.assertTrue(all(score>9.0 for row in review9["critics"].values() for score in row["scores"].values()))
+                    self.assertEqual(review9["unresolved_mandatory_defects"],[])
+                    self.assertEqual({row["status"] for row in ledger9["defects"]},{"VERIFIED_CLOSED"})
+                    owner9=next(w for w in load_json(DOCS/"PATH_OWNERSHIP.json")["completed_production_owners"] if w["task_id"]=="T09")
+                    self.assertEqual(owner9["accepted_source"],completion9["candidate_commit"])
+                    if graph["T10"]["status"]=="LOCKED":
+                        self.assertIsNone(gates["active_task"])
+                        self.assertIsNone(gates["active_status"])
+                    elif graph["T10"]["status"]!="APPROVED":
+                        self.assertEqual(gates["active_task"],"T10")
+                        self.assertEqual(gates["active_status"],graph["T10"]["status"])
+                        self.assertTrue((DOCS/"T10/FROZEN_SCOPE.md").exists())
+                        self.assertTrue((DOCS/"T10/TASK_PACKET.md").exists())
+                        registry10=next(w for w in load_json(DOCS/"WORKSTREAM_REGISTRY.json")["workstreams"] if w["task_id"]=="T10")
+                        owner10=next(w for w in load_json(DOCS/"PATH_OWNERSHIP.json")["active_owners"] if w["task_id"]=="T10")
+                        expected10=("world-transformation-builder","havenline/T10-world-transformation",gates["active_base_integration_commit"])
+                        self.assertEqual((registry10["owner"],registry10["branch"],registry10["base_commit"]),expected10)
+                        self.assertEqual((owner10["owner"],owner10["branch"],owner10["base_commit"]),expected10)
+                        self.assertEqual(registry10["owned_paths"],["@reservation:T10"])
+                        self.assertEqual(owner10["paths_alias"],"@reservation:T10")
+                else:
+                    self.assertEqual(gates["active_task"],"T09")
+                    self.assertEqual(gates["active_status"],graph["T09"]["status"])
+                    if graph["T09"]["status"] != "LOCKED":
+                        registry9=next(w for w in load_json(DOCS/"WORKSTREAM_REGISTRY.json")["workstreams"] if w["task_id"]=="T09")
+                        owner9=next(w for w in load_json(DOCS/"PATH_OWNERSHIP.json")["active_owners"] if w["task_id"]=="T09")
+                        expected=("harvesting-acquisition-builder","havenline/T09-harvesting","7492074e40a0b061f31d8c32602b7a581b2610f3")
+                        self.assertEqual((registry9["owner"],registry9["branch"],registry9["base_commit"]),expected)
+                        self.assertEqual((owner9["owner"],owner9["branch"],owner9["base_commit"]),expected)
+                        self.assertEqual(registry9["owned_paths"],["@reservation:T09"])
+                        self.assertEqual(owner9["paths_alias"],"@reservation:T09")
+                        self.assertEqual(gates["active_base_integration_commit"],expected[2])
+                        self.assertTrue((DOCS/"T09/FROZEN_SCOPE.md").exists())
+                        self.assertTrue((DOCS/"T09/TASK_PACKET.md").exists())
+                self.assertEqual(set(graph["T09"]["critics"]),{"C2","C3","C4","C5","C6"})
         else:
             self.assertEqual(gates["active_task"],"T07")
             self.assertEqual(gates["active_status"],t7["status"])

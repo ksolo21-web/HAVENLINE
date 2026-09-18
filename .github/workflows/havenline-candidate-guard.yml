@@ -21,35 +21,53 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           fetch-depth: 0
-      - name: Resolve registered task and exact candidate base
+
+      - name: Validate candidate-guard tooling
+        run: |
+          python -m py_compile tools/havenline/production/preactivation_candidate.py tools/havenline/production/builder_repair_gate.py
+          python -m unittest tools.havenline.production.tests.test_preactivation_candidate tools.havenline.production.tests.test_c0_builder
+
+      - name: Resolve candidate mode and exact registered base
         id: resolve
         shell: bash
         run: |
           set -euo pipefail
           python3 - <<'PY' > /tmp/resolve.env
-          import json, os, re, subprocess
+          import json, os, pathlib, re, subprocess
           reg=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
           ref=os.environ.get('GITHUB_HEAD_REF') or os.environ.get('GITHUB_REF_NAME','')
           m=re.search(r'(T\d{2})',ref,re.I)
           if not m: raise SystemExit(f'No Txx task id in isolated branch {ref!r}')
           task=m.group(1).upper()
           ws=next((x for x in reg['workstreams'] if x['task_id']==task),None)
-          if not ws: raise SystemExit(f'{task} is not registered')
-          if ws['status'] in ('LOCKED','APPROVED'):
-              raise SystemExit(f'{task} status {ws["status"]} may not produce an integration candidate')
-          base=ws.get('base_commit')
-          if not base: raise SystemExit(f'{task} has no recorded base_commit')
           integration=subprocess.check_output(['git','ls-remote','origin','refs/heads/'+reg['integration_branch']],text=True).split()[0]
           print('TASK='+task)
-          print('BASE='+base)
+          print('BRANCH='+ref)
           print('INTEGRATION_HEAD='+integration)
+          if ws:
+              if ws['status'] in ('LOCKED','APPROVED'):
+                  raise SystemExit(f'{task} status {ws["status"]} may not produce an integration candidate')
+              base=ws.get('base_commit')
+              if not base: raise SystemExit(f'{task} has no recorded base_commit')
+              print('CANDIDATE_MODE=registered')
+              print('TASK_STATUS='+ws['status'])
+              print('BASE='+base)
+          else:
+              checklist=pathlib.Path('Docs/Production')/task/'ACTIVATION_CHECKLIST.json'
+              if not checklist.exists():
+                  raise SystemExit(f'{task} is not registered and has no activation checklist for a pre-activation lane')
+              print('CANDIDATE_MODE=preactivation')
+              print('TASK_STATUS=PREACTIVATION')
+              print('BASE=')
           PY
           cat /tmp/resolve.env >> "$GITHUB_ENV"
           cat /tmp/resolve.env
-      - name: Detect empty branch initialization
+
+      - name: Detect empty registered branch initialization
+        if: env.CANDIDATE_MODE == 'registered'
         shell: bash
         run: |
           if git diff --quiet "$INTEGRATION_HEAD" HEAD; then
@@ -58,15 +76,54 @@ jobs:
           else
             echo 'NO_CANDIDATE_CHANGES=false' >> "$GITHUB_ENV"
           fi
-      - name: Reject foreign/protected paths and stale candidate base
-        if: env.NO_CANDIDATE_CHANGES != 'true'
+
+      - name: Reject foreign/protected paths and stale registered candidate base
+        if: env.CANDIDATE_MODE == 'registered' && env.NO_CANDIDATE_CHANGES != 'true'
         run: |
           python3 tools/havenline/production/workstream.py validate-candidate "$TASK" --base "$BASE" --head HEAD --integration-head "$INTEGRATION_HEAD"
+
+      - name: Require complete C0 diagnosis and bounded repair diff
+        if: env.CANDIDATE_MODE == 'registered' && env.TASK_STATUS == 'FIX_REQUIRED' && env.NO_CANDIDATE_CHANGES != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          c0="Docs/Production/$TASK/C0_ROOT_CAUSE.json"
+          plan="Docs/Production/$TASK/REPAIR_PLAN.json"
+          test -s "$c0"
+          test -s "$plan"
+          repair_base=$(python3 - <<'PY'
+          import json,os
+          task=os.environ['TASK']
+          plan=json.load(open(f'Docs/Production/{task}/REPAIR_PLAN.json'))
+          base=plan.get('repair_base','')
+          if len(base)!=40:raise SystemExit('REPAIR_PLAN repair_base must be an exact 40-char SHA')
+          print(base)
+          PY
+          )
+          git merge-base --is-ancestor "$repair_base" HEAD
+          mkdir -p Docs/Production/Evidence/CandidateGuard
+          python3 tools/havenline/production/builder_repair_gate.py \
+            --c0 "$c0" --plan "$plan" --base "$repair_base" --head HEAD \
+            --output Docs/Production/Evidence/CandidateGuard/builder-repair.json
+
+      - name: Validate explicitly authorized pre-activation build-pending candidate
+        if: env.CANDIDATE_MODE == 'preactivation'
+        run: |
+          mkdir -p Docs/Production/Evidence/CandidateGuard
+          python3 tools/havenline/production/preactivation_candidate.py \
+            --task "$TASK" \
+            --branch "$BRANCH" \
+            --head HEAD \
+            --output Docs/Production/Evidence/CandidateGuard/preactivation.json
+
       - name: Calculate mandatory impact regression plan
-        if: env.NO_CANDIDATE_CHANGES != 'true'
+        if: env.CANDIDATE_MODE == 'registered' && env.NO_CANDIDATE_CHANGES != 'true'
         run: |
           mkdir -p Docs/Production/Evidence/CandidateGuard
           python3 tools/havenline/production/change_impact.py --base "$BASE" --head HEAD | tee Docs/Production/Evidence/CandidateGuard/impact.json
           python3 tools/havenline/production/regression_runner.py --base "$BASE" --head HEAD --plan-only | tee Docs/Production/Evidence/CandidateGuard/regression-plan.json
-# QA/governance branches are governance infrastructure, not Txx builder branches, so they are validated by the governance/safeguard workflows instead.
-# Passing this guard means only assignment/base/path/impact rules are valid; it never approves a task.
+
+# Passing registered mode means assignment/base/path/impact rules are valid; it never approves a task.
+# FIX_REQUIRED candidates additionally require a source-bound C0 diagnosis plus a machine-bounded repair plan.
+# Passing preactivation mode means only explicitly authorized isolated construction may continue to
+# BUILT_PENDING_DEPENDENCY. It never grants INTEGRATION_READY, integration, critic approval, or task approval.

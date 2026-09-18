@@ -9,7 +9,12 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[3]
+sys.path.insert(0, str(ROOT / "tools/havenline/production"))
+from critic_profile import resolve_critic
 
 REQUIRED_CRITICS = ["C1", "C2", "C3", "C4", "C6", "C7"]
 REQUIRED_STATES = ["ready", "blocked", "preview", "committing", "complete"]
@@ -24,6 +29,19 @@ def load(path: Path):
 
 def check_names(report: dict) -> set[str]:
     return {str(row.get("name")) for row in report.get("checks", []) if row.get("passed") is True}
+
+
+def authority_errors(domain: dict, integration: dict, lifecycle: dict, native4k: dict, candidate: str) -> list[str]:
+    errors = []
+    for name, report in (("domain", domain), ("integration", integration), ("lifecycle", lifecycle), ("native4k", native4k)):
+        if report.get("candidate") != candidate:
+            errors.append(name + " exact candidate mismatch")
+    if integration.get("fixture_simulation_only") is not False or integration.get("real_t09_adapter_bound") is not True:
+        errors.append("real simulation integration proof required")
+    for name, report in (("lifecycle", lifecycle), ("native4k", native4k)):
+        if report.get("real_t09_adapter_bound") is not True or report.get("exact_debit_verified") is not True or report.get("fixture_only") is not False:
+            errors.append(name + " requires real authority and exact debit proof")
+    return errors
 
 
 def main() -> None:
@@ -44,6 +62,12 @@ def main() -> None:
 
     errors: list[str] = []
     candidate = args.candidate
+    errors.extend(authority_errors(domain, integration, lifecycle, native4k, candidate))
+    execution = load(ROOT / "Docs/Production/CRITIC_EXECUTION.json")
+    matrix = load(ROOT / "Docs/Production/CRITIC_MATRIX.json")
+    c7_spec, _ = resolve_critic("T10", "C7", execution, matrix)
+    if c7_spec.get("scope_profile") != "T10_transaction_state_integrity_v1" or matrix["task_applicability"]["T10"] != REQUIRED_CRITICS:
+        errors.append("T10 critic contract mismatch")
 
     if source.get("candidate") != candidate:
         errors.append(f"source contract candidate mismatch: {source.get('candidate')} != {candidate}")
@@ -71,8 +95,6 @@ def main() -> None:
         errors.append("fixture integration suite is not clean")
     if int(integration.get("check_count", 0)) < 75:
         errors.append("fixture integration suite has fewer than 75 R06/R11-hardened checks")
-    if integration.get("fixture_simulation_only") is not True or integration.get("real_t09_adapter_bound") is not False:
-        errors.append("fixture authority boundary is not explicit")
     if integration.get("simulation_models_carried_vs_stored_delivery") is not True:
         errors.append("R06 carried-vs-stored delivery model proof missing")
     if integration.get("simulation_debits_stored_only") is not True:
@@ -172,7 +194,7 @@ def main() -> None:
             "focus": "Havenline gameplay identity",
             "isolated_inputs": ["presentation-only authority checks", "fixture simulation exact-once flow", "carried inventory versus delivered stored-resource separation", "stored-only transform debit", "no T09/T08 mutation boundary"],
             "input_ready": not errors,
-            "production_review_blocked_by": ["real T09/T08 authority binding", "impacted gameplay regression"],
+            "production_review_blocked_by": ["fresh integrated-source gameplay regression"],
         },
         "C4": {
             "focus": "gameplay UX and readability",
@@ -190,7 +212,7 @@ def main() -> None:
             "focus": "progression/state integrity",
             "isolated_inputs": ["branching recipe coverage", "prerequisite enforcement", "stale/out-of-order rejection", "exact snapshot/recovery", "malformed/duplicate recipe rejection", "undeclared cycle rejection", "reciprocal reversible/inverse execution", "stale lower-revision authority rejection"],
             "input_ready": not errors,
-            "production_review_blocked_by": ["real integrated progression inputs after T09"],
+            "production_review_blocked_by": ["source-bound C7 transactional progression proof"],
         },
     }
 
@@ -198,17 +220,15 @@ def main() -> None:
         "task": "T10",
         "candidate": candidate,
         "required_critics": REQUIRED_CRITICS,
+        "c7_dimensions": c7_spec["dimensions"],
         "isolated_critic_input_ready": not errors,
-        "production_critic_execution_allowed": False,
+        "production_critic_execution_allowed": not errors,
         "integration_allowed": False,
         "task_approved": False,
-        "real_t09_adapter_bound": False,
+        "real_t09_adapter_bound": integration.get("real_t09_adapter_bound") is True,
         "coverage": coverage,
         "remaining_integration_blockers": [
-            "T09 APPROVED and integrated",
-            "reconcile T10 onto exact post-T09 integration head",
-            "bind real approved T09/T08 authority interface",
-            "rerun impacted T01-T09 regression and affected captures",
+            "integration-owner acceptance and fresh integrated-source regression/evidence",
             "execute required C1/C2/C3/C4/C6/C7 production reviews with every mandatory dimension >9.0 unrounded",
         ],
         "errors": errors,

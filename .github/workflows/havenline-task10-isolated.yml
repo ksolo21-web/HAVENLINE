@@ -27,56 +27,26 @@ permissions:
 
 concurrency:
   group: havenline-task10-isolated-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 
 jobs:
   built-pending-dependency:
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
 
-      - name: Enforce isolated ownership and dependency boundary
+      - name: Enforce registered candidate ownership
         run: |
           set -euo pipefail
           mkdir -p task10-isolated-evidence/tests task10-isolated-evidence/capture task10-isolated-evidence/device-layout task10-isolated-evidence/native4k
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
-          branch_point=$(git merge-base "$integration" HEAD)
-          python3 - <<'PY' "$branch_point" "$integration" | tee task10-isolated-evidence/scope.json
-          import fnmatch,json,subprocess,sys
-          from pathlib import Path
-          branch_point,integration=sys.argv[1],sys.argv[2]
-          changed=subprocess.check_output(['git','diff','--name-only',branch_point,'HEAD'],text=True).splitlines()
-          checklist=json.loads(Path('Docs/Production/T10/ACTIVATION_CHECKLIST.json').read_text())
-          planned=checklist.get('planned_owned_paths',[])
-          assert checklist.get('task_id')=='T10'
-          assert isinstance(planned,list) and planned and len(planned)==len(set(planned)),planned
-          bad=[p for p in changed if not any(fnmatch.fnmatchcase(p,pattern) for pattern in planned)]
-          assert not bad,bad
-          forbidden=(
-            'HavenlineGodot/assets/harvesting_v1/',
-            'HavenlineGodot/scripts/harvest_presentation.gd',
-            'HavenlineGodot/tests/test_task09_',
-            'Docs/Production/T09/',
-            'tools/havenline/task09/',
-            'HavenlineGodot/scripts/main.gd',
-            'HavenlineGodot/scripts/simulation.gd',
-          )
-          touched=[p for p in changed if any(p.startswith(x) for x in forbidden)]
-          assert not touched,touched
-          graph=json.loads(Path('Docs/Production/DEPENDENCY_GRAPH.json').read_text())
-          t09=graph['tasks']['T09']['status']
-          print(json.dumps({
-            'task':'T10','mode':'BUILDING_ISOLATED','candidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
-            'branch_point':branch_point,'integration_head':integration,'t09_status':t09,
-            'reservation_source':'Docs/Production/T10/ACTIVATION_CHECKLIST.json',
-            'planned_owned_paths':planned,'changed_files':changed,
-            'integration_allowed':False,'task_approved':False,'passed':True
-          },indent=2))
-          PY
+          base=$(python3 -c "import json; r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json')); print(next(x['base_commit'] for x in r['workstreams'] if x['task_id']=='T10'))")
+          python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$GITHUB_SHA" --integration-head "$integration" | tee task10-isolated-evidence/scope.json
+          python3 tools/havenline/task10/validate_post_t09_adapter.py --require-bound
 
       - name: Validate isolated-build governance
         run: |
@@ -104,7 +74,7 @@ jobs:
           timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_world_transform.gd > task10-isolated-evidence/tests/domain.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-isolated-evidence/tests/import.log task10-isolated-evidence/tests/domain.log; then exit 1; fi
           python3 - <<'PY'
-          import json
+          import json,os
           from pathlib import Path
           reports=[json.loads(x) for x in Path('task10-isolated-evidence/tests/domain.log').read_text().splitlines() if x.startswith('{')]
           assert reports
@@ -115,6 +85,7 @@ jobs:
           assert r.get('stress_retained_receipts') == 512,r
           assert r.get('preview_stress_iterations') == 5000 and r.get('reject_stress_iterations') == 5000,r
           assert r.get('catalog_stress_recipes') == 258,r
+          r['candidate']=os.environ['GITHUB_SHA']
           r['integration_allowed']=False; r['task_approved']=False
           Path('task10-isolated-evidence/domain-tests.json').write_text(json.dumps(r,indent=2))
           PY
@@ -125,14 +96,15 @@ jobs:
           timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_integration.gd > task10-isolated-evidence/tests/integration.log 2>&1
           if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-isolated-evidence/tests/integration.log; then exit 1; fi
           python3 - <<'PY'
-          import json
+          import json,os
           from pathlib import Path
           reports=[json.loads(x) for x in Path('task10-isolated-evidence/tests/integration.log').read_text().splitlines() if x.startswith('{')]
           assert reports
           r=reports[-1]
           assert r.get('passed') is True and not r.get('failures'),r
           assert r.get('check_count') >= 60,r
-          assert r.get('fixture_simulation_only') is True and r.get('real_t09_adapter_bound') is False,r
+          assert r.get('fixture_simulation_only') is False and r.get('real_t09_adapter_bound') is True,r
+          r['candidate']=os.environ['GITHUB_SHA']
           assert r.get('r11_world_response_tested') is True,r
           assert r.get('visual_node_budget') == 4 and r.get('visual_build_count') == 1 and r.get('visual_node_count') == 4,r
           r['integration_allowed']=False; r['task_approved']=False
@@ -225,7 +197,7 @@ jobs:
           assert m.get('native_scale_1') is True and m.get('capture_resolution') == [3840,2160],m
           assert m.get('record_count') == 30 and m.get('states') == expected_states and m.get('angles') == expected_angles,m
           assert m.get('view_visual_node_count') == 4 and m.get('view_visual_build_count') == 1,m
-          assert m.get('real_t09_adapter_bound') is False and m.get('integration_allowed') is False and m.get('task_approved') is False,m
+          assert m.get('real_t09_adapter_bound') is True and m.get('exact_debit_verified') is True and m.get('integration_allowed') is False and m.get('task_approved') is False,m
           files=[]; hashes=set()
           for row in m['records']:
               p=root/row['file']; data=p.read_bytes()
@@ -238,7 +210,7 @@ jobs:
               'task':'T10','candidate':m['candidate'],'native_scale_1':True,'resolution':[3840,2160],
               'state_count':5,'angle_count':6,'capture_count':30,'unique_capture_count':30,
               'states':expected_states,'angles':expected_angles,'files':files,
-              'integration_allowed':False,'real_t09_adapter_bound':False,'task_approved':False,'passed':True
+              'integration_allowed':False,'real_t09_adapter_bound':True,'exact_debit_verified':True,'task_approved':False,'passed':True
           },indent=2))
           PY
 
@@ -261,15 +233,15 @@ jobs:
           assert critic.get('passed') is True and critic.get('isolated_critic_input_ready') is True,critic
           print(json.dumps({
             'task':'T10','candidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
-            'isolated_state':'BUILT_PENDING_DEPENDENCY','dependency':'T09','dependency_status':graph['tasks']['T09']['status'],
+            'isolated_state':'BUILDING_ISOLATED','dependency':'T09','dependency_status':graph['tasks']['T09']['status'],
             'critic_ready_native4k_evidence':True,'isolated_critic_input_ready':True,
             'critic_evidence_states':['ready','blocked','preview','committing','complete'],
             'critic_evidence_angles':['front','side','three-quarter','overhead','gameplay','detail'],
-            'integration_allowed':False,'real_t09_adapter_bound':False,'task_approved':False,'passed':True
+            'integration_allowed':False,'real_t09_adapter_bound':True,'task_approved':False,'passed':True
           },indent=2))
           PY
 
-      - uses: actions/upload-artifact@v4
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
           name: havenline-task10-isolated-${{ github.sha }}

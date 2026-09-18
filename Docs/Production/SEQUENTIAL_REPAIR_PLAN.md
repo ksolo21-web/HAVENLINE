@@ -40,10 +40,8 @@ integration-owner-controlled production integration.
   in `Docs/Production/T08/verified-completion.json` after 23 suites / 1535
   checks, all 44 locked frames and both locked recordings, G1-G14, and strict
   C2 9.55 / C3 9.48 / C4 9.52 / C6 9.61 independent review.
-- T09 is ASSIGNED to `harvesting-acquisition-builder` on isolated branch
-  `havenline/T09-harvesting` from exact integration base
-  `7492074e40a0b061f31d8c32602b7a581b2610f3`; its frozen scope, task packet and
-  disjoint path reservation are authoritative. T10+ remains LOCKED.
+- T09 is APPROVED. Exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0 passed 17 suites / 1006 checks, 7/7 save cases, 6/6 device cases, 1193/1193 indexed hashes, G1-G14, and fresh independent C2/C3/C4/C5/C6 review with every mandatory dimension strictly above 9.0 and zero unresolved defects.
+  T10+ remains LOCKED.
 
 ## Forward acceptance rule
 
@@ -130,10 +128,8 @@ after each packet and owner are prepared:
 - T08 visible inventory, carrying and transfers is complete and APPROVED;
   preserve exact integrated source
   `9d56ea8ae972d0a0705ff8b985e13fab31dde493` and its verified closure.
-- T09 harvesting and automatic acquisition is ASSIGNED to
-  `harvesting-acquisition-builder` on isolated branch
-  `havenline/T09-harvesting`; build and review against its frozen packet are
-  next. T10+ remains LOCKED.
+- T09 harvesting and automatic acquisition is APPROVED at `5415d85838ecf4bea8b3c71662072670e61797a0`.
+  Preserve its verified closure. T10+ remains LOCKED.
 - QA/integration infrastructure may continue separately.
 
 Those workstreams are isolated and path-disjoint. Shared wiring remains
