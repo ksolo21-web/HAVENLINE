@@ -75,6 +75,7 @@ jobs:
           gh api "repos/${GITHUB_REPOSITORY}/actions/runs/${FAILED_RUN_ID}/artifacts?per_page=100" > c0-input/artifacts.json
           python3 tools/havenline/production/collect_failure_job_logs.py --run c0-input/run.json --jobs c0-input/jobs.json --run-id "$FAILED_RUN_ID" --repository "$GITHUB_REPOSITORY" --output c0-input/failed.log
           gh run download "$FAILED_RUN_ID" -D c0-input/artifacts >/dev/null 2>&1 || true
+          python3 tools/havenline/production/collect_artifact_diagnostics.py --root c0-input/artifacts --output c0-input/artifact-diagnostics.json
           python3 - <<'PY'
           import hashlib,json,os,pathlib,subprocess
           root=pathlib.Path('.')
@@ -114,6 +115,7 @@ jobs:
               records.append(value)
           if len(records)>20:raise SystemExit('too many critic records in failed run artifacts')
           log_bytes=log.encode('utf-8')
+          artifact_diagnostics=json.loads((root/'c0-input/artifact-diagnostics.json').read_text())
           packet={
             'schema_version':1,'task_id':task,'failed_run_id':run_id,'failed_candidate':candidate,'integration_head':integration,
             'integration_branch':integration_branch,'task_branch':task_branch,'current_branch_head':current,'run_conclusion':run.get('conclusion'),
@@ -121,6 +123,8 @@ jobs:
             'changed_files':changed,'failed_logs':log,'failed_logs_bytes':len(log_bytes),'failed_logs_sha256':hashlib.sha256(log_bytes).hexdigest(),
             'structured_failure_records':records,'task_scope':scope.read_text(errors='replace')[:30000] if scope.exists() else '',
             'defect_ledger':ledger.read_text(errors='replace')[:30000] if ledger else '',
+            'artifact_diagnostics':artifact_diagnostics,'repository_paths':subprocess.check_output(['git','ls-files'],text=True).splitlines(),
+            'strict_evidence_grounding':task=='T10',
             'protected_files':[],
           }
           (root/'c0-input/failure-packet.json').write_text(json.dumps(packet,indent=2)+'\n')
@@ -196,6 +200,7 @@ jobs:
             c0-input/failure-packet.json
             c0-input/failure-intelligence.json
             c0-input/artifacts.json
+            c0-input/artifact-diagnostics.json
             c0-output/
           retention-days: 30
           if-no-files-found: error

@@ -1,7 +1,8 @@
-import pathlib, sys, unittest
+import json, pathlib, sys, tempfile, unittest
 HERE=pathlib.Path(__file__).resolve();PROD=HERE.parents[1];sys.path.insert(0,str(PROD))
 from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, build_model_request, c0_response_schema, model_projection, retain_http_error, superseded_report, validate_report
 from builder_repair_gate import validate as validate_builder
+from collect_artifact_diagnostics import collect as collect_artifact_diagnostics
 
 
 def packet(conclusion="failure"):
@@ -72,6 +73,32 @@ class C0BuilderTests(unittest.TestCase):
         p=packet("cancelled");r=superseded_report(p);r["validated"]=True;r["report_sha256"]="d"*64
         errors=validate_builder(r,plan())
         self.assertTrue(any("superseded" in e for e in errors))
+
+    def test_t10_strict_grounding_rejects_invented_quote_and_path(self):
+        p=packet();p.update(task_id="T10",strict_evidence_grounding=True,
+            failed_logs='{"required_critics":["C1","C2","C3","C4","C6","C7"]}',
+            repository_paths=[".github/workflows/havenline-task10-world-transformation.yml"],
+            artifact_diagnostics={"records":[{"path":"tests/integration.log","retained_lines":[{"line":41,"text":"assertion failed: exact lifecycle cost changed"}]}]})
+        r=complete_c0();r.update(task_id="T10",diagnosis_id="C0-T10-123")
+        row=r["blockers"][0];row["evidence"]=['failure_logs | "required_critics": []'];row["files_to_change"]=[".github/workflows/task10_workflow.yml"]
+        errors=validate_report(r,p)
+        self.assertTrue(any("exact retained source excerpt" in e for e in errors),errors)
+        self.assertTrue(any("exact repository path" in e for e in errors),errors)
+        row["evidence"]=["artifact_diagnostics:tests/integration.log#L41 | assertion failed: exact lifecycle cost changed"]
+        row["files_to_change"]=[".github/workflows/havenline-task10-world-transformation.yml"]
+        self.assertEqual([],validate_report(r,p))
+
+    def test_artifact_diagnostics_retain_hashed_failure_lines(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=pathlib.Path(temporary);path=root/"run"/"tests"/"integration.log";path.parent.mkdir(parents=True)
+            path.write_text("ordinary output\nASSERT FAILED: expected 8 wood, got 4\n")
+            result=collect_artifact_diagnostics(root)
+            self.assertTrue(result["passed"])
+            self.assertEqual(1,result["record_count"])
+            row=result["records"][0]
+            self.assertEqual("run/tests/integration.log",row["path"])
+            self.assertEqual("ASSERT FAILED: expected 8 wood, got 4",row["retained_lines"][0]["text"])
+            self.assertEqual(64,len(row["sha256"]))
 
 class CausalBookkeepingTests(unittest.TestCase):
     def test_documents_cannot_satisfy_causal_change(self):

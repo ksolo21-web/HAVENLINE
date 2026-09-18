@@ -135,6 +135,28 @@ def compact_history(value:Any,detail:int=2)->dict:
     return {"matches":rows,"historical_match_is_advisory_only":value.get("historical_match_is_advisory_only")}
 
 
+def artifact_diagnostic_projection(packet:dict,excerpt_bytes:int,detail:int)->dict:
+    value=packet.get("artifact_diagnostics",{})
+    rows=value.get("records",[]) if isinstance(value,dict) else []
+    limit=max(512,excerpt_bytes*2);used=0;retained=[]
+    row_limit={2:8,1:4,0:2}.get(detail,2)
+    for row in rows[:row_limit]:
+        if not isinstance(row,dict):continue
+        lines=[]
+        for item in row.get("retained_lines",[]) if isinstance(row.get("retained_lines"),list) else []:
+            if not isinstance(item,dict):continue
+            text=str(item.get("text", ""));size=len(text.encode("utf-8",errors="replace"))+32
+            if not text or used+size>limit:continue
+            lines.append({"line":item.get("line"),"text":text});used+=size
+        if lines:
+            retained.append({"path":row.get("path"),"bytes":row.get("bytes"),"sha256":row.get("sha256"),"retained_lines":lines})
+    return {
+        "record_count":value.get("record_count",len(rows)) if isinstance(value,dict) else 0,
+        "records_sha256":stable_json_digest(rows),"records":retained,
+        "retained_bytes":used,"truncated":len(retained)<len(rows),
+    }
+
+
 def failure_log_projection(packet:dict,excerpt_bytes:int)->dict:
     value=packet.get("failed_logs","")
     if not isinstance(value,str):value=""
@@ -204,6 +226,7 @@ def model_projection(packet:dict,packet_sha256:str,excerpt_bytes:int=640,detail:
         "change_surface":{"changed_files":compact_paths(changed,detail),"protected_files":compact_paths(protected,detail)},
         "structured_failure_records":compact_failure_records(packet,detail),
         "failure_logs":failure_log_projection(packet,excerpt_bytes),
+        "artifact_diagnostics":artifact_diagnostic_projection(packet,excerpt_bytes,detail),
         "task_scope_excerpt":bounded_lines(scope,excerpt_bytes),
         "defect_ledger_excerpt":bounded_lines(ledger,excerpt_bytes),
         "historical_failure_intelligence":compact_history(history,detail),
@@ -212,6 +235,7 @@ def model_projection(packet:dict,packet_sha256:str,excerpt_bytes:int=640,detail:
             "arbitrary_character_slice_used":False,"all_failed_terminal_steps_retained":True,
             "all_unexecuted_checks_retained":True,"complete_change_surface_bound_by_digest":True,
             "bounded_excerpts_have_source_hash_and_truncation_metadata":True,
+            "artifact_diagnostics_are_source_hashed":True,
         },
     }
 
@@ -261,6 +285,22 @@ def validate_report(report:dict,packet:dict)->list[str]:
     blockers=report.get("blockers",[])
     if not isinstance(blockers,list):errors.append("blockers must be list");blockers=[]
     seen=set()
+    strict_grounding=packet.get("strict_evidence_grounding") is True
+    repository_paths=set(packet.get("repository_paths",[])) if isinstance(packet.get("repository_paths"),list) else set()
+    grounding={
+        "failure_logs":ANSI_RE.sub("",str(packet.get("failed_logs", ""))),
+        "task_scope":str(packet.get("task_scope", "")),
+        "defect_ledger":str(packet.get("defect_ledger", "")),
+        "historical_failure_intelligence":json.dumps(packet.get("historical_failure_intelligence",{}),sort_keys=True),
+    }
+    for item in packet.get("structured_failure_records",[]) if isinstance(packet.get("structured_failure_records"),list) else []:
+        if isinstance(item,dict) and item.get("path"):
+            grounding["structured_failure_records:"+str(item["path"])]=json.dumps(item,sort_keys=True)
+    diagnostics=packet.get("artifact_diagnostics",{})
+    for item in diagnostics.get("records",[]) if isinstance(diagnostics,dict) and isinstance(diagnostics.get("records"),list) else []:
+        if not isinstance(item,dict) or not item.get("path"):continue
+        for line in item.get("retained_lines",[]) if isinstance(item.get("retained_lines"),list) else []:
+            if isinstance(line,dict):grounding[f"artifact_diagnostics:{item['path']}#L{line.get('line')}"]=str(line.get("text", ""))
     for row in blockers:
         rid=row.get("id")
         if not rid or rid in seen:errors.append("blocker ids must be unique/non-empty")
@@ -270,6 +310,15 @@ def validate_report(report:dict,packet:dict)->list[str]:
         if row.get("classification") not in BLOCKER_CLASSES:errors.append(f"{rid} invalid classification")
         for key in ("evidence","files_to_change","files_not_to_change","verification"):
             if not isinstance(row.get(key),list):errors.append(f"{rid} {key} must be list")
+        if strict_grounding:
+            for evidence in row.get("evidence",[]) if isinstance(row.get("evidence"),list) else []:
+                if not isinstance(evidence,str) or " | " not in evidence:
+                    errors.append(f"{rid} evidence lacks source-bound quote");continue
+                source,quote=evidence.split(" | ",1)
+                if source not in grounding or len(quote.strip())<8 or quote not in grounding.get(source,""):
+                    errors.append(f"{rid} evidence is not an exact retained source excerpt: {source}")
+            for path in row.get("files_to_change",[]) if isinstance(row.get("files_to_change"),list) else []:
+                if path not in repository_paths:errors.append(f"{rid} proposed causal file is not an exact repository path: {path}")
         if row.get("classification") in {"TOOLING_DEFECT","GOVERNANCE_DEFECT","EVIDENCE_DEFECT","INFRASTRUCTURE_FAILURE","SUPERSEDED"} and row.get("affected_object","").lower().startswith("shipping product") and not row.get("evidence"):
             errors.append(f"{rid} unsupported product attribution")
     freeze=report.get("candidate_freeze",{})
@@ -328,10 +377,13 @@ def start_runtime(out:pathlib.Path):
     raise RuntimeError("C0 local reviewer runtime not ready")
 
 
-def c0_response_schema()->dict:
+def c0_response_schema(strict_grounding:bool=False)->dict:
+    evidence_item={"type":"string"}
+    if strict_grounding:
+        evidence_item["pattern"]=r"^(failure_logs|task_scope|defect_ledger|historical_failure_intelligence|artifact_diagnostics:[^|]+|structured_failure_records:[^|]+) \| .{8,}$"
     blocker_props={
         "id":{"type":"string"},"classification":{"type":"string","enum":sorted(BLOCKER_CLASSES)},"symptom":{"type":"string"},
-        "evidence":{"type":"array","items":{"type":"string"},"minItems":1,"maxItems":8},"root_cause":{"type":"string"},"affected_object":{"type":"string"},
+        "evidence":{"type":"array","items":evidence_item,"minItems":1,"maxItems":8},"root_cause":{"type":"string"},"affected_object":{"type":"string"},
         "causal_fix":{"type":"string"},"files_to_change":{"type":"array","items":{"type":"string"},"maxItems":20},"files_not_to_change":{"type":"array","items":{"type":"string"},"maxItems":20},
         "verification":{"type":"array","items":{"type":"string"},"minItems":1,"maxItems":12},
     }
@@ -349,8 +401,11 @@ def model_report(packet:dict,out:pathlib.Path,packet_sha256:str)->dict:
     proc=log=manifest=None
     try:
         proc,log,manifest=start_runtime(out)
-        schema=c0_response_schema()
+        strict_grounding=packet.get("strict_evidence_grounding") is True
+        schema=c0_response_schema(strict_grounding)
         prompt="""You are C0, Havenline's non-voting Root-Cause Advisor. Diagnose the complete available failed run before any builder changes code. Do not score gameplay and do not approve the task. Distinguish PRODUCT_DEFECT, TOOLING_DEFECT, GOVERNANCE_DEFECT, EVIDENCE_DEFECT, INFRASTRUCTURE_FAILURE and SUPERSEDED. A red CI state is not a diagnosis. Inspect successful upstream steps as evidence too. Return every currently observable independent blocker, not only the first red line. Mark downstream steps that never executed as unexecuted_checks; do not invent their results. Protect already-approved work: if a harness/test/governance defect is supported and the product is not disproven, explicitly keep the approved production files in files_not_to_change. For every blocker give concrete evidence, root cause, smallest causal fix, exact files_to_change/files_not_to_change and dependency-ordered verification. Prefer a complete blocker set over serial symptom fixing. If evidence is insufficient, say so rather than guessing. Candidate validation must use finish_running_sha: a newer commit queues and does not cancel the running SHA."""
+        if strict_grounding:
+            prompt += " Every evidence item must be SOURCE | EXACT_QUOTE using an exact retained source label and verbatim excerpt from the projection. Never infer an empty collection from a populated one. Every files_to_change value must be an exact path from repository_paths; if the source does not support a causal repair, return INSUFFICIENT_EVIDENCE instead of inventing a path."
         try:body,request_bytes,budget,projection=build_model_request(packet,packet_sha256,prompt,schema)
         except RuntimeError as exc:
             diagnostic={"passed":False,"error":"request_budget_exceeded","detail":str(exc),"context_tokens":C0_CONTEXT_TOKENS,"max_completion_tokens":C0_MAX_TOKENS,"safety_tokens":C0_SAFETY_TOKENS,"max_request_bytes":C0_MAX_REQUEST_BYTES}
