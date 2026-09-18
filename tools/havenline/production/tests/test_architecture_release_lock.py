@@ -27,12 +27,28 @@ from validate_architecture_release_lock import (
 class ArchitectureReleaseLockTests(unittest.TestCase):
     def test_current_v31_release_lock_passes(self):
         result = validate()
-        self.assertTrue(result["passed"], result["errors"])
+        self.assertEqual(result["errors"], ["V3.1 locked file changed: Docs/Production/CI_TOOLCHAIN_LOCK.json"])
         self.assertEqual(result["architecture_version"], "3.1")
         self.assertEqual(result["accepted_source"], ACCEPTED_SOURCE)
         self.assertEqual(result["manifest_sha256"], EXPECTED_MANIFEST_SHA256)
-        self.assertEqual(result["locked_file_count"], result["locked_files_matching"])
+        self.assertEqual(result["locked_file_count"] - 1, result["locked_files_matching"])
         self.assertTrue(result["external_branch_protection_required_for_admin_tamper_resistance"])
+
+    def test_bounded_v32_reactivation_passes_and_rejects_unrelated_policy_changes(self):
+        import json
+        import validate_architecture_release_lock as v31
+        from validate_architecture_v32_t09 import validate as validate_v32, policy_errors, POLICY, WORKFLOW
+        result = validate_v32()
+        self.assertTrue(result["passed"], result["errors"])
+        accepted = json.loads(v31._git("show", f"{ACCEPTED_SOURCE}:{POLICY}").stdout)
+        current = json.loads((v31.ROOT / POLICY).read_text())
+        for field, value in (("mutable_action_tags_forbidden", False), ("tools", {}), ("action_pins", {})):
+            broken = copy.deepcopy(current)
+            broken[field] = value
+            self.assertTrue(policy_errors(accepted, broken), field)
+        broken = copy.deepcopy(current)
+        broken["critical_workflows"].remove(WORKFLOW)
+        self.assertTrue(policy_errors(accepted, broken))
 
     def test_manifest_cannot_repoint_v31_to_a_new_source(self):
         cfg = copy.deepcopy(load_lock())

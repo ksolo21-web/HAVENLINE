@@ -128,7 +128,8 @@ def main() -> None:
     presentation_source = SCRIPT.read_text(encoding="utf-8") if SCRIPT.exists() else ""
     if not all(token in presentation_source for token in [
         "vertex_color_use_as_albedo = true", "T09_shared_vertex_palette",
-        '"source_contact_radius":0.10',
+        '"source_contact_radius":0.10', '"source_selection_indicator":"single_shipping_resource_color_ring"',
+        'source_selection_ring.name = "T09ShippingSourceSelectionRing"',
     ]):
         errors.append("tool palette consumption or visible wood surface contact is incomplete")
     capture_source = CAPTURE.read_text(encoding="utf-8") if CAPTURE.exists() else ""
@@ -136,7 +137,21 @@ def main() -> None:
         'if resource_kind in ["stone","metal","fuel"]',
         "detail_direction = (right+forward*0.85).normalized()",
         "var detail_direction := (right-forward*0.22).normalized()",
-    ]):
+        "T09DisclosedNeutralSnowStage",
+        "visual_review_source_units",
+        "capture_canvas_transform = root.get_final_transform()",
+        "capture_logical_size = Vector2(root.size) / capture_scale",
+        "game.size = capture_logical_size",
+        "game_canvas_fully_covers_capture_canvas",
+        "target_device_logical_size",
+        "var joystick_extent: Vector2",
+        "var joystick_bounds: Rect2",
+        "var capture_canvas: Rect2",
+        "joystick_circle_fully_inside_capture_canvas",
+        '"joystick_input_path":"Main._gui_input/InputEventScreenTouch+InputEventScreenDrag"',
+        '"source_material_policy":"shipping_materials_unchanged"',
+        '"permanent_action_buttons":int(Harvest.contract().permanent_action_buttons)',
+    ]) or "display.show_behind_parent = true" not in main_source:
         errors.append("resource-specific non-occluding detail camera is missing")
     motion_fixture_source = MOTION_FIXTURE.read_text(encoding="utf-8") if MOTION_FIXTURE.exists() else ""
     motion_scene_source = MOTION_SCENE.read_text(encoding="utf-8") if MOTION_SCENE.exists() else ""
@@ -146,19 +161,22 @@ def main() -> None:
     if not all(token in motion_fixture_source for token in [
         'preload("res://assets/characters/Character1.glb")',
         'Character1Motion.install(self,"player_lead")',
-        "MOTION_REVIEW_HEIGHT_METERS := 4.5",
+        "MOTION_REVIEW_HEIGHT_METERS := 1.75",
         'set_meta("t09_motion_review_height_m",MOTION_REVIEW_HEIGHT_METERS)',
+        '"shipping_character_tools_targets_and_contact_solver"',
         '"human_player_chop"', '"human_player_mine"', '"human_player_dismantle"',
     ]) or "t09_motion_fixture.gd" not in motion_scene_source:
         errors.append("C5 motion fixture does not use shipping Character 1 motion profiles")
     if not all(token in motion_capture_source for token in [
-        "production_motion_v2", "INITIALIZATION_SETTLE_FRAMES:=8",
+        "production_motion_v3", "INITIALIZATION_SETTLE_FRAMES:=8",
         "FIRST_USE_WARMUP_FRAMES:=8", "player.advance(0.0)", '"upper-opposite"', '"lower-rear"',
         "pose_signature", "get_bone_global_pose", '"initialization_pose_schema":"skeleton_global_pose_v1"',
+        "length/maxf(speed,.01)*fps", "float(i)/fps*speed", "contact_time(anim,a.length)",
+        'row["contact_alignment_valid"]', 'row["impact_error_m"]',
     ]) or not all(token in motion_runner_source for token in [
         "t09_motion_capture.gd", "START_MAX_TRANSLATION_M", "START_MAX_ROTATION_DEG",
         "FIRST_STEP_MAX_TRANSLATION_M", "FIRST_STEP_MAX_ROTATION_DEG",
-        "final_skeleton_pose_transform_v1", "pose_delta", "sha256_file",
+        "final_skeleton_pose_transform_v1", "pose_delta", "sha256_file", "contact_review_rows", "cycle_contact_rows",
     ]):
         errors.append("T09 C5 capture lacks final-skeleton initialization or contact-region coverage")
     def motion_function_body(name: str) -> str:
@@ -201,7 +219,7 @@ def main() -> None:
         "tools/havenline/task09/motion_capture.py",
         "t09_motion_fixture.tscn",
         "t06/chop,t06/mine,t06/dismantle",
-        "production_motion_v2",
+        "production_motion_v3",
         "initialization_settle_frames",
         "first_use_warmup_frames",
         "initialization_validation",
@@ -210,6 +228,10 @@ def main() -> None:
         "close-lower-rear",
         "motion-hashes.json",
         "len(motion_pngs)>=220",
+        "motion_c5_videos",
+        "shipping_joystick_draw_above_scene_texture",
+        "joystick_circle_fully_inside_capture_canvas",
+        "visual_review_source_units",
         "c6-performance.json",
         "critic_harness.py performance",
         "--rendering-method mobile --rendering-driver vulkan",

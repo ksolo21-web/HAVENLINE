@@ -8,17 +8,10 @@
     ".github/workflows/havenline-godot-android.yml",
     ".github/workflows/havenline-production-governance.yml",
     ".github/workflows/havenline-specialist-critic.yml",
-    ".github/workflows/havenline-specialist-model-cache.yml"
+    ".github/workflows/havenline-specialist-model-cache.yml",
+    ".github/workflows/havenline-task09-harvesting.yml"
   ],
-  "retired_workflows": {
-    ".github/workflows/havenline-task09-harvesting.yml": {
-      "status": "RETIRED_APPROVED_TASK",
-      "accepted_integrated_source": "9bc735502b265bfdd365004fb863b19c613e27dd",
-      "forward_execution_allowed": false,
-      "reopen_requires_full_revalidation": true,
-      "reason": "T09 is approved and closed. Preserve its task-specific validation workflow without rewriting approved logic solely for CI platform maintenance; any future T09 repair must deliberately reopen and modernize/revalidate it before use."
-    }
-  },
+  "retired_workflows": {},
   "action_pins": {
     "actions/checkout": "fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09",
     "actions/setup-python": "ece7cb06caefa5fff74198d8649806c4678c61a1",

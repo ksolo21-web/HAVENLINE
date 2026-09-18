@@ -12,11 +12,12 @@ var root3d:Node3D
 var subject:Node3D
 var player:AnimationPlayer
 var camera:Camera3D
+var fixture_sample:Dictionary={}
 const INITIALIZATION_SETTLE_FRAMES:=8
 const FIRST_USE_WARMUP_FRAMES:=8
 const TURN_ANGLES:=[-135.0,-90.0,-45.0,0.0,30.0,45.0,90.0,135.0,180.0]
-const REVIEW_CAMERA_POSITION:=Vector3(4.5,2.8,6.5)
-const REVIEW_CAMERA_TARGET:=Vector3(0,1,0)
+const REVIEW_CAMERA_POSITION:=Vector3(3.2,1.8,0.15)
+const REVIEW_CAMERA_TARGET:=Vector3(0,0.92,0.66)
 
 func _initialize():
 	for arg in OS.get_cmdline_user_args():
@@ -45,8 +46,9 @@ func setup_scene():
 	env.ambient_light_source=Environment.AMBIENT_SOURCE_COLOR;env.ambient_light_color=Color("#dbeaff");env.ambient_light_energy=.9
 	world.environment=env;root3d.add_child(world)
 	var light=DirectionalLight3D.new();light.rotation_degrees=Vector3(-45,-30,0);light.light_energy=1.2;root3d.add_child(light)
-	var ground=MeshInstance3D.new();var plane=PlaneMesh.new();plane.size=Vector2(12,12);ground.mesh=plane;ground.position.y=-.02;root3d.add_child(ground)
-	camera=Camera3D.new();root3d.add_child(camera);camera.current=true
+	var ground=MeshInstance3D.new();var plane=PlaneMesh.new();plane.size=Vector2(8,8);ground.mesh=plane;ground.position.y=-.02
+	var ground_material=StandardMaterial3D.new();ground_material.albedo_color=Color("7899ac");ground_material.roughness=.92;ground.material_override=ground_material;root3d.add_child(ground)
+	camera=Camera3D.new();root3d.add_child(camera);camera.current=true;camera.fov=50.0
 	set_camera(REVIEW_CAMERA_POSITION,REVIEW_CAMERA_TARGET)
 
 func set_camera(position:Vector3,target:Vector3):
@@ -56,20 +58,28 @@ func set_pose(anim:String,t:float):
 	# The capture harness samples explicit animation times. Freeze the playback
 	# clock so render-settle frames cannot silently advance beyond that sample.
 	player.stop();player.speed_scale=0.0;player.play(anim,0.0);player.seek(t,true);player.advance(0.0)
+	sync_harvest_fixture(anim,t)
+
+func sync_harvest_fixture(anim:String,t:float):
+	if subject.has_method("configure_harvest_sample"):
+		var animation=player.get_animation(anim)
+		var result:Variant=subject.call("configure_harvest_sample",anim,t,maxf(animation.length,.001))
+		assert(result is Dictionary and bool(result.get("passed",false)),"C5 fixture failed to pose shipping tool and target")
+		fixture_sample=(result as Dictionary).duplicate(true)
 
 func settle_pose(anim:String,t:float,frames:int=INITIALIZATION_SETTLE_FRAMES):
 	# Start the requested sample once, then let final SkeletonModifier3D output
 	# converge without restarting the animation on every settle frame.
 	set_pose(anim,t)
 	for _frame in range(frames):
-		player.advance(0.0);await process_frame;await RenderingServer.frame_post_draw
+		player.advance(0.0);sync_harvest_fixture(anim,t);await process_frame;await RenderingServer.frame_post_draw
 
 func warm_pose(anim:String,t:float,frames:int):
 	# Do not restart the player between warm-up frames. This allows skeleton
 	# modifiers installed by the shipping Character 1 fixture to converge.
 	set_pose(anim,t)
 	for _frame in range(frames):
-		player.advance(0.0);await process_frame;await RenderingServer.frame_post_draw
+		player.advance(0.0);sync_harvest_fixture(anim,t);await process_frame;await RenderingServer.frame_post_draw
 
 func _append_skeleton_pose(node:Node,rows:Array):
 	if node is Skeleton3D:
@@ -103,6 +113,16 @@ func snap(folder:String,name:String,evidence_type:String,animation:String,t:floa
 	var img=get_root().get_texture().get_image()
 	var path=dir.path_join(name+".png");img.save_png(path)
 	var row={"file":folder+"/"+name+".png","evidence_type":evidence_type,"animation":animation,"time":t,"speed":speed,"turn_degrees":turn,"camera_position":str(camera.position),"resolution":[img.get_width(),img.get_height()]}
+	if not fixture_sample.is_empty():
+		row["fixture_resource"]=String(fixture_sample.get("fixture_resource",""))
+		row["fixture_has_tool_and_target"]=bool(fixture_sample.get("fixture_has_tool_and_target",false))
+		row["tool"]=String(fixture_sample.get("tool",""))
+		row["contact_ready"]=bool(fixture_sample.get("contact_ready",false))
+		row["contact_alignment_valid"]=bool(fixture_sample.get("contact_alignment_valid",false))
+		row["grip_error_m"]=float(fixture_sample.get("grip_error_m",INF))
+		row["secondary_grip_error_m"]=float(fixture_sample.get("secondary_grip_error_m",INF))
+		row["impact_error_m"]=float(fixture_sample.get("impact_error_m",INF))
+		row["fixture_presented_progress"]=float(fixture_sample.get("fixture_presented_progress",-1.0))
 	var initialization_probe=(evidence_type in ["real-time-cycle","slow-review-cycle"] and name in ["0000","0001"]) or evidence_type=="transition-start"
 	if initialization_probe:
 		row["pose_signature"]=pose_signature()
@@ -110,10 +130,10 @@ func snap(folder:String,name:String,evidence_type:String,animation:String,t:floa
 
 func capture_cycle(anim:String,speed:float,label:String):
 	var a=player.get_animation(anim);assert(a)
-	var length=maxf(a.length,.033);var fps=30.0;var count=maxi(2,ceili(length*fps))
+	var length=maxf(a.length,.033);var fps=30.0;var count=maxi(2,ceili(length/maxf(speed,.01)*fps))
 	set_camera(REVIEW_CAMERA_POSITION,REVIEW_CAMERA_TARGET);await settle_pose(anim,0.0)
 	for i in range(count+1):
-		var t=minf(length,float(i)/fps)
+		var t=minf(length,float(i)/fps*speed)
 		# Preserve the converged t=0 pose established above. Restarting it here
 		# would discard the settle work immediately before the first capture.
 		if i>0:set_pose(anim,t)
@@ -122,13 +142,18 @@ func capture_cycle(anim:String,speed:float,label:String):
 func turn_name(turn:float)->String:
 	return "neg-%03d"%absi(int(turn)) if turn<0.0 else "%03d"%int(turn)
 
+func contact_time(anim:String,length:float)->float:
+	if anim.ends_with("chop"): return length*.56
+	if anim.ends_with("mine"): return length*.58
+	return length*.61
+
 func capture_close_contacts(anim:String,mid:float):
 	var views=[
-		{"name":"upper-front","position":Vector3(2.35,2.35,3.3),"target":Vector3(0,1.75,0),"turn":0.0},
-		{"name":"upper-opposite","position":Vector3(2.35,2.35,3.3),"target":Vector3(0,1.75,0),"turn":-90.0},
-		{"name":"waist-rear","position":Vector3(2.15,1.55,3.0),"target":Vector3(0,1.15,0),"turn":135.0},
-		{"name":"lower-front","position":Vector3(2.0,.85,2.8),"target":Vector3(0,.55,0),"turn":0.0},
-		{"name":"lower-rear","position":Vector3(2.0,.85,2.8),"target":Vector3(0,.55,0),"turn":-135.0},
+		{"name":"upper-front","position":Vector3(2.65,1.65,.15),"target":Vector3(0,1.15,.72),"turn":0.0},
+		{"name":"upper-opposite","position":Vector3(-2.65,1.65,.15),"target":Vector3(0,1.15,.72),"turn":0.0},
+		{"name":"waist-rear","position":Vector3(1.75,1.35,2.65),"target":Vector3(0,.92,.72),"turn":135.0},
+		{"name":"lower-front","position":Vector3(2.4,.72,.15),"target":Vector3(0,.5,.62),"turn":0.0},
+		{"name":"lower-rear","position":Vector3(-2.4,.72,.15),"target":Vector3(0,.5,.62),"turn":0.0},
 	]
 	for view in views:
 		subject.rotation_degrees.y=view.turn;set_camera(view.position,view.target)
@@ -144,7 +169,7 @@ func run():
 		# than two rendered frames for SkeletonModifier3D state to converge.
 		await warm_pose(anim,0.0,FIRST_USE_WARMUP_FRAMES)
 		await capture_cycle(anim,1.0,"real-time-cycle");await capture_cycle(anim,.25,"slow-review-cycle")
-		var a=player.get_animation(anim);var mid=a.length*.5
+		var a=player.get_animation(anim);var mid=contact_time(anim,a.length)
 		for turn in TURN_ANGLES:
 			subject.rotation_degrees.y=turn;set_pose(anim,mid)
 			var label=turn_name(turn)
@@ -154,5 +179,5 @@ func run():
 		await settle_pose(anim,a.length);await snap(anim+"/transitions","end","transition-end",anim,a.length,1,0)
 		await capture_close_contacts(anim,mid)
 	var f=FileAccess.open(output.path_join("motion.json"),FileAccess.WRITE)
-	f.store_string(JSON.stringify({"harness":"production_motion_v2","candidate_commit":candidate,"task_id":task_id,"scene":scene_path,"subject_path":subject_path,"animation_player_path":player_path,"initialization_settle_frames":INITIALIZATION_SETTLE_FRAMES,"first_use_warmup_frames":FIRST_USE_WARMUP_FRAMES,"initialization_pose_schema":"skeleton_global_pose_v1","turn_angles_degrees":TURN_ANGLES,"captures":captures,"body_checks_for_critic":["feet","toes","knees","hips","hands","cuffs","belt/pouches","inner legs","boots","gear","ground contact","clipping"]},"\t"));f.close()
+	f.store_string(JSON.stringify({"harness":"production_motion_v3","candidate_commit":candidate,"task_id":task_id,"scene":scene_path,"subject_path":subject_path,"animation_player_path":player_path,"initialization_settle_frames":INITIALIZATION_SETTLE_FRAMES,"first_use_warmup_frames":FIRST_USE_WARMUP_FRAMES,"initialization_pose_schema":"skeleton_global_pose_v1","turn_angles_degrees":TURN_ANGLES,"shipping_tool_target_fixture":true,"contact_review_cutaway":String(subject.get_meta("t09_contact_review_cutaway","none")),"real_time_speed":1.0,"slow_review_speed":0.25,"captures":captures,"body_checks_for_critic":["feet","toes","knees","hips","hands","cuffs","belt/pouches","inner legs","boots","gear","tool grip","target contact","ground contact","clipping"]},"\t"));f.close()
 	quit()

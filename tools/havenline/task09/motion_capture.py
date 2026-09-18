@@ -95,10 +95,12 @@ def main():
     if p.returncode:raise SystemExit(p.returncode)
     meta=json.loads((out/"motion.json").read_text())
     if meta.get("candidate_commit")!=a.candidate:raise SystemExit("candidate mismatch")
-    if meta.get("harness")!="production_motion_v2" or meta.get("initialization_settle_frames",0)<8 or meta.get("first_use_warmup_frames",0)<8:
+    if meta.get("harness")!="production_motion_v3" or meta.get("initialization_settle_frames",0)<8 or meta.get("first_use_warmup_frames",0)<8 or meta.get("shipping_tool_target_fixture") is not True:
         raise SystemExit("motion initialization pre-roll metadata missing")
     if meta.get("initialization_pose_schema")!="skeleton_global_pose_v1":
         raise SystemExit("final skeleton pose schema missing")
+    if meta.get("real_time_speed")!=1.0 or meta.get("slow_review_speed")!=0.25:
+        raise SystemExit("motion review speed metadata is not exact")
     present={row["evidence_type"] for row in meta["captures"]}
     missing=REQUIRED-present
     if missing:raise SystemExit("motion evidence types missing: "+",".join(sorted(missing)))
@@ -114,6 +116,22 @@ def main():
     }
     failed=[]
     for animation in a.animations.split(","):
+        animation_rows=[row for row in meta["captures"] if row.get("animation")==animation]
+        if not animation_rows or not all(row.get("fixture_has_tool_and_target") is True and row.get("tool") for row in animation_rows):
+            raise SystemExit(f"shipping tool/target proof missing from {animation}")
+        real_rows=[row for row in animation_rows if row.get("evidence_type")=="real-time-cycle"]
+        slow_rows=[row for row in animation_rows if row.get("evidence_type")=="slow-review-cycle"]
+        if len(slow_rows)<len(real_rows)*3.8 or not all(row.get("speed")==1.0 for row in real_rows) or not all(row.get("speed")==0.25 for row in slow_rows):
+            raise SystemExit(f"{animation} slow review is not a true quarter-speed four-times-duration capture")
+        contact_rows=[row for row in animation_rows if str(row.get("evidence_type","")).startswith(("turn-","close-"))]
+        cycle_contact_rows=[row for row in real_rows+slow_rows if row.get("contact_ready") is True]
+        if not contact_rows or not all(
+            row.get("contact_ready") is True and row.get("contact_alignment_valid") is True
+            and row.get("grip_error_m",999.0)<=0.025 and row.get("impact_error_m",999.0)<=0.025
+            and row.get("secondary_grip_error_m",999.0)<=0.045
+            for row in contact_rows
+        ) or not cycle_contact_rows:
+            raise SystemExit(f"{animation} lacks shipping-synchronized tool/target contact proof")
         real0=_capture(meta,animation,"real-time-cycle","/0000.png")
         slow0=_capture(meta,animation,"slow-review-cycle","/0000.png")
         transition0=_capture(meta,animation,"transition-start","/start.png")
@@ -126,7 +144,8 @@ def main():
         first_step=pose_delta(real0,real1)
         start_translation=max(row["max_translation_m"] for row in start_pairs.values())
         start_rotation=max(row["max_rotation_deg"] for row in start_pairs.values())
-        row={"start_pairs":start_pairs,"start_max_translation_m":start_translation,"start_max_rotation_deg":start_rotation,"first_step":first_step}
+        row={"start_pairs":start_pairs,"start_max_translation_m":start_translation,"start_max_rotation_deg":start_rotation,"first_step":first_step,
+             "contact_review_rows":len(contact_rows),"cycle_contact_rows":len(cycle_contact_rows),"contact_passed":True}
         initialization_validation["animations"][animation]=row
         if start_translation>START_MAX_TRANSLATION_M or start_rotation>START_MAX_ROTATION_DEG or first_step["max_translation_m"]>FIRST_STEP_MAX_TRANSLATION_M or first_step["max_rotation_deg"]>FIRST_STEP_MAX_ROTATION_DEG:
             initialization_validation["passed"]=False
@@ -136,6 +155,7 @@ def main():
             )
     (out/"motion-hashes.json").write_text(json.dumps({"candidate":a.candidate,"frames":hashes,"initialization_validation":initialization_validation},indent=2)+"\n")
     if failed:raise SystemExit("C5 final skeleton pose initialization/continuity is inconsistent after warm-up: "+"; ".join(failed))
-    print(json.dumps({"passed":True,"frames":len(frames),"initialization_method":initialization_validation["method"],"out":str(out.relative_to(ROOT))},indent=2))
+    display_out=out.relative_to(ROOT) if out.is_relative_to(ROOT) else out
+    print(json.dumps({"passed":True,"frames":len(frames),"initialization_method":initialization_validation["method"],"out":str(display_out)},indent=2))
 
 if __name__=="__main__":main()

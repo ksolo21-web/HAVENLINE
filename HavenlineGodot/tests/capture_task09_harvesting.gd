@@ -25,6 +25,20 @@ var frame_usec: Array[float] = []
 var draw_calls: Array[int] = []
 var primitives: Array[int] = []
 var action_token := 901
+var review_stage: Node3D
+var default_source_units := 0
+var visual_review_source_units := 0
+var target_device_logical_size := Vector2.ZERO
+var capture_canvas_transform: Transform2D = Transform2D.IDENTITY
+var capture_logical_size := Vector2.ZERO
+
+func projected_game_canvas_size() -> Vector2:
+	return (capture_canvas_transform * game.size) - (capture_canvas_transform * Vector2.ZERO)
+
+func game_canvas_fully_covers_capture_canvas() -> bool:
+	var projected_origin: Vector2 = capture_canvas_transform * Vector2.ZERO
+	var projected_size: Vector2 = projected_game_canvas_size()
+	return projected_origin.distance_to(Vector2.ZERO) <= 1.0 and projected_size.distance_to(Vector2(root.size)) <= 1.0
 
 func _initialize() -> void:
 	for argument in OS.get_cmdline_user_args():
@@ -60,12 +74,67 @@ func focus_review_visibility() -> void:
 	# carry, transfer, or impact pixels. The authored terrain and lighting remain.
 	var selected_visual: Node3D = game.resource_visuals[String(source.id)]
 	var visible_roots: Array[Node] = [
-		game.sun, game.camera, game.outpost_view, game.player_rig,
+		game.sun, game.camera, game.player_rig, review_stage,
 		selected_visual, game.transfer_feedback, game.harvest_presentation,
 	]
 	for child in game.world.get_children():
 		if child is Node3D and not child is WorldEnvironment and child not in visible_roots:
 			(child as Node3D).visible = false
+	# Some protected scenery systems group render nodes beneath non-Node3D
+	# managers, so direct-child hiding alone can leave a bright unrelated crown in
+	# frame. Resolve every render leaf against the explicit review allow-list.
+	for candidate in game.world.find_children("*","VisualInstance3D",true,false):
+		var visual := candidate as VisualInstance3D
+		var keep := false
+		var belongs_to_selected_source := selected_visual == visual or selected_visual.is_ancestor_of(visual)
+		for visible_root in visible_roots:
+			if is_instance_valid(visible_root) and (visible_root == visual or visible_root.is_ancestor_of(visual)):
+				keep = true
+				break
+		# Isolation must never resurrect an authoritatively depleted target.
+		visual.visible = keep and not (belongs_to_selected_source and int(source.units) <= 0)
+
+func review_material(color: Color, roughness := 0.90, metallic := 0.0) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	material.albedo_color = color
+	material.roughness = roughness
+	material.metallic = metallic
+	return material
+
+func configure_review_stage() -> void:
+	# The approved T02/T03 terrain shader is outside T09 ownership and is not a
+	# useful background for close tool/contact inspection. Keep the real shipping
+	# actor, source, simulation, T07 selection and T08 transfer/carry nodes, while
+	# placing them over a disclosed neutral snow inspection floor. This prevents
+	# unrelated lane contrast from masking T09 pixels without altering gameplay.
+	game.environment.background_color = Color("18344d")
+	game.environment.ambient_light_color = Color("d7ecff")
+	game.environment.ambient_light_energy = 0.34
+	game.environment.tonemap_mode = Environment.TONE_MAPPER_LINEAR
+	game.environment.tonemap_exposure = 0.82
+	game.environment.tonemap_white = 6.0
+	game.environment.fog_enabled = false
+	game.sun.light_color = Color("eef7ff")
+	game.sun.light_energy = 0.72
+	if mode == "asset" or is_instance_valid(review_stage):
+		return
+	# Preserve the shipping source materials in the review packet. Controlled
+	# lighting and the neutral floor isolate T09 without replacing the authored
+	# resource surface, so source identity remains production-derived.
+	review_stage = Node3D.new()
+	review_stage.name = "T09DisclosedNeutralSnowStage"
+	game.world.add_child(review_stage)
+	var actor_ground: Vector3 = game.xyz(game.sim.position)
+	var target_ground: Vector3 = game.xyz(source.position)
+	var center: Vector3 = actor_ground.lerp(target_ground,0.5)
+	center.y = minf(actor_ground.y,target_ground.y)-0.025
+	var floor := MeshInstance3D.new()
+	var plane := PlaneMesh.new()
+	plane.size = Vector2(13.0,13.0)
+	floor.mesh = plane
+	floor.material_override = review_material(Color("7797a8"))
+	floor.position = center
+	review_stage.add_child(floor)
 
 func source_cutaway() -> float:
 	var selected_visual: Node3D = game.resource_visuals[String(source.id)]
@@ -102,6 +171,10 @@ func configure_review_frame(frame: int) -> void:
 	# pine can retain a stale fully-discarded state from the gameplay camera.
 	for visibility_step in 3:
 		game.update_foreground_visibility(actor_point(),0.10)
+	# The protected cutaway updater legitimately restores non-depleted scenery for
+	# gameplay. Reapply the disclosed evidence allow-list after that update so it
+	# cannot resurrect unrelated trees inside this isolated review frame.
+	focus_review_visibility()
 
 func configure_camera(frame := 0) -> void:
 	var actor := actor_point()
@@ -160,7 +233,9 @@ func canonical_action(progress: float) -> Dictionary:
 	}
 
 func capture_png(name: String) -> void:
-	if mode != "asset": focus_review_visibility()
+	if mode != "asset":
+		var frame := int(records[-1].get("frame",0)) if not records.is_empty() else 0
+		configure_review_frame(frame)
 	await process_frame
 	root.get_texture().get_image().save_png(output.path_join(name + ".png"))
 
@@ -299,6 +374,35 @@ func commit(frame: int) -> void:
 		"harvest":game.harvest_presentation.descriptor(),
 	})
 
+func settle_depleted_state(frame: int) -> int:
+	# A depletion still must show the authoritative result, not the preceding
+	# contact pose or an in-flight T08 receipt. Advance the real shipping systems
+	# until T07 has cleared the unavailable action and the bounded transfer/pulse
+	# presentation has completed. Inventory/carry state remains untouched.
+	var settled_row: Dictionary = {}
+	for settle_index in 120:
+		settled_row = await sample_shipping(frame,Vector2.ZERO,"depletion_settle")
+		frame += 1
+		var transfer: Dictionary = settled_row.transfer
+		var harvest: Dictionary = settled_row.harvest
+		var action_clear := String(settled_row.action_identity).is_empty() and not bool(harvest.get("active",false))
+		var transfer_clear := int(transfer.get("active_flights",0)) == 0 and int(transfer.get("active_arrival_pulses",0)) == 0
+		if settle_index >= 72 and action_clear and transfer_clear:
+			break
+	var final_transfer: Dictionary = game.transfer_feedback.descriptor()
+	var final_harvest: Dictionary = game.harvest_presentation.descriptor()
+	assert(String(game.sim.action.get("identity","")).is_empty(),"depleted proof requires cleared T07 action")
+	assert(not bool(final_harvest.get("active",false)),"depleted proof requires hidden T09 tool")
+	assert(int(final_transfer.get("active_flights",0)) == 0 and int(final_transfer.get("active_arrival_pulses",0)) == 0,"depleted proof requires completed T08 transfer")
+	records.append({
+		"frame":frame,"depleted":true,"depletion_settled":true,
+		"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible,
+		"action_identity":String(game.sim.action.get("identity","")),
+		"harvest":final_harvest,"transfer":final_transfer,
+		"carry":game.carry_stacks[game.sim.lead].descriptor(),
+	})
+	return frame+1
+
 func sample_cancelled(frame: int) -> void:
 	var started := Time.get_ticks_usec()
 	game.sim.action = {"kind":"", "id":"", "position":source.position, "actionable":false, "reason":"movement_owns_locomotion"}
@@ -405,8 +509,7 @@ func capture_sequence() -> void:
 		game._process(1.0 / 60.0)
 		action_token += 1
 		lifecycle_frame += 1
-	game._process(1.0 / 60.0)
-	records.append({"frame":lifecycle_frame,"depleted":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
+	lifecycle_frame = await settle_depleted_state(lifecycle_frame)
 	await capture_png("%s-depleted" % resource_kind)
 	for video_frame in range(video_frame_cursor,video_frame_cursor+8,2): await capture_jpg(video_frame)
 	# Let the unchanged 90-second simulation timer perform the respawn while the
@@ -450,6 +553,8 @@ func capture_asset_view() -> void:
 	game.world.add_child(stage)
 	var tool := packed.instantiate() as Node3D
 	stage.add_child(tool)
+	var turntable_material := Harvest.create_tool_palette_material()
+	Harvest.apply_tool_palette(tool,turntable_material)
 	await process_frame
 	var bounds := {"set":false,"value":AABB()}
 	gather_bounds(tool,bounds)
@@ -471,6 +576,30 @@ func capture_asset_view() -> void:
 	await capture_png("asset-%s-%s" % [String(profile.tool),view_id])
 
 func capture_device_view() -> void:
+	# Show the only movement control in the adaptive evidence. Harvesting itself
+	# remains automatic and introduces no button.
+	# Exercise Main's real touch handler; do not fabricate joystick state in the
+	# capture harness. The scene viewport is already behind Main's parent draw in
+	# shipping code, so the screenshot proves the production layering as well.
+	var touch_position := Vector2(game.hud_safe_rect.position.x+game.joystick_radius+22.0,game.hud_safe_rect.end.y-game.joystick_radius-22.0)
+	var touch := InputEventScreenTouch.new()
+	touch.index = 77
+	touch.position = touch_position
+	touch.pressed = true
+	game._gui_input(touch)
+	var drag := InputEventScreenDrag.new()
+	drag.index = 77
+	drag.position = touch_position+Vector2(game.joystick_radius*0.38,-game.joystick_radius*0.24)
+	game._gui_input(drag)
+	assert(game.joystick_id == 77,"T09 device proof must exercise shipping touch input")
+	var joystick_radius: float = float(game.joystick_radius)
+	var capture_scale: Vector2 = capture_canvas_transform.get_scale().abs()
+	var joystick_origin_pixels: Vector2 = capture_canvas_transform * game.joystick_origin
+	var joystick_extent: Vector2 = capture_scale * (joystick_radius + 2.0)
+	var joystick_bounds: Rect2 = Rect2(joystick_origin_pixels - joystick_extent,joystick_extent * 2.0)
+	var capture_canvas: Rect2 = Rect2(Vector2.ZERO,Vector2(root.size))
+	assert(capture_canvas.encloses(joystick_bounds),"T09 joystick circle must be fully inside the captured canvas")
+	assert(game_canvas_fully_covers_capture_canvas(),"T09 game canvas must fully cover the captured canvas")
 	var contact_frame := await advance_fixture_to_shipping_contact(true)
 	if contact_frame < 0: return
 	var committed_row: Dictionary = await sample_shipping(contact_frame,Vector2.ZERO,"fixture_commit")
@@ -485,8 +614,7 @@ func capture_device_view() -> void:
 		game._process(1.0/60.0)
 		action_token += 1
 		lifecycle_frame += 1
-	game._process(1.0/60.0)
-	records.append({"frame":lifecycle_frame,"depleted":true,"source_units":int(source.units),"source_visible":game.resource_visuals[source.id].visible})
+	lifecycle_frame = await settle_depleted_state(lifecycle_frame)
 	await capture_png("device-%s-%s-depleted" % [device_id,resource_kind])
 	var evidence_position: Vector2 = game.sim.position
 	game.sim.position = Vector2(float(game.sim.contract.world.boundX),float(game.sim.contract.world.boundZ))
@@ -500,13 +628,50 @@ func capture_device_view() -> void:
 	await capture_png("device-%s-%s-respawned" % [device_id,resource_kind])
 
 func write_report() -> void:
+	var visible_review_visuals: Array[String] = []
+	for candidate_visual in game.world.find_children("*","VisualInstance3D",true,false):
+		var visual := candidate_visual as VisualInstance3D
+		if visual.is_visible_in_tree():
+			visible_review_visuals.append(String(game.world.get_path_to(visual)))
+	var review_root_paths := {
+		"selected_source":String(game.world.get_path_to(game.resource_visuals[String(source.id)])),
+		"player_rig":String(game.world.get_path_to(game.player_rig)),
+		"transfer_feedback":String(game.world.get_path_to(game.transfer_feedback)),
+		"harvest_presentation":String(game.world.get_path_to(game.harvest_presentation)),
+		"review_stage":String(game.world.get_path_to(review_stage)) if is_instance_valid(review_stage) else "",
+	}
+	var device_control_evidence := {
+		"joystick_active":game.joystick_id != -1,
+		"joystick_input_path":"Main._gui_input/InputEventScreenTouch+InputEventScreenDrag",
+		"shipping_scene_layering":true,
+		"joystick_origin":[game.joystick_origin.x,game.joystick_origin.y],
+		"joystick_current":[game.joystick_current.x,game.joystick_current.y],
+		"joystick_radius":game.joystick_radius,
+		"joystick_origin_capture_pixels":[(capture_canvas_transform * game.joystick_origin).x,(capture_canvas_transform * game.joystick_origin).y],
+		"joystick_radius_capture_pixels":game.joystick_radius*capture_canvas_transform.get_scale().abs().x,
+		"capture_canvas_size":[root.size.x,root.size.y],
+		"capture_canvas_transform_scale":[capture_canvas_transform.get_scale().abs().x,capture_canvas_transform.get_scale().abs().y],
+		"game_logical_canvas_size":[game.size.x,game.size.y],
+		"projected_game_canvas_size":[projected_game_canvas_size().x,projected_game_canvas_size().y],
+		"game_canvas_fully_covers_capture_canvas":game_canvas_fully_covers_capture_canvas(),
+		"target_device_logical_size":[target_device_logical_size.x,target_device_logical_size.y],
+		"joystick_circle_fully_inside_capture_canvas":Rect2(Vector2.ZERO,Vector2(root.size)).encloses(Rect2(capture_canvas_transform*game.joystick_origin-capture_canvas_transform.get_scale().abs()*(game.joystick_radius+2.0),capture_canvas_transform.get_scale().abs()*(game.joystick_radius+2.0)*2.0)),
+		"permanent_action_buttons":int(Harvest.contract().permanent_action_buttons),
+	} if mode == "device" else {}
 	var report := {
 		"task_id":"T09", "candidate":candidate, "mode":mode, "resource":resource_kind,
 		"view":view_id, "device_state":device_id, "window":[root.size.x,root.size.y],
-		"logical_size":[game.size.x,game.size.y], "internal_render":[game.scene_view.size.x,game.scene_view.size.y],
+		"logical_size":[target_device_logical_size.x,target_device_logical_size.y], "capture_canvas_size":[root.size.x,root.size.y], "game_logical_canvas_size":[game.size.x,game.size.y], "internal_render":[game.scene_view.size.x,game.scene_view.size.y],
 		"render_scale":game.scene_view.scaling_3d_scale, "native_4k_render":native_4k and game.scene_view.size.x >= 3840 and game.scene_view.size.y >= 2160,
 		"physical_4k60_verified":false, "scenario_is_test_fixture":true,
+		"review_stage":"disclosed_neutral_snow_stage_with_shipping_actor_source_and_systems" if mode != "asset" else "isolated_tool_turntable",
+		"device_review_canvas":"shipping_joystick_draw_above_scene_texture" if mode == "device" else "not_applicable",
+		"device_control_evidence":device_control_evidence,
+		"default_source_units":default_source_units, "visual_review_source_units":visual_review_source_units,
 		"review_visibility_policy":"selected_actor_source_effects_on_shipping_surface",
+		"source_material_policy":"shipping_materials_unchanged",
+		"review_root_paths":review_root_paths,
+		"review_visible_visual_paths":visible_review_visuals,
 		"capture_progress_driver":"presentation_fixture" if mode == "asset" else "shipping_simulation_step",
 		"t07_selection_authority":"fixture_not_claimed" if mode == "asset" else "context_director.advance",
 		"commit_authority":"outpost_simulation.perform_action",
@@ -530,7 +695,17 @@ func run() -> void:
 		return
 	DirAccess.make_dir_recursive_absolute(output)
 	game = Main.new()
-	game.size = DEVICE_SIZES.get(device_id,Vector2(2400,1080))
+	target_device_logical_size = DEVICE_SIZES.get(device_id,Vector2(2400,1080))
+	# The review window is a downscaled, aspect-matched stand-in for the target
+	# device. Main must occupy the complete captured pixel canvas. Hosted X11 may
+	# apply a HiDPI canvas transform, so root.size alone can shrink Main and leave
+	# dark right/bottom bands. Invert that transform to obtain the local Control
+	# size that projects exactly onto the root texture.
+	capture_canvas_transform = root.get_final_transform()
+	var capture_scale: Vector2 = capture_canvas_transform.get_scale().abs()
+	assert(capture_scale.x > 0.0 and capture_scale.y > 0.0,"T09 capture canvas transform must be invertible")
+	capture_logical_size = Vector2(root.size) / capture_scale
+	game.size = capture_logical_size
 	root.add_child(game)
 	for frame in 5: await process_frame
 	game.set_process(false)
@@ -547,6 +722,15 @@ func run() -> void:
 		push_error("T09 capture source missing: " + resource_kind)
 		quit(3)
 		return
+	default_source_units = int(source.units)
+	# Two units are sufficient to prove a normal commit followed by authoritative
+	# depletion/respawn. Keeping the review fixture bounded prevents seventeen
+	# overlapping transfer flights and a four-metre evidence-only carry tower from
+	# hiding the actor, target and tool. Default yields remain tested unchanged.
+	if mode in ["sequence","device"]:
+		source.units = mini(2,int(source.units))
+		game.harvest_presentation.sync_source(String(source.id),int(source.units),float(source.respawn))
+	visual_review_source_units = int(source.units)
 	focus_review_visibility()
 	action_token += ["wood","stone","metal","fuel"].find(resource_kind) * 100
 	# Opening sources sit outside the protected camp fence. Start on their camp
@@ -569,6 +753,7 @@ func run() -> void:
 	game.sim.velocity = Vector2.ZERO
 	game.player_rig.position = game.xyz(game.sim.position)
 	game.player_rig.rotation.y = atan2(game.sim.facing.x,game.sim.facing.y)
+	configure_review_stage()
 	if mode == "sequence": await capture_sequence()
 	elif mode == "tool": await capture_tool_view()
 	elif mode == "asset": await capture_asset_view()
