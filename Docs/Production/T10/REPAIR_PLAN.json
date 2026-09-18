@@ -4,7 +4,7 @@
   "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
   "c0_report_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
-  "c0_report_sha256": "e17b8f3714cbd3d2f5e16130980a92ec7a07ee625911bbc156672095b9b6743c",
+  "c0_report_sha256": "31745d19161b9a99d18c9bef44b79e639b4f55925c03a610e0a51bb2c38794c4",
   "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "repair_base_status": "CUMULATIVE_REPAIR_CYCLE_ROOT_WITH_LATEST_TERMINAL_FAILURE_BOUND",
   "repair_base_rule": "Measure the complete reconciled B037-B061 owner-plus-task diff from cumulative repair root c7a18d002fe8d0f3978370f3e4567ba88bfe17e8. The latest terminal evidence is 5fc87f4897597463d2f6b39229ef9479bd9bc776; it is evidence only and no score is reusable.",
@@ -437,7 +437,8 @@
         "tools/havenline/production/validate_architecture_v32_t10.py",
         ".github/workflows/havenline-production-governance.yml",
         "Docs/Production/WORKSTREAM_REGISTRY.json",
-        "tools/havenline/production/tests/test_t10_activation_validation.py"
+        "tools/havenline/production/tests/test_t10_activation_validation.py",
+        "Docs/Production/ChangeRequests/T10-c0-grounding-blocker-registry.json"
       ],
       "causal_change": "Scan downloaded text artifacts deterministically, retain only actual failed dispositions with source path, line and source hash, and include that bounded projection in the immutable packet and model request.",
       "verification": [
@@ -456,7 +457,8 @@
         "tools/havenline/production/validate_architecture_v32_t10.py",
         ".github/workflows/havenline-production-governance.yml",
         "Docs/Production/WORKSTREAM_REGISTRY.json",
-        "tools/havenline/production/tests/test_t10_activation_validation.py"
+        "tools/havenline/production/tests/test_t10_activation_validation.py",
+        "Docs/Production/ChangeRequests/T10-c0-grounding-regression-contract.json"
       ],
       "causal_change": "For T10, require every evidence item to cite an exact retained SOURCE | EXACT_QUOTE and every files_to_change entry to equal a tracked repository path; reject the diagnosis before publication when either binding fails.",
       "verification": [
