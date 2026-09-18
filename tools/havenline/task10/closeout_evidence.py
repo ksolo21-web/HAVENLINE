@@ -15,6 +15,8 @@ def terminal_errors(candidate,run,regression,aggregate,provenance):
  if aggregate.get('candidate_commit')!=candidate or aggregate.get('passed') is not True or set(aggregate.get('required_critics',[]))!={'C1','C2','C3','C4','C6','C7'}:errors.append('complete exact-source critic aggregate required')
  rows=aggregate.get('results',[])
  if {x.get('critic_id') for x in rows}!={'C1','C2','C3','C4','C6','C7'} or len(rows)!=6 or any(x.get('passed') is not True or x.get('candidate')!=candidate for x in rows):errors.append('six validated exact-source critic results required')
+ supplement=aggregate.get('quantitative_c6',{})
+ if supplement.get('critic_id')!='C6' or supplement.get('candidate')!=candidate or supplement.get('passed') is not True:errors.append('separate exact-source quantitative C6 required')
  if provenance.get('candidate_commit')!=candidate:errors.append('runner provenance source mismatch')
  return errors
 

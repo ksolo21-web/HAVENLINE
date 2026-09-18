@@ -22,3 +22,18 @@ class OriginalOutputTests(unittest.TestCase):
    elif change=='failed':data[1]['groups'][0]['passed']=False
    else:data[1]['fatal_error']='truncated'
    with self.subTest(change=change),self.assertRaises(AssertionError):m.verify_original(*data)
+ def test_c6_raw_identity_cannot_be_substituted(self):
+  data=self.rows('C6');data[1].update(candidate_hash=data[-1],critic_id='C6');m.verify_original(*data)
+  for key,value in [('candidate_hash','b'*40),('critic_id','C1')]:
+   forged=copy.deepcopy(data);forged[1][key]=value
+   with self.subTest(key=key),self.assertRaises(AssertionError):m.verify_original(*forged)
+
+ def test_quantitative_bytes_must_match_reviewed_manifest(self):
+  import tempfile,json,hashlib
+  with tempfile.TemporaryDirectory() as t:
+   path=Path(t)/'performance.json';path.write_text(json.dumps({'candidate_commit':'a'*40,'draw_calls':9}))
+   item=dict(path='critic-input/performance.json',kind='json',category='quantitative_budgets',sha256=hashlib.sha256(path.read_bytes()).hexdigest())
+   manifest=dict(candidate_commit='a'*40,critic_id='C6',groups=[dict(items=[item])])
+   m.verify_performance_binding(path,manifest,'a'*40)
+   path.write_text(json.dumps({'candidate_commit':'a'*40,'draw_calls':0}))
+   with self.assertRaises(AssertionError):m.verify_performance_binding(path,manifest,'a'*40)

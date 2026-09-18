@@ -98,6 +98,51 @@ class T10ActivationValidationTests(unittest.TestCase):
         state[0]["tasks"]["T09"]["status"] = "UNDER_REVIEW"
         self.assertTrue(any("dependencies are not all APPROVED" in error for error in self.errors(tuple(state))))
 
+    def completed_state(self):
+        graph, registry, ownership, gates, checklist = self.state()
+        for i in range(1,11): graph['tasks'][f'T{i:02d}']['status']='APPROVED'
+        registry['workstreams'][0]['status']='APPROVED'
+        registry['workstreams'][0]['candidate_commit']='b'*40
+        owner=ownership['active_owners'].pop()
+        owner.update(status='APPROVED',accepted_source='b'*40,integrated_source='c'*40)
+        ownership['completed_production_owners']=[owner]
+        for field in list(gates):
+            if field.startswith('active_'):gates[field]=None
+        gates['approved_tasks']=[f'T{i:02d}' for i in range(1,11)]
+        gates['completed_task_records']={'T10':dict(status='APPROVED',accepted_source='b'*40,integrated_source='c'*40,record='Docs/Production/T10/verified-completion.json')}
+        gates['next_post_t03_wave'][0]['state']='APPROVED'
+        return graph, registry, ownership, gates, checklist
+
+    def test_complete_terminal_state(self):
+        self.assertEqual([],self.errors(self.completed_state()))
+
+    def test_terminal_registry_candidate_failures(self):
+        for value in (None,'bad','d'*40):
+            state=self.completed_state()
+            if value is None:state[1]['workstreams'][0].pop('candidate_commit')
+            else:state[1]['workstreams'][0]['candidate_commit']=value
+            with self.subTest(value=value):self.assertTrue(self.errors(state))
+
+    def test_terminal_owner_failures(self):
+        for change in ('missing','duplicate','active','source','status','branch'):
+            state=self.completed_state();owners=state[2]
+            if change=='missing':owners['completed_production_owners']=[]
+            elif change=='duplicate':owners['completed_production_owners']*=2
+            elif change=='active':owners['active_owners']=[dict(task_id='T10')]
+            else:owners['completed_production_owners'][0][{'source':'integrated_source'}.get(change,change)]='wrong'
+            with self.subTest(change=change):self.assertTrue(self.errors(state))
+
+    def test_terminal_gate_failures(self):
+        for change in ('pointer','missing_pointer','source','record','status','prefix_missing','prefix_extra','future'):
+            state=self.completed_state();gates=state[3]
+            if change=='pointer':gates['active_task']='T10'
+            elif change=='missing_pointer':del gates['active_evidence']
+            elif change=='prefix_missing':gates['approved_tasks'].pop()
+            elif change=='prefix_extra':gates['approved_tasks'].append('T11')
+            elif change=='future':state[0]['tasks']['T11']['status']='ASSIGNED'
+            else:gates['completed_task_records']['T10'][{'source':'accepted_source'}.get(change,change)]='wrong'
+            with self.subTest(change=change):self.assertTrue(self.errors(state))
+
 
 class T10WorkflowActivationTests(unittest.TestCase):
     @classmethod

@@ -61,62 +61,60 @@ jobs:
           assert report['integration_allowed'] is not True, report
           PY
 
-      - name: Validate isolated candidate reconciliation shape
+      - name: Validate lifecycle-appropriate candidate scope
         run: |
           set -euo pipefail
-          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
-          candidate=$(git rev-parse HEAD)
-          python3 tools/havenline/task10/prepare_reconciliation.py \
-            --integration-base "$integration" \
-            --isolated-candidate "$candidate" \
-            --output task10-adapter-preflight/reconciliation.json
-          python3 - <<'PY'
-          import json
+          cat > /tmp/t10_adapter_scope.py <<'PY'
+          import json, subprocess, sys
           from pathlib import Path
-          report=json.loads(Path('task10-adapter-preflight/reconciliation.json').read_text())
-          assert report['passed'] is True, report
-          assert report['path_reconciliation_clean'] is True, report
-          assert not report['reservation_errors'], report
-          assert not report['unauthorized_isolated_paths'], report
-          assert not report['overlapping_t10_drift'], report
-          # Dependency readiness may legitimately be false before T09 closes.
-          assert report['handoff_ready_for_reconcile'] == report['dependencies_fully_approved'], report
-          assert report['integration_allowed'] is False, report
-          assert report['task_approved'] is False, report
-          PY
+          sys.path.insert(0, 'tools/havenline/production')
+          from workstream import registry_errors, ACTIVE_STATES
 
-      - name: Summarize live handoff state
-        run: |
-          set -euo pipefail
-          python3 - <<'PY'
-          import json, subprocess
-          from pathlib import Path
-          adapter=json.loads(Path('task10-adapter-preflight/adapter-contract.json').read_text())
-          reconcile=json.loads(Path('task10-adapter-preflight/reconciliation.json').read_text())
-          t09=reconcile['dependency_state']['T09']
-          ready=bool(reconcile['handoff_ready_for_reconcile'])
-          result={
-            'task':'T10',
-            'candidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
-            'integration_base':reconcile['integration_base'],
-            'integration_t09_state':t09,
-            'prepared_adapter_contract_valid':adapter['prepared_contract_valid'],
-            'reservation_source':reconcile['reservation_source'],
-            'path_reconciliation_clean':reconcile['path_reconciliation_clean'],
-            'dependencies_fully_approved':reconcile['dependencies_fully_approved'],
-            'handoff_ready_for_reconcile':ready,
-            'real_adapter_bound':adapter['real_adapter_bound'],
-            'integration_allowed':False,
-            'handoff_action':(
-              'run strict post-T09 activation/reconciliation and integration-owner adapter change'
-              if ready else
-              'remain BUILT_PENDING_DEPENDENCY until exact dependency closure'
-            ),
-            'passed':True,
-          }
-          Path('task10-adapter-preflight/summary.json').write_text(json.dumps(result,indent=2)+'\n')
-          print(json.dumps(result,indent=2))
+          def validate_report(report, mode, base, candidate, integration):
+              assert report['passed'] is True, report
+              if mode == 'registered':
+                  assert (report['task_id'], report['base'], report['head'], report['integration_head']) == ('T10', base, candidate, integration), report
+                  assert not report['errors'], report
+              else:
+                  assert report['path_reconciliation_clean'] is True, report
+                  assert not report['reservation_errors'] and not report['unauthorized_isolated_paths'] and not report['overlapping_t10_drift'], report
+                  assert report['handoff_ready_for_reconcile'] == report['dependencies_fully_approved'], report
+                  assert report['integration_allowed'] is False and report['task_approved'] is False, report
+
+          def select_mode(registry):
+              errors = registry_errors(registry)
+              assert not errors, errors
+              rows = [r for r in registry['workstreams'] if r['task_id'] == 'T10']
+              assert len(rows) <= 1, 'duplicate T10 registration'
+              row = rows[0] if rows else {}
+              status = row.get('status')
+              if status in (None, 'LOCKED', 'PREPARED'):
+                  return 'preactivation', row
+              assert status != 'APPROVED' and status in ACTIVE_STATES, 'invalid forward-use lifecycle'
+              return 'registered', row
+
+          if __name__ == '__main__':
+              registry = json.loads(Path('Docs/Production/WORKSTREAM_REGISTRY.json').read_text())
+              mode, row = select_mode(registry)
+              integration = subprocess.check_output(['git','rev-parse','origin/codex/havenline-sequential-task-01'], text=True).strip()
+              candidate = subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip()
+              target = Path('task10-adapter-preflight/reconciliation.json')
+              base = row.get('base_commit')
+              if mode == 'registered':
+                  result = subprocess.run([sys.executable,'tools/havenline/production/workstream.py','validate-candidate','T10','--base',base,'--head',candidate,'--integration-head',integration], text=True, capture_output=True)
+                  target.write_text(result.stdout)
+                  if result.returncode:
+                      raise SystemExit(result.stderr or result.stdout)
+              else:
+                  subprocess.run([sys.executable,'tools/havenline/task10/prepare_reconciliation.py','--integration-base',integration,'--isolated-candidate',candidate,'--output',str(target)], check=True)
+              report = json.loads(target.read_text())
+              validate_report(report, mode, base, candidate, integration)
+              summary = dict(task='T10',candidate=candidate,integration_base=integration,mode=mode,passed=True,integration_allowed=False,task_approved=False,
+                             handoff_action='continue registered build/review; approval requires full closure' if mode=='registered' else ('run strict post-T09 activation/reconciliation' if report['handoff_ready_for_reconcile'] else 'remain BUILT_PENDING_DEPENDENCY'))
+              Path('task10-adapter-preflight/summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+              print(json.dumps(summary))
           PY
+          python3 /tmp/t10_adapter_scope.py
 
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:

@@ -74,7 +74,7 @@ def t10_activation_errors(graph,registry,ownership,task_gates,checklist):
         if any(task_gates.get(field) is not None for field in pointer_fields):
             errors.append("task-gates must clear active pointers while T10 is LOCKED")
         return errors
-    if status not in T10_ACTIVE_STATES:
+    if status not in T10_ACTIVE_STATES and status!="APPROVED":
         errors.append(f"invalid active T10 lifecycle state: {status}")
         return errors
 
@@ -100,6 +100,39 @@ def t10_activation_errors(graph,registry,ownership,task_gates,checklist):
         actual=(row.get("workstream_id"),row.get("status"),row.get("owner"),row.get("branch"),row.get("owned_paths"),row.get("dependencies"),row.get("critic_requirements"),row.get("evidence_path"))
         if actual!=expected:
             errors.append("T10 workstream activation identity mismatch")
+
+    if status=="APPROVED":
+        base=row.get("base_commit")
+        if not isinstance(base,str) or not re.fullmatch(r"[0-9a-f]{40}",base):
+            errors.append("T10 completed base commit invalid")
+        if any(owner.get("task_id")=="T10" for owner in ownership.get("active_owners",[])):
+            errors.append("T10 completed task retains active owner")
+        fields=("active_task","active_status","active_base_integration_commit","active_frozen_scope","active_task_packet","active_evidence","active_critic_state")
+        if any(field not in task_gates or task_gates[field] is not None for field in fields):
+            errors.append("T10 completed task must clear all active pointers")
+        completed=[owner for owner in ownership.get("completed_production_owners",[]) if owner.get("task_id")=="T10"]
+        record=task_gates.get("completed_task_records",{}).get("T10",{})
+        if len(completed)!=1:
+            errors.append("T10 completed owner missing or duplicated")
+        else:
+            owner=completed[0]
+            if (owner.get("workstream"),owner.get("status"),owner.get("owner"),owner.get("branch"),owner.get("base_commit"),owner.get("paths_alias"))!=(T10_WORKSTREAM,"APPROVED",T10_OWNER,T10_BRANCH,base,T10_ALIAS):
+                errors.append("T10 completed owner identity mismatch")
+            for field in ("accepted_source","integrated_source"):
+                value=owner.get(field)
+                if not isinstance(value,str) or not re.fullmatch(r"[0-9a-f]{40}",value) or record.get(field)!=value:
+                    errors.append("T10 completed source identity mismatch: "+field)
+        accepted=row.get("candidate_commit")
+        if not isinstance(accepted,str) or not re.fullmatch(r"[0-9a-f]{40}",accepted) or accepted!=record.get("accepted_source"):
+            errors.append("T10 completed registry candidate mismatch")
+        if record.get("status")!="APPROVED" or record.get("record")!="Docs/Production/T10/verified-completion.json":
+            errors.append("T10 completed task record identity mismatch")
+        if task_gates.get("approved_tasks")!=[f"T{i:02d}" for i in range(1,11)] or any(graph.get("tasks",{}).get(f"T{i:02d}",{}).get("status")!="APPROVED" for i in range(1,11)):
+            errors.append("T10 completed approved prefix mismatch")
+        gate_rows=[gate for gate in task_gates.get("next_post_t03_wave",[]) if gate.get("task")=="T10"]
+        if len(gate_rows)!=1 or (gate_rows[0].get("state"),gate_rows[0].get("owner"),gate_rows[0].get("branch"),gate_rows[0].get("base_commit"))!=("APPROVED",T10_OWNER,T10_BRANCH,base):
+            errors.append("T10 completed wave row mismatch")
+        return errors
 
     owners=[owner for owner in ownership.get("active_owners",[]) if owner.get("task_id")=="T10"]
     if len(owners)!=1:
@@ -460,6 +493,7 @@ def main():
         if f"| {t} |" not in plan:errors.append("build plan missing "+t)
     if t03_status=="APPROVED":
         expected_approved=(
+            [f"T{i:02d}" for i in range(1,11)] if t09_status=="APPROVED" and graph["tasks"]["T10"].get("status")=="APPROVED" else
             ["T01","T02","T03","T04","T05","T06","T07","T08","T09"] if t09_status=="APPROVED" else
             ["T01","T02","T03","T04","T05","T06","T07","T08"] if t08_status=="APPROVED" else
             ["T01","T02","T03","T04","T05","T06","T07"] if t07_status=="APPROVED" else

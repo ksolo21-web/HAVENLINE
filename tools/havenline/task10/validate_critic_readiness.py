@@ -44,6 +44,46 @@ def authority_errors(domain: dict, integration: dict, lifecycle: dict, native4k:
     return errors
 
 
+def package_errors(root, candidate):
+    from build_critic_evidence import benchmark_errors, prompt_errors, compact_progression, digest, SCOPE_SYNOPSIS
+    errors=[]
+    try:
+        index=load(root/'evidence-index.json')
+        assert index['candidate']==candidate
+        for rel,expected in index['files'].items():
+            assert (root/rel).is_file() and digest(root/rel)==expected, 'indexed raw digest mismatch '+rel
+        assert (root/'scope-brief.txt').read_text()==SCOPE_SYNOPSIS
+        proof=compact_progression(load(root/'progression.json'))
+        assert (root/'progression-brief.txt').read_text()==proof+'\nRaw critic-input/progression.json SHA256 '+digest(root/'progression.json')+'\n'
+        errors.extend(benchmark_errors(load(root/'benchmark/manifest.json'),candidate))
+        required={'FROZEN_SCOPE.md','recipes.json','progression.json','domain-tests.json','integration-tests.json','review-summary.json','motion-timeline.json','save-matrix/save-matrix.json','benchmark/manifest.json','performance.json'}
+        for cid in ('C3','C4','C6','C7'):
+            manifest=load(root/(cid+'-manifest.json'))
+            assert manifest['candidate_commit']==candidate and manifest['critic_id']==cid
+            entries=manifest['preserved_sources']
+            assert {i['path'].removeprefix('critic-input/') for i in entries}==required
+            for item in entries+[i for g in manifest['groups'] for i in g['items']]:
+                rel=item['path'].removeprefix('critic-input/')
+                assert rel in index['files'] and index['files'][rel]==item['sha256'], 'manifest/index mismatch '+rel
+            if cid!='C6':
+                # Rebase only filesystem paths for transported package validation.
+                transported=json.loads(json.dumps(manifest))
+                for group in transported['groups']:
+                    for item in group['items']:item['path']=item['path'].removeprefix('critic-input/')
+                errors.extend(prompt_errors(transported,root))
+                categories={i['category'] for g in manifest['groups'] for i in g['items']}
+                spec,_=resolve_critic('T10',cid,load(ROOT/'Docs/Production/CRITIC_EXECUTION.json'),load(ROOT/'Docs/Production/CRITIC_MATRIX.json'))
+                assert set(spec['required_categories'])<=categories
+                if cid in ('C3','C4'):
+                    paths=[i['path'].removeprefix('critic-input/') for g in manifest['groups'] for i in g['items'] if i['kind'] in ('image','motion_frame')]
+                    expected={'native4k/'+s+'-front.png' for s in REQUIRED_STATES}
+                    expected|={str(p.relative_to(root)) for p in (root/'capture').glob('motion-*.png')}
+                    expected|={str(p.relative_to(root)) for s in ('blocked','complete') for p in (root/'device-layout').glob('*/'+s+'-front.png')}
+                    assert len(paths)==len(expected) and set(paths)==expected, 'visual coverage incomplete'
+    except (KeyError,AssertionError,OSError,ValueError,TypeError) as exc: errors.append('critic package: '+str(exc))
+    return errors
+
+
 def main() -> None:
     ap = argparse.ArgumentParser()
     ap.add_argument("--evidence-root", required=True)
@@ -62,6 +102,7 @@ def main() -> None:
 
     errors: list[str] = []
     candidate = args.candidate
+    errors.extend(package_errors(ROOT / "critic-input", candidate))
     errors.extend(authority_errors(domain, integration, lifecycle, native4k, candidate))
     execution = load(ROOT / "Docs/Production/CRITIC_EXECUTION.json")
     matrix = load(ROOT / "Docs/Production/CRITIC_MATRIX.json")

@@ -52,3 +52,41 @@ class WorkflowTests(unittest.TestCase):
         for name in ('prebuild', 'preparation'):
             source = (WORKFLOWS / ('havenline-task10-' + name + '.yml')).read_text()
             self.assertIn('Reject activated forward use of historical preparation workflow', source)
+
+class AdapterRoutingTests(unittest.TestCase):
+    @classmethod
+    def setUpClass(cls):
+        source=(WORKFLOWS/'havenline-task10-adapter-preflight.yml').read_text()
+        body=source.split("cat > /tmp/t10_adapter_scope.py <<'PY'\n",1)[1].split('          PY\n',1)[0]
+        cls.namespace={'__name__':'workflow_fixture'}
+        exec(compile('\n'.join(line[10:] for line in body.splitlines()),'adapter_scope','exec'),cls.namespace)
+    def test_lifecycle_routing(self):
+        from unittest.mock import patch
+        for status,mode in [(None,'preactivation'),('LOCKED','preactivation'),('PREPARED','preactivation'),('ASSIGNED','registered'),('BLOCKED','registered'),('FIX_REQUIRED','registered')]:
+            registry={'workstreams':[] if status is None else [dict(task_id='T10',status=status)]}
+            with patch.dict(self.namespace,registry_errors=lambda r:[]):
+                self.assertEqual(mode,self.namespace['select_mode'](registry)[0])
+        for status in ('APPROVED','unknown'):
+            with patch.dict(self.namespace,registry_errors=lambda r:[]),self.assertRaises(AssertionError):
+                self.namespace['select_mode']({'workstreams':[dict(task_id='T10',status=status)]})
+        with patch.dict(self.namespace,registry_errors=lambda r:['invalid registry']),self.assertRaises(AssertionError):
+            self.namespace['select_mode']({'workstreams':[]})
+    def test_registered_report_binding(self):
+        check=self.namespace['validate_report'];base='a'*40;head='b'*40;integration='c'*40
+        report=dict(passed=True,task_id='T10',base=base,head=head,integration_head=integration,errors=[])
+        check(report,'registered',base,head,integration)
+        for key,value in [('passed',False),('base','wrong'),('head','wrong'),('errors',['unauthorized'])]:
+            with self.subTest(key=key),self.assertRaises(AssertionError):check(dict(report,**{key:value}),'registered',base,head,integration)
+        with self.assertRaises(KeyError):check(dict(passed=True),'registered',base,head,integration)
+    def test_failed_command_stops_and_no_scope_waiver(self):
+        source=(WORKFLOWS/'havenline-task10-adapter-preflight.yml').read_text()
+        self.assertIn('if result.returncode:',source)
+        self.assertIn('raise SystemExit(result.stderr or result.stdout)',source)
+        self.assertIn('check=True',source)
+        self.assertNotIn('simulation.gd',source)
+    def test_benchmark_uses_real_time_without_movie(self):
+        source=(WORKFLOWS/'havenline-task10-isolated.yml').read_text()
+        block=source.split('name: Measure warmed idle and committing performance',1)[1].split('      - name:',1)[0]
+        self.assertIn('benchmark_world_transform.gd',block)
+        self.assertNotIn('--fixed-fps',block)
+        self.assertNotIn('--write-movie',block)

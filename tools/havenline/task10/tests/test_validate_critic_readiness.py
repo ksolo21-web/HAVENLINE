@@ -31,3 +31,18 @@ class AuthorityReadinessTests(unittest.TestCase):
             rows = self.records()
             rows[index][field] = False
             self.assertTrue(module.authority_errors(*rows, 'a' * 40))
+
+class PackageBindingTests(unittest.TestCase):
+    def test_missing_or_tampered_raw_package_rejects(self):
+        import hashlib,json,sys,tempfile
+        sys.path.insert(0,str(ROOT/'tools/havenline/task10'))
+        with tempfile.TemporaryDirectory() as t:
+            root=Path(t);raw=root/'progression.json';raw.write_text('{}')
+            index=dict(candidate='a'*40,files={'progression.json':hashlib.sha256(raw.read_bytes()).hexdigest()})
+            (root/'evidence-index.json').write_text(json.dumps(index))
+            raw.write_text('{"tampered":true}')
+            errors=module.package_errors(root,'a'*40)
+            self.assertTrue(any('indexed raw digest mismatch' in e for e in errors))
+            raw.unlink()
+            self.assertTrue(module.package_errors(root,'a'*40))
+            self.assertTrue(module.package_errors(root,'b'*40))
