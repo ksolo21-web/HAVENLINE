@@ -111,8 +111,8 @@ jobs:
           set -euo pipefail
           if [ "${{ github.event_name }}" = "pull_request" ]; then base="${{ github.event.pull_request.base.sha }}"; else base=$(git rev-parse HEAD^); fi
           echo '4858759f46b3c34d942082cb9fa9ea11a14eb0f871c131eb1f6eeeb26fb54c9d  Docs/Production/ARCHITECTURE_RELEASE_LOCK.json' | sha256sum -c -
-          # V3.2 composes validate_architecture_release_lock.py with only the authorized T09 policy delta.
-          python3 tools/havenline/production/validate_architecture_v32_t09.py --output /tmp/v32-release-lock.json
+          # V3.2 composes validate_architecture_release_lock.py with only the authorized T09 policy and T10 canary deltas.
+          python3 tools/havenline/production/validate_architecture_v32_t10.py --output /tmp/v32-release-lock.json
           python3 tools/havenline/production/architecture_v31.py validate > /tmp/v31-validation.json
           python3 tools/havenline/production/architecture_v31.py readiness T10 > /tmp/v31-t10.json
           python3 tools/havenline/production/architecture_v31.py readiness T68 > /tmp/v31-t68.json

@@ -406,12 +406,49 @@
       "known_blockers": [],
       "next_action": "Preserve T09 completion; T10 remains LOCKED pending separate preparation, ownership, and activation.",
       "status_updated_at": "2026-09-18T01:30:01.987770Z"
+    },
+    {
+      "task_id": "T10",
+      "task_name": "World Transformation Framework",
+      "workstream_id": "T10-world-transformation-builder",
+      "status": "ASSIGNED",
+      "owner": "world-transformation-builder",
+      "branch": "havenline/T10-world-transformation",
+      "base_commit": "62f5a13753968c77a0feb47a18d93c82d8c5b581",
+      "dependencies": [
+        "T05",
+        "T08",
+        "T09"
+      ],
+      "owned_paths": [
+        "@reservation:T10"
+      ],
+      "protected_paths": [
+        "@protected:approved",
+        "@integration-only"
+      ],
+      "candidate_commit": null,
+      "candidate_hash_or_artifact": null,
+      "tests": {},
+      "evidence_path": "Docs/Production/Evidence/T10/",
+      "critic_requirements": [
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ],
+      "critic_status": {},
+      "integration_status": "not integrated",
+      "known_blockers": [],
+      "next_action": "Create the isolated T10 builder branch from the activation governance checkpoint and begin the frozen World Transformation Framework candidate."
     }
   ],
   "notes": [
     "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
-    "T03-T09 are APPROVED. T09 exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0 passed G1-G14 and fresh strict C2/C3/C4/C5/C6 review; T10+ runtime work remains locked until explicit activation and ownership.",
     "All future runtime builders use isolated branches and cannot approve themselves.",
-    "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them."
+    "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them.",
+    "T03-T09 are APPROVED. T10 is ASSIGNED with frozen scope, owner and disjoint reservation; T11+ runtime remains dependency-gated."
   ]
 }

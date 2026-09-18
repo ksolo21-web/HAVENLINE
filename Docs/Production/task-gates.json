@@ -99,17 +99,17 @@
     "all_applicable_gates_must_pass": true,
     "no_unresolved_mandatory_defects": true
   },
-  "active_task": null,
-  "active_task_title": null,
-  "active_status": null,
-  "active_frozen_scope": null,
-  "active_task_packet": null,
-  "active_base_integration_commit": null,
+  "active_task": "T10",
+  "active_task_title": "World Transformation Framework",
+  "active_status": "ASSIGNED",
+  "active_frozen_scope": "Docs/Production/T10/FROZEN_SCOPE.md",
+  "active_task_packet": "Docs/Production/T10/TASK_PACKET.md",
+  "active_base_integration_commit": "62f5a13753968c77a0feb47a18d93c82d8c5b581",
   "active_candidate_source": null,
   "active_candidate_run": null,
   "active_tests": null,
-  "active_evidence": null,
-  "active_critic_state": null,
+  "active_evidence": "Docs/Production/Evidence/T10/",
+  "active_critic_state": "PENDING_BUILD_AND_INDEPENDENT_REVIEW",
   "task04_plus_runtime_locked": false,
   "task05_plus_runtime_locked": false,
   "task06_plus_runtime_locked": false,
@@ -321,10 +321,19 @@
       "owner": "harvesting-acquisition-builder",
       "base_commit": "7492074e40a0b061f31d8c32602b7a581b2610f3",
       "reason": "Exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0 passed 17 suites / 1006 checks, 7/7 save cases, 6/6 device cases, 1193/1193 indexed hashes, G1-G14, and fresh independent C2/C3/C4/C5/C6 review with every mandatory dimension strictly above 9.0 and zero unresolved defects."
+    },
+    {
+      "task": "T10",
+      "branch": "havenline/T10-world-transformation",
+      "state": "ASSIGNED",
+      "owner": "world-transformation-builder",
+      "base_commit": "62f5a13753968c77a0feb47a18d93c82d8c5b581",
+      "reason": "T05/T08/T09 are approved; T10 frozen scope, activation preflight and disjoint reservation are complete. Build and independent C1/C2/C3/C4/C6/C7 review remain pending."
     }
   ],
   "whole_game_approved": false,
   "physical_phone_tablet_native_4k60_verified": false,
   "unfinished_apk_delivery_allowed": false,
-  "user_testing_requested": false
+  "user_testing_requested": false,
+  "task10_plus_runtime_locked": false
 }

@@ -30,7 +30,7 @@ def load(path: pathlib.Path):
 
 
 def dump(path: pathlib.Path, value):
-    path.write_text(json.dumps(value, indent=2) + "\n")
+    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n")
 
 
 def fail(message: str):
@@ -102,6 +102,19 @@ def validate_preparation():
 
     active_collisions = []
     for active in ownership.get("active_owners", []):
+        if active.get("task_id") == "T10":
+            expected_self = {
+                "owner": checklist["future_owner"],
+                "branch": checklist["future_builder_branch"],
+                "paths_alias": checklist["planned_owned_alias"],
+            }
+            for key, expected in expected_self.items():
+                if active.get(key) != expected:
+                    errors.append(
+                        f"existing T10 ownership {key} mismatch: "
+                        f"{active.get(key)!r} != {expected!r}"
+                    )
+            continue
         alias = active.get("paths_alias")
         foreign = ownership.get("aliases", {}).get(alias, [])
         for candidate in planned:
@@ -120,8 +133,12 @@ def validate_preparation():
             errors.append(f"missing/empty preparation artifact: {required.relative_to(ROOT)}")
 
     row = next((x for x in registry.get("workstreams", []) if x.get("task_id") == "T10"), None)
-    if row and row.get("status") not in ("LOCKED", "PREPARED"):
-        errors.append(f"pre-activation registry T10 status must be LOCKED/PREPARED, got {row.get('status')}")
+    legal_states = {
+        "LOCKED", "PREPARED", "ASSIGNED", "BUILDING_ISOLATED",
+        "BUILT_PENDING_DEPENDENCY",
+    }
+    if row and row.get("status") not in legal_states:
+        errors.append(f"pre-integration registry T10 status is illegal: {row.get('status')}")
 
     result = {
         "task_id": "T10",
@@ -173,8 +190,11 @@ def validate_activation(base: str):
     if stale_t09_owner:
         errors.append("T09 is still listed as an active owner; finish T09 closeout before T10 activation")
 
-    if graph.get("tasks", {}).get("T10", {}).get("status") not in ("LOCKED", "PREPARED"):
-        errors.append(f"unexpected pre-activation T10 graph state: {graph.get('tasks', {}).get('T10', {}).get('status')}")
+    if graph.get("tasks", {}).get("T10", {}).get("status") not in (
+        "LOCKED", "PREPARED", "ASSIGNED", "BUILDING_ISOLATED",
+        "BUILT_PENDING_DEPENDENCY",
+    ):
+        errors.append(f"unexpected pre-integration T10 graph state: {graph.get('tasks', {}).get('T10', {}).get('status')}")
 
     result = {
         "task_id": "T10",

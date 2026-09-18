@@ -179,9 +179,31 @@
       "Docs/Production/T09/**",
       "tools/havenline/task09/**",
       ".github/workflows/havenline-task09-*.yml"
+    ],
+    "@reservation:T10": [
+      "HavenlineGodot/scripts/world_transform.gd",
+      "HavenlineGodot/scripts/world_transform_view.gd",
+      "HavenlineGodot/data/world_transform_recipes.json",
+      "HavenlineGodot/assets/world_transform_v1/**",
+      "HavenlineGodot/tests/test_task10_world_transform.gd",
+      "HavenlineGodot/tests/test_task10_integration.gd",
+      "HavenlineGodot/tests/capture_task10_world_transform.gd",
+      "Docs/Production/T10/**",
+      "tools/havenline/task10/**",
+      ".github/workflows/havenline-task10-*.yml"
     ]
   },
-  "active_owners": [],
+  "active_owners": [
+    {
+      "workstream": "T10-world-transformation-builder",
+      "task_id": "T10",
+      "owner": "world-transformation-builder",
+      "branch": "havenline/T10-world-transformation",
+      "paths_alias": "@reservation:T10",
+      "status": "ASSIGNED",
+      "base_commit": "62f5a13753968c77a0feb47a18d93c82d8c5b581"
+    }
+  ],
   "completed_production_owners": [
     {
       "workstream": "T03-legacy-integrated",
@@ -276,6 +298,11 @@
       "task_id": "T09",
       "branch": "havenline/T09-harvesting",
       "paths_alias": "@reservation:T09"
+    },
+    {
+      "task_id": "T10",
+      "branch": "havenline/T10-world-transformation",
+      "paths_alias": "@reservation:T10"
     }
   ],
   "change_request_required_fields": [

@@ -1,5 +1,6 @@
 from __future__ import annotations
 import copy,pathlib,sys,unittest
+from unittest.mock import patch
 HERE=pathlib.Path(__file__).resolve();PROD=HERE.parents[1];sys.path.insert(0,str(PROD))
 from architecture_v31 import validate as validate_v31,task_readiness as v31_readiness,ACTIVE_RUNTIME_STATES
 from flake_intelligence import classify_records
@@ -42,11 +43,20 @@ class ArchitectureV31Tests(unittest.TestCase):
     def test_v31_readiness_requires_lifecycle_and_ownership(self):
         r=v31_readiness('T10')
         self.assertEqual(r['v3']['feasibility']['activation_state'],'READY_NOW')
-        self.assertEqual(r['task_state']['lifecycle_status'],'LOCKED')
-        self.assertIn('lifecycle_status_LOCKED',r['task_state']['blockers'])
-        self.assertIn('ownership_not_assigned',r['task_state']['blockers'])
-        self.assertFalse(r['runtime_activation_allowed'])
+        self.assertEqual(r['task_state']['lifecycle_status'],'ASSIGNED')
+        self.assertTrue(r['task_state']['task_branch'])
+        self.assertTrue(r['task_state']['owned_paths'])
+        self.assertNotIn('lifecycle_status_LOCKED',r['task_state']['blockers'])
+        self.assertNotIn('ownership_not_assigned',r['task_state']['blockers'])
+        self.assertTrue(r['runtime_activation_allowed'])
         self.assertNotIn('BLOCKED',ACTIVE_RUNTIME_STATES)
+    def test_v31_readiness_rejects_locked_unowned_state(self):
+        state=snapshot('T10');state.update({'lifecycle_status':'LOCKED','task_branch':None,'owned_paths':[]})
+        with patch('architecture_v31.snapshot',return_value=state):
+            r=v31_readiness('T10')
+        self.assertIn('lifecycle_not_activated',r['activation_blockers'])
+        self.assertIn('ownership_not_assigned',r['activation_blockers'])
+        self.assertFalse(r['runtime_activation_allowed'])
     def test_t09_raw_critic_semantics_are_fail_closed(self):
         raw=load_json(DOCS/'T09/CriticRaw/C2.json')
         args=('C2','T09',raw['candidate_commit'],raw['workflow_run_id'],raw['artifact_id'],raw['artifact_sha256'],raw['complete_evidence_index_sha256'],raw['scores'],raw['review_export_commit'])
