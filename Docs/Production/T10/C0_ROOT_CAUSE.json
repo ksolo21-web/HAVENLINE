@@ -10,11 +10,11 @@
   "failed_job_id": 105628493430,
   "integration_head": "82518322a8e0dc9ee6ef12a759bf4ca723c8a490",
   "failed_candidate_role": "CUMULATIVE_REPAIR_CYCLE_ROOT",
-  "latest_failed_candidate": "5fc87f4897597463d2f6b39229ef9479bd9bc776",
+  "latest_failed_candidate": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81",
   "latest_failed_run_ids": [
-    35397839956
+    35401512350
   ],
-  "latest_failed_integration_head": "710616b93fa65164e5e80bba9e151e12077b646a",
+  "latest_failed_integration_head": "76d56e1af39692dd382936c480a57bc7d858d983",
   "diagnosis_status": "DIAGNOSIS_COMPLETE",
   "terminal_class": "MIXED",
   "complete_known_blocker_set": true,
@@ -637,9 +637,9 @@
       "id": "C0-T10-B053",
       "classification": "PRODUCT_DEFECT",
       "affected_object": "T10 presentation and critic evidence",
-      "symptom": "C1 and C2 independently rejected the original committing-overhead collision; after the camera-plane lane repair, exact candidate 5fc87f passed primary but its isolated phone 16:9 ready/overhead projection placed the label rectangle 20.006 px beyond the 27 px safe-frame inset.",
-      "root_cause": "The original Label3D separation collapsed in the required overhead camera. The first camera-plane repair removed response overlap but left the canonical label width unconstrained for the narrowest device projection.",
-      "causal_fix": "Keep the deterministic camera-plane lane and explicit glyph/outline priorities, and cap the canonical label width at 960 world units so the exact phone overhead projection remains inside the safe frame with positive clearance. Preserve four nodes, one build, cameras, authority and lifecycle semantics.",
+      "symptom": "C1 and C2 independently rejected the original committing-overhead collision. Exact candidates 5fc87f and 0f9303 then passed primary/structural gates but their isolated phone 16:9 ready/overhead projection placed the label rectangle 20.006 px beyond the 27 px safe-frame inset.",
+      "root_cause": "The original Label3D separation collapsed in the required overhead camera. The first camera-plane repair removed response overlap, but reducing Label3D.width from 1000 to 960 did not change Godot's natural measured ready-label width; 0f9303 reproduced the exact same projected rectangle.",
+      "causal_fix": "Keep the deterministic camera-plane lane, 960-unit wrap bound and explicit glyph/outline priorities, and set the actual Label3D pixel projection scale to 0.0057. This directly reduces the known 848.519 px phone-overhead label to about 806.093 px, moving its left edge from 6.994 px to about 49.420 px inside the 27 px safe frame while retaining a large readable label. Preserve four nodes, one build, cameras, authority and lifecycle semantics.",
       "files_to_change": [
         "HavenlineGodot/scripts/world_transform_view.gd",
         "HavenlineGodot/tests/test_task10_integration.gd",
@@ -658,7 +658,8 @@
       ],
       "evidence": [
         "C1 and C2 independently rejected the original committing-overhead label/ring collision and washed-out outline.",
-        "Run 35397839956 artifact 10570168891, device-layout/phone_16_9/capture.log line 4: label_rect starts at x=6.99359130859375 while frame_rect starts at x=27.0; overlap=false, priority_ok=true, fully_in_frame=false."
+        "Runs 35397839956 and 35401512350 reproduce the exact same ready/overhead label_rect [6.99359130859375,412.05078125,848.519104003906,254.125015258789] despite the 960 width value, proving that width was not the effective projection control.",
+        "At fixed camera geometry, changing pixel_size from 0.006 to 0.0057 scales the projected label by 0.95: expected width 806.093 px and left edge 49.420 px in the existing left lane, 22.420 px inside the 27 px safe-frame inset."
       ],
       "verification": [
         "Run focused hostile tests for the exact causal boundary.",
@@ -702,9 +703,9 @@
       "id": "C0-T10-B055",
       "classification": "EVIDENCE_DEFECT",
       "affected_object": "T10 presentation and critic evidence",
-      "symptom": "The original overhead collision passed packaging and consumed critic jobs; the repaired 5fc projection invariant then correctly stopped the isolated run at the first out-of-frame phone overhead label before any critic executed.",
-      "root_cause": "The original capture/readiness path had no projected label-clearance, frame-containment or render-priority invariant. The new invariant works and exposed that the first lane repair retained a label width too large for the narrowest device safe frame.",
-      "causal_fix": "Retain the finite projected label/response/frame, clearance, overlap, containment and priority checks for every native and device capture; reduce only the source-declared canonical label width to satisfy the already-strict invariant on phone 16:9 overhead.",
+      "symptom": "The strict projection invariant stopped both exact 5fc87f and 0f9303 isolated runs at the first phone 16:9 ready/overhead out-of-frame label before any critic executed; the second run proved the width-only repair was ineffective.",
+      "root_cause": "The new invariant works. Its exact repeat on 0f9303 proved Label3D.width was not reducing the natural measured line; the projected pixel scale is the causal size control for this camera lane.",
+      "causal_fix": "Retain all finite projected rectangle, clearance, overlap, containment and priority checks. Bind the source contract to a 0.0057 Label3D pixel scale and require the already-strict device/native matrix to prove every state and angle before any critic executes.",
       "files_to_change": [
         "HavenlineGodot/tests/capture_task10_world_transform.gd",
         "tools/havenline/task10/validate_critic_readiness.py",
@@ -725,8 +726,8 @@
         ".github/workflows/havenline-specialist-critic.yml"
       ],
       "evidence": [
-        "Run 35397839956 stopped in device-layout/phone_16_9/capture.log before critic packaging: clearance_px=16.2000122070312, overlap=false, priority_ok=true, fully_in_frame=false.",
-        "Artifact 10570168891 SHA256 cc99ba3080c253a59acb0e988cac58e8d4bb1a5ea281d4e58d977a01c64d7623 retains the exact failed capture log; the log SHA256 is f46b704698a9584ce8a2f3fa86b9e1ef6caaacb9feb44f4f9585ef46722bf1a0."
+        "Run 35401512350 artifact 10570477028 stopped before critic packaging with clearance_px=16.2000122070312, overlap=false, priority_ok=true and fully_in_frame=false.",
+        "Artifact 10570477028 ZIP SHA256 3067306c2a60acc9377e0aa3547622b84881bf01b90a3049e74fbea80c9b605b retains the exact repeated capture; capture.log SHA256 f46b704698a9584ce8a2f3fa86b9e1ef6caaacb9feb44f4f9585ef46722bf1a0 matches the prior failure."
       ],
       "verification": [
         "Run focused hostile tests for the exact causal boundary.",
@@ -997,10 +998,11 @@
     "Run 35397278342 passed activation/scope/import and 134 of 135 integration checks; the sole failure was the pre-repair B054 test still requiring removed duplicate prose although exact costs and shortfalls remained present. This is a B054 verification repair, not a new product blocker.",
     "Run 35397839949 completed SUCCESS for exact candidate 5fc87f4897597463d2f6b39229ef9479bd9bc776; primary artifact 10569607542 SHA256 355819c8e1d05cab396216c694e2747403fffeb66a3c82a0d8cd88461b1f915d.",
     "Run 35397839956 artifact 10570168891 SHA256 cc99ba3080c253a59acb0e988cac58e8d4bb1a5ea281d4e58d977a01c64d7623; device-layout/phone_16_9/capture.log line 4 proves the sole hosted failure was fully_in_frame=false at ready/overhead after prior structural gates passed.",
-    "C0 artifact 10569242248 SHA256 37b087f4417108f21ccaf16242480d26fe36b76d8c7450ea90db02f18df78968 proves B059 transport succeeded but B060/B061 grounding failed."
+    "C0 artifact 10569242248 SHA256 37b087f4417108f21ccaf16242480d26fe36b76d8c7450ea90db02f18df78968 proves B059 transport succeeded but B060/B061 grounding failed.",
+    "Run 35401512350 artifact 10570477028 ZIP SHA256 3067306c2a60acc9377e0aa3547622b84881bf01b90a3049e74fbea80c9b605b reproduces the exact prior capture.log SHA256 f46b704698a9584ce8a2f3fa86b9e1ef6caaacb9feb44f4f9585ef46722bf1a0, proving the width-only adjustment did not affect Godot projection."
   ],
   "unexecuted_checks": [
-    "Exact 5fc primary regression passed, while isolated validation stopped at the phone 16:9 ready/overhead containment invariant before the remaining five device rows, native 4K capture, benchmark, critic packaging or any fresh critic executed.",
+    "Exact 0f9303 passed candidate guard, hosted preflight, isolated governance, domain, integration and lifecycle capture; device validation stopped at phone 16:9 ready/overhead before the remaining five device rows, native 4K capture, benchmark, critic packaging or any fresh critic executed.",
     "B060/B061 are implemented and locally validated but require the exact integration-owner governance commit and hosted governance proof.",
     "B046's full-request repair has not yet completed a fresh normal specialist run because 48cc stopped at preparation.",
     "Fresh exact-source C1/C2/C3/C4/C6/C7 reviews for the repaired post-B052 source have not executed.",
@@ -1024,7 +1026,7 @@
       "the exact candidate tree passes the dedicated clean hosted pipeline preflight including same-parent raw job-log retrieval and the B060/B061 grounded C0 architecture lock"
     ]
   },
-  "summary": "The cumulative B037-B061 inventory is complete. Exact candidate 5fc passed the full primary pipeline and all isolated structural/logic gates through lifecycle capture; the projected-containment invariant correctly stopped phone 16:9 ready/overhead because the first B053 lane repair retained an overwide label. B053/B055 now cap only that label width. B060/B061 bind C0 to downloaded artifact excerpts and tracked paths so future repairs cannot follow invented evidence. No critic, dimension, model budget or threshold changes.",
+  "summary": "The cumulative B037-B061 inventory remains complete. Exact 0f9303 proved the first B053 width adjustment was ineffective by reproducing the identical phone-overhead projected rectangle. B053/B055 now change the actual Label3D pixel projection scale to 0.0057, with a source-bound calculation placing the known rectangle about 22.42 px inside the safe frame. B060/B061 grounding is published and governance-green. No critic, dimension, model budget or threshold changes.",
   "confidence": "high",
   "approval_claimed": false,
   "score_assigned": false,

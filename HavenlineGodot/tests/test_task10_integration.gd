@@ -275,7 +275,7 @@ func run() -> void:
 	check("view uses shape and color redundancy", view_contract.shape_and_color_redundancy and view_contract.world_response_shapes == ["perimeter_ring", "preview_volume", "status_label"])
 	check("view declares strict four-node visual budget", view_contract.visual_node_budget == 4)
 	check("view exposes bounded readability range", view_contract.readability_scale_range == [0.85, 1.35])
-	check("view declares camera-plane clearance and explicit label ordering", view_contract.label_camera_offset == Vector2(0.0, -190.0) and view_contract.label_max_width == 960.0 and view_contract.label_render_priority == 100 and view_contract.label_outline_render_priority == 99)
+	check("view declares camera-plane clearance and explicit label ordering", view_contract.label_camera_offset == Vector2(0.0, -190.0) and view_contract.label_max_width == 960.0 and is_equal_approx(float(view_contract.label_pixel_size), 0.0057) and view_contract.label_render_priority == 100 and view_contract.label_outline_render_priority == 99)
 
 	var visual_engine := configured_engine()
 	check("visual fixture target registers", visual_engine.register_target("visual-A", "seed"))

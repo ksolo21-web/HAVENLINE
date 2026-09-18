@@ -4,10 +4,10 @@
   "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
   "c0_report_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
-  "c0_report_sha256": "31745d19161b9a99d18c9bef44b79e639b4f55925c03a610e0a51bb2c38794c4",
+  "c0_report_sha256": "d49662c0ed7805e3ea681fcb6e4595dc0813e33a6538184882fb44e6bf87a785",
   "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "repair_base_status": "CUMULATIVE_REPAIR_CYCLE_ROOT_WITH_LATEST_TERMINAL_FAILURE_BOUND",
-  "repair_base_rule": "Measure the complete reconciled B037-B061 owner-plus-task diff from cumulative repair root c7a18d002fe8d0f3978370f3e4567ba88bfe17e8. The latest terminal evidence is 5fc87f4897597463d2f6b39229ef9479bd9bc776; it is evidence only and no score is reusable.",
+  "repair_base_rule": "Measure the complete reconciled B037-B061 owner-plus-task diff from cumulative repair root c7a18d002fe8d0f3978370f3e4567ba88bfe17e8. The latest terminal evidence is 0f93003e91ec2e785af5e821f3c94a3ec9c2dc81; it is evidence only and no score is reusable.",
   "full_blocker_set_acknowledged": true,
   "candidate_freeze_after_build": true,
   "validation_concurrency_policy": "finish_running_sha",
@@ -54,7 +54,7 @@
     "Require C7 context to preserve R01-R14, all six unchanged dimensions and exact source-bound R05/R06 rows; reject stale, missing, duplicate or failed rows.",
     "Require exact-0e83-shaped C0 requests to fit the fixed context budget and HTTP failures to retain bounded diagnostics without emitting a diagnosis.",
     "Require C0 artifact diagnostics to cite bounded exact source excerpts and every T10 causal path to exist in the tracked repository; reject fabricated, paraphrased or ungrounded diagnoses.",
-    "Require the 960-unit canonical label width contract and projected containment proof across every state, camera and device before any critic executes."
+    "Require the 960-unit wrap contract, 0.0057 pixel projection scale and projected containment proof across every state, camera and device before any critic executes."
   ],
   "fixes": [
     {
@@ -317,7 +317,7 @@
     },
     {
       "blocker_id": "C0-T10-B053",
-      "causal_change": "Keep the deterministic camera-plane lane and explicit glyph/outline priorities, and cap the canonical label width at 960 world units so the exact phone overhead projection remains inside the safe frame with positive clearance. Preserve four nodes, one build, cameras, authority and lifecycle semantics.",
+      "causal_change": "Keep the deterministic camera-plane lane, 960-unit wrap bound and explicit glyph/outline priorities, and set the actual Label3D pixel projection scale to 0.0057. This directly reduces the known 848.519 px phone-overhead label to about 806.093 px, moving its left edge from 6.994 px to about 49.420 px inside the 27 px safe frame while retaining a large readable label. Preserve four nodes, one build, cameras, authority and lifecycle semantics.",
       "files": [
         "HavenlineGodot/scripts/world_transform_view.gd",
         "HavenlineGodot/tests/test_task10_integration.gd"
@@ -343,7 +343,7 @@
     },
     {
       "blocker_id": "C0-T10-B055",
-      "causal_change": "Retain the finite projected label/response/frame, clearance, overlap, containment and priority checks for every native and device capture; reduce only the source-declared canonical label width to satisfy the already-strict invariant on phone 16:9 overhead.",
+      "causal_change": "Retain all finite projected rectangle, clearance, overlap, containment and priority checks. Bind the source contract to a 0.0057 Label3D pixel scale and require the already-strict device/native matrix to prove every state and angle before any critic executes.",
       "files": [
         "HavenlineGodot/tests/capture_task10_world_transform.gd",
         "tools/havenline/task10/validate_critic_readiness.py",

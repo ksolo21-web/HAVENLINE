@@ -14,6 +14,7 @@ const READABILITY_MAX := 1.35
 const PULSE_HZ := 1.4
 const LABEL_CAMERA_OFFSET := Vector2(0.0, -190.0)
 const LABEL_MAX_WIDTH := 960.0
+const LABEL_PIXEL_SIZE := 0.0057
 const LABEL_RENDER_PRIORITY := 100
 const LABEL_OUTLINE_RENDER_PRIORITY := 99
 const LABEL_MIN_CLEARANCE_PX := 12.0
@@ -75,6 +76,7 @@ static func contract() -> Dictionary:
 		"committing_pulse_hz": PULSE_HZ,
 		"label_camera_offset": LABEL_CAMERA_OFFSET,
 		"label_max_width": LABEL_MAX_WIDTH,
+		"label_pixel_size": LABEL_PIXEL_SIZE,
 		"label_render_priority": LABEL_RENDER_PRIORITY,
 		"label_outline_render_priority": LABEL_OUTLINE_RENDER_PRIORITY,
 	}
@@ -256,7 +258,7 @@ func _ensure_visuals() -> void:
 	_beacon.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_beacon.width = LABEL_MAX_WIDTH
 	_beacon.outline_size = 9
-	_beacon.pixel_size = 0.006
+	_beacon.pixel_size = LABEL_PIXEL_SIZE
 	_beacon.billboard = BaseMaterial3D.BILLBOARD_ENABLED
 	_beacon.no_depth_test = true
 	# Label3D.offset is evaluated in the billboard camera plane. Keeping the
