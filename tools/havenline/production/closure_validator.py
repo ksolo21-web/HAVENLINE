@@ -53,6 +53,12 @@ def has_placeholder(value,tokens):
 
 RAW_ACCEPTANCE_RULE=">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects"
 
+def valid_reviewer_confidence(value):
+    """Accept original reviewer schemas without assigning or converting confidence."""
+    if isinstance(value,str):
+        return value in {"high","medium"}
+    return isinstance(value,(int,float)) and not isinstance(value,bool) and 0<value<=1
+
 def validate_raw_critic_record(raw,cid,task,candidate,workflow_run_id,artifact_id,artifact_sha,evidence_hash,scores,review_export_commit):
     errors=[]
     if raw.get("task_id")!=task or raw.get("critic_id")!=cid or raw.get("candidate_commit")!=candidate:errors.append("identity mismatch")
@@ -63,7 +69,7 @@ def validate_raw_critic_record(raw,cid,task,candidate,workflow_run_id,artifact_i
     if raw.get("scores")!=scores:errors.append("aggregate score mismatch")
     errors += ensure_score_strictly_above_nine(raw.get("scores",{}))
     confidence=raw.get("confidence")
-    if not isinstance(confidence,(int,float)) or isinstance(confidence,bool) or not 0<confidence<=1:errors.append("confidence invalid")
+    if not valid_reviewer_confidence(confidence):errors.append("confidence invalid")
     if raw.get("score_reuse") is not False:errors.append("score reuse must be false")
     raw_scores=raw.get("scores",{})
     if not raw_scores or raw.get("minimum_dimension_score")!=min(raw_scores.values()):errors.append("minimum score mismatch")
@@ -351,7 +357,7 @@ def main():
                 if raw.get("artifact_sha256")!=d.get("artifact_sha256"):
                     errors.append("raw critic artifact digest mismatch "+cid)
                 confidence=raw.get("confidence")
-                if not isinstance(confidence,(int,float)) or isinstance(confidence,bool) or not 0<confidence<=1:
+                if not valid_reviewer_confidence(confidence):
                     errors.append("raw critic confidence invalid "+cid)
                 if raw.get("score_reuse") is not False:
                     errors.append("raw critic score reuse must be false "+cid)

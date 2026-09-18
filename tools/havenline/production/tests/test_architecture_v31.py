@@ -13,7 +13,7 @@ from task_state_snapshot import snapshot,validate as validate_snapshot
 from mutation_canary import run_canaries
 from proof_invalidation import invalidate_contract,validate_policy as validate_invalidation
 from gate_fingerprint import validate_policy as validate_fingerprint
-from closure_validator import validate_raw_critic_record,validate_critic_aggregate,validate_defect_ledger
+from closure_validator import validate_raw_critic_record,validate_critic_aggregate,validate_defect_ledger,valid_reviewer_confidence
 
 class ArchitectureV31Tests(unittest.TestCase):
     def test_flake_history_never_waives_mandatory_gate(self):
@@ -41,7 +41,9 @@ class ArchitectureV31Tests(unittest.TestCase):
         wrong_index=copy.deepcopy(manifest);wrong_index['regeneration_contract']['complete_evidence_index_sha256']='f'*64;cases.append(wrong_index)
         for case in cases:self.assertFalse(validate_manifest(case,path=path)['passed'])
     def test_v31_readiness_requires_lifecycle_and_ownership(self):
-        r=v31_readiness('T10')
+        state=snapshot('T10');state.update({'lifecycle_status':'ASSIGNED','task_branch':'havenline/T10-world-transformation','owned_paths':['HavenlineGodot/scripts/world_transform.gd']})
+        with patch('architecture_v31.snapshot',return_value=state):
+            r=v31_readiness('T10')
         self.assertEqual(r['v3']['feasibility']['activation_state'],'READY_NOW')
         self.assertEqual(r['task_state']['lifecycle_status'],'ASSIGNED')
         self.assertTrue(r['task_state']['task_branch'])
@@ -50,6 +52,14 @@ class ArchitectureV31Tests(unittest.TestCase):
         self.assertNotIn('ownership_not_assigned',r['task_state']['blockers'])
         self.assertTrue(r['runtime_activation_allowed'])
         self.assertNotIn('BLOCKED',ACTIVE_RUNTIME_STATES)
+    def test_v31_completed_state_is_not_runtime_activation(self):
+        state=snapshot('T10');state.update({'lifecycle_status':'APPROVED','task_branch':None,'owned_paths':[]})
+        with patch('architecture_v31.snapshot',return_value=state):
+            r=v31_readiness('T10')
+        self.assertIn('lifecycle_not_activated',r['activation_blockers'])
+        self.assertIn('ownership_not_assigned',r['activation_blockers'])
+        self.assertFalse(r['runtime_activation_allowed'])
+
     def test_v31_readiness_rejects_locked_unowned_state(self):
         state=snapshot('T10');state.update({'lifecycle_status':'LOCKED','task_branch':None,'owned_paths':[]})
         with patch('architecture_v31.snapshot',return_value=state):
@@ -68,6 +78,24 @@ class ArchitectureV31Tests(unittest.TestCase):
         too_high=copy.deepcopy(raw);too_high['scores']['geometry_contact']=10.0001;mutations.append(too_high)
         empty=copy.deepcopy(raw);empty['scores']={};mutations.append(empty)
         for bad in mutations:self.assertTrue(validate_raw_critic_record(bad,*args))
+    def test_original_confidence_schemas_without_conversion(self):
+        for value in (0.01,0.96,1,"high","medium"):
+            with self.subTest(value=value):self.assertTrue(valid_reviewer_confidence(value))
+        for value in (None,True,False,0,-1,1.01,float('nan'),float('inf'),"low","0.96","HIGH","high "," medium",[],{}):
+            with self.subTest(value=value):self.assertFalse(valid_reviewer_confidence(value))
+    def test_categorical_confidence_does_not_waive_other_raw_gates(self):
+        raw=load_json(DOCS/'T09/CriticRaw/C2.json')
+        args=('C2','T09',raw['candidate_commit'],raw['workflow_run_id'],raw['artifact_id'],raw['artifact_sha256'],raw['complete_evidence_index_sha256'],raw['scores'],raw['review_export_commit'])
+        for confidence in ('high','medium'):
+            copied=copy.deepcopy(raw);copied['confidence']=confidence
+            self.assertEqual([],validate_raw_critic_record(copied,*args))
+            self.assertEqual(confidence,copied['confidence'])
+            for key,value in (('score_reuse',True),('coverage_complete',False),('defects',['defect']),('provider',''),('candidate_commit','f'*40)):
+                bad=copy.deepcopy(copied);bad[key]=value
+                self.assertTrue(validate_raw_critic_record(bad,*args))
+            bad=copy.deepcopy(copied);bad['scores'][next(iter(bad['scores']))]=9.0
+            self.assertTrue(validate_raw_critic_record(bad,*args))
+
     def test_t09_aggregate_and_defect_ledger_are_fail_closed(self):
         completion=load_json(DOCS/'T09/verified-completion.json');aggregate=load_json(DOCS/'T09/independent-critic-review.json');ledger=load_json(DOCS/'T09/defect-ledger.json')
         required=['C2','C3','C4','C5','C6'];retained=completion['retained_review_evidence']
