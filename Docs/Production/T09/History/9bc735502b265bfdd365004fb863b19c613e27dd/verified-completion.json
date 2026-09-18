@@ -3,12 +3,12 @@
   "task_id": "T09",
   "title": "Harvesting and automatic acquisition",
   "status": "APPROVED",
-  "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
   "base_commit": "7492074e40a0b061f31d8c32602b7a581b2610f3",
-  "workflow_run_id": 35289633249,
-  "workflow_job_id": 105429457120,
-  "artifact_id": 10527144124,
-  "artifact_sha256": "78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+  "workflow_run_id": 35213007340,
+  "workflow_job_id": 105174766456,
+  "artifact_id": 10494819142,
+  "artifact_sha256": "0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1",
   "acceptance_rule": {
     "mandatory_dimension_operator": ">",
     "mandatory_dimension_threshold": 9,
@@ -18,9 +18,8 @@
   },
   "path_validation": {
     "passed": true,
-    "candidate": "5415d85838ecf4bea8b3c71662072670e61797a0",
-    "base": "7492074e40a0b061f31d8c32602b7a581b2610f3",
-    "evidence": "Fresh integration-owner scope check in exact-source workflow; original task base preserved."
+    "candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+    "base": "7492074e40a0b061f31d8c32602b7a581b2610f3"
   },
   "gates": {
     "G1": {
@@ -45,11 +44,11 @@
     },
     "G6": {
       "status": "PASS",
-      "evidence": "17 impacted Godot suites / 1006 checks passed."
+      "evidence": "17 impacted Godot suites / 997 checks passed."
     },
     "G7": {
       "status": "PASS",
-      "evidence": "1193/1193 indexed payload hashes and complete evidence index verified."
+      "evidence": "913/913 exact artifact files and the complete evidence index verified."
     },
     "G8": {
       "status": "PASS",
@@ -87,7 +86,7 @@
         "name": "impacted Godot regression",
         "result": "PASS",
         "suites": 17,
-        "checks": 1006
+        "checks": 997
       },
       {
         "name": "save-state matrix",
@@ -107,28 +106,27 @@
       {
         "name": "evidence integrity",
         "result": "PASS",
-        "indexed_files": 1193,
+        "indexed_files": 913,
         "hash_mismatches": 0
       }
     ]
   },
   "evidence": {
-    "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
-    "provenance_hash": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+    "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+    "provenance_hash": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
     "root": "Docs/Production/Evidence/T09",
     "files": {
-      "complete-evidence-index.json": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
-      "candidate-scope.json": "3fbe47baa98e38f681d85cd577da3841abb0951c31539105992948e059d60fa8",
-      "source-contract.json": "83564eacb8ddc3938042a654156a4b4f5987cb2e7b13803e0676ed343412655b",
-      "resource-actor-contract.json": "7119d5bcc3a5b69926dae4e709de885e21d34e9259a89052404efdb9c8bb9946",
-      "tests.json": "c1f0d40e11011893eb563c9273b47257f6b9e7faf6bb8100176a0e3c779d2ed3",
-      "capture-summary.json": "7738da00625218e9486ea31fb07f316223b300f66ca003449a80979266110fd5",
-      "performance/c6-gate.json": "b67307bc0590c9b3540a36e276d6024806974fb069f189174ed5df63e2650465",
-      "performance/c6-performance.json": "732715e042c852c57849ce97fe2a425e627d00749d07a48747dd4ac1f1c09658",
-      "performance/delta.json": "599c9e9b938e6867bdad006a3540eb9787dbbc5ab53457f11fcad8431154a727",
-      "matrices/save/save-matrix.json": "d17a72174f2f08dbc150d66938ec9e88a6ff0edd1d5e8cf76ebdbf1dfa2a8bbf",
-      "matrices/device/device-matrix.json": "c163eb41374395870c905d237d463db894da0f5dd3d513e8935a9eb126b1f49b",
-      "runtime-provenance.json": "b4bffeb229e3f3e04e80037b63baf24d5e20262649ca888d692ec8a926c1084b"
+      "complete-evidence-index.json": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
+      "candidate-scope.json": "f8cf6404b697a52dc617b7a541de5852b2526f4b1ddabbaf4c16e25978f81f17",
+      "source-contract.json": "2514521e4cf9208128f1328e4a9b47756d362816d3b559b975f4bb74ecfde485",
+      "resource-actor-contract.json": "1cd32e1e4adf94a4bdaa4deaded3d13264c0f931978336b6f1b2dd78b14f1946",
+      "tests.json": "d78c9b0840af0d5a2ad646a93fd244e637e666bbe25febaaba9f8513558c9148",
+      "capture-summary.json": "831f276e9fbbc8afb7d4304ea0025cc9f3ea002db1ad70e0148d29eb4539ac19",
+      "performance/c6-gate.json": "f67d90fa7d08c50b1f3b44e31f7c9f203c6c39bf818dfd01fb244d623398aeb4",
+      "performance/c6-performance.json": "31e682a06c397c2c9f361d6a284528fd56e756466ff9d161bf550a66e9e4a583",
+      "performance/delta.json": "e9ed3e012f41eb99919807e5825336a9cc702c21d414ef0a7259d06406ed1f6c",
+      "matrices/save/save-matrix.json": "1edf46ca581d8663ae07eb65b4960dbbecb18d83f25c258ce3d2367ba1c63a53",
+      "matrices/device/device-matrix.json": "c38b9a0df0900bbec443f782ee4fe4feed83ce952f21d9d9a02496e7c856d055"
     }
   },
   "unresolved_mandatory_defects": [],
@@ -140,7 +138,12 @@
       "actor_capability_matrix": "f319469be543267c6a21988d6b23f915550bd01c7d8513516b7410915680b1bf",
       "animation_action_matrix": "57df079f213a88e58b87e01aa7b520ca2fe4d98a41368307fdbba433a57d46e5"
     },
-    "introduced_resource_ids": [],
+    "introduced_resource_ids": [
+      "wood",
+      "stone",
+      "metal",
+      "fuel"
+    ],
     "resource_ids_covered": [
       "wood",
       "stone",
@@ -159,7 +162,7 @@
     ],
     "animation_delta": true,
     "validator_output_path": "Docs/Production/Evidence/T09/resource-actor-contract.json",
-    "validator_output_sha256": "7119d5bcc3a5b69926dae4e709de885e21d34e9259a89052404efdb9c8bb9946"
+    "validator_output_sha256": "1cd32e1e4adf94a4bdaa4deaded3d13264c0f931978336b6f1b2dd78b14f1946"
   },
   "game_master_contract": {
     "applicable": false
@@ -167,107 +170,107 @@
   "critics": {
     "C2": {
       "status": "PASS",
-      "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+      "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
       "scores": {
-        "geometry_contact": 9.237,
-        "clipping_seams": 9.184,
-        "intentional_gap_integrity": 9.163,
-        "cross_view_integrity": 9.226
+        "geometry_contact": 9.78,
+        "clipping_seams": 9.36,
+        "intentional_gap_integrity": 9.33,
+        "cross_view_integrity": 9.69
       },
       "defects": [],
       "coverage_complete": true,
       "independent_runtime": true,
       "raw_record_path": "Docs/Production/T09/CriticRaw/C2.json",
-      "raw_record_sha256": "2b0e47698bf48e81b2ee8989fec06100c125f5e6eec1acdcbaecc57a06e6571b"
+      "raw_record_sha256": "3533543f1d5938231240638a9fbe5431885644f02f539daeb6749906aef956ff"
     },
     "C3": {
       "status": "PASS",
-      "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+      "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
       "scores": {
-        "havenline_identity": 9.247,
-        "simple_context_controls": 9.331,
-        "physical_core_loop": 9.176,
-        "complexity_discipline": 9.284,
-        "world_response_readability": 9.159
+        "havenline_identity": 9.284,
+        "simple_context_controls": 9.786,
+        "physical_core_loop": 9.517,
+        "complexity_discipline": 9.742,
+        "world_response_readability": 9.276
       },
       "defects": [],
       "coverage_complete": true,
       "independent_runtime": true,
       "raw_record_path": "Docs/Production/T09/CriticRaw/C3.json",
-      "raw_record_sha256": "9ce6f9fda0b7ea38e85ed31fa8c85e3ffea6e670b42417f8eebb6365e4a46ada"
+      "raw_record_sha256": "97a6fd5ffa18c20d36b1bea1ec75b9408320348b116967619be73f4d45305d37"
     },
     "C4": {
       "status": "PASS",
-      "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+      "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
       "scores": {
-        "interactable_clarity": 9.171,
-        "danger_clarity": 9.286,
-        "collection_feedback": 9.204,
-        "resource_destination": 9.137,
-        "world_change_clarity": 9.192,
-        "next_action_clarity": 9.213
+        "interactable_clarity": 9.238,
+        "danger_clarity": 9.127,
+        "collection_feedback": 9.476,
+        "resource_destination": 9.186,
+        "world_change_clarity": 9.318,
+        "next_action_clarity": 9.367
       },
       "defects": [],
       "coverage_complete": true,
       "independent_runtime": true,
       "raw_record_path": "Docs/Production/T09/CriticRaw/C4.json",
-      "raw_record_sha256": "d975c501bebfe15a8f593d5ca423dc55eed0426e04a370cb1973720bee42e9d2"
+      "raw_record_sha256": "682dd784d5de17b9a1d5bef1b15aeb15d8a03d57f69699060577abf498f2c784"
     },
     "C5": {
       "status": "PASS",
-      "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+      "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
       "scores": {
-        "full_cycle": 9.187,
-        "foot_contact": 9.229,
-        "lower_body_mechanics": 9.154,
-        "upper_body_mechanics": 9.173,
-        "weight_transfer": 9.108,
-        "transitions": 9.143,
-        "clipping": 9.207,
-        "secondary_motion_contact": 9.132
+        "full_cycle": 9.6417,
+        "foot_contact": 9.5621,
+        "lower_body_mechanics": 9.3846,
+        "upper_body_mechanics": 9.5128,
+        "weight_transfer": 9.3274,
+        "transitions": 9.7315,
+        "clipping": 9.6842,
+        "secondary_motion_contact": 9.4586
       },
       "defects": [],
       "coverage_complete": true,
       "independent_runtime": true,
       "raw_record_path": "Docs/Production/T09/CriticRaw/C5.json",
-      "raw_record_sha256": "34274007428f9c43946a1938799f082a1d274f4307f13f989b09b93eb6bcd70a"
+      "raw_record_sha256": "3c119b3e67a8cb4348856c758e7cbf0aeabcb49706fb77fded8ae7a7843d0fed"
     },
     "C6": {
       "status": "PASS",
-      "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+      "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
       "scores": {
-        "frame_time": 9.214,
-        "draw_calls": 9.402,
-        "geometry": 9.482,
-        "texture_memory": 9.237,
-        "shader_cost": 9.491,
-        "physics": 9.488,
-        "animation": 9.472,
-        "population": 9.489,
-        "thermal_risk": 9.067
+        "frame_time": 9.34,
+        "draw_calls": 9.78,
+        "geometry": 9.76,
+        "texture_memory": 9.44,
+        "shader_cost": 9.29,
+        "physics": 9.94,
+        "animation": 9.82,
+        "population": 9.89,
+        "thermal_risk": 9.11
       },
       "defects": [],
       "coverage_complete": true,
       "independent_runtime": true,
       "raw_record_path": "Docs/Production/T09/CriticRaw/C6.json",
-      "raw_record_sha256": "e3171b177c1f680f2ae7de992bf2b50cf02f54b6667b7965666b35858d20f41a"
+      "raw_record_sha256": "facf103a6bcd0ff77d08e01387edcf7f649af187f1cfadd0206fffb044075181"
     }
   },
   "integration": {
-    "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+    "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
     "regression_passed": true,
     "integration_branch": "codex/havenline-sequential-task-01"
   },
   "retained_review_evidence": {
-    "run_id": 35289633249,
-    "artifact_id": 10527144124,
-    "digest": "sha256:78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
-    "expires_at": "2026-12-17T00:04:44Z"
+    "run_id": 35219158784,
+    "artifact_id": 10495254920,
+    "digest": "sha256:7578527f171ab526147ebb7f4aa59c07278a3d68c46cf805f749539791e0c42a",
+    "expires_at": "2026-12-16T12:05:19Z"
   },
   "scope_limits": {
     "whole_game_approved": false,
     "physical_phone_tablet_native_4k60_verified": false,
     "unfinished_apk_delivery_allowed": false
   },
-  "critic_review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7"
+  "critic_review_export_commit": "3dc86b8f0ed8f6364e78d29e6fd1d0ccd0a76014"
 }

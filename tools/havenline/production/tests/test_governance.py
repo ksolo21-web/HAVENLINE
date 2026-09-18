@@ -196,7 +196,7 @@ class GovernanceTests(unittest.TestCase):
                     completion9=load_json(DOCS/"T09/verified-completion.json")
                     ledger9=load_json(DOCS/"T09/defect-ledger.json")
                     review9=load_json(DOCS/"T09/independent-critic-review.json")
-                    self.assertEqual(completion9["candidate_commit"],"9bc735502b265bfdd365004fb863b19c613e27dd")
+                    self.assertEqual(completion9["candidate_commit"],"5415d85838ecf4bea8b3c71662072670e61797a0")
                     self.assertTrue(all(score>9.0 for row in review9["critics"].values() for score in row["scores"].values()))
                     self.assertEqual(review9["unresolved_mandatory_defects"],[])
                     self.assertEqual({row["status"] for row in ledger9["defects"]},{"VERIFIED_CLOSED"})

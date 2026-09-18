@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "task_id": "T09",
-  "status": "AUTHORIZED_IMPLEMENTATION_PENDING_VALIDATION",
+  "status": "IMPLEMENTED_VALIDATED",
   "authorization": "User explicitly answered yes to the bounded V3.2 T09 reactivation request in this session.",
   "request": "Authorize a bounded V3.2 policy change to reactivate T09 validation and integrate the reviewed repair candidate without weakening acceptance or replacing the V3.1 architecture.",
   "integration_head": "00b39caa8a5d4925d1ba0f3d7c19dd9ebdf14f26",
@@ -21,7 +21,13 @@
     "canvas_and_joystick_geometry_passed": true,
     "c6_quantitative_gate_passed": true,
     "independent_review": "PASS",
-    "critic_minimum_scores": {"C2": 9.34, "C3": 9.31, "C4": 9.22, "C5": 9.18, "C6": 9.12},
+    "critic_minimum_scores": {
+      "C2": 9.34,
+      "C3": 9.31,
+      "C4": 9.22,
+      "C5": 9.18,
+      "C6": 9.12
+    },
     "independent_review_record": "Docs/Production/T09/repair-independent-review-94714f6.md",
     "unresolved_artifact_defects": []
   },
@@ -49,5 +55,9 @@
     "No physical-device 4K60 certification claim."
   ],
   "architecture_files_modified": true,
-  "integration_branch_modified": false
+  "integration_branch_modified": true,
+  "accepted_reconciled_source": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "final_verification_run": 35289633249,
+  "final_artifact_id": 10527144124,
+  "final_review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7"
 }

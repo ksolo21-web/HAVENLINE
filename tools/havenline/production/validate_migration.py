@@ -337,7 +337,7 @@ def main():
             t09_owners=[row for row in ownership.get("completed_production_owners",[]) if row.get("task_id")=="T09"]
             if len(t09_owners)!=1 or t09_owners[0].get("status")!="APPROVED":
                 errors.append("T09 completed owner missing or status mismatch")
-            elif (t09_owners[0].get("workstream"),t09_owners[0].get("paths_alias"),t09_owners[0].get("accepted_source"),t09_owners[0].get("integrated_source")) != (T09_WORKSTREAM,T09_ALIAS,"9bc735502b265bfdd365004fb863b19c613e27dd","9bc735502b265bfdd365004fb863b19c613e27dd"):
+            elif (t09_owners[0].get("workstream"),t09_owners[0].get("paths_alias"),t09_owners[0].get("accepted_source"),t09_owners[0].get("integrated_source")) != (T09_WORKSTREAM,T09_ALIAS,"5415d85838ecf4bea8b3c71662072670e61797a0","5415d85838ecf4bea8b3c71662072670e61797a0"):
                 errors.append("T09 completed path owner identity mismatch")
             unlocked=[tid for tid in ids[9:] if graph["tasks"][tid]["status"]!="LOCKED"]
             if unlocked:errors.append("T10+ must remain LOCKED after T09 approval: "+",".join(unlocked))
@@ -459,7 +459,7 @@ def main():
                                 if tg.get("active_task") is not None or tg.get("active_status") is not None:
                                     errors.append("task-gates must clear active task after T09 approval")
                                 t09_record=tg.get("completed_task_records",{}).get("T09",{})
-                                if t09_record.get("status")!="APPROVED" or t09_record.get("accepted_source")!="9bc735502b265bfdd365004fb863b19c613e27dd":
+                                if t09_record.get("status")!="APPROVED" or t09_record.get("accepted_source")!="5415d85838ecf4bea8b3c71662072670e61797a0":
                                     errors.append("task-gates T09 completion record mismatch")
                                 if not (DOCS/"T09/verified-completion.json").exists():
                                     errors.append("T09 verified completion record missing")

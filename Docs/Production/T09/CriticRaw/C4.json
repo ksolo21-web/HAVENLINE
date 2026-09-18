@@ -1,71 +1,87 @@
 {
-  "schema_version": 1,
-  "task_id": "T09",
-  "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
-  "workflow_run_id": 35213007340,
-  "artifact_id": 10494819142,
-  "artifact_sha256": "0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1",
-  "complete_evidence_index_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
-  "input_manifest_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
-  "review_export_commit": "3dc86b8f0ed8f6364e78d29e6fd1d0ccd0a76014",
   "status": "PASS",
-  "passed": true,
-  "coverage_complete": true,
-  "score_reuse": false,
-  "critic_id": "C4",
-  "critic_name": "Gameplay UX / Readability Critic",
-  "provider": "OpenAI",
-  "model": "gpt-6-astra",
-  "request_or_run_id": "35213007340:C4:/root/t09_c3_c4_final",
-  "independent_runtime": true,
-  "confidence": 0.968,
-  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
   "scores": {
-    "interactable_clarity": 9.238,
-    "danger_clarity": 9.127,
-    "collection_feedback": 9.476,
-    "resource_destination": 9.186,
-    "world_change_clarity": 9.318,
-    "next_action_clarity": 9.367
+    "interactable_clarity": 9.171,
+    "danger_clarity": 9.286,
+    "collection_feedback": 9.204,
+    "resource_destination": 9.137,
+    "world_change_clarity": 9.192,
+    "next_action_clarity": 9.213
   },
-  "minimum_dimension_score": 9.127,
-  "coverage": {
-    "sequence_contact_sheets": 8,
-    "full_resolution_sequence_states": 16,
-    "device_matrix_states": 24,
-    "device_matrix_passed": true,
-    "suite_count": 17,
-    "total_checks": 997
-  },
+  "minimum_score": 9.137,
+  "coverage_complete": true,
+  "confidence": 0.96,
+  "defects": [],
   "evidence": [
     {
-      "path": "captures/sequence-wood/wood-approach.png",
-      "sha256": "3358f674e2171e9b66996758cd013985a631f8c70c61b2d878fcc596e9503b0e"
-    },
-    {
-      "path": "captures/sequence-wood/wood-focus-acquired.png",
-      "sha256": "37ad9320cc2b2c2367e5b79675c27596a8a2ff372c20a7dfa54d579422bbd95a"
+      "path": "captures/sequence-wood/wood-committed-contact.png",
+      "sha256": "cb4a65d13231640115b8d3d037403a248cacec5d6f643923708a44a44e107bdf"
     },
     {
       "path": "captures/sequence-wood/wood-depleted.png",
-      "sha256": "8f0300b8327e280acf8641d958343b0809e8d4a8184448a2a3ea31c62196bacd"
+      "sha256": "5d8ecb66cad86bce0b773ab3bba31395b68f9eb609317c9d2173db36807f78e3"
     },
     {
       "path": "captures/sequence-wood/wood-respawned.png",
-      "sha256": "f428a7fff5c739b8854adf2cf2268e0135d9ac0445ebbf7dbefb86003431db8c"
+      "sha256": "9b144e3900e99511b2e132022b439d32aaf57b3fdc9f58584f0bd91e3411da55"
     },
     {
-      "path": "matrices/device/device-matrix.json",
-      "sha256": "c38b9a0df0900bbec443f782ee4fe4feed83ce952f21d9d9a02496e7c856d055"
+      "path": "captures/sequence-stone/stone-committed-contact.png",
+      "sha256": "6919933131388d087b856342b87e9fd2c1cd89407b6bddf01cb681adfc643a77"
     },
     {
-      "path": "tests.json",
-      "sha256": "d78c9b0840af0d5a2ad646a93fd244e637e666bbe25febaaba9f8513558c9148"
+      "path": "captures/sequence-stone/stone-depleted.png",
+      "sha256": "c3f983d292b46b5175a563c9893729aa3a1093c736599e716dea99105bbcfded"
+    },
+    {
+      "path": "captures/sequence-stone/stone-respawned.png",
+      "sha256": "6d55e4178eaaedc927a794f6682a76caa098d132de2c701699342f33e8ffb32b"
+    },
+    {
+      "path": "captures/sequence-metal/metal-committed-contact.png",
+      "sha256": "d19d805844fcfa2f8f8bcdf82312af32eb75b52673d76559de4da155cb838962"
+    },
+    {
+      "path": "captures/sequence-metal/metal-depleted.png",
+      "sha256": "b65f404886ec76c98d545a48f5e6fd96f50a8902d7c971e3334760ee88ec19b2"
+    },
+    {
+      "path": "captures/sequence-metal/metal-respawned.png",
+      "sha256": "b205c58c49325af7821672e171b41bcd5beb0b8541a3a4a77596e6534da948ae"
+    },
+    {
+      "path": "captures/sequence-fuel/fuel-committed-contact.png",
+      "sha256": "39e21ec9d43c2961cc7464f85395ea2e74e47daecf2d0bae8d2aae0b8e37e55c"
+    },
+    {
+      "path": "captures/sequence-fuel/fuel-depleted.png",
+      "sha256": "9c77135f06c95866bb037b473511f6aa0dcf8b5b9cbd22d9d8d333769bfab4da"
+    },
+    {
+      "path": "captures/sequence-fuel/fuel-respawned.png",
+      "sha256": "edcd75c8ea612a67a78c2fd1329a45c7ec1471525aabe462ddc3456b2f92a57a"
     }
   ],
-  "defects": [],
-  "advisories": [
-    "T09 introduces no danger state; danger clarity is scored for non-interference with existing channels.",
-    "Physical-device 4K60 certification is not claimed."
-  ]
+  "rationale": [
+    "All 32 static resource states and all eight sequence videos were inspected for approach, focus, contact, recovery, cancel, re-entry, depletion and respawn.",
+    "Every source has exactly two authoritative commits: units 2 to 1/inventory 0 to 1, then units 1 to 0/inventory 1 to 2. Maximum simultaneous transfer flight and impact pulse are each one.",
+    "Settled depletion shows zero source units, hidden source and tool, empty action identity, zero flights and zero pulses; respawn is visibly distinct and restores harvestable presentation."
+  ],
+  "schema_version": 1,
+  "task_id": "T09",
+  "critic_id": "C4",
+  "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "workflow_run_id": 35289633249,
+  "artifact_id": 10527144124,
+  "artifact_sha256": "78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+  "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "input_manifest_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "passed": true,
+  "score_reuse": false,
+  "minimum_dimension_score": 9.137,
+  "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
+  "provider": "OpenAI",
+  "model": "unavailable in runtime metadata",
+  "request_or_run_id": "/root/t09_final_critic"
 }

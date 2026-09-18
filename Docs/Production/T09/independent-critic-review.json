@@ -1,117 +1,229 @@
 {
   "schema_version": 1,
+  "review_type": "fresh_independent_exact_source_final",
   "task_id": "T09",
+  "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "candidate_tree": "d9d86772e0231ace00a81ebd69768cf915f8ba2e",
+  "workflow_run_id": 35289633249,
+  "workflow_job_id": 105429457120,
+  "artifact_id": 10527144124,
+  "artifact_sha256": "78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+  "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
   "status": "PASS",
-  "disposition": "APPROVED",
-  "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
-  "workflow_run_id": 35213007340,
-  "artifact_id": 10494819142,
-  "artifact_sha256": "0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1",
-  "complete_evidence_index_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
-  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
-  "score_averaging_used": false,
+  "approval": "APPROVED",
   "coverage_complete": true,
   "unresolved_mandatory_defects": [],
-  "minimum_mandatory_dimension_score": 9.11,
+  "score_reuse": false,
+  "provider": "OpenAI",
+  "model": "unavailable in runtime metadata",
+  "request_or_run_id": "/root/t09_final_critic",
+  "reviewed_at_utc": "2026-09-18T01:19:11Z",
+  "reviewer_independence": "Fresh read-only C2/C3/C4/C5/C6 review. No prior T09 critic score was reused and no production file was edited.",
+  "threshold_contract": {
+    "rule": "Every mandatory dimension must be strictly greater than 9.0 unrounded; no averaging; zero unresolved mandatory defects.",
+    "minimum_score": 9.067,
+    "passed": true
+  },
+  "artifact_integrity": {
+    "verified_zip_path": "/workspace/scratch/9a5e5c6d5884/t09-5415-verified-transfer.zip",
+    "verified_zip_size_bytes": 119604425,
+    "verified_zip_entries": 1195,
+    "zip_crc_passed": true,
+    "artifact_directory": "/workspace/scratch/9a5e5c6d5884/t09-final-5415d85-artifact",
+    "complete_evidence_index_path": "complete-evidence-index.json",
+    "indexed_payload_files": 1193,
+    "verified_payload_hashes": 1193,
+    "missing_payload_files": 0,
+    "hash_mismatches": 0,
+    "unindexed_payload_files": 0,
+    "payload_inventory": {
+      "png": 630,
+      "jpg": 414,
+      "mp4": 14,
+      "json": 97,
+      "log": 36,
+      "txt": 2
+    },
+    "index_and_sidecar_are_additional_to_payload": true,
+    "failed_local_transfer": {
+      "path": "/workspace/scratch/9a5e5c6d5884/t09-final-5415d85.zip",
+      "size_bytes": 104599552,
+      "sha256": "d053d375efb1d3b9f0fb60c752c6c068e93898633debb120e60ec0c6076096be",
+      "error": "BadZipFile",
+      "disposition": "Rejected truncated local download; it does not redefine or invalidate the authoritative artifact digest. G7 uses the independently verified replacement transfer."
+    }
+  },
+  "reviewed_evidence_counts": {
+    "locked_reference_pixels": 3,
+    "isolated_tool_views": 30,
+    "in_hand_tool_target_views": 30,
+    "resource_static_states": 32,
+    "device_screenshots": 24,
+    "native_4k_captures": 1,
+    "c5_videos": 6,
+    "resource_sequence_videos": 8,
+    "c5_png_records": 510,
+    "resource_sequence_jpg_frames": 414,
+    "capture_reports": 71,
+    "test_suites": 17,
+    "test_checks": 1006,
+    "save_matrix_cases": 7,
+    "device_matrix_profiles": 6
+  },
+  "requirements": {
+    "R01": "PASS \u2014 registry and exact candidate/source hashes are bound and the four resource mappings are complete.",
+    "R02": "PASS \u2014 T07 contextual selection remains automatic; one joystick and zero action buttons were proven on all 24 device pixels.",
+    "R03": "PASS \u2014 authored axe, pickaxe and pry finish is visible across all 30 isolated views.",
+    "R04": "PASS \u2014 hand/two-hand grip, facing and target reach pass real-time, slow, turn, close and native-4K inspection.",
+    "R05": "PASS \u2014 each resource has exactly two single authoritative commits synchronized to impact and no presentation grant path.",
+    "R06": "PASS \u2014 wood chips, stone/metal strike differentiation and restrained fuel response are bounded and readable.",
+    "R07": "PASS \u2014 one transfer flight per committed unit visibly reaches the actor and updates carried output exactly once.",
+    "R08": "PASS \u2014 source identity, remaining/depleted state and respawn visibility agree with reports and pixels.",
+    "R09": "PASS \u2014 actor capability boundary tests pass without claiming helper/survivor final motion.",
+    "R10": "PASS \u2014 full C5 protocol passes all three actions at 1.0x and 0.25x with 66-joint grouped coverage.",
+    "R11": "PASS \u2014 6/6 devices, 24/24 states and 7/7 save cases pass; presentation reconstructs without a new save field.",
+    "R12": "PASS \u2014 pooled/bounded response and integrated C6 preserve declared headroom without expanding future scope."
+  },
+  "gates": {
+    "G1": "PASS \u2014 required dependencies and current integrated source are satisfied.",
+    "G2": "PASS \u2014 authorized integration scope and routing governance pass; 49 locked architecture files are unchanged.",
+    "G3": "PASS \u2014 frozen T09 scope is complete with no T10+ or excluded-system expansion.",
+    "G4": "PASS \u2014 source contract, parser/import/resource and exact integration scope checks pass.",
+    "G5": "PASS \u2014 harvesting functional states and fail-closed event boundaries pass.",
+    "G6": "PASS \u2014 17 impacted suites / 1006 checks pass.",
+    "G7": "PASS \u2014 source, verified ZIP, complete index and all 1193 payload hashes are exact; the truncated first local transfer is rejected and separately recorded.",
+    "G8": "PASS \u2014 exact-base integrated C6 gate passes all declared budgets.",
+    "G9": "PASS \u2014 7/7 save/reload/migration/recovery cases pass and no saved field was added.",
+    "G10": "PASS \u2014 replay, duplicate, stale, malformed and authority boundaries fail closed without duplicate reward.",
+    "G11": "PASS \u2014 6/6 profiles and all 24 captures preserve joystick, actor/tool/target/feedback readability and full-frame canvas coverage.",
+    "G12": "PASS \u2014 fresh C2/C3/C4/C5/C6 coverage is complete against the exact artifact.",
+    "G13": "PASS \u2014 every canonical dimension is strictly greater than 9.0 unrounded; minimum 9.067; zero unresolved mandatory defects.",
+    "G14": "PASS \u2014 exact integrated gameplay source 5415d85838ecf4bea8b3c71662072670e61797a0 passed run 35289633249; governance routing commit 460064be8fff1b970071212a923423f2733024cc passed hosted run 35290773190."
+  },
+  "defect_ledger_review": {
+    "D008": "VERIFIED_CLOSED \u2014 visible authored colored finish on all three tools.",
+    "D009": "VERIFIED_CLOSED \u2014 six actual tool/target/contact C5 videos with genuine 0.25x slow review.",
+    "D010": "VERIFIED_CLOSED \u2014 neutral readable stage, unchanged shipping target materials and one resource-colored selection ring.",
+    "D011": "VERIFIED_CLOSED \u2014 maximum one transfer flight/pulse, two authoritative units total, and settled zero-clutter depletion.",
+    "D012": "VERIFIED_CLOSED \u2014 known-failures.json is indexed as ec917b06f4485f02508a9c45c617ff7613338883e8b1858dd691d2602dff300d.",
+    "D013": "VERIFIED_CLOSED \u2014 visible one-joystick/zero-action-button proof in all 24 device pixels and reports.",
+    "D014": "VERIFIED_CLOSED \u2014 71 capture reports, complete render output, typed source and passing contract/tests.",
+    "D015": "VERIFIED_CLOSED \u2014 full-frame world coverage on all 24 device pixels; maximum projected canvas error 0.000122 px; no dark bands."
+  },
+  "known_failures_evidence": {
+    "path": "known-failures.json",
+    "sha256": "ec917b06f4485f02508a9c45c617ff7613338883e8b1858dd691d2602dff300d",
+    "open_failures": 0
+  },
+  "limitations": [
+    "This approval is limited to the frozen T09 contract and exact source/artifact identity stated above.",
+    "Physical-device 4K60/display and thermal certification are not claimed and remain T68/T69 scope.",
+    "The C5 approval is for the in-place harvesting clips and their runtime transition/contact contract, not new locomotion or root-motion behavior.",
+    "The exact underlying runtime model identifier is not exposed to this review session and is therefore reported as unavailable rather than inferred."
+  ],
+  "disposition": "APPROVED",
+  "approved_at": "2026-09-18T01:30:01.987770Z",
+  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
+  "score_averaging_used": false,
   "critics": {
     "C2": {
       "status": "PASS",
+      "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
       "scores": {
-        "geometry_contact": 9.78,
-        "clipping_seams": 9.36,
-        "intentional_gap_integrity": 9.33,
-        "cross_view_integrity": 9.69
+        "geometry_contact": 9.237,
+        "clipping_seams": 9.184,
+        "intentional_gap_integrity": 9.163,
+        "cross_view_integrity": 9.226
       },
-      "minimum_dimension_score": 9.33,
       "defects": [],
+      "coverage_complete": true,
+      "independent_runtime": true,
       "raw_record_path": "Docs/Production/T09/CriticRaw/C2.json",
-      "raw_record_sha256": "3533543f1d5938231240638a9fbe5431885644f02f539daeb6749906aef956ff",
-      "coverage_complete": true
+      "raw_record_sha256": "2b0e47698bf48e81b2ee8989fec06100c125f5e6eec1acdcbaecc57a06e6571b",
+      "minimum_dimension_score": 9.163
     },
     "C3": {
       "status": "PASS",
+      "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
       "scores": {
-        "havenline_identity": 9.284,
-        "simple_context_controls": 9.786,
-        "physical_core_loop": 9.517,
-        "complexity_discipline": 9.742,
-        "world_response_readability": 9.276
+        "havenline_identity": 9.247,
+        "simple_context_controls": 9.331,
+        "physical_core_loop": 9.176,
+        "complexity_discipline": 9.284,
+        "world_response_readability": 9.159
       },
-      "minimum_dimension_score": 9.276,
       "defects": [],
+      "coverage_complete": true,
+      "independent_runtime": true,
       "raw_record_path": "Docs/Production/T09/CriticRaw/C3.json",
-      "raw_record_sha256": "97a6fd5ffa18c20d36b1bea1ec75b9408320348b116967619be73f4d45305d37",
-      "coverage_complete": true
+      "raw_record_sha256": "9ce6f9fda0b7ea38e85ed31fa8c85e3ffea6e670b42417f8eebb6365e4a46ada",
+      "minimum_dimension_score": 9.159
     },
     "C4": {
       "status": "PASS",
+      "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
       "scores": {
-        "interactable_clarity": 9.238,
-        "danger_clarity": 9.127,
-        "collection_feedback": 9.476,
-        "resource_destination": 9.186,
-        "world_change_clarity": 9.318,
-        "next_action_clarity": 9.367
+        "interactable_clarity": 9.171,
+        "danger_clarity": 9.286,
+        "collection_feedback": 9.204,
+        "resource_destination": 9.137,
+        "world_change_clarity": 9.192,
+        "next_action_clarity": 9.213
       },
-      "minimum_dimension_score": 9.127,
       "defects": [],
+      "coverage_complete": true,
+      "independent_runtime": true,
       "raw_record_path": "Docs/Production/T09/CriticRaw/C4.json",
-      "raw_record_sha256": "682dd784d5de17b9a1d5bef1b15aeb15d8a03d57f69699060577abf498f2c784",
-      "coverage_complete": true
+      "raw_record_sha256": "d975c501bebfe15a8f593d5ca423dc55eed0426e04a370cb1973720bee42e9d2",
+      "minimum_dimension_score": 9.137
     },
     "C5": {
       "status": "PASS",
+      "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
       "scores": {
-        "full_cycle": 9.6417,
-        "foot_contact": 9.5621,
-        "lower_body_mechanics": 9.3846,
-        "upper_body_mechanics": 9.5128,
-        "weight_transfer": 9.3274,
-        "transitions": 9.7315,
-        "clipping": 9.6842,
-        "secondary_motion_contact": 9.4586
+        "full_cycle": 9.187,
+        "foot_contact": 9.229,
+        "lower_body_mechanics": 9.154,
+        "upper_body_mechanics": 9.173,
+        "weight_transfer": 9.108,
+        "transitions": 9.143,
+        "clipping": 9.207,
+        "secondary_motion_contact": 9.132
       },
-      "minimum_dimension_score": 9.3274,
       "defects": [],
+      "coverage_complete": true,
+      "independent_runtime": true,
       "raw_record_path": "Docs/Production/T09/CriticRaw/C5.json",
-      "raw_record_sha256": "3c119b3e67a8cb4348856c758e7cbf0aeabcb49706fb77fded8ae7a7843d0fed",
-      "coverage_complete": true
+      "raw_record_sha256": "34274007428f9c43946a1938799f082a1d274f4307f13f989b09b93eb6bcd70a",
+      "minimum_dimension_score": 9.108
     },
     "C6": {
       "status": "PASS",
+      "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
       "scores": {
-        "frame_time": 9.34,
-        "draw_calls": 9.78,
-        "geometry": 9.76,
-        "texture_memory": 9.44,
-        "shader_cost": 9.29,
-        "physics": 9.94,
-        "animation": 9.82,
-        "population": 9.89,
-        "thermal_risk": 9.11
+        "frame_time": 9.214,
+        "draw_calls": 9.402,
+        "geometry": 9.482,
+        "texture_memory": 9.237,
+        "shader_cost": 9.491,
+        "physics": 9.488,
+        "animation": 9.472,
+        "population": 9.489,
+        "thermal_risk": 9.067
       },
-      "minimum_dimension_score": 9.11,
       "defects": [],
+      "coverage_complete": true,
+      "independent_runtime": true,
       "raw_record_path": "Docs/Production/T09/CriticRaw/C6.json",
-      "raw_record_sha256": "facf103a6bcd0ff77d08e01387edcf7f649af187f1cfadd0206fffb044075181",
-      "coverage_complete": true
+      "raw_record_sha256": "e3171b177c1f680f2ae7de992bf2b50cf02f54b6667b7965666b35858d20f41a",
+      "minimum_dimension_score": 9.067
     }
   },
-  "review_scope": {
-    "indexed_files_verified": 913,
-    "full_resolution_images": 463,
-    "motion_images_inspected": 238,
-    "suites": 17,
-    "checks": 997,
-    "save_cases": "7/7",
-    "device_cases": "6/6",
-    "physical_device_certification": false
-  },
   "retained_review_evidence": {
-    "workflow_run_id": 35219158784,
-    "artifact_id": 10495254920,
-    "artifact_sha256": "7578527f171ab526147ebb7f4aa59c07278a3d68c46cf805f749539791e0c42a",
-    "expires_at": "2026-12-16T12:05:19Z"
+    "workflow_run_id": 35289633249,
+    "artifact_id": 10527144124,
+    "artifact_sha256": "78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+    "expires_at": "2026-12-17T00:04:44Z"
   },
-  "approved_at": "2026-09-17T12:20:00Z"
+  "minimum_mandatory_dimension_score": 9.067
 }

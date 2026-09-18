@@ -22,7 +22,10 @@
     "independent_runtime_smoke": "PASS",
     "self_healing_pinned_runtime": "PASS",
     "combined_readiness_gate": "PASS",
-    "unit_tests": {"passed": 20, "failed": 0}
+    "unit_tests": {
+      "passed": 20,
+      "failed": 0
+    }
   },
   "integration_governance_run": {
     "run_id": 34652626961,
@@ -33,7 +36,10 @@
   "prior_qa_readiness_proof": {
     "run_id": 34651444922,
     "tested_source": "bf17d0b83c346e0dae15472e115d49767a589fbb",
-    "unit_tests": {"passed": 20, "failed": 0},
+    "unit_tests": {
+      "passed": 20,
+      "failed": 0
+    },
     "deterministic_artifact": {
       "artifact_id": 10284335243,
       "zip_sha256": "cb7649fb3feb9cbadaa795eeffbd34a0ffb6a937dcd5f7335bc46c5fad68e366"
@@ -54,22 +60,82 @@
     "cache_miss_self_healing": true,
     "actual_inference_smoke": {
       "passed": true,
-      "response": {"runtime_ready": true, "token": "havenline-specialist-v1"}
+      "response": {
+        "runtime_ready": true,
+        "token": "havenline-specialist-v1"
+      }
     },
     "paid_api_required": false
   },
   "critics": {
-    "C1": {"name":"Reference Fidelity Critic","operational":true,"execution":"existing independent visual reviewer","production_review_history_exists":true},
-    "C2": {"name":"Technical / Visual Integrity Critic","operational":true,"execution":"existing independent visual reviewer","production_review_history_exists":true},
-    "C3": {"name":"Havenline Gameplay Identity Critic","operational":true,"execution":"independent specialist local model","production_candidate_score_executed_yet":true},
-    "C4": {"name":"Gameplay UX / Readability Critic","operational":true,"execution":"independent specialist local model","production_candidate_score_executed_yet":true},
-    "C5": {"name":"Motion / Rigging Critic","operational":true,"execution":"independent specialist local model plus motion capture harness","production_candidate_score_executed_yet":false},
-    "C6": {"name":"Performance Critic","operational":true,"execution":"quantitative budget gate","production_candidate_score_executed_yet":true,"final_physical_4k60_substitute":false},
-    "C7": {"name":"Progression / Difficulty Critic","operational":true,"execution":"independent specialist local model plus deterministic progression gate","production_candidate_score_executed_yet":false},
-    "C8": {"name":"Economy / Fairness Critic","operational":true,"execution":"independent specialist local model plus deterministic economy gate","production_candidate_score_executed_yet":false},
-    "C9": {"name":"Security / Exploit Critic","operational":true,"execution":"10-attack deterministic adversarial harness","secure_and_vulnerable_mock_paths_tested":true,"production_system_attack_run_yet":false},
-    "C10": {"name":"LiveOps Critic","operational":true,"execution":"independent specialist local model plus deterministic LiveOps gate","production_candidate_score_executed_yet":false},
-    "C11": {"name":"Accessibility Critic","operational":true,"execution":"independent specialist local model plus deterministic accessibility and device-layout gates","production_candidate_score_executed_yet":true}
+    "C1": {
+      "name": "Reference Fidelity Critic",
+      "operational": true,
+      "execution": "existing independent visual reviewer",
+      "production_review_history_exists": true
+    },
+    "C2": {
+      "name": "Technical / Visual Integrity Critic",
+      "operational": true,
+      "execution": "existing independent visual reviewer",
+      "production_review_history_exists": true
+    },
+    "C3": {
+      "name": "Havenline Gameplay Identity Critic",
+      "operational": true,
+      "execution": "independent specialist local model",
+      "production_candidate_score_executed_yet": true
+    },
+    "C4": {
+      "name": "Gameplay UX / Readability Critic",
+      "operational": true,
+      "execution": "independent specialist local model",
+      "production_candidate_score_executed_yet": true
+    },
+    "C5": {
+      "name": "Motion / Rigging Critic",
+      "operational": true,
+      "execution": "independent specialist local model plus motion capture harness",
+      "production_candidate_score_executed_yet": true
+    },
+    "C6": {
+      "name": "Performance Critic",
+      "operational": true,
+      "execution": "quantitative budget gate",
+      "production_candidate_score_executed_yet": true,
+      "final_physical_4k60_substitute": false
+    },
+    "C7": {
+      "name": "Progression / Difficulty Critic",
+      "operational": true,
+      "execution": "independent specialist local model plus deterministic progression gate",
+      "production_candidate_score_executed_yet": false
+    },
+    "C8": {
+      "name": "Economy / Fairness Critic",
+      "operational": true,
+      "execution": "independent specialist local model plus deterministic economy gate",
+      "production_candidate_score_executed_yet": false
+    },
+    "C9": {
+      "name": "Security / Exploit Critic",
+      "operational": true,
+      "execution": "10-attack deterministic adversarial harness",
+      "secure_and_vulnerable_mock_paths_tested": true,
+      "production_system_attack_run_yet": false
+    },
+    "C10": {
+      "name": "LiveOps Critic",
+      "operational": true,
+      "execution": "independent specialist local model plus deterministic LiveOps gate",
+      "production_candidate_score_executed_yet": false
+    },
+    "C11": {
+      "name": "Accessibility Critic",
+      "operational": true,
+      "execution": "independent specialist local model plus deterministic accessibility and device-layout gates",
+      "production_candidate_score_executed_yet": true
+    }
   },
   "negative_fixture_proofs": [
     "exact score 9.0 is rejected",
@@ -94,7 +160,8 @@
     "T06": "APPROVED",
     "T07": "APPROVED",
     "T08": "APPROVED",
-    "T09_plus_runtime": "LOCKED"
+    "T09": "APPROVED",
+    "T10_plus_runtime": "LOCKED"
   },
-  "next_step": "Preserve T08 exact integrated source 9d56ea8ae972d0a0705ff8b985e13fab31dde493. Prepare a separate T09 frozen scope, task packet, owner and disjoint path reservation before assignment; T09+ remains LOCKED until then."
+  "next_step": "Preserve T09 exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0. T10 remains LOCKED pending separate activation."
 }

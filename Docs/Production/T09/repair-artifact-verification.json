@@ -1,9 +1,15 @@
 {
   "schema_version": 1,
   "task_id": "T09",
-  "status": "ARTIFACT_AND_INDEPENDENT_REVIEW_PASSED_INTEGRATION_BLOCKED",
+  "status": "HISTORICAL_REPAIR_PASSED_INTEGRATION_REVALIDATION_COMPLETE",
   "independent_review_record": "Docs/Production/T09/repair-independent-review-94714f6.md",
-  "critic_minimum_scores": {"C2": 9.34, "C3": 9.31, "C4": 9.22, "C5": 9.18, "C6": 9.12},
+  "critic_minimum_scores": {
+    "C2": 9.34,
+    "C3": 9.31,
+    "C4": 9.22,
+    "C5": 9.18,
+    "C6": 9.12
+  },
   "unresolved_artifact_defects": [],
   "source": "94714f6f65c26a05d78888802c9fb54d31e8c95b",
   "source_tree": "902e6a876591f9c5c3802f57c64deaa0c44cf1d1",
@@ -31,5 +37,8 @@
   "physical_device_4k60_certified": false,
   "task_approval_granted_by_this_record": false,
   "integration_blocker_record": "Docs/Production/ChangeRequests/T09-reviewed-repair-reactivation.json",
-  "regeneration": "Run the source-bound T09 harvesting workflow only after its retirement and architecture authorization are resolved. Preserve the pinned Godot version and exact capture inputs."
+  "regeneration": "Run the source-bound T09 harvesting workflow only after its retirement and architecture authorization are resolved. Preserve the pinned Godot version and exact capture inputs.",
+  "historical_record": true,
+  "superseded_by": "Docs/Production/T09/verified-completion.json",
+  "current_accepted_source": "5415d85838ecf4bea8b3c71662072670e61797a0"
 }

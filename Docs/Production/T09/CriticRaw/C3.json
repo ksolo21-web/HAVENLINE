@@ -1,89 +1,70 @@
 {
-  "schema_version": 1,
-  "task_id": "T09",
-  "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
-  "workflow_run_id": 35213007340,
-  "artifact_id": 10494819142,
-  "artifact_sha256": "0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1",
-  "complete_evidence_index_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
-  "input_manifest_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
-  "review_export_commit": "3dc86b8f0ed8f6364e78d29e6fd1d0ccd0a76014",
   "status": "PASS",
-  "passed": true,
-  "coverage_complete": true,
-  "score_reuse": false,
-  "critic_id": "C3",
-  "critic_name": "Havenline Gameplay Identity Critic",
-  "provider": "OpenAI",
-  "model": "gpt-6-astra",
-  "request_or_run_id": "35213007340:C3:/root/t09_c3_c4_final",
-  "independent_runtime": true,
-  "confidence": 0.974,
-  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
   "scores": {
-    "havenline_identity": 9.284,
-    "simple_context_controls": 9.786,
-    "physical_core_loop": 9.517,
-    "complexity_discipline": 9.742,
-    "world_response_readability": 9.276
+    "havenline_identity": 9.247,
+    "simple_context_controls": 9.331,
+    "physical_core_loop": 9.176,
+    "complexity_discipline": 9.284,
+    "world_response_readability": 9.159
   },
-  "minimum_dimension_score": 9.276,
-  "coverage": {
-    "resources": [
-      "wood",
-      "stone",
-      "metal",
-      "fuel"
-    ],
-    "sequence_states": [
-      "approach",
-      "focus_acquired",
-      "cancelled",
-      "committed_contact",
-      "recovery",
-      "reentry",
-      "depleted",
-      "respawned"
-    ],
-    "device_states": [
-      "phone_16_9",
-      "phone_20_9",
-      "tablet_16_10",
-      "tablet_4_3",
-      "foldable_outer",
-      "foldable_inner"
-    ],
-    "suite_count": 17,
-    "total_checks": 997
-  },
+  "minimum_score": 9.159,
+  "coverage_complete": true,
+  "confidence": 0.96,
+  "defects": [],
   "evidence": [
     {
-      "path": "captures/sequence-wood/wood-committed-contact.png",
-      "sha256": "315364caa0040814c94e35a8e990652aa9879355eb96bc28eb28fa0676a2c68a"
+      "path": "reference/A-003.00.png",
+      "sha256": "1dc3c5c3572d49263c6eb8eb3116b44cd31fa17e2634caf1ed3b1a5860737b07"
     },
     {
-      "path": "captures/sequence-stone/stone-committed-contact.png",
-      "sha256": "6695aee2ef9efc1cbc246c0975811897c1b5daf2a4f703c609d911f511c85c94"
+      "path": "reference/A-016.00.png",
+      "sha256": "3afe3c0fe64702894b7cac3a0d1b271cac0b2d60e87490063a1def7ee111d5ba"
     },
     {
-      "path": "captures/sequence-metal/metal-committed-contact.png",
-      "sha256": "330f1806ced3787bd3796d14fc4513c654085463149baa8d2ddfb27e17c205fe"
+      "path": "reference/B-028.00.png",
+      "sha256": "3e983101885a727eb32fcc0d132fcacf8be8c439d2dfefcb267b45326065ee18"
     },
     {
-      "path": "captures/sequence-fuel/fuel-committed-contact.png",
-      "sha256": "e3ebdc89151631d67d7d79b7bae1170574f68f59e5af93a47c8ea328f9ac5c08"
+      "path": "captures/sequence-wood/wood-real-time.mp4",
+      "sha256": "849f12e96b66f61174d0653cde945f18be6f0cad18dec084f0c03f7b32f9f59c"
     },
     {
-      "path": "source-contract.json",
-      "sha256": "2514521e4cf9208128f1328e4a9b47756d362816d3b559b975f4bb74ecfde485"
+      "path": "captures/sequence-stone/stone-real-time.mp4",
+      "sha256": "dc1cce16eb43df05096fe3067c0e2ef278ecf83ff4d07719e181ce3d61983448"
     },
     {
-      "path": "resource-actor-contract.json",
-      "sha256": "1cd32e1e4adf94a4bdaa4deaded3d13264c0f931978336b6f1b2dd78b14f1946"
+      "path": "captures/sequence-metal/metal-real-time.mp4",
+      "sha256": "3b62a892d21e808a0aad2d73a26968021cf4b6b62a6c5bc0601437e186c5b993"
+    },
+    {
+      "path": "captures/sequence-fuel/fuel-real-time.mp4",
+      "sha256": "45e72d649b3f688428eb1c868c9ffde7eb5000460d626a07bdf50fcd50c496a9"
+    },
+    {
+      "path": "matrices/device/device-matrix.json",
+      "sha256": "c163eb41374395870c905d237d463db894da0f5dd3d513e8935a9eb126b1f49b"
     }
   ],
-  "defects": [],
-  "advisories": [
-    "Physical-device 4K60 certification is not claimed."
-  ]
+  "rationale": [
+    "The four automatic contextual loops preserve Havenline's authored stylized material language and physical actor-source-transfer-carry chain.",
+    "All 24 device pixels show one movement joystick and zero action buttons; no pickup, tool-cycle, gather or inventory button appears.",
+    "The selected-source ring, resource-specific tool, impact response, one-unit transfer and physical carried destination are readable without introducing out-of-scope systems."
+  ],
+  "schema_version": 1,
+  "task_id": "T09",
+  "critic_id": "C3",
+  "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "workflow_run_id": 35289633249,
+  "artifact_id": 10527144124,
+  "artifact_sha256": "78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+  "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "input_manifest_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "passed": true,
+  "score_reuse": false,
+  "minimum_dimension_score": 9.159,
+  "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
+  "provider": "OpenAI",
+  "model": "unavailable in runtime metadata",
+  "request_or_run_id": "/root/t09_final_critic"
 }

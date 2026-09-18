@@ -38,6 +38,46 @@
         "actions/upload-artifact": "ea165f8d65b6e75b540449e92b4886f43607fa02"
       },
       "statement": "Durable, non-reusable provenance for the exact integrated T09 proof created before V3.1 activation. This record does not grant cross-source proof reuse."
+    },
+    {
+      "record_type": "exact_source_provenance",
+      "task_id": "T09",
+      "gate_family": "integrated_candidate_g1_g14",
+      "candidate": "5415d85838ecf4bea8b3c71662072670e61797a0",
+      "result": "PASS",
+      "reuse_eligible": false,
+      "recorded_at": "2026-09-18T01:30:01.987770Z",
+      "workflow_run_id": 35289633249,
+      "workflow_job_id": 105429457120,
+      "evidence": {
+        "original_artifact_id": 10527144124,
+        "original_artifact_sha256": "78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "indexed_files": 1193,
+        "retained_artifact_id": 10527144124,
+        "retained_artifact_sha256": "78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+        "retained_until": "2026-12-17T00:04:44Z"
+      },
+      "runner_provenance": {
+        "ImageOS": "ubuntu24",
+        "ImageVersion": "20260907.300.1",
+        "RUNNER_OS": "Linux",
+        "RUNNER_ARCH": "X64",
+        "godot": "4.7.2.stable",
+        "godot_editor_sha512": "9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65",
+        "source": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "runner_version": "2.337.0",
+        "hosted_compute_agent_version": "20260828.587",
+        "hosted_compute_agent_commit": "abac92662cab4cc7352de4f9f9d2e2419aad9c29",
+        "operating_system": "Ubuntu 24.04.5 LTS",
+        "region": "westus",
+        "job_log_source": "105429457120"
+      },
+      "resolved_actions": {
+        "actions/checkout": "fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09",
+        "actions/upload-artifact": "b7c566a772e6b6bfb58ed0dc250532a479d7789f"
+      },
+      "statement": "Fresh exact-source integrated review under authorized bounded V3.2 T09 reactivation; no cross-source approval reuse."
     }
   ]
 }

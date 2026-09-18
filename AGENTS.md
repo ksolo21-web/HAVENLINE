@@ -91,12 +91,9 @@ checks, all 44 locked frames, both locked recordings, G1-G14 and strict
 C2/C3/C4/C6 review.
 
 T09 is APPROVED at exact integrated source
-`9bc735502b265bfdd365004fb863b19c613e27dd`; its verified closure is recorded
-in `Docs/Production/T09/verified-completion.json`. Exact-source workflow run
-35213007340 passed 17 suites / 997 checks, 7/7 save cases, 6/6 device cases,
-913/913 evidence hashes, G1-G14, and fresh strict C2/C3/C4/C5/C6 review with
-all mandatory dimensions above 9.0 and zero defects. T10+ runtime production
-remains LOCKED pending separate preparation, ownership, and activation.
+`5415d85838ecf4bea8b3c71662072670e61797a0`; its verified closure is recorded
+in `Docs/Production/T09/verified-completion.json`. Exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0 passed 17 suites / 1006 checks, 7/7 save cases, 6/6 device cases, 1193/1193 indexed hashes, G1-G14, and fresh independent C2/C3/C4/C5/C6 review with every mandatory dimension strictly above 9.0 and zero unresolved defects.
+T10+ runtime production remains LOCKED pending separate preparation, ownership, and activation.
 
 T03 was the final legacy task grandfathered to finish directly on
 `codex/havenline-sequential-task-01`. T04 and all later runtime work use
