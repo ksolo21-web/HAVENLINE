@@ -96,7 +96,8 @@ jobs:
           assert ready.get('passed') is True and ready.get('isolated_critic_input_ready') is True,ready
           assert 'stable_evidence_ids_with_anchored_semantic_matchers' in c7
           assert 'R05_INTEGRATION_ACCEPTED_STOPS_FLOW' in c7
-          assert 'accepted receipt stops flow while retaining camera-lane maintenance' in c7
+          assert '"source_reports"' in c7 and 'integration-tests.json' in c7 and 'domain-tests.json' in c7
+          assert 'accepted receipt stops flow while retaining camera-lane maintenance' not in c7
           out={
             'schema_version':1,
             'task':'T10',
