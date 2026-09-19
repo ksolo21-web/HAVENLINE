@@ -385,13 +385,22 @@ func _label_candidate(lane: String, response: Rect2, frame: Rect2, gap: float, p
 		return diagnostic
 	var wrap_width := minf(LABEL_MAX_WIDTH, max_wrap_width)
 	var label_size := _label_size_for_wrap(pixels_per_label_unit, wrap_width)
+	var fit_attempts := 1
+	# Label3D/font shaping can exceed the requested wrap width because words,
+	# glyph fallback and outline metrics are authoritative. Search the actual
+	# measured result instead of treating the requested width as proof of fit.
+	while label_size.x > available_width + 0.01 and wrap_width > LABEL_MIN_WRAP_WIDTH:
+		wrap_width = maxf(LABEL_MIN_WRAP_WIDTH, wrap_width - 8.0)
+		label_size = _label_size_for_wrap(pixels_per_label_unit, wrap_width)
+		fit_attempts += 1
 	diagnostic["wrap_width"] = wrap_width
+	diagnostic["fit_attempts"] = fit_attempts
 	diagnostic["label_size"] = [label_size.x, label_size.y]
 	if label_size.x > available_width + 0.01:
-		diagnostic["failure"] = "label_too_wide"
+		diagnostic["failure"] = "label_too_wide_after_search"
 		return diagnostic
 	if label_size.y > available_height + 0.01:
-		diagnostic["failure"] = "label_too_tall"
+		diagnostic["failure"] = "label_too_tall_after_search"
 		return diagnostic
 	var half := label_size * 0.5
 	var desired := response.get_center()
