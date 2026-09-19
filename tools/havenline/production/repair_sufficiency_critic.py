@@ -252,6 +252,11 @@ def review(c0: dict, plan: dict, c0_sha256: str | None = None) -> dict:
 
     observations = _list(frontier.get("observations"))
     unclassified = _list(frontier.get("unclassified_failures"))
+    unclassified_candidates = {
+        _text(row.get("candidate"))
+        for row in unclassified
+        if isinstance(row, dict) and len(_text(row.get("candidate"))) == 40
+    }
     if unclassified:
         evidence_gaps.append("POST_DIAGNOSIS_FAILURES_UNCLASSIFIED")
 
@@ -288,7 +293,7 @@ def review(c0: dict, plan: dict, c0_sha256: str | None = None) -> dict:
                 reject.append(prefix + ":BOUND_GROUP_UNKNOWN")
         elif disposition == "NEW_FAILURE_REQUIRES_C0":
             evidence_gaps.append(prefix + ":NEW_FAILURE_REQUIRES_C0")
-    if latest_observed and latest_observed != diagnosed_through and latest_observed not in observation_candidates:
+    if latest_observed and latest_observed != diagnosed_through and latest_observed not in observation_candidates and latest_observed not in unclassified_candidates:
         reject.append("LATEST_POST_DIAGNOSIS_FAILURE_NOT_REPRESENTED")
     if observations:
         risk_codes.add("POST_DIAGNOSIS_FAILURES_PRESENT")
