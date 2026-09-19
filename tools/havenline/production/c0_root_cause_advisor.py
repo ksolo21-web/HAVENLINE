@@ -30,7 +30,7 @@ C0_SAFETY_TOKENS=512
 # reserves inside the pinned context window.
 C0_MAX_REQUEST_BYTES=C0_CONTEXT_TOKENS-C0_MAX_TOKENS-C0_SAFETY_TOKENS
 FAIL_CONCLUSIONS={"failure","timed_out","cancelled","action_required","startup_failure"}
-TERMINAL_SIGNAL_RE=re.compile(r'(?i)(projected(?: device)? readability failed|assert(?:ion)? failed|script error|parse error|traceback|fatal(?: error)?|runtime error|process completed with exit code [1-9]|"passed"\\s*:\\s*false)')
+TERMINAL_SIGNAL_RE=re.compile(r'(?i)(projected(?: device)? readability failed|assertionerror|assert(?:ion)? failed|script error|parse error|traceback|fatal(?: error)?|runtime error|process completed with exit code [1-9]|"passed"\\s*:\\s*false)')
 C0_DIAGNOSTIC_JOB_MARKERS=("c0 diagnosis after failed","c0 non-voting root-cause diagnosis","c0 root-cause advisor")
 ANSI_RE=re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
 SIGNAL_RE=re.compile(r"(?i)(critic|score|defect|error|fail|fatal|traceback|assert|coverage|confidence|timeout|exceed|blocked|unexecuted)")
