@@ -62,7 +62,9 @@ SPECIALIST_REQUEST = "Docs/Production/ChangeRequests/T10-specialist-actionable-d
 SPECIALIST_REQUEST_SHA256 = "25c8544a37587fdbbd527de7606c0517e67781ee879fdb72e502b6fe2d1c513d"
 C0_ADVISOR = "tools/havenline/production/c0_root_cause_advisor.py"
 C0_ADVISOR_BASE_SHA256 = "d66e551eadf4dcdd1363da3da41d64e314a074292b2531cf99c0f5028a24beee"
-C0_ADVISOR_CURRENT_SHA256 = "721c84e1cc7ca00cc2c8ccabe9821f17eb142448ff25db03b7003b8d4d9c2986"
+C0_ADVISOR_CURRENT_SHA256 = "889e41072b2096aac6ed9843cbdb028425d126e7b254229a523294467d6dd777"
+C0_TERMINAL_JOB_LOG_REQUEST = "Docs/Production/ChangeRequests/T10-c0-terminal-job-log-priority.json"
+C0_TERMINAL_JOB_LOG_REQUEST_SHA256 = "08a3d20890dc37532c70fa22baa040116543474eceaad0879c9dc9d7d21559e2"
 C0_TERMINAL_REQUEST = "Docs/Production/ChangeRequests/T10-c0-terminal-evidence-priority.json"
 C0_TERMINAL_REQUEST_SHA256 = "d348b08f9dae57cc56fb9ba1cbb40053a31c8d598ad87531bc11d381395f8d6a"
 C0_BOUNDED_REQUEST = "Docs/Production/ChangeRequests/T10-c0-bounded-model-packet.json"
@@ -210,6 +212,11 @@ def validate() -> dict:
             errors.append("Bounded C0 terminal-evidence authorization changed or missing")
         if c0_terminal_request.get("status")!="AUTHORIZED" or c0_terminal_request.get("blockers")!=["C0-T10-B059","C0-T10-B060","C0-T10-B061"]:
             errors.append("Explicit B059/B060/B061 terminal-evidence C0 authorization missing")
+        c0_terminal_job_request=json.loads((v31.ROOT/C0_TERMINAL_JOB_LOG_REQUEST).read_text())
+        if hashlib.sha256((v31.ROOT/C0_TERMINAL_JOB_LOG_REQUEST).read_bytes()).hexdigest()!=C0_TERMINAL_JOB_LOG_REQUEST_SHA256:
+            errors.append("Bounded C0 terminal job-log authorization changed or missing")
+        if c0_terminal_job_request.get("status")!="AUTHORIZED" or c0_terminal_job_request.get("blockers")!=["C0-T10-B059","C0-T10-B060","C0-T10-B061"]:
+            errors.append("Explicit B059/B060/B061 terminal job-log C0 authorization missing")
         if hashlib.sha256((v31.ROOT/C0_DIAGNOSTICS).read_bytes()).hexdigest()!=C0_DIAGNOSTICS_SHA256:
             errors.append("Bounded C0 artifact diagnostic collector changed or missing")
         specialist_request=json.loads((v31.ROOT/SPECIALIST_REQUEST).read_text())
@@ -261,7 +268,7 @@ def validate() -> dict:
     return {
         "passed": not errors,
         "architecture_version": "3.2",
-        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, exact-byte inherited integration governance, canonical C0R builder enforcement for T10+, actionable critic defects, bounded C0 model packets, grounded artifact diagnostics and terminal-first subject-isolated C0 projection",
+        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, exact-byte inherited integration governance, canonical C0R builder enforcement for T10+, actionable critic defects, bounded C0 model packets, grounded artifact diagnostics, terminal-first artifact evidence, latest-terminal failed-job log projection, and subject-isolated C0 execution",
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
@@ -276,6 +283,7 @@ def validate() -> dict:
         "c0_bounded_packet_authorization_record": C0_BOUNDED_REQUEST,
         "c0_grounding_authorization_record": C0_GROUNDING_REQUEST,
         "c0_terminal_evidence_authorization_record": C0_TERMINAL_REQUEST,
+        "c0_terminal_job_log_authorization_record": C0_TERMINAL_JOB_LOG_REQUEST,
         "specialist_actionable_defect_authorization_record": SPECIALIST_REQUEST,
         "errors": errors,
     }
