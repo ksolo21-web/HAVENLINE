@@ -1,0 +1,161 @@
+name: Havenline T10 exhaustive projection diagnostic
+
+on:
+  push:
+    branches: ['havenline/T10-exhaustive-diagnostic']
+    paths:
+      - 'HavenlineGodot/tests/capture_task10_world_transform.gd'
+      - '.github/workflows/havenline-task10-exhaustive-diagnostic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-t10-exhaustive-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  enumerate-projections:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      SOURCE_CANDIDATE: 1482ee7d89ec0d7d051b9149323127dfaf1443e4
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Prove diagnostic-only diff
+        run: |
+          set -euo pipefail
+          git cat-file -e "$SOURCE_CANDIDATE^{commit}"
+          mapfile -t changed < <(git diff --name-only "$SOURCE_CANDIDATE" HEAD)
+          printf '%s\n' "${changed[@]}"
+          python3 - "${changed[@]}" <<'PY'
+          import sys
+          allowed={
+            'HavenlineGodot/tests/capture_task10_world_transform.gd',
+            '.github/workflows/havenline-task10-exhaustive-diagnostic.yml',
+          }
+          changed=set(sys.argv[1:])
+          assert changed and changed <= allowed,(changed,allowed)
+          assert 'HavenlineGodot/scripts/world_transform_view.gd' not in changed
+          PY
+
+      - name: Prepare pinned Godot diagnostic renderer
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine" t10-exhaustive
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          timeout 240 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --path HavenlineGodot --import --quit > t10-exhaustive/import.log 2>&1
+
+      - name: Enumerate all 216 device state angle projections
+        env:
+          HARNESS_COMMIT: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          python3 - <<'PY' > /tmp/t10-device-matrix.tsv
+          import json
+          from pathlib import Path
+          matrix=json.loads(Path('Docs/Production/DEVICE_LAYOUT_MATRIX.json').read_text())
+          assert matrix.get('landscape_required') is True
+          assert len(matrix.get('states',[])) == 6
+          for row in matrix['states']:
+              w,h=row['logical_size']; print(f"{row['id']}\t{w}\t{h}")
+          PY
+          while IFS=$'\t' read -r device width height; do
+            out="$(pwd)/t10-exhaustive/$device"; mkdir -p "$out"
+            set +e
+            xvfb-run -a -s "-screen 0 ${width}x${height}x24" timeout 300 Godot_v4.7.2-stable_linux.x86_64 \
+              --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy \
+              --resolution "${width}x${height}" \
+              --script res://tests/capture_task10_world_transform.gd -- \
+              --candidate="$SOURCE_CANDIDATE" --device-check --exhaustive-projections \
+              --device-id="$device" --width="$width" --height="$height" --out="$out" \
+              > "$out/capture.log" 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > "$out/process-exit.txt"
+            test "$rc" -eq 0 -o "$rc" -eq 1
+            test -s "$out/manifest.json"
+          done < /tmp/t10-device-matrix.tsv
+
+          python3 - <<'PY'
+          import json,os
+          from collections import Counter
+          from pathlib import Path
+          matrix=json.loads(Path('Docs/Production/DEVICE_LAYOUT_MATRIX.json').read_text())
+          root=Path('t10-exhaustive')
+          rows=[]; failures=[]; keys=set(); criteria=Counter()
+          states=['ready','blocked','preview','committing','complete','replay']
+          angles=['front','side','three-quarter','overhead','gameplay','detail']
+          for device_row in matrix['states']:
+              device=device_row['id']; expected=device_row['logical_size']
+              d=root/device
+              m=json.loads((d/'manifest.json').read_text())
+              assert m.get('candidate') == os.environ['SOURCE_CANDIDATE'],(device,m.get('candidate'))
+              assert m.get('device_id') == device
+              assert m.get('logical_size') == expected
+              assert m.get('exhaustive_projections') is True
+              assert m.get('states') == states
+              assert m.get('projection_angles') == angles
+              assert m.get('record_count') == 6,m
+              assert m.get('projection_record_count') == 36,m
+              rc=int((d/'process-exit.txt').read_text().strip())
+              assert rc in (0,1)
+              for record in m['projection_records']:
+                  state=record['state']; angle=record['angle']; readability=record['projected_readability']
+                  key=(device,state,angle)
+                  assert key not in keys,key
+                  keys.add(key)
+                  row={'device':device,'state':state,'angle':angle,'passed':bool(readability.get('passed',False)),'readability':readability}
+                  rows.append(row)
+                  if not row['passed']:
+                      reasons=[]
+                      if readability.get('overlap',False): reasons.append('overlap')
+                      if not readability.get('fully_in_frame',False): reasons.append('containment')
+                      if float(readability.get('clearance_px',-1)) + 0.01 < float(readability.get('required_clearance_px',0)): reasons.append('clearance')
+                      if not readability.get('priority_ok',False): reasons.append('priority')
+                      if not reasons: reasons.append('other')
+                      for reason in reasons: criteria[reason]+=1
+                      failures.append({**row,'failure_reasons':reasons})
+          assert len(rows)==216,len(rows)
+          assert len(keys)==216,len(keys)
+          assert {r['device'] for r in rows} == {r['id'] for r in matrix['states']}
+          assert {r['state'] for r in rows} == set(states)
+          assert {r['angle'] for r in rows} == set(angles)
+          summary={
+            'schema_version':1,
+            'task':'T10',
+            'mode':'diagnostic_exhaustive_projection_enumeration',
+            'source_candidate':os.environ['SOURCE_CANDIDATE'],
+            'harness_commit':os.environ['HARNESS_COMMIT'],
+            'device_count':6,'state_count':6,'angle_count':6,
+            'projection_count':len(rows),
+            'failure_count':len(failures),
+            'failure_reason_counts':dict(sorted(criteria.items())),
+            'failures':failures,
+            'diagnostic_collection_passed':True,
+            'product_projection_passed':not failures,
+            'task_approved':False,
+            'reusable_for_approval':False,
+            'critic_score_reusable':False,
+          }
+          (root/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps({k:v for k,v in summary.items() if k!='failures'},indent=2))
+          PY
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-T10-exhaustive-projections-${{ github.sha }}
+          path: t10-exhaustive
+          if-no-files-found: error
+          retention-days: 30
