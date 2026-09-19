@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0R",
+  "name": "Repair Sufficiency Critic",
+  "non_voting": true,
+  "approval_critic": false,
+  "outcomes": [
+    "REPAIR_PLAN_ACCEPTED",
+    "REPAIR_PLAN_REJECTED",
+    "INSUFFICIENT_EVIDENCE"
+  ],
+  "builder_actions": [
+    "BUILD_BOUNDED_REPAIR",
+    "REVISE_REPAIR_PLAN",
+    "COLLECT_NAMED_EVIDENCE"
+  ],
+  "hard_rules": {
+    "every_c0_blocker_requires_sufficiency_coverage": true,
+    "repeated_scalar_fix_requires_full_domain_proof": true,
+    "product_defect_cannot_use_evidence_only_strategy": true,
+    "unknown_required_cases_forbid_full_family_closure_claim": true,
+    "cheap_disproof_preflight_required": true,
+    "threshold_weakening_forbidden": true
+  },
+  "may_score_gameplay": false,
+  "may_approve_task": false,
+  "may_lower_C1_C11_thresholds": false
+}
