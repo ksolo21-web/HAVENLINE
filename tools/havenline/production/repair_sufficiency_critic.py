@@ -28,7 +28,7 @@ def _digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def review(c0: dict, plan: dict) -> dict:
+def review(c0: dict, plan: dict, c0_sha256: str | None = None) -> dict:
     reject: list[str] = []
     evidence_gaps: list[str] = []
     risk_codes: list[str] = []
@@ -51,6 +51,15 @@ def review(c0: dict, plan: dict) -> dict:
         reject.append("REPAIR_PLAN_FAILED_CANDIDATE_MISMATCH")
     if plan.get("diagnosis_id") != c0.get("diagnosis_id"):
         reject.append("REPAIR_PLAN_DIAGNOSIS_MISMATCH")
+    canonical_c0 = f"Docs/Production/{task}/C0_ROOT_CAUSE.json"
+    if plan.get("c0_report_path") != canonical_c0:
+        reject.append("CANONICAL_C0_REPORT_PATH_REQUIRED")
+    declared_c0_hash = _text(plan.get("c0_report_sha256"))
+    if c0_sha256 is not None:
+        if len(c0_sha256) != 64 or declared_c0_hash != c0_sha256:
+            reject.append("C0_REPORT_HASH_MISMATCH")
+    elif declared_c0_hash and len(declared_c0_hash) != 64:
+        reject.append("C0_REPORT_HASH_INVALID")
 
     suff = _dict(plan.get("repair_sufficiency"))
     if not suff:
@@ -228,10 +237,11 @@ def main() -> int:
     plan_path = Path(args.plan)
     c0 = json.loads(c0_path.read_text())
     plan = json.loads(plan_path.read_text())
-    report = review(c0, plan)
+    c0_sha256 = _digest(c0_path)
+    report = review(c0, plan, c0_sha256)
     report["input_bindings"] = {
         "c0_path": str(c0_path),
-        "c0_sha256": _digest(c0_path),
+        "c0_sha256": c0_sha256,
         "plan_path": str(plan_path),
         "plan_sha256": _digest(plan_path),
     }
