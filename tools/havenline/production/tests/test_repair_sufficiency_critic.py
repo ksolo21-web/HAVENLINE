@@ -38,6 +38,8 @@ def accepted_plan():
         "task_id": "T10",
         "failed_candidate": "a" * 40,
         "diagnosis_id": "C0-T10-123",
+        "c0_report_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "c0_report_sha256": "d" * 64,
         "repair_sufficiency": {
             "failure_family": {
                 "id": "projected-label-feasibility",
@@ -96,6 +98,12 @@ class RepairSufficiencyCriticTests(unittest.TestCase):
         self.assertEqual("REPAIR_PLAN_ACCEPTED", report["outcome"])
         self.assertEqual("C0R", report["critic_id"])
         self.assertFalse(report["may_approve_task"])
+
+    def test_exact_c0_hash_binding_rejects_substituted_diagnosis_bytes(self):
+        report = review(c0(), accepted_plan(), "e" * 64)
+        self.assertFalse(report["passed"])
+        self.assertIn("C0_REPORT_HASH_MISMATCH", report["rejections"])
+        self.assertTrue(review(c0(), accepted_plan(), "d" * 64)["passed"])
 
     def test_current_style_scalar_patch_after_two_attempts_is_rejected(self):
         plan = accepted_plan()
