@@ -35,7 +35,9 @@ The union of all group `blocker_ids` must equal the complete C0 blocker set with
 
 ## Required plan contract
 
-`repair_sufficiency` contains `repair_groups`, `cross_group_interactions`, an explicit empty `threshold_changes` collection, and `loop_risk_acknowledged=true`.
+`repair_sufficiency` contains `repair_groups`, an `evidence_frontier`, `cross_group_interactions`, an explicit empty `threshold_changes` collection, and `loop_risk_acknowledged=true`.
+
+The `evidence_frontier` binds the plan to C0's latest diagnosed failed candidate and records every known failure observed after that diagnosis boundary. A newer failure must either be source-bound to an existing repair group as the same causal family, identified as superseded/infrastructure-only, or returned to C0 as a new blocker. Unclassified post-diagnosis failures make the plan insufficient.
 
 Each repair group contains:
 
@@ -59,6 +61,8 @@ Each repair group contains:
 - Every blocker must bind to C0's exact diagnosed root cause and explain why the proposed change alters that cause, the expected result, falsifying result, and cheap disproof.
 - A claim of complete observable failure-family collection is rejected without collection evidence.
 - Every C0 blocker must be assigned exactly once across repair groups.
+- C0R rejects stale repair reasoning: the evidence frontier must match C0's diagnosis boundary and account for the latest observed failed candidate.
+- Any post-diagnosis failure that cannot be causally bound to an existing group returns `INSUFFICIENT_EVIDENCE` and requires C0 rather than builder improvisation.
 - Any critic/quality threshold weakening rejects the entire plan.
 - The reviewed plan must be bound to the canonical C0 path and exact C0 report SHA-256.
 
