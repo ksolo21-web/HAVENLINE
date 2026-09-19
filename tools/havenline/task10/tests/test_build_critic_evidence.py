@@ -63,26 +63,26 @@ class CompactEvidenceTests(unittest.TestCase):
  def test_c7_context_binds_roles_dimensions_and_selected_rows(self):
   candidate='a'*40
   # Independent fixtures: do not derive report rows from the selector table being tested.
-  domain_names=[
-   'view lifecycle contains all frozen states','view enters ready lifecycle','valid preview enters preview lifecycle',
-   'prepared intent enters committing lifecycle','raw simulation receipt cannot complete before T10 accepts it','T10-accepted receipt completes lifecycle',
+  domain_rows=[
+   ('R05_DOMAIN_LIFECYCLE_SET','view lifecycle contains all frozen states'),('R05_DOMAIN_READY','view enters ready lifecycle'),('R05_DOMAIN_PREVIEW','valid preview enters preview lifecycle'),
+   ('R05_DOMAIN_COMMITTING','prepared intent enters committing lifecycle'),('R05_DOMAIN_RAW_RECEIPT_REJECTED','raw simulation receipt cannot complete before T10 accepts it'),('R05_DOMAIN_ACCEPTED_RECEIPT_COMPLETES','T10-accepted receipt completes lifecycle'),
   ]
-  integration_names=[
-   'locked lifecycle hides response geometry','view exposes explicit blocked lifecycle','blocked world response preserves exact reasons and shortfalls',
-   'same blocked state refreshes exact shortfall label','unaccepted receipt cannot stop pending flow or claim paid',
-   'accepted receipt stops flow while retaining camera-lane maintenance',
-   'real harvesting commits to carried inventory','real carried harvest cannot pay T10','real deposit conserves delivered resources',
-   'real simulation exact stored debit','real insufficient stock cannot partially charge',
+  integration_rows=[
+   ('R05_INTEGRATION_LOCKED_HIDDEN','locked lifecycle hides response geometry'),('R05_INTEGRATION_BLOCKED_EXPLICIT','view exposes explicit blocked lifecycle'),('R05_INTEGRATION_BLOCK_REASONS','blocked world response preserves exact reasons and shortfalls'),
+   ('R05_INTEGRATION_BLOCK_REFRESH','same blocked state refreshes exact shortfall label'),('R05_INTEGRATION_UNACCEPTED_PENDING','unaccepted receipt cannot stop pending flow or claim paid'),
+   ('R05_INTEGRATION_ACCEPTED_STOPS_FLOW','accepted receipt stops flow while retaining camera-lane maintenance'),
+   ('R06_INTEGRATION_HARVEST_CARRIED','real harvesting commits to carried inventory'),('R06_INTEGRATION_CARRIED_CANNOT_PAY','real carried harvest cannot pay T10'),('R06_INTEGRATION_DEPOSIT_CONSERVES','real deposit conserves delivered resources'),
+   ('R06_INTEGRATION_EXACT_STORED_DEBIT','real simulation exact stored debit'),('R06_INTEGRATION_NO_PARTIAL_CHARGE','real insufficient stock cannot partially charge'),
   ]
-  domain=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in domain_names])
-  integration=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in integration_names])
+  domain=dict(candidate=candidate,passed=True,failures=[],checks=[dict(evidence_id=e,name=n,passed=True) for e,n in domain_rows])
+  integration=dict(candidate=candidate,passed=True,failures=[],checks=[dict(evidence_id=e,name=n,passed=True) for e,n in integration_rows])
   text=m.c7_context(domain,integration,candidate,'1'*64,'2'*64)
   for i in range(1,15):self.assertIn('R'+str(i).zfill(2),text)
   for dimension in m.C7_DIMENSIONS:self.assertIn(dimension,text)
   self.assertIn('Requirement IDs R01-R14 are scope boundaries; they are not score dimensions.',text)
   self.assertIn('R05 truthful locked/ready/blocked/preview/committing/complete lifecycle',text)
   self.assertIn('R06 only physically delivered stored resources pay',text)
-  self.assertIn('stable_evidence_ids_with_anchored_semantic_matchers',text)
+  self.assertIn('producer_emitted_exact_evidence_ids',text)
   self.assertIn('R05_INTEGRATION_ACCEPTED_STOPS_FLOW',text)
   self.assertNotIn('accepted receipt stops flow while retaining camera-lane maintenance',text)
   for change in ('missing','duplicate','false','stale','failed'):
@@ -94,35 +94,36 @@ class CompactEvidenceTests(unittest.TestCase):
    else:i['failures']=['failure']
    with self.subTest(change=change),self.assertRaises(AssertionError):m.c7_context(d,i,candidate,'1'*64,'2'*64)
 
- def test_c7_selector_survives_nonsemantic_suffix_but_rejects_ambiguity_and_core_drift(self):
+ def test_c7_selector_uses_producer_ids_and_rejects_missing_duplicate_or_false_ids(self):
   candidate='a'*40
-  domain_names=[
-   'view lifecycle contains all frozen states','view enters ready lifecycle','valid preview enters preview lifecycle',
-   'prepared intent enters committing lifecycle','raw simulation receipt cannot complete before T10 accepts it','T10-accepted receipt completes lifecycle',
+  domain_rows=[
+   ('R05_DOMAIN_LIFECYCLE_SET','view lifecycle contains all frozen states'),('R05_DOMAIN_READY','view enters ready lifecycle'),('R05_DOMAIN_PREVIEW','valid preview enters preview lifecycle'),
+   ('R05_DOMAIN_COMMITTING','prepared intent enters committing lifecycle'),('R05_DOMAIN_RAW_RECEIPT_REJECTED','raw simulation receipt cannot complete before T10 accepts it'),('R05_DOMAIN_ACCEPTED_RECEIPT_COMPLETES','T10-accepted receipt completes lifecycle'),
   ]
   base=[
-   'locked lifecycle hides response geometry','view exposes explicit blocked lifecycle','blocked world response preserves exact reasons and shortfalls',
-   'same blocked state refreshes exact shortfall label','unaccepted receipt cannot stop pending flow or claim paid',
-   'accepted receipt stops flow while preserving a future presentation maintenance policy',
-   'real harvesting commits to carried inventory','real carried harvest cannot pay T10','real deposit conserves delivered resources',
-   'real simulation exact stored debit','real insufficient stock cannot partially charge',
+   ('R05_INTEGRATION_LOCKED_HIDDEN','locked lifecycle hides response geometry'),('R05_INTEGRATION_BLOCKED_EXPLICIT','view exposes explicit blocked lifecycle'),('R05_INTEGRATION_BLOCK_REASONS','blocked world response preserves exact reasons and shortfalls'),
+   ('R05_INTEGRATION_BLOCK_REFRESH','same blocked state refreshes exact shortfall label'),('R05_INTEGRATION_UNACCEPTED_PENDING','unaccepted receipt cannot stop pending flow or claim paid'),
+   ('R05_INTEGRATION_ACCEPTED_STOPS_FLOW','accepted receipt stops flow — contradictory display suffix is not authority'),
+   ('R06_INTEGRATION_HARVEST_CARRIED','real harvesting commits to carried inventory'),('R06_INTEGRATION_CARRIED_CANNOT_PAY','real carried harvest cannot pay T10'),('R06_INTEGRATION_DEPOSIT_CONSERVES','real deposit conserves delivered resources'),
+   ('R06_INTEGRATION_EXACT_STORED_DEBIT','real simulation exact stored debit'),('R06_INTEGRATION_NO_PARTIAL_CHARGE','real insufficient stock cannot partially charge'),
   ]
-  domain=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in domain_names])
-  def integration(names):return dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in names])
+  domain=dict(candidate=candidate,passed=True,failures=[],checks=[dict(evidence_id=e,name=n,passed=True) for e,n in domain_rows])
+  def integration(rows):return dict(candidate=candidate,passed=True,failures=[],checks=[dict(evidence_id=e,name=n,passed=True) for e,n in rows])
   text=m.c7_context(domain,integration(base),candidate,'1'*64,'2'*64)
-  self.assertNotIn('accepted receipt stops flow while preserving a future presentation maintenance policy',text)
-  duplicate=base+['accepted receipt stops flow with duplicate semantic evidence']
+  self.assertNotIn('contradictory display suffix',text)
+  duplicate=base+[('R05_INTEGRATION_ACCEPTED_STOPS_FLOW','duplicate producer id')]
   with self.assertRaises(AssertionError):m.c7_context(domain,integration(duplicate),candidate,'1'*64,'2'*64)
-  drift=base.copy();drift[5]='accepted authority receipt completes presentation'
-  with self.assertRaises(AssertionError):m.c7_context(domain,integration(drift),candidate,'1'*64,'2'*64)
+  missing=base.copy();missing[5]=('RENAMED_BY_CONSUMER','accepted authority receipt completes presentation')
+  with self.assertRaises(AssertionError):m.c7_context(domain,integration(missing),candidate,'1'*64,'2'*64)
+  false=base.copy();report=integration(false);report['checks'][5]['passed']=False
+  with self.assertRaises(AssertionError):m.c7_context(domain,report,candidate,'1'*64,'2'*64)
 
- def test_c7_claim_ids_and_matchers_are_unique_and_anchored(self):
+ def test_c7_claim_ids_are_unique_without_consumer_regexes(self):
   ids=[]
   for claims in m.C7_CLAIMS.values():
-   for claim in claims:
-    ids.append(claim['evidence_id'])
-    self.assertTrue(claim['name_pattern'].startswith('^') and claim['name_pattern'].endswith('$'))
+   ids.extend(claims)
   self.assertEqual(len(ids),len(set(ids)))
+  self.assertNotIn('name_pattern',Path(m.__file__).read_text())
 
  def test_contract_rejects_omission_duplicate_tampering_and_order(self):
   with tempfile.TemporaryDirectory() as t:

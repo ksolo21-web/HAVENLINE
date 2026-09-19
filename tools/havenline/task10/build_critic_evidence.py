@@ -46,30 +46,19 @@ T10 owns the local recipe/transaction progression. T11 owns authored camp bindin
 '''
 C7_CLAIMS = {
     'R05_domain': [
-        {'evidence_id':'R05_DOMAIN_LIFECYCLE_SET','name_pattern':r'^view lifecycle contains all frozen states$'},
-        {'evidence_id':'R05_DOMAIN_READY','name_pattern':r'^view enters ready lifecycle$'},
-        {'evidence_id':'R05_DOMAIN_PREVIEW','name_pattern':r'^valid preview enters preview lifecycle$'},
-        {'evidence_id':'R05_DOMAIN_COMMITTING','name_pattern':r'^prepared intent enters committing lifecycle$'},
-        {'evidence_id':'R05_DOMAIN_RAW_RECEIPT_REJECTED','name_pattern':r'^raw simulation receipt cannot complete before T10 accepts it$'},
-        {'evidence_id':'R05_DOMAIN_ACCEPTED_RECEIPT_COMPLETES','name_pattern':r'^T10-accepted receipt completes lifecycle$'},
+        'R05_DOMAIN_LIFECYCLE_SET', 'R05_DOMAIN_READY', 'R05_DOMAIN_PREVIEW',
+        'R05_DOMAIN_COMMITTING', 'R05_DOMAIN_RAW_RECEIPT_REJECTED',
+        'R05_DOMAIN_ACCEPTED_RECEIPT_COMPLETES',
     ],
     'R05_integration': [
-        {'evidence_id':'R05_INTEGRATION_LOCKED_HIDDEN','name_pattern':r'^locked lifecycle hides response geometry$'},
-        {'evidence_id':'R05_INTEGRATION_BLOCKED_EXPLICIT','name_pattern':r'^view exposes explicit blocked lifecycle$'},
-        {'evidence_id':'R05_INTEGRATION_BLOCK_REASONS','name_pattern':r'^blocked world response preserves exact reasons and shortfalls$'},
-        {'evidence_id':'R05_INTEGRATION_BLOCK_REFRESH','name_pattern':r'^same blocked state refreshes exact shortfall label$'},
-        {'evidence_id':'R05_INTEGRATION_UNACCEPTED_PENDING','name_pattern':r'^unaccepted receipt cannot stop pending flow or claim paid$'},
-        # C7 needs the stable semantic claim "accepted receipt stops flow".
-        # Presentation-maintenance wording after that clause may evolve without
-        # invalidating the transaction-state evidence.
-        {'evidence_id':'R05_INTEGRATION_ACCEPTED_STOPS_FLOW','name_pattern':r'^accepted receipt stops flow\b.*$'},
+        'R05_INTEGRATION_LOCKED_HIDDEN', 'R05_INTEGRATION_BLOCKED_EXPLICIT',
+        'R05_INTEGRATION_BLOCK_REASONS', 'R05_INTEGRATION_BLOCK_REFRESH',
+        'R05_INTEGRATION_UNACCEPTED_PENDING', 'R05_INTEGRATION_ACCEPTED_STOPS_FLOW',
     ],
     'R06_integration': [
-        {'evidence_id':'R06_INTEGRATION_HARVEST_CARRIED','name_pattern':r'^real harvesting commits to carried inventory$'},
-        {'evidence_id':'R06_INTEGRATION_CARRIED_CANNOT_PAY','name_pattern':r'^real carried harvest cannot pay T10$'},
-        {'evidence_id':'R06_INTEGRATION_DEPOSIT_CONSERVES','name_pattern':r'^real deposit conserves delivered resources$'},
-        {'evidence_id':'R06_INTEGRATION_EXACT_STORED_DEBIT','name_pattern':r'^real simulation exact stored debit$'},
-        {'evidence_id':'R06_INTEGRATION_NO_PARTIAL_CHARGE','name_pattern':r'^real insufficient stock cannot partially charge$'},
+        'R06_INTEGRATION_HARVEST_CARRIED', 'R06_INTEGRATION_CARRIED_CANNOT_PAY',
+        'R06_INTEGRATION_DEPOSIT_CONSERVES', 'R06_INTEGRATION_EXACT_STORED_DEBIT',
+        'R06_INTEGRATION_NO_PARTIAL_CHARGE',
     ],
 }
 
@@ -77,19 +66,17 @@ C7_CLAIMS = {
 def _selected_c7_claims(report, claims, report_name):
     if report.get('candidate') is None or report.get('passed') is not True or report.get('failures'):
         raise AssertionError(report_name+' report is stale or failed')
-    ids=[claim.get('evidence_id') for claim in claims]
+    ids=list(claims)
     if len(ids)!=len(set(ids)) or any(not isinstance(value,str) or not value for value in ids):
         raise AssertionError(report_name+' C7 evidence ids must be unique non-empty strings')
     rows=[]
-    for claim in claims:
-        pattern=claim.get('name_pattern')
-        if not isinstance(pattern,str) or not pattern.startswith('^') or not pattern.endswith('$'):
-            raise AssertionError(report_name+' C7 selector must be an anchored regex: '+str(claim.get('evidence_id')))
-        rx=re.compile(pattern)
-        matches=[row for row in report.get('checks',[]) if isinstance(row,dict) and isinstance(row.get('name'),str) and rx.fullmatch(row['name'])]
+    for evidence_id in claims:
+        matches=[row for row in report.get('checks',[]) if isinstance(row,dict) and row.get('evidence_id') == evidence_id]
         if len(matches)!=1 or type(matches[0].get('passed')) is not bool or matches[0]['passed'] is not True:
-            raise AssertionError(report_name+' selected C7 claim missing, duplicate or failed: '+claim['evidence_id'])
-        rows.append({'evidence_id':claim['evidence_id'],'passed':True})
+            raise AssertionError(report_name+' selected C7 claim missing, duplicate or failed: '+evidence_id)
+        if not isinstance(matches[0].get('name'),str) or not matches[0]['name']:
+            raise AssertionError(report_name+' selected C7 claim has no diagnostic name: '+evidence_id)
+        rows.append({'evidence_id':evidence_id,'passed':True})
     return rows
 
 
@@ -104,7 +91,7 @@ def c7_context(domain, integration, candidate, domain_sha256, integration_sha256
     }
     payload={'candidate':candidate,'requirement_ids_are_score_dimensions':False,'c7_score_dimensions':C7_DIMENSIONS,
              'source_reports':{'domain-tests.json':domain_sha256,'integration-tests.json':integration_sha256},
-             'selection_contract':'stable_evidence_ids_with_anchored_semantic_matchers',
+             'selection_contract':'producer_emitted_exact_evidence_ids',
              'selected_source_rows':sections}
     return C7_SCOPE_SYNOPSIS+'\nSOURCE-BOUND SELECTED ROWS\n'+json.dumps(payload,sort_keys=True,separators=(',',':'))+'\n'
 

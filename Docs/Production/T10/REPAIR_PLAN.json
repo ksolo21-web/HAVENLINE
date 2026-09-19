@@ -4,10 +4,10 @@
   "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
   "c0_report_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
-  "c0_report_sha256": "d49662c0ed7805e3ea681fcb6e4595dc0813e33a6538184882fb44e6bf87a785",
+  "c0_report_sha256": "0bcfa6d160d8dd81932f841ed1826f8b16f1189b39f39c7e6d81039244c3e50f",
   "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "repair_base_status": "CUMULATIVE_REPAIR_CYCLE_ROOT_WITH_LATEST_TERMINAL_FAILURE_BOUND",
-  "repair_base_rule": "Measure the complete reconciled B037-B061 owner-plus-task diff from cumulative repair root c7a18d002fe8d0f3978370f3e4567ba88bfe17e8. The latest terminal evidence is 0f93003e91ec2e785af5e821f3c94a3ec9c2dc81; it is evidence only and no score is reusable.",
+  "repair_base_rule": "Measure the complete reconciled B037-B062 owner-plus-task diff from cumulative repair root c7a18d002fe8d0f3978370f3e4567ba88bfe17e8. The latest terminal evidence is 81fbc7958ceb69b711f8be60add48b4510d3520e; it is evidence only and no score is reusable.",
   "full_blocker_set_acknowledged": true,
   "candidate_freeze_after_build": true,
   "validation_concurrency_policy": "finish_running_sha",
@@ -376,6 +376,8 @@
       "blocker_id": "C0-T10-B057",
       "causal_change": "Replace prose-coupled C7 row selection with stable semantic evidence IDs plus anchored matchers. Validate exactly one passing real domain/integration row for every R05/R06 claim, keep exact source-report hashes, expose only compact semantic IDs to the reviewer so prompt budget remains bounded, and reject missing/duplicate/core-semantic drift. Do not alter C7 dimensions, model, scores, thresholds, progression authority or product runtime.",
       "files": [
+        "HavenlineGodot/tests/test_task10_world_transform.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd",
         "tools/havenline/task10/build_critic_evidence.py",
         "tools/havenline/task10/tests/test_build_critic_evidence.py",
         "tools/havenline/task10/validate_critic_readiness.py",
@@ -466,11 +468,37 @@
         "C0's own diagnostic steps must not appear as unexecuted subject-job gates.",
         "Unsupported/paraphrased quotations and nonexistent causal paths remain rejected; no grounding or critic threshold is weakened."
       ]
+    },
+    {
+      "blocker_id": "C0-T10-B062",
+      "files": [
+        "tools/havenline/production/repair_sufficiency_critic.py",
+        "tools/havenline/production/builder_repair_gate.py",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        "tools/havenline/production/tests/test_repair_sufficiency_critic.py",
+        "tools/havenline/production/c0_root_cause_advisor.py",
+        "tools/havenline/production/tests/test_c0_builder.py",
+        "Docs/Production/C0R_REPAIR_SUFFICIENCY_STANDARD.md",
+        "Docs/Production/C0R_REPORT_SCHEMA.json",
+        "Docs/Production/T10/C0_REPAIR_INTELLIGENCE_LOCK.json",
+        "Docs/Production/T10/Proofs/layout-solver-10584940146-summary.json",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "tools/havenline/production/tests/test_t10_activation_validation.py"
+      ],
+      "causal_change": "Bind evidence frontier, attempt history and proof to a digest-locked source manifest plus retained machine summary; require deterministic symbol-bound architectural operations after two attempts; reject fixed scalar repairs; and permit derived per-case sinks only through one-to-one exact normalized RHS/dependency/bounds bindings to the proof artifact and exact proof-source commit/path/file hash. Hash the canonicalized whole proven source excluding only four exact metadata lines authorized by locked C0 evidence, and require the current candidate to match it exactly. Reconstruct multiline before/after statements, require reachable executable symbols, verify both threshold registries, pin integration authority outside the plan/registry, and run the exact builder gate in the direct pre-build dependency.",
+      "verification": [
+        "Hostile C0R tests reject erased frontier evidence, false attempt history/counts, scalar euphemisms, undeclared scalar reassignments, comment/string-only markers, incomplete proof provenance, registry branch redirection and threshold weakening.",
+        "Workflow tests prove C0R and builder_repair_gate execute in the same direct dependency before either primary build job.",
+        "The canonical C0R report is byte-for-byte reproducible and the exact builder gate accepts only the C0-authorized cumulative diff."
+      ]
     }
   ],
   "verification_order": [
     "C0R REPAIR SUFFICIENCY ACCEPTED",
-    "CANONICAL CUMULATIVE B037-B061 ACTIVATION",
+    "CANONICAL CUMULATIVE B037-B062 ACTIVATION",
     "PUBLISHED OWNER B058-B061 GOVERNANCE PREFIX",
     "ONE B053-B057 PRODUCT AND EVIDENCE BATCH",
     "FOCUSED HOSTILE, GODOT, TASK AND PRODUCTION TESTS",
@@ -503,7 +531,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "TOOLING",
@@ -566,7 +594,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "TOOLING",
@@ -629,7 +657,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "TOOLING",
@@ -693,7 +721,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "GOVERNANCE",
@@ -756,7 +784,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "GOVERNANCE",
@@ -819,7 +847,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "TOOLING",
@@ -882,7 +910,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "TOOLING",
@@ -945,7 +973,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "GOVERNANCE",
@@ -1008,7 +1036,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "GOVERNANCE",
@@ -1071,7 +1099,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "TOOLING",
@@ -1137,7 +1165,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "TOOLING",
@@ -1212,7 +1240,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "PRODUCT_LOGIC",
@@ -1283,7 +1311,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "TOOLING",
@@ -1346,7 +1374,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "TOOLING",
@@ -1409,7 +1437,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "TOOLING",
@@ -1484,7 +1512,7 @@
           ]
         },
         "strategy_kind": "ALGORITHM",
-        "causal_mechanism": "Replace unconditional above/right/left fallback with measured legal-region search, word-preserving reflow, bounded scale only after reflow, fail-closed infeasibility, and positive one-pixel fit slack.",
+        "causal_mechanism": "ALGORITHM_REPLACEMENT[_label_candidate,required_scale,placement_found]",
         "why_this_fixes_cause": "Replace unconditional above/right/left fallback with measured legal-region search, word-preserving reflow, bounded scale only after reflow, fail-closed infeasibility, and positive one-pixel fit slack.",
         "why_materially_different": "Replaces serial width/pixel-size symptom tuning with a constrained layout solver validated against the entire 6×6×6 projection domain.",
         "same_family_attempt_count": 2,
@@ -1493,15 +1521,93 @@
             "strategy": "Reduce Label3D.width from 1000 to 960",
             "outcome": "FAILED",
             "same_family": true,
+            "candidate": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81",
+            "run_id": 35401512350,
             "lesson": "Godot natural measured line width did not change; 0f9303 reproduced the same projected rectangle."
           },
           {
             "strategy": "Reduce label pixel size from 0.006 to 0.0057",
             "outcome": "PARTIAL",
             "same_family": true,
+            "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+            "run_id": 35402388836,
             "lesson": "Ready/overhead improved, but 8ab exposed blocked/overhead and exhaustive collection later found the whole overhead containment family."
           }
         ],
+        "architectural_escalation": {
+          "required": true,
+          "provided": true,
+          "kind": "PLACEMENT_ALGORITHM",
+          "reason": "Two scalar attempts failed to close the family, so the repair replaces terminal fallback selection with a feasibility algorithm that proves each accepted placement."
+        },
+        "repair_operations": [
+          {
+            "operation_kind": "ALGORITHM_REPLACEMENT",
+            "target": "Label3D terminal fallback placement",
+            "target_symbols": [
+              "_label_candidate",
+              "required_scale",
+              "placement_found"
+            ],
+            "replaces": "unconditional above/right/left fallback acceptance",
+            "with": "measured legal-region search, word-preserving reflow, fail-closed infeasibility and bounded readability after reflow",
+            "invariant_enforced": "every accepted placement is contained, non-overlapping, clear and readable across the complete mandatory projection domain"
+          }
+        ],
+        "scalar_parameters_changed": [
+          {
+            "target": "_beacon.pixel_size",
+            "mode": "DERIVED_PER_CASE",
+            "normalized_rhs": "LABEL_PIXEL_SIZE*float(projection.get(\"label_scale\",1.0))",
+            "dependency_symbols": ["projection", "label_scale"],
+            "bounds": {"minimum_gte": 0.004845, "maximum_lte": 0.0057, "violation_count": 0},
+            "proof_source_commit": "58789aafcba7f2cf85c4097472989f5bb2dc445f",
+            "proof_source_path": "HavenlineGodot/scripts/world_transform_view.gd",
+            "proof_source_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+            "proof_binding_sha256": "7256dd13fde5f8bfe8b6570469a018692f992a7fdcd6e76498abf45fd778d3fb"
+          },
+          {
+            "target": "_beacon.width",
+            "mode": "DERIVED_PER_CASE",
+            "normalized_rhs": "float(projection.wrap_width)",
+            "dependency_symbols": ["projection", "wrap_width"],
+            "bounds": {"minimum_policy": "whole_word_width", "maximum_lte": 960.0, "violation_count": 0},
+            "proof_source_commit": "58789aafcba7f2cf85c4097472989f5bb2dc445f",
+            "proof_source_path": "HavenlineGodot/scripts/world_transform_view.gd",
+            "proof_source_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+            "proof_binding_sha256": "27778d44d7da0d4ba7461d75135bb08b43b396704ea81bac812be4522de3492f"
+          }
+        ],
+        "implementation_diff_contract": {
+          "comparison_base": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+          "proof_source_commit": "58789aafcba7f2cf85c4097472989f5bb2dc445f",
+          "proof_source_path": "HavenlineGodot/scripts/world_transform_view.gd",
+          "proof_slice_mode": "WHOLE_FILE_EXCEPT_EXACT_METADATA_LINES",
+          "proof_irrelevant_exact_lines": [
+            "\t\t\"label_layout_policy\": \"constrained_screen_lanes_v1\",",
+            "\t\t\"label_dynamic_camera_lane\": true,",
+            "\t\t\"label_min_readability_scale\": READABILITY_MIN,",
+            "\t\t\"label_fit_slack_px\": LABEL_FIT_SLACK_PX,"
+          ],
+          "proof_relevant_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+          "causal_files": [
+            "HavenlineGodot/scripts/world_transform_view.gd"
+          ],
+          "required_added_markers": [
+            {
+              "kind": "FUNCTION_DEFINITION",
+              "value": "_label_candidate"
+            },
+            {
+              "kind": "CODE_IDENTIFIER",
+              "value": "required_scale"
+            },
+            {
+              "kind": "CODE_IDENTIFIER",
+              "value": "placement_found"
+            }
+          ]
+        },
         "blocker_coverage": [
           {
             "blocker_id": "C0-T10-B053",
@@ -1525,7 +1631,30 @@
           "provided": true,
           "method": "Bounded non-approval constrained-layout prototype executed the authoritative 6 devices × 6 lifecycle states × 6 camera angles matrix.",
           "expected_cases": 216,
-          "covered_cases": 216
+          "covered_cases": 216,
+          "dimensions": {
+            "device": 6,
+            "lifecycle_state": 6,
+            "camera_angle": 6
+          },
+          "artifact_id": 10584940146,
+          "artifact_sha256": "affa1884f56bf4ab5b1000f4ebcf2f29b3da93ddd1ad47306ad7584955fbf6a8",
+          "proof_source_commit": "58789aafcba7f2cf85c4097472989f5bb2dc445f",
+          "proof_source_path": "HavenlineGodot/scripts/world_transform_view.gd",
+          "proof_source_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+          "proof_slice_mode": "WHOLE_FILE_EXCEPT_EXACT_METADATA_LINES",
+          "proof_irrelevant_exact_lines": [
+            "\t\t\"label_layout_policy\": \"constrained_screen_lanes_v1\",",
+            "\t\t\"label_dynamic_camera_lane\": true,",
+            "\t\t\"label_min_readability_scale\": READABILITY_MIN,",
+            "\t\t\"label_fit_slack_px\": LABEL_FIT_SLACK_PX,"
+          ],
+          "proof_relevant_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+          "derived_effect_bounds": {
+            "_beacon.pixel_size": {"dependency_symbols": ["projection", "label_scale"], "minimum_gte": 0.004845, "maximum_lte": 0.0057, "violation_count": 0},
+            "_beacon.width": {"dependency_symbols": ["projection", "wrap_width"], "minimum_policy": "whole_word_width", "maximum_lte": 960.0, "violation_count": 0}
+          },
+          "verifier": "Read summary.json from artifact 10584940146 and require projection_count=216, failure_count=0, diagnostic_collection_passed=true, product_projection_passed=true, task_approved=false and reusable_for_approval=false."
         },
         "cheap_disproof_preflight": [
           {
@@ -1564,7 +1693,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "TOOLING",
@@ -1628,22 +1757,24 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": [
             "Run 35444671480 retained exact passing domain/integration/performance evidence and the terminal packaging traceback.",
             "Diagnostic replay run 35446792906 / artifact 10585304699 proved the stable-ID selector against the exact failed artifact without reusing it for approval."
           ]
         },
         "strategy_kind": "TOOLING",
-        "causal_mechanism": "Validate R05/R06 source rows by stable semantic evidence IDs and anchored matchers, require exactly one passing match in the exact candidate-bound reports, preserve exact report SHA-256 bindings, and send only compact semantic IDs to C7 so nonsemantic prose evolution cannot break packaging or overflow the prompt budget.",
-        "why_this_fixes_cause": "The failure was caused by using the full human-readable test sentence as the evidence identity. Stable semantic IDs separate the invariant from presentation wording, while anchored matchers still fail closed on missing, duplicate, false or core-semantic drift and source hashes bind the exact reports.",
-        "why_materially_different": "The previous repair added source-bound R05/R06 rows but still keyed them by exact prose. This repair replaces prose identity with a stable machine contract and proves it on the exact failed artifact; it does not merely update the obsolete string.",
+        "causal_mechanism": "Emit producer-owned R05/R06 evidence IDs from the authoritative Godot checks, require exactly one passing exact-ID row in the candidate-bound reports, preserve exact whole-report SHA-256 bindings, and send only compact IDs to C7.",
+        "why_this_fixes_cause": "The failure was caused by a consumer inventing identity from mutable human-readable prose. Producer-emitted exact IDs make the test that proves the invariant authoritative while missing, duplicate, false or renamed IDs fail closed and exact report hashes bind the full source rows.",
+        "why_materially_different": "The previous repair still inferred identity from prose through a consumer regex. This repair moves identity into the producing tests and removes prose matching from the consumer entirely; it does not update or broaden another string matcher.",
         "same_family_attempt_count": 1,
         "prior_attempts": [
           {
             "strategy": "Exact human-readable R05/R06 row names plus report hashes",
             "outcome": "PARTIAL",
             "same_family": true,
+            "candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e",
+            "run_id": 35444671480,
             "lesson": "Source binding was correct, but the selector treated presentation wording as identity. A later presentation-only wording refinement made packaging fail despite the real integration row still proving the same accepted-receipt invariant."
           }
         ],
@@ -1651,7 +1782,7 @@
           {
             "blocker_id": "C0-T10-B057",
             "diagnosed_root_cause": "The generic C7 brief conflates R01-R14 requirement IDs with six score dimensions and omits source-bound R05/R06 lifecycle/delivery rows.",
-            "why_fix_changes_cause": "The C7 packager no longer identifies lifecycle/delivery evidence by mutable display prose. It validates one real passing row for each stable semantic ID, preserves source hashes, and emits compact IDs inside the reviewer budget.",
+            "why_fix_changes_cause": "The authoritative domain and integration tests now emit exact lifecycle/delivery evidence IDs. The C7 packager requires one passing producer ID, preserves whole-report hashes, and emits compact IDs inside the reviewer budget without interpreting display prose.",
             "expected_result": "The exact failed artifact from run 35444671480 packages successfully, quantitative C6 passes, critic-readiness passes, and hostile tests reject missing/duplicate/core-semantic drift without changing C7 thresholds.",
             "failure_if_wrong": "Any real candidate-bound R05/R06 claim cannot be uniquely matched, packaging exceeds the existing prompt budget, the old exact-string failure recurs, or semantic drift/duplicate evidence is silently accepted.",
             "cheap_disproof": "Run the focused independent-fixture selector tests and replay the exact failed artifact through build_critic_evidence.py plus quantitative C6 and validate_critic_readiness.py."
@@ -1720,7 +1851,7 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": []
         },
         "strategy_kind": "TOOLING",
@@ -1790,13 +1921,13 @@
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
-          "full_failure_family_closed_by_design": true,
+          "full_failure_family_closed_by_design": false,
           "collection_evidence": [
             "C0 artifact from run 35444671480: terminal subject step is Package source-bound specialist inputs and quantitative C6; artifact projection had zero retained terminal lines; failed-log projection retained generic visual-critic/defect/setup lines instead of the traceback; diagnosis validation returned false."
           ]
         },
         "strategy_kind": "TOOLING",
-        "causal_mechanism": "Preserve the complete authoritative packet and fixed request budget; prioritize terminal failed artifact diagnostics and latest terminal failed-job log windows before generic context; keep current subject-job execution separate from the live C0 job; bind evidence to exact retained quotations and causal paths to exact tracked files; keep historical failure intelligence advisory-only.",
+        "causal_mechanism": "EVIDENCE_ARCHITECTURE_CHANGE[terminal_bounded_lines,excluded_diagnostic_jobs,terminal]",
         "why_this_fixes_cause": "The 8ab failure required terminal artifact priority; the later 81fbc failure proved that terminal evidence may exist only in the job log. Latest-terminal job-log windows close that source gap without expanding the request budget or weakening grounding, while advisory history cannot substitute for current evidence.",
         "why_materially_different": "This extends the existing bounded/grounded architecture to a distinct evidence source that the previous terminal-artifact repair did not cover. It changes selection priority over retained job-log bytes rather than rerunning the same model or relaxing validation.",
         "same_family_attempt_count": 2,
@@ -1805,15 +1936,59 @@
             "strategy": "Bound the C0 model packet semantically",
             "outcome": "PARTIAL",
             "same_family": true,
+            "run_id": 35386826359,
             "lesson": "Request size became valid, but terminal artifact evidence could still lose the shared excerpt budget."
           },
           {
             "strategy": "Collect source-addressed artifact diagnostics and strict grounding",
             "outcome": "PARTIAL",
             "same_family": true,
+            "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+            "run_id": 35402388836,
             "lesson": "The exact terminal line was retained, yet projection priority omitted it and C0 self-steps contaminated subject-job interpretation."
           }
         ],
+        "architectural_escalation": {
+          "required": true,
+          "provided": true,
+          "kind": "EVIDENCE_ARCHITECTURE",
+          "reason": "The third cycle changes the source-priority architecture and separates subject-job evidence from the diagnostic job, rather than enlarging another scalar budget or timeout."
+        },
+        "repair_operations": [
+          {
+            "operation_kind": "EVIDENCE_ARCHITECTURE_CHANGE",
+            "target": "C0 bounded terminal-evidence selection",
+            "target_symbols": [
+              "terminal_bounded_lines",
+              "excluded_diagnostic_jobs",
+              "terminal"
+            ],
+            "replaces": "generic artifact/log ordering that can displace the terminal subject failure",
+            "with": "source-addressed terminal artifact and latest terminal job-log priority with diagnostic-job separation",
+            "invariant_enforced": "the current subject job's terminal failure survives the bounded projection and advisory history cannot substitute for current evidence"
+          }
+        ],
+        "scalar_parameters_changed": [],
+        "implementation_diff_contract": {
+          "comparison_base": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+          "causal_files": [
+            "tools/havenline/production/c0_root_cause_advisor.py"
+          ],
+          "required_added_markers": [
+            {
+              "kind": "FUNCTION_DEFINITION",
+              "value": "terminal_bounded_lines"
+            },
+            {
+              "kind": "CODE_IDENTIFIER",
+              "value": "excluded_diagnostic_jobs"
+            },
+            {
+              "kind": "CODE_IDENTIFIER",
+              "value": "terminal"
+            }
+          ]
+        },
         "blocker_coverage": [
           {
             "blocker_id": "C0-T10-B059",
@@ -1870,6 +2045,82 @@
         ],
         "blast_radius_hypotheses": [
           "Changes in c0-semantic-projection-grounding can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "c0r-source-bound-admission",
+        "blocker_ids": [
+          "C0-T10-B062"
+        ],
+        "failure_family": {
+          "id": "repair-sufficiency-self-attestation",
+          "invariant": "No repair may enter implementation unless C0R independently binds its frontier and prior-attempt history to C0, verifies proof provenance and unchanged canonical thresholds, detects disguised scalar repetition, and runs the exact builder gate as the direct build prerequisite.",
+          "scope_dimensions": [
+            "c0-source-binding",
+            "attempt-history",
+            "architectural-escalation",
+            "proof-provenance",
+            "threshold-registry",
+            "workflow-dependency"
+          ],
+          "known_failed_cases": [
+            "Independent review of a8084aa demonstrated that a plan could erase post-diagnosis observations, self-report fewer prior attempts, relabel scalar tuning as TOOLING, or rely on a concurrent candidate-guard job while still passing the original C0R checks."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": false,
+          "collection_evidence": [
+            "Independent C0R critic review of a8084aa: mandatory FAIL 6.8/10 with five concrete admission bypasses and six required hostile tests."
+          ]
+        },
+        "strategy_kind": "GOVERNANCE",
+        "causal_mechanism": "Digest-lock authoritative frontier, attempt history and full-domain proof to an immutable manifest with run/candidate/result hashes and a retained machine-readable summary; validate that lock in C0 and C0R; require structured architectural operations, executable symbols and an exact latest-failed-candidate comparison base after two attempts; reject undeclared scalar reassignment in the real diff; load both canonical threshold registries; resolve the pinned canonical integration branch independently of the plan/registry; and invoke the exact builder gate in each direct pre-build job.",
+        "why_this_fixes_cause": "The builder can no longer make its own repair plan true by editing C0 and the plan together. Every challenged claim is either digest-locked to source records and a retained verifier result, read from canonical policy files, or checked against the real fetched integration head before the workflow dependency permits a build.",
+        "why_materially_different": "This changes the trust boundary and workflow graph instead of adding another required prose field to the same self-attested plan.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B062",
+            "diagnosed_root_cause": "C0R validates the internal shape of builder-authored claims but does not bind attempt history and the evidence frontier to C0, does not independently verify canonical threshold registries or proof provenance, and the primary workflows do not execute the exact builder gate in the direct pre-build dependency.",
+            "why_fix_changes_cause": "Authoritative history/frontier/proof are locked outside both mutable C0 and the plan, repeated repairs use structured non-scalar operations, thresholds acquire independent baselines, and workflow jobs resolve the real remote integration head before executing the exact implementation-surface gate.",
+            "expected_result": "Every known self-attestation bypass fails locally and both build workflows have a single direct prerequisite that runs C0R plus the exact builder gate.",
+            "failure_if_wrong": "A hostile plan can erase history/frontier evidence, disguise a scalar repair, forge proof provenance, weaken canonical thresholds, or begin a build without the exact builder gate.",
+            "cheap_disproof": "Run test_repair_sufficiency_critic.py and test_task10_workflows.py with the hostile fixtures before any Godot or critic job."
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "c0r-hostile-admission-preflight",
+            "command": "python3 -m unittest tools.havenline.production.tests.test_repair_sufficiency_critic tools.havenline.task10.tests.test_task10_workflows",
+            "falsifies": "Any known self-attestation, scalar-disguise, proof-provenance, threshold-policy, or workflow-order bypass remains accepted."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "A builder deletes newer failure observations and calls its plan complete.",
+            "why_covered": "The plan frontier must equal the exact frontier embedded in hashed C0 bytes."
+          },
+          {
+            "case": "A scalar tweak is relabeled TOOLING after two failed attempts.",
+            "why_covered": "C0R derives attempt count from C0, requires architectural escalation, and detects scalar mechanisms in causal prose independently of the enum."
+          },
+          {
+            "case": "A concurrent guard fails after an expensive build has already started.",
+            "why_covered": "The exact builder gate runs inside the direct repair-sufficiency dependency required by every build job."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Stricter source binding can reject older repair plans until C0 contains authoritative frontier/history; T10 is the canary and no approval threshold or product behavior changes."
         ],
         "residual_unknowns": []
       }
@@ -1945,14 +2196,10 @@
   },
   "reconciled_integration_head": "29be5ddae67cf47fd6674de8dfb3beb673116776",
   "inherited_noncausal_files": [
-    "Docs/Production/C0R_REPAIR_SUFFICIENCY_STANDARD.md",
-    "Docs/Production/C0R_REPORT_SCHEMA.json",
     "Docs/Production/ChangeRequests/T10-c0-terminal-evidence-priority.json",
     "Docs/Production/ChangeRequests/T10-c0-terminal-job-log-priority.json",
     "Docs/Production/ChangeRequests/T10-c0r-builder-enforcement.json",
     "Docs/Production/ChangeRequests/T10-c0r-repair-sufficiency-canary.json",
-    "Docs/Production/ChangeRequests/T10-repair-base-inherited-governance.json",
-    "tools/havenline/production/repair_sufficiency_critic.py",
-    "tools/havenline/production/tests/test_repair_sufficiency_critic.py"
+    "Docs/Production/ChangeRequests/T10-repair-base-inherited-governance.json"
   ]
 }

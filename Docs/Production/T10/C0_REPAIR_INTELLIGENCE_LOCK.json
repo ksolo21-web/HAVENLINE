@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
+  "repair_intelligence_sha256": "f6c61f4220c928c2ad148404961fb8c3c164f3e73dcd430a3745d67bec4dcb37",
+  "prior_attempt_sources": [
+    {
+      "failure_family_id": "projected-label-feasibility",
+      "attempt": 1,
+      "candidate": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81",
+      "run_id": 35401512350,
+      "artifact_id": 10570477028,
+      "artifact_sha256": "3067306c2a60acc9377e0aa3547622b84881bf01b90a3049e74fbea80c9b605b",
+      "result_sha256": "f46b704698a9584ce8a2f3fa86b9e1ef6caaacb9feb44f4f9585ef46722bf1a0",
+      "result": "FAILED"
+    },
+    {
+      "failure_family_id": "projected-label-feasibility",
+      "attempt": 2,
+      "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+      "run_id": 35402388836,
+      "result_sha256": "7866775cf10dec9aa2c278a8e67a0c0865c057b80c90362f893fab0e74a926e2",
+      "result": "PARTIAL",
+      "result_record": "canonical failure_frontier observations for run 35402388836"
+    },
+    {
+      "failure_family_id": "c7-requirement-dimension-context",
+      "attempt": 1,
+      "candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e",
+      "run_id": 35444671480,
+      "result_sha256": "a8003d34c24c8865c0ab74e3b03f586ce1ab33ea4d3cc10464ef78336b0ffcca",
+      "result": "PARTIAL",
+      "result_record": "canonical failure_frontier C7 packaging observation"
+    },
+    {
+      "failure_family_id": "c0-terminal-evidence-grounding",
+      "attempt": 1,
+      "run_id": 35386826359,
+      "artifact_id": 10566412411,
+      "artifact_sha256": "da1caba052a07adacd35e4df3562b1a2e878043a496768524d2d0f19ed814889",
+      "result": "PARTIAL",
+      "result_record": "bounded request succeeded in transport but omitted terminal source evidence"
+    },
+    {
+      "failure_family_id": "c0-terminal-evidence-grounding",
+      "attempt": 2,
+      "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+      "run_id": 35402388836,
+      "result_sha256": "7866775cf10dec9aa2c278a8e67a0c0865c057b80c90362f893fab0e74a926e2",
+      "result": "PARTIAL",
+      "result_record": "canonical failure_frontier C0 grounding observation"
+    }
+  ],
+  "frontier_sources": [
+    {
+      "run_id": 35402388836,
+      "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0"
+    },
+    {
+      "run_id": 35444671480,
+      "candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e"
+    }
+  ],
+  "domain_proof": {
+    "run_id": 35443178004,
+    "artifact_id": 10584940146,
+    "artifact_sha256": "affa1884f56bf4ab5b1000f4ebcf2f29b3da93ddd1ad47306ad7584955fbf6a8",
+    "proof_source_commit": "58789aafcba7f2cf85c4097472989f5bb2dc445f",
+    "proof_source_path": "HavenlineGodot/scripts/world_transform_view.gd",
+    "proof_source_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+    "proof_slice_mode": "WHOLE_FILE_EXCEPT_EXACT_METADATA_LINES",
+    "proof_irrelevant_exact_lines": [
+      "\t\t\"label_layout_policy\": \"constrained_screen_lanes_v1\",",
+      "\t\t\"label_dynamic_camera_lane\": true,",
+      "\t\t\"label_min_readability_scale\": READABILITY_MIN,",
+      "\t\t\"label_fit_slack_px\": LABEL_FIT_SLACK_PX,"
+    ],
+    "proof_relevant_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+    "retained_summary_path": "Docs/Production/T10/Proofs/layout-solver-10584940146-summary.json",
+    "retained_summary_sha256": "7cd41bdb18a46ff50f3e7fc4f2f341ff1467f1faba253d6efed70fe93dc10f09",
+    "required_summary": {
+      "projection_count": 216,
+      "failure_count": 0,
+      "diagnostic_collection_passed": true,
+      "product_projection_passed": true,
+      "proof_slice_mode": "WHOLE_FILE_EXCEPT_EXACT_METADATA_LINES",
+      "proof_irrelevant_exact_lines": [
+        "\t\t\"label_layout_policy\": \"constrained_screen_lanes_v1\",",
+        "\t\t\"label_dynamic_camera_lane\": true,",
+        "\t\t\"label_min_readability_scale\": READABILITY_MIN,",
+        "\t\t\"label_fit_slack_px\": LABEL_FIT_SLACK_PX,"
+      ],
+      "proof_relevant_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+      "derived_effect_bounds": {
+        "_beacon.pixel_size": {
+          "dependency_symbols": ["projection", "label_scale"],
+          "minimum_gte": 0.004845,
+          "maximum_lte": 0.0057,
+          "violation_count": 0
+        },
+        "_beacon.width": {
+          "dependency_symbols": ["projection", "wrap_width"],
+          "minimum_policy": "whole_word_width",
+          "maximum_lte": 960.0,
+          "violation_count": 0
+        }
+      },
+      "task_approved": false,
+      "reusable_for_approval": false,
+      "critic_score_reusable": false
+    }
+  }
+}

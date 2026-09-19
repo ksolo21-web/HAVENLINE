@@ -32,7 +32,7 @@ BUILDER_INHERIT_REQUEST_SHA256 = "6c1abc343d0b6837612e47a9ae222b81d167b28743b665
 BUILDER_C0R_REQUEST = "Docs/Production/ChangeRequests/T10-c0r-builder-enforcement.json"
 BUILDER_C0R_REQUEST_SHA256 = "f55b6906f492901e9cebe755a94ac73577935ca01e42e0f7af8de6c00a43e2ca"
 BUILDER_PRE_C0R_SHA256 = "f2b93756d6f9e70b9533ff2fde44525c7fb305778f80bb8c4eef49f02aa18eb4"
-BUILDER_C0R_CURRENT_SHA256 = "6fa3dcc397d0e680f2d39d98c0b36a1ca49a92779f1115e8c3002bfb30e7277c"
+BUILDER_C0R_CURRENT_SHA256 = "935bc94206fb51d49461abac734eee66d34d8b7ba4e992b85114ae0143971d3d"
 BUILDER_DELTAS = [('    errors=[]\n', '    errors=[]\n    task=c0.get("task_id")\n    canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"\n    canonical_plan=f"Docs/Production/{task}/REPAIR_PLAN.json"\n    bookkeeping={canonical_c0,canonical_plan}\n    if plan.get("c0_report_path")!=canonical_c0 or plan.get("plan_path")!=canonical_plan:\n        errors.append("canonical C0 and repair plan paths required")\n'), ('        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n', '        if set(files)&bookkeeping:errors.append(f"{bid} bookkeeping cannot be causal files")\n        causal_files=set(files)-bookkeeping\n        if not causal_files:errors.append(f"{bid} non-bookkeeping causal files required")\n        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n'), ('        allowed.update(files)\n', '        allowed.update(causal_files)\n'), ('        plan_path=plan.get("plan_path")\n        allowed_actual=set(allowed)\n        if isinstance(plan_path,str) and plan_path:allowed_actual.add(plan_path)\n', '        allowed_actual=set(allowed)|bookkeeping\n'), ('            if not set(fix.get("files",[]))&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n', '            if not (set(fix.get("files",[]))-bookkeeping)&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n')]
 BUILDER_INHERIT_DELTAS = [
     ('import pathlib\n\nfrom lib import ROOT, changed_files\n', 'import pathlib\nimport os\nimport subprocess\n\nfrom lib import ROOT, changed_files\n'),
@@ -62,7 +62,7 @@ SPECIALIST_REQUEST = "Docs/Production/ChangeRequests/T10-specialist-actionable-d
 SPECIALIST_REQUEST_SHA256 = "25c8544a37587fdbbd527de7606c0517e67781ee879fdb72e502b6fe2d1c513d"
 C0_ADVISOR = "tools/havenline/production/c0_root_cause_advisor.py"
 C0_ADVISOR_BASE_SHA256 = "d66e551eadf4dcdd1363da3da41d64e314a074292b2531cf99c0f5028a24beee"
-C0_ADVISOR_CURRENT_SHA256 = "889e41072b2096aac6ed9843cbdb028425d126e7b254229a523294467d6dd777"
+C0_ADVISOR_CURRENT_SHA256 = "8fcb94cdc74b879627596fd520960b0010347ff2d3600663dbff51530f99f7a0"
 C0_TERMINAL_JOB_LOG_REQUEST = "Docs/Production/ChangeRequests/T10-c0-terminal-job-log-priority.json"
 C0_TERMINAL_JOB_LOG_REQUEST_SHA256 = "08a3d20890dc37532c70fa22baa040116543474eceaad0879c9dc9d7d21559e2"
 C0_TERMINAL_REQUEST = "Docs/Production/ChangeRequests/T10-c0-terminal-evidence-priority.json"

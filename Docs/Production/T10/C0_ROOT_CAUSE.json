@@ -15,6 +15,157 @@
     35401512350
   ],
   "latest_failed_integration_head": "76d56e1af39692dd382936c480a57bc7d858d983",
+  "failure_family_history": [
+    {
+      "failure_family_id": "projected-label-feasibility",
+      "blocker_ids": ["C0-T10-B053", "C0-T10-B055"],
+      "prior_attempts": [
+        {
+          "strategy": "Reduce Label3D.width from 1000 to 960",
+          "outcome": "FAILED",
+          "same_family": true,
+          "candidate": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81",
+          "run_id": 35401512350,
+          "lesson": "Godot natural measured line width did not change; 0f9303 reproduced the same projected rectangle."
+        },
+        {
+          "strategy": "Reduce label pixel size from 0.006 to 0.0057",
+          "outcome": "PARTIAL",
+          "same_family": true,
+          "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+          "run_id": 35402388836,
+          "lesson": "Ready/overhead improved, but 8ab exposed blocked/overhead and exhaustive collection later found the whole overhead containment family."
+        }
+      ]
+    },
+    {
+      "failure_family_id": "c7-requirement-dimension-context",
+      "blocker_ids": ["C0-T10-B057"],
+      "prior_attempts": [
+        {
+          "strategy": "Exact human-readable R05/R06 row names plus report hashes",
+          "outcome": "PARTIAL",
+          "same_family": true,
+          "candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e",
+          "run_id": 35444671480,
+          "lesson": "Source binding was correct, but the selector treated presentation wording as identity. A later presentation-only wording refinement made packaging fail despite the real integration row still proving the same accepted-receipt invariant."
+        }
+      ]
+    },
+    {
+      "failure_family_id": "c0-terminal-evidence-grounding",
+      "blocker_ids": ["C0-T10-B059", "C0-T10-B060", "C0-T10-B061"],
+      "prior_attempts": [
+        {
+          "strategy": "Bound the C0 model packet semantically",
+          "outcome": "PARTIAL",
+          "same_family": true,
+          "run_id": 35386826359,
+          "lesson": "Request size became valid, but terminal artifact evidence could still lose the shared excerpt budget."
+        },
+        {
+          "strategy": "Collect source-addressed artifact diagnostics and strict grounding",
+          "outcome": "PARTIAL",
+          "same_family": true,
+          "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+          "run_id": 35402388836,
+          "lesson": "The exact terminal line was retained, yet projection priority omitted it and C0 self-steps contaminated subject-job interpretation."
+        }
+      ]
+    }
+  ],
+  "full_domain_proofs": [
+    {
+      "failure_family_id": "projected-label-feasibility",
+      "proof": {
+        "required": true,
+        "provided": true,
+        "method": "Bounded non-approval constrained-layout prototype executed the authoritative 6 devices × 6 lifecycle states × 6 camera angles matrix.",
+        "expected_cases": 216,
+        "covered_cases": 216,
+        "dimensions": {
+          "device": 6,
+          "lifecycle_state": 6,
+          "camera_angle": 6
+        },
+        "artifact_id": 10584940146,
+        "artifact_sha256": "affa1884f56bf4ab5b1000f4ebcf2f29b3da93ddd1ad47306ad7584955fbf6a8",
+        "proof_source_commit": "58789aafcba7f2cf85c4097472989f5bb2dc445f",
+        "proof_source_path": "HavenlineGodot/scripts/world_transform_view.gd",
+        "proof_source_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+        "proof_slice_mode": "WHOLE_FILE_EXCEPT_EXACT_METADATA_LINES",
+        "proof_irrelevant_exact_lines": [
+          "\t\t\"label_layout_policy\": \"constrained_screen_lanes_v1\",",
+          "\t\t\"label_dynamic_camera_lane\": true,",
+          "\t\t\"label_min_readability_scale\": READABILITY_MIN,",
+          "\t\t\"label_fit_slack_px\": LABEL_FIT_SLACK_PX,"
+        ],
+        "proof_relevant_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+        "derived_effect_bounds": {
+          "_beacon.pixel_size": {"dependency_symbols": ["projection", "label_scale"], "minimum_gte": 0.004845, "maximum_lte": 0.0057, "violation_count": 0},
+          "_beacon.width": {"dependency_symbols": ["projection", "wrap_width"], "minimum_policy": "whole_word_width", "maximum_lte": 960.0, "violation_count": 0}
+        },
+        "verifier": "Read summary.json from artifact 10584940146 and require projection_count=216, failure_count=0, diagnostic_collection_passed=true, product_projection_passed=true, task_approved=false and reusable_for_approval=false."
+      }
+    }
+  ],
+  "failure_frontier": {
+    "complete": true,
+    "diagnosed_through_candidate": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81",
+    "latest_observed_failed_candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e",
+    "observations": [
+      {
+        "run_id": 35402388836,
+        "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+        "disposition": "BOUND_TO_EXISTING_GROUP",
+        "group_id": "layout-feasibility",
+        "evidence": [
+          "retained device-layout/phone_16_9/capture.log: blocked/overhead failed fully_in_frame while overlap, clearance and priority passed",
+          "exhaustive diagnostic run 35441401273 later expanded the same invariant to 32 overhead containment failures across the 216-case domain"
+        ],
+        "reason": "The new failure changes the observed state/device coverage but not the causal family: the fallback layout did not prove a legal contained placement."
+      },
+      {
+        "run_id": 35402388836,
+        "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+        "disposition": "BOUND_TO_EXISTING_GROUP",
+        "group_id": "c0-semantic-projection-grounding",
+        "evidence": [
+          "the downloaded artifact contained the exact terminal device failure, but C0's bounded model projection retained generic successful evidence instead",
+          "C0 validation rejected six unsupported exact quotations rather than weakening grounding"
+        ],
+        "reason": "This is the same bounded C0 evidence-grounding family, now narrowed to terminal-evidence priority and subject-job separation."
+      },
+      {
+        "run_id": 35444671480,
+        "candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e",
+        "disposition": "BOUND_TO_EXISTING_GROUP",
+        "group_id": "c7-context-binding",
+        "evidence": [
+          "built-pending-dependency passed domain stress, fixture/R11 integration, frozen source contract, 216/216 authoritative device projections, native4K capture, and warmed performance before failing in build_critic_evidence.py.",
+          "terminal traceback: AssertionError: integration selected C7 row missing, duplicate or failed: accepted receipt stops flow and resets its bounded phase.",
+          "the same candidate's integration report passed 135/135 and contains the invariant-preserving row accepted receipt stops flow while retaining camera-lane maintenance.",
+          "diagnostic replay run 35446792906 / artifact 10585304699 passes hostile selector tests, the exact failed artifact packaging replay, quantitative C6 and critic-readiness; approval reuse is explicitly forbidden."
+        ],
+        "reason": "This is the existing B057 C7 context-binding family. The prior repair correctly added R05/R06 source binding but used mutable human-readable row prose as identity; the new failure is selector-contract drift, not a product or C7 scoring defect."
+      },
+      {
+        "run_id": 35444671480,
+        "candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e",
+        "disposition": "BOUND_TO_EXISTING_GROUP",
+        "group_id": "c0-semantic-projection-grounding",
+        "evidence": [
+          "the C0 failure packet identifies Package source-bound specialist inputs and quantitative C6 as the failed terminal subject step.",
+          "the C0 model projection retained zero terminal artifact diagnostic lines for this cause because the traceback existed only in the job log.",
+          "the failed-log excerpt retained early branch/critic/defect/setup noise instead of the terminal traceback; historical FI-T09 permission context then influenced the model.",
+          "strict C0 validation returned validated=false because the proposed permission diagnosis used unsupported evidence and wildcard/nonexistent causal paths.",
+          "governance hardening integrated at 29be5ddae67cf47fd6674de8dfb3beb673116776 prioritizes latest terminal failed-job signal windows and keeps history advisory-only without weakening grounding."
+        ],
+        "reason": "This is the existing B059-B061 bounded/grounded C0 evidence family. The previous terminal-artifact repair did not cover a terminal cause present only in the failed job log."
+      }
+    ],
+    "unclassified_failures": []
+  },
   "diagnosis_status": "DIAGNOSIS_COMPLETE",
   "terminal_class": "MIXED",
   "complete_known_blocker_set": true,
@@ -775,8 +926,10 @@
       "affected_object": "T10 presentation and critic evidence",
       "symptom": "C7 scores all dimensions 9.8-9.9 but mislabels lifecycle as R06 and returns a role-confusion defect; output completes normally.",
       "root_cause": "The generic C7 brief conflates R01-R14 requirement IDs with six score dimensions and omits source-bound R05/R06 lifecycle/delivery rows.",
-      "causal_fix": "Build a C7-only early context that keeps R01-R14, names the six unchanged dimensions, maps R05 lifecycle and R06 delivered stock correctly, and binds selected passing rows to exact domain/integration report hashes with hostile validation.",
+      "causal_fix": "Build a C7-only early context that keeps R01-R14, names the six unchanged dimensions, maps R05 lifecycle and R06 delivered stock correctly, and binds producer-emitted exact evidence IDs plus whole-report hashes with hostile validation; never infer evidence identity from display prose.",
       "files_to_change": [
+        "HavenlineGodot/tests/test_task10_world_transform.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd",
         "tools/havenline/task10/build_critic_evidence.py",
         "tools/havenline/task10/tests/test_build_critic_evidence.py",
         "tools/havenline/task10/validate_critic_readiness.py",
@@ -957,6 +1110,51 @@
         "Hostile tests reject uncited/paraphrased evidence, missing source excerpts and untracked causal paths.",
         "Valid diagnoses retain exact artifact excerpts and tracked paths without changing C0 model/runtime/token/timeouts.",
         "Full production governance passes with C0 non-voting and every critic threshold unchanged."
+      ]
+    },
+    {
+      "id": "C0-T10-B062",
+      "classification": "GOVERNANCE_DEFECT",
+      "affected_object": "C0R repair sufficiency admission gate",
+      "symptom": "The first C0R canary can accept a repeated repair after the plan self-declares incomplete history/frontier evidence, relabels a scalar adjustment as tooling, or leaves the exact builder repair gate in a concurrent workflow job.",
+      "root_cause": "C0R validates the internal shape of builder-authored claims but does not bind attempt history and the evidence frontier to C0, does not independently verify canonical threshold registries or proof provenance, and the primary workflows do not execute the exact builder gate in the direct pre-build dependency.",
+      "causal_fix": "Bind frontier, same-family attempt history and proof to a digest-locked source manifest with exact run/candidate/result hashes and a retained machine-readable proof summary; validate the lock in C0 and C0R, require machine-rendered symbol-bound architectural operations after two attempts, reject fixed scalar repairs, and permit a derived per-case sink only when its exact normalized RHS, dependencies and zero-violation bounds are bound to the proof artifact and exact proof-source commit/path/file hash. Require the current candidate's canonicalized whole proof source—excluding only four exact, locked metadata lines inside the static contract function—to match the proven source exactly, closing transitive dependency and plan-controlled exclusion gaps. Validate reachable executable symbols while excluding comments/literals, compare reconstructed multiline before/after statements to the latest failed candidate, compare both canonical threshold registries, pin the canonical integration branch outside the plan/registry, and execute the exact builder repair gate in each direct pre-build C0R job.",
+      "files_to_change": [
+        "tools/havenline/production/repair_sufficiency_critic.py",
+        "tools/havenline/production/builder_repair_gate.py",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        "tools/havenline/production/tests/test_repair_sufficiency_critic.py",
+        "tools/havenline/production/c0_root_cause_advisor.py",
+        "tools/havenline/production/tests/test_c0_builder.py",
+        "Docs/Production/C0R_REPAIR_SUFFICIENCY_STANDARD.md",
+        "Docs/Production/C0R_REPORT_SCHEMA.json",
+        "Docs/Production/T10/C0_REPAIR_INTELLIGENCE_LOCK.json",
+        "Docs/Production/T10/Proofs/layout-solver-10584940146-summary.json",
+        "Docs/Production/T10/C0R_REPAIR_SUFFICIENCY.json",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "tools/havenline/production/tests/test_t10_activation_validation.py",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "evidence": [
+        "Independent C0R critic review of a8084aa scored 6.8/10 and demonstrated self-attested attempt/frontier bypasses, consumer-invented C7 regex identity, concurrent rather than prerequisite builder-gate execution, and unverified threshold registries."
+      ],
+      "verification": [
+        "Hostile tests reject jointly erased C0/plan frontiers, false attempt counts, scalar euphemisms, undeclared scalar reassignments, comment/string-only diff markers, incomplete or forged full-domain proof, registry branch redirection, and weakened canonical threshold snapshots.",
+        "C7 packaging selects only producer-emitted exact IDs and rejects missing, duplicate, false, or consumer-renamed IDs.",
+        "Both primary T10 workflows run C0R and the exact builder repair gate in the same direct prerequisite job before any build job."
       ]
     }
   ],

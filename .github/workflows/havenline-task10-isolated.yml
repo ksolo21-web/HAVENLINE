@@ -55,6 +55,17 @@ jobs:
             --c0 Docs/Production/T10/C0_ROOT_CAUSE.json \
             --plan Docs/Production/T10/REPAIR_PLAN.json \
             --output task10-c0r/report.json
+          repair_base=$(python3 -c "import json; print(json.load(open('Docs/Production/T10/REPAIR_PLAN.json'))['repair_base'])")
+          INTEGRATION_BRANCH=codex/havenline-sequential-task-01
+          git fetch --no-tags origin "$INTEGRATION_BRANCH"
+          INTEGRATION_HEAD=$(git rev-parse "origin/$INTEGRATION_BRANCH")
+          export INTEGRATION_BRANCH INTEGRATION_HEAD
+          python3 tools/havenline/production/builder_repair_gate.py \
+            --c0 Docs/Production/T10/C0_ROOT_CAUSE.json \
+            --plan Docs/Production/T10/REPAIR_PLAN.json \
+            --base "$repair_base" \
+            --head "$GITHUB_SHA" \
+            --output task10-c0r/builder-gate.json
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:

@@ -266,19 +266,51 @@
         "REPEATED_FAILURE_FAMILY"
       ],
       "passed": true
+    },
+    {
+      "group_id": "c0r-source-bound-admission",
+      "blocker_ids": [
+        "C0-T10-B062"
+      ],
+      "strategy_kind": "GOVERNANCE",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
     }
   ],
-  "group_count": 20,
+  "group_count": 21,
   "full_blocker_coverage": true,
   "thresholds_unchanged": true,
+  "threshold_registry": {
+    "critic_matrix_sha256": "cf8c435050e01b0f3a96cf73c57cbf1075f3da7d84584f680c8c4cb952debcaf",
+    "task_gates_sha256": "84abb49c28d755b40576e09c4415e574b9780c1c58e7010a4826576e7cab1591",
+    "critic_matrix": {
+      "dimension_operator": ">",
+      "threshold": 9.0,
+      "unrounded": true,
+      "target": 10.0,
+      "no_average_waiver": true,
+      "no_unresolved_mandatory_defect": true
+    },
+    "task_gates": {
+      "mandatory_dimension_operator": ">",
+      "mandatory_dimension_threshold": 9,
+      "unrounded": true,
+      "target": 10,
+      "all_applicable_gates_must_pass": true,
+      "no_unresolved_mandatory_defects": true
+    }
+  },
   "may_approve_task": false,
   "may_score_gameplay": false,
   "may_lower_C1_C11_thresholds": false,
   "passed": true,
   "input_bindings": {
     "c0_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
-    "c0_sha256": "d49662c0ed7805e3ea681fcb6e4595dc0813e33a6538184882fb44e6bf87a785",
+    "c0_sha256": "0bcfa6d160d8dd81932f841ed1826f8b16f1189b39f39c7e6d81039244c3e50f",
     "plan_path": "Docs/Production/T10/REPAIR_PLAN.json",
-    "plan_sha256": "a988ef22aa4245ca215e11a09afaad6004f0ca545bac4b178c076c7c3e8f32fc"
+    "plan_sha256": "42853ad23ce584b0e66ec009f82b693dd012570fa9aaa672817f309c95e8d5af"
   }
 }
