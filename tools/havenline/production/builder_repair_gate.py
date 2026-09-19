@@ -9,6 +9,7 @@ import os
 import subprocess
 
 from lib import ROOT, changed_files
+from repair_sufficiency_critic import review as review_repair_sufficiency
 
 
 def digest(path:pathlib.Path)->str:
@@ -51,12 +52,69 @@ def verify_inherited_noncausal(plan:dict,head:str,integration_head:str|None,read
     return errors
 
 
-def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:str|None=None)->list[str]:
+def _requires_c0r(task:object,plan:dict)->bool:
+    if isinstance(task,str) and len(task)==3 and task.startswith("T") and task[1:].isdigit() and int(task[1:])>=10:
+        return True
+    return isinstance(plan.get("repair_sufficiency"),dict)
+
+
+def validate_c0r(c0:dict,plan:dict,c0r:dict|None,c0_sha256:str|None,plan_sha256:str|None)->list[str]:
+    if not _requires_c0r(c0.get("task_id"),plan):
+        return []
     errors=[]
     task=c0.get("task_id")
     canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"
     canonical_plan=f"Docs/Production/{task}/REPAIR_PLAN.json"
-    bookkeeping={canonical_c0,canonical_plan}
+    if not isinstance(plan.get("repair_sufficiency"),dict):
+        errors.append("T10+ repair plan requires repair_sufficiency")
+    if not isinstance(c0r,dict):
+        return errors+["canonical C0R repair-sufficiency report required"]
+    expected_fields={
+        "critic_id":"C0R",
+        "non_voting":True,
+        "approval_critic":False,
+        "read_only":True,
+        "outcome":"REPAIR_PLAN_ACCEPTED",
+        "builder_action":"BUILD_BOUNDED_REPAIR",
+        "passed":True,
+        "full_blocker_coverage":True,
+        "thresholds_unchanged":True,
+        "may_approve_task":False,
+        "may_score_gameplay":False,
+        "may_lower_C1_C11_thresholds":False,
+    }
+    for key,value in expected_fields.items():
+        if c0r.get(key)!=value:
+            errors.append(f"C0R {key} does not authorize bounded repair")
+    if c0r.get("task_id")!=task or c0r.get("diagnosis_id")!=c0.get("diagnosis_id") or c0r.get("failed_candidate")!=c0.get("failed_candidate"):
+        errors.append("C0R task/diagnosis/candidate binding mismatch")
+    if c0r.get("rejections") not in ([],None) or c0r.get("evidence_gaps") not in ([],None):
+        errors.append("C0R contains unresolved rejection or evidence gap")
+    bindings=c0r.get("input_bindings",{})
+    if not isinstance(bindings,dict):
+        errors.append("C0R input bindings missing")
+        bindings={}
+    if bindings.get("c0_path")!=canonical_c0 or bindings.get("plan_path")!=canonical_plan:
+        errors.append("C0R canonical input paths mismatch")
+    if not isinstance(c0_sha256,str) or len(c0_sha256)!=64 or bindings.get("c0_sha256")!=c0_sha256:
+        errors.append("C0R exact C0 hash mismatch")
+    if not isinstance(plan_sha256,str) or len(plan_sha256)!=64 or bindings.get("plan_sha256")!=plan_sha256:
+        errors.append("C0R exact repair-plan hash mismatch")
+    if isinstance(c0_sha256,str) and len(c0_sha256)==64:
+        expected=review_repair_sufficiency(c0,plan,c0_sha256)
+        actual={key:value for key,value in c0r.items() if key!="input_bindings"}
+        if actual!=expected:
+            errors.append("canonical C0R report does not match deterministic recomputation")
+    return errors
+
+
+def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:str|None=None,c0r:dict|None=None,c0_sha256:str|None=None,plan_sha256:str|None=None)->list[str]:
+    errors=[]
+    task=c0.get("task_id")
+    canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"
+    canonical_plan=f"Docs/Production/{task}/REPAIR_PLAN.json"
+    canonical_c0r=f"Docs/Production/{task}/C0R_REPAIR_SUFFICIENCY.json"
+    bookkeeping={canonical_c0,canonical_plan,canonical_c0r}
     inherited=_inherited_noncausal(plan)
     if plan.get("inherited_noncausal_files",[]) is not None and not isinstance(plan.get("inherited_noncausal_files",[]),list):
         errors.append("inherited_noncausal_files must be list")
@@ -82,6 +140,7 @@ def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:st
         errors.append("repair plan diagnosis id mismatch")
     if plan.get("c0_report_sha256")!=c0.get("report_sha256"):
         errors.append("repair plan C0 hash mismatch")
+    errors.extend(validate_c0r(c0,plan,c0r,c0_sha256,plan_sha256))
     repair_base=plan.get("repair_base")
     if not isinstance(repair_base,str) or len(repair_base)!=40:
         errors.append("repair plan repair_base must be an exact 40-char SHA")
@@ -132,13 +191,17 @@ def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:st
 def main()->int:
     ap=argparse.ArgumentParser();ap.add_argument("--c0",required=True);ap.add_argument("--plan",required=True);ap.add_argument("--base");ap.add_argument("--head",default="HEAD");ap.add_argument("--output");a=ap.parse_args()
     c0_path=(ROOT/a.c0).resolve();plan_path=(ROOT/a.plan).resolve();c0=load(c0_path);plan=load(plan_path)
-    c0_copy=dict(c0);c0_copy["report_sha256"]=digest(c0_path)
+    c0_sha256=digest(c0_path);plan_sha256=digest(plan_path)
+    c0_copy=dict(c0);c0_copy["report_sha256"]=c0_sha256
     if "c0_report_sha256" not in plan:plan["c0_report_sha256"]=""
+    task=c0.get("task_id")
+    c0r_path=(ROOT/f"Docs/Production/{task}/C0R_REPAIR_SUFFICIENCY.json").resolve()
+    c0r=load(c0r_path) if c0r_path.exists() else None
     actual=changed_files(a.base,a.head) if a.base else None
-    errors=validate(c0_copy,plan,actual,a.base)
+    errors=validate(c0_copy,plan,actual,a.base,c0r=c0r,c0_sha256=c0_sha256,plan_sha256=plan_sha256)
     inherited_errors=verify_inherited_noncausal(plan,a.head,os.environ.get("INTEGRATION_HEAD")) if actual is not None else []
     errors.extend(inherited_errors)
-    result={"schema_version":1,"task_id":c0.get("task_id"),"diagnosis_id":c0.get("diagnosis_id"),"passed":not errors,"mode":"post-build" if actual is not None else "pre-build","repair_base":plan.get("repair_base"),"reconciled_integration_head":plan.get("reconciled_integration_head"),"inherited_noncausal_files":_inherited_noncausal(plan),"actual_changed_files":actual or [],"errors":errors}
+    result={"schema_version":1,"task_id":c0.get("task_id"),"diagnosis_id":c0.get("diagnosis_id"),"passed":not errors,"mode":"post-build" if actual is not None else "pre-build","repair_base":plan.get("repair_base"),"c0r_required":_requires_c0r(task,plan),"c0r_path":f"Docs/Production/{task}/C0R_REPAIR_SUFFICIENCY.json","c0r_sha256":digest(c0r_path) if c0r_path.exists() else None,"c0r_outcome":c0r.get("outcome") if isinstance(c0r,dict) else None,"reconciled_integration_head":plan.get("reconciled_integration_head"),"inherited_noncausal_files":_inherited_noncausal(plan),"actual_changed_files":actual or [],"errors":errors}
     text=json.dumps(result,indent=2)+"\n"
     if a.output:
         p=(ROOT/a.output).resolve();p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text)
