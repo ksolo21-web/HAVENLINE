@@ -29,6 +29,10 @@ BUILDER_REQUEST = "Docs/Production/ChangeRequests/T10-builder-repair-causal-book
 BUILDER_REQUEST_SHA256 = "92986f20ded72d4b22fb6ebe1e82d01d2dd2003e1f453b02b8ae392bd5d438c7"
 BUILDER_INHERIT_REQUEST = "Docs/Production/ChangeRequests/T10-repair-base-inherited-governance.json"
 BUILDER_INHERIT_REQUEST_SHA256 = "6c1abc343d0b6837612e47a9ae222b81d167b28743b6651fb2cf217b88d7392a"
+BUILDER_C0R_REQUEST = "Docs/Production/ChangeRequests/T10-c0r-builder-enforcement.json"
+BUILDER_C0R_REQUEST_SHA256 = "f55b6906f492901e9cebe755a94ac73577935ca01e42e0f7af8de6c00a43e2ca"
+BUILDER_PRE_C0R_SHA256 = "f2b93756d6f9e70b9533ff2fde44525c7fb305778f80bb8c4eef49f02aa18eb4"
+BUILDER_C0R_CURRENT_SHA256 = "6fa3dcc397d0e680f2d39d98c0b36a1ca49a92779f1115e8c3002bfb30e7277c"
 BUILDER_DELTAS = [('    errors=[]\n', '    errors=[]\n    task=c0.get("task_id")\n    canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"\n    canonical_plan=f"Docs/Production/{task}/REPAIR_PLAN.json"\n    bookkeeping={canonical_c0,canonical_plan}\n    if plan.get("c0_report_path")!=canonical_c0 or plan.get("plan_path")!=canonical_plan:\n        errors.append("canonical C0 and repair plan paths required")\n'), ('        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n', '        if set(files)&bookkeeping:errors.append(f"{bid} bookkeeping cannot be causal files")\n        causal_files=set(files)-bookkeeping\n        if not causal_files:errors.append(f"{bid} non-bookkeeping causal files required")\n        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n'), ('        allowed.update(files)\n', '        allowed.update(causal_files)\n'), ('        plan_path=plan.get("plan_path")\n        allowed_actual=set(allowed)\n        if isinstance(plan_path,str) and plan_path:allowed_actual.add(plan_path)\n', '        allowed_actual=set(allowed)|bookkeeping\n'), ('            if not set(fix.get("files",[]))&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n', '            if not (set(fix.get("files",[]))-bookkeeping)&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n')]
 BUILDER_INHERIT_DELTAS = [
     ('import pathlib\n\nfrom lib import ROOT, changed_files\n', 'import pathlib\nimport os\nimport subprocess\n\nfrom lib import ROOT, changed_files\n'),
@@ -137,7 +141,11 @@ def builder_delta_errors(accepted: str, current: str) -> list[str]:
         if expected.count(old) != 1:
             return ["V3.2 builder inherited-governance anchor missing"]
         expected = expected.replace(old, new, 1)
-    return [] if current == expected else ["Only the authorized causal-bookkeeping plus exact inherited-governance builder deltas are permitted"]
+    if hashlib.sha256(expected.encode()).hexdigest()!=BUILDER_PRE_C0R_SHA256:
+        return ["pre-C0R builder authorization baseline drifted"]
+    if hashlib.sha256(current.encode()).hexdigest()!=BUILDER_C0R_CURRENT_SHA256:
+        return ["Only the exact authorized causal-bookkeeping, inherited-governance and canonical C0R builder enforcement bytes are permitted"]
+    return []
 
 
 def failure_delta_errors(accepted: str, current: str) -> list[str]:
@@ -218,6 +226,11 @@ def validate() -> dict:
             errors.append("Bounded builder inherited-governance authorization changed or missing")
         if inherited_request.get("status")!="AUTHORIZED" or inherited_request.get("blocker")!="C0R-T10-RECONCILED-INHERITANCE":
             errors.append("Explicit T10 inherited-governance builder authorization missing")
+        c0r_builder_request=json.loads((v31.ROOT/BUILDER_C0R_REQUEST).read_text())
+        if hashlib.sha256((v31.ROOT/BUILDER_C0R_REQUEST).read_bytes()).hexdigest()!=BUILDER_C0R_REQUEST_SHA256:
+            errors.append("Bounded canonical C0R builder authorization changed or missing")
+        if c0r_builder_request.get("status")!="AUTHORIZED" or c0r_builder_request.get("blocker")!="C0R-T10-BUILDER-ENFORCEMENT":
+            errors.append("Explicit canonical C0R builder enforcement authorization missing")
         accepted_failure = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{FAILURE}").stdout.decode()
         errors += failure_delta_errors(accepted_failure, (v31.ROOT / FAILURE).read_text())
         if hashlib.sha256((v31.ROOT / FAILURE_REQUEST).read_bytes()).hexdigest() != FAILURE_REQUEST_SHA256:
@@ -248,7 +261,7 @@ def validate() -> dict:
     return {
         "passed": not errors,
         "architecture_version": "3.2",
-        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, exact-byte inherited integration governance, actionable critic defects, bounded C0 model packets, grounded artifact diagnostics and terminal-first subject-isolated C0 projection",
+        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, exact-byte inherited integration governance, canonical C0R builder enforcement for T10+, actionable critic defects, bounded C0 model packets, grounded artifact diagnostics and terminal-first subject-isolated C0 projection",
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
@@ -258,6 +271,7 @@ def validate() -> dict:
         "failure_packet_authorization_record": FAILURE_REQUEST,
         "builder_authorization_record": BUILDER_REQUEST,
         "builder_inherited_governance_authorization_record": BUILDER_INHERIT_REQUEST,
+        "builder_c0r_authorization_record": BUILDER_C0R_REQUEST,
         "c0_job_log_authorization_record": C0_REQUEST,
         "c0_bounded_packet_authorization_record": C0_BOUNDED_REQUEST,
         "c0_grounding_authorization_record": C0_GROUNDING_REQUEST,
