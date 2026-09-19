@@ -431,7 +431,7 @@ class CausalBookkeepingTests(unittest.TestCase):
             read_ref=lambda ref,path:b'x',
             is_ancestor=lambda ancestor,head:True
         )
-        self.assertTrue(any('does not match active integration head' in e for e in errors),errors)
+        self.assertTrue(any('active canonical head differs from authority snapshot' in e for e in errors),errors)
 
     def test_inherited_paths_are_safe_unique_and_not_bookkeeping(self):
         c=complete_c0()

@@ -78,12 +78,46 @@ def python_source_review_errors(plan: dict, review: dict | None, before: dict | 
     return errors
 
 
+def _remote_tip(raw: bytes) -> str:
+    expected = "refs/heads/" + PINNED_BRANCH
+    try:
+        lines = raw.decode("ascii").splitlines()
+    except UnicodeError as exc:
+        raise ValueError("invalid remote ref encoding") from exc
+    if len(lines) != 1 or re.fullmatch(r"[0-9a-f]{40}\t" + re.escape(expected), lines[0]) is None:
+        raise ValueError("remote response must contain exactly the full pinned branch ref")
+    return lines[0].split("\t", 1)[0]
+
+
+def promotion_dag_errors(candidate: str, parents: list[str], reviewed: str, authority: str, is_ancestor) -> list[str]:
+    errors=[]
+    if parents != [reviewed, authority]:
+        errors.append("promotion requires exact ordered reviewed-source and authority parents")
+    if candidate in (reviewed, authority) or is_ancestor(authority, reviewed):
+        errors.append("promotion authority must be outside reviewed-source ancestry")
+    return errors
+
+
+def authority_context(plan: dict, candidate: str, active: str | None, is_ancestor) -> tuple[str | None, list[str]]:
+    """Classify actual Git identities, never a caller-selected execution mode."""
+    snapshot = plan.get("reconciled_integration_head")
+    if any(not isinstance(value, str) or re.fullmatch(r"[0-9a-f]{40}", value) is None for value in (snapshot, active)):
+        return None, ["exact authority snapshot and active canonical head required"]
+    if snapshot == candidate:
+        return None, ["authority snapshot cannot authorize itself as repair candidate"]
+    if not is_ancestor(snapshot, candidate):
+        return None, ["authority snapshot is not candidate ancestor"]
+    if active == snapshot:
+        return "ISOLATED_REPAIR", []
+    if candidate == active:
+        return "INTEGRATED_REPAIR", []
+    return None, ["stale isolated candidate: active canonical head differs from authority snapshot"]
+
+
 def load_trusted_python_review(plan: dict, head: str, integration_head: str | None, branch: str | None, read_ref=None, is_ancestor=None):
     if not repeated_python_bindings(plan):
         return None, []
     errors = verify_integration_branch(branch)
-    if not isinstance(integration_head, str) or re.fullmatch(r"[0-9a-f]{40}", integration_head) is None or plan.get("reconciled_integration_head") != integration_head:
-        return None, errors + ["Python source review requires exact reconciled canonical integration head"]
     task = plan.get("task_id")
     if not isinstance(task, str) or re.fullmatch(r"T[0-9]{2}", task) is None:
         return None, errors + ["Python source review task invalid"]
@@ -91,11 +125,14 @@ def load_trusted_python_review(plan: dict, head: str, integration_head: str | No
         read_ref = lambda ref, path: subprocess.check_output(["git", "show", f"{ref}:{path}"])
     if is_ancestor is None:
         is_ancestor = lambda base, tip: subprocess.run(["git", "merge-base", "--is-ancestor", base, tip], check=False).returncode == 0
-    if not is_ancestor(integration_head, head):
-        errors.append("Python source review integration is not candidate ancestor")
+    mode, context_errors = authority_context(plan, head, integration_head, is_ancestor)
+    errors.extend(context_errors)
+    if errors:
+        return None, errors
+    authority_head = plan["reconciled_integration_head"]
     path = f"Docs/Production/ChangeRequests/{task}-repeated-python-source-review.json"
     try:
-        trusted = read_ref(integration_head, path)
+        trusted = read_ref(authority_head, path)
         if trusted != read_ref(head, path):
             errors.append("Python source review candidate record differs from canonical authority")
         review = json.loads(trusted)
@@ -104,12 +141,12 @@ def load_trusted_python_review(plan: dict, head: str, integration_head: str | No
     return (None if errors else review), errors
 
 
-def verify_candidate(repo: pathlib.Path, canonical_head: str, candidate: str, task: str) -> dict:
+def verify_candidate(repo: pathlib.Path, canonical_head: str, candidate: str, task: str, require_promotion_dag: bool = False) -> dict:
     errors = []
     env = {key:value for key,value in os.environ.items() if not key.startswith("GIT_")}
     env.update(GIT_NO_REPLACE_OBJECTS="1", GIT_CONFIG_NOSYSTEM="1")
     def git(*args):
-        return subprocess.check_output(["git", "--no-replace-objects", "-C", str(repo), *args], env=env, stderr=subprocess.PIPE)
+        return subprocess.check_output(["git", "--no-replace-objects", "-C", str(repo), *args], env=env, stderr=subprocess.PIPE, timeout=30)
     def blob(ref, path):
         if not isinstance(path, str) or path.startswith(("/", "-")) or any(x in ("", ".", "..") for x in path.split("/")):
             raise ValueError("unsafe source path")
@@ -129,26 +166,37 @@ def verify_candidate(repo: pathlib.Path, canonical_head: str, candidate: str, ta
         resolved = git("rev-parse", "refs/remotes/origin/" + PINNED_BRANCH).decode().strip()
         if resolved != canonical_head:
             raise ValueError("canonical head differs from fetched pinned branch")
-        git("merge-base", "--is-ancestor", canonical_head, candidate)
-        report.update(canonical_head=canonical_head,candidate_commit=candidate,candidate_tree=git("rev-parse",candidate+"^{tree}").decode().strip())
-        verifier, identity = blob(canonical_head, SELF_PATH)
+        plan_raw, _ = blob(candidate, f"Docs/Production/{task}/REPAIR_PLAN.json")
+        plan = json.loads(plan_raw)
+        def ancestor(base, tip):
+            try:
+                git("merge-base", "--is-ancestor", base, tip)
+                return True
+            except subprocess.CalledProcessError:
+                return False
+        mode, context_errors = authority_context(plan, candidate, canonical_head, ancestor)
+        errors.extend(context_errors)
+        if context_errors:
+            raise ValueError("invalid repair authority lifecycle")
+        authority_head = plan["reconciled_integration_head"]
+        report.update(canonical_head=canonical_head,authority_head=authority_head,execution_mode=mode,candidate_commit=candidate,candidate_tree=git("rev-parse",candidate+"^{tree}").decode().strip())
+        verifier, identity = blob(authority_head, SELF_PATH)
         if pathlib.Path(__file__).read_bytes() != verifier:
             raise ValueError("executing verifier differs from canonical bytes")
         report["verifier"] = identity
-        if blob(candidate, SELF_PATH)[0] != verifier:
-            raise ValueError("candidate verifier differs from canonical bytes")
+        if blob(candidate, SELF_PATH) != (verifier, identity) or blob(canonical_head, SELF_PATH) != (verifier, identity):
+            raise ValueError("candidate verifier differs from canonical bytes or regular mode")
         record_path = f"Docs/Production/ChangeRequests/{task}-repeated-python-source-review.json"
-        raw, identity = blob(canonical_head, record_path)
+        raw, identity = blob(authority_head, record_path)
         report["authorization_record"] = identity
-        if blob(candidate, record_path)[0] != raw:
-            raise ValueError("candidate record differs from canonical authority")
+        if blob(candidate, record_path) != (raw, identity) or blob(canonical_head, record_path) != (raw, identity):
+            raise ValueError("candidate record differs from canonical authority bytes or regular mode")
         review = json.loads(raw)
-        plan_raw, _ = blob(candidate, f"Docs/Production/{task}/REPAIR_PLAN.json")
         c0_raw, _ = blob(candidate, f"Docs/Production/{task}/C0_ROOT_CAUSE.json")
         plan = json.loads(plan_raw);c0=json.loads(c0_raw)
         if review.get("c0_sha256") != hashlib.sha256(c0_raw).hexdigest() or plan.get("c0_report_sha256") != review.get("c0_sha256"):
             errors.append("authoritative C0 source binding mismatch")
-        if plan.get("reconciled_integration_head") != canonical_head or plan.get("task_id") != task or c0.get("task_id") != task:
+        if plan.get("task_id") != task or c0.get("task_id") != task:
             errors.append("task or integration binding mismatch")
         provenance=review.get("independent_review", {})
         reviewed=provenance.get("reviewed_commit", "")
@@ -170,7 +218,7 @@ def verify_candidate(repo: pathlib.Path, canonical_head: str, candidate: str, ta
         report_path=f"Docs/Production/{task}/C0R_REPAIR_SUFFICIENCY.json"
         old_plan=json.loads(blob(reviewed,plan_path)[0])
         expected_plan=json.loads(json.dumps(old_plan))
-        expected_plan["reconciled_integration_head"]=canonical_head
+        expected_plan["reconciled_integration_head"]=authority_head
         expected_plan["inherited_noncausal_files"]=list(dict.fromkeys(old_plan.get("inherited_noncausal_files",[])+inherited))
         for fix in expected_plan.get("fixes",[]):
             fix["files"]=[path for path in fix["files"] if path not in inherited]
@@ -184,10 +232,10 @@ def verify_candidate(repo: pathlib.Path, canonical_head: str, candidate: str, ta
         for path in filter(None,changed):
             if path in (plan_path,report_path):
                 continue
-            if path not in inherited or blob(candidate,path)!=blob(canonical_head,path):
+            if path not in inherited or blob(candidate,path)!=blob(authority_head,path):
                 errors.append("unreviewed post-freeze path change: "+path)
-        for path in inherited:
-            if blob(candidate,path)!=blob(canonical_head,path):
+        for path in plan.get("inherited_noncausal_files", []):
+            if blob(candidate,path)!=blob(authority_head,path) or blob(canonical_head,path)!=blob(authority_head,path):
                 errors.append("inherited metadata differs from canonical: "+path)
         before={};after={}
         for row in review.get("bindings", []):
@@ -201,7 +249,20 @@ def verify_candidate(repo: pathlib.Path, canonical_head: str, candidate: str, ta
             report["sources"].append({"group_id":row["group_id"],"comparison_base":base,"before":old_id,"candidate":new_id,"reviewed":accepted_id})
         errors.extend(python_source_review_errors(plan,review,before,after))
         report["causal_source_set_sha256"]=review.get("causal_source_set_sha256")
-    except (subprocess.CalledProcessError, ValueError, TypeError, KeyError, UnicodeError, OSError) as exc:
+        parents=git("rev-list", "--parents", "-n", "1", candidate).decode().strip().split()
+        if not parents or parents[0]!=candidate:
+            raise ValueError("candidate parent identity mismatch")
+        dag_errors=promotion_dag_errors(candidate,parents[1:],reviewed,authority_head,ancestor)
+        report["promotion_dag"]={"required":require_promotion_dag,"passed":not dag_errors,"parents":parents[1:],"reviewed_source":reviewed,"authority_head":authority_head,"errors":dag_errors,"concurrency_policy":"OWNER_NO_FORCE_FORWARD_ONLY"}
+        if require_promotion_dag:
+            errors.extend(dag_errors)
+        if git("rev-parse", "refs/remotes/origin/" + PINNED_BRANCH).decode().strip() != canonical_head:
+            errors.append("pinned canonical head advanced during verification")
+        remote_tip=_remote_tip(git("ls-remote", "--exit-code", "origin", "refs/heads/"+PINNED_BRANCH))
+        report["remote_tip_at_completion"]=remote_tip
+        if remote_tip!=canonical_head:
+            errors.append("remote canonical head advanced during verification")
+    except (subprocess.CalledProcessError, subprocess.TimeoutExpired, ValueError, TypeError, KeyError, UnicodeError, OSError) as exc:
         errors.append("canonical source verification failed: "+str(exc))
     report["passed"]=not errors
     return report
@@ -214,8 +275,9 @@ def main():
     ap.add_argument("--candidate",required=True)
     ap.add_argument("--task",required=True)
     ap.add_argument("--output",type=pathlib.Path,required=True)
+    ap.add_argument("--promotion-check",action="store_true",help="Require the restricted DAG needed for atomic forward-only canonical promotion")
     args=ap.parse_args()
-    result=verify_candidate(args.repo,args.canonical_head,args.candidate,args.task)
+    result=verify_candidate(args.repo,args.canonical_head,args.candidate,args.task,args.promotion_check)
     args.output.write_text(json.dumps(result,indent=2)+"\n")
     print(json.dumps(result,indent=2))
     return 0 if result["passed"] else 2

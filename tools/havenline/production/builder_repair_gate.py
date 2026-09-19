@@ -9,7 +9,7 @@ import os
 import re
 import subprocess
 
-from verify_python_repair_bindings import _stable_digest, repeated_python_bindings, python_source_review_errors, load_trusted_python_review
+from verify_python_repair_bindings import authority_context, verify_candidate, _stable_digest, repeated_python_bindings, python_source_review_errors, load_trusted_python_review
 from lib import ROOT, changed_files
 from repair_sufficiency_critic import review as review_repair_sufficiency, whole_file_proof_digest
 
@@ -36,16 +36,14 @@ def verify_inherited_noncausal(plan:dict,head:str,integration_head:str|None,read
     source=plan.get("reconciled_integration_head")
     if not isinstance(source,str) or len(source)!=40:
         return ["inherited noncausal files require exact reconciled_integration_head"]
-    if not isinstance(integration_head,str) or len(integration_head)!=40 or source!=integration_head:
-        errors.append("reconciled integration head does not match active integration head")
     if read_ref is None:
         def read_ref(ref,path):
             return subprocess.check_output(["git","show",f"{ref}:{path}"])
     if is_ancestor is None:
         def is_ancestor(ancestor,descendant):
             return subprocess.run(["git","merge-base","--is-ancestor",ancestor,descendant],check=False).returncode==0
-    if integration_head and not is_ancestor(source,head):
-        errors.append("reconciled integration head is not an ancestor of repair candidate")
+    _, context_errors=authority_context(plan,head,integration_head,is_ancestor)
+    errors.extend(context_errors)
     for path in inherited:
         try:
             source_bytes=read_ref(source,path);head_bytes=read_ref(head,path)
@@ -384,6 +382,7 @@ def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:st
 
 def main()->int:
     ap=argparse.ArgumentParser();ap.add_argument("--c0",required=True);ap.add_argument("--plan",required=True);ap.add_argument("--base");ap.add_argument("--head",default="HEAD");ap.add_argument("--output");a=ap.parse_args()
+    a.head=subprocess.check_output(["git","rev-parse","--verify",a.head+"^{commit}"],text=True).strip()
     c0_path=(ROOT/a.c0).resolve();plan_path=(ROOT/a.plan).resolve();c0=load(c0_path);plan=load(plan_path)
     c0_sha256=digest(c0_path);plan_sha256=digest(plan_path)
     c0_copy=dict(c0);c0_copy["report_sha256"]=c0_sha256
@@ -414,10 +413,14 @@ def main()->int:
     trusted_review,review_errors=load_trusted_python_review(plan,a.head,os.environ.get("INTEGRATION_HEAD"),os.environ.get("INTEGRATION_BRANCH")) if actual is not None else (None,[])
     errors=validate(c0_copy,plan,actual,a.base,c0r=c0r,c0_sha256=c0_sha256,plan_sha256=plan_sha256,actual_diff_by_file=actual_diff_by_file,actual_source_by_file=actual_source_by_file,actual_base_source_by_file=actual_base_source_by_file,trusted_python_review=trusted_review)
     errors.extend(review_errors)
+    source_authority_report=None
+    if actual is not None and repeated_python_bindings(plan):
+        source_authority_report=verify_candidate(ROOT,os.environ.get("INTEGRATION_HEAD", ""),a.head,str(task))
+        errors.extend(source_authority_report["errors"])
     inherited_errors=verify_inherited_noncausal(plan,a.head,os.environ.get("INTEGRATION_HEAD")) if actual is not None else []
     errors.extend(inherited_errors)
     if actual is not None:errors.extend(verify_integration_branch(os.environ.get("INTEGRATION_BRANCH")))
-    result={"schema_version":1,"task_id":c0.get("task_id"),"diagnosis_id":c0.get("diagnosis_id"),"passed":not errors,"mode":"post-build" if actual is not None else "pre-build","repair_base":plan.get("repair_base"),"c0r_required":_requires_c0r(task,plan),"c0r_path":f"Docs/Production/{task}/C0R_REPAIR_SUFFICIENCY.json","c0r_sha256":digest(c0r_path) if c0r_path.exists() else None,"c0r_outcome":c0r.get("outcome") if isinstance(c0r,dict) else None,"reconciled_integration_head":plan.get("reconciled_integration_head"),"inherited_noncausal_files":_inherited_noncausal(plan),"actual_changed_files":actual or [],"errors":errors}
+    result={"schema_version":1,"task_id":c0.get("task_id"),"diagnosis_id":c0.get("diagnosis_id"),"passed":not errors,"source_authority":source_authority_report,"mode":"post-build" if actual is not None else "pre-build","repair_base":plan.get("repair_base"),"c0r_required":_requires_c0r(task,plan),"c0r_path":f"Docs/Production/{task}/C0R_REPAIR_SUFFICIENCY.json","c0r_sha256":digest(c0r_path) if c0r_path.exists() else None,"c0r_outcome":c0r.get("outcome") if isinstance(c0r,dict) else None,"reconciled_integration_head":plan.get("reconciled_integration_head"),"inherited_noncausal_files":_inherited_noncausal(plan),"actual_changed_files":actual or [],"errors":errors}
     text=json.dumps(result,indent=2)+"\n"
     if a.output:
         p=(ROOT/a.output).resolve();p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text)
