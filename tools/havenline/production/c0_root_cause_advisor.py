@@ -30,7 +30,7 @@ C0_SAFETY_TOKENS=512
 # reserves inside the pinned context window.
 C0_MAX_REQUEST_BYTES=C0_CONTEXT_TOKENS-C0_MAX_TOKENS-C0_SAFETY_TOKENS
 FAIL_CONCLUSIONS={"failure","timed_out","cancelled","action_required","startup_failure"}
-TERMINAL_SIGNAL_RE=re.compile(r'(?i)(projected(?: device)? readability failed|assert(?:ion)? failed|script error|parse error|traceback|fatal(?: error)?|runtime error|process completed with exit code [1-9]|"passed"\\s*:\\s*false)')
+TERMINAL_SIGNAL_RE=re.compile(r'(?i)(projected(?: device)? readability failed|assertionerror|assert(?:ion)? failed|script error|parse error|traceback|fatal(?: error)?|runtime error|process completed with exit code [1-9]|"passed"\\s*:\\s*false)')
 C0_DIAGNOSTIC_JOB_MARKERS=("c0 diagnosis after failed","c0 non-voting root-cause diagnosis","c0 root-cause advisor")
 ANSI_RE=re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
 SIGNAL_RE=re.compile(r"(?i)(critic|score|defect|error|fail|fatal|traceback|assert|coverage|confidence|timeout|exceed|blocked|unexecuted)")
@@ -75,6 +75,45 @@ def bounded_lines(text:str,limit:int)->dict:
         "source_bytes":len(raw),"source_sha256":hashlib.sha256(raw).hexdigest(),
         "retained_lines":lines,"retained_bytes":used,
         "truncated":used<len(raw),
+    }
+
+
+def terminal_bounded_lines(text:str,limit:int)->dict:
+    """Prioritize the latest terminal failure signal and its local source context."""
+    raw=text.encode("utf-8",errors="replace")
+    source=[]
+    for line_number,raw_line in enumerate(text.splitlines(),1):
+        line=ANSI_RE.sub("",raw_line).strip()
+        if line:
+            source.append((line_number,line))
+    terminal=[index for index,(_,line) in enumerate(source) if TERMINAL_SIGNAL_RE.search(line)]
+    if not terminal:
+        fallback=bounded_lines(text,limit)
+        fallback["selection_policy"]="generic_signal_fallback"
+        fallback["terminal_signal_count"]=0
+        return fallback
+    selected=[];seen=set()
+    # Start with the latest terminal region because CI logs often contain earlier
+    # negative fixtures or setup noise that are not the terminal cause.
+    for index in reversed(terminal):
+        window=[index]
+        window.extend(range(max(0,index-3),index))
+        window.extend(range(index+1,min(len(source),index+5)))
+        for item in window:
+            if item not in seen:
+                seen.add(item);selected.append(item)
+    lines=[];used=0
+    for index in selected:
+        _,line=source[index]
+        encoded=line.encode("utf-8",errors="replace")
+        if used+len(encoded)+1>limit:
+            continue
+        lines.append(line);used+=len(encoded)+1
+    return {
+        "source_bytes":len(raw),"source_sha256":hashlib.sha256(raw).hexdigest(),
+        "retained_lines":lines,"retained_bytes":used,"truncated":used<len(raw),
+        "selection_policy":"latest_terminal_signal_windows_first",
+        "terminal_signal_count":len(terminal),
     }
 
 
@@ -234,7 +273,7 @@ def failure_log_projection(packet:dict,excerpt_bytes:int)->dict:
         projection["jobs"].append({
             "job_id":job.get("job_id"),"name":job.get("name"),"conclusion":job.get("conclusion"),
             "log_bytes":job.get("log_bytes"),"log_sha256":job.get("log_sha256"),
-            "excerpt":bounded_lines(raw_log,excerpt_bytes),
+            "excerpt":terminal_bounded_lines(raw_log,excerpt_bytes),
         })
     return projection
 
@@ -286,7 +325,9 @@ def model_projection(packet:dict,packet_sha256:str,excerpt_bytes:int=640,detail:
             "bounded_excerpts_have_source_hash_and_truncation_metadata":True,
             "artifact_diagnostics_are_source_hashed":True,
             "terminal_artifact_evidence_prioritized":True,
+            "terminal_job_log_evidence_prioritized":True,
             "c0_advisory_job_excluded_from_subject_execution":True,
+            "historical_failure_intelligence_is_advisory_only":True,
         },
     }
 
