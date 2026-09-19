@@ -44,13 +44,16 @@ SPECIALIST_REQUEST = "Docs/Production/ChangeRequests/T10-specialist-actionable-d
 SPECIALIST_REQUEST_SHA256 = "25c8544a37587fdbbd527de7606c0517e67781ee879fdb72e502b6fe2d1c513d"
 C0_ADVISOR = "tools/havenline/production/c0_root_cause_advisor.py"
 C0_ADVISOR_BASE_SHA256 = "d66e551eadf4dcdd1363da3da41d64e314a074292b2531cf99c0f5028a24beee"
-C0_ADVISOR_CURRENT_SHA256 = "5d6788905504c61bfeb3ddcd24a283614b58486c524e2f508f98de08dd2f1bab"
+C0_ADVISOR_CURRENT_SHA256 = "d43f35bf75169d19ebf5be5c3441395b586ea587080730d5792aff867cf69144"
 C0_BOUNDED_REQUEST = "Docs/Production/ChangeRequests/T10-c0-bounded-model-packet.json"
 C0_BOUNDED_REQUEST_SHA256 = "c54e6bd4c572f71673272a4b4e20ca4ba54da7c353643a1268d17c66c575f94e"
 C0_GROUNDING_REQUEST = "Docs/Production/ChangeRequests/T10-c0-grounded-artifact-diagnostics.json"
 C0_GROUNDING_REQUEST_SHA256 = "42e4cc3e8dac7759d912196fe2eb4e8ef836ad82eb1cdafd8f3922a2188a490f"
+C0_TERMINAL_REQUEST = "Docs/Production/ChangeRequests/T10-c0-terminal-evidence-priority.json"
+C0_TERMINAL_REQUEST_SHA256 = "6499d4202188918441f5730b07e39edc4481b1144001f5867816fee2c5207bf0"
+C0_TERMINAL_AUTHORIZATION = "Authorize the bounded T10 C0 terminal-evidence priority repair."
 C0_DIAGNOSTICS = "tools/havenline/production/collect_artifact_diagnostics.py"
-C0_DIAGNOSTICS_SHA256 = "ad701a1a6c005ff45b6052c68886677dd9c513ad25fabb979a7b6cca2fa8993b"
+C0_DIAGNOSTICS_SHA256 = "d856abd2b15f4f281cbd8604e1679b70a8b3783f9574af779cc0150cccaeb80e"
 C0_PACKET_IMPORT_OLD = "          import json,os,pathlib,subprocess\n"
 C0_PACKET_IMPORT_NEW = "          import hashlib,json,os,pathlib,subprocess\n"
 C0_PACKET_LOG_OLD = "          log=(root/'c0-input/failed.log').read_text(errors='replace') if (root/'c0-input/failed.log').exists() else ''\n"
@@ -86,6 +89,34 @@ C0_GROUNDING_DELTAS = [
     ),
 ]
 
+C0_SUBJECT_JOBS_OLD = """          run=json.loads((root/'c0-input/run.json').read_text());jobs=json.loads((root/'c0-input/jobs.json').read_text()).get('jobs',[])
+          steps=[];unexecuted=[]
+          for job in jobs:
+              for step in job.get('steps',[]):
+                  row={'job':job.get('name'),'name':step.get('name'),'status':step.get('status'),'conclusion':step.get('conclusion')}
+                  steps.append(row)
+                  if step.get('conclusion') in (None,'skipped','cancelled'):unexecuted.append(f"{job.get('name')}: {step.get('name')}")
+"""
+C0_SUBJECT_JOBS_NEW = """          run=json.loads((root/'c0-input/run.json').read_text());jobs=json.loads((root/'c0-input/jobs.json').read_text()).get('jobs',[])
+          subject_jobs=[];diagnostic_jobs=[]
+          for job in jobs:
+              name=str(job.get('name') or '')
+              if 'C0 non-voting root-cause diagnosis' in name:
+                  diagnostic_jobs.append(job)
+              else:
+                  subject_jobs.append(job)
+          steps=[];unexecuted=[]
+          for job in subject_jobs:
+              for step in job.get('steps',[]):
+                  row={'job':job.get('name'),'name':step.get('name'),'status':step.get('status'),'conclusion':step.get('conclusion')}
+                  steps.append(row)
+                  if step.get('conclusion') in (None,'skipped','cancelled'):unexecuted.append(f"{job.get('name')}: {step.get('name')}")
+          subject_jobs_terminal=all(job.get('status')=='completed' for job in subject_jobs)
+          diagnostic_jobs_excluded=[str(job.get('name') or '') for job in diagnostic_jobs]
+"""
+C0_PACKET_EXECUTION_OLD = "            'run_status':run.get('status'),'workflow_name':run.get('name'),'event':run.get('event'),'steps':steps,'unexecuted_checks':unexecuted,\n"
+C0_PACKET_EXECUTION_NEW = C0_PACKET_EXECUTION_OLD + "            'subject_jobs_terminal':subject_jobs_terminal,'diagnostic_jobs_excluded_from_subject_execution':diagnostic_jobs_excluded,\n"
+
 
 def c0_workflow_delta_errors(accepted: str, current: str) -> list[str]:
     if accepted.count(C0_LOG_OLD) != 1:
@@ -97,7 +128,11 @@ def c0_workflow_delta_errors(accepted: str, current: str) -> list[str]:
     for old,new in C0_GROUNDING_DELTAS:
         if expected.count(old)!=1:return ["V3.2 C0 grounded artifact diagnostic anchor missing"]
         expected=expected.replace(old,new,1)
-    return [] if current == expected else ["Only the authorized completed-job collection and bounded complete C0 packet deltas are permitted"]
+    if expected.count(C0_SUBJECT_JOBS_OLD)!=1:return ["V3.2 C0 subject-job isolation anchor missing"]
+    expected=expected.replace(C0_SUBJECT_JOBS_OLD,C0_SUBJECT_JOBS_NEW,1)
+    if expected.count(C0_PACKET_EXECUTION_OLD)!=1:return ["V3.2 C0 subject execution packet anchor missing"]
+    expected=expected.replace(C0_PACKET_EXECUTION_OLD,C0_PACKET_EXECUTION_NEW,1)
+    return [] if current == expected else ["Only the authorized completed-job collection, grounded packet and subject-job isolation deltas are permitted"]
 
 
 def exact_owner_source_errors(path:str,base_sha256:str,current_sha256:str)->list[str]:
@@ -177,6 +212,11 @@ def validate() -> dict:
             errors.append("Bounded C0 grounding authorization changed or missing")
         if c0_grounding_request.get("status")!="AUTHORIZED" or c0_grounding_request.get("blockers")!=["C0-T10-B060","C0-T10-B061"]:
             errors.append("Explicit B060/B061 C0 grounding authorization missing")
+        c0_terminal_request=json.loads((v31.ROOT/C0_TERMINAL_REQUEST).read_text())
+        if hashlib.sha256((v31.ROOT/C0_TERMINAL_REQUEST).read_bytes()).hexdigest()!=C0_TERMINAL_REQUEST_SHA256:
+            errors.append("Bounded C0 terminal-evidence authorization changed or missing")
+        if c0_terminal_request.get("status")!="AUTHORIZED" or c0_terminal_request.get("blockers")!=["C0-T10-B060","C0-T10-B061"] or c0_terminal_request.get("authorization")!=C0_TERMINAL_AUTHORIZATION:
+            errors.append("Explicit B060/B061 terminal-evidence priority authorization missing")
         if hashlib.sha256((v31.ROOT/C0_DIAGNOSTICS).read_bytes()).hexdigest()!=C0_DIAGNOSTICS_SHA256:
             errors.append("Bounded C0 artifact diagnostic collector changed or missing")
         specialist_request=json.loads((v31.ROOT/SPECIALIST_REQUEST).read_text())
@@ -218,7 +258,7 @@ def validate() -> dict:
     return {
         "passed": not errors,
         "architecture_version": "3.2",
-        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, actionable critic defects, bounded C0 model packets and grounded artifact diagnostics",
+        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, actionable critic defects, bounded C0 model packets, grounded artifact diagnostics and terminal-evidence priority",
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
@@ -230,6 +270,7 @@ def validate() -> dict:
         "c0_job_log_authorization_record": C0_REQUEST,
         "c0_bounded_packet_authorization_record": C0_BOUNDED_REQUEST,
         "c0_grounding_authorization_record": C0_GROUNDING_REQUEST,
+        "c0_terminal_evidence_authorization_record": C0_TERMINAL_REQUEST,
         "specialist_actionable_defect_authorization_record": SPECIALIST_REQUEST,
         "errors": errors,
     }
