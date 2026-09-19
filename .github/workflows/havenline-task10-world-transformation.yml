@@ -41,7 +41,33 @@ concurrency:
   cancel-in-progress: false
 
 jobs:
+  repair-sufficiency:
+    name: C0R repair sufficiency pre-build gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Challenge proposed repair before building
+        run: |
+          set -euo pipefail
+          mkdir -p task10-c0r
+          python3 tools/havenline/production/repair_sufficiency_critic.py \
+            --c0 Docs/Production/T10/C0_ROOT_CAUSE.json \
+            --plan Docs/Production/T10/REPAIR_PLAN.json \
+            --output task10-c0r/report.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task10-C0R-${{ github.sha }}
+          path: task10-c0r
+          if-no-files-found: warn
+          retention-days: 30
+
   first-builder-milestone:
+    needs: repair-sufficiency
     runs-on: ubuntu-24.04
     timeout-minutes: 40
     steps:
