@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "subject_commit": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+  "authorization_commit": "e00269405eea513c94f6ef023fab2855ef0fc734",
+  "authorization_record": "Docs/Production/ChangeRequests/T10-benchmark-diagnostic.json",
+  "original_run_id": 35461009111,
+  "original_failed_job_id": 105944782203,
+  "original_artifact_id": 10590840640,
+  "original_artifact_sha256": "0bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2",
+  "diagnostic_only": true,
+  "task_approved": false,
+  "reusable_for_approval": false,
+  "maximum_attempts": 1,
+  "question": "Does the frozen benchmark complete, continue making slow progress until its unchanged watchdog, or stall at the final control on another hosted allocation?",
+  "unchanged": ["subject source", "Godot archive", "native 3840x2160 mobile Vulkan renderer", "conditioning", "warmup", "samples", "cycles", "1800-second timeout", "acceptance thresholds"],
+  "additional_observation": "External process CPU/RSS, host load/cgroup counters and newly completed phase log lines sampled every 30 seconds. No telemetry is added to the benchmark process or sample loops.",
+  "interpretation": "Completion alone is not an infrastructure diagnosis, a flake waiver, a performance PASS, or task approval. A second noncompletion ends repetitions and returns both records to C0 for causal diagnosis.",
+  "local_attempt": "No benchmark executed locally: verified engine and user-local packages were prepared, but display socket creation was unavailable. No container permission controls were bypassed.",
+  "required_before_publication": ["independent workflow review", "base-derived governance scope validation", "original run and C0 terminal"]
+}

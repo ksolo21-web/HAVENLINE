@@ -1,0 +1,149 @@
+name: Havenline T10 one-shot benchmark diagnostic
+on:
+  push:
+    branches: ['havenline/governance-t10-benchmark-diagnostic']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-task10-benchmark-diagnostic
+  cancel-in-progress: false
+jobs:
+  diagnostic:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      SUBJECT: 45eb7750c52975bd393e9860f11cdf9ac39e4e8a
+      AUTHORITY: e00269405eea513c94f6ef023fab2855ef0fc734
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+          path: diagnostic
+      - name: Verify owner authorization, bounded scope and one-shot admission
+        working-directory: diagnostic
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p "$GITHUB_WORKSPACE/diagnostic-output"
+          python3 tools/havenline/production/validate_migration_scope.py --base "$AUTHORITY" --head "$GITHUB_SHA" --output "$GITHUB_WORKSPACE/diagnostic-output/scope.json"
+          python3 - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          def git(*args): return subprocess.check_output(['git',*args],text=True).strip()
+          def api(path): return json.loads(subprocess.check_output(['gh','api',path],text=True))
+          authority=os.environ['AUTHORITY'];subject=os.environ['SUBJECT'];repo=os.environ['GITHUB_REPOSITORY']
+          assert os.environ['GITHUB_REF_NAME']=='havenline/governance-t10-benchmark-diagnostic'
+          assert os.environ['GITHUB_RUN_ATTEMPT']=='1', 'one diagnostic attempt only'
+          subprocess.run(['git','fetch','--no-tags','origin','codex/havenline-sequential-task-01'],check=True)
+          subprocess.run(['git','merge-base','--is-ancestor',authority,'FETCH_HEAD'],check=True)
+          subprocess.run(['git','merge-base','--is-ancestor',authority,'HEAD'],check=True)
+          request='Docs/Production/ChangeRequests/T10-benchmark-diagnostic.json'
+          data=subprocess.check_output(['git','show',authority+':'+request])
+          assert hashlib.sha256(data).hexdigest()=='fe5536ac6e1e1df572e4b2236c0f03595cdf846162245186fb9163922fdb9820'
+          r=json.loads(data)
+          assert r['status']=='AUTHORIZED' and r['integration_owner_disposition']=='APPROVED_BOUNDED_BENCHMARK_DIAGNOSTIC'
+          assert r['subject_commit']==subject and r['maximum_diagnostic_attempts']==1
+          assert r['diagnostic_only'] is True and r['task_approved'] is False and r['reusable_for_approval'] is False
+          changed=set(git('diff','--name-only',authority,'HEAD').splitlines())
+          assert changed=={'.github/workflows/havenline-task10-benchmark-diagnostic.yml','Docs/Production/Evidence/T10/benchmark-diagnostic-plan.json'},changed
+          original=api(f'repos/{repo}/actions/runs/35461009111')
+          assert original['head_sha']==subject and original['status']=='completed' and original['conclusion']=='failure'
+          jobs=api(f'repos/{repo}/actions/runs/35461009111/jobs?per_page=100')['jobs']
+          c0=[j for j in jobs if j['id']==105949555778]
+          assert len(c0)==1 and c0[0]['status']=='completed'
+          assert all(j['status']=='completed' for j in jobs)
+          history=api(f'repos/{repo}/actions/workflows/havenline-task10-benchmark-diagnostic.yml/runs?branch=havenline%2Fgovernance-t10-benchmark-diagnostic&per_page=100')
+          assert history['total_count']==1 and len(history['workflow_runs'])==1, 'diagnostic already attempted'
+          assert history['workflow_runs'][0]['id']==int(os.environ['GITHUB_RUN_ID'])
+          out=Path(os.environ['GITHUB_WORKSPACE'])/'diagnostic-output'
+          (out/'admission.json').write_text(json.dumps(dict(diagnostic_only=True,task_approved=False,reusable_for_approval=False,subject_commit=subject,diagnostic_workflow_commit=os.environ['GITHUB_SHA'],authorization_commit=authority,original_run=original,original_jobs=jobs,maximum_attempts=1),indent=2))
+          PY
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: 45eb7750c52975bd393e9860f11cdf9ac39e4e8a
+          fetch-depth: 0
+          path: subject
+      - name: Verify frozen subject and prepare exact pinned runtime
+        working-directory: subject
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$SUBJECT"
+          test "$(git rev-parse HEAD:HavenlineGodot)" = 4c8bf933b16a25f875944d1654ac0ade35cc8d62
+          python3 - <<'PY'
+          import hashlib
+          from pathlib import Path
+          assert hashlib.sha256(Path('tools/havenline/task10/benchmark_world_transform.gd').read_bytes()).hexdigest()=='640f1ee98ad43abd337fd2f7014168ce85c08e2942e2303ae0f783e37f9ef44b'
+          assert hashlib.sha256(Path('.github/workflows/havenline-task10-isolated.yml').read_bytes()).hexdigest()=='5154f3e90d72ad25dd73b20a255eaadd2638462c1c3caf5438b87d01e985c4e5'
+          PY
+          mkdir -p "$RUNNER_TEMP/engine"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+      - name: Import frozen project
+        working-directory: subject
+        run: |
+          set -euo pipefail
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > "$GITHUB_WORKSPACE/diagnostic-output/import.log" 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' "$GITHUB_WORKSPACE/diagnostic-output/import.log"; then exit 1; fi
+          git diff --exit-code -- HavenlineGodot tools/havenline/task10/benchmark_world_transform.gd
+      - name: One unchanged benchmark with external 30-second telemetry
+        working-directory: subject
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          python3 - <<'PY'
+          import hashlib,json,os,platform,subprocess,time
+          from datetime import datetime,timezone
+          from pathlib import Path
+          root=Path.cwd();out=Path(os.environ['GITHUB_WORKSPACE'])/'diagnostic-output'
+          benchmark=out/'benchmark';benchmark.mkdir()
+          command=['xvfb-run','-a','-s','-screen 0 3840x2160x24','timeout','1800','Godot_v4.7.2-stable_linux.x86_64','--path','HavenlineGodot','--rendering-method','mobile','--rendering-driver','vulkan','--audio-driver','Dummy','--resolution','3840x2160','--script',str(root/'tools/havenline/task10/benchmark_world_transform.gd'),'--','--candidate='+os.environ['SUBJECT'],'--width=3840','--height=2160','--out='+str(benchmark)]
+          def now():return datetime.now(timezone.utc).isoformat()
+          def read(path):
+              try:return Path(path).read_text()
+              except OSError:return None
+          def process_rows(parent):
+              rows={}
+              for entry in Path('/proc').iterdir():
+                  if not entry.name.isdigit():continue
+                  try:
+                      stat=(entry/'stat').read_text();end=stat.rfind(')');fields=stat[end+2:].split()
+                      rows[int(entry.name)]={'pid':int(entry.name),'name':stat[stat.index('(')+1:end],'ppid':int(fields[1]),'state':fields[0],'utime_ticks':int(fields[11]),'stime_ticks':int(fields[12]),'rss_pages':int(fields[21])}
+                  except (OSError,ValueError,IndexError):continue
+              selected={parent}
+              while True:
+                  children={pid for pid,row in rows.items() if row['ppid'] in selected}
+                  if children<=selected:break
+                  selected|=children
+              return [row for pid,row in sorted(rows.items()) if pid in selected]
+          metadata={'diagnostic_only':True,'task_approved':False,'reusable_for_approval':False,'subject_commit':os.environ['SUBJECT'],'diagnostic_workflow_commit':os.environ['GITHUB_SHA'],'workflow_run_id':int(os.environ['GITHUB_RUN_ID']),'run_attempt':int(os.environ['GITHUB_RUN_ATTEMPT']),'command':command,'started_at':now(),'telemetry_interval_seconds':30,'host':{'platform':platform.platform(),'cpu_count':os.cpu_count(),'affinity':sorted(os.sched_getaffinity(0)),'cpuinfo':read('/proc/cpuinfo'),'memory':read('/proc/meminfo'),'runner':{key:os.environ.get(key) for key in ('ImageOS','ImageVersion','RUNNER_OS','RUNNER_ARCH')},'clock_ticks':os.sysconf('SC_CLK_TCK'),'page_size':os.sysconf('SC_PAGE_SIZE')},'benchmark_sha256':hashlib.sha256((root/'tools/havenline/task10/benchmark_world_transform.gd').read_bytes()).hexdigest(),'engine_sha256':hashlib.sha256(Path(os.environ['RUNNER_TEMP'],'engine/Godot_v4.7.2-stable_linux.x86_64').read_bytes()).hexdigest(),'icd':read(os.environ['VK_ICD_FILENAMES'])}
+          (out/'metadata.json').write_text(json.dumps(metadata,indent=2))
+          started=time.monotonic();log=benchmark/'benchmark.log';seen=0
+          with log.open('w') as handle, (out/'telemetry.jsonl').open('w') as telemetry:
+              proc=subprocess.Popen(command,stdout=handle,stderr=subprocess.STDOUT)
+              while True:
+                  lines=(read(log) or '').splitlines()
+                  row={'observed_at':now(),'elapsed_seconds':time.monotonic()-started,'load_average':os.getloadavg(),'processes':process_rows(proc.pid),'host_cpu':read('/proc/stat'),'memory':read('/proc/meminfo'),'cgroup_cpu':read('/sys/fs/cgroup/cpu.stat'),'cgroup_memory_current':read('/sys/fs/cgroup/memory.current'),'new_log_lines':lines[seen:]}
+                  seen=len(lines);telemetry.write(json.dumps(row)+'\n');telemetry.flush()
+                  result=proc.poll()
+                  if result is not None:break
+                  time.sleep(30)
+          raw=log.read_text();manifest=benchmark/'manifest.json'
+          record=dict(metadata,completed_at=now(),elapsed_seconds=time.monotonic()-started,exit_code=result,watchdog_timeout=result==124,manifest_present=manifest.is_file(),completed_controls=sum('completed_control' in line for line in raw.splitlines()),benchmark_log_sha256=hashlib.sha256(log.read_bytes()).hexdigest(),renderer_matches=json.loads(manifest.read_text()).get('renderer')=='mobile/llvmpipe (LLVM 20.1.2, 256 bits)' if manifest.is_file() else 'llvmpipe (LLVM 20.1.2, 256 bits)' in raw)
+          (out/'result.json').write_text(json.dumps(record,indent=2))
+          subprocess.run(['git','diff','--exit-code','--','HavenlineGodot','tools/havenline/task10/benchmark_world_transform.gd'],check=True)
+          if result:raise SystemExit(result)
+          assert manifest.is_file() and record['completed_controls']==9 and record['renderer_matches'], 'incomplete or wrong-renderer diagnostic'
+          assert not any(x in raw for x in ('SCRIPT ERROR','Parse Error','ObjectDB instances were leaked'))
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task10-benchmark-diagnostic-${{ github.run_id }}-${{ github.run_attempt }}
+          path: diagnostic-output
+          if-no-files-found: error
+          retention-days: 30
