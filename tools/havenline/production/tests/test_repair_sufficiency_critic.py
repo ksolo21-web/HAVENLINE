@@ -52,6 +52,7 @@ def layout_group():
             "observable_exhaustive_collection_required": True,
             "complete_observable_set_collected": True,
             "full_failure_family_closed_by_design": True,
+            "collection_evidence": ["run 35402388836 retained device-layout projection records"],
         },
         "strategy_kind": "ALGORITHM",
         "causal_mechanism": "enumerate legal screen regions, measure reflowed candidates, and accept only a proven feasible placement",
@@ -64,6 +65,7 @@ def layout_group():
         ],
         "blocker_coverage": [{
             "blocker_id": "C0-T10-B053",
+            "diagnosed_root_cause": "fallback placement accepts an infeasible terminal lane",
             "why_fix_changes_cause": "removes unconditional infeasible fallback acceptance",
             "expected_result": "all mandatory projections either select a legal placement or fail deterministically",
             "failure_if_wrong": "any mandatory projection has no legal candidate or escapes the safe frame",
@@ -112,6 +114,7 @@ def tooling_group():
         "prior_attempts": [{"strategy": "bounded artifact diagnostics", "outcome": "PARTIAL", "same_family": True, "lesson": "collection succeeded but projection priority still dropped terminal evidence"}],
         "blocker_coverage": [{
             "blocker_id": "C0-T10-B060",
+            "diagnosed_root_cause": "diagnostic projection can omit the terminal artifact excerpt",
             "why_fix_changes_cause": "makes the exact terminal record consume projection budget first",
             "expected_result": "C0 sees the terminal failed assertion before secondary evidence",
             "failure_if_wrong": "terminal artifact remains absent from model projection",
@@ -168,6 +171,18 @@ class RepairSufficiencyCriticTests(unittest.TestCase):
         self.assertFalse(report["passed"])
         self.assertIn("C0_REPORT_HASH_MISMATCH", report["rejections"])
         self.assertTrue(review(c0(), accepted_plan(), "d" * 64)["passed"])
+
+    def test_root_cause_binding_is_exact(self):
+        plan = accepted_plan()
+        plan["repair_sufficiency"]["repair_groups"][0]["blocker_coverage"][0]["diagnosed_root_cause"] = "generic label problem"
+        report = review(c0(), plan)
+        self.assertTrue(any("ROOT_CAUSE_BINDING_MISMATCH" in x for x in report["rejections"]))
+
+    def test_exhaustive_claim_requires_collection_evidence(self):
+        plan = accepted_plan()
+        plan["repair_sufficiency"]["repair_groups"][0]["failure_family"]["collection_evidence"] = []
+        report = review(c0(), plan)
+        self.assertTrue(any("EXHAUSTIVE_COLLECTION_EVIDENCE_REQUIRED" in x for x in report["rejections"]))
 
     def test_current_style_scalar_patch_after_two_attempts_is_rejected(self):
         plan = accepted_plan()
