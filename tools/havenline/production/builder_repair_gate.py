@@ -9,6 +9,7 @@ import os
 import re
 import subprocess
 
+from verify_python_repair_bindings import _stable_digest, repeated_python_bindings, python_source_review_errors, load_trusted_python_review
 from lib import ROOT, changed_files
 from repair_sufficiency_critic import review as review_repair_sufficiency, whole_file_proof_digest
 
@@ -82,7 +83,17 @@ def _executable_code(line:str)->str:
     return "".join(kept)
 
 
-SCALAR_NAME=re.compile(r"(?i)(?:size|width|height|scale|factor|ratio|coefficient|threshold|timeout|limit|offset|slack|inset|clearance|dimension|footprint)")
+SCALAR_SEGMENTS = frozenset({
+    "size", "width", "height", "scale", "factor", "ratio", "coefficient", "threshold",
+    "timeout", "limit", "offset", "slack", "inset", "clearance", "dimension", "footprint",
+    "deadline", "budget",
+})
+
+
+def _scalar_identifier(name: str) -> bool:
+    words = re.sub(r"([A-Z]+)([A-Z][a-z])", r"\1_\2", name)
+    words = re.sub(r"([a-z0-9])([A-Z])", r"\1_\2", words)
+    return bool(set(re.findall(r"[A-Za-z]+", words.lower())) & SCALAR_SEGMENTS)
 
 
 def _diff_statements(diff:str,prefix:str)->list[str]:
@@ -115,10 +126,10 @@ def _diff_statements(diff:str,prefix:str)->list[str]:
 def _scalar_statement_effect(statement:str)->tuple[str,str]:
     code=_executable_code(statement)
     generic=re.search(r"\b((?:[A-Za-z_][A-Za-z0-9_]*\.)*)set\s*\(\s*[\"']([^\"']+)[\"']\s*,\s*(.*?)\)\s*$",statement)
-    if generic and SCALAR_NAME.search(generic.group(2)):
+    if generic and _scalar_identifier(generic.group(2)):
         return (generic.group(1)+generic.group(2)).rstrip("."),re.sub(r"\s+","",generic.group(3))
     setter=re.search(r"\b((?:[A-Za-z_][A-Za-z0-9_]*\.)*)set_([A-Za-z_][A-Za-z0-9_]*)\s*\((.*?)\)\s*$",code)
-    if setter and SCALAR_NAME.search(setter.group(2)):
+    if setter and _scalar_identifier(setter.group(2)):
         return (setter.group(1)+setter.group(2)).rstrip("."),re.sub(r"\s+","",setter.group(3))
     source=statement.split("#",1)[0]
     if re.match(r"^\s*(?:def|func)\b",source):return "",""
@@ -126,9 +137,9 @@ def _scalar_statement_effect(statement:str)->tuple[str,str]:
     if not assignment:return "",""
     lhs=re.sub(r"\s+","",assignment.group(1));rhs=_executable_code(assignment.group(2))
     normalized_rhs=re.sub(r"\s+","",assignment.group(2))
-    if SCALAR_NAME.search(lhs) and ("." in lhs or "[" in lhs or lhs.upper()==lhs):return lhs,normalized_rhs
+    if _scalar_identifier(lhs) and ("." in lhs or "[" in lhs or lhs.upper()==lhs):return lhs,normalized_rhs
     qualified=re.search(r"\b((?:[A-Za-z_][A-Za-z0-9_]*\.)+[A-Za-z_][A-Za-z0-9_]*)\b(?!\s*\()",rhs)
-    if qualified and SCALAR_NAME.search(qualified.group(1)):
+    if qualified and _scalar_identifier(qualified.group(1)):
         return lhs+"->"+qualified.group(1),normalized_rhs
     return "",""
 
@@ -155,8 +166,10 @@ def implementation_diff_errors(
     actual_diff_by_file:dict[str,str]|None,
     actual_source_by_file:dict[str,str]|None=None,
     trusted_proofs:dict[str,dict]|None=None,
+    actual_base_source_by_file:dict[str,str]|None=None,
+    trusted_python_review:dict|None=None,
 )->list[str]:
-    errors=[]
+    errors=python_source_review_errors(plan,trusted_python_review,actual_base_source_by_file,actual_source_by_file)
     for group in plan.get("repair_sufficiency",{}).get("repair_groups",[]):
         if not isinstance(group,dict) or not isinstance(group.get("same_family_attempt_count"),int) or group.get("same_family_attempt_count",0)<2:
             continue
@@ -191,7 +204,13 @@ def implementation_diff_errors(
                 found=False
             if not found:errors.append(group_id+" architectural executable marker missing: "+value)
         effects={}
-        for path in files:effects.update(_changed_scalar_assignments(actual_diff_by_file.get(path,"")))
+        for path in files:
+            if path.endswith(".py"):
+                # Completeness comes from canonical independent whole-source
+                # review, not an incomplete static interpretation of Python.
+                continue
+            for target, values in _changed_scalar_assignments(actual_diff_by_file.get(path, "")).items():
+                effects.setdefault(target, set()).update(values)
         declared=group.get("scalar_parameters_changed",[])
         declarations={str(row.get("target")):row for row in declared if isinstance(row,dict) and row.get("target")} if isinstance(declared,list) else {}
         if set(effects)!=set(declarations):
@@ -277,7 +296,7 @@ def validate_c0r(c0:dict,plan:dict,c0r:dict|None,c0_sha256:str|None,plan_sha256:
     return errors
 
 
-def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:str|None=None,c0r:dict|None=None,c0_sha256:str|None=None,plan_sha256:str|None=None,actual_diff_by_file:dict[str,str]|None=None,actual_source_by_file:dict[str,str]|None=None)->list[str]:
+def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:str|None=None,c0r:dict|None=None,c0_sha256:str|None=None,plan_sha256:str|None=None,actual_diff_by_file:dict[str,str]|None=None,actual_source_by_file:dict[str,str]|None=None,actual_base_source_by_file:dict[str,str]|None=None,trusted_python_review:dict|None=None)->list[str]:
     errors=[]
     task=c0.get("task_id")
     canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"
@@ -359,7 +378,7 @@ def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:st
             for row in c0.get("full_domain_proofs",[])
             if isinstance(row,dict) and row.get("failure_family_id") and isinstance(row.get("proof"),dict)
         }
-        errors.extend(implementation_diff_errors(plan,actual_changed,actual_diff_by_file,actual_source_by_file,trusted_proofs))
+        errors.extend(implementation_diff_errors(plan,actual_changed,actual_diff_by_file,actual_source_by_file,trusted_proofs,actual_base_source_by_file,trusted_python_review))
     return errors
 
 
@@ -375,17 +394,26 @@ def main()->int:
     actual=changed_files(a.base,a.head) if a.base else None
     actual_diff_by_file=None
     actual_source_by_file=None
+    actual_base_source_by_file=None
     if a.base:
         actual_diff_by_file={}
         actual_source_by_file={}
+        actual_base_source_by_file={}
         for group in plan.get("repair_sufficiency",{}).get("repair_groups",[]):
             contract=group.get("implementation_diff_contract",{}) if isinstance(group,dict) else {}
             for path in contract.get("causal_files",[]) if isinstance(contract,dict) and isinstance(contract.get("causal_files",[]),list) else []:
                 comparison_base=contract.get("comparison_base")
                 if isinstance(comparison_base,str) and len(comparison_base)==40:
                     actual_diff_by_file[path]=subprocess.check_output(["git","diff","--unified=100000",comparison_base,a.head,"--",path],text=True)
-                actual_source_by_file[path]=subprocess.check_output(["git","show",f"{a.head}:{path}"],text=True)
-    errors=validate(c0_copy,plan,actual,a.base,c0r=c0r,c0_sha256=c0_sha256,plan_sha256=plan_sha256,actual_diff_by_file=actual_diff_by_file,actual_source_by_file=actual_source_by_file)
+                    if path.endswith(".py") and group.get("same_family_attempt_count",0)>=2:
+                        try:
+                            actual_base_source_by_file[path]=subprocess.check_output(["git","show",f"{comparison_base}:{path}"]).decode("utf-8")
+                        except subprocess.CalledProcessError:
+                            pass
+                actual_source_by_file[path]=subprocess.check_output(["git","show",f"{a.head}:{path}"]).decode("utf-8")
+    trusted_review,review_errors=load_trusted_python_review(plan,a.head,os.environ.get("INTEGRATION_HEAD"),os.environ.get("INTEGRATION_BRANCH")) if actual is not None else (None,[])
+    errors=validate(c0_copy,plan,actual,a.base,c0r=c0r,c0_sha256=c0_sha256,plan_sha256=plan_sha256,actual_diff_by_file=actual_diff_by_file,actual_source_by_file=actual_source_by_file,actual_base_source_by_file=actual_base_source_by_file,trusted_python_review=trusted_review)
+    errors.extend(review_errors)
     inherited_errors=verify_inherited_noncausal(plan,a.head,os.environ.get("INTEGRATION_HEAD")) if actual is not None else []
     errors.extend(inherited_errors)
     if actual is not None:errors.extend(verify_integration_branch(os.environ.get("INTEGRATION_BRANCH")))

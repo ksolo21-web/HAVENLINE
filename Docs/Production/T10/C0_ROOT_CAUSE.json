@@ -10,11 +10,11 @@
   "failed_job_id": 105628493430,
   "integration_head": "82518322a8e0dc9ee6ef12a759bf4ca723c8a490",
   "failed_candidate_role": "CUMULATIVE_REPAIR_CYCLE_ROOT",
-  "latest_failed_candidate": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81",
+  "latest_failed_candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
   "latest_failed_run_ids": [
-    35401512350
+    35461009111
   ],
-  "latest_failed_integration_head": "76d56e1af39692dd382936c480a57bc7d858d983",
+  "latest_failed_integration_head": "842d015df1f22d00484741cefb222ac7c2cabe51",
   "failure_family_history": [
     {
       "failure_family_id": "projected-label-feasibility",
@@ -79,6 +79,22 @@
           "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
           "run_id": 35402388836,
           "lesson": "The exact terminal line was retained, yet projection priority omitted it and C0 self-steps contaminated subject-job interpretation."
+        },
+        {
+          "strategy": "Terminal-artifact evidence priority",
+          "outcome": "PARTIAL",
+          "same_family": true,
+          "candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e",
+          "run_id": 35444671480,
+          "lesson": "Terminal-artifact priority did not cover the packaging failure available only in the failed-job log."
+        },
+        {
+          "strategy": "Terminal-first bounded failed-job projection and strict quotation grounding",
+          "outcome": "PARTIAL",
+          "same_family": true,
+          "candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+          "run_id": 35461009111,
+          "lesson": "The same advisor strategy on3d24 and45eb left complete-three-critic packet loss/overflow and decoded-versus-escaped quotation mismatch. These are observations of one repair strategy, not separate repair attempts."
         }
       ]
     },
@@ -176,8 +192,8 @@
   ],
   "failure_frontier": {
     "complete": true,
-    "diagnosed_through_candidate": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81",
-    "latest_observed_failed_candidate": "3d24ffaacab9ffd1350d47e5479ce70142424217",
+    "diagnosed_through_candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+    "latest_observed_failed_candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
     "observations": [
       {
         "run_id": 35402388836,
@@ -259,6 +275,56 @@
           "C7 job 105939873831 in run 35458022974 returned only defects and scores; coverage_complete, confidence and observations were absent. Pinned b10809 schema converter reproduces their absence from both oneOf alternatives because root sibling properties are ignored. Complete branch schemas restore all required fields without changing scoring or response bounds."
         ],
         "reason": "Existing B058 response-schema repair omitted required fields from effective branch grammar. This is invalid review output, not passing product evidence."
+      },
+      {
+        "run_id": 35458022974,
+        "candidate": "3d24ffaacab9ffd1350d47e5479ce70142424217",
+        "disposition": "BOUND_TO_EXISTING_GROUP",
+        "group_id": "actionable-defect-schema",
+        "evidence": [
+          "C3 job105939873809 and C4 job105939873845 returned defects-only envelopes; C7 job105939873831 returned defects/scores only. Raw allegations retained and independently adjudicated against actual task scope/pixels in14 families; no mandatory product defect confirmed, readability/copy ambiguity still requires fresh valid reviewers. Invalid outer defaults are not real zero scores."
+        ],
+        "reason": "Retain the complete observed failure family and its source identity; no failed gate or missing critic is converted to approval."
+      },
+      {
+        "run_id": 35458022974,
+        "candidate": "3d24ffaacab9ffd1350d47e5479ce70142424217",
+        "disposition": "BOUND_TO_EXISTING_GROUP",
+        "group_id": "c0-semantic-projection-grounding",
+        "evidence": [
+          "C0 artifact10588669986 SHA2569c5a8c8581326d589a507784e56b8611ca4318eb3c78905c8d4c2f92e3d9dce4: unchanged old request17680 bytes. Reviewed repair reconstructs13 groups and97 exact errors/claims in13564 bytes under unchanged13672 maximum."
+        ],
+        "reason": "Retain the complete observed failure family and its source identity; no failed gate or missing critic is converted to approval."
+      },
+      {
+        "run_id": 35461009111,
+        "candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+        "disposition": "BOUND_TO_EXISTING_GROUP",
+        "group_id": "c0-semantic-projection-grounding",
+        "evidence": [
+          "C0 artifact10590392757 SHA256de4d502a76d13fe36a552bedd37079111c03672044e2735fda4bbccdf542a328 retained the exact decoded shell quotation. Replay validates its quotes at11112 request bytes, while unsupported simulation/infinite-loop advice remains rejected."
+        ],
+        "reason": "Retain the complete observed failure family and its source identity; no failed gate or missing critic is converted to approval."
+      },
+      {
+        "run_id": 35461009111,
+        "candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+        "disposition": "BOUND_TO_EXISTING_GROUP",
+        "group_id": "benchmark-liveness",
+        "evidence": [
+          "Original run35461009111/job105944782203: job18:23:11, benchmark18:26:48 (217 seconds prior work), exit124 after8 controls; artifact10590840640 SHA2560bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2."
+        ],
+        "reason": "Retain the complete observed failure family and its source identity; no failed gate or missing critic is converted to approval."
+      },
+      {
+        "run_id": 35454638560,
+        "candidate": "d238925040b9c58ee8337bed6397e9690218f06c",
+        "disposition": "BOUND_TO_EXISTING_GROUP",
+        "group_id": "c0r-source-bound-admission",
+        "evidence": [
+          "Adapter preflight run35454638560 independently rejected the same eight already-integrated C0R governance paths through the legacy authorization consumer, as retained in the original combined guard/adapter observation."
+        ],
+        "reason": "Separate source-bound job family observation of the same B062 strategy, not an additional repair attempt."
       }
     ],
     "unclassified_failures": [],
@@ -272,6 +338,74 @@
           "Static replay of dd2e326 pipeline-preflight caller: the real builder validators reject absent INTEGRATION_BRANCH and INTEGRATION_HEAD. Exhaustive workflow discovery finds four executable callers; only this caller still omits both exports and hardcodes repair_base. No hosted failure is claimed for this static finding."
         ],
         "task_approved": false
+      },
+      {
+        "source_kind": "INDEPENDENT_IMPLEMENTATION_REPLAY",
+        "candidate": "8475f8c5d4dfcd41df6a083e96965d4981b76915",
+        "source_path": "tools/havenline/task10/benchmark_supervisor.py",
+        "group_id": "benchmark-liveness",
+        "evidence": [
+          "Independent reviewer reproduced a false success from an unread trailing duplicate; repaired supervisor drains the completed child through EOF and rejects it.11 supervisor and14 standalone workflow tests pass."
+        ],
+        "task_approved": false
+      },
+      {
+        "source_kind": "DIAGNOSTIC_NONAPPROVAL",
+        "run_id": 35463952552,
+        "candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+        "source_path": "Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json",
+        "group_id": "benchmark-liveness",
+        "evidence": [
+          "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
+        ],
+        "task_approved": false,
+        "reusable_for_approval": false
+      },
+      {
+        "source_kind": "STATIC_C0R_REPLAY",
+        "candidate": "8475f8c5d4dfcd41df6a083e96965d4981b76915",
+        "source_path": "tools/havenline/production/repair_sufficiency_critic.py",
+        "group_id": "c0r-source-bound-admission",
+        "evidence": [
+          "Local actual C0R rejected EVIDENCE_ARCHITECTURE_CHANGE[decoded_failure_logs,compact_model_projection] solely on regex match CHANGE[decoded_failure_logs,compact_model_projection.29 tests including valid canonical and invalid/empty/near-match/scalar cases now pass."
+        ],
+        "task_approved": false
+      },
+      {
+        "source_kind": "HOSTILE_C0R_PLAN_REPLAY",
+        "candidate": "23c8e0bede9efa644e904b811a104fc98874e92c",
+        "source_path": "tools/havenline/production/repair_sufficiency_critic.py",
+        "group_id": "c0r-source-bound-admission",
+        "evidence": [
+          "Independent frozen23c8 attack placed set timeout limit to2000 and shrink projection scale to0.95 in operation.with and was accepted. Forward proposal fields now participate in scalar detection; hostile cases cover with, target, invariant, material difference and escalation reason."
+        ],
+        "task_approved": false
+      },
+      {
+        "source_kind": "HOSTILE_C0R_PLAN_REPLAY",
+        "candidate": "0751286b94e12d17ddf119b66eaba9d23e38623f",
+        "source_path": "tools/havenline/production/repair_sufficiency_critic.py",
+        "group_id": "c0r-source-bound-admission",
+        "evidence": [
+          "Independent0751286b review accepted neither cap watchdog duration at2000seconds nor alternate quantity phrasing as a structural safeguard. Version2 replaces free-form with with exact machine serialization; scalar sink changes still require existing one-to-one DERIVED_PER_CASE full-domain/source proof."
+        ],
+        "task_approved": false
+      },
+      {
+        "source_kind": "HOSTILE_TYPED_PLAN_AND_IMPLEMENTATION_REPLAY",
+        "candidate": "fd85c76da45eb5b63e140337970a5c0a0a01bab3",
+        "source_path": "tools/havenline/production/builder_repair_gate.py",
+        "group_id": "c0r-source-bound-admission",
+        "evidence": [
+          "Independentfd85c76 review mutated typed operation to timeout_budget, then added timeout_budget=2000 and run_model(timeout=timeout_budget); both C0R and legacy post-build effect checks accepted without a declaration. Full-source AST tracking now observes LOCAL and KWARG effects and rejects the exact chain. Moved unchanged timeout3/1200/10 calls and boolean/operation identifiers yield no new effects."
+        ],
+        "task_approved": false
+      },
+      {
+        "source": "32a22825ba0b0f14293aba690e165fd8730c4a63",
+        "classification": "INDEPENDENT_REVIEW_REJECTED",
+        "finding": "Partial Python AST misses removed kwargs/defaults, positional calls, class attributes/helper-return provenance and decorator/class keywords. Self-verifying candidate code is not external authority.",
+        "disposition": "Canonical owner-reviewed exact-source bindings and mandatory external promotion verifier replace the completeness claim. No new full candidate run or historical production attempt increment."
       }
     ]
   },
@@ -401,7 +535,7 @@
       ],
       "root_cause": "The repair lifecycle was handled through ad hoc uniquely named review artifacts without transitioning all lifecycle authorities to FIX_REQUIRED and activating the canonical report/plan pair required by the architecture.",
       "affected_object": "T10 repair lifecycle and machine-enforced repair scope",
-      "causal_fix": "Atomically set T10 FIX_REQUIRED across the four lifecycle authorities, populate the registry blocker list and next action, activate this canonical C0 report and repair plan, retain the original assignment base provenance, and require builder_repair_gate for every subsequent repair candidate. Keep the registry blocker inventory synchronized with all independently confirmed canonical B037-B048 blockers without relabeling prior findings.",
+      "causal_fix": "Atomically set T10 FIX_REQUIRED across the four lifecycle authorities, populate the registry blocker list and next action, activate this canonical C0 report and repair plan, retain the original assignment base provenance, and require builder_repair_gate for every subsequent repair candidate. Keep the registry blocker inventory synchronized with all independently confirmed canonical B037-B063 blockers without relabeling prior findings.",
       "files_to_change": [
         "Docs/Production/WORKSTREAM_REGISTRY.json",
         "Docs/Production/DEPENDENCY_GRAPH.json",
@@ -423,7 +557,7 @@
       ],
       "verification": [
         "Validate exact T10 FIX_REQUIRED agreement across registry, graph, active owner, active task-gates status and T10 wave row while T01-T09 remain APPROVED and T11+ remain LOCKED.",
-        "Require registry known_blockers to equal the complete canonical B037-B048 report/plan inventory before the repaired task candidate is frozen, with comprehensive next_action, original assignment base unchanged and no approval/integration claim.",
+        "Require registry known_blockers to equal the complete canonical B037-B063 report/plan inventory before the repaired task candidate is frozen, with comprehensive next_action, original assignment base unchanged and no approval/integration claim.",
         "Candidate guard must invoke builder_repair_gate against the canonical C0 and plan for the next nonempty T10 candidate."
       ]
     },
@@ -898,8 +1032,8 @@
       "classification": "PRODUCT_DEFECT",
       "affected_object": "T10 presentation and critic evidence",
       "symptom": "C1 and C2 independently rejected the original committing-overhead collision. Exact candidates 5fc87f and 0f9303 then passed primary/structural gates but their isolated phone 16:9 ready/overhead projection placed the label rectangle 20.006 px beyond the 27 px safe-frame inset.",
-      "root_cause": "The original Label3D separation collapsed in the required overhead camera. The first camera-plane repair removed response overlap, but reducing Label3D.width from 1000 to 960 did not change Godot's natural measured ready-label width; 0f9303 reproduced the exact same projected rectangle.",
-      "causal_fix": "Keep the deterministic camera-plane lane, 960-unit wrap bound and explicit glyph/outline priorities, and set the actual Label3D pixel projection scale to 0.0057. This directly reduces the known 848.519 px phone-overhead label to about 806.093 px, moving its left edge from 6.994 px to about 49.420 px inside the 27 px safe frame while retaining a large readable label. Preserve four nodes, one build, cameras, authority and lifecycle semantics.",
+      "root_cause": "The camera-plane fallback had no guaranteed legal terminal region. Width tuning did not affect natural measured width; the subsequent fixed pixel scale addressed ready but failed the longer blocked label. Feasibility depends on device, lifecycle text and camera together.",
+      "causal_fix": "Replace unconditional fallback with constrained screen-lane placement and bounded per-case reflow. Derive pixel_size from label_scale and width from wrap_width only within the locked readability and whole-word bounds; prove containment, clearance and overlap for every accepted placement and fail impossible geometry deterministically. Preserve four nodes, one build, cameras, authority and lifecycle semantics.",
       "files_to_change": [
         "HavenlineGodot/scripts/world_transform_view.gd",
         "HavenlineGodot/tests/test_task10_integration.gd",
@@ -919,7 +1053,8 @@
       "evidence": [
         "C1 and C2 independently rejected the original committing-overhead label/ring collision and washed-out outline.",
         "Runs 35397839956 and 35401512350 reproduce the exact same ready/overhead label_rect [6.99359130859375,412.05078125,848.519104003906,254.125015258789] despite the 960 width value, proving that width was not the effective projection control.",
-        "At fixed camera geometry, changing pixel_size from 0.006 to 0.0057 scales the projected label by 0.95: expected width 806.093 px and left edge 49.420 px in the existing left lane, 22.420 px inside the 27 px safe-frame inset."
+        "Historical fixed .006 to .0057 calculation covered only the ready rectangle; candidate8ab496d failed blocked/overhead. It is superseded by the retained 216-case solver proof, not accepted as full-domain proof.",
+        "Exact45eb run35461009111 passed all216 device/state/angle projections and36 native4K captures before benchmark failure; no critic approval follows from these passes."
       ],
       "verification": [
         "Run focused hostile tests for the exact causal boundary.",
@@ -964,8 +1099,8 @@
       "classification": "EVIDENCE_DEFECT",
       "affected_object": "T10 presentation and critic evidence",
       "symptom": "The strict projection invariant stopped both exact 5fc87f and 0f9303 isolated runs at the first phone 16:9 ready/overhead out-of-frame label before any critic executed; the second run proved the width-only repair was ineffective.",
-      "root_cause": "The new invariant works. Its exact repeat on 0f9303 proved Label3D.width was not reducing the natural measured line; the projected pixel scale is the causal size control for this camera lane.",
-      "causal_fix": "Retain all finite projected rectangle, clearance, overlap, containment and priority checks. Bind the source contract to a 0.0057 Label3D pixel scale and require the already-strict device/native matrix to prove every state and angle before any critic executes.",
+      "root_cause": "The strict per-case invariant correctly found clipping, but device collection stopped at the first red case and the earlier source contract prescribed a fixed scalar rather than guaranteed placement. The complete observable family was therefore unavailable during repair selection.",
+      "causal_fix": "Collect all six devices by six lifecycle states by six angles before returning a failed disposition. Retain every finite rectangle, containment, clearance, overlap and priority check; bind readiness and source contracts to constrained placement/reflow and deterministic impossible-case failure, with all216 projections required before critics.",
       "files_to_change": [
         "HavenlineGodot/tests/capture_task10_world_transform.gd",
         "tools/havenline/task10/validate_critic_readiness.py",
@@ -987,7 +1122,8 @@
       ],
       "evidence": [
         "Run 35401512350 artifact 10570477028 stopped before critic packaging with clearance_px=16.2000122070312, overlap=false, priority_ok=true and fully_in_frame=false.",
-        "Artifact 10570477028 ZIP SHA256 3067306c2a60acc9377e0aa3547622b84881bf01b90a3049e74fbea80c9b605b retains the exact repeated capture; capture.log SHA256 f46b704698a9584ce8a2f3fa86b9e1ef6caaacb9feb44f4f9585ef46722bf1a0 matches the prior failure."
+        "Artifact 10570477028 ZIP SHA256 3067306c2a60acc9377e0aa3547622b84881bf01b90a3049e74fbea80c9b605b retains the exact repeated capture; capture.log SHA256 f46b704698a9584ce8a2f3fa86b9e1ef6caaacb9feb44f4f9585ef46722bf1a0 matches the prior failure.",
+        "Exhaustive run35441401273 exposed32 overhead containment failures; proof35443178004/artifact10584940146 demonstrates216/216 after constrained solver. Exact45eb independently passed216/216."
       ],
       "verification": [
         "Run focused hostile tests for the exact causal boundary.",
@@ -1109,9 +1245,9 @@
       "id": "C0-T10-B059",
       "classification": "TOOLING_DEFECT",
       "affected_object": "T10 critic/C0 production tooling",
-      "symptom": "The exact 0e83 request is 29970 tokens against a 16384-token context; runtime.log contains the cause but the advisor artifact only exposes a traceback.",
-      "root_cause": "C0 pretty-prints the full packet, slices the first 60000 characters without semantic boundaries or budget calculation, and discards HTTP 400 response details.",
-      "causal_fix": "Preserve the complete authoritative packet, construct a deterministic hash-bound semantic projection below the fixed context budget, send the exact serialized bytes, and retain bounded HTTP status/headers/body before failing.",
+      "symptom": "The exact 0e83 request is 29970 tokens against a 16384-token context; runtime.log contains the cause but the advisor artifact only exposes a traceback. Later run35458022974 retained all three failed critic groups but the complete request still exceeded13672 bytes; the old minimum silently removed group validation errors and citation paths.",
+      "root_cause": "C0 pretty-prints the full packet, slices the first 60000 characters without semantic boundaries or budget calculation, and discards HTTP 400 response details. Subsequent lossy minimal projection did not preserve complete group errors/source identities, and verbose repeated records exhausted the exact request budget.",
+      "causal_fix": "Preserve the complete authoritative packet, construct a deterministic hash-bound semantic projection below the fixed context budget, send the exact serialized bytes, and retain bounded HTTP status/headers/body before failing. Use immutable indexed groups and exact escaped string references for repeated error/claim text, select only complete rich or compact requests with genuine terminal evidence, and fail closed when the full required payload cannot fit.",
       "files_to_change": [
         ".github/workflows/havenline-c0-root-cause.yml",
         "tools/havenline/production/c0_root_cause_advisor.py",
@@ -1123,7 +1259,8 @@
         "Docs/Production/WORKSTREAM_REGISTRY.json",
         "tools/havenline/production/tests/test_t10_activation_validation.py",
         "Docs/Production/T10/C0_ROOT_CAUSE.json",
-        "Docs/Production/T10/REPAIR_PLAN.json"
+        "Docs/Production/T10/REPAIR_PLAN.json",
+        "Docs/Production/ChangeRequests/T10-c0-decoded-complete-evidence.json"
       ],
       "files_not_to_change": [
         "HavenlineGodot/scripts/world_transform.gd",
@@ -1136,7 +1273,8 @@
         ".github/workflows/havenline-specialist-critic.yml"
       ],
       "evidence": [
-        "The exact 0e83 request is 29970 tokens against a 16384-token context; runtime.log contains the cause but the advisor artifact only exposes a traceback."
+        "The exact 0e83 request is 29970 tokens against a 16384-token context; runtime.log contains the cause but the advisor artifact only exposes a traceback.",
+        "C0 artifact10588669986 SHA2569c5a8c8581326d589a507784e56b8611ca4318eb3c78905c8d4c2f92e3d9dce4: unchanged old request17680 bytes. Reviewed repair reconstructs13 groups and97 exact errors/claims in13564 bytes under unchanged13672 maximum."
       ],
       "verification": [
         "Run focused hostile tests for the exact causal boundary.",
@@ -1188,9 +1326,9 @@
       "id": "C0-T10-B061",
       "classification": "TOOLING_DEFECT",
       "affected_object": "T10 C0 diagnosis grounding",
-      "symptom": "C0 contradicted the packet by claiming required_critics was empty and proposed nonexistent .github/workflows/task10_workflow.yml.",
-      "root_cause": "The T10 response validator checked schema shape but did not bind evidence to retained source excerpts or causal files to exact tracked repository paths.",
-      "causal_fix": "For T10, require every evidence item to cite an exact retained SOURCE | EXACT_QUOTE and every files_to_change entry to equal a tracked repository path; reject the diagnosis before publication when either binding fails.",
+      "symptom": "C0 contradicted the packet by claiming required_critics was empty and proposed nonexistent .github/workflows/task10_workflow.yml. Run35461009111 then rejected an exact shell quotation present in the decoded failed-job log.",
+      "root_cause": "The T10 response validator checked schema shape but did not bind evidence to retained source excerpts or causal files to exact tracked repository paths. Presentation and grounding used different representations: decoded semantic log text versus JSON-escaped transport bytes. Structured scalar quotations had the same representation mismatch.",
+      "causal_fix": "For T10, require every evidence item to cite an exact retained SOURCE | EXACT_QUOTE and every files_to_change entry to equal a tracked repository path; reject the diagnosis before publication when either binding fails. Share validated hash/identity-bound decoded job logs and per-record scalar strings between projection and grounding; reject cross-job joins, malformed envelopes and altered source hashes. Correct quotation binding does not accept unsupported causal advice.",
       "files_to_change": [
         "tools/havenline/production/c0_root_cause_advisor.py",
         "tools/havenline/production/tests/test_c0_builder.py",
@@ -1202,7 +1340,8 @@
         "tools/havenline/production/tests/test_t10_activation_validation.py",
         "Docs/Production/T10/C0_ROOT_CAUSE.json",
         "Docs/Production/T10/REPAIR_PLAN.json",
-        "Docs/Production/ChangeRequests/T10-c0-grounding-regression-contract.json"
+        "Docs/Production/ChangeRequests/T10-c0-grounding-regression-contract.json",
+        "Docs/Production/ChangeRequests/T10-c0-decoded-complete-evidence.json"
       ],
       "files_not_to_change": [
         "HavenlineGodot/scripts/world_transform.gd",
@@ -1215,7 +1354,8 @@
         ".github/workflows/havenline-specialist-critic.yml"
       ],
       "evidence": [
-        "C0 artifact 10569242248 says required_critics is empty although its immutable packet contains C1, C2, C3, C4, C6 and C7, and names a workflow path absent from the repository."
+        "C0 artifact 10569242248 says required_critics is empty although its immutable packet contains C1, C2, C3, C4, C6 and C7, and names a workflow path absent from the repository.",
+        "C0 artifact10590392757 SHA256de4d502a76d13fe36a552bedd37079111c03672044e2735fda4bbccdf542a328 retained the exact decoded shell quotation. Replay validates its quotes at11112 request bytes, while unsupported simulation/infinite-loop advice remains rejected."
       ],
       "verification": [
         "Hostile tests reject uncited/paraphrased evidence, missing source excerpts and untracked causal paths.",
@@ -1227,9 +1367,9 @@
       "id": "C0-T10-B062",
       "classification": "GOVERNANCE_DEFECT",
       "affected_object": "C0R repair sufficiency admission gate",
-      "symptom": "The first C0R canary can accept a repeated repair after the plan self-declares incomplete history/frontier evidence, relabels a scalar adjustment as tooling, leaves the exact builder repair gate in a concurrent workflow job, or reaches a legacy path guard that falsely rejects the already-integrated bounded authorization schema before the exact builder gate executes.",
-      "root_cause": "C0R originally validated builder-authored claims without binding history/frontier/proof to independent sources, while the candidate guard and adapter preflight still consume only the legacy APPROVED + AUTHORIZED single-target change-request schema. Integrated C0R records use AUTHORIZED + APPROVED_BOUNDED_* with exact target arrays, so the stale consumer rejects their governance paths before or without the exact builder gate. The shared candidate-guard caller also omits the branch environment required by the hardened builder interface. Exhaustive caller review also finds the cheap preflight omits both authority exports and hardcodes the repair base.",
-      "causal_fix": "Bind frontier, same-family attempt history and proof to a digest-locked source manifest with exact run/candidate/result hashes and a retained machine-readable proof summary; validate the lock in C0 and C0R, require machine-rendered symbol-bound architectural operations after two attempts, reject fixed scalar repairs, and permit a derived per-case sink only when its exact normalized RHS, dependencies and zero-violation bounds are bound to the proof artifact and exact proof-source commit/path/file hash. Require the current candidate's canonicalized whole proof source\u2014excluding only four exact, locked metadata lines inside the static contract function\u2014to match the proven source exactly. Validate reachable executable symbols, canonical thresholds, the pinned integration branch and the exact builder gate. Finally, make the shared workstream authorization consumer fail-closed while recognizing both the exact legacy schema and the integrated bounded multi-target schema, so earlier lifecycle guards cannot contradict C0R authority. Supply the pinned branch at that shared invocation and test the actual workflow contract. Bind the remaining preflight caller to the same authority contract and execute all workflow call boundaries with changed fixture plan bases.",
+      "symptom": "The first C0R canary can accept a repeated repair after the plan self-declares incomplete history/frontier evidence, relabels a scalar adjustment as tooling, leaves the exact builder repair gate in a concurrent workflow job, or reaches a legacy path guard that falsely rejects the already-integrated bounded authorization schema before the exact builder gate executes. Canonical EVIDENCE_ARCHITECTURE_CHANGE function identifiers also trigger the natural-language scalar regex when a function name contains projection.",
+      "root_cause": "C0R originally validated builder-authored claims without binding history/frontier/proof to independent sources, while the candidate guard and adapter preflight still consume only the legacy APPROVED + AUTHORIZED single-target change-request schema. Integrated C0R records use AUTHORIZED + APPROVED_BOUNDED_* with exact target arrays, so the stale consumer rejects their governance paths before or without the exact builder gate. The shared candidate-guard caller also omits the branch environment required by the hardened builder interface. Exhaustive caller review also finds the cheap preflight omits both authority exports and hardcodes the repair base. The scalar prose heuristic scanned already-validated machine operation identifiers as prose, so CHANGE followed by compact_model_projection produced a false scalar diagnosis. Downstream builder effect accounting ignored unqualified lowercase fixed scalar locals, keyword parameter plumbing and function defaults, allowing a typed symbol to hide an undeclared fixed timeout. Candidate-described operations and partial source heuristics cannot establish complete repair authority. Static Python accounting misses removal, positional, attribute/helper provenance and decorator/class channels; a candidate-executed gate cannot independently authorize itself.",
+      "causal_fix": "Use typed non-prose operation contracts plus independently reviewed exact Python before/after regular-file bindings integrated on canonical. Require an external owner-run canonical verifier before exact candidate promotion; retain GDScript whole-source full-domain proof.",
       "files_to_change": [
         "tools/havenline/production/repair_sufficiency_critic.py",
         "tools/havenline/production/builder_repair_gate.py",
@@ -1257,7 +1397,10 @@
         "Docs/Production/T10/REPAIR_PLAN.json",
         ".github/workflows/havenline-candidate-guard.yml",
         ".github/workflows/havenline-task10-pipeline-preflight.yml",
-        "tools/havenline/task10/tests/test_builder_workflow_callers.py"
+        "tools/havenline/task10/tests/test_builder_workflow_callers.py",
+        "Docs/Production/ChangeRequests/T10-c0r-structured-mechanism-detection.json",
+        "tools/havenline/production/verify_python_repair_bindings.py",
+        "tools/havenline/production/tests/test_python_repair_bindings.py"
       ],
       "files_not_to_change": [
         "HavenlineGodot/scripts/world_transform.gd",
@@ -1272,7 +1415,11 @@
         "Independent C0R critic review of a8084aa scored 6.8/10 and demonstrated self-attested attempt/frontier bypasses, consumer-invented C7 regex identity, concurrent rather than prerequisite builder-gate execution, and unverified threshold registries.",
         "Runs 35454636290 and 35454638560 on exact tree 44c3a07d failed on the same eight C0R governance paths because the legacy workstream consumer ignored integrated bounded multi-target authorization records.",
         "Candidate guard run 35458019688 job 105936658374 passed ownership and failed only with active integration branch does not match pinned canonical branch. Its environment contains INTEGRATION_HEAD but omits INTEGRATION_BRANCH; both primary T10 C0R pre-build jobs explicitly supplied it and passed.",
-        "Static replay of dd2e326 pipeline-preflight caller: the real builder validators reject absent INTEGRATION_BRANCH and INTEGRATION_HEAD. Exhaustive workflow discovery finds four executable callers; only this caller still omits both exports and hardcodes repair_base. No hosted failure is claimed for this static finding."
+        "Static replay of dd2e326 pipeline-preflight caller: the real builder validators reject absent INTEGRATION_BRANCH and INTEGRATION_HEAD. Exhaustive workflow discovery finds four executable callers; only this caller still omits both exports and hardcodes repair_base. No hosted failure is claimed for this static finding.",
+        "Local actual C0R rejected EVIDENCE_ARCHITECTURE_CHANGE[decoded_failure_logs,compact_model_projection] solely on regex match CHANGE[decoded_failure_logs,compact_model_projection.29 tests including valid canonical and invalid/empty/near-match/scalar cases now pass.",
+        "Independent frozen23c8 attack placed set timeout limit to2000 and shrink projection scale to0.95 in operation.with and was accepted. Forward proposal fields now participate in scalar detection; hostile cases cover with, target, invariant, material difference and escalation reason.",
+        "Independent0751286b review accepted neither cap watchdog duration at2000seconds nor alternate quantity phrasing as a structural safeguard. Version2 replaces free-form with with exact machine serialization; scalar sink changes still require existing one-to-one DERIVED_PER_CASE full-domain/source proof.",
+        "Independentfd85c76 review mutated typed operation to timeout_budget, then added timeout_budget=2000 and run_model(timeout=timeout_budget); both C0R and legacy post-build effect checks accepted without a declaration. Full-source AST tracking now observes LOCAL and KWARG effects and rejects the exact chain. Moved unchanged timeout3/1200/10 calls and boolean/operation identifiers yield no new effects."
       ],
       "verification": [
         "Hostile tests reject jointly erased C0/plan frontiers, false attempt counts, scalar euphemisms, undeclared scalar reassignments, comment/string-only diff markers, incomplete or forged full-domain proof, registry branch redirection, and weakened canonical threshold snapshots.",
@@ -1280,6 +1427,49 @@
         "Both primary T10 workflows run C0R and the exact builder repair gate in the same direct prerequisite job before any build job.",
         "Workstream authorization tests accept only the exact legacy pair or the AUTHORIZED + APPROVED_BOUNDED_* pair, flatten safe target lists, and reject malformed, cross-task, traversal or unapproved records.",
         "The V3.2 release lock binds the exact workstream source and exact B062 authorization record hashes."
+      ]
+    },
+    {
+      "id": "C0-T10-B063",
+      "classification": "TOOLING_DEFECT",
+      "affected_object": "T10 benchmark process supervision and evidence retention",
+      "symptom": "Exact45eb isolated run35461009111 timed out124 after8/9 controls and withheld the manifest/critic package despite216/216 projections and36/36 native captures.",
+      "root_cause": "A single benchmark elapsed1800-second watchdog conflated finite slow software-rendered work with stalled progress and ignored the remaining original40-minute job budget. Process exit, ordered progress, absolute budget and complete valid evidence had no separate supervision contract. The precise original host slowdown remains unknown.",
+      "causal_fix": "Replace elapsed-only wrapper with an ordered-progress supervisor bound to actual GitHub job start, original2400-second cap,120-second retention reserve and1800-second no-progress ceiling. Require all nine exact ordered controls, process exit0 and unchanged complete source-bound manifest validation; preserve failures and immediately retain execution evidence before packaging.",
+      "files_to_change": [
+        "tools/havenline/task10/benchmark_supervisor.py",
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/tests/test_benchmark_supervisor.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "Docs/Production/ChangeRequests/T10-benchmark-liveness-contract.json",
+        "Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "tools/havenline/production/tests/test_t10_activation_validation.py",
+        "Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "tools/havenline/production/critic_runtime_lock.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "evidence": [
+        "Original run35461009111/job105944782203: job18:23:11, benchmark18:26:48 (217 seconds prior work), exit124 after8 controls; artifact10590840640 SHA2560bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2.",
+        "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate.",
+        "Older same-runtime3d24 completed benchmark in about1174 seconds and packaging plus both uploads in11.6 seconds. The120-second reserve is conservative relative to that observation, not a guarantee under GitHub outage.",
+        "Independent source review9.4 at8475f8c5 verified completed-log EOF drain and hostile trailing duplicate rejection.",
+        "Retained cheap trace proof Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json SHA2564c10b53b809228d72b007d4a6a790c095089e7ec8d9a409effb2436f3b4f3659 invokes actual ProgressGuard/completion_errors and unmocked benchmark_errors; six hostile completions reject and original timeout stays failed."
+      ],
+      "verification": [
+        "Run supervisor hostile clock, identity, ordered-event, EOF-drain, child status and late-admission tests plus standalone workflow tests.",
+        "Replay prior completed, original failed and diagnostic retained traces through actual supervisor/manifest logic; original exit124 must remain failed and diagnostic cannot replace G8.",
+        "Preserve benchmark GDScript, conditioning, samples, native4K renderer, all C6 thresholds and original40-minute cap. Require one newly frozen candidate to produce fresh complete G8/critic evidence."
       ]
     }
   ],
@@ -1322,18 +1512,17 @@
     "Run 35397839949 completed SUCCESS for exact candidate 5fc87f4897597463d2f6b39229ef9479bd9bc776; primary artifact 10569607542 SHA256 355819c8e1d05cab396216c694e2747403fffeb66a3c82a0d8cd88461b1f915d.",
     "Run 35397839956 artifact 10570168891 SHA256 cc99ba3080c253a59acb0e988cac58e8d4bb1a5ea281d4e58d977a01c64d7623; device-layout/phone_16_9/capture.log line 4 proves the sole hosted failure was fully_in_frame=false at ready/overhead after prior structural gates passed.",
     "C0 artifact 10569242248 SHA256 37b087f4417108f21ccaf16242480d26fe36b76d8c7450ea90db02f18df78968 proves B059 transport succeeded but B060/B061 grounding failed.",
-    "Run 35401512350 artifact 10570477028 ZIP SHA256 3067306c2a60acc9377e0aa3547622b84881bf01b90a3049e74fbea80c9b605b reproduces the exact prior capture.log SHA256 f46b704698a9584ce8a2f3fa86b9e1ef6caaacb9feb44f4f9585ef46722bf1a0, proving the width-only adjustment did not affect Godot projection."
+    "Run 35401512350 artifact 10570477028 ZIP SHA256 3067306c2a60acc9377e0aa3547622b84881bf01b90a3049e74fbea80c9b605b reproduces the exact prior capture.log SHA256 f46b704698a9584ce8a2f3fa86b9e1ef6caaacb9feb44f4f9585ef46722bf1a0, proving the width-only adjustment did not affect Godot projection.",
+    "C3 job105939873809 and C4 job105939873845 returned defects-only envelopes; C7 job105939873831 returned defects/scores only. Raw allegations retained and independently adjudicated against actual task scope/pixels in14 families; no mandatory product defect confirmed, readability/copy ambiguity still requires fresh valid reviewers. Invalid outer defaults are not real zero scores.",
+    "C0 artifact10588669986 SHA2569c5a8c8581326d589a507784e56b8611ca4318eb3c78905c8d4c2f92e3d9dce4: unchanged old request17680 bytes. Reviewed repair reconstructs13 groups and97 exact errors/claims in13564 bytes under unchanged13672 maximum.",
+    "C0 artifact10590392757 SHA256de4d502a76d13fe36a552bedd37079111c03672044e2735fda4bbccdf542a328 retained the exact decoded shell quotation. Replay validates its quotes at11112 request bytes, while unsupported simulation/infinite-loop advice remains rejected.",
+    "Original run35461009111/job105944782203: job18:23:11, benchmark18:26:48 (217 seconds prior work), exit124 after8 controls; artifact10590840640 SHA2560bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2.",
+    "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
   ],
   "unexecuted_checks": [
-    "Exact 0f9303 passed candidate guard, hosted preflight, isolated governance, domain, integration and lifecycle capture; device validation stopped at phone 16:9 ready/overhead before the remaining five device rows, native 4K capture, benchmark, critic packaging or any fresh critic executed.",
-    "B060/B061 are implemented and locally validated but require the exact integration-owner governance commit and hosted governance proof.",
-    "B046's full-request repair has not yet completed a fresh normal specialist run because 48cc stopped at preparation.",
-    "Fresh exact-source C1/C2/C3/C4/C6/C7 reviews for the repaired post-B052 source have not executed.",
-    "The closeout assembler has not yet passed its actual canonical-C0 path and clean-hosted-LFS rehearsal together.",
-    "Final integration-scope validation, integrated-source evidence, factory closeout, G1-G14, retention, migration, lifecycle transition and APPROVED closure remain unexecuted.",
-    "No preflight, diagnostic canary, historical reviewer score or prior-source artifact may be inferred as specialist approval.",
-    "B053-B061 require one new frozen candidate and fresh isolated C1/C2/C3/C4/C6/C7; no 0e83 score can be carried forward.",
-    "After isolated acceptance, integration and a fresh integrated-source six-critic closeout remain required."
+    "New cumulative source must pass exact C0R, builder, ownership, governance and cheap preflight before one fresh isolated candidate.",
+    "Fresh complete benchmark/manifest and valid C1/C2/C3/C4/C6/C7 reviews remain mandatory; no older score or diagnostic is reusable for approval.",
+    "Integration-owner acceptance, exact integrated-source regression/evidence and fresh six-critic review, G1-G14, retained closeout and verified completion remain required. T11 stays LOCKED."
   ],
   "builder_action": "REPAIR",
   "candidate_freeze": {
@@ -1342,14 +1531,15 @@
     "cancelled_run_product_judgment": false,
     "pre_full_validation_requirements": [
       "canonical FIX_REQUIRED lifecycle and builder gate active",
-      "all B037-B052 static/unit/production checks pass",
+      "all B037-B063 static/unit/production checks pass",
       "immutable c7a18 readiness replay passes",
       "diagnostic transport contracts pass while the historical C4 product failure remains failed and non-reusable",
       "disposable full closeout rehearsal passes with the actual canonical C0 and explicit LFS-skip child environment",
-      "the exact candidate tree passes the dedicated clean hosted pipeline preflight including same-parent raw job-log retrieval and the B060/B061 grounded C0 architecture lock"
+      "the exact candidate tree passes the dedicated clean hosted pipeline preflight including same-parent raw job-log retrieval and the B060/B061 grounded C0 architecture lock",
+      "Exact cumulative C0R report/hash accepted; independent decoded-evidence and benchmark supervision/trace review; original failed G8 and diagnostic nonapproval preserved."
     ]
   },
-  "summary": "The cumulative B037-B061 inventory remains complete. Exact 0f9303 proved the first B053 width adjustment was ineffective by reproducing the identical phone-overhead projected rectangle. B053/B055 now change the actual Label3D pixel projection scale to 0.0057, with a source-bound calculation placing the known rectangle about 22.42 px inside the safe frame. B060/B061 grounding is published and governance-green. No critic, dimension, model budget or threshold changes.",
+  "summary": "Cumulative B037-B063 remains open pending exact candidate and integrated approval. Constrained placement/reflow supersedes both failed scalar repairs and exact45eb passed216/216 projections plus36/36 native captures. Its benchmark still failed after8/9 controls. Complete decoded C0 evidence and bounded progress/job-budget supervision repair the newly observed tooling families; original host slowdown is unknown. Diagnostic completion is not G8 or critic approval. All models, samples, thresholds and product authority remain unchanged.",
   "confidence": "high",
   "approval_claimed": false,
   "score_assigned": false,

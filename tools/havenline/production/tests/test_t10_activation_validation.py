@@ -60,8 +60,8 @@ class T10ActivationValidationTests(unittest.TestCase):
         registry = json.loads((root / 'Docs/Production/WORKSTREAM_REGISTRY.json').read_text())
         workstream = next(w for w in registry['workstreams'] if w['task_id'] == 'T10')
         if workstream['status'] == 'FIX_REQUIRED':
-            self.assertEqual([f'C0-T10-B{i:03d}' for i in range(37, 63)], workstream['known_blockers'])
-            self.assertIn('B037-B062', workstream['next_action'])
+            self.assertEqual([f'C0-T10-B{i:03d}' for i in range(37, 64)], workstream['known_blockers'])
+            self.assertIn('B037-B063', workstream['next_action'])
             canonical = root / 'Docs/Production/T10/C0_ROOT_CAUSE.json'
             if canonical.exists():
                 report = json.loads(canonical.read_text())

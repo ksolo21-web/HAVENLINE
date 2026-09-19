@@ -1,7 +1,7 @@
 import json, pathlib, sys, tempfile, unittest
 HERE=pathlib.Path(__file__).resolve();PROD=HERE.parents[1];sys.path.insert(0,str(PROD))
-from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, artifact_diagnostic_projection, build_model_request, c0_response_schema, failure_log_projection, model_projection, retain_http_error, subject_execution, superseded_report, validate_report
-from builder_repair_gate import implementation_diff_errors, validate as validate_builder, validate_c0r, verify_inherited_noncausal, verify_integration_branch
+from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, compact_model_projection, decoded_failure_logs, c0_prompt, artifact_diagnostic_projection, build_model_request, c0_response_schema, failure_log_projection, model_projection, retain_http_error, subject_execution, superseded_report, validate_report
+from builder_repair_gate import repeated_python_bindings, python_source_review_errors, load_trusted_python_review, _stable_digest, implementation_diff_errors, validate as validate_builder, validate_c0r, verify_inherited_noncausal, verify_integration_branch
 from repair_sufficiency_critic import review as review_c0r, whole_file_proof_digest
 from collect_artifact_diagnostics import collect as collect_artifact_diagnostics
 
@@ -301,6 +301,58 @@ class C0RBuilderEnforcementTests(unittest.TestCase):
         self.assertTrue(verify_integration_branch("attacker/redirected-branch"))
 
 
+class PythonSourceBindingTests(unittest.TestCase):
+    def fixture(self):
+        import hashlib
+        p={"task_id":"T10","diagnosis_id":"C0-fixture","reconciled_integration_head":"a"*40,"repair_sufficiency":{"repair_groups":[{
+            "group_id":"evidence", "failure_family":{"id":"grounding"}, "same_family_attempt_count":2,
+            "implementation_diff_contract":{"comparison_base":"b"*40,"causal_files":["advisor.py"],"required_added_markers":[{"kind":"CODE_IDENTIFIER","value":"project"}]}}]}}
+        before="run_model(timeout=1200)\n";after="project(packet,640)\nrun_model(timeout=1200)\n"
+        row=repeated_python_bindings(p)[0]
+        row.update(before_sha256=hashlib.sha256(before.encode()).hexdigest(),after_sha256=hashlib.sha256(after.encode()).hexdigest())
+        review={"schema_version":1,"task_id":"T10","diagnosis_id":"C0-fixture","decision":"ACCEPTED_BOUNDED_SOURCE","non_voting":True,"task_approved":False,"thresholds_unchanged":True,"runtime_model_contracts_unchanged":True,"bindings":[row],"causal_source_set_sha256":_stable_digest([row]),"independent_review":{"reviewer":"owner","review_id":"independent-session","reviewed_commit":"c"*40,"reviewed_tree":"d"*40,"evidence_sha256":"e"*64}}
+        return p,review,{"advisor.py":before},{"advisor.py":after}
+
+    def test_exact_reviewed_sources_pass(self):
+        self.assertEqual([],python_source_review_errors(*self.fixture()))
+
+    def test_every_unreviewed_byte_change_rejects_independent_of_python_syntax(self):
+        p,r,b,a=self.fixture()
+        attacks=[a["advisor.py"].replace("640","641"), "run_model()\n", "run_model(2000)\n", "n=2000\nrun_model(n)\n", "def budget(): return 2000\nrun_model(timeout=budget())\n", "class C:\n t=2000\n def run(self): run_model(timeout=self.t)\n", "@retry(timeout=2000)\ndef run(): pass\n", "class C(Base,timeout=2000): pass\n", "def f(timeout): pass\n", "options={'timeout':2000}\nrun_model(**options)\n", a["advisor.py"]+"# harmless but unreviewed\n"]
+        for value in attacks:
+            with self.subTest(value=value):
+                self.assertTrue(python_source_review_errors(p,r,b,{"advisor.py":value}))
+
+    def test_missing_stale_duplicate_extra_and_candidate_authored_bindings_reject(self):
+        import copy
+        p,r,b,a=self.fixture()
+        self.assertTrue(python_source_review_errors(p,None,b,a))
+        self.assertTrue(python_source_review_errors(p,r,{},a))
+        for field in ("task_id","diagnosis_id","decision","non_voting","task_approved","causal_source_set_sha256"):
+            q=copy.deepcopy(r);q[field]="wrong"
+            self.assertTrue(python_source_review_errors(p,q,b,a),field)
+        for field in ("group_id","failure_family_id","comparison_base","path","operation_contract_sha256","before_sha256","after_sha256"):
+            q=copy.deepcopy(r);q["bindings"][0][field]="wrong"
+            self.assertTrue(python_source_review_errors(p,q,b,a),field)
+        for rows in ([],r["bindings"]*2,r["bindings"]+[dict(r["bindings"][0],path="extra.py")]):
+            q=copy.deepcopy(r);q["bindings"]=rows
+            self.assertTrue(python_source_review_errors(p,q,b,a))
+        p["repair_sufficiency"]["repair_groups"][0]["implementation_diff_contract"]["causal_files"].append("extra.py")
+        self.assertTrue(python_source_review_errors(p,r,b,a))
+
+    def test_loader_uses_fixed_canonical_record_and_rejects_redirection(self):
+        p,r,b,a=self.fixture();payload=json.dumps(r).encode();calls=[]
+        def read(ref,path):
+            calls.append((ref,path));return payload
+        args=(p,"HEAD","a"*40,"codex/havenline-sequential-task-01")
+        result,errors=load_trusted_python_review(*args,read_ref=read,is_ancestor=lambda x,y:True)
+        self.assertEqual([],errors);self.assertEqual(r,result)
+        self.assertEqual([("a"*40,"Docs/Production/ChangeRequests/T10-repeated-python-source-review.json"),("HEAD","Docs/Production/ChangeRequests/T10-repeated-python-source-review.json")],calls)
+        for branch,ancestor in (("attacker/branch",True),(args[3],False)):
+            self.assertTrue(load_trusted_python_review(p,"HEAD","a"*40,branch,read_ref=read,is_ancestor=lambda x,y:ancestor)[1])
+        self.assertTrue(load_trusted_python_review(*args,read_ref=lambda ref,path:payload if ref!="HEAD" else b"{}",is_ancestor=lambda x,y:True)[1])
+
+
 class CausalBookkeepingTests(unittest.TestCase):
     def test_documents_cannot_satisfy_causal_change(self):
         p=plan();c=complete_c0();docs=[p['c0_report_path'],p['plan_path']]
@@ -547,7 +599,7 @@ class C0BoundedModelPacketTests(unittest.TestCase):
     def test_log_digest_substitution_and_unbounded_core_fail_closed(self):
         packet=self.packet();packet['failed_logs_sha256']='0'*64
         with self.assertRaisesRegex(ValueError,'digest mismatch'):model_projection(packet,'f'*64)
-        packet=self.packet();packet['unexecuted_checks']=['x'*5000]*20
+        packet=self.packet();packet['unexecuted_checks']=[str(i)*5000 for i in range(20)]
         with self.assertRaisesRegex(RuntimeError,'C0_REQUEST_BUDGET_EXCEEDED'):build_model_request(packet,'f'*64,'prompt',c0_response_schema())
 
     def test_http_400_status_body_and_safe_headers_are_retained(self):
@@ -560,5 +612,133 @@ class C0BoundedModelPacketTests(unittest.TestCase):
             retained=json.loads((out/'http-error.json').read_text())
             self.assertEqual(400,retained['status']);self.assertIn('context exceeded',retained['body'])
             self.assertEqual({'content-type':'application/json'},retained['headers'])
+
+
+class C0DecodedEvidenceTests(unittest.TestCase):
+    def logs(self, texts):
+        import hashlib
+        p=packet();p['strict_evidence_grounding']=True
+        p['repository_paths']=['tools/havenline/task09/motion_capture.py']
+        jobs=[{'job_id':i+1,'name':f'job-{i}','conclusion':'failure','raw_log':text,
+               'log_bytes':len(text.encode()),'log_sha256':hashlib.sha256(text.encode()).hexdigest()} for i,text in enumerate(texts)]
+        self.bind(p,{'run_id':123,'jobs':jobs})
+        return p
+
+    def bind(self,p,envelope):
+        import hashlib
+        raw=json.dumps(envelope,ensure_ascii=False)
+        p.update(failed_logs=raw,failed_logs_bytes=len(raw.encode()),failed_logs_sha256=hashlib.sha256(raw.encode()).hexdigest())
+
+    def test_projection_quotes_validate_without_modifying_original(self):
+        import copy
+        text='2026-09-19T18:26:48Z \x1b[36mif grep -E "SCRIPT ERROR|Parse Error" C:\\日志\\run.log; then exit 1; fi\x1b[0m\nerror:\tquote "escaped" and café\n'
+        p=self.logs([text]);before=copy.deepcopy(p)
+        projected=failure_log_projection(p,640)
+        r=complete_c0()
+        for quote in projected['jobs'][0]['excerpt']['retained_lines']:
+            r['blockers'][0]['evidence']=['failure_logs | '+quote]
+            self.assertEqual([],validate_report(r,p))
+            r['blockers'][0]['evidence']=['failure_logs | '+quote+' altered']
+            self.assertTrue(validate_report(r,p))
+        self.assertEqual(before,p)
+
+    def test_transport_identity_and_hash_corruption_fail_closed(self):
+        import copy
+        p=self.logs(['error: first source\n','error: second source\n'])
+        original=json.loads(p['failed_logs'])
+        mutations=[lambda e:e.update(run_id=124),lambda e:e['jobs'][0].update(job_id=0),
+                   lambda e:e['jobs'][1].update(job_id=1),lambda e:e['jobs'][0].update(raw_log=123),
+                   lambda e:e['jobs'][0].update(log_bytes=1),lambda e:e['jobs'][0].update(log_sha256='0'*64)]
+        for mutate in mutations:
+            with self.subTest(mutation=mutate):
+                e=copy.deepcopy(original);mutate(e);q=copy.deepcopy(p);self.bind(q,e)
+                with self.assertRaises(ValueError):failure_log_projection(q,640)
+                self.assertTrue(validate_report(complete_c0(),q))
+        for field,value in [('failed_logs_bytes',0),('failed_logs_sha256','0'*64),('failed_logs','{"jobs":')]:
+            q=copy.deepcopy(p);q[field]=value
+            with self.assertRaises(ValueError):decoded_failure_logs(q)
+
+    def test_no_cross_job_quote_and_decoded_structured_scalars(self):
+        p=self.logs(['error: left boundary','right boundary error'])
+        r=complete_c0();r['blockers'][0]['evidence']=['failure_logs | left boundary\nright boundary']
+        self.assertTrue(validate_report(r,p))
+        claim='The target is difficult to identify as a buildable/"'
+        p['structured_failure_records']=[{'path':'artifacts/C4/critic-record.json','groups':[{'review':{'defects':[claim]}}]}]
+        r['blockers'][0]['evidence']=['structured_failure_records:artifacts/C4/critic-record.json | '+claim]
+        self.assertEqual([],validate_report(r,p))
+        r['blockers'][0]['evidence']=['structured_failure_records:other.json | '+claim]
+        self.assertTrue(validate_report(r,p))
+
+
+class C0CompactProjectionTests(unittest.TestCase):
+    @staticmethod
+    def decode(value,strings):
+        if isinstance(value,list):return [C0CompactProjectionTests.decode(x,strings) for x in value]
+        if isinstance(value,dict):
+            if set(value)=={'s'}:return strings[value['s']]
+            if set(value)=={'literal_object'}:return {k:C0CompactProjectionTests.decode(x,strings) for k,x in value['literal_object']}
+            return {k:C0CompactProjectionTests.decode(x,strings) for k,x in value.items()}
+        return value
+
+    def test_all_groups_roundtrip_pure_calls_and_literal_collisions(self):
+        import copy
+        p=C0BoundedModelPacketTests().packet()
+        for record in p['structured_failure_records']:
+            record['groups'][0]['review']['extra']={'s':1,'nested':{'literal_object':{'s':0}}}
+            record['groups'][0]['unknown']={'s':0}
+        original=copy.deepcopy(p)
+        first=compact_model_projection(p,'f'*64)
+        self.assertEqual(original,p)
+        self.assertEqual(first,compact_model_projection(p,'f'*64))
+        decoded=self.decode(first['data'],first['string_table'])
+        for source,row in zip(p['structured_failure_records'],decoded['records']):
+            restored=[]
+            for cells in row['groups']:
+                group,passed,error_id,lowest,review=cells[:5]
+                item=dict(group=group,passed=passed,errors=decoded['error_sets'][error_id],lowest_score=lowest,review=review)
+                if len(cells)>5:item.update(cells[5])
+                restored.append(item)
+            self.assertEqual(source['groups'],restored)
+        self.assertTrue(all(job[-1]['retained_lines'] for job in decoded['failure_logs']['jobs']))
+
+    def test_selected_request_preserves_schema_errors_and_citation_paths(self):
+        import copy
+        p=C0BoundedModelPacketTests().packet()
+        p['structured_failure_records']=p['structured_failure_records'][:1]
+        record=p['structured_failure_records'][0];group=record['groups'][0]
+        record['groups']=[dict(copy.deepcopy(group),group='full-lifecycle-'+str(i),errors=[
+            'score map is empty','observations count violates T10 response contract',
+            'dimension coverage mismatch','coverage incomplete','confidence insufficient']) for i in range(12)]
+        p.update(changed_files=[],protected_files=[],steps=[],unexecuted_checks=[],artifact_diagnostics={})
+        _,raw,budget,projection=build_model_request(p,'f'*64,c0_prompt(True),c0_response_schema(True))
+        self.assertEqual(-1,budget['projection_detail'])
+        self.assertLessEqual(len(raw),C0_MAX_REQUEST_BYTES)
+        text=json.dumps(projection)
+        self.assertIn('score map is empty',text)
+        self.assertIn(record['path'],text)
+        decoded=self.decode(projection['data'],projection['string_table'])
+        self.assertEqual(12,len(decoded['records'][0]['groups']))
+
+    def test_oversized_terminal_cannot_be_replaced_by_ordinary_context(self):
+        p=C0DecodedEvidenceTests().logs(['ordinary preparation context\n##[error]Process completed with exit code 124 '+('failure detail '*100)])
+        with self.assertRaisesRegex(ValueError,'No quotable terminal'):
+            build_model_request(p,'f'*64,c0_prompt(True),c0_response_schema(True))
+
+    def test_missing_group_fields_and_unquotable_logs_reject(self):
+        p=C0BoundedModelPacketTests().packet();del p['structured_failure_records'][0]['groups'][0]['review']
+        with self.assertRaisesRegex(ValueError,'Unsupported structured group shape'):compact_model_projection(p,'f'*64)
+        p=C0DecodedEvidenceTests().logs(['ordinary output only'])
+        with self.assertRaisesRegex(ValueError,'No quotable terminal'):compact_model_projection(p,'f'*64)
+
+    def test_full_prompt_budget_and_lossless_repeated_payload(self):
+        p=C0BoundedModelPacketTests().packet();p['unexecuted_checks']=['same diagnostic boundary '*100]*20
+        body,raw,budget,projection=build_model_request(p,'f'*64,c0_prompt(True),c0_response_schema(True))
+        self.assertLessEqual(len(raw),C0_MAX_REQUEST_BYTES)
+        self.assertEqual(2200,body['max_tokens'])
+        self.assertEqual(16384,budget['context_tokens'])
+        self.assertEqual(512,budget['safety_tokens'])
+        p['unexecuted_checks']=[str(i)*5000 for i in range(20)]
+        with self.assertRaisesRegex(RuntimeError,'C0_REQUEST_BUDGET_EXCEEDED'):
+            build_model_request(p,'f'*64,c0_prompt(True),c0_response_schema(True))
 
 if __name__=="__main__":unittest.main(verbosity=2)

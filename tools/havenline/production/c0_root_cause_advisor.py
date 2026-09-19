@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import argparse
+import copy
+import collections
 import hashlib
 import json
 import os
@@ -242,40 +244,62 @@ def subject_execution(packet:dict)->tuple[list[dict],list[str],list[str]]:
     return steps,unexecuted,sorted(excluded_jobs)
 
 
-def failure_log_projection(packet:dict,excerpt_bytes:int)->dict:
+def decoded_failure_logs(packet:dict)->tuple[dict,list[dict],str|None]:
+    """Validate immutable transport bytes once; expose decoded sources to all consumers."""
     value=packet.get("failed_logs","")
-    if not isinstance(value,str):value=""
+    if not isinstance(value,str):raise ValueError("invalid failed log text")
     raw=value.encode("utf-8",errors="replace")
-    projection={
-        "envelope_bytes":len(raw),"envelope_sha256":hashlib.sha256(raw).hexdigest(),
-        "declared_bytes":packet.get("failed_logs_bytes"),
-        "declared_sha256":packet.get("failed_logs_sha256"),"valid_envelope":False,"jobs":[],
-    }
-    if projection["declared_bytes"] is not None and projection["declared_bytes"]!=len(raw):
-        raise ValueError("failed log envelope byte count mismatch")
-    if projection["declared_sha256"] is not None and projection["declared_sha256"]!=projection["envelope_sha256"]:
-        raise ValueError("failed log envelope digest mismatch")
+    binding={"envelope_bytes":len(raw),"envelope_sha256":hashlib.sha256(raw).hexdigest(),
+             "declared_bytes":packet.get("failed_logs_bytes"),"declared_sha256":packet.get("failed_logs_sha256"),
+             "valid_envelope":False}
+    if binding["declared_bytes"] is not None and binding["declared_bytes"]!=len(raw):raise ValueError("failed log envelope byte count mismatch")
+    if binding["declared_sha256"] is not None and binding["declared_sha256"]!=binding["envelope_sha256"]:raise ValueError("failed log envelope digest mismatch")
     try:envelope=json.loads(value)
-    except Exception:
-        projection["legacy_truncated_excerpt"]=bounded_lines(value,excerpt_bytes)
-        return projection
-    if not isinstance(envelope,dict) or not isinstance(envelope.get("jobs"),list):
-        raise ValueError("invalid failed log envelope")
-    projection["valid_envelope"]=True
-    projection["run_id"]=envelope.get("run_id")
-    projection["run_status"]=envelope.get("run_status")
-    projection["run_conclusion"]=envelope.get("run_conclusion")
-    projection["diagnostic_marker"]=envelope.get("diagnostic_marker")
+    except (ValueError,TypeError):
+        if value.lstrip().startswith(("{","[")):raise ValueError("malformed failed log envelope")
+        return binding,[],value
+    if isinstance(envelope,dict) and not {"jobs","run_id","repository","run_status"}&set(envelope):return binding,[],value
+    if not isinstance(envelope,dict) or not isinstance(envelope.get("jobs"),list):raise ValueError("invalid failed log envelope")
+    if packet.get("failed_run_id") is not None and envelope.get("run_id")!=packet["failed_run_id"]:raise ValueError("failed log run identity mismatch")
+    binding.update({"valid_envelope":True,**{key:envelope.get(key) for key in ("run_id","run_status","run_conclusion","diagnostic_marker")}})
+    jobs=[];seen=set()
     for job in envelope["jobs"]:
         if not isinstance(job,dict):raise ValueError("invalid failed log job")
-        raw_log=job.get("raw_log","")
-        if not isinstance(raw_log,str):raise ValueError("invalid failed log text")
-        projection["jobs"].append({
-            "job_id":job.get("job_id"),"name":job.get("name"),"conclusion":job.get("conclusion"),
-            "log_bytes":job.get("log_bytes"),"log_sha256":job.get("log_sha256"),
-            "excerpt":terminal_bounded_lines(raw_log,excerpt_bytes),
-        })
+        identity=job.get("job_id")
+        if type(identity) is not int or identity<=0 or identity in seen:raise ValueError("invalid or duplicate failed log job identity")
+        seen.add(identity)
+        text=job.get("raw_log")
+        if not isinstance(text,str):raise ValueError("invalid failed log text")
+        encoded=text.encode("utf-8",errors="replace")
+        if job.get("log_bytes")!=len(encoded):raise ValueError("failed job log byte count mismatch")
+        if job.get("log_sha256")!=hashlib.sha256(encoded).hexdigest():raise ValueError("failed job log digest mismatch")
+        jobs.append(dict(job,normalized_log=ANSI_RE.sub("",text)))
+    return binding,jobs,None
+
+
+def failure_log_projection(packet:dict,excerpt_bytes:int)->dict:
+    binding,jobs,legacy=decoded_failure_logs(packet)
+    projection=dict(binding,jobs=[])
+    if legacy is not None:
+        projection["legacy_truncated_excerpt"]=bounded_lines(legacy,excerpt_bytes)
+        return projection
+    for job in jobs:
+        projection["jobs"].append({**{key:job.get(key) for key in ("job_id","name","conclusion","log_bytes","log_sha256")},
+                                  "excerpt":terminal_bounded_lines(job["raw_log"],excerpt_bytes)})
     return projection
+
+
+def structured_grounding_fragments(value:Any)->list[str]:
+    """Keep JSON-property citations and decoded scalar quotations source-local."""
+    result=[json.dumps(value,sort_keys=True)]
+    def collect(item):
+        if isinstance(item,str):result.append(item)
+        elif isinstance(item,list):
+            for child in item:collect(child)
+        elif isinstance(item,dict):
+            for child in item.values():collect(child)
+    collect(value)
+    return result
 
 
 def model_projection(packet:dict,packet_sha256:str,excerpt_bytes:int=640,detail:int=2)->dict:
@@ -332,10 +356,77 @@ def model_projection(packet:dict,packet_sha256:str,excerpt_bytes:int=640,detail:
     }
 
 
+def compact_model_projection(packet:dict,packet_sha256:str)->dict:
+    p=copy.deepcopy(model_projection(packet,packet_sha256,0,0))
+    rich_logs=failure_log_projection(packet,640)
+    for job,rich in zip(p['failure_logs']['jobs'],rich_logs['jobs']):
+        selector=TERMINAL_SIGNAL_RE if rich['excerpt'].get('terminal_signal_count',0) else SIGNAL_RE
+        lines=[line for line in rich['excerpt']['retained_lines'] if selector.search(line)]
+        if not lines:raise ValueError('No quotable terminal log evidence')
+        job['excerpt']['retained_lines']=lines[:1]
+    records=[]; error_sets=[]
+    for r in packet.get('structured_failure_records',[]):
+        groups=r.get('groups',[])
+        if not isinstance(groups,list) or any(not isinstance(g,dict) or not {'group','passed','errors','lowest_score','review'}<=set(g) or not isinstance(g['errors'],list) or not isinstance(g['review'],dict) for g in groups):
+            raise ValueError('Unsupported structured group shape; original packet retained')
+        derived=[str(g.get('group'))+': '+d for g in groups for d in g.get('review',{}).get('defects',[])]
+        row={k:r.get(k) for k in ('path','sha256','critic_id','passed','scores','coverage_complete','confidence','fatal_error')}
+        encoded_groups=[]
+        for g in groups:
+            errors=g.get('errors',[])
+            if errors not in error_sets:error_sets.append(errors)
+            encoded_groups.append([g.get('group'),g.get('passed'),error_sets.index(errors),g.get('lowest_score'),g.get('review')])
+        row['groups']=encoded_groups
+        for source,encoded in zip(groups,encoded_groups):
+            extras={k:v for k,v in source.items() if k not in ('group','passed','errors','lowest_score','review')}
+            if extras:encoded.append(extras)
+        if groups and all(not g.get('review',{}).get('scores') for g in groups) and r.get('scores') and all(x==0 for x in r['scores'].values()):
+            row['scores']='INVALID_DEFAULT_ZEROS: all raw groups lack score maps; original map retained by source hash.'
+        row['aggregate_defects_derived_from_groups']=derived==r.get('defects',[])
+        if not row['aggregate_defects_derived_from_groups']:row['aggregate_defects']=r.get('defects',[])
+        records.append(row)
+    logs=p['failure_logs']; logs.pop('declared_bytes',None);logs.pop('declared_sha256',None)
+    for j in logs['jobs']:
+        j['excerpt']={k:j['excerpt'][k] for k in ('retained_lines','truncated')}
+    execution=p['execution']
+    jobs=list(execution['job_dispositions'])
+    for step in execution['failed_terminal_steps']:
+        step['job']=jobs.index(step['job'])
+    for log_job in logs['jobs']:
+        if log_job.get('name') in jobs:
+            log_job['job_index']=jobs.index(log_job.pop('name'))
+    execution['job_dispositions']=[[name,summary['conclusions']] for name,summary in execution['job_dispositions'].items()]
+    execution['failed_terminal_steps']=[[step.get(k) for k in ('job','name','status','conclusion')] for step in execution['failed_terminal_steps']]
+    log_columns=['job_id','name','job_index','conclusion','log_bytes','log_sha256','excerpt']
+    logs['job_columns']=log_columns
+    logs['jobs']=[[job.get(k) for k in log_columns] for job in logs['jobs']]
+    execution['unexecuted_checks']=[[jobs.index(x.split(':',1)[0]),x.split(':',1)[1]] if x.split(':',1)[0] in jobs else x for x in execution['unexecuted_checks']]
+    result={'group_columns':['group','passed','error_set_id','lowest_score','raw_review'],'error_sets':error_sets,'identity':{k:p['identity'][k] for k in ('task_id','failed_run_id','failed_candidate','integration_head','run_conclusion')},'failure_packet_sha256':packet_sha256,'failed_step_columns':['job','name','status','conclusion'],'job_references':'job, job_index and unexecuted pair first values index job_dispositions; logs preserve job_id.','execution':{k:execution[k] for k in ('failed_terminal_steps','unexecuted_checks','job_dispositions','excluded_diagnostic_jobs')},'records':records,'failure_logs':logs,'artifact_diagnostics':p['artifact_diagnostics'],'task_scope_excerpt':{'omitted':True,'reason':'Original scope retained in immutable packet'},'historical_failure_intelligence':p['historical_failure_intelligence'],'projection_contract':'Original packet retained by hash; all failed steps/checks/groups retained. Invalid-review claims and default zeros are not product judgments.'}
+    # Intern repeated strings only when storage decreases; lossless reversible encoding.
+    counts=collections.Counter()
+    def visit(v):
+        if isinstance(v,str):counts[v]+=1
+        elif isinstance(v,list):
+            for x in v:visit(x)
+        elif isinstance(v,dict):
+            for x in v.values():visit(x)
+    visit(result)
+    strings=[s for s,n in counts.items() if n>1 and (len(json.dumps(s))-12)*(n-1)>20]
+    lookup={s:i for i,s in enumerate(strings)}
+    def encode(v):
+        if isinstance(v,str) and v in lookup:return {'s':lookup[v]}
+        if isinstance(v,list):return [encode(x) for x in v]
+        if isinstance(v,dict):
+            if set(v) in ({'s'},{'literal_object'}):return {'literal_object':[[k,encode(x)] for k,x in v.items()]}
+            return {k:encode(x) for k,x in v.items()}
+        return v
+    return {'string_table':strings,'encoding':'Objects containing only s refer to exact strings in string_table (zero based); literal_object wraps escaped key/value pairs.','data':encode(result)}
+
+
 def build_model_request(packet:dict,packet_sha256:str,prompt:str,schema:dict)->tuple[dict,bytes,dict,dict]:
     last=None
-    for excerpt_bytes,detail in ((640,2),(320,1),(0,0)):
-        projection=model_projection(packet,packet_sha256,excerpt_bytes,detail)
+    for excerpt_bytes,detail in ((640,2),(320,1),(0,-1)):
+        projection=compact_model_projection(packet,packet_sha256) if detail==-1 else model_projection(packet,packet_sha256,excerpt_bytes,detail)
         content=prompt+"\n\nFAILURE PACKET MODEL PROJECTION:\n"+json.dumps(projection,sort_keys=True,separators=(",",":"),ensure_ascii=False)
         body={"model":"havenline-c0-local","messages":[{"role":"user","content":content}],"max_tokens":C0_MAX_TOKENS,"temperature":0.1,"top_p":0.9,"seed":20260917,"chat_template_kwargs":{"enable_thinking":False},"response_format":{"type":"json_object","schema":schema},"cache_prompt":False}
         request_bytes=json.dumps(body,sort_keys=True,separators=(",",":"),ensure_ascii=False).encode()
@@ -347,7 +438,13 @@ def build_model_request(packet:dict,packet_sha256:str,prompt:str,schema:dict)->t
             "request_sha256":hashlib.sha256(request_bytes).hexdigest(),"projection_detail":detail,
         }
         last=(body,request_bytes,budget,projection)
-        if budget["within_budget"]:return last
+        evidence_complete=True
+        if detail!=-1:
+            for job in projection["failure_logs"]["jobs"]:
+                excerpt=job["excerpt"]
+                selector=TERMINAL_SIGNAL_RE if excerpt.get("terminal_signal_count",0) else SIGNAL_RE
+                if not any(selector.search(line) for line in excerpt["retained_lines"]):evidence_complete=False
+        if budget["within_budget"] and evidence_complete:return last
     raise RuntimeError("C0_REQUEST_BUDGET_EXCEEDED "+json.dumps(last[2],sort_keys=True))
 
 
@@ -380,14 +477,19 @@ def validate_report(report:dict,packet:dict)->list[str]:
     strict_grounding=packet.get("strict_evidence_grounding") is True
     repository_paths=set(packet.get("repository_paths",[])) if isinstance(packet.get("repository_paths"),list) else set()
     grounding={
-        "failure_logs":ANSI_RE.sub("",str(packet.get("failed_logs", ""))),
+        "failure_logs":[],
         "task_scope":str(packet.get("task_scope", "")),
         "defect_ledger":str(packet.get("defect_ledger", "")),
         "historical_failure_intelligence":json.dumps(packet.get("historical_failure_intelligence",{}),sort_keys=True),
     }
+    if strict_grounding:
+        try:
+            _,log_jobs,legacy=decoded_failure_logs(packet)
+            grounding["failure_logs"]=[ANSI_RE.sub("",legacy)] if legacy is not None else [job["normalized_log"] for job in log_jobs]
+        except ValueError as exc:errors.append(str(exc))
     for item in packet.get("structured_failure_records",[]) if isinstance(packet.get("structured_failure_records"),list) else []:
         if isinstance(item,dict) and item.get("path"):
-            grounding["structured_failure_records:"+str(item["path"])]=json.dumps(item,sort_keys=True)
+            grounding["structured_failure_records:"+str(item["path"])]=structured_grounding_fragments(item)
     diagnostics=packet.get("artifact_diagnostics",{})
     for item in diagnostics.get("records",[]) if isinstance(diagnostics,dict) and isinstance(diagnostics.get("records"),list) else []:
         if not isinstance(item,dict) or not item.get("path"):continue
@@ -407,7 +509,9 @@ def validate_report(report:dict,packet:dict)->list[str]:
                 if not isinstance(evidence,str) or " | " not in evidence:
                     errors.append(f"{rid} evidence lacks source-bound quote");continue
                 source,quote=evidence.split(" | ",1)
-                if source not in grounding or len(quote.strip())<8 or quote not in grounding.get(source,""):
+                fragments=grounding.get(source,[])
+                if isinstance(fragments,str):fragments=[fragments]
+                if source not in grounding or len(quote.strip())<8 or not any(quote in fragment for fragment in fragments):
                     errors.append(f"{rid} evidence is not an exact retained source excerpt: {source}")
             for path in row.get("files_to_change",[]) if isinstance(row.get("files_to_change"),list) else []:
                 if path not in repository_paths:errors.append(f"{rid} proposed causal file is not an exact repository path: {path}")
@@ -492,6 +596,13 @@ def c0_response_schema(strict_grounding:bool=False)->dict:
     },"required":["diagnosis_status","terminal_class","complete_known_blocker_set","blockers","unexecuted_checks","builder_action","summary","confidence"],"additionalProperties":False}
 
 
+def c0_prompt(strict_grounding:bool)->str:
+    prompt="""You are C0, Havenline's non-voting Root-Cause Advisor. Diagnose the complete available failed run before any builder changes code. Do not score gameplay and do not approve the task. Distinguish PRODUCT_DEFECT, TOOLING_DEFECT, GOVERNANCE_DEFECT, EVIDENCE_DEFECT, INFRASTRUCTURE_FAILURE and SUPERSEDED. A red CI state is not a diagnosis. Inspect successful upstream steps as evidence too. Return every currently observable independent blocker, not only the first red line. Mark downstream steps that never executed as unexecuted_checks; do not invent their results. Protect already-approved work: if a harness/test/governance defect is supported and the product is not disproven, explicitly keep the approved production files in files_not_to_change. For every blocker give concrete evidence, root cause, smallest causal fix, exact files_to_change/files_not_to_change and dependency-ordered verification. Prefer a complete blocker set over serial symptom fixing. If evidence is insufficient, say so rather than guessing. Candidate validation must use finish_running_sha: a newer commit queues and does not cancel the running SHA."""
+    if strict_grounding:
+        prompt += " Every evidence item must be SOURCE | EXACT_QUOTE using an exact retained source label and verbatim excerpt from the projection. Never infer an empty collection from a populated one. Every files_to_change value must be an exact path from repository_paths; if the source does not support a causal repair, return INSUFFICIENT_EVIDENCE instead of inventing a path."
+    return prompt
+
+
 def model_report(packet:dict,out:pathlib.Path,packet_sha256:str)->dict:
     if os.environ.get("HAVENLINE_C0_INDEPENDENT_JOB")!="1":raise SystemExit("C0 model diagnosis must run in its separately declared advisory job")
     proc=log=manifest=None
@@ -499,12 +610,10 @@ def model_report(packet:dict,out:pathlib.Path,packet_sha256:str)->dict:
         proc,log,manifest=start_runtime(out)
         strict_grounding=packet.get("strict_evidence_grounding") is True
         schema=c0_response_schema(strict_grounding)
-        prompt="""You are C0, Havenline's non-voting Root-Cause Advisor. Diagnose the complete available failed run before any builder changes code. Do not score gameplay and do not approve the task. Distinguish PRODUCT_DEFECT, TOOLING_DEFECT, GOVERNANCE_DEFECT, EVIDENCE_DEFECT, INFRASTRUCTURE_FAILURE and SUPERSEDED. A red CI state is not a diagnosis. Inspect successful upstream steps as evidence too. Return every currently observable independent blocker, not only the first red line. Mark downstream steps that never executed as unexecuted_checks; do not invent their results. Protect already-approved work: if a harness/test/governance defect is supported and the product is not disproven, explicitly keep the approved production files in files_not_to_change. For every blocker give concrete evidence, root cause, smallest causal fix, exact files_to_change/files_not_to_change and dependency-ordered verification. Prefer a complete blocker set over serial symptom fixing. If evidence is insufficient, say so rather than guessing. Candidate validation must use finish_running_sha: a newer commit queues and does not cancel the running SHA."""
-        if strict_grounding:
-            prompt += " Every evidence item must be SOURCE | EXACT_QUOTE using an exact retained source label and verbatim excerpt from the projection. Never infer an empty collection from a populated one. Every files_to_change value must be an exact path from repository_paths; if the source does not support a causal repair, return INSUFFICIENT_EVIDENCE instead of inventing a path."
+        prompt=c0_prompt(strict_grounding)
         try:body,request_bytes,budget,projection=build_model_request(packet,packet_sha256,prompt,schema)
-        except RuntimeError as exc:
-            diagnostic={"passed":False,"error":"request_budget_exceeded","detail":str(exc),"context_tokens":C0_CONTEXT_TOKENS,"max_completion_tokens":C0_MAX_TOKENS,"safety_tokens":C0_SAFETY_TOKENS,"max_request_bytes":C0_MAX_REQUEST_BYTES}
+        except (RuntimeError,ValueError) as exc:
+            diagnostic={"passed":False,"error":"request_budget_exceeded" if isinstance(exc,RuntimeError) else "invalid_evidence_projection","detail":str(exc),"context_tokens":C0_CONTEXT_TOKENS,"max_completion_tokens":C0_MAX_TOKENS,"safety_tokens":C0_SAFETY_TOKENS,"max_request_bytes":C0_MAX_REQUEST_BYTES}
             (out/"request-budget.json").write_text(json.dumps(diagnostic,indent=2)+"\n")
             raise
         (out/"model-projection.json").write_text(json.dumps(projection,sort_keys=True,separators=(",",":"),ensure_ascii=False))

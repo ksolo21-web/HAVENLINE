@@ -22,7 +22,7 @@ EXPECTED_THRESHOLD_REGISTRY_HASHES = {
 LOCKED_REPAIR_INTELLIGENCE = {
     "C0-T10-c7a18d0-comprehensive-anti-loop": {
         "path": "Docs/Production/T10/C0_REPAIR_INTELLIGENCE_LOCK.json",
-        "sha256": "9a37602aa3f64f86efb0f55cac8ea6033f01ca5dc0fb9b05cfe012e6381f0a5b",
+        "sha256": "473db8591a3c76a296129bd33230fcb4dd7b9a658f6340736b572f9d1d6a1d01",
     }
 }
 ARCHITECTURAL_OPERATION_KINDS = {
@@ -262,6 +262,7 @@ def _group_review(
     prior_attempts = _list(group.get("prior_attempts"))
     escalation = _dict(group.get("architectural_escalation"))
     repair_operations = _list(group.get("repair_operations"))
+    structured_operations_valid = False
     scalar_parameters_changed = group.get("scalar_parameters_changed")
     diff_contract = _dict(group.get("implementation_diff_contract"))
     blocker_coverage = _list(group.get("blocker_coverage"))
@@ -315,6 +316,8 @@ def _group_review(
         reject.append(f"{group_id}:PRIOR_ATTEMPTS_REQUIRED")
     if same_family_attempt_count >= 2:
         risk_codes.append("REPEATED_FAILURE_FAMILY")
+        if type(group.get("operation_contract_version")) is not int or group["operation_contract_version"] != 2:
+            reject.append(f"{group_id}:REPEATED_REPAIR_OPERATION_CONTRACT_V2_REQUIRED")
         if len(_text(group.get("why_materially_different"))) < 24:
             reject.append(f"{group_id}:MATERIAL_DIFFERENCE_NOT_JUSTIFIED")
         if escalation.get("required") is not True or escalation.get("provided") is not True:
@@ -323,6 +326,7 @@ def _group_review(
             reject.append(f"{group_id}:ARCHITECTURAL_ESCALATION_KIND_INVALID")
         if len(_text(escalation.get("reason"))) < 24:
             reject.append(f"{group_id}:ARCHITECTURAL_ESCALATION_REASON_REQUIRED")
+        operation_error_start = len(reject)
         if not repair_operations:
             reject.append(f"{group_id}:STRUCTURED_REPAIR_OPERATIONS_REQUIRED")
         for row in repair_operations:
@@ -333,8 +337,15 @@ def _group_review(
                 if not _text(row.get(key)):
                     reject.append(f"{group_id}:REPAIR_OPERATION_{key.upper()}_REQUIRED")
             symbols = _list(row.get("target_symbols"))
-            if not symbols or any(re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", _text(symbol)) is None for symbol in symbols):
+            valid_symbols = bool(symbols) and all(
+                isinstance(symbol, str) and re.fullmatch(r"[A-Za-z_][A-Za-z0-9_]*", symbol) is not None
+                for symbol in symbols)
+            if not valid_symbols or len(symbols) != len(set(symbols)):
                 reject.append(f"{group_id}:REPAIR_OPERATION_TARGET_SYMBOLS_REQUIRED")
+            elif row.get("with") != "IMPLEMENT_SYMBOLS[" + ",".join(symbols) + "]":
+                risk_codes.append("SERIAL_SCALAR_PATCH_RISK")
+                reject.append(f"{group_id}:REPEATED_REPAIR_REPLACEMENT_MUST_BE_MACHINE_STRUCTURED")
+        structured_operations_valid = bool(repair_operations) and len(reject) == operation_error_start
         if not isinstance(scalar_parameters_changed, list):
             reject.append(f"{group_id}:SCALAR_PARAMETER_DECLARATION_REQUIRED")
         elif scalar_parameters_changed:
@@ -476,8 +487,23 @@ def _group_review(
         if not _text(domain.get("verifier")):
             reject.append(f"{group_id}:FULL_DOMAIN_PROOF_VERIFIER_REQUIRED")
 
-    current_strategy_text = " ".join(_text(group.get(key)) for key in ("strategy_kind", "causal_mechanism", "why_this_fixes_cause"))
-    scalar_patch = strategy in SCALAR_STRATEGIES or bool(SCALAR_PATCH.search(current_strategy_text))
+    # Validated machine identifiers are not a natural-language scalar proposal.
+    # Free-form/near-match mechanisms and all strategy/explanation prose remain scanned.
+    mechanism = _text(group.get("causal_mechanism"))
+    if structured_operations_valid and group.get("causal_mechanism") == _structured_mechanism(repair_operations):
+        mechanism = ""
+    proposal_prose = [_text(group.get("strategy_kind")), mechanism,
+                      _text(group.get("why_this_fixes_cause")),
+                      _text(group.get("why_materially_different")), _text(escalation.get("reason"))]
+    for operation in repair_operations:
+        if isinstance(operation, dict):
+            # `replaces` describes history; these fields prescribe the new repair.
+            proposal_prose.extend(_text(operation.get(key)) for key in ("target", "invariant_enforced"))
+            if not structured_operations_valid:
+                proposal_prose.append(_text(operation.get("with")))
+    # Separate explanatory fields cannot form a synthetic prose instruction.
+    scalar_patch = strategy in SCALAR_STRATEGIES or any(
+        SCALAR_PATCH.search(current_strategy_text) for current_strategy_text in proposal_prose)
     if same_family_attempt_count >= 2 and scalar_patch:
         risk_codes.append("SERIAL_SCALAR_PATCH_RISK")
         reject.append(f"{group_id}:REPEATED_SCALAR_FIX_REQUIRES_ARCHITECTURAL_REPAIR")
@@ -716,6 +742,12 @@ def review(
         "name": "Repair Sufficiency Critic",
         "non_voting": True,
         "approval_critic": False,
+        "repair_operation_contract": {
+            "repeated_family_version": 2,
+            "replacement": "IMPLEMENT_SYMBOLS[exact,ordered,validated,symbols]",
+            "explanatory_prose_authorizes_source_or_parameters": False,
+            "scalar_prose_heuristic": "defense_in_depth",
+        },
         "read_only": True,
         "task_id": task,
         "diagnosis_id": c0.get("diagnosis_id"),

@@ -92,6 +92,7 @@ def layout_group():
         "why_this_fixes_cause": "the failed code accepted the last fallback without proving containment; the new solver validates containment before selection",
         "why_materially_different": "replaces scalar symptom tuning with a constrained feasibility algorithm over the whole mandatory projection domain",
         "same_family_attempt_count": 2,
+        "operation_contract_version": 2,
         "prior_attempts": [
             {"strategy": "width 1000 to 960", "outcome": "FAILED", "same_family": True, "candidate": "1" * 40, "lesson": "natural measured width was unchanged"},
             {"strategy": "pixel_size 0.006 to 0.0057", "outcome": "PARTIAL", "same_family": True, "candidate": "2" * 40, "lesson": "one state improved while blocked overhead remained infeasible"},
@@ -107,7 +108,7 @@ def layout_group():
             "target": "terminal fallback",
             "target_symbols": ["_label_candidate", "placement_found"],
             "replaces": "unconditional last-lane acceptance",
-            "with": "measured legal-region feasibility search",
+            "with": "IMPLEMENT_SYMBOLS[_label_candidate,placement_found]",
             "invariant_enforced": "accepted placements are contained and readable",
         }],
         "scalar_parameters_changed": [],
@@ -312,6 +313,75 @@ class RepairSufficiencyCriticTests(unittest.TestCase):
         plan["repair_sufficiency"]["repair_groups"][0]["failure_family"]["collection_evidence"] = []
         report = review(c0(), plan)
         self.assertTrue(any("EXHAUSTIVE_COLLECTION_EVIDENCE_REQUIRED" in x for x in report["rejections"]))
+
+    def test_validated_machine_identifiers_are_not_scalar_prose(self):
+        def fixture():
+            plan = accepted_plan()
+            group = plan["repair_sufficiency"]["repair_groups"][0]
+            symbols = ["decoded_failure_logs", "structured_grounding_fragments", "compact_model_projection"]
+            group["repair_operations"][0].update(operation_kind="EVIDENCE_ARCHITECTURE_CHANGE", target_symbols=symbols)
+            group["repair_operations"][0]["with"] = "IMPLEMENT_SYMBOLS[" + ",".join(symbols) + "]"
+            group["causal_mechanism"] = "EVIDENCE_ARCHITECTURE_CHANGE[" + ",".join(symbols) + "]"
+            group["implementation_diff_contract"]["required_added_markers"] = [
+                {"kind": "FUNCTION_DEFINITION", "value": symbol} for symbol in symbols]
+            return plan, group
+        plan, group = fixture()
+        result = review(c0(), plan)
+        self.assertTrue(result["passed"], result["rejections"])
+        self.assertNotIn("SERIAL_SCALAR_PATCH_RISK", result["risk_codes"])
+        for mutation in ("empty", "invalid_kind", "missing_target", "invalid_symbol", "appended", "near_match", "why", "strategy", "with", "target", "invariant_enforced", "difference", "escalation"):
+            plan, group = fixture()
+            if mutation == "empty": group["repair_operations"] = []
+            elif mutation == "invalid_kind": group["repair_operations"][0]["operation_kind"] = "UNSUPPORTED"
+            elif mutation == "missing_target": group["repair_operations"][0].pop("target")
+            elif mutation == "invalid_symbol": group["repair_operations"][0]["target_symbols"] = ["compact-model-projection"]
+            elif mutation == "appended": group["causal_mechanism"] += "; reduce projection scale to 0.95"
+            elif mutation == "near_match": group["causal_mechanism"] = group["causal_mechanism"].replace("[", "[ ")
+            elif mutation == "why": group["why_this_fixes_cause"] = "reduce projection scale to 0.95"
+            elif mutation == "strategy": group["strategy_kind"] = "SCALAR_TUNING"
+            elif mutation in {"with", "target", "invariant_enforced"}:
+                group["repair_operations"][0][mutation] = "set timeout limit to 2000 and shrink projection scale to 0.95"
+            elif mutation == "difference": group["why_materially_different"] = "set timeout limit to 2000 and shrink projection scale to 0.95"
+            elif mutation == "escalation": group["architectural_escalation"]["reason"] = "set timeout limit to 2000 and shrink projection scale to 0.95"
+            with self.subTest(mutation=mutation):
+                result = review(c0(), plan)
+                self.assertFalse(result["passed"])
+                self.assertIn("SERIAL_SCALAR_PATCH_RISK", result["risk_codes"])
+
+    def test_prose_fields_do_not_form_a_synthetic_scalar_sentence(self):
+        plan = accepted_plan(); group = plan["repair_sufficiency"]["repair_groups"][0]
+        group["why_this_fixes_cause"] = "The geometry proof remains authoritative."
+        group["why_materially_different"] = "Repair the missing caller-to-callee authority contract."
+        self.assertTrue(review(c0(), plan)["passed"])
+
+    def test_repeated_replacement_is_typed_not_quantity_prose(self):
+        bad = ["cap watchdog duration at 2000 seconds", "prefer a 2000-second deadline",
+               "replace the prior sizing number with 54 ten-thousandths",
+               "cap watchdog duration at two thousand seconds", "prefer a ２０００-second deadline",
+               "IMPLEMENT_SYMBOLS[_label_candidate,placement_found]; cap duration at 2000",
+               " IMPLEMENT_SYMBOLS[_label_candidate,placement_found]",
+               "IMPLEMENT_SYMBOLS[placement_found,_label_candidate]",
+               "IMPLEMENT_SYMBOLS[_label_candidate,placement_found,extra]",
+               "IMPLEMENT_SYMBOLS[_label_candidate, placement_found]"]
+        for replacement in bad:
+            plan = accepted_plan()
+            group = plan["repair_sufficiency"]["repair_groups"][0]
+            group["repair_operations"][0]["with"] = replacement
+            with self.subTest(replacement=replacement):
+                result = review(c0(), plan)
+                self.assertFalse(result["passed"])
+                self.assertIn("layout-feasibility:REPEATED_REPAIR_REPLACEMENT_MUST_BE_MACHINE_STRUCTURED", result["rejections"])
+                self.assertIn("SERIAL_SCALAR_PATCH_RISK", result["risk_codes"])
+        for mutation in ("duplicate", "symbol_whitespace", "old_version", "missing_version"):
+            plan = accepted_plan(); group = plan["repair_sufficiency"]["repair_groups"][0]
+            operation = group["repair_operations"][0]
+            if mutation == "duplicate": operation["target_symbols"].append("placement_found")
+            elif mutation == "symbol_whitespace": operation["target_symbols"][0] += " "
+            elif mutation == "old_version": group["operation_contract_version"] = 1
+            else: group.pop("operation_contract_version")
+            operation["with"] = "IMPLEMENT_SYMBOLS[" + ",".join(operation["target_symbols"]) + "]"
+            with self.subTest(mutation=mutation):
+                self.assertFalse(review(c0(), plan)["passed"])
 
     def test_current_style_scalar_patch_after_two_attempts_is_rejected(self):
         plan = accepted_plan()

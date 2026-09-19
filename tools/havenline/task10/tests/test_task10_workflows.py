@@ -1,8 +1,10 @@
 import re
+import sys
 import unittest
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[4]
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 WORKFLOWS = ROOT / '.github/workflows'
 PINS = {'actions/checkout': 'fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09',
         'actions/cache/restore': 'caa296126883cff596d87d8935842f9db880ef25',
@@ -106,15 +108,24 @@ class AdapterRoutingTests(unittest.TestCase):
     def test_benchmark_uses_real_time_without_movie(self):
         source=(WORKFLOWS/'havenline-task10-isolated.yml').read_text()
         block=source.split('name: Measure warmed idle and committing performance',1)[1].split('      - name:',1)[0]
-        self.assertIn('benchmark_world_transform.gd',block)
-        self.assertNotIn('--fixed-fps',block)
-        self.assertNotIn('--write-movie',block)
+        self.assertIn('benchmark_supervisor.py',block)
+        from benchmark_supervisor import command
+        argv=command('a'*40,Path('/tmp/benchmark-fixture'))
+        self.assertTrue(any(arg.endswith('benchmark_world_transform.gd') for arg in argv))
+        self.assertNotIn('--fixed-fps',argv)
+        self.assertNotIn('--write-movie',argv)
 
     def test_review_retention_and_bounded_control_timeout(self):
         source=(WORKFLOWS/'havenline-task10-isolated.yml').read_text()
         self.assertEqual(1,source.count('retention-days: 90'))
         self.assertIn('timeout-minutes: 40',source)
-        self.assertIn('timeout 1800 Godot',source)
+        from benchmark_supervisor import STALL_SECONDS, JOB_SECONDS
+        self.assertEqual(1800,STALL_SECONDS)
+        self.assertEqual(40*60,JOB_SECONDS)
+        self.assertNotIn('timeout 1800 Godot',source)
+        upload=source.split('name: Retain benchmark execution before further packaging',1)[1].split('name: Package source-bound specialist inputs',1)[0]
+        self.assertIn('if: always()',upload)
+        self.assertIn('timeout-minutes: 1',upload)
 
 class ClosurePathTests(unittest.TestCase):
     common = {'HavenlineGodot/scripts/world_transform.gd', 'HavenlineGodot/scripts/world_transform_view.gd',

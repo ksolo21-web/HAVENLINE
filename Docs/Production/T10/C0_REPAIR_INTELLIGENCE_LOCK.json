@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T10",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
-  "repair_intelligence_sha256": "7ccb90753886a8b596306ff3f25c3b52e68b2d642d05e6da9cd0befc087ff48c",
+  "repair_intelligence_sha256": "2da69a266e1020c505e2c87181daeff29694e71e94acfa8bf26ee749327ddb6e",
   "prior_attempt_sources": [
     {
       "failure_family_id": "projected-label-feasibility",
@@ -75,7 +75,25 @@
       "run_id": 35458022974,
       "result": "PARTIAL",
       "result_record": "canonical failure_frontier incomplete grammar observation",
-      "result_sha256": "6b057b0200c33e2cb7962f888912830ba26b5f0b4377bdf63f2dbb5134d83927"
+      "result_sha256": "dbc4ce218d357363aa14db9ddfcdc8a047fb66f6795e354164c36eab25b9aa08"
+    },
+    {
+      "failure_family_id": "c0-terminal-evidence-grounding",
+      "attempt": 3,
+      "candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e",
+      "run_id": 35444671480,
+      "result": "PARTIAL",
+      "result_record": "canonical failure_frontier retained C0 strategy",
+      "result_sha256": "a8003d34c24c8865c0ab74e3b03f586ce1ab33ea4d3cc10464ef78336b0ffcca"
+    },
+    {
+      "failure_family_id": "c0-terminal-evidence-grounding",
+      "attempt": 4,
+      "candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+      "run_id": 35461009111,
+      "result": "PARTIAL",
+      "result_record": "canonical failure_frontier retained C0 strategy",
+      "result_sha256": "0993261b0173080b9e84045e6840284968dbf24d6db65d9d8e93ba18a8e6baa6"
     }
   ],
   "frontier_sources": [
@@ -92,12 +110,20 @@
       "candidate": "d238925040b9c58ee8337bed6397e9690218f06c"
     },
     {
+      "run_id": 35454638560,
+      "candidate": "d238925040b9c58ee8337bed6397e9690218f06c"
+    },
+    {
       "run_id": 35458019688,
       "candidate": "e637dcc336eb72e4e3115305b92fb5ae8932a7b4"
     },
     {
       "run_id": 35458022974,
       "candidate": "3d24ffaacab9ffd1350d47e5479ce70142424217"
+    },
+    {
+      "run_id": 35461009111,
+      "candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a"
     }
   ],
   "domain_proof": {

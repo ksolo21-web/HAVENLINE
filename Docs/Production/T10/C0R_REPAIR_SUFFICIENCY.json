@@ -4,6 +4,12 @@
   "name": "Repair Sufficiency Critic",
   "non_voting": true,
   "approval_critic": false,
+  "repair_operation_contract": {
+    "repeated_family_version": 2,
+    "replacement": "IMPLEMENT_SYMBOLS[exact,ordered,validated,symbols]",
+    "explanatory_prose_authorizes_source_or_parameters": false,
+    "scalar_prose_heuristic": "defense_in_depth"
+  },
   "read_only": true,
   "task_id": "T10",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
@@ -259,7 +265,7 @@
         "C0-T10-B061"
       ],
       "strategy_kind": "TOOLING",
-      "same_family_attempt_count": 2,
+      "same_family_attempt_count": 4,
       "rejections": [],
       "evidence_gaps": [],
       "risk_codes": [
@@ -280,9 +286,21 @@
         "REPEATED_FAILURE_FAMILY"
       ],
       "passed": true
+    },
+    {
+      "group_id": "benchmark-liveness",
+      "blocker_ids": [
+        "C0-T10-B063"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
     }
   ],
-  "group_count": 21,
+  "group_count": 22,
   "full_blocker_coverage": true,
   "thresholds_unchanged": true,
   "threshold_registry": {
@@ -311,8 +329,8 @@
   "passed": true,
   "input_bindings": {
     "c0_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
-    "c0_sha256": "2135099aab88955dfba3457ff76bcd0002deb8252cf604ea2d5332f796dfc567",
+    "c0_sha256": "ed42b4ee82efc9d5c884659263725089146acab4d192c02e98f857ff81264cd5",
     "plan_path": "Docs/Production/T10/REPAIR_PLAN.json",
-    "plan_sha256": "7072f511a69d76af3f2cdd4953ca3cf34e39f5600bb4ec77db9ebe6f011aa16f"
+    "plan_sha256": "2f029752289ca8f090e1e7923d584a689bc4cc5c217d35aac4204c48d04ec7ca"
   }
 }

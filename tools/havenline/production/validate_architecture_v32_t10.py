@@ -32,7 +32,7 @@ BUILDER_INHERIT_REQUEST_SHA256 = "6c1abc343d0b6837612e47a9ae222b81d167b28743b665
 BUILDER_C0R_REQUEST = "Docs/Production/ChangeRequests/T10-c0r-builder-enforcement.json"
 BUILDER_C0R_REQUEST_SHA256 = "f55b6906f492901e9cebe755a94ac73577935ca01e42e0f7af8de6c00a43e2ca"
 BUILDER_PRE_C0R_SHA256 = "f2b93756d6f9e70b9533ff2fde44525c7fb305778f80bb8c4eef49f02aa18eb4"
-BUILDER_C0R_CURRENT_SHA256 = "935bc94206fb51d49461abac734eee66d34d8b7ba4e992b85114ae0143971d3d"
+BUILDER_C0R_CURRENT_SHA256 = "ede18167850819fbfa4199bea98c5b39f0e6fb09505dacdb7f00c4f88729ef88"
 WORKSTREAM = "tools/havenline/production/workstream.py"
 WORKSTREAM_BASE_SHA256 = "9f322e6d02d4a0b2896a83bd0ef525803d6033db18e07fbe7aa06df65161bae4"
 WORKSTREAM_CURRENT_SHA256 = "38c28d372acead6fe416fe822333a3cb2b9881fe5ad6924b7b9677afd6bcfe81"
@@ -74,7 +74,13 @@ SPECIALIST_REQUEST = "Docs/Production/ChangeRequests/T10-specialist-actionable-d
 SPECIALIST_REQUEST_SHA256 = "25c8544a37587fdbbd527de7606c0517e67781ee879fdb72e502b6fe2d1c513d"
 C0_ADVISOR = "tools/havenline/production/c0_root_cause_advisor.py"
 C0_ADVISOR_BASE_SHA256 = "d66e551eadf4dcdd1363da3da41d64e314a074292b2531cf99c0f5028a24beee"
-C0_ADVISOR_CURRENT_SHA256 = "8fcb94cdc74b879627596fd520960b0010347ff2d3600663dbff51530f99f7a0"
+C0_ADVISOR_CURRENT_SHA256 = "f375814f19399b11e1228f1e2af90ad2f3aa80a955009e57649b0df4f62a25f2"
+C0R_MACHINE_PROSE_REQUEST = "Docs/Production/ChangeRequests/T10-c0r-structured-mechanism-detection.json"
+C0R_MACHINE_PROSE_REQUEST_SHA256 = "0c080170ac7f70ee8da8f03ad22086609a3c9ff1315b632bfc71b5d35fa5e6af"
+BENCHMARK_LIVENESS_REQUEST = "Docs/Production/ChangeRequests/T10-benchmark-liveness-contract.json"
+BENCHMARK_LIVENESS_REQUEST_SHA256 = "0ed117d226c8258597413e6b652c1c4a5864d8121a3c98aaaf8692f8264aa742"
+C0_COMPLETE_EVIDENCE_REQUEST = "Docs/Production/ChangeRequests/T10-c0-decoded-complete-evidence.json"
+C0_COMPLETE_EVIDENCE_REQUEST_SHA256 = "ac7faaa137cb020419daf661a2188296fbe9f91f60bb23cc1e5a4dc81d56f96f"
 C0_TERMINAL_JOB_LOG_REQUEST = "Docs/Production/ChangeRequests/T10-c0-terminal-job-log-priority.json"
 C0_TERMINAL_JOB_LOG_REQUEST_SHA256 = "08a3d20890dc37532c70fa22baa040116543474eceaad0879c9dc9d7d21559e2"
 C0_TERMINAL_REQUEST = "Docs/Production/ChangeRequests/T10-c0-terminal-evidence-priority.json"
@@ -210,6 +216,32 @@ def validate() -> dict:
         if hashlib.sha256((v31.ROOT / C0_REQUEST).read_bytes()).hexdigest() != C0_REQUEST_SHA256:
             errors.append("Bounded C0 job log authorization changed or missing")
         errors += exact_owner_source_errors(C0_ADVISOR,C0_ADVISOR_BASE_SHA256,C0_ADVISOR_CURRENT_SHA256)
+        complete_request_bytes=(v31.ROOT/C0_COMPLETE_EVIDENCE_REQUEST).read_bytes()
+        complete_request=json.loads(complete_request_bytes)
+        if hashlib.sha256(complete_request_bytes).hexdigest()!=C0_COMPLETE_EVIDENCE_REQUEST_SHA256:
+            errors.append("Decoded complete C0 evidence authorization changed or missing")
+        if complete_request.get("status")!="AUTHORIZED" or complete_request.get("blockers")!=["C0-T10-B059","C0-T10-B061"] or complete_request.get("advisor_sha256")!=C0_ADVISOR_CURRENT_SHA256:
+            errors.append("Explicit bounded decoded complete C0 evidence authorization missing")
+        machine_request_bytes=(v31.ROOT/C0R_MACHINE_PROSE_REQUEST).read_bytes()
+        machine_request=json.loads(machine_request_bytes)
+        if hashlib.sha256(machine_request_bytes).hexdigest()!=C0R_MACHINE_PROSE_REQUEST_SHA256:
+            errors.append("C0R machine-prose authorization changed or missing")
+        if machine_request.get("status")!="AUTHORIZED" or machine_request.get("blocker")!="C0-T10-B062":
+            errors.append("Explicit B062 machine-prose authorization missing")
+        for source_path,key in [("tools/havenline/production/repair_sufficiency_critic.py","source_sha256"),("tools/havenline/production/tests/test_repair_sufficiency_critic.py","tests_sha256"),("tools/havenline/production/builder_repair_gate.py","builder_sha256"),("tools/havenline/production/tests/test_c0_builder.py","builder_tests_sha256"),("Docs/Production/C0R_REPORT_SCHEMA.json","contract_schema_sha256"),("Docs/Production/C0R_REPAIR_SUFFICIENCY_STANDARD.md","standard_sha256"),("tools/havenline/production/verify_python_repair_bindings.py","canonical_verifier_sha256"),("tools/havenline/production/tests/test_python_repair_bindings.py","canonical_verifier_tests_sha256")]:
+            if hashlib.sha256((v31.ROOT/source_path).read_bytes()).hexdigest()!=machine_request.get(key):
+                errors.append("C0R machine-prose source exceeds owner authorization: "+source_path)
+        benchmark_request_bytes=(v31.ROOT/BENCHMARK_LIVENESS_REQUEST).read_bytes()
+        benchmark_request=json.loads(benchmark_request_bytes)
+        if hashlib.sha256(benchmark_request_bytes).hexdigest()!=BENCHMARK_LIVENESS_REQUEST_SHA256:
+            errors.append("Bounded benchmark liveness authorization changed or missing")
+        if benchmark_request.get("status")!="AUTHORIZED" or benchmark_request.get("blocker")!="C0-T10-B063":
+            errors.append("Explicit B063 benchmark liveness authorization missing")
+        for source_path,expected_hash in benchmark_request.get("implementation_sha256",{}).items():
+            if hashlib.sha256((v31.ROOT/source_path).read_bytes()).hexdigest()!=expected_hash:
+                errors.append("Benchmark liveness source exceeds exact owner authorization: "+source_path)
+        if hashlib.sha256((v31.ROOT/"Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json").read_bytes()).hexdigest()!=benchmark_request.get("trace_proof_sha256"):
+            errors.append("Benchmark liveness trace proof changed or missing")
         errors += exact_owner_source_errors(SPECIALIST,SPECIALIST_BASE_SHA256,SPECIALIST_CURRENT_SHA256)
         if hashlib.sha256((v31.ROOT/SPECIALIST_BRANCH_REQUEST).read_bytes()).hexdigest()!=SPECIALIST_BRANCH_REQUEST_SHA256:
             errors.append("Complete specialist grammar branch authorization changed or missing")
@@ -313,6 +345,7 @@ def validate() -> dict:
         "c0_job_log_authorization_record": C0_REQUEST,
         "c0_bounded_packet_authorization_record": C0_BOUNDED_REQUEST,
         "c0_grounding_authorization_record": C0_GROUNDING_REQUEST,
+        "c0_complete_evidence_authorization_record": C0_COMPLETE_EVIDENCE_REQUEST,
         "c0_terminal_evidence_authorization_record": C0_TERMINAL_REQUEST,
         "c0_terminal_job_log_authorization_record": C0_TERMINAL_JOB_LOG_REQUEST,
         "specialist_actionable_defect_authorization_record": SPECIALIST_REQUEST,
