@@ -55,6 +55,17 @@ jobs:
             --c0 Docs/Production/T10/C0_ROOT_CAUSE.json \
             --plan Docs/Production/T10/REPAIR_PLAN.json \
             --output task10-c0r/report.json
+          repair_base=$(python3 -c "import json; print(json.load(open('Docs/Production/T10/REPAIR_PLAN.json'))['repair_base'])")
+          INTEGRATION_BRANCH=codex/havenline-sequential-task-01
+          git fetch --no-tags origin "$INTEGRATION_BRANCH"
+          INTEGRATION_HEAD=$(git rev-parse "origin/$INTEGRATION_BRANCH")
+          export INTEGRATION_BRANCH INTEGRATION_HEAD
+          python3 tools/havenline/production/builder_repair_gate.py \
+            --c0 Docs/Production/T10/C0_ROOT_CAUSE.json \
+            --plan Docs/Production/T10/REPAIR_PLAN.json \
+            --base "$repair_base" \
+            --head "$GITHUB_SHA" \
+            --output task10-c0r/builder-gate.json
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
@@ -207,34 +218,111 @@ jobs:
           from pathlib import Path
           matrix=json.loads(Path('Docs/Production/DEVICE_LAYOUT_MATRIX.json').read_text())
           assert matrix.get('landscape_required') is True
+          assert len(matrix.get('states',[])) == 6
           for row in matrix['states']:
               w,h=row['logical_size']; print(f"{row['id']}\t{w}\t{h}")
           PY
+
           while IFS=$'\t' read -r device width height; do
             out="$(pwd)/task10-isolated-evidence/device-layout/$device"; mkdir -p "$out"
-            xvfb-run -a -s "-screen 0 ${width}x${height}x24" timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution "${width}x${height}" --script res://tests/capture_task10_world_transform.gd -- --candidate="$CANDIDATE" --device-check --device-id="$device" --width="$width" --height="$height" --out="$out" > "$out/capture.log" 2>&1
+            set +e
+            xvfb-run -a -s "-screen 0 ${width}x${height}x24" timeout 300 Godot_v4.7.2-stable_linux.x86_64 \
+              --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy \
+              --resolution "${width}x${height}" \
+              --script res://tests/capture_task10_world_transform.gd -- \
+              --candidate="$CANDIDATE" --device-check --exhaustive-projections \
+              --device-id="$device" --width="$width" --height="$height" --out="$out" \
+              > "$out/capture.log" 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > "$out/process-exit.txt"
+            # Projection failures are expected to return 1 only after that device's
+            # complete 36-case projection set is written. Other exit classes are
+            # harness/infrastructure failures and remain terminal.
+            test "$rc" -eq 0 -o "$rc" -eq 1
+            test -s "$out/manifest.json"
           done < /tmp/t10-device-matrix.tsv
+
           python3 - <<'PY'
           import hashlib,json,struct
-          from collections import defaultdict
+          from collections import Counter,defaultdict
           from pathlib import Path
-          matrix=json.loads(Path('Docs/Production/DEVICE_LAYOUT_MATRIX.json').read_text()); root=Path('task10-isolated-evidence/device-layout')
-          rows=[]; by_hash=defaultdict(list); by_device=defaultdict(dict)
-          for state in matrix['states']:
-              device=state['id']; expected=state['logical_size']; m=json.loads((root/device/'manifest.json').read_text())
-              assert m.get('passed') is True and m.get('logical_size') == expected,m
-              assert m.get('states') == ['ready','blocked','preview','committing','complete','replay'] and m.get('record_count') == 6,m
+
+          matrix=json.loads(Path('Docs/Production/DEVICE_LAYOUT_MATRIX.json').read_text())
+          root=Path('task10-isolated-evidence/device-layout')
+          rows=[]; projection_rows=[]; failures=[]; by_hash=defaultdict(list); by_device=defaultdict(dict); reasons=Counter()
+          expected_states=['ready','blocked','preview','committing','complete','replay']
+          expected_angles=['front','side','three-quarter','overhead','gameplay','detail']
+
+          for device_row in matrix['states']:
+              device=device_row['id']; expected=device_row['logical_size']; d=root/device
+              m=json.loads((d/'manifest.json').read_text())
+              rc=int((d/'process-exit.txt').read_text().strip())
+              assert rc in (0,1),(device,rc)
+              assert m.get('candidate') == __import__('os').environ['CANDIDATE'],(device,m.get('candidate'))
+              assert m.get('logical_size') == expected,m
+              assert m.get('device_id') == device,m
+              assert m.get('states') == expected_states,m
+              assert m.get('record_count') == 6,m
+              assert m.get('projection_angles') == expected_angles,m
+              assert m.get('projection_record_count') == 36,m
+              assert m.get('exhaustive_projections') is True,m
+
               for record in m['records']:
-                  data=(root/device/record['file']).read_bytes(); w,h=struct.unpack('>II',data[16:24]); assert [w,h]==expected
-                  digest=hashlib.sha256(data).hexdigest(); row={'device':device,'state':record['state'],'size':[w,h],'sha256':digest}
+                  data=(d/record['file']).read_bytes()
+                  w,h=struct.unpack('>II',data[16:24]); assert [w,h]==expected
+                  digest=hashlib.sha256(data).hexdigest()
+                  row={'device':device,'state':record['state'],'size':[w,h],'sha256':digest}
                   rows.append(row); by_hash[digest].append(row); by_device[device][record['state']]=digest
-          assert len(rows)==36
+
+              for record in m['projection_records']:
+                  readability=record['projected_readability']
+                  prow={
+                    'device':device,
+                    'state':record['state'],
+                    'angle':record['angle'],
+                    'passed':bool(readability.get('passed',False)),
+                    'readability':readability,
+                  }
+                  projection_rows.append(prow)
+                  if not prow['passed']:
+                      why=[]
+                      if readability.get('overlap',False): why.append('overlap')
+                      if not readability.get('fully_in_frame',False): why.append('containment')
+                      if float(readability.get('clearance_px',-1)) + 0.01 < float(readability.get('required_clearance_px',0)): why.append('clearance')
+                      if not readability.get('priority_ok',False): why.append('priority')
+                      if not readability.get('placement_found',True): why.append('no_legal_placement')
+                      if float(readability.get('label_scale',1.0)) + 0.0001 < float(readability.get('minimum_readability_scale',0.85)): why.append('readability_floor')
+                      if not why: why.append('other')
+                      for reason in why: reasons[reason]+=1
+                      failures.append({**prow,'failure_reasons':why})
+
+          assert len(rows)==36,len(rows)
+          assert len(projection_rows)==216,len(projection_rows)
+          assert len({(x['device'],x['state'],x['angle']) for x in projection_rows})==216
           for state in matrix['states']:
               d=state['id']; assert by_device[d]['preview'] != by_device[d]['committing'],d
           for digest,group in by_hash.items():
               if len(group)>1:
                   assert len({(tuple(x['size']),x['state']) for x in group})==1,(digest,group)
-          Path('task10-isolated-evidence/device-layout-evidence.json').write_text(json.dumps({'device_count':6,'capture_count':36,'passed':True,'integration_allowed':False,'task_approved':False,'rows':rows},indent=2))
+
+          report={
+            'device_count':6,
+            'capture_count':36,
+            'projection_count':216,
+            'projection_failure_count':len(failures),
+            'projection_failure_reason_counts':dict(sorted(reasons.items())),
+            'projection_failures':failures,
+            'complete_failure_set_collected':True,
+            'passed':not failures,
+            'integration_allowed':False,
+            'task_approved':False,
+            'rows':rows,
+          }
+          Path('task10-isolated-evidence/device-layout-evidence.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps({k:v for k,v in report.items() if k not in ('rows','projection_failures')},indent=2))
+          if failures:
+              raise SystemExit(f"authoritative device matrix has {len(failures)} failed projections; complete failure set retained")
           PY
 
       - name: Capture critic-ready native 4K multi-angle evidence

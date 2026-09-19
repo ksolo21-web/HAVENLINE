@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "requesting_task": "T10",
+  "target_path": [
+    ".github/workflows/havenline-candidate-guard.yml",
+    "tools/havenline/production/tests/test_governance.py"
+  ],
+  "requested_change": "Pass the pinned INTEGRATION_BRANCH=codex/havenline-sequential-task-01 to the candidate guard's Require complete C0 diagnosis and bounded repair diff step, and add a regression test proving that this hosted caller supplies the branch required by builder_repair_gate.",
+  "reason": "Candidate guard run 35458019688, job 105936658374, passed ownership but failed the builder gate solely with active integration branch does not match pinned canonical branch. The recorded environment has INTEGRATION_HEAD but no INTEGRATION_BRANCH. Both T10 pre-build C0R callers already supply this branch and passed.",
+  "dependency": "Independently integrate this owner authorization before reconciling the task candidate. Preserve the builder's rejection of missing or redirected branch authority.",
+  "expected_behavior": "The shared workflow explicitly supplies the canonical integration branch and retains its exact integration head, while missing or noncanonical branch identities continue to fail the builder gate.",
+  "tests_required": [
+    "The shared candidate-guard builder step supplies the pinned canonical branch.",
+    "Builder rejects missing and redirected integration branch identities.",
+    "Replay the exact hosted builder invocation with its complete environment against the committed candidate.",
+    "Run production regression and independent implementation review before publishing."
+  ],
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "APPROVED_BOUNDED_CANDIDATE_GUARD_BRANCH",
+  "authorization": "Kaleb approved this exact workflow fix and regression test, and authorized necessary bounded governance and workflow repairs to finish T10 without repeated permission requests. Task approval and critic thresholds remain unchanged.",
+  "forbidden_changes": [
+    "No weakening of builder branch, ancestry, ownership, C0R or hash checks.",
+    "No changes to runtime code, critic thresholds, task approval, or T11 activation."
+  ]
+}

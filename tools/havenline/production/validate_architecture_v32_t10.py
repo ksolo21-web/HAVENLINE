@@ -32,7 +32,17 @@ BUILDER_INHERIT_REQUEST_SHA256 = "6c1abc343d0b6837612e47a9ae222b81d167b28743b665
 BUILDER_C0R_REQUEST = "Docs/Production/ChangeRequests/T10-c0r-builder-enforcement.json"
 BUILDER_C0R_REQUEST_SHA256 = "f55b6906f492901e9cebe755a94ac73577935ca01e42e0f7af8de6c00a43e2ca"
 BUILDER_PRE_C0R_SHA256 = "f2b93756d6f9e70b9533ff2fde44525c7fb305778f80bb8c4eef49f02aa18eb4"
-BUILDER_C0R_CURRENT_SHA256 = "6fa3dcc397d0e680f2d39d98c0b36a1ca49a92779f1115e8c3002bfb30e7277c"
+BUILDER_C0R_CURRENT_SHA256 = "935bc94206fb51d49461abac734eee66d34d8b7ba4e992b85114ae0143971d3d"
+WORKSTREAM = "tools/havenline/production/workstream.py"
+WORKSTREAM_BASE_SHA256 = "9f322e6d02d4a0b2896a83bd0ef525803d6033db18e07fbe7aa06df65161bae4"
+WORKSTREAM_CURRENT_SHA256 = "38c28d372acead6fe416fe822333a3cb2b9881fe5ad6924b7b9677afd6bcfe81"
+WORKSTREAM_REQUEST = "Docs/Production/ChangeRequests/T10-c0r-workstream-authorization-schema.json"
+WORKSTREAM_REQUEST_SHA256 = "5c52bc606a1ac4d6cce06bcfa0420614879cb22948908d91f8ec945dee0ebb7d"
+GUARD = ".github/workflows/havenline-candidate-guard.yml"
+GUARD_BASE_SHA256 = "1aad9fba33b2a03d798065573c4bd9f9cd157dbf9559d60efb61913713a9c185"
+GUARD_CURRENT_SHA256 = "071cfb7143b42dc903919da4a6a340fcd9eb3ef71656667dde6b5a1da233716a"
+GUARD_REQUEST = "Docs/Production/ChangeRequests/T10-candidate-guard-integration-branch.json"
+GUARD_REQUEST_SHA256 = "c2557fbdd0d4ce12660997d12fc46c9b7abf1d8ed337a9832acee6f32908fb9c"
 BUILDER_DELTAS = [('    errors=[]\n', '    errors=[]\n    task=c0.get("task_id")\n    canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"\n    canonical_plan=f"Docs/Production/{task}/REPAIR_PLAN.json"\n    bookkeeping={canonical_c0,canonical_plan}\n    if plan.get("c0_report_path")!=canonical_c0 or plan.get("plan_path")!=canonical_plan:\n        errors.append("canonical C0 and repair plan paths required")\n'), ('        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n', '        if set(files)&bookkeeping:errors.append(f"{bid} bookkeeping cannot be causal files")\n        causal_files=set(files)-bookkeeping\n        if not causal_files:errors.append(f"{bid} non-bookkeeping causal files required")\n        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n'), ('        allowed.update(files)\n', '        allowed.update(causal_files)\n'), ('        plan_path=plan.get("plan_path")\n        allowed_actual=set(allowed)\n        if isinstance(plan_path,str) and plan_path:allowed_actual.add(plan_path)\n', '        allowed_actual=set(allowed)|bookkeeping\n'), ('            if not set(fix.get("files",[]))&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n', '            if not (set(fix.get("files",[]))-bookkeeping)&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n')]
 BUILDER_INHERIT_DELTAS = [
     ('import pathlib\n\nfrom lib import ROOT, changed_files\n', 'import pathlib\nimport os\nimport subprocess\n\nfrom lib import ROOT, changed_files\n'),
@@ -57,12 +67,14 @@ C0_LOG_NEW = '          python3 tools/havenline/production/collect_failure_job_l
 OWNER_BASE = "c1957696c6f716d3cd6f8528c95edbb7542cd4a6"
 SPECIALIST = "tools/havenline/production/specialist_critic_runner.py"
 SPECIALIST_BASE_SHA256 = "ddf0849d034033ae9df61d671953127e4e40bc80a0601ee735b9c68c9e2cdb00"
-SPECIALIST_CURRENT_SHA256 = "961d6daa2ae42297e703c17b16f34db540fbdee294dccbaebf29c81351c0f980"
+SPECIALIST_CURRENT_SHA256 = "febb56d2cfdce0e71e3af637199a314447d7593508cad0c0b18998e85ddac373"
+SPECIALIST_BRANCH_REQUEST = "Docs/Production/ChangeRequests/T10-specialist-complete-grammar-branches.json"
+SPECIALIST_BRANCH_REQUEST_SHA256 = "b5be20435029b1b407427366c8d9dd2aa87bdee5f682966e8a8c109e8f5e1d4a"
 SPECIALIST_REQUEST = "Docs/Production/ChangeRequests/T10-specialist-actionable-defect-schema.json"
 SPECIALIST_REQUEST_SHA256 = "25c8544a37587fdbbd527de7606c0517e67781ee879fdb72e502b6fe2d1c513d"
 C0_ADVISOR = "tools/havenline/production/c0_root_cause_advisor.py"
 C0_ADVISOR_BASE_SHA256 = "d66e551eadf4dcdd1363da3da41d64e314a074292b2531cf99c0f5028a24beee"
-C0_ADVISOR_CURRENT_SHA256 = "889e41072b2096aac6ed9843cbdb028425d126e7b254229a523294467d6dd777"
+C0_ADVISOR_CURRENT_SHA256 = "8fcb94cdc74b879627596fd520960b0010347ff2d3600663dbff51530f99f7a0"
 C0_TERMINAL_JOB_LOG_REQUEST = "Docs/Production/ChangeRequests/T10-c0-terminal-job-log-priority.json"
 C0_TERMINAL_JOB_LOG_REQUEST_SHA256 = "08a3d20890dc37532c70fa22baa040116543474eceaad0879c9dc9d7d21559e2"
 C0_TERMINAL_REQUEST = "Docs/Production/ChangeRequests/T10-c0-terminal-evidence-priority.json"
@@ -188,6 +200,8 @@ def validate() -> dict:
         f"V3.1 locked file changed: {BUILDER}",
         f"V3.1 locked file changed: {C0_WORKFLOW}",
         f"V3.1 locked file changed: {C0_ADVISOR}",
+        f"V3.1 locked file changed: {WORKSTREAM}",
+        f"V3.1 locked file changed: {GUARD}",
     }
     errors = [error for error in baseline["errors"] if error not in allowed]
     try:
@@ -197,6 +211,8 @@ def validate() -> dict:
             errors.append("Bounded C0 job log authorization changed or missing")
         errors += exact_owner_source_errors(C0_ADVISOR,C0_ADVISOR_BASE_SHA256,C0_ADVISOR_CURRENT_SHA256)
         errors += exact_owner_source_errors(SPECIALIST,SPECIALIST_BASE_SHA256,SPECIALIST_CURRENT_SHA256)
+        if hashlib.sha256((v31.ROOT/SPECIALIST_BRANCH_REQUEST).read_bytes()).hexdigest()!=SPECIALIST_BRANCH_REQUEST_SHA256:
+            errors.append("Complete specialist grammar branch authorization changed or missing")
         c0_bounded_request=json.loads((v31.ROOT/C0_BOUNDED_REQUEST).read_text())
         if hashlib.sha256((v31.ROOT/C0_BOUNDED_REQUEST).read_bytes()).hexdigest()!=C0_BOUNDED_REQUEST_SHA256:
             errors.append("Bounded C0 model packet authorization changed or missing")
@@ -238,6 +254,20 @@ def validate() -> dict:
             errors.append("Bounded canonical C0R builder authorization changed or missing")
         if c0r_builder_request.get("status")!="AUTHORIZED" or c0r_builder_request.get("blocker")!="C0R-T10-BUILDER-ENFORCEMENT":
             errors.append("Explicit canonical C0R builder enforcement authorization missing")
+        errors += exact_owner_source_errors(WORKSTREAM,WORKSTREAM_BASE_SHA256,WORKSTREAM_CURRENT_SHA256)
+        errors += exact_owner_source_errors(GUARD,GUARD_BASE_SHA256,GUARD_CURRENT_SHA256)
+        if hashlib.sha256((v31.ROOT/GUARD_REQUEST).read_bytes()).hexdigest()!=GUARD_REQUEST_SHA256:
+            errors.append("Exact candidate guard branch authorization changed or missing")
+        workstream_request=json.loads((v31.ROOT/WORKSTREAM_REQUEST).read_text())
+        if hashlib.sha256((v31.ROOT/WORKSTREAM_REQUEST).read_bytes()).hexdigest()!=WORKSTREAM_REQUEST_SHA256:
+            errors.append("Bounded C0R workstream authorization-schema record changed or missing")
+        if (
+            workstream_request.get("status")!="AUTHORIZED"
+            or workstream_request.get("blocker")!="C0-T10-B062"
+            or workstream_request.get("integration_owner_disposition")!="APPROVED_BOUNDED_C0R_WORKSTREAM_SCHEMA"
+            or WORKSTREAM not in workstream_request.get("target_path",[])
+        ):
+            errors.append("Explicit bounded C0R workstream authorization-schema repair missing")
         accepted_failure = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{FAILURE}").stdout.decode()
         errors += failure_delta_errors(accepted_failure, (v31.ROOT / FAILURE).read_text())
         if hashlib.sha256((v31.ROOT / FAILURE_REQUEST).read_bytes()).hexdigest() != FAILURE_REQUEST_SHA256:
@@ -268,17 +298,18 @@ def validate() -> dict:
     return {
         "passed": not errors,
         "architecture_version": "3.2",
-        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, exact-byte inherited integration governance, canonical C0R builder enforcement for T10+, actionable critic defects, bounded C0 model packets, grounded artifact diagnostics, terminal-first artifact evidence, latest-terminal failed-job log projection, and subject-isolated C0 execution",
+        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, exact-byte inherited integration governance, canonical C0R builder enforcement for T10+, bounded workstream authorization-schema compatibility, actionable critic defects, bounded C0 model packets, grounded artifact diagnostics, terminal-first artifact evidence, latest-terminal failed-job log projection, and subject-isolated C0 execution",
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
-        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE, BUILDER, C0_WORKFLOW, C0_ADVISOR, C0_DIAGNOSTICS, SPECIALIST],
+        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE, BUILDER, WORKSTREAM, GUARD, C0_WORKFLOW, C0_ADVISOR, C0_DIAGNOSTICS, SPECIALIST],
         "authorization_record": REQUEST,
         "c7_authorization_record": C7_REQUEST,
         "failure_packet_authorization_record": FAILURE_REQUEST,
         "builder_authorization_record": BUILDER_REQUEST,
         "builder_inherited_governance_authorization_record": BUILDER_INHERIT_REQUEST,
         "builder_c0r_authorization_record": BUILDER_C0R_REQUEST,
+        "workstream_authorization_schema_record": WORKSTREAM_REQUEST,
         "c0_job_log_authorization_record": C0_REQUEST,
         "c0_bounded_packet_authorization_record": C0_BOUNDED_REQUEST,
         "c0_grounding_authorization_record": C0_GROUNDING_REQUEST,

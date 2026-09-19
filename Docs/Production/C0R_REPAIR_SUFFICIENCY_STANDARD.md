@@ -37,7 +37,9 @@ The union of all group `blocker_ids` must equal the complete C0 blocker set with
 
 `repair_sufficiency` contains `repair_groups`, an `evidence_frontier`, `cross_group_interactions`, an explicit empty `threshold_changes` collection, and `loop_risk_acknowledged=true`.
 
-The `evidence_frontier` binds the plan to C0's latest diagnosed failed candidate and records every known failure observed after that diagnosis boundary. A newer failure must either be source-bound to an existing repair group as the same causal family, identified as superseded/infrastructure-only, or returned to C0 as a new blocker. Unclassified post-diagnosis failures make the plan insufficient.
+The `evidence_frontier` is authored in C0 and copied byte-for-byte into the plan. C0R rejects any difference, so the builder cannot erase a newer failure or move the diagnosis boundary. A newer failure must either be source-bound to an existing repair group as the same causal family, identified as superseded/infrastructure-only, or returned to C0 as a new blocker. Unclassified post-diagnosis failures make the plan insufficient.
+
+Same-family attempt history, the failure frontier, and any full-domain proof are digest-locked to an immutable repair-intelligence manifest outside both C0 and the plan. The manifest retains exact run/candidate/result hashes and a machine-readable proof summary. C0 and C0R validate the lock. C0R derives the attempt count from the locked rows and rejects a plan that omits, rewrites, undercounts, or substitutes them.
 
 Each repair group contains:
 
@@ -54,17 +56,19 @@ Each repair group contains:
 
 ## Hard anti-loop rules
 
-- Two or more failed/partial attempts in the same failure family raise `REPEATED_FAILURE_FAMILY`.
-- A repeated scalar/configuration/constant adjustment raises `SERIAL_SCALAR_PATCH_RISK` and is rejected unless complete full-domain proof is supplied.
+- Two or more failed/partial attempts in the same failure family raise `REPEATED_FAILURE_FAMILY` and require an explicit architectural escalation with a named mechanism and reason.
+- A repeated family must declare symbol-bound structured architectural operations, use their deterministic machine rendering as `causal_mechanism`, bind the exact latest failed-candidate comparison base, provide reachable executable-symbol markers, and declare every scalar sink effect one-to-one. Fixed scalar changes raise `SERIAL_SCALAR_PATCH_RISK` and are rejected. A per-case derived parameter is allowed only when its exact normalized RHS depends on named per-case symbols, its bounds have zero violations in the complete domain, and its binding hashes the proof artifact plus the exact proof-source commit/path/file SHA. The proof slice is the canonicalized whole source file, excluding only exact metadata lines named by locked C0 evidence; every such line must occur at most once and, if present, must be inside the single static `contract()` function. The plan must reproduce that policy exactly and cannot add exclusions. The current candidate must match the resulting transitive slice exactly. The post-build gate reconstructs before/after multiline statements and requires the implemented sink RHS to equal that proof-bound expression. Free prose is non-authoritative.
 - A product defect cannot be closed by an evidence-only, test-only, or diagnostic-only strategy.
-- A group cannot claim its whole failure family is closed while known required cases remain unexecuted or unknown.
+- A group cannot claim its whole failure family is closed unless the complete observable set was collected with source evidence and no required case remains unexecuted or unknown.
 - Every blocker must bind to C0's exact diagnosed root cause and explain why the proposed change alters that cause, the expected result, falsifying result, and cheap disproof.
 - A claim of complete observable failure-family collection is rejected without collection evidence.
 - Every C0 blocker must be assigned exactly once across repair groups.
 - C0R rejects stale repair reasoning: the evidence frontier must match C0's diagnosis boundary and account for the latest observed failed candidate.
 - Any post-diagnosis failure that cannot be causally bound to an existing group returns `INSUFFICIENT_EVIDENCE` and requires C0 rather than builder improvisation.
-- Any critic/quality threshold weakening rejects the entire plan.
+- Any critic/quality threshold weakening rejects the entire plan. C0R reads both canonical threshold registries, records their exact hashes and values, and compares the strict `>9.0` unrounded/no-waiver contract rather than trusting an empty plan list.
 - The reviewed plan must be bound to the canonical C0 path and exact C0 report SHA-256.
+- A provided full-domain proof must equal the locked C0 proof and name positive dimensions whose product equals the case count, an artifact ID, hexadecimal artifact SHA-256, and a retained machine-readable summary whose digest and required results C0R verifies.
+- Primary build workflows must fetch and resolve the pinned canonical integration branch, export both its exact name and resolved head, then run the exact builder repair gate in the same direct prerequisite job after C0R and before any build job starts. Neither the plan nor the candidate-editable registry may select the active integration branch.
 
 ## Outcomes
 

@@ -63,8 +63,31 @@ class PackageBindingTests(unittest.TestCase):
             return dict(path='critic-input/'+name,category=category,kind=kind,description=description,sha256=hashlib.sha256((root/name).read_bytes()).hexdigest())
         required=['FROZEN_SCOPE.md','recipes.json','progression.json','domain-tests.json','integration-tests.json','review-summary.json','motion-timeline.json','save-matrix/save-matrix.json','benchmark/manifest.json','performance.json']
         for name in required:write(name,{})
-        domain=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in build.C7_ROWS['R05_domain']])
-        integration=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in build.C7_ROWS['R05_integration']+build.C7_ROWS['R06_integration']])
+        # Independent real-report fixtures: never derive consumer fixtures from
+        # the C7 selector table being validated.
+        domain_rows=[
+            ('R05_DOMAIN_LIFECYCLE_SET','view lifecycle contains all frozen states'),
+            ('R05_DOMAIN_READY','view enters ready lifecycle'),
+            ('R05_DOMAIN_PREVIEW','valid preview enters preview lifecycle'),
+            ('R05_DOMAIN_COMMITTING','prepared intent enters committing lifecycle'),
+            ('R05_DOMAIN_RAW_RECEIPT_REJECTED','raw simulation receipt cannot complete before T10 accepts it'),
+            ('R05_DOMAIN_ACCEPTED_RECEIPT_COMPLETES','T10-accepted receipt completes lifecycle'),
+        ]
+        integration_rows=[
+            ('R05_INTEGRATION_LOCKED_HIDDEN','locked lifecycle hides response geometry'),
+            ('R05_INTEGRATION_BLOCKED_EXPLICIT','view exposes explicit blocked lifecycle'),
+            ('R05_INTEGRATION_BLOCK_REASONS','blocked world response preserves exact reasons and shortfalls'),
+            ('R05_INTEGRATION_BLOCK_REFRESH','same blocked state refreshes exact shortfall label'),
+            ('R05_INTEGRATION_UNACCEPTED_PENDING','unaccepted receipt cannot stop pending flow or claim paid'),
+            ('R05_INTEGRATION_ACCEPTED_STOPS_FLOW','accepted receipt stops flow while retaining camera-lane maintenance'),
+            ('R06_INTEGRATION_HARVEST_CARRIED','real harvesting commits to carried inventory'),
+            ('R06_INTEGRATION_CARRIED_CANNOT_PAY','real carried harvest cannot pay T10'),
+            ('R06_INTEGRATION_DEPOSIT_CONSERVES','real deposit conserves delivered resources'),
+            ('R06_INTEGRATION_EXACT_STORED_DEBIT','real simulation exact stored debit'),
+            ('R06_INTEGRATION_NO_PARTIAL_CHARGE','real insufficient stock cannot partially charge'),
+        ]
+        domain=dict(candidate=candidate,passed=True,failures=[],checks=[dict(evidence_id=e,name=n,passed=True) for e,n in domain_rows])
+        integration=dict(candidate=candidate,passed=True,failures=[],checks=[dict(evidence_id=e,name=n,passed=True) for e,n in integration_rows])
         write('domain-tests.json',domain);write('integration-tests.json',integration)
         progression=dict(passed=True,executed=True,suites=[dict(suite=k,checks=len(v),required_checks=sorted(v),passed=True) for k,v in REQUIRED.items()])
         write('progression.json',progression);write('benchmark/manifest.json',fixture.BenchmarkEvidenceTests().fixture())

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import copy
+import hashlib
+import json
 import pathlib
 import sys
 import unittest
@@ -8,7 +10,14 @@ import unittest
 HERE = pathlib.Path(__file__).resolve()
 sys.path.insert(0, str(HERE.parents[1]))
 
-from repair_sufficiency_critic import review
+from repair_sufficiency_critic import ROOT, _stable_digest, canonical_threshold_snapshot, review as _review
+
+
+def review(root, plan, c0_sha256=None, threshold_snapshot=None, expected_repair_intelligence_sha256=None):
+    expected = expected_repair_intelligence_sha256 or _stable_digest({
+        key: root.get(key) for key in ("failure_family_history", "full_domain_proofs", "failure_frontier")
+    })
+    return _review(root, plan, c0_sha256, threshold_snapshot, expected)
 
 
 def c0(product=True, two_blockers=False):
@@ -24,6 +33,24 @@ def c0(product=True, two_blockers=False):
             "classification": "TOOLING_DEFECT",
             "root_cause": "diagnostic projection can omit the terminal artifact excerpt",
         })
+    frontier = {
+        "complete": True,
+        "diagnosed_through_candidate": "a" * 40,
+        "latest_observed_failed_candidate": "a" * 40,
+        "observations": [],
+        "unclassified_failures": [],
+    }
+    history = [{
+        "failure_family_id": "projected-label-feasibility",
+        "blocker_ids": ["C0-T10-B053"],
+        "prior_attempts": copy.deepcopy(layout_group()["prior_attempts"]),
+    }]
+    if two_blockers:
+        history.append({
+            "failure_family_id": "diagnostic-terminal-evidence-loss",
+            "blocker_ids": ["C0-T10-B060"],
+            "prior_attempts": copy.deepcopy(tooling_group()["prior_attempts"]),
+        })
     return {
         "schema_version": 1,
         "critic_id": "C0",
@@ -36,6 +63,12 @@ def c0(product=True, two_blockers=False):
         "task_id": "T10",
         "failed_candidate": "a" * 40,
         "blockers": blockers,
+        "failure_frontier": frontier,
+        "failure_family_history": history,
+        "full_domain_proofs": [{
+            "failure_family_id": "projected-label-feasibility",
+            "proof": copy.deepcopy(layout_group()["full_domain_proof"]),
+        }],
     }
 
 
@@ -55,14 +88,37 @@ def layout_group():
             "collection_evidence": ["run 35402388836 retained device-layout projection records"],
         },
         "strategy_kind": "ALGORITHM",
-        "causal_mechanism": "enumerate legal screen regions, measure reflowed candidates, and accept only a proven feasible placement",
+        "causal_mechanism": "ALGORITHM_REPLACEMENT[_label_candidate,placement_found]",
         "why_this_fixes_cause": "the failed code accepted the last fallback without proving containment; the new solver validates containment before selection",
         "why_materially_different": "replaces scalar symptom tuning with a constrained feasibility algorithm over the whole mandatory projection domain",
         "same_family_attempt_count": 2,
         "prior_attempts": [
-            {"strategy": "width 1000 to 960", "outcome": "FAILED", "same_family": True, "lesson": "natural measured width was unchanged"},
-            {"strategy": "pixel_size 0.006 to 0.0057", "outcome": "PARTIAL", "same_family": True, "lesson": "one state improved while blocked overhead remained infeasible"},
+            {"strategy": "width 1000 to 960", "outcome": "FAILED", "same_family": True, "candidate": "1" * 40, "lesson": "natural measured width was unchanged"},
+            {"strategy": "pixel_size 0.006 to 0.0057", "outcome": "PARTIAL", "same_family": True, "candidate": "2" * 40, "lesson": "one state improved while blocked overhead remained infeasible"},
         ],
+        "architectural_escalation": {
+            "required": True,
+            "provided": True,
+            "kind": "PLACEMENT_ALGORITHM",
+            "reason": "two scalar attempts failed, so the repair replaces terminal fallback with a complete feasibility algorithm",
+        },
+        "repair_operations": [{
+            "operation_kind": "ALGORITHM_REPLACEMENT",
+            "target": "terminal fallback",
+            "target_symbols": ["_label_candidate", "placement_found"],
+            "replaces": "unconditional last-lane acceptance",
+            "with": "measured legal-region feasibility search",
+            "invariant_enforced": "accepted placements are contained and readable",
+        }],
+        "scalar_parameters_changed": [],
+        "implementation_diff_contract": {
+            "comparison_base": "2" * 40,
+            "causal_files": ["HavenlineGodot/scripts/world_transform_view.gd"],
+            "required_added_markers": [
+                {"kind": "FUNCTION_DEFINITION", "value": "_label_candidate"},
+                {"kind": "CODE_IDENTIFIER", "value": "placement_found"},
+            ],
+        },
         "blocker_coverage": [{
             "blocker_id": "C0-T10-B053",
             "diagnosed_root_cause": "fallback placement accepts an infeasible terminal lane",
@@ -77,6 +133,10 @@ def layout_group():
             "method": "216-case device/state/angle projection sweep",
             "expected_cases": 216,
             "covered_cases": 216,
+            "dimensions": {"device": 6, "lifecycle_state": 6, "camera_angle": 6},
+            "artifact_id": 10584940146,
+            "artifact_sha256": "f" * 64,
+            "verifier": "verify the source-addressed summary has 216 projections and zero failures",
         },
         "cheap_disproof_preflight": [{
             "name": "projection-matrix",
@@ -105,6 +165,7 @@ def tooling_group():
             "observable_exhaustive_collection_required": False,
             "complete_observable_set_collected": True,
             "full_failure_family_closed_by_design": True,
+            "collection_evidence": ["source-addressed packet replay covers the retained terminal artifact"],
         },
         "strategy_kind": "TOOLING",
         "causal_mechanism": "rank terminal failing source excerpts ahead of generic successful artifact excerpts",
@@ -145,13 +206,7 @@ def accepted_plan(two_groups=False):
         "c0_report_sha256": "d" * 64,
         "repair_sufficiency": {
             "repair_groups": groups,
-            "evidence_frontier": {
-                "complete": True,
-                "diagnosed_through_candidate": "a" * 40,
-                "latest_observed_failed_candidate": "a" * 40,
-                "observations": [],
-                "unclassified_failures": [],
-            },
+            "evidence_frontier": copy.deepcopy(c0()["failure_frontier"]),
             "cross_group_interactions": ["layout exhaustiveness feeds better terminal diagnostics; neither group lowers task quality gates"],
             "threshold_changes": [],
             "loop_risk_acknowledged": True,
@@ -160,6 +215,18 @@ def accepted_plan(two_groups=False):
 
 
 class RepairSufficiencyCriticTests(unittest.TestCase):
+    def test_canonical_plan_cannot_redefine_locked_proof_exclusions(self):
+        root = json.loads((ROOT / "Docs/Production/T10/C0_ROOT_CAUSE.json").read_text())
+        plan = json.loads((ROOT / "Docs/Production/T10/REPAIR_PLAN.json").read_text())
+        group = next(row for row in plan["repair_sufficiency"]["repair_groups"] if row["group_id"] == "layout-feasibility")
+        contract = group["implementation_diff_contract"]
+        contract["proof_irrelevant_exact_lines"] = ['\treturn "READY".repeat(100)']
+        contract["proof_relevant_sha256"] = "0" * 64
+        c0_sha = hashlib.sha256((ROOT / "Docs/Production/T10/C0_ROOT_CAUSE.json").read_bytes()).hexdigest()
+        report = review(root, plan, c0_sha)
+        self.assertFalse(report["passed"])
+        self.assertTrue(any("PROOF_RELEVANT_SOURCE_BINDING_INVALID" in row for row in report["rejections"]), report)
+
     def test_algorithmic_full_domain_plan_is_accepted(self):
         report = review(c0(), accepted_plan())
         self.assertTrue(report["passed"], report)
@@ -175,6 +242,7 @@ class RepairSufficiencyCriticTests(unittest.TestCase):
 
     def test_post_diagnosis_failure_can_bind_to_existing_group(self):
         plan = accepted_plan()
+        root = c0()
         newer = "b" * 40
         plan["repair_sufficiency"]["evidence_frontier"]["latest_observed_failed_candidate"] = newer
         plan["repair_sufficiency"]["evidence_frontier"]["observations"] = [{
@@ -185,22 +253,26 @@ class RepairSufficiencyCriticTests(unittest.TestCase):
             "evidence": ["new blocked/overhead projection violates the same containment invariant"],
             "reason": "same invariant and same affected placement algorithm",
         }]
-        report = review(c0(), plan)
+        root["failure_frontier"] = copy.deepcopy(plan["repair_sufficiency"]["evidence_frontier"])
+        report = review(root, plan)
         self.assertTrue(report["passed"], report)
         self.assertIn("POST_DIAGNOSIS_FAILURES_PRESENT", report["risk_codes"])
 
     def test_unclassified_post_diagnosis_failure_blocks_build(self):
         plan = accepted_plan()
+        root = c0()
         newer = "b" * 40
         frontier = plan["repair_sufficiency"]["evidence_frontier"]
         frontier["latest_observed_failed_candidate"] = newer
         frontier["unclassified_failures"] = [{"run_id": 12345, "candidate": newer}]
-        report = review(c0(), plan)
+        root["failure_frontier"] = copy.deepcopy(frontier)
+        report = review(root, plan)
         self.assertEqual("INSUFFICIENT_EVIDENCE", report["outcome"])
         self.assertIn("POST_DIAGNOSIS_FAILURES_UNCLASSIFIED", report["evidence_gaps"])
 
     def test_new_failure_requiring_c0_blocks_build(self):
         plan = accepted_plan()
+        root = c0()
         newer = "b" * 40
         frontier = plan["repair_sufficiency"]["evidence_frontier"]
         frontier["latest_observed_failed_candidate"] = newer
@@ -211,7 +283,8 @@ class RepairSufficiencyCriticTests(unittest.TestCase):
             "evidence": ["new causal surface not represented by the diagnosed blocker set"],
             "reason": "cannot bind to an existing failure family",
         }]
-        report = review(c0(), plan)
+        root["failure_frontier"] = copy.deepcopy(frontier)
+        report = review(root, plan)
         self.assertEqual("INSUFFICIENT_EVIDENCE", report["outcome"])
         self.assertTrue(any("NEW_FAILURE_REQUIRES_C0" in x for x in report["evidence_gaps"]))
 
@@ -251,15 +324,165 @@ class RepairSufficiencyCriticTests(unittest.TestCase):
         self.assertFalse(report["passed"])
         self.assertEqual("REPAIR_PLAN_REJECTED", report["outcome"])
         self.assertIn("SERIAL_SCALAR_PATCH_RISK", report["risk_codes"])
-        self.assertTrue(any("REPEATED_SCALAR_FIX_REQUIRES_FULL_DOMAIN_PROOF" in x for x in report["rejections"]))
+        self.assertTrue(any("REPEATED_SCALAR_FIX_REQUIRES_ARCHITECTURAL_REPAIR" in x for x in report["rejections"]))
+
+    def test_scalar_patch_cannot_hide_behind_tooling_label(self):
+        plan = accepted_plan()
+        group = plan["repair_sufficiency"]["repair_groups"][0]
+        group["strategy_kind"] = "TOOLING"
+        group["causal_mechanism"] = "reduce pixel_size from 0.0057 to 0.0054 until the observed rectangle fits"
+        report = review(c0(), plan)
+        self.assertFalse(report["passed"])
+        self.assertIn("SERIAL_SCALAR_PATCH_RISK", report["risk_codes"])
+        self.assertTrue(any("REPEATED_SCALAR_FIX_REQUIRES_ARCHITECTURAL_REPAIR" in x for x in report["rejections"]))
+
+    def test_attempt_count_and_history_are_derived_from_c0(self):
+        for mutation in ("count", "erase", "rewrite"):
+            plan = accepted_plan()
+            group = plan["repair_sufficiency"]["repair_groups"][0]
+            if mutation == "count":
+                group["same_family_attempt_count"] = 0
+            elif mutation == "erase":
+                group["prior_attempts"] = []
+            else:
+                group["prior_attempts"][0]["outcome"] = "SUCCESS"
+            report = review(c0(), plan)
+            with self.subTest(mutation=mutation):
+                self.assertTrue(any("C0_ATTEMPT_HISTORY_BINDING_MISMATCH" in x for x in report["rejections"]))
+
+    def test_plan_cannot_erase_c0_failure_frontier(self):
+        root = c0()
+        root["failure_frontier"]["latest_observed_failed_candidate"] = "b" * 40
+        root["failure_frontier"]["unclassified_failures"] = [{"run_id": 123, "candidate": "b" * 40}]
+        report = review(root, accepted_plan())
+        self.assertFalse(report["passed"])
+        self.assertIn("C0_FAILURE_FRONTIER_BINDING_MISMATCH", report["rejections"])
+
+    def test_c0_and_plan_cannot_jointly_erase_locked_frontier_or_attempts(self):
+        for mutation in ("frontier", "attempts"):
+            root = c0()
+            plan = accepted_plan()
+            if mutation == "frontier":
+                root["failure_frontier"] = {
+                    "complete": True,
+                    "diagnosed_through_candidate": "b" * 40,
+                    "latest_observed_failed_candidate": "b" * 40,
+                    "observations": [{"run_id": 123, "candidate": "b" * 40}],
+                    "unclassified_failures": [],
+                }
+                plan["repair_sufficiency"]["evidence_frontier"] = copy.deepcopy(root["failure_frontier"])
+            expected = _stable_digest({key: root.get(key) for key in ("failure_family_history", "full_domain_proofs", "failure_frontier")})
+            if mutation == "frontier":
+                root["failure_frontier"] = {
+                    "complete": True, "diagnosed_through_candidate": "a" * 40,
+                    "latest_observed_failed_candidate": "a" * 40, "observations": [], "unclassified_failures": [],
+                }
+                plan["repair_sufficiency"]["evidence_frontier"] = copy.deepcopy(root["failure_frontier"])
+            else:
+                root["failure_family_history"] = []
+                group = plan["repair_sufficiency"]["repair_groups"][0]
+                group["same_family_attempt_count"] = 0
+                group["prior_attempts"] = []
+                group.pop("architectural_escalation")
+                group.pop("repair_operations")
+                group.pop("scalar_parameters_changed")
+                group.pop("implementation_diff_contract")
+            report = review(root, plan, expected_repair_intelligence_sha256=expected)
+            with self.subTest(mutation=mutation):
+                self.assertIn("C0_REPAIR_INTELLIGENCE_DIGEST_MISMATCH", report["rejections"])
+
+    def test_full_domain_proof_requires_source_addressed_provenance(self):
+        for key in ("dimensions", "artifact_id", "artifact_sha256", "verifier"):
+            plan = accepted_plan()
+            plan["repair_sufficiency"]["repair_groups"][0]["full_domain_proof"].pop(key)
+            report = review(c0(), plan)
+            with self.subTest(key=key):
+                self.assertTrue(any("FULL_DOMAIN_PROOF_" in x for x in report["rejections"]))
+
+    def test_full_domain_proof_cannot_substitute_a_fake_artifact(self):
+        plan = accepted_plan()
+        plan["repair_sufficiency"]["repair_groups"][0]["full_domain_proof"]["artifact_sha256"] = "0" * 64
+        report = review(c0(), plan)
+        self.assertFalse(report["passed"])
+        self.assertTrue(any("C0_FULL_DOMAIN_PROOF_BINDING_MISMATCH" in x for x in report["rejections"]))
+
+    def test_c0_and_plan_cannot_jointly_substitute_a_fake_artifact(self):
+        root = c0()
+        plan = accepted_plan()
+        expected = _stable_digest({key: root.get(key) for key in ("failure_family_history", "full_domain_proofs", "failure_frontier")})
+        for holder in (root["full_domain_proofs"][0]["proof"], plan["repair_sufficiency"]["repair_groups"][0]["full_domain_proof"]):
+            holder["artifact_id"] = 1
+            holder["artifact_sha256"] = "z" * 64
+            holder["verifier"] = "trust this text"
+        report = review(root, plan, expected_repair_intelligence_sha256=expected)
+        self.assertFalse(report["passed"])
+        self.assertIn("C0_REPAIR_INTELLIGENCE_DIGEST_MISMATCH", report["rejections"])
+
+    def test_scalar_synonym_cannot_hide_behind_architectural_label(self):
+        for proposal in (
+            "multiply the projection factor by 0.95 for every label",
+            "apply a coefficient of 0.95 to glyph dimensions",
+            "shrink glyph geometry by five percent",
+            "use nine tenths of the current glyph footprint",
+            "make every glyph 95% of its former dimensions",
+            "render each glyph at nineteen twentieths of its former dimensions",
+            "compress each label geometry by one twentieth",
+            "cap each caption at 95% of its former extent",
+            "give every caption nineteen parts of the former twenty",
+            "trim each caption by one part in twenty",
+        ):
+            plan = accepted_plan()
+            group = plan["repair_sufficiency"]["repair_groups"][0]
+            group["causal_mechanism"] = proposal
+            report = review(c0(), plan)
+            with self.subTest(proposal=proposal):
+                self.assertFalse(report["passed"])
+                self.assertIn("SERIAL_SCALAR_PATCH_RISK", report["risk_codes"])
+
+    def test_repeated_family_requires_structured_non_scalar_operations(self):
+        for mutation in ("missing", "scalar", "symbols", "unbound_marker"):
+            plan = accepted_plan()
+            group = plan["repair_sufficiency"]["repair_groups"][0]
+            if mutation == "missing":
+                group.pop("repair_operations")
+            elif mutation == "scalar":
+                group["scalar_parameters_changed"] = [{"target": "projection factor", "after": 0.95}]
+            elif mutation == "symbols":
+                group["repair_operations"][0].pop("target_symbols")
+            else:
+                group["implementation_diff_contract"]["required_added_markers"][0]["value"] = "unbound_symbol"
+            report = review(c0(), plan)
+            with self.subTest(mutation=mutation):
+                self.assertFalse(report["passed"])
+
+    def test_canonical_threshold_registry_is_independently_verified(self):
+        snapshot = canonical_threshold_snapshot()
+        snapshot["critic_matrix"] = dict(snapshot["critic_matrix"], threshold=8.0)
+        report = review(c0(), accepted_plan(), threshold_snapshot=snapshot)
+        self.assertFalse(report["passed"])
+        self.assertIn("CANONICAL_THRESHOLD_POLICY_WEAKENED", report["rejections"])
+        self.assertFalse(report["thresholds_unchanged"])
+        snapshot = canonical_threshold_snapshot()
+        snapshot["critic_matrix_sha256"] = "0" * 64
+        report = review(c0(), accepted_plan(), threshold_snapshot=snapshot)
+        self.assertIn("CANONICAL_THRESHOLD_POLICY_WEAKENED", report["rejections"])
+
+    def test_full_family_closure_requires_complete_collected_evidence(self):
+        plan = accepted_plan()
+        family = plan["repair_sufficiency"]["repair_groups"][0]["failure_family"]
+        family["complete_observable_set_collected"] = False
+        family["observable_exhaustive_collection_required"] = False
+        report = review(c0(), plan)
+        self.assertTrue(any("FULL_FAMILY_CLOSURE_REQUIRES_COMPLETE_COLLECTION" in x for x in report["rejections"]))
 
     def test_missing_exhaustive_observable_set_returns_insufficient_evidence(self):
         plan = accepted_plan()
         plan["repair_sufficiency"]["repair_groups"][0]["failure_family"]["complete_observable_set_collected"] = False
         report = review(c0(), plan)
         self.assertFalse(report["passed"])
-        self.assertEqual("INSUFFICIENT_EVIDENCE", report["outcome"])
+        self.assertEqual("REPAIR_PLAN_REJECTED", report["outcome"])
         self.assertTrue(any("OBSERVABLE_FAILURE_FAMILY_NOT_EXHAUSTIVELY_COLLECTED" in x for x in report["evidence_gaps"]))
+        self.assertTrue(any("FULL_FAMILY_CLOSURE_REQUIRES_COMPLETE_COLLECTION" in x for x in report["rejections"]))
 
     def test_unknown_cases_cannot_be_called_fully_closed(self):
         plan = accepted_plan()

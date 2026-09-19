@@ -420,6 +420,10 @@ def validate_report(report:dict,packet:dict)->list[str]:
         if report.get("confidence") not in ("medium","high"):errors.append("complete diagnosis requires medium/high confidence")
         if packet.get("run_conclusion") not in ("success","cancelled") and not blockers:errors.append("failed run complete diagnosis requires at least one blocker")
     if report.get("terminal_class")=="SUPERSEDED" and report.get("builder_action") not in {"FREEZE_AND_VALIDATE","NO_PRODUCT_CHANGE"}:errors.append("superseded run cannot authorize product repair")
+    repair_fields={"failure_family_history","full_domain_proofs","failure_frontier"}
+    from repair_sufficiency_critic import LOCKED_REPAIR_INTELLIGENCE,repair_intelligence_errors
+    if report.get("diagnosis_id") in LOCKED_REPAIR_INTELLIGENCE or repair_fields & set(report):
+        errors.extend(repair_intelligence_errors(report))
     return errors
 
 

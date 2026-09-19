@@ -85,6 +85,8 @@ jobs:
       - name: Require complete C0 diagnosis and bounded repair diff
         if: env.CANDIDATE_MODE == 'registered' && env.TASK_STATUS == 'FIX_REQUIRED' && env.NO_CANDIDATE_CHANGES != 'true'
         shell: bash
+        env:
+          INTEGRATION_BRANCH: codex/havenline-sequential-task-01
         run: |
           set -euo pipefail
           c0="Docs/Production/$TASK/C0_ROOT_CAUSE.json"

@@ -42,6 +42,23 @@ class WorkflowTests(unittest.TestCase):
         for suite in ('test_task09_harvesting', 'test_task09_integration', 'test_task10_world_transform', 'test_task10_integration'):
             self.assertIn(suite, source)
 
+    def test_c0r_and_exact_builder_gate_are_direct_build_prerequisites(self):
+        for name, build_job in (('world-transformation', 'first-builder-milestone'), ('isolated', 'built-pending-dependency')):
+            source = (WORKFLOWS / ('havenline-task10-' + name + '.yml')).read_text()
+            prebuild = source.split('  repair-sufficiency:', 1)[1].split('\n  ' + build_job + ':', 1)[0]
+            build = source.split('\n  ' + build_job + ':', 1)[1]
+            self.assertIn('repair_sufficiency_critic.py', prebuild)
+            self.assertIn('builder_repair_gate.py', prebuild)
+            self.assertIn('--base "$repair_base"', prebuild)
+            self.assertIn('--head "$GITHUB_SHA"', prebuild)
+            self.assertIn('INTEGRATION_BRANCH=codex/havenline-sequential-task-01', prebuild)
+            self.assertIn('git fetch --no-tags origin "$INTEGRATION_BRANCH"', prebuild)
+            self.assertIn('git rev-parse "origin/$INTEGRATION_BRANCH"', prebuild)
+            self.assertNotIn("WORKSTREAM_REGISTRY.json'))['integration_branch']", prebuild)
+            self.assertNotIn("REPAIR_PLAN.json'))['reconciled_integration_head']", prebuild)
+            self.assertIn('needs: repair-sufficiency', build[:300])
+            self.assertLess(prebuild.index('repair_sufficiency_critic.py'), prebuild.index('builder_repair_gate.py'))
+
     def test_bound_adapter_is_required(self):
         source = (WORKFLOWS / 'havenline-task10-adapter-preflight.yml').read_text()
         self.assertIn('--require-bound', source)

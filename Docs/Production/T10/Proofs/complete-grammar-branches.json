@@ -1,0 +1,21 @@
+{
+  "diagnostic_only": true,
+  "task_approved": false,
+  "runtime_release": "b10809",
+  "converter_url": "https://github.com/ggml-org/llama.cpp/blob/b10809/examples/json_schema_to_grammar.py",
+  "converter_sha256": "843de0e7c15cca3803ceaf0127dc03a373ac1692aadb0a47c21b8370a7fe86fd",
+  "failed_artifact_id": 10589437315,
+  "failed_artifact_sha256": "7bc954858ed0d489930975c75589c8f205a721f1c07ee22b0e32f371b892ff09",
+  "branches": {
+    "old": [
+      "alternative-0 ::= \"{\" space alternative-0-defects-kv \",\" space alternative-0-scores-kv space \"}\"",
+      "alternative-1 ::= \"{\" space alternative-1-defects-kv space \"}\"",
+      "root ::= alternative-0 | alternative-1"
+    ],
+    "fixed": [
+      "alternative-0 ::= \"{\" space alternative-0-observations-kv \",\" space alternative-0-defects-kv \",\" space alternative-0-coverage-complete-kv \",\" space alternative-0-confidence-kv \",\" space alternative-0-scores-kv space \"}\"",
+      "alternative-1 ::= \"{\" space alternative-1-observations-kv \",\" space alternative-1-defects-kv \",\" space alternative-1-coverage-complete-kv \",\" space alternative-1-confidence-kv \",\" space alternative-1-scores-kv space \"}\"",
+      "root ::= alternative-0 | alternative-1"
+    ]
+  }
+}
