@@ -35,11 +35,13 @@ class ArchitectureReleaseLockTests(unittest.TestCase):
             "V3.1 locked file changed: tools/havenline/production/builder_repair_gate.py",
             "V3.1 locked file changed: .github/workflows/havenline-c0-root-cause.yml",
             "V3.1 locked file changed: tools/havenline/production/c0_root_cause_advisor.py",
+            "V3.1 locked file changed: tools/havenline/production/workstream.py",
+            "V3.1 locked file changed: .github/workflows/havenline-candidate-guard.yml",
         ])
         self.assertEqual(result["architecture_version"], "3.1")
         self.assertEqual(result["accepted_source"], ACCEPTED_SOURCE)
         self.assertEqual(result["manifest_sha256"], EXPECTED_MANIFEST_SHA256)
-        self.assertEqual(result["locked_file_count"] - 7, result["locked_files_matching"])
+        self.assertEqual(result["locked_file_count"] - 9, result["locked_files_matching"])
         self.assertTrue(result["external_branch_protection_required_for_admin_tamper_resistance"])
 
     def test_bounded_v32_t09_is_superseded_only_by_t10_canary_delta(self):
@@ -47,7 +49,7 @@ class ArchitectureReleaseLockTests(unittest.TestCase):
         import validate_architecture_release_lock as v31
         from validate_architecture_v32_t09 import validate as validate_v32, policy_errors, POLICY, WORKFLOW
         result = validate_v32()
-        self.assertCountEqual(result["errors"], ["V3.1 locked file changed: tools/havenline/production/forward_execution.py", "V3.1 locked file changed: tools/havenline/production/mutation_canary.py", "V3.1 locked file changed: tools/havenline/production/failure_intelligence.py", "V3.1 locked file changed: tools/havenline/production/builder_repair_gate.py", "V3.1 locked file changed: .github/workflows/havenline-c0-root-cause.yml", "V3.1 locked file changed: tools/havenline/production/c0_root_cause_advisor.py"])
+        self.assertCountEqual(result["errors"], ["V3.1 locked file changed: tools/havenline/production/forward_execution.py", "V3.1 locked file changed: tools/havenline/production/mutation_canary.py", "V3.1 locked file changed: tools/havenline/production/failure_intelligence.py", "V3.1 locked file changed: tools/havenline/production/builder_repair_gate.py", "V3.1 locked file changed: .github/workflows/havenline-c0-root-cause.yml", "V3.1 locked file changed: tools/havenline/production/c0_root_cause_advisor.py", "V3.1 locked file changed: tools/havenline/production/workstream.py", "V3.1 locked file changed: .github/workflows/havenline-candidate-guard.yml"])
         accepted = json.loads(v31._git("show", f"{ACCEPTED_SOURCE}:{POLICY}").stdout)
         current = json.loads((v31.ROOT / POLICY).read_text())
         for field, value in (("mutable_action_tags_forbidden", False), ("tools", {}), ("action_pins", {})):
@@ -83,6 +85,11 @@ class ArchitectureReleaseLockTests(unittest.TestCase):
         self.assertEqual([],exact_owner_source_errors(SPECIALIST,SPECIALIST_BASE_SHA256,SPECIALIST_CURRENT_SHA256))
         self.assertTrue(exact_owner_source_errors(C0_ADVISOR,C0_ADVISOR_BASE_SHA256,'0'*64))
         self.assertTrue(exact_owner_source_errors(SPECIALIST,'0'*64,SPECIALIST_CURRENT_SHA256))
+
+    def test_b062_workstream_consumer_is_exact_hash_bound(self):
+        from validate_architecture_v32_t10 import WORKSTREAM,WORKSTREAM_BASE_SHA256,WORKSTREAM_CURRENT_SHA256,exact_owner_source_errors
+        self.assertEqual([],exact_owner_source_errors(WORKSTREAM,WORKSTREAM_BASE_SHA256,WORKSTREAM_CURRENT_SHA256))
+        self.assertTrue(exact_owner_source_errors(WORKSTREAM,WORKSTREAM_BASE_SHA256,'0'*64))
 
     def test_manifest_cannot_repoint_v31_to_a_new_source(self):
         cfg = copy.deepcopy(load_lock())

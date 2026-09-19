@@ -6,6 +6,23 @@ sys.path.insert(0, str(pathlib.Path(__file__).resolve().parents[1]))
 from specialist_critic_runner import response_schema, response_bounds_errors
 
 class ResponseBoundsTests(unittest.TestCase):
+    def test_each_grammar_alternative_is_a_complete_response(self):
+        schema=response_schema('T10',['one','two'])
+        for i, branch in enumerate(schema['oneOf']):
+            # The pinned converter visits each alternative independently, so
+            # sibling root constraints cannot supply any of these fields.
+            required={'observations','defects','coverage_complete','confidence','scores'}
+            self.assertEqual(required,set(branch['required']))
+            self.assertEqual(required,set(branch['properties']))
+            self.assertEqual('object',branch['type'])
+            self.assertEqual(2,branch['properties']['observations']['minItems'])
+            self.assertEqual(2,branch['properties']['observations']['maxItems'])
+            self.assertEqual(['low','medium','high'],branch['properties']['confidence']['enum'])
+            self.assertEqual('boolean',branch['properties']['coverage_complete']['type'])
+            self.assertEqual(['one','two'],branch['properties']['scores']['required'])
+            if i==0:self.assertEqual(9.0,branch['properties']['scores']['properties']['one']['exclusiveMinimum'])
+            self.assertFalse(branch['additionalProperties'])
+
     def test_t10_schema_preserves_scores_and_enforces_bounds(self):
         schema=response_schema('T10',['one','two'])
         self.assertEqual(schema['properties']['scores']['required'],['one','two'])

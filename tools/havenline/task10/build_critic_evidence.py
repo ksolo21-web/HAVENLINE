@@ -44,40 +44,55 @@ C7_SCOPE_SYNOPSIS = '''T10 C7 transaction/state-integrity context. Requirement I
 R01 stable ordered recipes/costs/prerequisites/presentation keys. R02 pure eligibility with exact blockers. R03 atomic authoritative debit and transition once. R04 stable identity rejects duplicate/stale/out-of-order commits. R05 truthful locked/ready/blocked/preview/committing/complete lifecycle; completion requires a T10-accepted authoritative receipt. R06 only physically delivered stored resources pay; carried harvest cannot. R07 monotonic branches, explicit reciprocal inverses only. R08 simulation owns resources, model owns state, view only presents. R09 deterministic component recovery rejects malformed state atomically; global saves belong to T14. R10 neutral branching fixtures; authored camp structures and main-loop binding belong to T11. R11 readable world response belongs to unchanged C1/C2/C3/C4 review and is not visually certified by C7 semantic rows. R12 bounded previews/events/nodes/history, unchanged state does not rebuild. R13 T05/T08/T09 approved and real authority bound; integration still requires owner acceptance. R14 C1/C2/C3/C4/C6/C7 every mandatory dimension >9.0 unrounded, G1-G14 and impacted regression, zero defects.
 T10 owns the local recipe/transaction progression. T11 owns authored camp binding, T12 global progression, T13 difficulty, and T14 global save integration. Preserve every genuine defect; this context does not direct a passing result.
 '''
-C7_ROWS = {
+C7_CLAIMS = {
     'R05_domain': [
-        'view lifecycle contains all frozen states','view enters ready lifecycle','valid preview enters preview lifecycle',
-        'prepared intent enters committing lifecycle','raw simulation receipt cannot complete before T10 accepts it','T10-accepted receipt completes lifecycle',
+        'R05_DOMAIN_LIFECYCLE_SET', 'R05_DOMAIN_READY', 'R05_DOMAIN_PREVIEW',
+        'R05_DOMAIN_COMMITTING', 'R05_DOMAIN_RAW_RECEIPT_REJECTED',
+        'R05_DOMAIN_ACCEPTED_RECEIPT_COMPLETES',
     ],
     'R05_integration': [
-        'locked lifecycle hides response geometry','view exposes explicit blocked lifecycle','blocked world response preserves exact reasons and shortfalls',
-        'same blocked state refreshes exact shortfall label','unaccepted receipt cannot stop pending flow or claim paid','accepted receipt stops flow and resets its bounded phase',
+        'R05_INTEGRATION_LOCKED_HIDDEN', 'R05_INTEGRATION_BLOCKED_EXPLICIT',
+        'R05_INTEGRATION_BLOCK_REASONS', 'R05_INTEGRATION_BLOCK_REFRESH',
+        'R05_INTEGRATION_UNACCEPTED_PENDING', 'R05_INTEGRATION_ACCEPTED_STOPS_FLOW',
     ],
     'R06_integration': [
-        'real harvesting commits to carried inventory','real carried harvest cannot pay T10','real deposit conserves delivered resources',
-        'real simulation exact stored debit','real insufficient stock cannot partially charge',
+        'R06_INTEGRATION_HARVEST_CARRIED', 'R06_INTEGRATION_CARRIED_CANNOT_PAY',
+        'R06_INTEGRATION_DEPOSIT_CONSERVES', 'R06_INTEGRATION_EXACT_STORED_DEBIT',
+        'R06_INTEGRATION_NO_PARTIAL_CHARGE',
     ],
 }
 
 
+def _selected_c7_claims(report, claims, report_name):
+    if report.get('candidate') is None or report.get('passed') is not True or report.get('failures'):
+        raise AssertionError(report_name+' report is stale or failed')
+    ids=list(claims)
+    if len(ids)!=len(set(ids)) or any(not isinstance(value,str) or not value for value in ids):
+        raise AssertionError(report_name+' C7 evidence ids must be unique non-empty strings')
+    rows=[]
+    for evidence_id in claims:
+        matches=[row for row in report.get('checks',[]) if isinstance(row,dict) and row.get('evidence_id') == evidence_id]
+        if len(matches)!=1 or type(matches[0].get('passed')) is not bool or matches[0]['passed'] is not True:
+            raise AssertionError(report_name+' selected C7 claim missing, duplicate or failed: '+evidence_id)
+        if not isinstance(matches[0].get('name'),str) or not matches[0]['name']:
+            raise AssertionError(report_name+' selected C7 claim has no diagnostic name: '+evidence_id)
+        rows.append({'evidence_id':evidence_id,'passed':True})
+    return rows
+
+
 def c7_context(domain, integration, candidate, domain_sha256, integration_sha256):
-    def selected(report, names, report_name):
-        if report.get('candidate') != candidate or report.get('passed') is not True or report.get('failures'):
-            raise AssertionError(report_name+' report is stale or failed')
-        rows=[]
-        for name in names:
-            matches=[row for row in report.get('checks',[]) if row.get('name')==name]
-            if len(matches)!=1 or type(matches[0].get('passed')) is not bool or matches[0]['passed'] is not True:
-                raise AssertionError(report_name+' selected C7 row missing, duplicate or failed: '+name)
-            rows.append({'name':name,'passed':True})
-        return rows
+    for report,name in ((domain,'domain'),(integration,'integration')):
+        if report.get('candidate') != candidate:
+            raise AssertionError(name+' report is stale or failed')
     sections={
-        'R05_domain':selected(domain,C7_ROWS['R05_domain'],'domain'),
-        'R05_integration':selected(integration,C7_ROWS['R05_integration'],'integration'),
-        'R06_integration':selected(integration,C7_ROWS['R06_integration'],'integration'),
+        'R05_domain':_selected_c7_claims(domain,C7_CLAIMS['R05_domain'],'domain'),
+        'R05_integration':_selected_c7_claims(integration,C7_CLAIMS['R05_integration'],'integration'),
+        'R06_integration':_selected_c7_claims(integration,C7_CLAIMS['R06_integration'],'integration'),
     }
     payload={'candidate':candidate,'requirement_ids_are_score_dimensions':False,'c7_score_dimensions':C7_DIMENSIONS,
-             'source_reports':{'domain-tests.json':domain_sha256,'integration-tests.json':integration_sha256},'selected_source_rows':sections}
+             'source_reports':{'domain-tests.json':domain_sha256,'integration-tests.json':integration_sha256},
+             'selection_contract':'producer_emitted_exact_evidence_ids',
+             'selected_source_rows':sections}
     return C7_SCOPE_SYNOPSIS+'\nSOURCE-BOUND SELECTED ROWS\n'+json.dumps(payload,sort_keys=True,separators=(',',':'))+'\n'
 
 

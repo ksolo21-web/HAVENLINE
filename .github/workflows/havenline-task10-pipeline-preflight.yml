@@ -27,11 +27,14 @@ jobs:
           python3 tools/havenline/task10/validate_world_transform.py --candidate "$GITHUB_SHA" --output pipeline-preflight/world-transform.json
           python3 tools/havenline/production/validate_migration.py > pipeline-preflight/migration.json
           python3 tools/havenline/task10/validate_post_t09_adapter.py --require-bound --output pipeline-preflight/adapter.json
-          git fetch origin codex/havenline-sequential-task-01
-          integration=$(git rev-parse FETCH_HEAD)
+          INTEGRATION_BRANCH=codex/havenline-sequential-task-01
+          git fetch --no-tags origin "$INTEGRATION_BRANCH"
+          INTEGRATION_HEAD=$(git rev-parse FETCH_HEAD)
+          export INTEGRATION_BRANCH INTEGRATION_HEAD
           base=$(python3 -c "import json; print(next(r for r in json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))['workstreams'] if r['task_id']=='T10')['base_commit'])")
-          python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$GITHUB_SHA" --integration-head "$integration" > pipeline-preflight/scope.json
-          python3 tools/havenline/production/builder_repair_gate.py --c0 Docs/Production/T10/C0_ROOT_CAUSE.json --plan Docs/Production/T10/REPAIR_PLAN.json --base c7a18d002fe8d0f3978370f3e4567ba88bfe17e8 --head "$GITHUB_SHA" --output pipeline-preflight/repair.json
+          python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$GITHUB_SHA" --integration-head "$INTEGRATION_HEAD" > pipeline-preflight/scope.json
+          repair_base=$(python3 -c "import json; print(json.load(open('Docs/Production/T10/REPAIR_PLAN.json'))['repair_base'])")
+          python3 tools/havenline/production/builder_repair_gate.py --c0 Docs/Production/T10/C0_ROOT_CAUSE.json --plan Docs/Production/T10/REPAIR_PLAN.json --base "$repair_base" --head "$GITHUB_SHA" --output pipeline-preflight/repair.json
           python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > pipeline-preflight/production-tests.log 2>&1
           python3 -m unittest discover -s tools/havenline/task10/tests -p 'test_*.py' > pipeline-preflight/task-tests.log 2>&1
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f

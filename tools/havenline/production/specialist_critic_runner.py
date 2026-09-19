@@ -99,6 +99,14 @@ def response_schema(task_id, dimensions):
                 'required':['defects'],
             },
         ]
+        # The pinned llama.cpp converter handles oneOf before sibling properties.
+        # Make each alternative a complete response schema so grammar generation
+        # cannot discard observations, coverage, confidence or score dimensions.
+        for branch in schema['oneOf']:
+            properties=json.loads(json.dumps(schema['properties']))
+            properties.update(branch['properties'])
+            branch.update(type='object', properties=properties,
+                          required=list(schema['required']), additionalProperties=False)
     return schema
 
 

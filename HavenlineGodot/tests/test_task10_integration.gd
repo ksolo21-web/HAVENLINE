@@ -95,8 +95,11 @@ class FakeSimulationAuthority:
 var checks: Array[Dictionary] = []
 var failures: Array[String] = []
 
-func check(label: String, passed: bool, detail: Variant = null) -> void:
-	checks.append({"name": label, "passed": passed, "detail": detail})
+func check(label: String, passed: bool, detail: Variant = null, evidence_id: String = "") -> void:
+	var row := {"name": label, "passed": passed, "detail": detail}
+	if not evidence_id.is_empty():
+		row["evidence_id"] = evidence_id
+	checks.append(row)
 	if not passed:
 		failures.append(label)
 
@@ -270,12 +273,12 @@ func run() -> void:
 	# R11 neutral reusable world-response layer: visuals are bounded and presentation-only.
 	var view_contract := TransformView.contract()
 	check("view retains frozen five-state core lifecycle", view_contract.lifecycle == ["locked", "ready", "preview", "committing", "complete"])
-	check("view exposes explicit blocked lifecycle", view_contract.blocked_lifecycle == "blocked")
+	check("view exposes explicit blocked lifecycle", view_contract.blocked_lifecycle == "blocked", null, "R05_INTEGRATION_BLOCKED_EXPLICIT")
 	check("view remains neutral and T11-safe", view_contract.neutral_framework_visuals_only and view_contract.t11_owns_final_camp_content)
 	check("view uses shape and color redundancy", view_contract.shape_and_color_redundancy and view_contract.world_response_shapes == ["perimeter_ring", "preview_volume", "status_label"])
 	check("view declares strict four-node visual budget", view_contract.visual_node_budget == 4)
 	check("view exposes bounded readability range", view_contract.readability_scale_range == [0.85, 1.35])
-	check("view declares camera-plane clearance and explicit label ordering", view_contract.label_camera_offset == Vector2(0.0, -190.0) and view_contract.label_max_width == 960.0 and is_equal_approx(float(view_contract.label_pixel_size), 0.0057) and view_contract.label_render_priority == 100 and view_contract.label_outline_render_priority == 99)
+	check("view declares constrained adaptive label layout and explicit ordering", view_contract.label_layout_policy == "constrained_screen_lanes_v1" and view_contract.label_dynamic_camera_lane and is_equal_approx(float(view_contract.label_min_readability_scale), 0.85) and float(view_contract.label_fit_slack_px) >= 1.0 and view_contract.label_max_width == 960.0 and is_equal_approx(float(view_contract.label_pixel_size), 0.0057) and view_contract.label_render_priority == 100 and view_contract.label_outline_render_priority == 99)
 
 	var visual_engine := configured_engine()
 	check("visual fixture target registers", visual_engine.register_target("visual-A", "seed"))
@@ -289,7 +292,7 @@ func run() -> void:
 	var beacon := view.get_node_or_null("T10WorldResponse/StatusLabel") as Label3D
 	var initial_view := view.descriptor()
 	check("world-response visuals build exactly once", initial_view.visual_build_count == 1 and initial_view.visual_node_count == 4 and visual_root != null and visual_root.get_child_count() == 3, initial_view)
-	check("locked lifecycle hides response geometry", not ring.visible and not ghost.visible and not beacon.visible)
+	check("locked lifecycle hides response geometry", not ring.visible and not ghost.visible and not beacon.visible, null, "R05_INTEGRATION_LOCKED_HIDDEN")
 	for glyph in [0xe000, 0xe001, 0xe002, 0xe003]:
 		check("resource symbol is available through actual Godot font fallback: %s" % glyph, TransformView.RESOURCE_SYMBOLS.has_char(glyph) and beacon.font.has_char(glyph))
 	var flow_texture_id: int = view._ring_material.emission_texture.get_instance_id()
@@ -305,10 +308,10 @@ func run() -> void:
 	check("ready lifecycle shows low source form and readable status", view.descriptor().lifecycle == "ready" and ring.visible and beacon.visible and ghost.visible and ghost.scale.y < 0.2)
 	var blocked_preview := visual_engine.preview_transform("framework_anchor_seed_to_foundation", "visual-A", {"wood": 7, "stone": 3})
 	check("blocked fixture preview is authoritative failure", not blocked_preview.passed and blocked_preview.errors.has("insufficient_resources") and blocked_preview.shortfalls == {"wood": 1, "stone": 1})
-	check("blocked world response preserves exact reasons and shortfalls", view.show_blocked(blocked_preview) and view.descriptor().lifecycle == "blocked" and view.descriptor().block_reasons.has("insufficient_resources") and view.descriptor().blocked_shortfalls == {"wood": 1, "stone": 1})
+	check("blocked world response preserves exact reasons and shortfalls", view.show_blocked(blocked_preview) and view.descriptor().lifecycle == "blocked" and view.descriptor().block_reasons.has("insufficient_resources") and view.descriptor().blocked_shortfalls == {"wood": 1, "stone": 1}, null, "R05_INTEGRATION_BLOCK_REASONS")
 	var changed_blocked := visual_engine.preview_transform("framework_anchor_seed_to_foundation", "visual-A", {"wood": 0, "stone": 0})
 	view.show_blocked(changed_blocked)
-	check("same blocked state refreshes exact shortfall label", beacon.text.contains("8 wood") and beacon.text.contains("4 stone"))
+	check("same blocked state refreshes exact shortfall label", beacon.text.contains("8 wood") and beacon.text.contains("4 stone"), null, "R05_INTEGRATION_BLOCK_REFRESH")
 	view.show_blocked(blocked_preview)
 	var applies_before_noop := view.visual_apply_count
 	view.show_blocked(blocked_preview)
@@ -348,7 +351,7 @@ func run() -> void:
 	forged_visual_ack.authority_source = "simulation"
 	forged_visual_ack.authority_applied = true
 	forged_visual_ack.accepted_by_world_transform = false
-	check("unaccepted receipt cannot stop pending flow or claim paid", not view.mark_complete(forged_visual_ack) and view.lifecycle == "committing" and view._ring_material.emission_enabled and beacon.text == pending_text)
+	check("unaccepted receipt cannot stop pending flow or claim paid", not view.mark_complete(forged_visual_ack) and view.lifecycle == "committing" and view._ring_material.emission_enabled and beacon.text == pending_text, null, "R05_INTEGRATION_UNACCEPTED_PENDING")
 	var beacon_before_pulse := ghost.scale
 	view._process(0.12)
 	check("committing target pulse changes shape without rebuilding nodes", ghost.scale != beacon_before_pulse and view.descriptor().visual_build_count == 1 and view.descriptor().visual_node_count == 4)
@@ -365,8 +368,8 @@ func run() -> void:
 	check("complete world response requires accepted authority receipt", view.mark_complete(visual_accepted, next_blocked_offer) and view.descriptor().lifecycle == "complete")
 	check("completion puts next-stage shortfalls first and preserves prerequisite", beacon.text.begins_with("NEXT — deliver missing resources") and beacon.text.contains("12 wood") and beacon.text.contains("8 stone") and beacon.text.contains("2 metal") and beacon.text.contains("harvesting online"))
 	check("complete lifecycle solidifies accepted target form", ring.visible and ghost.visible and beacon.visible and ghost.scale == Vector3.ONE and ghost.material_override.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED and beacon.text.contains("Paid:") and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and view.displayed_costs == {"wood": 8, "stone": 4})
-	check("label stays in its camera-plane lane above transparent response passes", beacon.offset == Vector2(0.0, -190.0) and beacon.render_priority == 100 and beacon.outline_render_priority == 99)
-	check("accepted receipt stops flow while retaining camera-lane maintenance", not view._ring_material.emission_enabled and view._ring_material.uv1_scale == Vector3.ONE and view._ring_material.uv1_offset == Vector3.ZERO and view.is_processing())
+	check("label preserves adaptive camera-lane render ordering", beacon.render_priority == 100 and beacon.outline_render_priority == 99 and beacon.pixel_size >= TransformView.LABEL_PIXEL_SIZE * TransformView.READABILITY_MIN - 0.000001 and beacon.pixel_size <= TransformView.LABEL_PIXEL_SIZE + 0.000001)
+	check("accepted receipt stops flow while retaining camera-lane maintenance", not view._ring_material.emission_enabled and view._ring_material.uv1_scale == Vector3.ONE and view._ring_material.uv1_offset == Vector3.ZERO and view.is_processing(), null, "R05_INTEGRATION_ACCEPTED_STOPS_FLOW")
 	var completion_text := beacon.text
 	check("repeated completion does not replay debit feedback", not view.mark_complete(visual_accepted) and beacon.text == completion_text and not view._ring_material.emission_enabled)
 	var accepted_form := ghost.scale
@@ -411,16 +414,16 @@ func run_real_authority() -> void:
 		for i in quantity:
 			sim.action = {"kind": "gather", "id": kind + "0", "position": Vector2.ZERO}
 			sim.perform_action(float(sim.tuning.gatherSecondsPerUnit[kind]))
-	check("real harvesting commits to carried inventory", sim.inventory.wood == 8 and sim.inventory.stone == 4 and sim.stored.wood == 0)
-	check("real carried harvest cannot pay T10", not model.preview_transform("framework_anchor_seed_to_foundation", "real-delivery", sim.stored.duplicate(true)).passed)
+	check("real harvesting commits to carried inventory", sim.inventory.wood == 8 and sim.inventory.stone == 4 and sim.stored.wood == 0, null, "R06_INTEGRATION_HARVEST_CARRIED")
+	check("real carried harvest cannot pay T10", not model.preview_transform("framework_anchor_seed_to_foundation", "real-delivery", sim.stored.duplicate(true)).passed, null, "R06_INTEGRATION_CARRIED_CANNOT_PAY")
 	for i in 12:
 		sim.action = {"kind": "deposit", "id": "furnace", "position": Vector2.ZERO}
 		sim.perform_action(float(sim.tuning.furnaceDepositSecondsPerUnit))
-	check("real deposit conserves delivered resources", sim.carried() == 0 and sim.stored.wood == 8 and sim.stored.stone == 4)
+	check("real deposit conserves delivered resources", sim.carried() == 0 and sim.stored.wood == 8 and sim.stored.stone == 4, null, "R06_INTEGRATION_DEPOSIT_CONSERVES")
 	var intent := model.commit_transform("real-1", "framework_anchor_seed_to_foundation", "real-delivery", sim.stored.duplicate(true))
 	var pending: Dictionary = JSON.parse_string(JSON.stringify(model.export_component_state()))
 	var ack := sim.commit_world_transform_debit(intent)
-	check("real simulation exact stored debit", ack.get("authority_applied", false) and sim.stored.wood == 0 and sim.stored.stone == 0 and sim.carried() == 0)
+	check("real simulation exact stored debit", ack.get("authority_applied", false) and sim.stored.wood == 0 and sim.stored.stone == 0 and sim.carried() == 0, null, "R06_INTEGRATION_EXACT_STORED_DEBIT")
 	var saved: Dictionary = JSON.parse_string(JSON.stringify(sim.snapshot()))
 	var recovered := Simulation.new()
 	check("real snapshot restores after debit before acceptance", recovered.restore(saved))
@@ -448,7 +451,7 @@ func run_real_authority() -> void:
 	check("legacy snapshot has empty component receipts", legacy_sim.restore(legacy) and legacy_sim.world_transform_debit_receipts.is_empty())
 	var insufficient := Simulation.new()
 	var before := insufficient.snapshot()
-	check("real insufficient stock cannot partially charge", not insufficient.commit_world_transform_debit(intent).get("authority_applied", false) and insufficient.snapshot() == before)
+	check("real insufficient stock cannot partially charge", not insufficient.commit_world_transform_debit(intent).get("authority_applied", false) and insufficient.snapshot() == before, null, "R06_INTEGRATION_NO_PARTIAL_CHARGE")
 	for field in ["transaction_id", "debits", "progression_tags", "presentation_key", "source_state", "target_revision"]:
 		var fresh := Simulation.new()
 		fresh.stored = {"wood": 100, "stone": 100, "metal": 100, "fuel": 100}

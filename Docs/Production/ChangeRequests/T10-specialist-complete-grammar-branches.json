@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "requesting_task": "T10",
+  "blocker": "C0-T10-B058",
+  "target_path": ["tools/havenline/production/specialist_critic_runner.py", "tools/havenline/production/tests/test_specialist_critic_runner.py", "tools/havenline/production/validate_architecture_v32_t10.py"],
+  "requested_change": "Materialize all common response properties and required fields in every T10 oneOf branch before the pinned llama.cpp converter compiles it; retain pass/defect alternative semantics and strict post-response checks.",
+  "reason": "Run 35458022974 C7 job 105939873831 emitted only defects and scores. Pinned b10809 converter reproduces omission of root sibling requirements when compiling oneOf. Artifact 10589437315 preserves the exact request and invalid response.",
+  "expected_behavior": "Every generated branch requires observations, defects, coverage_complete, confidence and every score dimension. Incomplete or low-confidence responses still fail.",
+  "tests_required": ["Compile old and repaired schema with pinned converter and verify required fields in both alternatives", "Preserve real scalar scores and actionable-defect rule", "Preserve non-T10 schema byte-equivalence", "Run production and T10 regression plus independent review"],
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "APPROVED_BOUNDED_COMPLETE_GRAMMAR_BRANCHES",
+  "authorization": "Kaleb authorized necessary bounded governance and workflow repairs to finish T10 without repeated permission requests.",
+  "forbidden_changes": ["No model/runtime/sampling/token-budget changes", "No score or confidence/coverage threshold weakening", "No assignment of missing review fields", "No task approval or runtime gameplay changes"]
+}
