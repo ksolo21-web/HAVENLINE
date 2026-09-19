@@ -22,18 +22,18 @@ EXPECTED_THRESHOLD_REGISTRY_HASHES = {
 LOCKED_REPAIR_INTELLIGENCE = {
     "C0-T10-c7a18d0-comprehensive-anti-loop": {
         "path": "Docs/Production/T10/C0_REPAIR_INTELLIGENCE_LOCK.json",
-        "sha256": "ec4ed82ef8ffc4211654a9b394e3279b7c0ee0c9378e28a8f50b6de583c96765",
+        "sha256": "255d2ffb61d0a980b5003ad4041193c1e1429338ac4346b0ebfece690d6f033d",
     }
 }
 ARCHITECTURAL_OPERATION_KINDS = {
     "ALGORITHM_REPLACEMENT", "EVIDENCE_ARCHITECTURE_CHANGE", "CONTRACT_REDIRECT", "STATE_MACHINE_CHANGE", "DATA_MODEL_CHANGE"
 }
-SCALAR_PATCH = re.compile(
+SCALAR_PATCH = re.compile((
     r"(?:reduce|decrease|increase|adjust|set|tune|tweak|change|alter|multiply|divide|apply|shrink|compress|contract|enlarge|expand|use|make|render|draw|halve).{0,120}(?:pixel[_ -]?size|width|height|scale|constant|threshold|timeout|limit|factor|ratio|coefficient|projection|glyph|label|text|geometry|footprint|dimension|percent|tenths?|twentieths?|half|quarter)"
     r"|(?:pixel[_ -]?size|width|height|scale|constant|threshold|timeout|limit|factor|ratio|coefficient|projection|glyph|label|text|geometry|footprint|dimension|percent|tenths?|twentieths?|half|quarter).{0,120}(?:reduce|decrease|increase|adjust|set|tune|tweak|change|alter|multiply|divide|apply|shrink|compress|contract|enlarge|expand|use|make|render|draw|halve)"
     r"|(?:multiply|divide|factor|ratio|coefficient|percent|tenths?|twentieths?|half|quarter).{0,80}\b\d+(?:\.\d+)?%?\b"
-    r"|\b\d+(?:\.\d+)?%\b.{0,80}(?:glyph|label|text|geometry|footprint|dimension|size|scale)",
-    re.IGNORECASE,
+    r"|\b\d+(?:\.\d+)?%\b.{0,80}(?:glyph|label|text|geometry|footprint|dimension|size|scale)"
+    ).replace("ratio", r"\bratio\b"), re.IGNORECASE,
 )
 
 

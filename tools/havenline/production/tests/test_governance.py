@@ -10,6 +10,23 @@ from workstream import approved_change_requests, authorized_change_request_targe
 from change_impact import calculate
 
 class GovernanceTests(unittest.TestCase):
+    def test_scalar_detector_distinguishes_ratio_from_integration(self):
+        from repair_sufficiency_critic import SCALAR_PATCH
+        self.assertIsNone(SCALAR_PATCH.search("CONTRACT_REDIRECT[INTEGRATION_BRANCH]"))
+        self.assertIsNotNone(SCALAR_PATCH.search("adjust the ratio to 0.95"))
+        self.assertIsNotNone(SCALAR_PATCH.search("reduce pixel_size to 0.0057"))
+
+    def test_shared_candidate_guard_supplies_pinned_builder_authority(self):
+        import yaml
+        from builder_repair_gate import PINNED_INTEGRATION_BRANCH, verify_integration_branch
+        workflow=yaml.safe_load((HERE.parents[4]/".github/workflows/havenline-candidate-guard.yml").read_text())
+        steps=workflow["jobs"]["validate-candidate"]["steps"]
+        callers=[step for step in steps if "--c0" in step.get("run","") and "builder_repair_gate.py" in step.get("run","")]
+        self.assertEqual(len(callers),1)
+        self.assertEqual(callers[0]["env"]["INTEGRATION_BRANCH"],PINNED_INTEGRATION_BRANCH)
+        self.assertTrue(verify_integration_branch(None))
+        self.assertTrue(verify_integration_branch("candidate-controlled-branch"))
+
     def test_candidate_validation_requires_integration_authority(self):
         from workstream import validate_candidate
         with patch("workstream.approved_change_requests") as requests:

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T10",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
-  "repair_intelligence_sha256": "b080aed1e8b9c86cc50e4c52d3efd17f3d8a4fbf66938ddca9b22ef09f8c557d",
+  "repair_intelligence_sha256": "02827ab46edbf5bf1b5e25fea6d4210a76c9113047123d22557a873d57a8eca3",
   "prior_attempt_sources": [
     {
       "failure_family_id": "projected-label-feasibility",
@@ -58,6 +58,15 @@
       "result_sha256": "d516e42c32cc4c14eade0753413133821a47d58c69f9238cd9997731e40cbf25",
       "result": "PARTIAL",
       "result_record": "canonical failure_frontier C0R admission observation"
+    },
+    {
+      "failure_family_id": "repair-sufficiency-self-attestation",
+      "attempt": 2,
+      "candidate": "e637dcc336eb72e4e3115305b92fb5ae8932a7b4",
+      "run_id": 35458019688,
+      "result": "PARTIAL",
+      "result_record": "canonical failure_frontier shared builder caller observation",
+      "result_sha256": "01538edb236419b9527870a76d967ca8d39cab8fbe8b98820c54d5c83e51907b"
     }
   ],
   "frontier_sources": [
@@ -72,6 +81,10 @@
     {
       "run_id": 35454636290,
       "candidate": "d238925040b9c58ee8337bed6397e9690218f06c"
+    },
+    {
+      "run_id": 35458019688,
+      "candidate": "e637dcc336eb72e4e3115305b92fb5ae8932a7b4"
     }
   ],
   "domain_proof": {
@@ -106,13 +119,19 @@
       "proof_relevant_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
       "derived_effect_bounds": {
         "_beacon.pixel_size": {
-          "dependency_symbols": ["projection", "label_scale"],
+          "dependency_symbols": [
+            "projection",
+            "label_scale"
+          ],
           "minimum_gte": 0.004845,
           "maximum_lte": 0.0057,
           "violation_count": 0
         },
         "_beacon.width": {
-          "dependency_symbols": ["projection", "wrap_width"],
+          "dependency_symbols": [
+            "projection",
+            "wrap_width"
+          ],
           "minimum_policy": "whole_word_width",
           "maximum_lte": 960.0,
           "violation_count": 0

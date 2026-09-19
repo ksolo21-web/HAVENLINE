@@ -38,6 +38,11 @@ WORKSTREAM_BASE_SHA256 = "9f322e6d02d4a0b2896a83bd0ef525803d6033db18e07fbe7aa06d
 WORKSTREAM_CURRENT_SHA256 = "38c28d372acead6fe416fe822333a3cb2b9881fe5ad6924b7b9677afd6bcfe81"
 WORKSTREAM_REQUEST = "Docs/Production/ChangeRequests/T10-c0r-workstream-authorization-schema.json"
 WORKSTREAM_REQUEST_SHA256 = "5c52bc606a1ac4d6cce06bcfa0420614879cb22948908d91f8ec945dee0ebb7d"
+GUARD = ".github/workflows/havenline-candidate-guard.yml"
+GUARD_BASE_SHA256 = "1aad9fba33b2a03d798065573c4bd9f9cd157dbf9559d60efb61913713a9c185"
+GUARD_CURRENT_SHA256 = "071cfb7143b42dc903919da4a6a340fcd9eb3ef71656667dde6b5a1da233716a"
+GUARD_REQUEST = "Docs/Production/ChangeRequests/T10-candidate-guard-integration-branch.json"
+GUARD_REQUEST_SHA256 = "c2557fbdd0d4ce12660997d12fc46c9b7abf1d8ed337a9832acee6f32908fb9c"
 BUILDER_DELTAS = [('    errors=[]\n', '    errors=[]\n    task=c0.get("task_id")\n    canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"\n    canonical_plan=f"Docs/Production/{task}/REPAIR_PLAN.json"\n    bookkeeping={canonical_c0,canonical_plan}\n    if plan.get("c0_report_path")!=canonical_c0 or plan.get("plan_path")!=canonical_plan:\n        errors.append("canonical C0 and repair plan paths required")\n'), ('        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n', '        if set(files)&bookkeeping:errors.append(f"{bid} bookkeeping cannot be causal files")\n        causal_files=set(files)-bookkeeping\n        if not causal_files:errors.append(f"{bid} non-bookkeeping causal files required")\n        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n'), ('        allowed.update(files)\n', '        allowed.update(causal_files)\n'), ('        plan_path=plan.get("plan_path")\n        allowed_actual=set(allowed)\n        if isinstance(plan_path,str) and plan_path:allowed_actual.add(plan_path)\n', '        allowed_actual=set(allowed)|bookkeeping\n'), ('            if not set(fix.get("files",[]))&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n', '            if not (set(fix.get("files",[]))-bookkeeping)&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n')]
 BUILDER_INHERIT_DELTAS = [
     ('import pathlib\n\nfrom lib import ROOT, changed_files\n', 'import pathlib\nimport os\nimport subprocess\n\nfrom lib import ROOT, changed_files\n'),
@@ -194,6 +199,7 @@ def validate() -> dict:
         f"V3.1 locked file changed: {C0_WORKFLOW}",
         f"V3.1 locked file changed: {C0_ADVISOR}",
         f"V3.1 locked file changed: {WORKSTREAM}",
+        f"V3.1 locked file changed: {GUARD}",
     }
     errors = [error for error in baseline["errors"] if error not in allowed]
     try:
@@ -245,6 +251,9 @@ def validate() -> dict:
         if c0r_builder_request.get("status")!="AUTHORIZED" or c0r_builder_request.get("blocker")!="C0R-T10-BUILDER-ENFORCEMENT":
             errors.append("Explicit canonical C0R builder enforcement authorization missing")
         errors += exact_owner_source_errors(WORKSTREAM,WORKSTREAM_BASE_SHA256,WORKSTREAM_CURRENT_SHA256)
+        errors += exact_owner_source_errors(GUARD,GUARD_BASE_SHA256,GUARD_CURRENT_SHA256)
+        if hashlib.sha256((v31.ROOT/GUARD_REQUEST).read_bytes()).hexdigest()!=GUARD_REQUEST_SHA256:
+            errors.append("Exact candidate guard branch authorization changed or missing")
         workstream_request=json.loads((v31.ROOT/WORKSTREAM_REQUEST).read_text())
         if hashlib.sha256((v31.ROOT/WORKSTREAM_REQUEST).read_bytes()).hexdigest()!=WORKSTREAM_REQUEST_SHA256:
             errors.append("Bounded C0R workstream authorization-schema record changed or missing")
@@ -289,7 +298,7 @@ def validate() -> dict:
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
-        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE, BUILDER, WORKSTREAM, C0_WORKFLOW, C0_ADVISOR, C0_DIAGNOSTICS, SPECIALIST],
+        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE, BUILDER, WORKSTREAM, GUARD, C0_WORKFLOW, C0_ADVISOR, C0_DIAGNOSTICS, SPECIALIST],
         "authorization_record": REQUEST,
         "c7_authorization_record": C7_REQUEST,
         "failure_packet_authorization_record": FAILURE_REQUEST,

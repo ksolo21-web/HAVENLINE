@@ -18,7 +18,10 @@
   "failure_family_history": [
     {
       "failure_family_id": "projected-label-feasibility",
-      "blocker_ids": ["C0-T10-B053", "C0-T10-B055"],
+      "blocker_ids": [
+        "C0-T10-B053",
+        "C0-T10-B055"
+      ],
       "prior_attempts": [
         {
           "strategy": "Reduce Label3D.width from 1000 to 960",
@@ -40,7 +43,9 @@
     },
     {
       "failure_family_id": "c7-requirement-dimension-context",
-      "blocker_ids": ["C0-T10-B057"],
+      "blocker_ids": [
+        "C0-T10-B057"
+      ],
       "prior_attempts": [
         {
           "strategy": "Exact human-readable R05/R06 row names plus report hashes",
@@ -54,7 +59,11 @@
     },
     {
       "failure_family_id": "c0-terminal-evidence-grounding",
-      "blocker_ids": ["C0-T10-B059", "C0-T10-B060", "C0-T10-B061"],
+      "blocker_ids": [
+        "C0-T10-B059",
+        "C0-T10-B060",
+        "C0-T10-B061"
+      ],
       "prior_attempts": [
         {
           "strategy": "Bound the C0 model packet semantically",
@@ -75,7 +84,9 @@
     },
     {
       "failure_family_id": "repair-sufficiency-self-attestation",
-      "blocker_ids": ["C0-T10-B062"],
+      "blocker_ids": [
+        "C0-T10-B062"
+      ],
       "prior_attempts": [
         {
           "strategy": "Source-bound C0R plus exact builder gate in both primary T10 build prerequisites",
@@ -84,6 +95,14 @@
           "candidate": "d238925040b9c58ee8337bed6397e9690218f06c",
           "run_id": 35454636290,
           "lesson": "The primary build prerequisites were correctly hardened, but the legacy workstream change-request consumer ran first in the candidate guard and adapter preflight and did not recognize the integrated bounded multi-target authorization schema."
+        },
+        {
+          "strategy": "Trusted integration-ref authorization consumer and exact bounded schema decoding",
+          "outcome": "PARTIAL",
+          "same_family": true,
+          "candidate": "e637dcc336eb72e4e3115305b92fb5ae8932a7b4",
+          "run_id": 35458019688,
+          "lesson": "Ownership now passes; the shared builder caller still omits the required integration branch environment. Replay all hosted invocation environments, not only the primary pre-build callers."
         }
       ]
     }
@@ -94,7 +113,7 @@
       "proof": {
         "required": true,
         "provided": true,
-        "method": "Bounded non-approval constrained-layout prototype executed the authoritative 6 devices × 6 lifecycle states × 6 camera angles matrix.",
+        "method": "Bounded non-approval constrained-layout prototype executed the authoritative 6 devices \u00d7 6 lifecycle states \u00d7 6 camera angles matrix.",
         "expected_cases": 216,
         "covered_cases": 216,
         "dimensions": {
@@ -116,8 +135,24 @@
         ],
         "proof_relevant_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
         "derived_effect_bounds": {
-          "_beacon.pixel_size": {"dependency_symbols": ["projection", "label_scale"], "minimum_gte": 0.004845, "maximum_lte": 0.0057, "violation_count": 0},
-          "_beacon.width": {"dependency_symbols": ["projection", "wrap_width"], "minimum_policy": "whole_word_width", "maximum_lte": 960.0, "violation_count": 0}
+          "_beacon.pixel_size": {
+            "dependency_symbols": [
+              "projection",
+              "label_scale"
+            ],
+            "minimum_gte": 0.004845,
+            "maximum_lte": 0.0057,
+            "violation_count": 0
+          },
+          "_beacon.width": {
+            "dependency_symbols": [
+              "projection",
+              "wrap_width"
+            ],
+            "minimum_policy": "whole_word_width",
+            "maximum_lte": 960.0,
+            "violation_count": 0
+          }
         },
         "verifier": "Read summary.json from artifact 10584940146 and require projection_count=216, failure_count=0, diagnostic_collection_passed=true, product_projection_passed=true, task_approved=false and reusable_for_approval=false."
       }
@@ -126,7 +161,7 @@
   "failure_frontier": {
     "complete": true,
     "diagnosed_through_candidate": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81",
-    "latest_observed_failed_candidate": "d238925040b9c58ee8337bed6397e9690218f06c",
+    "latest_observed_failed_candidate": "e637dcc336eb72e4e3115305b92fb5ae8932a7b4",
     "observations": [
       {
         "run_id": 35402388836,
@@ -188,6 +223,16 @@
           "the exact C0R/builder implementation tree passed local pre-build, cumulative post-build, 274 production tests, 115 T10 tests, and independent hostile review at 9.6/10"
         ],
         "reason": "This is the existing B062 admission/workflow family: a legacy authorization-schema consumer executes before or without the exact builder gate and falsely rejects the already-integrated bounded C0R authorization records."
+      },
+      {
+        "run_id": 35458019688,
+        "candidate": "e637dcc336eb72e4e3115305b92fb5ae8932a7b4",
+        "disposition": "BOUND_TO_EXISTING_GROUP",
+        "group_id": "c0r-source-bound-admission",
+        "evidence": [
+          "Candidate guard run 35458019688 job 105936658374 passed ownership and failed only with active integration branch does not match pinned canonical branch. Its environment contains INTEGRATION_HEAD but omits INTEGRATION_BRANCH; both primary T10 C0R pre-build jobs explicitly supplied it and passed."
+        ],
+        "reason": "Same B062 admission interface family; the caller must supply the authority required by the already-hardened callee."
       }
     ],
     "unclassified_failures": []
@@ -1143,8 +1188,8 @@
       "classification": "GOVERNANCE_DEFECT",
       "affected_object": "C0R repair sufficiency admission gate",
       "symptom": "The first C0R canary can accept a repeated repair after the plan self-declares incomplete history/frontier evidence, relabels a scalar adjustment as tooling, leaves the exact builder repair gate in a concurrent workflow job, or reaches a legacy path guard that falsely rejects the already-integrated bounded authorization schema before the exact builder gate executes.",
-      "root_cause": "C0R originally validated builder-authored claims without binding history/frontier/proof to independent sources, while the candidate guard and adapter preflight still consume only the legacy APPROVED + AUTHORIZED single-target change-request schema. Integrated C0R records use AUTHORIZED + APPROVED_BOUNDED_* with exact target arrays, so the stale consumer rejects their governance paths before or without the exact builder gate.",
-      "causal_fix": "Bind frontier, same-family attempt history and proof to a digest-locked source manifest with exact run/candidate/result hashes and a retained machine-readable proof summary; validate the lock in C0 and C0R, require machine-rendered symbol-bound architectural operations after two attempts, reject fixed scalar repairs, and permit a derived per-case sink only when its exact normalized RHS, dependencies and zero-violation bounds are bound to the proof artifact and exact proof-source commit/path/file hash. Require the current candidate's canonicalized whole proof source—excluding only four exact, locked metadata lines inside the static contract function—to match the proven source exactly. Validate reachable executable symbols, canonical thresholds, the pinned integration branch and the exact builder gate. Finally, make the shared workstream authorization consumer fail-closed while recognizing both the exact legacy schema and the integrated bounded multi-target schema, so earlier lifecycle guards cannot contradict C0R authority.",
+      "root_cause": "C0R originally validated builder-authored claims without binding history/frontier/proof to independent sources, while the candidate guard and adapter preflight still consume only the legacy APPROVED + AUTHORIZED single-target change-request schema. Integrated C0R records use AUTHORIZED + APPROVED_BOUNDED_* with exact target arrays, so the stale consumer rejects their governance paths before or without the exact builder gate. The shared candidate-guard caller also omits the branch environment required by the hardened builder interface.",
+      "causal_fix": "Bind frontier, same-family attempt history and proof to a digest-locked source manifest with exact run/candidate/result hashes and a retained machine-readable proof summary; validate the lock in C0 and C0R, require machine-rendered symbol-bound architectural operations after two attempts, reject fixed scalar repairs, and permit a derived per-case sink only when its exact normalized RHS, dependencies and zero-violation bounds are bound to the proof artifact and exact proof-source commit/path/file hash. Require the current candidate's canonicalized whole proof source\u2014excluding only four exact, locked metadata lines inside the static contract function\u2014to match the proven source exactly. Validate reachable executable symbols, canonical thresholds, the pinned integration branch and the exact builder gate. Finally, make the shared workstream authorization consumer fail-closed while recognizing both the exact legacy schema and the integrated bounded multi-target schema, so earlier lifecycle guards cannot contradict C0R authority. Supply the pinned branch at that shared invocation and test the actual workflow contract.",
       "files_to_change": [
         "tools/havenline/production/repair_sufficiency_critic.py",
         "tools/havenline/production/builder_repair_gate.py",
@@ -1169,7 +1214,8 @@
         "Docs/Production/WORKSTREAM_REGISTRY.json",
         "tools/havenline/production/tests/test_t10_activation_validation.py",
         "Docs/Production/T10/C0_ROOT_CAUSE.json",
-        "Docs/Production/T10/REPAIR_PLAN.json"
+        "Docs/Production/T10/REPAIR_PLAN.json",
+        ".github/workflows/havenline-candidate-guard.yml"
       ],
       "files_not_to_change": [
         "HavenlineGodot/scripts/world_transform.gd",
@@ -1182,7 +1228,8 @@
       ],
       "evidence": [
         "Independent C0R critic review of a8084aa scored 6.8/10 and demonstrated self-attested attempt/frontier bypasses, consumer-invented C7 regex identity, concurrent rather than prerequisite builder-gate execution, and unverified threshold registries.",
-        "Runs 35454636290 and 35454638560 on exact tree 44c3a07d failed on the same eight C0R governance paths because the legacy workstream consumer ignored integrated bounded multi-target authorization records."
+        "Runs 35454636290 and 35454638560 on exact tree 44c3a07d failed on the same eight C0R governance paths because the legacy workstream consumer ignored integrated bounded multi-target authorization records.",
+        "Candidate guard run 35458019688 job 105936658374 passed ownership and failed only with active integration branch does not match pinned canonical branch. Its environment contains INTEGRATION_HEAD but omits INTEGRATION_BRANCH; both primary T10 C0R pre-build jobs explicitly supplied it and passed."
       ],
       "verification": [
         "Hostile tests reject jointly erased C0/plan frontiers, false attempt counts, scalar euphemisms, undeclared scalar reassignments, comment/string-only diff markers, incomplete or forged full-domain proof, registry branch redirection, and weakened canonical threshold snapshots.",
