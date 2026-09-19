@@ -28,10 +28,130 @@ def _digest(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def review(c0: dict, plan: dict, c0_sha256: str | None = None) -> dict:
+def _group_review(group: dict, c0_blockers: dict[str, dict]) -> tuple[list[str], list[str], list[str]]:
     reject: list[str] = []
     evidence_gaps: list[str] = []
     risk_codes: list[str] = []
+
+    group_id = _text(group.get("group_id")) or "<missing-group>"
+    group_blockers = [str(x) for x in _list(group.get("blocker_ids")) if _text(x)]
+    family = _dict(group.get("failure_family"))
+    strategy = _text(group.get("strategy_kind")).upper()
+    same_family_attempt_count = group.get("same_family_attempt_count")
+    prior_attempts = _list(group.get("prior_attempts"))
+    blocker_coverage = _list(group.get("blocker_coverage"))
+    domain = _dict(group.get("full_domain_proof"))
+    preflights = _list(group.get("cheap_disproof_preflight"))
+    counterexamples = _list(group.get("counterexamples_considered"))
+    blast = _list(group.get("blast_radius_hypotheses"))
+
+    if group_id == "<missing-group>":
+        reject.append("GROUP_ID_REQUIRED")
+    if not group_blockers:
+        reject.append(f"{group_id}:BLOCKER_IDS_REQUIRED")
+    unknown_blocker_ids = sorted(set(group_blockers) - set(c0_blockers))
+    if unknown_blocker_ids:
+        reject.append(f"{group_id}:UNKNOWN_C0_BLOCKERS:{','.join(unknown_blocker_ids)}")
+
+    for field in ("id", "invariant"):
+        if not _text(family.get(field)):
+            reject.append(f"{group_id}:FAILURE_FAMILY_{field.upper()}_REQUIRED")
+    dimensions = _list(family.get("scope_dimensions"))
+    if not dimensions or any(not _text(x) for x in dimensions):
+        reject.append(f"{group_id}:FAILURE_FAMILY_SCOPE_DIMENSIONS_REQUIRED")
+    if not _list(family.get("known_failed_cases")):
+        reject.append(f"{group_id}:KNOWN_FAILED_CASES_REQUIRED")
+    unknown_cases = _list(family.get("unexecuted_or_unknown_cases"))
+
+    if strategy not in CAUSAL_STRATEGIES | NON_PRODUCT_STRATEGIES:
+        reject.append(f"{group_id}:STRATEGY_KIND_INVALID")
+    for key in ("causal_mechanism", "why_this_fixes_cause", "why_materially_different"):
+        if not _text(group.get(key)):
+            reject.append(f"{group_id}:{key.upper()}_REQUIRED")
+
+    if not isinstance(same_family_attempt_count, int) or same_family_attempt_count < 0:
+        reject.append(f"{group_id}:SAME_FAMILY_ATTEMPT_COUNT_INVALID")
+        same_family_attempt_count = 0
+    recorded_same_family = sum(1 for row in prior_attempts if isinstance(row, dict) and row.get("same_family") is True)
+    if recorded_same_family > same_family_attempt_count:
+        reject.append(f"{group_id}:PRIOR_ATTEMPTS_EXCEED_DECLARED_COUNT")
+    if same_family_attempt_count > 0 and not prior_attempts:
+        reject.append(f"{group_id}:PRIOR_ATTEMPTS_REQUIRED")
+    if same_family_attempt_count >= 2:
+        risk_codes.append("REPEATED_FAILURE_FAMILY")
+        if len(_text(group.get("why_materially_different"))) < 24:
+            reject.append(f"{group_id}:MATERIAL_DIFFERENCE_NOT_JUSTIFIED")
+
+    product_blockers = {
+        bid for bid in group_blockers
+        if c0_blockers.get(bid, {}).get("classification") == "PRODUCT_DEFECT"
+    }
+    if product_blockers and strategy in NON_PRODUCT_STRATEGIES:
+        reject.append(f"{group_id}:PRODUCT_DEFECT_REQUIRES_CAUSAL_PRODUCT_STRATEGY")
+
+    covered = [str(row.get("blocker_id")) for row in blocker_coverage if isinstance(row, dict) and row.get("blocker_id")]
+    if set(group_blockers) != set(covered) or len(covered) != len(set(covered)):
+        reject.append(f"{group_id}:GROUP_BLOCKERS_REQUIRE_EXACT_SUFFICIENCY_COVERAGE")
+    for row in blocker_coverage:
+        if not isinstance(row, dict):
+            reject.append(f"{group_id}:BLOCKER_COVERAGE_ENTRY_INVALID")
+            continue
+        bid = _text(row.get("blocker_id")) or "<missing>"
+        for key in ("why_fix_changes_cause", "expected_result", "failure_if_wrong", "cheap_disproof"):
+            if not _text(row.get(key)):
+                reject.append(f"{group_id}:{bid}:{key.upper()}_REQUIRED")
+
+    exhaustive_required = family.get("observable_exhaustive_collection_required") is True
+    complete_observable = family.get("complete_observable_set_collected") is True
+    if exhaustive_required and not complete_observable:
+        evidence_gaps.append(f"{group_id}:OBSERVABLE_FAILURE_FAMILY_NOT_EXHAUSTIVELY_COLLECTED")
+    if family.get("full_failure_family_closed_by_design") is True and unknown_cases:
+        reject.append(f"{group_id}:OVERCLAIMED_FAILURE_FAMILY_CLOSURE")
+
+    domain_required = domain.get("required") is True
+    domain_provided = domain.get("provided") is True
+    expected_cases = domain.get("expected_cases")
+    covered_cases = domain.get("covered_cases")
+    if domain_required and not domain_provided:
+        reject.append(f"{group_id}:FULL_DOMAIN_PROOF_REQUIRED")
+    if domain_provided:
+        if not _text(domain.get("method")):
+            reject.append(f"{group_id}:FULL_DOMAIN_PROOF_METHOD_REQUIRED")
+        if isinstance(expected_cases, int) and expected_cases > 0 and covered_cases != expected_cases:
+            reject.append(f"{group_id}:FULL_DOMAIN_PROOF_CASE_COUNT_MISMATCH")
+
+    if same_family_attempt_count >= 2 and strategy in SCALAR_STRATEGIES:
+        risk_codes.append("SERIAL_SCALAR_PATCH_RISK")
+        if not domain_provided:
+            reject.append(f"{group_id}:REPEATED_SCALAR_FIX_REQUIRES_FULL_DOMAIN_PROOF")
+
+    if same_family_attempt_count >= 1 and not counterexamples:
+        reject.append(f"{group_id}:COUNTEREXAMPLES_REQUIRED_AFTER_PRIOR_FAILURE")
+    for row in counterexamples:
+        if not isinstance(row, dict) or not _text(row.get("case")) or not _text(row.get("why_covered")):
+            reject.append(f"{group_id}:COUNTEREXAMPLE_ENTRY_INVALID")
+
+    if not preflights:
+        reject.append(f"{group_id}:CHEAP_DISPROOF_PREFLIGHT_REQUIRED")
+    for row in preflights:
+        if not isinstance(row, dict):
+            reject.append(f"{group_id}:CHEAP_DISPROOF_PREFLIGHT_ENTRY_INVALID")
+            continue
+        for key in ("name", "command", "falsifies"):
+            if not _text(row.get(key)):
+                reject.append(f"{group_id}:PREFLIGHT_{key.upper()}_REQUIRED")
+
+    if not blast:
+        reject.append(f"{group_id}:BLAST_RADIUS_HYPOTHESES_REQUIRED")
+
+    return reject, evidence_gaps, risk_codes
+
+
+def review(c0: dict, plan: dict, c0_sha256: str | None = None) -> dict:
+    reject: list[str] = []
+    evidence_gaps: list[str] = []
+    risk_codes: set[str] = set()
+    group_reports: list[dict] = []
 
     c0_ready = (
         c0.get("critic_id") == "C0"
@@ -61,125 +181,59 @@ def review(c0: dict, plan: dict, c0_sha256: str | None = None) -> dict:
     elif declared_c0_hash and len(declared_c0_hash) != 64:
         reject.append("C0_REPORT_HASH_INVALID")
 
+    c0_blockers = {
+        str(row.get("id")): row
+        for row in _list(c0.get("blockers"))
+        if isinstance(row, dict) and row.get("id")
+    }
+    if c0_ready and not c0_blockers:
+        reject.append("COMPLETE_FAILED_C0_REQUIRES_BLOCKERS")
+
     suff = _dict(plan.get("repair_sufficiency"))
     if not suff:
         reject.append("REPAIR_SUFFICIENCY_SECTION_REQUIRED")
-        suff = {}
+    groups = _list(suff.get("repair_groups"))
+    if not groups:
+        reject.append("REPAIR_GROUPS_REQUIRED")
 
-    family = _dict(suff.get("failure_family"))
-    strategy = _text(suff.get("strategy_kind")).upper()
-    same_family_attempt_count = suff.get("same_family_attempt_count")
-    prior_attempts = _list(suff.get("prior_attempts"))
-    blocker_coverage = _list(suff.get("blocker_coverage"))
-    domain = _dict(suff.get("full_domain_proof"))
-    preflights = _list(suff.get("cheap_disproof_preflight"))
-    counterexamples = _list(suff.get("counterexamples_considered"))
-    blast = _list(suff.get("blast_radius_hypotheses"))
-    residual_unknowns = _list(suff.get("residual_unknowns"))
+    assigned: list[str] = []
+    group_ids: list[str] = []
+    for raw_group in groups:
+        if not isinstance(raw_group, dict):
+            reject.append("REPAIR_GROUP_ENTRY_INVALID")
+            continue
+        group_id = _text(raw_group.get("group_id")) or "<missing-group>"
+        group_ids.append(group_id)
+        assigned.extend(str(x) for x in _list(raw_group.get("blocker_ids")) if _text(x))
+        group_reject, group_gaps, group_risks = _group_review(raw_group, c0_blockers)
+        reject.extend(group_reject)
+        evidence_gaps.extend(group_gaps)
+        risk_codes.update(group_risks)
+        group_reports.append({
+            "group_id": group_id,
+            "blocker_ids": [str(x) for x in _list(raw_group.get("blocker_ids")) if _text(x)],
+            "strategy_kind": _text(raw_group.get("strategy_kind")).upper(),
+            "same_family_attempt_count": raw_group.get("same_family_attempt_count"),
+            "rejections": sorted(set(group_reject)),
+            "evidence_gaps": sorted(set(group_gaps)),
+            "risk_codes": sorted(set(group_risks)),
+            "passed": not group_reject and not group_gaps,
+        })
+
+    if len(group_ids) != len(set(group_ids)):
+        reject.append("REPAIR_GROUP_IDS_MUST_BE_UNIQUE")
+    if len(assigned) != len(set(assigned)):
+        reject.append("C0_BLOCKER_ASSIGNED_TO_MULTIPLE_REPAIR_GROUPS")
+    if set(assigned) != set(c0_blockers):
+        reject.append("REPAIR_GROUPS_MUST_COVER_EVERY_C0_BLOCKER_EXACTLY_ONCE")
+
     threshold_changes = _list(suff.get("threshold_changes"))
-
-    for field in ("id", "invariant"):
-        if not _text(family.get(field)):
-            reject.append(f"FAILURE_FAMILY_{field.upper()}_REQUIRED")
-    dimensions = _list(family.get("scope_dimensions"))
-    if not dimensions or any(not _text(x) for x in dimensions):
-        reject.append("FAILURE_FAMILY_SCOPE_DIMENSIONS_REQUIRED")
-    known_failed = _list(family.get("known_failed_cases"))
-    if not known_failed:
-        reject.append("KNOWN_FAILED_CASES_REQUIRED")
-    unknown = _list(family.get("unexecuted_or_unknown_cases"))
-
-    if strategy not in CAUSAL_STRATEGIES | NON_PRODUCT_STRATEGIES:
-        reject.append("STRATEGY_KIND_INVALID")
-    if not _text(suff.get("causal_mechanism")):
-        reject.append("CAUSAL_MECHANISM_REQUIRED")
-    if not _text(suff.get("why_this_fixes_cause")):
-        reject.append("WHY_THIS_FIXES_CAUSE_REQUIRED")
-    if not _text(suff.get("why_materially_different")):
-        reject.append("WHY_MATERIALLY_DIFFERENT_REQUIRED")
-
-    if not isinstance(same_family_attempt_count, int) or same_family_attempt_count < 0:
-        reject.append("SAME_FAMILY_ATTEMPT_COUNT_INVALID")
-        same_family_attempt_count = 0
-    recorded_same_family = sum(1 for row in prior_attempts if isinstance(row, dict) and row.get("same_family") is True)
-    if recorded_same_family > same_family_attempt_count:
-        reject.append("PRIOR_ATTEMPTS_EXCEED_DECLARED_COUNT")
-    if same_family_attempt_count > 0 and not prior_attempts:
-        reject.append("PRIOR_ATTEMPTS_REQUIRED")
-    if same_family_attempt_count >= 2:
-        risk_codes.append("REPEATED_FAILURE_FAMILY")
-        if len(_text(suff.get("why_materially_different"))) < 24:
-            reject.append("MATERIAL_DIFFERENCE_NOT_JUSTIFIED")
-
-    product_blockers = {
-        str(row.get("id"))
-        for row in _list(c0.get("blockers"))
-        if isinstance(row, dict) and row.get("classification") == "PRODUCT_DEFECT"
-    }
-    if product_blockers and strategy in NON_PRODUCT_STRATEGIES:
-        reject.append("PRODUCT_DEFECT_REQUIRES_CAUSAL_PRODUCT_STRATEGY")
-
-    blocker_ids = {str(row.get("id")) for row in _list(c0.get("blockers")) if isinstance(row, dict) and row.get("id")}
-    covered = {str(row.get("blocker_id")) for row in blocker_coverage if isinstance(row, dict) and row.get("blocker_id")}
-    if blocker_ids != covered:
-        reject.append("EVERY_C0_BLOCKER_REQUIRES_SUFFICIENCY_COVERAGE")
-    for row in blocker_coverage:
-        if not isinstance(row, dict):
-            reject.append("BLOCKER_COVERAGE_ENTRY_INVALID")
-            continue
-        bid = _text(row.get("blocker_id")) or "<missing>"
-        for key in ("why_fix_changes_cause", "expected_result", "failure_if_wrong", "cheap_disproof"):
-            if not _text(row.get(key)):
-                reject.append(f"{bid}:{key.upper()}_REQUIRED")
-
-    exhaustive_required = family.get("observable_exhaustive_collection_required") is True
-    complete_observable = family.get("complete_observable_set_collected") is True
-    if exhaustive_required and not complete_observable:
-        evidence_gaps.append("OBSERVABLE_FAILURE_FAMILY_NOT_EXHAUSTIVELY_COLLECTED")
-    if family.get("full_failure_family_closed_by_design") is True and unknown:
-        reject.append("OVERCLAIMED_FAILURE_FAMILY_CLOSURE")
-
-    domain_required = domain.get("required") is True
-    domain_provided = domain.get("provided") is True
-    expected_cases = domain.get("expected_cases")
-    covered_cases = domain.get("covered_cases")
-    if domain_required and not domain_provided:
-        reject.append("FULL_DOMAIN_PROOF_REQUIRED")
-    if domain_provided:
-        if not _text(domain.get("method")):
-            reject.append("FULL_DOMAIN_PROOF_METHOD_REQUIRED")
-        if isinstance(expected_cases, int) and expected_cases > 0:
-            if covered_cases != expected_cases:
-                reject.append("FULL_DOMAIN_PROOF_CASE_COUNT_MISMATCH")
-
-    if same_family_attempt_count >= 2 and strategy in SCALAR_STRATEGIES:
-        risk_codes.append("SERIAL_SCALAR_PATCH_RISK")
-        if not domain_provided:
-            reject.append("REPEATED_SCALAR_FIX_REQUIRES_FULL_DOMAIN_PROOF")
-
-    if same_family_attempt_count >= 1 and not counterexamples:
-        reject.append("COUNTEREXAMPLES_REQUIRED_AFTER_PRIOR_FAILURE")
-    for row in counterexamples:
-        if not isinstance(row, dict) or not _text(row.get("case")) or not _text(row.get("why_covered")):
-            reject.append("COUNTEREXAMPLE_ENTRY_INVALID")
-
-    if not preflights:
-        reject.append("CHEAP_DISPROOF_PREFLIGHT_REQUIRED")
-    for row in preflights:
-        if not isinstance(row, dict):
-            reject.append("CHEAP_DISPROOF_PREFLIGHT_ENTRY_INVALID")
-            continue
-        for key in ("name", "command", "falsifies"):
-            if not _text(row.get(key)):
-                reject.append(f"PREFLIGHT_{key.upper()}_REQUIRED")
-
-    if not blast:
-        reject.append("BLAST_RADIUS_HYPOTHESES_REQUIRED")
     if threshold_changes:
         reject.append("CRITIC_OR_QUALITY_THRESHOLD_CHANGE_FORBIDDEN")
-
     if suff.get("loop_risk_acknowledged") is not True:
         reject.append("LOOP_RISK_ACKNOWLEDGEMENT_REQUIRED")
+    if not _list(suff.get("cross_group_interactions")):
+        reject.append("CROSS_GROUP_INTERACTIONS_REQUIRED")
 
     if c0_ready and reject:
         outcome = "REPAIR_PLAN_REJECTED"
@@ -191,14 +245,13 @@ def review(c0: dict, plan: dict, c0_sha256: str | None = None) -> dict:
         outcome = "REPAIR_PLAN_ACCEPTED"
         builder_action = "BUILD_BOUNDED_REPAIR"
 
-    risk_rank = 0
-    if same_family_attempt_count >= 1:
-        risk_rank = 1
-    if same_family_attempt_count >= 2 or "SERIAL_SCALAR_PATCH_RISK" in risk_codes:
+    max_attempts = max(
+        [g.get("same_family_attempt_count") for g in groups if isinstance(g, dict) and isinstance(g.get("same_family_attempt_count"), int)]
+        or [0]
+    )
+    risk_rank = 0 if max_attempts == 0 else 1
+    if max_attempts >= 2 or "SERIAL_SCALAR_PATCH_RISK" in risk_codes or reject:
         risk_rank = 2
-    if reject:
-        risk_rank = max(risk_rank, 2)
-    loop_risk = ["LOW", "MEDIUM", "HIGH"][risk_rank]
 
     return {
         "schema_version": 1,
@@ -212,12 +265,13 @@ def review(c0: dict, plan: dict, c0_sha256: str | None = None) -> dict:
         "failed_candidate": c0.get("failed_candidate"),
         "outcome": outcome,
         "builder_action": builder_action,
-        "loop_risk": loop_risk,
-        "risk_codes": sorted(set(risk_codes)),
+        "loop_risk": ["LOW", "MEDIUM", "HIGH"][risk_rank],
+        "risk_codes": sorted(risk_codes),
         "rejections": sorted(set(reject)),
         "evidence_gaps": sorted(set(evidence_gaps)),
-        "full_blocker_coverage": blocker_ids == covered and bool(blocker_ids),
-        "same_family_attempt_count": same_family_attempt_count,
+        "group_reports": group_reports,
+        "group_count": len(group_reports),
+        "full_blocker_coverage": set(assigned) == set(c0_blockers) and len(assigned) == len(set(assigned)) and bool(c0_blockers),
         "thresholds_unchanged": not threshold_changes,
         "may_approve_task": False,
         "may_score_gameplay": False,
