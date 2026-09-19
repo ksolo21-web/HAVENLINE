@@ -14,7 +14,6 @@ const READABILITY_MAX := 1.35
 const PULSE_HZ := 1.4
 const LABEL_CAMERA_OFFSET := Vector2(0.0, -190.0)
 const LABEL_MAX_WIDTH := 960.0
-const LABEL_MIN_WRAP_WIDTH := 180.0
 const LABEL_PIXEL_SIZE := 0.0057
 const LABEL_RENDER_PRIORITY := 100
 const LABEL_OUTLINE_RENDER_PRIORITY := 99
@@ -344,6 +343,15 @@ func _label_size_for_wrap(pixels_per_label_unit: float, wrap_width: float) -> Ve
 	var measured := _beacon.font.get_multiline_string_size(_beacon.text, HORIZONTAL_ALIGNMENT_CENTER, wrap_width, _beacon.font_size)
 	return (measured + Vector2(_beacon.outline_size * 2.0, _beacon.outline_size * 2.0)) * pixels_per_label_unit
 
+func _minimum_word_wrap_width() -> float:
+	var longest := 1.0
+	for line in _beacon.text.split("\n"):
+		for token in String(line).split(" ", false):
+			if token.is_empty():
+				continue
+			longest = maxf(longest, _beacon.font.get_string_size(token, HORIZONTAL_ALIGNMENT_LEFT, -1, _beacon.font_size).x)
+	return longest
+
 func _rect_clearance(label_rect: Rect2, response_rect: Rect2) -> float:
 	var horizontal_gap := maxf(maxf(response_rect.position.x - label_rect.end.x, label_rect.position.x - response_rect.end.x), 0.0)
 	var vertical_gap := maxf(maxf(response_rect.position.y - label_rect.end.y, label_rect.position.y - response_rect.end.y), 0.0)
@@ -367,12 +375,14 @@ func _label_candidate(lane: String, response: Rect2, frame: Rect2, gap: float, p
 			available_height = frame.size.y
 		_:
 			return {"valid": false, "lane": lane, "failure": "unknown_lane"}
+	var minimum_wrap_width := _minimum_word_wrap_width()
 	var diagnostic := {
 		"valid": false,
 		"lane": lane,
 		"available_width": available_width,
 		"available_height": available_height,
-		"minimum_wrap_width": LABEL_MIN_WRAP_WIDTH,
+		"minimum_wrap_width": minimum_wrap_width,
+		"minimum_readability_scale": READABILITY_MIN,
 	}
 	if available_width <= 0.0 or available_height <= 0.0:
 		diagnostic["failure"] = "no_lane_space"
@@ -380,28 +390,26 @@ func _label_candidate(lane: String, response: Rect2, frame: Rect2, gap: float, p
 	var outline_units := float(_beacon.outline_size) * 2.0
 	var max_wrap_width := available_width / pixels_per_label_unit - outline_units - 1.0
 	diagnostic["max_wrap_width"] = max_wrap_width
-	if max_wrap_width < LABEL_MIN_WRAP_WIDTH:
-		diagnostic["failure"] = "wrap_width_below_minimum"
-		return diagnostic
-	var wrap_width := minf(LABEL_MAX_WIDTH, max_wrap_width)
+	# Preserve whole words. If the lane is narrower than the longest word,
+	# measure that truthful lower bound and let the bounded readability scale
+	# decide whether the lane is still legal.
+	var wrap_width := minf(LABEL_MAX_WIDTH, maxf(minimum_wrap_width, max_wrap_width))
 	var label_size := _label_size_for_wrap(pixels_per_label_unit, wrap_width)
 	var fit_attempts := 1
-	# Label3D/font shaping can exceed the requested wrap width because words,
-	# glyph fallback and outline metrics are authoritative. Search the actual
-	# measured result instead of treating the requested width as proof of fit.
-	while label_size.x > available_width + 0.01 and wrap_width > LABEL_MIN_WRAP_WIDTH:
-		wrap_width = maxf(LABEL_MIN_WRAP_WIDTH, wrap_width - 8.0)
+	while label_size.x > available_width + 0.01 and wrap_width > minimum_wrap_width + 0.01:
+		wrap_width = maxf(minimum_wrap_width, wrap_width - 8.0)
 		label_size = _label_size_for_wrap(pixels_per_label_unit, wrap_width)
 		fit_attempts += 1
+	var required_scale := minf(1.0, minf(available_width / maxf(label_size.x, 0.01), available_height / maxf(label_size.y, 0.01)))
 	diagnostic["wrap_width"] = wrap_width
 	diagnostic["fit_attempts"] = fit_attempts
+	diagnostic["unscaled_label_size"] = [label_size.x, label_size.y]
+	diagnostic["required_scale"] = required_scale
+	if required_scale + 0.0001 < READABILITY_MIN:
+		diagnostic["failure"] = "required_scale_below_readability_floor"
+		return diagnostic
+	label_size *= required_scale
 	diagnostic["label_size"] = [label_size.x, label_size.y]
-	if label_size.x > available_width + 0.01:
-		diagnostic["failure"] = "label_too_wide_after_search"
-		return diagnostic
-	if label_size.y > available_height + 0.01:
-		diagnostic["failure"] = "label_too_tall_after_search"
-		return diagnostic
 	var half := label_size * 0.5
 	var desired := response.get_center()
 	match lane:
@@ -433,6 +441,8 @@ func _label_candidate(lane: String, response: Rect2, frame: Rect2, gap: float, p
 		return diagnostic
 	diagnostic["valid"] = true
 	diagnostic["placement_found"] = true
+	diagnostic["label_scale"] = required_scale
+	diagnostic["effective_pixels_per_label_unit"] = pixels_per_label_unit * required_scale
 	diagnostic["label_size_vector"] = label_size
 	diagnostic["desired_center_vector"] = desired
 	diagnostic["label_rect_value"] = label_rect
@@ -442,7 +452,7 @@ func _label_projection(active_camera: Camera3D) -> Dictionary:
 	var viewport_size := Vector2(get_viewport().get_visible_rect().size)
 	var base := active_camera.unproject_position(_beacon.global_position)
 	var camera_up := active_camera.global_transform.basis.y.normalized()
-	var probe := active_camera.unproject_position(_beacon.global_position + camera_up * _beacon.pixel_size * 100.0)
+	var probe := active_camera.unproject_position(_beacon.global_position + camera_up * LABEL_PIXEL_SIZE * 100.0)
 	var pixels_per_label_unit := maxf(0.01, absf(probe.y - base.y) / 100.0)
 	var response := _projected_response_rect(active_camera)
 	var gap := maxf(LABEL_MIN_CLEARANCE_PX, viewport_size.y * 0.015)
@@ -468,7 +478,7 @@ func _label_projection(active_camera: Camera3D) -> Dictionary:
 		candidate["gap"] = gap
 		candidate["safe_inset"] = inset
 		candidate["attempts"] = attempts
-		candidate["offset"] = (candidate.desired_center - base) / pixels_per_label_unit
+		candidate["offset"] = (candidate.desired_center - base) / float(candidate.effective_pixels_per_label_unit)
 		return candidate
 	# Fail closed when no legal lane exists. Keep a deterministic visible fallback
 	# only so the validator can report the impossible geometry without inventing a pass.
@@ -490,6 +500,8 @@ func _label_projection(active_camera: Camera3D) -> Dictionary:
 		"gap": gap,
 		"safe_inset": inset,
 		"attempts": attempts,
+		"label_scale": 1.0,
+		"effective_pixels_per_label_unit": pixels_per_label_unit,
 	}
 
 func _update_camera_lane() -> void:
@@ -498,6 +510,7 @@ func _update_camera_lane() -> void:
 		return
 	var projection := _label_projection(active_camera)
 	_beacon.width = float(projection.wrap_width)
+	_beacon.pixel_size = LABEL_PIXEL_SIZE * float(projection.get("label_scale", 1.0))
 	_beacon.offset = projection.offset
 
 func projected_readability(active_camera: Camera3D) -> Dictionary:
@@ -525,6 +538,8 @@ func projected_readability(active_camera: Camera3D) -> Dictionary:
 		"placement_found": placement_found,
 		"layout_lane": String(projection.get("lane", "none")),
 		"label_wrap_width": float(projection.get("wrap_width", LABEL_MAX_WIDTH)),
+		"label_scale": float(projection.get("label_scale", 1.0)),
+		"minimum_readability_scale": READABILITY_MIN,
 		"layout_attempts": projection.get("attempts", []),
 		"label_offset": [_beacon.offset.x, _beacon.offset.y],
 		"passed": placement_found and not overlap and in_frame and clearance + 0.01 >= float(projection.gap) and priority_ok,
