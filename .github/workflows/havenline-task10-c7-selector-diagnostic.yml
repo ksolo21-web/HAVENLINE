@@ -1,0 +1,130 @@
+name: Havenline T10 C7 selector diagnostic replay
+
+on:
+  push:
+    branches: ['havenline/T10-c7-selector-prototype']
+    paths:
+      - 'tools/havenline/task10/build_critic_evidence.py'
+      - 'tools/havenline/task10/tests/test_build_critic_evidence.py'
+      - '.github/workflows/havenline-task10-c7-selector-diagnostic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: havenline-t10-c7-selector-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  replay:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      FAILED_RUN_ID: '35444671480'
+      FAILED_CANDIDATE: '81fbc7958ceb69b711f8be60add48b4510d3520e'
+      FAILED_ARTIFACT: 'havenline-task10-isolated-81fbc7958ceb69b711f8be60add48b4510d3520e'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Prove bounded prototype-only diff
+        run: |
+          set -euo pipefail
+          git cat-file -e "$FAILED_CANDIDATE^{commit}"
+          mapfile -t changed < <(git diff --name-only 19ccc6faf4152c62c99295357f038062301ae165 HEAD)
+          printf '%s\n' "${changed[@]}"
+          python3 - "${changed[@]}" <<'PY'
+          import sys
+          allowed={
+            'tools/havenline/task10/build_critic_evidence.py',
+            'tools/havenline/task10/tests/test_build_critic_evidence.py',
+            '.github/workflows/havenline-task10-c7-selector-diagnostic.yml',
+          }
+          changed=set(sys.argv[1:])
+          assert changed and changed <= allowed,(changed,allowed)
+          PY
+
+      - name: Preserve prototype tooling then restore exact failed candidate source
+        run: |
+          set -euo pipefail
+          mkdir -p /tmp/t10-c7-prototype
+          cp tools/havenline/task10/build_critic_evidence.py /tmp/t10-c7-prototype/
+          cp tools/havenline/task10/tests/test_build_critic_evidence.py /tmp/t10-c7-prototype/
+          git checkout --detach "$FAILED_CANDIDATE"
+          cp /tmp/t10-c7-prototype/build_critic_evidence.py tools/havenline/task10/build_critic_evidence.py
+          cp /tmp/t10-c7-prototype/test_build_critic_evidence.py tools/havenline/task10/tests/test_build_critic_evidence.py
+          test "$(git rev-parse HEAD)" = "$FAILED_CANDIDATE"
+
+      - name: Run focused hostile selector tests
+        run: |
+          set -euo pipefail
+          python3 -m unittest tools.havenline.task10.tests.test_build_critic_evidence -v
+
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.FAILED_RUN_ID }}
+          name: ${{ env.FAILED_ARTIFACT }}
+          path: replay-evidence
+
+      - name: Replay exact failed packaging input through prototype
+        run: |
+          set -euo pipefail
+          rm -rf critic-input replay-output
+          python3 tools/havenline/task10/build_critic_evidence.py \
+            --candidate "$FAILED_CANDIDATE" \
+            --evidence-root replay-evidence
+          python3 tools/havenline/production/critic_harness.py performance \
+            --candidate "$FAILED_CANDIDATE" \
+            --record critic-input/performance.json > replay-evidence/C6.json
+          python3 tools/havenline/task10/validate_critic_readiness.py \
+            --evidence-root replay-evidence \
+            --candidate "$FAILED_CANDIDATE" \
+            --output replay-evidence/critic-readiness.json
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          candidate=os.environ['FAILED_CANDIDATE']
+          ready=json.loads(Path('replay-evidence/critic-readiness.json').read_text())
+          c7=Path('critic-input/c7-brief.txt').read_text()
+          assert ready.get('passed') is True and ready.get('isolated_critic_input_ready') is True,ready
+          assert 'stable_evidence_ids_with_anchored_semantic_matchers' in c7
+          assert 'R05_INTEGRATION_ACCEPTED_STOPS_FLOW' in c7
+          assert 'accepted receipt stops flow while retaining camera-lane maintenance' in c7
+          out={
+            'schema_version':1,
+            'task':'T10',
+            'mode':'diagnostic_exact_failed_artifact_replay',
+            'failed_run_id':int(os.environ['FAILED_RUN_ID']),
+            'failed_candidate':candidate,
+            'selector_prototype_source':os.environ['GITHUB_SHA'],
+            'focused_tests_passed':True,
+            'exact_failed_artifact_packaging_replay_passed':True,
+            'critic_readiness_replay_passed':True,
+            'task_approved':False,
+            'integration_allowed':False,
+            'critic_scores_reusable':False,
+            'approval_evidence_reusable':False,
+          }
+          Path('replay-output').mkdir()
+          Path('replay-output/summary.json').write_text(json.dumps(out,indent=2)+'\n')
+          print(json.dumps(out,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-T10-C7-selector-diagnostic-${{ github.sha }}
+          path: |
+            replay-output/
+            replay-evidence/critic-readiness.json
+            replay-evidence/C6.json
+            critic-input/c7-brief.txt
+            critic-input/C7-manifest.json
+          if-no-files-found: warn
+          retention-days: 30
