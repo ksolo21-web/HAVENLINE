@@ -421,8 +421,7 @@
         "tools/havenline/production/tests/test_architecture_release_lock.py",
         ".github/workflows/havenline-production-governance.yml",
         "Docs/Production/WORKSTREAM_REGISTRY.json",
-        "tools/havenline/production/tests/test_t10_activation_validation.py",
-        "Docs/Production/ChangeRequests/T10-c0-decoded-complete-evidence.json"
+        "tools/havenline/production/tests/test_t10_activation_validation.py"
       ],
       "verification": [
         "Hostile regression with 50 branch/critic/defect noise lines before the exact T10 packaging traceback retains build_critic_evidence.py, AssertionError and terminal exit context while excluding the early noise.",
@@ -463,8 +462,7 @@
         ".github/workflows/havenline-production-governance.yml",
         "Docs/Production/WORKSTREAM_REGISTRY.json",
         "tools/havenline/production/tests/test_t10_activation_validation.py",
-        "Docs/Production/ChangeRequests/T10-c0-grounding-regression-contract.json",
-        "Docs/Production/ChangeRequests/T10-c0-decoded-complete-evidence.json"
+        "Docs/Production/ChangeRequests/T10-c0-grounding-regression-contract.json"
       ],
       "causal_change": "For T10, require every evidence item to cite an exact retained SOURCE | EXACT_QUOTE and every files_to_change entry to equal a tracked repository path; reject the diagnosis before publication when either binding fails. Share validated hash/identity-bound decoded job logs and per-record scalar strings between projection and grounding; reject cross-job joins, malformed envelopes and altered source hashes. Correct quotation binding does not accept unsupported causal advice.",
       "verification": [
@@ -500,7 +498,6 @@
         ".github/workflows/havenline-candidate-guard.yml",
         ".github/workflows/havenline-task10-pipeline-preflight.yml",
         "tools/havenline/task10/tests/test_builder_workflow_callers.py",
-        "Docs/Production/ChangeRequests/T10-c0r-structured-mechanism-detection.json",
         "tools/havenline/production/verify_python_repair_bindings.py",
         "tools/havenline/production/tests/test_python_repair_bindings.py"
       ],
@@ -520,7 +517,6 @@
         ".github/workflows/havenline-task10-isolated.yml",
         "tools/havenline/task10/tests/test_benchmark_supervisor.py",
         "tools/havenline/task10/tests/test_task10_workflows.py",
-        "Docs/Production/ChangeRequests/T10-benchmark-liveness-contract.json",
         "Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json",
         "tools/havenline/production/validate_architecture_v32_t10.py",
         "Docs/Production/WORKSTREAM_REGISTRY.json",
@@ -2726,7 +2722,7 @@
     "threshold_changes": [],
     "loop_risk_acknowledged": true
   },
-  "reconciled_integration_head": "e00269405eea513c94f6ef023fab2855ef0fc734",
+  "reconciled_integration_head": "0931e8794fee2690845ba83f92e7209d160f4a76",
   "inherited_noncausal_files": [
     "Docs/Production/ChangeRequests/T10-c0r-workstream-authorization-schema.json",
     "Docs/Production/ChangeRequests/T10-c0-terminal-evidence-priority.json",
@@ -2736,6 +2732,10 @@
     "Docs/Production/ChangeRequests/T10-repair-base-inherited-governance.json",
     "Docs/Production/ChangeRequests/T10-candidate-guard-integration-branch.json",
     "Docs/Production/ChangeRequests/T10-specialist-complete-grammar-branches.json",
-    "Docs/Production/ChangeRequests/T10-benchmark-diagnostic.json"
+    "Docs/Production/ChangeRequests/T10-benchmark-diagnostic.json",
+    "Docs/Production/ChangeRequests/T10-benchmark-liveness-contract.json",
+    "Docs/Production/ChangeRequests/T10-c0-decoded-complete-evidence.json",
+    "Docs/Production/ChangeRequests/T10-c0r-structured-mechanism-detection.json",
+    "Docs/Production/ChangeRequests/T10-repeated-python-source-review.json"
   ]
 }

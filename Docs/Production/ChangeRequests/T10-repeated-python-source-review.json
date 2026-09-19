@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
+  "decision": "ACCEPTED_BOUNDED_SOURCE",
+  "non_voting": true,
+  "task_approved": false,
+  "thresholds_unchanged": true,
+  "runtime_model_contracts_unchanged": true,
+  "c0_sha256": "ed42b4ee82efc9d5c884659263725089146acab4d192c02e98f857ff81264cd5",
+  "canonical_inherited_paths": [
+    "Docs/Production/ChangeRequests/T10-benchmark-liveness-contract.json",
+    "Docs/Production/ChangeRequests/T10-c0-decoded-complete-evidence.json",
+    "Docs/Production/ChangeRequests/T10-c0r-structured-mechanism-detection.json",
+    "Docs/Production/ChangeRequests/T10-repeated-python-source-review.json"
+  ],
+  "independent_review": {
+    "reviewer": "/root/authorization_critic",
+    "review_id": "T10-owner-c149fa03-source-authority",
+    "reviewed_commit": "dae8530875b5bbf920679c34910b41a88163d091",
+    "reviewed_tree": "9c53e38e080c4fd21ac4845baed23d55d84dd052",
+    "evidence_sha256": "46178c778500417f211c66216264c6d4fbb6adf6234c9d561abc42bfa52097aa",
+    "reviewed_local_commit": "c149fa03ebf6344d322ecd0531982942025ec13c",
+    "score": 9.5,
+    "remote_identity_mapping": "Git data commit has identical cryptographic tree to the independently reviewed local source; exact remote tree and parents verified before this record was authored."
+  },
+  "bindings": [
+    {
+      "group_id": "c0-semantic-projection-grounding",
+      "failure_family_id": "c0-terminal-evidence-grounding",
+      "comparison_base": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+      "path": "tools/havenline/production/c0_root_cause_advisor.py",
+      "operation_contract_sha256": "011af99cfb4136c641c140b2b7fa41f85489a36faa0fa5ff36e2a57143bdc8f8",
+      "before_sha256": "8fcb94cdc74b879627596fd520960b0010347ff2d3600663dbff51530f99f7a0",
+      "after_sha256": "f375814f19399b11e1228f1e2af90ad2f3aa80a955009e57649b0df4f62a25f2",
+      "before_mode": "100644",
+      "after_mode": "100644"
+    },
+    {
+      "group_id": "c0r-source-bound-admission",
+      "failure_family_id": "repair-sufficiency-self-attestation",
+      "comparison_base": "e637dcc336eb72e4e3115305b92fb5ae8932a7b4",
+      "path": "tools/havenline/production/repair_sufficiency_critic.py",
+      "operation_contract_sha256": "fb5d47f4e39d61297d6d2b2573d049bb2fa8a68c09a06ac173ad85f128d3b0ff",
+      "before_sha256": "9001bf6cd9efea216cc1c95f364b3bb8e6a91c29054d26c2c046e023548535cf",
+      "after_sha256": "79cc9294c353459dc396c58c1b997782d08333682895b430d43423626377adf9",
+      "before_mode": "100644",
+      "after_mode": "100644"
+    },
+    {
+      "group_id": "c0r-source-bound-admission",
+      "failure_family_id": "repair-sufficiency-self-attestation",
+      "comparison_base": "e637dcc336eb72e4e3115305b92fb5ae8932a7b4",
+      "path": "tools/havenline/production/builder_repair_gate.py",
+      "operation_contract_sha256": "fb5d47f4e39d61297d6d2b2573d049bb2fa8a68c09a06ac173ad85f128d3b0ff",
+      "before_sha256": "935bc94206fb51d49461abac734eee66d34d8b7ba4e992b85114ae0143971d3d",
+      "after_sha256": "ede18167850819fbfa4199bea98c5b39f0e6fb09505dacdb7f00c4f88729ef88",
+      "before_mode": "100644",
+      "after_mode": "100644"
+    }
+  ],
+  "causal_source_set_sha256": "e6adcdcd41d09eeda7a2c41412568af0fbb6b23fb4bb59b2393ba2637e104914",
+  "authority_boundary": "Canonical owner executes the exact canonical stdlib verifier with python -I against candidate git objects before promotion. Candidate-side checks are defensive only. No T10 approval or diagnostic reuse."
+}
