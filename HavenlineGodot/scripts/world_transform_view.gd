@@ -366,17 +366,33 @@ func _label_candidate(lane: String, response: Rect2, frame: Rect2, gap: float, p
 			available_width = response.position.x - gap - frame.position.x
 			available_height = frame.size.y
 		_:
-			return {}
+			return {"valid": false, "lane": lane, "failure": "unknown_lane"}
+	var diagnostic := {
+		"valid": false,
+		"lane": lane,
+		"available_width": available_width,
+		"available_height": available_height,
+		"minimum_wrap_width": LABEL_MIN_WRAP_WIDTH,
+	}
 	if available_width <= 0.0 or available_height <= 0.0:
-		return {}
+		diagnostic["failure"] = "no_lane_space"
+		return diagnostic
 	var outline_units := float(_beacon.outline_size) * 2.0
 	var max_wrap_width := available_width / pixels_per_label_unit - outline_units - 1.0
+	diagnostic["max_wrap_width"] = max_wrap_width
 	if max_wrap_width < LABEL_MIN_WRAP_WIDTH:
-		return {}
+		diagnostic["failure"] = "wrap_width_below_minimum"
+		return diagnostic
 	var wrap_width := minf(LABEL_MAX_WIDTH, max_wrap_width)
 	var label_size := _label_size_for_wrap(pixels_per_label_unit, wrap_width)
-	if label_size.x > available_width + 0.01 or label_size.y > available_height + 0.01:
-		return {}
+	diagnostic["wrap_width"] = wrap_width
+	diagnostic["label_size"] = [label_size.x, label_size.y]
+	if label_size.x > available_width + 0.01:
+		diagnostic["failure"] = "label_too_wide"
+		return diagnostic
+	if label_size.y > available_height + 0.01:
+		diagnostic["failure"] = "label_too_tall"
+		return diagnostic
 	var half := label_size * 0.5
 	var desired := response.get_center()
 	match lane:
@@ -394,19 +410,24 @@ func _label_candidate(lane: String, response: Rect2, frame: Rect2, gap: float, p
 			desired.y = clampf(desired.y, frame.position.y + half.y, frame.end.y - half.y)
 	var label_rect := Rect2(desired - half, label_size)
 	var clearance := _rect_clearance(label_rect, response)
-	if not frame.encloses(label_rect) or label_rect.intersects(response) or clearance + 0.01 < gap:
-		return {}
-	return {
-		"placement_found": true,
-		"lane": lane,
-		"wrap_width": wrap_width,
-		"label_size": label_size,
-		"desired_center": desired,
-		"label_rect": label_rect,
-		"clearance": clearance,
-		"available_width": available_width,
-		"available_height": available_height,
-	}
+	diagnostic["desired_center"] = [desired.x, desired.y]
+	diagnostic["label_rect"] = [label_rect.position.x, label_rect.position.y, label_rect.size.x, label_rect.size.y]
+	diagnostic["clearance"] = clearance
+	if not frame.encloses(label_rect):
+		diagnostic["failure"] = "not_in_frame"
+		return diagnostic
+	if label_rect.intersects(response):
+		diagnostic["failure"] = "overlap"
+		return diagnostic
+	if clearance + 0.01 < gap:
+		diagnostic["failure"] = "insufficient_clearance"
+		return diagnostic
+	diagnostic["valid"] = true
+	diagnostic["placement_found"] = true
+	diagnostic["label_size_vector"] = label_size
+	diagnostic["desired_center_vector"] = desired
+	diagnostic["label_rect_value"] = label_rect
+	return diagnostic
 
 func _label_projection(active_camera: Camera3D) -> Dictionary:
 	var viewport_size := Vector2(get_viewport().get_visible_rect().size)
@@ -418,10 +439,18 @@ func _label_projection(active_camera: Camera3D) -> Dictionary:
 	var gap := maxf(LABEL_MIN_CLEARANCE_PX, viewport_size.y * 0.015)
 	var inset := maxf(LABEL_MIN_CLEARANCE_PX, minf(viewport_size.x, viewport_size.y) * LABEL_SAFE_INSET_RATIO)
 	var frame := Rect2(Vector2(inset, inset), viewport_size - Vector2.ONE * inset * 2.0)
+	var attempts: Array[Dictionary] = []
 	for lane in ["top", "right", "left", "bottom"]:
 		var candidate := _label_candidate(lane, response, frame, gap, pixels_per_label_unit)
-		if candidate.is_empty():
+		var report := candidate.duplicate(true)
+		report.erase("label_size_vector")
+		report.erase("desired_center_vector")
+		report.erase("label_rect_value")
+		attempts.append(report)
+		if not candidate.get("valid", false):
 			continue
+		candidate["label_size"] = candidate.label_size_vector
+		candidate["desired_center"] = candidate.desired_center_vector
 		candidate["viewport"] = viewport_size
 		candidate["base"] = base
 		candidate["pixels_per_label_unit"] = pixels_per_label_unit
@@ -429,6 +458,7 @@ func _label_projection(active_camera: Camera3D) -> Dictionary:
 		candidate["frame_rect"] = frame
 		candidate["gap"] = gap
 		candidate["safe_inset"] = inset
+		candidate["attempts"] = attempts
 		candidate["offset"] = (candidate.desired_center - base) / pixels_per_label_unit
 		return candidate
 	# Fail closed when no legal lane exists. Keep a deterministic visible fallback
@@ -450,6 +480,7 @@ func _label_projection(active_camera: Camera3D) -> Dictionary:
 		"offset": (fallback_center - base) / pixels_per_label_unit,
 		"gap": gap,
 		"safe_inset": inset,
+		"attempts": attempts,
 	}
 
 func _update_camera_lane() -> void:
@@ -485,6 +516,7 @@ func projected_readability(active_camera: Camera3D) -> Dictionary:
 		"placement_found": placement_found,
 		"layout_lane": String(projection.get("lane", "none")),
 		"label_wrap_width": float(projection.get("wrap_width", LABEL_MAX_WIDTH)),
+		"layout_attempts": projection.get("attempts", []),
 		"label_offset": [_beacon.offset.x, _beacon.offset.y],
 		"passed": placement_found and not overlap and in_frame and clearance + 0.01 >= float(projection.gap) and priority_ok,
 	}
