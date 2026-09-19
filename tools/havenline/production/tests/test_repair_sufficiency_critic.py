@@ -145,6 +145,13 @@ def accepted_plan(two_groups=False):
         "c0_report_sha256": "d" * 64,
         "repair_sufficiency": {
             "repair_groups": groups,
+            "evidence_frontier": {
+                "complete": True,
+                "diagnosed_through_candidate": "a" * 40,
+                "latest_observed_failed_candidate": "a" * 40,
+                "observations": [],
+                "unclassified_failures": [],
+            },
             "cross_group_interactions": ["layout exhaustiveness feeds better terminal diagnostics; neither group lowers task quality gates"],
             "threshold_changes": [],
             "loop_risk_acknowledged": True,
@@ -165,6 +172,55 @@ class RepairSufficiencyCriticTests(unittest.TestCase):
         self.assertTrue(report["passed"], report)
         self.assertEqual(2, report["group_count"])
         self.assertTrue(report["full_blocker_coverage"])
+
+    def test_post_diagnosis_failure_can_bind_to_existing_group(self):
+        plan = accepted_plan()
+        newer = "b" * 40
+        plan["repair_sufficiency"]["evidence_frontier"]["latest_observed_failed_candidate"] = newer
+        plan["repair_sufficiency"]["evidence_frontier"]["observations"] = [{
+            "run_id": 12345,
+            "candidate": newer,
+            "disposition": "BOUND_TO_EXISTING_GROUP",
+            "group_id": "layout-feasibility",
+            "evidence": ["new blocked/overhead projection violates the same containment invariant"],
+            "reason": "same invariant and same affected placement algorithm",
+        }]
+        report = review(c0(), plan)
+        self.assertTrue(report["passed"], report)
+        self.assertIn("POST_DIAGNOSIS_FAILURES_PRESENT", report["risk_codes"])
+
+    def test_unclassified_post_diagnosis_failure_blocks_build(self):
+        plan = accepted_plan()
+        newer = "b" * 40
+        frontier = plan["repair_sufficiency"]["evidence_frontier"]
+        frontier["latest_observed_failed_candidate"] = newer
+        frontier["unclassified_failures"] = [{"run_id": 12345, "candidate": newer}]
+        report = review(c0(), plan)
+        self.assertEqual("INSUFFICIENT_EVIDENCE", report["outcome"])
+        self.assertIn("POST_DIAGNOSIS_FAILURES_UNCLASSIFIED", report["evidence_gaps"])
+
+    def test_new_failure_requiring_c0_blocks_build(self):
+        plan = accepted_plan()
+        newer = "b" * 40
+        frontier = plan["repair_sufficiency"]["evidence_frontier"]
+        frontier["latest_observed_failed_candidate"] = newer
+        frontier["observations"] = [{
+            "run_id": 12345,
+            "candidate": newer,
+            "disposition": "NEW_FAILURE_REQUIRES_C0",
+            "evidence": ["new causal surface not represented by the diagnosed blocker set"],
+            "reason": "cannot bind to an existing failure family",
+        }]
+        report = review(c0(), plan)
+        self.assertEqual("INSUFFICIENT_EVIDENCE", report["outcome"])
+        self.assertTrue(any("NEW_FAILURE_REQUIRES_C0" in x for x in report["evidence_gaps"]))
+
+    def test_frontier_must_bind_to_c0_diagnosis_boundary(self):
+        root = c0()
+        root["latest_failed_candidate"] = "c" * 40
+        report = review(root, accepted_plan())
+        self.assertFalse(report["passed"])
+        self.assertIn("EVIDENCE_FRONTIER_DIAGNOSIS_BOUNDARY_MISMATCH", report["rejections"])
 
     def test_exact_c0_hash_binding_rejects_substituted_diagnosis_bytes(self):
         report = review(c0(), accepted_plan(), "e" * 64)
