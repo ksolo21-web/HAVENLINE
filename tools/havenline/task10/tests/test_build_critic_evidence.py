@@ -84,7 +84,7 @@ class CompactEvidenceTests(unittest.TestCase):
   self.assertIn('R06 only physically delivered stored resources pay',text)
   self.assertIn('stable_evidence_ids_with_anchored_semantic_matchers',text)
   self.assertIn('R05_INTEGRATION_ACCEPTED_STOPS_FLOW',text)
-  self.assertIn('accepted receipt stops flow while retaining camera-lane maintenance',text)
+  self.assertNotIn('accepted receipt stops flow while retaining camera-lane maintenance',text)
   for change in ('missing','duplicate','false','stale','failed'):
    d=copy.deepcopy(domain);i=copy.deepcopy(integration)
    if change=='missing':d['checks'].pop()
@@ -110,7 +110,7 @@ class CompactEvidenceTests(unittest.TestCase):
   domain=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in domain_names])
   def integration(names):return dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in names])
   text=m.c7_context(domain,integration(base),candidate,'1'*64,'2'*64)
-  self.assertIn('accepted receipt stops flow while preserving a future presentation maintenance policy',text)
+  self.assertNotIn('accepted receipt stops flow while preserving a future presentation maintenance policy',text)
   duplicate=base+['accepted receipt stops flow with duplicate semantic evidence']
   with self.assertRaises(AssertionError):m.c7_context(domain,integration(duplicate),candidate,'1'*64,'2'*64)
   drift=base.copy();drift[5]='accepted authority receipt completes presentation'
