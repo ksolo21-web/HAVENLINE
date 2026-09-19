@@ -44,6 +44,7 @@ def _group_review(group: dict, c0_blockers: dict[str, dict]) -> tuple[list[str],
     preflights = _list(group.get("cheap_disproof_preflight"))
     counterexamples = _list(group.get("counterexamples_considered"))
     blast = _list(group.get("blast_radius_hypotheses"))
+    residual_unknowns = _list(group.get("residual_unknowns"))
 
     if group_id == "<missing-group>":
         reject.append("GROUP_ID_REQUIRED")
@@ -97,6 +98,12 @@ def _group_review(group: dict, c0_blockers: dict[str, dict]) -> tuple[list[str],
             reject.append(f"{group_id}:BLOCKER_COVERAGE_ENTRY_INVALID")
             continue
         bid = _text(row.get("blocker_id")) or "<missing>"
+        diagnosed = _text(row.get("diagnosed_root_cause"))
+        expected_root = _text(c0_blockers.get(bid, {}).get("root_cause"))
+        if not diagnosed:
+            reject.append(f"{group_id}:{bid}:DIAGNOSED_ROOT_CAUSE_REQUIRED")
+        elif diagnosed != expected_root:
+            reject.append(f"{group_id}:{bid}:ROOT_CAUSE_BINDING_MISMATCH")
         for key in ("why_fix_changes_cause", "expected_result", "failure_if_wrong", "cheap_disproof"):
             if not _text(row.get(key)):
                 reject.append(f"{group_id}:{bid}:{key.upper()}_REQUIRED")
@@ -105,7 +112,9 @@ def _group_review(group: dict, c0_blockers: dict[str, dict]) -> tuple[list[str],
     complete_observable = family.get("complete_observable_set_collected") is True
     if exhaustive_required and not complete_observable:
         evidence_gaps.append(f"{group_id}:OBSERVABLE_FAILURE_FAMILY_NOT_EXHAUSTIVELY_COLLECTED")
-    if family.get("full_failure_family_closed_by_design") is True and unknown_cases:
+    if exhaustive_required and complete_observable and not _list(family.get("collection_evidence")):
+        reject.append(f"{group_id}:EXHAUSTIVE_COLLECTION_EVIDENCE_REQUIRED")
+    if family.get("full_failure_family_closed_by_design") is True and (unknown_cases or residual_unknowns):
         reject.append(f"{group_id}:OVERCLAIMED_FAILURE_FAMILY_CLOSURE")
 
     domain_required = domain.get("required") is True
@@ -227,12 +236,18 @@ def review(c0: dict, plan: dict, c0_sha256: str | None = None) -> dict:
     if set(assigned) != set(c0_blockers):
         reject.append("REPAIR_GROUPS_MUST_COVER_EVERY_C0_BLOCKER_EXACTLY_ONCE")
 
-    threshold_changes = _list(suff.get("threshold_changes"))
+    raw_threshold_changes = suff.get("threshold_changes")
+    if not isinstance(raw_threshold_changes, list):
+        reject.append("THRESHOLD_CHANGES_MUST_BE_EXPLICIT_LIST")
+        threshold_changes = []
+    else:
+        threshold_changes = raw_threshold_changes
     if threshold_changes:
         reject.append("CRITIC_OR_QUALITY_THRESHOLD_CHANGE_FORBIDDEN")
     if suff.get("loop_risk_acknowledged") is not True:
         reject.append("LOOP_RISK_ACKNOWLEDGEMENT_REQUIRED")
-    if not _list(suff.get("cross_group_interactions")):
+    interactions = suff.get("cross_group_interactions")
+    if not isinstance(interactions, list) or not interactions or any(not _text(x) for x in interactions):
         reject.append("CROSS_GROUP_INTERACTIONS_REQUIRED")
 
     if c0_ready and reject:
