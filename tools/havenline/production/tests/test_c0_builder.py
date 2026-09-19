@@ -1,6 +1,6 @@
 import json, pathlib, sys, tempfile, unittest
 HERE=pathlib.Path(__file__).resolve();PROD=HERE.parents[1];sys.path.insert(0,str(PROD))
-from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, artifact_diagnostic_projection, build_model_request, c0_response_schema, model_projection, retain_http_error, subject_execution, superseded_report, validate_report
+from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, artifact_diagnostic_projection, build_model_request, c0_response_schema, failure_log_projection, model_projection, retain_http_error, subject_execution, superseded_report, validate_report
 from builder_repair_gate import validate as validate_builder, validate_c0r, verify_inherited_noncausal
 from repair_sufficiency_critic import review as review_c0r
 from collect_artifact_diagnostics import collect as collect_artifact_diagnostics
@@ -341,6 +341,50 @@ class C0TerminalEvidencePriorityTests(unittest.TestCase):
         self.assertIn('blocked/overhead',projection['records'][0]['retained_lines'][0]['text'])
         self.assertTrue(projection['terminal_evidence_priority'])
         self.assertEqual('terminal_signal_first_then_diagnostic_path',projection['selection_policy'])
+
+    def test_latest_terminal_job_log_traceback_beats_generic_critic_and_defect_noise(self):
+        import hashlib,json
+        noise="\n".join(
+            f"2026-09-19T13:04:{index:02d}Z * [new branch] codex/havenline-visual-critic-{index} -> origin/defect-record-{index}"
+            for index in range(50)
+        )
+        terminal="\n".join([
+            "2026-09-19T13:24:20Z Traceback (most recent call last):",
+            '2026-09-19T13:24:20Z   File "tools/havenline/task10/build_critic_evidence.py", line 76, in c7_context',
+            "2026-09-19T13:24:20Z     raise AssertionError(report_name+' selected C7 row missing, duplicate or failed: '+name)",
+            "2026-09-19T13:24:20Z AssertionError: integration selected C7 row missing, duplicate or failed: accepted receipt stops flow and resets its bounded phase",
+            "2026-09-19T13:24:20Z ##[error]Process completed with exit code 1.",
+        ])
+        raw=noise+"\n"+terminal+"\n"
+        envelope={'schema_version':1,'run_id':35444671480,'repository':'owner/repo','run_status':'in_progress','run_conclusion':None,'diagnostic_marker':None,
+                  'jobs':[{'job_id':105901465810,'name':'built-pending-dependency','conclusion':'failure','log_bytes':len(raw.encode()),'log_sha256':hashlib.sha256(raw.encode()).hexdigest(),'raw_log':raw}]}
+        encoded=json.dumps(envelope)
+        packet={'failed_logs':encoded,'failed_logs_bytes':len(encoded.encode()),'failed_logs_sha256':hashlib.sha256(encoded.encode()).hexdigest()}
+        projection=failure_log_projection(packet,640)
+        excerpt=projection['jobs'][0]['excerpt']
+        joined="\n".join(excerpt['retained_lines'])
+        self.assertEqual('latest_terminal_signal_windows_first',excerpt['selection_policy'])
+        self.assertGreaterEqual(excerpt['terminal_signal_count'],3)
+        self.assertIn('selected C7 row missing, duplicate or failed',joined)
+        self.assertIn('build_critic_evidence.py',joined)
+        self.assertNotIn('visual-critic-0',joined)
+
+    def test_model_projection_marks_terminal_job_logs_authoritative_over_advisory_history(self):
+        import hashlib,json
+        raw='Traceback (most recent call last):\nAssertionError: exact terminal package failure\n'
+        envelope={'schema_version':1,'run_id':1,'repository':'owner/repo','run_status':'completed','run_conclusion':'failure','diagnostic_marker':None,
+                  'jobs':[{'job_id':2,'name':'builder','conclusion':'failure','log_bytes':len(raw.encode()),'log_sha256':hashlib.sha256(raw.encode()).hexdigest(),'raw_log':raw}]}
+        encoded=json.dumps(envelope)
+        packet={'task_id':'T10','failed_run_id':1,'failed_candidate':'a'*40,'integration_head':'b'*40,'run_conclusion':'failure',
+                'steps':[{'job':'builder','name':'package','status':'completed','conclusion':'failure'}],'changed_files':[],
+                'failed_logs':encoded,'failed_logs_bytes':len(encoded.encode()),'failed_logs_sha256':hashlib.sha256(encoded.encode()).hexdigest(),
+                'structured_failure_records':[],'artifact_diagnostics':{'records':[]},'task_scope':'','defect_ledger':'',
+                'historical_failure_intelligence':{'matches':[{'id':'old','classification':'GOVERNANCE_DEFECT','root_cause':'old permission issue'}],'historical_match_is_advisory_only':True}}
+        projection=model_projection(packet,'f'*64,640,2)
+        self.assertTrue(projection['projection_contract']['terminal_job_log_evidence_prioritized'])
+        self.assertTrue(projection['projection_contract']['historical_failure_intelligence_is_advisory_only'])
+        self.assertIn('exact terminal package failure',"\n".join(projection['failure_logs']['jobs'][0]['excerpt']['retained_lines']))
+        self.assertTrue(projection['historical_failure_intelligence']['historical_match_is_advisory_only'])
 
     def test_live_c0_job_is_not_subject_execution_or_unexecuted_check(self):
         packet={
