@@ -38,7 +38,16 @@
         "counterexamples_considered",
         "blast_radius_hypotheses",
         "residual_unknowns"
-      ]
+      ],
+      "repair_group_blocker_coverage_required": [
+        "blocker_id",
+        "diagnosed_root_cause",
+        "why_fix_changes_cause",
+        "expected_result",
+        "failure_if_wrong",
+        "cheap_disproof"
+      ],
+      "failure_family_collection_rule": "When observable_exhaustive_collection_required and complete_observable_set_collected are true, collection_evidence must be non-empty."
     }
   },
   "hard_rules": {
@@ -49,7 +58,9 @@
     "unknown_required_cases_forbid_full_family_closure_claim": true,
     "cheap_disproof_preflight_required": true,
     "canonical_c0_path_and_exact_sha256_required": true,
-    "threshold_weakening_forbidden": true
+    "threshold_weakening_forbidden": true,
+    "exhaustive_collection_claim_requires_evidence": true,
+    "blocker_coverage_binds_exact_c0_root_cause": true
   },
   "may_score_gameplay": false,
   "may_approve_task": false,
