@@ -236,6 +236,63 @@ def review(c0: dict, plan: dict, c0_sha256: str | None = None) -> dict:
     if set(assigned) != set(c0_blockers):
         reject.append("REPAIR_GROUPS_MUST_COVER_EVERY_C0_BLOCKER_EXACTLY_ONCE")
 
+    frontier = _dict(suff.get("evidence_frontier"))
+    if not frontier:
+        reject.append("EVIDENCE_FRONTIER_REQUIRED")
+        frontier = {}
+    expected_diagnosed_through = _text(c0.get("latest_failed_candidate")) or _text(c0.get("failed_candidate"))
+    diagnosed_through = _text(frontier.get("diagnosed_through_candidate"))
+    if diagnosed_through != expected_diagnosed_through:
+        reject.append("EVIDENCE_FRONTIER_DIAGNOSIS_BOUNDARY_MISMATCH")
+    latest_observed = _text(frontier.get("latest_observed_failed_candidate"))
+    if not latest_observed or len(latest_observed) != 40:
+        reject.append("LATEST_OBSERVED_FAILED_CANDIDATE_REQUIRED")
+    if frontier.get("complete") is not True:
+        evidence_gaps.append("EVIDENCE_FRONTIER_INCOMPLETE")
+
+    observations = _list(frontier.get("observations"))
+    unclassified = _list(frontier.get("unclassified_failures"))
+    if unclassified:
+        evidence_gaps.append("POST_DIAGNOSIS_FAILURES_UNCLASSIFIED")
+
+    allowed_frontier_dispositions = {
+        "BOUND_TO_EXISTING_GROUP",
+        "SUPERSEDED",
+        "INFRASTRUCTURE_ONLY",
+        "NEW_FAILURE_REQUIRES_C0",
+    }
+    observation_candidates: set[str] = set()
+    for index, row in enumerate(observations):
+        prefix = f"FRONTIER[{index}]"
+        if not isinstance(row, dict):
+            reject.append(prefix + ":ENTRY_INVALID")
+            continue
+        candidate = _text(row.get("candidate"))
+        if len(candidate) != 40:
+            reject.append(prefix + ":CANDIDATE_INVALID")
+        else:
+            observation_candidates.add(candidate)
+        run_id = row.get("run_id")
+        if not isinstance(run_id, int) or run_id <= 0:
+            reject.append(prefix + ":RUN_ID_INVALID")
+        disposition = _text(row.get("disposition")).upper()
+        if disposition not in allowed_frontier_dispositions:
+            reject.append(prefix + ":DISPOSITION_INVALID")
+        if not _list(row.get("evidence")):
+            reject.append(prefix + ":EVIDENCE_REQUIRED")
+        if not _text(row.get("reason")):
+            reject.append(prefix + ":REASON_REQUIRED")
+        if disposition == "BOUND_TO_EXISTING_GROUP":
+            group_id = _text(row.get("group_id"))
+            if group_id not in set(group_ids):
+                reject.append(prefix + ":BOUND_GROUP_UNKNOWN")
+        elif disposition == "NEW_FAILURE_REQUIRES_C0":
+            evidence_gaps.append(prefix + ":NEW_FAILURE_REQUIRES_C0")
+    if latest_observed and latest_observed != diagnosed_through and latest_observed not in observation_candidates:
+        reject.append("LATEST_POST_DIAGNOSIS_FAILURE_NOT_REPRESENTED")
+    if observations:
+        risk_codes.add("POST_DIAGNOSIS_FAILURES_PRESENT")
+
     raw_threshold_changes = suff.get("threshold_changes")
     if not isinstance(raw_threshold_changes, list):
         reject.append("THRESHOLD_CHANGES_MUST_BE_EXPLICIT_LIST")
