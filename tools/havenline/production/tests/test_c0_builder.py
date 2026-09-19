@@ -104,7 +104,7 @@ class C0BuilderTests(unittest.TestCase):
             self.assertTrue(result["terminal_failure_priority_enabled"])
             self.assertEqual("run/device-layout/phone_16_9/capture.log",result["records"][0]["path"])
             self.assertGreater(result["records"][0]["hard_failure_line_count"],0)
-            p=self.packet()
+            p=packet()
             p["artifact_diagnostics"]=result
             projection=model_projection(p,"f"*64,excerpt_bytes=320,detail=2)
             records=projection["artifact_diagnostics"]["records"]
