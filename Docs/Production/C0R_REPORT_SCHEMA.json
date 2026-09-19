@@ -14,12 +14,41 @@
     "REVISE_REPAIR_PLAN",
     "COLLECT_NAMED_EVIDENCE"
   ],
+  "plan_contract": {
+    "repair_sufficiency": {
+      "required": [
+        "repair_groups",
+        "cross_group_interactions",
+        "threshold_changes",
+        "loop_risk_acknowledged"
+      ],
+      "repair_group_required": [
+        "group_id",
+        "blocker_ids",
+        "failure_family",
+        "strategy_kind",
+        "causal_mechanism",
+        "why_this_fixes_cause",
+        "why_materially_different",
+        "same_family_attempt_count",
+        "prior_attempts",
+        "blocker_coverage",
+        "full_domain_proof",
+        "cheap_disproof_preflight",
+        "counterexamples_considered",
+        "blast_radius_hypotheses",
+        "residual_unknowns"
+      ]
+    }
+  },
   "hard_rules": {
-    "every_c0_blocker_requires_sufficiency_coverage": true,
+    "all_c0_blockers_assigned_exactly_once_across_groups": true,
+    "group_blocker_coverage_exact": true,
     "repeated_scalar_fix_requires_full_domain_proof": true,
     "product_defect_cannot_use_evidence_only_strategy": true,
     "unknown_required_cases_forbid_full_family_closure_claim": true,
     "cheap_disproof_preflight_required": true,
+    "canonical_c0_path_and_exact_sha256_required": true,
     "threshold_weakening_forbidden": true
   },
   "may_score_gameplay": false,
