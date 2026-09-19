@@ -89,7 +89,7 @@ def _selected_c7_claims(report, claims, report_name):
         matches=[row for row in report.get('checks',[]) if isinstance(row,dict) and isinstance(row.get('name'),str) and rx.fullmatch(row['name'])]
         if len(matches)!=1 or type(matches[0].get('passed')) is not bool or matches[0]['passed'] is not True:
             raise AssertionError(report_name+' selected C7 claim missing, duplicate or failed: '+claim['evidence_id'])
-        rows.append({'evidence_id':claim['evidence_id'],'name':matches[0]['name'],'passed':True})
+        rows.append({'evidence_id':claim['evidence_id'],'passed':True})
     return rows
 
 
