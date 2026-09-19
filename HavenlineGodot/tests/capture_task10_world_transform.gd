@@ -11,6 +11,7 @@ var capture_height := 720
 var device_id := "baseline"
 var device_check := false
 var production_evidence := false
+var exhaustive_projections := false
 var engine
 var view
 var world: Node3D
@@ -41,6 +42,8 @@ func _initialize() -> void:
 			device_check = true
 		elif argument == "--production-evidence":
 			production_evidence = true
+		elif argument == "--exhaustive-projections":
+			exhaustive_projections = true
 	call_deferred("run")
 
 func authoritative_debit(intent: Dictionary) -> Dictionary:
@@ -134,6 +137,7 @@ func configure_camera(angle: String) -> void:
 
 func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front", "three-quarter"]) -> bool:
 	state_label.text = "T10 NEUTRAL FRAMEWORK | %s\nReal delivered-resource authority | Not T11 content" % name.to_upper()
+	var projection_failed := false
 	for raw_angle in angles:
 		var angle := String(raw_angle)
 		configure_camera(angle)
@@ -148,9 +152,6 @@ func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front
 		if error != OK:
 			return false
 		var readability: Dictionary = view.projected_readability(camera)
-		if not readability.get("passed", false):
-			push_error("Projected readability failed for %s/%s: %s" % [name, angle, JSON.stringify(readability)])
-			return false
 		records.append({
 			"state": name,
 			"angle": angle,
@@ -160,17 +161,28 @@ func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front
 			"projected_readability": readability,
 		})
 		projection_records.append({"state": name, "angle": angle, "projected_readability": readability})
+		if not readability.get("passed", false):
+			projection_failed = true
+			if exhaustive_projections:
+				push_warning("Projected readability failed for %s/%s: %s" % [name, angle, JSON.stringify(readability)])
+			else:
+				push_error("Projected readability failed for %s/%s: %s" % [name, angle, JSON.stringify(readability)])
+				return false
 	if device_check:
 		for supplemental_angle in ["side", "three-quarter", "overhead", "gameplay", "detail"]:
 			configure_camera(supplemental_angle)
 			await process_frame
 			await RenderingServer.frame_post_draw
 			var supplemental: Dictionary = view.projected_readability(camera)
-			if not supplemental.get("passed", false):
-				push_error("Projected device readability failed for %s/%s: %s" % [name, supplemental_angle, JSON.stringify(supplemental)])
-				return false
 			projection_records.append({"state": name, "angle": supplemental_angle, "projected_readability": supplemental})
-	return true
+			if not supplemental.get("passed", false):
+				projection_failed = true
+				if exhaustive_projections:
+					push_warning("Projected device readability failed for %s/%s: %s" % [name, supplemental_angle, JSON.stringify(supplemental)])
+				else:
+					push_error("Projected device readability failed for %s/%s: %s" % [name, supplemental_angle, JSON.stringify(supplemental)])
+					return false
+	return true if exhaustive_projections else not projection_failed
 
 func measure_performance() -> void:
 	var rss_output: Array = []
@@ -261,6 +273,8 @@ func capture_lifecycle(inventory: Dictionary) -> void:
 		"record_count": records.size(), "states": states, "angles": angles, "records": records,
 		"projection_angles": ["front", "side", "three-quarter", "overhead", "gameplay", "detail"] if device_check or production_evidence else angles,
 		"projection_record_count": projection_records.size(), "projection_records": projection_records,
+		"exhaustive_projections": exhaustive_projections,
+		"projection_failure_count": projection_records.filter(func(row): return not row.get("projected_readability", {}).get("passed", false)).size(),
 		"view_visual_node_count": int(final_view.visual_node_count),
 		"view_visual_build_count": int(final_view.visual_build_count),
 		"final_target": engine.descriptor().targets["capture-anchor"].duplicate(true),
