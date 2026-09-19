@@ -63,8 +63,31 @@ class PackageBindingTests(unittest.TestCase):
             return dict(path='critic-input/'+name,category=category,kind=kind,description=description,sha256=hashlib.sha256((root/name).read_bytes()).hexdigest())
         required=['FROZEN_SCOPE.md','recipes.json','progression.json','domain-tests.json','integration-tests.json','review-summary.json','motion-timeline.json','save-matrix/save-matrix.json','benchmark/manifest.json','performance.json']
         for name in required:write(name,{})
-        domain=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in build.C7_ROWS['R05_domain']])
-        integration=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in build.C7_ROWS['R05_integration']+build.C7_ROWS['R06_integration']])
+        # Independent real-report fixtures: never derive consumer fixtures from
+        # the C7 selector table being validated.
+        domain_names=[
+            'view lifecycle contains all frozen states',
+            'view enters ready lifecycle',
+            'valid preview enters preview lifecycle',
+            'prepared intent enters committing lifecycle',
+            'raw simulation receipt cannot complete before T10 accepts it',
+            'T10-accepted receipt completes lifecycle',
+        ]
+        integration_names=[
+            'locked lifecycle hides response geometry',
+            'view exposes explicit blocked lifecycle',
+            'blocked world response preserves exact reasons and shortfalls',
+            'same blocked state refreshes exact shortfall label',
+            'unaccepted receipt cannot stop pending flow or claim paid',
+            'accepted receipt stops flow while retaining camera-lane maintenance',
+            'real harvesting commits to carried inventory',
+            'real carried harvest cannot pay T10',
+            'real deposit conserves delivered resources',
+            'real simulation exact stored debit',
+            'real insufficient stock cannot partially charge',
+        ]
+        domain=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in domain_names])
+        integration=dict(candidate=candidate,passed=True,failures=[],checks=[dict(name=n,passed=True) for n in integration_names])
         write('domain-tests.json',domain);write('integration-tests.json',integration)
         progression=dict(passed=True,executed=True,suites=[dict(suite=k,checks=len(v),required_checks=sorted(v),passed=True) for k,v in REQUIRED.items()])
         write('progression.json',progression);write('benchmark/manifest.json',fixture.BenchmarkEvidenceTests().fixture())

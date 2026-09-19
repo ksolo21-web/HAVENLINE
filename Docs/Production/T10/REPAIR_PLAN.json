@@ -374,7 +374,7 @@
     },
     {
       "blocker_id": "C0-T10-B057",
-      "causal_change": "Build a C7-only early context that keeps R01-R14, names the six unchanged dimensions, maps R05 lifecycle and R06 delivered stock correctly, and binds selected passing rows to exact domain/integration report hashes with hostile validation.",
+      "causal_change": "Replace prose-coupled C7 row selection with stable semantic evidence IDs plus anchored matchers. Validate exactly one passing real domain/integration row for every R05/R06 claim, keep exact source-report hashes, expose only compact semantic IDs to the reviewer so prompt budget remains bounded, and reject missing/duplicate/core-semantic drift. Do not alter C7 dimensions, model, scores, thresholds, progression authority or product runtime.",
       "files": [
         "tools/havenline/task10/build_critic_evidence.py",
         "tools/havenline/task10/tests/test_build_critic_evidence.py",
@@ -382,9 +382,9 @@
         "tools/havenline/task10/tests/test_validate_critic_readiness.py"
       ],
       "verification": [
-        "Focused exact-boundary and hostile tests pass.",
-        "Full task and production suites pass with unchanged governance/critic thresholds.",
-        "Fresh exact-source isolated and integrated critic runs are required; this plan claims no approval."
+        "Independent hostile fixtures are hard-coded from real report rows rather than generated from the selector table; nonsemantic suffix drift passes, duplicate semantic matches and core drift fail.",
+        "Diagnostic run 35446792906 / artifact 10585304699 overlays only the selector/test prototype on failed candidate 81fbc7958ceb69b711f8be60add48b4510d3520e and replays the exact failed artifact: focused tests PASS, packaging PASS, quantitative C6 PASS, critic-readiness PASS, with approval reuse forbidden.",
+        "Fresh exact-source isolated build and C7 review remain mandatory; no prior score or diagnostic artifact counts as approval."
       ]
     },
     {
@@ -408,7 +408,7 @@
     },
     {
       "blocker_id": "C0-T10-B059",
-      "causal_change": "Preserve the complete authoritative packet and fixed context budget, but make bounded semantic projection terminal-first: failed terminal artifact excerpts and failed structured records are selected before generic successful context, with exact serialized request bytes and bounded HTTP diagnostics retained.",
+      "causal_change": "Preserve the complete authoritative packet and fixed context budget, but make bounded semantic projection terminal-first across both failed artifact diagnostics and failed-job logs: latest terminal signal windows are selected before generic signal lines, with exact serialized request bytes and bounded HTTP diagnostics retained. Historical failure intelligence remains advisory-only.",
       "files": [
         ".github/workflows/havenline-c0-root-cause.yml",
         "tools/havenline/production/c0_root_cause_advisor.py",
@@ -421,9 +421,9 @@
         "tools/havenline/production/tests/test_t10_activation_validation.py"
       ],
       "verification": [
-        "Replay run 35402388836 through the repaired C0 pipeline; the phone_16_9 blocked/overhead terminal failure must appear in the model projection with immutable path/line/hash identity.",
-        "C0's own diagnostic steps must not appear as unexecuted subject-job gates.",
-        "Unsupported/paraphrased quotations and nonexistent causal paths remain rejected; no grounding or critic threshold is weakened."
+        "Hostile regression with 50 branch/critic/defect noise lines before the exact T10 packaging traceback retains build_critic_evidence.py, AssertionError and terminal exit context while excluding the early noise.",
+        "Full governance suite and V3.2 exact-byte lock pass; request/context budgets and grounding validators are unchanged.",
+        "A future C0 diagnosis must quote retained source evidence and exact tracked repository paths; no historical match can authorize repair."
       ]
     },
     {
@@ -440,7 +440,7 @@
         "tools/havenline/production/tests/test_t10_activation_validation.py",
         "Docs/Production/ChangeRequests/T10-c0-grounding-blocker-registry.json"
       ],
-      "causal_change": "Retain deterministic source path/line/hash artifact extraction, then prioritize terminal failed diagnostics in the model projection so the exact device failure cannot lose the shared excerpt budget. Replay the 8ab packet as the hostile regression.",
+      "causal_change": "Retain deterministic source-addressed artifact diagnostics and prioritize terminal artifact excerpts when present; when the terminal cause exists only in the retained failed-job log, use the B059 latest-terminal job-log projection rather than allowing generic artifact/history context to displace it.",
       "verification": [
         "Replay run 35402388836 through the repaired C0 pipeline; the phone_16_9 blocked/overhead terminal failure must appear in the model projection with immutable path/line/hash identity.",
         "C0's own diagnostic steps must not appear as unexecuted subject-job gates.",
@@ -460,7 +460,7 @@
         "tools/havenline/production/tests/test_t10_activation_validation.py",
         "Docs/Production/ChangeRequests/T10-c0-grounding-regression-contract.json"
       ],
-      "causal_change": "Keep T10 exact SOURCE | EXACT_QUOTE and tracked-path grounding; additionally separate subject-job unexecuted checks from the live C0 diagnostic job so successful C0 runtime preparation cannot be misreported as missing subject execution.",
+      "causal_change": "Keep T10 exact SOURCE | EXACT_QUOTE and tracked-path grounding, separate subject-job execution from the live C0 diagnostic job, and mark historical failure intelligence advisory-only so it cannot replace current terminal artifact/job-log evidence.",
       "verification": [
         "Replay run 35402388836 through the repaired C0 pipeline; the phone_16_9 blocked/overhead terminal failure must appear in the model projection with immutable path/line/hash identity.",
         "C0's own diagnostic steps must not appear as unexecuted subject-job gates.",
@@ -1622,28 +1622,39 @@
             "source-hashes"
           ],
           "known_failed_cases": [
-            "C7 scores all dimensions 9.8-9.9 but mislabels lifecycle as R06 and returns a role-confusion defect; output completes normally."
+            "C7 scores all dimensions 9.8-9.9 but mislabels lifecycle as R06 and returns a role-confusion defect; output completes normally.",
+            "Run 35444671480 passed 216/216 layout projections, native4K and performance, then build_critic_evidence.py failed because C7 selected the obsolete prose row 'accepted receipt stops flow and resets its bounded phase' while the passing integration suite emitted 'accepted receipt stops flow while retaining camera-lane maintenance'."
           ],
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
           "full_failure_family_closed_by_design": true,
-          "collection_evidence": []
+          "collection_evidence": [
+            "Run 35444671480 retained exact passing domain/integration/performance evidence and the terminal packaging traceback.",
+            "Diagnostic replay run 35446792906 / artifact 10585304699 proved the stable-ID selector against the exact failed artifact without reusing it for approval."
+          ]
         },
         "strategy_kind": "TOOLING",
-        "causal_mechanism": "Build a C7-only context that names both namespaces and binds selected passing rows to exact domain/integration report hashes.",
-        "why_this_fixes_cause": "Build a C7-only context that names both namespaces and binds selected passing rows to exact domain/integration report hashes.",
-        "why_materially_different": "Fixes context semantics rather than altering C7 scoring or progression authority.",
-        "same_family_attempt_count": 0,
-        "prior_attempts": [],
+        "causal_mechanism": "Validate R05/R06 source rows by stable semantic evidence IDs and anchored matchers, require exactly one passing match in the exact candidate-bound reports, preserve exact report SHA-256 bindings, and send only compact semantic IDs to C7 so nonsemantic prose evolution cannot break packaging or overflow the prompt budget.",
+        "why_this_fixes_cause": "The failure was caused by using the full human-readable test sentence as the evidence identity. Stable semantic IDs separate the invariant from presentation wording, while anchored matchers still fail closed on missing, duplicate, false or core-semantic drift and source hashes bind the exact reports.",
+        "why_materially_different": "The previous repair added source-bound R05/R06 rows but still keyed them by exact prose. This repair replaces prose identity with a stable machine contract and proves it on the exact failed artifact; it does not merely update the obsolete string.",
+        "same_family_attempt_count": 1,
+        "prior_attempts": [
+          {
+            "strategy": "Exact human-readable R05/R06 row names plus report hashes",
+            "outcome": "PARTIAL",
+            "same_family": true,
+            "lesson": "Source binding was correct, but the selector treated presentation wording as identity. A later presentation-only wording refinement made packaging fail despite the real integration row still proving the same accepted-receipt invariant."
+          }
+        ],
         "blocker_coverage": [
           {
             "blocker_id": "C0-T10-B057",
             "diagnosed_root_cause": "The generic C7 brief conflates R01-R14 requirement IDs with six score dimensions and omits source-bound R05/R06 lifecycle/delivery rows.",
-            "why_fix_changes_cause": "Build a C7-only context that names both namespaces and binds selected passing rows to exact domain/integration report hashes. This directly targets T10 presentation and critic evidence.",
-            "expected_result": "Focused exact-boundary and hostile tests pass.",
-            "failure_if_wrong": "C7 scores all dimensions 9.8-9.9 but mislabels lifecycle as R06 and returns a role-confusion defect; output completes normally. remains reproducible, or the group preflight fails on the exact repaired surface.",
-            "cheap_disproof": "python3 -m unittest tools.havenline.task10.tests.test_build_critic_evidence tools.havenline.task10.tests.test_validate_critic_readiness"
+            "why_fix_changes_cause": "The C7 packager no longer identifies lifecycle/delivery evidence by mutable display prose. It validates one real passing row for each stable semantic ID, preserves source hashes, and emits compact IDs inside the reviewer budget.",
+            "expected_result": "The exact failed artifact from run 35444671480 packages successfully, quantitative C6 passes, critic-readiness passes, and hostile tests reject missing/duplicate/core-semantic drift without changing C7 thresholds.",
+            "failure_if_wrong": "Any real candidate-bound R05/R06 claim cannot be uniquely matched, packaging exceeds the existing prompt budget, the old exact-string failure recurs, or semantic drift/duplicate evidence is silently accepted.",
+            "cheap_disproof": "Run the focused independent-fixture selector tests and replay the exact failed artifact through build_critic_evidence.py plus quantitative C6 and validate_critic_readiness.py."
           }
         ],
         "full_domain_proof": {
@@ -1655,19 +1666,38 @@
         },
         "cheap_disproof_preflight": [
           {
-            "name": "c7-context-binding-preflight",
-            "command": "python3 -m unittest tools.havenline.task10.tests.test_build_critic_evidence tools.havenline.task10.tests.test_validate_critic_readiness",
-            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+            "name": "c7-stable-id-hostile-tests",
+            "command": "python3 -m unittest tools.havenline.task10.tests.test_build_critic_evidence tools.havenline.task10.tests.test_validate_critic_readiness -v",
+            "falsifies": "Any stable evidence ID is ambiguous, an anchored matcher accepts core semantic drift, missing/duplicate/false rows are not rejected, or the compact context violates prompt contracts."
+          },
+          {
+            "name": "c7-exact-failed-artifact-replay",
+            "command": "Havenline T10 C7 selector diagnostic replay on run 35444671480 artifact havenline-task10-isolated-81fbc7958ceb69b711f8be60add48b4510d3520e",
+            "falsifies": "The proposed selector cannot package the exact previously failing evidence, quantitative C6 fails, or critic-readiness remains red."
           }
         ],
         "counterexamples_considered": [
           {
-            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
-            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+            "case": "Only a nonsemantic suffix after 'accepted receipt stops flow' changes.",
+            "why_covered": "The anchored semantic matcher accepts the invariant-preserving suffix change; exact failed-artifact replay proves the current camera-lane wording."
+          },
+          {
+            "case": "Two passing rows claim the same accepted-receipt semantic invariant.",
+            "why_covered": "Exactly-one matching is mandatory; duplicate semantic evidence fails closed."
+          },
+          {
+            "case": "The core accepted-receipt semantic claim changes rather than its suffix.",
+            "why_covered": "The anchored matcher rejects core drift; the hostile test substitutes a different authority/completion claim and requires rejection."
+          },
+          {
+            "case": "Stable IDs make the C7 model context larger than the prior exact-name payload.",
+            "why_covered": "Validated source row prose is not duplicated into the model payload; the exact failed-artifact replay passes the existing prompt budget and critic-readiness."
           }
         ],
         "blast_radius_hypotheses": [
-          "Changes in c7-context-binding can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+          "Over-broad regexes could silently bind the wrong evidence; exactly-one matching plus duplicate/core-drift hostile tests prevent this.",
+          "Additional stable-ID metadata could overflow C7 prompt budget; compact ID-only reviewer payload is checked by the existing prompt budget and exact replay.",
+          "Source-binding could be weakened by omitting report identity; exact domain/integration SHA-256 bindings remain in the C7 context."
         ],
         "residual_unknowns": []
       },
@@ -1754,18 +1784,21 @@
           "known_failed_cases": [
             "The exact 0e83 request is 29970 tokens against a 16384-token context; runtime.log contains the cause but the advisor artifact only exposes a traceback.",
             "C0 completed inside the B059 token budget but its diagnosis omitted the exact failed integration assertion already present in the downloaded a210 artifact.",
-            "C0 contradicted the packet by claiming required_critics was empty and proposed nonexistent .github/workflows/task10_workflow.yml."
+            "C0 contradicted the packet by claiming required_critics was empty and proposed nonexistent .github/workflows/task10_workflow.yml.",
+            "On run 35444671480 the exact packaging traceback existed in the retained failed-job log but not in uploaded artifacts; bounded failed-log projection selected earlier branch/critic/defect noise, historical permission intelligence filled the evidence vacuum, and strict grounding correctly rejected the unsupported diagnosis."
           ],
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
           "full_failure_family_closed_by_design": true,
-          "collection_evidence": []
+          "collection_evidence": [
+            "C0 artifact from run 35444671480: terminal subject step is Package source-bound specialist inputs and quantitative C6; artifact projection had zero retained terminal lines; failed-log projection retained generic visual-critic/defect/setup lines instead of the traceback; diagnosis validation returned false."
+          ]
         },
         "strategy_kind": "TOOLING",
-        "causal_mechanism": "Keep the authoritative packet hash-bound, project semantically under budget, rank terminal failed artifact excerpts before generic successful evidence, separate C0's own job from subject unexecuted checks, and retain strict quote/path validation.",
-        "why_this_fixes_cause": "Keep the authoritative packet hash-bound, project semantically under budget, rank terminal failed artifact excerpts before generic successful evidence, separate C0's own job from subject unexecuted checks, and retain strict quote/path validation.",
-        "why_materially_different": "Extends the existing bounded/grounded pipeline to the exact failure exposed by 8ab: evidence collection succeeded but selection priority and subject-job boundaries still produced an unsupported diagnosis.",
+        "causal_mechanism": "Preserve the complete authoritative packet and fixed request budget; prioritize terminal failed artifact diagnostics and latest terminal failed-job log windows before generic context; keep current subject-job execution separate from the live C0 job; bind evidence to exact retained quotations and causal paths to exact tracked files; keep historical failure intelligence advisory-only.",
+        "why_this_fixes_cause": "The 8ab failure required terminal artifact priority; the later 81fbc failure proved that terminal evidence may exist only in the job log. Latest-terminal job-log windows close that source gap without expanding the request budget or weakening grounding, while advisory history cannot substitute for current evidence.",
+        "why_materially_different": "This extends the existing bounded/grounded architecture to a distinct evidence source that the previous terminal-artifact repair did not cover. It changes selection priority over retained job-log bytes rather than rerunning the same model or relaxing validation.",
         "same_family_attempt_count": 2,
         "prior_attempts": [
           {
@@ -1825,6 +1858,14 @@
           {
             "case": "A prior repair can make one observed example green while another case in the same family remains red.",
             "why_covered": "The latest 8ab failure packet is replayed and terminal evidence must survive the exact bounded projection."
+          },
+          {
+            "case": "Dozens of earlier branch names or historical critic/defect strings precede the terminal traceback in the same failed job log.",
+            "why_covered": "Latest terminal signal windows are selected before the generic signal fallback; the hostile regression places 50 such noise lines before the exact T10 packaging traceback."
+          },
+          {
+            "case": "No terminal signal exists in the retained job log.",
+            "why_covered": "The old bounded generic signal projection remains an explicit fallback, so unrelated logs do not invent terminal evidence."
           }
         ],
         "blast_radius_hypotheses": [
@@ -1836,7 +1877,7 @@
     "evidence_frontier": {
       "complete": true,
       "diagnosed_through_candidate": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81",
-      "latest_observed_failed_candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+      "latest_observed_failed_candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e",
       "observations": [
         {
           "run_id": 35402388836,
@@ -1859,6 +1900,33 @@
             "C0 validation rejected six unsupported exact quotations rather than weakening grounding"
           ],
           "reason": "This is the same bounded C0 evidence-grounding family, now narrowed to terminal-evidence priority and subject-job separation."
+        },
+        {
+          "run_id": 35444671480,
+          "candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e",
+          "disposition": "BOUND_TO_EXISTING_GROUP",
+          "group_id": "c7-context-binding",
+          "evidence": [
+            "built-pending-dependency passed domain stress, fixture/R11 integration, frozen source contract, 216/216 authoritative device projections, native4K capture, and warmed performance before failing in build_critic_evidence.py.",
+            "terminal traceback: AssertionError: integration selected C7 row missing, duplicate or failed: accepted receipt stops flow and resets its bounded phase.",
+            "the same candidate's integration report passed 135/135 and contains the invariant-preserving row accepted receipt stops flow while retaining camera-lane maintenance.",
+            "diagnostic replay run 35446792906 / artifact 10585304699 passes hostile selector tests, the exact failed artifact packaging replay, quantitative C6 and critic-readiness; approval reuse is explicitly forbidden."
+          ],
+          "reason": "This is the existing B057 C7 context-binding family. The prior repair correctly added R05/R06 source binding but used mutable human-readable row prose as identity; the new failure is selector-contract drift, not a product or C7 scoring defect."
+        },
+        {
+          "run_id": 35444671480,
+          "candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e",
+          "disposition": "BOUND_TO_EXISTING_GROUP",
+          "group_id": "c0-semantic-projection-grounding",
+          "evidence": [
+            "the C0 failure packet identifies Package source-bound specialist inputs and quantitative C6 as the failed terminal subject step.",
+            "the C0 model projection retained zero terminal artifact diagnostic lines for this cause because the traceback existed only in the job log.",
+            "the failed-log excerpt retained early branch/critic/defect/setup noise instead of the terminal traceback; historical FI-T09 permission context then influenced the model.",
+            "strict C0 validation returned validated=false because the proposed permission diagnosis used unsupported evidence and wildcard/nonexistent causal paths.",
+            "governance hardening integrated at 29be5ddae67cf47fd6674de8dfb3beb673116776 prioritizes latest terminal failed-job signal windows and keeps history advisory-only without weakening grounding."
+          ],
+          "reason": "This is the existing B059-B061 bounded/grounded C0 evidence family. The previous terminal-artifact repair did not cover a terminal cause present only in the failed job log."
         }
       ],
       "unclassified_failures": []
