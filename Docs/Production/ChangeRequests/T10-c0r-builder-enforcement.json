@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "requesting_task": "T10",
+  "blocker": "C0R-T10-BUILDER-ENFORCEMENT",
+  "target_path": [
+    "tools/havenline/production/builder_repair_gate.py",
+    "tools/havenline/production/tests/test_c0_builder.py",
+    "tools/havenline/production/validate_architecture_v32_t10.py"
+  ],
+  "requested_change": "Require T10 and future T11+ FIX_REQUIRED repair candidates to provide the canonical source-bound C0R Repair Sufficiency report before builder_repair_gate can authorize implementation. Verify exact C0/plan hashes, ACCEPTED outcome, unchanged thresholds, full blocker coverage, and deterministic recomputation of the C0R report. Treat the canonical C0R record as bookkeeping only, never as causal implementation.",
+  "reason": "The T10 canary proved that workflow-level C0R blocks insufficient repairs before expensive validation, but a workflow omission could still bypass it because builder_repair_gate does not independently require C0R. The builder gate must enforce the accepted repair idea and then separately enforce the actual bounded implementation.",
+  "dependency": "Integrated non-voting C0R repair_sufficiency_critic.py and the existing canonical C0/REPAIR_PLAN repair lifecycle.",
+  "expected_behavior": "T10+ repair plans without repair_sufficiency or without an exact canonical REPAIR_PLAN_ACCEPTED C0R report fail closed. Stale or forged C0R reports fail. T09 historical repair validation remains unchanged. C1-C11 authority and >9.0 thresholds remain unchanged.",
+  "tests_required": [
+    "T10 missing C0R rejects.",
+    "T10 missing repair_sufficiency rejects.",
+    "Exact recomputed C0R acceptance permits the bounded repair.",
+    "Stale plan hash rejects.",
+    "Forged or hand-edited C0R content rejects deterministic recomputation.",
+    "T09 historical repair remains backward compatible.",
+    "Architecture validator accepts only the exact bounded builder delta."
+  ],
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "APPROVED_BOUNDED_V32_EXTENSION",
+  "authorization": "Authorize canonical C0R enforcement inside builder_repair_gate for T10 and future T11+ repairs, preserving all critics and thresholds.",
+  "forbidden_changes": [
+    "No gameplay approval authority for C0R.",
+    "No C1-C11 score or threshold changes.",
+    "No weakening of builder diff/protected-file/repair-base/freeze checks.",
+    "No use of the C0R bookkeeping file as causal-touch credit.",
+    "No retroactive invalidation of completed T09."
+  ]
+}
