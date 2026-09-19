@@ -249,6 +249,8 @@ def model_projection(packet:dict,packet_sha256:str,excerpt_bytes:int=640,detail:
             "step_count":len(steps),"step_disposition_counts":counts,"all_steps_sha256":stable_json_digest(steps),
             "failed_terminal_steps":failed,"job_dispositions":jobs,
             "unexecuted_checks":packet.get("unexecuted_checks",[]),
+            "subject_jobs_terminal":packet.get("subject_jobs_terminal"),
+            "diagnostic_jobs_excluded_from_subject_execution":packet.get("diagnostic_jobs_excluded_from_subject_execution",[]),
         },
         "change_surface":{"changed_files":compact_paths(changed,detail),"protected_files":compact_paths(protected,detail)},
         "structured_failure_records":compact_failure_records(packet,detail),
