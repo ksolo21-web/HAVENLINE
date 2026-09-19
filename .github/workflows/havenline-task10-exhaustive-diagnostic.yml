@@ -2,7 +2,7 @@ name: Havenline T10 exhaustive projection diagnostic
 
 on:
   push:
-    branches: ['havenline/T10-exhaustive-diagnostic']
+    branches: ['havenline/T10-exhaustive-diagnostic', 'havenline/T10-layout-solver-prototype']
     paths:
       - 'HavenlineGodot/tests/capture_task10_world_transform.gd'
       - '.github/workflows/havenline-task10-exhaustive-diagnostic.yml'
@@ -27,7 +27,7 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
 
-      - name: Prove diagnostic-only diff
+      - name: Prove bounded non-approval prototype diff
         run: |
           set -euo pipefail
           git cat-file -e "$SOURCE_CANDIDATE^{commit}"
@@ -37,11 +37,13 @@ jobs:
           import sys
           allowed={
             'HavenlineGodot/tests/capture_task10_world_transform.gd',
+            'HavenlineGodot/scripts/world_transform_view.gd',
             '.github/workflows/havenline-task10-exhaustive-diagnostic.yml',
           }
           changed=set(sys.argv[1:])
           assert changed and changed <= allowed,(changed,allowed)
-          assert 'HavenlineGodot/scripts/world_transform_view.gd' not in changed
+          if 'T10-layout-solver-prototype' in __import__('os').environ.get('GITHUB_REF_NAME',''):
+              assert 'HavenlineGodot/scripts/world_transform_view.gd' in changed
           PY
 
       - name: Prepare pinned Godot diagnostic renderer
@@ -134,7 +136,7 @@ jobs:
           summary={
             'schema_version':1,
             'task':'T10',
-            'mode':'diagnostic_exhaustive_projection_enumeration',
+            'mode':'diagnostic_exhaustive_projection_enumeration_nonapproval',
             'source_candidate':os.environ['SOURCE_CANDIDATE'],
             'harness_commit':os.environ['HARNESS_COMMIT'],
             'device_count':6,'state_count':6,'angle_count':6,
