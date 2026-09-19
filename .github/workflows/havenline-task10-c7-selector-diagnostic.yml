@@ -34,6 +34,7 @@ jobs:
       - name: Prove bounded prototype-only diff
         run: |
           set -euo pipefail
+          git fetch --no-tags origin "$FAILED_CANDIDATE"
           git cat-file -e "$FAILED_CANDIDATE^{commit}"
           mapfile -t changed < <(git diff --name-only 19ccc6faf4152c62c99295357f038062301ae165 HEAD)
           printf '%s\n' "${changed[@]}"
