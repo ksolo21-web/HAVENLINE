@@ -67,7 +67,9 @@ C0_LOG_NEW = '          python3 tools/havenline/production/collect_failure_job_l
 OWNER_BASE = "c1957696c6f716d3cd6f8528c95edbb7542cd4a6"
 SPECIALIST = "tools/havenline/production/specialist_critic_runner.py"
 SPECIALIST_BASE_SHA256 = "ddf0849d034033ae9df61d671953127e4e40bc80a0601ee735b9c68c9e2cdb00"
-SPECIALIST_CURRENT_SHA256 = "961d6daa2ae42297e703c17b16f34db540fbdee294dccbaebf29c81351c0f980"
+SPECIALIST_CURRENT_SHA256 = "febb56d2cfdce0e71e3af637199a314447d7593508cad0c0b18998e85ddac373"
+SPECIALIST_BRANCH_REQUEST = "Docs/Production/ChangeRequests/T10-specialist-complete-grammar-branches.json"
+SPECIALIST_BRANCH_REQUEST_SHA256 = "b5be20435029b1b407427366c8d9dd2aa87bdee5f682966e8a8c109e8f5e1d4a"
 SPECIALIST_REQUEST = "Docs/Production/ChangeRequests/T10-specialist-actionable-defect-schema.json"
 SPECIALIST_REQUEST_SHA256 = "25c8544a37587fdbbd527de7606c0517e67781ee879fdb72e502b6fe2d1c513d"
 C0_ADVISOR = "tools/havenline/production/c0_root_cause_advisor.py"
@@ -209,6 +211,8 @@ def validate() -> dict:
             errors.append("Bounded C0 job log authorization changed or missing")
         errors += exact_owner_source_errors(C0_ADVISOR,C0_ADVISOR_BASE_SHA256,C0_ADVISOR_CURRENT_SHA256)
         errors += exact_owner_source_errors(SPECIALIST,SPECIALIST_BASE_SHA256,SPECIALIST_CURRENT_SHA256)
+        if hashlib.sha256((v31.ROOT/SPECIALIST_BRANCH_REQUEST).read_bytes()).hexdigest()!=SPECIALIST_BRANCH_REQUEST_SHA256:
+            errors.append("Complete specialist grammar branch authorization changed or missing")
         c0_bounded_request=json.loads((v31.ROOT/C0_BOUNDED_REQUEST).read_text())
         if hashlib.sha256((v31.ROOT/C0_BOUNDED_REQUEST).read_bytes()).hexdigest()!=C0_BOUNDED_REQUEST_SHA256:
             errors.append("Bounded C0 model packet authorization changed or missing")

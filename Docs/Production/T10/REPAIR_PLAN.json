@@ -4,7 +4,7 @@
   "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
   "c0_report_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
-  "c0_report_sha256": "744d5cdddf3b504fa9cb2a706d4548eb275fb954a94579433a9ad7d987f2e843",
+  "c0_report_sha256": "5f496c911e3117e9820669e2c95dcaaae038a252cba1bfbb8450477972b8268f",
   "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "repair_base_status": "CUMULATIVE_REPAIR_CYCLE_ROOT_WITH_LATEST_TERMINAL_FAILURE_BOUND",
   "repair_base_rule": "Measure the complete reconciled B037-B062 owner-plus-task diff from cumulative repair root c7a18d002fe8d0f3978370f3e4567ba88bfe17e8. The latest terminal evidence is 81fbc7958ceb69b711f8be60add48b4510d3520e; it is evidence only and no score is reusable.",
@@ -390,7 +390,7 @@
     },
     {
       "blocker_id": "C0-T10-B058",
-      "causal_change": "For T10 only, require either all scores strictly above 9.0 with no defects or at least one concrete defect; retain every model, runtime, token and threshold setting.",
+      "causal_change": "For T10 only, require either all scores strictly above 9.0 with no defects or at least one concrete defect; retain every model, runtime, token and threshold setting. Materialize common properties and requirements into every oneOf branch.",
       "files": [
         "tools/havenline/production/specialist_critic_runner.py",
         "tools/havenline/production/tests/test_specialist_critic_runner.py",
@@ -399,7 +399,8 @@
         "tools/havenline/production/tests/test_architecture_release_lock.py",
         ".github/workflows/havenline-production-governance.yml",
         "Docs/Production/WORKSTREAM_REGISTRY.json",
-        "tools/havenline/production/tests/test_t10_activation_validation.py"
+        "tools/havenline/production/tests/test_t10_activation_validation.py",
+        "Docs/Production/T10/Proofs/complete-grammar-branches.json"
       ],
       "verification": [
         "Focused exact-boundary and hostile tests pass.",
@@ -1883,25 +1884,37 @@
             "strict-threshold"
           ],
           "known_failed_cases": [
-            "C3 returns world_response_readability 9.0 with defects=[]; the gate fails correctly but the repair system gets no cause."
+            "C3 returns world_response_readability 9.0 with defects=[]; the gate fails correctly but the repair system gets no cause.",
+            "C7 job 105939873831 in run 35458022974 returned only defects and scores; coverage_complete, confidence and observations were absent. Pinned b10809 schema converter reproduces their absence from both oneOf alternatives because root sibling properties are ignored. Complete branch schemas restore all required fields without changing scoring or response bounds."
           ],
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
           "full_failure_family_closed_by_design": false,
-          "collection_evidence": []
+          "collection_evidence": [
+            "Docs/Production/T10/Proofs/complete-grammar-branches.json"
+          ]
         },
         "strategy_kind": "TOOLING",
-        "causal_mechanism": "Enforce the existing prompt rule in the response validator for T10 only.",
-        "why_this_fixes_cause": "Enforce the existing prompt rule in the response validator for T10 only.",
+        "causal_mechanism": "Materialize the complete required response object in each oneOf alternative consumed by the pinned grammar compiler.",
+        "why_this_fixes_cause": "Materialize the complete required response object in each oneOf alternative consumed by the pinned grammar compiler.",
         "why_materially_different": "Adds machine actionability while preserving model/runtime/token/threshold settings.",
-        "same_family_attempt_count": 0,
-        "prior_attempts": [],
+        "same_family_attempt_count": 1,
+        "prior_attempts": [
+          {
+            "strategy": "T10 actionable-defect oneOf schema",
+            "outcome": "PARTIAL",
+            "same_family": true,
+            "candidate": "3d24ffaacab9ffd1350d47e5479ce70142424217",
+            "run_id": 35458022974,
+            "lesson": "Validate the effective generated grammar for both alternatives, not JSON Schema root constraints alone."
+          }
+        ],
         "blocker_coverage": [
           {
             "blocker_id": "C0-T10-B058",
-            "diagnosed_root_cause": "The T10 response schema permits scores at or below 9.0 with an empty defect list even though the prompt requires an actionable defect.",
-            "why_fix_changes_cause": "Enforce the existing prompt rule in the response validator for T10 only. This directly targets T10 critic/C0 production tooling.",
+            "diagnosed_root_cause": "The T10 response schema permits scores at or below 9.0 with an empty defect list even though the prompt requires an actionable defect. The pinned grammar compiler visits oneOf before sibling properties, dropping root-only required fields.",
+            "why_fix_changes_cause": "Materialize the complete required response object in each oneOf alternative consumed by the pinned grammar compiler.",
             "expected_result": "Focused exact-boundary and hostile tests pass.",
             "failure_if_wrong": "C3 returns world_response_readability 9.0 with defects=[]; the gate fails correctly but the repair system gets no cause. remains reproducible, or the group preflight fails on the exact repaired surface.",
             "cheap_disproof": "python3 -m unittest tools.havenline.production.tests.test_specialist_critic_runner"
@@ -2118,7 +2131,7 @@
         },
         "strategy_kind": "GOVERNANCE",
         "causal_mechanism": "CONTRACT_REDIRECT[INTEGRATION_BRANCH]",
-      "why_this_fixes_cause": "The shared caller supplies canonical integration authority explicitly. The callee continues to reject absent or redirected authority, and workflow-contract tests verify the actual caller environment.",
+        "why_this_fixes_cause": "The shared caller supplies canonical integration authority explicitly. The callee continues to reject absent or redirected authority, and workflow-contract tests verify the actual caller environment.",
         "why_materially_different": "Repair the missing caller-to-callee authority contract and validate its executable workflow environment, preserving all strict callee checks.",
         "same_family_attempt_count": 2,
         "prior_attempts": [
@@ -2221,7 +2234,7 @@
     "evidence_frontier": {
       "complete": true,
       "diagnosed_through_candidate": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81",
-      "latest_observed_failed_candidate": "e637dcc336eb72e4e3115305b92fb5ae8932a7b4",
+      "latest_observed_failed_candidate": "3d24ffaacab9ffd1350d47e5479ce70142424217",
       "observations": [
         {
           "run_id": 35402388836,
@@ -2293,6 +2306,16 @@
             "Candidate guard run 35458019688 job 105936658374 passed ownership and failed only with active integration branch does not match pinned canonical branch. Its environment contains INTEGRATION_HEAD but omits INTEGRATION_BRANCH; both primary T10 C0R pre-build jobs explicitly supplied it and passed."
           ],
           "reason": "Same B062 admission interface family; the caller must supply the authority required by the already-hardened callee."
+        },
+        {
+          "run_id": 35458022974,
+          "candidate": "3d24ffaacab9ffd1350d47e5479ce70142424217",
+          "disposition": "BOUND_TO_EXISTING_GROUP",
+          "group_id": "actionable-defect-schema",
+          "evidence": [
+            "C7 job 105939873831 in run 35458022974 returned only defects and scores; coverage_complete, confidence and observations were absent. Pinned b10809 schema converter reproduces their absence from both oneOf alternatives because root sibling properties are ignored. Complete branch schemas restore all required fields without changing scoring or response bounds."
+          ],
+          "reason": "Existing B058 response-schema repair omitted required fields from effective branch grammar. This is invalid review output, not passing product evidence."
         }
       ],
       "unclassified_failures": []
@@ -2309,7 +2332,7 @@
     "threshold_changes": [],
     "loop_risk_acknowledged": true
   },
-  "reconciled_integration_head": "92865e44812694de7f469608954c95ca39bb8613",
+  "reconciled_integration_head": "842d015df1f22d00484741cefb222ac7c2cabe51",
   "inherited_noncausal_files": [
     "Docs/Production/ChangeRequests/T10-c0r-workstream-authorization-schema.json",
     "Docs/Production/ChangeRequests/T10-c0-terminal-evidence-priority.json",
@@ -2317,6 +2340,7 @@
     "Docs/Production/ChangeRequests/T10-c0r-builder-enforcement.json",
     "Docs/Production/ChangeRequests/T10-c0r-repair-sufficiency-canary.json",
     "Docs/Production/ChangeRequests/T10-repair-base-inherited-governance.json",
-    "Docs/Production/ChangeRequests/T10-candidate-guard-integration-branch.json"
+    "Docs/Production/ChangeRequests/T10-candidate-guard-integration-branch.json",
+    "Docs/Production/ChangeRequests/T10-specialist-complete-grammar-branches.json"
   ]
 }
