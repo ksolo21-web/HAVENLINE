@@ -1,7 +1,8 @@
 import json, pathlib, sys, tempfile, unittest
 HERE=pathlib.Path(__file__).resolve();PROD=HERE.parents[1];sys.path.insert(0,str(PROD))
 from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, artifact_diagnostic_projection, build_model_request, c0_response_schema, model_projection, retain_http_error, subject_execution, superseded_report, validate_report
-from builder_repair_gate import validate as validate_builder, verify_inherited_noncausal
+from builder_repair_gate import validate as validate_builder, validate_c0r, verify_inherited_noncausal
+from repair_sufficiency_critic import review as review_c0r
 from collect_artifact_diagnostics import collect as collect_artifact_diagnostics
 
 
@@ -39,6 +40,82 @@ def plan():
         "fixes":[{"blocker_id":"C0-B001","files":["tools/havenline/task09/motion_capture.py"],"causal_change":"compare skeleton transforms","verification":["pose-space preflight passes"]}],
         "blast_radius_checks":["T06 regression"],"plan_path":"Docs/Production/T09/REPAIR_PLAN.json"
     }
+
+def t10_c0():
+    c=complete_c0()
+    c.update(task_id="T10",diagnosis_id="C0-T10-123",report_sha256="c"*64)
+    c["blockers"][0]=dict(c["blockers"][0])
+    c["blockers"][0].update(id="C0-T10-B001",files_to_change=["tools/havenline/task10/fix.py"])
+    return c
+
+
+def t10_plan():
+    p={
+        "c0_report_path":"Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "schema_version":1,"task_id":"T10","failed_candidate":"a"*40,"diagnosis_id":"C0-T10-123","c0_report_sha256":"c"*64,
+        "repair_base":"e"*40,"full_blocker_set_acknowledged":True,"candidate_freeze_after_build":True,"validation_concurrency_policy":"finish_running_sha",
+        "must_not_change":["HavenlineGodot/assets/characters/Character1.glb"],
+        "fixes":[{"blocker_id":"C0-T10-B001","files":["tools/havenline/task10/fix.py"],"causal_change":"compare skeleton transforms","verification":["pose-space preflight passes"]}],
+        "blast_radius_checks":["T09 regression"],"plan_path":"Docs/Production/T10/REPAIR_PLAN.json",
+    }
+    p["repair_sufficiency"]={
+        "repair_groups":[{
+            "group_id":"pose-tooling",
+            "blocker_ids":["C0-T10-B001"],
+            "failure_family":{
+                "id":"pose-identity",
+                "invariant":"pose identity must be derived from transforms rather than pixel equality",
+                "scope_dimensions":["tooling","pose-space"],
+                "known_failed_cases":["bad pose gate"],
+                "unexecuted_or_unknown_cases":[],
+                "observable_exhaustive_collection_required":False,
+                "complete_observable_set_collected":False,
+                "full_failure_family_closed_by_design":True,
+                "collection_evidence":[],
+            },
+            "strategy_kind":"TOOLING",
+            "causal_mechanism":"compare skeleton transforms",
+            "why_this_fixes_cause":"pixel equality is replaced by transform-space identity",
+            "why_materially_different":"changes the causal measurement instead of rerunning the same pixel gate",
+            "same_family_attempt_count":0,
+            "prior_attempts":[],
+            "blocker_coverage":[{
+                "blocker_id":"C0-T10-B001",
+                "diagnosed_root_cause":"pixel equality used as pose identity",
+                "why_fix_changes_cause":"the validator now compares skeleton transforms",
+                "expected_result":"pose-space preflight passes",
+                "failure_if_wrong":"pixel-equality false negatives remain reproducible",
+                "cheap_disproof":"run pose-space preflight",
+            }],
+            "full_domain_proof":{"required":False,"provided":False,"method":"","expected_cases":0,"covered_cases":0},
+            "cheap_disproof_preflight":[{"name":"pose-preflight","command":"run pose-space preflight","falsifies":"transform-space identity is still wrong"}],
+            "counterexamples_considered":[],
+            "blast_radius_hypotheses":["pose identity changes could affect C5 tooling but not approved runtime assets"],
+            "residual_unknowns":[],
+        }],
+        "evidence_frontier":{
+            "complete":True,
+            "diagnosed_through_candidate":"a"*40,
+            "latest_observed_failed_candidate":"a"*40,
+            "observations":[],
+            "unclassified_failures":[],
+        },
+        "cross_group_interactions":["single-group fixture has no cross-group causal dependency"],
+        "threshold_changes":[],
+        "loop_risk_acknowledged":True,
+    }
+    return p
+
+
+def accepted_c0r(c0,plan,c0_sha="c"*64,plan_sha="p"*64):
+    report=review_c0r(c0,plan,c0_sha)
+    report["input_bindings"]={
+        "c0_path":"Docs/Production/T10/C0_ROOT_CAUSE.json",
+        "c0_sha256":c0_sha,
+        "plan_path":"Docs/Production/T10/REPAIR_PLAN.json",
+        "plan_sha256":plan_sha,
+    }
+    return report
 
 
 class C0BuilderTests(unittest.TestCase):
@@ -99,6 +176,41 @@ class C0BuilderTests(unittest.TestCase):
             self.assertEqual("run/tests/integration.log",row["path"])
             self.assertEqual("ASSERT FAILED: expected 8 wood, got 4",row["retained_lines"][0]["text"])
             self.assertEqual(64,len(row["sha256"]))
+
+class C0RBuilderEnforcementTests(unittest.TestCase):
+    def test_t10_requires_canonical_c0r(self):
+        c=t10_c0();p=t10_plan()
+        errors=validate_builder(c,p,c0_sha256="c"*64,plan_sha256="p"*64)
+        self.assertTrue(any("canonical C0R" in e for e in errors),errors)
+
+    def test_exact_recomputed_c0r_allows_t10_repair(self):
+        c=t10_c0();p=t10_plan();r=accepted_c0r(c,p)
+        self.assertEqual([],validate_c0r(c,p,r,"c"*64,"p"*64))
+        self.assertEqual([],validate_builder(c,p,c0r=r,c0_sha256="c"*64,plan_sha256="p"*64))
+
+    def test_stale_c0r_plan_hash_is_rejected(self):
+        c=t10_c0();p=t10_plan();r=accepted_c0r(c,p)
+        errors=validate_builder(c,p,c0r=r,c0_sha256="c"*64,plan_sha256="q"*64)
+        self.assertTrue(any("repair-plan hash mismatch" in e for e in errors),errors)
+
+    def test_forged_c0r_acceptance_is_rejected(self):
+        import copy
+        c=t10_c0();p=t10_plan();r=accepted_c0r(c,p)
+        bad=copy.deepcopy(r);bad["risk_codes"]=["FORGED"]
+        errors=validate_builder(c,p,c0r=bad,c0_sha256="c"*64,plan_sha256="p"*64)
+        self.assertTrue(any("deterministic recomputation" in e for e in errors),errors)
+        bad=copy.deepcopy(r);bad["outcome"]="REPAIR_PLAN_REJECTED"
+        errors=validate_builder(c,p,c0r=bad,c0_sha256="c"*64,plan_sha256="p"*64)
+        self.assertTrue(any("C0R outcome" in e for e in errors),errors)
+
+    def test_t10_missing_repair_sufficiency_cannot_bypass_c0r(self):
+        c=t10_c0();p=t10_plan();p.pop("repair_sufficiency")
+        errors=validate_builder(c,p,c0_sha256="c"*64,plan_sha256="p"*64)
+        self.assertTrue(any("requires repair_sufficiency" in e for e in errors),errors)
+
+    def test_t09_historical_repair_remains_backward_compatible(self):
+        self.assertEqual([],validate_builder(complete_c0(),plan()))
+
 
 class CausalBookkeepingTests(unittest.TestCase):
     def test_documents_cannot_satisfy_causal_change(self):
