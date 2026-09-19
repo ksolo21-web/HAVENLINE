@@ -244,9 +244,6 @@ class BenchmarkEvidenceTests(unittest.TestCase):
   # Startup cost remains visible; it never replaces or relaxes the measured limit.
   row=self.fixture();self.assertGreater(row['conditioning']['phases'][-1]['after']['rss_mb']-row['conditioning']['before_preallocation']['rss_mb'],32)
   self.assertEqual([],m.benchmark_errors(row,'a'*40))
-))
-  self.assertEqual(len(ids),len(set(ids)))
-
  def test_contract_rejects_omission_duplicate_tampering_and_order(self):
   with tempfile.TemporaryDirectory() as t:
    root=Path(t)
