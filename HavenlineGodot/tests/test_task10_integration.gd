@@ -275,7 +275,7 @@ func run() -> void:
 	check("view uses shape and color redundancy", view_contract.shape_and_color_redundancy and view_contract.world_response_shapes == ["perimeter_ring", "preview_volume", "status_label"])
 	check("view declares strict four-node visual budget", view_contract.visual_node_budget == 4)
 	check("view exposes bounded readability range", view_contract.readability_scale_range == [0.85, 1.35])
-	check("view declares camera-plane clearance and explicit label ordering", view_contract.label_camera_offset == Vector2(0.0, -190.0) and view_contract.label_max_width == 960.0 and is_equal_approx(float(view_contract.label_pixel_size), 0.0057) and view_contract.label_render_priority == 100 and view_contract.label_outline_render_priority == 99)
+	check("view declares constrained adaptive label layout and explicit ordering", view_contract.label_layout_policy == "constrained_screen_lanes_v1" and view_contract.label_dynamic_camera_lane and is_equal_approx(float(view_contract.label_min_readability_scale), 0.85) and float(view_contract.label_fit_slack_px) >= 1.0 and view_contract.label_max_width == 960.0 and is_equal_approx(float(view_contract.label_pixel_size), 0.0057) and view_contract.label_render_priority == 100 and view_contract.label_outline_render_priority == 99)
 
 	var visual_engine := configured_engine()
 	check("visual fixture target registers", visual_engine.register_target("visual-A", "seed"))
@@ -365,7 +365,7 @@ func run() -> void:
 	check("complete world response requires accepted authority receipt", view.mark_complete(visual_accepted, next_blocked_offer) and view.descriptor().lifecycle == "complete")
 	check("completion puts next-stage shortfalls first and preserves prerequisite", beacon.text.begins_with("NEXT — deliver missing resources") and beacon.text.contains("12 wood") and beacon.text.contains("8 stone") and beacon.text.contains("2 metal") and beacon.text.contains("harvesting online"))
 	check("complete lifecycle solidifies accepted target form", ring.visible and ghost.visible and beacon.visible and ghost.scale == Vector3.ONE and ghost.material_override.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED and beacon.text.contains("Paid:") and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and view.displayed_costs == {"wood": 8, "stone": 4})
-	check("label stays in its camera-plane lane above transparent response passes", beacon.offset == Vector2(0.0, -190.0) and beacon.render_priority == 100 and beacon.outline_render_priority == 99)
+	check("label preserves adaptive camera-lane render ordering", beacon.render_priority == 100 and beacon.outline_render_priority == 99 and beacon.pixel_size >= TransformView.LABEL_PIXEL_SIZE * TransformView.READABILITY_MIN - 0.000001 and beacon.pixel_size <= TransformView.LABEL_PIXEL_SIZE + 0.000001)
 	check("accepted receipt stops flow while retaining camera-lane maintenance", not view._ring_material.emission_enabled and view._ring_material.uv1_scale == Vector3.ONE and view._ring_material.uv1_offset == Vector3.ZERO and view.is_processing())
 	var completion_text := beacon.text
 	check("repeated completion does not replay debit feedback", not view.mark_complete(visual_accepted) and beacon.text == completion_text and not view._ring_material.emission_enabled)
