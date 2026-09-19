@@ -135,25 +135,52 @@ def compact_history(value:Any,detail:int=2)->dict:
     return {"matches":rows,"historical_match_is_advisory_only":value.get("historical_match_is_advisory_only")}
 
 
+def _artifact_item_priority(item:dict)->int:
+    try:declared=int(item.get("priority",0))
+    except Exception:declared=0
+    text=str(item.get("text",""))
+    if ARTIFACT_HARD_RE.search(text):return max(3,declared)
+    if SIGNAL_RE.search(text):return max(1,declared)
+    return declared
+
+
+def _artifact_row_priority(row:dict)->tuple:
+    items=row.get("retained_lines",[]) if isinstance(row.get("retained_lines"),list) else []
+    priorities=[_artifact_item_priority(item) for item in items if isinstance(item,dict)]
+    declared=int(row.get("diagnostic_priority",0) or 0)
+    return (-max([declared]+priorities+[0]),-sum(p>=3 for p in priorities),-sum(p>=2 for p in priorities),str(row.get("path","")))
+
+
 def artifact_diagnostic_projection(packet:dict,excerpt_bytes:int,detail:int)->dict:
     value=packet.get("artifact_diagnostics",{})
-    rows=value.get("records",[]) if isinstance(value,dict) else []
+    source_rows=value.get("records",[]) if isinstance(value,dict) else []
+    rows=sorted([row for row in source_rows if isinstance(row,dict)],key=_artifact_row_priority)
     limit=max(512,excerpt_bytes*2);used=0;retained=[]
     row_limit={2:8,1:4,0:2}.get(detail,2)
+    per_row_limit={2:3,1:2,0:1}.get(detail,1)
     for row in rows[:row_limit]:
-        if not isinstance(row,dict):continue
+        source_items=row.get("retained_lines",[]) if isinstance(row.get("retained_lines"),list) else []
+        items=sorted(
+            [item for item in source_items if isinstance(item,dict)],
+            key=lambda item:(-_artifact_item_priority(item),str(item.get("line",""))),
+        )
         lines=[]
-        for item in row.get("retained_lines",[]) if isinstance(row.get("retained_lines"),list) else []:
-            if not isinstance(item,dict):continue
-            text=str(item.get("text", ""));size=len(text.encode("utf-8",errors="replace"))+32
+        for item in items[:per_row_limit]:
+            text=str(item.get("text",""));size=len(text.encode("utf-8",errors="replace"))+32
             if not text or used+size>limit:continue
-            lines.append({"line":item.get("line"),"text":text});used+=size
+            lines.append({"line":item.get("line"),"text":text,"priority":_artifact_item_priority(item)});used+=size
         if lines:
-            retained.append({"path":row.get("path"),"bytes":row.get("bytes"),"sha256":row.get("sha256"),"retained_lines":lines})
+            retained.append({
+                "path":row.get("path"),"bytes":row.get("bytes"),"sha256":row.get("sha256"),
+                "diagnostic_priority":max([int(row.get("diagnostic_priority",0) or 0)]+[x["priority"] for x in lines]),
+                "retained_lines":lines,
+            })
     return {
-        "record_count":value.get("record_count",len(rows)) if isinstance(value,dict) else 0,
-        "records_sha256":stable_json_digest(rows),"records":retained,
-        "retained_bytes":used,"truncated":len(retained)<len(rows),
+        "record_count":value.get("record_count",len(source_rows)) if isinstance(value,dict) else 0,
+        "hard_failure_record_count":value.get("hard_failure_record_count"),
+        "records_sha256":stable_json_digest(source_rows),"records":retained,
+        "retained_bytes":used,"truncated":len(retained)<len(source_rows),
+        "terminal_failure_priority_enabled":True,
     }
 
 
@@ -403,7 +430,7 @@ def model_report(packet:dict,out:pathlib.Path,packet_sha256:str)->dict:
         proc,log,manifest=start_runtime(out)
         strict_grounding=packet.get("strict_evidence_grounding") is True
         schema=c0_response_schema(strict_grounding)
-        prompt="""You are C0, Havenline's non-voting Root-Cause Advisor. Diagnose the complete available failed run before any builder changes code. Do not score gameplay and do not approve the task. Distinguish PRODUCT_DEFECT, TOOLING_DEFECT, GOVERNANCE_DEFECT, EVIDENCE_DEFECT, INFRASTRUCTURE_FAILURE and SUPERSEDED. A red CI state is not a diagnosis. Inspect successful upstream steps as evidence too. Return every currently observable independent blocker, not only the first red line. Mark downstream steps that never executed as unexecuted_checks; do not invent their results. Protect already-approved work: if a harness/test/governance defect is supported and the product is not disproven, explicitly keep the approved production files in files_not_to_change. For every blocker give concrete evidence, root cause, smallest causal fix, exact files_to_change/files_not_to_change and dependency-ordered verification. Prefer a complete blocker set over serial symptom fixing. If evidence is insufficient, say so rather than guessing. Candidate validation must use finish_running_sha: a newer commit queues and does not cancel the running SHA."""
+        prompt="""You are C0, Havenline's non-voting Root-Cause Advisor. Diagnose the complete available failed run before any builder changes code. Do not score gameplay and do not approve the task. Distinguish PRODUCT_DEFECT, TOOLING_DEFECT, GOVERNANCE_DEFECT, EVIDENCE_DEFECT, INFRASTRUCTURE_FAILURE and SUPERSEDED. A red CI state is not a diagnosis, and a job stopping after a failed step is not by itself an infrastructure failure. Classify INFRASTRUCTURE_FAILURE only when exact retained evidence independently identifies runner, network, cache, permission, toolchain or runtime infrastructure failure. Prefer hard terminal artifact diagnostics (ERROR/FATAL/Traceback/assertion/explicit passed=false) over successful or expected-negative test prose. If the specific causal terminal evidence is absent, return INSUFFICIENT_EVIDENCE instead of guessing. Inspect successful upstream steps as evidence too. Return every currently observable independent blocker, not only the first red line. Mark downstream subject-validation steps that never executed as unexecuted_checks; do not treat C0's own diagnostic steps as subject checks. Protect already-approved work: if a harness/test/governance defect is supported and the product is not disproven, explicitly keep the approved production files in files_not_to_change. For every blocker give concrete evidence, root cause, smallest causal fix, exact files_to_change/files_not_to_change and dependency-ordered verification. Prefer a complete blocker set over serial symptom fixing. Candidate validation must use finish_running_sha: a newer commit queues and does not cancel the running SHA."""
         if strict_grounding:
             prompt += " Every evidence item must be SOURCE | EXACT_QUOTE using an exact retained source label and verbatim excerpt from the projection. Never infer an empty collection from a populated one. Every files_to_change value must be an exact path from repository_paths; if the source does not support a causal repair, return INSUFFICIENT_EVIDENCE instead of inventing a path."
         try:body,request_bytes,budget,projection=build_model_request(packet,packet_sha256,prompt,schema)
