@@ -1,7 +1,7 @@
 import json, pathlib, sys, tempfile, unittest
 HERE=pathlib.Path(__file__).resolve();PROD=HERE.parents[1];sys.path.insert(0,str(PROD))
 from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, build_model_request, c0_response_schema, model_projection, retain_http_error, superseded_report, validate_report
-from builder_repair_gate import validate as validate_builder
+from builder_repair_gate import validate as validate_builder, verify_inherited_noncausal
 from collect_artifact_diagnostics import collect as collect_artifact_diagnostics
 
 
@@ -132,6 +132,64 @@ class CausalBookkeepingTests(unittest.TestCase):
         actual=p['fixes'][0]['files']+[p['c0_report_path'],p['plan_path']]
         self.assertTrue(any('C0-B002 causal files did not change' in e for e in validate_builder(c,p,actual,p['repair_base'])))
         self.assertEqual(validate_builder(c,p,actual+['second.py'],p['repair_base']),[])
+    def test_exact_integration_inheritance_is_noncausal_and_allowed(self):
+        p=plan();c=complete_c0()
+        p['reconciled_integration_head']='f'*40
+        p['inherited_noncausal_files']=['Docs/Production/C0R_REPORT_SCHEMA.json']
+        actual=p['fixes'][0]['files']+[p['c0_report_path'],p['plan_path']]+p['inherited_noncausal_files']
+        self.assertEqual(validate_builder(c,p,actual,p['repair_base']),[])
+        reads={
+            ('f'*40,'Docs/Production/C0R_REPORT_SCHEMA.json'):b'exact-governance',
+            ('HEAD','Docs/Production/C0R_REPORT_SCHEMA.json'):b'exact-governance',
+        }
+        errors=verify_inherited_noncausal(
+            p,'HEAD','f'*40,
+            read_ref=lambda ref,path:reads[(ref,path)],
+            is_ancestor=lambda ancestor,head: ancestor=='f'*40 and head=='HEAD'
+        )
+        self.assertEqual(errors,[])
+
+    def test_inherited_governance_never_satisfies_causal_touch(self):
+        p=plan();c=complete_c0()
+        inherited='tools/havenline/production/inherited.py'
+        p['reconciled_integration_head']='f'*40
+        p['inherited_noncausal_files']=[inherited]
+        p['fixes'][0]['files']=[inherited]
+        c['blockers'][0]['files_to_change']=[inherited]
+        errors=validate_builder(c,p,[inherited,p['c0_report_path'],p['plan_path']],p['repair_base'])
+        self.assertTrue(any('cannot also be blocker causal files' in e for e in errors),errors)
+
+    def test_inherited_bytes_must_match_exact_active_integration(self):
+        p=plan()
+        p['reconciled_integration_head']='f'*40
+        p['inherited_noncausal_files']=['Docs/Production/C0R_REPORT_SCHEMA.json']
+        reads={
+            ('f'*40,'Docs/Production/C0R_REPORT_SCHEMA.json'):b'integration',
+            ('HEAD','Docs/Production/C0R_REPORT_SCHEMA.json'):b'mutated',
+        }
+        errors=verify_inherited_noncausal(
+            p,'HEAD','f'*40,
+            read_ref=lambda ref,path:reads[(ref,path)],
+            is_ancestor=lambda ancestor,head:True
+        )
+        self.assertTrue(any('differs from exact integration bytes' in e for e in errors),errors)
+        errors=verify_inherited_noncausal(
+            p,'HEAD','e'*40,
+            read_ref=lambda ref,path:b'x',
+            is_ancestor=lambda ancestor,head:True
+        )
+        self.assertTrue(any('does not match active integration head' in e for e in errors),errors)
+
+    def test_inherited_paths_are_safe_unique_and_not_bookkeeping(self):
+        c=complete_c0()
+        for rows in [
+            ['../escape'],
+            ['same','same'],
+            ['Docs/Production/T09/C0_ROOT_CAUSE.json'],
+        ]:
+            p=plan();p['reconciled_integration_head']='f'*40;p['inherited_noncausal_files']=rows
+            errors=validate_builder(c,p)
+            self.assertTrue(errors,rows)
     def test_exact_locked_delta(self):
         import validate_architecture_release_lock as v31
         from validate_architecture_v32_t10 import BUILDER,builder_delta_errors
