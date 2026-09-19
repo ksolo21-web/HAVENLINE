@@ -14,7 +14,15 @@ The required repair loop becomes:
 
 A plan rejected by C0R returns to planning. `INSUFFICIENT_EVIDENCE` gathers only the named missing evidence and then re-runs C0R.
 
-## Questions C0R must answer
+## Repair groups
+
+One repair plan may contain several independent causal families. C0R therefore reviews **repair groups**, not one global strategy.
+
+Every C0 blocker must belong to exactly one repair group. A group may contain multiple blockers only when the proposed repair genuinely shares one causal mechanism/failure family. Product, tooling, governance, evidence, and diagnostic blockers are not collapsed into one fake root cause merely to satisfy the gate.
+
+The union of all group `blocker_ids` must equal the complete C0 blocker set with no duplicates and no omissions.
+
+## Questions each repair group must answer
 
 1. What exact invariant failed?
 2. What complete failure family is currently observable?
@@ -27,28 +35,31 @@ A plan rejected by C0R returns to planning. `INSUFFICIENT_EVIDENCE` gathers only
 
 ## Required plan contract
 
-`repair_sufficiency` must contain:
+`repair_sufficiency` contains `repair_groups`, `cross_group_interactions`, an explicit empty `threshold_changes` collection, and `loop_risk_acknowledged=true`.
 
-- `failure_family.id`, the failed `invariant`, and all applicable `scope_dimensions`;
+Each repair group contains:
+
+- unique `group_id` and exact `blocker_ids`;
+- `failure_family.id`, the failed `invariant`, and applicable `scope_dimensions`;
 - known failed cases, unexecuted/unknown cases, and whether exhaustive observable collection is required/complete;
 - `strategy_kind`, `causal_mechanism`, `why_this_fixes_cause`, and `why_materially_different`;
 - same-family attempt count plus prior attempts and lessons;
-- one explicit sufficiency row for every C0 blocker;
+- one explicit sufficiency row for every blocker assigned to the group;
 - full-domain proof when required;
 - cheap falsification preflights;
 - counterexamples considered;
-- blast-radius hypotheses and residual unknowns;
-- an explicit empty `threshold_changes` collection;
-- `loop_risk_acknowledged=true`.
+- blast-radius hypotheses and residual unknowns.
 
 ## Hard anti-loop rules
 
 - Two or more failed/partial attempts in the same failure family raise `REPEATED_FAILURE_FAMILY`.
 - A repeated scalar/configuration/constant adjustment raises `SERIAL_SCALAR_PATCH_RISK` and is rejected unless complete full-domain proof is supplied.
 - A product defect cannot be closed by an evidence-only, test-only, or diagnostic-only strategy.
-- A plan cannot claim the whole failure family is closed while known required cases remain unexecuted or unknown.
-- Every C0 blocker must have its own explanation of why the proposed change alters the cause, expected result, falsifying result, and cheap disproof.
-- Any critic/quality threshold weakening rejects the plan.
+- A group cannot claim its whole failure family is closed while known required cases remain unexecuted or unknown.
+- Every blocker must have an explanation of why the proposed change alters the cause, expected result, falsifying result, and cheap disproof.
+- Every C0 blocker must be assigned exactly once across repair groups.
+- Any critic/quality threshold weakening rejects the entire plan.
+- The reviewed plan must be bound to the canonical C0 path and exact C0 report SHA-256.
 
 ## Outcomes
 
