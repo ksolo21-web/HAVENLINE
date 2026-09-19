@@ -76,8 +76,9 @@ static func contract() -> Dictionary:
 		"readability_scale_range": [READABILITY_MIN, READABILITY_MAX],
 		"committing_pulse_hz": PULSE_HZ,
 		"label_camera_offset": LABEL_CAMERA_OFFSET,
-		"label_layout_policy": "constrained_screen_lanes_v1",
+		"label_layout_policy": "constrained_screen_lanes_v2_rendered_probe",
 		"label_dynamic_camera_lane": true,
+		"label_screen_y_axis_inverted": true,
 		"label_min_readability_scale": READABILITY_MIN,
 		"label_fit_slack_px": LABEL_FIT_SLACK_PX,
 		"label_max_width": LABEL_MAX_WIDTH,
@@ -362,6 +363,15 @@ func _rect_clearance(label_rect: Rect2, response_rect: Rect2) -> float:
 	var vertical_gap := maxf(maxf(response_rect.position.y - label_rect.end.y, label_rect.position.y - response_rect.end.y), 0.0)
 	return maxf(horizontal_gap, vertical_gap)
 
+static func screen_delta_to_label_offset(delta: Vector2, pixels_per_label_unit: float) -> Vector2:
+	# Label3D's billboard offset uses a screen-X/right, screen-Y/up basis.
+	# Viewport coordinates use screen-Y/down, so only the Y component changes
+	# sign.  Keep this transform explicit and independently verify its rendered
+	# result; the analytic rectangle alone is not approval evidence.
+	if not is_finite(pixels_per_label_unit) or pixels_per_label_unit <= 0.0:
+		return Vector2.ZERO
+	return Vector2(delta.x, -delta.y) / pixels_per_label_unit
+
 func _label_candidate(lane: String, response: Rect2, frame: Rect2, gap: float, pixels_per_label_unit: float) -> Dictionary:
 	var available_width := 0.0
 	var available_height := 0.0
@@ -488,7 +498,10 @@ func _label_projection(active_camera: Camera3D) -> Dictionary:
 		candidate["gap"] = gap
 		candidate["safe_inset"] = inset
 		candidate["attempts"] = attempts
-		candidate["offset"] = (candidate.desired_center - base) / float(candidate.effective_pixels_per_label_unit)
+		candidate["offset"] = screen_delta_to_label_offset(
+			candidate.desired_center - base,
+			float(candidate.effective_pixels_per_label_unit)
+		)
 		return candidate
 	# Fail closed when no legal lane exists. Keep a deterministic visible fallback
 	# only so the validator can report the impossible geometry without inventing a pass.
@@ -506,7 +519,7 @@ func _label_projection(active_camera: Camera3D) -> Dictionary:
 		"response_rect": response,
 		"frame_rect": frame,
 		"desired_center": fallback_center,
-		"offset": (fallback_center - base) / pixels_per_label_unit,
+		"offset": screen_delta_to_label_offset(fallback_center - base, pixels_per_label_unit),
 		"gap": gap,
 		"safe_inset": inset,
 		"attempts": attempts,

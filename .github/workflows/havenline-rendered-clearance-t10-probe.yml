@@ -1,0 +1,229 @@
+name: Havenline T10 rendered-clearance diagnostic probe
+
+on:
+  push:
+    branches: ['havenline/governance-T10-rendered-clearance-probe']
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: havenline-task10-rendered-clearance-probe
+  cancel-in-progress: false
+
+jobs:
+  compare-rendered-clearance:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      FAILED_SOURCE: 30a7e0cc40d44aea2b21229bc39f312da13865e0
+      FAILED_VIEW_SHA256: 6d737567f224be8d221b18e4d0ace6c6ef10de0102d27901c9f9e8d37e6659ac
+      INTEGRATION_BRANCH: codex/havenline-sequential-task-01
+      AUTHORIZATION_PATH: Docs/Production/ChangeRequests/T10-rendered-clearance-one-shot.json
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+          lfs: false
+
+      - name: Enforce exact canonical one-shot admission
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          test "$GITHUB_EVENT_NAME" = push
+          test "$GITHUB_REF" = refs/heads/havenline/governance-T10-rendered-clearance-probe
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          git fetch --no-tags origin "$INTEGRATION_BRANCH"
+          python3 - <<'PY'
+          import hashlib,json,os,subprocess,urllib.parse,urllib.request
+          from pathlib import Path
+          retained=Path('rendered-clearance/admission')
+          retained.mkdir(parents=True,exist_ok=True)
+          branch=os.environ['INTEGRATION_BRANCH']
+          path=os.environ['AUTHORIZATION_PATH']
+          raw=subprocess.check_output(['git','show',f'origin/{branch}:{path}'])
+          (retained/'canonical-authorization.json').write_bytes(raw)
+          auth=json.loads(raw)
+          workflow_path='.github/workflows/havenline-rendered-clearance-t10-probe.yml'
+          actual={
+            'commit':os.environ['GITHUB_SHA'],
+            'tree':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(),
+            'workflow_path':workflow_path,
+            'workflow_sha256':hashlib.sha256(Path(workflow_path).read_bytes()).hexdigest(),
+            'ref':os.environ['GITHUB_REF'],
+            'event':os.environ['GITHUB_EVENT_NAME'],
+            'failed_source':os.environ['FAILED_SOURCE'],
+            'failed_view_sha256':os.environ['FAILED_VIEW_SHA256'],
+          }
+          assert auth['task_id']=='T10'
+          assert auth['authorization_kind']=='T10_RENDERED_CLEARANCE_ONE_SHOT'
+          assert auth['disposition']=='AUTHORIZED_FOR_ONE_DIAGNOSTIC_EXECUTION'
+          assert auth['diagnostic_execution_authorized'] is True
+          assert auth['max_runs']==1
+          assert auth['probe']==actual,(auth.get('probe'),actual)
+
+          run_branch=urllib.parse.quote('havenline/governance-T10-rendered-clearance-probe',safe='')
+          head_sha=urllib.parse.quote(os.environ['GITHUB_SHA'],safe='')
+          url=(f"{os.environ['GITHUB_API_URL']}/repos/{os.environ['GITHUB_REPOSITORY']}"
+               f"/actions/runs?branch={run_branch}&event=push&head_sha={head_sha}&per_page=100")
+          request=urllib.request.Request(url,headers={
+            'Accept':'application/vnd.github+json',
+            'Authorization':f"Bearer {os.environ['GH_TOKEN']}",
+            'X-GitHub-Api-Version':'2022-11-28',
+            'User-Agent':'havenline-t10-rendered-clearance-admission',
+          })
+          with urllib.request.urlopen(request,timeout=30) as response:
+            api_bytes=response.read()
+          (retained/'workflow-runs-api.json').write_bytes(api_bytes)
+          payload=json.loads(api_bytes)
+          assert isinstance(payload.get('total_count'),int),payload
+          runs=payload.get('workflow_runs')
+          assert isinstance(runs,list),payload
+          assert payload['total_count']<=100,payload['total_count']
+          assert len(runs)==payload['total_count'],(len(runs),payload['total_count'])
+          matching=[run for run in runs
+                    if run.get('path')==workflow_path
+                    and run.get('head_sha')==os.environ['GITHUB_SHA']
+                    and run.get('head_branch')=='havenline/governance-T10-rendered-clearance-probe'
+                    and run.get('event')=='push']
+          current=[run for run in matching if str(run.get('id'))==os.environ['GITHUB_RUN_ID']]
+          prior=[run.get('id') for run in matching if str(run.get('id'))!=os.environ['GITHUB_RUN_ID']]
+          assert len(current)==1,current
+          assert current[0].get('run_attempt')==1,current[0]
+          assert len(matching)==1 and not prior,f'one-shot diagnostic already attempted: {prior}'
+          summary={'admitted':True,'commit':actual['commit'],'tree':actual['tree'],
+                   'authorization_sha256':hashlib.sha256(raw).hexdigest(),
+                   'workflow_runs_api_sha256':hashlib.sha256(api_bytes).hexdigest(),
+                   'matching_runs':1,'prior_attempts':0,'task_approved':False}
+          (retained/'admission-summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps(summary,sort_keys=True))
+          PY
+
+      - name: Validate focused probe tooling
+        run: |
+          set -euo pipefail
+          python3 -m pip install pillow==12.3.0 numpy==2.3.5
+          python3 -m unittest tools.havenline.task10.tests.test_verify_rendered_clearance
+          python3 -m py_compile tools/havenline/task10/verify_rendered_clearance.py
+
+      - name: Prepare exact failed baseline and pinned renderer
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine" "$RUNNER_TEMP/t10-failed"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          GIT_LFS_SKIP_SMUDGE=1 git worktree add --detach "$RUNNER_TEMP/t10-failed" "$FAILED_SOURCE"
+          cp HavenlineGodot/tests/capture_task10_world_transform.gd "$RUNNER_TEMP/t10-failed/HavenlineGodot/tests/capture_task10_world_transform.gd"
+          test "$(git show "$FAILED_SOURCE":HavenlineGodot/scripts/world_transform_view.gd | sha256sum | cut -d' ' -f1)" = "$FAILED_VIEW_SHA256"
+          mkdir -p rendered-clearance/{baseline,candidate}
+          {
+            echo "failed_source=$FAILED_SOURCE"
+            echo "failed_view_sha256=$FAILED_VIEW_SHA256"
+            echo "probe_commit=$GITHUB_SHA"
+            echo "probe_capture_sha256=$(sha256sum HavenlineGodot/tests/capture_task10_world_transform.gd | cut -d' ' -f1)"
+            echo "probe_verifier_sha256=$(sha256sum tools/havenline/task10/verify_rendered_clearance.py | cut -d' ' -f1)"
+            echo "probe_workflow_sha256=$(sha256sum .github/workflows/havenline-rendered-clearance-t10-probe.yml | cut -d' ' -f1)"
+            echo "candidate_view_sha256=$(sha256sum HavenlineGodot/scripts/world_transform_view.gd | cut -d' ' -f1)"
+            echo "resource_symbols_sha256=$(sha256sum HavenlineGodot/assets/world_transform_v1/resource_symbols.tres | cut -d' ' -f1)"
+          } > rendered-clearance/identity.txt
+
+      - name: Render exact baseline and strategy-A prototype
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          engine=Godot_v4.7.2-stable_linux.x86_64
+          capture_sha=$(sha256sum HavenlineGodot/tests/capture_task10_world_transform.gd | cut -d' ' -f1)
+          verifier_sha=$(sha256sum tools/havenline/task10/verify_rendered_clearance.py | cut -d' ' -f1)
+          workflow_sha=$(sha256sum .github/workflows/havenline-rendered-clearance-t10-probe.yml | cut -d' ' -f1)
+          resource_sha=$(sha256sum HavenlineGodot/assets/world_transform_v1/resource_symbols.tres | cut -d' ' -f1)
+          for variant in baseline candidate; do
+            if test "$variant" = baseline; then
+              repo="$RUNNER_TEMP/t10-failed"
+              source="$FAILED_SOURCE"
+              view_sha="$FAILED_VIEW_SHA256"
+            else
+              repo="$GITHUB_WORKSPACE"
+              source="$GITHUB_SHA"
+              view_sha="$(sha256sum HavenlineGodot/scripts/world_transform_view.gd | cut -d' ' -f1)"
+            fi
+            out="$GITHUB_WORKSPACE/rendered-clearance/$variant"
+            timeout 240 "$engine" --headless --editor --path "$repo/HavenlineGodot" --import --quit > "$out/import.log" 2>&1
+            xvfb-run -a -s '-screen 0 3840x2160x24' timeout 300 "$engine" \
+              --path "$repo/HavenlineGodot" --rendering-method mobile --rendering-driver vulkan \
+              --audio-driver Dummy --resolution 3840x2160 \
+              --script res://tests/capture_task10_world_transform.gd -- \
+              --candidate="$source" --rendered-clearance-probe --width=3840 --height=2160 --out="$out" \
+              --product-view-sha256="$view_sha" --probe-source="$GITHUB_SHA" \
+              --probe-capture-sha256="$capture_sha" --probe-verifier-sha256="$verifier_sha" \
+              --probe-workflow-sha256="$workflow_sha" \
+              > "$out/capture.log" 2>&1
+            if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' "$out/import.log" "$out/capture.log"; then exit 1; fi
+            python3 tools/havenline/task10/verify_rendered_clearance.py \
+              --root "$out" --manifest "$out/manifest.json" --masks "$out/masks" \
+              --source "$source" --product-blob-sha256 "$view_sha" --variant "$variant" \
+              --probe-source "$GITHUB_SHA" --capture-sha256 "$capture_sha" \
+              --verifier-sha256 "$verifier_sha" --workflow-sha256 "$workflow_sha" \
+              --resource-symbols-sha256 "$resource_sha" \
+              --output "$out/rendered-clearance.json"
+          done
+
+      - name: Assert bounded diagnostic outcome
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path('rendered-clearance')
+          admission=json.loads((root/'admission/admission-summary.json').read_text())
+          baseline=json.loads((root/'baseline/rendered-clearance.json').read_text())
+          candidate=json.loads((root/'candidate/rendered-clearance.json').read_text())
+          known={'preview','committing','complete','replay'}
+          assert baseline['source']==os.environ['FAILED_SOURCE']
+          assert baseline['product_blob_sha256']==os.environ['FAILED_VIEW_SHA256']
+          assert known.issubset(baseline['direct_failure_states']),baseline
+          assert baseline['passed'] is True,baseline
+          assert candidate['source']==os.environ['GITHUB_SHA']
+          assert candidate['direct_failure_count']==0,candidate
+          assert candidate['failure_count']==0,candidate
+          assert candidate['passed'] is True,candidate
+          for report in (baseline,candidate):
+            assert report['contract']=='T10_RENDERED_CLEARANCE_REPRESENTATIVE_PROBE_V1',report
+            assert report['domain_complete'] is False,report
+            assert all(row['size']==[3840,2160] for row in report['rows']),report
+            assert all(row['physical_scale_xy']==[2.0,2.0] for row in report['rows']),report
+            assert all(abs(row['required_clearance_logical_px']-16.2)<1e-6 for row in report['rows']),report
+            assert all(row['required_clearance_radius_xy']==[33,33] for row in report['rows']),report
+          summary={
+            'contract':'T10_RENDERED_CLEARANCE_REPRESENTATIVE_PROBE_V1',
+            'domain_complete':False,
+            'diagnostic_only':True,
+            'task_approved':False,
+            'admission':admission,
+            'baseline':{
+              'source':baseline['source'],
+              'view_sha256':baseline['product_blob_sha256'],
+              'direct_failure_states':baseline['direct_failure_states'],
+              'clearance_failure_states':baseline['clearance_failure_states'],
+            },
+            'candidate':{
+              'source':candidate['source'],
+              'view_sha256':candidate['product_blob_sha256'],
+              'direct_failure_states':candidate['direct_failure_states'],
+              'clearance_failure_states':candidate['clearance_failure_states'],
+            },
+          }
+          (root/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          PY
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task10-rendered-clearance-probe-${{ github.sha }}
+          path: rendered-clearance
+          if-no-files-found: error
+          retention-days: 30
