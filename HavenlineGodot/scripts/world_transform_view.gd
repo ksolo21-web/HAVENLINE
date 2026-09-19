@@ -14,6 +14,7 @@ const READABILITY_MAX := 1.35
 const PULSE_HZ := 1.4
 const LABEL_CAMERA_OFFSET := Vector2(0.0, -190.0)
 const LABEL_MAX_WIDTH := 960.0
+const LABEL_MIN_WRAP_WIDTH := 180.0
 const LABEL_PIXEL_SIZE := 0.0057
 const LABEL_RENDER_PRIORITY := 100
 const LABEL_OUTLINE_RENDER_PRIORITY := 99
@@ -339,31 +340,114 @@ func _projected_response_rect(active_camera: Camera3D) -> Rect2:
 		maximum = maximum.max(point)
 	return Rect2(minimum, maximum - minimum)
 
+func _label_size_for_wrap(pixels_per_label_unit: float, wrap_width: float) -> Vector2:
+	var measured := _beacon.font.get_multiline_string_size(_beacon.text, HORIZONTAL_ALIGNMENT_CENTER, wrap_width, _beacon.font_size)
+	return (measured + Vector2(_beacon.outline_size * 2.0, _beacon.outline_size * 2.0)) * pixels_per_label_unit
+
+func _rect_clearance(label_rect: Rect2, response_rect: Rect2) -> float:
+	var horizontal_gap := maxf(maxf(response_rect.position.x - label_rect.end.x, label_rect.position.x - response_rect.end.x), 0.0)
+	var vertical_gap := maxf(maxf(response_rect.position.y - label_rect.end.y, label_rect.position.y - response_rect.end.y), 0.0)
+	return maxf(horizontal_gap, vertical_gap)
+
+func _label_candidate(lane: String, response: Rect2, frame: Rect2, gap: float, pixels_per_label_unit: float) -> Dictionary:
+	var available_width := 0.0
+	var available_height := 0.0
+	match lane:
+		"top":
+			available_width = frame.size.x
+			available_height = response.position.y - gap - frame.position.y
+		"bottom":
+			available_width = frame.size.x
+			available_height = frame.end.y - response.end.y - gap
+		"right":
+			available_width = frame.end.x - response.end.x - gap
+			available_height = frame.size.y
+		"left":
+			available_width = response.position.x - gap - frame.position.x
+			available_height = frame.size.y
+		_:
+			return {}
+	if available_width <= 0.0 or available_height <= 0.0:
+		return {}
+	var outline_units := float(_beacon.outline_size) * 2.0
+	var max_wrap_width := available_width / pixels_per_label_unit - outline_units - 1.0
+	if max_wrap_width < LABEL_MIN_WRAP_WIDTH:
+		return {}
+	var wrap_width := minf(LABEL_MAX_WIDTH, max_wrap_width)
+	var label_size := _label_size_for_wrap(pixels_per_label_unit, wrap_width)
+	if label_size.x > available_width + 0.01 or label_size.y > available_height + 0.01:
+		return {}
+	var half := label_size * 0.5
+	var desired := response.get_center()
+	match lane:
+		"top":
+			desired.y = response.position.y - gap - half.y
+			desired.x = clampf(desired.x, frame.position.x + half.x, frame.end.x - half.x)
+		"bottom":
+			desired.y = response.end.y + gap + half.y
+			desired.x = clampf(desired.x, frame.position.x + half.x, frame.end.x - half.x)
+		"right":
+			desired.x = response.end.x + gap + half.x
+			desired.y = clampf(desired.y, frame.position.y + half.y, frame.end.y - half.y)
+		"left":
+			desired.x = response.position.x - gap - half.x
+			desired.y = clampf(desired.y, frame.position.y + half.y, frame.end.y - half.y)
+	var label_rect := Rect2(desired - half, label_size)
+	var clearance := _rect_clearance(label_rect, response)
+	if not frame.encloses(label_rect) or label_rect.intersects(response) or clearance + 0.01 < gap:
+		return {}
+	return {
+		"placement_found": true,
+		"lane": lane,
+		"wrap_width": wrap_width,
+		"label_size": label_size,
+		"desired_center": desired,
+		"label_rect": label_rect,
+		"clearance": clearance,
+		"available_width": available_width,
+		"available_height": available_height,
+	}
+
 func _label_projection(active_camera: Camera3D) -> Dictionary:
 	var viewport_size := Vector2(get_viewport().get_visible_rect().size)
 	var base := active_camera.unproject_position(_beacon.global_position)
 	var camera_up := active_camera.global_transform.basis.y.normalized()
 	var probe := active_camera.unproject_position(_beacon.global_position + camera_up * _beacon.pixel_size * 100.0)
 	var pixels_per_label_unit := maxf(0.01, absf(probe.y - base.y) / 100.0)
-	var measured := _beacon.font.get_multiline_string_size(_beacon.text, HORIZONTAL_ALIGNMENT_CENTER, _beacon.width, _beacon.font_size)
-	var label_size := (measured + Vector2(_beacon.outline_size * 2.0, _beacon.outline_size * 2.0)) * pixels_per_label_unit
 	var response := _projected_response_rect(active_camera)
 	var gap := maxf(LABEL_MIN_CLEARANCE_PX, viewport_size.y * 0.015)
 	var inset := maxf(LABEL_MIN_CLEARANCE_PX, minf(viewport_size.x, viewport_size.y) * LABEL_SAFE_INSET_RATIO)
-	var desired := Vector2(response.get_center().x, response.position.y - gap - label_size.y * 0.5)
-	if desired.y - label_size.y * 0.5 < inset:
-		desired = Vector2(response.end.x + gap + label_size.x * 0.5, response.get_center().y)
-	if desired.x + label_size.x * 0.5 > viewport_size.x - inset:
-		desired.x = response.position.x - gap - label_size.x * 0.5
-	var next_offset := (desired - base) / pixels_per_label_unit
+	var frame := Rect2(Vector2(inset, inset), viewport_size - Vector2.ONE * inset * 2.0)
+	for lane in ["top", "right", "left", "bottom"]:
+		var candidate := _label_candidate(lane, response, frame, gap, pixels_per_label_unit)
+		if candidate.is_empty():
+			continue
+		candidate["viewport"] = viewport_size
+		candidate["base"] = base
+		candidate["pixels_per_label_unit"] = pixels_per_label_unit
+		candidate["response_rect"] = response
+		candidate["frame_rect"] = frame
+		candidate["gap"] = gap
+		candidate["safe_inset"] = inset
+		candidate["offset"] = (candidate.desired_center - base) / pixels_per_label_unit
+		return candidate
+	# Fail closed when no legal lane exists. Keep a deterministic visible fallback
+	# only so the validator can report the impossible geometry without inventing a pass.
+	var fallback_wrap := LABEL_MAX_WIDTH
+	var fallback_size := _label_size_for_wrap(pixels_per_label_unit, fallback_wrap)
+	var fallback_center := frame.get_center()
 	return {
+		"placement_found": false,
+		"lane": "none",
+		"wrap_width": fallback_wrap,
 		"viewport": viewport_size,
 		"base": base,
 		"pixels_per_label_unit": pixels_per_label_unit,
-		"label_size": label_size,
+		"label_size": fallback_size,
 		"response_rect": response,
-		"desired_center": desired,
-		"offset": next_offset,
+		"frame_rect": frame,
+		"desired_center": fallback_center,
+		"offset": (fallback_center - base) / pixels_per_label_unit,
 		"gap": gap,
 		"safe_inset": inset,
 	}
@@ -373,6 +457,7 @@ func _update_camera_lane() -> void:
 	if active_camera == null or lifecycle == "locked":
 		return
 	var projection := _label_projection(active_camera)
+	_beacon.width = float(projection.wrap_width)
 	_beacon.offset = projection.offset
 
 func projected_readability(active_camera: Camera3D) -> Dictionary:
@@ -382,13 +467,12 @@ func projected_readability(active_camera: Camera3D) -> Dictionary:
 	var projection := _label_projection(active_camera)
 	var label_rect := Rect2(projection.desired_center - projection.label_size * 0.5, projection.label_size)
 	var response_rect: Rect2 = projection.response_rect
-	var frame := Rect2(Vector2(projection.safe_inset, projection.safe_inset), projection.viewport - Vector2.ONE * projection.safe_inset * 2.0)
-	var horizontal_gap := maxf(maxf(response_rect.position.x - label_rect.end.x, label_rect.position.x - response_rect.end.x), 0.0)
-	var vertical_gap := maxf(maxf(response_rect.position.y - label_rect.end.y, label_rect.position.y - response_rect.end.y), 0.0)
-	var clearance := maxf(horizontal_gap, vertical_gap)
+	var frame: Rect2 = projection.frame_rect
+	var clearance := _rect_clearance(label_rect, response_rect)
 	var overlap := label_rect.intersects(response_rect)
 	var in_frame := frame.encloses(label_rect)
 	var priority_ok := _beacon.render_priority == LABEL_RENDER_PRIORITY and _beacon.outline_render_priority == LABEL_OUTLINE_RENDER_PRIORITY
+	var placement_found := bool(projection.get("placement_found", false))
 	return {
 		"label_rect": [label_rect.position.x, label_rect.position.y, label_rect.size.x, label_rect.size.y],
 		"response_rect": [response_rect.position.x, response_rect.position.y, response_rect.size.x, response_rect.size.y],
@@ -398,8 +482,11 @@ func projected_readability(active_camera: Camera3D) -> Dictionary:
 		"overlap": overlap,
 		"fully_in_frame": in_frame,
 		"priority_ok": priority_ok,
+		"placement_found": placement_found,
+		"layout_lane": String(projection.get("lane", "none")),
+		"label_wrap_width": float(projection.get("wrap_width", LABEL_MAX_WIDTH)),
 		"label_offset": [_beacon.offset.x, _beacon.offset.y],
-		"passed": not overlap and in_frame and clearance + 0.01 >= float(projection.gap) and priority_ok,
+		"passed": placement_found and not overlap and in_frame and clearance + 0.01 >= float(projection.gap) and priority_ok,
 	}
 
 func _target_form_scale() -> Vector3:
