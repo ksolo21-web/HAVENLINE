@@ -5,7 +5,7 @@
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
   "c0_report_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
   "c0_report_sha256": "d49662c0ed7805e3ea681fcb6e4595dc0813e33a6538184882fb44e6bf87a785",
-  "repair_base": "ffc6c6e9652fded2be2849f59958506200471aef",
+  "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "repair_base_status": "CUMULATIVE_REPAIR_CYCLE_ROOT_WITH_LATEST_TERMINAL_FAILURE_BOUND",
   "repair_base_rule": "Measure the complete reconciled B037-B061 owner-plus-task diff from cumulative repair root c7a18d002fe8d0f3978370f3e4567ba88bfe17e8. The latest terminal evidence is 0f93003e91ec2e785af5e821f3c94a3ec9c2dc81; it is evidence only and no score is reusable.",
   "full_blocker_set_acknowledged": true,
@@ -1868,9 +1868,19 @@
       "C0 job-log transport and semantic projection/grounding must preserve the terminal failure produced by any earlier group without reclassifying C0's own diagnostic steps as subject-job failures.",
       "Specialist transport/schema groups may improve completeness/actionability but cannot alter C1-C11 scores, thresholds, evidence sets, or independent runtime identity.",
       "Closeout groups consume only exact-source records after all product/evidence/tooling groups pass; they cannot synthesize approval.",
-      "No group may use another group's tooling or evidence repair to close a product defect without the product group's own causal implementation and proof."
+      "No group may use another group's tooling or evidence repair to close a product defect without the product group's own causal implementation and proof.",
+      "Exact integration-inherited governance files are verified byte-for-byte against reconciled_integration_head and are noncausal; they cannot satisfy any blocker repair touch."
     ],
     "threshold_changes": [],
     "loop_risk_acknowledged": true
-  }
+  },
+  "reconciled_integration_head": "c5c4dc9b50f585b12b4a9e00718bb7326b98a51a",
+  "inherited_noncausal_files": [
+    "Docs/Production/C0R_REPAIR_SUFFICIENCY_STANDARD.md",
+    "Docs/Production/C0R_REPORT_SCHEMA.json",
+    "Docs/Production/ChangeRequests/T10-c0r-repair-sufficiency-canary.json",
+    "Docs/Production/ChangeRequests/T10-repair-base-inherited-governance.json",
+    "tools/havenline/production/repair_sufficiency_critic.py",
+    "tools/havenline/production/tests/test_repair_sufficiency_critic.py"
+  ]
 }
