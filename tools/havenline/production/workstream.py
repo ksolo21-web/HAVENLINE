@@ -1,20 +1,75 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, datetime, json, pathlib, subprocess
+import argparse, datetime, json, pathlib, re, subprocess
 from lib import DOCS, ROOT, load_json, expand_alias, any_match, changed_files, json_dump, fail
 from change_impact import calculate as calculate_impact
 
 ACTIVE_STATES = {"PREPARED","ASSIGNED","BUILDING_ISOLATED","BUILT_PENDING_DEPENDENCY","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","BLOCKED"}
 ALLOWED_STATES = {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","BUILT_PENDING_DEPENDENCY","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}
 
-def approved_change_requests(task_id: str) -> set[str]:
-    root = DOCS / "ChangeRequests";result=set()
+def authorized_change_request_targets(record: dict, task_id: str) -> set[str]:
+    """Return exact paths from either supported integration authorization schema."""
+    if not isinstance(record, dict) or record.get("requesting_task") != task_id:
+        return set()
+    status = record.get("status")
+    disposition = record.get("integration_owner_disposition")
+    raw = record.get("target_path")
+    if status == "APPROVED" and disposition == "AUTHORIZED":
+        if not isinstance(raw, str):
+            return set()
+        targets = [raw]
+    elif (
+        status == "AUTHORIZED"
+        and isinstance(disposition, str)
+        and re.fullmatch(r"APPROVED_BOUNDED_[A-Z0-9]+(?:_[A-Z0-9]+)*", disposition)
+    ):
+        if not isinstance(raw, list) or not raw:
+            return set()
+        targets = raw
+    else:
+        return set()
+
+    if any(not isinstance(path, str) or not _safe_exact_target(path) for path in targets):
+        return set()
+    if len(set(targets)) != len(targets):
+        return set()
+    return set(targets)
+
+
+def _safe_exact_target(path: str) -> bool:
+    """Accept one canonical repository-relative POSIX path, never a pattern."""
+    if not path or "\\" in path or ":" in path or any(ord(char) < 32 or ord(char) == 127 for char in path) or path.startswith("/"):
+        return False
+    parts = path.split("/")
+    if any(part in {"", ".", ".."} for part in parts):
+        return False
+    if any(char in path for char in "*?[]"):
+        return False
+    return pathlib.PurePosixPath(path).as_posix() == path
+
+def approved_change_requests(task_id: str, source_ref: str | None = None) -> set[str]:
+    """Read candidate authority from the integration ref, never candidate-added records."""
+    result=set()
+    if source_ref:
+        try:
+            paths=subprocess.check_output(
+                ["git","ls-tree","-r","--name-only",source_ref,"--","Docs/Production/ChangeRequests"],
+                cwd=ROOT,text=True,stderr=subprocess.DEVNULL,
+            ).splitlines()
+        except Exception:
+            return result
+        for path in paths:
+            if not path.endswith(".json"):continue
+            try:d=json.loads(subprocess.check_output(["git","show",f"{source_ref}:{path}"],cwd=ROOT,text=True,stderr=subprocess.DEVNULL))
+            except Exception:continue
+            result.update(authorized_change_request_targets(d,task_id))
+        return result
+    root = DOCS / "ChangeRequests"
     if not root.exists():return result
     for p in root.glob("*.json"):
         try:d=json.loads(p.read_text())
         except Exception:continue
-        if d.get("requesting_task")==task_id and d.get("status")=="APPROVED" and d.get("integration_owner_disposition")=="AUTHORIZED":
-            result.add(d.get("target_path",""))
+        result.update(authorized_change_request_targets(d,task_id))
     return result
 
 def governance_only_drift(files: list[str]) -> bool:
@@ -144,6 +199,8 @@ def set_status(task_id,status):
     json_dump(DOCS/"WORKSTREAM_REGISTRY.json",registry);print(json.dumps(ws,indent=2))
 
 def validate_candidate(task_id: str, base: str, head: str, integration_head: str|None):
+    if not integration_head:
+        fail("candidate validation requires a trusted integration head; candidate-local authorization is forbidden")
     registry=load_json(DOCS/"WORKSTREAM_REGISTRY.json");ownership=load_json(DOCS/"PATH_OWNERSHIP.json");graph=load_json(DOCS/"DEPENDENCY_GRAPH.json")
     ws=next((x for x in registry["workstreams"] if x["task_id"]==task_id),None)
     if not ws:fail(f"{task_id} not registered")
@@ -154,7 +211,7 @@ def validate_candidate(task_id: str, base: str, head: str, integration_head: str
     scope,drift=candidate_reconcile_assessment(base,head,integration_head)
     if drift["requires_reconcile"]:
         errors.append(f"stale branch point: candidate {scope['branch_point']}, current integration {integration_head}; {drift['reason']}")
-    owned=expand_alias(ws.get("owned_paths",[]),ownership);protected=expand_alias(ws.get("protected_paths",[]),ownership);authorized=approved_change_requests(task_id)
+    owned=expand_alias(ws.get("owned_paths",[]),ownership);protected=expand_alias(ws.get("protected_paths",[]),ownership);authorized=approved_change_requests(task_id,integration_head)
     foreign=[]
     for other in registry["workstreams"]:
         if other["task_id"]==task_id or other["status"] not in ACTIVE_STATES or not other.get("owner"):continue

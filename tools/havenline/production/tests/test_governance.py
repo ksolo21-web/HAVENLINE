@@ -1,4 +1,4 @@
-import pathlib, sys, unittest
+import json, pathlib, sys, tempfile, unittest
 from types import SimpleNamespace
 from unittest.mock import patch
 HERE=pathlib.Path(__file__).resolve()
@@ -6,10 +6,73 @@ PROD=HERE.parents[1]
 sys.path.insert(0,str(PROD))
 from lib import DOCS, load_json, ensure_score_strictly_above_nine, any_match
 from validate_migration import ALLOWED_MIGRATION_PATTERNS
-from workstream import registry_errors, governance_only_drift, candidate_scope_assessment
+from workstream import approved_change_requests, authorized_change_request_targets, registry_errors, governance_only_drift, candidate_scope_assessment
 from change_impact import calculate
 
 class GovernanceTests(unittest.TestCase):
+    def test_candidate_validation_requires_integration_authority(self):
+        from workstream import validate_candidate
+        with patch("workstream.approved_change_requests") as requests:
+            with self.assertRaises(SystemExit):
+                validate_candidate("T10","base","HEAD",None)
+            requests.assert_not_called()
+
+    def test_change_request_consumer_supports_exact_legacy_and_bounded_schemas(self):
+        legacy={"requesting_task":"T10","status":"APPROVED","integration_owner_disposition":"AUTHORIZED","target_path":"one.py"}
+        bounded={"requesting_task":"T10","status":"AUTHORIZED","integration_owner_disposition":"APPROVED_BOUNDED_QA_GOV_CANARY","target_path":["two.py","three.py"]}
+        self.assertEqual({"one.py"},authorized_change_request_targets(legacy,"T10"))
+        self.assertEqual({"two.py","three.py"},authorized_change_request_targets(bounded,"T10"))
+        for hostile in (
+            [],
+            dict(bounded,target_path=["dir/line\nfile.py"]),
+            dict(bounded,target_path=["C:/escape"]),
+            dict(legacy,target_path=["one.py","two.py"]),
+            dict(bounded,target_path="two.py"),
+            dict(bounded,status="REQUESTED"),
+            dict(bounded,integration_owner_disposition="AUTHORIZED"),
+            dict(bounded,integration_owner_disposition="APPROVED_BOUNDED_"),
+            dict(bounded,requesting_task="T11"),
+            dict(bounded,target_path=["../escape"]),
+            dict(bounded,target_path=["..\\escape"]),
+            dict(bounded,target_path=["dir//file.py"]),
+            dict(bounded,target_path=["dir/./file.py"]),
+            dict(bounded,target_path=["dir/*.py"]),
+            dict(bounded,target_path=["same.py","same.py"]),
+            dict(bounded,target_path=["ok.py",7]),
+        ):
+            self.assertEqual(set(),authorized_change_request_targets(hostile,"T10"),hostile)
+
+    def test_t10_integrated_bounded_authorizations_are_consumed(self):
+        authorized=approved_change_requests("T10","29be5ddae67cf47fd6674de8dfb3beb673116776")
+        self.assertTrue({
+            "Docs/Production/C0R_REPAIR_SUFFICIENCY_STANDARD.md",
+            "Docs/Production/C0R_REPORT_SCHEMA.json",
+            "tools/havenline/production/builder_repair_gate.py",
+            "tools/havenline/production/c0_root_cause_advisor.py",
+            "tools/havenline/production/repair_sufficiency_critic.py",
+            "tools/havenline/production/tests/test_c0_builder.py",
+            "tools/havenline/production/tests/test_repair_sufficiency_critic.py",
+            "tools/havenline/production/validate_architecture_v32_t10.py",
+        } <= authorized)
+
+    def test_candidate_added_authorization_is_not_read_from_integration_ref(self):
+        candidate_record={
+            "requesting_task":"T10",
+            "status":"AUTHORIZED",
+            "integration_owner_disposition":"APPROVED_BOUNDED_TEST_ONLY",
+            "target_path":["candidate-only.py"],
+        }
+        with tempfile.TemporaryDirectory() as td:
+            docs=pathlib.Path(td)
+            requests=docs/"ChangeRequests"
+            requests.mkdir()
+            (requests/"candidate-added.json").write_text(json.dumps(candidate_record))
+            with patch("workstream.DOCS",docs):
+                local=approved_change_requests("T10")
+                integrated=approved_change_requests("T10","29be5ddae67cf47fd6674de8dfb3beb673116776")
+        self.assertIn("candidate-only.py",local)
+        self.assertNotIn("candidate-only.py",integrated)
+
     def test_t09_closeout_workflow_is_exactly_allowlisted(self):
         self.assertTrue(any_match(".github/workflows/havenline-task09-harvesting.yml",ALLOWED_MIGRATION_PATTERNS))
         self.assertFalse(any_match(".github/workflows/havenline-task10-world-transformation.yml",ALLOWED_MIGRATION_PATTERNS))

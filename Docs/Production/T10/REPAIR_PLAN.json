@@ -4,7 +4,7 @@
   "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
   "c0_report_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
-  "c0_report_sha256": "0bcfa6d160d8dd81932f841ed1826f8b16f1189b39f39c7e6d81039244c3e50f",
+  "c0_report_sha256": "04655dac4f829a6495952ce0fc94bfa0f26cd6063b87454ce496d5eabff587c6",
   "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "repair_base_status": "CUMULATIVE_REPAIR_CYCLE_ROOT_WITH_LATEST_TERMINAL_FAILURE_BOUND",
   "repair_base_rule": "Measure the complete reconciled B037-B062 owner-plus-task diff from cumulative repair root c7a18d002fe8d0f3978370f3e4567ba88bfe17e8. The latest terminal evidence is 81fbc7958ceb69b711f8be60add48b4510d3520e; it is evidence only and no score is reusable.",
@@ -478,6 +478,11 @@
         "tools/havenline/production/tests/test_repair_sufficiency_critic.py",
         "tools/havenline/production/c0_root_cause_advisor.py",
         "tools/havenline/production/tests/test_c0_builder.py",
+        "tools/havenline/production/workstream.py",
+        "tools/havenline/production/tests/test_governance.py",
+        "tools/havenline/production/tests/test_architecture_release_lock.py",
+        ".github/workflows/havenline-production-governance.yml",
+        "tools/havenline/production/tests/test_production_governance_v32_consumer.py",
         "Docs/Production/C0R_REPAIR_SUFFICIENCY_STANDARD.md",
         "Docs/Production/C0R_REPORT_SCHEMA.json",
         "Docs/Production/T10/C0_REPAIR_INTELLIGENCE_LOCK.json",
@@ -488,11 +493,13 @@
         "Docs/Production/WORKSTREAM_REGISTRY.json",
         "tools/havenline/production/tests/test_t10_activation_validation.py"
       ],
-      "causal_change": "Bind evidence frontier, attempt history and proof to a digest-locked source manifest plus retained machine summary; require deterministic symbol-bound architectural operations after two attempts; reject fixed scalar repairs; and permit derived per-case sinks only through one-to-one exact normalized RHS/dependency/bounds bindings to the proof artifact and exact proof-source commit/path/file hash. Hash the canonicalized whole proven source excluding only four exact metadata lines authorized by locked C0 evidence, and require the current candidate to match it exactly. Reconstruct multiline before/after statements, require reachable executable symbols, verify both threshold registries, pin integration authority outside the plan/registry, and run the exact builder gate in the direct pre-build dependency.",
+      "causal_change": "Bind evidence frontier, attempt history and proof to a digest-locked source manifest plus retained machine summary; require deterministic symbol-bound architectural operations after two attempts; reject fixed scalar repairs; and permit derived per-case sinks only through one-to-one exact normalized RHS/dependency/bounds bindings to the proof artifact and exact proof-source commit/path/file hash. Hash the canonicalized whole proven source excluding only four exact metadata lines authorized by locked C0 evidence, and require the current candidate to match it exactly. Reconstruct multiline before/after statements, require reachable executable symbols, verify both threshold registries, pin integration authority outside the plan/registry, run the exact builder gate in the direct pre-build dependency, and make the shared workstream consumer recognize only the exact legacy or integrated bounded multi-target authorization schemas.",
       "verification": [
         "Hostile C0R tests reject erased frontier evidence, false attempt history/counts, scalar euphemisms, undeclared scalar reassignments, comment/string-only markers, incomplete proof provenance, registry branch redirection and threshold weakening.",
         "Workflow tests prove C0R and builder_repair_gate execute in the same direct dependency before either primary build job.",
-        "The canonical C0R report is byte-for-byte reproducible and the exact builder gate accepts only the C0-authorized cumulative diff."
+        "The canonical C0R report is byte-for-byte reproducible and the exact builder gate accepts only the C0-authorized cumulative diff.",
+        "Candidate guard and adapter preflight accept the integrated bounded C0R authorization records while hostile malformed, cross-task, traversal and unapproved records remain rejected.",
+        "V3.2 release-lock validation binds the exact workstream source and exact B062 authorization record hashes."
       ]
     }
   ],
@@ -2065,30 +2072,41 @@
             "workflow-dependency"
           ],
           "known_failed_cases": [
-            "Independent review of a8084aa demonstrated that a plan could erase post-diagnosis observations, self-report fewer prior attempts, relabel scalar tuning as TOOLING, or rely on a concurrent candidate-guard job while still passing the original C0R checks."
+            "Independent review of a8084aa demonstrated that a plan could erase post-diagnosis observations, self-report fewer prior attempts, relabel scalar tuning as TOOLING, or rely on a concurrent candidate-guard job while still passing the original C0R checks.",
+            "Exact tree 44c3a07d passed C0R, builder preflight/post-build and hostile review, but runs 35454636290 and 35454638560 falsely rejected eight governance paths because the legacy workstream consumer could not read integrated bounded multi-target authorization records."
           ],
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
           "complete_observable_set_collected": false,
           "full_failure_family_closed_by_design": false,
           "collection_evidence": [
-            "Independent C0R critic review of a8084aa: mandatory FAIL 6.8/10 with five concrete admission bypasses and six required hostile tests."
+            "Independent C0R critic review of a8084aa: mandatory FAIL 6.8/10 with five concrete admission bypasses and six required hostile tests.",
+            "Candidate guard 35454636290 and adapter preflight 35454638560 emitted the same unauthorized-path set before or without reaching the exact builder gate."
           ]
         },
         "strategy_kind": "GOVERNANCE",
-        "causal_mechanism": "Digest-lock authoritative frontier, attempt history and full-domain proof to an immutable manifest with run/candidate/result hashes and a retained machine-readable summary; validate that lock in C0 and C0R; require structured architectural operations, executable symbols and an exact latest-failed-candidate comparison base after two attempts; reject undeclared scalar reassignment in the real diff; load both canonical threshold registries; resolve the pinned canonical integration branch independently of the plan/registry; and invoke the exact builder gate in each direct pre-build job.",
-        "why_this_fixes_cause": "The builder can no longer make its own repair plan true by editing C0 and the plan together. Every challenged claim is either digest-locked to source records and a retained verifier result, read from canonical policy files, or checked against the real fetched integration head before the workflow dependency permits a build.",
-        "why_materially_different": "This changes the trust boundary and workflow graph instead of adding another required prose field to the same self-attested plan.",
-        "same_family_attempt_count": 0,
-        "prior_attempts": [],
+        "causal_mechanism": "Digest-lock authoritative frontier, attempt history and full-domain proof to an immutable manifest with run/candidate/result hashes and a retained machine-readable summary; validate that lock in C0 and C0R; require structured architectural operations, executable symbols and an exact latest-failed-candidate comparison base after two attempts; reject undeclared scalar reassignment in the real diff; load both canonical threshold registries; resolve the pinned canonical integration branch independently of the plan/registry; invoke the exact builder gate in each direct pre-build job; and decode only the exact legacy or integrated bounded multi-target authorization schemas in the shared workstream consumer.",
+        "why_this_fixes_cause": "The builder can no longer make its own repair plan true by editing C0 and the plan together, while earlier lifecycle guards no longer contradict already-integrated bounded authorization records. Every challenged claim remains source-bound, and malformed, cross-task, traversal or unapproved records still yield no authorized paths.",
+        "why_materially_different": "This repairs the stale shared authorization-schema consumer exposed by the hosted canary rather than adding a path whitelist or bypassing the candidate guard.",
+        "same_family_attempt_count": 1,
+        "prior_attempts": [
+          {
+            "strategy": "Source-bound C0R plus exact builder gate in both primary T10 build prerequisites",
+            "outcome": "PARTIAL",
+            "same_family": true,
+            "candidate": "d238925040b9c58ee8337bed6397e9690218f06c",
+            "run_id": 35454636290,
+            "lesson": "The primary build prerequisites were correctly hardened, but the legacy workstream change-request consumer ran first in the candidate guard and adapter preflight and did not recognize the integrated bounded multi-target authorization schema."
+          }
+        ],
         "blocker_coverage": [
           {
             "blocker_id": "C0-T10-B062",
-            "diagnosed_root_cause": "C0R validates the internal shape of builder-authored claims but does not bind attempt history and the evidence frontier to C0, does not independently verify canonical threshold registries or proof provenance, and the primary workflows do not execute the exact builder gate in the direct pre-build dependency.",
-            "why_fix_changes_cause": "Authoritative history/frontier/proof are locked outside both mutable C0 and the plan, repeated repairs use structured non-scalar operations, thresholds acquire independent baselines, and workflow jobs resolve the real remote integration head before executing the exact implementation-surface gate.",
-            "expected_result": "Every known self-attestation bypass fails locally and both build workflows have a single direct prerequisite that runs C0R plus the exact builder gate.",
-            "failure_if_wrong": "A hostile plan can erase history/frontier evidence, disguise a scalar repair, forge proof provenance, weaken canonical thresholds, or begin a build without the exact builder gate.",
-            "cheap_disproof": "Run test_repair_sufficiency_critic.py and test_task10_workflows.py with the hostile fixtures before any Godot or critic job."
+            "diagnosed_root_cause": "C0R originally validated builder-authored claims without binding history/frontier/proof to independent sources, while the candidate guard and adapter preflight still consume only the legacy APPROVED + AUTHORIZED single-target change-request schema. Integrated C0R records use AUTHORIZED + APPROVED_BOUNDED_* with exact target arrays, so the stale consumer rejects their governance paths before or without the exact builder gate.",
+            "why_fix_changes_cause": "Authoritative C0R inputs stay locked, and the shared consumer now recognizes the two exact integration-approved schemas while returning no paths for malformed, cross-task, traversal or unapproved records.",
+            "expected_result": "Every known self-attestation bypass remains closed and both hosted lifecycle guards accept the already-integrated bounded C0R target paths before the exact builder-gated build.",
+            "failure_if_wrong": "The hosted guards again reject authorized C0R paths, or a malformed/unapproved record grants a foreign path.",
+            "cheap_disproof": "Run the governance hostile schema tests and replay workstream validate-candidate over the cumulative T10 candidate before any Godot or critic job."
           }
         ],
         "full_domain_proof": {
@@ -2101,8 +2119,8 @@
         "cheap_disproof_preflight": [
           {
             "name": "c0r-hostile-admission-preflight",
-            "command": "python3 -m unittest tools.havenline.production.tests.test_repair_sufficiency_critic tools.havenline.task10.tests.test_task10_workflows",
-            "falsifies": "Any known self-attestation, scalar-disguise, proof-provenance, threshold-policy, or workflow-order bypass remains accepted."
+            "command": "python3 -m unittest tools.havenline.production.tests.test_repair_sufficiency_critic tools.havenline.production.tests.test_governance tools.havenline.task10.tests.test_task10_workflows",
+            "falsifies": "Any known self-attestation, scalar-disguise, proof-provenance, threshold-policy, workflow-order or authorization-schema bypass remains accepted."
           }
         ],
         "counterexamples_considered": [
@@ -2117,6 +2135,10 @@
           {
             "case": "A concurrent guard fails after an expensive build has already started.",
             "why_covered": "The exact builder gate runs inside the direct repair-sufficiency dependency required by every build job."
+          },
+          {
+            "case": "An integrated bounded authorization uses multiple exact target paths instead of the legacy single target string.",
+            "why_covered": "The consumer accepts arrays only for AUTHORIZED records with an APPROVED_BOUNDED_* integration disposition and validates every path before flattening."
           }
         ],
         "blast_radius_hypotheses": [
@@ -2128,7 +2150,7 @@
     "evidence_frontier": {
       "complete": true,
       "diagnosed_through_candidate": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81",
-      "latest_observed_failed_candidate": "81fbc7958ceb69b711f8be60add48b4510d3520e",
+      "latest_observed_failed_candidate": "d238925040b9c58ee8337bed6397e9690218f06c",
       "observations": [
         {
           "run_id": 35402388836,
@@ -2178,6 +2200,18 @@
             "governance hardening integrated at 29be5ddae67cf47fd6674de8dfb3beb673116776 prioritizes latest terminal failed-job signal windows and keeps history advisory-only without weakening grounding."
           ],
           "reason": "This is the existing B059-B061 bounded/grounded C0 evidence family. The previous terminal-artifact repair did not cover a terminal cause present only in the failed job log."
+        },
+        {
+          "run_id": 35454636290,
+          "candidate": "d238925040b9c58ee8337bed6397e9690218f06c",
+          "disposition": "BOUND_TO_EXISTING_GROUP",
+          "group_id": "c0r-source-bound-admission",
+          "evidence": [
+            "candidate guard run 35454636290 failed before the builder gate because workstream.approved_change_requests ignored the integrated AUTHORIZED + APPROVED_BOUNDED_* records and their target_path arrays",
+            "adapter preflight run 35454638560 independently failed on the same eight governance paths through the same legacy workstream consumer",
+            "the exact C0R/builder implementation tree passed local pre-build, cumulative post-build, 274 production tests, 115 T10 tests, and independent hostile review at 9.6/10"
+          ],
+          "reason": "This is the existing B062 admission/workflow family: a legacy authorization-schema consumer executes before or without the exact builder gate and falsely rejects the already-integrated bounded C0R authorization records."
         }
       ],
       "unclassified_failures": []
@@ -2194,8 +2228,9 @@
     "threshold_changes": [],
     "loop_risk_acknowledged": true
   },
-  "reconciled_integration_head": "29be5ddae67cf47fd6674de8dfb3beb673116776",
+  "reconciled_integration_head": "7db0658c318214c52b3010dd09fea0eb049495af",
   "inherited_noncausal_files": [
+    "Docs/Production/ChangeRequests/T10-c0r-workstream-authorization-schema.json",
     "Docs/Production/ChangeRequests/T10-c0-terminal-evidence-priority.json",
     "Docs/Production/ChangeRequests/T10-c0-terminal-job-log-priority.json",
     "Docs/Production/ChangeRequests/T10-c0r-builder-enforcement.json",
