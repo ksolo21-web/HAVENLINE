@@ -92,12 +92,21 @@ jobs:
           if len(integration)!=40:raise SystemExit('unable to resolve integration head')
           current=remote_head(task_branch)
           run=json.loads((root/'c0-input/run.json').read_text());jobs=json.loads((root/'c0-input/jobs.json').read_text()).get('jobs',[])
-          steps=[];unexecuted=[]
+          subject_jobs=[];diagnostic_jobs=[]
           for job in jobs:
+              name=str(job.get('name') or '')
+              if 'C0 non-voting root-cause diagnosis' in name:
+                  diagnostic_jobs.append(job)
+              else:
+                  subject_jobs.append(job)
+          steps=[];unexecuted=[]
+          for job in subject_jobs:
               for step in job.get('steps',[]):
                   row={'job':job.get('name'),'name':step.get('name'),'status':step.get('status'),'conclusion':step.get('conclusion')}
                   steps.append(row)
                   if step.get('conclusion') in (None,'skipped','cancelled'):unexecuted.append(f"{job.get('name')}: {step.get('name')}")
+          subject_jobs_terminal=all(job.get('status')=='completed' for job in subject_jobs)
+          diagnostic_jobs_excluded=[str(job.get('name') or '') for job in diagnostic_jobs]
           try:
               merge=subprocess.check_output(['git','merge-base',candidate,integration],text=True).strip()
               changed=subprocess.check_output(['git','diff','--name-only',merge,candidate],text=True).splitlines()
@@ -120,6 +129,7 @@ jobs:
             'schema_version':1,'task_id':task,'failed_run_id':run_id,'failed_candidate':candidate,'integration_head':integration,
             'integration_branch':integration_branch,'task_branch':task_branch,'current_branch_head':current,'run_conclusion':run.get('conclusion'),
             'run_status':run.get('status'),'workflow_name':run.get('name'),'event':run.get('event'),'steps':steps,'unexecuted_checks':unexecuted,
+            'subject_jobs_terminal':subject_jobs_terminal,'diagnostic_jobs_excluded_from_subject_execution':diagnostic_jobs_excluded,
             'changed_files':changed,'failed_logs':log,'failed_logs_bytes':len(log_bytes),'failed_logs_sha256':hashlib.sha256(log_bytes).hexdigest(),
             'structured_failure_records':records,'task_scope':scope.read_text(errors='replace')[:30000] if scope.exists() else '',
             'defect_ledger':ledger.read_text(errors='replace')[:30000] if ledger else '',
