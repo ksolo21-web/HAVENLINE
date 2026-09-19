@@ -5,6 +5,8 @@ import argparse
 import hashlib
 import json
 import pathlib
+import os
+import subprocess
 
 from lib import ROOT, changed_files
 
@@ -17,12 +19,53 @@ def load(path:pathlib.Path)->dict:
     return json.loads(path.read_text())
 
 
+def _inherited_noncausal(plan:dict)->list[str]:
+    rows=plan.get("inherited_noncausal_files",[])
+    return [str(path) for path in rows] if isinstance(rows,list) else []
+
+
+def verify_inherited_noncausal(plan:dict,head:str,integration_head:str|None,read_ref=None,is_ancestor=None)->list[str]:
+    inherited=_inherited_noncausal(plan)
+    if not inherited:return []
+    errors=[]
+    source=plan.get("reconciled_integration_head")
+    if not isinstance(source,str) or len(source)!=40:
+        return ["inherited noncausal files require exact reconciled_integration_head"]
+    if not isinstance(integration_head,str) or len(integration_head)!=40 or source!=integration_head:
+        errors.append("reconciled integration head does not match active integration head")
+    if read_ref is None:
+        def read_ref(ref,path):
+            return subprocess.check_output(["git","show",f"{ref}:{path}"])
+    if is_ancestor is None:
+        def is_ancestor(ancestor,descendant):
+            return subprocess.run(["git","merge-base","--is-ancestor",ancestor,descendant],check=False).returncode==0
+    if integration_head and not is_ancestor(source,head):
+        errors.append("reconciled integration head is not an ancestor of repair candidate")
+    for path in inherited:
+        try:
+            source_bytes=read_ref(source,path);head_bytes=read_ref(head,path)
+        except Exception:
+            errors.append("inherited noncausal file missing at integration/head: "+path);continue
+        if source_bytes!=head_bytes:
+            errors.append("inherited noncausal file differs from exact integration bytes: "+path)
+    return errors
+
+
 def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:str|None=None)->list[str]:
     errors=[]
     task=c0.get("task_id")
     canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"
     canonical_plan=f"Docs/Production/{task}/REPAIR_PLAN.json"
     bookkeeping={canonical_c0,canonical_plan}
+    inherited=_inherited_noncausal(plan)
+    if plan.get("inherited_noncausal_files",[]) is not None and not isinstance(plan.get("inherited_noncausal_files",[]),list):
+        errors.append("inherited_noncausal_files must be list")
+    if len(inherited)!=len(set(inherited)) or any(not path or path.startswith("/") or ".." in pathlib.PurePosixPath(path).parts for path in inherited):
+        errors.append("inherited noncausal file paths must be unique safe repository paths")
+    if inherited and (not isinstance(plan.get("reconciled_integration_head"),str) or len(plan.get("reconciled_integration_head"))!=40):
+        errors.append("inherited noncausal files require exact reconciled_integration_head")
+    if set(inherited)&bookkeeping:
+        errors.append("canonical repair bookkeeping cannot be inherited noncausal")
     if plan.get("c0_report_path")!=canonical_c0 or plan.get("plan_path")!=canonical_plan:
         errors.append("canonical C0 and repair plan paths required")
     if c0.get("critic_id")!="C0" or c0.get("non_voting") is not True or c0.get("validated") is not True:
@@ -70,10 +113,13 @@ def validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:st
         if authorized and not set(files)<=authorized:errors.append(f"{bid} repair exceeds C0 files_to_change")
         if set(files)&must_not:errors.append(f"{bid} repair touches must_not_change")
         allowed.update(causal_files)
+    inherited_set=set(inherited)
+    if inherited_set&allowed:
+        errors.append("inherited noncausal files cannot also be blocker causal files")
     blast=plan.get("blast_radius_checks",[])
     if not isinstance(blast,list) or not blast:errors.append("blast_radius_checks required")
     if actual_changed is not None:
-        allowed_actual=set(allowed)|bookkeeping
+        allowed_actual=set(allowed)|bookkeeping|set(inherited)
         extra=set(actual_changed)-allowed_actual
         if extra:errors.append("actual repair diff exceeds authorized surface: "+",".join(sorted(extra)))
         for fix in fixes:
@@ -90,7 +136,9 @@ def main()->int:
     if "c0_report_sha256" not in plan:plan["c0_report_sha256"]=""
     actual=changed_files(a.base,a.head) if a.base else None
     errors=validate(c0_copy,plan,actual,a.base)
-    result={"schema_version":1,"task_id":c0.get("task_id"),"diagnosis_id":c0.get("diagnosis_id"),"passed":not errors,"mode":"post-build" if actual is not None else "pre-build","repair_base":plan.get("repair_base"),"actual_changed_files":actual or [],"errors":errors}
+    inherited_errors=verify_inherited_noncausal(plan,a.head,os.environ.get("INTEGRATION_HEAD")) if actual is not None else []
+    errors.extend(inherited_errors)
+    result={"schema_version":1,"task_id":c0.get("task_id"),"diagnosis_id":c0.get("diagnosis_id"),"passed":not errors,"mode":"post-build" if actual is not None else "pre-build","repair_base":plan.get("repair_base"),"reconciled_integration_head":plan.get("reconciled_integration_head"),"inherited_noncausal_files":_inherited_noncausal(plan),"actual_changed_files":actual or [],"errors":errors}
     text=json.dumps(result,indent=2)+"\n"
     if a.output:
         p=(ROOT/a.output).resolve();p.parent.mkdir(parents=True,exist_ok=True);p.write_text(text)

@@ -27,7 +27,21 @@ FAILURE_REQUEST_SHA256 = "d388a6fe33d1a45a2c475c2874b039ef1d136c6bc61c5119b8159e
 BUILDER = "tools/havenline/production/builder_repair_gate.py"
 BUILDER_REQUEST = "Docs/Production/ChangeRequests/T10-builder-repair-causal-bookkeeping.json"
 BUILDER_REQUEST_SHA256 = "92986f20ded72d4b22fb6ebe1e82d01d2dd2003e1f453b02b8ae392bd5d438c7"
+BUILDER_INHERIT_REQUEST = "Docs/Production/ChangeRequests/T10-repair-base-inherited-governance.json"
+BUILDER_INHERIT_REQUEST_SHA256 = "6c1abc343d0b6837612e47a9ae222b81d167b28743b6651fb2cf217b88d7392a"
 BUILDER_DELTAS = [('    errors=[]\n', '    errors=[]\n    task=c0.get("task_id")\n    canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"\n    canonical_plan=f"Docs/Production/{task}/REPAIR_PLAN.json"\n    bookkeeping={canonical_c0,canonical_plan}\n    if plan.get("c0_report_path")!=canonical_c0 or plan.get("plan_path")!=canonical_plan:\n        errors.append("canonical C0 and repair plan paths required")\n'), ('        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n', '        if set(files)&bookkeeping:errors.append(f"{bid} bookkeeping cannot be causal files")\n        causal_files=set(files)-bookkeeping\n        if not causal_files:errors.append(f"{bid} non-bookkeeping causal files required")\n        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n'), ('        allowed.update(files)\n', '        allowed.update(causal_files)\n'), ('        plan_path=plan.get("plan_path")\n        allowed_actual=set(allowed)\n        if isinstance(plan_path,str) and plan_path:allowed_actual.add(plan_path)\n', '        allowed_actual=set(allowed)|bookkeeping\n'), ('            if not set(fix.get("files",[]))&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n', '            if not (set(fix.get("files",[]))-bookkeeping)&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n')]
+BUILDER_INHERIT_DELTAS = [
+    ('import pathlib\n\nfrom lib import ROOT, changed_files\n', 'import pathlib\nimport os\nimport subprocess\n\nfrom lib import ROOT, changed_files\n'),
+    ('def load(path:pathlib.Path)->dict:\n    return json.loads(path.read_text())\n\n\ndef validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:str|None=None)->list[str]:\n',
+     'def load(path:pathlib.Path)->dict:\n    return json.loads(path.read_text())\n\n\ndef _inherited_noncausal(plan:dict)->list[str]:\n    rows=plan.get("inherited_noncausal_files",[])\n    return [str(path) for path in rows] if isinstance(rows,list) else []\n\n\ndef verify_inherited_noncausal(plan:dict,head:str,integration_head:str|None,read_ref=None,is_ancestor=None)->list[str]:\n    inherited=_inherited_noncausal(plan)\n    if not inherited:return []\n    errors=[]\n    source=plan.get("reconciled_integration_head")\n    if not isinstance(source,str) or len(source)!=40:\n        return ["inherited noncausal files require exact reconciled_integration_head"]\n    if not isinstance(integration_head,str) or len(integration_head)!=40 or source!=integration_head:\n        errors.append("reconciled integration head does not match active integration head")\n    if read_ref is None:\n        def read_ref(ref,path):\n            return subprocess.check_output(["git","show",f"{ref}:{path}"])\n    if is_ancestor is None:\n        def is_ancestor(ancestor,descendant):\n            return subprocess.run(["git","merge-base","--is-ancestor",ancestor,descendant],check=False).returncode==0\n    if integration_head and not is_ancestor(source,head):\n        errors.append("reconciled integration head is not an ancestor of repair candidate")\n    for path in inherited:\n        try:\n            source_bytes=read_ref(source,path);head_bytes=read_ref(head,path)\n        except Exception:\n            errors.append("inherited noncausal file missing at integration/head: "+path);continue\n        if source_bytes!=head_bytes:\n            errors.append("inherited noncausal file differs from exact integration bytes: "+path)\n    return errors\n\n\ndef validate(c0:dict,plan:dict,actual_changed:list[str]|None=None,actual_base:str|None=None)->list[str]:\n'),
+    ('    bookkeeping={canonical_c0,canonical_plan}\n    if plan.get("c0_report_path")!=canonical_c0 or plan.get("plan_path")!=canonical_plan:\n',
+     '    bookkeeping={canonical_c0,canonical_plan}\n    inherited=_inherited_noncausal(plan)\n    if plan.get("inherited_noncausal_files",[]) is not None and not isinstance(plan.get("inherited_noncausal_files",[]),list):\n        errors.append("inherited_noncausal_files must be list")\n    if len(inherited)!=len(set(inherited)) or any(not path or path.startswith("/") or ".." in pathlib.PurePosixPath(path).parts for path in inherited):\n        errors.append("inherited noncausal file paths must be unique safe repository paths")\n    if inherited and (not isinstance(plan.get("reconciled_integration_head"),str) or len(plan.get("reconciled_integration_head"))!=40):\n        errors.append("inherited noncausal files require exact reconciled_integration_head")\n    if set(inherited)&bookkeeping:\n        errors.append("canonical repair bookkeeping cannot be inherited noncausal")\n    if plan.get("c0_report_path")!=canonical_c0 or plan.get("plan_path")!=canonical_plan:\n'),
+    ('        allowed.update(causal_files)\n    blast=plan.get("blast_radius_checks",[])\n',
+     '        allowed.update(causal_files)\n    inherited_set=set(inherited)\n    if inherited_set&allowed:\n        errors.append("inherited noncausal files cannot also be blocker causal files")\n    blast=plan.get("blast_radius_checks",[])\n'),
+    ('        allowed_actual=set(allowed)|bookkeeping\n', '        allowed_actual=set(allowed)|bookkeeping|set(inherited)\n'),
+    ('    actual=changed_files(a.base,a.head) if a.base else None\n    errors=validate(c0_copy,plan,actual,a.base)\n    result={"schema_version":1,"task_id":c0.get("task_id"),"diagnosis_id":c0.get("diagnosis_id"),"passed":not errors,"mode":"post-build" if actual is not None else "pre-build","repair_base":plan.get("repair_base"),"actual_changed_files":actual or [],"errors":errors}\n',
+     '    actual=changed_files(a.base,a.head) if a.base else None\n    errors=validate(c0_copy,plan,actual,a.base)\n    inherited_errors=verify_inherited_noncausal(plan,a.head,os.environ.get("INTEGRATION_HEAD")) if actual is not None else []\n    errors.extend(inherited_errors)\n    result={"schema_version":1,"task_id":c0.get("task_id"),"diagnosis_id":c0.get("diagnosis_id"),"passed":not errors,"mode":"post-build" if actual is not None else "pre-build","repair_base":plan.get("repair_base"),"reconciled_integration_head":plan.get("reconciled_integration_head"),"inherited_noncausal_files":_inherited_noncausal(plan),"actual_changed_files":actual or [],"errors":errors}\n'),
+]
 
 
 C0_WORKFLOW = ".github/workflows/havenline-c0-root-cause.yml"
@@ -117,7 +131,11 @@ def builder_delta_errors(accepted: str, current: str) -> list[str]:
         if expected.count(old) != 1:
             return ["V3.1 builder causal bookkeeping anchor missing"]
         expected = expected.replace(old, new, 1)
-    return [] if current == expected else ["Only the authorized causal bookkeeping builder delta is permitted"]
+    for old, new in BUILDER_INHERIT_DELTAS:
+        if expected.count(old) != 1:
+            return ["V3.2 builder inherited-governance anchor missing"]
+        expected = expected.replace(old, new, 1)
+    return [] if current == expected else ["Only the authorized causal-bookkeeping plus exact inherited-governance builder deltas are permitted"]
 
 
 def failure_delta_errors(accepted: str, current: str) -> list[str]:
@@ -188,6 +206,11 @@ def validate() -> dict:
         errors += builder_delta_errors(accepted_builder, (v31.ROOT / BUILDER).read_text())
         if hashlib.sha256((v31.ROOT / BUILDER_REQUEST).read_bytes()).hexdigest() != BUILDER_REQUEST_SHA256:
             errors.append("Bounded builder causal bookkeeping authorization changed or missing")
+        inherited_request=json.loads((v31.ROOT/BUILDER_INHERIT_REQUEST).read_text())
+        if hashlib.sha256((v31.ROOT/BUILDER_INHERIT_REQUEST).read_bytes()).hexdigest()!=BUILDER_INHERIT_REQUEST_SHA256:
+            errors.append("Bounded builder inherited-governance authorization changed or missing")
+        if inherited_request.get("status")!="AUTHORIZED" or inherited_request.get("blocker")!="C0R-T10-RECONCILED-INHERITANCE":
+            errors.append("Explicit T10 inherited-governance builder authorization missing")
         accepted_failure = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{FAILURE}").stdout.decode()
         errors += failure_delta_errors(accepted_failure, (v31.ROOT / FAILURE).read_text())
         if hashlib.sha256((v31.ROOT / FAILURE_REQUEST).read_bytes()).hexdigest() != FAILURE_REQUEST_SHA256:
@@ -218,7 +241,7 @@ def validate() -> dict:
     return {
         "passed": not errors,
         "architecture_version": "3.2",
-        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, actionable critic defects, bounded C0 model packets and grounded artifact diagnostics",
+        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, exact-byte inherited integration governance, actionable critic defects, bounded C0 model packets and grounded artifact diagnostics",
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
@@ -227,6 +250,7 @@ def validate() -> dict:
         "c7_authorization_record": C7_REQUEST,
         "failure_packet_authorization_record": FAILURE_REQUEST,
         "builder_authorization_record": BUILDER_REQUEST,
+        "builder_inherited_governance_authorization_record": BUILDER_INHERIT_REQUEST,
         "c0_job_log_authorization_record": C0_REQUEST,
         "c0_bounded_packet_authorization_record": C0_BOUNDED_REQUEST,
         "c0_grounding_authorization_record": C0_GROUNDING_REQUEST,
