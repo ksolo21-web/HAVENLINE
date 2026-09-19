@@ -1,0 +1,311 @@
+{
+  "schema_version": 1,
+  "review_type": "fresh_independent_exact_source_final",
+  "task_id": "T09",
+  "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "candidate_tree": "d9d86772e0231ace00a81ebd69768cf915f8ba2e",
+  "workflow_run_id": 35289633249,
+  "workflow_job_id": 105429457120,
+  "artifact_id": 10527144124,
+  "artifact_sha256": "78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+  "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "status": "PASS",
+  "approval": "APPROVED",
+  "coverage_complete": true,
+  "unresolved_mandatory_defects": [],
+  "score_reuse": false,
+  "provider": "OpenAI",
+  "model": "unavailable in runtime metadata",
+  "request_or_run_id": "/root/t09_final_critic",
+  "reviewed_at_utc": "2026-09-18T01:19:11Z",
+  "reviewer_independence": "Fresh read-only C2/C3/C4/C5/C6 review. No prior T09 critic score was reused and no production file was edited.",
+  "threshold_contract": {
+    "rule": "Every mandatory dimension must be strictly greater than 9.0 unrounded; no averaging; zero unresolved mandatory defects.",
+    "minimum_score": 9.067,
+    "passed": true
+  },
+  "artifact_integrity": {
+    "verified_zip_path": "/workspace/scratch/9a5e5c6d5884/t09-5415-verified-transfer.zip",
+    "verified_zip_size_bytes": 119604425,
+    "verified_zip_entries": 1195,
+    "zip_crc_passed": true,
+    "artifact_directory": "/workspace/scratch/9a5e5c6d5884/t09-final-5415d85-artifact",
+    "complete_evidence_index_path": "complete-evidence-index.json",
+    "indexed_payload_files": 1193,
+    "verified_payload_hashes": 1193,
+    "missing_payload_files": 0,
+    "hash_mismatches": 0,
+    "unindexed_payload_files": 0,
+    "payload_inventory": {
+      "png": 630,
+      "jpg": 414,
+      "mp4": 14,
+      "json": 97,
+      "log": 36,
+      "txt": 2
+    },
+    "index_and_sidecar_are_additional_to_payload": true,
+    "failed_local_transfer": {
+      "path": "/workspace/scratch/9a5e5c6d5884/t09-final-5415d85.zip",
+      "size_bytes": 104599552,
+      "sha256": "d053d375efb1d3b9f0fb60c752c6c068e93898633debb120e60ec0c6076096be",
+      "error": "BadZipFile",
+      "disposition": "Rejected truncated local download; it does not redefine or invalidate the authoritative artifact digest. G7 uses the independently verified replacement transfer."
+    }
+  },
+  "reviewed_evidence_counts": {
+    "locked_reference_pixels": 3,
+    "isolated_tool_views": 30,
+    "in_hand_tool_target_views": 30,
+    "resource_static_states": 32,
+    "device_screenshots": 24,
+    "native_4k_captures": 1,
+    "c5_videos": 6,
+    "resource_sequence_videos": 8,
+    "c5_png_records": 510,
+    "resource_sequence_jpg_frames": 414,
+    "capture_reports": 71,
+    "test_suites": 17,
+    "test_checks": 1006,
+    "save_matrix_cases": 7,
+    "device_matrix_profiles": 6
+  },
+  "critics": {
+    "C2": {
+      "status": "PASS",
+      "scores": {
+        "geometry_contact": 9.237,
+        "clipping_seams": 9.184,
+        "intentional_gap_integrity": 9.163,
+        "cross_view_integrity": 9.226
+      },
+      "minimum_score": 9.163,
+      "coverage_complete": true,
+      "confidence": 0.97,
+      "defects": [],
+      "evidence": [
+        {"path": "captures/asset-wood-detail/asset-axe-detail.png", "sha256": "8949616da7b71b401dbd5a91f7b2889609ff35a480ed159bbbed75b104618e48"},
+        {"path": "captures/asset-stone-detail/asset-pickaxe-detail.png", "sha256": "5e64ea61c12c3cab68d232c68de775907e54a1e368e6ad6e88d6fee2982de179"},
+        {"path": "captures/asset-fuel-detail/asset-salvage_pry_tool-detail.png", "sha256": "6159a06b81ba343aa23cb40241019243f3e96bbf5631f1654c550ddf199f8a56"},
+        {"path": "captures/tool-wood-detail/tool-wood-detail.png", "sha256": "bc1ba99a791998cbed2bd822e160f323ad12229610cc17c124975e6f0782ebc7"},
+        {"path": "captures/tool-stone-detail/tool-stone-detail.png", "sha256": "c3a6e086a162b3eb35dce2718d46de7b4820438e03440b811d91544e17bff3f7"},
+        {"path": "captures/tool-fuel-detail/tool-fuel-detail.png", "sha256": "0a6622e37e3a3b1642dc1e8752f222e4edc7022a3b05dd76c38dbd7a647f49b0"},
+        {"path": "captures/native-4k/tool-wood-front-right.png", "sha256": "bb78b5c9d60d10ad712e3bed8650477721bed4c46d8ff878cae18a29aac46a34"}
+      ],
+      "rationale": [
+        "All 30 isolated turntable views and 30 in-hand actor/tool/target views were inspected across front, rear, left, right, three-quarter, overhead and detail angles.",
+        "The axe, pickaxe and pry tool have visible authored blue/orange/brown finish; no white silhouette, debug primitive, reversed attachment, floating grip, body penetration or missed contact was observed.",
+        "Cross-view silhouettes, material boundaries, intentional hand/tool gaps and native-4K contact remain coherent."
+      ]
+    },
+    "C3": {
+      "status": "PASS",
+      "scores": {
+        "havenline_identity": 9.247,
+        "simple_context_controls": 9.331,
+        "physical_core_loop": 9.176,
+        "complexity_discipline": 9.284,
+        "world_response_readability": 9.159
+      },
+      "minimum_score": 9.159,
+      "coverage_complete": true,
+      "confidence": 0.96,
+      "defects": [],
+      "evidence": [
+        {"path": "reference/A-003.00.png", "sha256": "1dc3c5c3572d49263c6eb8eb3116b44cd31fa17e2634caf1ed3b1a5860737b07"},
+        {"path": "reference/A-016.00.png", "sha256": "3afe3c0fe64702894b7cac3a0d1b271cac0b2d60e87490063a1def7ee111d5ba"},
+        {"path": "reference/B-028.00.png", "sha256": "3e983101885a727eb32fcc0d132fcacf8be8c439d2dfefcb267b45326065ee18"},
+        {"path": "captures/sequence-wood/wood-real-time.mp4", "sha256": "849f12e96b66f61174d0653cde945f18be6f0cad18dec084f0c03f7b32f9f59c"},
+        {"path": "captures/sequence-stone/stone-real-time.mp4", "sha256": "dc1cce16eb43df05096fe3067c0e2ef278ecf83ff4d07719e181ce3d61983448"},
+        {"path": "captures/sequence-metal/metal-real-time.mp4", "sha256": "3b62a892d21e808a0aad2d73a26968021cf4b6b62a6c5bc0601437e186c5b993"},
+        {"path": "captures/sequence-fuel/fuel-real-time.mp4", "sha256": "45e72d649b3f688428eb1c868c9ffde7eb5000460d626a07bdf50fcd50c496a9"},
+        {"path": "matrices/device/device-matrix.json", "sha256": "c163eb41374395870c905d237d463db894da0f5dd3d513e8935a9eb126b1f49b"}
+      ],
+      "rationale": [
+        "The four automatic contextual loops preserve Havenline's authored stylized material language and physical actor-source-transfer-carry chain.",
+        "All 24 device pixels show one movement joystick and zero action buttons; no pickup, tool-cycle, gather or inventory button appears.",
+        "The selected-source ring, resource-specific tool, impact response, one-unit transfer and physical carried destination are readable without introducing out-of-scope systems."
+      ]
+    },
+    "C4": {
+      "status": "PASS",
+      "scores": {
+        "interactable_clarity": 9.171,
+        "danger_clarity": 9.286,
+        "collection_feedback": 9.204,
+        "resource_destination": 9.137,
+        "world_change_clarity": 9.192,
+        "next_action_clarity": 9.213
+      },
+      "minimum_score": 9.137,
+      "coverage_complete": true,
+      "confidence": 0.96,
+      "defects": [],
+      "evidence": [
+        {"path": "captures/sequence-wood/wood-committed-contact.png", "sha256": "cb4a65d13231640115b8d3d037403a248cacec5d6f643923708a44a44e107bdf"},
+        {"path": "captures/sequence-wood/wood-depleted.png", "sha256": "5d8ecb66cad86bce0b773ab3bba31395b68f9eb609317c9d2173db36807f78e3"},
+        {"path": "captures/sequence-wood/wood-respawned.png", "sha256": "9b144e3900e99511b2e132022b439d32aaf57b3fdc9f58584f0bd91e3411da55"},
+        {"path": "captures/sequence-stone/stone-committed-contact.png", "sha256": "6919933131388d087b856342b87e9fd2c1cd89407b6bddf01cb681adfc643a77"},
+        {"path": "captures/sequence-stone/stone-depleted.png", "sha256": "c3f983d292b46b5175a563c9893729aa3a1093c736599e716dea99105bbcfded"},
+        {"path": "captures/sequence-stone/stone-respawned.png", "sha256": "6d55e4178eaaedc927a794f6682a76caa098d132de2c701699342f33e8ffb32b"},
+        {"path": "captures/sequence-metal/metal-committed-contact.png", "sha256": "d19d805844fcfa2f8f8bcdf82312af32eb75b52673d76559de4da155cb838962"},
+        {"path": "captures/sequence-metal/metal-depleted.png", "sha256": "b65f404886ec76c98d545a48f5e6fd96f50a8902d7c971e3334760ee88ec19b2"},
+        {"path": "captures/sequence-metal/metal-respawned.png", "sha256": "b205c58c49325af7821672e171b41bcd5beb0b8541a3a4a77596e6534da948ae"},
+        {"path": "captures/sequence-fuel/fuel-committed-contact.png", "sha256": "39e21ec9d43c2961cc7464f85395ea2e74e47daecf2d0bae8d2aae0b8e37e55c"},
+        {"path": "captures/sequence-fuel/fuel-depleted.png", "sha256": "9c77135f06c95866bb037b473511f6aa0dcf8b5b9cbd22d9d8d333769bfab4da"},
+        {"path": "captures/sequence-fuel/fuel-respawned.png", "sha256": "edcd75c8ea612a67a78c2fd1329a45c7ec1471525aabe462ddc3456b2f92a57a"}
+      ],
+      "rationale": [
+        "All 32 static resource states and all eight sequence videos were inspected for approach, focus, contact, recovery, cancel, re-entry, depletion and respawn.",
+        "Every source has exactly two authoritative commits: units 2 to 1/inventory 0 to 1, then units 1 to 0/inventory 1 to 2. Maximum simultaneous transfer flight and impact pulse are each one.",
+        "Settled depletion shows zero source units, hidden source and tool, empty action identity, zero flights and zero pulses; respawn is visibly distinct and restores harvestable presentation."
+      ]
+    },
+    "C5": {
+      "status": "PASS",
+      "scores": {
+        "full_cycle": 9.187,
+        "foot_contact": 9.229,
+        "lower_body_mechanics": 9.154,
+        "upper_body_mechanics": 9.173,
+        "weight_transfer": 9.108,
+        "transitions": 9.143,
+        "clipping": 9.207,
+        "secondary_motion_contact": 9.132
+      },
+      "minimum_score": 9.108,
+      "coverage_complete": true,
+      "confidence": 0.97,
+      "defects": [],
+      "evidence": [
+        {"path": "captures/motion-c5/motion.json", "sha256": "09455e349e8895fd458255569384539c730551e7132a727f633d31bf098643b5"},
+        {"path": "captures/motion-c5/motion-hashes.json", "sha256": "39a4a10c520d35704c1fa491c8753319b2693053d6d74d2e1bef8fe0aaac5ed1"},
+        {"path": "captures/motion-c5/videos/chop-real-time.mp4", "sha256": "3086a858f7ddcd64717b9f24b7675f397eb833e5bdd6346349795043c6005994"},
+        {"path": "captures/motion-c5/videos/chop-slow-review.mp4", "sha256": "a1f08010df97b1ebc5db6ce7de35cd5637b387ed836c5e4bca3bc5ddc63b8e75"},
+        {"path": "captures/motion-c5/videos/mine-real-time.mp4", "sha256": "83bd54cb08ce4d4110f367adf6ec3cb25089b95617c6afbeca4384c32d20d07c"},
+        {"path": "captures/motion-c5/videos/mine-slow-review.mp4", "sha256": "704fd76f688dc6328bbb1f87b010a33930b2a2ff3f8351025118f90cf17ae436"},
+        {"path": "captures/motion-c5/videos/dismantle-real-time.mp4", "sha256": "076fc0ae3088c5ca6fc3e88261652e64c2c3cb1f826b27f799adac9bb3f9bbda"},
+        {"path": "captures/motion-c5/videos/dismantle-slow-review.mp4", "sha256": "99d5a8ea3384622b6c9df14a378ae744d5168115a9f0d7752a311bfe4ab9fc85"},
+        {"path": "captures/motion-c5/t06/chop/turns/turn-180.png", "sha256": "feedc581ca0fcf15860069f03d12cbf04f62cba160ef2d991bf6c9e3a9b3c253"},
+        {"path": "captures/motion-c5/t06/mine/turns/turn-neg-090.png", "sha256": "7e2bddf0074f533b82ce699b5764f1041bde3f74afdbaa545a68fb5dba60c8dd"},
+        {"path": "captures/motion-c5/t06/dismantle/close-contacts/lower-front.png", "sha256": "4591fc7329ea46aae511edaeb421a787e7fdf80228592a89f167e76165512109"}
+      ],
+      "rationale": [
+        "The character-rigging critic protocol was applied to the full real-time and true 0.25x slow-review chop, mine and dismantle cycles, transitions, nine turn angles and five close-contact views per action.",
+        "Real/slow frame counts are 29/112 chop, 32/124 mine and 34/131 dismantle. Slow durations are approximately 3.86 times real durations, confirming genuine quarter-speed review evidence.",
+        "All 27 turns, 15 close contacts and every cycle contact window are contact-ready and aligned with sub-micrometre recorded impact/grip error. Feet/toes/knees/hips, shoulders/elbows/hands, cuffs, boots, belt/pouches, hem, tool grip and target contact remain stable with no visible loop pop or clipping."
+      ],
+      "rig_inventory": {
+        "joint_count": 66,
+        "all_joints_mapped": true,
+        "groups": {
+          "root_core": ["Root", "Hip", "Pelvis", "Waist", "Spine01", "Spine02"],
+          "head_neck": ["NeckTwist01", "NeckTwist02", "Head"],
+          "left_arm_hand": ["L_Clavicle", "L_Upperarm", "L_UpperarmTwist01", "L_UpperarmTwist02", "L_Forearm", "L_ForearmTwist01", "L_ForearmTwist02", "L_Hand"],
+          "right_arm_hand": ["R_Clavicle", "R_Upperarm", "R_UpperarmTwist01", "R_UpperarmTwist02", "R_Forearm", "R_ForearmTwist01", "R_ForearmTwist02", "R_Hand"],
+          "left_leg_boot": ["L_Thigh", "L_ThighTwist01", "L_ThighTwist02", "L_Calf", "L_CalfTwist01", "L_CalfTwist02", "L_KneePad", "L_Foot", "L_ToeBase", "L_BootFastener_upper_inner", "L_BootFastener_lower_inner", "L_BootFastener_upper_outer", "L_BootFastener_lower_outer"],
+          "right_leg_boot": ["R_Thigh", "R_ThighTwist01", "R_ThighTwist02", "R_Calf", "R_CalfTwist01", "R_CalfTwist02", "R_KneePad", "R_Foot", "R_ToeBase", "R_BootFastener_upper_inner", "R_BootFastener_lower_inner", "R_BootFastener_upper_outer", "R_BootFastener_lower_outer"],
+          "coat_pouch_hem": ["CoatFront", "L_CoatFront", "PouchSwing", "HemFastener_01", "HemFastener_02", "HemFastener_03", "HemFastener_04", "HemFastener_05", "HemFastener_06", "HemFastener_07", "HemFastener_08", "HemFastener_09", "HemFastener_10", "HemFastener_11", "HemFastener_12"]
+        }
+      },
+      "part_clip_ledger": {
+        "check_order": ["transform", "deformation", "clearance", "temporal"],
+        "root_core": {"chop": ["PASS", "PASS", "PASS", "PASS"], "mine": ["PASS", "PASS", "PASS", "PASS"], "dismantle": ["PASS", "PASS", "PASS", "PASS"]},
+        "head_neck_hair_eyewear": {"chop": ["PASS", "PASS", "PASS", "PASS"], "mine": ["PASS", "PASS", "PASS", "PASS"], "dismantle": ["PASS", "PASS", "PASS", "PASS"]},
+        "left_arm_hand_cuff": {"chop": ["PASS", "PASS", "PASS", "PASS"], "mine": ["PASS", "PASS", "PASS", "PASS"], "dismantle": ["PASS", "PASS", "PASS", "PASS"]},
+        "right_arm_hand_cuff": {"chop": ["PASS", "PASS", "PASS", "PASS"], "mine": ["PASS", "PASS", "PASS", "PASS"], "dismantle": ["PASS", "PASS", "PASS", "PASS"]},
+        "left_leg_foot_knee_fasteners": {"chop": ["PASS", "PASS", "PASS", "PASS"], "mine": ["PASS", "PASS", "PASS", "PASS"], "dismantle": ["PASS", "PASS", "PASS", "PASS"]},
+        "right_leg_foot_knee_fasteners": {"chop": ["PASS", "PASS", "PASS", "PASS"], "mine": ["PASS", "PASS", "PASS", "PASS"], "dismantle": ["PASS", "PASS", "PASS", "PASS"]},
+        "coat_hem_belt_pouches": {"chop": ["PASS", "PASS", "PASS", "PASS"], "mine": ["PASS", "PASS", "PASS", "PASS"], "dismantle": ["PASS", "PASS", "PASS", "PASS"]},
+        "tool_grip_target_contact": {"chop": ["PASS", "PASS", "PASS", "PASS"], "mine": ["PASS", "PASS", "PASS", "PASS"], "dismantle": ["PASS", "PASS", "PASS", "PASS"]}
+      },
+      "clip_level_checks": {
+        "chop": {"loop_continuity": "PASS", "ground_contact": "PASS", "motion_intent": "PASS", "entry_exit_transition": "PASS"},
+        "mine": {"loop_continuity": "PASS", "ground_contact": "PASS", "motion_intent": "PASS", "entry_exit_transition": "PASS"},
+        "dismantle": {"loop_continuity": "PASS", "ground_contact": "PASS", "motion_intent": "PASS", "entry_exit_transition": "PASS"},
+        "skeleton_integrity": "PASS",
+        "animation_integrity": "PASS",
+        "runtime_export_integrity": "PASS"
+      }
+    },
+    "C6": {
+      "status": "PASS",
+      "scores": {
+        "frame_time": 9.214,
+        "draw_calls": 9.402,
+        "geometry": 9.482,
+        "texture_memory": 9.237,
+        "shader_cost": 9.491,
+        "physics": 9.488,
+        "animation": 9.472,
+        "population": 9.489,
+        "thermal_risk": 9.067
+      },
+      "minimum_score": 9.067,
+      "coverage_complete": true,
+      "confidence": 0.94,
+      "defects": [],
+      "evidence": [
+        {"path": "performance/c6-performance.json", "sha256": "732715e042c852c57849ce97fe2a425e627d00749d07a48747dd4ac1f1c09658"},
+        {"path": "performance/delta.json", "sha256": "599c9e9b938e6867bdad006a3540eb9787dbbc5ab53457f11fcad8431154a727"},
+        {"path": "performance/c6-gate.json", "sha256": "b67307bc0590c9b3540a36e276d6024806974fb069f189174ed5df63e2650465"}
+      ],
+      "rationale": [
+        "Exact-base and candidate used the same forced-render script at 3840x2160 after 30 warm-up frames for 180 measured active-harvest frames on llvmpipe.",
+        "Candidate deltas: p95 -62.225 ms, p99 -500.047 ms, average draw calls +2, average primitives -330.511, static memory +1.054 MB, visible materials +2, shaders/physics/animation/population +0. All declared limits pass.",
+        "Maximum runtime fragments and impact pulses are zero after settling and unchanged active-state node count is stable. Thermal score applies only to the bounded software preflight; physical 4K60 and thermal certification remain explicitly outside T09."
+      ]
+    }
+  },
+  "requirements": {
+    "R01": "PASS — registry and exact candidate/source hashes are bound and the four resource mappings are complete.",
+    "R02": "PASS — T07 contextual selection remains automatic; one joystick and zero action buttons were proven on all 24 device pixels.",
+    "R03": "PASS — authored axe, pickaxe and pry finish is visible across all 30 isolated views.",
+    "R04": "PASS — hand/two-hand grip, facing and target reach pass real-time, slow, turn, close and native-4K inspection.",
+    "R05": "PASS — each resource has exactly two single authoritative commits synchronized to impact and no presentation grant path.",
+    "R06": "PASS — wood chips, stone/metal strike differentiation and restrained fuel response are bounded and readable.",
+    "R07": "PASS — one transfer flight per committed unit visibly reaches the actor and updates carried output exactly once.",
+    "R08": "PASS — source identity, remaining/depleted state and respawn visibility agree with reports and pixels.",
+    "R09": "PASS — actor capability boundary tests pass without claiming helper/survivor final motion.",
+    "R10": "PASS — full C5 protocol passes all three actions at 1.0x and 0.25x with 66-joint grouped coverage.",
+    "R11": "PASS — 6/6 devices, 24/24 states and 7/7 save cases pass; presentation reconstructs without a new save field.",
+    "R12": "PASS — pooled/bounded response and integrated C6 preserve declared headroom without expanding future scope."
+  },
+  "gates": {
+    "G1": "PASS — required dependencies and current integrated source are satisfied.",
+    "G2": "PASS — authorized integration scope and routing governance pass; 49 locked architecture files are unchanged.",
+    "G3": "PASS — frozen T09 scope is complete with no T10+ or excluded-system expansion.",
+    "G4": "PASS — source contract, parser/import/resource and exact integration scope checks pass.",
+    "G5": "PASS — harvesting functional states and fail-closed event boundaries pass.",
+    "G6": "PASS — 17 impacted suites / 1006 checks pass.",
+    "G7": "PASS — source, verified ZIP, complete index and all 1193 payload hashes are exact; the truncated first local transfer is rejected and separately recorded.",
+    "G8": "PASS — exact-base integrated C6 gate passes all declared budgets.",
+    "G9": "PASS — 7/7 save/reload/migration/recovery cases pass and no saved field was added.",
+    "G10": "PASS — replay, duplicate, stale, malformed and authority boundaries fail closed without duplicate reward.",
+    "G11": "PASS — 6/6 profiles and all 24 captures preserve joystick, actor/tool/target/feedback readability and full-frame canvas coverage.",
+    "G12": "PASS — fresh C2/C3/C4/C5/C6 coverage is complete against the exact artifact.",
+    "G13": "PASS — every canonical dimension is strictly greater than 9.0 unrounded; minimum 9.067; zero unresolved mandatory defects.",
+    "G14": "PASS — exact integrated gameplay source 5415d85838ecf4bea8b3c71662072670e61797a0 passed run 35289633249; governance routing commit 460064be8fff1b970071212a923423f2733024cc passed hosted run 35290773190."
+  },
+  "defect_ledger_review": {
+    "D008": "VERIFIED_CLOSED — visible authored colored finish on all three tools.",
+    "D009": "VERIFIED_CLOSED — six actual tool/target/contact C5 videos with genuine 0.25x slow review.",
+    "D010": "VERIFIED_CLOSED — neutral readable stage, unchanged shipping target materials and one resource-colored selection ring.",
+    "D011": "VERIFIED_CLOSED — maximum one transfer flight/pulse, two authoritative units total, and settled zero-clutter depletion.",
+    "D012": "VERIFIED_CLOSED — known-failures.json is indexed as ec917b06f4485f02508a9c45c617ff7613338883e8b1858dd691d2602dff300d.",
+    "D013": "VERIFIED_CLOSED — visible one-joystick/zero-action-button proof in all 24 device pixels and reports.",
+    "D014": "VERIFIED_CLOSED — 71 capture reports, complete render output, typed source and passing contract/tests.",
+    "D015": "VERIFIED_CLOSED — full-frame world coverage on all 24 device pixels; maximum projected canvas error 0.000122 px; no dark bands."
+  },
+  "known_failures_evidence": {
+    "path": "known-failures.json",
+    "sha256": "ec917b06f4485f02508a9c45c617ff7613338883e8b1858dd691d2602dff300d",
+    "open_failures": 0
+  },
+  "limitations": [
+    "This approval is limited to the frozen T09 contract and exact source/artifact identity stated above.",
+    "Physical-device 4K60/display and thermal certification are not claimed and remain T68/T69 scope.",
+    "The C5 approval is for the in-place harvesting clips and their runtime transition/contact contract, not new locomotion or root-motion behavior.",
+    "The exact underlying runtime model identifier is not exposed to this review session and is therefore reported as unavailable rather than inferred."
+  ]
+}

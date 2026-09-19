@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "task_id": "T09",
+  "status": "IMPLEMENTED_VALIDATED",
+  "authorization": "User explicitly answered yes to the bounded V3.2 T09 reactivation request in this session.",
+  "request": "Authorize a bounded V3.2 policy change to reactivate T09 validation and integrate the reviewed repair candidate without weakening acceptance or replacing the V3.1 architecture.",
+  "integration_head": "00b39caa8a5d4925d1ba0f3d7c19dd9ebdf14f26",
+  "previously_approved_source": "9bc735502b265bfdd365004fb863b19c613e27dd",
+  "reviewed_repair_source": "94714f6f65c26a05d78888802c9fb54d31e8c95b",
+  "verification_run": 35278615319,
+  "artifact_id": 10523722147,
+  "artifact_sha256": "751a3998b9556e45861b3b7d62195784e830074de0ca1f0563d9667c1d92dd68",
+  "evidence_index_sha256": "fa557d056078ff4d36e14d1defe3a0549013cd3fc9ef6d7e0a9a48c237f0e532",
+  "verified_evidence": {
+    "indexed_files": 1192,
+    "hash_mismatches": 0,
+    "engine_suites": 17,
+    "engine_checks": 1006,
+    "device_captures": 24,
+    "device_profiles": 6,
+    "canvas_and_joystick_geometry_passed": true,
+    "c6_quantitative_gate_passed": true,
+    "independent_review": "PASS",
+    "critic_minimum_scores": {
+      "C2": 9.34,
+      "C3": 9.31,
+      "C4": 9.22,
+      "C5": 9.18,
+      "C6": 9.12
+    },
+    "independent_review_record": "Docs/Production/T09/repair-independent-review-94714f6.md",
+    "unresolved_artifact_defects": []
+  },
+  "blocker": {
+    "policy_path": "Docs/Production/CI_TOOLCHAIN_LOCK.json",
+    "retired_workflow": ".github/workflows/havenline-task09-harvesting.yml",
+    "forward_execution_allowed": false,
+    "reopen_requires_full_revalidation": true,
+    "lock_path": "Docs/Production/ARCHITECTURE_RELEASE_LOCK.json",
+    "locked_file_change_requires_explicit_v32_scope": true,
+    "ordinary_task_repairs_may_not_reopen_v31": true
+  },
+  "bounded_proposal": [
+    "Preserve V3.1 accepted history and all unrelated architecture files.",
+    "Explicitly authorize T09 repair validation in the CI policy through the required versioned architecture release process.",
+    "Use the existing pinned action identities and runner provenance requirements for the reactivated workflow.",
+    "Reconcile the T09 defect-ledger conflict while preserving both historical approval and later repair evidence.",
+    "Integrate only the reviewed T09 delta, run fresh post-integration regression and independent exact-source review, and use evidence reuse only where the existing policy permits a provenance bridge.",
+    "Replace current approval records only after every required gate passes; keep T10 runtime locked until its separate activation."
+  ],
+  "unchanged_requirements": [
+    "Every mandatory critic dimension strictly greater than 9.0 unrounded.",
+    "Zero unresolved mandatory defects.",
+    "G1-G14 and fresh integration validation.",
+    "No physical-device 4K60 certification claim."
+  ],
+  "architecture_files_modified": true,
+  "integration_branch_modified": true,
+  "accepted_reconciled_source": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "final_verification_run": 35289633249,
+  "final_artifact_id": 10527144124,
+  "final_review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7"
+}

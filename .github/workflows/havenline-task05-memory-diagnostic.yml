@@ -1,0 +1,163 @@
+name: Havenline T05 C6 memory diagnostic
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task05-memory-diagnostic.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+env:
+  T05_SOURCE: '8c9da476ca93a7a826d51eae892449fd20e9c105'
+  T04_SOURCE: 'e08fd37e9a999d878644c03089c4b4b253bd7472'
+
+jobs:
+  native-4k-memory-ab:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with: {ref: '${{ env.T04_SOURCE }}', path: baseline-source}
+      - uses: actions/checkout@v4
+        with: {ref: '${{ env.T05_SOURCE }}', path: candidate-original}
+      - name: Create controlled candidate variants
+        run: |
+          set -euo pipefail
+          cp -a candidate-original candidate-ignore-cache
+          cp -a candidate-original candidate-empty-batch
+          cp -a candidate-original candidate-compile-drop
+          python3 - <<'PY'
+          import hashlib
+          import json
+          from pathlib import Path
+
+          ignore_path = Path('candidate-ignore-cache/HavenlineGodot/scripts/station_kit.gd')
+          empty_path = Path('candidate-empty-batch/HavenlineGodot/scripts/station_kit.gd')
+          drop_path = Path('candidate-compile-drop/HavenlineGodot/scripts/station_kit.gd')
+          ignore_old = 'var packed: PackedScene = load(str(row.asset))'
+          ignore_new = 'var packed: PackedScene = ResourceLoader.load(str(row.asset), "", ResourceLoader.CACHE_MODE_IGNORE)'
+          empty_old = 'batched_visual.mesh = compile_batch(batch_groups)'
+          empty_new = 'batched_visual.mesh = ArrayMesh.new() # diagnostic: omit permanent combined geometry'
+          drop_new = 'var diagnostic_mesh: ArrayMesh = compile_batch(batch_groups)\n\tdiagnostic_mesh = null\n\tbatched_visual.mesh = ArrayMesh.new() # diagnostic: compile, then omit permanent combined geometry'
+          ignore_text = ignore_path.read_text()
+          empty_text = empty_path.read_text()
+          drop_text = drop_path.read_text()
+          assert ignore_text.count(ignore_old) == 1
+          assert empty_text.count(empty_old) == 1
+          assert drop_text.count(empty_old) == 1
+          ignore_path.write_text(ignore_text.replace(ignore_old, ignore_new))
+          empty_path.write_text(empty_text.replace(empty_old, empty_new))
+          drop_path.write_text(drop_text.replace(empty_old, drop_new))
+          Path('memory-diagnostic').mkdir()
+          Path('memory-diagnostic/variants.json').write_text(json.dumps({
+              'baseline_source': '${{ env.T04_SOURCE }}',
+              'candidate_source': '${{ env.T05_SOURCE }}',
+              'candidate_original_station_kit_sha256': hashlib.sha256(Path('candidate-original/HavenlineGodot/scripts/station_kit.gd').read_bytes()).hexdigest(),
+              'candidate_ignore_cache_station_kit_sha256': hashlib.sha256(ignore_path.read_bytes()).hexdigest(),
+              'candidate_empty_batch_station_kit_sha256': hashlib.sha256(empty_path.read_bytes()).hexdigest(),
+              'candidate_compile_drop_station_kit_sha256': hashlib.sha256(drop_path.read_bytes()).hexdigest(),
+              'acceptance_evidence': False,
+          }, indent=2) + '\n')
+          PY
+      - name: Run interleaved native-4K RSS probes
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          for project in baseline-source candidate-original candidate-ignore-cache candidate-empty-batch candidate-compile-drop; do
+            timeout 240 "$engine" --headless --editor --path "$project/HavenlineGodot" --import --quit > "memory-diagnostic/$project-import.log" 2>&1
+          done
+          run_probe() {
+            label="$1"
+            project="$2"
+            mkdir -p "memory-diagnostic/$label"
+            /usr/bin/time -v -o "memory-diagnostic/$label/time.txt" xvfb-run -a -s '-screen 0 3840x2160x24' timeout 240 "$engine" --path "$project/HavenlineGodot" --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/benchmark_environment.gd -- --benchmark-seconds=60 --benchmark-warmup=5 --benchmark-output="$(pwd)/memory-diagnostic/$label" > "memory-diagnostic/$label/run.log" 2>&1
+          }
+          run_probe baseline-a baseline-source
+          run_probe original-a candidate-original
+          run_probe ignore-cache candidate-ignore-cache
+          run_probe empty-batch candidate-empty-batch
+          run_probe compile-drop candidate-compile-drop
+          run_probe original-b candidate-original
+          run_probe baseline-b baseline-source
+          allowed_baked_errors='^ERROR: Missing baked outpost audio: run tools/havenline/bake_outpost_audio\.py$|^ERROR: Missing baked crew motion: run res://tools/bake_crew_motion\.gd$'
+          for log in memory-diagnostic/*/run.log; do
+            grep -E 'SCRIPT ERROR|Parse Error|ERROR:' "$log" | grep -Ev "$allowed_baked_errors" > "$log.unexpected" || true
+            test ! -s "$log.unexpected"
+            cmp <(grep -E "$allowed_baked_errors" memory-diagnostic/baseline-a/run.log | sort) <(grep -E "$allowed_baked_errors" "$log" | sort)
+          done
+      - name: Summarize discriminating measurements
+        run: |
+          python3 - <<'PY'
+          import hashlib
+          import json
+          import re
+          from pathlib import Path
+
+          rows = []
+          conditions = None
+          for label in ('baseline-a', 'original-a', 'ignore-cache', 'empty-batch', 'compile-drop', 'original-b', 'baseline-b'):
+              folder = Path('memory-diagnostic') / label
+              benchmark = json.loads((folder / 'benchmark.json').read_text())
+              assert benchmark['requested_seconds'] == 60
+              assert benchmark['retained_seconds'] >= 60
+              assert benchmark['native_dimensions_and_scale_maintained'] is True
+              assert benchmark['internal_resolutions'] == [[3840, 2160]]
+              assert benchmark['software_renderer'] is True
+              assert benchmark['fixed_timestep_used'] is False
+              row_conditions = tuple(benchmark[key] for key in ('renderer', 'display_driver', 'gpu', 'software_renderer'))
+              if conditions is None:
+                  conditions = row_conditions
+              assert row_conditions == conditions
+              match = re.search(r'Maximum resident set size \(kbytes\):\s*(\d+)', (folder / 'time.txt').read_text())
+              assert match
+              rows.append({
+                  'label': label,
+                  'max_rss_kib': int(match.group(1)),
+                  'samples': benchmark['samples'],
+                  'retained_seconds': benchmark['retained_seconds'],
+                  'p50_ms': benchmark['p50_ms'],
+                  'p95_ms': benchmark['p95_ms'],
+                  'p99_ms': benchmark['p99_ms'],
+                  'run_log_sha256': hashlib.sha256((folder / 'run.log').read_bytes()).hexdigest(),
+                  'benchmark_sha256': hashlib.sha256((folder / 'benchmark.json').read_bytes()).hexdigest(),
+                  'time_sha256': hashlib.sha256((folder / 'time.txt').read_bytes()).hexdigest(),
+              })
+          by_label = {row['label']: row for row in rows}
+          baseline_mean = (by_label['baseline-a']['max_rss_kib'] + by_label['baseline-b']['max_rss_kib']) / 2
+          original_mean = (by_label['original-a']['max_rss_kib'] + by_label['original-b']['max_rss_kib']) / 2
+          report = {
+              'task': 'T05',
+              'candidate_source': '${{ env.T05_SOURCE }}',
+              'baseline_source': '${{ env.T04_SOURCE }}',
+              'method': 'same-runner interleaved 60-second native-4K scale-1 software-rendered probes',
+              'rows': rows,
+              'baseline_repeat_mean_rss_kib': baseline_mean,
+              'original_repeat_mean_rss_kib': original_mean,
+              'original_to_baseline_ratio': original_mean / baseline_mean,
+              'ignore_cache_to_original_ratio': by_label['ignore-cache']['max_rss_kib'] / original_mean,
+              'no_compile_to_original_ratio': by_label['empty-batch']['max_rss_kib'] / original_mean,
+              'compile_then_drop_to_original_ratio': by_label['compile-drop']['max_rss_kib'] / original_mean,
+              'compile_peak_ratio': by_label['compile-drop']['max_rss_kib'] / by_label['empty-batch']['max_rss_kib'],
+              'acceptance_evidence': False,
+              'production_change_authorized': False,
+          }
+          Path('memory-diagnostic/result.json').write_text(json.dumps(report, indent=2) + '\n')
+          print(json.dumps(report, indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t05-memory-diagnostic-${{ github.run_id }}'
+          path: memory-diagnostic/
+          retention-days: 14
+          if-no-files-found: error

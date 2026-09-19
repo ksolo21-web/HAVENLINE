@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "required_metrics": [
+    "queue_seconds",
+    "run_seconds",
+    "gate_durations",
+    "rerun_count",
+    "c0_cycles",
+    "proof_cache_hits",
+    "artifact_bytes",
+    "terminal_gate",
+    "terminal_class"
+  ],
+  "forbidden_fields": ["token", "secret", "password", "credential", "authorization"],
+  "quality_threshold_changes_from_telemetry": "FORBIDDEN",
+  "purpose": "Measure factory throughput and waste without changing acceptance quality."
+}

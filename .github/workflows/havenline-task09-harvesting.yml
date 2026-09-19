@@ -1,0 +1,456 @@
+name: Havenline Task 9 integrated harvesting candidate
+
+on:
+  push:
+    branches: ['havenline/T09-harvesting']
+    paths:
+      - 'HavenlineGodot/assets/harvesting_v1/**'
+      - 'HavenlineGodot/scripts/harvest_presentation.gd'
+      - 'HavenlineGodot/scripts/main.gd'
+      - 'HavenlineGodot/tests/test_task09_*.gd'
+      - 'HavenlineGodot/tests/capture_task09_*.gd'
+      - 'Docs/Production/T09/**'
+      - 'tools/havenline/task09/**'
+      - '.github/workflows/havenline-task09-*.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: havenline-task09-harvesting-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  integrated-candidate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 80 # Full 71-capture render plus equal-window base/candidate performance.
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Prepare pinned Godot
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/engine" task09-evidence/tests
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+
+      - name: Record pinned runner provenance
+        run: |
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          Path('task09-evidence/runtime-provenance.json').write_text(json.dumps({
+              'ImageOS': os.environ.get('ImageOS'),
+              'ImageVersion': os.environ.get('ImageVersion'),
+              'RUNNER_OS': os.environ.get('RUNNER_OS'),
+              'RUNNER_ARCH': os.environ.get('RUNNER_ARCH'),
+              'godot': '4.7.2.stable',
+              'godot_editor_sha512': '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65',
+              'source': os.environ['GITHUB_SHA'],
+          }, indent=2) + '\n')
+          PY
+
+      - name: Verify scope, assets and frozen contracts
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          frozen_base=7492074e40a0b061f31d8c32602b7a581b2610f3
+          preintegration_head=d3b5260de0a57830f10e276f3368ad96f6e7a32a
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          impact_base="$integration"
+          if [[ "$integration" = "$CANDIDATE" ]]; then
+            # Fresh post-integration verification must review the integrated T09
+            # delta, not compare the integration head to itself.
+            impact_base="$preintegration_head"
+            python3 tools/havenline/production/validate_integration_scope.py \
+              --base "$preintegration_head" --head "$CANDIDATE" \
+              --output task09-evidence/candidate-scope.json
+          elif git merge-base --is-ancestor "$integration" "$CANDIDATE"; then
+            # Integration-owner reconciled candidate includes authorized V3.2
+            # governance alongside T09; validate the complete integration scope.
+            python3 tools/havenline/production/validate_architecture_v32_t09.py
+            python3 tools/havenline/production/validate_integration_scope.py \
+              --base "$integration" --head "$CANDIDATE" \
+              --output task09-evidence/candidate-scope.json
+          else
+            python3 tools/havenline/production/workstream.py validate-candidate T09 \
+              --base "$frozen_base" --head "$CANDIDATE" \
+              --integration-head "$integration" | tee task09-evidence/candidate-scope.json
+          fi
+          python3 tools/havenline/production/change_impact.py --base "$impact_base" --head "$CANDIDATE" > task09-evidence/change-impact.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          impact=json.loads(Path('task09-evidence/change-impact.json').read_text())
+          assert impact['unknown_production_fallback'] is False,impact['unknown_production_files']
+          suites=impact['required_suites']
+          assert suites and all(not suite.endswith('.py') for suite in suites),suites
+          Path('task09-evidence/required-godot-suites.txt').write_text('\n'.join(suites)+'\n')
+          print(json.dumps({'required_suites':suites,'unknown_production_fallback':False}))
+          PY
+          python3 tools/havenline/task09/validate_harvesting.py --candidate "$CANDIDATE" --output task09-evidence/source-contract.json
+          mkdir -p task09-evidence/reference
+          cp Docs/Production/T09/reference-selection.json task09-evidence/reference/
+          cp Docs/Design/ReferenceVideoLock/reference-video-sources.json task09-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/coverage.json task09-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/extraction-report.json task09-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/A-003.00.png task09-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/A-016.00.png task09-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/B-028.00.png task09-evidence/reference/
+          before=$(sha256sum HavenlineGodot/assets/harvesting_v1/* | sha256sum)
+          python3 tools/havenline/task09/generate_harvesting_tools.py > task09-evidence/generator.json
+          after=$(sha256sum HavenlineGodot/assets/harvesting_v1/* | sha256sum)
+          test "$before" = "$after"
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          manifest={'task_id':'T09','candidate_commit':os.environ['CANDIDATE'],'resource_actor_contract':{
+            'introduced_resource_ids':[],'resource_ids_covered':['wood','stone','metal','fuel'],
+            'actor_keys_covered':['player_lead','core_human_companion','rescued_survivor_helper'],
+            'animation_profiles_covered':['human_player_chop','human_player_mine','human_player_dismantle'],
+            'animation_delta':True}}
+          Path('task09-evidence/candidate-manifest.json').write_text(json.dumps(manifest,indent=2))
+          matrix=json.loads(Path('Docs/Production/CRITIC_MATRIX.json').read_text())
+          assert matrix['task_applicability']['T09']==['C2','C3','C4','C5','C6']
+          PY
+          python3 tools/havenline/production/resource_actor_contract.py --task T09 --manifest task09-evidence/candidate-manifest.json --output task09-evidence/resource-actor-contract.json
+          python3 tools/havenline/production/validate_migration.py > task09-evidence/governance.json
+          python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > task09-evidence/tests/production-tools.log 2>&1
+
+      - name: Import and run impacted regression
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/bake_outpost_audio.py > task09-evidence/tests/audio-fixture.json
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task09-evidence/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task09-evidence/tests/motion-fixture.log 2>&1
+          mapfile -t suites < task09-evidence/required-godot-suites.txt
+          for suite in "${suites[@]}"; do
+            timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task09-evidence/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task09-evidence/tests/*.log; then exit 1; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,os
+          rows=[]
+          for path in sorted(Path('task09-evidence/tests').glob('test_*.log')):
+              reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
+              assert reports,path
+              report=reports[-1]
+              assert report.get('passed') is True and not report.get('failures'),(path,report.get('failures'))
+              checks=report.get('checks',[])
+              rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
+          required=Path('task09-evidence/required-godot-suites.txt').read_text().splitlines()
+          assert {row['suite'] for row in rows}==set(required),(rows,required)
+          output={'task':'T09-integrated-candidate','source':os.environ['GITHUB_SHA'],'suite_count':len(rows),'total_checks':sum(row['checks'] for row in rows),'suites':rows,'all_passed':True,'task_approved':False}
+          Path('task09-evidence/tests.json').write_text(json.dumps(output,indent=2)); print(json.dumps(output))
+          PY
+
+      - name: Run canonical save-state and device matrices
+        env:
+          CANDIDATE: ${{ github.sha }}
+          GODOT_BIN: Godot_v4.7.2-stable_linux.x86_64
+        run: |
+          set -euo pipefail
+          HAVENLINE_T09_MATRIX_MODE=save python3 tools/havenline/production/save_state_matrix.py \
+            --candidate "$CANDIDATE" --task T09 \
+            --adapter 'bash tools/havenline/task09/run_matrix_case.sh' \
+            --out task09-evidence/matrices/save
+          HAVENLINE_T09_MATRIX_MODE=device python3 tools/havenline/production/device_matrix.py \
+            --candidate "$CANDIDATE" --task T09 \
+            --adapter 'bash tools/havenline/task09/run_matrix_case.sh' \
+            --out task09-evidence/matrices/device
+
+      - name: Measure exact-base performance delta
+        env:
+          CANDIDATE: ${{ github.sha }}
+          BASE: 7492074e40a0b061f31d8c32602b7a581b2610f3
+        run: |
+          set -euo pipefail
+          base_dir="$RUNNER_TEMP/t09-exact-base"
+          git worktree add --detach "$base_dir" "$BASE"
+          cp HavenlineGodot/tests/capture_task09_performance.gd "$base_dir/HavenlineGodot/tests/capture_task09_performance.gd"
+          (cd "$base_dir" && python3 tools/havenline/bake_outpost_audio.py >/dev/null)
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path "$base_dir/HavenlineGodot" --import --quit > task09-evidence/tests/exact-base-import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path "$base_dir/HavenlineGodot" --script res://tools/bake_crew_motion.gd > task09-evidence/tests/exact-base-motion-fixture.log 2>&1
+          mkdir -p task09-evidence/performance/exact-base task09-evidence/performance/candidate
+          vk_icd=$(find /usr/share/vulkan/icd.d -name '*lvp*json' -print -quit 2>/dev/null || true)
+          if [[ -z "$vk_icd" ]]; then
+            sudo apt-get update
+            sudo apt-get install -y mesa-vulkan-drivers
+            vk_icd=$(find /usr/share/vulkan/icd.d -name '*lvp*json' -print -quit)
+          fi
+          export VK_ICD_FILENAMES="$vk_icd"
+          test -f "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method mobile --rendering-driver vulkan --resolution 1280x720 --path "$base_dir/HavenlineGodot" --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/exact-base" --candidate="$BASE" --expect-base
+          /usr/bin/time -v -o task09-evidence/performance/candidate/time.txt xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method mobile --rendering-driver vulkan --resolution 1280x720 --path HavenlineGodot --script res://tests/capture_task09_performance.gd -- --out="$PWD/task09-evidence/performance/candidate" --candidate="$CANDIDATE"
+          git worktree remove --force "$base_dir"
+          python3 - <<'PY'
+          import json,os,subprocess
+          from pathlib import Path
+          base=json.loads(Path('task09-evidence/performance/exact-base/performance.json').read_text())
+          candidate=json.loads(Path('task09-evidence/performance/candidate/performance.json').read_text())
+          assert base['candidate']==os.environ['BASE'] and base['integrated'] is False
+          assert candidate['candidate']==os.environ['CANDIDATE'] and candidate['integrated'] is True
+          assert base['renderer']=='mobile' and candidate['renderer']=='mobile'
+          delta={key:candidate[key]-base[key] for key in ['p95_ms','p99_ms','average_draw_calls','average_primitives','process_static_memory_mb','materials_visible','unique_shader_resources','physics_active_bodies','animation_players','active_animations','visible_rigs','npc_companion_active_population']}
+          result={'task':'T09','exact_base':os.environ['BASE'],'candidate':os.environ['CANDIDATE'],'method':candidate['method'],'base':base,'integrated':candidate,'delta':delta,'limits':{'p95_ms':10.0,'draw_calls':12.0,'primitives':5000.0,'memory_mb':32.0,'materials':6,'shaders':0,'physics_bodies':0,'animation_players':0},'physical_4k60_verified':False,'thermal_certified':False}
+          Path('task09-evidence/performance/delta-diagnostic.json').write_text(json.dumps(result,indent=2))
+          print(json.dumps({'task':'T09','performance_delta':delta,'diagnostic':True}))
+          assert candidate['measured_frames']==180 and candidate['unchanged_active_state_node_count_stable'] is True
+          assert candidate['maximum_fragment_descriptors']<=32 and candidate['maximum_impact_pulses']<=8
+          assert delta['p95_ms']<=result['limits']['p95_ms'] and delta['average_draw_calls']<=result['limits']['draw_calls'] and delta['average_primitives']<=result['limits']['primitives']
+          assert delta['process_static_memory_mb']<=result['limits']['memory_mb'] and delta['materials_visible']<=result['limits']['materials'] and delta['unique_shader_resources']<=result['limits']['shaders']
+          assert delta['physics_active_bodies']<=0 and delta['animation_players']<=0 and delta['active_animations']<=0
+          result['passed']=True
+          Path('task09-evidence/performance/delta.json').write_text(json.dumps(result,indent=2)); print(json.dumps({'task':'T09','performance_delta':delta,'passed':True}))
+          rss_line=next(line for line in Path('task09-evidence/performance/candidate/time.txt').read_text().splitlines() if 'Maximum resident set size' in line)
+          rss_mb=float(rss_line.split(':')[-1].strip())/1024.0
+          changed=subprocess.check_output(['git','diff','--name-only',os.environ['BASE'],os.environ['CANDIDATE']],text=True).splitlines()
+          storage_paths=[Path(path) for path in changed if Path(path).is_file() and path.startswith(('HavenlineGodot/assets/harvesting_v1/','HavenlineGodot/scripts/'))]
+          storage_mb=sum(path.stat().st_size for path in storage_paths)/(1024.0*1024.0)
+          c6={
+            'task':'T09','candidate_commit':os.environ['CANDIDATE'],'passed':True,
+            'scene_state':'shipping main scene; 30-frame warm-up; 180 measured active-harvest forced-render submissions',
+            'resolution':candidate['resolution'],'renderer':candidate['renderer'],'gpu':candidate['gpu'],
+            'visible_triangles':int(candidate['maximum_primitives']),'draw_calls':int(candidate['maximum_draw_calls']),
+            'materials_visible':int(candidate['materials_visible']),'texture_gpu_memory_mb':float(candidate['texture_gpu_memory_mb']),
+            'process_memory_mb':rss_mb,'process_static_memory_mb':float(candidate['process_static_memory_mb']),
+            'physics_active_bodies':int(candidate['physics_active_bodies']),'animated_rigs_active':int(candidate['visible_rigs']),
+            'npc_companion_active_population':int(candidate['npc_companion_active_population']),'storage_download_mb':storage_mb,
+            'cpu_frame_ms':None,'gpu_frame_ms_where_measurable':None,
+            'render_submission_p95_ms':float(candidate['p95_ms']),'render_submission_p99_ms':float(candidate['p99_ms']),
+            'exact_base_delta':delta,'maximum_fragment_descriptors':int(candidate['maximum_fragment_descriptors']),
+            'maximum_impact_pulses':int(candidate['maximum_impact_pulses']),
+            'measurement_method':'Pinned Godot 4.7.2 same-script exact-base/candidate forced-render comparison; Godot visible draw/primitive/GPU-memory and scene inventory counters; GNU time maximum RSS; exact T09 runtime asset/source byte delta.',
+            'known_unmeasured_fields':['full_cpu_frame_ms','gpu_frame_ms_where_measurable','direct_gpu_shader_time_ms','physical_display_presentation','physical_device_thermal_behavior'],
+            'physical_device_certification':False,'thermal_certified':False,'errors':[],
+          }
+          Path('task09-evidence/performance/c6-performance.json').write_text(json.dumps(c6,indent=2))
+          PY
+          python3 tools/havenline/production/critic_harness.py performance --candidate "$CANDIDATE" --record task09-evidence/performance/c6-performance.json | tee task09-evidence/performance/c6-gate.json
+
+
+      - name: Render T09 review and native-4K evidence
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          command -v xvfb-run >/dev/null || (sudo apt-get update && sudo apt-get install -y xvfb)
+          command -v ffmpeg >/dev/null || (sudo apt-get update && sudo apt-get install -y ffmpeg)
+          godot=(Godot_v4.7.2-stable_linux.x86_64 --audio-driver Dummy --rendering-method gl_compatibility --path HavenlineGodot)
+          mkdir -p task09-evidence/captures
+          # Run the repaired C5 gate first so initialization/coverage defects
+          # fail before the longer gameplay/device evidence fan-out.
+          xvfb-run -a python3 tools/havenline/task09/motion_capture.py \
+            --candidate "$CANDIDATE" --task T09 \
+            --scene res://assets/harvesting_v1/t09_motion_fixture.tscn \
+            --subject-path . --animation-player-path Character1Visual/AnimationPlayer \
+            --animations t06/chop,t06/mine,t06/dismantle \
+            --out task09-evidence/captures/motion-c5
+          mkdir -p task09-evidence/captures/motion-c5/videos
+          for animation in chop mine dismantle; do
+            ffmpeg -hide_banner -loglevel error -y -framerate 30 \
+              -i "task09-evidence/captures/motion-c5/t06/$animation/real-time-cycle/%04d.png" \
+              -c:v libx264 -pix_fmt yuv420p "task09-evidence/captures/motion-c5/videos/$animation-real-time.mp4"
+            ffmpeg -hide_banner -loglevel error -y -framerate 30 \
+              -i "task09-evidence/captures/motion-c5/t06/$animation/slow-review-cycle/%04d.png" \
+              -c:v libx264 -pix_fmt yuv420p "task09-evidence/captures/motion-c5/videos/$animation-slow-review.mp4"
+          done
+          for resource in wood stone metal fuel; do
+            out="task09-evidence/captures/sequence-$resource"
+            xvfb-run -a "${godot[@]}" --resolution 1280x720 --script res://tests/capture_task09_harvesting.gd -- --render-review --out="$PWD/$out" --resource="$resource" --mode=sequence --device=phone_16_9 --candidate="$CANDIDATE"
+            ffmpeg -hide_banner -loglevel error -y -framerate 30 -i "$out/frames/frame-%05d.jpg" -c:v libx264 -pix_fmt yuv420p "$out/$resource-real-time.mp4"
+            ffmpeg -hide_banner -loglevel error -y -framerate 30 -i "$out/frames/frame-%05d.jpg" -vf 'setpts=2.0*PTS' -r 30 -c:v libx264 -pix_fmt yuv420p "$out/$resource-slow-motion.mp4"
+          done
+          for resource in wood stone fuel; do
+            for view in front front-right right rear-right rear rear-left left front-left overhead detail; do
+              out="task09-evidence/captures/tool-$resource-$view"
+              xvfb-run -a "${godot[@]}" --resolution 960x540 --script res://tests/capture_task09_harvesting.gd -- --render-review --out="$PWD/$out" --resource="$resource" --mode=tool --view="$view" --candidate="$CANDIDATE"
+            done
+          done
+          for resource in wood stone fuel; do
+            for view in front front-right right rear-right rear rear-left left front-left overhead detail; do
+              out="task09-evidence/captures/asset-$resource-$view"
+              xvfb-run -a "${godot[@]}" --resolution 960x540 --script res://tests/capture_task09_harvesting.gd -- --render-review --out="$PWD/$out" --resource="$resource" --mode=asset --view="$view" --candidate="$CANDIDATE"
+            done
+          done
+          declare -A widths=( [phone_16_9]=1280 [phone_20_9]=1280 [tablet_16_10]=1280 [tablet_4_3]=1024 [foldable_outer]=1280 [foldable_inner]=1104 )
+          declare -A heights=( [phone_16_9]=720 [phone_20_9]=576 [tablet_16_10]=800 [tablet_4_3]=768 [foldable_outer]=549 [foldable_inner]=884 )
+          for device in phone_16_9 phone_20_9 tablet_16_10 tablet_4_3 foldable_outer foldable_inner; do
+            out="task09-evidence/captures/device-$device"
+            xvfb-run -a "${godot[@]}" --resolution "${widths[$device]}x${heights[$device]}" --script res://tests/capture_task09_harvesting.gd -- --render-review --out="$PWD/$out" --resource=wood --mode=device --device="$device" --candidate="$CANDIDATE"
+          done
+          out=task09-evidence/captures/native-4k
+          xvfb-run -a "${godot[@]}" --resolution 3840x2160 --script res://tests/capture_task09_harvesting.gd -- --out="$PWD/$out" --resource=wood --mode=tool --view=front-right --device=phone_16_9 --native-4k --candidate="$CANDIDATE"
+          python3 - <<'PY'
+          import hashlib,json,struct
+          from pathlib import Path
+          root=Path('task09-evidence/captures')
+          reports=[json.loads(p.read_text()) for p in root.glob('*/capture-report.json')]
+          assert len(reports)==71,len(reports)
+          sequences=[r for r in reports if r['mode']=='sequence']
+          assert len(sequences)==4 and {r['resource'] for r in sequences}=={'wood','stone','metal','fuel'}
+          for report in sequences:
+              assert report['simulation_authoritative'] is True
+              assert report['review_stage']=='disclosed_neutral_snow_stage_with_shipping_actor_source_and_systems'
+              assert report['source_material_policy']=='shipping_materials_unchanged'
+              assert report['visual_review_source_units']==2 and report['default_source_units']>=report['visual_review_source_units']
+              assert report['commit_authority']=='outpost_simulation.perform_action'
+              assert report['capture_progress_driver']=='shipping_simulation_step'
+              assert report['t07_selection_authority']=='context_director.advance'
+              approach=[row for row in report['samples'] if row.get('phase')=='approach' and row.get('distance_before',0)>1.85 and not row.get('action_identity')]
+              focused=[row for row in report['samples'] if row.get('action_identity','').startswith('gather:') and row.get('action_state') in ('acquiring','active')]
+              shipping_commits=[row for row in report['samples'] if row.get('commit') and row.get('authority')=='outpost_simulation.step/context_director.advance']
+              assert approach and focused and shipping_commits,report['resource']
+              assert any(row['harvest']['source_selection_visible'] for row in focused),report['resource']
+              if report['resource']=='wood':
+                  visible_contact=[row for row in report['samples'] if row.get('source_units',0)>0 and row.get('phase') in ('focus_acquisition','anticipation')]
+                  assert visible_contact and all(row.get('source_visible') is True and row.get('source_contact_surface_opaque') is True for row in visible_contact),report['resource']
+              assert shipping_commits[0]['action_token']==focused[0]['action_token'] and shipping_commits[0]['action_token']>0
+              commits=[row for row in report['samples'] if row.get('commit')]
+              assert commits and report['final_harvest']['accepted_impacts']==len(commits),report['resource']
+              assert report['final_transfer']['accepted_receipts']==len(commits),report['resource']
+              assert all(row['authority'] in ('outpost_simulation.step/context_director.advance','outpost_simulation.perform_action') and row['authoritative_event'] for row in commits)
+              assert all(row['units_before']-row['units_after']==1 and row['inventory_after']-row['inventory_before']==1 for row in commits)
+              assert all(row['harvest']['contact_alignment_valid'] and row['harvest']['grip_error_m']<=0.025 and row['harvest']['impact_error_m']<=0.025 and row['harvest']['secondary_grip_error_m']<=0.045 for row in commits)
+              cancelled=[row for row in report['samples'] if row.get('phase')=='cancellation' and row.get('context',{}).get('cancelled') and row.get('action_state')=='blocked_movement']
+              depleted=[row for row in report['samples'] if row.get('depleted')]
+              respawned=[row for row in report['samples'] if row.get('respawned')]
+              assert cancelled and all(not row['harvest']['active'] for row in cancelled)
+              assert len(depleted)==1 and depleted[0]['source_units']==0 and depleted[0]['source_visible'] is False and depleted[0]['depletion_settled'] is True
+              assert not depleted[0]['action_identity'] and depleted[0]['harvest']['active'] is False
+              assert depleted[0]['transfer']['active_flights']==0 and depleted[0]['transfer']['active_arrival_pulses']==0
+              assert len(respawned)==1 and respawned[0]['source_units']>0 and respawned[0]['source_visible'] is True
+          tools=[r for r in reports if r['mode']=='tool' and not r['native_4k_render']]
+          assert len(tools)==30 and len({(r['resource'],r['view']) for r in tools})==30
+          assert all(r['final_harvest']['contact_alignment_valid'] and r['final_harvest']['grip_error_m']<=0.025 and r['final_harvest']['impact_error_m']<=0.025 and r['final_harvest']['secondary_grip_error_m']<=0.045 for r in tools)
+          assets=[r for r in reports if r['mode']=='asset']
+          assert len(assets)==30 and len({(r['resource'],r['view']) for r in assets})==30
+          devices=[r for r in reports if r['mode']=='device']
+          assert len(devices)==6 and len({r['device_state'] for r in devices})==6
+          assert len({tuple(r['window']) for r in devices})==6
+          for report in devices:
+              commits=[row for row in report['samples'] if row.get('commit')]
+              samples=[row for row in report['samples'] if all(key in row for key in ('harvest','transfer','carry'))]
+              depleted=[row for row in report['samples'] if row.get('depleted')]
+              respawned=[row for row in report['samples'] if row.get('respawned')]
+              assert report['simulation_authoritative'] is True and commits
+              assert report['review_stage']=='disclosed_neutral_snow_stage_with_shipping_actor_source_and_systems'
+              assert report['source_material_policy']=='shipping_materials_unchanged'
+              assert report['device_review_canvas']=='shipping_joystick_draw_above_scene_texture'
+              assert report['device_control_evidence']['joystick_active'] is True and report['device_control_evidence']['permanent_action_buttons']==0
+              assert report['device_control_evidence']['shipping_scene_layering'] is True and report['device_control_evidence']['joystick_input_path'].startswith('Main._gui_input/')
+              assert report['device_control_evidence']['joystick_circle_fully_inside_capture_canvas'] is True
+              assert report['device_control_evidence']['game_canvas_fully_covers_capture_canvas'] is True
+              assert all(abs(float(a)-float(b))<=1.0 for a,b in zip(report['device_control_evidence']['projected_game_canvas_size'],report['window']))
+              assert report['device_control_evidence']['capture_canvas_size']==report['window']
+              assert report['capture_canvas_size']==report['window']
+              assert any(row['harvest']['accepted_impacts']>=1 and row['transfer']['accepted_receipts']>=1 and row['carry']['logical_total']>=1 for row in samples)
+              assert len(depleted)==1 and depleted[0]['source_visible'] is False and depleted[0]['depletion_settled'] is True
+              assert not depleted[0]['action_identity'] and depleted[0]['harvest']['active'] is False
+              assert depleted[0]['transfer']['active_flights']==0 and depleted[0]['transfer']['active_arrival_pulses']==0
+              assert len(respawned)==1 and respawned[0]['source_visible'] is True
+          native=[r for r in reports if r['native_4k_render']]
+          assert len(native)==1 and native[0]['internal_render'][0]>=3840 and native[0]['internal_render'][1]>=2160 and native[0]['render_scale']==1.0
+          motion=json.loads((root/'motion-c5/motion.json').read_text())
+          motion_hashes=json.loads((root/'motion-c5/motion-hashes.json').read_text())
+          assert motion['candidate_commit']==reports[0]['candidate'] and motion['task_id']=='T09'
+          assert {row['animation'] for row in motion['captures']}=={'t06/chop','t06/mine','t06/dismantle'}
+          assert motion['harness']=='production_motion_v3' and motion['shipping_tool_target_fixture'] is True and motion['initialization_settle_frames']>=2 and motion['first_use_warmup_frames']>=8
+          assert motion['initialization_pose_schema']=='skeleton_global_pose_v1'
+          required_motion={'real-time-cycle','slow-review-cycle','turn-neg-135','turn-neg-090','turn-neg-045','turn-000','turn-030','turn-045','turn-090','turn-135','turn-180','transition-start','transition-end','close-upper-front','close-upper-opposite','close-waist-rear','close-lower-front','close-lower-rear'}
+          assert required_motion<={row['evidence_type'] for row in motion['captures']}
+          for animation in ('t06/chop','t06/mine','t06/dismantle'):
+              rows=[row for row in motion['captures'] if row['animation']==animation]
+              contact=[row for row in rows if row['evidence_type'].startswith(('turn-','close-'))]
+              assert contact and all(row['contact_ready'] and row['contact_alignment_valid'] and row['grip_error_m']<=0.025 and row['impact_error_m']<=0.025 and row['secondary_grip_error_m']<=0.045 for row in contact),animation
+              assert any(row['contact_ready'] for row in rows if row['evidence_type'] in ('real-time-cycle','slow-review-cycle')),animation
+          motion_pngs=list((root/'motion-c5').rglob('*.png'))
+          motion_videos=list((root/'motion-c5/videos').glob('*.mp4'))
+          assert len(motion_videos)==6
+          assert len(motion_pngs)>=220 and len(motion_hashes['frames'])==len(motion_pngs)
+          assert all(motion_hashes['frames'][str(path.relative_to(root/'motion-c5'))]==hashlib.sha256(path.read_bytes()).hexdigest() for path in motion_pngs)
+          initialization=motion_hashes['initialization_validation']
+          assert initialization['passed'] is True
+          assert initialization['method']=='final_skeleton_pose_transform_v1'
+          assert set(initialization['animations'])=={'t06/chop','t06/mine','t06/dismantle'}
+          start_limits=initialization['start_limits']
+          first_step_limits=initialization['first_step_limits']
+          assert all(
+              row['start_max_translation_m']<=start_limits['max_translation_m']
+              and row['start_max_rotation_deg']<=start_limits['max_rotation_deg']
+              and row['first_step']['max_translation_m']<=first_step_limits['max_translation_m']
+              and row['first_step']['max_rotation_deg']<=first_step_limits['max_rotation_deg']
+              for row in initialization['animations'].values()
+          )
+          pngs=list(root.glob('*/*.png'))
+          sequence_frames=list(root.glob('sequence-*/frames/frame-*.jpg'))
+          frame_counts={resource:len(list((root/('sequence-'+resource)/'frames').glob('frame-*.jpg'))) for resource in ('wood','stone','metal','fuel')}
+          assert min(frame_counts.values())>=80,frame_counts
+          for resource,count in frame_counts.items():
+              indices=sorted(int(path.stem.split('-')[-1]) for path in (root/('sequence-'+resource)/'frames').glob('frame-*.jpg'))
+              assert indices==list(range(count)),(resource,indices)
+          assert pngs
+          for path in pngs:
+              with path.open('rb') as stream:
+                  assert stream.read(8)==b'\x89PNG\r\n\x1a\n'
+                  length=struct.unpack('>I',stream.read(4))[0]
+                  assert stream.read(4)==b'IHDR' and length==13
+                  width,height=struct.unpack('>II',stream.read(8))
+                  assert width>0 and height>0,(path,width,height)
+          summary={'candidate':reports[0]['candidate'],'reports':len(reports),'pngs':len(pngs),'motion_c5_pngs':len(motion_pngs),'motion_c5_animations':['t06/chop','t06/mine','t06/dismantle'],'motion_c5_videos':len(motion_videos),'sequence_videos':len(list(root.glob('sequence-*/*.mp4'))),'sequence_frame_counts':frame_counts,'in_hand_views':len(tools),'isolated_tool_turntables':len(assets),'native_4k_internal':native[0]['internal_render'],'physical_4k60_verified':False,'passed':True}
+          Path('task09-evidence/capture-summary.json').write_text(json.dumps(summary,indent=2)); print(json.dumps(summary))
+          PY
+
+      - name: Build complete T09 evidence index
+        if: success()
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path('task09-evidence')
+          (root/'known-failures.json').write_text(json.dumps({'task_id':'T09','candidate_commit':os.environ['CANDIDATE'],'known_failures':[],'unresolved_mandatory_defects':[],'basis':'All preceding exact-source candidate gates completed successfully.'},indent=2)+'\n')
+          ignored={'complete-evidence-index.json','complete-evidence-index.sha256'}
+          files={str(path.relative_to(root)):hashlib.sha256(path.read_bytes()).hexdigest() for path in sorted(root.rglob('*')) if path.is_file() and path.name not in ignored}
+          assert files and all(len(value)==64 for value in files.values())
+          index={'schema_version':1,'task_id':'T09','candidate_commit':os.environ['CANDIDATE'],'file_count':len(files),'files':files}
+          index_path=root/'complete-evidence-index.json'
+          index_path.write_text(json.dumps(index,indent=2)+'\n')
+          digest=hashlib.sha256(index_path.read_bytes()).hexdigest()
+          (root/'complete-evidence-index.sha256').write_text(digest+'  complete-evidence-index.json\n')
+          print(json.dumps({'candidate':os.environ['CANDIDATE'],'indexed_files':len(files),'index_sha256':digest,'passed':True}))
+          PY
+
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task09-integrated-candidate-${{ github.sha }}
+          path: task09-evidence
+          if-no-files-found: error
+          retention-days: 90
+
+  c0-diagnose:
+    name: C0 diagnosis after terminal T09 failure
+    needs: integrated-candidate
+    # A newer SHA can cancel a superseded validation. That is not a product
+    # failure and must not launch an 85-minute advisor job that blocks the frozen
+    # replacement SHA behind the same workflow concurrency group.
+    if: ${{ always() && needs.integrated-candidate.result == 'failure' }}
+    uses: ./.github/workflows/havenline-c0-root-cause.yml
+    with:
+      task_id: T09
+      failed_run_id: ${{ github.run_id }}
+      failed_candidate: ${{ github.sha }}
+      task_branch: havenline/T09-harvesting
+
+# C0 is diagnostic-only and non-voting. Successful T09 validation proceeds to the normal C2/C3/C4/C5/C6 review path.

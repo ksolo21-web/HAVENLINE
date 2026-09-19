@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "cases": [
+    {
+      "id": "fresh_save",
+      "required": true
+    },
+    {
+      "id": "existing_current_save",
+      "required": true
+    },
+    {
+      "id": "previous_version_save",
+      "required": true
+    },
+    {
+      "id": "interrupted_save",
+      "required": true
+    },
+    {
+      "id": "reload",
+      "required": true
+    },
+    {
+      "id": "migration",
+      "required": true
+    },
+    {
+      "id": "rollback_recovery",
+      "required": "where applicable"
+    }
+  ],
+  "invariants": [
+    "inventory conserved",
+    "identity conserved",
+    "jobs/assignments conserved",
+    "level/progression conserved",
+    "entitlements conserved when applicable",
+    "invalid world positions recover safely",
+    "no duplicate grants",
+    "schema version explicit"
+  ],
+  "security_cases": [
+    "tampered save rejected or safely sanitized",
+    "clock manipulation does not mint server-authoritative value",
+    "rollback cannot duplicate premium/economy grants"
+  ]
+}

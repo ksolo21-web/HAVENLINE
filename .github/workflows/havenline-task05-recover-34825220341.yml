@@ -1,0 +1,18 @@
+name: Havenline T05 recover unresolved visual rows fa6fa70 v4
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task05-recover-34825220341.yml']
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  recovery:
+    uses: ./.github/workflows/havenline-task05-review.yml
+    with:
+      mode: recover
+      visual_primary_run_id: '34825220341'
+      recovery_targets: '["C1:shipping-contexts-and-native","C1:shipping-device-and-tracking","C2:shipping-device-and-tracking"]'

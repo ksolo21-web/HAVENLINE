@@ -1,0 +1,156 @@
+name: Havenline T02 rounded-bank repair and independent review
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-rounded-bank.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  build-capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.build.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+      - run: python3 -m pip install pyyaml
+      - name: Apply the checksum-bound bank repair and execute complete tests and actual captures
+        id: build
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess,hashlib,json
+          patch=Path('Docs/Production/T02/rounded-bank.patch')
+          assert hashlib.sha256(patch.read_bytes()).hexdigest()=='f45235810ea56c8fd7ecfd3be0a1d650817a52ca9cd1c365e7ac7a3d060bdce5'
+          after={
+           'HavenlineGodot/scripts/outpost_surface.gd':'f2fc3b015f9e06b3dd2a2f5b0beecebd69a2627ffed2eb336e09f3ad4c0e5da3',
+           'HavenlineGodot/scripts/outpost_view.gd':'8b329f1f279f4d7a63c96924f231090436dcc44bcd6620f0c3ec71b4b875e746',
+           'HavenlineGodot/shaders/outpost_snow.gdshader':'6c178772b867b17a5ce14445539b31bc24116039c5fe4e6a2e40c65c2e66a30c',
+           'HavenlineGodot/tests/capture_task02.gd':'6a3f61a66012b5858ceb835a26562473fbb4b64207a1c0949ddd1f151f992d84',
+           'HavenlineGodot/tests/test_task02_surface_stress.gd':'d90b2e20897121711cc14d2ccb68e3bb453e95ffd0e51e020ab7138c5a8881d2'}
+          if not all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in after.items()):
+              subprocess.run(['git','apply','--check',str(patch)],check=True)
+              subprocess.run(['git','apply',str(patch)],check=True)
+          assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in after.items()),'Applied source differs from tested local repair'
+          w=yaml.safe_load(Path('.github/workflows/havenline-task02.yml').read_text())
+          runs=[s['run'] for s in w['jobs']['terrain-build']['steps'] if 'run' in s]
+          assert len(runs)==5
+          runs[0]+='\nexport PATH="$RUNNER_TEMP/engine:$PATH"\n'
+          runs[2]=runs[2].replace('test_task02_terrain;','test_task02_terrain test_task02_surface_stress;').replace('len(rows)==12','len(rows)==13').replace('705','726')
+          runs[3]=runs[3].replace('git add HavenlineGodot/tests/test_outpost.gd','git add -- '+' '.join(after))
+          runs[3]=runs[3].replace('T02: retain tested lake topology and dry-snow slope checks; no critic approval','T02: preserve tested rounded bank, daylight snow finish and source-bound profile diagnostics; pending independent review')
+          runs[4]=runs[4].replace("(3 if name=='native4k' else 24)","(8 if name=='native4k' else 26)").replace("'tests':705","'tests':726")
+          script='\n'.join(runs)
+          e=Path('task02-evidence');e.mkdir(exist_ok=True);(e/'executed-build.sh').write_text(script)
+          subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          for name in ('reference-ground.webp','reference-ground-provenance.json'):
+              (e/name).write_bytes((Path('Docs/Production/T02')/name).read_bytes())
+          provenance=json.loads((e/'provenance.json').read_text());assert len(provenance['captures'])==45
+          (e/'revision.json').write_text(json.dumps({'task':'T02','revision':'rounded-bank-and-snow-finish','prior_source':'ccee33e3ae304cabba3663da74147ddab05424e9','actual_source':provenance['source'],'changed_files':after,'changes':['Raised rounded snow lip and physically sloped lake bank','Brighter daylight snow fill and restrained clay surface variation','Two supplemental isolated ground profile views in addition to every original normal scene'],'existing_routes_and_approved_trees_preserved':True,'engine_assertions':726,'gallery_captures':26,'native_4k_captures':8,'tree_clearance_captures':11,'task_approved':False,'physical_4k60_verified':False},indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-bank-evidence-${{ github.run_id }}
+          path: task02-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-bank-source-${{ github.run_id }}
+          path: source-snapshot/
+          retention-days: 30
+          if-no-files-found: error
+  critic:
+    needs: build-capture
+    strategy:
+      fail-fast: false
+      max-parallel: 16
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        group: [workfloor, shoreline, snow-contact, tree-visibility, camera-route-early, camera-route-late, water-sequence, night-overview]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build-capture.outputs.source }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-bank-evidence-${{ github.run_id }}
+          path: task02-evidence/
+      - uses: actions/cache/restore@v4
+        id: cache
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: false
+      - name: Recover the exact pinned reviewer on a cache miss
+        if: steps.cache.outputs.cache-hit != 'true'
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y aria2
+          python3 tools/havenline/ensure_task01_reviewer.py
+      - run: python3 -m pip install pillow
+      - name: Independently review the new terrain, unchanged normal-view set and additional labelled ground profiles
+        run: python3 -u tools/havenline/review_task02_bank_profiles.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T02-bank-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
+          path: task02-review/
+          retention-days: 30
+          if-no-files-found: error
+  task-gate:
+    needs: [build-capture,critic]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    env:
+      EXPECTED_SOURCE: ${{ needs.build-capture.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: T02-bank-*-${{ github.run_id }}
+          path: gate-report/reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-bank-evidence-${{ github.run_id }}
+          path: evidence/
+      - run: python3 -m pip install pyyaml
+      - name: Enforce exact-source tests and complete raw independent scores without rounding or averaging
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess,os
+          w=yaml.safe_load(Path('.github/workflows/havenline-task02-fullsize-review.yml').read_text())
+          scripts=[s['run'] for s in w['jobs']['task-gate']['steps'] if 'run' in s]
+          assert len(scripts)==1 and len(os.environ['EXPECTED_SOURCE'])==40
+          script=scripts[0].replace('3b3e0af44ec638b0671a02e4bd7b5909d89ea2cd',os.environ['EXPECTED_SOURCE']).replace('720','726')
+          Path('gate-report/executed-gate.sh').write_text(script)
+          subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-bank-independent-evidence-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# A genuine geometry/material repair, not repeated unchanged rescoring.
+# Previous failed reviews retained. No APK, later-task work, physical-FPS claim or automatic approval.

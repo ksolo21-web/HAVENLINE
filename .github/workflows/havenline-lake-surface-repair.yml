@@ -1,0 +1,129 @@
+name: Havenline extended lake surface repair and independent review
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-lake-surface-repair.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.execute.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - run: python3 -m pip install pyyaml
+      - name: Repeat all checks and captures on the actual corrected water mesh
+        id: execute
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          w=yaml.safe_load(Path('.github/workflows/havenline-lake-east-west.yml').read_text())
+          runs=[s['run'] for s in w['jobs']['build-capture']['steps'] if 'run' in s]
+          assert len(runs)==5
+          runs[0]+='\nexport PATH="$RUNNER_TEMP/engine:$PATH"\n'
+          assert runs[1].count("'scripts/main.gd',")==1
+          runs[1]=runs[1].replace("'scripts/main.gd',",'').replace('len(protected)==37','len(protected)==36')
+          runs[1]=runs[1].replace('tools/havenline/extend_lake_east_west.py','tools/havenline/polish_extended_lake.py')
+          runs[2]=runs[2].replace("'protected_runtime_and_contract_unchanged':4","'protected_runtime_and_contract_unchanged':3")
+          runs[3]=runs[3].replace('Docs/Production/task-gates.json\n','Docs/Production/task-gates.json HavenlineGodot/scripts/main.gd HavenlineGodot/tests/test_lake_east_west.gd HavenlineGodot/tests/capture_lake_east_west.gd\n')
+          runs[3]=runs[3].replace('Extend lake end-to-end east-west with matching dry-shore recovery; T02 reopened pending fresh critics','Fix extended-water shading, exclude submerged props, and capture controlled lighting; no approval claimed')
+          runs[3]=runs[3].replace('HavenlineGodot tools/havenline Docs AGENTS.md .github','HavenlineGodot tools/havenline Docs/Production/task-gates.json AGENTS.md .github')
+          script='\n'.join(runs)
+          Path('lake-evidence').mkdir(exist_ok=True)
+          Path('lake-evidence/executed-build.sh').write_text(script)
+          subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-east-west-lake-evidence-${{ github.run_id }}
+          path: lake-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-east-west-lake-source-${{ github.run_id }}
+          path: source-snapshot/
+          retention-days: 30
+          if-no-files-found: error
+  independent-review:
+    needs: build-capture
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        role: [reference-fidelity,visual-integrity]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    env:
+      EXPECTED_SOURCE: ${{ needs.build-capture.outputs.source }}
+      REVIEW_ROLE: ${{ matrix.role }}
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build-capture.outputs.source }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-east-west-lake-evidence-${{ github.run_id }}
+          path: lake-evidence/
+      - run: python3 -m pip install 'gradio_client==1.14.0' pillow
+      - name: Review all new lake, ground, visibility and matched-condition frames independently
+        run: python3 -u tools/havenline/review_lake_east_west.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-east-west-lake-${{ matrix.role }}-${{ github.run_id }}
+          path: lake-review/
+          retention-days: 30
+          if-no-files-found: error
+  exact-source-review-gate:
+    needs: [build-capture,independent-review]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    env:
+      SOURCE: ${{ needs.build-capture.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-east-west-lake-*-*-${{ github.run_id }}
+          path: gate-report/reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-east-west-lake-evidence-${{ github.run_id }}
+          path: evidence/
+      - run: python3 -m pip install pyyaml
+      - name: Apply the unchanged raw-score and full-evidence acceptance gate
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          w=yaml.safe_load(Path('.github/workflows/havenline-lake-east-west.yml').read_text())
+          runs=[s['run'] for s in w['jobs']['exact-source-review-gate']['steps'] if 'run' in s]
+          assert len(runs)==1
+          subprocess.run(['bash','-euo','pipefail','-c',runs[0]],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-east-west-lake-complete-review-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# Earlier failed workflows and initial seam captures remain preserved, not relabelled.
+# The source precondition now matches the verified T02 main.gd from the original run.
+# The active lake correction is the only task. No APK export or player testing.

@@ -1,0 +1,322 @@
+{
+  "schema_version": 1,
+  "integration_branch": "codex/havenline-sequential-task-01",
+  "integration_owner": "primary-integration-owner",
+  "rules": {
+    "no_two_active_workstreams_share_owned_paths": true,
+    "foreign_owned_path_requires_change_request": true,
+    "stale_base_requires_reconcile_before_integration": true,
+    "integration_only_paths_may_only_be_changed_by_integration_owner": true
+  },
+  "aliases": {
+    "@protected:T01": [
+      "HavenlineGodot/assets/reference_forest/**",
+      "HavenlineGodot/scripts/reference_forest.gd",
+      "Docs/Production/T01/**"
+    ],
+    "@protected:T02": [
+      "HavenlineGodot/scripts/river_geometry.gd",
+      "Docs/Production/T02/**"
+    ],
+    "@protected:C1-model": [
+      "HavenlineGodot/assets/**/*.glb"
+    ],
+    "@protected:approved": [
+      "HavenlineGodot/assets/reference_forest/**",
+      "HavenlineGodot/scripts/reference_forest.gd",
+      "HavenlineGodot/scripts/river_geometry.gd",
+      "Docs/Production/T01/**",
+      "Docs/Production/T02/**"
+    ],
+    "@protected:runtime-approved": [
+      "HavenlineGodot/**"
+    ],
+    "@integration-only": [
+      "HavenlineGodot/scripts/main.gd",
+      "HavenlineGodot/scripts/simulation.gd",
+      "HavenlineGodot/scripts/population_simulation.gd",
+      "HavenlineGodot/scripts/outpost_simulation.gd",
+      "HavenlineGodot/scripts/outpost_view.gd",
+      "HavenlineGodot/data/reference-contract.json"
+    ],
+    "@ownership:T03": [
+      "HavenlineGodot/scripts/camp_boundary.gd",
+      "HavenlineGodot/scripts/camp_boundary_view.gd",
+      "HavenlineGodot/scripts/main.gd",
+      "HavenlineGodot/scripts/outpost_simulation.gd",
+      "HavenlineGodot/scripts/outpost_surface.gd",
+      "HavenlineGodot/shaders/outpost_snow.gdshader",
+      "HavenlineGodot/tests/capture_task03_boundary.gd",
+      "HavenlineGodot/tests/test_task03_boundary.gd",
+      "HavenlineGodot/tests/test_task02_surface_stress.gd",
+      "Docs/Production/T03/**",
+      ".github/workflows/havenline-task03-*.yml",
+      "tools/havenline/*task03*"
+    ],
+    "@ownership:QA-GOV": [
+      "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+      "Docs/Production/AGENT_EXECUTION_LOOP_GUARD.md",
+      "Docs/Production/ANTI_LOOP_ROOT_CAUSE_STANDARD.md",
+      "Docs/Production/SEQUENTIAL_REPAIR_PLAN.md",
+      "Docs/Production/BUILDER_REPAIR_STANDARD.md",
+      "Docs/Production/C0_ROOT_CAUSE_STANDARD.md",
+      "Docs/Production/C0_REPORT_SCHEMA.json",
+      "Docs/Production/C0_EXECUTION.json",
+      "Docs/Production/C0_CHECKPOINT.json",
+      "Docs/Production/FORWARD_EXECUTION_STANDARD.md",
+      "Docs/Production/FORWARD_EXECUTION_PROFILES.json",
+      "Docs/Production/FORWARD_GATE_RUNNERS.json",
+      "Docs/Production/PRODUCTION_ARCHITECTURE_V3.md",
+      "Docs/Production/PRODUCTION_ARCHITECTURE_V31_STANDARD.md",
+      "Docs/Production/TASK_CAPABILITY_MATRIX.json",
+      "Docs/Production/CAPABILITY_STATUS.json",
+      "Docs/Production/PRODUCTION_SCHEDULER_POLICY.json",
+      "Docs/Production/GATE_FINGERPRINT_POLICY.json",
+      "Docs/Production/GATE_RESULT_INDEX.json",
+      "Docs/Production/CONTRACT_REGISTRY.json",
+      "Docs/Production/FAILURE_INTELLIGENCE.json",
+      "Docs/Production/FLAKE_REGISTRY.json",
+      "Docs/Production/PIPELINE_TELEMETRY_POLICY.json",
+      "Docs/Production/PIPELINE_TELEMETRY.json",
+      "Docs/Production/CI_TOOLCHAIN_LOCK.json",
+      "Docs/Production/EVIDENCE_RETENTION_POLICY.json",
+      "Docs/Production/RUNTIME_DEPENDENCY_OBSERVATIONS.json",
+      "Docs/Production/TASK_STATE_SCHEMA.json",
+      "Docs/Production/TaskState/**",
+      "Docs/Production/MUTATION_CANARY_MATRIX.json",
+      "Docs/Production/PROOF_INVALIDATION_POLICY.json",
+      "Docs/Production/WORKSTREAM_REGISTRY.json",
+      "Docs/Production/DEPENDENCY_GRAPH.json",
+      "Docs/Production/PATH_OWNERSHIP.json",
+      "Docs/Production/CRITIC_MATRIX.json",
+      "Docs/Production/CRITIC_EXECUTION.json",
+      "Docs/Production/SECURITY_ATTACK_MATRIX.json",
+      "Docs/Production/CRITIC_READINESS.json",
+      "Docs/Production/PERFORMANCE_BUDGETS.json",
+      "Docs/Production/TASK_PACKET_TEMPLATE.md",
+      "Docs/Production/REGRESSION_MATRIX.json",
+      "Docs/Production/DEVICE_LAYOUT_MATRIX.json",
+      "Docs/Production/SAVE_STATE_MATRIX.json",
+      "Docs/Production/CANDIDATE_MANIFEST_TEMPLATE.json",
+      "Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md",
+      "Docs/Production/RESOURCE_ACTION_REGISTRY.json",
+      "Docs/Production/ACTOR_CAPABILITY_MATRIX.json",
+      "Docs/Production/ANIMATION_ACTION_MATRIX.json",
+      "Docs/Production/TASK_SCOPE_OVERRIDES.json",
+      "Docs/Production/GAME_MASTER_ACCOUNT_STANDARD.md",
+      "Docs/Production/GAME_MASTER_POLICY.json",
+      "Docs/Production/GAME_MASTER_TASKLIST.md",
+      "Docs/Production/Archive/**",
+      "Docs/Production/ChangeRequests/**",
+      "Docs/Production/Evidence/**",
+      "tools/havenline/production/**",
+      ".github/workflows/havenline-production-governance.yml",
+      ".github/workflows/havenline-candidate-guard.yml",
+      ".github/workflows/havenline-preactivation-candidate-guard-tests.yml",
+      ".github/workflows/havenline-specialist-critic.yml",
+      ".github/workflows/havenline-specialist-model-cache.yml",
+      ".github/workflows/havenline-critic-safeguards.yml",
+      ".github/workflows/havenline-c0-root-cause.yml",
+      ".github/workflows/havenline-device-release-gate.yml",
+      ".github/workflows/havenline-godot-android.yml",
+      "AGENTS.md",
+      "Docs/Production/task-gates.json",
+      ".github/workflows/havenline-apply-governance-v2.yml",
+      "Docs/Production/C0R_REPAIR_SUFFICIENCY_STANDARD.md",
+      "Docs/Production/C0R_REPORT_SCHEMA.json",
+      ".github/workflows/havenline-task10-benchmark-diagnostic.yml"
+    ],
+    "@reservation:T04": [
+      "HavenlineGodot/scripts/camera_composition.gd",
+      "HavenlineGodot/tests/test_task04_camera.gd",
+      "HavenlineGodot/tests/capture_task04_camera.gd",
+      "Docs/Production/T04/**",
+      "tools/havenline/task04/**",
+      ".github/workflows/havenline-task04-*.yml"
+    ],
+    "@reservation:T05": [
+      "HavenlineGodot/assets/stations_v2/**",
+      "HavenlineGodot/scripts/station_kit.gd",
+      "HavenlineGodot/tests/test_task05_station_kit.gd",
+      "HavenlineGodot/tests/capture_task05_station_kit.gd",
+      "Docs/Production/T05/**",
+      "tools/havenline/task05/**",
+      ".github/workflows/havenline-task05-*.yml"
+    ],
+    "@reservation:T06": [
+      "HavenlineGodot/animations/c1/**",
+      "HavenlineGodot/scripts/character1_motion.gd",
+      "HavenlineGodot/tests/test_task06_character1.gd",
+      "HavenlineGodot/tests/capture_task06_character1.gd",
+      "Docs/Production/T06/**",
+      "tools/havenline/task06/**",
+      ".github/workflows/havenline-task06-*.yml"
+    ],
+    "@reservation:T07": [
+      "HavenlineGodot/scripts/context_director.gd",
+      "HavenlineGodot/tests/test_task07_context_director.gd",
+      "HavenlineGodot/tests/test_task07_integration.gd",
+      "HavenlineGodot/tests/capture_task07_context_director.gd",
+      "Docs/Production/T07/**",
+      "tools/havenline/task07/**",
+      ".github/workflows/havenline-task07-*.yml"
+    ],
+    "@reservation:T08": [
+      "HavenlineGodot/scripts/carry_stack.gd",
+      "HavenlineGodot/scripts/storage_stockpile.gd",
+      "HavenlineGodot/scripts/transfer_feedback.gd",
+      "HavenlineGodot/tests/test_task08_inventory.gd",
+      "HavenlineGodot/tests/test_task08_integration.gd",
+      "HavenlineGodot/tests/capture_task08_inventory.gd",
+      "Docs/Production/T08/**",
+      "tools/havenline/task08/**",
+      ".github/workflows/havenline-task08-*.yml"
+    ],
+    "@reservation:T09": [
+      "HavenlineGodot/assets/harvesting_v1/**",
+      "HavenlineGodot/scripts/harvest_presentation.gd",
+      "HavenlineGodot/tests/test_task09_harvesting.gd",
+      "HavenlineGodot/tests/test_task09_integration.gd",
+      "HavenlineGodot/tests/capture_task09_harvesting.gd",
+      "HavenlineGodot/tests/capture_task09_performance.gd",
+      "Docs/Production/T09/**",
+      "tools/havenline/task09/**",
+      ".github/workflows/havenline-task09-*.yml"
+    ],
+    "@reservation:T10": [
+      "HavenlineGodot/scripts/world_transform.gd",
+      "HavenlineGodot/scripts/world_transform_view.gd",
+      "HavenlineGodot/data/world_transform_recipes.json",
+      "HavenlineGodot/assets/world_transform_v1/**",
+      "HavenlineGodot/tests/test_task10_world_transform.gd",
+      "HavenlineGodot/tests/test_task10_integration.gd",
+      "HavenlineGodot/tests/capture_task10_world_transform.gd",
+      "Docs/Production/T10/**",
+      "tools/havenline/task10/**",
+      ".github/workflows/havenline-task10-*.yml"
+    ]
+  },
+  "active_owners": [
+    {
+      "workstream": "T10-world-transformation-builder",
+      "task_id": "T10",
+      "owner": "world-transformation-builder",
+      "branch": "havenline/T10-world-transformation",
+      "paths_alias": "@reservation:T10",
+      "status": "FIX_REQUIRED",
+      "base_commit": "62f5a13753968c77a0feb47a18d93c82d8c5b581"
+    }
+  ],
+  "completed_production_owners": [
+    {
+      "workstream": "T03-legacy-integrated",
+      "task_id": "T03",
+      "paths_alias": "@ownership:T03",
+      "status": "APPROVED",
+      "accepted_source": "5df9726e0b1c33f0f8865385b1c49aca229fd461"
+    },
+    {
+      "workstream": "wave1-camera",
+      "task_id": "T04",
+      "paths_alias": "@reservation:T04",
+      "status": "APPROVED",
+      "accepted_source": "e08fd37e9a999d878644c03089c4b4b253bd7472"
+    },
+    {
+      "workstream": "wave1-props",
+      "task_id": "T05",
+      "paths_alias": "@reservation:T05",
+      "status": "APPROVED",
+      "accepted_source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f"
+    },
+    {
+      "workstream": "wave1-character1",
+      "task_id": "T06",
+      "paths_alias": "@reservation:T06",
+      "status": "APPROVED",
+      "accepted_source": "47f86fae25b099abb5c7096c37ca7495453b2b8f",
+      "integrated_source": "91f35f331aaabe2b1785b10c0d911f20da6f12d9"
+    },
+    {
+      "workstream": "wave2-context-director",
+      "task_id": "T07",
+      "paths_alias": "@reservation:T07",
+      "status": "APPROVED",
+      "accepted_source": "0a30dc0859541626eb6aa9a9bb749abc93dcb355",
+      "integrated_source": "94b3f6c5097356a3857ebd13a77fb1e316eb06ae"
+    },
+    {
+      "workstream": "T08-physical-inventory-builder",
+      "task_id": "T08",
+      "paths_alias": "@reservation:T08",
+      "status": "APPROVED",
+      "accepted_source": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
+      "integrated_source": "9d56ea8ae972d0a0705ff8b985e13fab31dde493"
+    },
+    {
+      "workstream": "T09-harvesting-acquisition-builder",
+      "task_id": "T09",
+      "paths_alias": "@reservation:T09",
+      "status": "APPROVED",
+      "accepted_source": "5415d85838ecf4bea8b3c71662072670e61797a0",
+      "integrated_source": "5415d85838ecf4bea8b3c71662072670e61797a0"
+    }
+  ],
+  "completed_governance_owners": [
+    {
+      "workstream": "QA-GOV-20260911",
+      "task_id": "QA-GOV",
+      "paths_alias": "@ownership:QA-GOV",
+      "status": "APPROVED",
+      "integrated_candidate": "4e851ce496e077342e6369b18b78ca27e4724849"
+    }
+  ],
+  "future_wave1_reservations": [
+    {
+      "task_id": "T04",
+      "branch": "havenline/T04-camera",
+      "paths_alias": "@reservation:T04"
+    },
+    {
+      "task_id": "T05",
+      "branch": "havenline/T05-props",
+      "paths_alias": "@reservation:T05"
+    },
+    {
+      "task_id": "T06",
+      "branch": "havenline/T06-character1",
+      "paths_alias": "@reservation:T06"
+    },
+    {
+      "task_id": "T07",
+      "branch": "havenline/T07-context-director",
+      "paths_alias": "@reservation:T07"
+    },
+    {
+      "task_id": "T08",
+      "branch": "havenline/T08-visible-inventory",
+      "paths_alias": "@reservation:T08"
+    },
+    {
+      "task_id": "T09",
+      "branch": "havenline/T09-harvesting",
+      "paths_alias": "@reservation:T09"
+    },
+    {
+      "task_id": "T10",
+      "branch": "havenline/T10-world-transformation",
+      "paths_alias": "@reservation:T10"
+    }
+  ],
+  "change_request_required_fields": [
+    "requesting_task",
+    "target_path",
+    "requested_change",
+    "reason",
+    "dependency",
+    "expected_behavior",
+    "tests_required",
+    "status",
+    "integration_owner_disposition"
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "purpose": "Deterministic resource-aware scheduling for T10-T70 without granting ownership or approval.",
+  "wip": {
+    "max_parallel_runtime_builds": 4,
+    "max_parallel_prep_tasks": 8,
+    "max_integration_ready_queue": 3,
+    "integration_owner_slots": 1,
+    "independent_critic_runtime_slots": 1,
+    "physical_certification_slots": 1
+  },
+  "policy": {
+    "single_integration_authority": true,
+    "dependency_approval_required_for_runtime": true,
+    "preparation_before_dependency_approval_allowed": true,
+    "capability_feasibility_required_for_runtime": true,
+    "packet_required_for_runtime": true,
+    "unknown_ownership_requires_claim_before_runtime": true,
+    "do_not_auto_start": true,
+    "scheduler_recommends_only": true
+  },
+  "priority_weights": {
+    "direct_downstream_count": 5,
+    "transitive_downstream_count": 2,
+    "critical_path_depth": 4,
+    "ready_now_bonus": 40,
+    "integration_ready_bonus": 30,
+    "unblocks_multiple_tasks_bonus": 15,
+    "external_block_penalty": 100,
+    "missing_packet_penalty": 10
+  },
+  "tie_break_order": ["higher_priority_score", "lower_task_number"],
+  "resource_classes": {
+    "independent_critic": ["C1", "C2", "C3", "C4", "C5", "C7", "C8", "C10", "C11"],
+    "physical_certification": ["T68", "T69"],
+    "integration": ["INTEGRATION_READY", "INTEGRATING"]
+  }
+}

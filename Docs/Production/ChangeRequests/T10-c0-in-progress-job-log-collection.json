@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "requesting_task": "T10",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "authorization": "Also when we find issues with the architecture and/or critics, we need to fix.",
+  "reviewer": "/root/t10_c0_critic",
+  "blocker": "C0-T10-B047",
+  "classification": "TOOLING_DEFECT",
+  "scope": [
+    ".github/workflows/havenline-c0-root-cause.yml",
+    "tools/havenline/production/collect_failure_job_logs.py",
+    "tools/havenline/production/tests/test_failure_job_log_collection.py",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "tools/havenline/production/tests/test_architecture_release_lock.py",
+    ".github/workflows/havenline-production-governance.yml",
+    "tools/havenline/production/tests/test_production_governance_v32_consumer.py"
+  ],
+  "permitted_behavior_change": "Replace only run-level failure log collection with exact completed-job REST log collection. Require complete matching run/repository/job identities, deterministic order, successful nonempty logs and atomic output. Include failure/timed_out jobs; include cancelled jobs only for a completed cancelled parent and mark non-product diagnosis. Preserve explicit CANCELLED_NO_FAILED_JOB and STARTUP_FAILURE_NO_JOB_LOG metadata when no eligible job exists. Reject all other unsupported or empty states. Preserve the original run_conclusion for downstream supersession.",
+  "live_evidence": {
+    "run_id": 35377452576,
+    "run_status": "in_progress",
+    "completed_job_id": 105705399641,
+    "decoded_log_bytes": 25510,
+    "transport": "authenticated GitHub MCP job-log endpoint"
+  },
+  "forbidden_changes": [
+    "critic applicability",
+    "dimensions",
+    "scores",
+    "thresholds",
+    "runtime",
+    "model",
+    "token budget",
+    "shipping gameplay",
+    "historical lock manifest",
+    "approval authority"
+  ]
+}

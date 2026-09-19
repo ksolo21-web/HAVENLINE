@@ -1,0 +1,188 @@
+name: Havenline T04 adjudicated closeout
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task04-adjudicated-closeout.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  EXPECTED_SOURCE: 'e08fd37e9a999d878644c03089c4b4b253bd7472'
+  PRIMARY_REVIEW_RUN: '34739476341'
+  PRIMARY_EVIDENCE_RUN: '34738864775'
+  ISOLATED_EVIDENCE_RUN: '34738403369'
+  OMP_NUM_THREADS: '4'
+
+jobs:
+  bind-primary-dissents:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_REVIEW_RUN }}'
+          pattern: 'havenline-t04-*-primary-${{ env.PRIMARY_REVIEW_RUN }}'
+          path: primary-reviews
+      - name: Preserve primaries and bind the exact dissent set
+        run: |
+          set +e
+          python3 tools/havenline/task04/evaluate_camera_reviews.py --primary primary-reviews --source "$EXPECTED_SOURCE" --output primary-decision.json
+          code=$?
+          set -e
+          test "$code" -eq 3
+          python3 - <<'PY'
+          import json
+          report=json.load(open('primary-decision.json'))
+          expected={('C1','contexts-and-native'),('C2','device-matrix'),('C2','tracking-and-target'),('C2','contexts-and-native')}
+          observed={(row['critic_id'],row['group']) for row in report['adjudication_requests']}
+          assert observed==expected,(observed,expected)
+          assert report['completed_low_scores_retried'] is False and report['score_averaging'] is False
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'havenline-t04-primary-decision-${{ github.run_id }}'
+          path: primary-decision.json
+          retention-days: 30
+
+  focused-supplemental:
+    needs: bind-primary-dissents
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - {critic: C1, attempt: supplement-1, groups: contexts-and-native, seed: '20261111'}
+          - {critic: C1, attempt: supplement-2, groups: contexts-and-native, seed: '20261211'}
+          - {critic: C2, attempt: supplement-1, groups: 'device-matrix,tracking-and-target,contexts-and-native', seed: '20261121'}
+          - {critic: C2, attempt: supplement-2, groups: 'device-matrix,tracking-and-target,contexts-and-native', seed: '20261221'}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      REVIEW_ROLE: '${{ matrix.critic }}'
+      REVIEW_ATTEMPT: '${{ matrix.attempt }}'
+      REVIEW_GROUPS: '${{ matrix.groups }}'
+      REVIEW_SEED: '${{ matrix.seed }}'
+      REVIEW_OUTPUT: 'supplemental-${{ matrix.critic }}-${{ matrix.attempt }}'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_EVIDENCE_RUN }}'
+          name: 'task04-camera-precritic-${{ env.EXPECTED_SOURCE }}'
+          path: task04-evidence
+      - uses: actions/cache/restore@v4
+        with:
+          path: '~/.cache/havenline-t01-qwen35'
+          key: 'havenline-t01-qwen35-9b-q5-20260908-v1'
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - run: python3 -u tools/havenline/task04/review_camera.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t04-${{ matrix.critic }}-${{ matrix.attempt }}-${{ github.run_id }}'
+          path: 'supplemental-${{ matrix.critic }}-${{ matrix.attempt }}/'
+          retention-days: 30
+          if-no-files-found: error
+
+  visual-resolution:
+    needs: focused-supplemental
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_REVIEW_RUN }}'
+          pattern: 'havenline-t04-*-primary-${{ env.PRIMARY_REVIEW_RUN }}'
+          path: primary-reviews
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: 'havenline-t04-*-supplement-*-${{ github.run_id }}'
+          path: supplemental-reviews
+      - run: python3 tools/havenline/task04/evaluate_camera_reviews.py --primary primary-reviews --supplemental supplemental-reviews --source "$EXPECTED_SOURCE" --output visual/final-visual-decision.json
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t04-adjudicated-visual-${{ github.run_id }}'
+          path: visual/
+          retention-days: 30
+          if-no-files-found: error
+
+  performance:
+    needs: visual-resolution
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 4}
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_EVIDENCE_RUN }}'
+          name: 'task04-camera-precritic-${{ env.EXPECTED_SOURCE }}'
+          path: task04-evidence
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.ISOLATED_EVIDENCE_RUN }}'
+          name: 'task04-camera-precritic-7c3f6e1c43871a424a78ed7590e3c0b153ef9d62'
+          path: task04-isolated-evidence
+      - run: python3 tools/havenline/task04/performance_gate.py --candidate "$EXPECTED_SOURCE" --evidence task04-evidence --baseline task04-isolated-evidence --output task04-C6
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t04-adjudicated-C6-${{ github.run_id }}'
+          path: task04-C6/
+          retention-days: 30
+          if-no-files-found: error
+
+  final-machine-gate:
+    needs: [visual-resolution, performance]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t04-adjudicated-visual-${{ github.run_id }}', path: visual}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t04-adjudicated-C6-${{ github.run_id }}', path: performance}
+      - name: Bind strict visual quorum and deterministic C6
+        run: |
+          python3 - <<'PY'
+          import json,math,os
+          from pathlib import Path
+          source=os.environ['EXPECTED_SOURCE'];errors=[]
+          visual=json.loads(next(Path('visual').rglob('final-visual-decision.json')).read_text())
+          c6=json.loads(next(Path('performance').rglob('result.json')).read_text());scores=c6.get('mandatory_dimensions',{})
+          if visual.get('source')!=source or visual.get('passed') is not True or visual.get('status') not in ('PASS','PASS_BY_QUORUM'):errors.append('C1/C2 visual resolution')
+          if visual.get('completed_low_scores_retried') is not False or visual.get('score_averaging') is not False:errors.append('anti-loop policy')
+          if c6.get('candidate_commit')!=source or c6.get('passed') is not True or c6.get('defects')!=[]:errors.append('C6 result')
+          if not scores or any(isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) or v<=9.0 for v in scores.values()):errors.append('C6 strict scores')
+          out={'task':'T04','source':source,'primary_review_run':os.environ['PRIMARY_REVIEW_RUN'],'passed':not errors,'strict_rule':'>9.0 unrounded; no averaging; dissent-only same-role 2-of-3 quorum','visual_status':visual.get('status'),'quorums':visual.get('quorums',[]),'C6_minimum':min(scores.values()) if scores else None,'ready_for_final_pixel_signoff':not errors,'final_pixel_signoff_required':True,'task_approved':False,'physical_4k60_verified':False,'errors':errors}
+          Path('final-gate').mkdir();Path('final-gate/final-machine-gate.json').write_text(json.dumps(out,indent=2)+'\n')
+          print(json.dumps(out,indent=2));raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: 'havenline-t04-adjudicated-final-gate-${{ github.run_id }}'
+          path: final-gate/
+          retention-days: 30
+
+# The accepted gameplay and primary critic sources remain frozen. This workflow
+# adds only the bounded dissent-resolution path and deterministic closeout.

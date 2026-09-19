@@ -1,0 +1,118 @@
+name: Havenline T02 independent terrain critics
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-review.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  critic:
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        group: [workfloor, shoreline, snow-contact, motion-light]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 32
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Bind review to the unchanged runtime that generated the evidence
+        run: |
+          set -euo pipefail
+          git fetch --no-tags --depth=1 origin 824b91c973355cb9726bab526de98267fe19d6a7
+          git diff --exit-code 824b91c973355cb9726bab526de98267fe19d6a7 HEAD -- HavenlineGodot
+          python3 -m py_compile tools/havenline/review_task02.py
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-terrain-evidence-34499194534
+          run-id: 34499194534
+          github-token: ${{ github.token }}
+          path: task02-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install 'pillow==11.3.0'
+      - name: Independently inspect actual reference and candidate pixels
+        run: python3 -u tools/havenline/review_task02.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-critic-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
+          path: task02-review/
+          retention-days: 30
+          if-no-files-found: error
+  task-gate:
+    needs: critic
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-T02-critic-*-${{ github.run_id }}
+          path: reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-terrain-evidence-34499194534
+          run-id: 34499194534
+          github-token: ${{ github.token }}
+          path: evidence/
+      - name: Require every independent role/group and all mechanical evidence
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib,math
+          source='824b91c973355cb9726bab526de98267fe19d6a7'
+          roles=['reference-fidelity','visual-integrity'];groups=['workfloor','shoreline','snow-contact','motion-light']
+          dims={'reference_fidelity','material_finish','geometry_contact','layout_readability','view_consistency'}
+          errors=[];rows=[];models=[]
+          evidence=Path('evidence');p=json.loads((evidence/'provenance.json').read_text())
+          if p['source']!=source or p['renderer']!='mobile':errors.append('Evidence source or renderer mismatch')
+          for name,h in p['captures'].items():
+              if hashlib.sha256((evidence/name).read_bytes()).hexdigest()!=h:errors.append('Changed capture '+name)
+          tests=json.loads((evidence/'tests.json').read_text())
+          if tests['total_checks']!=707 or not tests['all_passed']:errors.append('Engine checks failed or missing')
+          if not json.loads((evidence/'protected.json').read_text())['all_unchanged']:errors.append('Protected assets changed')
+          for role in roles:
+              for group in groups:
+                  found=list(Path('reviews').glob('*'+role+'-'+group+'*/review.json'))
+                  if len(found)!=1:errors.append('Missing/duplicate '+role+'/'+group);continue
+                  f=found[0];r=json.loads(f.read_text());rows.append(r);label=role+'/'+group
+                  value=r.get('review',{});scores=value.get('scores',{})
+                  if r.get('source')!=source or r.get('role')!=role or r.get('group')!=group:errors.append('Wrong source/role/group '+label)
+                  if r.get('passed') is not True or r.get('independent_execution') is not True or r.get('control_passed') is not True:errors.append('Review not passing '+label)
+                  if set(scores)!=dims or any(type(v) not in (int,float) or not math.isfinite(v) or not 9<=v<=10 for v in scores.values()):errors.append('Invalid or below-nine scores '+label)
+                  elif r.get('lowest_score')!=min(scores.values()):errors.append('Wrong minimum '+label)
+                  if value.get('defects')!=[] or value.get('coverage_complete') is not True or value.get('confidence') not in ('medium','high'):errors.append('Defect or insufficient evidence '+label)
+                  try:
+                      raw=json.loads((f.parent/'review-raw.json').read_text())['choices'][0]
+                      if raw['finish_reason']!='stop' or json.loads(raw['message']['content'])!=value:errors.append('Raw review mismatch '+label)
+                      c=json.loads((f.parent/'control-raw.json').read_text())['choices'][0]
+                      if c['finish_reason']!='stop' or json.loads(c['message']['content'])!={'A_B_same_scene':True,'C_D_same_scene':False}:errors.append('Blind image control failed '+label)
+                      pr=json.loads((f.parent/'provenance.json').read_text());models.append((pr['model'],pr['model_revision']))
+                      if pr['source']!=source or pr['independent_model_execution'] is not True:errors.append('Reviewer execution provenance failed '+label)
+                  except Exception as exc:errors.append('Incomplete raw evidence '+label+': '+str(exc))
+          if len(rows)!=8 or len(models)!=8 or len(set(models))!=1:errors.append('Incomplete or inconsistent review coverage')
+          report={'task':'T02','source':source,'minimum_dimension_score':9,'target':10,'mechanical_and_critics_passed':not errors,'lowest_score':min((r.get('lowest_score',0) for r in rows),default=None),'role_minimums':{role:min((r.get('lowest_score',0) for r in rows if r.get('role')==role),default=None) for role in roles},'reviews':rows,'errors':errors,'same_model_family_roles_disclosed':True,'final_actual_pixel_check_required':True,'task_approved':False,'T03_started':False,'full_game_approved':False,'physical_phone_tablet_native4k60_verified':False}
+          out=Path('gate-report');out.mkdir(exist_ok=True);(out/'T02-independent-gate.json').write_text(json.dumps(report,indent=2)+'\n');print(json.dumps(report,indent=2))
+          raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-independent-gate-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# Scoring unchanged; no images or game files modified and no APK/player test request.

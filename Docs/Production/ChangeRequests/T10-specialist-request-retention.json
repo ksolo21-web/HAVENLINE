@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "requesting_task": "T10",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "authorization": "Also when we find issues with the architecture and/or critics, we need to fix.",
+  "reviewer": "/root/t10_c0_critic",
+  "blocker": "C0-T10-B046",
+  "classification": "TOOLING_DEFECT",
+  "runner_before_sha256": "ad5c6f4693462a550076699e7d57bf71af8ec6051093382b29c7609883417ffc",
+  "scope": [
+    "tools/havenline/production/specialist_critic_runner.py",
+    "tools/havenline/production/tests/test_specialist_critic_runner.py"
+  ],
+  "permitted_behavior_change": "Serialize the existing HTTP request body once, preserve those exact complete bytes as the request artifact and transmit the same bytes. Remove the 250000-character retention truncation without changing the request or model behavior.",
+  "preserved": [
+    "model/provider/revision/runtime",
+    "all dimensions and thresholds",
+    "sampling/context/token budget/timeout",
+    "complete images and text",
+    "finish-running-SHA policy",
+    "fail-closed write/network behavior",
+    "all existing response validation"
+  ],
+  "evidence": "74b19 C3 motion-0-request.json is exactly250000 bytes and invalid JSON; complete actual HTTP body was transmitted by the same runner."
+}
