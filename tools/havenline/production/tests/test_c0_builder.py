@@ -88,6 +88,37 @@ class C0BuilderTests(unittest.TestCase):
         row["files_to_change"]=[".github/workflows/havenline-task10-world-transformation.yml"]
         self.assertEqual([],validate_report(r,p))
 
+    def test_terminal_artifact_error_outranks_expected_negative_test_prose(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            root=pathlib.Path(temporary)
+            domain=root/"run"/"domain-tests.json";domain.parent.mkdir(parents=True)
+            domain.write_text(json.dumps({
+                "passed":True,
+                "checks":[{"name":"recipe missing target state is rejected","passed":True},{"name":"failed cyclic reconfiguration preserves prior catalog","passed":True}],
+                "errors":[],
+            }))
+            capture=root/"run"/"device-layout"/"phone_16_9"/"capture.log";capture.parent.mkdir(parents=True)
+            terminal='ERROR: Projected device readability failed for blocked/overhead: {"fully_in_frame":false,"overlap":false,"passed":false}\n'
+            capture.write_text("ordinary output\n"+terminal)
+            result=collect_artifact_diagnostics(root)
+            self.assertTrue(result["terminal_failure_priority_enabled"])
+            self.assertEqual("run/device-layout/phone_16_9/capture.log",result["records"][0]["path"])
+            self.assertGreater(result["records"][0]["hard_failure_line_count"],0)
+            p=self.packet()
+            p["artifact_diagnostics"]=result
+            projection=model_projection(p,"f"*64,excerpt_bytes=320,detail=2)
+            records=projection["artifact_diagnostics"]["records"]
+            self.assertTrue(records)
+            self.assertEqual("run/device-layout/phone_16_9/capture.log",records[0]["path"])
+            self.assertIn("Projected device readability failed",records[0]["retained_lines"][0]["text"])
+
+    def test_c0_workflow_excludes_its_own_job_from_subject_unexecuted_checks(self):
+        workflow=(PROD.parents[2]/".github/workflows/havenline-c0-root-cause.yml").read_text()
+        self.assertIn("diagnostic_jobs_excluded_from_subject_execution",workflow)
+        self.assertIn("if 'C0 non-voting root-cause diagnosis' in name:",workflow)
+        self.assertIn("for job in subject_jobs:",workflow)
+        self.assertNotIn("for job in jobs:\n              for step in job.get('steps',[]):",workflow)
+
     def test_artifact_diagnostics_retain_hashed_failure_lines(self):
         with tempfile.TemporaryDirectory() as temporary:
             root=pathlib.Path(temporary);path=root/"run"/"tests"/"integration.log";path.parent.mkdir(parents=True)
