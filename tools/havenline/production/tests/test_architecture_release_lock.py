@@ -84,6 +84,23 @@ class ArchitectureReleaseLockTests(unittest.TestCase):
         self.assertTrue(exact_owner_source_errors(C0_ADVISOR,C0_ADVISOR_BASE_SHA256,'0'*64))
         self.assertTrue(exact_owner_source_errors(SPECIALIST,'0'*64,SPECIALIST_CURRENT_SHA256))
 
+    def test_c0_terminal_evidence_priority_extension_is_exact_and_bounded(self):
+        import hashlib
+        import validate_architecture_release_lock as v31
+        from validate_architecture_v32_t10 import (
+            C0_ADVISOR,C0_ADVISOR_BASE_SHA256,C0_ADVISOR_CURRENT_SHA256,
+            C0_DIAGNOSTICS,C0_DIAGNOSTICS_SHA256,
+            C0_TERMINAL_REQUEST,C0_TERMINAL_REQUEST_SHA256,
+            C0_WORKFLOW,c0_workflow_delta_errors,exact_owner_source_errors,
+        )
+        self.assertEqual([],exact_owner_source_errors(C0_ADVISOR,C0_ADVISOR_BASE_SHA256,C0_ADVISOR_CURRENT_SHA256))
+        self.assertEqual(hashlib.sha256((v31.ROOT/C0_DIAGNOSTICS).read_bytes()).hexdigest(),C0_DIAGNOSTICS_SHA256)
+        self.assertEqual(hashlib.sha256((v31.ROOT/C0_TERMINAL_REQUEST).read_bytes()).hexdigest(),C0_TERMINAL_REQUEST_SHA256)
+        accepted=v31._git("show",f"{ACCEPTED_SOURCE}:{C0_WORKFLOW}").stdout.decode()
+        current=(v31.ROOT/C0_WORKFLOW).read_text()
+        self.assertEqual([],c0_workflow_delta_errors(accepted,current))
+        self.assertTrue(c0_workflow_delta_errors(accepted,current+"\n# terminal-priority drift\n"))
+
     def test_manifest_cannot_repoint_v31_to_a_new_source(self):
         cfg = copy.deepcopy(load_lock())
         cfg["accepted_source"] = "f" * 40
