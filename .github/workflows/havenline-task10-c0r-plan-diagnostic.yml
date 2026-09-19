@@ -1,0 +1,91 @@
+name: Havenline T10 C0R plan diagnostic
+
+on:
+  push:
+    branches: ['havenline/T10-c7-repair-plan-v2']
+    paths:
+      - 'Docs/Production/T10/REPAIR_PLAN.json'
+      - '.github/workflows/havenline-task10-c0r-plan-diagnostic.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-t10-c0r-plan-diagnostic-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  review-plan:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Prove plan-only diagnostic scope
+        run: |
+          set -euo pipefail
+          mapfile -t changed < <(git diff --name-only 67eb7975ae5c9cc7f8f72d04c9169bb575d45fbf HEAD)
+          printf '%s\n' "${changed[@]}"
+          python3 - "${changed[@]}" <<'PY'
+          import sys
+          allowed={
+            'Docs/Production/T10/REPAIR_PLAN.json',
+            '.github/workflows/havenline-task10-c0r-plan-diagnostic.yml',
+          }
+          changed=set(sys.argv[1:])
+          assert changed and changed <= allowed,(changed,allowed)
+          PY
+
+      - name: Challenge revised repair plan with C0R
+        run: |
+          set -euo pipefail
+          mkdir -p c0r-plan
+          python3 tools/havenline/production/repair_sufficiency_critic.py \
+            --c0 Docs/Production/T10/C0_ROOT_CAUSE.json \
+            --plan Docs/Production/T10/REPAIR_PLAN.json \
+            --output c0r-plan/report.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('c0r-plan/report.json').read_text())
+          plan=json.loads(Path('Docs/Production/T10/REPAIR_PLAN.json').read_text())
+          assert report['outcome']=='REPAIR_PLAN_ACCEPTED' and report['builder_action']=='BUILD_BOUNDED_REPAIR',report
+          assert report['passed'] is True and report['full_blocker_coverage'] is True and report['thresholds_unchanged'] is True,report
+          assert report['rejections']==[] and report['evidence_gaps']==[],report
+          groups={x['group_id']:x for x in report['group_reports']}
+          assert groups['c7-context-binding']['passed'] is True and groups['c7-context-binding']['same_family_attempt_count']==1,groups['c7-context-binding']
+          assert groups['c0-semantic-projection-grounding']['passed'] is True,groups['c0-semantic-projection-grounding']
+          frontier=plan['repair_sufficiency']['evidence_frontier']
+          assert frontier['latest_observed_failed_candidate']=='81fbc7958ceb69b711f8be60add48b4510d3520e'
+          bound={(x['candidate'],x['group_id']) for x in frontier['observations']}
+          assert ('81fbc7958ceb69b711f8be60add48b4510d3520e','c7-context-binding') in bound
+          assert ('81fbc7958ceb69b711f8be60add48b4510d3520e','c0-semantic-projection-grounding') in bound
+          summary={
+            'schema_version':1,
+            'task':'T10',
+            'mode':'nonapproval_repair_plan_review',
+            'plan_commit':__import__('os').environ['GITHUB_SHA'],
+            'outcome':report['outcome'],
+            'loop_risk':report['loop_risk'],
+            'risk_codes':report['risk_codes'],
+            'group_count':report['group_count'],
+            'full_blocker_coverage':report['full_blocker_coverage'],
+            'thresholds_unchanged':report['thresholds_unchanged'],
+            'task_approved':False,
+            'implementation_authorized_only_by_canonical_builder_gate_after_report_commit':True,
+          }
+          Path('c0r-plan/summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps(summary,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-T10-C0R-plan-${{ github.sha }}
+          path: c0r-plan
+          if-no-files-found: error
+          retention-days: 30
