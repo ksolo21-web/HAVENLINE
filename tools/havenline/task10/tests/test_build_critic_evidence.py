@@ -121,7 +121,9 @@ class CompactEvidenceTests(unittest.TestCase):
   for claims in m.C7_CLAIMS.values():
    for claim in claims:
     ids.append(claim['evidence_id'])
-    self.assertTrue(claim['name_pattern'].startswith('^') and claim['name_pattern'].endswith('
+    self.assertTrue(claim['name_pattern'].startswith('^') and claim['name_pattern'].endswith('$'))
+  self.assertEqual(len(ids),len(set(ids)))
+
  def test_contract_rejects_omission_duplicate_tampering_and_order(self):
   with tempfile.TemporaryDirectory() as t:
    root=Path(t)
