@@ -13,8 +13,11 @@ const CATALOG_STRESS_RECIPES := 256
 var checks: Array[Dictionary] = []
 var failures: Array[String] = []
 
-func check(label: String, passed: bool, detail: Variant = null) -> void:
-	checks.append({"name": label, "passed": passed, "detail": detail})
+func check(label: String, passed: bool, detail: Variant = null, evidence_id: String = "") -> void:
+	var row := {"name": label, "passed": passed, "detail": detail}
+	if not evidence_id.is_empty():
+		row["evidence_id"] = evidence_id
+	checks.append(row)
 	if not passed:
 		failures.append(label)
 
@@ -409,7 +412,7 @@ func run() -> void:
 	expect_import_rejected("component state cannot retain two completed receipts for one target", before_bad_import, duplicate_receipt_target)
 
 	var view_contract := TransformView.contract()
-	check("view lifecycle contains all frozen states", view_contract.lifecycle == ["locked", "ready", "preview", "committing", "complete"])
+	check("view lifecycle contains all frozen states", view_contract.lifecycle == ["locked", "ready", "preview", "committing", "complete"], null, "R05_DOMAIN_LIFECYCLE_SET")
 	check("view is presentation-only", view_contract.presentation_only and not view_contract.mutates_resources and not view_contract.advances_progression)
 	check("view completion requires simulation and T10 acceptance", view_contract.complete_requires_simulation_receipt and view_contract.complete_requires_world_transform_acceptance)
 	check("T11 retains final camp-content ownership", view_contract.t11_owns_final_camp_content)
@@ -417,11 +420,11 @@ func run() -> void:
 	root.add_child(view)
 	check("view target configures", view.configure("anchor-A"))
 	view.set_ready()
-	check("view enters ready lifecycle", view.descriptor().lifecycle == "ready")
-	check("valid preview enters preview lifecycle", view.show_preview(preview) and view.descriptor().lifecycle == "preview")
-	check("prepared intent enters committing lifecycle", view.show_commit(first) and view.descriptor().lifecycle == "committing")
-	check("raw simulation receipt cannot complete before T10 accepts it", not view.mark_complete(first_ack) and view.descriptor().lifecycle == "committing")
-	check("T10-accepted receipt completes lifecycle", view.mark_complete(first_accepted) and view.descriptor().lifecycle == "complete")
+	check("view enters ready lifecycle", view.descriptor().lifecycle == "ready", null, "R05_DOMAIN_READY")
+	check("valid preview enters preview lifecycle", view.show_preview(preview) and view.descriptor().lifecycle == "preview", null, "R05_DOMAIN_PREVIEW")
+	check("prepared intent enters committing lifecycle", view.show_commit(first) and view.descriptor().lifecycle == "committing", null, "R05_DOMAIN_COMMITTING")
+	check("raw simulation receipt cannot complete before T10 accepts it", not view.mark_complete(first_ack) and view.descriptor().lifecycle == "committing", null, "R05_DOMAIN_RAW_RECEIPT_REJECTED")
+	check("T10-accepted receipt completes lifecycle", view.mark_complete(first_accepted) and view.descriptor().lifecycle == "complete", null, "R05_DOMAIN_ACCEPTED_RECEIPT_COMPLETES")
 	var updates := view.update_count
 	check("already complete lifecycle cannot be completed twice", not view.mark_complete(first_accepted))
 	check("unchanged lifecycle does not rebuild presentation state", view.update_count == updates)

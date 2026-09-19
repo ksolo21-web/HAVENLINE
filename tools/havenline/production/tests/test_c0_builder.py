@@ -1,8 +1,8 @@
 import json, pathlib, sys, tempfile, unittest
 HERE=pathlib.Path(__file__).resolve();PROD=HERE.parents[1];sys.path.insert(0,str(PROD))
 from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, artifact_diagnostic_projection, build_model_request, c0_response_schema, failure_log_projection, model_projection, retain_http_error, subject_execution, superseded_report, validate_report
-from builder_repair_gate import validate as validate_builder, validate_c0r, verify_inherited_noncausal
-from repair_sufficiency_critic import review as review_c0r
+from builder_repair_gate import implementation_diff_errors, validate as validate_builder, validate_c0r, verify_inherited_noncausal, verify_integration_branch
+from repair_sufficiency_critic import review as review_c0r, whole_file_proof_digest
 from collect_artifact_diagnostics import collect as collect_artifact_diagnostics
 
 
@@ -46,6 +46,12 @@ def t10_c0():
     c.update(task_id="T10",diagnosis_id="C0-T10-123",report_sha256="c"*64)
     c["blockers"][0]=dict(c["blockers"][0])
     c["blockers"][0].update(id="C0-T10-B001",files_to_change=["tools/havenline/task10/fix.py"])
+    c["failure_frontier"]={
+        "complete":True,"diagnosed_through_candidate":"a"*40,"latest_observed_failed_candidate":"a"*40,
+        "observations":[],"unclassified_failures":[],
+    }
+    c["failure_family_history"]=[]
+    c["full_domain_proofs"]=[]
     return c
 
 
@@ -70,7 +76,7 @@ def t10_plan():
                 "unexecuted_or_unknown_cases":[],
                 "observable_exhaustive_collection_required":False,
                 "complete_observable_set_collected":False,
-                "full_failure_family_closed_by_design":True,
+                "full_failure_family_closed_by_design":False,
                 "collection_evidence":[],
             },
             "strategy_kind":"TOOLING",
@@ -178,6 +184,12 @@ class C0BuilderTests(unittest.TestCase):
             self.assertEqual(64,len(row["sha256"]))
 
 class C0RBuilderEnforcementTests(unittest.TestCase):
+    def setUp(self):
+        from unittest.mock import patch
+        self._intelligence_lock = patch("repair_sufficiency_critic.repair_intelligence_errors", return_value=[])
+        self._intelligence_lock.start()
+        self.addCleanup(self._intelligence_lock.stop)
+
     def test_t10_requires_canonical_c0r(self):
         c=t10_c0();p=t10_plan()
         errors=validate_builder(c,p,c0_sha256="c"*64,plan_sha256="p"*64)
@@ -210,6 +222,83 @@ class C0RBuilderEnforcementTests(unittest.TestCase):
 
     def test_t09_historical_repair_remains_backward_compatible(self):
         self.assertEqual([],validate_builder(complete_c0(),plan()))
+
+    def test_repeated_repair_requires_actual_architectural_diff_markers(self):
+        p={"repair_sufficiency":{"repair_groups":[{
+            "group_id":"layout-feasibility","same_family_attempt_count":2,
+            "scalar_parameters_changed":[],
+            "implementation_diff_contract":{
+                "comparison_base":"a"*40,
+                "causal_files":["view.gd"],"required_added_markers":[
+                    {"kind":"FUNCTION_DEFINITION","value":"solve_layout"},
+                    {"kind":"CODE_IDENTIFIER","value":"placement_found"},
+                ]
+            },
+        }]}}
+        good={"view.gd":"diff --git a/view.gd b/view.gd\n+func solve_layout():\n+  placement_found = true\n+solve_layout()\n"}
+        self.assertEqual([],implementation_diff_errors(p,["view.gd"],good))
+        self.assertTrue(implementation_diff_errors(p,["view.gd"],{"view.gd":"+LABEL_PIXEL_SIZE = 0.0054\n"}))
+        for hostile in (
+            "+# func solve_layout(): placement_found solve_layout()\n",
+            "+message = 'func solve_layout(): placement_found solve_layout()'\n",
+        ):
+            self.assertTrue(implementation_diff_errors(p,["view.gd"],{"view.gd":hostile}))
+        scalar={"view.gd":"-LABEL_PIXEL_SIZE = 0.0057\n+LABEL_PIXEL_SIZE = 0.0054\n+func solve_layout():\n+  placement_found = true\n+solve_layout()\n"}
+        self.assertTrue(any("undeclared scalar" in e for e in implementation_diff_errors(p,["view.gd"],scalar)))
+        for syntax in (
+            "-label.pixel_size = 0.0057\n+label.pixel_size = 0.0054\n",
+            "-label.set_pixel_size(0.0057)\n+label.set_pixel_size(0.0054)\n",
+            "-settings[\"pixel_size\"] = 0.0057\n+settings[\"pixel_size\"] = 0.0054\n",
+            "-label.scale = Vector2(1.0, 1.0)\n+label.scale = Vector2(0.95, 0.95)\n",
+            "-label.pixel_size = DEFAULT_LABEL_SIZE\n+label.pixel_size = COMPACT_LABEL_SIZE\n",
+            "-label.set_pixel_size(\n-    0.0057\n-)\n+label.set_pixel_size(\n+    0.0054\n+)\n",
+            "-label.set(\"pixel_size\", 0.0057)\n+label.set(\"pixel_size\", 0.0054)\n",
+            "-var chosen = label.pixel_size * 1.0\n+var chosen = label.pixel_size * 0.95\n",
+        ):
+            hostile={"view.gd":syntax+"+func solve_layout():\n+  placement_found = true\n+solve_layout()\n"}
+            self.assertTrue(any("undeclared scalar" in e for e in implementation_diff_errors(p,["view.gd"],hostile)),syntax)
+        import copy
+        derived=copy.deepcopy(p)
+        derived["repair_sufficiency"]["repair_groups"][0]["failure_family"]={"id":"test-layout"}
+        proven_source='func solve_layout():\n  return {"label_scale": 1.0, "wrap_width": 960.0}\n\nfunc feedback_text():\n  return "READY"\n\nfunc _target_form_scale():\n  return Vector3.ONE\n\nsolve_layout()\n'
+        contract=derived["repair_sufficiency"]["repair_groups"][0]["implementation_diff_contract"]
+        contract.update(proof_source_path="view.gd",proof_slice_mode="WHOLE_FILE_EXCEPT_EXACT_METADATA_LINES",proof_irrelevant_exact_lines=[],proof_relevant_sha256=whole_file_proof_digest(proven_source,[]))
+        trusted={"test-layout":{
+            "proof_slice_mode":"WHOLE_FILE_EXCEPT_EXACT_METADATA_LINES",
+            "proof_irrelevant_exact_lines":[],
+            "proof_relevant_sha256":whole_file_proof_digest(proven_source,[]),
+        }}
+        derived["repair_sufficiency"]["repair_groups"][0]["scalar_parameters_changed"]=[{
+            "target":"label.pixel_size","mode":"DERIVED_PER_CASE",
+            "normalized_rhs":"DEFAULT_LABEL_SIZE*float(projection.get(\"label_scale\",1.0))",
+        }]
+        prefix="+func solve_layout():\n+  placement_found = true\n+solve_layout()\n"
+        exact={"view.gd":"-label.pixel_size = DEFAULT_LABEL_SIZE\n+label.pixel_size = DEFAULT_LABEL_SIZE * float(projection.get(\"label_scale\", 1.0))\n"+prefix}
+        self.assertEqual([],implementation_diff_errors(derived,["view.gd"],exact,{"view.gd":proven_source},trusted))
+        for fixed in ("0.0054","COMPACT_LABEL_SIZE","960.0"):
+            bad={"view.gd":"-label.pixel_size = DEFAULT_LABEL_SIZE\n+label.pixel_size = "+fixed+"\n"+prefix}
+            self.assertTrue(any("does not match declared" in e for e in implementation_diff_errors(derived,["view.gd"],bad,{"view.gd":proven_source},trusted)),fixed)
+        altered_source='func solve_layout():\n  return {"label_scale": 0.1, "wrap_width": 5000.0}\n\nsolve_layout()\n'
+        self.assertTrue(any("proof-relevant implementation differs" in e for e in implementation_diff_errors(derived,["view.gd"],exact,{"view.gd":altered_source},trusted)))
+        for altered in (
+            proven_source.replace('return "READY"','return "READY".repeat(100)'),
+            proven_source.replace('return Vector3.ONE','return Vector3(100.0, 100.0, 100.0)'),
+        ):
+            self.assertTrue(any("proof-relevant implementation differs" in e for e in implementation_diff_errors(derived,["view.gd"],exact,{"view.gd":altered},trusted)))
+        hostile_plan=copy.deepcopy(derived)
+        hostile_contract=hostile_plan["repair_sufficiency"]["repair_groups"][0]["implementation_diff_contract"]
+        hostile_contract["proof_irrelevant_exact_lines"]=['  return "READY".repeat(100)']
+        hostile_source=proven_source.replace('return "READY"','return "READY".repeat(100)')
+        hostile_contract["proof_relevant_sha256"]=whole_file_proof_digest(hostile_source,hostile_contract["proof_irrelevant_exact_lines"])
+        self.assertTrue(any("proof-relevant implementation differs" in e for e in implementation_diff_errors(hostile_plan,["view.gd"],exact,{"view.gd":hostile_source},trusted)))
+        context_diff={"view.gd":"@@ -1,3 +1,3 @@\n label.set_pixel_size(\n-    0.0057\n+    0.0054\n )\n"+prefix}
+        self.assertTrue(any("undeclared scalar" in e for e in implementation_diff_errors(p,["view.gd"],context_diff)))
+        self.assertTrue(implementation_diff_errors(p,[],good))
+        self.assertTrue(implementation_diff_errors(p,["view.gd"],None))
+
+    def test_active_integration_branch_is_pinned(self):
+        self.assertEqual([],verify_integration_branch("codex/havenline-sequential-task-01"))
+        self.assertTrue(verify_integration_branch("attacker/redirected-branch"))
 
 
 class CausalBookkeepingTests(unittest.TestCase):

@@ -40,6 +40,48 @@
         "blast_radius_hypotheses",
         "residual_unknowns"
       ],
+      "c0_authoritative_inputs": [
+        "failure_frontier",
+        "failure_family_history",
+        "full_domain_proofs"
+      ],
+      "repeated_family_structured_inputs": [
+        "repair_operations",
+        "scalar_parameters_changed",
+        "implementation_diff_contract"
+      ],
+      "implementation_diff_contract_required_fields": [
+        "comparison_base",
+        "causal_files",
+        "required_added_markers"
+      ],
+      "derived_effect_proof_slice_fields": [
+        "proof_source_commit",
+        "proof_source_path",
+        "proof_slice_mode",
+        "proof_irrelevant_exact_lines",
+        "proof_relevant_sha256"
+      ],
+      "implementation_diff_marker_kinds": [
+        "FUNCTION_DEFINITION",
+        "CODE_IDENTIFIER"
+      ],
+      "repair_operation_symbol_binding_required": "Each repeated-family repair operation declares target_symbols, and every executable diff marker binds to one of those symbols.",
+      "repeated_family_causal_mechanism_rule": "causal_mechanism is the deterministic OPERATION_KIND[symbol,...] rendering; free prose cannot authorize a repeated repair.",
+      "derived_parameter_exception": "Only a declared DERIVED_PER_CASE expression with an explicit bound and complete full-domain proof may alter a scalar sink after two attempts; its proof-slice policy must come from locked C0 evidence rather than the plan.",
+      "derived_parameter_required_fields": [
+        "target",
+        "mode",
+        "normalized_rhs",
+        "dependency_symbols",
+        "bounds",
+        "proof_source_commit",
+        "proof_source_path",
+        "proof_source_sha256",
+        "proof_binding_sha256"
+      ],
+      "derived_parameter_implementation_rule": "Declared targets and actual changed scalar sinks match one-to-one; each implemented normalized RHS exactly equals its artifact/source/bounds-bound declaration.",
+      "current_proof_slice_rule": "The current candidate's canonicalized whole source file must match the source exercised by the retained proof, excluding only exact metadata lines authorized by locked C0 evidence and found inside the single static contract function.",
       "repair_group_blocker_coverage_required": [
         "blocker_id",
         "diagnosed_root_cause",
@@ -61,7 +103,12 @@
   "hard_rules": {
     "all_c0_blockers_assigned_exactly_once_across_groups": true,
     "group_blocker_coverage_exact": true,
-    "repeated_scalar_fix_requires_full_domain_proof": true,
+    "two_attempts_require_architectural_escalation": true,
+    "repeated_scalar_fix_rejected_even_when_relabelled": true,
+    "repeated_family_diff_compared_to_latest_failed_candidate": true,
+    "executable_markers_exclude_comments_and_string_literals": true,
+    "undeclared_existing_scalar_reassignment_rejected": true,
+    "integration_branch_is_pinned_outside_plan_and_registry": true,
     "product_defect_cannot_use_evidence_only_strategy": true,
     "unknown_required_cases_forbid_full_family_closure_claim": true,
     "cheap_disproof_preflight_required": true,
@@ -71,7 +118,15 @@
     "blocker_coverage_binds_exact_c0_root_cause": true,
     "post_diagnosis_failures_must_be_classified": true,
     "latest_observed_failure_must_be_represented": true,
-    "new_unbound_failure_requires_c0": true
+    "new_unbound_failure_requires_c0": true,
+    "frontier_and_attempt_history_bound_to_exact_c0": true,
+    "repair_intelligence_bound_to_digest_locked_source_manifest": true,
+    "prior_attempt_sources_include_run_candidate_and_result_hashes": true,
+    "structured_architectural_operations_required_after_two_attempts": true,
+    "provided_full_domain_proof_requires_source_provenance": true,
+    "provided_full_domain_proof_bound_to_exact_c0": true,
+    "canonical_threshold_registries_verified": true,
+    "exact_builder_gate_is_direct_prebuild_dependency": true
   },
   "may_score_gameplay": false,
   "may_approve_task": false,

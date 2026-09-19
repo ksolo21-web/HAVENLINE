@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "requesting_task": "T10",
+  "blocker": "C0-T10-B062",
+  "target_path": [
+    "tools/havenline/production/workstream.py",
+    "tools/havenline/production/tests/test_governance.py",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "tools/havenline/production/tests/test_architecture_release_lock.py",
+    ".github/workflows/havenline-production-governance.yml",
+    "tools/havenline/production/tests/test_production_governance_v32_consumer.py"
+  ],
+  "requested_change": "Make the shared workstream authorization consumer recognize both the exact legacy APPROVED + AUTHORIZED single-target schema and the integrated AUTHORIZED + APPROVED_BOUNDED_* multi-target schema while rejecting every other status/disposition pair and every malformed or unsafe path.",
+  "reason": "Hosted candidate-guard run 35454636290 and adapter-preflight run 35454638560 rejected the same eight already-authorized C0R governance paths before or without reaching the exact builder gate because workstream.approved_change_requests only understood the legacy schema.",
+  "dependency": "Canonical C0-T10-B062 diagnosis, immutable repair-intelligence lock, integrated bounded C0R authorization records, and exact builder repair gate.",
+  "expected_behavior": "Both hosted lifecycle guards accept only paths from exact integration-authorized records; malformed, cross-task, traversal, unapproved and mismatched schema records grant no paths. C0R remains non-voting and every critic threshold remains unchanged.",
+  "tests_required": [
+    "Legacy exact schema yields its one safe target.",
+    "Bounded exact schema yields every safe target in its target_path array.",
+    "Wrong task, wrong status, wrong disposition, traversal and non-string targets yield no authorization.",
+    "Candidate-added authorization records are ignored until present on the trusted integration ref.",
+    "The cumulative T10 candidate scope replay passes only after this request is independently authorized and integrated.",
+    "V3.2 release-lock validation accepts only the exact authorized workstream source hash and exact authorization-record hash."
+  ],
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "APPROVED_BOUNDED_C0R_WORKSTREAM_SCHEMA",
+  "authorization": "Kaleb explicitly approved integration of this bounded governance authorization on 2026-09-19. This authorizes only the listed repair paths; it does not approve T10 or change critic thresholds.",
+  "forbidden_changes": [
+    "No wildcard, prefix or directory authorization.",
+    "No plan-authored, C0-authored or candidate-added path authorization at runtime.",
+    "No acceptance of REQUESTED, REJECTED, missing or unknown dispositions.",
+    "No weakening of candidate ownership, protected-path, integration-drift, C0R or builder checks.",
+    "No C1-C11 score, threshold or approval change."
+  ]
+}
