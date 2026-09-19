@@ -5,7 +5,7 @@
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
   "c0_report_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
   "c0_report_sha256": "d49662c0ed7805e3ea681fcb6e4595dc0813e33a6538184882fb44e6bf87a785",
-  "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
+  "repair_base": "ffc6c6e9652fded2be2849f59958506200471aef",
   "repair_base_status": "CUMULATIVE_REPAIR_CYCLE_ROOT_WITH_LATEST_TERMINAL_FAILURE_BOUND",
   "repair_base_rule": "Measure the complete reconciled B037-B061 owner-plus-task diff from cumulative repair root c7a18d002fe8d0f3978370f3e4567ba88bfe17e8. The latest terminal evidence is 0f93003e91ec2e785af5e821f3c94a3ec9c2dc81; it is evidence only and no score is reusable.",
   "full_blocker_set_acknowledged": true,
@@ -317,15 +317,15 @@
     },
     {
       "blocker_id": "C0-T10-B053",
-      "causal_change": "Keep the deterministic camera-plane lane, 960-unit wrap bound and explicit glyph/outline priorities, and set the actual Label3D pixel projection scale to 0.0057. This directly reduces the known 848.519 px phone-overhead label to about 806.093 px, moving its left edge from 6.994 px to about 49.420 px inside the 27 px safe frame while retaining a large readable label. Preserve four nodes, one build, cameras, authority and lifecycle semantics.",
+      "causal_change": "Replace scalar label-size tuning with a constrained screen-lane solver: measure top/right/left/bottom legal regions, preserve whole-word wrapping, reflow before bounded scaling, enforce readability scale >=0.85, require positive one-pixel frame slack, and fail closed when no legal lane exists. Preserve four visual nodes, transaction authority, camera set, render priorities, and all critic thresholds.",
       "files": [
         "HavenlineGodot/scripts/world_transform_view.gd",
         "HavenlineGodot/tests/test_task10_integration.gd"
       ],
       "verification": [
-        "Focused exact-boundary and hostile tests pass.",
-        "Full task and production suites pass with unchanged governance/critic thresholds.",
-        "Fresh exact-source isolated and integrated critic runs are required; this plan claims no approval."
+        "Diagnostic run 35443178004 / artifact 10584940146 proves the bounded prototype across all 216 device/state/angle projections with failure_count=0 and no approval reuse.",
+        "The focused T10 integration suite must pass with the adaptive layout contract, four-node/one-build budget, authority separation, exact resource semantics and render ordering unchanged.",
+        "The exact promoted candidate must rerun the authoritative device matrix, native-4K evidence, performance, and fresh C1/C2/C3/C4/C6/C7 before any approval claim."
       ]
     },
     {
@@ -343,7 +343,7 @@
     },
     {
       "blocker_id": "C0-T10-B055",
-      "causal_change": "Retain all finite projected rectangle, clearance, overlap, containment and priority checks. Bind the source contract to a 0.0057 Label3D pixel scale and require the already-strict device/native matrix to prove every state and angle before any critic executes.",
+      "causal_change": "Keep every existing projected rectangle, overlap, clearance, containment and priority invariant; bind critic readiness to the adaptive constrained-lane contract rather than one scalar pixel-size expectation. Preserve fail-closed validation and require full-domain diagnostic evidence before an expensive candidate cycle.",
       "files": [
         "HavenlineGodot/tests/capture_task10_world_transform.gd",
         "tools/havenline/task10/validate_critic_readiness.py",
@@ -352,9 +352,9 @@
         "Docs/Production/T10/defect-ledger.json"
       ],
       "verification": [
-        "Focused exact-boundary and hostile tests pass.",
-        "Full task and production suites pass with unchanged governance/critic thresholds.",
-        "Fresh exact-source isolated and integrated critic runs are required; this plan claims no approval."
+        "The full 216-case diagnostic matrix is complete and source-bound before promotion; any missing/failed projection blocks the plan.",
+        "Focused hostile/readiness tests reject missing projection coverage, readability below 0.85, overlap, insufficient clearance, out-of-frame placement, or priority drift.",
+        "The promoted exact SHA must pass the normal device/native evidence gates before critics execute."
       ]
     },
     {
@@ -408,7 +408,7 @@
     },
     {
       "blocker_id": "C0-T10-B059",
-      "causal_change": "Preserve the complete authoritative packet, construct a deterministic hash-bound semantic projection below the fixed context budget, send the exact serialized bytes, and retain bounded HTTP status/headers/body before failing.",
+      "causal_change": "Preserve the complete authoritative packet and fixed context budget, but make bounded semantic projection terminal-first: failed terminal artifact excerpts and failed structured records are selected before generic successful context, with exact serialized request bytes and bounded HTTP diagnostics retained.",
       "files": [
         ".github/workflows/havenline-c0-root-cause.yml",
         "tools/havenline/production/c0_root_cause_advisor.py",
@@ -421,9 +421,9 @@
         "tools/havenline/production/tests/test_t10_activation_validation.py"
       ],
       "verification": [
-        "Focused exact-boundary and hostile tests pass.",
-        "Full task and production suites pass with unchanged governance/critic thresholds.",
-        "Fresh exact-source isolated and integrated critic runs are required; this plan claims no approval."
+        "Replay run 35402388836 through the repaired C0 pipeline; the phone_16_9 blocked/overhead terminal failure must appear in the model projection with immutable path/line/hash identity.",
+        "C0's own diagnostic steps must not appear as unexecuted subject-job gates.",
+        "Unsupported/paraphrased quotations and nonexistent causal paths remain rejected; no grounding or critic threshold is weakened."
       ]
     },
     {
@@ -440,11 +440,11 @@
         "tools/havenline/production/tests/test_t10_activation_validation.py",
         "Docs/Production/ChangeRequests/T10-c0-grounding-blocker-registry.json"
       ],
-      "causal_change": "Scan downloaded text artifacts deterministically, retain only actual failed dispositions with source path, line and source hash, and include that bounded projection in the immutable packet and model request.",
+      "causal_change": "Retain deterministic source path/line/hash artifact extraction, then prioritize terminal failed diagnostics in the model projection so the exact device failure cannot lose the shared excerpt budget. Replay the 8ab packet as the hostile regression.",
       "verification": [
-        "Collector tests prove bounded source path/line/hash extraction and exclude nested expected-negative fixture failures.",
-        "The exact a210 artifact yields the real failed integration disposition in the semantic projection.",
-        "Full production governance passes with all critics, budgets and thresholds unchanged."
+        "Replay run 35402388836 through the repaired C0 pipeline; the phone_16_9 blocked/overhead terminal failure must appear in the model projection with immutable path/line/hash identity.",
+        "C0's own diagnostic steps must not appear as unexecuted subject-job gates.",
+        "Unsupported/paraphrased quotations and nonexistent causal paths remain rejected; no grounding or critic threshold is weakened."
       ]
     },
     {
@@ -460,15 +460,16 @@
         "tools/havenline/production/tests/test_t10_activation_validation.py",
         "Docs/Production/ChangeRequests/T10-c0-grounding-regression-contract.json"
       ],
-      "causal_change": "For T10, require every evidence item to cite an exact retained SOURCE | EXACT_QUOTE and every files_to_change entry to equal a tracked repository path; reject the diagnosis before publication when either binding fails.",
+      "causal_change": "Keep T10 exact SOURCE | EXACT_QUOTE and tracked-path grounding; additionally separate subject-job unexecuted checks from the live C0 diagnostic job so successful C0 runtime preparation cannot be misreported as missing subject execution.",
       "verification": [
-        "Hostile tests reject uncited/paraphrased evidence, missing source excerpts and untracked causal paths.",
-        "Valid diagnoses retain exact artifact excerpts and tracked paths without changing C0 model/runtime/token/timeouts.",
-        "Full production governance passes with C0 non-voting and every critic threshold unchanged."
+        "Replay run 35402388836 through the repaired C0 pipeline; the phone_16_9 blocked/overhead terminal failure must appear in the model projection with immutable path/line/hash identity.",
+        "C0's own diagnostic steps must not appear as unexecuted subject-job gates.",
+        "Unsupported/paraphrased quotations and nonexistent causal paths remain rejected; no grounding or critic threshold is weakened."
       ]
     }
   ],
   "verification_order": [
+    "C0R REPAIR SUFFICIENCY ACCEPTED",
     "CANONICAL CUMULATIVE B037-B061 ACTIVATION",
     "PUBLISHED OWNER B058-B061 GOVERNANCE PREFIX",
     "ONE B053-B057 PRODUCT AND EVIDENCE BATCH",
@@ -480,5 +481,1396 @@
     "STAGED CLOSEOUT AND APPROVED TRANSITION"
   ],
   "shipping_gameplay_runtime_change_authorized": true,
-  "approval_claimed": false
+  "approval_claimed": false,
+  "repair_sufficiency": {
+    "repair_groups": [
+      {
+        "group_id": "critic-input-path-mode",
+        "blocker_ids": [
+          "C0-T10-B037"
+        ],
+        "failure_family": {
+          "id": "critic-input-normalization",
+          "invariant": "Canonical critic-input hashes must be validated before one explicit transported path normalization; the consumer may never mix the two representations.",
+          "scope_dimensions": [
+            "critic-input",
+            "path-mode",
+            "hash-binding"
+          ],
+          "known_failed_cases": [
+            "The correctly packaged c7a18 T10 critic input was rejected by readiness after all capture, benchmark, packaging and upload work passed, so C3, C4 and C7 were skipped."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Keep canonical index/hash validation authoritative, then normalize through one explicit path-mode enum and exercise the actual transported package consumer.",
+        "why_this_fixes_cause": "Keep canonical index/hash validation authoritative, then normalize through one explicit path-mode enum and exercise the actual transported package consumer.",
+        "why_materially_different": "Replaces implicit path-shape assumptions with one explicit representation contract tested against the actual package consumer.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B037",
+            "diagnosed_root_cause": "B036 added a canonical critic-input/review-output-contract.txt assertion, while the readiness consumer validates index and hashes and then intentionally strips critic-input/ before prompt validation. The new helper hard-coded only the pre-transport representation and its tests omitted the real normalized consumer.",
+            "why_fix_changes_cause": "Keep canonical index/hash validation authoritative, then normalize through one explicit path-mode enum and exercise the actual transported package consumer. This directly targets T10 critic-input readiness path resolution.",
+            "expected_result": "Run canonical/transported positive and hostile unit tests.",
+            "failure_if_wrong": "The correctly packaged c7a18 T10 critic input was rejected by readiness after all capture, benchmark, packaging and upload work passed, so C3, C4 and C7 were skipped. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.task10.tests.test_build_critic_evidence tools.havenline.task10.tests.test_validate_critic_readiness"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "critic-input-path-mode-preflight",
+            "command": "python3 -m unittest tools.havenline.task10.tests.test_build_critic_evidence tools.havenline.task10.tests.test_validate_critic_readiness",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in critic-input-path-mode can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "specialist-response-bounds",
+        "blocker_ids": [
+          "C0-T10-B038"
+        ],
+        "failure_family": {
+          "id": "specialist-response-completion",
+          "invariant": "Every T10 specialist response must terminate inside the unchanged token budget with bounded observations/defects and all mandatory score fields intact.",
+          "scope_dimensions": [
+            "specialist-runtime",
+            "response-schema",
+            "token-budget"
+          ],
+          "known_failed_cases": [
+            "B036's prompt-only response instruction does not deterministically prevent the pinned specialist model from spending all 900 output tokens repeating one schema-valid observation and returning finish_reason=length."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Machine-bound T10 response lengths in the schema and post-parse validator instead of relying on prompt-only brevity.",
+        "why_this_fixes_cause": "Machine-bound T10 response lengths in the schema and post-parse validator instead of relying on prompt-only brevity.",
+        "why_materially_different": "Moves the constraint from natural-language prompting into an executable response contract without changing model, token budget, scores, or thresholds.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B038",
+            "diagnosed_root_cause": "The machine-enforced specialist response schema leaves individual observation and defect strings unbounded. Natural-language brevity instructions cannot reliably constrain decoding under the unchanged 900-token limit.",
+            "why_fix_changes_cause": "Machine-bound T10 response lengths in the schema and post-parse validator instead of relying on prompt-only brevity. This directly targets T10 C3/C4/C7 specialist response generation.",
+            "expected_result": "Focused schema tests prove exact T10 bounds, post-parse rejection and non-T10 behavior preservation.",
+            "failure_if_wrong": "B036's prompt-only response instruction does not deterministically prevent the pinned specialist model from spending all 900 output tokens repeating one schema-valid observation and returning finish_reason=length. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.production.tests.test_specialist_critic_runner"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "specialist-response-bounds-preflight",
+            "command": "python3 -m unittest tools.havenline.production.tests.test_specialist_critic_runner",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in specialist-response-bounds can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "reviewer-canary",
+        "blocker_ids": [
+          "C0-T10-B039"
+        ],
+        "failure_family": {
+          "id": "specialist-runtime-preflight",
+          "invariant": "Reviewer/schema repairs must be falsifiable on exact retained evidence before a new full capture/benchmark candidate is published.",
+          "scope_dimensions": [
+            "evidence-identity",
+            "runtime-identity",
+            "transport"
+          ],
+          "known_failed_cases": [
+            "There is no inexpensive exact-runtime specialist canary that can prove reviewer/schema repairs on retained evidence before another full capture and benchmark candidate is published."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Use a diagnostic-only exact-artifact canary that separately binds old evidence bytes and current reviewer/runtime bytes and forbids approval reuse.",
+        "why_this_fixes_cause": "Use a diagnostic-only exact-artifact canary that separately binds old evidence bytes and current reviewer/runtime bytes and forbids approval reuse.",
+        "why_materially_different": "Adds a cheap exact-runtime transport proof rather than discovering reviewer transport defects after another full candidate build.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B039",
+            "diagnosed_root_cause": "T10 has root-cause-specific offline package replay but lacks a task-owned diagnostic path that binds old evidence identity separately from new runner identity and executes the real pinned specialist runtime.",
+            "why_fix_changes_cause": "Use a diagnostic-only exact-artifact canary that separately binds old evidence bytes and current reviewer/runtime bytes and forbids approval reuse. This directly targets Pre-publication reviewer/runtime proof ordering.",
+            "expected_result": "Unit tests reject wrong run conclusion, artifact, source, name, size, digest, archive layout, group coverage, response length, finish reason, provider/model/revision/runtime, request sampling/token/schema fields and diagnostic labeling.",
+            "failure_if_wrong": "There is no inexpensive exact-runtime specialist canary that can prove reviewer/schema repairs on retained evidence before another full capture and benchmark candidate is published. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.task10.tests.test_reviewer_canary tools.havenline.task10.tests.test_task10_workflows"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "reviewer-canary-preflight",
+            "command": "python3 -m unittest tools.havenline.task10.tests.test_reviewer_canary tools.havenline.task10.tests.test_task10_workflows",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in reviewer-canary can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "repair-lifecycle",
+        "blocker_ids": [
+          "C0-T10-B040"
+        ],
+        "failure_family": {
+          "id": "fix-required-lifecycle-authority",
+          "invariant": "Every T10 repair candidate must operate under synchronized FIX_REQUIRED authorities and canonical C0/repair-plan enforcement.",
+          "scope_dimensions": [
+            "registry",
+            "dependency-graph",
+            "ownership",
+            "task-gate"
+          ],
+          "known_failed_cases": [
+            "Repeated failed T10 repair candidates remained ASSIGNED, so the canonical anti-loop builder gate was never activated and uniquely named reports did not constrain later diffs."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "GOVERNANCE",
+        "causal_mechanism": "Synchronize all lifecycle authorities to FIX_REQUIRED, preserve assignment provenance, and make canonical repair artifacts authoritative.",
+        "why_this_fixes_cause": "Synchronize all lifecycle authorities to FIX_REQUIRED, preserve assignment provenance, and make canonical repair artifacts authoritative.",
+        "why_materially_different": "Replaces ad-hoc uniquely named repair artifacts with the canonical machine-enforced repair lifecycle.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B040",
+            "diagnosed_root_cause": "The repair lifecycle was handled through ad hoc uniquely named review artifacts without transitioning all lifecycle authorities to FIX_REQUIRED and activating the canonical report/plan pair required by the architecture.",
+            "why_fix_changes_cause": "Synchronize all lifecycle authorities to FIX_REQUIRED, preserve assignment provenance, and make canonical repair artifacts authoritative. This directly targets T10 repair lifecycle and machine-enforced repair scope.",
+            "expected_result": "Lifecycle tests prove exact FIX_REQUIRED agreement and reject any partial transition, cleared active ownership, changed assignment base, advanced approval or unlocked T11+ task.",
+            "failure_if_wrong": "Repeated failed T10 repair candidates remained ASSIGNED, so the canonical anti-loop builder gate was never activated and uniquely named reports did not constrain later diffs. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.production.tests.test_t10_activation_validation"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "repair-lifecycle-preflight",
+            "command": "python3 -m unittest tools.havenline.production.tests.test_t10_activation_validation",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in repair-lifecycle can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "c0-invocation-intelligence",
+        "blocker_ids": [
+          "C0-T10-B041"
+        ],
+        "failure_family": {
+          "id": "automatic-failure-observation",
+          "invariant": "Every terminal T10 failure must invoke reusable C0/factory observation and failure intelligence must consume the collected failed-log field.",
+          "scope_dimensions": [
+            "workflow-routing",
+            "failure-packet",
+            "history"
+          ],
+          "known_failed_cases": [
+            "The architecture's failure-observation and historical-intelligence path was not invoked by T10 failures, and the packet/query interface drops the failure log even when C0 is run."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "GOVERNANCE",
+        "causal_mechanism": "Wire explicit terminal failures to the reusable C0 workflow and make failure intelligence consume failed_logs with bounded compatibility.",
+        "why_this_fixes_cause": "Wire explicit terminal failures to the reusable C0 workflow and make failure intelligence consume failed_logs with bounded compatibility.",
+        "why_materially_different": "Turns C0 from an ad-hoc/manual side path into the standard automatic failure disposition without changing its non-voting role.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B041",
+            "diagnosed_root_cause": "T10 omitted the standard C0 failure job, and a locked control-plane producer/consumer field-name mismatch prevents the historical matcher from seeing collected failure logs.",
+            "why_fix_changes_cause": "Wire explicit terminal failures to the reusable C0 workflow and make failure intelligence consume failed_logs with bounded compatibility. This directly targets T10 failed-run C0/factory observation and cross-task failure intelligence.",
+            "expected_result": "Workflow tests prove C0 invocation on terminal T10 failure and no false invocation/authority on success, skip, cancellation or supersession.",
+            "failure_if_wrong": "The architecture's failure-observation and historical-intelligence path was not invoked by T10 failures, and the packet/query interface drops the failure log even when C0 is run. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.production.tests.test_failure_intelligence_packet tools.havenline.task10.tests.test_task10_workflows"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "c0-invocation-intelligence-preflight",
+            "command": "python3 -m unittest tools.havenline.production.tests.test_failure_intelligence_packet tools.havenline.task10.tests.test_task10_workflows",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in c0-invocation-intelligence can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "closeout-assembler",
+        "blocker_ids": [
+          "C0-T10-B042"
+        ],
+        "failure_family": {
+          "id": "closure-assembly-integrity",
+          "invariant": "Proposed T10 closure records must be deterministically assembled from exact-source validated inputs and rehearse the real closure consumers without publishing or inventing approval.",
+          "scope_dimensions": [
+            "closure-records",
+            "git-bytes",
+            "defect-disposition"
+          ],
+          "known_failed_cases": [
+            "No executable producer proves that T10's transport critic aggregate and exported records can become the canonical closure records consumed by closure_validator and the atomic lifecycle closeout gates."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Use a staged non-authoritative assembler, exact native-Git ReviewExports bytes, and blocker-to-diff-to-proof identity binding.",
+        "why_this_fixes_cause": "Use a staged non-authoritative assembler, exact native-Git ReviewExports bytes, and blocker-to-diff-to-proof identity binding.",
+        "why_materially_different": "Adds one executable end-to-end closure producer/rehearsal instead of trusting individually strict but disconnected components.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B042",
+            "diagnosed_root_cause": "The closeout design has individually strict components but no deterministic task-owned assembler and disposable end-to-end rehearsal across their actual file-system and git-root interfaces. In addition, the task-owned ReviewExports directory lacks a narrow attribute override required for byte-exact native-Git retention of its bounded durable ZIPs, and the initial assembler bound defect IDs/classifications but not each defect's canonical affected object, actual causal diff or proof identity.",
+            "why_fix_changes_cause": "Use a staged non-authoritative assembler, exact native-Git ReviewExports bytes, and blocker-to-diff-to-proof identity binding. This directly targets T10 final closure assembly and atomic owner handoff.",
+            "expected_result": "Positive synthetic rehearsal executes original export commit, canonical export, aggregate conversion, proposed lifecycle staging, derived snapshot, approval retention and every real closure consumer.",
+            "failure_if_wrong": "No executable producer proves that T10's transport critic aggregate and exported records can become the canonical closure records consumed by closure_validator and the atomic lifecycle closeout gates. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.task10.tests.test_assemble_closeout tools.havenline.task10.tests.test_export_closure_records"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "closeout-assembler-preflight",
+            "command": "python3 -m unittest tools.havenline.task10.tests.test_assemble_closeout tools.havenline.task10.tests.test_export_closure_records",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in closeout-assembler can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "c1c2-identity-binding",
+        "blocker_ids": [
+          "C0-T10-B043"
+        ],
+        "failure_family": {
+          "id": "critic-raw-record-identity",
+          "invariant": "C1/C2 raw payload, validated record, manifest, candidate, task, critic, and reviewer provenance must all agree before scores can be consumed.",
+          "scope_dimensions": [
+            "critic-identity",
+            "manifest-hash",
+            "runtime-provenance"
+          ],
+          "known_failed_cases": [
+            "The T10 critic aggregate accepts C1/C2 raw payloads whose embedded candidate, critic, task, manifest or reviewer provenance conflicts with the separately validated record."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Require exact raw-to-record-to-manifest equality before comparing review content.",
+        "why_this_fixes_cause": "Require exact raw-to-record-to-manifest equality before comparing review content.",
+        "why_materially_different": "Closes the identity/provenance gap instead of trusting content equality alone.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B043",
+            "diagnosed_root_cause": "The C1/C2 branch of verify_original omits complete raw-to-record-to-manifest task, identity and reviewer-provenance equality before comparing review content.",
+            "why_fix_changes_cause": "Require exact raw-to-record-to-manifest equality before comparing review content. This directly targets C1/C2 critic transport integrity.",
+            "expected_result": "Positive aggregate/export fixtures contain and preserve exact raw identity fields.",
+            "failure_if_wrong": "The T10 critic aggregate accepts C1/C2 raw payloads whose embedded candidate, critic, task, manifest or reviewer provenance conflicts with the separately validated record. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.task10.tests.test_aggregate_critics tools.havenline.task10.tests.test_export_closure_records"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "c1c2-identity-binding-preflight",
+            "command": "python3 -m unittest tools.havenline.task10.tests.test_aggregate_critics tools.havenline.task10.tests.test_export_closure_records",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in c1c2-identity-binding can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "v32-consumer-sync",
+        "blocker_ids": [
+          "C0-T10-B044"
+        ],
+        "failure_family": {
+          "id": "v32-producer-consumer-contract",
+          "invariant": "Hosted governance must consume the exact current V3.2 validator report cardinality and authorized-change list.",
+          "scope_dimensions": [
+            "architecture-lock",
+            "workflow-consumer",
+            "exact-contract"
+          ],
+          "known_failed_cases": [
+            "Hosted owner governance run 35375796218 job 105700056549 passed the actual V3.2 validator and all preceding gates, then failed because the workflow's jq consumer still required the pre-B041 locked-file count and three-entry authorization list."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "GOVERNANCE",
+        "causal_mechanism": "Bind the hosted jq predicate to the exact authoritative V3.2 report and hostile-test interface drift.",
+        "why_this_fixes_cause": "Bind the hosted jq predicate to the exact authoritative V3.2 report and hostile-test interface drift.",
+        "why_materially_different": "Repairs the duplicated stale consumer contract rather than changing the authoritative validator.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B044",
+            "diagnosed_root_cause": "B041 extended the authoritative V3.2 report under exact lock validation, but the serial hosted workflow consumer duplicated the old output cardinality and authorization list and was omitted from the B041 blast-radius audit.",
+            "why_fix_changes_cause": "Bind the hosted jq predicate to the exact authoritative V3.2 report and hostile-test interface drift. This directly targets Production-governance V3.2 report consumer.",
+            "expected_result": "The extracted workflow jq predicate accepts the actual passing V3.2 validator report.",
+            "failure_if_wrong": "Hosted owner governance run 35375796218 job 105700056549 passed the actual V3.2 validator and all preceding gates, then failed because the workflow's jq consumer still required the pre-B041 locked-file count and three-entry authorization list. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.production.tests.test_production_governance_v32_consumer"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "v32-consumer-sync-preflight",
+            "command": "python3 -m unittest tools.havenline.production.tests.test_production_governance_v32_consumer",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in v32-consumer-sync can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "builder-repair-causal-enforcement",
+        "blocker_ids": [
+          "C0-T10-B045"
+        ],
+        "failure_family": {
+          "id": "builder-repair-causal-touch",
+          "invariant": "Bookkeeping files can never satisfy a causal repair; every blocker must touch at least one authorized non-bookkeeping causal file.",
+          "scope_dimensions": [
+            "repair-plan",
+            "actual-diff",
+            "protected-files"
+          ],
+          "known_failed_cases": [
+            "The canonical builder repair gate accepts a post-build diff containing only C0/repair-plan bookkeeping as if every independent blocker received a causal implementation."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "GOVERNANCE",
+        "causal_mechanism": "Separate canonical C0/plan bookkeeping from causal surfaces and require an actual non-bookkeeping touch for every blocker.",
+        "why_this_fixes_cause": "Separate canonical C0/plan bookkeeping from causal surfaces and require an actual non-bookkeeping touch for every blocker.",
+        "why_materially_different": "Makes the builder gate prove causal implementation rather than merely seeing changed canonical repair documents.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B045",
+            "diagnosed_root_cause": "The builder gate does not distinguish canonical diagnosis/plan bookkeeping from blocker-specific causal files when authorizing the diff and checking that every fix changed.",
+            "why_fix_changes_cause": "Separate canonical C0/plan bookkeeping from causal surfaces and require an actual non-bookkeeping touch for every blocker. This directly targets Canonical FIX_REQUIRED builder repair enforcement.",
+            "expected_result": "C0-only, plan-only and both-doc-only diffs fail; bookkeeping listed in a fix and empty causal sets fail.",
+            "failure_if_wrong": "The canonical builder repair gate accepts a post-build diff containing only C0/repair-plan bookkeeping as if every independent blocker received a causal implementation. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.production.tests.test_c0_builder"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "builder-repair-causal-enforcement-preflight",
+            "command": "python3 -m unittest tools.havenline.production.tests.test_c0_builder",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in builder-repair-causal-enforcement can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "specialist-request-retention",
+        "blocker_ids": [
+          "C0-T10-B046"
+        ],
+        "failure_family": {
+          "id": "specialist-request-byte-identity",
+          "invariant": "The retained specialist request bytes must be exactly the bytes transmitted to the pinned reviewer runtime.",
+          "scope_dimensions": [
+            "request-serialization",
+            "audit-provenance",
+            "network-payload"
+          ],
+          "known_failed_cases": [
+            "The specialist runner transmits the complete HTTP request but preserves only the first 250000 characters of a separately pretty-printed request document, producing invalid provenance for larger visual groups."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Serialize once, persist complete bytes, and use those identical bytes as Request.data.",
+        "why_this_fixes_cause": "Serialize once, persist complete bytes, and use those identical bytes as Request.data.",
+        "why_materially_different": "Eliminates double serialization and audit-copy truncation without changing reviewer inputs or thresholds.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B046",
+            "diagnosed_root_cause": "request_local serializes the same logical request twice using different formatting and applies a fixed character slice only to the audit copy. The network request remains complete, but the source-bound request record becomes malformed and cannot prove what the critic received.",
+            "why_fix_changes_cause": "Serialize once, persist complete bytes, and use those identical bytes as Request.data. This directly targets Specialist critic request provenance retention.",
+            "expected_result": "A mocked request larger than 250000 bytes produces valid recorded JSON whose bytes equal Request.data and whose parsed value equals the original logical body.",
+            "failure_if_wrong": "The specialist runner transmits the complete HTTP request but preserves only the first 250000 characters of a separately pretty-printed request document, producing invalid provenance for larger visual groups. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.production.tests.test_specialist_critic_runner"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "specialist-request-retention-preflight",
+            "command": "python3 -m unittest tools.havenline.production.tests.test_specialist_critic_runner",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in specialist-request-retention can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "c0-job-log-transport",
+        "blocker_ids": [
+          "C0-T10-B047",
+          "C0-T10-B052"
+        ],
+        "failure_family": {
+          "id": "same-parent-failure-log-collection",
+          "invariant": "C0 must retrieve exact completed failed-job logs while the parent run is active, fail closed on transport errors, and prove the path cheaply before full validation.",
+          "scope_dimensions": [
+            "job-identity",
+            "log-bytes",
+            "same-parent-run",
+            "hosted-preflight"
+          ],
+          "known_failed_cases": [
+            "The reusable C0 workflow runs inside its failed parent workflow while that run is still in progress, but it uses run-level `gh run view --log-failed` and `--log`, which refuse to return logs until the whole run completes.",
+            "Both reusable C0 jobs for 48cc fail while collecting already-completed source-job logs and discard the command return code and stderr, leaving the automated root-cause system without the very failure evidence it is meant to analyze."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Use exact job endpoints/bytes with sanitized bounded failure diagnostics and a task-owned hosted sentinel preflight.",
+        "why_this_fixes_cause": "Use exact job endpoints/bytes with sanitized bounded failure diagnostics and a task-owned hosted sentinel preflight.",
+        "why_materially_different": "Replaces run-completion-oriented log retrieval and swallowed errors with exact job-scoped transport plus a cheap hosted proof.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B047",
+            "diagnosed_root_cause": "The locked reusable workflow uses a run-completion-oriented CLI interface from inside the same active run. Its fallback repeats the same run-status precondition and `|| true` converts retrieval failure into apparently usable evidence. No tested job-scoped collector preserves failure, timeout, cancellation and startup-failure semantics.",
+            "why_fix_changes_cause": "Use exact job endpoints/bytes with sanitized bounded failure diagnostics and a task-owned hosted sentinel preflight. This directly targets Reusable C0 failed-job log collection.",
+            "expected_result": "Authenticated evidence proves a completed job log is retrievable while its parent remains in_progress; unit tests prove deterministic failure/timed_out selection and exact job/run identity.",
+            "failure_if_wrong": "The reusable C0 workflow runs inside its failed parent workflow while that run is still in progress, but it uses run-level `gh run view --log-failed` and `--log`, which refuse to return logs until the whole run completes. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.production.tests.test_failure_job_log_collection tools.havenline.task10.tests.test_pipeline_preflight"
+          },
+          {
+            "blocker_id": "C0-T10-B052",
+            "diagnosed_root_cause": "The job-log collector assumes arbitrary log bytes are printable through gh's default output guard and erases diagnostic details when that assumption fails. The repair system also lacks a cheap hosted preflight that exercises exact lifecycle, LFS, canonical-C0, closeout and same-parent log boundaries before triggering the full benchmark and six critics.",
+            "why_fix_changes_cause": "Use exact job endpoints/bytes with sanitized bounded failure diagnostics and a task-owned hosted sentinel preflight. This directly targets T10 failure-evidence collection and hosted anti-loop preflight.",
+            "expected_result": "Owner unit tests prove exact command/bytes, bounded sanitized rc/stderr, no secret/signed-URL disclosure, atomicity and all existing identity/cancellation/startup hostile cases; the exact CR and registry inventory validate.",
+            "failure_if_wrong": "Both reusable C0 jobs for 48cc fail while collecting already-completed source-job logs and discard the command return code and stderr, leaving the automated root-cause system without the very failure evidence it is meant to analyze. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.production.tests.test_failure_job_log_collection tools.havenline.task10.tests.test_pipeline_preflight"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "c0-job-log-transport-preflight",
+            "command": "python3 -m unittest tools.havenline.production.tests.test_failure_job_log_collection tools.havenline.task10.tests.test_pipeline_preflight",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in c0-job-log-transport can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "presentation-action-clarity",
+        "blocker_ids": [
+          "C0-T10-B048",
+          "C0-T10-B054"
+        ],
+        "failure_family": {
+          "id": "world-transform-action-feedback",
+          "invariant": "Every lifecycle state must make the next player action, exact resource identity/quantity, pending status, and accepted payment history legible without adding authority.",
+          "scope_dimensions": [
+            "blocked",
+            "preview",
+            "committing",
+            "complete",
+            "resource-cues"
+          ],
+          "known_failed_cases": [
+            "The completed independent C4 diagnostic review of the retained c7a18 source scored interactable_clarity and next_action_clarity at 8.5, world_change_clarity at 9.0, and reported unresolved blocked-state and committing-state feedback defects.",
+            "C4 scores interactable clarity 8.5 and next-action clarity 7.0; C3 world-response readability is exactly 9.0 on the dense motion board."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "PRODUCT_LOGIC",
+        "causal_mechanism": "Use action-first compact copy, deterministic resource pictograms, exact quantities, distinct pending/paid states, and bounded committing flow within the existing four-node presentation layer.",
+        "why_this_fixes_cause": "Use action-first compact copy, deterministic resource pictograms, exact quantities, distinct pending/paid states, and bounded committing flow within the existing four-node presentation layer.",
+        "why_materially_different": "Changes the information hierarchy and visual cues instead of adding more equal-weight text or changing transaction authority.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B048",
+            "diagnosed_root_cause": "world_transform_view.gd renders transition, full cost, generic reason and exact shortfall as equal-weight Label3D lines, so the actionable delivery instruction is last and visually undifferentiated. Blocked geometry communicates only generic failure color, and committing animates target scale without a resource-to-target cue. Exact resource data exists and authority is correct, but the presentation does not make resource identity, action priority or pending application visually legible.",
+            "why_fix_changes_cause": "Use action-first compact copy, deterministic resource pictograms, exact quantities, distinct pending/paid states, and bounded committing flow within the existing four-node presentation layer. This directly targets T10 neutral world-transform resource and action feedback.",
+            "expected_result": "Direct Godot tests cover blocked shortfall and prerequisite variants, same-state updates, ready/preview/committing/complete/replay semantics, exact resource data and no fabricated percentage/debit/payment.",
+            "failure_if_wrong": "The completed independent C4 diagnostic review of the retained c7a18 source scored interactable_clarity and next_action_clarity at 8.5, world_change_clarity at 9.0, and reported unresolved blocked-state and committing-state feedback defects. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_integration.gd"
+          },
+          {
+            "blocker_id": "C0-T10-B054",
+            "diagnosed_root_cause": "Blocked feedback repeats the same shortfall and cost while complete feedback buries the next action below completion/payment history.",
+            "why_fix_changes_cause": "Use action-first compact copy, deterministic resource pictograms, exact quantities, distinct pending/paid states, and bounded committing flow within the existing four-node presentation layer. This directly targets T10 presentation and critic evidence.",
+            "expected_result": "Focused exact-boundary and hostile tests pass.",
+            "failure_if_wrong": "C4 scores interactable clarity 8.5 and next-action clarity 7.0; C3 world-response readability is exactly 9.0 on the dense motion board. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_integration.gd"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "presentation-action-clarity-preflight",
+            "command": "Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_integration.gd",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in presentation-action-clarity can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "canonical-c0-closeout-ingestion",
+        "blocker_ids": [
+          "C0-T10-B049"
+        ],
+        "failure_family": {
+          "id": "canonical-diagnosis-trust-domain",
+          "invariant": "The exact canonical non-voting C0 diagnosis must be readable as diagnosis while reusable approval-proof readers remain hostile to diagnostic provenance.",
+          "scope_dimensions": [
+            "canonical-c0",
+            "hash-binding",
+            "approval-proof"
+          ],
+          "known_failed_cases": [
+            "The staged closeout assembler rejects the genuine canonical C0 report before validating any approval proof because its recursive diagnostic-provenance scan treats narrative history containing the words `diagnostic-only` as reusable diagnostic evidence."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Give canonical C0 a dedicated exact-byte/identity reader and keep strict recursive diagnostic rejection on every reusable approval proof.",
+        "why_this_fixes_cause": "Give canonical C0 a dedicated exact-byte/identity reader and keep strict recursive diagnostic rejection on every reusable approval proof.",
+        "why_materially_different": "Separates two trust domains instead of weakening the approval-proof safeguards globally.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B049",
+            "diagnosed_root_cause": "assemble_closeout uses one evidence-provenance reader for two different trust domains: exact canonical C0 diagnosis and reusable approval proof. A broad lexical safeguard appropriate for approval evidence is therefore applied to descriptive root-cause prose and rejects truthful history before exact canonical identity can be checked.",
+            "why_fix_changes_cause": "Give canonical C0 a dedicated exact-byte/identity reader and keep strict recursive diagnostic rejection on every reusable approval proof. This directly targets T10 canonical C0 diagnosis ingestion at staged closeout.",
+            "expected_result": "The actual canonical C0 bytes pass only the dedicated reader; altered hash/bytes/path, wrong identity, incomplete diagnosis, voting, approval or score fields fail.",
+            "failure_if_wrong": "The staged closeout assembler rejects the genuine canonical C0 report before validating any approval proof because its recursive diagnostic-provenance scan treats narrative history containing the words `diagnostic-only` as reusable diagnostic evidence. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.task10.tests.test_assemble_closeout"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "canonical-c0-closeout-ingestion-preflight",
+            "command": "python3 -m unittest tools.havenline.task10.tests.test_assemble_closeout",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in canonical-c0-closeout-ingestion can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "activation-lifecycle-validation",
+        "blocker_ids": [
+          "C0-T10-B050"
+        ],
+        "failure_family": {
+          "id": "long-lived-t10-lifecycle-validation",
+          "invariant": "Default T10 validation must accept every legitimate nonterminal lifecycle only when graph, registry, ownership, and task-gate authorities remain synchronized.",
+          "scope_dimensions": [
+            "lifecycle-state",
+            "authority-sync",
+            "frozen-owner"
+          ],
+          "known_failed_cases": [
+            "Both 48cc primary validation lanes stop before tests because default prepare_activation validation rejects the canonical T10 FIX_REQUIRED lifecycle; the same hard-coded list would later reject INTEGRATION_READY, INTEGRATING and UNDER_REVIEW."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Expand only the validation allowlist and enforce cross-authority identity/status consistency; leave activation-write authority unchanged.",
+        "why_this_fixes_cause": "Expand only the validation allowlist and enforce cross-authority identity/status consistency; leave activation-write authority unchanged.",
+        "why_materially_different": "Repairs a stale preparation-era validator without broadening transition or approval authority.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B050",
+            "diagnosed_root_cause": "A preparation-era validation-state allowlist was reused as the lifecycle allowlist for the long-lived registered validation command. It was never composed with repair and integration-review states and does not verify that active authority records remain synchronized.",
+            "why_fix_changes_cause": "Expand only the validation allowlist and enforce cross-authority identity/status consistency; leave activation-write authority unchanged. This directly targets T10 validation-only lifecycle handling in prepare_activation.",
+            "expected_result": "The actual FIX_REQUIRED checkout and disposable BLOCKED/INTEGRATION_READY/INTEGRATING/UNDER_REVIEW fixtures pass validation with integration_allowed=false and task_approved=false.",
+            "failure_if_wrong": "Both 48cc primary validation lanes stop before tests because default prepare_activation validation rejects the canonical T10 FIX_REQUIRED lifecycle; the same hard-coded list would later reject INTEGRATION_READY, INTEGRATING and UNDER_REVIEW. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.task10.tests.test_prepare_activation_validation"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "activation-lifecycle-validation-preflight",
+            "command": "python3 -m unittest tools.havenline.task10.tests.test_prepare_activation_validation",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in activation-lifecycle-validation can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "hermetic-closeout-lfs",
+        "blocker_ids": [
+          "C0-T10-B051"
+        ],
+        "failure_family": {
+          "id": "disposable-closeout-hermeticity",
+          "invariant": "Disposable closeout clone/checkout must not require unrelated historical LFS objects while exact ReviewExports committed bytes remain verified.",
+          "scope_dimensions": [
+            "git-lfs",
+            "disposable-clone",
+            "reviewexports-bytes"
+          ],
+          "known_failed_cases": [
+            "The 48cc adapter lane fails two closeout-assembler tests in a clean hosted runner because their disposable local clone attempts to smudge an unrelated historical T01 LFS object that is absent from the remote object store."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Set GIT_LFS_SKIP_SMUDGE only in child clone/checkout environments used by the assembler and its tests.",
+        "why_this_fixes_cause": "Set GIT_LFS_SKIP_SMUDGE only in child clone/checkout environments used by the assembler and its tests.",
+        "why_materially_different": "Removes an irrelevant external binary prerequisite without changing repository/global LFS policy or closure byte checks.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B051",
+            "diagnosed_root_cause": "Disposable closeout repositories inherit ambient Git LFS smudge behavior. Checkout therefore expands every historical LFS pointer even though the consumer never reads those assets, making an irrelevant missing binary a prerequisite and allowing local ambient configuration to mask the hosted failure.",
+            "why_fix_changes_cause": "Set GIT_LFS_SKIP_SMUDGE only in child clone/checkout environments used by the assembler and its tests. This directly targets Hermetic disposable-git closeout rehearsal and staged assembler checkout.",
+            "expected_result": "With no ambient skip variable, actual clone/checkout and both closeout rehearsals pass without fetching irrelevant historical LFS objects.",
+            "failure_if_wrong": "The 48cc adapter lane fails two closeout-assembler tests in a clean hosted runner because their disposable local clone attempts to smudge an unrelated historical T01 LFS object that is absent from the remote object store. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.task10.tests.test_assemble_closeout"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "hermetic-closeout-lfs-preflight",
+            "command": "python3 -m unittest tools.havenline.task10.tests.test_assemble_closeout",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in hermetic-closeout-lfs can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "layout-feasibility",
+        "blocker_ids": [
+          "C0-T10-B053",
+          "C0-T10-B055"
+        ],
+        "failure_family": {
+          "id": "projected-label-feasibility",
+          "invariant": "For every mandatory device, lifecycle state, and camera angle, the status label must have a legal placement inside the safe frame with required clearance, no overlap, preserved priority, and readability scale >=0.85.",
+          "scope_dimensions": [
+            "device",
+            "lifecycle-state",
+            "camera-angle",
+            "containment",
+            "clearance",
+            "readability"
+          ],
+          "known_failed_cases": [
+            "C1 and C2 independently rejected the original committing-overhead collision. Exact candidates 5fc87f and 0f9303 then passed primary/structural gates but their isolated phone 16:9 ready/overhead projection placed the label rectangle 20.006 px beyond the 27 px safe-frame inset.",
+            "The strict projection invariant stopped both exact 5fc87f and 0f9303 isolated runs at the first phone 16:9 ready/overhead out-of-frame label before any critic executed; the second run proved the width-only repair was ineffective."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": true,
+          "complete_observable_set_collected": true,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": [
+            "run 35441401273 / artifact 10584122088 enumerated the complete pre-solver 216-case domain and found 32 failures, all overhead containment.",
+            "run 35443178004 / artifact 10584940146 enumerated the complete bounded solver prototype domain: 216 projections, 0 failures, product_projection_passed=true, diagnostic-only/nonapproval."
+          ]
+        },
+        "strategy_kind": "ALGORITHM",
+        "causal_mechanism": "Replace unconditional above/right/left fallback with measured legal-region search, word-preserving reflow, bounded scale only after reflow, fail-closed infeasibility, and positive one-pixel fit slack.",
+        "why_this_fixes_cause": "Replace unconditional above/right/left fallback with measured legal-region search, word-preserving reflow, bounded scale only after reflow, fail-closed infeasibility, and positive one-pixel fit slack.",
+        "why_materially_different": "Replaces serial width/pixel-size symptom tuning with a constrained layout solver validated against the entire 6×6×6 projection domain.",
+        "same_family_attempt_count": 2,
+        "prior_attempts": [
+          {
+            "strategy": "Reduce Label3D.width from 1000 to 960",
+            "outcome": "FAILED",
+            "same_family": true,
+            "lesson": "Godot natural measured line width did not change; 0f9303 reproduced the same projected rectangle."
+          },
+          {
+            "strategy": "Reduce label pixel size from 0.006 to 0.0057",
+            "outcome": "PARTIAL",
+            "same_family": true,
+            "lesson": "Ready/overhead improved, but 8ab exposed blocked/overhead and exhaustive collection later found the whole overhead containment family."
+          }
+        ],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B053",
+            "diagnosed_root_cause": "The original Label3D separation collapsed in the required overhead camera. The first camera-plane repair removed response overlap, but reducing Label3D.width from 1000 to 960 did not change Godot's natural measured ready-label width; 0f9303 reproduced the exact same projected rectangle.",
+            "why_fix_changes_cause": "Replace unconditional above/right/left fallback with measured legal-region search, word-preserving reflow, bounded scale only after reflow, fail-closed infeasibility, and positive one-pixel fit slack. This directly targets T10 presentation and critic evidence.",
+            "expected_result": "Focused exact-boundary and hostile tests pass.",
+            "failure_if_wrong": "C1 and C2 independently rejected the original committing-overhead collision. Exact candidates 5fc87f and 0f9303 then passed primary/structural gates but their isolated phone 16:9 ready/overhead projection placed the label rectangle 20.006 px beyond the 27 px safe-frame inset. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "Havenline T10 exhaustive projection diagnostic run 35443178004 / artifact 10584940146"
+          },
+          {
+            "blocker_id": "C0-T10-B055",
+            "diagnosed_root_cause": "The new invariant works. Its exact repeat on 0f9303 proved Label3D.width was not reducing the natural measured line; the projected pixel scale is the causal size control for this camera lane.",
+            "why_fix_changes_cause": "Replace unconditional above/right/left fallback with measured legal-region search, word-preserving reflow, bounded scale only after reflow, fail-closed infeasibility, and positive one-pixel fit slack. This directly targets T10 presentation and critic evidence.",
+            "expected_result": "Focused exact-boundary and hostile tests pass.",
+            "failure_if_wrong": "The strict projection invariant stopped both exact 5fc87f and 0f9303 isolated runs at the first phone 16:9 ready/overhead out-of-frame label before any critic executed; the second run proved the width-only repair was ineffective. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "Havenline T10 exhaustive projection diagnostic run 35443178004 / artifact 10584940146"
+          }
+        ],
+        "full_domain_proof": {
+          "required": true,
+          "provided": true,
+          "method": "Bounded non-approval constrained-layout prototype executed the authoritative 6 devices × 6 lifecycle states × 6 camera angles matrix.",
+          "expected_cases": 216,
+          "covered_cases": 216
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "layout-feasibility-preflight",
+            "command": "Havenline T10 exhaustive projection diagnostic run 35443178004 / artifact 10584940146",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "A prior repair can make one observed example green while another case in the same family remains red.",
+            "why_covered": "The full 216-case matrix is mandatory and the solver fails closed when no legal lane exists."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in layout-feasibility can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "visual-evidence-density",
+        "blocker_ids": [
+          "C0-T10-B056"
+        ],
+        "failure_family": {
+          "id": "critic-visual-group-density",
+          "invariant": "C3/C4 evidence groups must preserve every required image while keeping each visual group small enough for individual-frame readability.",
+          "scope_dimensions": [
+            "motion-groups",
+            "device-groups",
+            "hash-preservation"
+          ],
+          "known_failed_cases": [
+            "C3 only fails the 12-frame motion group at 9.0 while its single-frame group scores 9.9; C4 only fails the 12-image device board."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Split ordered visual groups to at most six items while retaining every source file/category/device/state/hash.",
+        "why_this_fixes_cause": "Split ordered visual groups to at most six items while retaining every source file/category/device/state/hash.",
+        "why_materially_different": "Changes grouping density only; it does not remove evidence or alter scores.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B056",
+            "diagnosed_root_cause": "C3/C4 receive 12 visual items in single motion/device groups, shrinking otherwise readable individual images.",
+            "why_fix_changes_cause": "Split ordered visual groups to at most six items while retaining every source file/category/device/state/hash. This directly targets T10 presentation and critic evidence.",
+            "expected_result": "Focused exact-boundary and hostile tests pass.",
+            "failure_if_wrong": "C3 only fails the 12-frame motion group at 9.0 while its single-frame group scores 9.9; C4 only fails the 12-image device board. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.task10.tests.test_build_critic_evidence tools.havenline.task10.tests.test_validate_critic_readiness"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "visual-evidence-density-preflight",
+            "command": "python3 -m unittest tools.havenline.task10.tests.test_build_critic_evidence tools.havenline.task10.tests.test_validate_critic_readiness",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in visual-evidence-density can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "c7-context-binding",
+        "blocker_ids": [
+          "C0-T10-B057"
+        ],
+        "failure_family": {
+          "id": "c7-requirement-dimension-context",
+          "invariant": "C7 must distinguish R01-R14 requirement IDs from score dimensions and bind R05 lifecycle/R06 delivered-stock claims to exact passing reports.",
+          "scope_dimensions": [
+            "requirement-ids",
+            "score-dimensions",
+            "source-hashes"
+          ],
+          "known_failed_cases": [
+            "C7 scores all dimensions 9.8-9.9 but mislabels lifecycle as R06 and returns a role-confusion defect; output completes normally."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Build a C7-only context that names both namespaces and binds selected passing rows to exact domain/integration report hashes.",
+        "why_this_fixes_cause": "Build a C7-only context that names both namespaces and binds selected passing rows to exact domain/integration report hashes.",
+        "why_materially_different": "Fixes context semantics rather than altering C7 scoring or progression authority.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B057",
+            "diagnosed_root_cause": "The generic C7 brief conflates R01-R14 requirement IDs with six score dimensions and omits source-bound R05/R06 lifecycle/delivery rows.",
+            "why_fix_changes_cause": "Build a C7-only context that names both namespaces and binds selected passing rows to exact domain/integration report hashes. This directly targets T10 presentation and critic evidence.",
+            "expected_result": "Focused exact-boundary and hostile tests pass.",
+            "failure_if_wrong": "C7 scores all dimensions 9.8-9.9 but mislabels lifecycle as R06 and returns a role-confusion defect; output completes normally. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.task10.tests.test_build_critic_evidence tools.havenline.task10.tests.test_validate_critic_readiness"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "c7-context-binding-preflight",
+            "command": "python3 -m unittest tools.havenline.task10.tests.test_build_critic_evidence tools.havenline.task10.tests.test_validate_critic_readiness",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in c7-context-binding can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "actionable-defect-schema",
+        "blocker_ids": [
+          "C0-T10-B058"
+        ],
+        "failure_family": {
+          "id": "failed-score-actionability",
+          "invariant": "A T10 specialist result at or below the strict threshold must contain a concrete defect; a clean defect list is only legal when all mandatory scores are strictly above 9.0.",
+          "scope_dimensions": [
+            "scores",
+            "defects",
+            "strict-threshold"
+          ],
+          "known_failed_cases": [
+            "C3 returns world_response_readability 9.0 with defects=[]; the gate fails correctly but the repair system gets no cause."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Enforce the existing prompt rule in the response validator for T10 only.",
+        "why_this_fixes_cause": "Enforce the existing prompt rule in the response validator for T10 only.",
+        "why_materially_different": "Adds machine actionability while preserving model/runtime/token/threshold settings.",
+        "same_family_attempt_count": 0,
+        "prior_attempts": [],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B058",
+            "diagnosed_root_cause": "The T10 response schema permits scores at or below 9.0 with an empty defect list even though the prompt requires an actionable defect.",
+            "why_fix_changes_cause": "Enforce the existing prompt rule in the response validator for T10 only. This directly targets T10 critic/C0 production tooling.",
+            "expected_result": "Focused exact-boundary and hostile tests pass.",
+            "failure_if_wrong": "C3 returns world_response_readability 9.0 with defects=[]; the gate fails correctly but the repair system gets no cause. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "python3 -m unittest tools.havenline.production.tests.test_specialist_critic_runner"
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "actionable-defect-schema-preflight",
+            "command": "python3 -m unittest tools.havenline.production.tests.test_specialist_critic_runner",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "The proposed repair can satisfy a fixture while the real consumer/hosted interface remains broken.",
+            "why_covered": "The group preflight targets the actual consumer, hosted interface, or exact source-bound records named by C0."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in actionable-defect-schema can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      },
+      {
+        "group_id": "c0-semantic-projection-grounding",
+        "blocker_ids": [
+          "C0-T10-B059",
+          "C0-T10-B060",
+          "C0-T10-B061"
+        ],
+        "failure_family": {
+          "id": "c0-terminal-evidence-grounding",
+          "invariant": "C0 must fit its request budget while preserving and prioritizing terminal source-bound failure evidence, excluding diagnostic-job self-state from subject-job conclusions, and accepting only exact retained quotations/tracked paths.",
+          "scope_dimensions": [
+            "request-budget",
+            "artifact-priority",
+            "exact-quotes",
+            "tracked-paths",
+            "subject-job-boundary"
+          ],
+          "known_failed_cases": [
+            "The exact 0e83 request is 29970 tokens against a 16384-token context; runtime.log contains the cause but the advisor artifact only exposes a traceback.",
+            "C0 completed inside the B059 token budget but its diagnosis omitted the exact failed integration assertion already present in the downloaded a210 artifact.",
+            "C0 contradicted the packet by claiming required_critics was empty and proposed nonexistent .github/workflows/task10_workflow.yml."
+          ],
+          "unexecuted_or_unknown_cases": [],
+          "observable_exhaustive_collection_required": false,
+          "complete_observable_set_collected": false,
+          "full_failure_family_closed_by_design": true,
+          "collection_evidence": []
+        },
+        "strategy_kind": "TOOLING",
+        "causal_mechanism": "Keep the authoritative packet hash-bound, project semantically under budget, rank terminal failed artifact excerpts before generic successful evidence, separate C0's own job from subject unexecuted checks, and retain strict quote/path validation.",
+        "why_this_fixes_cause": "Keep the authoritative packet hash-bound, project semantically under budget, rank terminal failed artifact excerpts before generic successful evidence, separate C0's own job from subject unexecuted checks, and retain strict quote/path validation.",
+        "why_materially_different": "Extends the existing bounded/grounded pipeline to the exact failure exposed by 8ab: evidence collection succeeded but selection priority and subject-job boundaries still produced an unsupported diagnosis.",
+        "same_family_attempt_count": 2,
+        "prior_attempts": [
+          {
+            "strategy": "Bound the C0 model packet semantically",
+            "outcome": "PARTIAL",
+            "same_family": true,
+            "lesson": "Request size became valid, but terminal artifact evidence could still lose the shared excerpt budget."
+          },
+          {
+            "strategy": "Collect source-addressed artifact diagnostics and strict grounding",
+            "outcome": "PARTIAL",
+            "same_family": true,
+            "lesson": "The exact terminal line was retained, yet projection priority omitted it and C0 self-steps contaminated subject-job interpretation."
+          }
+        ],
+        "blocker_coverage": [
+          {
+            "blocker_id": "C0-T10-B059",
+            "diagnosed_root_cause": "C0 pretty-prints the full packet, slices the first 60000 characters without semantic boundaries or budget calculation, and discards HTTP 400 response details.",
+            "why_fix_changes_cause": "Keep the authoritative packet hash-bound, project semantically under budget, rank terminal failed artifact excerpts before generic successful evidence, separate C0's own job from subject unexecuted checks, and retain strict quote/path validation. This directly targets T10 critic/C0 production tooling.",
+            "expected_result": "Focused exact-boundary and hostile tests pass.",
+            "failure_if_wrong": "The exact 0e83 request is 29970 tokens against a 16384-token context; runtime.log contains the cause but the advisor artifact only exposes a traceback. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "Replay run 35402388836 failure packet through the repaired C0 projection and require the phone_16_9 blocked/overhead terminal excerpt to survive with valid SOURCE | EXACT_QUOTE bindings."
+          },
+          {
+            "blocker_id": "C0-T10-B060",
+            "diagnosed_root_cause": "The workflow hashed downloaded artifacts without extracting a bounded, source-addressed projection of nested text diagnostics into the immutable C0 packet.",
+            "why_fix_changes_cause": "Keep the authoritative packet hash-bound, project semantically under budget, rank terminal failed artifact excerpts before generic successful evidence, separate C0's own job from subject unexecuted checks, and retain strict quote/path validation. This directly targets T10 C0 artifact diagnosis.",
+            "expected_result": "Collector tests prove bounded source path/line/hash extraction and exclude nested expected-negative fixture failures.",
+            "failure_if_wrong": "C0 completed inside the B059 token budget but its diagnosis omitted the exact failed integration assertion already present in the downloaded a210 artifact. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "Replay run 35402388836 failure packet through the repaired C0 projection and require the phone_16_9 blocked/overhead terminal excerpt to survive with valid SOURCE | EXACT_QUOTE bindings."
+          },
+          {
+            "blocker_id": "C0-T10-B061",
+            "diagnosed_root_cause": "The T10 response validator checked schema shape but did not bind evidence to retained source excerpts or causal files to exact tracked repository paths.",
+            "why_fix_changes_cause": "Keep the authoritative packet hash-bound, project semantically under budget, rank terminal failed artifact excerpts before generic successful evidence, separate C0's own job from subject unexecuted checks, and retain strict quote/path validation. This directly targets T10 C0 diagnosis grounding.",
+            "expected_result": "Hostile tests reject uncited/paraphrased evidence, missing source excerpts and untracked causal paths.",
+            "failure_if_wrong": "C0 contradicted the packet by claiming required_critics was empty and proposed nonexistent .github/workflows/task10_workflow.yml. remains reproducible, or the group preflight fails on the exact repaired surface.",
+            "cheap_disproof": "Replay run 35402388836 failure packet through the repaired C0 projection and require the phone_16_9 blocked/overhead terminal excerpt to survive with valid SOURCE | EXACT_QUOTE bindings."
+          }
+        ],
+        "full_domain_proof": {
+          "required": false,
+          "provided": false,
+          "method": "",
+          "expected_cases": 0,
+          "covered_cases": 0
+        },
+        "cheap_disproof_preflight": [
+          {
+            "name": "c0-semantic-projection-grounding-preflight",
+            "command": "Replay run 35402388836 failure packet through the repaired C0 projection and require the phone_16_9 blocked/overhead terminal excerpt to survive with valid SOURCE | EXACT_QUOTE bindings.",
+            "falsifies": "Any recurrence of the group's diagnosed invariant or a contract mismatch on its authorized surface."
+          }
+        ],
+        "counterexamples_considered": [
+          {
+            "case": "A prior repair can make one observed example green while another case in the same family remains red.",
+            "why_covered": "The latest 8ab failure packet is replayed and terminal evidence must survive the exact bounded projection."
+          }
+        ],
+        "blast_radius_hypotheses": [
+          "Changes in c0-semantic-projection-grounding can regress adjacent approved contracts if they exceed the C0-authorized files or weaken existing gates; all existing thresholds remain unchanged."
+        ],
+        "residual_unknowns": []
+      }
+    ],
+    "evidence_frontier": {
+      "complete": true,
+      "diagnosed_through_candidate": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81",
+      "latest_observed_failed_candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+      "observations": [
+        {
+          "run_id": 35402388836,
+          "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+          "disposition": "BOUND_TO_EXISTING_GROUP",
+          "group_id": "layout-feasibility",
+          "evidence": [
+            "retained device-layout/phone_16_9/capture.log: blocked/overhead failed fully_in_frame while overlap, clearance and priority passed",
+            "exhaustive diagnostic run 35441401273 later expanded the same invariant to 32 overhead containment failures across the 216-case domain"
+          ],
+          "reason": "The new failure changes the observed state/device coverage but not the causal family: the fallback layout did not prove a legal contained placement."
+        },
+        {
+          "run_id": 35402388836,
+          "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
+          "disposition": "BOUND_TO_EXISTING_GROUP",
+          "group_id": "c0-semantic-projection-grounding",
+          "evidence": [
+            "the downloaded artifact contained the exact terminal device failure, but C0's bounded model projection retained generic successful evidence instead",
+            "C0 validation rejected six unsupported exact quotations rather than weakening grounding"
+          ],
+          "reason": "This is the same bounded C0 evidence-grounding family, now narrowed to terminal-evidence priority and subject-job separation."
+        }
+      ],
+      "unclassified_failures": []
+    },
+    "cross_group_interactions": [
+      "The layout-feasibility preflight runs before any expensive critic and feeds complete device/state/angle evidence into critic readiness.",
+      "C0 job-log transport and semantic projection/grounding must preserve the terminal failure produced by any earlier group without reclassifying C0's own diagnostic steps as subject-job failures.",
+      "Specialist transport/schema groups may improve completeness/actionability but cannot alter C1-C11 scores, thresholds, evidence sets, or independent runtime identity.",
+      "Closeout groups consume only exact-source records after all product/evidence/tooling groups pass; they cannot synthesize approval.",
+      "No group may use another group's tooling or evidence repair to close a product defect without the product group's own causal implementation and proof."
+    ],
+    "threshold_changes": [],
+    "loop_risk_acknowledged": true
+  }
 }
