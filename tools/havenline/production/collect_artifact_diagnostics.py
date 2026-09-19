@@ -13,6 +13,14 @@ SIGNAL_RE = re.compile(
     r"(?i)(assert|error|fail|fatal|traceback|timeout|exception|runtime error|script error|"
     r"parse error|mismatch|missing|invalid|blocked|score|defect)"
 )
+# Hard failure evidence outranks prose/test names that merely contain words such
+# as "failed" or "error". This is intentionally narrow so expected-negative
+# fixture names cannot displace the terminal product/tooling assertion.
+HARD_FAILURE_RE = re.compile(
+    r"(?i)(\bERROR\b|\bFATAL\b|\bTRACEBACK\b|ASSERT(?:ION)?\s+FAILED|"
+    r"SCRIPT ERROR|PARSE ERROR|RUNTIME ERROR|PROCESS COMPLETED WITH EXIT CODE\s+[1-9]|"
+    r"\"passed\"\s*:\s*false|\"fatal_error\"\s*:\s*\"[^\"]+\")"
+)
 TEXT_SUFFIXES = {".json", ".jsonl", ".log", ".txt", ".md", ".out"}
 MAX_FILE_BYTES = 1_000_000
 MAX_LINES_PER_FILE = 24
@@ -48,6 +56,14 @@ def json_failures(value, pointer="$"):
     return rows
 
 
+def _line_priority(text: str) -> int:
+    if HARD_FAILURE_RE.search(text):
+        return 3
+    if re.search(r"(?i)(assert|error|fatal|traceback|runtime error|script error|parse error|exception)", text):
+        return 2
+    return 1
+
+
 def collect(root: pathlib.Path) -> dict:
     rows = []
     for path in sorted(root.rglob("*")):
@@ -73,7 +89,12 @@ def collect(root: pathlib.Path) -> dict:
                 if parsed is not None:
                     projected_failures = json_failures(parsed)
                     for index, (pointer, projected) in enumerate(projected_failures, 1):
-                        retained.append({"line": f"{number}.{index}", "json_pointer": pointer, "text": projected})
+                        retained.append({
+                            "line": f"{number}.{index}",
+                            "json_pointer": pointer,
+                            "text": projected,
+                            "priority": _line_priority(projected),
+                        })
                         if len(retained) == MAX_LINES_PER_FILE:
                             break
                     if retained and len(retained) == MAX_LINES_PER_FILE:
@@ -83,10 +104,12 @@ def collect(root: pathlib.Path) -> dict:
             encoded = line.encode("utf-8", errors="replace")
             if len(encoded) > MAX_LINE_BYTES:
                 line = encoded[:MAX_LINE_BYTES].decode("utf-8", errors="ignore")
-            retained.append({"line": number, "text": line})
+            retained.append({"line": number, "text": line, "priority": _line_priority(line)})
             if len(retained) == MAX_LINES_PER_FILE:
                 break
         if retained:
+            hard_count = sum(item["priority"] == 3 for item in retained)
+            strong_count = sum(item["priority"] >= 2 for item in retained)
             rows.append({
                 "path": str(path.relative_to(root)),
                 "bytes": len(raw),
@@ -94,8 +117,16 @@ def collect(root: pathlib.Path) -> dict:
                 "file_truncated_for_scan": file_truncated,
                 "retained_lines": retained,
                 "retained_line_count": len(retained),
+                "hard_failure_line_count": hard_count,
+                "strong_failure_line_count": strong_count,
+                "diagnostic_priority": 3 if hard_count else (2 if strong_count else 1),
             })
-    rows.sort(key=lambda row: (-sum(bool(re.search(r"(?i)(assert|error|fail|fatal|traceback|runtime error)", x["text"])) for x in row["retained_lines"]), row["path"]))
+    rows.sort(key=lambda row: (
+        -int(row.get("diagnostic_priority", 0)),
+        -int(row.get("hard_failure_line_count", 0)),
+        -int(row.get("strong_failure_line_count", 0)),
+        row["path"],
+    ))
     omitted = rows[MAX_FILES:]
     kept = rows[:MAX_FILES]
     return {
@@ -103,9 +134,11 @@ def collect(root: pathlib.Path) -> dict:
         "artifact_root": str(root),
         "records": kept,
         "record_count": len(kept),
+        "hard_failure_record_count": sum(int(row.get("hard_failure_line_count", 0)) > 0 for row in kept),
         "omitted_record_count": len(omitted),
         "omitted_records_sha256": sha256(json.dumps(omitted, sort_keys=True, separators=(",", ":")).encode()),
         "bounded_semantic_excerpts_only": True,
+        "terminal_failure_priority_enabled": True,
         "passed": True,
     }
 
