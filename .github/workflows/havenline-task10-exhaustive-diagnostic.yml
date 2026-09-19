@@ -6,6 +6,7 @@ on:
     paths:
       - 'HavenlineGodot/tests/capture_task10_world_transform.gd'
       - 'HavenlineGodot/scripts/world_transform_view.gd'
+      - 'HavenlineGodot/tests/test_task10_integration.gd'
       - '.github/workflows/havenline-task10-exhaustive-diagnostic.yml'
   workflow_dispatch:
 
@@ -39,6 +40,7 @@ jobs:
           allowed={
             'HavenlineGodot/tests/capture_task10_world_transform.gd',
             'HavenlineGodot/scripts/world_transform_view.gd',
+            'HavenlineGodot/tests/test_task10_integration.gd',
             '.github/workflows/havenline-task10-exhaustive-diagnostic.yml',
           }
           changed=set(sys.argv[1:])
@@ -57,6 +59,24 @@ jobs:
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
           timeout 240 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --path HavenlineGodot --import --quit > t10-exhaustive/import.log 2>&1
+
+      - name: Run focused T10 authority and presentation integration
+        run: |
+          set -euo pipefail
+          timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot \
+            --script res://tests/test_task10_integration.gd > t10-exhaustive/integration.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' t10-exhaustive/integration.log; then exit 1; fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          reports=[json.loads(x) for x in Path('t10-exhaustive/integration.log').read_text().splitlines() if x.startswith('{')]
+          assert reports
+          report=reports[-1]
+          assert report.get('passed') is True and not report.get('failures'),report
+          assert report.get('r11_world_response_tested') is True,report
+          assert report.get('visual_node_budget') == 4 and report.get('visual_build_count') == 1 and report.get('visual_node_count') == 4,report
+          Path('t10-exhaustive/integration-summary.json').write_text(json.dumps(report,indent=2)+'\n')
+          PY
 
       - name: Enumerate all 216 device state angle projections
         env:
