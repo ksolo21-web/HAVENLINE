@@ -18,6 +18,7 @@
     "repair_sufficiency": {
       "required": [
         "repair_groups",
+        "evidence_frontier",
         "cross_group_interactions",
         "threshold_changes",
         "loop_risk_acknowledged"
@@ -47,7 +48,14 @@
         "failure_if_wrong",
         "cheap_disproof"
       ],
-      "failure_family_collection_rule": "When observable_exhaustive_collection_required and complete_observable_set_collected are true, collection_evidence must be non-empty."
+      "failure_family_collection_rule": "When observable_exhaustive_collection_required and complete_observable_set_collected are true, collection_evidence must be non-empty.",
+      "evidence_frontier_required": [
+        "complete",
+        "diagnosed_through_candidate",
+        "latest_observed_failed_candidate",
+        "observations",
+        "unclassified_failures"
+      ]
     }
   },
   "hard_rules": {
@@ -60,7 +68,10 @@
     "canonical_c0_path_and_exact_sha256_required": true,
     "threshold_weakening_forbidden": true,
     "exhaustive_collection_claim_requires_evidence": true,
-    "blocker_coverage_binds_exact_c0_root_cause": true
+    "blocker_coverage_binds_exact_c0_root_cause": true,
+    "post_diagnosis_failures_must_be_classified": true,
+    "latest_observed_failure_must_be_represented": true,
+    "new_unbound_failure_requires_c0": true
   },
   "may_score_gameplay": false,
   "may_approve_task": false,
