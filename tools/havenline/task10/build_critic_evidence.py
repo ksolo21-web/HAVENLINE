@@ -62,7 +62,7 @@ C7_CLAIMS = {
         # C7 needs the stable semantic claim "accepted receipt stops flow".
         # Presentation-maintenance wording after that clause may evolve without
         # invalidating the transaction-state evidence.
-        {'evidence_id':'R05_INTEGRATION_ACCEPTED_STOPS_FLOW','name_pattern':r'^accepted receipt stops flow\b.*},
+        {'evidence_id':'R05_INTEGRATION_ACCEPTED_STOPS_FLOW','name_pattern':r'^accepted receipt stops flow\b.*$'},
     ],
     'R06_integration': [
         {'evidence_id':'R06_INTEGRATION_HARVEST_CARRIED','name_pattern':r'^real harvesting commits to carried inventory$'},
