@@ -1,6 +1,6 @@
 import json, pathlib, sys, tempfile, unittest
 HERE=pathlib.Path(__file__).resolve();PROD=HERE.parents[1];sys.path.insert(0,str(PROD))
-from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, build_model_request, c0_response_schema, model_projection, retain_http_error, superseded_report, validate_report
+from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, artifact_diagnostic_projection, build_model_request, c0_response_schema, model_projection, retain_http_error, subject_execution, superseded_report, validate_report
 from builder_repair_gate import validate as validate_builder, verify_inherited_noncausal
 from collect_artifact_diagnostics import collect as collect_artifact_diagnostics
 
@@ -198,6 +198,78 @@ class CausalBookkeepingTests(unittest.TestCase):
         self.assertEqual(builder_delta_errors(accepted,current),[])
         self.assertTrue(builder_delta_errors(accepted,current+'\n# drift\n'))
         self.assertTrue(builder_delta_errors(accepted,accepted))
+
+class C0TerminalEvidencePriorityTests(unittest.TestCase):
+    def test_terminal_artifact_precedes_generic_success_context(self):
+        packet={
+            'artifact_diagnostics':{
+                'records':[
+                    {
+                        'path':'task10-isolated-evidence/domain-tests.json',
+                        'bytes':2000,'sha256':'a'*64,
+                        'retained_lines':[
+                            {'line':1,'text':'critic score summary coverage complete'},
+                            {'line':2,'text':'confidence high'},
+                        ],
+                    },
+                    {
+                        'path':'task10-isolated-evidence/device-layout/phone_16_9/capture.log',
+                        'bytes':3000,'sha256':'b'*64,
+                        'retained_lines':[
+                            {'line':3,'text':'ordinary renderer context'},
+                            {'line':4,'text':'ERROR: Projected device readability failed for blocked/overhead: {"fully_in_frame":false,"overlap":false}'},
+                        ],
+                    },
+                ],
+                'record_count':2,
+            }
+        }
+        projection=artifact_diagnostic_projection(packet,0,0)
+        self.assertEqual('task10-isolated-evidence/device-layout/phone_16_9/capture.log',projection['records'][0]['path'])
+        self.assertIn('blocked/overhead',projection['records'][0]['retained_lines'][0]['text'])
+        self.assertTrue(projection['terminal_evidence_priority'])
+        self.assertEqual('terminal_signal_first_then_diagnostic_path',projection['selection_policy'])
+
+    def test_live_c0_job_is_not_subject_execution_or_unexecuted_check(self):
+        packet={
+            'steps':[
+                {'job':'built-pending-dependency','name':'Validate authoritative Havenline device matrix','status':'completed','conclusion':'failure'},
+                {'job':'C0 diagnosis after failed T10 gates / C0 non-voting root-cause diagnosis','name':'Collect complete immutable failure packet','status':'completed','conclusion':'success'},
+                {'job':'C0 diagnosis after failed T10 gates / C0 non-voting root-cause diagnosis','name':'Run C0 full-blocker-set diagnosis','status':'in_progress','conclusion':None},
+            ],
+            'unexecuted_checks':[
+                'review-c3: review',
+                'C0 diagnosis after failed T10 gates / C0 non-voting root-cause diagnosis: Run C0 full-blocker-set diagnosis',
+            ],
+        }
+        steps,unexecuted,excluded=subject_execution(packet)
+        self.assertEqual(1,len(steps))
+        self.assertEqual('built-pending-dependency',steps[0]['job'])
+        self.assertEqual(['review-c3: review'],unexecuted)
+        self.assertEqual(1,len(excluded))
+        self.assertIn('C0 diagnosis after failed T10 gates',excluded[0])
+
+    def test_model_projection_preserves_packet_digest_but_uses_subject_only_execution(self):
+        packet={
+            'task_id':'T10','failed_run_id':35402388836,'failed_candidate':'8'*40,'integration_head':'7'*40,
+            'run_conclusion':'failure','steps':[
+                {'job':'built-pending-dependency','name':'Validate authoritative Havenline device matrix','status':'completed','conclusion':'failure'},
+                {'job':'C0 non-voting root-cause diagnosis','name':'Self-heal runtime','status':'completed','conclusion':'success'},
+            ],
+            'unexecuted_checks':['review-c3: review','C0 non-voting root-cause diagnosis: Run diagnosis'],
+            'changed_files':[],'protected_files':[],'failed_logs':'','artifact_diagnostics':{'records':[]},
+            'structured_failure_records':[],'task_scope':'','defect_ledger':'','historical_failure_intelligence':{},
+        }
+        projection=model_projection(packet,'f'*64,0,0)
+        execution=projection['execution']
+        self.assertEqual(1,execution['step_count'])
+        self.assertEqual(2,execution['packet_step_count'])
+        self.assertEqual(1,len(execution['failed_terminal_steps']))
+        self.assertEqual(['review-c3: review'],execution['unexecuted_checks'])
+        self.assertEqual(['C0 non-voting root-cause diagnosis'],execution['excluded_diagnostic_jobs'])
+        self.assertNotEqual(projection['source_bindings']['steps_sha256'],projection['source_bindings']['subject_steps_sha256'])
+        self.assertTrue(projection['projection_contract']['c0_advisory_job_excluded_from_subject_execution'])
+
 
 class C0BoundedModelPacketTests(unittest.TestCase):
     def packet(self):

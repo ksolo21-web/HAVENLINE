@@ -30,6 +30,8 @@ C0_SAFETY_TOKENS=512
 # reserves inside the pinned context window.
 C0_MAX_REQUEST_BYTES=C0_CONTEXT_TOKENS-C0_MAX_TOKENS-C0_SAFETY_TOKENS
 FAIL_CONCLUSIONS={"failure","timed_out","cancelled","action_required","startup_failure"}
+TERMINAL_SIGNAL_RE=re.compile(r'(?i)(projected(?: device)? readability failed|assert(?:ion)? failed|script error|parse error|traceback|fatal(?: error)?|runtime error|process completed with exit code [1-9]|"passed"\\s*:\\s*false)')
+C0_DIAGNOSTIC_JOB_MARKERS=("c0 diagnosis after failed","c0 non-voting root-cause diagnosis","c0 root-cause advisor")
 ANSI_RE=re.compile(r"\x1b\[[0-?]*[ -/]*[@-~]")
 SIGNAL_RE=re.compile(r"(?i)(critic|score|defect|error|fail|fatal|traceback|assert|coverage|confidence|timeout|exceed|blocked|unexecuted)")
 
@@ -135,16 +137,32 @@ def compact_history(value:Any,detail:int=2)->dict:
     return {"matches":rows,"historical_match_is_advisory_only":value.get("historical_match_is_advisory_only")}
 
 
+def _artifact_diagnostic_priority(row:dict)->tuple:
+    """Rank exact terminal evidence ahead of generic successful context."""
+    lines=row.get("retained_lines",[]) if isinstance(row.get("retained_lines"),list) else []
+    terminal=sum(
+        1 for item in lines
+        if isinstance(item,dict) and TERMINAL_SIGNAL_RE.search(str(item.get("text","")))
+    )
+    path=str(row.get("path") or "").lower()
+    terminal_path=any(token in path for token in ("capture.log","integration.log","benchmark.log","domain.log","import.log"))
+    return (-terminal,0 if terminal_path else 1,path)
+
+
 def artifact_diagnostic_projection(packet:dict,excerpt_bytes:int,detail:int)->dict:
     value=packet.get("artifact_diagnostics",{})
     rows=value.get("records",[]) if isinstance(value,dict) else []
     limit=max(512,excerpt_bytes*2);used=0;retained=[]
     row_limit={2:8,1:4,0:2}.get(detail,2)
-    for row in rows[:row_limit]:
-        if not isinstance(row,dict):continue
+    ordered=sorted((row for row in rows if isinstance(row,dict)),key=_artifact_diagnostic_priority)
+    for row in ordered[:row_limit]:
+        source_lines=row.get("retained_lines",[]) if isinstance(row.get("retained_lines"),list) else []
+        ordered_lines=sorted(
+            (item for item in source_lines if isinstance(item,dict)),
+            key=lambda item:(0 if TERMINAL_SIGNAL_RE.search(str(item.get("text",""))) else 1,str(item.get("line",""))),
+        )
         lines=[]
-        for item in row.get("retained_lines",[]) if isinstance(row.get("retained_lines"),list) else []:
-            if not isinstance(item,dict):continue
+        for item in ordered_lines:
             text=str(item.get("text", ""));size=len(text.encode("utf-8",errors="replace"))+32
             if not text or used+size>limit:continue
             lines.append({"line":item.get("line"),"text":text});used+=size
@@ -154,7 +172,35 @@ def artifact_diagnostic_projection(packet:dict,excerpt_bytes:int,detail:int)->di
         "record_count":value.get("record_count",len(rows)) if isinstance(value,dict) else 0,
         "records_sha256":stable_json_digest(rows),"records":retained,
         "retained_bytes":used,"truncated":len(retained)<len(rows),
+        "selection_policy":"terminal_signal_first_then_diagnostic_path",
+        "terminal_evidence_priority":True,
     }
+
+
+def _is_c0_diagnostic_job(name:Any)->bool:
+    normalized=str(name or "").strip().lower()
+    return any(marker in normalized for marker in C0_DIAGNOSTIC_JOB_MARKERS)
+
+
+def subject_execution(packet:dict)->tuple[list[dict],list[str],list[str]]:
+    """Exclude the live C0 advisory job from the failed subject's execution picture."""
+    source_steps=packet.get("steps",[])
+    steps=[];excluded_jobs=set()
+    for row in source_steps if isinstance(source_steps,list) else []:
+        if not isinstance(row,dict):continue
+        name=str(row.get("job") or "unknown")
+        if _is_c0_diagnostic_job(name):
+            excluded_jobs.add(name);continue
+        steps.append(row)
+    source_unexecuted=packet.get("unexecuted_checks",[])
+    unexecuted=[]
+    for item in source_unexecuted if isinstance(source_unexecuted,list) else []:
+        text=str(item)
+        job=text.split(":",1)[0].strip()
+        if _is_c0_diagnostic_job(job):
+            excluded_jobs.add(job);continue
+        unexecuted.append(text)
+    return steps,unexecuted,sorted(excluded_jobs)
 
 
 def failure_log_projection(packet:dict,excerpt_bytes:int)->dict:
@@ -194,7 +240,8 @@ def failure_log_projection(packet:dict,excerpt_bytes:int)->dict:
 
 
 def model_projection(packet:dict,packet_sha256:str,excerpt_bytes:int=640,detail:int=2)->dict:
-    steps=packet.get("steps",[])
+    all_steps=packet.get("steps",[])
+    steps,unexecuted,excluded_diagnostic_jobs=subject_execution(packet)
     failed=[];jobs={};counts={}
     for row in steps:
         if not isinstance(row,dict):continue
@@ -214,14 +261,16 @@ def model_projection(packet:dict,packet_sha256:str,excerpt_bytes:int=640,detail:
         "identity":{key:packet.get(key) for key in ("task_id","failed_run_id","failed_candidate","integration_head","integration_branch","task_branch","current_branch_head","run_conclusion","run_status","workflow_name","event")},
         "source_bindings":{
             "failure_packet_sha256":packet_sha256,
-            "steps_sha256":stable_json_digest(steps),"changed_files_sha256":stable_json_digest(changed),
+            "steps_sha256":stable_json_digest(all_steps),"subject_steps_sha256":stable_json_digest(steps),"changed_files_sha256":stable_json_digest(changed),
             "protected_files_sha256":stable_json_digest(protected),"task_scope_sha256":hashlib.sha256(scope.encode()).hexdigest(),
             "defect_ledger_sha256":hashlib.sha256(ledger.encode()).hexdigest(),"historical_failure_intelligence_sha256":stable_json_digest(history),
         },
         "execution":{
-            "step_count":len(steps),"step_disposition_counts":counts,"all_steps_sha256":stable_json_digest(steps),
+            "step_count":len(steps),"packet_step_count":len(all_steps) if isinstance(all_steps,list) else 0,
+            "step_disposition_counts":counts,"all_steps_sha256":stable_json_digest(all_steps),"subject_steps_sha256":stable_json_digest(steps),
             "failed_terminal_steps":failed,"job_dispositions":jobs,
-            "unexecuted_checks":packet.get("unexecuted_checks",[]),
+            "unexecuted_checks":unexecuted,
+            "excluded_diagnostic_jobs":excluded_diagnostic_jobs,
         },
         "change_surface":{"changed_files":compact_paths(changed,detail),"protected_files":compact_paths(protected,detail)},
         "structured_failure_records":compact_failure_records(packet,detail),
@@ -236,6 +285,8 @@ def model_projection(packet:dict,packet_sha256:str,excerpt_bytes:int=640,detail:
             "all_unexecuted_checks_retained":True,"complete_change_surface_bound_by_digest":True,
             "bounded_excerpts_have_source_hash_and_truncation_metadata":True,
             "artifact_diagnostics_are_source_hashed":True,
+            "terminal_artifact_evidence_prioritized":True,
+            "c0_advisory_job_excluded_from_subject_execution":True,
         },
     }
 
