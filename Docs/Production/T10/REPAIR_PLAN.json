@@ -4,7 +4,7 @@
   "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
   "c0_report_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
-  "c0_report_sha256": "5f496c911e3117e9820669e2c95dcaaae038a252cba1bfbb8450477972b8268f",
+  "c0_report_sha256": "2135099aab88955dfba3457ff76bcd0002deb8252cf604ea2d5332f796dfc567",
   "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "repair_base_status": "CUMULATIVE_REPAIR_CYCLE_ROOT_WITH_LATEST_TERMINAL_FAILURE_BOUND",
   "repair_base_rule": "Measure the complete reconciled B037-B062 owner-plus-task diff from cumulative repair root c7a18d002fe8d0f3978370f3e4567ba88bfe17e8. The latest terminal evidence is 81fbc7958ceb69b711f8be60add48b4510d3520e; it is evidence only and no score is reusable.",
@@ -492,9 +492,11 @@
         "tools/havenline/task10/tests/test_task10_workflows.py",
         "Docs/Production/WORKSTREAM_REGISTRY.json",
         "tools/havenline/production/tests/test_t10_activation_validation.py",
-        ".github/workflows/havenline-candidate-guard.yml"
+        ".github/workflows/havenline-candidate-guard.yml",
+        ".github/workflows/havenline-task10-pipeline-preflight.yml",
+        "tools/havenline/task10/tests/test_builder_workflow_callers.py"
       ],
-      "causal_change": "Bind evidence frontier, attempt history and proof to a digest-locked source manifest plus retained machine summary; require deterministic symbol-bound architectural operations after two attempts; reject fixed scalar repairs; and permit derived per-case sinks only through one-to-one exact normalized RHS/dependency/bounds bindings to the proof artifact and exact proof-source commit/path/file hash. Hash the canonicalized whole proven source excluding only four exact metadata lines authorized by locked C0 evidence, and require the current candidate to match it exactly. Reconstruct multiline before/after statements, require reachable executable symbols, verify both threshold registries, pin integration authority outside the plan/registry, run the exact builder gate in the direct pre-build dependency, and make the shared workstream consumer recognize only the exact legacy or integrated bounded multi-target authorization schemas. Supply the pinned canonical branch explicitly at the shared builder invocation.",
+      "causal_change": "Bind evidence frontier, attempt history and proof to a digest-locked source manifest plus retained machine summary; require deterministic symbol-bound architectural operations after two attempts; reject fixed scalar repairs; and permit derived per-case sinks only through one-to-one exact normalized RHS/dependency/bounds bindings to the proof artifact and exact proof-source commit/path/file hash. Hash the canonicalized whole proven source excluding only four exact metadata lines authorized by locked C0 evidence, and require the current candidate to match it exactly. Reconstruct multiline before/after statements, require reachable executable symbols, verify both threshold registries, pin integration authority outside the plan/registry, run the exact builder gate in the direct pre-build dependency, and make the shared workstream consumer recognize only the exact legacy or integrated bounded multi-target authorization schemas. Supply the pinned canonical branch explicitly at the shared builder invocation. Export fetched canonical branch/head in the fourth caller and derive its base from the canonical plan; execute every workflow caller boundary.",
       "verification": [
         "Hostile C0R tests reject erased frontier evidence, false attempt history/counts, scalar euphemisms, undeclared scalar reassignments, comment/string-only markers, incomplete proof provenance, registry branch redirection and threshold weakening.",
         "Workflow tests prove C0R and builder_repair_gate execute in the same direct dependency before either primary build job.",
@@ -2112,12 +2114,14 @@
             "architectural-escalation",
             "proof-provenance",
             "threshold-registry",
-            "workflow-dependency"
+            "workflow-dependency",
+            "all-executable-workflow-callers"
           ],
           "known_failed_cases": [
             "Independent review of a8084aa demonstrated that a plan could erase post-diagnosis observations, self-report fewer prior attempts, relabel scalar tuning as TOOLING, or rely on a concurrent candidate-guard job while still passing the original C0R checks.",
             "Exact tree 44c3a07d passed C0R, builder preflight/post-build and hostile review, but runs 35454636290 and 35454638560 falsely rejected eight governance paths because the legacy workstream consumer could not read integrated bounded multi-target authorization records.",
-            "Candidate guard run 35458019688 job 105936658374 passed ownership and failed only with active integration branch does not match pinned canonical branch. Its environment contains INTEGRATION_HEAD but omits INTEGRATION_BRANCH; both primary T10 C0R pre-build jobs explicitly supplied it and passed."
+            "Candidate guard run 35458019688 job 105936658374 passed ownership and failed only with active integration branch does not match pinned canonical branch. Its environment contains INTEGRATION_HEAD but omits INTEGRATION_BRANCH; both primary T10 C0R pre-build jobs explicitly supplied it and passed.",
+            "Static replay of dd2e326 pipeline-preflight caller: the real builder validators reject absent INTEGRATION_BRANCH and INTEGRATION_HEAD. Exhaustive workflow discovery finds four executable callers; only this caller still omits both exports and hardcodes repair_base. No hosted failure is claimed for this static finding."
           ],
           "unexecuted_or_unknown_cases": [],
           "observable_exhaustive_collection_required": false,
@@ -2126,12 +2130,13 @@
           "collection_evidence": [
             "Independent C0R critic review of a8084aa: mandatory FAIL 6.8/10 with five concrete admission bypasses and six required hostile tests.",
             "Candidate guard 35454636290 and adapter preflight 35454638560 emitted the same unauthorized-path set before or without reaching the exact builder gate.",
-            "Candidate guard run 35458019688 job 105936658374 passed ownership and failed only with active integration branch does not match pinned canonical branch. Its environment contains INTEGRATION_HEAD but omits INTEGRATION_BRANCH; both primary T10 C0R pre-build jobs explicitly supplied it and passed."
+            "Candidate guard run 35458019688 job 105936658374 passed ownership and failed only with active integration branch does not match pinned canonical branch. Its environment contains INTEGRATION_HEAD but omits INTEGRATION_BRANCH; both primary T10 C0R pre-build jobs explicitly supplied it and passed.",
+            "Static replay of dd2e326 pipeline-preflight caller: the real builder validators reject absent INTEGRATION_BRANCH and INTEGRATION_HEAD. Exhaustive workflow discovery finds four executable callers; only this caller still omits both exports and hardcodes repair_base. No hosted failure is claimed for this static finding."
           ]
         },
         "strategy_kind": "GOVERNANCE",
-        "causal_mechanism": "CONTRACT_REDIRECT[INTEGRATION_BRANCH]",
-        "why_this_fixes_cause": "The shared caller supplies canonical integration authority explicitly. The callee continues to reject absent or redirected authority, and workflow-contract tests verify the actual caller environment.",
+        "causal_mechanism": "CONTRACT_REDIRECT[INTEGRATION_BRANCH];CONTRACT_REDIRECT[INTEGRATION_BRANCH,INTEGRATION_HEAD,repair_base]",
+        "why_this_fixes_cause": "All executable workflow callers are discovered and their actual shell boundaries replayed, including earlier GITHUB_ENV exports; the remaining omitted authority is supplied from the pinned branch and the base comes from the canonical plan.",
         "why_materially_different": "Repair the missing caller-to-callee authority contract and validate its executable workflow environment, preserving all strict callee checks.",
         "same_family_attempt_count": 2,
         "prior_attempts": [
@@ -2155,8 +2160,8 @@
         "blocker_coverage": [
           {
             "blocker_id": "C0-T10-B062",
-            "diagnosed_root_cause": "C0R originally validated builder-authored claims without binding history/frontier/proof to independent sources, while the candidate guard and adapter preflight still consume only the legacy APPROVED + AUTHORIZED single-target change-request schema. Integrated C0R records use AUTHORIZED + APPROVED_BOUNDED_* with exact target arrays, so the stale consumer rejects their governance paths before or without the exact builder gate. The shared candidate-guard caller also omits the branch environment required by the hardened builder interface.",
-            "why_fix_changes_cause": "Authoritative C0R inputs stay locked, and the shared consumer now recognizes the two exact integration-approved schemas while returning no paths for malformed, cross-task, traversal or unapproved records.",
+            "diagnosed_root_cause": "C0R originally validated builder-authored claims without binding history/frontier/proof to independent sources, while the candidate guard and adapter preflight still consume only the legacy APPROVED + AUTHORIZED single-target change-request schema. Integrated C0R records use AUTHORIZED + APPROVED_BOUNDED_* with exact target arrays, so the stale consumer rejects their governance paths before or without the exact builder gate. The shared candidate-guard caller also omits the branch environment required by the hardened builder interface. Exhaustive caller review also finds the cheap preflight omits both authority exports and hardcodes the repair base.",
+            "why_fix_changes_cause": "All executable workflow callers are discovered and their actual shell boundaries replayed, including earlier GITHUB_ENV exports; the remaining omitted authority is supplied from the pinned branch and the base comes from the canonical plan.",
             "expected_result": "Every known self-attestation bypass remains closed and both hosted lifecycle guards accept the already-integrated bounded C0R target paths before the exact builder-gated build.",
             "failure_if_wrong": "The hosted guards again reject authorized C0R paths, or a malformed/unapproved record grants a foreign path.",
             "cheap_disproof": "Replay the exact hosted builder environment and assert the parsed workflow step supplies the pinned branch; missing and redirected branch values must still fail."
@@ -2172,7 +2177,7 @@
         "cheap_disproof_preflight": [
           {
             "name": "c0r-hostile-admission-preflight",
-            "command": "python3 -m unittest tools.havenline.production.tests.test_repair_sufficiency_critic tools.havenline.production.tests.test_governance tools.havenline.task10.tests.test_task10_workflows",
+            "command": "python3 -m unittest tools.havenline.production.tests.test_repair_sufficiency_critic tools.havenline.production.tests.test_governance tools.havenline.task10.tests.test_task10_workflows tools.havenline.task10.tests.test_builder_workflow_callers",
             "falsifies": "Any known self-attestation, scalar-disguise, proof-provenance, threshold-policy, workflow-order or authorization-schema bypass remains accepted."
           }
         ],
@@ -2214,13 +2219,26 @@
             "replaces": "Implicit absent caller branch authority",
             "with": "Explicit pinned branch in the shared builder step environment",
             "invariant_enforced": "Every hosted builder caller supplies canonical integration authority before repair validation."
+          },
+          {
+            "operation_kind": "CONTRACT_REDIRECT",
+            "target": ".github/workflows/havenline-task10-pipeline-preflight.yml",
+            "target_symbols": [
+              "INTEGRATION_BRANCH",
+              "INTEGRATION_HEAD",
+              "repair_base"
+            ],
+            "replaces": "Absent authority exports and hardcoded repair base",
+            "with": "Explicit pinned branch, branch-fetched head, canonical plan base",
+            "invariant_enforced": "Every executable builder workflow caller supplies canonical authority and plan-derived base."
           }
         ],
         "scalar_parameters_changed": [],
         "implementation_diff_contract": {
           "comparison_base": "e637dcc336eb72e4e3115305b92fb5ae8932a7b4",
           "causal_files": [
-            ".github/workflows/havenline-candidate-guard.yml"
+            ".github/workflows/havenline-candidate-guard.yml",
+            ".github/workflows/havenline-task10-pipeline-preflight.yml"
           ],
           "required_added_markers": [
             {
@@ -2318,7 +2336,19 @@
           "reason": "Existing B058 response-schema repair omitted required fields from effective branch grammar. This is invalid review output, not passing product evidence."
         }
       ],
-      "unclassified_failures": []
+      "unclassified_failures": [],
+      "static_observations": [
+        {
+          "source_kind": "STATIC_CALLER_REPLAY",
+          "candidate": "dd2e32654efa2c90ad5c8ec23f65eb7fcd340c16",
+          "source_path": ".github/workflows/havenline-task10-pipeline-preflight.yml",
+          "group_id": "c0r-source-bound-admission",
+          "evidence": [
+            "Static replay of dd2e326 pipeline-preflight caller: the real builder validators reject absent INTEGRATION_BRANCH and INTEGRATION_HEAD. Exhaustive workflow discovery finds four executable callers; only this caller still omits both exports and hardcodes repair_base. No hosted failure is claimed for this static finding."
+          ],
+          "task_approved": false
+        }
+      ]
     },
     "cross_group_interactions": [
       "The layout-feasibility preflight runs before any expensive critic and feeds complete device/state/angle evidence into critic readiness.",

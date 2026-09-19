@@ -261,7 +261,19 @@
         "reason": "Existing B058 response-schema repair omitted required fields from effective branch grammar. This is invalid review output, not passing product evidence."
       }
     ],
-    "unclassified_failures": []
+    "unclassified_failures": [],
+    "static_observations": [
+      {
+        "source_kind": "STATIC_CALLER_REPLAY",
+        "candidate": "dd2e32654efa2c90ad5c8ec23f65eb7fcd340c16",
+        "source_path": ".github/workflows/havenline-task10-pipeline-preflight.yml",
+        "group_id": "c0r-source-bound-admission",
+        "evidence": [
+          "Static replay of dd2e326 pipeline-preflight caller: the real builder validators reject absent INTEGRATION_BRANCH and INTEGRATION_HEAD. Exhaustive workflow discovery finds four executable callers; only this caller still omits both exports and hardcodes repair_base. No hosted failure is claimed for this static finding."
+        ],
+        "task_approved": false
+      }
+    ]
   },
   "diagnosis_status": "DIAGNOSIS_COMPLETE",
   "terminal_class": "MIXED",
@@ -1216,8 +1228,8 @@
       "classification": "GOVERNANCE_DEFECT",
       "affected_object": "C0R repair sufficiency admission gate",
       "symptom": "The first C0R canary can accept a repeated repair after the plan self-declares incomplete history/frontier evidence, relabels a scalar adjustment as tooling, leaves the exact builder repair gate in a concurrent workflow job, or reaches a legacy path guard that falsely rejects the already-integrated bounded authorization schema before the exact builder gate executes.",
-      "root_cause": "C0R originally validated builder-authored claims without binding history/frontier/proof to independent sources, while the candidate guard and adapter preflight still consume only the legacy APPROVED + AUTHORIZED single-target change-request schema. Integrated C0R records use AUTHORIZED + APPROVED_BOUNDED_* with exact target arrays, so the stale consumer rejects their governance paths before or without the exact builder gate. The shared candidate-guard caller also omits the branch environment required by the hardened builder interface.",
-      "causal_fix": "Bind frontier, same-family attempt history and proof to a digest-locked source manifest with exact run/candidate/result hashes and a retained machine-readable proof summary; validate the lock in C0 and C0R, require machine-rendered symbol-bound architectural operations after two attempts, reject fixed scalar repairs, and permit a derived per-case sink only when its exact normalized RHS, dependencies and zero-violation bounds are bound to the proof artifact and exact proof-source commit/path/file hash. Require the current candidate's canonicalized whole proof source\u2014excluding only four exact, locked metadata lines inside the static contract function\u2014to match the proven source exactly. Validate reachable executable symbols, canonical thresholds, the pinned integration branch and the exact builder gate. Finally, make the shared workstream authorization consumer fail-closed while recognizing both the exact legacy schema and the integrated bounded multi-target schema, so earlier lifecycle guards cannot contradict C0R authority. Supply the pinned branch at that shared invocation and test the actual workflow contract.",
+      "root_cause": "C0R originally validated builder-authored claims without binding history/frontier/proof to independent sources, while the candidate guard and adapter preflight still consume only the legacy APPROVED + AUTHORIZED single-target change-request schema. Integrated C0R records use AUTHORIZED + APPROVED_BOUNDED_* with exact target arrays, so the stale consumer rejects their governance paths before or without the exact builder gate. The shared candidate-guard caller also omits the branch environment required by the hardened builder interface. Exhaustive caller review also finds the cheap preflight omits both authority exports and hardcodes the repair base.",
+      "causal_fix": "Bind frontier, same-family attempt history and proof to a digest-locked source manifest with exact run/candidate/result hashes and a retained machine-readable proof summary; validate the lock in C0 and C0R, require machine-rendered symbol-bound architectural operations after two attempts, reject fixed scalar repairs, and permit a derived per-case sink only when its exact normalized RHS, dependencies and zero-violation bounds are bound to the proof artifact and exact proof-source commit/path/file hash. Require the current candidate's canonicalized whole proof source\u2014excluding only four exact, locked metadata lines inside the static contract function\u2014to match the proven source exactly. Validate reachable executable symbols, canonical thresholds, the pinned integration branch and the exact builder gate. Finally, make the shared workstream authorization consumer fail-closed while recognizing both the exact legacy schema and the integrated bounded multi-target schema, so earlier lifecycle guards cannot contradict C0R authority. Supply the pinned branch at that shared invocation and test the actual workflow contract. Bind the remaining preflight caller to the same authority contract and execute all workflow call boundaries with changed fixture plan bases.",
       "files_to_change": [
         "tools/havenline/production/repair_sufficiency_critic.py",
         "tools/havenline/production/builder_repair_gate.py",
@@ -1243,7 +1255,9 @@
         "tools/havenline/production/tests/test_t10_activation_validation.py",
         "Docs/Production/T10/C0_ROOT_CAUSE.json",
         "Docs/Production/T10/REPAIR_PLAN.json",
-        ".github/workflows/havenline-candidate-guard.yml"
+        ".github/workflows/havenline-candidate-guard.yml",
+        ".github/workflows/havenline-task10-pipeline-preflight.yml",
+        "tools/havenline/task10/tests/test_builder_workflow_callers.py"
       ],
       "files_not_to_change": [
         "HavenlineGodot/scripts/world_transform.gd",
@@ -1257,7 +1271,8 @@
       "evidence": [
         "Independent C0R critic review of a8084aa scored 6.8/10 and demonstrated self-attested attempt/frontier bypasses, consumer-invented C7 regex identity, concurrent rather than prerequisite builder-gate execution, and unverified threshold registries.",
         "Runs 35454636290 and 35454638560 on exact tree 44c3a07d failed on the same eight C0R governance paths because the legacy workstream consumer ignored integrated bounded multi-target authorization records.",
-        "Candidate guard run 35458019688 job 105936658374 passed ownership and failed only with active integration branch does not match pinned canonical branch. Its environment contains INTEGRATION_HEAD but omits INTEGRATION_BRANCH; both primary T10 C0R pre-build jobs explicitly supplied it and passed."
+        "Candidate guard run 35458019688 job 105936658374 passed ownership and failed only with active integration branch does not match pinned canonical branch. Its environment contains INTEGRATION_HEAD but omits INTEGRATION_BRANCH; both primary T10 C0R pre-build jobs explicitly supplied it and passed.",
+        "Static replay of dd2e326 pipeline-preflight caller: the real builder validators reject absent INTEGRATION_BRANCH and INTEGRATION_HEAD. Exhaustive workflow discovery finds four executable callers; only this caller still omits both exports and hardcodes repair_base. No hosted failure is claimed for this static finding."
       ],
       "verification": [
         "Hostile tests reject jointly erased C0/plan frontiers, false attempt counts, scalar euphemisms, undeclared scalar reassignments, comment/string-only diff markers, incomplete or forged full-domain proof, registry branch redirection, and weakened canonical threshold snapshots.",
