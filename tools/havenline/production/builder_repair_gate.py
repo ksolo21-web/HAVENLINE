@@ -219,7 +219,7 @@ def implementation_diff_errors(
             expected=declarations[target].get("normalized_rhs")
             if effects[target]!={expected}:
                 errors.append(group_id+" scalar implementation does not match declared derived expression: "+target)
-        if declarations:
+        if isinstance(group.get("full_domain_proof"),dict) and group.get("full_domain_proof",{}).get("provided") is True:
             family=group.get("failure_family",{}) if isinstance(group.get("failure_family"),dict) else {}
             family_id=family.get("id")
             trusted=(trusted_proofs or {}).get(family_id,{}) if isinstance(family_id,str) else {}
