@@ -2144,7 +2144,7 @@
           ]
         },
         "strategy_kind": "GOVERNANCE",
-        "causal_mechanism": "CONTRACT_REDIRECT[INTEGRATION_BRANCH];CONTRACT_REDIRECT[INTEGRATION_BRANCH,INTEGRATION_HEAD,repair_base];CONTRACT_REDIRECT[structured_operations_valid,current_strategy_text];CONTRACT_REDIRECT[load_trusted_python_review,authority_context];CONTRACT_REDIRECT[C0R_MACHINE_PROSE_REQUEST_SHA256]",
+        "causal_mechanism": "CONTRACT_REDIRECT[INTEGRATION_BRANCH];CONTRACT_REDIRECT[INTEGRATION_BRANCH,INTEGRATION_HEAD,repair_base];CONTRACT_REDIRECT[structured_operations_valid,current_strategy_text];CONTRACT_REDIRECT[load_trusted_python_review,authority_context];CONTRACT_REDIRECT[C0R_MACHINE_PROSE_REQUEST_SHA256,BENCHMARK_LIVENESS_REQUEST_SHA256]",
         "why_this_fixes_cause": "Canonical independent source authority uses a stable snapshot. Actual Git identities distinguish isolated admission from validation of the exact live integrated tip. Both contexts enforce every reviewed byte, regular mode, group binding and permitted metadata delta; stale branches reject.",
         "why_materially_different": "Exact canonical independently reviewed Python source bindings replace incomplete syntax-based parameter accounting; mandatory owner-executed canonical verifier binds the final candidate before promotion. Typed operations remain non-voting; existing GDScript whole-domain proof remains mandatory.",
         "same_family_attempt_count": 2,
@@ -2296,10 +2296,11 @@
             "operation_kind": "CONTRACT_REDIRECT",
             "target": "Exact owner source authorization consumed by the architecture validator",
             "target_symbols": [
-              "C0R_MACHINE_PROSE_REQUEST_SHA256"
+              "C0R_MACHINE_PROSE_REQUEST_SHA256",
+              "BENCHMARK_LIVENESS_REQUEST_SHA256"
             ],
             "replaces": "Prior reviewed-source authorization digest",
-            "with": "IMPLEMENT_SYMBOLS[C0R_MACHINE_PROSE_REQUEST_SHA256]",
+            "with": "IMPLEMENT_SYMBOLS[C0R_MACHINE_PROSE_REQUEST_SHA256,BENCHMARK_LIVENESS_REQUEST_SHA256]",
             "invariant_enforced": "The architecture validator requires the exact independently reviewed source-authorization bytes; no wildcard or source-check bypass."
           }
         ],
@@ -2333,6 +2334,10 @@
             {
               "kind": "CODE_IDENTIFIER",
               "value": "C0R_MACHINE_PROSE_REQUEST_SHA256"
+            },
+            {
+              "kind": "CODE_IDENTIFIER",
+              "value": "BENCHMARK_LIVENESS_REQUEST_SHA256"
             }
           ]
         },

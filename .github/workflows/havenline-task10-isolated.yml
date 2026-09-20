@@ -94,9 +94,9 @@ jobs:
             python3 - <<'PYCODE'
           import json
           r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
-          assert next(x['status'] for x in r['workstreams'] if x['task_id']=='T10') in ['INTEGRATION_READY','INTEGRATING','UNDER_REVIEW']
+          assert next(x['status'] for x in r['workstreams'] if x['task_id']=='T10') in ['INTEGRATION_READY','INTEGRATING','UNDER_REVIEW','FIX_REQUIRED']
           PYCODE
-            python3 tools/havenline/production/validate_integration_scope.py --base "$GITHUB_SHA^" --head "$GITHUB_SHA" --output task10-isolated-evidence/scope.json
+            python3 tools/havenline/production/validate_integration_scope.py --base "$GITHUB_SHA^2" --head "$GITHUB_SHA" --output task10-isolated-evidence/scope.json
             python3 tools/havenline/production/validate_integration_scope.py --base c1768dbba7bacbbc5d0174e6b9b661b6dbdbbc11 --head "$GITHUB_SHA" --output task10-isolated-evidence/recovery-scope.json
           else
             python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$GITHUB_SHA" --integration-head "$integration" | tee task10-isolated-evidence/scope.json

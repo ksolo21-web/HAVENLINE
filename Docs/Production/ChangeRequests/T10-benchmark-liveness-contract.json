@@ -22,9 +22,9 @@
   "review_score": 9.4,
   "implementation_sha256": {
     "tools/havenline/task10/benchmark_supervisor.py": "41631621dc541f0087c913892ef0328b3de760a6b4b628b27b09a5e19849838a",
-    ".github/workflows/havenline-task10-isolated.yml": "2d632a02fd5466c609ddc8fe9866fd9b1c52e05ee0ef4e37c76f846624d9905f",
+    ".github/workflows/havenline-task10-isolated.yml": "f44cfae240dbefdbdd5461b7e2912b35b60f431561b087a6d339da9fd8ef6fd2",
     "tools/havenline/task10/tests/test_benchmark_supervisor.py": "182fdbb9069a2b649a0eed88c0d482fc50a5928c14bfe4d309c9673591203eac",
-    "tools/havenline/task10/tests/test_task10_workflows.py": "7e7d6ca2ed707fe309a9c0065a36b35b1f0c80a0e9f28a419cf05c0833971d8e"
+    "tools/havenline/task10/tests/test_task10_workflows.py": "05fb692310055e2020551c707d559deb712f03aafe18286c797707a2f1bed922"
   },
   "causal_repair": "Replace elapsed-only wrapper with an ordered-progress supervisor bound to actual GitHub job start, original2400-second cap,120-second retention reserve and1800-second no-progress ceiling. Require all nine exact ordered controls, process exit0 and unchanged complete source-bound manifest validation; preserve failures and immediately retain execution evidence before packaging.",
   "evidence": [
@@ -41,5 +41,12 @@
   ],
   "task_approved": false,
   "trace_proof_sha256": "4c10b53b809228d72b007d4a6a790c095089e7ec8d9a409effb2436f3b4f3659",
-  "additional_test_after_review": "Explicit later-phase stall and clean-checkout canonical retained event-bracket replay added; runtime unchanged. Final cumulative source review required."
+  "additional_test_after_review": "Explicit later-phase stall and clean-checkout canonical retained event-bracket replay added; runtime unchanged. Final cumulative source review required.",
+  "post_review_caller_delta": {
+    "baseline_source": "2842845c4e4a9866d3bf7bb62a1beeabf58199c2",
+    "scope": "Workflow invocation metadata and tests only; benchmark supervisor, GDScript, budgets, samples and C6 thresholds unchanged.",
+    "repair": "Allow source-verified integrated FIX_REQUIRED capture without approval, and compare scope/regression against authoritative second merge parent H in exact [R,H] promotions.",
+    "final_source_review_required": true,
+    "task_approved": false
+  }
 }

@@ -180,3 +180,40 @@ class FailureObservationTests(unittest.TestCase):
             for dependency in required:
                 self.assertIn("needs."+dependency+".result == 'failure'",job)
             self.assertNotIn("== 'cancelled'",job)
+
+
+class IntegratedRepairCallerTests(unittest.TestCase):
+    def test_repair_capture_is_not_an_approval_transition(self):
+        import ast
+        for name in ('isolated','world-transformation'):
+            text=(WORKFLOWS/('havenline-task10-'+name+'.yml')).read_text()
+            lines=[x for x in text.splitlines() if "assert next(x['status']" in x]
+            self.assertEqual(1,len(lines))
+            allowed=ast.literal_eval(lines[0].rsplit(' in ',1)[1])
+            self.assertEqual({'INTEGRATION_READY','INTEGRATING','UNDER_REVIEW','FIX_REQUIRED'},set(allowed))
+            for rejected in ('APPROVED','LOCKED','PREPARED','ASSIGNED','BLOCKED','unknown'):
+                self.assertNotIn(rejected,allowed)
+            build='built-pending-dependency' if name=='isolated' else 'first-builder-milestone'
+            prefix=text.split('  repair-sufficiency:',1)[1].split('\n  '+build+':',1)[0]
+            self.assertIn('builder_repair_gate.py',prefix)
+            self.assertIn('needs: repair-sufficiency',text.split('\n  '+build+':',1)[1][:300])
+
+    def test_integrated_scope_uses_authority_parent_not_reviewed_parent(self):
+        for name,variable in [('isolated','GITHUB_SHA'),('world-transformation','CANDIDATE')]:
+            text=(WORKFLOWS/('havenline-task10-'+name+'.yml')).read_text()
+            self.assertIn('validate_integration_scope.py --base "$'+variable+'^2"',text)
+            self.assertNotIn('validate_integration_scope.py --base "$'+variable+'^"',text)
+
+    def test_integrated_regression_uses_exact_authority_parent(self):
+        text=(WORKFLOWS/'havenline-task10-world-transformation.yml').read_text()
+        self.assertIn('if [ "$GITHUB_SHA" = "$integration" ]; then integration=$(git rev-parse "$GITHUB_SHA^2"); fi',text)
+        self.assertNotIn('git rev-parse "$GITHUB_SHA^"',text)
+
+    def test_real_review_merge_exposes_first_parent_regression_blind_spot(self):
+        import subprocess
+        source='2842845c4e4a9866d3bf7bb62a1beeabf58199c2'
+        def changed(parent):
+            return set(subprocess.check_output(['git','diff','--name-only',source+parent,source],cwd=ROOT,text=True).splitlines())
+        path='HavenlineGodot/scripts/world_transform_view.gd'
+        self.assertNotIn(path,changed('^'))
+        self.assertIn(path,changed('^2'))

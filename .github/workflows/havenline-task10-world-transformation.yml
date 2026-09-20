@@ -136,9 +136,9 @@ jobs:
               python3 - <<'PYCODE'
           import json
           r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
-          assert next(x['status'] for x in r['workstreams'] if x['task_id']=='T10') in ['INTEGRATION_READY','INTEGRATING','UNDER_REVIEW']
+          assert next(x['status'] for x in r['workstreams'] if x['task_id']=='T10') in ['INTEGRATION_READY','INTEGRATING','UNDER_REVIEW','FIX_REQUIRED']
           PYCODE
-              python3 tools/havenline/production/validate_integration_scope.py --base "$CANDIDATE^" --head "$CANDIDATE" --output task10-evidence/candidate-scope.json
+              python3 tools/havenline/production/validate_integration_scope.py --base "$CANDIDATE^2" --head "$CANDIDATE" --output task10-evidence/candidate-scope.json
               python3 tools/havenline/production/validate_integration_scope.py --base c1768dbba7bacbbc5d0174e6b9b661b6dbdbbc11 --head "$CANDIDATE" --output task10-evidence/recovery-scope.json
             else
               python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$CANDIDATE" --integration-head "$integration" | tee task10-evidence/candidate-scope.json
@@ -179,7 +179,7 @@ jobs:
           python3 tools/havenline/production/save_state_matrix.py --candidate "$GITHUB_SHA" --task T10 --adapter "python3 tools/havenline/task10/save_matrix_adapter.py" --out task10-evidence/save-matrix > task10-evidence/save-matrix-summary.json
 
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
-          if [ "$GITHUB_SHA" = "$integration" ]; then integration=$(git rev-parse "$GITHUB_SHA^"); fi
+          if [ "$GITHUB_SHA" = "$integration" ]; then integration=$(git rev-parse "$GITHUB_SHA^2"); fi
           python3 tools/havenline/production/regression_runner.py --base "$integration" --head "$GITHUB_SHA" --godot "$(command -v Godot_v4.7.2-stable_linux.x86_64)" --out task10-evidence/impact-regression.json
 
           suites=(
