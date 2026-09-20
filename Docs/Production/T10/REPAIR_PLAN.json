@@ -4,7 +4,7 @@
   "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
   "c0_report_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
-  "c0_report_sha256": "87eb9ca60f48e3237ba9a73118e1ed5e988ac3a98461bc2a11df303d072586ef",
+  "c0_report_sha256": "dce511914144274eaaa0b73044955c282b5edbac6282ae5259846fddadf00fb9",
   "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
   "repair_base_status": "CUMULATIVE_REPAIR_CYCLE_ROOT_WITH_LATEST_TERMINAL_FAILURE_BOUND",
   "repair_base_rule": "Keep cumulative repair base c7a18 unchanged; reconcile the exact canonical integration head recorded in reconciled_integration_head. Latest failed source45eb and every prior failure remain in the source-bound frontier. The candidate implements all27 authorized blockers with unchanged protected surfaces.",
@@ -342,13 +342,17 @@
     },
     {
       "blocker_id": "C0-T10-B055",
-      "causal_change": "Replace analytic-only closure evidence with source-bound rendered label/response mask proof covering 19 profiles × 6 lifecycle states × 6 camera angles.",
+      "causal_change": "Replace analytic-only closure evidence with source-bound rendered label/response mask proof covering 19 profiles \u00d7 6 lifecycle states \u00d7 6 camera angles.",
       "files": [
         "HavenlineGodot/tests/capture_task10_world_transform.gd",
         "tools/havenline/task10/validate_critic_readiness.py",
         "tools/havenline/task10/tests/test_validate_critic_readiness.py",
         "HavenlineGodot/tests/test_task10_integration.gd",
-        "Docs/Production/T10/defect-ledger.json"
+        "Docs/Production/T10/defect-ledger.json",
+        "tools/havenline/task10/run_screen_pixel_canary.py",
+        "tools/havenline/task10/verify_screen_pixel_clearance.py",
+        "tools/havenline/task10/tests/test_verify_screen_pixel_clearance.py",
+        "tools/havenline/task10/preflight_feedback_layout.gd"
       ],
       "verification": [
         "Artifact 10603974070 execution binds the product, capture, verifier, runner, engine and renderer inputs.",
@@ -500,7 +504,7 @@
         "tools/havenline/production/tests/test_python_repair_bindings.py",
         "Docs/Production/T10/Proofs/rendered-shadow-10603974070-summary.json"
       ],
-      "causal_change": "Bind frontier, same-family attempt history and proof to a digest-locked source manifest with exact run/candidate/result hashes and a retained machine-readable proof summary; validate the lock in C0 and C0R, require machine-rendered symbol-bound architectural operations after two attempts, reject fixed scalar repairs, and permit a derived per-case sink only when its exact normalized RHS, dependencies and zero-violation bounds are bound to the proof artifact and exact proof-source commit/path/file hash. Require the current candidate's canonicalized whole proof source—excluding only four exact, locked metadata lines inside the static contract function—to match the proven source exactly. Validate reachable executable symbols, canonical thresholds, the pinned integration branch and the exact builder gate. Finally, make the shared workstream authorization consumer fail-closed while recognizing both the exact legacy schema and the integrated bounded multi-target schema, so earlier lifecycle guards cannot contradict C0R authority. Supply the pinned branch at that shared invocation and test the actual workflow contract. Bind the remaining preflight caller to the same authority contract and execute all workflow call boundaries with changed fixture plan bases. Exclude only byte-exact canonical mechanism text generated from successfully validated nonempty operations from the prose heuristic; continue scanning strategy, explanation and every noncanonical mechanism. Preserve all scalar declarations, structured operation, executable diff/source and proof guards. Scan forward operation target/with/invariant prose, material-difference rationale and escalation reason; historical replaces text remains historical. Migrate repeated-family operation contract to version2: with is exact IMPLEMENT_SYMBOLS[...] from unique ordered validated target_symbols. Free replacement prose always rejects. Target/invariant/rationale explain the repair but cannot authorize symbols or scalar parameters; English heuristics are defense in depth, not universal semantic parsing. Compare exact base/candidate Python ASTs by lexical scope and normalized effect multisets. Track fixed scalar locals, named or fixed-valued keyword arguments and function defaults, simple dominating aliases and conservative unresolved local flows/keyword bundles. Identifier segments distinguish ratio from operation. Missing or unparseable Python source rejects. Preserve the existing proof-bound GDScript path.",
+      "causal_change": "Bind frontier, same-family attempt history and proof to a digest-locked source manifest with exact run/candidate/result hashes and a retained machine-readable proof summary; validate the lock in C0 and C0R, require machine-rendered symbol-bound architectural operations after two attempts, reject fixed scalar repairs, and permit a derived per-case sink only when its exact normalized RHS, dependencies and zero-violation bounds are bound to the proof artifact and exact proof-source commit/path/file hash. Require the current candidate's canonicalized whole proof source\u2014excluding only four exact, locked metadata lines inside the static contract function\u2014to match the proven source exactly. Validate reachable executable symbols, canonical thresholds, the pinned integration branch and the exact builder gate. Finally, make the shared workstream authorization consumer fail-closed while recognizing both the exact legacy schema and the integrated bounded multi-target schema, so earlier lifecycle guards cannot contradict C0R authority. Supply the pinned branch at that shared invocation and test the actual workflow contract. Bind the remaining preflight caller to the same authority contract and execute all workflow call boundaries with changed fixture plan bases. Exclude only byte-exact canonical mechanism text generated from successfully validated nonempty operations from the prose heuristic; continue scanning strategy, explanation and every noncanonical mechanism. Preserve all scalar declarations, structured operation, executable diff/source and proof guards. Scan forward operation target/with/invariant prose, material-difference rationale and escalation reason; historical replaces text remains historical. Migrate repeated-family operation contract to version2: with is exact IMPLEMENT_SYMBOLS[...] from unique ordered validated target_symbols. Free replacement prose always rejects. Target/invariant/rationale explain the repair but cannot authorize symbols or scalar parameters; English heuristics are defense in depth, not universal semantic parsing. Compare exact base/candidate Python ASTs by lexical scope and normalized effect multisets. Track fixed scalar locals, named or fixed-valued keyword arguments and function defaults, simple dominating aliases and conservative unresolved local flows/keyword bundles. Identifier segments distinguish ratio from operation. Missing or unparseable Python source rejects. Preserve the existing proof-bound GDScript path.",
       "verification": [
         "Hostile C0R tests reject erased frontier evidence, false attempt history/counts, scalar euphemisms, undeclared scalar reassignments, comment/string-only markers, incomplete proof provenance, registry branch redirection and threshold weakening.",
         "Workflow tests prove C0R and builder_repair_gate execute in the same direct dependency before either primary build job.",
@@ -2140,7 +2144,7 @@
           ]
         },
         "strategy_kind": "GOVERNANCE",
-        "causal_mechanism": "CONTRACT_REDIRECT[INTEGRATION_BRANCH];CONTRACT_REDIRECT[INTEGRATION_BRANCH,INTEGRATION_HEAD,repair_base];CONTRACT_REDIRECT[structured_operations_valid,current_strategy_text];CONTRACT_REDIRECT[load_trusted_python_review,authority_context]",
+        "causal_mechanism": "CONTRACT_REDIRECT[INTEGRATION_BRANCH];CONTRACT_REDIRECT[INTEGRATION_BRANCH,INTEGRATION_HEAD,repair_base];CONTRACT_REDIRECT[structured_operations_valid,current_strategy_text];CONTRACT_REDIRECT[load_trusted_python_review,authority_context];CONTRACT_REDIRECT[C0R_MACHINE_PROSE_REQUEST_SHA256]",
         "why_this_fixes_cause": "Canonical independent source authority uses a stable snapshot. Actual Git identities distinguish isolated admission from validation of the exact live integrated tip. Both contexts enforce every reviewed byte, regular mode, group binding and permitted metadata delta; stale branches reject.",
         "why_materially_different": "Exact canonical independently reviewed Python source bindings replace incomplete syntax-based parameter accounting; mandatory owner-executed canonical verifier binds the final candidate before promotion. Typed operations remain non-voting; existing GDScript whole-domain proof remains mandatory.",
         "same_family_attempt_count": 2,
@@ -2287,6 +2291,16 @@
             "replaces": "Partial scalar syntax detection and candidate self-attestation",
             "with": "IMPLEMENT_SYMBOLS[load_trusted_python_review,authority_context]",
             "invariant_enforced": "Both isolated and integrated repair admission preserve immutable independent authority and exact reviewed source provenance."
+          },
+          {
+            "operation_kind": "CONTRACT_REDIRECT",
+            "target": "Exact owner source authorization consumed by the architecture validator",
+            "target_symbols": [
+              "C0R_MACHINE_PROSE_REQUEST_SHA256"
+            ],
+            "replaces": "Prior reviewed-source authorization digest",
+            "with": "IMPLEMENT_SYMBOLS[C0R_MACHINE_PROSE_REQUEST_SHA256]",
+            "invariant_enforced": "The architecture validator requires the exact independently reviewed source-authorization bytes; no wildcard or source-check bypass."
           }
         ],
         "scalar_parameters_changed": [],
@@ -2296,7 +2310,8 @@
             ".github/workflows/havenline-candidate-guard.yml",
             ".github/workflows/havenline-task10-pipeline-preflight.yml",
             "tools/havenline/production/repair_sufficiency_critic.py",
-            "tools/havenline/production/builder_repair_gate.py"
+            "tools/havenline/production/builder_repair_gate.py",
+            "tools/havenline/production/validate_architecture_v32_t10.py"
           ],
           "required_added_markers": [
             {
@@ -2314,6 +2329,10 @@
             {
               "kind": "CODE_IDENTIFIER",
               "value": "authority_context"
+            },
+            {
+              "kind": "CODE_IDENTIFIER",
+              "value": "C0R_MACHINE_PROSE_REQUEST_SHA256"
             }
           ]
         },
@@ -2348,7 +2367,7 @@
           "full_failure_family_closed_by_design": false,
           "collection_evidence": [
             "Original run35461009111/job105944782203: job18:23:11, benchmark18:26:48 (217 seconds prior work), exit124 after8 controls; artifact10590840640 SHA2560bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2.",
-            "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211–1771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate.",
+            "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate.",
             "Older same-runtime3d24 completed benchmark in about1174 seconds and packaging plus both uploads in11.6 seconds. The120-second reserve is conservative relative to that observation, not a guarantee under GitHub outage.",
             "Independent source review9.4 at8475f8c5 verified completed-log EOF drain and hostile trailing duplicate rejection."
           ]
@@ -2626,7 +2645,7 @@
           "source_path": "Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json",
           "group_id": "benchmark-liveness",
           "evidence": [
-            "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211–1771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
+            "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
           ],
           "task_approved": false,
           "reusable_for_approval": false
@@ -2715,7 +2734,7 @@
     "threshold_changes": [],
     "loop_risk_acknowledged": true
   },
-  "reconciled_integration_head": "8427a5ce86b1468b76b203d8e15a60394571fbce",
+  "reconciled_integration_head": "0b61aa5bd6a9e9cb3662412f9d0a7003d2bd5f00",
   "inherited_noncausal_files": [
     "Docs/Production/ChangeRequests/T10-c0r-workstream-authorization-schema.json",
     "Docs/Production/ChangeRequests/T10-c0-terminal-evidence-priority.json",
@@ -2729,6 +2748,30 @@
     "Docs/Production/ChangeRequests/T10-benchmark-liveness-contract.json",
     "Docs/Production/ChangeRequests/T10-c0-decoded-complete-evidence.json",
     "Docs/Production/ChangeRequests/T10-c0r-structured-mechanism-detection.json",
-    "Docs/Production/ChangeRequests/T10-repeated-python-source-review.json"
+    "Docs/Production/ChangeRequests/T10-repeated-python-source-review.json",
+    "Docs/Production/ChangeRequests/T10-rendered-clearance-diagnostic-v1-failure.json",
+    "Docs/Production/ChangeRequests/T10-rendered-clearance-diagnostic-v2-result.json",
+    "Docs/Production/ChangeRequests/T10-rendered-clearance-full-domain-one-shot.json",
+    "Docs/Production/ChangeRequests/T10-rendered-clearance-full-domain-scope.json",
+    "Docs/Production/ChangeRequests/T10-rendered-clearance-one-shot-v2.json",
+    "Docs/Production/ChangeRequests/T10-rendered-clearance-one-shot.json",
+    "Docs/Production/ChangeRequests/T10-rendered-clearance-probe-v2.json",
+    "Docs/Production/ChangeRequests/T10-rendered-clearance-probe.json",
+    "Docs/Production/ChangeRequests/T10-screen-pixel-canary-one-shot.json",
+    "Docs/Production/ChangeRequests/T10-screen-pixel-canary-scope.json",
+    "Docs/Production/ChangeRequests/T10-screen-pixel-canary-terminal-result.json",
+    "Docs/Production/Evidence/T10/rendered-domain-recovery/c0r-review.json",
+    "Docs/Production/Evidence/T10/rendered-domain-recovery/owner-review.json",
+    "Docs/Production/Evidence/T10/rendered-domain-recovery/v2-bounded-normal-replay.json",
+    "Docs/Production/Evidence/T10/rendered-domain-recovery/v2-normal-diagnosis.json",
+    "Docs/Production/Evidence/T10/rendered-domain-recovery/v2-summary.json",
+    "Docs/Production/Evidence/T10/screen-pixel-canary/35483383557/admission-summary.json",
+    "Docs/Production/Evidence/T10/screen-pixel-canary/35483383557/file-manifest.json",
+    "Docs/Production/Evidence/T10/screen-pixel-canary/35483383557/summary.json",
+    "Docs/Production/Evidence/T10/screen-pixel-canary/clean-preflight.json",
+    "Docs/Production/Evidence/T10/screen-pixel-canary/full-family-review.json",
+    "Docs/Production/Evidence/T10/screen-pixel-canary/independent-review.json",
+    "Docs/Production/Evidence/T10/screen-pixel-canary/single-realization-review.json",
+    "Docs/Production/PATH_OWNERSHIP.json"
   ]
 }

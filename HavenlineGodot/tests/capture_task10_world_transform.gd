@@ -12,6 +12,17 @@ var device_id := "baseline"
 var device_check := false
 var production_evidence := false
 var exhaustive_projections := false
+var rendered_clearance_probe := false
+var domain_profile := ""
+var evidence_scale := 1.0
+var logical_width := 0
+var logical_height := 0
+var anchor_only := false
+var product_view_sha256 := ""
+var probe_source := ""
+var probe_capture_sha256 := ""
+var probe_verifier_sha256 := ""
+var probe_workflow_sha256 := ""
 var engine
 var view
 var world: Node3D
@@ -44,6 +55,31 @@ func _initialize() -> void:
 			production_evidence = true
 		elif argument == "--exhaustive-projections":
 			exhaustive_projections = true
+		elif argument == "--rendered-clearance-probe":
+			rendered_clearance_probe = true
+		elif argument.begins_with("--domain-profile="):
+			domain_profile = argument.trim_prefix("--domain-profile=")
+			rendered_clearance_probe = true
+			exhaustive_projections = true
+			device_check = true
+		elif argument.begins_with("--readability-scale="):
+			evidence_scale = float(argument.trim_prefix("--readability-scale="))
+		elif argument.begins_with("--logical-width="):
+			logical_width = int(argument.trim_prefix("--logical-width="))
+		elif argument.begins_with("--logical-height="):
+			logical_height = int(argument.trim_prefix("--logical-height="))
+		elif argument == "--native4k-anchors":
+			anchor_only = true
+		elif argument.begins_with("--product-view-sha256="):
+			product_view_sha256 = argument.trim_prefix("--product-view-sha256=")
+		elif argument.begins_with("--probe-source="):
+			probe_source = argument.trim_prefix("--probe-source=")
+		elif argument.begins_with("--probe-capture-sha256="):
+			probe_capture_sha256 = argument.trim_prefix("--probe-capture-sha256=")
+		elif argument.begins_with("--probe-verifier-sha256="):
+			probe_verifier_sha256 = argument.trim_prefix("--probe-verifier-sha256=")
+		elif argument.begins_with("--probe-workflow-sha256="):
+			probe_workflow_sha256 = argument.trim_prefix("--probe-workflow-sha256=")
 	call_deferred("run")
 
 func authoritative_debit(intent: Dictionary) -> Dictionary:
@@ -59,6 +95,7 @@ func authoritative_debit(intent: Dictionary) -> Dictionary:
 
 func add_environment() -> void:
 	var environment_node := WorldEnvironment.new()
+	environment_node.name = "EvidenceEnvironment"
 	var environment := Environment.new()
 	environment.background_mode = Environment.BG_COLOR
 	environment.background_color = Color("101820")
@@ -76,6 +113,7 @@ func add_environment() -> void:
 
 func add_fixture_scene() -> void:
 	var floor := MeshInstance3D.new()
+	floor.name = "EvidenceFloor"
 	var plane := PlaneMesh.new()
 	plane.size = Vector2(8.0, 8.0)
 	floor.mesh = plane
@@ -135,31 +173,259 @@ func configure_camera(angle: String) -> void:
 			camera.position = Vector3(5.6, 3.8, 6.2)
 			camera.look_at(Vector3(0.0, 0.9, 0.0), Vector3.UP)
 
+func _save_viewport_image(path: String) -> bool:
+	var image := root.get_texture().get_image()
+	return image != null and not image.is_empty() and image.save_png(path) == OK
+
+func _vector3_record(value: Vector3) -> Array:
+	return [value.x, value.y, value.z]
+
+func _transform_record(value: Transform3D) -> Dictionary:
+	return {
+		"basis_x": _vector3_record(value.basis.x),
+		"basis_y": _vector3_record(value.basis.y),
+		"basis_z": _vector3_record(value.basis.z),
+		"origin": _vector3_record(value.origin),
+	}
+
+func _logical_viewport_record() -> Array:
+	var logical := root.get_visible_rect().size
+	return [int(round(logical.x)), int(round(logical.y))]
+
+func _clearance_core_binding(name: String, angle: String, case_nonce: String) -> Dictionary:
+	var visual_root := view.get_node("T10WorldResponse") as Node3D
+	var label := view.get_node("T10WorldResponse/StatusLabel") as Label3D
+	var ring := view.get_node("T10WorldResponse/StateRing") as MeshInstance3D
+	var ghost := view.get_node("T10WorldResponse/PreviewVolume") as MeshInstance3D
+	var resource_symbols_path := "res://assets/world_transform_v1/resource_symbols.tres"
+	return {
+		"case_nonce": case_nonce,
+		"domain_profile": domain_profile,
+		"evidence_scale": evidence_scale,
+		"state": name,
+		"angle": angle,
+		"viewport": _logical_viewport_record(),
+		"camera_transform": _transform_record(camera.transform),
+		"camera_fov": camera.fov,
+		"camera_projection": camera.projection,
+		"camera_size": camera.size,
+		"camera_near": camera.near,
+		"camera_far": camera.far,
+		"camera_keep_aspect": camera.keep_aspect,
+		"visual_root_transform": _transform_record(visual_root.transform),
+		"label_transform": _transform_record(label.transform),
+		"ring_transform": _transform_record(ring.transform),
+		"ghost_transform": _transform_record(ghost.transform),
+		"lifecycle_descriptor": view.descriptor(),
+		"dynamic_phase_seconds": float(view.get("_pulse_time")),
+		"label_text": label.text,
+		"label_realization": {
+			"offset": [label.offset.x, label.offset.y],
+			"width": label.width,
+			"fixed_size": label.fixed_size,
+			"pixel_size": label.pixel_size,
+			"billboard": label.billboard,
+			"no_depth_test": label.no_depth_test,
+			"render_priority": label.render_priority,
+			"outline_render_priority": label.outline_render_priority,
+		},
+		"font_identity": {
+			"class": label.font.get_class(),
+			"resource_path": label.font.resource_path,
+			"resource_name": label.font.resource_name,
+			"fallback_count": label.font.fallbacks.size(),
+			"engine_version": Engine.get_version_info(),
+			"font_size": label.font_size,
+			"outline_size": label.outline_size,
+			"resource_symbols_path": resource_symbols_path,
+			"resource_symbols_sha256": FileAccess.get_sha256(resource_symbols_path),
+		},
+		"renderer": RenderingServer.get_current_rendering_method() + "/" + RenderingServer.get_video_adapter_name(),
+		"product_source": candidate,
+		"product_view_sha256": product_view_sha256,
+		"probe_source": probe_source,
+		"probe_capture_sha256": probe_capture_sha256,
+		"probe_verifier_sha256": probe_verifier_sha256,
+		"probe_workflow_sha256": probe_workflow_sha256,
+	}
+
+func _clearance_layer_record(file_name: String, core: Dictionary, isolation: Dictionary) -> Dictionary:
+	var path := output.path_join(file_name)
+	var core_json := JSON.stringify(core)
+	return {
+		"file": file_name,
+		"sha256": FileAccess.get_sha256(path),
+		"core": core,
+		"core_json": core_json,
+		"core_sha256": core_json.sha256_text(),
+		"isolation": isolation,
+	}
+
+func _capture_clearance_layers(name: String, angle: String, case_nonce: String, normal_file: String, normal_core: Dictionary, process_was_enabled: bool) -> Dictionary:
+	var visual_root := view.get_node_or_null("T10WorldResponse") as Node3D
+	var label := view.get_node_or_null("T10WorldResponse/StatusLabel") as Label3D
+	var ring := view.get_node_or_null("T10WorldResponse/StateRing") as MeshInstance3D
+	var ghost := view.get_node_or_null("T10WorldResponse/PreviewVolume") as MeshInstance3D
+	var floor := world.get_node_or_null("EvidenceFloor") as MeshInstance3D
+	var environment_node := world.get_node_or_null("EvidenceEnvironment") as WorldEnvironment
+	if visual_root == null or label == null or ring == null or ghost == null or floor == null or environment_node == null:
+		return {"passed": false, "error": "missing_clearance_probe_nodes"}
+	var label_was_visible := label.visible
+	var ring_was_visible := ring.visible
+	var ghost_was_visible := ghost.visible
+	var floor_was_visible := floor.visible
+	var background_was := environment_node.environment.background_color
+	var label_modulate_was := label.modulate
+	var label_outline_was := label.outline_modulate
+	var caption_was_visible := state_label.visible
+	var prefix := "%s-%s" % [name, angle]
+	var error := ""
+	var layer_records := {
+		"normal": _clearance_layer_record(normal_file, normal_core, {
+			"label_visible": true, "response_visible": true, "floor_visible": true,
+			"caption_visible": true, "id_background": false, "label_id_white": false,
+		}),
+	}
+
+	# R: response only.  B: actual background with both label and response
+	# hidden.  LI/LB are deterministic label-ID passes: the response and floor
+	# are hidden, the environment is black, and glyph plus outline are white.
+	# The independent verifier uses LI-LB for complete label coverage and R-B
+	# for response coverage, avoiding equal-RGB/outline occlusion blind spots.
+	label.visible = false
+	await process_frame
+	await RenderingServer.frame_post_draw
+	var response_file := "%s-response-only.png" % prefix
+	if not _save_viewport_image(output.path_join(response_file)):
+		error = "response_only_capture_failed"
+	else:
+		layer_records["response_only"] = _clearance_layer_record(response_file, _clearance_core_binding(name, angle, case_nonce), {
+			"label_visible": false, "response_visible": true, "floor_visible": true,
+			"caption_visible": true, "id_background": false, "label_id_white": false,
+		})
+
+	var background_file := "%s-background.png" % prefix
+	if error.is_empty():
+		ring.visible = false
+		ghost.visible = false
+		await process_frame
+		await RenderingServer.frame_post_draw
+		if not _save_viewport_image(output.path_join(background_file)):
+			error = "background_capture_failed"
+		else:
+			layer_records["background"] = _clearance_layer_record(background_file, _clearance_core_binding(name, angle, case_nonce), {
+				"label_visible": false, "response_visible": false, "floor_visible": true,
+				"caption_visible": true, "id_background": false, "label_id_white": false,
+			})
+
+	var label_id_background_file := "%s-label-id-background.png" % prefix
+	if error.is_empty():
+		floor.visible = false
+		environment_node.environment.background_color = Color.BLACK
+		label.modulate = Color.WHITE
+		label.outline_modulate = Color.WHITE
+		label.visible = false
+		state_label.visible = false
+		await process_frame
+		await RenderingServer.frame_post_draw
+		if not _save_viewport_image(output.path_join(label_id_background_file)):
+			error = "label_id_background_capture_failed"
+		else:
+			layer_records["label_id_background"] = _clearance_layer_record(label_id_background_file, _clearance_core_binding(name, angle, case_nonce), {
+				"label_visible": false, "response_visible": false, "floor_visible": false,
+				"caption_visible": false, "id_background": true, "label_id_white": true,
+			})
+
+	var label_id_file := "%s-label-id.png" % prefix
+	if error.is_empty():
+		label.visible = label_was_visible
+		await process_frame
+		await RenderingServer.frame_post_draw
+		if not _save_viewport_image(output.path_join(label_id_file)):
+			error = "label_id_capture_failed"
+		else:
+			layer_records["label_id"] = _clearance_layer_record(label_id_file, _clearance_core_binding(name, angle, case_nonce), {
+				"label_visible": true, "response_visible": false, "floor_visible": false,
+				"caption_visible": false, "id_background": true, "label_id_white": true,
+			})
+
+	label.visible = label_was_visible
+	ring.visible = ring_was_visible
+	ghost.visible = ghost_was_visible
+	floor.visible = floor_was_visible
+	environment_node.environment.background_color = background_was
+	label.modulate = label_modulate_was
+	label.outline_modulate = label_outline_was
+	state_label.visible = caption_was_visible
+	view.set_process(process_was_enabled)
+	await process_frame
+	if not error.is_empty():
+		return {"passed": false, "error": error}
+	return {
+		"passed": true,
+		"response_only_file": response_file,
+		"background_file": background_file,
+		"label_id_background_file": label_id_background_file,
+		"label_id_file": label_id_file,
+		"process_frozen": true,
+		"mask_construction": "label=LI-LB;response=R-B;normal=N",
+		"label_id_contract": "white glyph and outline on black; floor and response hidden",
+		"case_nonce": case_nonce,
+		"layer_records": layer_records,
+	}
+
 func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front", "three-quarter"]) -> bool:
 	state_label.text = "T10 NEUTRAL FRAMEWORK | %s\nReal delivered-resource authority | Not T11 content" % name.to_upper()
 	var projection_failed := false
+	var state_processing: bool = view.is_processing()
+	if rendered_clearance_probe:
+		view.set_process(false)
 	for raw_angle in angles:
 		var angle := String(raw_angle)
 		configure_camera(angle)
+		var process_was_enabled: bool = view.is_processing()
+		if rendered_clearance_probe:
+			view.set_process(false)
+			# Bind the committing case to the exact maximum 1.18 pulse envelope;
+			# every isolation layer then retains this frozen dynamic phase.
+			if name == "committing":
+				view.set("_pulse_time", 0.0)
+				view._process(0.25 / TransformView.PULSE_HZ)
+		# Apply the exact layout before the evidence frame.  The returned analytic
+		# report is bound to this camera/state, but an independent raster mask is
+		# authoritative for rendered clearance.
+		var readability: Dictionary = view.projected_readability(camera)
 		await process_frame
 		await RenderingServer.frame_post_draw
 		measure_performance()
 		var image := root.get_texture().get_image()
 		if image == null or image.is_empty():
+			view.set_process(process_was_enabled)
 			return false
 		var filename := "%s-%s.png" % [name, angle]
 		var error := image.save_png(output.path_join(filename))
 		if error != OK:
+			view.set_process(process_was_enabled)
 			return false
-		var readability: Dictionary = view.projected_readability(camera)
-		records.append({
+		var record := {
 			"state": name,
 			"angle": angle,
 			"file": filename,
 			"size": [image.get_width(), image.get_height()],
 			"view": descriptor.duplicate(true),
 			"projected_readability": readability,
-		})
+		}
+		if rendered_clearance_probe:
+			var case_key := candidate + ":" + probe_source + ":" + name + ":" + angle
+			if not domain_profile.is_empty():
+				case_key += ":" + domain_profile
+			var case_nonce := case_key.sha256_text()
+			var normal_core := _clearance_core_binding(name, angle, case_nonce)
+			var layers: Dictionary = await _capture_clearance_layers(name, angle, case_nonce, filename, normal_core, process_was_enabled)
+			if not layers.get("passed", false):
+				return false
+			record["rendered_clearance_layers"] = layers
+		records.append(record)
 		projection_records.append({"state": name, "angle": angle, "projected_readability": readability})
 		if not readability.get("passed", false):
 			projection_failed = true
@@ -168,7 +434,7 @@ func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front
 			else:
 				push_error("Projected readability failed for %s/%s: %s" % [name, angle, JSON.stringify(readability)])
 				return false
-	if device_check:
+	if device_check and not rendered_clearance_probe:
 		for supplemental_angle in ["side", "three-quarter", "overhead", "gameplay", "detail"]:
 			configure_camera(supplemental_angle)
 			await process_frame
@@ -182,6 +448,7 @@ func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front
 				else:
 					push_error("Projected device readability failed for %s/%s: %s" % [name, supplemental_angle, JSON.stringify(supplemental)])
 					return false
+	view.set_process(state_processing)
 	return true if exhaustive_projections else not projection_failed
 
 func measure_performance() -> void:
@@ -226,8 +493,10 @@ func hold_motion(state: String) -> void:
 	motion_segments.append({"state": state, "start_frame": start_frame, "end_frame": Engine.get_frames_drawn(), "fps": 30, "start_seconds": start_frame / 30.0, "end_seconds": Engine.get_frames_drawn() / 30.0})
 
 func capture_lifecycle(inventory: Dictionary) -> void:
-	var angles: Array = ["front"] if device_check else (["front", "side", "three-quarter", "overhead", "gameplay", "detail"] if production_evidence else ["front", "three-quarter"])
-	var states := ["ready", "blocked", "preview", "committing", "complete", "replay"]
+	var angles: Array = ["gameplay"] if rendered_clearance_probe else (["front"] if device_check else (["front", "side", "three-quarter", "overhead", "gameplay", "detail"] if production_evidence else ["front", "three-quarter"]))
+	if not domain_profile.is_empty():
+		angles = ["overhead"] if anchor_only else ["front", "side", "three-quarter", "overhead", "gameplay", "detail"]
+	var states := ["ready", "blocked"] if anchor_only else ["ready", "blocked", "preview", "committing", "complete", "replay"]
 	var ready_offer: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
 	view.set_ready(ready_offer)
 	if not await capture_state("ready", view.descriptor(), angles): quit(1); return
@@ -236,14 +505,14 @@ func capture_lifecycle(inventory: Dictionary) -> void:
 	if blocked.passed or not view.show_blocked(blocked) or not await capture_state("blocked", view.descriptor(), angles): quit(1); return
 	await hold_motion("blocked")
 	var preview: Dictionary = engine.preview_transform("framework_anchor_seed_to_foundation", "capture-anchor", inventory)
-	if not preview.passed or not view.show_preview(preview) or not await capture_state("preview", view.descriptor(), angles): quit(1); return
+	if not preview.passed or not view.show_preview(preview) or (not anchor_only and not await capture_state("preview", view.descriptor(), angles)): quit(1); return
 	await hold_motion("preview")
 	var intent: Dictionary = engine.commit_transform("capture-tx", "framework_anchor_seed_to_foundation", "capture-anchor", inventory)
-	if not intent.passed or not view.show_commit(intent) or not await capture_state("committing", view.descriptor(), angles): quit(1); return
+	if not intent.passed or not view.show_commit(intent) or (not anchor_only and not await capture_state("committing", view.descriptor(), angles)): quit(1); return
 	await hold_motion("committing")
 	var accepted: Dictionary = engine.accept_authoritative_receipt(authoritative_debit(intent))
 	var next_offer: Dictionary = engine.preview_transform("framework_anchor_foundation_to_reinforced", "capture-anchor", simulation.stored)
-	if not accepted.passed or not view.mark_complete(accepted, next_offer) or not await capture_state("complete", view.descriptor(), angles): quit(1); return
+	if not accepted.passed or not view.mark_complete(accepted, next_offer) or (not anchor_only and not await capture_state("complete", view.descriptor(), angles)): quit(1); return
 	await hold_motion("complete")
 	var stored_before := simulation.stored.duplicate(true)
 	var component_before: Dictionary = engine.export_component_state()
@@ -251,13 +520,13 @@ func capture_lifecycle(inventory: Dictionary) -> void:
 	var replay_receipt: Dictionary = simulation.commit_world_transform_debit(intent)
 	var replay: Dictionary = engine.accept_authoritative_receipt(replay_receipt)
 	var replay_verified: bool = replay_receipt.get("simulation_replayed", false) and replay.get("replayed", false) and simulation.stored == stored_before and engine.export_component_state() == component_before and view.descriptor() == view_before
-	if not replay_verified or not await capture_state("replay", view.descriptor(), angles): quit(1); return
+	if not replay_verified or (not anchor_only and not await capture_state("replay", view.descriptor(), angles)): quit(1); return
 	await hold_motion("replay")
 	var final_view: Dictionary = view.descriptor()
 	var manifest := {
 		"task_id": "T10", "candidate": candidate,
 		"mode": "real-authority-neutral-fixture", "device_id": device_id,
-		"logical_size": [capture_width, capture_height],
+		"logical_size": _logical_viewport_record() if rendered_clearance_probe else [capture_width, capture_height],
 		"capture_resolution": [capture_width, capture_height],
 		"native_scale_1": capture_width == 3840 and capture_height == 2160,
 		"fixture_only": false, "t11_content": false,
@@ -271,16 +540,29 @@ func capture_lifecycle(inventory: Dictionary) -> void:
 		"motion_segments": motion_segments,
 		"motion_frames_per_state": 30 if not device_check and not production_evidence else 0,
 		"record_count": records.size(), "states": states, "angles": angles, "records": records,
-		"projection_angles": ["front", "side", "three-quarter", "overhead", "gameplay", "detail"] if device_check or production_evidence else angles,
+		"projection_angles": angles if rendered_clearance_probe else (["front", "side", "three-quarter", "overhead", "gameplay", "detail"] if device_check or production_evidence else angles),
 		"projection_record_count": projection_records.size(), "projection_records": projection_records,
 		"exhaustive_projections": exhaustive_projections,
+		"rendered_clearance_probe": rendered_clearance_probe,
+		"domain_profile": domain_profile,
+		"evidence_scale": evidence_scale,
+		"rendered_clearance_committing_phase": "maximum_1.18" if rendered_clearance_probe else "",
+		"rendered_clearance_identity": {
+			"product_source": candidate,
+			"product_view_sha256": product_view_sha256,
+			"probe_source": probe_source,
+			"probe_capture_sha256": probe_capture_sha256,
+			"probe_verifier_sha256": probe_verifier_sha256,
+			"probe_workflow_sha256": probe_workflow_sha256,
+		} if rendered_clearance_probe else {},
+		"rendered_clearance_triplet_count": records.size() if rendered_clearance_probe else 0,
 		"projection_failure_count": projection_records.filter(func(row): return not row.get("projected_readability", {}).get("passed", false)).size(),
 		"view_visual_node_count": int(final_view.visual_node_count),
 		"view_visual_build_count": int(final_view.visual_build_count),
 		"final_target": engine.descriptor().targets["capture-anchor"].duplicate(true),
 		"integration_allowed": false, "task_approved": false,
 		"projected_readability_passed": projection_records.all(func(row): return row.get("projected_readability", {}).get("passed", false)),
-		"passed": records.size() == states.size() * angles.size() and projection_records.size() == states.size() * (6 if device_check or production_evidence else angles.size()) and projection_records.all(func(row): return row.get("projected_readability", {}).get("passed", false)) and int(final_view.visual_node_count) == 4 and int(final_view.visual_build_count) == 1 and debit_verified and replay_verified,
+		"passed": records.size() == states.size() * angles.size() and projection_records.size() == states.size() * (angles.size() if rendered_clearance_probe else (6 if device_check or production_evidence else angles.size())) and projection_records.all(func(row): return row.get("projected_readability", {}).get("passed", false)) and int(final_view.visual_node_count) == 4 and int(final_view.visual_build_count) == 1 and debit_verified and replay_verified,
 	}
 	if not write_manifest(manifest): quit(1); return
 	print(JSON.stringify(manifest))
@@ -291,8 +573,24 @@ func run() -> void:
 		print(JSON.stringify({"passed": false, "error": "invalid_capture_size"}))
 		quit(1)
 		return
+	if rendered_clearance_probe:
+		var actual_view_sha256 := FileAccess.get_sha256("res://scripts/world_transform_view.gd")
+		var actual_capture_sha256 := FileAccess.get_sha256("res://tests/capture_task10_world_transform.gd")
+		if candidate.length() != 40 or probe_source.length() != 40 or product_view_sha256.length() != 64 or probe_capture_sha256.length() != 64 or probe_verifier_sha256.length() != 64 or probe_workflow_sha256.length() != 64:
+			print(JSON.stringify({"passed": false, "error": "incomplete_rendered_clearance_identity"}))
+			quit(1)
+			return
+		if actual_view_sha256 != product_view_sha256 or actual_capture_sha256 != probe_capture_sha256:
+			print(JSON.stringify({"passed": false, "error": "rendered_clearance_source_hash_mismatch", "actual_view_sha256": actual_view_sha256, "actual_capture_sha256": actual_capture_sha256}))
+			quit(1)
+			return
+	if not domain_profile.is_empty() and (logical_width <= 0 or logical_height <= 0 or not is_finite(evidence_scale) or evidence_scale < 0.85 or evidence_scale > 1.35):
+		quit(2)
+		return
 	DirAccess.make_dir_recursive_absolute(output)
 	root.size = Vector2i(capture_width, capture_height)
+	if not domain_profile.is_empty():
+		root.content_scale_size = Vector2i(logical_width, logical_height)
 	world = Node3D.new()
 	root.add_child(world)
 	add_environment()
@@ -310,7 +608,7 @@ func run() -> void:
 		return
 	world.add_child(view)
 	await process_frame
-	if not view.configure_readability(1.0):
+	if not view.configure_readability(evidence_scale):
 		print(JSON.stringify({"passed": false, "error": "readability_setup_failed"}))
 		quit(1)
 		return

@@ -351,7 +351,7 @@
         "source_path": "Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json",
         "group_id": "benchmark-liveness",
         "evidence": [
-          "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211–1771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
+          "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
         ],
         "task_approved": false,
         "reusable_for_approval": false
@@ -1127,7 +1127,11 @@
         "HavenlineGodot/tests/test_task10_integration.gd",
         "Docs/Production/T10/C0_ROOT_CAUSE.json",
         "Docs/Production/T10/REPAIR_PLAN.json",
-        "Docs/Production/T10/defect-ledger.json"
+        "Docs/Production/T10/defect-ledger.json",
+        "tools/havenline/task10/run_screen_pixel_canary.py",
+        "tools/havenline/task10/verify_screen_pixel_clearance.py",
+        "tools/havenline/task10/tests/test_verify_screen_pixel_clearance.py",
+        "tools/havenline/task10/preflight_feedback_layout.gd"
       ],
       "files_not_to_change": [
         "HavenlineGodot/scripts/world_transform.gd",
@@ -1481,7 +1485,7 @@
       ],
       "evidence": [
         "Original run35461009111/job105944782203: job18:23:11, benchmark18:26:48 (217 seconds prior work), exit124 after8 controls; artifact10590840640 SHA2560bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2.",
-        "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211–1771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate.",
+        "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate.",
         "Older same-runtime3d24 completed benchmark in about1174 seconds and packaging plus both uploads in11.6 seconds. The120-second reserve is conservative relative to that observation, not a guarantee under GitHub outage.",
         "Independent source review9.4 at8475f8c5 verified completed-log EOF drain and hostile trailing duplicate rejection.",
         "Retained cheap trace proof Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json SHA2564c10b53b809228d72b007d4a6a790c095089e7ec8d9a409effb2436f3b4f3659 invokes actual ProgressGuard/completion_errors and unmocked benchmark_errors; six hostile completions reject and original timeout stays failed."
@@ -1537,7 +1541,7 @@
     "C0 artifact10588669986 SHA2569c5a8c8581326d589a507784e56b8611ca4318eb3c78905c8d4c2f92e3d9dce4: unchanged old request17680 bytes. Reviewed repair reconstructs13 groups and97 exact errors/claims in13564 bytes under unchanged13672 maximum.",
     "C0 artifact10590392757 SHA256de4d502a76d13fe36a552bedd37079111c03672044e2735fda4bbccdf542a328 retained the exact decoded shell quotation. Replay validates its quotes at11112 request bytes, while unsupported simulation/infinite-loop advice remains rejected.",
     "Original run35461009111/job105944782203: job18:23:11, benchmark18:26:48 (217 seconds prior work), exit124 after8 controls; artifact10590840640 SHA2560bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2.",
-    "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211–1771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
+    "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
   ],
   "unexecuted_checks": [
     "New cumulative source must pass exact C0R, builder, ownership, governance and cheap preflight before one fresh isolated candidate.",
@@ -1563,5 +1567,22 @@
   "confidence": "high",
   "approval_claimed": false,
   "score_assigned": false,
-  "shipping_gameplay_runtime_change_authorized": true
+  "shipping_gameplay_runtime_change_authorized": true,
+  "pre_final_reconciliation": {
+    "scope": "Evidence and metadata only; unchanged product source fc35ebc4bc59dd41e165f6eb8d091ed274c1f02a5fe48e56cf8c9d15b8970b75",
+    "engine_reproduction_run": 35522179547,
+    "frozen_source": "f85e2b94cd77676e44f374f8577d079f0d2f6070",
+    "domain_passed": 238,
+    "integration_cases": 135,
+    "integration_failures": 6,
+    "classification": "TEST_CONTRACT_DRIFT",
+    "mapped_existing_blockers": [
+      "C0-T10-B053",
+      "C0-T10-B055",
+      "C0-T10-B057",
+      "C0-T10-B062"
+    ],
+    "repair": "Restore the already verified screen-pixel v3 assertions and full raster proof driver. Reconcile exact canonical historical metadata and source authorization; do not alter gameplay or acceptance thresholds.",
+    "task_approved": false
+  }
 }

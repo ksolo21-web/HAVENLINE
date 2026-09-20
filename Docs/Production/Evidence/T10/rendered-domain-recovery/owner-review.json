@@ -1,0 +1,46 @@
+{
+  "reviewer": "independent-integration-owner /root/recovered_t10_owner_review",
+  "review_type": "bounded diagnostic integration-owner source review",
+  "reviewed_commit": "2a7e7f36eeee88de3cf5063b4ca50eb8ac330e5a",
+  "reviewed_tree": "80b09e1326d3e11bdbecef4baa1905b0d227ffe2",
+  "baseline_commit": "da251cdd8556e1c336a3bdf5d5adbd7852decdae",
+  "canonical_observed_commit": "58a4208913eabfcb0ed4756edc9a9c129e0982f4",
+  "decision": "ACCEPTED_FOR_ONE_SEPARATELY_AUTHORIZED_FULL_DOMAIN_DIAGNOSTIC_EXECUTION",
+  "task_approved": false,
+  "product_integration_authorized": false,
+  "trigger_authorized_by_this_report": false,
+  "exact_source_sha256": {
+    ".github/workflows/havenline-rendered-clearance-t10-full-domain-recovery.yml": "c53581a58add927987e2393949c62b7e050779e137cabdc2ea615012d42b4005",
+    "HavenlineGodot/tests/capture_task10_world_transform.gd": "b1254e02b1529d9ee7aec25a5fdd1cdebfe98fb372c3d930f29c459c7642b522",
+    "tools/havenline/task10/run_rendered_clearance_domain.py": "098d216b215bd252cc0ef734f60517e78fc947389dc6dbbf6fc272fc7fe0c03e",
+    "tools/havenline/task10/tests/test_verify_rendered_clearance_domain.py": "b8246ab9a89aeddc017fdef505c2071cc2d97bbae17ab34c74c20abc6ae0d6e7",
+    "tools/havenline/task10/verify_rendered_clearance_domain.py": "e4ce544d93aaebb0f4015e08e234ff78454a156ce1d4a6ae3f975059f0228d23"
+  },
+  "product_view_sha256": "5067ea967ea527cb28a4d5df5f4a5bd4cca8bf5dad393c4b6ca326a9897d8561",
+  "findings": [
+    "Five-path delta from V2; product view unchanged.",
+    "Independent domain enumerates 216 base + 432 readability endpoints + 2 native4K overhead anchors = 650 cases across 19 profiles.",
+    "State processing disabled before angle configuration; committing pulse resets and is advanced to exact quarter-cycle on every angle, preserving maximum pulse across five isolation images.",
+    "Analytic and raster geometry failures produce failed rows while preserving all source images and masks. Invalid provenance remains fail-closed; runner continues other profiles.",
+    "Normal correspondence requires >=50 percent label-mask coverage plus spatial/numeric bounds outside label; hostile white/single-pixel/recolor/erase substitutions are rejected.",
+    "Admission binds exact remote commit/tree/workflow hash/ref/event and V2 result tuple; requires run attempt 1 and only one matching run. Upload runs on failure.",
+    "Diagnostic does not authorize final product approval, C4 closure, critic-budget closure, or T11 unlock."
+  ],
+  "verification": {
+    "focused_unittest_command": "python3 -m unittest tools.havenline.task10.tests.test_verify_rendered_clearance_domain",
+    "tests": 4,
+    "result": "PASS"
+  },
+  "canonical_requirements": [
+    "Integration owner adds .github/workflows/havenline-rendered-clearance-t10-full-domain-recovery.yml to @ownership:QA-GOV in PATH_OWNERSHIP.json. Capture and tools already belong to @reservation:T10; do not duplicate ownership.",
+    "Create bounded ChangeRequests scope record with requesting_task,target_path,requested_change,reason,dependency,expected_behavior,tests_required,status,integration_owner_disposition; list exact five-path delta and immutable product-view hash.",
+    "Retain V2 result run35478189624 artifact10594858274 ZIP SHA234626b1bae1d89cdb94ca6e1c069cc95612cbb80725c08948026e6f25fed8ce and its independent result decisions; representative proof stays domain_complete=false.",
+    "Create Docs/Production/ChangeRequests/T10-rendered-clearance-full-domain-one-shot.json only after fresh C0R acceptance and clean pinned parser preflight. Bind this review hash, C0R hash, exact five source hashes, V2 evidence, and remote-source identity mapping.",
+    "One-shot fields: task_id=T10; authorization_kind=T10_RENDERED_CLEARANCE_FULL_DOMAIN_ONE_SHOT; disposition=AUTHORIZED_FOR_ONE_DIAGNOSTIC_EXECUTION; diagnostic_execution_authorized=true; max_runs=1; domain_cases=650; task_approved=false.",
+    "probe must exactly equal runtime dictionary: commit remote staging commit, tree80b09e1326d3e11bdbecef4baa1905b0d227ffe2, workflow_path .github/workflows/havenline-rendered-clearance-t10-full-domain-recovery.yml, workflow_sha256 c53581a58add927987e2393949c62b7e050779e137cabdc2ea615012d42b4005, ref refs/heads/havenline/governance-T10-rendered-clearance-full-domain-recovery, event push, failed_source30a7e0cc40d44aea2b21229bc39f312da13865e0, failed_view_sha2566d737567f224be8d221b18e4d0ace6c6ef10de0102d27901c9f9e8d37e6659ac.",
+    "v2_result must exactly equal run_id35478189624, artifact_id10594858274, zip_sha256234626b1bae1d89cdb94ca6e1c069cc95612cbb80725c08948026e6f25fed8ce.",
+    "Preserve V1/V2 trigger refs and consumed records. Full-domain trigger is one new run only. Product integration, final candidate approval, rerun and run deletion remain false.",
+    "Verify remote staging tree equality and current canonical head before owner metadata integration; use synthetic merge/contract forecast and applicable metadata regression. Do not move the trigger ref until canonical records exist."
+  ],
+  "scope_limit": "This verdict supports one diagnostic execution after canonical source authorization and C0R acceptance; it is not evidence that the product passes650 cases."
+}

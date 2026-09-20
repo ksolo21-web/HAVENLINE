@@ -57,6 +57,7 @@ func run() -> void:
 	var screen_delta := Vector2(-20.0, -40.0)
 	var label_offset := TransformView.screen_delta_to_label_offset(screen_delta, 2.0)
 	check("Label3D offset preserves screen X and inverts viewport Y", label_offset.is_equal_approx(Vector2(-10.0, 20.0)), label_offset)
+	check("Label3D offset rejects invalid scale", TransformView.screen_delta_to_label_offset(Vector2.ONE, 0.0) == Vector2.ZERO)
 
 	# R01/R07 catalog validation must fail closed before any runtime target exists.
 	var base_forward: Dictionary = {
