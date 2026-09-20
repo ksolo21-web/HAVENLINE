@@ -15,21 +15,19 @@
     "Docs/Production/ChangeRequests/T10-repeated-python-source-review.json"
   ],
   "independent_review": {
-    "reviewer": "independent-final-bookkeeping-review",
-    "review_id": "T10-bookkeeping-fc9010daebf6",
-    "reviewed_commit": "fc9010daebf6b4d520333279486a1b6bea164e7c",
-    "reviewed_tree": "dad82b4136efa814f2a4328ef50f6a225899d61c",
-    "evidence_sha256": "a53051022c41ac62db1fd6024e0a24eaf48d173b2ec7190d1c102087b658738a",
+    "reviewer": "independent-final-runner-source-review",
+    "review_id": "T10-runner-5484a8c3d47f",
+    "reviewed_commit": "5484a8c3d47ffb0d895b379aeb267f190f3ff577",
+    "reviewed_tree": "27eb21aaa4ef19375e7562d223d19f6b9af169a2",
+    "evidence_sha256": "2161486503dd65af9443e88b7f235fcaf883c21c8e49cf13e3ad5eef7f6b84fb",
     "score": 10.0,
     "evidence": {
-      "bookkeeping_review": {
-        "archive_sha256": "dca7e3db27039e2120cb7eeaeb9ec187c7f9abbe6ec6d221a57e2a235438ae03",
-        "result_sha256": "657fda96a055be6693f53d12a0654eb56161c900900b7d276396385964b41ea3",
-        "lowest_score": 10.0
-      },
-      "prior_source_authority_sha256": "c613c75400e7d9e952340c5ebee4df8074ca7d5394830e1f54be3ce228f69ec9",
-      "prior_candidate": "249b61b02db28f694291dda8c1019c2514e991bf",
-      "scope": "Two-file bookkeeping classification correction only; all gameplay/runtime/test bytes unchanged."
+      "review_archive_sha256": "86ff689660c8dd8aaa7b51be88d0f73cd4b377686df59a71a7e391982e96d197",
+      "review_result_sha256": "71bd14dddb03ad6317c3fa01baab533e0e474aa76190386dde1f3263cf7d4c4c",
+      "lowest_score": 10.0,
+      "reviewed_commit": "5484a8c3d47ffb0d895b379aeb267f190f3ff577",
+      "reviewed_tree": "27eb21aaa4ef19375e7562d223d19f6b9af169a2",
+      "prepared_benchmark_authority_sha256": "ac4a2f46743940a58fcd675623611b1fe9052ed615fcd7ab2fcba478a5822dec"
     }
   },
   "bindings": [
@@ -73,11 +71,11 @@
       "path": "tools/havenline/production/validate_architecture_v32_t10.py",
       "operation_contract_sha256": "3204ff6e40f5ab8adf3e83644aa3f2fd6fc5cc7a5d7e399f6e655ac9b337e734",
       "before_sha256": "a9eb915511d5aada2e236da199ae77c8c7badfdf9a701d7c9d64431a3bb476a7",
-      "after_sha256": "1d427cf1c2c38b721b52a4230ba72cae2115c9e80759f4a7dc9a409af04b653c",
+      "after_sha256": "283f0845a54fa38b1c8c50be9909bccbad881644a26dc917408f4d17310fa5a8",
       "before_mode": "100644",
       "after_mode": "100644"
     }
   ],
-  "causal_source_set_sha256": "53d7b7dd46de323867be2f5a60af384df44dd7f2807f0d348be4f69bddef3e31",
-  "authority_boundary": "Exact metadata-only reviewed source; owner must verify ordered [R,H] and use a non-forced canonical update. No T10 approval or T11 unlock."
+  "causal_source_set_sha256": "d8f606f6044b0d9ebd3edf5a110dbeaee0643a04ed7c460f6c2bef3edd2ce162",
+  "authority_boundary": "Benchmark authorization and repeated-Python source review remain a separate metadata-only authority parent. Owner must verify exact ordered [R,H] and publish non-forced. No T10 approval or T11 unlock."
 }
