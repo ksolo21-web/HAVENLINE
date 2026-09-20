@@ -22,7 +22,7 @@ EXPECTED_THRESHOLD_REGISTRY_HASHES = {
 LOCKED_REPAIR_INTELLIGENCE = {
     "C0-T10-c7a18d0-comprehensive-anti-loop": {
         "path": "Docs/Production/T10/C0_REPAIR_INTELLIGENCE_LOCK.json",
-        "sha256": "debae108e140b28ffe8afb6ad4d77620b980fbb9b04fcb986a2f4e67337f5154",
+        "sha256": "337a212a37d9f1ff5cbd5daf89787e5ea39b9af8dd9737407674bda9c3dedb20",
     }
 }
 ARCHITECTURAL_OPERATION_KINDS = {
