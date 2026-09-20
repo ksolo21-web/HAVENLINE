@@ -396,7 +396,7 @@ func _projected_response_rect(active_camera: Camera3D) -> Rect2:
 	for point in mesh_points:
 		minimum = minimum.min(point)
 		maximum = maximum.max(point)
-	var response := Rect2(minimum, maximum - minimum)
+	var response := Rect2(minimum, maximum - minimum).grow(LABEL_FIT_SLACK_PX)
 	if not shadow_points.is_empty():
 		var shadow_minimum := shadow_points[0]
 		var shadow_maximum := shadow_points[0]
