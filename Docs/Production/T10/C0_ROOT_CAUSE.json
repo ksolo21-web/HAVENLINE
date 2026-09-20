@@ -38,6 +38,14 @@
           "candidate": "8ab496db00f10fcf7dadd9d85139e752ff91cff0",
           "run_id": 35402388836,
           "lesson": "Ready/overhead improved, but 8ab exposed blocked/overhead and exhaustive collection later found the whole overhead containment family."
+        },
+        {
+          "strategy": "Screen-pixel v3 logical-pixel realization with mesh-only analytic response envelope",
+          "outcome": "PARTIAL",
+          "same_family": true,
+          "candidate": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97",
+          "run_id": 35483383557,
+          "lesson": "The 180-case hosted raster canary found 10 measured shadow-clearance failures despite analytic placement passing; the response envelope omitted directional-light shadows cast onto the evidence floor."
         }
       ]
     },
@@ -145,55 +153,31 @@
       "proof": {
         "required": true,
         "provided": true,
-        "method": "Bounded non-approval constrained-layout prototype executed the authoritative 6 devices \u00d7 6 lifecycle states \u00d7 6 camera angles matrix.",
-        "expected_cases": 216,
-        "covered_cases": 216,
+        "method": "Hosted full rendered screen-pixel proof across 19 device/readability profiles, six lifecycle states and six camera angles using independent label and response raster masks.",
+        "expected_cases": 684,
+        "covered_cases": 684,
         "dimensions": {
-          "device": 6,
+          "profile": 19,
           "lifecycle_state": 6,
           "camera_angle": 6
         },
-        "artifact_id": 10584940146,
-        "artifact_sha256": "affa1884f56bf4ab5b1000f4ebcf2f29b3da93ddd1ad47306ad7584955fbf6a8",
-        "proof_source_commit": "58789aafcba7f2cf85c4097472989f5bb2dc445f",
+        "artifact_id": 10603974070,
+        "artifact_sha256": "5df019bd208c167914678d239a0712492bfe8afc57a713abcc97c076d4f07790",
+        "proof_source_commit": "48ffd32a0ce7518e4734630f69553e1525eba116",
         "proof_source_path": "HavenlineGodot/scripts/world_transform_view.gd",
-        "proof_source_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+        "proof_source_sha256": "fc35ebc4bc59dd41e165f6eb8d091ed274c1f02a5fe48e56cf8c9d15b8970b75",
         "proof_slice_mode": "WHOLE_FILE_EXCEPT_EXACT_METADATA_LINES",
-        "proof_irrelevant_exact_lines": [
-          "\t\t\"label_layout_policy\": \"constrained_screen_lanes_v1\",",
-          "\t\t\"label_dynamic_camera_lane\": true,",
-          "\t\t\"label_min_readability_scale\": READABILITY_MIN,",
-          "\t\t\"label_fit_slack_px\": LABEL_FIT_SLACK_PX,"
-        ],
-        "proof_relevant_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
-        "derived_effect_bounds": {
-          "_beacon.pixel_size": {
-            "dependency_symbols": [
-              "projection",
-              "label_scale"
-            ],
-            "minimum_gte": 0.004845,
-            "maximum_lte": 0.0057,
-            "violation_count": 0
-          },
-          "_beacon.width": {
-            "dependency_symbols": [
-              "projection",
-              "wrap_width"
-            ],
-            "minimum_policy": "whole_word_width",
-            "maximum_lte": 960.0,
-            "violation_count": 0
-          }
-        },
-        "verifier": "Read summary.json from artifact 10584940146 and require projection_count=216, failure_count=0, diagnostic_collection_passed=true, product_projection_passed=true, task_approved=false and reusable_for_approval=false."
+        "proof_irrelevant_exact_lines": [],
+        "proof_relevant_sha256": "fc35ebc4bc59dd41e165f6eb8d091ed274c1f02a5fe48e56cf8c9d15b8970b75",
+        "derived_effect_bounds": {},
+        "verifier": "Read cases/execution.json and cases/summary.json from artifact 10603974070; require source 48ffd32a0ce7518e4734630f69553e1525eba116, input hash fc35ebc4bc59dd41e165f6eb8d091ed274c1f02a5fe48e56cf8c9d15b8970b75, domain=full684, expected_cases=684, case_count=684, domain_complete=true, every profile failure_count=0 and passed=true, physical_certification=false, task_approved=false."
       }
     }
   ],
   "failure_frontier": {
     "complete": true,
-    "diagnosed_through_candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
-    "latest_observed_failed_candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+    "diagnosed_through_candidate": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97",
+    "latest_observed_failed_candidate": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97",
     "observations": [
       {
         "run_id": 35402388836,
@@ -325,6 +309,17 @@
           "Adapter preflight run35454638560 independently rejected the same eight already-integrated C0R governance paths through the legacy authorization consumer, as retained in the original combined guard/adapter observation."
         ],
         "reason": "Separate source-bound job family observation of the same B062 strategy, not an additional repair attempt."
+      },
+      {
+        "run_id": 35483383557,
+        "candidate": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97",
+        "disposition": "BOUND_TO_EXISTING_GROUP",
+        "group_id": "layout-feasibility",
+        "evidence": [
+          "Hosted screen-pixel canary retained 180 cases across five profiles with all capture exits zero and 10 measured raster failures.",
+          "All 10 failures were label-versus-rendered-response clearance failures while the analytic solver treated the placement as legal; retained layer masks isolate label and response pixels independently."
+        ],
+        "reason": "Same projected-label-feasibility family: the solver modeled mesh projection but not directional-light shadow pixels on the ground plane."
       }
     ],
     "unclassified_failures": [],
@@ -356,7 +351,7 @@
         "source_path": "Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json",
         "group_id": "benchmark-liveness",
         "evidence": [
-          "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
+          "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211–1771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
         ],
         "task_approved": false,
         "reusable_for_approval": false
@@ -418,6 +413,18 @@
         "classification": "INDEPENDENT_REVIEW_REJECTED_REMOTE_RACE",
         "finding": "Independent review of17435472 found that re-reading only the local remote-tracking ref misses a remote-only branch advance. Real bare-origin replay preserved the stale local ref and exposed acceptance; owner publication also needs an atomic forward-only precondition.",
         "disposition": "Live-origin query and restricted forward-only promotion DAG; no full candidate run or attempt increment."
+      },
+      {
+        "source_kind": "DIAGNOSTIC_NONAPPROVAL",
+        "run_id": 35508254523,
+        "candidate": "48ffd32a0ce7518e4734630f69553e1525eba116",
+        "source_path": "artifact 10603974070 / cases/summary.json",
+        "group_id": "layout-feasibility",
+        "evidence": [
+          "Fresh hosted full raster proof retained 684/684 passing cases over 19 profiles, six lifecycle states and six camera angles; product source hash fc35ebc4bc59dd41e165f6eb8d091ed274c1f02a5fe48e56cf8c9d15b8970b75."
+        ],
+        "task_approved": false,
+        "reusable_for_approval": false
       }
     ]
   },
@@ -1044,8 +1051,8 @@
       "classification": "PRODUCT_DEFECT",
       "affected_object": "T10 presentation and critic evidence",
       "symptom": "C1 and C2 independently rejected the original committing-overhead collision. Exact candidates 5fc87f and 0f9303 then passed primary/structural gates but their isolated phone 16:9 ready/overhead projection placed the label rectangle 20.006 px beyond the 27 px safe-frame inset.",
-      "root_cause": "The camera-plane fallback had no guaranteed legal terminal region. Width tuning did not affect natural measured width; the subsequent fixed pixel scale addressed ready but failed the longer blocked label. Feasibility depends on device, lifecycle text and camera together.",
-      "causal_fix": "Replace unconditional fallback with constrained screen-lane placement and bounded per-case reflow. Derive pixel_size from label_scale and width from wrap_width only within the locked readability and whole-word bounds; prove containment, clearance and overlap for every accepted placement and fail impossible geometry deterministically. Preserve four nodes, one build, cameras, authority and lifecycle semantics.",
+      "root_cause": "The constrained lane solver used a projected response rectangle derived from ring/preview mesh geometry, while the evidence scene also renders shadow-enabled directional lighting onto a floor. Those light-cast pixels extend beyond the mesh envelope, so the solver could certify analytic separation while the actual label overlapped or violated clearance against the rendered response.",
+      "causal_fix": "Include the light-cast response region in lane geometry by projecting caster corners along each active directional-light ray to the response ground plane and merging that region before candidate selection. Preserve the existing safe-frame, clearance, priority and readability contracts.",
       "files_to_change": [
         "HavenlineGodot/scripts/world_transform_view.gd",
         "HavenlineGodot/tests/test_task10_integration.gd",
@@ -1111,8 +1118,8 @@
       "classification": "EVIDENCE_DEFECT",
       "affected_object": "T10 presentation and critic evidence",
       "symptom": "The strict projection invariant stopped both exact 5fc87f and 0f9303 isolated runs at the first phone 16:9 ready/overhead out-of-frame label before any critic executed; the second run proved the width-only repair was ineffective.",
-      "root_cause": "The strict per-case invariant correctly found clipping, but device collection stopped at the first red case and the earlier source contract prescribed a fixed scalar rather than guaranteed placement. The complete observable family was therefore unavailable during repair selection.",
-      "causal_fix": "Collect all six devices by six lifecycle states by six angles before returning a failed disposition. Retain every finite rectangle, containment, clearance, overlap and priority check; bind readiness and source contracts to constrained placement/reflow and deterministic impossible-case failure, with all216 projections required before critics.",
+      "root_cause": "The earlier 216-case proof was analytic-only and therefore could not observe raster pixels created by lighting. The later 180-case screen-pixel canary exposed 10 failures that the analytic invariant missed, so complete repair proof must be rendered and cover the full required device/readability/state/angle domain.",
+      "causal_fix": "Use independent raster label/response masks and full-domain hosted capture across all 19 required profiles, six lifecycle states and six camera angles; require 684/684 cases with zero direct or clearance failures before the layout family is considered closed.",
       "files_to_change": [
         "HavenlineGodot/tests/capture_task10_world_transform.gd",
         "tools/havenline/task10/validate_critic_readiness.py",
@@ -1412,7 +1419,8 @@
         "tools/havenline/task10/tests/test_builder_workflow_callers.py",
         "Docs/Production/ChangeRequests/T10-c0r-structured-mechanism-detection.json",
         "tools/havenline/production/verify_python_repair_bindings.py",
-        "tools/havenline/production/tests/test_python_repair_bindings.py"
+        "tools/havenline/production/tests/test_python_repair_bindings.py",
+        "Docs/Production/T10/Proofs/rendered-shadow-10603974070-summary.json"
       ],
       "files_not_to_change": [
         "HavenlineGodot/scripts/world_transform.gd",
@@ -1473,7 +1481,7 @@
       ],
       "evidence": [
         "Original run35461009111/job105944782203: job18:23:11, benchmark18:26:48 (217 seconds prior work), exit124 after8 controls; artifact10590840640 SHA2560bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2.",
-        "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate.",
+        "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211–1771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate.",
         "Older same-runtime3d24 completed benchmark in about1174 seconds and packaging plus both uploads in11.6 seconds. The120-second reserve is conservative relative to that observation, not a guarantee under GitHub outage.",
         "Independent source review9.4 at8475f8c5 verified completed-log EOF drain and hostile trailing duplicate rejection.",
         "Retained cheap trace proof Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json SHA2564c10b53b809228d72b007d4a6a790c095089e7ec8d9a409effb2436f3b4f3659 invokes actual ProgressGuard/completion_errors and unmocked benchmark_errors; six hostile completions reject and original timeout stays failed."
@@ -1529,7 +1537,7 @@
     "C0 artifact10588669986 SHA2569c5a8c8581326d589a507784e56b8611ca4318eb3c78905c8d4c2f92e3d9dce4: unchanged old request17680 bytes. Reviewed repair reconstructs13 groups and97 exact errors/claims in13564 bytes under unchanged13672 maximum.",
     "C0 artifact10590392757 SHA256de4d502a76d13fe36a552bedd37079111c03672044e2735fda4bbccdf542a328 retained the exact decoded shell quotation. Replay validates its quotes at11112 request bytes, while unsupported simulation/infinite-loop advice remains rejected.",
     "Original run35461009111/job105944782203: job18:23:11, benchmark18:26:48 (217 seconds prior work), exit124 after8 controls; artifact10590840640 SHA2560bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2.",
-    "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
+    "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211–1771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
   ],
   "unexecuted_checks": [
     "New cumulative source must pass exact C0R, builder, ownership, governance and cheap preflight before one fresh isolated candidate.",
