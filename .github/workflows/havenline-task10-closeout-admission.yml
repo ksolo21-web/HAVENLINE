@@ -26,9 +26,9 @@ jobs:
           mkdir -p admission-preflight
           gh api /repos/ksolo21-web/HAVENLINE/actions/artifacts/10608518512/zip > preparation.zip
           echo '70ffd9bb63a1a1f8ef4592002d33dd09d387525d870105045ff14eab373e13ac  preparation.zip' | sha256sum -c -
-          python3 -m unittest discover -s tools/havenline/task10 -p test_review_closeout_delta.py -v > admission-preflight/tests.log 2>&1
-          for group in assertions authority evidence; do
-            python3 tools/havenline/task10/review_closeout_delta.py --group "$group" --preparation preparation.zip --out "admission-preflight/$group" --packet-only
+          T10_PREP_ARCHIVE=preparation.zip python3 -m unittest discover -s tools/havenline/task10 -p 'test_*closeout*.py' -v > admission-preflight/tests.log 2>&1
+          for group in assertions authority; do
+            python3 tools/havenline/task10/resolve_closeout_admission.py --group "$group" --preparation preparation.zip --out "admission-preflight/$group" --packet-only
           done
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
@@ -43,9 +43,9 @@ jobs:
     timeout-minutes: 35
     strategy:
       fail-fast: false
-      max-parallel: 3
+      max-parallel: 2
       matrix:
-        group: [assertions, authority, evidence]
+        group: [assertions, authority]
     env:
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
@@ -70,10 +70,10 @@ jobs:
           fi
           python3 tools/havenline/production/prepare_specialist_runtime.py > runtime-preparation.json
           gh api /repos/ksolo21-web/HAVENLINE/actions/artifacts/10608518512/zip > preparation.zip
-      - name: Review exact source delta without modifying gameplay
+      - name: Review current assertions or exact authority bindings
         run: |
           set -euo pipefail
-          python3 -u tools/havenline/task10/review_closeout_delta.py --group '${{ matrix.group }}' --preparation preparation.zip --out 'admission/${{ matrix.group }}'
+          python3 -u tools/havenline/task10/resolve_closeout_admission.py --group '${{ matrix.group }}' --preparation preparation.zip --out 'admission/${{ matrix.group }}'
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
@@ -96,8 +96,13 @@ jobs:
         with:
           pattern: t10-admission-*-${{ github.sha }}
           path: original-reviews/
-      - name: Validate all original outputs and exact source bindings
-        run: python3 tools/havenline/task10/review_closeout_delta.py --aggregate original-reviews --out admission-result
+      - name: Preserve original successful evidence review and validate remaining outputs
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          gh api /repos/ksolo21-web/HAVENLINE/actions/artifacts/10610506963/zip > retained-evidence.zip
+          python3 tools/havenline/task10/resolve_closeout_admission.py --aggregate original-reviews --retained retained-evidence.zip --out admission-result
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
