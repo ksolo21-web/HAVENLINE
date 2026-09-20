@@ -136,6 +136,18 @@ def commit_tree(worktree,parents,message):
  commit=run(*args,cwd=worktree,input=(message+"\n").encode(),env=env).decode().strip()
  return commit,tree
 
+def validate_existing_authority(current,old_h,record):
+ parents=run("rev-list","--parents","-n","1",current).decode().strip().split()[1:]
+ if parents!=[old_h]:raise ValueError("existing authority parent mismatch")
+ expected_record=(json.dumps(record,indent=2)+"\n").encode()
+ if show(current,RECORD)!=expected_record:raise ValueError("existing authority source-review record mismatch")
+ for p in INHERITED[:-1]:
+  if show(current,p)!=show(R,p):raise ValueError("existing authority inherited bytes mismatch: "+p)
+ changed=set(run("diff-tree","-r","--no-commit-id","--name-only",old_h,current).decode().splitlines())
+ expected={p for p in INHERITED if show(old_h,p)!=show(current,p)}
+ if changed!=expected:raise ValueError("existing authority changed unexpected paths: "+repr(changed^expected))
+ return current
+
 def build_authority(old_h,record,tmp):
  authority=pathlib.Path(tmp)/"authority"
  subprocess.run(["git","worktree","add","--detach",str(authority),old_h],check=True,stdout=subprocess.PIPE,stderr=subprocess.PIPE)
@@ -169,11 +181,14 @@ def main():
  out=pathlib.Path(a.out);out.mkdir(parents=True,exist_ok=True)
  if run("rev-parse",R+"^{tree}").decode().strip()!=R_TREE:raise ValueError("reviewed tree mismatch")
  current=remote_tip()
- if current!=EXPECTED_OLD_H:raise ValueError("canonical moved before authority publication: "+current)
  evidence,lowest=validate_reviews(a.admission,a.caller)
  record=build_record(evidence,lowest)
  with tempfile.TemporaryDirectory(prefix="t10-promotion-") as tmp:
-  h2,h2_tree=build_authority(current,record,tmp)
+  if current==EXPECTED_OLD_H:
+   h2,h2_tree=build_authority(current,record,tmp)
+  else:
+   h2=validate_existing_authority(current,EXPECTED_OLD_H,record)
+   h2_tree=run("rev-parse",h2+"^{tree}").decode().strip()
   p,p_tree,candidate=build_candidate(h2,tmp)
   # Pre-publication structural checks. No remote mutation has occurred yet.
   parents=run("rev-list","--parents","-n","1",p).decode().strip().split()[1:]
@@ -184,14 +199,18 @@ def main():
   plan=json.loads(show(p,PLAN));c0r=json.loads(show(p,C0R))
   if plan["reconciled_integration_head"]!=h2 or c0r["input_bindings"]["plan_sha256"]!=sha(show(p,PLAN)):raise ValueError("candidate reconciliation binding invalid")
   write_json(out/"prepublication.json",{"reviewed_source":R,"reviewed_tree":R_TREE,"old_canonical":current,"authority":h2,"authority_tree":h2_tree,"candidate":p,"candidate_tree":p_tree,"parents":parents,"source_review_lowest_score":lowest,"task_approved":False,"t11_unlocked":False})
-  # Publish authority metadata only, forward-only, after all independent source reviews.
-  if remote_tip()!=current:raise ValueError("canonical advanced before authority push")
-  subprocess.run(["git","push","--porcelain","origin",f"{h2}:refs/heads/{BRANCH}"],check=True,stdout=(out/"authority-push.log").open("w"),stderr=subprocess.STDOUT)
-  run("fetch","--no-tags","origin",BRANCH)
-  if remote_tip()!=h2:raise ValueError("authority publication did not land exactly")
+  # Publish authority metadata only once, forward-only, after all independent source reviews.
+  if current==EXPECTED_OLD_H:
+   if remote_tip()!=current:raise ValueError("canonical advanced before authority push")
+   subprocess.run(["git","push","--porcelain","origin",f"{h2}:refs/heads/{BRANCH}"],check=True,stdout=(out/"authority-push.log").open("w"),stderr=subprocess.STDOUT)
+  else:
+   (out/"authority-push.log").write_text("exact previously-published authority verified: "+h2+"\n")
+  if remote_tip()!=h2:raise ValueError("authority publication is not the exact reviewed authority")
+  run("fetch","--no-tags","origin",f"+refs/heads/{BRANCH}:refs/remotes/origin/{BRANCH}")
   # Verify exact P using canonical authority bytes and live remote H.
-  verifier_out=out/"owner-verifier.json"
-  subprocess.run(["python3","-I",VERIFIER,"--repo",".","--canonical-head",h2,"--candidate",p,"--task",TASK,"--output",str(verifier_out),"--promotion-check"],cwd=candidate,check=True,stdout=(out/"owner-verifier.log").open("w"),stderr=subprocess.STDOUT)
+  verifier_out=(out/"owner-verifier.json").resolve()
+  verifier_log=(out/"owner-verifier.log").resolve()
+  subprocess.run(["python3","-I",VERIFIER,"--repo",".","--canonical-head",h2,"--candidate",p,"--task",TASK,"--output",str(verifier_out),"--promotion-check"],cwd=candidate,check=True,stdout=verifier_log.open("w"),stderr=subprocess.STDOUT)
   verdict=json.loads(verifier_out.read_text())
   if verdict.get("passed") is not True:raise ValueError("owner verifier did not pass")
   if remote_tip()!=h2:raise ValueError("canonical advanced after verification")
