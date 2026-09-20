@@ -1,0 +1,78 @@
+name: Havenline T10 final C1 C2 visual critics
+on:
+  push:
+    branches: ['havenline/review-T10-final-visual-critics']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-t10-final-c1-c2
+  cancel-in-progress: false
+jobs:
+  visual-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        critic: [C1, C2]
+    env:
+      CANDIDATE: 'fd962391dd3ac956fd6b111adb2313652859125e'
+      EVIDENCE_RUN: '35534465419'
+      EVIDENCE_ARTIFACT: 'havenline-task10-critic-input-fd962391dd3ac956fd6b111adb2313652859125e'
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: ${{ env.EVIDENCE_ARTIFACT }}
+          path: critic-input
+          github-token: ${{ github.token }}
+          run-id: ${{ env.EVIDENCE_RUN }}
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Bind exact candidate, reviewer contract and runtime
+        run: |
+          set -euo pipefail
+          test "$(git ls-remote --exit-code origin refs/heads/codex/havenline-sequential-task-01 | cut -f1)" = "$CANDIDATE"
+          git worktree add --detach "$RUNNER_TEMP/t10-final-candidate" "$CANDIDATE"
+          for p in             tools/havenline/task10/review_visual.py             tools/havenline/production/critic_harness.py             Docs/Production/CRITIC_MATRIX.json             Docs/Production/CRITIC_EXECUTION.json
+          do
+            cmp "$RUNNER_TEMP/t10-final-candidate/$p" "$p"
+          done
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > reviewer-runtime.json
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python3 -m pip install --disable-pip-version-check --no-input pillow==12.3.0
+          python3 tools/havenline/production/specialist_evidence_manifest.py validate "critic-input/${{ matrix.critic }}-manifest.json"
+      - name: Execute fresh independent visual critic
+        run: |
+          set -euo pipefail
+          python3 -u tools/havenline/task10/review_final_visual.py             --critic "${{ matrix.critic }}"             --candidate "$CANDIDATE"             --repo "$RUNNER_TEMP/t10-final-candidate"             --evidence critic-input             --out "visual-review/${{ matrix.critic }}"
+      - name: Enforce exact T10 visual critic record
+        if: always()
+        run: |
+          set -euo pipefail
+          test -f "visual-review/${{ matrix.critic }}/critic-record.json"
+          python3 tools/havenline/task10/review_visual.py             --critic "${{ matrix.critic }}"             --candidate "$CANDIDATE"             --manifest "critic-input/${{ matrix.critic }}-manifest.json"             --record "visual-review/${{ matrix.critic }}/critic-record.json"             --output "visual-review/${{ matrix.critic }}/validated.json"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task10-${{ matrix.critic }}-final-${{ env.CANDIDATE }}
+          path: |
+            visual-review/${{ matrix.critic }}/
+            reviewer-runtime.json
+          if-no-files-found: error
+          retention-days: 30
