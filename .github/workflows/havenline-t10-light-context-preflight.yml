@@ -1,0 +1,167 @@
+name: T10 lighting-context diagnostic preflight
+on:
+  push:
+    branches: ['havenline/review-T10-light-context-preflight']
+permissions:
+  contents: read
+concurrency:
+  group: t10-light-context-diagnostic-preflight
+  cancel-in-progress: false
+jobs:
+  freeze-diagnostic-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.freeze.outputs.source }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - name: Apply exact tested patch and freeze only this diagnostic branch
+        id: freeze
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/havenline/review-T10-light-context-preflight
+          test "$GITHUB_RUN_ATTEMPT" = 1
+          mkdir -p light-context-input
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess
+          patch=pathlib.Path('Docs/Production/T10/DiagnosticInputs/light-context-repair.patch')
+          assert hashlib.sha256(patch.read_bytes()).hexdigest()=='c9ef630e3931b8a41c13533b7c584b206a8956782c5eb86bb8f2d48da2c33543'
+          base='e1a3ce36ecd4891e79e2956dde2c7d8393f0884d'
+          before={
+            'HavenlineGodot/scripts/world_transform_view.gd':'88bea24eca5b411cdc220d44ba1a544f61e43689',
+            'HavenlineGodot/tests/test_task10_integration.gd':'111386adb7f35e34b216ae9645a8341430e7e3f3',
+          }
+          after={
+            'HavenlineGodot/scripts/world_transform_view.gd':'bd91be572015673201982ad4c923960b8ace31c844916c7ca98db24efe005780',
+            'HavenlineGodot/tests/test_task10_integration.gd':'2e908082d4292e3269b0f7e3a6039b99cda525951f62bd3dfe8f3bc7735b2254',
+            'HavenlineGodot/tests/test_task10_world_transform.gd':'ae337e64a7159901bf8fc6df7d1448af70bbedc34cd8b4b45f339672cb407c6e',
+          }
+          for path,blob in before.items():
+            assert subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()==blob
+          subprocess.run(['git','apply','--check',str(patch)],check=True)
+          subprocess.run(['git','apply',str(patch)],check=True)
+          subprocess.run(['git','diff','--check'],check=True)
+          changed=subprocess.check_output(['git','diff','--name-only'],text=True).splitlines()
+          assert set(changed)==set(before),changed
+          for path,digest in after.items():
+            assert hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()==digest,path
+          subprocess.run(['git','config','user.name','Havenline diagnostic source builder'],check=True)
+          subprocess.run(['git','config','user.email','diagnostic@users.noreply.github.com'],check=True)
+          subprocess.run(['git','add','--',*sorted(before)],check=True)
+          subprocess.run(['git','commit','-m','T10 diagnostic: tested live lighting-context repair; no approval'],check=True)
+          source=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          parent=subprocess.check_output(['git','rev-parse','HEAD^'],text=True).strip()
+          assert parent==os.environ['GITHUB_SHA']
+          branch='refs/heads/havenline/review-T10-light-context-preflight'
+          remote=subprocess.check_output(['git','ls-remote','--exit-code','origin',branch],text=True).strip()
+          assert remote.split()==[parent,branch],remote
+          subprocess.run(['git','push','origin','HEAD:'+branch],check=True)
+          remote_after=subprocess.check_output(['git','ls-remote','--exit-code','origin',branch],text=True).strip()
+          assert remote_after.split()==[source,branch],remote_after
+          record={'kind':'DIAGNOSTIC_SOURCE_FREEZE','workflow_source':parent,'source':source,
+            'tree':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(),
+            'files_sha256':after,'patch_sha256':hashlib.sha256(patch.read_bytes()).hexdigest(),
+            'branch':branch,'canonical_branch_changed':False,'force_push':False,'task_approved':False,'T11_unlocked':False}
+          pathlib.Path('light-context-input/source-binding.json').write_text(json.dumps(record,indent=2)+'\n')
+          with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('source='+source+'\n')
+          print(json.dumps(record))
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-light-context-source-${{ github.sha }}
+          path: light-context-input
+          if-no-files-found: error
+          retention-days: 30
+  full-vulkan-proof:
+    needs: freeze-diagnostic-source
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      PROOF_SOURCE: ${{ needs.freeze-diagnostic-source.outputs.source }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ needs.freeze-diagnostic-source.outputs.source }}
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+      - name: Prepare pinned runtime and source identity
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$PROOF_SOURCE"
+          mkdir -p "$RUNNER_TEMP/engine" light-context-proof
+          python3 -m pip install pillow==12.3.0 numpy==2.3.5
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+      - name: Parse, import, and 397 exact-source engine checks
+        run: |
+          set -euo pipefail
+          ENGINE="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+          timeout 30 "$ENGINE" --headless --path HavenlineGodot --script res://tests/capture_task10_world_transform.gd --check-only > light-context-proof/parser.log 2>&1
+          timeout 240 "$ENGINE" --headless --editor --path HavenlineGodot --import --quit > light-context-proof/import.log 2>&1
+          for suite in test_task10_world_transform test_task10_integration; do
+            timeout 300 "$ENGINE" --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "light-context-proof/$suite.log" 2>&1
+          done
+          python3 - <<'PY'
+          import json,os,pathlib
+          out=pathlib.Path('light-context-proof');rows=[]
+          for name,count in [('test_task10_world_transform',239),('test_task10_integration',158)]:
+            text=(out/(name+'.log')).read_text()
+            assert not any(s in text for s in ['SCRIPT ERROR','Parse Error','ERROR:','ObjectDB instances were leaked'])
+            r=[json.loads(line) for line in text.splitlines() if line.startswith('{')][-1]
+            n=len(r['checks']) if isinstance(r['checks'],list) else r['checks']
+            assert r.get('passed') is True and not r.get('failures') and n==count,(name,r)
+            rows.append({'suite':name,'checks':n,'passed':True})
+          (out/'engine-checks.json').write_text(json.dumps({'source':os.environ['PROOF_SOURCE'],'suites':rows,'total_checks':397,'passed':True,'task_approved':False},indent=2))
+          PY
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' light-context-proof/*.log; then exit 1; fi
+          python3 -m unittest tools.havenline.task10.tests.test_verify_screen_pixel_clearance > light-context-proof/raster-verifier-tests.log 2>&1
+      - name: Analytic feedback and transition domain
+        run: |
+          set -euo pipefail
+          timeout 300 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --path HavenlineGodot --script "$(pwd)/tools/havenline/task10/preflight_feedback_layout.gd" -- --out="$(pwd)/light-context-proof/feedback-layout.json" > light-context-proof/feedback-layout.log 2>&1
+          python3 - <<'PY'
+          import json
+          p=json.load(open('light-context-proof/feedback-layout.json'))
+          assert p.get('passed') is True and p.get('case_count')==1728
+          assert len(p.get('extra_cases',[]))==111 and all(x.get('passed') is True for x in p['extra_cases'])
+          assert len(p.get('transition_cases',[]))==3 and all(x.get('passed') is True for x in p['transition_cases'])
+          assert not p.get('errors')
+          PY
+      - name: All 684 fresh rendered cases with unchanged verifier
+        run: |
+          set -euo pipefail
+          icd=$(find /usr/share/vulkan/icd.d -name '*lvp*json' -print -quit)
+          test -n "$icd"
+          python3 tools/havenline/task10/run_screen_pixel_canary.py --repo "$GITHUB_WORKSPACE" --output "$GITHUB_WORKSPACE/light-context-proof/cases" --source "$PROOF_SOURCE" --engine "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --engine-archive "$RUNNER_TEMP/engine/engine.zip" --xvfb /usr/bin/Xvfb --library-path /usr/lib/x86_64-linux-gnu --vulkan-icd "$icd" --execution-kind HOSTED_FULL_RASTER_PROOF --domain full684
+      - name: Seal diagnostic outcome without approval
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          out=pathlib.Path('light-context-proof');out.mkdir(exist_ok=True)
+          path=out/'cases/summary.json'
+          summary=json.loads(path.read_text()) if path.exists() else {}
+          record={'source':os.environ['PROOF_SOURCE'],'workflow_source':os.environ['GITHUB_SHA'],
+            'kind':'DIAGNOSTIC_NONAPPROVAL','case_count':summary.get('case_count',0),
+            'raster_passed':summary.get('passed') is True,'domain_complete':summary.get('domain_complete') is True,
+            'task_approved':False,'reusable_as_final_critic_score':False,'T11_unlocked':False}
+          (out/'diagnostic-outcome.json').write_text(json.dumps(record,indent=2)+'\n')
+          print(json.dumps(record))
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-light-context-proof-${{ needs.freeze-diagnostic-source.outputs.source }}
+          path: light-context-proof
+          if-no-files-found: error
+          retention-days: 30
