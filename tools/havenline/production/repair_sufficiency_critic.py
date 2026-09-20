@@ -401,7 +401,7 @@ def _group_review(
         marker_symbols = {str(marker.get("value")) for marker in markers if isinstance(marker, dict) and marker.get("value")}
         if not marker_symbols <= operation_symbols:
             reject.append(f"{group_id}:DIFF_MARKERS_MUST_BIND_TO_OPERATION_SYMBOLS")
-        if domain.get("provided") is True:
+        if scalar_parameters_changed or diff_contract.get("full_domain_source_binding_required") is True:
             proof_mode=_text(diff_contract.get("proof_slice_mode"))
             ignored_lines=[str(value) for value in _list(diff_contract.get("proof_irrelevant_exact_lines"))]
             proof_commit=_text(diff_contract.get("proof_source_commit"))
