@@ -10,7 +10,7 @@ import time
 import zipfile
 import verify_screen_pixel_clearance as verifier
 
-PROFILES=('phone_16_9__0.85','phone_16_9__1.0','phone_16_9__1.35','native4k_full')
+PROFILES=('phone_16_9__0.85','phone_16_9__1.0','phone_16_9__1.35','native4k_full','foldable_inner__1.35')
 ENGINE_ARCHIVE_SHA512='9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65'
 FILES=('HavenlineGodot/scripts/world_transform_view.gd','HavenlineGodot/tests/capture_task10_world_transform.gd','tools/havenline/task10/verify_screen_pixel_clearance.py','tools/havenline/task10/run_screen_pixel_canary.py','HavenlineGodot/assets/world_transform_v1/resource_symbols.tres')
 
@@ -40,7 +40,7 @@ def run(args):
     display=next(i for i in range(191,221) if not Path(f'/tmp/.X{i}-lock').exists())
     env['DISPLAY']=f':{display}'
     xvfb_cmd=[str(args.xvfb),env['DISPLAY'],'-screen','0','3840x2160x24','-nolisten','tcp']
-    metadata={'source':args.source,'input_hashes':hashes,'profiles':list(PROFILES),'expected_cases':144,'engine_sha256':hashlib.sha256(engine_bytes).hexdigest(),'engine_archive_sha512':ENGINE_ARCHIVE_SHA512,'xvfb_sha256':verifier.sha256(args.xvfb),'vulkan_icd':json.loads(args.vulkan_icd.read_text()),'xvfb_command':xvfb_cmd,'execution_kind':'LOCAL_BOUNDED_RASTER_CANARY','physical_certification':False,'task_approved':False}
+    metadata={'source':args.source,'input_hashes':hashes,'profiles':list(PROFILES),'expected_cases':180,'engine_sha256':hashlib.sha256(engine_bytes).hexdigest(),'engine_archive_sha512':ENGINE_ARCHIVE_SHA512,'xvfb_sha256':verifier.sha256(args.xvfb),'vulkan_icd':json.loads(args.vulkan_icd.read_text()),'xvfb_command':xvfb_cmd,'execution_kind':args.execution_kind,'physical_certification':False,'task_approved':False}
     (output/'execution.json').write_text(json.dumps(metadata,indent=2))
     summaries=[]
     with (output/'xvfb.log').open('w') as log:
@@ -79,13 +79,14 @@ def run(args):
             try:server.wait(timeout=10)
             except subprocess.TimeoutExpired:server.kill();server.wait()
     if bound_files(repo,args.source)!=hashes:raise ValueError('canary changed during execution')
-    result={'source':args.source,'profiles':summaries,'case_count':sum(x.get('case_count',0) for x in summaries),'passed':len(summaries)==4 and all(x['passed'] for x in summaries) and sum(x.get('case_count',0) for x in summaries)==144,'task_approved':False}
+    result={'source':args.source,'profiles':summaries,'case_count':sum(x.get('case_count',0) for x in summaries),'passed':len(summaries)==5 and all(x['passed'] for x in summaries) and sum(x.get('case_count',0) for x in summaries)==180,'task_approved':False}
     (output/'summary.json').write_text(json.dumps(result,indent=2))
     return result
 
 if __name__=='__main__':
     p=argparse.ArgumentParser()
     p.add_argument('--repo',type=Path,default=Path.cwd());p.add_argument('--output',type=Path,required=True)
+    p.add_argument('--execution-kind',choices=['LOCAL_BOUNDED_RASTER_CANARY','HOSTED_BOUNDED_RASTER_CANARY'],default='LOCAL_BOUNDED_RASTER_CANARY')
     p.add_argument('--source',required=True);p.add_argument('--engine',type=Path,required=True)
     p.add_argument('--engine-archive',type=Path,required=True);p.add_argument('--xvfb',type=Path,required=True)
     p.add_argument('--library-path',type=Path,required=True);p.add_argument('--vulkan-icd',type=Path,required=True)

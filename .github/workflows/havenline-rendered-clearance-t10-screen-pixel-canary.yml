@@ -1,0 +1,59 @@
+name: Havenline T10 screen-pixel hosted canary
+on:
+  push:
+    branches: ['havenline/governance-T10-screen-pixel-canary']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-task10-rendered-clearance-probe
+  cancel-in-progress: false
+jobs:
+  rendered-canary:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+          lfs: false
+      - name: Exact canonical one-shot admission
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin codex/havenline-sequential-task-01:refs/remotes/origin/codex/havenline-sequential-task-01
+          python3 tools/havenline/task10/admit_screen_pixel_canary.py
+      - name: Cheap proof tooling and pinned parser
+        run: |
+          set -euo pipefail
+          python3 -m pip install pillow==12.3.0 numpy==2.3.5
+          python3 -m unittest tools.havenline.task10.tests.test_admit_screen_pixel_canary tools.havenline.task10.tests.test_verify_screen_pixel_clearance
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          test ! -e HavenlineGodot/.godot
+          timeout 30 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --path HavenlineGodot --script res://tests/capture_task10_world_transform.gd --check-only > screen-canary/check-only.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error' screen-canary/check-only.log; then exit 1; fi
+          timeout 240 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --path HavenlineGodot --import --quit > screen-canary/import.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' screen-canary/import.log; then exit 1; fi
+      - name: Collect all 180 rendered canary cases
+        run: |
+          set -euo pipefail
+          icd=$(find /usr/share/vulkan/icd.d -name '*lvp*json' -print -quit)
+          test -n "$icd"
+          python3 tools/havenline/task10/run_screen_pixel_canary.py \
+            --repo "$GITHUB_WORKSPACE" --output "$GITHUB_WORKSPACE/screen-canary/cases" \
+            --source "$GITHUB_SHA" --engine "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" \
+            --engine-archive "$RUNNER_TEMP/engine/engine.zip" --xvfb /usr/bin/Xvfb \
+            --library-path /usr/lib/x86_64-linux-gnu --vulkan-icd "$icd" \
+            --execution-kind HOSTED_BOUNDED_RASTER_CANARY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task10-screen-pixel-canary-${{ github.sha }}
+          path: screen-canary
+          if-no-files-found: error
+          retention-days: 30
