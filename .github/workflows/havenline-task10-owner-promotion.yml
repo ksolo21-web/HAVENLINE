@@ -1,0 +1,60 @@
+name: Havenline T10 exact owner source promotion
+on:
+  push:
+    branches: ['havenline/review-T10-owner-promotion-go']
+permissions:
+  contents: write
+  actions: read
+concurrency:
+  group: havenline-t10-owner-promotion
+  cancel-in-progress: false
+jobs:
+  promote-reviewed-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - name: Bind green admission and caller reviews
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p promotion-input promotion-output
+          test "$(gh api /repos/ksolo21-web/HAVENLINE/actions/runs/35529782297 --jq .conclusion)" = success
+          gh api /repos/ksolo21-web/HAVENLINE/actions/artifacts/10610618513/zip > promotion-input/admission.zip
+          echo '521c20b6ab15e621853c8c432abf207d448f66528a4ff47ef51311ddec2e4eda  promotion-input/admission.zip' | sha256sum -c -
+          test "$(gh api /repos/ksolo21-web/HAVENLINE/actions/runs/35530036101 --jq .conclusion)" = success
+          gh api /repos/ksolo21-web/HAVENLINE/actions/runs/35530036101/artifacts > promotion-input/caller-artifacts.json
+          python3 - <<'PY'
+          import json
+          d=json.load(open('promotion-input/caller-artifacts.json'))
+          rows=[x for x in d['artifacts'] if x['name'].startswith('t10-independent-caller-review-')]
+          assert len(rows)==1,rows
+          r=rows[0]
+          assert r['expired'] is False and r['digest'].startswith('sha256:')
+          open('promotion-input/caller-meta.json','w').write(json.dumps(r,indent=2)+'\n')
+          print(r['id'])
+          PY
+          id=$(python3 -c "import json;print(json.load(open('promotion-input/caller-meta.json'))['id'])")
+          digest=$(python3 -c "import json;print(json.load(open('promotion-input/caller-meta.json'))['digest'].split(':',1)[1])")
+          gh api "/repos/ksolo21-web/HAVENLINE/actions/artifacts/$id/zip" > promotion-input/caller.zip
+          echo "$digest  promotion-input/caller.zip" | sha256sum -c -
+      - name: Install reviewed authority and exact candidate
+        run: |
+          set -euo pipefail
+          git config user.name 'T10 Integration Owner'
+          git config user.email 't10-owner@example.invalid'
+          python3 tools/havenline/task10/promote_closeout_source.py --admission promotion-input/admission.zip --caller promotion-input/caller.zip --out promotion-output
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-owner-promotion-${{ github.sha }}
+          path: |
+            promotion-input/caller-meta.json
+            promotion-output/
+          if-no-files-found: error
+          retention-days: 30
