@@ -107,7 +107,6 @@ func configure_readability(next_scale: float) -> bool:
 		return true
 	readability_scale = next_scale
 	_ensure_visuals()
-	_beacon.pixel_size = LABEL_PIXEL_SIZE * readability_scale
 	visual_apply_count += 1
 	return true
 
@@ -278,7 +277,6 @@ func _ensure_visuals() -> void:
 	_beacon.outline_render_priority = LABEL_OUTLINE_RENDER_PRIORITY
 	_visual_root.add_child(_beacon)
 
-	_beacon.pixel_size = LABEL_PIXEL_SIZE * readability_scale
 	visual_build_count += 1
 
 func _visual_signature() -> Array:

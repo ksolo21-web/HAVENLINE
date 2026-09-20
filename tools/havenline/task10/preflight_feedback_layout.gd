@@ -79,6 +79,22 @@ func run():
                     var row={"branch":branch.id,"device_index":device_index,"scale":scale,"angle":angle,"text":text,"passed":report.passed,"projection":report}
                     rows.append(row)
                     if not report.passed: errors.append(row)
+    var transition_cases: Array=[]
+    view.set_locked()
+    view.set_ready()
+    view.set_process(false)
+    configure_camera(camera,"gameplay")
+    var revision_before: int=view.target_revision
+    var costs_before: Dictionary=view.displayed_costs.duplicate(true)
+    var nodes_before: int=view._visual_root.get_child_count()
+    for next_scale in [0.85,1.35,1.0]:
+        view.configure_readability(next_scale)
+        var immediate: Dictionary=view.projected_readability(camera)
+        var nominal: float=view._beacon.pixel_size * absf(camera.unproject_position(view._beacon.global_position + camera.global_transform.basis.y).y-camera.unproject_position(view._beacon.global_position).y)
+        var expected: float=next_scale * float(immediate.label_scale)
+        var passed: bool=immediate.passed and absf(nominal-expected)<0.001 and view.target_revision==revision_before and view.displayed_costs==costs_before and view._visual_root.get_child_count()==nodes_before and not view.is_processing()
+        transition_cases.append({"scale":next_scale,"actual_font_unit_pixels":nominal,"expected_font_unit_pixels":expected,"passed":passed})
+        if not passed:errors.append(transition_cases[-1])
     var extra_cases: Array=[]
     view.target_state="W".repeat(192)
     view.lifecycle="blocked"
@@ -129,7 +145,7 @@ func run():
     for arg in OS.get_cmdline_user_args():
         if arg.begins_with("--out="): output=arg.trim_prefix("--out=")
     var f=FileAccess.open(output,FileAccess.WRITE)
-    f.store_string(JSON.stringify({"branch_count":branches.size(),"case_count":rows.size(),"rows":rows,"extra_cases":extra_cases,"errors":errors,"passed":errors.is_empty(),"rendered_proof":false,"task_approved":false}))
+    f.store_string(JSON.stringify({"branch_count":branches.size(),"case_count":rows.size(),"rows":rows,"extra_cases":extra_cases,"transition_cases":transition_cases,"errors":errors,"passed":errors.is_empty(),"rendered_proof":false,"task_approved":false}))
     f.close()
     print(JSON.stringify({"branches":branches.size(),"cases":rows.size(),"failures":errors.size(),"passed":errors.is_empty()}))
     quit(0 if errors.is_empty() else 1)
