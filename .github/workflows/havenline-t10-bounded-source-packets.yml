@@ -1,0 +1,101 @@
+name: T10 bounded whole-source independent packet review
+on:
+  push:
+    branches: ['havenline/review-T10-bounded-source-packets']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: t10-bounded-source-packet-review
+  cancel-in-progress: false
+env:
+  REVIEWED_SOURCE: 731a40d459926a3fd8ff15a6ad1f0ef9efa0f5ee
+  REVIEWED_TREE: a8b65ca07a8d3b52402d4e9bfe02416e7135c5b6
+jobs:
+  tooling-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          persist-credentials: false
+          lfs: false
+      - name: Validate lossless packets and hostile result handling
+        run: |
+          set -euo pipefail
+          mkdir -p packet-tooling
+          python3 -m py_compile tools/havenline/task10/source_packets.py tools/havenline/task10/source_packet_aggregate.py
+          python3 -m unittest -v tools.havenline.task10.tests.test_source_packets tools.havenline.task10.tests.test_source_packet_aggregate > packet-tooling/tests.log 2>&1
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-source-packet-tooling-${{ github.sha }}
+          path: packet-tooling
+          if-no-files-found: error
+  independent-source-review:
+    needs: tooling-preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        group: [lifecycle, visuals, lighting, placement, projection, feedback]
+    env:
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Prepare unchanged checksum-pinned reviewer
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          mkdir -p packet-result
+          python3 tools/havenline/production/prepare_specialist_runtime.py > packet-result/runtime-preparation.json
+      - name: Review one lossless source packet after measured-token admission
+        run: python3 -u tools/havenline/task10/source_packets.py --source "$REVIEWED_SOURCE" --tree "$REVIEWED_TREE" --group "${{ matrix.group }}" --out packet-result
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-source-packet-${{ matrix.group }}-${{ github.sha }}
+          path: packet-result
+          if-no-files-found: error
+          retention-days: 30
+  aggregate-complete-source-review:
+    needs: [tooling-preflight, independent-source-review]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+          persist-credentials: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          pattern: t10-source-packet-*-${{ github.sha }}
+          path: packet-results
+      - name: Require every source packet and every raw score
+        run: python3 tools/havenline/task10/source_packet_aggregate.py --source "$REVIEWED_SOURCE" --tree "$REVIEWED_TREE" --input packet-results --output source-packet-closeout/review.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-source-packet-aggregate-${{ github.sha }}
+          path: source-packet-closeout
+          if-no-files-found: error
+          retention-days: 30
