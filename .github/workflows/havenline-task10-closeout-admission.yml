@@ -1,0 +1,107 @@
+name: Havenline T10 exact closeout source admission review
+on:
+  push:
+    branches: ['havenline/review-T10-closeout-admission']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-t10-closeout-admission
+  cancel-in-progress: false
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - name: Test strict review and bind exact prepared source
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p admission-preflight
+          gh api /repos/ksolo21-web/HAVENLINE/actions/artifacts/10608518512/zip > preparation.zip
+          echo '70ffd9bb63a1a1f8ef4592002d33dd09d387525d870105045ff14eab373e13ac  preparation.zip' | sha256sum -c -
+          python3 -m unittest discover -s tools/havenline/task10 -p test_review_closeout_delta.py -v > admission-preflight/tests.log 2>&1
+          for group in assertions authority evidence; do
+            python3 tools/havenline/task10/review_closeout_delta.py --group "$group" --preparation preparation.zip --out "admission-preflight/$group" --packet-only
+          done
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-admission-preflight-${{ github.sha }}
+          path: admission-preflight/
+          if-no-files-found: error
+          retention-days: 30
+  independent-delta-review:
+    needs: preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    strategy:
+      fail-fast: false
+      max-parallel: 3
+      matrix:
+        group: [assertions, authority, evidence]
+    env:
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Bind pinned runtime and preparation archive
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > runtime-preparation.json
+          gh api /repos/ksolo21-web/HAVENLINE/actions/artifacts/10608518512/zip > preparation.zip
+      - name: Review exact source delta without modifying gameplay
+        run: |
+          set -euo pipefail
+          python3 -u tools/havenline/task10/review_closeout_delta.py --group '${{ matrix.group }}' --preparation preparation.zip --out 'admission/${{ matrix.group }}'
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-admission-${{ matrix.group }}-${{ github.sha }}
+          path: admission/
+          if-no-files-found: error
+          retention-days: 30
+  original-output-gate:
+    needs: [preflight, independent-delta-review]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          pattern: t10-admission-*-${{ github.sha }}
+          path: original-reviews/
+      - name: Validate all original outputs and exact source bindings
+        run: python3 tools/havenline/task10/review_closeout_delta.py --aggregate original-reviews --out admission-result
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-admission-result-${{ github.sha }}
+          path: admission-result/
+          if-no-files-found: error
+          retention-days: 30
