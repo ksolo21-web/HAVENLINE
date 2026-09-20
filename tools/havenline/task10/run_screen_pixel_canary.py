@@ -11,6 +11,7 @@ import zipfile
 import verify_screen_pixel_clearance as verifier
 
 PROFILES=('phone_16_9__0.85','phone_16_9__1.0','phone_16_9__1.35','native4k_full','foldable_inner__1.35')
+FULL_PROFILES=tuple(f'{device}__{scale}' for device in verifier.DEVICES for scale in (1.0,0.85,1.35))+('native4k_full',)
 ENGINE_ARCHIVE_SHA512='9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65'
 FILES=('HavenlineGodot/scripts/world_transform_view.gd','HavenlineGodot/tests/capture_task10_world_transform.gd','tools/havenline/task10/verify_screen_pixel_clearance.py','tools/havenline/task10/run_screen_pixel_canary.py','HavenlineGodot/assets/world_transform_v1/resource_symbols.tres')
 
@@ -28,6 +29,8 @@ def bound_files(repo,source):
 def run(args):
     repo=args.repo.resolve();output=args.output.resolve();output.mkdir(parents=True,exist_ok=False)
     hashes=bound_files(repo,args.source)
+    profiles=FULL_PROFILES if args.domain=='full684' else PROFILES
+    expected_cases=684 if args.domain=='full684' else 180
     if hashlib.sha512(args.engine_archive.read_bytes()).hexdigest()!=ENGINE_ARCHIVE_SHA512:
         raise ValueError('wrong pinned engine archive')
     with zipfile.ZipFile(args.engine_archive) as archive:
@@ -40,7 +43,7 @@ def run(args):
     display=next(i for i in range(191,221) if not Path(f'/tmp/.X{i}-lock').exists())
     env['DISPLAY']=f':{display}'
     xvfb_cmd=[str(args.xvfb),env['DISPLAY'],'-screen','0','3840x2160x24','-nolisten','tcp']
-    metadata={'source':args.source,'input_hashes':hashes,'profiles':list(PROFILES),'expected_cases':180,'engine_sha256':hashlib.sha256(engine_bytes).hexdigest(),'engine_archive_sha512':ENGINE_ARCHIVE_SHA512,'xvfb_sha256':verifier.sha256(args.xvfb),'vulkan_icd':json.loads(args.vulkan_icd.read_text()),'xvfb_command':xvfb_cmd,'execution_kind':args.execution_kind,'physical_certification':False,'task_approved':False}
+    metadata={'source':args.source,'input_hashes':hashes,'profiles':list(profiles),'expected_cases':expected_cases,'domain':args.domain,'engine_sha256':hashlib.sha256(engine_bytes).hexdigest(),'engine_archive_sha512':ENGINE_ARCHIVE_SHA512,'xvfb_sha256':verifier.sha256(args.xvfb),'vulkan_icd':json.loads(args.vulkan_icd.read_text()),'xvfb_command':xvfb_cmd,'execution_kind':args.execution_kind,'physical_certification':False,'task_approved':False}
     (output/'execution.json').write_text(json.dumps(metadata,indent=2))
     summaries=[]
     with (output/'xvfb.log').open('w') as log:
@@ -51,7 +54,7 @@ def run(args):
                 if Path(f'/tmp/.X11-unix/X{display}').exists():break
                 time.sleep(.1)
             else:raise RuntimeError('Xvfb did not create display')
-            for profile in PROFILES:
+            for profile in profiles:
                 if bound_files(repo,args.source)!=hashes:raise ValueError('canary changed during execution')
                 logical,physical,scale=verifier.PROFILES[profile]
                 folder=output/profile;folder.mkdir()
@@ -79,14 +82,15 @@ def run(args):
             try:server.wait(timeout=10)
             except subprocess.TimeoutExpired:server.kill();server.wait()
     if bound_files(repo,args.source)!=hashes:raise ValueError('canary changed during execution')
-    result={'source':args.source,'profiles':summaries,'case_count':sum(x.get('case_count',0) for x in summaries),'passed':len(summaries)==5 and all(x['passed'] for x in summaries) and sum(x.get('case_count',0) for x in summaries)==180,'task_approved':False}
+    result={'source':args.source,'domain':args.domain,'expected_cases':expected_cases,'domain_complete':args.domain=='full684' and sum(x.get('case_count',0) for x in summaries)==684,'profiles':summaries,'case_count':sum(x.get('case_count',0) for x in summaries),'passed':len(summaries)==len(profiles) and all(x['passed'] for x in summaries) and sum(x.get('case_count',0) for x in summaries)==expected_cases,'task_approved':False}
     (output/'summary.json').write_text(json.dumps(result,indent=2))
     return result
 
 if __name__=='__main__':
     p=argparse.ArgumentParser()
     p.add_argument('--repo',type=Path,default=Path.cwd());p.add_argument('--output',type=Path,required=True)
-    p.add_argument('--execution-kind',choices=['LOCAL_BOUNDED_RASTER_CANARY','HOSTED_BOUNDED_RASTER_CANARY'],default='LOCAL_BOUNDED_RASTER_CANARY')
+    p.add_argument('--domain',choices=['canary180','full684'],default='canary180')
+    p.add_argument('--execution-kind',choices=['LOCAL_BOUNDED_RASTER_CANARY','HOSTED_BOUNDED_RASTER_CANARY','HOSTED_FULL_RASTER_PROOF'],default='LOCAL_BOUNDED_RASTER_CANARY')
     p.add_argument('--source',required=True);p.add_argument('--engine',type=Path,required=True)
     p.add_argument('--engine-archive',type=Path,required=True);p.add_argument('--xvfb',type=Path,required=True)
     p.add_argument('--library-path',type=Path,required=True);p.add_argument('--vulkan-icd',type=Path,required=True)
