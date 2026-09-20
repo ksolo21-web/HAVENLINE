@@ -1,9 +1,14 @@
 import json, pathlib, sys, tempfile, unittest
 HERE=pathlib.Path(__file__).resolve();PROD=HERE.parents[1];sys.path.insert(0,str(PROD))
-from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, compact_model_projection, decoded_failure_logs, c0_prompt, artifact_diagnostic_projection, build_model_request, c0_response_schema, failure_log_projection, model_projection, retain_http_error, subject_execution, superseded_report, validate_report
+from c0_root_cause_advisor import C0_MAX_REQUEST_BYTES, compact_model_projection, decoded_failure_logs, c0_prompt, artifact_diagnostic_projection, build_model_request as native_build_model_request, c0_response_schema, failure_log_projection, model_projection, retain_http_error, subject_execution, superseded_report, validate_report
 from builder_repair_gate import repeated_python_bindings, python_source_review_errors, load_trusted_python_review, _stable_digest, implementation_diff_errors, validate as validate_builder, validate_c0r, verify_inherited_noncausal, verify_integration_branch
 from repair_sufficiency_critic import review as review_c0r, whole_file_proof_digest
 from collect_artifact_diagnostics import collect as collect_artifact_diagnostics
+
+
+def build_model_request(*args,**kwargs):
+    kwargs["count_tokens"]=lambda raw:{"object":"response.input_tokens","input_tokens":len(raw)}
+    return native_build_model_request(*args,**kwargs)
 
 
 def packet(conclusion="failure"):
@@ -740,5 +745,109 @@ class C0CompactProjectionTests(unittest.TestCase):
         p['unexecuted_checks']=[str(i)*5000 for i in range(20)]
         with self.assertRaisesRegex(RuntimeError,'C0_REQUEST_BUDGET_EXCEEDED'):
             build_model_request(p,'f'*64,c0_prompt(True),c0_response_schema(True))
+
+class C0NativeTokenAdmissionTests(unittest.TestCase):
+    def test_exact_native_boundary_and_no_byte_surrogate(self):
+        from c0_root_cause_advisor import build_model_request as build
+        p=packet()
+        body,raw,budget,_=build(p,'f'*64,'prompt'+(' padding'*3000),c0_response_schema(),
+            count_tokens=lambda raw:{'object':'response.input_tokens','input_tokens':13672})
+        self.assertGreater(len(raw),C0_MAX_REQUEST_BYTES)
+        self.assertEqual(16384,budget['total_reserved_tokens'])
+        self.assertTrue(budget['within_budget'])
+        attempts=[]
+        with self.assertRaisesRegex(RuntimeError,'C0_REQUEST_BUDGET_EXCEEDED'):
+            build(p,'f'*64,'short',c0_response_schema(),attempts=attempts,
+                count_tokens=lambda raw:{'object':'response.input_tokens','input_tokens':13673})
+        self.assertEqual(3,len(attempts))
+        self.assertTrue(all(not x['within_budget'] for x in attempts))
+
+    def exercise_model(self,count_raw,*,usage=100,fail_count=None):
+        import io,os
+        from unittest.mock import patch,Mock
+        import c0_root_cause_advisor as advisor
+        requests=[]
+        def respond(req,**kwargs):
+            requests.append(req)
+            if req.full_url.endswith('/input_tokens'):
+                if fail_count:raise fail_count
+                return io.BytesIO(count_raw)
+            self.assertEqual(requests[0].data,req.data)
+            return io.BytesIO(json.dumps({'usage':{'prompt_tokens':usage},'choices':[
+                {'finish_reason':'stop','message':{'content':'{}'}}]}).encode())
+        with tempfile.TemporaryDirectory() as d:
+            out=pathlib.Path(d)
+            with patch.dict(os.environ,{'HAVENLINE_C0_INDEPENDENT_JOB':'1'}), \
+                 patch.object(advisor,'start_runtime',return_value=(Mock(),Mock(),{'publisher':'p','revision':'r'})), \
+                 patch.object(advisor.urllib.request,'urlopen',side_effect=respond):
+                try:
+                    result=advisor.model_report(packet(),out,'f'*64)
+                except Exception as exc:
+                    result=exc
+                retained={x.name:json.loads(x.read_text()) for x in out.glob('*.json')}
+        return result,requests,retained
+
+    def test_production_counts_identical_bytes_and_retains_provenance(self):
+        result,requests,retained=self.exercise_model(b'{"object":"response.input_tokens","input_tokens":100}')
+        self.assertIsInstance(result,dict)
+        self.assertEqual(2,len(requests))
+        self.assertEqual(requests[0].data,requests[1].data)
+        self.assertEqual(100,retained['request-budget.json']['input_tokens'])
+        self.assertEqual('r',retained['token-count-attempts.json']['runtime_manifest']['revision'])
+
+    def test_invalid_count_never_generates(self):
+        import urllib.error
+        values=[None,True,False,0,-1,1.0,'100',float('nan'),float('inf')]
+        payloads=[json.dumps({'object':'response.input_tokens','input_tokens':v}).encode() for v in values]
+        payloads += [b'{}',b'[]',b'null',b'not json',b'x'*4097,
+                     b'{"object":"error","input_tokens":100}']
+        for payload in payloads:
+            with self.subTest(payload=payload[:100]):
+                result,requests,retained=self.exercise_model(payload)
+                self.assertIsInstance(result,Exception)
+                self.assertEqual(1,len(requests))
+                self.assertIn('token-count-attempts.json',retained)
+                self.assertNotIn('raw-response.json',retained)
+                self.assertIn('tier-2-request.json',retained)
+                self.assertIn('tier-2-projection.json',retained)
+        for error in [TimeoutError('count timeout'),urllib.error.HTTPError('url',500,'bad',{},None)]:
+            result,requests,retained=self.exercise_model(b'',fail_count=error)
+            self.assertIsInstance(result,Exception)
+            self.assertEqual(1,len(requests))
+            self.assertIn('token-count-attempts.json',retained)
+
+    def test_all_tier_overflow_retains_exact_counted_inputs(self):
+        import hashlib
+        result,requests,retained=self.exercise_model(b'{"object":"response.input_tokens","input_tokens":13673}')
+        self.assertIsInstance(result,RuntimeError)
+        self.assertEqual(3,len(requests))
+        attempts=retained['token-count-attempts.json']['attempts']
+        for request,attempt in zip(requests,attempts):
+            self.assertEqual(hashlib.sha256(request.data).hexdigest(),attempt['request_sha256'])
+            self.assertEqual(json.loads(request.data),retained[attempt['retained_input']['request_path']])
+            self.assertIn(attempt['retained_input']['projection_path'],retained)
+        self.assertNotIn('raw-response.json',retained)
+
+    def test_changed_counted_request_cannot_generate(self):
+        import os
+        from unittest.mock import Mock,patch
+        import c0_root_cause_advisor as advisor
+        with tempfile.TemporaryDirectory() as d, \
+             patch.dict(os.environ,{'HAVENLINE_C0_INDEPENDENT_JOB':'1'}), \
+             patch.object(advisor,'start_runtime',return_value=(Mock(),Mock(),{})), \
+             patch.object(advisor,'build_model_request',return_value=({},b'changed',{'request_sha256':'0'*64,'within_budget':True},{})), \
+             patch.object(advisor.urllib.request,'urlopen') as network:
+            with self.assertRaisesRegex(RuntimeError,'COUNTED_REQUEST_BINDING_MISMATCH'):
+                advisor.model_report(packet(),pathlib.Path(d),'f'*64)
+            network.assert_not_called()
+
+    def test_native_generation_mismatch_rejects_report(self):
+        for usage in [101,None,True,'100']:
+            result,requests,retained=self.exercise_model(
+                b'{"object":"response.input_tokens","input_tokens":100}',usage=usage)
+            self.assertIsInstance(result,RuntimeError)
+            self.assertIn('GENERATION_MISMATCH',str(result))
+            self.assertIn('raw-response.json',retained)
+
 
 if __name__=="__main__":unittest.main(verbosity=2)

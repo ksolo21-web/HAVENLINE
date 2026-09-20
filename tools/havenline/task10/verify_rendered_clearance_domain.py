@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import math
+import struct
 from pathlib import Path
 
 import numpy as np
@@ -160,6 +161,18 @@ def expected_geometry(logical_size: list[int]) -> tuple[float, list[float]]:
     return clearance, [inset, inset, width - inset * 2.0, height - inset * 2.0]
 
 
+def serialized_frame(logical_size: list[int]) -> list[float]:
+    # Godot Rect2/Vector2 stores each intermediate as IEEE754 binary32.
+    # Keep expected_geometry's ideal double frame for physical raster thresholds.
+    def f32(value):
+        return struct.unpack("<f", struct.pack("<f", value))[0]
+    _, ideal = expected_geometry(logical_size)
+    inset = f32(ideal[0])
+    doubled = f32(inset * 2.0)
+    return [inset, inset, f32(float(logical_size[0]) - doubled),
+            f32(float(logical_size[1]) - doubled)]
+
+
 def close_list(actual, expected, tolerance=1e-5) -> bool:
     return (isinstance(actual, list) and len(actual) == len(expected)
             and all(finite_number(a) and math.isclose(float(a), float(e), rel_tol=0.0, abs_tol=tolerance)
@@ -225,7 +238,7 @@ def verify(root: Path, manifest_path: Path, masks_root: Path, source: str,
            product_blob_sha256: str, variant: str, probe_source: str,
            capture_sha256: str, verifier_sha256: str, workflow_sha256: str,
            resource_symbols_sha256: str,
-           profile: str) -> dict:
+           profile: str, *, reanalysis_verifier_sha256: str | None = None) -> dict:
     geometry = PROFILES[profile]
     logical_expected, expected_capture_size, scale = geometry
     expected_cases = profile_cases(profile)
@@ -241,7 +254,8 @@ def verify(root: Path, manifest_path: Path, masks_root: Path, source: str,
     }
     if manifest.get("candidate") != source or identity != expected_identity:
         raise ValueError("manifest rendered-clearance identity mismatch")
-    if sha256(Path(__file__)) != verifier_sha256:
+    executing_sha256 = reanalysis_verifier_sha256 or verifier_sha256
+    if sha256(Path(__file__)) != executing_sha256:
         raise ValueError("running verifier does not match bound verifier hash")
     if manifest.get("rendered_clearance_probe") is not True or manifest.get("domain_profile") != profile:
         raise ValueError("manifest has the wrong domain profile")
@@ -341,7 +355,7 @@ def verify(root: Path, manifest_path: Path, masks_root: Path, source: str,
         label_box = label_box or [0, 0, 0, 0]
         response_box = response_box or [0, 0, 0, 0]
         readability = record.get("projected_readability", {})
-        if (not close_list(readability.get("frame_rect"), expected_frame)
+        if (not close_list(readability.get("frame_rect"), serialized_frame(logical_size))
                 or not finite_number(readability.get("required_clearance_px"))
                 or not math.isclose(float(readability["required_clearance_px"]), required_logical,
                                     rel_tol=0.0, abs_tol=1e-5)):
@@ -434,6 +448,13 @@ def verify(root: Path, manifest_path: Path, masks_root: Path, source: str,
         errors.append("capture manifest reports a failure")
     report["errors"] = errors
     report["passed"] = not errors
+    if reanalysis_verifier_sha256 is not None:
+        report["derivative_reanalysis"] = {
+            "capture_verifier_sha256": verifier_sha256,
+            "executing_verifier_sha256": executing_sha256,
+            "original_evidence_unchanged": True,
+            "task_approved": False,
+        }
     return report
 
 

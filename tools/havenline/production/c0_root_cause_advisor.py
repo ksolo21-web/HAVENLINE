@@ -26,10 +26,8 @@ ACTIONS={"REPAIR","RETRY_INFRA","NO_PRODUCT_CHANGE","FREEZE_AND_VALIDATE","BLOCK
 C0_CONTEXT_TOKENS=16384
 C0_MAX_TOKENS=2200
 C0_SAFETY_TOKENS=512
-# Every tokenizer token represents at least one input byte. Keeping the complete
-# serialized request below this byte ceiling is therefore a conservative,
-# tokenizer-independent upper bound that leaves both completion and safety
-# reserves inside the pinned context window.
+# Legacy byte ceiling retained for historical diagnostics only. Production
+# admission counts the exact request with the pinned runtime shared chat parser.
 C0_MAX_REQUEST_BYTES=C0_CONTEXT_TOKENS-C0_MAX_TOKENS-C0_SAFETY_TOKENS
 FAIL_CONCLUSIONS={"failure","timed_out","cancelled","action_required","startup_failure"}
 TERMINAL_SIGNAL_RE=re.compile(r'(?i)(projected(?: device)? readability failed|assertionerror|assert(?:ion)? failed|script error|parse error|traceback|fatal(?: error)?|runtime error|process completed with exit code [1-9]|"passed"\\s*:\\s*false)')
@@ -423,7 +421,30 @@ def compact_model_projection(packet:dict,packet_sha256:str)->dict:
     return {'string_table':strings,'encoding':'Objects containing only s refer to exact strings in string_table (zero based); literal_object wraps escaped key/value pairs.','data':encode(result)}
 
 
-def build_model_request(packet:dict,packet_sha256:str,prompt:str,schema:dict)->tuple[dict,bytes,dict,dict]:
+def native_input_token_count(request_bytes:bytes)->dict:
+    """b10809 uses generation's exact parser/template/tokenizer for this endpoint."""
+    req=urllib.request.Request("http://127.0.0.1:8080/v1/chat/completions/input_tokens",
+        data=request_bytes,headers={"Content-Type":"application/json"},method="POST")
+    try:
+        with urllib.request.urlopen(req,timeout=30) as response:
+            raw=response.read(4097)
+    except urllib.error.HTTPError as exc:
+        raw=exc.read(4097)
+        raise ValueError("C0_TOKEN_COUNT_HTTP_ERROR "+json.dumps({"status":exc.code,
+            "body":raw[:4096].decode("utf-8",errors="replace"),"truncated":len(raw)>4096})) from exc
+    if len(raw)>4096:raise ValueError("C0_TOKEN_COUNT_RESPONSE_TOO_LARGE")
+    result=json.loads(raw)
+    if not isinstance(result,dict) or result.get("object")!="response.input_tokens":
+        raise ValueError("C0_TOKEN_COUNT_INVALID_RESPONSE")
+    count=result.get("input_tokens")
+    if type(count) is not int or count<=0:raise ValueError("C0_TOKEN_COUNT_INVALID_INTEGER")
+    return result
+
+
+def build_model_request(packet:dict,packet_sha256:str,prompt:str,schema:dict,*,count_tokens=None,attempts=None,retain_request=None)->tuple[dict,bytes,dict,dict]:
+    # Injection is for deterministic tests; production always uses the native endpoint.
+    if count_tokens is None:count_tokens=native_input_token_count
+    if attempts is None:attempts=[]
     last=None
     for excerpt_bytes,detail in ((640,2),(320,1),(0,-1)):
         projection=compact_model_projection(packet,packet_sha256) if detail==-1 else model_projection(packet,packet_sha256,excerpt_bytes,detail)
@@ -433,10 +454,12 @@ def build_model_request(packet:dict,packet_sha256:str,prompt:str,schema:dict)->t
         budget={
             "context_tokens":C0_CONTEXT_TOKENS,"max_completion_tokens":C0_MAX_TOKENS,
             "safety_tokens":C0_SAFETY_TOKENS,"request_bytes":len(request_bytes),
-            "max_request_bytes":C0_MAX_REQUEST_BYTES,"token_upper_bound":len(request_bytes),
-            "within_budget":len(request_bytes)<=C0_MAX_REQUEST_BYTES,"excerpt_bytes_per_source":excerpt_bytes,
+            "historical_max_request_bytes":C0_MAX_REQUEST_BYTES,
+            "within_budget":False,"excerpt_bytes_per_source":excerpt_bytes,
             "request_sha256":hashlib.sha256(request_bytes).hexdigest(),"projection_detail":detail,
         }
+        if retain_request is not None:
+            budget["retained_input"]=retain_request(detail,request_bytes,projection)
         last=(body,request_bytes,budget,projection)
         evidence_complete=True
         if detail!=-1:
@@ -444,7 +467,25 @@ def build_model_request(packet:dict,packet_sha256:str,prompt:str,schema:dict)->t
                 excerpt=job["excerpt"]
                 selector=TERMINAL_SIGNAL_RE if excerpt.get("terminal_signal_count",0) else SIGNAL_RE
                 if not any(selector.search(line) for line in excerpt["retained_lines"]):evidence_complete=False
-        if budget["within_budget"] and evidence_complete:return last
+        if not evidence_complete:
+            budget["evidence_complete"]=False
+            attempts.append(dict(budget))
+            continue
+        try:
+            native=count_tokens(request_bytes)
+            count=native.get("input_tokens") if isinstance(native,dict) else None
+            if not isinstance(native,dict) or native.get("object")!="response.input_tokens" or type(count) is not int or count<=0:
+                raise ValueError("C0_TOKEN_COUNT_INVALID_RESPONSE")
+        except Exception as exc:
+            budget.update(error="native_token_count_failed",detail=str(exc))
+            attempts.append(dict(budget))
+            raise
+        budget.update(input_tokens=count,native_count_response=native,
+            count_endpoint="/v1/chat/completions/input_tokens",evidence_complete=True,
+            total_reserved_tokens=count+C0_MAX_TOKENS+C0_SAFETY_TOKENS,
+            within_budget=count+C0_MAX_TOKENS+C0_SAFETY_TOKENS<=C0_CONTEXT_TOKENS)
+        attempts.append(dict(budget))
+        if budget["within_budget"]:return last
     raise RuntimeError("C0_REQUEST_BUDGET_EXCEEDED "+json.dumps(last[2],sort_keys=True))
 
 
@@ -611,14 +652,26 @@ def model_report(packet:dict,out:pathlib.Path,packet_sha256:str)->dict:
         strict_grounding=packet.get("strict_evidence_grounding") is True
         schema=c0_response_schema(strict_grounding)
         prompt=c0_prompt(strict_grounding)
-        try:body,request_bytes,budget,projection=build_model_request(packet,packet_sha256,prompt,schema)
-        except (RuntimeError,ValueError) as exc:
-            diagnostic={"passed":False,"error":"request_budget_exceeded" if isinstance(exc,RuntimeError) else "invalid_evidence_projection","detail":str(exc),"context_tokens":C0_CONTEXT_TOKENS,"max_completion_tokens":C0_MAX_TOKENS,"safety_tokens":C0_SAFETY_TOKENS,"max_request_bytes":C0_MAX_REQUEST_BYTES}
+        attempts=[]
+        def retain_request(detail,raw,projection):
+            request_name=f"tier-{detail}-request.json"
+            projection_name=f"tier-{detail}-projection.json"
+            (out/request_name).write_bytes(raw)
+            (out/projection_name).write_text(json.dumps(projection,sort_keys=True,separators=(",",":"),ensure_ascii=False))
+            return {"request_path":request_name,"projection_path":projection_name,
+                    "projection_sha256":digest(out/projection_name)}
+        try:body,request_bytes,budget,projection=build_model_request(packet,packet_sha256,prompt,schema,attempts=attempts,retain_request=retain_request)
+        except (RuntimeError,ValueError,OSError) as exc:
+            diagnostic={"passed":False,"error":"request_budget_exceeded" if str(exc).startswith("C0_REQUEST_BUDGET_EXCEEDED") else ("native_token_count_failed" if attempts and attempts[-1].get("error")=="native_token_count_failed" else "invalid_evidence_projection"),"detail":str(exc),"context_tokens":C0_CONTEXT_TOKENS,"max_completion_tokens":C0_MAX_TOKENS,"safety_tokens":C0_SAFETY_TOKENS,"max_request_bytes":C0_MAX_REQUEST_BYTES}
             (out/"request-budget.json").write_text(json.dumps(diagnostic,indent=2)+"\n")
             raise
+        finally:
+            (out/"token-count-attempts.json").write_text(json.dumps({"attempts":attempts,"runtime_manifest":manifest},indent=2)+"\n")
         (out/"model-projection.json").write_text(json.dumps(projection,sort_keys=True,separators=(",",":"),ensure_ascii=False))
         (out/"request-budget.json").write_text(json.dumps(budget,indent=2)+"\n")
         (out/"request.json").write_bytes(request_bytes)
+        if hashlib.sha256(request_bytes).hexdigest()!=budget["request_sha256"] or not budget["within_budget"]:
+            raise RuntimeError("C0_COUNTED_REQUEST_BINDING_MISMATCH")
         req=urllib.request.Request("http://127.0.0.1:8080/v1/chat/completions",data=request_bytes,headers={"Content-Type":"application/json"},method="POST")
         try:
             with urllib.request.urlopen(req,timeout=1200) as response:raw=json.load(response)
@@ -626,6 +679,9 @@ def model_report(packet:dict,out:pathlib.Path,packet_sha256:str)->dict:
             retain_http_error(exc,out)
             raise RuntimeError(f"C0 model request HTTP {exc.code}; retained http-error.json") from exc
         (out/"raw-response.json").write_text(json.dumps(raw,indent=2))
+        observed=raw.get("usage",{}).get("prompt_tokens")
+        if type(observed) is not int or observed!=budget["input_tokens"]:
+            raise RuntimeError("C0_NATIVE_TOKEN_COUNT_GENERATION_MISMATCH")
         choice=raw["choices"][0]
         if choice.get("finish_reason")!="stop":raise RuntimeError("incomplete C0 response")
         core=json.loads(choice["message"]["content"])
