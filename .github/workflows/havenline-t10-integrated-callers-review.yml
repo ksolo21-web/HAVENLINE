@@ -50,8 +50,13 @@ jobs:
           SOURCE=06232b7c0e4cf8662f9b94d51bc93aa125fe2f20
           DEST=refs/heads/havenline/review-T10-integrated-caller-source
           test "$(git ls-remote --exit-code origin refs/heads/codex/havenline-sequential-task-01 | cut -f1)" = 0b61aa5bd6a9e9cb3662412f9d0a7003d2bd5f00
-          test -z "$(git ls-remote origin "$DEST")"
-          git push --porcelain origin "$SOURCE:$DEST" > caller-proof/publication.log 2>&1
+          existing="$(git ls-remote origin "$DEST" | cut -f1)"
+          if [ -z "$existing" ]; then
+            git push --porcelain origin "$SOURCE:$DEST" > caller-proof/publication.log 2>&1
+          else
+            test "$existing" = "$SOURCE"
+            printf 'existing exact review source verified: %s\n' "$SOURCE" > caller-proof/publication.log
+          fi
           test "$(git ls-remote --exit-code origin "$DEST" | cut -f1)" = "$SOURCE"
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
