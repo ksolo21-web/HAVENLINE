@@ -1,0 +1,100 @@
+name: Havenline T10 integrated caller causal preflight
+on:
+  push:
+    branches: ['havenline/review-T10-integrated-callers-preflight']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-t10-integrated-callers-preflight
+  cancel-in-progress: false
+jobs:
+  source-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    permissions:
+      contents: write
+      actions: read
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - name: Reproduce exact bounded caller source
+        run: |
+          set -euo pipefail
+          git worktree add --detach "$RUNNER_TEMP/callers" 2842845c4e4a9866d3bf7bb62a1beeabf58199c2
+          python3 tools/havenline/task10/prepare_integrated_callers.py --repo "$RUNNER_TEMP/callers" --out "$GITHUB_WORKSPACE/caller-proof"
+      - name: Complete source tooling and architecture regressions
+        run: |
+          set -euo pipefail
+          python3 -m pip install pillow==12.3.0 numpy==2.3.5 pyyaml
+          export TEST_REPO="$RUNNER_TEMP/callers" PROOF_DIR="$GITHUB_WORKSPACE/caller-proof"
+          python3 - <<'PY'
+          import subprocess,json,os,re,hashlib
+          from pathlib import Path
+          root=Path(os.environ['TEST_REPO']);out=Path(os.environ['PROOF_DIR']);rows=[]
+          for label,command in [('architecture',['python3','tools/havenline/production/validate_architecture_v32_t10.py']),('production',['python3','-m','unittest','discover','-s','tools/havenline/production/tests','-p','test_*.py','-v']),('task10',['python3','-m','unittest','discover','-s','tools/havenline/task10/tests','-p','test_*.py','-v'])]:
+              path=out/(label+'.log')
+              with path.open('w') as log:
+                  try:run=subprocess.run(command,cwd=root,stdout=log,stderr=subprocess.STDOUT,timeout=1000);code=run.returncode
+                  except subprocess.TimeoutExpired:code=124
+              text=path.read_text(errors='replace');count=re.search(r'Ran (\d+) tests?',text)
+              row={'suite':label,'exit_code':code,'tests':int(count.group(1)) if count else None,'passed':code==0,'log_sha256':hashlib.sha256(path.read_bytes()).hexdigest()};rows.append(row);print(json.dumps(row),flush=True)
+          result={'source':'06232b7c0e4cf8662f9b94d51bc93aa125fe2f20','rows':rows,'passed':all(x['passed'] for x in rows),'task_approved':False};(out/'preflight.json').write_text(json.dumps(result,indent=2)+'\n');raise SystemExit(0 if result['passed'] else 1)
+          PY
+      - name: Publish only the reproduced review-source branch
+        run: |
+          set -euo pipefail
+          SOURCE=06232b7c0e4cf8662f9b94d51bc93aa125fe2f20
+          DEST=refs/heads/havenline/review-T10-integrated-caller-source
+          test "$(git ls-remote --exit-code origin refs/heads/codex/havenline-sequential-task-01 | cut -f1)" = 0b61aa5bd6a9e9cb3662412f9d0a7003d2bd5f00
+          test -z "$(git ls-remote origin "$DEST")"
+          git push --porcelain origin "$SOURCE:$DEST" > caller-proof/publication.log 2>&1
+          test "$(git ls-remote --exit-code origin "$DEST" | cut -f1)" = "$SOURCE"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-caller-source-preflight-${{ github.sha }}
+          path: caller-proof/
+          if-no-files-found: error
+          retention-days: 30
+  independent-caller-review:
+    needs: source-preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: t10-caller-source-preflight-${{ github.sha }}
+          path: caller-input/
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Prepare pinned original reviewer runtime
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > runtime-preparation.json
+      - name: Review the exact complete caller delta
+        run: python3 -u tools/havenline/task10/review_integrated_callers.py --proof caller-input/preflight.json --out caller-review
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-independent-caller-review-${{ github.sha }}
+          path: caller-review/
+          if-no-files-found: error
+          retention-days: 30
