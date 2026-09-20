@@ -58,7 +58,28 @@ def review(repo,out):
  repo=pathlib.Path(repo);out=pathlib.Path(out);out.mkdir(parents=True,exist_ok=True)
  pre=preflight(repo,out/"preflight")
  plan=json.loads((repo/PLAN).read_text());c0r=json.loads((repo/C0R).read_text())
- evidence={"preflight":pre,"exact_diff":(out/"preflight/exact-diff.patch").read_text(),"B040_fix":next(x for x in plan["fixes"] if x["blocker_id"]=="C0-T10-B040"),"c0r":{"outcome":c0r["outcome"],"passed":c0r["passed"],"thresholds_unchanged":c0r["thresholds_unchanged"],"input_bindings":c0r["input_bindings"]},"final_acceptance_still_required":"Fresh C1/C2/C3/C4/C6/C7 each >9 unrounded, G1-G14, regression, zero mandatory defects, integrated closeout; T11 stays locked."}
+ base_plan=json.loads(git(repo,"show",B+":"+PLAN,text=True));base_c0r=json.loads(git(repo,"show",B+":"+C0R,text=True))
+ import copy
+ before=copy.deepcopy(base_plan);after=copy.deepcopy(plan)
+ before_inherited=before.pop("inherited_noncausal_files");after_inherited=after.pop("inherited_noncausal_files")
+ repair_note=after.pop("final_closeout_bookkeeping_repair",None)
+ if after!=before:raise ValueError("plan changed outside inheritance classification/note")
+ removed=sorted(set(before_inherited)-set(after_inherited));added=sorted(set(after_inherited)-set(before_inherited))
+ if removed!=["Docs/Production/PATH_OWNERSHIP.json"] or added:raise ValueError("unexpected inheritance delta")
+ before_report=copy.deepcopy(base_c0r);after_report=copy.deepcopy(c0r)
+ old_plan_hash=before_report["input_bindings"]["plan_sha256"];new_plan_hash=after_report["input_bindings"]["plan_sha256"]
+ after_report["input_bindings"]["plan_sha256"]=old_plan_hash
+ if after_report!=before_report:raise ValueError("C0R changed outside exact plan hash binding")
+ evidence={
+  "preflight":pre,
+  "semantic_json_delta":{
+   "repair_plan":{"removed_from_inherited_noncausal_files":removed,"added_to_inherited_noncausal_files":added,"all_other_existing_plan_fields_equal":True,"added_audit_note":repair_note},
+   "c0r":{"only_changed_field":"input_bindings.plan_sha256","before":old_plan_hash,"after":new_plan_hash,"all_other_fields_equal":True}
+  },
+  "B040_fix":next(x for x in plan["fixes"] if x["blocker_id"]=="C0-T10-B040"),
+  "c0r_result":{"outcome":c0r["outcome"],"passed":c0r["passed"],"thresholds_unchanged":c0r["thresholds_unchanged"],"rejections":c0r.get("rejections"),"evidence_gaps":c0r.get("evidence_gaps")},
+  "final_acceptance_still_required":"Fresh C1/C2/C3/C4/C6/C7 each >9 unrounded, G1-G14, regression, zero mandatory defects, integrated closeout; T11 stays locked."
+ }
  root=pathlib.Path.cwd();runtime=json.loads((root/"Docs/Production/CRITIC_EXECUTION.json").read_text())["local_independent_runtime"]
  cache=pathlib.Path(os.path.expanduser(runtime["cache_path"]));manifest=json.loads((cache/"manifest.json").read_text())
  servers=list((cache/"runtime").rglob("llama-server"))
