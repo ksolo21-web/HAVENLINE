@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T10",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
-  "repair_intelligence_sha256": "24a68ddc6d5276fe228e5fd5f8512121a68b23d19686a31dd3230d3ff5866f06",
+  "repair_intelligence_sha256": "ea2194136dc4f90492cb2e0e64e5d441e03c5956e1cc56dbc63965af0e3b602a",
   "prior_attempt_sources": [
     {
       "failure_family_id": "projected-label-feasibility",
@@ -94,6 +94,16 @@
       "result": "PARTIAL",
       "result_record": "canonical failure_frontier retained C0 strategy",
       "result_sha256": "0993261b0173080b9e84045e6840284968dbf24d6db65d9d8e93ba18a8e6baa6"
+    },
+    {
+      "failure_family_id": "projected-label-feasibility",
+      "attempt": 3,
+      "candidate": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97",
+      "run_id": 35483383557,
+      "artifact_id": 10596841905,
+      "artifact_sha256": "96333e40fc0d5b98d0bcdd0248f80c8aaaf458d55b73207205fabbc22fc29188",
+      "result": "PARTIAL",
+      "result_record": "retained terminal diagnostic result T10-screen-pixel-canary-terminal-result.json"
     }
   ],
   "frontier_sources": [
@@ -124,58 +134,33 @@
     {
       "run_id": 35461009111,
       "candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a"
+    },
+    {
+      "run_id": 35483383557,
+      "candidate": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97"
     }
   ],
   "domain_proof": {
-    "run_id": 35443178004,
-    "artifact_id": 10584940146,
-    "artifact_sha256": "affa1884f56bf4ab5b1000f4ebcf2f29b3da93ddd1ad47306ad7584955fbf6a8",
-    "proof_source_commit": "58789aafcba7f2cf85c4097472989f5bb2dc445f",
+    "run_id": 35508254523,
+    "artifact_id": 10603974070,
+    "artifact_sha256": "5df019bd208c167914678d239a0712492bfe8afc57a713abcc97c076d4f07790",
+    "proof_source_commit": "48ffd32a0ce7518e4734630f69553e1525eba116",
     "proof_source_path": "HavenlineGodot/scripts/world_transform_view.gd",
-    "proof_source_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+    "proof_source_sha256": "fc35ebc4bc59dd41e165f6eb8d091ed274c1f02a5fe48e56cf8c9d15b8970b75",
     "proof_slice_mode": "WHOLE_FILE_EXCEPT_EXACT_METADATA_LINES",
-    "proof_irrelevant_exact_lines": [
-      "\t\t\"label_layout_policy\": \"constrained_screen_lanes_v1\",",
-      "\t\t\"label_dynamic_camera_lane\": true,",
-      "\t\t\"label_min_readability_scale\": READABILITY_MIN,",
-      "\t\t\"label_fit_slack_px\": LABEL_FIT_SLACK_PX,"
-    ],
-    "proof_relevant_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
-    "retained_summary_path": "Docs/Production/T10/Proofs/layout-solver-10584940146-summary.json",
-    "retained_summary_sha256": "7cd41bdb18a46ff50f3e7fc4f2f341ff1467f1faba253d6efed70fe93dc10f09",
+    "proof_irrelevant_exact_lines": [],
+    "proof_relevant_sha256": "fc35ebc4bc59dd41e165f6eb8d091ed274c1f02a5fe48e56cf8c9d15b8970b75",
+    "retained_summary_path": "Docs/Production/T10/Proofs/rendered-shadow-10603974070-summary.json",
+    "retained_summary_sha256": "1bc9c15abadc8db4f4e506e054a4b82337ef9ccc8a0a0640aad2b5066b98c8de",
     "required_summary": {
-      "projection_count": 216,
+      "projection_count": 684,
       "failure_count": 0,
       "diagnostic_collection_passed": true,
       "product_projection_passed": true,
       "proof_slice_mode": "WHOLE_FILE_EXCEPT_EXACT_METADATA_LINES",
-      "proof_irrelevant_exact_lines": [
-        "\t\t\"label_layout_policy\": \"constrained_screen_lanes_v1\",",
-        "\t\t\"label_dynamic_camera_lane\": true,",
-        "\t\t\"label_min_readability_scale\": READABILITY_MIN,",
-        "\t\t\"label_fit_slack_px\": LABEL_FIT_SLACK_PX,"
-      ],
-      "proof_relevant_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
-      "derived_effect_bounds": {
-        "_beacon.pixel_size": {
-          "dependency_symbols": [
-            "projection",
-            "label_scale"
-          ],
-          "minimum_gte": 0.004845,
-          "maximum_lte": 0.0057,
-          "violation_count": 0
-        },
-        "_beacon.width": {
-          "dependency_symbols": [
-            "projection",
-            "wrap_width"
-          ],
-          "minimum_policy": "whole_word_width",
-          "maximum_lte": 960.0,
-          "violation_count": 0
-        }
-      },
+      "proof_irrelevant_exact_lines": [],
+      "proof_relevant_sha256": "fc35ebc4bc59dd41e165f6eb8d091ed274c1f02a5fe48e56cf8c9d15b8970b75",
+      "derived_effect_bounds": {},
       "task_approved": false,
       "reusable_for_approval": false,
       "critic_score_reusable": false
