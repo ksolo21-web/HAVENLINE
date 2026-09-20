@@ -360,7 +360,7 @@ func capture_state(name: String, descriptor: Dictionary, angles: Array = ["front
 	for raw_angle in angles:
 		var angle := String(raw_angle)
 		configure_camera(angle)
-		var process_was_enabled := view.is_processing()
+		var process_was_enabled: bool = view.is_processing()
 		if rendered_clearance_probe:
 			view.set_process(false)
 			# Bind the committing case to the exact maximum 1.18 pulse envelope;

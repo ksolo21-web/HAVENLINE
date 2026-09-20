@@ -40,9 +40,14 @@ class RenderedClearanceTests(unittest.TestCase):
         }
 
     def test_diagnostic_workflow_is_one_shot_pinned_and_exact_baseline_bound(self):
-        workflow = MODULE_PATH.parents[3] / ".github/workflows/havenline-rendered-clearance-t10-probe.yml"
+        consumed_v1 = MODULE_PATH.parents[3] / ".github/workflows/havenline-rendered-clearance-t10-probe.yml"
+        self.assertEqual(
+            hashlib.sha256(consumed_v1.read_bytes()).hexdigest(),
+            "607bb3ff328327c609a2735df7f46e5a60d9c174bb7e0d7770d769e3bccdbfe8",
+        )
+        workflow = MODULE_PATH.parents[3] / ".github/workflows/havenline-rendered-clearance-t10-probe-v2.yml"
         source = workflow.read_text()
-        self.assertIn("branches: ['havenline/governance-T10-rendered-clearance-probe']", source)
+        self.assertIn("branches: ['havenline/governance-T10-rendered-clearance-probe-v2']", source)
         self.assertIn("cancel-in-progress: false", source)
         self.assertIn("actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09", source)
         self.assertIn("actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f", source)
@@ -52,7 +57,17 @@ class RenderedClearanceTests(unittest.TestCase):
         self.assertNotIn("workflow_dispatch", source)
         self.assertIn("actions: read", source)
         self.assertIn("GITHUB_RUN_ATTEMPT", source)
-        self.assertIn("T10-rendered-clearance-one-shot.json", source)
+        self.assertIn("T10-rendered-clearance-one-shot-v2.json", source)
+        self.assertIn("T10_RENDERED_CLEARANCE_ONE_SHOT_V2", source)
+        self.assertEqual(source.count("--check-only"), 4)
+        self.assertEqual(source.count('timeout 30 "$engine" --headless'), 2)
+        self.assertIn('test ! -e "$RUNNER_TEMP/t10-failed/HavenlineGodot/.godot"', source)
+        self.assertIn('test ! -e "$GITHUB_WORKSPACE/HavenlineGodot/.godot"', source)
+        self.assertIn("check-only-status.json", source)
+        self.assertLess(source.index("--check-only"), source.index("- name: Render exact baseline"))
+        self.assertIn("'run_id':35477329507", source)
+        self.assertIn("d0fdd3252d330450f83acd14a15ca339fe9eb653cfd78008a09abe5e3c8c9116", source)
+        self.assertIn("8b97ef6621bed10bcee713c9aa2021fdee2ebedfd5e2d0aa8d254c931fa1c32f", source)
         self.assertIn("one-shot diagnostic already attempted", source)
         self.assertIn("head_sha={head_sha}", source)
         self.assertIn("len(runs)==payload['total_count']", source)
@@ -60,14 +75,14 @@ class RenderedClearanceTests(unittest.TestCase):
         self.assertIn("workflow-runs-api.json", source)
 
     def test_one_shot_admission_rejects_missing_truncated_prior_and_wrong_attempt_history(self):
-        workflow = MODULE_PATH.parents[3] / ".github/workflows/havenline-rendered-clearance-t10-probe.yml"
+        workflow = MODULE_PATH.parents[3] / ".github/workflows/havenline-rendered-clearance-t10-probe-v2.yml"
         source = workflow.read_text()
         code = source.split("python3 - <<'PY'\n", 1)[1].split("\n          PY", 1)[0]
         code = "\n".join(line[10:] for line in code.splitlines())
         commit = "1" * 40
         tree = "2" * 40
-        workflow_path = ".github/workflows/havenline-rendered-clearance-t10-probe.yml"
-        branch = "havenline/governance-T10-rendered-clearance-probe"
+        workflow_path = ".github/workflows/havenline-rendered-clearance-t10-probe-v2.yml"
+        branch = "havenline/governance-T10-rendered-clearance-probe-v2"
         env = {
             "GITHUB_SHA": commit,
             "GITHUB_REF": f"refs/heads/{branch}",
@@ -77,17 +92,28 @@ class RenderedClearanceTests(unittest.TestCase):
             "GITHUB_API_URL": "https://api.github.test",
             "GITHUB_REPOSITORY": "owner/repo",
             "INTEGRATION_BRANCH": "codex/havenline-sequential-task-01",
-            "AUTHORIZATION_PATH": "Docs/Production/ChangeRequests/T10-rendered-clearance-one-shot.json",
+            "AUTHORIZATION_PATH": "Docs/Production/ChangeRequests/T10-rendered-clearance-one-shot-v2.json",
             "FAILED_SOURCE": "3" * 40,
             "FAILED_VIEW_SHA256": "4" * 64,
             "GH_TOKEN": "fixture-token",
         }
         auth = {
             "task_id": "T10",
-            "authorization_kind": "T10_RENDERED_CLEARANCE_ONE_SHOT",
+            "authorization_kind": "T10_RENDERED_CLEARANCE_ONE_SHOT_V2",
             "disposition": "AUTHORIZED_FOR_ONE_DIAGNOSTIC_EXECUTION",
             "diagnostic_execution_authorized": True,
             "max_runs": 1,
+            "supersedes_failed_diagnostic": {
+                "run_id": 35477329507,
+                "run_attempt": 1,
+                "conclusion": "failure",
+                "source_commit": "f3ded9ba3d0c0d2182c9db4efbc9cc0a703dc347",
+                "source_tree": "fca9a337b7b4fdf3b2ccbb1c38ce603876f927c0",
+                "artifact_id": 10594507398,
+                "artifact_zip_sha256": "d0fdd3252d330450f83acd14a15ca339fe9eb653cfd78008a09abe5e3c8c9116",
+                "diagnosis_sha256": "8b97ef6621bed10bcee713c9aa2021fdee2ebedfd5e2d0aa8d254c931fa1c32f",
+                "product_evidence": "NONE",
+            },
             "probe": {
                 "commit": commit, "tree": tree, "workflow_path": workflow_path,
                 "workflow_sha256": hashlib.sha256(source.encode()).hexdigest(),
@@ -129,6 +155,31 @@ class RenderedClearanceTests(unittest.TestCase):
                         patch("urllib.request.urlopen", return_value=io.BytesIO(json.dumps(valid).encode())), \
                         contextlib.redirect_stdout(io.StringIO()):
                     exec(compile(code, "admission-fixture", "exec"), {})
+                binding_mutations = {
+                    "wrong_probe_commit": lambda row: row["probe"].update(commit="9" * 40),
+                    "wrong_probe_tree": lambda row: row["probe"].update(tree="8" * 40),
+                    "wrong_workflow_hash": lambda row: row["probe"].update(workflow_sha256="7" * 64),
+                    "wrong_v1_artifact": lambda row: row["supersedes_failed_diagnostic"].update(
+                        artifact_zip_sha256="6" * 64
+                    ),
+                    "false_v1_product_evidence": lambda row: row["supersedes_failed_diagnostic"].update(
+                        product_evidence="PRESENT"
+                    ),
+                }
+                for name, mutate in binding_mutations.items():
+                    bad_auth = copy.deepcopy(auth)
+                    mutate(bad_auth)
+
+                    def bad_git(args, **_kwargs):
+                        if args[1] == "rev-parse":
+                            return tree + "\n"
+                        return json.dumps(bad_auth).encode()
+
+                    with self.subTest(name=name), patch.dict(os.environ, env), \
+                            patch("subprocess.check_output", bad_git), \
+                            patch("urllib.request.urlopen", return_value=io.BytesIO(json.dumps(valid).encode())), \
+                            contextlib.redirect_stdout(io.StringIO()), self.assertRaises(Exception):
+                        exec(compile(code, "admission-fixture", "exec"), {})
             finally:
                 os.chdir(previous)
 
