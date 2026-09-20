@@ -44,16 +44,23 @@ def profile_cases(profile):
     return ({("ready","overhead"),("blocked","overhead")} if profile == "native4k_anchors"
             else {(state,angle) for state in STATES for angle in CAMERA_FOV})
 
-def normal_correspondence(normal, response, label_mask):
-    # Only label pixels may differ between N and R. One raster pixel tolerance
-    # handles the antialiased edge; broad substitutions must remain impossible.
+def normal_correspondence(normal, response, label_mask, response_mask):
+    # N and R can differ by one code value on response faces when the label
+    # draw submission changes (observed in both V2 subjects). Bound that
+    # quantization spatially and numerically; never relax the collision masks.
     delta = difference_mask(normal, response)
-    support = dilate_square(label_mask, 1)
-    outside = count_mask(ImageChops.multiply(delta, ImageChops.invert(support)))
+    label_support = dilate_square(label_mask, 1)
+    outside = ImageChops.multiply(delta, ImageChops.invert(label_support))
+    outside_array = np.asarray(outside) != 0
+    response_support = np.asarray(dilate_square(response_mask, 1)) != 0
+    channel_delta = np.abs(np.asarray(normal.convert("RGB"), dtype=np.int16)
+                           - np.asarray(response.convert("RGB"), dtype=np.int16)).max(axis=2)
+    unexpected = int(np.count_nonzero(outside_array & (~response_support | (channel_delta > 1))))
     inside = count_mask(ImageChops.multiply(delta, label_mask))
     coverage = inside / max(1, count_mask(label_mask))
-    return {"outside_label_pixels":outside, "label_coverage":coverage,
-            "passed":outside == 0 and coverage >= 0.5}
+    return {"unexpected_outside_label_pixels":unexpected,
+            "response_quantization_pixels":int(np.count_nonzero(outside_array & response_support & (channel_delta == 1))),
+            "label_coverage":coverage, "passed":unexpected == 0 and coverage >= 0.5}
 
 
 def sha256(path: Path) -> str:
@@ -371,7 +378,7 @@ def verify(root: Path, manifest_path: Path, masks_root: Path, source: str,
                             (clearance_violation, mask_paths["violation"])):
             image.save(path)
         clearance_passed = clearance_pixels == 0
-        correspondence = normal_correspondence(images["normal"], images["response_only"], label_mask)
+        correspondence = normal_correspondence(images["normal"], images["response_only"], label_mask, response_mask)
         analytic_passed = readability.get("passed") is True and readability.get("placement_found") is True
         rows.append({
             "profile": profile, "evidence_scale": scale, "state": state, "angle": angle, "case_nonce": nonce,

@@ -57,13 +57,19 @@ class DomainTests(unittest.TestCase):
             self.assertEqual(report['failure_count'],1)
 
     def test_rehashed_normal_substitutions_are_rejected(self):
-        for mutation in ('white','single_pixel'):
+        for mutation in ('white','single_pixel','response_recolor','response_erase'):
             with self.subTest(mutation=mutation), tempfile.TemporaryDirectory() as d:
                 root=Path(d); manifest=self.make_manifest(root)
                 layer=manifest['records'][0]['rendered_clearance_layers']['layer_records']['normal']
                 target=root/layer['file']
                 if mutation=='white':
                     image=Image.new('RGB',tuple(fixture.CAPTURE_SIZE),'white')
+                elif mutation=='response_erase':
+                    image=Image.open(target).convert('RGB')
+                    image.paste((16,24,32),(110,100,160,170))
+                elif mutation=='response_recolor':
+                    image=Image.open(target).convert('RGB')
+                    image.putpixel((150,130),(255,0,0))
                 else:
                     image=Image.open(root/'ready-gameplay-response-only.png').convert('RGB')
                     image.putpixel((140,50),(255,255,255))
