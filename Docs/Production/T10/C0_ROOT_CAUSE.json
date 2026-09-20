@@ -10,11 +10,11 @@
   "failed_job_id": 105628493430,
   "integration_head": "82518322a8e0dc9ee6ef12a759bf4ca723c8a490",
   "failed_candidate_role": "CUMULATIVE_REPAIR_CYCLE_ROOT",
-  "latest_failed_candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+  "latest_failed_candidate": "fd962391dd3ac956fd6b111adb2313652859125e",
   "latest_failed_run_ids": [
-    35461009111
+    35534465419
   ],
-  "latest_failed_integration_head": "842d015df1f22d00484741cefb222ac7c2cabe51",
+  "latest_failed_integration_head": "fd962391dd3ac956fd6b111adb2313652859125e",
   "failure_family_history": [
     {
       "failure_family_id": "projected-label-feasibility",
@@ -145,6 +145,23 @@
           "lesson": "Validate the effective generated grammar for both alternatives, not JSON Schema root constraints alone."
         }
       ]
+    },
+    {
+      "failure_family_id": "world-transform-action-feedback",
+      "blocker_ids": [
+        "C0-T10-B048",
+        "C0-T10-B054"
+      ],
+      "prior_attempts": [
+        {
+          "strategy": "Action-first compact feedback with resource cues and neutral success geometry",
+          "outcome": "PARTIAL",
+          "same_family": true,
+          "candidate": "fd962391dd3ac956fd6b111adb2313652859125e",
+          "run_id": 35534465419,
+          "lesson": "Fresh exact-source C4 passed full-lifecycle, motion-0, motion-6 and device-readability-6, but motion-12 and device-readability-0 still failed because prerequisite/current-status/payment-history lines competed visually and the blocked next stage had no distinct world cue."
+        }
+      ]
     }
   ],
   "full_domain_proofs": [
@@ -176,8 +193,8 @@
   ],
   "failure_frontier": {
     "complete": true,
-    "diagnosed_through_candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
-    "latest_observed_failed_candidate": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97",
+    "diagnosed_through_candidate": "fd962391dd3ac956fd6b111adb2313652859125e",
+    "latest_observed_failed_candidate": "fd962391dd3ac956fd6b111adb2313652859125e",
     "observations": [
       {
         "run_id": 35402388836,
@@ -320,6 +337,18 @@
           "All 10 failures were label-versus-rendered-response clearance failures while the analytic solver treated the placement as legal; retained layer masks isolate label and response pixels independently."
         ],
         "reason": "Same projected-label-feasibility family: the solver modeled mesh projection but not directional-light shadow pixels on the ground plane."
+      },
+      {
+        "run_id": 35534465419,
+        "candidate": "fd962391dd3ac956fd6b111adb2313652859125e",
+        "disposition": "BOUND_TO_EXISTING_GROUP",
+        "group_id": "presentation-action-clarity",
+        "evidence": [
+          "Fresh final isolated run 35534465419 on exact candidate fd962391dd3ac956fd6b111adb2313652859125e passed C0R, full build/evidence, device/native4K/performance packaging, C3 and C7; C4 alone failed.",
+          "C4 artifact 10613684975 SHA256 78bbb9c37fb0824ee5a6605cee7ef07a21712431b93e531abf3652c4d56e23ab scored interactable_clarity 7.5, collection_feedback 9.0 and next_action_clarity 7.0 with concrete motion-12/device-readability-0 hierarchy defects.",
+          "C4 passed full-lifecycle, motion-0, motion-6 and device-readability-6, localizing the remaining defect to dense blocker/next-action hierarchy rather than general layout, authority or geometry."
+        ],
+        "reason": "Same B048/B054 world-transform-action-feedback family: exact resource and lifecycle facts remained correct, but the first hierarchy repair did not make the prerequisite/next action visually dominant in dense late-lifecycle evidence."
       }
     ],
     "unclassified_failures": [],
@@ -351,7 +380,7 @@
         "source_path": "Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json",
         "group_id": "benchmark-liveness",
         "evidence": [
-          "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
+          "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211–1771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
         ],
         "task_approved": false,
         "reusable_for_approval": false
@@ -422,6 +451,18 @@
         "group_id": "layout-feasibility",
         "evidence": [
           "Fresh hosted full raster proof retained 684/684 passing cases over 19 profiles, six lifecycle states and six camera angles; product source hash fc35ebc4bc59dd41e165f6eb8d091ed274c1f02a5fe48e56cf8c9d15b8970b75."
+        ],
+        "task_approved": false,
+        "reusable_for_approval": false
+      },
+      {
+        "source_kind": "DIAGNOSTIC_NONAPPROVAL",
+        "run_id": 35539499493,
+        "candidate": "a70dd8499eab2b121601d1bcaf8ee0641a8281e4",
+        "source_path": "artifact 10613759597 / full C4 hierarchy causal proof",
+        "group_id": "presentation-action-clarity",
+        "evidence": [
+          "Repair-source proof passed focused Godot tests, 1728 analytic layout cases, 111 extreme cases, 3 transition cases and full 684 rendered screen-pixel cases with zero failures. Artifact SHA256 afa8396db08606c37842fff2bee493437c05921892e5439bdc91731e8bd38c6c."
         ],
         "task_approved": false,
         "reusable_for_approval": false
@@ -862,7 +903,10 @@
         "The unchanged C4 record preserves three defects: blocked text density obscures the primary delivery action; committing lacks a clear resource-application/progress cue; and insufficient-resource feedback relies on text rather than resource-specific visual indicators.",
         "Direct board inspection corroborates equal-weight four-line blocked copy, a generic red failure shape with no wood/stone identity, and a blue target pulse that does not communicate delivered-resource transfer. Motion-12 and device-readability passed, so the defect is semantic hierarchy/state feedback rather than a general layout failure.",
         "The C3 diagnostic job in run 35377452576 completed every group with finish_reason=stop, no defects and minimum score 9.6; its job failed only because the historical request audit copy hit the already diagnosed B046 truncation. Both C3 and C4 response contracts pass independently.",
-        "Failure-intelligence query for blocked text density, next action, missing-resource visual indicators and committing resource transfer returned no matches; the product diagnosis is independently current."
+        "Failure-intelligence query for blocked text density, next action, missing-resource visual indicators and committing resource transfer returned no matches; the product diagnosis is independently current.",
+        "Fresh final isolated run 35534465419 on exact candidate fd962391dd3ac956fd6b111adb2313652859125e passed C0R, full build/evidence, device/native4K/performance packaging, C3 and C7; C4 alone failed.",
+        "C4 artifact 10613684975 SHA256 78bbb9c37fb0824ee5a6605cee7ef07a21712431b93e531abf3652c4d56e23ab scored interactable_clarity 7.5, collection_feedback 9.0 and next_action_clarity 7.0 with concrete motion-12/device-readability-0 hierarchy defects.",
+        "C4 passed full-lifecycle, motion-0, motion-6 and device-readability-6, localizing the remaining defect to dense blocker/next-action hierarchy rather than general layout, authority or geometry."
       ],
       "root_cause": "world_transform_view.gd renders transition, full cost, generic reason and exact shortfall as equal-weight Label3D lines, so the actionable delivery instruction is last and visually undifferentiated. Blocked geometry communicates only generic failure color, and committing animates target scale without a resource-to-target cue. Exact resource data exists and authority is correct, but the presentation does not make resource identity, action priority or pending application visually legible.",
       "affected_object": "T10 neutral world-transform resource and action feedback",
@@ -1086,8 +1130,8 @@
       "classification": "PRODUCT_DEFECT",
       "affected_object": "T10 presentation and critic evidence",
       "symptom": "C4 scores interactable clarity 8.5 and next-action clarity 7.0; C3 world-response readability is exactly 9.0 on the dense motion board.",
-      "root_cause": "Blocked feedback repeats the same shortfall and cost while complete feedback buries the next action below completion/payment history.",
-      "causal_fix": "Make every lifecycle message action-first and compact while retaining exact costs, shortfalls, prerequisites, delivered-stock destination, pending uncertainty and accepted paid history.",
+      "root_cause": "The first action-first repair moved delivery text upward, but late-lifecycle feedback still gave prerequisite, completion/payment history and next-stage status similar visual weight; the accepted form also stayed visually success-only when the next transform was blocked.",
+      "causal_fix": "Make the prerequisite itself the first explicit NEXT action when it blocks progress, retain exact shortfalls/payment history beneath it, and keep the accepted completed form green while switching only the perimeter to blocked red for a blocked next stage. Preserve neutral T11-safe geometry, four nodes, transaction authority and all thresholds.",
       "files_to_change": [
         "HavenlineGodot/scripts/world_transform_view.gd",
         "HavenlineGodot/tests/test_task10_integration.gd",
@@ -1105,7 +1149,10 @@
         ".github/workflows/havenline-specialist-critic.yml"
       ],
       "evidence": [
-        "C4 scores interactable clarity 8.5 and next-action clarity 7.0; C3 world-response readability is exactly 9.0 on the dense motion board."
+        "C4 scores interactable clarity 8.5 and next-action clarity 7.0; C3 world-response readability is exactly 9.0 on the dense motion board.",
+        "Fresh final isolated run 35534465419 on exact candidate fd962391dd3ac956fd6b111adb2313652859125e passed C0R, full build/evidence, device/native4K/performance packaging, C3 and C7; C4 alone failed.",
+        "C4 artifact 10613684975 SHA256 78bbb9c37fb0824ee5a6605cee7ef07a21712431b93e531abf3652c4d56e23ab scored interactable_clarity 7.5, collection_feedback 9.0 and next_action_clarity 7.0 with concrete motion-12/device-readability-0 hierarchy defects.",
+        "C4 passed full-lifecycle, motion-0, motion-6 and device-readability-6, localizing the remaining defect to dense blocker/next-action hierarchy rather than general layout, authority or geometry."
       ],
       "verification": [
         "Run focused hostile tests for the exact causal boundary.",
@@ -1485,7 +1532,7 @@
       ],
       "evidence": [
         "Original run35461009111/job105944782203: job18:23:11, benchmark18:26:48 (217 seconds prior work), exit124 after8 controls; artifact10590840640 SHA2560bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2.",
-        "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate.",
+        "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211–1771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate.",
         "Older same-runtime3d24 completed benchmark in about1174 seconds and packaging plus both uploads in11.6 seconds. The120-second reserve is conservative relative to that observation, not a guarantee under GitHub outage.",
         "Independent source review9.4 at8475f8c5 verified completed-log EOF drain and hostile trailing duplicate rejection.",
         "Retained cheap trace proof Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json SHA2564c10b53b809228d72b007d4a6a790c095089e7ec8d9a409effb2436f3b4f3659 invokes actual ProgressGuard/completion_errors and unmocked benchmark_errors; six hostile completions reject and original timeout stays failed."
@@ -1541,7 +1588,7 @@
     "C0 artifact10588669986 SHA2569c5a8c8581326d589a507784e56b8611ca4318eb3c78905c8d4c2f92e3d9dce4: unchanged old request17680 bytes. Reviewed repair reconstructs13 groups and97 exact errors/claims in13564 bytes under unchanged13672 maximum.",
     "C0 artifact10590392757 SHA256de4d502a76d13fe36a552bedd37079111c03672044e2735fda4bbccdf542a328 retained the exact decoded shell quotation. Replay validates its quotes at11112 request bytes, while unsupported simulation/infinite-loop advice remains rejected.",
     "Original run35461009111/job105944782203: job18:23:11, benchmark18:26:48 (217 seconds prior work), exit124 after8 controls; artifact10590840640 SHA2560bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2.",
-    "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211\u20131771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
+    "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211–1771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate. Diagnostic only, one-shot exhausted; no approval reuse."
   ],
   "unexecuted_checks": [
     "New cumulative source must pass exact C0R, builder, ownership, governance and cheap preflight before one fresh isolated candidate.",
