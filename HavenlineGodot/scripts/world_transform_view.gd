@@ -57,6 +57,8 @@ var _ghost_material: StandardMaterial3D
 var displayed_costs: Dictionary = {}
 var next_preview: Dictionary = {}
 var _last_visual_signature: Array = []
+var _directional_shadow_lights: Array[DirectionalLight3D] = []
+var _shadow_lights_scanned := false
 
 static func contract() -> Dictionary:
 	return {
@@ -76,8 +78,12 @@ static func contract() -> Dictionary:
 		"readability_scale_range": [READABILITY_MIN, READABILITY_MAX],
 		"committing_pulse_hz": PULSE_HZ,
 		"label_camera_offset": LABEL_CAMERA_OFFSET,
-		"label_layout_policy": "constrained_screen_lanes_v1",
+		"label_layout_policy": "constrained_screen_pixels_v3",
+		"label_size_coordinate_space": "logical_viewport_pixels",
+		"readability_affects": "text_only",
+		"authored_font_size": 38,
 		"label_dynamic_camera_lane": true,
+		"label_screen_y_axis_inverted": true,
 		"label_min_readability_scale": READABILITY_MIN,
 		"label_fit_slack_px": LABEL_FIT_SLACK_PX,
 		"label_max_width": LABEL_MAX_WIDTH,
@@ -103,7 +109,6 @@ func configure_readability(next_scale: float) -> bool:
 		return true
 	readability_scale = next_scale
 	_ensure_visuals()
-	_visual_root.scale = Vector3.ONE * readability_scale
 	visual_apply_count += 1
 	return true
 
@@ -274,7 +279,6 @@ func _ensure_visuals() -> void:
 	_beacon.outline_render_priority = LABEL_OUTLINE_RENDER_PRIORITY
 	_visual_root.add_child(_beacon)
 
-	_visual_root.scale = Vector3.ONE * readability_scale
 	visual_build_count += 1
 
 func _visual_signature() -> Array:
@@ -329,20 +333,82 @@ func _process(delta: float) -> void:
 	_ghost.scale = _target_form_scale() * pulse
 	_ghost.position.y = 0.08 + 0.75 * _ghost.scale.y
 
+func _active_directional_shadow_lights() -> Array[DirectionalLight3D]:
+	if not _shadow_lights_scanned:
+		_shadow_lights_scanned = true
+		var tree := get_tree()
+		if tree != null and tree.root != null:
+			for node in tree.root.find_children("*", "DirectionalLight3D", true, false):
+				var light := node as DirectionalLight3D
+				if light != null:
+					_directional_shadow_lights.append(light)
+	var active: Array[DirectionalLight3D] = []
+	for light in _directional_shadow_lights:
+		if not is_instance_valid(light):
+			continue
+		if light.shadow_enabled and light.is_visible_in_tree():
+			active.append(light)
+	return active
+
+func _ground_shadow_point(world_point: Vector3, light: DirectionalLight3D) -> Variant:
+	# DirectionalLight3D emits along local -Z. Project each caster corner along
+	# that ray onto the response ground plane instead of pretending the visible
+	# response ends at the mesh silhouette.
+	var ray_direction := -light.global_transform.basis.z.normalized()
+	var plane_normal := _visual_root.global_transform.basis.y.normalized()
+	var plane_origin := _visual_root.global_position
+	var height := plane_normal.dot(world_point - plane_origin)
+	var denominator := plane_normal.dot(ray_direction)
+	if height <= 0.0 or denominator >= -0.0001:
+		return null
+	var travel := -height / denominator
+	if travel < 0.0:
+		return null
+	return world_point + ray_direction * travel
+
 func _projected_response_rect(active_camera: Camera3D) -> Rect2:
-	var points: Array[Vector2] = []
-	var radius := 1.58
-	var top := 0.08 + 1.5 * _target_form_scale().y * 1.18
-	for x in [-radius, radius]:
-		for y in [0.0, top]:
-			for z in [-radius, radius]:
-				points.append(active_camera.unproject_position(_visual_root.to_global(Vector3(x, y, z))))
-	var minimum := points[0]
-	var maximum := points[0]
-	for point in points:
+	var mesh_points: Array[Vector2] = []
+	var shadow_points: Array[Vector2] = []
+	var shadow_lights := _active_directional_shadow_lights()
+	for mesh_instance in [_ring, _ghost]:
+		var box: AABB = mesh_instance.get_aabb()
+		var pose: Transform3D = mesh_instance.global_transform
+		if mesh_instance == _ghost and lifecycle == "committing":
+			var peak := _target_form_scale() * 1.18
+			pose = _visual_root.global_transform * Transform3D(Basis.from_scale(peak), Vector3(0.0, 0.08 + 0.75 * peak.y, 0.0))
+		for corner in 8:
+			var world_point := pose * box.get_endpoint(corner)
+			var depth := -(active_camera.global_transform.affine_inverse() * world_point).z
+			if depth <= active_camera.near or depth >= active_camera.far:
+				return Rect2()
+			mesh_points.append(active_camera.unproject_position(world_point))
+			for light in shadow_lights:
+				var shadow_point: Variant = _ground_shadow_point(world_point, light)
+				if shadow_point == null:
+					continue
+				var shadow_world := shadow_point as Vector3
+				var shadow_depth := -(active_camera.global_transform.affine_inverse() * shadow_world).z
+				if shadow_depth <= active_camera.near or shadow_depth >= active_camera.far:
+					return Rect2()
+				shadow_points.append(active_camera.unproject_position(shadow_world))
+	var minimum := mesh_points[0]
+	var maximum := mesh_points[0]
+	for point in mesh_points:
 		minimum = minimum.min(point)
 		maximum = maximum.max(point)
-	return Rect2(minimum, maximum - minimum)
+	var response := Rect2(minimum, maximum - minimum).grow(LABEL_FIT_SLACK_PX)
+	if not shadow_points.is_empty():
+		var shadow_minimum := shadow_points[0]
+		var shadow_maximum := shadow_points[0]
+		for point in shadow_points:
+			shadow_minimum = shadow_minimum.min(point)
+			shadow_maximum = shadow_maximum.max(point)
+		# Shadow-map filtering and raster quantization extend a few pixels past the
+		# geometric ray endpoints. Reuse the existing minimum-clearance contract as
+		# a bounded guard on the shadow footprint only; do not inflate the mesh box.
+		var shadow_response := Rect2(shadow_minimum, shadow_maximum - shadow_minimum).grow(LABEL_MIN_CLEARANCE_PX)
+		response = response.merge(shadow_response)
+	return response
 
 func _label_size_for_wrap(pixels_per_label_unit: float, wrap_width: float) -> Vector2:
 	var measured := _beacon.font.get_multiline_string_size(_beacon.text, HORIZONTAL_ALIGNMENT_CENTER, wrap_width, _beacon.font_size)
@@ -361,6 +427,15 @@ func _rect_clearance(label_rect: Rect2, response_rect: Rect2) -> float:
 	var horizontal_gap := maxf(maxf(response_rect.position.x - label_rect.end.x, label_rect.position.x - response_rect.end.x), 0.0)
 	var vertical_gap := maxf(maxf(response_rect.position.y - label_rect.end.y, label_rect.position.y - response_rect.end.y), 0.0)
 	return maxf(horizontal_gap, vertical_gap)
+
+static func screen_delta_to_label_offset(delta: Vector2, pixels_per_label_unit: float) -> Vector2:
+	# Label3D's billboard offset uses a screen-X/right, screen-Y/up basis.
+	# Viewport coordinates use screen-Y/down, so only the Y component changes
+	# sign.  Keep this transform explicit and independently verify its rendered
+	# result; the analytic rectangle alone is not approval evidence.
+	if not is_finite(pixels_per_label_unit) or pixels_per_label_unit <= 0.0:
+		return Vector2.ZERO
+	return Vector2(delta.x, -delta.y) / pixels_per_label_unit
 
 func _label_candidate(lane: String, response: Rect2, frame: Rect2, gap: float, pixels_per_label_unit: float) -> Dictionary:
 	var available_width := 0.0
@@ -393,18 +468,14 @@ func _label_candidate(lane: String, response: Rect2, frame: Rect2, gap: float, p
 		diagnostic["failure"] = "no_lane_space"
 		return diagnostic
 	var outline_units := float(_beacon.outline_size) * 2.0
-	var max_wrap_width := available_width / pixels_per_label_unit - outline_units - 1.0
+	var max_wrap_width := (available_width - LABEL_FIT_SLACK_PX) / (pixels_per_label_unit * READABILITY_MIN) - outline_units - 1.0
 	diagnostic["max_wrap_width"] = max_wrap_width
-	# Preserve whole words. If the lane is narrower than the longest word,
-	# measure that truthful lower bound and let the bounded readability scale
-	# decide whether the lane is still legal.
+	# Test the widest wrap that can fit at the protected scale floor. Narrower
+	# wraps cannot reduce height; rejecting only this maximum avoids false
+	# infeasibility caused by wrapping at full size before allowing bounded fit.
 	var wrap_width := minf(LABEL_MAX_WIDTH, maxf(minimum_wrap_width, max_wrap_width))
 	var label_size := _label_size_for_wrap(pixels_per_label_unit, wrap_width)
 	var fit_attempts := 1
-	while label_size.x > available_width + 0.01 and wrap_width > minimum_wrap_width + 0.01:
-		wrap_width = maxf(minimum_wrap_width, wrap_width - 8.0)
-		label_size = _label_size_for_wrap(pixels_per_label_unit, wrap_width)
-		fit_attempts += 1
 	var bounded_width := maxf(0.0, available_width - LABEL_FIT_SLACK_PX)
 	var bounded_height := maxf(0.0, available_height - LABEL_FIT_SLACK_PX)
 	var required_scale := minf(1.0, minf(bounded_width / maxf(label_size.x, 0.01), bounded_height / maxf(label_size.y, 0.01)))
@@ -460,16 +531,22 @@ func _label_candidate(lane: String, response: Rect2, frame: Rect2, gap: float, p
 
 func _label_projection(active_camera: Camera3D) -> Dictionary:
 	var viewport_size := Vector2(get_viewport().get_visible_rect().size)
-	var base := active_camera.unproject_position(_beacon.global_position)
+	var label_depth := -(active_camera.global_transform.affine_inverse() * _beacon.global_position).z
+	var label_in_frustum := label_depth > active_camera.near and label_depth < active_camera.far
+	var base := active_camera.unproject_position(_beacon.global_position) if label_in_frustum else viewport_size * 0.5
 	var camera_up := active_camera.global_transform.basis.y.normalized()
-	var probe := active_camera.unproject_position(_beacon.global_position + camera_up * LABEL_PIXEL_SIZE * 100.0)
-	var pixels_per_label_unit := maxf(0.01, absf(probe.y - base.y) / 100.0)
+	var probe := active_camera.unproject_position(_beacon.global_position + camera_up * LABEL_PIXEL_SIZE * _beacon.global_transform.basis.get_scale().y * 100.0) if label_in_frustum else base
+	var world_pixels_per_label_unit := maxf(0.01, absf(probe.y - base.y) / 100.0)
+	var pixels_per_label_unit := readability_scale
 	var response := _projected_response_rect(active_camera)
+	var label_basis_scale := _beacon.global_transform.basis.get_scale()
+	var projection_valid := response.size.x > 0.0 and response.size.y > 0.0 and label_depth > active_camera.near and label_depth < active_camera.far and label_basis_scale.x > 0.0 and is_equal_approx(label_basis_scale.x, label_basis_scale.y) and is_equal_approx(label_basis_scale.y, label_basis_scale.z)
 	var gap := maxf(LABEL_MIN_CLEARANCE_PX, viewport_size.y * 0.015)
 	var inset := maxf(LABEL_MIN_CLEARANCE_PX, minf(viewport_size.x, viewport_size.y) * LABEL_SAFE_INSET_RATIO)
 	var frame := Rect2(Vector2(inset, inset), viewport_size - Vector2.ONE * inset * 2.0)
 	var attempts: Array[Dictionary] = []
 	for lane in ["top", "right", "left", "bottom"]:
+		if not projection_valid: break
 		var candidate := _label_candidate(lane, response, frame, gap, pixels_per_label_unit)
 		var report := candidate.duplicate(true)
 		report.erase("label_size_vector")
@@ -478,17 +555,22 @@ func _label_projection(active_camera: Camera3D) -> Dictionary:
 		attempts.append(report)
 		if not candidate.get("valid", false):
 			continue
+		candidate["projection_valid"] = true
 		candidate["label_size"] = candidate.label_size_vector
 		candidate["desired_center"] = candidate.desired_center_vector
 		candidate["viewport"] = viewport_size
 		candidate["base"] = base
 		candidate["pixels_per_label_unit"] = pixels_per_label_unit
+		candidate["world_pixels_per_label_unit"] = world_pixels_per_label_unit
 		candidate["response_rect"] = response
 		candidate["frame_rect"] = frame
 		candidate["gap"] = gap
 		candidate["safe_inset"] = inset
 		candidate["attempts"] = attempts
-		candidate["offset"] = (candidate.desired_center - base) / float(candidate.effective_pixels_per_label_unit)
+		candidate["offset"] = screen_delta_to_label_offset(
+			candidate.desired_center - base,
+			float(candidate.effective_pixels_per_label_unit)
+		)
 		return candidate
 	# Fail closed when no legal lane exists. Keep a deterministic visible fallback
 	# only so the validator can report the impossible geometry without inventing a pass.
@@ -497,16 +579,18 @@ func _label_projection(active_camera: Camera3D) -> Dictionary:
 	var fallback_center := frame.get_center()
 	return {
 		"placement_found": false,
+		"projection_valid": projection_valid,
 		"lane": "none",
 		"wrap_width": fallback_wrap,
 		"viewport": viewport_size,
 		"base": base,
 		"pixels_per_label_unit": pixels_per_label_unit,
+		"world_pixels_per_label_unit": world_pixels_per_label_unit,
 		"label_size": fallback_size,
 		"response_rect": response,
 		"frame_rect": frame,
 		"desired_center": fallback_center,
-		"offset": (fallback_center - base) / pixels_per_label_unit,
+		"offset": screen_delta_to_label_offset(fallback_center - base, pixels_per_label_unit),
 		"gap": gap,
 		"safe_inset": inset,
 		"attempts": attempts,
@@ -520,7 +604,7 @@ func _update_camera_lane() -> void:
 		return
 	var projection := _label_projection(active_camera)
 	_beacon.width = float(projection.wrap_width)
-	_beacon.pixel_size = LABEL_PIXEL_SIZE * float(projection.get("label_scale", 1.0))
+	_beacon.pixel_size = LABEL_PIXEL_SIZE * readability_scale * float(projection.get("label_scale", 1.0)) / float(projection.world_pixels_per_label_unit)
 	_beacon.offset = projection.offset
 
 func projected_readability(active_camera: Camera3D) -> Dictionary:
@@ -548,6 +632,11 @@ func projected_readability(active_camera: Camera3D) -> Dictionary:
 		"placement_found": placement_found,
 		"layout_lane": String(projection.get("lane", "none")),
 		"label_wrap_width": float(projection.get("wrap_width", LABEL_MAX_WIDTH)),
+		"projection_valid": bool(projection.get("projection_valid", false)),
+		"label_size_coordinate_space": "logical_viewport_pixels",
+		"logical_font_size": float(_beacon.font_size) * readability_scale * float(projection.get("label_scale", 1.0)),
+		"logical_outline_size": float(_beacon.outline_size) * readability_scale * float(projection.get("label_scale", 1.0)),
+		"world_pixel_size": _beacon.pixel_size,
 		"label_scale": float(projection.get("label_scale", 1.0)),
 		"minimum_readability_scale": READABILITY_MIN,
 		"layout_attempts": projection.get("attempts", []),
@@ -579,7 +668,7 @@ func _readable_reasons(reasons: Array, shortfalls: Dictionary = {}) -> String:
 		var text := String(reason)
 		if text == "insufficient_resources" and not shortfalls.is_empty():
 			continue # The exact delivery action already explains this reason.
-		var friendly := text.replace("missing_prerequisite:", "Requires ").replace("_", " ")
+		var friendly := "Needs harvesting access" if text == "missing_prerequisite:harvesting_online" else text.replace("missing_prerequisite:", "Requires ").replace("_", " ")
 		readable.append(friendly.left(1).to_upper() + friendly.substr(1))
 	return " / ".join(readable)
 
@@ -587,7 +676,7 @@ func feedback_text() -> String:
 	var destination := target_state.capitalize() if not target_state.is_empty() else "Transformation"
 	var cost_cues := _resource_cues(displayed_costs)
 	if lifecycle == "complete":
-		var text := "COMPLETE — %s" % destination
+		var text := "✓ %s complete" % destination
 		if not next_preview.is_empty():
 			var next_destination := String(next_preview.get("target_state", "")).capitalize()
 			var next_shortfalls: Dictionary = next_preview.get("shortfalls", {})
@@ -595,21 +684,22 @@ func feedback_text() -> String:
 			if next_preview.get("passed", false):
 				text = "NEXT — approach %s" % next_destination
 			elif not next_shortfalls.is_empty():
-				text = "NEXT — deliver missing resources\n" + _resource_cues(next_shortfalls)
+				text = "NEXT %s — deliver\n%s" % [next_destination, _resource_cues(next_shortfalls)]
 			elif not next_reason.is_empty():
-				text = "NEXT — " + next_reason
+				text = "NEXT %s blocked\n%s" % [next_destination, next_reason]
 			if not next_shortfalls.is_empty() and not next_reason.is_empty():
 				text += "\n" + next_reason
-		text += "\n✓ %s complete\nPaid: %s" % [destination, _resource_cues(displayed_costs)]
+		if not next_preview.is_empty(): text += "\n✓ %s complete" % destination
+		text += "\nSpent: %s" % _resource_cues(displayed_costs)
 		return text
 	if lifecycle == "blocked":
 		var reason := _readable_reasons(block_reasons, blocked_shortfalls)
 		if not blocked_shortfalls.is_empty():
-			var text := "BLOCKED — deliver missing resources\n" + _resource_cues(blocked_shortfalls)
+			var text := "%s blocked — deliver\n%s" % [destination, _resource_cues(blocked_shortfalls)]
 			if not reason.is_empty(): text += "\n" + reason
 			if not displayed_costs.is_empty(): text += "\n%s cost: %s" % [destination, cost_cues]
 			return text
-		return "BLOCKED — " + reason + ("\n%s cost: %s" % [destination, cost_cues] if not displayed_costs.is_empty() else "")
+		return "BLOCKED — %s\n%s" % [destination, reason] + ("\n%s cost: %s" % [destination, cost_cues] if not displayed_costs.is_empty() else "")
 	if lifecycle == "committing":
 		return "APPLYING → " + destination + "\nDelivered resources: " + cost_cues + "\nAwaiting confirmation"
 	if lifecycle == "preview":
@@ -619,6 +709,8 @@ func feedback_text() -> String:
 func descriptor() -> Dictionary:
 	return {
 		"authority_id": AUTHORITY_ID,
+		"label_layout_policy": "constrained_screen_pixels_v3",
+		"label_size_coordinate_space": "logical_viewport_pixels",
 		"target_id": target_id,
 		"lifecycle": lifecycle,
 		"presentation_key": presentation_key,
