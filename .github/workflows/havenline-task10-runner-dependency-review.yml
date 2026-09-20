@@ -1,0 +1,137 @@
+name: Havenline T10 runner dependency repair review
+on:
+  push:
+    branches: ['havenline/review-T10-runner-dependency-controller']
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-t10-runner-dependency-review
+  cancel-in-progress: false
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - name: Fetch exact runner repair source
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin havenline/review-T10-runner-dependency-repair
+          git worktree add --detach "$RUNNER_TEMP/t10-runner-source" 69e13b80540b520f252b4ac959ea374cea9bed85
+      - name: Reproduce root-cause closure
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task10/review_runner_dependency_repair.py --mode preflight --repo "$RUNNER_TEMP/t10-runner-source" --out runner-preflight
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: t10-runner-dependency-preflight-${{ github.sha }}
+          path: runner-preflight/
+          if-no-files-found: error
+          retention-days: 30
+
+  independent-review:
+    needs: preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    env:
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Prepare pinned reviewer runtime
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > reviewer-runtime.json
+          git fetch --no-tags origin havenline/review-T10-runner-dependency-repair
+          git worktree add --detach "$RUNNER_TEMP/t10-runner-source" 69e13b80540b520f252b4ac959ea374cea9bed85
+      - name: Independently review exact workflow-only repair
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task10/review_runner_dependency_repair.py --mode review --repo "$RUNNER_TEMP/t10-runner-source" --out runner-review
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-runner-dependency-review-${{ github.sha }}
+          path: |
+            runner-review/
+            reviewer-runtime.json
+          if-no-files-found: error
+          retention-days: 30
+
+  promote:
+    needs: [preflight, independent-review]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    permissions:
+      contents: write
+      actions: write
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE: '69e13b80540b520f252b4ac959ea374cea9bed85'
+      BASE: '90f1d56e8781f4998b00b9563f0f9d49458ebf53'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: t10-runner-dependency-review-${{ github.sha }}
+          path: bound-review/
+      - name: Revalidate review and canonical base
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json, pathlib
+          rows=list(pathlib.Path('bound-review').rglob('result.json'))
+          assert len(rows)==1,rows
+          r=json.loads(rows[0].read_text())
+          assert r['source']=='69e13b80540b520f252b4ac959ea374cea9bed85'
+          assert r['base']=='90f1d56e8781f4998b00b9563f0f9d49458ebf53'
+          assert r['passed'] is True and r['errors']==[] and r['review']['defects']==[] and r['lowest_score']>9.0
+          PY
+          tip=$(gh api /repos/ksolo21-web/HAVENLINE/branches/codex/havenline-sequential-task-01 --jq .commit.sha)
+          test "$tip" = "$BASE"
+          git fetch --no-tags origin havenline/review-T10-runner-dependency-repair
+          test "$(git rev-parse origin/havenline/review-T10-runner-dependency-repair)" = "$SOURCE"
+          test "$(git rev-parse "$SOURCE^")" = ce76d7104a5d2ebaf1efb58584034e44695e17d2
+          test "$(git rev-parse "$SOURCE^^")" = "$BASE"
+      - name: Publish workflow-only repair non-forced
+        run: |
+          set -euo pipefail
+          git push --porcelain origin "$SOURCE:refs/heads/codex/havenline-sequential-task-01" > promotion.log 2>&1
+          tip=$(gh api /repos/ksolo21-web/HAVENLINE/branches/codex/havenline-sequential-task-01 --jq .commit.sha)
+          test "$tip" = "$SOURCE"
+      - name: Dispatch fresh complete T10 pipelines
+        run: |
+          set -euo pipefail
+          gh workflow run havenline-task10-isolated.yml --ref codex/havenline-sequential-task-01
+          gh workflow run havenline-task10-world-transformation.yml --ref codex/havenline-sequential-task-01
+          printf '{"candidate":"%s","runner_dependency_repair":true,"fresh_final_gates_dispatched":true,"task_approved":false,"t11_unlocked":false}\n' "$SOURCE" > promotion-result.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-runner-dependency-promotion-${{ github.sha }}
+          path: |
+            promotion.log
+            promotion-result.json
+          if-no-files-found: warn
+          retention-days: 30
