@@ -28,6 +28,7 @@ jobs:
           set -euo pipefail
           python3 tools/havenline/task10/review_runner_dependency_repair.py --mode preflight --repo "$RUNNER_TEMP/t10-runner-source" --out runner-preflight
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
         with:
           name: t10-runner-dependency-preflight-${{ github.sha }}
           path: runner-preflight/
