@@ -1,0 +1,53 @@
+name: Havenline T10 owner promotion structural preflight
+on:
+  push:
+    branches: ['havenline/review-T10-owner-promotion-prep']
+permissions:
+  contents: read
+jobs:
+  structural-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - name: Reproduce authority and candidate objects without publishing
+        run: |
+          set -euo pipefail
+          python3 -m py_compile tools/havenline/task10/promote_closeout_source.py
+          python3 - <<'PY'
+          import json, pathlib, sys, tempfile, subprocess
+          sys.path.insert(0,'tools/havenline/task10')
+          import promote_closeout_source as p
+          sys.path.insert(0,'tools/havenline/production')
+          from verify_python_repair_bindings import python_source_review_errors
+          evidence={'preflight':'synthetic structural evidence only','reviewed_commit':p.R,'reviewed_tree':p.R_TREE}
+          record=p.build_record(evidence,9.1)
+          plan=json.loads(p.show(p.R,p.PLAN))
+          before={row['path']:p.show(row['comparison_base'],row['path']).decode() for row in record['bindings']}
+          after={row['path']:p.show(p.R,row['path']).decode() for row in record['bindings']}
+          errors=python_source_review_errors(plan,record,before,after)
+          assert not errors,errors
+          with tempfile.TemporaryDirectory(prefix='t10-owner-preflight-') as tmp:
+            h2,h2tree=p.build_authority(p.EXPECTED_OLD_H,record,tmp)
+            cand,ctree,work=p.build_candidate(h2,tmp)
+            parents=p.run('rev-list','--parents','-n','1',cand).decode().strip().split()[1:]
+            assert parents==[p.R,h2],parents
+            assert p.show(cand,p.VERIFIER)==p.show(h2,p.VERIFIER)
+            for path in p.INHERITED: assert p.show(cand,path)==p.show(h2,path),path
+            cp=json.loads(p.show(cand,p.PLAN));cr=json.loads(p.show(cand,p.C0R))
+            assert cp['reconciled_integration_head']==h2
+            assert cr['input_bindings']['plan_sha256']==p.sha(p.show(cand,p.PLAN))
+            out={'reviewed':p.R,'authority':h2,'authority_tree':h2tree,'candidate':cand,'candidate_tree':ctree,'parents':parents,'python_source_review_errors':errors,'passed':True,'canonical_mutated':False,'task_approved':False}
+            pathlib.Path('owner-preflight.json').write_text(json.dumps(out,indent=2)+'\n')
+            print(json.dumps(out))
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: t10-owner-promotion-preflight-${{ github.sha }}
+          path: owner-preflight.json
+          if-no-files-found: error
+          retention-days: 30
