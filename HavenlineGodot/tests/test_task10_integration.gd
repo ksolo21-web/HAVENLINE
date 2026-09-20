@@ -278,7 +278,7 @@ func run() -> void:
 	check("view uses shape and color redundancy", view_contract.shape_and_color_redundancy and view_contract.world_response_shapes == ["perimeter_ring", "preview_volume", "status_label"])
 	check("view declares strict four-node visual budget", view_contract.visual_node_budget == 4)
 	check("view exposes bounded readability range", view_contract.readability_scale_range == [0.85, 1.35])
-	check("view declares constrained adaptive label layout and explicit ordering", view_contract.label_layout_policy == "constrained_screen_pixels_v3" and view_contract.label_dynamic_camera_lane and view_contract.label_screen_y_axis_inverted and is_equal_approx(float(view_contract.label_min_readability_scale), 0.85) and float(view_contract.label_fit_slack_px) >= 1.0 and view_contract.label_max_width == 960.0 and is_equal_approx(float(view_contract.label_pixel_size), 0.0057) and view_contract.label_render_priority == 100 and view_contract.label_outline_render_priority == 99)
+	check("view declares constrained adaptive label layout and explicit ordering", view_contract.label_layout_policy == "constrained_screen_pixels_v3" and view_contract.label_size_coordinate_space == "logical_viewport_pixels" and view_contract.readability_affects == "text_only" and view_contract.authored_font_size == 38 and view_contract.label_dynamic_camera_lane and view_contract.label_screen_y_axis_inverted and is_equal_approx(float(view_contract.label_min_readability_scale), 0.85) and float(view_contract.label_fit_slack_px) >= 1.0 and view_contract.label_max_width == 960.0 and is_equal_approx(float(view_contract.label_pixel_size), 0.0057) and view_contract.label_render_priority == 100 and view_contract.label_outline_render_priority == 99)
 
 	var visual_engine := configured_engine()
 	check("visual fixture target registers", visual_engine.register_target("visual-A", "seed"))
@@ -335,7 +335,7 @@ func run() -> void:
 	check("preview world response shows ring plus translucent preview volume", view.show_preview(visual_preview) and ring.visible and ghost.visible and beacon.visible and beacon.text.begins_with("PREVIEW — stay near") and beacon.text.contains("Cost from delivered stock:") and ghost.material_override.transparency == BaseMaterial3D.TRANSPARENCY_ALPHA)
 	var visual_intent := visual_engine.commit_transform("visual-tx", "framework_anchor_seed_to_foundation", "visual-A", visual_inventory)
 	check("committing world response shows all three shapes", view.show_commit(visual_intent) and ring.visible and ghost.visible and beacon.visible)
-	check("pending resources have exact named source-to-target cues without premature payment", beacon.text.begins_with("APPLYING → Foundation") and beacon.text.contains("Delivered resources:") and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and not beacon.text.contains("Spent:") and view._ring_material.emission_enabled)
+	check("pending resources have exact named source-to-target cues without premature payment", beacon.text.begins_with("APPLYING → Foundation") and beacon.text.contains("Delivered resources:") and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and not beacon.text.contains("Spent:") and not beacon.text.contains("Paid:") and view._ring_material.emission_enabled)
 	var ring_arrays: Array = ring.mesh.surface_get_arrays(0)
 	var ring_vertices: PackedVector3Array = ring_arrays[Mesh.ARRAY_VERTEX]
 	var ring_normals: PackedVector3Array = ring_arrays[Mesh.ARRAY_NORMAL]
@@ -382,6 +382,8 @@ func run() -> void:
 		view.set_ready()
 	check("repeated lifecycle calls create zero visual node growth", view.descriptor().visual_build_count == builds_before_repeat and view.descriptor().visual_node_count == children_before_repeat and children_before_repeat == 4)
 	check("view remains presentation-only after full lifecycle", view.descriptor().presentation_only and not view.descriptor().mutates_resources and not view.descriptor().advances_progression)
+
+	run_shadow_context()
 
 	print(JSON.stringify({
 		"suite": "T10_fixture_simulation_integration",
@@ -509,3 +511,101 @@ func run_real_authority() -> void:
 	duplicate_row.transaction_id = "bounded-0"
 	duplicate_row.authority_transaction_key = Simulation.transform_key(duplicate_row)
 	check("duplicate retained transaction ids reject atomically", not bounded.restore(duplicate_save) and bounded.snapshot() == bounded_before)
+
+func shadow_listener_count(object_id: int, watched: Signal) -> int:
+	var count := 0
+	for connection in watched.get_connections():
+		var callback: Callable = connection["callable"]
+		if callback.get_object_id() == object_id:
+			count += 1
+	return count
+
+func run_shadow_context() -> void:
+	# Shipping main.gd owns a separate World3D. Scene-tree membership alone
+	# therefore cannot define which directional lights affect a T10 response.
+	var viewport_a := SubViewport.new()
+	viewport_a.own_world_3d = true
+	viewport_a.size = Vector2i(2400, 1080)
+	root.add_child(viewport_a)
+	var world_a := Node3D.new()
+	viewport_a.add_child(world_a)
+	var view_a := TransformView.new()
+	world_a.add_child(view_a)
+	view_a.configure("shadow-context")
+	view_a.set_ready()
+	check("shadow context starts empty before lighting exists", view_a._active_directional_shadow_lights().is_empty())
+	check("shadow observer subscribes exactly once per signal", shadow_listener_count(view_a.get_instance_id(), node_added) == 1 and shadow_listener_count(view_a.get_instance_id(), node_removed) == 1)
+	var light_a := DirectionalLight3D.new()
+	light_a.shadow_enabled = true
+	light_a.rotation_degrees = Vector3(-45.0, -25.0, 0.0)
+	world_a.add_child(light_a)
+	check("late-added directional light invalidates shadow membership", not view_a._shadow_lights_scanned)
+	check("late-added same-world light participates in shadow layout", view_a._active_directional_shadow_lights().has(light_a))
+	light_a.shadow_enabled = false
+	check("disabled shadows stop affecting layout without a rescan", view_a._active_directional_shadow_lights().is_empty() and view_a._shadow_lights_scanned)
+	light_a.shadow_enabled = true
+	light_a.visible = false
+	check("hidden directional light stops affecting layout", view_a._active_directional_shadow_lights().is_empty())
+	light_a.visible = true
+	check("restored directional light affects layout again", view_a._active_directional_shadow_lights().has(light_a))
+	var ordinary := Node.new()
+	world_a.add_child(ordinary)
+	check("non-light scene mutation does not force a shadow rescan", view_a._shadow_lights_scanned)
+	ordinary.free()
+	world_a.remove_child(light_a)
+	check("removed but live light is excluded from layout", view_a._active_directional_shadow_lights().is_empty())
+	light_a.free()
+	var replacement := DirectionalLight3D.new()
+	replacement.shadow_enabled = true
+	world_a.add_child(replacement)
+	check("replacement light is discovered after original destruction", view_a._active_directional_shadow_lights().has(replacement))
+	var viewport_b := SubViewport.new()
+	viewport_b.own_world_3d = true
+	viewport_b.size = Vector2i(2400, 1080)
+	root.add_child(viewport_b)
+	var world_b := Node3D.new()
+	viewport_b.add_child(world_b)
+	var foreign := DirectionalLight3D.new()
+	foreign.shadow_enabled = true
+	world_b.add_child(foreign)
+	var view_b := TransformView.new()
+	world_a.add_child(view_b)
+	check("shadow fixture viewports own different World3D instances", view_b.get_world_3d() != foreign.get_world_3d())
+	var scoped := view_b._active_directional_shadow_lights()
+	check("foreign-world light cannot alter the gameplay shadow envelope", not scoped.has(foreign) and scoped.size() == 1)
+	check("same-world light remains included beside a foreign preview", scoped.has(replacement))
+	view_b.reparent(world_b)
+	var moved := view_b._active_directional_shadow_lights()
+	check("view reparenting updates shadow-world membership", moved.size() == 1 and moved.has(foreign) and not moved.has(replacement))
+	check("view reparenting leaves one observer per signal", shadow_listener_count(view_b.get_instance_id(), node_added) == 1 and shadow_listener_count(view_b.get_instance_id(), node_removed) == 1)
+	world_b.remove_child(view_b)
+	check("detached view returns no lights without touching a missing tree", view_b._active_directional_shadow_lights().is_empty())
+	check("detached view releases scene observers", shadow_listener_count(view_b.get_instance_id(), node_added) == 0 and shadow_listener_count(view_b.get_instance_id(), node_removed) == 0)
+	world_a.add_child(view_b)
+	check("reattached view discovers its current world's lighting", view_b._active_directional_shadow_lights().size() == 1 and view_b._active_directional_shadow_lights().has(replacement))
+	var subtree := Node3D.new()
+	for i in 3:
+		var nested_light := DirectionalLight3D.new()
+		nested_light.shadow_enabled = true
+		subtree.add_child(nested_light)
+	world_a.add_child(subtree)
+	check("whole lighting subtree insertion refreshes membership", view_a._active_directional_shadow_lights().size() == 4)
+	subtree.free()
+	check("whole lighting subtree removal leaves no stale influences", view_a._active_directional_shadow_lights().size() == 1)
+	for i in 32:
+		var transient_light := DirectionalLight3D.new()
+		transient_light.shadow_enabled = true
+		world_a.add_child(transient_light)
+		view_a._active_directional_shadow_lights()
+		transient_light.free()
+	var final_lights := view_a._active_directional_shadow_lights()
+	check("repeated lighting replacement leaves bounded cache membership", final_lights.size() == 1 and final_lights.has(replacement) and view_a._directional_shadow_lights.size() == 2)
+	var builds := view_a.visual_build_count
+	for i in 32:
+		view_a._active_directional_shadow_lights()
+	check("shadow cache reuse does not rebuild any presentation nodes", builds == 1 and view_a.visual_build_count == 1 and view_a.descriptor().visual_node_count == 4)
+	var view_a_id := view_a.get_instance_id()
+	var view_b_id := view_b.get_instance_id()
+	viewport_a.free()
+	viewport_b.free()
+	check("destroyed views leave no lingering shadow listeners", shadow_listener_count(view_a_id, node_added) == 0 and shadow_listener_count(view_a_id, node_removed) == 0 and shadow_listener_count(view_b_id, node_added) == 0 and shadow_listener_count(view_b_id, node_removed) == 0)

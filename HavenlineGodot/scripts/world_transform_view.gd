@@ -59,6 +59,7 @@ var next_preview: Dictionary = {}
 var _last_visual_signature: Array = []
 var _directional_shadow_lights: Array[DirectionalLight3D] = []
 var _shadow_lights_scanned := false
+var _shadow_observed_tree: SceneTree
 
 static func contract() -> Dictionary:
 	return {
@@ -91,6 +92,31 @@ static func contract() -> Dictionary:
 		"label_render_priority": LABEL_RENDER_PRIORITY,
 		"label_outline_render_priority": LABEL_OUTLINE_RENDER_PRIORITY,
 	}
+
+func _enter_tree() -> void:
+	# Cache membership follows the live scene tree; properties and World3D
+	# membership are checked at use time. No per-frame whole-tree traversal.
+	_directional_shadow_lights.clear()
+	_shadow_lights_scanned = false
+	_shadow_observed_tree = get_tree()
+	if not _shadow_observed_tree.node_added.is_connected(_on_shadow_scene_node_changed):
+		_shadow_observed_tree.node_added.connect(_on_shadow_scene_node_changed)
+	if not _shadow_observed_tree.node_removed.is_connected(_on_shadow_scene_node_changed):
+		_shadow_observed_tree.node_removed.connect(_on_shadow_scene_node_changed)
+
+func _exit_tree() -> void:
+	if is_instance_valid(_shadow_observed_tree):
+		if _shadow_observed_tree.node_added.is_connected(_on_shadow_scene_node_changed):
+			_shadow_observed_tree.node_added.disconnect(_on_shadow_scene_node_changed)
+		if _shadow_observed_tree.node_removed.is_connected(_on_shadow_scene_node_changed):
+			_shadow_observed_tree.node_removed.disconnect(_on_shadow_scene_node_changed)
+	_shadow_observed_tree = null
+	_directional_shadow_lights.clear()
+	_shadow_lights_scanned = false
+
+func _on_shadow_scene_node_changed(node: Node) -> void:
+	if node is DirectionalLight3D:
+		_shadow_lights_scanned = false
 
 func _ready() -> void:
 	_ensure_visuals()
@@ -334,17 +360,23 @@ func _process(delta: float) -> void:
 	_ghost.position.y = 0.08 + 0.75 * _ghost.scale.y
 
 func _active_directional_shadow_lights() -> Array[DirectionalLight3D]:
-	if not _shadow_lights_scanned:
-		_shadow_lights_scanned = true
-		var tree := get_tree()
-		if tree != null and tree.root != null:
-			for node in tree.root.find_children("*", "DirectionalLight3D", true, false):
-				var light := node as DirectionalLight3D
-				if light != null:
-					_directional_shadow_lights.append(light)
 	var active: Array[DirectionalLight3D] = []
+	if not is_inside_tree():
+		return active
+	if not _shadow_lights_scanned:
+		_directional_shadow_lights.clear()
+		for node in get_tree().root.find_children("*", "DirectionalLight3D", true, false):
+			var light := node as DirectionalLight3D
+			if light != null:
+				_directional_shadow_lights.append(light)
+		_shadow_lights_scanned = true
+	var active_world := get_world_3d()
 	for light in _directional_shadow_lights:
-		if not is_instance_valid(light):
+		if not is_instance_valid(light) or not light.is_inside_tree():
+			continue
+		# A separate preview viewport can share this SceneTree without sharing
+		# any lighting. It must not displace labels in the gameplay World3D.
+		if light.get_world_3d() != active_world:
 			continue
 		if light.shadow_enabled and light.is_visible_in_tree():
 			active.append(light)
