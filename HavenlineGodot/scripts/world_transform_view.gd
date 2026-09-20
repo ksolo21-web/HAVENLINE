@@ -57,6 +57,8 @@ var _ghost_material: StandardMaterial3D
 var displayed_costs: Dictionary = {}
 var next_preview: Dictionary = {}
 var _last_visual_signature: Array = []
+var _directional_shadow_lights: Array[DirectionalLight3D] = []
+var _shadow_lights_scanned := false
 
 static func contract() -> Dictionary:
 	return {
@@ -331,8 +333,43 @@ func _process(delta: float) -> void:
 	_ghost.scale = _target_form_scale() * pulse
 	_ghost.position.y = 0.08 + 0.75 * _ghost.scale.y
 
+func _active_directional_shadow_lights() -> Array[DirectionalLight3D]:
+	if not _shadow_lights_scanned:
+		_shadow_lights_scanned = true
+		var tree := get_tree()
+		if tree != null and tree.root != null:
+			for node in tree.root.find_children("*", "DirectionalLight3D", true, false):
+				var light := node as DirectionalLight3D
+				if light != null:
+					_directional_shadow_lights.append(light)
+	var active: Array[DirectionalLight3D] = []
+	for light in _directional_shadow_lights:
+		if not is_instance_valid(light):
+			continue
+		if light.shadow_enabled and light.is_visible_in_tree():
+			active.append(light)
+	return active
+
+func _ground_shadow_point(world_point: Vector3, light: DirectionalLight3D) -> Variant:
+	# DirectionalLight3D emits along local -Z. Project each caster corner along
+	# that ray onto the response ground plane instead of pretending the visible
+	# response ends at the mesh silhouette.
+	var ray_direction := -light.global_transform.basis.z.normalized()
+	var plane_normal := _visual_root.global_transform.basis.y.normalized()
+	var plane_origin := _visual_root.global_position
+	var height := plane_normal.dot(world_point - plane_origin)
+	var denominator := plane_normal.dot(ray_direction)
+	if height <= 0.0 or denominator >= -0.0001:
+		return null
+	var travel := -height / denominator
+	if travel < 0.0:
+		return null
+	return world_point + ray_direction * travel
+
 func _projected_response_rect(active_camera: Camera3D) -> Rect2:
-	var points: Array[Vector2] = []
+	var mesh_points: Array[Vector2] = []
+	var shadow_points: Array[Vector2] = []
+	var shadow_lights := _active_directional_shadow_lights()
 	for mesh_instance in [_ring, _ghost]:
 		var box: AABB = mesh_instance.get_aabb()
 		var pose: Transform3D = mesh_instance.global_transform
@@ -344,13 +381,34 @@ func _projected_response_rect(active_camera: Camera3D) -> Rect2:
 			var depth := -(active_camera.global_transform.affine_inverse() * world_point).z
 			if depth <= active_camera.near or depth >= active_camera.far:
 				return Rect2()
-			points.append(active_camera.unproject_position(world_point))
-	var minimum := points[0]
-	var maximum := points[0]
-	for point in points:
+			mesh_points.append(active_camera.unproject_position(world_point))
+			for light in shadow_lights:
+				var shadow_point: Variant = _ground_shadow_point(world_point, light)
+				if shadow_point == null:
+					continue
+				var shadow_world := shadow_point as Vector3
+				var shadow_depth := -(active_camera.global_transform.affine_inverse() * shadow_world).z
+				if shadow_depth <= active_camera.near or shadow_depth >= active_camera.far:
+					return Rect2()
+				shadow_points.append(active_camera.unproject_position(shadow_world))
+	var minimum := mesh_points[0]
+	var maximum := mesh_points[0]
+	for point in mesh_points:
 		minimum = minimum.min(point)
 		maximum = maximum.max(point)
-	return Rect2(minimum, maximum - minimum)
+	var response := Rect2(minimum, maximum - minimum)
+	if not shadow_points.is_empty():
+		var shadow_minimum := shadow_points[0]
+		var shadow_maximum := shadow_points[0]
+		for point in shadow_points:
+			shadow_minimum = shadow_minimum.min(point)
+			shadow_maximum = shadow_maximum.max(point)
+		# Shadow-map filtering and raster quantization extend a few pixels past the
+		# geometric ray endpoints. Reuse the existing minimum-clearance contract as
+		# a bounded guard on the shadow footprint only; do not inflate the mesh box.
+		var shadow_response := Rect2(shadow_minimum, shadow_maximum - shadow_minimum).grow(LABEL_MIN_CLEARANCE_PX)
+		response = response.merge(shadow_response)
+	return response
 
 func _label_size_for_wrap(pixels_per_label_unit: float, wrap_width: float) -> Vector2:
 	var measured := _beacon.font.get_multiline_string_size(_beacon.text, HORIZONTAL_ALIGNMENT_CENTER, wrap_width, _beacon.font_size)
