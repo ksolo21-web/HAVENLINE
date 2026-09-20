@@ -1,7 +1,19 @@
 name: Havenline T10 final C1 C2 visual critics
 on:
-  push:
-    branches: ['havenline/review-T10-final-visual-critics']
+  workflow_dispatch:
+    inputs:
+      candidate:
+        description: Exact canonical T10 candidate SHA
+        required: true
+        type: string
+      evidence_run:
+        description: Exact successful isolated T10 run ID
+        required: true
+        type: string
+      evidence_artifact:
+        description: Exact critic-input artifact name
+        required: true
+        type: string
 permissions:
   contents: read
   actions: read
@@ -18,9 +30,9 @@ jobs:
       matrix:
         critic: [C1, C2]
     env:
-      CANDIDATE: 'fd962391dd3ac956fd6b111adb2313652859125e'
-      EVIDENCE_RUN: '35534465419'
-      EVIDENCE_ARTIFACT: 'havenline-task10-critic-input-fd962391dd3ac956fd6b111adb2313652859125e'
+      CANDIDATE: ${{ inputs.candidate }}
+      EVIDENCE_RUN: ${{ inputs.evidence_run }}
+      EVIDENCE_ARTIFACT: ${{ inputs.evidence_artifact }}
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
     steps:
