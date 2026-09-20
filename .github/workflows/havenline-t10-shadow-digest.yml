@@ -1,0 +1,27 @@
+name: Havenline T10 shadow intelligence digest
+on:
+  push:
+    branches: ['havenline/T10-shadow-intelligence-digest']
+permissions:
+  contents: read
+jobs:
+  digest:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+      - run: |
+          python3 - <<'PY'
+          import hashlib,json
+          from pathlib import Path
+          c0=json.loads(Path('Docs/Production/T10/C0_ROOT_CAUSE.json').read_text())
+          payload={k:c0.get(k) for k in ('failure_family_history','full_domain_proofs','failure_frontier')}
+          digest=hashlib.sha256(json.dumps(payload,sort_keys=True,separators=(',',':')).encode()).hexdigest()
+          Path('repair-intelligence-digest.txt').write_text(digest+'\n')
+          print(digest)
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: t10-shadow-intelligence-digest
+          path: repair-intelligence-digest.txt
