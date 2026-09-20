@@ -52,6 +52,11 @@ func run() -> void:
 	check("reversible pairs require reciprocal inverse metadata", contract.reversible_pairs_require_reciprocal_inverse_metadata)
 	check("T14 global save/versioning boundary is preserved", contract.global_save_versioning_owned_by_t14)
 	check("T09 adapter remains required before integration", contract.t09_adapter_required_before_integration)
+	var probe_view_contract := TransformView.contract()
+	check("rendered-clearance layout contract is explicit", probe_view_contract.label_layout_policy == "constrained_screen_pixels_v3" and probe_view_contract.label_size_coordinate_space == "logical_viewport_pixels" and probe_view_contract.readability_affects == "text_only" and probe_view_contract.label_screen_y_axis_inverted)
+	var screen_delta := Vector2(-20.0, -40.0)
+	var label_offset := TransformView.screen_delta_to_label_offset(screen_delta, 2.0)
+	check("Label3D offset preserves screen X and inverts viewport Y", label_offset.is_equal_approx(Vector2(-10.0, 20.0)), label_offset)
 
 	# R01/R07 catalog validation must fail closed before any runtime target exists.
 	var base_forward: Dictionary = {
