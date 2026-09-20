@@ -1,15 +1,18 @@
-name: Havenline T10 final bookkeeping C0R preparation
+name: Havenline T10 final bookkeeping repair review
 on:
   push:
     branches: ['havenline/review-T10-bookkeeping-controller']
 permissions:
   contents: read
+concurrency:
+  group: havenline-t10-final-bookkeeping-review
+  cancel-in-progress: false
 jobs:
-  prepare:
+  exact-preflight:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
-      REVIEWED_SOURCE: '59f8b2b10f2fc33982d3675551cb5c90aef34970'
+      REVIEWED_SOURCE: 'fc9010daebf6b4d520333279486a1b6bea164e7c'
       BASE_CANDIDATE: '249b61b02db28f694291dda8c1019c2514e991bf'
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
@@ -17,19 +20,30 @@ jobs:
           ref: ${{ env.REVIEWED_SOURCE }}
           fetch-depth: 0
           lfs: false
-      - name: Prove metadata-only scope and recompute C0R
+      - name: Verify exact two-file metadata repair
         run: |
           set -euo pipefail
-          mkdir -p bookkeeping-prep
+          mkdir -p bookkeeping-review
           python3 - <<'PY'
           import hashlib,json,os,subprocess
           from pathlib import Path
           base=os.environ['BASE_CANDIDATE'];head=os.environ['REVIEWED_SOURCE']
           changed=subprocess.check_output(['git','diff','--name-only',base,head],text=True).splitlines()
-          assert changed==['Docs/Production/T10/REPAIR_PLAN.json'],changed
-          product='HavenlineGodot/scripts/world_transform_view.gd'
-          a=subprocess.check_output(['git','show',base+':'+product]);b=Path(product).read_bytes()
-          assert a==b and hashlib.sha256(b).hexdigest()=='fc35ebc4bc59dd41e165f6eb8d091ed274c1f02a5fe48e56cf8c9d15b8970b75'
+          assert changed==['Docs/Production/T10/C0R_REPAIR_SUFFICIENCY.json','Docs/Production/T10/REPAIR_PLAN.json'],changed
+          product_paths=[
+            'HavenlineGodot/scripts/world_transform.gd',
+            'HavenlineGodot/scripts/world_transform_view.gd',
+            'HavenlineGodot/data/world_transform_recipes.json',
+            'HavenlineGodot/tests/test_task10_world_transform.gd',
+            'HavenlineGodot/tests/test_task10_integration.gd',
+            'HavenlineGodot/tests/capture_task10_world_transform.gd',
+          ]
+          hashes={}
+          for p in product_paths:
+            before=subprocess.check_output(['git','show',base+':'+p])
+            after=Path(p).read_bytes()
+            assert before==after,p
+            hashes[p]=hashlib.sha256(after).hexdigest()
           plan=json.load(open('Docs/Production/T10/REPAIR_PLAN.json'))
           inherited=set(plan['inherited_noncausal_files'])
           causal={(f['blocker_id'],p) for f in plan['fixes'] for p in f['files']}
@@ -38,18 +52,141 @@ jobs:
           b40=next(f for f in plan['fixes'] if f['blocker_id']=='C0-T10-B040')
           assert 'Docs/Production/PATH_OWNERSHIP.json' in b40['files']
           assert 'Docs/Production/PATH_OWNERSHIP.json' not in inherited
-          Path('bookkeeping-prep/scope.json').write_text(json.dumps({'reviewed_source':head,'base_candidate':base,'changed_paths':changed,'product_unchanged':True,'product_sha256':hashlib.sha256(b).hexdigest(),'causal_inherited_overlap':overlap,'passed':True,'task_approved':False,'t11_unlocked':False},indent=2)+'\n')
+          Path('bookkeeping-review/scope.json').write_text(json.dumps({
+            'reviewed_source':head,'base_candidate':base,'changed_paths':changed,
+            'product_runtime_files_byte_identical':True,'product_hashes':hashes,
+            'causal_inherited_overlap':overlap,'thresholds_changed':False,
+            'task_approved':False,'t11_unlocked':False
+          },indent=2)+'\n')
           PY
-          python3 tools/havenline/production/repair_sufficiency_critic.py             --c0 Docs/Production/T10/C0_ROOT_CAUSE.json             --plan Docs/Production/T10/REPAIR_PLAN.json             --output bookkeeping-prep/C0R_REPAIR_SUFFICIENCY.json             > bookkeeping-prep/c0r.log
+          python3 tools/havenline/production/repair_sufficiency_critic.py             --c0 Docs/Production/T10/C0_ROOT_CAUSE.json             --plan Docs/Production/T10/REPAIR_PLAN.json             --output bookkeeping-review/recomputed-c0r.json             > bookkeeping-review/c0r.log
           python3 - <<'PY'
-          import json
-          r=json.load(open('bookkeeping-prep/C0R_REPAIR_SUFFICIENCY.json'))
-          assert r['passed'] is True and r['outcome']=='REPAIR_PLAN_ACCEPTED' and not r.get('rejections') and not r.get('evidence_gaps'),r
-          assert r['thresholds_unchanged'] is True and r['task_id']=='T10'
+          import json,hashlib
+          from pathlib import Path
+          actual=json.load(open('Docs/Production/T10/C0R_REPAIR_SUFFICIENCY.json'))
+          recomputed=json.load(open('bookkeeping-review/recomputed-c0r.json'))
+          assert actual==recomputed,(actual,recomputed)
+          assert actual['passed'] is True and actual['outcome']=='REPAIR_PLAN_ACCEPTED'
+          assert actual['thresholds_unchanged'] is True and not actual.get('rejections') and not actual.get('evidence_gaps')
+          Path('bookkeeping-review/c0r-exact-match.json').write_text(json.dumps({
+            'object_equal':True,
+            'committed_sha256':hashlib.sha256(Path('Docs/Production/T10/C0R_REPAIR_SUFFICIENCY.json').read_bytes()).hexdigest(),
+            'recomputed_sha256':hashlib.sha256(Path('bookkeeping-review/recomputed-c0r.json').read_bytes()).hexdigest(),
+            'semantic_result':'REPAIR_PLAN_ACCEPTED','task_approved':False
+          },indent=2)+'\n')
           PY
+          git diff --unified=40 "$BASE_CANDIDATE" "$REVIEWED_SOURCE" -- Docs/Production/T10/REPAIR_PLAN.json Docs/Production/T10/C0R_REPAIR_SUFFICIENCY.json > bookkeeping-review/exact-diff.patch
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: t10-final-bookkeeping-c0r-${{ github.sha }}
-          path: bookkeeping-prep/
+          name: t10-final-bookkeeping-preflight-${{ github.sha }}
+          path: bookkeeping-review/
+          if-no-files-found: error
+          retention-days: 30
+
+  independent-bookkeeping-review:
+    needs: exact-preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+      OMP_NUM_THREADS: '4'
+      REVIEWED_SOURCE: 'fc9010daebf6b4d520333279486a1b6bea164e7c'
+      BASE_CANDIDATE: '249b61b02db28f694291dda8c1019c2514e991bf'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - uses: actions/cache/restore@caa296126883cff596cd826c3c89aef350131
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Prepare pinned reviewer runtime
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > reviewer-runtime.json
+      - name: Independently review exact bookkeeping delta
+        run: |
+          set -euo pipefail
+          mkdir -p bookkeeping-critic
+          python3 - <<'PY'
+          import hashlib,json,os,pathlib,subprocess,time,urllib.request
+          ROOT=pathlib.Path.cwd();R=os.environ['REVIEWED_SOURCE'];B=os.environ['BASE_CANDIDATE']
+          def show(p):return subprocess.check_output(['git','show',R+':'+p],text=True)
+          def diff():return subprocess.check_output(['git','diff','--unified=60',B,R,'--','Docs/Production/T10/REPAIR_PLAN.json','Docs/Production/T10/C0R_REPAIR_SUFFICIENCY.json'],text=True)
+          plan=json.loads(show('Docs/Production/T10/REPAIR_PLAN.json'));c0r=json.loads(show('Docs/Production/T10/C0R_REPAIR_SUFFICIENCY.json'))
+          evidence={
+            'source':R,'base':B,'changed_paths':['Docs/Production/T10/C0R_REPAIR_SUFFICIENCY.json','Docs/Production/T10/REPAIR_PLAN.json'],
+            'exact_diff':diff(),
+            'B040_fix':next(x for x in plan['fixes'] if x['blocker_id']=='C0-T10-B040'),
+            'path_ownership_is_inherited_noncausal':'Docs/Production/PATH_OWNERSHIP.json' in plan['inherited_noncausal_files'],
+            'all_causal_inherited_overlap':sorted(set(plan['inherited_noncausal_files']) & {p for f in plan['fixes'] for p in f['files']}),
+            'c0r':{'passed':c0r['passed'],'outcome':c0r['outcome'],'thresholds_unchanged':c0r['thresholds_unchanged'],'rejections':c0r.get('rejections'),'evidence_gaps':c0r.get('evidence_gaps'),'input_bindings':c0r['input_bindings']},
+            'product_contract':'No HavenlineGodot runtime/test/asset/data file differs from base; final C1/C2/C3/C4/C6/C7 remain mandatory and cannot be reused from source review.'
+          }
+          runtime=json.loads((ROOT/'Docs/Production/CRITIC_EXECUTION.json').read_text())['local_independent_runtime']
+          cache=pathlib.Path(os.path.expanduser(runtime['cache_path']));manifest=json.loads((cache/'manifest.json').read_text())
+          servers=list((cache/'runtime').rglob('llama-server'));assert len(servers)==1,servers
+          server=servers[0];env=dict(os.environ);env['LD_LIBRARY_PATH']=str(server.parent)+':'+env.get('LD_LIBRARY_PATH','')
+          log=(ROOT/'bookkeeping-critic/runtime.log').open('w')
+          proc=subprocess.Popen([str(server),'-m',str(cache/manifest['model_file']),'--mmproj',str(cache/manifest['projector_file']),'--host','127.0.0.1','--port','8080','-c','12288','-t','4','-tb','4','-ngl','0','--no-mmproj-offload','--parallel','1','--jinja','--image-min-tokens','768','--image-max-tokens','2048'],stdout=log,stderr=subprocess.STDOUT,env=env)
+          try:
+            for _ in range(180):
+              try:
+                if proc.poll() is not None:raise RuntimeError('review runtime exited')
+                if json.load(urllib.request.urlopen('http://127.0.0.1:8080/health',timeout=3)).get('status')=='ok':break
+              except Exception:
+                time.sleep(2)
+            else:raise RuntimeError('review runtime not ready')
+            dims=['bookkeeping_correctness','causal_scope_integrity','threshold_preservation','gameplay_immutability','source_binding']
+            props={d:{'type':'number','minimum':0,'maximum':10} for d in dims}
+            schema={'type':'object','properties':{
+              'observations':{'type':'array','items':{'type':'string','maxLength':180},'minItems':3,'maxItems':4},
+              'defects':{'type':'array','items':{'type':'string','maxLength':180},'maxItems':5},
+              'coverage_complete':{'type':'boolean'},'confidence':{'type':'string','enum':['low','medium','high']},
+              'scores':{'type':'object','properties':props,'required':dims,'additionalProperties':False}},
+              'required':['observations','defects','coverage_complete','confidence','scores'],'additionalProperties':False}
+            prompt='''You are an independent non-voting T10 bookkeeping repair critic. This is NOT gameplay approval.
+The user requires quality-first final closeout: all final C1/C2/C3/C4/C6/C7 dimensions remain strictly >9.0 unrounded, G1-G14/regression remain mandatory, and T11 stays locked.
+Review only the exact two-file metadata delta. Decide whether PATH_OWNERSHIP.json is correctly kept causal under B040 while being removed from inherited_noncausal_files, whether the deterministic C0R remains strict, whether thresholds are preserved, and whether gameplay/runtime is unchanged.
+Do not invent a gameplay defect from absent gameplay changes. If there is any real source-bound bookkeeping defect, report it.
+Every score here must be >9.0 to accept this bookkeeping source. Return JSON only.
+
+EVIDENCE:
+'''+json.dumps(evidence,indent=2)
+            body={'model':'havenline-specialist-local','messages':[{'role':'user','content':[{'type':'text','text':prompt}]}],'max_tokens':900,'temperature':0.2,'top_p':0.9,'seed':20260920,'chat_template_kwargs':{'enable_thinking':False},'response_format':{'type':'json_object','schema':schema},'cache_prompt':False}
+            raw=json.dumps(body).encode();(ROOT/'bookkeeping-critic/request.json').write_bytes(raw)
+            req=urllib.request.Request('http://127.0.0.1:8080/v1/chat/completions',data=raw,headers={'Content-Type':'application/json'},method='POST')
+            with urllib.request.urlopen(req,timeout=1200) as resp:reply=json.load(resp)
+            (ROOT/'bookkeeping-critic/raw.json').write_text(json.dumps(reply,indent=2))
+            choice=reply['choices'][0];assert choice.get('finish_reason')=='stop',choice
+            review=json.loads(choice['message']['content']);errors=[]
+            if review.get('coverage_complete') is not True:errors.append('coverage incomplete')
+            if review.get('confidence') not in ('medium','high'):errors.append('confidence insufficient')
+            if review.get('defects'):errors.append('unresolved defects')
+            scores=review.get('scores',{})
+            if set(scores)!=set(dims):errors.append('dimension mismatch')
+            for d,v in scores.items():
+              if type(v) not in (int,float) or v<=9.0:errors.append(d+' not strictly above 9')
+            result={'task_id':'T10','review_kind':'FINAL_BOOKKEEPING_SOURCE_REVIEW','source':R,'base':B,'provider':manifest['publisher'],'model':manifest['base_model'],'model_revision':manifest['revision'],'runtime_release':manifest.get('runtime_release'),'review':review,'passed':not errors,'errors':errors,'lowest_score':min(scores.values()) if scores else 0,'non_voting':True,'task_approved':False,'t11_unlocked':False}
+            (ROOT/'bookkeeping-critic/result.json').write_text(json.dumps(result,indent=2)+'\n');print(json.dumps(result,indent=2));raise SystemExit(0 if not errors else 1)
+          finally:
+            proc.terminate()
+            try:proc.wait(timeout=10)
+            except Exception:proc.kill()
+            log.close()
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t10-final-bookkeeping-review-${{ github.sha }}
+          path: |
+            bookkeeping-critic/
+            reviewer-runtime.json
           if-no-files-found: error
           retention-days: 30
