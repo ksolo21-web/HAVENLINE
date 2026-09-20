@@ -23,55 +23,7 @@ jobs:
           lfs: false
       - name: Apply exact tested patch and freeze only this diagnostic branch
         id: freeze
-        run: |
-          set -euo pipefail
-          test "$GITHUB_REF" = refs/heads/havenline/review-T10-light-context-preflight
-          test "$GITHUB_RUN_ATTEMPT" = 1
-          mkdir -p light-context-input
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib,subprocess
-          patch=pathlib.Path('Docs/Production/T10/DiagnosticInputs/light-context-repair.patch')
-          assert hashlib.sha256(patch.read_bytes()).hexdigest()=='c9ef630e3931b8a41c13533b7c584b206a8956782c5eb86bb8f2d48da2c33543'
-          base='e1a3ce36ecd4891e79e2956dde2c7d8393f0884d'
-          before={
-            'HavenlineGodot/scripts/world_transform_view.gd':'88bea24eca5b411cdc220d44ba1a544f61e43689',
-            'HavenlineGodot/tests/test_task10_integration.gd':'111386adb7f35e34b216ae9645a8341430e7e3f3',
-          }
-          after={
-            'HavenlineGodot/scripts/world_transform_view.gd':'bd91be572015673201982ad4c923960b8ace31c844916c7ca98db24efe005780',
-            'HavenlineGodot/tests/test_task10_integration.gd':'2e908082d4292e3269b0f7e3a6039b99cda525951f62bd3dfe8f3bc7735b2254',
-            'HavenlineGodot/tests/test_task10_world_transform.gd':'ae337e64a7159901bf8fc6df7d1448af70bbedc34cd8b4b45f339672cb407c6e',
-          }
-          for path,blob in before.items():
-            assert subprocess.check_output(['git','rev-parse','HEAD:'+path],text=True).strip()==blob
-          subprocess.run(['git','apply','--check',str(patch)],check=True)
-          subprocess.run(['git','apply',str(patch)],check=True)
-          subprocess.run(['git','diff','--check'],check=True)
-          changed=subprocess.check_output(['git','diff','--name-only'],text=True).splitlines()
-          assert set(changed)==set(before),changed
-          for path,digest in after.items():
-            assert hashlib.sha256(pathlib.Path(path).read_bytes()).hexdigest()==digest,path
-          subprocess.run(['git','config','user.name','Havenline diagnostic source builder'],check=True)
-          subprocess.run(['git','config','user.email','diagnostic@users.noreply.github.com'],check=True)
-          subprocess.run(['git','add','--',*sorted(before)],check=True)
-          subprocess.run(['git','commit','-m','T10 diagnostic: tested live lighting-context repair; no approval'],check=True)
-          source=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
-          parent=subprocess.check_output(['git','rev-parse','HEAD^'],text=True).strip()
-          assert parent==os.environ['GITHUB_SHA']
-          branch='refs/heads/havenline/review-T10-light-context-preflight'
-          remote=subprocess.check_output(['git','ls-remote','--exit-code','origin',branch],text=True).strip()
-          assert remote.split()==[parent,branch],remote
-          subprocess.run(['git','push','origin','HEAD:'+branch],check=True)
-          remote_after=subprocess.check_output(['git','ls-remote','--exit-code','origin',branch],text=True).strip()
-          assert remote_after.split()==[source,branch],remote_after
-          record={'kind':'DIAGNOSTIC_SOURCE_FREEZE','workflow_source':parent,'source':source,
-            'tree':subprocess.check_output(['git','rev-parse','HEAD^{tree}'],text=True).strip(),
-            'files_sha256':after,'patch_sha256':hashlib.sha256(patch.read_bytes()).hexdigest(),
-            'branch':branch,'canonical_branch_changed':False,'force_push':False,'task_approved':False,'T11_unlocked':False}
-          pathlib.Path('light-context-input/source-binding.json').write_text(json.dumps(record,indent=2)+'\n')
-          with open(os.environ['GITHUB_OUTPUT'],'a') as out:out.write('source='+source+'\n')
-          print(json.dumps(record))
-          PY
+        run: python3 tools/havenline/task10/freeze_light_context_diagnostic.py
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
