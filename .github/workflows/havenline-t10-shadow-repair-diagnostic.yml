@@ -1,0 +1,89 @@
+name: Havenline T10 shadow-footprint 684 diagnostic
+on:
+  push:
+    branches: ['havenline/T10-rendered-footprint-shadow-repair']
+    paths:
+      - 'HavenlineGodot/scripts/world_transform_view.gd'
+      - 'HavenlineGodot/tests/capture_task10_world_transform.gd'
+      - 'tools/havenline/task10/**'
+      - '.github/workflows/havenline-t10-shadow-repair-diagnostic.yml'
+permissions:
+  contents: read
+concurrency:
+  group: havenline-t10-shadow-footprint-diagnostic
+  cancel-in-progress: false
+jobs:
+  raster:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+          lfs: false
+      - name: Declare diagnostic-only scope
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = refs/heads/havenline/T10-rendered-footprint-shadow-repair
+          mkdir -p screen-full
+          printf '{"source":"%s","execution_kind":"DIAGNOSTIC_NONAPPROVAL","task_approved":false,"reusable_for_approval":false}\n' "$GITHUB_SHA" > screen-full/diagnostic-scope.json
+      - name: Prepare pinned Godot and verifier
+        run: |
+          set -euo pipefail
+          python3 -m pip install pillow==12.3.0 numpy==2.3.5
+          python3 -m unittest tools.havenline.task10.tests.test_verify_screen_pixel_clearance
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          test ! -e HavenlineGodot/.godot
+          timeout 30 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --path HavenlineGodot --script res://tests/capture_task10_world_transform.gd --check-only > screen-full/check-only.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error' screen-full/check-only.log; then exit 1; fi
+          timeout 240 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --path HavenlineGodot --import --quit > screen-full/import.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' screen-full/import.log; then exit 1; fi
+      - name: Prove feedback layout branches
+        run: |
+          set -euo pipefail
+          timeout 300 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --path HavenlineGodot --script "$(pwd)/tools/havenline/task10/preflight_feedback_layout.gd" -- --out="$(pwd)/screen-full/feedback-layout.json" > screen-full/feedback-layout.log 2>&1
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          p=json.loads(Path('screen-full/feedback-layout.json').read_text())
+          assert p.get('passed') is True and p.get('case_count')==1728,p
+          assert len(p.get('extra_cases',[]))==111 and all(x.get('passed') is True for x in p['extra_cases']),p
+          assert len(p.get('transition_cases',[]))==3 and all(x.get('passed') is True for x in p['transition_cases']),p
+          assert not p.get('errors'),p
+          PY
+      - name: Collect all 684 fresh rendered cases
+        run: |
+          set -euo pipefail
+          icd=$(find /usr/share/vulkan/icd.d -name '*lvp*json' -print -quit)
+          test -n "$icd"
+          python3 tools/havenline/task10/run_screen_pixel_canary.py \
+            --repo "$GITHUB_WORKSPACE" --output "$GITHUB_WORKSPACE/screen-full/cases" \
+            --source "$GITHUB_SHA" --engine "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" \
+            --engine-archive "$RUNNER_TEMP/engine/engine.zip" --xvfb /usr/bin/Xvfb \
+            --library-path /usr/lib/x86_64-linux-gnu --vulkan-icd "$icd" \
+            --execution-kind HOSTED_FULL_RASTER_PROOF --domain full684
+      - name: Seal non-approval result
+        if: always()
+        run: |
+          python3 - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path('screen-full')
+          summary={}
+          p=root/'cases'/'summary.json'
+          if p.exists(): summary=json.loads(p.read_text())
+          record={'source':os.environ['GITHUB_SHA'],'case_count':summary.get('case_count'),'passed':summary.get('passed',False),'task_approved':False,'reusable_for_approval':False,'execution_kind':'DIAGNOSTIC_NONAPPROVAL'}
+          if p.exists(): record['summary_sha256']=hashlib.sha256(p.read_bytes()).hexdigest()
+          (root/'diagnostic-result.json').write_text(json.dumps(record,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-t10-shadow-diagnostic-${{ github.sha }}
+          path: screen-full
+          if-no-files-found: error
+          retention-days: 30
