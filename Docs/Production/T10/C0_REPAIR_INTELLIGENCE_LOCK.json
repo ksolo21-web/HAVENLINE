@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T10",
   "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
-  "repair_intelligence_sha256": "1df19856325d2fc110942c7d0292c5bac0d8fb32a8178fda78be58ccbf956474",
+  "repair_intelligence_sha256": "cd9e13412232a1c83ee2c5eb8094b1785c2188c7f123f8053470d52888c58161",
   "prior_attempt_sources": [
     {
       "failure_family_id": "projected-label-feasibility",
@@ -104,6 +104,16 @@
       "artifact_sha256": "96333e40fc0d5b98d0bcdd0248f80c8aaaf458d55b73207205fabbc22fc29188",
       "result": "PARTIAL",
       "result_record": "retained terminal diagnostic result T10-screen-pixel-canary-terminal-result.json"
+    },
+    {
+      "failure_family_id": "world-transform-action-feedback",
+      "attempt": 1,
+      "candidate": "fd962391dd3ac956fd6b111adb2313652859125e",
+      "run_id": 35534465419,
+      "artifact_id": 10613684975,
+      "artifact_sha256": "78bbb9c37fb0824ee5a6605cee7ef07a21712431b93e531abf3652c4d56e23ab",
+      "result": "PARTIAL",
+      "result_record": "fresh final C4 source-bound artifact 10613684975"
     }
   ],
   "frontier_sources": [
@@ -138,6 +148,10 @@
     {
       "run_id": 35483383557,
       "candidate": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97"
+    },
+    {
+      "run_id": 35534465419,
+      "candidate": "fd962391dd3ac956fd6b111adb2313652859125e"
     }
   ],
   "domain_proof": {
