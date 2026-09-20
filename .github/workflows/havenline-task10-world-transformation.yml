@@ -165,6 +165,7 @@ jobs:
 
           python3 tools/havenline/task10/validate_world_transform.py --candidate "$CANDIDATE" --output task10-evidence/source-contract.json
           python3 tools/havenline/production/validate_migration.py > task10-evidence/governance.json
+          python3 -m pip install --disable-pip-version-check --no-input numpy==2.3.5 pillow==12.3.0
           python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > task10-evidence/tests/production-tools.log 2>&1
           python3 -m unittest discover -s tools/havenline/task10/tests -p 'test_*.py' > task10-evidence/tests/task10-tooling.log 2>&1
 
