@@ -296,7 +296,10 @@ func _set_lifecycle(next: String) -> void:
 func _apply_visuals() -> void:
 	_ensure_visuals()
 	var color: Color = STATE_COLORS.get(lifecycle, STATE_COLORS.locked)
-	var ring_color := color
+	# A completed form stays green, but a blocked next transform gets a blocked
+	# perimeter so the world itself reinforces the action hierarchy without
+	# adding authored T11 content or another visual node.
+	var ring_color: Color = STATE_COLORS.blocked if _next_preview_blocked() else color
 	ring_color.a = 0.78 if lifecycle != "complete" else 0.92
 	_ring_material.albedo_color = ring_color
 	_ring_material.emission_enabled = lifecycle == "committing"
@@ -672,34 +675,61 @@ func _readable_reasons(reasons: Array, shortfalls: Dictionary = {}) -> String:
 		readable.append(friendly.left(1).to_upper() + friendly.substr(1))
 	return " / ".join(readable)
 
+func _harvesting_access_blocked(reasons: Array) -> bool:
+	for reason in reasons:
+		if String(reason) == "missing_prerequisite:harvesting_online":
+			return true
+	return false
+
+func _next_preview_blocked() -> bool:
+	return lifecycle == "complete" and not next_preview.is_empty() and not bool(next_preview.get("passed", false))
+
 func feedback_text() -> String:
 	var destination := target_state.capitalize() if not target_state.is_empty() else "Transformation"
 	var cost_cues := _resource_cues(displayed_costs)
 	if lifecycle == "complete":
-		var text := "✓ %s complete" % destination
-		if not next_preview.is_empty():
-			var next_destination := String(next_preview.get("target_state", "")).capitalize()
-			var next_shortfalls: Dictionary = next_preview.get("shortfalls", {})
-			var next_reason := _readable_reasons(next_preview.get("errors", []), next_shortfalls)
-			if next_preview.get("passed", false):
-				text = "NEXT — approach %s" % next_destination
-			elif not next_shortfalls.is_empty():
-				text = "NEXT %s — deliver\n%s" % [next_destination, _resource_cues(next_shortfalls)]
-			elif not next_reason.is_empty():
-				text = "NEXT %s blocked\n%s" % [next_destination, next_reason]
-			if not next_shortfalls.is_empty() and not next_reason.is_empty():
-				text += "\n" + next_reason
-		if not next_preview.is_empty(): text += "\n✓ %s complete" % destination
-		text += "\nSpent: %s" % _resource_cues(displayed_costs)
+		if next_preview.is_empty():
+			return "✓ %s complete" % destination + ("\nSpent: %s" % _resource_cues(displayed_costs) if not displayed_costs.is_empty() else "")
+		var next_destination := String(next_preview.get("target_state", "")).capitalize()
+		var next_shortfalls: Dictionary = next_preview.get("shortfalls", {})
+		var next_errors: Array = next_preview.get("errors", [])
+		var next_reason := _readable_reasons(next_errors, next_shortfalls)
+		var text := ""
+		if next_preview.get("passed", false):
+			text = "NEXT: APPROACH → %s" % next_destination
+		elif _harvesting_access_blocked(next_errors):
+			text = "NEXT: UNLOCK HARVESTING ACCESS"
+			if not next_shortfalls.is_empty():
+				text += "\nTHEN DELIVER → %s: %s" % [next_destination, _resource_cues(next_shortfalls)]
+			else:
+				text += "\nTHEN: %s" % next_destination
+		elif not next_shortfalls.is_empty():
+			text = "NEXT: DELIVER → %s\nMISSING: %s" % [next_destination, _resource_cues(next_shortfalls)]
+		elif not next_reason.is_empty():
+			text = "NEXT: RESOLVE → %s\n%s" % [next_destination, next_reason]
+		else:
+			text = "NEXT: %s" % next_destination
+		text += "\n✓ %s complete" % destination
+		if not displayed_costs.is_empty():
+			text += "\nSpent: %s" % _resource_cues(displayed_costs)
 		return text
 	if lifecycle == "blocked":
 		var reason := _readable_reasons(block_reasons, blocked_shortfalls)
-		if not blocked_shortfalls.is_empty():
-			var text := "%s blocked — deliver\n%s" % [destination, _resource_cues(blocked_shortfalls)]
-			if not reason.is_empty(): text += "\n" + reason
-			if not displayed_costs.is_empty(): text += "\n%s cost: %s" % [destination, cost_cues]
+		if _harvesting_access_blocked(block_reasons):
+			var text := "NEXT: UNLOCK HARVESTING ACCESS\nBLOCKED: %s" % destination
+			if not blocked_shortfalls.is_empty():
+				text += "\nTHEN DELIVER: %s" % _resource_cues(blocked_shortfalls)
+			if not displayed_costs.is_empty():
+				text += "\nTOTAL: %s" % cost_cues
 			return text
-		return "BLOCKED — %s\n%s" % [destination, reason] + ("\n%s cost: %s" % [destination, cost_cues] if not displayed_costs.is_empty() else "")
+		if not blocked_shortfalls.is_empty():
+			var text := "NEXT: DELIVER → %s\nMISSING: %s" % [destination, _resource_cues(blocked_shortfalls)]
+			if not displayed_costs.is_empty():
+				text += "\nTOTAL: %s" % cost_cues
+			if not reason.is_empty():
+				text += "\n" + reason
+			return text
+		return "BLOCKED: %s" % destination + ("\nNEXT: %s" % reason if not reason.is_empty() else "") + ("\nTOTAL: %s" % cost_cues if not displayed_costs.is_empty() else "")
 	if lifecycle == "committing":
 		return "APPLYING → " + destination + "\nDelivered resources: " + cost_cues + "\nAwaiting confirmation"
 	if lifecycle == "preview":
@@ -722,6 +752,7 @@ func descriptor() -> Dictionary:
 		"blocked_shortfalls": blocked_shortfalls.duplicate(true),
 		"displayed_costs": displayed_costs.duplicate(true),
 		"feedback_text": feedback_text(),
+		"next_preview_blocked": _next_preview_blocked(),
 		"update_count": update_count,
 		"visual_apply_count": visual_apply_count,
 		"visual_build_count": visual_build_count,
