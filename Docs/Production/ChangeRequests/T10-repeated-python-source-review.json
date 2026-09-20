@@ -15,21 +15,21 @@
     "Docs/Production/ChangeRequests/T10-repeated-python-source-review.json"
   ],
   "independent_review": {
-    "reviewer": "independent-closeout-admission-and-integrated-caller-review",
-    "review_id": "T10-final-source-authority-06232b7c0e4c",
-    "reviewed_commit": "06232b7c0e4cf8662f9b94d51bc93aa125fe2f20",
-    "reviewed_tree": "50d50cf0cbf45eb2d8f38590b91821d97cc83e1e",
-    "evidence_sha256": "11e893e1d182cb415d31a22d2a10169fd448192ef84617d256711b183f51bab1",
-    "score": 9.2,
+    "reviewer": "independent-final-bookkeeping-review",
+    "review_id": "T10-bookkeeping-fc9010daebf6",
+    "reviewed_commit": "fc9010daebf6b4d520333279486a1b6bea164e7c",
+    "reviewed_tree": "dad82b4136efa814f2a4328ef50f6a225899d61c",
+    "evidence_sha256": "a53051022c41ac62db1fd6024e0a24eaf48d173b2ec7190d1c102087b658738a",
+    "score": 10.0,
     "evidence": {
-      "admission_archive_sha256": "521c20b6ab15e621853c8c432abf207d448f66528a4ff47ef51311ddec2e4eda",
-      "admission_result_sha256": "d9c3e9f3eca89cae475a43036e49e11477c3d94bf0484ee1b37afe75c3c6c274",
-      "admission_lowest_score": 9.2,
-      "caller_archive_sha256": "e2f6d2922779ce82fde1f96158492c0c910cde5d3b27ffcec24e98d2fd6e454f",
-      "caller_result_sha256": "904c55c7b5521fa1bac64f9d0694ca3e90a2a3871f87c682d8d67758548736c3",
-      "caller_lowest_score": 10.0,
-      "reviewed_commit": "06232b7c0e4cf8662f9b94d51bc93aa125fe2f20",
-      "reviewed_tree": "50d50cf0cbf45eb2d8f38590b91821d97cc83e1e"
+      "bookkeeping_review": {
+        "archive_sha256": "dca7e3db27039e2120cb7eeaeb9ec187c7f9abbe6ec6d221a57e2a235438ae03",
+        "result_sha256": "657fda96a055be6693f53d12a0654eb56161c900900b7d276396385964b41ea3",
+        "lowest_score": 10.0
+      },
+      "prior_source_authority_sha256": "c613c75400e7d9e952340c5ebee4df8074ca7d5394830e1f54be3ce228f69ec9",
+      "prior_candidate": "249b61b02db28f694291dda8c1019c2514e991bf",
+      "scope": "Two-file bookkeeping classification correction only; all gameplay/runtime/test bytes unchanged."
     }
   },
   "bindings": [
@@ -79,5 +79,5 @@
     }
   ],
   "causal_source_set_sha256": "53d7b7dd46de323867be2f5a60af384df44dd7f2807f0d348be4f69bddef3e31",
-  "authority_boundary": "Owner verifies exact ordered [R,H] promotion using the unchanged canonical verifier with --promotion-check and a non-forced update. This source record is non-voting and cannot approve T10 or unlock T11."
+  "authority_boundary": "Exact metadata-only reviewed source; owner must verify ordered [R,H] and use a non-forced canonical update. No T10 approval or T11 unlock."
 }
