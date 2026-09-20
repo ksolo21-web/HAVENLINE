@@ -42,7 +42,7 @@ jobs:
           ref: ${{ github.sha }}
           fetch-depth: 0
           lfs: false
-      - uses: actions/cache/restore@caa296126883cff596cd826c3c89aef350131
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
         with:
           path: ~/.cache/havenline-t01-qwen35
           key: havenline-t01-qwen35-9b-q5-20260908-v1
