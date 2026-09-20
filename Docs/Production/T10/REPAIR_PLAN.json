@@ -1548,8 +1548,8 @@
         },
         "strategy_kind": "ALGORITHM",
         "causal_mechanism": "ALGORITHM_REPLACEMENT[_active_directional_shadow_lights,_ground_shadow_point,_projected_response_rect]",
-        "why_this_fixes_cause": "Raster shadow pixels are included in the response region by ray/plane intersection before lane selection, so a placement cannot pass solely because the mesh silhouette is smaller than the visible response.",
-        "why_materially_different": "This models the previously absent light-cast region from scene geometry and camera projection; the repair is structural rather than another label-parameter adjustment.",
+        "why_this_fixes_cause": "Light-cast pixels belong to the response region before lane selection; analytic-only certification is no longer sufficient once scene lighting participates in collision checks.",
+        "why_materially_different": "A light-to-ground ray intersection is now part of response coverage. No label parameter is part of this repair.",
         "same_family_attempt_count": 3,
         "prior_attempts": [
           {
@@ -1581,12 +1581,12 @@
           "required": true,
           "provided": true,
           "kind": "PLACEMENT_ALGORITHM",
-          "reason": "Three same-family outcomes show a missing light-cast region in the response model; the repair adds ray/plane geometry before lane selection."
+          "reason": "Three same-family outcomes demonstrate absent scene-light response coverage; ray-to-ground intersection becomes an explicit input to lane feasibility."
         },
         "repair_operations": [
           {
             "operation_kind": "ALGORITHM_REPLACEMENT",
-            "target": "Directional-shadow response region used by lane selection",
+            "target": "Directional-shadow response region in lane selection",
             "target_symbols": [
               "_active_directional_shadow_lights",
               "_ground_shadow_point",
@@ -1594,7 +1594,7 @@
             ],
             "replaces": "mesh-only response-envelope acceptance",
             "with": "IMPLEMENT_SYMBOLS[_active_directional_shadow_lights,_ground_shadow_point,_projected_response_rect]",
-            "invariant_enforced": "every accepted lane is disjoint from the complete mesh-plus-shadow raster response under the existing clearance contract"
+            "invariant_enforced": "every accepted lane remains disjoint from the complete mesh-plus-shadow raster response"
           }
         ],
         "scalar_parameters_changed": [],
@@ -2450,8 +2450,8 @@
     ],
     "evidence_frontier": {
       "complete": true,
-      "diagnosed_through_candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
-      "latest_observed_failed_candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+      "diagnosed_through_candidate": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97",
+      "latest_observed_failed_candidate": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97",
       "observations": [
         {
           "run_id": 35402388836,
@@ -2583,6 +2583,17 @@
             "Adapter preflight run35454638560 independently rejected the same eight already-integrated C0R governance paths through the legacy authorization consumer, as retained in the original combined guard/adapter observation."
           ],
           "reason": "Separate source-bound job family observation of the same B062 strategy, not an additional repair attempt."
+        },
+        {
+          "run_id": 35483383557,
+          "candidate": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97",
+          "disposition": "BOUND_TO_EXISTING_GROUP",
+          "group_id": "layout-feasibility",
+          "evidence": [
+            "Hosted screen-pixel canary retained 180 cases across five profiles with all capture exits zero and 10 measured raster failures.",
+            "All 10 failures were label-versus-rendered-response clearance failures while the analytic solver treated the placement as legal; retained layer masks isolate label and response pixels independently."
+          ],
+          "reason": "Same projected-label-feasibility family: the solver modeled mesh projection but not directional-light shadow pixels on the ground plane."
         }
       ],
       "unclassified_failures": [],
@@ -2676,6 +2687,18 @@
           "classification": "INDEPENDENT_REVIEW_REJECTED_REMOTE_RACE",
           "finding": "Independent review of17435472 found that re-reading only the local remote-tracking ref misses a remote-only branch advance. Real bare-origin replay preserved the stale local ref and exposed acceptance; owner publication also needs an atomic forward-only precondition.",
           "disposition": "Live-origin query and restricted forward-only promotion DAG; no full candidate run or attempt increment."
+        },
+        {
+          "source_kind": "DIAGNOSTIC_NONAPPROVAL",
+          "run_id": 35508254523,
+          "candidate": "48ffd32a0ce7518e4734630f69553e1525eba116",
+          "source_path": "artifact 10603974070 / cases/summary.json",
+          "group_id": "layout-feasibility",
+          "evidence": [
+            "Fresh hosted full raster proof retained 684/684 passing cases over 19 profiles, six lifecycle states and six camera angles; product source hash fc35ebc4bc59dd41e165f6eb8d091ed274c1f02a5fe48e56cf8c9d15b8970b75."
+          ],
+          "task_approved": false,
+          "reusable_for_approval": false
         }
       ]
     },
