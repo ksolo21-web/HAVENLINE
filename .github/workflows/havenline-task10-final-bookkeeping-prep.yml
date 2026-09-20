@@ -1,0 +1,55 @@
+name: Havenline T10 final bookkeeping C0R preparation
+on:
+  push:
+    branches: ['havenline/review-T10-bookkeeping-controller']
+permissions:
+  contents: read
+jobs:
+  prepare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      REVIEWED_SOURCE: '59f8b2b10f2fc33982d3675551cb5c90aef34970'
+      BASE_CANDIDATE: '249b61b02db28f694291dda8c1019c2514e991bf'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ env.REVIEWED_SOURCE }}
+          fetch-depth: 0
+          lfs: false
+      - name: Prove metadata-only scope and recompute C0R
+        run: |
+          set -euo pipefail
+          mkdir -p bookkeeping-prep
+          python3 - <<'PY'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          base=os.environ['BASE_CANDIDATE'];head=os.environ['REVIEWED_SOURCE']
+          changed=subprocess.check_output(['git','diff','--name-only',base,head],text=True).splitlines()
+          assert changed==['Docs/Production/T10/REPAIR_PLAN.json'],changed
+          product='HavenlineGodot/scripts/world_transform_view.gd'
+          a=subprocess.check_output(['git','show',base+':'+product]);b=Path(product).read_bytes()
+          assert a==b and hashlib.sha256(b).hexdigest()=='fc35ebc4bc59dd41e165f6eb8d091ed274c1f02a5fe48e56cf8c9d15b8970b75'
+          plan=json.load(open('Docs/Production/T10/REPAIR_PLAN.json'))
+          inherited=set(plan['inherited_noncausal_files'])
+          causal={(f['blocker_id'],p) for f in plan['fixes'] for p in f['files']}
+          overlap=[{'blocker_id':bid,'path':p} for bid,p in sorted(causal) if p in inherited]
+          assert overlap==[],overlap
+          b40=next(f for f in plan['fixes'] if f['blocker_id']=='C0-T10-B040')
+          assert 'Docs/Production/PATH_OWNERSHIP.json' in b40['files']
+          assert 'Docs/Production/PATH_OWNERSHIP.json' not in inherited
+          Path('bookkeeping-prep/scope.json').write_text(json.dumps({'reviewed_source':head,'base_candidate':base,'changed_paths':changed,'product_unchanged':True,'product_sha256':hashlib.sha256(b).hexdigest(),'causal_inherited_overlap':overlap,'passed':True,'task_approved':False,'t11_unlocked':False},indent=2)+'\n')
+          PY
+          python3 tools/havenline/production/repair_sufficiency_critic.py             --c0 Docs/Production/T10/C0_ROOT_CAUSE.json             --plan Docs/Production/T10/REPAIR_PLAN.json             --output bookkeeping-prep/C0R_REPAIR_SUFFICIENCY.json             > bookkeeping-prep/c0r.log
+          python3 - <<'PY'
+          import json
+          r=json.load(open('bookkeeping-prep/C0R_REPAIR_SUFFICIENCY.json'))
+          assert r['passed'] is True and r['outcome']=='REPAIR_PLAN_ACCEPTED' and not r.get('rejections') and not r.get('evidence_gaps'),r
+          assert r['thresholds_unchanged'] is True and r['task_id']=='T10'
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: t10-final-bookkeeping-c0r-${{ github.sha }}
+          path: bookkeeping-prep/
+          if-no-files-found: error
+          retention-days: 30
