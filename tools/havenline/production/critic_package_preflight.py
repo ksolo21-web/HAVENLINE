@@ -4,7 +4,7 @@ import argparse,hashlib,json,re
 from pathlib import Path
 ROOT=Path(__file__).resolve().parents[3];DOCS=ROOT/'Docs'/'Production';HEX64=re.compile(r'^[0-9a-f]{64}$');HEX40=re.compile(r'^[0-9a-f]{40}$')
 def load(p): return json.loads(Path(p).read_text())
-def validate_manifest(path,candidate=None,critic=None):
+def validate_manifest(path,candidate=None,critic=None,evidence_root=None):
     p=Path(path);policy=load(DOCS/'CRITIC_PACKAGE_PREFLIGHT_POLICY.json');lim=policy['limits'];errors=[];raw=p.read_bytes()
     if len(raw)>lim['manifest_bytes_max']: errors.append('manifest too large')
     try:m=json.loads(raw)
@@ -31,7 +31,13 @@ def validate_manifest(path,candidate=None,critic=None):
             seen.add(rel);h=item.get('sha256')
             if h is not None and not HEX64.fullmatch(str(h)): errors.append('bad sha256 '+str(rel))
             if rel:
-                fp=p.parent/rel
+                relpath=Path(rel)
+                if relpath.is_absolute() or '..' in relpath.parts:
+                    errors.append('unsafe evidence path '+str(rel));continue
+                roots=[]
+                if evidence_root is not None: roots.append(Path(evidence_root).resolve())
+                roots.append(p.parent.resolve())
+                fp=next((root/relpath for root in roots if (root/relpath).is_file()),roots[0]/relpath)
                 if fp.exists() and fp.is_file():
                     data=fp.read_bytes()
                     if item.get('kind')=='text' and len(data)>lim['text_item_bytes_max']: errors.append('text item too large '+rel)
@@ -46,5 +52,5 @@ def validate_manifest(path,candidate=None,critic=None):
             if int(rc.get(field,0))<=0 or int(rc[field])>lim[cap]: errors.append('response contract '+field+' outside policy')
     return {'passed':not errors,'task_id':m.get('task_id'),'critic_id':m.get('critic_id'),'candidate_commit':m.get('candidate_commit'),'group_count':len(groups),'errors':errors}
 def main():
-    ap=argparse.ArgumentParser();ap.add_argument('manifest');ap.add_argument('--candidate');ap.add_argument('--critic');a=ap.parse_args();out=validate_manifest(a.manifest,a.candidate,a.critic);print(json.dumps(out,indent=2));raise SystemExit(0 if out['passed'] else 2)
+    ap=argparse.ArgumentParser();ap.add_argument('manifest');ap.add_argument('--candidate');ap.add_argument('--critic');ap.add_argument('--evidence-root');a=ap.parse_args();out=validate_manifest(a.manifest,a.candidate,a.critic,a.evidence_root);print(json.dumps(out,indent=2));raise SystemExit(0 if out['passed'] else 2)
 if __name__=='__main__':main()

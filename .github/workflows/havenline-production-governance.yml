@@ -203,6 +203,8 @@ jobs:
           python3 tools/havenline/production/performance_ledger.py validate > /tmp/v32-performance.json
           git ls-remote --heads origin 'refs/heads/havenline/T*' | awk '{print $2}' | sed 's#refs/heads/##' | jq -R -s 'split("\n") | map(select(length > 0))' > /tmp/v32-remote-branches.json
           python3 tools/havenline/production/branch_budget.py --inventory /tmp/v32-remote-branches.json > /tmp/v32-branches.json
+          python3 tools/havenline/production/forward_task_control.py validate > /tmp/v32-forward-control-validation.json
+          python3 tools/havenline/production/forward_task_control.py plan T11 --target ASSIGNED --inventory /tmp/v32-remote-branches.json --output /tmp/v32-forward-control-T11.json > /tmp/v32-forward-control-T11.stdout
           python3 tools/havenline/production/v32_forward_prep_harness.py validate > /tmp/v32-forward-harness.json
           python3 tools/havenline/production/v32_forward_prep_harness.py fixture progression > /tmp/v32-progression-fixture.json
           python3 tools/havenline/production/v32_forward_prep_harness.py fixture save_versioning > /tmp/v32-save-fixture.json
@@ -224,6 +226,8 @@ jobs:
           jq -e '([.canaries[] | select(.canary == "level_1_100_reachability")] | length) == 1' /tmp/v32-t12-canaries.json
           jq -e '.passed == true' /tmp/v32-performance.json
           jq -e '.passed == true and .details.inventory_checked == true' /tmp/v32-branches.json
+          jq -e '.passed == true and .task_count == 60' /tmp/v32-forward-control-validation.json
+          jq -e '.passed == true and .task_id == "T11" and .target == "ASSIGNED" and .quality_thresholds_unchanged == true' /tmp/v32-forward-control-T11.json
           jq -e '.passed == true and .domain_count >= 12' /tmp/v32-forward-harness.json
           jq -e '.passed == true' /tmp/v32-progression-fixture.json
           jq -e '.passed == true' /tmp/v32-save-fixture.json
@@ -238,6 +242,11 @@ jobs:
           jq -e '.passed == true' /tmp/v32-authority.json
           jq -e '.passed == true and .prep_task_count == 59 and .expected_prep_task_count == 59 and .external_milestone_count >= 10 and .shared_contract_count >= 8' /tmp/v32-forward-prep.json
           grep -q 'actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'forward_task_control.py' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'critic_package_preflight.py' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'havenline-v32-specialist-fanout.yml' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'havenline-c0-root-cause.yml' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'cancel-in-progress: false' .github/workflows/havenline-v32-task-preflight.yml
           grep -q 'fail-fast: false' .github/workflows/havenline-v32-specialist-fanout.yml
       - name: Require C1-C11 execution readiness
         run: python3 tools/havenline/production/validate_critic_readiness.py

@@ -44,12 +44,14 @@
   "external_blockers_fail_closed": true,
   "governance_only_base_drift_may_reconcile_without_runtime_reset": true,
   "workflow_required_tokens": [
-    "architecture_v32.py",
-    "execution_checkpoint.py",
-    "timeout_stage_plan.py",
-    "critic_package_preflight.py",
-    "blocker_family_gate.py",
-    "rolling_canary.py"
+    "havenline-v32-task-preflight.yml",
+    "mode: preflight",
+    "target: BUILDING_ISOLATED",
+    "candidate:",
+    "mode: failure",
+    "failed_run_id:",
+    "failure()",
+    "actions: read"
   ],
   "specialist_fanout_critics": [
     "C3",
@@ -60,5 +62,11 @@
     "C10",
     "C11"
   ],
-  "performance_ledger_required_when_critic": "C6"
+  "performance_ledger_required_when_critic": "C6",
+  "shared_control_workflow": ".github/workflows/havenline-v32-task-preflight.yml",
+  "specialist_review_tokens": [
+    "mode: review",
+    "evidence_artifact_prefix:",
+    "output_artifact_prefix:"
+  ]
 }

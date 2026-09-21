@@ -13,6 +13,7 @@ from forward_prep_contract import validate as validate_forward_prep
 from v32_forward_prep_harness import validate_all as validate_forward_harness
 from opening_loop_canary import validate as validate_opening_loop
 from external_readiness import evaluate as validate_external_readiness
+from forward_task_control import validate_all as validate_forward_control
 import re
 ROOT=Path(__file__).resolve().parents[3];DOCS=ROOT/'Docs'/'Production'
 def validate_workflows_and_consumption():
@@ -28,7 +29,7 @@ def validate_workflows_and_consumption():
             if not re.fullmatch(r'[0-9a-f]{40}',m.group(2)): errors.append(name+' mutable/unpinned action '+m.group(0))
     if workflows['task_preflight'].exists():
         body=workflows['task_preflight'].read_text()
-        for token in ('architecture_v32.py','task_graduation_gate.py','timeout_stage_plan.py'):
+        for token in ('architecture_v32.py','task_graduation_gate.py','timeout_stage_plan.py','forward_task_control.py','execution_checkpoint.py','critic_package_preflight.py','havenline-v32-specialist-fanout.yml','havenline-c0-root-cause.yml','cancel-in-progress: false'):
             if token not in body: errors.append('task preflight missing '+token)
     if workflows['specialist_fanout'].exists():
         body=workflows['specialist_fanout'].read_text()
@@ -48,7 +49,7 @@ def validate():
     errors=[];components={}
     for n in ('PRODUCTION_ARCHITECTURE_V32_STANDARD.md','PARALLEL_PREPARATION_POLICY.json','EXECUTION_CHECKPOINT_SCHEMA.json','TASK_GRADUATION_POLICY.json','EARLY_CANARY_POLICY.json','CUMULATIVE_PERFORMANCE_LEDGER.json','CRITIC_PACKAGE_PREFLIGHT_POLICY.json','V32_FORWARD_PREP_CONTRACTS.json','V32_FORWARD_PREP_CANARIES.json'):
         if not (DOCS/n).exists(): errors.append('missing '+n)
-    components['parallel_preparation']=prep_plan();components['canaries']=validate_canaries();components['performance_ledger']=validate_performance();components['branch_budget']=validate_branches();components['authority_consistency']=validate_authority();components['forward_prep_contract']=validate_forward_prep();components['forward_prep_harness']=validate_forward_harness();components['opening_loop_canary']=validate_opening_loop();components['external_readiness']=validate_external_readiness();components['workflow_consumption']=validate_workflows_and_consumption()
+    components['parallel_preparation']=prep_plan();components['canaries']=validate_canaries();components['performance_ledger']=validate_performance();components['branch_budget']=validate_branches();components['authority_consistency']=validate_authority();components['forward_prep_contract']=validate_forward_prep();components['forward_prep_harness']=validate_forward_harness();components['opening_loop_canary']=validate_opening_loop();components['external_readiness']=validate_external_readiness();components['forward_task_control']=validate_forward_control();components['workflow_consumption']=validate_workflows_and_consumption()
     for k,v in components.items():
         if not v.get('passed',True): errors += [k+': '+x for x in v.get('errors',[])]
     t11=graduation('T11','ASSIGNED');components['t11_assignment_graduation']=t11
