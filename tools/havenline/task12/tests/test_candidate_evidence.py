@@ -28,6 +28,7 @@ class T12CandidateEvidenceTests(unittest.TestCase):
         source = data["exact_source"]
         source["activation_base"] = "b" * 40
         source["candidate_source"] = candidate
+        source["integration_head"] = "c" * 40
         source["authorized_changed_file_manifest_ref"] = "artifact://authorized-files.json"
         source["shipping_data_hashes"] = {
             "progression_levels_v1_json_sha256": "c" * 64,
