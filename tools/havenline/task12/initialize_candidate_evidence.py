@@ -40,6 +40,7 @@ def initialize_packet(
     *,
     activation_base: str,
     candidate_source: str,
+    integration_head: str,
     levels_sha256: str,
     milestones_sha256: str,
     binding_resolution_sha256: str,
@@ -48,6 +49,7 @@ def initialize_packet(
 ) -> dict[str, Any]:
     activation_base = exact_sha(activation_base, "activation_base")
     candidate_source = exact_sha(candidate_source, "candidate_source")
+    integration_head = exact_sha(integration_head, "integration_head")
     if resolution.get("task_id") != "T12":
         raise ValueError("binding resolution task_id must be T12")
     if resolution.get("status") != "RESOLVED_FOR_ACTIVATION":
@@ -86,6 +88,7 @@ def initialize_packet(
     source = packet["exact_source"]
     source["activation_base"] = activation_base
     source["candidate_source"] = candidate_source
+    source["integration_head"] = integration_head
     source["authorized_changed_file_manifest_ref"] = changed_file_manifest_ref
     source["shipping_data_hashes"] = {
         "progression_levels_v1_json_sha256": levels_sha256,
@@ -126,6 +129,7 @@ def main() -> None:
     ap.add_argument("--binding-resolution", required=True)
     ap.add_argument("--activation-base", required=True)
     ap.add_argument("--candidate", required=True)
+    ap.add_argument("--integration-head", required=True)
     ap.add_argument("--levels", required=True)
     ap.add_argument("--milestones", required=True)
     ap.add_argument("--changed-file-manifest-ref", required=True)
@@ -153,6 +157,7 @@ def main() -> None:
         resolution,
         activation_base=args.activation_base,
         candidate_source=args.candidate,
+        integration_head=args.integration_head,
         levels_sha256=sha256_file(levels_path),
         milestones_sha256=sha256_file(milestones_path),
         binding_resolution_sha256=sha256_file(resolution_path),
