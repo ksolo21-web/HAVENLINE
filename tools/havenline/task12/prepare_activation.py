@@ -414,8 +414,8 @@ def validate_performance_budget_contract(data=None) -> list[str]:
     if fuzz.get("cases") != 250 or fuzz.get("minimum_rejected_mutations") != 250:
         errors.append("fuzz budget must require 250/250 rejected malformed cases")
     mutation_classes = fuzz.get("mutation_classes")
-    if not isinstance(mutation_classes, list) or len(mutation_classes) != 24 or len(set(mutation_classes)) != 24:
-        errors.append("fuzz mutation_classes must contain exactly 24 unique classes")
+    if not isinstance(mutation_classes, list) or len(mutation_classes) != 27 or len(set(mutation_classes)) != 27:
+        errors.append("fuzz mutation_classes must contain exactly 27 unique classes")
     if fuzz.get("deterministic_seed") != 1200:
         errors.append("fuzz deterministic seed drifted")
     if not isinstance(fuzz.get("maximum_total_seconds"), (int, float)) or fuzz.get("maximum_total_seconds") <= 0:
