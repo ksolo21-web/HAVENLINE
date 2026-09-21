@@ -1,4 +1,4 @@
-import hashlib,json,re,sys,tempfile,unittest
+import hashlib,json,re,subprocess,sys,tempfile,unittest
 from pathlib import Path
 
 PROD=Path(__file__).resolve().parents[1]
@@ -11,6 +11,7 @@ import blocker_family_gate
 import branch_budget
 import critic_invalidation
 import critic_package_preflight
+import control_plane_lineage
 import execution_checkpoint
 import forward_prep_contract
 import forward_task_control
@@ -26,9 +27,20 @@ SHA='a'*40
 
 class V32Tests(unittest.TestCase):
  def test_t11_assignment_graduation_is_valid(self):
-  out=task_graduation_gate.evaluate('T11','ASSIGNED')
+  head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+  stale='fbb81ae34b9053f17fc937fb7e67895e3ef0584b'
+  stale_lineage=control_plane_lineage.assess(stale,head)
+  self.assertFalse(stale_lineage['passed'],stale_lineage)
+  self.assertTrue(stale_lineage['control_plane_sync_required'],stale_lineage)
+  self.assertTrue(stale_lineage['governance_only_drift'],stale_lineage)
+  self.assertFalse(stale_lineage['runtime_reset_required'],stale_lineage)
+  stale_gate=task_graduation_gate.evaluate('T11','ASSIGNED',stale,head)
+  self.assertFalse(stale_gate['passed'],stale_gate)
+  self.assertFalse(stale_gate['checks']['control_plane_lineage'],stale_gate)
+  out=task_graduation_gate.evaluate('T11','ASSIGNED',head,head)
   self.assertTrue(out['passed'],out)
-  build=task_graduation_gate.evaluate('T11','BUILDING_ISOLATED')
+  self.assertTrue(out['checks']['control_plane_lineage'],out)
+  build=task_graduation_gate.evaluate('T11','BUILDING_ISOLATED',head,head)
   manifest=ROOT/'Docs/Production/T11/GRADUATION.json'
   self.assertEqual(manifest.exists(),build['passed'],build)
 
@@ -196,12 +208,15 @@ class V32Tests(unittest.TestCase):
     self.assertRegex(ref,r'^[0-9a-f]{40}$',rel)
 
  def test_shared_forward_task_control_is_fail_closed_and_partitions_critics(self):
-  out=forward_task_control.plan('T11','ASSIGNED')
+  head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+  stale=forward_task_control.plan('T11','ASSIGNED',builder='fbb81ae34b9053f17fc937fb7e67895e3ef0584b',integration=head)
+  self.assertFalse(stale['passed'],stale)
+  out=forward_task_control.plan('T11','ASSIGNED',builder=head,integration=head)
   self.assertTrue(out['passed'],out)
   self.assertEqual(['C3','C4'],out['critic_plan']['specialist_fanout'])
   self.assertEqual(['C2'],out['critic_plan']['reference_specific'])
   self.assertEqual(['C6'],out['critic_plan']['deterministic'])
-  blocked=forward_task_control.plan('T11','BUILDING_ISOLATED')
+  blocked=forward_task_control.plan('T11','BUILDING_ISOLATED',builder=head,integration=head)
   self.assertFalse(blocked['passed'])
   self.assertTrue(any('explicit exact candidate SHA' in x for x in blocked['errors']))
   self.assertTrue(forward_task_control.validate_all()['passed'])
