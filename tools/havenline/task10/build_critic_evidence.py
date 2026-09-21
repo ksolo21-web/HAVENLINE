@@ -288,7 +288,8 @@ def main():
         raise SystemExit('critic-input exists; use a fresh evidence workspace')
     shutil.copytree(src, out)
     reports = {}
-    for name in ('domain-tests.json', 'integration-tests.json', 'progression.json'):
+    required_reports = ('domain-tests.json', 'integration-tests.json') if a.affected_only else ('domain-tests.json', 'integration-tests.json', 'progression.json')
+    for name in required_reports:
         report = json.loads((out / name).read_text())
         assert report.get('candidate', report.get('candidate_commit')) == a.candidate, name
         assert report.get('passed') is True, name
