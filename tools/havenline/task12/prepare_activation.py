@@ -9,6 +9,7 @@ edits gameplay/runtime.
 from __future__ import annotations
 
 import argparse
+import fnmatch
 import json
 import pathlib
 import re
@@ -54,22 +55,85 @@ def load(path: pathlib.Path):
     return json.loads(path.read_text())
 
 
-def prefix(pattern: str) -> str:
-    cut = len(pattern)
+def has_glob(segment: str) -> bool:
+    return any(token in segment for token in ("*", "?", "["))
+
+
+def literal_prefix(segment: str) -> str:
+    cut = len(segment)
     for token in ("*", "?", "["):
-        pos = pattern.find(token)
+        pos = segment.find(token)
         if pos >= 0:
             cut = min(cut, pos)
-    return pattern[:cut].rstrip("/")
+    return segment[:cut]
+
+
+def literal_suffix(segment: str) -> str:
+    last = -1
+    for token in ("*", "?", "]"):
+        pos = segment.rfind(token)
+        if pos > last:
+            last = pos
+    return segment[last + 1:] if last >= 0 else segment
+
+
+def segment_patterns_overlap(a: str, b: str) -> bool:
+    if a == b:
+        return True
+    if not has_glob(a):
+        return fnmatch.fnmatchcase(a, b)
+    if not has_glob(b):
+        return fnmatch.fnmatchcase(b, a)
+
+    pa, pb = literal_prefix(a), literal_prefix(b)
+    if pa and pb and not (pa.startswith(pb) or pb.startswith(pa)):
+        return False
+    sa, sb = literal_suffix(a), literal_suffix(b)
+    if sa and sb and not (sa.endswith(sb) or sb.endswith(sa)):
+        return False
+    # The remaining wildcard languages are treated conservatively as possibly
+    # intersecting. This avoids false negatives while still proving common
+    # task-number patterns such as task12-* vs task03-* are disjoint.
+    return True
 
 
 def may_overlap(a: str, b: str) -> bool:
-    if a == b:
-        return True
-    pa, pb = prefix(a), prefix(b)
-    if not pa or not pb:
-        return True
-    return pa == pb or pa.startswith(pb + "/") or pb.startswith(pa + "/")
+    """Return whether two repository glob patterns can match a common path."""
+    a_parts = tuple(part for part in a.strip("/").split("/") if part)
+    b_parts = tuple(part for part in b.strip("/").split("/") if part)
+    memo: dict[tuple[int, int], bool] = {}
+
+    def visit(i: int, j: int) -> bool:
+        key = (i, j)
+        if key in memo:
+            return memo[key]
+        if i == len(a_parts) and j == len(b_parts):
+            memo[key] = True
+            return True
+        if i == len(a_parts):
+            result = all(part == "**" for part in b_parts[j:])
+            memo[key] = result
+            return result
+        if j == len(b_parts):
+            result = all(part == "**" for part in a_parts[i:])
+            memo[key] = result
+            return result
+
+        left, right = a_parts[i], b_parts[j]
+        if left == "**" and right == "**":
+            result = visit(i + 1, j) or visit(i, j + 1)
+        elif left == "**":
+            result = visit(i + 1, j) or visit(i, j + 1)
+        elif right == "**":
+            result = visit(i, j + 1) or visit(i + 1, j)
+        elif segment_patterns_overlap(left, right):
+            result = visit(i + 1, j + 1)
+        else:
+            result = False
+        memo[key] = result
+        return result
+
+    return visit(0, 0)
 
 
 def git_head() -> str:
