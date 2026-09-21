@@ -279,6 +279,7 @@ def main():
     ap = argparse.ArgumentParser()
     ap.add_argument('--candidate', required=True)
     ap.add_argument('--evidence-root', required=True)
+    ap.add_argument('--affected-only', action='store_true')
     a = ap.parse_args()
     assert subprocess.check_output(['git', 'rev-parse', 'HEAD'], cwd=ROOT, text=True).strip() == a.candidate
     src = ROOT / a.evidence_root
@@ -301,6 +302,58 @@ def main():
     perf.update(scene_state='maximum measured across six lifecycle states and six native4K cameras', resolution=capture['capture_resolution'], renderer=capture['renderer'], render_scale=capture['render_scale'], triangles_or_primitives=perf['visible_triangles'], materials={'conservative_upper_bound':perf['materials_visible'],'method':'submitted draw calls bound distinct visible materials, including internal font passes'}, texture_memory_if_measurable=perf['texture_gpu_memory_mb'], cpu_frame_time_if_measurable=None, gpu_frame_time_if_measurable=None, physics_body_count=perf['physics_active_bodies'], animation_count=perf['animated_rigs_active'], population_count=perf['npc_companion_active_population'], process_memory_if_measurable=perf['process_memory_mb'], storage_delta={'tracked_project_mb':perf['storage_download_mb'],'method':'uncompressed tracked project bytes; not a shipping APK estimate'}, measurement_method='Godot rendering/physics monitors at post-draw; ps RSS for exact Godot PID; max across native4K captures; known empty neutral fixture rig/population topology', known_unmeasured_fields={'cpu_frame_time':'capture includes screenshot/file IO; no representative full-game steady-state frame measurement','gpu_frame_time':'software Vulkan capture is not physical GPU timing','physical_certification':'T68/T69 only'})
     perf.update(candidate_commit=a.candidate, scope=capture['performance_scope'], source_manifest_sha256=digest(out / 'native4k/manifest.json'), physical_certification=False)
     (out / 'performance.json').write_text(json.dumps(perf, indent=2) + '\n')
+
+    if a.affected_only:
+        baseline=json.loads((out/'capture/manifest.json').read_text())
+        probe=json.loads((out/'capture/motion-probe.json').read_text())
+        video=next(x for x in probe['streams'] if x['codec_type']=='video')
+        segments=baseline['motion_segments']
+        errors=motion_errors(capture['states'],segments,video)
+        assert not errors,errors
+        timeline={'candidate_commit':a.candidate,'fps':30,'frame_count':int(video['nb_frames']),'duration_seconds':float(video['duration']),'video_sha256':digest(out/'capture/lifecycle.mp4'),'segments':segments,'sample_stride_frames':15,'sample_origin_frame':0,'sample_mapping':[{'file':p.name,'frame':i*15,'seconds':i/2,'state':next((x['state'] for x in segments if x['start_frame']<=i*15<x['end_frame']),'transition')} for i,p in enumerate(sorted((out/'capture').glob('motion-*.png')))]}
+        (out/'motion-timeline.json').write_text(json.dumps(timeline,indent=2)+'\n')
+        shutil.copyfile(ROOT/'Docs/Production/T10/FROZEN_SCOPE.md',out/'FROZEN_SCOPE.md')
+        (out/'scope-brief.txt').write_text(SCOPE_SYNOPSIS)
+        (out/'review-output-contract.txt').write_text(REVIEW_OUTPUT_CONTRACT)
+        context=('Exact source '+a.candidate+'. Executed domain '+str(reports['domain-tests.json']['check_count'])+' and integration '+str(reports['integration-tests.json']['check_count'])+' checks PASS. Real delivered authority/exact debit/replay verified. Four view nodes, one build. READY/BLOCKED/COMPLETE feedback and geometry are fresh exact-SHA captures.\n'
+                 +'30fps video '+str(timeline['frame_count'])+' frames: '+','.join(x['state']+' '+str(x['start_frame'])+'-'+str(x['end_frame']) for x in segments)+'. Motion images sampled every15 frames; full video preserved.\n'
+                 +'C6 and C7 are outside this repair blast radius and are handled by critic-specific preservation proof; this packet is for C1/C2/C3/C4 only.\n')
+        (out/'visual-brief.txt').write_text(context)
+
+        def item(path, category, kind='json', description=''):
+            p = ROOT / path
+            return dict(path=path, category=category, kind=kind, description=description, sha256=digest(p))
+
+        preserved=[item('critic-input/FROZEN_SCOPE.md','preserved_raw','text'),item('critic-input/domain-tests.json','preserved_raw'),item('critic-input/integration-tests.json','preserved_raw'),item('critic-input/device-layout-evidence.json','preserved_raw'),item('critic-input/native4k-evidence.json','preserved_raw'),item('critic-input/performance.json','preserved_raw')]
+        for cid in ('C3','C4'):
+            rows=[item('critic-input/visual-brief.txt','control_state' if cid=='C3' else 'feedback_state','text')]
+            rows += [item('critic-input/native4k/'+state+'-front.png','gameplay_state','image',state+': neutral real-authority fixture') for state in capture['states']]
+            groups=[dict(id='full-lifecycle',items=rows)]
+            frames=sorted((out/'capture').glob('motion-*.png')); assert len(frames)>=12
+            for start in range(0,len(frames),6):
+                groups.append(dict(id='motion-'+str(start),items=[item(str(p.relative_to(ROOT)),'loop_evidence' if cid=='C3' else 'feedback_state','motion_frame','30fps video sampled every15 frames; '+timeline['sample_mapping'][i]['state']+' frame '+str(i*15)) for i,p in enumerate(frames) if start<=i<start+6]))
+            rows=[]
+            for folder in sorted((out/'device-layout').iterdir()):
+                if folder.is_dir():
+                    rows += [item(str((folder/(state+'-front.png')).relative_to(ROOT)),'control_state' if cid=='C3' else 'feedback_state','image',folder.name+' '+state+'; judge actual pixel aspect ratio') for state in ('blocked','complete')]
+            for start in range(0,len(rows),6):
+                groups.append(dict(id='device-readability-'+str(start),items=rows[start:start+6]))
+            for group in groups:
+                group['items'].append(item('critic-input/scope-brief.txt','task_scope','text'))
+                if not any(i['path']=='critic-input/visual-brief.txt' for i in group['items']):
+                    group['items'].append(item('critic-input/visual-brief.txt','control_state' if cid=='C3' else 'feedback_state','text'))
+                group['items'].append(item(REVIEW_OUTPUT_PATH,'task_scope','text',REVIEW_OUTPUT_DESCRIPTION))
+            manifest=dict(schema_version=1,task_id='T10',critic_id=cid,candidate_commit=a.candidate,groups=groups,preserved_sources=preserved,prompt_budget_method='conservative estimate, not tokenizer: 1000 + image2048 + ceil(textchars/2.5) <=4200')
+            errors=validate(manifest)+prompt_errors(manifest)
+            if errors: raise SystemExit('\n'.join(errors))
+            (out/(cid+'-manifest.json')).write_text(json.dumps(manifest,indent=2)+'\n')
+        references=sorted((ROOT/'Docs/Production/T05/ReferenceFrames').glob('*.png')); assert references
+        for cid in ('C1','C2'):
+            manifest={'schema_version':1,'task_id':'T10','critic_id':cid,'candidate_commit':a.candidate,'scope':'T10 neutral transaction framework; T11 final authored camp art and main-loop binding excluded; all critic dimensions and thresholds unchanged','groups':[{'id':'references','items':[item(str(p.relative_to(ROOT)),'reference_lock','image') for p in references]},{'id':'lifecycle','items':[item('critic-input/native4k/'+row['file'],'world_response','image') for row in capture['records']]},{'id':'motion','items':[item('critic-input/motion-timeline.json','motion_timeline')]}],'video':{'path':'critic-input/capture/lifecycle.mp4','sha256':digest(out/'capture/lifecycle.mp4')},'device_manifest_sha256':digest(out/'device-layout-evidence.json')}
+            (out/(cid+'-manifest.json')).write_text(json.dumps(manifest,indent=2)+'\n')
+        index={str(p.relative_to(out)):digest(p) for p in sorted(out.rglob('*')) if p.is_file()}
+        (out/'evidence-index.json').write_text(json.dumps({'candidate':a.candidate,'affected_critics':['C1','C2','C3','C4'],'preserved_critics':['C6','C7'],'files':index},indent=2)+'\n')
+        return
     benchmark=json.loads((out/'benchmark/manifest.json').read_text())
     assert not benchmark_errors(benchmark,a.candidate),benchmark_errors(benchmark,a.candidate)
     perf['steady_state_benchmark']={'path':'critic-input/benchmark/manifest.json','sha256':digest(out/'benchmark/manifest.json'),'physical_certification':False}
