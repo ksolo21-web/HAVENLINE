@@ -2,136 +2,388 @@
   "schema_version": 1,
   "task_id": "T12",
   "status": "PREPARATION_TRACEABILITY_PLAN",
-  "required_critics": ["C2","C3","C4","C6","C7"],
-  "acceptance_rule": {"operator": ">", "threshold": 9.0, "unrounded": true, "target": 10.0, "zero_unresolved_mandatory_defects": true},
+  "required_critics": [
+    "C2",
+    "C3",
+    "C4",
+    "C6",
+    "C7"
+  ],
+  "acceptance_rule": {
+    "operator": ">",
+    "threshold": 9,
+    "unrounded": true,
+    "target": 10,
+    "zero_unresolved_mandatory_defects": true
+  },
   "requirements": [
     {
       "id": "T12-R01",
       "name": "Stable Level 1–100 identity",
-      "prepared_checks": ["validate_level_matrix.py", "validate_progression_contract.py"],
-      "shipping_tests": ["exactly 100 records", "unique stable level IDs", "ordered 1..100 range", "duplicate/missing/out-of-range/cycle rejection"],
-      "required_evidence": ["shipping level manifest", "ID uniqueness report", "graph validation report"],
-      "critics": ["C2","C4","C7"]
+      "prepared_checks": [
+        "validate_level_matrix.py",
+        "validate_progression_contract.py"
+      ],
+      "shipping_tests": [
+        "exactly 100 records",
+        "canonical t12.level.001..100 IDs matching numeric level",
+        "frozen region-band identity matches each level range",
+        "required list/schema fields are present and typed",
+        "duplicate/missing/out-of-range/cycle rejection"
+      ],
+      "required_evidence": [
+        "shipping level manifest",
+        "ID uniqueness report",
+        "graph validation report"
+      ],
+      "critics": [
+        "C2",
+        "C4",
+        "C7"
+      ]
     },
     {
       "id": "T12-R02",
       "name": "Practical progression every level",
-      "prepared_checks": ["LEVEL_1_100_MATRIX.json role/effect coverage", "validate_progression_contract.py non-empty progression_effects"],
-      "shipping_tests": ["all 100 levels declare practical effect/unlock", "counter-only filler rejection"],
-      "required_evidence": ["per-level effect coverage report"],
-      "critics": ["C2","C4"]
+      "prepared_checks": [
+        "LEVEL_1_100_MATRIX.json role/effect coverage",
+        "validate_progression_contract.py practical-effect/filler checks"
+      ],
+      "shipping_tests": [
+        "all 100 levels declare practical effect/unlock",
+        "counter/stat-only filler rejection",
+        "adjacent levels cannot use an identical full progression-effect payload as fake progression"
+      ],
+      "required_evidence": [
+        "per-level effect coverage report"
+      ],
+      "critics": [
+        "C2",
+        "C4"
+      ]
     },
     {
       "id": "T12-R03",
       "name": "Visual-progression cadence contract",
-      "prepared_checks": ["x3/x6/x9/x0 matrix cadence", "matrix mutation tests"],
-      "shipping_tests": ["visible hook gap <= 3 levels", "major milestone every ten-level band or accepted in-band substitution"],
-      "required_evidence": ["visible-progression cadence report", "major milestone report"],
-      "critics": ["C2","C3","C4"]
+      "prepared_checks": [
+        "x3/x6/x9/x0 matrix cadence",
+        "matrix mutation tests"
+      ],
+      "shipping_tests": [
+        "visible hook gap <= 3 levels",
+        "major milestone every ten-level band or accepted in-band substitution"
+      ],
+      "required_evidence": [
+        "visible-progression cadence report",
+        "major milestone report"
+      ],
+      "critics": [
+        "C2",
+        "C3",
+        "C4"
+      ]
     },
     {
       "id": "T12-R04",
       "name": "Connected-world region slots without pre-authoring later regions",
-      "prepared_checks": ["fixed 10-band owner map in LEVEL_1_100_MATRIX.json"],
-      "shipping_tests": ["stable region-band IDs", "T44-T52 ownership retained", "no T44-T52 authored assets in T12 changed-path manifest"],
-      "required_evidence": ["region-band topology report", "changed-path ownership audit"],
-      "critics": ["C2","C4","C7"]
+      "prepared_checks": [
+        "fixed 10-band owner map in LEVEL_1_100_MATRIX.json"
+      ],
+      "shipping_tests": [
+        "stable region-band IDs",
+        "T44-T52 ownership retained",
+        "no T44-T52 authored assets in T12 changed-path manifest"
+      ],
+      "required_evidence": [
+        "region-band topology report",
+        "changed-path ownership audit"
+      ],
+      "critics": [
+        "C2",
+        "C4",
+        "C7"
+      ]
     },
     {
       "id": "T12-R05",
       "name": "Existing-system bindings only",
-      "prepared_checks": ["UPSTREAM_BINDINGS.json", "BINDING_RESOLUTION_TEMPLATE.json", "verify_binding_resolution.py"],
-      "shipping_tests": ["T07/T08/T10/T11 bindings resolve to accepted public IDs/interfaces", "no upstream source mutation", "facts are read-only inputs"],
-      "required_evidence": ["exact binding-resolution proof", "upstream mutation audit", "integration binding tests"],
-      "critics": ["C2","C4","C7"]
+      "prepared_checks": [
+        "UPSTREAM_BINDINGS.json",
+        "BINDING_RESOLUTION_TEMPLATE.json",
+        "verify_binding_resolution.py"
+      ],
+      "shipping_tests": [
+        "T07/T08/T10/T11 bindings resolve to accepted public IDs/interfaces",
+        "no upstream source mutation",
+        "facts are read-only inputs"
+      ],
+      "required_evidence": [
+        "exact binding-resolution proof",
+        "upstream mutation audit",
+        "integration binding tests"
+      ],
+      "critics": [
+        "C2",
+        "C4",
+        "C7"
+      ]
     },
     {
       "id": "T12-R06",
       "name": "Visible upgrade/world-change truth",
-      "prepared_checks": ["visible binding profiles require world/camp completion classes", "concrete unfinished T10/T11 IDs forbidden"],
-      "shipping_tests": ["visible progression bound to accepted real transform/camp-state identity", "hidden stat-only substitution rejection"],
-      "required_evidence": ["transform/camp binding audit", "before/after visible progression evidence where applicable"],
-      "critics": ["C2","C3","C4"]
+      "prepared_checks": [
+        "visible binding profiles require world/camp completion classes",
+        "concrete unfinished T10/T11 IDs forbidden"
+      ],
+      "shipping_tests": [
+        "visible progression bound to accepted real transform/camp-state identity",
+        "hidden stat-only substitution rejection"
+      ],
+      "required_evidence": [
+        "transform/camp binding audit",
+        "before/after visible progression evidence where applicable"
+      ],
+      "critics": [
+        "C2",
+        "C3",
+        "C4"
+      ]
     },
     {
       "id": "T12-R07",
       "name": "Spend-blind progression topology",
-      "prepared_checks": ["forbidden eligibility input guards", "progression-contract mutation tests"],
-      "shipping_tests": ["purchase/VIP/premium-spend inputs rejected or ignored for eligibility", "no energy-wall prerequisite", "no pay-to-unlock path"],
-      "required_evidence": ["spend-blind static audit", "eligibility mutation test results"],
-      "critics": ["C2","C4","C7"]
+      "prepared_checks": [
+        "forbidden eligibility input guards",
+        "progression-contract mutation tests"
+      ],
+      "shipping_tests": [
+        "purchase/VIP/premium-spend inputs rejected or ignored for eligibility",
+        "no energy-wall prerequisite",
+        "no pay-to-unlock path"
+      ],
+      "required_evidence": [
+        "spend-blind static audit",
+        "eligibility mutation test results"
+      ],
+      "critics": [
+        "C2",
+        "C4",
+        "C7"
+      ]
     },
     {
       "id": "T12-R08",
       "name": "Deterministic progression state contract",
-      "prepared_checks": ["RUNTIME_INTERFACE_CONTRACT.json replay/idempotency rules", "runtime-interface mutation tests"],
-      "shipping_tests": ["identical state produces identical eligibility/output", "duplicate fact key no-op", "no duplicate one-time event", "no prerequisite skip"],
-      "required_evidence": ["deterministic replay trace", "duplicate/reorder/idempotency matrix"],
-      "critics": ["C2","C4","C7"]
+      "prepared_checks": [
+        "RUNTIME_INTERFACE_CONTRACT.json replay/idempotency rules",
+        "runtime-interface mutation tests"
+      ],
+      "shipping_tests": [
+        "identical state produces identical eligibility/output",
+        "duplicate fact key no-op",
+        "no duplicate one-time event",
+        "no prerequisite skip"
+      ],
+      "required_evidence": [
+        "deterministic replay trace",
+        "duplicate/reorder/idempotency matrix"
+      ],
+      "critics": [
+        "C2",
+        "C4",
+        "C7"
+      ]
     },
     {
       "id": "T12-R09",
       "name": "Recovery-compatible identifiers",
-      "prepared_checks": ["stable T12 namespace contract", "T14 ownership boundary guard"],
-      "shipping_tests": ["snapshot/restore reconstructs same completed/unlocked state", "already-emitted events do not re-emit", "unknown/impossible IDs fail closed"],
-      "required_evidence": ["stable ID schema report", "T12-local snapshot/reconstruction proof"],
-      "critics": ["C2","C4","C7"]
+      "prepared_checks": [
+        "stable T12 namespace contract",
+        "T14 ownership boundary guard"
+      ],
+      "shipping_tests": [
+        "snapshot/restore reconstructs same completed/unlocked state",
+        "already-emitted events do not re-emit",
+        "unknown/impossible IDs fail closed"
+      ],
+      "required_evidence": [
+        "stable ID schema report",
+        "T12-local snapshot/reconstruction proof"
+      ],
+      "critics": [
+        "C2",
+        "C4",
+        "C7"
+      ]
     },
     {
       "id": "T12-R10",
       "name": "No impossible progression graph",
-      "prepared_checks": ["linear baseline predecessor matrix", "validate_progression_contract.py DAG/reachability checks"],
-      "shipping_tests": ["cycle rejection", "missing target rejection", "unreachable-level rejection", "dead-end/mutually-exclusive mandatory requirement rejection", "valid Level 1->100 chain"],
-      "required_evidence": ["DAG/reachability report", "Level 1->100 path proof"],
-      "critics": ["C2","C4","C7"]
+      "prepared_checks": [
+        "linear baseline predecessor matrix",
+        "validate_progression_contract.py ordered prerequisite/DAG/reachability/milestone-reference checks"
+      ],
+      "shipping_tests": [
+        "cycle rejection",
+        "missing target rejection",
+        "forward prerequisite rejection",
+        "unreachable-level rejection",
+        "unresolved or wrong-level milestone-reference rejection",
+        "dead-end/mutually-exclusive mandatory requirement rejection",
+        "valid Level 1->100 path"
+      ],
+      "required_evidence": [
+        "DAG/reachability report",
+        "Level 1->100 path proof"
+      ],
+      "critics": [
+        "C2",
+        "C4",
+        "C7"
+      ]
     },
     {
       "id": "T12-R11",
       "name": "Clear progression/readability contract",
-      "prepared_checks": ["RUNTIME_INTERFACE_CONTRACT.json concise progression-intent/query outputs", "no new control ownership"],
-      "shipping_tests": ["current level/next objective/milestone data available", "no required RPG tree/management screen", "T07 simple-control regression"],
-      "required_evidence": ["player-readable progression evidence where presentation exists", "adaptive-layout evidence when applicable", "T07 regression"],
-      "critics": ["C2","C3","C4"]
+      "prepared_checks": [
+        "RUNTIME_INTERFACE_CONTRACT.json concise progression-intent/query outputs",
+        "no new control ownership"
+      ],
+      "shipping_tests": [
+        "current level/next objective/milestone data available",
+        "no required RPG tree/management screen",
+        "T07 simple-control regression"
+      ],
+      "required_evidence": [
+        "player-readable progression evidence where presentation exists",
+        "adaptive-layout evidence when applicable",
+        "T07 regression"
+      ],
+      "critics": [
+        "C2",
+        "C3",
+        "C4"
+      ]
     },
     {
       "id": "T12-R12",
       "name": "Performance-bounded evaluation",
-      "prepared_checks": ["runtime interface forbids unchanged per-frame full-graph traversal", "required index/measurement plan"],
-      "shipping_tests": ["bounded cold validation", "bounded single-fact evaluation", "bounded 100-level unlock query", "bounded duplicate replay", "no retained event/object growth", "unchanged-frame stability"],
-      "required_evidence": ["C6 performance record", "evaluation/index metrics", "unchanged-frame CPU/draw evidence as applicable"],
-      "critics": ["C6"]
+      "prepared_checks": [
+        "runtime interface forbids unchanged per-frame full-graph traversal",
+        "required index/measurement plan"
+      ],
+      "shipping_tests": [
+        "bounded cold validation",
+        "bounded single-fact evaluation",
+        "bounded 100-level unlock query",
+        "bounded duplicate replay",
+        "no retained event/object growth",
+        "unchanged-frame stability"
+      ],
+      "required_evidence": [
+        "C6 performance record",
+        "evaluation/index metrics",
+        "unchanged-frame CPU/draw evidence as applicable"
+      ],
+      "critics": [
+        "C6"
+      ]
     },
     {
       "id": "T12-R13",
       "name": "Later-owner boundaries",
-      "prepared_checks": ["RUNTIME_INTERFACE_CONTRACT.json T12_never_owns guard", "runtime authority mutation tests"],
-      "shipping_tests": ["no T13/T14/T15+/T33+/T44-T52 implementation in T12-owned diff", "no monetization or region-authoring scope creep"],
-      "required_evidence": ["changed-path/scope audit", "foreign-owner implementation audit"],
-      "critics": ["C2","C4","C7"]
+      "prepared_checks": [
+        "RUNTIME_INTERFACE_CONTRACT.json T12_never_owns guard",
+        "runtime authority mutation tests"
+      ],
+      "shipping_tests": [
+        "no T13/T14/T15+/T33+/T44-T52 implementation in T12-owned diff",
+        "no monetization or region-authoring scope creep"
+      ],
+      "required_evidence": [
+        "changed-path/scope audit",
+        "foreign-owner implementation audit"
+      ],
+      "critics": [
+        "C2",
+        "C4",
+        "C7"
+      ]
     },
     {
       "id": "T12-R14",
       "name": "Integration-safe shared wiring",
-      "prepared_checks": ["prepare_activation.py path collision checks", "@integration-only collision guard"],
-      "shipping_tests": ["isolated diff remains inside @reservation:T12", "shared wiring performed only by integration owner or approved ChangeRequest"],
-      "required_evidence": ["authorized changed-file manifest", "path-ownership report", "ChangeRequest record if needed"],
-      "critics": ["C2","C4","C7"]
+      "prepared_checks": [
+        "prepare_activation.py path collision checks",
+        "@integration-only collision guard"
+      ],
+      "shipping_tests": [
+        "isolated diff remains inside @reservation:T12",
+        "shared wiring performed only by integration owner or approved ChangeRequest"
+      ],
+      "required_evidence": [
+        "authorized changed-file manifest",
+        "path-ownership report",
+        "ChangeRequest record if needed"
+      ],
+      "critics": [
+        "C2",
+        "C4",
+        "C7"
+      ]
     },
     {
       "id": "T12-R15",
       "name": "Dependency truth",
-      "prepared_checks": ["prepare_activation.py fail-closed dependency checks", "CI deliberate activation rejection while T10/T11 unfinished", "exact binding-resolution gate"],
-      "shipping_tests": ["T07/T08/T10/T11 APPROVED at exact activation base", "T10/T11 completion records present", "T10/T11 stale ownership closed"],
-      "required_evidence": ["exact activation base", "dependency graph/registry/task-gate snapshot", "resolved T10/T11 binding proof"],
-      "critics": ["C2","C4","C7"]
+      "prepared_checks": [
+        "prepare_activation.py fail-closed dependency checks",
+        "CI deliberate activation rejection while T10/T11 unfinished",
+        "exact binding-resolution gate"
+      ],
+      "shipping_tests": [
+        "T07/T08/T10/T11 APPROVED at exact activation base",
+        "T10/T11 completion records present",
+        "T10/T11 stale ownership closed"
+      ],
+      "required_evidence": [
+        "exact activation base",
+        "dependency graph/registry/task-gate snapshot",
+        "resolved T10/T11 binding proof"
+      ],
+      "critics": [
+        "C2",
+        "C4",
+        "C7"
+      ]
     },
     {
       "id": "T12-R16",
       "name": "Acceptance gate",
-      "prepared_checks": ["critic applicability frozen C2/C3/C4/C6/C7", "strict >9.0 unrounded rule", "zero mandatory defect rule"],
-      "shipping_tests": ["G1-G14 pass", "full impacted T01-T11 regression", "all mandatory defects closed", "exact integrated source reviewed"],
-      "required_evidence": ["independent critic records", "C6 quantitative record", "defect closure ledger", "G1-G14 disposition", "integrated regression evidence"],
-      "critics": ["C2","C3","C4","C6","C7"]
+      "prepared_checks": [
+        "critic applicability frozen C2/C3/C4/C6/C7",
+        "strict >9.0 unrounded rule",
+        "zero mandatory defect rule"
+      ],
+      "shipping_tests": [
+        "G1-G14 pass",
+        "full impacted T01-T11 regression",
+        "all mandatory defects closed",
+        "exact integrated source reviewed"
+      ],
+      "required_evidence": [
+        "independent critic records",
+        "C6 quantitative record",
+        "defect closure ledger",
+        "G1-G14 disposition",
+        "integrated regression evidence"
+      ],
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
     }
   ]
 }
