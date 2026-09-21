@@ -73,8 +73,14 @@ def validate_schema(data: dict[str, Any]) -> dict[str, Any]:
             errors.append("level_id contract must freeze the t12.level.NNN namespace")
         if "acyclic" not in str(level_contracts.get("prerequisite_level_ids", "")).lower():
             errors.append("prerequisite contract must explicitly require acyclic topology")
-        if "replay" not in str(level_contracts.get("one_time_event_ids", "")).lower():
+        one_time_contract = str(level_contracts.get("one_time_event_ids", ""))
+        if "replay" not in one_time_contract.lower():
             errors.append("one_time_event_ids contract must retain replay safety")
+        if "t12.event.level.nnn.completed" not in one_time_contract.lower():
+            errors.append("one_time_event_ids contract must freeze canonical level completion event identity")
+        effects_contract = str(level_contracts.get("progression_effects", "")).lower()
+        if "exact full effect payload" not in effects_contract or "fake progression" not in effects_contract:
+            errors.append("progression_effects contract must reject exact-payload filler reuse")
 
     forbidden = set(level.get("forbidden_eligibility_fields", [])) if isinstance(level.get("forbidden_eligibility_fields"), list) else set()
     missing_forbidden = sorted(REQUIRED_FORBIDDEN_KEYS - forbidden)
@@ -97,8 +103,11 @@ def validate_schema(data: dict[str, Any]) -> dict[str, Any]:
     if not isinstance(milestone_contracts, dict) or set(milestone_contracts) != EXPECTED_MILESTONE_FIELDS:
         errors.append("milestone field_contracts must define every and only required milestone field")
     else:
-        if "^t12\\.milestone" not in str(milestone_contracts.get("milestone_id")):
+        milestone_id_contract = str(milestone_contracts.get("milestone_id"))
+        if "^t12\\.milestone" not in milestone_id_contract:
             errors.append("milestone_id contract must freeze t12.milestone namespace")
+        if "t12.milestone.NNN" not in milestone_id_contract:
+            errors.append("milestone_id contract must freeze canonical major milestone identity")
         if "ten-level" not in str(milestone_contracts.get("kind", "")).lower():
             errors.append("milestone kind contract must retain ten-level major cadence")
 
@@ -117,6 +126,37 @@ def validate_schema(data: dict[str, Any]) -> dict[str, Any]:
     for token in REQUIRED_PROMOTION_TOKENS:
         if token not in promotion_blob:
             errors.append(f"shipping promotion rule missing {token!r}")
+
+    shipping_files = data.get("shipping_files")
+    if not isinstance(shipping_files, dict):
+        errors.append("shipping_files must define the two split shipping datasets")
+        shipping_files = {}
+    expected_files = {
+        "progression_levels_v1": (
+            "HavenlineGodot/data/progression_levels_v1.json",
+            {"schema_version", "task_id", "levels"},
+        ),
+        "progression_milestones_v1": (
+            "HavenlineGodot/data/progression_milestones_v1.json",
+            {"schema_version", "task_id", "milestones"},
+        ),
+    }
+    for key, (expected_path, expected_top) in expected_files.items():
+        row = shipping_files.get(key)
+        if not isinstance(row, dict):
+            errors.append(f"shipping_files missing {key}")
+            continue
+        if row.get("path") != expected_path:
+            errors.append(f"{key} path must be {expected_path}")
+        if row.get("schema_version") != 1 or row.get("task_id") != "T12":
+            errors.append(f"{key} must freeze schema_version=1 and task_id=T12")
+        top_fields = set(row.get("required_top_level_fields", [])) if isinstance(row.get("required_top_level_fields"), list) else set()
+        if top_fields != expected_top:
+            errors.append(f"{key} top-level fields drifted: {sorted(top_fields)}")
+    cross_file_rule = str(shipping_files.get("cross_file_rule", "")).lower()
+    for token in ("share schema_version/task_id", "validated together", "--levels", "--milestones"):
+        if token not in cross_file_rule:
+            errors.append(f"shipping_files cross-file rule missing {token!r}")
 
     return {
         "passed": not errors,
