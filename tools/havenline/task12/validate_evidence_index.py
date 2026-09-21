@@ -89,6 +89,8 @@ def required_refs(candidate: dict[str, Any], critics: dict[str, Any]) -> set[str
 
 def validate_index(data: dict[str, Any], *, require_resolved: bool = False, candidate: dict[str, Any] | None = None, critics: dict[str, Any] | None = None) -> dict[str, Any]:
     errors: list[str] = []
+    if data.get("schema_version") != 1:
+        errors.append("schema_version must be 1")
     if data.get("task_id") != "T12":
         errors.append("task_id must be T12")
     expected_status = "EVIDENCE_INDEX_COMPLETE" if require_resolved else "PREPARATION_ONLY_EVIDENCE_INDEX_TEMPLATE"
