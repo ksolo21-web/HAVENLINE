@@ -21,6 +21,8 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v5
@@ -108,7 +110,7 @@ jobs:
       - name: Run T12 progression/preparation unit tests
         run: python -m unittest discover -s tools/havenline/task12/tests -p 'test_*.py' -v
 
-      - name: Prove activation fails closed while T10 or T11 is unfinished
+      - name: Prove activation stays closed before T11 closeout and binding resolution
         shell: bash
         run: |
           set +e
@@ -119,7 +121,7 @@ jobs:
             echo "ERROR: T12 activation unexpectedly passed before all dependencies are approved/integrated."
             exit 1
           fi
-          grep -Eq 'T10|T11|dependency' /tmp/t12-activation.json
+          grep -Eq 'T11|binding reconciliation|dependency' /tmp/t12-activation.json
 
       - name: Confirm shipping T12 runtime is still absent
         run: |
