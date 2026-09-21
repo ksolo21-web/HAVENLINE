@@ -21,10 +21,10 @@
       "region_band_id": "one frozen connected-world band ID owned by T12 topology only",
       "prerequisite_level_ids": "stable T12 level IDs only; level 1 empty; shipping graph acyclic and Level-1 reachable",
       "required_fact_ids": "stable accepted fact/binding IDs; T10/T11 concrete IDs permitted only after resolved activation binding proof",
-      "progression_effects": "non-empty array of practical progression descriptors; no counter/stat-only filler; adjacent levels may reuse structural kinds but may not ship an identical full effect payload as fake progression",
+      "progression_effects": "non-empty array of practical progression descriptors; no counter/stat-only filler; exact full effect payload may not be reused on another level as fake progression",
       "visible_progression_hook_ids": "array of stable visible-change hook IDs; cadence validated independently",
       "milestone_ids": "array of stable T12 milestone IDs that resolve in milestone data",
-      "one_time_event_ids": "globally unique stable T12 progression-event IDs; replay-safe/idempotent"
+      "one_time_event_ids": "globally unique stable T12 progression-event IDs; every level includes canonical t12.event.level.NNN.completed; replay-safe/idempotent"
     },
     "forbidden_eligibility_fields": [
       "purchase_history",
@@ -58,7 +58,7 @@
       "owner_task"
     ],
     "field_contracts": {
-      "milestone_id": "stable unique string matching ^t12\\.milestone\\.[a-z0-9_.-]+$",
+      "milestone_id": "stable unique string in ^t12\\.milestone\\.[a-z0-9_.-]+$ namespace; major milestone at level N uses exact t12.milestone.NNN",
       "level": "integer 1..100 resolving to a shipping level",
       "kind": "major or minor; every ten-level boundary has a major milestone unless a separately accepted exception stays within that band",
       "progression_hook_ids": "stable hook IDs only",
@@ -67,7 +67,12 @@
     }
   },
   "shipping_manifest": {
-    "required_top_level_fields": ["schema_version", "task_id", "levels", "milestones"],
+    "required_top_level_fields": [
+      "schema_version",
+      "task_id",
+      "levels",
+      "milestones"
+    ],
     "exact_level_count": 100,
     "required_task_id": "T12",
     "promotion_requires": [
@@ -81,5 +86,28 @@
   "notes": [
     "This schema freezes structure, not final gameplay content, prices, difficulty, region assets or unfinished upstream IDs.",
     "Any accepted upstream interface conflict blocks activation or requires a structured ChangeRequest; it is never guessed around."
-  ]
+  ],
+  "shipping_files": {
+    "progression_levels_v1": {
+      "path": "HavenlineGodot/data/progression_levels_v1.json",
+      "required_top_level_fields": [
+        "schema_version",
+        "task_id",
+        "levels"
+      ],
+      "schema_version": 1,
+      "task_id": "T12"
+    },
+    "progression_milestones_v1": {
+      "path": "HavenlineGodot/data/progression_milestones_v1.json",
+      "required_top_level_fields": [
+        "schema_version",
+        "task_id",
+        "milestones"
+      ],
+      "schema_version": 1,
+      "task_id": "T12"
+    },
+    "cross_file_rule": "Both files must share schema_version/task_id and must be composed and validated together by validate_progression_contract.py --levels ... --milestones ... before runtime use or final disposition."
+  }
 }
