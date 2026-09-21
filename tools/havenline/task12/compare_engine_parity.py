@@ -27,8 +27,14 @@ EXPECTED_RESULT_FIELDS = {
 
 def compare(actual: dict[str, Any], vectors: dict[str, Any], schema: dict[str, Any]) -> dict[str, Any]:
     errors: list[str] = []
+    if schema.get("schema_version") != 1:
+        errors.append("engine parity output schema_version must be 1")
     if schema.get("task_id") != "T12" or schema.get("status") != "PREPARATION_ONLY_EVIDENCE_SCHEMA":
         errors.append("engine parity output schema identity/status drifted")
+    if vectors.get("schema_version") != 1:
+        errors.append("engine test vectors schema_version must be 1")
+    if vectors.get("task_id") != "T12" or vectors.get("status") != "PREPARATION_ONLY_TEST_VECTORS":
+        errors.append("engine test vectors identity/status drifted")
     if set(schema.get("vector_result_required_fields", [])) != EXPECTED_RESULT_FIELDS:
         errors.append("engine parity output required vector fields drifted")
 
