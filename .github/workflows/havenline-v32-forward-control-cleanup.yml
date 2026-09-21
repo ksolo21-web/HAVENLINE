@@ -1,0 +1,47 @@
+name: Havenline V3.2 forward-control stale ref cleanup
+
+on:
+  push:
+    branches:
+      - codex/havenline-sequential-task-01
+    paths:
+      - .github/workflows/havenline-v32-forward-control-cleanup.yml
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Revalidate and delete forward-control ref
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          BRANCH='havenline/governance-v32-forward-control-plane'
+          SHA='f4f50d4a756f112ab4107635e2359a4582d43e18'
+          git fetch --no-tags origin codex/havenline-sequential-task-01
+          gh api "/repos/$GITHUB_REPOSITORY/pulls?state=open&per_page=100" > /tmp/open-pulls.json
+          python3 - <<'PY'
+          import json
+          branch='havenline/governance-v32-forward-control-plane'
+          for pr in json.load(open('/tmp/open-pulls.json')):
+              assert (pr.get('head') or {}).get('ref') != branch
+              assert (pr.get('base') or {}).get('ref') != branch
+          PY
+          current=$(git ls-remote --heads origin "$BRANCH" | cut -f1)
+          if [ -z "$current" ]; then
+            echo "already absent"
+            exit 0
+          fi
+          test "$current" = "$SHA"
+          git merge-base --is-ancestor "$SHA" origin/codex/havenline-sequential-task-01
+          git push origin --delete "$BRANCH"
+          ! git ls-remote --exit-code --heads origin "$BRANCH" >/dev/null 2>&1
