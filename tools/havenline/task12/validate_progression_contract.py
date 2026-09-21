@@ -237,6 +237,16 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
     if missing_numbers:
         errors.append(f"missing level numbers: {missing_numbers}")
 
+    # Every shipping level must carry a genuinely distinct practical descriptor.
+    # Structural effect kinds may repeat, but two adjacent levels may not ship the
+    # exact same effect payload and masquerade as separate progression.
+    for level in range(2, 101):
+        if level in effect_signatures and level - 1 in effect_signatures:
+            if effect_signatures[level] == effect_signatures[level - 1]:
+                errors.append(
+                    f"levels {level - 1} and {level}: duplicate progression_effects payload is counter-only/filler progression"
+                )
+
     # Stable prerequisite graph checks.
     graph: dict[str, list[str]] = defaultdict(list)
     indegree: dict[str, int] = {level_id: 0 for level_id in id_to_number}
@@ -244,17 +254,23 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
         level_id = row.get("level_id")
         if not isinstance(level_id, str) or level_id not in id_to_number:
             continue
-        prereqs = row.get("prerequisite_level_ids", [])
-        if not isinstance(prereqs, list):
-            continue
+        prereqs = as_list(row.get("prerequisite_level_ids"))
         if level == 1 and prereqs:
             errors.append("level 1 must not require another level")
         for prereq_id in prereqs:
+            if not isinstance(prereq_id, str) or not prereq_id:
+                continue
             if prereq_id not in id_to_number:
                 errors.append(f"level {level}: prerequisite target does not exist: {prereq_id}")
                 continue
             if prereq_id == level_id:
                 errors.append(f"level {level}: self prerequisite is forbidden")
+                continue
+            prereq_level = id_to_number[prereq_id]
+            if prereq_level >= level:
+                errors.append(
+                    f"level {level}: prerequisite {prereq_id} is not earlier in the ordered progression"
+                )
             graph[prereq_id].append(level_id)
             indegree[level_id] = indegree.get(level_id, 0) + 1
 
