@@ -29,10 +29,22 @@ def valid_manifest() -> dict[str, Any]:
     for n in range(1, 101):
         level_id = f"t12.level.{n:03d}"
         visible = n % 10 in (0, 3, 6, 9)
+        band_id = (
+            "band_opening_frozen",
+            "band_forest",
+            "band_desert",
+            "band_underwater",
+            "band_sky",
+            "band_volcanic",
+            "band_swamp",
+            "band_ruins",
+            "band_underground",
+            "band_alien",
+        )[(n - 1) // 10]
         levels.append({
             "level": n,
             "level_id": level_id,
-            "region_band_id": f"prepared.band.{(n - 1) // 10 + 1:02d}",
+            "region_band_id": band_id,
             "prerequisite_level_ids": [] if n == 1 else [f"t12.level.{n - 1:03d}"],
             "required_fact_ids": [],
             "progression_effects": [{"kind": "prepared_fixture", "id": f"prepared.effect.{n:03d}"}],
@@ -109,6 +121,43 @@ def mutate_provisional_id(m: dict[str, Any], rng: random.Random) -> None:
     m["levels"][rng.randrange(100)]["visible_progression_hook_ids"] = ["t10_provisional:should_never_ship"]
 
 
+def mutate_noncanonical_level_id(m: dict[str, Any], rng: random.Random) -> None:
+    idx = rng.randrange(100)
+    m["levels"][idx]["level_id"] = f"level_{idx + 1:03d}"
+
+
+def mutate_wrong_region_band(m: dict[str, Any], rng: random.Random) -> None:
+    idx = rng.randrange(100)
+    m["levels"][idx]["region_band_id"] = "band_wrong"
+
+
+def mutate_missing_required_field(m: dict[str, Any], rng: random.Random) -> None:
+    idx = rng.randrange(100)
+    del m["levels"][idx]["required_fact_ids"]
+
+
+def mutate_forward_prerequisite(m: dict[str, Any], rng: random.Random) -> None:
+    idx = rng.randrange(1, 99)
+    m["levels"][idx]["prerequisite_level_ids"] = [f"t12.level.{idx + 2:03d}"]
+
+
+def mutate_duplicate_effect_payload(m: dict[str, Any], rng: random.Random) -> None:
+    idx = rng.randrange(1, 100)
+    m["levels"][idx]["progression_effects"] = json.loads(
+        json.dumps(m["levels"][idx - 1]["progression_effects"])
+    )
+
+
+def mutate_unresolved_milestone_reference(m: dict[str, Any], rng: random.Random) -> None:
+    boundary = rng.choice(list(range(10, 101, 10)))
+    m["levels"][boundary - 1]["milestone_ids"] = ["t12.milestone.missing"]
+
+
+def mutate_invalid_milestone_shape(m: dict[str, Any], rng: random.Random) -> None:
+    idx = rng.randrange(len(m["milestones"]))
+    m["milestones"][idx]["visible_change_required"] = "yes"
+
+
 MUTATIONS: dict[str, Callable[[dict[str, Any], random.Random], None]] = {
     "missing_level": mutate_missing_level,
     "duplicate_level_id": mutate_duplicate_level_id,
@@ -122,6 +171,13 @@ MUTATIONS: dict[str, Callable[[dict[str, Any], random.Random], None]] = {
     "spend_gate": mutate_spend_gate,
     "energy_gate": mutate_energy_gate,
     "provisional_upstream_id": mutate_provisional_id,
+    "noncanonical_level_id": mutate_noncanonical_level_id,
+    "wrong_region_band": mutate_wrong_region_band,
+    "missing_required_field": mutate_missing_required_field,
+    "forward_prerequisite": mutate_forward_prerequisite,
+    "duplicate_effect_payload": mutate_duplicate_effect_payload,
+    "unresolved_milestone_reference": mutate_unresolved_milestone_reference,
+    "invalid_milestone_shape": mutate_invalid_milestone_shape,
 }
 
 
