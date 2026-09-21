@@ -163,6 +163,8 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
             text+="- Use `critic_invalidation.py` to preserve unchanged same-SHA critic passes; a source-SHA change still requires fresh exact-source review where V3/V3.1 require it.\n"
             text+=f"- Rolling prevention canaries: `python3 tools/havenline/production/rolling_canary.py requirements {task_id}`.\n"
             text+="- Record cumulative workload pressure with `performance_ledger.py`; C6 quality scores cannot waive performance budgets or reserved headroom.\n"
+            text+="- After a deterministic/source-bound gate PASS, stage a content-addressed proof record with `gate_result_recorder.py proposal`; CI cannot promote it. Only the integration owner may apply a verified proposal into `GATE_RESULT_INDEX.json`.\n"
+            text+="- C0 automatically stages unverified failure-learning proposals. They remain advisory/non-authoritative until a verified post-repair proof plus explicit integration-owner disposition promotes one into `FAILURE_INTELLIGENCE.json`.\n"
             text+="- Parallel preparation of later tasks is encouraged only inside GREEN/YELLOW boundaries; it never grants integration or approval.\n"
     text+="""
 

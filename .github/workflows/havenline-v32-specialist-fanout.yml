@@ -17,6 +17,9 @@ on:
 permissions:
   contents: read
   actions: read
+concurrency:
+  group: havenline-v32-independent-specialist-batch
+  cancel-in-progress: false
 jobs:
   specialist:
     strategy:

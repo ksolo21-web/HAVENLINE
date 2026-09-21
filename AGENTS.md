@@ -173,6 +173,9 @@ For T11+ run `python3 tools/havenline/production/architecture_v32.py readiness T
 - Applicable specialist critics fan out on one frozen SHA. Use `critic_invalidation.py` so same-SHA unaffected critics remain valid; changed source SHA still requires fresh exact-source review.
 - Run rolling canaries early and maintain cumulative performance headroom. Early canaries never replace T32/T55/T58/T62/T68/T69 formal acceptance.
 - Branch budget: one authoritative task branch plus at most one active bounded repair branch; prototypes are disposable.
+- Every task workflow stages eligible PASS proof with `gate_result_recorder.py proposal`. CI has read-only repository authority; only the integration owner may promote a validated proposal into `GATE_RESULT_INDEX.json`.
+- C0 stages unverified failure-learning proposals automatically. A lesson enters durable `FAILURE_INTELLIGENCE.json` only after verified causal repair/full regression/unchanged thresholds and explicit integration-owner promotion.
+- Independent critic capacity is one queued task-level review batch enforced by `havenline-v32-independent-specialist-batch`; specialist critics inside the active batch still fan out in parallel. Never fake reviewer capacity with self-review.
 - Preserve the strict >9.0 unrounded quality rule, target 10/10, zero unresolved mandatory defects. V3.2 improves throughput, never lowers quality.
 
 ## Controlled parallel-production rule

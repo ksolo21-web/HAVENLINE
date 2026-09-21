@@ -204,6 +204,8 @@ jobs:
           git ls-remote --heads origin 'refs/heads/havenline/T*' | awk '{print $2}' | sed 's#refs/heads/##' | jq -R -s 'split("\n") | map(select(length > 0))' > /tmp/v32-remote-branches.json
           python3 tools/havenline/production/branch_budget.py --inventory /tmp/v32-remote-branches.json > /tmp/v32-branches.json
           python3 tools/havenline/production/forward_task_control.py validate > /tmp/v32-forward-control-validation.json
+          python3 tools/havenline/production/gate_result_recorder.py validate > /tmp/v32-gate-result-recording.json
+          python3 tools/havenline/production/failure_learning.py validate > /tmp/v32-failure-learning.json
           python3 tools/havenline/production/forward_task_control.py plan T11 --target ASSIGNED --inventory /tmp/v32-remote-branches.json --output /tmp/v32-forward-control-T11.json > /tmp/v32-forward-control-T11.stdout
           python3 tools/havenline/production/v32_forward_prep_harness.py validate > /tmp/v32-forward-harness.json
           python3 tools/havenline/production/v32_forward_prep_harness.py fixture progression > /tmp/v32-progression-fixture.json
@@ -227,6 +229,8 @@ jobs:
           jq -e '.passed == true' /tmp/v32-performance.json
           jq -e '.passed == true and .details.inventory_checked == true' /tmp/v32-branches.json
           jq -e '.passed == true and .task_count == 60' /tmp/v32-forward-control-validation.json
+          jq -e '.passed == true and .owner_promotion_required == true and .ci_repo_write_required == false' /tmp/v32-gate-result-recording.json
+          jq -e '.passed == true and .automatic_staging == true and .automatic_promotion == false and .owner_promotion_required == true' /tmp/v32-failure-learning.json
           jq -e '.passed == true and .task_id == "T11" and .target == "ASSIGNED" and .quality_thresholds_unchanged == true' /tmp/v32-forward-control-T11.json
           jq -e '.passed == true and .domain_count >= 12' /tmp/v32-forward-harness.json
           jq -e '.passed == true' /tmp/v32-progression-fixture.json
@@ -246,6 +250,10 @@ jobs:
           grep -q 'critic_package_preflight.py' .github/workflows/havenline-v32-task-preflight.yml
           grep -q 'havenline-v32-specialist-fanout.yml' .github/workflows/havenline-v32-task-preflight.yml
           grep -q 'havenline-c0-root-cause.yml' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'gate_result_recorder.py' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'havenline-v32-independent-specialist-batch' .github/workflows/havenline-v32-specialist-fanout.yml
+          grep -q 'failure_learning.py propose' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'failure-learning-after-c0' .github/workflows/havenline-v32-task-preflight.yml
           grep -q 'cancel-in-progress: false' .github/workflows/havenline-v32-task-preflight.yml
           grep -q 'fail-fast: false' .github/workflows/havenline-v32-specialist-fanout.yml
       - name: Require C1-C11 execution readiness
