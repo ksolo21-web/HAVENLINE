@@ -63,11 +63,12 @@ class T12EvidenceIndexTests(unittest.TestCase):
         data = copy.deepcopy(self.template)
         data["status"] = "EVIDENCE_INDEX_COMPLETE"
         data["candidate_source"] = self.candidate_sha
-        refs = sorted(validator.required_refs(candidate, critics))
+        categories = validator.required_ref_categories(candidate, critics)
+        refs = sorted(categories)
         data["entries"] = [
             {
                 "artifact_id": f"artifact-{index:03d}",
-                "category": "static_report",
+                "category": next(iter(categories[uri])),
                 "uri": uri,
                 "sha256": f"{index + 1:064x}",
                 "candidate_source": self.candidate_sha,
@@ -150,6 +151,21 @@ class T12EvidenceIndexTests(unittest.TestCase):
         result = validator.validate_index(index, require_resolved=True, candidate=candidate, critics=critics)
         self.assertFalse(result["passed"])
         self.assertTrue(any("schema_version" in error for error in result["errors"]))
+
+
+    def test_wrong_evidence_category_fails(self):
+        candidate = self.candidate()
+        critics = self.critics()
+        index = self.resolved_index(candidate, critics)
+        target = next(
+            row for row in index["entries"]
+            if row["uri"] == "artifact://changed-files.json"
+        )
+        target["category"] = "static_report"
+        result = validator.validate_index(index, require_resolved=True, candidate=candidate, critics=critics)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("category mismatch" in error for error in result["errors"]))
+
 
 
 if __name__ == "__main__":
