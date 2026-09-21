@@ -113,7 +113,7 @@ func configure_camera(angle: String) -> void:
 			camera.look_at(Vector3(0.0, 1.45, 0.0), Vector3.UP)
 
 func _foundation_receipt() -> Dictionary:
-	var intent := engine.commit_transform(
+	var intent: Dictionary = engine.commit_transform(
 		"capture-foundation-bootstrap",
 		"framework_anchor_seed_to_foundation",
 		"camp-review",
@@ -177,7 +177,7 @@ func build_state(state: String) -> bool:
 		)
 		match state:
 			"reinforced_blocked":
-				var blocked := engine.preview_transform(
+				var blocked: Dictionary = engine.preview_transform(
 					"framework_anchor_foundation_to_reinforced",
 					"camp-review",
 					INVENTORY
