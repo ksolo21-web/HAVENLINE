@@ -403,13 +403,41 @@ def validate_activation(base: str):
             errors.append(f"dependency {dep} missing from task-gates approved_tasks")
 
     completed = gates.get("completed_task_records", {})
+    dependency_sources: dict[str, str] = {}
     for dep in ("T10", "T11"):
-        if dep not in completed:
+        record = completed.get(dep)
+        if not isinstance(record, dict):
             errors.append(f"{dep} has no completed_task_records entry in task-gates")
+            continue
+        if str(record.get("status", "")).upper() != "APPROVED":
+            errors.append(f"{dep} completed_task_records status is not APPROVED")
+        source = completion_source(record)
+        if source is None:
+            errors.append(f"{dep} completed_task_records has no exact accepted/integrated source")
+            continue
+        dependency_sources[dep] = source
+        if not git_is_ancestor(source, head):
+            errors.append(f"{dep} accepted/integrated source {source} is not an ancestor of activation head {head}")
 
-    stale_owners = [x for x in ownership.get("active_owners", []) if x.get("task_id") in ("T10", "T11")]
+        owner_row = next(
+            (x for x in ownership.get("completed_production_owners", []) if x.get("task_id") == dep),
+            None,
+        )
+        if not isinstance(owner_row, dict) or owner_row.get("status") != "APPROVED":
+            errors.append(f"{dep} is missing an APPROVED completed production owner record")
+        else:
+            owner_source = owner_row.get("integrated_source") or owner_row.get("accepted_source")
+            if owner_source != source:
+                errors.append(
+                    f"{dep} completed production owner source {owner_source!r} does not match task-gates source {source!r}"
+                )
+
+    stale_owners = [
+        x for x in ownership.get("active_owners", [])
+        if x.get("task_id") in set(checklist["dependencies"])
+    ]
     if stale_owners:
-        errors.append("T10/T11 still listed as active owners; finish closeout before T12 activation")
+        errors.append("a T12 dependency is still listed as an active owner; finish closeout before T12 activation")
 
     if graph.get("tasks", {}).get("T12", {}).get("status") not in ("LOCKED", "PREPARED"):
         errors.append(f"unexpected pre-activation T12 graph state: {graph.get('tasks', {}).get('T12', {}).get('status')}")
@@ -423,6 +451,8 @@ def validate_activation(base: str):
             "--resolution",
             str(RESOLUTION_PATH),
             "--require-resolved",
+            "--activation-head",
+            base,
         ])
         if not binding_resolution_passed:
             errors.append("T10/T11 exact binding reconciliation failed: " + output)
@@ -490,6 +520,7 @@ def validate_activation(base: str):
         "prebuild_benchmark_passed": prebuild_benchmark_passed,
         "shipping_c6_satisfied_by_prebuild_benchmark": False,
         "binding_resolution_passed": binding_resolution_passed,
+        "dependency_accepted_sources": dependency_sources,
         "reservation_patch": {
             "alias": checklist["planned_owned_alias"],
             "paths": checklist["planned_owned_paths"]
