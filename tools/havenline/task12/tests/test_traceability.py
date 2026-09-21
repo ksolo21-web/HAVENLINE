@@ -81,5 +81,11 @@ class T12TraceabilityTests(unittest.TestCase):
         self.assertTrue(any("strictly >9.0" in error for error in result["errors"]))
 
 
+    def test_rejects_schema_version_drift(self):
+        result = self.validate(lambda trace: trace.__setitem__("schema_version", 2))
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("schema_version" in error for error in result["errors"]))
+
+
 if __name__ == "__main__":
     unittest.main()
