@@ -192,18 +192,6 @@ jobs:
             --packet c0-input/failure-packet.json \
             --out c0-output
 
-      - name: Stage unverified failure-learning proposals
-        if: always()
-        run: |
-          set -euo pipefail
-          if [ -f tools/havenline/production/failure_learning.py ] && [ -f c0-output/c0-report.json ]; then
-            python3 tools/havenline/production/failure_learning.py propose \
-              --c0 c0-output/c0-report.json \
-              --output c0-output/failure-learning-proposals.json
-          else
-            printf '%s\n' '{"schema_version":1,"availability":"candidate_predates_failure_learning","automatic_promotion":false,"approval_authority_granted":false}' > c0-output/failure-learning-proposals.json
-          fi
-
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:

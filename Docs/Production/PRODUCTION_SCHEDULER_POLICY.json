@@ -29,38 +29,10 @@
     "external_block_penalty": 100,
     "missing_packet_penalty": 10
   },
-  "tie_break_order": [
-    "higher_priority_score",
-    "lower_task_number"
-  ],
+  "tie_break_order": ["higher_priority_score", "lower_task_number"],
   "resource_classes": {
-    "independent_critic": [
-      "C1",
-      "C2",
-      "C3",
-      "C4",
-      "C5",
-      "C7",
-      "C8",
-      "C10",
-      "C11"
-    ],
-    "physical_certification": [
-      "T68",
-      "T69"
-    ],
-    "integration": [
-      "INTEGRATION_READY",
-      "INTEGRATING"
-    ]
-  },
-  "critic_capacity": {
-    "unit": "task_level_independent_review_batch",
-    "slots": 1,
-    "enforcement": "GitHub Actions concurrency group havenline-v32-independent-specialist-batch",
-    "within_batch_parallel_specialists": true,
-    "cancel_in_progress": false,
-    "scheduler_role": "advisory; Actions concurrency is runtime queue authority",
-    "no_independence_simulation": true
+    "independent_critic": ["C1", "C2", "C3", "C4", "C5", "C7", "C8", "C10", "C11"],
+    "physical_certification": ["T68", "T69"],
+    "integration": ["INTEGRATION_READY", "INTEGRATING"]
   }
 }

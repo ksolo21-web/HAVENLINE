@@ -177,3 +177,35 @@ jobs:
       failed_run_id: ${{ inputs.failed_run_id }}
       failed_candidate: ${{ inputs.candidate }}
     secrets: inherit
+
+  failure-learning-after-c0:
+    if: >-
+      always() &&
+      (needs.automatic-c0.result == 'success' || needs.failure-router.result == 'success') &&
+      inputs.candidate != ''
+    needs: [automatic-c0, failure-router]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ inputs.candidate }}
+          fetch-depth: 0
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-C0-${{ inputs.task_id }}-${{ inputs.candidate }}-${{ github.run_id }}
+          path: c0-learning
+      - name: Stage unverified failure-learning proposals from returned C0
+        run: |
+          set -euo pipefail
+          test -s c0-learning/c0-output/c0-report.json
+          python3 tools/havenline/production/failure_learning.py propose \
+            --c0 c0-learning/c0-output/c0-report.json \
+            --output failure-learning-proposals.json
+          python3 tools/havenline/production/failure_learning.py validate-proposals failure-learning-proposals.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-failure-learning-${{ inputs.task_id }}-${{ inputs.candidate }}-${{ github.run_id }}
+          path: failure-learning-proposals.json
+          retention-days: 30
+          if-no-files-found: error

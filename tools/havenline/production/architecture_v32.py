@@ -43,8 +43,8 @@ def validate_workflows_and_consumption():
     for token in ('Production Architecture V3.2','task_graduation_gate.py','execution_checkpoint.py','blocker_family_gate.py','critic_invalidation.py'):
         if token not in packet: errors.append('task packet consumption missing '+token)
     if 'Production Architecture V3.2 parallel/resumable rule' not in agents: errors.append('AGENTS missing V3.2 mandatory rule')
-    c0_workflow=(ROOT/'.github/workflows/havenline-c0-root-cause.yml').read_text()
-    if 'failure_learning.py propose' not in c0_workflow: errors.append('C0 workflow missing failure-learning staging')
+    shared_control=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
+    if 'failure_learning.py propose' not in shared_control or 'failure-learning-after-c0' not in shared_control: errors.append('shared control missing post-C0 failure-learning staging')
     fi=json.loads((DOCS/'FAILURE_INTELLIGENCE.json').read_text());ids={x.get('id') for x in fi.get('records',[])}
     for rid in ('FI-T10-001','FI-T10-002','FI-T10-003','FI-T10-004','FI-T10-005','FI-T10-006'):
         if rid not in ids: errors.append('missing promoted T10 lesson '+rid)

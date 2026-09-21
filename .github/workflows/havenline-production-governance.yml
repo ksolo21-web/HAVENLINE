@@ -252,7 +252,8 @@ jobs:
           grep -q 'havenline-c0-root-cause.yml' .github/workflows/havenline-v32-task-preflight.yml
           grep -q 'gate_result_recorder.py' .github/workflows/havenline-v32-task-preflight.yml
           grep -q 'havenline-v32-independent-specialist-batch' .github/workflows/havenline-v32-specialist-fanout.yml
-          grep -q 'failure_learning.py propose' .github/workflows/havenline-c0-root-cause.yml
+          grep -q 'failure_learning.py propose' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'failure-learning-after-c0' .github/workflows/havenline-v32-task-preflight.yml
           grep -q 'cancel-in-progress: false' .github/workflows/havenline-v32-task-preflight.yml
           grep -q 'fail-fast: false' .github/workflows/havenline-v32-specialist-fanout.yml
       - name: Require C1-C11 execution readiness

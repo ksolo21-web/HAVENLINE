@@ -264,11 +264,18 @@ class V32Tests(unittest.TestCase):
 
  def test_specialist_capacity_is_one_batch_with_parallel_within_batch(self):
   policy=json.loads((ROOT/'Docs/Production/PRODUCTION_SCHEDULER_POLICY.json').read_text())
-  cap=policy['critic_capacity'];self.assertEqual(1,cap['slots']);self.assertTrue(cap['within_batch_parallel_specialists'])
+  self.assertEqual(1,policy['wip']['independent_critic_runtime_slots'])
   body=(ROOT/'.github/workflows/havenline-v32-specialist-fanout.yml').read_text()
   self.assertIn('havenline-v32-independent-specialist-batch',body)
   self.assertIn('fail-fast: false',body)
   self.assertIn('cancel-in-progress: false',body)
+
+ def test_shared_control_stages_learning_after_existing_c0_without_mutating_c0_workflow(self):
+  body=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
+  self.assertIn('failure-learning-after-c0',body)
+  self.assertIn('failure_learning.py propose',body)
+  base=(ROOT/'.github/workflows/havenline-c0-root-cause.yml').read_text()
+  self.assertNotIn('failure_learning.py propose',base)
 
  def test_full_v32_validator(self):
   out=architecture_v32.validate()
