@@ -36,6 +36,10 @@ def validate_manifest(path,candidate=None,critic=None):
                     data=fp.read_bytes()
                     if item.get('kind')=='text' and len(data)>lim['text_item_bytes_max']: errors.append('text item too large '+rel)
                     if h and hashlib.sha256(data).hexdigest()!=h: errors.append('hash mismatch '+rel)
+                elif item.get('external_uri'):
+                    if not h: errors.append('external evidence must be SHA-256 bound '+rel)
+                else:
+                    errors.append('evidence file missing '+rel)
     rc=m.get('response_contract')
     if rc:
         for field,cap in [('observations_max','response_observations_max'),('observation_chars_max','response_observation_chars_max'),('defects_max','response_defects_max'),('defect_chars_max','response_defect_chars_max'),('completion_tokens_max','response_completion_tokens_max')]:
