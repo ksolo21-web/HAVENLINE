@@ -480,12 +480,69 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def load_split_manifest(levels_path: pathlib.Path, milestones_path: pathlib.Path) -> dict[str, Any]:
+    levels_data = json.loads(levels_path.read_text())
+    milestones_data = json.loads(milestones_path.read_text())
+
+    if isinstance(levels_data, list):
+        levels = levels_data
+        levels_schema = 1
+        levels_task = "T12"
+    elif isinstance(levels_data, dict):
+        levels = levels_data.get("levels")
+        levels_schema = levels_data.get("schema_version")
+        levels_task = levels_data.get("task_id")
+    else:
+        raise ValueError("levels file must be a list or object")
+
+    if isinstance(milestones_data, list):
+        milestones = milestones_data
+        milestones_schema = 1
+        milestones_task = "T12"
+    elif isinstance(milestones_data, dict):
+        milestones = milestones_data.get("milestones")
+        milestones_schema = milestones_data.get("schema_version")
+        milestones_task = milestones_data.get("task_id")
+    else:
+        raise ValueError("milestones file must be a list or object")
+
+    if levels_schema != milestones_schema:
+        raise ValueError(
+            f"split progression schema_version mismatch: levels={levels_schema!r} milestones={milestones_schema!r}"
+        )
+    if levels_task != milestones_task:
+        raise ValueError(
+            f"split progression task_id mismatch: levels={levels_task!r} milestones={milestones_task!r}"
+        )
+
+    return {
+        "schema_version": levels_schema,
+        "task_id": levels_task,
+        "levels": levels,
+        "milestones": milestones,
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input", required=True, help="Progression manifest JSON to validate")
+    parser.add_argument("--input", help="Combined progression manifest JSON to validate")
+    parser.add_argument("--levels", help="Shipping progression_levels_v1.json")
+    parser.add_argument("--milestones", help="Shipping progression_milestones_v1.json")
     args = parser.parse_args()
-    path = pathlib.Path(args.input)
-    manifest = json.loads(path.read_text())
+
+    if args.input and (args.levels or args.milestones):
+        raise SystemExit("use either --input or the --levels/--milestones pair, not both")
+    if args.input:
+        manifest = json.loads(pathlib.Path(args.input).read_text())
+    elif args.levels and args.milestones:
+        try:
+            manifest = load_split_manifest(pathlib.Path(args.levels), pathlib.Path(args.milestones))
+        except Exception as exc:
+            print(json.dumps({"passed": False, "errors": [f"split progression load failed: {exc}"], "warnings": []}, indent=2))
+            raise SystemExit(1)
+    else:
+        raise SystemExit("provide --input or both --levels and --milestones")
+
     result = validate_manifest(manifest)
     print(json.dumps(result, indent=2))
     if not result["passed"]:
