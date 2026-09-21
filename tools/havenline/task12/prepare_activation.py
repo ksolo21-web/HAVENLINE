@@ -291,6 +291,30 @@ def validate_preparation():
     unsafe_support = [path for path in support if not isinstance(path, str) or not safe_repo_pattern(path)]
     if unsafe_support:
         errors.append("prepared_support_artifacts contains unsafe repository paths: " + json.dumps(unsafe_support))
+
+    try:
+        tracked_output = subprocess.check_output(
+            [
+                "git",
+                "ls-files",
+                "Docs/Production/T12",
+                "tools/havenline/task12",
+                ".github/workflows/havenline-task12-prep.yml",
+            ],
+            cwd=ROOT,
+            text=True,
+        )
+        tracked_t12 = {line.strip() for line in tracked_output.splitlines() if line.strip()}
+        manifested_t12 = set(support) | {str(CHECKLIST_PATH.relative_to(ROOT))}
+        missing_manifest_entries = sorted(tracked_t12 - manifested_t12)
+        stale_manifest_entries = sorted(manifested_t12 - tracked_t12)
+        if missing_manifest_entries:
+            errors.append("tracked T12 preparation files missing from support manifest: " + json.dumps(missing_manifest_entries))
+        if stale_manifest_entries:
+            errors.append("support manifest references untracked T12 files: " + json.dumps(stale_manifest_entries))
+    except Exception as exc:
+        errors.append(f"could not prove T12 support-manifest completeness: {exc}")
+
     required = [ROOT / path for path in support if isinstance(path, str) and safe_repo_pattern(path)] + [CHECKLIST_PATH]
     for path in required:
         try:
