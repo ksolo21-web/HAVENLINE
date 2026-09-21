@@ -122,6 +122,69 @@ def run_read_only_tool(args: list[str]) -> tuple[bool, str]:
     return proc.returncode == 0, proc.stdout.strip()
 
 
+def validate_dependency_closeout(
+    checklist,
+    graph,
+    registry,
+    ownership,
+    gates,
+    head: str,
+    *,
+    ancestry_check=git_is_ancestor,
+) -> tuple[list[str], dict[str, str]]:
+    errors: list[str] = []
+    dependency_sources: dict[str, str] = {}
+    dependencies = checklist.get("dependencies", [])
+
+    for dep in dependencies:
+        graph_status = graph.get("tasks", {}).get(dep, {}).get("status")
+        reg_status = registry_status(registry, dep)
+        if graph_status != "APPROVED":
+            errors.append(f"dependency {dep} graph status is {graph_status}, not APPROVED")
+        if reg_status != "APPROVED":
+            errors.append(f"dependency {dep} registry status is {reg_status}, not APPROVED")
+        if dep not in gates.get("approved_tasks", []):
+            errors.append(f"dependency {dep} missing from task-gates approved_tasks")
+
+    completed = gates.get("completed_task_records", {})
+    for dep in ("T10", "T11"):
+        record = completed.get(dep)
+        if not isinstance(record, dict):
+            errors.append(f"{dep} has no completed_task_records entry in task-gates")
+            continue
+        if str(record.get("status", "")).upper() != "APPROVED":
+            errors.append(f"{dep} completed_task_records status is not APPROVED")
+        source = completion_source(record)
+        if source is None:
+            errors.append(f"{dep} completed_task_records has no exact accepted/integrated source")
+            continue
+        dependency_sources[dep] = source
+        if not ancestry_check(source, head):
+            errors.append(f"{dep} accepted/integrated source {source} is not an ancestor of activation head {head}")
+
+        owner_row = next(
+            (x for x in ownership.get("completed_production_owners", []) if x.get("task_id") == dep),
+            None,
+        )
+        if not isinstance(owner_row, dict) or owner_row.get("status") != "APPROVED":
+            errors.append(f"{dep} is missing an APPROVED completed production owner record")
+        else:
+            owner_source = owner_row.get("integrated_source") or owner_row.get("accepted_source")
+            if owner_source != source:
+                errors.append(
+                    f"{dep} completed production owner source {owner_source!r} does not match task-gates source {source!r}"
+                )
+
+    stale_owners = [
+        x for x in ownership.get("active_owners", [])
+        if x.get("task_id") in set(dependencies)
+    ]
+    if stale_owners:
+        errors.append("a T12 dependency is still listed as an active owner; finish closeout before T12 activation")
+
+    return errors, dependency_sources
+
+
 def validate_preparation():
     checklist = load(CHECKLIST_PATH)
     graph = load(GRAPH_PATH)
@@ -392,52 +455,15 @@ def validate_activation(base: str):
     if head != base:
         errors.append(f"activation base must equal checked-out HEAD: head={head} base={base}")
 
-    for dep in checklist["dependencies"]:
-        graph_status = graph.get("tasks", {}).get(dep, {}).get("status")
-        reg_status = registry_status(registry, dep)
-        if graph_status != "APPROVED":
-            errors.append(f"dependency {dep} graph status is {graph_status}, not APPROVED")
-        if reg_status != "APPROVED":
-            errors.append(f"dependency {dep} registry status is {reg_status}, not APPROVED")
-        if dep not in gates.get("approved_tasks", []):
-            errors.append(f"dependency {dep} missing from task-gates approved_tasks")
-
-    completed = gates.get("completed_task_records", {})
-    dependency_sources: dict[str, str] = {}
-    for dep in ("T10", "T11"):
-        record = completed.get(dep)
-        if not isinstance(record, dict):
-            errors.append(f"{dep} has no completed_task_records entry in task-gates")
-            continue
-        if str(record.get("status", "")).upper() != "APPROVED":
-            errors.append(f"{dep} completed_task_records status is not APPROVED")
-        source = completion_source(record)
-        if source is None:
-            errors.append(f"{dep} completed_task_records has no exact accepted/integrated source")
-            continue
-        dependency_sources[dep] = source
-        if not git_is_ancestor(source, head):
-            errors.append(f"{dep} accepted/integrated source {source} is not an ancestor of activation head {head}")
-
-        owner_row = next(
-            (x for x in ownership.get("completed_production_owners", []) if x.get("task_id") == dep),
-            None,
-        )
-        if not isinstance(owner_row, dict) or owner_row.get("status") != "APPROVED":
-            errors.append(f"{dep} is missing an APPROVED completed production owner record")
-        else:
-            owner_source = owner_row.get("integrated_source") or owner_row.get("accepted_source")
-            if owner_source != source:
-                errors.append(
-                    f"{dep} completed production owner source {owner_source!r} does not match task-gates source {source!r}"
-                )
-
-    stale_owners = [
-        x for x in ownership.get("active_owners", [])
-        if x.get("task_id") in set(checklist["dependencies"])
-    ]
-    if stale_owners:
-        errors.append("a T12 dependency is still listed as an active owner; finish closeout before T12 activation")
+    closeout_errors, dependency_sources = validate_dependency_closeout(
+        checklist,
+        graph,
+        registry,
+        ownership,
+        gates,
+        head,
+    )
+    errors.extend(closeout_errors)
 
     if graph.get("tasks", {}).get("T12", {}).get("status") not in ("LOCKED", "PREPARED"):
         errors.append(f"unexpected pre-activation T12 graph state: {graph.get('tasks', {}).get('T12', {}).get('status')}")
