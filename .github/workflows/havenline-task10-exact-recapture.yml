@@ -198,42 +198,7 @@ jobs:
           # It is unrelated generated drift; ignore only this exact known path.
           cp review-controller/tools/havenline/task10/build_critic_evidence.py tools/havenline/task10/build_critic_evidence.py
           git diff --name-only
-          changed="$(git diff --name-only | grep -v '^Assets/TutorialInfo/Icons/URP.png
-      - name: Package fresh C1 C2 C3 C4 critic input only
-        run: |
-          set -euo pipefail
-          export GITHUB_SHA="$CANDIDATE"
-          python3 tools/havenline/task10/build_critic_evidence.py             --candidate "$CANDIDATE"             --evidence-root task10-isolated-evidence             --affected-only
-          for cid in C1 C2 C3 C4; do
-            test -s "critic-input/$cid-manifest.json"
-          done
-          test ! -e critic-input/C6-manifest.json
-          test ! -e critic-input/C7-manifest.json
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-          idx=json.loads(Path('critic-input/evidence-index.json').read_text())
-          assert idx['candidate']=='eba0107def258824549fb10d81785290d0c81d97'
-          assert idx['affected_critics']==['C1','C2','C3','C4']
-          assert idx['preserved_critics']==['C6','C7']
-          PY
-
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        with:
-          name: havenline-task10-critic-input-${{ env.CANDIDATE }}
-          path: critic-input/
-          if-no-files-found: error
-          retention-days: 90
-
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        with:
-          name: havenline-task10-exact-recapture-${{ env.CANDIDATE }}
-          path: |
-            task10-isolated-evidence/
-            critic-input/
-          if-no-files-found: error
-          retention-days: 90
- || true)"
+          changed="$(git diff --name-only | grep -vF 'Assets/TutorialInfo/Icons/URP.png' || true)"
           printf 'meaningful-diff:\n%s\n' "$changed"
           test "$changed" = "tools/havenline/task10/build_critic_evidence.py"
 
