@@ -3,7 +3,7 @@
   "task_id": "T12",
   "status": "PREPARATION_ONLY_NON_SHIPPING",
   "shipping_path_forbidden": true,
-  "purpose": "Concrete 100-level structural matrix for dependency-safe preparation. Reserves progression roles/validation obligations only; no downstream authored content or unfinished T10/T11 IDs.",
+  "purpose": "Concrete 100-level structural matrix for dependency-safe preparation. Reserves progression roles/validation obligations only; no downstream authored content; accepted T10 identities are activation-reverified and T11 identities remain unresolved until T11 approval/integration.",
   "invariants": {
     "exact_level_count": 100,
     "range": [1, 100],
@@ -27,7 +27,7 @@
   },
   "forbidden_eligibility_inputs": ["purchase_history", "premium_spend", "vip_status", "payer_tier", "ad_spend", "energy_required_to_continue"],
   "concrete_binding_ids": {"T10": [], "T11": []},
-  "conversion_rule": "After T10/T11 are APPROVED and integrated, reconcile exact accepted public IDs into approved slots, rerun T12 validators, then author shipping data under HavenlineGodot/data/. This file never becomes shipping data.",
+  "conversion_rule": "After all T12 dependencies are APPROVED/integrated (currently T11 remains outstanding), reconcile exact accepted T10/T11 public IDs into approved slots, rerun T12 validators, then author shipping data under HavenlineGodot/data/. This file never becomes shipping data.",
   "levels": [
     {"level":1,"id":"t12.level.001","band":"band_opening_frozen","owner":"T32","role":"band_entry","requires":[],"binding_profile":"entry","visible":false,"major":false},
     {"level":2,"id":"t12.level.002","band":"band_opening_frozen","owner":"T32","role":"interaction_expansion","requires":["t12.level.001"],"binding_profile":"interaction","visible":false,"major":false},
