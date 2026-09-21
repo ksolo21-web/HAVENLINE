@@ -60,11 +60,13 @@ jobs:
       - name: Resolve V3.2 readiness and graduation
         run: |
           set -euo pipefail;mkdir -p v32-control
+          lineage_head="${{ steps.refs.outputs.builder_sha }}"
+          if [ "${{ inputs.target }}" = "BUILDING_ISOLATED" ]; then lineage_head="${{ steps.refs.outputs.candidate_sha }}"; fi
           if [ "${{ inputs.target }}" = "ASSIGNED" ]; then
-            python3 tools/havenline/production/control_plane_lineage.py --builder-head "${{ steps.refs.outputs.builder_sha }}" --integration-head "${{ steps.refs.outputs.integration_sha }}" > v32-control/control-plane-lineage.json
+            python3 tools/havenline/production/control_plane_lineage.py --builder-head "$lineage_head" --integration-head "${{ steps.refs.outputs.integration_sha }}" > v32-control/control-plane-lineage.json
           fi
-          python3 tools/havenline/production/architecture_v32.py readiness "${{ inputs.task_id }}" --target "${{ inputs.target }}" --builder-head "${{ steps.refs.outputs.builder_sha }}" --integration-head "${{ steps.refs.outputs.integration_sha }}" > v32-control/readiness.json
-          python3 tools/havenline/production/task_graduation_gate.py "${{ inputs.task_id }}" --target "${{ inputs.target }}" --builder-head "${{ steps.refs.outputs.builder_sha }}" --integration-head "${{ steps.refs.outputs.integration_sha }}" > v32-control/graduation.json
+          python3 tools/havenline/production/architecture_v32.py readiness "${{ inputs.task_id }}" --target "${{ inputs.target }}" --builder-head "$lineage_head" --integration-head "${{ steps.refs.outputs.integration_sha }}" > v32-control/readiness.json
+          python3 tools/havenline/production/task_graduation_gate.py "${{ inputs.task_id }}" --target "${{ inputs.target }}" --builder-head "$lineage_head" --integration-head "${{ steps.refs.outputs.integration_sha }}" > v32-control/graduation.json
           python3 tools/havenline/production/timeout_stage_plan.py "${{ inputs.task_id }}" > v32-control/stage-plan.json
           python3 tools/havenline/production/rolling_canary.py requirements "${{ inputs.task_id }}" > v32-control/canaries.json
           python3 tools/havenline/production/branch_budget.py --task "${{ inputs.task_id }}" --inventory /tmp/v32-remote-branches.json > v32-control/branch-budget.json
