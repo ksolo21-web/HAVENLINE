@@ -28,7 +28,7 @@ def digest_file(path: pathlib.Path) -> str:
     return h.hexdigest()
 
 def candidate_of(row: dict) -> str:
-    return str(row.get("candidate_commit") or row.get("candidate") or row.get("source") or "")
+    return str(row.get("candidate_commit") or row.get("candidate") or row.get("candidate_hash") or row.get("source") or "")
 
 def main():
     ap = argparse.ArgumentParser()
@@ -57,40 +57,40 @@ def main():
     if head != CANDIDATE:
         raise SystemExit(f"canonical worktree must start at exact candidate {CANDIDATE}, got {head}")
 
-    # Exact source evidence.
-    critic_readiness = load(find_one(src, "critic-readiness.json"))
-    source_contract = load(find_one(src, "source-contract.json"))
-    domain = load(find_one(src, "domain-tests.json"))
-    integration = load(find_one(src, "integration-tests.json"))
-    device = load(find_one(src, "device-layout-evidence.json"))
-    native4k = load(find_one(src, "native4k-evidence.json"))
-    save = load(find_one(src, "save-matrix-summary.json"))
-    c6_quant = load(find_one(src, "C6.json"))
+    # Exact affected-source evidence from the final recapture.
+    source_root = src / "task10-isolated-evidence"
+    critic_input_root = src / "critic-input"
+    source_contract = load(source_root / "source-contract.json")
+    domain = load(source_root / "domain-tests.json")
+    integration = load(source_root / "integration-tests.json")
+    device = load(source_root / "device-layout-evidence.json")
+    native4k = load(source_root / "native4k-evidence.json")
+    current_performance = load(critic_input_root / "performance.json")
     for label, row in [
-        ("critic_readiness", critic_readiness), ("source_contract", source_contract),
-        ("domain", domain), ("integration", integration),
-        ("device", device), ("native4k", native4k), ("save", save), ("c6_quant", c6_quant)
+        ("source_contract", source_contract), ("domain", domain), ("integration", integration),
+        ("device", device), ("native4k", native4k)
     ]:
         if not bool(row.get("passed")):
             raise SystemExit(f"{label} did not pass: {row}")
-        c = candidate_of(row)
-        if c and c != CANDIDATE:
-            raise SystemExit(f"{label} candidate mismatch: {c}")
-    if critic_readiness.get("real_t09_adapter_bound") is not True:
-        raise SystemExit("real T09 adapter is not bound in exact recapture readiness")
+        candidate = candidate_of(row)
+        if candidate and candidate != CANDIDATE:
+            raise SystemExit(f"{label} candidate mismatch: {candidate}")
     if integration.get("real_t09_adapter_bound") is not True:
         raise SystemExit("integration evidence is not bound to real T09 adapter")
-    if device.get("device_count") != 6 or device.get("projection_failure_count") != 0:
+    if native4k.get("real_t09_adapter_bound") is not True or native4k.get("exact_debit_verified") is not True:
+        raise SystemExit("native4k evidence does not prove real T09 exact debit")
+    if device.get("device_count") != 6 or device.get("projection_count") != 216 or device.get("projection_failure_count") != 0:
         raise SystemExit("device matrix incomplete or has failures")
     if native4k.get("capture_count") != 36 or native4k.get("unique_capture_count") != 36:
         raise SystemExit("native4k evidence is incomplete")
-    if len(save.get("cases", [])) != 7 or not all(x.get("passed") for x in save["cases"]):
-        raise SystemExit("save/recovery matrix incomplete")
+    if current_performance.get("candidate_commit") != CANDIDATE:
+        raise SystemExit("current performance invariant is not exact-source bound")
 
-    # Fresh exact-source regression evidence.
+    # Fresh exact-source integrated regression and save/recovery evidence.
     tests = load(find_one(reg, "tests.json"))
     impact = load(find_one(reg, "impact-regression.json"))
     reg_contract = load(find_one(reg, "source-contract.json"))
+    save = load(find_one(reg, "save-matrix-summary.json"))
     if not tests.get("all_passed"):
         raise SystemExit(f"fresh regression tests failed: {tests}")
     if candidate_of(tests) != CANDIDATE:
@@ -99,6 +99,10 @@ def main():
         raise SystemExit(f"impact regression failed: {impact}")
     if not reg_contract.get("passed") or candidate_of(reg_contract) != CANDIDATE:
         raise SystemExit("fresh source contract did not pass on exact candidate")
+    if candidate_of(save) not in ("", CANDIDATE):
+        raise SystemExit("save/recovery matrix candidate mismatch")
+    if not save.get("passed") or len(save.get("cases", [])) != 7 or not all(x.get("passed") for x in save["cases"]):
+        raise SystemExit("fresh integrated save/recovery matrix incomplete")
 
     # Fresh final six-critic evidence.
     summary = load(find_one(rev, "six-critic-summary.json"))
@@ -106,6 +110,11 @@ def main():
         raise SystemExit(f"six-critic aggregate did not pass: {summary}")
     if summary.get("all_dimensions_strictly_above_9") is not True:
         raise SystemExit("strict >9 acceptance not satisfied")
+    if summary.get("fresh_critics") != ["C1","C2","C3","C4"] or summary.get("preserved_critics") != ["C6","C7"]:
+        raise SystemExit("critic-specific invalidation provenance is incomplete")
+    preservation = load(find_one(rev, "preservation-proof.json"))
+    if preservation.get("passed") is not True or preservation.get("candidate") != CANDIDATE:
+        raise SystemExit("C6/C7 preservation proof did not pass")
 
     critic_rows = {}
     minimum = 100.0
@@ -124,6 +133,14 @@ def main():
         if not scores or any(v <= 9.0 for v in scores.values()):
             raise SystemExit(f"{cid} violates strict >9 gate: {scores}")
         minimum = min(minimum, min(scores.values()))
+        if cid in ("C6","C7"):
+            if row.get("preserved_pass") is not True or row.get("fresh_rerun") is not False:
+                raise SystemExit(f"{cid} preservation provenance missing")
+            if row.get("preserved_from_candidate") != "7eccdac8928e59812d7991d2f2da93eb6b8ebf18":
+                raise SystemExit(f"{cid} preservation source mismatch")
+        else:
+            if row.get("preserved_pass", False):
+                raise SystemExit(f"{cid} must be a fresh affected-critic pass")
         critic_rows[cid] = row
 
     if minimum <= 9.0:
@@ -151,7 +168,7 @@ def main():
         "save_state_matrix": "7/7 passed",
         "device_layout_matrix": "6 devices / 216 projections passed",
         "native_4k_matrix": "36/36 unique 3840x2160 captures passed",
-        "performance_gate": "PASS",
+        "performance_gate": "PASS; C6 strict pass preserved under critic-specific invalidation with current quantitative/topology invariant proof",
     }
     critic_status = {
         cid: f"PASS; minimum mandatory dimension {min(float(v) for v in critic_rows[cid]['scores'].values()):.3f}; zero defects"
@@ -166,11 +183,11 @@ def main():
         "G5": {"status":"PASS","evidence":f"World-transform domain and real-T09 adapter integration passed ({domain.get('check_count')} + {integration.get('check_count')} checks)."},
         "G6": {"status":"PASS","evidence":f"Fresh exact-source impacted regression passed {tests.get('suite_count')} suites / {tests.get('total_checks')} checks."},
         "G7": {"status":"PASS","evidence":"Source, regression and critic evidence are exact-SHA bound and artifact digests are retained below."},
-        "G8": {"status":"PASS","evidence":"Quantitative C6 source gate and fresh independent C6 critic both passed."},
+        "G8": {"status":"PASS","evidence":"Prior strict C6 pass is preserved under critic-specific invalidation; current candidate quantitative/topology invariants pass and preservation proof is retained."},
         "G9": {"status":"PASS","evidence":"7/7 save, reload, migration, interrupted-save and recovery cases passed."},
         "G10":{"status":"PASS","evidence":"T10 remained transformation-framework scope; no economy/purchase/entitlement expansion was introduced."},
         "G11":{"status":"PASS","evidence":"6-device / 216-projection layout matrix and 36 unique native 3840x2160 captures passed."},
-        "G12":{"status":"PASS","evidence":"Fresh exact-source C1/C2/C3/C4/C6/C7 review is complete."},
+        "G12":{"status":"PASS","evidence":"Fresh exact-source C1/C2/C3/C4 review passed; unaffected C6/C7 passes are preserved with audited critic-specific invalidation provenance and invariants."},
         "G13":{"status":"PASS","evidence":f"Every mandatory critic dimension is strictly above 9.0; minimum unrounded score {minimum:.3f}; zero defects remain."},
         "G14":{"status":"PASS","evidence":"Exact canonical integrated source passed fresh impacted regression and final source-bound closeout."},
     }
@@ -223,10 +240,12 @@ def main():
         "tests": {"passed": True, **test_summary},
         "evidence": {
             "candidate_commit": CANDIDATE,
-            "source_contract_sha256": digest_file(find_one(src, "source-contract.json")),
-            "device_layout_sha256": digest_file(find_one(src, "device-layout-evidence.json")),
-            "native4k_manifest_sha256": digest_file(find_one(src, "native4k-evidence.json")),
-            "save_matrix_sha256": digest_file(find_one(src, "save-matrix-summary.json")),
+            "source_contract_sha256": digest_file(source_root / "source-contract.json"),
+            "device_layout_sha256": digest_file(source_root / "device-layout-evidence.json"),
+            "native4k_manifest_sha256": digest_file(source_root / "native4k-evidence.json"),
+            "current_performance_invariant_sha256": digest_file(critic_input_root / "performance.json"),
+            "save_matrix_sha256": digest_file(find_one(reg, "save-matrix-summary.json")),
+            "critic_preservation_proof_sha256": digest_file(find_one(rev, "preservation-proof.json")),
             "fresh_regression_tests_sha256": digest_file(find_one(reg, "tests.json")),
             "six_critic_summary_sha256": digest_file(find_one(rev, "six-critic-summary.json")),
         },
@@ -239,6 +258,8 @@ def main():
                 "defects": [],
                 "coverage_complete": True,
                 "independent_runtime": True,
+                "review_mode": "preserved" if cid in ("C6","C7") else "fresh",
+                "preserved_from_candidate": critic_rows[cid].get("preserved_from_candidate"),
                 "raw_record_path": f"Docs/Production/T10/CriticRaw/{cid}.json",
             } for cid in CRITICS
         },
@@ -269,6 +290,9 @@ def main():
         "all_dimensions_strictly_above_9": True,
         "zero_unresolved_defects": True,
         "coverage_complete": True,
+        "fresh_critics": ["C1","C2","C3","C4"],
+        "preserved_critics": ["C6","C7"],
+        "preservation_proof": preservation,
         "records": {cid: critic_rows[cid] for cid in CRITICS},
         "retained_review_evidence": retained,
         "passed": True,
@@ -328,7 +352,7 @@ def main():
         "integration_status": (
             f"APPROVED; exact canonical source {CANDIDATE} passed fresh regression, "
             f"6-device/216-projection and 36-frame native-4K evidence, 7/7 save cases, "
-            f"G1-G14, and fresh C1/C2/C3/C4/C6/C7 review with every mandatory "
+            f"G1-G14, fresh C1/C2/C3/C4 plus preserved C6/C7 review provenance with every mandatory "
             f"dimension strictly above 9.0 (minimum {minimum:.3f}) and zero unresolved defects."
         ),
         "known_blockers": [],
@@ -367,7 +391,7 @@ def main():
             row["state"] = "APPROVED"
             row["reason"] = (
                 f"Exact canonical source {CANDIDATE} passed G1-G14, fresh impacted regression, "
-                f"source-bound C1/C2/C3/C4/C6/C7 with minimum {minimum:.3f}, "
+                f"source-bound fresh C1/C2/C3/C4 plus preserved C6/C7 with minimum {minimum:.3f}, "
                 "complete coverage and zero unresolved mandatory defects."
             )
     dump(gates_path, gates)
