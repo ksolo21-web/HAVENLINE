@@ -164,6 +164,7 @@ For T11+ run `python3 tools/havenline/production/architecture_v32.py readiness T
 
 - Safe future work may proceed in parallel only as PREP_NOW / BUILD_WHEN_UNLOCKED preparation; it cannot integrate or claim approval early.
 - PREPARED -> ASSIGNED requires exact builder/integration lineage proof: the authoritative integration/control-plane head must be an ancestor of the builder head. Use `task_graduation_gate.py Txx --target ASSIGNED --builder-head <SHA> --integration-head <SHA>`; registry metadata alone is not proof.
+- For T11-T70, the integration owner must perform the actual ASSIGNED claim through `v32_assignment_claim.py`, which independently resolves the named remote builder/integration tips and records the exact assignment binding. Do not use the legacy `workstream.py claim --status ASSIGNED` path for forward V3.2 tasks.
 - Governance-only drift may preserve frozen scope and prepared/runtime work, but it never waives control-plane synchronization. No runtime reset does not mean no synchronization.
 - ASSIGNED -> BUILDING_ISOLATED requires the candidate to retain the recorded assignment integration binding plus `GRADUATION.json`, the early sentinel, focused tests, task workflow, execution checkpoint, timeout stage plan and critic-package preflight.
 - Every active task keeps a resumable `execution_checkpoint.py` record. TIMEOUT is infrastructure evidence by default and resumes from the last completed stage on the same exact SHA.
