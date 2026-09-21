@@ -1,22 +1,175 @@
 {
-  "schema_version": 1,
-  "default_invalidated_gates": ["source_contract", "impacted_regression", "critic_review", "closeout"],
+  "schema_version": 2,
+  "default_invalidated_gates": [
+    "source_contract",
+    "impacted_regression",
+    "closeout"
+  ],
   "contract_gate_overrides": {
-    "persistence_schema": ["save_matrix", "security_attack", "impacted_regression", "closeout"],
-    "inventory_transfer": ["save_matrix", "impacted_regression", "visual_evidence", "closeout"],
-    "harvest_resource_identity": ["motion_preflight", "save_matrix", "impacted_regression", "critic_review", "closeout"],
-    "world_transaction": ["save_matrix", "impacted_regression", "visual_evidence", "closeout"],
-    "progression_state": ["progression_sim", "economy_sim", "impacted_regression", "closeout"],
-    "economy_grant": ["economy_sim", "security_attack", "impacted_regression", "closeout"],
-    "backend_authority": ["security_attack", "save_matrix", "impacted_regression", "closeout"],
-    "billing_entitlement": ["economy_sim", "security_attack", "device_matrix", "closeout"],
-    "liveops_payload": ["liveops_sim", "economy_sim", "security_attack", "closeout"],
-    "identity_cloud": ["save_matrix", "device_matrix", "security_attack", "closeout"],
-    "region_transition": ["save_matrix", "device_matrix", "performance", "impacted_regression", "closeout"],
-    "accessibility_layout": ["device_matrix", "visual_evidence", "critic_review", "closeout"]
+    "persistence_schema": [
+      "save_matrix",
+      "security_attack",
+      "impacted_regression",
+      "closeout"
+    ],
+    "inventory_transfer": [
+      "save_matrix",
+      "impacted_regression",
+      "visual_evidence",
+      "closeout"
+    ],
+    "harvest_resource_identity": [
+      "motion_preflight",
+      "save_matrix",
+      "impacted_regression",
+      "critic_review",
+      "closeout"
+    ],
+    "world_transaction": [
+      "save_matrix",
+      "impacted_regression",
+      "visual_evidence",
+      "closeout"
+    ],
+    "progression_state": [
+      "progression_sim",
+      "economy_sim",
+      "impacted_regression",
+      "closeout"
+    ],
+    "economy_grant": [
+      "economy_sim",
+      "security_attack",
+      "impacted_regression",
+      "closeout"
+    ],
+    "backend_authority": [
+      "security_attack",
+      "save_matrix",
+      "impacted_regression",
+      "closeout"
+    ],
+    "billing_entitlement": [
+      "economy_sim",
+      "security_attack",
+      "device_matrix",
+      "closeout"
+    ],
+    "liveops_payload": [
+      "liveops_sim",
+      "economy_sim",
+      "security_attack",
+      "closeout"
+    ],
+    "identity_cloud": [
+      "save_matrix",
+      "device_matrix",
+      "security_attack",
+      "closeout"
+    ],
+    "region_transition": [
+      "save_matrix",
+      "device_matrix",
+      "performance",
+      "impacted_regression",
+      "closeout"
+    ],
+    "accessibility_layout": [
+      "device_matrix",
+      "visual_evidence",
+      "critic_review",
+      "closeout"
+    ]
   },
   "uncertainty_policy": "INVALIDATE",
   "invalidated_proof_may_be_reused": false,
   "automatic_approval_revocation": false,
-  "integration_owner_disposition_required": true
+  "integration_owner_disposition_required": true,
+  "critic_invalidation_policy": {
+    "mode": "critic_specific",
+    "blanket_candidate_sha_invalidation": false,
+    "rule": "A passing critic remains valid across a later candidate when the changed production/tooling paths do not intersect that critic's reviewed domain and an impact proof binds the prior exact-source pass to the later candidate.",
+    "changed_sha_alone_invalidates_all_critics": false,
+    "prompt_or_runner_change": "Invalidate only the critic whose prompt/runner/review protocol changed, unless the shared evidence contract itself changed.",
+    "product_change": "Invalidate only critics whose mandatory checks can be materially affected by the changed production paths/behavior.",
+    "preserved_pass_requirements": [
+      "prior critic record passed every mandatory dimension strictly above 9.0 unrounded",
+      "prior record has zero unresolved defects and complete coverage",
+      "prior source/run/artifact/digest are retained",
+      "candidate diff is enumerated and mapped to critic domains",
+      "deterministic invariant checks for the preserved critic pass",
+      "preservation is recorded as carry-forward provenance, never represented as a fresh rerun",
+      "no score averaging or threshold change"
+    ],
+    "uncertainty_policy": "INVALIDATE_AFFECTED_CRITIC_ONLY"
+  },
+  "task_specific_critic_domains": {
+    "T10": {
+      "C1": [
+        "visual language",
+        "reference fidelity",
+        "same-state cross-view consistency",
+        "replay visual semantics"
+      ],
+      "C2": [
+        "geometry/contact",
+        "clipping/seams",
+        "intentional gaps",
+        "cross-view integrity"
+      ],
+      "C3": [
+        "Havenline identity",
+        "simple-context controls",
+        "physical core loop",
+        "world-response readability"
+      ],
+      "C4": [
+        "interactable clarity",
+        "collection/resource feedback",
+        "world-change clarity",
+        "next-action clarity"
+      ],
+      "C6": [
+        "performance topology",
+        "draw calls",
+        "geometry count",
+        "materials/shaders",
+        "physics",
+        "animation",
+        "memory/thermal indicators"
+      ],
+      "C7": [
+        "state/progression semantics",
+        "prerequisites",
+        "transaction ordering",
+        "exact-once replay",
+        "recovery/bounded state"
+      ]
+    }
+  },
+  "branch_minimization_policy": {
+    "default": "reuse_existing_branch",
+    "branch_per_failure_forbidden": true,
+    "branch_per_critic_forbidden": true,
+    "branch_per_retry_forbidden": true,
+    "branch_per_harness_fix_forbidden": true,
+    "standard_task_branch_set": [
+      "one canonical/integration product branch",
+      "one task review/controller branch when independent review tooling is needed",
+      "one task approval/closeout branch when write authority must be isolated"
+    ],
+    "new_branch_allowed_only_when": [
+      "a genuinely separate long-lived product line is required",
+      "ownership/path collision makes same-branch work unsafe",
+      "security or release isolation explicitly requires a distinct branch"
+    ],
+    "required_new_branch_record": [
+      "why an existing branch cannot be reused",
+      "owner",
+      "exact base SHA",
+      "owned paths",
+      "expected deletion/merge disposition"
+    ],
+    "stale_scratch_branch_policy": "Do not create replacements. Finish the task on the standard branch set; archive/delete obsolete scratch branches during cleanup after closeout."
+  }
 }
