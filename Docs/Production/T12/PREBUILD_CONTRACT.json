@@ -15,7 +15,12 @@
     "t12_frozen_scope": "Docs/Production/T12/FROZEN_SCOPE.md"
   },
   "dependency_gate": {
-    "required_approved": ["T07", "T08", "T10", "T11"],
+    "required_approved": [
+      "T07",
+      "T08",
+      "T10",
+      "T11"
+    ],
     "runtime_allowed_before_gate": false,
     "activation_base": "exact integration head containing T10 and T11 APPROVED/integrated completion records",
     "stale_base_fails_closed": true
@@ -42,6 +47,7 @@
       "level_id",
       "region_band_id",
       "prerequisite_level_ids",
+      "required_fact_ids",
       "progression_effects",
       "visible_progression_hook_ids",
       "milestone_ids",
@@ -49,13 +55,17 @@
     ],
     "validation_rules": [
       "level is an integer 1..100",
-      "level_id is unique and stable",
+      "level_id is exact canonical t12.level.NNN for its level and globally unique",
       "exactly one shipping record exists for each level 1..100",
-      "every prerequisite target exists",
+      "region_band_id matches the frozen ten-level connected-world band",
+      "every prerequisite target exists and points only to an earlier level",
+      "required_fact_ids are stable accepted/activation-verified facts; preparation-only or provisional IDs cannot ship",
       "prerequisite topology is acyclic and reachable from Level 1",
-      "every level declares at least one practical progression effect or unlock",
-      "purchase/VIP/premium-spend signals are not valid prerequisites",
-      "one-time event IDs are unique and deterministic"
+      "every level declares at least one practical progression effect or unlock and exact effect payloads cannot be reused as filler",
+      "purchase/VIP/premium-spend/energy signals are not valid eligibility inputs",
+      "each level includes canonical completion event t12.event.level.NNN.completed",
+      "one-time event and visible-hook IDs are unique and deterministic",
+      "milestone references resolve to the milestone dataset at the same level"
     ]
   },
   "milestone_schema": {
@@ -68,42 +78,134 @@
       "owner_task"
     ],
     "validation_rules": [
-      "milestone_id is unique and stable",
+      "milestone_id is unique and stable in t12.milestone namespace",
+      "default major milestone at each ten-level boundary uses exact t12.milestone.NNN",
       "milestone level exists in Level 1..100 records",
+      "progression_hook_ids contain no preparation-only/provisional IDs",
       "owner_task identifies the task responsible for shipping content/behavior",
       "T12 metadata cannot claim later-owner content is already implemented"
     ]
   },
   "region_band_contract": [
-    {"band": "opening-frozen", "approx_levels": "1-10", "content_owner": "T32", "t12_role": "reserve stable progression band and hooks only"},
-    {"band": "forest", "approx_levels": "11-20", "content_owner": "T44", "t12_role": "reserve stable progression band and hooks only"},
-    {"band": "desert", "approx_levels": "21-30", "content_owner": "T45", "t12_role": "reserve stable progression band and hooks only"},
-    {"band": "underwater", "approx_levels": "31-40", "content_owner": "T46", "t12_role": "reserve stable progression band and hooks only"},
-    {"band": "sky", "approx_levels": "41-50", "content_owner": "T47", "t12_role": "reserve stable progression band and hooks only"},
-    {"band": "volcanic", "approx_levels": "51-60", "content_owner": "T48", "t12_role": "reserve stable progression band and hooks only"},
-    {"band": "swamp", "approx_levels": "61-70", "content_owner": "T49", "t12_role": "reserve stable progression band and hooks only"},
-    {"band": "ruins", "approx_levels": "71-80", "content_owner": "T50", "t12_role": "reserve stable progression band and hooks only"},
-    {"band": "underground", "approx_levels": "81-90", "content_owner": "T51", "t12_role": "reserve stable progression band and hooks only"},
-    {"band": "alien", "approx_levels": "91-100", "content_owner": "T52", "t12_role": "reserve stable progression band and hooks only"}
+    {
+      "band": "opening-frozen",
+      "approx_levels": "1-10",
+      "content_owner": "T32",
+      "t12_role": "reserve stable progression band and hooks only"
+    },
+    {
+      "band": "forest",
+      "approx_levels": "11-20",
+      "content_owner": "T44",
+      "t12_role": "reserve stable progression band and hooks only"
+    },
+    {
+      "band": "desert",
+      "approx_levels": "21-30",
+      "content_owner": "T45",
+      "t12_role": "reserve stable progression band and hooks only"
+    },
+    {
+      "band": "underwater",
+      "approx_levels": "31-40",
+      "content_owner": "T46",
+      "t12_role": "reserve stable progression band and hooks only"
+    },
+    {
+      "band": "sky",
+      "approx_levels": "41-50",
+      "content_owner": "T47",
+      "t12_role": "reserve stable progression band and hooks only"
+    },
+    {
+      "band": "volcanic",
+      "approx_levels": "51-60",
+      "content_owner": "T48",
+      "t12_role": "reserve stable progression band and hooks only"
+    },
+    {
+      "band": "swamp",
+      "approx_levels": "61-70",
+      "content_owner": "T49",
+      "t12_role": "reserve stable progression band and hooks only"
+    },
+    {
+      "band": "ruins",
+      "approx_levels": "71-80",
+      "content_owner": "T50",
+      "t12_role": "reserve stable progression band and hooks only"
+    },
+    {
+      "band": "underground",
+      "approx_levels": "81-90",
+      "content_owner": "T51",
+      "t12_role": "reserve stable progression band and hooks only"
+    },
+    {
+      "band": "alien",
+      "approx_levels": "91-100",
+      "content_owner": "T52",
+      "t12_role": "reserve stable progression band and hooks only"
+    }
   ],
   "upstream_bindings": [
-    {"task": "T07", "contract": "context/action state may be referenced for progression events; T12 cannot add permanent action-button complexity"},
-    {"task": "T08", "contract": "resource/inventory/carrying truth may gate progression through published state only; T12 cannot mutate conserved quantities"},
-    {"task": "T10", "contract": "world-transform identities/status may be referenced; T12 cannot debit or commit transform transactions"},
-    {"task": "T11", "contract": "camp-state identities/completion may be referenced; T12 cannot spawn/modify camp content directly"}
+    {
+      "task": "T07",
+      "contract": "context/action state may be referenced for progression events; T12 cannot add permanent action-button complexity"
+    },
+    {
+      "task": "T08",
+      "contract": "resource/inventory/carrying truth may gate progression through published state only; T12 cannot mutate conserved quantities"
+    },
+    {
+      "task": "T10",
+      "contract": "world-transform identities/status may be referenced; T12 cannot debit or commit transform transactions"
+    },
+    {
+      "task": "T11",
+      "contract": "camp-state identities/completion may be referenced; T12 cannot spawn/modify camp content directly"
+    }
   ],
   "required_capture_groups": [
     {
       "id": "progression-readability",
-      "views": ["gameplay", "phone-layout", "tablet-layout", "foldable-layout"],
-      "conditions": ["normal-level", "visible-progression-level", "major-milestone"],
-      "critics": ["C3", "C4"]
+      "views": [
+        "gameplay",
+        "phone-layout",
+        "tablet-layout",
+        "foldable-layout"
+      ],
+      "conditions": [
+        "normal-level",
+        "visible-progression-level",
+        "major-milestone"
+      ],
+      "critics": [
+        "C3",
+        "C4"
+      ]
     },
     {
       "id": "progression-transition",
-      "views": ["gameplay", "three-quarter", "detail"],
-      "conditions": ["before", "eligible", "commit", "complete", "duplicate-replay"],
-      "critics": ["C2", "C3", "C4", "C6", "C7"]
+      "views": [
+        "gameplay",
+        "three-quarter",
+        "detail"
+      ],
+      "conditions": [
+        "before",
+        "eligible",
+        "commit",
+        "complete",
+        "duplicate-replay"
+      ],
+      "critics": [
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "C7"
+      ]
     }
   ],
   "required_static_reports": [
@@ -117,11 +219,17 @@
     "upstream-binding ownership audit"
   ],
   "critic_contract": {
-    "required": ["C2", "C3", "C4", "C6", "C7"],
+    "required": [
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
     "operator": ">",
-    "threshold": 9.0,
+    "threshold": 9,
     "unrounded": true,
-    "target": 10.0,
+    "target": 10,
     "zero_unresolved_mandatory_defects": true,
     "builder_self_review_is_independent_critic": false
   },
