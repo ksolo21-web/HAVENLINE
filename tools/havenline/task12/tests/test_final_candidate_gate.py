@@ -26,6 +26,7 @@ class T12FinalCandidateGateTests(unittest.TestCase):
     base_sha = "b" * 40
     t10_sha = "c" * 40
     t11_sha = "d" * 40
+    integration_sha = "e" * 40
     levels_digest = "1" * 64
     milestones_digest = "2" * 64
     binding_digest = "3" * 64
@@ -55,6 +56,7 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         source = data["exact_source"]
         source["activation_base"] = self.base_sha
         source["candidate_source"] = self.candidate_sha
+        source["integration_head"] = self.integration_sha
         source["authorized_changed_file_manifest_ref"] = "artifact://authorized-files.json"
         source["shipping_data_hashes"] = {
             "progression_levels_v1_json_sha256": self.levels_digest,
@@ -166,6 +168,7 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         levels_digest=None,
         progression_validation_result=None,
         binding_verification_result=None,
+        candidate_guard_result=None,
         checked_out_head=None,
     ):
         records = records if records is not None else self.critic_records()
@@ -186,6 +189,18 @@ class T12FinalCandidateGateTests(unittest.TestCase):
                 binding_verification_result
                 if binding_verification_result is not None
                 else {"passed": True, "errors": []}
+            ),
+            candidate_guard_result=(
+                candidate_guard_result
+                if candidate_guard_result is not None
+                else {
+                    "passed": True,
+                    "task_id": "T12",
+                    "base": self.base_sha,
+                    "head": self.candidate_sha,
+                    "integration_head": self.integration_sha,
+                    "errors": [],
+                }
             ),
             checked_out_head=checked_out_head if checked_out_head is not None else self.candidate_sha,
             levels_sha256=levels_digest if levels_digest is not None else self.levels_digest,
@@ -277,6 +292,27 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         result = self.validate(checked_out_head="f" * 40)
         self.assertFalse(result["passed"])
         self.assertTrue(any("exact candidate checkout" in error for error in result["errors"]))
+
+    def test_failed_candidate_guard_fails(self):
+        result = self.validate(
+            candidate_guard_result={"passed": False, "errors": ["unauthorized path"]}
+        )
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("canonical T12 candidate path guard failed" in error for error in result["errors"]))
+
+    def test_candidate_guard_identity_mismatch_fails(self):
+        result = self.validate(
+            candidate_guard_result={
+                "passed": True,
+                "task_id": "T12",
+                "base": self.base_sha,
+                "head": self.candidate_sha,
+                "integration_head": "f" * 40,
+                "errors": [],
+            }
+        )
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("candidate guard integration_head" in error for error in result["errors"]))
 
 
 if __name__ == "__main__":
