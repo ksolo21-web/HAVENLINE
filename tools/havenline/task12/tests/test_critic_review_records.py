@@ -119,5 +119,13 @@ class T12CriticReviewRecordTests(unittest.TestCase):
         self.assertTrue(any("template C2.state_integrity score" in error for error in result["errors"]))
 
 
+    def test_rejects_schema_version_drift(self):
+        data = self.resolved()
+        data["schema_version"] = 2
+        result = validator.validate_record(data, require_resolved=True)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("schema_version" in error for error in result["errors"]))
+
+
 if __name__ == "__main__":
     unittest.main()
