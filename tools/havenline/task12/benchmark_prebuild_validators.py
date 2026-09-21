@@ -38,6 +38,9 @@ downstream_validator = load_module("t12_downstream", "validate_downstream_contra
 candidate_validator = load_module("t12_candidate_evidence", "validate_candidate_evidence.py")
 critic_validator = load_module("t12_critic_reviews", "validate_critic_review_records.py")
 evidence_index_validator = load_module("t12_evidence_index", "validate_evidence_index.py")
+oracle_validator = load_module("t12_reference_oracle", "reference_progression_oracle.py")
+binding_validator = load_module("t12_binding_resolution", "verify_binding_resolution.py")
+prepare_validator = load_module("t12_prepare_activation", "prepare_activation.py")
 fuzz_module = load_module("t12_fuzz", "fuzz_progression_contract.py")
 
 MATRIX = json.loads((DOCS / "LEVEL_1_100_MATRIX.json").read_text())
@@ -48,7 +51,11 @@ DOWNSTREAM = json.loads((DOCS / "DOWNSTREAM_CONSUMER_CONTRACT.json").read_text()
 CANDIDATE_TEMPLATE = json.loads((DOCS / "CANDIDATE_EVIDENCE_TEMPLATE.json").read_text())
 CRITIC_TEMPLATE = json.loads((DOCS / "CRITIC_REVIEW_RECORD_TEMPLATE.json").read_text())
 EVIDENCE_INDEX_TEMPLATE = json.loads((DOCS / "EVIDENCE_INDEX_TEMPLATE.json").read_text())
-BUDGET = json.loads((DOCS / "PREBUILD_PERFORMANCE_BUDGET.json").read_text())["static_validation_budget"]
+ENGINE_VECTORS = json.loads((DOCS / "ENGINE_TEST_VECTORS.json").read_text())
+BINDING_TEMPLATE = json.loads((DOCS / "BINDING_RESOLUTION_TEMPLATE.json").read_text())
+CHECKLIST = json.loads((DOCS / "ACTIVATION_CHECKLIST.json").read_text())
+BUDGET_DOC = json.loads((DOCS / "PREBUILD_PERFORMANCE_BUDGET.json").read_text())
+BUDGET = BUDGET_DOC["static_validation_budget"]
 SYNTHETIC_MANIFEST = fuzz_module.valid_manifest()
 
 
@@ -63,6 +70,20 @@ def validate_once() -> list[dict[str, Any]]:
         candidate_validator.validate_packet(CANDIDATE_TEMPLATE, require_resolved=False),
         critic_validator.validate_record(CRITIC_TEMPLATE, require_resolved=False),
         evidence_index_validator.validate_index(EVIDENCE_INDEX_TEMPLATE, require_resolved=False),
+        oracle_validator.run_vectors(ENGINE_VECTORS),
+        binding_validator.validate_resolution(BINDING_TEMPLATE, require_resolved=False),
+        {
+            "passed": not prepare_validator.validate_cross_contracts(CHECKLIST),
+            "errors": prepare_validator.validate_cross_contracts(CHECKLIST),
+        },
+        {
+            "passed": not prepare_validator.validate_upstream_preparation_bindings(),
+            "errors": prepare_validator.validate_upstream_preparation_bindings(),
+        },
+        {
+            "passed": not prepare_validator.validate_defect_ledger_preparation(),
+            "errors": prepare_validator.validate_defect_ledger_preparation(),
+        },
     ]
 
 
@@ -134,7 +155,7 @@ def main() -> None:
         "memory_instrumentation": "separate tracemalloc pass",
         "iterations": len(durations_ms),
         "memory_iterations": memory_iterations,
-        "validators_per_iteration": 9,
+        "validators_per_iteration": len(initial),
         "mean_ms": round(mean_ms, 6),
         "p95_ms": round(p95_ms, 6),
         "maximum_ms": round(maximum_ms, 6),
