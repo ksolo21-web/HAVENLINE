@@ -255,6 +255,34 @@ def validate_dependency_closeout(
 
 def validate_cross_contracts(checklist, prebuild=None, schema=None) -> list[str]:
     errors: list[str] = []
+    if checklist.get("schema_version") != 1 or checklist.get("task_id") != "T12":
+        errors.append("ACTIVATION_CHECKLIST identity must remain schema_version=1 task_id=T12")
+    if checklist.get("preparation_status") != "PREPARED_GOVERNANCE_ONLY":
+        errors.append("ACTIVATION_CHECKLIST preparation_status drifted")
+    if checklist.get("prepared_branch") != "havenline/governance-t12-prep":
+        errors.append("ACTIVATION_CHECKLIST prepared_branch drifted")
+    if checklist.get("prepared_from_branch") != "havenline/governance-t11-prep" or checklist.get("prepared_from_commit") != "b383e450594d60b172d43ed2d60bda535ca9f225":
+        errors.append("ACTIVATION_CHECKLIST preparation provenance drifted")
+    if checklist.get("future_builder_branch") != "havenline/T12-progression-architecture":
+        errors.append("ACTIVATION_CHECKLIST future_builder_branch drifted")
+    if checklist.get("future_owner") != "progression-architecture-builder":
+        errors.append("ACTIVATION_CHECKLIST future_owner drifted")
+    if checklist.get("activation_requires_all_dependencies_approved") is not True:
+        errors.append("ACTIVATION_CHECKLIST must require all dependencies approved")
+    acceptance = checklist.get("acceptance", {})
+    if (
+        acceptance.get("operator") != ">"
+        or acceptance.get("threshold") != 9
+        or acceptance.get("unrounded") is not True
+        or acceptance.get("target") != 10
+        or acceptance.get("zero_unresolved_mandatory_defects") is not True
+    ):
+        errors.append("ACTIVATION_CHECKLIST acceptance rule drifted")
+    claim_template = str(checklist.get("claim_template", ""))
+    for token in ("T12", "havenline/T12-progression-architecture", "@reservation:T12", "<POST_T11_INTEGRATION_SHA>"):
+        if token not in claim_template:
+            errors.append(f"ACTIVATION_CHECKLIST claim_template missing {token!r}")
+
     prebuild = load(PREBUILD_CONTRACT_PATH) if prebuild is None else prebuild
     schema = load(DATA_SCHEMA_PATH) if schema is None else schema
 
