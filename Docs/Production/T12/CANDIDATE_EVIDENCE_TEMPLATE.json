@@ -6,6 +6,7 @@
   "exact_source": {
     "activation_base": "<POST_T11_INTEGRATION_SHA>",
     "candidate_source": "<T12_CANDIDATE_SHA>",
+    "integration_head": "<EXACT_INTEGRATION_HEAD_SHA_USED_BY_CANDIDATE_GUARD>",
     "authorized_changed_file_manifest_ref": "<ARTIFACT_OR_REPO_PATH>",
     "shipping_data_hashes": {
       "progression_levels_v1_json_sha256": "<SHA256>",
@@ -21,16 +22,46 @@
     "validator_source": "<EXACT_T12_VALIDATOR_SHA_OR_DIGEST>"
   },
   "static_reports": {
-    "level_100_completeness": {"status": "PENDING", "evidence_ref": ""},
-    "prerequisite_dag": {"status": "PENDING", "evidence_ref": ""},
-    "practical_progression_coverage": {"status": "PENDING", "evidence_ref": ""},
-    "visible_progression_cadence": {"status": "PENDING", "evidence_ref": ""},
-    "major_milestone_cadence": {"status": "PENDING", "evidence_ref": ""},
-    "spend_blind_audit": {"status": "PENDING", "evidence_ref": ""},
-    "stable_id_audit": {"status": "PENDING", "evidence_ref": ""},
-    "upstream_authority_audit": {"status": "PENDING", "evidence_ref": ""},
-    "one_time_idempotency": {"status": "PENDING", "evidence_ref": ""},
-    "later_owner_boundary": {"status": "PENDING", "evidence_ref": ""}
+    "level_100_completeness": {
+      "status": "PENDING",
+      "evidence_ref": ""
+    },
+    "prerequisite_dag": {
+      "status": "PENDING",
+      "evidence_ref": ""
+    },
+    "practical_progression_coverage": {
+      "status": "PENDING",
+      "evidence_ref": ""
+    },
+    "visible_progression_cadence": {
+      "status": "PENDING",
+      "evidence_ref": ""
+    },
+    "major_milestone_cadence": {
+      "status": "PENDING",
+      "evidence_ref": ""
+    },
+    "spend_blind_audit": {
+      "status": "PENDING",
+      "evidence_ref": ""
+    },
+    "stable_id_audit": {
+      "status": "PENDING",
+      "evidence_ref": ""
+    },
+    "upstream_authority_audit": {
+      "status": "PENDING",
+      "evidence_ref": ""
+    },
+    "one_time_idempotency": {
+      "status": "PENDING",
+      "evidence_ref": ""
+    },
+    "later_owner_boundary": {
+      "status": "PENDING",
+      "evidence_ref": ""
+    }
   },
   "engine_parity": {
     "status": "PENDING",
@@ -47,9 +78,18 @@
     "failed_suites": []
   },
   "functional_sequences": {
-    "ordinary_level_progression": {"status": "PENDING", "evidence_refs": []},
-    "visible_progression_hook": {"status": "PENDING", "evidence_refs": []},
-    "major_milestone": {"status": "PENDING", "evidence_refs": []}
+    "ordinary_level_progression": {
+      "status": "PENDING",
+      "evidence_refs": []
+    },
+    "visible_progression_hook": {
+      "status": "PENDING",
+      "evidence_refs": []
+    },
+    "major_milestone": {
+      "status": "PENDING",
+      "evidence_refs": []
+    }
   },
   "adaptive_readability": {
     "required_if_player_facing_presentation_exists": true,
@@ -70,11 +110,51 @@
     "score": null
   },
   "critic_reviews": {
-    "C2": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independence_required": true, "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null},
-    "C3": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independence_required": true, "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null},
-    "C4": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independence_required": true, "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null},
-    "C6": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independence_required": false, "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null},
-    "C7": {"status": "PENDING", "candidate_source": "<T12_CANDIDATE_SHA>", "independence_required": true, "independent": null, "reviewer_runtime_id": "", "evidence_ref": "", "minimum_mandatory_dimension_score": null}
+    "C2": {
+      "status": "PENDING",
+      "candidate_source": "<T12_CANDIDATE_SHA>",
+      "independence_required": true,
+      "independent": null,
+      "reviewer_runtime_id": "",
+      "evidence_ref": "",
+      "minimum_mandatory_dimension_score": null
+    },
+    "C3": {
+      "status": "PENDING",
+      "candidate_source": "<T12_CANDIDATE_SHA>",
+      "independence_required": true,
+      "independent": null,
+      "reviewer_runtime_id": "",
+      "evidence_ref": "",
+      "minimum_mandatory_dimension_score": null
+    },
+    "C4": {
+      "status": "PENDING",
+      "candidate_source": "<T12_CANDIDATE_SHA>",
+      "independence_required": true,
+      "independent": null,
+      "reviewer_runtime_id": "",
+      "evidence_ref": "",
+      "minimum_mandatory_dimension_score": null
+    },
+    "C6": {
+      "status": "PENDING",
+      "candidate_source": "<T12_CANDIDATE_SHA>",
+      "independence_required": false,
+      "independent": null,
+      "reviewer_runtime_id": "",
+      "evidence_ref": "",
+      "minimum_mandatory_dimension_score": null
+    },
+    "C7": {
+      "status": "PENDING",
+      "candidate_source": "<T12_CANDIDATE_SHA>",
+      "independence_required": true,
+      "independent": null,
+      "reviewer_runtime_id": "",
+      "evidence_ref": "",
+      "minimum_mandatory_dimension_score": null
+    }
   },
   "gates": {
     "G1": null,
@@ -98,14 +178,21 @@
   },
   "acceptance_rule": {
     "operator": ">",
-    "threshold": 9.0,
+    "threshold": 9,
     "unrounded": true,
-    "target": 10.0,
+    "target": 10,
     "zero_unresolved_mandatory_defects": true,
     "all_G1_G14_required": true,
     "all_required_critics_exact_candidate": true,
-    "independent_critic_set": ["C2", "C3", "C4", "C7"],
-    "quantitative_specialist_set": ["C6"]
+    "independent_critic_set": [
+      "C2",
+      "C3",
+      "C4",
+      "C7"
+    ],
+    "quantitative_specialist_set": [
+      "C6"
+    ]
   },
   "scope_limits": {
     "this_packet_can_approve_t12_only": true,
