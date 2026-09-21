@@ -26,7 +26,8 @@ jobs:
       specialist_critics_json: ${{ steps.plan.outputs.specialist_critics_json }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-        with: {fetch-depth: 0}
+        with:
+          fetch-depth: 0
       - name: Resolve exact candidate and integration refs
         id: refs
         shell: bash
@@ -61,7 +62,8 @@ jobs:
           python3 tools/havenline/production/branch_budget.py --task "${{ inputs.task_id }}" --inventory /tmp/v32-remote-branches.json > v32-control/branch-budget.json
       - name: Validate resumable checkpoint for build candidates
         if: inputs.target == 'BUILDING_ISOLATED'
-        env: {TASK: ${{ inputs.task_id }}}
+        env:
+          TASK: ${{ inputs.task_id }}
         run: |
           set -euo pipefail
           checkpoint=$(python3 - <<'PY'
@@ -97,7 +99,9 @@ jobs:
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-        with: {ref: ${{ needs.v32-control.outputs.candidate_sha }}, fetch-depth: 0}
+        with:
+          ref: ${{ needs.v32-control.outputs.candidate_sha }}
+          fetch-depth: 0
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
           pattern: ${{ inputs.evidence_artifact_prefix }}-*

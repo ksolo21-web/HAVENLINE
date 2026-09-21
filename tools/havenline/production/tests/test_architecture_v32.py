@@ -204,6 +204,14 @@ class V32Tests(unittest.TestCase):
   self.assertTrue(any('explicit exact candidate SHA' in x for x in blocked['errors']))
   self.assertTrue(forward_task_control.validate_all()['passed'])
 
+ def test_shared_workflow_avoids_expression_flow_maps(self):
+  body=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
+  for line in body.splitlines():
+   if '${{' in line:
+    self.assertFalse('{' in line.split(':',1)[-1].lstrip()[:1],line)
+  self.assertNotIn('env: {TASK: ${{',body)
+  self.assertNotIn('with: {ref: ${{',body)
+
  def test_shared_workflow_contains_preflight_review_failure_modes(self):
   body=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
   for token in ('mode:','preflight','review','failure','forward_task_control.py','critic_package_preflight.py','havenline-v32-specialist-fanout.yml','havenline-c0-root-cause.yml','cancel-in-progress: false'):
