@@ -47,17 +47,17 @@ def valid_manifest() -> dict[str, Any]:
             "region_band_id": band_id,
             "prerequisite_level_ids": [] if n == 1 else [f"t12.level.{n - 1:03d}"],
             "required_fact_ids": [],
-            "progression_effects": [{"kind": "prepared_fixture", "id": f"prepared.effect.{n:03d}"}],
-            "visible_progression_hook_ids": [f"prepared.visible.{n:03d}"] if visible else [],
-            "milestone_ids": [f"t12.milestone.band_{n // 10:02d}"] if n % 10 == 0 else [],
-            "one_time_event_ids": [f"t12.event.level_{n:03d}"],
+            "progression_effects": [{"kind": "synthetic_fixture", "id": f"t12.effect.{n:03d}"}],
+            "visible_progression_hook_ids": [f"t12.visible.{n:03d}"] if visible else [],
+            "milestone_ids": [f"t12.milestone.{n:03d}"] if n % 10 == 0 else [],
+            "one_time_event_ids": [f"t12.event.level.{n:03d}.completed"],
         })
         if n % 10 == 0:
             milestones.append({
-                "milestone_id": f"t12.milestone.band_{n // 10:02d}",
+                "milestone_id": f"t12.milestone.{n:03d}",
                 "level": n,
                 "kind": "major",
-                "progression_hook_ids": [f"prepared.milestone_hook.{n:03d}"],
+                "progression_hook_ids": [f"t12.visible.{n:03d}"],
                 "visible_change_required": True,
                 "owner_task": "PREPARED_FIXTURE_ONLY",
             })
@@ -158,6 +158,36 @@ def mutate_invalid_milestone_shape(m: dict[str, Any], rng: random.Random) -> Non
     m["milestones"][idx]["visible_change_required"] = "yes"
 
 
+def mutate_schema_version(m: dict[str, Any], rng: random.Random) -> None:
+    m["schema_version"] = 2
+
+
+def mutate_missing_completion_event(m: dict[str, Any], rng: random.Random) -> None:
+    idx = rng.randrange(100)
+    m["levels"][idx]["one_time_event_ids"] = [f"t12.event.other.{idx + 1:03d}"]
+
+
+def mutate_prepared_required_fact(m: dict[str, Any], rng: random.Random) -> None:
+    idx = rng.randrange(100)
+    m["levels"][idx]["required_fact_ids"] = ["prepared.fact.should_never_ship"]
+
+
+def mutate_duplicate_visible_hook(m: dict[str, Any], rng: random.Random) -> None:
+    source = 2
+    target = 5
+    m["levels"][target]["visible_progression_hook_ids"] = list(
+        m["levels"][source]["visible_progression_hook_ids"]
+    )
+
+
+def mutate_noncanonical_major_milestone(m: dict[str, Any], rng: random.Random) -> None:
+    idx = rng.randrange(len(m["milestones"]))
+    level = m["milestones"][idx]["level"]
+    bad = f"t12.milestone.major_{level:03d}"
+    m["milestones"][idx]["milestone_id"] = bad
+    m["levels"][level - 1]["milestone_ids"] = [bad]
+
+
 MUTATIONS: dict[str, Callable[[dict[str, Any], random.Random], None]] = {
     "missing_level": mutate_missing_level,
     "duplicate_level_id": mutate_duplicate_level_id,
@@ -178,6 +208,11 @@ MUTATIONS: dict[str, Callable[[dict[str, Any], random.Random], None]] = {
     "duplicate_effect_payload": mutate_duplicate_effect_payload,
     "unresolved_milestone_reference": mutate_unresolved_milestone_reference,
     "invalid_milestone_shape": mutate_invalid_milestone_shape,
+    "schema_version": mutate_schema_version,
+    "missing_completion_event": mutate_missing_completion_event,
+    "prepared_required_fact": mutate_prepared_required_fact,
+    "duplicate_visible_hook": mutate_duplicate_visible_hook,
+    "noncanonical_major_milestone": mutate_noncanonical_major_milestone,
 }
 
 
