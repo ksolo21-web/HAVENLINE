@@ -60,12 +60,16 @@ def t10_activation_errors(graph,registry,ownership,task_gates,checklist):
     t10=graph.get("tasks",{}).get("T10",{})
     status=t10.get("status")
     future_ids=[f"T{i:02d}" for i in range(11,71)]
-    unlocked_future=[tid for tid in future_ids if graph.get("tasks",{}).get(tid,{}).get("status")!="LOCKED"]
-    if unlocked_future:
-        errors.append("T11+ must remain LOCKED during T10 activation: "+",".join(unlocked_future))
-    active_future=[row.get("task_id") for row in ownership.get("active_owners",[]) if row.get("task_id") in future_ids]
-    if active_future:
-        errors.append("T11+ active ownership exists during T10 activation: "+",".join(str(x) for x in active_future))
+    # While T10 is still active, future runtime must remain locked and unowned.
+    # Once T10 is APPROVED, T11+ may legitimately enter PREPARED/ASSIGNED states;
+    # post-T10 pointer consistency is validated in the APPROVED branch below.
+    if status!="APPROVED":
+        unlocked_future=[tid for tid in future_ids if graph.get("tasks",{}).get(tid,{}).get("status")!="LOCKED"]
+        if unlocked_future:
+            errors.append("T11+ must remain LOCKED during T10 activation: "+",".join(unlocked_future))
+        active_future=[row.get("task_id") for row in ownership.get("active_owners",[]) if row.get("task_id") in future_ids]
+        if active_future:
+            errors.append("T11+ active ownership exists during T10 activation: "+",".join(str(x) for x in active_future))
     if status=="LOCKED":
         active_t10=[row for row in ownership.get("active_owners",[]) if row.get("task_id")=="T10"]
         if active_t10:
@@ -102,14 +106,56 @@ def t10_activation_errors(graph,registry,ownership,task_gates,checklist):
             errors.append("T10 workstream activation identity mismatch")
 
     if status=="APPROVED":
+        # Any post-T10 task that leaves LOCKED must be represented by the same
+        # canonical lifecycle in WORKSTREAM_REGISTRY and may only do so after
+        # all of its declared dependencies are APPROVED. This permits valid
+        # T11+ preparation without accepting orphaned/untracked activation.
+        unlocked_future=[tid for tid in future_ids if graph.get("tasks",{}).get(tid,{}).get("status")!="LOCKED"]
+        for tid in unlocked_future:
+            future=graph.get("tasks",{}).get(tid,{})
+            future_rows=[r for r in registry.get("workstreams",[]) if r.get("task_id")==tid]
+            if len(future_rows)!=1:
+                errors.append("post-T10 unlocked future workstream missing or duplicated: "+tid)
+                continue
+            if future_rows[0].get("status")!=future.get("status"):
+                errors.append("post-T10 unlocked future lifecycle mismatch: "+tid)
+            if any(graph.get("tasks",{}).get(dep,{}).get("status")!="APPROVED" for dep in future.get("dependencies",[])):
+                errors.append("post-T10 unlocked future dependencies not approved: "+tid)
         base=row.get("base_commit")
         if not isinstance(base,str) or not re.fullmatch(r"[0-9a-f]{40}",base):
             errors.append("T10 completed base commit invalid")
         if any(owner.get("task_id")=="T10" for owner in ownership.get("active_owners",[])):
             errors.append("T10 completed task retains active owner")
         fields=("active_task","active_status","active_base_integration_commit","active_frozen_scope","active_task_packet","active_evidence","active_critic_state")
-        if any(field not in task_gates or task_gates[field] is not None for field in fields):
-            errors.append("T10 completed task must clear all active pointers")
+        if any(field not in task_gates for field in fields):
+            errors.append("post-T10 active pointer fields missing")
+        active_task=task_gates.get("active_task")
+        if active_task=="T10":
+            errors.append("T10 completed task retains active task-gate pointer")
+        elif active_task is None:
+            if any(task_gates.get(field) is not None for field in fields[1:]):
+                errors.append("post-T10 null active_task must clear companion pointers")
+        else:
+            if active_task not in future_ids:
+                errors.append("post-T10 active_task must be T11-T70")
+            else:
+                future=graph.get("tasks",{}).get(active_task,{})
+                future_rows=[r for r in registry.get("workstreams",[]) if r.get("task_id")==active_task]
+                if len(future_rows)!=1:
+                    errors.append("post-T10 active future workstream missing or duplicated: "+active_task)
+                else:
+                    future_row=future_rows[0]
+                    if future_row.get("status")!=future.get("status") or task_gates.get("active_status")!=future.get("status"):
+                        errors.append("post-T10 active future lifecycle mismatch: "+active_task)
+                    if any(graph.get("tasks",{}).get(dep,{}).get("status")!="APPROVED" for dep in future.get("dependencies",[])):
+                        errors.append("post-T10 active future dependencies not approved: "+active_task)
+                    if task_gates.get("active_base_integration_commit")!=future_row.get("base_commit"):
+                        errors.append("post-T10 active future base pointer mismatch: "+active_task)
+                    expected_scope=f"Docs/Production/{active_task}/FROZEN_SCOPE.md"
+                    expected_packet=f"Docs/Production/{active_task}/TASK_PACKET.md"
+                    expected_evidence=f"Docs/Production/Evidence/{active_task}/"
+                    if task_gates.get("active_frozen_scope")!=expected_scope or task_gates.get("active_task_packet")!=expected_packet or task_gates.get("active_evidence")!=expected_evidence:
+                        errors.append("post-T10 active future artifact pointers mismatch: "+active_task)
         completed=[owner for owner in ownership.get("completed_production_owners",[]) if owner.get("task_id")=="T10"]
         record=task_gates.get("completed_task_records",{}).get("T10",{})
         if len(completed)!=1:
