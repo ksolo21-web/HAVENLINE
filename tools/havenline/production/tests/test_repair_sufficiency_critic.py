@@ -5,6 +5,7 @@ import hashlib
 import json
 import pathlib
 import sys
+import tempfile
 import unittest
 
 HERE = pathlib.Path(__file__).resolve()
@@ -536,6 +537,26 @@ class RepairSufficiencyCriticTests(unittest.TestCase):
         snapshot["critic_matrix_sha256"] = "0" * 64
         report = review(c0(), accepted_plan(), threshold_snapshot=snapshot)
         self.assertIn("CANONICAL_THRESHOLD_POLICY_WEAKENED", report["rejections"])
+
+    def test_lifecycle_metadata_does_not_masquerade_as_threshold_drift(self):
+        baseline = canonical_threshold_snapshot()
+        with tempfile.TemporaryDirectory() as td:
+            root = pathlib.Path(td)
+            prod = root / "Docs/Production"
+            prod.mkdir(parents=True)
+            matrix = json.loads((ROOT / "Docs/Production/CRITIC_MATRIX.json").read_text())
+            gates = json.loads((ROOT / "Docs/Production/task-gates.json").read_text())
+            gates["active_status"] = "TEST_LIFECYCLE_ONLY_CHANGE"
+            gates["test_non_threshold_metadata"] = {"task_id": "T11", "status": "ASSIGNED"}
+            (prod / "CRITIC_MATRIX.json").write_text(json.dumps(matrix, indent=2) + "\n")
+            (prod / "task-gates.json").write_text(json.dumps(gates, indent=2) + "\n")
+            changed = canonical_threshold_snapshot(root)
+        self.assertEqual(baseline["critic_matrix_sha256"], changed["critic_matrix_sha256"])
+        self.assertEqual(baseline["task_gates_sha256"], changed["task_gates_sha256"])
+        self.assertNotEqual(baseline["task_gates_file_sha256"], changed["task_gates_file_sha256"])
+        self.assertEqual("forward_acceptance_policy_only", changed["hash_scope"])
+        report = review(c0(), accepted_plan(), threshold_snapshot=changed)
+        self.assertTrue(report["passed"], report)
 
     def test_full_family_closure_requires_complete_collected_evidence(self):
         plan = accepted_plan()
