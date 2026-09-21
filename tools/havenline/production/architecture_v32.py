@@ -64,7 +64,8 @@ def validate():
         t=f'T{i:02d}';classify(t);stage_plan(t);canary_requirements(t);resolved+=1
     return {'passed':not errors,'schema_version':1,'architecture_version':'3.2','task_count':resolved,'components':components,'errors':errors}
 def readiness(task,builder_head=None,integration_head=None,target='ASSIGNED'):
-    return {'schema_version':1,'architecture_version':'3.2','task_id':task,'preparation':classify(task),'graduation':graduation(task,target,builder_head,integration_head),'graduation_target':target,'stage_plan':stage_plan(task),'canaries':canary_requirements(task)}
+    grad=graduation(task,target,builder_head,integration_head)
+    return {'schema_version':1,'architecture_version':'3.2','task_id':task,'preparation':classify(task),'graduation':grad,'graduation_assigned':grad if target=='ASSIGNED' else None,'graduation_target':target,'stage_plan':stage_plan(task),'canaries':canary_requirements(task)}
 def main():
     ap=argparse.ArgumentParser();sub=ap.add_subparsers(dest='cmd',required=True);sub.add_parser('validate');r=sub.add_parser('readiness');r.add_argument('task');r.add_argument('--builder-head');r.add_argument('--integration-head');r.add_argument('--target',choices=['ASSIGNED','BUILDING_ISOLATED'],default='ASSIGNED');a=ap.parse_args();out=validate() if a.cmd=='validate' else readiness(a.task.upper(),a.builder_head,a.integration_head,a.target);print(json.dumps(out,indent=2));raise SystemExit(0 if out.get('passed',True) else 2)
 if __name__=='__main__':main()
