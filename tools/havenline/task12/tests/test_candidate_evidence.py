@@ -169,5 +169,14 @@ class T12CandidateEvidenceTests(unittest.TestCase):
         self.assertTrue(any("schema_version" in error for error in result["errors"]))
 
 
+    def test_invalid_validator_source_digest_fails(self):
+        data = self.resolved_packet()
+        data["exact_source"]["validator_source"] = "branch-name"
+        result = validator.validate_packet(data, require_resolved=True)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("validator_source" in error and "sha256" in error for error in result["errors"]))
+
+
+
 if __name__ == "__main__":
     unittest.main()
