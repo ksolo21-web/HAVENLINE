@@ -317,16 +317,16 @@ func run() -> void:
 	view.show_blocked(blocked_preview)
 	check("identical blocked payload does not reapply visuals", view.visual_apply_count == applies_before_noop)
 	check("blocked lifecycle renders exact costs and shortfalls", ring.visible and beacon.visible and ghost.visible and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and beacon.text.contains("1 wood") and beacon.text.contains("1 stone"))
-	check("blocked primary instruction leads with explicit next action and exact shortfall", beacon.text.begins_with("NEXT: DELIVER → Foundation\nMISSING:") and beacon.text.count("1 wood") == 1 and beacon.text.count("1 stone") == 1 and beacon.text.contains("\ue000") and beacon.text.contains("\ue001") and beacon.text.contains("TOTAL:") and not view._ring_material.emission_enabled)
+	check("blocked primary instruction leads with explicit next action and exact shortfall", beacon.text.begins_with("NEXT >> DELIVER → Foundation\nNeed:") and beacon.text.count("1 wood") == 1 and beacon.text.count("1 stone") == 1 and beacon.text.contains("\ue000") and beacon.text.contains("\ue001") and beacon.text.contains("Cost:") and not view._ring_material.emission_enabled)
 	var multi_block := blocked_preview.duplicate(true)
 	multi_block.shortfalls = {"wood": 1, "stone": 2, "metal": 3, "fuel": 4}
 	multi_block.errors = ["insufficient_resources", "missing_prerequisite:harvesting_online"]
 	view.show_blocked(multi_block)
-	check("all four resource shortfalls and additional prerequisite remain visible", beacon.text.begins_with("NEXT: UNLOCK HARVESTING ACCESS\nBLOCKED: Foundation") and beacon.text.contains("THEN DELIVER:") and beacon.text.contains("1 wood") and beacon.text.contains("2 stone") and beacon.text.contains("3 metal") and beacon.text.contains("4 fuel") and beacon.text.contains("\ue002") and beacon.text.contains("\ue003"))
+	check("all four resource shortfalls and additional prerequisite remain visible", beacon.text.begins_with("NEXT >> UNLOCK HARVESTING ACCESS\nBlocked: Foundation") and beacon.text.contains("Then: deliver ·") and beacon.text.contains("1 wood") and beacon.text.contains("2 stone") and beacon.text.contains("3 metal") and beacon.text.contains("4 fuel") and beacon.text.contains("\ue002") and beacon.text.contains("\ue003"))
 	multi_block.shortfalls = {}
 	multi_block.errors = ["missing_prerequisite:harvesting_online"]
 	view.show_blocked(multi_block)
-	check("prerequisite-only block makes unlock action primary without inventing missing resources", beacon.text.begins_with("NEXT: UNLOCK HARVESTING ACCESS\nBLOCKED: Foundation") and not beacon.text.contains("THEN DELIVER:"))
+	check("prerequisite-only block makes unlock action primary without inventing missing resources", beacon.text.begins_with("NEXT >> UNLOCK HARVESTING ACCESS\nBlocked: Foundation") and not beacon.text.contains("Then: deliver ·"))
 	view.set_ready()
 	check("leaving blocked state clears failure payload", view.descriptor().block_reasons.is_empty() and view.descriptor().blocked_shortfalls.is_empty())
 
@@ -366,7 +366,7 @@ func run() -> void:
 	var visual_accepted := visual_engine.accept_authoritative_receipt(visual_ack)
 	var next_blocked_offer := visual_engine.preview_transform("framework_anchor_foundation_to_reinforced", "visual-A", {"wood": 0, "stone": 0, "metal": 0})
 	check("complete world response requires accepted authority receipt", view.mark_complete(visual_accepted, next_blocked_offer) and view.descriptor().lifecycle == "complete")
-	check("completion makes prerequisite the primary next action before delivery details", beacon.text.begins_with("NEXT: UNLOCK HARVESTING ACCESS\nTHEN DELIVER → Reinforced:") and beacon.text.contains("12 wood") and beacon.text.contains("8 stone") and beacon.text.contains("2 metal") and beacon.text.contains("✓ Foundation complete"))
+	check("completion makes prerequisite the primary next action before delivery details", beacon.text.begins_with("NEXT >> UNLOCK HARVESTING ACCESS\nThen: deliver → Reinforced ·") and beacon.text.contains("12 wood") and beacon.text.contains("8 stone") and beacon.text.contains("2 metal") and beacon.text.contains("✓ Foundation complete"))
 	check("complete lifecycle keeps accepted form green while blocked-next perimeter is red", ring.visible and ghost.visible and beacon.visible and ghost.scale == Vector3.ONE and ghost.material_override.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED and beacon.text.contains("Spent:") and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and view.displayed_costs == {"wood": 8, "stone": 4} and view.descriptor().next_preview_blocked and view._ring_material.albedo_color.r > view._ring_material.albedo_color.g and view._ghost_material.albedo_color.g > view._ghost_material.albedo_color.r)
 	check("label preserves adaptive camera-lane render ordering", beacon.render_priority == 100 and beacon.outline_render_priority == 99 and beacon.pixel_size >= TransformView.LABEL_PIXEL_SIZE * TransformView.READABILITY_MIN - 0.000001 and beacon.pixel_size <= TransformView.LABEL_PIXEL_SIZE + 0.000001)
 	check("accepted receipt stops flow while retaining camera-lane maintenance", not view._ring_material.emission_enabled and view._ring_material.uv1_scale == Vector3.ONE and view._ring_material.uv1_offset == Vector3.ZERO and view.is_processing(), null, "R05_INTEGRATION_ACCEPTED_STOPS_FLOW")
