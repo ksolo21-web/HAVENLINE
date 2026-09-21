@@ -151,6 +151,72 @@ jobs:
           if-no-files-found: error
           retention-days: 30
 
+  semantic-specialist:
+    needs: evidence-ready
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    strategy:
+      fail-fast: false
+      matrix:
+        critic: [C3, C7]
+    env:
+      CANDIDATE: 'b37b3d5e471c5699b97597f508ad8e7b28ce70ee'
+      SOURCE_RUN: '35546330367'
+      EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: ${{ env.EVIDENCE_ARTIFACT }}
+          path: critic-input
+          github-token: ${{ github.token }}
+          run-id: ${{ env.SOURCE_RUN }}
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Bind exact candidate and pinned reviewer
+        run: |
+          set -euo pipefail
+          git worktree add --detach "$RUNNER_TEMP/t10-final-candidate" "$CANDIDATE"
+          for p in Docs/Production/CRITIC_MATRIX.json Docs/Production/CRITIC_EXECUTION.json tools/havenline/production/specialist_critic_runner.py tools/havenline/production/specialist_evidence_manifest.py tools/havenline/production/critic_harness.py; do
+            cmp "$RUNNER_TEMP/t10-final-candidate/$p" "$p"
+          done
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq; sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > reviewer-runtime.json
+          python3 -m pip install --disable-pip-version-check --no-input pillow==12.3.0
+          python3 tools/havenline/production/specialist_evidence_manifest.py validate "critic-input/${{ matrix.critic }}-manifest.json"
+      - name: Execute fresh independent specialist
+        run: |
+          set -euo pipefail
+          python3 -u tools/havenline/production/specialist_critic_runner.py \
+            --critic "${{ matrix.critic }}" --candidate "$CANDIDATE" \
+            --manifest "critic-input/${{ matrix.critic }}-manifest.json" \
+            --out "specialist-final/${{ matrix.critic }}"
+          cp reviewer-runtime.json "specialist-final/${{ matrix.critic }}/runtime-preparation.json"
+      - name: Enforce strict greater-than-nine specialist gate
+        if: always()
+        run: |
+          test -f "specialist-final/${{ matrix.critic }}/critic-record.json"
+          python3 tools/havenline/production/critic_harness.py validate-raw \
+            --critic "${{ matrix.critic }}" --candidate "$CANDIDATE" \
+            --raw "specialist-final/${{ matrix.critic }}/critic-record.json"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task10-${{ matrix.critic }}-final-${{ env.CANDIDATE }}
+          path: specialist-final/${{ matrix.critic }}/
+          if-no-files-found: error
+          retention-days: 90
+
   c4:
     needs: evidence-ready
     runs-on: ubuntu-24.04
@@ -271,11 +337,10 @@ jobs:
           retention-days: 30
 
   six-critic-aggregate:
-    needs: [evidence-ready, aggregate-visual, c4, c6]
+    needs: [evidence-ready, aggregate-visual, semantic-specialist, c4, c6]
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
-      GH_TOKEN: ${{ github.token }}
       CANDIDATE: 'b37b3d5e471c5699b97597f508ad8e7b28ce70ee'
       SOURCE_RUN: '35546330367'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
@@ -295,35 +360,11 @@ jobs:
           path: critic-input
           github-token: ${{ github.token }}
           run-id: ${{ env.SOURCE_RUN }}
-      - name: Bind successful exact-source C3 and C7 plus current final records
+      - name: Normalize the six fresh exact-source critic records
         run: |
           set -euo pipefail
           mkdir -p normalized
-          gh api "/repos/ksolo21-web/HAVENLINE/actions/runs/$SOURCE_RUN/artifacts" > source-artifacts.json
-          for cid in C3 C7; do
-            id=$(CID="$cid" python3 - <<'PY'
-          import json,os
-          d=json.load(open('source-artifacts.json'));cid=os.environ['CID'];cand=os.environ['CANDIDATE']
-          rows=[x for x in d['artifacts'] if x['name']==f'havenline-task10-{cid}-{cand}' and not x['expired']]
-          assert len(rows)==1,(cid,rows)
-          print(rows[0]['id'])
-          PY
-            )
-            mkdir -p "source-$cid" "normalized/$cid"
-            gh api "/repos/ksolo21-web/HAVENLINE/actions/artifacts/$id/zip" > "$cid.zip"
-            unzip -q "$cid.zip" -d "source-$cid"
-            rec=$(find "source-$cid" -name critic-record.json -print -quit); test -n "$rec"
-            cp "$rec" "normalized/$cid/critic-record.json"
-            rawname=$(CID="$cid" python3 - <<'PY'
-          import json,os
-          from pathlib import Path
-          cid=os.environ['CID'];print(Path(json.load(open(f'normalized/{cid}/critic-record.json'))['raw_output_path']).name)
-          PY
-            )
-            raw=$(find "source-$cid" -name "$rawname" -print -quit); test -n "$raw"
-            cp "$raw" "normalized/$cid/$rawname"
-          done
-          for cid in C1 C2 C4 C6; do
+          for cid in C1 C2 C3 C4 C6 C7; do
             rec=$(find current-final -path "*$cid*" -name critic-record.json -print -quit); test -n "$rec"
             mkdir -p "normalized/$cid"
             cp "$rec" "normalized/$cid/critic-record.json"
@@ -338,7 +379,7 @@ jobs:
           done
           final_manifest=$(find current-final -path '*C4*' -name C4-final-manifest.json -print -quit); test -n "$final_manifest"
           cp "$final_manifest" critic-input/C4-manifest.json
-      - name: Aggregate exact six critics without rescoring
+      - name: Aggregate exact six fresh critics without rescoring
         run: |
           set -euo pipefail
           rm -rf six-critic
