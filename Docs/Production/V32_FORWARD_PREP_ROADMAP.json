@@ -185,6 +185,165 @@
       "forbidden": [
         "reconnaissance cannot substitute T68/T69 certification"
       ]
+    },
+    {
+      "tasks": [
+        "T31"
+      ],
+      "lane": "forward_preparation",
+      "deliverables": [
+        "companion/survivor capability conflict matrix",
+        "job arbitration stress cases",
+        "navigation contention cases",
+        "animation-profile separation audit"
+      ],
+      "forbidden": [
+        "no integration until T15/T23/T24-T30 dependencies are APPROVED"
+      ]
+    },
+    {
+      "tasks": [
+        "T32"
+      ],
+      "lane": "forward_preparation",
+      "deliverables": [
+        "rolling Level 1-10 closure scenario",
+        "save/resume/device acceptance scenario",
+        "resource/economy conservation scenario",
+        "first physical-device reconnaissance plan"
+      ],
+      "forbidden": [
+        "T32 remains build-gated until all declared dependencies are APPROVED"
+      ]
+    },
+    {
+      "tasks": [
+        "T54"
+      ],
+      "lane": "forward_preparation",
+      "deliverables": [
+        "day/night/weather deterministic state cases",
+        "audio/feedback layering matrix",
+        "readability/performance budget cases"
+      ],
+      "forbidden": [
+        "no final feedback runtime before T53 and T32 dependencies"
+      ]
+    },
+    {
+      "tasks": [
+        "T57"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "milestone persistence/offline cases",
+        "shareable milestone schema",
+        "platform achievement capability evidence plan"
+      ],
+      "forbidden": [
+        "no platform achievement integration without READY capability evidence"
+      ]
+    },
+    {
+      "tasks": [
+        "T59",
+        "T60",
+        "T61"
+      ],
+      "lane": "asset_content_readiness",
+      "deliverables": [
+        "final rig inventory",
+        "tool/weapon contact matrix",
+        "full-cycle transition/clipping capture plan",
+        "C5 pose/contact preflight"
+      ],
+      "forbidden": [
+        "no final rig approval before T58"
+      ]
+    },
+    {
+      "tasks": [
+        "T62"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "Level 1-100 acceptance scenario manifest",
+        "all contract coverage checklist",
+        "save/device/performance/security/economy/liveops closure matrix"
+      ],
+      "forbidden": [
+        "validation-only: route defects to owning tasks; do not become a repair branch"
+      ]
+    },
+    {
+      "tasks": [
+        "T63"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "$0 lifelong-F2P simulation scenarios",
+        "bounded-grind cadence cases",
+        "dead-end detection cases"
+      ],
+      "forbidden": [
+        "validation-only; no economy tuning authority"
+      ]
+    },
+    {
+      "tasks": [
+        "T64"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "purchase value/fairness scenarios",
+        "billing entitlement/recovery attack cases",
+        "Game Master exclusion checks"
+      ],
+      "forbidden": [
+        "validation-only; no billing/economy implementation authority"
+      ]
+    },
+    {
+      "tasks": [
+        "T65"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "full LiveOps rehearsal schedule",
+        "reward/collision/kill-switch/rollback cases",
+        "billing/recovery rehearsal cases"
+      ],
+      "forbidden": [
+        "validation-only; no LiveOps implementation authority"
+      ]
+    },
+    {
+      "tasks": [
+        "T66"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "full exploit attack matrix",
+        "repeatability/privilege-boundary cases",
+        "recovery-after-rejected-attack cases"
+      ],
+      "forbidden": [
+        "validation-only; no security feature implementation authority"
+      ]
+    },
+    {
+      "tasks": [
+        "T67"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "accepted-source full-game regression manifest",
+        "reference/contract/motion/performance/service comparison plan",
+        "zero-drift release candidate checklist"
+      ],
+      "forbidden": [
+        "validation-only; defects return to owning task/system"
+      ]
     }
   ],
   "required_shared_contracts": {
@@ -420,6 +579,73 @@
     ],
     "T70": [
       "physical_reconnaissance",
+      "external_capabilities"
+    ],
+    "T31": [
+      "population",
+      "motion_readiness"
+    ],
+    "T32": [
+      "progression",
+      "save_versioning",
+      "physical_reconnaissance"
+    ],
+    "T54": [
+      "accessibility_device"
+    ],
+    "T57": [
+      "external_capabilities"
+    ],
+    "T59": [
+      "motion_readiness"
+    ],
+    "T60": [
+      "motion_readiness"
+    ],
+    "T61": [
+      "motion_readiness"
+    ],
+    "T62": [
+      "progression",
+      "difficulty",
+      "save_versioning",
+      "population",
+      "action_arbitration",
+      "motion_readiness",
+      "transaction_security",
+      "liveops_clock",
+      "region_template",
+      "accessibility_device",
+      "external_capabilities"
+    ],
+    "T63": [
+      "progression",
+      "transaction_security"
+    ],
+    "T64": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T65": [
+      "transaction_security",
+      "liveops_clock",
+      "external_capabilities"
+    ],
+    "T66": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T67": [
+      "progression",
+      "difficulty",
+      "save_versioning",
+      "population",
+      "action_arbitration",
+      "motion_readiness",
+      "transaction_security",
+      "liveops_clock",
+      "region_template",
+      "accessibility_device",
       "external_capabilities"
     ]
   },
