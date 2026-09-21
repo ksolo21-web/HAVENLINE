@@ -15,6 +15,7 @@ import importlib.util
 import json
 import pathlib
 import re
+import subprocess
 from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
@@ -215,13 +216,42 @@ def main() -> None:
         if not path.is_file():
             raise SystemExit(f"required {label} file missing: {path}")
 
+    candidate_data = json.loads(paths["candidate"].read_text())
     binding_bytes = paths["binding"].read_bytes()
+    binding_data = json.loads(binding_bytes.decode("utf-8"))
+
+    try:
+        split_manifest = progression_validator.load_split_manifest(paths["levels"], paths["milestones"])
+        progression_result = progression_validator.validate_manifest(split_manifest)
+    except Exception as exc:
+        progression_result = {"passed": False, "errors": [f"split shipping progression load failed: {exc}"]}
+
+    candidate_source = (
+        candidate_data.get("exact_source", {}).get("candidate_source")
+        if isinstance(candidate_data.get("exact_source"), dict)
+        else None
+    )
+    binding_result = binding_verifier.validate_resolution(
+        binding_data,
+        require_resolved=True,
+        root=ROOT,
+        activation_head=candidate_source if isinstance(candidate_source, str) else None,
+    )
+    checked_out_head = subprocess.check_output(
+        ["git", "rev-parse", "HEAD"],
+        cwd=ROOT,
+        text=True,
+    ).strip()
+
     result = validate_consistency(
-        json.loads(paths["candidate"].read_text()),
+        candidate_data,
         json.loads(paths["critics"].read_text()),
         json.loads(paths["parity"].read_text()),
         json.loads(paths["evidence_index"].read_text()),
-        json.loads(binding_bytes.decode("utf-8")),
+        binding_data,
+        progression_validation_result=progression_result,
+        binding_verification_result=binding_result,
+        checked_out_head=checked_out_head,
         levels_sha256=sha256_bytes(paths["levels"].read_bytes()),
         milestones_sha256=sha256_bytes(paths["milestones"].read_bytes()),
         binding_resolution_sha256=sha256_bytes(binding_bytes),
