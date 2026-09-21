@@ -100,5 +100,11 @@ class T12LevelMatrixTests(unittest.TestCase):
         self.assertTrue(any("PREPARATION_ONLY_NON_SHIPPING" in error for error in result["errors"]))
 
 
+    def test_rejects_schema_version_drift(self):
+        result = self.validate(lambda matrix: matrix.__setitem__("schema_version", 2))
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("schema_version" in error for error in result["errors"]))
+
+
 if __name__ == "__main__":
     unittest.main()
