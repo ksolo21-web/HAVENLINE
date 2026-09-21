@@ -59,6 +59,8 @@ def expected_band(level: int) -> tuple[str, str]:
 def validate_matrix(matrix: dict[str, Any]) -> dict[str, Any]:
     errors: list[str] = []
 
+    if matrix.get("schema_version") != 1:
+        errors.append("schema_version must be 1")
     if matrix.get("task_id") != "T12":
         errors.append("task_id must be T12")
     if matrix.get("status") != "PREPARATION_ONLY_NON_SHIPPING":
