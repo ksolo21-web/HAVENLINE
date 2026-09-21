@@ -39,17 +39,17 @@ class T12ReferenceOracleTests(unittest.TestCase):
             "level": 2,
             "level_id": "t12.level.002",
             "prerequisite_level_ids": ["t12.level.001"],
-            "required_fact_ids": ["prepared.fact.ready"],
-            "one_time_event_ids": ["t12.event.level_002"],
+            "required_fact_ids": ["synthetic.fact.ready"],
+            "one_time_event_ids": ["t12.event.level.002.completed"],
         }]
         once = oracle.evaluate(levels, {
             "completed_level_ids": ["t12.level.001"],
-            "observed_fact_ids": ["prepared.fact.ready"],
+            "observed_fact_ids": ["synthetic.fact.ready"],
             "emitted_event_ids": [],
         })
         twice = oracle.evaluate(levels, {
             "completed_level_ids": ["t12.level.001"],
-            "observed_fact_ids": ["prepared.fact.ready", "prepared.fact.ready"],
+            "observed_fact_ids": ["synthetic.fact.ready", "synthetic.fact.ready"],
             "emitted_event_ids": [],
         })
         self.assertEqual(once, twice)
@@ -60,11 +60,11 @@ class T12ReferenceOracleTests(unittest.TestCase):
             "level_id": "t12.level.002",
             "prerequisite_level_ids": ["t12.level.001"],
             "required_fact_ids": [],
-            "one_time_event_ids": ["t12.event.level_002"],
+            "one_time_event_ids": ["t12.event.level.002.completed"],
         }], {
             "completed_level_ids": ["t12.level.001"],
             "observed_fact_ids": [],
-            "emitted_event_ids": ["t12.event.level_002"],
+            "emitted_event_ids": ["t12.event.level.002.completed"],
         })
         self.assertEqual(result["eligible_level_ids"], ["t12.level.002"])
         self.assertEqual(result["new_one_time_event_ids"], [])
