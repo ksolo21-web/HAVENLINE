@@ -23,6 +23,7 @@ CHECKLIST_PATH = T12_DOCS / "ACTIVATION_CHECKLIST.json"
 PREBUILD_CONTRACT_PATH = T12_DOCS / "PREBUILD_CONTRACT.json"
 UPSTREAM_BINDINGS_PATH = T12_DOCS / "UPSTREAM_BINDINGS.json"
 DEFECT_LEDGER_PATH = T12_DOCS / "defect-ledger.json"
+PERFORMANCE_BUDGET_PATH = T12_DOCS / "PREBUILD_PERFORMANCE_BUDGET.json"
 GRAPH_PATH = DOCS / "DEPENDENCY_GRAPH.json"
 REGISTRY_PATH = DOCS / "WORKSTREAM_REGISTRY.json"
 OWNERSHIP_PATH = DOCS / "PATH_OWNERSHIP.json"
@@ -391,6 +392,43 @@ def validate_upstream_preparation_bindings(data=None) -> list[str]:
     return errors
 
 
+def validate_performance_budget_contract(data=None) -> list[str]:
+    errors: list[str] = []
+    data = load(PERFORMANCE_BUDGET_PATH) if data is None else data
+    if data.get("schema_version") != 1 or data.get("task_id") != "T12":
+        errors.append("PREBUILD_PERFORMANCE_BUDGET identity drifted")
+    if data.get("status") != "PREPARATION_ONLY_BUDGET":
+        errors.append("PREBUILD_PERFORMANCE_BUDGET status drifted")
+
+    static = data.get("static_validation_budget", {})
+    if static.get("iterations") != 500 or static.get("memory_iterations") != 100:
+        errors.append("static validation iteration budget drifted")
+    for key in ("maximum_mean_ms", "maximum_p95_ms", "maximum_single_ms", "maximum_retained_growth_kib"):
+        value = static.get(key)
+        if not isinstance(value, (int, float)) or isinstance(value, bool) or value <= 0:
+            errors.append(f"static validation budget {key} must be positive")
+    if "14 static preparation checks" not in str(static.get("input_shape", "")):
+        errors.append("static validation input_shape must enumerate the 14-check surface")
+
+    fuzz = data.get("fuzz_budget", {})
+    if fuzz.get("cases") != 250 or fuzz.get("minimum_rejected_mutations") != 250:
+        errors.append("fuzz budget must require 250/250 rejected malformed cases")
+    mutation_classes = fuzz.get("mutation_classes")
+    if not isinstance(mutation_classes, list) or len(mutation_classes) != 24 or len(set(mutation_classes)) != 24:
+        errors.append("fuzz mutation_classes must contain exactly 24 unique classes")
+    if fuzz.get("deterministic_seed") != 1200:
+        errors.append("fuzz deterministic seed drifted")
+    if not isinstance(fuzz.get("maximum_total_seconds"), (int, float)) or fuzz.get("maximum_total_seconds") <= 0:
+        errors.append("fuzz maximum_total_seconds must be positive")
+
+    shipping = data.get("shipping_c6_boundary", {})
+    if shipping.get("required_after_activation") is not True or shipping.get("critics") != ["C6"]:
+        errors.append("shipping C6 boundary must remain required and owned by C6")
+    if "cannot approve or waive shipping C6" not in str(shipping.get("rule", "")):
+        errors.append("prebuild budget must explicitly remain unable to waive shipping C6")
+    return errors
+
+
 def validate_defect_ledger_preparation(ledger=None) -> list[str]:
     errors: list[str] = []
     ledger = load(DEFECT_LEDGER_PATH) if ledger is None else ledger
@@ -443,6 +481,7 @@ def validate_preparation():
     errors.extend(validate_cross_contracts(checklist))
     errors.extend(validate_upstream_preparation_bindings())
     errors.extend(validate_defect_ledger_preparation())
+    errors.extend(validate_performance_budget_contract())
 
     t12 = graph.get("tasks", {}).get("T12")
     if not t12:
