@@ -135,7 +135,7 @@
   "claim_template": "python3 tools/havenline/production/workstream.py claim T12 --owner progression-architecture-builder --branch havenline/T12-progression-architecture --base <POST_T11_INTEGRATION_SHA> --owned-alias @reservation:T12 --status ASSIGNED",
   "runtime_build_allowed_before_activation": false,
   "notes": [
-    "T12 governance/tooling preparation may continue while T09/T10/T11 runtime work is unfinished; shipping T12 runtime/data remain dependency-gated.",
+    "T12 governance/tooling preparation may continue while remaining dependencies are unfinished; at the current checkpoint T10 is APPROVED/integrated and T11 remains unfinished. Shipping T12 runtime/data remain dependency-gated.",
     "T12 owns Level 1–100 progression topology and cadence contracts; T13 owns adaptive difficulty/Challenge Director behavior.",
     "T12 may consume T10/T11 public transform/camp-state IDs after approval but may not change their transaction or content semantics.",
     "T14 owns global persistence/versioning; T33+ own economy/monetization; T44-T52 own authored connected-region content.",
