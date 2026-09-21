@@ -1,0 +1,239 @@
+name: Havenline T11 governance-only prepare and unlock
+on:
+  push:
+    branches: ['havenline/review-T10-approval-closeout']
+    paths:
+      - '.github/t11-unlock.trigger'
+
+permissions:
+  contents: write
+
+jobs:
+  prepare-t11:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CANONICAL_BRANCH: 'codex/havenline-sequential-task-01'
+      T11_BRANCH: 'havenline/T11-camp-construction'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ env.CANONICAL_BRANCH }}
+          fetch-depth: 0
+
+      - name: Verify T10 approval is authoritative
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin "$CANONICAL_BRANCH"
+          test "$(git rev-parse HEAD)" = "$(git rev-parse "origin/$CANONICAL_BRANCH")"
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          g=json.loads(Path('Docs/Production/DEPENDENCY_GRAPH.json').read_text())
+          r=json.loads(Path('Docs/Production/WORKSTREAM_REGISTRY.json').read_text())
+          v=json.loads(Path('Docs/Production/T10/verified-completion.json').read_text())
+          assert g['tasks']['T10']['status']=='APPROVED',g['tasks']['T10']
+          assert next(x for x in r['workstreams'] if x['task_id']=='T10')['status']=='APPROVED'
+          assert v['status']=='APPROVED' and v['unresolved_mandatory_defects']==[]
+          assert g['tasks']['T11']['status']=='LOCKED',g['tasks']['T11']
+          assert not any(x.get('task_id')=='T11' for x in r['workstreams'])
+          PY
+
+      - name: Generate T11 frozen packet, reservation and PREPARED state
+        run: |
+          set -euo pipefail
+          BASE=$(git rev-parse HEAD)
+          export BASE
+          python3 - <<'PY'
+          import datetime,json,os
+          from pathlib import Path
+          base=os.environ['BASE']
+          now=datetime.datetime.now(datetime.timezone.utc).isoformat()
+          root=Path('.')
+          graph=json.loads((root/'Docs/Production/DEPENDENCY_GRAPH.json').read_text())
+          registry=json.loads((root/'Docs/Production/WORKSTREAM_REGISTRY.json').read_text())
+          ownership=json.loads((root/'Docs/Production/PATH_OWNERSHIP.json').read_text())
+          gates=json.loads((root/'Docs/Production/task-gates.json').read_text())
+
+          t11dir=root/'Docs/Production/T11'
+          t11dir.mkdir(parents=True,exist_ok=True)
+          frozen=f'''# T11 frozen scope — Camp construction and visual upgrade system
+
+## Required outcome
+Turn the approved T10 World Transformation Framework into authored, readable camp construction and upgrade content without changing T10 transaction semantics. T11 owns final camp building/upgrade presentation, authored structure assets and construction/upgrade content. It must preserve Havenline's simple MOVE → AUTO-INTERACT → GATHER → VISIBLY CARRY → DELIVER → TRANSFORM → BUILD/UPGRADE flow.
+
+## Dependencies
+- T05 Production station and prop kit — APPROVED.
+- T10 World Transformation Framework — APPROVED.
+- Consume approved T08/T09 delivered-resource and harvesting interfaces through T10; do not change their quantities/yields/carry rules.
+
+## Required behavior
+- Register deterministic camp construction/upgrade content through T10's published recipe/presentation boundary.
+- Provide authored camp structure/upgrade visuals and clear before/preview/committing/complete response at gameplay scale.
+- Preserve exact resource costs, prerequisites, state order and exact-once behavior from T10.
+- Support adaptive phone/tablet/foldable layouts and native 3840×2160 scale-1 evidence where applicable.
+- Prove construction/upgrade visuals are legible from gameplay, overhead, side/three-quarter and detail views.
+- Keep performance bounded with headroom for later T12+ systems.
+
+## Explicit exclusions
+- No changes to T10 transaction/idempotency/resource-authority semantics.
+- No changes to T08 carrying/storage conservation or T09 harvesting yields/timing.
+- No Level 1–100 progression architecture or difficulty director; T12/T13 own them.
+- No global save schema/versioning; T14 owns it.
+- No NPC/customer/economy/combat/companion/biome/release-certification work.
+- No new manual action-button or inventory/menu complexity.
+- If T11 needs a protected T10 data/source change, use a structured integration-owner ChangeRequest rather than silently taking ownership.
+
+## Owned-path reservation
+- HavenlineGodot/assets/camp_construction_v1/**
+- HavenlineGodot/scripts/camp_construction_view.gd
+- HavenlineGodot/data/camp_construction_recipes.json
+- HavenlineGodot/tests/test_task11_camp_construction.gd
+- HavenlineGodot/tests/test_task11_integration.gd
+- HavenlineGodot/tests/capture_task11_camp_construction.gd
+- Docs/Production/T11/**
+- tools/havenline/task11/**
+- .github/workflows/havenline-task11-*.yml
+
+## Acceptance
+Required critics: C2, C3, C4, C6. Every mandatory dimension must be strictly >9.0 unrounded, target 10/10, complete coverage, zero unresolved mandatory defects. G1–G14 apply where relevant and final integrated-source regression is mandatory.
+'''
+          (t11dir/'FROZEN_SCOPE.md').write_text(frozen)
+
+          packet=f'''# Havenline frozen task packet — T11
+
+## Identity
+- Task ID: T11
+- Task name: Camp construction and visual upgrade system
+- Workstream ID: T11-camp-construction-builder
+- Owner: camp-construction-builder
+- Isolated branch: havenline/T11-camp-construction
+- Exact base integration commit: {base}
+- Packet generation timestamp: {now}
+
+## Dependencies
+- Required APPROVED upstream tasks: T05, T10
+- Stable interfaces: approved T10 transform recipe/presentation boundary; approved T08/T09 delivered-resource path
+- Dependency evidence: Docs/Production/T05/, Docs/Production/T10/verified-completion.json
+
+## Frozen scope
+See Docs/Production/T11/FROZEN_SCOPE.md. Authored camp construction/upgrade content only; do not alter T10 authority semantics.
+
+## Path ownership
+- Owned: @reservation:T11
+- Protected: @protected:approved, @integration-only, @reservation:T10
+- Any protected T10 extension requires a structured ChangeRequest.
+
+## Acceptance gates
+G1–G9, G11–G14 REQUIRED. G10 N/A unless scope changes introduce economy/security behavior, which is currently excluded.
+
+## Resource / tool / actor / animation contract
+T11 consumes already-approved delivered resources through T10. No new resource/tool/actor animation may enter scope without the forward contract validators.
+
+## Required tests
+- T11 construction/upgrade domain and integration suites.
+- T10/T08/T09 impacted regression.
+- Save/recovery cases applicable to T10-backed transform state.
+- Six-device adaptive layout and native-4K visual evidence.
+- Performance evidence.
+
+## Required critics
+C2, C3, C4, C6 — independent where required; every mandatory dimension >9.0 unrounded, zero unresolved defects.
+
+## Candidate handoff
+No candidate yet. State is PREPARED only; runtime build has not started.
+'''
+          (t11dir/'TASK_PACKET.md').write_text(packet)
+
+          alias='@reservation:T11'
+          assert alias not in ownership['aliases']
+          ownership['aliases'][alias]=[
+            'HavenlineGodot/assets/camp_construction_v1/**',
+            'HavenlineGodot/scripts/camp_construction_view.gd',
+            'HavenlineGodot/data/camp_construction_recipes.json',
+            'HavenlineGodot/tests/test_task11_camp_construction.gd',
+            'HavenlineGodot/tests/test_task11_integration.gd',
+            'HavenlineGodot/tests/capture_task11_camp_construction.gd',
+            'Docs/Production/T11/**',
+            'tools/havenline/task11/**',
+            '.github/workflows/havenline-task11-*.yml',
+          ]
+          active=ownership.get('active_owners',[])
+          t10=[x for x in active if x.get('task_id')=='T10']
+          ownership['active_owners']=[x for x in active if x.get('task_id')!='T10']
+          if t10 and not any(x.get('task_id')=='T10' for x in ownership.get('completed_production_owners',[])):
+            v=json.loads((root/'Docs/Production/T10/verified-completion.json').read_text())
+            ownership.setdefault('completed_production_owners',[]).append({
+              'workstream':'T10-world-transformation-builder','task_id':'T10','paths_alias':'@reservation:T10',
+              'status':'APPROVED','accepted_source':v['candidate_commit'],'integrated_source':v['integrated_source']
+            })
+          ownership['active_owners'].append({
+            'workstream':'T11-camp-construction-builder','task_id':'T11','owner':'camp-construction-builder',
+            'branch':'havenline/T11-camp-construction','paths_alias':alias,'status':'PREPARED','base_commit':base
+          })
+
+          graph['tasks']['T11']['status']='PREPARED'
+
+          registry['workstreams'].append({
+            'task_id':'T11','task_name':'Camp construction and visual upgrade system',
+            'workstream_id':'T11-camp-construction-builder','status':'PREPARED',
+            'owner':'camp-construction-builder','branch':'havenline/T11-camp-construction',
+            'base_commit':base,'dependencies':graph['tasks']['T11']['dependencies'],
+            'owned_paths':[alias],'protected_paths':['@protected:approved','@integration-only','@reservation:T10'],
+            'candidate_commit':None,'candidate_hash_or_artifact':None,'tests':{},
+            'evidence_path':'Docs/Production/Evidence/T11/',
+            'critic_requirements':['C2','C3','C4','C6'],'critic_status':{},
+            'integration_status':'not integrated','known_blockers':[],
+            'next_action':'Freeze T11 builder design against this packet, then claim ASSIGNED before runtime construction begins.',
+            'status_updated_at':now,
+          })
+
+          gates.update({
+            'active_task':'T11','active_task_title':'Camp construction and visual upgrade system',
+            'active_status':'PREPARED','active_frozen_scope':'Docs/Production/T11/FROZEN_SCOPE.md',
+            'active_task_packet':'Docs/Production/T11/TASK_PACKET.md','active_base_integration_commit':base,
+            'active_candidate_source':None,'active_candidate_run':None,'active_tests':None,
+            'active_evidence':'Docs/Production/Evidence/T11/','active_critic_state':'PENDING_BUILD_AND_INDEPENDENT_REVIEW',
+          })
+          rows=gates.setdefault('next_post_t03_wave',[])
+          if not any(x.get('task')=='T11' for x in rows):
+            rows.append({'task':'T11','branch':'havenline/T11-camp-construction','state':'PREPARED','owner':'camp-construction-builder','base_commit':base,
+                         'reason':'T05 and T10 are APPROVED; T11 packet and disjoint path reservation are prepared. No T11 runtime candidate exists yet.'})
+
+          for p,obj in [
+            ('Docs/Production/DEPENDENCY_GRAPH.json',graph),
+            ('Docs/Production/WORKSTREAM_REGISTRY.json',registry),
+            ('Docs/Production/PATH_OWNERSHIP.json',ownership),
+            ('Docs/Production/task-gates.json',gates),
+          ]:
+            Path(p).write_text(json.dumps(obj,indent=2)+'\n')
+          PY
+
+          python3 tools/havenline/production/workstream.py validate-registry
+          python3 tools/havenline/production/validate_migration.py > /tmp/t11-migration.json
+
+      - name: Publish bounded T11 preparation and branch
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import subprocess
+          allowed={
+            'Docs/Production/DEPENDENCY_GRAPH.json','Docs/Production/WORKSTREAM_REGISTRY.json',
+            'Docs/Production/PATH_OWNERSHIP.json','Docs/Production/task-gates.json',
+            'Docs/Production/T11/FROZEN_SCOPE.md','Docs/Production/T11/TASK_PACKET.md',
+          }
+          lines=subprocess.check_output(['git','status','--porcelain'],text=True).splitlines()
+          paths={x[3:] for x in lines if len(x)>=4}
+          assert paths==allowed,(paths,allowed,paths^allowed)
+          PY
+          git config user.name 'Havenline T11 Preparation'
+          git config user.email 't11-prep@example.invalid'
+          git add Docs/Production/DEPENDENCY_GRAPH.json Docs/Production/WORKSTREAM_REGISTRY.json Docs/Production/PATH_OWNERSHIP.json Docs/Production/task-gates.json Docs/Production/T11
+          git commit -m "T11: prepare and unlock camp construction workstream"
+          git push origin HEAD:refs/heads/$CANONICAL_BRANCH
+          if git ls-remote --exit-code --heads origin "$T11_BRANCH" >/dev/null 2>&1; then
+            echo "T11 branch already exists; refusing to rewrite it" >&2
+            exit 1
+          fi
+          git push origin HEAD:refs/heads/$T11_BRANCH
+          git rev-parse HEAD
