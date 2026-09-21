@@ -224,12 +224,27 @@ class V32Tests(unittest.TestCase):
 
  def test_assignment_claim_binds_actual_remote_branch_tips(self):
   head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
-  stale=v32_assignment_claim.validate_assignment('T11','havenline/T11-camp-construction','fbb81ae34b9053f17fc937fb7e67895e3ef0584b',head,verify_remote=False)
+  stale=v32_assignment_claim.validate_assignment('T11','havenline/T11-camp-construction','fbb81ae34b9053f17fc937fb7e67895e3ef0584b',head,verify_remote=False,base=head)
   self.assertFalse(stale['passed'],stale)
-  synced=v32_assignment_claim.validate_assignment('T11','havenline/T11-camp-construction',head,head,verify_remote=False)
+  wrong_base=v32_assignment_claim.validate_assignment('T11','havenline/T11-camp-construction',head,head,verify_remote=False,base='fbb81ae34b9053f17fc937fb7e67895e3ef0584b')
+  self.assertFalse(wrong_base['passed'],wrong_base)
+  synced=v32_assignment_claim.validate_assignment('T11','havenline/T11-camp-construction',head,head,verify_remote=False,base=head)
   self.assertTrue(synced['passed'],synced)
+  state=v32_assignment_claim.proposed_assignment_state('T11','camp-construction-builder','havenline/T11-camp-construction','@reservation:T11',head,head)
+  row=next(w for w in state['registry']['workstreams'] if w['task_id']=='T11')
+  self.assertEqual('ASSIGNED',row['status'])
+  self.assertEqual(head,row['base_commit'])
+  self.assertEqual(head,row['assignment_integration_commit'])
+  self.assertEqual(head,row['assignment_branch_head'])
+  self.assertIn('@reservation:T10',row['protected_paths'])
+  self.assertEqual('ASSIGNED',state['graph']['tasks']['T11']['status'])
+  owner=next(x for x in state['ownership']['active_owners'] if x['task_id']=='T11')
+  self.assertEqual(head,owner['base_commit'])
+  self.assertEqual('ASSIGNED',owner['status'])
+  self.assertEqual(head,state['gates']['active_base_integration_commit'])
+  self.assertEqual('ASSIGNED',state['gates']['active_status'])
   body=(ROOT/'tools/havenline/production/v32_assignment_claim.py').read_text()
-  for token in ('remote_branch_head','actual_builder','actual_integration','assignment_integration_commit','assignment_branch_head','assignment_lineage_state','legacy_claim'):
+  for token in ('remote_branch_head','actual_builder','actual_integration','WORKSTREAM_REGISTRY.json','DEPENDENCY_GRAPH.json','PATH_OWNERSHIP.json','task-gates.json','assignment_integration_commit','assignment_branch_head','assignment_lineage_state'):
    self.assertIn(token,body)
 
  def test_shared_workflow_avoids_expression_flow_maps(self):
