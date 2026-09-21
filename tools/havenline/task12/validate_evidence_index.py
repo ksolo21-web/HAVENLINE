@@ -130,6 +130,7 @@ def validate_index(data: dict[str, Any], *, require_resolved: bool = False, cand
 
     ids: set[str] = set()
     uris: set[str] = set()
+    rows_by_uri: dict[str, dict[str, Any]] = {}
     for index, row in enumerate(entries):
         if not isinstance(row, dict):
             errors.append(f"entries[{index}] must be an object")
@@ -150,6 +151,7 @@ def validate_index(data: dict[str, Any], *, require_resolved: bool = False, cand
             errors.append(f"duplicate uri {uri}")
         else:
             uris.add(uri)
+            rows_by_uri[uri] = row
         if row.get("category") not in EXPECTED_CATEGORIES:
             errors.append(f"entries[{index}] category is not allowed")
         if require_resolved:
@@ -172,10 +174,24 @@ def validate_index(data: dict[str, Any], *, require_resolved: bool = False, cand
                 errors.append("evidence index candidate_source does not match candidate packet")
             if critics.get("candidate_source") != candidate_source:
                 errors.append("evidence index candidate_source does not match critic records")
-            required = required_refs(candidate, critics)
+            expected_categories = required_ref_categories(candidate, critics)
+            required = set(expected_categories)
             missing_refs = sorted(required - uris)
             if missing_refs:
                 errors.append(f"required evidence refs missing from index: {missing_refs}")
+            for uri, categories in expected_categories.items():
+                if len(categories) > 1:
+                    errors.append(
+                        f"evidence URI reused across incompatible categories {sorted(categories)}: {uri}"
+                    )
+                    continue
+                row = rows_by_uri.get(uri)
+                if row is not None:
+                    expected_category = next(iter(categories))
+                    if row.get("category") != expected_category:
+                        errors.append(
+                            f"evidence URI {uri} category mismatch: expected {expected_category}, got {row.get('category')}"
+                        )
 
     return {
         "passed": not errors,
