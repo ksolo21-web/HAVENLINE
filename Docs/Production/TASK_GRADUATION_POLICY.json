@@ -37,8 +37,28 @@
     "task_workflow",
     "checkpoint_path",
     "critic_preflight_command",
-    "stage_plan_command"
+    "stage_plan_command",
+    "failure_router_command",
+    "canary_command"
   ],
   "external_blockers_fail_closed": true,
-  "governance_only_base_drift_may_reconcile_without_runtime_reset": true
+  "governance_only_base_drift_may_reconcile_without_runtime_reset": true,
+  "workflow_required_tokens": [
+    "architecture_v32.py",
+    "execution_checkpoint.py",
+    "timeout_stage_plan.py",
+    "critic_package_preflight.py",
+    "blocker_family_gate.py",
+    "rolling_canary.py"
+  ],
+  "specialist_fanout_critics": [
+    "C3",
+    "C4",
+    "C5",
+    "C7",
+    "C8",
+    "C10",
+    "C11"
+  ],
+  "performance_ledger_required_when_critic": "C6"
 }
