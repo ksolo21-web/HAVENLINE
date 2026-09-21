@@ -78,8 +78,8 @@ def initialize_packet(
             raise ValueError(f"{label} must be exact lowercase SHA-256")
     if not isinstance(changed_file_manifest_ref, str) or not changed_file_manifest_ref.strip():
         raise ValueError("changed_file_manifest_ref must be non-empty")
-    if not isinstance(validator_source, str) or not validator_source.strip():
-        raise ValueError("validator_source must be non-empty")
+    if not isinstance(validator_source, str) or re.fullmatch(r"sha256:[0-9a-f]{64}", validator_source) is None:
+        raise ValueError("validator_source must be exact sha256:<64-lowercase-hex>")
 
     packet = copy.deepcopy(template)
     if packet.get("task_id") != "T12":
