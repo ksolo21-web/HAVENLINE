@@ -2,7 +2,7 @@
 """Verify T12 reconciliation of accepted T10/T11 public identifiers.
 
 Default mode is a pre-activation guard: the resolution template must remain
-unresolved/blank while T10 or T11 is unfinished. --require-resolved switches to
+unresolved/blank until activation reconciliation. --require-resolved switches to
 a future activation-time proof that verifies exact accepted dependency commits,
 completion records and repository-backed JSON-pointer identity evidence.
 
@@ -14,12 +14,27 @@ import argparse
 import json
 import pathlib
 import re
+import subprocess
 from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 EXPECTED_TASKS = ("T10", "T11")
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 FORBIDDEN_ID_MARKERS = ("provisional", "prepared", "example", "debug", "fixture", "test_only", "test-only")
+EXPECTED_COMPLETION_PATHS = {
+    "T10": "Docs/Production/T10/verified-completion.json",
+    "T11": "Docs/Production/T11/verified-completion.json",
+}
+ALLOWED_SOURCE_PREFIXES = {
+    "T10": (
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/assets/world_transform_v1/",
+    ),
+    "T11": (
+        "HavenlineGodot/data/camp_construction_recipes.json",
+        "HavenlineGodot/assets/camp_construction_v1/",
+    ),
+}
 
 
 def decode_pointer_token(token: str) -> str:
@@ -46,6 +61,38 @@ def resolve_json_pointer(document: Any, pointer: str) -> Any:
     return current
 
 
+def safe_repo_relative(path: str) -> bool:
+    pure = pathlib.PurePosixPath(path)
+    return bool(path) and not pure.is_absolute() and ".." not in pure.parts
+
+
+def source_path_allowed(task: str, source_path: str) -> bool:
+    return any(
+        source_path == prefix or (prefix.endswith("/") and source_path.startswith(prefix))
+        for prefix in ALLOWED_SOURCE_PREFIXES[task]
+    )
+
+
+def git_head(root: pathlib.Path) -> str:
+    return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=root, text=True).strip()
+
+
+def git_is_ancestor(root: pathlib.Path, ancestor: str, head: str) -> bool:
+    proc = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", ancestor, head],
+        cwd=root,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        check=False,
+    )
+    return proc.returncode == 0
+
+
+def git_file_bytes(root: pathlib.Path, commit: str, source_path: str) -> bytes:
+    return subprocess.check_output(["git", "show", f"{commit}:{source_path}"], cwd=root)
+
+
 def completion_source(record: dict[str, Any]) -> str | None:
     for key in ("integrated_source", "accepted_source", "accepted_integrated_source", "candidate_source"):
         value = record.get(key)
@@ -59,15 +106,33 @@ def completion_passes(record: dict[str, Any]) -> bool:
     return status in {"PASS", "APPROVED"}
 
 
-def validate_resolution(resolution: dict[str, Any], *, require_resolved: bool, root: pathlib.Path = ROOT) -> dict[str, Any]:
+def validate_resolution(
+    resolution: dict[str, Any],
+    *,
+    require_resolved: bool,
+    root: pathlib.Path = ROOT,
+    activation_head: str | None = None,
+) -> dict[str, Any]:
     errors: list[str] = []
     verified_ids = 0
+    globally_seen_ids: dict[str, str] = {}
 
+    if resolution.get("schema_version") != 1:
+        errors.append("schema_version must be 1")
     if resolution.get("task_id") != "T12":
         errors.append("task_id must be T12")
     dependencies = resolution.get("dependencies")
     if not isinstance(dependencies, dict):
         return {"passed": False, "verified_ids": 0, "errors": ["dependencies must be an object"]}
+    if set(dependencies) != set(EXPECTED_TASKS):
+        errors.append(f"dependencies must contain exactly {list(EXPECTED_TASKS)}")
+
+    resolved_head = activation_head
+    if require_resolved and resolved_head is None:
+        try:
+            resolved_head = git_head(root)
+        except Exception as exc:
+            errors.append(f"cannot determine activation HEAD: {exc}")
 
     for task in EXPECTED_TASKS:
         entry = dependencies.get(task)
@@ -89,10 +154,24 @@ def validate_resolution(resolution: dict[str, Any], *, require_resolved: bool, r
                 errors.append(f"{task} resolved_public_ids must remain empty before activation reconciliation")
             continue
 
-        if not isinstance(source, str) or not HEX40.fullmatch(source):
+        source_valid = isinstance(source, str) and HEX40.fullmatch(source) is not None
+        if not source_valid:
             errors.append(f"{task} accepted_integrated_source must be an exact 40-hex commit")
-        if not isinstance(completion_path, str) or not completion_path:
-            errors.append(f"{task} verified_completion_path must be set")
+        elif not isinstance(resolved_head, str) or HEX40.fullmatch(resolved_head) is None:
+            errors.append(f"{task} activation head is not an exact 40-hex commit")
+        else:
+            try:
+                if not git_is_ancestor(root, source, resolved_head):
+                    errors.append(f"{task} accepted integrated source is not an ancestor of activation head")
+            except Exception as exc:
+                errors.append(f"{task} accepted source ancestry proof failed: {exc}")
+
+        expected_completion = EXPECTED_COMPLETION_PATHS[task]
+        if completion_path != expected_completion:
+            errors.append(f"{task} verified_completion_path must be {expected_completion}")
+            continue
+        if not safe_repo_relative(completion_path):
+            errors.append(f"{task} verified_completion_path is not repository-relative safe")
             continue
         completion_file = root / completion_path
         if not completion_file.is_file():
@@ -134,10 +213,22 @@ def validate_resolution(resolution: dict[str, Any], *, require_resolved: bool, r
             if public_id in seen:
                 errors.append(f"{task} duplicate resolved ID: {public_id}")
             seen.add(public_id)
+            if public_id in globally_seen_ids:
+                errors.append(
+                    f"resolved public ID {public_id} is ambiguous across {globally_seen_ids[public_id]} and {task}"
+                )
+            else:
+                globally_seen_ids[public_id] = task
             if not isinstance(kind, str) or not kind.strip():
                 errors.append(f"{prefix}.kind must be non-empty")
             if not isinstance(source_path, str) or not source_path:
                 errors.append(f"{prefix}.source_path must be non-empty")
+                continue
+            if not safe_repo_relative(source_path):
+                errors.append(f"{prefix}.source_path is not repository-relative safe")
+                continue
+            if not source_path_allowed(task, source_path):
+                errors.append(f"{prefix}.source_path is outside {task} accepted ownership: {source_path}")
                 continue
             evidence_file = root / source_path
             if not evidence_file.is_file():
@@ -146,6 +237,17 @@ def validate_resolution(resolution: dict[str, Any], *, require_resolved: bool, r
             if evidence_file.suffix.lower() != ".json":
                 errors.append(f"{prefix} source_path must point to JSON for exact pointer proof")
                 continue
+            if source_valid:
+                try:
+                    accepted_bytes = git_file_bytes(root, source, source_path)
+                    if evidence_file.read_bytes() != accepted_bytes:
+                        errors.append(
+                            f"{prefix} source file drifted from accepted integrated source {source}"
+                        )
+                        continue
+                except Exception as exc:
+                    errors.append(f"{prefix} accepted-source blob proof failed: {exc}")
+                    continue
             try:
                 document = json.loads(evidence_file.read_text())
                 resolved = resolve_json_pointer(document, pointer)
@@ -171,9 +273,14 @@ def main() -> None:
     parser = argparse.ArgumentParser()
     parser.add_argument("--resolution", default="Docs/Production/T12/BINDING_RESOLUTION_TEMPLATE.json")
     parser.add_argument("--require-resolved", action="store_true")
+    parser.add_argument("--activation-head", help="Exact activation HEAD; defaults to checked-out HEAD in resolved mode")
     args = parser.parse_args()
     resolution = json.loads(pathlib.Path(args.resolution).read_text())
-    result = validate_resolution(resolution, require_resolved=args.require_resolved)
+    result = validate_resolution(
+        resolution,
+        require_resolved=args.require_resolved,
+        activation_head=args.activation_head,
+    )
     print(json.dumps(result, indent=2))
     if not result["passed"]:
         raise SystemExit(1)
