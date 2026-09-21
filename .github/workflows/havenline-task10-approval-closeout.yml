@@ -161,6 +161,7 @@ jobs:
           allowed={
             'Docs/Production/DEPENDENCY_GRAPH.json',
             'Docs/Production/WORKSTREAM_REGISTRY.json',
+            'Docs/Production/PATH_OWNERSHIP.json',
             'Docs/Production/task-gates.json',
             'Docs/Production/T10/verified-completion.json',
             'Docs/Production/T10/independent-critic-review.json',
@@ -173,7 +174,7 @@ jobs:
           PY
           git config user.name 'Havenline T10 Closeout'
           git config user.email 't10-closeout@example.invalid'
-          git add Docs/Production/DEPENDENCY_GRAPH.json Docs/Production/WORKSTREAM_REGISTRY.json Docs/Production/task-gates.json             Docs/Production/T10/verified-completion.json Docs/Production/T10/independent-critic-review.json             Docs/Production/T10/defect-ledger.json Docs/Production/T10/CriticRaw Docs/Production/Evidence/T10/final-closeout.json
+          git add Docs/Production/DEPENDENCY_GRAPH.json Docs/Production/WORKSTREAM_REGISTRY.json Docs/Production/PATH_OWNERSHIP.json Docs/Production/task-gates.json             Docs/Production/T10/verified-completion.json Docs/Production/T10/independent-critic-review.json             Docs/Production/T10/defect-ledger.json Docs/Production/T10/CriticRaw Docs/Production/Evidence/T10/final-closeout.json
           git commit -m "T10: approve exact eba0107 integrated source after strict closeout"
           git push origin HEAD:refs/heads/$CANONICAL_BRANCH
           git rev-parse HEAD > /tmp/approval-commit.txt
