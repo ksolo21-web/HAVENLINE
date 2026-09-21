@@ -50,7 +50,7 @@ def validate_workflows_and_consumption():
         errors.append('missing top-level production governance workflow')
     else:
         governance=governance_path.read_text()
-        for token in ('t11_lineage_builder','integration_sha','task_graduation_gate.py T11 --target ASSIGNED --builder-head "$t11_lineage_builder" --integration-head "$integration_sha"','forward_task_control.py plan T11 --target ASSIGNED --builder "$t11_lineage_builder" --integration "$integration_sha"'):
+        for token in ('t11_lineage_builder','lineage_integration_sha','t11_assignment_sha','task_graduation_gate.py T11 --target ASSIGNED --builder-head "$t11_lineage_builder" --integration-head "$lineage_integration_sha"','forward_task_control.py plan T11 --target ASSIGNED --builder "$t11_lineage_builder" --integration "$lineage_integration_sha"'):
             if token not in governance: errors.append('top-level governance missing exact T11 lineage binding: '+token)
     fi=json.loads((DOCS/'FAILURE_INTELLIGENCE.json').read_text());ids={x.get('id') for x in fi.get('records',[])}
     for rid in ('FI-T10-001','FI-T10-002','FI-T10-003','FI-T10-004','FI-T10-005','FI-T10-006'):
