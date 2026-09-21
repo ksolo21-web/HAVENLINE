@@ -297,6 +297,16 @@ def main() -> None:
         cwd=ROOT,
         text=True,
     ).strip()
+    exact_source = candidate_data.get("exact_source", {}) if isinstance(candidate_data.get("exact_source"), dict) else {}
+    activation_base = exact_source.get("activation_base")
+    integration_head = exact_source.get("integration_head")
+    if all(isinstance(x, str) and SHA40.fullmatch(x) for x in (activation_base, candidate_source, integration_head)):
+        candidate_guard_result = run_candidate_guard(activation_base, candidate_source, integration_head)
+    else:
+        candidate_guard_result = {
+            "passed": False,
+            "errors": ["candidate guard cannot run until activation_base, candidate_source and integration_head are exact SHAs"],
+        }
 
     result = validate_consistency(
         candidate_data,
@@ -306,6 +316,7 @@ def main() -> None:
         binding_data,
         progression_validation_result=progression_result,
         binding_verification_result=binding_result,
+        candidate_guard_result=candidate_guard_result,
         checked_out_head=checked_out_head,
         levels_sha256=sha256_bytes(paths["levels"].read_bytes()),
         milestones_sha256=sha256_bytes(paths["milestones"].read_bytes()),
