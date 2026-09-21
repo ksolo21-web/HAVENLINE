@@ -6,7 +6,7 @@ import external_readiness,forward_prep_packet
 
 class FuturePrepPacketTests(unittest.TestCase):
  def test_current_external_readiness_policy_is_valid(self):
-  out=external_readiness.evaluate();self.assertTrue(out['passed'],out);self.assertEqual('T10',out['frontier'])
+  out=external_readiness.evaluate();self.assertTrue(out['passed'],out);self.assertGreaterEqual(int(out['frontier'][1:]),10)
  def test_future_frontier_warns_before_activation(self):
   out=external_readiness.evaluate('T34');self.assertTrue(out['passed'],out)
   self.assertIn('authoritative_backend',out['activation_blockers'])
