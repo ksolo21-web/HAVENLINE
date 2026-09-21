@@ -1,6 +1,6 @@
 # T12 non-shipping Level 1–100 cadence blueprint
 
-**Status:** PREPARATION ONLY. This is not `progression_levels_v1.json`, does not activate T12, and must not be treated as shipping progression data. Exact T10/T11 IDs remain provisional until those tasks are approved/integrated and T12 activation reconciliation passes.
+**Status:** PREPARATION ONLY. This is not `progression_levels_v1.json`, does not activate T12, and must not be treated as shipping progression data. Exact T10 is already approved/integrated but must still be re-verified on the activation base; T11 IDs remain provisional until T11 is approved/integrated and T12 activation reconciliation passes.
 
 ## Purpose
 
@@ -72,7 +72,7 @@ A future shipping progression manifest fails if any of these are true:
 - fewer or more than 100 shipping levels;
 - missing integer in 1–100;
 - duplicate `level` or `level_id`;
-- empty practical progression-effect set;
+- empty practical progression-effect set;\n- adjacent levels with an identical full progression-effect payload masquerading as separate progression;
 - prerequisite points to a missing level;
 - prerequisite graph has a cycle or an unreachable level;
 - visible-progression gap exceeds three consecutive levels without a declared hook;
