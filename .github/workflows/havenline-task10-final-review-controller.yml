@@ -8,7 +8,7 @@ permissions:
   contents: read
   actions: read
 concurrency:
-  group: havenline-t10-final-six-critic
+  group: havenline-t10-final-six-critic-${{ github.sha }}
   cancel-in-progress: true
 jobs:
   evidence-ready:
