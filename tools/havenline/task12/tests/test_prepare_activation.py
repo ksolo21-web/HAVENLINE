@@ -168,5 +168,33 @@ class T12PrepareActivationTests(unittest.TestCase):
         )
 
 
+    def test_current_cross_contracts_are_consistent(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        self.assertEqual(activation.validate_cross_contracts(checklist), [])
+        self.assertEqual(activation.validate_upstream_preparation_bindings(), [])
+        self.assertEqual(activation.validate_defect_ledger_preparation(), [])
+
+    def test_cross_contract_rejects_level_count_drift(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["product_contract"]["exact_shipping_level_record_count"] = 99
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("product contract drifted" in error for error in errors))
+
+    def test_upstream_binding_contract_rejects_missing_t11(self):
+        data = copy.deepcopy(activation.load(activation.UPSTREAM_BINDINGS_PATH))
+        del data["bindings"]["T11"]
+        errors = activation.validate_upstream_preparation_bindings(data)
+        self.assertTrue(any("exactly T07,T08,T10,T11" in error for error in errors))
+
+    def test_defect_ledger_rejects_mandatory_defect(self):
+        ledger = copy.deepcopy(activation.load(activation.DEFECT_LEDGER_PATH))
+        ledger["mandatory_defects"] = [{"id": "T12-D999", "status": "OPEN"}]
+        errors = activation.validate_defect_ledger_preparation(ledger)
+        self.assertTrue(any("unresolved mandatory defects" in error for error in errors))
+
+
+
 if __name__ == "__main__":
     unittest.main()
