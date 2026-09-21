@@ -27,6 +27,13 @@ def main():
     cpu=perf.get('cpu_frame_ms')
     if cpu is None:
         errors.append('missing measured cpu_frame_ms for T11 early C6')
+    if perf.get('cpu_frame_statistic') != 'p95_after_warmup':
+        errors.append('T11 C6 cpu_frame_ms must be p95_after_warmup from dedicated CPU probe')
+    sample_count=perf.get('cpu_probe_sample_count')
+    if not isinstance(sample_count,int) or isinstance(sample_count,bool) or sample_count < 120:
+        errors.append('T11 C6 requires at least 120 post-warmup CPU samples')
+    if not str(perf.get('cpu_measurement_method','')).startswith('Godot headless fixed-fps 60 process-time probe'):
+        errors.append('T11 C6 CPU measurement method is not the dedicated headless process-time probe')
     if perf.get('custom_shader_count') is None:
         errors.append('missing custom_shader_count')
     scores={

@@ -157,6 +157,10 @@ jobs:
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
           GODOT="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
           test -x "$GODOT"
+          if ! timeout 180 "$GODOT" --headless --audio-driver Dummy --fixed-fps 60 --path HavenlineGodot --script res://tests/test_task11_performance_probe.gd -- --candidate="$CANDIDATE" > t11-review-evidence/cpu-probe.log 2>&1; then
+            cat t11-review-evidence/cpu-probe.log >&2
+            exit 1
+          fi
           if ! xvfb-run -a -s '-screen 0 1280x720x24' timeout 420 "$GODOT"             --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy             --resolution 1280x720 --fixed-fps 30             --script res://tests/capture_task11_camp_construction.gd --             --candidate="$CANDIDATE" --profile=standard --out="$(pwd)/t11-review-evidence/standard"             > t11-review-evidence/standard/capture.log 2>&1; then
             cat t11-review-evidence/standard/capture.log >&2
             exit 1
@@ -176,6 +180,11 @@ jobs:
           cand=os.environ['CANDIDATE']
           standard=json.load(open('t11-review-evidence/standard/manifest.json'))
           native=json.load(open('t11-review-evidence/native4k/manifest.json'))
+          probe_reports=[json.loads(line) for line in Path('t11-review-evidence/cpu-probe.log').read_text().splitlines() if line.startswith('{')]
+          assert probe_reports, 'missing CPU probe report'
+          probe=probe_reports[-1]
+          assert probe['passed'] and probe['candidate']==cand and probe['sample_count'] >= 120
+          assert probe['cpu_frame_statistic']=='p95_after_warmup'
           assert standard['passed'] and native['passed']
           assert standard['candidate']==native['candidate']==cand
           assert standard['record_count'] >= 40 and native['record_count'] == 8
@@ -193,12 +202,17 @@ jobs:
             'draw_calls':int(maximum('draw_calls')),
             'materials_visible':8,
             'texture_gpu_memory_mb':maximum('texture_gpu_memory_mb'),
-            'cpu_frame_ms':maximum('cpu_frame_ms'),
+            'cpu_frame_ms':float(probe['cpu_frame_ms_p95']),
+            'cpu_frame_ms_max':float(probe['cpu_frame_ms_max']),
+            'cpu_frame_ms_mean':float(probe['cpu_frame_ms_mean']),
+            'cpu_frame_statistic':'p95_after_warmup',
+            'cpu_probe_sample_count':int(probe['sample_count']),
+            'cpu_measurement_method':probe['measurement_method'],
             'gpu_frame_ms_where_measurable':None,
             'process_memory_mb':maximum('process_memory_mb'),
             'physics_active_bodies':0,'animated_rigs_active':0,'npc_companion_active_population':0,
             'storage_download_mb':storage,'custom_shader_count':0,
-            'measurement_method':'Godot Performance monitors across standard and native-4K review captures; static task-scoped material/body/rig counts',
+            'measurement_method':'CPU p95 from dedicated headless 60 Hz committing-state probe; render structure/memory from standard and native-4K software visual captures',
             'known_unmeasured_fields':['gpu_frame_ms_where_measurable'],
             'physical_4k60_certified':False,
           }
