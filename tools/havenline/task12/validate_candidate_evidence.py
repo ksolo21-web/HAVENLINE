@@ -55,6 +55,8 @@ def exact_sha(value: Any) -> bool:
 
 def validate_packet(data: dict[str, Any], require_resolved: bool = False) -> dict[str, Any]:
     errors: list[str] = []
+    if data.get("schema_version") != 1:
+        errors.append("schema_version must be 1")
     if data.get("task_id") != "T12":
         errors.append("task_id must be T12")
     if not require_resolved and data.get("status") != "PREPARATION_ONLY_CANDIDATE_EVIDENCE_TEMPLATE":
