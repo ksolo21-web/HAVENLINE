@@ -8,9 +8,10 @@
     "t09_obsolete_refs_deleted": 11,
     "fully_merged_non_task_refs_deleted": 14,
     "t03_fully_merged_hardening_ref_deleted": 1,
-    "v32_fully_merged_refs_deleted": 7
+    "v32_fully_merged_refs_deleted": 7,
+    "v32_forward_control_ref_deleted": 1
   },
-  "total_branch_refs_deleted": 119,
+  "total_branch_refs_deleted": 120,
   "preserved_rules": [
     "Preserve designated T01-T70 task branches and task evidence.",
     "Preserve canonical integration/release history.",
@@ -256,6 +257,12 @@
       "family": "V3.2 merged prep",
       "archive_record": "Docs/Production/Archive/V32_MERGED_BRANCH_CLEANUP_20260921.json",
       "deleted_refs": 7,
+      "compile_effect": "none"
+    },
+    {
+      "family": "V3.2 forward control",
+      "archive_record": "Docs/Production/Archive/V32_FORWARD_CONTROL_PLANE_CLEANUP_20260921.json",
+      "deleted_refs": 1,
       "compile_effect": "none"
     }
   ]
