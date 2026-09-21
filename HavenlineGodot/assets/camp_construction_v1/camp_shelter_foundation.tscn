@@ -1,0 +1,78 @@
+[gd_scene load_steps=5 format=3]
+
+[sub_resource type="StandardMaterial3D" id="MatWood"]
+albedo_color = Color(0.34, 0.20, 0.10, 1)
+roughness = 0.86
+
+[sub_resource type="StandardMaterial3D" id="MatLightWood"]
+albedo_color = Color(0.48, 0.31, 0.16, 1)
+roughness = 0.82
+
+[sub_resource type="StandardMaterial3D" id="MatStone"]
+albedo_color = Color(0.32, 0.36, 0.39, 1)
+roughness = 0.96
+
+[sub_resource type="BoxMesh" id="Box"]
+size = Vector3(1, 1, 1)
+
+[node name="CampShelterFoundation" type="Node3D"]
+
+[node name="StoneFooting" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatStone")
+position = Vector3(0, 0.12, 0)
+scale = Vector3(4.8, 0.24, 3.8)
+
+[node name="Deck" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatLightWood")
+position = Vector3(0, 0.28, 0)
+scale = Vector3(4.45, 0.16, 3.45)
+
+[node name="BeamFront" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(0, 0.52, 1.52)
+scale = Vector3(4.4, 0.32, 0.24)
+
+[node name="BeamBack" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(0, 0.52, -1.52)
+scale = Vector3(4.4, 0.32, 0.24)
+
+[node name="BeamLeft" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(-2.08, 0.52, 0)
+scale = Vector3(0.24, 0.32, 3.25)
+
+[node name="BeamRight" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(2.08, 0.52, 0)
+scale = Vector3(0.24, 0.32, 3.25)
+
+[node name="PostNW" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(-2.0, 1.45, -1.45)
+scale = Vector3(0.3, 2.2, 0.3)
+
+[node name="PostNE" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(2.0, 1.45, -1.45)
+scale = Vector3(0.3, 2.2, 0.3)
+
+[node name="PostSW" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(-2.0, 1.45, 1.45)
+scale = Vector3(0.3, 2.2, 0.3)
+
+[node name="PostSE" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(2.0, 1.45, 1.45)
+scale = Vector3(0.3, 2.2, 0.3)

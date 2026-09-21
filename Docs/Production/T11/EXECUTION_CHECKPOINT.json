@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "task_id": "T11",
+  "integration_sha": "f558b9b162b349d1ee127e65edf967f6d28dfed0",
+  "candidate_sha": null,
+  "branch": "havenline/T11-camp-construction",
+  "stage": "PRECHECK",
+  "stage_status": "NOT_STARTED",
+  "completed_gates": [],
+  "reusable_proof": [],
+  "blocker_families": [],
+  "running_workflows": [],
+  "environment_fingerprint": null,
+  "next_action": "Run exact BUILDING_ISOLATED preflight and T11 sentinel on the first camp construction candidate.",
+  "next_command": "python3 tools/havenline/production/task_graduation_gate.py T11 --target BUILDING_ISOLATED --builder-head $(git rev-parse HEAD)",
+  "updated_at": "2026-09-21T22:17:00+00:00",
+  "notes": "Initial resumability checkpoint. This record is not task approval."
+}
