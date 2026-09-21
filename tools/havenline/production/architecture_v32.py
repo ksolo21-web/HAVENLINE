@@ -40,7 +40,7 @@ def validate_workflows_and_consumption():
         if 'havenline-v32-independent-specialist-batch' not in body or 'cancel-in-progress: false' not in body: errors.append('specialist fanout missing batch capacity concurrency')
     packet=(ROOT/'tools/havenline/production/task_packet.py').read_text()
     agents=(ROOT/'AGENTS.md').read_text()
-    for token in ('Production Architecture V3.2','task_graduation_gate.py','control_plane_lineage.py','execution_checkpoint.py','blocker_family_gate.py','critic_invalidation.py'):
+    for token in ('Production Architecture V3.2','task_graduation_gate.py','control_plane_lineage.py','v32_assignment_claim.py','execution_checkpoint.py','blocker_family_gate.py','critic_invalidation.py'):
         if token not in packet: errors.append('task packet consumption missing '+token)
     if 'Production Architecture V3.2 parallel/resumable rule' not in agents: errors.append('AGENTS missing V3.2 mandatory rule')
     shared_control=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
