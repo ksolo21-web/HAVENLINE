@@ -221,6 +221,11 @@ class V32Tests(unittest.TestCase):
   self.assertTrue(any('explicit exact candidate SHA' in x for x in blocked['errors']))
   self.assertTrue(forward_task_control.validate_all()['passed'])
 
+ def test_assignment_claim_binds_actual_remote_branch_tips(self):
+  body=(ROOT/'tools/havenline/production/workstream.py').read_text()
+  for token in ('_remote_branch_head','actual_builder_head!=branch_head','actual_integration_head!=integration_head','assignment_integration_commit','assignment_branch_head','assignment_lineage_state'):
+   self.assertIn(token,body)
+
  def test_shared_workflow_avoids_expression_flow_maps(self):
   body=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
   for line in body.splitlines():
@@ -231,7 +236,7 @@ class V32Tests(unittest.TestCase):
 
  def test_shared_workflow_contains_preflight_review_failure_modes(self):
   body=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
-  for token in ('mode:','preflight','review','failure','forward_task_control.py','critic_package_preflight.py','havenline-v32-specialist-fanout.yml','havenline-c0-root-cause.yml','cancel-in-progress: false'):
+  for token in ('mode:','preflight','review','failure','builder_sha','lineage_head','control_plane_lineage.py','forward_task_control.py','critic_package_preflight.py','havenline-v32-specialist-fanout.yml','havenline-c0-root-cause.yml','cancel-in-progress: false'):
    self.assertIn(token,body)
 
  def test_gate_result_proposals_require_owner_promotion(self):
