@@ -7,7 +7,7 @@
   "task_approved": false,
   "thresholds_unchanged": true,
   "runtime_model_contracts_unchanged": true,
-  "c0_sha256": "dce511914144274eaaa0b73044955c282b5edbac6282ae5259846fddadf00fb9",
+  "c0_sha256": "89df39634d0a51d47b03fc6575c551d126fc11b788aef10489a2b8727f478617",
   "canonical_inherited_paths": [
     "Docs/Production/ChangeRequests/T10-benchmark-liveness-contract.json",
     "Docs/Production/ChangeRequests/T10-c0-decoded-complete-evidence.json",
@@ -15,19 +15,64 @@
     "Docs/Production/ChangeRequests/T10-repeated-python-source-review.json"
   ],
   "independent_review": {
-    "reviewer": "independent-final-runner-source-review",
-    "review_id": "T10-runner-5484a8c3d47f",
-    "reviewed_commit": "5484a8c3d47ffb0d895b379aeb267f190f3ff577",
-    "reviewed_tree": "27eb21aaa4ef19375e7562d223d19f6b9af169a2",
-    "evidence_sha256": "2161486503dd65af9443e88b7f235fcaf883c21c8e49cf13e3ad5eef7f6b84fb",
-    "score": 10.0,
+    "reviewer": "independent-final-c4-source-review",
+    "review_id": "T10-c4-final-af6742e5fe6c",
+    "reviewed_commit": "af6742e5fe6c11296dfc7e6ce54e53c93318719e",
+    "reviewed_tree": "7041614f62edac203206d18433a314fa32233ff1",
+    "evidence_sha256": "4aca81515a23047c98af66ef87e6d6c4d30d0e0f208b077f3c0a65d48abd654c",
+    "score": 9.2,
     "evidence": {
-      "review_archive_sha256": "86ff689660c8dd8aaa7b51be88d0f73cd4b377686df59a71a7e391982e96d197",
-      "review_result_sha256": "71bd14dddb03ad6317c3fa01baab533e0e474aa76190386dde1f3263cf7d4c4c",
-      "lowest_score": 10.0,
-      "reviewed_commit": "5484a8c3d47ffb0d895b379aeb267f190f3ff577",
-      "reviewed_tree": "27eb21aaa4ef19375e7562d223d19f6b9af169a2",
-      "prepared_benchmark_authority_sha256": "ac4a2f46743940a58fcd675623611b1fe9052ed615fcd7ab2fcba478a5822dec"
+      "source_review": {
+        "packet_bindings": {
+          "product-feedback": {
+            "archive_sha256": "f6e26a1169b2185260a752e8843a5a6efe668b282185deca479881e01aff8f3d",
+            "result_sha256": "c2efe407de56e75dc038768c6914e6ec12fbb45f1d5ddf30c9211a234981a173",
+            "scores": {
+              "causal_correctness": 9.8,
+              "feedback_hierarchy": 9.9,
+              "scope_preservation": 9.5
+            },
+            "evidence_sha256": "425bbcb63efc20b07d031bfee0ffc7a081bbb0fcaa497a86978dd5d2f71bfe94"
+          },
+          "product-proof": {
+            "archive_sha256": "b7b243e9ed35fe87c44ef06c6027c1ca0783ffa0be634163a5ff48eddb011d96",
+            "result_sha256": "c823ecb67061caecdf76dda1677575ea31efc53e60cd865d047868601bcc667f",
+            "scores": {
+              "regression_safety": 10.0,
+              "proof_binding": 10.0
+            },
+            "evidence_sha256": "0ff8548d579ebdd917b4f5d5cdcd9f42dbe05f98b123110b79d03a70a5bf1636"
+          },
+          "governance-history": {
+            "archive_sha256": "05124be92b3d4dc639d1debf633a3f02aa8050689e8699bea7519aa6b4043e49",
+            "result_sha256": "fcd1916ab2bf855e61af93a53d86543fa83394c0c99fd360a42a814ee36d7706",
+            "scores": {
+              "anti_loop_integrity": 9.5,
+              "history_frontier_fidelity": 9.2
+            },
+            "evidence_sha256": "1e85fb164d4cc813ff8d048fa45fc1eedbba813d89150cf57fdc9166b8f4259e"
+          },
+          "governance-authority": {
+            "archive_sha256": "febf7b78f916545d8015d8f1bc935ec770a8fde3d28c1fdbd678428ca3694b52",
+            "result_sha256": "a863ab5dd03ff31d34005366673c55139358127b535c797ca2d08d3d152ae283",
+            "scores": {
+              "threshold_preservation": 10.0,
+              "authority_separation": 10.0,
+              "source_binding": 10.0
+            },
+            "evidence_sha256": "b808d6668dc66af8a990a26cdc38ba37b9dbb00232ef367d88f80f6f9f70b112"
+          }
+        },
+        "result_sha256": "4fc974c797de651da0f162c157fbf860307a25eed1a978d01b576697fb7bfe19",
+        "lowest_score": 9.2,
+        "evidence_sha256": "e1f5f67a3dcae3c18a0d33d25fd45a1a5b47ca5a270d961b97325255f95fb55e"
+      },
+      "reviewed_commit": "af6742e5fe6c11296dfc7e6ce54e53c93318719e",
+      "reviewed_tree": "7041614f62edac203206d18433a314fa32233ff1",
+      "product_proof_run": 35539499493,
+      "product_proof_artifact": 10613759597,
+      "failed_c4_run": 35534465419,
+      "failed_c4_artifact": 10613684975
     }
   },
   "bindings": [
@@ -49,7 +94,7 @@
       "path": "tools/havenline/production/repair_sufficiency_critic.py",
       "operation_contract_sha256": "3204ff6e40f5ab8adf3e83644aa3f2fd6fc5cc7a5d7e399f6e655ac9b337e734",
       "before_sha256": "9001bf6cd9efea216cc1c95f364b3bb8e6a91c29054d26c2c046e023548535cf",
-      "after_sha256": "05f4ed95151b956462aeb4c74a265a28c9290d71b1f172c51af70b55534e2a08",
+      "after_sha256": "d00679ef6d67232363bb6b73aff14a51b8da4fc4c601639de433ec3ecddbe316",
       "before_mode": "100644",
       "after_mode": "100644"
     },
@@ -71,11 +116,11 @@
       "path": "tools/havenline/production/validate_architecture_v32_t10.py",
       "operation_contract_sha256": "3204ff6e40f5ab8adf3e83644aa3f2fd6fc5cc7a5d7e399f6e655ac9b337e734",
       "before_sha256": "a9eb915511d5aada2e236da199ae77c8c7badfdf9a701d7c9d64431a3bb476a7",
-      "after_sha256": "283f0845a54fa38b1c8c50be9909bccbad881644a26dc917408f4d17310fa5a8",
+      "after_sha256": "aba49cdfe17923d4e20cc8cba877e2b99ac8a70dedcaab4023365633f0088c26",
       "before_mode": "100644",
       "after_mode": "100644"
     }
   ],
-  "causal_source_set_sha256": "d8f606f6044b0d9ebd3edf5a110dbeaee0643a04ed7c460f6c2bef3edd2ce162",
-  "authority_boundary": "Benchmark authorization and repeated-Python source review remain a separate metadata-only authority parent. Owner must verify exact ordered [R,H] and publish non-forced. No T10 approval or T11 unlock."
+  "causal_source_set_sha256": "a5a0d4385b155804a87f25acd394413883f04e43b1c83a1e604a32defbdb9556",
+  "authority_boundary": "Exact reviewed C4-family source only. Owner must verify ordered [R,H] and publish non-forced. Final fresh C1/C2/C3/C4/C6/C7, G1-G14, regression and integrated closeout remain mandatory; T11 stays locked."
 }
