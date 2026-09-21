@@ -8,9 +8,9 @@
   "qa_branch": "havenline/QA-integration",
   "forward_acceptance": {
     "mandatory_dimension_operator": ">",
-    "threshold": 9.0,
+    "threshold": 9,
     "unrounded": true,
-    "target": 10.0,
+    "target": 10,
     "averaging_waiver_allowed": false,
     "unresolved_mandatory_defect_allowed": false
   },
@@ -109,7 +109,7 @@
       "name": "Progression / Difficulty Critic",
       "operational": true,
       "execution": "independent specialist local model plus deterministic progression gate",
-      "production_candidate_score_executed_yet": false
+      "production_candidate_score_executed_yet": true
     },
     "C8": {
       "name": "Economy / Fairness Critic",
@@ -161,7 +161,9 @@
     "T07": "APPROVED",
     "T08": "APPROVED",
     "T09": "APPROVED",
-    "T10_plus_runtime": "LOCKED"
+    "T10": "APPROVED",
+    "T11": "PREPARED",
+    "T12_plus_runtime": "LOCKED"
   },
-  "next_step": "Preserve T09 exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0. T10 remains LOCKED pending separate activation."
+  "next_step": "Preserve T10 exact integrated source eba0107def258824549fb10d81785290d0c81d97. T11 is PREPARED on havenline/T11-camp-construction and may be claimed ASSIGNED before runtime construction. T12+ remains dependency-gated."
 }
