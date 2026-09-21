@@ -3,7 +3,7 @@
 
 This validator is intentionally stricter than a prose review. It proves that the
 prepared matrix has deterministic IDs/topology/cadence/owners and contains no
-concrete unfinished T10/T11 binding IDs. It never writes shipping progression.
+unresolved or activation-unverified T10/T11 binding IDs. It never writes shipping progression.
 """
 from __future__ import annotations
 
