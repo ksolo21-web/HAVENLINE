@@ -133,5 +133,22 @@ class T12CandidateEvidenceInitializerTests(unittest.TestCase):
         self.assertFalse(packet["performance_c6"]["prebuild_python_benchmark_used_as_shipping_c6"])
 
 
+    def test_invalid_validator_source_digest_fails(self):
+        with self.assertRaisesRegex(ValueError, "validator_source"):
+            initializer.initialize_packet(
+                copy.deepcopy(self.template),
+                self.resolution(),
+                activation_base="a" * 40,
+                candidate_source="b" * 40,
+                integration_head="9" * 40,
+                levels_sha256="c" * 64,
+                milestones_sha256="d" * 64,
+                binding_resolution_sha256="e" * 64,
+                changed_file_manifest_ref="artifact://files.json",
+                validator_source="branch-name",
+            )
+
+
+
 if __name__ == "__main__":
     unittest.main()
