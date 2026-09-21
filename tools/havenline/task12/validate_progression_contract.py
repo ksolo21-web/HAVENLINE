@@ -94,6 +94,29 @@ def as_list(value: Any) -> list[Any]:
     return value if isinstance(value, list) else []
 
 
+def expected_region_band(level: int) -> str | None:
+    for start, end, band_id in REGION_BANDS:
+        if start <= level <= end:
+            return band_id
+    return None
+
+
+def validate_string_list(value: Any, *, label: str, errors: list[str]) -> list[str]:
+    if not isinstance(value, list):
+        errors.append(f"{label} must be a list")
+        return []
+    out: list[str] = []
+    for item in value:
+        if not isinstance(item, str) or not item.strip():
+            errors.append(f"{label} contains invalid ID {item!r}")
+            continue
+        out.append(item)
+    duplicates = sorted({item for item in out if out.count(item) > 1})
+    if duplicates:
+        errors.append(f"{label} contains duplicate IDs: {duplicates}")
+    return out
+
+
 def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
     errors: list[str] = []
     warnings: list[str] = []
