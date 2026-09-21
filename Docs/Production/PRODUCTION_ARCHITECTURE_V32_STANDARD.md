@@ -29,6 +29,12 @@ Every applicable mandatory critic dimension remains strictly greater than 9.0 un
 12. **Timeout-safe stage sharding.** Preflight, domain/matrix, regression/performance, evidence, critic fan-out, integration and closeout are separate resumable stages. Long critic/physical jobs are single-purpose and checkpointed before/after. Finish-running-SHA remains mandatory.
 13. **Reusable forward-task control plane.** Every T11–T70 task workflow consumes the same reusable V3.2 control workflow. Preflight mode binds lifecycle, ownership, exact source, checkpoints, gate-fingerprint reuse, canaries, performance policy, contracts and synthetic merge. Review mode preflights the actual source-bound critic packages before parallel specialist review. Failure mode routes exact failed runs to non-voting C0. Task-specific workflows retain their actual gameplay/domain/C1/C2/C6/C9 work; the shared layer prevents them from forgetting cross-task governance.
 
+## Durable learning and proof promotion
+
+- CI may stage content-addressed gate PASS proposals, but repository history remains read-only from validation jobs. Only the integration owner may promote a validated PASS proposal into `GATE_RESULT_INDEX.json`; promotion never grants task approval by itself.
+- C0 automatically stages unverified failure-learning proposals from the complete blocker set. These proposals are advisory and cannot authorize repair or approval. Durable Failure Intelligence requires verified post-repair proof, full regression, unchanged thresholds and explicit integration-owner promotion.
+- Independent specialist capacity is one task-level review batch at a time. GitHub Actions concurrency enforces that scarce batch slot with `cancel-in-progress:false`; critics inside the active batch fan out in parallel.
+
 ## Parallel work safety
 
 **GREEN — prepare now:** packets, scopes, reservations, references, fixtures, validators, test scaffolds, schemas, asset/rig audits, capability checks, critic/evidence scaffolds, performance allocations, save/security cases and non-authoritative simulations.

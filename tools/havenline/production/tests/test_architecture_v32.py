@@ -14,6 +14,8 @@ import critic_package_preflight
 import execution_checkpoint
 import forward_prep_contract
 import forward_task_control
+import gate_result_recorder
+import failure_learning
 import parallel_preparation_planner
 import performance_ledger
 import rolling_canary
@@ -216,6 +218,57 @@ class V32Tests(unittest.TestCase):
   body=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
   for token in ('mode:','preflight','review','failure','forward_task_control.py','critic_package_preflight.py','havenline-v32-specialist-fanout.yml','havenline-c0-root-cause.yml','cancel-in-progress: false'):
    self.assertIn(token,body)
+
+ def test_gate_result_proposals_require_owner_promotion(self):
+  import subprocess
+  head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+  evidence=ROOT/'tools/havenline/production/tests/.gate-result-evidence.json'
+  try:
+   evidence.write_text(json.dumps({'passed':True,'task_id':'T11'}))
+   proposal=gate_result_recorder.proposal('T11','scope_dependency',head,str(evidence.relative_to(ROOT)))
+   self.assertTrue(gate_result_recorder.validate_proposal(proposal)['passed'])
+   self.assertFalse(proposal['approval_authority_granted'])
+   with tempfile.TemporaryDirectory() as td:
+    pp=Path(td)/'proposal.json';pp.write_text(json.dumps(proposal))
+    index=Path(td)/'index.json';index.write_text((ROOT/'Docs/Production/GATE_RESULT_INDEX.json').read_text())
+    self.assertFalse(gate_result_recorder.apply_proposal(pp,index,'WRONG')['passed'])
+    result=gate_result_recorder.apply_proposal(pp,index,gate_result_recorder.OWNER_DISPOSITION)
+    self.assertTrue(result['passed'],result)
+    self.assertFalse(result['record']['approval_authority_granted'])
+  finally:
+   evidence.unlink(missing_ok=True)
+
+ def test_failure_learning_stages_unverified_and_requires_verified_owner_promotion(self):
+  doc=failure_learning.propose('Docs/Production/T10/C0_ROOT_CAUSE.json')
+  self.assertTrue(doc['passed'],doc)
+  self.assertGreater(doc['proposal_count'],0)
+  proposal=doc['proposals'][0]
+  self.assertEqual('UNVERIFIED_C0_LESSON',proposal['state'])
+  self.assertFalse(proposal['approval_authority_granted'])
+  with tempfile.TemporaryDirectory() as td:
+   pd=Path(td)/'proposals.json';pd.write_text(json.dumps(doc))
+   verification=Path(td)/'verification.json'
+   verification.write_text(json.dumps({
+    'owner_disposition':failure_learning.OWNER_DISPOSITION,
+    'proposal_id':proposal['proposal_id'],'candidate_after_repair':'b'*40,
+    'causal_repair_verified':True,'full_regression_passed':True,'thresholds_unchanged':True,
+    'scope':'cross_task_reusable','gate':'unit-test-gate',
+    'signature_terms':['verified','failure','family'],'prevention_rule':'Keep the verified causal invariant.',
+    'proof':['Synthetic owner-bound promotion fixture passed.'],
+    'source':'Docs/Production/T10/C0_ROOT_CAUSE.json#'+proposal['blocker_id']
+   }))
+   index=Path(td)/'failure.json';index.write_text((ROOT/'Docs/Production/FAILURE_INTELLIGENCE.json').read_text())
+   result=failure_learning.promote(pd,proposal['proposal_id'],verification,index)
+   self.assertTrue(result['passed'],result)
+   self.assertFalse(result['record']['approval_authority_granted'])
+
+ def test_specialist_capacity_is_one_batch_with_parallel_within_batch(self):
+  policy=json.loads((ROOT/'Docs/Production/PRODUCTION_SCHEDULER_POLICY.json').read_text())
+  cap=policy['critic_capacity'];self.assertEqual(1,cap['slots']);self.assertTrue(cap['within_batch_parallel_specialists'])
+  body=(ROOT/'.github/workflows/havenline-v32-specialist-fanout.yml').read_text()
+  self.assertIn('havenline-v32-independent-specialist-batch',body)
+  self.assertIn('fail-fast: false',body)
+  self.assertIn('cancel-in-progress: false',body)
 
  def test_full_v32_validator(self):
   out=architecture_v32.validate()

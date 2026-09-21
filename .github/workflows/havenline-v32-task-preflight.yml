@@ -85,6 +85,22 @@ jobs:
           jq -e '.passed == true and .finish_running_sha == true and .quality_thresholds_unchanged == true' v32-control/control-plan.json
           critics=$(jq -c '.critic_plan.specialist_fanout' v32-control/control-plan.json);echo "specialist_critics_json=$critics" >> "$GITHUB_OUTPUT"
           if [ "${{ inputs.mode }}" = "review" ]; then test "$critics" != "[]";test -n "${{ inputs.evidence_artifact_prefix }}";test -n "${{ inputs.output_artifact_prefix }}";fi
+      - name: Stage content-addressed shared gate PASS proposals
+        if: inputs.target == 'BUILDING_ISOLATED'
+        env:
+          CANDIDATE: ${{ steps.refs.outputs.candidate_sha }}
+        run: |
+          set -euo pipefail
+          mkdir -p v32-control/gate-proposals
+          for gate in scope_dependency ownership; do
+            python3 tools/havenline/production/gate_result_recorder.py proposal \
+              --task "${{ inputs.task_id }}" \
+              --gate "$gate" \
+              --candidate "$CANDIDATE" \
+              --evidence v32-control/control-plan.json \
+              --workflow-run-id "${{ github.run_id }}" \
+              --output "v32-control/gate-proposals/$gate.json"
+          done
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
