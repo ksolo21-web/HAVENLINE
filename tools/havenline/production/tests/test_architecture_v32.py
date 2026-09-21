@@ -20,6 +20,63 @@ class V32Tests(unittest.TestCase):
   self.assertTrue(execution_checkpoint.validate_record(good)['passed'])
   bad=dict(good);bad['next_action']='fix gameplay'
   self.assertFalse(execution_checkpoint.validate_record(bad)['passed'])
+ def test_checkpoint_advance_hashes_prior_state_and_refuses_source_switch(self):
+  with tempfile.TemporaryDirectory() as td:
+   p=Path(td)/'checkpoint.json'
+   row={'schema_version':1,'task_id':'T11','integration_sha':SHA,'candidate_sha':None,'branch':'havenline/T11-camp-construction','stage':'PRECHECK','stage_status':'PASS','completed_gates':[],'reusable_proof':[],'blocker_families':[],'running_workflows':[],'next_action':'build','next_command':'build command','updated_at':'now'}
+   p.write_text(json.dumps(row))
+   class A: pass
+   a=A();a.integration=None;a.candidate='b'*40;a.stage='BUILD';a.status='RUNNING';a.add_gate=['scope_dependency'];a.proof=['packet'];a.blocker_family=[];a.workflow_id=[77];a.clear_running_workflows=False;a.environment='env';a.next_action='run sentinel';a.next_command='sentinel command';a.notes='bounded build'
+   updated,result=execution_checkpoint.advance_record(p,a);self.assertTrue(result['passed'],result);self.assertRegex(updated['previous_checkpoint_sha256'],r'^[0-9a-f]{64} def test_three_blockers_require_family_reconciliation(self):
+  report={'task_id':'T11','failed_candidate':SHA,'blockers':[{'id':'B1','root_cause':'same root','affected_object':'camp view'},{'id':'B2','root_cause':'same root','affected_object':'camp view'},{'id':'B3','root_cause':'another symptom','affected_object':'camp view'}]}
+  p=ROOT/'tools/havenline/production/tests/.v32-blockers.json'
+  try:
+   p.write_text(json.dumps(report));out=blocker_family_gate.evaluate('T11',SHA,str(p));self.assertFalse(out['passed']);self.assertTrue(out['causal_family_reconciliation_required']);self.assertEqual(3,out['blocker_count'])
+  finally:
+   p.unlink(missing_ok=True)
+ def test_critic_package_preflight_rejects_wrong_source_and_missing_evidence(self):
+  with tempfile.TemporaryDirectory() as td:
+   d=Path(td);f=d/'note.txt';f.write_text('proof');h=hashlib.sha256(f.read_bytes()).hexdigest()
+   m={'task_id':'T11','critic_id':'C3','candidate_commit':SHA,'groups':[{'id':'g1','items':[{'path':'note.txt','kind':'text','sha256':h}]}],'response_contract':{'observations_max':2,'observation_chars_max':160,'defects_max':5,'defect_chars_max':160,'completion_tokens_max':600}}
+   mp=d/'manifest.json';mp.write_text(json.dumps(m))
+   self.assertTrue(critic_package_preflight.validate_manifest(mp,SHA,'C3')['passed'])
+   self.assertFalse(critic_package_preflight.validate_manifest(mp,'b'*40,'C3')['passed'])
+   f.unlink();self.assertFalse(critic_package_preflight.validate_manifest(mp,SHA,'C3')['passed'])
+   m['groups'][0]['items'][0]['external_uri']='artifact://source-bound-note';mp.write_text(json.dumps(m));self.assertTrue(critic_package_preflight.validate_manifest(mp,SHA,'C3')['passed'])
+ def test_critic_specific_invalidation_uses_exact_input_fingerprints(self):
+  with tempfile.TemporaryDirectory() as td:
+   d=Path(td);b=d/'b.json';a=d/'a.json'
+   fx='1'*64;fy='2'*64;fz='3'*64;changed='4'*64
+   b.write_text(json.dumps({'task_id':'T11','candidate_sha':SHA,'critics':{'C2':{'input_fingerprint':fx,'disposition':'PASS'},'C3':{'input_fingerprint':fy,'disposition':'PASS'},'C4':{'input_fingerprint':fz,'disposition':'PASS'}}}))
+   a.write_text(json.dumps({'task_id':'T11','candidate_sha':SHA,'critics':{'C2':{'input_fingerprint':fx,'disposition':'PASS'},'C3':{'input_fingerprint':changed,'disposition':'PASS'},'C4':{'input_fingerprint':fz,'disposition':'PASS'}}}))
+   out=critic_invalidation.evaluate(b,a);self.assertTrue(out['passed'],out);self.assertEqual(['C3'],out['rerun_critics']);self.assertEqual(['C2','C4'],out['preserve_critics'])
+   a.write_text(json.dumps({'task_id':'T11','candidate_sha':'b'*40,'critics':{'C2':{'input_fingerprint':fx,'disposition':'PASS'},'C3':{'input_fingerprint':changed,'disposition':'PASS'},'C4':{'input_fingerprint':fz,'disposition':'PASS'}}}))
+   out=critic_invalidation.evaluate(b,a);self.assertEqual(['C2','C3','C4'],out['rerun_critics']);self.assertEqual([],out['preserve_critics'])
+   a.write_text(json.dumps({'task_id':'T11','candidate_sha':SHA,'critics':{'C2':{'input_fingerprint':'not-a-hash','disposition':'PASS'}}}))
+   self.assertFalse(critic_invalidation.evaluate(b,a)['passed'])
+ def test_stage_plan_parallelizes_critics_and_checkpoints(self):
+  out=timeout_stage_plan.plan('T11');self.assertGreaterEqual(out['critic_parallelism'],4);self.assertTrue(all(x.get('checkpoint_after') for x in out['shards']))
+  self.assertFalse(out['timeout_is_product_judgment'])
+ def test_rolling_canaries_start_early(self):
+  c11={x['canary'] for x in rolling_canary.requirements('T11')['canaries']};self.assertIn('opening_loop_L1_10',c11)
+  c12={x['canary'] for x in rolling_canary.requirements('T12')['canaries']};self.assertIn('level_1_100_reachability',c12)
+ def test_branch_and_performance_ledgers_validate(self):
+  self.assertTrue(branch_budget.validate()['passed']);self.assertTrue(performance_ledger.validate()['passed'])
+  with tempfile.TemporaryDirectory() as td:
+   p=Path(td)/'branches.json'
+   p.write_text(json.dumps(['havenline/T11-camp-construction']));self.assertTrue(branch_budget.validate(inventory=str(p))['passed'])
+   p.write_text(json.dumps(['havenline/T11-camp-construction','havenline/T11-repair-a','havenline/T11-repair-b']));self.assertFalse(branch_budget.validate(inventory=str(p))['passed'])
+   p.write_text(json.dumps(['havenline/T11-camp-construction','havenline/T11-prototype']));self.assertFalse(branch_budget.validate(inventory=str(p))['passed'])
+   p.write_text(json.dumps(['havenline/T11-camp-construction','havenline/T12-unregistered']));self.assertFalse(branch_budget.validate(inventory=str(p))['passed'])
+ def test_authority_and_forward_prep_contracts(self):
+  self.assertTrue(authority_consistency.validate()['passed'])
+  prep=forward_prep_contract.validate();self.assertTrue(prep['passed']);self.assertGreaterEqual(prep['prep_task_count'],20)
+ def test_full_v32_validator(self):
+  out=architecture_v32.validate();self.assertTrue(out['passed'],out);self.assertEqual(60,out['task_count'])
+if __name__=='__main__':unittest.main()
+);self.assertEqual(['scope_dependency'],updated['completed_gates']);self.assertEqual([77],updated['running_workflows'])
+   a.candidate='c'*40
+   _,result=execution_checkpoint.advance_record(p,a);self.assertFalse(result['passed']);self.assertIn('candidate SHA change requires a new checkpoint',result['errors'])
  def test_three_blockers_require_family_reconciliation(self):
   report={'task_id':'T11','failed_candidate':SHA,'blockers':[{'id':'B1','root_cause':'same root','affected_object':'camp view'},{'id':'B2','root_cause':'same root','affected_object':'camp view'},{'id':'B3','root_cause':'another symptom','affected_object':'camp view'}]}
   p=ROOT/'tools/havenline/production/tests/.v32-blockers.json'
