@@ -106,6 +106,21 @@ def t10_activation_errors(graph,registry,ownership,task_gates,checklist):
             errors.append("T10 workstream activation identity mismatch")
 
     if status=="APPROVED":
+        # Any post-T10 task that leaves LOCKED must be represented by the same
+        # canonical lifecycle in WORKSTREAM_REGISTRY and may only do so after
+        # all of its declared dependencies are APPROVED. This permits valid
+        # T11+ preparation without accepting orphaned/untracked activation.
+        unlocked_future=[tid for tid in future_ids if graph.get("tasks",{}).get(tid,{}).get("status")!="LOCKED"]
+        for tid in unlocked_future:
+            future=graph.get("tasks",{}).get(tid,{})
+            future_rows=[r for r in registry.get("workstreams",[]) if r.get("task_id")==tid]
+            if len(future_rows)!=1:
+                errors.append("post-T10 unlocked future workstream missing or duplicated: "+tid)
+                continue
+            if future_rows[0].get("status")!=future.get("status"):
+                errors.append("post-T10 unlocked future lifecycle mismatch: "+tid)
+            if any(graph.get("tasks",{}).get(dep,{}).get("status")!="APPROVED" for dep in future.get("dependencies",[])):
+                errors.append("post-T10 unlocked future dependencies not approved: "+tid)
         base=row.get("base_commit")
         if not isinstance(base,str) or not re.fullmatch(r"[0-9a-f]{40}",base):
             errors.append("T10 completed base commit invalid")
