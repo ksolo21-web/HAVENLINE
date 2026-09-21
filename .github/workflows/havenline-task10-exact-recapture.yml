@@ -183,6 +183,21 @@ jobs:
           Path('task10-isolated-evidence/native4k-evidence.json').write_text(json.dumps({'task':'T10','candidate':m['candidate'],'native_scale_1':True,'resolution':[3840,2160],'state_count':6,'angle_count':6,'capture_count':36,'unique_capture_count':36,'states':states,'angles':angles,'files':files,'integration_allowed':False,'real_t09_adapter_bound':True,'exact_debit_verified':True,'task_approved':False,'passed':True},indent=2))
           PY
 
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          path: review-controller
+          sparse-checkout: |
+            tools/havenline/task10/build_critic_evidence.py
+          sparse-checkout-cone-mode: false
+
+      - name: Install review-only benchmark validator
+        run: |
+          set -euo pipefail
+          cp review-controller/tools/havenline/task10/build_critic_evidence.py tools/havenline/task10/build_critic_evidence.py
+          git diff --name-only
+          test "$(git diff --name-only)" = "tools/havenline/task10/build_critic_evidence.py"
+
       - name: Measure performance and package fresh critic input
         run: |
           set -euo pipefail
