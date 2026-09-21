@@ -48,6 +48,17 @@ REQUIRED_FORBIDDEN_INPUTS = {
     "energy_required_to_continue",
 }
 
+EXPECTED_INVARIANTS = {
+    "exact_level_count": 100,
+    "range": [1, 100],
+    "max_visible_gap": 3,
+    "major_each_band": True,
+    "spend_blind": True,
+    "energy_wall_forbidden": True,
+    "counter_only_filler_forbidden": True,
+    "upstream_ids_require_activation_resolution": True,
+}
+
 
 def expected_band(level: int) -> tuple[str, str]:
     for start, end, band, owner in EXPECTED_BANDS:
@@ -67,6 +78,13 @@ def validate_matrix(matrix: dict[str, Any]) -> dict[str, Any]:
         errors.append("matrix status must remain PREPARATION_ONLY_NON_SHIPPING")
     if matrix.get("shipping_path_forbidden") is not True:
         errors.append("shipping_path_forbidden must remain true")
+
+    invariants = matrix.get("invariants")
+    if invariants != EXPECTED_INVARIANTS:
+        errors.append(
+            "matrix invariants drifted from frozen T12 contract: "
+            + json.dumps({"expected": EXPECTED_INVARIANTS, "actual": invariants}, sort_keys=True)
+        )
 
     concrete = matrix.get("concrete_binding_ids")
     if concrete != {"T10": [], "T11": []}:
