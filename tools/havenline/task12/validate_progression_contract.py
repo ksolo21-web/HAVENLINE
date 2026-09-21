@@ -121,6 +121,9 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
     errors: list[str] = []
     warnings: list[str] = []
 
+    if manifest.get("task_id") != "T12":
+        errors.append(f"manifest.task_id must be 'T12', got {manifest.get('task_id')!r}")
+
     levels = manifest.get("levels")
     milestones = manifest.get("milestones", [])
     if not isinstance(levels, list):
@@ -136,6 +139,7 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
     id_to_number: dict[str, int] = {}
     duplicate_numbers: set[int] = set()
     duplicate_ids: set[str] = set()
+    effect_signatures: dict[int, str] = {}
 
     for index, row in enumerate(levels):
         if not isinstance(row, dict):
@@ -147,31 +151,80 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
         if not isinstance(level, int) or isinstance(level, bool) or not 1 <= level <= 100:
             errors.append(f"levels[{index}].level must be integer 1..100, got {level!r}")
             continue
+
+        missing_fields = [field for field in REQUIRED_LEVEL_FIELDS if field not in row]
+        if missing_fields:
+            errors.append(f"level {level}: missing required fields: {missing_fields}")
+
         if level in by_number:
             duplicate_numbers.add(level)
         by_number[level] = row
 
+        canonical_level_id = f"t12.level.{level:03d}"
         if not isinstance(level_id, str) or not level_id.strip():
             errors.append(f"level {level}: level_id must be a non-empty string")
+        elif level_id != canonical_level_id:
+            errors.append(f"level {level}: level_id must be canonical {canonical_level_id}, got {level_id!r}")
         elif level_id in id_to_number:
             duplicate_ids.add(level_id)
         else:
             id_to_number[level_id] = level
 
+        expected_band = expected_region_band(level)
+        region_band_id = row.get("region_band_id")
+        if not isinstance(region_band_id, str) or not region_band_id.strip():
+            errors.append(f"level {level}: region_band_id must be a non-empty string")
+        elif region_band_id != expected_band:
+            errors.append(f"level {level}: region_band_id must be {expected_band}, got {region_band_id!r}")
+
+        prereqs = validate_string_list(
+            row.get("prerequisite_level_ids"),
+            label=f"level {level}: prerequisite_level_ids",
+            errors=errors,
+        )
+        validate_string_list(
+            row.get("required_fact_ids"),
+            label=f"level {level}: required_fact_ids",
+            errors=errors,
+        )
+        visible_hooks = validate_string_list(
+            row.get("visible_progression_hook_ids"),
+            label=f"level {level}: visible_progression_hook_ids",
+            errors=errors,
+        )
+        validate_string_list(
+            row.get("milestone_ids"),
+            label=f"level {level}: milestone_ids",
+            errors=errors,
+        )
+        one_time_events = validate_string_list(
+            row.get("one_time_event_ids"),
+            label=f"level {level}: one_time_event_ids",
+            errors=errors,
+        )
+
         effects = row.get("progression_effects")
         if not isinstance(effects, list) or not effects:
             errors.append(f"level {level}: progression_effects must contain at least one practical effect")
-
-        prereqs = row.get("prerequisite_level_ids", [])
-        if not isinstance(prereqs, list) or any(not isinstance(x, str) or not x for x in prereqs):
-            errors.append(f"level {level}: prerequisite_level_ids must be a list of non-empty strings")
+        else:
+            valid_effects = True
+            for effect_index, effect in enumerate(effects):
+                if not isinstance(effect, dict) or not effect:
+                    errors.append(f"level {level}: progression_effects[{effect_index}] must be a non-empty object")
+                    valid_effects = False
+                    continue
+                kind = normalized_key(str(effect.get("kind", "")))
+                if kind in FORBIDDEN_FILLER_EFFECT_KINDS:
+                    errors.append(f"level {level}: counter/stat-only filler effect is forbidden: {effect.get('kind')!r}")
+            if valid_effects:
+                effect_signatures[level] = json.dumps(effects, sort_keys=True, separators=(",", ":"))
 
         for key_path, key, _ in walk_keys(row, f"level[{level}]"):
             if normalized_key(key) in FORBIDDEN_ELIGIBILITY_KEYS:
                 errors.append(f"level {level}: forbidden spend/energy eligibility key at {key_path}.{key}: {key}")
 
-        for hook in as_list(row.get("visible_progression_hook_ids")) + as_list(row.get("one_time_event_ids")):
-            if isinstance(hook, str) and hook.lower().startswith(PROVISIONAL_PREFIXES):
+        for hook in visible_hooks + one_time_events:
+            if hook.lower().startswith(PROVISIONAL_PREFIXES):
                 errors.append(f"level {level}: provisional hook/event ID cannot ship: {hook}")
 
     if duplicate_numbers:
