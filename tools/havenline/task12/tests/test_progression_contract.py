@@ -125,8 +125,13 @@ class PreparationBindingTests(unittest.TestCase):
         self.assertEqual(data["bindings"]["T08"]["integrated_source"], "9d56ea8ae972d0a0705ff8b985e13fab31dde493")
         self.assertTrue(data["bindings"]["T10"]["reconcile_at_activation"])
         self.assertTrue(data["bindings"]["T11"]["reconcile_at_activation"])
-        self.assertIn("UNFINISHED", data["bindings"]["T10"]["status"])
-        self.assertIn("UNFINISHED", data["bindings"]["T11"]["status"])
+        self.assertEqual(data["bindings"]["T10"]["status"], "APPROVED")
+        self.assertEqual(
+            data["bindings"]["T10"]["integrated_source"],
+            "eba0107def258824549fb10d81785290d0c81d97",
+        )
+        self.assertEqual(data["bindings"]["T11"]["status"], "ASSIGNED_PROVISIONAL_CONTRACT")
+        self.assertNotIn("APPROVED", data["bindings"]["T11"]["status"])
 
     def test_shipping_t12_runtime_is_not_prebuilt(self):
         forbidden = [
