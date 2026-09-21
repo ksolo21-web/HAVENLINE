@@ -189,6 +189,9 @@ def benchmark_errors(report, candidate):
     if report.get('cycles')!=3 or len(phases)!=9 or [(x.get('cycle'),x.get('state')) for x in phases]!=[(c,s) for c in range(3) for s in ('hidden','frozen','pulse')]: errors.append('benchmark repeated phases missing')
     try:
         identity=phases[0]['identity_before']
+        view_source=(ROOT/'HavenlineGodot/scripts/world_transform_view.gd').read_text()
+        response_base_match=re.search(r'^const RESPONSE_BASE_Y := ([0-9]+(?:\\.[0-9]+)?)',view_source,re.MULTILINE)
+        response_base_y=float(response_base_match.group(1)) if response_base_match else .08
         conditioning=report['conditioning']
         assert conditioning['method']=='fixed_all_controls' and conditioning['adaptive'] is False
         assert type(conditioning['sweeps']) is int and conditioning['sweeps']==2
@@ -223,7 +226,7 @@ def benchmark_errors(report, candidate):
                 assert finite(t) and 0<=t<10 and len(scale)==3 and all(finite(v) for v in scale) and finite(y)
                 pulse=1+math.sin(t*math.tau*1.4)*.18
                 assert all(math.isclose(v,b*pulse,rel_tol=1e-5,abs_tol=1e-5) for v,b in zip(scale,base))
-                assert math.isclose(y,.08+.75*scale[1],rel_tol=1e-5,abs_tol=1e-5)
+                assert math.isclose(y,response_base_y+.75*scale[1],rel_tol=1e-5,abs_tol=1e-5)
                 if phase['state']!='pulse':assert t==0 and all(math.isclose(v,b,abs_tol=1e-5) for v,b in zip(scale,base))
             if phase['state']=='pulse':
                 assert len({s['time'] for s in motion})>100
