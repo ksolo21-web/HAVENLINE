@@ -192,24 +192,28 @@ jobs:
           t11_branch=$(python3 -c 'import json;print(next(w["branch"] for w in json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json"))["workstreams"] if w["task_id"]=="T11"))')
           integration_sha=$(git ls-remote origin "refs/heads/$integration_branch" | awk '{print $1}')
           t11_remote_sha=$(git ls-remote origin "refs/heads/$t11_branch" | awk '{print $1}')
+          t11_assignment_sha=$(python3 -c 'import json; row=next(w for w in json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json"))["workstreams"] if w["task_id"]=="T11"); print(row.get("assignment_integration_commit") or "")')
           [[ "$integration_sha" =~ ^[0-9a-f]{40}$ ]] || { echo "unable to resolve integration head" >&2; exit 2; }
           [[ "$t11_remote_sha" =~ ^[0-9a-f]{40}$ ]] || { echo "unable to resolve T11 builder head" >&2; exit 2; }
-          # PR/governance branches validate the proposed control plane itself. Once
-          # merged to the authoritative integration branch, governance validates the
-          # actual remote T11 branch so stale live authority cannot remain hidden.
+          # PR/governance branches validate the proposed control plane itself.
+          # Live integration validates the exact assignment binding once one exists;
+          # later governance-only integration motion must not cancel a legitimately
+          # assigned/running SHA. BUILDING preflight still forecasts against latest integration.
+          lineage_integration_sha="$integration_sha"
           if [ "${GITHUB_EVENT_NAME}" = "pull_request" ] || [ "${GITHUB_REF_NAME}" != "$integration_branch" ]; then
             t11_lineage_builder=$(git rev-parse HEAD)
           else
             t11_lineage_builder="$t11_remote_sha"
+            if [[ "$t11_assignment_sha" =~ ^[0-9a-f]{40}$ ]]; then lineage_integration_sha="$t11_assignment_sha"; fi
           fi
           python3 tools/havenline/production/architecture_v32.py validate > /tmp/v32-validation.json
-          python3 tools/havenline/production/architecture_v32.py readiness T11 --builder-head "$t11_lineage_builder" --integration-head "$integration_sha" > /tmp/v32-t11.json
+          python3 tools/havenline/production/architecture_v32.py readiness T11 --builder-head "$t11_lineage_builder" --integration-head "$lineage_integration_sha" > /tmp/v32-t11.json
           python3 tools/havenline/production/architecture_v32.py readiness T12 > /tmp/v32-t12.json
           python3 tools/havenline/production/architecture_v32.py readiness T14 > /tmp/v32-t14.json
           python3 tools/havenline/production/architecture_v32.py readiness T35 > /tmp/v32-t35.json
           python3 tools/havenline/production/architecture_v32.py readiness T68 > /tmp/v32-t68.json
           python3 tools/havenline/production/parallel_preparation_planner.py validate > /tmp/v32-prep.json
-          python3 tools/havenline/production/task_graduation_gate.py T11 --target ASSIGNED --builder-head "$t11_lineage_builder" --integration-head "$integration_sha" > /tmp/v32-t11-graduation.json
+          python3 tools/havenline/production/task_graduation_gate.py T11 --target ASSIGNED --builder-head "$t11_lineage_builder" --integration-head "$lineage_integration_sha" > /tmp/v32-t11-graduation.json
           python3 tools/havenline/production/timeout_stage_plan.py T11 > /tmp/v32-t11-stages.json
           python3 tools/havenline/production/timeout_stage_plan.py T62 > /tmp/v32-t62-stages.json
           python3 tools/havenline/production/rolling_canary.py validate > /tmp/v32-canaries.json
@@ -220,7 +224,7 @@ jobs:
           python3 tools/havenline/production/forward_task_control.py validate > /tmp/v32-forward-control-validation.json
           python3 tools/havenline/production/gate_result_recorder.py validate > /tmp/v32-gate-result-recording.json
           python3 tools/havenline/production/failure_learning.py validate > /tmp/v32-failure-learning.json
-          python3 tools/havenline/production/forward_task_control.py plan T11 --target ASSIGNED --builder "$t11_lineage_builder" --integration "$integration_sha" --inventory /tmp/v32-remote-branches.json --output /tmp/v32-forward-control-T11.json > /tmp/v32-forward-control-T11.stdout
+          python3 tools/havenline/production/forward_task_control.py plan T11 --target ASSIGNED --builder "$t11_lineage_builder" --integration "$lineage_integration_sha" --inventory /tmp/v32-remote-branches.json --output /tmp/v32-forward-control-T11.json > /tmp/v32-forward-control-T11.stdout
           python3 tools/havenline/production/v32_forward_prep_harness.py validate > /tmp/v32-forward-harness.json
           python3 tools/havenline/production/v32_forward_prep_harness.py fixture progression > /tmp/v32-progression-fixture.json
           python3 tools/havenline/production/v32_forward_prep_harness.py fixture save_versioning > /tmp/v32-save-fixture.json
