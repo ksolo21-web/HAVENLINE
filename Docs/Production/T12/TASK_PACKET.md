@@ -47,12 +47,13 @@ Exactly one shipping record must exist for every integer Level 1–100. Each rec
 - `level_id`
 - `region_band_id`
 - `prerequisite_level_ids`
+- `required_fact_ids`
 - `progression_effects`
 - `visible_progression_hook_ids`
 - `milestone_ids`
 - `one_time_event_ids`
 
-Validation rejects missing/duplicate levels, duplicate IDs, out-of-range levels, missing prerequisite targets, cycles/unreachable records, empty progression-effect records and monetization/spend-gated prerequisite fields.
+Validation rejects wrong schema/task identity, missing/duplicate levels, noncanonical level/completion/milestone IDs, wrong region bands, missing or forward prerequisite targets, unresolved required facts, cycles/unreachable records, duplicate/filler progression effects, unresolved milestone references and monetization/spend/energy-gated eligibility.
 
 ### `progression_milestones_v1.json`
 
