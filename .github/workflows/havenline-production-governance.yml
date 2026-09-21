@@ -204,6 +204,14 @@ jobs:
           git ls-remote --heads origin 'refs/heads/havenline/T*' | awk '{print $2}' | sed 's#refs/heads/##' | jq -R -s 'split("\n") | map(select(length > 0))' > /tmp/v32-remote-branches.json
           python3 tools/havenline/production/branch_budget.py --inventory /tmp/v32-remote-branches.json > /tmp/v32-branches.json
           python3 tools/havenline/production/v32_forward_prep_harness.py validate > /tmp/v32-forward-harness.json
+          python3 tools/havenline/production/v32_forward_prep_harness.py fixture progression > /tmp/v32-progression-fixture.json
+          python3 tools/havenline/production/v32_forward_prep_harness.py fixture save_versioning > /tmp/v32-save-fixture.json
+          python3 tools/havenline/production/external_readiness.py > /tmp/v32-external-readiness.json
+          python3 tools/havenline/production/forward_prep_packet.py T12 --output /tmp/v32-prep-T12.md > /tmp/v32-prep-T12.stdout
+          python3 tools/havenline/production/forward_prep_packet.py T14 --output /tmp/v32-prep-T14.md > /tmp/v32-prep-T14.stdout
+          python3 tools/havenline/production/forward_prep_packet.py T35 --output /tmp/v32-prep-T35.md > /tmp/v32-prep-T35.stdout
+          python3 tools/havenline/production/forward_prep_packet.py T62 --output /tmp/v32-prep-T62.md > /tmp/v32-prep-T62.stdout
+          python3 tools/havenline/production/forward_prep_packet.py T68 --output /tmp/v32-prep-T68.md > /tmp/v32-prep-T68.stdout
           python3 tools/havenline/production/opening_loop_canary.py > /tmp/v32-opening-loop.json
           python3 tools/havenline/production/authority_consistency.py > /tmp/v32-authority.json
           python3 tools/havenline/production/forward_prep_contract.py > /tmp/v32-forward-prep.json
@@ -217,9 +225,18 @@ jobs:
           jq -e '.passed == true' /tmp/v32-performance.json
           jq -e '.passed == true and .details.inventory_checked == true' /tmp/v32-branches.json
           jq -e '.passed == true and .domain_count >= 12' /tmp/v32-forward-harness.json
+          jq -e '.passed == true' /tmp/v32-progression-fixture.json
+          jq -e '.passed == true' /tmp/v32-save-fixture.json
+          jq -e '.passed == true' /tmp/v32-external-readiness.json
+          grep -q 'PREPARATION ONLY' /tmp/v32-prep-T12.md
+          grep -q 'progression' /tmp/v32-prep-T12.md
+          grep -q 'save_versioning' /tmp/v32-prep-T14.md
+          grep -q 'google_play_billing_sandbox' /tmp/v32-prep-T35.md
+          grep -q 'validation-only' /tmp/v32-prep-T62.md
+          grep -q 'physical_phone_4k60' /tmp/v32-prep-T68.md
           jq -e '.passed == true and .this_is_readiness_not_formal_acceptance == true and (.implemented_segments | index("transform")) != null' /tmp/v32-opening-loop.json
           jq -e '.passed == true' /tmp/v32-authority.json
-          jq -e '.passed == true and .prep_task_count >= 20 and .shared_contract_count >= 8' /tmp/v32-forward-prep.json
+          jq -e '.passed == true and .prep_task_count == 59 and .expected_prep_task_count == 59 and .external_milestone_count >= 10 and .shared_contract_count >= 8' /tmp/v32-forward-prep.json
           grep -q 'actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09' .github/workflows/havenline-v32-task-preflight.yml
           grep -q 'fail-fast: false' .github/workflows/havenline-v32-specialist-fanout.yml
       - name: Require C1-C11 execution readiness

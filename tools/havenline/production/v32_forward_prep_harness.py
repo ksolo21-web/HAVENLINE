@@ -180,9 +180,20 @@ def validate_all():
     if not results['external_capabilities']['passed']: errors += ['external_capabilities: '+e for e in results['external_capabilities']['errors']]
     return {'passed':not errors,'domain_count':len(results),'results':results,'errors':errors}
 
+def fixture(domain):
+    if domain=='external_capabilities': return check(domain,load('CAPABILITY_STATUS.json'))
+    can=load('V32_FORWARD_PREP_CANARIES.json')
+    if domain not in can: return {'passed':False,'errors':['missing fixture domain '+domain]}
+    return check(domain,can[domain])
+
 def main():
-    ap=argparse.ArgumentParser();sub=ap.add_subparsers(dest='cmd',required=True);sub.add_parser('validate');c=sub.add_parser('check');c.add_argument('domain');c.add_argument('record')
+    ap=argparse.ArgumentParser();sub=ap.add_subparsers(dest='cmd',required=True)
+    sub.add_parser('validate')
+    c=sub.add_parser('check');c.add_argument('domain');c.add_argument('record')
+    f=sub.add_parser('fixture');f.add_argument('domain')
     a=ap.parse_args()
-    out=validate_all() if a.cmd=='validate' else check(a.domain,json.loads(Path(a.record).read_text()))
+    if a.cmd=='validate': out=validate_all()
+    elif a.cmd=='fixture': out=fixture(a.domain)
+    else: out=check(a.domain,json.loads(Path(a.record).read_text()))
     print(json.dumps(out,indent=2));raise SystemExit(0 if out.get('passed') else 2)
 if __name__=='__main__':main()

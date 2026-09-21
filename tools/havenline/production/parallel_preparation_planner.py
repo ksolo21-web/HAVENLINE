@@ -24,7 +24,9 @@ def classify(task):
     elif deps_ok: cls='BUILD_WHEN_UNLOCKED'
     elif task in profiles.get('tasks',{}): cls='PREP_NOW'
     else: cls='DO_NOT_TOUCH'
-    return {'task_id':task,'classification':cls,'lifecycle_status':lifecycle,'dependency_status':dep,'dependencies_approved':deps_ok,'external_blockers':external,'workstream_present':ws is not None,'safe_work':policy['safe_work'][cls]}
+    roadmap=load('V32_FORWARD_PREP_ROADMAP.json')
+    prep=next((r for r in roadmap.get('immediate_parallel_prep',[]) if task in r.get('tasks',[])),None)
+    return {'task_id':task,'classification':cls,'lifecycle_status':lifecycle,'dependency_status':dep,'dependencies_approved':deps_ok,'external_blockers':external,'workstream_present':ws is not None,'safe_work':policy['safe_work'][cls],'prep_lane':(prep or {}).get('lane'),'prep_deliverables':(prep or {}).get('deliverables',[]),'prep_forbidden':(prep or {}).get('forbidden',[]),'prep_canary_domains':roadmap.get('task_canary_domains',{}).get(task,[])}
 def plan():
     rows=[classify(f'T{i:02d}') for i in range(11,71)];policy=load('PARALLEL_PREPARATION_POLICY.json');counts={k:sum(1 for r in rows if r['classification']==k) for k in policy['classifications']};active=sum(1 for r in rows if r['classification']=='ACTIVE_RUNTIME')
     return {'passed':active<=policy['wip']['max_parallel_runtime_builds'],'schema_version':1,'rows':rows,'counts':counts,'active_runtime_count':active,'runtime_wip_max':policy['wip']['max_parallel_runtime_builds'],'integration_owner_slots':policy['wip']['integration_owner_slots']}

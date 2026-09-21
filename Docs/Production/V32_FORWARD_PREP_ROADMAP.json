@@ -185,6 +185,165 @@
       "forbidden": [
         "reconnaissance cannot substitute T68/T69 certification"
       ]
+    },
+    {
+      "tasks": [
+        "T31"
+      ],
+      "lane": "forward_preparation",
+      "deliverables": [
+        "companion/survivor capability conflict matrix",
+        "job arbitration stress cases",
+        "navigation contention cases",
+        "animation-profile separation audit"
+      ],
+      "forbidden": [
+        "no integration until T15/T23/T24-T30 dependencies are APPROVED"
+      ]
+    },
+    {
+      "tasks": [
+        "T32"
+      ],
+      "lane": "forward_preparation",
+      "deliverables": [
+        "rolling Level 1-10 closure scenario",
+        "save/resume/device acceptance scenario",
+        "resource/economy conservation scenario",
+        "first physical-device reconnaissance plan"
+      ],
+      "forbidden": [
+        "T32 remains build-gated until all declared dependencies are APPROVED"
+      ]
+    },
+    {
+      "tasks": [
+        "T54"
+      ],
+      "lane": "forward_preparation",
+      "deliverables": [
+        "day/night/weather deterministic state cases",
+        "audio/feedback layering matrix",
+        "readability/performance budget cases"
+      ],
+      "forbidden": [
+        "no final feedback runtime before T53 and T32 dependencies"
+      ]
+    },
+    {
+      "tasks": [
+        "T57"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "milestone persistence/offline cases",
+        "shareable milestone schema",
+        "platform achievement capability evidence plan"
+      ],
+      "forbidden": [
+        "no platform achievement integration without READY capability evidence"
+      ]
+    },
+    {
+      "tasks": [
+        "T59",
+        "T60",
+        "T61"
+      ],
+      "lane": "asset_content_readiness",
+      "deliverables": [
+        "final rig inventory",
+        "tool/weapon contact matrix",
+        "full-cycle transition/clipping capture plan",
+        "C5 pose/contact preflight"
+      ],
+      "forbidden": [
+        "no final rig approval before T58"
+      ]
+    },
+    {
+      "tasks": [
+        "T62"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "Level 1-100 acceptance scenario manifest",
+        "all contract coverage checklist",
+        "save/device/performance/security/economy/liveops closure matrix"
+      ],
+      "forbidden": [
+        "validation-only: route defects to owning tasks; do not become a repair branch"
+      ]
+    },
+    {
+      "tasks": [
+        "T63"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "$0 lifelong-F2P simulation scenarios",
+        "bounded-grind cadence cases",
+        "dead-end detection cases"
+      ],
+      "forbidden": [
+        "validation-only; no economy tuning authority"
+      ]
+    },
+    {
+      "tasks": [
+        "T64"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "purchase value/fairness scenarios",
+        "billing entitlement/recovery attack cases",
+        "Game Master exclusion checks"
+      ],
+      "forbidden": [
+        "validation-only; no billing/economy implementation authority"
+      ]
+    },
+    {
+      "tasks": [
+        "T65"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "full LiveOps rehearsal schedule",
+        "reward/collision/kill-switch/rollback cases",
+        "billing/recovery rehearsal cases"
+      ],
+      "forbidden": [
+        "validation-only; no LiveOps implementation authority"
+      ]
+    },
+    {
+      "tasks": [
+        "T66"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "full exploit attack matrix",
+        "repeatability/privilege-boundary cases",
+        "recovery-after-rejected-attack cases"
+      ],
+      "forbidden": [
+        "validation-only; no security feature implementation authority"
+      ]
+    },
+    {
+      "tasks": [
+        "T67"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "accepted-source full-game regression manifest",
+        "reference/contract/motion/performance/service comparison plan",
+        "zero-drift release candidate checklist"
+      ],
+      "forbidden": [
+        "validation-only; defects return to owning task/system"
+      ]
     }
   ],
   "required_shared_contracts": {
@@ -270,5 +429,333 @@
       "memory",
       "non_certification"
     ]
+  },
+  "task_canary_domains": {
+    "T12": [
+      "progression"
+    ],
+    "T13": [
+      "difficulty"
+    ],
+    "T14": [
+      "save_versioning"
+    ],
+    "T15": [
+      "population"
+    ],
+    "T16": [
+      "action_arbitration"
+    ],
+    "T17": [
+      "action_arbitration"
+    ],
+    "T18": [
+      "action_arbitration"
+    ],
+    "T19": [
+      "action_arbitration"
+    ],
+    "T20": [
+      "action_arbitration"
+    ],
+    "T21": [
+      "action_arbitration"
+    ],
+    "T22": [
+      "action_arbitration"
+    ],
+    "T23": [
+      "action_arbitration"
+    ],
+    "T24": [
+      "motion_readiness"
+    ],
+    "T25": [
+      "motion_readiness"
+    ],
+    "T26": [
+      "motion_readiness"
+    ],
+    "T27": [
+      "motion_readiness"
+    ],
+    "T28": [
+      "motion_readiness"
+    ],
+    "T29": [
+      "motion_readiness"
+    ],
+    "T30": [
+      "motion_readiness"
+    ],
+    "T33": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T34": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T35": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T36": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T37": [
+      "transaction_security",
+      "liveops_clock",
+      "external_capabilities"
+    ],
+    "T38": [
+      "liveops_clock",
+      "external_capabilities"
+    ],
+    "T39": [
+      "liveops_clock",
+      "external_capabilities"
+    ],
+    "T40": [
+      "liveops_clock",
+      "external_capabilities"
+    ],
+    "T41": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T42": [
+      "external_capabilities"
+    ],
+    "T43": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T44": [
+      "region_template"
+    ],
+    "T45": [
+      "region_template"
+    ],
+    "T46": [
+      "region_template"
+    ],
+    "T47": [
+      "region_template"
+    ],
+    "T48": [
+      "region_template"
+    ],
+    "T49": [
+      "region_template"
+    ],
+    "T50": [
+      "region_template"
+    ],
+    "T51": [
+      "region_template"
+    ],
+    "T52": [
+      "region_template"
+    ],
+    "T53": [
+      "region_template"
+    ],
+    "T55": [
+      "accessibility_device"
+    ],
+    "T56": [
+      "accessibility_device"
+    ],
+    "T58": [
+      "accessibility_device"
+    ],
+    "T68": [
+      "physical_reconnaissance"
+    ],
+    "T69": [
+      "physical_reconnaissance"
+    ],
+    "T70": [
+      "physical_reconnaissance",
+      "external_capabilities"
+    ],
+    "T31": [
+      "population",
+      "motion_readiness"
+    ],
+    "T32": [
+      "progression",
+      "save_versioning",
+      "physical_reconnaissance"
+    ],
+    "T54": [
+      "accessibility_device"
+    ],
+    "T57": [
+      "external_capabilities"
+    ],
+    "T59": [
+      "motion_readiness"
+    ],
+    "T60": [
+      "motion_readiness"
+    ],
+    "T61": [
+      "motion_readiness"
+    ],
+    "T62": [
+      "progression",
+      "difficulty",
+      "save_versioning",
+      "population",
+      "action_arbitration",
+      "motion_readiness",
+      "transaction_security",
+      "liveops_clock",
+      "region_template",
+      "accessibility_device",
+      "external_capabilities"
+    ],
+    "T63": [
+      "progression",
+      "transaction_security"
+    ],
+    "T64": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T65": [
+      "transaction_security",
+      "liveops_clock",
+      "external_capabilities"
+    ],
+    "T66": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T67": [
+      "progression",
+      "difficulty",
+      "save_versioning",
+      "population",
+      "action_arbitration",
+      "motion_readiness",
+      "transaction_security",
+      "liveops_clock",
+      "region_template",
+      "accessibility_device",
+      "external_capabilities"
+    ]
+  },
+  "external_capability_milestones": {
+    "authoritative_backend": {
+      "prepare_by": "T24",
+      "required_by": [
+        "T33",
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T41",
+        "T43",
+        "T64",
+        "T65",
+        "T66"
+      ],
+      "reason": "Backend authority underpins economy, security, LiveOps and identity."
+    },
+    "google_play_billing_sandbox": {
+      "prepare_by": "T28",
+      "required_by": [
+        "T35",
+        "T36",
+        "T64",
+        "T65"
+      ],
+      "reason": "Billing sandbox and entitlement recovery should be proven before store implementation."
+    },
+    "remote_config_backend": {
+      "prepare_by": "T30",
+      "required_by": [
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T65"
+      ],
+      "reason": "LiveOps scheduling and kill switch require remote-config authority."
+    },
+    "telemetry_backend": {
+      "prepare_by": "T34",
+      "required_by": [
+        "T42"
+      ],
+      "reason": "Privacy-safe telemetry sink should exist before telemetry integration."
+    },
+    "google_signin_oauth": {
+      "prepare_by": "T34",
+      "required_by": [
+        "T43"
+      ],
+      "reason": "OAuth package/signing identity must be proven before identity integration."
+    },
+    "cloud_backend": {
+      "prepare_by": "T34",
+      "required_by": [
+        "T43"
+      ],
+      "reason": "Cloud continuity/recovery requires a proven backend."
+    },
+    "platform_achievement_backend": {
+      "prepare_by": "T48",
+      "required_by": [
+        "T57"
+      ],
+      "reason": "Achievement/milestone service should be ready before T57."
+    },
+    "physical_phone_4k60": {
+      "prepare_by": "T32",
+      "required_by": [
+        "T68",
+        "T70"
+      ],
+      "reason": "Early named-device reconnaissance protects final 4K/60 certification."
+    },
+    "physical_tablet_foldable_4k60": {
+      "prepare_by": "T32",
+      "required_by": [
+        "T69",
+        "T70"
+      ],
+      "reason": "Early tablet/foldable reconnaissance protects final certification."
+    },
+    "release_signing_identity": {
+      "prepare_by": "T58",
+      "required_by": [
+        "T70"
+      ],
+      "reason": "Release signing must be proven well before handoff without committing secrets."
+    },
+    "store_release_access": {
+      "prepare_by": "T58",
+      "required_by": [
+        "T70"
+      ],
+      "reason": "Store/release-channel access must be proven before final handoff."
+    }
+  },
+  "packet_policy": {
+    "dynamic_generated_not_lifecycle_authority": true,
+    "allowed_output": "stdout or temporary/evidence workspace",
+    "may_not_change_task_status": true,
+    "may_not_grant_ownership": true,
+    "may_not_integrate_runtime": true,
+    "strict_quality_rule_preserved": true,
+    "hosted_validation_required": true
   }
 }
