@@ -198,9 +198,30 @@
       "Docs/Production/T10/**",
       "tools/havenline/task10/**",
       ".github/workflows/havenline-task10-*.yml"
+    ],
+    "@reservation:T11": [
+      "HavenlineGodot/assets/camp_construction_v1/**",
+      "HavenlineGodot/scripts/camp_construction_view.gd",
+      "HavenlineGodot/data/camp_construction_recipes.json",
+      "HavenlineGodot/tests/test_task11_camp_construction.gd",
+      "HavenlineGodot/tests/test_task11_integration.gd",
+      "HavenlineGodot/tests/capture_task11_camp_construction.gd",
+      "Docs/Production/T11/**",
+      "tools/havenline/task11/**",
+      ".github/workflows/havenline-task11-*.yml"
     ]
   },
-  "active_owners": [],
+  "active_owners": [
+    {
+      "workstream": "T11-camp-construction-builder",
+      "task_id": "T11",
+      "owner": "camp-construction-builder",
+      "branch": "havenline/T11-camp-construction",
+      "paths_alias": "@reservation:T11",
+      "status": "PREPARED",
+      "base_commit": "87a4346eb33473c3723c7b7c1bbf1dd04dba9131"
+    }
+  ],
   "completed_production_owners": [
     {
       "workstream": "T03-legacy-integrated",
