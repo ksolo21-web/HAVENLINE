@@ -153,9 +153,21 @@ jobs:
         run: |
           set -euo pipefail
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
-          xvfb-run -a -s '-screen 0 1280x720x24' timeout 420 Godot_v4.7.2-stable_linux.x86_64             --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy             --resolution 1280x720 --fixed-fps 30             --script res://tests/capture_task11_camp_construction.gd --             --candidate="$CANDIDATE" --profile=standard --out="$(pwd)/t11-review-evidence/standard"             > t11-review-evidence/standard/capture.log 2>&1
-          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64             --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy             --resolution 3840x2160 --fixed-fps 30             --script res://tests/capture_task11_camp_construction.gd --             --candidate="$CANDIDATE" --profile=native4k --out="$(pwd)/t11-review-evidence/native4k"             > t11-review-evidence/native4k/capture.log 2>&1
-          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' t11-review-evidence/*/capture.log; then exit 1; fi
+          GODOT="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+          test -x "$GODOT"
+          if ! xvfb-run -a -s '-screen 0 1280x720x24' timeout 420 "$GODOT"             --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy             --resolution 1280x720 --fixed-fps 30             --script res://tests/capture_task11_camp_construction.gd --             --candidate="$CANDIDATE" --profile=standard --out="$(pwd)/t11-review-evidence/standard"             > t11-review-evidence/standard/capture.log 2>&1; then
+            cat t11-review-evidence/standard/capture.log >&2
+            exit 1
+          fi
+          if ! xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 "$GODOT"             --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy             --resolution 3840x2160 --fixed-fps 30             --script res://tests/capture_task11_camp_construction.gd --             --candidate="$CANDIDATE" --profile=native4k --out="$(pwd)/t11-review-evidence/native4k"             > t11-review-evidence/native4k/capture.log 2>&1; then
+            cat t11-review-evidence/native4k/capture.log >&2
+            exit 1
+          fi
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' t11-review-evidence/*/capture.log; then
+            cat t11-review-evidence/standard/capture.log >&2
+            cat t11-review-evidence/native4k/capture.log >&2
+            exit 1
+          fi
           python3 - <<'PY'
           import json,os
           from pathlib import Path
@@ -206,6 +218,7 @@ jobs:
           done
           rm -rf critic-input
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
         with:
           name: havenline-task11-review-evidence-${{ github.sha }}
           path: t11-review-evidence/
