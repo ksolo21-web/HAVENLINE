@@ -18,7 +18,7 @@ ARCHITECTURAL_ESCALATIONS = {"PLACEMENT_ALGORITHM", "EVIDENCE_ARCHITECTURE", "CO
 EXPECTED_THRESHOLD_REGISTRY_HASHES = {
     # Hash only the immutable quality-policy projections. CRITIC_MATRIX.json and
     # task-gates.json also carry legitimate mutable task/lifecycle metadata.
-    "critic_matrix_sha256": "e685a87371887fa4c0d1e150aa307da0b34e848981e00e53b6b3bd3c7c5642ae",
+    "critic_matrix_sha256": "4458f680dffc8212f0c8e53343d0cf61249a85a338d56cd2a4e218ddbe075f37",
     "task_gates_sha256": "368e64886f7ead3fe371e52e5de439ff0890faa1868c4ce688aa315f025950f0",
 }
 LOCKED_REPAIR_INTELLIGENCE = {
