@@ -78,6 +78,41 @@ class T12ProgressionSchemaTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertTrue(any("binding_resolution.json" in error.lower() for error in result["errors"]))
 
+    def test_rejects_completion_event_namespace_drift(self):
+        def mutate(data):
+            data["level_record"]["field_contracts"]["one_time_event_ids"] = "replay safe arbitrary IDs"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("completion event identity" in error for error in result["errors"]))
+
+    def test_rejects_major_milestone_namespace_drift(self):
+        def mutate(data):
+            data["milestone_record"]["field_contracts"]["milestone_id"] = "stable ^t12\\.milestone\\..+$ IDs"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("canonical major milestone" in error for error in result["errors"]))
+
+    def test_rejects_missing_split_shipping_file_contract(self):
+        def mutate(data):
+            del data["shipping_files"]["progression_milestones_v1"]
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("progression_milestones_v1" in error for error in result["errors"]))
+
+    def test_rejects_split_file_identity_drift(self):
+        def mutate(data):
+            data["shipping_files"]["progression_levels_v1"]["task_id"] = "T13"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("schema_version=1 and task_id=T12" in error for error in result["errors"]))
+
+    def test_rejects_missing_cross_file_validation_rule(self):
+        def mutate(data):
+            data["shipping_files"]["cross_file_rule"] = "hash both files"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("cross-file rule" in error for error in result["errors"]))
+
 
 if __name__ == "__main__":
     unittest.main()
