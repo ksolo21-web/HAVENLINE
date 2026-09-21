@@ -34,11 +34,19 @@ FORBIDDEN_ELIGIBILITY_KEYS = {
     "energycost",
 }
 
-PROVISIONAL_PREFIXES = (
+FORBIDDEN_ID_PREFIXES = (
     "provisional:",
+    "provisional.",
     "t10_provisional:",
     "t11_provisional:",
     "prepared_only:",
+    "prepared.",
+    "prepared_",
+    "example.",
+    "debug.",
+    "fixture.",
+    "test_only.",
+    "test-only.",
 )
 
 REQUIRED_LEVEL_FIELDS = (
@@ -121,6 +129,8 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
     errors: list[str] = []
     warnings: list[str] = []
 
+    if manifest.get("schema_version") != 1:
+        errors.append(f"manifest.schema_version must be 1, got {manifest.get('schema_version')!r}")
     if manifest.get("task_id") != "T12":
         errors.append(f"manifest.task_id must be 'T12', got {manifest.get('task_id')!r}")
 
@@ -182,7 +192,7 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
             label=f"level {level}: prerequisite_level_ids",
             errors=errors,
         )
-        validate_string_list(
+        required_facts = validate_string_list(
             row.get("required_fact_ids"),
             label=f"level {level}: required_fact_ids",
             errors=errors,
@@ -223,9 +233,14 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
             if normalized_key(key) in FORBIDDEN_ELIGIBILITY_KEYS:
                 errors.append(f"level {level}: forbidden spend/energy eligibility key at {key_path}.{key}: {key}")
 
-        for hook in visible_hooks + one_time_events:
-            if hook.lower().startswith(PROVISIONAL_PREFIXES):
-                errors.append(f"level {level}: provisional hook/event ID cannot ship: {hook}")
+        canonical_completion_event = f"t12.event.level.{level:03d}.completed"
+        if canonical_completion_event not in one_time_events:
+            errors.append(
+                f"level {level}: one_time_event_ids must include canonical completion event {canonical_completion_event}"
+            )
+        for identifier in required_facts + visible_hooks + one_time_events:
+            if identifier.lower().startswith(FORBIDDEN_ID_PREFIXES):
+                errors.append(f"level {level}: provisional/preparation-only ID cannot ship: {identifier}")
 
     if duplicate_numbers:
         errors.append(f"duplicate level numbers: {sorted(duplicate_numbers)}")
