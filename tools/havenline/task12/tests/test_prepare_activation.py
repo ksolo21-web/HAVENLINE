@@ -139,6 +139,34 @@ class T12PrepareActivationTests(unittest.TestCase):
             )
         )
 
+    def test_glob_overlap_does_not_invent_cross_task_collision(self):
+        self.assertFalse(
+            activation.may_overlap(
+                "tools/havenline/task12/**",
+                "tools/havenline/*task03*",
+            )
+        )
+        self.assertFalse(
+            activation.may_overlap(
+                ".github/workflows/havenline-task12-*.yml",
+                ".github/workflows/havenline-task03-*.yml",
+            )
+        )
+
+    def test_glob_overlap_still_detects_real_subtree_collision(self):
+        self.assertTrue(
+            activation.may_overlap(
+                "Docs/Production/T12/**",
+                "Docs/Production/T12/review/evidence.json",
+            )
+        )
+        self.assertTrue(
+            activation.may_overlap(
+                "HavenlineGodot/assets/**",
+                "HavenlineGodot/assets/world_transform_v1/**",
+            )
+        )
+
 
 if __name__ == "__main__":
     unittest.main()
