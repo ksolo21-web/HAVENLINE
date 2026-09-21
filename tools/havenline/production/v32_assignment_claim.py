@@ -48,8 +48,11 @@ def validate_assignment(task_id: str, branch: str, builder_head: str, integratio
         errors.append("task is missing from dependency graph")
     if not row:
         errors.append("task must already have a PREPARED registered workstream")
-    elif row.get("branch") != branch:
-        errors.append(f"builder branch mismatch: registry={row.get('branch')} supplied={branch}")
+    else:
+        if row.get("status") not in {"PREPARED", "ASSIGNED"}:
+            errors.append(f"assignment may start only from PREPARED/ASSIGNED, got {row.get('status')}")
+        if row.get("branch") != branch:
+            errors.append(f"builder branch mismatch: registry={row.get('branch')} supplied={branch}")
     if not SHA40.fullmatch(str(builder_head or "")):
         errors.append("exact builder head is required")
     if not SHA40.fullmatch(str(integration_head or "")):
@@ -96,6 +99,7 @@ def proposed_assignment_state(
     owner: str,
     branch: str,
     owned_alias: str,
+    builder_head: str,
     integration_head: str,
 ) -> dict:
     task_id = task_id.upper()
@@ -114,7 +118,7 @@ def proposed_assignment_state(
     row["base_commit"] = integration_head
     row["known_blockers"] = []
     row["assignment_integration_commit"] = integration_head
-    row["assignment_branch_head"] = integration_head if remote_branch_head(branch) == integration_head else remote_branch_head(branch)
+    row["assignment_branch_head"] = builder_head
     row["assignment_lineage_state"] = "SYNCHRONIZED"
     row["assignment_claimed_at"] = now
     row["status_updated_at"] = now
@@ -169,7 +173,20 @@ def apply_assignment(task_id: str, owner: str, branch: str, base: str, owned_ali
     if not report["passed"]:
         return report
 
-    state = proposed_assignment_state(task_id, owner, branch, owned_alias, integration_head)
+    current_registry = load_json(DOCS / "WORKSTREAM_REGISTRY.json")
+    current_row = next(w for w in current_registry["workstreams"] if w.get("task_id") == task_id.upper())
+    if current_row.get("owner") not in (None, owner):
+        report["passed"] = False
+        report["errors"].append(f"owner mismatch: registry={current_row.get('owner')} supplied={owner}")
+        return report
+    if current_row.get("owned_paths") != [owned_alias]:
+        report["passed"] = False
+        report["errors"].append(
+            f"owned alias mismatch: registry={current_row.get('owned_paths')} supplied={[owned_alias]}"
+        )
+        return report
+
+    state = proposed_assignment_state(task_id, owner, branch, owned_alias, builder_head, integration_head)
     # All four documents are computed before any write. In CI/repository use they
     # are committed as one integration-owner change, so partial working-tree writes
     # never become lifecycle authority.
