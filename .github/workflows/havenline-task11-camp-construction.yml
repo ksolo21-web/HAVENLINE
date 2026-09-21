@@ -119,6 +119,275 @@ jobs:
           retention-days: 30
           if-no-files-found: error
 
+
+  evidence-capture:
+    needs: candidate-tests
+    runs-on: ubuntu-24.04
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-candidate-${{ github.sha }}
+          path: functional-evidence
+      - name: Prepare pinned Godot software-render evidence path
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine" t11-review-evidence/standard t11-review-evidence/native4k critic-packages
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          python3 tools/havenline/bake_outpost_audio.py > t11-review-evidence/audio-fixture.json
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > t11-review-evidence/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > t11-review-evidence/motion-fixture.log 2>&1
+      - name: Capture multi-angle gameplay and committing motion evidence
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 420 Godot_v4.7.2-stable_linux.x86_64             --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy             --resolution 1280x720 --fixed-fps 30             --script res://tests/capture_task11_camp_construction.gd --             --candidate="$CANDIDATE" --profile=standard --out="$(pwd)/t11-review-evidence/standard"             > t11-review-evidence/standard/capture.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64             --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy             --resolution 3840x2160 --fixed-fps 30             --script res://tests/capture_task11_camp_construction.gd --             --candidate="$CANDIDATE" --profile=native4k --out="$(pwd)/t11-review-evidence/native4k"             > t11-review-evidence/native4k/capture.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' t11-review-evidence/*/capture.log; then exit 1; fi
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          cand=os.environ['CANDIDATE']
+          standard=json.load(open('t11-review-evidence/standard/manifest.json'))
+          native=json.load(open('t11-review-evidence/native4k/manifest.json'))
+          assert standard['passed'] and native['passed']
+          assert standard['candidate']==native['candidate']==cand
+          assert standard['record_count'] >= 40 and native['record_count'] == 8
+          allrows=standard['records']+native['records']
+          def maximum(key,default=0.0):
+              vals=[r.get('metrics',{}).get(key) for r in allrows]
+              vals=[float(x) for x in vals if isinstance(x,(int,float))]
+              return max(vals) if vals else default
+          scenes=list(Path('HavenlineGodot/assets/camp_construction_v1').glob('*.tscn'))
+          storage=sum(p.stat().st_size for p in scenes)/1024/1024
+          perf={
+            'task_id':'T11','candidate_commit':cand,'scene_state':'combined T10 framework + T11 authored construction',
+            'resolution':[3840,2160],'renderer':'Godot 4.7.2 mobile Vulkan software evidence path',
+            'visible_triangles':int(maximum('visible_triangles')),
+            'draw_calls':int(maximum('draw_calls')),
+            'materials_visible':8,
+            'texture_gpu_memory_mb':maximum('texture_gpu_memory_mb'),
+            'cpu_frame_ms':maximum('cpu_frame_ms'),
+            'gpu_frame_ms_where_measurable':None,
+            'process_memory_mb':maximum('process_memory_mb'),
+            'physics_active_bodies':0,'animated_rigs_active':0,'npc_companion_active_population':0,
+            'storage_download_mb':storage,'custom_shader_count':0,
+            'measurement_method':'Godot Performance monitors across standard and native-4K review captures; static task-scoped material/body/rig counts',
+            'known_unmeasured_fields':['gpu_frame_ms_where_measurable'],
+            'physical_4k60_certified':False,
+          }
+          Path('t11-review-evidence/performance-record.json').write_text(json.dumps(perf,indent=2)+'\n')
+          print(json.dumps({'standard_records':standard['record_count'],'native_records':native['record_count'],'performance':perf},indent=2))
+          PY
+          python3 tools/havenline/production/performance_ledger.py evaluate t11-review-evidence/performance-record.json > t11-review-evidence/performance-evaluation.json
+      - name: Build and preflight exact critic packages
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task11/build_critic_packages.py             --candidate "$CANDIDATE"             --standard t11-review-evidence/standard             --native t11-review-evidence/native4k             --functional functional-evidence             --performance t11-review-evidence/performance-record.json             --out-root critic-packages
+          for critic in C2 C3 C4; do
+            rm -rf critic-input
+            cp -a "critic-packages/havenline-task11-critic-$critic" critic-input
+            python3 tools/havenline/production/specialist_evidence_manifest.py validate critic-input/critic-manifest.json
+            python3 tools/havenline/production/critic_package_preflight.py               critic-input/critic-manifest.json --candidate "$CANDIDATE" --critic "$critic" --evidence-root .
+          done
+          rm -rf critic-input
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task11-review-evidence-${{ github.sha }}
+          path: t11-review-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task11-critic-C2
+          path: critic-packages/havenline-task11-critic-C2/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task11-critic-C3
+          path: critic-packages/havenline-task11-critic-C3/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task11-critic-C4
+          path: critic-packages/havenline-task11-critic-C4/
+          retention-days: 30
+          if-no-files-found: error
+
+  critic-package-preflight:
+    needs: evidence-capture
+    strategy:
+      fail-fast: false
+      matrix:
+        critic: [C2, C3, C4]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-critic-${{ matrix.critic }}
+          path: critic-input
+      - run: |
+          python3 tools/havenline/production/specialist_evidence_manifest.py validate critic-input/critic-manifest.json
+          python3 tools/havenline/production/critic_package_preflight.py             critic-input/critic-manifest.json --candidate "${{ github.sha }}" --critic "${{ matrix.critic }}" --evidence-root .
+
+  c2-review:
+    needs: critic-package-preflight
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    env:
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-critic-C2
+          path: critic-input
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        id: reviewer-cache
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Prepare exact independent reviewer runtime
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > c2-runtime-preparation.json
+          python3 -m pip install pillow
+      - name: Execute independent T11 C2 visual-integrity critic
+        run: |
+          python3 -u tools/havenline/task11/review_c2.py             --candidate "${{ github.sha }}"             --manifest critic-input/critic-manifest.json             --out task11-C2
+          python3 tools/havenline/production/critic_harness.py validate-raw             --critic C2 --candidate "${{ github.sha }}" --raw task11-C2/critic-record.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task11-review-C2
+          path: |
+            task11-C2/
+            c2-runtime-preparation.json
+          retention-days: 30
+          if-no-files-found: error
+
+  c3-review:
+    needs: critic-package-preflight
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C3
+      candidate: ${{ github.sha }}
+      evidence_artifact: havenline-task11-critic-C3
+      output_artifact: havenline-task11-review-C3
+    secrets: inherit
+
+  c4-review:
+    needs: critic-package-preflight
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C4
+      candidate: ${{ github.sha }}
+      evidence_artifact: havenline-task11-critic-C4
+      output_artifact: havenline-task11-review-C4
+    secrets: inherit
+
+  c6-performance:
+    needs: evidence-capture
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-review-evidence-${{ github.sha }}
+          path: t11-review-evidence
+      - run: |
+          python3 tools/havenline/task11/c6_gate.py             --candidate "${{ github.sha }}"             --record t11-review-evidence/performance-record.json             --out task11-C6/result.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task11-review-C6
+          path: task11-C6/
+          retention-days: 30
+          if-no-files-found: error
+
+  final-review-gate:
+    needs: [c2-review, c3-review, c4-review, c6-performance]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-review-C2
+          path: reviews/C2
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-review-C3
+          path: reviews/C3
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-review-C4
+          path: reviews/C4
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-review-C6
+          path: reviews/C6
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-candidate-${{ github.sha }}
+          path: functional-evidence
+      - name: Bind exact C2 C3 C4 C6 proof
+        run: |
+          C2=$(find reviews/C2 -name critic-record.json -print -quit)
+          C3=$(find reviews/C3 -name critic-record.json -print -quit)
+          C4=$(find reviews/C4 -name critic-record.json -print -quit)
+          C6=$(find reviews/C6 -name result.json -print -quit)
+          test -n "$C2" -a -n "$C3" -a -n "$C4" -a -n "$C6"
+          python3 tools/havenline/task11/final_gate.py             --candidate "${{ github.sha }}" --c2 "$C2" --c3 "$C3" --c4 "$C4" --c6 "$C6"             --tests functional-evidence/tests.json --out task11-final-review/final-review-gate.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task11-final-review-${{ github.sha }}
+          path: task11-final-review/
+          retention-days: 30
+          if-no-files-found: error
+
+  review-failure-router:
+    if: ${{ always() && (needs.evidence-capture.result == 'failure' || needs.critic-package-preflight.result == 'failure' || needs.c2-review.result == 'failure' || needs.c3-review.result == 'failure' || needs.c4-review.result == 'failure' || needs.c6-performance.result == 'failure' || needs.final-review-gate.result == 'failure') }}
+    needs: [evidence-capture, critic-package-preflight, c2-review, c3-review, c4-review, c6-performance, final-review-gate]
+    uses: ./.github/workflows/havenline-v32-task-preflight.yml
+    with:
+      task_id: T11
+      target: BUILDING_ISOLATED
+      mode: failure
+      candidate: ${{ github.sha }}
+      failed_run_id: ${{ github.run_id }}
+    secrets: inherit
+
   specialist-review:
     if: ${{ github.event_name == 'workflow_dispatch' && inputs.run_review }}
     needs: candidate-tests
