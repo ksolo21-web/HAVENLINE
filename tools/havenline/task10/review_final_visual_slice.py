@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """One source-bound T10 C1/C2 visual slice. Aggregation happens separately."""
 from __future__ import annotations
-import argparse,base64,hashlib,io,json,math,os,pathlib,subprocess,time,urllib.request
+import argparse,base64,hashlib,io,json,math,os,pathlib,subprocess,time,urllib.request,urllib.error
 from PIL import Image,ImageDraw,ImageFont
 DIMS={"C1":["reference_fidelity","visual_language","cross_view_consistency"],"C2":["geometry_contact","clipping_seams","intentional_gap_integrity","cross_view_integrity"]}
 STATES=["ready","blocked","preview","committing","complete","replay"];ANGLES=["front","side","three-quarter","overhead","gameplay","detail"]
@@ -81,18 +81,51 @@ def main():
    im=Image.open(boardp).convert("RGB");im.thumbnail((1664,1664),Image.Resampling.LANCZOS);buf=io.BytesIO();im.save(buf,format="JPEG",quality=94);payload=buf.getvalue();board_hashes.append(sha(boardp));content.append({"type":"image_url","image_url":{"url":"data:image/jpeg;base64,"+base64.b64encode(payload).decode()}})
   content.append({"type":"text","text":common+" "+role+(" This motion slice is derived from the full hash-bound lifecycle video." if kind=="motion" else "")+" Return JSON only."})
   body={"model":"T10-final-visual","messages":[{"role":"user","content":content}],"max_tokens":650,"temperature":0.2,"top_p":0.9,"seed":20261000+(0 if a.critic=="C1" else 100)+a.slice,"repeat_penalty":1.1,"chat_template_kwargs":{"enable_thinking":False},"response_format":{"type":"json_object","schema":schema},"cache_prompt":False}
-  req=urllib.request.Request("http://127.0.0.1:8080/v1/chat/completions",data=json.dumps(body).encode(),headers={"Content-Type":"application/json"},method="POST")
-  with urllib.request.urlopen(req,timeout=1200) as resp:raw=json.load(resp)
-  (out/"raw-response.json").write_text(json.dumps(raw,indent=2));choice=raw["choices"][0]
-  if choice.get("finish_reason")!="stop":raise ValueError("truncated review")
-  row=json.loads(choice["message"]["content"]);scores=row.get("scores",{});errors=[]
+  base_seed=20261000+(0 if a.critic=="C1" else 100)+a.slice
+  attempts=[];row=None;raw=None;transport_error=None
+  for attempt in range(3):
+   body["seed"]=base_seed+attempt*1000
+   req=urllib.request.Request("http://127.0.0.1:8080/v1/chat/completions",data=json.dumps(body).encode(),headers={"Content-Type":"application/json"},method="POST")
+   try:
+    with urllib.request.urlopen(req,timeout=1200) as resp:raw=json.load(resp)
+   except (TimeoutError,urllib.error.URLError,ConnectionError) as exc:
+    attempts.append({"attempt":attempt+1,"valid":False,"reason":"transport_or_timeout","error":str(exc)})
+    transport_error=str(exc);continue
+   (out/("raw-response-attempt-"+str(attempt+1)+".json")).write_text(json.dumps(raw,indent=2))
+   choice=raw["choices"][0]
+   if choice.get("finish_reason")!="stop":
+    attempts.append({"attempt":attempt+1,"valid":False,"reason":"truncated_review"});continue
+   try: candidate_row=json.loads(choice["message"]["content"])
+   except Exception as exc:
+    attempts.append({"attempt":attempt+1,"valid":False,"reason":"invalid_json","error":str(exc)});continue
+   candidate_scores=candidate_row.get("scores",{})
+   score_shape_ok=set(candidate_scores)==set(dims) and all(type(v) in (int,float) and not isinstance(v,bool) and math.isfinite(v) for v in candidate_scores.values())
+   coverage_ok=candidate_row.get("coverage_complete") is True
+   confidence_ok=candidate_row.get("confidence") in ("medium","high")
+   defects=candidate_row.get("defects",[])
+   low_scores=[] if not score_shape_ok else [d for d,v in candidate_scores.items() if v<=9]
+   invalid_reasons=[]
+   if not score_shape_ok:invalid_reasons.append("dimension_or_score_shape")
+   if not coverage_ok:invalid_reasons.append("incomplete_coverage")
+   if not confidence_ok:invalid_reasons.append("invalid_confidence")
+   if low_scores and not defects:invalid_reasons.append("low_score_without_actionable_defect")
+   if invalid_reasons:
+    attempts.append({"attempt":attempt+1,"valid":False,"reason":",".join(invalid_reasons),"scores":candidate_scores,"defects":defects})
+    continue
+   row=candidate_row
+   attempts.append({"attempt":attempt+1,"valid":True,"scores":candidate_scores,"defects":defects})
+   (out/"raw-response.json").write_text(json.dumps(raw,indent=2))
+   break
+  if row is None:
+   raise RuntimeError("invalid independent review after bounded retries: "+json.dumps(attempts))
+  scores=row.get("scores",{});errors=[]
   if set(scores)!=set(dims):errors.append("dimension mismatch")
   if row.get("defects"):errors.append("defects")
   if row.get("coverage_complete") is not True:errors.append("coverage")
   if row.get("confidence") not in ("medium","high"):errors.append("confidence")
   if any(type(v) not in (int,float) or isinstance(v,bool) or not math.isfinite(v) or v<=9 for v in scores.values()):errors.append("score")
   combined_board_hash=hashlib.sha256("".join(board_hashes).encode()).hexdigest()
-  result={"task_id":"T10","candidate":a.candidate,"critic_id":a.critic,"slice":a.slice,"kind":kind,"input_manifest_hash":sha(mp),"video_sha256":sha(video),"board_sha256":combined_board_hash,"board_sha256s":board_hashes,"provider":mf.get("publisher"),"model":mf.get("base_model"),"model_revision":mf.get("revision"),"review":row,"passed":not errors,"errors":errors,"non_voting":False}
+  result={"task_id":"T10","candidate":a.candidate,"critic_id":a.critic,"slice":a.slice,"kind":kind,"input_manifest_hash":sha(mp),"video_sha256":sha(video),"board_sha256":combined_board_hash,"board_sha256s":board_hashes,"provider":mf.get("publisher"),"model":mf.get("base_model"),"model_revision":mf.get("revision"),"review":row,"review_attempts":attempts,"passed":not errors,"errors":errors,"non_voting":False}
   (out/"slice-result.json").write_text(json.dumps(result,indent=2)+"\n");print(json.dumps(result,indent=2));return 0 if not errors else 1
  finally:
   proc.terminate()
