@@ -16,8 +16,10 @@ CAUSAL_STRATEGIES = {"ALGORITHM", "ARCHITECTURE", "CONTRACT", "PRODUCT_LOGIC", "
 NON_PRODUCT_STRATEGIES = {"EVIDENCE_ONLY", "TEST_ONLY", "DIAGNOSTIC_ONLY"}
 ARCHITECTURAL_ESCALATIONS = {"PLACEMENT_ALGORITHM", "EVIDENCE_ARCHITECTURE", "CONTRACT_REDIRECT", "STATE_MACHINE", "DATA_MODEL"}
 EXPECTED_THRESHOLD_REGISTRY_HASHES = {
-    "critic_matrix_sha256": "cf8c435050e01b0f3a96cf73c57cbf1075f3da7d84584f680c8c4cb952debcaf",
-    "task_gates_sha256": "b6b5f023c922b9a63c97f81667062b2f6cd6e5ba39c66005342b097d9fb0fd12",
+    # Hash only the immutable quality-policy projections. CRITIC_MATRIX.json and
+    # task-gates.json also carry legitimate mutable task/lifecycle metadata.
+    "critic_matrix_sha256": "e685a87371887fa4c0d1e150aa307da0b34e848981e00e53b6b3bd3c7c5642ae",
+    "task_gates_sha256": "368e64886f7ead3fe371e52e5de439ff0890faa1868c4ce688aa315f025950f0",
 }
 LOCKED_REPAIR_INTELLIGENCE = {
     "C0-T10-c7a18d0-comprehensive-anti-loop": {
@@ -215,11 +217,18 @@ def canonical_threshold_snapshot(root: Path = ROOT) -> dict:
     gates_path = root / "Docs/Production/task-gates.json"
     matrix = json.loads(matrix_path.read_text())
     gates = json.loads(gates_path.read_text())
+    matrix_policy = _dict(matrix.get("forward_acceptance"))
+    gates_policy = _dict(gates.get("forward_acceptance"))
     return {
-        "critic_matrix_sha256": _digest(matrix_path),
-        "task_gates_sha256": _digest(gates_path),
-        "critic_matrix": matrix.get("forward_acceptance"),
-        "task_gates": gates.get("forward_acceptance"),
+        # Compatibility field names retained, but these now bind the canonical
+        # threshold projections rather than mutable whole-file bytes.
+        "critic_matrix_sha256": _stable_digest(matrix_policy),
+        "task_gates_sha256": _stable_digest(gates_policy),
+        "critic_matrix_file_sha256": _digest(matrix_path),
+        "task_gates_file_sha256": _digest(gates_path),
+        "critic_matrix": matrix_policy,
+        "task_gates": gates_policy,
+        "hash_scope": "forward_acceptance_policy_only",
     }
 
 
