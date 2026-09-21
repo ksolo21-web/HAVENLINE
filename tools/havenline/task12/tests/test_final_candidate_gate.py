@@ -156,7 +156,18 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         ]
         return data
 
-    def validate(self, candidate=None, records=None, parity=None, evidence_index=None, binding=None, levels_digest=None):
+    def validate(
+        self,
+        candidate=None,
+        records=None,
+        parity=None,
+        evidence_index=None,
+        binding=None,
+        levels_digest=None,
+        progression_validation_result=None,
+        binding_verification_result=None,
+        checked_out_head=None,
+    ):
         records = records if records is not None else self.critic_records()
         candidate = candidate if candidate is not None else self.candidate_packet(records)
         evidence_index = evidence_index if evidence_index is not None else self.evidence_index(candidate, records)
@@ -166,6 +177,17 @@ class T12FinalCandidateGateTests(unittest.TestCase):
             parity if parity is not None else self.parity_output(),
             evidence_index,
             binding if binding is not None else self.binding(),
+            progression_validation_result=(
+                progression_validation_result
+                if progression_validation_result is not None
+                else {"passed": True, "errors": []}
+            ),
+            binding_verification_result=(
+                binding_verification_result
+                if binding_verification_result is not None
+                else {"passed": True, "errors": []}
+            ),
+            checked_out_head=checked_out_head if checked_out_head is not None else self.candidate_sha,
             levels_sha256=levels_digest if levels_digest is not None else self.levels_digest,
             milestones_sha256=self.milestones_digest,
             binding_resolution_sha256=self.binding_digest,
@@ -236,6 +258,25 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         result = self.validate(candidate=candidate, records=records, evidence_index=evidence)
         self.assertFalse(result["passed"])
         self.assertTrue(any("complete evidence digest index failed" in error for error in result["errors"]))
+
+    def test_invalid_actual_shipping_progression_fails(self):
+        result = self.validate(
+            progression_validation_result={"passed": False, "errors": ["missing level 42"]}
+        )
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("actual split shipping progression data failed" in error for error in result["errors"]))
+
+    def test_unverified_binding_resolution_fails(self):
+        result = self.validate(
+            binding_verification_result={"passed": False, "errors": ["source drift"]}
+        )
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("exact accepted-source verification" in error for error in result["errors"]))
+
+    def test_wrong_checkout_head_fails(self):
+        result = self.validate(checked_out_head="f" * 40)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("exact candidate checkout" in error for error in result["errors"]))
 
 
 if __name__ == "__main__":
