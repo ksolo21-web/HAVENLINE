@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "authority": "Docs/Production/PRODUCTION_ARCHITECTURE_V32_STANDARD.md",
+  "lanes": {
+    "active_runtime": {
+      "integration_allowed": true,
+      "rule": "Dependency-ready graduated runtime only; isolated branch; one integration authority."
+    },
+    "forward_preparation": {
+      "integration_allowed": false,
+      "rule": "Packets, scopes, fixtures, validators, simulations and capability checks."
+    },
+    "asset_content_readiness": {
+      "integration_allowed": false,
+      "rule": "Audit assets, rigs, references and animation inventories without task completion claims."
+    },
+    "infrastructure": {
+      "integration_allowed": false,
+      "rule": "CI, critics, security/device/performance harnesses and service readiness without active gameplay changes."
+    }
+  },
+  "classifications": [
+    "PREP_NOW",
+    "BUILD_WHEN_UNLOCKED",
+    "BLOCKED_EXTERNAL",
+    "ACTIVE_RUNTIME",
+    "PRESERVE",
+    "DO_NOT_TOUCH"
+  ],
+  "safe_work": {
+    "PREP_NOW": [
+      "packet",
+      "frozen_scope",
+      "reference_lock",
+      "fixtures",
+      "test_scaffold",
+      "schema",
+      "asset_audit",
+      "capability_check",
+      "critic_scaffold",
+      "performance_allocation",
+      "save_security_cases"
+    ],
+    "BUILD_WHEN_UNLOCKED": [
+      "complete graduation package",
+      "sentinel adapter",
+      "focused tests",
+      "timeout shard plan",
+      "checkpoint initialization",
+      "critic package preflight"
+    ],
+    "BLOCKED_EXTERNAL": [
+      "prepare local contracts",
+      "prepare mocks/fixtures",
+      "verify non-secret configuration expectations",
+      "do not claim external integration"
+    ],
+    "ACTIVE_RUNTIME": [
+      "build only owned runtime",
+      "checkpoint each stage",
+      "finish running SHA",
+      "use bounded repair family"
+    ],
+    "PRESERVE": [
+      "no reopening without explicit dependency/contract invalidation"
+    ],
+    "DO_NOT_TOUCH": [
+      "no runtime edit",
+      "no final evidence",
+      "no integration"
+    ]
+  },
+  "wip": {
+    "source": "Docs/Production/PRODUCTION_SCHEDULER_POLICY.json",
+    "max_parallel_runtime_builds": 4,
+    "max_parallel_prep_tasks": 8,
+    "max_integration_ready_queue": 3,
+    "integration_owner_slots": 1,
+    "independent_critic_slots": 1,
+    "physical_cert_slots": 1
+  },
+  "branch_budget": {
+    "authoritative_task_branches": 1,
+    "active_bounded_repair_branches": 1,
+    "persistent_prototype_branches": 0,
+    "prototype_rule": "Disposable prototype branches retire after their result is incorporated."
+  },
+  "blocker_policy": {
+    "causal_family_trigger_count": 3,
+    "same_candidate_only": true,
+    "duplicate_symptom_new_id_forbidden": true,
+    "new_source_bound_product_defect_still_blocks": true
+  },
+  "timeout_policy": {
+    "interactive_orchestrator_target_minutes": 5,
+    "ordinary_ci_shard_target_minutes": 12,
+    "long_single_purpose_stage_exception": [
+      "independent_critic",
+      "physical_device"
+    ],
+    "checkpoint_before_and_after_long_stage": true,
+    "timeout_default_classification": "INFRASTRUCTURE_FAILURE",
+    "timeout_is_product_judgment": false,
+    "finish_running_sha": true,
+    "cancel_running_candidate_for_newer_sha": false,
+    "successful_same_sha_stage_reuse_when_fingerprint_valid": true
+  },
+  "quality": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9,
+    "unrounded": true,
+    "target": 10,
+    "no_averaging": true,
+    "zero_unresolved_mandatory_defects": true
+  }
+}
