@@ -149,8 +149,20 @@ def validate_preparation():
         errors.append("runtime_build_allowed_before_activation must remain false")
 
     planned = checklist["planned_owned_paths"]
+    if not isinstance(planned, list) or not planned:
+        errors.append("planned_owned_paths must be a non-empty list")
+        planned = []
     if len(planned) != len(set(planned)):
         errors.append("planned T12 reservation contains duplicate paths")
+    unsafe_planned = [path for path in planned if not isinstance(path, str) or not safe_repo_pattern(path)]
+    if unsafe_planned:
+        errors.append("planned T12 reservation contains unsafe repository paths: " + json.dumps(unsafe_planned))
+
+    planned_alias = checklist.get("planned_owned_alias")
+    if planned_alias != "@reservation:T12":
+        errors.append("planned_owned_alias must remain @reservation:T12")
+    if planned_alias in ownership.get("aliases", {}):
+        errors.append("@reservation:T12 already exists before activation")
 
     protected = ownership.get("aliases", {}).get("@integration-only", [])
     collisions = []
@@ -172,6 +184,23 @@ def validate_preparation():
                         "foreign": path,
                     })
 
+    foreign_owner_collisions = []
+    for alias, foreign_paths in ownership.get("aliases", {}).items():
+        if alias in ("@integration-only", planned_alias) or alias.startswith("@protected:"):
+            continue
+        if not (alias.startswith("@reservation:") or alias.startswith("@ownership:")):
+            continue
+        if not isinstance(foreign_paths, list):
+            continue
+        for candidate in planned:
+            for path in foreign_paths:
+                if may_overlap(candidate, path):
+                    foreign_owner_collisions.append({
+                        "alias": alias,
+                        "candidate": candidate,
+                        "foreign": path,
+                    })
+
     t11_checklist = DOCS / "T11" / "ACTIVATION_CHECKLIST.json"
     t11_collisions = []
     if t11_checklist.exists():
@@ -185,6 +214,8 @@ def validate_preparation():
         errors.append("planned T12 reservation collides with integration-only paths: " + json.dumps(collisions))
     if active_collisions:
         errors.append("planned T12 reservation collides with active ownership: " + json.dumps(active_collisions))
+    if foreign_owner_collisions:
+        errors.append("planned T12 reservation collides with existing task ownership: " + json.dumps(foreign_owner_collisions))
     if t11_collisions:
         errors.append("planned T12 reservation collides with T11: " + json.dumps(t11_collisions))
 
@@ -194,7 +225,10 @@ def validate_preparation():
         support = []
     if len(support) != len(set(support)):
         errors.append("prepared_support_artifacts contains duplicate paths")
-    required = [ROOT / path for path in support] + [CHECKLIST_PATH]
+    unsafe_support = [path for path in support if not isinstance(path, str) or not safe_repo_pattern(path)]
+    if unsafe_support:
+        errors.append("prepared_support_artifacts contains unsafe repository paths: " + json.dumps(unsafe_support))
+    required = [ROOT / path for path in support if isinstance(path, str) and safe_repo_pattern(path)] + [CHECKLIST_PATH]
     for path in required:
         try:
             relative = path.relative_to(ROOT)
@@ -304,6 +338,12 @@ def validate_preparation():
     row = next((x for x in registry.get("workstreams", []) if x.get("task_id") == "T12"), None)
     if row and row.get("status") not in ("LOCKED", "PREPARED"):
         errors.append(f"pre-activation registry T12 status must be LOCKED/PREPARED, got {row.get('status')}")
+    if any(x.get("task_id") == "T12" for x in ownership.get("active_owners", [])):
+        errors.append("T12 must not be an active path owner before activation")
+    if any(x.get("task_id") == "T12" for x in ownership.get("completed_production_owners", [])):
+        errors.append("T12 must not appear as a completed production owner before activation")
+    if ownership.get("integration_branch") != registry.get("integration_branch"):
+        errors.append("PATH_OWNERSHIP integration_branch must match WORKSTREAM_REGISTRY integration_branch")
 
     return {
         "task_id": "T12",
@@ -317,6 +357,7 @@ def validate_preparation():
         "required_support_artifact_count": len(support),
         "integration_only_collision_count": len(collisions),
         "active_ownership_collision_count": len(active_collisions),
+        "foreign_owner_collision_count": len(foreign_owner_collisions),
         "t11_collision_count": len(t11_collisions),
         "level_matrix_validation_passed": matrix_passed,
         "blank_binding_resolution_guard_passed": resolution_blank_passed,
