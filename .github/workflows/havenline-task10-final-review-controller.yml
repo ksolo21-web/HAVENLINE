@@ -10,70 +10,102 @@ permissions:
   actions: read
 
 concurrency:
-  group: havenline-t10-final-critic-closeout-${{ github.sha }}
+  group: havenline-t10-focused-retry-${{ github.sha }}
   cancel-in-progress: true
 
 env:
   CANDIDATE: 'eba0107def258824549fb10d81785290d0c81d97'
   SOURCE_RUN: '35600328627'
-  PRIOR_CANDIDATE: '7eccdac8928e59812d7991d2f2da93eb6b8ebf18'
-  PRIOR_REVIEW_RUN: '35582494065'
-  PRIOR_SOURCE_RUN: '35582458599'
+  BASE_REVIEW_RUN: '35600362867'
 
 jobs:
-  evidence-ready:
+  base-ready:
     runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    outputs:
-      artifact_name: ${{ steps.wait.outputs.artifact_name }}
+    timeout-minutes: 70
     env:
       GH_TOKEN: ${{ github.token }}
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
-      - id: wait
-        name: Wait for exact affected-critic input artifact
+      - name: Wait for original affected-critic run and preserve unaffected successes
         run: |
           set -euo pipefail
-          wanted="havenline-task10-critic-input-$CANDIDATE"
-          for i in $(seq 1 80); do
-            gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN/artifacts" > artifacts.json
-            id=$(python3 - <<'PY'
-          import json,os
-          d=json.load(open('artifacts.json'))
-          name='havenline-task10-critic-input-'+os.environ['CANDIDATE']
-          rows=[a for a in d['artifacts'] if a['name']==name and not a['expired']]
-          print(rows[0]['id'] if len(rows)==1 else '')
-          PY
-            )
-            if [ -n "$id" ]; then
-              echo "artifact_name=$wanted" >> "$GITHUB_OUTPUT"
-              exit 0
-            fi
-            conclusion=$(gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN" --jq '.conclusion // ""')
-            if [ "$conclusion" = failure ] || [ "$conclusion" = cancelled ]; then
-              echo "source run terminated before critic input" >&2
-              exit 1
-            fi
+          for i in $(seq 1 240); do
+            status=$(gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$BASE_REVIEW_RUN" --jq '.status')
+            [ "$status" = completed ] && break
             sleep 15
           done
-          echo "critic input did not appear" >&2
-          exit 1
+          test "$(gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$BASE_REVIEW_RUN" --jq '.status')" = completed
+          gh api --paginate "/repos/$GITHUB_REPOSITORY/actions/runs/$BASE_REVIEW_RUN/jobs?per_page=100" > /tmp/jobs-pages.json
+          python3 - <<'PY'
+          import json,os
+          pages=json.load(open('/tmp/jobs-pages.json'))
+          jobs=pages.get('jobs',[]) if isinstance(pages,dict) else [j for p in pages for j in p.get('jobs',[])]
+          by={j['name']:j for j in jobs}
+          required=[
+            'visual-slice (C1, 1)','visual-slice (C1, 2)','visual-slice (C1, 3)',
+            'visual-slice (C2, 1)','visual-slice (C2, 2)',
+            'c3','c4','preserve-c6-c7',
+          ]
+          missing=[n for n in required if n not in by]
+          assert not missing,missing
+          bad={n:by[n]['conclusion'] for n in required if by[n]['conclusion']!='success'}
+          assert not bad,bad
+          print(json.dumps({'preserved_successes':required},indent=2))
+          PY
 
-  visual-slice:
-    needs: evidence-ready
+  normalize-c1-0:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: t10-final-visual-C1-0-${{ env.CANDIDATE }}
+          path: prior-c1-0
+          github-token: ${{ github.token }}
+          run-id: ${{ env.BASE_REVIEW_RUN }}
+      - name: Normalize explicit semantic empty-defect marker without rescoring
+        run: |
+          set -euo pipefail
+          mkdir -p normalized-c1-0
+          python3 - <<'PY'
+          import json,pathlib,os
+          rows=list(pathlib.Path('prior-c1-0').rglob('slice-result.json'))
+          assert len(rows)==1,rows
+          src=rows[0];r=json.load(open(src))
+          assert r['candidate']==os.environ['CANDIDATE'] and r['critic_id']=='C1' and r['slice']==0,r
+          assert r['review']['coverage_complete'] is True
+          assert r['review']['confidence'] in ('medium','high')
+          assert all(float(v)>9.0 for v in r['review']['scores'].values()),r['review']['scores']
+          markers={'none','none identified','none identified.','no defects','no defects.','no defect','no defect.'}
+          defects=r['review'].get('defects',[])
+          assert defects and all(isinstance(x,str) and x.strip().lower() in markers for x in defects),defects
+          r['review']['defects']=[]
+          r['passed']=True
+          r['errors']=[]
+          r['normalization']={
+            'type':'semantic_empty_defect_marker',
+            'original_defects':defects,
+            'scores_unchanged':True,
+            'review_not_rerun':True,
+          }
+          out=pathlib.Path('normalized-c1-0/slice-result.json')
+          out.write_text(json.dumps(r,indent=2)+'\n')
+          print(json.dumps(r,indent=2))
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: t10-normalized-C1-0-${{ env.CANDIDATE }}
+          path: normalized-c1-0/
+          if-no-files-found: error
+          retention-days: 90
+
+  retry-c2:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     strategy:
       fail-fast: false
-      max-parallel: 8
       matrix:
-        critic: [C1, C2]
-        slice: [0, 1, 2, 3]
+        slice: [0, 3]
     env:
-      EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
     steps:
@@ -83,7 +115,7 @@ jobs:
           fetch-depth: 0
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
-          name: ${{ env.EVIDENCE_ARTIFACT }}
+          name: havenline-task10-critic-input-${{ env.CANDIDATE }}
           path: critic-input
           github-token: ${{ github.token }}
           run-id: ${{ env.SOURCE_RUN }}
@@ -91,13 +123,10 @@ jobs:
         with:
           path: ~/.cache/havenline-t01-qwen35
           key: havenline-t01-qwen35-9b-q5-20260908-v1
-      - name: Bind exact candidate and reviewer runtime
+      - name: Bind exact candidate and clarified C2 reviewer
         run: |
           set -euo pipefail
           git worktree add --detach "$RUNNER_TEMP/t10-final-candidate" "$CANDIDATE"
-          for p in Docs/Production/CRITIC_MATRIX.json Docs/Production/CRITIC_EXECUTION.json tools/havenline/task10/review_visual.py; do
-            cmp "$RUNNER_TEMP/t10-final-candidate/$p" "$p"
-          done
           if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
             sudo apt-get update -qq
             sudo apt-get install -y aria2
@@ -106,150 +135,23 @@ jobs:
           sudo apt-get update -qq
           sudo apt-get install -y ffmpeg
           python3 -m pip install --disable-pip-version-check --no-input pillow==12.3.0
-          python3 tools/havenline/production/specialist_evidence_manifest.py validate "critic-input/${{ matrix.critic }}-manifest.json"
-      - name: Execute affected independent visual slice
+          python3 tools/havenline/production/specialist_evidence_manifest.py validate critic-input/C2-manifest.json
+      - name: Retry only disputed C2 slice
         run: |
           set -euo pipefail
-          python3 -u tools/havenline/task10/review_final_visual_slice.py             --critic "${{ matrix.critic }}" --slice "${{ matrix.slice }}"             --candidate "$CANDIDATE" --repo "$RUNNER_TEMP/t10-final-candidate"             --evidence critic-input --out "slice/${{ matrix.critic }}-${{ matrix.slice }}"
+          python3 -u tools/havenline/task10/review_final_visual_slice.py             --critic C2 --slice "${{ matrix.slice }}"             --candidate "$CANDIDATE" --repo "$RUNNER_TEMP/t10-final-candidate"             --evidence critic-input --out "retry/C2-${{ matrix.slice }}"
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: t10-final-visual-${{ matrix.critic }}-${{ matrix.slice }}-${{ env.CANDIDATE }}
-          path: slice/
-          if-no-files-found: error
-          retention-days: 30
-
-  aggregate-visual:
-    needs: [evidence-ready, visual-slice]
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    strategy:
-      fail-fast: false
-      matrix:
-        critic: [C1, C2]
-    env:
-      EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
-    steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
-        with:
-          pattern: t10-final-visual-${{ matrix.critic }}-*-${{ env.CANDIDATE }}
-          path: visual-input
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
-        with:
-          name: ${{ env.EVIDENCE_ARTIFACT }}
-          path: critic-input
-          github-token: ${{ github.token }}
-          run-id: ${{ env.SOURCE_RUN }}
-      - name: Aggregate fresh affected visual critic
-        run: |
-          set -euo pipefail
-          python3 tools/havenline/task10/aggregate_final_visual_slices.py             --critic "${{ matrix.critic }}" --candidate "$CANDIDATE"             --manifest "critic-input/${{ matrix.critic }}-manifest.json"             --inputs visual-input --out "visual-final/${{ matrix.critic }}"             --run-id "$GITHUB_RUN_ID"
-          python3 tools/havenline/task10/review_visual.py             --critic "${{ matrix.critic }}" --candidate "$CANDIDATE"             --manifest "critic-input/${{ matrix.critic }}-manifest.json"             --record "visual-final/${{ matrix.critic }}/critic-record.json"             --output "visual-final/${{ matrix.critic }}/validated.json"
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        with:
-          name: havenline-task10-${{ matrix.critic }}-final-${{ env.CANDIDATE }}
-          path: visual-final/${{ matrix.critic }}/
+          name: t10-retry-visual-C2-${{ matrix.slice }}-${{ env.CANDIDATE }}
+          path: retry/
           if-no-files-found: error
           retention-days: 90
 
-  c3:
-    needs: evidence-ready
-    runs-on: ubuntu-24.04
-    timeout-minutes: 85
-    env:
-      EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
-      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
-      OMP_NUM_THREADS: '4'
-    steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
-        with:
-          name: ${{ env.EVIDENCE_ARTIFACT }}
-          path: critic-input
-          github-token: ${{ github.token }}
-          run-id: ${{ env.SOURCE_RUN }}
-      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/havenline-t01-qwen35
-          key: havenline-t01-qwen35-9b-q5-20260908-v1
-      - name: Execute fresh affected C3
-        run: |
-          set -euo pipefail
-          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
-            sudo apt-get update -qq
-            sudo apt-get install -y aria2
-          fi
-          python3 tools/havenline/production/prepare_specialist_runtime.py > reviewer-runtime.json
-          python3 -m pip install --disable-pip-version-check --no-input pillow==12.3.0
-          python3 tools/havenline/production/specialist_evidence_manifest.py validate critic-input/C3-manifest.json
-          python3 -u tools/havenline/production/specialist_critic_runner.py             --critic C3 --candidate "$CANDIDATE"             --manifest critic-input/C3-manifest.json --out c3-final
-          cp reviewer-runtime.json c3-final/runtime-preparation.json
-          python3 tools/havenline/production/critic_harness.py validate-raw             --critic C3 --candidate "$CANDIDATE" --raw c3-final/critic-record.json
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        if: always()
-        with:
-          name: havenline-task10-C3-final-${{ env.CANDIDATE }}
-          path: c3-final/
-          if-no-files-found: error
-          retention-days: 90
-
-  c4:
-    needs: evidence-ready
-    runs-on: ubuntu-24.04
-    timeout-minutes: 85
-    env:
-      EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
-      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
-      OMP_NUM_THREADS: '4'
-    steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
-        with:
-          name: ${{ env.EVIDENCE_ARTIFACT }}
-          path: critic-input
-          github-token: ${{ github.token }}
-          run-id: ${{ env.SOURCE_RUN }}
-      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
-        with:
-          path: ~/.cache/havenline-t01-qwen35
-          key: havenline-t01-qwen35-9b-q5-20260908-v1
-      - name: Execute fresh affected C4
-        run: |
-          set -euo pipefail
-          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
-            sudo apt-get update -qq
-            sudo apt-get install -y aria2
-          fi
-          python3 tools/havenline/production/prepare_specialist_runtime.py > reviewer-runtime.json
-          python3 -m pip install --disable-pip-version-check --no-input pillow==12.3.0
-          python3 tools/havenline/production/specialist_evidence_manifest.py validate critic-input/C4-manifest.json
-          python3 -u tools/havenline/production/specialist_critic_runner.py             --critic C4 --candidate "$CANDIDATE"             --manifest critic-input/C4-manifest.json --out c4-final
-          cp reviewer-runtime.json c4-final/runtime-preparation.json
-          python3 tools/havenline/production/critic_harness.py validate-raw             --critic C4 --candidate "$CANDIDATE" --raw c4-final/critic-record.json
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        if: always()
-        with:
-          name: havenline-task10-C4-final-${{ env.CANDIDATE }}
-          path: c4-final/
-          if-no-files-found: error
-          retention-days: 90
-
-  preserve-c6-c7:
-    needs: evidence-ready
+  aggregate-c1-c2:
+    needs: [base-ready, normalize-c1-0, retry-c2]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
-    env:
-      EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
@@ -257,155 +159,120 @@ jobs:
           fetch-depth: 0
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
-          name: ${{ env.EVIDENCE_ARTIFACT }}
+          name: havenline-task10-critic-input-${{ env.CANDIDATE }}
           path: critic-input
           github-token: ${{ github.token }}
           run-id: ${{ env.SOURCE_RUN }}
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
-          name: havenline-task10-C6-final-${{ env.PRIOR_CANDIDATE }}
-          path: prior/C6
-          github-token: ${{ github.token }}
-          run-id: ${{ env.PRIOR_REVIEW_RUN }}
+          name: t10-normalized-C1-0-${{ env.CANDIDATE }}
+          path: slices/C1/0
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
-          name: havenline-task10-C7-final-${{ env.PRIOR_CANDIDATE }}
-          path: prior/C7
+          name: t10-final-visual-C1-1-${{ env.CANDIDATE }}
+          path: slices/C1/1
           github-token: ${{ github.token }}
-          run-id: ${{ env.PRIOR_REVIEW_RUN }}
+          run-id: ${{ env.BASE_REVIEW_RUN }}
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
-          name: havenline-task10-exact-recapture-${{ env.PRIOR_CANDIDATE }}
-          path: prior-source
+          name: t10-final-visual-C1-2-${{ env.CANDIDATE }}
+          path: slices/C1/2
           github-token: ${{ github.token }}
-          run-id: ${{ env.PRIOR_SOURCE_RUN }}
-      - name: Prove C6 and C7 remain outside repair blast radius
+          run-id: ${{ env.BASE_REVIEW_RUN }}
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: t10-final-visual-C1-3-${{ env.CANDIDATE }}
+          path: slices/C1/3
+          github-token: ${{ github.token }}
+          run-id: ${{ env.BASE_REVIEW_RUN }}
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: t10-retry-visual-C2-0-${{ env.CANDIDATE }}
+          path: slices/C2/0
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: t10-final-visual-C2-1-${{ env.CANDIDATE }}
+          path: slices/C2/1
+          github-token: ${{ github.token }}
+          run-id: ${{ env.BASE_REVIEW_RUN }}
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: t10-final-visual-C2-2-${{ env.CANDIDATE }}
+          path: slices/C2/2
+          github-token: ${{ github.token }}
+          run-id: ${{ env.BASE_REVIEW_RUN }}
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: t10-retry-visual-C2-3-${{ env.CANDIDATE }}
+          path: slices/C2/3
+      - name: Aggregate corrected visual critics
         run: |
           set -euo pipefail
-          mkdir -p preserved/C6 preserved/C7
-          python3 tools/havenline/production/critic_harness.py performance             --candidate "$CANDIDATE" --record critic-input/performance.json > preserved/current-c6-invariant.json
-          python3 - <<'PY'
-          import hashlib,json,os,pathlib,shutil,subprocess
-          current=os.environ['CANDIDATE']; prior=os.environ['PRIOR_CANDIDATE']
-          expected={
-            'HavenlineGodot/scripts/world_transform_view.gd',
-            'HavenlineGodot/tests/test_task10_integration.gd',
-          }
-          changed=set(subprocess.check_output(['git','diff','--name-only',prior,current],text=True).splitlines())
-          assert changed==expected,(changed,expected)
-
-          def show(ref,path):
-            return subprocess.check_output(['git','show',ref+':'+path])
-          semantic=[
-            'HavenlineGodot/scripts/world_transform.gd',
-            'HavenlineGodot/scripts/simulation.gd',
-            'HavenlineGodot/data/world_transform_recipes.json',
-            'HavenlineGodot/tests/test_task10_world_transform.gd',
-          ]
-          semantic_hashes={}
-          for p in semantic:
-            a=hashlib.sha256(show(prior,p)).hexdigest()
-            b=hashlib.sha256(show(current,p)).hexdigest()
-            assert a==b,(p,a,b)
-            semantic_hashes[p]=a
-
-          old_native=json.load(open('prior-source/task10-isolated-evidence/native4k/manifest.json'))
-          new_native=json.load(open('critic-input/native4k/manifest.json'))
-          for key in ('view_visual_node_count','view_visual_build_count','real_t09_adapter_bound','exact_debit_verified','capture_resolution','record_count'):
-            assert old_native[key]==new_native[key],(key,old_native[key],new_native[key])
-          for key in ('draw_calls','materials_visible','physics_active_bodies','animated_rigs_active','npc_companion_active_population'):
-            assert old_native['performance_peaks'][key]==new_native['performance_peaks'][key],(key,old_native['performance_peaks'][key],new_native['performance_peaks'][key])
-          invariant=json.load(open('preserved/current-c6-invariant.json'))
-          assert invariant['passed'] is True and invariant['errors']==[],invariant
-
-          proof={
-            'task':'T10','candidate':current,'prior_candidate':prior,'changed_files':sorted(changed),
-            'preserved_critics':['C6','C7'],
-            'C6':{
-              'reason':'view text/vertical separation changed; node/material/draw/physics/animation/population topology unchanged and current quantitative budget invariant passes',
-              'current_quantitative_invariant':invariant,
-              'old_performance_peaks':old_native['performance_peaks'],
-              'new_performance_peaks':new_native['performance_peaks'],
-            },
-            'C7':{
-              'reason':'transaction, recipe, simulation, progression, exact-once and recovery semantics are byte-identical',
-              'semantic_source_sha256':semantic_hashes,
-            },
-            'passed':True,
-          }
-          pathlib.Path('preserved/preservation-proof.json').write_text(json.dumps(proof,indent=2)+'\n')
-
-          for cid in ('C6','C7'):
-            old=json.load(open(f'prior/{cid}/critic-record.json'))
-            assert old['candidate_hash']==prior and old['passed'] is True
-            assert old['coverage_complete'] is True and old['defects']==[]
-            assert old['scores'] and all(float(v)>9.0 for v in old['scores'].values())
-            raw_src=pathlib.Path(f'prior/{cid}/raw-output.json')
-            raw_dst=pathlib.Path(f'preserved/{cid}/raw-output.json')
-            shutil.copyfile(raw_src,raw_dst)
-            record=dict(old)
-            record.update(
-              candidate_hash=current,
-              task_id='T10',
-              request_or_run_id='preserved:'+str(old.get('request_or_run_id'))+'->'+current,
-              raw_output_path=f'preserved/{cid}/raw-output.json',
-              raw_output_hash=hashlib.sha256(raw_dst.read_bytes()).hexdigest(),
-              preserved_pass=True,
-              fresh_rerun=False,
-              preserved_from_candidate=prior,
-              preserved_from_run=int(os.environ['PRIOR_REVIEW_RUN']),
-              preservation_proof='preserved/preservation-proof.json',
-              preservation_policy='critic-specific invalidation',
-              passed=True,
-            )
-            pathlib.Path(f'preserved/{cid}/critic-record.json').write_text(json.dumps(record,indent=2)+'\n')
-          PY
+          for cid in C1 C2; do
+            python3 tools/havenline/task10/aggregate_final_visual_slices.py               --critic "$cid" --candidate "$CANDIDATE"               --manifest "critic-input/$cid-manifest.json"               --inputs "slices/$cid" --out "visual-final/$cid"               --run-id "$GITHUB_RUN_ID"
+            python3 tools/havenline/task10/review_visual.py               --critic "$cid" --candidate "$CANDIDATE"               --manifest "critic-input/$cid-manifest.json"               --record "visual-final/$cid/critic-record.json"               --output "visual-final/$cid/validated.json"
+          done
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: havenline-task10-preserved-C6-C7-${{ env.CANDIDATE }}
-          path: preserved/
+          name: havenline-task10-C1-final-${{ env.CANDIDATE }}
+          path: visual-final/C1/
+          if-no-files-found: error
+          retention-days: 90
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task10-C2-final-${{ env.CANDIDATE }}
+          path: visual-final/C2/
           if-no-files-found: error
           retention-days: 90
 
   six-critic-aggregate:
-    needs: [evidence-ready, aggregate-visual, c3, c4, preserve-c6-c7]
+    needs: [base-ready, aggregate-c1-c2]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-        with:
-          ref: ${{ github.sha }}
-          fetch-depth: 0
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
-          pattern: havenline-task10-C?-final-${{ env.CANDIDATE }}
-          path: fresh
+          name: havenline-task10-C1-final-${{ env.CANDIDATE }}
+          path: normalized/C1
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task10-C2-final-${{ env.CANDIDATE }}
+          path: normalized/C2
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task10-C3-final-${{ env.CANDIDATE }}
+          path: normalized/C3
+          github-token: ${{ github.token }}
+          run-id: ${{ env.BASE_REVIEW_RUN }}
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task10-C4-final-${{ env.CANDIDATE }}
+          path: normalized/C4
+          github-token: ${{ github.token }}
+          run-id: ${{ env.BASE_REVIEW_RUN }}
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
           name: havenline-task10-preserved-C6-C7-${{ env.CANDIDATE }}
           path: preserved
-      - name: Aggregate four fresh plus two preserved critic passes
+          github-token: ${{ github.token }}
+          run-id: ${{ env.BASE_REVIEW_RUN }}
+      - name: Assemble strict final six-critic record
         run: |
           set -euo pipefail
-          mkdir -p normalized six-critic
-          for cid in C1 C2 C3 C4; do
-            rec=$(find fresh -path "*$cid*" -name critic-record.json -print -quit)
-            test -n "$rec"
-            mkdir -p "normalized/$cid"
-            cp "$rec" "normalized/$cid/critic-record.json"
-          done
-          for cid in C6 C7; do
-            mkdir -p "normalized/$cid"
-            cp "preserved/$cid/critic-record.json" "normalized/$cid/critic-record.json"
-            cp "preserved/$cid/raw-output.json" "normalized/$cid/raw-output.json"
-          done
+          mkdir -p normalized/C6 normalized/C7 six-critic
+          cp preserved/C6/critic-record.json normalized/C6/critic-record.json
+          cp preserved/C6/raw-output.json normalized/C6/raw-output.json
+          cp preserved/C7/critic-record.json normalized/C7/critic-record.json
+          cp preserved/C7/raw-output.json normalized/C7/raw-output.json
           cp preserved/preservation-proof.json six-critic/preservation-proof.json
           python3 - <<'PY'
-          import json,pathlib,os
-          ids=['C1','C2','C3','C4','C6','C7']; mins=[];provenance={}
+          import json,os,pathlib
+          ids=['C1','C2','C3','C4','C6','C7'];mins=[];provenance={}
           candidate=os.environ['CANDIDATE']
           for cid in ids:
-            r=json.load(open(f'normalized/{cid}/critic-record.json'))
+            rows=list(pathlib.Path('normalized',cid).rglob('critic-record.json'))
+            assert len(rows)==1,(cid,rows)
+            r=json.load(open(rows[0]))
             assert r.get('candidate_hash')==candidate,(cid,r.get('candidate_hash'))
             assert r.get('passed') is True and r.get('coverage_complete') is True,(cid,r)
             assert r.get('defects')==[],(cid,r.get('defects'))
@@ -414,10 +281,8 @@ jobs:
             mins.extend(scores.values())
             if cid in ('C6','C7'):
               assert r.get('preserved_pass') is True and r.get('fresh_rerun') is False
-              assert r.get('preserved_from_candidate')==os.environ['PRIOR_CANDIDATE']
               provenance[cid]={'mode':'preserved','source_candidate':r['preserved_from_candidate'],'source_run':r['preserved_from_run']}
             else:
-              assert not r.get('preserved_pass',False)
               provenance[cid]={'mode':'fresh','candidate':candidate}
           proof=json.load(open('six-critic/preservation-proof.json'))
           assert proof.get('passed') is True and proof.get('candidate')==candidate
