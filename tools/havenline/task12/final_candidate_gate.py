@@ -35,6 +35,8 @@ candidate_validator = load_module("t12_candidate_evidence", "validate_candidate_
 critic_validator = load_module("t12_critic_reviews", "validate_critic_review_records.py")
 parity_comparator = load_module("t12_engine_parity", "compare_engine_parity.py")
 evidence_index_validator = load_module("t12_evidence_index", "validate_evidence_index.py")
+progression_validator = load_module("t12_progression_contract", "validate_progression_contract.py")
+binding_verifier = load_module("t12_binding_resolution", "verify_binding_resolution.py")
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -48,6 +50,9 @@ def validate_consistency(
     evidence_index: dict[str, Any],
     binding_resolution: dict[str, Any],
     *,
+    progression_validation_result: dict[str, Any],
+    binding_verification_result: dict[str, Any],
+    checked_out_head: str,
     levels_sha256: str,
     milestones_sha256: str,
     binding_resolution_sha256: str,
@@ -77,10 +82,25 @@ def validate_consistency(
     if not evidence_index_result["passed"]:
         errors.append("complete evidence digest index failed: " + json.dumps(evidence_index_result["errors"]))
 
+    if not isinstance(progression_validation_result, dict) or progression_validation_result.get("passed") is not True:
+        errors.append(
+            "actual split shipping progression data failed validation: "
+            + json.dumps((progression_validation_result or {}).get("errors", []))
+        )
+    if not isinstance(binding_verification_result, dict) or binding_verification_result.get("passed") is not True:
+        errors.append(
+            "resolved binding record failed exact accepted-source verification: "
+            + json.dumps((binding_verification_result or {}).get("errors", []))
+        )
+
     source = candidate.get("exact_source", {}) if isinstance(candidate.get("exact_source"), dict) else {}
     candidate_sha = source.get("candidate_source")
     if not isinstance(candidate_sha, str) or SHA40.fullmatch(candidate_sha) is None:
         errors.append("candidate evidence exact source is not a valid candidate SHA")
+    if checked_out_head != candidate_sha:
+        errors.append(
+            f"final candidate gate must run on exact candidate checkout: head={checked_out_head!r} candidate={candidate_sha!r}"
+        )
 
     if critic_records.get("candidate_source") != candidate_sha:
         errors.append("critic records candidate_source does not match candidate evidence")
@@ -156,6 +176,9 @@ def validate_consistency(
         "critic_records_passed": critic_result["passed"],
         "engine_parity_passed": parity_result["passed"],
         "evidence_index_passed": evidence_index_result["passed"],
+        "shipping_progression_validation_passed": progression_validation_result.get("passed") is True,
+        "binding_verification_passed": binding_verification_result.get("passed") is True,
+        "exact_candidate_checkout_passed": checked_out_head == candidate_sha,
         "evidence_index_entry_count": evidence_index_result.get("entry_count"),
         "evidence_index_required_ref_count": evidence_index_result.get("required_ref_count"),
         "global_minimum_mandatory_dimension_score": critic_result.get("global_minimum_mandatory_dimension_score"),
