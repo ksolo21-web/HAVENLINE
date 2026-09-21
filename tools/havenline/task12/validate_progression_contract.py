@@ -41,6 +41,40 @@ PROVISIONAL_PREFIXES = (
     "prepared_only:",
 )
 
+REQUIRED_LEVEL_FIELDS = (
+    "level",
+    "level_id",
+    "region_band_id",
+    "prerequisite_level_ids",
+    "required_fact_ids",
+    "progression_effects",
+    "visible_progression_hook_ids",
+    "milestone_ids",
+    "one_time_event_ids",
+)
+
+REGION_BANDS = (
+    (1, 10, "band_opening_frozen"),
+    (11, 20, "band_forest"),
+    (21, 30, "band_desert"),
+    (31, 40, "band_underwater"),
+    (41, 50, "band_sky"),
+    (51, 60, "band_volcanic"),
+    (61, 70, "band_swamp"),
+    (71, 80, "band_ruins"),
+    (81, 90, "band_underground"),
+    (91, 100, "band_alien"),
+)
+
+FORBIDDEN_FILLER_EFFECT_KINDS = {
+    "counter",
+    "counter_only",
+    "level_counter",
+    "stat_only",
+    "xp_only",
+    "numeric_only",
+}
+
 
 def normalized_key(value: str) -> str:
     return value.strip().lower().replace("-", "_").replace(" ", "_")
