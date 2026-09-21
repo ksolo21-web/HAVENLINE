@@ -11,7 +11,6 @@ from pathlib import Path
 from control_plane_lineage import assess as assess_control_plane_lineage
 from lib import DOCS, ROOT, json_dump, load_json
 from task_graduation_gate import evaluate as graduation
-from workstream import claim as legacy_claim
 
 FORWARD_TASK = re.compile(r"^T(?:1[1-9]|[2-6][0-9]|70)$")
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
@@ -36,7 +35,7 @@ def remote_branch_head(branch: str) -> str | None:
     return sha
 
 
-def validate_assignment(task_id: str, branch: str, builder_head: str, integration_head: str, verify_remote: bool = True) -> dict:
+def validate_assignment(task_id: str, branch: str, builder_head: str, integration_head: str, verify_remote: bool = True, base: str | None = None) -> dict:
     errors: list[str] = []
     task_id = task_id.upper()
     registry = load_json(DOCS / "WORKSTREAM_REGISTRY.json")
@@ -55,6 +54,8 @@ def validate_assignment(task_id: str, branch: str, builder_head: str, integratio
         errors.append("exact builder head is required")
     if not SHA40.fullmatch(str(integration_head or "")):
         errors.append("exact integration head is required")
+    if base is not None and base != integration_head:
+        errors.append(f"assignment base must equal exact reconciled integration head: base={base} integration={integration_head}")
 
     integration_branch = registry.get("integration_branch")
     if verify_remote and not errors:
@@ -90,30 +91,100 @@ def validate_assignment(task_id: str, branch: str, builder_head: str, integratio
     }
 
 
-def apply_assignment(task_id: str, owner: str, branch: str, base: str, owned_alias: str, builder_head: str, integration_head: str) -> dict:
-    report = validate_assignment(task_id, branch, builder_head, integration_head, verify_remote=True)
-    if not report["passed"]:
-        return report
-
-    legacy_claim(task_id, owner, branch, base, owned_alias, "ASSIGNED")
-
+def proposed_assignment_state(
+    task_id: str,
+    owner: str,
+    branch: str,
+    owned_alias: str,
+    integration_head: str,
+) -> dict:
+    task_id = task_id.upper()
     registry = load_json(DOCS / "WORKSTREAM_REGISTRY.json")
-    row = next(w for w in registry["workstreams"] if w.get("task_id") == task_id.upper())
+    graph = load_json(DOCS / "DEPENDENCY_GRAPH.json")
+    ownership = load_json(DOCS / "PATH_OWNERSHIP.json")
+    gates = load_json(DOCS / "task-gates.json")
+    row = next(w for w in registry["workstreams"] if w.get("task_id") == task_id)
+    now = datetime.datetime.now(datetime.timezone.utc).isoformat()
+
+    # Preserve task-specific protection and prepared packet data. Assignment only
+    # advances lifecycle authority and rebinds the exact reconciled integration base.
+    row["status"] = "ASSIGNED"
+    row["owner"] = owner
+    row["branch"] = branch
+    row["base_commit"] = integration_head
+    row["known_blockers"] = []
     row["assignment_integration_commit"] = integration_head
-    row["assignment_branch_head"] = builder_head
+    row["assignment_branch_head"] = integration_head if remote_branch_head(branch) == integration_head else remote_branch_head(branch)
     row["assignment_lineage_state"] = "SYNCHRONIZED"
-    row["assignment_claimed_at"] = datetime.datetime.now(datetime.timezone.utc).isoformat()
+    row["assignment_claimed_at"] = now
+    row["status_updated_at"] = now
     row["next_action"] = (
         "Create/validate the V3.2 graduation package, pass BUILDING_ISOLATED on the exact candidate, "
         "then begin bounded task-owned runtime construction."
     )
-    json_dump(DOCS / "WORKSTREAM_REGISTRY.json", registry)
 
-    report["assignment_record"] = {
-        "assignment_integration_commit": integration_head,
-        "assignment_branch_head": builder_head,
-        "assignment_lineage_state": "SYNCHRONIZED",
+    graph["tasks"][task_id]["status"] = "ASSIGNED"
+
+    active = [x for x in ownership.get("active_owners", []) if x.get("task_id") != task_id]
+    active.append({
+        "workstream": row["workstream_id"],
+        "task_id": task_id,
+        "owner": owner,
+        "branch": branch,
+        "paths_alias": owned_alias,
+        "status": "ASSIGNED",
+        "base_commit": integration_head,
+    })
+    ownership["active_owners"] = active
+
+    gates["active_task"] = task_id
+    gates["active_task_title"] = graph["tasks"][task_id]["name"]
+    gates["active_status"] = "ASSIGNED"
+    gates["active_frozen_scope"] = f"Docs/Production/{task_id}/FROZEN_SCOPE.md"
+    gates["active_task_packet"] = f"Docs/Production/{task_id}/TASK_PACKET.md"
+    gates["active_base_integration_commit"] = integration_head
+    gates["active_candidate_source"] = None
+    gates["active_candidate_run"] = None
+    gates["active_tests"] = None
+    gates["active_evidence"] = row.get("evidence_path", f"Docs/Production/Evidence/{task_id}/")
+    gates["active_critic_state"] = "PENDING_BUILD_AND_INDEPENDENT_REVIEW"
+
+    return {
+        "registry": registry,
+        "graph": graph,
+        "ownership": ownership,
+        "gates": gates,
+        "assignment_record": {
+            "assignment_integration_commit": integration_head,
+            "assignment_branch_head": row["assignment_branch_head"],
+            "assignment_lineage_state": "SYNCHRONIZED",
+        },
     }
+
+
+def apply_assignment(task_id: str, owner: str, branch: str, base: str, owned_alias: str, builder_head: str, integration_head: str) -> dict:
+    report = validate_assignment(
+        task_id, branch, builder_head, integration_head, verify_remote=True, base=base
+    )
+    if not report["passed"]:
+        return report
+
+    state = proposed_assignment_state(task_id, owner, branch, owned_alias, integration_head)
+    # All four documents are computed before any write. In CI/repository use they
+    # are committed as one integration-owner change, so partial working-tree writes
+    # never become lifecycle authority.
+    json_dump(DOCS / "WORKSTREAM_REGISTRY.json", state["registry"])
+    json_dump(DOCS / "DEPENDENCY_GRAPH.json", state["graph"])
+    json_dump(DOCS / "PATH_OWNERSHIP.json", state["ownership"])
+    json_dump(DOCS / "task-gates.json", state["gates"])
+
+    report["assignment_record"] = state["assignment_record"]
+    report["authority_documents_updated"] = [
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "Docs/Production/DEPENDENCY_GRAPH.json",
+        "Docs/Production/PATH_OWNERSHIP.json",
+        "Docs/Production/task-gates.json",
+    ]
     report["registry_updated"] = True
     return report
 
@@ -131,7 +202,7 @@ def main() -> int:
     args = ap.parse_args()
 
     result = (
-        validate_assignment(args.task_id, args.branch, args.builder_head, args.integration_head, verify_remote=True)
+        validate_assignment(args.task_id, args.branch, args.builder_head, args.integration_head, verify_remote=True, base=args.base)
         if args.validate_only
         else apply_assignment(
             args.task_id,
