@@ -20,6 +20,9 @@ ROOT = pathlib.Path(__file__).resolve().parents[3]
 DOCS = ROOT / "Docs" / "Production"
 T12_DOCS = DOCS / "T12"
 CHECKLIST_PATH = T12_DOCS / "ACTIVATION_CHECKLIST.json"
+PREBUILD_CONTRACT_PATH = T12_DOCS / "PREBUILD_CONTRACT.json"
+UPSTREAM_BINDINGS_PATH = T12_DOCS / "UPSTREAM_BINDINGS.json"
+DEFECT_LEDGER_PATH = T12_DOCS / "defect-ledger.json"
 GRAPH_PATH = DOCS / "DEPENDENCY_GRAPH.json"
 REGISTRY_PATH = DOCS / "WORKSTREAM_REGISTRY.json"
 OWNERSHIP_PATH = DOCS / "PATH_OWNERSHIP.json"
@@ -249,6 +252,187 @@ def validate_dependency_closeout(
     return errors, dependency_sources
 
 
+def validate_cross_contracts(checklist) -> list[str]:
+    errors: list[str] = []
+    prebuild = load(PREBUILD_CONTRACT_PATH)
+    schema = load(DATA_SCHEMA_PATH)
+
+    if prebuild.get("schema_version") != 1 or prebuild.get("task_id") != "T12":
+        errors.append("PREBUILD_CONTRACT identity must remain schema_version=1 task_id=T12")
+
+    dependency_gate = prebuild.get("dependency_gate", {})
+    if dependency_gate.get("required_approved") != checklist.get("dependencies"):
+        errors.append("PREBUILD_CONTRACT dependency gate drifted from ACTIVATION_CHECKLIST")
+    if dependency_gate.get("runtime_allowed_before_gate") is not False:
+        errors.append("PREBUILD_CONTRACT must forbid runtime before dependency gate")
+
+    expected_product = {
+        "level_min": 1,
+        "level_max": 100,
+        "exact_shipping_level_record_count": 100,
+        "practical_progression_every_level": True,
+        "visible_improvement_target_max_gap_levels": 3,
+        "major_milestone_target_interval_levels": 10,
+        "connected_world": True,
+        "zero_dollar_completion_required": True,
+        "energy_wall_forbidden": True,
+        "purchase_or_vip_gated_level_eligibility_forbidden": True,
+        "difficulty_owner": "T13",
+        "persistence_owner": "T14",
+        "economy_owner": "T33+",
+        "authored_region_owner": "T44-T52",
+    }
+    if prebuild.get("product_contract") != expected_product:
+        errors.append("PREBUILD_CONTRACT product contract drifted from frozen T12 product invariants")
+
+    level_fields = prebuild.get("level_record_schema", {}).get("required_fields")
+    schema_level_fields = schema.get("level_record", {}).get("required_fields")
+    if level_fields != schema_level_fields:
+        errors.append("PREBUILD_CONTRACT level required_fields drifted from PROGRESSION_DATA_SCHEMA")
+
+    milestone_fields = prebuild.get("milestone_schema", {}).get("required_fields")
+    schema_milestone_fields = schema.get("milestone_record", {}).get("required_fields")
+    if milestone_fields != schema_milestone_fields:
+        errors.append("PREBUILD_CONTRACT milestone required_fields drifted from PROGRESSION_DATA_SCHEMA")
+
+    expected_regions = [
+        ("opening-frozen", "1-10", "T32"),
+        ("forest", "11-20", "T44"),
+        ("desert", "21-30", "T45"),
+        ("underwater", "31-40", "T46"),
+        ("sky", "41-50", "T47"),
+        ("volcanic", "51-60", "T48"),
+        ("swamp", "61-70", "T49"),
+        ("ruins", "71-80", "T50"),
+        ("underground", "81-90", "T51"),
+        ("alien", "91-100", "T52"),
+    ]
+    region_rows = prebuild.get("region_band_contract")
+    actual_regions = []
+    if isinstance(region_rows, list):
+        actual_regions = [
+            (row.get("band"), row.get("approx_levels"), row.get("content_owner"))
+            for row in region_rows
+            if isinstance(row, dict)
+        ]
+    if actual_regions != expected_regions:
+        errors.append("PREBUILD_CONTRACT region-band ownership/ranges drifted")
+
+    upstream_tasks = {
+        row.get("task")
+        for row in prebuild.get("upstream_bindings", [])
+        if isinstance(row, dict)
+    }
+    if upstream_tasks != {"T07", "T08", "T10", "T11"}:
+        errors.append("PREBUILD_CONTRACT upstream binding task set drifted")
+
+    critic = prebuild.get("critic_contract", {})
+    expected_critics = checklist.get("required_critics")
+    if critic.get("required") != expected_critics:
+        errors.append("PREBUILD_CONTRACT critic set drifted from ACTIVATION_CHECKLIST")
+    if (
+        critic.get("operator") != ">"
+        or critic.get("threshold") != 9.0
+        or critic.get("unrounded") is not True
+        or critic.get("target") != 10.0
+        or critic.get("zero_unresolved_mandatory_defects") is not True
+        or critic.get("builder_self_review_is_independent_critic") is not False
+    ):
+        errors.append("PREBUILD_CONTRACT critic threshold/provenance rules drifted")
+
+    return errors
+
+
+def validate_upstream_preparation_bindings() -> list[str]:
+    errors: list[str] = []
+    data = load(UPSTREAM_BINDINGS_PATH)
+    if data.get("schema_version") != 1 or data.get("task_id") != "T12":
+        errors.append("UPSTREAM_BINDINGS identity must remain schema_version=1 task_id=T12")
+    bindings = data.get("bindings")
+    if not isinstance(bindings, dict) or set(bindings) != {"T07", "T08", "T10", "T11"}:
+        errors.append("UPSTREAM_BINDINGS must contain exactly T07,T08,T10,T11")
+        return errors
+
+    expected_approved = {
+        "T07": ("94b3f6c5097356a3857ebd13a77fb1e316eb06ae", "Docs/Production/T07/verified-completion.json"),
+        "T08": ("9d56ea8ae972d0a0705ff8b985e13fab31dde493", "Docs/Production/T08/verified-completion.json"),
+        "T10": ("eba0107def258824549fb10d81785290d0c81d97", "Docs/Production/T10/verified-completion.json"),
+    }
+    for task, (source, completion) in expected_approved.items():
+        row = bindings.get(task, {})
+        if row.get("status") != "APPROVED":
+            errors.append(f"UPSTREAM_BINDINGS {task} status must be APPROVED")
+        if row.get("integrated_source") != source:
+            errors.append(f"UPSTREAM_BINDINGS {task} integrated_source drifted")
+        if row.get("verified_completion") != completion:
+            errors.append(f"UPSTREAM_BINDINGS {task} verified_completion drifted")
+
+    t10 = bindings.get("T10", {})
+    if t10.get("reconcile_at_activation") is not True:
+        errors.append("UPSTREAM_BINDINGS T10 must be reverified at activation")
+
+    t11 = bindings.get("T11", {})
+    if t11.get("status") not in {"ASSIGNED_PROVISIONAL_CONTRACT", "UNRESOLVED_PROVISIONAL_CONTRACT"}:
+        errors.append("UPSTREAM_BINDINGS T11 must remain unresolved/provisional before activation")
+    if t11.get("branch") != "havenline/T11-camp-construction":
+        errors.append("UPSTREAM_BINDINGS T11 authoritative branch drifted")
+    if t11.get("reconcile_at_activation") is not True:
+        errors.append("UPSTREAM_BINDINGS T11 must require activation reconciliation")
+    if t11.get("reconciliation_failure") != "BLOCK_T12_ACTIVATION_AND_RAISE_CHANGE_REQUEST":
+        errors.append("UPSTREAM_BINDINGS T11 reconciliation must fail closed")
+
+    reconciliation = data.get("activation_reconciliation", {})
+    if reconciliation.get("required") != ["T10", "T11"] or reconciliation.get("fail_closed") is not True:
+        errors.append("UPSTREAM_BINDINGS activation reconciliation contract drifted")
+    checks = reconciliation.get("checks")
+    if not isinstance(checks, list) or len(checks) < 5:
+        errors.append("UPSTREAM_BINDINGS activation reconciliation checks are incomplete")
+
+    return errors
+
+
+def validate_defect_ledger_preparation() -> list[str]:
+    errors: list[str] = []
+    ledger = load(DEFECT_LEDGER_PATH)
+    if ledger.get("schema_version") != 1 or ledger.get("task_id") != "T12":
+        errors.append("T12 defect ledger identity drifted")
+    if ledger.get("mode") != "PREPARATION":
+        errors.append("T12 defect ledger must remain PREPARATION before activation")
+    if ledger.get("mandatory_defects") != []:
+        errors.append("T12 preparation has unresolved mandatory defects in defect-ledger.json")
+
+    blockers = ledger.get("dependency_blockers")
+    if not isinstance(blockers, list):
+        errors.append("T12 dependency_blockers must be a list")
+        return errors
+    by_dep = {row.get("dependency"): row for row in blockers if isinstance(row, dict)}
+    if set(by_dep) != {"T10", "T11"}:
+        errors.append("T12 dependency blocker set must contain exactly T10 and T11")
+        return errors
+    t10 = by_dep["T10"]
+    if t10.get("status") != "RESOLVED":
+        errors.append("T10 dependency blocker must remain RESOLVED")
+    evidence = t10.get("resolution_evidence", {})
+    if evidence.get("integrated_source") != "eba0107def258824549fb10d81785290d0c81d97":
+        errors.append("T10 defect-ledger integrated source drifted")
+    t11 = by_dep["T11"]
+    if t11.get("status") != "OPEN_EXPECTED":
+        errors.append("T11 dependency blocker must remain OPEN_EXPECTED until authoritative closeout")
+    if t11.get("branch") != "havenline/T11-camp-construction":
+        errors.append("T11 defect-ledger branch drifted")
+
+    rule = ledger.get("acceptance_rule", {})
+    if (
+        rule.get("operator") != ">"
+        or rule.get("threshold") != 9.0
+        or rule.get("unrounded") is not True
+        or rule.get("target") != 10.0
+        or rule.get("zero_unresolved_mandatory_defects") is not True
+    ):
+        errors.append("T12 defect-ledger acceptance rule drifted")
+    return errors
+
+
 def validate_preparation():
     checklist = load(CHECKLIST_PATH)
     graph = load(GRAPH_PATH)
@@ -256,6 +440,9 @@ def validate_preparation():
     ownership = load(OWNERSHIP_PATH)
     critics = load(CRITICS_PATH)
     errors: list[str] = []
+    errors.extend(validate_cross_contracts(checklist))
+    errors.extend(validate_upstream_preparation_bindings())
+    errors.extend(validate_defect_ledger_preparation())
 
     t12 = graph.get("tasks", {}).get("T12")
     if not t12:
