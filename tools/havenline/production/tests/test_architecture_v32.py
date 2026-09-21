@@ -13,6 +13,7 @@ import critic_invalidation
 import critic_package_preflight
 import execution_checkpoint
 import forward_prep_contract
+import forward_task_control
 import parallel_preparation_planner
 import performance_ledger
 import rolling_canary
@@ -107,6 +108,9 @@ class V32Tests(unittest.TestCase):
    }
    mp=d/'manifest.json';mp.write_text(json.dumps(manifest))
    self.assertTrue(critic_package_preflight.validate_manifest(mp,SHA,'C3')['passed'])
+   pkg=d/'pkg';pkg.mkdir();nested=pkg/'manifest.json';nested.write_text(json.dumps(manifest))
+   self.assertFalse(critic_package_preflight.validate_manifest(nested,SHA,'C3')['passed'])
+   self.assertTrue(critic_package_preflight.validate_manifest(nested,SHA,'C3',d)['passed'])
    self.assertFalse(critic_package_preflight.validate_manifest(mp,'b'*40,'C3')['passed'])
    note.unlink()
    self.assertFalse(critic_package_preflight.validate_manifest(mp,SHA,'C3')['passed'])
@@ -188,6 +192,22 @@ class V32Tests(unittest.TestCase):
    body=(ROOT/rel).read_text()
    for _,ref in pattern.findall(body):
     self.assertRegex(ref,r'^[0-9a-f]{40}$',rel)
+
+ def test_shared_forward_task_control_is_fail_closed_and_partitions_critics(self):
+  out=forward_task_control.plan('T11','ASSIGNED')
+  self.assertTrue(out['passed'],out)
+  self.assertEqual(['C3','C4'],out['critic_plan']['specialist_fanout'])
+  self.assertEqual(['C2'],out['critic_plan']['reference_specific'])
+  self.assertEqual(['C6'],out['critic_plan']['deterministic'])
+  blocked=forward_task_control.plan('T11','BUILDING_ISOLATED')
+  self.assertFalse(blocked['passed'])
+  self.assertTrue(any('explicit exact candidate SHA' in x for x in blocked['errors']))
+  self.assertTrue(forward_task_control.validate_all()['passed'])
+
+ def test_shared_workflow_contains_preflight_review_failure_modes(self):
+  body=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
+  for token in ('mode:','preflight','review','failure','forward_task_control.py','critic_package_preflight.py','havenline-v32-specialist-fanout.yml','havenline-c0-root-cause.yml','cancel-in-progress: false'):
+   self.assertIn(token,body)
 
  def test_full_v32_validator(self):
   out=architecture_v32.validate()

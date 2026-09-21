@@ -13,7 +13,7 @@ PREPARE FAR AHEAD -> GRADUATE ONLY WHEN SAFE -> CHECKPOINT -> CHEAP SENTINELS
 
 Every applicable mandatory critic dimension remains strictly greater than 9.0 unrounded; target 10/10; no averaging; zero unresolved mandatory defects.
 
-## Twelve mandatory systems
+## Thirteen mandatory systems
 
 1. **Resumable execution checkpoints.** T11+ records integration SHA, candidate SHA, branch, stage, completed gates, reusable proof, blocker families, running workflows, environment fingerprint and exact next action/command. TIMEOUT is infrastructure evidence unless current source-bound evidence independently proves a product defect.
 2. **Parallel preparation planner.** Future work resolves to PREP_NOW, BUILD_WHEN_UNLOCKED, BLOCKED_EXTERNAL, ACTIVE_RUNTIME, PRESERVE or DO_NOT_TOUCH. Preparation never grants ownership, integration or approval.
@@ -27,6 +27,7 @@ Every applicable mandatory critic dimension remains strictly greater than 9.0 un
 10. **Rolling canaries.** T11+ expands the Level 1–10 gameplay canary; T12+ continuously simulates Level 1–100 reachability. Population, action arbitration, accessibility/device, economy/security, LiveOps, region and physical reconnaissance canaries start early.
 11. **Cumulative performance ledger.** Every task reports measurable pressure against PERFORMANCE_BUDGETS.json. Integrated frame timing uses measured integrated scenes, not naïve summation. Reserved headroom is protected.
 12. **Timeout-safe stage sharding.** Preflight, domain/matrix, regression/performance, evidence, critic fan-out, integration and closeout are separate resumable stages. Long critic/physical jobs are single-purpose and checkpointed before/after. Finish-running-SHA remains mandatory.
+13. **Reusable forward-task control plane.** Every T11–T70 task workflow consumes the same reusable V3.2 control workflow. Preflight mode binds lifecycle, ownership, exact source, checkpoints, gate-fingerprint reuse, canaries, performance policy, contracts and synthetic merge. Review mode preflights the actual source-bound critic packages before parallel specialist review. Failure mode routes exact failed runs to non-voting C0. Task-specific workflows retain their actual gameplay/domain/C1/C2/C6/C9 work; the shared layer prevents them from forgetting cross-task governance.
 
 ## Parallel work safety
 

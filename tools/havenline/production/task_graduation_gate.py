@@ -31,7 +31,8 @@ def evaluate(task,target):
                 body=wf.read_text()
                 for token in policy.get('workflow_required_tokens',[]): ck('workflow_token_'+token,token in body)
                 required=set((ws or {}).get('critic_requirements',[]))
-                if required.intersection(policy.get('specialist_fanout_critics',[])): ck('workflow_specialist_fanout','havenline-v32-specialist-fanout.yml' in body)
+                if required.intersection(policy.get('specialist_fanout_critics',[])):
+                    ck('workflow_specialist_review',all(token in body for token in policy.get('specialist_review_tokens',[])))
                 if policy.get('performance_ledger_required_when_critic') in required: ck('workflow_performance_ledger','performance_ledger.py' in body)
             if g.get('checkpoint_path') and (ROOT/g['checkpoint_path']).exists():
                 from execution_checkpoint import validate_record
