@@ -1,0 +1,130 @@
+name: Havenline T09 stale branch cleanup
+
+on:
+  push:
+    branches:
+      - codex/havenline-sequential-task-01
+    paths:
+      - .github/workflows/havenline-t09-stale-branch-cleanup.yml
+
+permissions:
+  contents: write
+  pull-requests: read
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      CANONICAL_BRANCH: codex/havenline-sequential-task-01
+      INVENTORY_PATH: Docs/Production/Archive/T09_STALE_BRANCH_INVENTORY_20260921.json
+      RESULT_PATH: Docs/Production/Archive/T09_BRANCH_CLEANUP_RESULT_20260921.json
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Build deletion plan
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          git show "HEAD:$INVENTORY_PATH" > /tmp/inventory.json
+          gh api "/repos/$GITHUB_REPOSITORY/pulls?state=open&per_page=100" > /tmp/open-pulls.json
+          python3 - <<'PY'
+          import json,pathlib
+          inv=json.load(open('/tmp/inventory.json'))
+          pulls=json.load(open('/tmp/open-pulls.json'))
+          keep=set(inv['keep']['branches'])
+          reasons=dict(inv['keep']['reasons'])
+          for pr in pulls:
+              for side in ('head','base'):
+                  name=(pr.get(side) or {}).get('ref')
+                  if name:
+                      keep.add(name)
+                      reasons[name]=f"open PR #{pr['number']} {side}"
+          delete=[row['branch'] for row in inv['obsolete_branches'] if row['branch'] not in keep]
+          assert inv['approved_t09_candidate']=='5415d85838ecf4bea8b3c71662072670e61797a0'
+          assert 'havenline/T09-harvesting' in keep
+          pathlib.Path('/tmp/delete.txt').write_text('\n'.join(delete)+'\n')
+          pathlib.Path('/tmp/keep.json').write_text(json.dumps({'keep':sorted(keep),'reasons':reasons},indent=2)+'\n')
+          print(json.dumps({'planned_delete':delete,'keep':sorted(keep)},indent=2))
+          PY
+
+      - name: Delete obsolete T09 refs
+        run: |
+          set -euo pipefail
+          : > /tmp/deleted.txt
+          : > /tmp/failed.txt
+          while IFS= read -r branch; do
+            [ -n "$branch" ] || continue
+            if ! git ls-remote --exit-code --heads origin "$branch" >/dev/null 2>&1; then
+              echo "$branch|already_absent" >> /tmp/deleted.txt
+              continue
+            fi
+            if git push origin --delete "$branch"; then
+              echo "$branch|deleted" >> /tmp/deleted.txt
+            else
+              echo "$branch|delete_failed" >> /tmp/failed.txt
+            fi
+          done < /tmp/delete.txt
+          test ! -s /tmp/failed.txt
+
+      - name: Verify preserved T09 refs
+        run: |
+          set -euo pipefail
+          test "$(git ls-remote --heads origin havenline/T09-harvesting | cut -f1)" = "5415d85838ecf4bea8b3c71662072670e61797a0"
+          git ls-remote --exit-code --heads origin havenline/governance-t09-strict-review >/dev/null
+          git ls-remote --heads origin > /tmp/heads.txt
+          python3 - <<'PY'
+          import json,re
+          keep=set(json.load(open('/tmp/keep.json'))['keep'])
+          heads=[]
+          for line in open('/tmp/heads.txt'):
+              sha,ref=line.rstrip().split('\t',1)
+              name=ref.removeprefix('refs/heads/')
+              if re.search('T09',name,re.I):
+                  heads.append({'branch':name,'head_sha':sha})
+          expected={'havenline/T09-harvesting','havenline/governance-t09-strict-review'}
+          unexpected=[x for x in heads if x['branch'] not in expected]
+          assert not unexpected,unexpected
+          open('/tmp/remaining.json','w').write(json.dumps(heads,indent=2)+'\n')
+          print(json.dumps({'remaining_t09_refs':heads},indent=2))
+          PY
+
+      - name: Publish cleanup result
+        run: |
+          set -euo pipefail
+          git fetch --no-tags origin "$CANONICAL_BRANCH"
+          git worktree add --detach "$RUNNER_TEMP/canonical-cleanup" "origin/$CANONICAL_BRANCH"
+          python3 - <<'PY'
+          import json,os,pathlib
+          deleted=[]
+          for line in open('/tmp/deleted.txt'):
+              if not line.strip(): continue
+              branch,status=line.rstrip().split('|',1)
+              deleted.append({'branch':branch,'status':status})
+          result={
+            'schema_version':1,
+            'cleanup_date':'2026-09-21',
+            'task':'T09',
+            'approved_candidate':'5415d85838ecf4bea8b3c71662072670e61797a0',
+            'policy':'Deleted only obsolete T09 repair/review/diagnostic/closeout refs from the archived inventory. Preserved the approved T09 task branch and open-PR dependencies.',
+            'deleted_or_already_absent':deleted,
+            'retained':json.load(open('/tmp/keep.json')),
+            'remaining_t09_refs':json.load(open('/tmp/remaining.json')),
+            'game_compile_effect':'none; no HavenlineGodot runtime files changed and the approved T09 task/canonical code remains intact'
+          }
+          target=pathlib.Path(os.environ['RUNNER_TEMP'])/'canonical-cleanup'/os.environ['RESULT_PATH']
+          target.parent.mkdir(parents=True,exist_ok=True)
+          target.write_text(json.dumps(result,indent=2)+'\n')
+          PY
+          cd "$RUNNER_TEMP/canonical-cleanup"
+          git config user.name "Havenline Branch Cleanup"
+          git config user.email "branch-cleanup@example.invalid"
+          git add "$RESULT_PATH"
+          git commit -m "Archive: record safe T09 stale-branch cleanup"
+          git fetch --no-tags origin "$CANONICAL_BRANCH"
+          test "$(git rev-parse HEAD^)" = "$(git rev-parse "origin/$CANONICAL_BRANCH")"
+          git push origin HEAD:refs/heads/$CANONICAL_BRANCH
