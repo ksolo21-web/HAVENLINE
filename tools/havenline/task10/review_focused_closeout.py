@@ -97,6 +97,7 @@ def request_review(focus,candidate,repo,evidence,out):
   items=life+devices
   title="T10 C4 focused gameplay UX/readability closeout — lifecycle + all device states"
   role=("Judge T10 gameplay UX/readability only within T10 scope. T10 adds no danger mechanic, enemy, hazard, warning animation or harvesting UI. For danger_clarity, judge whether the presentation avoids falsely implying danger and clearly distinguishes BLOCKED resource/prerequisite status from READY/PREVIEW/COMPLETE; do not require alarms, shaking, hazard icons or enemies. "
+        "BLOCKED is a pre-completion/current-target state: the requested transform has NOT completed, so a green COMPLETE/accepted volume must NOT be shown in a standalone BLOCKED frame. Requiring a completed green cube in BLOCKED would be a false-success defect. A separate COMPLETE state may show the accepted green volume and then communicate the next blocked prerequisite/action. "
         "For collection_feedback/resource_destination, judge delivered-stock transform feedback: Cost, Need, Spent and the named transform destination; do not require new gathering/collection animation. "
         "COMPLETE deliberately presents the completed result first, then NEXT action. REPLAY is exact idempotency and must visually match COMPLETE. "
         "The board contains all six lifecycle front views plus BLOCKED and COMPLETE front views for every authoritative device layout. Judge all six mandatory C4 dimensions and name only concrete actionable defects supported by the supplied pixels.")
