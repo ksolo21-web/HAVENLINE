@@ -252,10 +252,10 @@ def validate_dependency_closeout(
     return errors, dependency_sources
 
 
-def validate_cross_contracts(checklist) -> list[str]:
+def validate_cross_contracts(checklist, prebuild=None, schema=None) -> list[str]:
     errors: list[str] = []
-    prebuild = load(PREBUILD_CONTRACT_PATH)
-    schema = load(DATA_SCHEMA_PATH)
+    prebuild = load(PREBUILD_CONTRACT_PATH) if prebuild is None else prebuild
+    schema = load(DATA_SCHEMA_PATH) if schema is None else schema
 
     if prebuild.get("schema_version") != 1 or prebuild.get("task_id") != "T12":
         errors.append("PREBUILD_CONTRACT identity must remain schema_version=1 task_id=T12")
@@ -343,9 +343,9 @@ def validate_cross_contracts(checklist) -> list[str]:
     return errors
 
 
-def validate_upstream_preparation_bindings() -> list[str]:
+def validate_upstream_preparation_bindings(data=None) -> list[str]:
     errors: list[str] = []
-    data = load(UPSTREAM_BINDINGS_PATH)
+    data = load(UPSTREAM_BINDINGS_PATH) if data is None else data
     if data.get("schema_version") != 1 or data.get("task_id") != "T12":
         errors.append("UPSTREAM_BINDINGS identity must remain schema_version=1 task_id=T12")
     bindings = data.get("bindings")
@@ -391,9 +391,9 @@ def validate_upstream_preparation_bindings() -> list[str]:
     return errors
 
 
-def validate_defect_ledger_preparation() -> list[str]:
+def validate_defect_ledger_preparation(ledger=None) -> list[str]:
     errors: list[str] = []
-    ledger = load(DEFECT_LEDGER_PATH)
+    ledger = load(DEFECT_LEDGER_PATH) if ledger is None else ledger
     if ledger.get("schema_version") != 1 or ledger.get("task_id") != "T12":
         errors.append("T12 defect ledger identity drifted")
     if ledger.get("mode") != "PREPARATION":
