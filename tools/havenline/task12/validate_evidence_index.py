@@ -32,59 +32,71 @@ def nonempty(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
-def required_refs(candidate: dict[str, Any], critics: dict[str, Any]) -> set[str]:
-    refs: set[str] = set()
+def required_ref_categories(candidate: dict[str, Any], critics: dict[str, Any]) -> dict[str, set[str]]:
+    refs: dict[str, set[str]] = {}
+
+    def add(uri: Any, category: str) -> None:
+        if nonempty(uri):
+            refs.setdefault(uri, set()).add(category)
+
     source = candidate.get("exact_source", {}) if isinstance(candidate.get("exact_source"), dict) else {}
     manifest_ref = source.get("authorized_changed_file_manifest_ref")
     if nonempty(manifest_ref):
-        refs.add(manifest_ref)
+        add(manifest_ref, "authorized_changed_files")
 
     reports = candidate.get("static_reports", {}) if isinstance(candidate.get("static_reports"), dict) else {}
     for row in reports.values():
         if isinstance(row, dict) and nonempty(row.get("evidence_ref")):
-            refs.add(row["evidence_ref"])
+            add(row["evidence_ref"], "static_report")
 
     parity = candidate.get("engine_parity", {}) if isinstance(candidate.get("engine_parity"), dict) else {}
-    for key in ("output_ref", "comparator_output_ref"):
-        if nonempty(parity.get(key)):
-            refs.add(parity[key])
+    if nonempty(parity.get("output_ref")):
+        add(parity["output_ref"], "engine_parity_output")
+    if nonempty(parity.get("comparator_output_ref")):
+        add(parity["comparator_output_ref"], "engine_parity_comparator")
 
     regression = candidate.get("regression", {}) if isinstance(candidate.get("regression"), dict) else {}
     if nonempty(regression.get("artifact_ref")):
-        refs.add(regression["artifact_ref"])
+        add(regression["artifact_ref"], "regression")
 
     sequences = candidate.get("functional_sequences", {}) if isinstance(candidate.get("functional_sequences"), dict) else {}
     for row in sequences.values():
         if isinstance(row, dict) and isinstance(row.get("evidence_refs"), list):
-            refs.update(ref for ref in row["evidence_refs"] if nonempty(ref))
+            for ref in row["evidence_refs"]:
+                add(ref, "functional_sequence")
 
     adaptive = candidate.get("adaptive_readability", {}) if isinstance(candidate.get("adaptive_readability"), dict) else {}
     if adaptive.get("player_facing_presentation_exists") is True:
         for key in ("phone_landscape_ref", "tablet_landscape_ref", "foldable_landscape_ref", "native_3840x2160_scale1_ref"):
             if nonempty(adaptive.get(key)):
-                refs.add(adaptive[key])
+                add(adaptive[key], "adaptive_readability")
 
     performance = candidate.get("performance_c6", {}) if isinstance(candidate.get("performance_c6"), dict) else {}
     if nonempty(performance.get("evidence_ref")):
-        refs.add(performance["evidence_ref"])
+        add(performance["evidence_ref"], "performance_c6")
 
     packet_critics = candidate.get("critic_reviews", {}) if isinstance(candidate.get("critic_reviews"), dict) else {}
     for row in packet_critics.values():
         if isinstance(row, dict) and nonempty(row.get("evidence_ref")):
-            refs.add(row["evidence_ref"])
+            add(row["evidence_ref"], "critic_review")
 
     critic_rows = critics.get("critics", {}) if isinstance(critics.get("critics"), dict) else {}
     for row in critic_rows.values():
         if not isinstance(row, dict):
             continue
         if nonempty(row.get("review_evidence_ref")):
-            refs.add(row["review_evidence_ref"])
+            add(row["review_evidence_ref"], "critic_review")
         dimensions = row.get("dimensions")
         if isinstance(dimensions, list):
             for dimension in dimensions:
                 if isinstance(dimension, dict) and isinstance(dimension.get("evidence_refs"), list):
-                    refs.update(ref for ref in dimension["evidence_refs"] if nonempty(ref))
+                    for ref in dimension["evidence_refs"]:
+                        add(ref, "critic_dimension")
     return refs
+
+
+def required_refs(candidate: dict[str, Any], critics: dict[str, Any]) -> set[str]:
+    return set(required_ref_categories(candidate, critics))
 
 
 def validate_index(data: dict[str, Any], *, require_resolved: bool = False, candidate: dict[str, Any] | None = None, critics: dict[str, Any] | None = None) -> dict[str, Any]:
