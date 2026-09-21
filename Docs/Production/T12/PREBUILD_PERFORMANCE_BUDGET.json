@@ -11,14 +11,14 @@
     "maximum_p95_ms": 15,
     "maximum_single_ms": 75,
     "maximum_retained_growth_kib": 512,
-    "input_shape": "100 levels + 10 milestones + nine preparation validators including candidate-evidence, critic-review and complete-evidence-index templates",
+    "input_shape": "100-level synthetic progression + 10 milestones + 14 static preparation checks: progression, matrix, shipping schema, runtime interface, traceability, downstream contract, candidate evidence, critic records, evidence index, engine oracle, blank binding guard, cross-contract consistency, upstream-binding consistency, and defect-ledger consistency",
     "measurement_rule": "Timing is measured without tracemalloc instrumentation. Retained/peak traced memory is measured in a separate bounded pass so allocation tracing overhead is not mistaken for validator latency."
   },
   "fuzz_budget": {
     "deterministic_seed": 1200,
     "cases": 250,
     "maximum_total_seconds": 8,
-    "minimum_rejected_mutations": 240,
+    "minimum_rejected_mutations": 250,
     "mutation_classes": [
       "missing_level",
       "duplicate_level_id",
