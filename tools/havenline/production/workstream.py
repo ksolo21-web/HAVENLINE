@@ -3,6 +3,7 @@ from __future__ import annotations
 import argparse, datetime, json, pathlib, re, subprocess
 from lib import DOCS, ROOT, load_json, expand_alias, any_match, changed_files, json_dump, fail
 from change_impact import calculate as calculate_impact
+from control_plane_lineage import assess as assess_control_plane_lineage
 
 ACTIVE_STATES = {"PREPARED","ASSIGNED","BUILDING_ISOLATED","BUILT_PENDING_DEPENDENCY","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","BLOCKED"}
 ALLOWED_STATES = {"LOCKED","PREPARED","ASSIGNED","BUILDING_ISOLATED","BUILT_PENDING_DEPENDENCY","INTEGRATION_READY","INTEGRATING","UNDER_REVIEW","FIX_REQUIRED","APPROVED","BLOCKED"}
@@ -169,12 +170,17 @@ def registry_errors(registry=None):
 def deps_approved(task_id,graph):
     return [d for d in graph["tasks"][task_id]["dependencies"] if graph["tasks"][d]["status"]!="APPROVED"]
 
-def claim(task_id,owner,branch,base,owned_alias,status):
+def claim(task_id,owner,branch,base,owned_alias,status,integration_head=None,branch_head=None):
     registry=load_json(DOCS/"WORKSTREAM_REGISTRY.json");graph=load_json(DOCS/"DEPENDENCY_GRAPH.json")
     if task_id not in graph["tasks"]:fail("unknown task "+task_id)
     if status not in ("PREPARED","ASSIGNED"):fail("claim status must be PREPARED or ASSIGNED")
     blocked=deps_approved(task_id,graph)
-    if status=="ASSIGNED" and blocked:fail("cannot ASSIGN; dependencies not approved: "+",".join(blocked))
+    lineage=None
+    if status=="ASSIGNED":
+        if blocked:fail("cannot ASSIGN; dependencies not approved: "+",".join(blocked))
+        lineage=assess_control_plane_lineage(branch_head,integration_head)
+        if not lineage.get("passed"):
+            fail("cannot ASSIGN; control-plane lineage is not synchronized:\n"+json.dumps(lineage,indent=2))
     existing=next((w for w in registry["workstreams"] if w["task_id"]==task_id),None)
     row=existing or {"task_id":task_id,"task_name":graph["tasks"][task_id]["name"],"workstream_id":f"{task_id}-{owner}"}
     row.update({"status":status,"owner":owner,"branch":branch,"base_commit":base,"dependencies":graph["tasks"][task_id]["dependencies"],
@@ -182,6 +188,14 @@ def claim(task_id,owner,branch,base,owned_alias,status):
                 "candidate_hash_or_artifact":None,"tests":{},"evidence_path":f"Docs/Production/Evidence/{task_id}/",
                 "critic_requirements":graph["tasks"][task_id]["critics"],"critic_status":{},"integration_status":"not integrated",
                 "known_blockers":[f"waiting on {x}" for x in blocked],"next_action":"Build isolated candidate only after ASSIGNED."})
+    if status=="ASSIGNED":
+        row["assignment_integration_commit"]=integration_head
+        row["assignment_branch_head"]=branch_head
+        row["assignment_lineage_state"]=lineage.get("state")
+    else:
+        row.pop("assignment_integration_commit",None)
+        row.pop("assignment_branch_head",None)
+        row.pop("assignment_lineage_state",None)
     if not existing:registry["workstreams"].append(row)
     errs=registry_errors(registry)
     if errs:fail("claim rejected:\n"+"\n".join(errs))
@@ -230,14 +244,14 @@ def main():
     ap=argparse.ArgumentParser();sub=ap.add_subparsers(dest="cmd",required=True)
     sub.add_parser("validate-registry")
     c=sub.add_parser("validate-candidate");c.add_argument("task_id");c.add_argument("--base",required=True);c.add_argument("--head",default="HEAD");c.add_argument("--integration-head")
-    cl=sub.add_parser("claim");cl.add_argument("task_id");cl.add_argument("--owner",required=True);cl.add_argument("--branch",required=True);cl.add_argument("--base",required=True);cl.add_argument("--owned-alias",required=True);cl.add_argument("--status",default="PREPARED")
+    cl=sub.add_parser("claim");cl.add_argument("task_id");cl.add_argument("--owner",required=True);cl.add_argument("--branch",required=True);cl.add_argument("--base",required=True);cl.add_argument("--owned-alias",required=True);cl.add_argument("--status",default="PREPARED");cl.add_argument("--integration-head");cl.add_argument("--branch-head")
     ss=sub.add_parser("set-status");ss.add_argument("task_id");ss.add_argument("status")
     a=ap.parse_args()
     if a.cmd=="validate-registry":
         errors=registry_errors();print(json.dumps({"passed":not errors,"errors":errors},indent=2))
         if errors:raise SystemExit(1)
     elif a.cmd=="validate-candidate":validate_candidate(a.task_id,a.base,a.head,a.integration_head)
-    elif a.cmd=="claim":claim(a.task_id,a.owner,a.branch,a.base,a.owned_alias,a.status)
+    elif a.cmd=="claim":claim(a.task_id,a.owner,a.branch,a.base,a.owned_alias,a.status,a.integration_head,a.branch_head)
     else:set_status(a.task_id,a.status)
 
 if __name__=="__main__":main()
