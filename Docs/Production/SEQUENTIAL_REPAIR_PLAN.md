@@ -41,7 +41,8 @@ integration-owner-controlled production integration.
   checks, all 44 locked frames and both locked recordings, G1-G14, and strict
   C2 9.55 / C3 9.48 / C4 9.52 / C6 9.61 independent review.
 - T09 is APPROVED. Exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0 passed 17 suites / 1006 checks, 7/7 save cases, 6/6 device cases, 1193/1193 indexed hashes, G1-G14, and fresh independent C2/C3/C4/C5/C6 review with every mandatory dimension strictly above 9.0 and zero unresolved defects.
-  T10+ remains LOCKED.
+- T10 World Transformation Framework is APPROVED at exact integrated source `eba0107def258824549fb10d81785290d0c81d97`. Fresh impacted regression passed 7 suites / 653 checks; 7/7 save cases, 216/216 device projections and 36/36 native-4K captures passed. C1/C2/C3/C4 are fresh current-candidate passes; C6/C7 are preserved through critic-specific invalidation with audited invariant proof. Minimum mandatory dimension is 9.350213966238757 with zero unresolved defects.
+- T11 Camp construction and visual upgrade system is PREPARED at canonical preparation commit `fbb81ae34b9053f17fc937fb7e67895e3ef0584b`, based on T10 approval commit `87a4346eb33473c3723c7b7c1bbf1dd04dba9131`. T12+ remains dependency-gated.
 
 ## Forward acceptance rule
 
@@ -114,10 +115,10 @@ separate $0 reviewer is available, useful construction/testing continues but
 the critic gate remains `BLOCKED`. Never manufacture a pass and never add a
 paid critic dependency.
 
-## Current wave after T08 approval
+## Current wave after T10 approval
 
-T03 is approved. The registry may now assign these workstreams individually
-after each packet and owner are prepared:
+T01-T10 are approved. T11 is PREPARED with a frozen packet and disjoint path
+reservation; it may move to ASSIGNED before runtime construction begins.
 
 - T04 camera/composition is complete and APPROVED.
 - T05 station/prop kit is complete and APPROVED at `fa6fa70f154f3757d22303522ca3f6de2c3d391f`.
@@ -128,8 +129,10 @@ after each packet and owner are prepared:
 - T08 visible inventory, carrying and transfers is complete and APPROVED;
   preserve exact integrated source
   `9d56ea8ae972d0a0705ff8b985e13fab31dde493` and its verified closure.
-- T09 harvesting and automatic acquisition is APPROVED at `5415d85838ecf4bea8b3c71662072670e61797a0`.
-  Preserve its verified closure. T10+ remains LOCKED.
+- T09 harvesting and automatic acquisition is APPROVED at `5415d85838ecf4bea8b3c71662072670e61797a0`; preserve its verified closure.
+- T10 World Transformation Framework is APPROVED at `eba0107def258824549fb10d81785290d0c81d97`; preserve its verified completion and critic records.
+- T11 Camp construction and visual upgrade system is PREPARED on `havenline/T11-camp-construction`; its runtime candidate does not exist yet.
+- T12+ remains dependency-gated.
 - QA/integration infrastructure may continue separately.
 
 Those workstreams are isolated and path-disjoint. Shared wiring remains
