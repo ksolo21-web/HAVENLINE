@@ -201,7 +201,10 @@ jobs:
           python3 tools/havenline/production/rolling_canary.py validate > /tmp/v32-canaries.json
           python3 tools/havenline/production/rolling_canary.py requirements T12 > /tmp/v32-t12-canaries.json
           python3 tools/havenline/production/performance_ledger.py validate > /tmp/v32-performance.json
-          python3 tools/havenline/production/branch_budget.py > /tmp/v32-branches.json
+          git ls-remote --heads origin 'refs/heads/havenline/T*' | awk '{print $2}' | sed 's#refs/heads/##' | jq -R -s 'split("\n") | map(select(length > 0))' > /tmp/v32-remote-branches.json
+          python3 tools/havenline/production/branch_budget.py --inventory /tmp/v32-remote-branches.json > /tmp/v32-branches.json
+          python3 tools/havenline/production/v32_forward_prep_harness.py validate > /tmp/v32-forward-harness.json
+          python3 tools/havenline/production/opening_loop_canary.py > /tmp/v32-opening-loop.json
           python3 tools/havenline/production/authority_consistency.py > /tmp/v32-authority.json
           python3 tools/havenline/production/forward_prep_contract.py > /tmp/v32-forward-prep.json
           jq -e '.passed == true and .architecture_version == "3.2" and .task_count == 60 and .components.workflow_consumption.passed == true and .components.authority_consistency.passed == true and .components.forward_prep_contract.passed == true' /tmp/v32-validation.json
@@ -212,7 +215,9 @@ jobs:
           jq -e '.passed == true and .canary_count >= 8' /tmp/v32-canaries.json
           jq -e '([.canaries[] | select(.canary == "level_1_100_reachability")] | length) == 1' /tmp/v32-t12-canaries.json
           jq -e '.passed == true' /tmp/v32-performance.json
-          jq -e '.passed == true' /tmp/v32-branches.json
+          jq -e '.passed == true and .details.inventory_checked == true' /tmp/v32-branches.json
+          jq -e '.passed == true and .domain_count >= 12' /tmp/v32-forward-harness.json
+          jq -e '.passed == true and .this_is_readiness_not_formal_acceptance == true and (.implemented_segments | index("transform")) != null' /tmp/v32-opening-loop.json
           jq -e '.passed == true' /tmp/v32-authority.json
           jq -e '.passed == true and .prep_task_count >= 20 and .shared_contract_count >= 8' /tmp/v32-forward-prep.json
           grep -q 'actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09' .github/workflows/havenline-v32-task-preflight.yml
