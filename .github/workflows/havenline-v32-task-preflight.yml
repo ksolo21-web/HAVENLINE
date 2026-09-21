@@ -1,0 +1,29 @@
+name: Havenline V3.2 task graduation preflight
+on:
+  workflow_call:
+    inputs:
+      task_id:
+        required: true
+        type: string
+      target:
+        required: false
+        default: ASSIGNED
+        type: string
+permissions:
+  contents: read
+jobs:
+  v32-preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+      - name: Resolve V3.2 readiness
+        run: |
+          python3 tools/havenline/production/architecture_v32.py readiness "${{ inputs.task_id }}" > /tmp/v32-readiness.json
+          cat /tmp/v32-readiness.json
+      - name: Enforce task graduation gate
+        run: python3 tools/havenline/production/task_graduation_gate.py "${{ inputs.task_id }}" --target "${{ inputs.target }}"
+      - name: Emit timeout-safe shard plan
+        run: python3 tools/havenline/production/timeout_stage_plan.py "${{ inputs.task_id }}" > /tmp/v32-stage-plan.json
