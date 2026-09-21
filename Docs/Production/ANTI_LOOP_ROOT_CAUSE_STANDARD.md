@@ -58,6 +58,57 @@ rerun unchanged critics, alter only cameras/crops/captions/prompts, lower the
 threshold, or reinterpret the same score. If no materially different
 production repair is available, mark the task `BLOCKED`.
 
+## Critic-specific invalidation
+
+A new candidate SHA does **not** automatically erase every prior critic pass.
+Invalidation follows the repair's blast radius.
+
+- Re-run a critic only when the changed production paths/behavior can materially
+  affect one or more of that critic's mandatory checks.
+- A review-prompt, reviewer-runner or critic-protocol repair invalidates only
+  that critic unless a shared evidence contract changed.
+- Preserve an unaffected PASS only when its prior record had complete coverage,
+  zero unresolved defects and every mandatory dimension strictly above 9.0
+  unrounded, and the carry-forward record retains the original run/artifact/hash.
+- The current-candidate impact proof must enumerate the diff and prove that the
+  preserved critic's reviewed domain is unchanged. Preservation is provenance,
+  not a fresh review, and may not alter scores.
+- When uncertain whether the repair can affect a critic, invalidate that critic
+  only; do not invalidate unrelated critics by default.
+- Never average an old PASS with a new FAIL. An affected critic is either
+  re-run and passes independently or the candidate remains unapproved.
+
+For T10 presentation-only repairs, use the critic domains in
+`PROOF_INVALIDATION_POLICY.json`. View hierarchy/geometry changes normally
+invalidate C1/C2/C3/C4 as applicable. Preserve C6 only when performance topology
+and quantitative invariants are unchanged. Preserve C7 when transaction,
+prerequisite, progression, replay and recovery semantics are unchanged.
+
+## Branch minimization
+
+Repair work must reuse the existing task branch set. Creating a new branch is
+an exception, not a repair step.
+
+The normal maximum is:
+
+1. one canonical/integration product branch;
+2. one review/controller branch when separate review tooling is needed; and
+3. one approval/closeout branch when isolated write authority is needed.
+
+Do **not** create a branch for each blocker, critic, retry, prompt change,
+diagnostic, C0/C0R pass, bookkeeping fix, evidence recapture or review-harness
+repair. Add a bounded commit to the appropriate existing branch instead.
+
+A new branch is allowed only when a genuinely separate long-lived product line,
+a real ownership/path collision, or an explicit security/release isolation
+requirement makes branch reuse unsafe. The creation record must state why the
+existing branches cannot be reused, the exact base SHA, owner, owned paths and
+the branch's expected merge/delete disposition.
+
+Obsolete scratch branches do not justify replacement branches. Finish current
+work on the standard branch set, then archive/delete obsolete scratch branches
+during post-closeout cleanup.
+
 ## Evidence rules
 
 - Rejected candidates remain `REJECTED` and their failures stay preserved.
