@@ -106,5 +106,14 @@ class T12LevelMatrixTests(unittest.TestCase):
         self.assertTrue(any("schema_version" in error for error in result["errors"]))
 
 
+    def test_rejects_frozen_invariant_drift(self):
+        def mutate(matrix):
+            matrix["invariants"]["max_visible_gap"] = 4
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("matrix invariants drifted" in error for error in result["errors"]))
+
+
+
 if __name__ == "__main__":
     unittest.main()
