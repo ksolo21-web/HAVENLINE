@@ -14,12 +14,27 @@
       "scope": "cross_task_reusable",
       "gate": "C5",
       "classification": "TOOLING_DEFECT",
-      "signature_terms": ["png identity", "pixel rmse", "pose identity", "t=0", "skeleton pose", "c5 initialization"],
+      "signature_terms": [
+        "png identity",
+        "pixel rmse",
+        "pose identity",
+        "t=0",
+        "skeleton pose",
+        "c5 initialization"
+      ],
       "symptom": "Motion validation failed because independently rendered image pixels were treated as pose identity after otherwise successful task validation.",
       "root_cause": "Rendered-image equality is not a stable invariant for animation pose; lighting/AA/render initialization can differ while final skeleton transforms remain equivalent.",
       "causal_repair": "Compare final Skeleton3D transforms/contact state after controlled warm-up; preserve frame hashes only for provenance.",
-      "protected_files": ["approved shipping character mesh", "approved shipping rig", "approved upstream animation clips unless transform evidence disproves them"],
-      "proof": ["pose-space transform limits pass", "pixel equality/RMSE is rejected as a pose gate", "upstream regression/performance remain green"],
+      "protected_files": [
+        "approved shipping character mesh",
+        "approved shipping rig",
+        "approved upstream animation clips unless transform evidence disproves them"
+      ],
+      "proof": [
+        "pose-space transform limits pass",
+        "pixel equality/RMSE is rejected as a pose gate",
+        "upstream regression/performance remain green"
+      ],
       "prevention_rule": "Motion gates use pose/contact space for motion identity and image hashes only for provenance.",
       "source": "Docs/Production/T09/defect-ledger.json#T09-D004"
     },
@@ -29,12 +44,27 @@
       "scope": "cross_task_reusable",
       "gate": "C5",
       "classification": "TOOLING_DEFECT",
-      "signature_terms": ["animationplayer", "speed_scale", "settle frames", "seek", "t=0 drift", "start drift", "warm-up"],
+      "signature_terms": [
+        "animationplayer",
+        "speed_scale",
+        "settle frames",
+        "seek",
+        "t=0 drift",
+        "start drift",
+        "warm-up"
+      ],
       "symptom": "A supposedly fixed t=0 pose drifted substantially during settle frames.",
       "root_cause": "The capture harness sought t=0 while leaving AnimationPlayer running, so real-time settle frames advanced the clip and invalidated the explicit sample.",
       "causal_repair": "Freeze animation clock during sampled-pose settling while still allowing SkeletonModifier convergence.",
-      "protected_files": ["shipping animation clips", "pose thresholds"],
-      "proof": ["unchanged pose thresholds pass", "capture metadata proves frozen-clock sampling", "full task regression remains green"],
+      "protected_files": [
+        "shipping animation clips",
+        "pose thresholds"
+      ],
+      "proof": [
+        "unchanged pose thresholds pass",
+        "capture metadata proves frozen-clock sampling",
+        "full task regression remains green"
+      ],
       "prevention_rule": "Sampled-pose harnesses separate animation time from modifier convergence time.",
       "source": "Docs/Production/T09/defect-ledger.json#T09-D006"
     },
@@ -44,12 +74,24 @@
       "scope": "cross_task_reusable",
       "gate": "governance",
       "classification": "GOVERNANCE_DEFECT",
-      "signature_terms": ["unowned path", "qa-gov", "ownership", "governance files", "integration scope"],
+      "signature_terms": [
+        "unowned path",
+        "qa-gov",
+        "ownership",
+        "governance files",
+        "integration scope"
+      ],
       "symptom": "A task candidate was rejected because newly added governance/control-plane files were not included in QA-GOV ownership.",
       "root_cause": "Governance ownership metadata lagged behind the control-plane file set.",
       "causal_repair": "Add the control-plane files to @ownership:QA-GOV and reproduce integration-scope validation without changing task runtime.",
-      "protected_files": ["task runtime", "approved gameplay"],
-      "proof": ["integration-scope validation passes", "runtime diff remains unchanged"],
+      "protected_files": [
+        "task runtime",
+        "approved gameplay"
+      ],
+      "proof": [
+        "integration-scope validation passes",
+        "runtime diff remains unchanged"
+      ],
       "prevention_rule": "Every new control-plane authority is governance-owned in the same architecture change set.",
       "source": "Docs/Production/T09/defect-ledger.json#T09-D005"
     },
@@ -59,14 +101,199 @@
       "scope": "cross_task_reusable",
       "gate": "workflow_startup",
       "classification": "GOVERNANCE_DEFECT",
-      "signature_terms": ["startup_failure", "actions read", "reusable workflow", "github_token permissions", "zero jobs", "c0"],
+      "signature_terms": [
+        "startup_failure",
+        "actions read",
+        "reusable workflow",
+        "github_token permissions",
+        "zero jobs",
+        "c0"
+      ],
       "symptom": "A task workflow resolved the reusable C0 workflow but failed before creating jobs.",
       "root_cause": "Reusable workflows cannot elevate GITHUB_TOKEN permissions above the caller; the caller omitted actions: read required to retrieve failed-run evidence.",
       "causal_repair": "Grant the minimal read-only actions permission at the caller and enforce the caller permission contract in source validation.",
-      "protected_files": ["runtime", "critic thresholds", "write permissions"],
-      "proof": ["workflow creates jobs", "C0 evidence retrieval succeeds", "no write permission is added"],
+      "protected_files": [
+        "runtime",
+        "critic thresholds",
+        "write permissions"
+      ],
+      "proof": [
+        "workflow creates jobs",
+        "C0 evidence retrieval succeeds",
+        "no write permission is added"
+      ],
       "prevention_rule": "Reusable workflow caller permissions are validated statically before task CI is considered ready.",
       "source": "Docs/Production/T09/defect-ledger.json#T09-D007"
+    },
+    {
+      "id": "FI-T10-001",
+      "task_id": "T10",
+      "scope": "cross_task_reusable",
+      "gate": "repair_cycle",
+      "classification": "GOVERNANCE_DEFECT",
+      "signature_terms": [
+        "serial blocker ids",
+        "blocker accumulation",
+        "same frozen candidate",
+        "causal family",
+        "B037",
+        "B059"
+      ],
+      "symptom": "Related failures on T10 accumulated as many serial blocker IDs instead of being forced into a bounded causal family early.",
+      "root_cause": "Repair routing allowed symptom-level continuation after multiple failures on one candidate, increasing branch/retest churn and delaying terminal closeout.",
+      "causal_repair": "After three distinct blockers on one frozen candidate, stop candidate churn, reconcile the complete blocker set into causal families, and require one bounded family repair plan before another build.",
+      "protected_files": [
+        "unchanged approved gameplay outside the confirmed causal family",
+        "critic thresholds"
+      ],
+      "proof": [
+        "family reconciliation names every known blocker",
+        "duplicate symptoms do not create new repair work",
+        "one bounded candidate verifies the whole family"
+      ],
+      "prevention_rule": "V3.2 three-blocker causal-family trigger is mandatory for T11+.",
+      "source": "Docs/Production/T10/C0_ROOT_CAUSE.json"
+    },
+    {
+      "id": "FI-T10-002",
+      "task_id": "T10",
+      "scope": "cross_task_reusable",
+      "gate": "critic_review",
+      "classification": "EVIDENCE_DEFECT",
+      "signature_terms": [
+        "finish_reason length",
+        "reviewer truncation",
+        "repetitive output",
+        "incomplete json",
+        "critic output budget"
+      ],
+      "symptom": "Independent C3/C4 review could exhaust its output budget with repetitive prose and return incomplete scored JSON even though the underlying evidence package was otherwise usable.",
+      "root_cause": "The task evidence bounded group count but did not sufficiently bound response verbosity/output shape before expensive review.",
+      "causal_repair": "Preflight the critic package and bind a neutral response-format contract that preserves independent judgment while bounding observations, defects and completion size.",
+      "protected_files": [
+        "gameplay runtime",
+        "critic dimensions",
+        "score thresholds",
+        "reviewer independence"
+      ],
+      "proof": [
+        "manifest/source remains unchanged",
+        "review returns complete schema",
+        "no gameplay change is needed to resolve the evidence defect"
+      ],
+      "prevention_rule": "Critic-package preflight runs before expensive independent review; output/transport failure does not automatically reopen gameplay.",
+      "source": "Docs/Production/T10/C0-specialist-output-truncation-74b19b1.json"
+    },
+    {
+      "id": "FI-T10-003",
+      "task_id": "T10",
+      "scope": "cross_task_reusable",
+      "gate": "critic_review",
+      "classification": "GOVERNANCE_DEFECT",
+      "signature_terms": [
+        "critic-specific invalidation",
+        "unaffected critic pass",
+        "same sha",
+        "whole package rerun",
+        "fresh review"
+      ],
+      "symptom": "A failure in one critic/evidence lane risked unnecessarily reopening other valid critic results.",
+      "root_cause": "Invalidation was broader than the evidence/source fingerprint that actually changed.",
+      "causal_repair": "On the same frozen candidate, compare critic-specific input fingerprints and rerun only affected critics; any candidate source SHA change still requires fresh exact-source review where policy requires it.",
+      "protected_files": [
+        "valid same-SHA critic records",
+        "strict >9.0 rule"
+      ],
+      "proof": [
+        "preserved critic inputs are byte/fingerprint identical",
+        "changed critic inputs rerun fresh",
+        "source SHA changes invalidate exact-source critic proof"
+      ],
+      "prevention_rule": "Critic-specific invalidation is default; whole-package invalidation requires a shared-input or source change.",
+      "source": "Docs/Production/T10/verified-completion.json"
+    },
+    {
+      "id": "FI-T10-004",
+      "task_id": "T10",
+      "scope": "cross_task_reusable",
+      "gate": "closeout",
+      "classification": "GOVERNANCE_DEFECT",
+      "signature_terms": [
+        "stale authority",
+        "registry mismatch",
+        "task local stale",
+        "resume state",
+        "exact sha"
+      ],
+      "symptom": "Task-local records and moving integration state could present different pictures of the active T10 candidate and next action.",
+      "root_cause": "Mutable status artifacts were consulted without first binding all authority reads to one exact integration/candidate SHA.",
+      "causal_repair": "Use the canonical registry/dependency authority plus an exact-source resumable checkpoint; reconcile task-local records before closeout and do not infer state from stale files.",
+      "protected_files": [
+        "approved gameplay",
+        "completed critic proof"
+      ],
+      "proof": [
+        "registry, dependency graph, checkpoint and candidate identity agree on exact SHA",
+        "stale task-local records cannot override canonical lifecycle authority"
+      ],
+      "prevention_rule": "Every T11+ resume/closeout begins from an exact-SHA execution checkpoint and canonical registry state.",
+      "source": "Docs/Production/T10/C0-real-authority-70d3bc0.json"
+    },
+    {
+      "id": "FI-T10-005",
+      "task_id": "T10",
+      "scope": "cross_task_reusable",
+      "gate": "failure_classification",
+      "classification": "EVIDENCE_DEFECT",
+      "signature_terms": [
+        "evidence failure",
+        "tooling failure",
+        "infrastructure failure",
+        "gameplay reopen",
+        "unchanged runtime"
+      ],
+      "symptom": "Evidence/transport/format failures could be mistaken for reasons to alter or broadly retest unchanged gameplay.",
+      "root_cause": "Failure class and affected causal object were not always separated early enough from gameplay correctness.",
+      "causal_repair": "Classify PRODUCT_DEFECT versus TOOLING/EVIDENCE/INFRASTRUCTURE first; repair only the causal layer and preserve unchanged gameplay/critic proof when source-bound fingerprints permit.",
+      "protected_files": [
+        "unchanged gameplay runtime",
+        "unaffected critic evidence"
+      ],
+      "proof": [
+        "failure class names the affected object",
+        "runtime diff remains unchanged for evidence-only repair",
+        "affected proof reruns clean"
+      ],
+      "prevention_rule": "Evidence/tooling/infrastructure failures never authorize gameplay changes without independent source-bound product evidence.",
+      "source": "Docs/Production/T10/C0-transported-contract-readiness-c7a18d0.json"
+    },
+    {
+      "id": "FI-T10-006",
+      "task_id": "T10",
+      "scope": "cross_task_reusable",
+      "gate": "workflow_lifecycle",
+      "classification": "GOVERNANCE_DEFECT",
+      "signature_terms": [
+        "finish running sha",
+        "superseded",
+        "cancellation churn",
+        "moving candidate",
+        "queued candidate"
+      ],
+      "symptom": "Repeatedly moving or cancelling candidate review can erase useful terminal evidence and restart expensive work.",
+      "root_cause": "A newer repair candidate can be mistaken for permission to invalidate an already-running exact-source review.",
+      "causal_repair": "Finish the running SHA, preserve its terminal disposition, and queue newer candidates; cancelled/superseded runs are not product judgments.",
+      "protected_files": [
+        "running exact-source evidence",
+        "critic thresholds"
+      ],
+      "proof": [
+        "one candidate reaches terminal state before replacement review",
+        "newer candidate queues instead of cancelling",
+        "superseded status is not treated as FAIL"
+      ],
+      "prevention_rule": "finish-running-SHA is mandatory for T11+ task candidate review.",
+      "source": "Docs/Production/T10/C0_ROOT_CAUSE.json"
     }
   ]
 }
