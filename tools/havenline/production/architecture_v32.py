@@ -10,6 +10,7 @@ from performance_ledger import validate as validate_performance
 from branch_budget import validate as validate_branches
 from authority_consistency import validate as validate_authority
 from forward_prep_contract import validate as validate_forward_prep
+from v32_forward_prep_harness import validate_all as validate_forward_harness
 import re
 ROOT=Path(__file__).resolve().parents[3];DOCS=ROOT/'Docs'/'Production'
 def validate_workflows_and_consumption():
@@ -21,7 +22,7 @@ def validate_workflows_and_consumption():
     for name,p in workflows.items():
         if not p.exists(): errors.append('missing workflow '+name);continue
         body=p.read_text()
-        for m in re.finditer(r'uses:\\s*(actions/[^@\\s]+)@([^\\s]+)',body):
+        for m in re.finditer(r'uses:\s*(actions/[^@\s]+)@([^\s]+)',body):
             if not re.fullmatch(r'[0-9a-f]{40}',m.group(2)): errors.append(name+' mutable/unpinned action '+m.group(0))
     if workflows['task_preflight'].exists():
         body=workflows['task_preflight'].read_text()
@@ -43,9 +44,9 @@ def validate_workflows_and_consumption():
 
 def validate():
     errors=[];components={}
-    for n in ('PRODUCTION_ARCHITECTURE_V32_STANDARD.md','PARALLEL_PREPARATION_POLICY.json','EXECUTION_CHECKPOINT_SCHEMA.json','TASK_GRADUATION_POLICY.json','EARLY_CANARY_POLICY.json','CUMULATIVE_PERFORMANCE_LEDGER.json','CRITIC_PACKAGE_PREFLIGHT_POLICY.json'):
+    for n in ('PRODUCTION_ARCHITECTURE_V32_STANDARD.md','PARALLEL_PREPARATION_POLICY.json','EXECUTION_CHECKPOINT_SCHEMA.json','TASK_GRADUATION_POLICY.json','EARLY_CANARY_POLICY.json','CUMULATIVE_PERFORMANCE_LEDGER.json','CRITIC_PACKAGE_PREFLIGHT_POLICY.json','V32_FORWARD_PREP_CONTRACTS.json','V32_FORWARD_PREP_CANARIES.json'):
         if not (DOCS/n).exists(): errors.append('missing '+n)
-    components['parallel_preparation']=prep_plan();components['canaries']=validate_canaries();components['performance_ledger']=validate_performance();components['branch_budget']=validate_branches();components['authority_consistency']=validate_authority();components['forward_prep_contract']=validate_forward_prep();components['workflow_consumption']=validate_workflows_and_consumption()
+    components['parallel_preparation']=prep_plan();components['canaries']=validate_canaries();components['performance_ledger']=validate_performance();components['branch_budget']=validate_branches();components['authority_consistency']=validate_authority();components['forward_prep_contract']=validate_forward_prep();components['forward_prep_harness']=validate_forward_harness();components['workflow_consumption']=validate_workflows_and_consumption()
     for k,v in components.items():
         if not v.get('passed',True): errors += [k+': '+x for x in v.get('errors',[])]
     t11=graduation('T11','ASSIGNED');components['t11_assignment_graduation']=t11
