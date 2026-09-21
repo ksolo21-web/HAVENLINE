@@ -270,6 +270,66 @@ class ProgressionContractTests(unittest.TestCase):
                 MODULE.load_split_manifest(levels_path, milestones_path)
 
 
+    def test_global_spend_gate_fails(self):
+        manifest = make_valid_manifest()
+        manifest["purchase_history"] = {"minimum_usd": 1}
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("forbidden spend/energy eligibility key anywhere" in error for error in result["errors"]))
+
+    def test_unvalidated_extra_level_field_fails(self):
+        manifest = make_valid_manifest()
+        manifest["levels"][4]["bonus_xp"] = 50
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("unvalidated extra fields" in error for error in result["errors"]))
+
+    def test_unvalidated_extra_milestone_field_fails(self):
+        manifest = make_valid_manifest()
+        manifest["milestones"][0]["hidden_gate"] = True
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("unvalidated extra fields" in error for error in result["errors"]))
+
+    def test_split_shipping_file_rejects_extra_top_level_field(self):
+        import tempfile
+        manifest = make_valid_manifest()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            levels_path = root / "progression_levels_v1.json"
+            milestones_path = root / "progression_milestones_v1.json"
+            levels_path.write_text(json.dumps({
+                "schema_version": 1,
+                "task_id": "T12",
+                "levels": manifest["levels"],
+                "vip_status": "none",
+            }))
+            milestones_path.write_text(json.dumps({
+                "schema_version": 1,
+                "task_id": "T12",
+                "milestones": manifest["milestones"],
+            }))
+            with self.assertRaises(ValueError):
+                MODULE.load_split_manifest(levels_path, milestones_path)
+
+    def test_split_shipping_file_rejects_bare_array(self):
+        import tempfile
+        manifest = make_valid_manifest()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            levels_path = root / "progression_levels_v1.json"
+            milestones_path = root / "progression_milestones_v1.json"
+            levels_path.write_text(json.dumps(manifest["levels"]))
+            milestones_path.write_text(json.dumps({
+                "schema_version": 1,
+                "task_id": "T12",
+                "milestones": manifest["milestones"],
+            }))
+            with self.assertRaises(ValueError):
+                MODULE.load_split_manifest(levels_path, milestones_path)
+
+
+
 class PreparationBindingTests(unittest.TestCase):
     def test_upstream_binding_states_are_truthful(self):
         path = ROOT / "Docs" / "Production" / "T12" / "UPSTREAM_BINDINGS.json"
