@@ -45,6 +45,13 @@ def validate_workflows_and_consumption():
     if 'Production Architecture V3.2 parallel/resumable rule' not in agents: errors.append('AGENTS missing V3.2 mandatory rule')
     shared_control=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
     if 'failure_learning.py propose' not in shared_control or 'failure-learning-after-c0' not in shared_control: errors.append('shared control missing post-C0 failure-learning staging')
+    governance_path=ROOT/'.github/workflows/havenline-production-governance.yml'
+    if not governance_path.exists():
+        errors.append('missing top-level production governance workflow')
+    else:
+        governance=governance_path.read_text()
+        for token in ('t11_lineage_builder','integration_sha','task_graduation_gate.py T11 --target ASSIGNED --builder-head "$t11_lineage_builder" --integration-head "$integration_sha"','forward_task_control.py plan T11 --target ASSIGNED --builder "$t11_lineage_builder" --integration "$integration_sha"'):
+            if token not in governance: errors.append('top-level governance missing exact T11 lineage binding: '+token)
     fi=json.loads((DOCS/'FAILURE_INTELLIGENCE.json').read_text());ids={x.get('id') for x in fi.get('records',[])}
     for rid in ('FI-T10-001','FI-T10-002','FI-T10-003','FI-T10-004','FI-T10-005','FI-T10-006'):
         if rid not in ids: errors.append('missing promoted T10 lesson '+rid)
