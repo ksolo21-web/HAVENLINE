@@ -50,8 +50,12 @@ def main():
  drifts=[]
  for key in ("thermal_proxy_drift_ms","drift_ms"):
   if isinstance(bench.get(key),(int,float)):drifts.append(float(bench[key]))
- for row in bench.get("cycles",[]):
-  if isinstance(row,dict) and isinstance(row.get("thermal_proxy_drift_ms"),(int,float)):drifts.append(float(row["thermal_proxy_drift_ms"]))
+ cycles=bench.get("cycles",[])
+ if isinstance(cycles,list):
+  for row in cycles:
+   if isinstance(row,dict) and isinstance(row.get("thermal_proxy_drift_ms"),(int,float)):drifts.append(float(row["thermal_proxy_drift_ms"]))
+ elif not isinstance(cycles,int):
+  raise ValueError("invalid benchmark cycles schema")
  if not 0<=duty<1:raise ValueError("invalid active duty fraction")
  if drifts and max(drifts)>0:raise ValueError("positive thermal timing drift")
  thermal_margin=max(0.0,min(1.0,1.0-duty))
