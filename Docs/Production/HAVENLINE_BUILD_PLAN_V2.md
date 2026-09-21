@@ -12,7 +12,9 @@
 - T06 is APPROVED at accepted isolated source `47f86fae25b099abb5c7096c37ca7495453b2b8f`, integrated at `91f35f331aaabe2b1785b10c0d911f20da6f12d9`; 19 suites / 1345 checks, exact runtime-review identity, exhaustive motion/surface evidence, C1 9.42, C2 9.42, C5 9.31 and fresh C6 passed.
 - T07 is APPROVED at accepted isolated source `0a30dc0859541626eb6aa9a9bb749abc93dcb355`, integrated at `94b3f6c5097356a3857ebd13a77fb1e316eb06ae`; 21 suites / 1441 checks, exact-source visual/device/save/performance evidence, C2 9.46, C3 9.68, C4 9.24, C6 9.53 and C11 9.18 passed.
 - T08 is APPROVED at exact integrated source `9d56ea8ae972d0a0705ff8b985e13fab31dde493`; 23 suites / 1535 checks, 44/44 locked frames, both locked recordings, exact route/conservation evidence, C2 9.55, C3 9.48, C4 9.52 and C6 9.61 passed.
-- T09 is APPROVED. Exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0 passed 17 suites / 1006 checks, 7/7 save cases, 6/6 device cases, 1193/1193 indexed hashes, G1-G14, and fresh independent C2/C3/C4/C5/C6 review with every mandatory dimension strictly above 9.0 and zero unresolved defects. T10+ remains LOCKED.
+- T09 is APPROVED. Exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0 passed 17 suites / 1006 checks, 7/7 save cases, 6/6 device cases, 1193/1193 indexed hashes, G1-G14, and fresh independent C2/C3/C4/C5/C6 review with every mandatory dimension strictly above 9.0 and zero unresolved defects.
+- T10 World Transformation Framework is APPROVED at exact integrated source `eba0107def258824549fb10d81785290d0c81d97`; fresh impacted regression passed 7 suites / 653 checks, 7/7 save cases, 216/216 device projections and 36/36 native-4K captures. C1/C2/C3/C4 passed on the current candidate, C6/C7 were preserved under critic-specific invalidation with audited invariant proof, minimum mandatory dimension 9.350213966238757, zero unresolved defects.
+- T11 Camp construction and visual upgrade system is PREPARED on `havenline/T11-camp-construction` from T10 approval commit `87a4346eb33473c3723c7b7c1bbf1dd04dba9131`. T12+ remains dependency-gated.
 - Forward intermediate PASS requires every applicable mandatory reviewed dimension to be **strictly > 9.0 unrounded**, every mandatory gate to pass, and zero unresolved mandatory defects. Target remains 10/10.
 
 ## Permanent Havenline product contract
@@ -92,8 +94,8 @@ Only the integration owner may integrate production candidates into the integrat
 | T07 | Havenline Simple Control & Context Director | APPROVED |
 | T08 | Visible inventory, physical carrying and transfers | APPROVED |
 | T09 | Harvesting and automatic acquisition | APPROVED |
-| T10 | World Transformation Framework | LOCKED |
-| T11 | Camp construction and visual upgrade system | LOCKED |
+| T10 | World Transformation Framework | APPROVED |
+| T11 | Camp construction and visual upgrade system | PREPARED |
 | T12 | Level 1–100 progression architecture | LOCKED |
 | T13 | Progressive Difficulty & spend-blind Challenge Director | LOCKED |
 | T14 | Save-state/versioning foundation | LOCKED |
@@ -154,16 +156,18 @@ Only the integration owner may integrate production candidates into the integrat
 | T69 | Sustained native 4K/60 tablet/foldable evidence | LOCKED |
 | T70 | Final production release handoff | LOCKED |
 
-Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. Mandatory forward scope overlays for resource/tool/actor/animation behavior are machine-authoritative in `TASK_SCOPE_OVERRIDES.json` and the three contract registries. T01–T08 accepted records remain authoritative; T08 closure is recorded in `Docs/Production/T08/verified-completion.json`.
+Detailed dependencies and critic applicability are machine-authoritative in `DEPENDENCY_GRAPH.json` and `CRITIC_MATRIX.json`. Mandatory forward scope overlays for resource/tool/actor/animation behavior are machine-authoritative in `TASK_SCOPE_OVERRIDES.json` and the three contract registries. T01–T10 accepted records remain authoritative; T10 closure is recorded in `Docs/Production/T10/verified-completion.json`.
 
-## Wave checkpoint after T08 approval
+## Wave checkpoint after T10 approval
 
 - **Completed A / T04** — approved camera/composition; preserve its accepted source.
 - **Completed B / T05** — approved station/prop kit; preserve accepted source `fa6fa70f154f3757d22303522ca3f6de2c3d391f`.
 - **Completed C / T06** — approved Character 1 motion/contact foundation; preserve accepted source `47f86fae25b099abb5c7096c37ca7495453b2b8f` and integrated source `91f35f331aaabe2b1785b10c0d911f20da6f12d9`.
 - **Completed D / T07** — deterministic simple-control/context director is APPROVED; preserve accepted source `0a30dc0859541626eb6aa9a9bb749abc93dcb355` and integrated source `94b3f6c5097356a3857ebd13a77fb1e316eb06ae`.
 - **Completed E / T08** — visible inventory, carrying and transfers is APPROVED at exact integrated source `9d56ea8ae972d0a0705ff8b985e13fab31dde493`; preserve its 23-suite / 1535-check closure, complete locked-reference review and strict C2/C3/C4/C6 approval.
-- **Completed F / T09** — Exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0 passed 17 suites / 1006 checks, 7/7 save cases, 6/6 device cases, 1193/1193 indexed hashes, G1-G14, and fresh independent C2/C3/C4/C5/C6 review with every mandatory dimension strictly above 9.0 and zero unresolved defects. T10+ remains LOCKED.
+- **Completed F / T09** — Exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0 passed 17 suites / 1006 checks, 7/7 save cases, 6/6 device cases, 1193/1193 indexed hashes, G1-G14, and fresh independent C2/C3/C4/C5/C6 review with every mandatory dimension strictly above 9.0 and zero unresolved defects.
+- **Completed G / T10** — World Transformation Framework is APPROVED at exact integrated source `eba0107def258824549fb10d81785290d0c81d97`; preserve its verified completion, C1/C2/C3/C4 current-candidate passes, C6/C7 preservation proof, and fresh integrated regression.
+- **Prepared H / T11** — Camp construction and visual upgrade system is PREPARED on `havenline/T11-camp-construction`; it may move to ASSIGNED before runtime construction. T12+ remains dependency-gated.
 - **Workstream Q** — QA/automation/integration infrastructure only.
 
 These workstreams may build in parallel only after T03 is APPROVED and the registry assigns disjoint path ownership. Integration remains serial and integration-owner-controlled.
