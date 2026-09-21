@@ -18,8 +18,8 @@ jobs:
       artifact_name: ${{ steps.wait.outputs.artifact_name }}
     env:
       GH_TOKEN: ${{ github.token }}
-      SOURCE_RUN: '35582241008'
-      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
+      SOURCE_RUN: '35582458599'
+      CANDIDATE: '7eccdac8928e59812d7991d2f2da93eb6b8ebf18'
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
@@ -65,8 +65,8 @@ jobs:
         critic: [C1, C2]
         slice: [0, 1, 2, 3]
     env:
-      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
-      SOURCE_RUN: '35582241008'
+      CANDIDATE: '7eccdac8928e59812d7991d2f2da93eb6b8ebf18'
+      SOURCE_RUN: '35582458599'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
@@ -122,8 +122,8 @@ jobs:
       matrix:
         critic: [C1, C2]
     env:
-      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
-      SOURCE_RUN: '35582241008'
+      CANDIDATE: '7eccdac8928e59812d7991d2f2da93eb6b8ebf18'
+      SOURCE_RUN: '35582458599'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
@@ -162,8 +162,8 @@ jobs:
       matrix:
         critic: [C3, C7]
     env:
-      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
-      SOURCE_RUN: '35582241008'
+      CANDIDATE: '7eccdac8928e59812d7991d2f2da93eb6b8ebf18'
+      SOURCE_RUN: '35582458599'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
@@ -224,8 +224,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 85
     env:
-      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
-      SOURCE_RUN: '35582241008'
+      CANDIDATE: '7eccdac8928e59812d7991d2f2da93eb6b8ebf18'
+      SOURCE_RUN: '35582458599'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
@@ -286,8 +286,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
-      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
-      SOURCE_RUN: '35582241008'
+      CANDIDATE: '7eccdac8928e59812d7991d2f2da93eb6b8ebf18'
+      SOURCE_RUN: '35582458599'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
@@ -319,8 +319,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
-      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
-      SOURCE_RUN: '35582241008'
+      CANDIDATE: '7eccdac8928e59812d7991d2f2da93eb6b8ebf18'
+      SOURCE_RUN: '35582458599'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
