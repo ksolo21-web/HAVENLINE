@@ -22,27 +22,46 @@ def make_valid_manifest():
         band_start = ((level - 1) // 10) * 10 + 1
         relative = (level - 1) % 10 + 1
         visible = relative in (3, 6, 9, 10)
-        level_id = f"level_{level:03d}"
+        level_id = f"t12.level.{level:03d}"
+        band_id = {
+            1: "band_opening_frozen",
+            11: "band_forest",
+            21: "band_desert",
+            31: "band_underwater",
+            41: "band_sky",
+            51: "band_volcanic",
+            61: "band_swamp",
+            71: "band_ruins",
+            81: "band_underground",
+            91: "band_alien",
+        }[band_start]
+        visible_id = f"t12.visible.{level:03d}"
+        milestone_id = f"t12.milestone.major_{level:03d}"
         levels.append({
             "level": level,
             "level_id": level_id,
-            "region_band_id": f"band_{band_start:03d}_{band_start + 9:03d}",
-            "prerequisite_level_ids": [] if level == 1 else [f"level_{level - 1:03d}"],
-            "progression_effects": [{"kind": "practical_hook", "owner_task": "future-owner"}],
-            "visible_progression_hook_ids": [f"visible_{level:03d}"] if visible else [],
-            "milestone_ids": [f"major_{level:03d}"] if relative == 10 else [],
-            "one_time_event_ids": [f"event_{level:03d}"],
+            "region_band_id": band_id,
+            "prerequisite_level_ids": [] if level == 1 else [f"t12.level.{level - 1:03d}"],
+            "required_fact_ids": [f"t12.fact.level_{level:03d}"],
+            "progression_effects": [{
+                "kind": "practical_hook",
+                "effect_id": f"t12.effect.level_{level:03d}",
+                "owner_task": "future-owner",
+            }],
+            "visible_progression_hook_ids": [visible_id] if visible else [],
+            "milestone_ids": [milestone_id] if relative == 10 else [],
+            "one_time_event_ids": [f"t12.event.level_{level:03d}"],
         })
         if relative == 10:
             milestones.append({
-                "milestone_id": f"major_{level:03d}",
+                "milestone_id": milestone_id,
                 "level": level,
                 "kind": "major",
-                "progression_hook_ids": [f"visible_{level:03d}"],
+                "progression_hook_ids": [visible_id],
                 "visible_change_required": True,
                 "owner_task": "future-owner",
             })
-    return {"schema_version": 1, "levels": levels, "milestones": milestones}
+    return {"schema_version": 1, "task_id": "T12", "levels": levels, "milestones": milestones}
 
 
 class ProgressionContractTests(unittest.TestCase):
@@ -71,8 +90,8 @@ class ProgressionContractTests(unittest.TestCase):
 
     def test_cycle_fails(self):
         manifest = make_valid_manifest()
-        manifest["levels"][1]["prerequisite_level_ids"] = ["level_003"]
-        manifest["levels"][2]["prerequisite_level_ids"] = ["level_002"]
+        manifest["levels"][1]["prerequisite_level_ids"] = ["t12.level.003"]
+        manifest["levels"][2]["prerequisite_level_ids"] = ["t12.level.002"]
         result = validate_manifest(manifest)
         self.assertFalse(result["passed"])
         self.assertTrue(any("cycle" in error for error in result["errors"]))
@@ -113,6 +132,56 @@ class ProgressionContractTests(unittest.TestCase):
         result = validate_manifest(manifest)
         self.assertFalse(result["passed"])
         self.assertTrue(any("provisional hook/event ID" in error for error in result["errors"]))
+
+    def test_noncanonical_level_id_fails(self):
+        manifest = make_valid_manifest()
+        manifest["levels"][11]["level_id"] = "level_012"
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("level_id must be canonical" in error for error in result["errors"]))
+
+    def test_missing_required_fact_field_fails(self):
+        manifest = make_valid_manifest()
+        del manifest["levels"][20]["required_fact_ids"]
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("missing required fields" in error for error in result["errors"]))
+
+    def test_wrong_region_band_fails(self):
+        manifest = make_valid_manifest()
+        manifest["levels"][24]["region_band_id"] = "band_forest"
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("region_band_id must be band_desert" in error for error in result["errors"]))
+
+    def test_forward_prerequisite_fails(self):
+        manifest = make_valid_manifest()
+        manifest["levels"][1]["prerequisite_level_ids"] = ["t12.level.003"]
+        manifest["levels"][2]["prerequisite_level_ids"] = ["t12.level.001"]
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("not earlier in the ordered progression" in error for error in result["errors"]))
+
+    def test_duplicate_adjacent_effect_payload_fails(self):
+        manifest = make_valid_manifest()
+        manifest["levels"][9]["progression_effects"] = copy.deepcopy(manifest["levels"][8]["progression_effects"])
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("duplicate progression_effects payload" in error for error in result["errors"]))
+
+    def test_unresolved_milestone_reference_fails(self):
+        manifest = make_valid_manifest()
+        manifest["levels"][9]["milestone_ids"] = ["t12.milestone.missing"]
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("milestone reference does not resolve" in error for error in result["errors"]))
+
+    def test_milestone_schema_fails_closed(self):
+        manifest = make_valid_manifest()
+        manifest["milestones"][0]["visible_change_required"] = "yes"
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("visible_change_required must be boolean" in error for error in result["errors"]))
 
 
 class PreparationBindingTests(unittest.TestCase):
