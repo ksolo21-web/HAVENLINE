@@ -190,8 +190,9 @@ def validate_packet(data: dict[str, Any], require_resolved: bool = False) -> dic
         for dep in ("T10", "T11"):
             if not exact_sha(upstream.get(dep)):
                 errors.append(f"resolved upstream {dep} must be exact 40-hex SHA")
-        if not nonempty(source.get("validator_source")):
-            errors.append("resolved validator_source is required")
+        validator_source = source.get("validator_source")
+        if not isinstance(validator_source, str) or re.fullmatch(r"sha256:[0-9a-f]{64}", validator_source) is None:
+            errors.append("resolved validator_source must be exact sha256:<64-lowercase-hex>")
 
         for name, row in reports.items():
             if row.get("status") != "PASS" or not nonempty(row.get("evidence_ref")):
