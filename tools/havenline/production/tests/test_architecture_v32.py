@@ -2,7 +2,7 @@ import hashlib,json,sys,tempfile,unittest
 from pathlib import Path
 PROD=Path(__file__).resolve().parents[1];ROOT=Path(__file__).resolve().parents[4]
 sys.path.insert(0,str(PROD))
-import architecture_v32,branch_budget,critic_invalidation,critic_package_preflight,execution_checkpoint,parallel_preparation_planner,performance_ledger,rolling_canary,task_graduation_gate,timeout_stage_plan,blocker_family_gate
+import architecture_v32,authority_consistency,branch_budget,critic_invalidation,critic_package_preflight,execution_checkpoint,forward_prep_contract,parallel_preparation_planner,performance_ledger,rolling_canary,task_graduation_gate,timeout_stage_plan,blocker_family_gate
 
 SHA='a'*40
 class V32Tests(unittest.TestCase):
@@ -49,6 +49,9 @@ class V32Tests(unittest.TestCase):
   c12={x['canary'] for x in rolling_canary.requirements('T12')['canaries']};self.assertIn('level_1_100_reachability',c12)
  def test_branch_and_performance_ledgers_validate(self):
   self.assertTrue(branch_budget.validate()['passed']);self.assertTrue(performance_ledger.validate()['passed'])
+ def test_authority_and_forward_prep_contracts(self):
+  self.assertTrue(authority_consistency.validate()['passed'])
+  prep=forward_prep_contract.validate();self.assertTrue(prep['passed']);self.assertGreaterEqual(prep['prep_task_count'],20)
  def test_full_v32_validator(self):
   out=architecture_v32.validate();self.assertTrue(out['passed'],out);self.assertEqual(60,out['task_count'])
 if __name__=='__main__':unittest.main()
