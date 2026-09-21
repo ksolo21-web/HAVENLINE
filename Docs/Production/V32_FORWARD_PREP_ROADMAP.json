@@ -270,5 +270,265 @@
       "memory",
       "non_certification"
     ]
+  },
+  "task_canary_domains": {
+    "T12": [
+      "progression"
+    ],
+    "T13": [
+      "difficulty"
+    ],
+    "T14": [
+      "save_versioning"
+    ],
+    "T15": [
+      "population"
+    ],
+    "T16": [
+      "action_arbitration"
+    ],
+    "T17": [
+      "action_arbitration"
+    ],
+    "T18": [
+      "action_arbitration"
+    ],
+    "T19": [
+      "action_arbitration"
+    ],
+    "T20": [
+      "action_arbitration"
+    ],
+    "T21": [
+      "action_arbitration"
+    ],
+    "T22": [
+      "action_arbitration"
+    ],
+    "T23": [
+      "action_arbitration"
+    ],
+    "T24": [
+      "motion_readiness"
+    ],
+    "T25": [
+      "motion_readiness"
+    ],
+    "T26": [
+      "motion_readiness"
+    ],
+    "T27": [
+      "motion_readiness"
+    ],
+    "T28": [
+      "motion_readiness"
+    ],
+    "T29": [
+      "motion_readiness"
+    ],
+    "T30": [
+      "motion_readiness"
+    ],
+    "T33": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T34": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T35": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T36": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T37": [
+      "transaction_security",
+      "liveops_clock",
+      "external_capabilities"
+    ],
+    "T38": [
+      "liveops_clock",
+      "external_capabilities"
+    ],
+    "T39": [
+      "liveops_clock",
+      "external_capabilities"
+    ],
+    "T40": [
+      "liveops_clock",
+      "external_capabilities"
+    ],
+    "T41": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T42": [
+      "external_capabilities"
+    ],
+    "T43": [
+      "transaction_security",
+      "external_capabilities"
+    ],
+    "T44": [
+      "region_template"
+    ],
+    "T45": [
+      "region_template"
+    ],
+    "T46": [
+      "region_template"
+    ],
+    "T47": [
+      "region_template"
+    ],
+    "T48": [
+      "region_template"
+    ],
+    "T49": [
+      "region_template"
+    ],
+    "T50": [
+      "region_template"
+    ],
+    "T51": [
+      "region_template"
+    ],
+    "T52": [
+      "region_template"
+    ],
+    "T53": [
+      "region_template"
+    ],
+    "T55": [
+      "accessibility_device"
+    ],
+    "T56": [
+      "accessibility_device"
+    ],
+    "T58": [
+      "accessibility_device"
+    ],
+    "T68": [
+      "physical_reconnaissance"
+    ],
+    "T69": [
+      "physical_reconnaissance"
+    ],
+    "T70": [
+      "physical_reconnaissance",
+      "external_capabilities"
+    ]
+  },
+  "external_capability_milestones": {
+    "authoritative_backend": {
+      "prepare_by": "T24",
+      "required_by": [
+        "T33",
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T41",
+        "T43",
+        "T64",
+        "T65",
+        "T66"
+      ],
+      "reason": "Backend authority underpins economy, security, LiveOps and identity."
+    },
+    "google_play_billing_sandbox": {
+      "prepare_by": "T28",
+      "required_by": [
+        "T35",
+        "T36",
+        "T64",
+        "T65"
+      ],
+      "reason": "Billing sandbox and entitlement recovery should be proven before store implementation."
+    },
+    "remote_config_backend": {
+      "prepare_by": "T30",
+      "required_by": [
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T65"
+      ],
+      "reason": "LiveOps scheduling and kill switch require remote-config authority."
+    },
+    "telemetry_backend": {
+      "prepare_by": "T34",
+      "required_by": [
+        "T42"
+      ],
+      "reason": "Privacy-safe telemetry sink should exist before telemetry integration."
+    },
+    "google_signin_oauth": {
+      "prepare_by": "T34",
+      "required_by": [
+        "T43"
+      ],
+      "reason": "OAuth package/signing identity must be proven before identity integration."
+    },
+    "cloud_backend": {
+      "prepare_by": "T34",
+      "required_by": [
+        "T43"
+      ],
+      "reason": "Cloud continuity/recovery requires a proven backend."
+    },
+    "platform_achievement_backend": {
+      "prepare_by": "T48",
+      "required_by": [
+        "T57"
+      ],
+      "reason": "Achievement/milestone service should be ready before T57."
+    },
+    "physical_phone_4k60": {
+      "prepare_by": "T32",
+      "required_by": [
+        "T68",
+        "T70"
+      ],
+      "reason": "Early named-device reconnaissance protects final 4K/60 certification."
+    },
+    "physical_tablet_foldable_4k60": {
+      "prepare_by": "T32",
+      "required_by": [
+        "T69",
+        "T70"
+      ],
+      "reason": "Early tablet/foldable reconnaissance protects final certification."
+    },
+    "release_signing_identity": {
+      "prepare_by": "T58",
+      "required_by": [
+        "T70"
+      ],
+      "reason": "Release signing must be proven well before handoff without committing secrets."
+    },
+    "store_release_access": {
+      "prepare_by": "T58",
+      "required_by": [
+        "T70"
+      ],
+      "reason": "Store/release-channel access must be proven before final handoff."
+    }
+  },
+  "packet_policy": {
+    "dynamic_generated_not_lifecycle_authority": true,
+    "allowed_output": "stdout or temporary/evidence workspace",
+    "may_not_change_task_status": true,
+    "may_not_grant_ownership": true,
+    "may_not_integrate_runtime": true,
+    "strict_quality_rule_preserved": true
   }
 }
