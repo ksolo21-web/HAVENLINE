@@ -13,9 +13,10 @@
         "owned_path_reservation",
         "activation_checklist",
         "critic_contract",
-        "no_required_external_blocker"
+        "no_required_external_blocker",
+        "control_plane_lineage"
       ],
-      "rule": "Ownership may be claimed only after all requirements pass."
+      "rule": "Ownership may be claimed only after all requirements pass, including proof that the authoritative integration/control-plane head is an ancestor of the builder head."
     },
     "ASSIGNED_to_BUILDING_ISOLATED": {
       "required": [
@@ -69,5 +70,21 @@
     "mode: review",
     "evidence_artifact_prefix:",
     "output_artifact_prefix:"
-  ]
+  ],
+  "governance_only_base_drift_may_skip_control_plane_sync": false,
+  "assignment_lineage_policy": {
+    "current_integration_must_be_ancestor_of_builder": true,
+    "exact_builder_head_required": true,
+    "exact_integration_head_required": true,
+    "governance_only_drift_preserves_prepared_runtime_work": true,
+    "governance_only_drift_still_requires_control_plane_sync": true,
+    "runtime_or_contract_drift_requires_reconciliation": true,
+    "claim_binding_fields": [
+      "assignment_integration_commit",
+      "assignment_branch_head",
+      "assignment_lineage_state"
+    ]
+  },
+  "assignment_claim_tool": "tools/havenline/production/v32_assignment_claim.py",
+  "legacy_assignment_claim_for_t11_t70_forbidden": true
 }

@@ -163,13 +163,15 @@ T10+ work. V3.1 does not replace V3; it adds factory hardening.
 For T11+ run `python3 tools/havenline/production/architecture_v32.py readiness Txx` before assignment/build work.
 
 - Safe future work may proceed in parallel only as PREP_NOW / BUILD_WHEN_UNLOCKED preparation; it cannot integrate or claim approval early.
-- PREPARED -> ASSIGNED requires `task_graduation_gate.py Txx --target ASSIGNED`.
-- ASSIGNED -> BUILDING_ISOLATED requires `GRADUATION.json`, the early sentinel, focused tests, task workflow, execution checkpoint, timeout stage plan and critic-package preflight.
+- PREPARED -> ASSIGNED requires exact builder/integration lineage proof: the authoritative integration/control-plane head must be an ancestor of the builder head. Use `task_graduation_gate.py Txx --target ASSIGNED --builder-head <SHA> --integration-head <SHA>`; registry metadata alone is not proof.
+- For T11-T70, the integration owner must perform the actual ASSIGNED claim through `v32_assignment_claim.py`, which independently resolves the named remote builder/integration tips and records the exact assignment binding. Do not use the legacy `workstream.py claim --status ASSIGNED` path for forward V3.2 tasks.
+- Governance-only drift may preserve frozen scope and prepared/runtime work, but it never waives control-plane synchronization. No runtime reset does not mean no synchronization.
+- ASSIGNED -> BUILDING_ISOLATED requires the candidate to retain the recorded assignment integration binding plus `GRADUATION.json`, the early sentinel, focused tests, task workflow, execution checkpoint, timeout stage plan and critic-package preflight.
 - Every active task keeps a resumable `execution_checkpoint.py` record. TIMEOUT is infrastructure evidence by default and resumes from the last completed stage on the same exact SHA.
 - Use `timeout_stage_plan.py` to keep preflight, domain/matrix, regression/performance, evidence, critics, integration and closeout independently resumable.
 - Three blockers on one frozen candidate trigger `blocker_family_gate.py`; stop serial symptom IDs and reconcile causal families before another build.
 - Every T11+ task workflow must use `.github/workflows/havenline-v32-task-preflight.yml` as the shared control plane: `mode: preflight` before expensive build work, `mode: review` after specialist evidence is packaged, and `mode: failure` under `if: failure()` for task-local terminal failures. Do not reimplement those cross-task controls ad hoc.
-- The shared control plane binds exact candidate/integration SHA, graduation, branch budget, proof fingerprints, synthetic-merge/contract checks, checkpoint resume state, critic-package preflight, specialist fan-out and C0 routing. Task-specific workflows still own actual gameplay sentinel/domain/performance/C1/C2/C6/C9 work.
+- The shared control plane binds exact builder/candidate/integration SHA lineage, graduation, branch budget, proof fingerprints, synthetic-merge/contract checks, checkpoint resume state, critic-package preflight, specialist fan-out and C0 routing. Task-specific workflows still own actual gameplay sentinel/domain/performance/C1/C2/C6/C9 work.
 - Applicable specialist critics fan out on one frozen SHA. Use `critic_invalidation.py` so same-SHA unaffected critics remain valid; changed source SHA still requires fresh exact-source review.
 - Run rolling canaries early and maintain cumulative performance headroom. Early canaries never replace T32/T55/T58/T62/T68/T69 formal acceptance.
 - Branch budget: one authoritative task branch plus at most one active bounded repair branch; prototypes are disposable.

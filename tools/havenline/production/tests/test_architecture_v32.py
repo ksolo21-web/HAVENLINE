@@ -1,4 +1,4 @@
-import hashlib,json,re,sys,tempfile,unittest
+import hashlib,json,re,subprocess,sys,tempfile,unittest
 from pathlib import Path
 
 PROD=Path(__file__).resolve().parents[1]
@@ -11,6 +11,7 @@ import blocker_family_gate
 import branch_budget
 import critic_invalidation
 import critic_package_preflight
+import control_plane_lineage
 import execution_checkpoint
 import forward_prep_contract
 import forward_task_control
@@ -21,14 +22,26 @@ import performance_ledger
 import rolling_canary
 import task_graduation_gate
 import timeout_stage_plan
+import v32_assignment_claim
 
 SHA='a'*40
 
 class V32Tests(unittest.TestCase):
  def test_t11_assignment_graduation_is_valid(self):
-  out=task_graduation_gate.evaluate('T11','ASSIGNED')
+  head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+  stale='fbb81ae34b9053f17fc937fb7e67895e3ef0584b'
+  stale_lineage=control_plane_lineage.assess(stale,head)
+  self.assertFalse(stale_lineage['passed'],stale_lineage)
+  self.assertTrue(stale_lineage['control_plane_sync_required'],stale_lineage)
+  self.assertTrue(stale_lineage['governance_only_drift'],stale_lineage)
+  self.assertFalse(stale_lineage['runtime_reset_required'],stale_lineage)
+  stale_gate=task_graduation_gate.evaluate('T11','ASSIGNED',stale,head)
+  self.assertFalse(stale_gate['passed'],stale_gate)
+  self.assertFalse(stale_gate['checks']['control_plane_lineage'],stale_gate)
+  out=task_graduation_gate.evaluate('T11','ASSIGNED',head,head)
   self.assertTrue(out['passed'],out)
-  build=task_graduation_gate.evaluate('T11','BUILDING_ISOLATED')
+  self.assertTrue(out['checks']['control_plane_lineage'],out)
+  build=task_graduation_gate.evaluate('T11','BUILDING_ISOLATED',head,head)
   manifest=ROOT/'Docs/Production/T11/GRADUATION.json'
   self.assertEqual(manifest.exists(),build['passed'],build)
 
@@ -196,15 +209,43 @@ class V32Tests(unittest.TestCase):
     self.assertRegex(ref,r'^[0-9a-f]{40}$',rel)
 
  def test_shared_forward_task_control_is_fail_closed_and_partitions_critics(self):
-  out=forward_task_control.plan('T11','ASSIGNED')
+  head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+  stale=forward_task_control.plan('T11','ASSIGNED',builder='fbb81ae34b9053f17fc937fb7e67895e3ef0584b',integration=head)
+  self.assertFalse(stale['passed'],stale)
+  out=forward_task_control.plan('T11','ASSIGNED',builder=head,integration=head)
   self.assertTrue(out['passed'],out)
   self.assertEqual(['C3','C4'],out['critic_plan']['specialist_fanout'])
   self.assertEqual(['C2'],out['critic_plan']['reference_specific'])
   self.assertEqual(['C6'],out['critic_plan']['deterministic'])
-  blocked=forward_task_control.plan('T11','BUILDING_ISOLATED')
+  blocked=forward_task_control.plan('T11','BUILDING_ISOLATED',builder=head,integration=head)
   self.assertFalse(blocked['passed'])
   self.assertTrue(any('explicit exact candidate SHA' in x for x in blocked['errors']))
   self.assertTrue(forward_task_control.validate_all()['passed'])
+
+ def test_assignment_claim_binds_actual_remote_branch_tips(self):
+  head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+  stale=v32_assignment_claim.validate_assignment('T11','havenline/T11-camp-construction','fbb81ae34b9053f17fc937fb7e67895e3ef0584b',head,verify_remote=False,base=head)
+  self.assertFalse(stale['passed'],stale)
+  wrong_base=v32_assignment_claim.validate_assignment('T11','havenline/T11-camp-construction',head,head,verify_remote=False,base='fbb81ae34b9053f17fc937fb7e67895e3ef0584b')
+  self.assertFalse(wrong_base['passed'],wrong_base)
+  synced=v32_assignment_claim.validate_assignment('T11','havenline/T11-camp-construction',head,head,verify_remote=False,base=head)
+  self.assertTrue(synced['passed'],synced)
+  state=v32_assignment_claim.proposed_assignment_state('T11','camp-construction-builder','havenline/T11-camp-construction','@reservation:T11',head,head)
+  row=next(w for w in state['registry']['workstreams'] if w['task_id']=='T11')
+  self.assertEqual('ASSIGNED',row['status'])
+  self.assertEqual(head,row['base_commit'])
+  self.assertEqual(head,row['assignment_integration_commit'])
+  self.assertEqual(head,row['assignment_branch_head'])
+  self.assertIn('@reservation:T10',row['protected_paths'])
+  self.assertEqual('ASSIGNED',state['graph']['tasks']['T11']['status'])
+  owner=next(x for x in state['ownership']['active_owners'] if x['task_id']=='T11')
+  self.assertEqual(head,owner['base_commit'])
+  self.assertEqual('ASSIGNED',owner['status'])
+  self.assertEqual(head,state['gates']['active_base_integration_commit'])
+  self.assertEqual('ASSIGNED',state['gates']['active_status'])
+  body=(ROOT/'tools/havenline/production/v32_assignment_claim.py').read_text()
+  for token in ('remote_branch_head','actual_builder','actual_integration','WORKSTREAM_REGISTRY.json','DEPENDENCY_GRAPH.json','PATH_OWNERSHIP.json','task-gates.json','assignment_integration_commit','assignment_branch_head','assignment_lineage_state'):
+   self.assertIn(token,body)
 
  def test_shared_workflow_avoids_expression_flow_maps(self):
   body=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
@@ -216,7 +257,7 @@ class V32Tests(unittest.TestCase):
 
  def test_shared_workflow_contains_preflight_review_failure_modes(self):
   body=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
-  for token in ('mode:','preflight','review','failure','forward_task_control.py','critic_package_preflight.py','havenline-v32-specialist-fanout.yml','havenline-c0-root-cause.yml','cancel-in-progress: false'):
+  for token in ('mode:','preflight','review','failure','builder_sha','lineage_head','control_plane_lineage.py','forward_task_control.py','critic_package_preflight.py','havenline-v32-specialist-fanout.yml','havenline-c0-root-cause.yml','cancel-in-progress: false'):
    self.assertIn(token,body)
 
  def test_gate_result_proposals_require_owner_promotion(self):

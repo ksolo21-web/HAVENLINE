@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "architecture_version": "3.2",
+  "record_type": "exact_owner_authorization_overlay",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "APPROVED_EXACT_C0R_THRESHOLD_POLICY_PROJECTION",
+  "reason": "Decouple immutable quality-threshold proof from mutable lifecycle metadata after T11 activation. This changes only the digest scope from whole CRITIC_MATRIX/task-gates files to their forward_acceptance policy objects. It does not change any score threshold, reviewer authority, repair authorization, gameplay runtime, or T10 approval.",
+  "legacy_authorization": "Docs/Production/ChangeRequests/T10-c0r-structured-mechanism-detection.json",
+  "target_paths": [
+    "tools/havenline/production/repair_sufficiency_critic.py",
+    "tools/havenline/production/tests/test_repair_sufficiency_critic.py"
+  ],
+  "exact_git_blobs": {
+    "tools/havenline/production/repair_sufficiency_critic.py": "863a2491525157f292b607e611e39ae446f71505",
+    "tools/havenline/production/tests/test_repair_sufficiency_critic.py": "e6a6928f613302a262dbef1f17ba791a37e812d8"
+  },
+  "threshold_policy": {
+    "critic_matrix_forward_acceptance_sha256": "4458f680dffc8212f0c8e53343d0cf61249a85a338d56cd2a4e218ddbe075f37",
+    "task_gates_forward_acceptance_sha256": "368e64886f7ead3fe371e52e5de439ff0890faa1868c4ce688aa315f025950f0",
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9,
+    "unrounded": true,
+    "target": 10,
+    "no_averaging": true,
+    "zero_unresolved_mandatory_defects": true
+  },
+  "gameplay_runtime_changed": false,
+  "task_approved": false,
+  "scope": "governance-only exact-byte architecture repair"
+}

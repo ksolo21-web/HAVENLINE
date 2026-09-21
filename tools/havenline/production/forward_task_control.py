@@ -52,12 +52,13 @@ def _contract_validation(task_id,candidate_files):
     if extras:errors.append('descriptors without affected watched paths: '+','.join(extras))
     return {'required':True,'affected_contracts':affected,'descriptor':str(path.relative_to(ROOT)),'results':results,'passed':not errors,'errors':errors}
 
-def plan(task_id,target='ASSIGNED',candidate=None,integration=None,inventory=None):
+def plan(task_id,target='ASSIGNED',candidate=None,integration=None,inventory=None,builder=None):
     task_id=task_id.upper();errors=[]
     if target not in ('ASSIGNED','BUILDING_ISOLATED'):errors.append('target must be ASSIGNED or BUILDING_ISOLATED')
     try:forward=resolve_task(task_id)
     except Exception as exc:return {'passed':False,'task_id':task_id,'target':target,'errors':['forward plan: '+str(exc)]}
-    grad=graduation(task_id,target)
+    builder_for_gate=candidate if target=='BUILDING_ISOLATED' else builder
+    grad=graduation(task_id,target,builder_for_gate,integration)
     if not grad.get('passed'):errors += ['graduation: '+x for x in grad.get('errors',[])]
     branches=validate_branches(task_id,inventory)
     if not branches.get('passed'):errors += ['branch budget: '+x for x in branches.get('errors',[])]
@@ -99,11 +100,11 @@ def validate_all():
 def main():
     ap=argparse.ArgumentParser();sub=ap.add_subparsers(dest='cmd',required=True);sub.add_parser('validate')
     c=sub.add_parser('critics');c.add_argument('task_id')
-    p=sub.add_parser('plan');p.add_argument('task_id');p.add_argument('--target',choices=['ASSIGNED','BUILDING_ISOLATED'],default='ASSIGNED');p.add_argument('--candidate');p.add_argument('--integration');p.add_argument('--inventory');p.add_argument('--output')
+    p=sub.add_parser('plan');p.add_argument('task_id');p.add_argument('--target',choices=['ASSIGNED','BUILDING_ISOLATED'],default='ASSIGNED');p.add_argument('--candidate');p.add_argument('--integration');p.add_argument('--builder');p.add_argument('--inventory');p.add_argument('--output')
     a=ap.parse_args()
     if a.cmd=='validate':out=validate_all()
     elif a.cmd=='critics':out={'passed':True,'task_id':a.task_id.upper(),'critic_plan':critic_plan(a.task_id.upper()),'errors':[]}
-    else:out=plan(a.task_id,a.target,a.candidate,a.integration,a.inventory)
+    else:out=plan(a.task_id,a.target,a.candidate,a.integration,a.inventory,a.builder)
     text=json.dumps(out,indent=2)+'\n'
     if getattr(a,'output',None):Path(a.output).write_text(text)
     print(text,end='');raise SystemExit(0 if out.get('passed') else 2)

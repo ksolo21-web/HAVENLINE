@@ -21,12 +21,15 @@
   "assignment_requirements": [
     "T05 and T10 remain APPROVED on the exact authority used for assignment",
     "builder branch is the prepared T11 branch and contains the T11 packet/scope",
-    "V3.2 ASSIGNED graduation gate passes",
+    "exact authoritative integration/control-plane head is an ancestor of the exact builder head",
+    "V3.2 ASSIGNED graduation gate passes with exact builder/integration lineage proof",
+    "assignment claim records assignment_integration_commit, assignment_branch_head and assignment_lineage_state",
     "no runtime construction before a GRADUATION.json binds sentinel, focused tests, checkpoint and critic-package preflight"
   ],
   "stale_base_policy": {
-    "governance_only_drift": "may reconcile without resetting runtime work when existing V3 workstream policy classifies it governance-only",
-    "runtime_or_contract_drift": "must reconcile before build/integration and rerun impacted proof"
+    "governance_only_drift": "preserve frozen scope and prepared/runtime work, but synchronize the current control plane before ASSIGNED or initial BUILDING authority; no gameplay reset is required solely for governance drift",
+    "runtime_or_contract_drift": "must reconcile before build/integration and rerun impacted proof",
+    "invariant": "no runtime reset does not mean no control-plane synchronization"
   },
   "quality_rule": {
     "operator": ">",
@@ -35,5 +38,7 @@
     "target": 10,
     "zero_unresolved_mandatory_defects": true
   },
-  "gameplay_runtime_modified_by_this_checklist": false
+  "gameplay_runtime_modified_by_this_checklist": false,
+  "control_plane_lineage_required_before_assignment": true,
+  "control_plane_lineage_proof": "authoritative integration head must be an ancestor of builder head"
 }

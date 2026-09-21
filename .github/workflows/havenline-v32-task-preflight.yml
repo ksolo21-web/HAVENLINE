@@ -22,6 +22,7 @@ jobs:
     timeout-minutes: 12
     outputs:
       candidate_sha: ${{ steps.refs.outputs.candidate_sha }}
+      builder_sha: ${{ steps.refs.outputs.builder_sha }}
       integration_sha: ${{ steps.refs.outputs.integration_sha }}
       specialist_critics_json: ${{ steps.plan.outputs.specialist_critics_json }}
     steps:
@@ -35,6 +36,7 @@ jobs:
           INPUT_CANDIDATE: ${{ inputs.candidate }}
           INPUT_TARGET: ${{ inputs.target }}
           INPUT_MODE: ${{ inputs.mode }}
+          TASK_ID: ${{ inputs.task_id }}
         run: |
           set -euo pipefail
           case "$INPUT_MODE" in preflight|review) ;; *) echo "invalid control mode $INPUT_MODE" >&2; exit 2;; esac
@@ -47,16 +49,24 @@ jobs:
             [[ "$candidate" =~ ^[0-9a-f]{40}$ ]] || exit 2;test "$candidate" = "$head" || exit 2
           fi
           integration_branch=$(python3 -c 'import json;print(json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json"))["integration_branch"])')
+          builder_branch=$(python3 -c 'import json,os; r=json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json")); print(next(w["branch"] for w in r["workstreams"] if w["task_id"]==os.environ["TASK_ID"]))')
           integration=$(git ls-remote origin "refs/heads/$integration_branch" | awk '{print $1}')
+          builder=$(git ls-remote origin "refs/heads/$builder_branch" | awk '{print $1}')
           [[ "$integration" =~ ^[0-9a-f]{40}$ ]] || { echo 'unable to resolve exact integration head' >&2; exit 2; }
-          git fetch --no-tags origin "$integration_branch"
-          echo "candidate_sha=$candidate" >> "$GITHUB_OUTPUT";echo "integration_sha=$integration" >> "$GITHUB_OUTPUT"
+          [[ "$builder" =~ ^[0-9a-f]{40}$ ]] || { echo 'unable to resolve exact builder head' >&2; exit 2; }
+          git fetch --no-tags origin "$integration_branch" "$builder_branch"
+          echo "candidate_sha=$candidate" >> "$GITHUB_OUTPUT";echo "builder_sha=$builder" >> "$GITHUB_OUTPUT";echo "integration_sha=$integration" >> "$GITHUB_OUTPUT"
           git ls-remote --heads origin 'refs/heads/havenline/T*' | awk '{print $2}' | sed 's#refs/heads/##' | jq -R -s 'split("\n") | map(select(length > 0))' > /tmp/v32-remote-branches.json
       - name: Resolve V3.2 readiness and graduation
         run: |
           set -euo pipefail;mkdir -p v32-control
-          python3 tools/havenline/production/architecture_v32.py readiness "${{ inputs.task_id }}" > v32-control/readiness.json
-          python3 tools/havenline/production/task_graduation_gate.py "${{ inputs.task_id }}" --target "${{ inputs.target }}" > v32-control/graduation.json
+          lineage_head="${{ steps.refs.outputs.builder_sha }}"
+          if [ "${{ inputs.target }}" = "BUILDING_ISOLATED" ]; then lineage_head="${{ steps.refs.outputs.candidate_sha }}"; fi
+          if [ "${{ inputs.target }}" = "ASSIGNED" ]; then
+            python3 tools/havenline/production/control_plane_lineage.py --builder-head "$lineage_head" --integration-head "${{ steps.refs.outputs.integration_sha }}" > v32-control/control-plane-lineage.json
+          fi
+          python3 tools/havenline/production/architecture_v32.py readiness "${{ inputs.task_id }}" --target "${{ inputs.target }}" --builder-head "$lineage_head" --integration-head "${{ steps.refs.outputs.integration_sha }}" > v32-control/readiness.json
+          python3 tools/havenline/production/task_graduation_gate.py "${{ inputs.task_id }}" --target "${{ inputs.target }}" --builder-head "$lineage_head" --integration-head "${{ steps.refs.outputs.integration_sha }}" > v32-control/graduation.json
           python3 tools/havenline/production/timeout_stage_plan.py "${{ inputs.task_id }}" > v32-control/stage-plan.json
           python3 tools/havenline/production/rolling_canary.py requirements "${{ inputs.task_id }}" > v32-control/canaries.json
           python3 tools/havenline/production/branch_budget.py --task "${{ inputs.task_id }}" --inventory /tmp/v32-remote-branches.json > v32-control/branch-budget.json
@@ -76,11 +86,12 @@ jobs:
         id: plan
         env:
           CANDIDATE: ${{ steps.refs.outputs.candidate_sha }}
+          BUILDER: ${{ steps.refs.outputs.builder_sha }}
           INTEGRATION: ${{ steps.refs.outputs.integration_sha }}
         run: |
           set -euo pipefail
-          args=(plan "${{ inputs.task_id }}" --target "${{ inputs.target }}" --inventory /tmp/v32-remote-branches.json --output v32-control/control-plan.json)
-          if [ "${{ inputs.target }}" = "BUILDING_ISOLATED" ]; then args+=(--candidate "$CANDIDATE" --integration "$INTEGRATION"); fi
+          args=(plan "${{ inputs.task_id }}" --target "${{ inputs.target }}" --builder "$BUILDER" --integration "$INTEGRATION" --inventory /tmp/v32-remote-branches.json --output v32-control/control-plan.json)
+          if [ "${{ inputs.target }}" = "BUILDING_ISOLATED" ]; then args+=(--candidate "$CANDIDATE"); fi
           python3 tools/havenline/production/forward_task_control.py "${args[@]}"
           jq -e '.passed == true and .finish_running_sha == true and .quality_thresholds_unchanged == true' v32-control/control-plan.json
           critics=$(jq -c '.critic_plan.specialist_fanout' v32-control/control-plan.json);echo "specialist_critics_json=$critics" >> "$GITHUB_OUTPUT"

@@ -17,7 +17,7 @@ Every applicable mandatory critic dimension remains strictly greater than 9.0 un
 
 1. **Resumable execution checkpoints.** T11+ records integration SHA, candidate SHA, branch, stage, completed gates, reusable proof, blocker families, running workflows, environment fingerprint and exact next action/command. TIMEOUT is infrastructure evidence unless current source-bound evidence independently proves a product defect.
 2. **Parallel preparation planner.** Future work resolves to PREP_NOW, BUILD_WHEN_UNLOCKED, BLOCKED_EXTERNAL, ACTIVE_RUNTIME, PRESERVE or DO_NOT_TOUCH. Preparation never grants ownership, integration or approval.
-3. **Task graduation gate.** PREPARED→ASSIGNED requires approved dependencies, packet/scope, reservation, branch, critics, activation checklist and no required external blocker. ASSIGNED→BUILDING requires a graduation manifest binding sentinel, focused tests, shard plan, checkpoint and critic preflight.
+3. **Task graduation gate.** PREPARED→ASSIGNED requires approved dependencies, packet/scope, reservation, branch, critics, activation checklist, no required external blocker **and exact control-plane lineage proof that the authoritative integration head is an ancestor of the builder head**. Governance-only drift may preserve prepared gameplay/runtime work, but it never waives synchronization. ASSIGNED→BUILDING requires the builder/candidate to retain the assignment integration binding plus a graduation manifest binding sentinel, focused tests, shard plan, checkpoint and critic preflight.
 4. **WIP/lane control.** Active runtime, forward prep, asset/content readiness and infrastructure are separate lanes. Existing scheduler limits remain authoritative. One integration authority remains mandatory.
 5. **Three-blocker causal-family trigger.** Three distinct blockers on one frozen candidate require root-cause-family reconciliation before another candidate. Duplicate symptoms do not get endless new blocker IDs.
 6. **Branch budget/lifecycle.** One authoritative task branch plus at most one bounded repair branch. Prototype/diagnostic branches are disposable and retire after disposition.
@@ -42,6 +42,14 @@ Every applicable mandatory critic dimension remains strictly greater than 9.0 un
 **YELLOW — isolated build pending dependency:** implementation against a stable published interface may remain BUILT_PENDING_DEPENDENCY, but cannot integrate or claim final approval until dependencies and graduation gates permit it.
 
 **RED — do not touch:** another task's owned runtime, integration-only files, unfinished shared semantics, premature final evidence, or changes that invalidate active evidence without a ChangeRequest.
+
+## Control-plane lineage invariant
+
+- **No reset does not mean no synchronization.** Governance-only drift may be reconciled without discarding frozen scope, prepared tests, fixtures or valid task-local runtime work.
+- Before `ASSIGNED`, the exact authoritative integration/control-plane commit must be an ancestor of the exact builder head. A stale or diverged builder fails closed.
+- The assignment write records the exact integration commit and builder head used for the claim. `BUILDING_ISOLATED` must prove the candidate still contains that assignment integration commit.
+- Runtime/contract drift still requires normal reconciliation and invalidates impacted proof. Governance-only drift requires control-plane synchronization but does not manufacture gameplay invalidation.
+- The shared workflow resolves both remote refs independently; registry metadata alone is never accepted as proof of branch lineage.
 
 ## High-blast-radius checkpoints
 

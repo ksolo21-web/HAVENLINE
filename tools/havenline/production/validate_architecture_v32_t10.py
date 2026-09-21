@@ -77,6 +77,8 @@ C0_ADVISOR_BASE_SHA256 = "d66e551eadf4dcdd1363da3da41d64e314a074292b2531cf99c0f5
 C0_ADVISOR_CURRENT_SHA256 = "f375814f19399b11e1228f1e2af90ad2f3aa80a955009e57649b0df4f62a25f2"
 C0R_MACHINE_PROSE_REQUEST = "Docs/Production/ChangeRequests/T10-c0r-structured-mechanism-detection.json"
 C0R_MACHINE_PROSE_REQUEST_SHA256 = "d23285f91ab804ea55fcb264b2f23b03d45983a3aaf18fd5b49c95b3390bcd57"
+C0R_THRESHOLD_PROJECTION_REQUEST = "Docs/Production/ChangeRequests/V32-c0r-threshold-policy-projection.json"
+C0R_THRESHOLD_PROJECTION_REQUEST_BLOB = "6c64f132a0829cfff60e049de442f01e21766367"
 BENCHMARK_LIVENESS_REQUEST = "Docs/Production/ChangeRequests/T10-benchmark-liveness-contract.json"
 BENCHMARK_LIVENESS_REQUEST_SHA256 = "ac4a2f46743940a58fcd675623611b1fe9052ed615fcd7ab2fcba478a5822dec"
 C0_COMPLETE_EVIDENCE_REQUEST = "Docs/Production/ChangeRequests/T10-c0-decoded-complete-evidence.json"
@@ -228,8 +230,29 @@ def validate() -> dict:
             errors.append("C0R machine-prose authorization changed or missing")
         if machine_request.get("status")!="AUTHORIZED" or machine_request.get("blocker")!="C0-T10-B062":
             errors.append("Explicit B062 machine-prose authorization missing")
+
+        projection_request_path=v31.ROOT/C0R_THRESHOLD_PROJECTION_REQUEST
+        projection_request=json.loads(projection_request_path.read_text()) if projection_request_path.is_file() else {}
+        projection_blob=v31._git("rev-parse",f"HEAD:{C0R_THRESHOLD_PROJECTION_REQUEST}",check=False).stdout.decode().strip()
+        projection_valid=(
+            projection_blob==C0R_THRESHOLD_PROJECTION_REQUEST_BLOB
+            and projection_request.get("status")=="AUTHORIZED"
+            and projection_request.get("integration_owner_disposition")=="APPROVED_EXACT_C0R_THRESHOLD_POLICY_PROJECTION"
+            and projection_request.get("legacy_authorization")==C0R_MACHINE_PROSE_REQUEST
+            and projection_request.get("gameplay_runtime_changed") is False
+            and projection_request.get("task_approved") is False
+        )
+        if not projection_valid:
+            errors.append("Exact V3.2 C0R threshold-projection authorization changed or missing")
+        projection_overrides=projection_request.get("exact_git_blobs",{}) if projection_valid else {}
+
         for source_path,key in [("tools/havenline/production/repair_sufficiency_critic.py","source_sha256"),("tools/havenline/production/tests/test_repair_sufficiency_critic.py","tests_sha256"),("tools/havenline/production/builder_repair_gate.py","builder_sha256"),("tools/havenline/production/tests/test_c0_builder.py","builder_tests_sha256"),("Docs/Production/C0R_REPORT_SCHEMA.json","contract_schema_sha256"),("Docs/Production/C0R_REPAIR_SUFFICIENCY_STANDARD.md","standard_sha256"),("tools/havenline/production/verify_python_repair_bindings.py","canonical_verifier_sha256"),("tools/havenline/production/tests/test_python_repair_bindings.py","canonical_verifier_tests_sha256")]:
-            if hashlib.sha256((v31.ROOT/source_path).read_bytes()).hexdigest()!=machine_request.get(key):
+            override_blob=projection_overrides.get(source_path)
+            if override_blob:
+                actual_blob=v31._git("rev-parse",f"HEAD:{source_path}",check=False).stdout.decode().strip()
+                if actual_blob!=override_blob:
+                    errors.append("C0R threshold-projection source exceeds exact V3.2 authorization: "+source_path)
+            elif hashlib.sha256((v31.ROOT/source_path).read_bytes()).hexdigest()!=machine_request.get(key):
                 errors.append("C0R machine-prose source exceeds owner authorization: "+source_path)
         benchmark_request_bytes=(v31.ROOT/BENCHMARK_LIVENESS_REQUEST).read_bytes()
         benchmark_request=json.loads(benchmark_request_bytes)
