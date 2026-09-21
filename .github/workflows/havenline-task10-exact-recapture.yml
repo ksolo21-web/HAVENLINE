@@ -8,7 +8,7 @@ permissions:
   contents: read
   actions: read
 concurrency:
-  group: havenline-t10-exact-recapture
+  group: havenline-t10-exact-recapture-${{ github.sha }}
   cancel-in-progress: true
 
 jobs:
