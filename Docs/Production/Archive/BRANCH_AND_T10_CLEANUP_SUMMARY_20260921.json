@@ -6,9 +6,10 @@
   "deletion_totals": {
     "t10_obsolete_refs_deleted": 86,
     "t09_obsolete_refs_deleted": 11,
-    "fully_merged_non_task_refs_deleted": 14
+    "fully_merged_non_task_refs_deleted": 14,
+    "t03_fully_merged_hardening_ref_deleted": 1
   },
-  "total_branch_refs_deleted": 111,
+  "total_branch_refs_deleted": 112,
   "preserved_rules": [
     "Preserve designated T01-T70 task branches and task evidence.",
     "Preserve canonical integration/release history.",
@@ -241,5 +242,14 @@
     "T10": "APPROVED",
     "T11": "PREPARED"
   },
-  "compile_safety": "All branch cleanup operations changed Git refs/governance records only. Approved canonical runtime code was not deleted. Deleting stale branch refs cannot change a game build unless that deleted branch itself was explicitly selected as the build source."
+  "compile_safety": "All branch cleanup operations changed Git refs/governance records only. Approved canonical runtime code was not deleted. Deleting stale branch refs cannot change a game build unless that deleted branch itself was explicitly selected as the build source.",
+  "additional_cleanup": [
+    {
+      "branch": "havenline/t03-gate-hardening-20260911",
+      "head_sha": "a3038269631a7116af16d99a29ee46198a05c2a8",
+      "status": "deleted_after_ancestor_revalidation",
+      "archive_record": "Docs/Production/Archive/T03_FULLY_MERGED_BRANCH_CLEANUP_20260921.json",
+      "compile_effect": "none"
+    }
+  ]
 }
