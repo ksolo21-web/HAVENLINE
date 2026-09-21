@@ -696,19 +696,19 @@ func feedback_text() -> String:
 		var next_reason := _readable_reasons(next_errors, next_shortfalls)
 		var text := ""
 		if next_preview.get("passed", false):
-			text = "NEXT: APPROACH → %s" % next_destination
+			text = "NEXT >> APPROACH → %s" % next_destination
 		elif _harvesting_access_blocked(next_errors):
-			text = "NEXT: UNLOCK HARVESTING ACCESS"
+			text = "NEXT >> UNLOCK HARVESTING ACCESS"
 			if not next_shortfalls.is_empty():
-				text += "\nTHEN DELIVER → %s: %s" % [next_destination, _resource_cues(next_shortfalls)]
+				text += "\nThen: deliver → %s · %s" % [next_destination, _resource_cues(next_shortfalls)]
 			else:
-				text += "\nTHEN: %s" % next_destination
+				text += "\nThen: %s" % next_destination
 		elif not next_shortfalls.is_empty():
-			text = "NEXT: DELIVER → %s\nMISSING: %s" % [next_destination, _resource_cues(next_shortfalls)]
+			text = "NEXT >> DELIVER → %s\nNeed: %s" % [next_destination, _resource_cues(next_shortfalls)]
 		elif not next_reason.is_empty():
-			text = "NEXT: RESOLVE → %s\n%s" % [next_destination, next_reason]
+			text = "NEXT >> RESOLVE → %s\nWhy: %s" % [next_destination, next_reason]
 		else:
-			text = "NEXT: %s" % next_destination
+			text = "NEXT >> %s" % next_destination
 		text += "\n✓ %s complete" % destination
 		if not displayed_costs.is_empty():
 			text += "\nSpent: %s" % _resource_cues(displayed_costs)
@@ -716,20 +716,20 @@ func feedback_text() -> String:
 	if lifecycle == "blocked":
 		var reason := _readable_reasons(block_reasons, blocked_shortfalls)
 		if _harvesting_access_blocked(block_reasons):
-			var text := "NEXT: UNLOCK HARVESTING ACCESS\nBLOCKED: %s" % destination
+			var text := "NEXT >> UNLOCK HARVESTING ACCESS\nBlocked: %s" % destination
 			if not blocked_shortfalls.is_empty():
-				text += "\nTHEN DELIVER: %s" % _resource_cues(blocked_shortfalls)
+				text += "\nThen: deliver · %s" % _resource_cues(blocked_shortfalls)
 			if not displayed_costs.is_empty():
-				text += "\nTOTAL: %s" % cost_cues
+				text += "\nCost: %s" % cost_cues
 			return text
 		if not blocked_shortfalls.is_empty():
-			var text := "NEXT: DELIVER → %s\nMISSING: %s" % [destination, _resource_cues(blocked_shortfalls)]
+			var text := "NEXT >> DELIVER → %s\nNeed: %s" % [destination, _resource_cues(blocked_shortfalls)]
 			if not displayed_costs.is_empty():
-				text += "\nTOTAL: %s" % cost_cues
+				text += "\nCost: %s" % cost_cues
 			if not reason.is_empty():
 				text += "\n" + reason
 			return text
-		return "BLOCKED: %s" % destination + ("\nNEXT: %s" % reason if not reason.is_empty() else "") + ("\nTOTAL: %s" % cost_cues if not displayed_costs.is_empty() else "")
+		return ("NEXT >> %s\n" % reason if not reason.is_empty() else "") + "Blocked: %s" % destination + ("\nCost: %s" % cost_cues if not displayed_costs.is_empty() else "")
 	if lifecycle == "committing":
 		return "APPLYING → " + destination + "\nDelivered resources: " + cost_cues + "\nAwaiting confirmation"
 	if lifecycle == "preview":
