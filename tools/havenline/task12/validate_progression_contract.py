@@ -313,24 +313,81 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
 
     milestone_by_level: dict[int, list[dict[str, Any]]] = defaultdict(list)
     milestone_ids: set[str] = set()
+    milestone_owner: dict[str, int] = {}
+    required_milestone_fields = {
+        "milestone_id",
+        "level",
+        "kind",
+        "progression_hook_ids",
+        "visible_change_required",
+        "owner_task",
+    }
     for index, milestone in enumerate(milestones):
         if not isinstance(milestone, dict):
             errors.append(f"milestones[{index}] must be an object")
             continue
+        missing = sorted(required_milestone_fields - set(milestone))
+        if missing:
+            errors.append(f"milestones[{index}] missing required fields: {missing}")
+
         milestone_id = milestone.get("milestone_id")
         level = milestone.get("level")
-        if not isinstance(milestone_id, str) or not milestone_id.strip():
-            errors.append(f"milestones[{index}].milestone_id must be non-empty")
+        valid_milestone_id = isinstance(milestone_id, str) and milestone_id.startswith("t12.milestone.") and len(milestone_id) > len("t12.milestone.")
+        if not valid_milestone_id:
+            errors.append(f"milestones[{index}].milestone_id must use stable t12.milestone.* namespace")
         elif milestone_id in milestone_ids:
             errors.append(f"duplicate milestone_id: {milestone_id}")
         else:
             milestone_ids.add(milestone_id)
-        if not isinstance(level, int) or level not in by_number:
+
+        if not isinstance(level, int) or isinstance(level, bool) or level not in by_number:
             errors.append(f"milestone {milestone_id!r}: level must resolve to a shipping level")
             continue
+
+        kind = normalized_key(str(milestone.get("kind", "")))
+        if kind not in {"major", "minor"}:
+            errors.append(f"milestone {milestone_id!r}: kind must be 'major' or 'minor'")
+        validate_string_list(
+            milestone.get("progression_hook_ids"),
+            label=f"milestone {milestone_id!r}: progression_hook_ids",
+            errors=errors,
+        )
+        if not isinstance(milestone.get("visible_change_required"), bool):
+            errors.append(f"milestone {milestone_id!r}: visible_change_required must be boolean")
+        owner_task = milestone.get("owner_task")
+        if not isinstance(owner_task, str) or not owner_task.strip():
+            errors.append(f"milestone {milestone_id!r}: owner_task must be a non-empty string")
+
         milestone_by_level[level].append(milestone)
+        if valid_milestone_id:
+            milestone_owner[milestone_id] = level
         if milestone.get("visible_change_required") is True:
             visible_levels.add(level)
+
+    # Every level milestone reference must resolve to the milestone dataset at
+    # the same level, and every milestone record must be referenced exactly once.
+    milestone_reference_owner: dict[str, int] = {}
+    for level, row in by_number.items():
+        refs = as_list(row.get("milestone_ids"))
+        for milestone_id in refs:
+            if not isinstance(milestone_id, str) or not milestone_id:
+                continue
+            if milestone_id not in milestone_owner:
+                errors.append(f"level {level}: milestone reference does not resolve: {milestone_id}")
+                continue
+            if milestone_owner[milestone_id] != level:
+                errors.append(
+                    f"level {level}: milestone {milestone_id} belongs to level {milestone_owner[milestone_id]}"
+                )
+            if milestone_id in milestone_reference_owner:
+                errors.append(
+                    f"milestone {milestone_id} referenced by multiple levels: {milestone_reference_owner[milestone_id]} and {level}"
+                )
+            else:
+                milestone_reference_owner[milestone_id] = level
+    unreferenced_milestones = sorted(milestone_ids - set(milestone_reference_owner))
+    if unreferenced_milestones:
+        errors.append(f"milestones not referenced by any level: {unreferenced_milestones}")
 
     if not visible_levels:
         errors.append("no visible progression hooks/milestones are declared")
