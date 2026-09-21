@@ -10,101 +10,19 @@ permissions:
   actions: read
 
 concurrency:
-  group: havenline-t10-focused-retry-${{ github.sha }}
+  group: havenline-t10-c2-one-finalize-${{ github.sha }}
   cancel-in-progress: true
 
 env:
   CANDIDATE: 'eba0107def258824549fb10d81785290d0c81d97'
   SOURCE_RUN: '35600328627'
   BASE_REVIEW_RUN: '35600362867'
+  FOCUSED1_RUN: '35602696128'
 
 jobs:
-  base-ready:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 70
-    env:
-      GH_TOKEN: ${{ github.token }}
-    steps:
-      - name: Wait for original affected-critic run and preserve unaffected successes
-        run: |
-          set -euo pipefail
-          for i in $(seq 1 240); do
-            status=$(gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$BASE_REVIEW_RUN" --jq '.status')
-            [ "$status" = completed ] && break
-            sleep 15
-          done
-          test "$(gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$BASE_REVIEW_RUN" --jq '.status')" = completed
-          gh api --paginate "/repos/$GITHUB_REPOSITORY/actions/runs/$BASE_REVIEW_RUN/jobs?per_page=100" > /tmp/jobs-pages.json
-          python3 - <<'PY'
-          import json,os
-          pages=json.load(open('/tmp/jobs-pages.json'))
-          jobs=pages.get('jobs',[]) if isinstance(pages,dict) else [j for p in pages for j in p.get('jobs',[])]
-          by={j['name']:j for j in jobs}
-          required=[
-            'visual-slice (C1, 1)','visual-slice (C1, 2)','visual-slice (C1, 3)',
-            'visual-slice (C2, 1)','visual-slice (C2, 2)',
-            'c3','c4','preserve-c6-c7',
-          ]
-          missing=[n for n in required if n not in by]
-          assert not missing,missing
-          bad={n:by[n]['conclusion'] for n in required if by[n]['conclusion']!='success'}
-          assert not bad,bad
-          print(json.dumps({'preserved_successes':required},indent=2))
-          PY
-
-  normalize-c1-0:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 10
-    steps:
-      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
-        with:
-          name: t10-final-visual-C1-0-${{ env.CANDIDATE }}
-          path: prior-c1-0
-          github-token: ${{ github.token }}
-          run-id: ${{ env.BASE_REVIEW_RUN }}
-      - name: Normalize explicit semantic empty-defect marker without rescoring
-        run: |
-          set -euo pipefail
-          mkdir -p normalized-c1-0
-          python3 - <<'PY'
-          import json,pathlib,os
-          rows=list(pathlib.Path('prior-c1-0').rglob('slice-result.json'))
-          assert len(rows)==1,rows
-          src=rows[0];r=json.load(open(src))
-          assert r['candidate']==os.environ['CANDIDATE'] and r['critic_id']=='C1' and r['slice']==0,r
-          assert r['review']['coverage_complete'] is True
-          assert r['review']['confidence'] in ('medium','high')
-          assert all(float(v)>9.0 for v in r['review']['scores'].values()),r['review']['scores']
-          markers={'none','none identified','none identified.','no defects','no defects.','no defect','no defect.'}
-          defects=r['review'].get('defects',[])
-          assert defects and all(isinstance(x,str) and x.strip().lower() in markers for x in defects),defects
-          r['review']['defects']=[]
-          r['passed']=True
-          r['errors']=[]
-          r['normalization']={
-            'type':'semantic_empty_defect_marker',
-            'original_defects':defects,
-            'scores_unchanged':True,
-            'review_not_rerun':True,
-          }
-          out=pathlib.Path('normalized-c1-0/slice-result.json')
-          out.write_text(json.dumps(r,indent=2)+'\n')
-          print(json.dumps(r,indent=2))
-          PY
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        with:
-          name: t10-normalized-C1-0-${{ env.CANDIDATE }}
-          path: normalized-c1-0/
-          if-no-files-found: error
-          retention-days: 90
-
-  retry-c2:
+  retry-c2-1:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
-    strategy:
-      fail-fast: false
-      matrix:
-        slice: [0, 3]
     env:
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
@@ -123,7 +41,7 @@ jobs:
         with:
           path: ~/.cache/havenline-t01-qwen35
           key: havenline-t01-qwen35-9b-q5-20260908-v1
-      - name: Bind exact candidate and clarified C2 reviewer
+      - name: Bind exact candidate and mechanical C2 context
         run: |
           set -euo pipefail
           git worktree add --detach "$RUNNER_TEMP/t10-final-candidate" "$CANDIDATE"
@@ -136,20 +54,65 @@ jobs:
           sudo apt-get install -y ffmpeg
           python3 -m pip install --disable-pip-version-check --no-input pillow==12.3.0
           python3 tools/havenline/production/specialist_evidence_manifest.py validate critic-input/C2-manifest.json
-      - name: Retry only disputed C2 slice
+      - name: Retry only C2 slice 1
         run: |
           set -euo pipefail
-          python3 -u tools/havenline/task10/review_final_visual_slice.py             --critic C2 --slice "${{ matrix.slice }}"             --candidate "$CANDIDATE" --repo "$RUNNER_TEMP/t10-final-candidate"             --evidence critic-input --out "retry/C2-${{ matrix.slice }}"
+          python3 -u tools/havenline/task10/review_final_visual_slice.py             --critic C2 --slice 1             --candidate "$CANDIDATE" --repo "$RUNNER_TEMP/t10-final-candidate"             --evidence critic-input --out retry/C2-1
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: t10-retry-visual-C2-${{ matrix.slice }}-${{ env.CANDIDATE }}
+          name: t10-retry2-visual-C2-1-${{ env.CANDIDATE }}
           path: retry/
           if-no-files-found: error
           retention-days: 90
 
+  source-jobs-ready:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    env:
+      GH_TOKEN: ${{ github.token }}
+    steps:
+      - name: Wait only for source judgments that are being preserved
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' > /tmp/required.json
+          import json
+          print(json.dumps({
+            "base":[
+              "visual-slice (C1, 1)","visual-slice (C1, 2)","visual-slice (C1, 3)",
+              "visual-slice (C2, 2)","c3","c4","preserve-c6-c7"
+            ],
+            "focused1":["normalize-c1-0","retry-c2 (0)","retry-c2 (3)"]
+          }))
+          PY
+          for i in $(seq 1 280); do
+            gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$BASE_REVIEW_RUN/jobs?per_page=100" > /tmp/base.json
+            gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$FOCUSED1_RUN/jobs?per_page=100" > /tmp/focus.json
+            if python3 - <<'PY'
+          import json
+          required=json.load(open('/tmp/required.json'))
+          base={j['name']:j for j in json.load(open('/tmp/base.json'))['jobs']}
+          focus={j['name']:j for j in json.load(open('/tmp/focus.json'))['jobs']}
+          for source,rows in [('base',base),('focused1',focus)]:
+              for name in required[source]:
+                  if name not in rows or rows[name]['status']!='completed':
+                      raise SystemExit(1)
+                  if rows[name]['conclusion']!='success':
+                      raise SystemExit(2)
+          PY
+            then
+              exit 0
+            else
+              rc=$?
+              [ "$rc" -eq 1 ] || exit "$rc"
+            fi
+            sleep 15
+          done
+          echo "required source judgments did not finish" >&2
+          exit 1
+
   aggregate-c1-c2:
-    needs: [base-ready, normalize-c1-0, retry-c2]
+    needs: [retry-c2-1, source-jobs-ready]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -167,6 +130,8 @@ jobs:
         with:
           name: t10-normalized-C1-0-${{ env.CANDIDATE }}
           path: slices/C1/0
+          github-token: ${{ github.token }}
+          run-id: ${{ env.FOCUSED1_RUN }}
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
           name: t10-final-visual-C1-1-${{ env.CANDIDATE }}
@@ -189,12 +154,12 @@ jobs:
         with:
           name: t10-retry-visual-C2-0-${{ env.CANDIDATE }}
           path: slices/C2/0
+          github-token: ${{ github.token }}
+          run-id: ${{ env.FOCUSED1_RUN }}
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
-          name: t10-final-visual-C2-1-${{ env.CANDIDATE }}
+          name: t10-retry2-visual-C2-1-${{ env.CANDIDATE }}
           path: slices/C2/1
-          github-token: ${{ github.token }}
-          run-id: ${{ env.BASE_REVIEW_RUN }}
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
           name: t10-final-visual-C2-2-${{ env.CANDIDATE }}
@@ -205,20 +170,22 @@ jobs:
         with:
           name: t10-retry-visual-C2-3-${{ env.CANDIDATE }}
           path: slices/C2/3
-      - name: Aggregate corrected visual critics
+          github-token: ${{ github.token }}
+          run-id: ${{ env.FOCUSED1_RUN }}
+      - name: Aggregate exact corrected C1 and C2
         run: |
           set -euo pipefail
           for cid in C1 C2; do
             python3 tools/havenline/task10/aggregate_final_visual_slices.py               --critic "$cid" --candidate "$CANDIDATE"               --manifest "critic-input/$cid-manifest.json"               --inputs "slices/$cid" --out "visual-final/$cid"               --run-id "$GITHUB_RUN_ID"
             python3 tools/havenline/task10/review_visual.py               --critic "$cid" --candidate "$CANDIDATE"               --manifest "critic-input/$cid-manifest.json"               --record "visual-final/$cid/critic-record.json"               --output "visual-final/$cid/validated.json"
           done
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+      - uses: actions/upload-artifact@b7c566a772e6bfb58ed0dc250532a479d7789f
         with:
           name: havenline-task10-C1-final-${{ env.CANDIDATE }}
           path: visual-final/C1/
           if-no-files-found: error
           retention-days: 90
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+      - uses: actions/upload-artifact@b7c566a772e6bfb58ed0dc250532a479d7789f
         with:
           name: havenline-task10-C2-final-${{ env.CANDIDATE }}
           path: visual-final/C2/
@@ -226,7 +193,7 @@ jobs:
           retention-days: 90
 
   six-critic-aggregate:
-    needs: [base-ready, aggregate-c1-c2]
+    needs: [aggregate-c1-c2, source-jobs-ready]
     runs-on: ubuntu-24.04
     timeout-minutes: 15
     steps:
@@ -256,7 +223,7 @@ jobs:
           path: preserved
           github-token: ${{ github.token }}
           run-id: ${{ env.BASE_REVIEW_RUN }}
-      - name: Assemble strict final six-critic record
+      - name: Assemble strict final critic record
         run: |
           set -euo pipefail
           mkdir -p normalized/C6 normalized/C7 six-critic
@@ -298,7 +265,7 @@ jobs:
           pathlib.Path('six-critic/critic-aggregate.json').write_text(json.dumps(summary,indent=2)+'\n')
           print(json.dumps(summary))
           PY
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+      - uses: actions/upload-artifact@b7c566a772e6bfb58ed0dc250532a479d7789f
         with:
           name: havenline-task10-six-critic-final-${{ env.CANDIDATE }}
           path: |
