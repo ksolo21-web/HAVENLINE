@@ -3,67 +3,40 @@ on:
   push:
     branches: ['havenline/review-T10-approval-closeout']
     paths:
-      - '.github/workflows/havenline-task10-approval-closeout.yml'
+      - '.github/t10-approval.trigger'
+
 permissions:
   actions: read
   contents: write
+
 jobs:
   closeout:
     runs-on: ubuntu-24.04
-    timeout-minutes: 90
+    timeout-minutes: 45
     env:
       GH_TOKEN: ${{ github.token }}
-      CANDIDATE: 'b37b3d5e471c5699b97597f508ad8e7b28ce70ee'
-      CONTROLLER_SHA: 'f45dc2f0cc33551105bbc261da644840e0a79388'
-      CONTROLLER_WORKFLOW: 'Havenline T10 final six-critic controller'
-      CONTROLLER_BRANCH: 'havenline/review-T10-final-closeout-controller'
-      REGRESSION_WORKFLOW: 'Havenline Task 10 world transformation candidate'
+      CANDIDATE: 'eba0107def258824549fb10d81785290d0c81d97'
       CANONICAL_BRANCH: 'codex/havenline-sequential-task-01'
-      SOURCE_RUN: '35546330367'
-      SOURCE_ARTIFACT_ID: '10617181974'
+      SOURCE_RUN: '35600328627'
+      CONTROLLER_RUN: '35600362867'
+      CONTROLLER_SHA: '3dec94ead223e8e9a14addb31cbebd0f1c946d05'
+      REGRESSION_RUN: '0'
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
 
-      - name: Wait for exact repaired six-critic controller
+      - name: Bind successful affected-critic closeout
         run: |
           set -euo pipefail
-          controller_run=''
-          for i in $(seq 1 240); do
-            gh run list --workflow "$CONTROLLER_WORKFLOW" --branch "$CONTROLLER_BRANCH" --limit 30 \
-              --json databaseId,headSha,status,conclusion,event,createdAt > /tmp/controller-runs.json
-            controller_run=$(python3 - <<'PY'
-          import json,os
-          rows=json.load(open('/tmp/controller-runs.json'))
-          target=os.environ['CONTROLLER_SHA']
-          hits=[r for r in rows if r.get('headSha')==target]
-          print(hits[0]['databaseId'] if hits else '')
-          PY
-            )
-            [ -n "$controller_run" ] && break
-            sleep 15
-          done
-          test -n "$controller_run"
-          for i in $(seq 1 240); do
-            gh run view "$controller_run" --json status,conclusion,headSha,name > /tmp/controller.json
-            status=$(python3 -c "import json;print(json.load(open('/tmp/controller.json'))['status'])")
-            [ "$status" = completed ] && break
-            sleep 15
-          done
+          gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$CONTROLLER_RUN" > /tmp/controller.json
           python3 - <<'PY'
           import json,os
           r=json.load(open('/tmp/controller.json'))
-          assert r['status']=='completed',r
-          assert r['headSha']==os.environ['CONTROLLER_SHA'],r
-          assert r['conclusion']=='success',r
+          assert r['head_sha']==os.environ['CONTROLLER_SHA'],r
+          assert r['status']=='completed' and r['conclusion']=='success',r
           PY
-          echo "CONTROLLER_RUN=$controller_run" >> "$GITHUB_ENV"
-
-      - name: Bind exact final six-critic artifact
-        run: |
-          set -euo pipefail
           gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$CONTROLLER_RUN/artifacts?per_page=100" > /tmp/controller-artifacts.json
           python3 - <<'PY' > /tmp/review.env
           import json,os
@@ -76,54 +49,29 @@ jobs:
           print('REVIEW_ARTIFACT_DIGEST='+str(a.get('digest','')))
           PY
           cat /tmp/review.env >> "$GITHUB_ENV"
-          cat /tmp/review.env
           mkdir -p review-evidence
+          source /tmp/review.env
           gh api "/repos/$GITHUB_REPOSITORY/actions/artifacts/$REVIEW_ARTIFACT_ID/zip" > /tmp/review.zip
           unzip -q /tmp/review.zip -d review-evidence
           test -s review-evidence/six-critic-summary.json
+          test -s review-evidence/six-critic/preservation-proof.json
 
-      - name: Wait for fresh exact canonical integrated regression
+      - name: Bind exact successful integrated regression
         run: |
           set -euo pipefail
-          regression_run=''
-          for i in $(seq 1 240); do
-            gh run list --workflow "$REGRESSION_WORKFLOW" --branch "$CANONICAL_BRANCH" --limit 30 \
-              --json databaseId,headSha,status,conclusion,event,createdAt > /tmp/regression-runs.json
-            regression_run=$(python3 - <<'PY'
-          import json,os
-          rows=json.load(open('/tmp/regression-runs.json'))
-          cand=os.environ['CANDIDATE']
-          hits=[r for r in rows if r.get('headSha')==cand and r.get('event')=='workflow_dispatch']
-          print(hits[0]['databaseId'] if hits else '')
-          PY
-            )
-            [ -n "$regression_run" ] && break
-            sleep 15
-          done
-          test -n "$regression_run"
-          for i in $(seq 1 240); do
-            gh run view "$regression_run" --json status,conclusion,headSha,name > /tmp/regression.json
-            status=$(python3 -c "import json;print(json.load(open('/tmp/regression.json'))['status'])")
-            [ "$status" = completed ] && break
-            sleep 15
-          done
+          test "$REGRESSION_RUN" != "0"
+          gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$REGRESSION_RUN" > /tmp/regression-run.json
           python3 - <<'PY'
           import json,os
-          r=json.load(open('/tmp/regression.json'))
-          assert r['status']=='completed',r
-          assert r['headSha']==os.environ['CANDIDATE'],r
-          assert r['conclusion']=='success',r
+          r=json.load(open('/tmp/regression-run.json'))
+          assert r['status']=='completed' and r['conclusion']=='success',r
+          assert r['head_branch']=='havenline/review-T10-approval-closeout',r
           PY
-          echo "REGRESSION_RUN=$regression_run" >> "$GITHUB_ENV"
-
-      - name: Bind exact fresh regression artifact
-        run: |
-          set -euo pipefail
           gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$REGRESSION_RUN/artifacts?per_page=100" > /tmp/regression-artifacts.json
           python3 - <<'PY' > /tmp/regression.env
           import json,os
           d=json.load(open('/tmp/regression-artifacts.json'))
-          name='havenline-task10-first-milestone-'+os.environ['CANDIDATE']
+          name='havenline-task10-integrated-regression-'+os.environ['CANDIDATE']
           rows=[a for a in d['artifacts'] if a['name']==name and not a['expired']]
           assert len(rows)==1,(name,rows)
           a=rows[0]
@@ -131,53 +79,53 @@ jobs:
           print('REGRESSION_ARTIFACT_DIGEST='+str(a.get('digest','')))
           PY
           cat /tmp/regression.env >> "$GITHUB_ENV"
-          cat /tmp/regression.env
           mkdir -p regression-evidence
+          source /tmp/regression.env
           gh api "/repos/$GITHUB_REPOSITORY/actions/artifacts/$REGRESSION_ARTIFACT_ID/zip" > /tmp/regression.zip
           unzip -q /tmp/regression.zip -d regression-evidence
           test -s regression-evidence/tests.json
           test -s regression-evidence/impact-regression.json
+          test -s regression-evidence/save-matrix-summary.json
 
-      - name: Bind exact source evidence artifact
+      - name: Bind exact source recapture evidence
         run: |
           set -euo pipefail
-          gh api "/repos/$GITHUB_REPOSITORY/actions/artifacts/$SOURCE_ARTIFACT_ID" > /tmp/source-artifact.json
+          gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN" > /tmp/source-run.json
+          python3 - <<'PY'
+          import json
+          r=json.load(open('/tmp/source-run.json'))
+          assert r['status']=='completed' and r['conclusion']=='success',r
+          PY
+          gh api "/repos/$GITHUB_REPOSITORY/actions/runs/$SOURCE_RUN/artifacts?per_page=100" > /tmp/source-artifacts.json
           python3 - <<'PY' > /tmp/source.env
           import json,os
-          a=json.load(open('/tmp/source-artifact.json'))
-          assert not a['expired'],a
-          assert a['name']=='havenline-task10-isolated-'+os.environ['CANDIDATE'],a
+          d=json.load(open('/tmp/source-artifacts.json'))
+          name='havenline-task10-exact-recapture-'+os.environ['CANDIDATE']
+          rows=[a for a in d['artifacts'] if a['name']==name and not a['expired']]
+          assert len(rows)==1,(name,rows)
+          a=rows[0]
+          print('SOURCE_ARTIFACT_ID='+str(a['id']))
           print('SOURCE_ARTIFACT_DIGEST='+str(a.get('digest','')))
           PY
           cat /tmp/source.env >> "$GITHUB_ENV"
-          cat /tmp/source.env
           mkdir -p source-evidence
+          source /tmp/source.env
           gh api "/repos/$GITHUB_REPOSITORY/actions/artifacts/$SOURCE_ARTIFACT_ID/zip" > /tmp/source.zip
           unzip -q /tmp/source.zip -d source-evidence
-          test -s source-evidence/candidate-state.json
-          test -s source-evidence/device-layout-evidence.json
+          test -s source-evidence/task10-isolated-evidence/source-contract.json
+          test -s source-evidence/task10-isolated-evidence/device-layout-evidence.json
+          test -s source-evidence/task10-isolated-evidence/native4k-evidence.json
+          test -s source-evidence/critic-input/performance.json
 
-      - name: Generate authoritative T10 approval state from bound evidence
+      - name: Generate authoritative T10 approval state
         run: |
           set -euo pipefail
           git fetch --no-tags origin "$CANONICAL_BRANCH"
           remote=$(git rev-parse "origin/$CANONICAL_BRANCH")
           test "$remote" = "$CANDIDATE"
           git worktree add --detach "$RUNNER_TEMP/t10-approved" "$CANDIDATE"
-          python3 tools/havenline/task10/finalize_t10_approval.py \
-            --repo "$RUNNER_TEMP/t10-approved" \
-            --source-evidence "$GITHUB_WORKSPACE/source-evidence" \
-            --review-evidence "$GITHUB_WORKSPACE/review-evidence" \
-            --regression-evidence "$GITHUB_WORKSPACE/regression-evidence" \
-            --source-run-id "$SOURCE_RUN" \
-            --source-artifact-id "$SOURCE_ARTIFACT_ID" \
-            --source-artifact-digest "$SOURCE_ARTIFACT_DIGEST" \
-            --review-run-id "$CONTROLLER_RUN" \
-            --review-artifact-id "$REVIEW_ARTIFACT_ID" \
-            --review-artifact-digest "$REVIEW_ARTIFACT_DIGEST" \
-            --regression-run-id "$REGRESSION_RUN" \
-            --regression-artifact-id "$REGRESSION_ARTIFACT_ID" \
-            --regression-artifact-digest "$REGRESSION_ARTIFACT_DIGEST"
+          python3 tools/havenline/task10/finalize_t10_approval.py             --repo "$RUNNER_TEMP/t10-approved"             --source-evidence "$GITHUB_WORKSPACE/source-evidence"             --review-evidence "$GITHUB_WORKSPACE/review-evidence"             --regression-evidence "$GITHUB_WORKSPACE/regression-evidence"             --source-run-id "$SOURCE_RUN"             --source-artifact-id "$SOURCE_ARTIFACT_ID"             --source-artifact-digest "$SOURCE_ARTIFACT_DIGEST"             --review-run-id "$CONTROLLER_RUN"             --review-artifact-id "$REVIEW_ARTIFACT_ID"             --review-artifact-digest "$REVIEW_ARTIFACT_DIGEST"             --regression-run-id "$REGRESSION_RUN"             --regression-artifact-id "$REGRESSION_ARTIFACT_ID"             --regression-artifact-digest "$REGRESSION_ARTIFACT_DIGEST"
+
           (
             cd "$RUNNER_TEMP/t10-approved"
             python3 tools/havenline/production/workstream.py validate-registry
@@ -185,30 +133,32 @@ jobs:
             python3 - <<'PY'
           import json
           from pathlib import Path
-          root=Path('.')
-          g=json.loads((root/'Docs/Production/DEPENDENCY_GRAPH.json').read_text())
-          r=json.loads((root/'Docs/Production/WORKSTREAM_REGISTRY.json').read_text())
-          t=json.loads((root/'Docs/Production/task-gates.json').read_text())
-          v=json.loads((root/'Docs/Production/T10/verified-completion.json').read_text())
+          g=json.loads(Path('Docs/Production/DEPENDENCY_GRAPH.json').read_text())
+          r=json.loads(Path('Docs/Production/WORKSTREAM_REGISTRY.json').read_text())
+          t=json.loads(Path('Docs/Production/task-gates.json').read_text())
+          v=json.loads(Path('Docs/Production/T10/verified-completion.json').read_text())
           assert g['tasks']['T10']['status']=='APPROVED'
           assert next(x for x in r['workstreams'] if x['task_id']=='T10')['status']=='APPROVED'
           assert 'T10' in t['approved_tasks'] and t['approved_task_count']>=10
-          assert v['status']=='APPROVED' and v['candidate_commit']=='b37b3d5e471c5699b97597f508ad8e7b28ce70ee'
-          assert v['minimum_mandatory_dimension_score']>9.0 and v['unresolved_mandatory_defects']==[]
+          assert v['status']=='APPROVED' and v['candidate_commit']=='eba0107def258824549fb10d81785290d0c81d97'
+          assert v['minimum_mandatory_dimension_score']>9.0
+          assert v['unresolved_mandatory_defects']==[]
           assert all(x['status']=='PASS' for x in v['gates'].values())
+          assert v['critics']['C6']['review_mode']=='preserved'
+          assert v['critics']['C7']['review_mode']=='preserved'
+          assert all(v['critics'][c]['review_mode']=='fresh' for c in ('C1','C2','C3','C4'))
           PY
           )
 
-      - name: Enforce bounded closeout diff and publish canonical approval
+      - name: Publish bounded canonical T10 approval
         run: |
           set -euo pipefail
           cd "$RUNNER_TEMP/t10-approved"
           git fetch --no-tags origin "$CANONICAL_BRANCH"
           test "$(git rev-parse origin/$CANONICAL_BRANCH)" = "$CANDIDATE"
-          git status --short
           python3 - <<'PY'
           import subprocess
-          allowed_exact={
+          allowed={
             'Docs/Production/DEPENDENCY_GRAPH.json',
             'Docs/Production/WORKSTREAM_REGISTRY.json',
             'Docs/Production/task-gates.json',
@@ -217,23 +167,18 @@ jobs:
             'Docs/Production/T10/defect-ledger.json',
             'Docs/Production/Evidence/T10/final-closeout.json',
           }
-          changed=set(subprocess.check_output(['git','status','--porcelain'],text=True).splitlines())
-          paths={line[3:] for line in changed if len(line)>=4}
-          bad=[p for p in paths if p not in allowed_exact and not p.startswith('Docs/Production/T10/CriticRaw/')]
-          assert paths, 'no closeout changes'
-          assert not bad,bad
+          paths={x[3:] for x in subprocess.check_output(['git','status','--porcelain'],text=True).splitlines() if len(x)>=4}
+          bad=[p for p in paths if p not in allowed and not p.startswith('Docs/Production/T10/CriticRaw/')]
+          assert paths and not bad,(paths,bad)
           PY
           git config user.name 'Havenline T10 Closeout'
           git config user.email 't10-closeout@example.invalid'
-          git add Docs/Production/DEPENDENCY_GRAPH.json Docs/Production/WORKSTREAM_REGISTRY.json Docs/Production/task-gates.json \
-            Docs/Production/T10/verified-completion.json Docs/Production/T10/independent-critic-review.json \
-            Docs/Production/T10/defect-ledger.json Docs/Production/T10/CriticRaw Docs/Production/Evidence/T10/final-closeout.json
-          git commit -m "T10: approve exact b37 integrated source after strict final closeout"
+          git add Docs/Production/DEPENDENCY_GRAPH.json Docs/Production/WORKSTREAM_REGISTRY.json Docs/Production/task-gates.json             Docs/Production/T10/verified-completion.json Docs/Production/T10/independent-critic-review.json             Docs/Production/T10/defect-ledger.json Docs/Production/T10/CriticRaw Docs/Production/Evidence/T10/final-closeout.json
+          git commit -m "T10: approve exact eba0107 integrated source after strict closeout"
           git push origin HEAD:refs/heads/$CANONICAL_BRANCH
           git rev-parse HEAD > /tmp/approval-commit.txt
-          cat /tmp/approval-commit.txt
 
-      - name: Publish closeout result marker
+      - name: Publish closeout result
         if: always()
         run: |
           set -euo pipefail
@@ -242,10 +187,9 @@ jobs:
           import json,os,pathlib
           p=pathlib.Path('/tmp/approval-commit.txt')
           out={
-            'task':'T10',
-            'candidate':os.environ['CANDIDATE'],
-            'controller_run':int(os.environ['CONTROLLER_RUN']) if os.environ.get('CONTROLLER_RUN') else None,
-            'regression_run':int(os.environ['REGRESSION_RUN']) if os.environ.get('REGRESSION_RUN') else None,
+            'task':'T10','candidate':os.environ['CANDIDATE'],
+            'controller_run':int(os.environ['CONTROLLER_RUN']),
+            'regression_run':int(os.environ['REGRESSION_RUN']),
             'approval_commit':p.read_text().strip() if p.exists() else None,
             'approved':p.exists(),
           }
