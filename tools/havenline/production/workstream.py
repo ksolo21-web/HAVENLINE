@@ -170,6 +170,20 @@ def registry_errors(registry=None):
 def deps_approved(task_id,graph):
     return [d for d in graph["tasks"][task_id]["dependencies"] if graph["tasks"][d]["status"]!="APPROVED"]
 
+def _remote_branch_head(branch: str) -> str | None:
+    try:
+        output=subprocess.check_output(
+            ["git","ls-remote","origin",f"refs/heads/{branch}"],
+            cwd=ROOT,text=True,stderr=subprocess.DEVNULL,
+        ).strip()
+    except Exception:
+        return None
+    rows=[line.split() for line in output.splitlines() if line.strip()]
+    if len(rows)!=1 or len(rows[0])<2 or rows[0][1]!=f"refs/heads/{branch}" or not re.fullmatch(r"[0-9a-f]{40}",rows[0][0]):
+        return None
+    return rows[0][0]
+
+
 def claim(task_id,owner,branch,base,owned_alias,status,integration_head=None,branch_head=None):
     registry=load_json(DOCS/"WORKSTREAM_REGISTRY.json");graph=load_json(DOCS/"DEPENDENCY_GRAPH.json")
     if task_id not in graph["tasks"]:fail("unknown task "+task_id)
@@ -178,6 +192,13 @@ def claim(task_id,owner,branch,base,owned_alias,status,integration_head=None,bra
     lineage=None
     if status=="ASSIGNED":
         if blocked:fail("cannot ASSIGN; dependencies not approved: "+",".join(blocked))
+        integration_branch=registry.get("integration_branch")
+        actual_builder_head=_remote_branch_head(branch)
+        actual_integration_head=_remote_branch_head(integration_branch) if integration_branch else None
+        if actual_builder_head!=branch_head:
+            fail(f"cannot ASSIGN; exact builder head does not match remote branch {branch}: expected={actual_builder_head} supplied={branch_head}")
+        if actual_integration_head!=integration_head:
+            fail(f"cannot ASSIGN; exact integration head does not match remote branch {integration_branch}: expected={actual_integration_head} supplied={integration_head}")
         lineage=assess_control_plane_lineage(branch_head,integration_head)
         if not lineage.get("passed"):
             fail("cannot ASSIGN; control-plane lineage is not synchronized:\n"+json.dumps(lineage,indent=2))
