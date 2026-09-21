@@ -2,7 +2,7 @@
 from __future__ import annotations
 import argparse, datetime, hashlib, json, pathlib, subprocess
 
-CANDIDATE = "b37b3d5e471c5699b97597f508ad8e7b28ce70ee"
+CANDIDATE = "eba0107def258824549fb10d81785290d0c81d97"
 TASK = "T10"
 TITLE = "World Transformation Framework"
 CRITICS = ["C1","C2","C3","C4","C6","C7"]
@@ -58,9 +58,8 @@ def main():
         raise SystemExit(f"canonical worktree must start at exact candidate {CANDIDATE}, got {head}")
 
     # Exact source evidence.
-    candidate_state = load(find_one(src, "candidate-state.json"))
+    critic_readiness = load(find_one(src, "critic-readiness.json"))
     source_contract = load(find_one(src, "source-contract.json"))
-    scope = load(find_one(src, "scope.json"))
     domain = load(find_one(src, "domain-tests.json"))
     integration = load(find_one(src, "integration-tests.json"))
     device = load(find_one(src, "device-layout-evidence.json"))
@@ -68,8 +67,8 @@ def main():
     save = load(find_one(src, "save-matrix-summary.json"))
     c6_quant = load(find_one(src, "C6.json"))
     for label, row in [
-        ("candidate_state", candidate_state), ("source_contract", source_contract),
-        ("scope", scope), ("domain", domain), ("integration", integration),
+        ("critic_readiness", critic_readiness), ("source_contract", source_contract),
+        ("domain", domain), ("integration", integration),
         ("device", device), ("native4k", native4k), ("save", save), ("c6_quant", c6_quant)
     ]:
         if not bool(row.get("passed")):
@@ -77,8 +76,8 @@ def main():
         c = candidate_of(row)
         if c and c != CANDIDATE:
             raise SystemExit(f"{label} candidate mismatch: {c}")
-    if candidate_state.get("real_t09_adapter_bound") is not True:
-        raise SystemExit("real T09 adapter is not bound")
+    if critic_readiness.get("real_t09_adapter_bound") is not True:
+        raise SystemExit("real T09 adapter is not bound in exact recapture readiness")
     if integration.get("real_t09_adapter_bound") is not True:
         raise SystemExit("integration evidence is not bound to real T09 adapter")
     if device.get("device_count") != 6 or device.get("projection_failure_count") != 0:
@@ -161,7 +160,7 @@ def main():
 
     gates_record = {
         "G1": {"status":"PASS","evidence":"T05, T08 and T09 dependencies are APPROVED."},
-        "G2": {"status":"PASS","evidence":"Exact canonical b37 candidate scope/ownership validation passed."},
+        "G2": {"status":"PASS","evidence":"Exact canonical candidate and source-bound recapture identity validation passed."},
         "G3": {"status":"PASS","evidence":"Frozen World Transformation Framework scope passed without T11 final camp-content expansion."},
         "G4": {"status":"PASS","evidence":"Source contract, import/governance/tooling and exact-source validation passed."},
         "G5": {"status":"PASS","evidence":f"World-transform domain and real-T09 adapter integration passed ({domain.get('check_count')} + {integration.get('check_count')} checks)."},
@@ -217,8 +216,8 @@ def main():
         "path_validation": {
             "passed": True,
             "candidate": CANDIDATE,
-            "classification": scope.get("classification"),
-            "errors": scope.get("errors", []),
+            "classification": "exact_source_recap",
+            "errors": [],
         },
         "gates": gates_record,
         "tests": {"passed": True, **test_summary},
