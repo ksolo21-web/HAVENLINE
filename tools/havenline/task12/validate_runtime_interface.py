@@ -59,6 +59,8 @@ AUTHORITY_BOUNDARY_TERMS = ("T10", "T11", "T13", "T14", "economy")
 def validate_contract(contract: dict[str, Any]) -> dict[str, Any]:
     errors: list[str] = []
 
+    if contract.get("schema_version") != 1:
+        errors.append("schema_version must be 1")
     if contract.get("task_id") != "T12":
         errors.append("task_id must be T12")
     if contract.get("status") != "PREPARATION_ONLY_INTERFACE_CONTRACT":
