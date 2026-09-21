@@ -75,7 +75,9 @@ jobs:
       - name: Import and run focused plus impacted regression
         run: |
           set -euo pipefail
+          python3 tools/havenline/bake_outpost_audio.py > task11-evidence/tests/audio-fixture.json
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task11-evidence/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task11-evidence/tests/motion-fixture.log 2>&1
           suites=(test_task09_harvesting test_task09_integration test_task10_world_transform test_task10_integration test_task11_camp_construction test_task11_integration)
           printf '%s\n' "${suites[@]}" > task11-evidence/tests/required-suites.txt
           for suite in "${suites[@]}"; do

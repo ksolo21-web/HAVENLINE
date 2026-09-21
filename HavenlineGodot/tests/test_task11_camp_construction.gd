@@ -26,6 +26,7 @@ func run() -> void:
 	check("empty placement is clear", View.placement_is_clear(origin, [], 2.8))
 	check("overlapping footprint is rejected", not View.placement_is_clear(origin, [{"position": Vector3(3.0, 0, 0), "radius": 1.0}], 2.8))
 	check("touching boundary is valid rather than over-rejected", View.placement_is_clear(origin, [{"position": Vector3(3.8, 0, 0), "radius": 1.0}], 2.8))
+	check("meaningful near-boundary overlap remains rejected", not View.placement_is_clear(origin, [{"position": Vector3(3.79, 0, 0), "radius": 1.0}], 2.8))
 	check("malformed footprint fails closed", not View.placement_is_clear(origin, [{"position": "bad", "radius": 1.0}], 2.8))
 	check("invalid clearance fails closed", not View.placement_is_clear(origin, [], 0.0))
 

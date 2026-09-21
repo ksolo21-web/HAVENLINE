@@ -56,7 +56,9 @@ static func placement_is_clear(origin: Vector3, occupied: Array, clearance_radiu
 		if not is_finite(radius) or radius < 0.0 or not is_finite(position.x) or not is_finite(position.z):
 			return false
 		var delta := Vector2(origin.x - position.x, origin.z - position.z)
-		if delta.length() < clearance_radius + radius:
+		var distance := delta.length()
+		var contact_limit := clearance_radius + radius
+		if distance < contact_limit and not is_equal_approx(distance, contact_limit):
 			return false
 	return true
 
