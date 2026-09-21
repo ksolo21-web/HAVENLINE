@@ -7,9 +7,9 @@
     "reference_machine_class": "github-actions ubuntu-24.04 python-3.12",
     "iterations": 500,
     "memory_iterations": 100,
-    "maximum_mean_ms": 8.0,
-    "maximum_p95_ms": 15.0,
-    "maximum_single_ms": 75.0,
+    "maximum_mean_ms": 8,
+    "maximum_p95_ms": 15,
+    "maximum_single_ms": 75,
     "maximum_retained_growth_kib": 512,
     "input_shape": "100 levels + 10 milestones + nine preparation validators including candidate-evidence, critic-review and complete-evidence-index templates",
     "measurement_rule": "Timing is measured without tracemalloc instrumentation. Retained/peak traced memory is measured in a separate bounded pass so allocation tracing overhead is not mistaken for validator latency."
@@ -17,7 +17,7 @@
   "fuzz_budget": {
     "deterministic_seed": 1200,
     "cases": 250,
-    "maximum_total_seconds": 8.0,
+    "maximum_total_seconds": 8,
     "minimum_rejected_mutations": 240,
     "mutation_classes": [
       "missing_level",
@@ -31,12 +31,21 @@
       "duplicate_one_time_event",
       "spend_gate",
       "energy_gate",
-      "provisional_upstream_id"
+      "provisional_upstream_id",
+      "noncanonical_level_id",
+      "wrong_region_band",
+      "missing_required_field",
+      "forward_prerequisite",
+      "duplicate_effect_payload",
+      "unresolved_milestone_reference",
+      "invalid_milestone_shape"
     ]
   },
   "shipping_c6_boundary": {
     "required_after_activation": true,
-    "critics": ["C6"],
+    "critics": [
+      "C6"
+    ],
     "must_measure": [
       "shipping data load/parse/validation",
       "eligibility query latency",
