@@ -26,6 +26,13 @@ def evaluate(task,target):
             for f in policy['graduation_manifest_fields']: ck('graduation_'+f,f in g and bool(g[f]))
             for key in ('sentinel_adapter','focused_tests','task_workflow','checkpoint_path'):
                 if g.get(key): ck(key+'_exists',(ROOT/g[key]).exists(),g[key])
+            wf=(ROOT/g['task_workflow']) if g.get('task_workflow') else None
+            if wf and wf.exists():
+                body=wf.read_text()
+                for token in policy.get('workflow_required_tokens',[]): ck('workflow_token_'+token,token in body)
+                required=set((ws or {}).get('critic_requirements',[]))
+                if required.intersection(policy.get('specialist_fanout_critics',[])): ck('workflow_specialist_fanout','havenline-v32-specialist-fanout.yml' in body)
+                if policy.get('performance_ledger_required_when_critic') in required: ck('workflow_performance_ledger','performance_ledger.py' in body)
             if g.get('checkpoint_path') and (ROOT/g['checkpoint_path']).exists():
                 from execution_checkpoint import validate_record
                 ck('execution_checkpoint',validate_record(load(ROOT/g['checkpoint_path']))['passed'])
