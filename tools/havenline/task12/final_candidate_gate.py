@@ -16,12 +16,14 @@ import json
 import pathlib
 import re
 import subprocess
+import sys
 from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
 TASK = ROOT / "tools" / "havenline" / "task12"
 DOCS = ROOT / "Docs" / "Production" / "T12"
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
+WORKSTREAM_VALIDATOR = ROOT / "tools" / "havenline" / "production" / "workstream.py"
 
 
 def load_module(name: str, filename: str):
@@ -44,6 +46,40 @@ def sha256_bytes(data: bytes) -> str:
     return hashlib.sha256(data).hexdigest()
 
 
+def run_candidate_guard(base: str, candidate: str, integration_head: str) -> dict[str, Any]:
+    proc = subprocess.run(
+        [
+            sys.executable,
+            str(WORKSTREAM_VALIDATOR),
+            "validate-candidate",
+            "T12",
+            "--base",
+            base,
+            "--head",
+            candidate,
+            "--integration-head",
+            integration_head,
+        ],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+        check=False,
+    )
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return {
+            "passed": False,
+            "errors": [f"candidate guard produced non-JSON output: {proc.stdout.strip()}"],
+        }
+    if proc.returncode != 0 and result.get("passed") is True:
+        result = dict(result)
+        result["passed"] = False
+        result.setdefault("errors", []).append(f"candidate guard exited {proc.returncode}")
+    return result
+
+
 def validate_consistency(
     candidate: dict[str, Any],
     critic_records: dict[str, Any],
@@ -53,6 +89,7 @@ def validate_consistency(
     *,
     progression_validation_result: dict[str, Any],
     binding_verification_result: dict[str, Any],
+    candidate_guard_result: dict[str, Any],
     checked_out_head: str,
     levels_sha256: str,
     milestones_sha256: str,
@@ -102,6 +139,23 @@ def validate_consistency(
         errors.append(
             f"final candidate gate must run on exact candidate checkout: head={checked_out_head!r} candidate={candidate_sha!r}"
         )
+
+    activation_base = source.get("activation_base")
+    integration_head = source.get("integration_head")
+    if not isinstance(candidate_guard_result, dict) or candidate_guard_result.get("passed") is not True:
+        errors.append(
+            "canonical T12 candidate path guard failed: "
+            + json.dumps((candidate_guard_result or {}).get("errors", []))
+        )
+    else:
+        if candidate_guard_result.get("task_id") != "T12":
+            errors.append("candidate guard task_id does not match T12")
+        if candidate_guard_result.get("base") != activation_base:
+            errors.append("candidate guard base does not match candidate activation_base")
+        if candidate_guard_result.get("head") != candidate_sha:
+            errors.append("candidate guard head does not match candidate_source")
+        if candidate_guard_result.get("integration_head") != integration_head:
+            errors.append("candidate guard integration_head does not match candidate evidence")
 
     if critic_records.get("candidate_source") != candidate_sha:
         errors.append("critic records candidate_source does not match candidate evidence")
@@ -179,6 +233,7 @@ def validate_consistency(
         "evidence_index_passed": evidence_index_result["passed"],
         "shipping_progression_validation_passed": progression_validation_result.get("passed") is True,
         "binding_verification_passed": binding_verification_result.get("passed") is True,
+        "candidate_guard_passed": candidate_guard_result.get("passed") is True,
         "exact_candidate_checkout_passed": checked_out_head == candidate_sha,
         "evidence_index_entry_count": evidence_index_result.get("entry_count"),
         "evidence_index_required_ref_count": evidence_index_result.get("required_ref_count"),
