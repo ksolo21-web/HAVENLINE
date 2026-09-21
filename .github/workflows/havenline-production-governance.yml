@@ -14,6 +14,8 @@ on:
       - '.github/workflows/havenline-specialist-critic.yml'
       - '.github/workflows/havenline-specialist-model-cache.yml'
       - '.github/workflows/havenline-critic-safeguards.yml'
+      - '.github/workflows/havenline-v32-task-preflight.yml'
+      - '.github/workflows/havenline-v32-specialist-fanout.yml'
       - '.github/workflows/havenline-task03-v2-final.yml'
   pull_request:
     branches: ['codex/havenline-sequential-task-01']
@@ -182,6 +184,39 @@ jobs:
           jq -e '.proof_reuse_blocked == true and .automatic_approval_revocation == false and (.invalidated_tasks | index("T15")) != null and (.invalidated_tasks | index("T70")) != null and (.invalidated_gates | index("save_matrix")) != null' /tmp/v31-persistence-invalidation.json
           jq -e '.passed == true and ((.contract_change_detected == false and .proof_reuse_blocked == false and .integration_owner_disposition_required == false) or (.contract_change_detected == true and .proof_reuse_blocked == true and .integration_owner_disposition_required == true))' /tmp/v31-contract-diff.json
           python3 /tmp/t10_activation_check.py snapshot
+      - name: Validate Production Architecture V3.2 parallel production and resumability
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/architecture_v32.py validate > /tmp/v32-validation.json
+          python3 tools/havenline/production/architecture_v32.py readiness T11 > /tmp/v32-t11.json
+          python3 tools/havenline/production/architecture_v32.py readiness T12 > /tmp/v32-t12.json
+          python3 tools/havenline/production/architecture_v32.py readiness T14 > /tmp/v32-t14.json
+          python3 tools/havenline/production/architecture_v32.py readiness T35 > /tmp/v32-t35.json
+          python3 tools/havenline/production/architecture_v32.py readiness T68 > /tmp/v32-t68.json
+          python3 tools/havenline/production/parallel_preparation_planner.py validate > /tmp/v32-prep.json
+          python3 tools/havenline/production/task_graduation_gate.py T11 --target ASSIGNED > /tmp/v32-t11-graduation.json
+          python3 tools/havenline/production/timeout_stage_plan.py T11 > /tmp/v32-t11-stages.json
+          python3 tools/havenline/production/timeout_stage_plan.py T62 > /tmp/v32-t62-stages.json
+          python3 tools/havenline/production/rolling_canary.py validate > /tmp/v32-canaries.json
+          python3 tools/havenline/production/rolling_canary.py requirements T12 > /tmp/v32-t12-canaries.json
+          python3 tools/havenline/production/performance_ledger.py validate > /tmp/v32-performance.json
+          python3 tools/havenline/production/branch_budget.py > /tmp/v32-branches.json
+          python3 tools/havenline/production/authority_consistency.py > /tmp/v32-authority.json
+          python3 tools/havenline/production/forward_prep_contract.py > /tmp/v32-forward-prep.json
+          jq -e '.passed == true and .architecture_version == "3.2" and .task_count == 60 and .components.workflow_consumption.passed == true and .components.authority_consistency.passed == true and .components.forward_prep_contract.passed == true' /tmp/v32-validation.json
+          jq -e '.passed == true and .integration_owner_slots == 1 and .active_runtime_count <= .runtime_wip_max' /tmp/v32-prep.json
+          jq -e '.passed == true and .task_id == "T11"' /tmp/v32-t11-graduation.json
+          jq -e '.timeout_is_product_judgment == false and .critic_parallelism >= 1 and ([.shards[] | select(.checkpoint_after == true)] | length) == (.shards | length)' /tmp/v32-t11-stages.json
+          jq -e '.timeout_is_product_judgment == false and .critic_parallelism >= 1' /tmp/v32-t62-stages.json
+          jq -e '.passed == true and .canary_count >= 8' /tmp/v32-canaries.json
+          jq -e '([.canaries[] | select(.canary == "level_1_100_reachability")] | length) == 1' /tmp/v32-t12-canaries.json
+          jq -e '.passed == true' /tmp/v32-performance.json
+          jq -e '.passed == true' /tmp/v32-branches.json
+          jq -e '.passed == true' /tmp/v32-authority.json
+          jq -e '.passed == true and .prep_task_count >= 20 and .shared_contract_count >= 8' /tmp/v32-forward-prep.json
+          grep -q 'actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'fail-fast: false' .github/workflows/havenline-v32-specialist-fanout.yml
       - name: Require C1-C11 execution readiness
         run: python3 tools/havenline/production/validate_critic_readiness.py
       - name: Smoke-test frozen task packet generation
@@ -206,6 +241,12 @@ jobs:
           grep -q 'factory_observer.py' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'factory_closeout_gate.py' Docs/Production/Evidence/T10/TASK_PACKET.md
           grep -q 'factory-observation.json' Docs/Production/Evidence/T10/TASK_PACKET.md
+          python3 tools/havenline/production/task_packet.py T11
+          grep -q 'Production Architecture V3.2 — machine resolved' Docs/Production/Evidence/T11/TASK_PACKET.md
+          grep -q 'task_graduation_gate.py T11 --target ASSIGNED' Docs/Production/Evidence/T11/TASK_PACKET.md
+          grep -q 'execution_checkpoint.py' Docs/Production/Evidence/T11/TASK_PACKET.md
+          grep -q 'blocker_family_gate.py' Docs/Production/Evidence/T11/TASK_PACKET.md
+          grep -q 'critic_invalidation.py' Docs/Production/Evidence/T11/TASK_PACKET.md
       - name: Validate resource/tool/actor registry schema
         run: python3 tools/havenline/production/resource_actor_contract.py --task T05 --schema-only
       - name: Validate Game Master policy schema
@@ -221,7 +262,7 @@ jobs:
           fi
           cat /tmp/impact.json
           cat /tmp/integration-scope.json
-# Full V2/V3/V3.1 state is validated every run; integration scope remains lifecycle/ownership based rather than frozen to a task number.
+# Full V2/V3/V3.1/V3.2 state is validated every run; integration scope remains lifecycle/ownership based rather than frozen to a task number.
 # V3.1 locked surfaces are byte-bound to accepted source 673d7a7477cc94aef2b7bb8f3d788b1b3c47f902; any change requires explicit V3.2 scope and a new hosted acceptance cycle.
 # GitHub CODEOWNERS routes architecture review but repository-admin ruleset/branch protection remains the external enforcement layer.
 # Governance/QA only. This workflow cannot award a task critic score, approve gameplay, or bypass task-specific review.

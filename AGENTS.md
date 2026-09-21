@@ -30,6 +30,7 @@ Read in this order before any Havenline production work:
 7. `Docs/Production/FORWARD_GATE_RUNNERS.json`
 8. `Docs/Production/PRODUCTION_ARCHITECTURE_V3.md`
 9. `Docs/Production/PRODUCTION_ARCHITECTURE_V31_STANDARD.md`
+9a. `Docs/Production/PRODUCTION_ARCHITECTURE_V32_STANDARD.md`
 10. `Docs/Production/TASK_CAPABILITY_MATRIX.json`
 11. `Docs/Production/CAPABILITY_STATUS.json`
 12. `Docs/Production/PRODUCTION_SCHEDULER_POLICY.json`
@@ -156,6 +157,21 @@ T10+ work. V3.1 does not replace V3; it adds factory hardening.
 - Generate/read a canonical task state with `task_state_snapshot.py Txx` before rediscovering task history across chats.
 - `mutation_canary.py` must remain green so validators prove they can reject deliberately bad synthetic inputs.
 - If an approved task/contract is reopened, run `proof_invalidation.py` and treat affected downstream proof as stale until integration-owner disposition/revalidation.
+
+## Production Architecture V3.2 parallel/resumable rule
+
+For T11+ run `python3 tools/havenline/production/architecture_v32.py readiness Txx` before assignment/build work.
+
+- Safe future work may proceed in parallel only as PREP_NOW / BUILD_WHEN_UNLOCKED preparation; it cannot integrate or claim approval early.
+- PREPARED -> ASSIGNED requires `task_graduation_gate.py Txx --target ASSIGNED`.
+- ASSIGNED -> BUILDING_ISOLATED requires `GRADUATION.json`, the early sentinel, focused tests, task workflow, execution checkpoint, timeout stage plan and critic-package preflight.
+- Every active task keeps a resumable `execution_checkpoint.py` record. TIMEOUT is infrastructure evidence by default and resumes from the last completed stage on the same exact SHA.
+- Use `timeout_stage_plan.py` to keep preflight, domain/matrix, regression/performance, evidence, critics, integration and closeout independently resumable.
+- Three blockers on one frozen candidate trigger `blocker_family_gate.py`; stop serial symptom IDs and reconcile causal families before another build.
+- Applicable specialist critics fan out on one frozen SHA. Use `critic_invalidation.py` so same-SHA unaffected critics remain valid; changed source SHA still requires fresh exact-source review.
+- Run rolling canaries early and maintain cumulative performance headroom. Early canaries never replace T32/T55/T58/T62/T68/T69 formal acceptance.
+- Branch budget: one authoritative task branch plus at most one active bounded repair branch; prototypes are disposable.
+- Preserve the strict >9.0 unrounded quality rule, target 10/10, zero unresolved mandatory defects. V3.2 improves throughput, never lowers quality.
 
 ## Controlled parallel-production rule
 

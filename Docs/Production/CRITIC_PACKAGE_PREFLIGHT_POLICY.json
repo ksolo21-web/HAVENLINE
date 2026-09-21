@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "purpose": "Reject malformed or unbounded critic packages before expensive independent review.",
+  "limits": {
+    "manifest_bytes_max": 1048576,
+    "groups_max": 32,
+    "items_per_group_max": 64,
+    "text_item_bytes_max": 16384,
+    "response_observations_max": 8,
+    "response_observation_chars_max": 400,
+    "response_defects_max": 8,
+    "response_defect_chars_max": 400,
+    "response_completion_tokens_max": 1200
+  },
+  "required": [
+    "task_id",
+    "critic_id",
+    "candidate_commit",
+    "groups"
+  ],
+  "rules": {
+    "exact_candidate_match": true,
+    "unique_group_ids": true,
+    "unique_item_paths_per_group": true,
+    "sha256_format_when_present": true,
+    "readable_local_evidence_when_present": true,
+    "empty_required_group_forbidden": true,
+    "preflight_failure_is_evidence_or_tooling_defect_not_automatic_gameplay_defect": true
+  }
+}

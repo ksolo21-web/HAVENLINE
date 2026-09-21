@@ -6,6 +6,7 @@ from forward_execution import resolve_task
 from critic_profile import resolve_critic
 from architecture_v3 import task_readiness
 from architecture_v31 import task_readiness as task_readiness_v31
+from architecture_v32 import readiness as task_readiness_v32
 
 RESOURCE_REGISTRY = DOCS / "RESOURCE_ACTION_REGISTRY.json"
 ACTOR_MATRIX = DOCS / "ACTOR_CAPABILITY_MATRIX.json"
@@ -144,6 +145,24 @@ Required APPROVED upstream tasks: {', '.join(task['dependencies']) or 'none'}
         text+=f"- V3.1 runtime activation allowed now: `{str(v31['runtime_activation_allowed']).lower()}`\n"
         if not v31['runtime_activation_allowed']:text+="- **DO NOT start runtime implementation from this packet yet.** V3 capabilities may be ready, but V3.1 lifecycle, ownership, or canonical-state blockers must clear first.\n"
 
+        if int(task_id[1:]) >= 11:
+            v32=task_readiness_v32(task_id);prep=v32['preparation'];grad=v32['graduation_assigned'];stages=v32['stage_plan']
+            text+="\n## Production Architecture V3.2 — machine resolved\n"
+            text+="- Standard: `Docs/Production/PRODUCTION_ARCHITECTURE_V32_STANDARD.md`\n"
+            text+=f"- V3.2 readiness: `python3 tools/havenline/production/architecture_v32.py readiness {task_id}`\n"
+            text+=f"- Parallel-preparation class: `{prep['classification']}`; safe work: {', '.join(prep['safe_work']) or 'none'}\n"
+            text+=f"- ASSIGNED graduation currently passes: `{str(grad['passed']).lower()}`\n"
+            text+=f"- Timeout-safe stage shards: `{len(stages['shards'])}`; critic fan-out lanes: `{stages['critic_parallelism']}`\n"
+            text+=f"- Before ASSIGNED: `python3 tools/havenline/production/task_graduation_gate.py {task_id} --target ASSIGNED`\n"
+            text+=f"- Before BUILDING_ISOLATED: create `Docs/Production/{task_id}/GRADUATION.json` and pass `python3 tools/havenline/production/task_graduation_gate.py {task_id} --target BUILDING_ISOLATED`.\n"
+            text+="- Initialize/update `execution_checkpoint.py`; on timeout preserve `INFRASTRUCTURE_FAILURE` and resume the same exact SHA/stage instead of restarting the task.\n"
+            text+=f"- Run `python3 tools/havenline/production/timeout_stage_plan.py {task_id}`; do not combine unrelated expensive stages into one uncheckpointed job.\n"
+            text+="- Before independent critics run `critic_package_preflight.py` on every source-bound manifest. Applicable specialist critics fan out through `havenline-v32-specialist-fanout.yml`.\n"
+            text+="- If three blockers accumulate on one frozen candidate, `blocker_family_gate.py` requires causal-family reconciliation before another candidate.\n"
+            text+="- Use `critic_invalidation.py` to preserve unchanged same-SHA critic passes; a source-SHA change still requires fresh exact-source review where V3/V3.1 require it.\n"
+            text+=f"- Rolling prevention canaries: `python3 tools/havenline/production/rolling_canary.py requirements {task_id}`.\n"
+            text+="- Record cumulative workload pressure with `performance_ledger.py`; C6 quality scores cannot waive performance budgets or reserved headroom.\n"
+            text+="- Parallel preparation of later tasks is encouraged only inside GREEN/YELLOW boundaries; it never grants integration or approval.\n"
     text+="""
 
 ## Score rule

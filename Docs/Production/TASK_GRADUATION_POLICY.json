@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "authority": "Docs/Production/PRODUCTION_ARCHITECTURE_V32_STANDARD.md",
+  "transitions": {
+    "PREPARED_to_ASSIGNED": {
+      "required": [
+        "dependencies_approved",
+        "canonical_packet",
+        "frozen_scope",
+        "registered_workstream",
+        "owner",
+        "isolated_branch",
+        "owned_path_reservation",
+        "activation_checklist",
+        "critic_contract",
+        "no_required_external_blocker"
+      ],
+      "rule": "Ownership may be claimed only after all requirements pass."
+    },
+    "ASSIGNED_to_BUILDING_ISOLATED": {
+      "required": [
+        "assigned_gate_pass",
+        "graduation_manifest",
+        "early_sentinel_adapter",
+        "focused_tests",
+        "timeout_stage_plan",
+        "execution_checkpoint",
+        "critic_package_preflight_contract"
+      ],
+      "rule": "Authoritative runtime construction starts only after proof machinery is ready."
+    }
+  },
+  "graduation_manifest_fields": [
+    "task_id",
+    "sentinel_adapter",
+    "focused_tests",
+    "task_workflow",
+    "checkpoint_path",
+    "critic_preflight_command",
+    "stage_plan_command",
+    "failure_router_command",
+    "canary_command"
+  ],
+  "external_blockers_fail_closed": true,
+  "governance_only_base_drift_may_reconcile_without_runtime_reset": true,
+  "workflow_required_tokens": [
+    "architecture_v32.py",
+    "execution_checkpoint.py",
+    "timeout_stage_plan.py",
+    "critic_package_preflight.py",
+    "blocker_family_gate.py",
+    "rolling_canary.py"
+  ],
+  "specialist_fanout_critics": [
+    "C3",
+    "C4",
+    "C5",
+    "C7",
+    "C8",
+    "C10",
+    "C11"
+  ],
+  "performance_ledger_required_when_critic": "C6"
+}

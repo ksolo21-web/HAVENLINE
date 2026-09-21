@@ -1,0 +1,274 @@
+{
+  "schema_version": 1,
+  "authority": "Docs/Production/PRODUCTION_ARCHITECTURE_V32_STANDARD.md",
+  "purpose": "Safe ahead-of-frontier preparation. These artifacts do not unlock runtime or approval.",
+  "immediate_parallel_prep": [
+    {
+      "tasks": [
+        "T12"
+      ],
+      "lane": "forward_preparation",
+      "deliverables": [
+        "Level 1-100 reachability graph fixture",
+        "monotonic curve/dead-end simulator contract",
+        "rolling L1-10/L1-100 canary adapter"
+      ],
+      "forbidden": [
+        "T12 production runtime integration before T11 APPROVED"
+      ]
+    },
+    {
+      "tasks": [
+        "T13"
+      ],
+      "lane": "forward_preparation",
+      "deliverables": [
+        "spend-blind input schema",
+        "difficulty boundedness cases",
+        "no-HP-only-inflation cases",
+        "Game Master challenge separation tests"
+      ],
+      "forbidden": [
+        "difficulty runtime integration before T12 APPROVED"
+      ]
+    },
+    {
+      "tasks": [
+        "T14"
+      ],
+      "lane": "forward_preparation",
+      "deliverables": [
+        "save version/migration schema",
+        "golden-save fixture contract",
+        "corrupt/interrupted/rollback recovery cases",
+        "transaction identity preservation cases"
+      ],
+      "forbidden": [
+        "global save runtime implementation before T12 APPROVED"
+      ]
+    },
+    {
+      "tasks": [
+        "T15"
+      ],
+      "lane": "forward_preparation",
+      "deliverables": [
+        "population stress record schema",
+        "routing contention/deadlock cases",
+        "spawn/despawn identity cases",
+        "population performance allocation"
+      ],
+      "forbidden": [
+        "NPC runtime integration before T14 APPROVED"
+      ]
+    },
+    {
+      "tasks": [
+        "T16",
+        "T17",
+        "T18",
+        "T19",
+        "T20",
+        "T21",
+        "T22",
+        "T23"
+      ],
+      "lane": "forward_preparation",
+      "deliverables": [
+        "shared contextual-action arbitration contract",
+        "tool/weapon selection rules",
+        "cancellation/contact/resource-conservation cases"
+      ],
+      "forbidden": [
+        "task runtime before dependencies graduate"
+      ]
+    },
+    {
+      "tasks": [
+        "T24",
+        "T25",
+        "T26",
+        "T27",
+        "T28",
+        "T29",
+        "T30"
+      ],
+      "lane": "asset_content_readiness",
+      "deliverables": [
+        "source asset inventory",
+        "rig/skeleton audit",
+        "species-specific locomotion/contact matrix",
+        "C5 capture requirements"
+      ],
+      "forbidden": [
+        "final gameplay/critic approval before T14 and task dependencies"
+      ]
+    },
+    {
+      "tasks": [
+        "T33",
+        "T34",
+        "T35",
+        "T36",
+        "T37",
+        "T38",
+        "T39",
+        "T40",
+        "T41",
+        "T42",
+        "T43"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "shared transaction/idempotency contract",
+        "external capability evidence plan",
+        "security attack cases",
+        "virtual-clock LiveOps cases",
+        "identity/cloud recovery cases"
+      ],
+      "forbidden": [
+        "claim external readiness without evidence"
+      ]
+    },
+    {
+      "tasks": [
+        "T44",
+        "T45",
+        "T46",
+        "T47",
+        "T48",
+        "T49",
+        "T50",
+        "T51",
+        "T52",
+        "T53"
+      ],
+      "lane": "forward_preparation",
+      "deliverables": [
+        "region template contract",
+        "resource/tool registration template",
+        "entry/exit/save/streaming/performance hooks",
+        "transport continuity cases"
+      ],
+      "forbidden": [
+        "region runtime before dependencies"
+      ]
+    },
+    {
+      "tasks": [
+        "T55",
+        "T56",
+        "T58"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "accessibility smoke matrix",
+        "device/foldable layout cases",
+        "mode-switch persistence/performance cases"
+      ],
+      "forbidden": [
+        "formal acceptance before owning tasks"
+      ]
+    },
+    {
+      "tasks": [
+        "T68",
+        "T69",
+        "T70"
+      ],
+      "lane": "infrastructure",
+      "deliverables": [
+        "named-device evidence plan",
+        "non-certification reconnaissance record schema",
+        "release provenance checklist"
+      ],
+      "forbidden": [
+        "reconnaissance cannot substitute T68/T69 certification"
+      ]
+    }
+  ],
+  "required_shared_contracts": {
+    "progression_reachability": [
+      "node_id",
+      "prerequisites",
+      "costs",
+      "unlocks",
+      "terminal_or_next_nodes"
+    ],
+    "save_versioning": [
+      "schema_version",
+      "migration_from",
+      "migration_to",
+      "rollback_policy",
+      "corrupt_recovery",
+      "transaction_identity"
+    ],
+    "population_stress": [
+      "population",
+      "routes",
+      "contention",
+      "deadlocks",
+      "despawn_respawn",
+      "save_reload",
+      "cpu_ms",
+      "memory_mb"
+    ],
+    "action_arbitration": [
+      "context",
+      "eligible_actions",
+      "priority",
+      "selected_action",
+      "tool_or_weapon",
+      "cancel_rule",
+      "contact_authority",
+      "resource_effect"
+    ],
+    "motion_readiness": [
+      "actor",
+      "skeleton",
+      "locomotion_cycles",
+      "contact_actions",
+      "transition_set",
+      "clearance_constraints",
+      "capture_views"
+    ],
+    "transaction_security": [
+      "transaction_id",
+      "authority",
+      "idempotence",
+      "replay_rejection",
+      "rollback",
+      "grant_source"
+    ],
+    "liveops_virtual_clock": [
+      "case_id",
+      "start_time",
+      "time_shift",
+      "offline_interval",
+      "expected_events",
+      "expected_rewards",
+      "kill_switch",
+      "rollback"
+    ],
+    "region_template": [
+      "region_id",
+      "entry_exit",
+      "resources",
+      "tools",
+      "save_boundary",
+      "streaming_budget",
+      "performance_budget",
+      "transport_hooks"
+    ],
+    "physical_reconnaissance": [
+      "device",
+      "build_sha",
+      "native_resolution",
+      "duration_minutes",
+      "frame_time",
+      "thermal_state",
+      "memory",
+      "non_certification"
+    ]
+  }
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "purpose": "Resumable T11+ execution record; never an approval authority.",
+  "stages": [
+    "PRECHECK",
+    "BUILD",
+    "SENTINEL",
+    "DOMAIN_GATES",
+    "REGRESSION",
+    "PERFORMANCE",
+    "EVIDENCE",
+    "CRITICS",
+    "INTEGRATION",
+    "POST_INTEGRATION",
+    "CLOSEOUT"
+  ],
+  "stage_statuses": [
+    "NOT_STARTED",
+    "RUNNING",
+    "PASS",
+    "FAIL",
+    "BLOCKED",
+    "SUPERSEDED",
+    "TIMEOUT"
+  ],
+  "required_fields": [
+    "schema_version",
+    "task_id",
+    "integration_sha",
+    "branch",
+    "stage",
+    "stage_status",
+    "completed_gates",
+    "reusable_proof",
+    "blocker_families",
+    "running_workflows",
+    "next_action",
+    "next_command",
+    "updated_at"
+  ],
+  "optional_fields": [
+    "candidate_sha",
+    "environment_fingerprint",
+    "previous_checkpoint_sha256",
+    "notes"
+  ],
+  "rules": {
+    "exact_sha_required_for_candidate_stages": true,
+    "timeout_is_not_product_judgment": true,
+    "timeout_requires_infrastructure_classification": true,
+    "completed_gate_reuse_requires_same_source_and_valid_fingerprint": true,
+    "running_workflow_ids_preserved": true,
+    "no_secrets": true,
+    "checkpoint_is_not_lifecycle_authority": true
+  }
+}
