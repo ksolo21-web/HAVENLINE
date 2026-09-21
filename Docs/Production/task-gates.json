@@ -85,9 +85,10 @@
     "T06",
     "T07",
     "T08",
-    "T09"
+    "T09",
+    "T10"
   ],
-  "approved_task_count": 9,
+  "approved_task_count": 10,
   "legacy_approval_policy": {
     "T01_T02_not_retroactively_revoked": true
   },
@@ -99,17 +100,17 @@
     "all_applicable_gates_must_pass": true,
     "no_unresolved_mandatory_defects": true
   },
-  "active_task": "T10",
-  "active_task_title": "World Transformation Framework",
-  "active_status": "FIX_REQUIRED",
-  "active_frozen_scope": "Docs/Production/T10/FROZEN_SCOPE.md",
-  "active_task_packet": "Docs/Production/T10/TASK_PACKET.md",
-  "active_base_integration_commit": "62f5a13753968c77a0feb47a18d93c82d8c5b581",
+  "active_task": null,
+  "active_task_title": null,
+  "active_status": null,
+  "active_frozen_scope": null,
+  "active_task_packet": null,
+  "active_base_integration_commit": null,
   "active_candidate_source": null,
   "active_candidate_run": null,
   "active_tests": null,
-  "active_evidence": "Docs/Production/Evidence/T10/",
-  "active_critic_state": "PENDING_BUILD_AND_INDEPENDENT_REVIEW",
+  "active_evidence": null,
+  "active_critic_state": null,
   "task04_plus_runtime_locked": false,
   "task05_plus_runtime_locked": false,
   "task06_plus_runtime_locked": false,
@@ -271,6 +272,21 @@
       "artifact_id": 10527144124,
       "record": "Docs/Production/T09/verified-completion.json",
       "later_regression_reopens_task": true
+    },
+    "T10": {
+      "status": "APPROVED",
+      "accepted_source": "eba0107def258824549fb10d81785290d0c81d97",
+      "integrated_source": "eba0107def258824549fb10d81785290d0c81d97",
+      "score": 9.350213966238757,
+      "minimum_mandatory_dimension_score": 9.350213966238757,
+      "gate_operator": "> 9.0",
+      "visual_status": "PASS",
+      "source_evidence_run": 35600328627,
+      "final_review_run": 35611996638,
+      "integrated_evidence_run": 35611529497,
+      "artifact_id": 10644792259,
+      "record": "Docs/Production/T10/verified-completion.json",
+      "later_regression_reopens_task": true
     }
   },
   "next_post_t03_wave": [
@@ -325,10 +341,10 @@
     {
       "task": "T10",
       "branch": "havenline/T10-world-transformation",
-      "state": "FIX_REQUIRED",
+      "state": "APPROVED",
       "owner": "world-transformation-builder",
       "base_commit": "62f5a13753968c77a0feb47a18d93c82d8c5b581",
-      "reason": "C0 B037-B043 comprehensive tooling and governance repair required; all critics and thresholds preserved. Diagnostic canary and complete closure rehearsal precede fresh full validation."
+      "reason": "Exact canonical source eba0107def258824549fb10d81785290d0c81d97 passed G1-G14, fresh impacted regression, source-bound fresh C1/C2/C3/C4 plus preserved C6/C7 with minimum 9.350, complete coverage and zero unresolved mandatory defects."
     }
   ],
   "whole_game_approved": false,

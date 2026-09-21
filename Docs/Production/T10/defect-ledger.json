@@ -1,18 +1,18 @@
 {
   "schema_version": 1,
   "task_id": "T10",
-  "review_scope": "isolated World Transformation Framework build through BUILT_PENDING_DEPENDENCY; production integration/critics/approval remain dependency-gated",
+  "review_scope": "final exact integrated-source World Transformation Framework approval",
   "builder_branch": "havenline/T10-world-transformation",
   "source_integration_checkpoint": "0427a7f8f11ca2afe1866ee972657b631b3e3c50",
   "latest_observed_integration_head": "76d56e1af39692dd382936c480a57bc7d858d983",
-  "latest_verified_source": "0f93003e91ec2e785af5e821f3c94a3ec9c2dc81 (candidate guard/preflight and isolated structural gates passed; width-only adjustment reproduced phone 16:9 ready/overhead projected containment failure; not approved)",
-  "latest_verified_run": 35401512350,
-  "latest_verified_artifact": 10570477028,
-  "latest_verified_artifact_sha256": "3067306c2a60acc9377e0aa3547622b84881bf01b90a3049e74fbea80c9b605b",
-  "isolated_state": "FIX_REQUIRED_B053_B061_CUMULATIVE_REPAIR",
-  "integration_allowed": false,
-  "task_approved": false,
-  "real_t09_adapter_bound": false,
+  "latest_verified_source": "eba0107def258824549fb10d81785290d0c81d97",
+  "latest_verified_run": 35611529497,
+  "latest_verified_artifact": 10644792259,
+  "latest_verified_artifact_sha256": "d7b6f86467cd53d38084e8c8dd3d7a85edc2815d22d9682811526f84bf69cbe7",
+  "isolated_state": "APPROVED",
+  "integration_allowed": true,
+  "task_approved": true,
+  "real_t09_adapter_bound": true,
   "isolated_critic_input_ready": true,
   "internal_review": {
     "reviewer_type": "internal review; no separate critic runtime claimed",
@@ -354,5 +354,21 @@
       "status": "OWNER_REPAIR_READY",
       "classification": "TOOLING_DEFECT"
     }
-  ]
+  ],
+  "unresolved_mandatory_defects": [],
+  "final_closeout": {
+    "minimum_mandatory_dimension_score": 9.350213966238757,
+    "required_critics": [
+      "C1",
+      "C2",
+      "C3",
+      "C4",
+      "C6",
+      "C7"
+    ],
+    "zero_unresolved_defects": true,
+    "fresh_regression_run_id": 35611529497,
+    "final_review_run_id": 35611996638,
+    "approved_at": "2026-09-21T14:35:08.454169Z"
+  }
 }

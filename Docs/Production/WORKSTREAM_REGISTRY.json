@@ -411,7 +411,7 @@
       "task_id": "T10",
       "task_name": "World Transformation Framework",
       "workstream_id": "T10-world-transformation-builder",
-      "status": "FIX_REQUIRED",
+      "status": "APPROVED",
       "owner": "world-transformation-builder",
       "branch": "havenline/T10-world-transformation",
       "base_commit": "62f5a13753968c77a0feb47a18d93c82d8c5b581",
@@ -427,9 +427,18 @@
         "@protected:approved",
         "@integration-only"
       ],
-      "candidate_commit": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
-      "candidate_hash_or_artifact": null,
-      "tests": {},
+      "candidate_commit": "eba0107def258824549fb10d81785290d0c81d97",
+      "candidate_hash_or_artifact": "integrated-source:eba0107def258824549fb10d81785290d0c81d97; source-run:35600328627; source-artifact:10638906001; review-run:35611996638; review-artifact:10644792259; regression-run:35611529497; regression-artifact:10644571250",
+      "tests": {
+        "source_contract": "PASS",
+        "formal_domain": "PASS; 239 checks",
+        "real_t09_integration": "PASS; 135 checks",
+        "fresh_impacted_regression": "PASS; 7 suites / 653 checks",
+        "save_state_matrix": "7/7 passed",
+        "device_layout_matrix": "6 devices / 216 projections passed",
+        "native_4k_matrix": "36/36 unique 3840x2160 captures passed",
+        "performance_gate": "PASS; C6 strict pass preserved under critic-specific invalidation with current quantitative/topology invariant proof"
+      },
       "evidence_path": "Docs/Production/Evidence/T10/",
       "critic_requirements": [
         "C1",
@@ -439,38 +448,18 @@
         "C6",
         "C7"
       ],
-      "critic_status": {},
-      "integration_status": "not integrated",
-      "known_blockers": [
-        "C0-T10-B037",
-        "C0-T10-B038",
-        "C0-T10-B039",
-        "C0-T10-B040",
-        "C0-T10-B041",
-        "C0-T10-B042",
-        "C0-T10-B043",
-        "C0-T10-B044",
-        "C0-T10-B045",
-        "C0-T10-B046",
-        "C0-T10-B047",
-        "C0-T10-B048",
-        "C0-T10-B049",
-        "C0-T10-B050",
-        "C0-T10-B051",
-        "C0-T10-B052",
-        "C0-T10-B053",
-        "C0-T10-B054",
-        "C0-T10-B055",
-        "C0-T10-B056",
-        "C0-T10-B057",
-        "C0-T10-B058",
-        "C0-T10-B059",
-        "C0-T10-B060",
-        "C0-T10-B061",
-        "C0-T10-B062",
-        "C0-T10-B063"
-      ],
-      "next_action": "Resolve cumulative B037-B063 as one bounded batch with all critics and thresholds unchanged; enforce source-bound C0R and the direct builder gate, use producer-owned C7 evidence IDs, complete the bounded B053/B055 constrained placement solver, verify complete decoded C0 evidence and benchmark progress/job-budget supervision, pass exact-SHA preflight, run one fresh isolated C1/C2/C3/C4/C6/C7 review, integrate, and run fresh integrated-source review/closeout. T10 remains FIX_REQUIRED and unapproved."
+      "critic_status": {
+        "C1": "PASS; minimum mandatory dimension 9.500; zero defects",
+        "C2": "PASS; minimum mandatory dimension 10.000; zero defects",
+        "C3": "PASS; minimum mandatory dimension 9.500; zero defects",
+        "C4": "PASS; minimum mandatory dimension 10.000; zero defects",
+        "C6": "PASS; minimum mandatory dimension 9.350; zero defects",
+        "C7": "PASS; minimum mandatory dimension 10.000; zero defects"
+      },
+      "integration_status": "APPROVED; exact canonical source eba0107def258824549fb10d81785290d0c81d97 passed fresh regression, 6-device/216-projection and 36-frame native-4K evidence, 7/7 save cases, G1-G14, fresh C1/C2/C3/C4 plus preserved C6/C7 review provenance with every mandatory dimension strictly above 9.0 (minimum 9.350) and zero unresolved defects.",
+      "known_blockers": [],
+      "next_action": "Preserve T10 completion; prepare T11 packet/ownership before activation.",
+      "status_updated_at": "2026-09-21T14:35:08.454169Z"
     }
   ],
   "notes": [
