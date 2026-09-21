@@ -253,14 +253,17 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
         errors.append(f"missing level numbers: {missing_numbers}")
 
     # Every shipping level must carry a genuinely distinct practical descriptor.
-    # Structural effect kinds may repeat, but two adjacent levels may not ship the
-    # exact same effect payload and masquerade as separate progression.
-    for level in range(2, 101):
-        if level in effect_signatures and level - 1 in effect_signatures:
-            if effect_signatures[level] == effect_signatures[level - 1]:
-                errors.append(
-                    f"levels {level - 1} and {level}: duplicate progression_effects payload is counter-only/filler progression"
-                )
+    # Structural kinds may repeat, but the exact same full effect payload cannot
+    # count as fresh progression on multiple levels.
+    effect_owner: dict[str, int] = {}
+    for level in sorted(effect_signatures):
+        signature = effect_signatures[level]
+        if signature in effect_owner:
+            errors.append(
+                f"levels {effect_owner[signature]} and {level}: duplicate progression_effects payload is counter-only/filler progression"
+            )
+        else:
+            effect_owner[signature] = level
 
     # Stable prerequisite graph checks.
     graph: dict[str, list[str]] = defaultdict(list)
@@ -326,6 +329,18 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
         if isinstance(hooks, list) and any(isinstance(x, str) and x.strip() for x in hooks):
             visible_levels.add(level)
 
+    visible_hook_owner: dict[str, int] = {}
+    for level, row in by_number.items():
+        for hook in as_list(row.get("visible_progression_hook_ids")):
+            if not isinstance(hook, str) or not hook:
+                continue
+            if hook in visible_hook_owner:
+                errors.append(
+                    f"duplicate visible progression hook ID {hook} at levels {visible_hook_owner[hook]} and {level}"
+                )
+            else:
+                visible_hook_owner[hook] = level
+
     milestone_by_level: dict[int, list[dict[str, Any]]] = defaultdict(list)
     milestone_ids: set[str] = set()
     milestone_owner: dict[str, int] = {}
@@ -362,11 +377,22 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
         kind = normalized_key(str(milestone.get("kind", "")))
         if kind not in {"major", "minor"}:
             errors.append(f"milestone {milestone_id!r}: kind must be 'major' or 'minor'")
-        validate_string_list(
+        if kind == "major":
+            canonical_major_id = f"t12.milestone.{level:03d}"
+            if milestone_id != canonical_major_id:
+                errors.append(
+                    f"milestone at level {level}: major milestone_id must be {canonical_major_id}, got {milestone_id!r}"
+                )
+        milestone_hooks = validate_string_list(
             milestone.get("progression_hook_ids"),
             label=f"milestone {milestone_id!r}: progression_hook_ids",
             errors=errors,
         )
+        for identifier in milestone_hooks:
+            if identifier.lower().startswith(FORBIDDEN_ID_PREFIXES):
+                errors.append(
+                    f"milestone {milestone_id!r}: provisional/preparation-only hook cannot ship: {identifier}"
+                )
         if not isinstance(milestone.get("visible_change_required"), bool):
             errors.append(f"milestone {milestone_id!r}: visible_change_required must be boolean")
         owner_task = milestone.get("owner_task")
