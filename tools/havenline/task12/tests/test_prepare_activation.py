@@ -196,5 +196,16 @@ class T12PrepareActivationTests(unittest.TestCase):
 
 
 
+    def test_current_performance_budget_contract_is_consistent(self):
+        self.assertEqual(activation.validate_performance_budget_contract(), [])
+
+    def test_performance_budget_rejects_partial_fuzz_acceptance(self):
+        data = copy.deepcopy(activation.load(activation.PERFORMANCE_BUDGET_PATH))
+        data["fuzz_budget"]["minimum_rejected_mutations"] = 240
+        errors = activation.validate_performance_budget_contract(data)
+        self.assertTrue(any("250/250" in error for error in errors))
+
+
+
 if __name__ == "__main__":
     unittest.main()
