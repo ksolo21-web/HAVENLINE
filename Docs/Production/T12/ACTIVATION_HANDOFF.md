@@ -32,12 +32,15 @@ Populate only repository-proven accepted identifiers:
 - add each T12-consumed public ID with semantic `kind`, repository `source_path`, and exact RFC6901 JSON pointer;
 - set `status` to `RESOLVED_FOR_ACTIVATION` and `promotion_allowed` to `true` only after all required bindings are present.
 
-Then require:
+Then require a full-history checkout and bind the proof to the exact post-T11 activation head:
 
 ```bash
+BASE="$(git rev-parse HEAD)"
+test "$(git rev-parse --is-shallow-repository)" = "false"
 python tools/havenline/task12/verify_binding_resolution.py \
   --resolution Docs/Production/T12/BINDING_RESOLUTION.json \
-  --require-resolved
+  --require-resolved \
+  --activation-head "$BASE"
 ```
 
 Any missing, provisional, example, debug, test-only, ambiguous or pointer-unproven identifier blocks activation.
@@ -47,8 +50,18 @@ Any missing, provisional, example, debug, test-only, ambiguous or pointer-unprov
 Run all dependency-independent preparation checks again on the exact activation base:
 
 ```bash
+python tools/havenline/task12/prepare_activation.py
 python tools/havenline/task12/validate_level_matrix.py
 python tools/havenline/task12/validate_runtime_interface.py
+python tools/havenline/task12/validate_traceability.py
+python tools/havenline/task12/validate_downstream_contract.py
+python tools/havenline/task12/validate_data_schema.py
+python tools/havenline/task12/reference_progression_oracle.py
+python tools/havenline/task12/validate_candidate_evidence.py
+python tools/havenline/task12/validate_critic_review_records.py
+python tools/havenline/task12/validate_evidence_index.py
+python tools/havenline/task12/fuzz_progression_contract.py
+python tools/havenline/task12/benchmark_prebuild_validators.py
 python -m unittest discover -s tools/havenline/task12/tests -p 'test_*.py' -v
 ```
 
@@ -90,7 +103,8 @@ Use this order to reduce rework:
 
 1. Author `progression_milestones_v1.json` from accepted T12 milestone IDs and reconciled bindings.
 2. Author `progression_levels_v1.json` from the validated 100-level matrix, replacing abstract binding classes only with accepted resolved IDs/content-owner hooks.
-3. Run `validate_progression_contract.py` before runtime implementation depends on the data.
+3. Validate the two real shipping files together before runtime implementation depends on them:
+   `python tools/havenline/task12/validate_progression_contract.py --levels HavenlineGodot/data/progression_levels_v1.json --milestones HavenlineGodot/data/progression_milestones_v1.json`.
 4. Implement `progression_architecture.gd` against `RUNTIME_INTERFACE_CONTRACT.json`.
 5. Add `test_task12_progression_architecture.gd` for pure validation, reachability, idempotency, spend-blindness, recovery and performance-bound behavior.
 6. Add `test_task12_integration.gd` against exact accepted T07/T08/T10/T11 integration behavior.
@@ -119,7 +133,7 @@ The builder must preserve all of these prepared guarantees:
 
 After isolated implementation passes mechanical tests:
 
-1. capture exact source/base/changed-path manifest;
+1. capture exact activation base, candidate SHA, trusted integration head and canonical `workstream.py validate-candidate` changed-path proof;
 2. produce exact-100/DAG/reachability/per-level-effect/cadence reports;
 3. produce accepted upstream binding audit;
 4. produce deterministic replay/idempotency/reconstruction proof;
@@ -128,6 +142,7 @@ After isolated implementation passes mechanical tests:
 7. capture player-readable progression/milestone evidence where visual UI/world response applies;
 8. run impacted T01–T11 regression on integrated candidate;
 9. obtain C2, C3, C4, C7 independent review and C6 quantitative review against the exact current artifact;
-10. fix/retest until every mandatory dimension is strictly >9.0 unrounded, target 10.0, with zero unresolved mandatory defects and G1–G14 PASS.
+10. run `final_candidate_gate.py` from the exact candidate checkout so it revalidates split shipping data, accepted binding ancestry/blob identity, the live canonical candidate guard, evidence digests, parity, critic provenance and hashes;
+11. fix/retest until every mandatory dimension is strictly >9.0 unrounded, target 10.0, with zero unresolved mandatory defects and G1–G14 PASS.
 
 T12 is APPROVED only after the integrated exact source passes all required gates. Preparation artifacts do not count as runtime approval evidence.
