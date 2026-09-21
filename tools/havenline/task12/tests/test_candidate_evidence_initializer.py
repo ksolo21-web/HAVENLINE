@@ -48,6 +48,7 @@ class T12CandidateEvidenceInitializerTests(unittest.TestCase):
             copy.deepcopy(resolution if resolution is not None else self.resolution()),
             activation_base="a" * 40,
             candidate_source="b" * 40,
+            integration_head="9" * 40,
             levels_sha256="c" * 64,
             milestones_sha256="d" * 64,
             binding_resolution_sha256="e" * 64,
@@ -59,6 +60,7 @@ class T12CandidateEvidenceInitializerTests(unittest.TestCase):
         packet = self.initialize()
         self.assertEqual(packet["status"], "CANDIDATE_EVIDENCE_PENDING_REVIEW")
         self.assertEqual(packet["exact_source"]["candidate_source"], "b" * 40)
+        self.assertEqual(packet["exact_source"]["integration_head"], "9" * 40)
         self.assertEqual(packet["exact_source"]["upstream_sources"]["T10"], "1" * 40)
         self.assertEqual(packet["exact_source"]["upstream_sources"]["T11"], "2" * 40)
         self.assertTrue(all(row["status"] == "PENDING" for row in packet["static_reports"].values()))
@@ -85,6 +87,22 @@ class T12CandidateEvidenceInitializerTests(unittest.TestCase):
                 self.resolution(),
                 activation_base="a" * 40,
                 candidate_source="not-a-sha",
+                integration_head="9" * 40,
+                levels_sha256="c" * 64,
+                milestones_sha256="d" * 64,
+                binding_resolution_sha256="e" * 64,
+                changed_file_manifest_ref="artifact://files.json",
+                validator_source="sha256:x",
+            )
+
+    def test_invalid_integration_head_fails(self):
+        with self.assertRaisesRegex(ValueError, "integration_head"):
+            initializer.initialize_packet(
+                copy.deepcopy(self.template),
+                self.resolution(),
+                activation_base="a" * 40,
+                candidate_source="b" * 40,
+                integration_head="not-a-sha",
                 levels_sha256="c" * 64,
                 milestones_sha256="d" * 64,
                 binding_resolution_sha256="e" * 64,
