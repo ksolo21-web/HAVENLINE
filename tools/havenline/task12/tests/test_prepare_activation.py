@@ -207,5 +207,15 @@ class T12PrepareActivationTests(unittest.TestCase):
 
 
 
+    def test_cross_contract_rejects_checklist_identity_drift(self):
+        checklist = copy.deepcopy(activation.load(activation.CHECKLIST_PATH))
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        checklist["future_builder_branch"] = "havenline/T12-wrong"
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("future_builder_branch" in error for error in errors))
+
+
+
 if __name__ == "__main__":
     unittest.main()
