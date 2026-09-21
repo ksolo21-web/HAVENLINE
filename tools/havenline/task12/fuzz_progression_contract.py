@@ -188,6 +188,18 @@ def mutate_noncanonical_major_milestone(m: dict[str, Any], rng: random.Random) -
     m["levels"][level - 1]["milestone_ids"] = [bad]
 
 
+def mutate_global_spend_gate(m: dict[str, Any], rng: random.Random) -> None:
+    m["purchase_history"] = {"minimum_usd": 1}
+
+
+def mutate_extra_level_field(m: dict[str, Any], rng: random.Random) -> None:
+    m["levels"][rng.randrange(100)]["unvalidated_bonus"] = 1
+
+
+def mutate_extra_milestone_field(m: dict[str, Any], rng: random.Random) -> None:
+    m["milestones"][rng.randrange(len(m["milestones"]))]["hidden_gate"] = True
+
+
 MUTATIONS: dict[str, Callable[[dict[str, Any], random.Random], None]] = {
     "missing_level": mutate_missing_level,
     "duplicate_level_id": mutate_duplicate_level_id,
@@ -213,6 +225,9 @@ MUTATIONS: dict[str, Callable[[dict[str, Any], random.Random], None]] = {
     "prepared_required_fact": mutate_prepared_required_fact,
     "duplicate_visible_hook": mutate_duplicate_visible_hook,
     "noncanonical_major_milestone": mutate_noncanonical_major_milestone,
+    "global_spend_gate": mutate_global_spend_gate,
+    "extra_level_field": mutate_extra_level_field,
+    "extra_milestone_field": mutate_extra_milestone_field,
 }
 
 
