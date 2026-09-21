@@ -57,7 +57,7 @@ def plan(task_id,target='ASSIGNED',candidate=None,integration=None,inventory=Non
     if target not in ('ASSIGNED','BUILDING_ISOLATED'):errors.append('target must be ASSIGNED or BUILDING_ISOLATED')
     try:forward=resolve_task(task_id)
     except Exception as exc:return {'passed':False,'task_id':task_id,'target':target,'errors':['forward plan: '+str(exc)]}
-    builder_for_gate=builder or candidate
+    builder_for_gate=candidate if target=='BUILDING_ISOLATED' else builder
     grad=graduation(task_id,target,builder_for_gate,integration)
     if not grad.get('passed'):errors += ['graduation: '+x for x in grad.get('errors',[])]
     branches=validate_branches(task_id,inventory)
