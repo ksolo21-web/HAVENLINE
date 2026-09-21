@@ -34,6 +34,15 @@ INDEPENDENT_CRITICS = {"C2", "C3", "C4", "C7"}
 GATES = {f"G{i}" for i in range(1, 15)}
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
 SHA256 = re.compile(r"^[0-9a-f]{64}$")
+EXACT_SOURCE_FIELDS = {
+    "activation_base",
+    "candidate_source",
+    "integration_head",
+    "authorized_changed_file_manifest_ref",
+    "shipping_data_hashes",
+    "upstream_sources",
+    "validator_source",
+}
 
 
 def nonempty(value: Any) -> bool:
@@ -55,6 +64,8 @@ def validate_packet(data: dict[str, Any], require_resolved: bool = False) -> dic
     if not isinstance(source, dict):
         errors.append("exact_source must be an object")
         source = {}
+    elif set(source) != EXACT_SOURCE_FIELDS:
+        errors.append("exact_source fields drifted from frozen provenance contract")
     upstream = source.get("upstream_sources")
     if not isinstance(upstream, dict) or set(upstream) != {"T07", "T08", "T10", "T11"}:
         errors.append("exact_source.upstream_sources must contain exactly T07,T08,T10,T11")
@@ -167,6 +178,8 @@ def validate_packet(data: dict[str, Any], require_resolved: bool = False) -> dic
             errors.append("resolved activation_base must be exact 40-hex SHA")
         if not exact_sha(candidate):
             errors.append("resolved candidate_source must be exact 40-hex SHA")
+        if not exact_sha(source.get("integration_head")):
+            errors.append("resolved integration_head must be exact 40-hex SHA")
         if not nonempty(source.get("authorized_changed_file_manifest_ref")):
             errors.append("resolved authorized changed-file manifest reference is required")
         for name, value in hashes.items():
