@@ -20,6 +20,7 @@ const LABEL_OUTLINE_RENDER_PRIORITY := 99
 const LABEL_MIN_CLEARANCE_PX := 12.0
 const LABEL_FIT_SLACK_PX := 1.0
 const LABEL_SAFE_INSET_RATIO := 0.025
+const RESPONSE_BASE_Y := 0.16 # Ring top is 0.08; preserve a visible 0.08 world-unit separation.
 const RESOURCE_SYMBOLS = preload("res://assets/world_transform_v1/resource_symbols.tres")
 const RESOURCE_GLYPHS := {"wood": "", "stone": "", "metal": "", "fuel": ""}
 
@@ -253,7 +254,7 @@ func _ensure_visuals() -> void:
 	var ghost_mesh := BoxMesh.new()
 	ghost_mesh.size = Vector3(2.58, 1.5, 2.58)
 	_ghost.mesh = ghost_mesh
-	_ghost.position.y = 0.78
+	_ghost.position.y = RESPONSE_BASE_Y + 0.75 * _ghost.scale.y
 	_ghost_material = _material(STATE_COLORS.preview, 0.17)
 	_ghost.material_override = _ghost_material
 	_visual_root.add_child(_ghost)
@@ -315,7 +316,7 @@ func _apply_visuals() -> void:
 	_ghost.visible = lifecycle != "locked"
 	var target_form := lifecycle in ["preview", "committing", "complete"]
 	_ghost.scale = _target_form_scale() if target_form else _accepted_scale
-	_ghost.position.y = 0.08 + 0.75 * _ghost.scale.y
+	_ghost.position.y = RESPONSE_BASE_Y + 0.75 * _ghost.scale.y
 	_beacon.visible = lifecycle != "locked"
 	_beacon.text = feedback_text()
 	set_process(lifecycle != "locked")
@@ -334,7 +335,7 @@ func _process(delta: float) -> void:
 	_ring_material.uv1_offset = Vector3(0.5 - 0.5 * flow_scale, 0.5 - 1.5 * flow_scale, 0.0)
 	var pulse := 1.0 + sin(_pulse_time * TAU * PULSE_HZ) * 0.18
 	_ghost.scale = _target_form_scale() * pulse
-	_ghost.position.y = 0.08 + 0.75 * _ghost.scale.y
+	_ghost.position.y = RESPONSE_BASE_Y + 0.75 * _ghost.scale.y
 
 func _active_directional_shadow_lights() -> Array[DirectionalLight3D]:
 	if not _shadow_lights_scanned:
@@ -378,7 +379,7 @@ func _projected_response_rect(active_camera: Camera3D) -> Rect2:
 		var pose: Transform3D = mesh_instance.global_transform
 		if mesh_instance == _ghost and lifecycle == "committing":
 			var peak := _target_form_scale() * 1.18
-			pose = _visual_root.global_transform * Transform3D(Basis.from_scale(peak), Vector3(0.0, 0.08 + 0.75 * peak.y, 0.0))
+			pose = _visual_root.global_transform * Transform3D(Basis.from_scale(peak), Vector3(0.0, RESPONSE_BASE_Y + 0.75 * peak.y, 0.0))
 		for corner in 8:
 			var world_point := pose * box.get_endpoint(corner)
 			var depth := -(active_camera.global_transform.affine_inverse() * world_point).z
@@ -688,31 +689,31 @@ func feedback_text() -> String:
 	var destination := target_state.capitalize() if not target_state.is_empty() else "Transformation"
 	var cost_cues := _resource_cues(displayed_costs)
 	if lifecycle == "complete":
+		var completion := "✓ %s complete" % destination
+		if not displayed_costs.is_empty():
+			completion += " · Spent: %s" % _resource_cues(displayed_costs)
 		if next_preview.is_empty():
-			return "✓ %s complete" % destination + ("\nSpent: %s" % _resource_cues(displayed_costs) if not displayed_costs.is_empty() else "")
+			return completion
 		var next_destination := String(next_preview.get("target_state", "")).capitalize()
 		var next_shortfalls: Dictionary = next_preview.get("shortfalls", {})
 		var next_errors: Array = next_preview.get("errors", [])
 		var next_reason := _readable_reasons(next_errors, next_shortfalls)
-		var text := ""
+		var action := ""
 		if next_preview.get("passed", false):
-			text = "NEXT >> APPROACH → %s" % next_destination
+			action = "NEXT >> APPROACH → %s" % next_destination
 		elif _harvesting_access_blocked(next_errors):
-			text = "NEXT >> UNLOCK HARVESTING ACCESS"
+			action = "NEXT >> UNLOCK HARVESTING ACCESS"
 			if not next_shortfalls.is_empty():
-				text += "\nThen: deliver → %s · %s" % [next_destination, _resource_cues(next_shortfalls)]
+				action += "\nThen: deliver → %s · Need: %s" % [next_destination, _resource_cues(next_shortfalls)]
 			else:
-				text += "\nThen: %s" % next_destination
+				action += "\nThen: %s" % next_destination
 		elif not next_shortfalls.is_empty():
-			text = "NEXT >> DELIVER → %s\nNeed: %s" % [next_destination, _resource_cues(next_shortfalls)]
+			action = "NEXT >> DELIVER → %s\nNeed: %s" % [next_destination, _resource_cues(next_shortfalls)]
 		elif not next_reason.is_empty():
-			text = "NEXT >> RESOLVE → %s\nWhy: %s" % [next_destination, next_reason]
+			action = "NEXT >> RESOLVE → %s\nWhy: %s" % [next_destination, next_reason]
 		else:
-			text = "NEXT >> %s" % next_destination
-		text += "\n✓ %s complete" % destination
-		if not displayed_costs.is_empty():
-			text += "\nSpent: %s" % _resource_cues(displayed_costs)
-		return text
+			action = "NEXT >> %s" % next_destination
+		return completion + "\n" + action
 	if lifecycle == "blocked":
 		var reason := _readable_reasons(block_reasons, blocked_shortfalls)
 		if _harvesting_access_blocked(block_reasons):

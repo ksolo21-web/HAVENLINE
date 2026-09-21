@@ -355,7 +355,7 @@ func run() -> void:
 	var beacon_before_pulse := ghost.scale
 	view._process(0.12)
 	check("committing target pulse changes shape without rebuilding nodes", ghost.scale != beacon_before_pulse and view.descriptor().visual_build_count == 1 and view.descriptor().visual_node_count == 4)
-	check("committing pulse stays anchored to support", is_equal_approx(ghost.position.y - 0.75 * ghost.scale.y, 0.08))
+	check("committing pulse stays visibly separated above state ring", is_equal_approx(ghost.position.y - 0.75 * ghost.scale.y, TransformView.RESPONSE_BASE_Y) and TransformView.RESPONSE_BASE_Y > 0.08)
 	for pending_frame in 90:
 		view._process(1.0 / 60.0)
 	check("pending flow reuses material texture and text without visual rebuild", view._ring_material.uv1_scale.x > 1.0 and view._ring_material.get_instance_id() == ring_material_id and view._ring_material.emission_texture.get_instance_id() == flow_texture_id and beacon.text == pending_text and view.visual_apply_count == pending_apply_count and view.descriptor().visual_node_count == 4)
@@ -366,7 +366,7 @@ func run() -> void:
 	var visual_accepted := visual_engine.accept_authoritative_receipt(visual_ack)
 	var next_blocked_offer := visual_engine.preview_transform("framework_anchor_foundation_to_reinforced", "visual-A", {"wood": 0, "stone": 0, "metal": 0})
 	check("complete world response requires accepted authority receipt", view.mark_complete(visual_accepted, next_blocked_offer) and view.descriptor().lifecycle == "complete")
-	check("completion makes prerequisite the primary next action before delivery details", beacon.text.begins_with("NEXT >> UNLOCK HARVESTING ACCESS\nThen: deliver → Reinforced ·") and beacon.text.contains("12 wood") and beacon.text.contains("8 stone") and beacon.text.contains("2 metal") and beacon.text.contains("✓ Foundation complete"))
+	check("completion separates current result from the primary next action", beacon.text.begins_with("✓ Foundation complete · Spent:") and beacon.text.contains("\nNEXT >> UNLOCK HARVESTING ACCESS\nThen: deliver → Reinforced · Need:") and beacon.text.contains("12 wood") and beacon.text.contains("8 stone") and beacon.text.contains("2 metal"))
 	check("complete lifecycle keeps accepted form green while blocked-next perimeter is red", ring.visible and ghost.visible and beacon.visible and ghost.scale == Vector3.ONE and ghost.material_override.transparency == BaseMaterial3D.TRANSPARENCY_DISABLED and beacon.text.contains("Spent:") and beacon.text.contains("8 wood") and beacon.text.contains("4 stone") and view.displayed_costs == {"wood": 8, "stone": 4} and view.descriptor().next_preview_blocked and view._ring_material.albedo_color.r > view._ring_material.albedo_color.g and view._ghost_material.albedo_color.g > view._ghost_material.albedo_color.r)
 	check("label preserves adaptive camera-lane render ordering", beacon.render_priority == 100 and beacon.outline_render_priority == 99 and beacon.pixel_size >= TransformView.LABEL_PIXEL_SIZE * TransformView.READABILITY_MIN - 0.000001 and beacon.pixel_size <= TransformView.LABEL_PIXEL_SIZE + 0.000001)
 	check("accepted receipt stops flow while retaining camera-lane maintenance", not view._ring_material.emission_enabled and view._ring_material.uv1_scale == Vector3.ONE and view._ring_material.uv1_offset == Vector3.ZERO and view.is_processing(), null, "R05_INTEGRATION_ACCEPTED_STOPS_FLOW")
