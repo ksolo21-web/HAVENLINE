@@ -96,5 +96,20 @@ class T12EngineParityComparatorTests(unittest.TestCase):
         self.assertTrue(any("required vector fields drifted" in error for error in result["errors"]))
 
 
+    def test_rejects_schema_version_drift(self):
+        schema = copy.deepcopy(self.schema)
+        schema["schema_version"] = 2
+        result = self.compare(schema=schema)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("schema_version" in error for error in result["errors"]))
+
+    def test_rejects_vector_schema_version_drift(self):
+        vectors = copy.deepcopy(self.vectors)
+        vectors["schema_version"] = 2
+        result = self.compare(vectors=vectors)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("vectors schema_version" in error for error in result["errors"]))
+
+
 if __name__ == "__main__":
     unittest.main()
