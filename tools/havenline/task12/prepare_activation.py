@@ -11,6 +11,7 @@ from __future__ import annotations
 import argparse
 import json
 import pathlib
+import re
 import subprocess
 import sys
 
@@ -46,6 +47,7 @@ CRITIC_REVIEW_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_cr
 EVIDENCE_INDEX_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_evidence_index.py"
 FUZZ_GATE = ROOT / "tools" / "havenline" / "task12" / "fuzz_progression_contract.py"
 PREBUILD_BENCHMARK = ROOT / "tools" / "havenline" / "task12" / "benchmark_prebuild_validators.py"
+HEX40 = re.compile(r"^[0-9a-f]{40}$")
 
 
 def load(path: pathlib.Path):
@@ -72,6 +74,33 @@ def may_overlap(a: str, b: str) -> bool:
 
 def git_head() -> str:
     return subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=ROOT, text=True).strip()
+
+
+def git_is_ancestor(ancestor: str, head: str) -> bool:
+    proc = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", ancestor, head],
+        cwd=ROOT,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        check=False,
+    )
+    return proc.returncode == 0
+
+
+def safe_repo_pattern(pattern: str) -> bool:
+    pure = pathlib.PurePosixPath(pattern)
+    return bool(pattern) and not pure.is_absolute() and ".." not in pure.parts
+
+
+def completion_source(record) -> str | None:
+    if not isinstance(record, dict):
+        return None
+    for key in ("integrated_source", "accepted_source", "accepted_integrated_source", "candidate_source"):
+        value = record.get(key)
+        if isinstance(value, str) and HEX40.fullmatch(value):
+            return value
+    return None
 
 
 def registry_status(registry, task_id: str):
