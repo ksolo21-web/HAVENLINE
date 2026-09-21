@@ -1,0 +1,139 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-21",
+  "purpose": "Repository-wide safe stale-branch cleanup after T10 approval. Only unreferenced non-task branches with zero unique commits relative to canonical qualify.",
+  "canonical_branch": "codex/havenline-sequential-task-01",
+  "deletion_rule": "branch has zero unique commits (behind_by=0 when compared branch→canonical), is not a T01-T70 task branch, is not referenced by an open PR, and is not an authoritative integration/release branch",
+  "safe_to_delete": [
+    {
+      "branch": "agent/havenline-production-art-gate",
+      "head_sha": "7cee199919927ecb46b13a3e3f9097bfede50fdb",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-all-t12-t70-ready",
+      "head_sha": "4e851ce496e077342e6369b18b78ca27e4724849",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-c0-terminal-job-log",
+      "head_sha": "6cc35767f48a0324cfb31c13b1099e1bb4d63cdc",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-c0-terminal-priority",
+      "head_sha": "aa03b7693df9565e1c73fd6adf01eed728a6ff78",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-c0r-builder-enforcement",
+      "head_sha": "b8ac896f814c7d52cbe16740a93a06bc8c8795d8",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-c0r-frontier",
+      "head_sha": "f6ddafe513ef53950731d2044bc52d486c8a041b",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-c0r-sufficiency",
+      "head_sha": "f1dd33d497d2a66517ab29861f268eb960297922",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-forward-contract-packets",
+      "head_sha": "088d13c63b5538aa3cb6b2c286457125151e8ec0",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-game-master-accounts",
+      "head_sha": "92cce28e45ba52d0d8c1f74998e26333aed51628",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-preactivation-candidate-guard",
+      "head_sha": "fa6f2a39dce0bd2d4963ed9fbf3e706409ad5694",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-repair-base-inheritance",
+      "head_sha": "09fe754b16347ed97ffeca48965cac8cc88aa503",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-resource-actor-contracts",
+      "head_sha": "6c441ae583c9c5486268cf7c3a9b1ab8b643065b",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-t03-trigger-scope",
+      "head_sha": "5c3730e3af667c6b06600ee7885a4446380eb254",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    },
+    {
+      "branch": "havenline/governance-v32-parallel-resumability",
+      "head_sha": "c35aac981dca87743cacb85e9d83539e6c7a03d5",
+      "fully_contained_in_canonical": true,
+      "unique_commit_count": 0,
+      "game_compile_effect": "none"
+    }
+  ],
+  "preserved_unique_branches": [
+    {
+      "branch": "astra-webgl-review/2026-09-06",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "codex/havenline-environment-calibration",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "codex/havenline-visual-critic",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "havenline/QA-integration",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "havenline/governance-all-t13-t70-ready",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "havenline/governance-c0-terminal-evidence",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "havenline/governance-c0r-workstream-authorization",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    }
+  ],
+  "task_branch_policy": "All designated T01-T70 task branches and registry-referenced task branches are preserved regardless of ancestry.",
+  "open_pr_policy": "All open PR head/base branches are preserved."
+}
