@@ -149,9 +149,11 @@ def main():
     # Current governance state must still be the exact pre-closeout state.
     graph_path = repo / "Docs/Production/DEPENDENCY_GRAPH.json"
     registry_path = repo / "Docs/Production/WORKSTREAM_REGISTRY.json"
+    ownership_path = repo / "Docs/Production/PATH_OWNERSHIP.json"
     gates_path = repo / "Docs/Production/task-gates.json"
     graph = load(graph_path)
     registry = load(registry_path)
+    ownership = load(ownership_path)
     gates = load(gates_path)
     deps = graph["tasks"]["T10"]["dependencies"]
     if any(graph["tasks"][d]["status"] != "APPROVED" for d in deps):
@@ -361,16 +363,43 @@ def main():
     })
     dump(registry_path, registry)
 
+    # Move T10 path ownership from active to completed production ownership.
+    ownership["active_owners"] = [
+        row for row in ownership.get("active_owners", [])
+        if row.get("task_id") != "T10"
+    ]
+    completed = [
+        row for row in ownership.get("completed_production_owners", [])
+        if row.get("task_id") != "T10"
+    ]
+    completed.append({
+        "workstream": ws["workstream_id"],
+        "task_id": "T10",
+        "owner": ws["owner"],
+        "branch": ws["branch"],
+        "base_commit": ws["base_commit"],
+        "paths_alias": "@reservation:T10",
+        "status": "APPROVED",
+        "accepted_source": CANDIDATE,
+        "integrated_source": CANDIDATE,
+    })
+    ownership["completed_production_owners"] = completed
+    dump(ownership_path, ownership)
+
     if "T10" not in gates["approved_tasks"]:
         gates["approved_tasks"].append("T10")
     gates["approved_task_count"] = len(gates["approved_tasks"])
-    gates["active_task"] = "T10"
-    gates["active_task_title"] = TITLE
-    gates["active_status"] = "APPROVED"
-    gates["active_candidate_source"] = CANDIDATE
-    gates["active_candidate_run"] = a.regression_run_id
-    gates["active_tests"] = test_summary
-    gates["active_critic_state"] = "PASS"
+    gates["active_task"] = None
+    gates["active_task_title"] = None
+    gates["active_status"] = None
+    gates["active_base_integration_commit"] = None
+    gates["active_frozen_scope"] = None
+    gates["active_task_packet"] = None
+    gates["active_evidence"] = None
+    gates["active_candidate_source"] = None
+    gates["active_candidate_run"] = None
+    gates["active_tests"] = None
+    gates["active_critic_state"] = None
     gates.setdefault("completed_task_records", {})["T10"] = {
         "status": "APPROVED",
         "accepted_source": CANDIDATE,
@@ -403,6 +432,14 @@ def main():
         raise SystemExit("workstream closeout failed")
     if "T10" not in gates["approved_tasks"] or gates["approved_task_count"] < 10:
         raise SystemExit("task-gates closeout failed")
+    if any(row.get("task_id") == "T10" for row in ownership.get("active_owners", [])):
+        raise SystemExit("T10 active ownership was not cleared")
+    done = [row for row in ownership.get("completed_production_owners", []) if row.get("task_id") == "T10"]
+    if len(done) != 1 or done[0].get("accepted_source") != CANDIDATE or done[0].get("integrated_source") != CANDIDATE:
+        raise SystemExit("T10 completed ownership record is incomplete")
+    for field in ("active_task","active_status","active_base_integration_commit","active_frozen_scope","active_task_packet","active_evidence","active_critic_state"):
+        if gates.get(field) is not None:
+            raise SystemExit("active task pointer not cleared: "+field)
     print(json.dumps({
         "task": TASK,
         "candidate": CANDIDATE,
