@@ -36,7 +36,7 @@ def make_valid_manifest():
             91: "band_alien",
         }[band_start]
         visible_id = f"t12.visible.{level:03d}"
-        milestone_id = f"t12.milestone.major_{level:03d}"
+        milestone_id = f"t12.milestone.{level:03d}"
         levels.append({
             "level": level,
             "level_id": level_id,
@@ -50,7 +50,7 @@ def make_valid_manifest():
             }],
             "visible_progression_hook_ids": [visible_id] if visible else [],
             "milestone_ids": [milestone_id] if relative == 10 else [],
-            "one_time_event_ids": [f"t12.event.level_{level:03d}"],
+            "one_time_event_ids": [f"t12.event.level.{level:03d}.completed"],
         })
         if relative == 10:
             milestones.append({
@@ -131,7 +131,7 @@ class ProgressionContractTests(unittest.TestCase):
         manifest["levels"][2]["visible_progression_hook_ids"] = ["t11_provisional:camp_stage_1"]
         result = validate_manifest(manifest)
         self.assertFalse(result["passed"])
-        self.assertTrue(any("provisional hook/event ID" in error for error in result["errors"]))
+        self.assertTrue(any("provisional/preparation-only ID" in error for error in result["errors"]))
 
     def test_noncanonical_level_id_fails(self):
         manifest = make_valid_manifest()
@@ -162,7 +162,7 @@ class ProgressionContractTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertTrue(any("not earlier in the ordered progression" in error for error in result["errors"]))
 
-    def test_duplicate_adjacent_effect_payload_fails(self):
+    def test_duplicate_effect_payload_fails(self):
         manifest = make_valid_manifest()
         manifest["levels"][9]["progression_effects"] = copy.deepcopy(manifest["levels"][8]["progression_effects"])
         result = validate_manifest(manifest)
@@ -182,6 +182,92 @@ class ProgressionContractTests(unittest.TestCase):
         result = validate_manifest(manifest)
         self.assertFalse(result["passed"])
         self.assertTrue(any("visible_change_required must be boolean" in error for error in result["errors"]))
+
+    def test_schema_version_fails_closed(self):
+        manifest = make_valid_manifest()
+        manifest["schema_version"] = 2
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("schema_version must be 1" in error for error in result["errors"]))
+
+    def test_missing_canonical_completion_event_fails(self):
+        manifest = make_valid_manifest()
+        manifest["levels"][4]["one_time_event_ids"] = ["t12.event.other"]
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("canonical completion event" in error for error in result["errors"]))
+
+    def test_preparation_fact_id_cannot_ship(self):
+        manifest = make_valid_manifest()
+        manifest["levels"][2]["required_fact_ids"] = ["prepared.fact.world_transform_completed"]
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("provisional/preparation-only ID" in error for error in result["errors"]))
+
+    def test_duplicate_visible_hook_fails(self):
+        manifest = make_valid_manifest()
+        manifest["levels"][5]["visible_progression_hook_ids"] = list(
+            manifest["levels"][2]["visible_progression_hook_ids"]
+        )
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("duplicate visible progression hook ID" in error for error in result["errors"]))
+
+    def test_major_milestone_must_use_canonical_id(self):
+        manifest = make_valid_manifest()
+        manifest["milestones"][0]["milestone_id"] = "t12.milestone.major_010"
+        manifest["levels"][9]["milestone_ids"] = ["t12.milestone.major_010"]
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("major milestone_id must be t12.milestone.010" in error for error in result["errors"]))
+
+    def test_preparation_milestone_hook_cannot_ship(self):
+        manifest = make_valid_manifest()
+        manifest["milestones"][0]["progression_hook_ids"] = ["prepared.visible.010"]
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("provisional/preparation-only hook" in error for error in result["errors"]))
+
+    def test_split_shipping_files_compose_and_validate(self):
+        import tempfile
+        manifest = make_valid_manifest()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            levels_path = root / "progression_levels_v1.json"
+            milestones_path = root / "progression_milestones_v1.json"
+            levels_path.write_text(json.dumps({
+                "schema_version": 1,
+                "task_id": "T12",
+                "levels": manifest["levels"],
+            }))
+            milestones_path.write_text(json.dumps({
+                "schema_version": 1,
+                "task_id": "T12",
+                "milestones": manifest["milestones"],
+            }))
+            combined = MODULE.load_split_manifest(levels_path, milestones_path)
+            result = validate_manifest(combined)
+        self.assertTrue(result["passed"], result["errors"])
+
+    def test_split_shipping_files_reject_identity_mismatch(self):
+        import tempfile
+        manifest = make_valid_manifest()
+        with tempfile.TemporaryDirectory() as tmp:
+            root = pathlib.Path(tmp)
+            levels_path = root / "progression_levels_v1.json"
+            milestones_path = root / "progression_milestones_v1.json"
+            levels_path.write_text(json.dumps({
+                "schema_version": 1,
+                "task_id": "T12",
+                "levels": manifest["levels"],
+            }))
+            milestones_path.write_text(json.dumps({
+                "schema_version": 2,
+                "task_id": "T12",
+                "milestones": manifest["milestones"],
+            }))
+            with self.assertRaises(ValueError):
+                MODULE.load_split_manifest(levels_path, milestones_path)
 
 
 class PreparationBindingTests(unittest.TestCase):
