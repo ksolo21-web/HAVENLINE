@@ -2,10 +2,11 @@
 
 ## Governance state
 
-- **Preparation mode:** dependency-safe parallel prep while T09/T10/T11 remain unfinished.
+- **Preparation mode:** dependency-safe parallel prep while T11 remains unfinished.
 - **Production status target now:** governance prepared only; T12 remains `LOCKED` until T07, T08, T10 and T11 are all approved and T10/T11 are integrated.
+- **Current dependency checkpoint (2026-09-21):** T07 APPROVED, T08 APPROVED, T10 APPROVED/integrated at `eba0107def258824549fb10d81785290d0c81d97`; T11 is `ASSIGNED` on `havenline/T11-camp-construction` from base `87a4346eb33473c3723c7b7c1bbf1dd04dba9131` and is not integrated.
 - **Prepared branch:** `havenline/governance-t12-prep`.
-- **Prepared against:** `havenline/governance-t11-prep` checkpoint `b383e450594d60b172d43ed2d60bda535ca9f225` without claiming T11 runtime completion.
+- **Preparation provenance:** originally prepared against `havenline/governance-t11-prep` checkpoint `b383e450594d60b172d43ed2d60bda535ca9f225`; T10 binding is now reconciled to its accepted integrated source while T11 remains provisional.
 - **Future isolated builder branch:** `havenline/T12-progression-architecture`.
 - **Future owner:** `progression-architecture-builder`.
 - **Activation base:** exact integration commit that records T11 approval/integration and all dependencies approved.
@@ -13,7 +14,7 @@
 - **Evidence path after activation:** `Docs/Production/Evidence/T12/`.
 - **Required critics:** C2, C3, C4, C6, C7.
 - **Forward gate:** every mandatory dimension strictly `> 9.0` unrounded, target `10.0`, all applicable G1–G14 and impacted regression PASS, zero unresolved mandatory defects.
-- **Parallel rule:** T09/T10/T11/T12 preparation/building may proceed concurrently only with disjoint path ownership; production integration remains serial and integration-owner controlled.
+- **Parallel rule:** T11 runtime work and T12 governance preparation may proceed concurrently only with disjoint path ownership; production integration remains serial and integration-owner controlled.
 
 ## Builder objective after activation
 
@@ -142,21 +143,21 @@ Do not edit from the T12 builder branch unless an approved structured ChangeRequ
 
 Allowed now:
 
-- freeze T12 scope and task packet;
-- define future disjoint ownership paths;
-- define Level 1–100 record/milestone/region/event schemas;
-- define static graph/cadence/spend-blind validation rules;
-- bind accepted T07/T08 contracts and prepared T10/T11 public-contract assumptions;
+- freeze and refine T12 scope/task packet without changing shipping scope;
+- keep the future disjoint ownership paths collision-free;
+- maintain the Level 1–100 record/milestone/region/event schemas;
+- maintain static graph/cadence/spend-blind validation rules;
+- bind accepted T07/T08/T10 contracts and keep T11 public-contract assumptions explicitly provisional;
 - prepare validation and candidate CI scaffolding;
-- test that activation fails closed while T10/T11 are unfinished;
-- prepare an activation tool that refuses activation until all dependencies are approved/integrated;
+- test that activation fails closed while T11 is unfinished;
+- maintain an activation tool that refuses activation until all dependencies are approved/integrated;
 - static collision/review against T07/T08/T10/T11/T13 and integration-only paths.
 
 Not allowed now:
 
 - claim T12 shipping implementation as `ASSIGNED` or `BUILDING_ISOLATED`;
 - create/modify shipping T12 progression runtime/data and present it as an integration candidate;
-- edit unfinished T10/T11 runtime/content;
+- edit active T11 runtime/content;
 - implement T13/T14/T33+/T44–T52 scope early.
 
 ## Activation handoff
