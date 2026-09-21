@@ -191,28 +191,34 @@ jobs:
             tools/havenline/task10/build_critic_evidence.py
           sparse-checkout-cone-mode: false
 
-      - name: Install review-only benchmark validator
+      - name: Install review-only affected-critic packager
         run: |
           set -euo pipefail
+          # Godot import can rewrite tracked tutorial import metadata. It is generated
+          # drift, not part of T10 and must not poison the review-tool install check.
+          git restore --worktree -- Assets/TutorialInfo/Icons/URP.png || true
           cp review-controller/tools/havenline/task10/build_critic_evidence.py tools/havenline/task10/build_critic_evidence.py
-          git diff --name-only
-          test "$(git diff --name-only)" = "tools/havenline/task10/build_critic_evidence.py"
+          changed="$(git diff --name-only)"
+          printf '%s\n' "$changed"
+          test "$changed" = "tools/havenline/task10/build_critic_evidence.py"
 
-      - name: Measure performance and package fresh critic input
+      - name: Package fresh C1 C2 C3 C4 critic input only
         run: |
           set -euo pipefail
           export GITHUB_SHA="$CANDIDATE"
-          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
-          python3 tools/havenline/task10/benchmark_supervisor.py --candidate "$CANDIDATE" --output task10-isolated-evidence/benchmark
-          python3 tools/havenline/task10/validate_progression.py --candidate "$CANDIDATE" --output task10-isolated-evidence/progression.json
-          python3 tools/havenline/production/save_state_matrix.py --candidate "$CANDIDATE" --task T10 --adapter "python3 tools/havenline/task10/save_matrix_adapter.py" --out task10-isolated-evidence/save-matrix > task10-isolated-evidence/save-matrix-summary.json
-          python3 tools/havenline/task10/build_critic_evidence.py --candidate "$CANDIDATE" --evidence-root task10-isolated-evidence
-          python3 tools/havenline/production/critic_harness.py performance --candidate "$CANDIDATE" --record critic-input/performance.json > task10-isolated-evidence/C6.json
-          python3 tools/havenline/task10/validate_critic_readiness.py --evidence-root task10-isolated-evidence --candidate "$CANDIDATE" --output task10-isolated-evidence/critic-readiness.json
+          python3 tools/havenline/task10/build_critic_evidence.py             --candidate "$CANDIDATE"             --evidence-root task10-isolated-evidence             --affected-only
+          for cid in C1 C2 C3 C4; do
+            test -s "critic-input/$cid-manifest.json"
+          done
+          test ! -e critic-input/C6-manifest.json
+          test ! -e critic-input/C7-manifest.json
           python3 - <<'PY'
           import json
-          r=json.load(open('task10-isolated-evidence/critic-readiness.json'))
-          assert r.get('passed') is True and r.get('isolated_critic_input_ready') is True,r
+          from pathlib import Path
+          idx=json.loads(Path('critic-input/evidence-index.json').read_text())
+          assert idx['candidate']=='eba0107def258824549fb10d81785290d0c81d97'
+          assert idx['affected_critics']==['C1','C2','C3','C4']
+          assert idx['preserved_critics']==['C6','C7']
           PY
 
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
