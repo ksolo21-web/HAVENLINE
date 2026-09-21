@@ -34,6 +34,8 @@ def semantic_blob(value: Any) -> str:
 
 def validate_contract(data: dict[str, Any]) -> dict[str, Any]:
     errors: list[str] = []
+    if data.get("schema_version") != 1:
+        errors.append("schema_version must be 1")
     if data.get("task_id") != "T12":
         errors.append("task_id must be T12")
     if data.get("status") != "PREPARATION_ONLY_DOWNSTREAM_CONTRACT":
