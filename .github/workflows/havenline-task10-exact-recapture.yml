@@ -2,6 +2,8 @@ name: Havenline T10 exact-SHA recapture
 on:
   push:
     branches: ['havenline/review-T10-final-closeout-controller']
+    paths:
+      - '.github/workflows/havenline-task10-exact-recapture.yml'
 permissions:
   contents: read
   actions: read
