@@ -74,7 +74,7 @@
       },
       "integration_status": "APPROVED; accepted gameplay source 5df9726e0b1c33f0f8865385b1c49aca229fd461",
       "known_blockers": [],
-      "next_action": "Preserve T03; prepare and assign isolated T04/T05/T06 task packets before runtime work begins."
+      "next_action": "Preserve T03 approved source and verified completion; current forward runtime frontier is T11 PREPARED."
     },
     {
       "task_id": "QA-GOV",
@@ -148,7 +148,7 @@
       },
       "integration_status": "APPROVED; accepted gameplay source e08fd37e9a999d878644c03089c4b4b253bd7472",
       "known_blockers": [],
-      "next_action": "Preserve T04; prepare and assign the isolated T05 production-station and prop-kit packet."
+      "next_action": "Preserve T04 approved source and verified completion; current forward runtime frontier is T11 PREPARED."
     },
     {
       "task_id": "T05",
@@ -194,7 +194,7 @@
       },
       "integration_status": "APPROVED; accepted gameplay source fa6fa70f154f3757d22303522ca3f6de2c3d391f; 18 suites / 1119 checks and 77 source-bound images passed; strict C1+C2 resolution PASS; C6 PASS; final machine gate PASS",
       "known_blockers": [],
-      "next_action": "Preserve T05 accepted source and verified completion. T06 remains LOCKED until its separate task packet and owner are prepared."
+      "next_action": "Preserve T05 approved source and verified completion; current forward runtime frontier is T11 PREPARED."
     },
     {
       "task_id": "T06",
@@ -244,7 +244,7 @@
       },
       "integration_status": "APPROVED; accepted isolated source 47f86fae25b099abb5c7096c37ca7495453b2b8f integrated at 91f35f331aaabe2b1785b10c0d911f20da6f12d9; 19 suites / 1345 checks and exact-source evidence passed",
       "known_blockers": [],
-      "next_action": "Preserve T06 accepted and integrated sources; T07 may consume only the published deterministic motion-selector contract."
+      "next_action": "Preserve T06 approved source and verified completion; current forward runtime frontier is T11 PREPARED."
     },
     {
       "task_id": "T07",
@@ -296,7 +296,7 @@
       },
       "integration_status": "APPROVED; accepted isolated source 0a30dc0859541626eb6aa9a9bb749abc93dcb355 integrated at 94b3f6c5097356a3857ebd13a77fb1e316eb06ae; 21 suites / 1441 checks, exact-source evidence, all required critics and G1-G14 passed",
       "known_blockers": [],
-      "next_action": "Preserve T07 accepted and integrated sources. T08 remains LOCKED until its separate packet, owner and path reservation are prepared and validated."
+      "next_action": "Preserve T07 approved source and verified completion; current forward runtime frontier is T11 PREPARED."
     },
     {
       "task_id": "T08",
@@ -353,7 +353,7 @@
       },
       "integration_status": "APPROVED; exact integrated source 9d56ea8ae972d0a0705ff8b985e13fab31dde493 passed G1-G14, complete locked-reference review and all mandatory scores strictly above 9.0",
       "known_blockers": [],
-      "next_action": "Preserve T08 completion; prepare and assign T09 only after its separate packet, owner and disjoint path reservation exist.",
+      "next_action": "Preserve T08 approved source and verified completion; current forward runtime frontier is T11 PREPARED.",
       "status_updated_at": "2026-09-16T02:18:53+00:00"
     },
     {
@@ -404,7 +404,7 @@
       },
       "integration_status": "APPROVED; Exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0 passed 17 suites / 1006 checks, 7/7 save cases, 6/6 device cases, 1193/1193 indexed hashes, G1-G14, and fresh independent C2/C3/C4/C5/C6 review with every mandatory dimension strictly above 9.0 and zero unresolved defects.",
       "known_blockers": [],
-      "next_action": "Preserve T09 completion; T10 remains LOCKED pending separate preparation, ownership, and activation.",
+      "next_action": "Preserve T09 approved source and verified completion; T10 is APPROVED and T11 is PREPARED.",
       "status_updated_at": "2026-09-18T01:30:01.987770Z"
     },
     {
@@ -458,7 +458,7 @@
       },
       "integration_status": "APPROVED; exact canonical source eba0107def258824549fb10d81785290d0c81d97 passed fresh regression, 6-device/216-projection and 36-frame native-4K evidence, 7/7 save cases, G1-G14, fresh C1/C2/C3/C4 plus preserved C6/C7 review provenance with every mandatory dimension strictly above 9.0 (minimum 9.350) and zero unresolved defects.",
       "known_blockers": [],
-      "next_action": "Preserve T10 completion; prepare T11 packet/ownership before activation.",
+      "next_action": "Preserve T10 approved implementation and evidence; T11 is PREPARED and may proceed without reopening T10.",
       "status_updated_at": "2026-09-21T14:35:08.454169Z"
     },
     {
@@ -502,6 +502,6 @@
     "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
     "All future runtime builders use isolated branches and cannot approve themselves.",
     "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them.",
-    "T03-T09 are APPROVED. T10 is FIX_REQUIRED with frozen scope, owner and disjoint reservation; T11+ runtime remains dependency-gated."
+    "T03-T10 are APPROVED. T11 is PREPARED on havenline/T11-camp-construction; T12+ remains dependency-gated."
   ]
 }
