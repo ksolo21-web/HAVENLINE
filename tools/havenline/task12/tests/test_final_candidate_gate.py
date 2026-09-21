@@ -143,11 +143,12 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         data = copy.deepcopy(EVIDENCE_INDEX_TEMPLATE)
         data["status"] = "EVIDENCE_INDEX_COMPLETE"
         data["candidate_source"] = self.candidate_sha
-        refs = sorted(gate.evidence_index_validator.required_refs(candidate, records))
+        categories = gate.evidence_index_validator.required_ref_categories(candidate, records)
+        refs = sorted(categories)
         data["entries"] = [
             {
                 "artifact_id": f"evidence-{index:03d}",
-                "category": "static_report",
+                "category": next(iter(categories[uri])),
                 "uri": uri,
                 "sha256": f"{index + 1:064x}",
                 "candidate_source": self.candidate_sha,
