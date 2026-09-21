@@ -2,6 +2,8 @@ name: Havenline T10 final six-critic controller
 on:
   push:
     branches: ['havenline/review-T10-final-closeout-controller']
+    paths:
+      - '.github/workflows/havenline-task10-final-review-controller.yml'
 permissions:
   contents: read
   actions: read
@@ -16,8 +18,8 @@ jobs:
       artifact_name: ${{ steps.wait.outputs.artifact_name }}
     env:
       GH_TOKEN: ${{ github.token }}
-      SOURCE_RUN: '35546330367'
-      CANDIDATE: 'b37b3d5e471c5699b97597f508ad8e7b28ce70ee'
+      SOURCE_RUN: '35582101500'
+      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
@@ -63,8 +65,8 @@ jobs:
         critic: [C1, C2]
         slice: [0, 1, 2, 3]
     env:
-      CANDIDATE: 'b37b3d5e471c5699b97597f508ad8e7b28ce70ee'
-      SOURCE_RUN: '35546330367'
+      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
+      SOURCE_RUN: '35582101500'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
@@ -120,8 +122,8 @@ jobs:
       matrix:
         critic: [C1, C2]
     env:
-      CANDIDATE: 'b37b3d5e471c5699b97597f508ad8e7b28ce70ee'
-      SOURCE_RUN: '35546330367'
+      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
+      SOURCE_RUN: '35582101500'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
@@ -160,8 +162,8 @@ jobs:
       matrix:
         critic: [C3, C7]
     env:
-      CANDIDATE: 'b37b3d5e471c5699b97597f508ad8e7b28ce70ee'
-      SOURCE_RUN: '35546330367'
+      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
+      SOURCE_RUN: '35582101500'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
@@ -222,8 +224,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 85
     env:
-      CANDIDATE: 'b37b3d5e471c5699b97597f508ad8e7b28ce70ee'
-      SOURCE_RUN: '35546330367'
+      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
+      SOURCE_RUN: '35582101500'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
@@ -243,7 +245,7 @@ jobs:
         with:
           path: ~/.cache/havenline-t01-qwen35
           key: havenline-t01-qwen35-9b-q5-20260908-v1
-      - name: Bind exact candidate and prepare readable C4 evidence
+      - name: Bind exact candidate and validate complete C4 evidence
         run: |
           set -euo pipefail
           git worktree add --detach "$RUNNER_TEMP/t10-final-candidate" "$CANDIDATE"
@@ -255,36 +257,13 @@ jobs:
           fi
           python3 tools/havenline/production/prepare_specialist_runtime.py > reviewer-runtime.json
           python3 -m pip install --disable-pip-version-check --no-input pillow==12.3.0
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-          src=Path('critic-input/C4-manifest.json')
-          m=json.loads(src.read_text())
-          assert m['candidate_commit']=='b37b3d5e471c5699b97597f508ad8e7b28ce70ee' and m['critic_id']=='C4'
-          groups=[]
-          for g in m['groups']:
-            if g['id']!='motion-0':
-              groups.append(g);continue
-            visuals=[i for i in g['items'] if i.get('kind') in ('image','motion_frame')]
-            support=[i for i in g['items'] if i.get('kind') not in ('image','motion_frame')]
-            assert len(visuals)==6 and support and support[-1]['path']=='critic-input/review-output-contract.txt'
-            for gid,chunk in (
-              ('motion-0-ready-transition',visuals[:3]),
-              ('motion-0-blocked-fullres',visuals[3:5]),
-              ('motion-0-preview-transition',visuals[5:]),
-            ):
-              groups.append({'id':gid,'items':chunk+support})
-          assert len(groups)==len(m['groups'])+2
-          m['groups']=groups
-          Path('critic-input/C4-final-manifest.json').write_text(json.dumps(m,indent=2)+'\n')
-          PY
-          python3 tools/havenline/production/specialist_evidence_manifest.py validate critic-input/C4-final-manifest.json
-      - name: Execute fresh independent C4 at readable resolution
+          python3 tools/havenline/production/specialist_evidence_manifest.py validate critic-input/C4-manifest.json
+      - name: Execute fresh independent C4 on complete lifecycle evidence
         run: |
           set -euo pipefail
           python3 -u tools/havenline/production/specialist_critic_runner.py \
             --critic C4 --candidate "$CANDIDATE" \
-            --manifest critic-input/C4-final-manifest.json --out c4-final
+            --manifest critic-input/C4-manifest.json --out c4-final
           cp reviewer-runtime.json c4-final/runtime-preparation.json
       - name: Enforce strict greater-than-nine C4 gate
         if: always()
@@ -298,7 +277,6 @@ jobs:
           name: havenline-task10-C4-final-${{ env.CANDIDATE }}
           path: |
             c4-final/
-            critic-input/C4-final-manifest.json
             reviewer-runtime.json
           if-no-files-found: error
           retention-days: 90
@@ -308,8 +286,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
-      CANDIDATE: 'b37b3d5e471c5699b97597f508ad8e7b28ce70ee'
-      SOURCE_RUN: '35546330367'
+      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
+      SOURCE_RUN: '35582101500'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
@@ -341,8 +319,8 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 20
     env:
-      CANDIDATE: 'b37b3d5e471c5699b97597f508ad8e7b28ce70ee'
-      SOURCE_RUN: '35546330367'
+      CANDIDATE: '8d259d918c35df024d3cbb8c8644f76fa08309c0'
+      SOURCE_RUN: '35582101500'
       EVIDENCE_ARTIFACT: ${{ needs.evidence-ready.outputs.artifact_name }}
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
@@ -377,8 +355,6 @@ jobs:
             raw=$(find current-final -path "*$cid*" -name "$rawname" -print -quit); test -n "$raw"
             cp "$raw" "normalized/$cid/$rawname"
           done
-          final_manifest=$(find current-final -path '*C4*' -name C4-final-manifest.json -print -quit); test -n "$final_manifest"
-          cp "$final_manifest" critic-input/C4-manifest.json
       - name: Aggregate exact six fresh critics without rescoring
         run: |
           set -euo pipefail
