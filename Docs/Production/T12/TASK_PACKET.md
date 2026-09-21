@@ -4,7 +4,7 @@
 
 - **Preparation mode:** dependency-safe parallel prep while T11 remains unfinished.
 - **Production status target now:** governance prepared only; T12 remains `LOCKED` until T07, T08, T10 and T11 are all approved and T10/T11 are integrated.
-- **Current dependency checkpoint (2026-09-21):** T07 APPROVED, T08 APPROVED, T10 APPROVED/integrated at `eba0107def258824549fb10d81785290d0c81d97`; T11 is `ASSIGNED` on `havenline/T11-camp-construction` from base `87a4346eb33473c3723c7b7c1bbf1dd04dba9131` and is not integrated.
+- **Current dependency checkpoint (2026-09-21):** T07 APPROVED, T08 APPROVED, T10 APPROVED/integrated at `eba0107def258824549fb10d81785290d0c81d97`; T11 is `ASSIGNED` on `havenline/T11-camp-construction` from base `f558b9b162b349d1ee127e65edf967f6d28dfed0` and is not integrated.
 - **Prepared branch:** `havenline/governance-t12-prep`.
 - **Preparation provenance:** originally prepared against `havenline/governance-t11-prep` checkpoint `b383e450594d60b172d43ed2d60bda535ca9f225`; T10 binding is now reconciled to its accepted integrated source while T11 remains provisional.
 - **Future isolated builder branch:** `havenline/T12-progression-architecture`.
