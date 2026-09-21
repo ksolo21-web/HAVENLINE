@@ -129,10 +129,16 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
     errors: list[str] = []
     warnings: list[str] = []
 
+    if set(manifest) != {"schema_version", "task_id", "levels", "milestones"}:
+        errors.append(f"manifest top-level fields must be exactly schema_version/task_id/levels/milestones, got {sorted(manifest)}")
     if manifest.get("schema_version") != 1:
         errors.append(f"manifest.schema_version must be 1, got {manifest.get('schema_version')!r}")
     if manifest.get("task_id") != "T12":
         errors.append(f"manifest.task_id must be 'T12', got {manifest.get('task_id')!r}")
+
+    for key_path, key, _ in walk_keys(manifest):
+        if normalized_key(key) in FORBIDDEN_ELIGIBILITY_KEYS:
+            errors.append(f"forbidden spend/energy eligibility key anywhere in manifest at {key_path}.{key}: {key}")
 
     levels = manifest.get("levels")
     milestones = manifest.get("milestones", [])
@@ -165,6 +171,9 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
         missing_fields = [field for field in REQUIRED_LEVEL_FIELDS if field not in row]
         if missing_fields:
             errors.append(f"level {level}: missing required fields: {missing_fields}")
+        extra_fields = sorted(set(row) - set(REQUIRED_LEVEL_FIELDS))
+        if extra_fields:
+            errors.append(f"level {level}: unvalidated extra fields are forbidden: {extra_fields}")
 
         if level in by_number:
             duplicate_numbers.add(level)
@@ -228,10 +237,6 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
                     errors.append(f"level {level}: counter/stat-only filler effect is forbidden: {effect.get('kind')!r}")
             if valid_effects:
                 effect_signatures[level] = json.dumps(effects, sort_keys=True, separators=(",", ":"))
-
-        for key_path, key, _ in walk_keys(row, f"level[{level}]"):
-            if normalized_key(key) in FORBIDDEN_ELIGIBILITY_KEYS:
-                errors.append(f"level {level}: forbidden spend/energy eligibility key at {key_path}.{key}: {key}")
 
         canonical_completion_event = f"t12.event.level.{level:03d}.completed"
         if canonical_completion_event not in one_time_events:
@@ -359,6 +364,9 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
         missing = sorted(required_milestone_fields - set(milestone))
         if missing:
             errors.append(f"milestones[{index}] missing required fields: {missing}")
+        extra = sorted(set(milestone) - required_milestone_fields)
+        if extra:
+            errors.append(f"milestones[{index}] unvalidated extra fields are forbidden: {extra}")
 
         milestone_id = milestone.get("milestone_id")
         level = milestone.get("level")
@@ -485,10 +493,10 @@ def load_split_manifest(levels_path: pathlib.Path, milestones_path: pathlib.Path
     milestones_data = json.loads(milestones_path.read_text())
 
     if isinstance(levels_data, list):
-        levels = levels_data
-        levels_schema = 1
-        levels_task = "T12"
+        raise ValueError("shipping levels file must be an object with schema_version/task_id/levels")
     elif isinstance(levels_data, dict):
+        if set(levels_data) != {"schema_version", "task_id", "levels"}:
+            raise ValueError(f"levels file top-level fields drifted: {sorted(levels_data)}")
         levels = levels_data.get("levels")
         levels_schema = levels_data.get("schema_version")
         levels_task = levels_data.get("task_id")
@@ -496,10 +504,10 @@ def load_split_manifest(levels_path: pathlib.Path, milestones_path: pathlib.Path
         raise ValueError("levels file must be a list or object")
 
     if isinstance(milestones_data, list):
-        milestones = milestones_data
-        milestones_schema = 1
-        milestones_task = "T12"
+        raise ValueError("shipping milestones file must be an object with schema_version/task_id/milestones")
     elif isinstance(milestones_data, dict):
+        if set(milestones_data) != {"schema_version", "task_id", "milestones"}:
+            raise ValueError(f"milestones file top-level fields drifted: {sorted(milestones_data)}")
         milestones = milestones_data.get("milestones")
         milestones_schema = milestones_data.get("schema_version")
         milestones_task = milestones_data.get("task_id")
