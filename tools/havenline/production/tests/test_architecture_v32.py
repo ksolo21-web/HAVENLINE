@@ -22,6 +22,7 @@ import performance_ledger
 import rolling_canary
 import task_graduation_gate
 import timeout_stage_plan
+import v32_assignment_claim
 
 SHA='a'*40
 
@@ -222,8 +223,13 @@ class V32Tests(unittest.TestCase):
   self.assertTrue(forward_task_control.validate_all()['passed'])
 
  def test_assignment_claim_binds_actual_remote_branch_tips(self):
-  body=(ROOT/'tools/havenline/production/workstream.py').read_text()
-  for token in ('_remote_branch_head','actual_builder_head!=branch_head','actual_integration_head!=integration_head','assignment_integration_commit','assignment_branch_head','assignment_lineage_state'):
+  head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+  stale=v32_assignment_claim.validate_assignment('T11','havenline/T11-camp-construction','fbb81ae34b9053f17fc937fb7e67895e3ef0584b',head,verify_remote=False)
+  self.assertFalse(stale['passed'],stale)
+  synced=v32_assignment_claim.validate_assignment('T11','havenline/T11-camp-construction',head,head,verify_remote=False)
+  self.assertTrue(synced['passed'],synced)
+  body=(ROOT/'tools/havenline/production/v32_assignment_claim.py').read_text()
+  for token in ('remote_branch_head','actual_builder','actual_integration','assignment_integration_commit','assignment_branch_head','assignment_lineage_state','legacy_claim'):
    self.assertIn(token,body)
 
  def test_shared_workflow_avoids_expression_flow_maps(self):
