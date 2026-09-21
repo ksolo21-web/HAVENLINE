@@ -8,7 +8,12 @@
   "prepared_from_commit": "b383e450594d60b172d43ed2d60bda535ca9f225",
   "future_builder_branch": "havenline/T12-progression-architecture",
   "future_owner": "progression-architecture-builder",
-  "dependencies": ["T07", "T08", "T10", "T11"],
+  "dependencies": [
+    "T07",
+    "T08",
+    "T10",
+    "T11"
+  ],
   "activation_requires_all_dependencies_approved": true,
   "activation_base_rule": "exact current integration head that records T10 and T11 APPROVED and integrated",
   "planned_owned_alias": "@reservation:T12",
@@ -87,14 +92,22 @@
     "tools/havenline/task12/tests/test_critic_review_records.py",
     "tools/havenline/task12/tests/test_evidence_index.py",
     "tools/havenline/task12/tests/test_final_candidate_gate.py",
-    ".github/workflows/havenline-task12-prep.yml"
+    ".github/workflows/havenline-task12-prep.yml",
+    "tools/havenline/task12/tests/test_binding_resolution.py",
+    "tools/havenline/task12/tests/test_prepare_activation.py"
   ],
-  "required_critics": ["C2", "C3", "C4", "C6", "C7"],
+  "required_critics": [
+    "C2",
+    "C3",
+    "C4",
+    "C6",
+    "C7"
+  ],
   "acceptance": {
     "operator": ">",
-    "threshold": 9.0,
+    "threshold": 9,
     "unrounded": true,
-    "target": 10.0,
+    "target": 10,
     "zero_unresolved_mandatory_defects": true
   },
   "activation_steps": [
