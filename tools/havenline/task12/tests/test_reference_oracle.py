@@ -77,5 +77,13 @@ class T12ReferenceOracleTests(unittest.TestCase):
             ], {"completed_level_ids": [], "observed_fact_ids": [], "emitted_event_ids": []})
 
 
+    def test_rejects_schema_version_drift(self):
+        data = copy.deepcopy(self.vectors)
+        data["schema_version"] = 2
+        result = oracle.run_vectors(data)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("schema_version" in error for error in result["errors"]))
+
+
 if __name__ == "__main__":
     unittest.main()
