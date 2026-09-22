@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "task_id": "T08",
+  "repair_family": "shipping_visual_primitive_violation",
+  "status": "IMPLEMENTED_PENDING_EXACT_SOURCE_EVIDENCE",
+  "scope": "Replace transfer-feedback primitive geometry/materials only; preserve inventory, conservation, receipt, save and transfer semantics.",
+  "runtime_files": [
+    "HavenlineGodot/scripts/transfer_feedback.gd"
+  ],
+  "authored_assets": [
+    "HavenlineGodot/assets/transfer_feedback_v2/transfer_trail_ribbon.obj",
+    "HavenlineGodot/assets/transfer_feedback_v2/transfer_arrow_sigil.obj",
+    "HavenlineGodot/assets/transfer_feedback_v2/transfer_arrival_burst.obj",
+    "HavenlineGodot/assets/transfer_feedback_v2/transfer_feedback_v2.gdshader"
+  ],
+  "must_not_change": [
+    "HavenlineGodot/scripts/carry_stack.gd",
+    "HavenlineGodot/scripts/storage_stockpile.gd",
+    "HavenlineGodot/scripts/simulation.gd"
+  ],
+  "preserved_proof": [
+    "inventory conservation",
+    "save matrix",
+    "unrelated deterministic functional proof"
+  ],
+  "invalidated_proof": [
+    "visual evidence",
+    "C2",
+    "C3",
+    "C4",
+    "C6",
+    "closeout"
+  ],
+  "final_gate": {
+    "primitive_findings_allowed": 0,
+    "minimum_stills": 4,
+    "minimum_motion_seconds": 3,
+    "minimum_internal_resolution": [
+      3840,
+      2160
+    ],
+    "minimum_capture_fps": 60,
+    "explicit_user_visual_approval_required": true
+  }
+}

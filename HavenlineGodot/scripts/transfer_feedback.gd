@@ -16,6 +16,12 @@ const ARRIVAL_PULSE_SECONDS := 0.42
 const MAX_PULSES := 48
 const AUTHORITY_ID := "T08-transfer-feedback-v1"
 const ASSETS := HavenlineCarryStack.ASSETS
+const FEEDBACK_MESHES := {
+	"trail": "res://assets/transfer_feedback_v2/transfer_trail_ribbon.obj",
+	"arrow": "res://assets/transfer_feedback_v2/transfer_arrow_sigil.obj",
+	"pulse": "res://assets/transfer_feedback_v2/transfer_arrival_burst.obj",
+}
+const FEEDBACK_SHADER := "res://assets/transfer_feedback_v2/transfer_feedback_v2.gdshader"
 
 var loader: Callable
 var flights: Array[Dictionary] = []
@@ -47,6 +53,9 @@ static func contract() -> Dictionary:
 		"arrowheads": true,
 		"arrival_pulse_seconds": ARRIVAL_PULSE_SECONDS,
 		"trail_colors": {"source_to_actor":"5deaff", "actor_to_destination":"ffb548"},
+		"authored_feedback_assets": FEEDBACK_MESHES.duplicate(),
+		"feedback_shader": FEEDBACK_SHADER,
+		"primitive_feedback_allowed": false,
 		"feedback_draw_calls": 6,
 		"simulation_authoritative": true,
 		"mutates_inventory": false,
@@ -56,73 +65,58 @@ static func contract() -> Dictionary:
 static func valid_point(value: Vector3) -> bool:
 	return is_finite(value.x) and is_finite(value.y) and is_finite(value.z)
 
-func _make_trail(color: Color) -> MultiMeshInstance3D:
-	var mesh := CapsuleMesh.new()
-	mesh.radius = 0.095
-	mesh.height = 0.28
-	mesh.radial_segments = 8
-	mesh.rings = 4
-	var material := StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.albedo_color = color
-	material.emission_enabled = true
-	material.emission = color
-	material.emission_energy_multiplier = 2.4
-	material.no_depth_test = true
-	mesh.material = material
-	var instances := MultiMesh.new()
-	instances.transform_format = MultiMesh.TRANSFORM_3D
-	instances.mesh = mesh
-	instances.instance_count = MAX_FLIGHTS * TRAIL_SAMPLES
-	instances.visible_instance_count = 0
-	var result := MultiMeshInstance3D.new()
-	result.multimesh = instances
-	add_child(result)
-	return result
+func _load_feedback_mesh(kind: String) -> Mesh:
+	var path := String(FEEDBACK_MESHES.get(kind, ""))
+	if path.is_empty() or not ResourceLoader.exists(path):
+		push_error("Missing authored T08 feedback mesh: %s" % path)
+		return null
+	var resource: Variant = load(path)
+	if resource is Mesh:
+		return resource
+	push_error("Authored T08 feedback resource is not a Mesh: %s" % path)
+	return null
 
-func _emissive_material(color: Color) -> StandardMaterial3D:
-	var material := StandardMaterial3D.new()
-	material.shading_mode = BaseMaterial3D.SHADING_MODE_UNSHADED
-	material.albedo_color = color
-	material.emission_enabled = true
-	material.emission = color
-	material.emission_energy_multiplier = 2.8
-	material.no_depth_test = true
+func _feedback_material(color: Color, role: float) -> ShaderMaterial:
+	if not ResourceLoader.exists(FEEDBACK_SHADER):
+		push_error("Missing authored T08 feedback shader: %s" % FEEDBACK_SHADER)
+		return null
+	var shader_resource: Variant = load(FEEDBACK_SHADER)
+	if not shader_resource is Shader:
+		push_error("T08 feedback shader resource is invalid")
+		return null
+	var material := ShaderMaterial.new()
+	material.shader = shader_resource
+	material.set_shader_parameter("tint", color)
+	material.set_shader_parameter("role", role)
+	material.set_shader_parameter("emission_strength", 2.7)
 	return material
 
-func _make_arrows(color: Color) -> MultiMeshInstance3D:
-	var mesh := CylinderMesh.new()
-	mesh.top_radius = 0.0
-	mesh.bottom_radius = 0.16
-	mesh.height = 0.38
-	mesh.radial_segments = 8
-	mesh.material = _emissive_material(color)
+func _make_feedback_instances(kind: String, color: Color, capacity: int, role: float) -> MultiMeshInstance3D:
+	var mesh := _load_feedback_mesh(kind)
+	var material := _feedback_material(color, role)
+	if mesh == null or material == null:
+		return null
 	var instances := MultiMesh.new()
 	instances.transform_format = MultiMesh.TRANSFORM_3D
 	instances.mesh = mesh
-	instances.instance_count = MAX_FLIGHTS
+	instances.instance_count = capacity
 	instances.visible_instance_count = 0
 	var result := MultiMeshInstance3D.new()
 	result.multimesh = instances
+	result.material_override = material
+	result.set_meta("t08_authored_feedback_asset", FEEDBACK_MESHES[kind])
+	result.set_meta("t08_custom_feedback_shader", FEEDBACK_SHADER)
 	add_child(result)
 	return result
 
+func _make_trail(color: Color) -> MultiMeshInstance3D:
+	return _make_feedback_instances("trail", color, MAX_FLIGHTS * TRAIL_SAMPLES, 0.0)
+
+func _make_arrows(color: Color) -> MultiMeshInstance3D:
+	return _make_feedback_instances("arrow", color, MAX_FLIGHTS, 1.0)
+
 func _make_pulses(color: Color) -> MultiMeshInstance3D:
-	var mesh := TorusMesh.new()
-	mesh.inner_radius = 0.23
-	mesh.outer_radius = 0.31
-	mesh.rings = 12
-	mesh.ring_segments = 8
-	mesh.material = _emissive_material(color)
-	var instances := MultiMesh.new()
-	instances.transform_format = MultiMesh.TRANSFORM_3D
-	instances.mesh = mesh
-	instances.instance_count = MAX_PULSES
-	instances.visible_instance_count = 0
-	var result := MultiMeshInstance3D.new()
-	result.multimesh = instances
-	add_child(result)
-	return result
+	return _make_feedback_instances("pulse", color, MAX_PULSES, 2.0)
 
 func _ensure_trails() -> void:
 	if not is_instance_valid(gather_trail):

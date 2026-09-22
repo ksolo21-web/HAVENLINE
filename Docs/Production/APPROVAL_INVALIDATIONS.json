@@ -8,13 +8,14 @@
       "family": "shipping_visual_primitive_violation",
       "discovered_at": "2026-09-22T16:51:00Z",
       "audited_integration_source": "1083d82269e82c5aac678bb5c5c77312dde94099",
-      "reason": "Approved T08 shipping presentation still creates primitive CapsuleMesh/CylinderMesh geometry and StandardMaterial3D feedback.",
+      "reason": "Approved T08 shipping presentation used built-in primitive CapsuleMesh/CylinderMesh/TorusMesh geometry and StandardMaterial3D feedback.",
       "findings": [
         {
           "path": "HavenlineGodot/scripts/transfer_feedback.gd",
           "tokens": [
             "CapsuleMesh",
             "CylinderMesh",
+            "TorusMesh",
             "StandardMaterial3D"
           ]
         }
@@ -33,7 +34,8 @@
         "save matrix",
         "unrelated deterministic functional proof"
       ],
-      "required_resolution": "Replace all shipping-visible primitives/materials with authored production-quality assets/materials, recapture exact-source 4K60 visual evidence, rerun invalidated critics/performance only, obtain explicit user visual signoff."
+      "required_resolution": "Replace all shipping-visible primitives/materials with authored production-quality assets/materials, recapture exact-source 4K60 visual evidence, rerun invalidated critics/performance only, obtain explicit user visual signoff.",
+      "repair_status": "IMPLEMENTED_PENDING_EXACT_SOURCE_TEST_EVIDENCE_AND_USER_VISUAL_SIGNOFF"
     },
     {
       "task_id": "T09",

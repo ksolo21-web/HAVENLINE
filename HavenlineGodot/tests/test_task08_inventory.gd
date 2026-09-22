@@ -105,6 +105,7 @@ func run() -> void:
 	check("transfer authority and two directions are exact", transfer_contract.authority_id == "T08-transfer-feedback-v1" and transfer_contract.directions == ["source_to_actor", "actor_to_destination"])
 	check("transfer presentation exposes readable duration scale arc and trails", transfer_contract.duration_seconds >= 0.7 and transfer_contract.flight_scale_multiplier >= 2.2 and transfer_contract.arc_height >= 1.1 and transfer_contract.trail_samples >= 5 and transfer_contract.feedback_draw_calls <= 6)
 	check("transfer direction is explicit from trail through arrival", transfer_contract.trail_geometry == "tangent_oriented_tapered_continuous_segments" and transfer_contract.arrowheads and transfer_contract.arrival_pulse_seconds >= 0.4)
+	check("transfer contract forbids primitive feedback and publishes authored assets", not transfer_contract.primitive_feedback_allowed and transfer_contract.authored_feedback_assets.size() == 3 and String(transfer_contract.feedback_shader).begins_with("res://assets/transfer_feedback_v2/"))
 	check("transfer presentation cannot mutate inventory", transfer_contract.simulation_authoritative and not transfer_contract.mutates_inventory)
 	check("unknown resource transfer fails closed", not transfer.transfer("fish", Vector3.ZERO, Vector3.ONE, "bad-kind"))
 	check("zero-length transfer fails closed", not transfer.transfer("wood", Vector3.ZERO, Vector3.ZERO, "bad-route"))
@@ -116,6 +117,8 @@ func run() -> void:
 	check("active flights retain direction actor and destination", active.active_flights == 2 and active.flights[0].direction == "source_to_actor" and active.flights[1].destination_id == "furnace")
 	check("direction trails are active and draw-call bounded", transfer.gather_trail.multimesh.visible_instance_count == Transfer.TRAIL_SAMPLES and transfer.destination_trail.multimesh.visible_instance_count == Transfer.TRAIL_SAMPLES)
 	check("each flight has a visible directional arrowhead", transfer.gather_arrows.multimesh.visible_instance_count == 1 and transfer.destination_arrows.multimesh.visible_instance_count == 1)
+	var feedback_nodes := [transfer.gather_trail, transfer.destination_trail, transfer.gather_arrows, transfer.destination_arrows, transfer.gather_pulses, transfer.destination_pulses]
+	check("transfer feedback uses authored imported meshes and custom shader only", feedback_nodes.all(func(node): return is_instance_valid(node) and node.multimesh.mesh is ArrayMesh and not node.multimesh.mesh is PrimitiveMesh and node.material_override is ShaderMaterial and String(node.get_meta("t08_authored_feedback_asset", "")).begins_with("res://assets/transfer_feedback_v2/") and String(node.get_meta("t08_custom_feedback_shader", "")) == Transfer.FEEDBACK_SHADER))
 	transfer._process(0.2)
 	var tangent_item: Dictionary = transfer.flights[0]
 	var tangent_time := float(tangent_item.time) / Transfer.DURATION_SECONDS
