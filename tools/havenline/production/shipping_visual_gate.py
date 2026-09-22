@@ -92,6 +92,15 @@ def scan_task(task_id: str, ref: str="HEAD")->dict[str,Any]:
     visual=bool(critics.intersection(set(p.get("visual_critic_ids",[])))) or any(pathlib.PurePosixPath(x).suffix in {".tscn",".tres",".res",".gdshader"} for x in files)
     return {"schema_version":1,"task_id":task_id,"ref":git("rev-parse",f"{ref}^{{commit}}").strip(),"visual_task":visual,"scanned_files":files,"finding_count":len(findings),"findings":findings,"passed":not findings}
 
+def effective_candidate(task_id: str)->str|None:
+    for record in reversed(task_invalidation_records(task_id)):
+        candidate=record.get("repair_candidate_commit")
+        if isinstance(candidate,str) and HEX40.fullmatch(candidate):
+            return candidate
+    row=next((w for w in registry().get("workstreams",[]) if w.get("task_id")==task_id),None)
+    candidate=(row or {}).get("candidate_commit")
+    return candidate if isinstance(candidate,str) and HEX40.fullmatch(candidate) else None
+
 def signoff_path(task_id: str,candidate: str)->str:
     return f"Docs/Production/VisualApprovals/{task_id}/{candidate}.json"
 
@@ -135,8 +144,7 @@ def effective_approval(task_id: str, ref: str="HEAD")->dict[str,Any]:
     if not scan["passed"]: errors.append(f"shipping visual primitive audit has {scan['finding_count']} finding(s)")
     signoff=None
     if not inv and scan.get("visual_task") and signoff_required(task_id):
-        row=next((w for w in registry().get("workstreams",[]) if w.get("task_id")==task_id),None)
-        candidate=(row or {}).get("candidate_commit")
+        candidate=effective_candidate(task_id)
         if not isinstance(candidate,str) or not HEX40.fullmatch(candidate):
             errors.append("visual task has no exact candidate_commit for user signoff")
         else:
@@ -153,8 +161,7 @@ def audit_effective_approvals(ref: str="HEAD")->dict[str,Any]:
             errors.append(f"{task_id} has uncovered primitive shipping-art findings")
         effective=scan["passed"] and not covered
         if effective and scan.get("visual_task") and signoff_required(task_id):
-            row=next((w for w in reg.get("workstreams",[]) if w.get("task_id")==task_id),None)
-            candidate=(row or {}).get("candidate_commit")
+            candidate=effective_candidate(task_id)
             if not isinstance(candidate,str) or not HEX40.fullmatch(candidate):
                 effective=False;errors.append(f"{task_id} has no exact candidate_commit for mandatory user visual signoff")
             else:
