@@ -186,7 +186,7 @@ class T12FinalCandidateGateTests(unittest.TestCase):
             progression_validation_result=(
                 progression_validation_result
                 if progression_validation_result is not None
-                else {"passed": True, "errors": []}
+                else {"passed": True, "activation_head": self.base_sha, "errors": []}
             ),
             binding_verification_result=(
                 binding_verification_result
@@ -291,6 +291,17 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         )
         self.assertFalse(result["passed"])
         self.assertTrue(any("exact accepted-source verification" in error for error in result["errors"]))
+
+    def test_binding_verification_wrong_activation_head_fails(self):
+        result = self.validate(
+            binding_verification_result={
+                "passed": True,
+                "activation_head": "f" * 40,
+                "errors": [],
+            }
+        )
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("binding verification activation_head" in error for error in result["errors"]))
 
     def test_wrong_checkout_head_fails(self):
         result = self.validate(checked_out_head="f" * 40)
