@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "task_id": "T03",
+  "repair_family": "whole_frame_reference_fidelity_violation",
+  "status": "IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_USER_SIGNOFF",
+  "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
+  "preserves": [
+    "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
+    "T03 gate widths",
+    "T03 collision panel authority",
+    "T03 six-gate topology",
+    "T03 river crossing reserves",
+    "T03 route network",
+    "save/navigation deterministic proof"
+  ],
+  "changes": [
+    "T03-owned authored fence_panel.obj",
+    "T03-owned authored gate_post.obj",
+    "custom T03 ShaderMaterial",
+    "reduced gate-post visual scaling",
+    "cleaner T03-only compacted lane wear"
+  ],
+  "must_not_change": [
+    "HavenlineGodot/scripts/camp_boundary.gd geometry constants",
+    "HavenlineGodot/scripts/river_geometry.gd",
+    "T01 forest assets",
+    "T02 topology/water authority"
+  ],
+  "required_next_evidence": [
+    "Godot import/build pass",
+    "T03 mechanical regression",
+    "primitive/material audit zero findings",
+    "multi-angle gate/fence closeups",
+    "normal gameplay whole-frame capture",
+    "native 3840x2160 scale-1 captures",
+    "fresh C1/C2/C6 after visual preflight",
+    "explicit user visual signoff"
+  ],
+  "approval": false
+}

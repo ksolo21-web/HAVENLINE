@@ -4,6 +4,8 @@ extends Node3D
 const Boundary=preload("res://scripts/camp_boundary.gd")
 const Surface=preload("res://scripts/outpost_surface.gd")
 const Scenery=preload("res://scripts/scenery_batch.gd")
+const BOUNDARY_SHADER=preload("res://assets/t03_boundary_v2/t03_boundary_v2.gdshader")
+const BOUNDARY_ASSET_ROOT := "res://assets/t03_boundary_v2/"
 # Slightly deeper seating and a tiny visual-only overlap remove daylight slivers
 # at joints on uneven/curved terrain. Collision still uses Boundary.panel_specs()
 # exactly, so openings and gameplay widths do not change.
@@ -14,23 +16,60 @@ const GATE_HINGE_OVERLAP := 0.12
 const GATE_LEAF_ROOT_SINK := 0.56
 const TERRAIN_SEAT_SAMPLES := 7
 const GATE_POST_ROOT_SINK := 0.40
-const MAIN_GATE_POST_SCALE := 1.15
-const MAIN_GATE_POST_HEIGHT_SCALE := 1.55
-const WORK_GATE_POST_SCALE := 1.18
-const WORK_GATE_POST_HEIGHT_SCALE := 1.65
-const RIVER_GATE_POST_SCALE := 1.24
-const RIVER_GATE_POST_HEIGHT_SCALE := 1.85
+const MAIN_GATE_POST_SCALE := 1.00
+const MAIN_GATE_POST_HEIGHT_SCALE := 1.05
+const WORK_GATE_POST_SCALE := 1.00
+const WORK_GATE_POST_HEIGHT_SCALE := 1.00
+const RIVER_GATE_POST_SCALE := 1.05
+const RIVER_GATE_POST_HEIGHT_SCALE := 1.08
 var fence_batch:MultiMeshInstance3D
 var post_batch:MultiMeshInstance3D
 var descriptor:Dictionary={}
+var _boundary_materials:Dictionary={}
+
+func _material(key:String)->ShaderMaterial:
+	if _boundary_materials.has(key):return _boundary_materials[key]
+	var m:=ShaderMaterial.new()
+	m.shader=BOUNDARY_SHADER
+	match key:
+		"timber":
+			m.set_shader_parameter("base_color",Color(0.46,0.27,0.14,1.0));m.set_shader_parameter("roughness_value",0.88);m.set_shader_parameter("detail_strength",0.075);m.set_shader_parameter("detail_scale",2.7)
+		"timber_dark":
+			m.set_shader_parameter("base_color",Color(0.25,0.14,0.075,1.0));m.set_shader_parameter("roughness_value",0.92);m.set_shader_parameter("detail_strength",0.065);m.set_shader_parameter("detail_scale",2.9)
+		"snow":
+			m.set_shader_parameter("base_color",Color(0.88,0.95,1.0,1.0));m.set_shader_parameter("roughness_value",0.78);m.set_shader_parameter("detail_strength",0.025);m.set_shader_parameter("detail_scale",4.0)
+		"blue":
+			m.set_shader_parameter("base_color",Color(0.10,0.34,0.53,1.0));m.set_shader_parameter("roughness_value",0.46);m.set_shader_parameter("metallic_value",0.45);m.set_shader_parameter("detail_strength",0.025)
+		"orange":
+			m.set_shader_parameter("base_color",Color(0.94,0.43,0.10,1.0));m.set_shader_parameter("roughness_value",0.38);m.set_shader_parameter("metallic_value",0.10);m.set_shader_parameter("emission_color",Vector3(0.42,0.065,0.008));m.set_shader_parameter("detail_strength",0.015)
+		"iron":
+			m.set_shader_parameter("base_color",Color(0.08,0.12,0.15,1.0));m.set_shader_parameter("roughness_value",0.42);m.set_shader_parameter("metallic_value",0.70);m.set_shader_parameter("detail_strength",0.02)
+		"stone":
+			m.set_shader_parameter("base_color",Color(0.36,0.46,0.51,1.0));m.set_shader_parameter("roughness_value",0.95);m.set_shader_parameter("detail_strength",0.08);m.set_shader_parameter("detail_scale",4.5)
+		"brass":
+			m.set_shader_parameter("base_color",Color(0.66,0.42,0.17,1.0));m.set_shader_parameter("roughness_value",0.44);m.set_shader_parameter("metallic_value",0.62);m.set_shader_parameter("detail_strength",0.02)
+		_:
+			assert(false,"Unknown T03 authored boundary material: "+key)
+	_boundary_materials[key]=m
+	return m
 
 func _mesh(game,asset:String)->ArrayMesh:
-	if not game.merged_cache.has(asset):
-		var path="res://assets/environment_v2/"+asset.trim_prefix("world/")+".glb"
+	var cache_key:="t03-boundary-v2/"+asset
+	if not game.merged_cache.has(cache_key):
+		var path:=BOUNDARY_ASSET_ROOT+asset+".obj"
 		assert(ResourceLoader.exists(path),"Missing authored Task 3 boundary asset: "+path)
-		game.merged_cache[asset]=Scenery.compile(load(path))
-	return game.merged_cache[asset]
-
+		var source=load(path)
+		assert(source is ArrayMesh,"T03 boundary source must import as ArrayMesh: "+path)
+		var mesh:ArrayMesh=source.duplicate()
+		for index in mesh.get_surface_count():
+			var imported:=mesh.surface_get_material(index)
+			var key:=""
+			if imported!=null:key=String(imported.resource_name).to_lower()
+			if key.is_empty():key=String(mesh.surface_get_name(index)).to_lower()
+			assert(key in ["timber","timber_dark","snow","blue","orange","iron","stone","brass"],"Unmapped T03 boundary surface: "+key)
+			mesh.surface_set_material(index,_material(key))
+		game.merged_cache[cache_key]=mesh
+	return game.merged_cache[cache_key]
 func _segment_transform(a:Vector2,b:Vector2,overlap:=0.0,root_sink:=FENCE_ROOT_SINK,end_root_sink:=-1.0,terrain_seat:=false)->Transform3D:
 	var aa:=a;var bb:=b
 	var flat:=b-a
@@ -72,7 +111,7 @@ func configure(game):
 		if south_corners.any(func(c):return Vector2(panel.a).distance_to(c)<.01 or Vector2(panel.b).distance_to(c)<.01):overlap=VISUAL_CORNER_JOIN_OVERLAP
 		fence_transforms.append(_segment_transform(panel.a,panel.b,overlap))
 	for leaf in Boundary.gate_leaf_specs():fence_transforms.append(_segment_transform(leaf.a,leaf.b,GATE_HINGE_OVERLAP,FENCE_ROOT_SINK,GATE_LEAF_ROOT_SINK,true))
-	fence_batch=Scenery.instances(_mesh(game,"world/barricade"),fence_transforms,self)
+	fence_batch=Scenery.instances(_mesh(game,"fence_panel"),fence_transforms,self)
 	fence_batch.name="AuthoredTimberFenceAndOpenGateLeaves"
 	var post_transforms:Array[Transform3D]=[]
 	for gate in Boundary.gate_specs():
@@ -81,7 +120,7 @@ func configure(game):
 		var post_height:=RIVER_GATE_POST_HEIGHT_SCALE if gate.kind=="river" else (WORK_GATE_POST_HEIGHT_SCALE if gate.kind=="work" else MAIN_GATE_POST_HEIGHT_SCALE)
 		post_transforms.append(_post_transform(gate.a,tangent,post_scale,post_height))
 		post_transforms.append(_post_transform(gate.b,tangent,post_scale,post_height))
-	post_batch=Scenery.instances(_mesh(game,"world/lantern_post"),post_transforms,self)
+	post_batch=Scenery.instances(_mesh(game,"gate_post"),post_transforms,self)
 	post_batch.name="GateLanternPosts"
 	descriptor=Boundary.evidence()
 	descriptor["fence_visual_instances"]=fence_transforms.size()
@@ -89,8 +128,12 @@ func configure(game):
 	descriptor["open_gate_leaf_instances"]=Boundary.gate_leaf_specs().size()
 	descriptor["gate_post_instances"]=post_transforms.size()
 	descriptor["visual_collision_share_panel_authority"]=true
-	descriptor["authored_fence_asset"]="environment_v2/barricade.glb"
-	descriptor["authored_gate_post_asset"]="environment_v2/lantern_post.glb"
+	descriptor["authored_fence_asset"]="t03_boundary_v2/fence_panel.obj"
+	descriptor["authored_gate_post_asset"]="t03_boundary_v2/gate_post.obj"
+	descriptor["boundary_asset_manifest"]="t03_boundary_v2/manifest.json"
+	descriptor["runtime_material_family"]="ShaderMaterial/t03_boundary_v2.gdshader"
+	descriptor["imported_standard_materials_active"]=false
+	descriptor["authored_boundary_asset_family"]="t03_boundary_v2"
 	descriptor["fence_root_sink"]=FENCE_ROOT_SINK
 	descriptor["visual_join_overlap"]=VISUAL_JOIN_OVERLAP
 	descriptor["visual_corner_join_overlap"]=VISUAL_CORNER_JOIN_OVERLAP
