@@ -1,0 +1,98 @@
+[gd_scene load_steps=6 format=3]
+
+[sub_resource type="StandardMaterial3D" id="MatWood"]
+albedo_color = Color(0.31, 0.18, 0.09, 1)
+roughness = 0.86
+
+[sub_resource type="StandardMaterial3D" id="MatWall"]
+albedo_color = Color(0.40, 0.26, 0.13, 1)
+roughness = 0.9
+
+[sub_resource type="StandardMaterial3D" id="MatRoof"]
+albedo_color = Color(0.08, 0.19, 0.28, 1)
+roughness = 0.76
+
+[sub_resource type="StandardMaterial3D" id="MatStone"]
+albedo_color = Color(0.29, 0.33, 0.36, 1)
+roughness = 0.96
+
+[sub_resource type="BoxMesh" id="Box"]
+size = Vector3(1, 1, 1)
+
+[node name="CampShelterReinforced" type="Node3D"]
+
+[node name="StoneFooting" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatStone")
+position = Vector3(0, 0.12, 0)
+scale = Vector3(4.8, 0.24, 3.8)
+
+[node name="Deck" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(0, 0.28, 0)
+scale = Vector3(4.45, 0.16, 3.45)
+
+[node name="BackWall" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWall")
+position = Vector3(0, 1.72, -1.58)
+scale = Vector3(4.5, 2.65, 0.22)
+
+[node name="LeftWall" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWall")
+position = Vector3(-2.13, 1.72, 0)
+scale = Vector3(0.22, 2.65, 3.2)
+
+[node name="RightWall" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWall")
+position = Vector3(2.13, 1.72, 0)
+scale = Vector3(0.22, 2.65, 3.2)
+
+[node name="FrontLintel" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(0, 2.58, 1.55)
+scale = Vector3(4.4, 0.34, 0.3)
+
+[node name="FrontPostL" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(-1.95, 1.38, 1.55)
+scale = Vector3(0.34, 2.4, 0.34)
+
+[node name="FrontPostR" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(1.95, 1.38, 1.55)
+scale = Vector3(0.34, 2.4, 0.34)
+
+[node name="RoofLeft" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatRoof")
+position = Vector3(-1.12, 3.08, 0)
+rotation_degrees = Vector3(0, 0, -13)
+scale = Vector3(2.65, 0.18, 3.75)
+
+[node name="RoofRight" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatRoof")
+position = Vector3(1.12, 3.08, 0)
+rotation_degrees = Vector3(0, 0, 13)
+scale = Vector3(2.65, 0.18, 3.75)
+
+[node name="BraceLeft" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(-1.58, 1.82, 1.42)
+rotation_degrees = Vector3(0, 0, -36)
+scale = Vector3(0.18, 1.7, 0.18)
+
+[node name="BraceRight" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(1.58, 1.82, 1.42)
+rotation_degrees = Vector3(0, 0, 36)
+scale = Vector3(0.18, 1.7, 0.18)
