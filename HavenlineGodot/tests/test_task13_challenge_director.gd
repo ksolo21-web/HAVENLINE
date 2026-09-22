@@ -90,15 +90,17 @@ func run() -> void:
 	var struggle := director.evaluate(context(100), window(2, {
 		"attempt_count": 4, "success_count": 1, "failure_count": 2,
 		"abandonment_count": 1, "down_count": 2,
-		"slow_completion_count": 1, "struggle_streak": 1,
+		"fast_completion_count": 0, "slow_completion_count": 1, "struggle_streak": 1,
 	}), high_previous)
-	check("struggle triggers one-step recovery", struggle.band_index == 2 and struggle.reason_codes.has("recovery_deescalation"))
+	check("struggle decision remains valid", bool(struggle.get("passed", false)), struggle.get("errors", []))
+	check("struggle triggers one-step recovery", int(struggle.get("band_index", -1)) == 2 and Array(struggle.get("reason_codes", [])).has("recovery_deescalation"))
 	var deep_struggle := director.evaluate(context(100), window(3, {
 		"attempt_count": 4, "success_count": 1, "failure_count": 2,
 		"abandonment_count": 1, "down_count": 2,
-		"slow_completion_count": 1, "struggle_streak": 3,
+		"fast_completion_count": 0, "slow_completion_count": 1, "struggle_streak": 3,
 	}), struggle)
-	check("sustained struggle can deepen recovery but still one step per evaluation", deep_struggle.band_index == 1)
+	check("deep struggle decision remains valid", bool(deep_struggle.get("passed", false)), deep_struggle.get("errors", []))
+	check("sustained struggle can deepen recovery but still one step per evaluation", int(deep_struggle.get("band_index", -1)) == 1)
 
 	var neutral_hold := director.evaluate(context(1), window(2), {"band_index": 1, "evaluation_sequence": 1})
 	check("neutral input preserves hysteresis above base", neutral_hold.band_index == 1 and neutral_hold.reason_codes.has("hysteresis_hold"))
