@@ -76,6 +76,10 @@ def validate_schema(data: dict[str, Any]) -> dict[str, Any]:
         if "acyclic" not in str(level_contracts.get("prerequisite_level_ids", "")).lower():
             errors.append("prerequisite contract must explicitly require acyclic topology")
         one_time_contract = str(level_contracts.get("one_time_event_ids", ""))
+        required_fact_contract = str(level_contracts.get("required_fact_ids", "")).lower()
+        for token in ("level 1", "levels 2-100", "t12.fact.slot.nnn", "external", "binding index"):
+            if token not in required_fact_contract:
+                errors.append(f"required_fact_ids contract missing fact-slot token {token!r}")
         if "replay" not in one_time_contract.lower():
             errors.append("one_time_event_ids contract must retain replay safety")
         if "t12.event.level.nnn.completed" not in one_time_contract.lower():
@@ -93,6 +97,35 @@ def validate_schema(data: dict[str, Any]) -> dict[str, Any]:
     for token in ("inventory", "t10", "t11", "t13", "t14", "t32/t44-t52"):
         if token not in authority_blob:
             errors.append(f"level authority_rules must preserve boundary token {token!r}")
+
+    fact_slot = data.get("fact_slot_contract")
+    if not isinstance(fact_slot, dict):
+        errors.append("fact_slot_contract must be an object")
+        fact_slot = {}
+    else:
+        if fact_slot.get("namespace") != "t12.fact.slot.NNN":
+            errors.append("fact_slot_contract namespace must remain t12.fact.slot.NNN")
+        level1_rule = str(fact_slot.get("level_1_rule", "")).lower()
+        if "required_fact_ids" not in level1_rule or "[]" not in level1_rule:
+            errors.append("fact_slot_contract level_1_rule must freeze empty required_fact_ids")
+        levels_rule = str(fact_slot.get("levels_2_100_rule", "")).lower()
+        for token in ("required_fact_ids", "t12.fact.slot.nnn", "level number"):
+            if token not in levels_rule:
+                errors.append(f"fact_slot_contract levels_2_100_rule missing {token!r}")
+        producer_mapping = str(fact_slot.get("producer_mapping", "")).lower()
+        if "outside progression_levels_v1.json" not in producer_mapping or "binding index" not in producer_mapping:
+            errors.append("fact_slot_contract producer mapping must remain external to progression data")
+        t10_t11 = str(fact_slot.get("t10_t11_proof", "")).lower()
+        if "t10/t11" not in t10_t11 or "binding_resolution" not in t10_t11:
+            errors.append("fact_slot_contract must retain T10/T11 activation proof")
+        later = str(fact_slot.get("later_owner_behavior", "")).lower()
+        for token in ("deferred", "locked", "trusted integration"):
+            if token not in later:
+                errors.append(f"fact_slot_contract later-owner behavior missing {token!r}")
+        presentation_rule = str(fact_slot.get("presentation_requirement_rule", "")).lower()
+        for token in ("visibility", "milestone", "never", "producer bindings"):
+            if token not in presentation_rule:
+                errors.append(f"fact_slot_contract presentation rule missing {token!r}")
 
     milestone = data.get("milestone_record")
     if not isinstance(milestone, dict):
@@ -122,7 +155,7 @@ def validate_schema(data: dict[str, Any]) -> dict[str, Any]:
     if manifest.get("required_task_id") != "T12":
         errors.append("shipping_manifest required_task_id must be T12")
     top = set(manifest.get("required_top_level_fields", [])) if isinstance(manifest.get("required_top_level_fields"), list) else set()
-    if top != {"schema_version", "task_id", "levels", "milestones"}:
+    if top != {"schema_version", "task_id", "levels", "milestones", "bindings"}:
         errors.append("shipping_manifest top-level field contract drifted")
     promotion_blob = " ".join(str(x) for x in manifest.get("promotion_requires", [])).lower()
     for token in REQUIRED_PROMOTION_TOKENS:
@@ -131,7 +164,7 @@ def validate_schema(data: dict[str, Any]) -> dict[str, Any]:
 
     shipping_files = data.get("shipping_files")
     if not isinstance(shipping_files, dict):
-        errors.append("shipping_files must define the two split shipping datasets")
+        errors.append("shipping_files must define the three split shipping datasets")
         shipping_files = {}
     expected_files = {
         "progression_levels_v1": (
@@ -141,6 +174,10 @@ def validate_schema(data: dict[str, Any]) -> dict[str, Any]:
         "progression_milestones_v1": (
             "HavenlineGodot/data/progression_milestones_v1.json",
             {"schema_version", "task_id", "milestones"},
+        ),
+        "progression_bindings_v1": (
+            "HavenlineGodot/data/progression_bindings_v1.json",
+            {"schema_version", "task_id", "bindings"},
         ),
     }
     for key, (expected_path, expected_top) in expected_files.items():
@@ -155,8 +192,21 @@ def validate_schema(data: dict[str, Any]) -> dict[str, Any]:
         top_fields = set(row.get("required_top_level_fields", [])) if isinstance(row.get("required_top_level_fields"), list) else set()
         if top_fields != expected_top:
             errors.append(f"{key} top-level fields drifted: {sorted(top_fields)}")
+        if key == "progression_bindings_v1":
+            if row.get("exact_binding_count") != 99:
+                errors.append("progression_bindings_v1 exact_binding_count must be 99")
+            if row.get("binding_shape") != [
+                "slot_id",
+                "fact_kind",
+                "source_task",
+                "source_id",
+                "resolution_state",
+                "evidence_ref",
+                "idempotency_domain",
+            ]:
+                errors.append("progression_bindings_v1 binding_shape drifted")
     cross_file_rule = str(shipping_files.get("cross_file_rule", "")).lower()
-    for token in ("share schema_version/task_id", "validated together", "--levels", "--milestones"):
+    for token in ("share schema_version/task_id", "validate together", "--levels", "--milestones", "--shipping", "all three files", "99"):
         if token not in cross_file_rule:
             errors.append(f"shipping_files cross-file rule missing {token!r}")
 

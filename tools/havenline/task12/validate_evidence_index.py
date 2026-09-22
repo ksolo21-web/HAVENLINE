@@ -25,6 +25,7 @@ EXPECTED_CATEGORIES = {
     "critic_review",
     "critic_dimension",
     "binding_resolution",
+    "binding_producer",
     "gate",
 }
 
@@ -33,7 +34,11 @@ def nonempty(value: Any) -> bool:
     return isinstance(value, str) and bool(value.strip())
 
 
-def required_ref_categories(candidate: dict[str, Any], critics: dict[str, Any]) -> dict[str, set[str]]:
+def required_ref_categories(
+    candidate: dict[str, Any],
+    critics: dict[str, Any],
+    shipping_bindings: dict[str, Any] | None = None,
+) -> dict[str, set[str]]:
     refs: dict[str, set[str]] = {}
 
     def add(uri: Any, category: str) -> None:
@@ -86,6 +91,13 @@ def required_ref_categories(candidate: dict[str, Any], critics: dict[str, Any]) 
         if isinstance(row, dict) and nonempty(row.get("evidence_ref")):
             add(row["evidence_ref"], "critic_review")
 
+    if isinstance(shipping_bindings, dict):
+        binding_rows = shipping_bindings.get("bindings")
+        if isinstance(binding_rows, list):
+            for row in binding_rows:
+                if isinstance(row, dict) and nonempty(row.get("evidence_ref")):
+                    add(row["evidence_ref"], "binding_producer")
+
     critic_rows = critics.get("critics", {}) if isinstance(critics.get("critics"), dict) else {}
     for row in critic_rows.values():
         if not isinstance(row, dict):
@@ -101,11 +113,22 @@ def required_ref_categories(candidate: dict[str, Any], critics: dict[str, Any]) 
     return refs
 
 
-def required_refs(candidate: dict[str, Any], critics: dict[str, Any]) -> set[str]:
-    return set(required_ref_categories(candidate, critics))
+def required_refs(
+    candidate: dict[str, Any],
+    critics: dict[str, Any],
+    shipping_bindings: dict[str, Any] | None = None,
+) -> set[str]:
+    return set(required_ref_categories(candidate, critics, shipping_bindings))
 
 
-def validate_index(data: dict[str, Any], *, require_resolved: bool = False, candidate: dict[str, Any] | None = None, critics: dict[str, Any] | None = None) -> dict[str, Any]:
+def validate_index(
+    data: dict[str, Any],
+    *,
+    require_resolved: bool = False,
+    candidate: dict[str, Any] | None = None,
+    critics: dict[str, Any] | None = None,
+    shipping_bindings: dict[str, Any] | None = None,
+) -> dict[str, Any]:
     errors: list[str] = []
     if data.get("schema_version") != 1:
         errors.append("schema_version must be 1")
@@ -180,7 +203,7 @@ def validate_index(data: dict[str, Any], *, require_resolved: bool = False, cand
                 errors.append("evidence index candidate_source does not match candidate packet")
             if critics.get("candidate_source") != candidate_source:
                 errors.append("evidence index candidate_source does not match critic records")
-            expected_categories = required_ref_categories(candidate, critics)
+            expected_categories = required_ref_categories(candidate, critics, shipping_bindings)
             required = set(expected_categories)
             missing_refs = sorted(required - uris)
             if missing_refs:
@@ -203,7 +226,7 @@ def validate_index(data: dict[str, Any], *, require_resolved: bool = False, cand
         "passed": not errors,
         "mode": "resolved" if require_resolved else "template",
         "entry_count": len(entries),
-        "required_ref_count": len(required_refs(candidate, critics)) if require_resolved and candidate is not None and critics is not None else 0,
+        "required_ref_count": len(required_refs(candidate, critics, shipping_bindings)) if require_resolved and candidate is not None and critics is not None else 0,
         "missing_required_ref_count": len(missing_refs),
         "errors": errors,
     }
@@ -215,11 +238,19 @@ def main() -> None:
     ap.add_argument("--require-resolved", action="store_true")
     ap.add_argument("--candidate-evidence")
     ap.add_argument("--critic-records")
+    ap.add_argument("--shipping-bindings")
     args = ap.parse_args()
     data = json.loads((ROOT / args.input).read_text())
     candidate = json.loads((ROOT / args.candidate_evidence).read_text()) if args.candidate_evidence else None
     critics = json.loads((ROOT / args.critic_records).read_text()) if args.critic_records else None
-    result = validate_index(data, require_resolved=args.require_resolved, candidate=candidate, critics=critics)
+    shipping_bindings = json.loads((ROOT / args.shipping_bindings).read_text()) if args.shipping_bindings else None
+    result = validate_index(
+        data,
+        require_resolved=args.require_resolved,
+        candidate=candidate,
+        critics=critics,
+        shipping_bindings=shipping_bindings,
+    )
     print(json.dumps(result, indent=2))
     if not result["passed"]:
         raise SystemExit(1)

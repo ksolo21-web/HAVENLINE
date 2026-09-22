@@ -29,6 +29,7 @@ class T12FinalCandidateGateTests(unittest.TestCase):
     integration_sha = "e" * 40
     levels_digest = "1" * 64
     milestones_digest = "2" * 64
+    bindings_digest = "4" * 64
     binding_digest = "3" * 64
 
     def critic_records(self):
@@ -62,6 +63,7 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         source["shipping_data_hashes"] = {
             "progression_levels_v1_json_sha256": self.levels_digest,
             "progression_milestones_v1_json_sha256": self.milestones_digest,
+            "progression_bindings_v1_json_sha256": self.bindings_digest,
             "binding_resolution_json_sha256": self.binding_digest,
         }
         source["upstream_sources"]["T10"] = self.t10_sha
@@ -134,18 +136,68 @@ class T12FinalCandidateGateTests(unittest.TestCase):
             "schema_version": 1,
             "task_id": "T12",
             "status": "RESOLVED_FOR_ACTIVATION",
+            "allowed_id_kinds_by_task": {
+                "T10": ["transform_recipe", "transform_state"],
+                "T11": ["camp_recipe_binding", "camp_state"],
+            },
+            "fact_kind_compatibility": {
+                "world_transform_completed": {
+                    "source_task": "T10",
+                    "accepted_id_kinds": ["transform_recipe", "transform_state"],
+                },
+                "camp_state_completed": {
+                    "source_task": "T11",
+                    "accepted_id_kinds": ["camp_recipe_binding", "camp_state"],
+                },
+            },
             "dependencies": {
-                "T10": {"accepted_integrated_source": self.t10_sha, "resolved_public_ids": [{"id": "transform.ready"}]},
-                "T11": {"accepted_integrated_source": self.t11_sha, "resolved_public_ids": [{"id": "camp.ready"}]},
+                "T10": {
+                    "accepted_integrated_source": self.t10_sha,
+                    "resolved_public_ids": [{"id": "transform.ready", "kind": "transform_recipe"}],
+                },
+                "T11": {
+                    "accepted_integrated_source": self.t11_sha,
+                    "resolved_public_ids": [{"id": "camp.ready", "kind": "camp_state"}],
+                },
             },
             "promotion_allowed": True,
         }
 
-    def evidence_index(self, candidate, records):
+    def shipping_bindings(self):
+        return {
+            "schema_version": 1,
+            "task_id": "T12",
+            "bindings": [
+                {
+                    "slot_id": "t12.fact.slot.003",
+                    "fact_kind": "world_transform_completed",
+                    "source_task": "T10",
+                    "source_id": "transform.ready",
+                    "resolution_state": "RESOLVED",
+                    "evidence_ref": "artifact://binding-resolution/t10.json",
+                    "idempotency_domain": "t10.transform",
+                },
+                {
+                    "slot_id": "t12.fact.slot.006",
+                    "fact_kind": "camp_state_completed",
+                    "source_task": "T11",
+                    "source_id": "camp.ready",
+                    "resolution_state": "RESOLVED",
+                    "evidence_ref": "artifact://binding-resolution/t11.json",
+                    "idempotency_domain": "t11.camp",
+                },
+            ],
+        }
+
+    def evidence_index(self, candidate, records, shipping_bindings=None):
         data = copy.deepcopy(EVIDENCE_INDEX_TEMPLATE)
         data["status"] = "EVIDENCE_INDEX_COMPLETE"
         data["candidate_source"] = self.candidate_sha
-        categories = gate.evidence_index_validator.required_ref_categories(candidate, records)
+        categories = gate.evidence_index_validator.required_ref_categories(
+            candidate,
+            records,
+            shipping_bindings,
+        )
         refs = sorted(categories)
         data["entries"] = [
             {
@@ -168,8 +220,10 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         parity=None,
         evidence_index=None,
         binding=None,
+        shipping_bindings=None,
         levels_digest=None,
         progression_validation_result=None,
+        shipping_binding_validation_result=None,
         binding_verification_result=None,
         candidate_guard_result=None,
         frozen_scope_guard_result=None,
@@ -177,16 +231,23 @@ class T12FinalCandidateGateTests(unittest.TestCase):
     ):
         records = records if records is not None else self.critic_records()
         candidate = candidate if candidate is not None else self.candidate_packet(records)
-        evidence_index = evidence_index if evidence_index is not None else self.evidence_index(candidate, records)
+        shipping_bindings = shipping_bindings if shipping_bindings is not None else self.shipping_bindings()
+        evidence_index = evidence_index if evidence_index is not None else self.evidence_index(candidate, records, shipping_bindings)
         return gate.validate_consistency(
             candidate,
             records,
             parity if parity is not None else self.parity_output(),
             evidence_index,
             binding if binding is not None else self.binding(),
+            shipping_bindings if shipping_bindings is not None else self.shipping_bindings(),
             progression_validation_result=(
                 progression_validation_result
                 if progression_validation_result is not None
+                else {"passed": True, "errors": []}
+            ),
+            shipping_binding_validation_result=(
+                shipping_binding_validation_result
+                if shipping_binding_validation_result is not None
                 else {"passed": True, "errors": []}
             ),
             binding_verification_result=(
@@ -223,6 +284,7 @@ class T12FinalCandidateGateTests(unittest.TestCase):
             actual_validator_source=gate.validator_bundle.bundle_digest(ROOT),
             levels_sha256=levels_digest if levels_digest is not None else self.levels_digest,
             milestones_sha256=self.milestones_digest,
+            bindings_sha256=self.bindings_digest,
             binding_resolution_sha256=self.binding_digest,
             vectors=VECTORS,
             parity_schema=PARITY_SCHEMA,
@@ -258,6 +320,40 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertTrue(any("upstream T10" in error for error in result["errors"]))
 
+    def test_shipping_t10_source_id_must_be_proven_by_binding_resolution(self):
+        shipping = self.shipping_bindings()
+        shipping["bindings"][0]["source_id"] = "transform.not-proven"
+        result = self.validate(shipping_bindings=shipping)
+        self.assertFalse(result["passed"])
+        self.assertTrue(
+            any(
+                "shipping binding dataset uses T10 source IDs absent from BINDING_RESOLUTION"
+                in error
+                for error in result["errors"]
+            )
+        )
+
+    def test_shipping_t11_source_id_must_be_proven_by_binding_resolution(self):
+        shipping = self.shipping_bindings()
+        shipping["bindings"][1]["source_id"] = "camp.not-proven"
+        result = self.validate(shipping_bindings=shipping)
+        self.assertFalse(result["passed"])
+        self.assertTrue(
+            any(
+                "shipping binding dataset uses T11 source IDs absent from BINDING_RESOLUTION"
+                in error
+                for error in result["errors"]
+            )
+        )
+
+    def test_shipping_t10_id_kind_must_match_fact_kind(self):
+        binding = self.binding()
+        binding["dependencies"]["T10"]["resolved_public_ids"][0]["kind"] = "transform_state"
+        binding["fact_kind_compatibility"]["world_transform_completed"]["accepted_id_kinds"] = ["transform_recipe"]
+        result = self.validate(binding=binding)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("incompatible with fact_kind" in error for error in result["errors"]))
+
     def test_candidate_minimum_must_match_dimension_record(self):
         records = self.critic_records()
         candidate = self.candidate_packet(records)
@@ -283,6 +379,30 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertTrue(any("engine parity candidate_source" in error for error in result["errors"]))
 
+    def test_missing_shipping_binding_evidence_reference_fails(self):
+        records = self.critic_records()
+        candidate = self.candidate_packet(records)
+        shipping = self.shipping_bindings()
+        evidence = self.evidence_index(candidate, records, shipping)
+        target_uri = shipping["bindings"][0]["evidence_ref"]
+        evidence["entries"] = [
+            row for row in evidence["entries"]
+            if row["uri"] != target_uri
+        ]
+        result = self.validate(
+            candidate=candidate,
+            records=records,
+            shipping_bindings=shipping,
+            evidence_index=evidence,
+        )
+        self.assertFalse(result["passed"])
+        self.assertTrue(
+            any(
+                target_uri in error and "missing from index" in error
+                for error in result["errors"]
+            )
+        )
+
     def test_missing_evidence_reference_fails(self):
         records = self.critic_records()
         candidate = self.candidate_packet(records)
@@ -298,6 +418,16 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         )
         self.assertFalse(result["passed"])
         self.assertTrue(any("actual split shipping progression data failed" in error for error in result["errors"]))
+
+    def test_invalid_shipping_binding_dataset_fails(self):
+        result = self.validate(
+            shipping_binding_validation_result={
+                "passed": False,
+                "errors": ["missing slot 042"],
+            }
+        )
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("shipping progression binding data failed" in error for error in result["errors"]))
 
     def test_unverified_binding_resolution_fails(self):
         result = self.validate(
@@ -341,7 +471,7 @@ class T12FinalCandidateGateTests(unittest.TestCase):
             }
         )
         self.assertFalse(result["passed"])
-        self.assertTrue(any("frozen six-path T12 scope guard failed" in error for error in result["errors"]))
+        self.assertTrue(any("frozen seven-path T12 scope guard failed" in error for error in result["errors"]))
 
     def test_frozen_scope_guard_identity_mismatch_fails(self):
         result = self.validate(

@@ -22,17 +22,21 @@
       "name": "Stable Level 1–100 identity",
       "prepared_checks": [
         "validate_level_matrix.py",
+        "validate_authoring_blueprint.py deterministic 100-level authoring expansion",
         "validate_progression_contract.py"
       ],
       "shipping_tests": [
         "exactly 100 records",
         "canonical t12.level.001..100 IDs matching numeric level",
+        "canonical t12.slot.NNN and t12.fact.slot.NNN identities",
+        "Level 1 required_fact_ids empty and Levels 2-100 exact matching fact slot",
         "frozen region-band identity matches each level range",
         "required list/schema fields are present and typed",
         "duplicate/missing/out-of-range/cycle rejection"
       ],
       "required_evidence": [
         "shipping level manifest",
+        "100-level authoring blueprint conformance report",
         "ID uniqueness report",
         "graph validation report"
       ],
@@ -109,18 +113,30 @@
       "name": "Existing-system bindings only",
       "prepared_checks": [
         "UPSTREAM_BINDINGS.json",
+        "BINDING_SLOT_CATALOG.json typed fact-slot authority classes",
+        "FACT_SLOT_BINDING_INDEX_TEMPLATE.json with 99 unresolved Level 2-100 rows",
         "BINDING_RESOLUTION_TEMPLATE.json",
-        "verify_binding_resolution.py"
+        "validate_fact_slot_binding_index.py",
+        "verify_binding_resolution.py",
+        "canonical 99-row shipping binding dataset contract"
       ],
       "shipping_tests": [
-        "T07/T08/T10/T11 bindings resolve to accepted public IDs/interfaces",
+        "progression level data contains only T12 fact-slot IDs, never external producer IDs",
+        "fact-slot binding index resolves accepted T07/T08/T10/T11 public IDs/interfaces",
+        "T10/T11 slot source IDs have exact activation-time binding proof",
+        "deferred later-owner slots keep their levels locked",
         "no upstream source mutation",
-        "facts are read-only inputs"
+        "facts are read-only inputs",
+        "progression_bindings_v1.json validates every fact slot as RESOLVED or allowed DEFERRED_LATER_OWNER",
+        "opening activation binding rows at Levels 3,4,6,9,10 are RESOLVED and collectively consume both T10 and T11"
       ],
       "required_evidence": [
+        "fact-slot binding-index report",
         "exact binding-resolution proof",
         "upstream mutation audit",
-        "integration binding tests"
+        "integration binding tests",
+        "shipping binding dataset digest and validation report",
+        "opening T10/T11 binding coverage report"
       ],
       "critics": [
         "C2",
@@ -175,16 +191,28 @@
       "id": "T12-R08",
       "name": "Deterministic progression state contract",
       "prepared_checks": [
-        "RUNTIME_INTERFACE_CONTRACT.json replay/idempotency rules",
-        "runtime-interface mutation tests"
+        "RUNTIME_INTERFACE_CONTRACT.json replay/idempotency and fact-slot rules",
+        "REFERENCE_RUNTIME_SEMANTICS.json deterministic transition contract",
+        "reference_progression_engine.py executable out-of-order retention/settlement model",
+        "ENGINE_TEST_VECTORS.json smoke vectors",
+        "FULL_ENGINE_VECTOR_CORPUS.json 398-vector Level 1-100 readiness/lock/replay coverage",
+        "materialize_progression_data.py dry-run validated by real shipping validator",
+        "runtime-interface and reference-engine mutation tests"
       ],
       "shipping_tests": [
         "identical state produces identical eligibility/output",
-        "duplicate fact key no-op",
+        "duplicate fact key no-op with bounded state",
+        "valid out-of-order fact is retained without prerequisite skip",
+        "retained fact completes only after prerequisite later completes",
+        "wrong fact slot cannot unlock a level",
+        "deferred/unresolved slot keeps level locked",
         "no duplicate one-time event",
         "no prerequisite skip"
       ],
       "required_evidence": [
+        "reference runtime semantic conformance",
+        "out-of-order retention/cascade test evidence",
+        "398-vector full-corpus result",
         "deterministic replay trace",
         "duplicate/reorder/idempotency matrix"
       ],
@@ -199,15 +227,20 @@
       "name": "Recovery-compatible identifiers",
       "prepared_checks": [
         "stable T12 namespace contract",
+        "REFERENCE_RUNTIME_SEMANTICS snapshot/restore contract",
+        "reference_progression_engine snapshot reconstruction tests",
         "T14 ownership boundary guard"
       ],
       "shipping_tests": [
         "snapshot/restore reconstructs same completed/unlocked state",
+        "satisfied out-of-order fact slots and their source-key causality survive restore",
+        "interrupted ready transition settles deterministically after restore",
         "already-emitted events do not re-emit",
         "unknown/impossible IDs fail closed"
       ],
       "required_evidence": [
         "stable ID schema report",
+        "reference-engine restore/idempotency test record",
         "T12-local snapshot/reconstruction proof"
       ],
       "critics": [
@@ -339,18 +372,23 @@
         "prepare_activation.py fail-closed dependency and lineage checks",
         "CI deliberate activation rejection before T11 closeout/binding resolution",
         "exact accepted-source binding resolution with activation-head identity",
-        "shipping-only six-path T12 builder reservation; prep/acceptance surface frozen"
+        "shipping-only seven-path T12 builder reservation; prep/acceptance surface frozen",
+        "materializer repository writes forbidden before claimed T12 ownership and resolved binding proof"
       ],
       "shipping_tests": [
         "T07/T08/T10/T11 APPROVED at exact activation base",
         "T10/T11 completion records present and accepted sources are activation-base ancestors",
         "T10/T11 stale ownership closed",
-        "T12 candidate changes remain inside the six frozen shipping/runtime test paths"
+        "T12 candidate changes remain inside the seven frozen shipping/runtime test paths",
+        "materializer write mode runs only after T12 claim from exact activation base",
+        "seven-path candidate includes canonical progression_bindings_v1.json",
+        "activation rejects deferred or missing T10/T11 opening binding coverage"
       ],
       "required_evidence": [
         "exact activation base",
         "dependency graph/registry/task-gate snapshot",
         "resolved T10/T11 binding proof tied to activation base",
+        "materializer write-authority result",
         "canonical candidate-guard changed-path proof"
       ],
       "critics": [
@@ -367,7 +405,8 @@
         "strict >9.0 unrounded rule",
         "zero mandatory defect rule",
         "exact acceptance-critical validator bundle digest",
-        "evidence-bearing G1-G14 contract and complete evidence-index coverage"
+        "evidence-bearing G1-G14 contract and complete evidence-index coverage",
+        "exact acceptance-critical validator bundle covers the expanded preactivation authoring/slot/materializer/full-corpus surface"
       ],
       "shipping_tests": [
         "G1-G14 pass with evidence refs",

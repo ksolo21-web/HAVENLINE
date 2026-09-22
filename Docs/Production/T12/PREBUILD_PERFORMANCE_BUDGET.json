@@ -7,12 +7,16 @@
     "reference_machine_class": "github-actions ubuntu-24.04 python-3.12",
     "iterations": 500,
     "memory_iterations": 100,
-    "maximum_mean_ms": 8,
-    "maximum_p95_ms": 15,
+    "maximum_mean_ms": 20,
+    "maximum_p95_ms": 25,
     "maximum_single_ms": 75,
     "maximum_retained_growth_kib": 512,
-    "input_shape": "100-level synthetic progression + 10 milestones + 14 static preparation checks: progression, matrix, shipping schema, runtime interface, traceability, downstream contract, candidate evidence, critic records, evidence index, engine oracle, blank binding guard, cross-contract consistency, upstream-binding consistency, and defect-ledger consistency",
-    "measurement_rule": "Timing is measured without tracemalloc instrumentation. Retained/peak traced memory is measured in a separate bounded pass so allocation tracing overhead is not mistaken for validator latency."
+    "input_shape": "100-level synthetic progression + 10 milestones + 19 static preparation checks: progression, matrix, shipping schema, runtime interface, traceability, downstream contract, candidate evidence, critic records, evidence index, smoke engine oracle, 398-vector full oracle, blank binding guard, cross-contract consistency, upstream-binding consistency, defect-ledger consistency, authoring blueprint/fact-slot conformance, 99-slot binding-index conformance, shipping materializer dry-run, and reference-runtime semantic conformance",
+    "measurement_rule": "Timing is measured without tracemalloc instrumentation. Retained/peak traced memory is measured in a separate bounded pass so allocation tracing overhead is not mistaken for validator latency.",
+    "maximum_mean_ms_per_check": 1,
+    "maximum_p95_ms_per_check": 1.5,
+    "check_count": 19,
+    "budget_rule": "Absolute budgets cover the full 19-check surface; normalized per-check caps prevent expanded coverage from becoming an excuse for unbounded validator cost."
   },
   "fuzz_budget": {
     "deterministic_seed": 1200,
@@ -46,7 +50,10 @@
       "noncanonical_major_milestone",
       "global_spend_gate",
       "extra_level_field",
-      "extra_milestone_field"
+      "extra_milestone_field",
+      "wrong_fact_slot",
+      "level1_fact_gate",
+      "external_fact_id"
     ]
   },
   "shipping_c6_boundary": {

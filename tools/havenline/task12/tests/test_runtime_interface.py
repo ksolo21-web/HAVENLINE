@@ -40,6 +40,76 @@ class T12RuntimeInterfaceTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertTrue(any("level" in error and "pattern" in error for error in result["errors"]))
 
+    def test_rejects_fact_slot_namespace_drift(self):
+        def mutate(contract):
+            contract["stable_id_namespaces"]["fact_slot"]["pattern"] = "fact-slot-NNN"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("fact_slot" in error and "pattern" in error for error in result["errors"]))
+
+    def test_rejects_binding_dataset_path_drift(self):
+        def mutate(contract):
+            contract["fact_slot_binding_contract"]["shipping_dataset_path"] = "HavenlineGodot/data/wrong.json"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("progression_bindings_v1.json path" in error for error in result["errors"]))
+
+    def test_rejects_opening_activation_level_drift(self):
+        def mutate(contract):
+            contract["fact_slot_binding_contract"]["opening_activation_required_levels"] = [3, 6, 9, 10]
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("opening activation levels drifted" in error for error in result["errors"]))
+
+    def test_rejects_missing_t11_opening_coverage(self):
+        def mutate(contract):
+            contract["fact_slot_binding_contract"]["opening_activation_required_upstream_coverage"] = ["T10"]
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("require T10 and T11" in error for error in result["errors"]))
+
+    def test_rejects_missing_deferred_fact_slot_rule(self):
+        def mutate(contract):
+            contract["fact_slot_binding_contract"]["deferred_rule"] = "later owner may bind"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("fact-slot deferred rule" in error for error in result["errors"]))
+
+    def test_rejects_t10_t11_binding_proof_removal(self):
+        def mutate(contract):
+            contract["fact_slot_binding_contract"]["t10_t11_rule"] = "source IDs allowed"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("fact-slot T10/T11 rule" in error for error in result["errors"]))
+
+    def test_rejects_presentation_requirement_as_authoritative_fact(self):
+        def mutate(contract):
+            contract["fact_slot_binding_contract"]["presentation_requirement_rule"] = "visible progression may satisfy slot"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("presentation requirement rule" in error for error in result["errors"]))
+
+    def test_rejects_observe_api_source_task_removal(self):
+        def mutate(contract):
+            contract["runtime_api"]["observe_authoritative_fact"]["inputs"].remove("source_task")
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("observe_authoritative_fact inputs drifted" in error for error in result["errors"]))
+
+    def test_rejects_missing_fact_slot_source_causality_state(self):
+        def mutate(contract):
+            contract["component_state_contract"]["allowed_fields"].remove("fact_slot_source_keys")
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("component-state contract missing required" in error for error in result["errors"]))
+
+    def test_rejects_out_of_order_retention_semantic_drift(self):
+        def mutate(contract):
+            contract["transition_semantics"]["out_of_order_fact"] = "discard fact"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("transition_semantics missing" in error for error in result["errors"]))
+
     def test_rejects_missing_t13_boundary(self):
         def mutate(contract):
             contract["authority_model"]["T12_never_owns"] = [

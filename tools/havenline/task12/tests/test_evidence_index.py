@@ -58,13 +58,30 @@ class T12EvidenceIndexTests(unittest.TestCase):
             },
         }
 
-    def resolved_index(self, candidate=None, critics=None):
+    def shipping_bindings(self):
+        return {
+            "schema_version": 1,
+            "task_id": "T12",
+            "bindings": [
+                {
+                    "slot_id": "t12.fact.slot.003",
+                    "fact_kind": "world_transform_completed",
+                    "source_task": "T10",
+                    "source_id": "transform.ready",
+                    "resolution_state": "RESOLVED",
+                    "evidence_ref": "artifact://binding-resolution/t10-slot-003.json",
+                    "idempotency_domain": "t10.transform",
+                }
+            ],
+        }
+
+    def resolved_index(self, candidate=None, critics=None, shipping_bindings=None):
         candidate = candidate if candidate is not None else self.candidate()
         critics = critics if critics is not None else self.critics()
         data = copy.deepcopy(self.template)
         data["status"] = "EVIDENCE_INDEX_COMPLETE"
         data["candidate_source"] = self.candidate_sha
-        categories = validator.required_ref_categories(candidate, critics)
+        categories = validator.required_ref_categories(candidate, critics, shipping_bindings)
         refs = sorted(categories)
         data["entries"] = [
             {
@@ -97,6 +114,23 @@ class T12EvidenceIndexTests(unittest.TestCase):
         self.assertTrue(result["passed"], result["errors"])
         self.assertEqual(result["missing_required_ref_count"], 0)
         self.assertEqual(result["entry_count"], result["required_ref_count"])
+
+    def test_missing_binding_producer_reference_fails(self):
+        candidate = self.candidate()
+        critics = self.critics()
+        shipping = self.shipping_bindings()
+        index = self.resolved_index(candidate, critics, shipping)
+        target = shipping["bindings"][0]["evidence_ref"]
+        index["entries"] = [row for row in index["entries"] if row["uri"] != target]
+        result = validator.validate_index(
+            index,
+            require_resolved=True,
+            candidate=candidate,
+            critics=critics,
+            shipping_bindings=shipping,
+        )
+        self.assertFalse(result["passed"])
+        self.assertTrue(any(target in error and "missing from index" in error for error in result["errors"]))
 
     def test_missing_required_reference_fails(self):
         candidate = self.candidate()

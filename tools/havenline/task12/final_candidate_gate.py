@@ -28,6 +28,7 @@ FROZEN_BUILDER_PATHS = {
     "HavenlineGodot/scripts/progression_architecture.gd",
     "HavenlineGodot/data/progression_levels_v1.json",
     "HavenlineGodot/data/progression_milestones_v1.json",
+    "HavenlineGodot/data/progression_bindings_v1.json",
     "HavenlineGodot/tests/test_task12_progression_architecture.gd",
     "HavenlineGodot/tests/test_task12_integration.gd",
     "HavenlineGodot/tests/capture_task12_progression.gd",
@@ -48,6 +49,7 @@ parity_comparator = load_module("t12_engine_parity", "compare_engine_parity.py")
 evidence_index_validator = load_module("t12_evidence_index", "validate_evidence_index.py")
 progression_validator = load_module("t12_progression_contract", "validate_progression_contract.py")
 binding_verifier = load_module("t12_binding_resolution", "verify_binding_resolution.py")
+binding_index_validator = load_module("t12_binding_index", "validate_fact_slot_binding_index.py")
 validator_bundle = load_module("t12_validator_bundle", "validator_bundle.py")
 
 
@@ -124,7 +126,7 @@ def run_frozen_scope_guard(base: str, candidate: str) -> dict[str, Any]:
     missing = sorted(FROZEN_BUILDER_PATHS - set(changed))
     errors: list[str] = []
     if foreign:
-        errors.append(f"candidate changed paths outside frozen six-path T12 scope: {foreign}")
+        errors.append(f"candidate changed paths outside frozen seven-path T12 scope: {foreign}")
     if missing:
         errors.append(f"candidate is missing frozen T12 deliverable changes: {missing}")
     return {
@@ -144,8 +146,10 @@ def validate_consistency(
     parity_output: dict[str, Any],
     evidence_index: dict[str, Any],
     binding_resolution: dict[str, Any],
+    shipping_bindings: dict[str, Any],
     *,
     progression_validation_result: dict[str, Any],
+    shipping_binding_validation_result: dict[str, Any],
     binding_verification_result: dict[str, Any],
     candidate_guard_result: dict[str, Any],
     frozen_scope_guard_result: dict[str, Any],
@@ -153,6 +157,7 @@ def validate_consistency(
     actual_validator_source: str,
     levels_sha256: str,
     milestones_sha256: str,
+    bindings_sha256: str,
     binding_resolution_sha256: str,
     vectors: dict[str, Any],
     parity_schema: dict[str, Any],
@@ -176,6 +181,7 @@ def validate_consistency(
         require_resolved=True,
         candidate=candidate,
         critics=critic_records,
+        shipping_bindings=shipping_bindings,
     )
     if not evidence_index_result["passed"]:
         errors.append("complete evidence digest index failed: " + json.dumps(evidence_index_result["errors"]))
@@ -184,6 +190,11 @@ def validate_consistency(
         errors.append(
             "actual split shipping progression data failed validation: "
             + json.dumps((progression_validation_result or {}).get("errors", []))
+        )
+    if not isinstance(shipping_binding_validation_result, dict) or shipping_binding_validation_result.get("passed") is not True:
+        errors.append(
+            "actual shipping progression binding data failed validation: "
+            + json.dumps((shipping_binding_validation_result or {}).get("errors", []))
         )
     if not isinstance(binding_verification_result, dict) or binding_verification_result.get("passed") is not True:
         errors.append(
@@ -230,7 +241,7 @@ def validate_consistency(
 
     if not isinstance(frozen_scope_guard_result, dict) or frozen_scope_guard_result.get("passed") is not True:
         errors.append(
-            "frozen six-path T12 scope guard failed: "
+            "frozen seven-path T12 scope guard failed: "
             + json.dumps((frozen_scope_guard_result or {}).get("errors", []))
         )
     else:
@@ -250,6 +261,7 @@ def validate_consistency(
     expected_hashes = {
         "progression_levels_v1_json_sha256": levels_sha256,
         "progression_milestones_v1_json_sha256": milestones_sha256,
+        "progression_bindings_v1_json_sha256": bindings_sha256,
         "binding_resolution_json_sha256": binding_resolution_sha256,
     }
     for key, actual_digest in expected_hashes.items():
@@ -266,6 +278,7 @@ def validate_consistency(
         errors.append("binding resolution dependencies must be an object")
         deps = {}
     upstream = source.get("upstream_sources", {}) if isinstance(source.get("upstream_sources"), dict) else {}
+    accepted_upstream_ids: dict[str, dict[str, str]] = {}
     for task in ("T10", "T11"):
         row = deps.get(task)
         if not isinstance(row, dict):
@@ -277,6 +290,57 @@ def validate_consistency(
         ids = row.get("resolved_public_ids")
         if not isinstance(ids, list) or not ids:
             errors.append(f"binding resolution {task} has no resolved public IDs")
+            accepted_upstream_ids[task] = {}
+        else:
+            accepted_upstream_ids[task] = {
+                item.get("id"): item.get("kind")
+                for item in ids
+                if isinstance(item, dict)
+                and isinstance(item.get("id"), str)
+                and item.get("id")
+                and isinstance(item.get("kind"), str)
+                and item.get("kind")
+            }
+            if not accepted_upstream_ids[task]:
+                errors.append(f"binding resolution {task} has no usable resolved public ID values")
+
+    compatibility = (
+        binding_resolution.get("fact_kind_compatibility", {})
+        if isinstance(binding_resolution.get("fact_kind_compatibility"), dict)
+        else {}
+    )
+    shipping_rows = (
+        shipping_bindings.get("bindings", [])
+        if isinstance(shipping_bindings, dict)
+        else []
+    )
+    if isinstance(shipping_rows, list):
+        for binding_row in shipping_rows:
+            if not isinstance(binding_row, dict) or binding_row.get("resolution_state") != "RESOLVED":
+                continue
+            task = binding_row.get("source_task")
+            if task not in ("T10", "T11"):
+                continue
+            source_id = binding_row.get("source_id")
+            fact_kind = binding_row.get("fact_kind")
+            accepted_kind = accepted_upstream_ids.get(task, {}).get(source_id)
+            if accepted_kind is None:
+                errors.append(
+                    f"shipping binding dataset uses {task} source IDs absent from BINDING_RESOLUTION: {[source_id]}"
+                )
+                continue
+            fact_contract = compatibility.get(fact_kind)
+            allowed_kinds = (
+                set(fact_contract.get("accepted_id_kinds", []))
+                if isinstance(fact_contract, dict)
+                else set()
+            )
+            expected_task = fact_contract.get("source_task") if isinstance(fact_contract, dict) else None
+            if expected_task != task or accepted_kind not in allowed_kinds:
+                errors.append(
+                    f"shipping binding {binding_row.get('slot_id')} uses {task} ID {source_id!r} "
+                    f"with accepted kind {accepted_kind!r}, incompatible with fact_kind {fact_kind!r}"
+                )
 
     packet_critics = candidate.get("critic_reviews")
     record_critics = critic_records.get("critics")
@@ -314,6 +378,7 @@ def validate_consistency(
         "engine_parity_passed": parity_result["passed"],
         "evidence_index_passed": evidence_index_result["passed"],
         "shipping_progression_validation_passed": progression_validation_result.get("passed") is True,
+        "shipping_binding_validation_passed": shipping_binding_validation_result.get("passed") is True,
         "binding_verification_passed": binding_verification_result.get("passed") is True,
         "candidate_guard_passed": candidate_guard_result.get("passed") is True,
         "frozen_scope_guard_passed": frozen_scope_guard_result.get("passed") is True,
@@ -336,6 +401,8 @@ def main() -> None:
     ap.add_argument("--binding-resolution", required=True)
     ap.add_argument("--levels", required=True)
     ap.add_argument("--milestones", required=True)
+    ap.add_argument("--bindings", required=True)
+    ap.add_argument("--binding-catalog", default="Docs/Production/T12/BINDING_SLOT_CATALOG.json")
     ap.add_argument("--vectors", default="Docs/Production/T12/ENGINE_TEST_VECTORS.json")
     ap.add_argument("--parity-schema", default="Docs/Production/T12/ENGINE_PARITY_OUTPUT_SCHEMA.json")
     args = ap.parse_args()
@@ -348,6 +415,8 @@ def main() -> None:
         "binding": ROOT / args.binding_resolution,
         "levels": ROOT / args.levels,
         "milestones": ROOT / args.milestones,
+        "bindings_shipping": ROOT / args.bindings,
+        "binding_catalog": ROOT / args.binding_catalog,
         "vectors": ROOT / args.vectors,
         "parity_schema": ROOT / args.parity_schema,
     }
@@ -364,6 +433,14 @@ def main() -> None:
         progression_result = progression_validator.validate_manifest(split_manifest)
     except Exception as exc:
         progression_result = {"passed": False, "errors": [f"split shipping progression load failed: {exc}"]}
+
+    try:
+        shipping_binding_result = binding_index_validator.validate_shipping(
+            json.loads(paths["bindings_shipping"].read_text()),
+            json.loads(paths["binding_catalog"].read_text()),
+        )
+    except Exception as exc:
+        shipping_binding_result = {"passed": False, "errors": [f"shipping binding validation failed: {exc}"]}
 
     exact_source = candidate_data.get("exact_source", {}) if isinstance(candidate_data.get("exact_source"), dict) else {}
     candidate_source = exact_source.get("candidate_source")
@@ -399,7 +476,9 @@ def main() -> None:
         json.loads(paths["parity"].read_text()),
         json.loads(paths["evidence_index"].read_text()),
         binding_data,
+        json.loads(paths["bindings_shipping"].read_text()),
         progression_validation_result=progression_result,
+        shipping_binding_validation_result=shipping_binding_result,
         binding_verification_result=binding_result,
         candidate_guard_result=candidate_guard_result,
         frozen_scope_guard_result=frozen_scope_guard_result,
@@ -407,6 +486,7 @@ def main() -> None:
         actual_validator_source=validator_bundle.bundle_digest(ROOT),
         levels_sha256=sha256_bytes(paths["levels"].read_bytes()),
         milestones_sha256=sha256_bytes(paths["milestones"].read_bytes()),
+        bindings_sha256=sha256_bytes(paths["bindings_shipping"].read_bytes()),
         binding_resolution_sha256=sha256_bytes(binding_bytes),
         vectors=json.loads(paths["vectors"].read_text()),
         parity_schema=json.loads(paths["parity_schema"].read_text()),

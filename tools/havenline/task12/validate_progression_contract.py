@@ -206,6 +206,14 @@ def validate_manifest(manifest: dict[str, Any]) -> dict[str, Any]:
             label=f"level {level}: required_fact_ids",
             errors=errors,
         )
+        canonical_fact_slot = f"t12.fact.slot.{level:03d}"
+        if level == 1:
+            if required_facts:
+                errors.append("level 1: required_fact_ids must be empty for intrinsic start readiness")
+        elif required_facts != [canonical_fact_slot]:
+            errors.append(
+                f"level {level}: required_fact_ids must equal [{canonical_fact_slot!r}] and contain no external producer IDs"
+            )
         visible_hooks = validate_string_list(
             row.get("visible_progression_hook_ids"),
             label=f"level {level}: visible_progression_hook_ids",

@@ -49,6 +49,11 @@ jobs:
           python -m py_compile tools/havenline/task12/fuzz_progression_contract.py
           python -m py_compile tools/havenline/task12/benchmark_prebuild_validators.py
           python -m py_compile tools/havenline/task12/validator_bundle.py
+          python -m py_compile tools/havenline/task12/materialize_progression_data.py
+          python -m py_compile tools/havenline/task12/validate_authoring_blueprint.py
+          python -m py_compile tools/havenline/task12/validate_fact_slot_binding_index.py
+          python -m py_compile tools/havenline/task12/reference_progression_engine.py
+          python -m py_compile tools/havenline/task12/validate_reference_runtime_semantics.py
 
       - name: Validate T12 JSON artifacts
         run: |
@@ -68,6 +73,11 @@ jobs:
           python -m json.tool Docs/Production/T12/CRITIC_REVIEW_RECORD_TEMPLATE.json >/dev/null
           python -m json.tool Docs/Production/T12/EVIDENCE_INDEX_TEMPLATE.json >/dev/null
           python -m json.tool Docs/Production/T12/defect-ledger.json >/dev/null
+          python -m json.tool Docs/Production/T12/AUTHORING_BLUEPRINT.json >/dev/null
+          python -m json.tool Docs/Production/T12/BINDING_SLOT_CATALOG.json >/dev/null
+          python -m json.tool Docs/Production/T12/FACT_SLOT_BINDING_INDEX_TEMPLATE.json >/dev/null
+          python -m json.tool Docs/Production/T12/FULL_ENGINE_VECTOR_CORPUS.json >/dev/null
+          python -m json.tool Docs/Production/T12/REFERENCE_RUNTIME_SEMANTICS.json >/dev/null
 
       - name: Validate T12 preparation contract
         run: python tools/havenline/task12/prepare_activation.py
@@ -77,6 +87,21 @@ jobs:
 
       - name: Verify upstream resolution remains blank before activation
         run: python tools/havenline/task12/verify_binding_resolution.py
+
+      - name: Validate 100-level authoring blueprint and fact slots
+        run: python tools/havenline/task12/validate_authoring_blueprint.py
+
+      - name: Validate 99-slot binding-index template
+        run: python tools/havenline/task12/validate_fact_slot_binding_index.py
+
+      - name: Dry-run materialize full shipping-shaped progression data
+        run: python tools/havenline/task12/materialize_progression_data.py
+
+      - name: Validate full 398-vector Level 1-100 oracle corpus
+        run: python tools/havenline/task12/reference_progression_oracle.py --input Docs/Production/T12/FULL_ENGINE_VECTOR_CORPUS.json
+
+      - name: Validate reference runtime transition semantics
+        run: python tools/havenline/task12/validate_reference_runtime_semantics.py
 
       - name: Validate prepared T12 runtime interface and authority boundaries
         run: python tools/havenline/task12/validate_runtime_interface.py
@@ -129,3 +154,4 @@ jobs:
           test ! -e HavenlineGodot/scripts/progression_architecture.gd
           test ! -e HavenlineGodot/data/progression_levels_v1.json
           test ! -e HavenlineGodot/data/progression_milestones_v1.json
+          test ! -e HavenlineGodot/data/progression_bindings_v1.json

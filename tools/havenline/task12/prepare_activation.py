@@ -57,6 +57,7 @@ EXPECTED_BUILDER_PATHS = [
     "HavenlineGodot/scripts/progression_architecture.gd",
     "HavenlineGodot/data/progression_levels_v1.json",
     "HavenlineGodot/data/progression_milestones_v1.json",
+    "HavenlineGodot/data/progression_bindings_v1.json",
     "HavenlineGodot/tests/test_task12_progression_architecture.gd",
     "HavenlineGodot/tests/test_task12_integration.gd",
     "HavenlineGodot/tests/capture_task12_progression.gd",
@@ -276,7 +277,7 @@ def validate_cross_contracts(checklist, prebuild=None, schema=None) -> list[str]
     if checklist.get("future_owner") != "progression-architecture-builder":
         errors.append("ACTIVATION_CHECKLIST future_owner drifted")
     if checklist.get("planned_owned_paths") != EXPECTED_BUILDER_PATHS:
-        errors.append("ACTIVATION_CHECKLIST planned_owned_paths must remain the six frozen shipping/runtime test paths")
+        errors.append("ACTIVATION_CHECKLIST planned_owned_paths must remain the seven frozen shipping/runtime test paths")
     if checklist.get("activation_requires_all_dependencies_approved") is not True:
         errors.append("ACTIVATION_CHECKLIST must require all dependencies approved")
     acceptance = checklist.get("acceptance", {})
@@ -365,6 +366,70 @@ def validate_cross_contracts(checklist, prebuild=None, schema=None) -> list[str]
     if upstream_tasks != {"T07", "T08", "T10", "T11"}:
         errors.append("PREBUILD_CONTRACT upstream binding task set drifted")
 
+    fact_slot = prebuild.get("fact_slot_contract", {})
+    if not isinstance(fact_slot, dict):
+        errors.append("PREBUILD_CONTRACT fact_slot_contract must be an object")
+        fact_slot = {}
+    if fact_slot.get("namespace") != "t12.fact.slot.NNN":
+        errors.append("PREBUILD_CONTRACT fact-slot namespace drifted")
+    if fact_slot.get("level_1_required_fact_ids") != []:
+        errors.append("PREBUILD_CONTRACT Level 1 fact-slot rule drifted")
+    if fact_slot.get("levels_2_100_rule") != "exactly one matching fact slot per level":
+        errors.append("PREBUILD_CONTRACT Levels 2-100 fact-slot rule drifted")
+    if fact_slot.get("external_source_ids_in_level_records_forbidden") is not True:
+        errors.append("PREBUILD_CONTRACT must forbid external producer IDs in level records")
+    if set(fact_slot.get("resolution_states", [])) != {"RESOLVED", "DEFERRED_LATER_OWNER"}:
+        errors.append("PREBUILD_CONTRACT fact-slot resolution states drifted")
+    if fact_slot.get("t10_t11_exact_binding_proof_required") is not True:
+        errors.append("PREBUILD_CONTRACT must require exact T10/T11 binding proof")
+    if fact_slot.get("presentation_requirements_never_resolve_fact_slots") is not True:
+        errors.append("PREBUILD_CONTRACT must forbid presentation requirements from resolving fact slots")
+    if fact_slot.get("shipping_dataset_path") != "HavenlineGodot/data/progression_bindings_v1.json":
+        errors.append("PREBUILD_CONTRACT fact-slot shipping dataset path drifted")
+    if fact_slot.get("exact_shipping_binding_count") != 99:
+        errors.append("PREBUILD_CONTRACT fact-slot shipping binding count must be 99")
+    if fact_slot.get("shipping_top_level_fields") != ["schema_version", "task_id", "bindings"]:
+        errors.append("PREBUILD_CONTRACT fact-slot shipping top-level fields drifted")
+    if fact_slot.get("opening_activation_required_levels") != [3, 4, 6, 9, 10]:
+        errors.append("PREBUILD_CONTRACT opening activation levels drifted")
+    if set(fact_slot.get("opening_activation_required_upstream_coverage", [])) != {"T10", "T11"}:
+        errors.append("PREBUILD_CONTRACT opening activation must require T10 and T11 coverage")
+    if fact_slot.get("opening_activation_deferred_forbidden") is not True:
+        errors.append("PREBUILD_CONTRACT opening activation must forbid deferred bindings")
+    opening_rule = str(fact_slot.get("opening_activation_rule", "")).lower()
+    for token in ("3,4,6,9,10", "resolved", "t10", "t11"):
+        if token not in opening_rule:
+            errors.append(f"PREBUILD_CONTRACT opening activation rule missing {token!r}")
+
+    buildout = prebuild.get("preactivation_buildout", {})
+    expected_buildout = {
+        "authoring_blueprint": "Docs/Production/T12/AUTHORING_BLUEPRINT.json",
+        "exact_authoring_level_count": 100,
+        "binding_slot_catalog": "Docs/Production/T12/BINDING_SLOT_CATALOG.json",
+        "exact_fact_slot_count": 100,
+        "binding_index_template": "Docs/Production/T12/FACT_SLOT_BINDING_INDEX_TEMPLATE.json",
+        "exact_binding_index_entry_count": 99,
+        "full_vector_corpus": "Docs/Production/T12/FULL_ENGINE_VECTOR_CORPUS.json",
+        "exact_full_vector_count": 398,
+        "materializer": "tools/havenline/task12/materialize_progression_data.py",
+        "shipping_binding_dataset": "HavenlineGodot/data/progression_bindings_v1.json",
+        "reference_runtime_semantics": "Docs/Production/T12/REFERENCE_RUNTIME_SEMANTICS.json",
+        "reference_runtime_engine": "tools/havenline/task12/reference_progression_engine.py",
+        "out_of_order_fact_retention_required": True,
+        "reference_runtime_snapshot_restore_required": True,
+        "dry_run_required_before_activation": True,
+        "repository_write_allowed_before_activation": False,
+        "shipping_write_requires_claimed_t12_owner": True,
+        "shipping_write_requires_resolved_binding_proof": True,
+        "shipping_write_requires_resolved_binding_index": True,
+    }
+    if buildout != expected_buildout:
+        errors.append("PREBUILD_CONTRACT preactivation_buildout drifted")
+
+    schema_fact_slot = schema.get("fact_slot_contract", {})
+    if not isinstance(schema_fact_slot, dict) or schema_fact_slot.get("namespace") != fact_slot.get("namespace"):
+        errors.append("PREBUILD_CONTRACT fact-slot namespace drifted from PROGRESSION_DATA_SCHEMA")
+
     critic = prebuild.get("critic_contract", {})
     expected_critics = checklist.get("required_critics")
     if critic.get("required") != expected_critics:
@@ -441,19 +506,31 @@ def validate_performance_budget_contract(data=None) -> list[str]:
     static = data.get("static_validation_budget", {})
     if static.get("iterations") != 500 or static.get("memory_iterations") != 100:
         errors.append("static validation iteration budget drifted")
-    for key in ("maximum_mean_ms", "maximum_p95_ms", "maximum_single_ms", "maximum_retained_growth_kib"):
-        value = static.get(key)
-        if not isinstance(value, (int, float)) or isinstance(value, bool) or value <= 0:
-            errors.append(f"static validation budget {key} must be positive")
-    if "14 static preparation checks" not in str(static.get("input_shape", "")):
-        errors.append("static validation input_shape must enumerate the 14-check surface")
+    expected_static_limits = {
+        "check_count": 19,
+        "maximum_mean_ms": 20,
+        "maximum_p95_ms": 25,
+        "maximum_single_ms": 75,
+        "maximum_retained_growth_kib": 512,
+        "maximum_mean_ms_per_check": 1.0,
+        "maximum_p95_ms_per_check": 1.5,
+    }
+    for key, expected in expected_static_limits.items():
+        if static.get(key) != expected:
+            errors.append(f"static validation budget {key} drifted from frozen value {expected}")
+    if "19 static preparation checks" not in str(static.get("input_shape", "")):
+        errors.append("static validation input_shape must enumerate the 19-check surface")
+    budget_rule = str(static.get("budget_rule", "")).lower()
+    for token in ("19-check", "normalized", "unbounded"):
+        if token not in budget_rule:
+            errors.append(f"static validation budget_rule missing {token!r}")
 
     fuzz = data.get("fuzz_budget", {})
     if fuzz.get("cases") != 250 or fuzz.get("minimum_rejected_mutations") != 250:
         errors.append("fuzz budget must require 250/250 rejected malformed cases")
     mutation_classes = fuzz.get("mutation_classes")
-    if not isinstance(mutation_classes, list) or len(mutation_classes) != 27 or len(set(mutation_classes)) != 27:
-        errors.append("fuzz mutation_classes must contain exactly 27 unique classes")
+    if not isinstance(mutation_classes, list) or len(mutation_classes) != 30 or len(set(mutation_classes)) != 30:
+        errors.append("fuzz mutation_classes must contain exactly 30 unique classes")
     if fuzz.get("deterministic_seed") != 1200:
         errors.append("fuzz deterministic seed drifted")
     if not isinstance(fuzz.get("maximum_total_seconds"), (int, float)) or fuzz.get("maximum_total_seconds") <= 0:
@@ -745,6 +822,7 @@ def validate_preparation():
         ROOT / "HavenlineGodot" / "scripts" / "progression_architecture.gd",
         ROOT / "HavenlineGodot" / "data" / "progression_levels_v1.json",
         ROOT / "HavenlineGodot" / "data" / "progression_milestones_v1.json",
+        ROOT / "HavenlineGodot" / "data" / "progression_bindings_v1.json",
     ]
     for path in shipping_paths:
         if path.exists():

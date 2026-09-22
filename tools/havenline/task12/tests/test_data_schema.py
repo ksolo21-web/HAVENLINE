@@ -40,6 +40,34 @@ class T12ProgressionSchemaTests(unittest.TestCase):
         result = self.validate(mutate)
         self.assertFalse(result["passed"])
 
+    def test_rejects_required_fact_slot_contract_drift(self):
+        def mutate(data):
+            data["level_record"]["field_contracts"]["required_fact_ids"] = "any stable string"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("required_fact_ids contract" in error for error in result["errors"]))
+
+    def test_rejects_missing_fact_slot_contract(self):
+        def mutate(data):
+            del data["fact_slot_contract"]
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("fact_slot_contract must be an object" in error for error in result["errors"]))
+
+    def test_rejects_later_owner_unlocking_without_trusted_integration(self):
+        def mutate(data):
+            data["fact_slot_contract"]["later_owner_behavior"] = "later tasks can unlock directly"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("later-owner behavior" in error for error in result["errors"]))
+
+    def test_rejects_presentation_requirement_authority_drift(self):
+        def mutate(data):
+            data["fact_slot_contract"]["presentation_requirement_rule"] = "milestone may bind source"
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("presentation rule" in error for error in result["errors"]))
+
     def test_rejects_namespace_drift(self):
         def mutate(data):
             data["level_record"]["field_contracts"]["level_id"] = "any string"
@@ -99,6 +127,20 @@ class T12ProgressionSchemaTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertTrue(any("progression_milestones_v1" in error for error in result["errors"]))
 
+    def test_rejects_missing_binding_shipping_file_contract(self):
+        def mutate(data):
+            del data["shipping_files"]["progression_bindings_v1"]
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("progression_bindings_v1" in error for error in result["errors"]))
+
+    def test_rejects_binding_count_drift(self):
+        def mutate(data):
+            data["shipping_files"]["progression_bindings_v1"]["exact_binding_count"] = 98
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("exact_binding_count" in error for error in result["errors"]))
+
     def test_rejects_split_file_identity_drift(self):
         def mutate(data):
             data["shipping_files"]["progression_levels_v1"]["task_id"] = "T13"
@@ -108,7 +150,7 @@ class T12ProgressionSchemaTests(unittest.TestCase):
 
     def test_rejects_missing_cross_file_validation_rule(self):
         def mutate(data):
-            data["shipping_files"]["cross_file_rule"] = "hash both files"
+            data["shipping_files"]["cross_file_rule"] = "hash files"
         result = self.validate(mutate)
         self.assertFalse(result["passed"])
         self.assertTrue(any("cross-file rule" in error for error in result["errors"]))

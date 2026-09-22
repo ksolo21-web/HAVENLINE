@@ -182,6 +182,54 @@ class T12PrepareActivationTests(unittest.TestCase):
         errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
         self.assertTrue(any("product contract drifted" in error for error in errors))
 
+    def test_cross_contract_rejects_fact_slot_namespace_drift(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["fact_slot_contract"]["namespace"] = "wrong.fact.slot"
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("fact-slot namespace drifted" in error for error in errors))
+
+    def test_cross_contract_rejects_binding_shipping_dataset_drift(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["fact_slot_contract"]["shipping_dataset_path"] = "HavenlineGodot/data/wrong.json"
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("shipping dataset path drifted" in error for error in errors))
+
+    def test_cross_contract_rejects_missing_resolved_binding_index_gate(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["preactivation_buildout"]["shipping_write_requires_resolved_binding_index"] = False
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("preactivation_buildout drifted" in error for error in errors))
+
+    def test_cross_contract_rejects_materializer_write_before_activation(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["preactivation_buildout"]["repository_write_allowed_before_activation"] = True
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("preactivation_buildout drifted" in error for error in errors))
+
+    def test_cross_contract_rejects_full_vector_count_drift(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["preactivation_buildout"]["exact_full_vector_count"] = 397
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("preactivation_buildout drifted" in error for error in errors))
+
+    def test_cross_contract_rejects_presentation_fact_slot_authority(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["fact_slot_contract"]["presentation_requirements_never_resolve_fact_slots"] = False
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("presentation requirements" in error for error in errors))
+
     def test_upstream_binding_contract_rejects_missing_t11(self):
         data = copy.deepcopy(activation.load(activation.UPSTREAM_BINDINGS_PATH))
         del data["bindings"]["T11"]
@@ -198,6 +246,18 @@ class T12PrepareActivationTests(unittest.TestCase):
 
     def test_current_performance_budget_contract_is_consistent(self):
         self.assertEqual(activation.validate_performance_budget_contract(), [])
+
+    def test_performance_budget_rejects_normalized_limit_relaxation(self):
+        data = copy.deepcopy(activation.load(activation.PERFORMANCE_BUDGET_PATH))
+        data["static_validation_budget"]["maximum_mean_ms_per_check"] = 2.0
+        errors = activation.validate_performance_budget_contract(data)
+        self.assertTrue(any("maximum_mean_ms_per_check" in error and "drifted" in error for error in errors))
+
+    def test_performance_budget_rejects_check_count_drift(self):
+        data = copy.deepcopy(activation.load(activation.PERFORMANCE_BUDGET_PATH))
+        data["static_validation_budget"]["check_count"] = 18
+        errors = activation.validate_performance_budget_contract(data)
+        self.assertTrue(any("check_count" in error and "drifted" in error for error in errors))
 
     def test_performance_budget_rejects_partial_fuzz_acceptance(self):
         data = copy.deepcopy(activation.load(activation.PERFORMANCE_BUDGET_PATH))
@@ -218,7 +278,7 @@ class T12PrepareActivationTests(unittest.TestCase):
         checklist = copy.deepcopy(activation.load(activation.CHECKLIST_PATH))
         checklist["planned_owned_paths"].append("tools/havenline/task12/**")
         errors = activation.validate_cross_contracts(checklist)
-        self.assertTrue(any("six frozen shipping/runtime test paths" in error for error in errors))
+        self.assertTrue(any("seven frozen shipping/runtime test paths" in error for error in errors))
 
     def test_cross_contract_rejects_checklist_identity_drift(self):
         checklist = copy.deepcopy(activation.load(activation.CHECKLIST_PATH))

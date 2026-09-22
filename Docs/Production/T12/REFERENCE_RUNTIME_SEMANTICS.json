@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "status": "PREPARATION_ONLY_REFERENCE_RUNTIME_SEMANTICS",
+  "shipping_path_forbidden": true,
+  "purpose": "Freeze deterministic T12-local state-transition semantics before the Godot runtime exists. This is a non-shipping oracle/model, not production gameplay code.",
+  "initial_state": {
+    "completed_level_ids": [],
+    "satisfied_fact_slot_ids": [],
+    "fact_slot_source_keys": {},
+    "consumed_fact_keys": [],
+    "emitted_completion_event_ids": [],
+    "emitted_milestone_ids": []
+  },
+  "initialization": [
+    "Validate the exact 100-level/10-milestone progression contract and binding index.",
+    "Restore a supplied valid T12-local snapshot or begin from the empty initial state.",
+    "Run deterministic ascending settlement.",
+    "Fresh Level 1 is intrinsically ready because it has no prerequisite or fact slot; it completes exactly once and produces its canonical intent/event."
+  ],
+  "authoritative_fact_observation": {
+    "identity_fields": [
+      "source_task",
+      "fact_kind",
+      "source_id",
+      "idempotency_key"
+    ],
+    "match_rule": "Only RESOLVED binding rows matching source_task + fact_kind + source_id are eligible.",
+    "fact_key_rule": "For each newly satisfied binding row, combine its non-empty idempotency_domain with the producer idempotency_key to form the consumed T12 fact key.",
+    "duplicate_rule": "If all matching slots are already satisfied, or all corresponding domain/key identities were already consumed, observation is a deterministic no-op with no state growth.",
+    "out_of_order_rule": "Out-of-order valid authoritative facts are retained as satisfied T12 fact slots even when prerequisites are incomplete. The level stays locked and never skips prerequisites; the producer does not need to replay the retained fact.",
+    "deferred_rule": "DEFERRED_LATER_OWNER rows never match an observation and cannot satisfy a slot.",
+    "invalid_rule": "Unknown, ambiguous or malformed producer facts fail closed without mutation."
+  },
+  "settlement": {
+    "order": "ascending numeric level order under deterministic fixed-point settlement",
+    "fixed_point": true,
+    "completion_rule": "A non-complete level completes only when all prerequisite_level_ids are complete and all required_fact_ids are satisfied T12 fact slots.",
+    "cascade_rule": "After each completion, continue scanning until no additional level can complete. Previously retained out-of-order slots may therefore complete after their prerequisites become complete.",
+    "event_rule": "Record completion_event_id and milestone_ids in state before returning the intent.",
+    "replay_rule": "Replay never re-emits a completed level, completion event, or milestone; completed levels and already-emitted IDs are deterministic no-ops."
+  },
+  "progression_intent": {
+    "intent_id": "t12.intent.level.NNN.completed",
+    "unlocked_level_ids": "direct dependents whose prerequisites are all complete after this completion; a listed dependent may remain fact-locked",
+    "source_fact_keys": "domain-scoped fact keys recorded for the completed level's required fact slots; empty for Level 1"
+  },
+  "snapshot_restore": {
+    "required_state_fields": [
+      "completed_level_ids",
+      "satisfied_fact_slot_ids",
+      "fact_slot_source_keys",
+      "consumed_fact_keys",
+      "emitted_completion_event_ids",
+      "emitted_milestone_ids"
+    ],
+    "reject": [
+      "unknown IDs",
+      "duplicates",
+      "completed level with incomplete prerequisite",
+      "completed fact-gated level without satisfied slot",
+      "satisfied slot without source-key causality",
+      "emitted event/milestone not justified by completed state",
+      "consumed fact key not referenced by at least one satisfied fact-slot source-key mapping",
+      "emitted completion event not exactly justified by a completed level"
+    ],
+    "recovery": "A valid snapshot may contain satisfied slots whose levels are not yet complete because prerequisites were incomplete. Restore settles them deterministically if prerequisites are now complete, without re-emitting already-recorded IDs.",
+    "causality_rule": "consumed_fact_keys equals the set of fact_slot_source_keys values; emitted completion events equal the canonical completion-event set implied by completed_level_ids; emitted milestones equal the milestone set implied by completed levels."
+  },
+  "authority_boundaries": [
+    "Never mutate inventory/resource counts.",
+    "Never call T10 transform mutation APIs.",
+    "Never spawn/upgrade T11 camp content.",
+    "Never consume purchase/VIP/spend/energy signals.",
+    "Never own T13 difficulty or T14 global save/version schema.",
+    "Reference model output cannot approve or activate T12."
+  ]
+}

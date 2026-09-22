@@ -50,6 +50,17 @@ class T12BindingResolutionTests(unittest.TestCase):
             "schema_version": 1,
             "task_id": "T12",
             "status": "RESOLVED_FOR_ACTIVATION",
+            "allowed_id_kinds_by_task": {
+                task: sorted(validator.ALLOWED_ID_KINDS[task])
+                for task in validator.EXPECTED_TASKS
+            },
+            "fact_kind_compatibility": {
+                fact_kind: {
+                    "source_task": row["source_task"],
+                    "accepted_id_kinds": sorted(row["accepted_id_kinds"]),
+                }
+                for fact_kind, row in validator.FACT_KIND_COMPATIBILITY.items()
+            },
             "dependencies": {
                 "T10": {
                     "accepted_integrated_source": accepted_sha,
@@ -150,6 +161,32 @@ class T12BindingResolutionTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertTrue(any("ambiguous across T10 and T11" in e for e in result["errors"]))
 
+    def test_wrong_t10_id_kind_fails(self):
+        tmp, root, _, head_sha, resolution = self.build_repo()
+        with tmp:
+            resolution["dependencies"]["T10"]["resolved_public_ids"][0]["kind"] = "camp_state"
+            result = validator.validate_resolution(
+                resolution,
+                require_resolved=True,
+                root=root,
+                activation_head=head_sha,
+            )
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("is not allowed for T10" in e for e in result["errors"]))
+
+    def test_fact_kind_compatibility_contract_drift_fails(self):
+        tmp, root, _, head_sha, resolution = self.build_repo()
+        with tmp:
+            resolution["fact_kind_compatibility"]["world_transform_completed"]["accepted_id_kinds"] = ["camp_state"]
+            result = validator.validate_resolution(
+                resolution,
+                require_resolved=True,
+                root=root,
+                activation_head=head_sha,
+            )
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("fact_kind_compatibility drifted" in e for e in result["errors"]))
+
     def test_completion_record_path_is_frozen(self):
         tmp, root, _, head_sha, resolution = self.build_repo()
         with tmp:
@@ -168,6 +205,17 @@ class T12BindingResolutionTests(unittest.TestCase):
             "schema_version": 1,
             "task_id": "T12",
             "status": "PREPARATION_TEMPLATE_UNRESOLVED",
+            "allowed_id_kinds_by_task": {
+                task: sorted(validator.ALLOWED_ID_KINDS[task])
+                for task in validator.EXPECTED_TASKS
+            },
+            "fact_kind_compatibility": {
+                fact_kind: {
+                    "source_task": row["source_task"],
+                    "accepted_id_kinds": sorted(row["accepted_id_kinds"]),
+                }
+                for fact_kind, row in validator.FACT_KIND_COMPATIBILITY.items()
+            },
             "dependencies": {
                 "T10": {
                     "accepted_integrated_source": "",

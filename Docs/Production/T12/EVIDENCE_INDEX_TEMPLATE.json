@@ -16,7 +16,8 @@
     "critic_review",
     "critic_dimension",
     "binding_resolution",
-    "gate"
+    "gate",
+    "binding_producer"
   ],
   "entry_contract": {
     "required_fields": [
@@ -42,6 +43,7 @@
     "Every final entry has exact SHA-256, exact candidate source, non-empty producer and content_verified=true.",
     "Every evidence reference required by the resolved candidate packet and resolved critic records appears exactly once.",
     "Unknown extra evidence may be indexed, but it cannot replace any required reference.",
-    "The evidence index cannot make a failed report, critic dimension, gate or defect pass; it only proves completeness and byte identity."
+    "The evidence index cannot make a failed report, critic dimension, gate or defect pass; it only proves completeness and byte identity.",
+    "Every evidence_ref carried by progression_bindings_v1.json appears in the index as binding_producer evidence with verified bytes."
   ]
 }

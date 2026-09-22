@@ -50,6 +50,7 @@ def initialize_packet(
     integration_head: str,
     levels_sha256: str,
     milestones_sha256: str,
+    bindings_sha256: str,
     binding_resolution_sha256: str,
     changed_file_manifest_ref: str,
     validator_source: str | None = None,
@@ -79,6 +80,7 @@ def initialize_packet(
     for label, digest in (
         ("levels_sha256", levels_sha256),
         ("milestones_sha256", milestones_sha256),
+        ("bindings_sha256", bindings_sha256),
         ("binding_resolution_sha256", binding_resolution_sha256),
     ):
         if not isinstance(digest, str) or re.fullmatch(r"[0-9a-f]{64}", digest) is None:
@@ -106,6 +108,7 @@ def initialize_packet(
     source["shipping_data_hashes"] = {
         "progression_levels_v1_json_sha256": levels_sha256,
         "progression_milestones_v1_json_sha256": milestones_sha256,
+        "progression_bindings_v1_json_sha256": bindings_sha256,
         "binding_resolution_json_sha256": binding_resolution_sha256,
     }
     source["upstream_sources"]["T10"] = upstream["T10"]
@@ -146,6 +149,7 @@ def main() -> None:
     ap.add_argument("--integration-head", required=True)
     ap.add_argument("--levels", required=True)
     ap.add_argument("--milestones", required=True)
+    ap.add_argument("--bindings", required=True)
     ap.add_argument("--changed-file-manifest-ref", required=True)
     ap.add_argument(
         "--validator-source",
@@ -158,11 +162,13 @@ def main() -> None:
     resolution_path = ROOT / args.binding_resolution
     levels_path = ROOT / args.levels
     milestones_path = ROOT / args.milestones
+    bindings_path = ROOT / args.bindings
     for label, path in (
         ("template", template_path),
         ("binding resolution", resolution_path),
         ("levels", levels_path),
         ("milestones", milestones_path),
+        ("bindings", bindings_path),
     ):
         if not path.is_file():
             raise SystemExit(f"{label} file does not exist: {path}")
@@ -177,6 +183,7 @@ def main() -> None:
         integration_head=args.integration_head,
         levels_sha256=sha256_file(levels_path),
         milestones_sha256=sha256_file(milestones_path),
+        bindings_sha256=sha256_file(bindings_path),
         binding_resolution_sha256=sha256_file(resolution_path),
         changed_file_manifest_ref=args.changed_file_manifest_ref,
         validator_source=args.validator_source,

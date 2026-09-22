@@ -46,7 +46,7 @@ def valid_manifest() -> dict[str, Any]:
             "level_id": level_id,
             "region_band_id": band_id,
             "prerequisite_level_ids": [] if n == 1 else [f"t12.level.{n - 1:03d}"],
-            "required_fact_ids": [],
+            "required_fact_ids": [] if n == 1 else [f"t12.fact.slot.{n:03d}"],
             "progression_effects": [{"kind": "synthetic_fixture", "id": f"t12.effect.{n:03d}"}],
             "visible_progression_hook_ids": [f"t12.visible.{n:03d}"] if visible else [],
             "milestone_ids": [f"t12.milestone.{n:03d}"] if n % 10 == 0 else [],
@@ -153,6 +153,22 @@ def mutate_unresolved_milestone_reference(m: dict[str, Any], rng: random.Random)
     m["levels"][boundary - 1]["milestone_ids"] = ["t12.milestone.missing"]
 
 
+def mutate_wrong_fact_slot(m: dict[str, Any], rng: random.Random) -> None:
+    idx = rng.randrange(1, 100)
+    level = idx + 1
+    wrong = 2 if level != 2 else 3
+    m["levels"][idx]["required_fact_ids"] = [f"t12.fact.slot.{wrong:03d}"]
+
+
+def mutate_level1_fact_gate(m: dict[str, Any], rng: random.Random) -> None:
+    m["levels"][0]["required_fact_ids"] = ["t12.fact.slot.001"]
+
+
+def mutate_external_fact_id(m: dict[str, Any], rng: random.Random) -> None:
+    idx = rng.randrange(1, 100)
+    m["levels"][idx]["required_fact_ids"] = ["framework_anchor_seed_to_foundation"]
+
+
 def mutate_invalid_milestone_shape(m: dict[str, Any], rng: random.Random) -> None:
     idx = rng.randrange(len(m["milestones"]))
     m["milestones"][idx]["visible_change_required"] = "yes"
@@ -219,6 +235,9 @@ MUTATIONS: dict[str, Callable[[dict[str, Any], random.Random], None]] = {
     "forward_prerequisite": mutate_forward_prerequisite,
     "duplicate_effect_payload": mutate_duplicate_effect_payload,
     "unresolved_milestone_reference": mutate_unresolved_milestone_reference,
+    "wrong_fact_slot": mutate_wrong_fact_slot,
+    "level1_fact_gate": mutate_level1_fact_gate,
+    "external_fact_id": mutate_external_fact_id,
     "invalid_milestone_shape": mutate_invalid_milestone_shape,
     "schema_version": mutate_schema_version,
     "missing_completion_event": mutate_missing_completion_event,
