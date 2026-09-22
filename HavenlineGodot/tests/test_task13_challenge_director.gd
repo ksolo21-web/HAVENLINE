@@ -170,13 +170,15 @@ func run() -> void:
 	var samples: Array[int] = []
 	var benchmark_iterations: int = 2000
 	var total_usec: int = 0
+	var benchmark_valid := true
 	for iteration in benchmark_iterations:
 		var sample_start: int = Time.get_ticks_usec()
 		var result: Dictionary = director.evaluate(context(51), window(1))
 		var elapsed_usec: int = Time.get_ticks_usec() - sample_start
-		check("benchmark evaluation remains valid %d" % iteration, result.passed)
+		benchmark_valid = benchmark_valid and bool(result.get("passed", false))
 		total_usec += elapsed_usec
 		samples.append(elapsed_usec)
+	check("all benchmark evaluations remain valid", benchmark_valid)
 	samples.sort()
 	var p95_index: int = min(samples.size() - 1, int(floor(float(samples.size()) * 0.95)))
 	var p95_usec: int = samples[p95_index]
