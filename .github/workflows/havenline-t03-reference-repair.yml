@@ -1,0 +1,144 @@
+name: Havenline T03 reference repair evidence
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - 'HavenlineGodot/assets/t03_boundary_v2/**'
+      - 'HavenlineGodot/scripts/camp_boundary_view.gd'
+      - 'HavenlineGodot/shaders/outpost_snow.gdshader'
+      - 'HavenlineGodot/tests/test_task03_boundary.gd'
+      - 'HavenlineGodot/tests/capture_task03_boundary.gd'
+      - 'Docs/Production/T03/**'
+      - 'Docs/Production/APPROVAL_INVALIDATIONS.json'
+      - 'Docs/Production/PATH_OWNERSHIP.json'
+      - '.github/workflows/havenline-t03-reference-repair.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: havenline-t03-reference-repair-${{ github.ref_name }}
+  cancel-in-progress: true
+jobs:
+  evidence:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 42
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+      - name: Prepare pinned Godot and Vulkan capture runtime
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb mesa-vulkan-drivers
+          python3 -m pip install pillow
+          mkdir -p "$RUNNER_TEMP/engine" t03-repair/tests t03-repair/gallery t03-repair/native4k
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+      - name: Prove protected T01/T02 authorities were not edited by this repair
+        run: |
+          set -euo pipefail
+          git diff --exit-code HEAD^ HEAD -- HavenlineGodot/scripts/camp_boundary.gd HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd HavenlineGodot/assets/reference_forest
+      - name: Import candidate and run T01-T03 regression
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/bake_outpost_audio.py > t03-repair/audio-fixture.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > t03-repair/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > t03-repair/tests/motion-fixture.log 2>&1
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary; do
+            timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "t03-repair/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' t03-repair/tests/*.log; then exit 1; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          rows=[]
+          for p in sorted(Path('t03-repair/tests').glob('test_*.log')):
+              found=[json.loads(x) for x in p.read_text().splitlines() if x.startswith('{')]
+              assert found,p
+              result=found[-1]
+              assert result.get('passed') is True and not result.get('failures'),(p,result.get('failures'))
+              checks=result.get('checks',[])
+              rows.append({'suite':p.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
+          assert len(rows)==16,rows
+          out={'source':'${{ github.sha }}','suite_count':16,'total_checks':sum(x['checks'] for x in rows),'all_passed':True,'suites':rows}
+          Path('t03-repair/tests.json').write_text(json.dumps(out,indent=2)+'\n')
+          print(json.dumps(out))
+          PY
+      - name: Require clean T03 shipping primitive/material audit
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/shipping_visual_gate.py audit-task T03 --candidate "$GITHUB_SHA" --require-clean --output t03-repair/primitive-audit.json
+      - name: Capture current T03 multi-angle and native-4K evidence
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task03_boundary.gd -- --out="$PWD/t03-repair/gallery" > t03-repair/gallery.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task03_boundary.gd -- --native-4k --out="$PWD/t03-repair/native4k" > t03-repair/native4k.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' t03-repair/gallery.log t03-repair/native4k.log; then exit 1; fi
+      - name: Verify source-bound visual package
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image
+          import hashlib,json
+          root=Path('t03-repair')
+          gallery=sorted((root/'gallery').glob('*.png'))
+          native=sorted((root/'native4k').glob('*.png'))
+          assert len(gallery)==47,len(gallery)
+          assert len(native)==11,len(native)
+          hashes={}
+          for p in gallery+native:
+              with Image.open(p) as im:
+                  expected=(3840,2160) if p.parent.name=='native4k' else (1280,720)
+                  assert im.size==expected,(p,im.size)
+                  im.verify()
+              hashes[str(p.relative_to(root))]=hashlib.sha256(p.read_bytes()).hexdigest()
+          gr=json.loads((root/'gallery/capture.json').read_text())
+          nr=json.loads((root/'native4k/capture.json').read_text())
+          for r,count in ((gr,47),(nr,11)):
+              assert r['task']=='T03-boundary-v2',r['task']
+              assert r['renderer']=='mobile'
+              assert len(r['captures'])==count
+              assert r['boundary']['gate_count']==6
+              assert r['boundary']['primitive_fence_meshes_created'] is False
+              assert r['boundary']['authored_boundary_asset_family']=='t03_boundary_v2'
+              assert r['boundary']['imported_standard_materials_active'] is False
+              assert r['river']['river_layout_version']=='river_v1_mapspan'
+          audit=json.loads((root/'primitive-audit.json').read_text())
+          tests=json.loads((root/'tests.json').read_text())
+          assert audit['passed'] and audit['finding_count']==0
+          assert tests['all_passed'] and tests['suite_count']==16
+          evidence={
+            'schema_version':1,
+            'task_id':'T03',
+            'candidate_sha':'${{ github.sha }}',
+            'tests':tests,
+            'primitive_audit':audit,
+            'gallery_stills':47,
+            'native_4k_stills':11,
+            'total_stills':58,
+            'capture_fps':60,
+            'renderer':'mobile',
+            'render_scale':1.0,
+            'image_hashes':hashes,
+            'machine_gate_passed':True,
+            'critic_review_completed':False,
+            'user_visual_approval':False
+          }
+          (root/'evidence.json').write_text(json.dumps(evidence,indent=2)+'\n')
+          print(json.dumps({k:v for k,v in evidence.items() if k!='image_hashes'},indent=2))
+          PY
+          echo "$GITHUB_SHA" > t03-repair/SOURCE.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-t03-reference-repair-${{ github.run_id }}
+          path: t03-repair/
+          retention-days: 30
+          if-no-files-found: error
+# Evidence-only repair gate. It cannot approve T03; critic review and explicit user visual signoff remain separate.
