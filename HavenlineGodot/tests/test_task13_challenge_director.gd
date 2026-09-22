@@ -86,21 +86,21 @@ func run() -> void:
 	var level_jump_second := director.evaluate(context(100), window(3), level_jump)
 	check("progression continues one bounded step per evaluation", level_jump_second.band_index == 2)
 
-	var high_previous := {"band_index": 3, "evaluation_sequence": 1}
+	var high_previous := {"band_index": 9, "evaluation_sequence": 1}
 	var struggle := director.evaluate(context(100), window(2, {
 		"attempt_count": 4, "success_count": 1, "failure_count": 2,
 		"abandonment_count": 1, "down_count": 2,
 		"fast_completion_count": 0, "slow_completion_count": 1, "struggle_streak": 1,
 	}), high_previous)
 	check("struggle decision remains valid", bool(struggle.get("passed", false)), struggle.get("errors", []))
-	check("struggle triggers one-step recovery", int(struggle.get("band_index", -1)) == 2 and Array(struggle.get("reason_codes", [])).has("recovery_deescalation"))
+	check("struggle triggers one-step recovery", int(struggle.get("band_index", -1)) == 8 and Array(struggle.get("reason_codes", [])).has("recovery_deescalation"))
 	var deep_struggle := director.evaluate(context(100), window(3, {
 		"attempt_count": 4, "success_count": 1, "failure_count": 2,
 		"abandonment_count": 1, "down_count": 2,
 		"fast_completion_count": 0, "slow_completion_count": 1, "struggle_streak": 3,
 	}), struggle)
 	check("deep struggle decision remains valid", bool(deep_struggle.get("passed", false)), deep_struggle.get("errors", []))
-	check("sustained struggle can deepen recovery but still one step per evaluation", int(deep_struggle.get("band_index", -1)) == 1)
+	check("sustained struggle can deepen recovery but still one step per evaluation", int(deep_struggle.get("band_index", -1)) == 7)
 
 	var neutral_hold := director.evaluate(context(1), window(2), {"band_index": 1, "evaluation_sequence": 1})
 	check("neutral input preserves hysteresis above base", neutral_hold.band_index == 1 and neutral_hold.reason_codes.has("hysteresis_hold"))
@@ -152,6 +152,7 @@ func run() -> void:
 	var monotonic := true
 	var previous_threat := -1.0
 	var paired_spend_blind := true
+	var cold_start_band_ids := {}
 	for level in 100:
 		var level_number := level + 1
 		var ordinary := director.evaluate(context(level_number), window(1))
@@ -164,7 +165,9 @@ func run() -> void:
 		var threat := float(ordinary.coefficients.threat_budget_multiplier)
 		monotonic = monotonic and threat + 0.000001 >= previous_threat
 		previous_threat = threat
+		cold_start_band_ids[String(ordinary.band_id)] = true
 	check("cold-start level progression is monotonic across 1-100", monotonic)
+	check("difficulty exposes ten distinct 10-level progression bands", cold_start_band_ids.size() == 10, cold_start_band_ids.keys())
 	check("100-level spend-blind equivalence matrix passes", paired_spend_blind)
 
 	var samples: Array[int] = []
