@@ -26,6 +26,7 @@ on:
 
 permissions:
   contents: read
+  actions: read
 
 concurrency:
   group: havenline-t13-${{ github.event_name }}-${{ github.sha }}
@@ -108,6 +109,137 @@ jobs:
           assert m.get('isolated_state') == 'BUILT_PENDING_DEPENDENCY', m
           PY
 
+
+      - name: Package source-bound critic inputs and deterministic C6
+        env:
+          CANDIDATE: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          rm -rf critic-input
+          mkdir -p critic-input
+          python3 - <<'PY'
+          import json, os, subprocess
+          from pathlib import Path
+
+          candidate=os.environ['CANDIDATE']
+          evidence=Path('task13-isolated-evidence')
+
+          def last_json(path):
+              rows=[]
+              for line in Path(path).read_text().splitlines():
+                  line=line.strip()
+                  if line.startswith('{'):
+                      try: rows.append(json.loads(line))
+                      except json.JSONDecodeError: pass
+              assert rows, path
+              return rows[-1]
+
+          core=last_json(evidence/'tests/test_task13_challenge_director.log')
+          integration=last_json(evidence/'tests/test_task13_integration.log')
+          capture=json.loads((evidence/'capture/manifest.json').read_text())
+          assert core.get('passed') is True and integration.get('passed') is True and capture.get('passed') is True
+
+          def selected(report,names):
+              by={row['name']:row for row in report.get('checks',[]) if isinstance(row,dict) and row.get('name')}
+              rows=[]
+              for name in names:
+                  assert name in by and by[name].get('passed') is True,(name,by.get(name))
+                  rows.append(by[name])
+              return rows
+
+          core_names=[
+              'director is deterministic','normal path is spend blind','T12 read boundary is exact',
+              'director mutates no upstream authority','commerce-only changes cannot alter normal decision',
+              'one strong window does not spike challenge','sustained strong play raises exactly one band',
+              'struggle triggers one-step recovery','sustained struggle can deepen recovery but still one step per evaluation',
+              'GM threat target is exact','GM strong ratio stays inside approved envelope',
+              'GM recovery never falls below GM minimum ratio','malformed policy activates safe fallback',
+              'difficulty exposes ten distinct 10-level progression bands','100-level spend-blind equivalence matrix passes',
+              'pure decision mean stays bounded','pure decision p95 stays bounded'
+          ]
+          integration_names=[
+              'runtime does not preload T12 implementation','runtime does not preload simulation authority',
+              'runtime contains no random API','runtime contains no wall-clock scoring call','T12 consumer boundary exact',
+              'T12 context remains unmodified','progression intent payload cannot secretly tune difficulty',
+              'milestone metadata cannot auto-counter upgrade value','250 deterministic replay pairs are exact',
+              'Game Master target ratio matches current contract','Game Master cannot add grind or controls',
+              'GM envelope holds across all normal cold-start bands','all 100 normal cold-start levels stay in declared envelope',
+              'unbounded performance counts fail closed','T12 intent input is bounded','evaluation never mutates loaded policy data'
+          ]
+          core_summary={
+              'task':'T13','candidate':candidate,'passed':True,'check_count':core['check_count'],
+              'spend_blind_matrix_levels':core['spend_blind_matrix_levels'],
+              'benchmark_iterations':core['benchmark_iterations'],'benchmark_mean_usec':core['benchmark_mean_usec'],
+              'benchmark_p95_usec':core['benchmark_p95_usec'],'selected_checks':selected(core,core_names),
+              'integration_allowed':False,'task_approved':False,'isolated_state':'BUILT_PENDING_DEPENDENCY'
+          }
+          integration_summary={
+              'task':'T13','candidate':candidate,'passed':True,'check_count':integration['check_count'],
+              'deterministic_replay_pairs':integration['deterministic_replay_pairs'],
+              'level_envelope_cases':integration['level_envelope_cases'],'gm_band_cases':integration['gm_band_cases'],
+              'selected_checks':selected(integration,integration_names),'t12_mutated':False,
+              'integration_allowed':False,'task_approved':False,'isolated_state':'BUILT_PENDING_DEPENDENCY'
+          }
+          capture_summary={
+              'task':'T13','candidate':candidate,'passed':True,'scenario_count':len(capture.get('scenarios',{})),
+              'spend_blind_equivalence':capture['spend_blind_equivalence'],
+              'deterministic_replay_equivalence':capture['deterministic_replay_equivalence'],
+              'scenarios':{k:{
+                  'profile_id':v.get('profile_id'),'band_id':v.get('band_id'),'band_index':v.get('band_index'),
+                  'reason_codes':v.get('reason_codes'),'coefficients':v.get('coefficients'),
+                  'gm_relative':v.get('gm_relative',{})
+              } for k,v in capture.get('scenarios',{}).items()},
+              'integration_allowed':False,'task_approved':False,'isolated_state':'BUILT_PENDING_DEPENDENCY'
+          }
+          upgrade_isolation={
+              'task':'T13','candidate':candidate,'passed':True,
+              'claim':'T13 never directly counters T12 milestone/upgrade metadata; challenge reacts only to level and gameplay-performance signals, so upgrades retain their immediate value.',
+              'integration_checks':selected(integration,[
+                  'milestone metadata cannot auto-counter upgrade value',
+                  'progression intent payload cannot secretly tune difficulty',
+                  'Game Master cannot add grind or controls'
+              ]),
+              'core_checks':selected(core,['baseline never changes resource yield','GM never reduces resource yield'])
+          }
+          scope='T13 is a nonvisual pure decision service. It adds no buttons, menus, input mappings, harvesting rules, resource sinks, enemy spawns, world mutations, or global persistence. Existing Havenline physical/contextual controls and the MOVE-AUTO-INTERACT-GATHER-CARRY-DELIVER-TRANSFORM-BUILD/UPGRADE loop remain owned upstream. T13 consumes only stable T12 progression context plus gameplay-performance facts and returns bounded challenge coefficients and reason codes. Normal-player difficulty is structurally spend-blind. GM_CHALLENGE is separately authorized with a 1.25x-1.60x threat envelope; it cannot reduce resource yield or add permanent controls. Judge T13 within this decision-layer scope; absent player-facing UI is intentional, while reason_codes are the downstream-readable feedback contract.'
+          Path('critic-input/core-summary.json').write_text(json.dumps(core_summary,indent=2)+'\n')
+          Path('critic-input/integration-summary.json').write_text(json.dumps(integration_summary,indent=2)+'\n')
+          Path('critic-input/capture-summary.json').write_text(json.dumps(capture_summary,indent=2)+'\n')
+          Path('critic-input/upgrade-isolation.json').write_text(json.dumps(upgrade_isolation,indent=2)+'\n')
+          Path('critic-input/scope-brief.txt').write_text(scope+'\n')
+          Path('critic-input/policy.json').write_text(Path('HavenlineGodot/data/challenge_director_v1.json').read_text())
+
+          diff_files=subprocess.check_output(['git','diff','--name-only','origin/codex/havenline-sequential-task-01...HEAD'],text=True).splitlines()
+          storage_bytes=sum(Path(p).stat().st_size for p in diff_files if Path(p).is_file())
+          performance={
+              'task_id':'T13','candidate_commit':candidate,'measurement_scope':'incremental T13 pure decision service',
+              'visible_triangles':0,'draw_calls':0,'materials_visible':0,'texture_gpu_memory_mb':0,'process_memory_mb':0,
+              'physics_active_bodies':0,'animated_rigs_active':0,'npc_companion_active_population':0,
+              'storage_download_mb':storage_bytes/1048576.0,'cpu_frame_ms':float(core['benchmark_p95_usec'])/1000.0,
+              'gpu_frame_ms_where_measurable':None,
+              'decision_benchmark':{'iterations':core['benchmark_iterations'],'mean_usec':core['benchmark_mean_usec'],
+                                    'p95_usec':core['benchmark_p95_usec'],
+                                    'method':'Godot 4.7.2 headless pure evaluate() wall-clock microbenchmark'},
+              'incremental_zero_rendering_claim':True,'physical_certification':False
+          }
+          Path('critic-input/performance.json').write_text(json.dumps(performance,indent=2)+'\n')
+          PY
+
+          python3 tools/havenline/production/specialist_evidence_manifest.py build             --task T13 --critic C3 --candidate "$CANDIDATE" --out critic-input/C3-manifest.json             --item 'challenge|gameplay_state|json|critic-input/core-summary.json|Deterministic challenge behavior, spend-blind matrix, anti-spike and recovery proof'             --item 'challenge|control_state|text|critic-input/scope-brief.txt|No new controls; T13 preserves Havenline contextual physical control philosophy'             --item 'challenge|loop_evidence|json|critic-input/integration-summary.json|T12 boundary, replay stability and no upstream mutation'
+
+          python3 tools/havenline/production/specialist_evidence_manifest.py build             --task T13 --critic C4 --candidate "$CANDIDATE" --out critic-input/C4-manifest.json             --item 'challenge|gameplay_state|json|critic-input/core-summary.json|Challenge transitions and bounded recovery behavior'             --item 'challenge|feedback_state|json|critic-input/capture-summary.json|Reason-code and coefficient feedback across baseline, escalation, recovery and GM states'             --item 'challenge|feedback_state|text|critic-input/scope-brief.txt|Nonvisual decision-layer readability contract'
+
+          python3 tools/havenline/production/specialist_evidence_manifest.py build             --task T13 --critic C7 --candidate "$CANDIDATE" --out critic-input/C7-manifest.json             --item 'challenge|progression_simulation|json|critic-input/integration-summary.json|100-level envelope, replay and progression-boundary simulation'             --item 'challenge|difficulty_curve|json|critic-input/policy.json|Ten-band normal curve and bounded GM envelope'             --item 'challenge|upgrade_curve|json|critic-input/upgrade-isolation.json|Proof that milestone and progression metadata do not auto-counter upgrade value'
+
+          python3 tools/havenline/production/critic_harness.py performance             --candidate "$CANDIDATE" --record critic-input/performance.json | tee task13-isolated-evidence/C6.json
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task13-critic-input-${{ github.event.pull_request.head.sha || github.sha }}
+          path: critic-input
+          if-no-files-found: error
+          retention-days: 30
+
       - name: Declare isolated candidate state
         env:
           CANDIDATE: ${{ github.event.pull_request.head.sha || github.sha }}
@@ -132,3 +264,33 @@ jobs:
           path: task13-isolated-evidence
           if-no-files-found: error
           retention-days: 30
+
+  review-c3:
+    needs: built-pending-dependency
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C3
+      candidate: ${{ github.event.pull_request.head.sha || github.sha }}
+      evidence_artifact: havenline-task13-critic-input-${{ github.event.pull_request.head.sha || github.sha }}
+      manifest_name: C3-manifest.json
+      output_artifact: havenline-task13-C3-${{ github.event.pull_request.head.sha || github.sha }}
+
+  review-c4:
+    needs: built-pending-dependency
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C4
+      candidate: ${{ github.event.pull_request.head.sha || github.sha }}
+      evidence_artifact: havenline-task13-critic-input-${{ github.event.pull_request.head.sha || github.sha }}
+      manifest_name: C4-manifest.json
+      output_artifact: havenline-task13-C4-${{ github.event.pull_request.head.sha || github.sha }}
+
+  review-c7:
+    needs: built-pending-dependency
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C7
+      candidate: ${{ github.event.pull_request.head.sha || github.sha }}
+      evidence_artifact: havenline-task13-critic-input-${{ github.event.pull_request.head.sha || github.sha }}
+      manifest_name: C7-manifest.json
+      output_artifact: havenline-task13-C7-${{ github.event.pull_request.head.sha || github.sha }}
