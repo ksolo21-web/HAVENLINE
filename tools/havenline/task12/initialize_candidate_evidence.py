@@ -10,14 +10,21 @@ from __future__ import annotations
 import argparse
 import copy
 import hashlib
+import importlib.util
 import json
 import pathlib
 import re
 from typing import Any
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
+TASK = ROOT / "tools" / "havenline" / "task12"
 DEFAULT_TEMPLATE = ROOT / "Docs" / "Production" / "T12" / "CANDIDATE_EVIDENCE_TEMPLATE.json"
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
+
+_validator_spec = importlib.util.spec_from_file_location("t12_validator_bundle", TASK / "validator_bundle.py")
+validator_bundle = importlib.util.module_from_spec(_validator_spec)
+assert _validator_spec and _validator_spec.loader
+_validator_spec.loader.exec_module(validator_bundle)
 
 
 def sha256_file(path: pathlib.Path) -> str:
@@ -45,7 +52,7 @@ def initialize_packet(
     milestones_sha256: str,
     binding_resolution_sha256: str,
     changed_file_manifest_ref: str,
-    validator_source: str,
+    validator_source: str | None = None,
 ) -> dict[str, Any]:
     activation_base = exact_sha(activation_base, "activation_base")
     candidate_source = exact_sha(candidate_source, "candidate_source")
@@ -78,8 +85,14 @@ def initialize_packet(
             raise ValueError(f"{label} must be exact lowercase SHA-256")
     if not isinstance(changed_file_manifest_ref, str) or not changed_file_manifest_ref.strip():
         raise ValueError("changed_file_manifest_ref must be non-empty")
-    if not isinstance(validator_source, str) or re.fullmatch(r"sha256:[0-9a-f]{64}", validator_source) is None:
-        raise ValueError("validator_source must be exact sha256:<64-lowercase-hex>")
+    expected_validator_source = validator_bundle.bundle_digest(ROOT)
+    if validator_source is None:
+        validator_source = expected_validator_source
+    elif validator_source != expected_validator_source:
+        raise ValueError(
+            f"validator_source does not match current acceptance-critical validator bundle: "
+            f"expected {expected_validator_source}, got {validator_source}"
+        )
 
     packet = copy.deepcopy(template)
     if packet.get("task_id") != "T12":
@@ -133,7 +146,10 @@ def main() -> None:
     ap.add_argument("--levels", required=True)
     ap.add_argument("--milestones", required=True)
     ap.add_argument("--changed-file-manifest-ref", required=True)
-    ap.add_argument("--validator-source", required=True)
+    ap.add_argument(
+        "--validator-source",
+        help="Optional expected sha256:<digest>; when omitted it is computed from the acceptance-critical validator bundle",
+    )
     ap.add_argument("--output", help="Optional output JSON path; otherwise prints packet to stdout")
     args = ap.parse_args()
 
