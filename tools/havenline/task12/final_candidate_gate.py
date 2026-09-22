@@ -24,6 +24,14 @@ TASK = ROOT / "tools" / "havenline" / "task12"
 DOCS = ROOT / "Docs" / "Production" / "T12"
 SHA40 = re.compile(r"^[0-9a-f]{40}$")
 WORKSTREAM_VALIDATOR = ROOT / "tools" / "havenline" / "production" / "workstream.py"
+FROZEN_BUILDER_PATHS = {
+    "HavenlineGodot/scripts/progression_architecture.gd",
+    "HavenlineGodot/data/progression_levels_v1.json",
+    "HavenlineGodot/data/progression_milestones_v1.json",
+    "HavenlineGodot/tests/test_task12_progression_architecture.gd",
+    "HavenlineGodot/tests/test_task12_integration.gd",
+    "HavenlineGodot/tests/capture_task12_progression.gd",
+}
 
 
 def load_module(name: str, filename: str):
@@ -81,6 +89,55 @@ def run_candidate_guard(base: str, candidate: str, integration_head: str) -> dic
     return result
 
 
+def run_frozen_scope_guard(base: str, candidate: str) -> dict[str, Any]:
+    if not (isinstance(base, str) and SHA40.fullmatch(base)):
+        return {"passed": False, "errors": ["frozen scope guard base is not exact SHA"]}
+    if not (isinstance(candidate, str) and SHA40.fullmatch(candidate)):
+        return {"passed": False, "errors": ["frozen scope guard candidate is not exact SHA"]}
+
+    ancestor = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", base, candidate],
+        cwd=ROOT,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        check=False,
+    )
+    if ancestor.returncode != 0:
+        return {
+            "passed": False,
+            "base": base,
+            "head": candidate,
+            "errors": ["activation base is not an ancestor of candidate"],
+        }
+
+    changed = [
+        line.strip()
+        for line in subprocess.check_output(
+            ["git", "diff", "--name-only", f"{base}..{candidate}"],
+            cwd=ROOT,
+            text=True,
+        ).splitlines()
+        if line.strip()
+    ]
+    foreign = sorted(set(changed) - FROZEN_BUILDER_PATHS)
+    missing = sorted(FROZEN_BUILDER_PATHS - set(changed))
+    errors: list[str] = []
+    if foreign:
+        errors.append(f"candidate changed paths outside frozen six-path T12 scope: {foreign}")
+    if missing:
+        errors.append(f"candidate is missing frozen T12 deliverable changes: {missing}")
+    return {
+        "passed": not errors,
+        "base": base,
+        "head": candidate,
+        "changed_files": changed,
+        "foreign_paths": foreign,
+        "missing_deliverables": missing,
+        "errors": errors,
+    }
+
+
 def validate_consistency(
     candidate: dict[str, Any],
     critic_records: dict[str, Any],
@@ -91,6 +148,7 @@ def validate_consistency(
     progression_validation_result: dict[str, Any],
     binding_verification_result: dict[str, Any],
     candidate_guard_result: dict[str, Any],
+    frozen_scope_guard_result: dict[str, Any],
     checked_out_head: str,
     actual_validator_source: str,
     levels_sha256: str,
@@ -170,6 +228,17 @@ def validate_consistency(
         if candidate_guard_result.get("integration_head") != integration_head:
             errors.append("candidate guard integration_head does not match candidate evidence")
 
+    if not isinstance(frozen_scope_guard_result, dict) or frozen_scope_guard_result.get("passed") is not True:
+        errors.append(
+            "frozen six-path T12 scope guard failed: "
+            + json.dumps((frozen_scope_guard_result or {}).get("errors", []))
+        )
+    else:
+        if frozen_scope_guard_result.get("base") != activation_base:
+            errors.append("frozen scope guard base does not match activation_base")
+        if frozen_scope_guard_result.get("head") != candidate_sha:
+            errors.append("frozen scope guard head does not match candidate_source")
+
     if critic_records.get("candidate_source") != candidate_sha:
         errors.append("critic records candidate_source does not match candidate evidence")
     if parity_output.get("candidate_source") != candidate_sha:
@@ -247,6 +316,7 @@ def validate_consistency(
         "shipping_progression_validation_passed": progression_validation_result.get("passed") is True,
         "binding_verification_passed": binding_verification_result.get("passed") is True,
         "candidate_guard_passed": candidate_guard_result.get("passed") is True,
+        "frozen_scope_guard_passed": frozen_scope_guard_result.get("passed") is True,
         "exact_candidate_checkout_passed": checked_out_head == candidate_sha,
         "validator_bundle_identity_passed": source.get("validator_source") == actual_validator_source,
         "evidence_index_entry_count": evidence_index_result.get("entry_count"),
@@ -312,10 +382,15 @@ def main() -> None:
     ).strip()
     if all(isinstance(x, str) and SHA40.fullmatch(x) for x in (activation_base, candidate_source, integration_head)):
         candidate_guard_result = run_candidate_guard(activation_base, candidate_source, integration_head)
+        frozen_scope_guard_result = run_frozen_scope_guard(activation_base, candidate_source)
     else:
         candidate_guard_result = {
             "passed": False,
             "errors": ["candidate guard cannot run until activation_base, candidate_source and integration_head are exact SHAs"],
+        }
+        frozen_scope_guard_result = {
+            "passed": False,
+            "errors": ["frozen scope guard cannot run until activation_base and candidate_source are exact SHAs"],
         }
 
     result = validate_consistency(
@@ -327,6 +402,7 @@ def main() -> None:
         progression_validation_result=progression_result,
         binding_verification_result=binding_result,
         candidate_guard_result=candidate_guard_result,
+        frozen_scope_guard_result=frozen_scope_guard_result,
         checked_out_head=checked_out_head,
         actual_validator_source=validator_bundle.bundle_digest(ROOT),
         levels_sha256=sha256_bytes(paths["levels"].read_bytes()),
