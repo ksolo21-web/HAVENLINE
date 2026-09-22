@@ -8,7 +8,6 @@ from pathlib import Path
 
 from lib import DOCS, any_match, changed_files, expand_alias, load_json
 from workstream import approved_change_requests
-import shipping_visual_gate
 
 INTEGRATION_STATES = {"INTEGRATION_READY", "INTEGRATING", "UNDER_REVIEW", "FIX_REQUIRED", "APPROVED"}
 TASK_ADMIN_PATTERNS = [
@@ -98,23 +97,6 @@ def main() -> int:
         for w in registry["workstreams"] if w.get("task_id", "").startswith("T")
     }
     report = evaluate(changed_files(args.base, args.head), registry, ownership, authorizations)
-    if report.get("classification") == "TASK_INTEGRATION" and report.get("task_id"):
-        task_id = report["task_id"]
-        ws = next((w for w in registry["workstreams"] if w.get("task_id") == task_id), None)
-        candidate = (ws or {}).get("candidate_commit")
-        audit = shipping_visual_gate.scan_task(task_id, candidate or args.head)
-        report["shipping_visual_audit"] = audit
-        if not audit.get("passed"):
-            report["errors"].append(f"{task_id} shipping visual primitive audit failed with {audit.get('finding_count')} finding(s)")
-        if (ws or {}).get("status") in {"INTEGRATION_READY","INTEGRATING","UNDER_REVIEW"}:
-            if not isinstance(candidate, str) or len(candidate) != 40:
-                report["errors"].append(f"{task_id} integration-ready state has no exact candidate_commit for visual signoff")
-            else:
-                signoff = shipping_visual_gate.validate_signoff(task_id, candidate, args.base)
-                report["visual_user_signoff"] = signoff
-                if not signoff.get("passed"):
-                    report["errors"].extend([f"{task_id} visual signoff: {e}" for e in signoff.get("errors",[])])
-        report["passed"] = not report["errors"]
     text = json.dumps(report, indent=2) + "\n"
     if args.output:
         args.output.parent.mkdir(parents=True, exist_ok=True)

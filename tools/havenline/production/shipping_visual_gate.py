@@ -33,8 +33,18 @@ def graph()->dict[str,Any]:
 def invalidations()->dict[str,Any]:
     return load(INVALIDATIONS_PATH)
 
+def task_invalidation_records(task_id: str)->list[dict[str,Any]]:
+    return [r for r in invalidations().get("records",[]) if r.get("task_id")==task_id]
+
 def active_invalidation(task_id: str)->dict[str,Any]|None:
-    return next((r for r in invalidations().get("records",[]) if r.get("task_id")==task_id and r.get("status")=="ACTIVE"),None)
+    return next((r for r in task_invalidation_records(task_id) if r.get("status")=="ACTIVE"),None)
+
+def task_number(task_id: str)->int:
+    try: return int(task_id[1:])
+    except Exception: return 0
+
+def signoff_required(task_id: str)->bool:
+    return task_number(task_id)>=12 or bool(task_invalidation_records(task_id))
 
 def task_patterns(task_id: str)->list[str]:
     reg=registry(); own=ownership()
@@ -123,16 +133,48 @@ def effective_approval(task_id: str, ref: str="HEAD")->dict[str,Any]:
     if inv: errors.append("active approval invalidation: "+str(inv.get("family")))
     scan=scan_task(task_id,ref)
     if not scan["passed"]: errors.append(f"shipping visual primitive audit has {scan['finding_count']} finding(s)")
-    return {"passed":not errors,"task_id":task_id,"historical_approved":historical,"effective_approved":not errors,"active_invalidation":inv,"primitive_audit":scan,"errors":errors}
+    signoff=None
+    if not inv and scan.get("visual_task") and signoff_required(task_id):
+        row=next((w for w in registry().get("workstreams",[]) if w.get("task_id")==task_id),None)
+        candidate=(row or {}).get("candidate_commit")
+        if not isinstance(candidate,str) or not HEX40.fullmatch(candidate):
+            errors.append("visual task has no exact candidate_commit for user signoff")
+        else:
+            signoff=validate_signoff(task_id,candidate,None)
+            if not signoff.get("passed"): errors.extend(["visual signoff: "+e for e in signoff.get("errors",[])])
+    return {"passed":not errors,"task_id":task_id,"historical_approved":historical,"effective_approved":not errors,"active_invalidation":inv,"primitive_audit":scan,"visual_signoff":signoff,"errors":errors}
 
 def audit_effective_approvals(ref: str="HEAD")->dict[str,Any]:
-    gates=load(DOCS/"task-gates.json"); rows=[]; errors=[]
-    for task_id in gates.get("approved_tasks",[]):
-        scan=scan_task(task_id,ref); inv=active_invalidation(task_id)
-        covered=bool(inv)
+    gates=load(DOCS/"task-gates.json"); reg=registry(); rows=[]; errors=[]
+    approved=set(gates.get("approved_tasks",[]))
+    for task_id in sorted(approved):
+        scan=scan_task(task_id,ref); inv=active_invalidation(task_id); covered=bool(inv); signoff=None
         if scan["findings"] and not covered:
             errors.append(f"{task_id} has uncovered primitive shipping-art findings")
-        rows.append({"task_id":task_id,"finding_count":scan["finding_count"],"invalidation_active":covered,"effective_approved":scan["passed"] and not covered})
+        effective=scan["passed"] and not covered
+        if effective and scan.get("visual_task") and signoff_required(task_id):
+            row=next((w for w in reg.get("workstreams",[]) if w.get("task_id")==task_id),None)
+            candidate=(row or {}).get("candidate_commit")
+            if not isinstance(candidate,str) or not HEX40.fullmatch(candidate):
+                effective=False;errors.append(f"{task_id} has no exact candidate_commit for mandatory user visual signoff")
+            else:
+                signoff=validate_signoff(task_id,candidate,None)
+                if not signoff.get("passed"):
+                    effective=False;errors.extend([f"{task_id} visual signoff: {e}" for e in signoff.get("errors",[])])
+        rows.append({"task_id":task_id,"finding_count":scan["finding_count"],"invalidation_active":covered,"effective_approved":effective,"visual_signoff":signoff})
+    for row in reg.get("workstreams",[]):
+        task_id=row.get("task_id","")
+        if row.get("status") not in {"INTEGRATION_READY","INTEGRATING","UNDER_REVIEW"}: continue
+        scan=scan_task(task_id,ref); inv=active_invalidation(task_id)
+        if inv: errors.append(f"{task_id} cannot be {row.get('status')} with active visual invalidation")
+        if not scan["passed"]: errors.append(f"{task_id} cannot be {row.get('status')} with primitive shipping-art findings")
+        if scan.get("visual_task"):
+            candidate=row.get("candidate_commit")
+            if not isinstance(candidate,str) or not HEX40.fullmatch(candidate):
+                errors.append(f"{task_id} integration-ready visual task has no exact candidate_commit")
+            else:
+                signoff=validate_signoff(task_id,candidate,None)
+                if not signoff.get("passed"): errors.extend([f"{task_id} integration-ready visual signoff: {e}" for e in signoff.get("errors",[])])
     return {"passed":not errors,"ref":git("rev-parse",f"{ref}^{{commit}}").strip(),"rows":rows,"errors":errors}
 
 def main()->None:
