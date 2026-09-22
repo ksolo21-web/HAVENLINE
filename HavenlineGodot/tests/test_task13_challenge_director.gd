@@ -53,6 +53,15 @@ func run() -> void:
 	check("baseline decision passes", baseline.passed and baseline.profile_id == "NORMAL" and baseline.band_index == 0)
 	check("baseline is source-bound to policy", not baseline.policy_fallback and not baseline.policy_hash.is_empty())
 	check("baseline never changes resource yield", is_equal_approx(float(baseline.coefficients.resource_yield_multiplier), 1.0))
+	check("readability contract covers all C4 ownership boundaries",
+		baseline.readability_contract.contract_version == "t13.readability.v1"
+		and baseline.readability_contract.danger_band_id == baseline.band_id
+		and int(baseline.readability_contract.danger_rank) == 1
+		and int(baseline.readability_contract.danger_rank_max) == 10
+		and baseline.readability_contract.interaction_target_contract == "preserve_upstream_context_target"
+		and baseline.readability_contract.collection_feedback_contract == "preserve_upstream_collection_feedback"
+		and baseline.readability_contract.resource_destination_contract == "preserve_upstream_delivery_destination"
+		and not baseline.readability_contract.new_controls_required)
 
 	var replay := director.evaluate(context(1), window(1))
 	check("identical input replays byte-for-byte", replay == baseline)
@@ -80,6 +89,11 @@ func run() -> void:
 		"fast_completion_count": 2, "strong_streak": 2,
 	}), baseline)
 	check("sustained strong play raises exactly one band", strong.band_index == 1 and strong.reason_codes.has("strong_performance_escalation"))
+	check("escalation emits explicit pressure and next action cues",
+		strong.readability_contract.transition_state == "escalating"
+		and strong.readability_contract.world_response_cue == "pressure_increasing"
+		and strong.readability_contract.next_action_cue == "prepare_for_increased_pressure"
+		and strong.readability_contract.presentation_update_required)
 
 	var level_jump := director.evaluate(context(100), window(2), baseline)
 	check("large progression jump is capped to one band", level_jump.base_band_index == 9 and level_jump.band_index == 1 and level_jump.reason_codes.has("progression_step_up"))
@@ -94,6 +108,11 @@ func run() -> void:
 	}), high_previous)
 	check("struggle decision remains valid", bool(struggle.get("passed", false)), struggle.get("errors", []))
 	check("struggle triggers one-step recovery", int(struggle.get("band_index", -1)) == 8 and Array(struggle.get("reason_codes", [])).has("recovery_deescalation"))
+	check("recovery emits explicit easing and stabilization cues",
+		struggle.readability_contract.transition_state == "recovering"
+		and struggle.readability_contract.world_response_cue == "pressure_easing"
+		and struggle.readability_contract.next_action_cue == "stabilize_and_recover"
+		and struggle.readability_contract.presentation_update_required)
 	var deep_struggle := director.evaluate(context(100), window(3, {
 		"attempt_count": 4, "success_count": 1, "failure_count": 2,
 		"abandonment_count": 1, "down_count": 2,
@@ -117,6 +136,10 @@ func run() -> void:
 	check("spoofed GM request falls to normal profile", unauthorized_gm.passed and unauthorized_gm.profile_id == "NORMAL" and unauthorized_gm.coefficients == normal_gm_baseline.coefficients)
 	var gm := director.evaluate(context(50), window(1), {}, {"requested_profile": "GM_CHALLENGE", "gm_authorized": true})
 	check("authorized GM profile resolves", gm.passed and gm.profile_id == "GM_CHALLENGE")
+	check("GM readability explicitly marks owner challenge",
+		gm.readability_contract.world_response_cue == "owner_challenge_elevated"
+		and gm.readability_contract.next_action_cue == "prepare_for_owner_challenge"
+		and not gm.readability_contract.new_controls_required)
 	check("GM threat target is exact", is_equal_approx(float(gm.gm_relative.threat_ratio), 1.35))
 	check("GM recovery and wave ratios are exact", is_equal_approx(float(gm.gm_relative.recovery_window_ratio), 0.85) and is_equal_approx(float(gm.gm_relative.wave_delay_ratio), 0.85))
 	check("GM raw inflation caps are respected", float(gm.gm_relative.raw_enemy_hp_ratio) <= 1.10 and float(gm.gm_relative.raw_enemy_damage_ratio) <= 1.15)

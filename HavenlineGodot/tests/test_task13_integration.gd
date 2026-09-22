@@ -69,6 +69,10 @@ func run() -> void:
 	for i in 250:
 		replay_stable = replay_stable and director.evaluate(context(51), perf(1)) == director.evaluate(context(51), perf(1))
 	check("250 deterministic replay pairs are exact", replay_stable)
+	check("readability contract is deterministic and downstream-owned",
+		decision.readability_contract.contract_version == "t13.readability.v1"
+		and decision.readability_contract.player_facing_copy_owned_by_downstream
+		and not decision.readability_contract.new_controls_required)
 
 	var policy: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/challenge_director_v1.json"))
 	check("policy remains a dictionary", policy is Dictionary)
@@ -102,6 +106,14 @@ func run() -> void:
 		bounded_outputs = bounded_outputs and d.passed and int(d.band_index) >= 0 and int(d.band_index) <= 9
 		bounded_outputs = bounded_outputs and float(d.coefficients.threat_budget_multiplier) >= 0.90 and float(d.coefficients.threat_budget_multiplier) <= 1.50
 		challenge_styles[String(d.challenge_style_id)] = true
+	var readable_outputs := true
+	for level in 100:
+		var readable := director.evaluate(context(level + 1), perf(1)).readability_contract
+		readable_outputs = readable_outputs and int(readable.danger_rank) == int(floor(float(level) / 10.0)) + 1
+		readable_outputs = readable_outputs and int(readable.danger_rank_max) == 10
+		readable_outputs = readable_outputs and not String(readable.world_response_profile_id).is_empty()
+		readable_outputs = readable_outputs and not String(readable.next_action_cue).is_empty()
+	check("all 100 normal decisions expose bounded readable challenge state", readable_outputs)
 	check("all 100 normal cold-start levels stay in declared envelope", bounded_outputs)
 	check("all ten challenge styles appear across Level 1-100", challenge_styles.size() == 10, challenge_styles.keys())
 

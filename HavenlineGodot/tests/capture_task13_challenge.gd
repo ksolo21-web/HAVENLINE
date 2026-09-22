@@ -70,10 +70,16 @@ func run() -> void:
 		},
 		"spend_blind_equivalence": spend_equivalent,
 		"deterministic_replay_equivalence": replay_equivalent,
+		"readability_contract_complete": (
+			baseline.get("readability_contract", {}).get("contract_version", "") == "t13.readability.v1"
+			and strong.get("readability_contract", {}).get("transition_state", "") == "escalating"
+			and recovery.get("readability_contract", {}).get("transition_state", "") == "recovering"
+			and gm.get("readability_contract", {}).get("world_response_cue", "") == "owner_challenge_elevated"
+		),
 		"integration_allowed": false,
 		"task_approved": false,
 		"isolated_state": "BUILT_PENDING_DEPENDENCY",
-		"passed": configured and baseline.passed and strong.passed and recovery.passed and gm.passed and spoofed_gm.passed and spend_equivalent and replay_equivalent,
+		"passed": configured and baseline.passed and strong.passed and recovery.passed and gm.passed and spoofed_gm.passed and spend_equivalent and replay_equivalent and baseline.get("readability_contract", {}).get("contract_version", "") == "t13.readability.v1",
 	}
 	var out := output_dir()
 	DirAccess.make_dir_recursive_absolute(out)
@@ -89,6 +95,7 @@ func run() -> void:
 		"scenario_count": manifest.scenarios.size(),
 		"spend_blind_equivalence": spend_equivalent,
 		"deterministic_replay_equivalence": replay_equivalent,
+		"readability_contract_complete": manifest.readability_contract_complete,
 		"isolated_state": "BUILT_PENDING_DEPENDENCY",
 	}))
 	quit(0 if manifest.passed else 1)

@@ -466,6 +466,55 @@ static func _failure(errors: Array, evaluation_sequence := -1) -> Dictionary:
 		"mutated_upstream": false,
 	}
 
+static func _readability_contract(band: Dictionary, selected_band: int, base_band: int, previous_result: Dictionary, struggling: bool, strong: bool, profile_id: String, pressure_directives: Array, band_count: int) -> Dictionary:
+	var transition_state := "stable"
+	if not bool(previous_result.get("present", false)):
+		transition_state = "cold_start"
+	else:
+		var previous_band := int(previous_result.get("band_index", selected_band))
+		if selected_band > previous_band:
+			transition_state = "escalating"
+		elif selected_band < previous_band:
+			transition_state = "recovering"
+		elif selected_band != base_band:
+			transition_state = "hysteresis_hold"
+
+	var world_response_cue := "pressure_stable"
+	if transition_state == "escalating":
+		world_response_cue = "pressure_increasing"
+	elif transition_state == "recovering":
+		world_response_cue = "pressure_easing"
+	elif profile_id == PROFILE_GM:
+		world_response_cue = "owner_challenge_elevated"
+
+	var next_action_cue := "continue_current_objective"
+	if struggling or transition_state == "recovering":
+		next_action_cue = "stabilize_and_recover"
+	elif transition_state == "escalating":
+		next_action_cue = "prepare_for_increased_pressure"
+	elif profile_id == PROFILE_GM:
+		next_action_cue = "prepare_for_owner_challenge"
+	elif strong:
+		next_action_cue = "maintain_current_plan"
+
+	return {
+		"contract_version": "t13.readability.v1",
+		"danger_band_id": String(band.get("band_id", "")),
+		"danger_rank": selected_band + 1,
+		"danger_rank_max": band_count,
+		"transition_state": transition_state,
+		"world_response_cue": world_response_cue,
+		"world_response_profile_id": String(band.get("pressure_profile_id", "")),
+		"world_response_directives": pressure_directives.duplicate(),
+		"next_action_cue": next_action_cue,
+		"interaction_target_contract": "preserve_upstream_context_target",
+		"collection_feedback_contract": "preserve_upstream_collection_feedback",
+		"resource_destination_contract": "preserve_upstream_delivery_destination",
+		"new_controls_required": false,
+		"player_facing_copy_owned_by_downstream": true,
+		"presentation_update_required": transition_state != "stable" or profile_id == PROFILE_GM,
+	}
+
 func evaluate(progression_context: Dictionary, performance_window: Dictionary, previous_decision: Dictionary = {}, options: Dictionary = {}) -> Dictionary:
 	if policy.is_empty():
 		configure({})
@@ -598,6 +647,18 @@ func evaluate(progression_context: Dictionary, performance_window: Dictionary, p
 			"absolute_concurrent_emergency_bonus_cap": int(gm.absolute_concurrent_emergency_bonus_cap),
 		}
 
+	var readability_contract := _readability_contract(
+		band,
+		selected_band,
+		base_band,
+		previous_result,
+		struggling,
+		strong,
+		profile_id,
+		pressure_directives,
+		int(policy.bands.size())
+	)
+
 	var fingerprint_payload := [
 		int(context.level),
 		int(performance.attempt_count),
@@ -635,6 +696,7 @@ func evaluate(progression_context: Dictionary, performance_window: Dictionary, p
 		"coefficients": coefficients,
 		"gm_relative": gm_relative,
 		"reason_codes": reasons,
+		"readability_contract": readability_contract,
 		"evaluation_sequence": evaluation_sequence,
 		"input_fingerprint": JSON.stringify(fingerprint_payload).sha256_text(),
 		"spend_blind": true,

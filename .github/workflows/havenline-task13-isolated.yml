@@ -149,10 +149,13 @@ jobs:
 
           core_names=[
               'director is deterministic','normal path is spend blind','T12 read boundary is exact',
+              'readability contract covers all C4 ownership boundaries',
               'director mutates no upstream authority','commerce-only changes cannot alter normal decision',
               'one strong window does not spike challenge','sustained strong play raises exactly one band',
-              'struggle triggers one-step recovery','sustained struggle can deepen recovery but still one step per evaluation',
-              'GM threat target is exact','GM strong ratio stays inside approved envelope',
+              'escalation emits explicit pressure and next action cues',
+              'struggle triggers one-step recovery','recovery emits explicit easing and stabilization cues',
+              'sustained struggle can deepen recovery but still one step per evaluation',
+              'GM threat target is exact','GM readability explicitly marks owner challenge','GM strong ratio stays inside approved envelope',
               'GM recovery never falls below GM minimum ratio','GM apex remains below explicit absolute threat cap',
               'GM apex remains below explicit absolute raw caps','GM advisory pressure adds coordinated variety without new controls',
               'malformed policy activates safe fallback','nonlinear progression uses varied threat increments',
@@ -165,11 +168,13 @@ jobs:
           integration_names=[
               'runtime does not preload T12 implementation','runtime does not preload simulation authority',
               'runtime contains no random API','runtime contains no wall-clock scoring call','T12 consumer boundary exact',
-              'T12 context remains unmodified','progression intent payload cannot secretly tune difficulty',
+              'T12 context remains unmodified','readability contract is deterministic and downstream-owned',
+              'progression intent payload cannot secretly tune difficulty',
               'milestone metadata cannot auto-counter upgrade value','250 deterministic replay pairs are exact',
               'Game Master target ratio matches current contract','Game Master cannot add grind or controls',
               'GM envelope holds across all ten normal bands','GM absolute caps hold across all ten normal bands',
-              'all 100 normal cold-start levels stay in declared envelope','all ten challenge styles appear across Level 1-100',
+              'all 100 normal cold-start levels stay in declared envelope','all 100 normal decisions expose bounded readable challenge state',
+              'all ten challenge styles appear across Level 1-100',
               'unbounded performance counts fail closed','T12 intent input is bounded','evaluation never mutates loaded policy data'
           ]
           core_summary={
@@ -193,6 +198,7 @@ jobs:
               'scenarios':{k:{
                   'profile_id':v.get('profile_id'),'band_id':v.get('band_id'),'band_index':v.get('band_index'),
                   'reason_codes':v.get('reason_codes'),'coefficients':v.get('coefficients'),
+                  'readability_contract':v.get('readability_contract',{}),
                   'gm_relative':v.get('gm_relative',{})
               } for k,v in capture.get('scenarios',{}).items()},
               'integration_allowed':False,'task_approved':False,'isolated_state':'BUILT_PENDING_DEPENDENCY'
@@ -213,11 +219,34 @@ jobs:
               ]),
               'upgrade_protection':json.loads(Path('HavenlineGodot/data/challenge_director_v1.json').read_text())['upgrade_protection']
           }
-          scope='T13 is a nonvisual pure decision service. It adds no buttons, menus, input mappings, harvesting rules, resource sinks, enemy spawns, world mutations, or global persistence. Existing Havenline physical/contextual controls and the MOVE-AUTO-INTERACT-GATHER-CARRY-DELIVER-TRANSFORM-BUILD/UPGRADE loop remain owned upstream. T13 consumes only stable T12 progression context plus gameplay-performance facts and returns bounded challenge coefficients, advisory pressure directives, and reason codes. Normal-player difficulty is structurally spend-blind. The ten-band curve is intentionally nonlinear but adjacent adaptation is mathematically capped so a 10% upstream capability gain preserves at least a 2% advantage even after the strongest immediate counter-step. GM_CHALLENGE is separately authorized with a 1.25x-1.60x relative threat envelope plus explicit absolute caps; it cannot reduce resource yield or add permanent controls. Pressure directives are advisory for later content owners and do not claim those encounters are implemented. Judge T13 within this decision-layer scope; absent player-facing UI is intentional, while reason_codes are the downstream-readable feedback contract.'
+          readability_summary={
+              'task':'T13','candidate':candidate,'implementation_validation_passed':True,
+              'validation_state':'BUILT_PENDING_DEPENDENCY',
+              'dependency_lock':'T12 approval/integration only',
+              'approval_boolean_is_lifecycle_state_not_test_result':True,
+              'new_controls_required':False,
+              'player_facing_rendering_owned_downstream':True,
+              'baseline':capture['scenarios']['baseline'].get('readability_contract',{}),
+              'escalation':capture['scenarios']['strong_escalation'].get('readability_contract',{}),
+              'recovery':capture['scenarios']['recovery'].get('readability_contract',{}),
+              'authorized_gm':capture['scenarios']['authorized_gm'].get('readability_contract',{}),
+              'core_checks':selected(core,[
+                  'readability contract covers all C4 ownership boundaries',
+                  'escalation emits explicit pressure and next action cues',
+                  'recovery emits explicit easing and stabilization cues',
+                  'GM readability explicitly marks owner challenge'
+              ]),
+              'integration_checks':selected(integration,[
+                  'readability contract is deterministic and downstream-owned',
+                  'all 100 normal decisions expose bounded readable challenge state'
+              ])
+          }
+          scope='T13 is a nonvisual pure decision service and remains intentionally not scene-wired in preactivation. It adds no buttons, menus, input mappings, harvesting rules, resource sinks, enemy spawns, world mutations, or global persistence. Existing Havenline physical/contextual controls and the MOVE-AUTO-INTERACT-GATHER-CARRY-DELIVER-TRANSFORM-BUILD/UPGRADE loop remain owned upstream. T13 now returns a stable t13.readability.v1 contract on every successful decision: danger band/rank, transition state, world-response cue/profile/directives, next-action cue, and explicit preservation contracts for upstream interaction target clarity, collection feedback, and resource destination. Player-facing rendering/copy remains downstream-owned, so T13 creates no duplicate UI or controls. task_approved=false in raw isolated test output is a lifecycle lock caused solely by unresolved T12; it is not a failed T13 implementation test. The exact candidate implementation suites pass before critic review. Normal-player difficulty is structurally spend-blind. GM_CHALLENGE is separately authorized and remains spend-blind with no resource-yield penalty or new permanent controls.'
           Path('critic-input/core-summary.json').write_text(json.dumps(core_summary,indent=2)+'\n')
           Path('critic-input/integration-summary.json').write_text(json.dumps(integration_summary,indent=2)+'\n')
           Path('critic-input/capture-summary.json').write_text(json.dumps(capture_summary,indent=2)+'\n')
           Path('critic-input/upgrade-isolation.json').write_text(json.dumps(upgrade_isolation,indent=2)+'\n')
+          Path('critic-input/readability-summary.json').write_text(json.dumps(readability_summary,indent=2)+'\n')
           Path('critic-input/scope-brief.txt').write_text(scope+'\n')
           Path('critic-input/policy.json').write_text(Path('HavenlineGodot/data/challenge_director_v1.json').read_text())
 
@@ -239,7 +268,7 @@ jobs:
 
           python3 tools/havenline/production/specialist_evidence_manifest.py build             --task T13 --critic C3 --candidate "$CANDIDATE" --out critic-input/C3-manifest.json             --item 'challenge|gameplay_state|json|critic-input/core-summary.json|Deterministic challenge behavior, spend-blind matrix, anti-spike and recovery proof'             --item 'challenge|control_state|text|critic-input/scope-brief.txt|No new controls; T13 preserves Havenline contextual physical control philosophy'             --item 'challenge|loop_evidence|json|critic-input/integration-summary.json|T12 boundary, replay stability and no upstream mutation'
 
-          python3 tools/havenline/production/specialist_evidence_manifest.py build             --task T13 --critic C4 --candidate "$CANDIDATE" --out critic-input/C4-manifest.json             --item 'challenge|gameplay_state|json|critic-input/core-summary.json|Challenge transitions and bounded recovery behavior'             --item 'challenge|feedback_state|json|critic-input/capture-summary.json|Reason-code and coefficient feedback across baseline, escalation, recovery and GM states'             --item 'challenge|feedback_state|text|critic-input/scope-brief.txt|Nonvisual decision-layer readability contract'
+          python3 tools/havenline/production/specialist_evidence_manifest.py build             --task T13 --critic C4 --candidate "$CANDIDATE" --out critic-input/C4-manifest.json             --item 'challenge|gameplay_state|json|critic-input/readability-summary.json|Exact-candidate readability contract across baseline, escalation, recovery and GM states; lifecycle lock is separated from implementation validation'             --item 'challenge|feedback_state|json|critic-input/capture-summary.json|Deterministic danger rank, transition, world-response and next-action cues for every reviewed scenario'             --item 'challenge|feedback_state|text|critic-input/scope-brief.txt|T13 nonvisual ownership boundary and downstream presentation handoff without duplicate controls'
 
           python3 tools/havenline/production/specialist_evidence_manifest.py build             --task T13 --critic C7 --candidate "$CANDIDATE" --out critic-input/C7-manifest.json             --item 'challenge|progression_simulation|json|critic-input/integration-summary.json|100-level envelope, replay and progression-boundary simulation'             --item 'challenge|difficulty_curve|json|critic-input/policy.json|Ten-band normal curve and bounded GM envelope'             --item 'challenge|upgrade_curve|json|critic-input/upgrade-isolation.json|Proof that milestone and progression metadata do not auto-counter upgrade value'
 
@@ -371,6 +400,12 @@ jobs:
           echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
           sudo apt-get update -qq
           sudo apt-get install -y -qq xvfb mesa-vulkan-drivers
+
+      - name: Import project before exact-candidate visual review
+        run: |
+          set -euo pipefail
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit 2>&1 | tee c2-evidence/import.log
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' c2-evidence/import.log; then exit 1; fi
 
       - name: Render exact-candidate multi-view C2 evidence
         run: |

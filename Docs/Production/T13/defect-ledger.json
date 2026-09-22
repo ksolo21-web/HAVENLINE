@@ -42,5 +42,24 @@
       "repair": "Rewrote the T13 critic acceptance matrix to match canonical C2/C3/C4/C6/C7 names/responsibilities and kept spend-blind/GM isolation as mandatory evidence without repurposing critic IDs.",
       "status": "RESOLVED"
     }
+  ],
+  "unresolved_build_defects": [],
+  "resolved_build_defects": [
+    {
+      "id": "T13-BUILD-001",
+      "defect": "C2 exact-candidate visual review launched a fresh Godot checkout without importing the project first, so class-name cache resolution failed in unrelated main-scene scripts and the render timed out.",
+      "evidence": "Run 35717659264 review-c2: HavenlineStationKit/HavenlineHarvestPresentation parse errors followed by exit 124; the built-pending-dependency job on the same candidate passed project import and both T13 suites.",
+      "root_cause": "C2 job-local evidence harness omitted the Godot import step even though each GitHub Actions job has an isolated workspace.",
+      "repair": "Import the exact candidate in the C2 job before launching existing render-review scenarios; retain visual non-impact proof and independent C2 review.",
+      "status": "RESOLVED_PENDING_RETEST"
+    },
+    {
+      "id": "T13-BUILD-002",
+      "defect": "C4 evidence exposed only backend reason codes/coefficients, allowing the reviewer to infer that difficulty changes had no stable downstream danger/recovery/world-response/next-action presentation contract; it also misread task_approved=false as a test failure rather than the intentional T12 lifecycle lock.",
+      "evidence": "Run 35717659264 review-c4 scored world_change_clarity 3.0 and multiple clarity dimensions 4-5, citing missing feedback and task_approved=false.",
+      "root_cause": "T13 had deterministic challenge semantics but no explicit cross-owner readability handoff, and critic evidence did not separate implementation validation from dependency-gated task approval.",
+      "repair": "Add deterministic t13.readability.v1 output, test all C4 ownership boundaries, emit source-bound readability evidence, and state lifecycle lock separately from implementation validation.",
+      "status": "RESOLVED_PENDING_RETEST"
+    }
   ]
 }
