@@ -14,6 +14,7 @@ from typing import Any
 
 EXPECTED_LEVEL_PATTERN = "t12.level.NNN"
 EXPECTED_SLOT_PATTERN = "t12.slot.NNN"
+EXPECTED_FACT_SLOT_PATTERN = "t12.fact.slot.NNN"
 EXPECTED_EVENT_PATTERN = "t12.event.level.NNN.completed"
 EXPECTED_MILESTONE_PATTERN = "t12.milestone.NNN"
 EXPECTED_MILESTONE_LEVELS = [10,20,30,40,50,60,70,80,90,100]
@@ -31,6 +32,15 @@ REQUIRED_API = {
     "restore_component_state": "recovery_boundary",
     "get_metrics": "diagnostic_query",
 }
+EXPECTED_API_INPUTS = {
+    "load_contract": ["level_records", "milestone_records", "resolved_binding_index"],
+    "get_level_state": ["level_id", "authoritative_fact_view"],
+    "get_unlockable_levels": ["authoritative_fact_view"],
+    "observe_authoritative_fact": ["source_task", "fact_kind", "source_id", "idempotency_key"],
+    "snapshot_component_state": [],
+    "restore_component_state": ["T12-local snapshot"],
+    "get_metrics": [],
+}
 REQUIRED_FACT_KINDS = {
     "context_action_completed",
     "resource_delivery_completed",
@@ -46,8 +56,8 @@ REQUIRED_INTENT_FIELDS = {
     "milestone_ids","source_fact_keys",
 }
 REQUIRED_COMPONENT_FIELDS = {
-    "completed_level_ids","consumed_fact_keys","emitted_completion_event_ids",
-    "emitted_milestone_ids",
+    "completed_level_ids","satisfied_fact_slot_ids","fact_slot_source_keys",
+    "consumed_fact_keys","emitted_completion_event_ids","emitted_milestone_ids",
 }
 REQUIRED_FORBIDDEN_STATE_FIELDS = {
     "purchase_history","vip_status","premium_spend","energy","inventory_counts",
@@ -73,6 +83,7 @@ def validate_contract(contract: dict[str, Any]) -> dict[str, Any]:
     expected_patterns = {
         "level": EXPECTED_LEVEL_PATTERN,
         "progression_slot": EXPECTED_SLOT_PATTERN,
+        "fact_slot": EXPECTED_FACT_SLOT_PATTERN,
         "level_completion_event": EXPECTED_EVENT_PATTERN,
         "major_milestone": EXPECTED_MILESTONE_PATTERN,
     }
@@ -110,9 +121,64 @@ def validate_contract(contract: dict[str, Any]) -> dict[str, Any]:
             continue
         if row.get("kind") != kind:
             errors.append(f"runtime API {name} kind must be {kind}")
+        if row.get("inputs") != EXPECTED_API_INPUTS[name]:
+            errors.append(f"runtime API {name} inputs drifted")
         requirements = row.get("requirements")
         if not isinstance(requirements, list) or not requirements:
             errors.append(f"runtime API {name} requires explicit requirements")
+
+    fact_slot = contract.get("fact_slot_binding_contract")
+    if not isinstance(fact_slot, dict):
+        errors.append("fact_slot_binding_contract must be an object")
+        fact_slot = {}
+    else:
+        if fact_slot.get("slot_id_pattern") != EXPECTED_FACT_SLOT_PATTERN:
+            errors.append("fact-slot binding contract must freeze t12.fact.slot.NNN")
+        if fact_slot.get("shipping_dataset_path") != "HavenlineGodot/data/progression_bindings_v1.json":
+            errors.append("fact-slot binding contract must freeze progression_bindings_v1.json path")
+        if fact_slot.get("shipping_dataset_top_level_fields") != ["schema_version", "task_id", "bindings"]:
+            errors.append("fact-slot shipping dataset top-level fields drifted")
+        if fact_slot.get("shipping_dataset_exact_binding_count") != 99:
+            errors.append("fact-slot shipping dataset must contain exactly 99 bindings")
+        if fact_slot.get("opening_activation_required_levels") != [3, 4, 6, 9, 10]:
+            errors.append("fact-slot opening activation levels drifted")
+        if set(fact_slot.get("opening_activation_required_upstream_coverage", [])) != {"T10", "T11"}:
+            errors.append("fact-slot opening activation must require T10 and T11")
+        if fact_slot.get("opening_activation_deferred_forbidden") is not True:
+            errors.append("fact-slot opening activation must forbid deferred bindings")
+        opening_rule = str(fact_slot.get("opening_activation_rule", "")).lower()
+        for token in ("3,4,6,9,10", "resolved", "t10", "t11"):
+            if token not in opening_rule:
+                errors.append(f"fact-slot opening activation rule missing {token!r}")
+        shipping_rule = str(fact_slot.get("shipping_level_rule", "")).lower()
+        for token in ("level 1", "levels 2-100", "matching t12.fact.slot.nnn", "no external producer id"):
+            if token not in shipping_rule:
+                errors.append(f"fact-slot shipping rule missing {token!r}")
+        fields = fact_slot.get("binding_index_entry_required_fields")
+        if fields != ["slot_id", "fact_kind", "source_task", "source_id", "resolution_state", "evidence_ref", "idempotency_domain"]:
+            errors.append("fact-slot binding-index required fields drifted")
+        if set(fact_slot.get("resolution_states", [])) != {"RESOLVED", "DEFERRED_LATER_OWNER"}:
+            errors.append("fact-slot resolution states must be RESOLVED and DEFERRED_LATER_OWNER")
+        deferred = str(fact_slot.get("deferred_rule", "")).lower()
+        for token in ("later", "locked", "registration"):
+            if token not in deferred:
+                errors.append(f"fact-slot deferred rule missing {token!r}")
+        t10_t11 = str(fact_slot.get("t10_t11_rule", "")).lower()
+        for token in ("t10/t11", "binding_resolution"):
+            if token not in t10_t11:
+                errors.append(f"fact-slot T10/T11 rule missing {token!r}")
+        idempotency_rule = str(fact_slot.get("idempotency_rule", "")).lower()
+        for token in ("resolved", "idempotency_domain", "duplicates", "no-op"):
+            if token not in idempotency_rule:
+                errors.append(f"fact-slot idempotency rule missing {token!r}")
+        evidence_rule = str(fact_slot.get("evidence_rule", "")).lower()
+        for token in ("resolved", "evidence_ref", "deferred_later_owner", "no fake source_id"):
+            if token not in evidence_rule:
+                errors.append(f"fact-slot evidence rule missing {token!r}")
+        presentation_rule = str(fact_slot.get("presentation_requirement_rule", "")).lower()
+        for token in ("visible_progression_required", "major_milestone_completed", "never", "authoritative fact"):
+            if token not in presentation_rule:
+                errors.append(f"fact-slot presentation requirement rule missing {token!r}")
 
     facts = contract.get("authoritative_fact_kinds")
     if not isinstance(facts, list):
@@ -129,8 +195,22 @@ def validate_contract(contract: dict[str, Any]) -> dict[str, Any]:
     required_fields = intent.get("required_fields")
     if not isinstance(required_fields, list) or not REQUIRED_INTENT_FIELDS.issubset(set(required_fields)):
         errors.append("progression intent contract is missing required stable/idempotent fields")
-    if "replay" not in str(intent.get("intent_id_rule", "")).lower():
-        errors.append("progression intent identity rule must explicitly define replay behavior")
+    intent_rule = str(intent.get("intent_id_rule", "")).lower()
+    for token in ("t12.intent.level.nnn.completed", "replay", "no second publication"):
+        if token not in intent_rule:
+            errors.append(f"progression intent identity rule missing {token!r}")
+    field_semantics = intent.get("field_semantics")
+    if not isinstance(field_semantics, dict) or set(field_semantics) != REQUIRED_INTENT_FIELDS:
+        errors.append("progression intent field_semantics must define every required field")
+    else:
+        unlocked = str(field_semantics.get("unlocked_level_ids", "")).lower()
+        for token in ("direct dependent", "prerequisite", "fact-locked", "not implicitly complete"):
+            if token not in unlocked:
+                errors.append(f"unlocked_level_ids semantics missing {token!r}")
+        source_keys = str(field_semantics.get("source_fact_keys", "")).lower()
+        for token in ("domain-scoped", "authoritative fact", "fact slots", "level 1"):
+            if token not in source_keys:
+                errors.append(f"source_fact_keys semantics missing {token!r}")
     forbidden_actions = " ".join(str(x) for x in intent.get("may_not_do", []))
     for term in ("inventory", "T10", "T11", "T13", "save"):
         if term.lower() not in forbidden_actions.lower():
@@ -151,6 +231,34 @@ def validate_contract(contract: dict[str, Any]) -> dict[str, Any]:
         if token not in reconstruction:
             errors.append("component reconstruction rule must guarantee deterministic no-reemit behavior")
             break
+
+    transition = contract.get("transition_semantics")
+    if not isinstance(transition, dict):
+        errors.append("transition_semantics must be an object")
+        transition = {}
+    required_transition_keys = {
+        "fresh_initialization",
+        "authoritative_observation",
+        "out_of_order_fact",
+        "invalid_or_deferred_fact",
+        "settlement",
+        "intent_order",
+        "restore",
+    }
+    if set(transition) != required_transition_keys:
+        errors.append("transition_semantics fields drifted")
+    transition_blob = " ".join(str(value) for value in transition.values()).lower()
+    for token in (
+        "level 1",
+        "retained",
+        "never skip prerequisites",
+        "fail closed",
+        "ascending",
+        "before returning",
+        "never re-emits",
+    ):
+        if token not in transition_blob:
+            errors.append(f"transition_semantics missing {token!r}")
 
     performance = contract.get("performance_contract")
     if not isinstance(performance, dict):

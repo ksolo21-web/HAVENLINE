@@ -34,6 +34,7 @@ class T12CandidateEvidenceTests(unittest.TestCase):
         source["shipping_data_hashes"] = {
             "progression_levels_v1_json_sha256": "c" * 64,
             "progression_milestones_v1_json_sha256": "d" * 64,
+            "progression_bindings_v1_json_sha256": "f" * 64,
             "binding_resolution_json_sha256": "e" * 64,
         }
         source["upstream_sources"]["T10"] = "f" * 40

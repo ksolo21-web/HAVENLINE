@@ -26,7 +26,34 @@
     "Every resolved ID must be proven by an ownership-safe repository source_path plus exact JSON pointer, byte-identical to the accepted dependency commit; prose-only evidence is insufficient.",
     "No provisional/prepared/example/debug/test-only identifier may be promoted as a shipping progression binding.",
     "Resolution is read-only proof. T12 may consume accepted IDs but may not mutate T10/T11 source files or semantics.",
-    "Any missing or ambiguous required ID blocks T12 activation rather than being guessed."
+    "Any missing or ambiguous required ID blocks T12 activation rather than being guessed.",
+    "Every resolved public ID kind must be allowed for its owning task, and any T10/T11 shipping binding must use an ID kind compatible with the binding fact_kind."
   ],
-  "promotion_allowed": false
+  "promotion_allowed": false,
+  "allowed_id_kinds_by_task": {
+    "T10": [
+      "transform_state",
+      "transform_recipe"
+    ],
+    "T11": [
+      "camp_state",
+      "camp_recipe_binding"
+    ]
+  },
+  "fact_kind_compatibility": {
+    "world_transform_completed": {
+      "source_task": "T10",
+      "accepted_id_kinds": [
+        "transform_state",
+        "transform_recipe"
+      ]
+    },
+    "camp_state_completed": {
+      "source_task": "T11",
+      "accepted_id_kinds": [
+        "camp_state",
+        "camp_recipe_binding"
+      ]
+    }
+  }
 }

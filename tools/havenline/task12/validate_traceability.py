@@ -76,15 +76,16 @@ def validate_traceability(data: dict[str, Any]) -> dict[str, Any]:
     # High-risk requirements must explicitly contain the evidence concepts that prevent shallow sign-off.
     by_id = {row.get("id"): row for row in requirements if isinstance(row, dict)}
     concept_requirements = {
-        "T12-R01": ("100", "graph"),
+        "T12-R01": ("100", "graph", "fact.slot"),
         "T12-R03": ("cadence", "milestone"),
-        "T12-R05": ("binding", "mutation"),
+        "T12-R05": ("binding", "mutation", "fact-slot", "99"),
         "T12-R07": ("spend", "energy"),
-        "T12-R08": ("replay", "duplicate"),
+        "T12-R08": ("replay", "duplicate", "398", "fact slot", "out-of-order", "reference"),
+        "T12-R09": ("snapshot", "restore", "source-key"),
         "T12-R10": ("reachability", "1->100"),
         "T12-R12": ("performance", "unchanged"),
         "T12-R14": ("ownership", "changed-file"),
-        "T12-R15": ("activation", "dependency", "binding", "six"),
+        "T12-R15": ("activation", "dependency", "binding", "seven", "materializer"),
         "T12-R16": ("critic", "G1-G14", "evidence", "validator"),
     }
     for req_id, concepts in concept_requirements.items():

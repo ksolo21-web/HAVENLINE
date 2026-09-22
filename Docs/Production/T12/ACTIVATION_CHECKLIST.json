@@ -21,6 +21,7 @@
     "HavenlineGodot/scripts/progression_architecture.gd",
     "HavenlineGodot/data/progression_levels_v1.json",
     "HavenlineGodot/data/progression_milestones_v1.json",
+    "HavenlineGodot/data/progression_bindings_v1.json",
     "HavenlineGodot/tests/test_task12_progression_architecture.gd",
     "HavenlineGodot/tests/test_task12_integration.gd",
     "HavenlineGodot/tests/capture_task12_progression.gd"
@@ -92,7 +93,23 @@
     "tools/havenline/task12/tests/test_binding_resolution.py",
     "tools/havenline/task12/tests/test_prepare_activation.py",
     "tools/havenline/task12/validator_bundle.py",
-    "tools/havenline/task12/tests/test_validator_bundle.py"
+    "tools/havenline/task12/tests/test_validator_bundle.py",
+    "Docs/Production/T12/AUTHORING_BLUEPRINT.json",
+    "Docs/Production/T12/BINDING_SLOT_CATALOG.json",
+    "Docs/Production/T12/FACT_SLOT_BINDING_INDEX_TEMPLATE.json",
+    "Docs/Production/T12/FULL_ENGINE_VECTOR_CORPUS.json",
+    "tools/havenline/task12/materialize_progression_data.py",
+    "tools/havenline/task12/validate_authoring_blueprint.py",
+    "tools/havenline/task12/validate_fact_slot_binding_index.py",
+    "tools/havenline/task12/tests/test_authoring_blueprint.py",
+    "tools/havenline/task12/tests/test_materialize_progression_data.py",
+    "tools/havenline/task12/tests/test_full_engine_vector_corpus.py",
+    "tools/havenline/task12/tests/test_fact_slot_binding_index.py",
+    "Docs/Production/T12/REFERENCE_RUNTIME_SEMANTICS.json",
+    "tools/havenline/task12/reference_progression_engine.py",
+    "tools/havenline/task12/validate_reference_runtime_semantics.py",
+    "tools/havenline/task12/tests/test_reference_progression_engine.py",
+    "tools/havenline/task12/tests/test_reference_runtime_semantics.py"
   ],
   "required_critics": [
     "C2",
@@ -117,10 +134,15 @@
     "Create Docs/Production/T12/BINDING_RESOLUTION.json from BINDING_RESOLUTION_TEMPLATE.json, populate exact accepted T10/T11 integrated sources and repository-backed public-ID pointer evidence, set status RESOLVED_FOR_ACTIVATION and promotion_allowed true only when complete.",
     "Set BASE=<exact current integration head> in a full-history checkout, then run python tools/havenline/task12/verify_binding_resolution.py --resolution Docs/Production/T12/BINDING_RESOLUTION.json --require-resolved --activation-head <BASE> and require PASS, including accepted-source ancestry and byte-identical upstream JSON proof.",
     "Run python tools/havenline/task12/validate_level_matrix.py and require PASS; LEVEL_1_100_MATRIX.json remains preparation input and is never copied directly into shipping data.",
+    "Run python tools/havenline/task12/reference_progression_oracle.py --input Docs/Production/T12/FULL_ENGINE_VECTOR_CORPUS.json and require PASS for all 398 full-chain vectors.",
+    "Run python tools/havenline/task12/materialize_progression_data.py in dry-run mode and require PASS; no shipping files may be written before the T12 workstream is claimed on the activation base.",
+    "Run python tools/havenline/task12/validate_fact_slot_binding_index.py and require PASS; Levels 2-100 must have exactly 99 unresolved typed fact-slot bindings and T11 public IDs must remain empty until approval.",
+    "Run python tools/havenline/task12/validate_authoring_blueprint.py and require PASS; it must prove the 100-level authoring blueprint/fact-slot catalog deterministically expand the frozen matrix and materialize into shipping-shaped data that passes the real validator.",
+    "Run python tools/havenline/task12/validate_reference_runtime_semantics.py and require PASS; out-of-order authoritative facts must be retained without prerequisite skipping, deterministic settlement must be ascending/fixed-point, and snapshot/restore must preserve fact-slot causality without duplicate events.",
     "Run python tools/havenline/task12/validate_runtime_interface.py and require PASS so T12-owned API/authority boundaries remain frozen.",
     "Run python tools/havenline/task12/validate_traceability.py and require PASS so every T12-R01..R16 requirement retains tests/evidence/critic coverage.",
     "Run python tools/havenline/task12/validate_downstream_contract.py and require PASS so T13/T14/T32/T44-T52/T62 consumer boundaries remain frozen.",
-    "Run python tools/havenline/task12/validate_data_schema.py and require PASS so future shipping progression/milestone structure and authority boundaries remain frozen.",
+    "Run python tools/havenline/task12/validate_data_schema.py and require PASS so future shipping level/milestone/binding structure and authority boundaries remain frozen.",
     "Run python tools/havenline/task12/reference_progression_oracle.py and require PASS so future Godot behavior must match the prepared pure/idempotent engine vectors.",
     "Run python tools/havenline/task12/validate_candidate_evidence.py and require template PASS; the resolved packet is a future candidate-review gate, not an activation prerequisite.",
     "Run python tools/havenline/task12/validate_critic_review_records.py and require template PASS; resolved critic records are a future review/final-disposition gate, not an activation prerequisite.",
@@ -140,8 +162,8 @@
     "Require completed critic records derived from CRITIC_REVIEW_RECORD_TEMPLATE.json to pass validate_critic_review_records.py --require-resolved. Every one of the 29 mandatory T12-specific dimensions must be individually >9.0 with evidence and no unresolved defect; no average can waive a failing dimension. C2/C3/C4/C7 require independent reviewer-runtime provenance; C6 remains quantitative specialist.",
     "Populate the candidate evidence packet with real evidence and require validate_candidate_evidence.py --require-resolved PASS before final candidate disposition.",
     "Build EVIDENCE_INDEX_TEMPLATE.json into a resolved EVIDENCE_INDEX_COMPLETE manifest containing every evidence URI referenced by the candidate packet and critic records exactly once, with exact SHA-256, exact candidate source, producer identity and content_verified=true; require validate_evidence_index.py --require-resolved PASS.",
-    "Run final_candidate_gate.py from the exact candidate checkout with the resolved candidate evidence packet, critic records, exact engine-parity output, complete evidence digest index, resolved binding record and the actual split shipping level/milestone files. Require PASS; the gate must revalidate shipping data, accepted binding ancestry/blob identity, checked-out candidate identity, the live canonical workstream.py candidate guard, evidence completeness/digests, shipping hashes, T10/T11 sources, critic minima/provenance and parity identity.",
-    "Run python tools/havenline/task12/validate_progression_contract.py --levels HavenlineGodot/data/progression_levels_v1.json --milestones HavenlineGodot/data/progression_milestones_v1.json against every shipping-data revision before runtime use and candidate review."
+    "Run final_candidate_gate.py from the exact candidate checkout with the resolved candidate evidence packet, critic records, exact engine-parity output, complete evidence digest index, resolved T10/T11 binding record and the actual shipping levels/milestones/bindings files. Require PASS; the gate must revalidate all three shipping datasets, accepted binding ancestry/blob identity, checked-out candidate identity, the live canonical workstream.py candidate guard, evidence completeness/digests, shipping hashes, T10/T11 sources, critic minima/provenance and parity identity.",
+    "Validate every shipping-data revision with both validators: python tools/havenline/task12/validate_progression_contract.py --levels HavenlineGodot/data/progression_levels_v1.json --milestones HavenlineGodot/data/progression_milestones_v1.json and python tools/havenline/task12/validate_fact_slot_binding_index.py --input HavenlineGodot/data/progression_bindings_v1.json --shipping."
   ],
   "claim_template": "python3 tools/havenline/production/workstream.py claim T12 --owner progression-architecture-builder --branch havenline/T12-progression-architecture --base <POST_T11_INTEGRATION_SHA> --owned-alias @reservation:T12 --status ASSIGNED",
   "runtime_build_allowed_before_activation": false,
@@ -153,6 +175,8 @@
     "Parallel production is allowed only with disjoint path ownership; integration remains serial and integration-owner controlled.",
     "The non-shipping cadence blueprint, concrete 100-level matrix, runtime interface contract, downstream consumer contract, progression-data schema, engine parity vectors/oracle/comparator, candidate-evidence template/validator/initializer, per-dimension critic record template/validator, complete evidence digest index, cross-file final candidate gate, exact-binding template, acceptance traceability, fuzz/performance hardening and validators/tests are preparation accelerators, not evidence that T12 production implementation has started.",
     "PREBUILD_PERFORMANCE_BUDGET.json governs preparation tooling only; final C6 remains mandatory against the activated shipping candidate/integrated artifact.",
-    "After activation, the T12 shipping builder may not modify Docs/Production/T12/**, tools/havenline/task12/**, or T12 preparation workflows. Those preparation/acceptance surfaces are frozen before T11 closeout; any required change reopens pre-activation repair instead of being made by the shipping candidate."
+    "After activation, the T12 shipping builder may not modify Docs/Production/T12/**, tools/havenline/task12/**, or T12 preparation workflows. Those preparation/acceptance surfaces are frozen before T11 closeout; any required change reopens pre-activation repair instead of being made by the shipping candidate.",
+    "Preativation buildout may include deterministic authoring blueprints, fact-slot contracts, dry-run materialization and exhaustive reference vectors, but must never write the seven shipping/runtime-test files before T12 is activated and claimed.",
+    "The non-shipping reference progression engine freezes state-transition behavior for out-of-order facts, deterministic cascades, duplicate no-ops and snapshot/restore; it is an oracle for the future Godot runtime, not shipping gameplay code."
   ]
 }

@@ -42,7 +42,7 @@ def make_valid_manifest():
             "level_id": level_id,
             "region_band_id": band_id,
             "prerequisite_level_ids": [] if level == 1 else [f"t12.level.{level - 1:03d}"],
-            "required_fact_ids": [f"t12.fact.level_{level:03d}"],
+            "required_fact_ids": [] if level == 1 else [f"t12.fact.slot.{level:03d}"],
             "progression_effects": [{
                 "kind": "practical_hook",
                 "effect_id": f"t12.effect.level_{level:03d}",
@@ -139,6 +139,27 @@ class ProgressionContractTests(unittest.TestCase):
         result = validate_manifest(manifest)
         self.assertFalse(result["passed"])
         self.assertTrue(any("level_id must be canonical" in error for error in result["errors"]))
+
+    def test_level_one_fact_gate_fails(self):
+        manifest = make_valid_manifest()
+        manifest["levels"][0]["required_fact_ids"] = ["t12.fact.slot.001"]
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("level 1" in error and "intrinsic" in error for error in result["errors"]))
+
+    def test_wrong_fact_slot_fails(self):
+        manifest = make_valid_manifest()
+        manifest["levels"][11]["required_fact_ids"] = ["t12.fact.slot.013"]
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("level 12" in error and "t12.fact.slot.012" in error for error in result["errors"]))
+
+    def test_external_producer_id_cannot_replace_fact_slot(self):
+        manifest = make_valid_manifest()
+        manifest["levels"][2]["required_fact_ids"] = ["framework_anchor_seed_to_foundation"]
+        result = validate_manifest(manifest)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("contain no external producer IDs" in error for error in result["errors"]))
 
     def test_missing_required_fact_field_fails(self):
         manifest = make_valid_manifest()

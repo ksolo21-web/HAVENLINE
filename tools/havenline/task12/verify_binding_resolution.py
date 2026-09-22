@@ -25,6 +25,20 @@ EXPECTED_COMPLETION_PATHS = {
     "T10": "Docs/Production/T10/verified-completion.json",
     "T11": "Docs/Production/T11/verified-completion.json",
 }
+ALLOWED_ID_KINDS = {
+    "T10": {"transform_state", "transform_recipe"},
+    "T11": {"camp_state", "camp_recipe_binding"},
+}
+FACT_KIND_COMPATIBILITY = {
+    "world_transform_completed": {
+        "source_task": "T10",
+        "accepted_id_kinds": {"transform_state", "transform_recipe"},
+    },
+    "camp_state_completed": {
+        "source_task": "T11",
+        "accepted_id_kinds": {"camp_state", "camp_recipe_binding"},
+    },
+}
 ALLOWED_SOURCE_PREFIXES = {
     "T10": (
         "HavenlineGodot/data/world_transform_recipes.json",
@@ -121,6 +135,39 @@ def validate_resolution(
         errors.append("schema_version must be 1")
     if resolution.get("task_id") != "T12":
         errors.append("task_id must be T12")
+    allowed_kinds = resolution.get("allowed_id_kinds_by_task")
+    expected_allowed_kinds = {
+        task: sorted(ALLOWED_ID_KINDS[task])
+        for task in EXPECTED_TASKS
+    }
+    normalized_allowed_kinds = {
+        task: sorted(value) if isinstance(value, list) else value
+        for task, value in (allowed_kinds.items() if isinstance(allowed_kinds, dict) else [])
+    }
+    if normalized_allowed_kinds != expected_allowed_kinds:
+        errors.append("allowed_id_kinds_by_task drifted from frozen T10/T11 ID-kind contract")
+
+    compatibility = resolution.get("fact_kind_compatibility")
+    expected_compatibility = {
+        fact_kind: {
+            "source_task": row["source_task"],
+            "accepted_id_kinds": sorted(row["accepted_id_kinds"]),
+        }
+        for fact_kind, row in FACT_KIND_COMPATIBILITY.items()
+    }
+    normalized_compatibility = {}
+    if isinstance(compatibility, dict):
+        for fact_kind, row in compatibility.items():
+            if isinstance(row, dict):
+                normalized_compatibility[fact_kind] = {
+                    "source_task": row.get("source_task"),
+                    "accepted_id_kinds": sorted(row.get("accepted_id_kinds", []))
+                    if isinstance(row.get("accepted_id_kinds"), list)
+                    else row.get("accepted_id_kinds"),
+                }
+    if normalized_compatibility != expected_compatibility:
+        errors.append("fact_kind_compatibility drifted from frozen T10/T11 semantic binding contract")
+
     dependencies = resolution.get("dependencies")
     if not isinstance(dependencies, dict):
         return {"passed": False, "verified_ids": 0, "errors": ["dependencies must be an object"]}
@@ -221,6 +268,11 @@ def validate_resolution(
                 globally_seen_ids[public_id] = task
             if not isinstance(kind, str) or not kind.strip():
                 errors.append(f"{prefix}.kind must be non-empty")
+            elif kind not in ALLOWED_ID_KINDS[task]:
+                errors.append(
+                    f"{prefix}.kind {kind!r} is not allowed for {task}; "
+                    f"allowed={sorted(ALLOWED_ID_KINDS[task])}"
+                )
             if not isinstance(source_path, str) or not source_path:
                 errors.append(f"{prefix}.source_path must be non-empty")
                 continue

@@ -4,11 +4,55 @@
   "status": "PREPARATION_ONLY_INTERFACE_CONTRACT",
   "purpose": "Freeze T12-owned stable identities, authority boundaries and runtime responsibilities that do not depend on unresolved or activation-unverified T10/T11 concrete IDs.",
   "stable_id_namespaces": {
-    "level": {"pattern": "t12.level.NNN", "range": "001..100", "example": "t12.level.001"},
-    "progression_slot": {"pattern": "t12.slot.NNN", "range": "001..100", "example": "t12.slot.001"},
-    "level_completion_event": {"pattern": "t12.event.level.NNN.completed", "range": "001..100", "example": "t12.event.level.001.completed"},
-    "major_milestone": {"pattern": "t12.milestone.NNN", "levels": [10,20,30,40,50,60,70,80,90,100], "example": "t12.milestone.010"},
-    "region_band": ["band_opening_frozen","band_forest","band_desert","band_underwater","band_sky","band_volcanic","band_swamp","band_ruins","band_underground","band_alien"]
+    "level": {
+      "pattern": "t12.level.NNN",
+      "range": "001..100",
+      "example": "t12.level.001"
+    },
+    "progression_slot": {
+      "pattern": "t12.slot.NNN",
+      "range": "001..100",
+      "example": "t12.slot.001"
+    },
+    "level_completion_event": {
+      "pattern": "t12.event.level.NNN.completed",
+      "range": "001..100",
+      "example": "t12.event.level.001.completed"
+    },
+    "major_milestone": {
+      "pattern": "t12.milestone.NNN",
+      "levels": [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90,
+        100
+      ],
+      "example": "t12.milestone.010"
+    },
+    "region_band": [
+      "band_opening_frozen",
+      "band_forest",
+      "band_desert",
+      "band_underwater",
+      "band_sky",
+      "band_volcanic",
+      "band_swamp",
+      "band_ruins",
+      "band_underground",
+      "band_alien"
+    ],
+    "fact_slot": {
+      "pattern": "t12.fact.slot.NNN",
+      "range": "001..100",
+      "example": "t12.fact.slot.002",
+      "rule": "Level 1 is intrinsically ready and does not require its fact slot; Levels 2-100 each reference exactly the matching fact-slot identity."
+    }
   },
   "authority_model": {
     "T12_owns": [
@@ -17,7 +61,8 @@
       "level-completion and milestone event identity",
       "pure eligibility/progression evaluation",
       "idempotent publication of progression intents/events",
-      "component-local deterministic reconstruction data for later T14 integration"
+      "component-local deterministic reconstruction data for later T14 integration",
+      "fact-slot identity and binding requirements that map external authoritative facts into progression eligibility"
     ],
     "T12_reads_but_never_mutates": [
       "T07 contextual action completion facts",
@@ -40,45 +85,92 @@
   "runtime_api": {
     "load_contract": {
       "kind": "initialization",
-      "inputs": ["level_records","milestone_records","resolved_binding_index"],
+      "inputs": [
+        "level_records",
+        "milestone_records",
+        "resolved_binding_index"
+      ],
       "result": "validation_report",
-      "requirements": ["fail closed on malformed IDs/topology/bindings","no gameplay mutation","deterministic ordering"]
+      "requirements": [
+        "load progression_bindings_v1.json as the canonical resolved_binding_index",
+        "fail closed on malformed IDs/topology/binding rows",
+        "allow explicitly deferred later-content bindings while keeping affected levels locked",
+        "external producer IDs never appear directly in progression level records",
+        "no gameplay mutation",
+        "deterministic ordering"
+      ]
     },
     "get_level_state": {
       "kind": "pure_query",
-      "inputs": ["level_id","authoritative_fact_view"],
+      "inputs": [
+        "level_id",
+        "authoritative_fact_view"
+      ],
       "result": "locked|ready|complete plus missing prerequisite/binding IDs",
-      "requirements": ["read-only","spend-blind","deterministic"]
+      "requirements": [
+        "read-only",
+        "spend-blind",
+        "deterministic"
+      ]
     },
     "get_unlockable_levels": {
       "kind": "pure_query",
-      "inputs": ["authoritative_fact_view"],
+      "inputs": [
+        "authoritative_fact_view"
+      ],
       "result": "stable ordered level IDs",
-      "requirements": ["read-only","bounded","no full-world rebuild"]
+      "requirements": [
+        "read-only",
+        "bounded",
+        "no full-world rebuild"
+      ]
     },
     "observe_authoritative_fact": {
       "kind": "state_transition",
-      "inputs": ["fact_kind","source_id","idempotency_key"],
-      "result": "zero or more T12 progression intents",
-      "requirements": ["accept only resolved/registered fact bindings","duplicate fact key is no-op","never call upstream mutators"]
+      "inputs": [
+        "source_task",
+        "fact_kind",
+        "source_id",
+        "idempotency_key"
+      ],
+      "result": "zero or more ordered T12 progression intents after retaining newly satisfied fact slots and settling newly completable levels",
+      "requirements": [
+        "accept only RESOLVED binding rows matching source_task + fact_kind + source_id",
+        "map accepted facts into one or more stable T12 fact slots through the binding index",
+        "retain satisfied fact slots even when prerequisites are not yet complete; never skip prerequisites",
+        "combine binding idempotency_domain with producer idempotency_key; duplicate domain/key is no-op",
+        "settle newly completable levels in ascending deterministic order",
+        "never call upstream mutators"
+      ]
     },
     "snapshot_component_state": {
       "kind": "recovery_boundary",
       "inputs": [],
       "result": "T12-local deterministic state only",
-      "requirements": ["stable IDs only","does not define global save/version schema"]
+      "requirements": [
+        "stable IDs only",
+        "does not define global save/version schema"
+      ]
     },
     "restore_component_state": {
       "kind": "recovery_boundary",
-      "inputs": ["T12-local snapshot"],
+      "inputs": [
+        "T12-local snapshot"
+      ],
       "result": "validation/reconstruction report",
-      "requirements": ["reject impossible/unknown/duplicate state","no duplicate completion event","no upstream grants/commits"]
+      "requirements": [
+        "reject impossible/unknown/duplicate state",
+        "no duplicate completion event",
+        "no upstream grants/commits"
+      ]
     },
     "get_metrics": {
       "kind": "diagnostic_query",
       "inputs": [],
       "result": "bounded evaluation/event/replay counters",
-      "requirements": ["no telemetry or purchase signal affects progression eligibility"]
+      "requirements": [
+        "no telemetry or purchase signal affects progression eligibility"
+      ]
     }
   },
   "authoritative_fact_kinds": [
@@ -92,20 +184,126 @@
     "mastery_condition_completed"
   ],
   "progression_intent_contract": {
-    "required_fields": ["intent_id","level_id","completion_event_id","unlocked_level_ids","milestone_ids","source_fact_keys"],
-    "intent_id_rule": "deterministic from completed level/event identity; replay produces the same identity and no second publication",
-    "may_request": ["presentation of level completion","presentation of milestone completion","downstream content hook notification"],
-    "may_not_do": ["grant/debit inventory","commit T10 transform","spawn/upgrade T11 camp","change T13 difficulty","write global save schema"]
+    "required_fields": [
+      "intent_id",
+      "level_id",
+      "completion_event_id",
+      "unlocked_level_ids",
+      "milestone_ids",
+      "source_fact_keys"
+    ],
+    "intent_id_rule": "exact t12.intent.level.NNN.completed derived only from the completed level identity; replay produces the same identity and no second publication",
+    "may_request": [
+      "presentation of level completion",
+      "presentation of milestone completion",
+      "downstream content hook notification"
+    ],
+    "may_not_do": [
+      "grant/debit inventory",
+      "commit T10 transform",
+      "spawn/upgrade T11 camp",
+      "change T13 difficulty",
+      "write global save schema"
+    ],
+    "field_semantics": {
+      "intent_id": "exact deterministic t12.intent.level.NNN.completed identity for the completed level; replay never republishes it",
+      "level_id": "the T12 level completed by this transition",
+      "completion_event_id": "the canonical t12.event.level.NNN.completed identity recorded before the intent is returned",
+      "unlocked_level_ids": "direct dependent level IDs whose prerequisite sets became complete because of this completion; these levels may still remain fact-locked and are not implicitly complete",
+      "milestone_ids": "milestones attached to the completed level and recorded exactly once before the intent is returned",
+      "source_fact_keys": "domain-scoped consumed authoritative fact keys that satisfied the completed level's required T12 fact slots; empty for the intrinsic Level 1 baseline"
+    }
   },
   "component_state_contract": {
-    "allowed_fields": ["completed_level_ids","consumed_fact_keys","emitted_completion_event_ids","emitted_milestone_ids"],
-    "forbidden_fields": ["purchase_history","vip_status","premium_spend","energy","inventory_counts","T10 transaction internals","T11 asset instances","T13 difficulty state"],
-    "reconstruction_rule": "Restoring the same accepted T12-local snapshot against the same resolved bindings produces the same completed/unlocked state without re-emitting already-recorded completion or milestone events."
+    "allowed_fields": [
+      "completed_level_ids",
+      "satisfied_fact_slot_ids",
+      "fact_slot_source_keys",
+      "consumed_fact_keys",
+      "emitted_completion_event_ids",
+      "emitted_milestone_ids"
+    ],
+    "forbidden_fields": [
+      "purchase_history",
+      "vip_status",
+      "premium_spend",
+      "energy",
+      "inventory_counts",
+      "T10 transaction internals",
+      "T11 asset instances",
+      "T13 difficulty state"
+    ],
+    "reconstruction_rule": "Restoring the same accepted T12-local snapshot against the same resolved bindings produces the same completed/unlocked state while preserving satisfied fact slots, fact-slot source-key causality, consumed fact keys and emitted IDs, without re-emitting already-recorded completion or milestone events; deterministic settlement may finish an interrupted ready transition."
   },
   "performance_contract": {
     "evaluation": "event-driven or explicit query; no per-frame traversal of all 100 levels when nothing changed",
-    "indexes": ["level_id lookup","prerequisite reverse index","binding-to-level reverse index","completion-event uniqueness index"],
-    "required_measurements_after_activation": ["cold load/validation time","single fact evaluation time","100-level unlock query time","duplicate fact replay time","retained object/event growth","unchanged-frame CPU delta"]
+    "indexes": [
+      "level_id lookup",
+      "prerequisite reverse index",
+      "binding-to-level reverse index",
+      "completion-event uniqueness index"
+    ],
+    "required_measurements_after_activation": [
+      "cold load/validation time",
+      "single fact evaluation time",
+      "100-level unlock query time",
+      "duplicate fact replay time",
+      "retained object/event growth",
+      "unchanged-frame CPU delta"
+    ]
   },
-  "activation_rule": "This contract may be implemented only after T12 activation. Exact T10/T11 source IDs remain supplied by the separately verified BINDING_RESOLUTION.json and are not frozen here."
+  "activation_rule": "T12 may implement the frozen fact-slot architecture only after activation. Exact T10/T11 source IDs remain external to progression data and must be supplied through separately verified BINDING_RESOLUTION.json and the trusted runtime binding index.",
+  "fact_slot_binding_contract": {
+    "slot_id_pattern": "t12.fact.slot.NNN",
+    "shipping_level_rule": "Level 1 required_fact_ids is empty; Levels 2-100 each contain exactly the matching t12.fact.slot.NNN and no external producer ID.",
+    "binding_index_entry_required_fields": [
+      "slot_id",
+      "fact_kind",
+      "source_task",
+      "source_id",
+      "resolution_state",
+      "evidence_ref",
+      "idempotency_domain"
+    ],
+    "resolution_states": [
+      "RESOLVED",
+      "DEFERRED_LATER_OWNER"
+    ],
+    "resolved_rule": "RESOLVED entries identify an accepted authoritative producer fact and may satisfy the slot when observed.",
+    "deferred_rule": "DEFERRED_LATER_OWNER is allowed only for content owned by later tasks; the stable slot remains valid but the level stays locked until an integration-owned registration resolves it.",
+    "t10_t11_rule": "Any T10/T11 source_id used by the binding index must come from the exact activation-time BINDING_RESOLUTION.json proof.",
+    "authority_rule": "T12 owns slot identity and eligibility interpretation, never the upstream fact itself.",
+    "presentation_requirement_rule": "visible_progression_required and major_milestone_completed are T12 architecture/presentation requirements only; they can never be registered as authoritative fact sources or satisfy t12.fact.slot.NNN.",
+    "idempotency_rule": "Every RESOLVED binding has a non-empty idempotency_domain; observe_authoritative_fact combines that domain with the authoritative producer key so duplicates are deterministic no-ops.",
+    "evidence_rule": "Every RESOLVED binding carries an evidence_ref proving the trusted producer authority/source. DEFERRED_LATER_OWNER rows carry later-owner provenance but no fake source_id.",
+    "shipping_dataset_path": "HavenlineGodot/data/progression_bindings_v1.json",
+    "shipping_dataset_top_level_fields": [
+      "schema_version",
+      "task_id",
+      "bindings"
+    ],
+    "shipping_dataset_exact_binding_count": 99,
+    "opening_activation_required_levels": [
+      3,
+      4,
+      6,
+      9,
+      10
+    ],
+    "opening_activation_required_upstream_coverage": [
+      "T10",
+      "T11"
+    ],
+    "opening_activation_deferred_forbidden": true,
+    "opening_activation_rule": "Levels 3,4,6,9,10 are activation-critical opening slots and must be RESOLVED when T12 materializes shipping data; across those rows the binding set must consume at least one accepted T10 fact and at least one accepted T11 fact."
+  },
+  "transition_semantics": {
+    "fresh_initialization": "Level 1 has no prerequisites/fact gate, so deterministic settlement completes the baseline Level 1 once and emits its canonical completion intent/event exactly once.",
+    "authoritative_observation": "A valid RESOLVED producer fact first records its domain-scoped idempotency key and matching satisfied_fact_slot_ids, then runs deterministic ascending settlement.",
+    "out_of_order_fact": "A valid fact whose level prerequisite is not yet complete is retained as a satisfied fact slot. The level remains locked and can never skip prerequisites; after its prerequisite later completes, settlement may complete the retained-ready level without requiring the producer to replay the fact.",
+    "invalid_or_deferred_fact": "Unknown, ambiguous, mismatched, or DEFERRED_LATER_OWNER producer facts fail closed and do not mutate T12 state.",
+    "settlement": "Repeatedly scan levels in numeric ascending order until no new completion occurs. A level completes only when every prerequisite_level_id is complete and every ID in required_fact_ids is a satisfied T12 fact slot.",
+    "intent_order": "Completion intents are emitted in ascending level order. Completion and milestone IDs are recorded before returning intents so replay/restore cannot double-emit them.",
+    "restore": "Restore validates all stable IDs. It never re-emits already-recorded completion or milestone IDs; an interrupted snapshot with satisfied slots but incomplete now-ready levels may be deterministically settled."
+  }
 }

@@ -22,6 +22,17 @@ Implement a deterministic Level 1–100 progression architecture that gives ever
 
 T12 is architecture, not the later content itself. It must expose stable level/milestone/event/region-band identities and eligibility results without implementing T13 adaptive difficulty, T14 persistence, T33+ economy/monetization or T44–T52 region content.
 
+### Preactivation buildout now frozen
+
+The preparation package goes beyond a structural matrix without creating shipping runtime:
+
+- `AUTHORING_BLUEPRINT.json` deterministically expands all 100 levels into stable level/slot/fact-slot/effect/hook/milestone/event identities.
+- `BINDING_SLOT_CATALOG.json` freezes the allowed authoritative fact kinds for every fact slot and records approved T07/T08/T10 contract hints while keeping T11 IDs empty.
+- `FACT_SLOT_BINDING_INDEX_TEMPLATE.json` predeclares all 99 Level 2–100 binding rows; exact producer IDs remain unresolved until trusted accepted producers exist.
+- `FULL_ENGINE_VECTOR_CORPUS.json` carries 398 deterministic readiness/lock/replay vectors across Levels 1–100.
+- `REFERENCE_RUNTIME_SEMANTICS.json` + `reference_progression_engine.py` freeze executable state-transition behavior for out-of-order facts, deterministic cascades, duplicate no-ops, milestone exactly-once publication and snapshot/restore.
+- `materialize_progression_data.py` can generate both shipping-shaped JSON documents in memory now and run the real shipping validator. Repository writes remain fail-closed until T12 is activated, claimed with `@reservation:T12`, and exact binding proof passes.
+
 ## Required source contract
 
 ### `progression_architecture.gd`
@@ -54,6 +65,29 @@ Exactly one shipping record must exist for every integer Level 1–100. Each rec
 - `one_time_event_ids`
 
 Validation rejects wrong schema/task identity, missing/duplicate levels, noncanonical level/completion/milestone IDs, wrong region bands, missing or forward prerequisite targets, unresolved required facts, cycles/unreachable records, duplicate/filler progression effects, unresolved milestone references and monetization/spend/energy-gated eligibility.
+
+### Fact-slot binding layer
+
+Shipping level topology never embeds external producer IDs directly.
+
+- Level 1: `required_fact_ids = []` so the progression can begin intrinsically.
+- Levels 2–100: exactly one matching T12-owned slot, `t12.fact.slot.NNN`.
+- A separate binding index maps the stable T12 slot to an authoritative `fact_kind + source_task + source_id`.
+- T10/T11 source IDs behind slots require exact activation-time binding proof.
+- Later T32/T44–T52 content may remain `DEFERRED_LATER_OWNER`; the slot identity remains stable and its level stays locked until a trusted registration exists.
+- T12 owns slot identity/eligibility interpretation only, never the upstream gameplay fact.
+
+### `progression_bindings_v1.json`
+
+Canonical runtime binding data for the 99 fact-gated levels:
+
+- exactly one binding row for each `t12.fact.slot.002` through `t12.fact.slot.100`;
+- each row declares `slot_id`, `fact_kind`, `source_task`, `source_id`, `resolution_state`, `evidence_ref`, and `idempotency_domain`;
+- `RESOLVED` rows point only to accepted authoritative producer facts;
+- `DEFERRED_LATER_OWNER` rows may remain unresolved only where the frozen slot contract permits a later content owner and must keep the level locked;
+- exact T10/T11 source IDs require activation-time binding proof;
+- no purchase/VIP/spend/energy signal may appear as a producer fact;
+- T12 owns slot identity/mapping semantics, never the upstream gameplay authority.
 
 ### `progression_milestones_v1.json`
 
@@ -95,7 +129,7 @@ T12 may reserve hooks owned by later tasks but may not claim those later assets/
 
 ### Integration tests after T11 approval
 
-- exact accepted T10/T11 public IDs/interfaces reconcile with prepared T12 bindings;
+- exact accepted T10/T11 public IDs/interfaces reconcile with prepared T12 bindings and canonical progression_bindings_v1.json rows;
 - T12 never writes T10/T11 transaction/content state directly;
 - progression-driven transform/camp hooks remain exact-once through their upstream authorities;
 - approved T01–T11 regression remains clean;
@@ -150,6 +184,10 @@ Allowed now:
 - maintain static graph/cadence/spend-blind validation rules;
 - bind accepted T07/T08/T10 contracts and keep T11 public-contract assumptions explicitly provisional;
 - prepare validation and candidate CI scaffolding;
+- deterministically preauthor all 100 T12 level/slot/fact-slot/effect/hook/milestone/event identities in non-shipping blueprints;
+- maintain the 99-slot binding-index template without inventing unfinished producer IDs;
+- dry-run the activation-gated shipping data materializer in memory;
+- execute the exhaustive 398-vector full Level 1–100 reference corpus;
 - test that activation fails closed while T11 is unfinished;
 - maintain an activation tool that refuses activation until all dependencies are approved/integrated;
 - static collision/review against T07/T08/T10/T11/T13 and integration-only paths.
@@ -157,12 +195,12 @@ Allowed now:
 Not allowed now:
 
 - claim T12 shipping implementation as `ASSIGNED` or `BUILDING_ISOLATED`;
-- create/modify shipping T12 progression runtime/data and present it as an integration candidate;
+- create/modify shipping T12 progression runtime/data or invoke materializer write mode before T12 is activated/claimed;
 - edit active T11 runtime/content;
 - implement T13/T14/T33+/T44–T52 scope early.
 
 ## Activation handoff
 
-When T11 is integrated and marked APPROVED, run the T12 activation preflight against the exact new integration head. It must fail on stale base, unapproved dependency, stale T10/T11 owner, conflicting path reservation, missing T10/T11 completion record or prepared-interface drift. Reconcile the prepared T12 assumptions against the exact accepted T10/T11 contracts. After a clean preflight, apply `@reservation:T12`, claim T12 as `ASSIGNED`, cut `havenline/T12-progression-architecture` from the exact post-T11 governance checkpoint, run registry/candidate guards, then begin the builder/critic loop.
+When T11 is integrated and marked APPROVED, run the T12 activation preflight against the exact new integration head. It must fail on stale base, unapproved dependency, stale T10/T11 owner, conflicting path reservation, missing T10/T11 completion record or prepared-interface drift. Reconcile exact accepted T10/T11 source IDs, populate the resolved binding evidence and binding-index rows, then rerun the authoring/slot/materializer dry-run gates. After a clean preflight, apply `@reservation:T12`, claim T12 as `ASSIGNED`, cut `havenline/T12-progression-architecture` from the exact post-T11 governance checkpoint, run registry/candidate guards, and only then allow `materialize_progression_data.py --write-shipping` to seed the three shipping data files before the runtime builder/critic loop.
 
 See `ACTIVATION_CHECKLIST.json`, `PREBUILD_CONTRACT.json`, `FROZEN_SCOPE.md`, `defect-ledger.json`, and `tools/havenline/task12/prepare_activation.py`.

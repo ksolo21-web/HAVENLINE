@@ -12,7 +12,10 @@
     "t10_prepared_scope": "Docs/Production/T10/FROZEN_SCOPE.md",
     "t11_prepared_scope": "Docs/Production/T11/FROZEN_SCOPE.md",
     "t11_prepared_checkpoint": "b383e450594d60b172d43ed2d60bda535ca9f225",
-    "t12_frozen_scope": "Docs/Production/T12/FROZEN_SCOPE.md"
+    "t12_frozen_scope": "Docs/Production/T12/FROZEN_SCOPE.md",
+    "t12_authoring_blueprint": "Docs/Production/T12/AUTHORING_BLUEPRINT.json",
+    "t12_binding_slot_catalog": "Docs/Production/T12/BINDING_SLOT_CATALOG.json",
+    "t12_fact_slot_binding_index_template": "Docs/Production/T12/FACT_SLOT_BINDING_INDEX_TEMPLATE.json"
   },
   "dependency_gate": {
     "required_approved": [
@@ -59,7 +62,7 @@
       "exactly one shipping record exists for each level 1..100",
       "region_band_id matches the frozen ten-level connected-world band",
       "every prerequisite target exists and points only to an earlier level",
-      "required_fact_ids are stable accepted/activation-verified facts; preparation-only or provisional IDs cannot ship",
+      "Level 1 required_fact_ids is empty; Levels 2-100 contain exactly the matching T12-owned t12.fact.slot.NNN. External producer IDs resolve only through the binding index.",
       "prerequisite topology is acyclic and reachable from Level 1",
       "every level declares at least one practical progression effect or unlock and exact effect payloads cannot be reused as filler",
       "purchase/VIP/premium-spend/energy signals are not valid eligibility inputs",
@@ -216,7 +219,13 @@
     "major-milestone cadence report",
     "spend-blind input audit",
     "stable-ID uniqueness report",
-    "upstream-binding ownership audit"
+    "upstream-binding ownership audit",
+    "authoring blueprint/fact-slot conformance report",
+    "99-slot binding-index template report",
+    "398-vector full Level 1-100 oracle report",
+    "materializer dry-run shipping-validator report",
+    "reference runtime semantics conformance report",
+    "out-of-order fact retention/cascade/idempotency reference-engine test report"
   ],
   "critic_contract": {
     "required": [
@@ -239,6 +248,71 @@
     "T14 global save/versioning",
     "T33+ economy or monetization",
     "T44-T52 authored region content",
-    "shared main/simulation integration wiring"
-  ]
+    "shared main/simulation integration wiring",
+    "shipping writes from materialize_progression_data.py",
+    "external producer IDs embedded directly in progression_levels_v1.json",
+    "shipping progression_bindings_v1.json"
+  ],
+  "fact_slot_contract": {
+    "namespace": "t12.fact.slot.NNN",
+    "level_1_required_fact_ids": [],
+    "levels_2_100_rule": "exactly one matching fact slot per level",
+    "external_source_ids_in_level_records_forbidden": true,
+    "resolved_binding_fields": [
+      "slot_id",
+      "fact_kind",
+      "source_task",
+      "source_id",
+      "resolution_state",
+      "evidence_ref",
+      "idempotency_domain"
+    ],
+    "resolution_states": [
+      "RESOLVED",
+      "DEFERRED_LATER_OWNER"
+    ],
+    "t10_t11_exact_binding_proof_required": true,
+    "presentation_requirements_never_resolve_fact_slots": true,
+    "shipping_dataset_path": "HavenlineGodot/data/progression_bindings_v1.json",
+    "exact_shipping_binding_count": 99,
+    "shipping_top_level_fields": [
+      "schema_version",
+      "task_id",
+      "bindings"
+    ],
+    "opening_activation_required_levels": [
+      3,
+      4,
+      6,
+      9,
+      10
+    ],
+    "opening_activation_required_upstream_coverage": [
+      "T10",
+      "T11"
+    ],
+    "opening_activation_deferred_forbidden": true,
+    "opening_activation_rule": "Levels 3,4,6,9,10 are activation-critical opening slots and must be RESOLVED when T12 materializes shipping data; across those rows the binding set must consume at least one accepted T10 fact and at least one accepted T11 fact."
+  },
+  "preactivation_buildout": {
+    "authoring_blueprint": "Docs/Production/T12/AUTHORING_BLUEPRINT.json",
+    "exact_authoring_level_count": 100,
+    "binding_slot_catalog": "Docs/Production/T12/BINDING_SLOT_CATALOG.json",
+    "exact_fact_slot_count": 100,
+    "binding_index_template": "Docs/Production/T12/FACT_SLOT_BINDING_INDEX_TEMPLATE.json",
+    "exact_binding_index_entry_count": 99,
+    "full_vector_corpus": "Docs/Production/T12/FULL_ENGINE_VECTOR_CORPUS.json",
+    "exact_full_vector_count": 398,
+    "materializer": "tools/havenline/task12/materialize_progression_data.py",
+    "dry_run_required_before_activation": true,
+    "repository_write_allowed_before_activation": false,
+    "shipping_write_requires_claimed_t12_owner": true,
+    "shipping_write_requires_resolved_binding_proof": true,
+    "reference_runtime_semantics": "Docs/Production/T12/REFERENCE_RUNTIME_SEMANTICS.json",
+    "reference_runtime_engine": "tools/havenline/task12/reference_progression_engine.py",
+    "out_of_order_fact_retention_required": true,
+    "reference_runtime_snapshot_restore_required": true,
+    "shipping_binding_dataset": "HavenlineGodot/data/progression_bindings_v1.json",
+    "shipping_write_requires_resolved_binding_index": true
+  }
 }

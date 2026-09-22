@@ -83,6 +83,7 @@ def validate_packet(data: dict[str, Any], require_resolved: bool = False) -> dic
     if not isinstance(hashes, dict) or set(hashes) != {
         "progression_levels_v1_json_sha256",
         "progression_milestones_v1_json_sha256",
+        "progression_bindings_v1_json_sha256",
         "binding_resolution_json_sha256",
     }:
         errors.append("shipping_data_hashes structure drifted")

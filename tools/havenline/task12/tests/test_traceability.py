@@ -77,10 +77,10 @@ class T12TraceabilityTests(unittest.TestCase):
         def mutate(trace):
             row = trace["requirements"][14]
             for key in ("prepared_checks", "shipping_tests", "required_evidence"):
-                row[key] = [item for item in row[key] if "six" not in item.lower()]
+                row[key] = [item for item in row[key] if "seven" not in item.lower()]
         result = self.validate(mutate)
         self.assertFalse(result["passed"])
-        self.assertTrue(any("T12-R15" in error and "'six'" in error for error in result["errors"]))
+        self.assertTrue(any("T12-R15" in error and "'seven'" in error for error in result["errors"]))
 
     def test_rejects_missing_validator_identity_traceability(self):
         def mutate(trace):
@@ -90,6 +90,33 @@ class T12TraceabilityTests(unittest.TestCase):
         result = self.validate(mutate)
         self.assertFalse(result["passed"])
         self.assertTrue(any("T12-R16" in error and "'validator'" in error for error in result["errors"]))
+
+    def test_rejects_missing_fact_slot_binding_traceability(self):
+        def mutate(trace):
+            row = trace["requirements"][4]
+            for key in ("prepared_checks", "shipping_tests", "required_evidence"):
+                row[key] = [item for item in row[key] if "fact-slot" not in item.lower() and "99" not in item.lower()]
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("T12-R05" in error for error in result["errors"]))
+
+    def test_rejects_missing_full_corpus_traceability(self):
+        def mutate(trace):
+            row = trace["requirements"][7]
+            for key in ("prepared_checks", "shipping_tests", "required_evidence"):
+                row[key] = [item for item in row[key] if "398" not in item and "fact slot" not in item.lower()]
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("T12-R08" in error for error in result["errors"]))
+
+    def test_rejects_missing_materializer_activation_traceability(self):
+        def mutate(trace):
+            row = trace["requirements"][14]
+            for key in ("prepared_checks", "shipping_tests", "required_evidence"):
+                row[key] = [item for item in row[key] if "materializer" not in item.lower()]
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("T12-R15" in error and "materializer" in error for error in result["errors"]))
 
     def test_rejects_relaxed_score_rule(self):
         def mutate(trace):

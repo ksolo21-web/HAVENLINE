@@ -42,6 +42,10 @@ oracle_validator = load_module("t12_reference_oracle", "reference_progression_or
 binding_validator = load_module("t12_binding_resolution", "verify_binding_resolution.py")
 prepare_validator = load_module("t12_prepare_activation", "prepare_activation.py")
 fuzz_module = load_module("t12_fuzz", "fuzz_progression_contract.py")
+authoring_validator = load_module("t12_authoring_blueprint", "validate_authoring_blueprint.py")
+fact_index_validator = load_module("t12_fact_slot_binding_index", "validate_fact_slot_binding_index.py")
+materializer = load_module("t12_materializer_benchmark", "materialize_progression_data.py")
+reference_semantics_validator = load_module("t12_reference_runtime_semantics", "validate_reference_runtime_semantics.py")
 
 MATRIX = json.loads((DOCS / "LEVEL_1_100_MATRIX.json").read_text())
 SCHEMA = json.loads((DOCS / "PROGRESSION_DATA_SCHEMA.json").read_text())
@@ -54,6 +58,12 @@ EVIDENCE_INDEX_TEMPLATE = json.loads((DOCS / "EVIDENCE_INDEX_TEMPLATE.json").rea
 ENGINE_VECTORS = json.loads((DOCS / "ENGINE_TEST_VECTORS.json").read_text())
 BINDING_TEMPLATE = json.loads((DOCS / "BINDING_RESOLUTION_TEMPLATE.json").read_text())
 CHECKLIST = json.loads((DOCS / "ACTIVATION_CHECKLIST.json").read_text())
+AUTHORING_BLUEPRINT = json.loads((DOCS / "AUTHORING_BLUEPRINT.json").read_text())
+BINDING_SLOT_CATALOG = json.loads((DOCS / "BINDING_SLOT_CATALOG.json").read_text())
+FACT_SLOT_BINDING_INDEX = json.loads((DOCS / "FACT_SLOT_BINDING_INDEX_TEMPLATE.json").read_text())
+FULL_ENGINE_VECTORS = json.loads((DOCS / "FULL_ENGINE_VECTOR_CORPUS.json").read_text())
+REFERENCE_RUNTIME_SEMANTICS = json.loads((DOCS / "REFERENCE_RUNTIME_SEMANTICS.json").read_text())
+T10_CATALOG = json.loads((ROOT / "HavenlineGodot" / "data" / "world_transform_recipes.json").read_text())
 BUDGET_DOC = json.loads((DOCS / "PREBUILD_PERFORMANCE_BUDGET.json").read_text())
 BUDGET = BUDGET_DOC["static_validation_budget"]
 SYNTHETIC_MANIFEST = fuzz_module.valid_manifest()
@@ -63,6 +73,9 @@ def validate_once() -> list[dict[str, Any]]:
     return [
         progression.validate_manifest(SYNTHETIC_MANIFEST),
         matrix_validator.validate_matrix(MATRIX),
+        authoring_validator.validate(AUTHORING_BLUEPRINT, BINDING_SLOT_CATALOG, MATRIX, T10_CATALOG),
+        fact_index_validator.validate(FACT_SLOT_BINDING_INDEX, BINDING_SLOT_CATALOG),
+        materializer.validate_materialized(AUTHORING_BLUEPRINT),
         schema_validator.validate_schema(SCHEMA),
         runtime_validator.validate_contract(RUNTIME),
         trace_validator.validate_traceability(TRACE),
@@ -71,6 +84,8 @@ def validate_once() -> list[dict[str, Any]]:
         critic_validator.validate_record(CRITIC_TEMPLATE, require_resolved=False),
         evidence_index_validator.validate_index(EVIDENCE_INDEX_TEMPLATE, require_resolved=False),
         oracle_validator.run_vectors(ENGINE_VECTORS),
+        oracle_validator.run_vectors(FULL_ENGINE_VECTORS),
+        reference_semantics_validator.validate(REFERENCE_RUNTIME_SEMANTICS, RUNTIME),
         binding_validator.validate_resolution(BINDING_TEMPLATE, require_resolved=False),
         {
             "passed": not prepare_validator.validate_cross_contracts(CHECKLIST),
@@ -141,6 +156,19 @@ def main() -> None:
         errors.append(f"mean {mean_ms:.3f}ms exceeds budget {BUDGET['maximum_mean_ms']}ms")
     if p95_ms >= float(BUDGET["maximum_p95_ms"]):
         errors.append(f"p95 {p95_ms:.3f}ms exceeds budget {BUDGET['maximum_p95_ms']}ms")
+    validator_count = len(initial)
+    mean_ms_per_check = mean_ms / validator_count if validator_count else float("inf")
+    p95_ms_per_check = p95_ms / validator_count if validator_count else float("inf")
+    if validator_count != int(BUDGET["check_count"]):
+        errors.append(f"validator count {validator_count} does not match budget check_count {BUDGET['check_count']}")
+    if mean_ms_per_check >= float(BUDGET["maximum_mean_ms_per_check"]):
+        errors.append(
+            f"normalized mean {mean_ms_per_check:.3f}ms/check exceeds budget {BUDGET['maximum_mean_ms_per_check']}ms/check"
+        )
+    if p95_ms_per_check >= float(BUDGET["maximum_p95_ms_per_check"]):
+        errors.append(
+            f"normalized p95 {p95_ms_per_check:.3f}ms/check exceeds budget {BUDGET['maximum_p95_ms_per_check']}ms/check"
+        )
     if maximum_ms >= float(BUDGET["maximum_single_ms"]):
         errors.append(f"max {maximum_ms:.3f}ms exceeds budget {BUDGET['maximum_single_ms']}ms")
     if retained_growth_kib >= float(BUDGET["maximum_retained_growth_kib"]):
@@ -158,6 +186,8 @@ def main() -> None:
         "validators_per_iteration": len(initial),
         "mean_ms": round(mean_ms, 6),
         "p95_ms": round(p95_ms, 6),
+        "mean_ms_per_check": round(mean_ms_per_check, 6),
+        "p95_ms_per_check": round(p95_ms_per_check, 6),
         "maximum_ms": round(maximum_ms, 6),
         "retained_growth_kib": round(retained_growth_kib, 3),
         "peak_traced_kib": round(peak_kib, 3),
