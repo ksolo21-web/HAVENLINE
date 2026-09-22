@@ -58,6 +58,32 @@
         "HavenlineGodot/animations/c1/**",
         "HavenlineGodot/scripts/character1_motion.gd"
       ]
+    },
+    {
+      "task_id": "T02",
+      "class": "snow_surface",
+      "status": "USER_ACCEPTED_PRESERVE_AS_OK",
+      "paths": [
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ]
+    },
+    {
+      "task_id": "T02",
+      "class": "water",
+      "status": "USER_ACCEPTED_PRESERVE_AS_OK",
+      "paths": [
+        "HavenlineGodot/scripts/river_geometry.gd",
+        "HavenlineGodot/shaders/lakeshore_water.gdshader"
+      ]
+    },
+    {
+      "task_id": "T02",
+      "class": "ground_work_floor",
+      "status": "USER_ACCEPTED_PRESERVE_AS_OK",
+      "paths": [
+        "HavenlineGodot/scripts/outpost_surface.gd",
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ]
     }
   ],
   "mandatory_whole_frame_classes": [
@@ -89,11 +115,20 @@
     "every_mandatory_dimension_must_equal_10": true
   },
   "user_feedback_lock": {
-    "exact_meaning": "Only the trees and characters currently look like the supplied reference files/videos and intended Havenline game.",
+    "exact_meaning": "T02 is okay; visual repair should begin at T03 onward.",
     "accepted_classes": [
       "vegetation_trees",
-      "characters"
+      "characters",
+      "snow_surface",
+      "water",
+      "ground_work_floor"
     ],
-    "no_other_visible_class_is_user_accepted": true
+    "accepted_task_scope": [
+      "T01",
+      "T02",
+      "T06"
+    ],
+    "repair_frontier": "T03",
+    "note": "Preserve T02 unless a later T03+ change creates a demonstrated regression."
   }
 }
