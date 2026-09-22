@@ -81,9 +81,24 @@ python tools/havenline/task12/prepare_activation.py --activate --base "$BASE"
 
 Require `passed: true`. The preflight must independently verify dependency status, completed-task records, stale-owner closure, Level 1–100 matrix validity, exact T10/T11 binding resolution and path ownership safety.
 
-## 4. Integration owner reserves and activates T12
+## 4. Create the empty builder branch at the exact activation base
 
-Use only the reservation patch emitted by the activation preflight. Apply `@reservation:T12` through the integration owner, then claim:
+V3.2 assignment requires exact remote builder/integration lineage before `ASSIGNED`. Create the builder branch **before** assignment, from the exact activation base, but do not add runtime/data:
+
+```bash
+git branch havenline/T12-progression-architecture "$BASE"
+git push origin havenline/T12-progression-architecture
+```
+
+Require the remote builder tip and remote integration tip to both equal `$BASE` before continuing. Do not reuse a governance-prep branch.
+
+## 5. Integration owner stages reservation/PREPARED state, then V3.2 assigns T12
+
+Use only the reservation patch emitted by the activation preflight. In one integration-owner assignment change:
+
+1. stage the `@reservation:T12` alias in `PATH_OWNERSHIP.json`;
+2. register the T12 workstream as `PREPARED` with the legacy workstream helper **only for PREPARED registration**;
+3. run the V3.2 assignment authority for the real `ASSIGNED` transition.
 
 ```bash
 python3 tools/havenline/production/workstream.py claim T12 \
@@ -91,12 +106,33 @@ python3 tools/havenline/production/workstream.py claim T12 \
   --branch havenline/T12-progression-architecture \
   --base "$BASE" \
   --owned-alias @reservation:T12 \
-  --status ASSIGNED
+  --status PREPARED
+
+BUILDER_HEAD="$(git ls-remote origin refs/heads/havenline/T12-progression-architecture | awk '{print $1}')"
+INTEGRATION_HEAD="$(git ls-remote origin refs/heads/codex/havenline-sequential-task-01 | awk '{print $1}')"
+test "$BUILDER_HEAD" = "$BASE"
+test "$INTEGRATION_HEAD" = "$BASE"
+
+python3 tools/havenline/production/v32_assignment_claim.py T12 \
+  --owner progression-architecture-builder \
+  --branch havenline/T12-progression-architecture \
+  --base "$BASE" \
+  --owned-alias @reservation:T12 \
+  --builder-head "$BUILDER_HEAD" \
+  --integration-head "$INTEGRATION_HEAD"
 ```
 
-Update dependency graph/task gates/workstream state consistently through the integration owner. Validate zero ownership collisions.
+For T11–T70, **never use `workstream.py claim --status ASSIGNED`**. V3.2 must write the assignment authority across `WORKSTREAM_REGISTRY.json`, `DEPENDENCY_GRAPH.json`, `PATH_OWNERSHIP.json` and `task-gates.json`, retaining `assignment_integration_commit`, `assignment_branch_head` and `assignment_lineage_state=SYNCHRONIZED`.
 
-At this point—and not before—materializer write mode becomes eligible. On the claimed builder branch, require the resolved binding proof and exact activation base:
+Merge the integration-owner assignment change only after production governance passes.
+
+## 6. Synchronize the claimed builder branch before any shipping write
+
+After the assignment governance commit lands, fast-forward/synchronize the still-empty builder branch to that integration commit before adding T12-owned files. The recorded assignment integration/head fields remain immutable provenance; this synchronization merely gives the builder checkout the authoritative ASSIGNED registry/ownership state.
+
+Candidate/branch guards must recognize the active T12 owner/reservation before runtime/data work begins.
+
+At this point—and not before—materializer write mode becomes eligible. On the synchronized claimed builder branch, require the resolved binding proof and original activation base `$BASE`:
 
 ```bash
 cp Docs/Production/T12/FACT_SLOT_BINDING_INDEX_TEMPLATE.json /tmp/t12-resolved-fact-slots.json
@@ -113,15 +149,9 @@ python tools/havenline/task12/materialize_progression_data.py \
   --binding-index /tmp/t12-resolved-fact-slots.json
 ```
 
-The tool must refuse writes unless T12 is the active claimed owner of `@reservation:T12`, the builder branch/base match, the binding proof resolves against `$BASE`, and the three shipping data files do not already exist.
+The tool must refuse writes unless T12 is the active claimed owner of `@reservation:T12`, the actual checkout is `havenline/T12-progression-architecture`, the recorded base matches `$BASE`, the binding proof resolves against `$BASE`, and the three shipping data files do not already exist.
 
-## 5. Create the isolated builder branch from the exact activated head
-
-Create `havenline/T12-progression-architecture` only from the exact post-activation integration head. Do not reuse the governance-prep branch as the shipping builder branch.
-
-Before adding runtime/data, candidate guard must recognize the active T12 owner/reservation.
-
-## 6. Shipping implementation order
+## 7. Shipping implementation order
 
 Use this order to reduce rework:
 
@@ -140,7 +170,7 @@ Use this order to reduce rework:
 
 Shared shipping wiring such as `main.gd`, `simulation.gd` or canonical shared registries remains integration-owner work.
 
-## 7. Mandatory implementation behavior
+## 8. Mandatory implementation behavior
 
 The builder must preserve all of these prepared guarantees:
 

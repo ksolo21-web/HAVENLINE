@@ -150,12 +150,13 @@
     "Run python tools/havenline/task12/fuzz_progression_contract.py and require PASS so representative malformed progressions continue failing closed.",
     "Run python tools/havenline/task12/benchmark_prebuild_validators.py and require PASS as a preparation-tooling hygiene check only; this never substitutes for shipping C6.",
     "Run python -m unittest discover -s tools/havenline/task12/tests -p 'test_*.py' -v and require PASS.",
-    "Run tools/havenline/task12/prepare_activation.py --activate --base <current-integration-head>.",
-    "Apply the emitted @reservation:T12 PATH_OWNERSHIP patch through the integration owner.",
-    "Claim T12 with workstream.py as ASSIGNED using the exact current integration head and @reservation:T12.",
-    "Set T12 dependency-graph/task-gate active state consistently through integration-owner governance update.",
-    "Validate registry and planned ownership collision checks.",
-    "Create havenline/T12-progression-architecture from the exact post-activation integration head.",
+    "Run tools/havenline/task12/prepare_activation.py --activate --base <current-integration-head> and require PASS on the exact canonical integration SHA.",
+    "Create the empty havenline/T12-progression-architecture branch from that exact activation integration SHA before any runtime/data work; its remote head must equal the activation integration SHA.",
+    "In one integration-owner assignment change, stage the emitted @reservation:T12 PATH_OWNERSHIP alias and register the T12 workstream as PREPARED with workstream.py --status PREPARED; do not use workstream.py --status ASSIGNED.",
+    "While the remote builder and integration tips still equal the exact activation SHA, run v32_assignment_claim.py T12 with --builder-head <T12_BUILDER_HEAD> and --integration-head <ACTIVATION_INTEGRATION_SHA>; require remote identity, control-plane lineage and ASSIGNED graduation PASS.",
+    "Commit the V3.2 assignment authority atomically: WORKSTREAM_REGISTRY, DEPENDENCY_GRAPH, PATH_OWNERSHIP and task-gates plus the reservation alias. The assignment record must preserve assignment_integration_commit and assignment_branch_head.",
+    "Merge the integration-owner assignment change, then fast-forward/synchronize the empty T12 builder branch to the resulting assignment governance commit before any shipping materialization; preserve the recorded assignment base/head as immutable provenance.",
+    "Validate registry, ownership, V3.2 graduation and branch-budget/collision checks again before BUILDING_ISOLATED.",
     "Require candidate guard PASS before shipping T12 runtime/data expands.",
     "Require the future Godot T12 test harness to emit ENGINE_PARITY_OUTPUT_SCHEMA.json-shaped results for the exact candidate SHA and pass compare_engine_parity.py against ENGINE_TEST_VECTORS.json before candidate review.",
     "Once shipping progression data exists, seed candidate provenance only with initialize_candidate_evidence.py using exact activation base, candidate SHA, trusted integration-head SHA used by workstream.py validate-candidate, resolved T10/T11 bindings, authorized changed-file manifest reference and real shipping file hashes. The initializer must leave every acceptance field pending.",
@@ -165,7 +166,7 @@
     "Run final_candidate_gate.py from the exact candidate checkout with the resolved candidate evidence packet, critic records, exact engine-parity output, complete evidence digest index, resolved T10/T11 binding record and the actual shipping levels/milestones/bindings files. Require PASS; the gate must revalidate all three shipping datasets, accepted binding ancestry/blob identity, checked-out candidate identity, the live canonical workstream.py candidate guard, evidence completeness/digests, shipping hashes, T10/T11 sources, critic minima/provenance and parity identity.",
     "Validate every shipping-data revision with both validators: python tools/havenline/task12/validate_progression_contract.py --levels HavenlineGodot/data/progression_levels_v1.json --milestones HavenlineGodot/data/progression_milestones_v1.json and python tools/havenline/task12/validate_fact_slot_binding_index.py --input HavenlineGodot/data/progression_bindings_v1.json --shipping."
   ],
-  "claim_template": "python3 tools/havenline/production/workstream.py claim T12 --owner progression-architecture-builder --branch havenline/T12-progression-architecture --base <POST_T11_INTEGRATION_SHA> --owned-alias @reservation:T12 --status ASSIGNED",
+  "claim_template": "python3 tools/havenline/production/v32_assignment_claim.py T12 --owner progression-architecture-builder --branch havenline/T12-progression-architecture --base <ACTIVATION_INTEGRATION_SHA> --owned-alias @reservation:T12 --builder-head <T12_BUILDER_HEAD> --integration-head <ACTIVATION_INTEGRATION_SHA>",
   "runtime_build_allowed_before_activation": false,
   "notes": [
     "T12 governance/tooling preparation may continue while remaining dependencies are unfinished; at the current checkpoint T10 is APPROVED/integrated and T11 remains unfinished. Shipping T12 runtime/data remain dependency-gated.",
@@ -177,6 +178,8 @@
     "PREBUILD_PERFORMANCE_BUDGET.json governs preparation tooling only; final C6 remains mandatory against the activated shipping candidate/integrated artifact.",
     "After activation, the T12 shipping builder may not modify Docs/Production/T12/**, tools/havenline/task12/**, or T12 preparation workflows. Those preparation/acceptance surfaces are frozen before T11 closeout; any required change reopens pre-activation repair instead of being made by the shipping candidate.",
     "Preativation buildout may include deterministic authoring blueprints, fact-slot contracts, dry-run materialization and exhaustive reference vectors, but must never write the seven shipping/runtime-test files before T12 is activated and claimed.",
-    "The non-shipping reference progression engine freezes state-transition behavior for out-of-order facts, deterministic cascades, duplicate no-ops and snapshot/restore; it is an oracle for the future Godot runtime, not shipping gameplay code."
-  ]
+    "The non-shipping reference progression engine freezes state-transition behavior for out-of-order facts, deterministic cascades, duplicate no-ops and snapshot/restore; it is an oracle for the future Godot runtime, not shipping gameplay code.",
+    "V3.2 lifecycle authority supersedes the legacy ASSIGNED claim path: workstream.py may register PREPARED state, but T11-T70 ASSIGNED authority must come from v32_assignment_claim.py with exact remote builder/integration lineage."
+  ],
+  "prepared_registration_template": "python3 tools/havenline/production/workstream.py claim T12 --owner progression-architecture-builder --branch havenline/T12-progression-architecture --base <ACTIVATION_INTEGRATION_SHA> --owned-alias @reservation:T12 --status PREPARED"
 }
