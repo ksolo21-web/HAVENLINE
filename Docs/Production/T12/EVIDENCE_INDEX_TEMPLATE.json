@@ -15,10 +15,19 @@
     "performance_c6",
     "critic_review",
     "critic_dimension",
-    "binding_resolution"
+    "binding_resolution",
+    "gate"
   ],
   "entry_contract": {
-    "required_fields": ["artifact_id", "category", "uri", "sha256", "candidate_source", "producer", "content_verified"],
+    "required_fields": [
+      "artifact_id",
+      "category",
+      "uri",
+      "sha256",
+      "candidate_source",
+      "producer",
+      "content_verified"
+    ],
     "artifact_id_rule": "unique stable non-empty identifier",
     "uri_rule": "unique non-empty evidence reference exactly matching a reference used by the candidate/critic records",
     "sha256_rule": "exact lowercase 64-hex digest of the referenced evidence bytes",
