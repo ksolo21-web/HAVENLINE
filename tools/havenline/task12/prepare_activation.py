@@ -53,6 +53,14 @@ EVIDENCE_INDEX_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_e
 FUZZ_GATE = ROOT / "tools" / "havenline" / "task12" / "fuzz_progression_contract.py"
 PREBUILD_BENCHMARK = ROOT / "tools" / "havenline" / "task12" / "benchmark_prebuild_validators.py"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
+EXPECTED_BUILDER_PATHS = [
+    "HavenlineGodot/scripts/progression_architecture.gd",
+    "HavenlineGodot/data/progression_levels_v1.json",
+    "HavenlineGodot/data/progression_milestones_v1.json",
+    "HavenlineGodot/tests/test_task12_progression_architecture.gd",
+    "HavenlineGodot/tests/test_task12_integration.gd",
+    "HavenlineGodot/tests/capture_task12_progression.gd",
+]
 
 
 def load(path: pathlib.Path):
@@ -267,6 +275,8 @@ def validate_cross_contracts(checklist, prebuild=None, schema=None) -> list[str]
         errors.append("ACTIVATION_CHECKLIST future_builder_branch drifted")
     if checklist.get("future_owner") != "progression-architecture-builder":
         errors.append("ACTIVATION_CHECKLIST future_owner drifted")
+    if checklist.get("planned_owned_paths") != EXPECTED_BUILDER_PATHS:
+        errors.append("ACTIVATION_CHECKLIST planned_owned_paths must remain the six frozen shipping/runtime test paths")
     if checklist.get("activation_requires_all_dependencies_approved") is not True:
         errors.append("ACTIVATION_CHECKLIST must require all dependencies approved")
     acceptance = checklist.get("acceptance", {})
