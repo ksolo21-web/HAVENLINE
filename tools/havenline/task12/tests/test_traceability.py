@@ -73,6 +73,24 @@ class T12TraceabilityTests(unittest.TestCase):
         self.assertFalse(result["passed"])
         self.assertTrue(any("T12-R16" in error and "C7" in error for error in result["errors"]))
 
+    def test_rejects_missing_frozen_scope_traceability(self):
+        def mutate(trace):
+            row = trace["requirements"][14]
+            for key in ("prepared_checks", "shipping_tests", "required_evidence"):
+                row[key] = [item for item in row[key] if "six" not in item.lower()]
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("T12-R15" in error and "'six'" in error for error in result["errors"]))
+
+    def test_rejects_missing_validator_identity_traceability(self):
+        def mutate(trace):
+            row = trace["requirements"][15]
+            for key in ("prepared_checks", "shipping_tests", "required_evidence"):
+                row[key] = [item for item in row[key] if "validator" not in item.lower()]
+        result = self.validate(mutate)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("T12-R16" in error and "'validator'" in error for error in result["errors"]))
+
     def test_rejects_relaxed_score_rule(self):
         def mutate(trace):
             trace["acceptance_rule"]["operator"] = ">="
