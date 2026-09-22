@@ -25,6 +25,7 @@ EXPECTED_CATEGORIES = {
     "critic_review",
     "critic_dimension",
     "binding_resolution",
+    "gate",
 }
 
 
@@ -74,6 +75,11 @@ def required_ref_categories(candidate: dict[str, Any], critics: dict[str, Any]) 
     performance = candidate.get("performance_c6", {}) if isinstance(candidate.get("performance_c6"), dict) else {}
     if nonempty(performance.get("evidence_ref")):
         add(performance["evidence_ref"], "performance_c6")
+
+    gates = candidate.get("gates", {}) if isinstance(candidate.get("gates"), dict) else {}
+    for row in gates.values():
+        if isinstance(row, dict) and nonempty(row.get("evidence_ref")):
+            add(row["evidence_ref"], "gate")
 
     packet_critics = candidate.get("critic_reviews", {}) if isinstance(candidate.get("critic_reviews"), dict) else {}
     for row in packet_critics.values():
