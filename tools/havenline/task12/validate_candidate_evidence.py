@@ -142,6 +142,13 @@ def validate_packet(data: dict[str, Any], require_resolved: bool = False) -> dic
     if not isinstance(gates, dict) or set(gates) != GATES:
         errors.append("gates must contain exactly G1-G14")
         gates = {}
+    for gate, row in gates.items():
+        if not isinstance(row, dict) or set(row) != {"status", "evidence_ref"}:
+            errors.append(f"gate {gate} structure must be status + evidence_ref")
+            continue
+        if not require_resolved:
+            if row.get("status") != "PENDING" or row.get("evidence_ref") != "":
+                errors.append(f"template gate {gate} must remain PENDING without evidence")
 
     defects = data.get("defects")
     if not isinstance(defects, dict) or set(defects) != {"unresolved_mandatory", "closed_mandatory"}:
@@ -249,8 +256,13 @@ def validate_packet(data: dict[str, Any], require_resolved: bool = False) -> dic
             if critic == "C6" and row.get("independence_required") is not False:
                 errors.append("C6 must remain quantitative specialist, not fake independent-model requirement")
 
-        if any(value is not True for value in gates.values()):
-            errors.append("all G1-G14 must PASS")
+        for gate, row in gates.items():
+            if not isinstance(row, dict):
+                continue
+            if row.get("status") != "PASS":
+                errors.append(f"gate {gate} must PASS")
+            if not nonempty(row.get("evidence_ref")):
+                errors.append(f"gate {gate} must include evidence_ref")
         if defects.get("unresolved_mandatory") != []:
             errors.append("resolved candidate packet must have zero unresolved mandatory defects")
 
