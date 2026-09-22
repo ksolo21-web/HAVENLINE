@@ -64,8 +64,15 @@ def validate():
     components['parallel_preparation']=prep_plan();components['canaries']=validate_canaries();components['performance_ledger']=validate_performance();components['branch_budget']=validate_branches();components['authority_consistency']=validate_authority();components['forward_prep_contract']=validate_forward_prep();components['forward_prep_harness']=validate_forward_harness();components['opening_loop_canary']=validate_opening_loop();components['external_readiness']=validate_external_readiness();components['forward_task_control']=validate_forward_control();components['gate_result_recording']=validate_gate_recording();components['failure_learning']=validate_failure_learning();components['workflow_consumption']=validate_workflows_and_consumption()
     for k,v in components.items():
         if not v.get('passed',True): errors += [k+': '+x for x in v.get('errors',[])]
-    head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip();t11=graduation('T11','ASSIGNED',head,head);components['t11_assignment_graduation']=t11
-    if not t11['passed']: errors += ['T11 graduation: '+x for x in t11['errors']]
+    head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+    graph=json.loads((DOCS/'DEPENDENCY_GRAPH.json').read_text())
+    t11_status=graph.get('tasks',{}).get('T11',{}).get('status')
+    if t11_status in ('PREPARED','ASSIGNED'):
+        t11=graduation('T11','ASSIGNED',head,head)
+        components['t11_assignment_graduation']=t11
+        if not t11['passed']: errors += ['T11 graduation: '+x for x in t11['errors']]
+    else:
+        components['t11_assignment_graduation']={'passed':True,'not_applicable':True,'lifecycle_status':t11_status}
     resolved=0
     for i in range(11,71):
         t=f'T{i:02d}';classify(t);stage_plan(t);canary_requirements(t);resolved+=1

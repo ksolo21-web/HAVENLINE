@@ -173,7 +173,15 @@ def t10_activation_errors(graph,registry,ownership,task_gates,checklist):
             errors.append("T10 completed registry candidate mismatch")
         if record.get("status")!="APPROVED" or record.get("record")!="Docs/Production/T10/verified-completion.json":
             errors.append("T10 completed task record identity mismatch")
-        if task_gates.get("approved_tasks")!=[f"T{i:02d}" for i in range(1,11)] or any(graph.get("tasks",{}).get(f"T{i:02d}",{}).get("status")!="APPROVED" for i in range(1,11)):
+        expected_prefix=[]
+        for i in range(1,71):
+            tid=f"T{i:02d}"
+            if graph.get("tasks",{}).get(tid,{}).get("status")=="APPROVED":
+                expected_prefix.append(tid)
+            else:
+                break
+        required_t10_prefix=[f"T{i:02d}" for i in range(1,11)]
+        if expected_prefix[:10]!=required_t10_prefix or task_gates.get("approved_tasks")!=expected_prefix:
             errors.append("T10 completed approved prefix mismatch")
         gate_rows=[gate for gate in task_gates.get("next_post_t03_wave",[]) if gate.get("task")=="T10"]
         if len(gate_rows)!=1 or (gate_rows[0].get("state"),gate_rows[0].get("owner"),gate_rows[0].get("branch"),gate_rows[0].get("base_commit"))!=("APPROVED",T10_OWNER,T10_BRANCH,base):
@@ -538,16 +546,13 @@ def main():
     for t in ids:
         if f"| {t} |" not in plan:errors.append("build plan missing "+t)
     if t03_status=="APPROVED":
-        expected_approved=(
-            [f"T{i:02d}" for i in range(1,11)] if t09_status=="APPROVED" and graph["tasks"]["T10"].get("status")=="APPROVED" else
-            ["T01","T02","T03","T04","T05","T06","T07","T08","T09"] if t09_status=="APPROVED" else
-            ["T01","T02","T03","T04","T05","T06","T07","T08"] if t08_status=="APPROVED" else
-            ["T01","T02","T03","T04","T05","T06","T07"] if t07_status=="APPROVED" else
-            ["T01","T02","T03","T04","T05","T06"] if t06_status=="APPROVED" else
-            ["T01","T02","T03","T04","T05"] if t05_status=="APPROVED" else
-            ["T01","T02","T03","T04"] if t04_status=="APPROVED" else
-            ["T01","T02","T03"]
-        )
+        expected_approved=[]
+        for i in range(1,71):
+            tid=f"T{i:02d}"
+            if graph.get("tasks",{}).get(tid,{}).get("status")=="APPROVED":
+                expected_approved.append(tid)
+            else:
+                break
         if tg.get("approved_tasks")!=expected_approved:errors.append("task-gates approved list does not match dependency graph state")
         completion=DOCS/"T03/verified-completion.json"
         if not completion.exists():errors.append("T03 verified completion record missing")
