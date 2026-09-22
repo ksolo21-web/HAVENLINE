@@ -38,6 +38,15 @@ const FORBIDDEN_KEY_FRAGMENTS := [
 ]
 const PROFILE_NORMAL := "NORMAL"
 const PROFILE_GM := "GM_CHALLENGE"
+const ALLOWED_PRESSURE_DIRECTIVES := [
+	"recovery_space",
+	"route_pressure",
+	"weather_overlap",
+	"coordination_pressure",
+	"mixed_group_pressure",
+	"flanking_pressure",
+	"concurrent_objective_pressure",
+]
 
 var policy: Dictionary = {}
 var policy_hash := ""
@@ -95,6 +104,8 @@ static func _safe_fallback_policy() -> Dictionary:
 		"policy_version": "1.0.0-safe",
 		"bands": [{
 			"band_id": "safe",
+			"pressure_profile_id": "safe-recovery",
+			"pressure_directives": ["recovery_space"],
 			"threat_budget_multiplier": 0.85,
 			"recovery_window_multiplier": 1.15,
 			"wave_delay_multiplier": 1.15,
@@ -127,6 +138,12 @@ static func _safe_fallback_policy() -> Dictionary:
 			"maximum_up_steps_per_evaluation": 1,
 			"maximum_down_steps_per_evaluation": 1,
 		},
+		"upgrade_protection": {
+			"minimum_meaningful_upstream_gain_ratio": 1.10,
+			"maximum_immediate_threat_counter_ratio": 1.0,
+			"minimum_preserved_advantage_ratio": 1.10,
+			"milestone_metadata_is_scoring_input": false,
+		},
 		"gm_profile": {
 			"profile_id": PROFILE_GM,
 			"threat_target_ratio": 1.0,
@@ -139,6 +156,11 @@ static func _safe_fallback_policy() -> Dictionary:
 			"raw_enemy_hp_ratio_cap": 1.0,
 			"raw_enemy_damage_ratio": 1.0,
 			"raw_enemy_damage_ratio_cap": 1.0,
+			"absolute_threat_budget_multiplier_cap": 0.85,
+			"absolute_enemy_hp_multiplier_cap": 0.90,
+			"absolute_enemy_damage_multiplier_cap": 0.90,
+			"absolute_concurrent_emergency_bonus_cap": 0,
+			"extra_pressure_directives": [],
 			"concurrent_emergency_bonus": 0,
 			"resource_yield_penalty_allowed": false,
 			"no_new_permanent_controls": true,
@@ -162,6 +184,13 @@ static func validate_policy(candidate: Dictionary) -> bool:
 		if not _valid_identifier(band_id) or band_id in ids:
 			return false
 		ids[band_id] = true
+		if not _valid_identifier(row.get("pressure_profile_id")):
+			return false
+		if not _valid_string_array(row.get("pressure_directives"), 4) or row.pressure_directives.is_empty():
+			return false
+		for directive: Variant in row.pressure_directives:
+			if String(directive) not in ALLOWED_PRESSURE_DIRECTIVES:
+				return false
 		for field in [
 			"threat_budget_multiplier",
 			"recovery_window_multiplier",
@@ -230,6 +259,27 @@ static func validate_policy(candidate: Dictionary) -> bool:
 	if not _integer_number(limits.get("maximum_down_steps_per_evaluation"), 1, 2):
 		return false
 
+	var upgrade: Variant = candidate.get("upgrade_protection")
+	if not (upgrade is Dictionary):
+		return false
+	for field in [
+		"minimum_meaningful_upstream_gain_ratio",
+		"maximum_immediate_threat_counter_ratio",
+		"minimum_preserved_advantage_ratio",
+	]:
+		if not _finite_number(upgrade.get(field)) or float(upgrade[field]) <= 1.0:
+			return false
+	if not (upgrade.get("milestone_metadata_is_scoring_input") is bool) or bool(upgrade.milestone_metadata_is_scoring_input):
+		return false
+	var maximum_counter_ratio := float(upgrade.maximum_immediate_threat_counter_ratio)
+	for index in range(1, bands.size()):
+		var adjacent_ratio := float(bands[index].threat_budget_multiplier) / float(bands[index - 1].threat_budget_multiplier)
+		if adjacent_ratio > maximum_counter_ratio + 0.000001:
+			return false
+	var preserved_advantage := float(upgrade.minimum_meaningful_upstream_gain_ratio) / maximum_counter_ratio
+	if preserved_advantage + 0.000001 < float(upgrade.minimum_preserved_advantage_ratio):
+		return false
+
 	var gm: Variant = candidate.get("gm_profile")
 	if not (gm is Dictionary) or gm.get("profile_id") != PROFILE_GM:
 		return false
@@ -244,6 +294,9 @@ static func validate_policy(candidate: Dictionary) -> bool:
 		"raw_enemy_hp_ratio_cap",
 		"raw_enemy_damage_ratio",
 		"raw_enemy_damage_ratio_cap",
+		"absolute_threat_budget_multiplier_cap",
+		"absolute_enemy_hp_multiplier_cap",
+		"absolute_enemy_damage_multiplier_cap",
 	]:
 		if not _finite_number(gm.get(field)) or float(gm[field]) <= 0.0:
 			return false
@@ -261,6 +314,22 @@ static func validate_policy(candidate: Dictionary) -> bool:
 		return false
 	if not is_equal_approx(float(gm.raw_enemy_damage_ratio_cap), 1.15):
 		return false
+	var max_band: Dictionary = bands[bands.size() - 1]
+	if not is_equal_approx(float(gm.absolute_threat_budget_multiplier_cap), float(max_band.threat_budget_multiplier) * float(gm.threat_max_ratio)):
+		return false
+	if not is_equal_approx(float(gm.absolute_enemy_hp_multiplier_cap), float(max_band.raw_enemy_hp_multiplier) * float(gm.raw_enemy_hp_ratio_cap)):
+		return false
+	if not is_equal_approx(float(gm.absolute_enemy_damage_multiplier_cap), float(max_band.raw_enemy_damage_multiplier) * float(gm.raw_enemy_damage_ratio_cap)):
+		return false
+	if not _integer_number(gm.get("absolute_concurrent_emergency_bonus_cap"), 0, 8):
+		return false
+	if int(gm.absolute_concurrent_emergency_bonus_cap) != int(max_band.concurrent_emergency_bonus) + int(gm.concurrent_emergency_bonus):
+		return false
+	if not _valid_string_array(gm.get("extra_pressure_directives"), 8):
+		return false
+	for directive: Variant in gm.extra_pressure_directives:
+		if String(directive) not in ALLOWED_PRESSURE_DIRECTIVES:
+			return false
 	if float(gm.threat_strong_ratio) < float(gm.threat_target_ratio) or float(gm.threat_strong_ratio) > float(gm.threat_max_ratio):
 		return false
 	if float(gm.raw_enemy_hp_ratio) > float(gm.raw_enemy_hp_ratio_cap):
@@ -486,6 +555,7 @@ func evaluate(progression_context: Dictionary, performance_window: Dictionary, p
 			reasons.append("gm_unauthorized_fallback")
 
 	var band: Dictionary = policy.bands[selected_band]
+	var pressure_directives: Array = band.pressure_directives.duplicate()
 	var coefficients := {
 		"threat_budget_multiplier": float(band.threat_budget_multiplier),
 		"recovery_window_multiplier": float(band.recovery_window_multiplier),
@@ -504,13 +574,17 @@ func evaluate(progression_context: Dictionary, performance_window: Dictionary, p
 		elif strong:
 			threat_ratio = float(gm.threat_strong_ratio)
 		threat_ratio = min(float(gm.threat_max_ratio), max(float(gm.threat_min_ratio), threat_ratio))
-		coefficients.threat_budget_multiplier *= threat_ratio
+		coefficients.threat_budget_multiplier = min(float(gm.absolute_threat_budget_multiplier_cap), float(coefficients.threat_budget_multiplier) * threat_ratio)
 		coefficients.recovery_window_multiplier *= float(gm.recovery_window_ratio)
 		coefficients.wave_delay_multiplier *= float(gm.wave_delay_ratio)
-		coefficients.raw_enemy_hp_multiplier *= min(float(gm.raw_enemy_hp_ratio), float(gm.raw_enemy_hp_ratio_cap))
-		coefficients.raw_enemy_damage_multiplier *= min(float(gm.raw_enemy_damage_ratio), float(gm.raw_enemy_damage_ratio_cap))
-		coefficients.concurrent_emergency_bonus += int(gm.concurrent_emergency_bonus)
+		coefficients.raw_enemy_hp_multiplier = min(float(gm.absolute_enemy_hp_multiplier_cap), float(coefficients.raw_enemy_hp_multiplier) * min(float(gm.raw_enemy_hp_ratio), float(gm.raw_enemy_hp_ratio_cap)))
+		coefficients.raw_enemy_damage_multiplier = min(float(gm.absolute_enemy_damage_multiplier_cap), float(coefficients.raw_enemy_damage_multiplier) * min(float(gm.raw_enemy_damage_ratio), float(gm.raw_enemy_damage_ratio_cap)))
+		coefficients.concurrent_emergency_bonus = min(int(gm.absolute_concurrent_emergency_bonus_cap), int(coefficients.concurrent_emergency_bonus) + int(gm.concurrent_emergency_bonus))
 		coefficients.resource_yield_multiplier = 1.0
+		for directive: Variant in gm.extra_pressure_directives:
+			var directive_text := String(directive)
+			if directive_text not in pressure_directives:
+				pressure_directives.append(directive_text)
 		gm_relative = {
 			"threat_ratio": threat_ratio,
 			"recovery_window_ratio": float(gm.recovery_window_ratio),
@@ -518,6 +592,10 @@ func evaluate(progression_context: Dictionary, performance_window: Dictionary, p
 			"raw_enemy_hp_ratio": min(float(gm.raw_enemy_hp_ratio), float(gm.raw_enemy_hp_ratio_cap)),
 			"raw_enemy_damage_ratio": min(float(gm.raw_enemy_damage_ratio), float(gm.raw_enemy_damage_ratio_cap)),
 			"concurrent_emergency_bonus": int(gm.concurrent_emergency_bonus),
+			"absolute_threat_budget_multiplier_cap": float(gm.absolute_threat_budget_multiplier_cap),
+			"absolute_enemy_hp_multiplier_cap": float(gm.absolute_enemy_hp_multiplier_cap),
+			"absolute_enemy_damage_multiplier_cap": float(gm.absolute_enemy_damage_multiplier_cap),
+			"absolute_concurrent_emergency_bonus_cap": int(gm.absolute_concurrent_emergency_bonus_cap),
 		}
 
 	var fingerprint_payload := [
@@ -551,6 +629,9 @@ func evaluate(progression_context: Dictionary, performance_window: Dictionary, p
 		"band_id": String(band.band_id),
 		"band_index": selected_band,
 		"base_band_index": base_band,
+		"challenge_style_id": String(band.pressure_profile_id),
+		"advisory_pressure_directives": pressure_directives,
+		"upgrade_protection": policy.get("upgrade_protection", {}).duplicate(true),
 		"coefficients": coefficients,
 		"gm_relative": gm_relative,
 		"reason_codes": reasons,
