@@ -27,13 +27,17 @@
     "passed": false,
     "matched_visible_classes": [
       "vegetation_trees",
-      "characters"
+      "characters",
+      "snow_surface",
+      "water"
     ],
     "failed_visible_classes": [
+      "ground_work_floor",
       "structures_buildings",
       "fences_gates",
       "props_stations_resources",
-      "terrain_snow_water",
+      "camera_composition",
+      "interface_hud",
       "lighting_vfx_world_response"
     ],
     "upstream_owner_failures": [
@@ -41,8 +45,13 @@
         "owner_task": "T03",
         "classes": [
           "fences_gates",
-          "terrain_snow_water",
-          "lighting_vfx_world_response"
+          "ground_work_floor"
+        ]
+      },
+      {
+        "owner_task": "T04",
+        "classes": [
+          "camera_composition"
         ]
       },
       {
@@ -53,19 +62,26 @@
       },
       {
         "owner": "primary-integration-owner",
-        "paths": [
-          "HavenlineGodot/assets/environment_v2/shelter.glb"
-        ],
         "classes": [
-          "structures_buildings"
+          "structures_buildings",
+          "interface_hud",
+          "lighting_vfx_world_response"
+        ],
+        "paths": [
+          "HavenlineGodot/assets/environment_v2/shelter.glb",
+          "HavenlineGodot/assets/environment_v2/furnace.glb",
+          "HavenlineGodot/assets/environment_v2/lantern_post.glb",
+          "HavenlineGodot/scripts/main.gd",
+          "HavenlineGodot/scripts/action_readout.gd",
+          "HavenlineGodot/scripts/outpost_view.gd"
         ]
       }
     ],
-    "notes": "User states that only the trees and characters look like the supplied reference files/videos and intended Havenline look."
+    "notes": "User accepts the characters, trees, snow and water as looking like the intended reference game. The rest of the visible scene is rejected for reference fidelity."
   },
   "user_visual_approval": false,
   "user_visual_rejection": true,
-  "user_feedback": "Only the trees and characters look like the reference files/videos and what the game is supposed to look like.",
+  "user_feedback": "Characters, trees, snow, and water look like the supplied reference videos/intended Havenline game; the other visible scene elements do not.",
   "approved_at": null,
   "rejected_at": "2026-09-22T20:04:00Z"
 }

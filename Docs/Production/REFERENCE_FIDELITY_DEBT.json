@@ -6,20 +6,29 @@
   "user_disposition": "REJECTED_REFERENCE_FIDELITY",
   "benchmark_classes": [
     "vegetation_trees",
-    "characters"
+    "characters",
+    "snow_surface",
+    "water"
   ],
   "debts": [
     {
       "owner_task": "T03",
       "classes": [
         "fences_gates",
-        "terrain_snow_water",
-        "lighting_vfx_world_response"
+        "ground_work_floor"
       ],
       "paths": [
         "HavenlineGodot/scripts/camp_boundary_view.gd",
-        "HavenlineGodot/scripts/outpost_surface.gd",
-        "HavenlineGodot/shaders/outpost_snow.gdshader"
+        "HavenlineGodot/scripts/outpost_surface.gd"
+      ]
+    },
+    {
+      "owner_task": "T04",
+      "classes": [
+        "camera_composition"
+      ],
+      "paths": [
+        "HavenlineGodot/scripts/camera_composition.gd"
       ]
     },
     {
@@ -35,11 +44,17 @@
     {
       "owner": "primary-integration-owner",
       "classes": [
-        "structures_buildings"
+        "structures_buildings",
+        "interface_hud",
+        "lighting_vfx_world_response"
       ],
       "paths": [
         "HavenlineGodot/assets/environment_v2/shelter.glb",
-        "HavenlineGodot/scripts/main.gd"
+        "HavenlineGodot/assets/environment_v2/furnace.glb",
+        "HavenlineGodot/assets/environment_v2/lantern_post.glb",
+        "HavenlineGodot/scripts/main.gd",
+        "HavenlineGodot/scripts/action_readout.gd",
+        "HavenlineGodot/scripts/outpost_view.gd"
       ]
     }
   ],
@@ -47,5 +62,5 @@
     "T08 reference-fidelity closeout",
     "T09-T12 effective visual approval chain"
   ],
-  "rule": "Debt is zero only when the complete rendered scene matches the locked reference language and the user explicitly approves it."
+  "rule": "Debt is zero only when the complete rendered scene matches the checksum-locked reference videos, every mandatory visual dimension is exactly 10/10, and the user explicitly approves it. Characters, trees, snow and water are preserved unless separately invalidated."
 }

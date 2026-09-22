@@ -8,31 +8,40 @@
       "family": "shipping_visual_reference_fidelity_violation",
       "discovered_at": "2026-09-22T16:51:00Z",
       "audited_integration_source": "1083d82269e82c5aac678bb5c5c77312dde94099",
-      "reason": "T08 primitive feedback was repaired, but the user rejected the complete final scene for reference fidelity: only the trees and characters match the supplied reference files/videos and intended Havenline look.",
+      "reason": "T08 primitive feedback was repaired, but the user rejected the complete final scene for reference fidelity. Characters, trees, snow and water match the intended reference game; the other visible scene elements do not.",
       "findings": [
         {
           "category": "USER_VISUAL_REJECTION",
           "scope": "whole_frame",
-          "detail": "Trees and characters match the reference; the remaining visible scene does not."
+          "detail": "Characters, trees, snow and water are accepted as reference-matching; all other visible scene classes require repair."
         },
         {
           "category": "UPSTREAM_REFERENCE_FIDELITY",
           "owner_task": "T03",
-          "detail": "Fence/gate/lantern and terrain/lane/snow presentation visibly diverge from the locked stylized reference language."
+          "detail": "Fence/gate/lantern and ground/work-floor presentation diverge from the locked reference language; preserve the accepted snow treatment."
+        },
+        {
+          "category": "UPSTREAM_REFERENCE_FIDELITY",
+          "owner_task": "T04",
+          "detail": "Normal camera framing/scale does not yet match the reference active-floor actor/item readability."
         },
         {
           "category": "UPSTREAM_REFERENCE_FIDELITY",
           "owner_task": "T05",
-          "detail": "Furnace/station/resource-prop presentation visibly diverges from the locked stylized reference language."
+          "detail": "Station/resource/prop presentation is sparse/boxy and diverges from the locked production-camp language."
         },
         {
           "category": "INTEGRATION_OWNED_REFERENCE_FIDELITY",
           "owner": "primary-integration-owner",
           "paths": [
             "HavenlineGodot/assets/environment_v2/shelter.glb",
-            "HavenlineGodot/scripts/main.gd"
+            "HavenlineGodot/assets/environment_v2/furnace.glb",
+            "HavenlineGodot/assets/environment_v2/lantern_post.glb",
+            "HavenlineGodot/scripts/main.gd",
+            "HavenlineGodot/scripts/action_readout.gd",
+            "HavenlineGodot/scripts/outpost_view.gd"
           ],
-          "detail": "Shelter/world dressing visible in the final frame does not match the user-approved reference language."
+          "detail": "Structures, cabin/furnace staging, lamps and sparse interface/world dressing do not match the authoritative reference composition."
         }
       ],
       "invalidates": [
@@ -58,7 +67,7 @@
       "repair_evidence_status": "FUNCTIONAL_AND_4K60_EVIDENCE_PASS_BUT_VISUAL_STYLE_REJECTED",
       "historical_accepted_source": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
       "user_visual_rejection": true,
-      "user_feedback": "Only the trees and characters look like the reference files/videos and the intended game look.",
+      "user_feedback": "Characters, trees, snow, and water match the reference-video look; the other visible scene elements do not.",
       "reference_fidelity_passed": false,
       "primitive_audit_passed": true,
       "primitive_findings_count": 0
@@ -191,7 +200,7 @@
       "family": "whole_frame_reference_fidelity_violation",
       "discovered_at": "2026-09-22T20:04:00Z",
       "audited_integration_source": "7385d2f6c80cb0e09d7f30c41ddc1cdacd1e53e8",
-      "reason": "User whole-frame review of T08 shows T03-owned fence/gate/lantern and terrain/lane/snow presentation does not match the locked Havenline reference style.",
+      "reason": "User whole-frame review shows T03-owned fence/gate/lantern and ground/work-floor presentation does not match the locked Havenline reference style. The snow treatment is explicitly accepted and must be preserved.",
       "findings": [
         {
           "path": "HavenlineGodot/scripts/camp_boundary_view.gd",
@@ -199,11 +208,7 @@
         },
         {
           "path": "HavenlineGodot/scripts/outpost_surface.gd",
-          "detail": "Ground/lane/snow surface presentation requires reference-style art upgrade."
-        },
-        {
-          "path": "HavenlineGodot/shaders/outpost_snow.gdshader",
-          "detail": "Terrain/snow material treatment requires reference-style art upgrade."
+          "detail": "Ground/lane/work-floor geometry and composition require reference-style correction without degrading accepted snow."
         }
       ],
       "invalidates": [
@@ -218,6 +223,9 @@
       "preserves_unless_blast_radius_changes": [
         "boundary collision/navigation tests",
         "gate geometry authority",
+        "accepted snow presentation",
+        "T01 tree baseline",
+        "T02 water baseline",
         "nonvisual deterministic proof"
       ],
       "required_resolution": "Re-author T03 visible boundary/environment presentation to match the locked reference language while preserving collision/navigation authority; recapture whole-frame 4K60 evidence and obtain user approval."
@@ -228,7 +236,7 @@
       "family": "whole_frame_reference_fidelity_violation",
       "discovered_at": "2026-09-22T20:04:00Z",
       "audited_integration_source": "7385d2f6c80cb0e09d7f30c41ddc1cdacd1e53e8",
-      "reason": "User whole-frame review of T08 shows T05 furnace/station/resource-prop art does not match the locked Havenline reference style.",
+      "reason": "User whole-frame review shows T05 station/resource/prop art does not match the locked Havenline production-camp style.",
       "findings": [
         {
           "path": "HavenlineGodot/assets/stations_v2/**",
@@ -255,6 +263,35 @@
         "nonvisual deterministic proof"
       ],
       "required_resolution": "Re-author T05 visible station/prop family to match the locked reference language at gameplay scale; recapture whole-frame 4K60 evidence and obtain user approval."
+    },
+    {
+      "task_id": "T04",
+      "status": "ACTIVE",
+      "family": "whole_frame_reference_fidelity_violation",
+      "discovered_at": "2026-09-22T20:10:00Z",
+      "audited_integration_source": "efc648ed0ab9b9912743727f722001a63ab152bf",
+      "reason": "User whole-frame review shows current camera composition does not yet match the locked reference-video active-floor scale/readability.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/scripts/camera_composition.gd",
+          "detail": "Wide gameplay framing can read as a distant diagram; reference requires oblique framing with readable actor/item scale and station adjacency."
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "reference_fidelity",
+        "C1",
+        "C2",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "automatic phone/tablet layout logic",
+        "camera authority contract",
+        "nonvisual deterministic proof"
+      ],
+      "required_resolution": "Calibrate landscape camera composition directly against actual reference-video pixels/motion while preserving automatic device adaptation; require exact 10/10 composition fidelity and user approval."
     }
   ]
 }

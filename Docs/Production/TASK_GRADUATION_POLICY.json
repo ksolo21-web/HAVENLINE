@@ -34,6 +34,8 @@
       "required": [
         "exact_candidate_frozen",
         "zero_primitive_shipping_art",
+        "actual_reference_pixels_compared",
+        "reference_fidelity_exact_10_all_mandatory_dimensions",
         "source_bound_final_visual_evidence",
         "native_4k_visual_proof",
         "motion_visual_proof_60fps",
@@ -41,7 +43,7 @@
         "mandatory_critics_pass",
         "zero_unresolved_mandatory_defects"
       ],
-      "rule": "No visual task may become INTEGRATION_READY until the exact candidate is primitive-free and the user has inspected and explicitly approved exact-source final visuals. Signoff is governance-only and must not alter the frozen candidate SHA."
+      "rule": "No visual task may become INTEGRATION_READY until the exact candidate is primitive-free, compared directly with the checksum-locked authoritative reference-video pixels and motion, scores exactly 10/10 in every mandatory reference-fidelity dimension, and receives explicit user visual approval. Custom/authored but reference-wrong art fails."
     }
   },
   "graduation_manifest_fields": [

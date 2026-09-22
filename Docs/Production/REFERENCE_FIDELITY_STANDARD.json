@@ -58,15 +58,36 @@
         "HavenlineGodot/animations/c1/**",
         "HavenlineGodot/scripts/character1_motion.gd"
       ]
+    },
+    {
+      "task_id": "T03",
+      "class": "snow_surface",
+      "status": "USER_ACCEPTED_REFERENCE_MATCH",
+      "paths": [
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ]
+    },
+    {
+      "task_id": "T02",
+      "class": "water",
+      "status": "USER_ACCEPTED_REFERENCE_MATCH",
+      "paths": [
+        "HavenlineGodot/scripts/river_geometry.gd",
+        "HavenlineGodot/shaders/lakeshore_water.gdshader"
+      ]
     }
   ],
   "mandatory_whole_frame_classes": [
     "vegetation_trees",
     "characters",
+    "snow_surface",
+    "water",
+    "ground_work_floor",
     "structures_buildings",
     "fences_gates",
     "props_stations_resources",
-    "terrain_snow_water",
+    "camera_composition",
+    "interface_hud",
     "lighting_vfx_world_response"
   ],
   "approval_rules": {
@@ -78,6 +99,10 @@
     "upstream_failure_must_route_to_owner": true,
     "explicit_user_rejection_is_terminal_until_new_visual_candidate": true,
     "critic_pass_cannot_override_user_rejection": true,
-    "user_visual_approval_required_after_all_machine_and_critic_gates": true
+    "user_visual_approval_required_after_all_machine_and_critic_gates": true,
+    "actual_reference_pixels_required": true,
+    "mandatory_visual_dimension_score": 10,
+    "score_averaging_allowed": false,
+    "every_mandatory_dimension_must_equal_10": true
   }
 }
