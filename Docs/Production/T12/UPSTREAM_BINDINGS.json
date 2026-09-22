@@ -1,0 +1,110 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "purpose": "Pin approved upstream contracts and explicitly mark unfinished T11 assumptions as provisional until T12 activation.",
+  "bindings": {
+    "T07": {
+      "status": "APPROVED",
+      "integrated_source": "94b3f6c5097356a3857ebd13a77fb1e316eb06ae",
+      "verified_completion": "Docs/Production/T07/verified-completion.json",
+      "runtime_contract": "HavenlineGodot/scripts/context_director.gd",
+      "t12_may_read": [
+        "canonical action descriptor identity/state",
+        "actionable/blocked context state",
+        "stable contextual action kind/id"
+      ],
+      "t12_must_not": [
+        "mutate simulation state through T07",
+        "add permanent progression controls",
+        "persist ephemeral T07 focus/action_token as progression authority"
+      ],
+      "reconcile_at_activation": false
+    },
+    "T08": {
+      "status": "APPROVED",
+      "integrated_source": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
+      "verified_completion": "Docs/Production/T08/verified-completion.json",
+      "authority_contract": "simulation remains sole inventory/count authority; T08 presentation is derived from committed events and counts",
+      "t12_may_read": [
+        "authoritative resource/count/progression prerequisites exposed by integration",
+        "stable resource identities wood/stone/metal/fuel where progression rules require them",
+        "committed delivery/build/repair completion signals exposed through integration"
+      ],
+      "t12_must_not": [
+        "grant/debit/duplicate inventory",
+        "create logical capacity/encumbrance progression",
+        "treat presentation stacks as authoritative counts"
+      ],
+      "reconcile_at_activation": false
+    },
+    "T10": {
+      "status": "APPROVED",
+      "integrated_source": "eba0107def258824549fb10d81785290d0c81d97",
+      "verified_completion": "Docs/Production/T10/verified-completion.json",
+      "runtime_contract": "HavenlineGodot/scripts/world_transform.gd",
+      "presentation_contract": "HavenlineGodot/scripts/world_transform_view.gd",
+      "data_contract": "HavenlineGodot/data/world_transform_recipes.json",
+      "published_contract": [
+        "stable recipe/state ID",
+        "source state",
+        "target state",
+        "prerequisites",
+        "exact resource costs",
+        "progression tags",
+        "presentation key",
+        "locked/ready/preview/committing/complete/blocked-error lifecycle",
+        "stable transaction identity/idempotency behavior"
+      ],
+      "t12_may_read": [
+        "transform eligibility/completion state",
+        "stable transform recipe/state IDs",
+        "progression tags published by accepted T10",
+        "presentation keys and state lifecycle needed to reference visible world progression truth"
+      ],
+      "t12_must_not": [
+        "commit transforms",
+        "debit transform costs",
+        "change T10 idempotency/atomicity/recovery semantics",
+        "mutate world-transform targets or transaction state directly"
+      ],
+      "reconcile_at_activation": true,
+      "reconciliation_reason": "Re-verify that the exact accepted T10 source and public IDs remain present on the future post-T11 activation base; no T10 semantic changes are authorized."
+    },
+    "T11": {
+      "status": "ASSIGNED_PROVISIONAL_CONTRACT",
+      "branch": "havenline/T11-camp-construction",
+      "base_commit": "f558b9b162b349d1ee127e65edf967f6d28dfed0",
+      "prepared_scope": "Docs/Production/T11/FROZEN_SCOPE.md",
+      "expected_public_ids": [
+        "stable camp_state_id",
+        "T10 recipe binding",
+        "presentation key",
+        "asset manifest key",
+        "locked/ready/preview/committing/complete presentation mapping"
+      ],
+      "t12_may_eventually_read": [
+        "camp-state identity/completion",
+        "camp upgrade milestone hooks",
+        "stable authored camp progression state IDs"
+      ],
+      "t12_must_not": [
+        "spawn or modify camp content",
+        "invent camp upgrade IDs/prices before accepted T11",
+        "treat prepared T11 IDs as final if accepted implementation differs"
+      ],
+      "reconcile_at_activation": true,
+      "reconciliation_failure": "BLOCK_T12_ACTIVATION_AND_RAISE_CHANGE_REQUEST"
+    }
+  },
+  "activation_reconciliation": {
+    "required": ["T10", "T11"],
+    "checks": [
+      "accepted completion record exists",
+      "accepted integrated source is present at activation base",
+      "prepared public-interface assumptions still match accepted runtime/data",
+      "all progression hook IDs used by T12 shipping data resolve to accepted upstream IDs",
+      "no T12 reservation path overlaps an active/upstream owner"
+    ],
+    "fail_closed": true
+  }
+}
