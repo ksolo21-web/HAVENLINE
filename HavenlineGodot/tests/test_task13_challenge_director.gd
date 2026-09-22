@@ -171,7 +171,7 @@ func run() -> void:
 	var benchmark_iterations: int = 2000
 	var total_usec: int = 0
 	var benchmark_valid := true
-	for iteration in benchmark_iterations:
+	for _iteration in benchmark_iterations:
 		var sample_start: int = Time.get_ticks_usec()
 		var result: Dictionary = director.evaluate(context(51), window(1))
 		var elapsed_usec: int = Time.get_ticks_usec() - sample_start
