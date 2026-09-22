@@ -40,6 +40,7 @@ parity_comparator = load_module("t12_engine_parity", "compare_engine_parity.py")
 evidence_index_validator = load_module("t12_evidence_index", "validate_evidence_index.py")
 progression_validator = load_module("t12_progression_contract", "validate_progression_contract.py")
 binding_verifier = load_module("t12_binding_resolution", "verify_binding_resolution.py")
+validator_bundle = load_module("t12_validator_bundle", "validator_bundle.py")
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -91,6 +92,7 @@ def validate_consistency(
     binding_verification_result: dict[str, Any],
     candidate_guard_result: dict[str, Any],
     checked_out_head: str,
+    actual_validator_source: str,
     levels_sha256: str,
     milestones_sha256: str,
     binding_resolution_sha256: str,
@@ -142,6 +144,11 @@ def validate_consistency(
 
     activation_base = source.get("activation_base")
     integration_head = source.get("integration_head")
+    if source.get("validator_source") != actual_validator_source:
+        errors.append(
+            f"candidate validator_source does not match actual acceptance-critical bundle: "
+            f"expected {actual_validator_source!r}, got {source.get('validator_source')!r}"
+        )
     if not isinstance(candidate_guard_result, dict) or candidate_guard_result.get("passed") is not True:
         errors.append(
             "canonical T12 candidate path guard failed: "
@@ -235,6 +242,7 @@ def validate_consistency(
         "binding_verification_passed": binding_verification_result.get("passed") is True,
         "candidate_guard_passed": candidate_guard_result.get("passed") is True,
         "exact_candidate_checkout_passed": checked_out_head == candidate_sha,
+        "validator_bundle_identity_passed": source.get("validator_source") == actual_validator_source,
         "evidence_index_entry_count": evidence_index_result.get("entry_count"),
         "evidence_index_required_ref_count": evidence_index_result.get("required_ref_count"),
         "global_minimum_mandatory_dimension_score": critic_result.get("global_minimum_mandatory_dimension_score"),
@@ -314,6 +322,7 @@ def main() -> None:
         binding_verification_result=binding_result,
         candidate_guard_result=candidate_guard_result,
         checked_out_head=checked_out_head,
+        actual_validator_source=validator_bundle.bundle_digest(ROOT),
         levels_sha256=sha256_bytes(paths["levels"].read_bytes()),
         milestones_sha256=sha256_bytes(paths["milestones"].read_bytes()),
         binding_resolution_sha256=sha256_bytes(binding_bytes),
