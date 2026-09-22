@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_4_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_USER_SIGNOFF",
+  "status": "ITERATION_5_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_USER_SIGNOFF",
   "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -14,11 +14,11 @@
     "save/navigation deterministic proof"
   ],
   "changes": [
-    "Make the entire pointed crown solid snow with a short snow collar on the upper picket.",
-    "Remove all dark gate-post collars/bands; retain only tiny warm inset windows.",
-    "Use the same warm timber for gate posts and fence pickets.",
-    "Reduce rear structure to one thin same-family timber rail.",
-    "Keep T02 and T03 route/collision geometry unchanged."
+    "Remove timber geometry from the crown entirely so snow owns the full upper collar and point.",
+    "Shift fence/post timber toward the reference's pale warm salmon-brown.",
+    "Reduce material micro-contrast so the fence reads clean and sculpted at gameplay scale.",
+    "Keep tiny threshold warmth insets only.",
+    "Preserve T02 and all T03 route/collision geometry unchanged."
   ],
   "must_not_change": [
     "HavenlineGodot/scripts/camp_boundary.gd geometry constants",
@@ -37,7 +37,7 @@
     "explicit user visual signoff"
   ],
   "approval": false,
-  "review_repair_iteration": 4,
+  "review_repair_iteration": 5,
   "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
   "iteration_1_findings": [
     "Fence read as round log barricades rather than the reference's dense pointed palisade.",
@@ -57,5 +57,11 @@
     "Snow crown intersected the brown picket point and rendered as a white outline around a brown triangle.",
     "Gate-post dark bands visually merged into a black block at gameplay scale.",
     "Two visible rear rails still competed with the reference's vertical palisade rhythm."
+  ],
+  "iteration_4_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_4_findings": [
+    "Exact-source closeups showed a brown stripe cutting through the intended snow crown.",
+    "Fence timber remained more saturated orange than the pale salmon/brown reference fence.",
+    "Gate threshold warmth was acceptable but should stay even quieter."
   ]
 }

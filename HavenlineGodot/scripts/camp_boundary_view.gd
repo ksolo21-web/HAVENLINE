@@ -33,15 +33,15 @@ func _material(key:String)->ShaderMaterial:
 	m.shader=BOUNDARY_SHADER
 	match key:
 		"timber":
-			m.set_shader_parameter("base_color",Color(0.70,0.37,0.18,1.0));m.set_shader_parameter("roughness_value",0.84);m.set_shader_parameter("detail_strength",0.035);m.set_shader_parameter("detail_scale",3.2)
+			m.set_shader_parameter("base_color",Color(0.76,0.53,0.40,1.0));m.set_shader_parameter("roughness_value",0.86);m.set_shader_parameter("detail_strength",0.024);m.set_shader_parameter("detail_scale",3.2)
 		"timber_dark":
-			m.set_shader_parameter("base_color",Color(0.54,0.27,0.12,1.0));m.set_shader_parameter("roughness_value",0.88);m.set_shader_parameter("detail_strength",0.032);m.set_shader_parameter("detail_scale",3.4)
+			m.set_shader_parameter("base_color",Color(0.56,0.35,0.23,1.0));m.set_shader_parameter("roughness_value",0.89);m.set_shader_parameter("detail_strength",0.022);m.set_shader_parameter("detail_scale",3.4)
 		"snow":
-			m.set_shader_parameter("base_color",Color(0.93,0.975,1.0,1.0));m.set_shader_parameter("roughness_value",0.78);m.set_shader_parameter("detail_strength",0.025);m.set_shader_parameter("detail_scale",4.0)
+			m.set_shader_parameter("base_color",Color(0.95,0.985,1.0,1.0));m.set_shader_parameter("roughness_value",0.78);m.set_shader_parameter("detail_strength",0.025);m.set_shader_parameter("detail_scale",4.0)
 		"blue":
 			m.set_shader_parameter("base_color",Color(0.13,0.28,0.36,1.0));m.set_shader_parameter("roughness_value",0.46);m.set_shader_parameter("metallic_value",0.45);m.set_shader_parameter("detail_strength",0.025)
 		"orange":
-			m.set_shader_parameter("base_color",Color(0.98,0.64,0.20,1.0));m.set_shader_parameter("roughness_value",0.38);m.set_shader_parameter("metallic_value",0.10);m.set_shader_parameter("emission_color",Vector3(0.20,0.045,0.006));m.set_shader_parameter("detail_strength",0.015)
+			m.set_shader_parameter("base_color",Color(0.98,0.66,0.22,1.0));m.set_shader_parameter("roughness_value",0.38);m.set_shader_parameter("metallic_value",0.10);m.set_shader_parameter("emission_color",Vector3(0.20,0.045,0.006));m.set_shader_parameter("detail_strength",0.015)
 		"iron":
 			m.set_shader_parameter("base_color",Color(0.20,0.15,0.10,1.0));m.set_shader_parameter("roughness_value",0.42);m.set_shader_parameter("metallic_value",0.70);m.set_shader_parameter("detail_strength",0.02)
 		"stone":
