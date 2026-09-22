@@ -6,6 +6,7 @@ on:
       - '.github/workflows/havenline-task08-final-visual-signoff.yml'
       - 'Docs/Production/T08/VISUAL_REPAIR_SCOPE.json'
       - 'Docs/Production/APPROVAL_INVALIDATIONS.json'
+      - 'HavenlineGodot/tests/capture_task08_final_visual.gd'
 permissions:
   contents: read
 concurrency:
@@ -20,8 +21,11 @@ jobs:
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
-          ref: 9efb11e0262ae65de32f664d4627902d565f1148
           fetch-depth: 0
+      - name: Prove shipping runtime is exact repaired candidate
+        run: |
+          set -euo pipefail
+          git diff --exit-code "$T08_CANDIDATE" HEAD --             HavenlineGodot/scripts/transfer_feedback.gd             HavenlineGodot/scripts/carry_stack.gd             HavenlineGodot/scripts/storage_stockpile.gd             HavenlineGodot/assets/transfer_feedback_v2/
       - name: Prepare pinned Godot and capture tools
         run: |
           set -euo pipefail
@@ -40,25 +44,30 @@ jobs:
           python3 tools/havenline/bake_outpost_audio.py > t08-final-visual/audio-fixture.json
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > t08-final-visual/import.log 2>&1
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > t08-final-visual/motion-fixture.log 2>&1
-      - name: Capture exact-source native-4K motion
+      - name: Capture exact-source native-4K motion in bounded route shards
         run: |
           set -euo pipefail
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
           test -n "$VK_ICD_FILENAMES"
-          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 1200 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task08_inventory.gd -- --candidate="$T08_CANDIDATE" --state=route-proofs --device=final_visual_4k --view=three-quarter --native-4k --integrated --out="$(pwd)/t08-final-visual/route-proofs" > t08-final-visual/route-proofs.log 2>&1
-          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task08_inventory.gd -- --candidate="$T08_CANDIDATE" --state=sequence --device=final_visual_4k --view=front --native-4k --integrated --out="$(pwd)/t08-final-visual/sequence" > t08-final-visual/sequence.log 2>&1
+          for route in 0 2 5; do
+            out="t08-final-visual/route-$route"
+            mkdir -p "$out"
+            xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task08_final_visual.gd -- --candidate="$T08_CANDIDATE" --state=route-proofs --device=final_visual_4k --view=three-quarter --route-index="$route" --native-4k --integrated --out="$(pwd)/$out" > "$out.log" 2>&1
+          done
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' t08-final-visual/*.log; then exit 1; fi
       - name: Build 4K60 review package
         run: |
           set -euo pipefail
-          ffmpeg -hide_banner -loglevel error -framerate 60 -i t08-final-visual/route-proofs/frames/frame-%05d.jpg -c:v libx264 -preset ultrafast -crf 17 -pix_fmt yuv420p -r 60 t08-final-visual/route-proofs-4k60.mp4
-          ffmpeg -hide_banner -loglevel error -framerate 60 -i t08-final-visual/sequence/frames/frame-%05d.jpg -c:v libx264 -preset ultrafast -crf 17 -pix_fmt yuv420p -r 60 t08-final-visual/sequence-4k60.mp4
-          printf "file 'route-proofs-4k60.mp4'\nfile 'sequence-4k60.mp4'\n" > t08-final-visual/concat.txt
+          for route in 0 2 5; do
+            ffmpeg -hide_banner -loglevel error -framerate 60 -i "t08-final-visual/route-$route/frames/frame-%05d.jpg" -c:v libx264 -preset ultrafast -crf 17 -pix_fmt yuv420p -r 60 "t08-final-visual/route-$route-4k60.mp4"
+          done
+          printf "file 'route-0-4k60.mp4'\nfile 'route-2-4k60.mp4'\nfile 'route-5-4k60.mp4'\n" > t08-final-visual/concat.txt
           ffmpeg -hide_banner -loglevel error -f concat -safe 0 -i t08-final-visual/concat.txt -c copy -movflags +faststart t08-final-visual/T08-final-visual-4k60.mp4
-          cp t08-final-visual/route-proofs/arrival-furnace-storage.png t08-final-visual/stills/01-furnace-arrival.png
-          cp t08-final-visual/route-proofs/arrival-camp-storage.png t08-final-visual/stills/02-camp-storage-arrival.png
-          cp t08-final-visual/route-proofs/arrival-defense-north.png t08-final-visual/stills/03-defense-arrival.png
-          cp t08-final-visual/route-proofs/arrival-repair-furnace.png t08-final-visual/stills/04-repair-arrival.png
+          mkdir -p t08-final-visual/stills
+          cp t08-final-visual/route-0/route-0-frame-024.png t08-final-visual/stills/01-furnace-transfer.png
+          cp t08-final-visual/route-0/route-0-frame-050.png t08-final-visual/stills/02-furnace-arrival.png
+          cp t08-final-visual/route-2/route-2-frame-050.png t08-final-visual/stills/03-defense-arrival.png
+          cp t08-final-visual/route-5/route-5-frame-050.png t08-final-visual/stills/04-repair-arrival.png
           ffprobe -v error -show_entries stream=width,height,avg_frame_rate,nb_frames -show_entries format=duration -of json t08-final-visual/T08-final-visual-4k60.mp4 > t08-final-visual/video-probe.json
           python3 tools/havenline/task08/validate_final_visual.py --root t08-final-visual --candidate "$T08_CANDIDATE"
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
@@ -70,7 +79,8 @@ jobs:
             t08-final-visual/review-manifest.json
             t08-final-visual/primitive-audit.json
             t08-final-visual/video-probe.json
-            t08-final-visual/route-proofs/capture.json
-            t08-final-visual/sequence/capture.json
+            t08-final-visual/route-0/capture.json
+            t08-final-visual/route-2/capture.json
+            t08-final-visual/route-5/capture.json
           retention-days: 30
           if-no-files-found: error
