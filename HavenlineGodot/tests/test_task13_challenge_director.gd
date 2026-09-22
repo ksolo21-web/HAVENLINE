@@ -166,17 +166,19 @@ func run() -> void:
 	check("100-level spend-blind equivalence matrix passes", paired_spend_blind)
 
 	var samples: Array[int] = []
-	var benchmark_iterations := 2000
-	var total_usec := 0
+	var benchmark_iterations: int = 2000
+	var total_usec: int = 0
 	for iteration in benchmark_iterations:
-		var sample_start := Time.get_ticks_usec()
-		var result := director.evaluate(context(51), window(1))
-		total_usec += Time.get_ticks_usec() - sample_start
-		samples.append(Time.get_ticks_usec() - sample_start if not result.passed else max(0, Time.get_ticks_usec() - sample_start))
+		var sample_start: int = Time.get_ticks_usec()
+		var result: Dictionary = director.evaluate(context(51), window(1))
+		var elapsed_usec: int = Time.get_ticks_usec() - sample_start
+		check("benchmark evaluation remains valid %d" % iteration, result.passed)
+		total_usec += elapsed_usec
+		samples.append(elapsed_usec)
 	samples.sort()
-	var p95_index := min(samples.size() - 1, int(floor(float(samples.size()) * 0.95)))
-	var p95_usec := samples[p95_index]
-	var mean_usec := float(total_usec) / float(benchmark_iterations)
+	var p95_index: int = min(samples.size() - 1, int(floor(float(samples.size()) * 0.95)))
+	var p95_usec: int = samples[p95_index]
+	var mean_usec: float = float(total_usec) / float(benchmark_iterations)
 	check("pure decision mean stays bounded", mean_usec < 500.0, mean_usec)
 	check("pure decision p95 stays bounded", p95_usec < 1500, p95_usec)
 
