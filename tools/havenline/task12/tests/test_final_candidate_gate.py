@@ -186,12 +186,12 @@ class T12FinalCandidateGateTests(unittest.TestCase):
             progression_validation_result=(
                 progression_validation_result
                 if progression_validation_result is not None
-                else {"passed": True, "activation_head": self.base_sha, "errors": []}
+                else {"passed": True, "errors": []}
             ),
             binding_verification_result=(
                 binding_verification_result
                 if binding_verification_result is not None
-                else {"passed": True, "errors": []}
+                else {"passed": True, "activation_head": self.base_sha, "errors": []}
             ),
             candidate_guard_result=(
                 candidate_guard_result
