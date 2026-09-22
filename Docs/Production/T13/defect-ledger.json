@@ -76,6 +76,14 @@
       "evidence": "Run 35730558553 review-c2 showed only the known missing baked outpost audio and missing baked crew motion ERROR lines before the blanket grep exited 1.",
       "root_cause": "C2 did not classify known upstream evidence-fixture warnings separately from new render failures.",
       "repair": "Allowlist only those two exact warning messages, require both to be observed, keep all other ERROR/SCRIPT ERROR/Parse Error/ObjectDB leak signals fatal, and include the allowlist proof in C2 evidence.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "T13-BUILD-005",
+      "defect": "The exact-warning classifier was placed after six render commands under set -euo pipefail; the final Godot capture returned exit 1 because of the known baked-media warnings, aborting before classification could execute.",
+      "evidence": "Run 35732467356 review-c2 reached all six renders; the final shelter-detail log contained only the two known baked-media warning families, then the shell exited 1 before the post-render classifier or manifest step.",
+      "root_cause": "C2 capture control flow treated the raw Godot process code as authoritative before evaluating the bounded warning policy and required evidence artifacts.",
+      "repair": "Record each capture process exit without immediate pipefail termination, allow only exit 0/1, then require exact warning classification plus native-scene.png and render-evidence.json for every capture; any unexpected ERROR/parse/script/leak signal remains fatal.",
       "status": "RESOLVED_PENDING_RETEST"
     }
   ]
