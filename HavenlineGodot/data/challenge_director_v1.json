@@ -14,41 +14,101 @@
       "concurrent_emergency_bonus": 0
     },
     {
+      "band_id": "settled",
+      "threat_budget_multiplier": 0.95,
+      "recovery_window_multiplier": 1.08,
+      "wave_delay_multiplier": 1.06,
+      "raw_enemy_hp_multiplier": 0.98,
+      "raw_enemy_damage_multiplier": 0.96,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 0
+    },
+    {
       "band_id": "steady",
       "threat_budget_multiplier": 1,
-      "recovery_window_multiplier": 1,
-      "wave_delay_multiplier": 1,
+      "recovery_window_multiplier": 1.03,
+      "wave_delay_multiplier": 1.02,
       "raw_enemy_hp_multiplier": 1,
       "raw_enemy_damage_multiplier": 1,
       "resource_yield_multiplier": 1,
       "concurrent_emergency_bonus": 0
     },
     {
+      "band_id": "alert",
+      "threat_budget_multiplier": 1.06,
+      "recovery_window_multiplier": 1,
+      "wave_delay_multiplier": 0.99,
+      "raw_enemy_hp_multiplier": 1.01,
+      "raw_enemy_damage_multiplier": 1.02,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 0
+    },
+    {
       "band_id": "pressure",
       "threat_budget_multiplier": 1.12,
-      "recovery_window_multiplier": 0.95,
-      "wave_delay_multiplier": 0.95,
+      "recovery_window_multiplier": 0.97,
+      "wave_delay_multiplier": 0.96,
       "raw_enemy_hp_multiplier": 1.03,
       "raw_enemy_damage_multiplier": 1.04,
       "resource_yield_multiplier": 1,
       "concurrent_emergency_bonus": 0
     },
     {
+      "band_id": "hard",
+      "threat_budget_multiplier": 1.18,
+      "recovery_window_multiplier": 0.94,
+      "wave_delay_multiplier": 0.94,
+      "raw_enemy_hp_multiplier": 1.04,
+      "raw_enemy_damage_multiplier": 1.05,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 0
+    },
+    {
       "band_id": "severe",
-      "threat_budget_multiplier": 1.25,
-      "recovery_window_multiplier": 0.9,
-      "wave_delay_multiplier": 0.9,
+      "threat_budget_multiplier": 1.24,
+      "recovery_window_multiplier": 0.92,
+      "wave_delay_multiplier": 0.92,
       "raw_enemy_hp_multiplier": 1.05,
       "raw_enemy_damage_multiplier": 1.06,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 1
+    },
+    {
+      "band_id": "critical",
+      "threat_budget_multiplier": 1.3,
+      "recovery_window_multiplier": 0.9,
+      "wave_delay_multiplier": 0.9,
+      "raw_enemy_hp_multiplier": 1.06,
+      "raw_enemy_damage_multiplier": 1.08,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 1
+    },
+    {
+      "band_id": "extreme",
+      "threat_budget_multiplier": 1.36,
+      "recovery_window_multiplier": 0.88,
+      "wave_delay_multiplier": 0.88,
+      "raw_enemy_hp_multiplier": 1.08,
+      "raw_enemy_damage_multiplier": 1.1,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 1
+    },
+    {
+      "band_id": "apex",
+      "threat_budget_multiplier": 1.42,
+      "recovery_window_multiplier": 0.86,
+      "wave_delay_multiplier": 0.86,
+      "raw_enemy_hp_multiplier": 1.1,
+      "raw_enemy_damage_multiplier": 1.12,
       "resource_yield_multiplier": 1,
       "concurrent_emergency_bonus": 1
     }
   ],
   "normal_profile": {
     "profile_id": "NORMAL",
-    "level_band_size": 25,
+    "level_band_size": 10,
     "minimum_band_index": 0,
-    "maximum_band_index": 3
+    "maximum_band_index": 9
   },
   "thresholds": {
     "minimum_attempts_for_escalation": 4,
