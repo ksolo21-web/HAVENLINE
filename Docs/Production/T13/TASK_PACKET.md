@@ -5,7 +5,7 @@
 - Planned alias: `@reservation:T13`
 - Dependencies: T12
 - Required critics: C2, C3, C4, C6, C7
-- Runtime build before activation: **FORBIDDEN**
+- Runtime build before activation: **ISOLATED BUILD ALLOWED** — maximum state `BUILT_PENDING_DEPENDENCY`; integration/approval remain forbidden.
 
 ## Planned owned paths
 - `HavenlineGodot/scripts/challenge_director.gd`
@@ -14,6 +14,7 @@
 - `HavenlineGodot/tests/test_task13_integration.gd`
 - `HavenlineGodot/tests/capture_task13_challenge.gd`
 - `Docs/Production/T13/**`
+- `.github/workflows/havenline-task13-isolated.yml`
 
 ## Prepared builder handoff
 Read these before implementing any T13 runtime code:
@@ -49,11 +50,11 @@ If an external contract is absent or changed at activation, stop and reconcile i
 - zero unresolved mandatory defects.
 
 ## Activation start rule
-Only after every dependency is APPROVED/integrated and ownership is released:
+The isolated builder may be constructed before T12 approval under `preactivation_candidate.py`, but it may not activate or integrate. After every dependency is APPROVED/integrated and ownership is released:
 
 1. re-read exact current integration head;
 2. rebind T12 consumer contract and Game Master policy/standard;
-3. recheck the six planned T13 paths against current active/integration-only ownership and refresh contract hashes;
+3. recheck the seven planned T13 paths against current active/integration-only ownership and refresh contract hashes;
 4. require repository-wide production governance/migration validation PASS for the exact preparation candidate;
 5. through the integration owner, add `@reservation:T13` using the exact six planned paths from `ACTIVATION_CHECKLIST.json`;
 6. claim T13 as ASSIGNED with the checklist's canonical `workstream.py claim` command on the exact post-reservation integration head;
@@ -65,3 +66,7 @@ Preparation artifacts do not grant activation by themselves.
 
 ## Existing canonical activation controls
 T13 does not self-author governance tooling. Activation and branch graduation reuse the already-integrated production controls under `tools/havenline/production/`, especially `workstream.py`, `task_graduation_gate.py`, `preactivation_feasibility.py`, and the repository-wide governance/candidate workflows.
+
+## Preactivation isolated build lane
+
+While T12 is unresolved, `havenline/T13-challenge-director` may implement only the seven frozen T13-owned paths. The canonical `tools/havenline/production/preactivation_candidate.py` must PASS against the exact candidate. The maximum legal state is `BUILT_PENDING_DEPENDENCY`; `ASSIGNED`, `INTEGRATION_READY`, integration, and task approval remain forbidden. Any T12 consumer-contract or Game Master contract drift invalidates affected preactivation evidence and requires reconciliation/retest.
