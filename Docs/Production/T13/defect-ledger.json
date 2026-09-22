@@ -92,6 +92,14 @@
       "evidence": "Artifact 10696163794 from run 35733410803 was materialized and replayed against the same assertions: front/rear/side/three-quarter/gather-side/shelter-detail all had process exit 0, renderer mobile, render_scale 1.0; warning counts were 6 outpost-audio and 18 crew-motion; unexpected error set was empty.",
       "root_cause": "The evidence policy was split across opaque shell grep/test commands and Python assertions, making the failing subcondition non-diagnostic despite a valid retained artifact.",
       "repair": "Replace the fragmented shell post-check with one deterministic Python validator that records exit codes, warning counts, render metadata, exact unexpected lines, writes a structured evidence record, and fails only when that record contains a concrete violation.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "T13-BUILD-007",
+      "defect": "The source-bound capture reported readability_contract_complete=false even though C4 passed, because its scenario named recovery started Level 100 from previous band 3 and therefore correctly produced a bounded progression step-up instead of a recovery transition.",
+      "evidence": "Latest successful run 35734360763 printed readability_contract_complete=false while all deterministic suites and C2/C3/C4/C7 passed; source review showed capture_task13_challenge.gd used previous band 3 for the Level 100 struggle scenario.",
+      "root_cause": "Evidence fixture semantics contradicted the Challenge Director's bounded progression model; the fixture did not start from a high enough prior band to exercise de-escalation.",
+      "repair": "Start the Level 100 recovery capture from band 9, and require the complete four-state readability proof as part of capture PASS rather than recording it as an informational boolean.",
       "status": "RESOLVED_PENDING_RETEST"
     }
   ]

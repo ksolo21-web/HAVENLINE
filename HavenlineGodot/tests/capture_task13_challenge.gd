@@ -47,7 +47,7 @@ func run() -> void:
 	var recovery := director.evaluate(context(100), perf(2, {
 		"attempt_count": 4, "success_count": 1, "failure_count": 2,
 		"abandonment_count": 1, "down_count": 2, "struggle_streak": 1,
-	}), {"band_index": 3, "evaluation_sequence": 1})
+	}), {"band_index": 9, "evaluation_sequence": 1})
 	var gm := director.evaluate(context(51), perf(1), {}, {"requested_profile": "GM_CHALLENGE", "gm_authorized": true})
 	var spoofed_gm := director.evaluate(context(51), perf(1), {}, {"requested_profile": "GM_CHALLENGE", "gm_authorized": false})
 	var spend_context := context(1)
@@ -79,7 +79,12 @@ func run() -> void:
 		"integration_allowed": false,
 		"task_approved": false,
 		"isolated_state": "BUILT_PENDING_DEPENDENCY",
-		"passed": configured and baseline.passed and strong.passed and recovery.passed and gm.passed and spoofed_gm.passed and spend_equivalent and replay_equivalent and baseline.get("readability_contract", {}).get("contract_version", "") == "t13.readability.v1",
+		"passed": configured and baseline.passed and strong.passed and recovery.passed and gm.passed and spoofed_gm.passed and spend_equivalent and replay_equivalent and (
+			baseline.get("readability_contract", {}).get("contract_version", "") == "t13.readability.v1"
+			and strong.get("readability_contract", {}).get("transition_state", "") == "escalating"
+			and recovery.get("readability_contract", {}).get("transition_state", "") == "recovering"
+			and gm.get("readability_contract", {}).get("world_response_cue", "") == "owner_challenge_elevated"
+		),
 	}
 	var out := output_dir()
 	DirAccess.make_dir_recursive_absolute(out)
