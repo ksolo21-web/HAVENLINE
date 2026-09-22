@@ -53,7 +53,6 @@ class T12CandidateEvidenceInitializerTests(unittest.TestCase):
             milestones_sha256="d" * 64,
             binding_resolution_sha256="e" * 64,
             changed_file_manifest_ref="artifact://authorized-files.json",
-            validator_source="sha256:" + "f" * 64,
         )
 
     def test_initializer_fills_provenance_only(self):
@@ -65,7 +64,16 @@ class T12CandidateEvidenceInitializerTests(unittest.TestCase):
         self.assertEqual(packet["exact_source"]["upstream_sources"]["T11"], "2" * 40)
         self.assertTrue(all(row["status"] == "PENDING" for row in packet["static_reports"].values()))
         self.assertTrue(all(row["status"] == "PENDING" for row in packet["critic_reviews"].values()))
-        self.assertTrue(all(value is None for value in packet["gates"].values()))
+        self.assertTrue(
+            all(
+                row["status"] == "PENDING" and row["evidence_ref"] == ""
+                for row in packet["gates"].values()
+            )
+        )
+        self.assertEqual(
+            packet["exact_source"]["validator_source"],
+            initializer.validator_bundle.bundle_digest(ROOT),
+        )
         self.assertIsNone(packet["performance_c6"]["score"])
 
     def test_unresolved_binding_record_fails(self):
@@ -124,8 +132,9 @@ class T12CandidateEvidenceInitializerTests(unittest.TestCase):
 
     def test_prepassed_gate_in_template_fails(self):
         template = copy.deepcopy(self.template)
-        template["gates"]["G1"] = True
-        with self.assertRaisesRegex(ValueError, "pre-pass G1-G14"):
+        template["gates"]["G1"]["status"] = "PASS"
+        template["gates"]["G1"]["evidence_ref"] = "artifact://fake-g1.json"
+        with self.assertRaisesRegex(ValueError, "pre-pass or pre-evidence gate G1"):
             self.initialize(template=template)
 
     def test_prebuild_c6_flag_remains_false(self):
@@ -145,7 +154,7 @@ class T12CandidateEvidenceInitializerTests(unittest.TestCase):
                 milestones_sha256="d" * 64,
                 binding_resolution_sha256="e" * 64,
                 changed_file_manifest_ref="artifact://files.json",
-                validator_source="branch-name",
+                validator_source="sha256:" + "f" * 64,
             )
 
 
