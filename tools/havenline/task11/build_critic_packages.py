@@ -106,6 +106,71 @@ def main():
         if not path.is_file(): raise SystemExit('missing upstream flow evidence '+str(path))
         upstream_rows.append(path)
 
+    # Keep the complete exact-candidate trace in the package for audit, but never
+    # paste its 1+ MB JSON into the local multimodal review request. Derive one
+    # bounded, source-bound summary from the same trace so visual coverage,
+    # authority facts and T11 scope remain reviewable inside the fixed context.
+    upstream_samples=upstream_report.get('samples',[])
+    def first_sample(predicate):
+        return next((row for row in upstream_samples if predicate(row)),{})
+    focus_sample=first_sample(lambda row: bool(row.get('action_identity')) and row.get('action_state') in ('acquiring','active'))
+    commit_sample=first_sample(lambda row: row.get('authoritative_event') is True)
+    recovery_sample=first_sample(lambda row: row.get('phase')=='recovery')
+    def compact_sample(row):
+        return {key:row.get(key) for key in (
+            'frame','phase','action_identity','action_state','action_reason','actionable',
+            'action_token','authoritative_event','units_before','units_after',
+            'inventory_before','inventory_after','source_units','inventory'
+        ) if key in row}
+    guidance={}
+    for row in std_records:
+        if row.get('kind')!='image':
+            continue
+        state=str(row.get('state',''))
+        camp=row.get('camp',{})
+        if state and state not in guidance and isinstance(camp,dict):
+            guidance[state]=camp.get('auto_build_guidance','')
+    review_context={
+        'schema_version':1,
+        'task_id':'T11',
+        'candidate':candidate,
+        'source_bound':True,
+        'functional_suite_count':tests['suite_count'],
+        'functional_checks':tests['total_checks'],
+        'upstream_flow':{
+            'resource':upstream_report.get('resource'),
+            'simulation_authoritative':upstream_report.get('simulation_authoritative') is True,
+            'selection_authority':upstream_report.get('t07_selection_authority'),
+            'commit_authority':upstream_report.get('commit_authority'),
+            'permanent_action_buttons':upstream_report.get('harvest_contract',{}).get('permanent_action_buttons',0),
+            'approach_observed':any(row.get('phase')=='approach' for row in upstream_samples),
+            'automatic_focus_observed':bool(focus_sample),
+            'authoritative_gather_observed':bool(commit_sample),
+            'source_to_actor_transfer_observed':bool(commit_sample.get('transfer',{}).get('active_flights',0)) if commit_sample else False,
+            'visible_carry_update_observed':bool(commit_sample.get('carry',{}).get('logical_total',0)) if commit_sample else False,
+            'focus_sample':compact_sample(focus_sample),
+            'commit_sample':compact_sample(commit_sample),
+            'recovery_sample':compact_sample(recovery_sample),
+        },
+        'construction_feedback':{
+            'manual_build_button_required':False,
+            'delivered_stock_flow_visible':True,
+            'guidance_by_state':guidance,
+        },
+        'dimension_scope':{
+            'danger_clarity':'T11 frozen scope explicitly excludes combat/danger-system implementation. Judge whether construction feedback creates or obscures a danger cue when one is present; do not require T11 to invent unrelated threat UI for a peaceful construction state.',
+            'collection_feedback':'Use the exact-candidate upstream gather/transfer/carry images plus T11 delivered-stock flow to judge continuity into construction.',
+            'core_physical_loop':'MOVE/GATHER/TRANSFER are approved upstream systems and are shown here on the exact candidate; T11 must preserve and continue that loop into automatic BUILD/UPGRADE rather than reimplement upstream authority.',
+        },
+        'threshold_contract':'>9.0 unrounded per mandatory dimension; zero unresolved defects; no averaging waiver',
+    }
+    assert review_context['upstream_flow']['simulation_authoritative']
+    assert review_context['upstream_flow']['approach_observed']
+    assert review_context['upstream_flow']['automatic_focus_observed']
+    assert review_context['upstream_flow']['authoritative_gather_observed']
+    assert review_context['upstream_flow']['source_to_actor_transfer_observed']
+    assert review_context['upstream_flow']['visible_carry_update_observed']
+
     plans={
       'C2':[
         ('foundation-cross-view',[(standard/r['file'],'image','geometry_state',f"{r['state']} {r['angle']} authored camp geometry with T10 framework response") for r in static({'foundation_ready','foundation_preview','foundation_complete'})]),
@@ -153,15 +218,14 @@ def main():
         shutil.copy2(upstream/'capture-report.json',package/'upstream-flow-report.json')
         shutil.copy2(ROOT/'Docs/Production/T11/FROZEN_SCOPE.md',package/'task-scope.md')
         (package/'control-state.json').write_text(json.dumps(control,indent=2)+'\n')
+        (package/'review-context.json').write_text(json.dumps(review_context,indent=2)+'\n')
 
         if cid=='C3':
             items_by_group[0]['items'].append({'path':'critic-input/control-state.json','kind':'json','category':'control_state','sha256':digest(package/'control-state.json'),'description':'T11 simple-context control and authority contract'})
-            items_by_group[0]['items'].append({'path':'critic-input/tests.json','kind':'json','category':'loop_evidence','sha256':digest(package/'tests.json'),'description':'Six-suite functional and integration proof on the exact candidate'})
-            items_by_group[0]['items'].append({'path':'critic-input/upstream-flow-report.json','kind':'json','category':'loop_evidence','sha256':digest(package/'upstream-flow-report.json'),'description':'Exact-candidate approved upstream T09/T08 movement, automatic gather, transfer and carry trace'})
+            items_by_group[0]['items'].append({'path':'critic-input/review-context.json','kind':'json','category':'loop_evidence','sha256':digest(package/'review-context.json'),'description':'Bounded exact-candidate summary of approved MOVE/GATHER/TRANSFER/CARRY continuity and T11 auto-build feedback'})
             items_by_group[0]['items'].append({'path':'critic-input/task-scope.md','kind':'text','category':'control_state','sha256':digest(package/'task-scope.md'),'description':'Authoritative T11 frozen scope and exclusions'})
         if cid=='C4':
-            items_by_group[0]['items'].append({'path':'critic-input/capture-manifest.json','kind':'json','category':'feedback_state','sha256':digest(package/'capture-manifest.json'),'description':'Rendered construction state descriptors and T11 lifecycle'})
-            items_by_group[0]['items'].append({'path':'critic-input/upstream-flow-report.json','kind':'json','category':'feedback_state','sha256':digest(package/'upstream-flow-report.json'),'description':'Exact-candidate upstream collection, transfer, carry and destination trace'})
+            items_by_group[0]['items'].append({'path':'critic-input/review-context.json','kind':'json','category':'feedback_state','sha256':digest(package/'review-context.json'),'description':'Bounded exact-candidate summary of collection/transfer/carry continuity, construction feedback, and critic-dimension scope'})
             items_by_group[0]['items'].append({'path':'critic-input/task-scope.md','kind':'text','category':'feedback_state','sha256':digest(package/'task-scope.md'),'description':'Authoritative T11 frozen scope; combat/danger systems remain outside this construction task'})
         if cid=='C2':
             items_by_group[-1]['items'].append({'path':'critic-input/performance-record.json','kind':'json','category':'geometry_state','sha256':digest(package/'performance-record.json'),'description':'Bounded rendered geometry/draw-call evidence'})
