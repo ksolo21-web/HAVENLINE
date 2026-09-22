@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "status": "PREPARATION_ONLY_CRITIC_REVIEW_TEMPLATE",
+  "candidate_source": "<T12_CANDIDATE_SHA>",
+  "acceptance": {
+    "operator": ">",
+    "threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "no_average_waiver": true,
+    "zero_unresolved_mandatory_defects": true
+  },
+  "critics": {
+    "C2": {
+      "name": "Technical / Visual Integrity Critic",
+      "independence_required": true,
+      "independent": null,
+      "reviewer_runtime_id": "",
+      "review_evidence_ref": "",
+      "dimensions": [
+        {"id": "state_integrity", "description": "no duplicated or contradictory level/event state", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "authoritative_transition_truth", "description": "transition/result presentation matches actual authoritative progression state", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "objective_freshness", "description": "no stale objective after level completion", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "upstream_id_integrity", "description": "no provisional or missing upstream ID in shipping data", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "cross_view_consistency", "description": "no cross-view contradiction where player-facing progression presentation exists", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []}
+      ]
+    },
+    "C3": {
+      "name": "Havenline Gameplay Identity Critic",
+      "independence_required": true,
+      "independent": null,
+      "reviewer_runtime_id": "",
+      "review_evidence_ref": "",
+      "dimensions": [
+        {"id": "core_loop_reinforcement", "description": "progression reinforces MOVE→AUTO-INTERACT→GATHER→CARRY→DELIVER→TRANSFORM→RESCUE→BUILD/UPGRADE→EXPLORE→DEFEND", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "no_action_button_growth", "description": "no permanent action-button growth caused by progression", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "no_management_substitution", "description": "no manual inventory, skill-tree or 4X-management substitution", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "physical_world_response", "description": "no hidden-menu progression replacing physical world response", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "spend_blind_eligibility", "description": "no energy wall or spend-linked progression eligibility", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []}
+      ]
+    },
+    "C4": {
+      "name": "Gameplay UX / Readability Critic",
+      "independence_required": true,
+      "independent": null,
+      "reviewer_runtime_id": "",
+      "review_evidence_ref": "",
+      "dimensions": [
+        {"id": "current_and_next_clarity", "description": "current level and next meaningful objective are understandable", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "milestone_state_clarity", "description": "locked, eligible and complete milestone state is clear", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "causal_world_change_readability", "description": "visible world change and progression result are causally readable", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "prerequisite_explainability", "description": "no unexplained prerequisite or dead-end state", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "adaptive_layout_readability", "description": "adaptive layouts remain uncluttered", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []}
+      ]
+    },
+    "C6": {
+      "name": "Performance Critic",
+      "independence_required": false,
+      "quantitative_specialist_gate": true,
+      "independent": null,
+      "reviewer_runtime_id": "",
+      "review_evidence_ref": "",
+      "dimensions": [
+        {"id": "dataset_load_parse_validation", "description": "load, parse and validation cost for 100-level shipping datasets", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "current_next_query_cost", "description": "common current-level and next-objective query cost", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "milestone_prerequisite_query_cost", "description": "milestone and prerequisite query cost", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "allocation_object_growth", "description": "repeated-evaluation allocation/object growth", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "event_history_bounds", "description": "event/history bounds remain controlled", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "no_per_frame_full_rebuild", "description": "unchanged state does not trigger full-world or full-graph rebuild every frame", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "integrated_scene_telemetry", "description": "impacted integrated scene telemetry after T12 wiring", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []}
+      ]
+    },
+    "C7": {
+      "name": "Progression / Difficulty Critic",
+      "independence_required": true,
+      "independent": null,
+      "reviewer_runtime_id": "",
+      "review_evidence_ref": "",
+      "dimensions": [
+        {"id": "meaningful_every_level", "description": "meaningful progression at every level", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "no_boring_or_empty_stretches", "description": "no long boring stretches or empty filler levels", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "visible_cadence_quality", "description": "visible improvement cadence remains useful and readable", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "major_milestone_meaning", "description": "major milestones are structurally meaningful", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "no_impossible_chain", "description": "no impossible progression chain", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "no_stat_only_substitute", "description": "no HP-only/stat-only substitute where visible/system progression is required", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []},
+        {"id": "bounded_t13_interface", "description": "clean bounded interface for T13 spend-blind adaptive challenge without rewriting T12 topology", "mandatory": true, "score": null, "evidence_refs": [], "unresolved_defects": []}
+      ]
+    }
+  },
+  "notes": [
+    "Every listed dimension is mandatory for T12 review unless the authoritative review plan is formally revised; dimensions may not be omitted or averaged away.",
+    "C2/C3/C4/C7 require a genuinely separate reviewer/model runtime. The review pipeline must verify provenance; this JSON alone cannot prove runtime independence.",
+    "C6 is a quantitative specialist gate and must not be falsely labeled as an independent-model review.",
+    "Final physical-device native-4K/60 certification remains outside T12."
+  ]
+}

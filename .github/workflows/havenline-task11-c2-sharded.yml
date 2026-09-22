@@ -1,0 +1,278 @@
+name: Havenline T11 sharded C2 resolution
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task11-c2-sharded.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: havenline-t11-c2-sharded-9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+  cancel-in-progress: false
+
+env:
+  T11_CANDIDATE: 9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+  T11_SOURCE_RUN: '35679642713'
+
+jobs:
+  c2-shard:
+    strategy:
+      fail-fast: false
+      matrix:
+        shard:
+          - foundation-prebuild
+          - foundation-complete
+          - reinforced-prebuild
+          - reinforced-complete
+          - foundation-commit
+          - reinforced-commit
+          - native-detail
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+      OMP_NUM_THREADS: '4'
+      SHARD_ID: ${{ matrix.shard }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: 9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+          fetch-depth: 0
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-critic-C2
+          path: critic-input
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 35679642713
+      - name: Validate parent C2 package and derive exact shard
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/specialist_evidence_manifest.py validate critic-input/critic-manifest.json
+          python3 tools/havenline/production/critic_package_preflight.py critic-input/critic-manifest.json --candidate "$T11_CANDIDATE" --critic C2 --evidence-root .
+          cp critic-input/critic-manifest.json parent-manifest.json
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          shard=os.environ['SHARD_ID']
+          path=Path('critic-input/critic-manifest.json')
+          manifest=json.loads(path.read_text())
+          specs={
+            'foundation-prebuild':('foundation-cross-view',lambda p,k: 'foundation_ready' in p or 'foundation_preview' in p),
+            'foundation-complete':('foundation-cross-view',lambda p,k: 'foundation_complete' in p),
+            'reinforced-prebuild':('reinforced-cross-view',lambda p,k: 'reinforced_blocked' in p or 'reinforced_preview' in p),
+            'reinforced-complete':('reinforced-cross-view',lambda p,k: 'reinforced_complete' in p),
+            'foundation-commit':('commit-motion',lambda p,k: 'foundation_committing' in p),
+            'reinforced-commit':('commit-motion',lambda p,k: 'reinforced_committing' in p),
+            'native-detail':('native-detail',lambda p,k: True),
+          }
+          parent_id,predicate=specs[shard]
+          parent=next(g for g in manifest['groups'] if g['id']==parent_id)
+          items=[i for i in parent['items'] if predicate(i['path'],i['kind'])]
+          assert items, (shard,parent_id)
+          visual=sum(i['kind'] in ('image','motion_frame') for i in items)
+          assert 1 <= visual <= 8, (shard,visual)
+          manifest['groups']=[{'id':shard,'items':items}]
+          path.write_text(json.dumps(manifest,indent=2)+'\n')
+          Path('shard-provenance.json').write_text(json.dumps({
+            'schema_version':1,
+            'task_id':'T11',
+            'critic_id':'C2',
+            'candidate':os.environ['T11_CANDIDATE'],
+            'shard':shard,
+            'parent_group':parent_id,
+            'parent_manifest':'parent-manifest.json',
+            'item_count':len(items),
+            'visual_item_count':visual,
+            'threshold':'>9.0 unrounded',
+            'coverage_reduction_allowed':False,
+          },indent=2)+'\n')
+          PY
+          python3 tools/havenline/production/specialist_evidence_manifest.py validate critic-input/critic-manifest.json
+          python3 tools/havenline/production/critic_package_preflight.py critic-input/critic-manifest.json --candidate "$T11_CANDIDATE" --critic C2 --evidence-root .
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Prepare exact independent reviewer runtime
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > specialist-runtime-preparation.json
+          python3 -m pip install pillow
+      - name: Execute independent C2 shard
+        run: |
+          set -euo pipefail
+          python3 -u tools/havenline/task11/review_c2.py --candidate "$T11_CANDIDATE" --manifest critic-input/critic-manifest.json --out c2-shard
+          python3 tools/havenline/production/critic_harness.py validate-raw --critic C2 --candidate "$T11_CANDIDATE" --raw c2-shard/critic-record.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task11-c2-shard-${{ matrix.shard }}
+          path: |
+            c2-shard/
+            critic-input/critic-manifest.json
+            parent-manifest.json
+            shard-provenance.json
+            specialist-runtime-preparation.json
+          retention-days: 30
+          if-no-files-found: error
+
+  c2-aggregate:
+    needs: c2-shard
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: 9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-critic-C2
+          path: parent-input
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 35679642713
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          pattern: havenline-task11-c2-shard-*
+          path: shards
+      - name: Verify complete shard union and aggregate strict C2
+        run: |
+          set -euo pipefail
+          mkdir -p c2-combined
+          python3 - <<'PY'
+          import hashlib, json, os
+          from pathlib import Path
+          candidate=os.environ['T11_CANDIDATE']
+          def digest(path):
+              return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+          parent_path=Path('parent-input/critic-manifest.json')
+          parent=json.loads(parent_path.read_text())
+          assert parent['task_id']=='T11' and parent['critic_id']=='C2' and parent['candidate_commit']==candidate
+          parent_items={(i['path'],i['kind'],i['category'],i['sha256']) for g in parent['groups'] for i in g['items']}
+          manifests=list(Path('shards').rglob('critic-manifest.json'))
+          records=list(Path('shards').rglob('critic-record.json'))
+          assert len(manifests)==7 and len(records)==7,(len(manifests),len(records))
+          shard_items=set()
+          shard_ids=set()
+          for p in manifests:
+              m=json.loads(p.read_text())
+              assert m['task_id']=='T11' and m['critic_id']=='C2' and m['candidate_commit']==candidate
+              assert len(m['groups'])==1
+              shard_ids.add(m['groups'][0]['id'])
+              for i in m['groups'][0]['items']:
+                  shard_items.add((i['path'],i['kind'],i['category'],i['sha256']))
+          assert shard_items==parent_items, {'missing':list(parent_items-shard_items),'extra':list(shard_items-parent_items)}
+          expected={'foundation-prebuild','foundation-complete','reinforced-prebuild','reinforced-complete','foundation-commit','reinforced-commit','native-detail'}
+          assert shard_ids==expected,(shard_ids,expected)
+          parsed=[]
+          for p in records:
+              r=json.loads(p.read_text())
+              assert r['task_id']=='T11' and r['critic_id']=='C2' and r['candidate_hash']==candidate
+              assert r['passed'] is True and r['coverage_complete'] is True and r['defects']==[] and r['independent_runtime'] is True
+              assert r['confidence'] in ('medium','high')
+              assert set(r['scores'])=={'geometry_contact','clipping_seams','intentional_gap_integrity','cross_view_integrity'}
+              assert all(float(v)>9.0 for v in r['scores'].values())
+              parsed.append((p,r))
+          dimensions=parsed[0][1]['scores'].keys()
+          scores={d:min(float(r['scores'][d]) for _,r in parsed) for d in dimensions}
+          confidence=min((r['confidence'] for _,r in parsed),key=lambda x:{'low':0,'medium':1,'high':2}[x])
+          groups=[g for _,r in parsed for g in r.get('groups',[])]
+          raw={
+            'schema_version':1,'task_id':'T11','critic_id':'C2','candidate':candidate,
+            'strategy':'SOURCE_BOUND_SHARDED_INDEPENDENT_REVIEW',
+            'parent_manifest_hash':digest(parent_path),
+            'complete_parent_item_coverage':True,
+            'shards':[{'path':str(p),'record_hash':digest(p),'scores':r['scores']} for p,r in parsed],
+            'groups':groups,'defects':[],'scores':scores,'coverage_complete':True,'confidence':confidence,
+          }
+          raw_path=Path('c2-combined/raw-output.json')
+          raw_path.write_text(json.dumps(raw,indent=2)+'\n')
+          exemplar=parsed[0][1]
+          record={
+            'task_id':'T11','critic_id':'C2','provider':exemplar['provider'],'model':exemplar['model'],
+            'model_revision_expected':exemplar.get('model_revision_expected'),
+            'model_revision_actual':exemplar.get('model_revision_actual'),
+            'runtime_release':exemplar.get('runtime_release'),
+            'request_or_run_id':os.environ.get('GITHUB_RUN_ID','local')+'/c2-aggregate',
+            'candidate_hash':candidate,'input_manifest_hash':digest(parent_path),
+            'raw_output_path':'c2-combined/raw-output.json','raw_output_hash':digest(raw_path),
+            'scores':scores,'defects':[],'coverage_complete':True,'confidence':confidence,
+            'independent_runtime':True,'groups':groups,'fatal_error':None,'passed':True,
+            'review_strategy':'SOURCE_BOUND_SHARDED_INDEPENDENT_REVIEW',
+            'shard_count':len(parsed),'complete_parent_item_coverage':True,
+          }
+          Path('c2-combined/critic-record.json').write_text(json.dumps(record,indent=2)+'\n')
+          print(json.dumps({'passed':True,'candidate':candidate,'scores':scores,'shards':len(parsed),'complete_parent_item_coverage':True},indent=2))
+          PY
+          python3 tools/havenline/production/critic_harness.py validate-raw --critic C2 --candidate "$T11_CANDIDATE" --raw c2-combined/critic-record.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task11-review-C2-sharded-9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+          path: c2-combined/
+          retention-days: 30
+          if-no-files-found: error
+
+  final-review:
+    needs: c2-aggregate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: 9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-review-C2-sharded-9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+          path: reviews/C2
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-review-C3
+          path: reviews/C3
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 35679642713
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-review-C4
+          path: reviews/C4
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 35679642713
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-review-C6
+          path: reviews/C6
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 35679642713
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-candidate-9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+          path: functional-evidence
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 35679642713
+      - name: Bind strict C2 C3 C4 C6 proof
+        run: |
+          set -euo pipefail
+          C2=$(find reviews/C2 -name critic-record.json -print -quit)
+          C3=$(find reviews/C3 -name critic-record.json -print -quit)
+          C4=$(find reviews/C4 -name critic-record.json -print -quit)
+          C6=$(find reviews/C6 -name result.json -print -quit)
+          test -n "$C2" -a -n "$C3" -a -n "$C4" -a -n "$C6"
+          python3 tools/havenline/task11/final_gate.py --candidate "$T11_CANDIDATE" --c2 "$C2" --c3 "$C3" --c4 "$C4" --c6 "$C6" --tests functional-evidence/tests.json --out task11-final-review/final-review-gate.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task11-final-review-sharded-9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+          path: task11-final-review/
+          retention-days: 30
+          if-no-files-found: error
