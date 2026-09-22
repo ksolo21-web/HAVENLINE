@@ -66,7 +66,7 @@
         "C6 performance proof",
         "unrelated deterministic functional proof"
       ],
-      "required_resolution": "Repair the visible scene by earliest owning task: T02 terrain/snow/water/work-floor, T03 fences/gates/lanterns/lanes, T04 camera composition, T05 stations/resources/props, then downstream T08/T09/T10/T11 visual presentation as applicable; preserve unrelated functional proof, recapture exact-source 4K60 whole-frame evidence, rerun only invalidated critics/performance domains, and obtain explicit user side-by-side approval.",
+      "required_resolution": "Repair the visible scene beginning at T03 per user direction: T03 fences/gates/lanterns/lanes, T04 camera composition, T05 stations/resources/props, then downstream T08/T09/T10/T11 visual presentation as applicable. Preserve T02. Recapture exact-source 4K60 whole-frame evidence, rerun only invalidated critics/performance domains, and obtain explicit user side-by-side approval.",
       "repair_status": "USER_REJECTED_REFERENCE_FIDELITY",
       "repair_candidate_commit": "9efb11e0262ae65de32f664d4627902d565f1148",
       "repair_evidence_status": "FUNCTIONAL_AND_4K60_EVIDENCE_PASS_BUT_VISUAL_STYLE_REJECTED",
@@ -303,11 +303,11 @@
     },
     {
       "task_id": "T02",
-      "status": "ACTIVE",
+      "status": "RESOLVED_BY_USER_VISUAL_ACCEPTANCE",
       "family": "whole_frame_reference_fidelity_violation",
       "discovered_at": "2026-09-22T20:24:00Z",
       "audited_integration_source": "ef10e2e08562474800bb5973378ee3411abd1168",
-      "reason": "User whole-frame review clarifies that only trees and characters match the reference. T02's approved visual scope explicitly includes terrain, snow, warm work areas and river, so its visual approval must be reopened.",
+      "reason": "User explicitly accepted T02 as visually okay and directed the repair sequence to start at T03 onward.",
       "findings": [
         {
           "path": "HavenlineGodot/scripts/river_geometry.gd",
@@ -326,15 +326,7 @@
           "detail": "Water material treatment is not user-approved as reference-matching."
         }
       ],
-      "invalidates": [
-        "effective_approval",
-        "visual_evidence",
-        "reference_fidelity",
-        "C1",
-        "C2",
-        "C6",
-        "closeout"
-      ],
+      "invalidates": [],
       "preserves_unless_blast_radius_changes": [
         "river topology/meander geometry",
         "movement bounds",
@@ -342,7 +334,10 @@
         "T01 tree baseline",
         "nonvisual deterministic proof"
       ],
-      "required_resolution": "Re-review and, where needed, re-author T02 terrain/snow/work-floor/river presentation directly against the locked reference videos while preserving validated world geometry; recapture whole-frame 4K60 evidence and obtain explicit user approval."
+      "required_resolution": "None. Preserve T02 approved terrain/snow/work-floor/water presentation unless a later T03+ repair creates a demonstrated regression.",
+      "repair_status": "USER_ACCEPTED_PRESERVE",
+      "user_visual_acceptance": true,
+      "user_feedback": "T02 is okay; start repairs at T03 onward."
     }
   ]
 }
