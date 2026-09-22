@@ -122,6 +122,10 @@ func run() -> void:
 	check("GM raw inflation caps are respected", float(gm.gm_relative.raw_enemy_hp_ratio) <= 1.10 and float(gm.gm_relative.raw_enemy_damage_ratio) <= 1.15)
 	check("GM adds one meaningful emergency", int(gm.gm_relative.concurrent_emergency_bonus) == 1)
 	check("GM never reduces resource yield", is_equal_approx(float(gm.coefficients.resource_yield_multiplier), 1.0))
+	var gm_apex := director.evaluate(context(100), window(1), {}, {"requested_profile": "GM_CHALLENGE", "gm_authorized": true})
+	check("GM apex remains below explicit absolute threat cap", gm_apex.passed and float(gm_apex.coefficients.threat_budget_multiplier) <= float(gm_apex.gm_relative.absolute_threat_budget_multiplier_cap) + 0.000001)
+	check("GM apex remains below explicit absolute raw caps", float(gm_apex.coefficients.raw_enemy_hp_multiplier) <= float(gm_apex.gm_relative.absolute_enemy_hp_multiplier_cap) + 0.000001 and float(gm_apex.coefficients.raw_enemy_damage_multiplier) <= float(gm_apex.gm_relative.absolute_enemy_damage_multiplier_cap) + 0.000001)
+	check("GM advisory pressure adds coordinated variety without new controls", gm_apex.advisory_pressure_directives.size() >= 6)
 
 	var gm_strong := director.evaluate(context(50), window(2, {
 		"attempt_count": 4, "success_count": 4, "failure_count": 0,
@@ -142,6 +146,29 @@ func run() -> void:
 	var policy_data: Variant = JSON.parse_string(FileAccess.get_file_as_string("res://data/challenge_director_v1.json"))
 	check("shipping policy JSON parses", policy_data is Dictionary)
 	if policy_data is Dictionary:
+		var threat_deltas := {}
+		var pressure_profiles := {}
+		var pressure_vocabulary := {}
+		var maximum_adjacent_ratio := 1.0
+		for band_index in policy_data.bands.size():
+			var band: Dictionary = policy_data.bands[band_index]
+			pressure_profiles[String(band.pressure_profile_id)] = true
+			for directive: Variant in band.pressure_directives:
+				pressure_vocabulary[String(directive)] = true
+			if band_index > 0:
+				var previous_band: Dictionary = policy_data.bands[band_index - 1]
+				var delta_key := "%.3f" % (float(band.threat_budget_multiplier) - float(previous_band.threat_budget_multiplier))
+				threat_deltas[delta_key] = true
+				maximum_adjacent_ratio = max(maximum_adjacent_ratio, float(band.threat_budget_multiplier) / float(previous_band.threat_budget_multiplier))
+		check("nonlinear progression uses varied threat increments", threat_deltas.size() >= 4, threat_deltas.keys())
+		check("all ten bands carry distinct challenge styles", pressure_profiles.size() == 10, pressure_profiles.keys())
+		check("pressure vocabulary spans at least six challenge axes", pressure_vocabulary.size() >= 6, pressure_vocabulary.keys())
+		var protection: Dictionary = policy_data.upgrade_protection
+		check("adjacent adaptation respects upgrade counter cap", maximum_adjacent_ratio <= float(protection.maximum_immediate_threat_counter_ratio) + 0.000001, maximum_adjacent_ratio)
+		var preserved_advantage := float(protection.minimum_meaningful_upstream_gain_ratio) / maximum_adjacent_ratio
+		check("policy guarantees minimum preserved upgrade advantage", preserved_advantage + 0.000001 >= float(protection.minimum_preserved_advantage_ratio), preserved_advantage)
+		check("milestone metadata is explicitly excluded from challenge scoring", protection.milestone_metadata_is_scoring_input == false)
+
 		var bad_policy: Dictionary = policy_data.duplicate(true)
 		bad_policy.gm_profile.threat_target_ratio = 2.0
 		var fallback := Director.new()
