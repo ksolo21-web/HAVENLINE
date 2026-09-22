@@ -53,6 +53,7 @@ class T12FinalCandidateGateTests(unittest.TestCase):
 
     def candidate_packet(self, records):
         data = copy.deepcopy(CANDIDATE_TEMPLATE)
+        data["status"] = "CANDIDATE_EVIDENCE_COMPLETE"
         source = data["exact_source"]
         source["activation_base"] = self.base_sha
         source["candidate_source"] = self.candidate_sha
@@ -65,7 +66,7 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         }
         source["upstream_sources"]["T10"] = self.t10_sha
         source["upstream_sources"]["T11"] = self.t11_sha
-        source["validator_source"] = "sha256:" + "4" * 64
+        source["validator_source"] = gate.validator_bundle.bundle_digest(ROOT)
 
         for row in data["static_reports"].values():
             row["status"] = "PASS"
@@ -109,8 +110,9 @@ class T12FinalCandidateGateTests(unittest.TestCase):
                 "evidence_ref": record["review_evidence_ref"],
                 "minimum_mandatory_dimension_score": minima[critic],
             })
-        for key in data["gates"]:
-            data["gates"][key] = True
+        for key, row in data["gates"].items():
+            row["status"] = "PASS"
+            row["evidence_ref"] = f"artifact://gate-{key.lower()}.json"
         data["defects"]["unresolved_mandatory"] = []
         return data
 
@@ -204,6 +206,7 @@ class T12FinalCandidateGateTests(unittest.TestCase):
                 }
             ),
             checked_out_head=checked_out_head if checked_out_head is not None else self.candidate_sha,
+            actual_validator_source=gate.validator_bundle.bundle_digest(ROOT),
             levels_sha256=levels_digest if levels_digest is not None else self.levels_digest,
             milestones_sha256=self.milestones_digest,
             binding_resolution_sha256=self.binding_digest,
@@ -293,6 +296,15 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         result = self.validate(checked_out_head="f" * 40)
         self.assertFalse(result["passed"])
         self.assertTrue(any("exact candidate checkout" in error for error in result["errors"]))
+
+    def test_validator_bundle_mismatch_fails(self):
+        records = self.critic_records()
+        candidate = self.candidate_packet(records)
+        candidate["exact_source"]["validator_source"] = "sha256:" + "f" * 64
+        evidence = self.evidence_index(candidate, records)
+        result = self.validate(candidate=candidate, records=records, evidence_index=evidence)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("validator_source does not match actual" in error for error in result["errors"]))
 
     def test_failed_candidate_guard_fails(self):
         result = self.validate(
