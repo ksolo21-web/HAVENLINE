@@ -45,8 +45,17 @@
         "HavenlineGodot/assets/reference_forest/**",
         "HavenlineGodot/scripts/reference_forest.gd"
       ],
-      "tasks": ["T01","T02","T03"],
-      "suites": ["test_reference_forest","test_reference_forest_acceptance","test_task02_river","test_task03_boundary"]
+      "tasks": [
+        "T01",
+        "T02",
+        "T03"
+      ],
+      "suites": [
+        "test_reference_forest",
+        "test_reference_forest_acceptance",
+        "test_task02_river",
+        "test_task03_boundary"
+      ]
     },
     {
       "patterns": [
@@ -54,8 +63,17 @@
         "HavenlineGodot/scripts/outpost_surface.gd",
         "HavenlineGodot/shaders/lakeshore_water.gdshader"
       ],
-      "tasks": ["T02","T03"],
-      "suites": ["test_task02_terrain","test_task02_surface_stress","test_lake_east_west","test_task02_river","test_task03_boundary"]
+      "tasks": [
+        "T02",
+        "T03"
+      ],
+      "suites": [
+        "test_task02_terrain",
+        "test_task02_surface_stress",
+        "test_lake_east_west",
+        "test_task02_river",
+        "test_task03_boundary"
+      ]
     },
     {
       "patterns": [
@@ -63,8 +81,14 @@
         "HavenlineGodot/scripts/camp_boundary_view.gd",
         "HavenlineGodot/shaders/outpost_snow.gdshader"
       ],
-      "tasks": ["T03"],
-      "suites": ["test_task03_boundary","test_task02_surface_stress","test_task02_river"]
+      "tasks": [
+        "T03"
+      ],
+      "suites": [
+        "test_task03_boundary",
+        "test_task02_surface_stress",
+        "test_task02_river"
+      ]
     },
     {
       "patterns": [
@@ -72,32 +96,67 @@
         "HavenlineGodot/scripts/outpost_simulation.gd",
         "HavenlineGodot/data/reference-contract.json"
       ],
-      "tasks": ["T01","T02","T03"],
-      "suites": ["test_simulation","test_crew_and_persistence","test_outpost","test_outpost_runtime","test_environment","test_reference_forest","test_task02_river","test_task03_boundary"]
+      "tasks": [
+        "T01",
+        "T02",
+        "T03"
+      ],
+      "suites": [
+        "test_simulation",
+        "test_crew_and_persistence",
+        "test_outpost",
+        "test_outpost_runtime",
+        "test_environment",
+        "test_reference_forest",
+        "test_task02_river",
+        "test_task03_boundary"
+      ]
     },
     {
       "patterns": [
         "HavenlineGodot/scripts/camera*.gd",
         "HavenlineGodot/scripts/*camera*.gd"
       ],
-      "tasks": ["T01","T02","T03","T04"],
-      "suites": ["test_adaptive_devices","test_render_budget"]
+      "tasks": [
+        "T01",
+        "T02",
+        "T03",
+        "T04"
+      ],
+      "suites": [
+        "test_adaptive_devices",
+        "test_render_budget"
+      ]
     },
     {
       "patterns": [
         "HavenlineGodot/assets/stations_v2/**",
         "HavenlineGodot/scripts/station_kit.gd"
       ],
-      "tasks": ["T03","T04","T05"],
-      "suites": ["test_task03_boundary","test_task04_camera","test_render_budget","test_task05_station_kit"]
+      "tasks": [
+        "T03",
+        "T04",
+        "T05"
+      ],
+      "suites": [
+        "test_task03_boundary",
+        "test_task04_camera",
+        "test_render_budget",
+        "test_task05_station_kit"
+      ]
     },
     {
       "patterns": [
         "HavenlineGodot/animations/**",
         "HavenlineGodot/scripts/character*.gd"
       ],
-      "tasks": ["T06"],
-      "suites": ["test_motion_and_performance","test_population"]
+      "tasks": [
+        "T06"
+      ],
+      "suites": [
+        "test_motion_and_performance",
+        "test_population"
+      ]
     },
     {
       "patterns": [
@@ -108,8 +167,19 @@
         "HavenlineGodot/tests/test_task07_integration.gd",
         "HavenlineGodot/tests/capture_task07_context_director.gd"
       ],
-      "tasks": ["T04","T06","T07"],
-      "suites": ["test_adaptive_devices","test_outpost_runtime","test_task04_camera","test_task06_character1","test_task07_context_director","test_task07_integration"]
+      "tasks": [
+        "T04",
+        "T06",
+        "T07"
+      ],
+      "suites": [
+        "test_adaptive_devices",
+        "test_outpost_runtime",
+        "test_task04_camera",
+        "test_task06_character1",
+        "test_task07_context_director",
+        "test_task07_integration"
+      ]
     },
     {
       "patterns": [
@@ -120,8 +190,45 @@
         "HavenlineGodot/tests/capture_task09_harvesting.gd",
         "HavenlineGodot/tests/capture_task09_performance.gd"
       ],
-      "tasks": ["T06","T07","T08","T09"],
-      "suites": ["test_motion_and_performance","test_task06_character1","test_task07_context_director","test_task07_integration","test_task08_inventory","test_task08_integration","test_task09_harvesting","test_task09_integration"]
+      "tasks": [
+        "T06",
+        "T07",
+        "T08",
+        "T09"
+      ],
+      "suites": [
+        "test_motion_and_performance",
+        "test_task06_character1",
+        "test_task07_context_director",
+        "test_task07_integration",
+        "test_task08_inventory",
+        "test_task08_integration",
+        "test_task09_harvesting",
+        "test_task09_integration"
+      ]
+    },
+    {
+      "patterns": [
+        "HavenlineGodot/assets/camp_construction_v1/**",
+        "HavenlineGodot/scripts/camp_construction_view.gd",
+        "HavenlineGodot/data/camp_construction_recipes.json",
+        "HavenlineGodot/tests/test_task11_camp_construction.gd",
+        "HavenlineGodot/tests/test_task11_integration.gd",
+        "HavenlineGodot/tests/capture_task11_camp_construction.gd"
+      ],
+      "tasks": [
+        "T09",
+        "T10",
+        "T11"
+      ],
+      "suites": [
+        "test_task09_harvesting",
+        "test_task09_integration",
+        "test_task10_world_transform",
+        "test_task10_integration",
+        "test_task11_camp_construction",
+        "test_task11_integration"
+      ]
     },
     {
       "patterns": [
