@@ -63,19 +63,19 @@ func add_environment() -> void:
 	environment.background_color = Color("101821")
 	environment.ambient_light_source = Environment.AMBIENT_SOURCE_COLOR
 	environment.ambient_light_color = Color("d9e9f1")
-	environment.ambient_light_energy = 0.72
+	environment.ambient_light_energy = 0.82
 	environment_node.environment = environment
 	world.add_child(environment_node)
 
 	var key := DirectionalLight3D.new()
 	key.rotation_degrees = Vector3(-54.0, -28.0, 0.0)
-	key.light_energy = 1.9
+	key.light_energy = 1.55
 	key.shadow_enabled = true
 	world.add_child(key)
 
 	var fill := DirectionalLight3D.new()
 	fill.rotation_degrees = Vector3(-35.0, 145.0, 0.0)
-	fill.light_energy = 0.55
+	fill.light_energy = 0.82
 	fill.shadow_enabled = false
 	world.add_child(fill)
 
@@ -104,8 +104,11 @@ func configure_camera(angle: String) -> void:
 			camera.position = Vector3(7.0, 5.0, 7.4)
 			camera.look_at(Vector3(0.0, 1.45, 0.0), Vector3.UP)
 		"side":
-			camera.position = Vector3(9.2, 4.2, 0.0)
-			camera.look_at(Vector3(0.0, 1.45, 0.0), Vector3.UP)
+			# Keep a side-dominant inspection while retaining one front footing
+			# edge, so wall/base contact cannot collapse into a flat silhouette.
+			camera.position = Vector3(9.2, 4.6, 2.2)
+			camera.look_at(Vector3(0.0, 1.35, 0.0), Vector3.UP)
+			assert(absf(camera.position.z) >= 1.5, "T11 side evidence must retain a visible footing edge")
 		"overhead":
 			# A true vertical top-down view collapses a roofed shelter into one flat
 			# rectangle and cannot prove 3D cross-view integrity. Keep this as a
