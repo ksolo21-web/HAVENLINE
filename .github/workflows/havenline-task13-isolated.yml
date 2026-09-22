@@ -426,39 +426,73 @@ jobs:
           capture three-quarter three-quarter opening
           capture gather-side side gather
           capture shelter-detail front shelter-detail
-          unexpected_errors="$(grep -hE 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' c2-evidence/*.log | grep -vF 'ERROR: Missing baked outpost audio: run tools/havenline/bake_outpost_audio.py' | grep -vF 'ERROR: Missing baked crew motion: run res://tools/bake_crew_motion.gd' || true)"
-          if [ -n "$unexpected_errors" ]; then
-            printf '%s\n' "$unexpected_errors"
-            exit 1
-          fi
-          test "$(grep -hF 'ERROR: Missing baked outpost audio: run tools/havenline/bake_outpost_audio.py' c2-evidence/*.log | wc -l)" -ge 1
-          test "$(grep -hF 'ERROR: Missing baked crew motion: run res://tools/havenline/bake_crew_motion.gd' c2-evidence/*.log | wc -l)" -ge 1
           python3 - <<'PY'
           import json
           from pathlib import Path
+
+          root=Path('c2-evidence')
           names=['front','rear','side','three-quarter','gather-side','shelter-detail']
+          allowed_exact=[
+              'ERROR: Missing baked outpost audio: run tools/havenline/bake_outpost_audio.py',
+              'ERROR: Missing baked crew motion: run res://tools/bake_crew_motion.gd',
+          ]
+          fatal_tokens=('SCRIPT ERROR','Parse Error','ERROR:','ObjectDB instances were leaked')
           exit_codes={}
+          warning_counts={message:0 for message in allowed_exact}
+          unexpected=[]
+          reports={}
+
           for name in names:
-              root=Path('c2-evidence')/name
-              rc=int((root/'process-exit.txt').read_text().strip())
+              capture=root/name
+              rc=int((capture/'process-exit.txt').read_text().strip())
               exit_codes[name]=rc
-              assert rc in (0,1), (name,rc)
-              assert (root/'native-scene.png').is_file(), name
-              assert (root/'render-evidence.json').is_file(), name
-              report=json.loads((root/'render-evidence.json').read_text())
-              assert report['renderer']=='mobile' and report['render_scale']==1.0, (name,report)
-              if rc != 0:
-                  log=(Path('c2-evidence')/(name+'.log')).read_text(errors='replace')
-                  assert ('ERROR: Missing baked outpost audio: run tools/havenline/bake_outpost_audio.py' in log or 'ERROR: Missing baked crew motion: run res://tools/bake_crew_motion.gd' in log), (name,'nonzero_without_known_warning')
-          Path('c2-evidence/known-preexisting-render-warnings.json').write_text(json.dumps({
-              'passed': True,
-              'allowed_exact': [
-                  'ERROR: Missing baked outpost audio: run tools/havenline/bake_outpost_audio.py',
-                  'ERROR: Missing baked crew motion: run res://tools/bake_crew_motion.gd',
-              ],
-              'all_other_error_signals_remain_fatal': True,
+              if rc not in (0,1):
+                  unexpected.append(f'{name}: unexpected process exit {rc}')
+              png=capture/'native-scene.png'
+              report_path=capture/'render-evidence.json'
+              if not png.is_file():
+                  unexpected.append(f'{name}: missing native-scene.png')
+              if not report_path.is_file():
+                  unexpected.append(f'{name}: missing render-evidence.json')
+              else:
+                  report=json.loads(report_path.read_text())
+                  reports[name]={'renderer':report.get('renderer'),'render_scale':report.get('render_scale')}
+                  if report.get('renderer')!='mobile' or report.get('render_scale')!=1.0:
+                      unexpected.append(f'{name}: invalid render evidence {reports[name]}')
+              log=(root/(name+'.log')).read_text(errors='replace')
+              known_in_log=False
+              for line in log.splitlines():
+                  if not any(token in line for token in fatal_tokens):
+                      continue
+                  matched=False
+                  for message in allowed_exact:
+                      if message in line:
+                          warning_counts[message]+=1
+                          known_in_log=True
+                          matched=True
+                          break
+                  if not matched:
+                      unexpected.append(f'{name}: {line}')
+              if rc != 0 and not known_in_log:
+                  unexpected.append(f'{name}: nonzero exit without an allowed warning')
+
+          for message,count in warning_counts.items():
+              if count < 1:
+                  unexpected.append(f'missing expected pre-existing warning: {message}')
+
+          result={
+              'passed': not unexpected,
+              'allowed_exact': allowed_exact,
+              'warning_counts': warning_counts,
               'capture_exit_codes': exit_codes,
-          }, indent=2)+'\n')
+              'render_reports': reports,
+              'unexpected': unexpected,
+              'all_other_error_signals_remain_fatal': True,
+          }
+          (root/'known-preexisting-render-warnings.json').write_text(json.dumps(result,indent=2)+'\n')
+          print(json.dumps(result,indent=2))
+          if unexpected:
+              raise SystemExit(1)
           PY
 
       - name: Build and validate source-bound C2 manifest

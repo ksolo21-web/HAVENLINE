@@ -84,6 +84,14 @@
       "evidence": "Run 35732467356 review-c2 reached all six renders; the final shelter-detail log contained only the two known baked-media warning families, then the shell exited 1 before the post-render classifier or manifest step.",
       "root_cause": "C2 capture control flow treated the raw Godot process code as authoritative before evaluating the bounded warning policy and required evidence artifacts.",
       "repair": "Record each capture process exit without immediate pipefail termination, allow only exit 0/1, then require exact warning classification plus native-scene.png and render-evidence.json for every capture; any unexpected ERROR/parse/script/leak signal remains fatal.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "T13-BUILD-006",
+      "defect": "C2's fragmented shell post-capture warning checks returned exit 1 even though the retained exact-candidate artifact proves all six capture exits were 0, all six PNG/report pairs were present and valid, both allowed warning families were present, and no unexpected error signal remained.",
+      "evidence": "Artifact 10696163794 from run 35733410803 was materialized and replayed against the same assertions: front/rear/side/three-quarter/gather-side/shelter-detail all had process exit 0, renderer mobile, render_scale 1.0; warning counts were 6 outpost-audio and 18 crew-motion; unexpected error set was empty.",
+      "root_cause": "The evidence policy was split across opaque shell grep/test commands and Python assertions, making the failing subcondition non-diagnostic despite a valid retained artifact.",
+      "repair": "Replace the fragmented shell post-check with one deterministic Python validator that records exit codes, warning counts, render metadata, exact unexpected lines, writes a structured evidence record, and fails only when that record contains a concrete violation.",
       "status": "RESOLVED_PENDING_RETEST"
     }
   ]
