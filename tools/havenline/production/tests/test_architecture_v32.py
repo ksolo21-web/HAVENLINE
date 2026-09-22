@@ -1,4 +1,4 @@
-import hashlib,json,re,subprocess,sys,tempfile,unittest
+import hashlib,json,os,re,subprocess,sys,tempfile,unittest
 from pathlib import Path
 
 PROD=Path(__file__).resolve().parents[1]
@@ -28,20 +28,22 @@ SHA='a'*40
 
 class V32Tests(unittest.TestCase):
  def test_t11_assignment_graduation_is_valid(self):
-  head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+  candidate_head=subprocess.check_output(['git','rev-parse','HEAD'],cwd=ROOT,text=True).strip()
+  integration_head=os.environ.get('HAVENLINE_TRUSTED_INTEGRATION_HEAD',candidate_head).strip()
+  subprocess.check_call(['git','cat-file','-e',integration_head+'^{commit}'],cwd=ROOT)
   stale='fbb81ae34b9053f17fc937fb7e67895e3ef0584b'
-  stale_lineage=control_plane_lineage.assess(stale,head)
+  stale_lineage=control_plane_lineage.assess(stale,integration_head)
   self.assertFalse(stale_lineage['passed'],stale_lineage)
   self.assertTrue(stale_lineage['control_plane_sync_required'],stale_lineage)
   self.assertTrue(stale_lineage['governance_only_drift'],stale_lineage)
   self.assertFalse(stale_lineage['runtime_reset_required'],stale_lineage)
-  stale_gate=task_graduation_gate.evaluate('T11','ASSIGNED',stale,head)
+  stale_gate=task_graduation_gate.evaluate('T11','ASSIGNED',stale,integration_head)
   self.assertFalse(stale_gate['passed'],stale_gate)
   self.assertFalse(stale_gate['checks']['control_plane_lineage'],stale_gate)
-  out=task_graduation_gate.evaluate('T11','ASSIGNED',head,head)
+  out=task_graduation_gate.evaluate('T11','ASSIGNED',integration_head,integration_head)
   self.assertTrue(out['passed'],out)
   self.assertTrue(out['checks']['control_plane_lineage'],out)
-  build=task_graduation_gate.evaluate('T11','BUILDING_ISOLATED',head,head)
+  build=task_graduation_gate.evaluate('T11','BUILDING_ISOLATED',integration_head,integration_head)
   manifest=ROOT/'Docs/Production/T11/GRADUATION.json'
   self.assertEqual(manifest.exists(),build['passed'],build)
 
