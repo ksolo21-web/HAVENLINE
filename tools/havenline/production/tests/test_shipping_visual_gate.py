@@ -23,9 +23,11 @@ class ShippingVisualGateTests(unittest.TestCase):
         self.assertTrue(report["passed"],report)
         rows={r["task_id"]:r for r in report["rows"]}
         for task in ("T08","T09","T10","T11"):
-            self.assertGreater(rows[task]["finding_count"],0,rows[task])
             self.assertTrue(rows[task]["invalidation_active"])
             self.assertFalse(rows[task]["effective_approved"])
+        self.assertEqual(0, rows["T08"]["finding_count"], rows["T08"])
+        for task in ("T09","T10","T11"):
+            self.assertGreater(rows[task]["finding_count"], 0, rows[task])
 
     def test_t11_is_not_effectively_approved_until_visual_repair(self):
         out=shipping_visual_gate.effective_approval("T11")

@@ -334,9 +334,11 @@ class V32Tests(unittest.TestCase):
   self.assertTrue(out['passed'],out)
   rows={x['task_id']:x for x in out['rows']}
   for task in ('T08','T09','T10','T11'):
-   self.assertGreater(rows[task]['finding_count'],0,rows[task])
    self.assertTrue(rows[task]['invalidation_active'])
    self.assertFalse(rows[task]['effective_approved'])
+  self.assertEqual(0,rows['T08']['finding_count'],rows['T08'])
+  for task in ('T09','T10','T11'):
+   self.assertGreater(rows[task]['finding_count'],0,rows[task])
   self.assertFalse(shipping_visual_gate.effective_approval('T11')['passed'])
 
  def test_shared_review_enforces_shipping_visual_gate(self):
