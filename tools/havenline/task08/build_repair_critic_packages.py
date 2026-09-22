@@ -37,10 +37,10 @@ def main():
     items.append({'path':str(Path('critic-input')/rel),'kind':kind,'category':cat,'sha256':digest(dst),'description':desc})
    if cid=='C3':
     items += [
-     {'path':'critic-input/control-state.json','kind':'json','category':'control_state','sha256':digest(pkg/'control-state.json'),'description':'T08 control/authority contract'},
-     {'path':'critic-input/loop-evidence.json','kind':'json','category':'loop_evidence','sha256':digest(pkg/'loop-evidence.json'),'description':'Exact repaired transfer-loop/conservation proof'}]
+     {'path':str(pkg/'control-state.json'),'kind':'json','category':'control_state','sha256':digest(pkg/'control-state.json'),'description':'T08 control/authority contract'},
+     {'path':str(pkg/'loop-evidence.json'),'kind':'json','category':'loop_evidence','sha256':digest(pkg/'loop-evidence.json'),'description':'Exact repaired transfer-loop/conservation proof'}]
    if cid=='C4':
-    items.append({'path':'critic-input/control-state.json','kind':'json','category':'gameplay_state','sha256':digest(pkg/'control-state.json'),'description':'T08 gameplay/control context'})
+    items.append({'path':str(pkg/'control-state.json'),'kind':'json','category':'gameplay_state','sha256':digest(pkg/'control-state.json'),'description':'T08 gameplay/control context'})
    gs.append({'id':gid,'items':items})
   (pkg/'critic-manifest.json').write_text(json.dumps({'schema_version':1,'task_id':'T08','critic_id':cid,'candidate_commit':c,'groups':gs},indent=2)+'\n')
  print(json.dumps({'passed':True,'task_id':'T08','candidate':c,'critics':['C2','C3','C4'],'checks':tests['total_checks']},indent=2))
