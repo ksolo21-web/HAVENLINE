@@ -1,0 +1,129 @@
+name: Havenline T08 parallel final visual capture
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task08-final-visual-parallel.yml'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: havenline-t08-final-visual-parallel
+  cancel-in-progress: false
+
+env:
+  T08_CANDIDATE: 9efb11e0262ae65de32f664d4627902d565f1148
+
+jobs:
+  route:
+    strategy:
+      fail-fast: false
+      matrix:
+        route: [0, 2, 5]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+      - name: Prove shipping runtime is exact repaired candidate
+        run: |
+          set -euo pipefail
+          git diff --exit-code "$T08_CANDIDATE" HEAD --             HavenlineGodot/scripts/transfer_feedback.gd             HavenlineGodot/scripts/carry_stack.gd             HavenlineGodot/scripts/storage_stockpile.gd             HavenlineGodot/assets/transfer_feedback_v2/
+          python3 tools/havenline/production/shipping_visual_gate.py audit-task T08 --candidate "$T08_CANDIDATE" --require-clean
+      - name: Prepare pinned Godot
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers ffmpeg
+          mkdir -p "$RUNNER_TEMP/engine" "route-${{ matrix.route }}/stills"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          timeout 240 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --path HavenlineGodot --import --quit > "route-${{ matrix.route }}/import.log" 2>&1
+          timeout 120 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > "route-${{ matrix.route }}/motion-fixture.log" 2>&1
+      - name: Capture one native-4K 60Hz route
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          out="route-${{ matrix.route }}/capture"
+          mkdir -p "$out"
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task08_final_visual.gd -- --candidate="$T08_CANDIDATE" --state=route-proofs --device=final_visual_4k --view=three-quarter --route-index="${{ matrix.route }}" --native-4k --integrated --out="$(pwd)/$out" > "route-${{ matrix.route }}/capture.log" 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' "route-${{ matrix.route }}/capture.log"; then exit 1; fi
+          ffmpeg -hide_banner -loglevel error -framerate 60 -i "$out/frames/frame-%05d.jpg" -c:v libx264 -preset ultrafast -crf 17 -pix_fmt yuv420p -r 60 "route-${{ matrix.route }}/route-${{ matrix.route }}-4k60.mp4"
+          cp "$out/route-${{ matrix.route }}-frame-024.png" "route-${{ matrix.route }}/stills/route-${{ matrix.route }}-frame-024.png"
+          cp "$out/route-${{ matrix.route }}-frame-050.png" "route-${{ matrix.route }}/stills/route-${{ matrix.route }}-frame-050.png"
+          cp "$out/capture.json" "route-${{ matrix.route }}/capture.json"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-T08-route-${{ matrix.route }}-${{ github.run_id }}
+          path: |
+            route-${{ matrix.route }}/route-${{ matrix.route }}-4k60.mp4
+            route-${{ matrix.route }}/stills/
+            route-${{ matrix.route }}/capture.json
+          retention-days: 30
+          if-no-files-found: error
+
+  package:
+    needs: route
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          pattern: havenline-T08-route-*-${{ github.run_id }}
+          path: routes
+      - name: Assemble and validate final package
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg
+          python3 -m pip install --disable-pip-version-check pillow
+          mkdir -p final/stills
+          R0=$(find routes -name 'route-0-4k60.mp4' -print -quit)
+          R2=$(find routes -name 'route-2-4k60.mp4' -print -quit)
+          R5=$(find routes -name 'route-5-4k60.mp4' -print -quit)
+          test -n "$R0" -a -n "$R2" -a -n "$R5"
+          printf "file '%s'\nfile '%s'\nfile '%s'\n" "$(realpath "$R0")" "$(realpath "$R2")" "$(realpath "$R5")" > final/concat.txt
+          ffmpeg -hide_banner -loglevel error -f concat -safe 0 -i final/concat.txt -c copy -movflags +faststart final/T08-final-visual-4k60.mp4
+          cp "$(find routes -name 'route-0-frame-024.png' -print -quit)" final/stills/01-furnace-transfer.png
+          cp "$(find routes -name 'route-0-frame-050.png' -print -quit)" final/stills/02-furnace-arrival.png
+          cp "$(find routes -name 'route-2-frame-050.png' -print -quit)" final/stills/03-defense-arrival.png
+          cp "$(find routes -name 'route-5-frame-050.png' -print -quit)" final/stills/04-repair-arrival.png
+          python3 tools/havenline/production/shipping_visual_gate.py audit-task T08 --candidate "$T08_CANDIDATE" --require-clean --output final/primitive-audit.json
+          ffprobe -v error -show_entries stream=width,height,avg_frame_rate,nb_frames -show_entries format=duration -of json final/T08-final-visual-4k60.mp4 > final/video-probe.json
+          cp "$(find routes -name capture.json | sort | sed -n '1p')" final/route-a.json
+          cp "$(find routes -name capture.json | sort | sed -n '2p')" final/route-b.json
+          cp "$(find routes -name capture.json | sort | sed -n '3p')" final/route-c.json
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image,ImageStat
+          import hashlib,json,os
+          root=Path('final');candidate=os.environ['T08_CANDIDATE']
+          audit=json.load(open(root/'primitive-audit.json'));assert audit['passed'] and audit['finding_count']==0
+          probe=json.load(open(root/'video-probe.json'));stream=probe['streams'][0];num,den=map(int,stream['avg_frame_rate'].split('/'));fps=num/den;duration=float(probe['format']['duration'])
+          assert int(stream['width'])>=3840 and int(stream['height'])>=2160 and fps>=59.9 and duration>=3.0,(stream,duration)
+          captures=[json.load(open(root/f'route-{x}.json')) for x in ('a','b','c')]
+          assert all(r['candidate_commit']==candidate and r['conservation_held'] and r['native_3840x2160_scale1'] for r in captures)
+          assert all(r['shipping_main_scene_rendered'] and r['shipping_call_site_exercised'] for r in captures)
+          stills=[]
+          for p in sorted((root/'stills').glob('*.png')):
+            im=Image.open(p).convert('RGB');assert im.size[0]>=3840 and im.size[1]>=2160 and max(ImageStat.Stat(im).stddev)>=8.0
+            stills.append({'path':str(p),'width':im.size[0],'height':im.size[1],'sha256':hashlib.sha256(p.read_bytes()).hexdigest()})
+          assert len(stills)==4
+          video=root/'T08-final-visual-4k60.mp4'
+          out={'schema_version':1,'task_id':'T08','candidate_sha':candidate,'source_bound':True,'primitive_audit_passed':True,'primitive_findings_count':0,'stills':stills,'stills_count':4,'motion_video':str(video),'motion_video_sha256':hashlib.sha256(video.read_bytes()).hexdigest(),'motion_video_seconds':duration,'internal_resolution':[int(stream['width']),int(stream['height'])],'capture_fps':fps,'route_capture_count':3,'conservation_held':True,'physical_device_native_4k60_certified':False,'user_visual_approval':False,'effective_approval':False,'ready_for_user_visual_review':True}
+          (root/'review-manifest.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2))
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-T08-final-visual-parallel-${{ github.run_id }}
+          path: final/
+          retention-days: 30
+          if-no-files-found: error
