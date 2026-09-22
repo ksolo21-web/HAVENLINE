@@ -2,7 +2,7 @@
   "schema_version": 1,
   "authority": "Havenline hard visual-quality rule",
   "effective_date": "2026-09-22",
-  "rule": "No task may be effectively APPROVED or enter INTEGRATION_READY with any shipping-visible primitive mesh, primitive material, placeholder style, or primitive-looking authored presentation. Unfinished/pre-activation work may use temporary primitives, but final review must remove them completely.",
+  "rule": "No task may be effectively APPROVED or enter INTEGRATION_READY with primitive/placeholder shipping art OR a whole-frame reference-fidelity mismatch. Final review judges the complete rendered scene, including visible upstream dependencies.",
   "shipping_roots": [
     "HavenlineGodot/"
   ],
@@ -51,7 +51,12 @@
     "exact_candidate_required": true,
     "primitive_audit_zero_findings_required": true,
     "explicit_user_visual_approval_required": true,
-    "note": "This source-bound 4K60 visual proof is an approval-viewing requirement; final sustained physical-device native 4K60 certification remains a later release gate."
+    "note": "This source-bound 4K60 visual proof is an approval-viewing requirement; final sustained physical-device native 4K60 certification remains a later release gate.",
+    "reference_fidelity_side_by_side_required": true,
+    "whole_frame_review_required": true,
+    "zero_failed_visible_asset_classes_required": true,
+    "user_rejection_blocks_until_new_candidate": true,
+    "critic_pass_cannot_override_user_rejection": true
   },
   "visual_critic_ids": [
     "C1",
@@ -66,11 +71,16 @@
     "active_invalidation_revokes_effective_approval": true,
     "uncovered_primitive_finding_revokes_effective_approval": true,
     "dependency_gates_must_use_effective_approval": true,
-    "no_grandfathering_of_known_primitive_violations": true
+    "no_grandfathering_of_known_primitive_violations": true,
+    "reference_fidelity_failure_revokes_effective_approval": true,
+    "user_visual_rejection_revokes_effective_approval": true,
+    "upstream_visible_dependency_failure_blocks_downstream_visual_approval": true
   },
   "whole_game_release": {
     "audit_all_shipping_paths": true,
     "include_integration_only_paths": true,
-    "primitive_findings_allowed": 0
-  }
+    "primitive_findings_allowed": 0,
+    "reference_fidelity_failed_visible_classes_allowed": 0
+  },
+  "reference_fidelity_standard": "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
 }

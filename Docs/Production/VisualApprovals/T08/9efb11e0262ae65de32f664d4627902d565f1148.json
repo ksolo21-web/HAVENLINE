@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "task_id": "T08",
+  "candidate_sha": "9efb11e0262ae65de32f664d4627902d565f1148",
+  "status": "USER_REJECTED_REFERENCE_FIDELITY",
+  "primitive_audit": {
+    "passed": true,
+    "findings_count": 0,
+    "report_sha256": ""
+  },
+  "visual_evidence": {
+    "source_bound": true,
+    "workflow_run_id": 35771749048,
+    "artifact_id": 10715176472,
+    "stills_count": 4,
+    "motion_video_seconds": 4,
+    "internal_resolution": [
+      3840,
+      2160
+    ],
+    "capture_fps": 60
+  },
+  "reference_fidelity": {
+    "standard": "Docs/Production/REFERENCE_FIDELITY_STANDARD.json",
+    "whole_frame_reviewed": true,
+    "side_by_side_reference_reviewed": true,
+    "passed": false,
+    "matched_visible_classes": [
+      "vegetation_trees",
+      "characters"
+    ],
+    "failed_visible_classes": [
+      "structures_buildings",
+      "fences_gates",
+      "props_stations_resources",
+      "terrain_snow_water",
+      "lighting_vfx_world_response"
+    ],
+    "upstream_owner_failures": [
+      {
+        "owner_task": "T03",
+        "classes": [
+          "fences_gates",
+          "terrain_snow_water",
+          "lighting_vfx_world_response"
+        ]
+      },
+      {
+        "owner_task": "T05",
+        "classes": [
+          "props_stations_resources"
+        ]
+      },
+      {
+        "owner": "primary-integration-owner",
+        "paths": [
+          "HavenlineGodot/assets/environment_v2/shelter.glb"
+        ],
+        "classes": [
+          "structures_buildings"
+        ]
+      }
+    ],
+    "notes": "User states that only the trees and characters look like the supplied reference files/videos and intended Havenline look."
+  },
+  "user_visual_approval": false,
+  "user_visual_rejection": true,
+  "user_feedback": "Only the trees and characters look like the reference files/videos and what the game is supposed to look like.",
+  "approved_at": null,
+  "rejected_at": "2026-09-22T20:04:00Z"
+}

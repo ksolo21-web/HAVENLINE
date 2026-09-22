@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "authority": "Docs/Production/REFERENCE_FIDELITY_STANDARD.json",
+  "status": "ACTIVE",
+  "current_whole_frame": "T08 exact repaired candidate 9efb11e0262ae65de32f664d4627902d565f1148",
+  "user_disposition": "REJECTED_REFERENCE_FIDELITY",
+  "benchmark_classes": [
+    "vegetation_trees",
+    "characters"
+  ],
+  "debts": [
+    {
+      "owner_task": "T03",
+      "classes": [
+        "fences_gates",
+        "terrain_snow_water",
+        "lighting_vfx_world_response"
+      ],
+      "paths": [
+        "HavenlineGodot/scripts/camp_boundary_view.gd",
+        "HavenlineGodot/scripts/outpost_surface.gd",
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ]
+    },
+    {
+      "owner_task": "T05",
+      "classes": [
+        "props_stations_resources"
+      ],
+      "paths": [
+        "HavenlineGodot/assets/stations_v2/**",
+        "HavenlineGodot/scripts/station_kit.gd"
+      ]
+    },
+    {
+      "owner": "primary-integration-owner",
+      "classes": [
+        "structures_buildings"
+      ],
+      "paths": [
+        "HavenlineGodot/assets/environment_v2/shelter.glb",
+        "HavenlineGodot/scripts/main.gd"
+      ]
+    }
+  ],
+  "downstream_blocked": [
+    "T08 reference-fidelity closeout",
+    "T09-T12 effective visual approval chain"
+  ],
+  "rule": "Debt is zero only when the complete rendered scene matches the locked reference language and the user explicitly approves it."
+}

@@ -5,40 +5,63 @@
     {
       "task_id": "T08",
       "status": "ACTIVE",
-      "family": "shipping_visual_primitive_violation",
+      "family": "shipping_visual_reference_fidelity_violation",
       "discovered_at": "2026-09-22T16:51:00Z",
       "audited_integration_source": "1083d82269e82c5aac678bb5c5c77312dde94099",
-      "reason": "Approved T08 shipping presentation used built-in primitive CapsuleMesh/CylinderMesh/TorusMesh geometry and StandardMaterial3D feedback.",
+      "reason": "T08 primitive feedback was repaired, but the user rejected the complete final scene for reference fidelity: only the trees and characters match the supplied reference files/videos and intended Havenline look.",
       "findings": [
         {
-          "path": "HavenlineGodot/scripts/transfer_feedback.gd",
-          "tokens": [
-            "CapsuleMesh",
-            "CylinderMesh",
-            "TorusMesh",
-            "StandardMaterial3D"
-          ]
+          "category": "USER_VISUAL_REJECTION",
+          "scope": "whole_frame",
+          "detail": "Trees and characters match the reference; the remaining visible scene does not."
+        },
+        {
+          "category": "UPSTREAM_REFERENCE_FIDELITY",
+          "owner_task": "T03",
+          "detail": "Fence/gate/lantern and terrain/lane/snow presentation visibly diverge from the locked stylized reference language."
+        },
+        {
+          "category": "UPSTREAM_REFERENCE_FIDELITY",
+          "owner_task": "T05",
+          "detail": "Furnace/station/resource-prop presentation visibly diverges from the locked stylized reference language."
+        },
+        {
+          "category": "INTEGRATION_OWNED_REFERENCE_FIDELITY",
+          "owner": "primary-integration-owner",
+          "paths": [
+            "HavenlineGodot/assets/environment_v2/shelter.glb",
+            "HavenlineGodot/scripts/main.gd"
+          ],
+          "detail": "Shelter/world dressing visible in the final frame does not match the user-approved reference language."
         }
       ],
       "invalidates": [
         "effective_approval",
         "visual_evidence",
+        "reference_fidelity",
         "C2",
         "C3",
         "C4",
-        "C6",
-        "closeout"
+        "closeout",
+        "user_visual_signoff"
       ],
       "preserves_unless_blast_radius_changes": [
         "inventory conservation tests",
         "save matrix",
+        "device matrix",
+        "C6 performance proof",
         "unrelated deterministic functional proof"
       ],
-      "required_resolution": "Replace all shipping-visible primitives/materials with authored production-quality assets/materials, recapture exact-source 4K60 visual evidence, rerun invalidated critics/performance only, obtain explicit user visual signoff.",
-      "repair_status": "IMPLEMENTED_PENDING_EXACT_SOURCE_TEST_EVIDENCE_AND_USER_VISUAL_SIGNOFF",
+      "required_resolution": "Repair all visible non-benchmark world art in the final T08 scene to the locked reference language, including upstream-owned T03/T05/integration assets; recapture exact-source 4K60 whole-frame evidence; rerun invalidated visual critics; obtain explicit user side-by-side approval.",
+      "repair_status": "USER_REJECTED_REFERENCE_FIDELITY",
       "repair_candidate_commit": "9efb11e0262ae65de32f664d4627902d565f1148",
-      "repair_evidence_status": "RUNNING_EXACT_SOURCE_VALIDATION",
-      "historical_accepted_source": "9d56ea8ae972d0a0705ff8b985e13fab31dde493"
+      "repair_evidence_status": "FUNCTIONAL_AND_4K60_EVIDENCE_PASS_BUT_VISUAL_STYLE_REJECTED",
+      "historical_accepted_source": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
+      "user_visual_rejection": true,
+      "user_feedback": "Only the trees and characters look like the reference files/videos and the intended game look.",
+      "reference_fidelity_passed": false,
+      "primitive_audit_passed": true,
+      "primitive_findings_count": 0
     },
     {
       "task_id": "T09",
@@ -161,6 +184,77 @@
         "unrelated deterministic tests"
       ],
       "required_resolution": "Replace shelters/markers/materials with authored production-quality assets/materials matching the Havenline reference style, recapture exact-source 4K60 stills and motion, rerun invalidated critics/performance only, show the visual proof to the user, then obtain explicit user visual signoff before INTEGRATION_READY."
+    },
+    {
+      "task_id": "T03",
+      "status": "ACTIVE",
+      "family": "whole_frame_reference_fidelity_violation",
+      "discovered_at": "2026-09-22T20:04:00Z",
+      "audited_integration_source": "7385d2f6c80cb0e09d7f30c41ddc1cdacd1e53e8",
+      "reason": "User whole-frame review of T08 shows T03-owned fence/gate/lantern and terrain/lane/snow presentation does not match the locked Havenline reference style.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/scripts/camp_boundary_view.gd",
+          "detail": "Fence/gate/lantern presentation requires reference-style art upgrade."
+        },
+        {
+          "path": "HavenlineGodot/scripts/outpost_surface.gd",
+          "detail": "Ground/lane/snow surface presentation requires reference-style art upgrade."
+        },
+        {
+          "path": "HavenlineGodot/shaders/outpost_snow.gdshader",
+          "detail": "Terrain/snow material treatment requires reference-style art upgrade."
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "reference_fidelity",
+        "C1",
+        "C2",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "boundary collision/navigation tests",
+        "gate geometry authority",
+        "nonvisual deterministic proof"
+      ],
+      "required_resolution": "Re-author T03 visible boundary/environment presentation to match the locked reference language while preserving collision/navigation authority; recapture whole-frame 4K60 evidence and obtain user approval."
+    },
+    {
+      "task_id": "T05",
+      "status": "ACTIVE",
+      "family": "whole_frame_reference_fidelity_violation",
+      "discovered_at": "2026-09-22T20:04:00Z",
+      "audited_integration_source": "7385d2f6c80cb0e09d7f30c41ddc1cdacd1e53e8",
+      "reason": "User whole-frame review of T08 shows T05 furnace/station/resource-prop art does not match the locked Havenline reference style.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/assets/stations_v2/**",
+          "detail": "Furnace/stations/resource props need a cohesive reference-style re-authoring pass."
+        },
+        {
+          "path": "HavenlineGodot/scripts/station_kit.gd",
+          "detail": "Keep placement/sockets/batching authority; replace only visual assets/material treatment as needed."
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "reference_fidelity",
+        "C1",
+        "C2",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "station sockets",
+        "placement contracts",
+        "runtime_logic_included=false",
+        "nonvisual deterministic proof"
+      ],
+      "required_resolution": "Re-author T05 visible station/prop family to match the locked reference language at gameplay scale; recapture whole-frame 4K60 evidence and obtain user approval."
     }
   ]
 }

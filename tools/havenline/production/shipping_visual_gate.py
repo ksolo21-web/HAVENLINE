@@ -118,6 +118,8 @@ def validate_signoff(task_id: str,candidate: str,integration_ref: str|None=None)
         return {"passed":False,"task_id":task_id,"candidate_sha":candidate,"record_path":path,"errors":[f"visual signoff record missing/unreadable: {exc}"]}
     if rec.get("schema_version")!=1 or rec.get("task_id")!=task_id or rec.get("candidate_sha")!=candidate:
         errors.append("visual signoff identity mismatch")
+    if rec.get("user_visual_rejection") is True:
+        errors.append("user explicitly rejected final visual reference fidelity")
     primitive=rec.get("primitive_audit",{})
     if primitive.get("passed") is not True or primitive.get("findings_count")!=0:
         errors.append("primitive audit must pass with zero findings")
@@ -131,6 +133,12 @@ def validate_signoff(task_id: str,candidate: str,integration_ref: str|None=None)
     minimum=req["minimum_internal_resolution"]
     if not isinstance(res,list) or len(res)!=2 or int(res[0])<minimum[0] or int(res[1])<minimum[1]: errors.append("visual proof is below native 4K minimum")
     if int(evidence.get("capture_fps",0))<int(req["minimum_capture_fps"]): errors.append("visual motion proof is below 60 FPS")
+    fidelity=rec.get("reference_fidelity",{})
+    if fidelity.get("whole_frame_reviewed") is not True: errors.append("whole-frame reference review is required")
+    if fidelity.get("side_by_side_reference_reviewed") is not True: errors.append("side-by-side reference review is required")
+    if fidelity.get("passed") is not True: errors.append("whole-frame reference fidelity did not pass")
+    failed=fidelity.get("failed_visible_classes",[])
+    if not isinstance(failed,list) or failed: errors.append("zero failed visible asset classes are required")
     if rec.get("user_visual_approval") is not True: errors.append("explicit user visual approval is required")
     return {"passed":not errors,"task_id":task_id,"candidate_sha":candidate,"record_path":path,"errors":errors}
 
