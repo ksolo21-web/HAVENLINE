@@ -144,6 +144,12 @@ def validate_consistency(
 
     activation_base = source.get("activation_base")
     integration_head = source.get("integration_head")
+    if (
+        isinstance(binding_verification_result, dict)
+        and binding_verification_result.get("passed") is True
+        and binding_verification_result.get("activation_head") != activation_base
+    ):
+        errors.append("binding verification activation_head does not match candidate activation_base")
     if source.get("validator_source") != actual_validator_source:
         errors.append(
             f"candidate validator_source does not match actual acceptance-critical bundle: "
