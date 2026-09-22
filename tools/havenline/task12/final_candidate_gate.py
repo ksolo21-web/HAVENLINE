@@ -281,25 +281,21 @@ def main() -> None:
     except Exception as exc:
         progression_result = {"passed": False, "errors": [f"split shipping progression load failed: {exc}"]}
 
-    candidate_source = (
-        candidate_data.get("exact_source", {}).get("candidate_source")
-        if isinstance(candidate_data.get("exact_source"), dict)
-        else None
-    )
+    exact_source = candidate_data.get("exact_source", {}) if isinstance(candidate_data.get("exact_source"), dict) else {}
+    candidate_source = exact_source.get("candidate_source")
+    activation_base = exact_source.get("activation_base")
+    integration_head = exact_source.get("integration_head")
     binding_result = binding_verifier.validate_resolution(
         binding_data,
         require_resolved=True,
         root=ROOT,
-        activation_head=candidate_source if isinstance(candidate_source, str) else None,
+        activation_head=activation_base if isinstance(activation_base, str) else None,
     )
     checked_out_head = subprocess.check_output(
         ["git", "rev-parse", "HEAD"],
         cwd=ROOT,
         text=True,
     ).strip()
-    exact_source = candidate_data.get("exact_source", {}) if isinstance(candidate_data.get("exact_source"), dict) else {}
-    activation_base = exact_source.get("activation_base")
-    integration_head = exact_source.get("integration_head")
     if all(isinstance(x, str) and SHA40.fullmatch(x) for x in (activation_base, candidate_source, integration_head)):
         candidate_guard_result = run_candidate_guard(activation_base, candidate_source, integration_head)
     else:
