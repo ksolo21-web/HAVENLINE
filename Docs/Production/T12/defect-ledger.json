@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "task_name": "Level 1–100 progression architecture",
+  "mode": "PREPARATION",
+  "mandatory_defects": [],
+  "dependency_blockers": [
+    {
+      "id": "T12-B01",
+      "type": "dependency",
+      "status": "RESOLVED",
+      "dependency": "T10",
+      "description": "T10 must be APPROVED and integrated before T12 shipping implementation can activate.",
+      "resolution_evidence": {
+        "status": "APPROVED",
+        "integrated_source": "eba0107def258824549fb10d81785290d0c81d97",
+        "verified_completion": "Docs/Production/T10/verified-completion.json",
+        "approved_at": "2026-09-21T14:35:08.454169Z"
+      }
+    },
+    {
+      "id": "T12-B02",
+      "type": "dependency",
+      "status": "OPEN_EXPECTED",
+      "dependency": "T11",
+      "description": "T11 must be APPROVED and integrated before T12 shipping implementation can activate.",
+      "current_state": "ASSIGNED",
+      "branch": "havenline/T11-camp-construction",
+      "base_commit": "f558b9b162b349d1ee127e65edf967f6d28dfed0"
+    }
+  ],
+  "preparation_notes": [
+    "T07, T08 and T10 are APPROVED on the authoritative production lineage.",
+    "T11 is currently ASSIGNED and not integrated; T11 is the sole remaining activation blocker for T12 shipping runtime/data.",
+    "The open T11 dependency blocker does not prevent governance/tooling preparation on havenline/governance-t12-prep.",
+    "No blocker may be closed by time passage or assumption; activation must verify exact authoritative state.",
+    "Shipping T12 runtime/data must remain absent until activation passes."
+  ],
+  "acceptance_rule": {
+    "operator": ">",
+    "threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "zero_unresolved_mandatory_defects": true
+  }
+}
