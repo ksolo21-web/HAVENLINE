@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "task_id": "T13",
+  "task_name": "Progressive Difficulty & spend-blind Challenge Director",
+  "prepared_from_branch": "codex/havenline-sequential-task-01",
+  "prepared_from_commit": "6db1207b2b8725cb4591d4a55670aa48eeb2c3fb",
+  "mode": "dependency-independent governance/interface preparation only",
+  "dependencies": [
+    "T12"
+  ],
+  "future_builder_branch": "havenline/T13-challenge-director",
+  "future_owner": "challenge-director-builder",
+  "planned_owned_alias": "@reservation:T13",
+  "planned_owned_paths": [
+    "HavenlineGodot/scripts/challenge_director.gd",
+    "HavenlineGodot/data/challenge_director_v1.json",
+    "HavenlineGodot/tests/test_task13_challenge_director.gd",
+    "HavenlineGodot/tests/test_task13_integration.gd",
+    "HavenlineGodot/tests/capture_task13_challenge.gd",
+    "Docs/Production/T13/**"
+  ],
+  "allowed_now": [
+    "freeze scope and exclusions",
+    "define interfaces/data contracts",
+    "define deterministic tests/evidence plan",
+    "validate dependency graph and critic coverage",
+    "validate planned path ownership is non-overlapping"
+  ],
+  "forbidden_now": [
+    "HavenlineGodot runtime implementation while dependency-locked",
+    "claiming ASSIGNED/BUILDING state",
+    "self-approval",
+    "integration",
+    "using stale dependency interfaces",
+    "VIP/purchase/spend input to normal-player challenge selection"
+  ],
+  "activation_reconciliation": [
+    "refresh exact integration head",
+    "re-read dependency graph/workstream registry/task gates",
+    "verify T12 consumer binding",
+    "re-check path ownership collisions",
+    "re-bind current Game Master policy and forward contract hashes",
+    "refresh generated task packet",
+    "zero preparation defects",
+    "reuse existing integration-owner workstream, graduation, governance and candidate controls; T13 does not self-author governance tooling"
+  ],
+  "contract_paths": [
+    "Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json",
+    "Docs/Production/T13/T12_CONSUMER_BINDING.json",
+    "Docs/Production/GAME_MASTER_ACCOUNT_STANDARD.md",
+    "Docs/Production/GAME_MASTER_POLICY.json",
+    "Docs/Production/HAVENLINE_BUILD_PLAN_V2.md",
+    "Docs/Production/DEPENDENCY_GRAPH.json",
+    "Docs/Production/CRITIC_MATRIX.json"
+  ],
+  "game_master_required_proof_flags": [
+    "gm_challenge_profile_implemented",
+    "gm_challenge_spend_blind",
+    "gm_challenge_elevated_envelope_proven"
+  ],
+  "required_proof": [
+    "spend-blind input audit",
+    "deterministic difficulty replay",
+    "bounded escalation/recovery proof",
+    "GM challenge profile implementation",
+    "GM elevated envelope proof",
+    "GM role isolation proof",
+    "exact-source critic evidence"
+  ]
+}
