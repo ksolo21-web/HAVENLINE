@@ -269,9 +269,9 @@ static func validate_policy(candidate: Dictionary) -> bool:
 		return false
 	if not _integer_number(gm.get("concurrent_emergency_bonus"), 0, 2):
 		return false
-	if gm.get("resource_yield_penalty_allowed") is not bool or bool(gm.resource_yield_penalty_allowed):
+	if not (gm.get("resource_yield_penalty_allowed") is bool) or bool(gm.resource_yield_penalty_allowed):
 		return false
-	if gm.get("no_new_permanent_controls") is not bool or not bool(gm.no_new_permanent_controls):
+	if not (gm.get("no_new_permanent_controls") is bool) or not bool(gm.no_new_permanent_controls):
 		return false
 	return true
 
@@ -381,7 +381,7 @@ func _normalize_options(options: Dictionary) -> Dictionary:
 		errors.append("invalid_requested_profile")
 		requested = PROFILE_NORMAL
 	var authorized: Variant = options.get("gm_authorized", false)
-	if authorized is not bool:
+	if not (authorized is bool):
 		errors.append("invalid_gm_authorized")
 		authorized = false
 	return {"passed": errors.is_empty(), "errors": errors, "requested_profile": String(requested), "gm_authorized": bool(authorized)}
