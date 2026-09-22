@@ -29,7 +29,13 @@
       "execution_type": "independent_visual_model",
       "runner": "existing task-scoped C1 reviewer",
       "status": "OPERATIONAL",
-      "dimensions": ["reference_fidelity", "visual_language", "cross_view_consistency"]
+      "dimensions": ["reference_fidelity", "visual_language", "cross_view_consistency"],
+      "reference_style_lock": {
+        "policy": "Docs/Production/REFERENCE_STYLE_LOCK.json",
+        "exact_score_dimensions": ["reference_fidelity", "visual_language"],
+        "exact_required_score": 10.0,
+        "historical_dimension_schema_unchanged": true
+      }
     },
     "C2": {
       "execution_type": "independent_visual_model",
