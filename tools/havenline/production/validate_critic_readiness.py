@@ -4,9 +4,12 @@ import json,pathlib
 from lib import ROOT,DOCS,load_json
 
 def main():
-    matrix=load_json(DOCS/'CRITIC_MATRIX.json');execution=load_json(DOCS/'CRITIC_EXECUTION.json');c0=load_json(DOCS/'C0_EXECUTION.json');errors=[]
+    matrix=load_json(DOCS/'CRITIC_MATRIX.json');execution=load_json(DOCS/'CRITIC_EXECUTION.json');c0=load_json(DOCS/'C0_EXECUTION.json');style=load_json(DOCS/'REFERENCE_STYLE_LOCK.json');errors=[]
     expected={f'C{i}' for i in range(1,12)}
     if set(matrix['critics'])!=expected:errors.append('CRITIC_MATRIX must define exactly approval critics C1-C11')
+    style_cfg=matrix.get('reference_style_lock',{})
+    if style.get('status')!='MANDATORY_GLOBAL_VISUAL_CONTRACT':errors.append('reference style lock policy not mandatory')
+    if style_cfg.get('exact_score')!=10.0 or style_cfg.get('exact_c1_dimensions')!=['reference_fidelity','visual_language']:errors.append('C1 reference style exact-score contract mismatch')
     if set(execution['critics'])!=expected:errors.append('CRITIC_EXECUTION must define exactly approval critics C1-C11')
     for cid in sorted(expected,key=lambda x:int(x[1:])):
         row=execution['critics'].get(cid,{})
@@ -29,7 +32,7 @@ def main():
       '.github/workflows/havenline-c0-root-cause.yml',
       'tools/havenline/production/specialist_critic_runner.py','tools/havenline/production/specialist_evidence_manifest.py',
       'tools/havenline/production/security_exploit_harness.py','tools/havenline/production/domain_safeguard_gate.py',
-      'tools/havenline/production/critic_harness.py','tools/havenline/production/closure_validator.py',
+      'tools/havenline/production/critic_harness.py','tools/havenline/production/reference_style_lock.py','tools/havenline/production/closure_validator.py',
       'tools/havenline/production/motion_capture.py','tools/havenline/production/device_matrix.py',
       '.github/workflows/havenline-specialist-critic.yml','.github/workflows/havenline-specialist-model-cache.yml',
       'Docs/Production/SECURITY_ATTACK_MATRIX.json']
