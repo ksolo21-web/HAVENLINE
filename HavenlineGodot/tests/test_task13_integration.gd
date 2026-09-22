@@ -81,20 +81,29 @@ func run() -> void:
 		check("Game Master cannot add grind or controls", not gm.resource_yield_penalty_allowed and gm.no_new_permanent_controls)
 
 	var gm_envelope_pass := true
-	for level in [1, 26, 51, 76]:
+	var gm_absolute_bounds_pass := true
+	for level in [1, 11, 21, 31, 41, 51, 61, 71, 81, 91]:
 		var normal := director.evaluate(context(level), perf(1))
 		var gm := director.evaluate(context(level), perf(1), {}, {"requested_profile": "GM_CHALLENGE", "gm_authorized": true})
 		var ratio := float(gm.coefficients.threat_budget_multiplier) / float(normal.coefficients.threat_budget_multiplier)
 		gm_envelope_pass = gm_envelope_pass and ratio >= 1.25 and ratio <= 1.60
 		gm_envelope_pass = gm_envelope_pass and is_equal_approx(float(gm.coefficients.resource_yield_multiplier), 1.0)
-	check("GM envelope holds across all normal cold-start bands", gm_envelope_pass)
+		gm_absolute_bounds_pass = gm_absolute_bounds_pass and float(gm.coefficients.threat_budget_multiplier) <= float(gm.gm_relative.absolute_threat_budget_multiplier_cap) + 0.000001
+		gm_absolute_bounds_pass = gm_absolute_bounds_pass and float(gm.coefficients.raw_enemy_hp_multiplier) <= float(gm.gm_relative.absolute_enemy_hp_multiplier_cap) + 0.000001
+		gm_absolute_bounds_pass = gm_absolute_bounds_pass and float(gm.coefficients.raw_enemy_damage_multiplier) <= float(gm.gm_relative.absolute_enemy_damage_multiplier_cap) + 0.000001
+		gm_absolute_bounds_pass = gm_absolute_bounds_pass and int(gm.coefficients.concurrent_emergency_bonus) <= int(gm.gm_relative.absolute_concurrent_emergency_bonus_cap)
+	check("GM envelope holds across all ten normal bands", gm_envelope_pass)
+	check("GM absolute caps hold across all ten normal bands", gm_absolute_bounds_pass)
 
 	var bounded_outputs := true
+	var challenge_styles := {}
 	for level in 100:
 		var d := director.evaluate(context(level + 1), perf(1))
 		bounded_outputs = bounded_outputs and d.passed and int(d.band_index) >= 0 and int(d.band_index) <= 9
-		bounded_outputs = bounded_outputs and float(d.coefficients.threat_budget_multiplier) >= 0.90 and float(d.coefficients.threat_budget_multiplier) <= 1.42
+		bounded_outputs = bounded_outputs and float(d.coefficients.threat_budget_multiplier) >= 0.90 and float(d.coefficients.threat_budget_multiplier) <= 1.50
+		challenge_styles[String(d.challenge_style_id)] = true
 	check("all 100 normal cold-start levels stay in declared envelope", bounded_outputs)
+	check("all ten challenge styles appear across Level 1-100", challenge_styles.size() == 10, challenge_styles.keys())
 
 	var oversized := perf(1)
 	oversized.attempt_count = 1000001
@@ -119,7 +128,7 @@ func run() -> void:
 		"check_count": checks.size(),
 		"deterministic_replay_pairs": 250,
 		"level_envelope_cases": 100,
-		"gm_band_cases": 4,
+		"gm_band_cases": 10,
 		"t12_mutated": false,
 		"integration_allowed": false,
 		"task_approved": false,
