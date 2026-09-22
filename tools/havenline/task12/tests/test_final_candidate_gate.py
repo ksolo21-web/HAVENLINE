@@ -172,6 +172,7 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         progression_validation_result=None,
         binding_verification_result=None,
         candidate_guard_result=None,
+        frozen_scope_guard_result=None,
         checked_out_head=None,
     ):
         records = records if records is not None else self.critic_records()
@@ -202,6 +203,19 @@ class T12FinalCandidateGateTests(unittest.TestCase):
                     "base": self.base_sha,
                     "head": self.candidate_sha,
                     "integration_head": self.integration_sha,
+                    "errors": [],
+                }
+            ),
+            frozen_scope_guard_result=(
+                frozen_scope_guard_result
+                if frozen_scope_guard_result is not None
+                else {
+                    "passed": True,
+                    "base": self.base_sha,
+                    "head": self.candidate_sha,
+                    "changed_files": sorted(gate.FROZEN_BUILDER_PATHS),
+                    "foreign_paths": [],
+                    "missing_deliverables": [],
                     "errors": [],
                 }
             ),
@@ -316,6 +330,30 @@ class T12FinalCandidateGateTests(unittest.TestCase):
         result = self.validate(candidate=candidate, records=records, evidence_index=evidence)
         self.assertFalse(result["passed"])
         self.assertTrue(any("validator_source does not match actual" in error for error in result["errors"]))
+
+    def test_failed_frozen_scope_guard_fails(self):
+        result = self.validate(
+            frozen_scope_guard_result={
+                "passed": False,
+                "base": self.base_sha,
+                "head": self.candidate_sha,
+                "errors": ["unauthorized extra path"],
+            }
+        )
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("frozen six-path T12 scope guard failed" in error for error in result["errors"]))
+
+    def test_frozen_scope_guard_identity_mismatch_fails(self):
+        result = self.validate(
+            frozen_scope_guard_result={
+                "passed": True,
+                "base": "f" * 40,
+                "head": self.candidate_sha,
+                "errors": [],
+            }
+        )
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("frozen scope guard base" in error for error in result["errors"]))
 
     def test_failed_candidate_guard_fails(self):
         result = self.validate(
