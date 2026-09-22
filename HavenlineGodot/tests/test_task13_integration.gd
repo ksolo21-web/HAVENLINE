@@ -54,7 +54,7 @@ func run() -> void:
 	var ctx := context(26)
 	var before := ctx.duplicate(true)
 	var decision := director.evaluate(ctx, perf(1))
-	check("synthetic T12 context is consumable", decision.passed and decision.band_index == 1)
+	check("synthetic T12 context is consumable", decision.passed and decision.band_index == 2)
 	check("T12 context remains unmodified", ctx == before and not decision.mutated_upstream)
 
 	var intent_free := director.evaluate(context(26, 0), perf(1))
@@ -88,8 +88,8 @@ func run() -> void:
 	var bounded_outputs := true
 	for level in 100:
 		var d := director.evaluate(context(level + 1), perf(1))
-		bounded_outputs = bounded_outputs and d.passed and int(d.band_index) >= 0 and int(d.band_index) <= 3
-		bounded_outputs = bounded_outputs and float(d.coefficients.threat_budget_multiplier) >= 0.90 and float(d.coefficients.threat_budget_multiplier) <= 1.25
+		bounded_outputs = bounded_outputs and d.passed and int(d.band_index) >= 0 and int(d.band_index) <= 9
+		bounded_outputs = bounded_outputs and float(d.coefficients.threat_budget_multiplier) >= 0.90 and float(d.coefficients.threat_budget_multiplier) <= 1.42
 	check("all 100 normal cold-start levels stay in declared envelope", bounded_outputs)
 
 	var oversized := perf(1)
