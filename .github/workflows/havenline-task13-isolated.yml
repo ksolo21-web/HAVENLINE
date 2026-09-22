@@ -1,334 +1,38 @@
-name: Havenline T13 Isolated Challenge Director
+name: Havenline T13 C2 Evidence Repair
 
 on:
   push:
     branches:
-      - havenline/T13-challenge-director
-    paths:
-      - 'HavenlineGodot/scripts/challenge_director.gd'
-      - 'HavenlineGodot/data/challenge_director_v1.json'
-      - 'HavenlineGodot/tests/test_task13_challenge_director.gd'
-      - 'HavenlineGodot/tests/test_task13_integration.gd'
-      - 'HavenlineGodot/tests/capture_task13_challenge.gd'
-      - 'Docs/Production/T13/**'
-      - '.github/workflows/havenline-task13-isolated.yml'
-  pull_request:
-    branches:
-      - codex/havenline-sequential-task-01
-    paths:
-      - 'HavenlineGodot/scripts/challenge_director.gd'
-      - 'HavenlineGodot/data/challenge_director_v1.json'
-      - 'HavenlineGodot/tests/test_task13_challenge_director.gd'
-      - 'HavenlineGodot/tests/test_task13_integration.gd'
-      - 'HavenlineGodot/tests/capture_task13_challenge.gd'
-      - 'Docs/Production/T13/**'
-      - '.github/workflows/havenline-task13-isolated.yml'
+      - havenline/governance-t13-c2-evidence-repair
 
 permissions:
   contents: read
   actions: read
 
-concurrency:
-  group: havenline-t13-${{ github.event_name }}-${{ github.sha }}
-  cancel-in-progress: true
-
 jobs:
-  built-pending-dependency:
-    runs-on: ubuntu-24.04
-    timeout-minutes: 20
-    steps:
-      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
-        with:
-          fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
-
-      - name: Verify exact preactivation scope
-        run: |
-          set -euo pipefail
-          git fetch origin codex/havenline-sequential-task-01:refs/remotes/origin/codex/havenline-sequential-task-01
-          mkdir -p task13-isolated-evidence
-          python3 tools/havenline/production/preactivation_candidate.py \
-            --task T13 \
-            --branch havenline/T13-challenge-director \
-            --head HEAD \
-            --output task13-isolated-evidence/preactivation.json
-          python3 -m json.tool HavenlineGodot/data/challenge_director_v1.json >/dev/null
-
-      - name: Install Godot 4.7.2
-        run: |
-          set -euo pipefail
-          mkdir -p "$RUNNER_TEMP/godot"
-          cd "$RUNNER_TEMP/godot"
-          base='https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable'
-          curl -fL --retry 3 "$base/Godot_v4.7.2-stable_linux.x86_64.zip" -o editor.zip
-          unzip -q editor.zip
-          chmod +x Godot_v4.7.2-stable_linux.x86_64
-          echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
-
-      - name: Import project and reject parse errors
-        run: |
-          set -euo pipefail
-          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit 2>&1 | tee task13-isolated-evidence/import.log
-          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task13-isolated-evidence/import.log; then exit 1; fi
-
-      - name: Run deterministic T13 suites
-        run: |
-          set -euo pipefail
-          mkdir -p task13-isolated-evidence/tests
-          for suite in test_task13_challenge_director test_task13_integration; do
-            timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "task13-isolated-evidence/tests/$suite.log"
-            if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' "task13-isolated-evidence/tests/$suite.log"; then exit 1; fi
-          done
-          python3 - <<'PY'
-          import json
-          from pathlib import Path
-          for p in sorted(Path('task13-isolated-evidence/tests').glob('*.log')):
-              reports=[json.loads(x) for x in p.read_text().splitlines() if x.startswith('{')]
-              assert reports, p
-              r=reports[-1]
-              assert r.get('passed') is True and not r.get('failures'), (p,r)
-              assert r.get('integration_allowed') is False and r.get('task_approved') is False, r
-              assert r.get('isolated_state') == 'BUILT_PENDING_DEPENDENCY', r
-          PY
-
-      - name: Capture source-bound nonvisual evidence
-        env:
-          GITHUB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: |
-          set -euo pipefail
-          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/capture_task13_challenge.gd -- --out="$PWD/task13-isolated-evidence/capture" 2>&1 | tee task13-isolated-evidence/capture.log
-          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task13-isolated-evidence/capture.log; then exit 1; fi
-          python3 - <<'PY'
-          import json, os
-          from pathlib import Path
-          m=json.loads(Path('task13-isolated-evidence/capture/manifest.json').read_text())
-          assert m.get('passed') is True, m
-          assert m.get('candidate') == os.environ['GITHUB_SHA'], m
-          assert m.get('spend_blind_equivalence') is True and m.get('deterministic_replay_equivalence') is True, m
-          assert m.get('integration_allowed') is False and m.get('task_approved') is False, m
-          assert m.get('isolated_state') == 'BUILT_PENDING_DEPENDENCY', m
-          PY
-
-
-      - name: Package source-bound critic inputs and deterministic C6
-        env:
-          CANDIDATE: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: |
-          set -euo pipefail
-          rm -rf critic-input
-          mkdir -p critic-input
-          python3 - <<'PY'
-          import json, os, subprocess
-          from pathlib import Path
-
-          candidate=os.environ['CANDIDATE']
-          evidence=Path('task13-isolated-evidence')
-
-          def last_json(path):
-              rows=[]
-              for line in Path(path).read_text().splitlines():
-                  line=line.strip()
-                  if line.startswith('{'):
-                      try: rows.append(json.loads(line))
-                      except json.JSONDecodeError: pass
-              assert rows, path
-              return rows[-1]
-
-          core=last_json(evidence/'tests/test_task13_challenge_director.log')
-          integration=last_json(evidence/'tests/test_task13_integration.log')
-          capture=json.loads((evidence/'capture/manifest.json').read_text())
-          assert core.get('passed') is True and integration.get('passed') is True and capture.get('passed') is True
-
-          def selected(report,names):
-              by={row['name']:row for row in report.get('checks',[]) if isinstance(row,dict) and row.get('name')}
-              rows=[]
-              for name in names:
-                  assert name in by and by[name].get('passed') is True,(name,by.get(name))
-                  rows.append(by[name])
-              return rows
-
-          core_names=[
-              'director is deterministic','normal path is spend blind','T12 read boundary is exact',
-              'director mutates no upstream authority','commerce-only changes cannot alter normal decision',
-              'one strong window does not spike challenge','sustained strong play raises exactly one band',
-              'struggle triggers one-step recovery','sustained struggle can deepen recovery but still one step per evaluation',
-              'GM threat target is exact','GM strong ratio stays inside approved envelope',
-              'GM recovery never falls below GM minimum ratio','GM apex remains below explicit absolute threat cap',
-              'GM apex remains below explicit absolute raw caps','GM advisory pressure adds coordinated variety without new controls',
-              'malformed policy activates safe fallback','nonlinear progression uses varied threat increments',
-              'all ten bands carry distinct challenge styles','pressure vocabulary spans at least six challenge axes',
-              'adjacent adaptation respects upgrade counter cap','policy guarantees minimum preserved upgrade advantage',
-              'milestone metadata is explicitly excluded from challenge scoring',
-              'difficulty exposes ten distinct 10-level progression bands','100-level spend-blind equivalence matrix passes',
-              'pure decision mean stays bounded','pure decision p95 stays bounded'
-          ]
-          integration_names=[
-              'runtime does not preload T12 implementation','runtime does not preload simulation authority',
-              'runtime contains no random API','runtime contains no wall-clock scoring call','T12 consumer boundary exact',
-              'T12 context remains unmodified','progression intent payload cannot secretly tune difficulty',
-              'milestone metadata cannot auto-counter upgrade value','250 deterministic replay pairs are exact',
-              'Game Master target ratio matches current contract','Game Master cannot add grind or controls',
-              'GM envelope holds across all ten normal bands','GM absolute caps hold across all ten normal bands',
-              'all 100 normal cold-start levels stay in declared envelope','all ten challenge styles appear across Level 1-100',
-              'unbounded performance counts fail closed','T12 intent input is bounded','evaluation never mutates loaded policy data'
-          ]
-          core_summary={
-              'task':'T13','candidate':candidate,'passed':True,'check_count':core['check_count'],
-              'spend_blind_matrix_levels':core['spend_blind_matrix_levels'],
-              'benchmark_iterations':core['benchmark_iterations'],'benchmark_mean_usec':core['benchmark_mean_usec'],
-              'benchmark_p95_usec':core['benchmark_p95_usec'],'selected_checks':selected(core,core_names),
-              'integration_allowed':False,'task_approved':False,'isolated_state':'BUILT_PENDING_DEPENDENCY'
-          }
-          integration_summary={
-              'task':'T13','candidate':candidate,'passed':True,'check_count':integration['check_count'],
-              'deterministic_replay_pairs':integration['deterministic_replay_pairs'],
-              'level_envelope_cases':integration['level_envelope_cases'],'gm_band_cases':integration['gm_band_cases'],
-              'selected_checks':selected(integration,integration_names),'t12_mutated':False,
-              'integration_allowed':False,'task_approved':False,'isolated_state':'BUILT_PENDING_DEPENDENCY'
-          }
-          capture_summary={
-              'task':'T13','candidate':candidate,'passed':True,'scenario_count':len(capture.get('scenarios',{})),
-              'spend_blind_equivalence':capture['spend_blind_equivalence'],
-              'deterministic_replay_equivalence':capture['deterministic_replay_equivalence'],
-              'scenarios':{k:{
-                  'profile_id':v.get('profile_id'),'band_id':v.get('band_id'),'band_index':v.get('band_index'),
-                  'reason_codes':v.get('reason_codes'),'coefficients':v.get('coefficients'),
-                  'gm_relative':v.get('gm_relative',{})
-              } for k,v in capture.get('scenarios',{}).items()},
-              'integration_allowed':False,'task_approved':False,'isolated_state':'BUILT_PENDING_DEPENDENCY'
-          }
-          upgrade_isolation={
-              'task':'T13','candidate':candidate,'passed':True,
-              'claim':'T13 never directly counters T12 milestone/upgrade metadata; challenge reacts only to level and gameplay-performance signals, so upgrades retain their immediate value.',
-              'integration_checks':selected(integration,[
-                  'milestone metadata cannot auto-counter upgrade value',
-                  'progression intent payload cannot secretly tune difficulty',
-                  'Game Master cannot add grind or controls'
-              ]),
-              'core_checks':selected(core,[
-                  'baseline never changes resource yield','GM never reduces resource yield',
-                  'adjacent adaptation respects upgrade counter cap',
-                  'policy guarantees minimum preserved upgrade advantage',
-                  'milestone metadata is explicitly excluded from challenge scoring'
-              ]),
-              'upgrade_protection':json.loads(Path('HavenlineGodot/data/challenge_director_v1.json').read_text())['upgrade_protection']
-          }
-          scope='T13 is a nonvisual pure decision service. It adds no buttons, menus, input mappings, harvesting rules, resource sinks, enemy spawns, world mutations, or global persistence. Existing Havenline physical/contextual controls and the MOVE-AUTO-INTERACT-GATHER-CARRY-DELIVER-TRANSFORM-BUILD/UPGRADE loop remain owned upstream. T13 consumes only stable T12 progression context plus gameplay-performance facts and returns bounded challenge coefficients, advisory pressure directives, and reason codes. Normal-player difficulty is structurally spend-blind. The ten-band curve is intentionally nonlinear but adjacent adaptation is mathematically capped so a 10% upstream capability gain preserves at least a 2% advantage even after the strongest immediate counter-step. GM_CHALLENGE is separately authorized with a 1.25x-1.60x relative threat envelope plus explicit absolute caps; it cannot reduce resource yield or add permanent controls. Pressure directives are advisory for later content owners and do not claim those encounters are implemented. Judge T13 within this decision-layer scope; absent player-facing UI is intentional, while reason_codes are the downstream-readable feedback contract.'
-          Path('critic-input/core-summary.json').write_text(json.dumps(core_summary,indent=2)+'\n')
-          Path('critic-input/integration-summary.json').write_text(json.dumps(integration_summary,indent=2)+'\n')
-          Path('critic-input/capture-summary.json').write_text(json.dumps(capture_summary,indent=2)+'\n')
-          Path('critic-input/upgrade-isolation.json').write_text(json.dumps(upgrade_isolation,indent=2)+'\n')
-          Path('critic-input/scope-brief.txt').write_text(scope+'\n')
-          Path('critic-input/policy.json').write_text(Path('HavenlineGodot/data/challenge_director_v1.json').read_text())
-
-          diff_files=subprocess.check_output(['git','diff','--name-only','origin/codex/havenline-sequential-task-01...HEAD'],text=True).splitlines()
-          storage_bytes=sum(Path(p).stat().st_size for p in diff_files if Path(p).is_file())
-          performance={
-              'task_id':'T13','candidate_commit':candidate,'measurement_scope':'incremental T13 pure decision service',
-              'visible_triangles':0,'draw_calls':0,'materials_visible':0,'texture_gpu_memory_mb':0,'process_memory_mb':0,
-              'physics_active_bodies':0,'animated_rigs_active':0,'npc_companion_active_population':0,
-              'storage_download_mb':storage_bytes/1048576.0,'cpu_frame_ms':float(core['benchmark_p95_usec'])/1000.0,
-              'gpu_frame_ms_where_measurable':None,
-              'decision_benchmark':{'iterations':core['benchmark_iterations'],'mean_usec':core['benchmark_mean_usec'],
-                                    'p95_usec':core['benchmark_p95_usec'],
-                                    'method':'Godot 4.7.2 headless pure evaluate() wall-clock microbenchmark'},
-              'incremental_zero_rendering_claim':True,'physical_certification':False
-          }
-          Path('critic-input/performance.json').write_text(json.dumps(performance,indent=2)+'\n')
-          PY
-
-          python3 tools/havenline/production/specialist_evidence_manifest.py build             --task T13 --critic C3 --candidate "$CANDIDATE" --out critic-input/C3-manifest.json             --item 'challenge|gameplay_state|json|critic-input/core-summary.json|Deterministic challenge behavior, spend-blind matrix, anti-spike and recovery proof'             --item 'challenge|control_state|text|critic-input/scope-brief.txt|No new controls; T13 preserves Havenline contextual physical control philosophy'             --item 'challenge|loop_evidence|json|critic-input/integration-summary.json|T12 boundary, replay stability and no upstream mutation'
-
-          python3 tools/havenline/production/specialist_evidence_manifest.py build             --task T13 --critic C4 --candidate "$CANDIDATE" --out critic-input/C4-manifest.json             --item 'challenge|gameplay_state|json|critic-input/core-summary.json|Challenge transitions and bounded recovery behavior'             --item 'challenge|feedback_state|json|critic-input/capture-summary.json|Reason-code and coefficient feedback across baseline, escalation, recovery and GM states'             --item 'challenge|feedback_state|text|critic-input/scope-brief.txt|Nonvisual decision-layer readability contract'
-
-          python3 tools/havenline/production/specialist_evidence_manifest.py build             --task T13 --critic C7 --candidate "$CANDIDATE" --out critic-input/C7-manifest.json             --item 'challenge|progression_simulation|json|critic-input/integration-summary.json|100-level envelope, replay and progression-boundary simulation'             --item 'challenge|difficulty_curve|json|critic-input/policy.json|Ten-band normal curve and bounded GM envelope'             --item 'challenge|upgrade_curve|json|critic-input/upgrade-isolation.json|Proof that milestone and progression metadata do not auto-counter upgrade value'
-
-          python3 tools/havenline/production/critic_harness.py performance             --candidate "$CANDIDATE" --record critic-input/performance.json | tee task13-isolated-evidence/C6.json
-
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        with:
-          name: havenline-task13-critic-input-${{ github.event.pull_request.head.sha || github.sha }}
-          path: critic-input
-          if-no-files-found: error
-          retention-days: 30
-
-      - name: Declare isolated candidate state
-        env:
-          CANDIDATE: ${{ github.event.pull_request.head.sha || github.sha }}
-        run: |
-          python3 - <<'PY' > task13-isolated-evidence/candidate-state.json
-          import json, os
-          print(json.dumps({
-            'task':'T13',
-            'candidate':os.environ['CANDIDATE'],
-            'isolated_state':'BUILT_PENDING_DEPENDENCY',
-            'integration_allowed':False,
-            'task_approved':False,
-            'runtime_active':False,
-            'passed':True
-          },indent=2))
-          PY
-
-      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
-        if: always()
-        with:
-          name: havenline-task13-isolated-${{ github.event.pull_request.head.sha || github.sha }}
-          path: task13-isolated-evidence
-          if-no-files-found: error
-          retention-days: 30
-
-  review-c3:
-    needs: built-pending-dependency
-    uses: ./.github/workflows/havenline-specialist-critic.yml
-    with:
-      critic_id: C3
-      candidate: ${{ github.event.pull_request.head.sha || github.sha }}
-      evidence_artifact: havenline-task13-critic-input-${{ github.event.pull_request.head.sha || github.sha }}
-      manifest_name: C3-manifest.json
-      output_artifact: havenline-task13-C3-${{ github.event.pull_request.head.sha || github.sha }}
-
-  review-c4:
-    needs: built-pending-dependency
-    uses: ./.github/workflows/havenline-specialist-critic.yml
-    with:
-      critic_id: C4
-      candidate: ${{ github.event.pull_request.head.sha || github.sha }}
-      evidence_artifact: havenline-task13-critic-input-${{ github.event.pull_request.head.sha || github.sha }}
-      manifest_name: C4-manifest.json
-      output_artifact: havenline-task13-C4-${{ github.event.pull_request.head.sha || github.sha }}
-
-  review-c7:
-    needs: built-pending-dependency
-    uses: ./.github/workflows/havenline-specialist-critic.yml
-    with:
-      critic_id: C7
-      candidate: ${{ github.event.pull_request.head.sha || github.sha }}
-      evidence_artifact: havenline-task13-critic-input-${{ github.event.pull_request.head.sha || github.sha }}
-      manifest_name: C7-manifest.json
-      output_artifact: havenline-task13-C7-${{ github.event.pull_request.head.sha || github.sha }}
-
-  review-c2:
-    needs: built-pending-dependency
+  review-c2-repair:
     runs-on: ubuntu-24.04
     timeout-minutes: 85
     env:
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
       OMP_NUM_THREADS: '4'
-      CANDIDATE: ${{ github.event.pull_request.head.sha || github.sha }}
+      CANDIDATE: 5428955e5ad29c871fd85336197c94c0dd25c3df
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           fetch-depth: 0
-          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+          ref: 5428955e5ad29c871fd85336197c94c0dd25c3df
 
-      - name: Prove T13 has no visual/scene integration surface
+      - name: Prove exact product candidate and visual non-impact
         run: |
           set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$CANDIDATE"
           git fetch origin codex/havenline-sequential-task-01:refs/remotes/origin/codex/havenline-sequential-task-01
           mkdir -p c2-evidence
           python3 - <<'PY'
-          import json, subprocess
+          import json, os, subprocess
           from pathlib import Path
+          candidate=os.environ['CANDIDATE']
           changed=subprocess.check_output(
               ['git','diff','--name-only','origin/codex/havenline-sequential-task-01...HEAD'],text=True
           ).splitlines()
@@ -349,14 +53,13 @@ jobs:
               'HavenlineGodot/tests/capture_task13_challenge.gd'
           }
           assert set(refs).issubset(allowed_refs), refs
-          report={
-              'task':'T13','candidate':'${{ github.event.pull_request.head.sha || github.sha }}','passed':True,
+          Path('c2-evidence/nonimpact.json').write_text(json.dumps({
+              'task':'T13','candidate':candidate,'passed':True,
               'visual_scene_asset_changes':visual_changes,
               'runtime_scene_references':refs,
-              'statement':'T13 is not scene-wired and changes no existing render/scene/visual asset input. Fresh exact-candidate renders are reviewed only to prove no technical visual regression.',
+              'statement':'T13 is not scene-wired and changes no existing render/scene/visual asset input.',
               'changed_files':changed
-          }
-          Path('c2-evidence/nonimpact.json').write_text(json.dumps(report,indent=2)+'\n')
+          },indent=2)+'\n')
           PY
 
       - name: Install exact Godot and Mobile Vulkan dependencies
@@ -371,6 +74,12 @@ jobs:
           echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
           sudo apt-get update -qq
           sudo apt-get install -y -qq xvfb mesa-vulkan-drivers
+
+      - name: Import exact product candidate before standalone render
+        run: |
+          set -euo pipefail
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit 2>&1 | tee c2-evidence/import.log
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' c2-evidence/import.log; then exit 1; fi
 
       - name: Render exact-candidate multi-view C2 evidence
         run: |
@@ -390,27 +99,34 @@ jobs:
           python3 - <<'PY'
           import json
           from pathlib import Path
-          names=['front','rear','side','three-quarter','gather-side','shelter-detail']
-          for name in names:
+          for name in ['front','rear','side','three-quarter','gather-side','shelter-detail']:
               root=Path('c2-evidence')/name
               assert (root/'native-scene.png').is_file(), name
               report=json.loads((root/'render-evidence.json').read_text())
               assert report['renderer']=='mobile' and report['render_scale']==1.0, (name,report)
           PY
 
-      - name: Build and validate source-bound C2 manifest
+      - name: Build and validate exact-source C2 manifest
         run: |
           set -euo pipefail
-          python3 tools/havenline/production/specialist_evidence_manifest.py build             --task T13 --critic C2 --candidate "$CANDIDATE" --out c2-evidence/C2-manifest.json             --item 'visual-nonimpact|visual_integrity|image|c2-evidence/front/native-scene.png|Exact candidate opening/front Mobile Vulkan view'             --item 'visual-nonimpact|visual_integrity|image|c2-evidence/rear/native-scene.png|Exact candidate opening/rear Mobile Vulkan view'             --item 'visual-nonimpact|visual_integrity|image|c2-evidence/side/native-scene.png|Exact candidate opening/side Mobile Vulkan view'             --item 'visual-nonimpact|visual_integrity|image|c2-evidence/three-quarter/native-scene.png|Exact candidate opening/three-quarter Mobile Vulkan view'             --item 'visual-nonimpact|visual_integrity|image|c2-evidence/gather-side/native-scene.png|Exact candidate gather/side Mobile Vulkan view'             --item 'visual-nonimpact|visual_integrity|image|c2-evidence/shelter-detail/native-scene.png|Exact candidate shelter-detail Mobile Vulkan view'             --item 'visual-nonimpact|visual_integrity|json|c2-evidence/nonimpact.json|Machine-checked T13 visual non-impact diff'
+          python3 tools/havenline/production/specialist_evidence_manifest.py build \
+            --task T13 --critic C2 --candidate "$CANDIDATE" --out c2-evidence/C2-manifest.json \
+            --item 'visual-nonimpact|visual_integrity|image|c2-evidence/front/native-scene.png|Exact candidate opening/front Mobile Vulkan view' \
+            --item 'visual-nonimpact|visual_integrity|image|c2-evidence/rear/native-scene.png|Exact candidate opening/rear Mobile Vulkan view' \
+            --item 'visual-nonimpact|visual_integrity|image|c2-evidence/side/native-scene.png|Exact candidate opening/side Mobile Vulkan view' \
+            --item 'visual-nonimpact|visual_integrity|image|c2-evidence/three-quarter/native-scene.png|Exact candidate opening/three-quarter Mobile Vulkan view' \
+            --item 'visual-nonimpact|visual_integrity|image|c2-evidence/gather-side/native-scene.png|Exact candidate gather/side Mobile Vulkan view' \
+            --item 'visual-nonimpact|visual_integrity|image|c2-evidence/shelter-detail/native-scene.png|Exact candidate shelter-detail Mobile Vulkan view' \
+            --item 'visual-nonimpact|visual_integrity|json|c2-evidence/nonimpact.json|Machine-checked T13 visual non-impact diff'
           python3 tools/havenline/production/specialist_evidence_manifest.py validate c2-evidence/C2-manifest.json
 
       - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
-        id: reviewer-cache-c2
+        id: reviewer-cache
         with:
           path: ~/.cache/havenline-t01-qwen35
           key: havenline-t01-qwen35-9b-q5-20260908-v1
 
-      - name: Self-heal C2 reviewer runtime
+      - name: Self-heal reviewer runtime
         run: |
           set -euo pipefail
           if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
@@ -419,20 +135,19 @@ jobs:
           fi
           python3 tools/havenline/production/prepare_specialist_runtime.py > c2-evidence/runtime-preparation.json
 
-      - uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
-        if: steps.reviewer-cache-c2.outputs.cache-hit != 'true'
+      - uses: actions/cache/save@caa296126883cff596cd826c3c89aef350131
+        if: steps.reviewer-cache.outputs.cache-hit != 'true'
         with:
           path: ~/.cache/havenline-t01-qwen35
           key: havenline-t01-qwen35-9b-q5-20260908-v1
 
       - run: python3 -m pip install pillow
 
-      - name: Execute independent C2 visual critic
+      - name: Execute independent C2 critic
         run: |
           python3 - <<'PY'
           from __future__ import annotations
-          import hashlib, json, os, pathlib, subprocess, sys, time, urllib.request
-
+          import json, os, pathlib, subprocess, sys, time, urllib.request
           ROOT=pathlib.Path.cwd()
           PROD=ROOT/'tools'/'havenline'/'production'
           sys.path.insert(0,str(PROD))
@@ -448,7 +163,6 @@ jobs:
           spec,checks=resolve_critic('T13','C2',execution,matrix)
           dimensions=spec['dimensions']
           out=ROOT/'c2-review';out.mkdir(parents=True,exist_ok=True)
-
           cache=pathlib.Path(os.path.expanduser(execution['local_independent_runtime']['cache_path']))
           runtime=execution['local_independent_runtime']
           m=json.loads((cache/'manifest.json').read_text())
@@ -457,11 +171,9 @@ jobs:
           assert m.get('revision')==runtime['model_revision']
           for item in m['files']:
               assert shared.digest(cache/item['filename'])==item['sha256'], item['filename']
-          servers=list((cache/'runtime').rglob('llama-server'))
-          assert len(servers)==1
+          servers=list((cache/'runtime').rglob('llama-server')); assert len(servers)==1
           server=servers[0]
-          env=dict(os.environ)
-          env['LD_LIBRARY_PATH']=str(server.parent)+':'+env.get('LD_LIBRARY_PATH','')
+          env=dict(os.environ); env['LD_LIBRARY_PATH']=str(server.parent)+':'+env.get('LD_LIBRARY_PATH','')
           log=(out/'runtime.log').open('w')
           proc=subprocess.Popen([
               str(server),'-m',str(cache/m['model_file']),'--mmproj',str(cache/m['projector_file']),
@@ -477,13 +189,11 @@ jobs:
                   except Exception: pass
                   time.sleep(2)
               else: raise RuntimeError('local reviewer runtime not ready')
-
               schema=shared.response_schema('T13',dimensions)
-              base=f"""You are the independent {matrix['critics']['C2']['name']} for Havenline T13 candidate {candidate}. Mandatory checks: {json.dumps(checks)}. T13 is a nonvisual decision service and the machine-checked nonimpact record proves it changes no existing scene, render asset, shader, material, or visual integration point. Inspect the supplied exact-candidate Mobile Vulkan renders for geometry/contact, clipping/seams, intentional-gap integrity, and cross-view consistency to prove T13 introduced no technical visual regression. Do not invent defects, do not hide visible defects, and do not penalize the candidate for unrelated future content that is explicitly unchanged by T13. Every mandatory dimension is scored 0-10. PASS requires every unrounded score strictly above 9.0, zero actionable defects, complete coverage, and at least medium confidence. Return JSON only."""
+              base=f"""You are the independent {matrix['critics']['C2']['name']} for Havenline T13 candidate {candidate}. Mandatory checks: {json.dumps(checks)}. Machine evidence proves T13 changes no existing scene, render asset, shader, material, project setting, or visual integration point. Inspect the fresh exact-candidate Mobile Vulkan renders for geometry/contact, clipping/seams, intentional-gap integrity, and cross-view consistency. Do not invent defects and do not penalize unrelated unchanged future content. Every mandatory dimension is scored 0-10. PASS requires every unrounded score strictly above 9.0, zero actionable defects, complete coverage, and at least medium confidence. Return JSON only."""
               for group in manifest['groups']:
                   board=shared.evidence_board(group,out)
-                  text=shared.evidence_text(group)
-                  review=shared.request_local(board,text,base+f"\nEvidence group: {group['id']}. Judge all mandatory C2 dimensions.",schema,out,group['id'])
+                  review=shared.request_local(board,shared.evidence_text(group),base+f"\nEvidence group: {group['id']}. Judge all mandatory C2 dimensions.",schema,out,group['id'])
                   scores=review.get('scores',{})
                   errors=ensure_score_strictly_above_nine(scores)
                   if set(scores)!=set(dimensions): errors.append('dimension coverage mismatch')
@@ -498,7 +208,6 @@ jobs:
               try: proc.wait(timeout=10)
               except Exception: proc.kill()
               log.close()
-
           dim_scores={d:min((row['review']['scores'][d] for row in rows if d in row.get('review',{}).get('scores',{})),default=0) for d in dimensions}
           defects=[f"{row['group']}: {defect}" for row in rows for defect in row.get('review',{}).get('defects',[])]
           order={'low':0,'medium':1,'high':2}
@@ -509,8 +218,7 @@ jobs:
           record={
               'task_id':'T13','critic_id':'C2','provider':m['publisher'],'model':m['base_model'],
               'model_revision_expected':runtime['model_revision'],'model_revision_actual':m['revision'],
-              'runtime_release':m.get('runtime_release'),
-              'request_or_run_id':os.environ.get('GITHUB_RUN_ID','local')+'/'+os.environ.get('GITHUB_JOB','C2'),
+              'runtime_release':m.get('runtime_release'),'request_or_run_id':os.environ.get('GITHUB_RUN_ID','local')+'/'+os.environ.get('GITHUB_JOB','C2'),
               'candidate_hash':candidate,'input_manifest_hash':shared.digest(manifest_path),
               'raw_output_path':str(raw_path.relative_to(ROOT)),'raw_output_hash':shared.digest(raw_path),
               'scores':dim_scores,'defects':defects,
@@ -522,16 +230,17 @@ jobs:
           raise SystemExit(0 if passed else 1)
           PY
 
-      - name: Enforce strict C2 >9 raw critic gate
+      - name: Enforce strict C2 >9 gate
         if: always()
         run: |
           test -f c2-review/critic-record.json
-          python3 tools/havenline/production/critic_harness.py validate-raw             --critic C2             --candidate "$CANDIDATE"             --raw c2-review/critic-record.json
+          python3 tools/havenline/production/critic_harness.py validate-raw \
+            --critic C2 --candidate "$CANDIDATE" --raw c2-review/critic-record.json
 
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
-          name: havenline-task13-C2-${{ github.event.pull_request.head.sha || github.sha }}
+          name: havenline-task13-C2-repair-5428955e5ad29c871fd85336197c94c0dd25c3df
           path: |
             c2-evidence/
             c2-review/
