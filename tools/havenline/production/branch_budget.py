@@ -31,7 +31,30 @@ def authorized_preactivation_branches():
                 and policy.get('may_claim_integration_ready') is False
                 and policy.get('may_approve') is False
             )
-        if explicitly_allowed:
+        # V3.2 also permits one exact EMPTY seed branch before assignment when
+        # the task's activation contract explicitly requires that branch to
+        # exist at the exact activation integration SHA before authority is
+        # granted. This is branch existence only; it grants no runtime build,
+        # ownership, integration-ready state or approval.
+        activation_steps=checklist.get('activation_steps',[])
+        empty_seed_allowed=(
+            checklist.get('runtime_build_allowed_before_activation') is False
+            and checklist.get('future_builder_branch')==branch
+            and isinstance(activation_steps,list)
+            and any(
+                isinstance(step,str)
+                and 'Create the empty ' in step
+                and branch in step
+                and 'exact activation integration SHA' in step
+                for step in activation_steps
+            )
+            and any(
+                isinstance(step,str)
+                and 'remote head must equal the activation integration SHA' in step
+                for step in activation_steps
+            )
+        )
+        if explicitly_allowed or empty_seed_allowed:
             allowed[task_id]=branch
     return allowed
 def validate(task=None,inventory=None):
