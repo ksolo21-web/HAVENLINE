@@ -40,18 +40,10 @@ jobs:
           python3 tools/havenline/task13/prepare_activation.py --task T13 --activate --base "$(git rev-parse HEAD)"
           rc=$?
           set -e
-          T12_APPROVED=$(python3 - <<'PY'
-import json
-from pathlib import Path
-root=Path("Docs/Production")
-g=json.loads((root/"DEPENDENCY_GRAPH.json").read_text())
-t=json.loads((root/"task-gates.json").read_text())
-print("1" if g.get("tasks",{}).get("T12",{}).get("status")=="APPROVED" and "T12" in t.get("approved_tasks",[]) else "0")
-PY
-)
+          T12_APPROVED=$(python3 -c 'import json, pathlib; root=pathlib.Path("Docs/Production"); g=json.loads((root/"DEPENDENCY_GRAPH.json").read_text()); t=json.loads((root/"task-gates.json").read_text()); print("1" if g.get("tasks",{}).get("T12",{}).get("status")=="APPROVED" and "T12" in t.get("approved_tasks",[]) else "0")')
           if [ "$T12_APPROVED" = "1" ]; then
             if [ "$rc" -ne 0 ]; then
-              echo "T12 is approved; T13 activation preflight should no longer fail on dependency state."
+              echo "T12 is approved; T13 activation preflight must pass all current activation prerequisites."
               exit 1
             fi
           else
