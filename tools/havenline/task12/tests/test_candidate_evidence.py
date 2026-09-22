@@ -24,6 +24,7 @@ class T12CandidateEvidenceTests(unittest.TestCase):
 
     def resolved_packet(self):
         data = copy.deepcopy(self.template)
+        data["status"] = "CANDIDATE_EVIDENCE_COMPLETE"
         candidate = "a" * 40
         source = data["exact_source"]
         source["activation_base"] = "b" * 40
@@ -80,8 +81,9 @@ class T12CandidateEvidenceTests(unittest.TestCase):
                 "evidence_ref": f"artifact://{critic.lower()}-review.json",
                 "minimum_mandatory_dimension_score": 9.5,
             })
-        for gate in data["gates"]:
-            data["gates"][gate] = True
+        for gate, row in data["gates"].items():
+            row["status"] = "PASS"
+            row["evidence_ref"] = f"artifact://gate-{gate.lower()}.json"
         data["defects"]["unresolved_mandatory"] = []
         return data
 
@@ -127,10 +129,24 @@ class T12CandidateEvidenceTests(unittest.TestCase):
 
     def test_any_failed_gate_fails(self):
         data = self.resolved_packet()
-        data["gates"]["G9"] = False
+        data["gates"]["G9"]["status"] = "FAIL"
         result = validator.validate_packet(data, require_resolved=True)
         self.assertFalse(result["passed"])
-        self.assertTrue(any("G1-G14" in error for error in result["errors"]))
+        self.assertTrue(any("gate G9 must PASS" in error for error in result["errors"]))
+
+    def test_gate_without_evidence_fails(self):
+        data = self.resolved_packet()
+        data["gates"]["G4"]["evidence_ref"] = ""
+        result = validator.validate_packet(data, require_resolved=True)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("gate G4 must include evidence_ref" in error for error in result["errors"]))
+
+    def test_pending_packet_status_cannot_finalize(self):
+        data = self.resolved_packet()
+        data["status"] = "CANDIDATE_EVIDENCE_PENDING_REVIEW"
+        result = validator.validate_packet(data, require_resolved=True)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("CANDIDATE_EVIDENCE_COMPLETE" in error for error in result["errors"]))
 
     def test_unresolved_mandatory_defect_fails(self):
         data = self.resolved_packet()
