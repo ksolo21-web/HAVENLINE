@@ -189,20 +189,24 @@ No evidence set may claim PASS if any mandatory item is missing or references a 
 
 ## 14. Critic acceptance matrix
 
-### C2 — Functional correctness
-Must verify deterministic decision behavior, bounds, error handling, and T12 integration semantics.
+The critic IDs and responsibilities below must match the canonical `Docs/Production/CRITIC_MATRIX.json`. T13-specific proof may add requirements inside a critic's real domain, but may not rename or repurpose the critic.
 
-### C3 — Game design / challenge behavior
-Must verify progression is readable, bounded, recoverable, and avoids arbitrary spikes.
+### C2 — Technical / Visual Integrity Critic
+Must verify deterministic decision/state consistency, bounded/error behavior, exact T12 integration semantics, no contradictory challenge output, and the functional GM-vs-normal authorization/isolation behavior required by the current Game Master contract.
 
-### C4 — Fairness / economy isolation
-Must verify the normal-player challenge path is spend-blind and contains no monetization-derived proxy.
+### C3 — Havenline Gameplay Identity Critic
+Must verify challenge behavior reinforces Havenline's physical/simple-context loop, avoids unnecessary control complexity or management-game drift, and makes the elevated GM profile harder through coherent world pressure rather than arbitrary grind.
 
-### C6 — Systems integration
-Must verify ownership/API boundaries, stable downstream contract, and non-mutation of upstream state.
+### C4 — Gameplay UX / Readability Critic
+Must verify danger, recovery, world-response and next-action clarity across challenge changes; escalation/de-escalation must remain understandable at gameplay scale without clutter, hidden friction, or unreadable feedback.
 
-### C7 — Security / owner-only policy isolation
-Must verify the GM path is authorization-gated, non-spoofable, and does not leak privileged identity data.
+### C6 — Performance Critic
+Must quantitatively verify bounded Challenge Director CPU/frame-time and memory cost, no per-frame full-history/full-world rebuild, no avoidable allocation spikes, and preserved mobile performance headroom on the exact candidate. C6 is the quantitative specialist gate.
+
+### C7 — Progression / Difficulty Critic
+Must verify meaningful rising difficulty, no HP-only inflation, no impossible spikes or boring stretches, bounded normal-player escalation/recovery, spend-blind paired equivalence, and the authorized GM_CHALLENGE envelope without breaking progression fairness.
+
+Spend-blind input-flow proof and GM authorization/non-spoof tests remain mandatory acceptance evidence even though they do not change the canonical critic identities.
 
 Every mandatory reviewed dimension must be **strictly greater than 9.0 unrounded**. Target is 10/10. One mandatory failure blocks approval regardless of average score.
 
