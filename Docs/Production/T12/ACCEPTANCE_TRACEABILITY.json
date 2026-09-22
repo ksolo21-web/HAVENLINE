@@ -336,19 +336,22 @@
       "id": "T12-R15",
       "name": "Dependency truth",
       "prepared_checks": [
-        "prepare_activation.py fail-closed dependency checks",
-        "CI deliberate activation rejection while T10/T11 unfinished",
-        "exact binding-resolution gate"
+        "prepare_activation.py fail-closed dependency and lineage checks",
+        "CI deliberate activation rejection before T11 closeout/binding resolution",
+        "exact accepted-source binding resolution with activation-head identity",
+        "shipping-only six-path T12 builder reservation; prep/acceptance surface frozen"
       ],
       "shipping_tests": [
         "T07/T08/T10/T11 APPROVED at exact activation base",
-        "T10/T11 completion records present",
-        "T10/T11 stale ownership closed"
+        "T10/T11 completion records present and accepted sources are activation-base ancestors",
+        "T10/T11 stale ownership closed",
+        "T12 candidate changes remain inside the six frozen shipping/runtime test paths"
       ],
       "required_evidence": [
         "exact activation base",
         "dependency graph/registry/task-gate snapshot",
-        "resolved T10/T11 binding proof"
+        "resolved T10/T11 binding proof tied to activation base",
+        "canonical candidate-guard changed-path proof"
       ],
       "critics": [
         "C2",
@@ -362,20 +365,24 @@
       "prepared_checks": [
         "critic applicability frozen C2/C3/C4/C6/C7",
         "strict >9.0 unrounded rule",
-        "zero mandatory defect rule"
+        "zero mandatory defect rule",
+        "exact acceptance-critical validator bundle digest",
+        "evidence-bearing G1-G14 contract and complete evidence-index coverage"
       ],
       "shipping_tests": [
-        "G1-G14 pass",
+        "G1-G14 pass with evidence refs",
         "full impacted T01-T11 regression",
         "all mandatory defects closed",
-        "exact integrated source reviewed"
+        "exact candidate source reviewed",
+        "final candidate gate matches frozen validator bundle and activation-base binding proof"
       ],
       "required_evidence": [
         "independent critic records",
         "C6 quantitative record",
         "defect closure ledger",
-        "G1-G14 disposition",
-        "integrated regression evidence"
+        "G1-G14 disposition evidence indexed with SHA-256",
+        "integrated regression evidence",
+        "validator bundle digest and exact candidate guard proof"
       ],
       "critics": [
         "C2",
