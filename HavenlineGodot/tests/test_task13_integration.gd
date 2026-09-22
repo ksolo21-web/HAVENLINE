@@ -60,6 +60,10 @@ func run() -> void:
 	var intent_free := director.evaluate(context(26, 0), perf(1))
 	var intent_heavy := director.evaluate(context(26, 64), perf(1))
 	check("progression intent payload cannot secretly tune difficulty", intent_free == intent_heavy)
+	var milestone_context := context(26, 0)
+	milestone_context.completed_milestone_ids = ["t12.milestone.010", "t12.milestone.020"]
+	var milestone_heavy := director.evaluate(milestone_context, perf(1))
+	check("milestone metadata cannot auto-counter upgrade value", milestone_heavy == intent_free)
 
 	var replay_stable := true
 	for i in 250:
