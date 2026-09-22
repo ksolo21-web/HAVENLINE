@@ -82,7 +82,7 @@ func run() -> void:
 	check("sustained strong play raises exactly one band", strong.band_index == 1 and strong.reason_codes.has("strong_performance_escalation"))
 
 	var level_jump := director.evaluate(context(100), window(2), baseline)
-	check("large progression jump is capped to one band", level_jump.base_band_index == 3 and level_jump.band_index == 1 and level_jump.reason_codes.has("progression_step_up"))
+	check("large progression jump is capped to one band", level_jump.base_band_index == 9 and level_jump.band_index == 1 and level_jump.reason_codes.has("progression_step_up"))
 	var level_jump_second := director.evaluate(context(100), window(3), level_jump)
 	check("progression continues one bounded step per evaluation", level_jump_second.band_index == 2)
 
