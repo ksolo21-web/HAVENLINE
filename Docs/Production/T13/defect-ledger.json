@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "task_id": "T13",
+  "preparation_status": "PREPARED_GOVERNANCE_ONLY",
+  "unresolved_preparation_defects": [],
+  "dependency_blockers": [
+    {
+      "dependency": "T12",
+      "condition": "must be APPROVED and integrated before runtime activation"
+    }
+  ],
+  "notes": [
+    "Dependency blockers are expected gating conditions, not preparation defects.",
+    "Any stale interface/path collision discovered at activation reopens preparation.",
+    "Preactivation package reconciled to authoritative integration head 6db1207b2b8725cb4591d4a55670aa48eeb2c3fb; no T11/T12 runtime files modified.",
+    "Current blocker is lifecycle only: T12 must become APPROVED and integrated before T13 runtime activation."
+  ]
+}
