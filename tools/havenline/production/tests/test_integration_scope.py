@@ -29,6 +29,28 @@ class IntegrationScopeTests(unittest.TestCase):
         self.assertEqual(report["classification"], "GOVERNANCE_ONLY")
         self.assertIsNone(report["task_id"])
 
+    def test_reference_style_governance_paths_are_exactly_registered(self):
+        files = [
+            "Docs/Design/ReferenceVideoLock/SUPPLEMENTAL_WHITEOUT_SURVIVAL_AD_REFERENCES.md",
+            "Docs/Design/ReferenceVideoLock/supplemental-whiteout-survival-ad-sources.json",
+            "Docs/Production/REFERENCE_STYLE_LOCK.json",
+            "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
+        ]
+        report = evaluate(files, self.registry, self.ownership)
+        self.assertTrue(report["passed"], report["errors"])
+        self.assertEqual(report["classification"], "GOVERNANCE_ONLY")
+        self.assertEqual(sorted(report["governance_files"]), sorted(files))
+        self.assertEqual(report["task_files"], {})
+
+    def test_reference_style_registration_does_not_create_design_wildcard(self):
+        report = evaluate(
+            ["Docs/Design/ReferenceVideoLock/UNAUTHORIZED_NEW_REFERENCE.md"],
+            self.registry,
+            self.ownership,
+        )
+        self.assertFalse(report["passed"])
+        self.assertTrue(any("exactly one registered task owner" in x for x in report["errors"]))
+
     def test_task_closeout_and_dependent_packet_are_governance(self):
         files = [
             "Docs/Production/T06/verified-completion.json",
