@@ -48,9 +48,8 @@ The T12 isolated builder will own only the following disjoint paths once activat
 - `HavenlineGodot/tests/test_task12_progression_architecture.gd`
 - `HavenlineGodot/tests/test_task12_integration.gd`
 - `HavenlineGodot/tests/capture_task12_progression.gd`
-- `Docs/Production/T12/**`
-- `tools/havenline/task12/**`
-- `.github/workflows/havenline-task12-*.yml`
+
+The preparation/acceptance surface is intentionally **not** builder-owned after activation: `Docs/Production/T12/**`, `tools/havenline/task12/**`, and T12 preparation workflows are frozen baseline inputs. If a defect is later found in those rules/tools, stop the shipping candidate and reopen pre-activation repair rather than letting the candidate rewrite its own acceptance contract.
 
 T12 may reference but not mutate T07/T08/T10/T11 source/runtime. Shared shipping wiring (`main.gd`, `simulation.gd`, canonical registries) remains integration-owner work.
 
