@@ -107,9 +107,14 @@ func configure_camera(angle: String) -> void:
 			camera.position = Vector3(9.2, 4.2, 0.0)
 			camera.look_at(Vector3(0.0, 1.45, 0.0), Vector3.UP)
 		"overhead":
-			camera.position = Vector3(0.0, 11.2, 0.08)
+			# A true vertical top-down view collapses a roofed shelter into one flat
+			# rectangle and cannot prove 3D cross-view integrity. Keep this as a
+			# high bird's-eye inspection angle with enough horizontal offset to
+			# retain roof, wall and floor contact simultaneously.
+			camera.position = Vector3(5.8, 10.6, 5.8)
 			camera.fov = 42.0
-			camera.look_at(Vector3(0.0, 0.8, 0.0), Vector3.FORWARD)
+			camera.look_at(Vector3(0.0, 1.0, 0.0), Vector3.UP)
+			assert(Vector2(camera.position.x, camera.position.z).length() >= 6.0, "T11 overhead evidence must preserve visible 3D volume")
 		_:
 			camera.position = Vector3(7.0, 5.0, 7.4)
 			camera.look_at(Vector3(0.0, 1.45, 0.0), Vector3.UP)

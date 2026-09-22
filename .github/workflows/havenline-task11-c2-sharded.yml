@@ -11,12 +11,12 @@ permissions:
   actions: read
 
 concurrency:
-  group: havenline-t11-c2-sharded-9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+  group: havenline-t11-c2-sharded-ec1598770f84c180437a0e736fae92d3c9625707
   cancel-in-progress: false
 
 env:
-  T11_CANDIDATE: 9fb9e0da69b49c18bbdce6f43ac79b3583696af4
-  T11_SOURCE_RUN: '35679642713'
+  T11_CANDIDATE: ec1598770f84c180437a0e736fae92d3c9625707
+  T11_SOURCE_RUN: '35730534966'
 
 jobs:
   c2-shard:
@@ -40,7 +40,7 @@ jobs:
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
-          ref: 9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+          ref: ec1598770f84c180437a0e736fae92d3c9625707
           fetch-depth: 0
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
@@ -48,7 +48,7 @@ jobs:
           path: critic-input
           github-token: ${{ github.token }}
           repository: ksolo21-web/HAVENLINE
-          run-id: 35679642713
+          run-id: 35730534966
       - name: Validate parent C2 package and derive exact shard
         run: |
           set -euo pipefail
@@ -132,14 +132,14 @@ jobs:
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
-          ref: 9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+          ref: ec1598770f84c180437a0e736fae92d3c9625707
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
           name: havenline-task11-critic-C2
           path: parent-input
           github-token: ${{ github.token }}
           repository: ksolo21-web/HAVENLINE
-          run-id: 35679642713
+          run-id: 35730534966
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
           pattern: havenline-task11-c2-shard-*
@@ -216,22 +216,73 @@ jobs:
           python3 tools/havenline/production/critic_harness.py validate-raw --critic C2 --candidate "$T11_CANDIDATE" --raw c2-combined/critic-record.json
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: havenline-task11-review-C2-sharded-9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+          name: havenline-task11-review-C2-sharded-ec1598770f84c180437a0e736fae92d3c9625707
           path: c2-combined/
           retention-days: 30
           if-no-files-found: error
 
+  c4-retry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    env:
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ec1598770f84c180437a0e736fae92d3c9625707
+          fetch-depth: 0
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task11-critic-C4
+          path: critic-input
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 35730534966
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Prepare exact independent reviewer runtime
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > specialist-runtime-preparation.json
+          python3 -m pip install pillow
+      - name: Validate exact source-bound C4 package
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/specialist_evidence_manifest.py validate critic-input/critic-manifest.json
+          python3 tools/havenline/production/critic_package_preflight.py critic-input/critic-manifest.json --candidate "$T11_CANDIDATE" --critic C4 --evidence-root .
+      - name: Execute independent C4 retry
+        run: |
+          set -euo pipefail
+          python3 -u tools/havenline/production/specialist_critic_runner.py --critic C4 --candidate "$T11_CANDIDATE" --manifest critic-input/critic-manifest.json --out c4-retry
+          python3 tools/havenline/production/critic_harness.py validate-raw --critic C4 --candidate "$T11_CANDIDATE" --raw c4-retry/critic-record.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task11-review-C4-retry-ec1598770f84c180437a0e736fae92d3c9625707
+          path: |
+            c4-retry/
+            specialist-runtime-preparation.json
+          retention-days: 30
+          if-no-files-found: error
+
   final-review:
-    needs: c2-aggregate
+    needs: [c2-aggregate, c4-retry]
     runs-on: ubuntu-24.04
     timeout-minutes: 12
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
-          ref: 9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+          ref: ec1598770f84c180437a0e736fae92d3c9625707
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
-          name: havenline-task11-review-C2-sharded-9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+          name: havenline-task11-review-C2-sharded-ec1598770f84c180437a0e736fae92d3c9625707
           path: reviews/C2
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
@@ -239,28 +290,25 @@ jobs:
           path: reviews/C3
           github-token: ${{ github.token }}
           repository: ksolo21-web/HAVENLINE
-          run-id: 35679642713
+          run-id: 35730534966
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
-          name: havenline-task11-review-C4
+          name: havenline-task11-review-C4-retry-ec1598770f84c180437a0e736fae92d3c9625707
           path: reviews/C4
-          github-token: ${{ github.token }}
-          repository: ksolo21-web/HAVENLINE
-          run-id: 35679642713
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
           name: havenline-task11-review-C6
           path: reviews/C6
           github-token: ${{ github.token }}
           repository: ksolo21-web/HAVENLINE
-          run-id: 35679642713
+          run-id: 35730534966
       - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
         with:
-          name: havenline-task11-candidate-9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+          name: havenline-task11-candidate-ec1598770f84c180437a0e736fae92d3c9625707
           path: functional-evidence
           github-token: ${{ github.token }}
           repository: ksolo21-web/HAVENLINE
-          run-id: 35679642713
+          run-id: 35730534966
       - name: Bind strict C2 C3 C4 C6 proof
         run: |
           set -euo pipefail
@@ -272,7 +320,7 @@ jobs:
           python3 tools/havenline/task11/final_gate.py --candidate "$T11_CANDIDATE" --c2 "$C2" --c3 "$C3" --c4 "$C4" --c6 "$C6" --tests functional-evidence/tests.json --out task11-final-review/final-review-gate.json
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: havenline-task11-final-review-sharded-9fb9e0da69b49c18bbdce6f43ac79b3583696af4
+          name: havenline-task11-final-review-sharded-ec1598770f84c180437a0e736fae92d3c9625707
           path: task11-final-review/
           retention-days: 30
           if-no-files-found: error
