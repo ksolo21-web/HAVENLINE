@@ -1,0 +1,134 @@
+name: Havenline T13 Isolated Challenge Director
+
+on:
+  push:
+    branches:
+      - havenline/T13-challenge-director
+    paths:
+      - 'HavenlineGodot/scripts/challenge_director.gd'
+      - 'HavenlineGodot/data/challenge_director_v1.json'
+      - 'HavenlineGodot/tests/test_task13_challenge_director.gd'
+      - 'HavenlineGodot/tests/test_task13_integration.gd'
+      - 'HavenlineGodot/tests/capture_task13_challenge.gd'
+      - 'Docs/Production/T13/**'
+      - '.github/workflows/havenline-task13-isolated.yml'
+  pull_request:
+    branches:
+      - codex/havenline-sequential-task-01
+    paths:
+      - 'HavenlineGodot/scripts/challenge_director.gd'
+      - 'HavenlineGodot/data/challenge_director_v1.json'
+      - 'HavenlineGodot/tests/test_task13_challenge_director.gd'
+      - 'HavenlineGodot/tests/test_task13_integration.gd'
+      - 'HavenlineGodot/tests/capture_task13_challenge.gd'
+      - 'Docs/Production/T13/**'
+      - '.github/workflows/havenline-task13-isolated.yml'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-t13-${{ github.head_ref || github.ref_name }}
+  cancel-in-progress: true
+
+jobs:
+  built-pending-dependency:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Verify exact preactivation scope
+        run: |
+          set -euo pipefail
+          git fetch origin codex/havenline-sequential-task-01:refs/remotes/origin/codex/havenline-sequential-task-01
+          mkdir -p task13-isolated-evidence
+          python3 tools/havenline/production/preactivation_candidate.py \
+            --task T13 \
+            --branch havenline/T13-challenge-director \
+            --head HEAD \
+            --output task13-isolated-evidence/preactivation.json
+          python3 -m json.tool HavenlineGodot/data/challenge_director_v1.json >/dev/null
+
+      - name: Install Godot 4.7.2
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/godot"
+          cd "$RUNNER_TEMP/godot"
+          base='https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable'
+          curl -fL --retry 3 "$base/Godot_v4.7.2-stable_linux.x86_64.zip" -o editor.zip
+          unzip -q editor.zip
+          chmod +x Godot_v4.7.2-stable_linux.x86_64
+          echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
+
+      - name: Import project and reject parse errors
+        run: |
+          set -euo pipefail
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit 2>&1 | tee task13-isolated-evidence/import.log
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task13-isolated-evidence/import.log; then exit 1; fi
+
+      - name: Run deterministic T13 suites
+        run: |
+          set -euo pipefail
+          mkdir -p task13-isolated-evidence/tests
+          for suite in test_task13_challenge_director test_task13_integration; do
+            timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "task13-isolated-evidence/tests/$suite.log"
+            if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' "task13-isolated-evidence/tests/$suite.log"; then exit 1; fi
+          done
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          for p in sorted(Path('task13-isolated-evidence/tests').glob('*.log')):
+              reports=[json.loads(x) for x in p.read_text().splitlines() if x.startswith('{')]
+              assert reports, p
+              r=reports[-1]
+              assert r.get('passed') is True and not r.get('failures'), (p,r)
+              assert r.get('integration_allowed') is False and r.get('task_approved') is False, r
+              assert r.get('isolated_state') == 'BUILT_PENDING_DEPENDENCY', r
+          PY
+
+      - name: Capture source-bound nonvisual evidence
+        env:
+          GITHUB_SHA: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          set -euo pipefail
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/capture_task13_challenge.gd -- --out="$PWD/task13-isolated-evidence/capture" 2>&1 | tee task13-isolated-evidence/capture.log
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task13-isolated-evidence/capture.log; then exit 1; fi
+          python3 - <<'PY'
+          import json, os
+          from pathlib import Path
+          m=json.loads(Path('task13-isolated-evidence/capture/manifest.json').read_text())
+          assert m.get('passed') is True, m
+          assert m.get('candidate') == os.environ['GITHUB_SHA'], m
+          assert m.get('spend_blind_equivalence') is True and m.get('deterministic_replay_equivalence') is True, m
+          assert m.get('integration_allowed') is False and m.get('task_approved') is False, m
+          assert m.get('isolated_state') == 'BUILT_PENDING_DEPENDENCY', m
+          PY
+
+      - name: Declare isolated candidate state
+        env:
+          CANDIDATE: ${{ github.event.pull_request.head.sha || github.sha }}
+        run: |
+          python3 - <<'PY' > task13-isolated-evidence/candidate-state.json
+          import json, os
+          print(json.dumps({
+            'task':'T13',
+            'candidate':os.environ['CANDIDATE'],
+            'isolated_state':'BUILT_PENDING_DEPENDENCY',
+            'integration_allowed':False,
+            'task_approved':False,
+            'runtime_active':False,
+            'passed':True
+          },indent=2))
+          PY
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task13-isolated-${{ github.event.pull_request.head.sha || github.sha }}
+          path: task13-isolated-evidence
+          if-no-files-found: error
+          retention-days: 30
