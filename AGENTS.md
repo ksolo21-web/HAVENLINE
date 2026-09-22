@@ -266,6 +266,27 @@ paid transformations. Generic cabin/furnace clearing is not the target.
 Photorealism/noise/polygon count is not automatically closer. No primitive
 blockout/default/debug material may pass as finished art.
 
+### Non-bypassable reference-style material lock
+
+Every new or modified in-game visual material/surface treatment must match the
+locked reference style at **10.0/10.0 exact fidelity**. This covers textures,
+shaders, procedural/code-created materials, snow/ice/water/terrain, buildings,
+props, machines, resources/stacks/money, characters/animals/hostiles, VFX and
+lighting/post-processing that changes surface appearance. There is no
+performance, schedule, task-scope or "close enough" waiver. Unshown objects
+extend the same reference grammar; they do not authorize a new aesthetic.
+
+Run `tools/havenline/production/reference_style_lock.py` for every candidate
+with material-affecting changes. C1 becomes mandatory for such a candidate and
+both `reference_fidelity` and `visual_language` must equal **10.0 exactly**
+with zero style defects and complete reference-pixel evidence. Other critic,
+zero-primitive, human visual-signoff, performance, gameplay, security,
+persistence and device standards remain unchanged or stronger. Governance
+adoption alone preserves only the immutable historical accepted SHAs listed in
+`REFERENCE_STYLE_LOCK.json`; any changed/reopened source is fully subject to
+the lock, and T70 must prove a full shipped-material census so legacy drift
+cannot ship. See `Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md`.
+
 ## Monetization and LiveOps
 
 No energy wall, mandatory payment, fake discounts, hidden spend-based

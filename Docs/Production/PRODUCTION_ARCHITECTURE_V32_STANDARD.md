@@ -11,9 +11,9 @@ PREPARE FAR AHEAD -> GRADUATE ONLY WHEN SAFE -> CHECKPOINT -> CHEAP SENTINELS
 -> FRESH INTEGRATED CLOSEOUT -> ADVANCE
 ```
 
-Every applicable mandatory critic dimension remains strictly greater than 9.0 unrounded; target 10/10; no averaging; zero unresolved mandatory defects.
+Every applicable mandatory critic dimension remains strictly greater than 9.0 unrounded; target 10/10; no averaging; zero unresolved mandatory defects. **Reference-style material fidelity is stricter:** when the global style lock applies, C1 `reference_fidelity` and `visual_language` must equal 10.0 exactly.
 
-## Fifteen mandatory systems
+## Sixteen mandatory systems
 
 1. **Resumable execution checkpoints.** T11+ records integration SHA, candidate SHA, branch, stage, completed gates, reusable proof, blocker families, running workflows, environment fingerprint and exact next action/command. TIMEOUT is infrastructure evidence unless current source-bound evidence independently proves a product defect.
 2. **Parallel preparation planner.** Future work resolves to PREP_NOW, BUILD_WHEN_UNLOCKED, BLOCKED_EXTERNAL, ACTIVE_RUNTIME, PRESERVE or DO_NOT_TOUCH. Preparation never grants ownership, integration or approval.
@@ -30,6 +30,7 @@ Every applicable mandatory critic dimension remains strictly greater than 9.0 un
 13. **Reusable forward-task control plane.** Every T11–T70 task workflow consumes the same reusable V3.2 control workflow. Preflight mode binds lifecycle, ownership, exact source, checkpoints, gate-fingerprint reuse, canaries, performance policy, contracts and synthetic merge. Review mode preflights the actual source-bound critic packages before parallel specialist review. Failure mode routes exact failed runs to non-voting C0. Task-specific workflows retain their actual gameplay/domain/C1/C2/C6/C9 work; the shared layer prevents them from forgetting cross-task governance.
 14. **Zero-primitive shipping-art gate.** Temporary primitives are allowed only while a task is unfinished. Before final review or integration, every task-owned shipping-visible path is scanned fail-closed for primitive render types and primitive material types defined by `SHIPPING_VISUAL_APPROVAL_POLICY.json`. A known violation revokes effective approval even when an older historical completion record says APPROVED. No grandfathering is allowed for a known primitive violation.
 15. **Human final-visual signoff.** A visual task cannot become `INTEGRATION_READY` until its exact frozen candidate has source-bound final visual proof: at least four native-4K stills plus continuous motion at 60 FPS or higher, a zero-finding primitive audit, and an explicit user visual approval recorded governance-only under `Docs/Production/VisualApprovals/<task>/<candidate>.json`. The signoff record must not modify the frozen gameplay candidate SHA. Final sustained physical-device 4K60 certification remains a later release gate.
+16. **Non-bypassable reference-style material lock.** Every new or modified in-game material/surface/shader/VFX treatment must follow `REFERENCE_STYLE_LOCK_STANDARD.md`. Material-affecting changes automatically require C1, a source-bound material inventory, actual reference-pixel review and exact **10.0** scores for C1 `reference_fidelity` and `visual_language`. No zero-primitive, human-signoff, performance, gameplay, security, persistence, device or other threshold is lowered. A material-affecting source change always invalidates C1/style-lock proof; unrelated same-source critic passes may remain valid. T70 performs a full shipped-material census.
 
 ## Durable learning and proof promotion
 
@@ -43,7 +44,7 @@ Every applicable mandatory critic dimension remains strictly greater than 9.0 un
 
 **YELLOW — isolated build pending dependency:** implementation against a stable published interface may remain BUILT_PENDING_DEPENDENCY, but cannot integrate or claim final approval until dependencies and graduation gates permit it.
 
-**RED — do not touch:** another task's owned runtime, integration-only files, unfinished shared semantics, premature final evidence, or changes that invalidate active evidence without a ChangeRequest.
+**RED — do not touch:** another task's owned runtime, integration-only files, unfinished shared semantics, premature final evidence, changes that invalidate active evidence without a ChangeRequest, or any visual-material shortcut that reduces locked-reference style fidelity.
 
 ## Control-plane lineage invariant
 

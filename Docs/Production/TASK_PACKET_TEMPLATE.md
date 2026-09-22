@@ -122,6 +122,7 @@ Run:
 - Performance metrics:
 - Resource/tool/actor contract validation where applicable:
 - Game Master policy/contract validation where applicable:
+- Reference-style material lock validation where material-affecting visual paths are changed (always for T70):
 
 ## Required evidence
 - Exact candidate commit/hash.
@@ -139,9 +140,10 @@ Run:
 - Google identity/recovery and Game Master entitlement/difficulty/fairness evidence where applicable.
 - Logs, performance records and persistence records.
 - Raw critic inputs and outputs.
+- For any material-affecting candidate: exact changed-visual-path inventory, material inventory, actual A/B reference-pixel comparison, supplemental reference comparison where useful, style-lock validator proof, and C1 `reference_fidelity=10.0` plus `visual_language=10.0`.
 
 ## Required critics
-List exact critic IDs from `CRITIC_MATRIX.json` plus any automatic C5 requirement added by the resource/actor contract.
+List exact critic IDs from `CRITIC_MATRIX.json` plus any automatic C5 requirement added by the resource/actor contract. Any material-affecting visual change automatically adds C1 even when the task archetype would not otherwise require it.
 
 -
 
@@ -160,6 +162,7 @@ runtime. Builder self-review is recorded separately and cannot satisfy them.
 - Evidence package:
 - Resource/actor contract proof:
 - Game Master contract proof:
+- Reference-style lock proof:
 - Known failures:
 - Unresolved mandatory defects:
 - Reconcile/rebase status against current integration head:

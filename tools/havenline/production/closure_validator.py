@@ -6,6 +6,7 @@ from lib import ROOT, DOCS, load_json, ensure_score_strictly_above_nine, sha256_
 from evidence_retention import validate_manifest as validate_retention_manifest
 from task_state_snapshot import validate as validate_task_state
 from critic_profile import resolve_critic
+from reference_style_lock import style_lock_required, validate_manifest as validate_reference_style_lock
 
 ALL_GATES=[f"G{i}" for i in range(1,15)]
 RESOURCE_REGISTRY=DOCS/"RESOURCE_ACTION_REGISTRY.json"
@@ -284,7 +285,11 @@ def main():
 
     required=list(critcfg["task_applicability"].get(task,[]))
     if contract_c5_required and "C5" not in required:required.append("C5")
+    style_required=style_lock_required(d)
+    if style_required and "C1" not in required:required.append("C1")
     critics=d.get("critics",{})
+    style_check=validate_reference_style_lock(d,critics)
+    errors += ["reference style lock: "+x for x in style_check.get("errors",[])]
     aggregate=review_record
     if aggregate.get("status")!="PASS" or aggregate.get("disposition")!="APPROVED" or aggregate.get("coverage_complete") is not True or aggregate.get("unresolved_mandatory_defects"):
         errors.append("independent critic aggregate disposition incomplete")
@@ -374,7 +379,7 @@ def main():
                         errors.append("raw critic indexed evidence mismatch "+cid+": "+str(rel))
     integ=d.get("integration",{})
     if integ.get("candidate_commit")!=candidate or integ.get("regression_passed") is not True:errors.append("integration candidate regression missing")
-    result={"task_id":task,"candidate_commit":candidate,"passed":not errors,"errors":errors,"approval_allowed":not errors}
+    result={"task_id":task,"candidate_commit":candidate,"passed":not errors,"errors":errors,"approval_allowed":not errors,"reference_style_lock_required":style_required}
     print(json.dumps(result,indent=2))
     if errors:raise SystemExit(1)
 if __name__=="__main__":main()

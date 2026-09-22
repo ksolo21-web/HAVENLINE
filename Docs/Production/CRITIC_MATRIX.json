@@ -8,6 +8,15 @@
     "no_average_waiver": true,
     "no_unresolved_mandatory_defect": true
   },
+  "reference_style_lock": {
+    "applies_to": "every new or modified in-game visual material/surface treatment",
+    "exact_score": 10.0,
+    "exact_c1_dimensions": ["reference_fidelity", "visual_language"],
+    "zero_style_defects": true,
+    "actual_reference_pixels_required": true,
+    "no_exception_or_substitute": true,
+    "policy": "Docs/Production/REFERENCE_STYLE_LOCK.json"
+  },
   "independence_rule": "A builder/self-review/persona swap is not an independent critic. Use a genuinely separate reviewer/model runtime when required; if unavailable, keep the independent gate BLOCKED.",
   "cost_rule": "No paid APIs or paid critic services.",
   "critics": {
@@ -17,7 +26,8 @@
       "checks": [
         "authoritative reference-video fidelity",
         "visual-language match",
-        "cross-view consistency"
+        "cross-view consistency",
+        "all visible gameplay materials/surfaces/shaders/VFX obey REFERENCE_STYLE_LOCK; when applicable reference_fidelity and visual_language are exact 10.0 with zero style defects"
       ]
     },
     "C2": {
