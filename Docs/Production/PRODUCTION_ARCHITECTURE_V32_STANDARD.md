@@ -13,7 +13,7 @@ PREPARE FAR AHEAD -> GRADUATE ONLY WHEN SAFE -> CHECKPOINT -> CHEAP SENTINELS
 
 Every applicable mandatory critic dimension remains strictly greater than 9.0 unrounded; target 10/10; no averaging; zero unresolved mandatory defects.
 
-## Thirteen mandatory systems
+## Fifteen mandatory systems
 
 1. **Resumable execution checkpoints.** T11+ records integration SHA, candidate SHA, branch, stage, completed gates, reusable proof, blocker families, running workflows, environment fingerprint and exact next action/command. TIMEOUT is infrastructure evidence unless current source-bound evidence independently proves a product defect.
 2. **Parallel preparation planner.** Future work resolves to PREP_NOW, BUILD_WHEN_UNLOCKED, BLOCKED_EXTERNAL, ACTIVE_RUNTIME, PRESERVE or DO_NOT_TOUCH. Preparation never grants ownership, integration or approval.
@@ -28,6 +28,8 @@ Every applicable mandatory critic dimension remains strictly greater than 9.0 un
 11. **Cumulative performance ledger.** Every task reports measurable pressure against PERFORMANCE_BUDGETS.json. Integrated frame timing uses measured integrated scenes, not naïve summation. Reserved headroom is protected.
 12. **Timeout-safe stage sharding.** Preflight, domain/matrix, regression/performance, evidence, critic fan-out, integration and closeout are separate resumable stages. Long critic/physical jobs are single-purpose and checkpointed before/after. Finish-running-SHA remains mandatory.
 13. **Reusable forward-task control plane.** Every T11–T70 task workflow consumes the same reusable V3.2 control workflow. Preflight mode binds lifecycle, ownership, exact source, checkpoints, gate-fingerprint reuse, canaries, performance policy, contracts and synthetic merge. Review mode preflights the actual source-bound critic packages before parallel specialist review. Failure mode routes exact failed runs to non-voting C0. Task-specific workflows retain their actual gameplay/domain/C1/C2/C6/C9 work; the shared layer prevents them from forgetting cross-task governance.
+14. **Zero-primitive shipping-art gate.** Temporary primitives are allowed only while a task is unfinished. Before final review or integration, every task-owned shipping-visible path is scanned fail-closed for primitive render types and primitive material types defined by `SHIPPING_VISUAL_APPROVAL_POLICY.json`. A known violation revokes effective approval even when an older historical completion record says APPROVED. No grandfathering is allowed for a known primitive violation.
+15. **Human final-visual signoff.** A visual task cannot become `INTEGRATION_READY` until its exact frozen candidate has source-bound final visual proof: at least four native-4K stills plus continuous motion at 60 FPS or higher, a zero-finding primitive audit, and an explicit user visual approval recorded governance-only under `Docs/Production/VisualApprovals/<task>/<candidate>.json`. The signoff record must not modify the frozen gameplay candidate SHA. Final sustained physical-device 4K60 certification remains a later release gate.
 
 ## Durable learning and proof promotion
 
@@ -69,4 +71,4 @@ Extra preflight rigor applies to T12, T14, T15, T31, T32, T33–T43, T44–T53, 
 
 ## Acceptance
 
-V3.2 passes only when its policies, tools, task-packet consumption, T11 activation hygiene, promoted failure intelligence, ownership and hosted governance validation pass together with V2/V3/V3.1. V3.2 is governance/tooling only and must not modify active T11 gameplay/runtime.
+V3.2 passes only when its policies, tools, task-packet consumption, promoted failure intelligence, ownership, zero-primitive shipping-art audit, effective-approval invalidation coverage, human final-visual signoff rules and hosted governance validation pass together with V2/V3/V3.1. A historical APPROVED record is not effective approval while an active visual-quality invalidation exists.

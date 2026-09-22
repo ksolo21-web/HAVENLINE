@@ -29,6 +29,19 @@
         "critic_package_preflight_contract"
       ],
       "rule": "Authoritative runtime construction starts only after proof machinery is ready."
+    },
+    "REVIEW_to_INTEGRATION_READY": {
+      "required": [
+        "exact_candidate_frozen",
+        "zero_primitive_shipping_art",
+        "source_bound_final_visual_evidence",
+        "native_4k_visual_proof",
+        "motion_visual_proof_60fps",
+        "explicit_user_visual_signoff",
+        "mandatory_critics_pass",
+        "zero_unresolved_mandatory_defects"
+      ],
+      "rule": "No visual task may become INTEGRATION_READY until the exact candidate is primitive-free and the user has inspected and explicitly approved exact-source final visuals. Signoff is governance-only and must not alter the frozen candidate SHA."
     }
   },
   "graduation_manifest_fields": [
@@ -86,5 +99,9 @@
     ]
   },
   "assignment_claim_tool": "tools/havenline/production/v32_assignment_claim.py",
-  "legacy_assignment_claim_for_t11_t70_forbidden": true
+  "legacy_assignment_claim_for_t11_t70_forbidden": true,
+  "shipping_visual_policy": "Docs/Production/SHIPPING_VISUAL_APPROVAL_POLICY.json",
+  "approval_invalidation_index": "Docs/Production/APPROVAL_INVALIDATIONS.json",
+  "visual_signoff_template": "Docs/Production/FINAL_VISUAL_SIGNOFF_TEMPLATE.json",
+  "historical_approval_is_not_effective_when_invalidated": true
 }

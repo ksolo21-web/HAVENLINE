@@ -96,6 +96,17 @@ jobs:
           jq -e '.passed == true and .finish_running_sha == true and .quality_thresholds_unchanged == true' v32-control/control-plan.json
           critics=$(jq -c '.critic_plan.specialist_fanout' v32-control/control-plan.json);echo "specialist_critics_json=$critics" >> "$GITHUB_OUTPUT"
           if [ "${{ inputs.mode }}" = "review" ]; then test "$critics" != "[]";test -n "${{ inputs.evidence_artifact_prefix }}";test -n "${{ inputs.output_artifact_prefix }}";fi
+      - name: Enforce zero-primitive shipping art before final review
+        if: inputs.mode == 'review'
+        env:
+          TASK: ${{ inputs.task_id }}
+          CANDIDATE: ${{ steps.refs.outputs.candidate_sha }}
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/shipping_visual_gate.py audit-task "$TASK" \
+            --candidate "$CANDIDATE" --require-clean \
+            --output v32-control/shipping-visual-audit.json
+
       - name: Stage content-addressed shared gate PASS proposals
         if: inputs.target == 'BUILDING_ISOLATED'
         env:

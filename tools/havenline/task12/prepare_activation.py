@@ -52,6 +52,7 @@ CRITIC_REVIEW_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_cr
 EVIDENCE_INDEX_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_evidence_index.py"
 FUZZ_GATE = ROOT / "tools" / "havenline" / "task12" / "fuzz_progression_contract.py"
 PREBUILD_BENCHMARK = ROOT / "tools" / "havenline" / "task12" / "benchmark_prebuild_validators.py"
+SHIPPING_VISUAL_GATE = ROOT / "tools" / "havenline" / "production" / "shipping_visual_gate.py"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
 ACTIVATION_DYNAMIC_ARTIFACTS = {
     "Docs/Production/T12/BINDING_RESOLUTION.json",
@@ -927,6 +928,11 @@ def validate_activation(base: str):
         head,
     )
     errors.extend(closeout_errors)
+
+    for dep in checklist.get("dependencies", []):
+        passed, output = run_read_only_tool([str(SHIPPING_VISUAL_GATE), "effective-approval", dep, "--ref", base])
+        if not passed:
+            errors.append(f"dependency {dep} is not effectively approved under shipping visual policy: " + output)
 
     if graph.get("tasks", {}).get("T12", {}).get("status") not in ("LOCKED", "PREPARED"):
         errors.append(f"unexpected pre-activation T12 graph state: {graph.get('tasks', {}).get('T12', {}).get('status')}")

@@ -22,6 +22,7 @@ import performance_ledger
 import rolling_canary
 import task_graduation_gate
 import timeout_stage_plan
+import shipping_visual_gate
 import v32_assignment_claim
 
 SHA='a'*40
@@ -323,6 +324,22 @@ class V32Tests(unittest.TestCase):
   self.assertIn('failure_learning.py propose',body)
   base=(ROOT/'.github/workflows/havenline-c0-root-cause.yml').read_text()
   self.assertNotIn('failure_learning.py propose',base)
+
+ def test_shipping_visual_policy_revokes_known_primitive_approvals(self):
+  out=shipping_visual_gate.audit_effective_approvals()
+  self.assertTrue(out['passed'],out)
+  rows={x['task_id']:x for x in out['rows']}
+  for task in ('T08','T09','T10','T11'):
+   self.assertGreater(rows[task]['finding_count'],0,rows[task])
+   self.assertTrue(rows[task]['invalidation_active'])
+   self.assertFalse(rows[task]['effective_approved'])
+  self.assertFalse(shipping_visual_gate.effective_approval('T11')['passed'])
+
+ def test_shared_review_enforces_shipping_visual_gate(self):
+  body=(ROOT/'.github/workflows/havenline-v32-task-preflight.yml').read_text()
+  self.assertIn('Enforce zero-primitive shipping art before final review',body)
+  self.assertIn('shipping_visual_gate.py audit-task',body)
+  self.assertIn('--require-clean',body)
 
  def test_full_v32_validator(self):
   out=architecture_v32.validate()

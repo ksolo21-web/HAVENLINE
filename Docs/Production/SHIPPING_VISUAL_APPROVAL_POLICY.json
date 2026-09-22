@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "authority": "Havenline hard visual-quality rule",
+  "effective_date": "2026-09-22",
+  "rule": "No task may be effectively APPROVED or enter INTEGRATION_READY with any shipping-visible primitive mesh, primitive material, placeholder style, or primitive-looking authored presentation. Unfinished/pre-activation work may use temporary primitives, but final review must remove them completely.",
+  "shipping_roots": [
+    "HavenlineGodot/"
+  ],
+  "excluded_patterns": [
+    "HavenlineGodot/tests/**",
+    "HavenlineGodot/tools/**",
+    "HavenlineGodot/**/*.uid"
+  ],
+  "forbidden_render_types": [
+    "BoxMesh",
+    "PlaneMesh",
+    "SphereMesh",
+    "CylinderMesh",
+    "CapsuleMesh",
+    "PrismMesh",
+    "QuadMesh",
+    "PrimitiveMesh"
+  ],
+  "forbidden_material_types": [
+    "StandardMaterial3D",
+    "ORMMaterial3D"
+  ],
+  "text_extensions": [
+    ".gd",
+    ".tscn",
+    ".tres",
+    ".res",
+    ".gdshader",
+    ".material"
+  ],
+  "human_visual_gate": {
+    "required_for_new_or_repaired_visual_approval": true,
+    "governance_record_pattern": "Docs/Production/VisualApprovals/{task_id}/{candidate_sha}.json",
+    "minimum_stills": 4,
+    "minimum_motion_seconds": 3,
+    "minimum_internal_resolution": [
+      3840,
+      2160
+    ],
+    "minimum_capture_fps": 60,
+    "exact_candidate_required": true,
+    "primitive_audit_zero_findings_required": true,
+    "explicit_user_visual_approval_required": true,
+    "note": "This source-bound 4K60 visual proof is an approval-viewing requirement; final sustained physical-device native 4K60 certification remains a later release gate."
+  },
+  "visual_critic_ids": [
+    "C1",
+    "C2",
+    "C3",
+    "C4",
+    "C5",
+    "C11"
+  ],
+  "effective_approval": {
+    "historical_approved_status_alone_is_insufficient": true,
+    "active_invalidation_revokes_effective_approval": true,
+    "uncovered_primitive_finding_revokes_effective_approval": true,
+    "dependency_gates_must_use_effective_approval": true,
+    "no_grandfathering_of_known_primitive_violations": true
+  },
+  "whole_game_release": {
+    "audit_all_shipping_paths": true,
+    "include_integration_only_paths": true,
+    "primitive_findings_allowed": 0
+  }
+}

@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "authority": "Docs/Production/SHIPPING_VISUAL_APPROVAL_POLICY.json",
+  "records": [
+    {
+      "task_id": "T08",
+      "status": "ACTIVE",
+      "family": "shipping_visual_primitive_violation",
+      "discovered_at": "2026-09-22T16:51:00Z",
+      "audited_integration_source": "1083d82269e82c5aac678bb5c5c77312dde94099",
+      "reason": "Approved T08 shipping presentation still creates primitive CapsuleMesh/CylinderMesh geometry and StandardMaterial3D feedback.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/scripts/transfer_feedback.gd",
+          "tokens": [
+            "CapsuleMesh",
+            "CylinderMesh",
+            "StandardMaterial3D"
+          ]
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "inventory conservation tests",
+        "save matrix",
+        "unrelated deterministic functional proof"
+      ],
+      "required_resolution": "Replace all shipping-visible primitives/materials with authored production-quality assets/materials, recapture exact-source 4K60 visual evidence, rerun invalidated critics/performance only, obtain explicit user visual signoff."
+    },
+    {
+      "task_id": "T09",
+      "status": "ACTIVE",
+      "family": "shipping_visual_primitive_violation",
+      "discovered_at": "2026-09-22T16:51:00Z",
+      "audited_integration_source": "1083d82269e82c5aac678bb5c5c77312dde94099",
+      "reason": "Approved T09 harvesting presentation still creates primitive BoxMesh/PrismMesh/CylinderMesh effects and StandardMaterial3D.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/scripts/harvest_presentation.gd",
+          "tokens": [
+            "BoxMesh",
+            "PrismMesh",
+            "CylinderMesh",
+            "StandardMaterial3D",
+            "PrimitiveMesh"
+          ]
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "C5 motion proof",
+        "harvest conservation tests",
+        "save/device matrices"
+      ],
+      "required_resolution": "Replace primitive presentation with authored production-quality assets/materials, recapture exact-source 4K60 visual evidence, rerun only invalidated critics/performance, obtain explicit user visual signoff."
+    },
+    {
+      "task_id": "T10",
+      "status": "ACTIVE",
+      "family": "shipping_visual_primitive_violation",
+      "discovered_at": "2026-09-22T16:51:00Z",
+      "audited_integration_source": "1083d82269e82c5aac678bb5c5c77312dde94099",
+      "reason": "Approved T10 world-transform presentation still uses primitive CylinderMesh/BoxMesh geometry and StandardMaterial3D.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/scripts/world_transform_view.gd",
+          "tokens": [
+            "CylinderMesh",
+            "BoxMesh",
+            "StandardMaterial3D"
+          ]
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "C7 progression/state proof",
+        "world-transaction deterministic semantics",
+        "save matrix"
+      ],
+      "required_resolution": "Replace primitive transform ring/ghost/materials with authored production-quality presentation, recapture exact-source 4K60 visual evidence, rerun invalidated visual/performance critics only, obtain explicit user visual signoff."
+    },
+    {
+      "task_id": "T11",
+      "status": "ACTIVE",
+      "family": "shipping_visual_primitive_violation",
+      "discovered_at": "2026-09-22T16:51:00Z",
+      "audited_integration_source": "1083d82269e82c5aac678bb5c5c77312dde94099",
+      "reason": "Approved T11 shelter content and flow markers still use BoxMesh and StandardMaterial3D in shipping-visible content.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/assets/camp_construction_v1/camp_shelter_seed.tscn",
+          "tokens": [
+            "BoxMesh",
+            "StandardMaterial3D"
+          ]
+        },
+        {
+          "path": "HavenlineGodot/assets/camp_construction_v1/camp_shelter_foundation.tscn",
+          "tokens": [
+            "BoxMesh",
+            "StandardMaterial3D"
+          ]
+        },
+        {
+          "path": "HavenlineGodot/assets/camp_construction_v1/camp_shelter_reinforced.tscn",
+          "tokens": [
+            "BoxMesh",
+            "StandardMaterial3D"
+          ]
+        },
+        {
+          "path": "HavenlineGodot/scripts/camp_construction_view.gd",
+          "tokens": [
+            "BoxMesh",
+            "StandardMaterial3D"
+          ]
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "594-check functional suites",
+        "T10 transaction semantics",
+        "unrelated deterministic tests"
+      ],
+      "required_resolution": "Replace shelters/markers/materials with authored production-quality assets/materials matching the Havenline reference style, recapture exact-source 4K60 stills and motion, rerun invalidated critics/performance only, show the visual proof to the user, then obtain explicit user visual signoff before INTEGRATION_READY."
+    }
+  ]
+}
