@@ -34,7 +34,7 @@ def main():
    items=[]
    for n,(src,kind,cat,desc) in enumerate(rows):
     rel=Path('images')/(f'{n:02d}-'+src.name);dst=pkg/rel;dst.parent.mkdir(parents=True,exist_ok=True);shutil.copy2(src,dst)
-    items.append({'path':str(Path('critic-input')/rel),'kind':kind,'category':cat,'sha256':digest(dst),'description':desc})
+    items.append({'path':str(pkg/rel),'kind':kind,'category':cat,'sha256':digest(dst),'description':desc})
    if cid=='C3':
     items += [
      {'path':str(pkg/'control-state.json'),'kind':'json','category':'control_state','sha256':digest(pkg/'control-state.json'),'description':'T08 control/authority contract'},
