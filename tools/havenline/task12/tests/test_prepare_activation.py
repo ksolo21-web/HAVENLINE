@@ -207,6 +207,19 @@ class T12PrepareActivationTests(unittest.TestCase):
 
 
 
+    def test_current_builder_reservation_is_shipping_only(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        self.assertEqual(checklist["planned_owned_paths"], activation.EXPECTED_BUILDER_PATHS)
+        self.assertFalse(any(path.startswith("Docs/Production/T12") for path in checklist["planned_owned_paths"]))
+        self.assertFalse(any(path.startswith("tools/havenline/task12") for path in checklist["planned_owned_paths"]))
+        self.assertFalse(any(path.startswith(".github/workflows") for path in checklist["planned_owned_paths"]))
+
+    def test_cross_contract_rejects_broad_builder_ownership(self):
+        checklist = copy.deepcopy(activation.load(activation.CHECKLIST_PATH))
+        checklist["planned_owned_paths"].append("tools/havenline/task12/**")
+        errors = activation.validate_cross_contracts(checklist)
+        self.assertTrue(any("six frozen shipping/runtime test paths" in error for error in errors))
+
     def test_cross_contract_rejects_checklist_identity_drift(self):
         checklist = copy.deepcopy(activation.load(activation.CHECKLIST_PATH))
         prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
