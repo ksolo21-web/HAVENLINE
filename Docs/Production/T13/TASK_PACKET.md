@@ -14,8 +14,6 @@
 - `HavenlineGodot/tests/test_task13_integration.gd`
 - `HavenlineGodot/tests/capture_task13_challenge.gd`
 - `Docs/Production/T13/**`
-- `tools/havenline/task13/**`
-- `.github/workflows/havenline-task13-*.yml`
 
 ## Prepared builder handoff
 Read these before implementing any T13 runtime code:
@@ -27,7 +25,6 @@ Read these before implementing any T13 runtime code:
 5. `Docs/Production/T13/TEST_EVIDENCE_PLAN.md` — replay, spend-blind equivalence, anti-spike, malformed-policy, T12 integration, GM isolation, evidence/critic matrix.
 6. `Docs/Production/T13/ACTIVATION_CHECKLIST.json` — fail-closed activation sequence.
 7. `Docs/Production/T13/defect-ledger.json` — preparation defect/blocker state.
-8. `tools/havenline/task13/validate_preactivation.py` — T13-only fail-closed readiness check against current T12 and Game Master contracts.
 
 ## Mandatory forward contracts
 These are external bindings, not files T13 may recreate while dependency-locked:
@@ -56,10 +53,15 @@ Only after every dependency is APPROVED/integrated and ownership is released:
 
 1. re-read exact current integration head;
 2. rebind T12 consumer contract and Game Master policy/standard;
-3. recheck planned path ownership and refresh contract hashes;
-4. run `python3 tools/havenline/task13/prepare_activation.py --task T13 --activate --base <EXACT_CURRENT_INTEGRATION_HEAD>`;
-5. apply the emitted reservation/claim through the integration owner;
-6. create/rebase `havenline/T13-challenge-director` from the exact post-activation head;
-7. require candidate guard PASS before runtime/data expands.
+3. recheck the six planned T13 paths against current active/integration-only ownership and refresh contract hashes;
+4. require repository-wide production governance/migration validation PASS for the exact preparation candidate;
+5. through the integration owner, add `@reservation:T13` using the exact six planned paths from `ACTIVATION_CHECKLIST.json`;
+6. claim T13 as ASSIGNED with the checklist's canonical `workstream.py claim` command on the exact post-reservation integration head;
+7. require `python3 tools/havenline/production/task_graduation_gate.py T13 --target ASSIGNED --integration-head <EXACT_POST_CLAIM_INTEGRATION_HEAD>` to PASS;
+8. create/rebase `havenline/T13-challenge-director` from that exact post-assignment head;
+9. require the existing isolated candidate guard and BUILDING_ISOLATED graduation package to PASS before T13 runtime/data expands.
 
 Preparation artifacts do not grant activation by themselves.
+
+## Existing canonical activation controls
+T13 does not self-author governance tooling. Activation and branch graduation reuse the already-integrated production controls under `tools/havenline/production/`, especially `workstream.py`, `task_graduation_gate.py`, `preactivation_feasibility.py`, and the repository-wide governance/candidate workflows.
