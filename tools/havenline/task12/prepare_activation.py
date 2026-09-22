@@ -53,6 +53,9 @@ EVIDENCE_INDEX_VALIDATOR = ROOT / "tools" / "havenline" / "task12" / "validate_e
 FUZZ_GATE = ROOT / "tools" / "havenline" / "task12" / "fuzz_progression_contract.py"
 PREBUILD_BENCHMARK = ROOT / "tools" / "havenline" / "task12" / "benchmark_prebuild_validators.py"
 HEX40 = re.compile(r"^[0-9a-f]{40}$")
+ACTIVATION_DYNAMIC_ARTIFACTS = {
+    "Docs/Production/T12/BINDING_RESOLUTION.json",
+}
 EXPECTED_BUILDER_PATHS = [
     "HavenlineGodot/scripts/progression_architecture.gd",
     "HavenlineGodot/data/progression_levels_v1.json",
@@ -710,9 +713,14 @@ def validate_preparation():
             text=True,
         )
         tracked_t12 = {line.strip() for line in tracked_output.splitlines() if line.strip()}
-        manifested_t12 = set(support) | {str(CHECKLIST_PATH.relative_to(ROOT))}
+        dynamic_present = {
+            relative
+            for relative in ACTIVATION_DYNAMIC_ARTIFACTS
+            if (ROOT / relative).is_file()
+        }
+        manifested_t12 = set(support) | {str(CHECKLIST_PATH.relative_to(ROOT))} | dynamic_present
         missing_manifest_entries = sorted(tracked_t12 - manifested_t12)
-        stale_manifest_entries = sorted(manifested_t12 - tracked_t12)
+        stale_manifest_entries = sorted((manifested_t12 - dynamic_present) - tracked_t12)
         if missing_manifest_entries:
             errors.append("tracked T12 preparation files missing from support manifest: " + json.dumps(missing_manifest_entries))
         if stale_manifest_entries:

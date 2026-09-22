@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - havenline/governance-t12-prep
+      - codex/havenline-sequential-task-01
     paths:
       - 'Docs/Production/T12/**'
       - 'tools/havenline/task12/**'
@@ -62,6 +63,9 @@ jobs:
           python -m json.tool Docs/Production/T12/UPSTREAM_BINDINGS.json >/dev/null
           python -m json.tool Docs/Production/T12/LEVEL_1_100_MATRIX.json >/dev/null
           python -m json.tool Docs/Production/T12/BINDING_RESOLUTION_TEMPLATE.json >/dev/null
+          if [ -f Docs/Production/T12/BINDING_RESOLUTION.json ]; then
+            python -m json.tool Docs/Production/T12/BINDING_RESOLUTION.json >/dev/null
+          fi
           python -m json.tool Docs/Production/T12/RUNTIME_INTERFACE_CONTRACT.json >/dev/null
           python -m json.tool Docs/Production/T12/ACCEPTANCE_TRACEABILITY.json >/dev/null
           python -m json.tool Docs/Production/T12/DOWNSTREAM_CONSUMER_CONTRACT.json >/dev/null
@@ -136,18 +140,24 @@ jobs:
       - name: Run T12 progression/preparation unit tests
         run: python -m unittest discover -s tools/havenline/task12/tests -p 'test_*.py' -v
 
-      - name: Prove activation stays closed before T11 closeout and binding resolution
+      - name: Prove activation readiness or fail-closed lock
         shell: bash
         run: |
-          set +e
-          python tools/havenline/task12/prepare_activation.py --activate --base "$(git rev-parse HEAD)" > /tmp/t12-activation.json 2>&1
-          status=$?
-          cat /tmp/t12-activation.json
-          if [ "$status" -eq 0 ]; then
-            echo "ERROR: T12 activation unexpectedly passed before all dependencies are approved/integrated."
-            exit 1
+          if [ -f Docs/Production/T12/BINDING_RESOLUTION.json ]; then
+            python tools/havenline/task12/prepare_activation.py --activate --base "$(git rev-parse HEAD)" > /tmp/t12-activation.json 2>&1
+            cat /tmp/t12-activation.json
+          else
+            set +e
+            python tools/havenline/task12/prepare_activation.py --activate --base "$(git rev-parse HEAD)" > /tmp/t12-activation.json 2>&1
+            status=$?
+            set -e
+            cat /tmp/t12-activation.json
+            if [ "$status" -eq 0 ]; then
+              echo "ERROR: T12 activation unexpectedly passed without a resolved binding record."
+              exit 1
+            fi
+            grep -Eq 'T11|binding reconciliation|dependency' /tmp/t12-activation.json
           fi
-          grep -Eq 'T11|binding reconciliation|dependency' /tmp/t12-activation.json
 
       - name: Confirm shipping T12 runtime is still absent
         run: |
