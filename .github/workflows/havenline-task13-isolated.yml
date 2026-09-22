@@ -306,3 +306,234 @@ jobs:
       evidence_artifact: havenline-task13-critic-input-${{ github.event.pull_request.head.sha || github.sha }}
       manifest_name: C7-manifest.json
       output_artifact: havenline-task13-C7-${{ github.event.pull_request.head.sha || github.sha }}
+
+  review-c2:
+    needs: built-pending-dependency
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    env:
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+      OMP_NUM_THREADS: '4'
+      CANDIDATE: ${{ github.event.pull_request.head.sha || github.sha }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+          ref: ${{ github.event.pull_request.head.sha || github.sha }}
+
+      - name: Prove T13 has no visual/scene integration surface
+        run: |
+          set -euo pipefail
+          git fetch origin codex/havenline-sequential-task-01:refs/remotes/origin/codex/havenline-sequential-task-01
+          mkdir -p c2-evidence
+          python3 - <<'PY'
+          import json, subprocess
+          from pathlib import Path
+          changed=subprocess.check_output(
+              ['git','diff','--name-only','origin/codex/havenline-sequential-task-01...HEAD'],text=True
+          ).splitlines()
+          forbidden_suffixes=('.tscn','.tres','.png','.jpg','.jpeg','.webp','.glb','.gltf','.fbx','.obj','.material','.shader','.gdshader')
+          forbidden_exact={
+              'HavenlineGodot/scripts/main.gd',
+              'HavenlineGodot/scripts/simulation.gd',
+              'HavenlineGodot/project.godot'
+          }
+          visual_changes=[p for p in changed if p in forbidden_exact or p.lower().endswith(forbidden_suffixes)]
+          assert not visual_changes, visual_changes
+          refs=subprocess.check_output(
+              ['git','grep','-l','challenge_director.gd','--','HavenlineGodot'],text=True
+          ).splitlines()
+          allowed_refs={
+              'HavenlineGodot/tests/test_task13_challenge_director.gd',
+              'HavenlineGodot/tests/test_task13_integration.gd',
+              'HavenlineGodot/tests/capture_task13_challenge.gd'
+          }
+          assert set(refs).issubset(allowed_refs), refs
+          report={
+              'task':'T13','candidate':'${{ github.event.pull_request.head.sha || github.sha }}','passed':True,
+              'visual_scene_asset_changes':visual_changes,
+              'runtime_scene_references':refs,
+              'statement':'T13 is not scene-wired and changes no existing render/scene/visual asset input. Fresh exact-candidate renders are reviewed only to prove no technical visual regression.',
+              'changed_files':changed
+          }
+          Path('c2-evidence/nonimpact.json').write_text(json.dumps(report,indent=2)+'\n')
+          PY
+
+      - name: Install exact Godot and Mobile Vulkan dependencies
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/godot"
+          cd "$RUNNER_TEMP/godot"
+          base='https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable'
+          curl -fL --retry 3 "$base/Godot_v4.7.2-stable_linux.x86_64.zip" -o editor.zip
+          unzip -q editor.zip
+          chmod +x Godot_v4.7.2-stable_linux.x86_64
+          echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb mesa-vulkan-drivers
+
+      - name: Render exact-candidate multi-view C2 evidence
+        run: |
+          set -euo pipefail
+          capture() {
+            name="$1"; view="$2"; scenario="$3"
+            mkdir -p "c2-evidence/$name"
+            timeout 180 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --audio-driver Dummy --fixed-fps 60 -- --render-review --scenario="$scenario" --view="$view" --capture="$PWD/c2-evidence/$name" 2>&1 | tee "c2-evidence/$name.log"
+          }
+          capture front front opening
+          capture rear rear opening
+          capture side side opening
+          capture three-quarter three-quarter opening
+          capture gather-side side gather
+          capture shelter-detail front shelter-detail
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' c2-evidence/*.log; then exit 1; fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          names=['front','rear','side','three-quarter','gather-side','shelter-detail']
+          for name in names:
+              root=Path('c2-evidence')/name
+              assert (root/'native-scene.png').is_file(), name
+              report=json.loads((root/'render-evidence.json').read_text())
+              assert report['renderer']=='mobile' and report['render_scale']==1.0, (name,report)
+          PY
+
+      - name: Build and validate source-bound C2 manifest
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/specialist_evidence_manifest.py build             --task T13 --critic C2 --candidate "$CANDIDATE" --out c2-evidence/C2-manifest.json             --item 'visual-nonimpact|visual_integrity|image|c2-evidence/front/native-scene.png|Exact candidate opening/front Mobile Vulkan view'             --item 'visual-nonimpact|visual_integrity|image|c2-evidence/rear/native-scene.png|Exact candidate opening/rear Mobile Vulkan view'             --item 'visual-nonimpact|visual_integrity|image|c2-evidence/side/native-scene.png|Exact candidate opening/side Mobile Vulkan view'             --item 'visual-nonimpact|visual_integrity|image|c2-evidence/three-quarter/native-scene.png|Exact candidate opening/three-quarter Mobile Vulkan view'             --item 'visual-nonimpact|visual_integrity|image|c2-evidence/gather-side/native-scene.png|Exact candidate gather/side Mobile Vulkan view'             --item 'visual-nonimpact|visual_integrity|image|c2-evidence/shelter-detail/native-scene.png|Exact candidate shelter-detail Mobile Vulkan view'             --item 'visual-nonimpact|visual_integrity|json|c2-evidence/nonimpact.json|Machine-checked T13 visual non-impact diff'
+          python3 tools/havenline/production/specialist_evidence_manifest.py validate c2-evidence/C2-manifest.json
+
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        id: reviewer-cache-c2
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+
+      - name: Self-heal C2 reviewer runtime
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > c2-evidence/runtime-preparation.json
+
+      - uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        if: steps.reviewer-cache-c2.outputs.cache-hit != 'true'
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+
+      - run: python3 -m pip install pillow
+
+      - name: Execute independent C2 visual critic
+        run: |
+          python3 - <<'PY'
+          from __future__ import annotations
+          import hashlib, json, os, pathlib, subprocess, sys, time, urllib.request
+
+          ROOT=pathlib.Path.cwd()
+          PROD=ROOT/'tools'/'havenline'/'production'
+          sys.path.insert(0,str(PROD))
+          from lib import DOCS, load_json, ensure_score_strictly_above_nine
+          from critic_profile import resolve_critic
+          import specialist_critic_runner as shared
+
+          candidate=os.environ['CANDIDATE']
+          manifest_path=ROOT/'c2-evidence'/'C2-manifest.json'
+          manifest=shared.load_manifest(manifest_path,'C2',candidate)
+          matrix=load_json(DOCS/'CRITIC_MATRIX.json')
+          execution=load_json(DOCS/'CRITIC_EXECUTION.json')
+          spec,checks=resolve_critic('T13','C2',execution,matrix)
+          dimensions=spec['dimensions']
+          out=ROOT/'c2-review';out.mkdir(parents=True,exist_ok=True)
+
+          cache=pathlib.Path(os.path.expanduser(execution['local_independent_runtime']['cache_path']))
+          runtime=execution['local_independent_runtime']
+          m=json.loads((cache/'manifest.json').read_text())
+          assert m.get('publisher')==runtime['provider']
+          assert m.get('base_model')==runtime['base_model']
+          assert m.get('revision')==runtime['model_revision']
+          for item in m['files']:
+              assert shared.digest(cache/item['filename'])==item['sha256'], item['filename']
+          servers=list((cache/'runtime').rglob('llama-server'))
+          assert len(servers)==1
+          server=servers[0]
+          env=dict(os.environ)
+          env['LD_LIBRARY_PATH']=str(server.parent)+':'+env.get('LD_LIBRARY_PATH','')
+          log=(out/'runtime.log').open('w')
+          proc=subprocess.Popen([
+              str(server),'-m',str(cache/m['model_file']),'--mmproj',str(cache/m['projector_file']),
+              '--host','127.0.0.1','--port','8080','-c','12288','-t','4','-tb','4','-ngl','0',
+              '--no-mmproj-offload','--parallel','1','--jinja','--image-min-tokens','768','--image-max-tokens','2048'
+          ],stdout=log,stderr=subprocess.STDOUT,env=env)
+          rows=[];fatal=None
+          try:
+              for _ in range(180):
+                  if proc.poll() is not None: raise RuntimeError('local reviewer runtime exited')
+                  try:
+                      if json.load(urllib.request.urlopen('http://127.0.0.1:8080/health',timeout=3)).get('status')=='ok': break
+                  except Exception: pass
+                  time.sleep(2)
+              else: raise RuntimeError('local reviewer runtime not ready')
+
+              schema=shared.response_schema('T13',dimensions)
+              base=f"""You are the independent {matrix['critics']['C2']['name']} for Havenline T13 candidate {candidate}. Mandatory checks: {json.dumps(checks)}. T13 is a nonvisual decision service and the machine-checked nonimpact record proves it changes no existing scene, render asset, shader, material, or visual integration point. Inspect the supplied exact-candidate Mobile Vulkan renders for geometry/contact, clipping/seams, intentional-gap integrity, and cross-view consistency to prove T13 introduced no technical visual regression. Do not invent defects, do not hide visible defects, and do not penalize the candidate for unrelated future content that is explicitly unchanged by T13. Every mandatory dimension is scored 0-10. PASS requires every unrounded score strictly above 9.0, zero actionable defects, complete coverage, and at least medium confidence. Return JSON only."""
+              for group in manifest['groups']:
+                  board=shared.evidence_board(group,out)
+                  text=shared.evidence_text(group)
+                  review=shared.request_local(board,text,base+f"\nEvidence group: {group['id']}. Judge all mandatory C2 dimensions.",schema,out,group['id'])
+                  scores=review.get('scores',{})
+                  errors=ensure_score_strictly_above_nine(scores)
+                  if set(scores)!=set(dimensions): errors.append('dimension coverage mismatch')
+                  if review.get('defects'): errors.append('unresolved defects')
+                  if review.get('coverage_complete') is not True: errors.append('coverage incomplete')
+                  if review.get('confidence') not in ('medium','high'): errors.append('confidence insufficient')
+                  rows.append({'group':group['id'],'review':review,'passed':not errors,'errors':errors,'lowest_score':min(scores.values()) if scores else None})
+          except Exception as exc:
+              fatal=type(exc).__name__+': '+str(exc)
+          finally:
+              proc.terminate()
+              try: proc.wait(timeout=10)
+              except Exception: proc.kill()
+              log.close()
+
+          dim_scores={d:min((row['review']['scores'][d] for row in rows if d in row.get('review',{}).get('scores',{})),default=0) for d in dimensions}
+          defects=[f"{row['group']}: {defect}" for row in rows for defect in row.get('review',{}).get('defects',[])]
+          order={'low':0,'medium':1,'high':2}
+          confidence=min((row.get('review',{}).get('confidence','low') for row in rows),key=lambda x:order.get(x,0),default='low')
+          raw={'critic_id':'C2','task_id':'T13','candidate':candidate,'groups':rows,'fatal_error':fatal}
+          raw_path=out/'raw-output.json';raw_path.write_text(json.dumps(raw,indent=2)+'\n')
+          passed=fatal is None and len(rows)==len(manifest['groups']) and all(row['passed'] for row in rows)
+          record={
+              'task_id':'T13','critic_id':'C2','provider':m['publisher'],'model':m['base_model'],
+              'model_revision_expected':runtime['model_revision'],'model_revision_actual':m['revision'],
+              'runtime_release':m.get('runtime_release'),
+              'request_or_run_id':os.environ.get('GITHUB_RUN_ID','local')+'/'+os.environ.get('GITHUB_JOB','C2'),
+              'candidate_hash':candidate,'input_manifest_hash':shared.digest(manifest_path),
+              'raw_output_path':str(raw_path.relative_to(ROOT)),'raw_output_hash':shared.digest(raw_path),
+              'scores':dim_scores,'defects':defects,
+              'coverage_complete':fatal is None and len(rows)==len(manifest['groups']) and all(row.get('review',{}).get('coverage_complete') is True for row in rows),
+              'confidence':confidence,'independent_runtime':True,'groups':rows,'fatal_error':fatal,'passed':passed
+          }
+          (out/'critic-record.json').write_text(json.dumps(record,indent=2)+'\n')
+          print(json.dumps(record,indent=2))
+          raise SystemExit(0 if passed else 1)
+          PY
+
+      - name: Enforce strict C2 >9 raw critic gate
+        if: always()
+        run: |
+          test -f c2-review/critic-record.json
+          python3 tools/havenline/production/critic_harness.py validate-raw             --critic C2             --candidate "$CANDIDATE"             --raw c2-review/critic-record.json
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task13-C2-${{ github.event.pull_request.head.sha || github.sha }}
+          path: |
+            c2-evidence/
+            c2-review/
+          retention-days: 30
+          if-no-files-found: error
