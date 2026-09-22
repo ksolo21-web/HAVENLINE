@@ -314,7 +314,7 @@ func _normalize_context(context: Dictionary) -> Dictionary:
 	var level := _parse_level_id(context.get("current_level_id"))
 	if level < 1:
 		errors.append("invalid_current_level_id")
-	var region := context.get("current_region_band_id")
+	var region: Variant = context.get("current_region_band_id")
 	if not _valid_identifier(region):
 		errors.append("invalid_current_region_band_id")
 	var milestones: Variant = context.get("completed_milestone_ids")
@@ -376,7 +376,7 @@ func _normalize_previous(previous: Dictionary, evaluation_sequence: int) -> Dict
 
 func _normalize_options(options: Dictionary) -> Dictionary:
 	var errors: Array[String] = []
-	var requested := options.get("requested_profile", PROFILE_NORMAL)
+	var requested: Variant = options.get("requested_profile", PROFILE_NORMAL)
 	if not (requested is String) or String(requested) not in [PROFILE_NORMAL, PROFILE_GM]:
 		errors.append("invalid_requested_profile")
 		requested = PROFILE_NORMAL
@@ -420,13 +420,13 @@ func evaluate(progression_context: Dictionary, performance_window: Dictionary, p
 	var minimum_band := int(normal.minimum_band_index)
 	var maximum_band := int(normal.maximum_band_index)
 	var level_band_size := int(normal.level_band_size)
-	var base_band := min(maximum_band, max(minimum_band, int(floor(float(int(context.level) - 1) / float(level_band_size)))))
+	var base_band: int = min(maximum_band, max(minimum_band, int(floor(float(int(context.level) - 1) / float(level_band_size)))))
 
 	var attempts := int(performance.attempt_count)
 	var successes := int(performance.success_count)
 	var failures := int(performance.failure_count)
 	var abandonments := int(performance.abandonment_count)
-	var denominator := max(1, attempts)
+	var denominator: int = max(1, attempts)
 	var success_rate := float(successes) / float(denominator)
 	var failure_rate := float(failures + abandonments) / float(denominator)
 
@@ -443,7 +443,7 @@ func evaluate(progression_context: Dictionary, performance_window: Dictionary, p
 		and int(performance.down_count) == 0
 	)
 
-	var desired_band := base_band
+	var desired_band: int = base_band
 	if struggling:
 		var recovery_depth := 2 if int(performance.struggle_streak) >= int(thresholds.deep_recovery_struggle_streak) else 1
 		desired_band = max(minimum_band, base_band - recovery_depth)
@@ -451,7 +451,7 @@ func evaluate(progression_context: Dictionary, performance_window: Dictionary, p
 		desired_band = min(maximum_band, base_band + 1)
 
 	var reasons: Array[String] = ["progression_level_band"]
-	var selected_band := base_band
+	var selected_band: int = base_band
 	if previous_result.present:
 		var current_band := int(previous_result.band_index)
 		selected_band = current_band
