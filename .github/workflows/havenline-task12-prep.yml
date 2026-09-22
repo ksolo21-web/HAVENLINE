@@ -144,15 +144,50 @@ jobs:
       - name: Prove activation readiness or fail-closed lock
         shell: bash
         run: |
+          set +e
+          python tools/havenline/task12/prepare_activation.py --activate --base "$(git rev-parse HEAD)" > /tmp/t12-activation.json 2>&1
+          status=$?
+          set -e
+          cat /tmp/t12-activation.json
+
           if [ -f Docs/Production/T12/BINDING_RESOLUTION.json ]; then
-            python tools/havenline/task12/prepare_activation.py --activate --base "$(git rev-parse HEAD)" > /tmp/t12-activation.json 2>&1
-            cat /tmp/t12-activation.json
+            if [ "$status" -eq 0 ]; then
+              exit 0
+            fi
+            python - <<'PY'
+          import json
+          report=json.load(open('/tmp/t12-activation.json'))
+          errors=report.get('errors',[])
+          if not errors:
+              raise SystemExit('activation failed without structured errors')
+          expected_prefix='not effectively approved under shipping visual policy'
+          unexpected=[
+              error for error in errors
+              if not (
+                  isinstance(error,str)
+                  and error.startswith('dependency ')
+                  and expected_prefix in error
+              )
+          ]
+          if unexpected:
+              raise SystemExit('unexpected activation errors: '+json.dumps(unexpected))
+          required_true=(
+              'binding_resolution_passed',
+              'level_matrix_validation_passed',
+              'runtime_interface_validation_passed',
+              'acceptance_traceability_validation_passed',
+              'downstream_consumer_validation_passed',
+              'data_schema_validation_passed',
+              'engine_parity_validation_passed',
+              'fuzz_gate_passed',
+              'prebuild_benchmark_passed',
+          )
+          missing=[key for key in required_true if report.get(key) is not True]
+          if missing:
+              raise SystemExit('visual-policy lock may not mask failed T12 preparation gates: '+','.join(missing))
+          print('T12 activation correctly remains fail-closed on upstream shipping-visual invalidation.')
+          PY
           else
-            set +e
-            python tools/havenline/task12/prepare_activation.py --activate --base "$(git rev-parse HEAD)" > /tmp/t12-activation.json 2>&1
-            status=$?
-            set -e
-            cat /tmp/t12-activation.json
             if [ "$status" -eq 0 ]; then
               echo "ERROR: T12 activation unexpectedly passed without a resolved binding record."
               exit 1

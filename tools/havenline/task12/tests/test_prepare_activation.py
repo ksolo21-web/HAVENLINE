@@ -16,6 +16,14 @@ spec.loader.exec_module(activation)
 
 
 class T12PrepareActivationTests(unittest.TestCase):
+    def test_prep_workflow_accepts_only_visual_policy_fail_closed_lock(self):
+        body=(ROOT / ".github/workflows/havenline-task12-prep.yml").read_text()
+        self.assertIn("not effectively approved under shipping visual policy", body)
+        self.assertIn("unexpected activation errors", body)
+        self.assertIn("visual-policy lock may not mask failed T12 preparation gates", body)
+        self.assertIn("binding_resolution_passed", body)
+        self.assertIn("prebuild_benchmark_passed", body)
+
     t10 = "a" * 40
     t11 = "b" * 40
     head = "c" * 40
