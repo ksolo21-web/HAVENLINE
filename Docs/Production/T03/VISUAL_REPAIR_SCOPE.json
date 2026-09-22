@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_3_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_USER_SIGNOFF",
+  "status": "ITERATION_4_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_USER_SIGNOFF",
   "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -14,11 +14,11 @@
     "save/navigation deterministic proof"
   ],
   "changes": [
-    "Densify pickets and lighten timber toward the reference warm reddish fence.",
-    "Extend pointed snow frosting farther down each picket crown.",
-    "Make rear rails thinner, lighter and more recessed.",
-    "Remove the gate marker box; keep only small warm insets and thin belts inside a matching timber post.",
-    "Preserve iteration-2 clean T03 lane treatment and all T02 surfaces."
+    "Make the entire pointed crown solid snow with a short snow collar on the upper picket.",
+    "Remove all dark gate-post collars/bands; retain only tiny warm inset windows.",
+    "Use the same warm timber for gate posts and fence pickets.",
+    "Reduce rear structure to one thin same-family timber rail.",
+    "Keep T02 and T03 route/collision geometry unchanged."
   ],
   "must_not_change": [
     "HavenlineGodot/scripts/camp_boundary.gd geometry constants",
@@ -37,7 +37,7 @@
     "explicit user visual signoff"
   ],
   "approval": false,
-  "review_repair_iteration": 3,
+  "review_repair_iteration": 4,
   "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
   "iteration_1_findings": [
     "Fence read as round log barricades rather than the reference's dense pointed palisade.",
@@ -51,5 +51,11 @@
     "Picket gaps remained wider than the reference.",
     "Rear rails were too dark/thick and competed with the vertical fence rhythm.",
     "Gate markers still read as dark square boxes rather than quiet integrated threshold details."
+  ],
+  "iteration_3_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_3_findings": [
+    "Snow crown intersected the brown picket point and rendered as a white outline around a brown triangle.",
+    "Gate-post dark bands visually merged into a black block at gameplay scale.",
+    "Two visible rear rails still competed with the reference's vertical palisade rhythm."
   ]
 }
