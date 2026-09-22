@@ -20,7 +20,7 @@ class T12ValidatorBundleTests(unittest.TestCase):
     def make_fixture(self):
         tmp = tempfile.TemporaryDirectory()
         root = pathlib.Path(tmp.name)
-        for relative in bundle.VALIDATOR_BUNDLE_FILES:
+        for relative in bundle.bundle_files(ROOT):
             src = ROOT / relative
             dst = root / relative
             dst.parent.mkdir(parents=True, exist_ok=True)
@@ -37,7 +37,7 @@ class T12ValidatorBundleTests(unittest.TestCase):
         tmp, root = self.make_fixture()
         with tmp:
             before = bundle.bundle_digest(root)
-            target = root / bundle.VALIDATOR_BUNDLE_FILES[0]
+            target = root / bundle.bundle_files(root)[0]
             target.write_bytes(target.read_bytes() + b"\n# mutation canary\n")
             after = bundle.bundle_digest(root)
         self.assertNotEqual(before, after)
@@ -45,7 +45,8 @@ class T12ValidatorBundleTests(unittest.TestCase):
     def test_missing_bundle_file_fails_closed(self):
         tmp, root = self.make_fixture()
         with tmp:
-            (root / bundle.VALIDATOR_BUNDLE_FILES[-1]).unlink()
+            files = bundle.bundle_files(root)
+            (root / files[-1]).unlink()
             with self.assertRaises(FileNotFoundError):
                 bundle.bundle_digest(root)
 
