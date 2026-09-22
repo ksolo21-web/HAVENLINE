@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_2_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_USER_SIGNOFF",
+  "status": "ITERATION_3_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_USER_SIGNOFF",
   "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -14,11 +14,11 @@
     "save/navigation deterministic proof"
   ],
   "changes": [
-    "Replace round-log fence with dense authored warm reddish pointed palisade.",
-    "Replace hanging lantern with quiet integrated four-face amber marker on a taller matching timber post.",
-    "Use pointed snow frosting rather than round cap geometry.",
-    "Keep rear structural rails thin and subordinate.",
-    "Reduce T03 lane recoloring while preserving physical compression and route geometry."
+    "Densify pickets and lighten timber toward the reference warm reddish fence.",
+    "Extend pointed snow frosting farther down each picket crown.",
+    "Make rear rails thinner, lighter and more recessed.",
+    "Remove the gate marker box; keep only small warm insets and thin belts inside a matching timber post.",
+    "Preserve iteration-2 clean T03 lane treatment and all T02 surfaces."
   ],
   "must_not_change": [
     "HavenlineGodot/scripts/camp_boundary.gd geometry constants",
@@ -37,12 +37,19 @@
     "explicit user visual signoff"
   ],
   "approval": false,
-  "review_repair_iteration": 2,
+  "review_repair_iteration": 3,
   "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
   "iteration_1_findings": [
     "Fence read as round log barricades rather than the reference's dense pointed palisade.",
     "Large round snow caps read as marshmallow discs instead of thin pointed frosting.",
     "Hanging blue/orange lantern assemblies were too industrial and visually dominant.",
     "T03 lane tint remained broader/darker than the clean T02 work-floor treatment."
+  ],
+  "iteration_2_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_2_findings": [
+    "Palisade silhouette was much closer, but snow frosting covered too little of the pointed crown.",
+    "Picket gaps remained wider than the reference.",
+    "Rear rails were too dark/thick and competed with the vertical fence rhythm.",
+    "Gate markers still read as dark square boxes rather than quiet integrated threshold details."
   ]
 }
