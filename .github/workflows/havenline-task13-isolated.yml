@@ -153,7 +153,12 @@ jobs:
               'one strong window does not spike challenge','sustained strong play raises exactly one band',
               'struggle triggers one-step recovery','sustained struggle can deepen recovery but still one step per evaluation',
               'GM threat target is exact','GM strong ratio stays inside approved envelope',
-              'GM recovery never falls below GM minimum ratio','malformed policy activates safe fallback',
+              'GM recovery never falls below GM minimum ratio','GM apex remains below explicit absolute threat cap',
+              'GM apex remains below explicit absolute raw caps','GM advisory pressure adds coordinated variety without new controls',
+              'malformed policy activates safe fallback','nonlinear progression uses varied threat increments',
+              'all ten bands carry distinct challenge styles','pressure vocabulary spans at least six challenge axes',
+              'adjacent adaptation respects upgrade counter cap','policy guarantees minimum preserved upgrade advantage',
+              'milestone metadata is explicitly excluded from challenge scoring',
               'difficulty exposes ten distinct 10-level progression bands','100-level spend-blind equivalence matrix passes',
               'pure decision mean stays bounded','pure decision p95 stays bounded'
           ]
@@ -163,7 +168,8 @@ jobs:
               'T12 context remains unmodified','progression intent payload cannot secretly tune difficulty',
               'milestone metadata cannot auto-counter upgrade value','250 deterministic replay pairs are exact',
               'Game Master target ratio matches current contract','Game Master cannot add grind or controls',
-              'GM envelope holds across all normal cold-start bands','all 100 normal cold-start levels stay in declared envelope',
+              'GM envelope holds across all ten normal bands','GM absolute caps hold across all ten normal bands',
+              'all 100 normal cold-start levels stay in declared envelope','all ten challenge styles appear across Level 1-100',
               'unbounded performance counts fail closed','T12 intent input is bounded','evaluation never mutates loaded policy data'
           ]
           core_summary={
@@ -199,9 +205,15 @@ jobs:
                   'progression intent payload cannot secretly tune difficulty',
                   'Game Master cannot add grind or controls'
               ]),
-              'core_checks':selected(core,['baseline never changes resource yield','GM never reduces resource yield'])
+              'core_checks':selected(core,[
+                  'baseline never changes resource yield','GM never reduces resource yield',
+                  'adjacent adaptation respects upgrade counter cap',
+                  'policy guarantees minimum preserved upgrade advantage',
+                  'milestone metadata is explicitly excluded from challenge scoring'
+              ]),
+              'upgrade_protection':json.loads(Path('HavenlineGodot/data/challenge_director_v1.json').read_text())['upgrade_protection']
           }
-          scope='T13 is a nonvisual pure decision service. It adds no buttons, menus, input mappings, harvesting rules, resource sinks, enemy spawns, world mutations, or global persistence. Existing Havenline physical/contextual controls and the MOVE-AUTO-INTERACT-GATHER-CARRY-DELIVER-TRANSFORM-BUILD/UPGRADE loop remain owned upstream. T13 consumes only stable T12 progression context plus gameplay-performance facts and returns bounded challenge coefficients and reason codes. Normal-player difficulty is structurally spend-blind. GM_CHALLENGE is separately authorized with a 1.25x-1.60x threat envelope; it cannot reduce resource yield or add permanent controls. Judge T13 within this decision-layer scope; absent player-facing UI is intentional, while reason_codes are the downstream-readable feedback contract.'
+          scope='T13 is a nonvisual pure decision service. It adds no buttons, menus, input mappings, harvesting rules, resource sinks, enemy spawns, world mutations, or global persistence. Existing Havenline physical/contextual controls and the MOVE-AUTO-INTERACT-GATHER-CARRY-DELIVER-TRANSFORM-BUILD/UPGRADE loop remain owned upstream. T13 consumes only stable T12 progression context plus gameplay-performance facts and returns bounded challenge coefficients, advisory pressure directives, and reason codes. Normal-player difficulty is structurally spend-blind. The ten-band curve is intentionally nonlinear but adjacent adaptation is mathematically capped so a 10% upstream capability gain preserves at least a 2% advantage even after the strongest immediate counter-step. GM_CHALLENGE is separately authorized with a 1.25x-1.60x relative threat envelope plus explicit absolute caps; it cannot reduce resource yield or add permanent controls. Pressure directives are advisory for later content owners and do not claim those encounters are implemented. Judge T13 within this decision-layer scope; absent player-facing UI is intentional, while reason_codes are the downstream-readable feedback contract.'
           Path('critic-input/core-summary.json').write_text(json.dumps(core_summary,indent=2)+'\n')
           Path('critic-input/integration-summary.json').write_text(json.dumps(integration_summary,indent=2)+'\n')
           Path('critic-input/capture-summary.json').write_text(json.dumps(capture_summary,indent=2)+'\n')
