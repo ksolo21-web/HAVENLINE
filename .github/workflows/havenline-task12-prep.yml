@@ -48,6 +48,7 @@ jobs:
           python -m py_compile tools/havenline/task12/final_candidate_gate.py
           python -m py_compile tools/havenline/task12/fuzz_progression_contract.py
           python -m py_compile tools/havenline/task12/benchmark_prebuild_validators.py
+          python -m py_compile tools/havenline/task12/validator_bundle.py
 
       - name: Validate T12 JSON artifacts
         run: |
