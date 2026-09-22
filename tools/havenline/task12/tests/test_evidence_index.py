@@ -41,6 +41,7 @@ class T12EvidenceIndexTests(unittest.TestCase):
             },
             "adaptive_readability": {"player_facing_presentation_exists": False},
             "performance_c6": {"evidence_ref": "artifact://c6.json"},
+            "gates": {"G1": {"evidence_ref": "artifact://g1.json"}},
             "critic_reviews": {"C2": {"evidence_ref": "artifact://c2-review.json"}},
         }
 
@@ -105,6 +106,18 @@ class T12EvidenceIndexTests(unittest.TestCase):
         result = validator.validate_index(index, require_resolved=True, candidate=candidate, critics=critics)
         self.assertFalse(result["passed"])
         self.assertTrue(any("missing from index" in error for error in result["errors"]))
+
+    def test_missing_gate_evidence_reference_fails(self):
+        candidate = self.candidate()
+        critics = self.critics()
+        index = self.resolved_index(candidate, critics)
+        index["entries"] = [
+            row for row in index["entries"]
+            if row["uri"] != "artifact://g1.json"
+        ]
+        result = validator.validate_index(index, require_resolved=True, candidate=candidate, critics=critics)
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("artifact://g1.json" in error and "missing from index" in error for error in result["errors"]))
 
     def test_duplicate_uri_fails(self):
         candidate = self.candidate()
