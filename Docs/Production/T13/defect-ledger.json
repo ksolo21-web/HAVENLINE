@@ -32,6 +32,14 @@
       "root_cause": "The candidate tried to self-authorize new governance surfaces instead of reusing already-integrated canonical production controls.",
       "repair": "Removed all three self-authored governance files and narrowed planned T13 ownership to exactly five shipping/test files plus Docs/Production/T13/**.",
       "status": "RESOLVED"
+    },
+    {
+      "id": "T13-PREP-003",
+      "defect": "T13 test/evidence plan reused the correct critic IDs but mislabeled C6 as Systems integration and C7 as Security/owner-only policy isolation.",
+      "evidence": "Internal cross-check against authoritative Docs/Production/CRITIC_MATRIX.json showed C6 is Performance Critic and C7 is Progression / Difficulty Critic for T13.",
+      "root_cause": "Task-local prose drifted from the canonical critic taxonomy while preserving only the ID list.",
+      "repair": "Rewrote the T13 critic acceptance matrix to match canonical C2/C3/C4/C6/C7 names/responsibilities and kept spend-blind/GM isolation as mandatory evidence without repurposing critic IDs.",
+      "status": "RESOLVED"
     }
   ]
 }
