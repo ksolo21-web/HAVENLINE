@@ -6,16 +6,29 @@
   "user_disposition": "REJECTED_REFERENCE_FIDELITY",
   "benchmark_classes": [
     "vegetation_trees",
-    "characters",
-    "snow_surface",
-    "water"
+    "characters"
   ],
   "debts": [
+    {
+      "owner_task": "T02",
+      "classes": [
+        "snow_surface",
+        "water"
+      ],
+      "paths": [
+        "HavenlineGodot/scripts/river_geometry.gd",
+        "HavenlineGodot/scripts/outpost_surface.gd",
+        "HavenlineGodot/shaders/outpost_snow.gdshader",
+        "HavenlineGodot/shaders/lakeshore_water.gdshader"
+      ],
+      "note": "T02 explicitly covered terrain, snow, warm work areas, and river. User did not approve snow or water as reference-matching."
+    },
     {
       "owner_task": "T03",
       "classes": [
         "fences_gates",
-        "ground_work_floor"
+        "ground_work_floor",
+        "snow_surface"
       ],
       "paths": [
         "HavenlineGodot/scripts/camp_boundary_view.gd",
@@ -62,5 +75,5 @@
     "T08 reference-fidelity closeout",
     "T09-T12 effective visual approval chain"
   ],
-  "rule": "Debt is zero only when the complete rendered scene matches the checksum-locked reference videos, every mandatory visual dimension is exactly 10/10, and the user explicitly approves it. Characters, trees, snow and water are preserved unless separately invalidated."
+  "rule": "Debt is zero only when every complete rendered scene matches the checksum-locked reference videos, with only trees/characters carried forward as current user-accepted benchmarks, every mandatory visual dimension reaches the required gate, and the user explicitly approves the new whole-frame candidate."
 }

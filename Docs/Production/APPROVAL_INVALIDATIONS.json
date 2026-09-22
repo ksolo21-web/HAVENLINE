@@ -8,12 +8,17 @@
       "family": "shipping_visual_reference_fidelity_violation",
       "discovered_at": "2026-09-22T16:51:00Z",
       "audited_integration_source": "1083d82269e82c5aac678bb5c5c77312dde94099",
-      "reason": "T08 primitive feedback was repaired, but the user rejected the complete final scene for reference fidelity. Characters, trees, snow and water match the intended reference game; the other visible scene elements do not.",
+      "reason": "T08 primitive feedback was repaired, but the user rejected the complete final scene for reference fidelity. Only the trees and characters match the intended reference game.",
       "findings": [
         {
           "category": "USER_VISUAL_REJECTION",
           "scope": "whole_frame",
           "detail": "Characters, trees, snow and water are accepted as reference-matching; all other visible scene classes require repair."
+        },
+        {
+          "category": "UPSTREAM_REFERENCE_FIDELITY",
+          "owner_task": "T02",
+          "detail": "T02 explicitly owns terrain, snow, warm work areas and river; none are user-accepted as reference-matching under the clarified feedback."
         },
         {
           "category": "UPSTREAM_REFERENCE_FIDELITY",
@@ -67,7 +72,7 @@
       "repair_evidence_status": "FUNCTIONAL_AND_4K60_EVIDENCE_PASS_BUT_VISUAL_STYLE_REJECTED",
       "historical_accepted_source": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
       "user_visual_rejection": true,
-      "user_feedback": "Characters, trees, snow, and water match the reference-video look; the other visible scene elements do not.",
+      "user_feedback": "Only the trees and characters match the reference-video look; all other visible scene elements require repair.",
       "reference_fidelity_passed": false,
       "primitive_audit_passed": true,
       "primitive_findings_count": 0
@@ -200,7 +205,7 @@
       "family": "whole_frame_reference_fidelity_violation",
       "discovered_at": "2026-09-22T20:04:00Z",
       "audited_integration_source": "7385d2f6c80cb0e09d7f30c41ddc1cdacd1e53e8",
-      "reason": "User whole-frame review shows T03-owned fence/gate/lantern and ground/work-floor presentation does not match the locked Havenline reference style. The snow treatment is explicitly accepted and must be preserved.",
+      "reason": "User whole-frame review clarifies that only trees and characters match the locked reference. T03 fences/gates/work lanes and its current surface presentation therefore remain visually invalidated.",
       "findings": [
         {
           "path": "HavenlineGodot/scripts/camp_boundary_view.gd",
@@ -208,7 +213,11 @@
         },
         {
           "path": "HavenlineGodot/scripts/outpost_surface.gd",
-          "detail": "Ground/lane/work-floor geometry and composition require reference-style correction without degrading accepted snow."
+          "detail": "Ground/lane/work-floor composition requires reference-style correction."
+        },
+        {
+          "path": "HavenlineGodot/shaders/outpost_snow.gdshader",
+          "detail": "T03's current use/modification of the snow surface must be revalidated against reference; snow is not grandfathered as user-approved."
         }
       ],
       "invalidates": [
@@ -223,7 +232,6 @@
       "preserves_unless_blast_radius_changes": [
         "boundary collision/navigation tests",
         "gate geometry authority",
-        "accepted snow presentation",
         "T01 tree baseline",
         "T02 water baseline",
         "nonvisual deterministic proof"
@@ -292,6 +300,49 @@
         "nonvisual deterministic proof"
       ],
       "required_resolution": "Calibrate landscape camera composition directly against actual reference-video pixels/motion while preserving automatic device adaptation; require exact 10/10 composition fidelity and user approval."
+    },
+    {
+      "task_id": "T02",
+      "status": "ACTIVE",
+      "family": "whole_frame_reference_fidelity_violation",
+      "discovered_at": "2026-09-22T20:24:00Z",
+      "audited_integration_source": "ef10e2e08562474800bb5973378ee3411abd1168",
+      "reason": "User whole-frame review clarifies that only trees and characters match the reference. T02's approved visual scope explicitly includes terrain, snow, warm work areas and river, so its visual approval must be reopened.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/scripts/river_geometry.gd",
+          "detail": "River/water presentation requires fresh reference-fidelity review and repair as needed."
+        },
+        {
+          "path": "HavenlineGodot/scripts/outpost_surface.gd",
+          "detail": "Terrain/warm work-floor presentation requires fresh reference-fidelity review and repair."
+        },
+        {
+          "path": "HavenlineGodot/shaders/outpost_snow.gdshader",
+          "detail": "Snow/ground material treatment is not user-approved as reference-matching."
+        },
+        {
+          "path": "HavenlineGodot/shaders/lakeshore_water.gdshader",
+          "detail": "Water material treatment is not user-approved as reference-matching."
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "reference_fidelity",
+        "C1",
+        "C2",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "river topology/meander geometry",
+        "movement bounds",
+        "dry-bank/crossing geometry",
+        "T01 tree baseline",
+        "nonvisual deterministic proof"
+      ],
+      "required_resolution": "Re-review and, where needed, re-author T02 terrain/snow/work-floor/river presentation directly against the locked reference videos while preserving validated world geometry; recapture whole-frame 4K60 evidence and obtain explicit user approval."
     }
   ]
 }

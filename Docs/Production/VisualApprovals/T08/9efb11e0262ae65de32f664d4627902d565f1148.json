@@ -27,11 +27,11 @@
     "passed": false,
     "matched_visible_classes": [
       "vegetation_trees",
-      "characters",
-      "snow_surface",
-      "water"
+      "characters"
     ],
     "failed_visible_classes": [
+      "snow_surface",
+      "water",
       "ground_work_floor",
       "structures_buildings",
       "fences_gates",
@@ -42,10 +42,18 @@
     ],
     "upstream_owner_failures": [
       {
+        "owner_task": "T02",
+        "classes": [
+          "snow_surface",
+          "water"
+        ]
+      },
+      {
         "owner_task": "T03",
         "classes": [
-          "fences_gates",
-          "ground_work_floor"
+          "snow_surface",
+          "ground_work_floor",
+          "fences_gates"
         ]
       },
       {
@@ -77,11 +85,11 @@
         ]
       }
     ],
-    "notes": "User accepts the characters, trees, snow and water as looking like the intended reference game. The rest of the visible scene is rejected for reference fidelity."
+    "notes": "User explicitly accepts only trees and characters as matching the intended reference look. No other visible class is accepted."
   },
   "user_visual_approval": false,
   "user_visual_rejection": true,
-  "user_feedback": "Characters, trees, snow, and water look like the supplied reference videos/intended Havenline game; the other visible scene elements do not.",
+  "user_feedback": "Only the trees and characters look like the supplied reference files/videos and what the game is supposed to look like.",
   "approved_at": null,
   "rejected_at": "2026-09-22T20:04:00Z"
 }

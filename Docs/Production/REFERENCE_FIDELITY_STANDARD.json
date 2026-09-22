@@ -58,23 +58,6 @@
         "HavenlineGodot/animations/c1/**",
         "HavenlineGodot/scripts/character1_motion.gd"
       ]
-    },
-    {
-      "task_id": "T03",
-      "class": "snow_surface",
-      "status": "USER_ACCEPTED_REFERENCE_MATCH",
-      "paths": [
-        "HavenlineGodot/shaders/outpost_snow.gdshader"
-      ]
-    },
-    {
-      "task_id": "T02",
-      "class": "water",
-      "status": "USER_ACCEPTED_REFERENCE_MATCH",
-      "paths": [
-        "HavenlineGodot/scripts/river_geometry.gd",
-        "HavenlineGodot/shaders/lakeshore_water.gdshader"
-      ]
     }
   ],
   "mandatory_whole_frame_classes": [
@@ -104,5 +87,13 @@
     "mandatory_visual_dimension_score": 10,
     "score_averaging_allowed": false,
     "every_mandatory_dimension_must_equal_10": true
+  },
+  "user_feedback_lock": {
+    "exact_meaning": "Only the trees and characters currently look like the supplied reference files/videos and intended Havenline game.",
+    "accepted_classes": [
+      "vegetation_trees",
+      "characters"
+    ],
+    "no_other_visible_class_is_user_accepted": true
   }
 }
