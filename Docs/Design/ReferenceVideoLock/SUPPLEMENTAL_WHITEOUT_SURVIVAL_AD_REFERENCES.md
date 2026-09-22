@@ -74,7 +74,7 @@ These are external reference stills. Some are ad captures; some are store/editor
 
 ### ST04 — Campfire ravine survival capture
 
-[![ST04](https://image.enjoyglobal.net/upload/ba3ba1674e9946fe99f6r8c66b871fda.jpg)](https://enjoyglobal.net/detail/news/9a829yba)
+[![ST04](https://image.enjoyglobal.net/upload/ba3ba1674e9946fe99f6f8c66b871fda.jpg)](https://enjoyglobal.net/detail/news/9a829yba)
 
 **Use:** Reference for character scale against environment, warm/cold contrast and legible temperature pressure.
 
