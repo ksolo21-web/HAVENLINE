@@ -292,10 +292,35 @@ def validate_cross_contracts(checklist, prebuild=None, schema=None) -> list[str]
         or acceptance.get("zero_unresolved_mandatory_defects") is not True
     ):
         errors.append("ACTIVATION_CHECKLIST acceptance rule drifted")
+    prepared_template = str(checklist.get("prepared_registration_template", ""))
+    for token in (
+        "workstream.py claim",
+        "T12",
+        "havenline/T12-progression-architecture",
+        "@reservation:T12",
+        "<ACTIVATION_INTEGRATION_SHA>",
+        "--status PREPARED",
+    ):
+        if token not in prepared_template:
+            errors.append(f"ACTIVATION_CHECKLIST prepared_registration_template missing {token!r}")
+    if "--status ASSIGNED" in prepared_template:
+        errors.append("prepared_registration_template may not grant ASSIGNED authority")
+
     claim_template = str(checklist.get("claim_template", ""))
-    for token in ("T12", "havenline/T12-progression-architecture", "@reservation:T12", "<POST_T11_INTEGRATION_SHA>"):
+    for token in (
+        "v32_assignment_claim.py",
+        "T12",
+        "havenline/T12-progression-architecture",
+        "@reservation:T12",
+        "<ACTIVATION_INTEGRATION_SHA>",
+        "<T12_BUILDER_HEAD>",
+        "--builder-head",
+        "--integration-head",
+    ):
         if token not in claim_template:
             errors.append(f"ACTIVATION_CHECKLIST claim_template missing {token!r}")
+    if "workstream.py claim" in claim_template or "--status ASSIGNED" in claim_template:
+        errors.append("T12 ASSIGNED authority must use v32_assignment_claim.py, not legacy workstream.py")
 
     prebuild = load(PREBUILD_CONTRACT_PATH) if prebuild is None else prebuild
     schema = load(DATA_SCHEMA_PATH) if schema is None else schema
@@ -989,7 +1014,20 @@ def validate_activation(base: str):
             "alias": checklist["planned_owned_alias"],
             "paths": checklist["planned_owned_paths"]
         },
-        "claim_command": checklist["claim_template"].replace("<POST_T11_INTEGRATION_SHA>", base),
+        "builder_branch_seed": {
+            "branch": checklist["future_builder_branch"],
+            "exact_activation_base": base,
+            "required_remote_head_before_assignment": base,
+        },
+        "prepared_registration_command": checklist["prepared_registration_template"].replace(
+            "<ACTIVATION_INTEGRATION_SHA>", base
+        ),
+        "assignment_claim_command": checklist["claim_template"].replace(
+            "<ACTIVATION_INTEGRATION_SHA>", base
+        ),
+        "claim_command": checklist["claim_template"].replace(
+            "<ACTIVATION_INTEGRATION_SHA>", base
+        ),
         "passed": not errors,
         "errors": errors,
     }

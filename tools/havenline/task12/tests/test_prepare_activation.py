@@ -280,6 +280,39 @@ class T12PrepareActivationTests(unittest.TestCase):
         errors = activation.validate_cross_contracts(checklist)
         self.assertTrue(any("seven frozen shipping/runtime test paths" in error for error in errors))
 
+    def test_current_assignment_templates_use_v32_authority(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prepared = checklist["prepared_registration_template"]
+        assigned = checklist["claim_template"]
+        self.assertIn("workstream.py claim", prepared)
+        self.assertIn("--status PREPARED", prepared)
+        self.assertNotIn("--status ASSIGNED", prepared)
+        self.assertIn("v32_assignment_claim.py", assigned)
+        self.assertIn("--builder-head <T12_BUILDER_HEAD>", assigned)
+        self.assertIn("--integration-head <ACTIVATION_INTEGRATION_SHA>", assigned)
+        self.assertNotIn("workstream.py claim", assigned)
+
+    def test_cross_contract_rejects_legacy_assigned_claim(self):
+        checklist = copy.deepcopy(activation.load(activation.CHECKLIST_PATH))
+        checklist["claim_template"] = (
+            "python3 tools/havenline/production/workstream.py claim T12 "
+            "--owner progression-architecture-builder "
+            "--branch havenline/T12-progression-architecture "
+            "--base <ACTIVATION_INTEGRATION_SHA> "
+            "--owned-alias @reservation:T12 --status ASSIGNED "
+            "--builder-head <T12_BUILDER_HEAD> --integration-head <ACTIVATION_INTEGRATION_SHA>"
+        )
+        errors = activation.validate_cross_contracts(checklist)
+        self.assertTrue(any("ASSIGNED authority must use v32_assignment_claim.py" in error for error in errors))
+
+    def test_cross_contract_rejects_prepared_template_granting_assigned(self):
+        checklist = copy.deepcopy(activation.load(activation.CHECKLIST_PATH))
+        checklist["prepared_registration_template"] = checklist["prepared_registration_template"].replace(
+            "--status PREPARED", "--status ASSIGNED"
+        )
+        errors = activation.validate_cross_contracts(checklist)
+        self.assertTrue(any("may not grant ASSIGNED authority" in error for error in errors))
+
     def test_cross_contract_rejects_checklist_identity_drift(self):
         checklist = copy.deepcopy(activation.load(activation.CHECKLIST_PATH))
         prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
