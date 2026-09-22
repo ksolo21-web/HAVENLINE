@@ -84,8 +84,8 @@ def validate_traceability(data: dict[str, Any]) -> dict[str, Any]:
         "T12-R10": ("reachability", "1->100"),
         "T12-R12": ("performance", "unchanged"),
         "T12-R14": ("ownership", "changed-file"),
-        "T12-R15": ("activation", "dependency"),
-        "T12-R16": ("critic", "G1-G14"),
+        "T12-R15": ("activation", "dependency", "binding", "six"),
+        "T12-R16": ("critic", "G1-G14", "evidence", "validator"),
     }
     for req_id, concepts in concept_requirements.items():
         row = by_id.get(req_id, {})
