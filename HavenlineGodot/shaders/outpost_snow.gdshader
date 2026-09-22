@@ -51,28 +51,28 @@ void fragment(){
  // still too close to untouched snow at river approaches. Increase value and
  // temperature separation enough to read without captions, while preserving
  // broad/fine variation and a noisy edge so it never becomes a painted stripe.
- float lane_noise=(material_noise(p*1.10)-.5)*.065+(material_noise(p*3.10)-.5)*.025;
+ float lane_noise=(material_noise(p*1.10)-.5)*.045+(material_noise(p*3.10)-.5)*.018;
  float lane_aa=max(fwidth(lane)*.8,.025);
  float lane_edge_d=lane+lane_noise;
- float lane_mask=1.-smoothstep(-.08-lane_aa,.19+lane_aa,lane_edge_d);
- // T03 repair: preserve T02's accepted snow/work-floor language and show travel
- // as compacted use instead of a broad grey/muddy overlay. Geometry is unchanged.
- float packed_macro=material_noise(p*.74+vec2(4.7,-2.1));
- float packed_mid=material_noise(p*2.05+vec2(-1.3,3.8));
- float compression=smoothstep(.18,.84,packed_macro*.72+packed_mid*.28);
+ float lane_mask=1.-smoothstep(-.07-lane_aa,.18+lane_aa,lane_edge_d);
+ // T03 reference repair: T02 remains the dominant surface. Travel is shown by
+ // physical compression plus quiet paired wear, not by repainting a broad dark lane.
+ float packed_macro=material_noise(p*.78+vec2(4.7,-2.1));
+ float packed_mid=material_noise(p*2.20+vec2(-1.3,3.8));
+ float compression=smoothstep(.20,.82,packed_macro*.68+packed_mid*.32);
  float lane_center_distance=max(lane+1.30,0.0);
- float paired_rut=1.-smoothstep(.12,.31,abs(lane_center_distance-.62));
- float rut_breakup=.80+.20*smoothstep(.24,.78,material_noise(p*2.5+vec2(7.1,-4.3)));
- vec3 packed_snow=mix(snow,vec3(.78,.87,.95),.12+.15*compression);
- packed_snow=mix(packed_snow,vec3(.66,.74,.78),paired_rut*lane_mask*rut_breakup*.16);
- packed_snow+=vec3(.020,.018,.014)*(packed_mid-.5);
- vec3 packed_floor=mix(floor,vec3(.67,.39,.27),.12+.14*compression);
- packed_floor=mix(packed_floor,vec3(.52,.29,.19),paired_rut*lane_mask*rut_breakup*.22);
- packed_floor+=vec3(.020,.012,.007)*(packed_mid-.5);
+ float paired_rut=1.-smoothstep(.10,.27,abs(lane_center_distance-.62));
+ float rut_breakup=.82+.18*smoothstep(.28,.76,material_noise(p*2.7+vec2(7.1,-4.3)));
+ vec3 packed_snow=mix(snow,vec3(.82,.90,.965),.055+.085*compression);
+ packed_snow=mix(packed_snow,vec3(.70,.78,.84),paired_rut*lane_mask*rut_breakup*.105);
+ packed_snow+=vec3(.012,.014,.016)*(packed_mid-.5);
+ vec3 packed_floor=mix(floor,vec3(.72,.43,.30),.035+.060*compression);
+ packed_floor=mix(packed_floor,vec3(.58,.32,.22),paired_rut*lane_mask*rut_breakup*.12);
+ packed_floor+=vec3(.010,.007,.004)*(packed_mid-.5);
  vec3 packed=mix(packed_snow,packed_floor,cleared);
- material=mix(material,packed,lane_mask*.74);
- float lane_edge=(1.-smoothstep(.09,.34,abs(lane_edge_d)))*smoothstep(-.10,.02,abs(lane_edge_d));
- material=mix(material,material*.93,lane_edge*.22);
+ material=mix(material,packed,lane_mask*.52);
+ float lane_edge=(1.-smoothstep(.08,.30,abs(lane_edge_d)))*smoothstep(-.09,.015,abs(lane_edge_d));
+ material=mix(material,material*.965,lane_edge*.14);
 
  float ice=1.-smoothstep(-.12,.035,shore);
  material=mix(material,vec3(.37,.67,.84),ice*.35);
