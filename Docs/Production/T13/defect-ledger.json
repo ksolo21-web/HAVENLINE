@@ -60,6 +60,14 @@
       "root_cause": "T13 had deterministic challenge semantics but no explicit cross-owner readability handoff, and critic evidence did not separate implementation validation from dependency-gated task approval.",
       "repair": "Add deterministic t13.readability.v1 output, test all C4 ownership boundaries, emit source-bound readability evidence, and state lifecycle lock separately from implementation validation.",
       "status": "RESOLVED_PENDING_RETEST"
+    },
+    {
+      "id": "T13-BUILD-003",
+      "defect": "The new 100-level readability integration assertion used inferred typing for a Dictionary value returned through Variant access, which Godot 4.7.2 refused to infer.",
+      "evidence": "Run 35730422938: core T13 suite passed all 57 checks; test_task13_integration.gd then failed parse with 'Cannot infer the type of readable variable because the value does not have a set type.'",
+      "root_cause": "Test-only GDScript local variable relied on inference across a dynamic Dictionary property.",
+      "repair": "Declare readable explicitly as Dictionary; no runtime Challenge Director behavior changed.",
+      "status": "RESOLVED_PENDING_RETEST"
     }
   ]
 }

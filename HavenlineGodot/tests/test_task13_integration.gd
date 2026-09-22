@@ -108,7 +108,7 @@ func run() -> void:
 		challenge_styles[String(d.challenge_style_id)] = true
 	var readable_outputs := true
 	for level in 100:
-		var readable := director.evaluate(context(level + 1), perf(1)).readability_contract
+		var readable: Dictionary = director.evaluate(context(level + 1), perf(1)).readability_contract
 		readable_outputs = readable_outputs and int(readable.danger_rank) == int(floor(float(level) / 10.0)) + 1
 		readable_outputs = readable_outputs and int(readable.danger_rank_max) == 10
 		readable_outputs = readable_outputs and not String(readable.world_response_profile_id).is_empty()
