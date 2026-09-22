@@ -11,6 +11,10 @@ const MAX_AUTHORED_MESHES := 24
 const PREVIEW_ALPHA := 0.46
 const COMMIT_PULSE_HZ := 1.25
 const COMMIT_PULSE_AMPLITUDE := 0.035
+const FEEDBACK_MARKER_COUNT := 4
+const FEEDBACK_NODE_BUDGET := 6
+const FLOW_RADIUS := 2.75
+const FLOW_HEIGHT := 0.42
 
 var target_id := ""
 var construction_id := ""
@@ -23,6 +27,10 @@ var scene_swap_count := 0
 var catalog: Dictionary = {}
 var _spec: Dictionary = {}
 var _authored_root: Node3D
+var _feedback_root: Node3D
+var _status_label: Label3D
+var _flow_markers: Array[MeshInstance3D] = []
+var _flow_material: StandardMaterial3D
 var _pulse_time := 0.0
 
 static func contract() -> Dictionary:
@@ -36,6 +44,9 @@ static func contract() -> Dictionary:
 		"placement_validation_changes_t10_authority": false,
 		"completion_requires_t10_accepted_receipt": true,
 		"manual_action_button_required": false,
+		"auto_build_guidance_visible": true,
+		"delivered_stock_flow_visible": true,
+		"feedback_node_budget": FEEDBACK_NODE_BUDGET,
 		"max_authored_meshes": MAX_AUTHORED_MESHES,
 	}
 
@@ -112,7 +123,11 @@ func configure(next_target_id: String, next_construction_id: String) -> bool:
 	lifecycle = "ready"
 	placement_blocked = false
 	_pulse_time = 0.0
-	return _show_scene(String(_spec.before_scene), 0.0)
+	_ensure_feedback()
+	var shown := _show_scene(String(_spec.before_scene), 0.0)
+	if shown:
+		_apply_feedback()
+	return shown
 
 func set_placement_context(origin: Vector3, occupied: Array) -> bool:
 	placement_origin = origin
@@ -132,21 +147,30 @@ func _matches_t10(row: Dictionary) -> bool:
 func show_ready() -> bool:
 	transaction_id = ""
 	lifecycle = "blocked" if placement_blocked else "ready"
-	return _show_scene(String(_spec.before_scene), 0.0)
+	var shown := _show_scene(String(_spec.before_scene), 0.0)
+	if shown:
+		_apply_feedback()
+	return shown
 
 func show_preview(preview: Dictionary) -> bool:
 	if placement_blocked or not bool(preview.get("passed", false)) or not _matches_t10(preview):
 		return false
 	transaction_id = ""
 	lifecycle = "preview"
-	return _show_scene(String(_spec.after_scene), PREVIEW_ALPHA)
+	var shown := _show_scene(String(_spec.after_scene), PREVIEW_ALPHA)
+	if shown:
+		_apply_feedback()
+	return shown
 
 func show_blocked(preview: Dictionary) -> bool:
 	if bool(preview.get("passed", true)) or String(preview.get("target_id", "")) != target_id:
 		return false
 	transaction_id = ""
 	lifecycle = "blocked"
-	return _show_scene(String(_spec.before_scene), 0.0)
+	var shown := _show_scene(String(_spec.before_scene), 0.0)
+	if shown:
+		_apply_feedback()
+	return shown
 
 func show_commit(intent: Dictionary) -> bool:
 	if placement_blocked or not bool(intent.get("passed", false)) or bool(intent.get("replayed", false)):
@@ -159,7 +183,10 @@ func show_commit(intent: Dictionary) -> bool:
 	transaction_id = next_transaction
 	lifecycle = "committing"
 	_pulse_time = 0.0
-	return _show_scene(String(_spec.after_scene), PREVIEW_ALPHA)
+	var shown := _show_scene(String(_spec.after_scene), PREVIEW_ALPHA)
+	if shown:
+		_apply_feedback()
+	return shown
 
 func mark_complete(receipt: Dictionary) -> bool:
 	if lifecycle != "committing" or transaction_id.is_empty():
@@ -173,7 +200,93 @@ func mark_complete(receipt: Dictionary) -> bool:
 	lifecycle = "complete"
 	transaction_id = ""
 	_pulse_time = 0.0
-	return _show_scene(String(_spec.after_scene), 0.0)
+	var shown := _show_scene(String(_spec.after_scene), 0.0)
+	if shown:
+		_apply_feedback()
+	return shown
+
+func _feedback_text() -> String:
+	match lifecycle:
+		"ready":
+			return "AUTO-BUILD • WALK CLOSE\nNo build button • uses delivered stock"
+		"preview":
+			return "AUTO-BUILD READY\nStay in zone • delivered stock applies automatically"
+		"committing":
+			return "BUILDING NOW\nDelivered stock → structure • no input needed"
+		"complete":
+			return "BUILD COMPLETE\nResources applied exactly once"
+		"blocked":
+			return "BUILD LOCKED\nFollow the requirement shown above"
+		_:
+			return ""
+
+func _ensure_feedback() -> void:
+	if is_instance_valid(_feedback_root):
+		return
+	_feedback_root = Node3D.new()
+	_feedback_root.name = "T11BuildFeedback"
+	add_child(_feedback_root)
+
+	_status_label = Label3D.new()
+	_status_label.name = "AutoBuildGuidance"
+	_status_label.position = Vector3(0.0, 0.5, 2.65)
+	_status_label.font_size = 30
+	_status_label.outline_size = 7
+	_status_label.pixel_size = 0.0048
+	_status_label.width = 760.0
+	_status_label.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_status_label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_status_label.no_depth_test = true
+	_status_label.render_priority = 98
+	_status_label.outline_render_priority = 97
+	_feedback_root.add_child(_status_label)
+
+	_flow_material = StandardMaterial3D.new()
+	_flow_material.albedo_color = Color("f0a94d")
+	_flow_material.emission_enabled = true
+	_flow_material.emission = Color("ffd18a")
+	_flow_material.emission_energy_multiplier = 1.25
+	_flow_material.roughness = 0.45
+	var marker_mesh := BoxMesh.new()
+	marker_mesh.size = Vector3(0.26, 0.26, 0.26)
+	for marker_index in FEEDBACK_MARKER_COUNT:
+		var marker := MeshInstance3D.new()
+		marker.name = "DeliveredStockFlow%02d" % marker_index
+		marker.mesh = marker_mesh
+		marker.material_override = _flow_material
+		_feedback_root.add_child(marker)
+		_flow_markers.append(marker)
+
+func _flow_start_position(index: int) -> Vector3:
+	var angle := TAU * float(index) / float(FEEDBACK_MARKER_COUNT) + PI * 0.25
+	return Vector3(cos(angle) * FLOW_RADIUS, FLOW_HEIGHT, sin(angle) * FLOW_RADIUS)
+
+func _update_flow_markers() -> void:
+	for marker_index in _flow_markers.size():
+		var marker := _flow_markers[marker_index]
+		if lifecycle == "preview":
+			marker.position = _flow_start_position(marker_index)
+			marker.scale = Vector3.ONE
+			continue
+		if lifecycle != "committing":
+			continue
+		var phase := fmod(_pulse_time * 0.72 + float(marker_index) / float(FEEDBACK_MARKER_COUNT), 1.0)
+		var start := _flow_start_position(marker_index)
+		var finish := Vector3(0.0, 0.78, 0.0)
+		marker.position = start.lerp(finish, phase)
+		marker.position.y += sin(phase * PI) * 0.72
+		var marker_scale := 0.85 + sin(phase * PI) * 0.30
+		marker.scale = Vector3.ONE * marker_scale
+
+func _apply_feedback() -> void:
+	_ensure_feedback()
+	_status_label.text = _feedback_text()
+	_status_label.visible = not _status_label.text.is_empty()
+	var show_flow := lifecycle in ["preview", "committing"]
+	for marker in _flow_markers:
+		marker.visible = show_flow
+	_update_flow_markers()
+	set_process(lifecycle == "committing")
 
 func _show_scene(path: String, alpha: float) -> bool:
 	var packed := load(path) as PackedScene
@@ -223,6 +336,7 @@ func _process(delta: float) -> void:
 	_pulse_time += delta
 	var pulse := 1.0 + sin(_pulse_time * TAU * COMMIT_PULSE_HZ) * COMMIT_PULSE_AMPLITUDE
 	_authored_root.scale = Vector3.ONE * pulse
+	_update_flow_markers()
 
 func descriptor() -> Dictionary:
 	return {
@@ -235,6 +349,10 @@ func descriptor() -> Dictionary:
 		"current_scene": String(_spec.get("after_scene" if lifecycle in ["preview", "committing", "complete"] else "before_scene", "")),
 		"mesh_count": _count_meshes(_authored_root) if _authored_root != null else 0,
 		"scene_swap_count": scene_swap_count,
+		"auto_build_guidance": _status_label.text if is_instance_valid(_status_label) else "",
+		"delivered_stock_flow_visible": _flow_markers.any(func(marker): return marker.visible) if not _flow_markers.is_empty() else false,
+		"feedback_node_count": _feedback_root.get_child_count() if is_instance_valid(_feedback_root) else 0,
+		"flow_marker_count": _flow_markers.size(),
 		"presentation_only": true,
 		"mutates_resources": false,
 		"advances_transform_state": false,

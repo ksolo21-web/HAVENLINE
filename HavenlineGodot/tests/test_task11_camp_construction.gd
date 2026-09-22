@@ -21,6 +21,7 @@ func run() -> void:
 	check("T11 presentation cannot mutate resources or transform state", contract.presentation_only and not contract.mutates_resources and not contract.advances_transform_state)
 	check("placement validation is pure and does not change T10 authority", contract.placement_validation_pure and not contract.placement_validation_changes_t10_authority)
 	check("simple control philosophy preserved", not contract.manual_action_button_required)
+	check("auto-build guidance is explicit without manual controls", contract.auto_build_guidance_visible and contract.delivered_stock_flow_visible and contract.feedback_node_budget == View.FEEDBACK_NODE_BUDGET)
 
 	var origin := Vector3.ZERO
 	check("empty placement is clear", View.placement_is_clear(origin, [], 2.8))
@@ -49,6 +50,8 @@ func run() -> void:
 	get_root().add_child(view)
 	check("foundation view configures", view.configure("camp-A", "camp_shelter_foundation"))
 	check("foundation authored mesh budget is bounded", view.descriptor().mesh_count > 0 and view.descriptor().mesh_count <= View.MAX_AUTHORED_MESHES)
+	check("feedback node budget is bounded", view.descriptor().feedback_node_count <= View.FEEDBACK_NODE_BUDGET and view.descriptor().flow_marker_count == View.FEEDBACK_MARKER_COUNT)
+	check("ready guidance makes automatic trigger explicit", view.descriptor().auto_build_guidance.contains("AUTO-BUILD") and view.descriptor().auto_build_guidance.contains("No build button"))
 	check("placement context can block authored build", not view.set_placement_context(Vector3.ZERO, [{"position": Vector3(1.0, 0, 0), "radius": 1.0}]) and view.placement_blocked)
 	check("ready reflects blocked placement", view.show_ready() and view.descriptor().lifecycle == "blocked")
 	check("placement can recover without state mutation", view.set_placement_context(Vector3.ZERO, []) and not view.placement_blocked)
@@ -62,6 +65,7 @@ func run() -> void:
 		"presentation_key": "framework_foundation",
 	}
 	check("exact T10 preview selects authored after form", view.show_preview(preview) and view.descriptor().lifecycle == "preview")
+	check("preview shows delivered-stock destination and automatic behavior", view.descriptor().delivered_stock_flow_visible and view.descriptor().auto_build_guidance.contains("delivered stock applies automatically"))
 	var wrong_preview := preview.duplicate(true)
 	wrong_preview.presentation_key = "forged"
 	check("wrong T10 presentation identity fails closed", not view.show_preview(wrong_preview))
@@ -69,12 +73,17 @@ func run() -> void:
 	var intent := preview.duplicate(true)
 	intent.merge({"transaction_id": "t11-unit-1", "submit_debit_transaction": true, "replayed": false}, true)
 	check("exact T10 intent enters committing presentation", view.show_commit(intent) and view.descriptor().lifecycle == "committing")
+	var marker := view.get_node("T11BuildFeedback/DeliveredStockFlow00") as MeshInstance3D
+	var marker_before := marker.position
+	view._process(0.5)
+	check("committing visibly flows delivered stock toward the structure", marker.visible and marker.position != marker_before and view.descriptor().auto_build_guidance.contains("no input needed"))
 	var unaccepted := intent.duplicate(true)
 	unaccepted.merge({"authority_applied": true, "accepted_by_world_transform": false}, true)
 	check("unaccepted authority receipt cannot complete", not view.mark_complete(unaccepted) and view.descriptor().lifecycle == "committing")
 	var accepted := intent.duplicate(true)
 	accepted.merge({"authority_applied": true, "accepted_by_world_transform": true}, true)
 	check("accepted T10 receipt reveals completed authored form", view.mark_complete(accepted) and view.descriptor().lifecycle == "complete")
+	check("completion stops resource-flow feedback and announces exact completion", not view.descriptor().delivered_stock_flow_visible and view.descriptor().auto_build_guidance.contains("BUILD COMPLETE"))
 	check("duplicate completion cannot replay", not view.mark_complete(accepted))
 	check("completed presentation remains authority-free", view.descriptor().presentation_only and not view.descriptor().mutates_resources and not view.descriptor().advances_transform_state)
 

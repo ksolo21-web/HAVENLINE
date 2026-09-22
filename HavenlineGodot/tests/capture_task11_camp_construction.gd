@@ -33,6 +33,8 @@ const NATIVE_STATES := [
 	"reinforced_complete",
 ]
 const NATIVE_ANGLES := ["front", "three-quarter"]
+const CPU_WARMUP_FRAMES := 60
+const CPU_SAMPLE_FRAMES := 180
 
 func _initialize() -> void:
 	for argument in OS.get_cmdline_user_args():
@@ -327,7 +329,79 @@ func capture_motion(state: String) -> void:
 			"metrics": _record_metrics(),
 		})
 
+func run_cpu_probe() -> void:
+	var probe_engine = Transform.new()
+	if not probe_engine.configure_from_file():
+		print(JSON.stringify({"schema_version":1,"task_id":"T11","candidate":candidate,"passed":false,"reason":"T10 catalog failed to configure","sample_count":0}))
+		quit(1)
+		return
+	if not probe_engine.register_target("perf-camp", "seed"):
+		print(JSON.stringify({"schema_version":1,"task_id":"T11","candidate":candidate,"passed":false,"reason":"performance target registration failed","sample_count":0}))
+		quit(1)
+		return
+	var inventory := {"wood":100,"stone":100,"metal":20,"fuel":10}
+	var foundation_intent: Dictionary = probe_engine.commit_transform("perf-foundation","framework_anchor_seed_to_foundation","perf-camp",inventory)
+	if not bool(foundation_intent.get("passed", false)):
+		print(JSON.stringify({"schema_version":1,"task_id":"T11","candidate":candidate,"passed":false,"reason":"foundation intent failed","sample_count":0}))
+		quit(1)
+		return
+	var foundation_receipt: Dictionary = probe_engine.accept_authoritative_receipt(simulation_ack(foundation_intent))
+	if not bool(foundation_receipt.get("passed", false)) or not bool(foundation_receipt.get("applied", false)):
+		print(JSON.stringify({"schema_version":1,"task_id":"T11","candidate":candidate,"passed":false,"reason":"foundation bootstrap receipt failed","sample_count":0}))
+		quit(1)
+		return
+	var probe_view = CampView.new()
+	root.add_child(probe_view)
+	await process_frame
+	if not probe_view.configure("perf-camp", "camp_shelter_reinforced") or not probe_view.set_placement_context(Vector3.ZERO, []):
+		print(JSON.stringify({"schema_version":1,"task_id":"T11","candidate":candidate,"passed":false,"reason":"reinforced camp view failed to configure","sample_count":0}))
+		quit(1)
+		return
+	var reinforced_intent: Dictionary = probe_engine.commit_transform("perf-reinforced","framework_anchor_foundation_to_reinforced","perf-camp",inventory,["harvesting_online"])
+	if not bool(reinforced_intent.get("passed", false)) or not probe_view.show_commit(reinforced_intent):
+		print(JSON.stringify({"schema_version":1,"task_id":"T11","candidate":candidate,"passed":false,"reason":"reinforced committing state failed","sample_count":0}))
+		quit(1)
+		return
+	for _i in CPU_WARMUP_FRAMES:
+		await process_frame
+	var samples: Array[float] = []
+	for _i in CPU_SAMPLE_FRAMES:
+		await process_frame
+		var value_ms := float(Performance.get_monitor(Performance.TIME_PROCESS)) * 1000.0
+		if is_finite(value_ms) and value_ms >= 0.0:
+			samples.append(value_ms)
+	if samples.size() != CPU_SAMPLE_FRAMES:
+		print(JSON.stringify({"schema_version":1,"task_id":"T11","candidate":candidate,"passed":false,"reason":"incomplete CPU frame sample set","sample_count":samples.size()}))
+		quit(1)
+		return
+	samples.sort()
+	var p95_index := int(floor(float(samples.size() - 1) * 0.95))
+	var total := 0.0
+	for value in samples:
+		total += value
+	var report := {
+		"schema_version":1,
+		"task_id":"T11",
+		"candidate":candidate,
+		"passed":true,
+		"state":"reinforced_committing",
+		"warmup_frames":CPU_WARMUP_FRAMES,
+		"sample_count":samples.size(),
+		"fixed_fps":60,
+		"cpu_frame_statistic":"p95_after_warmup",
+		"cpu_frame_ms_p95":samples[p95_index],
+		"cpu_frame_ms_max":samples[-1],
+		"cpu_frame_ms_mean":total / float(samples.size()),
+		"measurement_method":"Godot headless fixed-fps 60 process-time probe from authorized T11 capture harness; no PNG encoding or software raster timing in CPU sample",
+		"physical_4k60_certified":false
+	}
+	print(JSON.stringify(report))
+	quit(0)
+
 func run() -> void:
+	if profile == "cpu-probe":
+		await run_cpu_probe()
+		return
 	DirAccess.make_dir_recursive_absolute(output)
 	add_environment()
 	await process_frame

@@ -21,14 +21,17 @@ def main():
     ap.add_argument('--native',required=True)
     ap.add_argument('--functional',required=True)
     ap.add_argument('--performance',required=True)
+    ap.add_argument('--upstream-flow',required=True)
     ap.add_argument('--out-root',required=True)
     a=ap.parse_args()
     candidate=a.candidate
     if len(candidate)!=40: raise SystemExit('candidate must be exact SHA')
-    standard=Path(a.standard);native=Path(a.native);functional=Path(a.functional);performance=Path(a.performance)
+    standard=Path(a.standard);native=Path(a.native);functional=Path(a.functional);performance=Path(a.performance);upstream=Path(a.upstream_flow)
     sm=load(standard/'manifest.json');nm=load(native/'manifest.json');tests=load(functional/'tests.json');sentinel=load(functional/'sentinel.json')
-    assert sm['candidate']==nm['candidate']==tests['source']==candidate
+    upstream_report=load(upstream/'capture-report.json')
+    assert sm['candidate']==nm['candidate']==tests['source']==upstream_report['candidate']==candidate
     assert sm['passed'] and nm['passed'] and tests['all_passed'] and sentinel['passed']
+    assert upstream_report.get('simulation_authoritative') is True
     out_root=Path(a.out_root);out_root.mkdir(parents=True,exist_ok=True)
 
     control={
@@ -44,6 +47,9 @@ def main():
         'functional_checks':tests['total_checks'],
         't10_authority_preserved':True,
         'task_approved':False,
+        'task_scope':'Camp construction and visual upgrade presentation through the approved T10 boundary',
+        'scope_exclusions':['combat/danger-system implementation','manual build button','harvesting authority changes'],
+        'upstream_flow_evidence':'Approved T09/T08 approach, automatic gather, transfer and carry capture generated on this exact candidate',
     }
 
     std_records=sm['records'];nat_records=nm['records']
@@ -71,33 +77,34 @@ def main():
         ('foundation_ready','front'),
         ('foundation_preview','three-quarter'),
         ('foundation_complete','front'),
-        ('foundation_complete','three-quarter'),
         ('reinforced_blocked','front'),
         ('reinforced_preview','three-quarter'),
         ('reinforced_complete','front'),
-        ('reinforced_complete','three-quarter'),
     ],'C3 lifecycle')
     c3_motion=required_rows(motion_by,[
-        ('foundation_committing',0),('foundation_committing',6),('foundation_committing',12),('foundation_committing',18),
-        ('reinforced_committing',0),('reinforced_committing',6),('reinforced_committing',12),('reinforced_committing',18),
+        ('foundation_committing',0),('foundation_committing',12),
+        ('reinforced_committing',0),('reinforced_committing',12),
     ],'C3 motion')
     c4_states=required_rows(std_by,[
         ('foundation_ready','front'),
         ('foundation_preview','three-quarter'),
         ('foundation_complete','front'),
-        ('foundation_complete','three-quarter'),
         ('reinforced_blocked','front'),
         ('reinforced_preview','three-quarter'),
         ('reinforced_complete','front'),
-        ('reinforced_complete','three-quarter'),
     ],'C4 lifecycle')
     c4_native=required_rows(native_by,[
         ('foundation_preview','front'),
         ('foundation_complete','front'),
         ('reinforced_blocked','front'),
         ('reinforced_complete','front'),
-        ('reinforced_complete','three-quarter'),
     ],'C4 native readability')
+    upstream_names=['wood-approach.png','wood-focus-acquired.png','wood-committed-contact.png','wood-recovery.png']
+    upstream_rows=[]
+    for name in upstream_names:
+        path=upstream/name
+        if not path.is_file(): raise SystemExit('missing upstream flow evidence '+str(path))
+        upstream_rows.append(path)
 
     plans={
       'C2':[
@@ -107,12 +114,16 @@ def main():
         ('native-detail',[(native/r['file'],'image','geometry_state',f"native 3840x2160 {r['state']} {r['angle']} detail frame") for r in native_rows]),
       ],
       'C3':[
-        ('physical-build-loop',[(standard/r['file'],'image','gameplay_state',f"{r['state']} {r['angle']} representative build/upgrade world state") for r in c3_states]),
-        ('commit-motion',[(standard/r['file'],'motion_frame','gameplay_state',f"{r['state']} construction pulse frame {r['frame_index']}") for r in c3_motion]),
+        ('complete-physical-build-loop',
+          [(upstream/p.name,'image','gameplay_state',f"approved upstream MOVE/AUTO-INTERACT/GATHER/TRANSFER evidence: {p.stem}") for p in upstream_rows]
+          +[(standard/r['file'],'image','gameplay_state',f"{r['state']} {r['angle']} build/upgrade world state") for r in c3_states]
+          +[(standard/r['file'],'motion_frame','gameplay_state',f"{r['state']} delivered-stock construction flow frame {r['frame_index']}") for r in c3_motion]),
       ],
       'C4':[
-        ('feedback-and-next-action',[(standard/r['file'],'image','gameplay_state',f"{r['state']} {r['angle']} representative state with rendered T10 status feedback") for r in c4_states]),
-        ('native-readability',[(native/r['file'],'image','feedback_state',f"native 3840x2160 {r['state']} {r['angle']} representative feedback/readability frame") for r in c4_native]),
+        ('complete-construction-feedback',
+          [(upstream/p.name,'image','feedback_state',f"approved upstream collection/transfer/carry feedback: {p.stem}") for p in upstream_rows]
+          +[(standard/r['file'],'image','gameplay_state',f"{r['state']} {r['angle']} construction state with auto-build guidance") for r in c4_states]
+          +[(native/r['file'],'image','feedback_state',f"native 3840x2160 {r['state']} {r['angle']} construction readability frame") for r in c4_native]),
       ],
     }
 
@@ -130,7 +141,7 @@ def main():
         for group_id,rows in groups:
             entries=[]
             for src,kind,category,description in rows:
-                folder='native' if src.parent==native else 'images'
+                folder='native' if src.parent==native else ('upstream' if src.parent==upstream else 'images')
                 entries.append(add_file(src,Path(folder)/src.name,kind,category,description))
             items_by_group.append({'id':group_id,'items':entries})
 
@@ -139,13 +150,19 @@ def main():
         shutil.copy2(performance,package/'performance-record.json')
         shutil.copy2(standard/'manifest.json',package/'capture-manifest.json')
         shutil.copy2(native/'manifest.json',package/'native-manifest.json')
+        shutil.copy2(upstream/'capture-report.json',package/'upstream-flow-report.json')
+        shutil.copy2(ROOT/'Docs/Production/T11/FROZEN_SCOPE.md',package/'task-scope.md')
         (package/'control-state.json').write_text(json.dumps(control,indent=2)+'\n')
 
         if cid=='C3':
             items_by_group[0]['items'].append({'path':'critic-input/control-state.json','kind':'json','category':'control_state','sha256':digest(package/'control-state.json'),'description':'T11 simple-context control and authority contract'})
-            items_by_group[0]['items'].append({'path':'critic-input/tests.json','kind':'json','category':'loop_evidence','sha256':digest(package/'tests.json'),'description':'Six-suite 581-check functional and integration proof'})
+            items_by_group[0]['items'].append({'path':'critic-input/tests.json','kind':'json','category':'loop_evidence','sha256':digest(package/'tests.json'),'description':'Six-suite functional and integration proof on the exact candidate'})
+            items_by_group[0]['items'].append({'path':'critic-input/upstream-flow-report.json','kind':'json','category':'loop_evidence','sha256':digest(package/'upstream-flow-report.json'),'description':'Exact-candidate approved upstream T09/T08 movement, automatic gather, transfer and carry trace'})
+            items_by_group[0]['items'].append({'path':'critic-input/task-scope.md','kind':'text','category':'control_state','sha256':digest(package/'task-scope.md'),'description':'Authoritative T11 frozen scope and exclusions'})
         if cid=='C4':
-            items_by_group[0]['items'].append({'path':'critic-input/capture-manifest.json','kind':'json','category':'feedback_state','sha256':digest(package/'capture-manifest.json'),'description':'Rendered state descriptors including exact T10 feedback text and T11 lifecycle'})
+            items_by_group[0]['items'].append({'path':'critic-input/capture-manifest.json','kind':'json','category':'feedback_state','sha256':digest(package/'capture-manifest.json'),'description':'Rendered construction state descriptors and T11 lifecycle'})
+            items_by_group[0]['items'].append({'path':'critic-input/upstream-flow-report.json','kind':'json','category':'feedback_state','sha256':digest(package/'upstream-flow-report.json'),'description':'Exact-candidate upstream collection, transfer, carry and destination trace'})
+            items_by_group[0]['items'].append({'path':'critic-input/task-scope.md','kind':'text','category':'feedback_state','sha256':digest(package/'task-scope.md'),'description':'Authoritative T11 frozen scope; combat/danger systems remain outside this construction task'})
         if cid=='C2':
             items_by_group[-1]['items'].append({'path':'critic-input/performance-record.json','kind':'json','category':'geometry_state','sha256':digest(package/'performance-record.json'),'description':'Bounded rendered geometry/draw-call evidence'})
 

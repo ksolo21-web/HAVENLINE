@@ -140,7 +140,7 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y xvfb mesa-vulkan-drivers
-          mkdir -p "$RUNNER_TEMP/engine" t11-review-evidence/standard t11-review-evidence/native4k critic-packages
+          mkdir -p "$RUNNER_TEMP/engine" t11-review-evidence/standard t11-review-evidence/native4k t11-review-evidence/upstream-flow critic-packages
           curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
           (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
           echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
@@ -157,10 +157,17 @@ jobs:
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
           GODOT="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
           test -x "$GODOT"
-          if ! timeout 180 "$GODOT" --headless --audio-driver Dummy --fixed-fps 60 --path HavenlineGodot --script res://tests/test_task11_performance_probe.gd -- --candidate="$CANDIDATE" > t11-review-evidence/cpu-probe.log 2>&1; then
+          if ! timeout 180 "$GODOT" --headless --audio-driver Dummy --fixed-fps 60 --path HavenlineGodot --script res://tests/capture_task11_camp_construction.gd -- --candidate="$CANDIDATE" --profile=cpu-probe > t11-review-evidence/cpu-probe.log 2>&1; then
             cat t11-review-evidence/cpu-probe.log >&2
             exit 1
           fi
+          if ! xvfb-run -a -s '-screen 0 1280x720x24' timeout 420 "$GODOT"             --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy             --resolution 1280x720 --fixed-fps 60             --script res://tests/capture_task09_harvesting.gd --             --candidate="$CANDIDATE" --resource=wood --mode=sequence --view=front-right --out="$(pwd)/t11-review-evidence/upstream-flow"             > t11-review-evidence/upstream-flow/capture.log 2>&1; then
+            cat t11-review-evidence/upstream-flow/capture.log >&2
+            exit 1
+          fi
+          for required in wood-approach.png wood-focus-acquired.png wood-committed-contact.png wood-recovery.png capture-report.json; do
+            test -s "t11-review-evidence/upstream-flow/$required"
+          done
           if ! xvfb-run -a -s '-screen 0 1280x720x24' timeout 420 "$GODOT"             --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy             --resolution 1280x720 --fixed-fps 30             --script res://tests/capture_task11_camp_construction.gd --             --candidate="$CANDIDATE" --profile=standard --out="$(pwd)/t11-review-evidence/standard"             > t11-review-evidence/standard/capture.log 2>&1; then
             cat t11-review-evidence/standard/capture.log >&2
             exit 1
@@ -170,6 +177,7 @@ jobs:
             exit 1
           fi
           if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' t11-review-evidence/*/capture.log; then
+            cat t11-review-evidence/upstream-flow/capture.log >&2
             cat t11-review-evidence/standard/capture.log >&2
             cat t11-review-evidence/native4k/capture.log >&2
             exit 1
@@ -183,8 +191,11 @@ jobs:
           probe_reports=[json.loads(line) for line in Path('t11-review-evidence/cpu-probe.log').read_text().splitlines() if line.startswith('{')]
           assert probe_reports, 'missing CPU probe report'
           probe=probe_reports[-1]
+          upstream=json.load(open('t11-review-evidence/upstream-flow/capture-report.json'))
           assert probe['passed'] and probe['candidate']==cand and probe['sample_count'] >= 120
           assert probe['cpu_frame_statistic']=='p95_after_warmup'
+          assert upstream['candidate']==cand and upstream['simulation_authoritative'] is True
+          assert upstream['harvest_contract']['permanent_action_buttons']==0
           assert standard['passed'] and native['passed']
           assert standard['candidate']==native['candidate']==cand
           assert standard['record_count'] >= 40 and native['record_count'] == 8
@@ -200,7 +211,7 @@ jobs:
             'resolution':[3840,2160],'renderer':'Godot 4.7.2 mobile Vulkan software evidence path',
             'visible_triangles':int(maximum('visible_triangles')),
             'draw_calls':int(maximum('draw_calls')),
-            'materials_visible':8,
+            'materials_visible':9,
             'texture_gpu_memory_mb':maximum('texture_gpu_memory_mb'),
             'cpu_frame_ms':float(probe['cpu_frame_ms_p95']),
             'cpu_frame_ms_max':float(probe['cpu_frame_ms_max']),
@@ -225,7 +236,7 @@ jobs:
           CANDIDATE: ${{ github.sha }}
         run: |
           set -euo pipefail
-          python3 tools/havenline/task11/build_critic_packages.py             --candidate "$CANDIDATE"             --standard t11-review-evidence/standard             --native t11-review-evidence/native4k             --functional functional-evidence             --performance t11-review-evidence/performance-record.json             --out-root critic-packages
+          python3 tools/havenline/task11/build_critic_packages.py             --candidate "$CANDIDATE"             --standard t11-review-evidence/standard             --native t11-review-evidence/native4k             --functional functional-evidence             --performance t11-review-evidence/performance-record.json             --upstream-flow t11-review-evidence/upstream-flow             --out-root critic-packages
           for critic in C2 C3 C4; do
             rm -rf critic-input
             cp -a "critic-packages/havenline-task11-critic-$critic" critic-input
