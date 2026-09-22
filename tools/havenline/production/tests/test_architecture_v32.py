@@ -194,6 +194,12 @@ class V32Tests(unittest.TestCase):
    self.assertFalse(branch_budget.validate(inventory=str(p))['passed'])
    p.write_text(json.dumps(['havenline/T11-camp-construction','havenline/T12-unregistered']))
    self.assertFalse(branch_budget.validate(inventory=str(p))['passed'])
+   p.write_text(json.dumps(['havenline/T11-camp-construction','havenline/T13-challenge-director']))
+   allowed=branch_budget.validate(inventory=str(p))
+   self.assertTrue(allowed['passed'],allowed['errors'])
+   self.assertEqual(allowed['details']['authorized_preactivation_branches'].get('T13'),'havenline/T13-challenge-director')
+   p.write_text(json.dumps(['havenline/T11-camp-construction','havenline/T13-challenge-director','havenline/T13-prototype']))
+   self.assertFalse(branch_budget.validate(inventory=str(p))['passed'])
 
  def test_authority_and_forward_prep_contracts(self):
   self.assertTrue(authority_consistency.validate()['passed'])
