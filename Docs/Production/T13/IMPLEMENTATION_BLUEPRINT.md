@@ -1,6 +1,6 @@
 # T13 — Challenge Director Implementation Blueprint
 
-**Status:** PREBUILD / GOVERNANCE ONLY — runtime implementation remains forbidden until T13 is activated.  
+**Status:** PREACTIVATION ISOLATED BUILD AUTHORIZED — runtime may be built/tested only on `havenline/T13-challenge-director`, with maximum state `BUILT_PENDING_DEPENDENCY`; integration remains forbidden until T12 approval.  
 **Task:** Progressive Difficulty & spend-blind Challenge Director  
 **Future builder branch:** `havenline/T13-challenge-director`  
 **Dependency:** T12  
@@ -10,7 +10,7 @@
 
 T13 owns the decision layer that converts approved progression context plus gameplay-performance history into a bounded challenge profile. Normal-player decisions must be completely spend-blind. T13 does not own enemy/weapon progression, billing, VIP, store logic, telemetry backend infrastructure, or T12 progression state.
 
-This document is an implementation handoff, not permission to build runtime code early. At activation, every external interface and hash must be rebound to the exact current integration head before implementation starts.
+This document authorizes a dependency-safe isolated preactivation build under the canonical `preactivation_candidate.py` gate. At activation, every external interface and hash must still be rebound to the exact current integration head before integration or approval.
 
 ## 2. Required runtime files after activation
 
@@ -20,7 +20,7 @@ This document is an implementation handoff, not permission to build runtime code
 - `HavenlineGodot/tests/test_task13_integration.gd`
 - `HavenlineGodot/tests/capture_task13_challenge.gd`
 
-No runtime file above may be created or modified while T13 is dependency-locked.
+These runtime files may be created/modified only on the isolated preactivation builder branch while T13 is dependency-locked. They may not be integrated, used to claim ASSIGNED/INTEGRATION_READY, or treated as approved until T12 closes and activation reconciliation passes.
 
 ## 3. Input boundary
 
@@ -163,7 +163,7 @@ Acceptance evidence must make spend blindness inspectable without exposing priva
 
 ## 11. Activation-time rebind checklist
 
-Before any T13 runtime code is created:
+Before any T13 runtime code is integrated or promoted beyond `BUILT_PENDING_DEPENDENCY`:
 
 1. Confirm T12 is APPROVED/integrated in graph, registry, and task gates.
 2. Confirm T12 active path ownership is released as required.

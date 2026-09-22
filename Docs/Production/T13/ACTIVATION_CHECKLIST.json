@@ -4,9 +4,9 @@
   "task_name": "Progressive Difficulty & spend-blind Challenge Director",
   "preparation_status": "PREPARED_GOVERNANCE_ONLY",
   "runtime_status": "LOCKED",
-  "prepared_branch": "havenline/governance-t13-preactivation-sync",
+  "prepared_branch": "codex/havenline-sequential-task-01",
   "prepared_from_branch": "codex/havenline-sequential-task-01",
-  "prepared_from_commit": "6db1207b2b8725cb4591d4a55670aa48eeb2c3fb",
+  "prepared_from_commit": "3c990b7e495573f8aed866dc7357fe3bbb88a504",
   "future_builder_branch": "havenline/T13-challenge-director",
   "future_owner": "challenge-director-builder",
   "dependencies": [
@@ -67,6 +67,21 @@
     "Require the existing isolated candidate guard and BUILDING_ISOLATED graduation package to PASS before runtime/data expands."
   ],
   "claim_template": "python3 tools/havenline/production/workstream.py claim T13 --owner challenge-director-builder --branch havenline/T13-challenge-director --base <EXACT_CURRENT_INTEGRATION_HEAD> --owned-alias @reservation:T13 --status ASSIGNED",
-  "runtime_build_allowed_before_activation": false,
-  "integration_mode": "serial integration-owner controlled"
+  "runtime_build_allowed_before_activation": true,
+  "integration_mode": "serial integration-owner controlled",
+  "isolated_build_allowed_before_all_dependencies_approved": true,
+  "built_pending_dependency_allowed": true,
+  "integration_allowed_before_activation": false,
+  "maximum_state_before_dependency_approval": "BUILT_PENDING_DEPENDENCY",
+  "preactivation_build_policy": {
+    "mode": "isolated_build_pending_dependency",
+    "validator": "tools/havenline/production/preactivation_candidate.py",
+    "builder_branch": "havenline/T13-challenge-director",
+    "maximum_state": "BUILT_PENDING_DEPENDENCY",
+    "may_claim_assigned": false,
+    "may_claim_integration_ready": false,
+    "may_integrate": false,
+    "may_approve": false,
+    "upstream_contract_must_match_prepared_binding": true
+  }
 }
