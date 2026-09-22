@@ -66,6 +66,15 @@ func run() -> void:
 	}
 	check("exact T10 preview selects authored after form", view.show_preview(preview) and view.descriptor().lifecycle == "preview")
 	check("preview shows delivered-stock destination and automatic behavior", view.descriptor().delivered_stock_flow_visible and view.descriptor().auto_build_guidance.contains("delivered stock applies automatically"))
+	var preview_footing := view.get_node_or_null("CampShelterFoundation/StoneFooting") as MeshInstance3D
+	var preview_deck := view.get_node_or_null("CampShelterFoundation/Deck") as MeshInstance3D
+	var preview_post := view.get_node_or_null("CampShelterFoundation/PostNW") as MeshInstance3D
+	var preview_beam := view.get_node_or_null("CampShelterFoundation/BeamBack") as MeshInstance3D
+	check("foundation preview base stays opaque against the world floor", preview_footing != null and preview_deck != null and is_zero_approx(preview_footing.transparency) and is_zero_approx(preview_deck.transparency))
+	check("foundation preview frame remains visibly provisional", preview_post != null and preview_post.transparency > 0.0)
+	var post_bottom := preview_post.position.y - preview_post.scale.y * 0.5 if preview_post != null else -999.0
+	var beam_top := preview_beam.position.y + preview_beam.scale.y * 0.5 if preview_beam != null else 999.0
+	check("foundation posts terminate exactly on perimeter beams", preview_beam != null and is_equal_approx(post_bottom, beam_top), {"post_bottom":post_bottom, "beam_top":beam_top})
 	var wrong_preview := preview.duplicate(true)
 	wrong_preview.presentation_key = "forged"
 	check("wrong T10 presentation identity fails closed", not view.show_preview(wrong_preview))

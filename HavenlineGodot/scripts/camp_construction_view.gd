@@ -302,6 +302,15 @@ func _show_scene(path: String, alpha: float) -> bool:
 		root.free()
 		return false
 	_set_mesh_alpha(root, alpha)
+	# Foundation preview keeps the completed footing/deck visually solid while the
+	# not-yet-accepted frame remains translucent. This prevents the review/world
+	# floor from bleeding through the load-bearing base differently by camera
+	# angle, without changing T10 authority or the completed authored form.
+	if alpha > 0.0 and construction_id == "camp_shelter_foundation":
+		for base_name in ["StoneFooting", "Deck"]:
+			var base_mesh := root.get_node_or_null(base_name) as MeshInstance3D
+			if base_mesh != null:
+				base_mesh.transparency = 0.0
 	if _authored_root != null and is_instance_valid(_authored_root):
 		_authored_root.free()
 	_authored_root = root
