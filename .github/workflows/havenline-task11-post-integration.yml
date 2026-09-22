@@ -1,0 +1,82 @@
+name: Havenline T11 post-integration regression
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - 'HavenlineGodot/assets/camp_construction_v1/**'
+      - 'HavenlineGodot/scripts/camp_construction_view.gd'
+      - 'HavenlineGodot/data/camp_construction_recipes.json'
+      - 'HavenlineGodot/tests/test_task11_camp_construction.gd'
+      - 'HavenlineGodot/tests/test_task11_integration.gd'
+      - 'HavenlineGodot/tests/capture_task11_camp_construction.gd'
+      - 'tools/havenline/task11/**'
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-t11-post-integration
+  cancel-in-progress: false
+
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Validate integrated authority and scope
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/authority_consistency.py
+          python3 tools/havenline/production/validate_integration_scope.py --base HEAD^ --head HEAD > t11-integration-scope.json
+          python3 - <<'PY'
+          import json
+          r=json.load(open('t11-integration-scope.json'))
+          assert r['passed'] and r['task_id']=='T11' and r['task_status']=='INTEGRATION_READY',r
+          PY
+      - name: Prepare pinned Godot
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/engine" t11-post-integration
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+      - name: Run fresh impacted regression
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/bake_outpost_audio.py > t11-post-integration/audio-fixture.json
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > t11-post-integration/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > t11-post-integration/motion-fixture.log 2>&1
+          suites=(test_task09_harvesting test_task09_integration test_task10_world_transform test_task10_integration test_task11_camp_construction test_task11_integration)
+          printf '%s\n' "${suites[@]}" > t11-post-integration/required-suites.txt
+          for suite in "${suites[@]}"; do
+            timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "t11-post-integration/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' t11-post-integration/*.log; then exit 1; fi
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          rows=[]
+          for suite in Path('t11-post-integration/required-suites.txt').read_text().splitlines():
+              reports=[json.loads(x) for x in (Path('t11-post-integration')/(suite+'.log')).read_text().splitlines() if x.startswith('{')]
+              assert reports,suite
+              report=reports[-1]
+              assert report.get('passed') is True and not report.get('failures'),(suite,report.get('failures'))
+              rows.append({'suite':suite,'checks':int(report.get('check_count',len(report.get('checks',[])))),'passed':True})
+          out={'schema_version':1,'task_id':'T11','integrated_source':os.environ['GITHUB_SHA'],'suite_count':len(rows),'total_checks':sum(x['checks'] for x in rows),'suites':rows,'passed':True,'task_approved':False}
+          Path('t11-post-integration/result.json').write_text(json.dumps(out,indent=2)+'\n')
+          print(json.dumps(out,indent=2))
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task11-post-integration-${{ github.sha }}
+          path: |
+            t11-post-integration/
+            t11-integration-scope.json
+          retention-days: 30
+          if-no-files-found: error

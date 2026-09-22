@@ -102,15 +102,19 @@
   },
   "active_task": "T11",
   "active_task_title": "Camp construction and visual upgrade system",
-  "active_status": "ASSIGNED",
+  "active_status": "INTEGRATION_READY",
   "active_frozen_scope": "Docs/Production/T11/FROZEN_SCOPE.md",
   "active_task_packet": "Docs/Production/T11/TASK_PACKET.md",
   "active_base_integration_commit": "f558b9b162b349d1ee127e65edf967f6d28dfed0",
-  "active_candidate_source": null,
-  "active_candidate_run": null,
-  "active_tests": null,
+  "active_candidate_source": "6d53da9d61af743a1d334d0b7bbfed14ef3a569f",
+  "active_candidate_run": 35737944230,
+  "active_tests": {
+    "suites": 6,
+    "checks": 594,
+    "result": "PASS"
+  },
   "active_evidence": "Docs/Production/Evidence/T11/",
-  "active_critic_state": "PENDING_BUILD_AND_INDEPENDENT_REVIEW",
+  "active_critic_state": "PASS_C2_C3_C4_C6_READY_FOR_INTEGRATION",
   "task04_plus_runtime_locked": false,
   "task05_plus_runtime_locked": false,
   "task06_plus_runtime_locked": false,
@@ -349,10 +353,10 @@
     {
       "task": "T11",
       "branch": "havenline/T11-camp-construction",
-      "state": "ASSIGNED",
+      "state": "INTEGRATION_READY",
       "owner": "camp-construction-builder",
       "base_commit": "f558b9b162b349d1ee127e65edf967f6d28dfed0",
-      "reason": "T05 and T10 are APPROVED; T11 is synchronized to the V3.2 control plane and ownership is bound to the exact assignment integration source. Runtime construction remains blocked until the BUILDING_ISOLATED graduation package and preflight pass."
+      "reason": "Exact isolated source 6d53da9d61af743a1d334d0b7bbfed14ef3a569f passed 6 suites / 594 checks and strict C2/C3/C4/C6 final review; post-integration regression still required before approval."
     }
   ],
   "whole_game_approved": false,
