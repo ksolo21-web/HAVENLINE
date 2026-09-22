@@ -151,7 +151,7 @@ static func validate_policy(candidate: Dictionary) -> bool:
 	if not _valid_identifier(candidate.get("policy_id")) or not _valid_identifier(candidate.get("policy_version")):
 		return false
 	var bands: Variant = candidate.get("bands")
-	if not (bands is Array) or bands.is_empty() or bands.size() > 8:
+	if not (bands is Array) or bands.size() != 10:
 		return false
 	var ids := {}
 	var previous_threat := -INF
@@ -184,7 +184,7 @@ static func validate_policy(candidate: Dictionary) -> bool:
 	var normal: Variant = candidate.get("normal_profile")
 	if not (normal is Dictionary) or normal.get("profile_id") != PROFILE_NORMAL:
 		return false
-	if not _integer_number(normal.get("level_band_size"), 1, 100):
+	if not _integer_number(normal.get("level_band_size"), 10, 10):
 		return false
 	if not _integer_number(normal.get("minimum_band_index"), 0, bands.size() - 1):
 		return false
