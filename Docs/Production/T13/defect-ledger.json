@@ -13,6 +13,25 @@
     "Dependency blockers are expected gating conditions, not preparation defects.",
     "Any stale interface/path collision discovered at activation reopens preparation.",
     "Preactivation package reconciled to authoritative integration head 6db1207b2b8725cb4591d4a55670aa48eeb2c3fb; no T11/T12 runtime files modified.",
-    "Current blocker is lifecycle only: T12 must become APPROVED and integrated before T13 runtime activation."
+    "Current blocker is lifecycle only: T12 must become APPROVED and integrated before T13 runtime activation.",
+    "Resolved preparation defects remain recorded for failure-learning; only unresolved_preparation_defects blocks readiness."
+  ],
+  "resolved_preparation_defects": [
+    {
+      "id": "T13-PREP-001",
+      "defect": "Proposed T13-local GitHub Actions workflow contained an invalid YAML heredoc indentation boundary.",
+      "evidence": "GitHub Actions run 35709301617 completed failure with zero jobs, then local syntax diagnosis identified the unindented embedded Python block.",
+      "root_cause": "A shell heredoc body escaped the YAML run-block indentation.",
+      "repair": "Replaced the heredoc, then removed the entire T13-local workflow when canonical governance ownership review showed it was unnecessary.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "T13-PREP-002",
+      "defect": "Initial candidate attempted to add T13-local tool/workflow paths that were not authorized by base governance ownership.",
+      "evidence": "Production governance run 35709460648 rejected .github/workflows/havenline-task13-preactivation.yml and tools/havenline/task13/* while accepting all eight Docs/Production/T13 files.",
+      "root_cause": "The candidate tried to self-authorize new governance surfaces instead of reusing already-integrated canonical production controls.",
+      "repair": "Removed all three self-authored governance files and narrowed planned T13 ownership to exactly five shipping/test files plus Docs/Production/T13/**.",
+      "status": "RESOLVED"
+    }
   ]
 }
