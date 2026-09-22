@@ -129,8 +129,9 @@ def initialize_packet(
         raise ValueError("initializer may not pre-pass C6")
     if any(row.get("status") != "PENDING" or row.get("minimum_mandatory_dimension_score") is not None for row in packet["critic_reviews"].values()):
         raise ValueError("initializer may not pre-pass or pre-score critics")
-    if any(value is not None for value in packet["gates"].values()):
-        raise ValueError("initializer may not pre-pass G1-G14")
+    for gate, row in packet["gates"].items():
+        if not isinstance(row, dict) or row.get("status") != "PENDING" or row.get("evidence_ref") != "":
+            raise ValueError(f"initializer may not pre-pass or pre-evidence gate {gate}")
     if packet["defects"].get("unresolved_mandatory") != []:
         raise ValueError("initializer template must begin with empty unresolved-defect ledger")
     return packet
