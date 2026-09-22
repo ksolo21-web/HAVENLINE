@@ -61,6 +61,8 @@ def validate_packet(data: dict[str, Any], require_resolved: bool = False) -> dic
         errors.append("task_id must be T12")
     if not require_resolved and data.get("status") != "PREPARATION_ONLY_CANDIDATE_EVIDENCE_TEMPLATE":
         errors.append("template status must remain PREPARATION_ONLY_CANDIDATE_EVIDENCE_TEMPLATE")
+    if require_resolved and data.get("status") != "CANDIDATE_EVIDENCE_COMPLETE":
+        errors.append("resolved candidate packet status must be CANDIDATE_EVIDENCE_COMPLETE")
 
     source = data.get("exact_source")
     if not isinstance(source, dict):
