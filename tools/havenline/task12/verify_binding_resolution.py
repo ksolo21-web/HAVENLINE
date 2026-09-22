@@ -266,7 +266,13 @@ def validate_resolution(
     if resolution.get("promotion_allowed") is not expected_promotion:
         errors.append(f"promotion_allowed must be {expected_promotion} in this mode")
 
-    return {"passed": not errors, "mode": "require_resolved" if require_resolved else "preactivation_blank", "verified_ids": verified_ids, "errors": errors}
+    return {
+        "passed": not errors,
+        "mode": "require_resolved" if require_resolved else "preactivation_blank",
+        "activation_head": resolved_head if require_resolved else None,
+        "verified_ids": verified_ids,
+        "errors": errors,
+    }
 
 
 def main() -> None:
