@@ -86,9 +86,10 @@
     "T07",
     "T08",
     "T09",
-    "T10"
+    "T10",
+    "T11"
   ],
-  "approved_task_count": 10,
+  "approved_task_count": 11,
   "legacy_approval_policy": {
     "T01_T02_not_retroactively_revoked": true
   },
@@ -100,21 +101,17 @@
     "all_applicable_gates_must_pass": true,
     "no_unresolved_mandatory_defects": true
   },
-  "active_task": "T11",
-  "active_task_title": "Camp construction and visual upgrade system",
-  "active_status": "INTEGRATION_READY",
-  "active_frozen_scope": "Docs/Production/T11/FROZEN_SCOPE.md",
-  "active_task_packet": "Docs/Production/T11/TASK_PACKET.md",
-  "active_base_integration_commit": "f558b9b162b349d1ee127e65edf967f6d28dfed0",
-  "active_candidate_source": "6d53da9d61af743a1d334d0b7bbfed14ef3a569f",
-  "active_candidate_run": 35737944230,
-  "active_tests": {
-    "suites": 6,
-    "checks": 594,
-    "result": "PASS"
-  },
-  "active_evidence": "Docs/Production/Evidence/T11/",
-  "active_critic_state": "PASS_C2_C3_C4_C6_READY_FOR_INTEGRATION",
+  "active_task": null,
+  "active_task_title": null,
+  "active_status": null,
+  "active_frozen_scope": null,
+  "active_task_packet": null,
+  "active_base_integration_commit": null,
+  "active_candidate_source": null,
+  "active_candidate_run": null,
+  "active_tests": null,
+  "active_evidence": null,
+  "active_critic_state": null,
   "task04_plus_runtime_locked": false,
   "task05_plus_runtime_locked": false,
   "task06_plus_runtime_locked": false,
@@ -291,6 +288,23 @@
       "artifact_id": 10644792259,
       "record": "Docs/Production/T10/verified-completion.json",
       "later_regression_reopens_task": true
+    },
+    "T11": {
+      "status": "APPROVED",
+      "accepted_source": "6d53da9d61af743a1d334d0b7bbfed14ef3a569f",
+      "integrated_source": "4059e159cb2f47a5ff2e713e60d971132da6c421",
+      "score": 9.8671,
+      "minimum_mandatory_dimension_score": 9.8671,
+      "gate_operator": "> 9.0",
+      "visual_status": "PASS",
+      "isolated_review_run": 35737944230,
+      "final_review_artifact_id": 10701196469,
+      "integrated_evidence_run": 35749910990,
+      "artifact_id": 10704359204,
+      "governance_run": 35750333232,
+      "safeguards_run": 35750333270,
+      "record": "Docs/Production/T11/verified-completion.json",
+      "later_regression_reopens_task": true
     }
   },
   "next_post_t03_wave": [
@@ -353,10 +367,10 @@
     {
       "task": "T11",
       "branch": "havenline/T11-camp-construction",
-      "state": "INTEGRATION_READY",
+      "state": "APPROVED",
       "owner": "camp-construction-builder",
       "base_commit": "f558b9b162b349d1ee127e65edf967f6d28dfed0",
-      "reason": "Exact isolated source 6d53da9d61af743a1d334d0b7bbfed14ef3a569f passed 6 suites / 594 checks and strict C2/C3/C4/C6 final review; post-integration regression still required before approval."
+      "reason": "Exact isolated source 6d53da9d61af743a1d334d0b7bbfed14ef3a569f integrated at 4059e159cb2f47a5ff2e713e60d971132da6c421; 6 suites / 594 checks passed both isolated and post-integration; C2/C3/C4=10.0, C6=9.8671, zero unresolved defects, governance/safeguards PASS."
     }
   ],
   "whole_game_approved": false,

@@ -465,7 +465,7 @@
       "task_id": "T11",
       "task_name": "Camp construction and visual upgrade system",
       "workstream_id": "T11-camp-construction-builder",
-      "status": "INTEGRATION_READY",
+      "status": "APPROVED",
       "owner": "camp-construction-builder",
       "branch": "havenline/T11-camp-construction",
       "base_commit": "f558b9b162b349d1ee127e65edf967f6d28dfed0",
@@ -482,12 +482,21 @@
         "@reservation:T10"
       ],
       "candidate_commit": "6d53da9d61af743a1d334d0b7bbfed14ef3a569f",
-      "candidate_hash_or_artifact": "isolated-source:6d53da9d61af743a1d334d0b7bbfed14ef3a569f; candidate-run:35737944230; final-review-artifact:10701196469",
+      "candidate_hash_or_artifact": "isolated-source:6d53da9d61af743a1d334d0b7bbfed14ef3a569f; isolated-run:35737944230; final-review-artifact:10701196469; integrated-source:4059e159cb2f47a5ff2e713e60d971132da6c421; post-integration-run:35749910990; post-integration-artifact:10704359204; governance-run:35750333232; safeguards-run:35750333270",
       "tests": {
-        "suites": 6,
-        "checks": 594,
-        "result": "PASS",
-        "candidate_run": 35737944230
+        "isolated": {
+          "suites": 6,
+          "checks": 594,
+          "result": "PASS",
+          "run_id": 35737944230
+        },
+        "post_integration": {
+          "suites": 6,
+          "checks": 594,
+          "result": "PASS",
+          "run_id": 35749910990,
+          "integrated_source": "4059e159cb2f47a5ff2e713e60d971132da6c421"
+        }
       },
       "evidence_path": "Docs/Production/Evidence/T11/",
       "critic_requirements": [
@@ -502,10 +511,10 @@
         "C4": "PASS; minimum mandatory dimension 10.000; zero defects",
         "C6": "PASS; minimum mandatory dimension 9.8671; zero defects"
       },
-      "integration_status": "INTEGRATION_READY; exact isolated source 6d53da9d61af743a1d334d0b7bbfed14ef3a569f passed 6 suites / 594 checks, fresh source-bound C2/C3/C4/C6 with strict >9.0 minima and zero unresolved defects",
+      "integration_status": "APPROVED; exact isolated source 6d53da9d61af743a1d334d0b7bbfed14ef3a569f integrated at 4059e159cb2f47a5ff2e713e60d971132da6c421; fresh post-integration 6 suites / 594 checks passed; repository governance and critic safeguards passed",
       "known_blockers": [],
-      "next_action": "Merge exact reviewed T11 candidate into canonical integration branch, then require fresh post-integration impacted regression before APPROVED.",
-      "status_updated_at": "2026-09-22T15:46:00Z",
+      "next_action": "Preserve T11 approved implementation/evidence; T12 may proceed through its separate activation checklist.",
+      "status_updated_at": "2026-09-22T15:55:31Z",
       "assignment_integration_commit": "f558b9b162b349d1ee127e65edf967f6d28dfed0",
       "assignment_branch_head": "f558b9b162b349d1ee127e65edf967f6d28dfed0",
       "assignment_lineage_state": "SYNCHRONIZED"
@@ -515,6 +524,6 @@
     "T03 completed as the final legacy task allowed to finish on the integration branch because its runtime changes were already integrated before this migration.",
     "All future runtime builders use isolated branches and cannot approve themselves.",
     "QA-GOV and the C1-C11 execution safeguards are integrated and APPROVED; future work must preserve them.",
-    "T03-T10 are APPROVED. T11 is PREPARED on havenline/T11-camp-construction; T12+ remains dependency-gated."
+    "T03-T11 are APPROVED. T12 remains dependency-gated until separate activation completes."
   ]
 }
