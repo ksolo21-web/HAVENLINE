@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_8A_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_VISUAL_CRITICS",
+  "status": "ITERATION_8B_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_VISUAL_CRITICS",
   "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -31,11 +31,11 @@
     "T03 mechanical regression and exact T01/T02 preservation",
     "primitive/material audit zero findings",
     "fresh multi-angle and native-4K T03 captures",
-    "fresh C1/C2 against iteration-8 exact pixels",
+    "fresh C1/C2 against iteration-8B exact pixels",
     "explicit user visual signoff"
   ],
   "approval": false,
-  "review_repair_iteration": 8,
+  "review_repair_iteration": "8B",
   "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
   "iteration_1_findings": [
     "Fence read as round log barricades rather than the reference's dense pointed palisade.",
@@ -85,5 +85,16 @@
     "repair": "Shorten visual-only river leaves from 1.40 to 1.30 while preserving the 0.72-radian readable face angle and 0.24 hinge overlap.",
     "authority_preserved": "camp_boundary.gd collision/opening/route constants remain unchanged.",
     "expected_east_clear_width": "~3.221 units, above the locked 3.20 minimum."
+  },
+  "iteration_8a_disposition": "REJECTED_BY_INTERNAL_PIXEL_PREFLIGHT_SUPPORT_RAIL_ARTIFACT",
+  "iteration_8a_findings": [
+    "Exact-source fence closeup still showed the dark structural support as a continuous front-facing horizontal stripe despite the earlier height raise.",
+    "The reference palisade is dominated by vertical snow-capped pickets; a strong exposed horizontal rail materially weakens that read."
+  ],
+  "iteration_8b_repair": {
+    "failure": "Support rail remained outside the picket face and read as a continuous ground-line/bar across the palisade.",
+    "repair": "Translate the existing support rail 0.11 local units inward on Z so it is fully contained inside the picket depth; keep its height, material, faces and triangle count unchanged.",
+    "performance_domain": "No triangle/material/shader/draw-batch/physics/animation/NPC increase; corrected iteration-6 C6 proof remains preserved.",
+    "authority_preserved": "No camp_boundary.gd, collision, route, gate-width, T01 or T02 change."
   }
 }
