@@ -1,0 +1,178 @@
+name: Havenline T03 iteration-6 critic closeout
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task03-iteration6-critics.yml'
+      - 'tools/havenline/production/review_t03_repair_visual.py'
+      - 'tools/havenline/production/review_t03_repair_c6.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+env:
+  CANDIDATE: '725bc8e088818264f9d28a881fdbff8ffb762161'
+  BASELINE: '97b615c38b1dbec1c8a6d728c069bfa66c4eece8'
+  EVIDENCE_RUN: '35838360434'
+  EVIDENCE_ARTIFACT: 'havenline-t03-reference-repair-35838360434'
+
+jobs:
+  visual:
+    strategy:
+      fail-fast: false
+      matrix:
+        critic: [C1, C2]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prove critic tooling did not change candidate runtime
+        run: git diff --exit-code "$CANDIDATE" HEAD -- HavenlineGodot
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.EVIDENCE_RUN }}
+          name: ${{ env.EVIDENCE_ARTIFACT }}
+          path: task03-evidence
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Execute independent source-bound critic
+        env:
+          EXPECTED_SOURCE: ${{ env.CANDIDATE }}
+          CRITIC_ID: ${{ matrix.critic }}
+          EVIDENCE_ROOT: task03-evidence
+          OUT_DIR: task03-${{ matrix.critic }}
+        run: python3 -u tools/havenline/production/review_t03_repair_visual.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-t03-${{ matrix.critic }}-${{ github.run_id }}
+          path: task03-${{ matrix.critic }}/
+          retention-days: 30
+          if-no-files-found: error
+
+  c6:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prove critic tooling did not change candidate runtime
+        run: git diff --exit-code "$CANDIDATE" HEAD -- HavenlineGodot
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.EVIDENCE_RUN }}
+          name: ${{ env.EVIDENCE_ARTIFACT }}
+          path: task03-evidence
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - name: Prepare pinned Godot and same-runner benchmark worktrees
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine" "$RUNNER_TEMP/base" "$RUNNER_TEMP/candidate" t03-c6/base t03-c6/candidate
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          git worktree add --detach "$RUNNER_TEMP/base" "$BASELINE"
+          git worktree add --detach "$RUNNER_TEMP/candidate" "$CANDIDATE"
+          for root in "$RUNNER_TEMP/base" "$RUNNER_TEMP/candidate"; do
+            (cd "$root" && python3 tools/havenline/bake_outpost_audio.py >/dev/null)
+            timeout 180 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --editor --path "$root/HavenlineGodot" --import --quit >/dev/null 2>&1
+            timeout 120 "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --headless --path "$root/HavenlineGodot" --script res://tools/bake_crew_motion.gd >/dev/null 2>&1
+          done
+      - name: Benchmark baseline and candidate on the same runner
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          timeout 240 xvfb-run -a -s '-screen 0 3840x2160x24' "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --path "$RUNNER_TEMP/base/HavenlineGodot" --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --script res://tests/benchmark_environment.gd -- --benchmark-seconds=15 --benchmark-warmup=2 --benchmark-output="$PWD/t03-c6/base" > t03-c6/base.log 2>&1
+          timeout 240 xvfb-run -a -s '-screen 0 3840x2160x24' "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --path "$RUNNER_TEMP/candidate/HavenlineGodot" --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --script res://tests/benchmark_environment.gd -- --benchmark-seconds=15 --benchmark-warmup=2 --benchmark-output="$PWD/t03-c6/candidate" > t03-c6/candidate.log 2>&1
+          test -f t03-c6/base/benchmark.json
+          test -f t03-c6/candidate/benchmark.json
+      - name: Execute fresh C6 incremental critic
+        env:
+          EXPECTED_SOURCE: ${{ env.CANDIDATE }}
+          BASELINE_SOURCE: ${{ env.BASELINE }}
+          EVIDENCE_ROOT: task03-evidence
+          OUT_DIR: task03-C6
+          BASELINE_BENCHMARK: t03-c6/base/benchmark.json
+          CANDIDATE_BENCHMARK: t03-c6/candidate/benchmark.json
+        run: python3 -u tools/havenline/production/review_t03_repair_c6.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-t03-C6-${{ github.run_id }}
+          path: |
+            task03-C6/
+            t03-c6/
+          retention-days: 30
+          if-no-files-found: error
+
+  final-gate:
+    needs: [visual, c6]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-t03-C*-${{ github.run_id }}
+          path: reviews
+      - name: Enforce T03 exact style lock plus C2/C6
+        env:
+          CANDIDATE: ${{ env.CANDIDATE }}
+        run: |
+          python3 - <<'PY'
+          import json,math,os,pathlib
+          root=pathlib.Path('reviews');candidate=os.environ['CANDIDATE'];errors=[];records={}
+          for cid in ('C1','C2','C6'):
+              paths=list(root.rglob('critic-record.json'))
+              matches=[]
+              for p in paths:
+                  d=json.loads(p.read_text())
+                  if d.get('critic_id')==cid:matches.append((p,d))
+              if len(matches)!=1:
+                  errors.append(f'{cid} record count {len(matches)}');continue
+              p,d=matches[0];records[cid]=d
+              if d.get('candidate_hash')!=candidate:errors.append(cid+' candidate mismatch')
+              if d.get('passed') is not True:errors.append(cid+' marked failed')
+              if d.get('defects')!=[]:errors.append(cid+' unresolved defects')
+              if d.get('coverage_complete') is not True:errors.append(cid+' incomplete coverage')
+              if d.get('confidence') not in ('medium','high'):errors.append(cid+' confidence')
+          if 'C1' in records:
+              s=records['C1'].get('scores',{})
+              if s.get('reference_fidelity')!=10.0:errors.append('C1 reference_fidelity must equal 10.0')
+              if s.get('visual_language')!=10.0:errors.append('C1 visual_language must equal 10.0')
+              if not isinstance(s.get('cross_view_consistency'),(int,float)) or s['cross_view_consistency']<=9.0:errors.append('C1 cross_view_consistency <=9')
+          if 'C2' in records:
+              if any(isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) or v<=9.0 for v in records['C2'].get('scores',{}).values()):errors.append('C2 dimension <=9')
+          if 'C6' in records:
+              if any(isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) or v<=9.0 for v in records['C6'].get('scores',{}).values()):errors.append('C6 dimension <=9')
+          result={'task_id':'T03','candidate':candidate,'passed':not errors,'errors':errors,'records':{k:{'scores':v.get('scores'),'defects':v.get('defects'),'confidence':v.get('confidence'),'passed':v.get('passed')} for k,v in records.items()},'user_visual_signoff_required':True,'task_approved':False}
+          pathlib.Path('gate-report').mkdir();pathlib.Path('gate-report/final-gate.json').write_text(json.dumps(result,indent=2)+'\n')
+          print(json.dumps(result,indent=2))
+          raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-t03-iteration6-final-gate-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# Exact-source critic closeout only. It does not alter candidate runtime or grant user visual approval.
