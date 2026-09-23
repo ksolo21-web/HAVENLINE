@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_8B_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_VISUAL_CRITICS",
+  "status": "ITERATION_8C_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_VISUAL_CRITICS",
   "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -31,11 +31,11 @@
     "T03 mechanical regression and exact T01/T02 preservation",
     "primitive/material audit zero findings",
     "fresh multi-angle and native-4K T03 captures",
-    "fresh C1/C2 against iteration-8B exact pixels",
+    "fresh C1/C2 against iteration-8C exact pixels",
     "explicit user visual signoff"
   ],
   "approval": false,
-  "review_repair_iteration": "8B",
+  "review_repair_iteration": "8C",
   "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
   "iteration_1_findings": [
     "Fence read as round log barricades rather than the reference's dense pointed palisade.",
@@ -96,5 +96,17 @@
     "repair": "Translate the existing support rail 0.11 local units inward on Z so it is fully contained inside the picket depth; keep its height, material, faces and triangle count unchanged.",
     "performance_domain": "No triangle/material/shader/draw-batch/physics/animation/NPC increase; corrected iteration-6 C6 proof remains preserved.",
     "authority_preserved": "No camp_boundary.gd, collision, route, gate-width, T01 or T02 change."
+  },
+  "iteration_8b_disposition": "REJECTED_BY_INTERNAL_PIXEL_PREFLIGHT_SUPPORT_RAIL_STILL_VISIBLE",
+  "iteration_8b_findings": [
+    "The support rail remained visibly continuous through the fence closeup even after depth recession.",
+    "Because the authoritative palisade is visually dominated by vertical snow-capped pickets, the horizontal stripe remained an avoidable reference-fidelity defect."
+  ],
+  "iteration_8c_repair": {
+    "failure": "Exposed horizontal support remained visible as a dark stripe across the palisade.",
+    "repair": "Delete the rail surface entirely from fence_panel.obj: remove 84 rail-only vertices/normals and 28 triangles; preserve all pickets, snow crowns and joins.",
+    "geometry_delta": "668 -> 640 triangles per source fence mesh; monotonic reduction only.",
+    "performance_domain": "No new surfaces, materials, shaders, draw batches, textures, physics, animation or NPC load; corrected C6 pass is preserved by monotonic workload reduction.",
+    "authority_preserved": "No camp_boundary.gd, collision, gate width, route, T01 or T02 change."
   }
 }
