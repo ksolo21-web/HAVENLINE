@@ -23,6 +23,7 @@ const WORK_GATE_POST_HEIGHT_SCALE := 1.00
 const RIVER_GATE_POST_SCALE := 1.05
 const RIVER_GATE_POST_HEIGHT_SCALE := 1.08
 var fence_batch:MultiMeshInstance3D
+var gate_leaf_batch:MultiMeshInstance3D
 var post_batch:MultiMeshInstance3D
 var descriptor:Dictionary={}
 var _boundary_materials:Dictionary={}
@@ -110,9 +111,12 @@ func configure(game):
 		var overlap:=VISUAL_JOIN_OVERLAP
 		if south_corners.any(func(c):return Vector2(panel.a).distance_to(c)<.01 or Vector2(panel.b).distance_to(c)<.01):overlap=VISUAL_CORNER_JOIN_OVERLAP
 		fence_transforms.append(_segment_transform(panel.a,panel.b,overlap))
-	for leaf in Boundary.gate_leaf_specs():fence_transforms.append(_segment_transform(leaf.a,leaf.b,GATE_HINGE_OVERLAP,FENCE_ROOT_SINK,GATE_LEAF_ROOT_SINK,true))
 	fence_batch=Scenery.instances(_mesh(game,"fence_panel"),fence_transforms,self)
-	fence_batch.name="AuthoredTimberFenceAndOpenGateLeaves"
+	fence_batch.name="ReferencePalisadeFence"
+	var gate_leaf_transforms:Array[Transform3D]=[]
+	for leaf in Boundary.gate_leaf_specs():gate_leaf_transforms.append(_segment_transform(leaf.a,leaf.b,GATE_HINGE_OVERLAP,FENCE_ROOT_SINK,GATE_LEAF_ROOT_SINK,true))
+	gate_leaf_batch=Scenery.instances(_mesh(game,"gate_leaf"),gate_leaf_transforms,self)
+	gate_leaf_batch.name="ReferenceFramedOpenGateLeaves"
 	var post_transforms:Array[Transform3D]=[]
 	for gate in Boundary.gate_specs():
 		var tangent:Vector2=gate.tangent
@@ -125,10 +129,11 @@ func configure(game):
 	descriptor=Boundary.evidence()
 	descriptor["fence_visual_instances"]=fence_transforms.size()
 	descriptor["collision_panel_instances"]=Boundary.panel_specs().size()
-	descriptor["open_gate_leaf_instances"]=Boundary.gate_leaf_specs().size()
+	descriptor["open_gate_leaf_instances"]=gate_leaf_transforms.size()
 	descriptor["gate_post_instances"]=post_transforms.size()
 	descriptor["visual_collision_share_panel_authority"]=true
 	descriptor["authored_fence_asset"]="t03_boundary_v2/fence_panel.obj"
+	descriptor["authored_gate_leaf_asset"]="t03_boundary_v2/gate_leaf.obj"
 	descriptor["authored_gate_post_asset"]="t03_boundary_v2/gate_post.obj"
 	descriptor["boundary_asset_manifest"]="t03_boundary_v2/manifest.json"
 	descriptor["runtime_material_family"]="ShaderMaterial/t03_boundary_v2.gdshader"
@@ -153,4 +158,4 @@ func configure(game):
 	descriptor["lane_rut_depth"]=Surface.T03_LANE_RUT_DEPTH
 	descriptor["lane_shoulder_height"]=Surface.T03_LANE_SHOULDER_HEIGHT
 	descriptor["primitive_fence_meshes_created"]=false
-	descriptor["draw_batches"]=2
+	descriptor["draw_batches"]=3

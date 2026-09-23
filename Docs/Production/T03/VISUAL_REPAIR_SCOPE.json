@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_5_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_USER_SIGNOFF",
+  "status": "ITERATION_6_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_USER_SIGNOFF",
   "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -14,11 +14,11 @@
     "save/navigation deterministic proof"
   ],
   "changes": [
-    "Remove timber geometry from the crown entirely so snow owns the full upper collar and point.",
-    "Shift fence/post timber toward the reference's pale warm salmon-brown.",
-    "Reduce material micro-contrast so the fence reads clean and sculpted at gameplay scale.",
-    "Keep tiny threshold warmth insets only.",
-    "Preserve T02 and all T03 route/collision geometry unchanged."
+    "Keep iteration-5 palisade fence and snow-crown treatment unchanged.",
+    "Add a separate authored gate_leaf.obj using solid framed warm timber panels with recessed dark timber and diagonal X bracing.",
+    "Render the twelve open leaves in their own authored batch while preserving the exact leaf transforms, hinges, openings and collision authority.",
+    "Accept one additional static draw batch as a bounded fidelity cost; no textures, NPCs, physics bodies or gameplay rules added.",
+    "Preserve T02, T01, route geometry, gate widths and collision topology."
   ],
   "must_not_change": [
     "HavenlineGodot/scripts/camp_boundary.gd geometry constants",
@@ -37,7 +37,7 @@
     "explicit user visual signoff"
   ],
   "approval": false,
-  "review_repair_iteration": 5,
+  "review_repair_iteration": 6,
   "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
   "iteration_1_findings": [
     "Fence read as round log barricades rather than the reference's dense pointed palisade.",
@@ -63,5 +63,10 @@
     "Exact-source closeups showed a brown stripe cutting through the intended snow crown.",
     "Fence timber remained more saturated orange than the pale salmon/brown reference fence.",
     "Gate threshold warmth was acceptable but should stay even quieter."
+  ],
+  "iteration_5_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
+  "iteration_5_findings": [
+    "Fence silhouette and snow crowns were close to reference, but the open gate leaves were still swung picket-fence panels.",
+    "The authoritative reference uses solid framed warm timber gate leaves with diagonal bracing."
   ]
 }

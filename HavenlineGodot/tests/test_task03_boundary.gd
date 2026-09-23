@@ -124,7 +124,7 @@ func run():
 	for side in game.sim.defenses:
 		zero_progress_hidden=zero_progress_hidden and not game.defense_visuals[side].visible
 	check("Zero-progress defense barricades do not appear as collapsed fence debris",zero_progress_hidden)
-	check("T03 uses authored boundary meshes and custom non-primitive runtime materials",desc.primitive_fence_meshes_created is bool and not desc.primitive_fence_meshes_created and desc.draw_batches==2 and desc.authored_fence_asset=="t03_boundary_v2/fence_panel.obj" and desc.authored_gate_post_asset=="t03_boundary_v2/gate_post.obj" and desc.runtime_material_family=="ShaderMaterial/t03_boundary_v2.gdshader" and desc.imported_standard_materials_active is bool and not desc.imported_standard_materials_active)
+	check("T03 uses authored boundary meshes and custom non-primitive runtime materials",desc.primitive_fence_meshes_created is bool and not desc.primitive_fence_meshes_created and desc.draw_batches==3 and desc.authored_fence_asset=="t03_boundary_v2/fence_panel.obj" and desc.authored_gate_leaf_asset=="t03_boundary_v2/gate_leaf.obj" and desc.authored_gate_post_asset=="t03_boundary_v2/gate_post.obj" and desc.runtime_material_family=="ShaderMaterial/t03_boundary_v2.gdshader" and desc.imported_standard_materials_active is bool and not desc.imported_standard_materials_active)
 	check("Native render scale remains exactly one",game.scene_view.scaling_3d_scale==1.0)
 	check("Approved river still reports mapspan layout",game.outpost_view.evidence(game.sim).river_layout_version==River.LAYOUT_VERSION)
 	game.outpost_audio.stop_all();await create_timer(.35).timeout;game.free();await process_frame
