@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_7_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_VISUAL_CRITICS",
+  "status": "ITERATION_8_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_VISUAL_CRITICS",
   "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -14,11 +14,11 @@
     "save/navigation deterministic proof"
   ],
   "changes": [
-    "Preserve the iteration-6 palisade, snow crowns, authored framed gate-leaf mesh, posts, lanes and river-gate presentation.",
-    "Apply a visual-only 1.30-unit leaf length and 0.70-radian open angle to north-main and west/east work leaves so their framed faces remain readable in gameplay views.",
-    "Increase north/work visual hinge overlap to 0.24 to hide the seam at the post/fence junction.",
-    "Do not change camp_boundary.gd gate/collision constants, six opening widths, routes, T02, draw-batch count, materials, textures, physics, animation or NPC state.",
-    "Invalidate only C1/C2 visual evidence; preserve the corrected iteration-6 C6 pass."
+    "Preserve iteration-7 north/work gate transforms, lane treatment, snow-crown geometry/materials, T02, and all authoritative collision/route constants.",
+    "Use visual-only river leaves at 1.40 units and 0.72 radians with 0.24 hinge overlap; keep actual crossing/collision geometry unchanged and explicitly prove visual clear width remains above the 3.20 minimum.",
+    "Raise only the existing recessed timber_dark palisade support rail by 0.32 local units so the 0.40 terrain sink no longer drags it into a visible ground line.",
+    "Increase ordinary fence visual join overlap from 0.10 to 0.18 to close panel-edge daylight seams without changing collision panels.",
+    "Keep fence topology, triangle count, materials, shaders, draw batches, physics, animation and NPC population unchanged; preserve the corrected iteration-6 C6 performance pass."
   ],
   "must_not_change": [
     "HavenlineGodot/scripts/camp_boundary.gd geometry constants",
@@ -28,14 +28,14 @@
   ],
   "required_next_evidence": [
     "Godot import/build pass",
-    "T03 mechanical regression for visual-only authority preservation",
+    "T03 mechanical regression and exact T01/T02 preservation",
     "primitive/material audit zero findings",
-    "affected north/work gate closeups plus gameplay views",
-    "fresh C1/C2 only",
+    "fresh multi-angle and native-4K T03 captures",
+    "fresh C1/C2 against iteration-8 exact pixels",
     "explicit user visual signoff"
   ],
   "approval": false,
-  "review_repair_iteration": 7,
+  "review_repair_iteration": 8,
   "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
   "iteration_1_findings": [
     "Fence read as round log barricades rather than the reference's dense pointed palisade.",
@@ -72,5 +72,12 @@
     "North-main framed leaves were too close to edge-on in normal gate views and could read as missing rather than intentionally open.",
     "West-work gate showed a visible hinge/fence alignment seam in the affected visual group.",
     "C6 passed after correcting its response-contract defect; preserve that performance proof because iteration 7 does not change mesh, material, batch count, physics or population."
+  ],
+  "iteration_7_disposition": "PARTIAL_PASS_TWO_REMAINING_VISUAL_DEFECT_FAMILIES",
+  "iteration_7_findings": [
+    "C1/C2 north-work gates passed after iteration-7 visual re-angle; the edge-on/missing-leaf and hinge seam defects are closed.",
+    "C1 lanes and conditions passed; the earlier dark-asphalt lane finding was critic misattribution to foreign task pads.",
+    "C1 river-gates failed because authoritative-length leaves remained too edge-on/distant to read as intentional framed future-crossing gates.",
+    "C2 palisade failed on visible panel joins and the recessed support rail reading as a ground-line artifact; C1 palisade style itself passed exactly."
   ]
 }

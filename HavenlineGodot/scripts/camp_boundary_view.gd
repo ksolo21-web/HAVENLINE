@@ -10,7 +10,7 @@ const BOUNDARY_ASSET_ROOT := "res://assets/t03_boundary_v2/"
 # at joints on uneven/curved terrain. Collision still uses Boundary.panel_specs()
 # exactly, so openings and gameplay widths do not change.
 const FENCE_ROOT_SINK := 0.40
-const VISUAL_JOIN_OVERLAP := 0.10
+const VISUAL_JOIN_OVERLAP := 0.18
 const VISUAL_CORNER_JOIN_OVERLAP := 0.28
 const GATE_HINGE_OVERLAP := 0.12
 # North/work leaves are a presentation-only readability correction. The
@@ -18,6 +18,12 @@ const GATE_HINGE_OVERLAP := 0.12
 const MAIN_WORK_VISUAL_LEAF_LENGTH := 1.30
 const MAIN_WORK_VISUAL_OPEN_ANGLE := 0.70
 const MAIN_WORK_GATE_HINGE_OVERLAP := 0.24
+# River leaves use the same visual-only presentation rule: keep the authoritative
+# crossing/collision contract, but turn a shorter framed panel toward the camera
+# so the future crossing reads unmistakably as a gate.
+const RIVER_VISUAL_LEAF_LENGTH := 1.40
+const RIVER_VISUAL_OPEN_ANGLE := 0.72
+const RIVER_GATE_VISUAL_HINGE_OVERLAP := 0.24
 const GATE_LEAF_ROOT_SINK := 0.56
 const TERRAIN_SEAT_SAMPLES := 7
 const GATE_POST_ROOT_SINK := 0.40
@@ -109,15 +115,15 @@ func _post_transform(p:Vector2,tangent:Vector2,visual_scale:=1.0,height_scale:=1
 	return Transform3D(basis,Vector3(p.x,Surface.height_at(p)-GATE_POST_ROOT_SINK,p.y))
 
 func _visual_gate_leaf_specs()->Array[Dictionary]:
-	# Keep river leaves on the already-passing authoritative geometry. Only the
-	# north/work presentation is shortened and turned toward normal gameplay
-	# views so the framed X-braced panel reads as a gate instead of an edge/seam.
+	# Collision/opening authority remains in camp_boundary.gd. Presentation-only
+	# leaf lengths/angles keep every framed X-braced panel readable in normal
+	# gameplay views without changing route or collision geometry.
 	var result:Array[Dictionary]=[]
 	for gate in Boundary.gate_specs():
 		var a:Vector2=gate.a;var b:Vector2=gate.b;var tangent:Vector2=gate.tangent;var mid:Vector2=gate.center
 		var inward:=(Boundary.CAMP_CENTER-mid).normalized()
-		var visual_length:=Boundary.RIVER_GATE_LEAF_LENGTH if gate.kind=="river" else MAIN_WORK_VISUAL_LEAF_LENGTH
-		var visual_angle:=Boundary.RIVER_GATE_OPEN_ANGLE if gate.kind=="river" else MAIN_WORK_VISUAL_OPEN_ANGLE
+		var visual_length:=RIVER_VISUAL_LEAF_LENGTH if gate.kind=="river" else MAIN_WORK_VISUAL_LEAF_LENGTH
+		var visual_angle:=RIVER_VISUAL_OPEN_ANGLE if gate.kind=="river" else MAIN_WORK_VISUAL_OPEN_ANGLE
 		var left_dir:=tangent.rotated(visual_angle)
 		if left_dir.dot(inward)<0:left_dir=tangent.rotated(-visual_angle)
 		var right_dir:=(-tangent).rotated(visual_angle)
@@ -138,7 +144,7 @@ func configure(game):
 	fence_batch.name="ReferencePalisadeFence"
 	var gate_leaf_transforms:Array[Transform3D]=[]
 	for leaf in _visual_gate_leaf_specs():
-		var hinge_overlap:=GATE_HINGE_OVERLAP if leaf.kind=="river" else MAIN_WORK_GATE_HINGE_OVERLAP
+		var hinge_overlap:=RIVER_GATE_VISUAL_HINGE_OVERLAP if leaf.kind=="river" else MAIN_WORK_GATE_HINGE_OVERLAP
 		gate_leaf_transforms.append(_segment_transform(leaf.a,leaf.b,hinge_overlap,FENCE_ROOT_SINK,GATE_LEAF_ROOT_SINK,true))
 	gate_leaf_batch=Scenery.instances(_mesh(game,"gate_leaf"),gate_leaf_transforms,self)
 	gate_leaf_batch.name="ReferenceFramedOpenGateLeaves"
@@ -171,7 +177,16 @@ func configure(game):
 	descriptor["main_work_visual_gate_leaf_length"]=MAIN_WORK_VISUAL_LEAF_LENGTH
 	descriptor["main_work_visual_gate_open_angle"]=MAIN_WORK_VISUAL_OPEN_ANGLE
 	descriptor["main_work_gate_hinge_overlap"]=MAIN_WORK_GATE_HINGE_OVERLAP
-	descriptor["river_gate_leaf_visuals_preserve_authoritative_geometry"]=true
+	descriptor["river_visual_gate_leaf_length"]=RIVER_VISUAL_LEAF_LENGTH
+	descriptor["river_visual_gate_open_angle"]=RIVER_VISUAL_OPEN_ANGLE
+	descriptor["river_gate_visual_hinge_overlap"]=RIVER_GATE_VISUAL_HINGE_OVERLAP
+	var river_visual_clear_min:=999.0
+	for gate in Boundary.gate_specs():
+		if gate.kind=="river":
+			river_visual_clear_min=minf(river_visual_clear_min,float(gate.width)-2.0*RIVER_VISUAL_LEAF_LENGTH*cos(RIVER_VISUAL_OPEN_ANGLE))
+	descriptor["river_visual_clear_width_min"]=river_visual_clear_min
+	descriptor["river_visual_clearance_pass"]=river_visual_clear_min>=Boundary.RIVER_VISUAL_CLEARANCE_MIN
+	descriptor["river_gate_leaf_visual_transform_only"]=true
 	descriptor["visual_gate_leaf_transform_only"]=true
 	descriptor["gate_leaf_root_sink"]=GATE_LEAF_ROOT_SINK
 	descriptor["gate_leaf_hinge_sink"]=FENCE_ROOT_SINK
