@@ -1,0 +1,130 @@
+name: Havenline T03 iteration-6 visual critic shards
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task03-iteration6-visual-shards.yml'
+      - 'tools/havenline/production/review_t03_repair_visual_shard_wrapper.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+env:
+  CANDIDATE: '725bc8e088818264f9d28a881fdbff8ffb762161'
+  EVIDENCE_RUN: '35838360434'
+  EVIDENCE_ARTIFACT: 'havenline-t03-reference-repair-35838360434'
+
+jobs:
+  visual-shard:
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        critic: [C1, C2]
+        shard: [0, 1, 2]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prove shard tooling did not change candidate runtime
+        run: git diff --exit-code "$CANDIDATE" HEAD -- HavenlineGodot
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.EVIDENCE_RUN }}
+          name: ${{ env.EVIDENCE_ARTIFACT }}
+          path: task03-evidence
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Execute exact reviewer shard
+        shell: bash
+        env:
+          EXPECTED_SOURCE: ${{ env.CANDIDATE }}
+          CRITIC_ID: ${{ matrix.critic }}
+          EVIDENCE_ROOT: task03-evidence
+          OUT_DIR: task03-${{ matrix.critic }}-shard-${{ matrix.shard }}
+        run: |
+          set -euo pipefail
+          case "${{ matrix.shard }}" in
+            0) export GROUP_FILTER='perimeter,north-side-gates' ;;
+            1) export GROUP_FILTER='river-gates,lanes' ;;
+            2) export GROUP_FILTER='detail-contact,conditions' ;;
+            *) exit 2 ;;
+          esac
+          python3 -u tools/havenline/production/review_t03_repair_visual_shard_wrapper.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-t03-shard-${{ matrix.critic }}-${{ matrix.shard }}-${{ github.run_id }}
+          path: task03-${{ matrix.critic }}-shard-${{ matrix.shard }}/
+          retention-days: 30
+          if-no-files-found: error
+
+  aggregate:
+    needs: visual-shard
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-t03-shard-*-${{ github.run_id }}
+          path: shards
+      - name: Aggregate each critic without averaging
+        env:
+          CANDIDATE: ${{ env.CANDIDATE }}
+        run: |
+          python3 - <<'PY'
+          import json,math,os,pathlib
+          root=pathlib.Path('shards');candidate=os.environ['CANDIDATE'];out=pathlib.Path('aggregate');out.mkdir()
+          group_expected={'perimeter','north-side-gates','river-gates','lanes','detail-contact','conditions'}
+          final={}
+          for cid,dims in {
+              'C1':['reference_fidelity','visual_language','cross_view_consistency'],
+              'C2':['geometry_contact','clipping_seams','intentional_gap_integrity','cross_view_integrity'],
+          }.items():
+              rows=[];records=[]
+              for p in root.rglob('critic-record.json'):
+                  d=json.loads(p.read_text())
+                  if d.get('critic_id')!=cid:continue
+                  records.append(d)
+                  assert d.get('candidate_hash')==candidate,(cid,p,d.get('candidate_hash'))
+                  rows.extend(d.get('groups',[]))
+              groups={r.get('group') for r in rows}
+              errors=[]
+              if len(records)!=3:errors.append(f'{cid} expected 3 shards got {len(records)}')
+              if groups!=group_expected:errors.append(f'{cid} group coverage {sorted(groups)}')
+              scores={k:min((r.get('review',{}).get('scores',{}).get(k,0) for r in rows),default=0) for k in dims}
+              defects=[f"{r.get('group')}: {x}" for r in rows for x in r.get('review',{}).get('defects',[])]
+              if any(r.get('review',{}).get('coverage_complete') is not True for r in rows):errors.append(cid+' incomplete coverage')
+              if any(r.get('review',{}).get('confidence') not in ('medium','high') for r in rows):errors.append(cid+' insufficient confidence')
+              if defects:errors.append(cid+' unresolved defects')
+              if cid=='C1':
+                  if scores['reference_fidelity']!=10.0:errors.append('C1 reference_fidelity !=10')
+                  if scores['visual_language']!=10.0:errors.append('C1 visual_language !=10')
+                  if scores['cross_view_consistency']<=9.0:errors.append('C1 cross_view_consistency <=9')
+              else:
+                  if any(isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) or v<=9.0 for v in scores.values()):errors.append('C2 dimension <=9')
+              record={'task_id':'T03','critic_id':cid,'candidate_hash':candidate,'shard_count':len(records),'group_count':len(rows),'groups':rows,'scores':scores,'defects':defects,'coverage_complete':not any(r.get('review',{}).get('coverage_complete') is not True for r in rows),'confidence':'high' if rows and all(r.get('review',{}).get('confidence')=='high' for r in rows) else 'medium','independent_runtime':True,'no_score_averaging':True,'passed':not errors,'errors':errors}
+              (out/(cid+'-critic-record.json')).write_text(json.dumps(record,indent=2)+'\n')
+              final[cid]=record
+          summary={'task_id':'T03','candidate':candidate,'passed':all(v['passed'] for v in final.values()),'critics':{k:{'scores':v['scores'],'defects':v['defects'],'errors':v['errors'],'passed':v['passed']} for k,v in final.items()}}
+          (out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps(summary,indent=2))
+          raise SystemExit(0 if summary['passed'] else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-t03-visual-aggregate-${{ github.run_id }}
+          path: aggregate/
+          retention-days: 30
+          if-no-files-found: error
+# Execution sharding only. Exact candidate, evidence, model, pixels, prompts and thresholds remain unchanged.
