@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_6_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_USER_SIGNOFF",
+  "status": "ITERATION_7_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_VISUAL_CRITICS",
   "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -14,11 +14,11 @@
     "save/navigation deterministic proof"
   ],
   "changes": [
-    "Keep iteration-5 palisade fence and snow-crown treatment unchanged.",
-    "Add a separate authored gate_leaf.obj using solid framed warm timber panels with recessed dark timber and diagonal X bracing.",
-    "Render the twelve open leaves in their own authored batch while preserving the exact leaf transforms, hinges, openings and collision authority.",
-    "Accept one additional static draw batch as a bounded fidelity cost; no textures, NPCs, physics bodies or gameplay rules added.",
-    "Preserve T02, T01, route geometry, gate widths and collision topology."
+    "Preserve the iteration-6 palisade, snow crowns, authored framed gate-leaf mesh, posts, lanes and river-gate presentation.",
+    "Apply a visual-only 1.30-unit leaf length and 0.70-radian open angle to north-main and west/east work leaves so their framed faces remain readable in gameplay views.",
+    "Increase north/work visual hinge overlap to 0.24 to hide the seam at the post/fence junction.",
+    "Do not change camp_boundary.gd gate/collision constants, six opening widths, routes, T02, draw-batch count, materials, textures, physics, animation or NPC state.",
+    "Invalidate only C1/C2 visual evidence; preserve the corrected iteration-6 C6 pass."
   ],
   "must_not_change": [
     "HavenlineGodot/scripts/camp_boundary.gd geometry constants",
@@ -28,16 +28,14 @@
   ],
   "required_next_evidence": [
     "Godot import/build pass",
-    "T03 mechanical regression",
+    "T03 mechanical regression for visual-only authority preservation",
     "primitive/material audit zero findings",
-    "multi-angle gate/fence closeups",
-    "normal gameplay whole-frame capture",
-    "native 3840x2160 scale-1 captures",
-    "fresh C1/C2/C6 after visual preflight",
+    "affected north/work gate closeups plus gameplay views",
+    "fresh C1/C2 only",
     "explicit user visual signoff"
   ],
   "approval": false,
-  "review_repair_iteration": 6,
+  "review_repair_iteration": 7,
   "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
   "iteration_1_findings": [
     "Fence read as round log barricades rather than the reference's dense pointed palisade.",
@@ -68,5 +66,11 @@
   "iteration_5_findings": [
     "Fence silhouette and snow crowns were close to reference, but the open gate leaves were still swung picket-fence panels.",
     "The authoritative reference uses solid framed warm timber gate leaves with diagonal bracing."
+  ],
+  "iteration_6_disposition": "REJECTED_BY_C1_C2_GATE_READABILITY_REVIEW",
+  "iteration_6_findings": [
+    "North-main framed leaves were too close to edge-on in normal gate views and could read as missing rather than intentionally open.",
+    "West-work gate showed a visible hinge/fence alignment seam in the affected visual group.",
+    "C6 passed after correcting its response-contract defect; preserve that performance proof because iteration 7 does not change mesh, material, batch count, physics or population."
   ]
 }

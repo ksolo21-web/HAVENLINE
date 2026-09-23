@@ -106,6 +106,7 @@ func run():
 	check("Fence visuals and collision use same authoritative panel count",desc.collision_panel_instances==panels.size() and desc.visual_collision_share_panel_authority is bool and desc.visual_collision_share_panel_authority)
 	check("Six gates have twelve authored gate posts and twelve open timber leaves",desc.gate_count==6 and desc.gate_post_instances==12 and desc.open_gate_leaf_instances==12)
 	check("Gate leaves use categorical general and river-specific portal geometry",is_equal_approx(Boundary.NORTH_GATE_HALF,2.15) and is_equal_approx(Boundary.SIDE_GATE_HALF,2.05) and is_equal_approx(Boundary.GATE_LEAF_LENGTH,1.85) and is_equal_approx(Boundary.GATE_OPEN_ANGLE,1.34) and is_equal_approx(Boundary.RIVER_GATE_HALF,2.70) and is_equal_approx(Boundary.RIVER_GATE_LEAF_LENGTH,2.25) and is_equal_approx(Boundary.RIVER_GATE_OPEN_ANGLE,1.13) and is_equal_approx(Boundary.RIVER_LANE_HALF,1.30))
+	check("North and work gate readability correction is visual-only while river leaves preserve authority",is_equal_approx(float(desc.main_work_visual_gate_leaf_length),1.30) and is_equal_approx(float(desc.main_work_visual_gate_open_angle),0.70) and is_equal_approx(float(desc.main_work_gate_hinge_overlap),0.24) and desc.river_gate_leaf_visuals_preserve_authoritative_geometry and desc.visual_gate_leaf_transform_only)
 	var river_authority_ok:=Boundary.river_gate_contracts().size()==3
 	var evidence_ids:Dictionary={}
 	for contract in Boundary.river_gate_contracts():
