@@ -63,16 +63,20 @@ void fragment(){
  float lane_center_distance=max(lane+1.30,0.0);
  float paired_rut=1.-smoothstep(.10,.27,abs(lane_center_distance-.62));
  float rut_breakup=.82+.18*smoothstep(.28,.76,material_noise(p*2.7+vec2(7.1,-4.3)));
- vec3 packed_snow=mix(snow,vec3(.82,.90,.965),.055+.085*compression);
- packed_snow=mix(packed_snow,vec3(.70,.78,.84),paired_rut*lane_mask*rut_breakup*.105);
- packed_snow+=vec3(.012,.014,.016)*(packed_mid-.5);
- vec3 packed_floor=mix(floor,vec3(.72,.43,.30),.035+.060*compression);
- packed_floor=mix(packed_floor,vec3(.58,.32,.22),paired_rut*lane_mask*rut_breakup*.12);
- packed_floor+=vec3(.010,.007,.004)*(packed_mid-.5);
+ // Iteration 9: make traffic wear legible at gameplay scale without adding
+ // a separate path plane or changing the accepted T02 base surface. Snow lanes
+ // compress toward a cool blue-grey packed value; warm-floor lanes deepen
+ // toward salmon-brown. Paired ruts stay narrow and noise-broken.
+ vec3 packed_snow=mix(snow,vec3(.78,.87,.945),.12+.15*compression);
+ packed_snow=mix(packed_snow,vec3(.62,.71,.79),paired_rut*lane_mask*rut_breakup*.17);
+ packed_snow+=vec3(.010,.012,.014)*(packed_mid-.5);
+ vec3 packed_floor=mix(floor,vec3(.68,.40,.285),.075+.095*compression);
+ packed_floor=mix(packed_floor,vec3(.53,.295,.205),paired_rut*lane_mask*rut_breakup*.18);
+ packed_floor+=vec3(.009,.006,.004)*(packed_mid-.5);
  vec3 packed=mix(packed_snow,packed_floor,cleared);
- material=mix(material,packed,lane_mask*.52);
+ material=mix(material,packed,lane_mask*.74);
  float lane_edge=(1.-smoothstep(.08,.30,abs(lane_edge_d)))*smoothstep(-.09,.015,abs(lane_edge_d));
- material=mix(material,material*.965,lane_edge*.14);
+ material=mix(material,material*.955,lane_edge*.19);
 
  float ice=1.-smoothstep(-.12,.035,shore);
  material=mix(material,vec3(.37,.67,.84),ice*.35);

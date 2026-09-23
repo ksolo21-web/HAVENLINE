@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_8C_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_VISUAL_CRITICS",
+  "status": "ITERATION_9_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_FINAL_C1_C2",
   "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -28,14 +28,15 @@
   ],
   "required_next_evidence": [
     "Godot import/build pass",
-    "T03 mechanical regression and exact T01/T02 preservation",
+    "T01/T02 protected-source check",
+    "T01-T03 mechanical regression",
     "primitive/material audit zero findings",
-    "fresh multi-angle and native-4K T03 captures",
-    "fresh C1/C2 against iteration-8C exact pixels",
+    "fresh 47+11 exact-source captures",
+    "final targeted high-resolution C1/C2 boards with intentional-gate attribution and T03-only crops",
     "explicit user visual signoff"
   ],
   "approval": false,
-  "review_repair_iteration": "8C",
+  "review_repair_iteration": 9,
   "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
   "iteration_1_findings": [
     "Fence read as round log barricades rather than the reference's dense pointed palisade.",
@@ -108,5 +109,18 @@
     "geometry_delta": "668 -> 640 triangles per source fence mesh; monotonic reduction only.",
     "performance_domain": "No new surfaces, materials, shaders, draw batches, textures, physics, animation or NPC load; corrected C6 pass is preserved by monotonic workload reduction.",
     "authority_preserved": "No camp_boundary.gd, collision, gate width, route, T01 or T02 change."
+  },
+  "iteration_8c_disposition": "REJECTED_BY_FINAL_C1_C2_WITH_TWO_REAL_DEFECT_FAMILIES_AND_ATTRIBUTION_NOISE",
+  "iteration_8c_findings": [
+    "C1 fence passed exact 10/10 style, but C2 identified real south continuous-panel seam/crown discontinuity.",
+    "C1 and C2 both identified insufficient T03 lane readability/continuity at gameplay scale.",
+    "C2 north/work gates scored 10/10 and C2 river gates passed; conflicting C1 gate omissions are attributed to compressed evidence boards, not deletion of authored gate assets.",
+    "Condition-scene C1 failures were whole-scene attribution noise; C2 conditions passed and exact pixels retain the same T03 material family under lighting changes."
+  ],
+  "iteration_9_repair": {
+    "gate_face_visibility": "Reduce visual-only gate-leaf terrain sinks from 0.40/0.56 to 0.14/0.18 so the existing solid framed X-braced faces are no longer buried. Gate/collision authority remains unchanged.",
+    "lanes": "Strengthen only the existing T03 lane-mask color separation and paired ruts within the accepted T02 surface; no path mesh/plane is added.",
+    "south_fence": "Use symmetric edge crown heights and stronger visual-only south-panel overlap to eliminate repeat-boundary crown jumps/daylight seams.",
+    "performance": "Fence remains 640 triangles; gate mesh/material/batch count unchanged; lane shader instruction topology unchanged (constant/color tuning only). Preserve corrected C6 pass."
   }
 }

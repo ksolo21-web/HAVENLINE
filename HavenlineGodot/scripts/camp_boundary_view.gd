@@ -10,7 +10,8 @@ const BOUNDARY_ASSET_ROOT := "res://assets/t03_boundary_v2/"
 # at joints on uneven/curved terrain. Collision still uses Boundary.panel_specs()
 # exactly, so openings and gameplay widths do not change.
 const FENCE_ROOT_SINK := 0.40
-const VISUAL_JOIN_OVERLAP := 0.18
+const VISUAL_JOIN_OVERLAP := 0.22
+const SOUTH_VISUAL_JOIN_OVERLAP := 0.34
 const VISUAL_CORNER_JOIN_OVERLAP := 0.28
 const GATE_HINGE_OVERLAP := 0.12
 # North/work leaves are a presentation-only readability correction. The
@@ -24,7 +25,8 @@ const MAIN_WORK_GATE_HINGE_OVERLAP := 0.24
 const RIVER_VISUAL_LEAF_LENGTH := 1.30
 const RIVER_VISUAL_OPEN_ANGLE := 0.72
 const RIVER_GATE_VISUAL_HINGE_OVERLAP := 0.24
-const GATE_LEAF_ROOT_SINK := 0.56
+const GATE_LEAF_HINGE_SINK := 0.14
+const GATE_LEAF_ROOT_SINK := 0.18
 const TERRAIN_SEAT_SAMPLES := 7
 const GATE_POST_ROOT_SINK := 0.40
 const MAIN_GATE_POST_SCALE := 1.00
@@ -137,15 +139,15 @@ func configure(game):
 	var fence_transforms:Array[Transform3D]=[]
 	var south_corners:=[Boundary.south_point(-Boundary.SIDE_X),Boundary.south_point(Boundary.SIDE_X)]
 	for panel in Boundary.panel_specs():
-		var overlap:=VISUAL_JOIN_OVERLAP
-		if south_corners.any(func(c):return Vector2(panel.a).distance_to(c)<.01 or Vector2(panel.b).distance_to(c)<.01):overlap=VISUAL_CORNER_JOIN_OVERLAP
+		var overlap:=SOUTH_VISUAL_JOIN_OVERLAP if String(panel.boundary).begins_with("south-") else VISUAL_JOIN_OVERLAP
+		if south_corners.any(func(c):return Vector2(panel.a).distance_to(c)<.01 or Vector2(panel.b).distance_to(c)<.01):overlap=maxf(overlap,VISUAL_CORNER_JOIN_OVERLAP)
 		fence_transforms.append(_segment_transform(panel.a,panel.b,overlap))
 	fence_batch=Scenery.instances(_mesh(game,"fence_panel"),fence_transforms,self)
 	fence_batch.name="ReferencePalisadeFence"
 	var gate_leaf_transforms:Array[Transform3D]=[]
 	for leaf in _visual_gate_leaf_specs():
 		var hinge_overlap:=RIVER_GATE_VISUAL_HINGE_OVERLAP if leaf.kind=="river" else MAIN_WORK_GATE_HINGE_OVERLAP
-		gate_leaf_transforms.append(_segment_transform(leaf.a,leaf.b,hinge_overlap,FENCE_ROOT_SINK,GATE_LEAF_ROOT_SINK,true))
+		gate_leaf_transforms.append(_segment_transform(leaf.a,leaf.b,hinge_overlap,GATE_LEAF_HINGE_SINK,GATE_LEAF_ROOT_SINK,true))
 	gate_leaf_batch=Scenery.instances(_mesh(game,"gate_leaf"),gate_leaf_transforms,self)
 	gate_leaf_batch.name="ReferenceFramedOpenGateLeaves"
 	var post_transforms:Array[Transform3D]=[]
@@ -172,6 +174,7 @@ func configure(game):
 	descriptor["authored_boundary_asset_family"]="t03_boundary_v2"
 	descriptor["fence_root_sink"]=FENCE_ROOT_SINK
 	descriptor["visual_join_overlap"]=VISUAL_JOIN_OVERLAP
+	descriptor["south_visual_join_overlap"]=SOUTH_VISUAL_JOIN_OVERLAP
 	descriptor["visual_corner_join_overlap"]=VISUAL_CORNER_JOIN_OVERLAP
 	descriptor["gate_hinge_overlap"]=GATE_HINGE_OVERLAP
 	descriptor["main_work_visual_gate_leaf_length"]=MAIN_WORK_VISUAL_LEAF_LENGTH
@@ -189,7 +192,7 @@ func configure(game):
 	descriptor["river_gate_leaf_visual_transform_only"]=true
 	descriptor["visual_gate_leaf_transform_only"]=true
 	descriptor["gate_leaf_root_sink"]=GATE_LEAF_ROOT_SINK
-	descriptor["gate_leaf_hinge_sink"]=FENCE_ROOT_SINK
+	descriptor["gate_leaf_hinge_sink"]=GATE_LEAF_HINGE_SINK
 	descriptor["terrain_seat_samples"]=TERRAIN_SEAT_SAMPLES
 	descriptor["terrain_crown_applied_to_gate_leaves_only"]=true
 	descriptor["gate_post_root_sink"]=GATE_POST_ROOT_SINK
