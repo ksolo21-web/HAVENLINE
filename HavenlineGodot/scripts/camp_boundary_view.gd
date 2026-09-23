@@ -21,7 +21,7 @@ const MAIN_WORK_GATE_HINGE_OVERLAP := 0.24
 # River leaves use the same visual-only presentation rule: keep the authoritative
 # crossing/collision contract, but turn a shorter framed panel toward the camera
 # so the future crossing reads unmistakably as a gate.
-const RIVER_VISUAL_LEAF_LENGTH := 1.40
+const RIVER_VISUAL_LEAF_LENGTH := 1.30
 const RIVER_VISUAL_OPEN_ANGLE := 0.72
 const RIVER_GATE_VISUAL_HINGE_OVERLAP := 0.24
 const GATE_LEAF_ROOT_SINK := 0.56
