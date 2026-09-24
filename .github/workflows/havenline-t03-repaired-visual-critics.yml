@@ -8,10 +8,13 @@ on:
 permissions:
   contents: read
   actions: read
+concurrency:
+  group: havenline-t03-final-critics-${{ github.ref_name }}
+  cancel-in-progress: true
 env:
-  CANDIDATE: '97b615c38b1dbec1c8a6d728c069bfa66c4eece8'
-  EVIDENCE_RUN: '35791483681'
-  EVIDENCE_ARTIFACT: 'havenline-t03-reference-repair-35791483681'
+  CANDIDATE: '53f612ac6cec7317482e28abed7b85878c3f014e'
+  EVIDENCE_RUN: '35984260224'
+  EVIDENCE_ARTIFACT: 'havenline-t03-reference-repair-35984260224'
 jobs:
   independent-visual:
     strategy:
@@ -21,7 +24,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 45
     env:
-      EXPECTED_SOURCE: '97b615c38b1dbec1c8a6d728c069bfa66c4eece8'
+      EXPECTED_SOURCE: '53f612ac6cec7317482e28abed7b85878c3f014e'
       REVIEW_CRITIC: ${{ matrix.critic }}
       EVIDENCE_ROOT: t03-repair
       REVIEW_OUT: review/${{ matrix.critic }}
@@ -34,8 +37,8 @@ jobs:
         with:
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
-          run-id: 35791483681
-          name: havenline-t03-reference-repair-35791483681
+          run-id: 35984260224
+          name: havenline-t03-reference-repair-35984260224
           path: t03-repair
       - uses: actions/cache/restore@v4
         with:
@@ -68,7 +71,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import json,math
-          candidate='97b615c38b1dbec1c8a6d728c069bfa66c4eece8'
+          candidate='53f612ac6cec7317482e28abed7b85878c3f014e'
           rows={}
           for p in Path('reviews').rglob('critic-record.json'):
               r=json.loads(p.read_text());rows[r['critic_id']]=r
@@ -99,7 +102,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
-      EXPECTED_SOURCE: '97b615c38b1dbec1c8a6d728c069bfa66c4eece8'
+      EXPECTED_SOURCE: '53f612ac6cec7317482e28abed7b85878c3f014e'
       REVIEW_CRITIC: C6
       EVIDENCE_ROOT: t03-repair
       REVIEW_OUT: review/C6
@@ -112,8 +115,8 @@ jobs:
         with:
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
-          run-id: 35791483681
-          name: havenline-t03-reference-repair-35791483681
+          run-id: 35984260224
+          name: havenline-t03-reference-repair-35984260224
           path: t03-repair
       - uses: actions/cache/restore@v4
         with:
@@ -150,7 +153,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import json,math
-          candidate='97b615c38b1dbec1c8a6d728c069bfa66c4eece8'
+          candidate='53f612ac6cec7317482e28abed7b85878c3f014e'
           v=json.loads(Path('visual/result.json').read_text())
           c=json.loads(next(Path('c6').rglob('critic-record.json')).read_text())
           assert v['passed'] is True and v['candidate']==candidate
