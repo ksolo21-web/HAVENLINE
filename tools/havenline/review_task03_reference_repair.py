@@ -57,6 +57,12 @@ GROUPS={
    "gallery/central-spine-north.png","gallery/central-spine-river.png",
    "gallery/cross-lane-centre.png","gallery/bank-lane-centre.png",
    "gallery/gameplay-river-gate-centre.png","native4k/native-lane-network.png"
+ ],
+ "iteration11_changed_domains":[
+   "gallery/west-work-gate.png","gallery/river-gate-west.png",
+   "gallery/river-gate-west-approach.png","gallery/river-gate-west-camp-side.png",
+   "gallery/bank-lane-west.png","gallery/bank-lane-centre.png",
+   "gallery/bank-lane-east.png","native4k/native-river-gate-west.png"
  ]
 }
 
@@ -155,11 +161,12 @@ The repair standard is unusually strict: every mandatory visual dimension must b
         b=capture["boundary"]
         candidate_manifest=json.loads(subprocess.check_output(["git","show",SOURCE+":HavenlineGodot/assets/t03_boundary_v2/manifest.json"],cwd=ROOT,text=True))
         fence_tri=next(x["triangles"] for x in candidate_manifest["assets"] if x["name"]=="fence_panel")
+        gate_tri=next(x["triangles"] for x in candidate_manifest["assets"] if x["name"]=="gate_leaf")
         post_tri=next(x["triangles"] for x in candidate_manifest["assets"] if x["name"]=="gate_post")
-        incremental_tri=fence_tri*int(b["fence_visual_instances"])+post_tri*int(b["gate_post_instances"])
-        metrics={"candidate_commit":SOURCE,"capture_frames":len(frames),"native_4k_frames":evidence["native_4k_stills"],"scene_draw_calls_max":max(int(x["draw_calls"]) for x in frames),"scene_submitted_primitives_max":max(int(x["submitted_primitives"]) for x in frames),"t03_draw_batches":int(b["draw_batches"]),"collision_panels":int(b["collision_panel_instances"]),"fence_visual_instances":int(b["fence_visual_instances"]),"gate_post_instances":int(b["gate_post_instances"]),"open_gate_leaf_instances":int(b["open_gate_leaf_instances"]),"fence_mesh_triangles":fence_tri,"gate_post_mesh_triangles":post_tri,"t03_incremental_visual_triangles":incremental_tri,"new_textures":0,"new_animations":0,"new_npcs":0,"new_active_physics_bodies":0,"primitive_findings":evidence["primitive_audit"]["finding_count"],"render_scale":1.0,"physical_device_certification":False}
+        incremental_tri=(fence_tri*int(b["fence_visual_instances"])+gate_tri*int(b["open_gate_leaf_instances"])+post_tri*int(b["gate_post_instances"]))
+        metrics={"candidate_commit":SOURCE,"capture_frames":len(frames),"native_4k_frames":evidence["native_4k_stills"],"scene_draw_calls_max":max(int(x["draw_calls"]) for x in frames),"scene_submitted_primitives_max":max(int(x["submitted_primitives"]) for x in frames),"t03_draw_batches":int(b["draw_batches"]),"collision_panels":int(b["collision_panel_instances"]),"fence_visual_instances":int(b["fence_visual_instances"]),"gate_post_instances":int(b["gate_post_instances"]),"open_gate_leaf_instances":int(b["open_gate_leaf_instances"]),"fence_mesh_triangles":fence_tri,"gate_leaf_mesh_triangles":gate_tri,"gate_post_mesh_triangles":post_tri,"t03_incremental_visual_triangles":incremental_tri,"new_textures":0,"new_animations":0,"new_npcs":0,"new_active_physics_bodies":0,"primitive_findings":evidence["primitive_audit"]["finding_count"],"render_scale":1.0,"physical_device_certification":False}
         dims=["frame_time","draw_calls","geometry","texture_memory","shader_cost","physics","animation","population","thermal_risk"]
-        prompt=f"""You are Havenline's quantitative C6 Performance Critic for exact candidate {SOURCE}. This is an intermediate subsystem budget review, not T68/T69 physical-device certification. Judge only the incremental T03 fence/gate/lane repair from the exact metrics below. T03 uses two batched visual submissions, adds no textures, animations, NPCs or active physics bodies, and its route/collision topology is unchanged. Whole-scene draw/primitives are context; do not misattribute all of them to T03. Every dimension must be strictly above 9.0 unrounded to pass. If any score is <=9.0, defects must identify a concrete metric-supported T03 issue. Return JSON only.\nMETRICS:\n"""+json.dumps(metrics,sort_keys=True,indent=2)
+        prompt=f"""You are Havenline's quantitative C6 Performance Critic for exact candidate {SOURCE}. This is an intermediate subsystem budget review, not T68/T69 physical-device certification. Judge only the incremental T03 fence/gate/lane repair from the exact metrics below. T03 uses {metrics["t03_draw_batches"]} batched visual submissions, adds no textures, animations, NPCs or active physics bodies, and its route/collision topology is unchanged. Whole-scene draw/primitives are context; do not misattribute all of them to T03. Every dimension must be strictly above 9.0 unrounded to pass. If any score is <=9.0, defects must identify a concrete metric-supported T03 issue. Return JSON only.\nMETRICS:\n"""+json.dumps(metrics,sort_keys=True,indent=2)
         review=request(None,prompt,response_schema(dims),"C6",650)
         scores=review.get("scores",{})
         errors=[]
