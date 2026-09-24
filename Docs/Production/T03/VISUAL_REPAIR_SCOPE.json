@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_11_IMPLEMENTED_AFTER_COMPLETE_ITERATION_10_FAILURE_COLLECTION",
+  "status": "ITERATION_11B_SAME_PIXELS_SHORE_SOLVE_CACHE_OPTIMIZED_PENDING_EVIDENCE",
   "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -182,5 +182,12 @@
     "work_gate": "Post footprint 1.18 and hinge-only backset 0.38; free edge/collision unchanged.",
     "river_gate": "Post footprint 1.18; west visual angle 0.88; hinge-only backset 0.38; visual clear width can only increase from the angle change.",
     "performance": "No new meshes, textures, materials, draw batches, physics bodies, animation or NPC load; scale/transform and terrain-build-time math only. C6 remains preserved."
+  },
+  "iteration_11b_preflight": {
+    "classification": "NON_VISUAL_PERFORMANCE_CAUSAL_FIX",
+    "finding": "The visual shore solver was called inside terrain sampling and recomputed the same three crossing points for each sample.",
+    "repair": "Cache exact solved shore points by snapped crossing X. No math/output/path/material/geometry values change.",
+    "visual_evidence_invalidation": "Required only because candidate SHA changed; expected pixels are output-identical.",
+    "anti_loop": "This does not open a new visual defect family and does not modify the iteration-11 repair target."
   }
 }

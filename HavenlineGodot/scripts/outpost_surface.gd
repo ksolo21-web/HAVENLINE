@@ -21,6 +21,7 @@ static var _mesh: ArrayMesh
 static var _water_mesh: ArrayMesh
 static var _heights := PackedFloat32Array()
 static var _lane_distances := PackedFloat32Array()
+static var _visual_shore_cache:Dictionary={}
 
 static func rounded_rect(p: Vector2, center: Vector2, half_size: Vector2, radius: float) -> float:
 	var q := (p-center).abs()-half_size+Vector2.ONE*radius
@@ -48,9 +49,12 @@ static func _segment_distance(p:Vector2,a:Vector2,b:Vector2)->float:
 	return p.distance_to(a+d*clampf((p-a).dot(d)/d.length_squared(),0.0,1.0))
 
 static func _visual_shore_point(x:float)->Vector2:
-	# Visual wear may descend the dry bank shoulder, but it must stop outside
-	# water. This does not change traversal or Boundary's authoritative route.
+	# Only the three fixed crossing X values call this in production. Cache the
+	# exact solved point so terrain sampling does not repeat the same curved-river
+	# projection tens of thousands of times. This is output-identical.
 	var clamped:=clampf(x,-HALF,HALF)
+	var key:=snappedf(clamped,.001)
+	if _visual_shore_cache.has(key):return Vector2(_visual_shore_cache[key])
 	var center:=River.center_at_x(clamped)
 	var z:=center.y+River.width_at_x(clamped)*.5+T03_BANK_VISUAL_SHORE_MARGIN
 	for _i in range(8):
@@ -58,7 +62,9 @@ static func _visual_shore_point(x:float)->Vector2:
 		var error:=T03_BANK_VISUAL_SHORE_MARGIN-float(q.shore_distance)
 		if absf(error)<.0001:break
 		z+=error/maxf(absf(Vector2(q.north_normal).y),.55)
-	return Vector2(clamped,z)
+	var result:=Vector2(clamped,z)
+	_visual_shore_cache[key]=result
+	return result
 
 static func bank_lane_visual_signed_distance(p:Vector2)->float:
 	var result:=999.0
