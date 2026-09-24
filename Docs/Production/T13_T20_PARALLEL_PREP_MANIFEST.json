@@ -1,0 +1,30 @@
+{
+  "schema_version":2,
+  "wave":"T13-T20 parallel preparation",
+  "prepared_from_branch":"havenline/governance-t12-prep",
+  "prepared_from_commit":"66efe083a57573b35fe4e6a3e8c9ab378d680796",
+  "preparation_mode":"dependency-independent governance/interface preparation only",
+  "task_prep_can_run_in_parallel":true,
+  "runtime_activation_is_dependency_gated":true,
+  "integration_remains_serial":true,
+  "acceptance":{"operator":">","threshold":9.0,"unrounded":true,"target":10.0,"zero_unresolved_mandatory_defects":true},
+  "parallel_lanes":[
+    {"after":["T12"],"can_start_together":["T13","T14"]},
+    {"after":["T14"],"can_start":["T15"]},
+    {"after":["T15"],"can_start":["T16"]},
+    {"after":["T16"],"can_start":["T17"]},
+    {"after":["T17"],"can_start_together":["T18","T20"]},
+    {"after":["T18"],"can_start":["T19"]}
+  ],
+  "tasks":{
+    "T13":{"dependencies":["T12"],"future_branch":"havenline/T13-challenge-director","owner":"challenge-director-builder","alias":"@reservation:T13"},
+    "T14":{"dependencies":["T08","T10","T12"],"future_branch":"havenline/T14-save-versioning","owner":"save-versioning-builder","alias":"@reservation:T14"},
+    "T15":{"dependencies":["T04","T05","T06","T07","T14"],"future_branch":"havenline/T15-npc-routing","owner":"npc-routing-builder","alias":"@reservation:T15"},
+    "T16":{"dependencies":["T08","T09","T15"],"future_branch":"havenline/T16-fishing-food","owner":"fishing-food-builder","alias":"@reservation:T16"},
+    "T17":{"dependencies":["T15","T16"],"future_branch":"havenline/T17-customer-service","owner":"customer-service-builder","alias":"@reservation:T17"},
+    "T18":{"dependencies":["T16","T17"],"future_branch":"havenline/T18-mechanized-fishing","owner":"mechanized-fishing-builder","alias":"@reservation:T18"},
+    "T19":{"dependencies":["T16","T18"],"future_branch":"havenline/T19-wheat-food","owner":"food-production-builder","alias":"@reservation:T19"},
+    "T20":{"dependencies":["T15","T17"],"future_branch":"havenline/T20-road-vehicle-service","owner":"road-vehicle-service-builder","alias":"@reservation:T20"}
+  },
+  "activation_policy":{"exact_current_integration_head":true,"all_dependencies_approved_and_integrated":true,"dependency_interfaces_reconciled":true,"current_contracts_rebound":true,"generated_task_packet_refreshed":true,"disjoint_path_ownership":true,"zero_preparation_defects":true,"no_time_based_unlock":true}
+}
