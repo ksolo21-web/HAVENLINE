@@ -2,8 +2,8 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_11B_SAME_PIXELS_SHORE_SOLVE_CACHE_OPTIMIZED_PENDING_EVIDENCE",
-  "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
+  "status": "ITERATION_11C_CAUSAL_VISUAL_REPAIR_PENDING_EVIDENCE",
+  "root_cause": "Iteration 11B exact-source critics exposed one shared presentation-transform family: fence and gate meshes used an approximate common source length plus large visual overlap/deep root sinks, while gate families used divergent leaf/post transforms; the lane shader also spread contrast across the whole bed so directional ruts weakened at review scale.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
     "T03 gate widths",
@@ -14,11 +14,11 @@
     "save/navigation deterministic proof"
   ],
   "changes": [
-    "Preserve iteration-7 north/work gate transforms, lane treatment, snow-crown geometry/materials, T02, and all authoritative collision/route constants.",
-    "Use visual-only river leaves at 1.30 units and 0.72 radians with 0.24 hinge overlap; keep actual crossing/collision geometry unchanged and explicitly prove visual clear width remains above the 3.20 minimum.",
-    "Raise only the existing recessed timber_dark palisade support rail by 0.32 local units so the 0.40 terrain sink no longer drags it into a visible ground line.",
-    "Increase ordinary fence visual join overlap from 0.10 to 0.18 to close panel-edge daylight seams without changing collision panels.",
-    "Keep fence topology, triangle count, materials, shaders, draw batches, physics, animation and NPC population unchanged; preserve the corrected iteration-6 C6 performance pass."
+    "Keep camp_boundary.gd, all six collision openings, river reserves and lane route authority unchanged.",
+    "Fit fence and gate-leaf authored meshes with their exact source lengths (2.9409 and 2.90), reduce repeated-panel overlap to seam-only values and reduce deep visual root sinking.",
+    "Use one 1.85-unit, 1.12-radian visual leaf presentation and one post scale/height across all six gates; use only a small hinge backset and rigid endpoint seating so leaves, posts and fence rails stay structurally aligned.",
+    "Keep the broad lane bed near the underlying snow/work-floor palette while increasing physical and material emphasis on continuous paired ruts; no path plane or new material is introduced.",
+    "Retain the same three T03 boundary draw batches, the same authored mesh family and all protected T01/T02 authorities."
   ],
   "must_not_change": [
     "HavenlineGodot/scripts/camp_boundary.gd geometry constants",
@@ -189,5 +189,22 @@
     "repair": "Cache exact solved shore points by snapped crossing X. No math/output/path/material/geometry values change.",
     "visual_evidence_invalidation": "Required only because candidate SHA changed; expected pixels are output-identical.",
     "anti_loop": "This does not open a new visual defect family and does not modify the iteration-11 repair target."
+  },
+  "iteration_11b_critic_disposition": {
+    "status": "REJECTED_BY_FRESH_C1_C2",
+    "evidence_run": "35984260224",
+    "critic_run": "36014619116",
+    "findings": [
+      "C1 found fence/post rhythm and gate rail alignment inconsistencies plus broad lane texture inconsistency.",
+      "C2 found gate/terrain seam and grounding issues, inconsistent gate-gap/leaf presentation and cross-view portal misalignment.",
+      "The actual 58-image evidence package was inspected before repair; the repeated-panel join seams, divergent portal presentation and broad lane treatment are visible in the cited frames."
+    ]
+  },
+  "iteration_11c_causal_repair": {
+    "protected_authority": "No camp_boundary.gd or river_geometry.gd change.",
+    "fence": "Exact fence mesh source-length fit, overlap reduced to 0.025 ordinary / 0.04 south / 0.05 corner, visual root sink reduced to 0.22.",
+    "gates": "Exact 2.90 leaf source-length fit; all gate families use 1.85 leaf length, 1.12 rad open angle, 0.08 hinge backset, 0.08/0.10 leaf embed and uniform 1.12 x 1.08 posts with 0.20 root sink.",
+    "lanes": "Broad compression depth 0.055, paired rut depth 0.085, shoulder 0.055; shader broad tint reduced and continuous rut contrast increased.",
+    "acceptance": "Fresh exact-source import/regression, 47+11 renders, C1/C2, C6 and final pixel signoff remain mandatory."
   }
 }

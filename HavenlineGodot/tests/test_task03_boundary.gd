@@ -119,7 +119,15 @@ func run():
 	check("Fence visuals and collision use same authoritative panel count",desc.collision_panel_instances==panels.size() and desc.visual_collision_share_panel_authority is bool and desc.visual_collision_share_panel_authority)
 	check("Six gates have twelve authored gate posts and twelve open timber leaves",desc.gate_count==6 and desc.gate_post_instances==12 and desc.open_gate_leaf_instances==12)
 	check("Gate leaves use categorical general and river-specific portal geometry",is_equal_approx(Boundary.NORTH_GATE_HALF,2.15) and is_equal_approx(Boundary.SIDE_GATE_HALF,2.05) and is_equal_approx(Boundary.GATE_LEAF_LENGTH,1.85) and is_equal_approx(Boundary.GATE_OPEN_ANGLE,1.34) and is_equal_approx(Boundary.RIVER_GATE_HALF,2.70) and is_equal_approx(Boundary.RIVER_GATE_LEAF_LENGTH,2.25) and is_equal_approx(Boundary.RIVER_GATE_OPEN_ANGLE,1.13) and is_equal_approx(Boundary.RIVER_LANE_HALF,1.30))
-	check("Gate readability corrections are visual-only while authoritative collision and crossing geometry remain locked",is_equal_approx(float(desc.main_work_visual_gate_leaf_length),1.30) and is_equal_approx(float(desc.main_work_visual_gate_open_angle),0.70) and is_equal_approx(float(desc.main_work_gate_hinge_overlap),0.38) and is_equal_approx(float(desc.river_visual_gate_leaf_length),1.30) and is_equal_approx(float(desc.river_visual_gate_open_angle),0.72) and is_equal_approx(float(desc.river_west_visual_gate_open_angle),0.88) and is_equal_approx(float(desc.river_gate_visual_hinge_overlap),0.38) and float(desc.river_visual_clear_width_min)>=Boundary.RIVER_VISUAL_CLEARANCE_MIN and desc.river_visual_clearance_pass and desc.river_gate_leaf_visual_transform_only and desc.visual_gate_leaf_transform_only and desc.gate_leaf_hinge_backset_is_start_only and String(desc.threshold_post_contact_repair)=="scaled-post-plus-hinge-only-backset")
+	check("Gate presentation is uniform while collision and crossing geometry remain locked",
+		is_equal_approx(float(desc.main_work_visual_gate_leaf_length),1.85) and is_equal_approx(float(desc.main_work_visual_gate_open_angle),1.12) and
+		is_equal_approx(float(desc.main_work_gate_hinge_overlap),.08) and is_equal_approx(float(desc.river_visual_gate_leaf_length),1.85) and
+		is_equal_approx(float(desc.river_visual_gate_open_angle),1.12) and is_equal_approx(float(desc.river_west_visual_gate_open_angle),1.12) and
+		is_equal_approx(float(desc.river_gate_visual_hinge_overlap),.08) and float(desc.river_visual_clear_width_min)>=Boundary.RIVER_VISUAL_CLEARANCE_MIN and
+		desc.river_visual_clearance_pass and desc.river_gate_leaf_visual_transform_only and desc.visual_gate_leaf_transform_only and
+		desc.gate_leaf_hinge_backset_is_start_only and desc.uniform_gate_presentation and desc.rigid_gate_leaf_endpoint_seating and
+		is_equal_approx(float(desc.fence_source_length),2.9409) and is_equal_approx(float(desc.gate_leaf_source_length),2.90) and
+		String(desc.threshold_post_contact_repair)=="uniform-post-plus-small-hinge-backset")
 	var river_authority_ok:=Boundary.river_gate_contracts().size()==3
 	var evidence_ids:Dictionary={}
 	for contract in Boundary.river_gate_contracts():
@@ -132,8 +140,17 @@ func run():
 		for kind in Boundary.RIVER_EVIDENCE_KINDS:
 			var eid:=String(contract.evidence_ids[kind]);evidence_ids[eid]=true
 	check("River gates share authoritative geometry for visual clearance routes and evidence",river_authority_ok and evidence_ids.size()==12 and evidence.required_river_gate_evidence_ids.size()==12 and evidence.all_river_visual_clearance_pass)
-	check("Authored fence roots are deliberately sunk into terrain",is_equal_approx(float(desc.fence_root_sink),.40))
-	check("Fence joins open leaves tall portal posts and rutted terrain preserve strong threshold contact",is_equal_approx(float(desc.visual_join_overlap),.22) and is_equal_approx(float(desc.south_visual_join_overlap),.34) and is_equal_approx(float(desc.visual_corner_join_overlap),.28) and is_equal_approx(float(desc.gate_hinge_overlap),.12) and is_equal_approx(float(desc.gate_leaf_root_sink),.18) and is_equal_approx(float(desc.gate_leaf_hinge_sink),.14) and int(desc.terrain_seat_samples)==7 and desc.terrain_crown_applied_to_gate_leaves_only and is_equal_approx(float(desc.gate_post_root_sink),.40) and is_equal_approx(float(desc.main_gate_post_scale),1.00) and is_equal_approx(float(desc.main_gate_post_height_scale),1.05) and is_equal_approx(float(desc.river_gate_post_scale),1.18) and is_equal_approx(float(desc.river_gate_post_height_scale),1.12) and is_equal_approx(float(desc.work_gate_post_scale),1.18) and is_equal_approx(float(desc.work_gate_post_height_scale),1.04) and is_equal_approx(float(desc.lane_compression_depth),.075) and is_equal_approx(float(desc.lane_rut_depth),.055) and is_equal_approx(float(desc.lane_shoulder_height),.075))
+	check("Authored fence roots use controlled embed rather than deep clipping",is_equal_approx(float(desc.fence_root_sink),.22))
+	check("Fence joins gate seating and rutted terrain preserve clean threshold contact",
+		is_equal_approx(float(desc.visual_join_overlap),.025) and is_equal_approx(float(desc.south_visual_join_overlap),.04) and
+		is_equal_approx(float(desc.visual_corner_join_overlap),.05) and is_equal_approx(float(desc.gate_hinge_overlap),.08) and
+		is_equal_approx(float(desc.gate_leaf_root_sink),.10) and is_equal_approx(float(desc.gate_leaf_hinge_sink),.08) and int(desc.terrain_seat_samples)==7 and
+		not desc.terrain_crown_applied_to_gate_leaves_only and is_equal_approx(float(desc.gate_post_root_sink),.20) and
+		is_equal_approx(float(desc.main_gate_post_scale),1.12) and is_equal_approx(float(desc.main_gate_post_height_scale),1.08) and
+		is_equal_approx(float(desc.river_gate_post_scale),1.12) and is_equal_approx(float(desc.river_gate_post_height_scale),1.08) and
+		is_equal_approx(float(desc.work_gate_post_scale),1.12) and is_equal_approx(float(desc.work_gate_post_height_scale),1.08) and
+		is_equal_approx(float(desc.lane_compression_depth),.055) and is_equal_approx(float(desc.lane_rut_depth),.085) and
+		is_equal_approx(float(desc.lane_shoulder_height),.055))
 	var zero_progress_hidden:=true
 	for side in game.sim.defenses:
 		zero_progress_hidden=zero_progress_hidden and not game.defense_visuals[side].visible

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "task_id": "T03",
-  "task_status": "FIX_REQUIRED",
+  "task_status": "ITERATION_11C_REPAIR_APPLIED_PENDING_EVIDENCE",
   "acceptance_target": "10/10; every mandatory dimension strictly greater than 9.0 unrounded",
   "rejected_candidates": [
     {
@@ -73,7 +73,11 @@
   "repair_range": {
     "base": "092d50131ea39f42439d0081d68e354aa839e83f",
     "repair_commit": "SELF",
-    "classifications": ["PRODUCTION_FIX", "TOOLING_FIX", "TEST_FIX"],
+    "classifications": [
+      "PRODUCTION_FIX",
+      "TOOLING_FIX",
+      "TEST_FIX"
+    ],
     "evidence_only": false
   },
   "same_object_before_after": {
@@ -97,15 +101,29 @@
       "triage": "VALID_PRODUCTION_DEFECT",
       "affected_production_object": "river threshold lantern posts and the worn route passing between them",
       "probable_root_cause": "standard-scale lantern posts and low-frequency route contrast lose the threshold hierarchy in the camp-side view",
-      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary_view.gd"],
-      "evidence_files_showing_defect": ["gallery/river-gate-west-camp-side.png"],
+      "production_files_likely_implicated": [
+        "HavenlineGodot/scripts/camp_boundary_view.gd"
+      ],
+      "evidence_files_showing_defect": [
+        "gallery/river-gate-west-camp-side.png"
+      ],
       "production_change": "retain the repaired corner join, scale the existing authored river threshold posts to 1.35, align each leaf hinge to the fixed panel, and add a continuous compressed core on the same terrain route",
       "expected_visible_result": "the two threshold posts, open leaves and worn corridor form one caption-independent west gate read",
-      "required_proof": ["river-gate/west/camp-side-outward", "river-gate/west/gameplay-scale"],
+      "required_proof": [
+        "river-gate/west/camp-side-outward",
+        "river-gate/west/gameplay-scale"
+      ],
       "repair_commit": "SELF",
-      "verification_evidence": ["river-gate/west/gameplay-scale"],
+      "verification_evidence": [
+        "river-gate/west/gameplay-scale"
+      ],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 4, "same_root_cause_count": 2, "evidence_only_attempt_count": 2, "production_repair_count": 3}
+      "counters": {
+        "review_round_count": 4,
+        "same_root_cause_count": 2,
+        "evidence_only_attempt_count": 2,
+        "production_repair_count": 3
+      }
     },
     {
       "defect_id": "T03-RG-002",
@@ -114,15 +132,29 @@
       "triage": "VALID_PRODUCTION_DEFECT",
       "affected_production_object": "authored open river-gate leaves",
       "probable_root_cause": "endpoint-only height fitting does not account for a higher terrain midpoint beneath a rigid open leaf",
-      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary_view.gd"],
-      "evidence_files_showing_defect": ["gallery/river-gate-centre-camp-side.png"],
+      "production_files_likely_implicated": [
+        "HavenlineGodot/scripts/camp_boundary_view.gd"
+      ],
+      "evidence_files_showing_defect": [
+        "gallery/river-gate-centre-camp-side.png"
+      ],
       "production_change": "keep the hinge at the fixed-panel 0.08 sink, solve a minimum 0.30 free-tip sink across seven terrain samples, and leave aperture/collision geometry unchanged",
       "expected_visible_result": "each leaf is visibly joined at the hinge and embedded at its free tip across curved snow",
-      "required_proof": ["river-gate/centre/camp-side-outward", "river-gate/centre/gameplay-scale"],
+      "required_proof": [
+        "river-gate/centre/camp-side-outward",
+        "river-gate/centre/gameplay-scale"
+      ],
       "repair_commit": "SELF",
-      "verification_evidence": ["river-gate/centre/gameplay-scale"],
+      "verification_evidence": [
+        "river-gate/centre/gameplay-scale"
+      ],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 4, "same_root_cause_count": 4, "evidence_only_attempt_count": 2, "production_repair_count": 3}
+      "counters": {
+        "review_round_count": 4,
+        "same_root_cause_count": 4,
+        "evidence_only_attempt_count": 2,
+        "production_repair_count": 3
+      }
     },
     {
       "defect_id": "T03-RG-003",
@@ -131,15 +163,31 @@
       "triage": "VALID_PRODUCTION_DEFECT",
       "affected_production_object": "continuous terrain packed-lane material",
       "probable_root_cause": "the previous 1.85-frequency mottle loses readable amplitude when the grouped evidence is downsampled",
-      "production_files_likely_implicated": ["HavenlineGodot/shaders/outpost_snow.gdshader"],
-      "evidence_files_showing_defect": ["gallery/river-gate-west-approach.png", "gallery/river-gate-centre.png", "gallery/river-gate-east-approach.png"],
+      "production_files_likely_implicated": [
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ],
+      "evidence_files_showing_defect": [
+        "gallery/river-gate-west-approach.png",
+        "gallery/river-gate-centre.png",
+        "gallery/river-gate-east-approach.png"
+      ],
       "production_change": "add full-range 0.68-frequency compression patches, mid-scale scuffs and a noisy continuous compression core inside the existing route SDF on the same terrain shader",
       "expected_visible_result": "natural worn tonal breakup survives grouped and gameplay reduction without a path plane or painted stripe",
-      "required_proof": ["river-gate/centre/threshold-three-quarter", "river-gate/centre/gameplay-scale"],
+      "required_proof": [
+        "river-gate/centre/threshold-three-quarter",
+        "river-gate/centre/gameplay-scale"
+      ],
       "repair_commit": "SELF",
-      "verification_evidence": ["river-gate/centre/gameplay-scale"],
+      "verification_evidence": [
+        "river-gate/centre/gameplay-scale"
+      ],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 4, "same_root_cause_count": 4, "evidence_only_attempt_count": 1, "production_repair_count": 3}
+      "counters": {
+        "review_round_count": 4,
+        "same_root_cause_count": 4,
+        "evidence_only_attempt_count": 1,
+        "production_repair_count": 3
+      }
     },
     {
       "defect_id": "T03-NG-001",
@@ -148,15 +196,35 @@
       "triage": "VALID_PRODUCTION_REGRESSION",
       "affected_production_object": "fixed fence panel transforms and packed warm-floor lane material",
       "probable_root_cause": "terrain-crown compensation intended for long open leaves was applied to every fixed panel, while macro wear was mixed out on cleared camp floor",
-      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary_view.gd", "HavenlineGodot/shaders/outpost_snow.gdshader"],
-      "evidence_files_showing_defect": ["gallery/north-gate-front.png", "gallery/north-gate-rear.png", "gallery/open-gate-leaves-detail.png"],
+      "production_files_likely_implicated": [
+        "HavenlineGodot/scripts/camp_boundary_view.gd",
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ],
+      "evidence_files_showing_defect": [
+        "gallery/north-gate-front.png",
+        "gallery/north-gate-rear.png",
+        "gallery/open-gate-leaves-detail.png"
+      ],
       "production_change": "apply sampled crown seating only to open gate leaves and propagate macro compression/scuffs into the packed warm-floor branch",
       "expected_visible_result": "north fixed panels retain their shared authored alignment while the route remains visibly worn across the snow-to-floor transition",
-      "required_proof": ["north-gate", "central-lane", "gameplay"],
+      "required_proof": [
+        "north-gate",
+        "central-lane",
+        "gameplay"
+      ],
       "repair_commit": "SELF",
-      "verification_evidence": ["gallery/north-gate-front.png", "gallery/north-gate-rear.png", "gallery/open-gate-leaves-detail.png"],
+      "verification_evidence": [
+        "gallery/north-gate-front.png",
+        "gallery/north-gate-rear.png",
+        "gallery/open-gate-leaves-detail.png"
+      ],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 1, "same_root_cause_count": 1, "evidence_only_attempt_count": 0, "production_repair_count": 1}
+      "counters": {
+        "review_round_count": 1,
+        "same_root_cause_count": 1,
+        "evidence_only_attempt_count": 0,
+        "production_repair_count": 1
+      }
     },
     {
       "defect_id": "T03-RG-004",
@@ -165,15 +233,38 @@
       "triage": "VALID_PRODUCTION_DEFECT",
       "affected_production_object": "river apron route geometry, continuous packed-lane terrain material, open leaf contact and authored threshold posts",
       "probable_root_cause": "the route terminated at the inner bank lane, its compressed material retained too much blue-grey bank similarity, and threshold/contact silhouettes remained too small at gameplay scale",
-      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary.gd", "HavenlineGodot/scripts/camp_boundary_view.gd", "HavenlineGodot/shaders/outpost_snow.gdshader"],
-      "evidence_files_showing_defect": ["gallery/river-gate-west-approach.png", "gallery/river-gate-centre.png", "gallery/river-gate-east-approach.png", "gallery/gameplay-river-gate-centre.png"],
+      "production_files_likely_implicated": [
+        "HavenlineGodot/scripts/camp_boundary.gd",
+        "HavenlineGodot/scripts/camp_boundary_view.gd",
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ],
+      "evidence_files_showing_defect": [
+        "gallery/river-gate-west-approach.png",
+        "gallery/river-gate-centre.png",
+        "gallery/river-gate-east-approach.png",
+        "gallery/gameplay-river-gate-centre.png"
+      ],
       "production_change": "extend each existing apron from camp through the gate to the authoritative dry edge, increase neutral dirty-snow macro compression and scuffs inside the same route SDF, deepen fence/leaf seating, overlap leaf hinges into fixed panels and scale the existing river threshold posts to 1.50",
       "expected_visible_result": "each river entrance reads without captions as camp lane, grounded open gate, compressed threshold and dry future-crossing approach",
-      "required_proof": ["river-gate/west/river-side-approach", "river-gate/centre/threshold-three-quarter", "river-gate/east/camp-side-outward", "river-gate/centre/gameplay-scale"],
+      "required_proof": [
+        "river-gate/west/river-side-approach",
+        "river-gate/centre/threshold-three-quarter",
+        "river-gate/east/camp-side-outward",
+        "river-gate/centre/gameplay-scale"
+      ],
       "repair_commit": "SELF",
-      "verification_evidence": ["river-gate/west/gameplay-scale", "river-gate/centre/gameplay-scale", "river-gate/east/gameplay-scale"],
+      "verification_evidence": [
+        "river-gate/west/gameplay-scale",
+        "river-gate/centre/gameplay-scale",
+        "river-gate/east/gameplay-scale"
+      ],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 5, "same_root_cause_count": 5, "evidence_only_attempt_count": 1, "production_repair_count": 4}
+      "counters": {
+        "review_round_count": 5,
+        "same_root_cause_count": 5,
+        "evidence_only_attempt_count": 1,
+        "production_repair_count": 4
+      }
     },
     {
       "defect_id": "T03-GP-001",
@@ -182,15 +273,33 @@
       "triage": "VALID_PRODUCTION_DEFECT",
       "affected_production_object": "authored work-gate lantern posts and open gate leaf hinge/contact transforms",
       "probable_root_cause": "standard work-post scale loses hierarchy beside nearby scenery while zero leaf overlap exposes the authored mesh end at the hinge",
-      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary_view.gd"],
-      "evidence_files_showing_defect": ["gallery/gameplay-east-gate.png", "gallery/gameplay-river-gate-centre.png"],
+      "production_files_likely_implicated": [
+        "HavenlineGodot/scripts/camp_boundary_view.gd"
+      ],
+      "evidence_files_showing_defect": [
+        "gallery/gameplay-east-gate.png",
+        "gallery/gameplay-river-gate-centre.png"
+      ],
       "production_change": "scale existing work-gate lantern posts to 1.20, add a 0.12 visual hinge overlap, and preserve a shared 0.12 hinge/fixed-panel root sink",
       "expected_visible_result": "the east work threshold remains obvious beside scenery and every open leaf visibly joins its fixed fence panel",
-      "required_proof": ["gameplay", "detail-contact", "river-gate/centre/gameplay-scale"],
+      "required_proof": [
+        "gameplay",
+        "detail-contact",
+        "river-gate/centre/gameplay-scale"
+      ],
       "repair_commit": "SELF",
-      "verification_evidence": ["gallery/gameplay-east-gate.png", "gallery/open-gate-leaves-detail.png", "river-gate/centre/gameplay-scale"],
+      "verification_evidence": [
+        "gallery/gameplay-east-gate.png",
+        "gallery/open-gate-leaves-detail.png",
+        "river-gate/centre/gameplay-scale"
+      ],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 1, "same_root_cause_count": 1, "evidence_only_attempt_count": 0, "production_repair_count": 1}
+      "counters": {
+        "review_round_count": 1,
+        "same_root_cause_count": 1,
+        "evidence_only_attempt_count": 0,
+        "production_repair_count": 1
+      }
     },
     {
       "defect_id": "T03-RG-005",
@@ -199,15 +308,43 @@
       "triage": "VALID_PRODUCTION_DEFECT",
       "affected_production_object": "continuous terrain geometry/material and authored river gate/fence transforms",
       "probable_root_cause": "color contrast alone cannot communicate compression, the near-edge-on leaves minimize gate silhouette, and shallow root placement does not survive sloped bank views",
-      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary.gd", "HavenlineGodot/scripts/outpost_surface.gd", "HavenlineGodot/scripts/camp_boundary_view.gd", "HavenlineGodot/shaders/outpost_snow.gdshader"],
-      "evidence_files_showing_defect": ["gallery/river-gate-west-approach.png", "gallery/river-gate-centre.png", "gallery/river-gate-east-approach.png", "gallery/south-fence-west.png", "gallery/south-fence-centre.png", "gallery/south-fence-east.png"],
+      "production_files_likely_implicated": [
+        "HavenlineGodot/scripts/camp_boundary.gd",
+        "HavenlineGodot/scripts/outpost_surface.gd",
+        "HavenlineGodot/scripts/camp_boundary_view.gd",
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ],
+      "evidence_files_showing_defect": [
+        "gallery/river-gate-west-approach.png",
+        "gallery/river-gate-centre.png",
+        "gallery/river-gate-east-approach.png",
+        "gallery/south-fence-west.png",
+        "gallery/south-fence-centre.png",
+        "gallery/south-fence-east.png"
+      ],
       "production_change": "physically depress the existing route bed and paired ruts in the shared terrain mesh, replace the flat grey read with irregular snowy compression and tread breakup, widen the actual river openings so long leaves can remain visibly open while preserving a greater-than-3.20 aperture, and deeply seat existing fence, leaf and lantern-post roots",
       "expected_visible_result": "unchanged evidence views show a continuous, textured and physically compressed snow route passing between obvious grounded posts/leaves to the dry river edge",
-      "required_proof": ["river-gates", "south-fence", "central-lane", "gameplay", "detail-contact"],
+      "required_proof": [
+        "river-gates",
+        "south-fence",
+        "central-lane",
+        "gameplay",
+        "detail-contact"
+      ],
       "repair_commit": "SELF",
-      "verification_evidence": ["river-gate/west/river-side-approach", "river-gate/centre/threshold-three-quarter", "river-gate/east/camp-side-outward", "river-gate/centre/gameplay-scale"],
+      "verification_evidence": [
+        "river-gate/west/river-side-approach",
+        "river-gate/centre/threshold-three-quarter",
+        "river-gate/east/camp-side-outward",
+        "river-gate/centre/gameplay-scale"
+      ],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 6, "same_root_cause_count": 6, "evidence_only_attempt_count": 1, "production_repair_count": 5}
+      "counters": {
+        "review_round_count": 6,
+        "same_root_cause_count": 6,
+        "evidence_only_attempt_count": 1,
+        "production_repair_count": 5
+      }
     },
     {
       "defect_id": "T03-RG-006",
@@ -216,15 +353,42 @@
       "triage": "VALID_PRODUCTION_DEFECT",
       "affected_production_object": "continuous terrain height/material and authored river fence/post root transforms",
       "probable_root_cause": "the dark treatment covers the whole lane instead of reserving contrast for continuous tread grooves, physical depression has no raised swept-snow shoulder at reduced scale, and 0.20/0.16 root seating remains too shallow against the sloped bank",
-      "production_files_likely_implicated": ["HavenlineGodot/scripts/outpost_surface.gd", "HavenlineGodot/scripts/camp_boundary_view.gd", "HavenlineGodot/shaders/outpost_snow.gdshader"],
-      "evidence_files_showing_defect": ["gallery/river-gate-west-approach.png", "gallery/river-gate-centre.png", "gallery/river-gate-east-camp-side.png", "native4k/native-river-gate-west.png", "native4k/native-river-gate-centre.png", "native4k/native-river-gate-east.png"],
+      "production_files_likely_implicated": [
+        "HavenlineGodot/scripts/outpost_surface.gd",
+        "HavenlineGodot/scripts/camp_boundary_view.gd",
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ],
+      "evidence_files_showing_defect": [
+        "gallery/river-gate-west-approach.png",
+        "gallery/river-gate-centre.png",
+        "gallery/river-gate-east-camp-side.png",
+        "native4k/native-river-gate-west.png",
+        "native4k/native-river-gate-centre.png",
+        "native4k/native-river-gate-east.png"
+      ],
       "production_change": "return the compressed bed toward near-white snow, reserve strong dirt contrast for unbroken paired tread grooves across both snow and warm floor, deepen the real terrain bed/ruts, raise irregular swept-snow shoulders along the route, and seat fixed fence, leaves and existing lantern posts substantially deeper",
       "expected_visible_result": "the same downsampled critic board reads one continuous physically cut snow route through grounded timber thresholds rather than a grey overlay",
-      "required_proof": ["river-gates", "south-fence", "central-lane", "gameplay", "detail-contact"],
+      "required_proof": [
+        "river-gates",
+        "south-fence",
+        "central-lane",
+        "gameplay",
+        "detail-contact"
+      ],
       "repair_commit": "SELF",
-      "verification_evidence": ["river-gate/west/river-side-approach", "river-gate/centre/threshold-three-quarter", "river-gate/east/camp-side-outward", "river-gate/centre/gameplay-scale"],
+      "verification_evidence": [
+        "river-gate/west/river-side-approach",
+        "river-gate/centre/threshold-three-quarter",
+        "river-gate/east/camp-side-outward",
+        "river-gate/centre/gameplay-scale"
+      ],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 7, "same_root_cause_count": 7, "evidence_only_attempt_count": 1, "production_repair_count": 6}
+      "counters": {
+        "review_round_count": 7,
+        "same_root_cause_count": 7,
+        "evidence_only_attempt_count": 1,
+        "production_repair_count": 6
+      }
     },
     {
       "defect_id": "T03-PORTAL-007",
@@ -233,15 +397,47 @@
       "triage": "VALID_PRODUCTION_DEFECT",
       "affected_production_object": "all six real gate openings, authored open leaves and lantern posts, plus the continuous terrain wear material",
       "probable_root_cause": "incremental scale and tint adjustments never created a categorical silhouette/material distinction between ordinary perimeter fence and an active worn gateway",
-      "production_files_likely_implicated": ["HavenlineGodot/scripts/camp_boundary.gd", "HavenlineGodot/scripts/camp_boundary_view.gd", "HavenlineGodot/scripts/outpost_surface.gd", "HavenlineGodot/shaders/outpost_snow.gdshader"],
-      "evidence_files_showing_defect": ["gallery/north-gate-front.png", "gallery/west-work-gate.png", "gallery/east-work-gate.png", "gallery/river-gate-west.png", "gallery/river-gate-centre.png", "gallery/river-gate-east.png", "gallery/gameplay-north-gate.png", "gallery/gameplay-west-gate.png"],
+      "production_files_likely_implicated": [
+        "HavenlineGodot/scripts/camp_boundary.gd",
+        "HavenlineGodot/scripts/camp_boundary_view.gd",
+        "HavenlineGodot/scripts/outpost_surface.gd",
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ],
+      "evidence_files_showing_defect": [
+        "gallery/north-gate-front.png",
+        "gallery/west-work-gate.png",
+        "gallery/east-work-gate.png",
+        "gallery/river-gate-west.png",
+        "gallery/river-gate-centre.png",
+        "gallery/river-gate-east.png",
+        "gallery/gameplay-north-gate.png",
+        "gallery/gameplay-west-gate.png"
+      ],
       "production_change": "widen all six actual openings, lengthen and visibly swing the existing authored timber leaves, make every threshold use tall slender paired lantern markers, return the compressed bed toward snowy tones, and reserve strong contrast and physical depth for irregular twin ruts plus center footfall churn across snow and warm floor",
       "expected_visible_result": "at full and delivered-board scale, every entrance reads as ordinary fence ending at paired tall posts, two clearly swung timber leaves, and an embedded used route continuing through the threshold",
-      "required_proof": ["river-gates", "north-gate", "side-gates", "gameplay", "detail-contact"],
+      "required_proof": [
+        "river-gates",
+        "north-gate",
+        "side-gates",
+        "gameplay",
+        "detail-contact"
+      ],
       "repair_commit": "SELF",
-      "verification_evidence": ["gallery/north-gate-front.png", "gallery/west-work-gate.png", "gallery/east-work-gate.png", "river-gate/west/threshold-three-quarter", "river-gate/centre/threshold-three-quarter", "river-gate/east/threshold-three-quarter"],
+      "verification_evidence": [
+        "gallery/north-gate-front.png",
+        "gallery/west-work-gate.png",
+        "gallery/east-work-gate.png",
+        "river-gate/west/threshold-three-quarter",
+        "river-gate/centre/threshold-three-quarter",
+        "river-gate/east/threshold-three-quarter"
+      ],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 8, "same_root_cause_count": 8, "evidence_only_attempt_count": 1, "production_repair_count": 7}
+      "counters": {
+        "review_round_count": 8,
+        "same_root_cause_count": 8,
+        "evidence_only_attempt_count": 1,
+        "production_repair_count": 7
+      }
     },
     {
       "defect_id": "T03-LANE-008",
@@ -250,15 +446,37 @@
       "triage": "VALID_PRODUCTION_DEFECT",
       "affected_production_object": "continuous packed-lane terrain material and existing fence/leaf/threshold-post root transforms",
       "probable_root_cause": "the lane's strongest variation remains concentrated in narrow ruts while broad bed values reduce uniformly, and contact seating has too little margin in oblique snow views",
-      "production_files_likely_implicated": ["HavenlineGodot/shaders/outpost_snow.gdshader", "HavenlineGodot/scripts/camp_boundary_view.gd"],
-      "evidence_files_showing_defect": ["gallery/cross-lane-west.png", "gallery/cross-lane-centre.png", "gallery/cross-lane-east.png"],
+      "production_files_likely_implicated": [
+        "HavenlineGodot/shaders/outpost_snow.gdshader",
+        "HavenlineGodot/scripts/camp_boundary_view.gd"
+      ],
+      "evidence_files_showing_defect": [
+        "gallery/cross-lane-west.png",
+        "gallery/cross-lane-centre.png",
+        "gallery/cross-lane-east.png"
+      ],
       "production_change": "add broad broken compression islands and fine grit inside the existing terrain route SDF, then deepen fixed fence, open leaf and threshold-post root seating without changing collision or cameras",
       "expected_visible_result": "cross-camp routes retain irregular compressed texture after reduction and every existing timber/post base remains visibly embedded in the terrain",
-      "required_proof": ["cross-shelter-lanes", "detail-contact", "gameplay"],
+      "required_proof": [
+        "cross-shelter-lanes",
+        "detail-contact",
+        "gameplay"
+      ],
       "repair_commit": "SELF",
-      "verification_evidence": ["gallery/cross-lane-west.png", "gallery/cross-lane-centre.png", "gallery/cross-lane-east.png", "gallery/open-gate-leaves-detail.png", "gallery/gate-post-detail.png"],
+      "verification_evidence": [
+        "gallery/cross-lane-west.png",
+        "gallery/cross-lane-centre.png",
+        "gallery/cross-lane-east.png",
+        "gallery/open-gate-leaves-detail.png",
+        "gallery/gate-post-detail.png"
+      ],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 1, "same_root_cause_count": 1, "evidence_only_attempt_count": 0, "production_repair_count": 1}
+      "counters": {
+        "review_round_count": 1,
+        "same_root_cause_count": 1,
+        "evidence_only_attempt_count": 0,
+        "production_repair_count": 1
+      }
     },
     {
       "defect_id": "T03-CRITIC-009",
@@ -267,15 +485,106 @@
       "triage": "VALID_TOOLING_DEFECT",
       "affected_production_object": "local critic response transport only; rendered product is unchanged",
       "probable_root_cause": "the output contract constrained item count but did not bound sentence length or penalize phrase repetition",
-      "production_files_likely_implicated": ["tools/havenline/review_task03_local_reference.py", "tools/havenline/production/review_task03_strict_v2_wrapper.py"],
-      "evidence_files_showing_defect": ["task03-local-review/river-gates-raw.json"],
+      "production_files_likely_implicated": [
+        "tools/havenline/review_task03_local_reference.py",
+        "tools/havenline/production/review_task03_strict_v2_wrapper.py"
+      ],
+      "evidence_files_showing_defect": [
+        "task03-local-review/river-gates-raw.json"
+      ],
       "production_change": "none; add output-only sentence-length discipline and a repeat penalty while preserving the model, pixels, rubric, seed and strict score threshold",
       "expected_visible_result": "the same independent judgment terminates as compact valid JSON instead of reaching the response cap",
-      "required_proof": ["complete visual-integrity river-gates judgment"],
+      "required_proof": [
+        "complete visual-integrity river-gates judgment"
+      ],
       "repair_commit": "SELF",
-      "verification_evidence": ["task03-local-review/river-gates-review.json"],
+      "verification_evidence": [
+        "task03-local-review/river-gates-review.json"
+      ],
       "status": "READY_FOR_VERIFICATION",
-      "counters": {"review_round_count": 1, "same_root_cause_count": 1, "evidence_only_attempt_count": 0, "production_repair_count": 0}
+      "counters": {
+        "review_round_count": 1,
+        "same_root_cause_count": 1,
+        "evidence_only_attempt_count": 0,
+        "production_repair_count": 0
+      }
+    },
+    {
+      "defect_id": "T03-11B-PERIMETER-010",
+      "critic_source": "run 36014619116 / C1+C2 / boundary_portals + iteration11_changed_domains",
+      "visible_symptom": "Repeated fence sections show irregular join rhythm/dark seams and inconsistent cap/post read across views.",
+      "triage": "VALID_PRODUCTION_DEFECT",
+      "affected_production_object": "T03 authored fence-panel transforms",
+      "probable_root_cause": "The 2.9409-unit fence mesh was fit with the shared approximate 2.95 source length and then overlapped by 0.22-0.34 units, doubling edge pickets and magnifying join rhythm.",
+      "production_files_likely_implicated": [
+        "HavenlineGodot/scripts/camp_boundary_view.gd"
+      ],
+      "production_change": "Use the exact fence source length and seam-only overlaps while preserving the exact collision panel authority.",
+      "expected_visible_result": "Continuous palisade rhythm with no dark doubled join pickets or daylight seam.",
+      "required_proof": [
+        "boundary_portals",
+        "iteration11_changed_domains",
+        "detail-contact"
+      ],
+      "repair_commit": "SELF",
+      "verification_evidence": [
+        "gallery/fence-panel-detail.png",
+        "gallery/perimeter-oblique.png",
+        "native4k/native-fence-detail.png"
+      ],
+      "status": "REPAIR_APPLIED_PENDING_EVIDENCE"
+    },
+    {
+      "defect_id": "T03-11B-PORTAL-011",
+      "critic_source": "run 36014619116 / C1+C2 / boundary_portals + iteration11_changed_domains",
+      "visible_symptom": "Gate families differ in leaf angle/post scale; some hinges/rails misalign and some roots read clipped into terrain.",
+      "triage": "VALID_PRODUCTION_DEFECT",
+      "affected_production_object": "T03 authored gate leaf/post visual transforms",
+      "probable_root_cause": "Gate leaves reused the fence source length, used family-specific lengths/angles/backsets and deep post/leaf sinks; sampled free-tip seating could further tilt leaves relative to posts.",
+      "production_files_likely_implicated": [
+        "HavenlineGodot/scripts/camp_boundary_view.gd"
+      ],
+      "production_change": "Fit the leaf with its exact 2.90 source length; use one leaf length/angle and one post scale across all portals; use small deterministic hinge/root embeds and rigid endpoint seating.",
+      "expected_visible_result": "All six gates read as one coherent authored portal family with aligned hinges/posts/rails and clean terrain contact.",
+      "required_proof": [
+        "boundary_portals",
+        "iteration11_changed_domains",
+        "native4k"
+      ],
+      "repair_commit": "SELF",
+      "verification_evidence": [
+        "gallery/north-gate-front.png",
+        "gallery/west-work-gate.png",
+        "gallery/east-work-gate.png",
+        "native4k/native-river-gate-west.png"
+      ],
+      "status": "REPAIR_APPLIED_PENDING_EVIDENCE"
+    },
+    {
+      "defect_id": "T03-11B-LANE-012",
+      "critic_source": "run 36014619116 / C1 / routes_contacts + iteration11_changed_domains",
+      "visible_symptom": "Packed routes lose directional wear and can read as a broad noisy/color-varied bed at critic scale.",
+      "triage": "VALID_PRODUCTION_DEFECT",
+      "affected_production_object": "T03 continuous terrain lane deformation/material",
+      "probable_root_cause": "Broad bed compression/tint carried more contrast than the paired ruts, so downsampling suppressed the directional track cue.",
+      "production_files_likely_implicated": [
+        "HavenlineGodot/scripts/outpost_surface.gd",
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ],
+      "production_change": "Reduce broad-bed deformation/tint variation and deepen/strengthen the existing continuous paired ruts without adding a path mesh.",
+      "expected_visible_result": "A quiet packed bed with legible continuous direction-of-travel ruts through gate thresholds and across warm/snow surfaces.",
+      "required_proof": [
+        "routes_contacts",
+        "iteration11_changed_domains",
+        "native4k"
+      ],
+      "repair_commit": "SELF",
+      "verification_evidence": [
+        "gallery/cross-lane-centre.png",
+        "gallery/central-spine-north.png",
+        "native4k/native-lane-network.png"
+      ],
+      "status": "REPAIR_APPLIED_PENDING_EVIDENCE"
     }
   ]
 }

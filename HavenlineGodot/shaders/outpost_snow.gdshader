@@ -63,20 +63,19 @@ void fragment(){
  float lane_center_distance=max(lane+1.30,0.0);
  float paired_rut=1.-smoothstep(.10,.27,abs(lane_center_distance-.62));
  float rut_breakup=.82+.18*smoothstep(.28,.76,material_noise(p*2.7+vec2(7.1,-4.3)));
- // Iteration 10: preserve readable traffic compression but return the bank
- // family to the reference's pale packed-snow language. The wear remains part
- // of the same T02 surface, with restrained cool ruts and warm salmon work-floor
- // compression rather than a dark road/asphalt read.
- vec3 packed_snow=mix(snow,vec3(.835,.905,.965),.20+.16*compression);
- packed_snow=mix(packed_snow,vec3(.70,.79,.875),paired_rut*lane_mask*rut_breakup*.14);
- packed_snow+=vec3(.010,.011,.013)*(packed_mid-.5);
- vec3 packed_floor=mix(floor,vec3(.755,.455,.335),.10+.075*compression);
- packed_floor=mix(packed_floor,vec3(.655,.365,.255),paired_rut*lane_mask*rut_breakup*.10);
- packed_floor+=vec3(.008,.006,.004)*(packed_mid-.5);
+ // Iteration 11C: the broad bed stays close to the underlying snow/work-floor
+ // family while the continuous paired ruts carry the readable direction of
+ // travel. This removes the noisy patchwork read without introducing a path plane.
+ vec3 packed_snow=mix(snow,vec3(.875,.93,.975),.08+.08*compression);
+ packed_snow=mix(packed_snow,vec3(.655,.755,.855),paired_rut*lane_mask*rut_breakup*.26);
+ packed_snow+=vec3(.004,.0045,.005)*(packed_mid-.5);
+ vec3 packed_floor=mix(floor,vec3(.765,.46,.34),.04+.03*compression);
+ packed_floor=mix(packed_floor,vec3(.62,.34,.24),paired_rut*lane_mask*rut_breakup*.18);
+ packed_floor+=vec3(.003,.0025,.002)*(packed_mid-.5);
  vec3 packed=mix(packed_snow,packed_floor,cleared);
- material=mix(material,packed,lane_mask*.72);
+ material=mix(material,packed,lane_mask*.82);
  float lane_edge=(1.-smoothstep(.08,.30,abs(lane_edge_d)))*smoothstep(-.09,.015,abs(lane_edge_d));
- material=mix(material,material*.975,lane_edge*.10);
+ material=mix(material,material*.985,lane_edge*.06);
 
  float ice=1.-smoothstep(-.12,.035,shore);
  material=mix(material,vec3(.37,.67,.84),ice*.35);

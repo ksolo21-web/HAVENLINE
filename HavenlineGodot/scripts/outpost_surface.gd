@@ -9,9 +9,9 @@ const WATER_Y := River.WATER_Y
 const LAND_MARGIN := River.DEFAULT_DRY_MARGIN
 const WORK_CENTER := Vector2(0.0, 2.8)
 const WORK_HALF := Vector2(9.75, 4.3)
-const T03_LANE_COMPRESSION_DEPTH := 0.075
-const T03_LANE_RUT_DEPTH := 0.055
-const T03_LANE_SHOULDER_HEIGHT := 0.075
+const T03_LANE_COMPRESSION_DEPTH := 0.055
+const T03_LANE_RUT_DEPTH := 0.085
+const T03_LANE_SHOULDER_HEIGHT := 0.055
 const T03_BANK_VISUAL_HALF_EXPAND := 0.22
 const T03_BANK_VISUAL_SHORE_MARGIN := River.WET_EDGE+0.08
 const T03_BANK_VISUAL_SHORE_HALF := 0.82
@@ -120,13 +120,13 @@ static func _shape_height(p: Vector2,lane_distance:=INF) -> float:
 	var lane_bed:=1.0-smoothstep(-.08,.22,lane)
 	var centre_distance:=maxf(0.0,lane+Boundary.LANE_HALF)
 	var paired_ruts:=exp(-pow((centre_distance-.62)/.17,2.0))
-	var compression_variation:=.82+.18*pow(sin(p.x*.91+p.y*.57),2.0)
+	var compression_variation:=.94+.06*pow(sin(p.x*.91+p.y*.57),2.0)
 	result-=lane_bed*(T03_LANE_COMPRESSION_DEPTH*compression_variation+T03_LANE_RUT_DEPTH*paired_ruts)
 	var bank_lane:=bank_lane_visual_signed_distance(p)
 	var bank_bed:=1.0-smoothstep(-.06,.24,bank_lane)
 	result-=bank_bed*(T03_BANK_EXTRA_COMPRESSION_DEPTH+T03_BANK_EXTRA_RUT_DEPTH*paired_ruts)
 	var swept_snow_shoulder:=exp(-pow((lane-.13)/.17,2.0))
-	result+=T03_LANE_SHOULDER_HEIGHT*swept_snow_shoulder*(.82+.18*pow(sin(p.x*.47-p.y*.81),2.0))
+	result+=T03_LANE_SHOULDER_HEIGHT*swept_snow_shoulder*(.92+.08*pow(sin(p.x*.47-p.y*.81),2.0))
 	return result
 
 static func _ensure_heights():
