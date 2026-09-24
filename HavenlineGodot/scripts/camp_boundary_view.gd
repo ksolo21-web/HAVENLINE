@@ -6,31 +6,24 @@ const Surface=preload("res://scripts/outpost_surface.gd")
 const Scenery=preload("res://scripts/scenery_batch.gd")
 const BOUNDARY_SHADER=preload("res://assets/t03_boundary_v2/t03_boundary_v2.gdshader")
 const BOUNDARY_ASSET_ROOT := "res://assets/t03_boundary_v2/"
-# Iteration 11C: fit each authored mesh against its real source bounds instead
-# of sharing the approximate fence length with gate leaves. Keep a small,
-# controlled embed and near-zero join overlap so repeated edge pickets do not
-# double into dark seams. Collision still consumes Boundary.panel_specs()
-# unchanged, so openings and gameplay authority do not move.
+# Iteration 11D: keep authored mesh scale/rhythm and derive each visible gate
+# leaf from the family-specific geometry that also owns crossing authority.
 const FENCE_SOURCE_LENGTH := 2.9409
 const GATE_LEAF_SOURCE_LENGTH := 2.90
 const FENCE_ROOT_SINK := 0.22
-const VISUAL_JOIN_OVERLAP := 0.025
-const SOUTH_VISUAL_JOIN_OVERLAP := 0.04
-const VISUAL_CORNER_JOIN_OVERLAP := 0.05
-const GATE_HINGE_OVERLAP := 0.08
-# Use one portal silhouette across all six openings. The leaves remain
-# presentation-only; authoritative collision/opening geometry stays in
-# camp_boundary.gd. A consistent angle/length prevents one gate family from
-# reading like a different leaf shape or pivot system.
-const VISUAL_GATE_LEAF_LENGTH := 1.85
-const VISUAL_GATE_OPEN_ANGLE := 1.12
-const VISUAL_GATE_HINGE_BACKSET := 0.08
-const MAIN_WORK_VISUAL_LEAF_LENGTH := VISUAL_GATE_LEAF_LENGTH
-const MAIN_WORK_VISUAL_OPEN_ANGLE := VISUAL_GATE_OPEN_ANGLE
+const VISUAL_JOIN_OVERLAP := 0.04
+const SOUTH_VISUAL_JOIN_OVERLAP := VISUAL_JOIN_OVERLAP
+const VISUAL_CORNER_JOIN_OVERLAP := VISUAL_JOIN_OVERLAP
+# The scaled threshold post is about 0.35 wide. A 0.18 backset seats the leaf
+# under the post without returning to the old 0.38 over-backset/dark seam.
+const GATE_HINGE_OVERLAP := 0.18
+const VISUAL_GATE_HINGE_BACKSET := GATE_HINGE_OVERLAP
+const MAIN_WORK_VISUAL_LEAF_LENGTH := Boundary.GATE_LEAF_LENGTH
+const MAIN_WORK_VISUAL_OPEN_ANGLE := Boundary.GATE_OPEN_ANGLE
 const MAIN_WORK_GATE_HINGE_OVERLAP := VISUAL_GATE_HINGE_BACKSET
-const RIVER_VISUAL_LEAF_LENGTH := VISUAL_GATE_LEAF_LENGTH
-const RIVER_VISUAL_OPEN_ANGLE := VISUAL_GATE_OPEN_ANGLE
-const RIVER_WEST_VISUAL_OPEN_ANGLE := VISUAL_GATE_OPEN_ANGLE
+const RIVER_VISUAL_LEAF_LENGTH := Boundary.RIVER_GATE_LEAF_LENGTH
+const RIVER_VISUAL_OPEN_ANGLE := Boundary.RIVER_GATE_OPEN_ANGLE
+const RIVER_WEST_VISUAL_OPEN_ANGLE := Boundary.RIVER_GATE_OPEN_ANGLE
 const RIVER_GATE_VISUAL_HINGE_OVERLAP := VISUAL_GATE_HINGE_BACKSET
 const GATE_LEAF_HINGE_SINK := 0.08
 const GATE_LEAF_ROOT_SINK := 0.10
@@ -133,19 +126,8 @@ func _gate_leaf_transform(leaf:Dictionary,hinge_backset:float)->Transform3D:
 	return _segment_transform(a-direction*hinge_backset,b,0.0,GATE_LEAF_HINGE_SINK,GATE_LEAF_ROOT_SINK,GATE_LEAF_SOURCE_LENGTH,false)
 
 func _visual_gate_leaf_specs()->Array[Dictionary]:
-	# Every portal now uses the same authored leaf length and swing angle. This is
-	# visual-only: route, collision and reserved crossing geometry remain locked.
-	var result:Array[Dictionary]=[]
-	for gate in Boundary.gate_specs():
-		var a:Vector2=gate.a;var b:Vector2=gate.b;var tangent:Vector2=gate.tangent;var mid:Vector2=gate.center
-		var inward:=(Boundary.CAMP_CENTER-mid).normalized()
-		var left_dir:=tangent.rotated(VISUAL_GATE_OPEN_ANGLE)
-		if left_dir.dot(inward)<0:left_dir=tangent.rotated(-VISUAL_GATE_OPEN_ANGLE)
-		var right_dir:=(-tangent).rotated(VISUAL_GATE_OPEN_ANGLE)
-		if right_dir.dot(inward)<0:right_dir=(-tangent).rotated(-VISUAL_GATE_OPEN_ANGLE)
-		result.append({"gate":gate.id,"kind":gate.kind,"hinge":a,"a":a,"b":a+left_dir*VISUAL_GATE_LEAF_LENGTH,"length":VISUAL_GATE_LEAF_LENGTH,"open_angle":VISUAL_GATE_OPEN_ANGLE})
-		result.append({"gate":gate.id,"kind":gate.kind,"hinge":b,"a":b,"b":b+right_dir*VISUAL_GATE_LEAF_LENGTH,"length":VISUAL_GATE_LEAF_LENGTH,"open_angle":VISUAL_GATE_OPEN_ANGLE})
-	return result
+	# Match the authoritative main/work and river gate families exactly.
+	return Boundary.gate_leaf_specs()
 
 func configure(game):
 	name="Task03CampBoundary"
@@ -186,7 +168,8 @@ func configure(game):
 	descriptor["authored_boundary_asset_family"]="t03_boundary_v2"
 	descriptor["fence_source_length"]=FENCE_SOURCE_LENGTH
 	descriptor["gate_leaf_source_length"]=GATE_LEAF_SOURCE_LENGTH
-	descriptor["uniform_gate_presentation"]=true
+	descriptor["uniform_gate_presentation"]=false
+	descriptor["gate_presentation_uses_authoritative_family_geometry"]=true
 	descriptor["rigid_gate_leaf_endpoint_seating"]=true
 	descriptor["fence_root_sink"]=FENCE_ROOT_SINK
 	descriptor["visual_join_overlap"]=VISUAL_JOIN_OVERLAP
@@ -209,7 +192,7 @@ func configure(game):
 	descriptor["river_visual_clearance_pass"]=river_visual_clear_min>=Boundary.RIVER_VISUAL_CLEARANCE_MIN
 	descriptor["river_gate_leaf_visual_transform_only"]=true
 	descriptor["gate_leaf_hinge_backset_is_start_only"]=true
-	descriptor["threshold_post_contact_repair"]="uniform-post-plus-small-hinge-backset"
+	descriptor["threshold_post_contact_repair"]="authoritative-leaf-geometry-plus-post-width-hinge-backset"
 	descriptor["visual_gate_leaf_transform_only"]=true
 	descriptor["gate_leaf_root_sink"]=GATE_LEAF_ROOT_SINK
 	descriptor["gate_leaf_hinge_sink"]=GATE_LEAF_HINGE_SINK

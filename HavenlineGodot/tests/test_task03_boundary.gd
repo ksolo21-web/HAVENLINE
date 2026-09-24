@@ -119,15 +119,15 @@ func run():
 	check("Fence visuals and collision use same authoritative panel count",desc.collision_panel_instances==panels.size() and desc.visual_collision_share_panel_authority is bool and desc.visual_collision_share_panel_authority)
 	check("Six gates have twelve authored gate posts and twelve open timber leaves",desc.gate_count==6 and desc.gate_post_instances==12 and desc.open_gate_leaf_instances==12)
 	check("Gate leaves use categorical general and river-specific portal geometry",is_equal_approx(Boundary.NORTH_GATE_HALF,2.15) and is_equal_approx(Boundary.SIDE_GATE_HALF,2.05) and is_equal_approx(Boundary.GATE_LEAF_LENGTH,1.85) and is_equal_approx(Boundary.GATE_OPEN_ANGLE,1.34) and is_equal_approx(Boundary.RIVER_GATE_HALF,2.70) and is_equal_approx(Boundary.RIVER_GATE_LEAF_LENGTH,2.25) and is_equal_approx(Boundary.RIVER_GATE_OPEN_ANGLE,1.13) and is_equal_approx(Boundary.RIVER_LANE_HALF,1.30))
-	check("Gate presentation is uniform while collision and crossing geometry remain locked",
-		is_equal_approx(float(desc.main_work_visual_gate_leaf_length),1.85) and is_equal_approx(float(desc.main_work_visual_gate_open_angle),1.12) and
-		is_equal_approx(float(desc.main_work_gate_hinge_overlap),.08) and is_equal_approx(float(desc.river_visual_gate_leaf_length),1.85) and
-		is_equal_approx(float(desc.river_visual_gate_open_angle),1.12) and is_equal_approx(float(desc.river_west_visual_gate_open_angle),1.12) and
-		is_equal_approx(float(desc.river_gate_visual_hinge_overlap),.08) and float(desc.river_visual_clear_width_min)>=Boundary.RIVER_VISUAL_CLEARANCE_MIN and
+	check("Gate presentation uses authoritative family geometry while collision and crossing geometry remain locked",
+		is_equal_approx(float(desc.main_work_visual_gate_leaf_length),Boundary.GATE_LEAF_LENGTH) and is_equal_approx(float(desc.main_work_visual_gate_open_angle),Boundary.GATE_OPEN_ANGLE) and
+		is_equal_approx(float(desc.main_work_gate_hinge_overlap),.18) and is_equal_approx(float(desc.river_visual_gate_leaf_length),Boundary.RIVER_GATE_LEAF_LENGTH) and
+		is_equal_approx(float(desc.river_visual_gate_open_angle),Boundary.RIVER_GATE_OPEN_ANGLE) and is_equal_approx(float(desc.river_west_visual_gate_open_angle),Boundary.RIVER_GATE_OPEN_ANGLE) and
+		is_equal_approx(float(desc.river_gate_visual_hinge_overlap),.18) and float(desc.river_visual_clear_width_min)>=Boundary.RIVER_VISUAL_CLEARANCE_MIN and
 		desc.river_visual_clearance_pass and desc.river_gate_leaf_visual_transform_only and desc.visual_gate_leaf_transform_only and
-		desc.gate_leaf_hinge_backset_is_start_only and desc.uniform_gate_presentation and desc.rigid_gate_leaf_endpoint_seating and
+		desc.gate_leaf_hinge_backset_is_start_only and not desc.uniform_gate_presentation and desc.gate_presentation_uses_authoritative_family_geometry and desc.rigid_gate_leaf_endpoint_seating and
 		is_equal_approx(float(desc.fence_source_length),2.9409) and is_equal_approx(float(desc.gate_leaf_source_length),2.90) and
-		String(desc.threshold_post_contact_repair)=="uniform-post-plus-small-hinge-backset")
+		String(desc.threshold_post_contact_repair)=="authoritative-leaf-geometry-plus-post-width-hinge-backset")
 	var river_authority_ok:=Boundary.river_gate_contracts().size()==3
 	var evidence_ids:Dictionary={}
 	for contract in Boundary.river_gate_contracts():
@@ -141,16 +141,22 @@ func run():
 			var eid:=String(contract.evidence_ids[kind]);evidence_ids[eid]=true
 	check("River gates share authoritative geometry for visual clearance routes and evidence",river_authority_ok and evidence_ids.size()==12 and evidence.required_river_gate_evidence_ids.size()==12 and evidence.all_river_visual_clearance_pass)
 	check("Authored fence roots use controlled embed rather than deep clipping",is_equal_approx(float(desc.fence_root_sink),.22))
+	var south_panel_total:=0.0
+	var south_panel_count:=0
+	for panel in Boundary.panel_specs():
+		if String(panel.boundary).begins_with("south-"):
+			south_panel_total+=float(panel.length);south_panel_count+=1
+	check("Curved south fence keeps authored-scale panel rhythm",south_panel_count>0 and south_panel_total/float(south_panel_count)>1.60 and south_panel_total/float(south_panel_count)<=Boundary.PANEL_TARGET+.05)
 	check("Fence joins gate seating and rutted terrain preserve clean threshold contact",
-		is_equal_approx(float(desc.visual_join_overlap),.025) and is_equal_approx(float(desc.south_visual_join_overlap),.04) and
-		is_equal_approx(float(desc.visual_corner_join_overlap),.05) and is_equal_approx(float(desc.gate_hinge_overlap),.08) and
+		is_equal_approx(float(desc.visual_join_overlap),.04) and is_equal_approx(float(desc.south_visual_join_overlap),.04) and
+		is_equal_approx(float(desc.visual_corner_join_overlap),.04) and is_equal_approx(float(desc.gate_hinge_overlap),.18) and
 		is_equal_approx(float(desc.gate_leaf_root_sink),.10) and is_equal_approx(float(desc.gate_leaf_hinge_sink),.08) and int(desc.terrain_seat_samples)==7 and
 		not desc.terrain_crown_applied_to_gate_leaves_only and is_equal_approx(float(desc.gate_post_root_sink),.20) and
 		is_equal_approx(float(desc.main_gate_post_scale),1.12) and is_equal_approx(float(desc.main_gate_post_height_scale),1.08) and
 		is_equal_approx(float(desc.river_gate_post_scale),1.12) and is_equal_approx(float(desc.river_gate_post_height_scale),1.08) and
 		is_equal_approx(float(desc.work_gate_post_scale),1.12) and is_equal_approx(float(desc.work_gate_post_height_scale),1.08) and
-		is_equal_approx(float(desc.lane_compression_depth),.055) and is_equal_approx(float(desc.lane_rut_depth),.085) and
-		is_equal_approx(float(desc.lane_shoulder_height),.055))
+		is_equal_approx(float(desc.lane_compression_depth),.065) and is_equal_approx(float(desc.lane_rut_depth),.105) and
+		is_equal_approx(float(desc.lane_shoulder_height),.065))
 	var zero_progress_hidden:=true
 	for side in game.sim.defenses:
 		zero_progress_hidden=zero_progress_hidden and not game.defense_visuals[side].visible

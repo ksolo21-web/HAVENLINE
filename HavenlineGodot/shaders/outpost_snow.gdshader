@@ -63,19 +63,18 @@ void fragment(){
  float lane_center_distance=max(lane+1.30,0.0);
  float paired_rut=1.-smoothstep(.10,.27,abs(lane_center_distance-.62));
  float rut_breakup=.82+.18*smoothstep(.28,.76,material_noise(p*2.7+vec2(7.1,-4.3)));
- // Iteration 11C: the broad bed stays close to the underlying snow/work-floor
- // family while the continuous paired ruts carry the readable direction of
- // travel. This removes the noisy patchwork read without introducing a path plane.
- vec3 packed_snow=mix(snow,vec3(.875,.93,.975),.08+.08*compression);
- packed_snow=mix(packed_snow,vec3(.655,.755,.855),paired_rut*lane_mask*rut_breakup*.26);
- packed_snow+=vec3(.004,.0045,.005)*(packed_mid-.5);
- vec3 packed_floor=mix(floor,vec3(.765,.46,.34),.04+.03*compression);
- packed_floor=mix(packed_floor,vec3(.62,.34,.24),paired_rut*lane_mask*rut_breakup*.18);
- packed_floor+=vec3(.003,.0025,.002)*(packed_mid-.5);
+ // Iteration 11D: use the same compression and rut weights on snow and warm
+ // floor so the work route stays continuous through the material transition.
+ vec3 packed_snow=mix(snow,vec3(.855,.915,.965),.14+.08*compression);
+ packed_snow=mix(packed_snow,vec3(.61,.72,.825),paired_rut*lane_mask*rut_breakup*.30);
+ packed_snow+=vec3(.006,.0065,.007)*(packed_mid-.5);
+ vec3 packed_floor=mix(floor,vec3(.72,.415,.31),.14+.08*compression);
+ packed_floor=mix(packed_floor,vec3(.55,.30,.22),paired_rut*lane_mask*rut_breakup*.30);
+ packed_floor+=vec3(.006,.005,.004)*(packed_mid-.5);
  vec3 packed=mix(packed_snow,packed_floor,cleared);
- material=mix(material,packed,lane_mask*.82);
+ material=mix(material,packed,lane_mask*.90);
  float lane_edge=(1.-smoothstep(.08,.30,abs(lane_edge_d)))*smoothstep(-.09,.015,abs(lane_edge_d));
- material=mix(material,material*.985,lane_edge*.06);
+ material=mix(material,material*.982,lane_edge*.08);
 
  float ice=1.-smoothstep(-.12,.035,shore);
  material=mix(material,vec3(.37,.67,.84),ice*.35);
