@@ -5,6 +5,7 @@ on:
     paths:
       - '.github/workflows/havenline-t03-repaired-visual-critics.yml'
       - 'tools/havenline/review_task03_reference_repair.py'
+  workflow_dispatch:
 permissions:
   contents: read
   actions: read
@@ -15,19 +16,22 @@ env:
   CANDIDATE: '53f612ac6cec7317482e28abed7b85878c3f014e'
   EVIDENCE_RUN: '35984260224'
   EVIDENCE_ARTIFACT: 'havenline-t03-reference-repair-35984260224'
+
 jobs:
-  independent-visual:
+  visual-shards:
     strategy:
       fail-fast: false
       matrix:
         critic: [C1,C2]
+        group: [boundary_portals,routes_contacts,iteration11_changed_domains]
     runs-on: ubuntu-24.04
-    timeout-minutes: 45
+    timeout-minutes: 30
     env:
       EXPECTED_SOURCE: '53f612ac6cec7317482e28abed7b85878c3f014e'
       REVIEW_CRITIC: ${{ matrix.critic }}
+      REVIEW_GROUP: ${{ matrix.group }}
       EVIDENCE_ROOT: t03-repair
-      REVIEW_OUT: review/${{ matrix.critic }}
+      REVIEW_OUT: review/${{ matrix.critic }}/${{ matrix.group }}
       HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
     steps:
       - uses: actions/checkout@v4
@@ -46,18 +50,18 @@ jobs:
           key: havenline-t01-qwen35-9b-q5-20260908-v1
           fail-on-cache-miss: true
       - run: python3 -m pip install pillow
-      - name: Run exact-source independent ${{ matrix.critic }}
+      - name: Run exact-source independent ${{ matrix.critic }} / ${{ matrix.group }}
         run: python3 -u tools/havenline/review_task03_reference_repair.py
       - uses: actions/upload-artifact@v4
         if: always()
         with:
-          name: t03-reference-repair-${{ matrix.critic }}-${{ github.run_id }}
-          path: review/${{ matrix.critic }}/
+          name: t03-reference-repair-${{ matrix.critic }}-${{ matrix.group }}-${{ github.run_id }}
+          path: review/${{ matrix.critic }}/${{ matrix.group }}/
           retention-days: 30
           if-no-files-found: error
 
   visual-gate:
-    needs: independent-visual
+    needs: visual-shards
     if: always()
     runs-on: ubuntu-24.04
     timeout-minutes: 6
@@ -72,20 +76,28 @@ jobs:
           from pathlib import Path
           import json,math
           candidate='53f612ac6cec7317482e28abed7b85878c3f014e'
+          groups={'boundary_portals','routes_contacts','iteration11_changed_domains'}
+          expected={(c,g) for c in ('C1','C2') for g in groups}
           rows={}
           for p in Path('reviews').rglob('critic-record.json'):
-              r=json.loads(p.read_text());rows[r['critic_id']]=r
-          assert set(rows)=={'C1','C2'},rows.keys()
-          for cid,r in rows.items():
-              assert r['candidate_hash']==candidate,(cid,r.get('candidate_hash'))
+              r=json.loads(p.read_text())
+              key=(r['critic_id'],r.get('review_group'))
+              assert key not in rows,key
+              rows[key]=r
+          assert set(rows)==expected,(set(rows),expected)
+          aggregate={}
+          for key,r in rows.items():
+              cid,gid=key
+              assert r['candidate_hash']==candidate,(key,r.get('candidate_hash'))
               assert r['independent_runtime'] is True
-              assert r['passed'] is True,(cid,r.get('defects'),r.get('scores'))
+              assert r['passed'] is True,(key,r.get('defects'),r.get('scores'))
               assert r['defects']==[]
               assert r['coverage_complete'] is True
               assert r['confidence'] in ('medium','high')
-              assert r['scores'] and all(type(v) in (int,float) and not isinstance(v,bool) and math.isfinite(v) and v==10.0 for v in r['scores'].values()),(cid,r['scores'])
+              assert r['scores'] and all(type(v) in (int,float) and not isinstance(v,bool) and math.isfinite(v) and v==10.0 for v in r['scores'].values()),(key,r['scores'])
+              aggregate.setdefault(cid,{}).setdefault('groups',{})[gid]=r['scores']
           Path('visual-gate').mkdir()
-          out={'task':'T03','candidate':candidate,'C1':rows['C1']['scores'],'C2':rows['C2']['scores'],'passed':True,'visual_exact_10':True,'user_signoff_required':True}
+          out={'task':'T03','candidate':candidate,'groups':sorted(groups),'C1':aggregate['C1'],'C2':aggregate['C2'],'passed':True,'visual_exact_10':True,'user_signoff_required':True}
           Path('visual-gate/result.json').write_text(json.dumps(out,indent=2)+'\n')
           print(json.dumps(out,indent=2))
           PY
@@ -124,7 +136,7 @@ jobs:
           key: havenline-t01-qwen35-9b-q5-20260908-v1
           fail-on-cache-miss: true
       - run: python3 -m pip install pillow
-      - name: Run fresh repaired-source C6
+      - name: Run fresh iteration 11B C6
         run: python3 -u tools/havenline/review_task03_reference_repair.py
       - uses: actions/upload-artifact@v4
         if: always()
@@ -156,7 +168,7 @@ jobs:
           candidate='53f612ac6cec7317482e28abed7b85878c3f014e'
           v=json.loads(Path('visual/result.json').read_text())
           c=json.loads(next(Path('c6').rglob('critic-record.json')).read_text())
-          assert v['passed'] is True and v['candidate']==candidate
+          assert v['passed'] is True and v['candidate']==candidate and v['visual_exact_10'] is True
           assert c['critic_id']=='C6' and c['candidate_hash']==candidate and c['passed'] is True
           assert c['defects']==[] and c['coverage_complete'] is True and c['confidence'] in ('medium','high')
           assert len(c['scores'])==9 and all(type(x) in (int,float) and not isinstance(x,bool) and math.isfinite(x) and x>9.0 for x in c['scores'].values())
@@ -171,4 +183,4 @@ jobs:
           path: final/
           retention-days: 30
           if-no-files-found: error
-# Critic/tooling workflow only. Candidate pixels are exact 97b615c... and cannot be changed by this run.
+# Iteration 11B critic/tooling workflow only. Candidate pixels are exact 53f612ac6cec7317482e28abed7b85878c3f014e and cannot be changed by this run.
