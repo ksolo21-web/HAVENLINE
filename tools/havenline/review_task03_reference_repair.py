@@ -8,6 +8,7 @@ EVIDENCE=ROOT/os.environ.get("EVIDENCE_ROOT","t03-repair")
 OUT=ROOT/os.environ.get("REVIEW_OUT","t03-reference-repair-review")
 SOURCE=os.environ["EXPECTED_SOURCE"]
 CRITIC=os.environ["REVIEW_CRITIC"].upper()
+REVIEW_GROUP=os.environ.get("REVIEW_GROUP","").strip()
 assert CRITIC in {"C1","C2","C6"} and len(SOURCE)==40
 OUT.mkdir(parents=True,exist_ok=True)
 
@@ -136,8 +137,13 @@ try:
         checks="Match the supplied reference fence/gate/work-area language and judge cross-view consistency." if CRITIC=="C1" else "Judge grounding, seams, clipping, intentional gate gaps, leaf/post contact, route continuity and cross-view integrity."
         base=f"""You are Havenline's independent {role}. Review exact candidate {SOURCE}. Scope is ONLY T03 fences, gates, threshold posts and packed/worn work lanes. T02 terrain/snow/water/work-floor is user-accepted and must not be re-litigated. T04+ buildings, stations, characters and later systems visible in context are NOT scored here. The top reference frames are authoritative gameplay references for the T03 art language. {checks}
 The repair standard is unusually strict: every mandatory visual dimension must be 10.0 for this repaired visual approval. Do not average. A score below 10.0 requires a concrete actionable T03-owned defect in defects. If there is no actionable T03 defect, defects must be [] exactly. Do not invent defects from downstream T04+ content. Return JSON only."""
+        if REVIEW_GROUP:
+            assert REVIEW_GROUP in GROUPS,("unknown review group",REVIEW_GROUP)
+            selected_groups={REVIEW_GROUP:GROUPS[REVIEW_GROUP]}
+        else:
+            selected_groups=GROUPS
         rows=[]
-        for gid,paths in GROUPS.items():
+        for gid,paths in selected_groups.items():
             board=make_board(gid,paths)
             review=request(board,base+"\nEvidence group: "+gid+". Inspect every candidate panel and the reference row.",response_schema(dims),gid)
             scores=review.get("scores",{})
@@ -150,10 +156,10 @@ The repair standard is unusually strict: every mandatory visual dimension must b
             rows.append({"group":gid,"review":review,"passed":not errors,"errors":errors})
         score_min={d:min(row["review"]["scores"].get(d,0) for row in rows) for d in dims}
         defects=[f"{row['group']}: {x}" for row in rows for x in row["review"].get("defects",[])]
-        passed=len(rows)==len(GROUPS) and all(row["passed"] for row in rows)
+        passed=len(rows)==len(selected_groups) and all(row["passed"] for row in rows)
         raw={"critic_id":CRITIC,"candidate":SOURCE,"groups":rows,"reference_hashes":ref_hashes}
         raw_path=OUT/"raw-output.json";raw_path.write_text(json.dumps(raw,indent=2)+"\n")
-        record={"task_id":"T03","critic_id":CRITIC,"provider":manifest["publisher"],"model":manifest["base_model"],"model_revision":manifest["revision"],"request_or_run_id":os.environ.get("GITHUB_RUN_ID","local")+"/"+os.environ.get("GITHUB_JOB","critic"),"candidate_hash":SOURCE,"input_manifest_hash":hashlib.sha256(json.dumps({"evidence":evidence["image_hashes"],"references":ref_hashes},sort_keys=True).encode()).hexdigest(),"raw_output_path":str(raw_path.relative_to(ROOT)),"raw_output_hash":digest(raw_path),"scores":score_min,"defects":defects,"coverage_complete":all(r["review"].get("coverage_complete") is True for r in rows),"confidence":"high" if all(r["review"].get("confidence")=="high" for r in rows) else "medium","independent_runtime":True,"groups":rows,"passed":passed,"visual_exact_10_required":True}
+        record={"task_id":"T03","critic_id":CRITIC,"review_group":REVIEW_GROUP or "all","provider":manifest["publisher"],"model":manifest["base_model"],"model_revision":manifest["revision"],"request_or_run_id":os.environ.get("GITHUB_RUN_ID","local")+"/"+os.environ.get("GITHUB_JOB","critic"),"candidate_hash":SOURCE,"input_manifest_hash":hashlib.sha256(json.dumps({"evidence":evidence["image_hashes"],"references":ref_hashes},sort_keys=True).encode()).hexdigest(),"raw_output_path":str(raw_path.relative_to(ROOT)),"raw_output_hash":digest(raw_path),"scores":score_min,"defects":defects,"coverage_complete":all(r["review"].get("coverage_complete") is True for r in rows),"confidence":"high" if all(r["review"].get("confidence")=="high" for r in rows) else "medium","independent_runtime":True,"groups":rows,"passed":passed,"visual_exact_10_required":True}
     else:
         capture=json.loads((EVIDENCE/"gallery/capture.json").read_text())
         native=json.loads((EVIDENCE/"native4k/capture.json").read_text())
