@@ -141,9 +141,11 @@ func run():
 			var eid:=String(contract.evidence_ids[kind]);evidence_ids[eid]=true
 	check("River gates share authoritative geometry for visual clearance routes and evidence",river_authority_ok and evidence_ids.size()==12 and evidence.required_river_gate_evidence_ids.size()==12 and evidence.all_river_visual_clearance_pass)
 	check("Authored fence roots use controlled embed rather than deep clipping",is_equal_approx(float(desc.fence_root_sink),.22))
-	check("Curved south fence rendering keeps authored-scale spacing",
-		desc.south_visual_grouping_from_panel_specs and int(desc.south_visual_panel_instances)>0 and
-		float(desc.south_visual_panel_average_length)>1.60 and float(desc.south_visual_panel_average_length)<=Boundary.PANEL_TARGET+.10)
+	check("Curved south fence rendering preserves authored spacing and gate endpoints",
+		desc.south_visual_grouping_from_panel_specs and desc.south_visual_spacing_normalized and int(desc.south_visual_panel_instances)>0 and
+		float(desc.south_visual_min_panel_length)>=1.60 and float(desc.south_visual_max_panel_length)<=Boundary.PANEL_TARGET+.10 and
+		float(desc.south_visual_gate_endpoint_error_max)<.001 and float(desc.south_visual_outer_extension_max)<=.95 and
+		float(desc.south_visual_internal_extension_max)<=.08)
 	check("Fence joins gate seating and rutted terrain preserve clean threshold contact",
 		is_equal_approx(float(desc.visual_join_overlap),.04) and is_equal_approx(float(desc.south_visual_join_overlap),.04) and
 		is_equal_approx(float(desc.visual_corner_join_overlap),.04) and is_equal_approx(float(desc.gate_hinge_overlap),.18) and
