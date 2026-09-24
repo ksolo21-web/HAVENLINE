@@ -18,13 +18,13 @@ const GATE_HINGE_OVERLAP := 0.12
 # authoritative gate specs/collision gaps remain in camp_boundary.gd.
 const MAIN_WORK_VISUAL_LEAF_LENGTH := 1.30
 const MAIN_WORK_VISUAL_OPEN_ANGLE := 0.70
-const MAIN_WORK_GATE_HINGE_OVERLAP := 0.24
+const MAIN_WORK_GATE_HINGE_OVERLAP := 0.30
 # River leaves use the same visual-only presentation rule: keep the authoritative
 # crossing/collision contract, but turn a shorter framed panel toward the camera
 # so the future crossing reads unmistakably as a gate.
 const RIVER_VISUAL_LEAF_LENGTH := 1.30
 const RIVER_VISUAL_OPEN_ANGLE := 0.72
-const RIVER_GATE_VISUAL_HINGE_OVERLAP := 0.24
+const RIVER_GATE_VISUAL_HINGE_OVERLAP := 0.30
 const GATE_LEAF_HINGE_SINK := 0.14
 const GATE_LEAF_ROOT_SINK := 0.18
 const TERRAIN_SEAT_SAMPLES := 7
@@ -116,6 +116,13 @@ func _post_transform(p:Vector2,tangent:Vector2,visual_scale:=1.0,height_scale:=1
 	var basis:=Basis(Vector3.UP,-angle).scaled(Vector3(visual_scale,height_scale,visual_scale))
 	return Transform3D(basis,Vector3(p.x,Surface.height_at(p)-GATE_POST_ROOT_SINK,p.y))
 
+func _gate_leaf_transform(leaf:Dictionary,hinge_backset:float)->Transform3D:
+	# Backset only the hinge edge beneath the authored threshold post. The free
+	# edge stays fixed, so seam closure never steals visual or collision aperture.
+	var a:=Vector2(leaf.a);var b:=Vector2(leaf.b)
+	var direction:=(b-a).normalized()
+	return _segment_transform(a-direction*hinge_backset,b,0.0,GATE_LEAF_HINGE_SINK,GATE_LEAF_ROOT_SINK,true)
+
 func _visual_gate_leaf_specs()->Array[Dictionary]:
 	# Collision/opening authority remains in camp_boundary.gd. Presentation-only
 	# leaf lengths/angles keep every framed X-braced panel readable in normal
@@ -146,8 +153,8 @@ func configure(game):
 	fence_batch.name="ReferencePalisadeFence"
 	var gate_leaf_transforms:Array[Transform3D]=[]
 	for leaf in _visual_gate_leaf_specs():
-		var hinge_overlap:=RIVER_GATE_VISUAL_HINGE_OVERLAP if leaf.kind=="river" else MAIN_WORK_GATE_HINGE_OVERLAP
-		gate_leaf_transforms.append(_segment_transform(leaf.a,leaf.b,hinge_overlap,GATE_LEAF_HINGE_SINK,GATE_LEAF_ROOT_SINK,true))
+		var hinge_backset:=RIVER_GATE_VISUAL_HINGE_OVERLAP if leaf.kind=="river" else MAIN_WORK_GATE_HINGE_OVERLAP
+		gate_leaf_transforms.append(_gate_leaf_transform(leaf,hinge_backset))
 	gate_leaf_batch=Scenery.instances(_mesh(game,"gate_leaf"),gate_leaf_transforms,self)
 	gate_leaf_batch.name="ReferenceFramedOpenGateLeaves"
 	var post_transforms:Array[Transform3D]=[]
@@ -190,6 +197,7 @@ func configure(game):
 	descriptor["river_visual_clear_width_min"]=river_visual_clear_min
 	descriptor["river_visual_clearance_pass"]=river_visual_clear_min>=Boundary.RIVER_VISUAL_CLEARANCE_MIN
 	descriptor["river_gate_leaf_visual_transform_only"]=true
+	descriptor["gate_leaf_hinge_backset_is_start_only"]=true
 	descriptor["visual_gate_leaf_transform_only"]=true
 	descriptor["gate_leaf_root_sink"]=GATE_LEAF_ROOT_SINK
 	descriptor["gate_leaf_hinge_sink"]=GATE_LEAF_HINGE_SINK

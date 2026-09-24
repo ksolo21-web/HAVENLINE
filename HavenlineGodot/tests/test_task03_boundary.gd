@@ -58,6 +58,12 @@ func run():
 	check("Work-lane centre lines do not run through visible fence collision",lanes_clear)
 	var lane_ids:=Boundary.lane_polylines().map(func(row):return row.id)
 	check("Lane network contains central cross shelter bank river connectors and three threshold aprons",Boundary.lane_polylines().size()==10 and lane_samples>275 and ["river-apron-west","river-apron-centre","river-apron-east"].all(func(id):return id in lane_ids))
+	var visual_lane_thresholds_ok:=true
+	for gate in gates:
+		if gate.kind!="river":continue
+		visual_lane_thresholds_ok=visual_lane_thresholds_ok and Surface.visual_lane_signed_distance(Vector2(gate.center))<-.9
+		visual_lane_thresholds_ok=visual_lane_thresholds_ok and Surface.visual_lane_signed_distance(Boundary.bank_lane_point(float(gate.reserve_x)))<-.9
+	check("Visual bank and river-apron wear remains route-derived and reaches every river threshold",visual_lane_thresholds_ok)
 	var sim:=Sim.new();sim.threats_enabled=false;sim.rescue_enabled=false;sim.population.enabled_templates.clear()
 	var gate_walks:=true;var gate_sprints:=true
 	for gate in gates:
@@ -106,7 +112,7 @@ func run():
 	check("Fence visuals and collision use same authoritative panel count",desc.collision_panel_instances==panels.size() and desc.visual_collision_share_panel_authority is bool and desc.visual_collision_share_panel_authority)
 	check("Six gates have twelve authored gate posts and twelve open timber leaves",desc.gate_count==6 and desc.gate_post_instances==12 and desc.open_gate_leaf_instances==12)
 	check("Gate leaves use categorical general and river-specific portal geometry",is_equal_approx(Boundary.NORTH_GATE_HALF,2.15) and is_equal_approx(Boundary.SIDE_GATE_HALF,2.05) and is_equal_approx(Boundary.GATE_LEAF_LENGTH,1.85) and is_equal_approx(Boundary.GATE_OPEN_ANGLE,1.34) and is_equal_approx(Boundary.RIVER_GATE_HALF,2.70) and is_equal_approx(Boundary.RIVER_GATE_LEAF_LENGTH,2.25) and is_equal_approx(Boundary.RIVER_GATE_OPEN_ANGLE,1.13) and is_equal_approx(Boundary.RIVER_LANE_HALF,1.30))
-	check("Gate readability corrections are visual-only while authoritative collision and crossing geometry remain locked",is_equal_approx(float(desc.main_work_visual_gate_leaf_length),1.30) and is_equal_approx(float(desc.main_work_visual_gate_open_angle),0.70) and is_equal_approx(float(desc.main_work_gate_hinge_overlap),0.24) and is_equal_approx(float(desc.river_visual_gate_leaf_length),1.30) and is_equal_approx(float(desc.river_visual_gate_open_angle),0.72) and is_equal_approx(float(desc.river_gate_visual_hinge_overlap),0.24) and float(desc.river_visual_clear_width_min)>=Boundary.RIVER_VISUAL_CLEARANCE_MIN and desc.river_visual_clearance_pass and desc.river_gate_leaf_visual_transform_only and desc.visual_gate_leaf_transform_only)
+	check("Gate readability corrections are visual-only while authoritative collision and crossing geometry remain locked",is_equal_approx(float(desc.main_work_visual_gate_leaf_length),1.30) and is_equal_approx(float(desc.main_work_visual_gate_open_angle),0.70) and is_equal_approx(float(desc.main_work_gate_hinge_overlap),0.30) and is_equal_approx(float(desc.river_visual_gate_leaf_length),1.30) and is_equal_approx(float(desc.river_visual_gate_open_angle),0.72) and is_equal_approx(float(desc.river_gate_visual_hinge_overlap),0.30) and float(desc.river_visual_clear_width_min)>=Boundary.RIVER_VISUAL_CLEARANCE_MIN and desc.river_visual_clearance_pass and desc.river_gate_leaf_visual_transform_only and desc.visual_gate_leaf_transform_only and desc.gate_leaf_hinge_backset_is_start_only)
 	var river_authority_ok:=Boundary.river_gate_contracts().size()==3
 	var evidence_ids:Dictionary={}
 	for contract in Boundary.river_gate_contracts():

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_9_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_FINAL_C1_C2",
+  "status": "ITERATION_10_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_TARGETED_FINAL_C1_C2",
   "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -31,12 +31,12 @@
     "T01/T02 protected-source check",
     "T01-T03 mechanical regression",
     "primitive/material audit zero findings",
-    "fresh 47+11 exact-source captures",
-    "final targeted high-resolution C1/C2 boards with intentional-gate attribution and T03-only crops",
+    "fresh exact-source 47+11 capture",
+    "rerun only C1 lanes-bank and C2 work-gates/river-gates/lanes-bank",
     "explicit user visual signoff"
   ],
   "approval": false,
-  "review_repair_iteration": 9,
+  "review_repair_iteration": 10,
   "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
   "iteration_1_findings": [
     "Fence read as round log barricades rather than the reference's dense pointed palisade.",
@@ -122,5 +122,17 @@
     "lanes": "Strengthen only the existing T03 lane-mask color separation and paired ruts within the accepted T02 surface; no path mesh/plane is added.",
     "south_fence": "Use symmetric edge crown heights and stronger visual-only south-panel overlap to eliminate repeat-boundary crown jumps/daylight seams.",
     "performance": "Fence remains 640 triangles; gate mesh/material/batch count unchanged; lane shader instruction topology unchanged (constant/color tuning only). Preserve corrected C6 pass."
+  },
+  "iteration_9_disposition": "PARTIAL_PASS_THREE_TARGETED_DEFECT_FAMILIES",
+  "iteration_9_findings": [
+    "C1 passed fence, north gate, work gates, river gates, central lanes and conditions; only bank-lane reference fidelity failed.",
+    "C2 passed fence, north gate, central lanes and conditions; failures were west work-gate hinge contact, west/east river inner-leaf threshold contact, and bank/crossing lane continuity.",
+    "Bank-lane color overcorrection could read as dark asphalt in the critic board while other views showed the wear fading before thresholds."
+  ],
+  "iteration_10_repair": {
+    "hinges": "Replace symmetric leaf overlap with a 0.30-unit hinge-only backset hidden beneath the threshold post. The free edge remains fixed, so visual/collision aperture is preserved.",
+    "bank_lanes": "Derive a visual-only union from the authoritative north-bank and river-apron polylines, widening those wear envelopes by 0.22 and filling each river threshold with a route-centered wear disk; no route/collision constants change.",
+    "lane_material": "Lighten packed snow to pale cool blue-white and warm-floor wear to salmon-brown; reduce rut/edge darkening to prevent asphalt-like contrast.",
+    "performance": "No new draw batches, textures, materials, physics, animations or NPCs. Visual-lane union is terrain-build-time only; shader instruction family remains unchanged. Preserve corrected C6 pass."
   }
 }

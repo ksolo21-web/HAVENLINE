@@ -37,6 +37,28 @@ static func land_position(p: Vector2, margin := LAND_MARGIN) -> Vector2:
 static func protected_build_position(p: Vector2) -> Vector2:
 	return River.protected_build_position(p)
 
+static func _segment_distance(p:Vector2,a:Vector2,b:Vector2)->float:
+	var d:=b-a
+	if d.length_squared()<.000001:return p.distance_to(a)
+	return p.distance_to(a+d*clampf((p-a).dot(d)/d.length_squared(),0.0,1.0))
+
+static func visual_lane_signed_distance(p:Vector2)->float:
+	# The authoritative T03 route graph remains Boundary.lane_polylines().
+	# Presentation gets a small union at the bank/apron family so packed wear
+	# visibly reaches each threshold instead of fading before the gate.
+	var result:=Boundary.lane_signed_distance(p)
+	for lane in Boundary.lane_polylines():
+		var id:=String(lane.id)
+		if id!="north-bank" and not id.begins_with("river-apron-"):continue
+		var points:Array=lane.points
+		var half_width:=float(lane.get("half_width",Boundary.LANE_HALF))+.22
+		for i in range(points.size()-1):
+			result=minf(result,_segment_distance(p,Vector2(points[i]),Vector2(points[i+1]))-half_width)
+	for gate in Boundary.gate_specs():
+		if gate.kind=="river":
+			result=minf(result,p.distance_to(Vector2(gate.center))-(Boundary.RIVER_LANE_HALF+.18))
+	return result
+
 static func _shape_height(p: Vector2,lane_distance:=INF) -> float:
 	var ripple := sin(p.x*.53+sin(p.y*.26))*cos(p.y*.48)*.055
 	var edge := smoothstep(13.5,24.0,maxf(absf(p.x),absf(p.y)*.86))
@@ -65,7 +87,7 @@ static func _shape_height(p: Vector2,lane_distance:=INF) -> float:
 	# previous shader-only tint could read as a flat overlay at grouped evidence
 	# scale. A shallow continuous bed plus paired traffic ruts now creates real
 	# height/contact cues without adding a path plane or touching T02 water.
-	var lane:=Boundary.lane_signed_distance(p) if is_inf(lane_distance) else lane_distance
+	var lane:=visual_lane_signed_distance(p) if is_inf(lane_distance) else lane_distance
 	var lane_bed:=1.0-smoothstep(-.08,.22,lane)
 	var centre_distance:=maxf(0.0,lane+Boundary.LANE_HALF)
 	var paired_ruts:=exp(-pow((centre_distance-.62)/.17,2.0))
@@ -83,7 +105,7 @@ static func _ensure_heights():
 	for z in range(side):
 		for x in range(side):
 			var i:=z*side+x;var p:=Vector2(-HALF+x*STEP,-HALF+z*STEP)
-			_lane_distances[i]=Boundary.lane_signed_distance(p)
+			_lane_distances[i]=visual_lane_signed_distance(p)
 			_heights[i]=_shape_height(p,_lane_distances[i])
 
 static func height_at(p: Vector2) -> float:

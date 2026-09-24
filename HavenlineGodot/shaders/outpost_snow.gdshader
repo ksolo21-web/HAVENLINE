@@ -63,20 +63,20 @@ void fragment(){
  float lane_center_distance=max(lane+1.30,0.0);
  float paired_rut=1.-smoothstep(.10,.27,abs(lane_center_distance-.62));
  float rut_breakup=.82+.18*smoothstep(.28,.76,material_noise(p*2.7+vec2(7.1,-4.3)));
- // Iteration 9: make traffic wear legible at gameplay scale without adding
- // a separate path plane or changing the accepted T02 base surface. Snow lanes
- // compress toward a cool blue-grey packed value; warm-floor lanes deepen
- // toward salmon-brown. Paired ruts stay narrow and noise-broken.
- vec3 packed_snow=mix(snow,vec3(.78,.87,.945),.12+.15*compression);
- packed_snow=mix(packed_snow,vec3(.62,.71,.79),paired_rut*lane_mask*rut_breakup*.17);
- packed_snow+=vec3(.010,.012,.014)*(packed_mid-.5);
- vec3 packed_floor=mix(floor,vec3(.68,.40,.285),.075+.095*compression);
- packed_floor=mix(packed_floor,vec3(.53,.295,.205),paired_rut*lane_mask*rut_breakup*.18);
- packed_floor+=vec3(.009,.006,.004)*(packed_mid-.5);
+ // Iteration 10: preserve readable traffic compression but return the bank
+ // family to the reference's pale packed-snow language. The wear remains part
+ // of the same T02 surface, with restrained cool ruts and warm salmon work-floor
+ // compression rather than a dark road/asphalt read.
+ vec3 packed_snow=mix(snow,vec3(.885,.935,.978),.18+.12*compression);
+ packed_snow=mix(packed_snow,vec3(.78,.845,.905),paired_rut*lane_mask*rut_breakup*.10);
+ packed_snow+=vec3(.009,.010,.012)*(packed_mid-.5);
+ vec3 packed_floor=mix(floor,vec3(.755,.455,.335),.10+.075*compression);
+ packed_floor=mix(packed_floor,vec3(.655,.365,.255),paired_rut*lane_mask*rut_breakup*.10);
+ packed_floor+=vec3(.008,.006,.004)*(packed_mid-.5);
  vec3 packed=mix(packed_snow,packed_floor,cleared);
- material=mix(material,packed,lane_mask*.74);
+ material=mix(material,packed,lane_mask*.66);
  float lane_edge=(1.-smoothstep(.08,.30,abs(lane_edge_d)))*smoothstep(-.09,.015,abs(lane_edge_d));
- material=mix(material,material*.955,lane_edge*.19);
+ material=mix(material,material*.982,lane_edge*.08);
 
  float ice=1.-smoothstep(-.12,.035,shore);
  material=mix(material,vec3(.37,.67,.84),ice*.35);
