@@ -14,6 +14,14 @@ const FENCE_ROOT_SINK := 0.22
 const VISUAL_JOIN_OVERLAP := 0.04
 const SOUTH_VISUAL_JOIN_OVERLAP := VISUAL_JOIN_OVERLAP
 const VISUAL_CORNER_JOIN_OVERLAP := VISUAL_JOIN_OVERLAP
+# Rendering may not compress the authored palisade below a readable picket
+# rhythm. Short residual rows keep their gate-side endpoint fixed; only an
+# exterior corner may extend outward, while longer rows share a tiny internal
+# overlap between adjacent visual panels. Collision/gate authority is untouched.
+const SOUTH_VISUAL_MIN_PANEL_LENGTH := 1.62
+const SOUTH_VISUAL_MAX_PANEL_LENGTH := Boundary.PANEL_TARGET + 0.10
+const SOUTH_VISUAL_MAX_OUTER_EXTENSION := 0.95
+const SOUTH_VISUAL_MAX_INTERNAL_EXTENSION := 0.08
 # The scaled threshold post is about 0.35 wide. A 0.18 backset seats the leaf
 # under the post without returning to the old 0.38 over-backset/dark seam.
 const GATE_HINGE_OVERLAP := 0.18
@@ -131,7 +139,9 @@ func _visual_gate_leaf_specs()->Array[Dictionary]:
 
 func _visual_fence_specs()->Array[Dictionary]:
 	# Curved river-side rows are sampled more finely than the authored mesh.
-	# Combine adjacent short spans for rendering so picket spacing stays even.
+	# Group adjacent collision spans for rendering, then normalize ONLY visual
+	# length so the picket rhythm cannot compress. Gate-side row endpoints stay
+	# exact; a short corner residual may extend outward behind the side fence.
 	var source:Array[Dictionary]=Boundary.panel_specs()
 	var result:Array[Dictionary]=[]
 	var i:=0
@@ -148,8 +158,45 @@ func _visual_fence_specs()->Array[Dictionary]:
 		for g in range(groups):
 			var first:=i+floori(float(g)*float(count)/float(groups))
 			var last:=i+ceili(float(g+1)*float(count)/float(groups))-1
-			var p0:=Vector2(source[first].a);var p1:=Vector2(source[last].b)
-			result.append({"boundary":row_id,"a":p0,"b":p1,"mid":(p0+p1)*.5,"length":p0.distance_to(p1),"tangent":(p1-p0).normalized()})
+			var source_a:=Vector2(source[first].a)
+			var source_b:=Vector2(source[last].b)
+			var p0:=source_a
+			var p1:=source_b
+			var length:=p0.distance_to(p1)
+			var internal_extension:=0.0
+			var outer_extension:=0.0
+			if length<SOUTH_VISUAL_MIN_PANEL_LENGTH:
+				var direction:=(p1-p0).normalized()
+				var shortage:=SOUTH_VISUAL_MIN_PANEL_LENGTH-length
+				var can_extend_start:=g>0
+				var can_extend_end:=g<groups-1
+				var extension_sides:=int(can_extend_start)+int(can_extend_end)
+				if extension_sides>0:
+					var each:=shortage/float(extension_sides)
+					assert(each<=SOUTH_VISUAL_MAX_INTERNAL_EXTENSION+.0001,"South fence internal visual overlap exceeded safe budget")
+					if can_extend_start:p0-=direction*each
+					if can_extend_end:p1+=direction*each
+					internal_extension=each
+				elif absf(source_a.x)>=Boundary.SIDE_X-.01:
+					assert(shortage<=SOUTH_VISUAL_MAX_OUTER_EXTENSION+.0001,"South fence outer visual extension exceeded safe budget")
+					p0-=direction*shortage;outer_extension=shortage
+				elif absf(source_b.x)>=Boundary.SIDE_X-.01:
+					assert(shortage<=SOUTH_VISUAL_MAX_OUTER_EXTENSION+.0001,"South fence outer visual extension exceeded safe budget")
+					p1+=direction*shortage;outer_extension=shortage
+				else:
+					assert(false,"South visual row cannot preserve authored spacing without stealing a gate opening: "+row_id)
+			var visual_length:=p0.distance_to(p1)
+			assert(visual_length>=SOUTH_VISUAL_MIN_PANEL_LENGTH-.001 and visual_length<=SOUTH_VISUAL_MAX_PANEL_LENGTH+.001,"South visual fence length outside authored rhythm")
+			var gate_endpoint_error:=0.0
+			if g==0 and absf(source_a.x)<Boundary.SIDE_X-.01:gate_endpoint_error=maxf(gate_endpoint_error,p0.distance_to(source_a))
+			if g==groups-1 and absf(source_b.x)<Boundary.SIDE_X-.01:gate_endpoint_error=maxf(gate_endpoint_error,p1.distance_to(source_b))
+			result.append({
+				"boundary":row_id,"a":p0,"b":p1,"mid":(p0+p1)*.5,
+				"length":visual_length,"tangent":(p1-p0).normalized(),
+				"spacing_internal_extension":internal_extension,
+				"spacing_outer_extension":outer_extension,
+				"gate_endpoint_error":gate_endpoint_error
+			})
 		i=j
 	return result
 
@@ -159,6 +206,11 @@ func configure(game):
 	var visual_fence_specs:=_visual_fence_specs()
 	var south_visual_total:=0.0
 	var south_visual_count:=0
+	var south_visual_min:=999.0
+	var south_visual_max:=0.0
+	var south_visual_outer_extension_max:=0.0
+	var south_visual_internal_extension_max:=0.0
+	var south_visual_gate_endpoint_error_max:=0.0
 	var south_corners:=[Boundary.south_point(-Boundary.SIDE_X),Boundary.south_point(Boundary.SIDE_X)]
 	for panel in visual_fence_specs:
 		var is_south:=String(panel.boundary).begins_with("south-")
@@ -166,7 +218,13 @@ func configure(game):
 		if south_corners.any(func(c):return Vector2(panel.a).distance_to(c)<.01 or Vector2(panel.b).distance_to(c)<.01):overlap=maxf(overlap,VISUAL_CORNER_JOIN_OVERLAP)
 		fence_transforms.append(_segment_transform(panel.a,panel.b,overlap))
 		if is_south:
-			south_visual_total+=Vector2(panel.a).distance_to(Vector2(panel.b));south_visual_count+=1
+			var visual_length:=Vector2(panel.a).distance_to(Vector2(panel.b))
+			south_visual_total+=visual_length;south_visual_count+=1
+			south_visual_min=minf(south_visual_min,visual_length)
+			south_visual_max=maxf(south_visual_max,visual_length)
+			south_visual_outer_extension_max=maxf(south_visual_outer_extension_max,float(panel.get("spacing_outer_extension",0.0)))
+			south_visual_internal_extension_max=maxf(south_visual_internal_extension_max,float(panel.get("spacing_internal_extension",0.0)))
+			south_visual_gate_endpoint_error_max=maxf(south_visual_gate_endpoint_error_max,float(panel.get("gate_endpoint_error",0.0)))
 	fence_batch=Scenery.instances(_mesh(game,"fence_panel"),fence_transforms,self)
 	fence_batch.name="ReferencePalisadeFence"
 	var gate_leaf_transforms:Array[Transform3D]=[]
@@ -187,8 +245,14 @@ func configure(game):
 	descriptor["fence_visual_instances"]=fence_transforms.size()
 	descriptor["collision_panel_instances"]=Boundary.panel_specs().size()
 	descriptor["south_visual_grouping_from_panel_specs"]=true
+	descriptor["south_visual_spacing_normalized"]=true
 	descriptor["south_visual_panel_instances"]=south_visual_count
 	descriptor["south_visual_panel_average_length"]=south_visual_total/float(maxi(1,south_visual_count))
+	descriptor["south_visual_min_panel_length"]=south_visual_min
+	descriptor["south_visual_max_panel_length"]=south_visual_max
+	descriptor["south_visual_outer_extension_max"]=south_visual_outer_extension_max
+	descriptor["south_visual_internal_extension_max"]=south_visual_internal_extension_max
+	descriptor["south_visual_gate_endpoint_error_max"]=south_visual_gate_endpoint_error_max
 	descriptor["open_gate_leaf_instances"]=gate_leaf_transforms.size()
 	descriptor["gate_post_instances"]=post_transforms.size()
 	descriptor["visual_collision_share_panel_authority"]=true
