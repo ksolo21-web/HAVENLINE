@@ -96,11 +96,8 @@ static func _north_shore_point(x:float,margin:float)->Vector2:
 	return Vector2(clamped,z)
 
 static func _sample_south(x0:float,x1:float)->Array[Vector2]:
-	# Keep the curved river-side perimeter at the same authored panel rhythm as
-	# the straight fence. The old 1.0-unit sampling compressed a ~2.95-unit
-	# authored panel into every chord and crowded the picket rhythm.
 	var points:Array[Vector2]=[]
-	var count:=maxi(1,ceili(absf(x1-x0)/PANEL_TARGET))
+	var count:=maxi(1,ceili(absf(x1-x0)/1.0))
 	for i in range(count+1):points.append(south_point(lerpf(x0,x1,float(i)/float(count))))
 	return points
 
