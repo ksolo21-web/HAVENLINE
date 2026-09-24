@@ -18,23 +18,27 @@ const GATE_HINGE_OVERLAP := 0.12
 # authoritative gate specs/collision gaps remain in camp_boundary.gd.
 const MAIN_WORK_VISUAL_LEAF_LENGTH := 1.30
 const MAIN_WORK_VISUAL_OPEN_ANGLE := 0.70
-const MAIN_WORK_GATE_HINGE_OVERLAP := 0.30
+const MAIN_WORK_GATE_HINGE_OVERLAP := 0.38
 # River leaves use the same visual-only presentation rule: keep the authoritative
 # crossing/collision contract, but turn a shorter framed panel toward the camera
 # so the future crossing reads unmistakably as a gate.
 const RIVER_VISUAL_LEAF_LENGTH := 1.30
 const RIVER_VISUAL_OPEN_ANGLE := 0.72
-const RIVER_GATE_VISUAL_HINGE_OVERLAP := 0.30
+# West river threshold is the only oblique view where the far framed face
+# remained visually collapsed. This presentation-only angle increases face
+# readability and also increases, rather than reduces, the clear aperture.
+const RIVER_WEST_VISUAL_OPEN_ANGLE := 0.88
+const RIVER_GATE_VISUAL_HINGE_OVERLAP := 0.38
 const GATE_LEAF_HINGE_SINK := 0.14
 const GATE_LEAF_ROOT_SINK := 0.18
 const TERRAIN_SEAT_SAMPLES := 7
 const GATE_POST_ROOT_SINK := 0.40
 const MAIN_GATE_POST_SCALE := 1.00
 const MAIN_GATE_POST_HEIGHT_SCALE := 1.05
-const WORK_GATE_POST_SCALE := 1.00
-const WORK_GATE_POST_HEIGHT_SCALE := 1.00
-const RIVER_GATE_POST_SCALE := 1.05
-const RIVER_GATE_POST_HEIGHT_SCALE := 1.08
+const WORK_GATE_POST_SCALE := 1.18
+const WORK_GATE_POST_HEIGHT_SCALE := 1.04
+const RIVER_GATE_POST_SCALE := 1.18
+const RIVER_GATE_POST_HEIGHT_SCALE := 1.12
 var fence_batch:MultiMeshInstance3D
 var gate_leaf_batch:MultiMeshInstance3D
 var post_batch:MultiMeshInstance3D
@@ -132,7 +136,9 @@ func _visual_gate_leaf_specs()->Array[Dictionary]:
 		var a:Vector2=gate.a;var b:Vector2=gate.b;var tangent:Vector2=gate.tangent;var mid:Vector2=gate.center
 		var inward:=(Boundary.CAMP_CENTER-mid).normalized()
 		var visual_length:=RIVER_VISUAL_LEAF_LENGTH if gate.kind=="river" else MAIN_WORK_VISUAL_LEAF_LENGTH
-		var visual_angle:=RIVER_VISUAL_OPEN_ANGLE if gate.kind=="river" else MAIN_WORK_VISUAL_OPEN_ANGLE
+		var visual_angle:=MAIN_WORK_VISUAL_OPEN_ANGLE
+		if gate.kind=="river":
+			visual_angle=RIVER_WEST_VISUAL_OPEN_ANGLE if gate.id=="river--9.0" else RIVER_VISUAL_OPEN_ANGLE
 		var left_dir:=tangent.rotated(visual_angle)
 		if left_dir.dot(inward)<0:left_dir=tangent.rotated(-visual_angle)
 		var right_dir:=(-tangent).rotated(visual_angle)
@@ -189,15 +195,18 @@ func configure(game):
 	descriptor["main_work_gate_hinge_overlap"]=MAIN_WORK_GATE_HINGE_OVERLAP
 	descriptor["river_visual_gate_leaf_length"]=RIVER_VISUAL_LEAF_LENGTH
 	descriptor["river_visual_gate_open_angle"]=RIVER_VISUAL_OPEN_ANGLE
+	descriptor["river_west_visual_gate_open_angle"]=RIVER_WEST_VISUAL_OPEN_ANGLE
 	descriptor["river_gate_visual_hinge_overlap"]=RIVER_GATE_VISUAL_HINGE_OVERLAP
 	var river_visual_clear_min:=999.0
 	for gate in Boundary.gate_specs():
 		if gate.kind=="river":
-			river_visual_clear_min=minf(river_visual_clear_min,float(gate.width)-2.0*RIVER_VISUAL_LEAF_LENGTH*cos(RIVER_VISUAL_OPEN_ANGLE))
+			var clear_angle:=RIVER_WEST_VISUAL_OPEN_ANGLE if gate.id=="river--9.0" else RIVER_VISUAL_OPEN_ANGLE
+			river_visual_clear_min=minf(river_visual_clear_min,float(gate.width)-2.0*RIVER_VISUAL_LEAF_LENGTH*cos(clear_angle))
 	descriptor["river_visual_clear_width_min"]=river_visual_clear_min
 	descriptor["river_visual_clearance_pass"]=river_visual_clear_min>=Boundary.RIVER_VISUAL_CLEARANCE_MIN
 	descriptor["river_gate_leaf_visual_transform_only"]=true
 	descriptor["gate_leaf_hinge_backset_is_start_only"]=true
+	descriptor["threshold_post_contact_repair"]="scaled-post-plus-hinge-only-backset"
 	descriptor["visual_gate_leaf_transform_only"]=true
 	descriptor["gate_leaf_root_sink"]=GATE_LEAF_ROOT_SINK
 	descriptor["gate_leaf_hinge_sink"]=GATE_LEAF_HINGE_SINK

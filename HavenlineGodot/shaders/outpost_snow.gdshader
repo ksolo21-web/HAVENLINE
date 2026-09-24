@@ -67,16 +67,16 @@ void fragment(){
  // family to the reference's pale packed-snow language. The wear remains part
  // of the same T02 surface, with restrained cool ruts and warm salmon work-floor
  // compression rather than a dark road/asphalt read.
- vec3 packed_snow=mix(snow,vec3(.885,.935,.978),.18+.12*compression);
- packed_snow=mix(packed_snow,vec3(.78,.845,.905),paired_rut*lane_mask*rut_breakup*.10);
- packed_snow+=vec3(.009,.010,.012)*(packed_mid-.5);
+ vec3 packed_snow=mix(snow,vec3(.835,.905,.965),.20+.16*compression);
+ packed_snow=mix(packed_snow,vec3(.70,.79,.875),paired_rut*lane_mask*rut_breakup*.14);
+ packed_snow+=vec3(.010,.011,.013)*(packed_mid-.5);
  vec3 packed_floor=mix(floor,vec3(.755,.455,.335),.10+.075*compression);
  packed_floor=mix(packed_floor,vec3(.655,.365,.255),paired_rut*lane_mask*rut_breakup*.10);
  packed_floor+=vec3(.008,.006,.004)*(packed_mid-.5);
  vec3 packed=mix(packed_snow,packed_floor,cleared);
- material=mix(material,packed,lane_mask*.66);
+ material=mix(material,packed,lane_mask*.72);
  float lane_edge=(1.-smoothstep(.08,.30,abs(lane_edge_d)))*smoothstep(-.09,.015,abs(lane_edge_d));
- material=mix(material,material*.982,lane_edge*.08);
+ material=mix(material,material*.975,lane_edge*.10);
 
  float ice=1.-smoothstep(-.12,.035,shore);
  material=mix(material,vec3(.37,.67,.84),ice*.35);

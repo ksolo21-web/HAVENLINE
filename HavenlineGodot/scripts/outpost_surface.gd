@@ -12,6 +12,11 @@ const WORK_HALF := Vector2(9.75, 4.3)
 const T03_LANE_COMPRESSION_DEPTH := 0.075
 const T03_LANE_RUT_DEPTH := 0.055
 const T03_LANE_SHOULDER_HEIGHT := 0.075
+const T03_BANK_VISUAL_HALF_EXPAND := 0.22
+const T03_BANK_VISUAL_SHORE_MARGIN := River.WET_EDGE+0.08
+const T03_BANK_VISUAL_SHORE_HALF := 0.82
+const T03_BANK_EXTRA_COMPRESSION_DEPTH := 0.028
+const T03_BANK_EXTRA_RUT_DEPTH := 0.030
 static var _mesh: ArrayMesh
 static var _water_mesh: ArrayMesh
 static var _heights := PackedFloat32Array()
@@ -42,22 +47,40 @@ static func _segment_distance(p:Vector2,a:Vector2,b:Vector2)->float:
 	if d.length_squared()<.000001:return p.distance_to(a)
 	return p.distance_to(a+d*clampf((p-a).dot(d)/d.length_squared(),0.0,1.0))
 
-static func visual_lane_signed_distance(p:Vector2)->float:
-	# The authoritative T03 route graph remains Boundary.lane_polylines().
-	# Presentation gets a small union at the bank/apron family so packed wear
-	# visibly reaches each threshold instead of fading before the gate.
-	var result:=Boundary.lane_signed_distance(p)
+static func _visual_shore_point(x:float)->Vector2:
+	# Visual wear may descend the dry bank shoulder, but it must stop outside
+	# water. This does not change traversal or Boundary's authoritative route.
+	var clamped:=clampf(x,-HALF,HALF)
+	var center:=River.center_at_x(clamped)
+	var z:=center.y+River.width_at_x(clamped)*.5+T03_BANK_VISUAL_SHORE_MARGIN
+	for _i in range(8):
+		var p:=Vector2(clamped,z);var q:=River.query(p)
+		var error:=T03_BANK_VISUAL_SHORE_MARGIN-float(q.shore_distance)
+		if absf(error)<.0001:break
+		z+=error/maxf(absf(Vector2(q.north_normal).y),.55)
+	return Vector2(clamped,z)
+
+static func bank_lane_visual_signed_distance(p:Vector2)->float:
+	var result:=999.0
 	for lane in Boundary.lane_polylines():
 		var id:=String(lane.id)
 		if id!="north-bank" and not id.begins_with("river-apron-"):continue
 		var points:Array=lane.points
-		var half_width:=float(lane.get("half_width",Boundary.LANE_HALF))+.22
+		var half_width:=float(lane.get("half_width",Boundary.LANE_HALF))+T03_BANK_VISUAL_HALF_EXPAND
 		for i in range(points.size()-1):
 			result=minf(result,_segment_distance(p,Vector2(points[i]),Vector2(points[i+1]))-half_width)
 	for gate in Boundary.gate_specs():
-		if gate.kind=="river":
-			result=minf(result,p.distance_to(Vector2(gate.center))-(Boundary.RIVER_LANE_HALF+.18))
+		if gate.kind!="river":continue
+		var reserve_x:=float(gate.reserve_x)
+		var dry:=Boundary.river_approach_point(reserve_x)
+		var shore:=_visual_shore_point(reserve_x)
+		result=minf(result,_segment_distance(p,dry,shore)-T03_BANK_VISUAL_SHORE_HALF)
+		result=minf(result,p.distance_to(Vector2(gate.center))-(Boundary.RIVER_LANE_HALF+.18))
 	return result
+
+static func visual_lane_signed_distance(p:Vector2)->float:
+	# Authoritative routes remain unchanged. This is a presentation-only union.
+	return minf(Boundary.lane_signed_distance(p),bank_lane_visual_signed_distance(p))
 
 static func _shape_height(p: Vector2,lane_distance:=INF) -> float:
 	var ripple := sin(p.x*.53+sin(p.y*.26))*cos(p.y*.48)*.055
@@ -93,6 +116,9 @@ static func _shape_height(p: Vector2,lane_distance:=INF) -> float:
 	var paired_ruts:=exp(-pow((centre_distance-.62)/.17,2.0))
 	var compression_variation:=.82+.18*pow(sin(p.x*.91+p.y*.57),2.0)
 	result-=lane_bed*(T03_LANE_COMPRESSION_DEPTH*compression_variation+T03_LANE_RUT_DEPTH*paired_ruts)
+	var bank_lane:=bank_lane_visual_signed_distance(p)
+	var bank_bed:=1.0-smoothstep(-.06,.24,bank_lane)
+	result-=bank_bed*(T03_BANK_EXTRA_COMPRESSION_DEPTH+T03_BANK_EXTRA_RUT_DEPTH*paired_ruts)
 	var swept_snow_shoulder:=exp(-pow((lane-.13)/.17,2.0))
 	result+=T03_LANE_SHOULDER_HEIGHT*swept_snow_shoulder*(.82+.18*pow(sin(p.x*.47-p.y*.81),2.0))
 	return result

@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_10_IMPLEMENTED_PENDING_ENGINE_CAPTURE_AND_TARGETED_FINAL_C1_C2",
+  "status": "ITERATION_11_IMPLEMENTED_AFTER_COMPLETE_ITERATION_10_FAILURE_COLLECTION",
   "root_cause": "T03 depended on environment_v2 barricade/lantern assets whose manifest explicitly marks production_visual_approval=false; oversized gate-post scaling and dirty grey lane treatment amplified the mismatch.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -29,14 +29,15 @@
   "required_next_evidence": [
     "Godot import/build pass",
     "T01/T02 protected-source check",
-    "T01-T03 mechanical regression",
+    "T01-T03 mechanical regression including visual-shore-outside-water assertion",
     "primitive/material audit zero findings",
     "fresh exact-source 47+11 capture",
-    "rerun only C1 lanes-bank and C2 work-gates/river-gates/lanes-bank",
+    "focused lane crops that exclude foreign T02/prop palette from C1 attribution",
+    "focused west work and west river threshold crops for C2",
     "explicit user visual signoff"
   ],
   "approval": false,
-  "review_repair_iteration": 10,
+  "review_repair_iteration": 11,
   "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
   "iteration_1_findings": [
     "Fence read as round log barricades rather than the reference's dense pointed palisade.",
@@ -134,5 +135,52 @@
     "bank_lanes": "Derive a visual-only union from the authoritative north-bank and river-apron polylines, widening those wear envelopes by 0.22 and filling each river threshold with a route-centered wear disk; no route/collision constants change.",
     "lane_material": "Lighten packed snow to pale cool blue-white and warm-floor wear to salmon-brown; reduce rut/edge darkening to prevent asphalt-like contrast.",
     "performance": "No new draw batches, textures, materials, physics, animations or NPCs. Visual-lane union is terrain-build-time only; shader instruction family remains unchanged. Preserve corrected C6 pass."
+  },
+  "iteration_10_disposition": "REJECTED_AFTER_COMPLETE_TARGETED_CRITIC_COLLECTION",
+  "iteration_10_complete_failure_set": {
+    "C1_lanes_bank": [
+      "Packed bank wear/ruts remained below perceptual/reference readability.",
+      "Whole-frame palette comments are attribution noise because T02 is user-accepted; the actionable T03 defect is lane wear visibility."
+    ],
+    "C2_lanes_bank": [
+      "Bank wear visually ended before/at the riverbank without a deliberate packed apron.",
+      "Gate-geometry complaint inside the lane group is cross-domain attribution; gate integrity is handled by gate critics."
+    ],
+    "C2_river_gates": [
+      "West river far threshold post/framed face collapsed in oblique evidence."
+    ],
+    "C2_work_gates": [
+      "West work leaf/post/fence contact still showed a hinge seam."
+    ]
+  },
+  "iteration_11_root_causes": [
+    {
+      "family": "bank_lane_perceptual_continuity",
+      "cause": "Iteration 10 widened the route-derived mask but reduced snow-lane contrast below readable gameplay scale and still stopped visual wear at the gameplay-dry margin (1.05), so the future-crossing approach did not read as a deliberate apron to the river.",
+      "causal_repair": "Extend presentation-only wear from each authoritative dry approach to a point at shore_distance=WET_EDGE+0.08, add bank-only physical compression, and restore pale cool rut contrast. Do not alter routes, collision, or water."
+    },
+    {
+      "family": "west_gate_threshold_contact",
+      "cause": "Leaf geometry exists, but small threshold posts plus oblique foreshortening let the west work seam and west river far leaf/post visually collapse.",
+      "causal_repair": "Increase work/river post footprint only, deepen hinge-only backset while keeping free leaf edges fixed, and rotate only the west river visual leaf family farther open. Do not change gate collision/opening authority."
+    }
+  ],
+  "iteration_11_anti_loop_gate": {
+    "complete_known_blocker_set_collected_before_repair": true,
+    "symptom_patching_prohibited": true,
+    "passed_domains_frozen": true,
+    "must_not_reopen": [
+      "T02",
+      "C1 fence/north-gate/work-gates/river-gates/lanes-central/conditions unless iteration-11 visible changes touch that domain",
+      "C2 fence/north-gate/lanes-central/conditions",
+      "C6 corrected performance pass"
+    ],
+    "proof_required": "Fresh exact-source captures plus focused high-resolution review of changed bank-lane and gate-contact domains."
+  },
+  "iteration_11_repair": {
+    "bank_lane": "Visual-only shore apron outside water + bank-only physical compression + readable pale-blue packed ruts.",
+    "work_gate": "Post footprint 1.18 and hinge-only backset 0.38; free edge/collision unchanged.",
+    "river_gate": "Post footprint 1.18; west visual angle 0.88; hinge-only backset 0.38; visual clear width can only increase from the angle change.",
+    "performance": "No new meshes, textures, materials, draw batches, physics bodies, animation or NPC load; scale/transform and terrain-build-time math only. C6 remains preserved."
   }
 }
