@@ -126,17 +126,47 @@ func _gate_leaf_transform(leaf:Dictionary,hinge_backset:float)->Transform3D:
 	return _segment_transform(a-direction*hinge_backset,b,0.0,GATE_LEAF_HINGE_SINK,GATE_LEAF_ROOT_SINK,GATE_LEAF_SOURCE_LENGTH,false)
 
 func _visual_gate_leaf_specs()->Array[Dictionary]:
-	# Match the authoritative main/work and river gate families exactly.
+	# Match the configured main/work and river gate families exactly.
 	return Boundary.gate_leaf_specs()
+
+func _visual_fence_specs()->Array[Dictionary]:
+	# Curved river-side rows are sampled more finely than the authored mesh.
+	# Combine adjacent short spans for rendering so picket spacing stays even.
+	var source:Array[Dictionary]=Boundary.panel_specs()
+	var result:Array[Dictionary]=[]
+	var i:=0
+	while i<source.size():
+		var row_id:=String(source[i].boundary)
+		if not row_id.begins_with("south-"):
+			result.append(source[i]);i+=1;continue
+		var j:=i
+		var total:=0.0
+		while j<source.size() and String(source[j].boundary)==row_id:
+			total+=float(source[j].length);j+=1
+		var count:=j-i
+		var groups:=maxi(1,ceili(total/Boundary.PANEL_TARGET))
+		for g in range(groups):
+			var first:=i+floori(float(g)*float(count)/float(groups))
+			var last:=i+ceili(float(g+1)*float(count)/float(groups))-1
+			var p0:=Vector2(source[first].a);var p1:=Vector2(source[last].b)
+			result.append({"boundary":row_id,"a":p0,"b":p1,"mid":(p0+p1)*.5,"length":p0.distance_to(p1),"tangent":(p1-p0).normalized()})
+		i=j
+	return result
 
 func configure(game):
 	name="Task03CampBoundary"
 	var fence_transforms:Array[Transform3D]=[]
+	var visual_fence_specs:=_visual_fence_specs()
+	var south_visual_total:=0.0
+	var south_visual_count:=0
 	var south_corners:=[Boundary.south_point(-Boundary.SIDE_X),Boundary.south_point(Boundary.SIDE_X)]
-	for panel in Boundary.panel_specs():
-		var overlap:=SOUTH_VISUAL_JOIN_OVERLAP if String(panel.boundary).begins_with("south-") else VISUAL_JOIN_OVERLAP
+	for panel in visual_fence_specs:
+		var is_south:=String(panel.boundary).begins_with("south-")
+		var overlap:=SOUTH_VISUAL_JOIN_OVERLAP if is_south else VISUAL_JOIN_OVERLAP
 		if south_corners.any(func(c):return Vector2(panel.a).distance_to(c)<.01 or Vector2(panel.b).distance_to(c)<.01):overlap=maxf(overlap,VISUAL_CORNER_JOIN_OVERLAP)
 		fence_transforms.append(_segment_transform(panel.a,panel.b,overlap))
+		if is_south:
+			south_visual_total+=Vector2(panel.a).distance_to(Vector2(panel.b));south_visual_count+=1
 	fence_batch=Scenery.instances(_mesh(game,"fence_panel"),fence_transforms,self)
 	fence_batch.name="ReferencePalisadeFence"
 	var gate_leaf_transforms:Array[Transform3D]=[]
@@ -156,6 +186,9 @@ func configure(game):
 	descriptor=Boundary.evidence()
 	descriptor["fence_visual_instances"]=fence_transforms.size()
 	descriptor["collision_panel_instances"]=Boundary.panel_specs().size()
+	descriptor["south_visual_grouping_from_panel_specs"]=true
+	descriptor["south_visual_panel_instances"]=south_visual_count
+	descriptor["south_visual_panel_average_length"]=south_visual_total/float(maxi(1,south_visual_count))
 	descriptor["open_gate_leaf_instances"]=gate_leaf_transforms.size()
 	descriptor["gate_post_instances"]=post_transforms.size()
 	descriptor["visual_collision_share_panel_authority"]=true

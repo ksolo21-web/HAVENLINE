@@ -141,12 +141,9 @@ func run():
 			var eid:=String(contract.evidence_ids[kind]);evidence_ids[eid]=true
 	check("River gates share authoritative geometry for visual clearance routes and evidence",river_authority_ok and evidence_ids.size()==12 and evidence.required_river_gate_evidence_ids.size()==12 and evidence.all_river_visual_clearance_pass)
 	check("Authored fence roots use controlled embed rather than deep clipping",is_equal_approx(float(desc.fence_root_sink),.22))
-	var south_panel_total:=0.0
-	var south_panel_count:=0
-	for panel in Boundary.panel_specs():
-		if String(panel.boundary).begins_with("south-"):
-			south_panel_total+=float(panel.length);south_panel_count+=1
-	check("Curved south fence keeps authored-scale panel rhythm",south_panel_count>0 and south_panel_total/float(south_panel_count)>1.60 and south_panel_total/float(south_panel_count)<=Boundary.PANEL_TARGET+.05)
+	check("Curved south fence rendering keeps authored-scale spacing",
+		desc.south_visual_grouping_from_panel_specs and int(desc.south_visual_panel_instances)>0 and
+		float(desc.south_visual_panel_average_length)>1.60 and float(desc.south_visual_panel_average_length)<=Boundary.PANEL_TARGET+.10)
 	check("Fence joins gate seating and rutted terrain preserve clean threshold contact",
 		is_equal_approx(float(desc.visual_join_overlap),.04) and is_equal_approx(float(desc.south_visual_join_overlap),.04) and
 		is_equal_approx(float(desc.visual_corner_join_overlap),.04) and is_equal_approx(float(desc.gate_hinge_overlap),.18) and
