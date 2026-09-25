@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 import base64,hashlib,io,json,math,os,pathlib,subprocess,time,urllib.request
-from PIL import Image,ImageDraw
+from PIL import Image,ImageDraw,ImageFont
 
 ROOT=pathlib.Path(__file__).resolve().parents[2]
 EVIDENCE=ROOT/os.environ.get("EVIDENCE_ROOT","t03-repair")
@@ -67,26 +67,39 @@ GROUPS={
  ]
 }
 
-def make_board(group,paths):
+def _label_font(size:int):
+    try:return ImageFont.truetype("/usr/share/fonts/truetype/dejavu/DejaVuSans.ttf",size)
+    except Exception:return ImageFont.load_default()
+
+def make_board(group,paths,page_index):
+    # Four candidate panels per page keeps each exact-source frame large enough
+    # for contact/seam/picket/lane inspection. Two pages are reviewed
+    # independently and aggregated by minimum score; this changes presentation,
+    # never the candidate pixels or acceptance threshold.
     ref_tiles=[]
     for p in REFS:
-        im=Image.open(p).convert("RGB");im.thumbnail((420,520),Image.Resampling.LANCZOS)
+        im=Image.open(p).convert("RGB");im.thumbnail((310,365),Image.Resampling.LANCZOS)
         ref_tiles.append((p.name,im))
     cand=[]
     for name in paths:
-        im=Image.open(EVIDENCE/name).convert("RGB");im.thumbnail((500,285),Image.Resampling.LANCZOS)
+        im=Image.open(EVIDENCE/name).convert("RGB");im.thumbnail((760,425),Image.Resampling.LANCZOS)
         cand.append((name,im))
-    w=1600;ref_h=570;cols=3;rows=(len(cand)+cols-1)//cols;h=ref_h+70+rows*335
+    w=1600;ref_h=430;cols=2;rows=(len(cand)+cols-1)//cols;row_h=505;h=ref_h+55+rows*row_h
     board=Image.new("RGB",(w,h),(18,29,40));d=ImageDraw.Draw(board)
-    d.text((15,10),"AUTHORITATIVE REFERENCE B — T03 fence/gate/work-area language",fill="white")
+    title_font=_label_font(20);label_font=_label_font(17)
+    d.text((18,12),"AUTHORITATIVE REFERENCE B — T03 fence/gate/work-area language",fill="white",font=title_font)
+    ref_cell=w//3
     for i,(name,im) in enumerate(ref_tiles):
-        cell=530;x=i*cell+(cell-im.width)//2;y=38
-        board.paste(im,(x,y));d.text((i*cell+8,548),name,fill="white")
-    y0=ref_h+35;d.text((15,y0-25),"EXACT-SOURCE T03 CANDIDATE — "+group,fill="white")
+        x=i*ref_cell+(ref_cell-im.width)//2;y=48
+        board.paste(im,(x,y));d.text((i*ref_cell+12,402),name,fill="white",font=label_font)
+    y0=ref_h+38
+    d.text((18,y0-30),f"EXACT-SOURCE T03 CANDIDATE — {group} — page {page_index+1}",fill="white",font=title_font)
+    cell=w//2
     for i,(name,im) in enumerate(cand):
-        c=i%cols;r=i//cols;cell=530;x=c*cell+(cell-im.width)//2;y=y0+r*335+28
-        d.text((c*cell+8,y0+r*335+5),name[:78],fill="white");board.paste(im,(x,y))
-    path=OUT/(group+"-board.jpg");board.save(path,quality=94);return path
+        col=i%cols;row=i//cols;x=col*cell+(cell-im.width)//2;y=y0+row*row_h+38
+        d.text((col*cell+14,y0+row*row_h+8),name,fill="white",font=label_font)
+        board.paste(im,(x,y))
+    path=OUT/(f"{group}-page{page_index+1}-board.jpg");board.save(path,quality=96);return path
 
 def response_schema(dimensions):
     return {
@@ -143,20 +156,30 @@ The repair standard is unusually strict: every mandatory visual dimension must b
         else:
             selected_groups=GROUPS
         rows=[]
+        expected_rows=0
         for gid,paths in selected_groups.items():
-            board=make_board(gid,paths)
-            review=request(board,base+"\nEvidence group: "+gid+". Inspect every candidate panel and the reference row.",response_schema(dims),gid)
-            scores=review.get("scores",{})
-            errors=[]
-            if set(scores)!=set(dims):errors.append("dimension mismatch")
-            if any(type(v) not in (int,float) or isinstance(v,bool) or not math.isfinite(v) or v!=10.0 for v in scores.values()):errors.append("visual score below exact 10")
-            if review.get("defects")!=[]:errors.append("unresolved defects")
-            if review.get("coverage_complete") is not True:errors.append("coverage incomplete")
-            if review.get("confidence") not in ("medium","high"):errors.append("confidence insufficient")
-            rows.append({"group":gid,"review":review,"passed":not errors,"errors":errors})
+            pages=[paths[i:i+4] for i in range(0,len(paths),4)]
+            expected_rows+=len(pages)
+            for page_index,page_paths in enumerate(pages):
+                board=make_board(gid,page_paths,page_index)
+                page_names=", ".join(page_paths)
+                review=request(
+                    board,
+                    base+f"\nEvidence group: {gid}, page {page_index+1} of {len(pages)}. Inspect ALL FOUR candidate panels on this page and the authoritative reference row. Candidate filenames on this page: {page_names}. Score only what is visibly supported on this page.",
+                    response_schema(dims),
+                    f"{gid}-page{page_index+1}"
+                )
+                scores=review.get("scores",{})
+                errors=[]
+                if set(scores)!=set(dims):errors.append("dimension mismatch")
+                if any(type(v) not in (int,float) or isinstance(v,bool) or not math.isfinite(v) or v!=10.0 for v in scores.values()):errors.append("visual score below exact 10")
+                if review.get("defects")!=[]:errors.append("unresolved defects")
+                if review.get("coverage_complete") is not True:errors.append("coverage incomplete")
+                if review.get("confidence") not in ("medium","high"):errors.append("confidence insufficient")
+                rows.append({"group":gid,"page":page_index+1,"paths":page_paths,"review":review,"passed":not errors,"errors":errors})
         score_min={d:min(row["review"]["scores"].get(d,0) for row in rows) for d in dims}
-        defects=[f"{row['group']}: {x}" for row in rows for x in row["review"].get("defects",[])]
-        passed=len(rows)==len(selected_groups) and all(row["passed"] for row in rows)
+        defects=[f"{row['group']}/page{row['page']}: {x}" for row in rows for x in row["review"].get("defects",[])]
+        passed=len(rows)==expected_rows and all(row["passed"] for row in rows)
         raw={"critic_id":CRITIC,"candidate":SOURCE,"groups":rows,"reference_hashes":ref_hashes}
         raw_path=OUT/"raw-output.json";raw_path.write_text(json.dumps(raw,indent=2)+"\n")
         record={"task_id":"T03","critic_id":CRITIC,"review_group":REVIEW_GROUP or "all","provider":manifest["publisher"],"model":manifest["base_model"],"model_revision":manifest["revision"],"request_or_run_id":os.environ.get("GITHUB_RUN_ID","local")+"/"+os.environ.get("GITHUB_JOB","critic"),"candidate_hash":SOURCE,"input_manifest_hash":hashlib.sha256(json.dumps({"evidence":evidence["image_hashes"],"references":ref_hashes},sort_keys=True).encode()).hexdigest(),"raw_output_path":str(raw_path.relative_to(ROOT)),"raw_output_hash":digest(raw_path),"scores":score_min,"defects":defects,"coverage_complete":all(r["review"].get("coverage_complete") is True for r in rows),"confidence":"high" if all(r["review"].get("confidence")=="high" for r in rows) else "medium","independent_runtime":True,"groups":rows,"passed":passed,"visual_exact_10_required":True}

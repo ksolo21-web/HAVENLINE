@@ -25,7 +25,7 @@ jobs:
         critic: [C1,C2]
         group: [boundary_portals,routes_contacts,iteration11_changed_domains]
     runs-on: ubuntu-24.04
-    timeout-minutes: 30
+    timeout-minutes: 50
     env:
       EXPECTED_SOURCE: '4f5f643feb82063c2745b8c1696a8c123723f824'
       REVIEW_CRITIC: ${{ matrix.critic }}
