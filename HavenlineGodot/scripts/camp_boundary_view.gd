@@ -6,14 +6,14 @@ const Surface=preload("res://scripts/outpost_surface.gd")
 const Scenery=preload("res://scripts/scenery_batch.gd")
 const BOUNDARY_SHADER=preload("res://assets/t03_boundary_v2/t03_boundary_v2.gdshader")
 const BOUNDARY_ASSET_ROOT := "res://assets/t03_boundary_v2/"
-# Iteration 11D: keep authored mesh scale/rhythm and derive each visible gate
+# Iteration 11E: preserve authored picket rhythm with low-overlap seams and derive each visible gate
 # leaf from the family-specific geometry that also owns crossing authority.
 const FENCE_SOURCE_LENGTH := 2.9409
 const GATE_LEAF_SOURCE_LENGTH := 2.90
 const FENCE_ROOT_SINK := 0.22
-const VISUAL_JOIN_OVERLAP := 0.04
-const SOUTH_VISUAL_JOIN_OVERLAP := VISUAL_JOIN_OVERLAP
-const VISUAL_CORNER_JOIN_OVERLAP := VISUAL_JOIN_OVERLAP
+const VISUAL_JOIN_OVERLAP := 0.01
+const SOUTH_VISUAL_JOIN_OVERLAP := 0.02
+const VISUAL_CORNER_JOIN_OVERLAP := 0.03
 # Rendering may not compress the authored palisade below a readable picket
 # rhythm. Short residual rows keep their gate-side endpoint fixed; only an
 # exterior corner may extend outward, while longer rows share a tiny internal
@@ -39,12 +39,12 @@ const TERRAIN_SEAT_SAMPLES := 7
 const GATE_POST_ROOT_SINK := 0.20
 # Keep the same authored post footprint/height at every portal so threshold
 # markers do not change category between north, work and river entrances.
-const MAIN_GATE_POST_SCALE := 1.12
-const MAIN_GATE_POST_HEIGHT_SCALE := 1.08
-const WORK_GATE_POST_SCALE := 1.12
-const WORK_GATE_POST_HEIGHT_SCALE := 1.08
-const RIVER_GATE_POST_SCALE := 1.12
-const RIVER_GATE_POST_HEIGHT_SCALE := 1.08
+const MAIN_GATE_POST_SCALE := 0.90
+const MAIN_GATE_POST_HEIGHT_SCALE := 0.90
+const WORK_GATE_POST_SCALE := 0.90
+const WORK_GATE_POST_HEIGHT_SCALE := 0.90
+const RIVER_GATE_POST_SCALE := 0.90
+const RIVER_GATE_POST_HEIGHT_SCALE := 0.90
 var fence_batch:MultiMeshInstance3D
 var gate_leaf_batch:MultiMeshInstance3D
 var post_batch:MultiMeshInstance3D

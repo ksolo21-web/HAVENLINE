@@ -147,13 +147,13 @@ func run():
 		float(desc.south_visual_gate_endpoint_error_max)<.001 and float(desc.south_visual_outer_extension_max)<=.95 and
 		float(desc.south_visual_internal_extension_max)<=.08)
 	check("Fence joins gate seating and rutted terrain preserve clean threshold contact",
-		is_equal_approx(float(desc.visual_join_overlap),.04) and is_equal_approx(float(desc.south_visual_join_overlap),.04) and
-		is_equal_approx(float(desc.visual_corner_join_overlap),.04) and is_equal_approx(float(desc.gate_hinge_overlap),.18) and
+		is_equal_approx(float(desc.visual_join_overlap),.01) and is_equal_approx(float(desc.south_visual_join_overlap),.02) and
+		is_equal_approx(float(desc.visual_corner_join_overlap),.03) and is_equal_approx(float(desc.gate_hinge_overlap),.18) and
 		is_equal_approx(float(desc.gate_leaf_root_sink),.10) and is_equal_approx(float(desc.gate_leaf_hinge_sink),.08) and int(desc.terrain_seat_samples)==7 and
 		not desc.terrain_crown_applied_to_gate_leaves_only and is_equal_approx(float(desc.gate_post_root_sink),.20) and
-		is_equal_approx(float(desc.main_gate_post_scale),1.12) and is_equal_approx(float(desc.main_gate_post_height_scale),1.08) and
-		is_equal_approx(float(desc.river_gate_post_scale),1.12) and is_equal_approx(float(desc.river_gate_post_height_scale),1.08) and
-		is_equal_approx(float(desc.work_gate_post_scale),1.12) and is_equal_approx(float(desc.work_gate_post_height_scale),1.08) and
+		is_equal_approx(float(desc.main_gate_post_scale),.90) and is_equal_approx(float(desc.main_gate_post_height_scale),.90) and
+		is_equal_approx(float(desc.river_gate_post_scale),.90) and is_equal_approx(float(desc.river_gate_post_height_scale),.90) and
+		is_equal_approx(float(desc.work_gate_post_scale),.90) and is_equal_approx(float(desc.work_gate_post_height_scale),.90) and
 		is_equal_approx(float(desc.lane_compression_depth),.065) and is_equal_approx(float(desc.lane_rut_depth),.105) and
 		is_equal_approx(float(desc.lane_shoulder_height),.065))
 	var zero_progress_hidden:=true
