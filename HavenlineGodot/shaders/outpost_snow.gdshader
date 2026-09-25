@@ -54,13 +54,13 @@ void fragment(){
  float lane_noise=(material_noise(p*1.10)-.5)*.060+(material_noise(p*3.10)-.5)*.025;
  float lane_aa=max(fwidth(lane)*.8,.025);
  float lane_edge_d=lane+lane_noise;
- float lane_mask=1.-smoothstep(-.07-lane_aa,.18+lane_aa,lane_edge_d);
+ float lane_mask=1.-smoothstep(-.06-lane_aa,.14+lane_aa,lane_edge_d);
  // T03 reference repair: T02 remains the dominant surface. Travel is shown by
  // physical compression plus quiet paired wear, not by repainting a broad dark lane.
  float packed_macro=material_noise(p*.78+vec2(4.7,-2.1));
  float packed_mid=material_noise(p*2.20+vec2(-1.3,3.8));
  float compression=smoothstep(.14,.76,packed_macro*.68+packed_mid*.32);
- float lane_center_distance=max(lane+1.30,0.0);
+ float lane_center_distance=max(lane+1.18,0.0);
  float paired_rut=1.-smoothstep(.08,.24,abs(lane_center_distance-.62));
  float rut_breakup=.82+.18*smoothstep(.28,.76,material_noise(p*2.7+vec2(7.1,-4.3)));
  // Iteration 11E: keep the same physical compression/ruts, but make packed

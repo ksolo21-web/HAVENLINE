@@ -11,9 +11,9 @@ const BOUNDARY_ASSET_ROOT := "res://assets/t03_boundary_v2/"
 const FENCE_SOURCE_LENGTH := 2.9409
 const GATE_LEAF_SOURCE_LENGTH := 2.90
 const FENCE_ROOT_SINK := 0.22
-const VISUAL_JOIN_OVERLAP := 0.002
-const SOUTH_VISUAL_JOIN_OVERLAP := 0.002
-const VISUAL_CORNER_JOIN_OVERLAP := 0.006
+const VISUAL_JOIN_OVERLAP := 0.012
+const SOUTH_VISUAL_JOIN_OVERLAP := 0.012
+const VISUAL_CORNER_JOIN_OVERLAP := 0.018
 # Rendering may not compress the authored palisade below a readable picket
 # rhythm. Short residual rows keep their gate-side endpoint fixed; only an
 # exterior corner may extend outward, while longer rows share a tiny internal
@@ -36,15 +36,16 @@ const RIVER_GATE_VISUAL_HINGE_OVERLAP := VISUAL_GATE_HINGE_BACKSET
 const GATE_LEAF_HINGE_SINK := 0.08
 const GATE_LEAF_ROOT_SINK := 0.10
 const TERRAIN_SEAT_SAMPLES := 7
-const GATE_POST_ROOT_SINK := 0.24
+const GATE_POST_ROOT_SINK := 0.04
+const GATE_POST_TERRAIN_SAMPLE_HALF := 0.19
 # Keep the same authored post footprint/height at every portal so threshold
 # markers do not change category between north, work and river entrances.
-const MAIN_GATE_POST_SCALE := 0.96
-const MAIN_GATE_POST_HEIGHT_SCALE := 1.05
-const WORK_GATE_POST_SCALE := 0.96
-const WORK_GATE_POST_HEIGHT_SCALE := 1.05
-const RIVER_GATE_POST_SCALE := 0.96
-const RIVER_GATE_POST_HEIGHT_SCALE := 1.05
+const MAIN_GATE_POST_SCALE := 1.12
+const MAIN_GATE_POST_HEIGHT_SCALE := 1.14
+const WORK_GATE_POST_SCALE := 1.12
+const WORK_GATE_POST_HEIGHT_SCALE := 1.14
+const RIVER_GATE_POST_SCALE := 1.12
+const RIVER_GATE_POST_HEIGHT_SCALE := 1.14
 var fence_batch:MultiMeshInstance3D
 var gate_leaf_batch:MultiMeshInstance3D
 var post_batch:MultiMeshInstance3D
@@ -106,12 +107,18 @@ func _segment_transform(a:Vector2,b:Vector2,overlap:=0.0,root_sink:=FENCE_ROOT_S
 	var start_sink:=root_sink
 	var finish_sink:=root_sink if end_root_sink<0.0 else end_root_sink
 	if terrain_seat:
+		# Keep the authored leaf rigid. Find the largest terrain valley under the
+		# chord and lower the whole leaf uniformly instead of pitching only its
+		# free edge. This preserves hinge alignment while eliminating daylight.
+		var uniform_sink:=maxf(start_sink,finish_sink)
 		for sample in range(1,TERRAIN_SEAT_SAMPLES):
 			var t:=float(sample)/float(TERRAIN_SEAT_SAMPLES)
 			var p:=aa.lerp(bb,t)
 			var chord_height:=lerpf(height_a,height_b,t)
 			var required_sink:=maxf(0.0,chord_height-Surface.height_at(p))
-			finish_sink=maxf(finish_sink,(required_sink-(1.0-t)*start_sink)/t)
+			uniform_sink=maxf(uniform_sink,required_sink+.035)
+		start_sink=uniform_sink
+		finish_sink=uniform_sink
 	var pa:=Vector3(aa.x,height_a-start_sink,aa.y);var pb:=Vector3(bb.x,height_b-finish_sink,bb.y)
 	var x_axis:=(pb-pa).normalized()
 	var z_axis:=x_axis.cross(Vector3.UP).normalized()
@@ -122,9 +129,22 @@ func _segment_transform(a:Vector2,b:Vector2,overlap:=0.0,root_sink:=FENCE_ROOT_S
 	return Transform3D(basis,(pa+pb)*.5)
 
 func _post_transform(p:Vector2,tangent:Vector2,visual_scale:=1.0,height_scale:=1.0)->Transform3D:
-	var angle:=atan2(tangent.y,tangent.x)
+	var direction:=tangent.normalized()
+	var normal:=Vector2(-direction.y,direction.x)
+	# Seat the complete post footprint into the lowest local terrain sample so no
+	# corner can float on bank/camp slopes. The small root sink hides the seam
+	# without reproducing the deep clipping seen in the previous presentation.
+	var base_height:=Surface.height_at(p)
+	for sample in [
+		p+direction*GATE_POST_TERRAIN_SAMPLE_HALF,
+		p-direction*GATE_POST_TERRAIN_SAMPLE_HALF,
+		p+normal*GATE_POST_TERRAIN_SAMPLE_HALF,
+		p-normal*GATE_POST_TERRAIN_SAMPLE_HALF
+	]:
+		base_height=minf(base_height,Surface.height_at(Vector2(sample)))
+	var angle:=atan2(direction.y,direction.x)
 	var basis:=Basis(Vector3.UP,-angle).scaled(Vector3(visual_scale,height_scale,visual_scale))
-	return Transform3D(basis,Vector3(p.x,Surface.height_at(p)-GATE_POST_ROOT_SINK,p.y))
+	return Transform3D(basis,Vector3(p.x,base_height-GATE_POST_ROOT_SINK,p.y))
 
 func _gate_leaf_transform(leaf:Dictionary,hinge_backset:float)->Transform3D:
 	# Backset only the hinge edge beneath the authored threshold post. The free
@@ -295,12 +315,15 @@ func configure(game):
 	descriptor["river_visual_clearance_pass"]=river_visual_clear_min>=Boundary.RIVER_VISUAL_CLEARANCE_MIN
 	descriptor["river_gate_leaf_visual_transform_only"]=true
 	descriptor["gate_leaf_hinge_backset_is_start_only"]=true
-	descriptor["threshold_post_contact_repair"]="authoritative-leaf-geometry-plus-post-width-hinge-backset"
+	descriptor["threshold_post_contact_repair"]="terrain-seated-wide-post-plus-authoritative-hinge-backset"
 	descriptor["visual_gate_leaf_transform_only"]=true
 	descriptor["gate_leaf_root_sink"]=GATE_LEAF_ROOT_SINK
 	descriptor["gate_leaf_hinge_sink"]=GATE_LEAF_HINGE_SINK
 	descriptor["terrain_seat_samples"]=TERRAIN_SEAT_SAMPLES
 	descriptor["terrain_crown_applied_to_gate_leaves_only"]=true
+	descriptor["gate_leaf_uniform_terrain_seat"]=true
+	descriptor["gate_post_terrain_footprint_seat"]=true
+	descriptor["gate_post_terrain_sample_half"]=GATE_POST_TERRAIN_SAMPLE_HALF
 	descriptor["gate_post_root_sink"]=GATE_POST_ROOT_SINK
 	descriptor["main_gate_post_scale"]=MAIN_GATE_POST_SCALE
 	descriptor["main_gate_post_height_scale"]=MAIN_GATE_POST_HEIGHT_SCALE
@@ -311,5 +334,7 @@ func configure(game):
 	descriptor["lane_compression_depth"]=Surface.T03_LANE_COMPRESSION_DEPTH
 	descriptor["lane_rut_depth"]=Surface.T03_LANE_RUT_DEPTH
 	descriptor["lane_shoulder_height"]=Surface.T03_LANE_SHOULDER_HEIGHT
+	descriptor["visual_lane_half_width"]=Surface.T03_VISUAL_LANE_HALF
+	descriptor["bank_visual_half_expand"]=Surface.T03_BANK_VISUAL_HALF_EXPAND
 	descriptor["primitive_fence_meshes_created"]=false
 	descriptor["draw_batches"]=3

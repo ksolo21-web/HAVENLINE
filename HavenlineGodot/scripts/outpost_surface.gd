@@ -12,7 +12,11 @@ const WORK_HALF := Vector2(9.75, 4.3)
 const T03_LANE_COMPRESSION_DEPTH := 0.065
 const T03_LANE_RUT_DEPTH := 0.105
 const T03_LANE_SHOULDER_HEIGHT := 0.065
-const T03_BANK_VISUAL_HALF_EXPAND := 0.08
+# Presentation-only inset: collision/routes still use Boundary.LANE_HALF=1.30.
+# The visible packed corridor is intentionally narrower and consistent through
+# camp, bank and threshold approaches.
+const T03_VISUAL_LANE_HALF := 1.18
+const T03_BANK_VISUAL_HALF_EXPAND := -0.12
 const T03_BANK_VISUAL_SHORE_MARGIN := River.WET_EDGE+0.08
 const T03_BANK_VISUAL_SHORE_HALF := 0.82
 const T03_BANK_EXTRA_COMPRESSION_DEPTH := 0.028
@@ -81,12 +85,12 @@ static func bank_lane_visual_signed_distance(p:Vector2)->float:
 		var dry:=Boundary.river_approach_point(reserve_x)
 		var shore:=_visual_shore_point(reserve_x)
 		result=minf(result,_segment_distance(p,dry,shore)-T03_BANK_VISUAL_SHORE_HALF)
-		result=minf(result,p.distance_to(Vector2(gate.center))-(Boundary.RIVER_LANE_HALF+.10))
+		result=minf(result,p.distance_to(Vector2(gate.center))-T03_VISUAL_LANE_HALF)
 	return result
 
 static func visual_lane_signed_distance(p:Vector2)->float:
 	# Authoritative routes remain unchanged. This is a presentation-only union.
-	return minf(Boundary.lane_signed_distance(p),bank_lane_visual_signed_distance(p))
+	return minf(Boundary.lane_signed_distance(p)+(Boundary.LANE_HALF-T03_VISUAL_LANE_HALF),bank_lane_visual_signed_distance(p))
 
 static func _shape_height(p: Vector2,lane_distance:=INF) -> float:
 	var ripple := sin(p.x*.53+sin(p.y*.26))*cos(p.y*.48)*.055
@@ -118,7 +122,7 @@ static func _shape_height(p: Vector2,lane_distance:=INF) -> float:
 	# height/contact cues without adding a path plane or touching T02 water.
 	var lane:=visual_lane_signed_distance(p) if is_inf(lane_distance) else lane_distance
 	var lane_bed:=1.0-smoothstep(-.08,.22,lane)
-	var centre_distance:=maxf(0.0,lane+Boundary.LANE_HALF)
+	var centre_distance:=maxf(0.0,lane+T03_VISUAL_LANE_HALF)
 	var paired_ruts:=exp(-pow((centre_distance-.62)/.17,2.0))
 	var compression_variation:=.94+.06*pow(sin(p.x*.91+p.y*.57),2.0)
 	result-=lane_bed*(T03_LANE_COMPRESSION_DEPTH*compression_variation+T03_LANE_RUT_DEPTH*paired_ruts)
