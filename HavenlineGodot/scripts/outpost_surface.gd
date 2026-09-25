@@ -9,14 +9,14 @@ const WATER_Y := River.WATER_Y
 const LAND_MARGIN := River.DEFAULT_DRY_MARGIN
 const WORK_CENTER := Vector2(0.0, 2.8)
 const WORK_HALF := Vector2(9.75, 4.3)
-const T03_LANE_COMPRESSION_DEPTH := 0.065
-const T03_LANE_RUT_DEPTH := 0.105
-const T03_LANE_SHOULDER_HEIGHT := 0.065
-const T03_BANK_VISUAL_HALF_EXPAND := 0.22
+const T03_LANE_COMPRESSION_DEPTH := 0.095
+const T03_LANE_RUT_DEPTH := 0.145
+const T03_LANE_SHOULDER_HEIGHT := 0.080
+const T03_BANK_VISUAL_HALF_EXPAND := 0.08
 const T03_BANK_VISUAL_SHORE_MARGIN := River.WET_EDGE+0.08
 const T03_BANK_VISUAL_SHORE_HALF := 0.82
-const T03_BANK_EXTRA_COMPRESSION_DEPTH := 0.028
-const T03_BANK_EXTRA_RUT_DEPTH := 0.030
+const T03_BANK_EXTRA_COMPRESSION_DEPTH := 0.045
+const T03_BANK_EXTRA_RUT_DEPTH := 0.050
 static var _mesh: ArrayMesh
 static var _water_mesh: ArrayMesh
 static var _heights := PackedFloat32Array()
@@ -81,7 +81,7 @@ static func bank_lane_visual_signed_distance(p:Vector2)->float:
 		var dry:=Boundary.river_approach_point(reserve_x)
 		var shore:=_visual_shore_point(reserve_x)
 		result=minf(result,_segment_distance(p,dry,shore)-T03_BANK_VISUAL_SHORE_HALF)
-		result=minf(result,p.distance_to(Vector2(gate.center))-(Boundary.RIVER_LANE_HALF+.18))
+		result=minf(result,p.distance_to(Vector2(gate.center))-(Boundary.RIVER_LANE_HALF+.10))
 	return result
 
 static func visual_lane_signed_distance(p:Vector2)->float:

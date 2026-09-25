@@ -11,17 +11,17 @@ const BOUNDARY_ASSET_ROOT := "res://assets/t03_boundary_v2/"
 const FENCE_SOURCE_LENGTH := 2.9409
 const GATE_LEAF_SOURCE_LENGTH := 2.90
 const FENCE_ROOT_SINK := 0.22
-const VISUAL_JOIN_OVERLAP := 0.01
-const SOUTH_VISUAL_JOIN_OVERLAP := 0.02
-const VISUAL_CORNER_JOIN_OVERLAP := 0.03
+const VISUAL_JOIN_OVERLAP := 0.002
+const SOUTH_VISUAL_JOIN_OVERLAP := 0.002
+const VISUAL_CORNER_JOIN_OVERLAP := 0.006
 # Rendering may not compress the authored palisade below a readable picket
 # rhythm. Short residual rows keep their gate-side endpoint fixed; only an
 # exterior corner may extend outward, while longer rows share a tiny internal
 # overlap between adjacent visual panels. Collision/gate authority is untouched.
-const SOUTH_VISUAL_MIN_PANEL_LENGTH := 1.62
-const SOUTH_VISUAL_MAX_PANEL_LENGTH := Boundary.PANEL_TARGET + 0.10
-const SOUTH_VISUAL_MAX_OUTER_EXTENSION := 0.95
-const SOUTH_VISUAL_MAX_INTERNAL_EXTENSION := 0.08
+const SOUTH_VISUAL_MIN_PANEL_LENGTH := 1.95
+const SOUTH_VISUAL_MAX_PANEL_LENGTH := 3.55
+const SOUTH_VISUAL_MAX_OUTER_EXTENSION := 0.0
+const SOUTH_VISUAL_MAX_INTERNAL_EXTENSION := 0.0
 # The scaled threshold post is about 0.35 wide. A 0.18 backset seats the leaf
 # under the post without returning to the old 0.38 over-backset/dark seam.
 const GATE_HINGE_OVERLAP := 0.18
@@ -36,15 +36,15 @@ const RIVER_GATE_VISUAL_HINGE_OVERLAP := VISUAL_GATE_HINGE_BACKSET
 const GATE_LEAF_HINGE_SINK := 0.08
 const GATE_LEAF_ROOT_SINK := 0.10
 const TERRAIN_SEAT_SAMPLES := 7
-const GATE_POST_ROOT_SINK := 0.20
+const GATE_POST_ROOT_SINK := 0.24
 # Keep the same authored post footprint/height at every portal so threshold
 # markers do not change category between north, work and river entrances.
-const MAIN_GATE_POST_SCALE := 0.90
-const MAIN_GATE_POST_HEIGHT_SCALE := 0.90
-const WORK_GATE_POST_SCALE := 0.90
-const WORK_GATE_POST_HEIGHT_SCALE := 0.90
-const RIVER_GATE_POST_SCALE := 0.90
-const RIVER_GATE_POST_HEIGHT_SCALE := 0.90
+const MAIN_GATE_POST_SCALE := 0.96
+const MAIN_GATE_POST_HEIGHT_SCALE := 1.05
+const WORK_GATE_POST_SCALE := 0.96
+const WORK_GATE_POST_HEIGHT_SCALE := 1.05
+const RIVER_GATE_POST_SCALE := 0.96
+const RIVER_GATE_POST_HEIGHT_SCALE := 1.05
 var fence_batch:MultiMeshInstance3D
 var gate_leaf_batch:MultiMeshInstance3D
 var post_batch:MultiMeshInstance3D
@@ -131,71 +131,55 @@ func _gate_leaf_transform(leaf:Dictionary,hinge_backset:float)->Transform3D:
 	# edge stays fixed, so seam closure never steals visual or collision aperture.
 	var a:=Vector2(leaf.a);var b:=Vector2(leaf.b)
 	var direction:=(b-a).normalized()
-	return _segment_transform(a-direction*hinge_backset,b,0.0,GATE_LEAF_HINGE_SINK,GATE_LEAF_ROOT_SINK,GATE_LEAF_SOURCE_LENGTH,false)
+	return _segment_transform(a-direction*hinge_backset,b,0.0,GATE_LEAF_HINGE_SINK,GATE_LEAF_ROOT_SINK,GATE_LEAF_SOURCE_LENGTH,true)
 
 func _visual_gate_leaf_specs()->Array[Dictionary]:
 	# Match the configured main/work and river gate families exactly.
 	return Boundary.gate_leaf_specs()
 
+func _row_path_point(source:Array[Dictionary],first:int,last_exclusive:int,distance:float)->Vector2:
+	var remaining:=maxf(0.0,distance)
+	for index in range(first,last_exclusive):
+		var a:=Vector2(source[index].a);var b:=Vector2(source[index].b)
+		var length:=a.distance_to(b)
+		if remaining<=length or index==last_exclusive-1:
+			if length<=.0001:return b
+			return a.lerp(b,clampf(remaining/length,0.0,1.0))
+		remaining-=length
+	return Vector2(source[last_exclusive-1].b)
+
 func _visual_fence_specs()->Array[Dictionary]:
-	# Curved river-side rows are sampled more finely than the authored mesh.
-	# Group adjacent collision spans for rendering, then normalize ONLY visual
-	# length so the picket rhythm cannot compress. Gate-side row endpoints stay
-	# exact; a short corner residual may extend outward behind the side fence.
+	# Iteration 11F: every authored boundary row is repartitioned by path length
+	# around the fence asset's native 2.9409m span. This keeps picket/rail rhythm
+	# consistent across straight and curved rows while preserving every row/gate
+	# endpoint exactly. Collision authority remains Boundary.panel_specs().
 	var source:Array[Dictionary]=Boundary.panel_specs()
 	var result:Array[Dictionary]=[]
 	var i:=0
 	while i<source.size():
 		var row_id:=String(source[i].boundary)
-		if not row_id.begins_with("south-"):
-			result.append(source[i]);i+=1;continue
 		var j:=i
 		var total:=0.0
 		while j<source.size() and String(source[j].boundary)==row_id:
 			total+=float(source[j].length);j+=1
-		var count:=j-i
-		var groups:=maxi(1,ceili(total/Boundary.PANEL_TARGET))
+		var groups:=maxi(1,roundi(total/FENCE_SOURCE_LENGTH))
+		while total/float(groups)>SOUTH_VISUAL_MAX_PANEL_LENGTH:groups+=1
+		while groups>1 and total/float(groups)<SOUTH_VISUAL_MIN_PANEL_LENGTH:
+			var candidate:=groups-1
+			if total/float(candidate)>SOUTH_VISUAL_MAX_PANEL_LENGTH:break
+			groups=candidate
+		var step:=total/float(groups)
 		for g in range(groups):
-			var first:=i+floori(float(g)*float(count)/float(groups))
-			var last:=i+ceili(float(g+1)*float(count)/float(groups))-1
-			var source_a:=Vector2(source[first].a)
-			var source_b:=Vector2(source[last].b)
-			var p0:=source_a
-			var p1:=source_b
-			var length:=p0.distance_to(p1)
-			var internal_extension:=0.0
-			var outer_extension:=0.0
-			if length<SOUTH_VISUAL_MIN_PANEL_LENGTH:
-				var direction:=(p1-p0).normalized()
-				var shortage:=SOUTH_VISUAL_MIN_PANEL_LENGTH-length
-				var can_extend_start:=g>0
-				var can_extend_end:=g<groups-1
-				var extension_sides:=int(can_extend_start)+int(can_extend_end)
-				if extension_sides>0:
-					var each:=shortage/float(extension_sides)
-					assert(each<=SOUTH_VISUAL_MAX_INTERNAL_EXTENSION+.0001,"South fence internal visual overlap exceeded safe budget")
-					if can_extend_start:p0-=direction*each
-					if can_extend_end:p1+=direction*each
-					internal_extension=each
-				elif absf(source_a.x)>=Boundary.SIDE_X-.01:
-					assert(shortage<=SOUTH_VISUAL_MAX_OUTER_EXTENSION+.0001,"South fence outer visual extension exceeded safe budget")
-					p0-=direction*shortage;outer_extension=shortage
-				elif absf(source_b.x)>=Boundary.SIDE_X-.01:
-					assert(shortage<=SOUTH_VISUAL_MAX_OUTER_EXTENSION+.0001,"South fence outer visual extension exceeded safe budget")
-					p1+=direction*shortage;outer_extension=shortage
-				else:
-					assert(false,"South visual row cannot preserve authored spacing without stealing a gate opening: "+row_id)
+			var p0:=_row_path_point(source,i,j,step*float(g))
+			var p1:=_row_path_point(source,i,j,step*float(g+1))
 			var visual_length:=p0.distance_to(p1)
-			assert(visual_length>=SOUTH_VISUAL_MIN_PANEL_LENGTH-.001 and visual_length<=SOUTH_VISUAL_MAX_PANEL_LENGTH+.001,"South visual fence length outside authored rhythm")
-			var gate_endpoint_error:=0.0
-			if g==0 and absf(source_a.x)<Boundary.SIDE_X-.01:gate_endpoint_error=maxf(gate_endpoint_error,p0.distance_to(source_a))
-			if g==groups-1 and absf(source_b.x)<Boundary.SIDE_X-.01:gate_endpoint_error=maxf(gate_endpoint_error,p1.distance_to(source_b))
+			assert(visual_length>1.55 and visual_length<3.65,"Visual fence panel outside safe authored-scale range: "+row_id)
 			result.append({
 				"boundary":row_id,"a":p0,"b":p1,"mid":(p0+p1)*.5,
 				"length":visual_length,"tangent":(p1-p0).normalized(),
-				"spacing_internal_extension":internal_extension,
-				"spacing_outer_extension":outer_extension,
-				"gate_endpoint_error":gate_endpoint_error
+				"spacing_internal_extension":0.0,
+				"spacing_outer_extension":0.0,
+				"gate_endpoint_error":0.0
 			})
 		i=j
 	return result
@@ -245,6 +229,7 @@ func configure(game):
 	descriptor["fence_visual_instances"]=fence_transforms.size()
 	descriptor["collision_panel_instances"]=Boundary.panel_specs().size()
 	descriptor["south_visual_grouping_from_panel_specs"]=true
+	descriptor["visual_fence_rhythm_normalized_all_rows"]=true
 	descriptor["south_visual_spacing_normalized"]=true
 	descriptor["south_visual_panel_instances"]=south_visual_count
 	descriptor["south_visual_panel_average_length"]=south_visual_total/float(maxi(1,south_visual_count))
@@ -294,7 +279,7 @@ func configure(game):
 	descriptor["gate_leaf_root_sink"]=GATE_LEAF_ROOT_SINK
 	descriptor["gate_leaf_hinge_sink"]=GATE_LEAF_HINGE_SINK
 	descriptor["terrain_seat_samples"]=TERRAIN_SEAT_SAMPLES
-	descriptor["terrain_crown_applied_to_gate_leaves_only"]=false
+	descriptor["terrain_crown_applied_to_gate_leaves_only"]=true
 	descriptor["gate_post_root_sink"]=GATE_POST_ROOT_SINK
 	descriptor["main_gate_post_scale"]=MAIN_GATE_POST_SCALE
 	descriptor["main_gate_post_height_scale"]=MAIN_GATE_POST_HEIGHT_SCALE

@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "task": "T03",
-  "kit": "Havenline reference palisade v9",
-  "revision": 12,
+  "kit": "Havenline reference palisade v10",
+  "revision": 13,
   "deterministic": true,
   "candidate_for_user_review": true,
   "production_visual_approval": false,
@@ -22,10 +22,10 @@
         "dense pale warm pointed palisade",
         "solid full snow crown with symmetric low-amplitude reference-like height variation",
         "no exposed horizontal support rail",
-        "authored-scale curved-perimeter resampling plus uniform small joins preserve consistent picket rhythm"
+        "all-row path-length repartition keeps the authored picket rhythm near native scale with minimal seam overlap"
       ],
-      "runtime_join_overlap": 0.01,
-      "south_runtime_join_overlap": 0.02
+      "runtime_join_overlap": 0.002,
+      "south_runtime_join_overlap": 0.002
     },
     {
       "name": "gate_post",
@@ -34,7 +34,8 @@
       "features": [
         "matching pale warm post",
         "solid snow crown",
-        "tiny integrated warm insets only"
+        "tiny integrated warm insets only",
+        "moderately taller threshold-marker presentation with terrain-seated roots"
       ]
     },
     {
@@ -48,5 +49,18 @@
         "separate from pointed palisade fence"
       ]
     }
-  ]
+  ],
+  "iteration_11f": {
+    "visual_only": true,
+    "collision_authority_unchanged": true,
+    "fence_rhythm": "all rows repartitioned near 2.9409m authored span",
+    "gate_post_scale": 0.96,
+    "gate_post_height_scale": 1.05,
+    "gate_post_root_sink": 0.24,
+    "gate_leaf_terrain_seated": true,
+    "lane_compression_depth": 0.095,
+    "lane_rut_depth": 0.145,
+    "lane_shoulder_height": 0.08,
+    "bank_visual_half_expand": 0.08
+  }
 }
