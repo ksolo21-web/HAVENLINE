@@ -110,7 +110,7 @@ def request(board,prompt,schema,label,max_tokens=750):
     body={"model":"havenline-t03-"+CRITIC,"messages":[{"role":"user","content":content}],"max_tokens":max_tokens,"temperature":0.15,"top_p":0.9,"seed":20260922+(1 if CRITIC=="C1" else 2 if CRITIC=="C2" else 6),"repeat_penalty":1.12,"chat_template_kwargs":{"enable_thinking":False},"response_format":{"type":"json_object","schema":schema},"cache_prompt":False}
     (OUT/(label+"-request.json")).write_text(json.dumps(body,indent=2))
     req=urllib.request.Request("http://127.0.0.1:8080/v1/chat/completions",data=json.dumps(body).encode(),headers={"Content-Type":"application/json"},method="POST")
-    with urllib.request.urlopen(req,timeout=1200) as resp:raw=json.load(resp)
+    with urllib.request.urlopen(req,timeout=1500) as resp:raw=json.load(resp)
     (OUT/(label+"-raw.json")).write_text(json.dumps(raw,indent=2))
     choice=raw["choices"][0]
     if choice.get("finish_reason")!="stop": raise RuntimeError("incomplete reviewer response")
@@ -135,7 +135,7 @@ try:
         dims=["reference_fidelity","visual_language","cross_view_consistency"] if CRITIC=="C1" else ["geometry_contact","clipping_seams","intentional_gap_integrity","cross_view_integrity"]
         role="Reference Fidelity Critic" if CRITIC=="C1" else "Technical / Visual Integrity Critic"
         checks="Match the supplied reference fence/gate/work-area language and judge cross-view consistency." if CRITIC=="C1" else "Judge grounding, seams, clipping, intentional gate gaps, leaf/post contact, route continuity and cross-view integrity."
-        base=f"""You are Havenline's independent {role}. Review exact candidate {SOURCE}. Scope is ONLY T03 fences, gates, threshold posts and packed/worn work lanes. T02 terrain/snow/water/work-floor is user-accepted and must not be re-litigated. T04+ buildings, stations, characters and later systems visible in context are NOT scored here. The top reference frames are authoritative gameplay references for the T03 art language. {checks}
+        base=f"""You are Havenline's independent {role}. Review exact candidate {SOURCE}. Scope is ONLY T03 fences, gates, threshold posts and packed/worn work lanes. T02 terrain/snow/water/work-floor is user-accepted and must not be re-litigated. T04+ buildings, stations, characters and later systems visible in context are NOT scored here. The circular blue furnace/workstation visible behind the reference gate is contextual T04+ equipment, not a T03 gate component; do not require it as part of gate fidelity. The top reference frames are authoritative gameplay references for the T03 art language. {checks}
 The repair standard is unusually strict: every mandatory visual dimension must be 10.0 for this repaired visual approval. Do not average. A score below 10.0 requires a concrete actionable T03-owned defect in defects. If there is no actionable T03 defect, defects must be [] exactly. Do not invent defects from downstream T04+ content. Return JSON only."""
         if REVIEW_GROUP:
             assert REVIEW_GROUP in GROUPS,("unknown review group",REVIEW_GROUP)

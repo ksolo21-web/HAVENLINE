@@ -13,9 +13,9 @@ concurrency:
   group: havenline-t03-final-critics-${{ github.ref_name }}
   cancel-in-progress: true
 env:
-  CANDIDATE: 'a25c45d7d42d1e3f4385bccc61d0f96a6356d830'
-  EVIDENCE_RUN: '36060194241'
-  EVIDENCE_ARTIFACT: 'havenline-t03-reference-repair-36060194241'
+  CANDIDATE: '4f5f643feb82063c2745b8c1696a8c123723f824'
+  EVIDENCE_RUN: '36087559797'
+  EVIDENCE_ARTIFACT: 'havenline-t03-reference-repair-36087559797'
 
 jobs:
   visual-shards:
@@ -27,7 +27,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
-      EXPECTED_SOURCE: 'a25c45d7d42d1e3f4385bccc61d0f96a6356d830'
+      EXPECTED_SOURCE: '4f5f643feb82063c2745b8c1696a8c123723f824'
       REVIEW_CRITIC: ${{ matrix.critic }}
       REVIEW_GROUP: ${{ matrix.group }}
       EVIDENCE_ROOT: t03-repair
@@ -41,8 +41,8 @@ jobs:
         with:
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
-          run-id: 36060194241
-          name: havenline-t03-reference-repair-36060194241
+          run-id: 36087559797
+          name: havenline-t03-reference-repair-36087559797
           path: t03-repair
       - uses: actions/cache/restore@v4
         with:
@@ -75,7 +75,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import json,math
-          candidate='a25c45d7d42d1e3f4385bccc61d0f96a6356d830'
+          candidate='4f5f643feb82063c2745b8c1696a8c123723f824'
           groups={'boundary_portals','routes_contacts','iteration11_changed_domains'}
           expected={(c,g) for c in ('C1','C2') for g in groups}
           rows={}
@@ -114,7 +114,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 30
     env:
-      EXPECTED_SOURCE: 'a25c45d7d42d1e3f4385bccc61d0f96a6356d830'
+      EXPECTED_SOURCE: '4f5f643feb82063c2745b8c1696a8c123723f824'
       REVIEW_CRITIC: C6
       EVIDENCE_ROOT: t03-repair
       REVIEW_OUT: review/C6
@@ -127,8 +127,8 @@ jobs:
         with:
           github-token: ${{ github.token }}
           repository: ${{ github.repository }}
-          run-id: 36060194241
-          name: havenline-t03-reference-repair-36060194241
+          run-id: 36087559797
+          name: havenline-t03-reference-repair-36087559797
           path: t03-repair
       - uses: actions/cache/restore@v4
         with:
@@ -136,7 +136,7 @@ jobs:
           key: havenline-t01-qwen35-9b-q5-20260908-v1
           fail-on-cache-miss: true
       - run: python3 -m pip install pillow
-      - name: Run fresh iteration 11D C6
+      - name: Run fresh iteration 11E C6
         run: python3 -u tools/havenline/review_task03_reference_repair.py
       - uses: actions/upload-artifact@v4
         if: always()
@@ -165,7 +165,7 @@ jobs:
           python3 - <<'PY'
           from pathlib import Path
           import json,math
-          candidate='a25c45d7d42d1e3f4385bccc61d0f96a6356d830'
+          candidate='4f5f643feb82063c2745b8c1696a8c123723f824'
           v=json.loads(Path('visual/result.json').read_text())
           c=json.loads(next(Path('c6').rglob('critic-record.json')).read_text())
           assert v['passed'] is True and v['candidate']==candidate and v['visual_exact_10'] is True
@@ -183,4 +183,4 @@ jobs:
           path: final/
           retention-days: 30
           if-no-files-found: error
-# iteration 11D critic/tooling workflow only. Candidate pixels are exact a25c45d7d42d1e3f4385bccc61d0f96a6356d830 and cannot be changed by this run.
+# iteration 11E critic/tooling workflow only. Candidate pixels are exact 4f5f643feb82063c2745b8c1696a8c123723f824 and cannot be changed by this run.
