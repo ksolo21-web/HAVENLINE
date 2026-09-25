@@ -150,12 +150,14 @@ func run():
 		is_equal_approx(float(desc.visual_join_overlap),.012) and is_equal_approx(float(desc.south_visual_join_overlap),.012) and
 		is_equal_approx(float(desc.visual_corner_join_overlap),.018) and is_equal_approx(float(desc.gate_hinge_overlap),.18) and
 		is_equal_approx(float(desc.gate_leaf_root_sink),.10) and is_equal_approx(float(desc.gate_leaf_hinge_sink),.08) and int(desc.terrain_seat_samples)==7 and
-		desc.terrain_crown_applied_to_gate_leaves_only and desc.gate_leaf_uniform_terrain_seat and desc.gate_post_terrain_footprint_seat and\n\t\tis_equal_approx(float(desc.gate_post_terrain_sample_half),.19) and is_equal_approx(float(desc.gate_post_root_sink),.04) and
+		desc.terrain_crown_applied_to_gate_leaves_only and desc.gate_leaf_uniform_terrain_seat and desc.gate_post_terrain_footprint_seat and
+		is_equal_approx(float(desc.gate_post_terrain_sample_half),.19) and is_equal_approx(float(desc.gate_post_root_sink),.04) and
 		is_equal_approx(float(desc.main_gate_post_scale),1.12) and is_equal_approx(float(desc.main_gate_post_height_scale),1.14) and
 		is_equal_approx(float(desc.river_gate_post_scale),1.12) and is_equal_approx(float(desc.river_gate_post_height_scale),1.14) and
 		is_equal_approx(float(desc.work_gate_post_scale),1.12) and is_equal_approx(float(desc.work_gate_post_height_scale),1.14) and
 		is_equal_approx(float(desc.lane_compression_depth),.065) and is_equal_approx(float(desc.lane_rut_depth),.105) and
-		is_equal_approx(float(desc.lane_shoulder_height),.065) and is_equal_approx(float(desc.visual_lane_half_width),1.18) and\n\t\tis_equal_approx(float(desc.bank_visual_half_expand),-.12))
+		is_equal_approx(float(desc.lane_shoulder_height),.065) and is_equal_approx(float(desc.visual_lane_half_width),1.18) and
+		is_equal_approx(float(desc.bank_visual_half_expand),-.12))
 	var zero_progress_hidden:=true
 	for side in game.sim.defenses:
 		zero_progress_hidden=zero_progress_hidden and not game.defense_visuals[side].visible
