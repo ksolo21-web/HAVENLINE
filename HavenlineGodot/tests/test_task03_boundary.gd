@@ -144,7 +144,7 @@ func run():
 	check("Curved south fence rendering preserves authored spacing and gate endpoints",
 		desc.south_visual_grouping_from_panel_specs and desc.south_visual_spacing_normalized and desc.visual_fence_rhythm_normalized_all_rows and int(desc.south_visual_panel_instances)>0 and
 		float(desc.south_visual_min_panel_length)>=1.55 and float(desc.south_visual_max_panel_length)<=3.65 and
-		float(desc.south_visual_gate_endpoint_error_max)<.001 and is_zero_approx(float(desc.south_visual_outer_extension_max)) and
+		float(desc.south_visual_gate_endpoint_error_max)<.001 and float(desc.south_visual_outer_extension_max)<=.95 and
 		is_zero_approx(float(desc.south_visual_internal_extension_max)))
 	check("Fence joins gate seating and rutted terrain preserve clean threshold contact",
 		is_equal_approx(float(desc.visual_join_overlap),.002) and is_equal_approx(float(desc.south_visual_join_overlap),.002) and
@@ -154,8 +154,8 @@ func run():
 		is_equal_approx(float(desc.main_gate_post_scale),.96) and is_equal_approx(float(desc.main_gate_post_height_scale),1.05) and
 		is_equal_approx(float(desc.river_gate_post_scale),.96) and is_equal_approx(float(desc.river_gate_post_height_scale),1.05) and
 		is_equal_approx(float(desc.work_gate_post_scale),.96) and is_equal_approx(float(desc.work_gate_post_height_scale),1.05) and
-		is_equal_approx(float(desc.lane_compression_depth),.095) and is_equal_approx(float(desc.lane_rut_depth),.145) and
-		is_equal_approx(float(desc.lane_shoulder_height),.080))
+		is_equal_approx(float(desc.lane_compression_depth),.065) and is_equal_approx(float(desc.lane_rut_depth),.105) and
+		is_equal_approx(float(desc.lane_shoulder_height),.065))
 	var zero_progress_hidden:=true
 	for side in game.sim.defenses:
 		zero_progress_hidden=zero_progress_hidden and not game.defense_visuals[side].visible

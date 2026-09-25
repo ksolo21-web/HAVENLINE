@@ -20,7 +20,7 @@ const VISUAL_CORNER_JOIN_OVERLAP := 0.006
 # overlap between adjacent visual panels. Collision/gate authority is untouched.
 const SOUTH_VISUAL_MIN_PANEL_LENGTH := 1.95
 const SOUTH_VISUAL_MAX_PANEL_LENGTH := 3.55
-const SOUTH_VISUAL_MAX_OUTER_EXTENSION := 0.0
+const SOUTH_VISUAL_MAX_OUTER_EXTENSION := 0.95
 const SOUTH_VISUAL_MAX_INTERNAL_EXTENSION := 0.0
 # The scaled threshold post is about 0.35 wide. A 0.18 backset seats the leaf
 # under the post without returning to the old 0.38 over-backset/dark seam.
@@ -151,8 +151,9 @@ func _row_path_point(source:Array[Dictionary],first:int,last_exclusive:int,dista
 func _visual_fence_specs()->Array[Dictionary]:
 	# Iteration 11F: every authored boundary row is repartitioned by path length
 	# around the fence asset's native 2.9409m span. This keeps picket/rail rhythm
-	# consistent across straight and curved rows while preserving every row/gate
-	# endpoint exactly. Collision authority remains Boundary.panel_specs().
+	# consistent across straight and curved rows while preserving every gate-side
+	# endpoint exactly. Only a tiny side-corner residual may extend outward behind
+	# the perpendicular side fence; collision authority remains Boundary.panel_specs().
 	var source:Array[Dictionary]=Boundary.panel_specs()
 	var result:Array[Dictionary]=[]
 	var i:=0
@@ -173,13 +174,33 @@ func _visual_fence_specs()->Array[Dictionary]:
 			var p0:=_row_path_point(source,i,j,step*float(g))
 			var p1:=_row_path_point(source,i,j,step*float(g+1))
 			var visual_length:=p0.distance_to(p1)
-			assert(visual_length>1.55 and visual_length<3.65,"Visual fence panel outside safe authored-scale range: "+row_id)
+			var outer_extension:=0.0
+			# The tiny south corner residuals are shorter than a readable authored
+			# panel scale. Preserve the river-gate endpoint and extend only the
+			# exterior corner behind the perpendicular side fence.
+			if visual_length<1.56:
+				var direction:=(p1-p0).normalized()
+				var shortage:=1.56-visual_length
+				if g==0 and absf(p0.x)>=Boundary.SIDE_X-.01:
+					assert(shortage<=SOUTH_VISUAL_MAX_OUTER_EXTENSION+.001,"South corner fence extension exceeded safe budget: "+row_id)
+					p0-=direction*shortage;outer_extension=shortage
+				elif g==groups-1 and absf(p1.x)>=Boundary.SIDE_X-.01:
+					assert(shortage<=SOUTH_VISUAL_MAX_OUTER_EXTENSION+.001,"South corner fence extension exceeded safe budget: "+row_id)
+					p1+=direction*shortage;outer_extension=shortage
+				else:
+					assert(false,"Visual fence row cannot preserve readable authored scale without stealing a gate opening: "+row_id)
+				visual_length=p0.distance_to(p1)
+			assert(visual_length>=1.55 and visual_length<3.65,"Visual fence panel outside safe authored-scale range: "+row_id)
+			var source_a:=Vector2(source[i].a);var source_b:=Vector2(source[j-1].b)
+			var gate_endpoint_error:=0.0
+			if g==0 and absf(source_a.x)<Boundary.SIDE_X-.01:gate_endpoint_error=maxf(gate_endpoint_error,p0.distance_to(source_a))
+			if g==groups-1 and absf(source_b.x)<Boundary.SIDE_X-.01:gate_endpoint_error=maxf(gate_endpoint_error,p1.distance_to(source_b))
 			result.append({
 				"boundary":row_id,"a":p0,"b":p1,"mid":(p0+p1)*.5,
 				"length":visual_length,"tangent":(p1-p0).normalized(),
 				"spacing_internal_extension":0.0,
-				"spacing_outer_extension":0.0,
-				"gate_endpoint_error":0.0
+				"spacing_outer_extension":outer_extension,
+				"gate_endpoint_error":gate_endpoint_error
 			})
 		i=j
 	return result
