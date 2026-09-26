@@ -558,9 +558,9 @@ def main():
         if not completion.exists():errors.append("T03 verified completion record missing")
         else:
             record=load_json(completion)
-            if record.get("status")!="PASS" or record.get("accepted_gameplay_source")!="5df9726e0b1c33f0f8865385b1c49aca229fd461":
+            if record.get("status")!="PASS" or record.get("accepted_gameplay_source")!="e1e7bb2d68d1d53025d1242011ad4c885f08c307":
                 errors.append("T03 verified completion record is not bound to the accepted source")
-            if record.get("visual_review",{}).get("status")!="PASS_BY_QUORUM" or record.get("performance_critic",{}).get("passed") is not True:
+            if record.get("visual_review",{}).get("status")!="PASS_STRICT_C1_C2" or record.get("visual_review",{}).get("all_mandatory_dimensions_strictly_gt_9") is not True or record.get("performance_critic",{}).get("passed") is not True:
                 errors.append("T03 verified completion gates are incomplete")
         if t04_status=="LOCKED":
             if tg.get("active_task") is not None or tg.get("active_status") is not None:errors.append("task-gates must have no active task while T04 is locked")
