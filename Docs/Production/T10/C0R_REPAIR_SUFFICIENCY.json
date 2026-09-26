@@ -1,0 +1,336 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0R",
+  "name": "Repair Sufficiency Critic",
+  "non_voting": true,
+  "approval_critic": false,
+  "repair_operation_contract": {
+    "repeated_family_version": 2,
+    "replacement": "IMPLEMENT_SYMBOLS[exact,ordered,validated,symbols]",
+    "explanatory_prose_authorizes_source_or_parameters": false,
+    "scalar_prose_heuristic": "defense_in_depth"
+  },
+  "read_only": true,
+  "task_id": "T10",
+  "diagnosis_id": "C0-T10-c7a18d0-comprehensive-anti-loop",
+  "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
+  "outcome": "REPAIR_PLAN_ACCEPTED",
+  "builder_action": "BUILD_BOUNDED_REPAIR",
+  "loop_risk": "HIGH",
+  "risk_codes": [
+    "POST_DIAGNOSIS_FAILURES_PRESENT",
+    "REPEATED_FAILURE_FAMILY"
+  ],
+  "rejections": [],
+  "evidence_gaps": [],
+  "group_reports": [
+    {
+      "group_id": "critic-input-path-mode",
+      "blocker_ids": [
+        "C0-T10-B037"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "specialist-response-bounds",
+      "blocker_ids": [
+        "C0-T10-B038"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "reviewer-canary",
+      "blocker_ids": [
+        "C0-T10-B039"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "repair-lifecycle",
+      "blocker_ids": [
+        "C0-T10-B040"
+      ],
+      "strategy_kind": "GOVERNANCE",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "c0-invocation-intelligence",
+      "blocker_ids": [
+        "C0-T10-B041"
+      ],
+      "strategy_kind": "GOVERNANCE",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "closeout-assembler",
+      "blocker_ids": [
+        "C0-T10-B042"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "c1c2-identity-binding",
+      "blocker_ids": [
+        "C0-T10-B043"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "v32-consumer-sync",
+      "blocker_ids": [
+        "C0-T10-B044"
+      ],
+      "strategy_kind": "GOVERNANCE",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "builder-repair-causal-enforcement",
+      "blocker_ids": [
+        "C0-T10-B045"
+      ],
+      "strategy_kind": "GOVERNANCE",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "specialist-request-retention",
+      "blocker_ids": [
+        "C0-T10-B046"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "c0-job-log-transport",
+      "blocker_ids": [
+        "C0-T10-B047",
+        "C0-T10-B052"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "presentation-action-clarity",
+      "blocker_ids": [
+        "C0-T10-B048",
+        "C0-T10-B054"
+      ],
+      "strategy_kind": "PRODUCT_LOGIC",
+      "same_family_attempt_count": 1,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "canonical-c0-closeout-ingestion",
+      "blocker_ids": [
+        "C0-T10-B049"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "activation-lifecycle-validation",
+      "blocker_ids": [
+        "C0-T10-B050"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "hermetic-closeout-lfs",
+      "blocker_ids": [
+        "C0-T10-B051"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "layout-feasibility",
+      "blocker_ids": [
+        "C0-T10-B053",
+        "C0-T10-B055"
+      ],
+      "strategy_kind": "ALGORITHM",
+      "same_family_attempt_count": 3,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [
+        "REPEATED_FAILURE_FAMILY"
+      ],
+      "passed": true
+    },
+    {
+      "group_id": "visual-evidence-density",
+      "blocker_ids": [
+        "C0-T10-B056"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "c7-context-binding",
+      "blocker_ids": [
+        "C0-T10-B057"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 1,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "actionable-defect-schema",
+      "blocker_ids": [
+        "C0-T10-B058"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 1,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    },
+    {
+      "group_id": "c0-semantic-projection-grounding",
+      "blocker_ids": [
+        "C0-T10-B059",
+        "C0-T10-B060",
+        "C0-T10-B061"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 4,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [
+        "REPEATED_FAILURE_FAMILY"
+      ],
+      "passed": true
+    },
+    {
+      "group_id": "c0r-source-bound-admission",
+      "blocker_ids": [
+        "C0-T10-B062"
+      ],
+      "strategy_kind": "GOVERNANCE",
+      "same_family_attempt_count": 2,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [
+        "REPEATED_FAILURE_FAMILY"
+      ],
+      "passed": true
+    },
+    {
+      "group_id": "benchmark-liveness",
+      "blocker_ids": [
+        "C0-T10-B063"
+      ],
+      "strategy_kind": "TOOLING",
+      "same_family_attempt_count": 0,
+      "rejections": [],
+      "evidence_gaps": [],
+      "risk_codes": [],
+      "passed": true
+    }
+  ],
+  "group_count": 22,
+  "full_blocker_coverage": true,
+  "thresholds_unchanged": true,
+  "threshold_registry": {
+    "critic_matrix_sha256": "cf8c435050e01b0f3a96cf73c57cbf1075f3da7d84584f680c8c4cb952debcaf",
+    "task_gates_sha256": "84abb49c28d755b40576e09c4415e574b9780c1c58e7010a4826576e7cab1591",
+    "critic_matrix": {
+      "dimension_operator": ">",
+      "threshold": 9,
+      "unrounded": true,
+      "target": 10,
+      "no_average_waiver": true,
+      "no_unresolved_mandatory_defect": true
+    },
+    "task_gates": {
+      "mandatory_dimension_operator": ">",
+      "mandatory_dimension_threshold": 9,
+      "unrounded": true,
+      "target": 10,
+      "all_applicable_gates_must_pass": true,
+      "no_unresolved_mandatory_defects": true
+    }
+  },
+  "may_approve_task": false,
+  "may_score_gameplay": false,
+  "may_lower_C1_C11_thresholds": false,
+  "passed": true,
+  "input_bindings": {
+    "c0_path": "Docs/Production/T10/C0_ROOT_CAUSE.json",
+    "c0_sha256": "89df39634d0a51d47b03fc6575c551d126fc11b788aef10489a2b8727f478617",
+    "plan_path": "Docs/Production/T10/REPAIR_PLAN.json",
+    "plan_sha256": "9f7d3bd2cb2e491ad9a6126d90fef716a3444105a56cc6cc27f6c99441ebc529"
+  }
+}

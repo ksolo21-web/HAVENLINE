@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "budget_source": "Docs/Production/PERFORMANCE_BUDGETS.json",
+  "purpose": "Track cumulative pressure/headroom without pretending task-local timing is arithmetically additive.",
+  "additive_metrics": [
+    "visible_triangles",
+    "draw_calls",
+    "materials_visible",
+    "texture_gpu_memory_mb",
+    "process_memory_mb",
+    "physics_active_bodies",
+    "animated_rigs_active",
+    "npc_companion_active_population",
+    "storage_download_mb"
+  ],
+  "integrated_observation_metrics": [
+    "cpu_frame_ms",
+    "gpu_frame_ms_where_measurable"
+  ],
+  "rules": {
+    "preserve_reserved_headroom": true,
+    "integrated_timing_uses_measured_scene_not_sum": true,
+    "missing_required_metric_requires_explicit_unmeasured_reason": true,
+    "soft_budget_exceedance_requires_integration_owner_disposition": true,
+    "final_physical_certification_only_T68_T69": true,
+    "quality_score_cannot_waive_performance_budget": true
+  },
+  "subsystem_task_groups": {
+    "environment_and_regions": [
+      "T11",
+      "T22",
+      "T44",
+      "T45",
+      "T46",
+      "T47",
+      "T48",
+      "T49",
+      "T50",
+      "T51",
+      "T52",
+      "T53",
+      "T54"
+    ],
+    "characters_companions_npcs": [
+      "T15",
+      "T23",
+      "T24",
+      "T25",
+      "T26",
+      "T27",
+      "T28",
+      "T29",
+      "T30",
+      "T31",
+      "T59",
+      "T60",
+      "T61"
+    ],
+    "production_economy_interactables": [
+      "T16",
+      "T17",
+      "T18",
+      "T19",
+      "T20",
+      "T32",
+      "T33",
+      "T34",
+      "T35",
+      "T36"
+    ],
+    "combat_defense_fx_weather": [
+      "T21",
+      "T22",
+      "T37",
+      "T38",
+      "T39",
+      "T40",
+      "T54"
+    ],
+    "ui_audio_services": [
+      "T42",
+      "T43",
+      "T55",
+      "T56",
+      "T57"
+    ]
+  },
+  "entries": []
+}

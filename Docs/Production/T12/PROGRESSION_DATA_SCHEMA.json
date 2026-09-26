@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "status": "PREPARATION_ONLY_SCHEMA",
+  "purpose": "Freeze the structural schema that future shipping T12 progression data must satisfy after activation. This file is not shipping progression data and contains no accepted T10/T11 IDs.",
+  "level_record": {
+    "required_fields": [
+      "level",
+      "level_id",
+      "region_band_id",
+      "prerequisite_level_ids",
+      "required_fact_ids",
+      "progression_effects",
+      "visible_progression_hook_ids",
+      "milestone_ids",
+      "one_time_event_ids"
+    ],
+    "field_contracts": {
+      "level": "integer 1..100; unique; exactly one record for every integer",
+      "level_id": "stable unique string matching ^t12\\.level\\.[0-9]{3}$ and corresponding exactly to level number",
+      "region_band_id": "one frozen connected-world band ID owned by T12 topology only",
+      "prerequisite_level_ids": "stable T12 level IDs only; level 1 empty; shipping graph acyclic and Level-1 reachable",
+      "required_fact_ids": "Level 1 must be empty. Levels 2-100 must contain exactly one T12-owned fact-slot ID matching the level: t12.fact.slot.NNN. External T07/T08/T10/T11/later-content producer IDs never appear directly in progression level data; they resolve through the separate binding index.",
+      "progression_effects": "non-empty array of practical progression descriptors; no counter/stat-only filler; exact full effect payload may not be reused on another level as fake progression",
+      "visible_progression_hook_ids": "array of stable visible-change hook IDs; cadence validated independently",
+      "milestone_ids": "array of stable T12 milestone IDs that resolve in milestone data",
+      "one_time_event_ids": "globally unique stable T12 progression-event IDs; every level includes canonical t12.event.level.NNN.completed; replay-safe/idempotent"
+    },
+    "forbidden_eligibility_fields": [
+      "purchase_history",
+      "vip_status",
+      "vip_level",
+      "premium_spend",
+      "premium_currency_spend",
+      "spend_tier",
+      "payer_status",
+      "energy",
+      "energy_required",
+      "energy_cost"
+    ],
+    "authority_rules": [
+      "records describe eligibility and progression intent only",
+      "records never debit or grant inventory",
+      "records never commit T10 transforms",
+      "records never mutate T11 camp state",
+      "records never tune T13 difficulty",
+      "records never implement T14 global save/version/migration",
+      "records never author T32/T44-T52 region content",
+      "T12 fact-slot IDs are topology/binding identities only; external gameplay fact authority stays with the owning task/integration"
+    ]
+  },
+  "milestone_record": {
+    "required_fields": [
+      "milestone_id",
+      "level",
+      "kind",
+      "progression_hook_ids",
+      "visible_change_required",
+      "owner_task"
+    ],
+    "field_contracts": {
+      "milestone_id": "stable unique string in ^t12\\.milestone\\.[a-z0-9_.-]+$ namespace; major milestone at level N uses exact t12.milestone.NNN",
+      "level": "integer 1..100 resolving to a shipping level",
+      "kind": "major or minor; every ten-level boundary has a major milestone unless a separately accepted exception stays within that band",
+      "progression_hook_ids": "stable hook IDs only",
+      "visible_change_required": "boolean",
+      "owner_task": "task responsible for authored presentation/content; T12 may own topology but not later-region assets"
+    }
+  },
+  "shipping_manifest": {
+    "required_top_level_fields": [
+      "schema_version",
+      "task_id",
+      "levels",
+      "milestones",
+      "bindings"
+    ],
+    "exact_level_count": 100,
+    "required_task_id": "T12",
+    "promotion_requires": [
+      "T07/T08/T10/T11 APPROVED",
+      "T10/T11 integrated at exact activation base",
+      "BINDING_RESOLUTION.json verified RESOLVED_FOR_ACTIVATION",
+      "T12 activation preflight PASS",
+      "future builder branch claimed with @reservation:T12",
+      "progression_bindings_v1.json validates all 99 fact slots"
+    ]
+  },
+  "notes": [
+    "This schema freezes structure, not final gameplay content, prices, difficulty, region assets or unfinished upstream IDs.",
+    "Any accepted upstream interface conflict blocks activation or requires a structured ChangeRequest; it is never guessed around.",
+    "The fact-slot layer lets the complete Level 1-100 topology ship before later region content exists without freezing fake future-content identifiers.",
+    "The canonical shipping binding dataset is separate from level topology so accepted/future producer IDs can evolve without changing stable T12 level/fact-slot identities."
+  ],
+  "shipping_files": {
+    "progression_levels_v1": {
+      "path": "HavenlineGodot/data/progression_levels_v1.json",
+      "required_top_level_fields": [
+        "schema_version",
+        "task_id",
+        "levels"
+      ],
+      "schema_version": 1,
+      "task_id": "T12"
+    },
+    "progression_milestones_v1": {
+      "path": "HavenlineGodot/data/progression_milestones_v1.json",
+      "required_top_level_fields": [
+        "schema_version",
+        "task_id",
+        "milestones"
+      ],
+      "schema_version": 1,
+      "task_id": "T12"
+    },
+    "cross_file_rule": "All three files share schema_version/task_id. Levels and milestones validate together with validate_progression_contract.py --levels HavenlineGodot/data/progression_levels_v1.json --milestones HavenlineGodot/data/progression_milestones_v1.json. Validate progression_bindings_v1.json with validate_fact_slot_binding_index.py --shipping; it must contain exactly 99 bindings covering t12.fact.slot.002..100.",
+    "progression_bindings_v1": {
+      "path": "HavenlineGodot/data/progression_bindings_v1.json",
+      "required_top_level_fields": [
+        "schema_version",
+        "task_id",
+        "bindings"
+      ],
+      "schema_version": 1,
+      "task_id": "T12",
+      "exact_binding_count": 99,
+      "binding_shape": [
+        "slot_id",
+        "fact_kind",
+        "source_task",
+        "source_id",
+        "resolution_state",
+        "evidence_ref",
+        "idempotency_domain"
+      ]
+    }
+  },
+  "fact_slot_contract": {
+    "namespace": "t12.fact.slot.NNN",
+    "level_1_rule": "required_fact_ids must be []",
+    "levels_2_100_rule": "required_fact_ids must equal [t12.fact.slot.NNN] for that level number",
+    "producer_mapping": "Resolved/deferred producer mappings live outside progression_levels_v1.json in the runtime binding index.",
+    "t10_t11_proof": "Any T10/T11 source ID behind a slot must be proven by activation-time BINDING_RESOLUTION.",
+    "later_owner_behavior": "Deferred later-owner slots keep their levels locked until a trusted integration registration resolves the producer.",
+    "presentation_requirement_rule": "Internal visibility/milestone requirements are evidence/architecture constraints only and are never legal required facts or producer bindings."
+  }
+}

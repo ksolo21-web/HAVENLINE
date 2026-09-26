@@ -1,0 +1,233 @@
+name: Havenline V3.2 shared forward-task control
+on:
+  workflow_call:
+    inputs:
+      task_id: {required: true, type: string}
+      target: {required: false, default: ASSIGNED, type: string}
+      mode: {required: false, default: preflight, type: string}
+      candidate: {required: false, default: '', type: string}
+      failed_run_id: {required: false, default: '', type: string}
+      evidence_artifact_prefix: {required: false, default: '', type: string}
+      output_artifact_prefix: {required: false, default: '', type: string}
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-v32-control-${{ inputs.task_id }}-${{ inputs.candidate || github.sha }}
+  cancel-in-progress: false
+jobs:
+  v32-control:
+    if: inputs.mode != 'failure'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    outputs:
+      candidate_sha: ${{ steps.refs.outputs.candidate_sha }}
+      builder_sha: ${{ steps.refs.outputs.builder_sha }}
+      integration_sha: ${{ steps.refs.outputs.integration_sha }}
+      specialist_critics_json: ${{ steps.plan.outputs.specialist_critics_json }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+      - name: Resolve exact candidate and integration refs
+        id: refs
+        shell: bash
+        env:
+          INPUT_CANDIDATE: ${{ inputs.candidate }}
+          INPUT_TARGET: ${{ inputs.target }}
+          INPUT_MODE: ${{ inputs.mode }}
+          TASK_ID: ${{ inputs.task_id }}
+        run: |
+          set -euo pipefail
+          case "$INPUT_MODE" in preflight|review) ;; *) echo "invalid control mode $INPUT_MODE" >&2; exit 2;; esac
+          case "$INPUT_TARGET" in ASSIGNED|BUILDING_ISOLATED) ;; *) echo "invalid graduation target $INPUT_TARGET" >&2; exit 2;; esac
+          head=$(git rev-parse HEAD);candidate="$INPUT_CANDIDATE"
+          if [ "$INPUT_TARGET" = "BUILDING_ISOLATED" ] || [ "$INPUT_MODE" = "review" ]; then
+            [[ "$candidate" =~ ^[0-9a-f]{40}$ ]] || { echo 'exact candidate input required' >&2; exit 2; }
+            test "$candidate" = "$head" || { echo "candidate input does not equal checked-out source" >&2; exit 2; }
+          elif [ -n "$candidate" ]; then
+            [[ "$candidate" =~ ^[0-9a-f]{40}$ ]] || exit 2;test "$candidate" = "$head" || exit 2
+          fi
+          integration_branch=$(python3 -c 'import json;print(json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json"))["integration_branch"])')
+          builder_branch=$(python3 -c 'import json,os; r=json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json")); print(next(w["branch"] for w in r["workstreams"] if w["task_id"]==os.environ["TASK_ID"]))')
+          integration=$(git ls-remote origin "refs/heads/$integration_branch" | awk '{print $1}')
+          builder=$(git ls-remote origin "refs/heads/$builder_branch" | awk '{print $1}')
+          [[ "$integration" =~ ^[0-9a-f]{40}$ ]] || { echo 'unable to resolve exact integration head' >&2; exit 2; }
+          [[ "$builder" =~ ^[0-9a-f]{40}$ ]] || { echo 'unable to resolve exact builder head' >&2; exit 2; }
+          git fetch --no-tags origin "$integration_branch" "$builder_branch"
+          echo "candidate_sha=$candidate" >> "$GITHUB_OUTPUT";echo "builder_sha=$builder" >> "$GITHUB_OUTPUT";echo "integration_sha=$integration" >> "$GITHUB_OUTPUT"
+          git ls-remote --heads origin 'refs/heads/havenline/T*' | awk '{print $2}' | sed 's#refs/heads/##' | jq -R -s 'split("\n") | map(select(length > 0))' > /tmp/v32-remote-branches.json
+      - name: Resolve V3.2 readiness and graduation
+        run: |
+          set -euo pipefail;mkdir -p v32-control
+          lineage_head="${{ steps.refs.outputs.builder_sha }}"
+          if [ "${{ inputs.target }}" = "BUILDING_ISOLATED" ]; then lineage_head="${{ steps.refs.outputs.candidate_sha }}"; fi
+          if [ "${{ inputs.target }}" = "ASSIGNED" ]; then
+            python3 tools/havenline/production/control_plane_lineage.py --builder-head "$lineage_head" --integration-head "${{ steps.refs.outputs.integration_sha }}" > v32-control/control-plane-lineage.json
+          fi
+          python3 tools/havenline/production/architecture_v32.py readiness "${{ inputs.task_id }}" --target "${{ inputs.target }}" --builder-head "$lineage_head" --integration-head "${{ steps.refs.outputs.integration_sha }}" > v32-control/readiness.json
+          python3 tools/havenline/production/task_graduation_gate.py "${{ inputs.task_id }}" --target "${{ inputs.target }}" --builder-head "$lineage_head" --integration-head "${{ steps.refs.outputs.integration_sha }}" > v32-control/graduation.json
+          python3 tools/havenline/production/timeout_stage_plan.py "${{ inputs.task_id }}" > v32-control/stage-plan.json
+          python3 tools/havenline/production/rolling_canary.py requirements "${{ inputs.task_id }}" > v32-control/canaries.json
+          python3 tools/havenline/production/branch_budget.py --task "${{ inputs.task_id }}" --inventory /tmp/v32-remote-branches.json > v32-control/branch-budget.json
+      - name: Validate resumable checkpoint for build candidates
+        if: inputs.target == 'BUILDING_ISOLATED'
+        env:
+          TASK: ${{ inputs.task_id }}
+        run: |
+          set -euo pipefail
+          checkpoint=$(python3 - <<'PY'
+          import json,os
+          print(json.load(open(f'Docs/Production/{os.environ["TASK"]}/GRADUATION.json'))['checkpoint_path'])
+          PY
+          )
+          python3 tools/havenline/production/execution_checkpoint.py resume "$checkpoint" > v32-control/checkpoint-resume.json
+      - name: Resolve source-bound forward control plan
+        id: plan
+        env:
+          CANDIDATE: ${{ steps.refs.outputs.candidate_sha }}
+          BUILDER: ${{ steps.refs.outputs.builder_sha }}
+          INTEGRATION: ${{ steps.refs.outputs.integration_sha }}
+        run: |
+          set -euo pipefail
+          args=(plan "${{ inputs.task_id }}" --target "${{ inputs.target }}" --builder "$BUILDER" --integration "$INTEGRATION" --inventory /tmp/v32-remote-branches.json --output v32-control/control-plan.json)
+          if [ "${{ inputs.target }}" = "BUILDING_ISOLATED" ]; then args+=(--candidate "$CANDIDATE"); fi
+          python3 tools/havenline/production/forward_task_control.py "${args[@]}"
+          jq -e '.passed == true and .finish_running_sha == true and .quality_thresholds_unchanged == true' v32-control/control-plan.json
+          critics=$(jq -c '.critic_plan.specialist_fanout' v32-control/control-plan.json);echo "specialist_critics_json=$critics" >> "$GITHUB_OUTPUT"
+          if [ "${{ inputs.mode }}" = "review" ]; then test "$critics" != "[]";test -n "${{ inputs.evidence_artifact_prefix }}";test -n "${{ inputs.output_artifact_prefix }}";fi
+      - name: Enforce zero-primitive shipping art before final review
+        if: inputs.mode == 'review'
+        env:
+          TASK: ${{ inputs.task_id }}
+          CANDIDATE: ${{ steps.refs.outputs.candidate_sha }}
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/shipping_visual_gate.py audit-task "$TASK" \
+            --candidate "$CANDIDATE" --require-clean \
+            --output v32-control/shipping-visual-audit.json
+
+      - name: Stage content-addressed shared gate PASS proposals
+        if: inputs.target == 'BUILDING_ISOLATED'
+        env:
+          CANDIDATE: ${{ steps.refs.outputs.candidate_sha }}
+        run: |
+          set -euo pipefail
+          mkdir -p v32-control/gate-proposals
+          for gate in scope_dependency ownership; do
+            python3 tools/havenline/production/gate_result_recorder.py proposal \
+              --task "${{ inputs.task_id }}" \
+              --gate "$gate" \
+              --candidate "$CANDIDATE" \
+              --evidence v32-control/control-plan.json \
+              --workflow-run-id "${{ github.run_id }}" \
+              --output "v32-control/gate-proposals/$gate.json"
+          done
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: v32-control-${{ inputs.task_id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: v32-control/
+          retention-days: 30
+          if-no-files-found: error
+  critic-package-preflight:
+    if: inputs.mode == 'review'
+    needs: v32-control
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ needs.v32-control.outputs.candidate_sha }}
+          fetch-depth: 0
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          pattern: ${{ inputs.evidence_artifact_prefix }}-*
+          path: critic-packages
+      - name: Validate exact critic packages before independent review
+        env:
+          CRITICS_JSON: ${{ needs.v32-control.outputs.specialist_critics_json }}
+          PREFIX: ${{ inputs.evidence_artifact_prefix }}
+          CANDIDATE: ${{ needs.v32-control.outputs.candidate_sha }}
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib,subprocess
+          critics=json.loads(os.environ['CRITICS_JSON']);prefix=os.environ['PREFIX'];candidate=os.environ['CANDIDATE']
+          if not critics:raise SystemExit('review mode has no specialist critics')
+          for cid in critics:
+              manifest=pathlib.Path('critic-packages')/f'{prefix}-{cid}'/'critic-manifest.json'
+              if not manifest.is_file():raise SystemExit(f'missing critic package manifest for {cid}: {manifest}')
+              subprocess.check_call(['python3','tools/havenline/production/specialist_evidence_manifest.py','validate',str(manifest)])
+              subprocess.check_call(['python3','tools/havenline/production/critic_package_preflight.py',str(manifest),'--candidate',candidate,'--critic',cid,'--evidence-root','.'])
+          PY
+  specialists:
+    if: inputs.mode == 'review'
+    needs: [v32-control, critic-package-preflight]
+    uses: ./.github/workflows/havenline-v32-specialist-fanout.yml
+    with:
+      candidate: ${{ needs.v32-control.outputs.candidate_sha }}
+      critic_ids_json: ${{ needs.v32-control.outputs.specialist_critics_json }}
+      evidence_artifact_prefix: ${{ inputs.evidence_artifact_prefix }}
+      output_artifact_prefix: ${{ inputs.output_artifact_prefix }}
+    secrets: inherit
+  automatic-c0:
+    if: >-
+      always() && inputs.mode != 'failure' && inputs.target == 'BUILDING_ISOLATED' && inputs.candidate != '' &&
+      (needs.v32-control.result == 'failure' || needs.critic-package-preflight.result == 'failure' || needs.specialists.result == 'failure')
+    needs: [v32-control, critic-package-preflight, specialists]
+    uses: ./.github/workflows/havenline-c0-root-cause.yml
+    with:
+      task_id: ${{ inputs.task_id }}
+      failed_run_id: ${{ github.run_id }}
+      failed_candidate: ${{ inputs.candidate }}
+    secrets: inherit
+  failure-request-preflight:
+    if: inputs.mode == 'failure'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 3
+    steps:
+      - name: Validate failure-routing request
+        run: |
+          set -euo pipefail
+          [[ "${{ inputs.task_id }}" =~ ^T[0-9]{2}$ ]];[[ "${{ inputs.candidate }}" =~ ^[0-9a-f]{40}$ ]];[[ "${{ inputs.failed_run_id }}" =~ ^[0-9]+$ ]]
+  failure-router:
+    if: inputs.mode == 'failure'
+    needs: failure-request-preflight
+    uses: ./.github/workflows/havenline-c0-root-cause.yml
+    with:
+      task_id: ${{ inputs.task_id }}
+      failed_run_id: ${{ inputs.failed_run_id }}
+      failed_candidate: ${{ inputs.candidate }}
+    secrets: inherit
+
+  failure-learning-after-c0:
+    if: >-
+      always() &&
+      (needs.automatic-c0.result == 'success' || needs.failure-router.result == 'success') &&
+      inputs.candidate != ''
+    needs: [automatic-c0, failure-router]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ inputs.candidate }}
+          fetch-depth: 0
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-C0-${{ inputs.task_id }}-${{ inputs.candidate }}-${{ github.run_id }}
+          path: c0-learning
+      - name: Stage unverified failure-learning proposals from returned C0
+        run: |
+          set -euo pipefail
+          test -s c0-learning/c0-output/c0-report.json
+          python3 tools/havenline/production/failure_learning.py propose \
+            --c0 c0-learning/c0-output/c0-report.json \
+            --output failure-learning-proposals.json
+          python3 tools/havenline/production/failure_learning.py validate-proposals failure-learning-proposals.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-failure-learning-${{ inputs.task_id }}-${{ inputs.candidate }}-${{ github.run_id }}
+          path: failure-learning-proposals.json
+          retention-days: 30
+          if-no-files-found: error

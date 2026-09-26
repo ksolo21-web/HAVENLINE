@@ -1,0 +1,327 @@
+name: Havenline production governance validation
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01','havenline/QA-integration','havenline/governance-*']
+    paths:
+      - 'AGENTS.md'
+      - 'Docs/Production/**'
+      - 'tools/havenline/production/**'
+      - '.github/CODEOWNERS'
+      - 'HavenlineGodot/tests/production_capture_harness.gd'
+      - 'HavenlineGodot/tests/production_motion_capture.gd'
+      - '.github/workflows/havenline-production-governance.yml'
+      - '.github/workflows/havenline-candidate-guard.yml'
+      - '.github/workflows/havenline-specialist-critic.yml'
+      - '.github/workflows/havenline-specialist-model-cache.yml'
+      - '.github/workflows/havenline-critic-safeguards.yml'
+      - '.github/workflows/havenline-v32-task-preflight.yml'
+      - '.github/workflows/havenline-v32-specialist-fanout.yml'
+      - '.github/workflows/havenline-task03-v2-final.yml'
+  pull_request:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - 'AGENTS.md'
+      - 'Docs/Production/**'
+      - 'tools/havenline/production/**'
+      - '.github/CODEOWNERS'
+      - 'HavenlineGodot/tests/production_capture_harness.gd'
+      - 'HavenlineGodot/tests/production_motion_capture.gd'
+      - '.github/workflows/havenline-production-governance.yml'
+      - '.github/workflows/havenline-candidate-guard.yml'
+      - '.github/workflows/havenline-specialist-critic.yml'
+      - '.github/workflows/havenline-specialist-model-cache.yml'
+      - '.github/workflows/havenline-critic-safeguards.yml'
+      - '.github/workflows/havenline-task03-v2-final.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: havenline-production-governance-${{ github.event.pull_request.head.ref || github.ref_name }}
+  cancel-in-progress: false
+jobs:
+  validate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+      - name: Compile production accelerator and specialist critic tooling
+        run: python3 -m compileall -q tools/havenline/production
+      - name: Run governance and safeguard unit tests
+        env:
+          HAVENLINE_TRUSTED_INTEGRATION_HEAD: ${{ github.event.pull_request.base.sha || github.sha }}
+        run: python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' -v
+      - name: Validate workstream registry and ownership collisions
+        run: python3 tools/havenline/production/workstream.py validate-registry
+      - name: Validate complete V2 state and event-appropriate scope
+        shell: bash
+        env:
+          SCOPE_EVENT: ${{ github.event_name }}
+          SCOPE_REF: ${{ github.ref_name }}
+          SCOPE_PR_BASE: ${{ github.event.pull_request.base.sha }}
+        run: |
+          set -euo pipefail
+          if [ "$SCOPE_EVENT" = "pull_request" ]; then base="$SCOPE_PR_BASE"; else base=$(git rev-parse HEAD^); fi
+          python3 tools/havenline/production/validate_migration.py
+          integration_branch=$(python3 -c 'import json; print(json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json"))["integration_branch"])')
+          if [ "$SCOPE_EVENT" = "push" ] && [ "$SCOPE_REF" = "$integration_branch" ]; then
+            python3 tools/havenline/production/validate_integration_scope.py --base "$base" --head HEAD --output /tmp/governance-scope.json
+          else
+            python3 tools/havenline/production/validate_migration_scope.py --base "$base" --head HEAD --output /tmp/governance-scope.json
+          fi
+          cat /tmp/governance-scope.json
+      - name: Validate T10-T70 forward execution architecture
+        run: |
+          python3 tools/havenline/production/forward_execution.py validate
+          python3 tools/havenline/production/forward_execution.py plan T10 > /tmp/t10-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T14 > /tmp/t14-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T24 > /tmp/t24-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T33 > /tmp/t33-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T58 > /tmp/t58-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T62 > /tmp/t62-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T68 > /tmp/t68-plan.json
+          python3 tools/havenline/production/forward_execution.py plan T70 > /tmp/t70-plan.json
+          jq -e '.execution_mode == "build" and (.ordered_gates | index("integration")) != null and (.gate_execution.task_sentinel.execution == "task_adapter_required")' /tmp/t10-plan.json
+          jq -e '.execution_mode == "validation_only" and (.ordered_gates | index("integration")) == null' /tmp/t62-plan.json
+          jq -e '.execution_mode == "certification_only" and (.ordered_gates | index("physical_device")) != null and (.gate_execution.physical_device.execution == "physical_hardware_only")' /tmp/t68-plan.json
+          jq -e '.execution_mode == "release_only" and (.ordered_gates | index("release_manifest")) != null' /tmp/t70-plan.json
+      - name: Validate Production Architecture V3 intelligence layer
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/architecture_v3.py validate > /tmp/v3-validation.json
+          python3 tools/havenline/production/architecture_v3.py readiness T10 > /tmp/v3-t10.json
+          python3 tools/havenline/production/architecture_v3.py readiness T35 > /tmp/v3-t35.json
+          python3 tools/havenline/production/architecture_v3.py readiness T68 > /tmp/v3-t68.json
+          python3 tools/havenline/production/critical_path_scheduler.py validate > /tmp/v3-scheduler-validation.json
+          python3 tools/havenline/production/critical_path_scheduler.py plan > /tmp/v3-schedule.json
+          python3 tools/havenline/production/gate_fingerprint.py validate > /tmp/v3-fingerprint.json
+          python3 tools/havenline/production/contract_compatibility.py validate > /tmp/v3-contracts.json
+          python3 tools/havenline/production/failure_intelligence.py validate > /tmp/v3-failures.json
+          python3 tools/havenline/production/synthetic_merge_forecast.py --candidate HEAD --integration HEAD --output /tmp/v3-merge.json
+          jq -e '.passed == true and .task_count == 61' /tmp/v3-validation.json
+          jq -e '.feasibility.dependencies_approved == true and .feasibility.activation_state == "READY_NOW" and .feasibility.runtime_activation_allowed == true' /tmp/v3-t10.json
+          # B022: validate canonical activation without rewriting lifecycle authority.
+          cat > /tmp/t10_activation_check.py <<'PY'
+          import argparse
+          import json
+          import sys
+          from pathlib import Path
+          sys.path.insert(0, str(Path.cwd() / "tools/havenline/production"))
+          from architecture_v31 import ACTIVE_RUNTIME_STATES
+          from lib import expand_alias
+
+          def validate_t10_activation(graph, registry, ownership, snapshot=None, packet=None):
+              status = graph["tasks"]["T10"]["status"]
+              rows = [w for w in registry["workstreams"] if w.get("task_id") == "T10"]
+              assert len(rows) == 1, "T10 needs exactly one registered workstream"
+              ws = rows[0]
+              assert ws["status"] == status, "T10 graph/registry mismatch"
+              assert status in ACTIVE_RUNTIME_STATES or status == "APPROVED", "T10 is not activated or completed"
+              owned = expand_alias(ws.get("owned_paths", []), ownership)
+              assert ws.get("branch") and owned, "T10 ownership missing"
+              if snapshot is not None:
+                  assert snapshot.get("validation", {}).get("passed") is True, "invalid derived snapshot"
+                  assert snapshot.get("snapshot_is_derived_not_authority") is True
+                  assert snapshot.get("task_id") == "T10" and snapshot.get("lifecycle_status") == status
+                  assert snapshot.get("task_branch") == ws["branch"] and snapshot.get("owned_paths") == owned
+                  assert not {"lifecycle_status_LOCKED", "ownership_not_assigned"}.intersection(snapshot.get("blockers", []))
+              if packet is not None and status in ACTIVE_RUNTIME_STATES:
+                  assert "DO NOT start runtime implementation" not in packet, "active T10 packet incorrectly stops runtime"
+              return status
+
+          if __name__ == "__main__":
+              parser = argparse.ArgumentParser()
+              parser.add_argument("stage", choices=["graph", "snapshot", "packet"])
+              args = parser.parse_args()
+              docs = Path("Docs/Production")
+              read = lambda name: json.loads((docs / name).read_text())
+              snapshot = json.loads(Path("/tmp/v31-t10-state.json").read_text()) if args.stage != "graph" else None
+              packet = (docs / "Evidence/T10/TASK_PACKET.md").read_text() if args.stage == "packet" else None
+              print(validate_t10_activation(read("DEPENDENCY_GRAPH.json"), read("WORKSTREAM_REGISTRY.json"), read("PATH_OWNERSHIP.json"), snapshot, packet))
+          PY
+          python3 /tmp/t10_activation_check.py graph
+          jq -e '.feasibility.capability_blockers | index("google_play_billing_sandbox") != null' /tmp/v3-t35.json
+          jq -e '.feasibility.capability_blockers | index("physical_phone_4k60") != null' /tmp/v3-t68.json
+          jq -e '.scheduler_is_advisory == true and .integration_owner_slots == 1' /tmp/v3-schedule.json
+          jq -e '.passed == true' /tmp/v3-fingerprint.json
+          jq -e '.passed == true' /tmp/v3-contracts.json
+          jq -e '.passed == true and .record_count >= 4' /tmp/v3-failures.json
+          jq -e '.risk == "NO_DRIFT" and .requires_reconcile == false' /tmp/v3-merge.json
+      - name: Validate Production Architecture V3.1 factory hardening
+        shell: bash
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then base="${{ github.event.pull_request.base.sha }}"; else base=$(git rev-parse HEAD^); fi
+          echo '4858759f46b3c34d942082cb9fa9ea11a14eb0f871c131eb1f6eeeb26fb54c9d  Docs/Production/ARCHITECTURE_RELEASE_LOCK.json' | sha256sum -c -
+          # V3.2 composes validate_architecture_release_lock.py with only the exact authorized T09 policy, T10 canary and T10 C7 runner deltas.
+          python3 tools/havenline/production/validate_architecture_v32_t10.py --output /tmp/v32-release-lock.json
+          python3 tools/havenline/production/architecture_v31.py validate > /tmp/v31-validation.json
+          python3 tools/havenline/production/architecture_v31.py readiness T10 > /tmp/v31-t10.json
+          python3 tools/havenline/production/architecture_v31.py readiness T68 > /tmp/v31-t68.json
+          python3 tools/havenline/production/factory_observer_contract.py > /tmp/v31-factory-observer-contract.json
+          python3 tools/havenline/production/flake_intelligence.py validate > /tmp/v31-flake.json
+          python3 tools/havenline/production/pipeline_telemetry.py validate > /tmp/v31-telemetry.json
+          python3 tools/havenline/production/ci_toolchain_lock.py validate > /tmp/v31-toolchain.json
+          python3 tools/havenline/production/ci_toolchain_lock.py provenance --output /tmp/v31-runner-provenance.json
+          python3 tools/havenline/production/evidence_retention.py validate-policy > /tmp/v31-retention.json
+          python3 tools/havenline/production/closure_validator.py Docs/Production/T09/verified-completion.json > /tmp/t09-closure.json
+          python3 tools/havenline/production/runtime_dependency_learning.py validate > /tmp/v31-runtime-deps.json
+          python3 tools/havenline/production/mutation_canary.py > /tmp/v31-canaries.json
+          python3 tools/havenline/production/proof_invalidation.py validate > /tmp/v31-invalidation.json
+          python3 tools/havenline/production/proof_invalidation.py contract persistence_schema > /tmp/v31-persistence-invalidation.json
+          python3 tools/havenline/production/proof_invalidation.py diff --base "$base" --head HEAD --output /tmp/v31-contract-diff.json > /tmp/v31-contract-diff.stdout.json
+          python3 tools/havenline/production/task_state_snapshot.py T10 --output /tmp/v31-t10-state.json > /tmp/v31-t10-state.stdout.json
+          jq -e '.passed == true and .architecture_version == "3.2" and .predecessor_accepted_source == "673d7a7477cc94aef2b7bb8f3d788b1b3c47f902" and .predecessor_manifest_sha256 == "4858759f46b3c34d942082cb9fa9ea11a14eb0f871c131eb1f6eeeb26fb54c9d" and .unchanged_locked_files == 41 and .authorized_changes == ["Docs/Production/CI_TOOLCHAIN_LOCK.json", "tools/havenline/production/mutation_canary.py", "tools/havenline/production/forward_execution.py", "tools/havenline/production/failure_intelligence.py", "tools/havenline/production/builder_repair_gate.py", "tools/havenline/production/workstream.py", ".github/workflows/havenline-candidate-guard.yml", ".github/workflows/havenline-c0-root-cause.yml", "tools/havenline/production/c0_root_cause_advisor.py", "tools/havenline/production/collect_artifact_diagnostics.py", "tools/havenline/production/specialist_critic_runner.py"]' /tmp/v32-release-lock.json
+          jq -e '.passed == true and .task_count == 62 and .snapshot_count == 62 and .components.factory_observer_consumption.passed == true' /tmp/v31-validation.json
+          jq -e '.v31_controls.automatic_factory_observation == "ENFORCED" and .v31_controls.ci_toolchain_lock == "ENFORCED_NODE24" and .v31_controls.runtime_dependency_learning == "ADDITIVE_ONLY_SOURCE_BOUND" and .v31_controls.transitive_proof_invalidation == "ENFORCED_AUTOMATIC_DIFF"' /tmp/v31-t10.json
+          jq -e '.passed == true and .automatic_failure_observation == true and .forward_closeout_observation_required == true and .factory_observation_is_not_authority == true and .quality_thresholds_unchanged == true' /tmp/v31-factory-observer-contract.json
+          jq -e '.passed == true and .critical_workflow_count == 9 and .retired_workflow_count == 0 and .action_pin_count >= 7 and .action_runtime == "node24"' /tmp/v31-toolchain.json
+          jq -e '.provenance_complete == true and .RUNNER_OS == "Linux"' /tmp/v31-runner-provenance.json
+          jq -e '.passed == true and ([.results[] | select(.rejected == true)] | length) == (.results | length)' /tmp/v31-canaries.json
+          jq -e '.passed == true' /tmp/v31-retention.json
+          jq -e '.passed == true and .approval_allowed == true' /tmp/t09-closure.json
+          jq -e '.passed == true' /tmp/v31-runtime-deps.json
+          jq -e '.passed == true' /tmp/v31-invalidation.json
+          jq -e '.proof_reuse_blocked == true and .automatic_approval_revocation == false and (.invalidated_tasks | index("T15")) != null and (.invalidated_tasks | index("T70")) != null and (.invalidated_gates | index("save_matrix")) != null' /tmp/v31-persistence-invalidation.json
+          jq -e '.passed == true and ((.contract_change_detected == false and .proof_reuse_blocked == false and .integration_owner_disposition_required == false) or (.contract_change_detected == true and .proof_reuse_blocked == true and .integration_owner_disposition_required == true))' /tmp/v31-contract-diff.json
+          python3 /tmp/t10_activation_check.py snapshot
+      - name: Validate Production Architecture V3.2 parallel production and resumability
+        shell: bash
+        run: |
+          set -euo pipefail
+          integration_branch=$(python3 -c 'import json;print(json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json"))["integration_branch"])')
+          t11_branch=$(python3 -c 'import json;print(next(w["branch"] for w in json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json"))["workstreams"] if w["task_id"]=="T11"))')
+          integration_sha=$(git ls-remote origin "refs/heads/$integration_branch" | awk '{print $1}')
+          t11_remote_sha=$(git ls-remote origin "refs/heads/$t11_branch" | awk '{print $1}')
+          t11_assignment_sha=$(python3 -c 'import json; row=next(w for w in json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json"))["workstreams"] if w["task_id"]=="T11"); print(row.get("assignment_integration_commit") or "")')
+          [[ "$integration_sha" =~ ^[0-9a-f]{40}$ ]] || { echo "unable to resolve integration head" >&2; exit 2; }
+          [[ "$t11_remote_sha" =~ ^[0-9a-f]{40}$ ]] || { echo "unable to resolve T11 builder head" >&2; exit 2; }
+          # PR/governance branches validate the proposed control plane itself.
+          # Live integration validates the exact assignment binding once one exists;
+          # later governance-only integration motion must not cancel a legitimately
+          # assigned/running SHA. BUILDING preflight still forecasts against latest integration.
+          lineage_integration_sha="$integration_sha"
+          if [ "${GITHUB_EVENT_NAME}" = "pull_request" ] || [ "${GITHUB_REF_NAME}" != "$integration_branch" ]; then
+            t11_lineage_builder=$(git rev-parse HEAD)
+          else
+            t11_lineage_builder="$t11_remote_sha"
+            if [[ "$t11_assignment_sha" =~ ^[0-9a-f]{40}$ ]]; then lineage_integration_sha="$t11_assignment_sha"; fi
+          fi
+          python3 tools/havenline/production/architecture_v32.py validate > /tmp/v32-validation.json
+          python3 tools/havenline/production/architecture_v32.py readiness T11 --builder-head "$t11_lineage_builder" --integration-head "$lineage_integration_sha" > /tmp/v32-t11.json
+          python3 tools/havenline/production/architecture_v32.py readiness T12 > /tmp/v32-t12.json
+          python3 tools/havenline/production/architecture_v32.py readiness T14 > /tmp/v32-t14.json
+          python3 tools/havenline/production/architecture_v32.py readiness T35 > /tmp/v32-t35.json
+          python3 tools/havenline/production/architecture_v32.py readiness T68 > /tmp/v32-t68.json
+          python3 tools/havenline/production/parallel_preparation_planner.py validate > /tmp/v32-prep.json
+          python3 tools/havenline/production/task_graduation_gate.py T11 --target ASSIGNED --builder-head "$t11_lineage_builder" --integration-head "$lineage_integration_sha" > /tmp/v32-t11-graduation.json
+          python3 tools/havenline/production/timeout_stage_plan.py T11 > /tmp/v32-t11-stages.json
+          python3 tools/havenline/production/timeout_stage_plan.py T62 > /tmp/v32-t62-stages.json
+          python3 tools/havenline/production/rolling_canary.py validate > /tmp/v32-canaries.json
+          python3 tools/havenline/production/rolling_canary.py requirements T12 > /tmp/v32-t12-canaries.json
+          python3 tools/havenline/production/performance_ledger.py validate > /tmp/v32-performance.json
+          git ls-remote --heads origin 'refs/heads/havenline/T*' | awk '{print $2}' | sed 's#refs/heads/##' | jq -R -s 'split("\n") | map(select(length > 0))' > /tmp/v32-remote-branches.json
+          python3 tools/havenline/production/branch_budget.py --inventory /tmp/v32-remote-branches.json > /tmp/v32-branches.json
+          python3 tools/havenline/production/forward_task_control.py validate > /tmp/v32-forward-control-validation.json
+          python3 tools/havenline/production/gate_result_recorder.py validate > /tmp/v32-gate-result-recording.json
+          python3 tools/havenline/production/failure_learning.py validate > /tmp/v32-failure-learning.json
+          python3 tools/havenline/production/forward_task_control.py plan T11 --target ASSIGNED --builder "$t11_lineage_builder" --integration "$lineage_integration_sha" --inventory /tmp/v32-remote-branches.json --output /tmp/v32-forward-control-T11.json > /tmp/v32-forward-control-T11.stdout
+          python3 tools/havenline/production/v32_forward_prep_harness.py validate > /tmp/v32-forward-harness.json
+          python3 tools/havenline/production/v32_forward_prep_harness.py fixture progression > /tmp/v32-progression-fixture.json
+          python3 tools/havenline/production/v32_forward_prep_harness.py fixture save_versioning > /tmp/v32-save-fixture.json
+          python3 tools/havenline/production/external_readiness.py > /tmp/v32-external-readiness.json
+          python3 tools/havenline/production/forward_prep_packet.py T12 --output /tmp/v32-prep-T12.md > /tmp/v32-prep-T12.stdout
+          python3 tools/havenline/production/forward_prep_packet.py T14 --output /tmp/v32-prep-T14.md > /tmp/v32-prep-T14.stdout
+          python3 tools/havenline/production/forward_prep_packet.py T35 --output /tmp/v32-prep-T35.md > /tmp/v32-prep-T35.stdout
+          python3 tools/havenline/production/forward_prep_packet.py T62 --output /tmp/v32-prep-T62.md > /tmp/v32-prep-T62.stdout
+          python3 tools/havenline/production/forward_prep_packet.py T68 --output /tmp/v32-prep-T68.md > /tmp/v32-prep-T68.stdout
+          python3 tools/havenline/production/opening_loop_canary.py > /tmp/v32-opening-loop.json
+          python3 tools/havenline/production/authority_consistency.py > /tmp/v32-authority.json
+          python3 tools/havenline/production/forward_prep_contract.py > /tmp/v32-forward-prep.json
+          jq -e '.passed == true and .architecture_version == "3.2" and .task_count == 60 and .components.workflow_consumption.passed == true and .components.authority_consistency.passed == true and .components.forward_prep_contract.passed == true' /tmp/v32-validation.json
+          jq -e '.passed == true and .integration_owner_slots == 1 and .active_runtime_count <= .runtime_wip_max' /tmp/v32-prep.json
+          jq -e '.passed == true and .task_id == "T11"' /tmp/v32-t11-graduation.json
+          jq -e '.timeout_is_product_judgment == false and .critic_parallelism >= 1 and ([.shards[] | select(.checkpoint_after == true)] | length) == (.shards | length)' /tmp/v32-t11-stages.json
+          jq -e '.timeout_is_product_judgment == false and .critic_parallelism >= 1' /tmp/v32-t62-stages.json
+          jq -e '.passed == true and .canary_count >= 8' /tmp/v32-canaries.json
+          jq -e '([.canaries[] | select(.canary == "level_1_100_reachability")] | length) == 1' /tmp/v32-t12-canaries.json
+          jq -e '.passed == true' /tmp/v32-performance.json
+          jq -e '.passed == true and .details.inventory_checked == true' /tmp/v32-branches.json
+          jq -e '.passed == true and .task_count == 60' /tmp/v32-forward-control-validation.json
+          jq -e '.passed == true and .owner_promotion_required == true and .ci_repo_write_required == false' /tmp/v32-gate-result-recording.json
+          jq -e '.passed == true and .automatic_staging == true and .automatic_promotion == false and .owner_promotion_required == true' /tmp/v32-failure-learning.json
+          jq -e '.passed == true and .task_id == "T11" and .target == "ASSIGNED" and .quality_thresholds_unchanged == true' /tmp/v32-forward-control-T11.json
+          jq -e '.passed == true and .domain_count >= 12' /tmp/v32-forward-harness.json
+          jq -e '.passed == true' /tmp/v32-progression-fixture.json
+          jq -e '.passed == true' /tmp/v32-save-fixture.json
+          jq -e '.passed == true' /tmp/v32-external-readiness.json
+          grep -q 'PREPARATION ONLY' /tmp/v32-prep-T12.md
+          grep -q 'progression' /tmp/v32-prep-T12.md
+          grep -q 'save_versioning' /tmp/v32-prep-T14.md
+          grep -q 'google_play_billing_sandbox' /tmp/v32-prep-T35.md
+          grep -q 'validation-only' /tmp/v32-prep-T62.md
+          grep -q 'physical_phone_4k60' /tmp/v32-prep-T68.md
+          jq -e '.passed == true and .this_is_readiness_not_formal_acceptance == true and (.implemented_segments | index("transform")) != null' /tmp/v32-opening-loop.json
+          jq -e '.passed == true' /tmp/v32-authority.json
+          jq -e '.passed == true and .prep_task_count == 59 and .expected_prep_task_count == 59 and .external_milestone_count >= 10 and .shared_contract_count >= 8' /tmp/v32-forward-prep.json
+          grep -q 'actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'forward_task_control.py' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'critic_package_preflight.py' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'havenline-v32-specialist-fanout.yml' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'havenline-c0-root-cause.yml' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'gate_result_recorder.py' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'havenline-v32-independent-specialist-batch' .github/workflows/havenline-v32-specialist-fanout.yml
+          grep -q 'failure_learning.py propose' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'failure-learning-after-c0' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'cancel-in-progress: false' .github/workflows/havenline-v32-task-preflight.yml
+          grep -q 'fail-fast: false' .github/workflows/havenline-v32-specialist-fanout.yml
+      - name: Require C1-C11 execution readiness
+        run: python3 tools/havenline/production/validate_critic_readiness.py
+      - name: Smoke-test frozen task packet generation
+        run: |
+          python3 tools/havenline/production/task_packet.py T03
+          test -s Docs/Production/Evidence/T03/TASK_PACKET.md
+          python3 tools/havenline/production/task_packet.py T05
+          grep -q 'N/A for this task' Docs/Production/Evidence/T05/TASK_PACKET.md
+          python3 tools/havenline/production/task_packet.py T10
+          grep -q 'Forward execution profile — machine resolved' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Execution mode: `build`' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Ordered fail-fast gates' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Terminal-failure disposition: C0' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Production Architecture V3 — machine resolved' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Production Architecture V3.1 — machine resolved' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Feasibility state:' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'Runtime activation allowed now:' Docs/Production/Evidence/T10/TASK_PACKET.md
+          python3 /tmp/t10_activation_check.py packet
+          grep -q 'synthetic_merge_forecast.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'task_state_snapshot.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'proof_invalidation.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'factory_observer.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'factory_closeout_gate.py' Docs/Production/Evidence/T10/TASK_PACKET.md
+          grep -q 'factory-observation.json' Docs/Production/Evidence/T10/TASK_PACKET.md
+          python3 tools/havenline/production/task_packet.py T11
+          grep -q 'Production Architecture V3.2 — machine resolved' Docs/Production/Evidence/T11/TASK_PACKET.md
+          grep -q 'task_graduation_gate.py T11 --target ASSIGNED' Docs/Production/Evidence/T11/TASK_PACKET.md
+          grep -q 'execution_checkpoint.py' Docs/Production/Evidence/T11/TASK_PACKET.md
+          grep -q 'blocker_family_gate.py' Docs/Production/Evidence/T11/TASK_PACKET.md
+          grep -q 'critic_invalidation.py' Docs/Production/Evidence/T11/TASK_PACKET.md
+      - name: Validate resource/tool/actor registry schema
+        run: python3 tools/havenline/production/resource_actor_contract.py --task T05 --schema-only
+      - name: Validate Game Master policy schema
+        run: python3 tools/havenline/production/game_master_contract.py --task T08 --schema-only
+      - name: Classify governance-only or lifecycle-valid task integration impact
+        run: |
+          set -euo pipefail
+          if [ "${{ github.event_name }}" = "pull_request" ]; then base="${{ github.event.pull_request.base.sha }}"; else base=$(git rev-parse HEAD^); fi
+          python3 tools/havenline/production/change_impact.py --base "$base" --head HEAD > /tmp/impact.json
+          python3 tools/havenline/production/validate_integration_scope.py --base "$base" --head HEAD --output /tmp/integration-scope.json
+          if jq -e '.task_id == "T03" and ([.task_files.T03[]? | select(startswith("HavenlineGodot/"))] | length > 0)' /tmp/integration-scope.json >/dev/null; then
+            python3 tools/havenline/production/validate_repair_cycle.py --ledger Docs/Production/T03/DEFECT_LEDGER.json --base e89818070603399cce27b595ff1116e40b8b3b2a --head HEAD
+          fi
+          cat /tmp/impact.json
+          cat /tmp/integration-scope.json
+# Full V2/V3/V3.1/V3.2 state is validated every run; integration scope remains lifecycle/ownership based rather than frozen to a task number.
+# V3.1 locked surfaces are byte-bound to accepted source 673d7a7477cc94aef2b7bb8f3d788b1b3c47f902; any change requires explicit V3.2 scope and a new hosted acceptance cycle.
+# GitHub CODEOWNERS routes architecture review but repository-admin ruleset/branch protection remains the external enforcement layer.
+# Governance/QA only. This workflow cannot award a task critic score, approve gameplay, or bypass task-specific review.

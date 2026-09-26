@@ -1,0 +1,401 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0",
+  "non_voting": true,
+  "validated": true,
+  "diagnosis_id": "C0-T10-70d3bc0-REAL-AUTHORITY",
+  "task_id": "T10",
+  "failed_candidate": "70d3bc015f78846698704c10070b0677543f259b",
+  "adapter_source": "858fa6fdaf6114afc789303de9d85cee6632140b",
+  "integration_base": "c1768dbba7bacbbc5d0174e6b9b661b6dbdbbc11",
+  "reconciled_candidate": "0cffb41",
+  "engine": "Godot 4.7.2 stable official ed1daf0bf",
+  "failed_evidence": "/tmp/t10-real-integration.log",
+  "diagnosis_status": "DIAGNOSIS_COMPLETE",
+  "terminal_class": "MIXED",
+  "complete_known_blocker_set": true,
+  "builder_action": "REPAIR",
+  "blockers": [
+    {
+      "id": "C0-T10-B001",
+      "classification": "PRODUCT_DEFECT",
+      "symptom": "The real Godot suite passes initial debit and both restores, then fails crash retry, recovered receipt acceptance, and duplicate acceptance after a JSON round trip.",
+      "evidence": [
+        "/tmp/t10-real-integration.log: 92 checks, exactly three failures: real crash retry does not debit again; real recovered receipt advances once; real duplicate acceptance is idempotent",
+        "HavenlineGodot/scripts/simulation.gd compares restored prior debits to the fresh intent with raw nested Dictionary equality",
+        "Godot JSON reload represents whole numeric debit values as floats while the live T10 intent uses ints",
+        "HavenlineGodot/scripts/world_transform.gd import_component_state retains raw JSON-parsed prepared/receipt dictionaries and _receipt_matches_prepared also uses raw debit Dictionary equality"
+      ],
+      "root_cause": "Both simulation receipt restore and T10 component import validate whole numeric values but retain their JSON Variant representation. Exact-match code then compares noncanonical nested Dictionaries, so semantically identical int and whole-float costs fail after reload.",
+      "affected_object": "Simulation debit receipt ledger and T10 prepared/receipt component state",
+      "causal_fix": "Validate and canonicalize both sides of the authority handshake: convert target revisions and every validated resource quantity to int, rebuild deterministic KINDS-ordered debit dictionaries, whitelist required fields, and retain canonical targets/prepared/receipts on import before exact comparison.",
+      "files_to_change": [
+        "Docs/Production/T10/C0-real-authority-70d3bc0.json",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd",
+        "HavenlineGodot/tests/test_task10_world_transform.gd"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/main.gd",
+        "HavenlineGodot/data/reference-contract.json"
+      ],
+      "verification": [
+        "JSON-round-trip both simulation snapshot and T10 component state after debit but before acceptance",
+        "Exact retry returns simulation_replayed=true with zero second debit",
+        "Recovered T10 accepts once and duplicate acceptance is idempotent",
+        "Mixed int/whole-float persisted revisions and debit values normalize to the same canonical state",
+        "Malformed fractional, negative, non-finite, or out-of-range numeric values still fail atomically"
+      ]
+    },
+    {
+      "id": "C0-T10-B002",
+      "classification": "PRODUCT_DEFECT",
+      "symptom": "A request with a different transaction_id but the latest authority_transaction_key and otherwise matching fields is classified as an authoritative replay.",
+      "evidence": [
+        "HavenlineGodot/scripts/simulation.gd replay comparison omits the required transaction_id field",
+        "The returned replay is the prior transaction receipt, so the caller receives authority_applied=true for a transaction it did not submit exactly"
+      ],
+      "root_cause": "Replay equality is partial rather than exact; transaction identity is not included in the comparison.",
+      "affected_object": "Simulation exact-once replay boundary",
+      "causal_fix": "Compare the complete canonical required intent, including transaction_id, before returning a replay. A different transaction ID must fail with zero stored or ledger mutation.",
+      "files_to_change": [
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/main.gd",
+        "HavenlineGodot/data/reference-contract.json"
+      ],
+      "verification": [
+        "Exact same canonical intent replays without debit",
+        "Different transaction_id with the same authority key rejects without mutation",
+        "Returned replay preserves the original authoritative transaction identity"
+      ]
+    },
+    {
+      "id": "C0-T10-B003",
+      "classification": "PRODUCT_DEFECT",
+      "symptom": "On a target with no prior receipt, authority-relevant fields can be changed without invalidating the current authority_transaction_key.",
+      "evidence": [
+        "The current key binds recipe_id, target_id, source_state, target_state, and target_revision only",
+        "transaction_id, debits, progression_tags, and presentation_key are not bound by the key",
+        "Existing forged-field tests execute after a prior receipt exists, so prior-field comparison masks the fresh-target vulnerability"
+      ],
+      "root_cause": "The request-scoped key is derived from only a subset of the canonical debit request.",
+      "affected_object": "T10-to-simulation intent integrity contract",
+      "causal_fix": "Define one stable canonical request encoding and bind the key to every authority-relevant required field, including transaction identity, exact ordered debits, progression tags, presentation key, states, target, recipe, and revision. Use the same implementation on preparation and authority validation.",
+      "files_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/tests/test_task10_world_transform.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd",
+        "Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/main.gd",
+        "HavenlineGodot/data/reference-contract.json"
+      ],
+      "verification": [
+        "Fresh-target mutation of each bound field rejects before debit",
+        "Canonical equivalent input produces one stable key before and after JSON round trip",
+        "Delimiter-bearing identifiers cannot collide with a different field tuple",
+        "The normal prepared T10 request still commits and replays exactly"
+      ]
+    },
+    {
+      "id": "C0-T10-B004",
+      "classification": "PRODUCT_DEFECT",
+      "symptom": "For an existing target, any numerically higher revision is accepted even if it skips revisions or its source_state does not continue from the prior target_state.",
+      "evidence": [
+        "HavenlineGodot/scripts/simulation.gd rejects only target_revision less than or equal to the prior revision",
+        "No adapter check requires target_revision == prior.target_revision + 1",
+        "No adapter check requires source_state == prior.target_state"
+      ],
+      "root_cause": "The bounded latest receipt is treated only as a stale-number floor, not as the authoritative continuity anchor for the next debit.",
+      "affected_object": "Per-target revision and state transition ordering",
+      "causal_fix": "For an existing target require the exact next revision and prior-target-state continuity before checking or mutating balances. Define and validate the first-use registration/initial-revision rule so arbitrary positive starting revisions cannot poison the ledger.",
+      "files_to_change": [
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd",
+        "Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/main.gd",
+        "HavenlineGodot/data/reference-contract.json"
+      ],
+      "verification": [
+        "Exact next revision with continuous source state succeeds",
+        "Revision jump, equal/lower revision, source discontinuity, and invalid first revision all reject with zero mutation",
+        "A rejected future revision cannot replace the latest bounded receipt or block the legitimate next revision"
+      ]
+    },
+    {
+      "id": "C0-T10-B005",
+      "classification": "PRODUCT_DEFECT",
+      "symptom": "The ledger is one row per supplied target ID, but accepted target count and per-row payload are not bounded or canonically constrained.",
+      "evidence": [
+        "First commit stores intent.duplicate(true), retaining arbitrary extra and nested fields",
+        "Receipt validation has no identifier length, tag count, tag length, or unknown-field limit",
+        "Persisted simulation_replayed=true is accepted even though the retained row should always be the first-success canonical receipt",
+        "Transaction IDs are not required to be unique across target rows",
+        "Any syntactically valid new target_id creates another retained row; no finite registered-target set or explicit maximum is enforced"
+      ],
+      "root_cause": "The implementation bounds history per attacker-supplied target key but does not bound the target namespace or retained row shape.",
+      "affected_object": "Simulation receipt persistence size and malformed-save boundary",
+      "causal_fix": "Persist only a canonical whitelist, require stored simulation_replayed=false, enforce unique transaction IDs, bounded identifiers/tags, and a finite registered-target allowlist or documented hard maximum. Reject over-limit or unregistered input before resource or ledger mutation.",
+      "files_to_change": [
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd",
+        "HavenlineGodot/tests/test_task10_world_transform.gd",
+        "Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/main.gd",
+        "HavenlineGodot/data/reference-contract.json"
+      ],
+      "verification": [
+        "Unknown receipt fields are not retained",
+        "Persisted replay=true and duplicate transaction IDs reject atomically",
+        "Oversized identifiers, duplicate or oversized tags, unregistered targets, and target-count overflow reject without mutation",
+        "Stress at the documented maximum retains exactly one fixed-shape canonical receipt per registered target",
+        "Failed restore leaves the complete prior simulation state unchanged"
+      ]
+    },
+    {
+      "id": "C0-T10-B006",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "The production T10 capture can render and label a completed transformation without invoking the bound simulation authority adapter.",
+      "evidence": [
+        "HavenlineGodot/tests/capture_task10_world_transform.gd defines simulation_ack(), which copies the prepared intent and sets authority flags locally",
+        "run_production_evidence() passes that fabricated dictionary directly to accept_authoritative_receipt()",
+        "The resulting manifest declares real_t09_adapter_bound=false, so it cannot be truthful post-T09 authority evidence"
+      ],
+      "root_cause": "The pre-activation visual fixture was not upgraded after T10 activation and still substitutes an authority-shaped receipt for the shipping simulation transaction boundary.",
+      "affected_object": "Source-bound T10 production capture and critic evidence",
+      "causal_fix": "Make production capture use HavenlineSimulation.commit_world_transform_debit() and accept only its returned receipt; assert the exact stored-resource debit and authority fields; remove the fabricated receipt helper; and make the task validator reject production capture that does not bind the real adapter. Device-layout-only preview/committing fixtures may remain non-authoritative and must remain labeled as fixtures.",
+      "files_to_change": [
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/validate_world_transform.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_validate_world_transform.py"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/main.gd",
+        "HavenlineGodot/data/reference-contract.json",
+        "HavenlineGodot/scripts/outpost_audio.gd"
+      ],
+      "verification": [
+        "Production capture contains no simulation_ack authority fabrication",
+        "The real simulation adapter debits exact delivered stored resources and returns the receipt accepted by T10",
+        "The production manifest binds the frozen candidate, reports real_t09_adapter_bound=true, and cannot pass on a fabricated receipt",
+        "Device-layout fixture output remains explicitly non-authoritative"
+      ]
+    },
+    {
+      "id": "C0-T10-B007",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "Task-owned workflows can cancel an in-progress frozen-SHA run, use mutable external-action tags, preserve stale pre-activation assertions, and omit the shared change-impact regression runner.",
+      "evidence": [
+        ".github/workflows/havenline-task10-world-transformation.yml uses cancel-in-progress=true, actions/checkout@v4, actions/upload-artifact@v4, and a handwritten suite list instead of tools/havenline/production/regression_runner.py",
+        ".github/workflows/havenline-task10-adapter-preflight.yml still asserts real_adapter_bound=false after the integration-owner adapter was merged",
+        "The remaining task-owned T10 workflows also use mutable action tags and cancellation semantics inconsistent with the frozen candidate policy"
+      ],
+      "root_cause": "The task workflow family remains at its pre-activation evidence contract and was not migrated to the production toolchain lock, finish-running-SHA policy, and shared impact calculation after T10 activation.",
+      "affected_object": "T10 CI source binding, regression completeness, and durable evidence provenance",
+      "causal_fix": "Modernize only the task-owned T10 workflow family: pin external actions to the exact CI_TOOLCHAIN_LOCK SHAs, set frozen validation concurrency to cancel-in-progress=false, replace stale unbound assertions with bound-candidate assertions, run the shared regression runner for the exact repair base/head after bake-then-import prerequisites, and add task-owned tests that fail on mutable action refs, cancellation, stale adapter state, or missing shared regression.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-adapter-preflight.yml",
+        ".github/workflows/havenline-task10-isolated.yml",
+        ".github/workflows/havenline-task10-prebuild.yml",
+        ".github/workflows/havenline-task10-preparation.yml",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "files_not_to_change": [
+        "Docs/Production/CI_TOOLCHAIN_LOCK.json",
+        "tools/havenline/production/regression_runner.py",
+        "HavenlineGodot/scripts/main.gd",
+        "HavenlineGodot/data/reference-contract.json"
+      ],
+      "verification": [
+        "Every external action ref in the task-owned T10 workflow family equals its exact CI_TOOLCHAIN_LOCK SHA",
+        "Frozen candidate validation uses cancel-in-progress=false",
+        "The active bound workflow rejects real_adapter_bound=false and records the exact candidate/base",
+        "The shared regression runner executes its calculated suite union on the exact base/head and its report/logs are retained",
+        "Audio is baked before a blocking Godot import, then regression starts only after imported resources exist"
+      ]
+    },
+    {
+      "id": "C0-T10-B008",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "The generic C7 progression_sim mapping required T10 to prove complete Levels 1-100 difficulty and pacing even though T10 owns transactional world-state integrity and the full progression architecture is reserved for T12/T13.",
+      "evidence": [
+        "The pre-repair forward plan routed T10 progression_sim to the generic domain_safeguard_gate.py progression runner",
+        "The generic runner requires Level 1-100, F2P completion, difficulty pacing, upgrades, and Challenge Director inputs outside the frozen T10 scope",
+        "Explicit authorization is recorded in Docs/Production/ChangeRequests/T10-C7-transactional-progression.json and SHA256-bound by validate_architecture_v32_t10.py",
+        "Authority sources 6369fe947c25991ce116d398d0195da141e4c838 and 17d303de29765f6b6c05fdd95f6b844e33233ee6 specialize only T10 while retaining C7 and progression_sim",
+        "Frozen task source b2825619091878f44054eef8b6a7e8b9204f5bd9 executes the source-bound task runner; /workspace/scratch/59b74b9aed55/t10-c7-proof/progression.json reports PASS with 320 executable checks"
+      ],
+      "root_cause": "C7 had one global progression interpretation and deterministic runner despite T10's registered transactional_world profile and the task boundary that assigns full campaign progression and difficulty to later tasks.",
+      "affected_object": "T10 forward progression_sim execution, C7 evidence profile, specialist input validation, critic records, task packets, and closure validation",
+      "causal_fix": "Keep progression_sim, C7 applicability, every other gate, and the strict score contract unchanged; apply an exact T10-only forward runner override; resolve the T10 C7 transactional dimensions and evidence categories through every consumer; require exact task identity; bind the authorization request digest; and execute the real domain and integration suites through a candidate- and engine-bound task runner. Every other task retains the generic full-progression interpretation.",
+      "files_to_change": [
+        ".github/workflows/havenline-production-governance.yml",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        "Docs/Production/ChangeRequests/T10-C7-transactional-progression.json",
+        "tools/havenline/production/closure_validator.py",
+        "tools/havenline/production/critic_harness.py",
+        "tools/havenline/production/critic_profile.py",
+        "tools/havenline/production/forward_execution.py",
+        "tools/havenline/production/specialist_critic_runner.py",
+        "tools/havenline/production/specialist_evidence_manifest.py",
+        "tools/havenline/production/task_packet.py",
+        "tools/havenline/production/tests/test_architecture_release_lock.py",
+        "tools/havenline/production/tests/test_critic_profile.py",
+        "tools/havenline/production/tests/test_forward_execution.py",
+        "tools/havenline/production/validate_architecture_v32_t10.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_validate_progression.py",
+        "tools/havenline/task10/validate_progression.py"
+      ],
+      "files_not_to_change": [
+        "Docs/Production/ARCHITECTURE_RELEASE_LOCK.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/FORWARD_GATE_RUNNERS.json",
+        "Docs/Production/GATE_FINGERPRINT_POLICY.json",
+        "tools/havenline/production/domain_safeguard_gate.py",
+        "HavenlineGodot/scripts/main.gd",
+        "T12/T13 runtime, proof requirements, or ownership"
+      ],
+      "verification": [
+        "T10 retains the progression_sim gate and independent C7 while its runner is exactly tools/havenline/task10/validate_progression.py",
+        "The task runner requires the exact checked-out candidate, rejects tracked source drift, requires Godot 4.7.2 stable official ed1daf0bf, executes both real T10 suites, enforces mandatory named checks, and rejects fixture authority",
+        "The T10-specific critic dimensions and evidence categories resolve consistently in manifest loading, specialist execution, evidence validation, raw critic validation, task packet generation, and closure validation",
+        "Every non-T10 task and every non-C7 critic resolves byte-equivalent to the global authority defaults",
+        "The V3.2 validator permits exactly the three locked V3.1 deltas and rejects any other forward_execution.py change; the hosted assertion expects 47 unchanged locked files and those exact three changes",
+        "The authorization record digest is 8f24a3216fa5d4d87f88227a4eb64074b8efea2f6d71b2218f5a3157061aebe1",
+        "All 178 authority production tests pass and the frozen task C7 proof passes 320 checks",
+        "Critic applicability, >9.0 unrounded thresholds, target 10.0, G1-G14, and zero-unresolved-defect requirements remain unchanged"
+      ]
+    }
+  ],
+  "repair_review": {
+    "reviewed_candidate": "b2825619091878f44054eef8b6a7e8b9204f5bd9",
+    "previous_reviewed_candidate": "97bf0cc6e55d74866f05a5345d867cdba1188c57",
+    "reviewed_governance_source": "17d303de29765f6b6c05fdd95f6b844e33233ee6",
+    "blocker_disposition": {
+      "C0-T10-B001": "CLOSED_ON_REVIEWED_CANDIDATE",
+      "C0-T10-B002": "CLOSED_ON_REVIEWED_CANDIDATE",
+      "C0-T10-B003": "CLOSED_ON_REVIEWED_CANDIDATE",
+      "C0-T10-B004": "CLOSED_ON_REVIEWED_CANDIDATE",
+      "C0-T10-B005": "CLOSED_ON_REVIEWED_CANDIDATE",
+      "C0-T10-B006": "IMPLEMENTED_ON_REVIEWED_CANDIDATE_PENDING_HOSTED_CAPTURE",
+      "C0-T10-B007": "IMPLEMENTED_ON_REVIEWED_CANDIDATE_PENDING_HOSTED_EXECUTION",
+      "C0-T10-B008": "CLOSED_ON_REVIEWED_SOURCES_PENDING_GOVERNANCE_PUBLICATION"
+    },
+    "regression_incident": {
+      "classification": "INFRASTRUCTURE_FAILURE",
+      "product_failure_proven": false,
+      "retry_result": "PASS_EXIT_0_AFTER_BLOCKING_IMPORT",
+      "evidence": "/tmp/t10-outpost-diagnostic.log",
+      "root_cause": "The generated WAV files existed, but the diagnostic Godot process started without their imported ResourceLoader artifacts because bake occurred after the relevant project import. outpost_audio.gd failed closed, leaving wind/fire nil; test_outpost_runtime then faulted while dereferencing the missing players and the wrapper eventually timed out.",
+      "disposition": "Closed as infrastructure-only. No gameplay or audio-runtime edit authorized; workflows must preserve bake then blocking import ordering."
+    },
+    "forward_c7_profile_mismatch": {
+      "classification": "GOVERNANCE_DEFECT",
+      "blocking": false,
+      "explicit_authorization": true,
+      "task_specific_exception_implemented": true,
+      "evidence": [
+        "The authorized forward_execution.py delta changes only T10's progression_sim runner and rule",
+        "critic_profile.py supplies the same T10/C7 dimensions and categories to all six consuming paths, including manifest loading",
+        "validate_architecture_v32_t10.py byte-bounds the forward delta and SHA256-binds the authorization request",
+        "Authority source 17d303de29765f6b6c05fdd95f6b844e33233ee6 passes 178 production tests",
+        "Frozen task source b2825619091878f44054eef8b6a7e8b9204f5bd9 passes the executable C7 proof with 320 checks"
+      ],
+      "disposition": "The causal mismatch is repaired within the explicit bounded authorization. Publish the exact reviewed governance tree and preserve the task-owned runner binding; no generic progression safeguard, critic, threshold, G1-G14, or T12/T13 change is authorized."
+    }
+  },
+  "unexecuted_checks": [
+    "full T01-T09 impacted regression",
+    "source-bound T10 evidence recapture",
+    "required independent C1/C2/C3/C4/C6/C7 review",
+    "G1-G14 closeout"
+  ],
+  "builder_constraints": {
+    "do_not_enter_expensive_regression_until_all_blockers_are_fixed": true,
+    "runtime_change_scope": [
+      "HavenlineGodot/scripts/simulation.gd",
+      "HavenlineGodot/scripts/world_transform.gd",
+      "HavenlineGodot/tests/test_task10_integration.gd",
+      "HavenlineGodot/tests/test_task10_world_transform.gd"
+    ],
+    "documentation_change_scope": [
+      "Docs/Production/T10/C0-real-authority-70d3bc0.json",
+      "Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json"
+    ],
+    "evidence_change_scope": [
+      "HavenlineGodot/tests/capture_task10_world_transform.gd",
+      "tools/havenline/task10/validate_critic_readiness.py",
+      "tools/havenline/task10/validate_world_transform.py",
+      "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+      "tools/havenline/task10/tests/test_validate_world_transform.py"
+    ],
+    "workflow_change_scope": [
+      ".github/workflows/havenline-task10-adapter-preflight.yml",
+      ".github/workflows/havenline-task10-isolated.yml",
+      ".github/workflows/havenline-task10-prebuild.yml",
+      ".github/workflows/havenline-task10-preparation.yml",
+      ".github/workflows/havenline-task10-world-transformation.yml",
+      "tools/havenline/task10/tests/test_task10_workflows.py"
+    ],
+    "governance_change_scope": [
+      ".github/workflows/havenline-production-governance.yml",
+      "Docs/Production/ChangeRequests/T10-C7-transactional-progression.json",
+      "tools/havenline/production/closure_validator.py",
+      "tools/havenline/production/critic_harness.py",
+      "tools/havenline/production/critic_profile.py",
+      "tools/havenline/production/forward_execution.py",
+      "tools/havenline/production/specialist_critic_runner.py",
+      "tools/havenline/production/specialist_evidence_manifest.py",
+      "tools/havenline/production/task_packet.py",
+      "tools/havenline/production/tests/test_architecture_release_lock.py",
+      "tools/havenline/production/tests/test_critic_profile.py",
+      "tools/havenline/production/tests/test_forward_execution.py",
+      "tools/havenline/production/validate_architecture_v32_t10.py"
+    ],
+    "task_c7_runner_change_scope": [
+      "tools/havenline/task10/validate_progression.py",
+      "tools/havenline/task10/tests/test_validate_progression.py"
+    ],
+    "must_not_change": [
+      "HavenlineGodot/scripts/main.gd",
+      "HavenlineGodot/data/reference-contract.json",
+      "approved T01-T09 runtime behavior and assets",
+      "T10 required critics or acceptance thresholds"
+    ]
+  },
+  "candidate_freeze": {
+    "required": true,
+    "validation_concurrency_policy": "finish_running_sha",
+    "cancelled_run_product_judgment": false
+  },
+  "acceptance_rule_unchanged": {
+    "required_critics": ["C1", "C2", "C3", "C4", "C6", "C7"],
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "all_applicable_gates": "G1-G14",
+    "zero_unresolved_mandatory_defects": true
+  },
+  "summary": "Frozen task source b2825619091878f44054eef8b6a7e8b9204f5bd9 closes B001-B005 and implements the real-authority capture/readiness and task-workflow repairs for B006-B007; hosted capture and workflow execution remain required evidence, not known source defects. Reviewed governance source 17d303de29765f6b6c05fdd95f6b844e33233ee6 closes B008 with an exact T10-only C7 transactional progression profile and source-bound runner while preserving progression_sim, independent C7, every other task's global progression proof, all critics, strict thresholds, and G1-G14. The outpost incident was import-order infrastructure and authorizes no gameplay or audio-runtime change. No final specialist approval or score is claimed.",
+  "confidence": "high",
+  "approval_claimed": false,
+  "score_assigned": false
+}

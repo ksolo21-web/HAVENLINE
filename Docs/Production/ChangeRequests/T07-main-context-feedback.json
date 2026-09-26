@@ -1,0 +1,17 @@
+{
+  "requesting_task": "T07",
+  "target_path": "HavenlineGodot/scripts/main.gd",
+  "requested_change": "Feed only actionable T07 descriptors to the accepted T06 Character 1 motion selector and render the director's concise shipping status text for acquiring, progress, movement cancellation, and blocked states in the existing hint label.",
+  "reason": "T07 state must be readable in normal gameplay and must not drive contact motion while action entry is blocked or still acquiring.",
+  "dependency": "T07 accepted isolated source e3ae7d9a7046fa1465f03acea7aba39c385fed23; T04 layout and T06 motion remain authoritative.",
+  "expected_behavior": "The existing responsive hint presents focus/progress/cancel/blocked feedback with text and state color, no new control is added, and T06 receives action motion only while the simulation descriptor is actionable.",
+  "tests_required": [
+    "test_adaptive_devices",
+    "test_task04_camera",
+    "test_task06_character1",
+    "test_task07_context_director",
+    "task07 device capture"
+  ],
+  "status": "APPROVED",
+  "integration_owner_disposition": "AUTHORIZED"
+}

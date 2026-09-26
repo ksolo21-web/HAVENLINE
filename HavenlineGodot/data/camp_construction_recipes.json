@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "authority_id": "T11-camp-construction-content-v1",
+  "transaction_authority": "T10-world-transform-v1",
+  "presentation_only": true,
+  "shadow_resource_authority": false,
+  "builds": [
+    {
+      "construction_id": "camp_shelter_foundation",
+      "world_transform_recipe_id": "framework_anchor_seed_to_foundation",
+      "presentation_key": "framework_foundation",
+      "source_state": "seed",
+      "target_state": "foundation",
+      "before_scene": "res://assets/camp_construction_v1/camp_shelter_seed.tscn",
+      "after_scene": "res://assets/camp_construction_v1/camp_shelter_foundation.tscn",
+      "footprint_radius": 2.4,
+      "clearance_radius": 2.8
+    },
+    {
+      "construction_id": "camp_shelter_reinforced",
+      "world_transform_recipe_id": "framework_anchor_foundation_to_reinforced",
+      "presentation_key": "framework_reinforced",
+      "source_state": "foundation",
+      "target_state": "reinforced",
+      "before_scene": "res://assets/camp_construction_v1/camp_shelter_foundation.tscn",
+      "after_scene": "res://assets/camp_construction_v1/camp_shelter_reinforced.tscn",
+      "footprint_radius": 2.4,
+      "clearance_radius": 2.8
+    }
+  ]
+}

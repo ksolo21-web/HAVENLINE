@@ -1,0 +1,133 @@
+{
+  "schema": 1,
+  "task": "T03",
+  "kit": "Havenline reference palisade v10.2",
+  "revision": 16,
+  "deterministic": true,
+  "candidate_for_user_review": true,
+  "production_visual_approval": false,
+  "reference_target": [
+    "Reference B 00:08 camp layout",
+    "Reference B 00:32 perimeter",
+    "Reference B 00:48 working-defense perimeter"
+  ],
+  "geometry_source": "authored OBJ triangle meshes; no engine PrimitiveMesh resources",
+  "runtime_material_source": "custom t03_boundary_v2.gdshader overrides all import materials",
+  "assets": [
+    {
+      "name": "fence_panel",
+      "path": "HavenlineGodot/assets/t03_boundary_v2/fence_panel.obj",
+      "triangles": 640,
+      "features": [
+        "dense pale warm pointed palisade",
+        "solid full snow crown with symmetric low-amplitude reference-like height variation",
+        "no exposed horizontal support rail",
+        "all-row path-length repartition keeps authored picket rhythm near native scale; tiny side-corner residuals extend only outward behind side fences so gate endpoints remain exact",
+        "small 0.012m seam overlap closes panel-to-panel daylight without compressing authored picket rhythm"
+      ],
+      "runtime_join_overlap": 0.012,
+      "south_runtime_join_overlap": 0.012
+    },
+    {
+      "name": "gate_post",
+      "path": "HavenlineGodot/assets/t03_boundary_v2/gate_post.obj",
+      "triangles": 176,
+      "features": [
+        "matching pale warm post",
+        "solid snow crown",
+        "tiny integrated warm insets only",
+        "1.12 footprint / 1.14 height threshold-marker presentation",
+        "terrain-footprint seating uses the lowest local sample plus a 0.04m root embed to avoid both floating corners and deep clipping"
+      ]
+    },
+    {
+      "name": "gate_leaf",
+      "path": "HavenlineGodot/assets/t03_boundary_v2/gate_leaf.obj",
+      "triangles": 84,
+      "features": [
+        "solid framed warm timber gate leaf",
+        "dark recessed timber panel",
+        "reference-style diagonal X bracing",
+        "separate from pointed palisade fence",
+        "rigid uniform terrain seating lowers the complete leaf to the worst chord valley instead of pitching the free edge"
+      ]
+    }
+  ],
+  "iteration_11f": {
+    "visual_only": true,
+    "collision_authority_unchanged": true,
+    "fence_rhythm": "all rows repartitioned near 2.9409m authored span",
+    "gate_post_scale": 0.96,
+    "gate_post_height_scale": 1.05,
+    "gate_post_root_sink": 0.24,
+    "gate_leaf_terrain_seated": true,
+    "lane_compression_depth": 0.065,
+    "lane_rut_depth": 0.105,
+    "lane_shoulder_height": 0.065,
+    "bank_visual_half_expand": 0.08,
+    "physical_lane_depths": "restored to last green T02-safe values after 11F evidence regression; stronger lane readability remains in the continuous terrain shader",
+    "corner_residual_outer_extension_max": 0.95
+  },
+  "iteration_11f_evidence_repair": {
+    "reason": "36130123969 exposed one T03 fence presentation assertion and one T02 river-surface safety regression before critics were rebound",
+    "visual_only": true,
+    "collision_authority_unchanged": true,
+    "protected_authority_unchanged": true,
+    "fix": [
+      "restore last-green T02-safe physical lane compression/rut/shoulder and bank-extra depths while retaining stronger continuous-terrain shader contrast",
+      "extend only sub-readable south side-corner fence residuals outward behind the perpendicular side fence; river-gate endpoints stay exact"
+    ]
+  },
+  "iteration_11g": {
+    "source_critic_run": 36142119575,
+    "visual_only": true,
+    "collision_authority_unchanged": true,
+    "protected_authority_unchanged": true,
+    "accepted_findings": [
+      "threshold posts remained too visually weak to read reliably at north/work/river portals and did not fully cover hinge seams",
+      "several gate/fence contacts showed visible seam or grounding ambiguity across high-resolution views",
+      "packed lane presentation remained too broad/inconsistent at threshold and bank approaches"
+    ],
+    "rejected_as_not_corroborated": [
+      "claims that threshold posts were literally absent",
+      "claims that river gates were wholly floating above the ground"
+    ],
+    "repair": [
+      "increase all threshold posts to 1.12 footprint and 1.14 height while seating the full footprint against local terrain with only a 0.04m root embed",
+      "terrain-seat gate leaves with one uniform rigid-body sink derived from the worst chord valley, preserving hinge/free-edge geometry",
+      "use 0.012m fence seam overlap (0.018m corners) to close daylight without returning to visible picket compression",
+      "narrow the presentation-only packed lane half-width from 1.30m to 1.18m consistently through camp/bank/threshold visuals; authoritative routes/collision remain unchanged",
+      "retain T02-safe physical lane depths 0.065/0.105/0.065 and the stronger continuous-terrain shader treatment"
+    ],
+    "gate_post_scale": 1.12,
+    "gate_post_height_scale": 1.14,
+    "gate_post_root_sink": 0.04,
+    "gate_post_terrain_sample_half": 0.19,
+    "gate_leaf_uniform_terrain_seat": true,
+    "visual_lane_half_width": 1.18,
+    "bank_visual_half_expand": -0.12,
+    "visual_join_overlap": 0.012,
+    "visual_corner_join_overlap": 0.018
+  },
+  "iteration_11h": {
+    "source_critic_run": 36206921533,
+    "visual_only": true,
+    "collision_authority_unchanged": true,
+    "protected_authority_unchanged": true,
+    "accepted_finding": "Fresh C1/C2 repeatedly exposed cross-view portal silhouette ambiguity: family-specific open-leaf length/angle let the free-end stile read inconsistently relative to threshold posts.",
+    "rejected_as_not_corroborated": [
+      "numeric threshold-post scale estimates inferred from screenshots",
+      "shadow or lighting differences treated as geometry defects",
+      "shoreline termination requirements not present in T03 scope"
+    ],
+    "repair": [
+      "normalize visual-only open leaves at all six gates to 1.85 length and 1.12 rad open angle",
+      "preserve every authoritative hinge, gate ID, collision opening, lane route and camp_boundary.gd constant",
+      "retain 0.18 hinge-only backset, rigid terrain seating, authored gate-leaf/post meshes and 1.12/1.14 threshold posts"
+    ],
+    "visual_gate_leaf_length": 1.85,
+    "visual_gate_open_angle": 1.12,
+    "gate_hinge_overlap": 0.18,
+    "next_required_proof": "fresh 16-suite T01-T03 regression, clean primitive/material audit, 47 gallery + 11 native-4K exact-source renders, then independent C1/C2 >9 and C6"
+  }
+}

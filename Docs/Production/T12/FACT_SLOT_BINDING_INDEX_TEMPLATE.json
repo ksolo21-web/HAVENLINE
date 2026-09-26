@@ -1,0 +1,1537 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "status": "PREPARATION_ONLY_FACT_SLOT_BINDING_INDEX_TEMPLATE",
+  "shipping_path_forbidden": true,
+  "purpose": "Activation/build-time template for mapping stable T12 fact slots to authoritative producer facts. Preparation freezes slot semantics only; exact source IDs remain blank until trusted accepted producers exist.",
+  "source_catalog_blob_sha": "e09c8f774ba844eb1b04158eb94aa492cdbdfa67",
+  "required_resolved_binding_shape": {
+    "slot_id": "exact t12.fact.slot.NNN",
+    "fact_kind": "one allowed fact kind for this slot",
+    "source_task": "authoritative producer task/integration identity",
+    "source_id": "exact accepted producer identifier",
+    "resolution_state": "RESOLVED or DEFERRED_LATER_OWNER",
+    "evidence_ref": "repository/evidence reference proving producer authority",
+    "idempotency_domain": "stable domain used to prevent duplicate observation"
+  },
+  "rules": [
+    "Level 1 has no required fact slot and therefore no binding entry.",
+    "Every Level 2-100 slot appears exactly once.",
+    "RESOLVED requires fact_kind within allowed_fact_kinds and a non-empty accepted source_id/evidence_ref.",
+    "T10/T11 source IDs require activation-time BINDING_RESOLUTION proof.",
+    "DEFERRED_LATER_OWNER is allowed only where later_owner_registration_allowed=true; deferred slots keep the level locked.",
+    "No purchase, premium_spend, VIP, payer or energy signal may be a source fact.",
+    "This template is not shipping progression data and cannot satisfy a slot by itself.",
+    "Internal T12 presentation requirements are not authoritative fact kinds and can never resolve a fact slot.",
+    "Opening-band activation-relevant Levels 3,4,6,9,10 must be RESOLVED at T12 activation; DEFERRED_LATER_OWNER is forbidden for them.",
+    "Resolved opening activation rows must collectively include at least one T10 source_task and at least one T11 source_task."
+  ],
+  "entries": [
+    {
+      "slot_id": "t12.fact.slot.002",
+      "level": 2,
+      "content_owner_task": "T32",
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.003",
+      "level": 3,
+      "content_owner_task": "T32",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.004",
+      "level": 4,
+      "content_owner_task": "T32",
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.005",
+      "level": 5,
+      "content_owner_task": "T32",
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.006",
+      "level": 6,
+      "content_owner_task": "T32",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.007",
+      "level": 7,
+      "content_owner_task": "T32",
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.008",
+      "level": 8,
+      "content_owner_task": "T32",
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.009",
+      "level": 9,
+      "content_owner_task": "T32",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.010",
+      "level": 10,
+      "content_owner_task": "T32",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.011",
+      "level": 11,
+      "content_owner_task": "T44",
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.012",
+      "level": 12,
+      "content_owner_task": "T44",
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.013",
+      "level": 13,
+      "content_owner_task": "T44",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.014",
+      "level": 14,
+      "content_owner_task": "T44",
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.015",
+      "level": 15,
+      "content_owner_task": "T44",
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.016",
+      "level": 16,
+      "content_owner_task": "T44",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.017",
+      "level": 17,
+      "content_owner_task": "T44",
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.018",
+      "level": 18,
+      "content_owner_task": "T44",
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.019",
+      "level": 19,
+      "content_owner_task": "T44",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.020",
+      "level": 20,
+      "content_owner_task": "T44",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.021",
+      "level": 21,
+      "content_owner_task": "T45",
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.022",
+      "level": 22,
+      "content_owner_task": "T45",
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.023",
+      "level": 23,
+      "content_owner_task": "T45",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.024",
+      "level": 24,
+      "content_owner_task": "T45",
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.025",
+      "level": 25,
+      "content_owner_task": "T45",
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.026",
+      "level": 26,
+      "content_owner_task": "T45",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.027",
+      "level": 27,
+      "content_owner_task": "T45",
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.028",
+      "level": 28,
+      "content_owner_task": "T45",
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.029",
+      "level": 29,
+      "content_owner_task": "T45",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.030",
+      "level": 30,
+      "content_owner_task": "T45",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.031",
+      "level": 31,
+      "content_owner_task": "T46",
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.032",
+      "level": 32,
+      "content_owner_task": "T46",
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.033",
+      "level": 33,
+      "content_owner_task": "T46",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.034",
+      "level": 34,
+      "content_owner_task": "T46",
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.035",
+      "level": 35,
+      "content_owner_task": "T46",
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.036",
+      "level": 36,
+      "content_owner_task": "T46",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.037",
+      "level": 37,
+      "content_owner_task": "T46",
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.038",
+      "level": 38,
+      "content_owner_task": "T46",
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.039",
+      "level": 39,
+      "content_owner_task": "T46",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.040",
+      "level": 40,
+      "content_owner_task": "T46",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.041",
+      "level": 41,
+      "content_owner_task": "T47",
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.042",
+      "level": 42,
+      "content_owner_task": "T47",
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.043",
+      "level": 43,
+      "content_owner_task": "T47",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.044",
+      "level": 44,
+      "content_owner_task": "T47",
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.045",
+      "level": 45,
+      "content_owner_task": "T47",
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.046",
+      "level": 46,
+      "content_owner_task": "T47",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.047",
+      "level": 47,
+      "content_owner_task": "T47",
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.048",
+      "level": 48,
+      "content_owner_task": "T47",
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.049",
+      "level": 49,
+      "content_owner_task": "T47",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.050",
+      "level": 50,
+      "content_owner_task": "T47",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.051",
+      "level": 51,
+      "content_owner_task": "T48",
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.052",
+      "level": 52,
+      "content_owner_task": "T48",
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.053",
+      "level": 53,
+      "content_owner_task": "T48",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.054",
+      "level": 54,
+      "content_owner_task": "T48",
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.055",
+      "level": 55,
+      "content_owner_task": "T48",
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.056",
+      "level": 56,
+      "content_owner_task": "T48",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.057",
+      "level": 57,
+      "content_owner_task": "T48",
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.058",
+      "level": 58,
+      "content_owner_task": "T48",
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.059",
+      "level": 59,
+      "content_owner_task": "T48",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.060",
+      "level": 60,
+      "content_owner_task": "T48",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.061",
+      "level": 61,
+      "content_owner_task": "T49",
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.062",
+      "level": 62,
+      "content_owner_task": "T49",
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.063",
+      "level": 63,
+      "content_owner_task": "T49",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.064",
+      "level": 64,
+      "content_owner_task": "T49",
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.065",
+      "level": 65,
+      "content_owner_task": "T49",
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.066",
+      "level": 66,
+      "content_owner_task": "T49",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.067",
+      "level": 67,
+      "content_owner_task": "T49",
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.068",
+      "level": 68,
+      "content_owner_task": "T49",
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.069",
+      "level": 69,
+      "content_owner_task": "T49",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.070",
+      "level": 70,
+      "content_owner_task": "T49",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.071",
+      "level": 71,
+      "content_owner_task": "T50",
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.072",
+      "level": 72,
+      "content_owner_task": "T50",
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.073",
+      "level": 73,
+      "content_owner_task": "T50",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.074",
+      "level": 74,
+      "content_owner_task": "T50",
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.075",
+      "level": 75,
+      "content_owner_task": "T50",
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.076",
+      "level": 76,
+      "content_owner_task": "T50",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.077",
+      "level": 77,
+      "content_owner_task": "T50",
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.078",
+      "level": 78,
+      "content_owner_task": "T50",
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.079",
+      "level": 79,
+      "content_owner_task": "T50",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.080",
+      "level": 80,
+      "content_owner_task": "T50",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.081",
+      "level": 81,
+      "content_owner_task": "T51",
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.082",
+      "level": 82,
+      "content_owner_task": "T51",
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.083",
+      "level": 83,
+      "content_owner_task": "T51",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.084",
+      "level": 84,
+      "content_owner_task": "T51",
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.085",
+      "level": 85,
+      "content_owner_task": "T51",
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.086",
+      "level": 86,
+      "content_owner_task": "T51",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.087",
+      "level": 87,
+      "content_owner_task": "T51",
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.088",
+      "level": 88,
+      "content_owner_task": "T51",
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.089",
+      "level": 89,
+      "content_owner_task": "T51",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.090",
+      "level": 90,
+      "content_owner_task": "T51",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.091",
+      "level": 91,
+      "content_owner_task": "T52",
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.092",
+      "level": 92,
+      "content_owner_task": "T52",
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.093",
+      "level": 93,
+      "content_owner_task": "T52",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.094",
+      "level": 94,
+      "content_owner_task": "T52",
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.095",
+      "level": 95,
+      "content_owner_task": "T52",
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.096",
+      "level": 96,
+      "content_owner_task": "T52",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.097",
+      "level": 97,
+      "content_owner_task": "T52",
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.098",
+      "level": 98,
+      "content_owner_task": "T52",
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "activation_binding_relevant": false,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.099",
+      "level": 99,
+      "content_owner_task": "T52",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    },
+    {
+      "slot_id": "t12.fact.slot.100",
+      "level": 100,
+      "content_owner_task": "T52",
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "activation_binding_relevant": true,
+      "later_owner_registration_allowed": true,
+      "resolved_binding": null
+    }
+  ]
+}

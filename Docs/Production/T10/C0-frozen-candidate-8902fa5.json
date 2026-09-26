@@ -1,0 +1,410 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0",
+  "non_voting": true,
+  "validated": true,
+  "diagnosis_id": "C0-T10-8902FA5-TERMINAL-CAPTURE",
+  "task_id": "T10",
+  "failed_run_id": 35333044186,
+  "failed_candidate": "8902fa56d5aaace500cf309047f656751859176e",
+  "repair_base": "c8c856175d244def95c947f9b41d7d0de1d0f9ac",
+  "integration_head": "a0cf1d2ae1b2e33c66eae01de353dd1df1076cf2",
+  "candidate_tree": "69daed8bfdd7c3d9248b27ebe7a816f3d65ad44a",
+  "engine": "Godot 4.7.2 stable official ed1daf0bf",
+  "diagnosis_status": "DIAGNOSIS_COMPLETE",
+  "terminal_class": "MIXED",
+  "complete_known_blocker_set": true,
+  "builder_action": "REPAIR",
+  "source_evidence": {
+    "capture_run": 35333044186,
+    "capture_artifact": 10541843030,
+    "capture_zip_sha256": "0595a1924fa9dbd7d94ce1ca1971df5ea93ba34816c959ba31e960bd76f55562",
+    "capture_root": "/workspace/scratch/59b74b9aed55/t10-8902fa5-capture",
+    "primary_run": 35333043968,
+    "primary_result": "SUCCESS",
+    "governance_b022_failure_run": 35335183259,
+    "governance_b022_failure_job": 105568264896,
+    "governance_b023_failure_run": 35336280314,
+    "governance_b023_failure_job": 105571743291,
+    "t09_closeout_checkpoint": "62f5a13753968c77a0feb47a18d93c82d8c5b581",
+    "t09_completion_sha256": "2b69ffad9979b1620d3a48a77f049dc7756b85e1c7a6ee33c8c3dd75254c0059",
+    "visual_review": "/workspace/scratch/59b74b9aed55/t10-c1-c2-8902fa5-review.json",
+    "gameplay_review": "/workspace/scratch/59b74b9aed55/t10-gameplay-8902fa5-repair-review.json",
+    "b009_retest": "/workspace/scratch/59b74b9aed55/t10-b009-independent-retest.json",
+    "same_phase_probe": "/workspace/scratch/59b74b9aed55/t10_critic_view_refresh_probe.gd",
+    "level_recovery_probe": "/tmp/t10_level_recovery_probe.gd",
+    "save_matrix_draft": "/tmp/t10_save_matrix.gd",
+    "proc_probe": "/tmp/t10_proc_probe.gd",
+    "frozen_checks": {
+      "domain": 236,
+      "integration": 114,
+      "c7_total": 350,
+      "production": 178,
+      "task_tooling": 16
+    }
+  },
+  "prior_diagnosis": {
+    "path": "Docs/Production/T10/C0-final-source-fc5f1d0.json",
+    "sha256": "7f6bfd72a869444261160d866cac362be58b423abfc042fc8192540c02900651",
+    "disposition": {
+      "C0-T10-B009": "CLOSED: both independent hostile import probes reject and 350 exact-source C7 checks pass; world_transform.gd requires no further repair.",
+      "C0-T10-B010": "PARTIAL: meaningful geometry and core feedback exist; B015 captures the remaining same-phase, ready/complete wording and grounded-pulse defects.",
+      "C0-T10-B011": "PARTIAL: all state/layout/movie evidence exists; B016 captures the remaining annotation and temporal-manifest defects.",
+      "C0-T10-B012": "CLOSED: the primary frozen-source regression completed successfully with prerequisites and retained logs.",
+      "C0-T10-B013": "PARTIAL: C3/C4/C7 jobs and C6 collection were added; B017 and B019 capture the remaining measurement and formal-review defects.",
+      "C0-T10-B014": "OPEN FINALIZATION DEPENDENCY: preserve the failed intermediate integration and execute its no-waiver recovery only after B015-B021 pass."
+    }
+  },
+  "blockers": [
+    {
+      "id": "C0-T10-B015",
+      "classification": "PRODUCT_DEFECT",
+      "symptom": "The view can render stale same-phase feedback, READY lacks truthful exact action cost/delivery guidance, completion gives a non-state-aware next instruction, and the committing pulse moves the target through its support plane.",
+      "evidence": [
+        "The independent same-phase probe calls show_blocked with an 8-wood shortfall and then a 1-wood shortfall; descriptor data changes to 1 while StatusLabel still renders 8 because _set_lifecycle returns before _apply_visuals when the lifecycle is unchanged.",
+        "The frozen READY capture renders only 'Approach to preview transformation' with no exact cost or delivered-resource destination.",
+        "The complete capture always says 'Continue to the next target' although the same target has a configured second transformation stage.",
+        "C2 V06 calculates that a revision-1 pulse at scale 1.18 puts the lower face below the floor because _process changes scale without recomputing y; inspected motion frames reproduce the moving contact plane."
+      ],
+      "root_cause": "The presentation adapter treats lifecycle identity as the complete visual dirty key and centers pulse scaling, while READY/complete copy is not derived from the current recipe availability.",
+      "affected_object": "T10-R05/R11 truthful actionable feedback and grounded neutral transformation presentation",
+      "causal_fix": "Use a bounded presentation fingerprint so changed same-phase payloads refresh materials, geometry and text without rebuilding nodes, while an identical payload remains a no-op. Bind READY to an authoritative preview so it renders exact costs and the delivered-resource action, derive completion wording from whether the same target has another available stage, and recompute the ghost y position on every pulse scale (or use a base pivot) so its lower face stays fixed above the support plane.",
+      "files_to_change": [
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/tests/test_task10_world_transform.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/main.gd",
+        "HavenlineGodot/data/world_transform_recipes.json"
+      ],
+      "verification": [
+        "Hostile same-phase blocked, prerequisite, preview-cost, recipe and revision updates immediately render the new payload; exact repeats change neither build nor apply count.",
+        "READY displays the exact current cost and delivered-resource action, and complete wording truthfully distinguishes another stage from another target.",
+        "At pulse minimum, midpoint and maximum the target base remains anchored and does not intersect or float above the floor/ring.",
+        "The four-node/one-build bound and presentation-only authority separation remain unchanged."
+      ]
+    },
+    {
+      "id": "C0-T10-B016",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "The native capture annotation collides with product feedback, and the validator does not bind the preserved 30-fps lifecycle movie to measured frame count, rate, duration and state time ranges.",
+      "evidence": [
+        "C1/C2 V05 finds the output-dimension-scaled title/disclaimer overlapping feedback in front, side, detail and three-quarter views, with complete/replay-detail and blocked-front obscured.",
+        "The artifact contains a real 194-frame, 30-fps, 6.466667-second movie, but readiness checks only a self-declared motion_frames_per_state value and file existence.",
+        "The critic manifest exposes thirteen 2-fps samples with sequential filenames but no explicit source timestamps or lifecycle range mapping."
+      ],
+      "root_cause": "Capture metadata is scaled twice and has no reserved screen region; temporal evidence packaging relies on capture declarations instead of inspecting and indexing the produced movie.",
+      "affected_object": "Source-bound C1/C2/C3/C4 readability and full-cycle motion evidence",
+      "causal_fix": "Render a fixed logical-size bottom annotation inside a reserved screen-safe region and validate non-collision across all six cameras and device layouts. Inspect the produced movie, retain its hash/frame-count/fps/duration, record lifecycle time ranges, and expose adequately sampled committing frames with timestamps so a complete grounded 1.4 Hz pulse and replay sequence are independently reviewable.",
+      "files_to_change": [
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "files_not_to_change": [
+        "Docs/Production/DEVICE_LAYOUT_MATRIX.json",
+        "tools/havenline/production/specialist_evidence_manifest.py",
+        "approved T01-T09 captures and assets"
+      ],
+      "verification": [
+        "All six native angles and all six device layouts have non-colliding readable metadata and product feedback.",
+        "Manifest values match ffprobe-observed frame count, fps and duration and bind the movie plus each review frame by SHA256.",
+        "Timestamped evidence contains at least one complete grounded committing pulse plus complete and exact replay ranges."
+      ]
+    },
+    {
+      "id": "C0-T10-B017",
+      "classification": "TOOLING_DEFECT",
+      "symptom": "The frozen capture run terminates in C6 packaging because process memory is always zero, and the proposed performance record omits mandatory measurement context.",
+      "evidence": [
+        "Run 35333044186 completes 12 baseline, 36 device and 36 native frames, then fails the build_critic_evidence.py process_memory_mb > 0 assertion.",
+        "The direct Godot probe shows FileAccess.get_file_as_string('/proc/self/status') returns zero bytes for the proc pseudo-file.",
+        "The proposed performance.json lacks PERFORMANCE_BUDGETS required resolution, renderer, measurement_method and known_unmeasured_fields even if the RSS assertion is repaired."
+      ],
+      "root_cause": "The capture treats a proc pseudo-file like a sized regular file and the packager maps counters to the shared soft-budget keys without emitting the complete per-candidate measurement contract.",
+      "affected_object": "Exact-source quantitative C6 evidence",
+      "causal_fix": "Collect RSS with OS.execute using ps for OS.get_process_id(), parse a single positive numeric value and fail closed on command/parse/value error. Emit all PERFORMANCE_BUDGETS required-per-candidate context, including exact resolution, Mobile Vulkan software renderer, scene state, measurement method, storage measurement, physical_certification=false and explicit known-unmeasured fields, then run the unchanged C6 harness.",
+      "files_to_change": [
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "files_not_to_change": [
+        "Docs/Production/PERFORMANCE_BUDGETS.json",
+        "tools/havenline/production/critic_harness.py",
+        "T68/T69 physical certification contracts"
+      ],
+      "verification": [
+        "A real pinned-Godot capture records positive RSS; missing ps output, nonnumeric output or nonpositive values fail before C6 pass.",
+        "The performance record contains every required_per_candidate field with exact-source and manifest hashes.",
+        "The unchanged critic_harness.py performance gate passes without claiming physical FPS, thermals or device certification."
+      ]
+    },
+    {
+      "id": "C0-T10-B018",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "T10's mandatory forward save_matrix gate has no task adapter, invocation or canonical seven-case record.",
+      "evidence": [
+        "forward_execution.py plan T10 includes save_matrix and binds it to save_state_matrix.py --adapter <task adapter>.",
+        "The frozen workflow runs recovery suites directly but never invokes the generic save matrix.",
+        "No tools/havenline/task10 save adapter or source-bound fresh/current/previous/interrupted/reload/migration/rollback record exists."
+      ],
+      "root_cause": "Task recovery tests were treated as a substitute for the forward gate instead of being exposed through the canonical matrix adapter contract.",
+      "affected_object": "T10 forward save/recovery gate and G1-G14 closure",
+      "causal_fix": "Add one task-owned adapter that maps every canonical save case to explicit passing T10 model plus real-simulation recovery checks, invoke it through the unchanged save_state_matrix.py on the exact candidate, retain the seven case logs/record, and make critic readiness fail if the record is absent, stale or incomplete.",
+      "files_to_change": [
+        "tools/havenline/task10/save_matrix_adapter.py",
+        "tools/havenline/task10/tests/test_save_matrix_adapter.py",
+        "tools/havenline/task10/save_matrix_cases.gd",
+        "HavenlineGodot/tests/test_task10_world_transform.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "files_not_to_change": [
+        "Docs/Production/SAVE_STATE_MATRIX.json",
+        "tools/havenline/production/save_state_matrix.py"
+      ],
+      "verification": [
+        "The generic harness runs all seven canonical cases against the exact candidate and every case log contains its required executable markers.",
+        "Previous-version/migration handling is explicitly fail-safe without inventing a global T14 save schema.",
+        "Readiness rejects omitted, duplicated, failed or candidate-mismatched cases."
+      ]
+    },
+    {
+      "id": "C0-T10-B019",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "The workflow can launch C3/C4/C7 but still lacks formal C1/C2 record ingestion and a fail-closed exact-candidate aggregation of all six required critics; C3/C4 manifests also omit much of the raw evidence they summarize.",
+      "evidence": [
+        "The isolated workflow defines review-c3, review-c4 and review-c7 only.",
+        "No review_visual.py, formal C1/C2 artifact path or final record aggregation exists although the repair contract required them.",
+        "C3/C4 manifests reference a generated summary that strips checks/source hashes and only front native frames, even though raw reports and all six native angles were captured.",
+        "The frozen independent C1/C2 and C3/C4 reports are valid defect discovery, not passing final-source records; minimum scores are 8.0 and defects remain."
+      ],
+      "root_cause": "The orchestration stopped at critic fan-out and did not implement the reference-specific visual provenance ingestion or terminal all-critic quorum layer; manifest minimization hid relevant raw and cross-view inputs.",
+      "affected_object": "Formal source-bound C1/C2/C3/C4/C6/C7 approval evidence",
+      "causal_fix": "Preserve fresh independent C1/C2 agent records with actual provider/model/session/raw-output provenance through a task-specific validator rather than rerunning them through the unsupported generic visual route. Expand C3/C4 manifests to reference raw domain/integration evidence and required cross-view images. Add one task-owned aggregator that rejects missing critics, source mismatch, missing raw hashes, incomplete coverage, non-independent required reviews, any score <=9.0 unrounded or any defect; ingest C6 and reusable C3/C4/C7 outputs without altering shared critic code.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/review_visual.py",
+        "tools/havenline/task10/aggregate_critics.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_review_visual.py",
+        "tools/havenline/task10/tests/test_aggregate_critics.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "files_not_to_change": [
+        ".github/workflows/havenline-specialist-critic.yml",
+        "tools/havenline/production/specialist_critic_runner.py",
+        "tools/havenline/production/critic_harness.py",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json"
+      ],
+      "verification": [
+        "Fresh C1/C2/C3/C4/C7 records retain exact candidate, provider/model/session, independent runtime, manifest/raw-output hashes, complete dimensions, coverage and defects; C6 retains its quantitative gate output.",
+        "C3/C4 manifests directly expose raw test records and all required cross-view/motion evidence by SHA256.",
+        "Aggregation fails hostile fixtures for missing critic, source mismatch, score exactly 9.0, missing dimension, unresolved defect, false independence, absent raw evidence or altered hash.",
+        "No builder self-review, retry-to-score, threshold change or score carry-forward is accepted."
+      ]
+    },
+    {
+      "id": "C0-T10-B020",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "There is no task-owned terminal factory observation/closeout path, so T10 cannot satisfy its mandatory post-integration forward closeout even after functional and critic gates pass.",
+      "evidence": [
+        "forward_execution.py plan T10 requires closeout through factory_observer.py, factory_closeout_gate.py, closure_validator.py, evidence_retention.py and task_state_snapshot.py.",
+        "The current T10 workflows produce no factory-observation.json and cannot observe their own terminal GitHub run after completion.",
+        "The a0cf1d2 intermediate integration remains failed/unapproved and may only be recovered by exact final task integration, not a waiver or no-op checkpoint."
+      ],
+      "root_cause": "T10 implemented build/capture workflows but omitted a post-terminal task-owned raw-API collection and closeout adapter for the forward factory contract.",
+      "affected_object": "T10 terminal factory evidence, controlled integration recovery and G1-G14 approval closure",
+      "causal_fix": "Add a task-owned post-terminal closeout workflow/helper that fetches immutable GitHub run, jobs and artifact metadata for the exact final source, preserves exact environment provenance, invokes the unchanged factory observer and closeout gate, then runs existing closure/retention/state-snapshot validators. Keep the a0cf1d2 failure explicit; execute this only after all repairs, save matrix, regression, C6 and critic quorum pass and the integration owner has integrated the exact frozen task source.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/closeout_evidence.py",
+        "tools/havenline/task10/tests/test_closeout_evidence.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "Docs/Production/T10/INTEGRATION_RECOVERY_FC5F1D0.json",
+        "Docs/Production/T10/C0-frozen-candidate-8902fa5.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "tools/havenline/production/factory_observer.py",
+        "tools/havenline/production/factory_closeout_gate.py",
+        "tools/havenline/production/evidence_retention.py",
+        "tools/havenline/production/task_state_snapshot.py",
+        "Docs/Production/FORWARD_EXECUTION_PROFILES.json",
+        "Docs/Production/FORWARD_GATE_RUNNERS.json"
+      ],
+      "verification": [
+        "A terminal successful exact-source run produces a hash-retained factory-observation.json with exact environment fingerprint, telemetry, artifacts and derived task snapshot.",
+        "Factory closeout rejects a running/failed/stale/source-mismatched run and missing or ambiguous environment provenance.",
+        "Parent-to-final and c1768dbba7bacbbc5d0174e6b9b661b6dbdbbc11-to-final integration scope both pass without a waiver before final regression and G1-G14 closure.",
+        "No task workflow or helper can mark T10 approved; integration-owner authority remains required."
+      ]
+    },
+    {
+      "id": "C0-T10-B021",
+      "classification": "PRODUCT_DEFECT",
+      "symptom": "A JSON save made after an earned furnace level and an accepted T10 stored-resource debit restores at a lower level even though restore returns true.",
+      "evidence": [
+        "The real simulation probe earns level 2 from stored wood=20 and stone=12, applies the accepted T10 debit of 8 wood and 4 stone, then JSON round-trips a snapshot; restore returns true but level changes from 2 to 1 while stored becomes wood=12 and stone=8.",
+        "The canonical seven-case draft passes fresh, previous and migration but fails current, interrupted, reload and rollback specifically on exact level conservation after the debit.",
+        "simulation.gd snapshot persists level, but restore resets level to 1 and derives it from the now-debited stored balance; T10 makes that balance non-monotonic relative to earned progression.",
+        "restore currently accepts any nonnegative integral level rather than enforcing the simulation's bounded earned-level domain 1 through 4."
+      ],
+      "root_cause": "Restore discards the persisted monotonic progression field and recomputes it from consumable post-debit stock, an invariant invalidated by T10's authorized stored-resource debit.",
+      "affected_object": "Shipping save/crash/rollback recovery of previously earned furnace progression",
+      "causal_fix": "Through a new exact-path integration-owner change request, validate the persisted level as a whole integer in [1,4] before any live-state mutation, restore that earned level, and then run the existing monotonic update_level calculation so qualifying stored stock may only raise it. Preserve every other restore field and invariant; do not inflate fixtures or weaken receipt validation.",
+      "files_to_change": [
+        "Docs/Production/ChangeRequests/T10-simulation-earned-level-recovery.json",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd",
+        "tools/havenline/task10/save_matrix_cases.gd",
+        "tools/havenline/task10/save_matrix_adapter.py",
+        "tools/havenline/task10/tests/test_save_matrix_adapter.py"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/main.gd",
+        "Docs/Production/SAVE_STATE_MATRIX.json",
+        "tools/havenline/production/save_state_matrix.py",
+        "all unrelated simulation fields and T01-T09 behavior"
+      ],
+      "verification": [
+        "Starting from naturally earned level 2 at wood=20 and stone=12, apply the real accepted 8-wood/4-stone T10 debit; current, interrupted, JSON reload and rollback recovery all retain level 2 with the true post-debit stock.",
+        "Persisted levels 1 through 4 restore exactly and update_level may only raise them when the restored stock independently qualifies for a higher level.",
+        "Level values 0, 5, negative, fractional, string, null and non-finite representations reject before mutation, with the complete pre-call snapshot unchanged.",
+        "The approved change request targets only simulation.gd, applicable proof invalidation/contract forecast passes, and the full impacted T01-T10 regression remains green."
+      ]
+    },
+    {
+      "id": "C0-T10-B022",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "The production-governance workflow rejects the authorized T10 activation because three hosted assertions still require the pre-activation LOCKED/unowned state or its warning text.",
+      "evidence": [
+        "Hosted run 35335183259 job 105568264896 passes all 178 production tests, workstream registry validation, integration scope and forward architecture before failing the V3 jq assertion `.tasks.T10.status == \"LOCKED\"`; the authoritative dependency graph and registry both record T10 as ASSIGNED.",
+        "The later V3.1 workflow assertion, hidden by the earlier failure, requires lifecycle_status LOCKED plus lifecycle_status_LOCKED and ownership_not_assigned blockers; the real validated T10 snapshot is ASSIGNED, has assigned branch/paths and has neither blocker.",
+        "The later task-packet smoke check unconditionally requires `DO NOT start runtime implementation`, but task_packet.py correctly omits that warning while V3/V3.1 runtime activation is allowed for an active owned task.",
+        "All remaining T10-specific workflow assertions were audited: V3 feasibility READY_NOW, forward build profile, critic/gate markers and V3.1 controls are lifecycle-independent and pass the activated state."
+      ],
+      "root_cause": "The shared workflow embedded fixture-era T10 lifecycle expectations instead of checking the authoritative current registry/graph/snapshot relationship, so the validation script contradicts the activation-aware production tools it invokes.",
+      "affected_object": "Hosted production-governance validation of the authorized T10 lifecycle",
+      "causal_fix": "Under an exact integration-owner governance change request, replace only the three stale workflow assertions with lifecycle-aware checks: dependency graph and registry status must match; status must be an architecture_v31 ACTIVE_RUNTIME_STATES value or APPROVED; active state must have assigned branch/owned paths, a valid derived snapshot, no locked/unowned blockers and no task-packet stop warning; APPROVED may retain the no-new-runtime warning. Add a regression test for the workflow assertions without changing lifecycle data, validators, gates, critics or thresholds.",
+      "files_to_change": [
+        "Docs/Production/ChangeRequests/T10-production-governance-activation-assertions.json",
+        ".github/workflows/havenline-production-governance.yml",
+        "tools/havenline/production/tests/test_t10_activation_validation.py"
+      ],
+      "files_not_to_change": [
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "Docs/Production/DEPENDENCY_GRAPH.json",
+        "Docs/Production/task-gates.json",
+        "tools/havenline/production/architecture_v3.py",
+        "tools/havenline/production/architecture_v31.py",
+        "tools/havenline/production/task_state_snapshot.py",
+        "tools/havenline/production/task_packet.py",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json"
+      ],
+      "verification": [
+        "A hosted governance run at T10 ASSIGNED passes V3, V3.1 and task-packet smoke checks while graph, registry, ownership and snapshot remain mutually consistent.",
+        "Hostile workflow/unit fixtures still reject LOCKED/PREPARED/BLOCKED as active, graph/registry disagreement, missing branch or owned paths, invalid/non-derived snapshot, locked/unowned blockers and an active packet containing the stop warning.",
+        "The same assertions accept later active T10 lifecycle states and treat APPROVED as completed rather than active, without accepting a relock, clearing ownership or weakening any critic/gate threshold.",
+        "The full 178-test production suite and hosted integration scope pass on the exact owner-governance commit."
+      ]
+    },
+    {
+      "id": "C0-T10-B023",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "The T09 closure replay fails after legitimate T10 activation because closure_validator.py re-evaluates three T09 closeout-time future-lock invariants against current lifecycle files.",
+      "evidence": [
+        "Hosted governance run 35336280314 job 105571743291 passes B022 V3 validation and reaches the V3.1 sequence, then closure_validator.py exits nonzero with exactly: T10+ must remain LOCKED after T09 closeout: T10; T10+ active ownership exists before explicit activation; all task-gates active_* fields must be clear after T09 closeout.",
+        "Direct replay identifies closure_validator.py Docs/Production/T09/verified-completion.json as the first nonzero command. Retention, runtime dependency learning, mutation canaries, invalidation policy, persistence invalidation, contract diff and task-state snapshot all pass independently after it.",
+        "Commit 62f5a13753968c77a0feb47a18d93c82d8c5b581 is the recorded final T09 closure checkpoint: T09 is APPROVED, T10-T70 are LOCKED, no T10+ active owner exists and every task-gates active_* field is clear there.",
+        "The current T09 verified-completion and task-state bytes are identical to that checkpoint; verified-completion SHA256 is 2b69ffad9979b1620d3a48a77f049dc7756b85e1c7a6ee33c8c3dd75254c0059. The accepted runtime candidate 5415d85838ecf4bea8b3c71662072670e61797a0 predates the final closure record and is not a valid historical-governance replay source."
+      ],
+      "root_cause": "The validator correctly preserves immutable T09 evidence but incorrectly treats a temporal closeout condition as a permanent current-state invariant, conflating historical closure replay with the separately validated present migration lifecycle.",
+      "affected_object": "Historical T09 closure validation during current T10 production governance",
+      "causal_fix": "Under a bounded integration-owner governance request, keep the closure validator command and every T09 evidence check, but replay only the three T09 future-lock/ownership/active-gate conditions from exact git objects at checkpoint 62f5a13753968c77a0feb47a18d93c82d8c5b581. Bind the supplied current T09 completion bytes to that checkpoint and the recorded SHA256, fail closed on missing/malformed git objects or any historical invariant mismatch, and leave current lifecycle validation to the unchanged validate_migration.py and B022 canonical-state checks.",
+      "files_to_change": [
+        "Docs/Production/ChangeRequests/T10-T09-historical-closure-replay.json",
+        "tools/havenline/production/closure_validator.py",
+        "tools/havenline/production/tests/test_architecture_v31.py"
+      ],
+      "files_not_to_change": [
+        "Docs/Production/T09/verified-completion.json",
+        "Docs/Production/T09/task-state.json",
+        "Docs/Production/T09/independent-critic-review.json",
+        "Docs/Production/T09/defect-ledger.json",
+        "Docs/Production/Evidence/T09/**",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "Docs/Production/DEPENDENCY_GRAPH.json",
+        "Docs/Production/PATH_OWNERSHIP.json",
+        "Docs/Production/task-gates.json",
+        "all critic, gate and threshold definitions"
+      ],
+      "verification": [
+        "Exact replay of T09 completion passes while current T10 remains legitimately ASSIGNED, and the unchanged current-state migration/canonical-state validators also pass.",
+        "Historical fixtures reject a non-APPROVED T09, any unlocked T10-T70 task, any T10+ active owner, any populated active_* gate, checkpoint/completion digest mismatch, missing commit/object or malformed JSON.",
+        "The validator never substitutes current lifecycle files or runtime candidate 5415d85838ecf4bea8b3c71662072670e61797a0 for the recorded closure checkpoint.",
+        "Every later V3.1 command and jq assertion passes, followed by the full production suite and a fresh hosted governance run on the exact owner commit."
+      ]
+    }
+  ],
+  "repair_order": [
+    "Repair B015 and resolve B021 through the integration-owner change-request path, then run focused view, level-recovery, domain and integration probes before recapturing evidence.",
+    "Repair B016-B018, run the canonical save matrix including exact earned-level conservation, and recapture all source-bound visual/motion/C6 evidence on one new frozen candidate.",
+    "Resolve B022 and B023 through bounded integration-owner governance change requests, proving current activation against authoritative live state and T09 closeout invariants against the exact historical checkpoint.",
+    "Run the full impacted regression and B019 fresh C1/C2/C3/C4/C6/C7 review/aggregation; every required dimension must be strictly greater than 9.0 unrounded with zero defects.",
+    "Only after readiness, perform the existing no-waiver integration recovery and B020 terminal factory/G1-G14 closeout on the exact integrated source."
+  ],
+  "unexecuted_checks": [
+    "same-phase feedback and grounded-pulse hostile tests after repair",
+    "integration-owner approved exact earned-level restore repair, atomic malformed-level tests and applicable shared-path proof invalidation",
+    "canonical seven-case T10 save matrix",
+    "collision-free exact-source recapture and complete C6 record",
+    "fresh full impacted regression on the repaired frozen source",
+    "fresh C1/C2/C3/C4/C6/C7 records and strict aggregate quorum",
+    "hosted production-governance V3/V3.1/task-packet validation after lifecycle-aware assertion repair",
+    "exact historical T09 closure replay plus every downstream V3.1 command and predicate",
+    "controlled final integration recovery, terminal factory observation and G1-G14 closeout"
+  ],
+  "candidate_freeze": {
+    "required": true,
+    "validation_concurrency_policy": "finish_running_sha",
+    "cancelled_run_product_judgment": false
+  },
+  "acceptance_rule_unchanged": {
+    "required_critics": ["C1", "C2", "C3", "C4", "C6", "C7"],
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "all_applicable_gates": "G1-G14",
+    "zero_unresolved_mandatory_defects": true
+  },
+  "summary": "Frozen candidate 8902fa5 is not approvable. B009 receipt recovery and the primary regression are clean, but independent reviews identify remaining presentation/annotation defects; the hosted capture fails deterministically at the invalid RSS collector, a real save-matrix probe proves earned level is lost after an accepted T10 debit, and production governance contains both activation-era workflow assertions and a T09 historical-closeout replay defect. The forward save-matrix, complete critic quorum and terminal factory closeout contracts are also absent. The smallest runtime expansion is only simulation.gd under an exact-path owner request; shared governance changes are limited to B022 workflow assertions and B023 exact historical closure replay. world_transform.gd, lifecycle/evidence records, shared gate definitions, critics, thresholds, T11 content and approved prior-task behavior remain unauthorized.",
+  "confidence": "high",
+  "approval_claimed": false,
+  "score_assigned": false
+}

@@ -1,0 +1,16 @@
+{
+  "requesting_task": "T07",
+  "target_path": "HavenlineGodot/scripts/population_simulation.gd",
+  "requested_change": "Delegate the legacy population choose_action compatibility surface to the base T07 pure preview while preserving population.perform as the sole population action-outcome extension.",
+  "reason": "The T07 base adapter now includes only visible population rescue and customer-service candidates; retaining the older score-based override would create a second selector.",
+  "dependency": "T07 accepted isolated source e3ae7d9a7046fa1465f03acea7aba39c385fed23; T03 population outcomes remain authoritative.",
+  "expected_behavior": "Population rescue and service use the same deterministic selector and capability rules as core actions without changing population rewards, saves, actors, or encounter logic.",
+  "tests_required": [
+    "test_population",
+    "test_outpost",
+    "test_outpost_runtime",
+    "test_task07_context_director"
+  ],
+  "status": "APPROVED",
+  "integration_owner_disposition": "AUTHORIZED"
+}

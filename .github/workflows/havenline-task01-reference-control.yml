@@ -1,0 +1,73 @@
+name: Havenline T01 reference recognition control
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-reference-control.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  control:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-gemma
+          key: havenline-t01-gemma3-12b-qat-b10809-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Run a controlled reference-to-identical-reference comparison, not a candidate verdict
+        run: |
+          python3 -u - <<'PY'
+          from pathlib import Path
+          import json,hashlib,base64,io,os,subprocess,time,urllib.request
+          from PIL import Image
+          out=Path('control-evidence');out.mkdir(exist_ok=True)
+          cache=Path.home()/'.cache/havenline-t01-gemma';m=json.loads((cache/'manifest.json').read_text())
+          def digest(p):
+              h=hashlib.sha256()
+              with p.open('rb') as f:
+                  for b in iter(lambda:f.read(4194304),b''):h.update(b)
+              return h.hexdigest()
+          for r in m['files']:assert digest(cache/r['filename'])==r['sha256']
+          data=base64.b64decode(Path('Docs/Production/T01/reference-detail.webp.b64').read_text())
+          assert hashlib.sha256(data).hexdigest()=='25b0e78c93f13ddadb8b815e7e19daf68485471d2be3fed0dd99bde8d00c48af'
+          im=Image.open(io.BytesIO(data)).convert('RGB');b=io.BytesIO();im.save(b,format='PNG');png=b.getvalue();(out/'control-image.png').write_bytes(png)
+          server=next((cache/'runtime').rglob('llama-server'));env=dict(os.environ);env['LD_LIBRARY_PATH']=str(server.parent)+':'+env.get('LD_LIBRARY_PATH','')
+          log=(out/'inference.log').open('w')
+          cmd=[str(server),'-m',str(cache/m['model_file']),'--mmproj',str(cache/m['projector_file']),'--host','127.0.0.1','--port','8080','-c','8192','-t','4','-tb','4','-ngl','0','--no-mmproj-offload','--parallel','1','--jinja']
+          process=subprocess.Popen(cmd,stdout=log,stderr=subprocess.STDOUT,env=env)
+          report={'purpose':'Blind positive control. Both image payloads are identical copies of the actual reference; not current game output.','same_png_bytes':True,'image_sha256':hashlib.sha256(png).hexdigest(),'model':m['base_model'],'revision':m['revision'],'game_approval':False,'task_approval':False}
+          try:
+              for _ in range(150):
+                  if process.poll() is not None:raise RuntimeError('Inference runtime stopped')
+                  try:
+                      if json.load(urllib.request.urlopen('http://127.0.0.1:8080/health',timeout=3)).get('status')=='ok':break
+                  except Exception:pass
+                  time.sleep(2)
+              prompt='Image 1 is the target reference. Image 2 is the comparison. Inspect the tree silhouettes, snow layers, colors, trunk shape, and visible shading in both. Report whether their visible image content differs. Score visual fidelity to image1 from0(completely different/absent) to10(no visible difference). Only describe genuine visible differences; do not invent one to fill a slot. This is a static visual comparison, not a gameplay or performance certification. Return the requested JSON.'
+              schema={'type':'object','properties':{'visually_same_content':{'type':'boolean'},'differences':{'type':'array','items':{'type':'string'}},'fidelity_score':{'type':'number','minimum':0,'maximum':10},'confidence':{'type':'string','enum':['low','medium','high']}},'required':['visually_same_content','differences','fidelity_score','confidence'],'additionalProperties':False}
+              image={'type':'image_url','image_url':{'url':'data:image/png;base64,'+base64.b64encode(png).decode()}}
+              req={'model':'reference-control','messages':[{'role':'user','content':[{'type':'text','text':'IMAGE 1: reference'},image,{'type':'text','text':'IMAGE 2: comparison'},image,{'type':'text','text':prompt}]}],'max_tokens':240,'temperature':.15,'seed':20260908,'response_format':{'type':'json_object','schema':schema},'cache_prompt':False}
+              (out/'prompt.txt').write_text(prompt)
+              with urllib.request.urlopen(urllib.request.Request('http://127.0.0.1:8080/v1/chat/completions',data=json.dumps(req).encode(),headers={'Content-Type':'application/json'}),timeout=480) as r:raw=json.load(r)
+              (out/'raw.json').write_text(json.dumps(raw,indent=2));c=raw['choices'][0];assert c['finish_reason']=='stop'
+              value=json.loads(c['message']['content']);report['response']=value;report['control_passed']=value['visually_same_content'] is True and value['differences']==[] and value['fidelity_score']==10 and value['confidence']!='low'
+          except Exception as exc:report['error']=str(exc);report['control_passed']=False
+          finally:
+              (out/'control-result.json').write_text(json.dumps(report,indent=2));print(json.dumps(report,indent=2))
+              process.terminate()
+              try:process.wait(timeout=15)
+              except subprocess.TimeoutExpired:process.kill()
+              log.close()
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-reference-control-${{ github.run_id }}
+          path: control-evidence/
+          retention-days: 30
+          if-no-files-found: error
+# This is deliberately not candidate evidence, an art score for Havenline, or task approval.

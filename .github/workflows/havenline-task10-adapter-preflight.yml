@@ -1,0 +1,124 @@
+name: Havenline Task 10 post-T09 adapter preflight
+
+on:
+  push:
+    branches: ['havenline/T10-world-transformation']
+    paths:
+      - 'Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json'
+      - 'Docs/Production/T10/POST_T09_CHANGE_REQUEST_TEMPLATE.json'
+      - 'tools/havenline/task10/validate_post_t09_adapter.py'
+      - 'tools/havenline/task10/prepare_reconciliation.py'
+      - 'tools/havenline/task10/tests/**'
+      - '.github/workflows/havenline-task10-adapter-preflight.yml'
+  pull_request:
+    branches: ['havenline/T10-world-transformation']
+    paths:
+      - 'Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json'
+      - 'Docs/Production/T10/POST_T09_CHANGE_REQUEST_TEMPLATE.json'
+      - 'tools/havenline/task10/validate_post_t09_adapter.py'
+      - 'tools/havenline/task10/prepare_reconciliation.py'
+      - 'tools/havenline/task10/tests/**'
+      - '.github/workflows/havenline-task10-adapter-preflight.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-task10-adapter-preflight-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  prepared-adapter-contract:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Fetch authoritative integration branch
+        run: |
+          set -euo pipefail
+          git fetch origin codex/havenline-sequential-task-01
+
+      - name: Validate prepared contract and preserve dependency boundary
+        run: |
+          set -euo pipefail
+          mkdir -p task10-adapter-preflight
+          python3 -m unittest discover -s tools/havenline/task10/tests -p 'test_*.py'
+          python3 tools/havenline/task10/validate_post_t09_adapter.py \
+            --require-bound \
+            --output task10-adapter-preflight/adapter-contract.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          report=json.loads(Path('task10-adapter-preflight/adapter-contract.json').read_text())
+          assert report['passed'] is True, report
+          assert report['prepared_contract_valid'] is True, report
+          # Adapter presence is necessary but does not grant task approval.
+          assert report['real_adapter_bound'] is True, report
+          assert report['integration_allowed'] is not True, report
+          PY
+
+      - name: Validate lifecycle-appropriate candidate scope
+        run: |
+          set -euo pipefail
+          cat > /tmp/t10_adapter_scope.py <<'PY'
+          import json, subprocess, sys
+          from pathlib import Path
+          sys.path.insert(0, 'tools/havenline/production')
+          from workstream import registry_errors, ACTIVE_STATES
+
+          def validate_report(report, mode, base, candidate, integration):
+              assert report['passed'] is True, report
+              if mode == 'registered':
+                  assert (report['task_id'], report['base'], report['head'], report['integration_head']) == ('T10', base, candidate, integration), report
+                  assert not report['errors'], report
+              else:
+                  assert report['path_reconciliation_clean'] is True, report
+                  assert not report['reservation_errors'] and not report['unauthorized_isolated_paths'] and not report['overlapping_t10_drift'], report
+                  assert report['handoff_ready_for_reconcile'] == report['dependencies_fully_approved'], report
+                  assert report['integration_allowed'] is False and report['task_approved'] is False, report
+
+          def select_mode(registry):
+              errors = registry_errors(registry)
+              assert not errors, errors
+              rows = [r for r in registry['workstreams'] if r['task_id'] == 'T10']
+              assert len(rows) <= 1, 'duplicate T10 registration'
+              row = rows[0] if rows else {}
+              status = row.get('status')
+              if status in (None, 'LOCKED', 'PREPARED'):
+                  return 'preactivation', row
+              assert status != 'APPROVED' and status in ACTIVE_STATES, 'invalid forward-use lifecycle'
+              return 'registered', row
+
+          if __name__ == '__main__':
+              registry = json.loads(Path('Docs/Production/WORKSTREAM_REGISTRY.json').read_text())
+              mode, row = select_mode(registry)
+              integration = subprocess.check_output(['git','rev-parse','origin/codex/havenline-sequential-task-01'], text=True).strip()
+              candidate = subprocess.check_output(['git','rev-parse','HEAD'], text=True).strip()
+              target = Path('task10-adapter-preflight/reconciliation.json')
+              base = row.get('base_commit')
+              if mode == 'registered':
+                  result = subprocess.run([sys.executable,'tools/havenline/production/workstream.py','validate-candidate','T10','--base',base,'--head',candidate,'--integration-head',integration], text=True, capture_output=True)
+                  target.write_text(result.stdout)
+                  if result.returncode:
+                      raise SystemExit(result.stderr or result.stdout)
+              else:
+                  subprocess.run([sys.executable,'tools/havenline/task10/prepare_reconciliation.py','--integration-base',integration,'--isolated-candidate',candidate,'--output',str(target)], check=True)
+              report = json.loads(target.read_text())
+              validate_report(report, mode, base, candidate, integration)
+              summary = dict(task='T10',candidate=candidate,integration_base=integration,mode=mode,passed=True,integration_allowed=False,task_approved=False,
+                             handoff_action='continue registered build/review; approval requires full closure' if mode=='registered' else ('run strict post-T09 activation/reconciliation' if report['handoff_ready_for_reconcile'] else 'remain BUILT_PENDING_DEPENDENCY'))
+              Path('task10-adapter-preflight/summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+              print(json.dumps(summary))
+          PY
+          python3 /tmp/t10_adapter_scope.py
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task10-adapter-preflight-${{ github.sha }}
+          path: task10-adapter-preflight
+          if-no-files-found: error
+          retention-days: 14

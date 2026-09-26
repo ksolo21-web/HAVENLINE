@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "status": "PREPARATION_ONLY_EVIDENCE_SCHEMA",
+  "purpose": "Freeze the machine-readable output future Godot T12 parity tests must emit so results can be compared against ENGINE_TEST_VECTORS.json and the non-shipping reference oracle.",
+  "required_top_level_fields": [
+    "task_id",
+    "candidate_source",
+    "vector_results"
+  ],
+  "vector_result_required_fields": [
+    "vector_id",
+    "eligible_level_ids",
+    "new_one_time_event_ids",
+    "state_hash_before",
+    "state_hash_after",
+    "repeat_output_hashes"
+  ],
+  "field_contracts": {
+    "task_id": "must equal T12",
+    "candidate_source": "exact activated T12 candidate commit SHA; non-empty and never a prepared governance commit when used for acceptance",
+    "vector_id": "must resolve exactly once to ENGINE_TEST_VECTORS.json",
+    "eligible_level_ids": "must exactly match reference expected ordering",
+    "new_one_time_event_ids": "must exactly match reference expected ordering",
+    "state_hash_before": "deterministic hash of query input/component state before the pure query",
+    "state_hash_after": "must equal state_hash_before for pure eligibility/query evaluation",
+    "repeat_output_hashes": "at least two hashes from identical repeated queries; all values must be identical"
+  },
+  "acceptance_rules": [
+    "Every prepared vector must have exactly one engine result and no unknown vector may appear.",
+    "Engine eligible_level_ids and new_one_time_event_ids must exactly match the frozen reference vector expected output.",
+    "state_hash_before must equal state_hash_after for every pure query vector.",
+    "repeat_output_hashes must contain at least two identical non-empty hashes for every vector.",
+    "This parity evidence cannot replace T10/T11 binding proof, shipping integration tests, C6, device evidence or independent critics."
+  ]
+}

@@ -1,0 +1,108 @@
+name: Havenline Task 3 polished fresh evidence
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Prepare pinned renderer and protected prerequisites
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install numpy pillow
+          mkdir -p "$RUNNER_TEMP/engine" task03-polished/tests task03-polished/gallery task03-polished/native4k task03-polished/tree-clearance source-snapshot
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          export PATH="$RUNNER_TEMP/engine:$PATH"
+          git diff --exit-code 1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff -- HavenlineGodot/assets HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          glbs=sorted(Path('HavenlineGodot/assets').rglob('*.glb'));assert len(glbs)==33
+          protected=sorted(set(glbs)|set(Path('HavenlineGodot/assets/reference_forest').rglob('*.*')))
+          Path('task03-polished/protected-before.json').write_text(json.dumps({str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in protected},indent=2))
+          PY
+          python3 tools/havenline/bake_outpost_audio.py > task03-polished/audio-fixture.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task03-polished/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task03-polished/tests/motion-fixture.log 2>&1
+      - name: Re-run all sixteen functional suites and T1 geometry
+        run: |
+          set -euo pipefail
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary; do
+            timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task03-polished/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task03-polished/tests/*.log; then exit 1; fi
+          python3 tools/havenline/audit_task01_geometry.py > task03-polished/tree-geometry.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          rows=[]
+          for p in sorted(Path('task03-polished/tests').glob('test_*.log')):
+            found=[json.loads(x) for x in p.read_text().splitlines() if x.startswith('{')];assert found,p
+            o=found[-1];assert o.get('passed') is True and not o.get('failures'),(p,o.get('failures'))
+            c=o.get('checks',[]);rows.append({'suite':p.stem,'checks':len(c) if isinstance(c,list) else int(c),'passed':True})
+          assert len(rows)==16
+          g=json.loads(Path('task03-polished/tree-geometry.json').read_text());assert g['passed'] and g['geometry_checks']==9
+          before=json.loads(Path('task03-polished/protected-before.json').read_text());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in before.items())
+          result={'source':'${{ github.sha }}','suite_count':16,'total_checks':sum(r['checks'] for r in rows),'suites':rows,'all_passed':True,'tree_geometry_checks':9,'protected_glbs_unchanged':33,'prior_6_of_10_failure_preserved':True,'task_approved':False,'physical4k60_verified':False}
+          Path('task03-polished/tests.json').write_text(json.dumps(result,indent=2));print(json.dumps(result))
+          PY
+      - name: Capture all fresh Task 3 views
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1);test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task03_boundary.gd -- --out="$(pwd)/task03-polished/gallery" > task03-polished/gallery.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task03_boundary.gd -- --native-4k --out="$(pwd)/task03-polished/native4k" > task03-polished/native4k.log 2>&1
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task01_clearance.gd -- --out="$(pwd)/task03-polished/tree-clearance" > task03-polished/tree-clearance.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task03-polished/*.log; then exit 1; fi
+          cp Docs/Production/T02/reference-ground.webp task03-polished/reference-ground.webp
+      - name: Verify all fresh pixels and bind them to this repaired source
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          from PIL import Image
+          out=Path('task03-polished');caps={str(p.relative_to(out)):hashlib.sha256(p.read_bytes()).hexdigest() for p in out.rglob('*.png')}
+          assert len(list((out/'gallery').glob('*.png')))==39 and len(list((out/'native4k').glob('*.png')))==11 and len(list((out/'tree-clearance').glob('*.png')))==11 and len(caps)==61
+          for n in caps:
+            with Image.open(out/n) as im:
+              assert im.size==((3840,2160) if n.startswith('native4k/') else (1280,720));im.verify()
+          gallery=json.loads((out/'gallery/capture.json').read_text());native=json.loads((out/'native4k/capture.json').read_text())
+          for r,e in [(gallery,39),(native,11)]:
+            assert r['task']=='T03-boundary-v1' and r['renderer']=='mobile' and len(r['captures'])==e and all(x['render_scale']==1.0 for x in r['captures'])
+            assert r['river']['river_layout_version']=='river_v1_mapspan' and r['boundary']['gate_count']==6 and r['boundary']['collision_panel_instances']==32 and r['boundary']['primitive_fence_meshes_created'] is False
+          assert gallery['boundary']['fence_root_sink']==.04 and gallery['boundary']['gate_leaf_length']==.92 and gallery['boundary']['gate_open_angle']==1.28
+          cond=[x for x in gallery['captures'] if x['name'].startswith('boundary-condition-')];assert len(cond)==6 and len({(tuple(x['camera_position']),x['camera_basis'],x['camera_size']) for x in cond})==1
+          assert caps['gallery/boundary-condition-day.png']==caps['gallery/boundary-condition-day-return.png']
+          before=json.loads((out/'protected-before.json').read_text());assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in before.items())
+          runtime=['HavenlineGodot/scripts/camp_boundary.gd','HavenlineGodot/scripts/camp_boundary_view.gd','HavenlineGodot/scripts/outpost_surface.gd','HavenlineGodot/scripts/outpost_simulation.gd','HavenlineGodot/scripts/outpost_view.gd','HavenlineGodot/scripts/main.gd','HavenlineGodot/scripts/river_geometry.gd','HavenlineGodot/scripts/reference_forest.gd','HavenlineGodot/shaders/outpost_snow.gdshader','HavenlineGodot/shaders/lakeshore_water.gdshader','HavenlineGodot/data/reference-contract.json']
+          report={'task':'T03-boundary-v1-polished','source':'${{ github.sha }}','renderer':'mobile','captures':caps,'runtime_files':{p:hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in runtime},'protected_files':before,'actual_images':61,'gallery_images':39,'native3840x2160_scale1_frames':11,'tree_clearance_frames':11,'gate_count':6,'collision_panels':32,'river_layout_version':'river_v1_mapspan','fence_root_sink':.04,'gate_leaf_length':.92,'gate_open_angle':1.28,'zero_progress_defense_hidden':True,'all61_images_verified':True,'prior_failed_evidence_is_stale_but_preserved':True,'task_approved':False,'physical_phone_tablet4k60_verified':False}
+          (out/'provenance.json').write_text(json.dumps(report,indent=2));print(json.dumps({k:v for k,v in report.items() if k not in ('captures','runtime_files','protected_files')}))
+          PY
+          echo "${GITHUB_SHA}" > source-snapshot/SOURCE.txt
+          git archive --format=tar.gz --output=source-snapshot/source.tar.gz "${GITHUB_SHA}" HavenlineGodot tools/havenline Docs AGENTS.md .github
+          sha256sum source-snapshot/source.tar.gz > source-snapshot/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-polished-evidence-${{ github.run_id }}
+          path: task03-polished/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-polished-source-${{ github.run_id }}
+          path: source-snapshot/
+          retention-days: 30
+          if-no-files-found: error
+# Fresh repaired-source evidence only. Retry 2 fixes same-step Godot PATH; game source is unchanged.

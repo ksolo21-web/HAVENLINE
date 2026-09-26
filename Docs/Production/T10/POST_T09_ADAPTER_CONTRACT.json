@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "name": "Post-T09 authoritative delivered-resource debit adapter",
+  "status": "BOUND_CANDIDATE_PENDING_FINAL_VERIFICATION",
+  "canonical_request": {
+    "encoding": "JSON array [transaction_id, recipe_id, target_id, source_state, target_state, integer revision, KINDS-ordered [kind, integer quantity] rows, progression_tags, presentation_key]",
+    "key": "T10|request_identity|sha256(canonical encoding)|revision:N",
+    "trust_boundary": "Internal prepared-intent integrity token, not authentication for untrusted network callers.",
+    "first_revision": 1,
+    "next_revision": "exactly prior revision + 1 with source_state equal to prior target_state",
+    "max_targets": 4096,
+    "max_identifier_chars": 192,
+    "max_tags": 64,
+    "max_tag_chars": 192,
+    "retention": "Whitelisted required fields plus passed/authority_source/authority_applied/simulation_replayed; retained simulation_replayed is false; transaction IDs unique across retained targets."
+  },
+  "integration_owner_required": true,
+  "shared_runtime_path": "HavenlineGodot/scripts/simulation.gd",
+  "t10_builder_may_edit_shared_runtime": false,
+  "authority": {
+    "resource_owner": "simulation",
+    "affordability_balance": "stored",
+    "carried_balance": "inventory",
+    "t10_must_use": "stored",
+    "t10_must_not_debit": "inventory",
+    "t09_harvest_receipt_is_direct_t10_authority": false,
+    "reason": "T09 gather commits resources into carried simulation.inventory. The existing simulation deposit action moves carried resources into simulation.stored. T10-R06 requires delivered/available resources, so only stored is eligible for transformation cost."
+  },
+  "proposed_api": {
+    "method": "commit_world_transform_debit",
+    "signature": "commit_world_transform_debit(intent: Dictionary) -> Dictionary",
+    "input_required_fields": [
+      "transaction_id",
+      "authority_transaction_key",
+      "request_identity",
+      "recipe_id",
+      "target_id",
+      "source_state",
+      "target_state",
+      "debits",
+      "progression_tags",
+      "presentation_key",
+      "target_revision"
+    ],
+    "success_receipt_additions": {
+      "authority_source": "simulation",
+      "authority_applied": true,
+      "simulation_replayed": false
+    },
+    "retry_receipt_additions": {
+      "authority_source": "simulation",
+      "authority_applied": true,
+      "simulation_replayed": true
+    },
+    "failure_contract": {
+      "authority_applied": false,
+      "must_not_mutate_stored": true,
+      "must_not_advance_t10_state": true
+    }
+  },
+  "validation_rules": [
+    "Intent must be a dictionary with every required field present and non-empty where textual.",
+    "debits must be a non-empty dictionary containing only simulation KINDS with strictly positive whole quantities.",
+    "target_revision must be a positive whole integer.",
+    "authority_transaction_key must match the T10-prepared request-scoped key carried by the intent; simulation does not invent or rewrite it.",
+    "All requested debit quantities must be available in simulation.stored at the instant of first commit.",
+    "Validation failure or insufficient stored resources returns authority_applied=false and leaves all stored balances unchanged.",
+    "First success subtracts each exact debit quantity from simulation.stored once and returns a simulation-authoritative receipt preserving the T10 intent fields.",
+    "Retry with the exact latest authority_transaction_key for that target returns the prior authoritative receipt with simulation_replayed=true and performs zero debit.",
+    "A stale/lower-or-equal target revision with a different authority_transaction_key fails closed and performs zero debit.",
+    "A new higher revision for the target may replace its prior bounded debit receipt after successful debit.",
+    "The authoritative debit ledger is bounded to at most one latest receipt per T10 target."
+  ],
+  "bounded_idempotency": {
+    "proposed_simulation_field": "world_transform_debit_receipts",
+    "key": "target_id",
+    "max_rows": "number of registered/used transformation targets",
+    "retention": "latest successful authoritative debit receipt per target",
+    "purpose": "Survive T10 retry/crash window without double-debit while avoiding unbounded transaction history."
+  },
+  "persistence": {
+    "required": true,
+    "component_data_only": true,
+    "global_versioning_owner": "T14",
+    "snapshot_behavior": "simulation snapshot includes world_transform_debit_receipts",
+    "restore_behavior": "missing field restores as empty for backward compatibility; malformed rows fail closed under the T10 integration test",
+    "does_not_define_global_save_version": true
+  },
+  "integration_tests_after_t09": [
+    "T10 preview affordability reads a copy of simulation.stored and never simulation.inventory.",
+    "A harvested-but-not-deposited T09 unit in simulation.inventory cannot satisfy T10 affordability.",
+    "After the existing deposit action moves that unit to simulation.stored, the same T10 preview may become eligible.",
+    "First transform debit subtracts exact costs from stored once.",
+    "Immediate duplicate/resubmission returns the same authoritative receipt and does not debit twice.",
+    "Crash/reload after simulation debit but before T10 acceptance restores the bounded simulation receipt and lets T10 close its pending transaction without a second debit.",
+    "Insufficient stored balance leaves stored and T10 world state unchanged.",
+    "Malformed/forged/stale authority keys fail closed without resource mutation.",
+    "Multiple different T10 targets may debit independently; each target retains at most one latest debit receipt.",
+    "T08 carried/source-to-actor presentation and conservation remain unchanged because T10 consumes only delivered stored resources."
+  ],
+  "shared_runtime_change_scope": {
+    "required_paths": ["HavenlineGodot/scripts/simulation.gd"],
+    "optional_paths": [],
+    "main_gd_change_required_for_t10_framework_integration": false,
+    "t11_later_owns_shipping_content_binding": true,
+    "reference_contract_change_required": false
+  },
+  "handoff_gate": {
+    "may_apply_before_t09_approved": false,
+    "requires_exact_post_t09_integration_head": true,
+    "requires_integration_owner": true,
+    "requires_impacted_t01_t09_regression": true,
+    "requires_t10_real_adapter_tests": true
+  }
+}

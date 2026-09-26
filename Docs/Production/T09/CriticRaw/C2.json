@@ -1,0 +1,65 @@
+{
+  "status": "PASS",
+  "scores": {
+    "geometry_contact": 9.237,
+    "clipping_seams": 9.184,
+    "intentional_gap_integrity": 9.163,
+    "cross_view_integrity": 9.226
+  },
+  "minimum_score": 9.163,
+  "coverage_complete": true,
+  "confidence": 0.97,
+  "defects": [],
+  "evidence": [
+    {
+      "path": "captures/asset-wood-detail/asset-axe-detail.png",
+      "sha256": "8949616da7b71b401dbd5a91f7b2889609ff35a480ed159bbbed75b104618e48"
+    },
+    {
+      "path": "captures/asset-stone-detail/asset-pickaxe-detail.png",
+      "sha256": "5e64ea61c12c3cab68d232c68de775907e54a1e368e6ad6e88d6fee2982de179"
+    },
+    {
+      "path": "captures/asset-fuel-detail/asset-salvage_pry_tool-detail.png",
+      "sha256": "6159a06b81ba343aa23cb40241019243f3e96bbf5631f1654c550ddf199f8a56"
+    },
+    {
+      "path": "captures/tool-wood-detail/tool-wood-detail.png",
+      "sha256": "bc1ba99a791998cbed2bd822e160f323ad12229610cc17c124975e6f0782ebc7"
+    },
+    {
+      "path": "captures/tool-stone-detail/tool-stone-detail.png",
+      "sha256": "c3a6e086a162b3eb35dce2718d46de7b4820438e03440b811d91544e17bff3f7"
+    },
+    {
+      "path": "captures/tool-fuel-detail/tool-fuel-detail.png",
+      "sha256": "0a6622e37e3a3b1642dc1e8752f222e4edc7022a3b05dd76c38dbd7a647f49b0"
+    },
+    {
+      "path": "captures/native-4k/tool-wood-front-right.png",
+      "sha256": "bb78b5c9d60d10ad712e3bed8650477721bed4c46d8ff878cae18a29aac46a34"
+    }
+  ],
+  "rationale": [
+    "All 30 isolated turntable views and 30 in-hand actor/tool/target views were inspected across front, rear, left, right, three-quarter, overhead and detail angles.",
+    "The axe, pickaxe and pry tool have visible authored blue/orange/brown finish; no white silhouette, debug primitive, reversed attachment, floating grip, body penetration or missed contact was observed.",
+    "Cross-view silhouettes, material boundaries, intentional hand/tool gaps and native-4K contact remain coherent."
+  ],
+  "schema_version": 1,
+  "task_id": "T09",
+  "critic_id": "C2",
+  "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "workflow_run_id": 35289633249,
+  "artifact_id": 10527144124,
+  "artifact_sha256": "78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+  "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "input_manifest_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "passed": true,
+  "score_reuse": false,
+  "minimum_dimension_score": 9.163,
+  "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
+  "provider": "OpenAI",
+  "model": "unavailable in runtime metadata",
+  "request_or_run_id": "/root/t09_final_critic"
+}

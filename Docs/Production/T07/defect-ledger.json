@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "task_id": "T07",
+  "candidate_commit": "0a30dc0859541626eb6aa9a9bb749abc93dcb355",
+  "integrated_commit": "94b3f6c5097356a3857ebd13a77fb1e316eb06ae",
+  "integrated_verification_run": 34991148246,
+  "acceptance_threshold": ">9.0 unrounded in every mandatory dimension",
+  "cycle": "critic-fix-retest-4",
+  "defects": [
+    {
+      "id": "T07-D01",
+      "source_critic": "independent source critic",
+      "triage": ["PRODUCTION_FIX", "TEST_FIX"],
+      "visible_symptom": "Candidate truncation, duplicate identities at the cap, approximate ordering, same-band priority switches and nonzero movement could select or retain the wrong contextual target.",
+      "probable_root_cause": "Early producer-order capping and tolerant comparisons weakened the frozen deterministic order and movement-ownership contract.",
+      "causal_production_change": "Inspect every bounded input, reject ambiguous duplicates, use a strict total order, keep release-only retention separate, respect declared priority in hysteresis, and cancel on every finite nonzero movement input.",
+      "verification_disposition": "Verified closed by 84 isolated component checks, 36 static checks, 12 integrated checks and exact-artifact trace review.",
+      "status": "VERIFIED_CLOSED"
+    },
+    {
+      "id": "T07-D02",
+      "source_critic": "integration review",
+      "triage": ["PRODUCTION_FIX", "INTEGRATION_FIX", "TEST_FIX"],
+      "visible_symptom": "A second selector or preview-side impact could duplicate outcomes, skip acquire dwell, or drive T06 contact motion while blocked.",
+      "probable_root_cause": "Legacy simulation/population selection surfaces were not yet delegated to the single T07 director and stopped dwell credit was not explicitly bounded at activation.",
+      "causal_production_change": "The simulation owns one director, choose_action is pure preview, step advances once and performs only actionable descriptors, population delegates selection, stopped activation credit is consumed once, and main sends only actionable descriptors to T06.",
+      "verification_disposition": "Verified closed by exact shipping-call-site tests, one-impact/event conservation, save restore reacquisition and independent sequence review.",
+      "status": "VERIFIED_CLOSED"
+    },
+    {
+      "id": "T07-D03",
+      "source_critic": "independent integrated artifact critic",
+      "triage": ["EVIDENCE_FIX", "TEST_FIX"],
+      "visible_symptom": "Rejected run 34988772768 emitted transient texture-allocation errors, padded 55.57291666666666 percent of sequence rasters with navy, omitted the MP4 and measured screenshot waits as shipping CPU cost.",
+      "probable_root_cause": "The harness parented an unsized Control under the project's desktop stretch override and sampled elapsed time after render waits.",
+      "causal_production_change": "Fix capture-space size before parenting, neutralize desktop stretch for exact device rasters, reject uniform right/bottom padding, and end CPU timing before render waits.",
+      "verification_disposition": "Verified closed in run 34991148246: zero render-log errors, six full-frame 1280x720 sequence PNGs, 60-frame H.264 MP4, 19 unique PNGs and passing integrated C6 telemetry.",
+      "status": "VERIFIED_CLOSED"
+    }
+  ],
+  "unresolved_mandatory_count": 0,
+  "critic_scores": {"C2": 9.46, "C3": 9.68, "C4": 9.24, "C6": 9.53, "C11": 9.18},
+  "critic_approval_pending": false,
+  "task_approved": true,
+  "advisories": [
+    "T21 may add a dedicated danger icon with finished enemy presentation.",
+    "T68/T69 retain physical-DPI and native-4K/60 certification."
+  ]
+}

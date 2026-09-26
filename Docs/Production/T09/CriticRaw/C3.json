@@ -1,0 +1,70 @@
+{
+  "status": "PASS",
+  "scores": {
+    "havenline_identity": 9.247,
+    "simple_context_controls": 9.331,
+    "physical_core_loop": 9.176,
+    "complexity_discipline": 9.284,
+    "world_response_readability": 9.159
+  },
+  "minimum_score": 9.159,
+  "coverage_complete": true,
+  "confidence": 0.96,
+  "defects": [],
+  "evidence": [
+    {
+      "path": "reference/A-003.00.png",
+      "sha256": "1dc3c5c3572d49263c6eb8eb3116b44cd31fa17e2634caf1ed3b1a5860737b07"
+    },
+    {
+      "path": "reference/A-016.00.png",
+      "sha256": "3afe3c0fe64702894b7cac3a0d1b271cac0b2d60e87490063a1def7ee111d5ba"
+    },
+    {
+      "path": "reference/B-028.00.png",
+      "sha256": "3e983101885a727eb32fcc0d132fcacf8be8c439d2dfefcb267b45326065ee18"
+    },
+    {
+      "path": "captures/sequence-wood/wood-real-time.mp4",
+      "sha256": "849f12e96b66f61174d0653cde945f18be6f0cad18dec084f0c03f7b32f9f59c"
+    },
+    {
+      "path": "captures/sequence-stone/stone-real-time.mp4",
+      "sha256": "dc1cce16eb43df05096fe3067c0e2ef278ecf83ff4d07719e181ce3d61983448"
+    },
+    {
+      "path": "captures/sequence-metal/metal-real-time.mp4",
+      "sha256": "3b62a892d21e808a0aad2d73a26968021cf4b6b62a6c5bc0601437e186c5b993"
+    },
+    {
+      "path": "captures/sequence-fuel/fuel-real-time.mp4",
+      "sha256": "45e72d649b3f688428eb1c868c9ffde7eb5000460d626a07bdf50fcd50c496a9"
+    },
+    {
+      "path": "matrices/device/device-matrix.json",
+      "sha256": "c163eb41374395870c905d237d463db894da0f5dd3d513e8935a9eb126b1f49b"
+    }
+  ],
+  "rationale": [
+    "The four automatic contextual loops preserve Havenline's authored stylized material language and physical actor-source-transfer-carry chain.",
+    "All 24 device pixels show one movement joystick and zero action buttons; no pickup, tool-cycle, gather or inventory button appears.",
+    "The selected-source ring, resource-specific tool, impact response, one-unit transfer and physical carried destination are readable without introducing out-of-scope systems."
+  ],
+  "schema_version": 1,
+  "task_id": "T09",
+  "critic_id": "C3",
+  "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "workflow_run_id": 35289633249,
+  "artifact_id": 10527144124,
+  "artifact_sha256": "78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+  "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "input_manifest_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "passed": true,
+  "score_reuse": false,
+  "minimum_dimension_score": 9.159,
+  "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
+  "provider": "OpenAI",
+  "model": "unavailable in runtime metadata",
+  "request_or_run_id": "/root/t09_final_critic"
+}

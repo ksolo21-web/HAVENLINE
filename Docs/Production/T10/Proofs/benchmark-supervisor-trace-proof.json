@@ -1,0 +1,250 @@
+{
+  "proof_type": "cheap source-bound observable trace replay against actual supervisor; no benchmark execution",
+  "reviewer": "/root/t10_visual_diagnostic",
+  "task_approved": false,
+  "approval_reuse": false,
+  "module_worktree_head": "8475f8c5d4dfcd41df6a083e96965d4981b76915",
+  "module_source_hashes": {
+    "/workspace/scratch/4fbfdc826de5/havenline-t10-c0-evidence/tools/havenline/task10/benchmark_supervisor.py": "41631621dc541f0087c913892ef0328b3de760a6b4b628b27b09a5e19849838a",
+    "/workspace/scratch/4fbfdc826de5/havenline-t10-c0-evidence/tools/havenline/task10/build_critic_evidence.py": "b791d5bceefa17310678404656d5e81726eca6aac4a5dca9e03207cd08d0c780",
+    "/workspace/scratch/4fbfdc826de5/havenline-t10-c0-evidence/tools/havenline/task10/benchmark_world_transform.gd": "640f1ee98ad43abd337fd2f7014168ce85c08e2942e2303ae0f783e37f9ef44b"
+  },
+  "replay_script_sha256": "d5cc88f839c2e472092be5b96b79de186762defa392b01ed0cbf103942cbabb4",
+  "input_hashes": {
+    "/tmp/t10-e637-evidence/benchmark/manifest.json": "8a72cff095b0b78c2f8a31c08ae7de39f4a2ddba9111e4b0f36ba6f5f66213f8",
+    "/tmp/t10-e637-evidence/benchmark/benchmark.log": "f39c265f457f618bb6251f2cf3331e079ba8ca7fce36e18ac1a16737ce43f9df",
+    "/tmp/t10-45eb775-isolated/benchmark/benchmark.log": "cb4d281f90f267d783a882ccb0a446c199925e05d71a178d4b1d657b03b3904b",
+    "/tmp/t10-benchmark-diagnostic-35463952552/benchmark/manifest.json": "757c10a2fa9548c641d7ab911fa09e9c9f03239eced76538723f0a848e495704",
+    "/tmp/t10-benchmark-diagnostic-35463952552/benchmark/benchmark.log": "b5edcb542a73b6026f57ad93e428b57b133c947bf5557d30f818520a931f7c70",
+    "/tmp/t10-benchmark-diagnostic-35463952552/telemetry.jsonl": "722290ed9c30c30ef93a75b909115314a0b050e3c4514c6848b5ebb48509f04e",
+    "/tmp/t10-benchmark-diagnostic-35463952552/result.json": "22569388ec0d64b40423c4a263e271a7ed2de6dee24f7796933d868c08f19d09",
+    "/tmp/t10-benchmark-diagnostic-35463952552/metadata.json": "58341d7d67325ab13b043d7d01d86f58470c61df9c955e28cddcd65f85f0ae4f"
+  },
+  "policy": {
+    "job_cap_seconds": 2400,
+    "reserve_seconds": 120,
+    "job_start_deadline_seconds": 2280,
+    "stall_seconds": 1800,
+    "ordered_controls": [
+      [
+        0,
+        "hidden"
+      ],
+      [
+        0,
+        "frozen"
+      ],
+      [
+        0,
+        "pulse"
+      ],
+      [
+        1,
+        "hidden"
+      ],
+      [
+        1,
+        "frozen"
+      ],
+      [
+        1,
+        "pulse"
+      ],
+      [
+        2,
+        "hidden"
+      ],
+      [
+        2,
+        "frozen"
+      ],
+      [
+        2,
+        "pulse"
+      ]
+    ]
+  },
+  "prior_success": {
+    "candidate": "3d24ffaacab9ffd1350d47e5479ce70142424217",
+    "completion_only_replay": {
+      "exit_code_input": 0,
+      "event_count": 9,
+      "completion_errors": [],
+      "completion_contract_satisfied": true
+    },
+    "timestamps": null,
+    "liveness_replay": "UNAVAILABLE: retained log has no per-event timestamps",
+    "exit0_input_basis": "Historical successful run; retained manifest/log report completion, raw process exit not present in this benchmark folder"
+  },
+  "original_failure": {
+    "candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+    "completion_only_replay": {
+      "exit_code_input": 124,
+      "event_count": 8,
+      "completion_errors": [
+        "BENCHMARK_PROCESS_FAILED",
+        "INCOMPLETE_PROGRESS_SEQUENCE",
+        "MISSING_BENCHMARK_MANIFEST"
+      ],
+      "completion_contract_satisfied": false
+    },
+    "timestamps": null,
+    "liveness_replay": "UNKNOWN: original phase timestamps unavailable",
+    "exit124_input_basis": "Verified original hosted job log at1800second timeout; not a newly observed process"
+  },
+  "completed_diagnostic": {
+    "run_id": 35463952552,
+    "candidate": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+    "diagnostic_workflow_commit": "b318108536323bd3ae61ba11c156b566b9427c3b",
+    "observed_event_brackets": [
+      {
+        "event": {
+          "completed_control": "hidden",
+          "cycle": 0
+        },
+        "earliest_seconds": 690.540876451,
+        "latest_seconds": 720.561381708
+      },
+      {
+        "event": {
+          "completed_control": "frozen",
+          "cycle": 0
+        },
+        "earliest_seconds": 840.638388844,
+        "latest_seconds": 870.6564733590001
+      },
+      {
+        "event": {
+          "completed_control": "pulse",
+          "cycle": 0
+        },
+        "earliest_seconds": 960.7205711290001,
+        "latest_seconds": 990.731392253
+      },
+      {
+        "event": {
+          "completed_control": "hidden",
+          "cycle": 1
+        },
+        "earliest_seconds": 1080.793319335,
+        "latest_seconds": 1110.8128436910001
+      },
+      {
+        "event": {
+          "completed_control": "frozen",
+          "cycle": 1
+        },
+        "earliest_seconds": 1200.867388224,
+        "latest_seconds": 1230.8883851790001
+      },
+      {
+        "event": {
+          "completed_control": "pulse",
+          "cycle": 1
+        },
+        "earliest_seconds": 1350.966733489,
+        "latest_seconds": 1380.9853177740001
+      },
+      {
+        "event": {
+          "completed_control": "hidden",
+          "cycle": 2
+        },
+        "earliest_seconds": 1471.0373964550001,
+        "latest_seconds": 1501.057384764
+      },
+      {
+        "event": {
+          "completed_control": "frozen",
+          "cycle": 2
+        },
+        "earliest_seconds": 1591.115114661,
+        "latest_seconds": 1621.137544996
+      },
+      {
+        "event": {
+          "completed_control": "pulse",
+          "cycle": 2
+        },
+        "earliest_seconds": 1741.211387047,
+        "latest_seconds": 1771.2310584240001
+      }
+    ],
+    "counterfactual_prework_seconds": 217,
+    "counterfactual_stage_budget_seconds": 2063,
+    "latest_exit_observation_seconds": 1771.237608025,
+    "remaining_budget_at_latest_exit_observation_seconds": 291.7623919749999,
+    "actual_ProgressGuard_accepted_observed_latest_bounds": true,
+    "completion_replay": {
+      "exit_code_input": 0,
+      "event_count": 9,
+      "completion_errors": [],
+      "completion_contract_satisfied": true
+    },
+    "meaning": "Admissible under requested original-job217second-prework counterfactual only; non-reusable diagnostic, not approval"
+  },
+  "negative_contract_cases": {
+    "nine_events_and_valid_manifest_do_not_override_exit124": {
+      "exit_code_input": 124,
+      "event_count": 9,
+      "completion_errors": [
+        "BENCHMARK_PROCESS_FAILED"
+      ],
+      "completion_contract_satisfied": false
+    },
+    "nine_events_and_exit0_do_not_override_missing_manifest": {
+      "exit_code_input": 0,
+      "event_count": 9,
+      "completion_errors": [
+        "MISSING_BENCHMARK_MANIFEST"
+      ],
+      "completion_contract_satisfied": false
+    },
+    "valid_manifest_and_exit0_do_not_override_missing_event": {
+      "exit_code_input": 0,
+      "event_count": 8,
+      "completion_errors": [
+        "INCOMPLETE_PROGRESS_SEQUENCE"
+      ],
+      "completion_contract_satisfied": false
+    },
+    "nine_events_and_exit0_do_not_override_wrong_source": {
+      "exit_code_input": 0,
+      "event_count": 9,
+      "completion_errors": [
+        "benchmark source mismatch"
+      ],
+      "completion_contract_satisfied": false
+    },
+    "nine_events_and_exit0_do_not_override_corrupt_raw_statistics": {
+      "exit_code_input": 0,
+      "event_count": 9,
+      "completion_errors": [
+        "invalid or unstable benchmark samples/statistics"
+      ],
+      "completion_contract_satisfied": false
+    },
+    "out_of_order_completion": {
+      "exit_code_input": 0,
+      "event_count": 9,
+      "completion_errors": [
+        "INCOMPLETE_PROGRESS_SEQUENCE"
+      ],
+      "completion_contract_satisfied": false
+    }
+  },
+  "boundary_cases": {
+    "stall_before_any_event": "BENCHMARK_STALLED",
+    "absolute_job_deadline_after_nine_events": "JOB_BUDGET_EXHAUSTED"
+  },
+  "limitations": [
+    "No subprocess benchmark, renderer, GPU workload or hosted rerun is performed.",
+    "Actual completion_errors and its real benchmark_errors dependency are invoked without mocks.",
+    "ProgressGuard is exercised directly, not the OS subprocess/termination/source-admission loop.",
+    "Unknown prior/original event timestamps are preserved as null; no reconstructed timing is presented as observed.",
+    "Diagnostic event times have30second brackets; conservative latest observed times are replayed.",
+    "The217second prework scenario is explicitly counterfactual, not live job_binding/API admission.",
+    "Earlier source success and diagnostic admissibility cannot approve a future candidate.",
+    "Original exit124 remains failure regardless of the counterfactual new deadline."
+  ]
+}

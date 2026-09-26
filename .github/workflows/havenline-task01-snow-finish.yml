@@ -1,0 +1,100 @@
+name: Havenline T01 snow-finish correction
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-snow-finish.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.build.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - run: python3 -m pip install pyyaml
+      - name: Execute the same build, unchanged regression requirements, and fresh source-bound captures
+        id: build
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          w=yaml.safe_load(Path('.github/workflows/havenline-task01-revision4.yml').read_text())
+          runs=[step['run'] for step in w['jobs']['build']['steps'] if 'run' in step]
+          assert len(runs)==4
+          runs[0]=runs[0].replace('python3 tools/havenline/polish_reference_forest.py','python3 tools/havenline/finish_reference_snow.py')
+          runs[0]+='\nexport PATH="$RUNNER_TEMP/engine:$PATH"\npython3 -m py_compile tools/havenline/finish_reference_snow.py tools/havenline/review_task01_single_group.py\n'
+          runs[2]=runs[2].replace('T01 revision4: smooth crown normals and tints; grounded diagnostics; no approval claimed','T01 revision6: directional snow contrast, unchanged geometry; no approval claimed')
+          assert runs[3].count("'revision':4")==1
+          runs[3]=runs[3].replace("'revision':4","'revision':6")
+          script='\n'.join(runs)
+          Path('task01-evidence').mkdir(exist_ok=True)
+          Path('task01-evidence/executed-build.sh').write_text(script)
+          subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          PY
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          e=Path('task01-evidence');p=e/'provenance.json';r=json.loads(p.read_text())
+          r['runtime_shader_sha256']=hashlib.sha256(Path('HavenlineGodot/shaders/evergreen.gdshader').read_bytes()).hexdigest()
+          r['change']='Tree-only Lambert diffuse response and reduced ambient fill; world lighting, geometry, reference rubric and minimum score unchanged.'
+          p.write_text(json.dumps(r,indent=2)+'\n')
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-snow-finish-evidence-${{ github.run_id }}
+          path: task01-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: havenline-T01-snow-finish-source-${{ github.run_id }}
+          path: task01-source/
+          retention-days: 30
+          if-no-files-found: error
+  independent-review:
+    needs: build
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        group: [0, 1, 2, 3, 4, 5]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_SHARD: ${{ matrix.group }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build.outputs.source }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-snow-finish-evidence-${{ github.run_id }}
+          path: task01-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Independently inspect one complete evidence group using the unchanged rubric
+        run: python3 -u tools/havenline/review_task01_single_group.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-snow-finish-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
+          path: critic-results/
+          retention-days: 30
+          if-no-files-found: error
+# Fresh tree-shading revision, same acceptance threshold. No Task 2 or APK delivery.

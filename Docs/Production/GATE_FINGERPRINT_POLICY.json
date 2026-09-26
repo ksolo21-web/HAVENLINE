@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "purpose": "Safely reuse logically identical gate proof across benign source movement without weakening exact-source gates.",
+  "global_inputs": [
+    "HavenlineGodot",
+    "Docs/Production/FORWARD_EXECUTION_PROFILES.json",
+    "Docs/Production/FORWARD_GATE_RUNNERS.json",
+    "Docs/Production/CRITIC_MATRIX.json",
+    "Docs/Production/CONTRACT_REGISTRY.json",
+    "Docs/Production/CI_TOOLCHAIN_LOCK.json",
+    "Docs/Production/RUNTIME_DEPENDENCY_OBSERVATIONS.json",
+    "Docs/Production/PROOF_INVALIDATION_POLICY.json"
+  ],
+  "task_inputs": [
+    "Docs/Production/{task}/FROZEN_SCOPE.md",
+    "tools/havenline/{task_lower}"
+  ],
+  "gates": {
+    "scope_dependency": {"reuse": "exact_source_required", "extra_inputs": ["Docs/Production/DEPENDENCY_GRAPH.json", "Docs/Production/WORKSTREAM_REGISTRY.json"]},
+    "ownership": {"reuse": "exact_source_required", "extra_inputs": ["Docs/Production/PATH_OWNERSHIP.json", "tools/havenline/production/workstream.py"]},
+    "reference_lock": {"reuse": "deterministic_reusable", "extra_inputs": ["Docs/Design/ReferenceVideoLock"]},
+    "source_contract": {"reuse": "deterministic_reusable", "extra_inputs": ["Docs/Production/RESOURCE_ACTION_REGISTRY.json", "Docs/Production/ACTOR_CAPABILITY_MATRIX.json", "Docs/Production/ANIMATION_ACTION_MATRIX.json"]},
+    "focused_unit": {"reuse": "deterministic_reusable", "extra_inputs": []},
+    "task_sentinel": {"reuse": "deterministic_reusable", "extra_inputs": []},
+    "motion_preflight": {"reuse": "rebind_with_provenance", "extra_inputs": ["tools/havenline/production/motion_capture.py"]},
+    "progression_sim": {"reuse": "deterministic_reusable", "extra_inputs": ["tools/havenline/production/domain_safeguard_gate.py"]},
+    "economy_sim": {"reuse": "deterministic_reusable", "extra_inputs": ["tools/havenline/production/domain_safeguard_gate.py"]},
+    "save_matrix": {"reuse": "deterministic_reusable", "extra_inputs": ["Docs/Production/SAVE_STATE_MATRIX.json", "tools/havenline/production/save_state_matrix.py"]},
+    "device_matrix": {"reuse": "deterministic_reusable", "extra_inputs": ["Docs/Production/DEVICE_LAYOUT_MATRIX.json", "tools/havenline/production/device_matrix.py"]},
+    "security_attack": {"reuse": "deterministic_reusable", "extra_inputs": ["Docs/Production/SECURITY_ATTACK_MATRIX.json", "tools/havenline/production/security_exploit_harness.py"]},
+    "liveops_sim": {"reuse": "deterministic_reusable", "extra_inputs": ["tools/havenline/production/domain_safeguard_gate.py"]},
+    "impacted_regression": {"reuse": "deterministic_reusable", "extra_inputs": ["Docs/Production/REGRESSION_MATRIX.json", "tools/havenline/production/change_impact.py", "tools/havenline/production/regression_runner.py"]},
+    "performance": {"reuse": "rebind_with_provenance", "extra_inputs": ["Docs/Production/PERFORMANCE_BUDGETS.json", "tools/havenline/production/critic_harness.py"]},
+    "visual_evidence": {"reuse": "rebind_with_provenance", "extra_inputs": ["tools/havenline/production/evidence_capture.py", "tools/havenline/production/specialist_evidence_manifest.py"]},
+    "physical_device": {"reuse": "exact_source_required", "extra_inputs": ["Docs/Production/PERFORMANCE_BUDGETS.json"]},
+    "critic_review": {"reuse": "exact_source_required", "extra_inputs": ["Docs/Production/CRITIC_EXECUTION.json", ".github/workflows/havenline-specialist-critic.yml"]},
+    "integration": {"reuse": "exact_source_required", "extra_inputs": ["Docs/Production/PATH_OWNERSHIP.json"]},
+    "post_integration_regression": {"reuse": "exact_source_required", "extra_inputs": ["Docs/Production/REGRESSION_MATRIX.json", "tools/havenline/production/regression_runner.py"]},
+    "closeout": {"reuse": "exact_source_required", "extra_inputs": ["tools/havenline/production/closure_validator.py", "Docs/Production/EVIDENCE_RETENTION_POLICY.json"]},
+    "release_manifest": {"reuse": "exact_source_required", "extra_inputs": ["Docs/Production/CANDIDATE_MANIFEST_TEMPLATE.json", "Docs/Production/EVIDENCE_RETENTION_POLICY.json"]}
+  },
+  "allowed_reuse_values": ["deterministic_reusable", "rebind_with_provenance", "exact_source_required"],
+  "fail_result_reuse": "forbidden",
+  "missing_input_behavior": "fail_closed",
+  "provenance_bridge_required_for": ["rebind_with_provenance"]
+}

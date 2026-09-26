@@ -1,0 +1,248 @@
+name: Havenline end-to-end east-west lake correction
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-lake-east-west.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.commit.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Prepare pinned engine and real Mobile software renderer
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install numpy pillow
+          mkdir -p "$RUNNER_TEMP/engine" lake-evidence/tests
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+      - name: Apply only the checksum-bound lake correction and reopen its approval
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          protected=list(Path('HavenlineGodot/assets').rglob('*.glb'))+[Path('HavenlineGodot')/p for p in ['scripts/main.gd','scripts/reference_forest.gd','shaders/evergreen.gdshader','data/reference-contract.json']]
+          assert len(protected)==37
+          Path('lake-evidence/protected-before.json').write_text(json.dumps({str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in protected},indent=2))
+          PY
+          python3 tools/havenline/extend_lake_east_west.py | tee lake-evidence/applied-source.json
+          python3 tools/havenline/bake_outpost_audio.py > lake-evidence/audio-fixture.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > lake-evidence/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > lake-evidence/tests/motion-fixture.log 2>&1
+      - name: Run every previous suite and the full-width lake regression
+        run: |
+          set -euo pipefail
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west; do
+            timeout 100 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "lake-evidence/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' lake-evidence/tests/*.log; then exit 1; fi
+          python3 tools/havenline/audit_task01_geometry.py > lake-evidence/tree-geometry.json
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          out=Path('lake-evidence');rows=[]
+          for path in sorted((out/'tests').glob('test_*.log')):
+              data=[json.loads(s) for s in path.read_text().splitlines() if s.startswith('{')][-1]
+              assert data['passed'] is True and not data.get('failures'),path
+              checks=data['checks'];count=len(checks) if isinstance(checks,list) else int(checks)
+              rows.append({'suite':path.stem,'checks':count,'passed':True})
+          assert len(rows)==14 and sum(r['checks'] for r in rows)==750
+          original=json.loads((out/'protected-before.json').read_text())
+          assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in original.items())
+          geometry=json.loads((out/'tree-geometry.json').read_text());assert geometry['passed']
+          report={'suites':rows,'total_checks':750,'all_passed':True,'approved_and_original_glbs_unchanged':33,'protected_runtime_and_contract_unchanged':4,'geometry_passed':True,'task_approved':False,'physical4k60_verified':False}
+          (out/'tests.json').write_text(json.dumps(report,indent=2));print(json.dumps(report))
+          PY
+      - name: Save exactly the tested game changes without overwriting concurrent work
+        id: commit
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add HavenlineGodot/scripts/outpost_surface.gd HavenlineGodot/scripts/outpost_view.gd HavenlineGodot/scripts/outpost_simulation.gd HavenlineGodot/shaders/outpost_snow.gdshader HavenlineGodot/shaders/lakeshore_water.gdshader HavenlineGodot/tests/test_task02_terrain.gd Docs/Production/task-gates.json
+          if ! git diff --cached --quiet; then
+            test "$(git ls-remote origin refs/heads/codex/havenline-sequential-task-01 | cut -f1)" = "$GITHUB_SHA"
+            git commit -m 'Extend lake end-to-end east-west with matching dry-shore recovery; T02 reopened pending fresh critics'
+            git push origin HEAD:refs/heads/codex/havenline-sequential-task-01
+          fi
+          source=$(git rev-parse HEAD)
+          echo "source=$source" >> "$GITHUB_OUTPUT"
+          echo "$source" > lake-evidence/SOURCE.txt
+          mkdir -p source-snapshot
+          git archive --format=tar.gz --output=source-snapshot/source.tar.gz HEAD HavenlineGodot tools/havenline Docs AGENTS.md .github
+          echo "$source" > source-snapshot/SOURCE.txt
+          sha256sum source-snapshot/source.tar.gz > source-snapshot/SHA256SUMS.txt
+      - name: Capture all previous ground views, tree visibility and the entire new lake
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          mkdir -p lake-evidence/gallery lake-evidence/native4k lake-evidence/tree-clearance lake-evidence/lake4k
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 360 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task02.gd -- --out="$(pwd)/lake-evidence/gallery" > lake-evidence/gallery.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 360 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task02.gd -- --native-4k --out="$(pwd)/lake-evidence/native4k" > lake-evidence/native4k.log 2>&1
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 240 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task01_clearance.gd -- --out="$(pwd)/lake-evidence/tree-clearance" > lake-evidence/tree-clearance.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 420 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_lake_east_west.gd -- --native-4k --out="$(pwd)/lake-evidence/lake4k" > lake-evidence/lake4k.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' lake-evidence/*.log; then exit 1; fi
+          cp Docs/Production/T02/reference-ground.webp lake-evidence/reference-ground.webp
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json
+          from PIL import Image
+          out=Path('lake-evidence');captures={str(p.relative_to(out)):hashlib.sha256(p.read_bytes()).hexdigest() for p in out.rglob('*.png')}
+          assert len(captures)==59,len(captures)
+          for folder,count in [('gallery',26),('native4k',8),('tree-clearance',11),('lake4k',14)]:
+              assert len(list((out/folder).glob('*.png')))==count,(folder,count)
+          native_count=0
+          for name in captures:
+              with Image.open(out/name) as image:
+                  if name.startswith(('native4k/','lake4k/')):
+                      assert image.size==(3840,2160),(name,image.size)
+                      native_count+=1
+                  image.verify()
+          for folder in ('gallery','native4k','lake4k'):
+              report=json.loads((out/folder/'capture.json').read_text())
+              assert report['renderer']=='mobile' and report['forest']['instances']==586
+              assert all(row['render_scale']==1.0 for row in report['captures'])
+          original=json.loads((out/'protected-before.json').read_text())
+          assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in original.items())
+          applied=json.loads((out/'applied-source.json').read_text())
+          runtime=applied['tested_runtime_hashes']
+          assert all(hashlib.sha256(Path(p).read_bytes()).hexdigest()==h for p,h in runtime.items())
+          conditions=json.loads((out/'lake4k/capture.json').read_text())['captures'][-6:]
+          assert len({(tuple(r['camera_position']),r['camera_basis'],r['camera_size']) for r in conditions})==1
+          assert captures['lake4k/lake-condition-day.png']==captures['lake4k/lake-condition-day-return.png']
+          r={'task':'T02-lake-correction','source':(out/'SOURCE.txt').read_text().strip(),'renderer':'mobile','captures':captures,'runtime_files':runtime,'protected_files':original,'native3840x2160_scale1_frames':native_count,'lake_extent_x':[-15.2,15.2],'playable_extent_x':[-14.2,14.2],'original_lake_length':10.4,'new_lake_length':30.4,'matched_condition_camera_verified':True,'day_return_identical':True,'all59_images_verified':True,'task_approved':False,'physical_phone_tablet4k60_verified':False}
+          (out/'provenance.json').write_text(json.dumps(r,indent=2));print(json.dumps({k:v for k,v in r.items() if k not in ('captures','runtime_files','protected_files')}))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-east-west-lake-evidence-${{ github.run_id }}
+          path: lake-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-east-west-lake-source-${{ github.run_id }}
+          path: source-snapshot/
+          retention-days: 30
+          if-no-files-found: error
+  independent-review:
+    needs: build-capture
+    strategy:
+      fail-fast: false
+      max-parallel: 2
+      matrix:
+        role: [reference-fidelity,visual-integrity]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    env:
+      EXPECTED_SOURCE: ${{ needs.build-capture.outputs.source }}
+      REVIEW_ROLE: ${{ matrix.role }}
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build-capture.outputs.source }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-east-west-lake-evidence-${{ github.run_id }}
+          path: lake-evidence/
+      - run: python3 -m pip install 'gradio_client==1.14.0' pillow
+      - name: Independently inspect all fresh frames including full east-west extent
+        run: python3 -u tools/havenline/review_lake_east_west.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-east-west-lake-${{ matrix.role }}-${{ github.run_id }}
+          path: lake-review/
+          retention-days: 30
+          if-no-files-found: error
+  exact-source-review-gate:
+    needs: [build-capture,independent-review]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    env:
+      SOURCE: ${{ needs.build-capture.outputs.source }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-east-west-lake-*-*-${{ github.run_id }}
+          path: gate-report/reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-east-west-lake-evidence-${{ github.run_id }}
+          path: evidence/
+      - name: Require both complete independent role reviews and unchanged raw scores
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,html,json,math,os,re
+          source=os.environ['SOURCE'];roles={'reference-fidelity','visual-integrity'}
+          groups={'workfloor','shoreline','snow-contact','tree-visibility','camera-route-early','camera-route-late','water-sequence','night-overview','east-west-extent'}
+          dims={'reference_fidelity','material_finish','geometry_contact','layout_readability','view_consistency'}
+          expected={'A':'human_character','B':'snow_tree','C':'snow_tree','D':'human_character'}
+          def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+          def parse(p):
+              raw=json.loads(p.read_text());text=html.unescape(re.sub(r'<[^>]+>','\n',raw[-1][1]));return json.JSONDecoder().raw_decode(text[text.index('{'):])[0]
+          errors=[];rows=[];seen=set();scores={};e=Path('evidence')
+          pro=json.loads((e/'provenance.json').read_text());tests=json.loads((e/'tests.json').read_text())
+          assert pro['source']==source and len(pro['captures'])==59 and tests['total_checks']==750 and tests['all_passed']
+          for name,h in pro['captures'].items():
+              if sha(e/name)!=h:errors.append('Changed source image '+name)
+          for path in Path('gate-report/reviews').glob('*/role-summary.json'):
+              report=json.loads(path.read_text());role=report['role'];seen.add(role);covered=set()
+              if role not in roles or report['source']!=source:errors.append('Wrong source/role')
+              pr=json.loads((path.parent/'provider-provenance.json').read_text())
+              if pr['source']!=source or pr['provider_space_revision']!='eb7f245e2c0d3b573dd8ed6addca9b7f6af26847' or pr['independent_model_execution'] is not True:errors.append('Provider not verified '+role)
+              try:
+                  control=json.loads((path.parent/'control.json').read_text())
+                  if control['passed'] is not True or control['answers']!=expected or parse(path.parent/'control-raw.json')!=expected:errors.append('Blind recognition failed '+role)
+              except Exception as exc:errors.append('Missing control '+role+': '+str(exc))
+              rr=report['reviews']
+              if len(rr)!=9 or {r['group'] for r in rr}!=groups:errors.append('Incomplete groups '+role)
+              for row in rr:
+                  label=role+'/'+row['group'];v=row.get('review',{});s=v.get('scores',{})
+                  if row.get('source')!=source or row.get('role')!=role or row.get('independent_execution') is not True or row.get('passed') is not True:errors.append('Not passing '+label)
+                  if set(s)!=dims or any(type(x) not in (float,int) or not math.isfinite(x) or not 9<=x<=10 for x in s.values()):errors.append('Invalid/below-nine '+label)
+                  elif row.get('lowest_score')!=min(s.values()):errors.append('Incorrect minimum '+label)
+                  if v.get('defects')!=[] or v.get('coverage_complete') is not True or v.get('confidence') not in ('medium','high'):errors.append('Defect or incomplete '+label)
+                  try:
+                      if parse(path.parent/(row['group']+'-raw.json'))!=v:errors.append('Raw/scored mismatch '+label)
+                      request=json.loads((path.parent/(row['group']+'-request.json')).read_text())
+                      if sha(path.parent/(row['group']+'-input.png'))!=request['image_sha256'] or request['image_sha256']!=row['execution']['image_sha256']:errors.append('Unbound input '+label)
+                  except Exception as exc:errors.append('Missing execution '+label+': '+str(exc))
+                  for item in row['inputs']:
+                      covered.add(item['filename'])
+                      if pro['captures'].get(item['filename'])!=item['sha256']:errors.append('Wrong frame '+label)
+              if covered!=set(pro['captures']):errors.append('Incomplete image coverage '+role)
+              scores[role]=min((r.get('lowest_score',0) for r in rr),default=None);rows+=rr
+          if seen!=roles or len(rows)!=18:errors.append('Both complete roles missing')
+          result={'task':'T02-lake-correction','source':source,'mechanical_and_independent_reviews_passed':not errors,'errors':errors,'role_lowest_scores':scores,'reviews':rows,'minimum_task_score':9,'target':10,'engine_assertions':750,'required_frames':59,'native4k_frames':22,'original_model_files_unchanged':33,'two_roles_same_publisher_model':True,'model_weights_not_locally_verified':True,'old_approval_not_reused':True,'final_actual_pixel_verification_required':True,'task_approved':False,'later_task_started':False,'physical_phone_tablet4k60_verified':False}
+          out=Path('gate-report');out.mkdir(exist_ok=True);(out/'lake-correction-gate.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2))
+          raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-east-west-lake-complete-review-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# No APK delivery, no player benchmark request, no later task started, no physical FPS claim.

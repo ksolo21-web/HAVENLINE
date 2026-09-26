@@ -1,0 +1,35 @@
+name: Havenline V3.2 independent specialist critic fan-out
+on:
+  workflow_call:
+    inputs:
+      candidate:
+        required: true
+        type: string
+      critic_ids_json:
+        required: true
+        type: string
+      evidence_artifact_prefix:
+        required: true
+        type: string
+      output_artifact_prefix:
+        required: true
+        type: string
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-v32-independent-specialist-batch
+  cancel-in-progress: false
+jobs:
+  specialist:
+    strategy:
+      fail-fast: false
+      matrix:
+        critic_id: ${{ fromJSON(inputs.critic_ids_json) }}
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: ${{ matrix.critic_id }}
+      candidate: ${{ inputs.candidate }}
+      evidence_artifact: ${{ format('{0}-{1}', inputs.evidence_artifact_prefix, matrix.critic_id) }}
+      output_artifact: ${{ format('{0}-{1}', inputs.output_artifact_prefix, matrix.critic_id) }}
+    secrets: inherit

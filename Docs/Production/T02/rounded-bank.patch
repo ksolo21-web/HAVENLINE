@@ -1,0 +1,120 @@
+--- a/HavenlineGodot/scripts/outpost_surface.gd
++++ b/HavenlineGodot/scripts/outpost_surface.gd
+@@ -65,13 +65,13 @@
+ 	var original := -.035+ripple+drift+local_drifts+shoulders
+ 	var wd := work_distance(p)
+ 	var floor_height := 0.008*sin(p.x*.22)*sin(p.y*.26)
+-	var snow_rim := .065*exp(-pow((wd-.28)/.48,2.0))
++	var snow_rim := .12*exp(-pow((wd-.36)/.62,2.0))
+ 	var result := lerpf(floor_height,original,smoothstep(-.12,1.80,wd))+snow_rim
+ 	var shore := lake_distance(p)
+ 	# A submerged basin and rounded snow-covered lip, connected without overlays.
+-	var bank_height := lerpf(WATER_Y-.85,.055,smoothstep(-.44,.27,shore))
+-	bank_height += .085*exp(-pow((shore-.36)/.30,2.0))
+-	result=lerpf(bank_height,result,smoothstep(.45,1.2,shore))
++	var bank_height := lerpf(WATER_Y-.85,.16,smoothstep(-.46,.30,shore))
++	bank_height += .19*exp(-pow((shore-.38)/.37,2.0))
++	result=lerpf(bank_height,result,smoothstep(.54,1.32,shore))
+ 	return result
+ 
+ static func _ensure_heights():
+--- a/HavenlineGodot/scripts/outpost_view.gd
++++ b/HavenlineGodot/scripts/outpost_view.gd
+@@ -62,6 +62,7 @@
+ 	ground_material.set_shader_parameter("warmth_radius",current_radius)
+ 	ground_material.set_shader_parameter("heat_strength",current_heat)
+ 	ground_material.set_shader_parameter("snow_amount",weather.snow)
++	ground_material.set_shader_parameter("daylight_fill",daylight)
+ 	lake_material.set_shader_parameter("sim_time",sim.climate.seconds)
+ 	snow_material.set_shader_parameter("sim_time",sim.climate.seconds)
+ 	snow_material.set_shader_parameter("snow_amount",weather.snow)
+@@ -94,7 +95,7 @@
+ 		"warmth_gameplay_radius":sim.warmth(), "warmth_visual_radius":current_radius,
+ 		"heat_strength":current_heat, "snow_instances":snow.multimesh.instance_count,
+ 		"surface_triangles":terrain.mesh.get_faces().size()/3,
+-		"terrain_revision":"T02-1", "lake_triangles":lake.mesh.get_faces().size()/3,
++		"terrain_revision":"T02-rounded-bank-and-snow-finish", "lake_triangles":lake.mesh.get_faces().size()/3,
+ 		"water_y":Surface.WATER_Y,"lake_center":[Surface.LAKE_CENTER.x,Surface.LAKE_CENTER.y],
+ 		"shared_actor_surface":true,
+ 		"native_4k60_certified":false}
+--- a/HavenlineGodot/shaders/outpost_snow.gdshader
++++ b/HavenlineGodot/shaders/outpost_snow.gdshader
+@@ -7,6 +7,7 @@
+ uniform float warmth_radius = 4.5;
+ uniform float heat_strength = 1.0;
+ uniform float snow_amount = 0.03;
++uniform float daylight_fill = 1.0;
+ uniform vec2 lake_center = vec2(-7.6,-13.85);
+ uniform vec2 lake_half = vec2(5.2,1.85);
+ varying vec3 world_pos;
+@@ -42,7 +43,7 @@
+  float fine=material_noise(p*7.8)-.5;
+  float footprint=max(length(dFdx(p)),length(dFdy(p)));
+  float detail_weight=1.-smoothstep(.025,.16,footprint);
+- vec3 snow=vec3(.955,.976,1.0)+vec3(.042,.029,.016)*broad;
++ vec3 snow=vec3(.98,.994,1.0)+vec3(.042,.029,.016)*broad;
+  snow+=vec3(.012,.010,.008)*fine*detail_weight;
+  float rim=(1.-smoothstep(.04,.48,d))*smoothstep(-.16,.04,d);
+  snow=mix(snow,vec3(.73,.82,.94),rim*.16);
+@@ -52,8 +53,8 @@
+  float edge_d=d+(material_noise(p*1.6)-.5)*.035;
+  float cleared=1.-smoothstep(-.08-aa,.13+aa,edge_d);
+  // Restrained peach/clay variation and wear, without checkerboard tiling.
+- vec3 floor=vec3(.80,.48,.36)+vec3(.046,.032,.023)*broad;
+- floor+=vec3(.010,.008,.006)*fine*detail_weight;
++ vec3 floor=vec3(.80,.48,.36)+vec3(.09,.058,.043)*broad;
++ floor+=vec3(.022,.015,.011)*fine*detail_weight;
+  float dist=length(p-furnace_center);
+  float warmth=(1.-smoothstep(warmth_radius-.4,warmth_radius+.12,dist))*heat_strength;
+  floor=mix(floor,floor+vec3(.025,.012,0.),warmth*.42);
+@@ -61,7 +62,10 @@
+  // The submerged bank grades into a cool clean ice-blue face; not an extra plane.
+  float ice=(1.-smoothstep(-.12,.035,shore));
+  material=mix(material,vec3(.37,.67,.84),ice*.35);
+- ALBEDO=pow(material,vec3(2.2));
++ ALBEDO=pow(clamp(material,vec3(0.),vec3(1.)),vec3(2.2));
++ // A small daylight-only painted-snow fill keeps the reference white readable.
++ // It is disabled at night and does not change any other asset or world light.
++ EMISSION=vec3(.030,.034,.040)*(1.-cleared)*clamp(daylight_fill,0.,1.);
+  // Very small grain slopes soften highlights; they do not deform geometry.
+  float sx=cos(p.x*8.1+p.y*3.7)*.006;
+  float sz=cos(p.x*-4.6+p.y*9.3)*.006;
+--- a/HavenlineGodot/tests/capture_task02.gd
++++ b/HavenlineGodot/tests/capture_task02.gd
+@@ -25,6 +25,9 @@
+ 	game.camera.position=target+offset
+ 	game.camera.look_at(target)
+ 	game.update_foreground_visibility(game.xyz(game.sim.position)+Vector3(0,.95,0),.1)
++func hide_nonterrain_diagnostic():
++	for node in game.world.find_children("*","GeometryInstance3D",true,false):
++		if node!=game.outpost_view.terrain and node!=game.outpost_view.lake:node.visible=false
+ func normal_at(p: Vector2):
+ 	game.sim.position=Surface.land_position(p)
+ 	game.capture_frames=0;game._process(.001);game.capture_frames=100
+@@ -58,6 +61,14 @@
+ 			normal_at(ground_route[i]);await snap("route-camera-%02d"%i)
+ 		game.sim.climate.seconds=630.0;game.outpost_view.sync(game.sim,.1,false)
+ 		normal_at(Vector2(-6.5,-9));await snap("lakeshore-night")
++	# Supplementary terrain-only diagnostics make bank thickness and snow
++	# shaping visible without roofs/trees concealing the ground. Normal gameplay
++	# frames above are retained; this is NOT the shipping visibility state.
++	game.sim.climate.seconds=0.0;game.outpost_view.sync(game.sim,0.0,false)
++	focus_at(Vector2(9.5,3.0),Vector3(4,3,6),5.0);hide_nonterrain_diagnostic();await snap("terrain-only-floor-profile")
++	records[-1]["terrain_only_diagnostic"]=true
++	focus_at(Vector2(-7.6,-12.3),Vector3(0,3.5,8),7.2);hide_nonterrain_diagnostic();await snap("terrain-only-bank-profile")
++	records[-1]["terrain_only_diagnostic"]=true
+ 	var report={"task":"T02","renderer":RenderingServer.get_current_rendering_method(),"device":RenderingServer.get_video_adapter_name(),"captures":records,"forest":game.reference_forest_evidence,"outpost":game.outpost_view.evidence(game.sim),"camera_views_are_disclosed_qa_states":true,"motion_is_sampled_not_fps_evidence":true,"physical_phone_tablet_4k60_verified":false,"task_approved":false}
+ 	var f=FileAccess.open(output.path_join("capture.json"),FileAccess.WRITE);f.store_string(JSON.stringify(report,"\t"));f.close()
+ 	game.outpost_audio.stop_all();await create_timer(.35).timeout;game.free();await process_frame;quit()
+--- a/HavenlineGodot/tests/test_task02_surface_stress.gd
++++ b/HavenlineGodot/tests/test_task02_surface_stress.gd
+@@ -58,5 +58,9 @@
+ 	check("Ground edge coverage uses screen derivatives",ground.contains("fwidth(d)"))
+ 	var water=FileAccess.get_file_as_string("res://shaders/lakeshore_water.gdshader")
+ 	check("No full-screen refraction, backbuffer or transparent water pass",not water.contains("hint_screen_texture") and not water.contains("ALPHA="))
++	var snow_bank := Surface.LAKE_CENTER+Vector2(0,Surface.LAKE_HALF.y+.38)
++	check("Snow shore has actual raised bank geometry, not a color-only rim",Surface.height_at(snow_bank)>.20)
++	check("Ground shader clamps surface reflectance",ground.contains("ALBEDO=pow(clamp(material"))
++	check("Snow fill is tied to daylight rather than a permanent glowing surface",ground.contains("clamp(daylight_fill,0.,1.)"))
+ 	print(JSON.stringify({"suite":"T02_surface_stress","checks":checks,"failures":failures,"passed":failures.is_empty(),"route_length":route_length,"waypoints":paths,"physical_4k60_verified":false,"independent_critic":false}))
+ 	quit(0 if failures.is_empty() else 1)

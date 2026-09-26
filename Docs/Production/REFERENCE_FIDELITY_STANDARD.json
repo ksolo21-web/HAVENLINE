@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "authority": "Havenline user-approved reference fidelity",
+  "effective_date": "2026-09-22",
+  "rule": "Final visual approval judges the complete rendered frame, not only the current task's delta. Every visible world-art class must match the locked Havenline stylized reference language. A passing task-owned primitive audit cannot override a whole-frame reference-fidelity failure.",
+  "source_references": [
+    {
+      "name": "Screen_Recording_20260817_124839_YouTube.mp4",
+      "sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+      "role": "primary gameplay/style reference"
+    },
+    {
+      "name": "Screen_Recording_20260817_124510_YouTube.mp4",
+      "sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+      "role": "primary gameplay/style reference"
+    },
+    {
+      "path": "Docs/Production/T05/ReferenceFrames/**",
+      "role": "locked extracted reference-frame set"
+    }
+  ],
+  "style_lock": {
+    "look": "polished stylized 3D winter-survival",
+    "realism_drift_forbidden": true,
+    "target_traits": [
+      "chunky rounded sculpted silhouettes",
+      "clean readable shape language",
+      "cohesive blue/orange/brown/cream winter palette",
+      "thick authored materials with deliberate snow contact",
+      "strong depth and dimensional lighting",
+      "recognizable silhouettes at gameplay scale",
+      "progressive visual upgrades that remain in the same art family"
+    ],
+    "forbidden_traits": [
+      "flat blockout appearance",
+      "simple block-built structures",
+      "placeholder-looking props or materials",
+      "mixed art languages within one frame",
+      "photoreal gritty drift",
+      "generic primitive-looking presentation"
+    ]
+  },
+  "current_in_game_benchmarks": [
+    {
+      "task_id": "T01",
+      "class": "vegetation_trees",
+      "status": "USER_ACCEPTED_REFERENCE_MATCH",
+      "paths": [
+        "HavenlineGodot/assets/reference_forest/**",
+        "HavenlineGodot/scripts/reference_forest.gd"
+      ]
+    },
+    {
+      "task_id": "T06",
+      "class": "characters",
+      "status": "USER_ACCEPTED_REFERENCE_MATCH",
+      "paths": [
+        "HavenlineGodot/animations/c1/**",
+        "HavenlineGodot/scripts/character1_motion.gd"
+      ]
+    },
+    {
+      "task_id": "T02",
+      "class": "snow_surface",
+      "status": "USER_ACCEPTED_PRESERVE_AS_OK",
+      "paths": [
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ]
+    },
+    {
+      "task_id": "T02",
+      "class": "water",
+      "status": "USER_ACCEPTED_PRESERVE_AS_OK",
+      "paths": [
+        "HavenlineGodot/scripts/river_geometry.gd",
+        "HavenlineGodot/shaders/lakeshore_water.gdshader"
+      ]
+    },
+    {
+      "task_id": "T02",
+      "class": "ground_work_floor",
+      "status": "USER_ACCEPTED_PRESERVE_AS_OK",
+      "paths": [
+        "HavenlineGodot/scripts/outpost_surface.gd",
+        "HavenlineGodot/shaders/outpost_snow.gdshader"
+      ]
+    }
+  ],
+  "mandatory_whole_frame_classes": [
+    "vegetation_trees",
+    "characters",
+    "snow_surface",
+    "water",
+    "ground_work_floor",
+    "structures_buildings",
+    "fences_gates",
+    "props_stations_resources",
+    "camera_composition",
+    "interface_hud",
+    "lighting_vfx_world_response"
+  ],
+  "approval_rules": {
+    "side_by_side_reference_review_required": true,
+    "whole_frame_required": true,
+    "failed_visible_classes_allowed": 0,
+    "task_delta_only_review_forbidden": true,
+    "upstream_visible_dependency_failures_block_current_task": true,
+    "upstream_failure_must_route_to_owner": true,
+    "explicit_user_rejection_is_terminal_until_new_visual_candidate": true,
+    "critic_pass_cannot_override_user_rejection": true,
+    "user_visual_approval_required_after_all_machine_and_critic_gates": true,
+    "actual_reference_pixels_required": true,
+    "mandatory_visual_dimension_score": 10,
+    "score_averaging_allowed": false,
+    "every_mandatory_dimension_must_equal_10": true
+  },
+  "user_feedback_lock": {
+    "exact_meaning": "T02 is okay; visual repair should begin at T03 onward.",
+    "accepted_classes": [
+      "vegetation_trees",
+      "characters",
+      "snow_surface",
+      "water",
+      "ground_work_floor"
+    ],
+    "accepted_task_scope": [
+      "T01",
+      "T02",
+      "T06"
+    ],
+    "repair_frontier": "T03",
+    "note": "Preserve T02 unless a later T03+ change creates a demonstrated regression."
+  }
+}

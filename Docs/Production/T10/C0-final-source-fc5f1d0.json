@@ -1,0 +1,284 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0",
+  "non_voting": true,
+  "validated": true,
+  "diagnosis_id": "C0-T10-FC5F1D0-FINAL-SOURCE",
+  "task_id": "T10",
+  "failed_run_id": 35330721066,
+  "failed_job_id": 105554192305,
+  "failed_candidate": "fc5f1d0a687768bb6e36f84e3a8db954e15b4de7",
+  "repair_base": "a0ee8bc6d1247f163f43558691538511be317edb",
+  "integration_head": "a0cf1d2ae1b2e33c66eae01de353dd1df1076cf2",
+  "engine": "Godot 4.7.2 stable official ed1daf0bf",
+  "diagnosis_status": "DIAGNOSIS_COMPLETE",
+  "terminal_class": "MIXED",
+  "complete_known_blocker_set": true,
+  "builder_action": "REPAIR",
+  "prior_closed_diagnosis": {
+    "path": "Docs/Production/T10/C0-real-authority-70d3bc0.json",
+    "sha256": "df7d37f4524390c3b63b459764fb2261179287095fc0c4cc7ed8328ebd898e6d",
+    "closed_blockers": [
+      "C0-T10-B001",
+      "C0-T10-B002",
+      "C0-T10-B003",
+      "C0-T10-B004",
+      "C0-T10-B005",
+      "C0-T10-B006",
+      "C0-T10-B007",
+      "C0-T10-B008"
+    ]
+  },
+  "source_evidence": {
+    "regression_artifact": "/workspace/scratch/59b74b9aed55/t10-fc5f1d0-regression",
+    "capture_artifact": "/workspace/scratch/59b74b9aed55/t10-fc5f1d0-capture",
+    "visual_report": "/workspace/scratch/59b74b9aed55/t10-c1-c2-fc5f1d0-review.json",
+    "gameplay_report": "/workspace/scratch/59b74b9aed55/t10-independent-gameplay-review-fc5f1d0-final.json",
+    "orphan_advance_probe": "/workspace/scratch/59b74b9aed55/t10_critic_recovery_probe.gd",
+    "pending_cost_probe": "/workspace/scratch/59b74b9aed55/t10_critic_pending_probe.gd",
+    "hosted_capture_run": 35330721072,
+    "hosted_capture_artifact": 10540658660,
+    "deterministic_c7_checks": 320,
+    "impacted_godot_suites_passed": 18
+  },
+  "blockers": [
+    {
+      "id": "C0-T10-B009",
+      "classification": "PRODUCT_DEFECT",
+      "symptom": "Malformed component recovery can grant an unearned advanced state or cause an authoritative resource debit that the model then refuses to apply.",
+      "evidence": [
+        "The orphan-advance probe changes a registered seed target to foundation/revision 1 with no receipt; import_component_state returns true and the foundation-to-reinforced preview passes.",
+        "The pending-cost probe changes a prepared wood debit from 8 to 1, recomputes the public request key, and imports successfully; simulation debits 1 wood and 4 stone, then the model rejects the receipt as receipt_debit_mismatch, leaving resources charged and the target at seed.",
+        "import_component_state checks row shape and local target/revision relationships but does not require every positive-revision target to have a completed receipt and does not bind imported transaction rows to configured recipe costs, endpoints, tags, or presentation key.",
+        "The existing 320-check deterministic C7 proof does not contain either hostile recovery case; the final independent C7 report scores recovery_integrity 4.0 after reproducing the partial charge."
+      ],
+      "root_cause": "Component import treats self-consistent caller-controlled transaction dictionaries as sufficient recovery authority instead of re-deriving their semantic fields from the configured recipe catalog and enforcing the target-to-latest-receipt invariant before recovered work can reach simulation authority.",
+      "affected_object": "T10 component recovery, exact-once debit atomicity, and progression integrity",
+      "causal_fix": "Before mutating live state, validate every persisted prepared and completed row against its configured recipe: exact recipe identity, source/target states, canonical costs, progression tags, presentation key, request identity and authority key. Require every target with revision greater than zero to have exactly one matching latest completed receipt; preserve legitimate revision-zero, pending-first, advanced-with-receipt, and advanced-with-receipt-plus-next-pending states. Reject the entire import atomically on any mismatch.",
+      "files_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/tests/test_task10_world_transform.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd",
+        "tools/havenline/task10/validate_progression.py",
+        "tools/havenline/task10/tests/test_validate_progression.py"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/scripts/main.gd",
+        "HavenlineGodot/data/reference-contract.json"
+      ],
+      "verification": [
+        "Both independent hostile probes reject with the complete previously populated component state unchanged and zero simulation-resource mutation.",
+        "Mutating each recipe-bound field in prepared and completed rows rejects atomically, including cost, endpoint, tag, presentation key, recipe ID, request identity and authority key.",
+        "Valid revision-zero, first pending, completed, completed-plus-next-pending, replay, crash recovery and JSON round-trip states still import and resolve exactly once.",
+        "The task C7 runner requires named orphan-advance and recipe-bound recovered-pending checks and all domain/integration checks pass."
+      ]
+    },
+    {
+      "id": "C0-T10-B010",
+      "classification": "PRODUCT_DEFECT",
+      "symptom": "The neutral fixture does not visibly transform its world geometry, and the presentation exposes no readable cost, shortfall, prerequisite, or next-action feedback even though the domain publishes those values.",
+      "evidence": [
+        "C1 scores are 5.0 reference fidelity, 7.0 visual language and 8.0 cross-view consistency; C2 cross-view/clipping scores are 8.0.",
+        "ready, preview and complete captures retain the same static solid box; completion changes only ring/beacon status color and beacon size.",
+        "world_transform_view.gd stores block_reasons and blocked_shortfalls but renders only generic geometry/color, so blocked cost and recovery action remain visible only in JSON.",
+        "C3/C4 review independently confirms that the result is a status indicator rather than a readable source-to-target world change and that resource destination/next action are not demonstrated."
+      ],
+      "root_cause": "The presentation adapter was optimized for lifecycle-state signaling but never mapped accepted source/target state to distinct neutral geometry or mapped the already-available domain feedback to an in-world readable status surface.",
+      "affected_object": "T10-R02/R05/R11 neutral world-response presentation and gameplay readability",
+      "causal_fix": "Preserve the four-node/one-build bound while making the view itself truthful: use root/ring/neutral transform volume/camera-facing status; render a low source form in ready/blocked, a translucent target form in preview/committing, and a solid target form only after an accepted real-authority receipt. Render exact costs, shortfalls, prerequisite reasons, proposed next state and next action in the camera-facing status. Remove the capture-only static box that masks the view-owned transformation. Do not create final T11 camp content.",
+      "files_to_change": [
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "HavenlineGodot/tests/test_task10_world_transform.gd",
+        "HavenlineGodot/tests/test_task10_integration.gd",
+        "tools/havenline/task10/validate_world_transform.py",
+        "tools/havenline/task10/tests/test_validate_world_transform.py"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/scripts/main.gd",
+        "HavenlineGodot/data/reference-contract.json",
+        "T11 final camp assets or content"
+      ],
+      "verification": [
+        "Matched-camera ready, preview, committing and complete frames show a meaningful neutral geometry transformation rather than only a color/status change.",
+        "Solid complete geometry appears only after real simulation debit and world-transform acceptance; a duplicate replay neither rebuilds nor changes the completed form.",
+        "Blocked output displays exact shortfalls/prerequisites and recovery action; ready/preview displays exact costs, resource destination, target state and next action.",
+        "Status remains camera-facing, unobstructed and readable from front, side, three-quarter, overhead, gameplay and detail cameras.",
+        "Visual node count remains exactly four including the root, unchanged state does not rebuild, and neutral content remains inside T10 scope."
+      ]
+    },
+    {
+      "id": "C0-T10-B011",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "The capture proves isolated still states but not the full temporal lifecycle/replay, and adaptive evidence omits most required states while its world-space annotations become edge-on or overlap the subject.",
+      "evidence": [
+        "No continuous transition or ordered timed sequence proves the complete 1.4 Hz committing pulse, completion timing, stable duplicate replay, or before/after persistence.",
+        "Fixed-orientation Label3D annotations collapse edge-on in overhead/side views and overlap the beacon in front/detail and tablet evidence.",
+        "All six device layouts contain only preview and committing; ready, blocked, complete and replay are absent.",
+        "The canonical phone_16_9 and phone_20_9 entries both request 2400x1080, so current evidence must not claim a distinct true-16:9 result."
+      ],
+      "root_cause": "The pre-review capture matrix sampled static lifecycle endpoints and used world-oriented evidence labels, while the existing task-isolated capture/device/native workflow was not extended to retain temporal, replay, feedback, or full-device-state proof.",
+      "affected_object": "Source-bound C1/C2/C3/C4 lifecycle, motion, replay and adaptive-layout evidence",
+      "causal_fix": "Extend the existing task-isolated capture/device/native workflow to capture one complete real-authority neutral lifecycle plus duplicate replay as a timestamped frame sequence or video containing at least one full committing pulse cycle, matched before/after cameras and stable completed replay. Use non-overlapping screen-space evidence annotations while leaving the view-owned status visible. Capture ready, blocked, preview, committing, complete and replay on every canonical device layout and report canonical dimensions truthfully; reuse the isolated job rather than duplicating its capture path in the primary workflow.",
+      "files_to_change": [
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/validate_world_transform.py",
+        "tools/havenline/task10/tests/test_validate_world_transform.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "files_not_to_change": [
+        "Docs/Production/DEVICE_LAYOUT_MATRIX.json",
+        "HavenlineGodot/scripts/simulation.gd",
+        "approved T01-T09 captures and assets"
+      ],
+      "verification": [
+        "The manifest binds every frame/video and descriptor to the exact frozen candidate and real authority receipt.",
+        "Motion evidence includes at least one complete committing pulse, accepted completion, duplicate replay and stable completed persistence.",
+        "Every canonical device ID contains ready, blocked, preview, committing, complete and replay evidence with readable costs/reasons and no annotation collision.",
+        "Validators reject missing states, missing pulse/replay coverage, fixture authority, edge-on annotation mode, mismatched candidate or false physical-device claims."
+      ]
+    },
+    {
+      "id": "C0-T10-B012",
+      "classification": "TOOLING_DEFECT",
+      "symptom": "The shared impacted regression reports one failure because audit_task01_geometry.py cannot import numpy, and the task workflow loses the per-suite logs because set -e exits before the copy command.",
+      "evidence": [
+        "Hosted regression run 35330721066 reports only audit_task01_geometry.py failed; all 18 required Godot suites passed.",
+        "tools/havenline/audit_task01_geometry.py imports numpy, while the T10 workflow installs no Python regression prerequisites.",
+        "tools/havenline/requirements-environment.txt already pins numpy==2.3.5.",
+        "The workflow invokes regression_runner.py and copies Docs/Production/Evidence/Regression/logs only afterward, so set -e skips log preservation on any runner failure."
+      ],
+      "root_cause": "The task-owned workflow omitted a deterministic prerequisite of the calculated shared suite union and made diagnostic retention conditional on runner success.",
+      "affected_object": "T10 hosted impacted-regression execution and failure evidence retention",
+      "causal_fix": "Install the existing exact numpy 2.3.5 pin before the shared runner and preserve its JSON and log directory in a separate always-running collection step or equivalent EXIT trap. Keep the shared runner and T01 audit unchanged.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "files_not_to_change": [
+        "tools/havenline/production/regression_runner.py",
+        "tools/havenline/audit_task01_geometry.py",
+        "tools/havenline/requirements-environment.txt",
+        "Docs/Production/CI_TOOLCHAIN_LOCK.json"
+      ],
+      "verification": [
+        "Workflow tests require the exact numpy==2.3.5 prerequisite before regression.",
+        "A runner failure canary still uploads impact-regression.json and every generated suite log.",
+        "The complete calculated suite union passes on the frozen repaired source, including audit_task01_geometry.py and all required Godot suites."
+      ]
+    },
+    {
+      "id": "C0-T10-B013",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "The task workflow asserts the critic list but does not execute or retain formal C1/C2/C3/C4/C7 records, and it has no quantitative C6 record accepted by the shared performance harness.",
+      "evidence": [
+        "The T10 workflow only prints the required critic IDs; it has no independent critic jobs or final record aggregation.",
+        "The reusable specialist workflow supports C3/C4/C7 and validates exact candidate, evidence manifest, raw output, strict scores and independent runtime, but T10 has no caller jobs or manifests.",
+        "C1/C2 are explicitly reference-specific and unsupported by the generic specialist runner.",
+        "Current evidence has stress counts and a four-node assertion but no source-bound C6 record containing the required performance-budget metrics."
+      ],
+      "root_cause": "T10's workflows stopped at critic-input readiness: the existing task-isolated capture/device/native workflow was not wired to task-owned manifest generation or thin critic calls, and neither workflow implemented the independent-review, quantitative-performance and result-aggregation layer required for terminal approval.",
+      "affected_object": "Formal T10 C1/C2/C3/C4/C6/C7 evidence and closure readiness",
+      "causal_fix": "Add task-owned source-bound manifest orchestration and tests, wiring the existing task-isolated capture/device/native workflow to thin calls of the unchanged reusable specialist workflow for C3/C4/C7 instead of duplicating capture jobs in the primary workflow. Run C1/C2 through a separate task-specific independent visual-review job with locked runtime/raw evidence, not the unsupported generic path. Emit measured T10 neutral-fixture C6 counters and exact-source stress/storage data, then pass critic_harness.py performance. Aggregate exact-candidate records fail-closed; no builder self-review or score retry may qualify.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        ".github/workflows/havenline-task10-isolated.yml",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/review_visual.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/validate_world_transform.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_review_visual.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_validate_world_transform.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "files_not_to_change": [
+        ".github/workflows/havenline-specialist-critic.yml",
+        "tools/havenline/production/specialist_critic_runner.py",
+        "tools/havenline/production/critic_harness.py",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "Docs/Production/PERFORMANCE_BUDGETS.json"
+      ],
+      "verification": [
+        "Critic manifests contain exact-source test/progression JSON, actual images or motion frames, complete task-specific categories and SHA256 bindings.",
+        "C3/C4/C7 run in separate reusable-workflow jobs; C1/C2 run in a separate reference-specific independent job; records retain provider/model/run/raw-output provenance.",
+        "C6 contains measured resolution, renderer, geometry, draw calls, materials, memory, physics, animation, population, storage, method and known-unmeasured fields and passes the unchanged performance harness.",
+        "Final aggregation rejects any missing critic, candidate mismatch, score at or below 9.0, incomplete coverage, unresolved defect, non-independent required critic or absent raw evidence.",
+        "No record claims T68/T69 physical native-4K/60 or thermal certification."
+      ]
+    },
+    {
+      "id": "C0-T10-B014",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "Integration source a0cf1d2 published the authorized simulation adapter and C7 governance before any T10-owned runtime file, so validate_integration_scope correctly rejected the integration-only change.",
+      "evidence": [
+        "Hosted governance run 35330549220 passed 178 production tests and failed only with integration-only path requires exactly one task-scoped runtime change: HavenlineGodot/scripts/simulation.gd.",
+        "A standalone simulation rollback would produce the same forbidden one-integration-only/zero-task-runtime shape and cannot be used as a green recovery checkpoint.",
+        "The simulation adapter at a0cf1d2 is byte-identical to fc5f1d0 and has an approved T10 change request.",
+        "A c1768db-to-final scope containing the authorized adapter plus the 17 T10-owned runtime files evaluates as TASK_INTEGRATION with zero errors once T10 is genuinely INTEGRATION_READY."
+      ],
+      "root_cause": "The integration owner published an authorized integration-only adapter in a governance-only commit before the task reached integration readiness instead of judging the adapter together with the task-owned runtime surface.",
+      "affected_object": "T10 integration publication provenance and final source approval",
+      "causal_fix": "Preserve a0cf1d2 and its run as failed/unapproved; do not roll back, waive, edit the validator, or fabricate a task change. Record the recovery method in task documentation. After B009-B013, full regression and all critics pass, advance through the existing lifecycle to INTEGRATION_READY, integrate the exact frozen task source, and archive both parent-to-final commit-local scope and last-approved c1768db-to-final recovery scope before final regression and G1-G14 closure.",
+      "files_to_change": [
+        "Docs/Production/T10/C0-final-source-fc5f1d0.json",
+        "Docs/Production/T10/INTEGRATION_RECOVERY_FC5F1D0.json"
+      ],
+      "files_not_to_change": [
+        "tools/havenline/production/validate_integration_scope.py",
+        "HavenlineGodot/scripts/simulation.gd",
+        "Docs/Production/ChangeRequests/T10-post-T09-simulation-authority-adapter.json",
+        "Docs/Production/WORKSTREAM_REGISTRY.json before every repair and critic requirement passes"
+      ],
+      "verification": [
+        "The recovery record preserves a0cf1d2/run 35330549220 as failed and never claims it was approved.",
+        "T10 remains below INTEGRATION_READY until repaired frozen-source regression, C6 and all five independent critic records pass strict policy.",
+        "Parent-to-final scope passes for the exact integration commit and c1768db-to-final scope proves the authorized simulation adapter and T10 runtime are judged together.",
+        "Fresh final-source impacted regression, factory observation, applicable G1-G14 and closure validation pass without a waiver."
+      ]
+    }
+  ],
+  "repair_order": [
+    "Repair B009 recovery semantic validation and B010 neutral presentation/readability before generating new evidence.",
+    "Run focused hostile recovery, real-authority and presentation tests; do not enter expensive regression while either product blocker remains.",
+    "Repair B011 capture coverage, B012 regression prerequisites/retention and B013 critic/C6 orchestration, then freeze one new candidate SHA.",
+    "Run deterministic C7, full impacted regression with retained logs, complete captures and quantitative C6 on that exact SHA.",
+    "Run fresh independent C1/C2/C3/C4/C7; every mandatory dimension must be strictly greater than 9.0 unrounded with zero unresolved defects.",
+    "Only then execute B014 controlled integration recovery, final-source regression, factory observation and G1-G14 closure."
+  ],
+  "unexecuted_checks": [
+    "repaired hostile component-import probes and full T10 domain/integration suites",
+    "complete numpy-provisioned T01-T09 impacted regression with retained per-suite logs",
+    "complete neutral lifecycle/replay motion and six-layout evidence recapture",
+    "source-bound quantitative C6 gate",
+    "fresh independent C1/C2/C3/C4/C7 review on one repaired frozen SHA",
+    "controlled final integration recovery, factory observation and G1-G14 closeout"
+  ],
+  "candidate_freeze": {
+    "required": true,
+    "validation_concurrency_policy": "finish_running_sha",
+    "cancelled_run_product_judgment": false
+  },
+  "acceptance_rule_unchanged": {
+    "required_critics": ["C1", "C2", "C3", "C4", "C6", "C7"],
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "all_applicable_gates": "G1-G14",
+    "zero_unresolved_mandatory_defects": true
+  },
+  "summary": "Candidate fc5f1d0 is not approvable. Two hostile recovery probes expose one product root cause: imported state is structurally checked but not bound to configured recipe semantics or the required advanced-target receipt, permitting free progression or a partial resource charge. Independent C1/C2/C3/C4 review also finds that the neutral adapter signals status without showing a meaningful geometry transformation or readable costs/reasons/next action, while temporal/replay and full-device evidence are incomplete. The hosted regression red state is a task-workflow prerequisite/retention defect, not a gameplay regression: all 18 Godot suites passed and only the numpy-dependent T01 audit failed. Formal independent critic and quantitative C6 execution remain unwired. The earlier integration publication remains explicitly failed and must be recovered only after a repaired frozen candidate passes every requirement. No shared runtime, shared gate, critic, threshold, T11 content or later-task change is authorized.",
+  "confidence": "high",
+  "approval_claimed": false,
+  "score_assigned": false
+}

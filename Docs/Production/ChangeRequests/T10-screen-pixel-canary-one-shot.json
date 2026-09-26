@@ -1,0 +1,129 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "diagnostic_only": true,
+  "task_approved": false,
+  "rerun_authorized": false,
+  "run_deletion_authorized": false,
+  "full_candidate_authorized": false,
+  "canonical_product_integration_authorized": false,
+  "probe": {
+    "commit": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97",
+    "tree": "a2ae569743749152853fec34d11d279d46d18b01",
+    "ref": "refs/heads/havenline/governance-T10-screen-pixel-canary",
+    "event": "push",
+    "workflow_path": ".github/workflows/havenline-rendered-clearance-t10-screen-pixel-canary.yml",
+    "files_sha256": {
+      "HavenlineGodot/scripts/world_transform_view.gd": "929ac703384276d488a65fdeb01120439f70e0bf8b335ddf7c7de15f8ce45e02",
+      "HavenlineGodot/tests/capture_task10_world_transform.gd": "b1254e02b1529d9ee7aec25a5fdd1cdebfe98fb372c3d930f29c459c7642b522",
+      "tools/havenline/task10/verify_screen_pixel_clearance.py": "36961301f7f3e06a36c8b12bb100393b49b7a6476d1ba0ef2a725ec4f20cd6fa",
+      "tools/havenline/task10/run_screen_pixel_canary.py": "933232b0c598e24731a9d67611c12bee3fbdd37b95a5ba3736ab20e0ba8e25df",
+      "HavenlineGodot/assets/world_transform_v1/resource_symbols.tres": "bbda21d0b8dd225ad856a6a60b6ac57ebc442ebbffcaf99ad1f40c419b0dcee2",
+      "tools/havenline/production/c0_root_cause_advisor.py": "6e250c67d78fc9bbe5e1eadde3368d094dcc8b52c58f8232b9f8749b9b84ba2e",
+      "tools/havenline/production/tests/test_c0_builder.py": "573d06cdab194991d22bcdcebe795224223f29f2372c0d4745ce4bfebcbc4ef6",
+      ".github/workflows/havenline-rendered-clearance-t10-screen-pixel-canary.yml": "b66a28fa4394d2c1c9665b58d671c196bac06dbe204656883ca5c744a64ff28c",
+      "tools/havenline/task10/admit_screen_pixel_canary.py": "adf494370e566cca67f3da66e75ba2eb270395925ca0bb7d8a41dbdad02bb8e3",
+      "tools/havenline/task10/tests/test_admit_screen_pixel_canary.py": "4b2423cb335ffb8cd046e32e55839b2a0e271fce08e20d4b0eaee87df12cdd41",
+      "tools/havenline/task10/tests/test_verify_screen_pixel_clearance.py": "17ecdc873abb810712facddaefbd51821e9dede67b48a0926d2e2f345ee876aa"
+    }
+  },
+  "local_reviewed_commit": "9e23938e59de11e8b7c3e48a7bb79d6ab50a7c44",
+  "reviewed_remote_parent": "0b3d52589bf13ecf6f0f93fd97a70040a1be0fad",
+  "remote_staging_ref": "refs/heads/havenline/review-T10-screen-pixel-repair",
+  "identical_reviewed_tree_verified": true,
+  "domain_cases": 180,
+  "profiles": [
+    "phone_16_9__0.85",
+    "phone_16_9__1.0",
+    "phone_16_9__1.35",
+    "native4k_full",
+    "foldable_inner__1.35"
+  ],
+  "domain": {
+    "phone_all_states_all_angles_three_readability_scales": 108,
+    "native4k_all_states_all_angles": 36,
+    "foldable_inner_max_readability_all_states_all_angles": 36
+  },
+  "previous_full_domain_run": 35480539082,
+  "previous_full_domain_artifact": 10595129703,
+  "previous_full_domain_zip_sha256": "a5b0e804ad39d461467dd8bbc29904cd982cf041f87c378741897bd5e3faccf5",
+  "previous_full_domain_result": "RED;650rasters retained; corrected derivative found108failures. Not approved.",
+  "local_raster_constraint": "Local Xvfb startup blocked by AF_UNIX socket bind EPERM before raster collection. Hosted Linux runner is separately permitted execution; no local restriction bypass.",
+  "clean_preflight": {
+    "source": "93ca35807efb6095599a9e939102553707071acd",
+    "command": [
+      "/tmp/t10-engine/Godot_v4.7.2-stable_linux.x86_64",
+      "--headless",
+      "--path",
+      "HavenlineGodot",
+      "--script",
+      "res://tests/capture_task10_world_transform.gd",
+      "--check-only"
+    ],
+    "cache_absent_before": true,
+    "exit_code": 0,
+    "log_sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e",
+    "passed": true
+  },
+  "focused_tests": "11/11 PASS",
+  "scope": "One bounded180case hosted raster canary only; includes observed rendering and no-feasible-placement failure classes. No productapproval, C0inference, physicalcertification or T11unlock.",
+  "authorization_kind": "T10_SCREEN_PIXEL_CANARY_ONE_SHOT",
+  "disposition": "AUTHORIZED_FOR_ONE_DIAGNOSTIC_EXECUTION",
+  "diagnostic_execution_authorized": true,
+  "max_runs": 1,
+  "independent_reviews": {
+    "Docs/Production/Evidence/T10/screen-pixel-canary/full-family-review.json": "f9ffd5bb5dc5ce7b8efc5cb4b6c968601c750dc91fc8f0bd631bde60cead46aa",
+    "Docs/Production/Evidence/T10/screen-pixel-canary/independent-review.json": "6485d013c285809e493375454b53cc57aeb96b0678de650c84e56ba06761d262",
+    "Docs/Production/Evidence/T10/screen-pixel-canary/clean-preflight.json": "b4a940d88abbb8f9c11104c99090705ec78a967cc6e88b002b0e8bb923467cba",
+    "Docs/Production/Evidence/T10/screen-pixel-canary/single-realization-review.json": "550a75170cf5d4ac16f89973ac3bc13d371551576a19919541e3b9f4d1516d56"
+  },
+  "integration_owner": "primary-integration-owner",
+  "owner_preparation_agent": "/root/recovered_t10_owner_review",
+  "superseded_unexecuted_source": {
+    "probe": {
+      "commit": "0b3d52589bf13ecf6f0f93fd97a70040a1be0fad",
+      "tree": "ff7be8fa6e013153149668c41f3f859565834322",
+      "ref": "refs/heads/havenline/governance-T10-screen-pixel-canary",
+      "event": "push",
+      "workflow_path": ".github/workflows/havenline-rendered-clearance-t10-screen-pixel-canary.yml",
+      "files_sha256": {
+        "HavenlineGodot/scripts/world_transform_view.gd": "c09e76658fbd1b042aa033463361e74f6d8c180b35b26a5d47f3fa4c704289ea",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd": "b1254e02b1529d9ee7aec25a5fdd1cdebfe98fb372c3d930f29c459c7642b522",
+        "tools/havenline/task10/verify_screen_pixel_clearance.py": "36961301f7f3e06a36c8b12bb100393b49b7a6476d1ba0ef2a725ec4f20cd6fa",
+        "tools/havenline/task10/run_screen_pixel_canary.py": "933232b0c598e24731a9d67611c12bee3fbdd37b95a5ba3736ab20e0ba8e25df",
+        "HavenlineGodot/assets/world_transform_v1/resource_symbols.tres": "bbda21d0b8dd225ad856a6a60b6ac57ebc442ebbffcaf99ad1f40c419b0dcee2",
+        "tools/havenline/production/c0_root_cause_advisor.py": "6e250c67d78fc9bbe5e1eadde3368d094dcc8b52c58f8232b9f8749b9b84ba2e",
+        "tools/havenline/production/tests/test_c0_builder.py": "573d06cdab194991d22bcdcebe795224223f29f2372c0d4745ce4bfebcbc4ef6",
+        ".github/workflows/havenline-rendered-clearance-t10-screen-pixel-canary.yml": "b66a28fa4394d2c1c9665b58d671c196bac06dbe204656883ca5c744a64ff28c",
+        "tools/havenline/task10/admit_screen_pixel_canary.py": "adf494370e566cca67f3da66e75ba2eb270395925ca0bb7d8a41dbdad02bb8e3",
+        "tools/havenline/task10/tests/test_admit_screen_pixel_canary.py": "4b2423cb335ffb8cd046e32e55839b2a0e271fce08e20d4b0eaee87df12cdd41",
+        "tools/havenline/task10/tests/test_verify_screen_pixel_clearance.py": "17ecdc873abb810712facddaefbd51821e9dede67b48a0926d2e2f345ee876aa"
+      }
+    },
+    "disposition": "REPLACED_BEFORE_CANONICAL_PUBLICATION_AND_TRIGGER",
+    "execution_authorized": false
+  },
+  "additional_reviewed_files_sha256": {
+    "tools/havenline/task10/preflight_feedback_layout.gd": "af1f4f668f59a70c4726b01bf996c00d588734b0326f8ae4f94c43fd15406a20"
+  },
+  "single_realization_correction": {
+    "cause": "Remove two transient world-unit writes inconsistent with logical font units; preserve sole camera-derived realization.",
+    "product_file": "HavenlineGodot/scripts/world_transform_view.gd",
+    "lines_removed": 2,
+    "preflight": {
+      "layout_path": "/tmp/t10-single-sink-layout.json",
+      "layout_sha256": "27bebbedb712201e804d343ac844d668bdabe29c03ac61e0780aba8e2a6610f9",
+      "canonical_cases": 1728,
+      "extreme_projection_cases": 111,
+      "frozen_process_transition_cases": 3,
+      "all_passed": true,
+      "integration_log_path": "/tmp/t10-single-sink-integration.log",
+      "integration_log_sha256": "be95d0b07a523c48059a3607c4f353baf455ba97f85d44c2379bf512b55353bd",
+      "integration_checks": 135,
+      "integration_passed": true,
+      "qualification": "Independent source/diff and retained machine-result review; priorindependent1728+111rerun and11hostedtoolingtests remain applicable exceptexactnewsource transitionchecks nowaddtestedcoverage."
+    },
+    "prior_clean_parser_source": "93ca35807efb6095599a9e939102553707071acd",
+    "new_source_parser_exercised_by": "135 Godot integration checks plus1728canonical/111extreme/3transition preflight"
+  }
+}

@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "requesting_task": "T10",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "authorization": "Also when we find issues with the architecture and/or critics, we need to fix.",
+  "standing_authorization": "Authorize the bounded V3.2 T10 canary repair.",
+  "blockers": ["C0-T10-B060", "C0-T10-B061"],
+  "classification": "TOOLING_DEFECT",
+  "failed_run": 35397278342,
+  "failed_candidate": "a21075c33f071982d1778c045adf5d922055d1d0",
+  "failed_c0_artifact": 10569242248,
+  "failed_c0_artifact_sha256": "37b087f4417108f21ccaf16242480d26fe36b76d8c7450ea90db02f18df78968",
+  "observed_failure": "C0 received only the outer regression summary, omitted the downloaded integration log that contained the exact stale assertion, contradicted the packet's populated six-critic list by claiming it was empty, and proposed a nonexistent workflow path. The transport completed inside its new bound, so this is a grounding and artifact-diagnostic completeness defect.",
+  "scope": [
+    "tools/havenline/production/collect_artifact_diagnostics.py",
+    "tools/havenline/production/c0_root_cause_advisor.py",
+    "tools/havenline/production/tests/test_c0_builder.py",
+    ".github/workflows/havenline-c0-root-cause.yml",
+    ".github/workflows/havenline-production-governance.yml",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "tools/havenline/production/tests/test_architecture_release_lock.py"
+  ],
+  "permitted_behavior_change": "Add bounded source-hashed diagnostic lines from downloaded text artifacts to the immutable packet and semantic projection. For T10 only, require each C0 evidence item to cite an exact retained source excerpt and every proposed causal file to match an exact tracked repository path; fail closed when grounding is absent.",
+  "preserved": [
+    "complete authoritative failure packet and full artifact hashes",
+    "C0 non-voting role and complete-blocker-set duty",
+    "pinned model, revision, runtime, 16384 context, 2200 completion tokens, sampling and timeout",
+    "all C1-C11 critics, dimensions and thresholds",
+    "finish-running-SHA and no approval authority",
+    "shipping runtime and approved gameplay"
+  ]
+}

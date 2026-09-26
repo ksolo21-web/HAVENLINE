@@ -1,0 +1,29 @@
+name: Havenline T01 exact source snapshot
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-source-snapshot.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  snapshot:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Archive native source and review tooling only
+        run: |
+          set -euo pipefail
+          mkdir -p snapshot
+          git archive --format=tar.gz --output=snapshot/task01-source.tar.gz HEAD HavenlineGodot tools/havenline Docs AGENTS.md .github
+          git rev-parse HEAD > snapshot/SOURCE.txt
+          sha256sum snapshot/task01-source.tar.gz > snapshot/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: havenline-T01-exact-source-${{ github.run_id }}
+          path: snapshot/
+          retention-days: 7
+          if-no-files-found: error

@@ -1,0 +1,122 @@
+name: Havenline T01 exact-source render and critic cycle
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-cycle.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build-and-capture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.run.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - run: python3 -m pip install pyyaml
+      - name: Execute the source-bound Task 1 build, with the correct tested line formatting
+        id: run
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          workflow=yaml.safe_load(Path('.github/workflows/havenline-task01-final-review.yml').read_text())
+          runs=[s['run'] for s in workflow['jobs']['build-and-capture']['steps'] if 'run' in s]
+          assert len(runs)==5
+          needle="files=package['files'];main=package['main_patch']"
+          assert runs[0].count(needle)==1
+          runs[0]=runs[0].replace(needle,needle+"\nmain['insert_before']='\\n\\tReferenceForest.set_player_clearance(self, focus + Vector3(0,.05,0))'")
+          runs[1]+='\nexport PATH="$RUNNER_TEMP/engine:$PATH"\n'
+          script='\n'.join(runs)
+          Path('task01-evidence').mkdir(exist_ok=True)
+          Path('task01-evidence/executed-build.sh').write_text(script)
+          subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-repaired-evidence-${{ github.run_id }}
+          path: task01-evidence/
+          retention-days: 30
+          if-no-files-found: error
+  independent-critics:
+    needs: build-and-capture
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        shard: [0, 1, 2]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 38
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_SHARD: ${{ matrix.shard }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build-and-capture.outputs.source }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-repaired-evidence-${{ github.run_id }}
+          path: task01-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-vision
+          key: havenline-qwen3vl8b-f982a075-b10809-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Execute the independent reviewer with the unchanged evidence rubric
+        run: python3 -u tools/havenline/review_task01_cached.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-independent-${{ matrix.role }}-${{ matrix.shard }}-${{ github.run_id }}
+          path: critic-results/
+          retention-days: 30
+          if-no-files-found: error
+  mechanical-and-critic-gate:
+    needs: [build-and-capture, independent-critics]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      SOURCE: ${{ needs.build-and-capture.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-T01-independent-*-${{ github.run_id }}
+          path: reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-repaired-evidence-${{ github.run_id }}
+          path: evidence/
+      - run: python3 -m pip install pyyaml
+      - name: Execute the unchanged failing-closed mechanical and independent-critic gate
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          w=yaml.safe_load(Path('.github/workflows/havenline-task01-final-review.yml').read_text())
+          steps=w['jobs']['mechanical-and-critic-gate']['steps']
+          script=[s['run'] for s in steps if 'run' in s]
+          assert len(script)==1
+          subprocess.run(['bash','-euo','pipefail','-c',script[0]],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-repaired-gate-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# No later-task edits, no APK export, no user tests, no automatic task approval.

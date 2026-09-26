@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0",
+  "non_voting": true,
+  "validated": true,
+  "diagnosis_id": "C0-T10-c7a18d0-transported-contract-readiness",
+  "task_id": "T10",
+  "failed_candidate": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
+  "failed_run_id": 35353927324,
+  "failed_job_id": 105628493430,
+  "repair_base": "c7a18d002fe8d0f3978370f3e4567ba88bfe17e8",
+  "integration_head": "82518322a8e0dc9ee6ef12a759bf4ca723c8a490",
+  "diagnosis_status": "DIAGNOSIS_COMPLETE",
+  "terminal_class": "TOOLING_DEFECT",
+  "complete_known_blocker_set": true,
+  "blockers": [
+    {
+      "id": "C0-T10-B037",
+      "classification": "TOOLING_DEFECT",
+      "symptom": "Correctly packaged contract is falsely rejected by readiness after manifest path normalization; all specialists skipped.",
+      "evidence": [
+        "Run35353927324 job105628493430 passed capture, benchmark, packaging and upload then failed readiness with16 path/content missing errors across C3/C4.",
+        "Canonical manifests bind critic-input/review-output-contract.txt; transported index binds review-output-contract.txt with exact B036 hash e149bee5c4081d0d4d7d4ac68fc56e5e51d18e645225103ed4c11b8474af35e1.",
+        "Readiness removes critic-input/ before prompt_errors; new contract helper still compares the original prefix and reads root/critic-input/file. Prior B036 tests exercised builder packaging but omitted this real readiness consumer."
+      ],
+      "root_cause": "Canonical-to-transported representation mismatch introduced by B036; its test coverage omitted the real consumer normalization branch. Evidence exists and remains valid, but the gate correctly fails on an inconsistent validator assumption.",
+      "affected_object": "T10 critic-input readiness path resolution",
+      "causal_fix": "Add keyword-only path_mode with exact canonical/transported enum mappings to output_contract_errors and prompt_errors. Default remains canonical. Invalid modes fail closed. Readiness retains canonical index/hash validation first, then calls transported prompt validation on its existing deep-copy normalization. No fallback or arbitrary path accepted. Require canonical critic-input/ prefixes during manifest/index validation before any transport normalization; reject noncanonical path mutations instead of accepting ambiguous representations.",
+      "files_to_change": [
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "Docs/Production/T10/C0-transported-contract-readiness-c7a18d0.json",
+        "Docs/Production/T10/REPAIR_PLAN-transported-contract-readiness-c7a18d0.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "tools/havenline/task10/export_closure_records.py",
+        "tools/havenline/production/specialist_critic_runner.py",
+        "tools/havenline/production/specialist_evidence_manifest.py",
+        "tools/havenline/production/critic_harness.py",
+        "tools/havenline/production/critic_runtime_lock.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "Docs/Production/CRITIC_MATRIX.json",
+        ".github/workflows/havenline-task10-isolated.yml",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "Docs/Production/DEPENDENCY_GRAPH.json",
+        "Docs/Production/PATH_OWNERSHIP.json",
+        "Docs/Production/task-gates.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "Canonical default and explicit transported modes accept only their fixed exact contract paths; invalid modes and missing/duplicate/tampered/not-last/wrong-metadata contracts reject in both representations.",
+        "Real package_errors consumer validates canonical manifest/index/digests before transport normalization; complete positive package and path/hash/content/order mutations tested.",
+        "Replay immutable c7a18 downloaded critic-input through package_errors and exact readiness CLI with original isolated evidence. Require zero errors; this is tooling diagnosis only, not new source approval.",
+        "Run task10 and production tests, pre/post builder gates, exact six-file scope and independent C0 implementation review. Publish one frozen candidate; require all fresh exact-source gates and six critics."
+      ]
+    }
+  ],
+  "source_evidence": [
+    {
+      "artifact_id": 10551832949,
+      "archive_sha256": "d5b5c5d91b91f7db0ddde5b32a33e7cb7118f134e44907b21374d8ddf3fe7171"
+    },
+    {
+      "artifact_id": 10551713101,
+      "archive_sha256": "3a1136c8b432353a80d2205605fa79af5726ca76377780b9275d4d4c2549545a",
+      "readiness_sha256": "1474b12315325c394ef03f68e5361d70a7017bc3ef30d7496dc2b273ca4c75c5"
+    }
+  ],
+  "unexecuted_checks": [
+    "B037 code/tests and fixed consumer CLI replay remain unexecuted.",
+    "C3/C4 B036 format note remains untested by hosted reviewers because readiness failed; all three hosted specialists skipped.",
+    "Next frozen-source fresh primary/capture and all six critics, final integrated-source gates, factory/export/G1-G14 and atomic owner closeout remain unexecuted."
+  ],
+  "builder_action": "REPAIR",
+  "candidate_freeze": {
+    "required": true,
+    "validation_concurrency_policy": "finish_running_sha",
+    "cancelled_run_product_judgment": false,
+    "next_candidate_policy": "All c7a18 runs terminal. Repair only B037, freeze complete candidate, run fresh evidence and all six critics. No scores reused."
+  },
+  "summary": "Complete known B037 is a path-mode interop bug in task-owned readiness tooling. Preserve B036 contract bytes and all evidence/judgment requirements. No gameplay defect or approval inferred.",
+  "confidence": "high",
+  "approval_claimed": false,
+  "score_assigned": false,
+  "shipping_gameplay_runtime_change_authorized": false
+}

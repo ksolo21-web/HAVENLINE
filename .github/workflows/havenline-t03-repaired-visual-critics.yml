@@ -1,0 +1,186 @@
+name: Havenline T03 repaired visual critics
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-t03-repaired-visual-critics.yml'
+      - 'tools/havenline/review_task03_reference_repair.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-t03-final-critics-${{ github.ref_name }}
+  cancel-in-progress: true
+env:
+  CANDIDATE: 'e1e7bb2d68d1d53025d1242011ad4c885f08c307'
+  EVIDENCE_RUN: '36228102780'
+  EVIDENCE_ARTIFACT: 'havenline-t03-reference-repair-36228102780'
+
+jobs:
+  visual-shards:
+    strategy:
+      fail-fast: false
+      matrix:
+        critic: [C1,C2]
+        group: [boundary_portals,routes_contacts,iteration11_changed_domains]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      EXPECTED_SOURCE: 'e1e7bb2d68d1d53025d1242011ad4c885f08c307'
+      REVIEW_CRITIC: ${{ matrix.critic }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      EVIDENCE_ROOT: t03-repair
+      REVIEW_OUT: review/${{ matrix.critic }}/${{ matrix.group }}
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 36228102780
+          name: havenline-t03-reference-repair-36228102780
+          path: t03-repair
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Run exact-source independent ${{ matrix.critic }} / ${{ matrix.group }}
+        run: python3 -u tools/havenline/review_task03_reference_repair.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: t03-reference-repair-${{ matrix.critic }}-${{ matrix.group }}-${{ github.run_id }}
+          path: review/${{ matrix.critic }}/${{ matrix.group }}/
+          retention-days: 30
+          if-no-files-found: error
+
+  visual-gate:
+    needs: visual-shards
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: t03-reference-repair-C*-${{ github.run_id }}
+          path: reviews
+      - name: Require independent C1/C2 strictly >9.0 with zero defects
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,math
+          candidate='e1e7bb2d68d1d53025d1242011ad4c885f08c307'
+          groups={'boundary_portals','routes_contacts','iteration11_changed_domains'}
+          expected={(c,g) for c in ('C1','C2') for g in groups}
+          rows={}
+          for p in Path('reviews').rglob('critic-record.json'):
+              r=json.loads(p.read_text())
+              key=(r['critic_id'],r.get('review_group'))
+              assert key not in rows,key
+              rows[key]=r
+          assert set(rows)==expected,(set(rows),expected)
+          aggregate={}
+          for key,r in rows.items():
+              cid,gid=key
+              assert r['candidate_hash']==candidate,(key,r.get('candidate_hash'))
+              assert r['independent_runtime'] is True
+              assert r['passed'] is True,(key,r.get('defects'),r.get('scores'))
+              assert r['defects']==[]
+              assert r['coverage_complete'] is True
+              assert r['confidence'] in ('medium','high')
+              assert r['scores'] and all(type(v) in (int,float) and not isinstance(v,bool) and math.isfinite(v) and v>9.0 for v in r['scores'].values()),(key,r['scores'])
+              aggregate.setdefault(cid,{}).setdefault('groups',{})[gid]=r['scores']
+          Path('visual-gate').mkdir()
+          out={'task':'T03','candidate':candidate,'groups':sorted(groups),'C1':aggregate['C1'],'C2':aggregate['C2'],'passed':True,'visual_strictly_gt_9':True,'visual_target_10':True,'user_signoff_required':True}
+          Path('visual-gate/result.json').write_text(json.dumps(out,indent=2)+'\n')
+          print(json.dumps(out,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: t03-reference-repair-visual-gate-${{ github.run_id }}
+          path: visual-gate/
+          retention-days: 30
+          if-no-files-found: error
+
+  C6:
+    needs: visual-gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      EXPECTED_SOURCE: 'e1e7bb2d68d1d53025d1242011ad4c885f08c307'
+      REVIEW_CRITIC: C6
+      EVIDENCE_ROOT: t03-repair
+      REVIEW_OUT: review/C6
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 36228102780
+          name: havenline-t03-reference-repair-36228102780
+          path: t03-repair
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Run fresh repaired T03 C6
+        run: python3 -u tools/havenline/review_task03_reference_repair.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: t03-reference-repair-C6-${{ github.run_id }}
+          path: review/C6/
+          retention-days: 30
+          if-no-files-found: error
+
+  final-gate:
+    needs: [visual-gate,C6]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: t03-reference-repair-visual-gate-${{ github.run_id }}
+          path: visual
+      - uses: actions/download-artifact@v4
+        with:
+          name: t03-reference-repair-C6-${{ github.run_id }}
+          path: c6
+      - name: Require repaired visual critics and fresh C6
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,math
+          candidate='e1e7bb2d68d1d53025d1242011ad4c885f08c307'
+          v=json.loads(Path('visual/result.json').read_text())
+          c=json.loads(next(Path('c6').rglob('critic-record.json')).read_text())
+          assert v['passed'] is True and v['candidate']==candidate and v['visual_strictly_gt_9'] is True and v['visual_target_10'] is True
+          assert c['critic_id']=='C6' and c['candidate_hash']==candidate and c['passed'] is True
+          assert c['defects']==[] and c['coverage_complete'] is True and c['confidence'] in ('medium','high')
+          assert len(c['scores'])==9 and all(type(x) in (int,float) and not isinstance(x,bool) and math.isfinite(x) and x>9.0 for x in c['scores'].values())
+          out={'task':'T03','candidate':candidate,'C1_C2_strictly_gt_9':True,'C1_C2_target_10':True,'C6':c['scores'],'C6_minimum':min(c['scores'].values()),'machine_and_critic_gate_passed':True,'user_visual_signoff_required':True,'effective_approval':False}
+          Path('final').mkdir();Path('final/result.json').write_text(json.dumps(out,indent=2)+'\n')
+          print(json.dumps(out,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: t03-reference-repair-final-${{ github.run_id }}
+          path: final/
+          retention-days: 30
+          if-no-files-found: error
+# T03 critic/tooling workflow only. Validation candidate is exact e1e7bb2d68d1d53025d1242011ad4c885f08c307; Iteration 11H pixels are source-bound to evidence run 36228102780 and cannot be changed by this run.

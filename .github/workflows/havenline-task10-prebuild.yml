@@ -1,0 +1,268 @@
+name: Havenline Task 10 dependency-independent prebuild
+
+on:
+  push:
+    branches: ['prebuild/T10-world-transform']
+    paths:
+      - 'HavenlineGodot/scripts/world_transform.gd'
+      - 'HavenlineGodot/scripts/world_transform_view.gd'
+      - 'HavenlineGodot/data/world_transform_recipes.json'
+      - 'HavenlineGodot/tests/test_task10_world_transform.gd'
+      - 'HavenlineGodot/tests/test_task10_integration.gd'
+      - 'HavenlineGodot/tests/capture_task10_world_transform.gd'
+      - 'Docs/Production/T10/**'
+      - 'tools/havenline/task10/**'
+      - '.github/workflows/havenline-task10-prebuild.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-task10-prebuild-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  dependency-independent-core:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Reject activated forward use of historical preparation workflow
+        run: |
+          python3 - <<'PY'
+          import json
+          r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
+          t10=next((x for x in r['workstreams'] if x['task_id']=='T10'), {})
+          assert t10.get('status', 'LOCKED') in ('LOCKED', 'PREPARED'), 'Historical preparation only; use the registered T10 candidate workflows'
+          PY
+
+      - name: Enforce prebuild boundary
+        run: |
+          set -euo pipefail
+          mkdir -p task10-prebuild-evidence
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          branch_point=$(git merge-base "$integration" HEAD)
+          python3 - <<'PY' "$branch_point" "$integration" | tee task10-prebuild-evidence/scope.json
+          import json, subprocess, sys
+          from pathlib import Path
+          branch_point=sys.argv[1]
+          integration=sys.argv[2]
+          changed=subprocess.check_output(['git','diff','--name-only',branch_point,'HEAD'],text=True).splitlines()
+          allowed=(
+            'HavenlineGodot/scripts/world_transform.gd',
+            'HavenlineGodot/scripts/world_transform_view.gd',
+            'HavenlineGodot/data/world_transform_recipes.json',
+            'HavenlineGodot/tests/test_task10_world_transform.gd',
+            'HavenlineGodot/tests/test_task10_integration.gd',
+            'HavenlineGodot/tests/capture_task10_world_transform.gd',
+            '.github/workflows/havenline-task10-prebuild.yml',
+          )
+          prefixes=('Docs/Production/T10/','tools/havenline/task10/')
+          bad=[p for p in changed if p not in allowed and not p.startswith(prefixes)]
+          assert not bad, bad
+          forbidden_prefixes=(
+            'HavenlineGodot/assets/harvesting_v1/',
+            'HavenlineGodot/scripts/harvest_presentation.gd',
+            'HavenlineGodot/tests/test_task09_',
+            'Docs/Production/T09/',
+            'tools/havenline/task09/',
+          )
+          assert not [p for p in changed if p.startswith(forbidden_prefixes)], changed
+          graph=json.loads(Path('Docs/Production/DEPENDENCY_GRAPH.json').read_text())
+          assert graph['tasks']['T09']['status'] != 'APPROVED', 'prebuild lane is only for pending dependency work'
+          print(json.dumps({'task':'T10','mode':'dependency-independent-prebuild','branch_point':branch_point,'integration_head':integration,'changed_files':changed,'t09_status':graph['tasks']['T09']['status'],'integration_allowed':False,'passed':True},indent=2))
+          PY
+
+      - name: Prepare pinned Godot and software render path
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine" task10-prebuild-evidence/tests task10-prebuild-evidence/capture task10-prebuild-evidence/device-layout
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+
+      - name: Import and test formal T10 domain core
+        run: |
+          set -euo pipefail
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task10-prebuild-evidence/tests/import.log 2>&1
+          timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_world_transform.gd > task10-prebuild-evidence/tests/test_task10_world_transform.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-prebuild-evidence/tests/import.log task10-prebuild-evidence/tests/test_task10_world_transform.log; then exit 1; fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('task10-prebuild-evidence/tests/test_task10_world_transform.log')
+          reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
+          assert reports, path
+          report=reports[-1]
+          assert report.get('passed') is True and not report.get('failures'), report
+          assert report.get('stress_targets') == 512 and report.get('stress_transactions') == 1024, report
+          assert report.get('stress_retained_receipts') == 512, report
+          assert report.get('preview_stress_iterations') == 5000 and report.get('reject_stress_iterations') == 5000, report
+          assert report.get('catalog_stress_recipes') == 258, report
+          report['integration_allowed']=False
+          report['task_approved']=False
+          Path('task10-prebuild-evidence/domain-tests.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report))
+          PY
+
+      - name: Run fixture simulation integration and race recovery
+        run: |
+          set -euo pipefail
+          timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_integration.gd > task10-prebuild-evidence/tests/test_task10_integration.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-prebuild-evidence/tests/test_task10_integration.log; then exit 1; fi
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          path=Path('task10-prebuild-evidence/tests/test_task10_integration.log')
+          reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
+          assert reports,path
+          report=reports[-1]
+          assert report.get('passed') is True and not report.get('failures'),report
+          assert report.get('fixture_simulation_only') is True
+          assert report.get('real_t09_adapter_bound') is False
+          assert report.get('r11_world_response_tested') is True
+          assert report.get('visual_node_budget') == 4 and report.get('visual_build_count') == 1 and report.get('visual_node_count') == 4,report
+          assert report.get('integration_allowed') is False and report.get('task_approved') is False
+          Path('task10-prebuild-evidence/integration-tests.json').write_text(json.dumps(report,indent=2))
+          print(json.dumps(report))
+          PY
+
+      - name: Validate full frozen T10 source contract
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task10/validate_world_transform.py --candidate "$GITHUB_SHA" --output task10-prebuild-evidence/source-contract.json
+
+      - name: Capture deterministic T10 view-owned lifecycle fixture
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task10_world_transform.gd -- --candidate="$CANDIDATE" --out="$(pwd)/task10-prebuild-evidence/capture" > task10-prebuild-evidence/capture/capture.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-prebuild-evidence/capture/capture.log; then exit 1; fi
+          python3 - <<'PY'
+          import hashlib,json,struct
+          from pathlib import Path
+          root=Path('task10-prebuild-evidence/capture')
+          manifest_path=root/'manifest.json'
+          assert manifest_path.exists(),manifest_path
+          report=json.loads(manifest_path.read_text())
+          assert report.get('passed') is True,report
+          assert report.get('fixture_only') is True and report.get('t11_content') is False,report
+          assert report.get('target_color_static') is True and report.get('view_owns_lifecycle_visuals') is True,report
+          assert report.get('real_t09_adapter_bound') is False,report
+          assert report.get('record_count') == 10,report
+          assert report.get('states') == ['ready','blocked','preview','committing','complete'],report
+          assert report.get('angles') == ['front','three-quarter'],report
+          assert report.get('view_visual_node_count') == 4 and report.get('view_visual_build_count') == 1,report
+          assert report.get('integration_allowed') is False and report.get('task_approved') is False,report
+          files=[]; hashes=set()
+          for row in report['records']:
+              p=root/row['file']; data=p.read_bytes()
+              assert len(data)>1024,(p,len(data))
+              assert data[:8] == b'\x89PNG\r\n\x1a\n',p
+              width,height=struct.unpack('>II',data[16:24])
+              assert (width,height)==(1280,720),(p,width,height)
+              files.append({'file':row['file'],'state':row['state'],'angle':row['angle'],'bytes':len(data),'sha256':hashlib.sha256(data).hexdigest(),'size':[width,height]})
+              hashes.add(files[-1]['sha256'])
+          assert len(files)==10 and len(hashes)==10,(len(files),len(hashes))
+          evidence={'task':'T10','candidate':report['candidate'],'capture_passed':True,'fixture_only':True,'view_owns_lifecycle_visuals':True,'record_count':10,'unique_image_count':10,'files':files,'task_approved':False}
+          Path('task10-prebuild-evidence/capture-evidence.json').write_text(json.dumps(evidence,indent=2))
+          print(json.dumps(evidence))
+          PY
+
+      - name: Validate T10 view across Havenline device layout matrix
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          python3 - <<'PY' > /tmp/t10-device-matrix.tsv
+          import json
+          from pathlib import Path
+          matrix=json.loads(Path('Docs/Production/DEVICE_LAYOUT_MATRIX.json').read_text())
+          assert matrix.get('landscape_required') is True
+          for row in matrix['states']:
+              width,height=row['logical_size']
+              print(f"{row['id']}\t{width}\t{height}\t{row['class']}\t{row['fold_state']}")
+          PY
+          while IFS=$'\t' read -r device width height class fold_state; do
+            out="$(pwd)/task10-prebuild-evidence/device-layout/$device"
+            mkdir -p "$out"
+            xvfb-run -a -s "-screen 0 ${width}x${height}x24" timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution "${width}x${height}" --script res://tests/capture_task10_world_transform.gd -- --candidate="$CANDIDATE" --device-check --device-id="$device" --width="$width" --height="$height" --out="$out" > "$out/capture.log" 2>&1
+            if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' "$out/capture.log"; then exit 1; fi
+          done < /tmp/t10-device-matrix.tsv
+          python3 - <<'PY'
+          import hashlib,json,struct
+          from collections import defaultdict
+          from pathlib import Path
+          matrix=json.loads(Path('Docs/Production/DEVICE_LAYOUT_MATRIX.json').read_text())
+          root=Path('task10-prebuild-evidence/device-layout')
+          rows=[]; by_hash=defaultdict(list); by_device=defaultdict(dict)
+          for state in matrix['states']:
+              device=state['id']; expected=state['logical_size']
+              manifest_path=root/device/'manifest.json'
+              assert manifest_path.exists(),manifest_path
+              report=json.loads(manifest_path.read_text())
+              assert report.get('passed') is True,report
+              assert report.get('device_id') == device,report
+              assert report.get('logical_size') == expected,report
+              assert report.get('states') == ['preview','committing'],report
+              assert report.get('angles') == ['front'] and report.get('record_count') == 2,report
+              assert report.get('view_owns_lifecycle_visuals') is True and report.get('target_color_static') is True,report
+              assert report.get('view_visual_node_count') == 4 and report.get('view_visual_build_count') == 1,report
+              for record in report['records']:
+                  p=root/device/record['file']; data=p.read_bytes()
+                  assert len(data)>1024,(p,len(data))
+                  assert data[:8] == b'\x89PNG\r\n\x1a\n',p
+                  width,height=struct.unpack('>II',data[16:24])
+                  assert [width,height] == expected,(p,width,height,expected)
+                  digest=hashlib.sha256(data).hexdigest()
+                  row={'device_id':device,'class':state['class'],'fold_state':state['fold_state'],'safe_area_test':bool(state.get('safe_area_test',False)),'state':record['state'],'file':str(p.relative_to(root)),'size':[width,height],'bytes':len(data),'sha256':digest}
+                  rows.append(row); by_hash[digest].append(row); by_device[device][record['state']]=digest
+          assert len(rows)==len(matrix['states'])*2,(len(rows),len(matrix['states']))
+          # Every device must visibly distinguish preview from committing.
+          for state in matrix['states']:
+              device=state['id']
+              assert by_device[device]['preview'] != by_device[device]['committing'],device
+          # Duplicate pixels are allowed only when the matrix intentionally gives two
+          # entries the same logical viewport and lifecycle state (phone_16_9 and
+          # phone_20_9 currently both use 2400x1080). A duplicate across different
+          # sizes or different states would indicate a broken capture/layout gate.
+          duplicate_groups=[]
+          for digest,group in by_hash.items():
+              if len(group) <= 1:
+                  continue
+              signatures={(tuple(row['size']),row['state']) for row in group}
+              assert len(signatures)==1,(digest,group)
+              duplicate_groups.append({'sha256':digest,'members':[{'device_id':row['device_id'],'state':row['state'],'size':row['size']} for row in group]})
+          safe_area_cases=[row['id'] for row in matrix['states'] if row.get('safe_area_test')]
+          evidence={'task':'T10','matrix_source':'Docs/Production/DEVICE_LAYOUT_MATRIX.json','landscape_required':True,'device_count':len(matrix['states']),'capture_count':len(rows),'classes':sorted(set(x['class'] for x in matrix['states'])),'safe_area_flagged_devices':safe_area_cases,'duplicate_policy':'allowed only for identical logical size + identical lifecycle state','duplicate_groups':duplicate_groups,'per_device_lifecycle_distinct':True,'rows':rows,'fixture_only':True,'real_t09_adapter_bound':False,'task_approved':False,'passed':True}
+          Path('task10-prebuild-evidence/device-layout-evidence.json').write_text(json.dumps(evidence,indent=2))
+          print(json.dumps(evidence))
+          PY
+
+      - name: Governance regression
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task10/prepare_activation.py | tee task10-prebuild-evidence/preparation.json
+          python3 tools/havenline/production/workstream.py validate-registry | tee task10-prebuild-evidence/registry.json
+          python3 tools/havenline/production/validate_migration.py > task10-prebuild-evidence/migration.json
+          python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > task10-prebuild-evidence/tests/production-tools.log 2>&1
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task10-prebuild-${{ github.sha }}
+          path: task10-prebuild-evidence
+          if-no-files-found: error
+          retention-days: 14

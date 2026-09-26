@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "task_id": "TXX",
+  "candidate_sha": "0000000000000000000000000000000000000000",
+  "status": "USER_VISUAL_SIGNOFF_REQUIRED_OR_REJECTED",
+  "primitive_audit": {
+    "passed": false,
+    "findings_count": null,
+    "report_sha256": ""
+  },
+  "visual_evidence": {
+    "source_bound": true,
+    "workflow_run_id": null,
+    "artifact_id": null,
+    "stills_count": 0,
+    "motion_video_seconds": 0,
+    "internal_resolution": [
+      3840,
+      2160
+    ],
+    "capture_fps": 60
+  },
+  "user_visual_approval": false,
+  "approved_at": null,
+  "note": "Final approval requires zero primitive findings, whole-frame side-by-side reference fidelity, zero failed visible asset classes, and explicit user approval. A user rejection cannot be overridden by critic scores.",
+  "reference_fidelity": {
+    "standard": "Docs/Production/REFERENCE_FIDELITY_STANDARD.json",
+    "whole_frame_reviewed": false,
+    "side_by_side_reference_reviewed": false,
+    "passed": false,
+    "matched_visible_classes": [],
+    "failed_visible_classes": [],
+    "upstream_owner_failures": [],
+    "notes": ""
+  },
+  "user_visual_rejection": false,
+  "user_feedback": ""
+}

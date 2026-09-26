@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "task_id": "T08",
+  "candidate_commit": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
+  "integrated_commit": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
+  "integrated_verification_run": 35035980827,
+  "acceptance_threshold": ">9.0 unrounded in every mandatory dimension",
+  "cycle": "final-independent-review-complete-reference",
+  "defects": [
+    {
+      "id": "T08-D001",
+      "severity": "mandatory-governance",
+      "summary": "Candidate workflow passed the assignment checkpoint as the runtime base instead of the registry's approved T07 base.",
+      "status": "VERIFIED_CLOSED",
+      "resolution": "Pinned the isolated build to 7744b9f6a063da3385ce10992ef732ba2c669890 and retained later shared integration commits only as integration-owner history."
+    },
+    {
+      "id": "T08-D002",
+      "severity": "mandatory-governance",
+      "summary": "First integration commit ran while the workstream still reported ASSIGNED.",
+      "status": "VERIFIED_CLOSED",
+      "resolution": "Advanced registry and dependency lifecycle before publishing the final exact integrated source and evidence run."
+    },
+    {
+      "id": "T08-D003",
+      "severity": "mandatory-visual",
+      "requirements": ["T08-R03", "T08-R04", "T08-R08", "T08-R11"],
+      "summary": "Actor loads read as tiny loose ground clutter instead of attached, upright physical stacks at gameplay scale.",
+      "status": "VERIFIED_CLOSED",
+      "resolution": "Distinct resource-specific vertical lanes now form compact, upright, actor-attached towers; exact integrated gameplay, detail and device pixels show no blob, clipping or floating defects."
+    },
+    {
+      "id": "T08-D004",
+      "severity": "mandatory-visual",
+      "requirements": ["T08-R05", "T08-R11"],
+      "summary": "Transfer pieces and arcs were too small, short and low-contrast to make direction readable from pixels.",
+      "status": "VERIFIED_CLOSED",
+      "resolution": "Each flight now renders six bounded tapered segments, readable arrowheads, cyan source-to-actor or gold actor-to-destination trails and a complete 26-sample destination pulse; six held route proofs passed independent review."
+    },
+    {
+      "id": "T08-D005",
+      "severity": "mandatory-evidence",
+      "requirements": ["T08-R05", "T08-R07", "T08-R08"],
+      "summary": "The first artifact omitted furnace/build/repair and lead-switch/hidden-actor proof and its integrated capture reported an overlapping duplicate stockpile.",
+      "status": "VERIFIED_CLOSED",
+      "resolution": "Player/helper furnace, storage, build and repair routes plus lead-switch and hidden-actor evidence now exercise the shipping stockpile and pass exact integrated review."
+    },
+    {
+      "id": "T08-D006",
+      "severity": "mandatory-contract",
+      "requirements": ["T08-R02"],
+      "summary": "Unsupported inventory keys were silently ignored instead of failing closed.",
+      "status": "VERIFIED_CLOSED",
+      "resolution": "All non-string or unsupported keys are rejected before normalization with transactional state preserved; behavioral and static-contract regression coverage passed in the exact integrated run."
+    },
+    {
+      "id": "REF-COVERAGE-01",
+      "severity": "mandatory-reference-evidence",
+      "requirements": ["T08-R03", "T08-R05", "T08-R11"],
+      "summary": "The initial critic packet exposed only 7 of 44 locked reference frames and neither original locked recording.",
+      "status": "VERIFIED_CLOSED",
+      "resolution": "Both exact source recordings and all 44 manifest-locked frames were hash-verified; the independent critic reviewed the complete motion/reference set and approved T08."
+    }
+  ],
+  "unresolved_mandatory_count": 0,
+  "critic_scores": {"C2": 9.55, "C3": 9.48, "C4": 9.52, "C6": 9.61},
+  "critic_source": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
+  "critic_history": [
+    {"cycle":"initial-independent-review","source":"76e11b2296bc8447f7ffd2e2bcbcb48245ad4f5f","scores":{"C2":7.85,"C3":7.62,"C4":6.84,"C6":9.27},"verdict":"BLOCKED"},
+    {"cycle":"round-two-independent-review","source":"50b07e60ac2b6d2a98e80732f62f66a14e15cec4","scores":{"C2":8.74,"C3":8.67,"C4":8.52,"C6":9.61},"verdict":"BLOCKED"},
+    {"cycle":"round-three-code-and-pixel-review","source":"3dea0a34c6676280baf239e1b6679571a94d0440","scores":{"C2":8.97,"C3":8.92,"C4":8.84,"C6":9.36},"verdict":"BLOCKED"},
+    {"cycle":"final-candidate-incomplete-reference-review","source":"9d56ea8ae972d0a0705ff8b985e13fab31dde493","scores":{"C2":8.99,"C3":8.98,"C4":8.97,"C6":9.61},"verdict":"BLOCKED"},
+    {"cycle":"final-independent-review-complete-reference","source":"9d56ea8ae972d0a0705ff8b985e13fab31dde493","scores":{"C2":9.55,"C3":9.48,"C4":9.52,"C6":9.61},"verdict":"APPROVED"}
+  ],
+  "evidence_retest_requested": false,
+  "critic_approval_pending": false,
+  "task_approved": true,
+  "advisories": [
+    "T09 remains separately packeted and reviewed.",
+    "T68/T69 retain physical-device native-4K/60 certification."
+  ]
+}

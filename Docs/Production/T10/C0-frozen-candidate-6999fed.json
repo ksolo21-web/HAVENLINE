@@ -1,0 +1,243 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0",
+  "non_voting": true,
+  "validated": true,
+  "diagnosis_id": "C0-T10-35337231852-6999fed",
+  "task_id": "T10",
+  "failed_run_id": 35337231852,
+  "failed_candidate": "6999fedfd9bd494c76710cb9604175eb07666c31",
+  "repair_base": "6999fedfd9bd494c76710cb9604175eb07666c31",
+  "integration_head": "c7b280d0ce2189ba6f716c4f19537bb2b21845c2",
+  "candidate_tree": "f9a7bd7b4e6f6bf908a12e208e0cd6a9c7ade2c5",
+  "engine": "4.7.2.stable.official.ed1daf0bf",
+  "diagnosis_status": "DIAGNOSIS_COMPLETE",
+  "terminal_class": "MIXED",
+  "complete_known_blocker_set": true,
+  "builder_action": "REPAIR",
+  "source_evidence": [
+    "Hosted adapter-preflight run 35337231594 job 105574778771 fails only because the preactivation reservation checker rejects the approved integration-only simulation.gd change; canonical registered workstream validation passes the same exact candidate and CR.",
+    "Hosted capture/review run 35337231852 produced exact-source artifact 10542578967 (ZIP SHA256 5057dd5207f0aa093918cb5a8645c53bb94ffa90055f6fe601cb21e5c773c9b5); capture, device, native-4K, movie and quantitative counter stages passed.",
+    "C7 artifact 105575431642 (ZIP SHA256 b94a8cb7de2899afa8963d92a040caaece2aaa533800551826fef10c81015177) contains no review judgment: a 14137-token request exceeded the pinned 12288-token context because model-facing evidence included the large source-hash map and repeated full scope.",
+    "C3 artifact 10543998592 (ZIP SHA256 58af9207b21d27853c4fe3683ef7172c82cbef52bc315cc54526e3548fbf57d2) contains no review judgment: 6473 prompt tokens consumed 1136.71 seconds and only 212 output tokens were generated before the unchanged 1200-second request deadline.",
+    "C4 artifact 10544917078 (ZIP SHA256 aaa9a7985860e345e3c9d134811e0addb526e9586fcde0ba7b731e67e95c480a) is terminal and incomplete: its full-lifecycle group returned all six dimensions at 10.0 with no defect, but the motion group timed out after 4026 of approximately 6000 prompt tokens had consumed 1087.62 seconds. The incomplete aggregate fails and no C4 score is carried forward.",
+    "Independent exact-source C1/C2 visual review passed all mandatory dimensions above 9.0 with zero defects; the actual 194-frame movie and all 36 native plus 36 device frames were inspected. These 6999 scores cannot be carried forward to a later SHA.",
+    "Independent C6 review of the same artifact supports seven dimensions at 9.2-10 but correctly leaves frame_time and thermal_risk unscored because no no-screenshot steady-state timing, duty-cycle or memory-plateau evidence exists.",
+    "Primary run 35337231625, the exact-source regression, 538 focused Godot checks, seven-case save matrix, 353-check C7 deterministic proof, production/tooling tests and post-build ownership scope passed.",
+    "Read-only closeout simulation shows validate_migration.py rejects a legitimate future T10 APPROVED state because t10_activation_errors accepts only LOCKED or active states and the task-gates approved-prefix calculation stops at T09."
+  ],
+  "prior_diagnosis": {
+    "report_sha256": "656fe67d93c8ce4d13ae37bd5d7947d819f9820badbe01a746d70d286ae8001f",
+    "resolved_blockers": [
+      "C0-T10-B015",
+      "C0-T10-B016",
+      "C0-T10-B017",
+      "C0-T10-B018",
+      "C0-T10-B019",
+      "C0-T10-B020",
+      "C0-T10-B021",
+      "C0-T10-B022",
+      "C0-T10-B023"
+    ],
+    "disposition": "The 6999 candidate retains the verified runtime, visual, recovery and governance repairs. No passed runtime or visual source is reopened by this diagnosis."
+  },
+  "blockers": [
+    {
+      "id": "C0-T10-B024",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "The task-owned adapter-preflight workflow rejects the registered 6999 candidate even though its integration-only simulation.gd delta is authorized by an approved exact-path change request and canonical workstream validation passes.",
+      "evidence": [
+        "The workflow always invokes prepare_reconciliation.py, whose correct preactivation contract permits only the activation-checklist reservation and therefore reports simulation.gd as unauthorized.",
+        "The authoritative T10 lifecycle is ASSIGNED with registry base 62f5a13753968c77a0feb47a18d93c82d8c5b581, current integration c7b280d0ce2189ba6f716c4f19537bb2b21845c2 and an approved simulation.gd change request.",
+        "workstream.py validate-candidate excludes the shared integration/governance prefix, recognizes the approved exact target path and passes the same candidate without a waiver."
+      ],
+      "root_cause": "A historical preactivation-only reconciliation path remained unconditional after T10 activation, so the workflow bypasses the canonical registered-candidate ownership and change-request resolver and then asserts the wrong report schema.",
+      "affected_object": "T10 adapter preflight ownership and lifecycle validation",
+      "causal_fix": "Resolve preactivation versus registered lifecycle from authoritative registry state. Keep prepare_reconciliation.py unchanged for missing/LOCKED/PREPARED preactivation candidates; reject APPROVED; route every registry-valid active repair/build state through workstream.py validate-candidate using the registry base and fetched integration head. Consume the matching report schema and keep integration_allowed and task_approved false.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-adapter-preflight.yml",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "Docs/Production/T10/C0-frozen-candidate-6999fed.json",
+        "Docs/Production/T10/REPAIR_PLAN.json"
+      ],
+      "files_not_to_change": [
+        "tools/havenline/task10/prepare_reconciliation.py",
+        "tools/havenline/production/workstream.py",
+        "Docs/Production/PATH_OWNERSHIP.json",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "Docs/Production/DEPENDENCY_GRAPH.json"
+      ],
+      "verification": [
+        "A registered T10 candidate with the approved simulation.gd CR passes canonical validate-candidate and the adapter contract while an unauthorized integration-only or foreign path still fails.",
+        "A true preactivation candidate continues to use the strict unchanged reservation checker, including rejection of simulation.gd.",
+        "APPROVED and invalid registry states fail closed; active repair states retain canonical ownership validation and neither path grants integration or task approval."
+      ]
+    },
+    {
+      "id": "C0-T10-B025",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "The T10 critic aggregate treats the unscored deterministic C6 budget result as the complete C6 critic record, but forward closure requires a scored, source-bound C6 record across all nine mandatory dimensions.",
+      "evidence": [
+        "critic_harness.py performance returns passed, measurement and errors but no scores, raw-record provenance, coverage or confidence.",
+        "aggregate_critics.py currently inserts that deterministic result as C6, and closeout_evidence.py accepts six IDs without distinguishing a scored critic from its deterministic supplement.",
+        "closure_validator.py, T10-R14 and CRITIC_EXECUTION require C6 scores strictly above 9.0 for frame_time, draw_calls, geometry, texture_memory, shader_cost, physics, animation, population and thermal_risk.",
+        "There is no authorized metric-to-score conversion. T09 demonstrates the canonical pattern: genuine scored C6 review grounded in a separate quantitative gate, with physical certification explicitly false."
+      ],
+      "root_cause": "Task-owned aggregation conflates a necessary quantitative safeguard with the separate scored critic judgment required at closure.",
+      "affected_object": "Formal C6 critic evidence and exact-source T10 closeout",
+      "causal_fix": "Package a C6 input manifest, ingest a fresh separate-reviewer C6 record without assigning or converting scores, validate all nine dimensions and provenance, and retain the unchanged quantitative performance result as a distinct deterministic supplement. Make aggregation and closeout require both objects for the same exact candidate and artifact.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/review_performance.py",
+        "tools/havenline/task10/aggregate_critics.py",
+        "tools/havenline/task10/closeout_evidence.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_review_performance.py",
+        "tools/havenline/task10/tests/test_aggregate_critics.py",
+        "tools/havenline/task10/tests/test_closeout_evidence.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "files_not_to_change": [
+        "tools/havenline/production/critic_harness.py",
+        "tools/havenline/production/closure_validator.py",
+        "tools/havenline/production/specialist_critic_runner.py",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "Docs/Production/PERFORMANCE_BUDGETS.json"
+      ],
+      "verification": [
+        "Aggregation rejects missing or altered scored C6 input, any missing dimension, score at or below 9.0, defect, stale candidate/manifest/raw hash, incomplete coverage or invalid reviewer provenance.",
+        "Aggregation separately rejects a missing, failed or stale deterministic C6 supplement; neither record substitutes for the other.",
+        "A fresh independent reviewer may score bounded software-fixture thermal-risk indicators, but the record and deterministic measurement both state physical_certification=false and make no T68/T69 claim."
+      ]
+    },
+    {
+      "id": "C0-T10-B026",
+      "classification": "TOOLING_DEFECT",
+      "symptom": "Source-complete but redundant model-facing evidence exceeds the pinned review runtime's context or wall-time budget: C7 exceeds context, C3 produces no judgment before timeout, and C4 completes only its lifecycle group before its motion group times out.",
+      "evidence": [
+        "C7 sends about 31867 characters including a 16456-character progression record whose sorted source_sha256 map consumes the first 14000-character item window; the resulting 14137-token request exceeds the 12288-token context.",
+        "C3 repeats a 9135-character full scope plus a 5215-character summary in every image group; its 6473-token prompt took 1136.71 seconds and timed out after only 212 generated tokens.",
+        "C4 full-lifecycle completed with all six dimensions at 10.0 and no defects, but its next motion request timed out after 1087.62 seconds had processed only 4026 of roughly 6000 prompt tokens; coverage_complete=false and passed=false are therefore correct.",
+        "Full raw progression, suite logs, scope, images, video, save matrix and evidence index already exist and can remain retained and hash-bound without repeating their verbose content in each model request."
+      ],
+      "root_cause": "The packager equates retained evidence completeness with prompt duplication. High-entropy source hashes and repeated full documents consume context and CPU prompt-evaluation time before the reviewer can judge the supplied evidence.",
+      "affected_object": "Executable independent C3/C4/C7 review on the pinned specialist runtime",
+      "causal_fix": "Generate concise category-specific model-facing briefs and proofs that preserve exact candidate identity, scope, controls, exclusions, named required checks and raw path/digest bindings. Use compact lifecycle/motion/device briefs for C3/C4 and a compact progression proof without the large source hash map for C7. Keep every full raw source, log, image, movie, scope document and hash index in the artifact. Enforce bounded rendered prompt payloads and complete category/dimension coverage without changing the shared runner, model, context, timeout or thresholds.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "files_not_to_change": [
+        ".github/workflows/havenline-specialist-critic.yml",
+        "tools/havenline/production/specialist_critic_runner.py",
+        "tools/havenline/production/specialist_evidence_manifest.py",
+        "Docs/Production/T10/FROZEN_SCOPE.md",
+        "Docs/Production/CRITIC_EXECUTION.json"
+      ],
+      "verification": [
+        "Every C3/C4 group renders at most 2800 text characters and every C7 group at most 7500; the conservative estimate base 1000 + image 2048 when present + ceil(text characters / 2.5) remains at most 4200 tokens, with no silent 14000-character truncation and no category/dimension loss.",
+        "Compact proofs bind the full original report, logs and scope by path and SHA256 and retain every required suite/check name; hostile removal, stale digest or omitted category fails readiness.",
+        "Fresh exact-source hosted C3/C4/C7 jobs complete on the unchanged pinned runtime and produce actual raw judgments; the 6999 timeouts are never interpreted as critic defects or scores."
+      ]
+    },
+    {
+      "id": "C0-T10-B027",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "The exact-source performance package has valid bounded counters but lacks representative no-screenshot steady-state timing and sustained workload data needed to judge C6 frame_time and early thermal_risk.",
+      "evidence": [
+        "The frozen performance record measures 2232 primitives, 9 draw calls/material upper bound, 170.46 MiB texture memory and 768.94 MiB RSS with zero actors, rigs and active physics, but cpu_frame_time_if_measurable and gpu_frame_time_if_measurable are null.",
+        "The independent C6 report leaves frame_time and thermal_risk unscored because screenshot/file-I/O captures do not establish idle-versus-committing frame distribution, sustained drift, duty cycle or memory/node plateau.",
+        "The deterministic C6 gate correctly passes implemented budgets and does not create the missing scored evidence."
+      ],
+      "root_cause": "Visual capture and static counter collection were used as the only performance source; no task-owned steady-state benchmark isolates the bounded T10 view's idle and committing work from evidence-capture I/O.",
+      "affected_object": "C6 frame-time and bounded early thermal-risk evidence",
+      "causal_fix": "Add a task-owned benchmark script that reuses the exact capture fixture setup by inheritance but overrides lifecycle capture. After warm-up, run repeated no-screenshot/no-file-I/O idle and committing intervals and record finite timing distributions, active-minus-idle deltas, repeated duty cycle, first-versus-last drift, RSS/static-memory/node/draw/geometry/texture plateaus, exact renderer/resolution and sample counts. Keep hardware GPU time and physical thermals explicitly unmeasured and physical_certification=false.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "Docs/Production/PERFORMANCE_BUDGETS.json"
+      ],
+      "verification": [
+        "Pinned Godot produces positive bounded samples for repeated idle and committing phases with declared warm-up, duration, frame counts, duty cycle, percentiles, drift and plateau data, with no screenshot/movie/file write inside a measured phase.",
+        "Readiness rejects zero/insufficient samples, non-finite values, missing phases, unstable nodes/memory, source/renderer mismatch or physical-certification claims.",
+        "The unchanged deterministic performance gate passes, then a fresh separate C6 reviewer scores all nine dimensions from the exact artifact without converting counters mechanically or claiming physical 4K60/thermal certification."
+      ]
+    },
+    {
+      "id": "C0-T10-B028",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "A fully closed T10 cannot pass validate_migration.py because the T10 lifecycle helper rejects APPROVED as an invalid active state and the expected task-gates approved list is hard-coded to end at T09.",
+      "evidence": [
+        "T10_ACTIVE_STATES omits APPROVED and t10_activation_errors returns 'invalid active T10 lifecycle state: APPROVED' before evaluating a completed owner or cleared active pointers.",
+        "The main migration path always calls the T10 helper after T09 approval, including during T10 closeout.",
+        "The expected_approved selection can produce at most T01-T09, so a legitimate task-gates approved_tasks entry for T10 is rejected.",
+        "validate_migration.py is not byte-locked by ARCHITECTURE_RELEASE_LOCK.json; validate_migration_scope.py remains locked and is unrelated."
+      ],
+      "root_cause": "The activation-era migration validator modeled T10 LOCKED and active ownership but never added the terminal completed lifecycle branch or advanced the contiguous approved-task prefix for T10.",
+      "affected_object": "T10 final migration/ownership/task-gate closeout validation",
+      "causal_fix": "Under one exact integration-owner change request, add a distinct T10 APPROVED branch that preserves dependencies, critics, reservation identity and T11+ lock; requires one matching APPROVED registry row, no T10 active owner, one completed T10 owner with source-bound identity, cleared active_* pointers and a matching T10 completed-task record; and extends the approved prefix to T10 only when graph T10 is APPROVED. Keep the active branch and generic closure validator unchanged and do not advance current lifecycle data.",
+      "files_to_change": [
+        "Docs/Production/ChangeRequests/T10-migration-approved-closeout.json",
+        "tools/havenline/production/validate_migration.py",
+        "tools/havenline/production/tests/test_t10_activation_validation.py"
+      ],
+      "files_not_to_change": [
+        "tools/havenline/production/validate_migration_scope.py",
+        "tools/havenline/production/closure_validator.py",
+        "Docs/Production/DEPENDENCY_GRAPH.json",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "Docs/Production/PATH_OWNERSHIP.json",
+        "Docs/Production/task-gates.json",
+        "Docs/Production/T10/verified-completion.json",
+        "all critic, gate and threshold definitions"
+      ],
+      "verification": [
+        "Current T10 ASSIGNED and every canonical active repair state continue to pass/fail exactly as before; no current lifecycle file changes.",
+        "A synthetic exact APPROVED state passes only with T01-T10 approved contiguously, T11+ locked, matching registry/completed owner/completion record source identity and all active_* pointers clear.",
+        "Hostile APPROVED fixtures reject retained active ownership or pointers, missing/duplicate completed owner, source mismatch, missing completion record, unlocked T11, graph/registry mismatch and a missing/extra approved_tasks entry.",
+        "The full production governance suite and hosted governance workflow pass before final closeout; the unchanged generic closure validator still proves critics, evidence, factory and strict thresholds."
+      ]
+    }
+  ],
+  "repair_order": [
+    "C0-T10-B024",
+    "C0-T10-B026",
+    "C0-T10-B027",
+    "C0-T10-B025",
+    "C0-T10-B028"
+  ],
+  "unexecuted_checks": [
+    "Fresh exact-source C1/C2/C3/C4/C6/C7 records for the repaired candidate have not run.",
+    "Final integrated-source factory observation, G1-G14 closure and integration-owner approval have not run."
+  ],
+  "candidate_freeze": {
+    "required": true,
+    "validation_concurrency_policy": "finish_running_sha",
+    "cancelled_run_product_judgment": false,
+    "next_candidate_policy": "Frozen 6999 is terminal and fully incorporated. Build the bounded repair, freeze one new candidate, and run fresh exact-source validation without carrying forward any 6999 score."
+  },
+  "acceptance_rule_unchanged": ">9.0 unrounded in every mandatory dimension; no averaging; zero unresolved mandatory defects",
+  "summary": "The 6999 runtime and visual repairs remain valid. The complete currently knowable blocker set is five governance/evidence-tooling defects: stale preactivation routing, incomplete C6 closure representation, oversized critic prompts, missing steady-state C6 measurements and missing terminal T10 migration-state support. C4's clean lifecycle judgment is only partial because motion timed out, so it supplies no reusable aggregate score. No shipping gameplay/runtime change is authorized.",
+  "confidence": "high",
+  "approval_claimed": false,
+  "score_assigned": false
+}

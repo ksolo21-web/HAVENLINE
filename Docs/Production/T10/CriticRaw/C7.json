@@ -1,0 +1,60 @@
+{
+  "critic_id": "C7",
+  "provider": "unsloth/Qwen3.5-9B-GGUF",
+  "model": "Qwen/Qwen3.5-9B",
+  "model_revision_expected": "3885219b6810b007914f3a7950a8d1b469d598a5",
+  "model_revision_actual": "3885219b6810b007914f3a7950a8d1b469d598a5",
+  "runtime_release": "b10809",
+  "request_or_run_id": "preserved:35582494065/semantic-specialist->eba0107def258824549fb10d81785290d0c81d97",
+  "candidate_hash": "eba0107def258824549fb10d81785290d0c81d97",
+  "input_manifest_hash": "76d39072e26abe88bf8f0979db06e7eb904fd76cd5188bb7fb029ae3b52b0eb7",
+  "raw_output_path": "preserved/C7/raw-output.json",
+  "raw_output_hash": "ef3323be31c7d9ac4722d1b70b18d1e44abee8c8f499d522a5559a87bc9e1314",
+  "scores": {
+    "state_graph_integrity": 10.0,
+    "prerequisite_integrity": 10.0,
+    "transaction_ordering": 10.0,
+    "exact_once_replay": 10.0,
+    "recovery_integrity": 10.0,
+    "bounded_state": 10.0
+  },
+  "defects": [],
+  "coverage_complete": true,
+  "confidence": "high",
+  "independent_runtime": true,
+  "groups": [
+    {
+      "group": "transaction-integrity",
+      "review": {
+        "observations": [
+          "All six mandatory C7 dimensions (state_graph_integrity, prerequisite_integrity, transaction_ordering, exact_once_replay, recovery_integrity, bounded_state) are ",
+          "Evidence confirms strict adherence to 'exact-once' semantics via idempotent duplicate rejection and stale revision rejection tests (135 integration checks PASS,"
+        ],
+        "defects": [],
+        "coverage_complete": true,
+        "confidence": "high",
+        "scores": {
+          "state_graph_integrity": 10.0,
+          "prerequisite_integrity": 10.0,
+          "transaction_ordering": 10.0,
+          "exact_once_replay": 10.0,
+          "recovery_integrity": 10.0,
+          "bounded_state": 10.0
+        }
+      },
+      "passed": true,
+      "errors": [],
+      "lowest_score": 10.0
+    }
+  ],
+  "fatal_error": null,
+  "passed": true,
+  "task_id": "T10",
+  "preserved_pass": true,
+  "fresh_rerun": false,
+  "preserved_from_candidate": "7eccdac8928e59812d7991d2f2da93eb6b8ebf18",
+  "preserved_from_run": 35582494065,
+  "preservation_proof": "preserved/preservation-proof.json",
+  "preservation_policy": "critic-specific invalidation",
+  "review_mode": "preserved"
+}

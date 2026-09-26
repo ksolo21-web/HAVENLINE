@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "authorization_kind": "T10_RENDERED_CLEARANCE_ONE_SHOT",
+  "disposition": "AUTHORIZED_FOR_ONE_DIAGNOSTIC_EXECUTION",
+  "diagnostic_execution_authorized": true,
+  "max_runs": 1,
+  "probe": {
+    "commit": "f3ded9ba3d0c0d2182c9db4efbc9cc0a703dc347",
+    "tree": "fca9a337b7b4fdf3b2ccbb1c38ce603876f927c0",
+    "workflow_path": ".github/workflows/havenline-rendered-clearance-t10-probe.yml",
+    "workflow_sha256": "607bb3ff328327c609a2735df7f46e5a60d9c174bb7e0d7770d769e3bccdbfe8",
+    "ref": "refs/heads/havenline/governance-T10-rendered-clearance-probe",
+    "event": "push",
+    "failed_source": "30a7e0cc40d44aea2b21229bc39f312da13865e0",
+    "failed_view_sha256": "6d737567f224be8d221b18e4d0ace6c6ef10de0102d27901c9f9e8d37e6659ac"
+  },
+  "identity_mapping": {
+    "reviewed_local_commit": "feb3679dd1cfaf629b65d8b7cbbc125932a3acef",
+    "reviewed_local_tree": "fca9a337b7b4fdf3b2ccbb1c38ce603876f927c0",
+    "remote_unpromoted_source_commit": "f3ded9ba3d0c0d2182c9db4efbc9cc0a703dc347",
+    "remote_unpromoted_source_tree": "fca9a337b7b4fdf3b2ccbb1c38ce603876f927c0",
+    "remote_staging_ref": "refs/heads/havenline/review-T10-rendered-clearance-probe-source",
+    "identical_tree_verified": true
+  },
+  "canonical_path_authorization": {
+    "commit": "26e61db3836d9c3c4615c167d19c35f1615d30c7",
+    "workflow_owned_by": "@ownership:QA-GOV",
+    "seven_path_scope_record": "Docs/Production/ChangeRequests/T10-rendered-clearance-probe.json"
+  },
+  "independent_reviews": {
+    "review_packet_sha256": "4f356df7d1446fbbd8c6e446767eebee91ad3b961753c2f9193274bbb716467a",
+    "c0r_decision": "ACCEPTED_FOR_ONE_SHOT_DIAGNOSTIC_EXECUTION",
+    "c0r_sha256": "47f0e3c77be0bcdb2e8bb3a80612fb12ae05e94dc18d82d712a3442ae0c77851",
+    "integration_owner_decision": "ACCEPTED_FOR_ONE_DIAGNOSTIC_RUN_AFTER_CANONICAL_EXACT_AUTHORIZATION",
+    "integration_owner_sha256": "b216a731cad6d06712e0fbfc313790c7aef7f3305932b85fb86d522190852d79"
+  },
+  "scope": {
+    "diagnostic_only": true,
+    "task_approved": false,
+    "full_candidate_authorized": false,
+    "canonical_product_integration_authorized": false,
+    "reusable_for_approval": false,
+    "rerun_authorized": false,
+    "run_deletion_authorized": false
+  }
+}

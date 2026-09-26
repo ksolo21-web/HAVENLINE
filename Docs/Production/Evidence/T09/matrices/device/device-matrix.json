@@ -1,0 +1,113 @@
+{
+  "harness": "device_layout_matrix_v1",
+  "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "task_id": "T09",
+  "checks": [
+    "safe_area",
+    "primary_joystick_reach",
+    "text_readability",
+    "touch_target_size",
+    "camera_world_scale",
+    "HUD_no_clipping",
+    "menu_scrollability",
+    "resize_transition",
+    "lifecycle_resume",
+    "save_continuity"
+  ],
+  "states": [
+    {
+      "state": {
+        "id": "phone_16_9",
+        "logical_size": [
+          2400,
+          1080
+        ],
+        "class": "phone",
+        "fold_state": "none"
+      },
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/device/phone_16_9.log",
+      "log_sha256": "605da9d55b4badc9801cfb1582ffb73180ecf58e175419bf8d09193239efd5fd"
+    },
+    {
+      "state": {
+        "id": "phone_20_9",
+        "logical_size": [
+          2400,
+          1080
+        ],
+        "class": "phone",
+        "fold_state": "none",
+        "safe_area_test": true
+      },
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/device/phone_20_9.log",
+      "log_sha256": "27a13d90c9367555662a7b78925e367067a5524c3dd20fcbe303f425edeb2685"
+    },
+    {
+      "state": {
+        "id": "tablet_16_10",
+        "logical_size": [
+          2560,
+          1600
+        ],
+        "class": "tablet",
+        "fold_state": "none"
+      },
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/device/tablet_16_10.log",
+      "log_sha256": "ee1dc0f2e0d4aec129edc340179f3b53d77f7c5190f328f0f4d18a65979be205"
+    },
+    {
+      "state": {
+        "id": "tablet_4_3",
+        "logical_size": [
+          2732,
+          2048
+        ],
+        "class": "tablet",
+        "fold_state": "none"
+      },
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/device/tablet_4_3.log",
+      "log_sha256": "fdf06da366e1d3f197690114609fb6cff00dec9df5f45d4fd7401ff3176122a5"
+    },
+    {
+      "state": {
+        "id": "foldable_outer",
+        "logical_size": [
+          2520,
+          1080
+        ],
+        "class": "foldable",
+        "fold_state": "outer"
+      },
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/device/foldable_outer.log",
+      "log_sha256": "70506efd16f8c03b655523cefddfeabec989bb885ec5664040df0531108c8914"
+    },
+    {
+      "state": {
+        "id": "foldable_inner",
+        "logical_size": [
+          2208,
+          1768
+        ],
+        "class": "foldable",
+        "fold_state": "inner"
+      },
+      "passed": true,
+      "returncode": 0,
+      "log": "task09-evidence/matrices/device/foldable_inner.log",
+      "log_sha256": "54716b41c9c5f3af8e3572f32c01f6b5be0ee8a73c850ad747781c68229f4c02"
+    }
+  ],
+  "passed": true,
+  "failures": [],
+  "physical_4k60_certified": false
+}

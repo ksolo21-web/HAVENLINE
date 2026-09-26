@@ -1,0 +1,97 @@
+name: Havenline Task 10 preparation gate
+
+on:
+  push:
+    branches: ['havenline/governance-t10-prep']
+    paths:
+      - 'Docs/Production/T10/**'
+      - 'tools/havenline/task10/**'
+      - '.github/workflows/havenline-task10-*.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-task10-preparation-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  validate-preparation:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Reject activated forward use of historical preparation workflow
+        run: |
+          python3 - <<'PY'
+          import json
+          r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
+          t10=next((x for x in r['workstreams'] if x['task_id']=='T10'), {})
+          assert t10.get('status', 'LOCKED') in ('LOCKED', 'PREPARED'), 'Historical preparation only; use the registered T10 candidate workflows'
+          PY
+
+      - name: Python syntax and frozen preparation contract
+        run: |
+          set -euo pipefail
+          mkdir -p task10-prep-evidence
+          python3 -m py_compile tools/havenline/task10/prepare_activation.py
+          python3 tools/havenline/task10/prepare_activation.py | tee task10-prep-evidence/preparation.json
+
+      - name: Verify T10/T09 ownership separation and critic contract
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | tee task10-prep-evidence/static-contract.json
+          import json
+          from pathlib import Path
+
+          checklist=json.loads(Path('Docs/Production/T10/ACTIVATION_CHECKLIST.json').read_text())
+          ownership=json.loads(Path('Docs/Production/PATH_OWNERSHIP.json').read_text())
+          graph=json.loads(Path('Docs/Production/DEPENDENCY_GRAPH.json').read_text())
+          critics=json.loads(Path('Docs/Production/CRITIC_MATRIX.json').read_text())
+
+          assert checklist['dependencies']==['T05','T08','T09']
+          assert graph['tasks']['T10']['dependencies']==checklist['dependencies']
+          assert checklist['required_critics']==['C1','C2','C3','C4','C6','C7']
+          assert graph['tasks']['T10']['critics']==checklist['required_critics']
+          assert critics['task_applicability']['T10']==checklist['required_critics']
+          assert checklist['runtime_build_allowed_before_activation'] is False
+
+          t09=set(ownership['aliases']['@reservation:T09'])
+          t10=set(checklist['planned_owned_paths'])
+          assert not (t09 & t10), sorted(t09 & t10)
+          assert 'HavenlineGodot/scripts/main.gd' not in t10
+          assert 'HavenlineGodot/scripts/simulation.gd' not in t10
+
+          result={
+            'task':'T10-preparation',
+            't09_status':graph['tasks']['T09']['status'],
+            't10_status':graph['tasks']['T10']['status'],
+            'dependency_contract':checklist['dependencies'],
+            'critic_contract':checklist['required_critics'],
+            'planned_paths':len(t10),
+            'exact_path_intersections_with_t09':0,
+            'runtime_build_allowed':False,
+            'passed':True,
+          }
+          print(json.dumps(result,indent=2))
+          PY
+
+      - name: Production governance regression
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/workstream.py validate-registry | tee task10-prep-evidence/registry.json
+          python3 tools/havenline/production/validate_migration.py > task10-prep-evidence/migration.json
+          python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > task10-prep-evidence/production-tools.log 2>&1
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task10-preparation-${{ github.sha }}
+          path: task10-prep-evidence
+          if-no-files-found: error
+          retention-days: 14

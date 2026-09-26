@@ -1,0 +1,4140 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "status": "PREPARATION_ONLY_AUTHORING_BLUEPRINT",
+  "shipping_path_forbidden": true,
+  "source_matrix_blob_sha": "dc59620cc40d17512b4e5cb03164bb13ac3f5b42",
+  "purpose": "Deterministic non-shipping authoring blueprint that preassigns T12-owned level/slot/fact-slot/effect/hook/milestone/event identities while keeping exact external producer IDs out of shipping topology.",
+  "identity_contract": {
+    "level": "t12.level.NNN",
+    "progression_slot": "t12.slot.NNN",
+    "fact_slot": "t12.fact.slot.NNN",
+    "effect": "t12.effect.level.NNN",
+    "visible_hook": "t12.visible.NNN",
+    "completion_event": "t12.event.level.NNN.completed",
+    "major_milestone": "t12.milestone.NNN"
+  },
+  "materialization_contract": {
+    "level_1_required_fact_ids": [],
+    "levels_2_100_required_fact_rule": "exactly [t12.fact.slot.NNN] matching the level number",
+    "external_authority_rule": "External T07/T08/T10/T11/later-content identifiers belong in the binding index, never directly in progression_levels_v1.json.",
+    "presentation_requirement_rule": "visible_progression_required and major_milestone_completed are T12 presentation/architecture requirements only and may never satisfy an authoritative fact slot.",
+    "later_owner_rule": "Unimplemented later content may leave its binding unresolved; the T12 fact-slot identity remains stable and the affected level stays locked until an authoritative producer is registered.",
+    "output_files": [
+      "HavenlineGodot/data/progression_levels_v1.json",
+      "HavenlineGodot/data/progression_milestones_v1.json",
+      "HavenlineGodot/data/progression_bindings_v1.json"
+    ],
+    "binding_output_rule": "The third shipping dataset progression_bindings_v1.json is materialized only from a fully dispositioned 99-slot resolved binding index; this blueprint never invents producer IDs."
+  },
+  "levels": [
+    {
+      "level": 1,
+      "level_id": "t12.level.001",
+      "progression_slot_id": "t12.slot.001",
+      "fact_slot_id": "t12.fact.slot.001",
+      "region_band_id": "band_opening_frozen",
+      "content_owner_task": "T32",
+      "role": "band_entry",
+      "binding_profile": "entry",
+      "prerequisite_level_ids": [],
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.001",
+        "kind": "entry",
+        "semantic": "Establish the band objective/state and one practical route/state slot.",
+        "owner_task": "T32",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.001.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 2,
+      "level_id": "t12.level.002",
+      "progression_slot_id": "t12.slot.002",
+      "fact_slot_id": "t12.fact.slot.002",
+      "region_band_id": "band_opening_frozen",
+      "content_owner_task": "T32",
+      "role": "interaction_expansion",
+      "binding_profile": "interaction",
+      "prerequisite_level_ids": [
+        "t12.level.001"
+      ],
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.002"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.002",
+        "kind": "interaction",
+        "semantic": "Unlock one practical resource/interaction/destination/recipe-family slot owned by the proper task.",
+        "owner_task": "T32",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.002.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 3,
+      "level_id": "t12.level.003",
+      "progression_slot_id": "t12.slot.003",
+      "fact_slot_id": "t12.fact.slot.003",
+      "region_band_id": "band_opening_frozen",
+      "content_owner_task": "T32",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.002"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.003"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.003",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T32",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.003"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.003.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 4,
+      "level_id": "t12.level.004",
+      "progression_slot_id": "t12.slot.004",
+      "fact_slot_id": "t12.fact.slot.004",
+      "region_band_id": "band_opening_frozen",
+      "content_owner_task": "T32",
+      "role": "loop_expansion",
+      "binding_profile": "loop",
+      "prerequisite_level_ids": [
+        "t12.level.003"
+      ],
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.004"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.004",
+        "kind": "loop",
+        "semantic": "Unlock one practical loop branch/helper/processing/automation slot without control complexity.",
+        "owner_task": "T32",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.004.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 5,
+      "level_id": "t12.level.005",
+      "progression_slot_id": "t12.slot.005",
+      "fact_slot_id": "t12.fact.slot.005",
+      "region_band_id": "band_opening_frozen",
+      "content_owner_task": "T32",
+      "role": "mid_band_capability",
+      "binding_profile": "capability",
+      "prerequisite_level_ids": [
+        "t12.level.004"
+      ],
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.005"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.005",
+        "kind": "capability",
+        "semantic": "Unlock one meaningful capability/system slot; stat-only/counter-only filler is invalid.",
+        "owner_task": "T32",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.005.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 6,
+      "level_id": "t12.level.006",
+      "progression_slot_id": "t12.slot.006",
+      "fact_slot_id": "t12.fact.slot.006",
+      "region_band_id": "band_opening_frozen",
+      "content_owner_task": "T32",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.005"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.006"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.006",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T32",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.006"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.006.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 7,
+      "level_id": "t12.level.007",
+      "progression_slot_id": "t12.slot.007",
+      "fact_slot_id": "t12.fact.slot.007",
+      "region_band_id": "band_opening_frozen",
+      "content_owner_task": "T32",
+      "role": "exploration_system_expansion",
+      "binding_profile": "exploration",
+      "prerequisite_level_ids": [
+        "t12.level.006"
+      ],
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.007"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.007",
+        "kind": "exploration",
+        "semantic": "Unlock one route/interaction/hazard-response/production-destination slot.",
+        "owner_task": "T32",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.007.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 8,
+      "level_id": "t12.level.008",
+      "progression_slot_id": "t12.slot.008",
+      "fact_slot_id": "t12.fact.slot.008",
+      "region_band_id": "band_opening_frozen",
+      "content_owner_task": "T32",
+      "role": "mastery_integration",
+      "binding_profile": "mastery",
+      "prerequisite_level_ids": [
+        "t12.level.007"
+      ],
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.008"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.008",
+        "kind": "mastery",
+        "semantic": "Require meaningful integration of earlier band capabilities without T13 difficulty tuning.",
+        "owner_task": "T32",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.008.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 9,
+      "level_id": "t12.level.009",
+      "progression_slot_id": "t12.slot.009",
+      "fact_slot_id": "t12.fact.slot.009",
+      "region_band_id": "band_opening_frozen",
+      "content_owner_task": "T32",
+      "role": "visible_pre_milestone",
+      "binding_profile": "visible_pre_milestone",
+      "prerequisite_level_ids": [
+        "t12.level.008"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.009"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.009",
+        "kind": "visible_pre_milestone",
+        "semantic": "Require a visible improvement that truthfully prepares the band milestone.",
+        "owner_task": "T32",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.009"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.009.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 10,
+      "level_id": "t12.level.010",
+      "progression_slot_id": "t12.slot.010",
+      "fact_slot_id": "t12.fact.slot.010",
+      "region_band_id": "band_opening_frozen",
+      "content_owner_task": "T32",
+      "role": "major_milestone",
+      "binding_profile": "milestone",
+      "prerequisite_level_ids": [
+        "t12.level.009"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "major_milestone_completed",
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.010"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.010",
+        "kind": "milestone",
+        "semantic": "Require a major visible/system milestone and expose the next-band transition hook.",
+        "owner_task": "T32",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.010"
+      ],
+      "milestone_ids": [
+        "t12.milestone.010"
+      ],
+      "one_time_event_ids": [
+        "t12.event.level.010.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 11,
+      "level_id": "t12.level.011",
+      "progression_slot_id": "t12.slot.011",
+      "fact_slot_id": "t12.fact.slot.011",
+      "region_band_id": "band_forest",
+      "content_owner_task": "T44",
+      "role": "band_entry",
+      "binding_profile": "entry",
+      "prerequisite_level_ids": [
+        "t12.level.010"
+      ],
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.011"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.011",
+        "kind": "entry",
+        "semantic": "Establish the band objective/state and one practical route/state slot.",
+        "owner_task": "T44",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.011.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 12,
+      "level_id": "t12.level.012",
+      "progression_slot_id": "t12.slot.012",
+      "fact_slot_id": "t12.fact.slot.012",
+      "region_band_id": "band_forest",
+      "content_owner_task": "T44",
+      "role": "interaction_expansion",
+      "binding_profile": "interaction",
+      "prerequisite_level_ids": [
+        "t12.level.011"
+      ],
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.012"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.012",
+        "kind": "interaction",
+        "semantic": "Unlock one practical resource/interaction/destination/recipe-family slot owned by the proper task.",
+        "owner_task": "T44",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.012.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 13,
+      "level_id": "t12.level.013",
+      "progression_slot_id": "t12.slot.013",
+      "fact_slot_id": "t12.fact.slot.013",
+      "region_band_id": "band_forest",
+      "content_owner_task": "T44",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.012"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.013"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.013",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T44",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.013"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.013.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 14,
+      "level_id": "t12.level.014",
+      "progression_slot_id": "t12.slot.014",
+      "fact_slot_id": "t12.fact.slot.014",
+      "region_band_id": "band_forest",
+      "content_owner_task": "T44",
+      "role": "loop_expansion",
+      "binding_profile": "loop",
+      "prerequisite_level_ids": [
+        "t12.level.013"
+      ],
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.014"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.014",
+        "kind": "loop",
+        "semantic": "Unlock one practical loop branch/helper/processing/automation slot without control complexity.",
+        "owner_task": "T44",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.014.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 15,
+      "level_id": "t12.level.015",
+      "progression_slot_id": "t12.slot.015",
+      "fact_slot_id": "t12.fact.slot.015",
+      "region_band_id": "band_forest",
+      "content_owner_task": "T44",
+      "role": "mid_band_capability",
+      "binding_profile": "capability",
+      "prerequisite_level_ids": [
+        "t12.level.014"
+      ],
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.015"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.015",
+        "kind": "capability",
+        "semantic": "Unlock one meaningful capability/system slot; stat-only/counter-only filler is invalid.",
+        "owner_task": "T44",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.015.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 16,
+      "level_id": "t12.level.016",
+      "progression_slot_id": "t12.slot.016",
+      "fact_slot_id": "t12.fact.slot.016",
+      "region_band_id": "band_forest",
+      "content_owner_task": "T44",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.015"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.016"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.016",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T44",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.016"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.016.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 17,
+      "level_id": "t12.level.017",
+      "progression_slot_id": "t12.slot.017",
+      "fact_slot_id": "t12.fact.slot.017",
+      "region_band_id": "band_forest",
+      "content_owner_task": "T44",
+      "role": "exploration_system_expansion",
+      "binding_profile": "exploration",
+      "prerequisite_level_ids": [
+        "t12.level.016"
+      ],
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.017"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.017",
+        "kind": "exploration",
+        "semantic": "Unlock one route/interaction/hazard-response/production-destination slot.",
+        "owner_task": "T44",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.017.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 18,
+      "level_id": "t12.level.018",
+      "progression_slot_id": "t12.slot.018",
+      "fact_slot_id": "t12.fact.slot.018",
+      "region_band_id": "band_forest",
+      "content_owner_task": "T44",
+      "role": "mastery_integration",
+      "binding_profile": "mastery",
+      "prerequisite_level_ids": [
+        "t12.level.017"
+      ],
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.018"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.018",
+        "kind": "mastery",
+        "semantic": "Require meaningful integration of earlier band capabilities without T13 difficulty tuning.",
+        "owner_task": "T44",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.018.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 19,
+      "level_id": "t12.level.019",
+      "progression_slot_id": "t12.slot.019",
+      "fact_slot_id": "t12.fact.slot.019",
+      "region_band_id": "band_forest",
+      "content_owner_task": "T44",
+      "role": "visible_pre_milestone",
+      "binding_profile": "visible_pre_milestone",
+      "prerequisite_level_ids": [
+        "t12.level.018"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.019"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.019",
+        "kind": "visible_pre_milestone",
+        "semantic": "Require a visible improvement that truthfully prepares the band milestone.",
+        "owner_task": "T44",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.019"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.019.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 20,
+      "level_id": "t12.level.020",
+      "progression_slot_id": "t12.slot.020",
+      "fact_slot_id": "t12.fact.slot.020",
+      "region_band_id": "band_forest",
+      "content_owner_task": "T44",
+      "role": "major_milestone",
+      "binding_profile": "milestone",
+      "prerequisite_level_ids": [
+        "t12.level.019"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "major_milestone_completed",
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.020"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.020",
+        "kind": "milestone",
+        "semantic": "Require a major visible/system milestone and expose the next-band transition hook.",
+        "owner_task": "T44",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.020"
+      ],
+      "milestone_ids": [
+        "t12.milestone.020"
+      ],
+      "one_time_event_ids": [
+        "t12.event.level.020.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 21,
+      "level_id": "t12.level.021",
+      "progression_slot_id": "t12.slot.021",
+      "fact_slot_id": "t12.fact.slot.021",
+      "region_band_id": "band_desert",
+      "content_owner_task": "T45",
+      "role": "band_entry",
+      "binding_profile": "entry",
+      "prerequisite_level_ids": [
+        "t12.level.020"
+      ],
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.021"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.021",
+        "kind": "entry",
+        "semantic": "Establish the band objective/state and one practical route/state slot.",
+        "owner_task": "T45",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.021.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 22,
+      "level_id": "t12.level.022",
+      "progression_slot_id": "t12.slot.022",
+      "fact_slot_id": "t12.fact.slot.022",
+      "region_band_id": "band_desert",
+      "content_owner_task": "T45",
+      "role": "interaction_expansion",
+      "binding_profile": "interaction",
+      "prerequisite_level_ids": [
+        "t12.level.021"
+      ],
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.022"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.022",
+        "kind": "interaction",
+        "semantic": "Unlock one practical resource/interaction/destination/recipe-family slot owned by the proper task.",
+        "owner_task": "T45",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.022.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 23,
+      "level_id": "t12.level.023",
+      "progression_slot_id": "t12.slot.023",
+      "fact_slot_id": "t12.fact.slot.023",
+      "region_band_id": "band_desert",
+      "content_owner_task": "T45",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.022"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.023"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.023",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T45",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.023"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.023.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 24,
+      "level_id": "t12.level.024",
+      "progression_slot_id": "t12.slot.024",
+      "fact_slot_id": "t12.fact.slot.024",
+      "region_band_id": "band_desert",
+      "content_owner_task": "T45",
+      "role": "loop_expansion",
+      "binding_profile": "loop",
+      "prerequisite_level_ids": [
+        "t12.level.023"
+      ],
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.024"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.024",
+        "kind": "loop",
+        "semantic": "Unlock one practical loop branch/helper/processing/automation slot without control complexity.",
+        "owner_task": "T45",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.024.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 25,
+      "level_id": "t12.level.025",
+      "progression_slot_id": "t12.slot.025",
+      "fact_slot_id": "t12.fact.slot.025",
+      "region_band_id": "band_desert",
+      "content_owner_task": "T45",
+      "role": "mid_band_capability",
+      "binding_profile": "capability",
+      "prerequisite_level_ids": [
+        "t12.level.024"
+      ],
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.025"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.025",
+        "kind": "capability",
+        "semantic": "Unlock one meaningful capability/system slot; stat-only/counter-only filler is invalid.",
+        "owner_task": "T45",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.025.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 26,
+      "level_id": "t12.level.026",
+      "progression_slot_id": "t12.slot.026",
+      "fact_slot_id": "t12.fact.slot.026",
+      "region_band_id": "band_desert",
+      "content_owner_task": "T45",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.025"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.026"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.026",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T45",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.026"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.026.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 27,
+      "level_id": "t12.level.027",
+      "progression_slot_id": "t12.slot.027",
+      "fact_slot_id": "t12.fact.slot.027",
+      "region_band_id": "band_desert",
+      "content_owner_task": "T45",
+      "role": "exploration_system_expansion",
+      "binding_profile": "exploration",
+      "prerequisite_level_ids": [
+        "t12.level.026"
+      ],
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.027"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.027",
+        "kind": "exploration",
+        "semantic": "Unlock one route/interaction/hazard-response/production-destination slot.",
+        "owner_task": "T45",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.027.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 28,
+      "level_id": "t12.level.028",
+      "progression_slot_id": "t12.slot.028",
+      "fact_slot_id": "t12.fact.slot.028",
+      "region_band_id": "band_desert",
+      "content_owner_task": "T45",
+      "role": "mastery_integration",
+      "binding_profile": "mastery",
+      "prerequisite_level_ids": [
+        "t12.level.027"
+      ],
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.028"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.028",
+        "kind": "mastery",
+        "semantic": "Require meaningful integration of earlier band capabilities without T13 difficulty tuning.",
+        "owner_task": "T45",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.028.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 29,
+      "level_id": "t12.level.029",
+      "progression_slot_id": "t12.slot.029",
+      "fact_slot_id": "t12.fact.slot.029",
+      "region_band_id": "band_desert",
+      "content_owner_task": "T45",
+      "role": "visible_pre_milestone",
+      "binding_profile": "visible_pre_milestone",
+      "prerequisite_level_ids": [
+        "t12.level.028"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.029"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.029",
+        "kind": "visible_pre_milestone",
+        "semantic": "Require a visible improvement that truthfully prepares the band milestone.",
+        "owner_task": "T45",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.029"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.029.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 30,
+      "level_id": "t12.level.030",
+      "progression_slot_id": "t12.slot.030",
+      "fact_slot_id": "t12.fact.slot.030",
+      "region_band_id": "band_desert",
+      "content_owner_task": "T45",
+      "role": "major_milestone",
+      "binding_profile": "milestone",
+      "prerequisite_level_ids": [
+        "t12.level.029"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "major_milestone_completed",
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.030"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.030",
+        "kind": "milestone",
+        "semantic": "Require a major visible/system milestone and expose the next-band transition hook.",
+        "owner_task": "T45",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.030"
+      ],
+      "milestone_ids": [
+        "t12.milestone.030"
+      ],
+      "one_time_event_ids": [
+        "t12.event.level.030.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 31,
+      "level_id": "t12.level.031",
+      "progression_slot_id": "t12.slot.031",
+      "fact_slot_id": "t12.fact.slot.031",
+      "region_band_id": "band_underwater",
+      "content_owner_task": "T46",
+      "role": "band_entry",
+      "binding_profile": "entry",
+      "prerequisite_level_ids": [
+        "t12.level.030"
+      ],
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.031"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.031",
+        "kind": "entry",
+        "semantic": "Establish the band objective/state and one practical route/state slot.",
+        "owner_task": "T46",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.031.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 32,
+      "level_id": "t12.level.032",
+      "progression_slot_id": "t12.slot.032",
+      "fact_slot_id": "t12.fact.slot.032",
+      "region_band_id": "band_underwater",
+      "content_owner_task": "T46",
+      "role": "interaction_expansion",
+      "binding_profile": "interaction",
+      "prerequisite_level_ids": [
+        "t12.level.031"
+      ],
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.032"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.032",
+        "kind": "interaction",
+        "semantic": "Unlock one practical resource/interaction/destination/recipe-family slot owned by the proper task.",
+        "owner_task": "T46",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.032.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 33,
+      "level_id": "t12.level.033",
+      "progression_slot_id": "t12.slot.033",
+      "fact_slot_id": "t12.fact.slot.033",
+      "region_band_id": "band_underwater",
+      "content_owner_task": "T46",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.032"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.033"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.033",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T46",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.033"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.033.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 34,
+      "level_id": "t12.level.034",
+      "progression_slot_id": "t12.slot.034",
+      "fact_slot_id": "t12.fact.slot.034",
+      "region_band_id": "band_underwater",
+      "content_owner_task": "T46",
+      "role": "loop_expansion",
+      "binding_profile": "loop",
+      "prerequisite_level_ids": [
+        "t12.level.033"
+      ],
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.034"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.034",
+        "kind": "loop",
+        "semantic": "Unlock one practical loop branch/helper/processing/automation slot without control complexity.",
+        "owner_task": "T46",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.034.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 35,
+      "level_id": "t12.level.035",
+      "progression_slot_id": "t12.slot.035",
+      "fact_slot_id": "t12.fact.slot.035",
+      "region_band_id": "band_underwater",
+      "content_owner_task": "T46",
+      "role": "mid_band_capability",
+      "binding_profile": "capability",
+      "prerequisite_level_ids": [
+        "t12.level.034"
+      ],
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.035"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.035",
+        "kind": "capability",
+        "semantic": "Unlock one meaningful capability/system slot; stat-only/counter-only filler is invalid.",
+        "owner_task": "T46",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.035.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 36,
+      "level_id": "t12.level.036",
+      "progression_slot_id": "t12.slot.036",
+      "fact_slot_id": "t12.fact.slot.036",
+      "region_band_id": "band_underwater",
+      "content_owner_task": "T46",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.035"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.036"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.036",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T46",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.036"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.036.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 37,
+      "level_id": "t12.level.037",
+      "progression_slot_id": "t12.slot.037",
+      "fact_slot_id": "t12.fact.slot.037",
+      "region_band_id": "band_underwater",
+      "content_owner_task": "T46",
+      "role": "exploration_system_expansion",
+      "binding_profile": "exploration",
+      "prerequisite_level_ids": [
+        "t12.level.036"
+      ],
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.037"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.037",
+        "kind": "exploration",
+        "semantic": "Unlock one route/interaction/hazard-response/production-destination slot.",
+        "owner_task": "T46",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.037.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 38,
+      "level_id": "t12.level.038",
+      "progression_slot_id": "t12.slot.038",
+      "fact_slot_id": "t12.fact.slot.038",
+      "region_band_id": "band_underwater",
+      "content_owner_task": "T46",
+      "role": "mastery_integration",
+      "binding_profile": "mastery",
+      "prerequisite_level_ids": [
+        "t12.level.037"
+      ],
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.038"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.038",
+        "kind": "mastery",
+        "semantic": "Require meaningful integration of earlier band capabilities without T13 difficulty tuning.",
+        "owner_task": "T46",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.038.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 39,
+      "level_id": "t12.level.039",
+      "progression_slot_id": "t12.slot.039",
+      "fact_slot_id": "t12.fact.slot.039",
+      "region_band_id": "band_underwater",
+      "content_owner_task": "T46",
+      "role": "visible_pre_milestone",
+      "binding_profile": "visible_pre_milestone",
+      "prerequisite_level_ids": [
+        "t12.level.038"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.039"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.039",
+        "kind": "visible_pre_milestone",
+        "semantic": "Require a visible improvement that truthfully prepares the band milestone.",
+        "owner_task": "T46",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.039"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.039.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 40,
+      "level_id": "t12.level.040",
+      "progression_slot_id": "t12.slot.040",
+      "fact_slot_id": "t12.fact.slot.040",
+      "region_band_id": "band_underwater",
+      "content_owner_task": "T46",
+      "role": "major_milestone",
+      "binding_profile": "milestone",
+      "prerequisite_level_ids": [
+        "t12.level.039"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "major_milestone_completed",
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.040"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.040",
+        "kind": "milestone",
+        "semantic": "Require a major visible/system milestone and expose the next-band transition hook.",
+        "owner_task": "T46",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.040"
+      ],
+      "milestone_ids": [
+        "t12.milestone.040"
+      ],
+      "one_time_event_ids": [
+        "t12.event.level.040.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 41,
+      "level_id": "t12.level.041",
+      "progression_slot_id": "t12.slot.041",
+      "fact_slot_id": "t12.fact.slot.041",
+      "region_band_id": "band_sky",
+      "content_owner_task": "T47",
+      "role": "band_entry",
+      "binding_profile": "entry",
+      "prerequisite_level_ids": [
+        "t12.level.040"
+      ],
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.041"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.041",
+        "kind": "entry",
+        "semantic": "Establish the band objective/state and one practical route/state slot.",
+        "owner_task": "T47",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.041.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 42,
+      "level_id": "t12.level.042",
+      "progression_slot_id": "t12.slot.042",
+      "fact_slot_id": "t12.fact.slot.042",
+      "region_band_id": "band_sky",
+      "content_owner_task": "T47",
+      "role": "interaction_expansion",
+      "binding_profile": "interaction",
+      "prerequisite_level_ids": [
+        "t12.level.041"
+      ],
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.042"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.042",
+        "kind": "interaction",
+        "semantic": "Unlock one practical resource/interaction/destination/recipe-family slot owned by the proper task.",
+        "owner_task": "T47",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.042.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 43,
+      "level_id": "t12.level.043",
+      "progression_slot_id": "t12.slot.043",
+      "fact_slot_id": "t12.fact.slot.043",
+      "region_band_id": "band_sky",
+      "content_owner_task": "T47",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.042"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.043"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.043",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T47",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.043"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.043.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 44,
+      "level_id": "t12.level.044",
+      "progression_slot_id": "t12.slot.044",
+      "fact_slot_id": "t12.fact.slot.044",
+      "region_band_id": "band_sky",
+      "content_owner_task": "T47",
+      "role": "loop_expansion",
+      "binding_profile": "loop",
+      "prerequisite_level_ids": [
+        "t12.level.043"
+      ],
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.044"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.044",
+        "kind": "loop",
+        "semantic": "Unlock one practical loop branch/helper/processing/automation slot without control complexity.",
+        "owner_task": "T47",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.044.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 45,
+      "level_id": "t12.level.045",
+      "progression_slot_id": "t12.slot.045",
+      "fact_slot_id": "t12.fact.slot.045",
+      "region_band_id": "band_sky",
+      "content_owner_task": "T47",
+      "role": "mid_band_capability",
+      "binding_profile": "capability",
+      "prerequisite_level_ids": [
+        "t12.level.044"
+      ],
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.045"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.045",
+        "kind": "capability",
+        "semantic": "Unlock one meaningful capability/system slot; stat-only/counter-only filler is invalid.",
+        "owner_task": "T47",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.045.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 46,
+      "level_id": "t12.level.046",
+      "progression_slot_id": "t12.slot.046",
+      "fact_slot_id": "t12.fact.slot.046",
+      "region_band_id": "band_sky",
+      "content_owner_task": "T47",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.045"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.046"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.046",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T47",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.046"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.046.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 47,
+      "level_id": "t12.level.047",
+      "progression_slot_id": "t12.slot.047",
+      "fact_slot_id": "t12.fact.slot.047",
+      "region_band_id": "band_sky",
+      "content_owner_task": "T47",
+      "role": "exploration_system_expansion",
+      "binding_profile": "exploration",
+      "prerequisite_level_ids": [
+        "t12.level.046"
+      ],
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.047"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.047",
+        "kind": "exploration",
+        "semantic": "Unlock one route/interaction/hazard-response/production-destination slot.",
+        "owner_task": "T47",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.047.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 48,
+      "level_id": "t12.level.048",
+      "progression_slot_id": "t12.slot.048",
+      "fact_slot_id": "t12.fact.slot.048",
+      "region_band_id": "band_sky",
+      "content_owner_task": "T47",
+      "role": "mastery_integration",
+      "binding_profile": "mastery",
+      "prerequisite_level_ids": [
+        "t12.level.047"
+      ],
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.048"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.048",
+        "kind": "mastery",
+        "semantic": "Require meaningful integration of earlier band capabilities without T13 difficulty tuning.",
+        "owner_task": "T47",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.048.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 49,
+      "level_id": "t12.level.049",
+      "progression_slot_id": "t12.slot.049",
+      "fact_slot_id": "t12.fact.slot.049",
+      "region_band_id": "band_sky",
+      "content_owner_task": "T47",
+      "role": "visible_pre_milestone",
+      "binding_profile": "visible_pre_milestone",
+      "prerequisite_level_ids": [
+        "t12.level.048"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.049"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.049",
+        "kind": "visible_pre_milestone",
+        "semantic": "Require a visible improvement that truthfully prepares the band milestone.",
+        "owner_task": "T47",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.049"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.049.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 50,
+      "level_id": "t12.level.050",
+      "progression_slot_id": "t12.slot.050",
+      "fact_slot_id": "t12.fact.slot.050",
+      "region_band_id": "band_sky",
+      "content_owner_task": "T47",
+      "role": "major_milestone",
+      "binding_profile": "milestone",
+      "prerequisite_level_ids": [
+        "t12.level.049"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "major_milestone_completed",
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.050"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.050",
+        "kind": "milestone",
+        "semantic": "Require a major visible/system milestone and expose the next-band transition hook.",
+        "owner_task": "T47",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.050"
+      ],
+      "milestone_ids": [
+        "t12.milestone.050"
+      ],
+      "one_time_event_ids": [
+        "t12.event.level.050.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 51,
+      "level_id": "t12.level.051",
+      "progression_slot_id": "t12.slot.051",
+      "fact_slot_id": "t12.fact.slot.051",
+      "region_band_id": "band_volcanic",
+      "content_owner_task": "T48",
+      "role": "band_entry",
+      "binding_profile": "entry",
+      "prerequisite_level_ids": [
+        "t12.level.050"
+      ],
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.051"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.051",
+        "kind": "entry",
+        "semantic": "Establish the band objective/state and one practical route/state slot.",
+        "owner_task": "T48",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.051.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 52,
+      "level_id": "t12.level.052",
+      "progression_slot_id": "t12.slot.052",
+      "fact_slot_id": "t12.fact.slot.052",
+      "region_band_id": "band_volcanic",
+      "content_owner_task": "T48",
+      "role": "interaction_expansion",
+      "binding_profile": "interaction",
+      "prerequisite_level_ids": [
+        "t12.level.051"
+      ],
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.052"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.052",
+        "kind": "interaction",
+        "semantic": "Unlock one practical resource/interaction/destination/recipe-family slot owned by the proper task.",
+        "owner_task": "T48",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.052.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 53,
+      "level_id": "t12.level.053",
+      "progression_slot_id": "t12.slot.053",
+      "fact_slot_id": "t12.fact.slot.053",
+      "region_band_id": "band_volcanic",
+      "content_owner_task": "T48",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.052"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.053"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.053",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T48",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.053"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.053.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 54,
+      "level_id": "t12.level.054",
+      "progression_slot_id": "t12.slot.054",
+      "fact_slot_id": "t12.fact.slot.054",
+      "region_band_id": "band_volcanic",
+      "content_owner_task": "T48",
+      "role": "loop_expansion",
+      "binding_profile": "loop",
+      "prerequisite_level_ids": [
+        "t12.level.053"
+      ],
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.054"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.054",
+        "kind": "loop",
+        "semantic": "Unlock one practical loop branch/helper/processing/automation slot without control complexity.",
+        "owner_task": "T48",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.054.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 55,
+      "level_id": "t12.level.055",
+      "progression_slot_id": "t12.slot.055",
+      "fact_slot_id": "t12.fact.slot.055",
+      "region_band_id": "band_volcanic",
+      "content_owner_task": "T48",
+      "role": "mid_band_capability",
+      "binding_profile": "capability",
+      "prerequisite_level_ids": [
+        "t12.level.054"
+      ],
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.055"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.055",
+        "kind": "capability",
+        "semantic": "Unlock one meaningful capability/system slot; stat-only/counter-only filler is invalid.",
+        "owner_task": "T48",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.055.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 56,
+      "level_id": "t12.level.056",
+      "progression_slot_id": "t12.slot.056",
+      "fact_slot_id": "t12.fact.slot.056",
+      "region_band_id": "band_volcanic",
+      "content_owner_task": "T48",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.055"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.056"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.056",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T48",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.056"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.056.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 57,
+      "level_id": "t12.level.057",
+      "progression_slot_id": "t12.slot.057",
+      "fact_slot_id": "t12.fact.slot.057",
+      "region_band_id": "band_volcanic",
+      "content_owner_task": "T48",
+      "role": "exploration_system_expansion",
+      "binding_profile": "exploration",
+      "prerequisite_level_ids": [
+        "t12.level.056"
+      ],
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.057"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.057",
+        "kind": "exploration",
+        "semantic": "Unlock one route/interaction/hazard-response/production-destination slot.",
+        "owner_task": "T48",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.057.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 58,
+      "level_id": "t12.level.058",
+      "progression_slot_id": "t12.slot.058",
+      "fact_slot_id": "t12.fact.slot.058",
+      "region_band_id": "band_volcanic",
+      "content_owner_task": "T48",
+      "role": "mastery_integration",
+      "binding_profile": "mastery",
+      "prerequisite_level_ids": [
+        "t12.level.057"
+      ],
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.058"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.058",
+        "kind": "mastery",
+        "semantic": "Require meaningful integration of earlier band capabilities without T13 difficulty tuning.",
+        "owner_task": "T48",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.058.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 59,
+      "level_id": "t12.level.059",
+      "progression_slot_id": "t12.slot.059",
+      "fact_slot_id": "t12.fact.slot.059",
+      "region_band_id": "band_volcanic",
+      "content_owner_task": "T48",
+      "role": "visible_pre_milestone",
+      "binding_profile": "visible_pre_milestone",
+      "prerequisite_level_ids": [
+        "t12.level.058"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.059"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.059",
+        "kind": "visible_pre_milestone",
+        "semantic": "Require a visible improvement that truthfully prepares the band milestone.",
+        "owner_task": "T48",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.059"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.059.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 60,
+      "level_id": "t12.level.060",
+      "progression_slot_id": "t12.slot.060",
+      "fact_slot_id": "t12.fact.slot.060",
+      "region_band_id": "band_volcanic",
+      "content_owner_task": "T48",
+      "role": "major_milestone",
+      "binding_profile": "milestone",
+      "prerequisite_level_ids": [
+        "t12.level.059"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "major_milestone_completed",
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.060"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.060",
+        "kind": "milestone",
+        "semantic": "Require a major visible/system milestone and expose the next-band transition hook.",
+        "owner_task": "T48",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.060"
+      ],
+      "milestone_ids": [
+        "t12.milestone.060"
+      ],
+      "one_time_event_ids": [
+        "t12.event.level.060.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 61,
+      "level_id": "t12.level.061",
+      "progression_slot_id": "t12.slot.061",
+      "fact_slot_id": "t12.fact.slot.061",
+      "region_band_id": "band_swamp",
+      "content_owner_task": "T49",
+      "role": "band_entry",
+      "binding_profile": "entry",
+      "prerequisite_level_ids": [
+        "t12.level.060"
+      ],
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.061"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.061",
+        "kind": "entry",
+        "semantic": "Establish the band objective/state and one practical route/state slot.",
+        "owner_task": "T49",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.061.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 62,
+      "level_id": "t12.level.062",
+      "progression_slot_id": "t12.slot.062",
+      "fact_slot_id": "t12.fact.slot.062",
+      "region_band_id": "band_swamp",
+      "content_owner_task": "T49",
+      "role": "interaction_expansion",
+      "binding_profile": "interaction",
+      "prerequisite_level_ids": [
+        "t12.level.061"
+      ],
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.062"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.062",
+        "kind": "interaction",
+        "semantic": "Unlock one practical resource/interaction/destination/recipe-family slot owned by the proper task.",
+        "owner_task": "T49",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.062.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 63,
+      "level_id": "t12.level.063",
+      "progression_slot_id": "t12.slot.063",
+      "fact_slot_id": "t12.fact.slot.063",
+      "region_band_id": "band_swamp",
+      "content_owner_task": "T49",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.062"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.063"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.063",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T49",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.063"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.063.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 64,
+      "level_id": "t12.level.064",
+      "progression_slot_id": "t12.slot.064",
+      "fact_slot_id": "t12.fact.slot.064",
+      "region_band_id": "band_swamp",
+      "content_owner_task": "T49",
+      "role": "loop_expansion",
+      "binding_profile": "loop",
+      "prerequisite_level_ids": [
+        "t12.level.063"
+      ],
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.064"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.064",
+        "kind": "loop",
+        "semantic": "Unlock one practical loop branch/helper/processing/automation slot without control complexity.",
+        "owner_task": "T49",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.064.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 65,
+      "level_id": "t12.level.065",
+      "progression_slot_id": "t12.slot.065",
+      "fact_slot_id": "t12.fact.slot.065",
+      "region_band_id": "band_swamp",
+      "content_owner_task": "T49",
+      "role": "mid_band_capability",
+      "binding_profile": "capability",
+      "prerequisite_level_ids": [
+        "t12.level.064"
+      ],
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.065"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.065",
+        "kind": "capability",
+        "semantic": "Unlock one meaningful capability/system slot; stat-only/counter-only filler is invalid.",
+        "owner_task": "T49",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.065.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 66,
+      "level_id": "t12.level.066",
+      "progression_slot_id": "t12.slot.066",
+      "fact_slot_id": "t12.fact.slot.066",
+      "region_band_id": "band_swamp",
+      "content_owner_task": "T49",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.065"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.066"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.066",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T49",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.066"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.066.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 67,
+      "level_id": "t12.level.067",
+      "progression_slot_id": "t12.slot.067",
+      "fact_slot_id": "t12.fact.slot.067",
+      "region_band_id": "band_swamp",
+      "content_owner_task": "T49",
+      "role": "exploration_system_expansion",
+      "binding_profile": "exploration",
+      "prerequisite_level_ids": [
+        "t12.level.066"
+      ],
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.067"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.067",
+        "kind": "exploration",
+        "semantic": "Unlock one route/interaction/hazard-response/production-destination slot.",
+        "owner_task": "T49",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.067.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 68,
+      "level_id": "t12.level.068",
+      "progression_slot_id": "t12.slot.068",
+      "fact_slot_id": "t12.fact.slot.068",
+      "region_band_id": "band_swamp",
+      "content_owner_task": "T49",
+      "role": "mastery_integration",
+      "binding_profile": "mastery",
+      "prerequisite_level_ids": [
+        "t12.level.067"
+      ],
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.068"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.068",
+        "kind": "mastery",
+        "semantic": "Require meaningful integration of earlier band capabilities without T13 difficulty tuning.",
+        "owner_task": "T49",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.068.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 69,
+      "level_id": "t12.level.069",
+      "progression_slot_id": "t12.slot.069",
+      "fact_slot_id": "t12.fact.slot.069",
+      "region_band_id": "band_swamp",
+      "content_owner_task": "T49",
+      "role": "visible_pre_milestone",
+      "binding_profile": "visible_pre_milestone",
+      "prerequisite_level_ids": [
+        "t12.level.068"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.069"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.069",
+        "kind": "visible_pre_milestone",
+        "semantic": "Require a visible improvement that truthfully prepares the band milestone.",
+        "owner_task": "T49",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.069"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.069.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 70,
+      "level_id": "t12.level.070",
+      "progression_slot_id": "t12.slot.070",
+      "fact_slot_id": "t12.fact.slot.070",
+      "region_band_id": "band_swamp",
+      "content_owner_task": "T49",
+      "role": "major_milestone",
+      "binding_profile": "milestone",
+      "prerequisite_level_ids": [
+        "t12.level.069"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "major_milestone_completed",
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.070"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.070",
+        "kind": "milestone",
+        "semantic": "Require a major visible/system milestone and expose the next-band transition hook.",
+        "owner_task": "T49",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.070"
+      ],
+      "milestone_ids": [
+        "t12.milestone.070"
+      ],
+      "one_time_event_ids": [
+        "t12.event.level.070.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 71,
+      "level_id": "t12.level.071",
+      "progression_slot_id": "t12.slot.071",
+      "fact_slot_id": "t12.fact.slot.071",
+      "region_band_id": "band_ruins",
+      "content_owner_task": "T50",
+      "role": "band_entry",
+      "binding_profile": "entry",
+      "prerequisite_level_ids": [
+        "t12.level.070"
+      ],
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.071"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.071",
+        "kind": "entry",
+        "semantic": "Establish the band objective/state and one practical route/state slot.",
+        "owner_task": "T50",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.071.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 72,
+      "level_id": "t12.level.072",
+      "progression_slot_id": "t12.slot.072",
+      "fact_slot_id": "t12.fact.slot.072",
+      "region_band_id": "band_ruins",
+      "content_owner_task": "T50",
+      "role": "interaction_expansion",
+      "binding_profile": "interaction",
+      "prerequisite_level_ids": [
+        "t12.level.071"
+      ],
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.072"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.072",
+        "kind": "interaction",
+        "semantic": "Unlock one practical resource/interaction/destination/recipe-family slot owned by the proper task.",
+        "owner_task": "T50",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.072.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 73,
+      "level_id": "t12.level.073",
+      "progression_slot_id": "t12.slot.073",
+      "fact_slot_id": "t12.fact.slot.073",
+      "region_band_id": "band_ruins",
+      "content_owner_task": "T50",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.072"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.073"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.073",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T50",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.073"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.073.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 74,
+      "level_id": "t12.level.074",
+      "progression_slot_id": "t12.slot.074",
+      "fact_slot_id": "t12.fact.slot.074",
+      "region_band_id": "band_ruins",
+      "content_owner_task": "T50",
+      "role": "loop_expansion",
+      "binding_profile": "loop",
+      "prerequisite_level_ids": [
+        "t12.level.073"
+      ],
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.074"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.074",
+        "kind": "loop",
+        "semantic": "Unlock one practical loop branch/helper/processing/automation slot without control complexity.",
+        "owner_task": "T50",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.074.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 75,
+      "level_id": "t12.level.075",
+      "progression_slot_id": "t12.slot.075",
+      "fact_slot_id": "t12.fact.slot.075",
+      "region_band_id": "band_ruins",
+      "content_owner_task": "T50",
+      "role": "mid_band_capability",
+      "binding_profile": "capability",
+      "prerequisite_level_ids": [
+        "t12.level.074"
+      ],
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.075"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.075",
+        "kind": "capability",
+        "semantic": "Unlock one meaningful capability/system slot; stat-only/counter-only filler is invalid.",
+        "owner_task": "T50",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.075.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 76,
+      "level_id": "t12.level.076",
+      "progression_slot_id": "t12.slot.076",
+      "fact_slot_id": "t12.fact.slot.076",
+      "region_band_id": "band_ruins",
+      "content_owner_task": "T50",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.075"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.076"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.076",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T50",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.076"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.076.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 77,
+      "level_id": "t12.level.077",
+      "progression_slot_id": "t12.slot.077",
+      "fact_slot_id": "t12.fact.slot.077",
+      "region_band_id": "band_ruins",
+      "content_owner_task": "T50",
+      "role": "exploration_system_expansion",
+      "binding_profile": "exploration",
+      "prerequisite_level_ids": [
+        "t12.level.076"
+      ],
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.077"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.077",
+        "kind": "exploration",
+        "semantic": "Unlock one route/interaction/hazard-response/production-destination slot.",
+        "owner_task": "T50",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.077.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 78,
+      "level_id": "t12.level.078",
+      "progression_slot_id": "t12.slot.078",
+      "fact_slot_id": "t12.fact.slot.078",
+      "region_band_id": "band_ruins",
+      "content_owner_task": "T50",
+      "role": "mastery_integration",
+      "binding_profile": "mastery",
+      "prerequisite_level_ids": [
+        "t12.level.077"
+      ],
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.078"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.078",
+        "kind": "mastery",
+        "semantic": "Require meaningful integration of earlier band capabilities without T13 difficulty tuning.",
+        "owner_task": "T50",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.078.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 79,
+      "level_id": "t12.level.079",
+      "progression_slot_id": "t12.slot.079",
+      "fact_slot_id": "t12.fact.slot.079",
+      "region_band_id": "band_ruins",
+      "content_owner_task": "T50",
+      "role": "visible_pre_milestone",
+      "binding_profile": "visible_pre_milestone",
+      "prerequisite_level_ids": [
+        "t12.level.078"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.079"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.079",
+        "kind": "visible_pre_milestone",
+        "semantic": "Require a visible improvement that truthfully prepares the band milestone.",
+        "owner_task": "T50",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.079"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.079.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 80,
+      "level_id": "t12.level.080",
+      "progression_slot_id": "t12.slot.080",
+      "fact_slot_id": "t12.fact.slot.080",
+      "region_band_id": "band_ruins",
+      "content_owner_task": "T50",
+      "role": "major_milestone",
+      "binding_profile": "milestone",
+      "prerequisite_level_ids": [
+        "t12.level.079"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "major_milestone_completed",
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.080"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.080",
+        "kind": "milestone",
+        "semantic": "Require a major visible/system milestone and expose the next-band transition hook.",
+        "owner_task": "T50",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.080"
+      ],
+      "milestone_ids": [
+        "t12.milestone.080"
+      ],
+      "one_time_event_ids": [
+        "t12.event.level.080.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 81,
+      "level_id": "t12.level.081",
+      "progression_slot_id": "t12.slot.081",
+      "fact_slot_id": "t12.fact.slot.081",
+      "region_band_id": "band_underground",
+      "content_owner_task": "T51",
+      "role": "band_entry",
+      "binding_profile": "entry",
+      "prerequisite_level_ids": [
+        "t12.level.080"
+      ],
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.081"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.081",
+        "kind": "entry",
+        "semantic": "Establish the band objective/state and one practical route/state slot.",
+        "owner_task": "T51",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.081.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 82,
+      "level_id": "t12.level.082",
+      "progression_slot_id": "t12.slot.082",
+      "fact_slot_id": "t12.fact.slot.082",
+      "region_band_id": "band_underground",
+      "content_owner_task": "T51",
+      "role": "interaction_expansion",
+      "binding_profile": "interaction",
+      "prerequisite_level_ids": [
+        "t12.level.081"
+      ],
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.082"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.082",
+        "kind": "interaction",
+        "semantic": "Unlock one practical resource/interaction/destination/recipe-family slot owned by the proper task.",
+        "owner_task": "T51",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.082.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 83,
+      "level_id": "t12.level.083",
+      "progression_slot_id": "t12.slot.083",
+      "fact_slot_id": "t12.fact.slot.083",
+      "region_band_id": "band_underground",
+      "content_owner_task": "T51",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.082"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.083"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.083",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T51",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.083"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.083.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 84,
+      "level_id": "t12.level.084",
+      "progression_slot_id": "t12.slot.084",
+      "fact_slot_id": "t12.fact.slot.084",
+      "region_band_id": "band_underground",
+      "content_owner_task": "T51",
+      "role": "loop_expansion",
+      "binding_profile": "loop",
+      "prerequisite_level_ids": [
+        "t12.level.083"
+      ],
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.084"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.084",
+        "kind": "loop",
+        "semantic": "Unlock one practical loop branch/helper/processing/automation slot without control complexity.",
+        "owner_task": "T51",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.084.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 85,
+      "level_id": "t12.level.085",
+      "progression_slot_id": "t12.slot.085",
+      "fact_slot_id": "t12.fact.slot.085",
+      "region_band_id": "band_underground",
+      "content_owner_task": "T51",
+      "role": "mid_band_capability",
+      "binding_profile": "capability",
+      "prerequisite_level_ids": [
+        "t12.level.084"
+      ],
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.085"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.085",
+        "kind": "capability",
+        "semantic": "Unlock one meaningful capability/system slot; stat-only/counter-only filler is invalid.",
+        "owner_task": "T51",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.085.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 86,
+      "level_id": "t12.level.086",
+      "progression_slot_id": "t12.slot.086",
+      "fact_slot_id": "t12.fact.slot.086",
+      "region_band_id": "band_underground",
+      "content_owner_task": "T51",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.085"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.086"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.086",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T51",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.086"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.086.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 87,
+      "level_id": "t12.level.087",
+      "progression_slot_id": "t12.slot.087",
+      "fact_slot_id": "t12.fact.slot.087",
+      "region_band_id": "band_underground",
+      "content_owner_task": "T51",
+      "role": "exploration_system_expansion",
+      "binding_profile": "exploration",
+      "prerequisite_level_ids": [
+        "t12.level.086"
+      ],
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.087"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.087",
+        "kind": "exploration",
+        "semantic": "Unlock one route/interaction/hazard-response/production-destination slot.",
+        "owner_task": "T51",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.087.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 88,
+      "level_id": "t12.level.088",
+      "progression_slot_id": "t12.slot.088",
+      "fact_slot_id": "t12.fact.slot.088",
+      "region_band_id": "band_underground",
+      "content_owner_task": "T51",
+      "role": "mastery_integration",
+      "binding_profile": "mastery",
+      "prerequisite_level_ids": [
+        "t12.level.087"
+      ],
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.088"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.088",
+        "kind": "mastery",
+        "semantic": "Require meaningful integration of earlier band capabilities without T13 difficulty tuning.",
+        "owner_task": "T51",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.088.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 89,
+      "level_id": "t12.level.089",
+      "progression_slot_id": "t12.slot.089",
+      "fact_slot_id": "t12.fact.slot.089",
+      "region_band_id": "band_underground",
+      "content_owner_task": "T51",
+      "role": "visible_pre_milestone",
+      "binding_profile": "visible_pre_milestone",
+      "prerequisite_level_ids": [
+        "t12.level.088"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.089"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.089",
+        "kind": "visible_pre_milestone",
+        "semantic": "Require a visible improvement that truthfully prepares the band milestone.",
+        "owner_task": "T51",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.089"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.089.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 90,
+      "level_id": "t12.level.090",
+      "progression_slot_id": "t12.slot.090",
+      "fact_slot_id": "t12.fact.slot.090",
+      "region_band_id": "band_underground",
+      "content_owner_task": "T51",
+      "role": "major_milestone",
+      "binding_profile": "milestone",
+      "prerequisite_level_ids": [
+        "t12.level.089"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "major_milestone_completed",
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.090"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.090",
+        "kind": "milestone",
+        "semantic": "Require a major visible/system milestone and expose the next-band transition hook.",
+        "owner_task": "T51",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.090"
+      ],
+      "milestone_ids": [
+        "t12.milestone.090"
+      ],
+      "one_time_event_ids": [
+        "t12.event.level.090.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 91,
+      "level_id": "t12.level.091",
+      "progression_slot_id": "t12.slot.091",
+      "fact_slot_id": "t12.fact.slot.091",
+      "region_band_id": "band_alien",
+      "content_owner_task": "T52",
+      "role": "band_entry",
+      "binding_profile": "entry",
+      "prerequisite_level_ids": [
+        "t12.level.090"
+      ],
+      "allowed_fact_kinds": [
+        "band_entry_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.091"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.091",
+        "kind": "entry",
+        "semantic": "Establish the band objective/state and one practical route/state slot.",
+        "owner_task": "T52",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.091.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 92,
+      "level_id": "t12.level.092",
+      "progression_slot_id": "t12.slot.092",
+      "fact_slot_id": "t12.fact.slot.092",
+      "region_band_id": "band_alien",
+      "content_owner_task": "T52",
+      "role": "interaction_expansion",
+      "binding_profile": "interaction",
+      "prerequisite_level_ids": [
+        "t12.level.091"
+      ],
+      "allowed_fact_kinds": [
+        "context_action_completed",
+        "resource_delivery_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T07_CONTEXT",
+        "T08_DELIVERY_INTEGRATION"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.092"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.092",
+        "kind": "interaction",
+        "semantic": "Unlock one practical resource/interaction/destination/recipe-family slot owned by the proper task.",
+        "owner_task": "T52",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.092.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 93,
+      "level_id": "t12.level.093",
+      "progression_slot_id": "t12.slot.093",
+      "fact_slot_id": "t12.fact.slot.093",
+      "region_band_id": "band_alien",
+      "content_owner_task": "T52",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.092"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.093"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.093",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T52",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.093"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.093.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 94,
+      "level_id": "t12.level.094",
+      "progression_slot_id": "t12.slot.094",
+      "fact_slot_id": "t12.fact.slot.094",
+      "region_band_id": "band_alien",
+      "content_owner_task": "T52",
+      "role": "loop_expansion",
+      "binding_profile": "loop",
+      "prerequisite_level_ids": [
+        "t12.level.093"
+      ],
+      "allowed_fact_kinds": [
+        "resource_delivery_completed",
+        "world_transform_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "T08_DELIVERY_INTEGRATION",
+        "T10_TRANSFORM"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.094"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.094",
+        "kind": "loop",
+        "semantic": "Unlock one practical loop branch/helper/processing/automation slot without control complexity.",
+        "owner_task": "T52",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.094.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 95,
+      "level_id": "t12.level.095",
+      "progression_slot_id": "t12.slot.095",
+      "fact_slot_id": "t12.fact.slot.095",
+      "region_band_id": "band_alien",
+      "content_owner_task": "T52",
+      "role": "mid_band_capability",
+      "binding_profile": "capability",
+      "prerequisite_level_ids": [
+        "t12.level.094"
+      ],
+      "allowed_fact_kinds": [
+        "capability_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.095"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.095",
+        "kind": "capability",
+        "semantic": "Unlock one meaningful capability/system slot; stat-only/counter-only filler is invalid.",
+        "owner_task": "T52",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.095.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 96,
+      "level_id": "t12.level.096",
+      "progression_slot_id": "t12.slot.096",
+      "fact_slot_id": "t12.fact.slot.096",
+      "region_band_id": "band_alien",
+      "content_owner_task": "T52",
+      "role": "visible_progression",
+      "binding_profile": "visible",
+      "prerequisite_level_ids": [
+        "t12.level.095"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.096"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.096",
+        "kind": "visible",
+        "semantic": "Require one player-visible world/camp/production/route improvement tied to authoritative completion.",
+        "owner_task": "T52",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.096"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.096.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 97,
+      "level_id": "t12.level.097",
+      "progression_slot_id": "t12.slot.097",
+      "fact_slot_id": "t12.fact.slot.097",
+      "region_band_id": "band_alien",
+      "content_owner_task": "T52",
+      "role": "exploration_system_expansion",
+      "binding_profile": "exploration",
+      "prerequisite_level_ids": [
+        "t12.level.096"
+      ],
+      "allowed_fact_kinds": [
+        "route_or_interaction_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.097"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.097",
+        "kind": "exploration",
+        "semantic": "Unlock one route/interaction/hazard-response/production-destination slot.",
+        "owner_task": "T52",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.097.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 98,
+      "level_id": "t12.level.098",
+      "progression_slot_id": "t12.slot.098",
+      "fact_slot_id": "t12.fact.slot.098",
+      "region_band_id": "band_alien",
+      "content_owner_task": "T52",
+      "role": "mastery_integration",
+      "binding_profile": "mastery",
+      "prerequisite_level_ids": [
+        "t12.level.097"
+      ],
+      "allowed_fact_kinds": [
+        "mastery_condition_completed"
+      ],
+      "presentation_requirements": [],
+      "authority_classes": [
+        "CONTENT_OWNER"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.098"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.098",
+        "kind": "mastery",
+        "semantic": "Require meaningful integration of earlier band capabilities without T13 difficulty tuning.",
+        "owner_task": "T52",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.098.completed"
+      ],
+      "activation_binding_relevant": false,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 99,
+      "level_id": "t12.level.099",
+      "progression_slot_id": "t12.slot.099",
+      "fact_slot_id": "t12.fact.slot.099",
+      "region_band_id": "band_alien",
+      "content_owner_task": "T52",
+      "role": "visible_pre_milestone",
+      "binding_profile": "visible_pre_milestone",
+      "prerequisite_level_ids": [
+        "t12.level.098"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.099"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.099",
+        "kind": "visible_pre_milestone",
+        "semantic": "Require a visible improvement that truthfully prepares the band milestone.",
+        "owner_task": "T52",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.099"
+      ],
+      "milestone_ids": [],
+      "one_time_event_ids": [
+        "t12.event.level.099.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    },
+    {
+      "level": 100,
+      "level_id": "t12.level.100",
+      "progression_slot_id": "t12.slot.100",
+      "fact_slot_id": "t12.fact.slot.100",
+      "region_band_id": "band_alien",
+      "content_owner_task": "T52",
+      "role": "major_milestone",
+      "binding_profile": "milestone",
+      "prerequisite_level_ids": [
+        "t12.level.099"
+      ],
+      "allowed_fact_kinds": [
+        "world_transform_completed",
+        "camp_state_completed"
+      ],
+      "presentation_requirements": [
+        "major_milestone_completed",
+        "visible_progression_required"
+      ],
+      "authority_classes": [
+        "T10_TRANSFORM",
+        "T11_CAMP"
+      ],
+      "materialized_required_fact_ids": [
+        "t12.fact.slot.100"
+      ],
+      "progression_effect_template": {
+        "effect_id": "t12.effect.level.100",
+        "kind": "milestone",
+        "semantic": "Require a major visible/system milestone and expose the next-band transition hook.",
+        "owner_task": "T52",
+        "exact_payload_must_be_unique": true
+      },
+      "visible_progression_hook_ids": [
+        "t12.visible.100"
+      ],
+      "milestone_ids": [
+        "t12.milestone.100"
+      ],
+      "one_time_event_ids": [
+        "t12.event.level.100.completed"
+      ],
+      "activation_binding_relevant": true,
+      "deferred_content_owner_registration_allowed": true
+    }
+  ],
+  "milestones": [
+    {
+      "milestone_id": "t12.milestone.010",
+      "level": 10,
+      "kind": "major",
+      "progression_hook_ids": [
+        "t12.visible.010"
+      ],
+      "visible_change_required": true,
+      "owner_task": "T32"
+    },
+    {
+      "milestone_id": "t12.milestone.020",
+      "level": 20,
+      "kind": "major",
+      "progression_hook_ids": [
+        "t12.visible.020"
+      ],
+      "visible_change_required": true,
+      "owner_task": "T44"
+    },
+    {
+      "milestone_id": "t12.milestone.030",
+      "level": 30,
+      "kind": "major",
+      "progression_hook_ids": [
+        "t12.visible.030"
+      ],
+      "visible_change_required": true,
+      "owner_task": "T45"
+    },
+    {
+      "milestone_id": "t12.milestone.040",
+      "level": 40,
+      "kind": "major",
+      "progression_hook_ids": [
+        "t12.visible.040"
+      ],
+      "visible_change_required": true,
+      "owner_task": "T46"
+    },
+    {
+      "milestone_id": "t12.milestone.050",
+      "level": 50,
+      "kind": "major",
+      "progression_hook_ids": [
+        "t12.visible.050"
+      ],
+      "visible_change_required": true,
+      "owner_task": "T47"
+    },
+    {
+      "milestone_id": "t12.milestone.060",
+      "level": 60,
+      "kind": "major",
+      "progression_hook_ids": [
+        "t12.visible.060"
+      ],
+      "visible_change_required": true,
+      "owner_task": "T48"
+    },
+    {
+      "milestone_id": "t12.milestone.070",
+      "level": 70,
+      "kind": "major",
+      "progression_hook_ids": [
+        "t12.visible.070"
+      ],
+      "visible_change_required": true,
+      "owner_task": "T49"
+    },
+    {
+      "milestone_id": "t12.milestone.080",
+      "level": 80,
+      "kind": "major",
+      "progression_hook_ids": [
+        "t12.visible.080"
+      ],
+      "visible_change_required": true,
+      "owner_task": "T50"
+    },
+    {
+      "milestone_id": "t12.milestone.090",
+      "level": 90,
+      "kind": "major",
+      "progression_hook_ids": [
+        "t12.visible.090"
+      ],
+      "visible_change_required": true,
+      "owner_task": "T51"
+    },
+    {
+      "milestone_id": "t12.milestone.100",
+      "level": 100,
+      "kind": "major",
+      "progression_hook_ids": [
+        "t12.visible.100"
+      ],
+      "visible_change_required": true,
+      "owner_task": "T52"
+    }
+  ]
+}

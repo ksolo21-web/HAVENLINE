@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "no_secrets": true,
+    "external_status_requires_evidence_reference": true,
+    "unverified_external_blocks_activation_when_required": true,
+    "repository_capabilities_are_probed_not_manually_asserted": true
+  },
+  "external": {
+    "authoritative_backend": {"state": "UNVERIFIED", "evidence": null, "note": "Prove an available task-appropriate authoritative backend before backend-owned runtime activation."},
+    "google_play_billing_sandbox": {"state": "UNVERIFIED", "evidence": null, "note": "No credential or account identifier belongs in this file."},
+    "google_signin_oauth": {"state": "UNVERIFIED", "evidence": null, "note": "Shipping package/signing identity and OAuth configuration must be proven at activation."},
+    "cloud_backend": {"state": "UNVERIFIED", "evidence": null, "note": "Cloud persistence/identity service availability must be proven without committing credentials."},
+    "remote_config_backend": {"state": "UNVERIFIED", "evidence": null, "note": "LiveOps remote configuration/kill-switch backend must be available before service integration."},
+    "telemetry_backend": {"state": "UNVERIFIED", "evidence": null, "note": "Privacy-safe telemetry sink availability must be proven before T42 service integration."},
+    "platform_achievement_backend": {"state": "UNVERIFIED", "evidence": null, "note": "Platform achievement/milestone service availability must be proven before T57 integration."},
+    "physical_phone_4k60": {"state": "UNVERIFIED", "evidence": null, "note": "T68 requires a named representative physical phone and sustained native 4K/60 thermal evidence."},
+    "physical_tablet_foldable_4k60": {"state": "UNVERIFIED", "evidence": null, "note": "T69 requires a named representative physical tablet/foldable and sustained native 4K/60 thermal evidence."},
+    "release_signing_identity": {"state": "UNVERIFIED", "evidence": null, "note": "Release-signing readiness is tracked as status only; never commit signing material."},
+    "store_release_access": {"state": "UNVERIFIED", "evidence": null, "note": "Store/release-channel access must be proven for T70 without storing credentials."}
+  }
+}
