@@ -48,13 +48,29 @@ jobs:
           print('BRANCH='+ref)
           print('INTEGRATION_HEAD='+integration)
           if ws:
-              if ws['status'] in ('LOCKED','APPROVED'):
-                  raise SystemExit(f'{task} status {ws["status"]} may not produce an integration candidate')
-              base=ws.get('base_commit')
-              if not base: raise SystemExit(f'{task} has no recorded base_commit')
-              print('CANDIDATE_MODE=registered')
-              print('TASK_STATUS='+ws['status'])
-              print('BASE='+base)
+              if ws['status']=='LOCKED':
+                  raise SystemExit(f'{task} status LOCKED may not produce an integration candidate')
+              if ws['status']=='APPROVED':
+                  raw=subprocess.check_output(['git','show',f'{integration}:Docs/Production/APPROVAL_INVALIDATIONS.json'],text=True)
+                  records=json.loads(raw).get('records',[])
+                  inv=next((row for row in records if row.get('task_id')==task and row.get('status')=='ACTIVE'),None)
+                  if not inv or inv.get('repair_candidate_allowed') is not True:
+                      raise SystemExit(f'{task} status APPROVED may not produce an integration candidate without an integration-owned active visual repair authorization')
+                  if inv.get('repair_scope')!='VISUAL_ONLY' or inv.get('repair_branch')!=ref:
+                      raise SystemExit(f'{task} visual repair authorization does not match exact branch/scope')
+                  historical=inv.get('historical_accepted_source')
+                  if historical!=ws.get('candidate_commit'):
+                      raise SystemExit(f'{task} visual repair historical source does not match registry approval')
+                  print('CANDIDATE_MODE=visual_repair')
+                  print('TASK_STATUS=APPROVED_VISUAL_INVALIDATED')
+                  print('BASE='+integration)
+                  print('HISTORICAL_SOURCE='+historical)
+              else:
+                  base=ws.get('base_commit')
+                  if not base: raise SystemExit(f'{task} has no recorded base_commit')
+                  print('CANDIDATE_MODE=registered')
+                  print('TASK_STATUS='+ws['status'])
+                  print('BASE='+base)
           else:
               checklist=pathlib.Path('Docs/Production')/task/'ACTIVATION_CHECKLIST.json'
               if not checklist.exists():
@@ -66,8 +82,8 @@ jobs:
           cat /tmp/resolve.env >> "$GITHUB_ENV"
           cat /tmp/resolve.env
 
-      - name: Detect empty registered branch initialization
-        if: env.CANDIDATE_MODE == 'registered'
+      - name: Detect empty registered or visual-repair branch initialization
+        if: env.CANDIDATE_MODE == 'registered' || env.CANDIDATE_MODE == 'visual_repair'
         shell: bash
         run: |
           if git diff --quiet "$INTEGRATION_HEAD" HEAD; then
@@ -108,6 +124,59 @@ jobs:
             --c0 "$c0" --plan "$plan" --base "$repair_base" --head HEAD \
             --output Docs/Production/Evidence/CandidateGuard/builder-repair.json
 
+      - name: Validate integration-authorized approved-task visual repair candidate
+        if: env.CANDIDATE_MODE == 'visual_repair' && env.NO_CANDIDATE_CHANGES != 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import fnmatch,json,os,subprocess
+          task=os.environ['TASK'];branch=os.environ['BRANCH'];integration=os.environ['INTEGRATION_HEAD']
+          head=subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()
+          if subprocess.run(['git','merge-base','--is-ancestor',integration,head],check=False).returncode!=0:
+              raise SystemExit('visual repair candidate must contain the current integration authorization head')
+          def integrated_json(path):
+              return json.loads(subprocess.check_output(['git','show',f'{integration}:{path}'],text=True))
+          invalidations=integrated_json('Docs/Production/APPROVAL_INVALIDATIONS.json')
+          inv=next((row for row in invalidations.get('records',[]) if row.get('task_id')==task and row.get('status')=='ACTIVE'),None)
+          if not inv or inv.get('repair_candidate_allowed') is not True or inv.get('repair_scope')!='VISUAL_ONLY' or inv.get('repair_branch')!=branch:
+              raise SystemExit('integration-owned visual repair authorization missing or mismatched')
+          registry=integrated_json('Docs/Production/WORKSTREAM_REGISTRY.json')
+          ownership=integrated_json('Docs/Production/PATH_OWNERSHIP.json')
+          ws=next((row for row in registry.get('workstreams',[]) if row.get('task_id')==task),None)
+          if not ws or ws.get('status')!='APPROVED' or ws.get('candidate_commit')!=inv.get('historical_accepted_source'):
+              raise SystemExit('historical approved source/lifecycle does not match visual repair authorization')
+          patterns=[]
+          for item in ws.get('owned_paths',[]):
+              if isinstance(item,str) and item.startswith('@'):
+                  patterns.extend(ownership.get('aliases',{}).get(item,[]))
+              elif isinstance(item,str):
+                  patterns.append(item)
+          changed=subprocess.check_output(['git','diff','--name-only',integration,head],text=True).splitlines()
+          if not changed: raise SystemExit('visual repair candidate contains no task-owned changes')
+          forbidden={
+              'Docs/Production/APPROVAL_INVALIDATIONS.json',
+              'Docs/Production/WORKSTREAM_REGISTRY.json',
+              'Docs/Production/DEPENDENCY_GRAPH.json',
+              'Docs/Production/task-gates.json',
+              'Docs/Production/SHIPPING_VISUAL_APPROVAL_POLICY.json',
+              'Docs/Production/REFERENCE_STYLE_LOCK.json',
+              'Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md',
+          }
+          errors=[]
+          for path in changed:
+              if path in forbidden: errors.append('candidate may not alter visual/lifecycle authority: '+path);continue
+              if not any(fnmatch.fnmatchcase(path,pattern) for pattern in patterns):
+                  errors.append('foreign path in visual repair candidate: '+path)
+          if errors: raise SystemExit('\n'.join(errors))
+          audit=f'Docs/Production/{task}/POST_COMPLETION_VISUAL_AUDIT_20260926.json'
+          scope=f'Docs/Production/{task}/VISUAL_REPAIR_SCOPE_20260926.md'
+          for path in (audit,scope):
+              if subprocess.run(['git','cat-file','-e',f'HEAD:{path}'],check=False).returncode!=0:
+                  raise SystemExit('required visual repair audit/scope missing: '+path)
+          print(json.dumps({'task':task,'branch':branch,'integration_head':integration,'head':head,'historical_source':inv.get('historical_accepted_source'),'changed_files':changed,'passed':True,'task_approved':False},indent=2))
+          PY
+
       - name: Validate explicitly authorized pre-activation build-pending candidate
         if: env.CANDIDATE_MODE == 'preactivation'
         run: |
@@ -119,13 +188,16 @@ jobs:
             --output Docs/Production/Evidence/CandidateGuard/preactivation.json
 
       - name: Calculate mandatory impact regression plan
-        if: env.CANDIDATE_MODE == 'registered' && env.NO_CANDIDATE_CHANGES != 'true'
+        if: (env.CANDIDATE_MODE == 'registered' || env.CANDIDATE_MODE == 'visual_repair') && env.NO_CANDIDATE_CHANGES != 'true'
         run: |
           mkdir -p Docs/Production/Evidence/CandidateGuard
           python3 tools/havenline/production/change_impact.py --base "$BASE" --head HEAD | tee Docs/Production/Evidence/CandidateGuard/impact.json
           python3 tools/havenline/production/regression_runner.py --base "$BASE" --head HEAD --plan-only | tee Docs/Production/Evidence/CandidateGuard/regression-plan.json
 
 # Passing registered mode means assignment/base/path/impact rules are valid; it never approves a task.
+# Passing visual_repair mode means an integration-owned ACTIVE visual invalidation authorized this exact
+# approved-task repair branch and its task-owned diff; historical lifecycle remains APPROVED while
+# effective visual approval stays revoked until fresh evidence and explicit user signoff clear invalidation.
 # FIX_REQUIRED candidates additionally require a source-bound C0 diagnosis plus a machine-bounded repair plan.
 # Passing preactivation mode means only explicitly authorized isolated construction may continue to
 # BUILT_PENDING_DEPENDENCY. It never grants INTEGRATION_READY, integration, critic approval, or task approval.

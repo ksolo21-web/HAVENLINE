@@ -71,6 +71,18 @@ class ArchitectureReleaseLockTests(unittest.TestCase):
         self.assertEqual(canary_delta_errors(accepted,current),[])
         self.assertTrue(canary_delta_errors(accepted,current+"\n# unrelated drift\n"))
 
+    def test_approved_visual_repair_guard_is_exact_hash_bound(self):
+        import hashlib,json
+        import validate_architecture_release_lock as v31
+        from validate_architecture_v32_t10 import GUARD,GUARD_CURRENT_SHA256,VISUAL_REPAIR_GUARD_REQUEST,VISUAL_REPAIR_GUARD_REQUEST_SHA256
+        current=(v31.ROOT/GUARD).read_bytes()
+        self.assertEqual(hashlib.sha256(current).hexdigest(),GUARD_CURRENT_SHA256)
+        record_bytes=(v31.ROOT/VISUAL_REPAIR_GUARD_REQUEST).read_bytes()
+        self.assertEqual(hashlib.sha256(record_bytes).hexdigest(),VISUAL_REPAIR_GUARD_REQUEST_SHA256)
+        record=json.loads(record_bytes)
+        self.assertEqual(record["integration_owner_disposition"],"APPROVED_BOUNDED_VISUAL_REPAIR_GUARD")
+        self.assertEqual(record["guard_authorized_sha256"],GUARD_CURRENT_SHA256)
+
     def test_native_timeout_delta_rejects_any_other_workflow_change(self):
         import validate_architecture_release_lock as v31
         from validate_architecture_v32_t10 import NATIVE_WORKFLOW, native_workflow_delta_errors

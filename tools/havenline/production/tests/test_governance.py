@@ -27,6 +27,20 @@ class GovernanceTests(unittest.TestCase):
         self.assertTrue(verify_integration_branch(None))
         self.assertTrue(verify_integration_branch("candidate-controlled-branch"))
 
+    def test_shared_candidate_guard_visual_repair_mode_is_integration_owned_and_fail_closed(self):
+        workflow=(HERE.parents[4]/".github/workflows/havenline-candidate-guard.yml").read_text()
+        self.assertIn("CANDIDATE_MODE=visual_repair",workflow)
+        self.assertIn("APPROVAL_INVALIDATIONS.json",workflow)
+        self.assertIn("git','show',f'{integration}:Docs/Production/APPROVAL_INVALIDATIONS.json",workflow)
+        self.assertIn("repair_candidate_allowed",workflow)
+        self.assertIn("repair_scope",workflow)
+        self.assertIn("historical_accepted_source",workflow)
+        self.assertIn("visual repair candidate must contain the current integration authorization head",workflow)
+        self.assertIn("candidate may not alter visual/lifecycle authority",workflow)
+        self.assertIn("foreign path in visual repair candidate",workflow)
+        self.assertIn("Docs/Production/SHIPPING_VISUAL_APPROVAL_POLICY.json",workflow)
+        self.assertIn("Docs/Production/REFERENCE_STYLE_LOCK.json",workflow)
+
     def test_candidate_validation_requires_integration_authority(self):
         from workstream import validate_candidate
         with patch("workstream.approved_change_requests") as requests:

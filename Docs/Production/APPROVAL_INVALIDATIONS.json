@@ -257,16 +257,27 @@
       "status": "ACTIVE",
       "family": "whole_frame_reference_fidelity_violation",
       "discovered_at": "2026-09-22T20:04:00Z",
-      "audited_integration_source": "7385d2f6c80cb0e09d7f30c41ddc1cdacd1e53e8",
-      "reason": "User whole-frame review shows T05 station/resource/prop art does not match the locked Havenline production-camp style.",
+      "audited_integration_source": "ff7c67285a67dc69a3bd97b207a9e61929e1e3c9",
+      "reason": "The 2026-09-26 post-completion audit, exact historical source-bound evidence and user-approved references confirm that multiple T05 station/resource/prop families remain visually primitive/blockout-like despite being authored GLBs.",
       "findings": [
         {
-          "path": "HavenlineGodot/assets/stations_v2/**",
-          "detail": "Furnace/stations/resource props need a cohesive reference-style re-authoring pass."
+          "category": "AUTHORED_BUT_PRIMITIVE_LOOKING",
+          "owner_task": "T05",
+          "paths": [
+            "HavenlineGodot/assets/stations_v2/**",
+            "tools/havenline/task05/generate_station_kit.py"
+          ],
+          "detail": "Hearth/furnace, counters, processing fixtures, defense platform, resource stacks and pads are generated primarily from generic boxes/cylinders/related forms and do not meet the sculpted shipping-art bar."
         },
         {
-          "path": "HavenlineGodot/scripts/station_kit.gd",
-          "detail": "Keep placement/sockets/batching authority; replace only visual assets/material treatment as needed."
+          "category": "RESOURCE_FAMILY_REFERENCE_FIDELITY",
+          "owner_task": "T05",
+          "detail": "Wood/stone/metal/fuel/fish/food/money/crate families must be rebuilt as resource-specific authored silhouettes such as rope-bound logs, faceted ore/crystal, framed bins and physical bundled currency."
+        },
+        {
+          "category": "PAD_FAMILY_REFERENCE_FIDELITY",
+          "owner_task": "T05",
+          "detail": "Ground pads currently read as flat world-space UI tokens and must become shallow constructed camp platforms while preserving six purposes, footprints and sockets."
         }
       ],
       "invalidates": [
@@ -284,7 +295,33 @@
         "runtime_logic_included=false",
         "nonvisual deterministic proof"
       ],
-      "required_resolution": "Re-author T05 visible station/prop family to match the locked reference language at gameplay scale; recapture whole-frame 4K60 evidence and obtain user approval."
+      "required_resolution": "Re-author T05 visible station/prop families on the exact authorized repair branch while preserving IDs, sockets, footprints, clearances, arrangements and all gameplay contracts. Require source-bound multi-angle/gameplay/native-4K evidence, zero primitive-looking/blockout findings, exact 10/10 locked style dimensions where required by the global reference-style policy, and explicit user visual approval before clearing the invalidation.",
+      "latest_audit_date": "2026-09-26",
+      "latest_audit_evidence_run": 34824259431,
+      "latest_audit_artifact_id": 10339801250,
+      "historical_accepted_source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+      "repair_candidate_allowed": true,
+      "repair_branch": "havenline/T05-visual-repair-20260926",
+      "repair_scope": "VISUAL_ONLY",
+      "repair_status": "POST_COMPLETION_VISUAL_REPAIR_AUTHORIZED",
+      "latest_user_direction": "Use the newly approved sculpted winter-production asset language; authored meshes that still visually read as primitive/blockout geometry fail. Preserve T05 mechanics/sockets/layout contracts.",
+      "generator_root_cause": "The historical deterministic T05 generator builds much of the final visible kit from generic beveled_box/cylinder/sphere/lathe forms. These are custom-authored GLBs, but exact source-bound renders still read as blockout-like compared with the approved art language.",
+      "first_repair_batch": [
+        "T05-R01 hearth/furnace",
+        "T05-R07 resource props"
+      ],
+      "approved_art_language": [
+        "chunky sculpted mobile-readable silhouettes",
+        "warm carved timber with layered construction",
+        "dark blue-gray metal plates, brackets and rivets",
+        "orange/yellow heat and machinery accents",
+        "thick irregular snow accumulation integrated into silhouettes",
+        "faceted stone, ore and crystal resources with snow contact",
+        "rope-bound logs with bark and readable cut ends",
+        "framed resource bins and storage platforms",
+        "bundled physical currency",
+        "physical constructed camp pads and tiles instead of flat UI-like tokens"
+      ]
     },
     {
       "task_id": "T04",
