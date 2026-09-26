@@ -80,8 +80,8 @@ def main() -> int:
     entries = catalog["entries"]
     assert len(entries) == 22
     assert len({row["id"] for row in entries}) == 22
-    assert sum(int(row["triangles"]) for row in entries) == 24928
-    assert sum((ASSET_DIR / f"{row['id']}.glb").stat().st_size for row in entries) == 826604
+    assert sum(int(row["triangles"]) for row in entries) == 27596
+    assert sum((ASSET_DIR / f"{row['id']}.glb").stat().st_size for row in entries) == 940796
     assert sum((ASSET_DIR / f"{row['id']}.glb").stat().st_size for row in entries) <= 15 * 1024 * 1024
     palette = {material for row in entries for material in row["materials"]}
     assert palette == {"snow", "cream", "wood", "wood_light", "metal", "blue", "cyan", "orange", "yellow", "green", "red", "dark"}
@@ -110,7 +110,7 @@ def main() -> int:
 
     arrangements = catalog["arrangements"]
     assert {name: len(rows) for name, rows in arrangements.items()} == {"camp": 11, "lakeshore": 10}
-    expected_triangles = {"camp": 12876, "lakeshore": 9456}
+    expected_triangles = {"camp": 15544, "lakeshore": 9456}
     expected_surfaces = {"camp": 12, "lakeshore": 10}
     for name, placements in arrangements.items():
         assert len({row["id"] for row in placements}) == len(placements)

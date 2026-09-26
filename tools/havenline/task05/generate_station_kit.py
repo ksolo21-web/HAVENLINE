@@ -234,6 +234,76 @@ class MeshBuilder:
                 inds.extend((a, c, b, a, d, c))
         self.triangles(material, verts, norms, inds, center, rotation)
 
+    def extruded_polygon(self, material, center, points, depth, rotation=(0, 0, 0)):
+        """Extrude a convex authored 2D silhouette in the local XY plane."""
+        if len(points) < 3:
+            raise ValueError("extruded polygon requires at least three points")
+        verts, norms, inds = [], [], []
+        front_z, back_z = -depth / 2, depth / 2
+        front_center = len(verts); verts.append((0.0, 0.0, front_z)); norms.append((0.0, 0.0, -1.0))
+        back_center = len(verts); verts.append((0.0, 0.0, back_z)); norms.append((0.0, 0.0, 1.0))
+        front, back = [], []
+        for x, y in points:
+            front.append(len(verts)); verts.append((x, y, front_z)); norms.append((0.0, 0.0, -1.0))
+            back.append(len(verts)); verts.append((x, y, back_z)); norms.append((0.0, 0.0, 1.0))
+        count = len(points)
+        for i in range(count):
+            j = (i + 1) % count
+            inds.extend((front_center, front[j], front[i]))
+            inds.extend((back_center, back[i], back[j]))
+            x0, y0 = points[i]; x1, y1 = points[j]
+            side_normal = vnorm((y1 - y0, -(x1 - x0), 0.0))
+            a=len(verts); verts.extend(((x0,y0,front_z),(x1,y1,front_z),(x1,y1,back_z),(x0,y0,back_z)))
+            norms.extend((side_normal,)*4)
+            inds.extend((a,a+2,a+1,a,a+3,a+2))
+        self.triangles(material, verts, norms, inds, center, rotation)
+
+    def rounded_rect_prism(self, material, center, size, radius, depth, corner_segments=3, rotation=(0, 0, 0)):
+        width, height = size
+        radius = min(radius, width * .49, height * .49)
+        points=[]
+        for cx, cy, start in (
+            (width/2-radius, -height/2+radius, -math.pi/2),
+            (width/2-radius, height/2-radius, 0.0),
+            (-width/2+radius, height/2-radius, math.pi/2),
+            (-width/2+radius, -height/2+radius, math.pi),
+        ):
+            for step in range(corner_segments + 1):
+                angle=start+(math.pi/2)*step/corner_segments
+                points.append((cx+math.cos(angle)*radius,cy+math.sin(angle)*radius))
+        self.extruded_polygon(material, center, points, depth, rotation)
+
+    def toothed_disc(self, material, center, radius, tooth_depth, teeth, depth, rotation=(0, 0, 0)):
+        points=[]
+        for i in range(teeth*2):
+            angle=TAU*i/(teeth*2)
+            r=radius+(tooth_depth if i%2==0 else 0.0)
+            points.append((math.cos(angle)*r,math.sin(angle)*r))
+        self.extruded_polygon(material, center, points, depth, rotation)
+
+    def faceted_blob(self, material, center, radii, rings=4, segments=8, phase=0.0, rotation=(0, 0, 0)):
+        """Purpose-authored low-poly organic form with flat faceted normals."""
+        grid=[]
+        for r in range(rings+1):
+            phi=math.pi*r/rings
+            row=[]
+            for i in range(segments):
+                angle=TAU*i/segments
+                wobble=1.0+0.075*math.sin(i*2.17+r*1.31+phase)+0.035*math.cos(i*1.23-r*.91+phase)
+                unit=(math.cos(angle)*math.sin(phi),math.cos(phi),math.sin(angle)*math.sin(phi))
+                row.append((unit[0]*radii[0]*wobble,unit[1]*radii[1]*wobble,unit[2]*radii[2]*wobble))
+            grid.append(row)
+        verts=[];norms=[];inds=[]
+        def add_face(a,b,c):
+            n=vnorm(vcross(vsub(b,a),vsub(c,a)));base=len(verts)
+            verts.extend((a,b,c));norms.extend((n,n,n));inds.extend((base,base+1,base+2))
+        for r in range(rings):
+            for i in range(segments):
+                j=(i+1)%segments
+                a,b,c,d=grid[r][i],grid[r][j],grid[r+1][j],grid[r+1][i]
+                add_face(a,c,b);add_face(a,d,c)
+        self.triangles(material,verts,norms,inds,center,rotation)
+
     def rod_between(self, material, a, b, radius=0.045, segments=10):
         delta = vsub(b, a); length = vlen(delta)
         if length < 1e-6:
@@ -252,20 +322,52 @@ def add_snow_foot(builder, size=(2.0, 0.12, 2.0), center=(0, 0.02, 0)):
 
 
 def build_hearth():
+    """R01 sculpted winter furnace: layered timber/steel construction, not a dressed cylinder."""
     b = MeshBuilder("hearth_vessel")
-    add_snow_foot(b, (2.6, .16, 2.25))
-    b.cylinder("wood", (0, .18, 0), 1.02, .26, 20)
-    b.cylinder("blue", (0, .35, 0), .88, .20, 20)
-    b.lathe("metal", (0, .48, 0), [(.72, 0), (.82, .18), (.76, .62), (.60, .83), (.53, .90)], 24)
-    b.lathe("orange", (0, .55, 0), [(.50, 0), (.56, .11), (.48, .34), (.37, .44)], 24)
-    b.torus("yellow", (0, 1.36, 0), .60, .075, 24, 8)
-    b.cylinder("cream", (0, 1.48, 0), .48, .16, 20, top_radius=.42)
-    for x in (-.72, .72):
-        b.beveled_box("blue", (x, .72, .1), (.20, .92, .30), .07, rotation=(0, 0, .12 if x < 0 else -.12))
-        b.cylinder("yellow", (x, 1.18, .1), .14, .18, 12)
-    b.cylinder("metal", (0, 1.76, .38), .18, .78, 14)
-    b.torus("orange", (0, 2.08, .35), .27, .09, 12, 8, rotation=(math.pi / 2, 0, 0), arc=math.pi)
-    b.beveled_box("wood_light", (0, .55, -.76), (.76, .38, .20), .08)
+    add_snow_foot(b, (2.58, .14, 2.22))
+    for z in (-.82,.82):
+        b.beveled_box("wood", (0,.24,z), (2.28,.34,.28), .07)
+    for x in (-1.0,1.0):
+        b.beveled_box("wood", (x,.24,0), (.28,.34,1.48), .07)
+        b.beveled_box("wood_light", (x,.55,0), (.22,.84,.22), .06)
+        b.beveled_box("metal", (x,.33,-.84), (.34,.28,.12), .035)
+        b.cylinder("metal", (x,.48,-.91), .055, .07, 10, rotation=(math.pi/2,0,0))
+    b.beveled_box("blue", (0,.92,.02), (1.62,1.34,1.42), .24)
+    b.beveled_box("metal", (0,1.55,.02), (1.72,.20,1.50), .08)
+    for x in (-.72,.72):
+        b.beveled_box("wood_light", (x,.96,.74), (.24,1.22,.18), .055)
+        b.beveled_box("metal", (x,.96,.84), (.32,.32,.08), .035)
+        for y in (.66,1.22): b.cylinder("cream", (x,y,.895), .055,.055,10,rotation=(math.pi/2,0,0))
+    b.rounded_rect_prism("metal", (0,.96,-.742), (1.28,.94), .20,.14,4)
+    b.rounded_rect_prism("dark", (0,.96,-.825), (1.02,.70), .17,.06,4)
+    b.toothed_disc("metal", (0,.97,-.865), .30,.075,12,.055)
+    b.cylinder("orange", (0,.97,-.905), .085,.075,12,rotation=(math.pi/2,0,0))
+    b.rod_between("orange", (-.34,.57,-.93),(.34,.57,-.93),.07,12)
+    for x in (-.38,.38):
+        b.cylinder("dark", (x,.57,-.93), .105,.09,12,rotation=(0,0,math.pi/2))
+    b.rounded_rect_prism("orange", (0,.47,-.84), (.68,.23), .08,.055,3)
+    b.rounded_rect_prism("yellow", (0,.47,-.875), (.42,.12), .05,.03,3)
+    b.beveled_box("blue", (0,1.67,.02), (1.82,.22,1.56), .08)
+    for x,z,rx,rz,phase in [(-.48,-.20,.62,.56,.2),(.22,-.25,.72,.54,1.1),(.50,.28,.58,.48,2.2),(-.30,.33,.70,.46,3.0)]:
+        b.faceted_blob("snow", (x,1.84,z), (rx,.18,rz),3,8,phase)
+    b.cylinder("metal", (0,2.10,.20), .25,.72,16)
+    b.cylinder("blue", (0,2.38,.20), .34,.18,16)
+    b.cylinder("dark", (0,2.50,.20), .25,.12,16)
+    b.torus("snow", (0,2.48,.20), .28,.055,16,6)
+    b.lathe("metal", (.88,.94,.20), [(.30,-.42),(.34,-.30),(.34,.26),(.27,.38)],16)
+    b.torus("orange", (.88,.93,.20), .34,.055,16,6)
+    b.cylinder("metal", (.88,1.43,.20), .08,.32,10)
+    b.cylinder("cream", (.88,1.61,.20), .12,.08,10)
+    b.rod_between("metal", (.72,.91,.20),(.55,.91,.20),.055,10)
+    b.beveled_box("wood", (-.86,.46,.42), (.62,.16,.98), .055)
+    for x in (-1.10,-.86,-.62):
+        b.cylinder("wood_light", (x,.63,.42), .10,.72,10,rotation=(math.pi/2,0,0))
+        b.torus("cream", (x,.63,.42), .115,.025,10,5,rotation=(math.pi/2,0,0))
+    b.beveled_box("metal", (.87,.45,.44), (.64,.15,.96), .055)
+    for x,y,z,s,phase in [(.70,.62,.25,.17,.4),(.96,.63,.30,.19,1.2),(.78,.67,.55,.16,2.0),(1.02,.68,.58,.15,2.8)]:
+        b.faceted_blob("dark", (x,y,z), (s,s*.78,s*.90),3,6,phase)
+    for x,z,rx,rz,phase in [(-.95,.80,.26,.24,.5),(.94,.80,.25,.23,1.5),(-.95,-.72,.24,.20,2.5),(.96,-.70,.23,.20,3.5)]:
+        b.faceted_blob("snow", (x,.39,z), (rx,.08,rz),2,6,phase)
     return b
 
 
@@ -610,7 +712,7 @@ def pack_glb(builder: MeshBuilder, path: Path):
         i_acc=len(accessors); accessors.append({"bufferView":i_view,"componentType":5125,"count":len(surface.indices),"type":"SCALAR"})
         primitives.append({"attributes":{"POSITION":p_acc,"NORMAL":n_acc},"indices":i_acc,"material":material_index,"mode":4})
     doc={
-        "asset":{"version":"2.0","generator":"Havenline T05 deterministic sculptor v1"},
+        "asset":{"version":"2.0","generator":"Havenline T05 deterministic sculptor v2-R01"},
         "scene":0,"scenes":[{"nodes":[0]}],"nodes":[{"name":builder.name,"mesh":0}],
         "meshes":[{"name":builder.name,"primitives":primitives}],"materials":materials,
         "accessors":accessors,"bufferViews":views,"buffers":[{"byteLength":len(blob)}],
@@ -646,7 +748,7 @@ def main():
         entries.append(entry)
     catalog={
         "schema_version":1,"authority_id":"T05-station-kit-v1","generator":"tools/havenline/task05/generate_station_kit.py",
-        "art_language":"bright sculpted winter production kit; shared blue/orange/yellow machinery with warm timber and snow contact",
+        "art_language":"approved sculpted winter production kit; layered warm timber, blue-gray metal hardware, thick snow contact and purpose-authored mobile-readable silhouettes",
         "requirements":[f"T05-R{i:02d}" for i in range(1,13)],
         "entries":entries,
         "arrangements":{name:[{"id":i,"position":list(p),"rotation_y":r} for i,p,r in rows] for name,rows in ARRANGEMENTS.items()},
