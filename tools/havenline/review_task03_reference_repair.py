@@ -27,6 +27,14 @@ for name,sha in evidence["image_hashes"].items():
     p=EVIDENCE/name
     assert p.is_file() and digest(p)==sha,(name,"evidence hash mismatch")
 
+capture_boundary=json.loads((EVIDENCE/"gallery/capture.json").read_text())["boundary"]
+assert capture_boundary["uniform_gate_presentation"] is True
+assert capture_boundary["visual_gate_family_normalized"] is True
+assert capture_boundary["gate_leaf_uniform_terrain_seat"] is True
+assert capture_boundary["gate_post_terrain_footprint_seat"] is True
+assert capture_boundary["main_gate_post_scale"]==capture_boundary["river_gate_post_scale"]==capture_boundary["work_gate_post_scale"]==1.12
+assert capture_boundary["main_gate_post_height_scale"]==capture_boundary["river_gate_post_height_scale"]==capture_boundary["work_gate_post_height_scale"]==1.14
+
 cache=pathlib.Path(os.path.expanduser("~/.cache/havenline-t01-qwen35"))
 runtime=json.loads((ROOT/"Docs/Production/CRITIC_EXECUTION.json").read_text())["local_independent_runtime"]
 manifest=json.loads((cache/"manifest.json").read_text())
@@ -124,6 +132,11 @@ def contract_violations(review,page_paths,dimensions):
       ("single-view missing-feature claim",re.compile(r"\\b(?:no|missing|absent|not present)\\b.{0,80}\\b(?:fence|fences|gate|gates|post|posts|lane|lanes)\\b",re.I)),
       ("T02-context tree alignment claim",re.compile(r"\\b(?:tree|trees|tree cluster)\\b",re.I)),
       ("snow-bank top-edge alignment claim",re.compile(r"\\btop edge\\b.{0,80}\\bsnow bank\\b|\\bsnow bank\\b.{0,80}\\btop edge\\b",re.I)),
+      ("contradicts authoritative uniform threshold-post scales",re.compile(r"\\bthreshold post\\b.{0,100}\\b(?:non-uniform|different|inconsistent)\\b.{0,60}\\b(?:scale|height|footprint)\\b|\\b(?:non-uniform|different|inconsistent)\\b.{0,80}\\b(?:scale|height|footprint)\\b.{0,80}\\bthreshold post\\b",re.I)),
+      ("misclassifies open-leaf free-edge stile as terrain support",re.compile(r"\\b(?:stile|free[- ]edge)\\b.{0,100}\\b(?:float|floating|gap|grounding|grounded)\\b.{0,100}\\b(?:ground|terrain|snow|snow bank)\\b|\\b(?:ground|terrain|snow|snow bank)\\b.{0,100}\\b(?:float|floating|gap|grounding|grounded)\\b.{0,100}\\b(?:stile|free[- ]edge)\\b",re.I)),
+      ("contradicts intentional threshold-post terrain seating",re.compile(r"\\bthreshold post(?:s)?\\b.{0,100}\\bclip(?:ping|s|ped)?\\b.{0,80}\\b(?:ground|terrain|snow)\\b|\\bclip(?:ping|s|ped)?\\b.{0,80}\\bthreshold post(?:s)?\\b.{0,80}\\b(?:ground|terrain|snow)\\b",re.I)),
+      ("misreads authored hinge overlap as stile/post clipping",re.compile(r"\\b(?:gate leaf )?stile\\b.{0,100}\\bclip(?:ping|s|ped)?\\b.{0,80}\\bthreshold post\\b",re.I)),
+      ("requires prominent lane depression despite subtle-wear contract",re.compile(r"\\black(?:s|ing)?\\b.{0,80}\\b(?:visible )?(?:depression|wear)\\b.{0,100}\\b(?:lane|strip|work-floor|work floor)\\b|\\blane(?:s| strip| strips)?\\b.{0,100}\\black(?:s|ing)?\\b.{0,80}\\b(?:depression|wear)\\b",re.I)),
     ]
     for defect in defects:
         if not any(name in defect for name in page_paths):
@@ -193,10 +206,11 @@ The repair standard is strict: every mandatory visual dimension must be strictly
                     f"{gid}-page{page_index+1}"
                 )
                 violations=contract_violations(review,page_paths,dims)
-                if violations:
+                for correction_index in range(1,3):
+                    if not violations: break
                     previous=json.dumps(review,sort_keys=True)
-                    correction=base+f"""\nEvidence group: {gid}, page {page_index+1} of {len(pages)}. Inspect ALL FOUR candidate panels on this page and the authoritative reference row. Candidate filenames on this page: {page_names}. Your prior review violated the evaluator contract for: {", ".join(violations)}. Re-evaluate the SAME board from scratch. Do not repeat those prohibited requirements or claims. Preserve any genuinely visible, contract-compliant T03-owned defect; do not force a pass. A score <=9.0 still requires a concrete blocking defect tied to an exact filename. Prior JSON for correction only: {previous}"""
-                    review=request(board,correction,response_schema(dims),f"{gid}-page{page_index+1}-corrected")
+                    correction=base+f"""\nEvidence group: {gid}, page {page_index+1} of {len(pages)}. Inspect ALL FOUR candidate panels on this page and the authoritative reference row. Candidate filenames on this page: {page_names}. Your prior review violated the evaluator contract for: {", ".join(violations)}. Re-evaluate the SAME board from scratch. Do not repeat those prohibited requirements or claims. Authoritative machine capture proves uniform gate presentation, uniform gate-family geometry, uniform threshold-post scales, terrain-seated posts, and terrain-seated gate leaves; visual perspective must not override those facts. Preserve any genuinely visible, contract-compliant T03-owned defect; do not force a pass. A score <=9.0 still requires a concrete blocking defect tied to an exact filename. Prior JSON for correction only: {previous}"""
+                    review=request(board,correction,response_schema(dims),f"{gid}-page{page_index+1}-corrected{correction_index}")
                     violations=contract_violations(review,page_paths,dims)
                 scores=review.get("scores",{})
                 errors=[]
