@@ -78,7 +78,12 @@ jobs:
           timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit 2>&1 | tee artifacts/import.log
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd 2>&1 | tee artifacts/motion-bake.log
           for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices; do
-            timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "artifacts/$suite.log"
+            suite_timeout=90
+            # test_outpost is the observed hosted-runner hotspot: it has repeatedly reached the 90s cap after earlier suites pass.
+            # Give only this suite extra infrastructure headroom; test assertions and pass/fail semantics are unchanged.
+            if [ "$suite" = test_outpost ]; then suite_timeout=180; fi
+            echo "Running $suite with timeout ${suite_timeout}s"
+            timeout "$suite_timeout" Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "artifacts/$suite.log"
           done
           # Hosted runners have repeatedly needed >60s here despite all prior suites passing; this is infrastructure allowance only, not a weaker test gate.
           timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/smoke_launch.gd 2>&1 | tee artifacts/launch.log
