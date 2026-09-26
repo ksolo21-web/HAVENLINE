@@ -40,9 +40,11 @@ WORKSTREAM_REQUEST = "Docs/Production/ChangeRequests/T10-c0r-workstream-authoriz
 WORKSTREAM_REQUEST_SHA256 = "5c52bc606a1ac4d6cce06bcfa0420614879cb22948908d91f8ec945dee0ebb7d"
 GUARD = ".github/workflows/havenline-candidate-guard.yml"
 GUARD_BASE_SHA256 = "1aad9fba33b2a03d798065573c4bd9f9cd157dbf9559d60efb61913713a9c185"
-GUARD_CURRENT_SHA256 = "071cfb7143b42dc903919da4a6a340fcd9eb3ef71656667dde6b5a1da233716a"
+GUARD_CURRENT_SHA256 = "3cd34d2fdbc347858e172c774a2af32d9d91af26cdfd01bf4613abe0738c047e"
 GUARD_REQUEST = "Docs/Production/ChangeRequests/T10-candidate-guard-integration-branch.json"
 GUARD_REQUEST_SHA256 = "c2557fbdd0d4ce12660997d12fc46c9b7abf1d8ed337a9832acee6f32908fb9c"
+VISUAL_REPAIR_GUARD_REQUEST = "Docs/Production/ChangeRequests/T05-approved-visual-repair-candidate-guard.json"
+VISUAL_REPAIR_GUARD_REQUEST_SHA256 = "e880247c8e115bf827b989aca093bb075168bb0d049e44c89639a06d36f9954a"
 NATIVE_WORKFLOW = ".github/workflows/havenline-godot-android.yml"
 NATIVE_WORKFLOW_REQUEST = "Docs/Production/ChangeRequests/T03-native-workflow-timeout-infrastructure.json"
 NATIVE_WORKFLOW_AUTHORIZATION = "Authorize the exact bounded T03 Native timeout infrastructure delta without changing test assertions, test membership, or gameplay."
@@ -379,6 +381,21 @@ def validate() -> dict:
         errors += exact_owner_source_errors(GUARD,GUARD_BASE_SHA256,GUARD_CURRENT_SHA256)
         if hashlib.sha256((v31.ROOT/GUARD_REQUEST).read_bytes()).hexdigest()!=GUARD_REQUEST_SHA256:
             errors.append("Exact candidate guard branch authorization changed or missing")
+        visual_guard_bytes=(v31.ROOT/VISUAL_REPAIR_GUARD_REQUEST).read_bytes()
+        visual_guard=json.loads(visual_guard_bytes)
+        if hashlib.sha256(visual_guard_bytes).hexdigest()!=VISUAL_REPAIR_GUARD_REQUEST_SHA256:
+            errors.append("Exact approved-task visual repair guard authorization changed or missing")
+        if (
+            visual_guard.get("status")!="AUTHORIZED"
+            or visual_guard.get("integration_owner_disposition")!="APPROVED_BOUNDED_VISUAL_REPAIR_GUARD"
+            or visual_guard.get("requesting_task")!="T05"
+            or visual_guard.get("repair_task")!="T05"
+            or visual_guard.get("repair_branch")!="havenline/T05-visual-repair-20260926"
+            or visual_guard.get("historical_accepted_source")!="fa6fa70f154f3757d22303522ca3f6de2c3d391f"
+            or visual_guard.get("guard_prior_sha256")!="071cfb7143b42dc903919da4a6a340fcd9eb3ef71656667dde6b5a1da233716a"
+            or visual_guard.get("guard_authorized_sha256")!=GUARD_CURRENT_SHA256
+        ):
+            errors.append("Explicit approved-task visual repair guard contract missing")
         workstream_request=json.loads((v31.ROOT/WORKSTREAM_REQUEST).read_text())
         if hashlib.sha256((v31.ROOT/WORKSTREAM_REQUEST).read_bytes()).hexdigest()!=WORKSTREAM_REQUEST_SHA256:
             errors.append("Bounded C0R workstream authorization-schema record changed or missing")
@@ -431,6 +448,7 @@ def validate() -> dict:
         "builder_inherited_governance_authorization_record": BUILDER_INHERIT_REQUEST,
         "builder_c0r_authorization_record": BUILDER_C0R_REQUEST,
         "workstream_authorization_schema_record": WORKSTREAM_REQUEST,
+        "visual_repair_guard_authorization_record": VISUAL_REPAIR_GUARD_REQUEST,
         "c0_job_log_authorization_record": C0_REQUEST,
         "c0_bounded_packet_authorization_record": C0_BOUNDED_REQUEST,
         "c0_grounding_authorization_record": C0_GROUNDING_REQUEST,

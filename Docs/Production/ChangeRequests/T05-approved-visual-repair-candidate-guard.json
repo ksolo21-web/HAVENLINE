@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "requesting_task": "T05",
+  "target_path": [
+    ".github/workflows/havenline-candidate-guard.yml",
+    "Docs/Production/APPROVAL_INVALIDATIONS.json",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "tools/havenline/production/tests/test_governance.py",
+    "tools/havenline/production/tests/test_architecture_release_lock.py"
+  ],
+  "requested_change": "Add a fail-closed approved-task visual-repair candidate mode that is authorized only by an ACTIVE integration-owned visual invalidation naming the exact branch and historical approved source.",
+  "reason": "T05 historical lifecycle must remain APPROVED so downstream lifecycle is not automatically revoked, while SHIPPING_VISUAL_APPROVAL_POLICY already makes its effective visual approval false. The generic candidate guard currently rejects every APPROVED task before it can perform a source-bound visual repair.",
+  "dependency": "Historical T05 gameplay/source contracts remain frozen. The visual repair branch must contain the current integration authorization head before candidate work is accepted.",
+  "expected_behavior": "An APPROVED task can produce a visual-only repair candidate only when the current integration ref has an ACTIVE invalidation with repair_candidate_allowed=true, repair_scope=VISUAL_ONLY, exact repair_branch, and historical_accepted_source equal to the registry candidate. Candidate changes are restricted to task-owned paths and cannot alter lifecycle/visual authority.",
+  "tests_required": [
+    "Candidate guard reads APPROVAL_INVALIDATIONS.json from the exact integration ref, never candidate-local authority.",
+    "LOCKED tasks remain rejected and APPROVED tasks without exact active visual repair authorization remain rejected.",
+    "Authorized visual repair candidate must contain current integration head.",
+    "Authorized visual repair candidate may change only task-owned paths.",
+    "Candidate cannot modify APPROVAL_INVALIDATIONS, registry, dependency graph, task-gates, shipping visual policy, or reference-style lock.",
+    "Historical lifecycle remains APPROVED and effective visual approval remains revoked until fresh user signoff."
+  ],
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "APPROVED_BOUNDED_VISUAL_REPAIR_GUARD",
+  "authorization": "User explicitly approved replacing primitive-looking HAVENLINE visual assets while preserving approved gameplay/geometry contracts. This governance change authorizes only the exact fail-closed repair lane needed to execute that visual correction.",
+  "guard_prior_sha256": "071cfb7143b42dc903919da4a6a340fcd9eb3ef71656667dde6b5a1da233716a",
+  "guard_authorized_sha256": "3cd34d2fdbc347858e172c774a2af32d9d91af26cdfd01bf4613abe0738c047e",
+  "repair_task": "T05",
+  "repair_branch": "havenline/T05-visual-repair-20260926",
+  "historical_accepted_source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+  "forbidden_changes": [
+    "No lifecycle downgrade or downstream automatic approval revocation.",
+    "No candidate-authored visual repair authorization.",
+    "No foreign/protected/integration-only production path changes.",
+    "No weakening of critic thresholds, user visual signoff, reference fidelity, or primitive audits.",
+    "No gameplay/economy/save/input changes."
+  ]
+}
