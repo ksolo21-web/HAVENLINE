@@ -13,8 +13,12 @@ integration-owner-controlled production integration.
 - Integration branch: `codex/havenline-sequential-task-01`.
 - T01: APPROVED at `45ba7905cd468c229cd61364f4d1ac45b14d3e5e`.
 - T02: APPROVED at `1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff`.
-- T03: APPROVED at accepted gameplay source
-  `5df9726e0b1c33f0f8865385b1c49aca229fd461`; verified closure is recorded in
+- T03: APPROVED at Iteration 11H accepted gameplay source
+  `e1e7bb2d68d1d53025d1242011ad4c885f08c307`; machine run `36228102780`
+  passed 16/16 suites and 812/812 checks, strict C1/C2 run `36240885422`
+  passed all six shards with minimum mandatory dimension 9.1 and no defects,
+  C6/final-gate run `36269596906` passed all nine C6 dimensions at 10.0, and
+  final Native run `36269926615` succeeded. Verified closure is recorded in
   `Docs/Production/T03/verified-completion.json`.
 - T04: APPROVED at accepted gameplay source
   `e08fd37e9a999d878644c03089c4b4b253bd7472`; verified closure is recorded in
@@ -43,6 +47,10 @@ integration-owner-controlled production integration.
 - T09 is APPROVED. Exact integrated source 5415d85838ecf4bea8b3c71662072670e61797a0 passed 17 suites / 1006 checks, 7/7 save cases, 6/6 device cases, 1193/1193 indexed hashes, G1-G14, and fresh independent C2/C3/C4/C5/C6 review with every mandatory dimension strictly above 9.0 and zero unresolved defects.
 - T10 World Transformation Framework is APPROVED at exact integrated source `eba0107def258824549fb10d81785290d0c81d97`. Fresh impacted regression passed 7 suites / 653 checks; 7/7 save cases, 216/216 device projections and 36/36 native-4K captures passed. C1/C2/C3/C4 are fresh current-candidate passes; C6/C7 are preserved through critic-specific invalidation with audited invariant proof. Minimum mandatory dimension is 9.350213966238757 with zero unresolved defects.
 - T11 Camp construction and visual upgrade system is PREPARED at canonical preparation commit `fbb81ae34b9053f17fc937fb7e67895e3ef0584b`, based on T10 approval commit `87a4346eb33473c3723c7b7c1bbf1dd04dba9131`. T12+ remains dependency-gated.
+
+## T03 post-completion audit sequence
+
+After Iteration 11H closeout, audit approved tasks in this order: `T04 -> T05 -> T06 -> T07 -> T08 -> T09 -> T10 -> T11`. These are post-completion audits, not rebuilds. Preserve each approved source unless a specific, directly corroborated task-owned regression is proven in current evidence. Audit primitive substitute geometry/materials, placeholders/fallbacks, wrong/default materials, missing real assets, Whiteout/Havenline style drift, collision/visual mismatches, shader/material regressions, and production residue. T04 camera/test/capture implementation remains locked to approved source `e08fd37e9a999d878644c03089c4b4b253bd7472` unless a concrete regression is proven.
 
 ## Forward acceptance rule
 

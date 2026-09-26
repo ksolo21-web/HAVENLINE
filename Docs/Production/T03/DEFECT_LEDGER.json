@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "task_id": "T03",
-  "task_status": "ITERATION_11C_REPAIR_APPLIED_PENDING_EVIDENCE",
+  "task_status": "APPROVED_ITERATION_11H",
   "acceptance_target": "10/10; every mandatory dimension strictly greater than 9.0 unrounded",
   "rejected_candidates": [
     {
@@ -586,5 +586,19 @@
       ],
       "status": "REPAIR_APPLIED_PENDING_EVIDENCE"
     }
-  ]
+  ],
+  "accepted_candidate": "e1e7bb2d68d1d53025d1242011ad4c885f08c307",
+  "current_open_defects": [],
+  "closeout": {
+    "evidence_run": 36228102780,
+    "visual_run": 36240885422,
+    "c6_run": 36269596906,
+    "final_native_run": 36269926615,
+    "all_current_mandatory_critic_dimensions_strictly_gt_9": true,
+    "c1_c2_minimum": 9.1,
+    "c6_minimum": 10,
+    "coverage_complete": true,
+    "defects": [],
+    "anti_loop": "Historical reviewer claims remain preserved below. Only directly corroborated T03-owned visible defects in exact source-bound evidence may drive future source changes."
+  }
 }

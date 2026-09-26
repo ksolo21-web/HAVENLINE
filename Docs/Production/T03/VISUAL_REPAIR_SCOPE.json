@@ -2,7 +2,7 @@
   "schema_version": 1,
   "task_id": "T03",
   "repair_family": "whole_frame_reference_fidelity_violation",
-  "status": "ITERATION_11C_CAUSAL_VISUAL_REPAIR_PENDING_EVIDENCE",
+  "status": "APPROVED_ITERATION_11H",
   "root_cause": "Iteration 11B exact-source critics exposed one shared presentation-transform family: fence and gate meshes used an approximate common source length plus large visual overlap/deep root sinks, while gate families used divergent leaf/post transforms; the lane shader also spread contrast across the whole bed so directional ruts weakened at review scale.",
   "preserves": [
     "T02 accepted terrain/snow/water/work-floor outside the T03 lane mask",
@@ -36,7 +36,7 @@
     "focused west work and west river threshold crops for C2",
     "explicit user visual signoff"
   ],
-  "approval": false,
+  "approval": true,
   "review_repair_iteration": 11,
   "iteration_1_disposition": "REJECTED_BY_INTERNAL_REFERENCE_REVIEW",
   "iteration_1_findings": [
@@ -206,5 +206,16 @@
     "gates": "Exact 2.90 leaf source-length fit; all gate families use 1.85 leaf length, 1.12 rad open angle, 0.08 hinge backset, 0.08/0.10 leaf embed and uniform 1.12 x 1.08 posts with 0.20 root sink.",
     "lanes": "Broad compression depth 0.055, paired rut depth 0.085, shoulder 0.055; shader broad tint reduced and continuous rut contrast increased.",
     "acceptance": "Fresh exact-source import/regression, 47+11 renders, C1/C2, C6 and final pixel signoff remain mandatory."
+  },
+  "accepted_candidate": "e1e7bb2d68d1d53025d1242011ad4c885f08c307",
+  "iteration_11h_closeout": {
+    "evidence_run": 36228102780,
+    "evidence_artifact_id": 10902176700,
+    "visual_run": 36240885422,
+    "c1_c2_minimum": 9.1,
+    "c6_run": 36269596906,
+    "c6_minimum": 10,
+    "final_native_run": 36269926615,
+    "open_defects": []
   }
 }

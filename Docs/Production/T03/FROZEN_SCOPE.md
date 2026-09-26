@@ -2,7 +2,7 @@
 
 ## Status
 
-Task 3 is ACTIVE. Task 4 and later tasks stay locked until this scope passes mechanical/regression checks, the cheap performance-budget preflight, the formal source-bound river-gate evidence preflight, both independent critic roles at >9.0 in every applicable mandatory dimension, the full C6 Performance Critic, and final pixel signoff. Target is 10/10.
+Task 3 is APPROVED at Iteration 11H gameplay source `e1e7bb2d68d1d53025d1242011ad4c885f08c307`. Authoritative machine evidence run `36228102780`, strict C1/C2 run `36240885422`, C6/final-gate run `36269596906`, and final Native run `36269926615` are green with no unresolved T03-owned defects. T04 and later tasks are no longer locked by T03; their approved sources remain protected and are subject only to the post-completion audit sequence.
 
 The strict `>9.0` rule is forward-only from T03. Prior T01/T02 approvals are not retroactively revoked.
 

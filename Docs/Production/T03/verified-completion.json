@@ -2,124 +2,204 @@
   "task": "T03",
   "title": "Fences, gates and navigable work lanes",
   "status": "PASS",
-  "accepted_gameplay_source": "5df9726e0b1c33f0f8865385b1c49aca229fd461",
-  "review_governance_source": "71ee598950a0ad71af743537099c3d0d6fa7c1e3",
-  "primary_run": 34730602238,
-  "adjudicated_closeout_run": 34735423968,
+  "accepted_gameplay_source": "e1e7bb2d68d1d53025d1242011ad4c885f08c307",
+  "iteration": "11H",
+  "reviewer_orchestration_source": "a807d9d302cacdf544a03dc1a1ac743c8af9395c",
+  "c6_closeout_orchestration_source": "605055e0e8fa57627ab19d319255b15592014849",
+  "workflow_policy_repair_parent": "07249a4a469ccce34e3cc8a71d2d9509f9641374",
   "acceptance_rule": {
     "mandatory_dimension_operator": ">",
-    "mandatory_dimension_threshold": 9.0,
+    "mandatory_dimension_threshold": 9,
     "unrounded": true,
     "score_averaging_used": false,
-    "target": 10.0
+    "target": 10
   },
   "mechanical_evidence": {
+    "run": 36228102780,
+    "artifact_id": 10902176700,
+    "artifact_name": "havenline-t03-reference-repair-36228102780",
+    "protected_t01_t02_authority_proof": "PASS",
     "functional_suites": 16,
-    "total_assertions_checks": 807,
+    "total_assertions_checks": 812,
     "all_passed": true,
-    "t01_geometry_checks": 9,
-    "t01_geometry_passed": true,
-    "formal_river_gate_evidence_ids_expected": 12,
-    "formal_river_gate_evidence_ids_present": 12,
-    "source_bound_pngs": 69,
-    "visual_apertures": {
-      "west": 3.509634,
-      "centre": 3.626626,
-      "east": 3.255770,
-      "required_strict_minimum": 3.2
-    },
-    "performance_preflight": {
-      "captured_frames": 58,
-      "maximum_draw_calls": 105,
-      "maximum_submitted_primitives": 654275,
-      "passed": true
-    }
+    "task03_boundary_checks": 34,
+    "task03_boundary_passed": true,
+    "primitive_material_audit_finding_count": 0,
+    "source_bound_stills": 58,
+    "gallery_stills": 47,
+    "native_4k_stills": 11,
+    "renderer": "mobile",
+    "render_scale": 1,
+    "package_verification": "PASS",
+    "machine_gate_passed": true
   },
   "visual_review": {
-    "status": "PASS_BY_QUORUM",
+    "status": "PASS_STRICT_C1_C2",
     "passed": true,
-    "primary_judgments_expected": 22,
-    "clean_primary_judgments": 18,
-    "raw_scores_modified": false,
-    "completed_low_verdicts_retried": false,
-    "unsupported_coverage_flags_resolved_by_deterministic_evidence": [
-      "reference-fidelity/gameplay",
-      "visual-integrity/bank-lane"
-    ],
-    "adjudicated_groups": {
-      "conditions": {
-        "result": "PASS_BY_2_OF_3_QUORUM",
-        "adjudicator_minimum_score": 10.0
+    "run": 36240885422,
+    "shard_jobs": [
+      {
+        "critic": "C2",
+        "group": "routes_contacts",
+        "job_id": 108401030109,
+        "artifact_id": 10906512518,
+        "artifact_name": "t03-reference-repair-C2-routes_contacts-36240885422"
       },
-      "river-gates": {
-        "result": "PASS_BY_2_OF_3_QUORUM",
-        "adjudicator_minimum_score": 10.0
+      {
+        "critic": "C1",
+        "group": "boundary_portals",
+        "job_id": 108401030268,
+        "artifact_id": 10906780979,
+        "artifact_name": "t03-reference-repair-C1-boundary_portals-36240885422"
+      },
+      {
+        "critic": "C1",
+        "group": "routes_contacts",
+        "job_id": 108401030282,
+        "artifact_id": 10906676313,
+        "artifact_name": "t03-reference-repair-C1-routes_contacts-36240885422"
+      },
+      {
+        "critic": "C1",
+        "group": "iteration11_changed_domains",
+        "job_id": 108401030298,
+        "artifact_id": 10906331172,
+        "artifact_name": "t03-reference-repair-C1-iteration11_changed_domains-36240885422"
+      },
+      {
+        "critic": "C2",
+        "group": "iteration11_changed_domains",
+        "job_id": 108401030361,
+        "artifact_id": 10906375700,
+        "artifact_name": "t03-reference-repair-C2-iteration11_changed_domains-36240885422"
+      },
+      {
+        "critic": "C2",
+        "group": "boundary_portals",
+        "job_id": 108401030366,
+        "artifact_id": 10905868096,
+        "artifact_name": "t03-reference-repair-C2-boundary_portals-36240885422"
       }
-    },
-    "errors": []
+    ],
+    "visual_gate_job": 108406284383,
+    "visual_gate_artifact_id": 10906552388,
+    "visual_gate_artifact_name": "t03-reference-repair-visual-gate-36240885422",
+    "minimum_mandatory_dimension_score": 9.1,
+    "all_mandatory_dimensions_strictly_gt_9": true,
+    "coverage_complete": true,
+    "confidence": "medium_or_high_per_shard_contract",
+    "defects": []
   },
   "performance_critic": {
     "critic": "C6",
+    "run": 36269596906,
+    "job_id": 108480881452,
+    "artifact_id": 10915077829,
+    "artifact_name": "t03-11h-C6-closeout-36269596906",
     "passed": true,
     "coverage_complete": true,
     "confidence": "high",
-    "minimum_mandatory_dimension_score": 9.5,
+    "minimum_mandatory_dimension_score": 10,
     "scores": {
-      "draw_call_batching": 9.5,
-      "geometry_increment": 10.0,
-      "shader_increment": 10.0,
-      "physics_increment": 9.8,
-      "animation_npc_increment": 10.0,
-      "memory_storage_increment": 10.0,
-      "thermal_risk_proxy": 10.0
+      "frame_time": 10,
+      "draw_calls": 10,
+      "geometry": 10,
+      "texture_memory": 10,
+      "shader_cost": 10,
+      "physics": 10,
+      "animation": 10,
+      "population": 10,
+      "thermal_risk": 10
     },
     "defects": []
   },
   "final_gate": {
     "passed": true,
-    "visual_status": "PASS_BY_QUORUM",
-    "ready_for_final_pixel_signoff": true,
+    "run": 36269596906,
+    "job_id": 108481596591,
+    "artifact_id": 10914973220,
+    "artifact_name": "t03-11h-final-closeout-36269596906",
+    "c1_c2_strictly_gt_9": true,
+    "c6_minimum": 10,
+    "machine_and_critic_gate_passed": true,
     "errors": []
   },
-  "pixel_signoff": {
-    "performed_against_accepted_gameplay_source": true,
-    "all_three_river_gates_readable_across_four_view_contract": true,
-    "worn_routes_cross_each_gate": true,
-    "east_gate_not_materially_occluded": true,
-    "no_visible_floating_gate_or_fence_base": true,
-    "no_missing_threshold_or_route_break": true,
-    "unresolved_mandatory_task_defects": []
+  "final_native": {
+    "run": 36269926615,
+    "job_id": 108481864049,
+    "conclusion": "success",
+    "tested_merge_sha": "bd43a82e0821dea3ec7e535ab31080eace7fa01f",
+    "t03_runtime_evidence_critical_files_compared": 10,
+    "t03_runtime_evidence_critical_files_byte_identical_to_11h": true,
+    "engine_regression_suites": 9,
+    "engine_regression_checks": 505,
+    "engine_regression_passed": true,
+    "mobile_vulkan_render_stage_passed": true,
+    "native_4k_render_passed": true,
+    "benchmark_stage_passed": true,
+    "arm64_apk_export_passed": true,
+    "apk_signature_verification_passed": true,
+    "package_verification_passed": true,
+    "source_artifact": {
+      "id": 10915197582,
+      "name": "HAVENLINE-native-source-bd43a82e0821dea3ec7e535ab31080eace7fa01f"
+    },
+    "render_artifact": {
+      "id": 10915817528,
+      "name": "HAVENLINE-environment-renders-bd43a82e0821dea3ec7e535ab31080eace7fa01f"
+    },
+    "native_review_artifact": {
+      "id": 10915996188,
+      "name": "HAVENLINE-native-review-bd43a82e0821dea3ec7e535ab31080eace7fa01f"
+    }
   },
-  "artifacts": {
-    "primary_evidence": {
-      "id": 10308254512,
-      "name": "havenline-t03-v2-evidence-34730602238",
-      "download_zip_sha256": "86cd380937f3445ea7fad0df73fa1ee62ce5232218c0f542e21bceb603dd6a92"
-    },
-    "primary_source": {
-      "id": 10308369258,
-      "name": "havenline-t03-v2-source-34730602238"
-    },
-    "final_visual": {
-      "id": 10310956842,
-      "download_zip_sha256": "24d2b5ec40b434644d4b3a9cc4c40df046d38adade70e39f74a4de60ef648117"
-    },
-    "final_c6": {
-      "id": 10309999501,
-      "download_zip_sha256": "c15194687a1f3cd0e78cf8b800af9c708e0b40040471fac851bad5a4d595e977"
-    },
-    "final_gate": {
-      "id": 10310887222,
-      "download_zip_sha256": "253c22dc05ea60164e3ab9e294812ff1c07c6745dce8be9c8702f7e32b4f5b06"
+  "source_protection": {
+    "t03_owned_files_changed_by_11h": [
+      "HavenlineGodot/scripts/camp_boundary_view.gd",
+      "HavenlineGodot/tests/test_task03_boundary.gd",
+      "HavenlineGodot/assets/t03_boundary_v2/manifest.json"
+    ],
+    "preserves": [
+      "authoritative collision/opening geometry",
+      "hinges",
+      "gate IDs",
+      "routes",
+      "HavenlineGodot/scripts/camp_boundary.gd",
+      "river geometry",
+      "lane shader",
+      "authored meshes/materials",
+      "threshold posts",
+      "protected T01/T02 authority"
+    ],
+    "visual_only_gate_leaf_normalization": {
+      "length": 1.85,
+      "open_angle_rad": 1.12,
+      "all_six_portals": true
     }
   },
   "governance_integrity": {
-    "rejected_candidates_and_low_verdicts_preserved": true,
-    "product_rerendered_during_adjudication": false,
-    "deterministic_or_mechanical_failures_overridable": false,
-    "two_critics_failing_same_group_overridable": false
+    "reference_frames_are_art_language_not_dimensional_blueprints": true,
+    "no_invented_numeric_ratio_shoreline_lighting_requirements": true,
+    "open_leaf_free_edge_stile_is_not_threshold_post": true,
+    "subtle_continuous_terrain_lane_wear_is_valid": true,
+    "shadows_perspective_occlusion_alone_are_not_defects": true,
+    "visible_features_are_not_called_missing": true,
+    "source_change_requires_specific_corroborated_t03_owned_visible_defect": true,
+    "aggregate_red_status_never_used_as_source_change_authority": true,
+    "score_averaging_used": false,
+    "unresolved_mandatory_task_defects": []
   },
-  "t04_plus_runtime_started": false,
+  "post_completion_audit_sequence": [
+    "T04",
+    "T05",
+    "T06",
+    "T07",
+    "T08",
+    "T09",
+    "T10",
+    "T11"
+  ],
+  "t04_plus_runtime_started": true,
   "whole_game_approved": false,
   "physical_phone_tablet_native_4k60_verified": false,
   "unfinished_apk_delivered": false,
