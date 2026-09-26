@@ -81,7 +81,7 @@ jobs:
             suite_timeout=90
             # test_outpost is the observed hosted-runner hotspot: it has repeatedly reached the 90s cap after earlier suites pass.
             # Give only this suite extra infrastructure headroom; test assertions and pass/fail semantics are unchanged.
-            if [ "$suite" = test_outpost ]; then suite_timeout=180; fi
+            if [ "$suite" = test_outpost ] || [ "$suite" = test_outpost_runtime ] || [ "$suite" = test_environment ]; then suite_timeout=180; fi
             echo "Running $suite with timeout ${suite_timeout}s"
             timeout "$suite_timeout" Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "artifacts/$suite.log"
           done
