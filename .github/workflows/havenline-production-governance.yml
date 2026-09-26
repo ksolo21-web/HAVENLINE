@@ -46,11 +46,22 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           fetch-depth: 0
+      - name: Resolve trusted integration authority
+        shell: bash
+        env:
+          SCOPE_EVENT: ${{ github.event_name }}
+        run: |
+          set -euo pipefail
+          if [ "$SCOPE_EVENT" = "pull_request" ]; then
+            trusted_integration=$(git rev-parse HEAD^1)
+          else
+            trusted_integration=$(git rev-parse HEAD)
+          fi
+          git cat-file -e "$trusted_integration^{commit}"
+          echo "HAVENLINE_TRUSTED_INTEGRATION_HEAD=$trusted_integration" >> "$GITHUB_ENV"
       - name: Compile production accelerator and specialist critic tooling
         run: python3 -m compileall -q tools/havenline/production
       - name: Run governance and safeguard unit tests
-        env:
-          HAVENLINE_TRUSTED_INTEGRATION_HEAD: ${{ github.event.pull_request.base.sha || github.sha }}
         run: python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' -v
       - name: Validate workstream registry and ownership collisions
         run: python3 tools/havenline/production/workstream.py validate-registry
@@ -59,10 +70,13 @@ jobs:
         env:
           SCOPE_EVENT: ${{ github.event_name }}
           SCOPE_REF: ${{ github.ref_name }}
-          SCOPE_PR_BASE: ${{ github.event.pull_request.base.sha }}
         run: |
           set -euo pipefail
-          if [ "$SCOPE_EVENT" = "pull_request" ]; then base="$SCOPE_PR_BASE"; else base=$(git rev-parse HEAD^); fi
+          if [ "$SCOPE_EVENT" = "pull_request" ]; then
+            base="$HAVENLINE_TRUSTED_INTEGRATION_HEAD"
+          else
+            base=$(git rev-parse HEAD^)
+          fi
           python3 tools/havenline/production/validate_migration.py
           integration_branch=$(python3 -c 'import json; print(json.load(open("Docs/Production/WORKSTREAM_REGISTRY.json"))["integration_branch"])')
           if [ "$SCOPE_EVENT" = "push" ] && [ "$SCOPE_REF" = "$integration_branch" ]; then
