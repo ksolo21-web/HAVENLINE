@@ -155,11 +155,11 @@
     {
       "task_id": "T05",
       "task_name": "Production station and prop kit",
-      "status": "FIX_REQUIRED",
+      "status": "APPROVED",
       "owner": "station-prop-builder",
       "workstream_id": "wave1-props",
-      "branch": "havenline/T05-visual-repair-20260926",
-      "base_commit": "ff7c67285a67dc69a3bd97b207a9e61929e1e3c9",
+      "branch": "havenline/T05-props",
+      "base_commit": "746c3e8757ccaf2a279a6184b6ed109a143d5b3a",
       "dependencies": [
         "T03"
       ],
@@ -170,8 +170,8 @@
         "@protected:approved",
         "@integration-only"
       ],
-      "candidate_commit": null,
-      "candidate_hash_or_artifact": null,
+      "candidate_commit": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+      "candidate_hash_or_artifact": "integrated-precritic-run:34824259431 artifact:10339801250 sha256:76f6a0237e2676abf86eeac7b82a1005a8bba0dd951b03a14a8022626d982da1; strict-review-primary-run:34825220341; recovery-and-final-gate-run:34839506095; visual-resolution-artifact:10348819805; C6-artifact:10343330715; final-gate-artifact:10349650771",
       "tests": {
         "suites": 18,
         "checks": 1119,
@@ -195,22 +195,8 @@
         "C6": "PASS; all nine mandatory dimensions strictly above 9.0; minimum 9.1; no defects"
       },
       "integration_status": "APPROVED; accepted gameplay source fa6fa70f154f3757d22303522ca3f6de2c3d391f; 18 suites / 1119 checks and 77 source-bound images passed; strict C1+C2 resolution PASS; C6 PASS; final machine gate PASS",
-      "known_blockers": [
-        "T05-D10",
-        "T05-D11",
-        "T05-D12",
-        "T05-D13"
-      ],
-      "next_action": "Rebuild T05 visual families on isolated repair branch under the 2026-09-26 sculpted asset standard. First batch: hearth/furnace (R01) + resource props (R07). Preserve IDs, sockets, footprints, clearances, arrangements, gameplay, T03 authority and T04 camera.",
-      "post_completion_visual_repair": {
-        "historical_status": "APPROVED",
-        "historical_accepted_source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
-        "historical_evidence_preserved": true,
-        "downstream_approvals_automatically_revoked": false,
-        "repair_reason": "User-approved stricter art-language audit found authored meshes that still visually read as primitive/blockout forms.",
-        "repair_branch": "havenline/T05-visual-repair-20260926",
-        "repair_scope": "VISUAL_ONLY"
-      }
+      "known_blockers": [],
+      "next_action": "Preserve T05 approved source and verified completion; current forward runtime frontier is T11 PREPARED."
     },
     {
       "task_id": "T06",
