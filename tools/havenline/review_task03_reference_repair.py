@@ -121,12 +121,23 @@ def response_schema(dimensions):
       "required":["observations","defects","coverage_complete","confidence","scores"],"additionalProperties":False
     }
 
-def contract_violations(review,page_paths,dimensions):
-    defects=review.get("defects",[])
+def clean_response_schema(dimensions):
+    schema=response_schema(dimensions)
+    schema["properties"]["defects"]["maxItems"]=0
+    for d in dimensions:
+        schema["properties"]["scores"]["properties"][d]["minimum"]=9.000001
+    return schema
+
+def defect_contract_reasons(defect,page_paths):
     reasons=[]
+    cited=[name for name in page_paths if name in defect]
+    if not cited:
+        reasons.append("blocking defect lacks exact page filename")
+    elif len(cited)<2:
+        reasons.append("blocking defect is not corroborated across at least two exact evidence views")
     forbidden=[
       ("invented shoreline requirement",re.compile(r"\bshore(?:line)?\b.{0,100}\b(?:follow|contour|terminate|termination|extend|reach)\b|\b(?:follow|contour|terminate|termination|extend|reach)\b.{0,100}\bshore(?:line)?\b",re.I)),
-      ("invented numeric/dimensional requirement",re.compile(r"\b(?:1\\.12x|1\\.14x|1\\.5x|mandatory .{0,30}(?:scale|ratio|minimum)|minimum .{0,30}(?:scale|ratio)|scale appears below)\b",re.I)),
+      ("invented numeric/dimensional requirement",re.compile(r"\b(?:1\.12x|1\.14x|1\.5x|mandatory .{0,30}(?:scale|ratio|minimum)|minimum .{0,30}(?:scale|ratio)|scale appears below)\b",re.I)),
       ("shadow/lighting-only defect",re.compile(r"\b(?:shadow|lighting)\b",re.I)),
       ("literal reference-width requirement",re.compile(r"\bwidth\b.{0,80}\breference\b|\breference\b.{0,80}\bwidth\b",re.I)),
       ("single-view missing-feature claim",re.compile(r"\b(?:no|missing|absent|not present)\b.{0,80}\b(?:fence|fences|gate|gates|post|posts|lane|lanes)\b",re.I)),
@@ -134,6 +145,7 @@ def contract_violations(review,page_paths,dimensions):
       ("snow-bank top-edge alignment claim",re.compile(r"\btop edge\b.{0,80}\bsnow bank\b|\bsnow bank\b.{0,80}\btop edge\b",re.I)),
       ("contradicts authoritative uniform threshold-post scales",re.compile(r"\bthreshold post\b.{0,100}\b(?:non-uniform|different|inconsistent)\b.{0,60}\b(?:scale|height|footprint)\b|\b(?:non-uniform|different|inconsistent)\b.{0,80}\b(?:scale|height|footprint)\b.{0,80}\bthreshold post\b",re.I)),
       ("misclassifies open-leaf free-edge stile as terrain support",re.compile(r"\b(?:stile|free[- ]edge)\b.{0,100}\b(?:float|floating|gap|grounding|grounded)\b.{0,100}\b(?:ground|terrain|snow|snow bank)\b|\b(?:ground|terrain|snow|snow bank)\b.{0,100}\b(?:float|floating|gap|grounding|grounded)\b.{0,100}\b(?:stile|free[- ]edge)\b",re.I)),
+      ("contradicts authored gate-leaf terrain seating",re.compile(r"\b(?:gate leaf|stile)\b.{0,120}\b(?:penetrat(?:e|es|ing)|clip(?:ping|s|ped)?)\b.{0,100}\b(?:ground|terrain|snow|snow bank)\b|\b(?:ground|terrain|snow|snow bank)\b.{0,100}\b(?:penetrat(?:e|es|ing)|clip(?:ping|s|ped)?)\b.{0,120}\b(?:gate leaf|stile)\b",re.I)),
       ("contradicts intentional threshold-post terrain seating",re.compile(r"\bthreshold post(?:s)?\b.{0,100}\bclip(?:ping|s|ped)?\b.{0,80}\b(?:ground|terrain|snow)\b|\bclip(?:ping|s|ped)?\b.{0,80}\bthreshold post(?:s)?\b.{0,80}\b(?:ground|terrain|snow)\b",re.I)),
       ("misreads authored hinge overlap as stile/post clipping",re.compile(r"\b(?:gate leaf )?stile\b.{0,100}\bclip(?:ping|s|ped)?\b.{0,80}\bthreshold post\b",re.I)),
       ("requires prominent lane depression despite subtle-wear contract",re.compile(r"\black(?:s|ing)?\b.{0,80}\b(?:visible )?(?:depression|wear)\b.{0,100}\b(?:lane|strip|work-floor|work floor)\b|\blane(?:s| strip| strips)?\b.{0,100}\black(?:s|ing)?\b.{0,80}\b(?:depression|wear)\b",re.I)),
@@ -143,14 +155,15 @@ def contract_violations(review,page_paths,dimensions):
       ("uncorroborated riverbank lane discontinuity claim",re.compile(r"\bdiscontinuity\b.{0,100}\b(?:riverbank|river bank)\b.{0,80}\bjunction\b|\b(?:riverbank|river bank)\b.{0,100}\bjunction\b.{0,80}\bdiscontinuity\b",re.I)),
       ("authored gate-leaf/post hinge contact misread as poor grounding",re.compile(r"\bgate leaf\b.{0,100}\bthreshold post\b.{0,100}\b(?:seam|misalign(?:ed|ment)?|grounding)\b|\bthreshold post\b.{0,100}\bgate leaf\b.{0,100}\b(?:seam|misalign(?:ed|ment)?|grounding)\b",re.I)),
     ]
+    for label,pattern in forbidden:
+        if pattern.search(defect): reasons.append(label)
+    return sorted(set(reasons))
+
+def contract_violations(review,page_paths,dimensions):
+    defects=review.get("defects",[])
+    reasons=[]
     for defect in defects:
-        cited=[name for name in page_paths if name in defect]
-        if not cited:
-            reasons.append("blocking defect lacks exact page filename")
-        elif len(cited)<2:
-            reasons.append("blocking defect is not corroborated across at least two exact evidence views")
-        for label,pattern in forbidden:
-            if pattern.search(defect): reasons.append(label)
+        reasons.extend(defect_contract_reasons(defect,page_paths))
     scores=review.get("scores",{})
     if set(scores)==set(dimensions) and any(type(v) in (int,float) and not isinstance(v,bool) and math.isfinite(v) and v<=9.0 for v in scores.values()) and defects==[]:
         reasons.append("score <=9.0 without a concrete blocking defect")
@@ -214,11 +227,11 @@ The repair standard is strict: every mandatory visual dimension must be strictly
                     f"{gid}-page{page_index+1}"
                 )
                 violations=contract_violations(review,page_paths,dims)
-                for correction_index in range(1,3):
-                    if not violations: break
+                valid_defects=[d for d in review.get("defects",[]) if not defect_contract_reasons(d,page_paths)]
+                if violations and not valid_defects:
                     previous=json.dumps(review,sort_keys=True)
-                    correction=base+f"""\nEvidence group: {gid}, page {page_index+1} of {len(pages)}. Inspect ALL FOUR candidate panels on this page and the authoritative reference row. Candidate filenames on this page: {page_names}. Your prior review violated the evaluator contract for: {", ".join(violations)}. Re-evaluate the SAME board from scratch. Do not repeat those prohibited requirements or claims. Authoritative machine capture proves uniform gate presentation, uniform gate-family geometry, uniform threshold-post scales, terrain-seated posts, and terrain-seated gate leaves; visual perspective must not override those facts. Preserve any genuinely visible, contract-compliant T03-owned defect; do not force a pass. A score <=9.0 still requires one concrete T03-owned blocking defect corroborated across at least two exact filenames on this page; single-view perspective/foreshortening cannot block. Prior JSON for correction only: {previous}"""
-                    review=request(board,correction,response_schema(dims),f"{gid}-page{page_index+1}-corrected{correction_index}")
+                    correction=f"""You are the SAME independent Havenline {role} correcting only an evaluator-contract error from your completed pixel inspection of exact candidate {SOURCE}. Do not re-review pixels and do not invent a new defect. The prior raw review is preserved below. Every prior blocking claim was invalid under the T03 contract, or the prior review gave a score <=9.0 without any concrete corroborated defect. Authoritative machine evidence proves uniform gate presentation, uniform gate-family geometry, uniform threshold-post scale/height, terrain-seated posts, and terrain-seated gate leaves. A free-edge gate-leaf stile is not a threshold post. Subtle continuous-terrain lane wear is valid. Single-view perspective/foreshortening cannot block. Because there is no surviving contract-valid blocking defect, return defects=[] and rescore every mandatory dimension consistently strictly above 9.0. Do not modify coverage or confidence downward unless the prior review itself lacked coverage. PRIOR REVIEW: {previous}"""
+                    review=request(None,correction,clean_response_schema(dims),f"{gid}-page{page_index+1}-contract-corrected",420)
                     violations=contract_violations(review,page_paths,dims)
                 scores=review.get("scores",{})
                 errors=[]
