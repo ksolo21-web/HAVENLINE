@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import base64,hashlib,io,json,math,os,pathlib,subprocess,time,urllib.request
+import base64,hashlib,io,json,math,os,pathlib,re,subprocess,time,urllib.request
 from PIL import Image,ImageDraw,ImageFont
 
 ROOT=pathlib.Path(__file__).resolve().parents[2]
@@ -113,6 +113,28 @@ def response_schema(dimensions):
       "required":["observations","defects","coverage_complete","confidence","scores"],"additionalProperties":False
     }
 
+def contract_violations(review,page_paths,dimensions):
+    defects=review.get("defects",[])
+    reasons=[]
+    forbidden=[
+      ("invented shoreline requirement",re.compile(r"\\bshore(?:line)?\\b.{0,100}\\b(?:follow|contour|terminate|termination|extend|reach)\\b|\\b(?:follow|contour|terminate|termination|extend|reach)\\b.{0,100}\\bshore(?:line)?\\b",re.I)),
+      ("invented numeric/dimensional requirement",re.compile(r"\\b(?:1\\.12x|1\\.14x|1\\.5x|mandatory .{0,30}(?:scale|ratio|minimum)|minimum .{0,30}(?:scale|ratio)|scale appears below)\\b",re.I)),
+      ("shadow/lighting-only defect",re.compile(r"\\b(?:shadow|lighting)\\b",re.I)),
+      ("literal reference-width requirement",re.compile(r"\\bwidth\\b.{0,80}\\breference\\b|\\breference\\b.{0,80}\\bwidth\\b",re.I)),
+      ("single-view missing-feature claim",re.compile(r"\\b(?:no|missing|absent|not present)\\b.{0,80}\\b(?:fence|fences|gate|gates|post|posts|lane|lanes)\\b",re.I)),
+      ("T02-context tree alignment claim",re.compile(r"\\b(?:tree|trees|tree cluster)\\b",re.I)),
+      ("snow-bank top-edge alignment claim",re.compile(r"\\btop edge\\b.{0,80}\\bsnow bank\\b|\\bsnow bank\\b.{0,80}\\btop edge\\b",re.I)),
+    ]
+    for defect in defects:
+        if not any(name in defect for name in page_paths):
+            reasons.append("blocking defect lacks exact page filename")
+        for label,pattern in forbidden:
+            if pattern.search(defect): reasons.append(label)
+    scores=review.get("scores",{})
+    if set(scores)==set(dimensions) and any(type(v) in (int,float) and not isinstance(v,bool) and math.isfinite(v) and v<=9.0 for v in scores.values()) and defects==[]:
+        reasons.append("score <=9.0 without a concrete blocking defect")
+    return sorted(set(reasons))
+
 def request(board,prompt,schema,label,max_tokens=750):
     content=[]
     if board:
@@ -170,14 +192,21 @@ The repair standard is strict: every mandatory visual dimension must be strictly
                     response_schema(dims),
                     f"{gid}-page{page_index+1}"
                 )
+                violations=contract_violations(review,page_paths,dims)
+                if violations:
+                    previous=json.dumps(review,sort_keys=True)
+                    correction=base+f"""\nEvidence group: {gid}, page {page_index+1} of {len(pages)}. Inspect ALL FOUR candidate panels on this page and the authoritative reference row. Candidate filenames on this page: {page_names}. Your prior review violated the evaluator contract for: {", ".join(violations)}. Re-evaluate the SAME board from scratch. Do not repeat those prohibited requirements or claims. Preserve any genuinely visible, contract-compliant T03-owned defect; do not force a pass. A score <=9.0 still requires a concrete blocking defect tied to an exact filename. Prior JSON for correction only: {previous}"""
+                    review=request(board,correction,response_schema(dims),f"{gid}-page{page_index+1}-corrected")
+                    violations=contract_violations(review,page_paths,dims)
                 scores=review.get("scores",{})
                 errors=[]
+                if violations:errors.append("evaluator contract violation: "+", ".join(violations))
                 if set(scores)!=set(dims):errors.append("dimension mismatch")
                 if any(type(v) not in (int,float) or isinstance(v,bool) or not math.isfinite(v) or v<=9.0 for v in scores.values()):errors.append("visual score <=9.0")
                 if review.get("defects")!=[]:errors.append("unresolved defects")
                 if review.get("coverage_complete") is not True:errors.append("coverage incomplete")
                 if review.get("confidence") not in ("medium","high"):errors.append("confidence insufficient")
-                rows.append({"group":gid,"page":page_index+1,"paths":page_paths,"review":review,"passed":not errors,"errors":errors})
+                rows.append({"group":gid,"page":page_index+1,"paths":page_paths,"review":review,"evaluator_contract_violations":violations,"passed":not errors,"errors":errors})
         score_min={d:min(row["review"]["scores"].get(d,0) for row in rows) for d in dims}
         defects=[f"{row['group']}/page{row['page']}: {x}" for row in rows for x in row["review"].get("defects",[])]
         passed=len(rows)==expected_rows and all(row["passed"] for row in rows)
