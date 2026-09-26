@@ -15,7 +15,8 @@
     "Preactivation package reconciled to authoritative integration head 6db1207b2b8725cb4591d4a55670aa48eeb2c3fb; no T11/T12 runtime files modified.",
     "Current blocker is lifecycle only: T12 must become APPROVED and integrated before T13 runtime activation.",
     "Resolved preparation defects remain recorded for failure-learning; only unresolved_preparation_defects blocks readiness.",
-    "2026-09-22 owner authorization: T13 may build isolated before T12 approval under canonical preactivation_candidate.py, capped at BUILT_PENDING_DEPENDENCY with integration/approval forbidden."
+    "2026-09-22 owner authorization: T13 may build isolated before T12 approval under canonical preactivation_candidate.py, capped at BUILT_PENDING_DEPENDENCY with integration/approval forbidden.",
+    "Run 35730558553: built-pending PASS; C3 PASS; C4 PASS after t13.readability.v1 repair; C7 PASS. Only C2 warning classification remained."
   ],
   "resolved_preparation_defects": [
     {
@@ -41,6 +42,65 @@
       "root_cause": "Task-local prose drifted from the canonical critic taxonomy while preserving only the ID list.",
       "repair": "Rewrote the T13 critic acceptance matrix to match canonical C2/C3/C4/C6/C7 names/responsibilities and kept spend-blind/GM isolation as mandatory evidence without repurposing critic IDs.",
       "status": "RESOLVED"
+    }
+  ],
+  "unresolved_build_defects": [],
+  "resolved_build_defects": [
+    {
+      "id": "T13-BUILD-001",
+      "defect": "C2 exact-candidate visual review launched a fresh Godot checkout without importing the project first, so class-name cache resolution failed in unrelated main-scene scripts and the render timed out.",
+      "evidence": "Run 35717659264 review-c2: HavenlineStationKit/HavenlineHarvestPresentation parse errors followed by exit 124; the built-pending-dependency job on the same candidate passed project import and both T13 suites.",
+      "root_cause": "C2 job-local evidence harness omitted the Godot import step even though each GitHub Actions job has an isolated workspace.",
+      "repair": "Import the exact candidate in the C2 job before launching existing render-review scenarios; retain visual non-impact proof and independent C2 review.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "T13-BUILD-002",
+      "defect": "C4 evidence exposed only backend reason codes/coefficients, allowing the reviewer to infer that difficulty changes had no stable downstream danger/recovery/world-response/next-action presentation contract; it also misread task_approved=false as a test failure rather than the intentional T12 lifecycle lock.",
+      "evidence": "Run 35717659264 review-c4 scored world_change_clarity 3.0 and multiple clarity dimensions 4-5, citing missing feedback and task_approved=false.",
+      "root_cause": "T13 had deterministic challenge semantics but no explicit cross-owner readability handoff, and critic evidence did not separate implementation validation from dependency-gated task approval.",
+      "repair": "Add deterministic t13.readability.v1 output, test all C4 ownership boundaries, emit source-bound readability evidence, and state lifecycle lock separately from implementation validation.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "T13-BUILD-003",
+      "defect": "The new 100-level readability integration assertion used inferred typing for a Dictionary value returned through Variant access, which Godot 4.7.2 refused to infer.",
+      "evidence": "Run 35730422938: core T13 suite passed all 57 checks; test_task13_integration.gd then failed parse with 'Cannot infer the type of readable variable because the value does not have a set type.'",
+      "root_cause": "Test-only GDScript local variable relied on inference across a dynamic Dictionary property.",
+      "repair": "Declare readable explicitly as Dictionary; no runtime Challenge Director behavior changed.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "T13-BUILD-004",
+      "defect": "C2 completed all six exact-candidate renders but the generic ERROR grep treated two known pre-existing baked-media warnings as T13 regressions.",
+      "evidence": "Run 35730558553 review-c2 showed only the known missing baked outpost audio and missing baked crew motion ERROR lines before the blanket grep exited 1.",
+      "root_cause": "C2 did not classify known upstream evidence-fixture warnings separately from new render failures.",
+      "repair": "Allowlist only those two exact warning messages, require both to be observed, keep all other ERROR/SCRIPT ERROR/Parse Error/ObjectDB leak signals fatal, and include the allowlist proof in C2 evidence.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "T13-BUILD-005",
+      "defect": "The exact-warning classifier was placed after six render commands under set -euo pipefail; the final Godot capture returned exit 1 because of the known baked-media warnings, aborting before classification could execute.",
+      "evidence": "Run 35732467356 review-c2 reached all six renders; the final shelter-detail log contained only the two known baked-media warning families, then the shell exited 1 before the post-render classifier or manifest step.",
+      "root_cause": "C2 capture control flow treated the raw Godot process code as authoritative before evaluating the bounded warning policy and required evidence artifacts.",
+      "repair": "Record each capture process exit without immediate pipefail termination, allow only exit 0/1, then require exact warning classification plus native-scene.png and render-evidence.json for every capture; any unexpected ERROR/parse/script/leak signal remains fatal.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "T13-BUILD-006",
+      "defect": "C2's fragmented shell post-capture warning checks returned exit 1 even though the retained exact-candidate artifact proves all six capture exits were 0, all six PNG/report pairs were present and valid, both allowed warning families were present, and no unexpected error signal remained.",
+      "evidence": "Artifact 10696163794 from run 35733410803 was materialized and replayed against the same assertions: front/rear/side/three-quarter/gather-side/shelter-detail all had process exit 0, renderer mobile, render_scale 1.0; warning counts were 6 outpost-audio and 18 crew-motion; unexpected error set was empty.",
+      "root_cause": "The evidence policy was split across opaque shell grep/test commands and Python assertions, making the failing subcondition non-diagnostic despite a valid retained artifact.",
+      "repair": "Replace the fragmented shell post-check with one deterministic Python validator that records exit codes, warning counts, render metadata, exact unexpected lines, writes a structured evidence record, and fails only when that record contains a concrete violation.",
+      "status": "RESOLVED"
+    },
+    {
+      "id": "T13-BUILD-007",
+      "defect": "The source-bound capture reported readability_contract_complete=false even though C4 passed, because its scenario named recovery started Level 100 from previous band 3 and therefore correctly produced a bounded progression step-up instead of a recovery transition.",
+      "evidence": "Latest successful run 35734360763 printed readability_contract_complete=false while all deterministic suites and C2/C3/C4/C7 passed; source review showed capture_task13_challenge.gd used previous band 3 for the Level 100 struggle scenario.",
+      "root_cause": "Evidence fixture semantics contradicted the Challenge Director's bounded progression model; the fixture did not start from a high enough prior band to exercise de-escalation.",
+      "repair": "Start the Level 100 recovery capture from band 9, and require the complete four-state readability proof as part of capture PASS rather than recording it as an informational boolean.",
+      "status": "RESOLVED_PENDING_RETEST"
     }
   ]
 }
