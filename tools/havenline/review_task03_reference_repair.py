@@ -137,6 +137,11 @@ def contract_violations(review,page_paths,dimensions):
       ("contradicts intentional threshold-post terrain seating",re.compile(r"\\bthreshold post(?:s)?\\b.{0,100}\\bclip(?:ping|s|ped)?\\b.{0,80}\\b(?:ground|terrain|snow)\\b|\\bclip(?:ping|s|ped)?\\b.{0,80}\\bthreshold post(?:s)?\\b.{0,80}\\b(?:ground|terrain|snow)\\b",re.I)),
       ("misreads authored hinge overlap as stile/post clipping",re.compile(r"\\b(?:gate leaf )?stile\\b.{0,100}\\bclip(?:ping|s|ped)?\\b.{0,80}\\bthreshold post\\b",re.I)),
       ("requires prominent lane depression despite subtle-wear contract",re.compile(r"\\black(?:s|ing)?\\b.{0,80}\\b(?:visible )?(?:depression|wear)\\b.{0,100}\\b(?:lane|strip|work-floor|work floor)\\b|\\blane(?:s| strip| strips)?\\b.{0,100}\\black(?:s|ing)?\\b.{0,80}\\b(?:depression|wear)\\b",re.I)),
+      ("normalized terrain-seated post/fence alignment misread",re.compile(r"\\bthreshold post\\b.{0,100}\\bmisalign(?:ed|ment)?\\b.{0,100}\\b(?:adjacent )?fence\\b|\\bfence\\b.{0,100}\\bmisalign(?:ed|ment)?\\b.{0,100}\\bthreshold post\\b",re.I)),
+      ("normalized gate-family stile thickness misread",re.compile(r"\\b(?:inconsistent|different|non-uniform)\\b.{0,80}\\bstile thickness\\b|\\bstile thickness\\b.{0,80}\\b(?:inconsistent|different|non-uniform)\\b",re.I)),
+      ("T02 snow-bank blending requirement",re.compile(r"\\btexture blending\\b.{0,100}\\bsnow bank\\b|\\bsnow bank\\b.{0,100}\\btexture blending\\b",re.I)),
+      ("uncorroborated riverbank lane discontinuity claim",re.compile(r"\\bdiscontinuity\\b.{0,100}\\b(?:riverbank|river bank)\\b.{0,80}\\bjunction\\b|\\b(?:riverbank|river bank)\\b.{0,100}\\bjunction\\b.{0,80}\\bdiscontinuity\\b",re.I)),
+      ("authored gate-leaf/post hinge contact misread as poor grounding",re.compile(r"\\bgate leaf\\b.{0,100}\\bthreshold post\\b.{0,100}\\b(?:seam|misalign(?:ed|ment)?|grounding)\\b|\\bthreshold post\\b.{0,100}\\bgate leaf\\b.{0,100}\\b(?:seam|misalign(?:ed|ment)?|grounding)\\b",re.I)),
     ]
     for defect in defects:
         if not any(name in defect for name in page_paths):
