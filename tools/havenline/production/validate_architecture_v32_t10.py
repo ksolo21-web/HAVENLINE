@@ -43,6 +43,12 @@ GUARD_BASE_SHA256 = "1aad9fba33b2a03d798065573c4bd9f9cd157dbf9559d60efb61913713a
 GUARD_CURRENT_SHA256 = "071cfb7143b42dc903919da4a6a340fcd9eb3ef71656667dde6b5a1da233716a"
 GUARD_REQUEST = "Docs/Production/ChangeRequests/T10-candidate-guard-integration-branch.json"
 GUARD_REQUEST_SHA256 = "c2557fbdd0d4ce12660997d12fc46c9b7abf1d8ed337a9832acee6f32908fb9c"
+NATIVE_WORKFLOW = ".github/workflows/havenline-godot-android.yml"
+NATIVE_WORKFLOW_REQUEST = "Docs/Production/ChangeRequests/T03-native-workflow-timeout-infrastructure.json"
+NATIVE_WORKFLOW_AUTHORIZATION = "Authorize the exact bounded T03 Native timeout infrastructure delta without changing test assertions, test membership, or gameplay."
+NATIVE_WORKFLOW_BASE_SHA256 = "005c85d855284523c009e53c76e9e7db8d2795211f4bdd387c7ad40724da6e0c"
+NATIVE_WORKFLOW_CURRENT_SHA256 = "cfbbde8302934d9fe58df412375855c7d53cb6729beeee04a30a6fa7da5a5720"
+NATIVE_WORKFLOW_REQUEST_SHA256 = "14d3589ea38fb892a50da550871bffcebc029991081bf411e2e4c347b58d89e7"
 BUILDER_DELTAS = [('    errors=[]\n', '    errors=[]\n    task=c0.get("task_id")\n    canonical_c0=f"Docs/Production/{task}/C0_ROOT_CAUSE.json"\n    canonical_plan=f"Docs/Production/{task}/REPAIR_PLAN.json"\n    bookkeeping={canonical_c0,canonical_plan}\n    if plan.get("c0_report_path")!=canonical_c0 or plan.get("plan_path")!=canonical_plan:\n        errors.append("canonical C0 and repair plan paths required")\n'), ('        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n', '        if set(files)&bookkeeping:errors.append(f"{bid} bookkeeping cannot be causal files")\n        causal_files=set(files)-bookkeeping\n        if not causal_files:errors.append(f"{bid} non-bookkeeping causal files required")\n        if not fix.get("causal_change"):errors.append(f"{bid} causal_change missing")\n'), ('        allowed.update(files)\n', '        allowed.update(causal_files)\n'), ('        plan_path=plan.get("plan_path")\n        allowed_actual=set(allowed)\n        if isinstance(plan_path,str) and plan_path:allowed_actual.add(plan_path)\n', '        allowed_actual=set(allowed)|bookkeeping\n'), ('            if not set(fix.get("files",[]))&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n', '            if not (set(fix.get("files",[]))-bookkeeping)&set(actual_changed):errors.append(f"{fix.get(\'blocker_id\')} causal files did not change")\n')]
 BUILDER_INHERIT_DELTAS = [
     ('import pathlib\n\nfrom lib import ROOT, changed_files\n', 'import pathlib\nimport os\nimport subprocess\n\nfrom lib import ROOT, changed_files\n'),
@@ -153,6 +159,39 @@ def exact_owner_source_errors(path:str,base_sha256:str,current_sha256:str)->list
     return errors
 
 
+def native_workflow_delta_errors(accepted: str, current: str) -> list[str]:
+    old = (
+        '          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices; do\n'
+        '            timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "artifacts/$suite.log"\n'
+        '          done\n'
+        '          timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/smoke_launch.gd 2>&1 | tee artifacts/launch.log\n'
+    )
+    new = (
+        '          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices; do\n'
+        '            suite_timeout=90\n'
+        '            # test_outpost is the observed hosted-runner hotspot: it has repeatedly reached the 90s cap after earlier suites pass.\n'
+        '            # Give only this suite extra infrastructure headroom; test assertions and pass/fail semantics are unchanged.\n'
+        '            if [ "$suite" = test_outpost ]; then suite_timeout=180; fi\n'
+        '            echo "Running $suite with timeout ${suite_timeout}s"\n'
+        '            timeout "$suite_timeout" Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" 2>&1 | tee "artifacts/$suite.log"\n'
+        '          done\n'
+        '          # Hosted runners have repeatedly needed >60s here despite all prior suites passing; this is infrastructure allowance only, not a weaker test gate.\n'
+        '          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/smoke_launch.gd 2>&1 | tee artifacts/launch.log\n'
+    )
+    errors=[]
+    if hashlib.sha256(accepted.encode()).hexdigest()!=NATIVE_WORKFLOW_BASE_SHA256:
+        errors.append("Native workflow accepted V3.1 baseline hash drifted")
+    if accepted.count(old)!=1:
+        errors.append("Native workflow accepted V3.1 timeout anchor missing")
+        return errors
+    expected=accepted.replace(old,new,1)
+    if hashlib.sha256(current.encode()).hexdigest()!=NATIVE_WORKFLOW_CURRENT_SHA256:
+        errors.append("Native workflow exceeds exact authorized timeout-infrastructure bytes")
+    if current!=expected:
+        errors.append("Only the exact T03 Native timeout infrastructure delta is authorized")
+    return errors
+
+
 def builder_delta_errors(accepted: str, current: str) -> list[str]:
     expected = accepted
     for old, new in BUILDER_DELTAS:
@@ -210,9 +249,36 @@ def validate() -> dict:
         f"V3.1 locked file changed: {C0_ADVISOR}",
         f"V3.1 locked file changed: {WORKSTREAM}",
         f"V3.1 locked file changed: {GUARD}",
+        f"V3.1 locked file changed: {NATIVE_WORKFLOW}",
     }
     errors = [error for error in baseline["errors"] if error not in allowed]
     try:
+        accepted_native = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{NATIVE_WORKFLOW}").stdout.decode()
+        current_native = (v31.ROOT / NATIVE_WORKFLOW).read_text()
+        errors += native_workflow_delta_errors(accepted_native, current_native)
+        native_request_bytes=(v31.ROOT/NATIVE_WORKFLOW_REQUEST).read_bytes()
+        native_request=json.loads(native_request_bytes)
+        if hashlib.sha256(native_request_bytes).hexdigest()!=NATIVE_WORKFLOW_REQUEST_SHA256:
+            errors.append("Bounded Native workflow timeout authorization changed or missing")
+        if (
+            native_request.get("task_id")!="T03"
+            or native_request.get("status")!="AUTHORIZED"
+            or native_request.get("authorization")!=NATIVE_WORKFLOW_AUTHORIZATION
+            or native_request.get("integration_owner_disposition")!="APPROVED_EXACT_BOUNDED_NATIVE_TIMEOUT_INFRASTRUCTURE"
+            or native_request.get("target_path")!=[NATIVE_WORKFLOW]
+            or native_request.get("accepted_v31_source")!=v31.ACCEPTED_SOURCE
+            or native_request.get("accepted_v31_sha256")!=NATIVE_WORKFLOW_BASE_SHA256
+            or native_request.get("authorized_current_sha256")!=NATIVE_WORKFLOW_CURRENT_SHA256
+            or native_request.get("authorized_semantics",{}).get("default_suite_timeout_seconds")!=90
+            or native_request.get("authorized_semantics",{}).get("test_outpost_timeout_seconds")!=180
+            or native_request.get("authorized_semantics",{}).get("smoke_launch_timeout_seconds")!=180
+            or native_request.get("authorized_semantics",{}).get("all_other_suites_timeout_seconds")!=90
+            or native_request.get("authorized_semantics",{}).get("suite_name_and_timeout_logging") is not True
+            or native_request.get("authorized_semantics",{}).get("assertions_unchanged") is not True
+            or native_request.get("authorized_semantics",{}).get("test_membership_unchanged") is not True
+            or native_request.get("authorized_semantics",{}).get("gameplay_runtime_changed") is not False
+        ):
+            errors.append("Explicit exact Native workflow timeout authorization missing")
         accepted_c0 = v31._git("show", f"{v31.ACCEPTED_SOURCE}:{C0_WORKFLOW}").stdout.decode()
         errors += c0_workflow_delta_errors(accepted_c0, (v31.ROOT / C0_WORKFLOW).read_text())
         if hashlib.sha256((v31.ROOT / C0_REQUEST).read_bytes()).hexdigest() != C0_REQUEST_SHA256:
@@ -353,11 +419,11 @@ def validate() -> dict:
     return {
         "passed": not errors,
         "architecture_version": "3.2",
-        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact C0 failure evidence transport, causal repair bookkeeping, exact-byte inherited integration governance, canonical C0R builder enforcement for T10+, bounded workstream authorization-schema compatibility, actionable critic defects, bounded C0 model packets, grounded artifact diagnostics, terminal-first artifact evidence, latest-terminal failed-job log projection, and subject-isolated C0 execution",
+        "scope": "T09 workflow reactivation, T10 authority canary, T10-only C7 proof runner, exact T03 Native timeout infrastructure, exact C0 failure evidence transport, causal repair bookkeeping, exact-byte inherited integration governance, canonical C0R builder enforcement for T10+, bounded workstream authorization-schema compatibility, actionable critic defects, bounded C0 model packets, grounded artifact diagnostics, terminal-first artifact evidence, latest-terminal failed-job log projection, and subject-isolated C0 execution",
         "predecessor_accepted_source": v31.ACCEPTED_SOURCE,
         "predecessor_manifest_sha256": baseline["manifest_sha256"],
         "unchanged_locked_files": baseline["locked_files_matching"],
-        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE, BUILDER, WORKSTREAM, GUARD, C0_WORKFLOW, C0_ADVISOR, C0_DIAGNOSTICS, SPECIALIST],
+        "authorized_changes": [POLICY, CANARY, FORWARD, FAILURE, BUILDER, WORKSTREAM, GUARD, C0_WORKFLOW, C0_ADVISOR, C0_DIAGNOSTICS, SPECIALIST, NATIVE_WORKFLOW],
         "authorization_record": REQUEST,
         "c7_authorization_record": C7_REQUEST,
         "failure_packet_authorization_record": FAILURE_REQUEST,
@@ -372,6 +438,7 @@ def validate() -> dict:
         "c0_terminal_evidence_authorization_record": C0_TERMINAL_REQUEST,
         "c0_terminal_job_log_authorization_record": C0_TERMINAL_JOB_LOG_REQUEST,
         "specialist_actionable_defect_authorization_record": SPECIALIST_REQUEST,
+        "native_workflow_timeout_authorization_record": NATIVE_WORKFLOW_REQUEST,
         "errors": errors,
     }
 

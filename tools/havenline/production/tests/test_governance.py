@@ -220,12 +220,12 @@ class GovernanceTests(unittest.TestCase):
         r=load_json(DOCS/"WORKSTREAM_REGISTRY.json")
         t3=next(w for w in r["workstreams"] if w["task_id"]=="T03")
         self.assertEqual(t3["status"],"APPROVED")
-        self.assertEqual(t3["candidate_commit"],"5df9726e0b1c33f0f8865385b1c49aca229fd461")
-        self.assertEqual(t3["tests"]["checks"],807)
+        self.assertEqual(t3["candidate_commit"],"e1e7bb2d68d1d53025d1242011ad4c885f08c307")
+        self.assertEqual(t3["tests"]["checks"],812)
         self.assertEqual(t3["tests"]["result"],"PASS")
         self.assertEqual(t3["known_blockers"],[])
-        self.assertIn("PASS_BY_QUORUM",t3["critic_status"]["C1+C2"])
-        self.assertIn("PASS",t3["critic_status"]["C6"])
+        self.assertIn("minimum 9.1",t3["critic_status"]["C1+C2"])
+        self.assertIn("all nine mandatory dimensions 10.0",t3["critic_status"]["C6"])
 
     def test_t06_closeout_and_t07_lifecycle_checkpoint(self):
         graph=load_json(DOCS/"DEPENDENCY_GRAPH.json")["tasks"]

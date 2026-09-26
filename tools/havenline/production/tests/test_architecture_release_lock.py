@@ -37,11 +37,12 @@ class ArchitectureReleaseLockTests(unittest.TestCase):
             "V3.1 locked file changed: tools/havenline/production/c0_root_cause_advisor.py",
             "V3.1 locked file changed: tools/havenline/production/workstream.py",
             "V3.1 locked file changed: .github/workflows/havenline-candidate-guard.yml",
+            "V3.1 locked file changed: .github/workflows/havenline-godot-android.yml",
         ])
         self.assertEqual(result["architecture_version"], "3.1")
         self.assertEqual(result["accepted_source"], ACCEPTED_SOURCE)
         self.assertEqual(result["manifest_sha256"], EXPECTED_MANIFEST_SHA256)
-        self.assertEqual(result["locked_file_count"] - 9, result["locked_files_matching"])
+        self.assertEqual(result["locked_file_count"] - 10, result["locked_files_matching"])
         self.assertTrue(result["external_branch_protection_required_for_admin_tamper_resistance"])
 
     def test_bounded_v32_t09_is_superseded_only_by_t10_canary_delta(self):
@@ -49,7 +50,7 @@ class ArchitectureReleaseLockTests(unittest.TestCase):
         import validate_architecture_release_lock as v31
         from validate_architecture_v32_t09 import validate as validate_v32, policy_errors, POLICY, WORKFLOW
         result = validate_v32()
-        self.assertCountEqual(result["errors"], ["V3.1 locked file changed: tools/havenline/production/forward_execution.py", "V3.1 locked file changed: tools/havenline/production/mutation_canary.py", "V3.1 locked file changed: tools/havenline/production/failure_intelligence.py", "V3.1 locked file changed: tools/havenline/production/builder_repair_gate.py", "V3.1 locked file changed: .github/workflows/havenline-c0-root-cause.yml", "V3.1 locked file changed: tools/havenline/production/c0_root_cause_advisor.py", "V3.1 locked file changed: tools/havenline/production/workstream.py", "V3.1 locked file changed: .github/workflows/havenline-candidate-guard.yml"])
+        self.assertCountEqual(result["errors"], ["V3.1 locked file changed: tools/havenline/production/forward_execution.py", "V3.1 locked file changed: tools/havenline/production/mutation_canary.py", "V3.1 locked file changed: tools/havenline/production/failure_intelligence.py", "V3.1 locked file changed: tools/havenline/production/builder_repair_gate.py", "V3.1 locked file changed: .github/workflows/havenline-c0-root-cause.yml", "V3.1 locked file changed: tools/havenline/production/c0_root_cause_advisor.py", "V3.1 locked file changed: tools/havenline/production/workstream.py", "V3.1 locked file changed: .github/workflows/havenline-candidate-guard.yml", "V3.1 locked file changed: .github/workflows/havenline-godot-android.yml"])
         accepted = json.loads(v31._git("show", f"{ACCEPTED_SOURCE}:{POLICY}").stdout)
         current = json.loads((v31.ROOT / POLICY).read_text())
         for field, value in (("mutable_action_tags_forbidden", False), ("tools", {}), ("action_pins", {})):
@@ -69,6 +70,15 @@ class ArchitectureReleaseLockTests(unittest.TestCase):
         current=(v31.ROOT/CANARY).read_text()
         self.assertEqual(canary_delta_errors(accepted,current),[])
         self.assertTrue(canary_delta_errors(accepted,current+"\n# unrelated drift\n"))
+
+    def test_native_timeout_delta_rejects_any_other_workflow_change(self):
+        import validate_architecture_release_lock as v31
+        from validate_architecture_v32_t10 import NATIVE_WORKFLOW, native_workflow_delta_errors
+        accepted=v31._git("show",f"{ACCEPTED_SOURCE}:{NATIVE_WORKFLOW}").stdout.decode()
+        current=(v31.ROOT/NATIVE_WORKFLOW).read_text()
+        self.assertEqual([],native_workflow_delta_errors(accepted,current))
+        self.assertTrue(native_workflow_delta_errors(accepted,current+"\n# unrelated drift\n"))
+        self.assertTrue(native_workflow_delta_errors(accepted,current.replace("suite_timeout=90","suite_timeout=91",1)))
 
     def test_c0_job_collection_delta_rejects_any_other_workflow_change(self):
         import validate_architecture_release_lock as v31
