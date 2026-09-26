@@ -6,8 +6,8 @@ const Surface=preload("res://scripts/outpost_surface.gd")
 const Scenery=preload("res://scripts/scenery_batch.gd")
 const BOUNDARY_SHADER=preload("res://assets/t03_boundary_v2/t03_boundary_v2.gdshader")
 const BOUNDARY_ASSET_ROOT := "res://assets/t03_boundary_v2/"
-# Iteration 11E: preserve authored picket rhythm with low-overlap seams and derive each visible gate
-# leaf from the family-specific geometry that also owns crossing authority.
+# Iteration 11H: preserve authored picket rhythm while normalizing only the visual gate-leaf
+# presentation across all six portals. Collision/opening authority remains in camp_boundary.gd.
 const FENCE_SOURCE_LENGTH := 2.9409
 const GATE_LEAF_SOURCE_LENGTH := 2.90
 const FENCE_ROOT_SINK := 0.22
@@ -26,12 +26,16 @@ const SOUTH_VISUAL_MAX_INTERNAL_EXTENSION := 0.0
 # under the post without returning to the old 0.38 over-backset/dark seam.
 const GATE_HINGE_OVERLAP := 0.18
 const VISUAL_GATE_HINGE_BACKSET := GATE_HINGE_OVERLAP
-const MAIN_WORK_VISUAL_LEAF_LENGTH := Boundary.GATE_LEAF_LENGTH
-const MAIN_WORK_VISUAL_OPEN_ANGLE := Boundary.GATE_OPEN_ANGLE
+# One visual-only leaf silhouette prevents a river/work/main portal from changing category
+# between views. These constants do not change collision, navigation, route or opening authority.
+const VISUAL_GATE_LEAF_LENGTH := 1.85
+const VISUAL_GATE_OPEN_ANGLE := 1.12
+const MAIN_WORK_VISUAL_LEAF_LENGTH := VISUAL_GATE_LEAF_LENGTH
+const MAIN_WORK_VISUAL_OPEN_ANGLE := VISUAL_GATE_OPEN_ANGLE
 const MAIN_WORK_GATE_HINGE_OVERLAP := VISUAL_GATE_HINGE_BACKSET
-const RIVER_VISUAL_LEAF_LENGTH := Boundary.RIVER_GATE_LEAF_LENGTH
-const RIVER_VISUAL_OPEN_ANGLE := Boundary.RIVER_GATE_OPEN_ANGLE
-const RIVER_WEST_VISUAL_OPEN_ANGLE := Boundary.RIVER_GATE_OPEN_ANGLE
+const RIVER_VISUAL_LEAF_LENGTH := VISUAL_GATE_LEAF_LENGTH
+const RIVER_VISUAL_OPEN_ANGLE := VISUAL_GATE_OPEN_ANGLE
+const RIVER_WEST_VISUAL_OPEN_ANGLE := VISUAL_GATE_OPEN_ANGLE
 const RIVER_GATE_VISUAL_HINGE_OVERLAP := VISUAL_GATE_HINGE_BACKSET
 const GATE_LEAF_HINGE_SINK := 0.08
 const GATE_LEAF_ROOT_SINK := 0.10
@@ -154,8 +158,19 @@ func _gate_leaf_transform(leaf:Dictionary,hinge_backset:float)->Transform3D:
 	return _segment_transform(a-direction*hinge_backset,b,0.0,GATE_LEAF_HINGE_SINK,GATE_LEAF_ROOT_SINK,GATE_LEAF_SOURCE_LENGTH,true)
 
 func _visual_gate_leaf_specs()->Array[Dictionary]:
-	# Match the configured main/work and river gate families exactly.
-	return Boundary.gate_leaf_specs()
+	# Iteration 11H is presentation-only: retain every authoritative hinge/gate ID while
+	# showing one consistent open-leaf silhouette at north, work and river thresholds.
+	var result:Array[Dictionary]=[]
+	for gate in Boundary.gate_specs():
+		var a:=Vector2(gate.a);var b:=Vector2(gate.b);var tangent:=Vector2(gate.tangent);var mid:=Vector2(gate.center)
+		var inward:=(Boundary.CAMP_CENTER-mid).normalized()
+		var left_dir:=tangent.rotated(VISUAL_GATE_OPEN_ANGLE)
+		if left_dir.dot(inward)<0.0:left_dir=tangent.rotated(-VISUAL_GATE_OPEN_ANGLE)
+		var right_dir:=(-tangent).rotated(VISUAL_GATE_OPEN_ANGLE)
+		if right_dir.dot(inward)<0.0:right_dir=(-tangent).rotated(-VISUAL_GATE_OPEN_ANGLE)
+		result.append({"gate":gate.id,"hinge":a,"a":a,"b":a+left_dir*VISUAL_GATE_LEAF_LENGTH,"length":VISUAL_GATE_LEAF_LENGTH,"open_angle":VISUAL_GATE_OPEN_ANGLE,"authority_id":gate.authority_id})
+		result.append({"gate":gate.id,"hinge":b,"a":b,"b":b+right_dir*VISUAL_GATE_LEAF_LENGTH,"length":VISUAL_GATE_LEAF_LENGTH,"open_angle":VISUAL_GATE_OPEN_ANGLE,"authority_id":gate.authority_id})
+	return result
 
 func _row_path_point(source:Array[Dictionary],first:int,last_exclusive:int,distance:float)->Vector2:
 	var remaining:=maxf(0.0,distance)
@@ -291,8 +306,10 @@ func configure(game):
 	descriptor["authored_boundary_asset_family"]="t03_boundary_v2"
 	descriptor["fence_source_length"]=FENCE_SOURCE_LENGTH
 	descriptor["gate_leaf_source_length"]=GATE_LEAF_SOURCE_LENGTH
-	descriptor["uniform_gate_presentation"]=false
-	descriptor["gate_presentation_uses_authoritative_family_geometry"]=true
+	descriptor["uniform_gate_presentation"]=true
+	descriptor["gate_presentation_uses_authoritative_family_geometry"]=false
+	descriptor["visual_gate_family_normalized"]=true
+	descriptor["visual_gate_presentation_preserves_collision_authority"]=true
 	descriptor["rigid_gate_leaf_endpoint_seating"]=true
 	descriptor["fence_root_sink"]=FENCE_ROOT_SINK
 	descriptor["visual_join_overlap"]=VISUAL_JOIN_OVERLAP

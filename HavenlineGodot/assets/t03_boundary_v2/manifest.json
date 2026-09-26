@@ -2,7 +2,7 @@
   "schema": 1,
   "task": "T03",
   "kit": "Havenline reference palisade v10.2",
-  "revision": 15,
+  "revision": 16,
   "deterministic": true,
   "candidate_for_user_review": true,
   "production_visual_approval": false,
@@ -108,5 +108,26 @@
     "bank_visual_half_expand": -0.12,
     "visual_join_overlap": 0.012,
     "visual_corner_join_overlap": 0.018
+  },
+  "iteration_11h": {
+    "source_critic_run": 36206921533,
+    "visual_only": true,
+    "collision_authority_unchanged": true,
+    "protected_authority_unchanged": true,
+    "accepted_finding": "Fresh C1/C2 repeatedly exposed cross-view portal silhouette ambiguity: family-specific open-leaf length/angle let the free-end stile read inconsistently relative to threshold posts.",
+    "rejected_as_not_corroborated": [
+      "numeric threshold-post scale estimates inferred from screenshots",
+      "shadow or lighting differences treated as geometry defects",
+      "shoreline termination requirements not present in T03 scope"
+    ],
+    "repair": [
+      "normalize visual-only open leaves at all six gates to 1.85 length and 1.12 rad open angle",
+      "preserve every authoritative hinge, gate ID, collision opening, lane route and camp_boundary.gd constant",
+      "retain 0.18 hinge-only backset, rigid terrain seating, authored gate-leaf/post meshes and 1.12/1.14 threshold posts"
+    ],
+    "visual_gate_leaf_length": 1.85,
+    "visual_gate_open_angle": 1.12,
+    "gate_hinge_overlap": 0.18,
+    "next_required_proof": "fresh 16-suite T01-T03 regression, clean primitive/material audit, 47 gallery + 11 native-4K exact-source renders, then independent C1/C2 >9 and C6"
   }
 }
