@@ -7,7 +7,7 @@ import numpy as np
 import legacy_station_kit_v1 as legacy
 import reference_resource_props_v2 as resource_v2
 import reference_station_families_v3 as station_v3
-import reference_utility_stations_v2 as utility_v2
+import reference_utility_stations_v3 as utility_v3
 # T05_SCOPE_NOTE: R01 hearth plus R07/R03/R10/R10B families are independently gated; no stale legacy utility freeze remains.
 
 ROOT=Path(__file__).resolve().parents[3]
@@ -127,7 +127,7 @@ def main():
 
     # R10B binds the four remaining legacy utility silhouettes to authored,
     # reference-driven replacements without changing their gameplay metadata.
-    utility_assets=utility_v2.build_utility_stations()
+    utility_assets=utility_v3.build_utility_stations()
     legacy_utility_triangles={
         'fishing_rack':1276,'intake_machine':760,
         'cooker_processor':1188,'conveyor_straight':1216,
