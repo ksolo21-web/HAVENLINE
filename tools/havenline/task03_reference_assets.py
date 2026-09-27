@@ -3,6 +3,7 @@
 
 Revision 18 binds the canonical export to the latest user-supplied chunky
 early-camp palisade/gate silhouette while preserving all 11H gameplay authority.
+Rev18 closed components: 43.
 
 Preserve the raw author's topology/material records and bound every changed numeric
 component to 0.000001 model units. This is encoding, not an art/authority change.
