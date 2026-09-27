@@ -147,6 +147,14 @@ def main():
         assert row['materials']==sorted(builder.surfaces),asset_id
         assert {'snow','wood','wood_light','blue'}<=set(row['materials']),asset_id
         assert len(row['materials'])>=6,asset_id
+        # Source-side footprint guard: catch authored mesh overhangs before the
+        # Godot placement/collision suite. This is intentionally stricter than
+        # a visual-only review because frozen gameplay footprints must match art.
+        footprint=legacy.METADATA[asset_id][0]
+        xs=[p[0] for surface in builder.surfaces.values() for p in surface.positions]
+        zs=[p[2] for surface in builder.surfaces.values() for p in surface.positions]
+        assert max(xs)-min(xs) <= float(footprint[0])+.03,(asset_id,'footprint_x',max(xs)-min(xs),footprint[0])
+        assert max(zs)-min(zs) <= float(footprint[1])+.03,(asset_id,'footprint_z',max(zs)-min(zs),footprint[1])
     assert catalog['performance_contract']=={
         'triangles_max':180000,'draw_calls_max':48,'visible_materials_max':12,
         'texture_memory_mib_max':96,'storage_delta_mib_max':15,
