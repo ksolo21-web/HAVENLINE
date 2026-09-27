@@ -171,31 +171,40 @@ def build_cooker_processor():
     return b
 
 def build_conveyor_straight():
-    b=legacy.MeshBuilder("conveyor_straight"); snow(b,(3.35,.10,1.30))
+    b=legacy.MeshBuilder("conveyor_straight")
+    for x,z,rx,rz in ((-1.34,-.48,.26,.18),(-1.34,.48,.24,.17),(1.34,-.48,.28,.18),(1.34,.48,.25,.17),(-.42,-.52,.32,.13),(.54,.52,.30,.13)):
+        b.sphere("snow",(x,.07,z),(rx,.07,rz),5,10)
     for z in (-.46,.46):
-        b.beveled_box("wood_light",(0,.20,z),(3.05,.14,.15),.045)
-        b.beveled_box("blue",(0,.52,z),(2.92,.16,.14),.045)
-    for x in (-1.32,1.32):
-        for z in (-.46,.46): b.beveled_box("wood",(x,.39,z),(.18,.56,.18),.050)
-    for x in (-1.18,-.78,-.38,.02,.42,.82,1.22):
-        b.beveled_box("wood_light",(x,.64,0),(.28,.12,.82),.035)
-    b.beveled_box("dark",(0,.70,0),(2.72,.08,.72),.035)
-    for x in (-1.18,-.79,-.40,-.01,.38,.77,1.16):
-        b.cylinder("metal",(x,.76,0),.075,.78,10,rotation=(math.pi/2,0,0))
-        b.cylinder("yellow",(x,.76,-.42),.095,.055,10,rotation=(math.pi/2,0,0))
-    # Keep the authored drive housing/handwheel fully inside the frozen 3.40 m
-    # gameplay footprint. The first materialized R10B pass overhung the left
-    # edge by ~0.09 m at the handwheel, which made the rendered mesh disagree
-    # with collision/placement clearance even though the station still read well.
-    b.beveled_box("blue",(-1.26,.83,-.28),(.42,.48,.42),.075)
-    b.torus("orange",(-1.48,.84,-.28),.20,.050,14,6,rotation=(0,math.pi/2,0))
-    for ang in (0,math.pi/2,math.pi,3*math.pi/2):
-        b.rod_between("orange",(-1.51,.84,-.28),(-1.51,.84+math.sin(ang)*.20,-.28+math.cos(ang)*.20),.030,7)
-    b.cylinder("cream",(-1.54,.84,-.28),.060,.16,10,rotation=(0,0,math.pi/2))
-    for x in (-1.45,1.45):
-        b.beveled_box("blue",(x,.86,0),(.14,.48,1.02),.045)
-        b.beveled_box("snow",(x,.99,.16),(.17,.08,.46),.025)
-    b.beveled_box("yellow",(1.42,.86,-.54),(.34,.12,.08),.025)
+        b.beveled_box("wood",(0,.22,z),(3.02,.18,.18),.050)
+        b.rod_between("wood_light",(-1.18,.22,z),(1.18,.64,z),.050,7)
+        b.rod_between("wood_light",(-1.18,.64,z),(1.18,.22,z),.050,7)
+    for x in (-1.30,1.30):
+        for z in (-.46,.46):
+            b.beveled_box("wood",(x,.44,z),(.20,.62,.20),.050)
+            b.beveled_box("dark",(x,.11,z),(.27,.10,.27),.035)
+    for z in (-.48,.48):
+        b.beveled_box("wood_light",(0,.62,z),(2.86,.15,.16),.045)
+        b.beveled_box("blue",(0,.79,z),(2.70,.12,.12),.035)
+    for x in (-1.22,1.22):
+        b.beveled_box("blue",(x,.88,0),(.18,.52,1.02),.055)
+        b.beveled_box("metal",(x,.79,0),(.10,.34,.86),.035)
+    for i,x in enumerate((-1.05,-.75,-.45,-.15,.15,.45,.75,1.05)):
+        b.beveled_box("dark" if i%2==0 else "blue",(x,.80,0),(.24,.09,.70),.030)
+        b.cylinder("metal",(x,.70,0),.070,.78,10,rotation=(math.pi/2,0,0))
+        b.cylinder("yellow",(x,.70,-.42),.088,.045,10,rotation=(math.pi/2,0,0))
+        b.cylinder("cream",(x,.70,.42),.082,.040,10,rotation=(math.pi/2,0,0))
+    b.beveled_box("blue",(-1.34,.88,-.22),(.34,.58,.50),.075)
+    b.beveled_box("dark",(-1.35,.88,.20),(.28,.40,.26),.055)
+    b.torus("orange",(-1.53,.90,-.22),.18,.045,14,5,rotation=(0,math.pi/2,0))
+    b.cylinder("cream",(-1.57,.90,-.22),.055,.12,10,rotation=(0,0,math.pi/2))
+    b.beveled_box("metal",(1.32,.88,.08),(.26,.52,.58),.065)
+    b.beveled_box("blue",(1.45,.89,-.24),(.16,.30,.32),.050)
+    b.beveled_box("yellow",(1.46,.92,-.49),(.22,.12,.08),.025)
+    for x in (-.78,.78): b.beveled_box("wood",(x,1.10,.34),(.13,.54,.13),.040)
+    b.beveled_box("wood_light",(0,1.36,.34),(1.68,.14,.16),.045)
+    b.beveled_box("blue",(0,1.42,.34),(1.24,.07,.12),.025)
+    b.beveled_box("snow",(-.42,.90,.49),(.52,.055,.14),.020,rotation=(0,.06,.02))
+    b.beveled_box("snow",(.67,.88,-.49),(.38,.050,.14),.018,rotation=(0,-.08,-.02))
     return b
 
 def build_utility_stations():
