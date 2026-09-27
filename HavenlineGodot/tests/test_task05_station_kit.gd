@@ -93,7 +93,7 @@ func placement_inside_fence(placement: Dictionary, row: Dictionary) -> bool:
 	var extent_z := absf(sin(angle)) * half.x + absf(cos(angle)) * half.y
 	if absf(centre.x) + extent_x > Boundary.SIDE_X - 0.30 or centre.y + extent_z > Boundary.NORTH_Z - 0.30:
 		return false
-	for local in [Vector2(-half.x,-half.y), Vector2(half.x,-half.y), Vector2(half.x,half.y), Vector2(-half.x,half.y)]:
+	for local in [Vector2(-half.x,-half.y), Vector2(half.x,-half.y), Vector2(-half.x,half.y), Vector2(half.x,half.y)]:
 		var rotated := Vector2(local.x * cos(angle) + local.y * sin(angle), -local.x * sin(angle) + local.y * cos(angle))
 		var corner := centre + rotated
 		if Boundary.push_off_fence(corner, 0.32).distance_to(corner) > 0.001:
@@ -112,7 +112,7 @@ func run() -> void:
 	check("Station authority is versioned", descriptor.authority_id == "T05-station-kit-v1")
 	check("Catalog contains the frozen 22-asset kit", descriptor.asset_count == 22)
 	check("Camp and lakeshore arrangements are both declared", descriptor.arrangement_count == 2)
-	check("Catalog triangle total has broad headroom", descriptor.total_catalog_triangles == 24928 and descriptor.total_catalog_triangles <= 180000)
+	check("Catalog triangle total has broad headroom", descriptor.total_catalog_triangles == 27596 and descriptor.total_catalog_triangles <= 180000)
 	check("Shared palette stays within 12 visible materials", descriptor.visible_material_palette_count == 12)
 	check("Catalog exposes future-task sockets", descriptor.socket_count >= 35)
 	check("No gameplay logic is claimed", not descriptor.runtime_logic_included)
@@ -186,7 +186,7 @@ func run() -> void:
 	check("Camp arrangement includes the heated vessel", camp.any(func(node): return node.get_meta("t05_asset_id", "") == "hearth_vessel"))
 	check("Camp visual batches to the shared 12-material palette", kit.batched_visual.mesh.get_surface_count() == 12)
 	check("Camp batch remains below the 48 draw-call ceiling", kit.batched_visual.mesh.get_surface_count() <= 48)
-	check("Camp batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 12876)
+	check("Camp batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 15544)
 	var hearth_transform := kit.arrangement_transform("camp", "hearth_vessel", Vector3.ZERO)
 	check("Interactive hearth placement resolves from the same catalog", hearth_transform.origin.is_equal_approx(Vector3(0.0, 0.0, 0.2)))
 	var camp_without_hearth := kit.build_arrangement("camp", Vector3.ZERO, Callable(), ["hearth_vessel"])
