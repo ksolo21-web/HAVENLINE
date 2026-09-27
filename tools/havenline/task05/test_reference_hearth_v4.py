@@ -44,14 +44,16 @@ def verify():
         try:apply_baked_occlusion(broken)
         except ValueError:pass
         else:raise AssertionError('stale bake accepted: '+mutation)
-    # Model-space contracts and the 13 non-R07, non-hearth binaries remain
-    # byte-frozen. The eight R07 props are guarded by their own anti-revert gate.
-    assert preserved['unchanged_nonhearth_nonresource_assets']==13
+    # Model-space contracts and the seven non-R07/non-R03/non-hearth binaries
+    # remain byte-frozen. The intentional R07 and R03 repairs are gated separately.
+    assert preserved['unchanged_nonhearth_nonresource_nonpad_assets']==7
     assert preserved['intentionally_rebuilt_r07_assets']==8
+    assert preserved['intentionally_rebuilt_r03_assets']==6
     return {'passed':True,'closed_outward_components':238,'hearth_triangles':25968,
             'vertex_occlusion_count':VERTEX_COUNT,'geometry_bound_bake':True,
             'new_hostile_controls_rejected':4,'preserved_v3_regression':preserved,
-            'unchanged_nonhearth_nonresource_assets':13,'intentionally_rebuilt_r07_assets':8,
+            'unchanged_nonhearth_nonresource_nonpad_assets':7,'intentionally_rebuilt_r07_assets':8,
+            'intentionally_rebuilt_r03_assets':6,
             'visual_approval':False,'independent_critic':False}
 
 
