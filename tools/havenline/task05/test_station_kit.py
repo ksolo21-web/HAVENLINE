@@ -9,6 +9,7 @@ import reference_resource_props_v2 as resource_v2
 import reference_station_families_v3 as station_v3
 import reference_utility_stations_v2 as utility_v2
 # R10E materialization trigger: utility visual builders changed; keep source-integrity gate authoritative.
+# R10F materialization trigger: resource visual family changed; preserve the same source-integrity gate.
 # T05_SCOPE_NOTE: R01 hearth plus R07/R03/R10/R10B families are independently gated; no stale legacy utility freeze remains.
 
 ROOT=Path(__file__).resolve().parents[3]
