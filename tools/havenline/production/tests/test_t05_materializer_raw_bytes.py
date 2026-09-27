@@ -37,14 +37,20 @@ class T05MaterializerRawBytesTests(unittest.TestCase):
 
     def test_raw_detection_reproduces_old_failure_and_still_detects_real_changes(self):
         job = yaml.safe_load(WORKFLOW.read_text())['jobs']['materialize-t05']
-        raw = {k: v for k, v in os.environ.items() if not k.startswith('GIT_CONFIG_')}
+        # This synthetic repository owns its converter, not the runner's LFS driver.
+        isolated = {k: v for k, v in os.environ.items() if not k.startswith('GIT_')}
+        isolated.update(GIT_CONFIG_GLOBAL=os.devnull, GIT_CONFIG_SYSTEM=os.devnull)
+        raw = dict(isolated)
         raw.update({k: str(v) for k, v in job['env'].items()})
         with tempfile.TemporaryDirectory() as tmp:
             root = Path(tmp)
 
             def git(*args, env=raw, check=True):
-                return subprocess.run(['git', *args], cwd=root, env=env,
-                                      capture_output=True, check=check)
+                result = subprocess.run(['git', *args], cwd=root, env=env,
+                                        capture_output=True, check=False)
+                if check and result.returncode:
+                    self.fail(f'git {args!r}: {result.returncode}: {result.stderr.decode(errors="replace")}')
+                return result
 
             git('init', '-q')
             git('config', 'user.name', 'test')
@@ -65,13 +71,11 @@ class T05MaterializerRawBytesTests(unittest.TestCase):
             git('commit', '-qm', 'baseline')
             converter = root / '.git/fake_clean.py'
             converter.write_text('import sys,hashlib\nb=sys.stdin.buffer.read()\nif b.startswith(b"version https://git-lfs.github.com/spec/v1"):\n sys.stdout.buffer.write(b)\nelse:\n print("version https://git-lfs.github.com/spec/v1\\noid sha256:"+hashlib.sha256(b).hexdigest()+"\\nsize "+str(len(b)))\n')
-            git('config', 'filter.lfs.process', '')
             git('config', 'filter.lfs.clean', f'python3 {converter}')
             git('config', 'filter.lfs.smudge', 'cat')
             git('config', 'filter.lfs.required', 'true')
-            old_env = {k: v for k, v in os.environ.items() if not k.startswith('GIT_CONFIG_')}
             (root / 'Assets/TutorialInfo/Icons/URP.png').touch()
-            self.assertIn('URP.png', git('diff', '--name-only', env=old_env).stdout.decode())
+            self.assertIn('URP.png', git('diff', '--name-only', env=isolated).stdout.decode())
             self.assertEqual(git('diff', '--exit-code', check=False).returncode, 0)
             self.assertEqual((root / 'bundle.zip').read_bytes(), files['bundle.zip'])
             for path in ['Assets/TutorialInfo/Icons/URP.png', 'HavenlineGodot/assets/t03_boundary_v2/fence_panel.obj']:
