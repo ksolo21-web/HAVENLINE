@@ -2,19 +2,55 @@
   "schema_version": 1,
   "task_id": "T03",
   "status": "MATERIALIZED_PENDING_ENGINE_AND_VISUAL_REVIEW",
-  "generator_commit": "7341aa1e0f272337f6144a78f4e6988631ea7277",
-  "materialized_commit": "f83bf2c363eca22ff5b1aa80d3c28e83d8646246",
-  "materializer_run": 36289181846,
+  "generator_commit": "8b2de68dba9f49966d54edc418f863c9d8a74c4b",
+  "materialized_commit": "98c74340b41a120e26658daac167c88a2211cce1",
+  "materializer_run": 36309122576,
   "materializer_result": "success",
-  "previous_failed_evidence_run": 36288335163,
-  "previous_failure": "Generated OBJ bytes differed on the evidence worker; no render or art approval occurred.",
-  "encoding_repair": "Canonical decimal encoding plus strict record/topology equality and bounded numeric equivalence. Actual source bytes must still match regeneration exactly; no tolerance replaces the hash gate.",
+  "superseded_reference_art_commit": "a4860b7544e05918369496152f070ce64acc77ae",
+  "superseded_reference_art_evidence_run": 36289241083,
+  "superseded_reason": "Revision 17 passed engine/evidence capture but internal comparison to the user's newer 18607.png early-camp board found the palisade too dense/snow-cone-heavy and the gate threshold silhouette too weak.",
+  "revision_18_changes": [
+    "eight chunky carved timber spear pickets per authored panel",
+    "rope concentrated at structural anchor pickets",
+    "exposed timber spear tips instead of oversized snow crowns",
+    "substantially taller authored threshold posts",
+    "six broad gate planks with dark heavy frame and full X bracing",
+    "iron gate hardware instead of blue-painted frame bolts"
+  ],
+  "user_reference_images": [
+    {
+      "name": "18607.png",
+      "role": "primary early-camp visual target",
+      "sha256": "d71d77c6e200b7ef8d225e573474ad99c2d466954d05c29eabd142f4901bbc0c"
+    },
+    {
+      "name": "18608.png",
+      "role": "secondary late-fortress material/polish ceiling",
+      "sha256": "7a31deb37be48509793b170158a5197757baa2c6081a807134011e221bc023e4"
+    }
+  ],
+  "encoding_repair": "Canonical decimal encoding remains strict in verify mode. Authorized --write may replace visual geometry; subsequent --verify must regenerate exact committed bytes.",
   "historical_gameplay_authority": "e1e7bb2d68d1d53025d1242011ad4c885f08c307",
-  "visual_meshes": ["fence_panel.obj", "gate_post.obj", "gate_leaf.obj"],
-  "generated_triangles": {"fence_panel": 7992, "gate_post": 648, "gate_leaf": 2820},
+  "visual_meshes": [
+    "fence_panel.obj",
+    "gate_post.obj",
+    "gate_leaf.obj"
+  ],
+  "generated_triangles": {
+    "fence_panel": 2520,
+    "gate_post": 528,
+    "gate_leaf": 1488
+  },
+  "generated_sha256": {
+    "fence_panel": "1c4a227b2dd43917bdf2ca81283dcf9eb13347df60fabdefa5159a424fd77f57",
+    "gate_post": "891a1e30e0456b51a2942673977d5fa904d507433319e5b1b6cff2b3ac67a2f2",
+    "gate_leaf": "5ccd27f5dd74315d8b7285ac5c224069061f1b1fa9892f04574def7fbbe0614b"
+  },
+  "closed_outward_components": 43,
+  "negative_controls": 3,
   "validation_concurrency_policy": "finish_running_sha",
   "no_authoritative_geometry_or_gameplay_changes": true,
-  "required_next_evidence": "Actual Godot mobile-renderer protected regression, 47 gallery and 11 native-4K views, then pixel/reference review before any new critic or approval.",
+  "required_next_evidence": "Actual Godot mobile-renderer protected T01-T03 regression, 47 gallery and 11 native-4K views, then comparison against 18607.png/18608.png before critic or integration.",
   "task_approved": false,
   "visual_approved": false,
   "user_visual_approval": false,
