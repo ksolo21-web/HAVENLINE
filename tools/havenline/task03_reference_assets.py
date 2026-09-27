@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Canonical decimal encoding for exact-source T03 OBJ byte verification.
 
+Revision 18 binds the canonical export to the latest user-supplied chunky
+early-camp palisade/gate silhouette while preserving all 11H gameplay authority.
+
 Preserve the raw author's topology/material records and bound every changed numeric
 component to 0.000001 model units. This is encoding, not an art/authority change.
 The original raw generator still performs every model, authority and hash check.
