@@ -6,7 +6,7 @@ from __future__ import annotations
 import hashlib,json,struct
 from pathlib import Path
 import legacy_station_kit_v1 as legacy
-from reference_hearth_v3 import build_legacy
+from reference_hearth_v4 import build_legacy
 
 ROOT=Path(__file__).resolve().parents[3]
 OUT=ROOT/'HavenlineGodot/assets/stations_v2'
@@ -21,6 +21,7 @@ def preserve_shared_palette(path):
     """
     raw=path.read_bytes();size=struct.unpack_from('<I',raw,12)[0]
     document=json.loads(raw[20:20+size]);binary_chunk=raw[20+size:]
+    document['asset']['generator']='HAVENLINE reference sculpt v4'
     for material in document['materials']:
         material.pop('emissiveFactor',None)
     encoded=json.dumps(document,sort_keys=True,separators=(',',':')).encode()

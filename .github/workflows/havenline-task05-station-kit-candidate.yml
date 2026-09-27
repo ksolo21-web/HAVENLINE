@@ -192,7 +192,7 @@ jobs:
         if: env.MATERIALIZATION_REQUIRED != 'true'
         run: |
           set -euo pipefail
-          git diff --exit-code b080906140b892f789a5f48a9f8cbeee1359c12e "$GITHUB_SHA" -- HavenlineGodot tools/havenline/task05/generate_station_kit.py tools/havenline/task05/reference_hearth_v3.py tools/havenline/task05/legacy_station_kit_v1.py
+          python3 tools/havenline/task05/verify_r01_v4_scope.py --head "$GITHUB_SHA" | tee task05-evidence/r01-v4-scope.json
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
           test -n "$VK_ICD_FILENAMES"
           mkdir -p task05-evidence/r01-inspection
@@ -226,7 +226,7 @@ jobs:
           assert hashlib.sha256(asset.read_bytes()).hexdigest()==report['asset_sha256']
           stream=json.loads(subprocess.check_output(['ffprobe','-v','error','-select_streams','v:0','-show_entries','stream=width,height,nb_frames,r_frame_rate','-of','json',str(root/'orbit-4k60.mp4')]))['streams'][0]
           assert (stream['width'],stream['height'],stream['nb_frames'],stream['r_frame_rate'])==(3840,2160,'180','60/1')
-          proof={'source':os.environ['GITHUB_SHA'],'unchanged_model_source':'b080906140b892f789a5f48a9f8cbeee1359c12e','asset_sha256':report['asset_sha256'],'verified_images':len(hashes),'stills':12,'orbit_frames':180,'image_hashes':hashes,'video_sha256':hashlib.sha256((root/'orbit-4k60.mp4').read_bytes()).hexdigest(),'video_stream':stream,'passed':True,'scope':'evidence-only; asset, materials, gameplay, T03 and T04 unchanged','critics_executed':False,'task_approved':False,'physical_4k60_verified':False}
+          proof={'source':os.environ['GITHUB_SHA'],'model_revision':'R01-V4','protected_baseline':'b080906140b892f789a5f48a9f8cbeee1359c12e','asset_sha256':report['asset_sha256'],'verified_images':len(hashes),'stills':12,'orbit_frames':180,'image_hashes':hashes,'video_sha256':hashlib.sha256((root/'orbit-4k60.mp4').read_bytes()).hexdigest(),'video_stream':stream,'passed':True,'scope':'R01 V4 furnace art only; all other assets, shared PBR, gameplay, T03 and T04 unchanged','critics_executed':False,'task_approved':False,'physical_4k60_verified':False}
           (root/'provenance.json').write_text(json.dumps(proof,indent=2)+'\n')
           print(json.dumps({key:value for key,value in proof.items() if key!='image_hashes'}))
           PY

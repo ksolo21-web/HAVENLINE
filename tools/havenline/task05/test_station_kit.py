@@ -67,9 +67,9 @@ def main():
     entries=catalog['entries'];ids=[row['id'] for row in entries]
     assert len(entries)==len(set(ids))==22
     assert set(ids)==set(legacy.METADATA)
-    assert sum(int(row['triangles']) for row in entries)==42872
+    assert sum(int(row['triangles']) for row in entries)==49160
     storage=sum((ASSET_DIR/(row['id']+'.glb')).stat().st_size for row in entries)
-    assert storage==1451176 and storage<=15*1024*1024
+    assert storage==1673036 and storage<=15*1024*1024
     palette={m for row in entries for m in row['materials']}
     assert palette=={'snow','cream','wood','wood_light','metal','blue','cyan','orange','yellow','green','red','dark'}
     assert catalog['performance_contract']=={
@@ -98,8 +98,8 @@ def main():
         assert row['clearance']==.55 and row['requirement']==requirement and row['later_task']==later_task
         assert row['sockets']=={k:list(v) for k,v in sockets.items()}
         if row['id']=='hearth_vessel':
-            assert row['triangles']==19680
-            assert doc['asset']['generator']=='HAVENLINE reference sculpt v3'
+            assert row['triangles']==25968
+            assert doc['asset']['generator']=='HAVENLINE reference sculpt v4'
             for material in doc['materials']:
                 key=material['name'].removeprefix('HL_')
                 color,metallic,roughness=legacy.MATERIALS[key]
@@ -111,16 +111,16 @@ def main():
     arrangements=catalog['arrangements']
     assert {name:len(rows) for name,rows in arrangements.items()}=={'camp':11,'lakeshore':10}
     assert arrangements=={name:[{'id':i,'position':list(p),'rotation_y':r} for i,p,r in rows] for name,rows in legacy.ARRANGEMENTS.items()}
-    triangles={'camp':30820,'lakeshore':9456};surfaces={'camp':12,'lakeshore':10}
+    triangles={'camp':37108,'lakeshore':9456};surfaces={'camp':12,'lakeshore':10}
     for name,placements in arrangements.items():
         assert len({r['id'] for r in placements})==len(placements)
         assert sum(by_id[r['id']]['triangles'] for r in placements)==triangles[name]
         assert len({m for r in placements for m in by_id[r['id']]['materials']})==surfaces[name]
         assert surfaces[name]<=catalog['performance_contract']['draw_calls_max']
-    from test_reference_hearth_v3 import verify
+    from test_reference_hearth_v4 import verify
     topology=verify()
     report={'suite':'T05_station_kit_source_integrity','passed':True,'asset_count':22,
-            'triangles':42872,'storage_bytes':storage,'deterministic_files':len(first),
+            'triangles':49160,'storage_bytes':storage,'deterministic_files':len(first),
             'opposite_winding_triangles':0,'nominal_batched_draw_calls':surfaces,
             'reference_hearth_topology':topology,'independent_critic':False,'physical_4k60_verified':False}
     print(json.dumps(report,indent=2))
