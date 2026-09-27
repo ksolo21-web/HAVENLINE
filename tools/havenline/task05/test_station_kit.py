@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 import legacy_station_kit_v1 as legacy
 import reference_resource_props_v2 as resource_v2
+# R07_SCOPE_NOTE: resource rebuild is independently gated; R01 freezes the other 13 models.
 
 ROOT=Path(__file__).resolve().parents[3]
 ASSET_DIR=ROOT/'HavenlineGodot/assets/stations_v2'
