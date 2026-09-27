@@ -165,21 +165,44 @@ def _augment_defense_platform(platform):
     for x in (-.72, .72):
         for z in (-.54, .54):
             platform.beveled_box("wood", (x, 2.05, z), (.14, .90, .14), .04)
-    # Layered shingle roof; avoid a single cyan slab/primitive silhouette.
-    for index, x in enumerate((-.63, -.21, .21, .63)):
-        lean = .010 if index % 2 == 0 else -.010
-        platform.beveled_box("blue", (x, 2.58, -.24), (.38, .10, .82), .035,
-                             rotation=(.30, 0, lean))
-        platform.beveled_box("blue", (x, 2.58, .24), (.38, .10, .82), .035,
-                             rotation=(-.30, 0, -lean))
-    platform.beveled_box("dark", (0, 2.69, 0), (1.78, .12, .15), .040)
-    platform.beveled_box("wood_light", (0, 2.49, -.58), (1.72, .12, .12), .035)
-    platform.beveled_box("wood_light", (0, 2.49, .58), (1.72, .12, .12), .035)
-    platform.beveled_box("snow", (-.34, 2.70, -.22), (.56, .050, .34), .020, rotation=(.30, .03, .012))
-    platform.beveled_box("snow", (.36, 2.70, .20), (.48, .045, .30), .018, rotation=(-.30, -.04, -.010))
-    platform.beveled_box("snow", (.02, 2.75, .00), (.34, .040, .13), .016, rotation=(0, .06, .01))
-    platform.beveled_box("dark", (0, 1.94, .53), (1.36, .32, .10), .035)
-    platform.beveled_box("blue", (0, 1.94, .59), (.96, .16, .045), .018)
+    # Layered overlapping shingle roof. The prior four broad roof blocks still
+    # read as separate cyan primitives in actual reverse pixels. Six narrower
+    # overlapping shingles per slope plus real rafters/fascia produce the
+    # blue-roof watchtower language from 18600/18607.
+    for index, x in enumerate((-.75, -.45, -.15, .15, .45, .75)):
+        lean = .008 if index % 2 == 0 else -.008
+        platform.beveled_box("blue", (x, 2.58, -.25), (.34, .085, .86), .030,
+                             rotation=(.32, 0, lean))
+        platform.beveled_box("blue", (x, 2.58, .25), (.34, .085, .86), .030,
+                             rotation=(-.32, 0, -lean))
+        if index in (1, 4):
+            platform.beveled_box("dark", (x, 2.535, -.25), (.30, .035, .74), .014,
+                                 rotation=(.32, 0, lean))
+            platform.beveled_box("dark", (x, 2.535, .25), (.30, .035, .74), .014,
+                                 rotation=(-.32, 0, -lean))
+    platform.beveled_box("dark", (0, 2.72, 0), (1.92, .12, .14), .038)
+    for z in (-.62, .62):
+        platform.rod_between("wood", (-.91, 2.47, z), (0, 2.78, z), .050, 8)
+        platform.rod_between("wood", (0, 2.78, z), (.91, 2.47, z), .050, 8)
+        platform.beveled_box("wood_light", (0, 2.46, z), (1.92, .11, .10), .030)
+    # Irregular snow clumps follow the roof pitch instead of sitting as flat
+    # rectangular icing plates.
+    for x,z,rx,rz,rot in (
+        (-.52,-.31,.28,.18,.04),(-.18,-.24,.24,.20,-.03),(.28,-.28,.30,.16,.05),
+        (-.40,.28,.26,.18,-.04),(.04,.24,.30,.19,.03),(.48,.31,.22,.16,-.05),
+    ):
+        platform.sphere("snow", (x, 2.73, z), (rx, .060, rz), 5, 10, rotation=(0,rot,0))
+    # Guard-post half walls close the upper silhouette so it reads as a usable
+    # watch post rather than an exposed scaffold. Individual slats preserve
+    # authored construction and sight gaps.
+    for x in (-.60, -.30, 0.0, .30, .60):
+        platform.beveled_box("wood_light", (x, 1.98, .54), (.22, .34, .095), .028)
+        platform.beveled_box("wood", (x, 1.98, -.54), (.22, .34, .095), .028)
+    for z in (-.30, 0.0, .30):
+        platform.beveled_box("wood", (-.72, 1.98, z), (.095, .34, .22), .028)
+        platform.beveled_box("wood_light", (.72, 1.98, z), (.095, .34, .22), .028)
+    platform.beveled_box("dark", (0, 2.17, .54), (1.48, .08, .11), .025)
+    platform.beveled_box("blue", (0, 2.20, -.54), (1.06, .07, .10), .022)
     platform.rod_between("yellow", (-.32, 2.42, -.56), (-.32, 2.04, -.56), .024, 8)
     platform.cylinder("orange", (-.32, 1.98, -.56), .075, .08, 10)
     return platform
