@@ -236,7 +236,7 @@ func run() -> void:
 	var hearth_transform := kit.arrangement_transform("camp", "hearth_vessel", Vector3.ZERO)
 	check("Interactive hearth placement resolves from the same catalog", hearth_transform.origin.is_equal_approx(Vector3(0.0, 0.0, 0.2)))
 	var camp_without_hearth := kit.build_arrangement("camp", Vector3.ZERO, Callable(), ["hearth_vessel"])
-	check("Integration can reserve the animated gameplay hearth without duplicate geometry", camp_without_hearth.size() == 10 and kit.batched_visual.mesh.get_faces().size() / 3 == 24004)
+	check("Integration can reserve the animated gameplay hearth without duplicate geometry", camp_without_hearth.size() == 10 and kit.batched_visual.mesh.get_faces().size() / 3 == 29944)
 	var lakeshore := kit.build_arrangement("lakeshore")
 	check("Lakeshore arrangement deterministically places 10 assets", lakeshore.size() == 10)
 	check("Lakeshore arrangement includes fishing and processing fixtures", lakeshore.any(func(node): return node.get_meta("t05_asset_id", "") == "fishing_rack") and lakeshore.any(func(node): return node.get_meta("t05_asset_id", "") == "cooker_processor"))

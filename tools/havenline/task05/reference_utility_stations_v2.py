@@ -114,11 +114,15 @@ def build_conveyor_straight():
     for x in (-1.18,-.79,-.40,-.01,.38,.77,1.16):
         b.cylinder("metal",(x,.76,0),.075,.78,10,rotation=(math.pi/2,0,0))
         b.cylinder("yellow",(x,.76,-.42),.095,.055,10,rotation=(math.pi/2,0,0))
-    b.beveled_box("blue",(-1.38,.83,-.28),(.42,.48,.42),.075)
-    b.torus("orange",(-1.60,.84,-.28),.20,.050,14,6,rotation=(0,math.pi/2,0))
+    # Keep the authored drive housing/handwheel fully inside the frozen 3.40 m
+    # gameplay footprint. The first materialized R10B pass overhung the left
+    # edge by ~0.09 m at the handwheel, which made the rendered mesh disagree
+    # with collision/placement clearance even though the station still read well.
+    b.beveled_box("blue",(-1.26,.83,-.28),(.42,.48,.42),.075)
+    b.torus("orange",(-1.48,.84,-.28),.20,.050,14,6,rotation=(0,math.pi/2,0))
     for ang in (0,math.pi/2,math.pi,3*math.pi/2):
-        b.rod_between("orange",(-1.63,.84,-.28),(-1.63,.84+math.sin(ang)*.20,-.28+math.cos(ang)*.20),.030,7)
-    b.cylinder("cream",(-1.66,.84,-.28),.060,.16,10,rotation=(0,0,math.pi/2))
+        b.rod_between("orange",(-1.51,.84,-.28),(-1.51,.84+math.sin(ang)*.20,-.28+math.cos(ang)*.20),.030,7)
+    b.cylinder("cream",(-1.54,.84,-.28),.060,.16,10,rotation=(0,0,math.pi/2))
     for x in (-1.45,1.45):
         b.beveled_box("blue",(x,.86,0),(.14,.48,1.02),.045)
         b.beveled_box("snow",(x,.99,.16),(.17,.08,.46),.025)
