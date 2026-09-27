@@ -194,6 +194,22 @@ def main():
             for prim in doc['meshes'][0]['primitives']:
                 colors=accessor(doc,blob,prim['attributes']['COLOR_0'])
                 assert np.isfinite(colors).all() and (colors>=0).all() and (colors<=1).all()
+        else:
+            # R10W material-finish gate: non-hearth shipping art may not fall
+            # back to uniform baseColor-only fills. Geometry and material slots
+            # are unchanged; deterministic COLOR_0 provides authored wood/metal/
+            # snow/paint breakup that the existing Godot batcher preserves.
+            assert doc['asset']['generator']=='HAVENLINE T05 authored material finish v1',row['id']
+            asset_colors=[]
+            for prim in doc['meshes'][0]['primitives']:
+                assert 'COLOR_0' in prim['attributes'],row['id']
+                colors=accessor(doc,blob,prim['attributes']['COLOR_0'])
+                assert colors.shape[1]==4 and np.isfinite(colors).all(),row['id']
+                assert (colors>=0).all() and (colors<=1).all(),row['id']
+                asset_colors.append(colors[:,:3])
+            merged=np.concatenate(asset_colors,axis=0)
+            assert float(merged.max()-merged.min())>=.08,(row['id'],'insufficient authored material variation')
+            assert float(merged.min())<=.90,(row['id'],'material finish remained uniformly bright')
     arrangements=catalog['arrangements']
     assert {name:len(rows) for name,rows in arrangements.items()}=={'camp':11,'lakeshore':10}
     assert arrangements=={name:[{'id':i,'position':list(p),'rotation_y':r} for i,p,r in rows] for name,rows in legacy.ARRANGEMENTS.items()}
