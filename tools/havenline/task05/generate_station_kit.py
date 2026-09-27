@@ -1,12 +1,18 @@
 #!/usr/bin/env python3
-"""Generate the T05 kit with one explicitly selected reference-hearth replacement.
-The other 21 assets and all gameplay metadata remain bound to the legacy source.
+"""Generate the T05 kit with bounded reference-driven visual overrides.
+
+R01 keeps the approved reference-hearth replacement. R07 replaces only the eight
+pickup/storage resource props whose legacy geometry/material treatment remains
+visibly primitive against the user's supplied HAVENLINE renders. IDs, footprints,
+sockets, arrangements, gameplay metadata and the existing 12-slot palette remain
+authoritative.
 """
 from __future__ import annotations
 import hashlib,json,struct
 from pathlib import Path
 import legacy_station_kit_v1 as legacy
 from reference_hearth_v4 import build_legacy
+from reference_resource_props_v2 import build_resource_props
 
 ROOT=Path(__file__).resolve().parents[3]
 OUT=ROOT/'HavenlineGodot/assets/stations_v2'
@@ -32,7 +38,9 @@ def preserve_shared_palette(path):
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
-    assets=legacy.asset_specs();assets['hearth_vessel']=build_legacy(legacy.MeshBuilder)
+    assets=legacy.asset_specs()
+    assets.update(build_resource_props())
+    assets['hearth_vessel']=build_legacy(legacy.MeshBuilder)
     expected={asset_id+'.glb' for asset_id in assets}
     for path in OUT.glob('*.glb'):
         if path.name not in expected:raise RuntimeError('Unexpected authored asset; refusing deletion: '+str(path))
@@ -54,7 +62,7 @@ def main():
         entries.append(entry)
     catalog={'schema_version':1,'authority_id':'T05-station-kit-v1',
              'generator':'tools/havenline/task05/generate_station_kit.py',
-             'art_language':'bright sculpted winter production kit; shared blue/orange/yellow machinery with warm timber and snow contact',
+             'art_language':'reference-driven sculpted winter production kit; chunky readable forms, layered timber/metal, snow loading and blue/orange/yellow Havenline identity',
              'requirements':[f'T05-R{i:02d}' for i in range(1,13)],'entries':entries,
              'arrangements':{name:[{'id':i,'position':list(p),'rotation_y':r} for i,p,r in rows] for name,rows in legacy.ARRANGEMENTS.items()},
              'performance_contract':{'triangles_max':180000,'draw_calls_max':48,'visible_materials_max':12,'texture_memory_mib_max':96,'storage_delta_mib_max':15,'active_physics':0,'skeletons':0,'animations':0,'population':0},
