@@ -1,0 +1,44 @@
+{
+  "task": "T05-R10B utility/processing visual rebuild",
+  "status": "SOURCE_BOUND_AWAITING_MATERIALIZATION",
+  "source_commit": "0640d822343af265b8be8a8fe593a76a1124a560",
+  "primary_visual_reference": "18607.png",
+  "secondary_polish_reference": "18608.png",
+  "repaired_families": [
+    "fishing_rack",
+    "intake_machine",
+    "cooker_processor",
+    "conveyor_straight"
+  ],
+  "preserved_families": [
+    "hearth_vessel R01-V4",
+    "R07 resource props",
+    "R03 ground pads",
+    "R10 service/processing/defense stations"
+  ],
+  "contracts_preserved": {
+    "ids": true,
+    "footprints": true,
+    "sockets": true,
+    "arrangements": true,
+    "gameplay_logic": true,
+    "material_budget_ceiling": 12,
+    "triangle_budget_ceiling": 180000
+  },
+  "source_gate": {
+    "canonical_generator_bound": true,
+    "primitive_regression_hashes_forbidden": true,
+    "per_asset_triangle_growth_required": true,
+    "authored_material_sets_required": true
+  },
+  "acceptance": {
+    "generated_assets_materialized": false,
+    "exact_source_engine_regression": false,
+    "actual_godot_multi_angle_evidence": false,
+    "gameplay_distance_evidence": false,
+    "reference_comparison_complete": false,
+    "critic_score_over_9": false,
+    "task_approved": false
+  },
+  "next_action": "Materialize deterministic GLBs/catalog from the bound generator, then run exact-source Godot regression and inspect multi-angle/detail/gameplay/native evidence against 18607/18608 before any visual approval."
+}
