@@ -5,6 +5,7 @@ import hashlib,json,struct,subprocess,sys
 from pathlib import Path
 import numpy as np
 import legacy_station_kit_v1 as legacy
+import reference_resource_props_v2 as resource_v2
 
 ROOT=Path(__file__).resolve().parents[3]
 ASSET_DIR=ROOT/'HavenlineGodot/assets/stations_v2'
@@ -67,17 +68,47 @@ def main():
     entries=catalog['entries'];ids=[row['id'] for row in entries]
     assert len(entries)==len(set(ids))==22
     assert set(ids)==set(legacy.METADATA)
-    assert sum(int(row['triangles']) for row in entries)==49160
+    by_id={r['id']:r for r in entries}
+    total_triangles=sum(int(row['triangles']) for row in entries)
+    assert 49160 < total_triangles <= int(catalog['performance_contract']['triangles_max'])
     storage=sum((ASSET_DIR/(row['id']+'.glb')).stat().st_size for row in entries)
-    assert storage==1673036 and storage<=15*1024*1024
+    assert 1673036 < storage <= 15*1024*1024
     palette={m for row in entries for m in row['materials']}
     assert palette=={'snow','cream','wood','wood_light','metal','blue','cyan','orange','yellow','green','red','dark'}
+
+    # R07 reference rebuild gate. These exact legacy hashes are forbidden so a
+    # future regeneration cannot silently restore the primitive pickup props.
+    legacy_resource_hashes={
+        'cargo_crate':'b524e93f6ebc56750c55b67f7e7747c599d956a37f66c4e6368d4314b01c2cf2',
+        'cooked_food_stack':'d235f82290045a02a7fb0200ab95d19192ff0784ef05185bcbe095516567f2f6',
+        'fish_crate':'6834b98ae6bb37cbca712676326e2c7f8b82ab557d0cffb5ad76712b5bd59320',
+        'fuel_canister':'4f12ab4c8bd7e6a282cbfe797bcebc11b638d4a458f7ad19661e76e6e12f70e5',
+        'metal_stack':'44e3467f16ee777878b7881b0a76fc2b41d87cbf199cc2731831a9c881490338',
+        'money_stack':'564be7e8e5ba47f36f96ab7d7851d4c905f8f005510a0a7b1948dbda5d975864',
+        'stone_stack':'4fda08c4b117ba6c3c72212cfe02fbed9519dba1a74345f2c2c04bc548d554c7',
+        'wood_stack':'5d5707cc5ecc05a2c586b6a933d15075510a9d091defdd63a42bca693658320b',
+    }
+    legacy_resource_triangles={
+        'cargo_crate':864,'cooked_food_stack':1764,'fish_crate':1512,'fuel_canister':640,
+        'metal_stack':1404,'money_stack':2596,'stone_stack':1116,'wood_stack':1404,
+    }
+    resource_report=resource_v2.quality_report()
+    assert resource_report['stone_uses_metal'] is False
+    assert set(resource_report['asset_ids'])==set(legacy_resource_hashes)
+    assert set(resource_report['material_slots'])<=palette
+    for asset_id in resource_report['asset_ids']:
+        row=by_id[asset_id]
+        assert row['sha256']!=legacy_resource_hashes[asset_id],asset_id
+        assert int(row['triangles'])==int(resource_report['triangles'][asset_id]),asset_id
+        assert int(row['triangles'])>legacy_resource_triangles[asset_id],asset_id
+        assert row['materials']==resource_report['materials'][asset_id],asset_id
+        assert len(row['materials'])>=4,asset_id
+    assert 'metal' not in by_id['stone_stack']['materials']
     assert catalog['performance_contract']=={
         'triangles_max':180000,'draw_calls_max':48,'visible_materials_max':12,
         'texture_memory_mib_max':96,'storage_delta_mib_max':15,
         'active_physics':0,'skeletons':0,'animations':0,'population':0,
     }
-    by_id={r['id']:r for r in entries}
     variants=[by_id['pad_'+kind]['visual_variant'] for kind in ('build','upgrade','input','output','stock','payment')]
     assert len({r['silhouette'] for r in variants})==6
     assert len({r['icon'] for r in variants})==6
@@ -111,16 +142,16 @@ def main():
     arrangements=catalog['arrangements']
     assert {name:len(rows) for name,rows in arrangements.items()}=={'camp':11,'lakeshore':10}
     assert arrangements=={name:[{'id':i,'position':list(p),'rotation_y':r} for i,p,r in rows] for name,rows in legacy.ARRANGEMENTS.items()}
-    triangles={'camp':37108,'lakeshore':9456};surfaces={'camp':12,'lakeshore':10}
+    triangle_floors={'camp':37108,'lakeshore':9456};surfaces={'camp':12,'lakeshore':10}
     for name,placements in arrangements.items():
         assert len({r['id'] for r in placements})==len(placements)
-        assert sum(by_id[r['id']]['triangles'] for r in placements)==triangles[name]
+        assert sum(by_id[r['id']]['triangles'] for r in placements)>triangle_floors[name]
         assert len({m for r in placements for m in by_id[r['id']]['materials']})==surfaces[name]
         assert surfaces[name]<=catalog['performance_contract']['draw_calls_max']
     from test_reference_hearth_v4 import verify
     topology=verify()
     report={'suite':'T05_station_kit_source_integrity','passed':True,'asset_count':22,
-            'triangles':49160,'storage_bytes':storage,'deterministic_files':len(first),
+            'triangles':total_triangles,'storage_bytes':storage,'deterministic_files':len(first),
             'opposite_winding_triangles':0,'nominal_batched_draw_calls':surfaces,
             'reference_hearth_topology':topology,'independent_critic':False,'physical_4k60_verified':False}
     print(json.dumps(report,indent=2))
