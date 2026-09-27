@@ -42,21 +42,10 @@ def picket(m,name,x,height=1.40,radius=.108,depth=None,seed=0,ropes=True):
     vv=p.vertices;angles=np.arctan2(vv[:,2]/depth,(vv[:,0]-x)/radius)
     p.colors[:,:3]=1.0
     p.uv=np.column_stack([(angles+math.pi)/math.pi,vv[:,1]/height*2.5+seed*.173])
-    rings=[(0.,1.12),(.08,1.05),(.18,.80),(.29,.45),(.38,.12)]
-    v=[];f=[];snow_base=height-.32
-    for j,(yy,rr) in enumerate(rings):
-        for i in range(seg):
-            a=TAU*i/seg;scallop=.036*math.sin(5*a+seed*.47)+.018*math.sin(8*a+1.2);y=snow_base+yy
-            if j==0:y+=scallop
-            elif j==1:y+=scallop*.35
-            v.append([x+radius*rr*1.09*math.cos(a),y,depth*rr*1.09*math.sin(a)])
-    for j in range(len(rings)-1):
-        for i in range(seg):
-            a=j*seg+i;b=j*seg+(i+1)%seg;c=b+seg;d=a+seg;f.extend([[a,b,c],[a,c,d]])
-    btm=len(v);v.append([x,snow_base-.01,0]);top=len(v);v.append([x,snow_base+.403,0])
-    for i in range(seg):
-        j=(i+1)%seg;f.extend([[btm,j,i],[(len(rings)-1)*seg+i,(len(rings)-1)*seg+j,top]])
-    m.add(name+'_snow_crown','snow',v,f)
+    # Revision 18 follows the user's early-camp render: the palisade reads as
+    # exposed carved timber spear tips, not a row of oversized white cones.
+    # Snow contact comes from the world/ground treatment; the authored picket
+    # silhouette stays visibly timber at gameplay distance.
     if ropes:
         for y in [.34,.90]:
             for wrap in range(2):
@@ -66,32 +55,40 @@ def picket(m,name,x,height=1.40,radius=.108,depth=None,seed=0,ropes=True):
 
 
 def fence_panel():
-    m=Model('fence_panel');span=2.9409;radius=.118;pitch=(span-radius*2)/11
-    for i in range(12):
+    m=Model('fence_panel');span=2.9409;radius=.178;count=8;pitch=(span-radius*2)/(count-1)
+    for i in range(count):
         x=-span/2+radius+i*pitch
-        picket(m,'picket_%02d'%i,x,height=1.382+.027*math.sin(i*2.1),radius=radius,depth=.080,seed=i,ropes=True)
-    for y in [.33,.88]:m.bevel_box('rear_support','wood',(span-.035,.09,.08),(0,y,.073),.018)
+        # Rope is concentrated at structural anchor pickets instead of wrapping
+        # every thin stave. The result matches the chunky, readable early-camp
+        # palisade language in 18607.png.
+        picket(m,'picket_%02d'%i,x,height=1.405+.035*math.sin(i*1.7),radius=radius,depth=.112,seed=i,ropes=i in (0,3,7))
+    for y in [.34,.91]:m.bevel_box('rear_support','wood',(span-.035,.12,.10),(0,y,.073),.022)
     return fit_visual_envelope(m,(-1.47045,0.,-.0806),(1.47045,1.465,.0706))
 
 
 def gate_post():
-    m=Model('gate_post');picket(m,'threshold_post',0,height=1.535,radius=.150,depth=.150,seed=4,ropes=True)
-    return fit_visual_envelope(m,(-.168,0.,-.1724),(.168,1.605,.168))
+    m=Model('gate_post')
+    # The supplied render uses a genuinely tall threshold marker, not a fence
+    # picket with a slightly larger scale. Runtime placement/terrain seating is
+    # unchanged; only the visual mesh becomes substantial enough to read.
+    picket(m,'threshold_post',0,height=2.04,radius=.205,depth=.205,seed=4,ropes=True)
+    return fit_visual_envelope(m,(-.215,0.,-.215),(.215,2.15,.215))
 
 
 def gate_leaf():
     m=Model('gate_leaf');length=2.9
-    for i in range(10):
-        x=-1.35+(i+.5)*2.7/10
-        m.bevel_box('gate_board_%02d'%i,'wood_light',(.264,1.01,.068),(x,.63,0),.018,tint=(1.,.84+.04*math.sin(i),.67),variation=.055)
-    for x in [-1.365,1.365]:m.bevel_box('gate_stile','wood_light',(.17,1.12,.11),(x,.61,-.012),.022,tint=(1.,.92,.81))
-    for y in [.15,1.115]:m.bevel_box('gate_crossrail','wood_light',(length,.15,.13),(0,y,-.022),.024,tint=(1.,.92,.81),variation=.04)
-    m.beam('gate_diagonal','wood_light',(-1.27,.25,-.061),(1.26,1.00,-.061),.12,.067,.016,tint=(1.,.94,.86))
-    for i in range(9):
-        x=-1.285+i*.321
-        m.snow('gate_top_snow_%02d'%i,(x,1.203,0),(.188,.055,.083),i,14,5)
+    # Six broad planks and a darker structural frame replace the thin slat wall.
+    for i in range(6):
+        x=-1.35+(i+.5)*2.7/6
+        m.bevel_box('gate_board_%02d'%i,'wood_light',(.432,1.01,.078),(x,.63,0),.022,tint=(1.,.84+.04*math.sin(i),.67),variation=.055)
+    for x in [-1.365,1.365]:m.bevel_box('gate_stile','wood',(.20,1.14,.13),(x,.61,-.012),.026,tint=(.78,.54,.33))
+    for y in [.15,1.115]:m.bevel_box('gate_crossrail','wood',(length,.18,.15),(0,y,-.022),.028,tint=(.78,.54,.33),variation=.04)
+    # Mirrored leaves already form a large X when closed; a full X on each leaf
+    # keeps that structural read visible while the gate is open.
+    m.beam('gate_diagonal_up','wood',(-1.25,.25,-.061),(1.25,1.00,-.061),.145,.080,.020,tint=(.82,.58,.36))
+    m.beam('gate_diagonal_down','wood',(-1.25,1.00,-.076),(1.25,.25,-.076),.145,.080,.020,tint=(.82,.58,.36))
     for x in [-1.34,1.34]:
-        for y in [.155,1.11]:m.loft('gate_frame_bolt','metal',[(-.010,.022),(.007,.026),(.016,.020)],(x,y,-.099),8,matrix=rotation(x=math.pi/2),tint=(.8,.83,.85))
+        for y in [.155,1.11]:m.loft('gate_frame_bolt','metal',[(-.010,.022),(.007,.026),(.016,.020)],(x,y,-.109),8,matrix=rotation(x=math.pi/2),tint=(.8,.83,.85))
     for part in m.parts:
         if part.material=='wood_light':
             lo=part.vertices.min(0);hi=part.vertices.max(0);d=hi-lo
@@ -103,7 +100,7 @@ def gate_leaf():
 
 
 def export_obj(model,path):
-    mapping={'wood':'timber_dark','wood_light':'timber','snow':'snow','cream':'rope','metal':'blue'}
+    mapping={'wood':'timber_dark','wood_light':'timber','snow':'snow','cream':'rope','metal':'iron'}
     lines=['# HAVENLINE supplied-reference T03 sculpted visual candidate','mtllib boundary_v2.mtl','o '+model.name,'s 1'];base=1
     for p in model.parts:
         lines.append('usemtl '+mapping[p.material])
@@ -129,9 +126,9 @@ def topology_errors(v,f):
 
 
 def model_checks(models):
-    expected={'fence_panel':(74,7992,[-1.47045,0,-.0806],[1.47045,1.465,.0706]),
-              'gate_post':(6,648,[-.168,0,-.1724],[.168,1.605,.168]),
-              'gate_leaf':(28,2820,[-1.45,.01,-.07],[1.45,1.21,.10])}
+    expected={'fence_panel':(22,2520,[-1.47045,0,-.0806],[1.47045,1.465,.0706]),
+              'gate_post':(5,528,[-.215,0,-.215],[.215,2.15,.215]),
+              'gate_leaf':(16,1488,[-1.45,.01,-.07],[1.45,1.21,.10])}
     for name,m in models.items():
         count,tris,lo,hi=expected[name];v=np.concatenate([p.vertices for p in m.parts])
         assert len(m.parts)==count and sum(len(p.faces) for p in m.parts)==tris
@@ -167,7 +164,7 @@ def authority_checks():
         return text[:start]+text[end:]
     assert neutral(old)==neutral(new),'11H layout/hinge/authority transform drift'
     assert 'WOOD_REFERENCE_ALBEDO.create_texture()' in new
-    assert '"rope"' in new
+    assert '"rope"' in new and '"iron"' in new
     shader=(OUT/'t03_boundary_v2.gdshader').read_text()
     assert 'cull_disabled' not in shader and 'use_reference_grain' in shader
     assert 'newmtl rope' in (OUT/'boundary_v2.mtl').read_text()
@@ -182,11 +179,11 @@ def authority_checks():
 def manifest_for(models,hashes):
     baseline=json.loads(git_bytes(BASE,'HavenlineGodot/assets/t03_boundary_v2/manifest.json'))
     m=copy.deepcopy(baseline)
-    m['revision']=17;m['kit']='Havenline supplied-reference palisade art v17'
+    m['revision']=18;m['kit']='Havenline supplied-reference chunky palisade art v18'
     m['production_visual_approval']=False;m['candidate_for_user_review']=True
-    features={'fence_panel':['twelve carved timber pickets','crossed rope wraps','closed scalloped snow crowns','same exact source envelope and unchanged 11H layout transforms'],
-              'gate_post':['matching carved timber','two rope bindings','closed snow crown','unchanged threshold scaling and terrain seating'],
-              'gate_leaf':['ten solid planks','single diagonal brace per leaf mirrored by existing placement','snow lip on the top rail','unchanged hinge, opening and source-length authority']}
+    features={'fence_panel':['eight chunky carved timber spear pickets','rope concentrated at structural anchor pickets','exposed timber tips without oversized snow cones','same exact source envelope and unchanged 11H layout transforms'],
+              'gate_post':['substantially taller carved threshold post','two rope binding bands','exposed timber spear tip','unchanged runtime placement and terrain seating'],
+              'gate_leaf':['six broad solid planks','dark heavy perimeter frame','full X bracing visible while open','iron frame hardware','unchanged hinge, opening and source-length authority']}
     m['prior_art_assets']=baseline['assets']
     for row in m['assets']:
         name=row['name'];row['triangles']=models[name].metrics()['triangles'];row['sha256']=hashes[name]
@@ -198,7 +195,12 @@ def manifest_for(models,hashes):
         'wood_albedo_crop':[416,780,530,895],'wood_albedo_size':[48,96],
         'wood_albedo_sha256':'f85c0beb09a5110da4281e765abf659403e9234d7307898416a8363f2989c437',
         'authoritative_geometry_source':BASE,'closed_component_counts':{n:len(x.parts) for n,x in models.items()},
-        'geometry_transforms_preserved':True,'task_approved':False,'visual_approved':False}
+        'geometry_transforms_preserved':True,
+        'external_user_reference_images':[
+            {'name':'18607.png','role':'primary early-camp visual target','sha256':'d71d77c6e200b7ef8d225e573474ad99c2d466954d05c29eabd142f4901bbc0c'},
+            {'name':'18608.png','role':'secondary late-fortress material/polish ceiling','sha256':'7a31deb37be48509793b170158a5197757baa2c6081a807134011e221bc023e4'}
+        ],
+        'task_approved':False,'visual_approved':False}
     return m
 
 
