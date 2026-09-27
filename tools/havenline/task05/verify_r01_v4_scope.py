@@ -1,4 +1,4 @@
-"""Fail-closed R01 identity proof inside the combined R01+R07 visual repair."""
+"""Fail-closed R01 identity proof inside the combined T05 visual-family repair."""
 import argparse,json,hashlib,subprocess
 from pathlib import Path
 
@@ -7,6 +7,7 @@ BASE='b080906140b892f789a5f48a9f8cbeee1359c12e'
 ASSET='HavenlineGodot/assets/stations_v2/hearth_vessel.glb'
 CATALOG='HavenlineGodot/assets/stations_v2/catalog.json'
 TEST='HavenlineGodot/tests/test_task05_station_kit.gd'
+CAPTURE='HavenlineGodot/tests/capture_task05_station_kit.gd'
 EXPECTED_SHA='6d32499229dd22dde1ee32940bb1b0a506a0647ea911a4787b3bce83fe60a8e7'
 R07_IDS=('wood_stack','stone_stack','metal_stack','fuel_canister','fish_crate','cooked_food_stack','money_stack','cargo_crate')
 R03_IDS=('pad_build','pad_upgrade','pad_input','pad_output','pad_stock','pad_payment')
@@ -44,15 +45,21 @@ def verify(head):
     r03_paths={f'HavenlineGodot/assets/stations_v2/{name}.glb' for name in R03_IDS}
     r10_paths={f'HavenlineGodot/assets/stations_v2/{name}.glb' for name in R10_IDS}
     r10b_paths={f'HavenlineGodot/assets/stations_v2/{name}.glb' for name in R10B_IDS}
-    allowed={ASSET,CATALOG,TEST}|r07_paths|r03_paths|r10_paths|r10b_paths
+    # The capture harness is part of the visual-evidence contract and was
+    # intentionally expanded to six-angle family coverage. No runtime/gameplay
+    # source is allowed through this scope proof.
+    allowed={ASSET,CATALOG,TEST,CAPTURE}|r07_paths|r03_paths|r10_paths|r10b_paths
     assert set(changed)==allowed,changed
 
     test_text=git('show',f'{head}:{TEST}').decode().lower()
     assert 'task05' in test_text and 'station' in test_text,'Unexpected T05 acceptance-test replacement'
-    capture_text=git('show',f'{head}:HavenlineGodot/tests/capture_task05_station_kit.gd').decode()
+    capture_text=git('show',f'{head}:{CAPTURE}').decode()
     assert '\"front_axis\": \"negative-Z\"' in capture_text,'T05 evidence front-axis contract missing'
     assert 'offset = Vector3(0.0, 10.7, -16.0)' in capture_text,'T05 front camera is not on negative-Z axis'
     assert 'offset = Vector3(0.0, 10.7, 16.0)' in capture_text,'T05 rear camera is not on positive-Z axis'
+    assert '--family-gallery' in capture_text and 'capture_family_gallery' in capture_text,'T05 six-angle family evidence path missing'
+    for view in ('front','rear','left','right','three-quarter','detail'):
+        assert f'"{view}"' in capture_text,f'T05 family evidence view missing: {view}'
 
     before=json.loads(git('show',f'{BASE}:{CATALOG}'))
     after=json.loads(git('show',f'{head}:{CATALOG}'))
