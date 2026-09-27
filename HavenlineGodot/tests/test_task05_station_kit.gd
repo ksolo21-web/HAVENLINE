@@ -159,7 +159,7 @@ func run() -> void:
 	check("Station authority is versioned", descriptor.authority_id == "T05-station-kit-v1")
 	check("Catalog contains the frozen 22-asset kit", descriptor.asset_count == 22)
 	check("Camp and lakeshore arrangements are both declared", descriptor.arrangement_count == 2)
-	check("Catalog triangle total has broad headroom", descriptor.total_catalog_triangles == 92860 and descriptor.total_catalog_triangles <= 180000)
+	check("Catalog triangle total has broad headroom", descriptor.total_catalog_triangles == 93832 and descriptor.total_catalog_triangles <= 180000)
 	check("Shared palette stays within 12 visible materials", descriptor.visible_material_palette_count == 11 and descriptor.visible_material_palette_count <= 12)
 	check("Catalog exposes future-task sockets", descriptor.socket_count >= 35)
 	check("No gameplay logic is claimed", not descriptor.runtime_logic_included)
@@ -243,7 +243,7 @@ func run() -> void:
 	check("Lakeshore arrangement includes fishing and processing fixtures", lakeshore.any(func(node): return node.get_meta("t05_asset_id", "") == "fishing_rack") and lakeshore.any(func(node): return node.get_meta("t05_asset_id", "") == "cooker_processor"))
 	check("Lakeshore visual batches to 10 material surfaces", kit.batched_visual.mesh.get_surface_count() == 10)
 	check("Lakeshore batch remains below the 48 draw-call ceiling", kit.batched_visual.mesh.get_surface_count() <= 48)
-	check("Lakeshore batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 34080)
+	check("Lakeshore batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 35052)
 
 	print(JSON.stringify({
 		"suite": "T05_station_and_prop_kit",

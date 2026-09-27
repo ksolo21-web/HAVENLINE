@@ -78,56 +78,82 @@ def build_intake_machine():
     return b
 
 def build_cooker_processor():
-    """Layered early-camp cooking/processing station, triangle-neutral R10C."""
+    """Reference-built early-camp cook/processing station.
+
+    R10D removes the dominant generic tank silhouette from R10C. The station now
+    combines the 18607 cookfire + butcher-table language: a constructed timber
+    chassis, a blue/dark stove core with a clearly recessed hot chamber, a real
+    prep surface, cookware and an offset banded flue. IDs/footprint/sockets stay
+    frozen; primitive helpers are only sub-parts, never the shipping silhouette.
+    """
     b=legacy.MeshBuilder("cooker_processor"); snow(b,(2.45,.14,2.15))
-    for x in (-.82,.82):
-        for z in (-.70,.70):
-            b.beveled_box("wood",(x,.46,z),(.18,.72,.18),.045)
+
+    # Chunky timber chassis: four feet, perimeter rails and visible cross braces.
+    for x in (-.84,.84):
+        for z in (-.68,.68):
+            b.beveled_box("wood",(x,.42,z),(.20,.66,.20),.050)
+            b.beveled_box("dark",(x,.10,z),(.26,.10,.26),.035)
     for z in (-.68,.68):
-        b.beveled_box("wood",(0,.40,z),(1.86,.18,.18),.045)
-        b.rod_between("wood_light",(-.72,.24,z),(.72,.62,z),.052,6)
-        b.rod_between("wood_light",(-.72,.62,z),(.72,.24,z),.052,6)
-    for x in (-.70,.70):
-        b.beveled_box("wood_light",(x,.72,0),(.16,.15,1.52),.040)
+        b.beveled_box("wood",(0,.38,z),(1.82,.18,.18),.050)
+        b.rod_between("wood_light",(-.72,.22,z),(.72,.58,z),.050,7)
+        b.rod_between("wood_light",(-.72,.58,z),(.72,.22,z),.050,7)
+    for x in (-.76,.76):
+        b.beveled_box("wood_light",(x,.66,0),(.16,.14,1.46),.040)
 
-    b.beveled_box("dark",(0,.72,0),(1.52,.18,1.28),.075)
-    b.lathe("metal",(0,.78,0),[(.52,0),(.68,.10),(.72,.36),(.66,.72),(.52,.86)],16)
-    b.lathe("blue",(0,.84,0),[(.46,0),(.60,.10),(.63,.33),(.57,.62),(.45,.72)],16)
-    for y in (.96,1.28):
-        b.torus("metal",(0,y,0),.615,.045,16,5)
-    for angle in (0,math.pi/2,math.pi,3*math.pi/2):
-        x=.56*math.sin(angle); z=.56*math.cos(angle)
-        b.beveled_box("blue",(x,1.12,z),(.26,.54,.10),.045,rotation=(0,angle,0))
-        b.cylinder("yellow",(x,1.27,z),.035,.08,6,rotation=(math.pi/2,0,0))
+    # Heavy work deck with separated slats, not a single block.
+    for x in (-.66,-.22,.22,.66):
+        b.beveled_box("wood_light",(x,.73,-.02),(.38,.12,1.48),.045)
+    b.beveled_box("dark",(0,.80,.04),(1.66,.08,1.34),.035)
 
-    # Standard T05 front camera looks toward the +Z face. Keep the hot chamber
-    # on that face so the purpose reads immediately at gameplay distance.
-    b.beveled_box("dark",(0,1.02,.665),(1.02,.74,.13),.085)
-    b.beveled_box("metal",(0,1.02,.745),(.80,.56,.09),.060)
-    b.beveled_box("orange",(0,1.00,.805),(.56,.35,.045),.050)
-    b.beveled_box("yellow",(0,1.03,.835),(.32,.20,.028),.035)
-    for x in (-.47,.47):
-        b.beveled_box("wood_light",(x,1.02,.79),(.12,.72,.12),.040)
-        for y in (.78,1.26):
-            b.cylinder("cream",(x,y,.86),.035,.045,6,rotation=(math.pi/2,0,0))
-    b.beveled_box("wood_light",(0,1.39,.79),(1.06,.12,.12),.040)
-    b.beveled_box("snow",(-.18,1.47,.80),(.55,.065,.13),.025,rotation=(0,.05,.02))
+    # Purpose-built stove core occupies the right half. Layered shell/trim makes
+    # it read as fabricated equipment rather than a cube or cylinder.
+    b.beveled_box("blue",(.34,1.13,.17),(.90,.66,.78),.120)
+    b.beveled_box("dark",(.34,1.13,.565),(.72,.50,.12),.060)
+    b.beveled_box("metal",(.34,1.13,.638),(.58,.38,.07),.040)
+    b.beveled_box("orange",(.34,1.11,.685),(.42,.24,.045),.040)
+    b.beveled_box("yellow",(.34,1.12,.714),(.24,.12,.026),.025)
+    for x in (.02,.66):
+        b.beveled_box("wood_light",(x,1.13,.690),(.09,.52,.08),.030)
+        for y in (.93,1.33):
+            b.cylinder("cream",(x,y,.742),.030,.040,7,rotation=(math.pi/2,0,0))
+    b.beveled_box("wood_light",(.34,1.42,.690),(.72,.09,.08),.030)
+    b.rod_between("yellow",(.63,1.09,.755),(.76,1.09,.755),.030,7)
 
-    b.cylinder("metal",(0,1.62,0),.53,.15,16)
-    b.cylinder("cream",(-.04,1.74,.02),.40,.10,14)
-    b.torus("orange",(-.04,1.82,.02),.20,.040,12,4)
-    b.cylinder("dark",(.46,2.00,-.28),.16,.68,12)
-    b.torus("metal",(.46,2.25,-.28),.18,.035,10,4)
-    b.cylinder("blue",(.46,2.38,-.28),.20,.12,10)
-    b.torus("orange",(.46,2.46,-.28),.22,.045,10,4)
-    b.beveled_box("snow",(.36,2.53,-.31),(.30,.06,.22),.025,rotation=(0,.08,.02))
+    # Cooktop with a readable lidded pot and side pan; kept subordinate to the
+    # constructed chassis so no single primitive dominates the silhouette.
+    b.beveled_box("metal",(.34,1.52,.10),(.78,.10,.68),.055)
+    b.lathe("dark",(.34,1.58,.08),[(.25,0),(.31,.06),(.30,.24),(.24,.31)],14)
+    b.cylinder("cream",(.34,1.91,.08),.20,.07,12)
+    b.torus("orange",(.34,1.95,.08),.12,.028,10,4)
+    b.rod_between("metal",(-.02,1.69,-.06),(-.39,1.69,-.20),.040,7)
+    b.cylinder("metal",(-.46,1.69,-.23),.18,.07,12)
 
-    b.rod_between("metal",(-.58,1.30,-.22),(-.88,1.58,-.22),.055,6)
-    b.rod_between("metal",(-.88,1.58,-.22),(-.88,1.58,.24),.055,6)
-    b.torus("orange",(-.88,1.58,.28),.20,.045,8,4,rotation=(math.pi/2,0,0))
-    b.cylinder("cream",(-.88,1.58,.34),.055,.10,5,rotation=(math.pi/2,0,0))
-    for angle in (0,2*math.pi/3,4*math.pi/3):
-        b.rod_between("orange",(-.88,1.58,.30),(-.88+math.sin(angle)*.18,1.58+math.cos(angle)*.18,.30),.025,6)
+    # Left prep station echoes the 18607 butcher table.
+    b.beveled_box("wood_light",(-.55,1.02,-.28),(.68,.10,.58),.045)
+    b.beveled_box("cream",(-.55,1.09,-.28),(.52,.055,.42),.025)
+    b.sphere("orange",(-.58,1.18,-.28),(.20,.09,.14),6,12,rotation=(0,.18,0))
+    b.rod_between("cream",(-.72,1.21,-.28),(-.43,1.21,-.28),.018,7)
+    b.rod_between("metal",(-.78,1.15,-.05),(-.42,1.15,-.05),.025,7)
+    b.beveled_box("blue",(-.55,.88,-.30),(.62,.08,.48),.030)
+
+    # Offset flue: segmented pipe, clamp bands and snow cap.
+    b.cylinder("dark",(.70,1.72,-.22),.12,.42,12)
+    b.cylinder("metal",(.70,2.06,-.22),.14,.28,12)
+    for y in (1.90,2.18):
+        b.torus("orange",(.70,y,-.22),.145,.030,12,5)
+    b.cylinder("blue",(.70,2.28,-.22),.18,.12,12)
+    b.torus("yellow",(.70,2.36,-.22),.19,.035,12,5)
+    b.beveled_box("snow",(.64,2.44,-.24),(.28,.06,.22),.025,rotation=(0,.08,.02))
+
+    # Small service gauge/handwheel on the left rear adds mechanical asymmetry.
+    b.rod_between("metal",(-.76,1.30,-.08),(-.92,1.48,-.08),.040,7)
+    b.torus("orange",(-.92,1.49,-.08),.15,.035,10,4,rotation=(math.pi/2,0,0))
+    for ang in (0,2*math.pi/3,4*math.pi/3):
+        b.rod_between("orange",(-.92,1.49,-.08),(-.92+math.sin(ang)*.13,1.49+math.cos(ang)*.13,-.08),.020,6)
+
+    # Irregular snow loading ties the machine into the winter silhouette.
+    b.beveled_box("snow",(.20,1.61,-.04),(.38,.055,.26),.022,rotation=(0,.08,.02))
+    b.beveled_box("snow",(-.60,1.15,-.32),(.30,.045,.24),.018,rotation=(0,-.07,-.01))
     return b
 
 def build_conveyor_straight():
