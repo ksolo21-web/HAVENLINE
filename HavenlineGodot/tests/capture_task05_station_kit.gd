@@ -119,17 +119,17 @@ func place_single(asset_id: String, position := Vector3.ZERO, rotation_y := 0.0)
 	return asset
 
 func set_camera(target: Vector3, view: String, full_height: float) -> void:
-	var offset := Vector3(10.2, 11.8, 14.2)
+	var offset := Vector3(10.2, 11.8, -14.2)
 	if view in ["reverse", "rear"]:
-		offset = Vector3(-10.2, 10.7, -14.2)
+		offset = Vector3(0.0, 10.7, -16.0)
 	elif view in ["side", "right"]:
-		offset = Vector3(14.2, 9.8, 5.0)
+		offset = Vector3(14.2, 9.8, 0.0)
 	elif view == "left":
-		offset = Vector3(-14.2, 9.8, -5.0)
+		offset = Vector3(-14.2, 9.8, 0.0)
 	elif view == "front":
 		offset = Vector3(0.0, 10.7, 16.0)
 	elif view == "detail":
-		offset = Vector3(8.4, 8.0, 11.2)
+		offset = Vector3(8.4, 8.0, -11.2)
 	camera.position = target + offset
 	camera.look_at(target + Vector3(0.0, 0.75, 0.0), Vector3.UP)
 	camera.size = full_height
@@ -312,6 +312,7 @@ func run() -> void:
 		"primitive_stage_is_not_shipping_content": true,
 		"existing_shipping_character_used_for_scale": true,
 		"source_bound": true,
+		"front_axis": "negative-Z",
 		"catalog_sha256": FileAccess.get_sha256(StationKit.CATALOG_PATH),
 		"renderer": RenderingServer.get_current_rendering_method(),
 		"device": RenderingServer.get_video_adapter_name(),
