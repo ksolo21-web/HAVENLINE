@@ -1,4 +1,5 @@
 extends SceneTree
+# Exact-source R10C rerun after materialized conveyor footprint repair.
 
 const StationKit = preload("res://scripts/station_kit.gd")
 const Boundary = preload("res://scripts/camp_boundary.gd")
