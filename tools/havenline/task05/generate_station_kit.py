@@ -75,7 +75,7 @@ def main():
         entries.append(entry)
     catalog={'schema_version':1,'authority_id':'T05-station-kit-v1',
              'generator':'tools/havenline/task05/generate_station_kit.py',
-             'art_language':'reference-driven sculpted winter production kit; chunky readable forms, layered timber/metal, snow loading and blue/orange/yellow Havenline identity',
+             'art_language':'reference-driven sculpted winter production kit; chunky readable forms, layered timber/metal, snow loading, purpose-built processing silhouettes and blue/orange/yellow Havenline identity',
              'requirements':[f'T05-R{i:02d}' for i in range(1,13)],'entries':entries,
              'arrangements':{name:[{'id':i,'position':list(p),'rotation_y':r} for i,p,r in rows] for name,rows in legacy.ARRANGEMENTS.items()},
              'performance_contract':{'triangles_max':180000,'draw_calls_max':48,'visible_materials_max':12,'texture_memory_mib_max':96,'storage_delta_mib_max':15,'active_physics':0,'skeletons':0,'animations':0,'population':0},
