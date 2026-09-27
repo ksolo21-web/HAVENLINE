@@ -1,4 +1,4 @@
-"""Reference-driven T05-R03 physical camp platform builders."""
+"""Reference-driven T05-R03 physical camp platform builders. Visual game art only."""
 from __future__ import annotations
 import legacy_station_kit_v1 as legacy
 
