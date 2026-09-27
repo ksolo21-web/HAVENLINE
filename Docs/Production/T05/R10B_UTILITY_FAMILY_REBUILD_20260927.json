@@ -1,6 +1,6 @@
 {
   "task": "T05-R10B utility/processing visual rebuild",
-  "status": "SOURCE_BOUND_AWAITING_MATERIALIZATION",
+  "status": "MATERIALIZED_AWAITING_EXACT_SOURCE_GODOT",
   "source_commit": "0640d822343af265b8be8a8fe593a76a1124a560",
   "primary_visual_reference": "18607.png",
   "secondary_polish_reference": "18608.png",
@@ -29,10 +29,12 @@
     "canonical_generator_bound": true,
     "primitive_regression_hashes_forbidden": true,
     "per_asset_triangle_growth_required": true,
-    "authored_material_sets_required": true
+    "authored_material_sets_required": true,
+    "deterministic_generator_passed": true,
+    "source_integrity_suite_passed": true
   },
   "acceptance": {
-    "generated_assets_materialized": false,
+    "generated_assets_materialized": true,
     "exact_source_engine_regression": false,
     "actual_godot_multi_angle_evidence": false,
     "gameplay_distance_evidence": false,
@@ -40,5 +42,8 @@
     "critic_score_over_9": false,
     "task_approved": false
   },
-  "next_action": "Materialize deterministic GLBs/catalog from the bound generator, then run exact-source Godot regression and inspect multi-angle/detail/gameplay/native evidence against 18607/18608 before any visual approval."
+  "next_action": "Run the exact-source T05 Godot regression/precritic on the materialized R10B bytes, then inspect actual multi-angle/detail/gameplay/native evidence against 18607/18608. Visual approval remains blocked until rendered evidence and critic score >9 are both proven.",
+  "materialized_asset_commit": "e05b28ff7f377ff385941fd1503088255c3cb093",
+  "materializer_run": 36322986399,
+  "source_gate_repair_commit": "ce560d20d879a1cfd4f43cf0faa46515687de55d"
 }
