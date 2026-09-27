@@ -8,7 +8,7 @@ import legacy_station_kit_v1 as legacy
 import reference_resource_props_v2 as resource_v2
 import reference_station_families_v3 as station_v3
 import reference_utility_stations_v2 as utility_v2
-# R07_SCOPE_NOTE: resource rebuild is independently gated; R01 freezes the other 13 models.
+# T05_SCOPE_NOTE: R01 hearth plus R07/R03/R10/R10B families are independently gated; no stale legacy utility freeze remains.
 
 ROOT=Path(__file__).resolve().parents[3]
 ASSET_DIR=ROOT/'HavenlineGodot/assets/stations_v2'
