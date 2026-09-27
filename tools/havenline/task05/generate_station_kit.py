@@ -16,6 +16,7 @@ from reference_resource_props_v2 import build_resource_props
 
 ROOT=Path(__file__).resolve().parents[3]
 OUT=ROOT/'HavenlineGodot/assets/stations_v2'
+EXPECTED_HEARTH_SHA256='6d32499229dd22dde1ee32940bb1b0a506a0647ea911a4787b3bce83fe60a8e7'
 
 
 def preserve_shared_palette(path):
@@ -48,8 +49,15 @@ def main():
     for asset_id in sorted(assets):
         builder=assets[asset_id];path=OUT/(asset_id+'.glb')
         if asset_id=='hearth_vessel':
-            builder.reference_model.export_glb(path)
-            preserve_shared_palette(path)
+            # R01-V4 is already source-bound and visually repaired. R07 does
+            # not own it, so never re-export the furnace on another CI host:
+            # tiny cross-host floating differences must not mutate approved art.
+            # Fail closed if the exact approved bytes are absent or altered.
+            if not path.exists():
+                raise RuntimeError('Missing approved R01-V4 hearth_vessel.glb')
+            actual=hashlib.sha256(path.read_bytes()).hexdigest()
+            if actual!=EXPECTED_HEARTH_SHA256:
+                raise RuntimeError(f'R01-V4 hearth bytes drifted: {actual}')
         else:legacy.pack_glb(builder,path)
         footprint,requirement,later_task,sockets=legacy.METADATA[asset_id]
         entry={'id':asset_id,'asset':'res://assets/stations_v2/'+path.name,
