@@ -13,6 +13,7 @@ from pathlib import Path
 import legacy_station_kit_v1 as legacy
 from reference_hearth_v4 import build_legacy
 from reference_resource_props_v2 import build_resource_props
+from reference_ground_pads_v2 import build_ground_pads
 
 ROOT=Path(__file__).resolve().parents[3]
 OUT=ROOT/'HavenlineGodot/assets/stations_v2'
@@ -41,6 +42,7 @@ def main():
     OUT.mkdir(parents=True,exist_ok=True)
     assets=legacy.asset_specs()
     assets.update(build_resource_props())
+    assets.update(build_ground_pads())
     assets['hearth_vessel']=build_legacy(legacy.MeshBuilder)
     expected={asset_id+'.glb' for asset_id in assets}
     for path in OUT.glob('*.glb'):
