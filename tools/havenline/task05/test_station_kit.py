@@ -7,6 +7,7 @@ import numpy as np
 import legacy_station_kit_v1 as legacy
 import reference_resource_props_v2 as resource_v2
 import reference_station_families_v3 as station_v3
+import reference_utility_stations_v2 as utility_v2
 # R07_SCOPE_NOTE: resource rebuild is independently gated; R01 freezes the other 13 models.
 
 ROOT=Path(__file__).resolve().parents[3]
@@ -123,6 +124,29 @@ def main():
         assert row['materials']==sorted(builder.surfaces),asset_id
         assert int(row['triangles'])>legacy_station_triangles[asset_id],asset_id
     assert 'cyan' in by_id['service_counter']['materials']
+
+    # R10B binds the four remaining legacy utility silhouettes to authored,
+    # reference-driven replacements without changing their gameplay metadata.
+    utility_assets=utility_v2.build_utility_stations()
+    legacy_utility_triangles={
+        'fishing_rack':1276,'intake_machine':760,
+        'cooker_processor':1188,'conveyor_straight':1216,
+    }
+    legacy_utility_hashes={
+        'fishing_rack':'56c190ec2abb6efb8b0e21656071ffb7f532941fe3b5a4ca069da3bf23b192bf',
+        'intake_machine':'df4a7e95f92b1ebff291506a4bd1eabf989e82cb8feec5efcce87a0eb01ab647',
+        'cooker_processor':'6c7820c06c20ed481e4f55b1e9d186f54b1a8e215f337b6a6bdbbe4d703c9688',
+        'conveyor_straight':'89bbeb9f7c38744497deefb414eb0456ed28100a07d4ae6bce47aa85cf40bb15',
+    }
+    assert set(utility_assets)==set(legacy_utility_triangles)
+    for asset_id,builder in utility_assets.items():
+        row=by_id[asset_id]
+        assert row['sha256']!=legacy_utility_hashes[asset_id],asset_id
+        assert int(row['triangles'])==builder.triangle_count(),asset_id
+        assert int(row['triangles'])>legacy_utility_triangles[asset_id],asset_id
+        assert row['materials']==sorted(builder.surfaces),asset_id
+        assert {'snow','wood','wood_light','blue'}<=set(row['materials']),asset_id
+        assert len(row['materials'])>=6,asset_id
     assert catalog['performance_contract']=={
         'triangles_max':180000,'draw_calls_max':48,'visible_materials_max':12,
         'texture_memory_mib_max':96,'storage_delta_mib_max':15,
@@ -175,6 +199,8 @@ def main():
             'reference_hearth_topology':topology,
             'r10_station_triangles':{name:builder.triangle_count() for name,builder in station_assets.items()},
             'r10_station_materials':{name:sorted(builder.surfaces) for name,builder in station_assets.items()},
+            'r10b_utility_triangles':{name:builder.triangle_count() for name,builder in utility_assets.items()},
+            'r10b_utility_materials':{name:sorted(builder.surfaces) for name,builder in utility_assets.items()},
             'independent_critic':False,'physical_4k60_verified':False}
     print(json.dumps(report,indent=2))
     return 0
