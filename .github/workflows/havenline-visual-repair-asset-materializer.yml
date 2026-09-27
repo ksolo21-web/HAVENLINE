@@ -1,7 +1,7 @@
 name: Havenline deterministic visual-repair asset materializer
 on:
   push:
-    branches: ['havenline/T05-visual-repair-20260926', 'havenline/T03-reference-art-20260926']
+    branches: ['havenline/T05-visual-repair-20260926', 'havenline/T03-reference-art-20260926', 'havenline/governance-image-reconstruction-probe']
     paths:
       - 'tools/havenline/task05/generate_station_kit.py'
       - 'tools/havenline/task05/test_station_kit.py'
@@ -10,6 +10,8 @@ on:
       - 'tools/havenline/task03_mesh_authoring.py'
       - 'HavenlineGodot/assets/t03_boundary_v2/wood_reference_crop.png'
       - '.github/workflows/havenline-visual-repair-asset-materializer.yml'
+      - 'tools/havenline/production/reference_reconstruction_probe.py'
+      - 'Docs/Production/Evidence/ReferenceReconstruction/**'
 
 permissions:
   contents: write
@@ -213,5 +215,54 @@ jobs:
         with:
           name: havenline-pinned-authoring-runtime-${{ github.run_id }}
           path: ${{ runner.temp }}/authoring-runtime
+          if-no-files-found: error
+          retention-days: 7
+
+  image-reconstruction-probe:
+    if: github.ref_name == 'havenline/governance-image-reconstruction-probe'
+    permissions:
+      contents: read
+    runs-on: ubuntu-22.04
+    timeout-minutes: 35
+    env:
+      OMP_NUM_THREADS: '4'
+      MKL_NUM_THREADS: '4'
+      OPENBLAS_NUM_THREADS: '4'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          persist-credentials: false
+      - name: Verify diagnostic-only scope and exact source image
+        run: |
+          set -euo pipefail
+          mkdir -p reconstruction-probe
+          git diff --exit-code 99c51e556c160f4b74d63e94d319165969328c2f HEAD -- HavenlineGodot Docs/Production/APPROVAL_INVALIDATIONS.json Docs/Production/WORKSTREAM_REGISTRY.json Docs/Production/DEPENDENCY_GRAPH.json Docs/Production/task-gates.json
+          python3 tools/havenline/production/reference_reconstruction_probe.py --prepare
+      - name: Install pinned CPU reconstruction implementation
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/reconstruction-venv"
+          source "$RUNNER_TEMP/reconstruction-venv/bin/activate"
+          python -m pip install --disable-pip-version-check 'pip==24.3.1' 'setuptools==75.6.0' wheel
+          python -m pip install torch==2.4.1 torchvision==0.19.1 --index-url https://download.pytorch.org/whl/cpu
+          python -m pip install 'numpy==1.26.4' 'omegaconf==2.3.0' 'Pillow==10.1.0' 'einops==0.7.0' 'transformers==4.35.0' 'trimesh==4.0.5' 'rembg==2.0.57' 'onnxruntime==1.19.2' 'huggingface-hub==0.17.3' 'imageio[ffmpeg]==2.36.1' 'scikit-image==0.24.0' 'scikit-build-core>=1.0' pybind11 cmake ninja
+          python -m pip install --no-build-isolation 'git+https://github.com/tatsy/torchmcubes.git@879926d0ef58e6ce0ac2630fdecb5e53af7ed3ff'
+          git clone https://github.com/VAST-AI-Research/TripoSR.git "$RUNNER_TEMP/TripoSR"
+          git -C "$RUNNER_TEMP/TripoSR" checkout --detach 107cefdc244c39106fa830359024f6a2f1c78871
+          python -m pip freeze > reconstruction-probe/dependencies.txt
+          echo "RECONSTRUCTION_CODE=$RUNNER_TEMP/TripoSR" >> "$GITHUB_ENV"
+          echo "$RUNNER_TEMP/reconstruction-venv/bin" >> "$GITHUB_PATH"
+      - name: Reconstruct one supplied-reference furnace without integration or approval
+        run: |
+          set -euo pipefail
+          timeout 1200 python tools/havenline/production/reference_reconstruction_probe.py --infer 2>&1 | tee reconstruction-probe/inference.log
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-reference-reconstruction-probe-${{ github.run_id }}
+          path: reconstruction-probe
           if-no-files-found: error
           retention-days: 7
