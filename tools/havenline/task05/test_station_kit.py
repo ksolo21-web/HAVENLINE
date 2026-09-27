@@ -6,6 +6,7 @@ from pathlib import Path
 import numpy as np
 import legacy_station_kit_v1 as legacy
 import reference_resource_props_v2 as resource_v2
+import reference_station_families_v3 as station_v3
 # R07_SCOPE_NOTE: resource rebuild is independently gated; R01 freezes the other 13 models.
 
 ROOT=Path(__file__).resolve().parents[3]
@@ -109,6 +110,19 @@ def main():
         assert row['materials']==resource_report['materials'][asset_id],asset_id
         assert len(row['materials'])>=4,asset_id
     assert 'metal' not in by_id['stone_stack']['materials']
+
+    # R10 station-family rebuild gate. The hearth freeze intentionally excludes
+    # these three assets, so bind them here to the exact authored v3 builders
+    # instead of weakening byte-identity proof globally.
+    station_assets=station_v3.build_station_families()
+    legacy_station_triangles={'service_counter':1476,'processing_counter':2052,'defense_platform':1632}
+    assert set(station_assets)==set(legacy_station_triangles)
+    for asset_id,builder in station_assets.items():
+        row=by_id[asset_id]
+        assert int(row['triangles'])==builder.triangle_count(),asset_id
+        assert row['materials']==sorted(builder.surfaces),asset_id
+        assert int(row['triangles'])>legacy_station_triangles[asset_id],asset_id
+    assert 'cyan' in by_id['service_counter']['materials']
     assert catalog['performance_contract']=={
         'triangles_max':180000,'draw_calls_max':48,'visible_materials_max':12,
         'texture_memory_mib_max':96,'storage_delta_mib_max':15,
