@@ -194,7 +194,7 @@
       }
     ]
   },
-  "art_language": "bright sculpted winter production kit; shared blue/orange/yellow machinery with warm timber and snow contact",
+  "art_language": "reference-driven sculpted winter production kit; chunky readable forms, layered timber/metal, snow loading and blue/orange/yellow Havenline identity",
   "authority_id": "T05-station-kit-v1",
   "entries": [
     {
@@ -207,14 +207,16 @@
       "id": "cargo_crate",
       "later_task": "T08",
       "materials": [
+        "blue",
         "dark",
+        "metal",
         "snow",
         "wood",
         "wood_light",
         "yellow"
       ],
       "requirement": "T05-R07",
-      "sha256": "b524e93f6ebc56750c55b67f7e7747c599d956a37f66c4e6368d4314b01c2cf2",
+      "sha256": "80ad8f83766b044ee62633a1b4ec83078ee125c0cc86704f790d9ea9919d0b04",
       "sockets": {
         "pickup": [
           0,
@@ -222,7 +224,7 @@
           0
         ]
       },
-      "triangles": 864
+      "triangles": 3196
     },
     {
       "asset": "res://assets/stations_v2/conveyor_straight.glb",
@@ -267,12 +269,15 @@
       "later_task": "T16",
       "materials": [
         "blue",
+        "cream",
+        "dark",
         "orange",
         "snow",
-        "yellow"
+        "wood",
+        "wood_light"
       ],
       "requirement": "T05-R07",
-      "sha256": "d235f82290045a02a7fb0200ab95d19192ff0784ef05185bcbe095516567f2f6",
+      "sha256": "d51ef1b1bb9c0d0e37dac17fd84356794eccb48d05c8bf76daf952ebec3a186d",
       "sockets": {
         "pickup": [
           0,
@@ -280,7 +285,7 @@
           0
         ]
       },
-      "triangles": 1764
+      "triangles": 1880
     },
     {
       "asset": "res://assets/stations_v2/cooker_processor.glb",
@@ -372,6 +377,7 @@
       "later_task": "T16",
       "materials": [
         "blue",
+        "cream",
         "cyan",
         "dark",
         "snow",
@@ -379,7 +385,7 @@
         "wood_light"
       ],
       "requirement": "T05-R07",
-      "sha256": "6834b98ae6bb37cbca712676326e2c7f8b82ab557d0cffb5ad76712b5bd59320",
+      "sha256": "16240109178b3eeb010270cf428d729420f94bdd1bc8118a47205892083ad225",
       "sockets": {
         "pickup": [
           0,
@@ -387,7 +393,7 @@
           0
         ]
       },
-      "triangles": 1512
+      "triangles": 4032
     },
     {
       "asset": "res://assets/stations_v2/fishing_rack.glb",
@@ -438,15 +444,16 @@
       "id": "fuel_canister",
       "later_task": "T08",
       "materials": [
+        "blue",
         "cream",
         "dark",
         "metal",
-        "red",
+        "orange",
         "snow",
         "yellow"
       ],
       "requirement": "T05-R07",
-      "sha256": "4f12ab4c8bd7e6a282cbfe797bcebc11b638d4a458f7ad19661e76e6e12f70e5",
+      "sha256": "8eecc6c9b28e75af2056295c30478b81b831947cdb44a0559ed188567523f60f",
       "sockets": {
         "pickup": [
           0,
@@ -454,7 +461,7 @@
           0
         ]
       },
-      "triangles": 640
+      "triangles": 1520
     },
     {
       "asset": "res://assets/stations_v2/hearth_vessel.glb",
@@ -551,12 +558,16 @@
       "id": "metal_stack",
       "later_task": "T08",
       "materials": [
+        "blue",
+        "dark",
         "metal",
         "orange",
-        "snow"
+        "snow",
+        "wood_light",
+        "yellow"
       ],
       "requirement": "T05-R07",
-      "sha256": "44e3467f16ee777878b7881b0a76fc2b41d87cbf199cc2731831a9c881490338",
+      "sha256": "a9df59680d3619e7f229503234689340db35b612f53623152af54543d1ba5a22",
       "sockets": {
         "pickup": [
           0,
@@ -564,7 +575,7 @@
           0
         ]
       },
-      "triangles": 1404
+      "triangles": 3564
     },
     {
       "asset": "res://assets/stations_v2/money_stack.glb",
@@ -576,13 +587,17 @@
       "id": "money_stack",
       "later_task": "T17",
       "materials": [
+        "blue",
         "cream",
+        "dark",
         "green",
         "snow",
+        "wood",
+        "wood_light",
         "yellow"
       ],
       "requirement": "T05-R07",
-      "sha256": "564be7e8e5ba47f36f96ab7d7851d4c905f8f005510a0a7b1948dbda5d975864",
+      "sha256": "600b3b668969ad0ac1c614b154630b1cee92c3690703e2f5f2a08dcc57c4e38d",
       "sockets": {
         "pickup": [
           0,
@@ -590,7 +605,7 @@
           0
         ]
       },
-      "triangles": 2596
+      "triangles": 2868
     },
     {
       "asset": "res://assets/stations_v2/pad_build.glb",
@@ -900,11 +915,13 @@
       "id": "stone_stack",
       "later_task": "T08",
       "materials": [
-        "metal",
-        "snow"
+        "cream",
+        "snow",
+        "wood",
+        "wood_light"
       ],
       "requirement": "T05-R07",
-      "sha256": "4fda08c4b117ba6c3c72212cfe02fbed9519dba1a74345f2c2c04bc548d554c7",
+      "sha256": "c4f44b5b512d402031cb0510deb0426bf9a55eb92f0123934d7b5449d5b21ab2",
       "sockets": {
         "pickup": [
           0,
@@ -912,7 +929,7 @@
           0
         ]
       },
-      "triangles": 1116
+      "triangles": 3032
     },
     {
       "asset": "res://assets/stations_v2/wood_stack.glb",
@@ -924,12 +941,15 @@
       "id": "wood_stack",
       "later_task": "T08",
       "materials": [
+        "blue",
         "cream",
         "snow",
-        "wood_light"
+        "wood",
+        "wood_light",
+        "yellow"
       ],
       "requirement": "T05-R07",
-      "sha256": "5d5707cc5ecc05a2c586b6a933d15075510a9d091defdd63a42bca693658320b",
+      "sha256": "eca04694d47a6e7c4fc074dd54529c1d4ad1380c3568697cd0db10106c92f925",
       "sockets": {
         "pickup": [
           0,
@@ -937,7 +957,7 @@
           0
         ]
       },
-      "triangles": 1404
+      "triangles": 3184
     }
   ],
   "generator": "tools/havenline/task05/generate_station_kit.py",
