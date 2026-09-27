@@ -126,6 +126,8 @@ def main():
         assert row['materials']==sorted(builder.surfaces),asset_id
         assert int(row['triangles'])>legacy_station_triangles[asset_id],asset_id
     assert 'cyan' in by_id['service_counter']['materials']
+    assert station_assets['processing_counter'].triangle_count()>=6000
+    assert {'metal','blue','orange','yellow','wood'}<=set(station_assets['processing_counter'].surfaces)
 
     # R10B binds the four remaining legacy utility silhouettes to authored,
     # reference-driven replacements without changing their gameplay metadata.

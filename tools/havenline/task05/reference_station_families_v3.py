@@ -81,11 +81,10 @@ def _augment_processing_counter(processing):
 
     # Clamp, workpiece and powered side box provide use-state storytelling at
     # vertical-isometric distance while keeping the frozen sockets/footprint.
-    processing.cylinder("wood", (0, 1.17, .34), .13, 1.92, 12,
-                        rotation=(math.pi / 2, 0, math.pi / 2))
-    for x in (-.78, .78):
+    processing.rod_between("wood", (-.96, 1.17, .34), (.96, 1.17, .34), .13, 12)
+    for x in (-.97, .97):
         processing.cylinder("cream", (x, 1.17, .34), .10, .035, 10,
-                            rotation=(math.pi / 2, 0, math.pi / 2))
+                            rotation=(0, 0, math.pi / 2))
     processing.beveled_box("metal", (-.88, 1.36, -.42), (.38, .42, .42), .075)
     processing.beveled_box("blue", (-.88, 1.39, -.64), (.44, .34, .10), .035)
     processing.cylinder("orange", (-.88, 1.39, -.705), .11, .07, 12,
