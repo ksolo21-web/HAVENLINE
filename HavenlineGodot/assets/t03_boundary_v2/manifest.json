@@ -1,8 +1,8 @@
 {
   "schema": 1,
   "task": "T03",
-  "kit": "Havenline reference palisade v10.2",
-  "revision": 16,
+  "kit": "Havenline supplied-reference palisade art v17",
+  "revision": 17,
   "deterministic": true,
   "candidate_for_user_review": true,
   "production_visual_approval": false,
@@ -17,40 +17,40 @@
     {
       "name": "fence_panel",
       "path": "HavenlineGodot/assets/t03_boundary_v2/fence_panel.obj",
-      "triangles": 640,
+      "triangles": 7992,
       "features": [
-        "dense pale warm pointed palisade",
-        "solid full snow crown with symmetric low-amplitude reference-like height variation",
-        "no exposed horizontal support rail",
-        "all-row path-length repartition keeps authored picket rhythm near native scale; tiny side-corner residuals extend only outward behind side fences so gate endpoints remain exact",
-        "small 0.012m seam overlap closes panel-to-panel daylight without compressing authored picket rhythm"
+        "twelve carved timber pickets",
+        "crossed rope wraps",
+        "closed scalloped snow crowns",
+        "same exact source envelope and unchanged 11H layout transforms"
       ],
       "runtime_join_overlap": 0.012,
-      "south_runtime_join_overlap": 0.012
+      "south_runtime_join_overlap": 0.012,
+      "sha256": "a32618b857e80b585f507b5a0bb357cfa3a0dcc950068f1751d47591bdf563a3"
     },
     {
       "name": "gate_post",
       "path": "HavenlineGodot/assets/t03_boundary_v2/gate_post.obj",
-      "triangles": 176,
+      "triangles": 648,
       "features": [
-        "matching pale warm post",
-        "solid snow crown",
-        "tiny integrated warm insets only",
-        "1.12 footprint / 1.14 height threshold-marker presentation",
-        "terrain-footprint seating uses the lowest local sample plus a 0.04m root embed to avoid both floating corners and deep clipping"
-      ]
+        "matching carved timber",
+        "two rope bindings",
+        "closed snow crown",
+        "unchanged threshold scaling and terrain seating"
+      ],
+      "sha256": "f6241d1a5f6ca7ff1c2d7c94c0ed8cebb100440a6ddcf5fdfeebd0e8a78d37b5"
     },
     {
       "name": "gate_leaf",
       "path": "HavenlineGodot/assets/t03_boundary_v2/gate_leaf.obj",
-      "triangles": 84,
+      "triangles": 2820,
       "features": [
-        "solid framed warm timber gate leaf",
-        "dark recessed timber panel",
-        "reference-style diagonal X bracing",
-        "separate from pointed palisade fence",
-        "rigid uniform terrain seating lowers the complete leaf to the worst chord valley instead of pitching the free edge"
-      ]
+        "ten solid planks",
+        "single diagonal brace per leaf mirrored by existing placement",
+        "snow lip on the top rail",
+        "unchanged hinge, opening and source-length authority"
+      ],
+      "sha256": "2e475481dd621cb758e8fc4a33144936b438a9e86491bb0d1092380b360c1841"
     }
   ],
   "iteration_11f": {
@@ -129,5 +129,75 @@
     "visual_gate_open_angle": 1.12,
     "gate_hinge_overlap": 0.18,
     "next_required_proof": "fresh 16-suite T01-T03 regression, clean primitive/material audit, 47 gallery + 11 native-4K exact-source renders, then independent C1/C2 >9 and C6"
+  },
+  "prior_art_assets": [
+    {
+      "name": "fence_panel",
+      "path": "HavenlineGodot/assets/t03_boundary_v2/fence_panel.obj",
+      "triangles": 640,
+      "features": [
+        "dense pale warm pointed palisade",
+        "solid full snow crown with symmetric low-amplitude reference-like height variation",
+        "no exposed horizontal support rail",
+        "all-row path-length repartition keeps authored picket rhythm near native scale; tiny side-corner residuals extend only outward behind side fences so gate endpoints remain exact",
+        "small 0.012m seam overlap closes panel-to-panel daylight without compressing authored picket rhythm"
+      ],
+      "runtime_join_overlap": 0.012,
+      "south_runtime_join_overlap": 0.012
+    },
+    {
+      "name": "gate_post",
+      "path": "HavenlineGodot/assets/t03_boundary_v2/gate_post.obj",
+      "triangles": 176,
+      "features": [
+        "matching pale warm post",
+        "solid snow crown",
+        "tiny integrated warm insets only",
+        "1.12 footprint / 1.14 height threshold-marker presentation",
+        "terrain-footprint seating uses the lowest local sample plus a 0.04m root embed to avoid both floating corners and deep clipping"
+      ]
+    },
+    {
+      "name": "gate_leaf",
+      "path": "HavenlineGodot/assets/t03_boundary_v2/gate_leaf.obj",
+      "triangles": 84,
+      "features": [
+        "solid framed warm timber gate leaf",
+        "dark recessed timber panel",
+        "reference-style diagonal X bracing",
+        "separate from pointed palisade fence",
+        "rigid uniform terrain seating lowers the complete leaf to the worst chord valley instead of pitching the free edge"
+      ]
+    }
+  ],
+  "reference_art_revision": {
+    "reference_images": [
+      "18590.png",
+      "18595.png",
+      "18596.png",
+      "18598.png"
+    ],
+    "reference_role": "Visual construction/material language, not literal dimensions or new gameplay requirements.",
+    "wood_albedo_source_sha256": "bc95d8be5769951c7b75073952662d17d3a40e80017a14fdee2a6fe6ec8a79fc",
+    "wood_albedo_crop": [
+      416,
+      780,
+      530,
+      895
+    ],
+    "wood_albedo_size": [
+      48,
+      96
+    ],
+    "wood_albedo_sha256": "f85c0beb09a5110da4281e765abf659403e9234d7307898416a8363f2989c437",
+    "authoritative_geometry_source": "e1e7bb2d68d1d53025d1242011ad4c885f08c307",
+    "closed_component_counts": {
+      "fence_panel": 74,
+      "gate_post": 6,
+      "gate_leaf": 28
+    },
+    "geometry_transforms_preserved": true,
+    "task_approved": false,
+    "visual_approved": false
   }
 }
