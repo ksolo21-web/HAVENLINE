@@ -14,7 +14,7 @@ from reference_station_families_v3 import build_station_families
 from reference_utility_stations_v3 import build_utility_stations
 # R10B utility/processing rebuild is canonical and visually gated before T05 approval.
 # R10B_MATERIALIZER_TRIGGER_20260927: materialize the canonical utility rebuild before exact-source render review.
-# R03_SOURCE_SCOPE: physical camp-platform visuals only; contracts remain frozen.
+# R10D_MATERIALIZER_TRIGGER_20260927: bind the reference-builder cooker rebuild to generated GLB/catalog bytes.\n# R03_SOURCE_SCOPE: physical camp-platform visuals only; contracts remain frozen.
 
 ROOT=Path(__file__).resolve().parents[3]
 OUT=ROOT/'HavenlineGodot/assets/stations_v2'
