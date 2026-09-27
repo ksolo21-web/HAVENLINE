@@ -13,6 +13,7 @@ import math,json,sys
 from pathlib import Path
 import task03_reference_assets_raw as authoring
 _original_export=authoring.export_obj
+_AUTHORIZED_GEOMETRY_WRITE='--write' in sys.argv
 
 
 def canonicalize(raw: str) -> str:
@@ -54,7 +55,7 @@ def export_obj(model,path):
     assert canonicalize(encoded)==encoded,'OBJ encoding not idempotent'
     equivalent_encoding(raw,encoded)
     committed=authoring.OUT/(model.name+'.obj')
-    if committed.exists():
+    if committed.exists() and not _AUTHORIZED_GEOMETRY_WRITE:
         diagnostic=equivalent_encoding(committed.read_text(),encoded)
         print(json.dumps({'encoding_comparison':model.name,**diagnostic}),file=sys.stderr)
     Path(path).write_text(encoded)
