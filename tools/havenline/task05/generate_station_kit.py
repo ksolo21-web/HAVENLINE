@@ -14,6 +14,7 @@ import legacy_station_kit_v1 as legacy
 from reference_hearth_v4 import build_legacy
 from reference_resource_props_v2 import build_resource_props
 from reference_ground_pads_v2 import build_ground_pads
+# R03_SOURCE_SCOPE: physical camp-platform visuals only; contracts remain frozen.
 
 ROOT=Path(__file__).resolve().parents[3]
 OUT=ROOT/'HavenlineGodot/assets/stations_v2'
