@@ -119,15 +119,16 @@ func place_single(asset_id: String, position := Vector3.ZERO, rotation_y := 0.0)
 	return asset
 
 func set_camera(target: Vector3, view: String, full_height: float) -> void:
+	# Authored station-kit fronts face negative Z; evidence labels follow model space.
 	var offset := Vector3(10.2, 11.8, -14.2)
 	if view in ["reverse", "rear"]:
-		offset = Vector3(0.0, 10.7, -16.0)
+		offset = Vector3(0.0, 10.7, 16.0)
 	elif view in ["side", "right"]:
 		offset = Vector3(14.2, 9.8, 0.0)
 	elif view == "left":
 		offset = Vector3(-14.2, 9.8, 0.0)
 	elif view == "front":
-		offset = Vector3(0.0, 10.7, 16.0)
+		offset = Vector3(0.0, 10.7, -16.0)
 	elif view == "detail":
 		offset = Vector3(8.4, 8.0, -11.2)
 	camera.position = target + offset
