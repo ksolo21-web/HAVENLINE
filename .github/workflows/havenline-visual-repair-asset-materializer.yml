@@ -6,6 +6,7 @@ on:
       - 'tools/havenline/task05/generate_station_kit.py'
       - 'tools/havenline/task05/test_station_kit.py'
       - '.github/workflows/havenline-task05-station-kit-candidate.yml'
+      - '.github/workflows/havenline-visual-repair-asset-materializer.yml'
 
 permissions:
   contents: write
@@ -18,6 +19,20 @@ jobs:
   materialize-t05:
     runs-on: ubuntu-24.04
     timeout-minutes: 8
+    # Compare committed raw bytes in this disposable job only. Legacy native-Git
+    # PNG/OBJ files match LFS patterns but are not pointers; running LFS clean
+    # during git diff falsely reports unchanged files as generated changes.
+    # No tracked attributes, global configuration, path gate or file is waived.
+    env:
+      GIT_CONFIG_COUNT: '4'
+      GIT_CONFIG_KEY_0: filter.lfs.process
+      GIT_CONFIG_VALUE_0: ''
+      GIT_CONFIG_KEY_1: filter.lfs.clean
+      GIT_CONFIG_VALUE_1: cat
+      GIT_CONFIG_KEY_2: filter.lfs.smudge
+      GIT_CONFIG_VALUE_2: cat
+      GIT_CONFIG_KEY_3: filter.lfs.required
+      GIT_CONFIG_VALUE_3: 'false'
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
@@ -53,9 +68,13 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
+          git diff --exit-code
+          git diff --cached --exit-code
+          test -z "$(git ls-files --others --exclude-standard)"
           python3 -m pip install --disable-pip-version-check numpy
           python3 tools/havenline/task05/generate_station_kit.py
           python3 tools/havenline/task05/test_station_kit.py
+          test -z "$(git ls-files --others --exclude-standard)"
           mapfile -t changed < <(git diff --name-only)
           if [ "${#changed[@]}" -eq 0 ]; then
             echo "No generated asset changes to materialize."
@@ -89,5 +108,13 @@ jobs:
               *) echo "Unauthorized staged path: $path" >&2; exit 1 ;;
             esac
           done
+          git diff --exit-code
           git commit -m 'T05: materialize deterministic visual repair assets'
+          python3 tools/havenline/task05/test_station_kit.py
+          git diff --exit-code
+          git diff --cached --exit-code
+          test -z "$(git ls-files --others --exclude-standard)"
+          remote_head=$(git ls-remote origin "refs/heads/$GITHUB_REF_NAME" | cut -f1)
+          test "$remote_head" = "$GITHUB_SHA"
           git push origin "HEAD:$GITHUB_REF_NAME"
+          echo "Materialized exact source: $(git rev-parse HEAD)"
