@@ -53,28 +53,42 @@ def build_fishing_rack():
     return b
 
 def build_intake_machine():
-    b=legacy.MeshBuilder("intake_machine"); snow(b,(2.60,.14,2.40))
+    b=legacy.MeshBuilder("intake_machine")
+    for x,z,rx,rz in ((-.92,-.72,.34,.24),(.88,-.70,.31,.22),(-.92,.70,.30,.23),(.88,.72,.35,.24),(0,-.86,.42,.18),(0,.87,.38,.17)):
+        b.sphere("snow",(x,.08,z),(rx,.08,rz),5,10)
     for x in (-.88,.88):
-        for z in (-.66,.66): leg(b,x,z,.64)
-    for x in (-.92,.92): b.beveled_box("wood_light",(x,.22,0),(.16,.18,1.68),.05)
-    for z in (-.62,.62): b.beveled_box("wood",(0,.48,z),(1.92,.18,.18),.05)
-    b.beveled_box("blue",(0,1.34,-.26),(1.72,.16,1.08),.055,rotation=(.42,0,0))
-    b.beveled_box("blue",(0,1.16,.24),(1.72,.16,.82),.055,rotation=(-.34,0,0))
-    for x in (-.80,.80):
-        b.beveled_box("wood_light",(x,1.27,-.05),(.13,.94,1.06),.040)
-    b.beveled_box("dark",(0,1.08,-.72),(1.36,.12,.20),.035)
-    b.beveled_box("orange",(0,1.08,-.81),(.92,.08,.08),.025)
-    b.cylinder("metal",(0,.91,.38),.43,1.30,20,rotation=(0,0,math.pi/2))
-    for x in (-.68,.68): b.torus("yellow",(x,.91,.38),.39,.045,18,6,rotation=(0,math.pi/2,0))
-    for x in (-.38,0,.38): b.beveled_box("dark",(x,.91,.80),(.12,.58,.08),.025)
-    b.torus("orange",(-.95,.94,.34),.30,.055,16,6,rotation=(0,math.pi/2,0))
-    for ang in (0,math.pi/2,math.pi,3*math.pi/2):
-        b.rod_between("orange",(-.97,.94,.34),(-.97,.94+math.sin(ang)*.30,.34+math.cos(ang)*.30),.035,8)
-    b.cylinder("cream",(-.99,.94,.34),.07,.18,10,rotation=(0,0,math.pi/2))
-    b.beveled_box("wood_light",(0,.67,.92),(1.60,.14,.44),.045)
-    for x in (-.58,-.19,.20,.59):
-        b.cylinder("cyan",(x,.78,.91),.075,.34,10,rotation=(math.pi/2,0,0))
-    b.beveled_box("snow",(-.40,1.86,-.23),(.62,.07,.42),.025,rotation=(0,.06,.02))
+        for z in (-.66,.66): leg(b,x,z,.78)
+    for z in (-.66,.66):
+        b.beveled_box("wood",(0,.40,z),(1.96,.18,.20),.050)
+        brace(b,-.78,.78,z)
+    for x in (-.86,.86): b.beveled_box("wood_light",(x,.62,0),(.18,.16,1.55),.045)
+    for x in (-.66,-.22,.22,.66): b.beveled_box("wood_light",(x,.77,.04),(.38,.12,1.36),.040)
+    b.beveled_box("dark",(0,.84,-.04),(1.58,.07,1.22),.030)
+    for x in (-.70,.70):
+        b.beveled_box("wood",(x,1.48,-.42),(.18,1.08,.20),.050)
+        b.beveled_box("blue",(x,1.52,-.30),(.12,.72,.72),.045,rotation=(.16,0,0))
+    b.beveled_box("wood_light",(0,1.98,-.44),(1.60,.18,.22),.050)
+    b.beveled_box("metal",(0,1.64,-.47),(1.30,.12,.62),.045,rotation=(.40,0,0))
+    b.beveled_box("blue",(0,1.39,-.20),(1.26,.12,.56),.045,rotation=(-.30,0,0))
+    b.beveled_box("cream",(0,1.94,-.57),(1.06,.08,.18),.030)
+    for x in (-.46,0,.46): b.beveled_box("yellow",(x,1.93,-.67),(.12,.12,.08),.025)
+    for z in (.02,.38):
+        b.cylinder("metal",(0,1.18,z),.22,1.32,18,rotation=(0,0,math.pi/2))
+        for x in (-.68,.68): b.torus("yellow",(x,1.18,z),.215,.040,16,5,rotation=(0,math.pi/2,0))
+        for x in (-.34,.34): b.beveled_box("blue",(x,1.18,z),(.16,.34,.46),.040)
+    for x in (-.72,.72): b.beveled_box("dark",(x,1.20,.20),(.12,.66,.68),.035)
+    b.beveled_box("blue",(-.74,1.16,.18),(.30,.62,.78),.080)
+    b.beveled_box("metal",(.74,1.16,.18),(.28,.54,.74),.070)
+    b.torus("orange",(-.96,1.18,.16),.28,.055,16,6,rotation=(0,math.pi/2,0))
+    b.cylinder("cream",(-1.02,1.18,.16),.065,.16,10,rotation=(0,0,math.pi/2))
+    b.beveled_box("wood_light",(0,.88,.78),(1.55,.14,.42),.045)
+    b.beveled_box("dark",(0,.97,.77),(1.34,.07,.32),.025)
+    for x in (-.52,-.18,.18,.52):
+        b.cylinder("cyan",(x,1.03,.77),.075,.34,10,rotation=(math.pi/2,0,0))
+        b.cylinder("cream",(x,1.03,.95),.085,.04,10,rotation=(math.pi/2,0,0))
+    b.beveled_box("blue",(0,.82,1.00),(1.40,.18,.16),.040)
+    b.beveled_box("snow",(-.37,2.08,-.45),(.52,.07,.22),.025,rotation=(0,.08,.02))
+    b.beveled_box("snow",(.55,1.50,-.22),(.26,.05,.30),.020,rotation=(0,-.10,-.03))
     return b
 
 def build_cooker_processor():
