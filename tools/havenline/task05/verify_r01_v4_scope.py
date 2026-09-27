@@ -1,4 +1,4 @@
-"""Fail-closed R01-only source boundary and exact model identity proof."""
+"""Fail-closed R01 identity proof inside the combined R01+R07 visual repair."""
 import argparse,json,hashlib,subprocess
 from pathlib import Path
 
@@ -8,31 +8,86 @@ ASSET='HavenlineGodot/assets/stations_v2/hearth_vessel.glb'
 CATALOG='HavenlineGodot/assets/stations_v2/catalog.json'
 TEST='HavenlineGodot/tests/test_task05_station_kit.gd'
 EXPECTED_SHA='6d32499229dd22dde1ee32940bb1b0a506a0647ea911a4787b3bce83fe60a8e7'
+R07_IDS=('wood_stack','stone_stack','metal_stack','fuel_canister','fish_crate','cooked_food_stack','money_stack','cargo_crate')
 
 
 def git(*args):return subprocess.check_output(['git',*args],cwd=ROOT)
 
 
+def contract_view(catalog):
+    # Hashes, triangle counts, material membership and art-language prose are
+    # visual implementation details. Everything that can affect gameplay,
+    # placement, sockets, later-task ownership or performance ceilings stays exact.
+    return {
+        'schema_version':catalog['schema_version'],
+        'authority_id':catalog['authority_id'],
+        'generator':catalog['generator'],
+        'requirements':catalog['requirements'],
+        'arrangements':catalog['arrangements'],
+        'performance_contract':catalog['performance_contract'],
+        'runtime_logic_included':catalog['runtime_logic_included'],
+        'visual_approval_claimed':catalog['visual_approval_claimed'],
+        'physical_4k60_certified':catalog['physical_4k60_certified'],
+        'entries':[
+            {k:v for k,v in row.items() if k not in ('sha256','triangles','materials')}
+            for row in catalog['entries']
+        ],
+    }
+
+
 def verify(head):
     changed=git('diff','--name-only',BASE,head,'--','HavenlineGodot').decode().splitlines()
-    assert set(changed)=={ASSET,CATALOG,TEST},changed
+    r07_paths={f'HavenlineGodot/assets/stations_v2/{name}.glb' for name in R07_IDS}
+    allowed={ASSET,CATALOG,TEST}|r07_paths
+    assert set(changed)==allowed,changed
+
     old=git('show',f'{BASE}:{TEST}').decode()
     expected=old.replace('== 42872','== 49160').replace('== 30820','== 37108')
     assert expected!=old
-    assert git('show',f'{head}:{TEST}').decode()==expected,'Unrelated test change'
+    assert git('show',f'{head}:{TEST}').decode()==expected,'Unrelated engine-test change'
+
     before=json.loads(git('show',f'{BASE}:{CATALOG}'))
     after=json.loads(git('show',f'{head}:{CATALOG}'))
-    row=next(r for r in before['entries'] if r['id']=='hearth_vessel')
-    row['sha256']=EXPECTED_SHA;row['triangles']=25968
-    assert before==after,'Gameplay catalog metadata changed'
-    for path in ('tools/havenline/task05/reference_hearth_v3.py','tools/havenline/task05/legacy_station_kit_v1.py','HavenlineGodot/scripts/station_kit.gd','HavenlineGodot/tests/capture_task05_station_kit.gd'):
+    assert contract_view(before)==contract_view(after),'Gameplay/catalog contract changed'
+
+    after_by={r['id']:r for r in after['entries']}
+    hearth=after_by['hearth_vessel']
+    assert hearth['sha256']==EXPECTED_SHA and int(hearth['triangles'])==25968
+    for name in R07_IDS:
+        old_row=next(r for r in before['entries'] if r['id']==name)
+        new_row=after_by[name]
+        assert new_row['sha256']!=old_row['sha256'],name
+        assert int(new_row['triangles'])>int(old_row['triangles']),name
+    assert 'metal' not in after_by['stone_stack']['materials']
+
+    for path in (
+        'tools/havenline/task05/reference_hearth_v3.py',
+        'tools/havenline/task05/legacy_station_kit_v1.py',
+        'HavenlineGodot/scripts/station_kit.gd',
+        'HavenlineGodot/tests/capture_task05_station_kit.gd',
+    ):
         assert git('show',f'{BASE}:{path}')==git('show',f'{head}:{path}'),path
+
     assert hashlib.sha256(git('show',f'{head}:{ASSET}')).hexdigest()==EXPECTED_SHA
     assert hashlib.sha256((ROOT/ASSET).read_bytes()).hexdigest()==EXPECTED_SHA
-    return {'passed':True,'candidate_source':head,'protected_baseline':BASE,'changed_game_paths':changed,
-            'model_sha256':EXPECTED_SHA,'other_21_models_unchanged':True,
-            'gameplay_contracts_unchanged':True,'engine_test_changes':'two exact triangle-accounting assertions only',
-            'task_approved':False,'independent_critic':False}
+
+    frozen=0
+    for row in before['entries']:
+        name=row['id']
+        if name=='hearth_vessel' or name in R07_IDS:continue
+        path=f'HavenlineGodot/assets/stations_v2/{name}.glb'
+        assert git('show',f'{BASE}:{path}')==git('show',f'{head}:{path}'),name
+        frozen+=1
+    assert frozen==13
+
+    return {
+        'passed':True,'candidate_source':head,'protected_baseline':BASE,
+        'changed_game_paths':changed,'model_sha256':EXPECTED_SHA,
+        'other_13_nonresource_models_unchanged':True,'r07_models_rebuilt':8,
+        'stone_metal_material_removed':True,'gameplay_contracts_unchanged':True,
+        'engine_test_changes':'historical R01 triangle-accounting assertions only',
+        'task_approved':False,'independent_critic':False,
+    }
 
 
 if __name__=='__main__':
