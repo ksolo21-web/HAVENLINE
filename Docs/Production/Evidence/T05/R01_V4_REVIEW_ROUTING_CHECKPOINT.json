@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "checkpoint": "R01-V4 exact-source review routing",
+  "recorded_at_utc": "2026-09-27T07:56:00Z",
+  "authoritative_game_candidate": "1c89e00723086bb4dac0f4d91237ff85c81e6b53",
+  "active_game_branch": "havenline/T05-visual-repair-20260926",
+  "active_game_branch_revert_head": "427148011ca2e8ad3cb6fef357e99a93b69bbe26",
+  "game_tree_status": {
+    "compare_base": "1c89e00723086bb4dac0f4d91237ff85c81e6b53",
+    "compare_head": "havenline/T05-visual-repair-20260926",
+    "ahead_by": 2,
+    "changed_files": [],
+    "effective_tree_byte_equivalent": true
+  },
+  "r01_v4_authoritative_evidence": {
+    "materializer_run": 36292579922,
+    "candidate_guard_run": 36292848813,
+    "precritic_run": 36292848721,
+    "precritic_artifact_id": 10923082504,
+    "precritic_artifact_sha256": "20fa1ce3ca548f5113e48e229595c1df14726c617906fead5c3a25b95d50d14f",
+    "suites": "18/18",
+    "checks": "1134/1134",
+    "t03_checks": 34,
+    "t04_checks": 45,
+    "t05_checks": 277,
+    "shipping_context_run": 36292848746,
+    "shipping_context_artifact_id": 10923441188,
+    "shipping_context_artifact_sha256": "39192188a5acb6f5f0442bf58fc7d9cf1272e5ed69bab03982a9730ba5e88c42"
+  },
+  "replay_proof": {
+    "artifact_id": 10922738146,
+    "downloaded_zip_sha256": "771515541de191af7465b929d606934cbb61c84407b44a2f86f316922aa53263",
+    "embedded_commit": "1c89e00723086bb4dac0f4d91237ff85c81e6b53",
+    "embedded_source_zip_sha256": "ef10e97691cfa33ae049a84ec78e7c59bbef257491efda090a264206e10eab42",
+    "embedded_engine_zip_sha256": "cadd3204e728a35d3f13adb7fd0d7902636b79f6b95c40c265eb73b6c35329e4",
+    "embedded_engine_version": "4.7.2.stable.official.ed1daf0bf"
+  },
+  "direct_visual_status": {
+    "full_resolution_inspection_complete": true,
+    "prior_open_shell_defect_reproduced": false,
+    "prior_candle_spike_flame_defect_reproduced": false,
+    "new_corroborated_task_owned_visual_defects": [],
+    "further_source_edit_authorized": false
+  },
+  "formal_review_requirement": {
+    "reviewer": "tools/havenline/task05/review_station_kit.py",
+    "required_formal_evidence_images": 77,
+    "required_layout": {
+      "component": 12,
+      "families": 42,
+      "gameplay": 20,
+      "native4k": 3
+    },
+    "exact_source_required": true,
+    "C1_C2_rule": "every mandatory dimension strictly >9.0 unrounded; defects []; coverage_complete true; confidence medium/high; no averaging",
+    "C6_may_start_before_C1_C2_pass": false
+  },
+  "blocked_routes_exhausted": [
+    {
+      "route": "modify/create GitHub Actions workflow from connector",
+      "state": "BLOCKED_BY_CONNECTOR_SAFETY_LAYER",
+      "retry_unchanged": false
+    },
+    {
+      "route": "GitHub Actions workflow_dispatch from connector",
+      "state": "UNAVAILABLE_ACTION_SURFACE",
+      "retry_unchanged": false
+    },
+    {
+      "route": "local exact 77-frame Vulkan reproduction using embedded Godot engine",
+      "state": "BLOCKED_RENDERER_ENVIRONMENT",
+      "evidence": "available SwiftShader ICD lacks VK_KHR_xlib_surface required by Godot x11 Vulkan; headless display driver is dummy and cannot save rendered capture textures; no Wayland compositor is installed",
+      "retry_unchanged": false
+    },
+    {
+      "route": "local exact independent C1/C2 execution",
+      "state": "BLOCKED_REVIEWER_RUNTIME",
+      "evidence": "~/.cache/havenline-t01-qwen35 checksum-pinned reviewer cache is absent",
+      "retry_unchanged": false
+    }
+  ],
+  "first_open_gate": "LEGITIMATE_EXACT_SOURCE_C1_C2",
+  "next_authorized_action": "Use an authorized repository CI route to run the existing full T05 integrated-precritic implementation at exact candidate 1c89e00723086bb4dac0f4d91237ff85c81e6b53, producing the 77-frame artifact; then run the repository's exact-source C1/C2 reviewer against that artifact. Do not reuse fa6fa70 historical evidence and do not integrate early merely to trigger CI.",
+  "t05_closeout_remaining": [
+    "exact-source C1/C2 PASS",
+    "C6 all nine mandatory dimensions >9.0 with defects []",
+    "explicit user visual approval if required by repair contract",
+    "sequential integration",
+    "fresh integrated protected regression",
+    "fresh final Native success"
+  ],
+  "source_change_made_in_this_checkpoint": false,
+  "task_approved": false,
+  "status": "BLOCKED_ON_AUTHORIZED_CI_REVIEW_ROUTE"
+}
