@@ -100,12 +100,58 @@ func placement_inside_fence(placement: Dictionary, row: Dictionary) -> bool:
 			return false
 	return true
 
+func color_fixture_mesh(colored: bool) -> ArrayMesh:
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array([Vector3.ZERO, Vector3.RIGHT, Vector3.FORWARD])
+	arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array([Vector3.UP, Vector3.UP, Vector3.UP])
+	arrays[Mesh.ARRAY_INDEX] = PackedInt32Array([0, 1, 2])
+	if colored:
+		arrays[Mesh.ARRAY_COLOR] = PackedColorArray([Color.RED, Color.GREEN, Color.BLUE])
+	var result := ArrayMesh.new()
+	result.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	return result
+
+func test_mixed_vertex_color_batch(kit: Node3D) -> void:
+	var colored := color_fixture_mesh(true)
+	var plain := color_fixture_mesh(false)
+	var material := ShaderMaterial.new()
+	var shader := Shader.new()
+	shader.code = "shader_type spatial; void fragment(){ALBEDO=COLOR.rgb;}"
+	material.shader = shader
+	for reverse_order in [false, true]:
+		var first := plain if reverse_order else colored
+		var second := colored if reverse_order else plain
+		var groups := {"fixture": {"material": material, "parts": [
+			{"mesh": first, "surface": 0, "transform": Transform3D.IDENTITY},
+			{"mesh": second, "surface": 0, "transform": Transform3D(Basis.IDENTITY, Vector3(2, 0, 0))}
+		]}}
+		var merged: ArrayMesh = kit.compile_batch(groups)
+		var arrays := merged.surface_get_arrays(0)
+		var colors: PackedColorArray = arrays[Mesh.ARRAY_COLOR]
+		var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		var uncolored_white := true
+		var authored_color_preserved := true
+		for i in colors.size():
+			var is_plain := (vertices[i].x < 1.5) if reverse_order else (vertices[i].x > 1.5)
+			if is_plain:
+				uncolored_white = uncolored_white and colors[i].is_equal_approx(Color.WHITE)
+			else:
+				authored_color_preserved = authored_color_preserved and colors[i] in [Color.RED, Color.GREEN, Color.BLUE]
+		var suffix := " (reverse=" + str(reverse_order) + ")"
+		check("Mixed-color batch retains both triangle payloads" + suffix, colors.size() == 6)
+		check("Missing source colors normalize to white, never black" + suffix, uncolored_white)
+		check("Authored vertex colors survive batching" + suffix, authored_color_preserved)
+		check("Batching never mutates the original uncolored mesh" + suffix, plain.surface_get_arrays(0)[Mesh.ARRAY_COLOR] == null)
+		check("Batching clones rather than mutates shared material" + suffix, merged.surface_get_material(0) != material)
+
 func _initialize() -> void:
 	call_deferred("run")
 
 func run() -> void:
 	var kit := StationKit.new()
 	root.add_child(kit)
+	test_mixed_vertex_color_batch(kit)
 	var catalog := StationKit.read_catalog()
 	var descriptor := kit.descriptor()
 	var lakeshore_lane_clearances := {}
