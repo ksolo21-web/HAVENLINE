@@ -1,6 +1,9 @@
 #!/usr/bin/env python3
 """Generate the T05 kit with bounded reference-driven visual overrides.
 
+R10T materialization preserves the reference-driven irregular snow grounding and
+strengthened service/defense silhouettes discovered in actual Godot captures.
+
 R01 keeps the approved reference-hearth replacement. R07 rebuilds the eight resource props, R03 rebuilds the physical pads, and R10 overrides the confirmed primitive-looking counter/defense families against the user's supplied HAVENLINE renders. IDs, footprints, sockets, arrangements, gameplay metadata and the existing palette remain authoritative.
 """
 from __future__ import annotations
