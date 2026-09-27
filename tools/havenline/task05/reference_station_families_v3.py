@@ -131,6 +131,18 @@ def _augment_defense_platform(platform):
         platform.rod_between("orange", (x, 1.69, .18), (x, 1.47, .43), .026, 8)
     platform.beveled_box("snow", (-.22, 1.93, .20), (.56, .055, .38), .022,
                          rotation=(0, .10, .015))
+    # Access ladder and rear windbreak reinforce the raised-platform silhouette.
+    for x in (-.56, .56):
+        platform.rod_between("wood", (x, .16, -1.34), (x, 1.26, -1.08), .060, 8)
+    for step in range(6):
+        t = float(step) / 5.0
+        y = .24 + t * .90
+        z = -1.32 + t * .21
+        platform.rod_between("wood_light", (-.55, y, z), (.55, y, z), .040, 8)
+    for x, h in ((-.72, .58), (0, .66), (.72, .54)):
+        platform.cylinder("wood_light", (x, 1.56 + h * .5, 1.10), .105, h, 9, top_radius=.032)
+        platform.cylinder("snow", (x-.012, 1.62 + h, 1.10), .078, .095, 9, top_radius=.012)
+    platform.rod_between("blue", (-.90, 1.68, 1.08), (.90, 1.68, 1.08), .048, 8)
     return platform
 
 
