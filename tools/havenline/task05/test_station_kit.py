@@ -172,7 +172,10 @@ def main():
     report={'suite':'T05_station_kit_source_integrity','passed':True,'asset_count':22,
             'triangles':total_triangles,'storage_bytes':storage,'deterministic_files':len(first),
             'opposite_winding_triangles':0,'nominal_batched_draw_calls':surfaces,
-            'reference_hearth_topology':topology,'independent_critic':False,'physical_4k60_verified':False}
+            'reference_hearth_topology':topology,
+            'r10_station_triangles':{name:builder.triangle_count() for name,builder in station_assets.items()},
+            'r10_station_materials':{name:sorted(builder.surfaces) for name,builder in station_assets.items()},
+            'independent_critic':False,'physical_4k60_verified':False}
     print(json.dumps(report,indent=2))
     return 0
 
