@@ -11,4 +11,5 @@ def build_ground_pads():
         b.beveled_box("wood_light",(0,.16,-.68),(1.74,.14,.14),.035)
         b.beveled_box("wood",(.72,.16,0),(.14,.14,1.40),.035)
         b.beveled_box("wood",(-.72,.16,0),(.14,.14,1.40),.035)
+        b.beveled_box("dark",(-.72,.24,-.68),(.14,.16,.14),.035)
     return {asset_id:source[asset_id] for asset_id in PAD_IDS}
