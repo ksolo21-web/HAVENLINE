@@ -6,8 +6,8 @@ Primary visual authority:
 - user HAVENLINE early-camp board 18607.png for early utility silhouettes.
 
 This pass preserves station IDs, metadata, sockets, placements, material vocabulary,
-and frozen gameplay contracts while replacing the two remaining weak reads:
-service_counter and defense_platform.
+and frozen gameplay contracts while repairing the remaining weak reads in the counter/defense family:
+service_counter, processing_counter and defense_platform.
 """
 from __future__ import annotations
 import math
@@ -53,6 +53,50 @@ def _augment_service_counter(service):
     return service
 
 
+
+def _augment_processing_counter(processing):
+    # Actual six-angle gameplay-scale review showed the legacy processing bench
+    # reading as a bare table with a target-like disk. Turn that disk into a
+    # mechanically legible saw/chop station using the user's early-camp language.
+    # The existing wheel remains purposeful machinery rather than decoration.
+    processing.torus("blue", (0, 1.45, -.17), .54, .050, 24, 7,
+                     rotation=(math.pi / 2, 0, 0), arc=math.pi)
+    for i in range(12):
+        a = math.tau * float(i) / 12.0
+        x = .49 * math.cos(a)
+        y = 1.45 + .49 * math.sin(a)
+        processing.beveled_box("metal", (x, y, -.184), (.11, .055, .045), .010,
+                               rotation=(0, 0, a))
+
+    # Substantial timber feed bed and blue guide rails make the workstation read
+    # as a production tool rather than a collection of primitives.
+    for z in (-.48, -.18, .12, .42):
+        processing.beveled_box("wood", (0, 1.03, z), (2.78, .12, .22), .035)
+    for z in (-.55, .49):
+        processing.rod_between("blue", (-1.23, 1.15, z), (1.23, 1.15, z), .042, 8)
+    for x in (-1.10, 1.10):
+        processing.beveled_box("blue", (x, 1.34, -.05), (.16, .66, .20), .045)
+        processing.beveled_box("snow", (x-.02, 1.70, -.05), (.20, .055, .23), .020,
+                               rotation=(0, .05 if x < 0 else -.05, .02))
+
+    # Clamp, workpiece and powered side box provide use-state storytelling at
+    # vertical-isometric distance while keeping the frozen sockets/footprint.
+    processing.cylinder("wood", (0, 1.17, .34), .13, 1.92, 12,
+                        rotation=(math.pi / 2, 0, math.pi / 2))
+    for x in (-.78, .78):
+        processing.cylinder("cream", (x, 1.17, .34), .10, .035, 10,
+                            rotation=(math.pi / 2, 0, math.pi / 2))
+    processing.beveled_box("metal", (-.88, 1.36, -.42), (.38, .42, .42), .075)
+    processing.beveled_box("blue", (-.88, 1.39, -.64), (.44, .34, .10), .035)
+    processing.cylinder("orange", (-.88, 1.39, -.705), .11, .07, 12,
+                        rotation=(math.pi / 2, 0, 0))
+    processing.rod_between("metal", (.70, 1.37, -.40), (1.15, 1.72, -.40), .035, 8)
+    processing.torus("yellow", (1.16, 1.74, -.40), .12, .026, 12, 6,
+                     rotation=(math.pi / 2, 0, 0))
+    processing.beveled_box("orange", (.92, .62, -.69), (.48, .12, .30), .035,
+                           rotation=(0, 0, -.08))
+    return processing
+
 def _augment_defense_platform(platform):
     # Snow-capped palisade corner posts tie the platform into the user's
     # boundary language and improve the silhouette without moving gameplay.
@@ -94,6 +138,7 @@ def _augment_defense_platform(platform):
 def build_station_families():
     result = v2.build_station_families()
     result["service_counter"] = _augment_service_counter(result["service_counter"])
+    result["processing_counter"] = _augment_processing_counter(result["processing_counter"])
     result["defense_platform"] = _augment_defense_platform(result["defense_platform"])
     assert tuple(sorted(result)) == tuple(sorted(v2.STATION_IDS))
     # Fail closed if visual geometry exceeds the frozen placement footprint.
