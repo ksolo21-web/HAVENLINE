@@ -49,6 +49,10 @@ def verify(head):
 
     test_text=git('show',f'{head}:{TEST}').decode().lower()
     assert 'task05' in test_text and 'station' in test_text,'Unexpected T05 acceptance-test replacement'
+    capture_text=git('show',f'{head}:HavenlineGodot/tests/capture_task05_station_kit.gd').decode()
+    assert '\"front_axis\": \"negative-Z\"' in capture_text,'T05 evidence front-axis contract missing'
+    assert 'offset = Vector3(0.0, 10.7, -16.0)' in capture_text,'T05 front camera is not on negative-Z axis'
+    assert 'offset = Vector3(0.0, 10.7, 16.0)' in capture_text,'T05 rear camera is not on positive-Z axis'
 
     before=json.loads(git('show',f'{BASE}:{CATALOG}'))
     after=json.loads(git('show',f'{head}:{CATALOG}'))
@@ -68,7 +72,6 @@ def verify(head):
         'tools/havenline/task05/reference_hearth_v3.py',
         'tools/havenline/task05/legacy_station_kit_v1.py',
         'HavenlineGodot/scripts/station_kit.gd',
-        'HavenlineGodot/tests/capture_task05_station_kit.gd',
     ):
         assert git('show',f'{BASE}:{path}')==git('show',f'{head}:{path}'),path
 
