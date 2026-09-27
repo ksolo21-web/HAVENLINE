@@ -95,8 +95,12 @@ jobs:
           q=json.load(open('Docs/Production/Evidence/T05/INTEGRATED_QUICK_LOOK.json'))
           p=json.load(open('task05-evidence/provenance.json'))
           t=json.load(open('task05-evidence/tests.json'))
+          a=json.load(open('Docs/Production/T05/NEWEST_USER_RENDER_AUTHORITY_20260927.json'))
           assert q['candidate_source']==p['source']==t['source']==source
           assert q['manual_quick_look']=='PASS' and q['critics_authorized'] is True
+          assert a['status']=='ACTIVE_ACCEPTANCE_AUTHORITY'
+          assert q['manual_checks']['newest_user_render_authority']=='PASS'
+          assert set(q['newest_user_render_refs']) >= {'18600.png','18607.png','Furnace_b080906_4K.png','Fence_a4860b7_4K.png','Gate_a4860b7.png'}
           assert q['artifact_digest']=='sha256:76f6a0237e2676abf86eeac7b82a1005a8bba0dd951b03a14a8022626d982da1'
           assert p['actual_images']==77 and p['family_view_contract_complete'] is True
           assert p['shipping_main_call_site_exercised'] is True
