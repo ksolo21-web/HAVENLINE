@@ -29,7 +29,17 @@ RESOURCE_IDS = (
 
 
 def _snow_base(b, size):
-    legacy.add_snow_foot(b, size)
+    """Irregular local snow contact; never a rectangular shipping slab."""
+    w,d=float(size[0]),float(size[2])
+    patches=(
+        (-.24*w,-.20*d,.20*w,.16*d,-.10),
+        (.21*w,-.18*d,.18*w,.14*d,.08),
+        (-.18*w,.19*d,.17*w,.15*d,.05),
+        (.24*w,.18*d,.19*w,.14*d,-.06),
+        (0.0,-.03*d,.21*w,.13*d,.02),
+    )
+    for x,z,rx,rz,yaw in patches:
+        b.sphere("snow",(x,.045,z),(rx,.055,rz),4,9,rotation=(0,yaw,0))
 
 
 def _pallet(b, width, depth, y=.14, material="wood"):
@@ -112,29 +122,32 @@ def build_stone_stack():
     b = legacy.MeshBuilder("stone_stack")
     _snow_base(b, (1.73, .10, 1.36))
     _pallet(b, 1.52, 1.12, .12)
-    # Old T05 used HL_metal for every rock. Use rough neutral/snow surfaces
-    # instead; no metallic material is permitted in this resource builder.
+
+    # Faceted, nonuniform rock forms replace the smooth snowball-like pile.
     stones = (
-        (-.50,.31,-.22,.40,.29,.34),
-        (-.12,.28,.23,.43,.27,.38),
-        (.35,.30,-.18,.41,.30,.34),
-        (.55,.27,.24,.30,.23,.28),
-        (-.34,.62,.13,.34,.27,.31),
-        (.12,.61,-.18,.37,.28,.33),
-        (.42,.60,.15,.29,.23,.27),
-        (-.04,.88,.02,.29,.22,.27),
+        (-.50,.33,-.23,.38,.27,.32,.10,-.18,.06),
+        (-.13,.30,.24,.41,.25,.35,-.06,.23,-.04),
+        (.34,.32,-.18,.39,.28,.31,.08,-.16,.07),
+        (.54,.29,.25,.29,.22,.27,-.08,.31,.03),
+        (-.34,.61,.13,.32,.25,.28,.06,.14,-.08),
+        (.10,.61,-.18,.35,.26,.30,-.04,-.22,.07),
+        (.40,.59,.15,.27,.21,.25,.10,.27,-.04),
+        (-.03,.86,.02,.27,.20,.24,-.08,.11,.05),
     )
-    for i,(x,y,z,rx,ry,rz) in enumerate(stones):
-        mat="cream" if i%3 else "snow"
-        b.sphere(mat,(x,y,z),(rx,ry,rz),7,14,rotation=(.11*i,.23*x,.17*z))
-        if mat!="snow":
-            b.sphere("snow",(x-.04,y+ry*.64,z-.03),(rx*.72,ry*.24,rz*.70),5,12,
-                     rotation=(0,.20*i,0))
-    # Timber side rails stop the pile reading as random floating spheres.
+    for i,(x,y,z,rx,ry,rz,px,py,pz) in enumerate(stones):
+        b.sphere("cream",(x,y,z),(rx,ry,rz),4,8,rotation=(px,py,pz))
+        if i in (0,2,4,6):
+            b.sphere("dark",(x-.03,y-ry*.46,z+.02),(rx*.54,ry*.18,rz*.50),3,7,
+                     rotation=(0,py*.5,0))
+        b.sphere("snow",(x-.04,y+ry*.67,z-.03),(rx*.66,ry*.18,rz*.62),3,8,
+                 rotation=(0,.17*i,0))
+
+    # Timber containment and a small blue inventory tab make the pile intentional.
     for x in (-.71,.71):
         b.beveled_box("wood_light",(x,.47,0),(.10,.65,1.00),.03)
+    b.beveled_box("wood",(0,.22,-.52),(1.42,.11,.10),.03)
+    b.beveled_box("blue",(.54,.72,-.54),(.22,.18,.05),.018)
     return b
-
 
 def build_metal_stack():
     b = legacy.MeshBuilder("metal_stack")
@@ -161,21 +174,28 @@ def build_metal_stack():
 def build_fuel_canister():
     b=legacy.MeshBuilder("fuel_canister")
     _snow_base(b,(1.13,.10,1.06))
-    # Reference-driven compact storage canister: shouldered vessel, banding,
-    # service cap and rigid carry frame. It keeps the early-camp footprint.
-    b.lathe("blue",(0,.18,0),[(.33,0),(.40,.08),(.42,.52),(.36,.78),(.28,.88)],18)
-    for y in (.34,.66):
-        b.torus("metal",(0,y,0),.405,.035,18,6)
-    b.cylinder("dark",(0,1.02,0),.17,.20,14)
-    b.cylinder("orange",(0,1.14,0),.12,.08,12)
-    b.torus("yellow",(0,1.02,0),.30,.035,16,6,rotation=(math.pi/2,0,0),arc=math.pi)
-    for x in (-.30,.30):
-        b.beveled_box("metal",(x,.95,0),(.07,.34,.08),.022)
-    b.beveled_box("cream",(0,.57,-.405),(.30,.25,.035),.015)
-    b.beveled_box("orange",(0,.57,-.427),(.18,.08,.018),.007)
-    b.beveled_box("snow",(-.10,1.23,.01),(.38,.06,.34),.025,rotation=(0,.08,0))
-    return b
+    _pallet(b,1.02,.88,.11,"wood")
 
+    # Two strapped winter canisters replace the former smooth blue tank stack.
+    for x,h,yaw in ((-.25,.76,-.04),(.24,.70,.05)):
+        b.beveled_box("blue",(x,.56,0),(.42,h,.58),.085,rotation=(0,yaw,0))
+        b.beveled_box("dark",(x,.56,-.302),(.28,h*.58,.035),.016,rotation=(0,yaw,0))
+        b.beveled_box("metal",(x,.56,-.324),(.08,h*.48,.020),.008,rotation=(0,yaw,0))
+        b.beveled_box("cream",(x,.50,-.338),(.16,.13,.012),.005,rotation=(0,yaw,0))
+        b.beveled_box("orange",(x,.50,-.346),(.08,.045,.008),.003,rotation=(0,yaw,0))
+        b.cylinder("orange",(x+.09,.96 if x<0 else .92,.03),.065,.08,10)
+        b.torus("yellow",(x,.94 if x<0 else .90,0),.16,.028,12,5,rotation=(math.pi/2,0,0),arc=math.pi)
+        for hx in (-.12,.12):
+            b.beveled_box("metal",(x+hx,.73,.28),(.045,.45,.045),.014,rotation=(0,yaw,0))
+
+    # Shared retaining frame, cross lashing and uneven snow load.
+    for x in (-.47,.47):
+        b.beveled_box("wood_light",(x,.52,0),(.08,.70,.78),.028)
+    b.rod_between("yellow",(-.43,.34,-.32),(.43,.75,-.32),.025,7)
+    b.rod_between("yellow",(-.43,.75,-.32),(.43,.34,-.32),.025,7)
+    b.beveled_box("snow",(-.25,1.03,.02),(.28,.055,.34),.020,rotation=(0,.07,.02))
+    b.beveled_box("snow",(.20,.98,-.04),(.24,.045,.28),.018,rotation=(0,-.10,-.01))
+    return b
 
 def build_fish_crate():
     return _crate_shell(legacy.MeshBuilder("fish_crate"), "fish_crate", True)
