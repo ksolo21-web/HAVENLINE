@@ -2,7 +2,23 @@
   "schema_version": 1,
   "task_id": "T05",
   "candidate_commit": null,
-  "defects": [],
+  "defects": [
+    {
+      "id": "T05-D01",
+      "status": "OPEN",
+      "requirements": [
+        "T05-R07",
+        "T05-R08"
+      ],
+      "symptom": "Nominal T05 resource props read as procedural primitive stacks and do not match the newest Havenline resource renders.",
+      "root_cause": "Repeated uniform simple solids with weak secondary forms, material breakup, bindings, brackets and localized snow.",
+      "required_proof": [
+        "actual Godot gameplay-scale captures",
+        "close views for repaired resource families",
+        "native 3840x2160 arrangement captures"
+      ]
+    }
+  ],
   "counters": {
     "review_round_count": 0,
     "evidence_only_attempt_count": 0,
@@ -10,4 +26,3 @@
   },
   "rule": "Every mandatory finding follows CRITIC SYMPTOM -> ROOT CAUSE -> PRODUCTION CHANGE -> EXPECTED VISIBLE RESULT -> REQUIRED PROOF."
 }
-
