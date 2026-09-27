@@ -10,7 +10,27 @@ import legacy_station_kit_v1 as legacy
 
 UTILITY_IDS=("fishing_rack","intake_machine","cooker_processor","conveyor_straight")
 
-def snow(b,size): legacy.add_snow_foot(b,size)
+def snow(b,size):
+    """Irregular winter grounding; never ship a flat rectangular snow slab.
+
+    User HAVENLINE renders ground stations with broken snow banks/rocks rather
+    than a primitive white plate. Normalized clusters stay inside each frozen
+    footprint and preserve the shallow terrain-seating overlap contract.
+    """
+    sx, _sy, sz = size
+    patches = (
+        (-.32,-.31,.14,.12,-.10), (-.10,-.36,.18,.09,.05),
+        (.22,-.32,.16,.11,.13), (.36,-.06,.11,.15,-.04),
+        (.31,.29,.16,.11,.08), (.03,.36,.19,.09,-.12),
+        (-.28,.31,.14,.12,.06), (-.36,.07,.11,.14,-.08),
+    )
+    for px,pz,rx,rz,rot in patches:
+        b.sphere("snow", (px*sx, .035, pz*sz),
+                 (rx*sx, .070, rz*sz), 5, 10, rotation=(0,rot,0))
+    stones = ((-.35,-.18,.08,.07,.10),(.34,.11,.08,.07,-.16),(-.15,.36,.07,.06,.22))
+    for px,pz,rx,rz,rot in stones:
+        b.beveled_box("dark", (px*sx,.045,pz*sz),
+                      (rx*sx,.085,rz*sz), .025, rotation=(0,rot,0))
 
 def leg(b,x,z,h=.70):
     b.beveled_box("wood",(x,.10+h*.5,z),(.18,h,.18),.045)
@@ -26,8 +46,8 @@ def build_fishing_rack():
         for z in (-.48,.48): leg(b,x,z)
     for z in (-.48,.48):
         b.beveled_box("wood",(0,.40,z),(2.66,.16,.18),.045); brace(b,-1.16,1.16,z)
-    for x in (-1.10,-.74,-.38,-.02,.34,.70,1.06):
-        b.beveled_box("wood_light",(x,.82,0),(.26,.16,1.02),.045)
+    for index,x in enumerate((-1.10,-.74,-.38,-.02,.34,.70,1.06)):
+        b.beveled_box("wood" if index % 2 == 0 else "wood_light",(x,.82,0),(.26,.16,1.02),.045)
     for x in (-1.05,1.05):
         b.rod_between("wood",(x,.82,-.42),(x,2.08,0),.105,10)
         b.rod_between("wood",(x,.82,.42),(x,2.08,0),.105,10)

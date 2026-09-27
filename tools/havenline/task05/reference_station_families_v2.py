@@ -12,7 +12,26 @@ import legacy_station_kit_v1 as legacy
 STATION_IDS=("service_counter","processing_counter","defense_platform")
 
 def snow(b,size):
-    legacy.add_snow_foot(b,size)
+    """Irregular winter grounding; never ship a flat rectangular snow slab.
+
+    User HAVENLINE renders ground stations with broken snow banks/rocks rather
+    than a primitive white plate. Normalized clusters stay inside each frozen
+    footprint and preserve the shallow terrain-seating overlap contract.
+    """
+    sx, _sy, sz = size
+    patches = (
+        (-.32,-.31,.14,.12,-.10), (-.10,-.36,.18,.09,.05),
+        (.22,-.32,.16,.11,.13), (.36,-.06,.11,.15,-.04),
+        (.31,.29,.16,.11,.08), (.03,.36,.19,.09,-.12),
+        (-.28,.31,.14,.12,.06), (-.36,.07,.11,.14,-.08),
+    )
+    for px,pz,rx,rz,rot in patches:
+        b.sphere("snow", (px*sx, .035, pz*sz),
+                 (rx*sx, .070, rz*sz), 5, 10, rotation=(0,rot,0))
+    stones = ((-.35,-.18,.08,.07,.10),(.34,.11,.08,.07,-.16),(-.15,.36,.07,.06,.22))
+    for px,pz,rx,rz,rot in stones:
+        b.beveled_box("dark", (px*sx,.045,pz*sz),
+                      (rx*sx,.085,rz*sz), .025, rotation=(0,rot,0))
 
 def leg(b,x,z,h=.86):
     b.beveled_box("wood",(x,.10+h*.5,z),(.18,h,.18),.045)
@@ -30,8 +49,8 @@ def build_service_counter():
         b.beveled_box("wood",(0,.40,z),(2.78,.18,.20),.05)
         brace(b,-1.14,1.14,.25,.66,z)
         brace(b,-1.14,1.14,.66,.25,z)
-    for z in (-.64,-.32,0,.32,.64):
-        b.beveled_box("wood_light",(0,1.00,z),(3.16,.17,.25),.045)
+    for index,z in enumerate((-.64,-.32,0,.32,.64)):
+        b.beveled_box("wood" if index % 2 == 0 else "wood_light",(0,1.00,z),(3.16,.17,.25),.045)
     b.beveled_box("blue",(0,.91,-.78),(2.74,.22,.10),.035)
     for x in (-1.08,-.54,0,.54,1.08):
         b.cylinder("dark",(x,1.04,-.71),.032,.04,8,rotation=(math.pi/2,0,0))
@@ -51,8 +70,8 @@ def build_processing_counter():
     for z in (-.56,.56):
         b.beveled_box("wood",(0,.37,z),(2.78,.18,.20),.05)
         brace(b,-1.14,1.14,.23,.63,z)
-    for z in (-.62,-.31,0,.31,.62):
-        b.beveled_box("wood_light",(0,.90,z),(3.10,.16,.23),.04)
+    for index,z in enumerate((-.62,-.31,0,.31,.62)):
+        b.beveled_box("wood" if index % 2 == 0 else "wood_light",(0,.90,z),(3.10,.16,.23),.04)
     for x in (-.62,.62):
         b.beveled_box("blue",(x,1.42,.06),(.18,1.12,.22),.055)
         b.beveled_box("dark",(x,1.00,.06),(.24,.16,.28),.045)

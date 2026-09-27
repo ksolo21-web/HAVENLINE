@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""T05 R10G station-family visual repair.
+"""T05 R10T station-family visual repair.
 
 Primary visual authority:
 - newest user-supplied HAVENLINE furnace render for construction/material language;
@@ -18,7 +18,7 @@ def _augment_service_counter(service):
     # A chunky lower storage carcass breaks the bare-table read while staying
     # inside the frozen 3.45 x 1.95 footprint.
     for z in (-.48, -.16, .16, .48):
-        service.beveled_box("wood_light", (0, .55, z), (2.46, .12, .24), .035)
+        service.beveled_box("wood", (0, .55, z), (2.46, .12, .24), .035)
     service.beveled_box("blue", (0, .68, -.68), (1.62, .50, .24), .065)
     service.beveled_box("dark", (0, .69, -.815), (1.30, .31, .035), .012)
     service.beveled_box("cream", (-.34, .69, -.838), (.42, .16, .018), .006)
@@ -42,7 +42,7 @@ def _augment_service_counter(service):
     for x in (-1.30, 1.30):
         service.beveled_box("wood", (x, 1.60, .50), (.16, 1.18, .16), .045)
         service.beveled_box("blue", (x, 1.67, .50), (.21, .16, .21), .05)
-    service.beveled_box("wood_light", (0, 2.14, .50), (2.78, .18, .18), .05)
+    service.beveled_box("wood", (0, 2.14, .50), (2.78, .18, .18), .05)
     service.beveled_box("snow", (-.28, 2.245, .50), (1.46, .055, .20), .022,
                         rotation=(0, .03, .012))
     for x in (-.72, -.24, .24, .72):
@@ -50,6 +50,20 @@ def _augment_service_counter(service):
         service.torus("yellow", (x, 1.68, .50), .075, .017, 10, 5,
                       rotation=(math.pi / 2, 0, 0), arc=math.pi)
     service.rod_between("metal", (-.18, 1.93, .48), (.18, 1.77, .48), .028, 8)
+
+    # R10T internal-render review: the reverse/gameplay read was still too close
+    # to a pale generic table. Add a warm timber apron, blue tool chest and one
+    # oversized hanging axe silhouette so the station purpose survives mobile
+    # distance without changing sockets, placement, or footprint.
+    service.beveled_box("wood", (0, .83, .67), (2.72, .30, .18), .05)
+    service.beveled_box("dark", (0, .82, .765), (2.30, .18, .055), .018)
+    service.beveled_box("blue", (.62, .91, .70), (.72, .38, .24), .06)
+    service.beveled_box("metal", (.62, .91, .835), (.50, .18, .035), .010)
+    for x in (.43, .81):
+        service.cylinder("yellow", (x, .91, .86), .035, .025, 8, rotation=(math.pi / 2, 0, 0))
+    service.rod_between("wood_light", (-.92, 1.98, .47), (-.52, 1.47, .47), .045, 8)
+    service.beveled_box("metal", (-.46, 1.42, .47), (.34, .30, .055), .035, rotation=(0, 0, -.28))
+    service.beveled_box("snow", (.44, 1.16, .60), (.64, .045, .24), .018, rotation=(0, -.07, .012))
     return service
 
 
@@ -143,6 +157,31 @@ def _augment_defense_platform(platform):
         platform.cylinder("wood_light", (x, 1.56 + h * .5, 1.10), .105, h, 9, top_radius=.032)
         platform.cylinder("snow", (x-.012, 1.62 + h, 1.10), .078, .095, 9, top_radius=.012)
     platform.rod_between("blue", (-.90, 1.68, 1.08), (.90, 1.68, 1.08), .048, 8)
+
+    # R10T internal-render review: the platform still read as an exposed scaffold
+    # at representative camera distance. Convert the upper silhouette into a
+    # compact snow-roofed guard post, echoing the user's early-camp watchtower,
+    # while leaving the central interaction footprint and future sockets intact.
+    for x in (-.72, .72):
+        for z in (-.54, .54):
+            platform.beveled_box("wood", (x, 2.05, z), (.14, .90, .14), .04)
+    # Layered shingle roof; avoid a single cyan slab/primitive silhouette.
+    for index, x in enumerate((-.63, -.21, .21, .63)):
+        lean = .010 if index % 2 == 0 else -.010
+        platform.beveled_box("blue", (x, 2.58, -.24), (.38, .10, .82), .035,
+                             rotation=(.30, 0, lean))
+        platform.beveled_box("blue", (x, 2.58, .24), (.38, .10, .82), .035,
+                             rotation=(-.30, 0, -lean))
+    platform.beveled_box("dark", (0, 2.69, 0), (1.78, .12, .15), .040)
+    platform.beveled_box("wood_light", (0, 2.49, -.58), (1.72, .12, .12), .035)
+    platform.beveled_box("wood_light", (0, 2.49, .58), (1.72, .12, .12), .035)
+    platform.beveled_box("snow", (-.34, 2.70, -.22), (.56, .050, .34), .020, rotation=(.30, .03, .012))
+    platform.beveled_box("snow", (.36, 2.70, .20), (.48, .045, .30), .018, rotation=(-.30, -.04, -.010))
+    platform.beveled_box("snow", (.02, 2.75, .00), (.34, .040, .13), .016, rotation=(0, .06, .01))
+    platform.beveled_box("dark", (0, 1.94, .53), (1.36, .32, .10), .035)
+    platform.beveled_box("blue", (0, 1.94, .59), (.96, .16, .045), .018)
+    platform.rod_between("yellow", (-.32, 2.42, -.56), (-.32, 2.04, -.56), .024, 8)
+    platform.cylinder("orange", (-.32, 1.98, -.56), .075, .08, 10)
     return platform
 
 
