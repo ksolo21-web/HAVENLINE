@@ -7,6 +7,7 @@ import tempfile
 import numpy as np
 from reference_hearth_v3 import Model,furnace
 import legacy_station_kit_v1 as legacy
+import reference_resource_props_v2 as resource_v2
 
 
 def component_errors(vertices,faces):
@@ -54,16 +55,22 @@ def verify():
                 snow=Model('snow');part=snow.snow('powder',(0,0,0),(.28,.12,.18),seed,segments,rings)
                 assert not component_errors(part.vertices,part.faces)
                 snow_cases+=1
-    # Preserve all 21 unrelated generated binaries from the immutable old generator.
+    # R01 still freezes every non-hearth asset that is not deliberately owned
+    # by the separately tested R07 resource-prop rebuild.
     root=Path(__file__).resolve().parents[3]
     assets=root/'HavenlineGodot/assets/stations_v2'
+    rebuilt=set(resource_v2.RESOURCE_IDS)
+    unchanged=0
     with tempfile.TemporaryDirectory() as tmp:
         for name,builder in legacy.asset_specs().items():
-            if name=='hearth_vessel':continue
+            if name=='hearth_vessel' or name in rebuilt:continue
             path=Path(tmp)/(name+'.glb');legacy.pack_glb(builder,path)
             assert path.read_bytes()==(assets/path.name).read_bytes(),name
+            unchanged+=1
+    assert unchanged==13 and len(rebuilt)==8
     return {'passed':True,'closed_outward_components':184,'hostile_controls_rejected':3,
-            'snow_topology_cases':snow_cases,'unchanged_nonhearth_assets':21,
+            'snow_topology_cases':snow_cases,'unchanged_nonhearth_nonresource_assets':unchanged,
+            'intentionally_rebuilt_r07_assets':len(rebuilt),
             'visual_approval':False,'independent_critic':False}
 
 
