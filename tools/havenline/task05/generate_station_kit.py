@@ -12,6 +12,7 @@ from reference_resource_props_v2 import build_resource_props
 from reference_ground_pads_v2 import build_ground_pads
 from reference_station_families_v3 import build_station_families
 from reference_utility_stations_v2 import build_utility_stations
+# R10B utility/processing rebuild is canonical and visually gated before T05 approval.
 # R03_SOURCE_SCOPE: physical camp-platform visuals only; contracts remain frozen.
 
 ROOT=Path(__file__).resolve().parents[3]
