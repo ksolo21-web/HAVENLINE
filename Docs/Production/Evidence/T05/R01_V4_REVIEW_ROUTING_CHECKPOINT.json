@@ -101,5 +101,16 @@
     "behind_by": 0,
     "changed_files": [],
     "purpose": "clean exact-source ref for an authorized full integrated-precritic / strict-review CI dispatch"
+  },
+  "workflow_inventory_findings": {
+    "exact_source_scan": true,
+    "workflow_file_count": 142,
+    "full_77_producer": ".github/workflows/havenline-task05-integration-precritic.yml",
+    "full_77_producer_push_branch": "codex/havenline-sequential-task-01",
+    "full_77_producer_has_workflow_dispatch": true,
+    "t05_reference_specific_reviewer": ".github/workflows/havenline-task05-review.yml",
+    "reviewer_source_hard_pin_is_obsolete": true,
+    "alternative_push_triggered_exact_source_full_77_route_found": false,
+    "conclusion": "No existing non-modifying push-triggered route on havenline/T05-r01-v4-exact-ci can produce the formal 77-frame C1/C2 evidence. Authorized Actions dispatch or a safely authorized workflow update remains required."
   }
 }
