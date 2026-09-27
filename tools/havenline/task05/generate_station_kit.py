@@ -1,11 +1,7 @@
 #!/usr/bin/env python3
 """Generate the T05 kit with bounded reference-driven visual overrides.
 
-R01 keeps the approved reference-hearth replacement. R07 replaces only the eight
-pickup/storage resource props whose legacy geometry/material treatment remains
-visibly primitive against the user's supplied HAVENLINE renders. IDs, footprints,
-sockets, arrangements, gameplay metadata and the existing 12-slot palette remain
-authoritative.
+R01 keeps the approved reference-hearth replacement. R07 rebuilds the eight resource props, R03 rebuilds the physical pads, and R10 overrides the confirmed primitive-looking counter/defense families against the user's supplied HAVENLINE renders. IDs, footprints, sockets, arrangements, gameplay metadata and the existing palette remain authoritative.
 """
 from __future__ import annotations
 import hashlib,json,struct
@@ -14,6 +10,7 @@ import legacy_station_kit_v1 as legacy
 from reference_hearth_v4 import build_legacy
 from reference_resource_props_v2 import build_resource_props
 from reference_ground_pads_v2 import build_ground_pads
+from reference_station_families_v2 import build_station_families
 # R03_SOURCE_SCOPE: physical camp-platform visuals only; contracts remain frozen.
 
 ROOT=Path(__file__).resolve().parents[3]
@@ -44,6 +41,7 @@ def main():
     assets=legacy.asset_specs()
     assets.update(build_resource_props())
     assets.update(build_ground_pads())
+    assets.update(build_station_families())
     assets['hearth_vessel']=build_legacy(legacy.MeshBuilder)
     expected={asset_id+'.glb' for asset_id in assets}
     for path in OUT.glob('*.glb'):
