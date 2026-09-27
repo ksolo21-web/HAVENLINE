@@ -81,7 +81,7 @@
     }
   ],
   "first_open_gate": "LEGITIMATE_EXACT_SOURCE_C1_C2",
-  "next_authorized_action": "Use an authorized repository CI route to run the existing full T05 integrated-precritic implementation at exact candidate 1c89e00723086bb4dac0f4d91237ff85c81e6b53, producing the 77-frame artifact; then run the repository's exact-source C1/C2 reviewer against that artifact. Do not reuse fa6fa70 historical evidence and do not integrate early merely to trigger CI.",
+  "next_authorized_action": "Use an authorized GitHub Actions route on clean branch havenline/T05-r01-v4-exact-ci (exactly 1c89e00723086bb4dac0f4d91237ff85c81e6b53) to run the existing full T05 integrated-precritic implementation, producing the 77-frame artifact; then run the repository's exact-source C1/C2 reviewer against that exact artifact. Do not reuse fa6fa70 historical evidence and do not integrate early merely to trigger CI.",
   "t05_closeout_remaining": [
     "exact-source C1/C2 PASS",
     "C6 all nine mandatory dimensions >9.0 with defects []",
@@ -92,5 +92,14 @@
   ],
   "source_change_made_in_this_checkpoint": false,
   "task_approved": false,
-  "status": "BLOCKED_ON_AUTHORIZED_CI_REVIEW_ROUTE"
+  "status": "BLOCKED_ON_AUTHORIZED_CI_REVIEW_ROUTE",
+  "exact_ci_ref": {
+    "branch": "havenline/T05-r01-v4-exact-ci",
+    "target": "1c89e00723086bb4dac0f4d91237ff85c81e6b53",
+    "compare_status": "identical",
+    "ahead_by": 0,
+    "behind_by": 0,
+    "changed_files": [],
+    "purpose": "clean exact-source ref for an authorized full integrated-precritic / strict-review CI dispatch"
+  }
 }
