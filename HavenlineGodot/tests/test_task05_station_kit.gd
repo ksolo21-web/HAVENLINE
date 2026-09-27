@@ -1,5 +1,6 @@
 extends SceneTree
-# Exact-source R10C rerun after materialized conveyor footprint repair.
+# Exact-source R10H validation after R10G service-counter/defense visual materialization.
+# Exact triangle assertions intentionally fail closed if authored geometry drifts.
 
 const StationKit = preload("res://scripts/station_kit.gd")
 const Boundary = preload("res://scripts/camp_boundary.gd")
@@ -159,7 +160,7 @@ func run() -> void:
 	check("Station authority is versioned", descriptor.authority_id == "T05-station-kit-v1")
 	check("Catalog contains the frozen 22-asset kit", descriptor.asset_count == 22)
 	check("Camp and lakeshore arrangements are both declared", descriptor.arrangement_count == 2)
-	check("Catalog triangle total has broad headroom", descriptor.total_catalog_triangles == 93832 and descriptor.total_catalog_triangles <= 180000)
+	check("Catalog triangle total has broad headroom", descriptor.total_catalog_triangles == 105500 and descriptor.total_catalog_triangles <= 180000)
 	check("Shared palette stays within 12 visible materials", descriptor.visible_material_palette_count == 11 and descriptor.visible_material_palette_count <= 12)
 	check("Catalog exposes future-task sockets", descriptor.socket_count >= 35)
 	check("No gameplay logic is claimed", not descriptor.runtime_logic_included)
@@ -233,17 +234,17 @@ func run() -> void:
 	check("Camp arrangement includes the heated vessel", camp.any(func(node): return node.get_meta("t05_asset_id", "") == "hearth_vessel"))
 	check("Camp visual batches to the shared 12-material palette", kit.batched_visual.mesh.get_surface_count() == 11)
 	check("Camp batch remains below the 48 draw-call ceiling", kit.batched_visual.mesh.get_surface_count() <= 48)
-	check("Camp batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 55912)
+	check("Camp batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 61220)
 	var hearth_transform := kit.arrangement_transform("camp", "hearth_vessel", Vector3.ZERO)
 	check("Interactive hearth placement resolves from the same catalog", hearth_transform.origin.is_equal_approx(Vector3(0.0, 0.0, 0.2)))
 	var camp_without_hearth := kit.build_arrangement("camp", Vector3.ZERO, Callable(), ["hearth_vessel"])
-	check("Integration can reserve the animated gameplay hearth without duplicate geometry", camp_without_hearth.size() == 10 and kit.batched_visual.mesh.get_faces().size() / 3 == 29944)
+	check("Integration can reserve the animated gameplay hearth without duplicate geometry", camp_without_hearth.size() == 10 and kit.batched_visual.mesh.get_faces().size() / 3 == 35252)
 	var lakeshore := kit.build_arrangement("lakeshore")
 	check("Lakeshore arrangement deterministically places 10 assets", lakeshore.size() == 10)
 	check("Lakeshore arrangement includes fishing and processing fixtures", lakeshore.any(func(node): return node.get_meta("t05_asset_id", "") == "fishing_rack") and lakeshore.any(func(node): return node.get_meta("t05_asset_id", "") == "cooker_processor"))
 	check("Lakeshore visual batches to 10 material surfaces", kit.batched_visual.mesh.get_surface_count() == 10)
 	check("Lakeshore batch remains below the 48 draw-call ceiling", kit.batched_visual.mesh.get_surface_count() <= 48)
-	check("Lakeshore batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 35052)
+	check("Lakeshore batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 41160)
 
 	print(JSON.stringify({
 		"suite": "T05_station_and_prop_kit",
