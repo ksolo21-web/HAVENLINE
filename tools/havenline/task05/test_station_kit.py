@@ -74,7 +74,11 @@ def main():
     storage=sum((ASSET_DIR/(row['id']+'.glb')).stat().st_size for row in entries)
     assert 1673036 < storage <= 15*1024*1024
     palette={m for row in entries for m in row['materials']}
-    assert palette=={'snow','cream','wood','wood_light','metal','blue','cyan','orange','yellow','green','red','dark'}
+    # R07 replaces the generic red jerrycan with a Havenline blue/orange
+    # canister. Red was used nowhere else, so the active palette intentionally
+    # contracts from 12 slots to 11 while the hard ceiling remains 12.
+    assert palette=={'snow','cream','wood','wood_light','metal','blue','cyan','orange','yellow','green','dark'}
+    assert len(palette)==11 and int(catalog['performance_contract']['visible_materials_max'])==12
 
     # R07 reference rebuild gate. These exact legacy hashes are forbidden so a
     # future regeneration cannot silently restore the primitive pickup props.
@@ -142,7 +146,7 @@ def main():
     arrangements=catalog['arrangements']
     assert {name:len(rows) for name,rows in arrangements.items()}=={'camp':11,'lakeshore':10}
     assert arrangements=={name:[{'id':i,'position':list(p),'rotation_y':r} for i,p,r in rows] for name,rows in legacy.ARRANGEMENTS.items()}
-    triangle_floors={'camp':37108,'lakeshore':9456};surfaces={'camp':12,'lakeshore':10}
+    triangle_floors={'camp':37108,'lakeshore':9456};surfaces={'camp':11,'lakeshore':10}
     for name,placements in arrangements.items():
         assert len({r['id'] for r in placements})==len(placements)
         assert sum(by_id[r['id']]['triangles'] for r in placements)>triangle_floors[name]
