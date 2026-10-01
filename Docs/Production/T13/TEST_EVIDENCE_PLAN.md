@@ -198,7 +198,7 @@ Must verify deterministic decision/state consistency, bounded/error behavior, ex
 Must verify challenge behavior reinforces Havenline's physical/simple-context loop, avoids unnecessary control complexity or management-game drift, and makes the elevated GM profile harder through coherent world pressure rather than arbitrary grind.
 
 ### C4 — Gameplay UX / Readability Critic
-Must verify danger, recovery, world-response and next-action clarity across challenge changes; escalation/de-escalation must remain understandable at gameplay scale without clutter, hidden friction, or unreadable feedback.
+Must verify danger, recovery, world-response and next-action clarity across challenge changes; escalation/de-escalation must remain understandable at gameplay scale without clutter, hidden friction, or unreadable feedback. T13 satisfies its nonvisual ownership boundary through the deterministic `t13.readability.v1` decision contract: danger band/rank, transition state, world-response cue/profile/directives, next-action cue, and explicit preservation of upstream interaction-target, collection-feedback, and resource-destination clarity. Rendering and final player-facing copy remain downstream-owned; T13 must not add duplicate controls merely to satisfy review evidence.
 
 ### C6 — Performance Critic
 Must quantitatively verify bounded Challenge Director CPU/frame-time and memory cost, no per-frame full-history/full-world rebuild, no avoidable allocation spikes, and preserved mobile performance headroom on the exact candidate. C6 is the quantitative specialist gate.

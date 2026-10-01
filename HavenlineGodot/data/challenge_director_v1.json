@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "policy_id": "t13.challenge.v1",
+  "policy_version": "1.0.0",
+  "bands": [
+    {
+      "band_id": "shelter",
+      "pressure_profile_id": "recovery_space",
+      "pressure_directives": [
+        "recovery_space"
+      ],
+      "threat_budget_multiplier": 0.9,
+      "recovery_window_multiplier": 1.14,
+      "wave_delay_multiplier": 1.12,
+      "raw_enemy_hp_multiplier": 0.94,
+      "raw_enemy_damage_multiplier": 0.92,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 0
+    },
+    {
+      "band_id": "settled",
+      "pressure_profile_id": "route_intro",
+      "pressure_directives": [
+        "route_pressure"
+      ],
+      "threat_budget_multiplier": 0.94,
+      "recovery_window_multiplier": 1.1,
+      "wave_delay_multiplier": 1.08,
+      "raw_enemy_hp_multiplier": 0.96,
+      "raw_enemy_damage_multiplier": 0.95,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 0
+    },
+    {
+      "band_id": "steady",
+      "pressure_profile_id": "weather_intro",
+      "pressure_directives": [
+        "weather_overlap"
+      ],
+      "threat_budget_multiplier": 0.99,
+      "recovery_window_multiplier": 1.06,
+      "wave_delay_multiplier": 1.04,
+      "raw_enemy_hp_multiplier": 0.98,
+      "raw_enemy_damage_multiplier": 0.98,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 0
+    },
+    {
+      "band_id": "alert",
+      "pressure_profile_id": "dual_pressure",
+      "pressure_directives": [
+        "route_pressure",
+        "weather_overlap"
+      ],
+      "threat_budget_multiplier": 1.05,
+      "recovery_window_multiplier": 1.02,
+      "wave_delay_multiplier": 1,
+      "raw_enemy_hp_multiplier": 1,
+      "raw_enemy_damage_multiplier": 1.01,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 0
+    },
+    {
+      "band_id": "pressure",
+      "pressure_profile_id": "coordination",
+      "pressure_directives": [
+        "coordination_pressure"
+      ],
+      "threat_budget_multiplier": 1.12,
+      "recovery_window_multiplier": 0.98,
+      "wave_delay_multiplier": 0.97,
+      "raw_enemy_hp_multiplier": 1.02,
+      "raw_enemy_damage_multiplier": 1.04,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 0
+    },
+    {
+      "band_id": "hard",
+      "pressure_profile_id": "mixed_routes",
+      "pressure_directives": [
+        "mixed_group_pressure",
+        "route_pressure"
+      ],
+      "threat_budget_multiplier": 1.2,
+      "recovery_window_multiplier": 0.94,
+      "wave_delay_multiplier": 0.94,
+      "raw_enemy_hp_multiplier": 1.04,
+      "raw_enemy_damage_multiplier": 1.07,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 0
+    },
+    {
+      "band_id": "severe",
+      "pressure_profile_id": "flanking_weather",
+      "pressure_directives": [
+        "flanking_pressure",
+        "weather_overlap"
+      ],
+      "threat_budget_multiplier": 1.28,
+      "recovery_window_multiplier": 0.91,
+      "wave_delay_multiplier": 0.91,
+      "raw_enemy_hp_multiplier": 1.06,
+      "raw_enemy_damage_multiplier": 1.1,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 1
+    },
+    {
+      "band_id": "critical",
+      "pressure_profile_id": "concurrent_mix",
+      "pressure_directives": [
+        "concurrent_objective_pressure",
+        "mixed_group_pressure"
+      ],
+      "threat_budget_multiplier": 1.36,
+      "recovery_window_multiplier": 0.88,
+      "wave_delay_multiplier": 0.88,
+      "raw_enemy_hp_multiplier": 1.08,
+      "raw_enemy_damage_multiplier": 1.13,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 1
+    },
+    {
+      "band_id": "extreme",
+      "pressure_profile_id": "multi_axis",
+      "pressure_directives": [
+        "flanking_pressure",
+        "route_pressure",
+        "weather_overlap"
+      ],
+      "threat_budget_multiplier": 1.43,
+      "recovery_window_multiplier": 0.85,
+      "wave_delay_multiplier": 0.85,
+      "raw_enemy_hp_multiplier": 1.1,
+      "raw_enemy_damage_multiplier": 1.16,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 1
+    },
+    {
+      "band_id": "apex",
+      "pressure_profile_id": "apex_coordination",
+      "pressure_directives": [
+        "concurrent_objective_pressure",
+        "mixed_group_pressure",
+        "flanking_pressure",
+        "coordination_pressure"
+      ],
+      "threat_budget_multiplier": 1.5,
+      "recovery_window_multiplier": 0.82,
+      "wave_delay_multiplier": 0.82,
+      "raw_enemy_hp_multiplier": 1.12,
+      "raw_enemy_damage_multiplier": 1.2,
+      "resource_yield_multiplier": 1,
+      "concurrent_emergency_bonus": 2
+    }
+  ],
+  "normal_profile": {
+    "profile_id": "NORMAL",
+    "level_band_size": 10,
+    "minimum_band_index": 0,
+    "maximum_band_index": 9
+  },
+  "thresholds": {
+    "minimum_attempts_for_escalation": 4,
+    "escalation_success_rate": 0.8,
+    "escalation_fast_completions": 2,
+    "escalation_strong_streak": 2,
+    "recovery_failure_rate": 0.5,
+    "recovery_down_count": 2,
+    "recovery_abandonment_count": 2,
+    "recovery_struggle_streak": 1,
+    "deep_recovery_struggle_streak": 3
+  },
+  "limits": {
+    "maximum_count": 1000000,
+    "maximum_streak": 64,
+    "maximum_progression_intents": 128,
+    "maximum_up_steps_per_evaluation": 1,
+    "maximum_down_steps_per_evaluation": 1
+  },
+  "gm_profile": {
+    "profile_id": "GM_CHALLENGE",
+    "threat_target_ratio": 1.35,
+    "threat_min_ratio": 1.25,
+    "threat_max_ratio": 1.6,
+    "threat_strong_ratio": 1.45,
+    "recovery_window_ratio": 0.85,
+    "wave_delay_ratio": 0.85,
+    "raw_enemy_hp_ratio": 1.05,
+    "raw_enemy_hp_ratio_cap": 1.1,
+    "raw_enemy_damage_ratio": 1.08,
+    "raw_enemy_damage_ratio_cap": 1.15,
+    "concurrent_emergency_bonus": 1,
+    "resource_yield_penalty_allowed": false,
+    "no_new_permanent_controls": true,
+    "absolute_threat_budget_multiplier_cap": 2.4,
+    "absolute_enemy_hp_multiplier_cap": 1.232,
+    "absolute_enemy_damage_multiplier_cap": 1.38,
+    "absolute_concurrent_emergency_bonus_cap": 3,
+    "extra_pressure_directives": [
+      "coordination_pressure",
+      "mixed_group_pressure",
+      "flanking_pressure",
+      "weather_overlap",
+      "route_pressure",
+      "concurrent_objective_pressure"
+    ]
+  },
+  "upgrade_protection": {
+    "minimum_meaningful_upstream_gain_ratio": 1.1,
+    "maximum_immediate_threat_counter_ratio": 1.075,
+    "minimum_preserved_advantage_ratio": 1.02,
+    "milestone_metadata_is_scoring_input": false
+  }
+}
