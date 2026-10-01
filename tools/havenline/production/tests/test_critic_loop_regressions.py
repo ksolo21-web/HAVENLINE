@@ -162,6 +162,14 @@ class CriticLoopRegressionTests(unittest.TestCase):
         self.assertNotIn("CAUSALLY_GOVERNED_T03_REPAIR", workflow)
         self.assertNotIn("allowed=ownership['aliases']['@ownership:T03']", workflow)
 
+    def test_long_lived_pr_scope_uses_current_merge_parent_not_creation_base_sha(self):
+        workflow = (ROOT / ".github/workflows/havenline-production-governance.yml").read_text()
+        self.assertIn("Resolve trusted integration authority", workflow)
+        self.assertIn("trusted_integration=$(git rev-parse HEAD^1)", workflow)
+        self.assertIn('base="$HAVENLINE_TRUSTED_INTEGRATION_HEAD"', workflow)
+        self.assertNotIn("SCOPE_PR_BASE:", workflow)
+        self.assertNotIn('base="$SCOPE_PR_BASE"', workflow)
+
     def test_repair_policy_blocks_evidence_only_loop_after_real_defect(self):
         policy = (PRODUCTION / "validate_repair_cycle.py").read_text()
         self.assertIn("two-strike rule blocks evidence-only rerun", policy)
