@@ -3,8 +3,7 @@ on:
   push:
     branches: ['havenline/T05-visual-repair-20260926', 'havenline/T03-reference-art-20260926']
     paths:
-      - 'tools/havenline/task05/generate_station_kit.py'
-      - 'tools/havenline/task05/test_station_kit.py'
+      - 'tools/havenline/task05/**'
       - '.github/workflows/havenline-task05-station-kit-candidate.yml'
       - 'tools/havenline/task03_reference_assets.py'
       - 'tools/havenline/task03_mesh_authoring.py'

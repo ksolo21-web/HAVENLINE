@@ -1,15 +1,28 @@
 #!/usr/bin/env python3
-"""Generate the T05 kit with one explicitly selected reference-hearth replacement.
-The other 21 assets and all gameplay metadata remain bound to the legacy source.
+"""Generate the T05 kit with bounded reference-driven visual overrides.
+
+R10T materialization preserves the reference-driven irregular snow grounding and
+strengthened service/defense silhouettes discovered in actual Godot captures.
+
+R01 keeps the approved reference-hearth replacement. R07 rebuilds the eight resource props, R03 rebuilds the physical pads, and R10 overrides the confirmed primitive-looking counter/defense families against the user's supplied HAVENLINE renders. IDs, footprints, sockets, arrangements, gameplay metadata and the existing palette remain authoritative.
 """
 from __future__ import annotations
 import hashlib,json,struct
 from pathlib import Path
 import legacy_station_kit_v1 as legacy
 from reference_hearth_v4 import build_legacy
+from reference_resource_props_v2 import build_resource_props
+from reference_ground_pads_v2 import build_ground_pads
+from reference_station_families_v3 import build_station_families
+from reference_utility_stations_v3 import build_utility_stations
+from styled_station_glb import pack_styled_glb
+# R10B utility/processing rebuild is canonical and visually gated before T05 approval.
+# R10B_MATERIALIZER_TRIGGER_20260927: materialize the canonical utility rebuild before exact-source render review.
+# R10D_MATERIALIZER_TRIGGER_20260927: bind the reference-builder cooker rebuild to generated GLB/catalog bytes.\n# R10G_MATERIALIZER_TRIGGER_20260927: materialize the latest station silhouette repair and footprint guard.\n# R10T_MATERIALIZER_TRIGGER_20260927: remove primitive snow slabs and strengthen service/defense silhouettes from actual rendered review.\n# R03_SOURCE_SCOPE: physical camp-platform visuals only; contracts remain frozen.
 
 ROOT=Path(__file__).resolve().parents[3]
 OUT=ROOT/'HavenlineGodot/assets/stations_v2'
+EXPECTED_HEARTH_SHA256='6d32499229dd22dde1ee32940bb1b0a506a0647ea911a4787b3bce83fe60a8e7'
 
 
 def preserve_shared_palette(path):
@@ -32,7 +45,12 @@ def preserve_shared_palette(path):
 
 def main():
     OUT.mkdir(parents=True,exist_ok=True)
-    assets=legacy.asset_specs();assets['hearth_vessel']=build_legacy(legacy.MeshBuilder)
+    assets=legacy.asset_specs()
+    assets.update(build_resource_props())
+    assets.update(build_ground_pads())
+    assets.update(build_station_families())
+    assets.update(build_utility_stations())
+    assets['hearth_vessel']=build_legacy(legacy.MeshBuilder)
     expected={asset_id+'.glb' for asset_id in assets}
     for path in OUT.glob('*.glb'):
         if path.name not in expected:raise RuntimeError('Unexpected authored asset; refusing deletion: '+str(path))
@@ -40,9 +58,16 @@ def main():
     for asset_id in sorted(assets):
         builder=assets[asset_id];path=OUT/(asset_id+'.glb')
         if asset_id=='hearth_vessel':
-            builder.reference_model.export_glb(path)
-            preserve_shared_palette(path)
-        else:legacy.pack_glb(builder,path)
+            # R01-V4 is already source-bound and visually repaired. R07 does
+            # not own it, so never re-export the furnace on another CI host:
+            # tiny cross-host floating differences must not mutate approved art.
+            # Fail closed if the exact approved bytes are absent or altered.
+            if not path.exists():
+                raise RuntimeError('Missing approved R01-V4 hearth_vessel.glb')
+            actual=hashlib.sha256(path.read_bytes()).hexdigest()
+            if actual!=EXPECTED_HEARTH_SHA256:
+                raise RuntimeError(f'R01-V4 hearth bytes drifted: {actual}')
+        else:pack_styled_glb(builder,path)
         footprint,requirement,later_task,sockets=legacy.METADATA[asset_id]
         entry={'id':asset_id,'asset':'res://assets/stations_v2/'+path.name,
                'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),
@@ -54,7 +79,7 @@ def main():
         entries.append(entry)
     catalog={'schema_version':1,'authority_id':'T05-station-kit-v1',
              'generator':'tools/havenline/task05/generate_station_kit.py',
-             'art_language':'bright sculpted winter production kit; shared blue/orange/yellow machinery with warm timber and snow contact',
+             'art_language':'reference-driven sculpted winter production kit; chunky readable forms, layered timber/metal, authored vertex-color surface variation, localized snow loading and blue/orange/yellow Havenline identity',
              'requirements':[f'T05-R{i:02d}' for i in range(1,13)],'entries':entries,
              'arrangements':{name:[{'id':i,'position':list(p),'rotation_y':r} for i,p,r in rows] for name,rows in legacy.ARRANGEMENTS.items()},
              'performance_contract':{'triangles_max':180000,'draw_calls_max':48,'visible_materials_max':12,'texture_memory_mib_max':96,'storage_delta_mib_max':15,'active_physics':0,'skeletons':0,'animations':0,'population':0},

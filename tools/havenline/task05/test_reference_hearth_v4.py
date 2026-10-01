@@ -44,12 +44,20 @@ def verify():
         try:apply_baked_occlusion(broken)
         except ValueError:pass
         else:raise AssertionError('stale bake accepted: '+mutation)
-    # Model-space contracts and the other 21 authored binaries remain preserved.
-    assert preserved['unchanged_nonhearth_assets']==21
+    # Model-space contracts remain frozen while every non-hearth T05 family is
+    # now intentionally owned by R07/R03/R10/R10B and gated separately.
+    assert preserved['unchanged_nonhearth_nonresource_nonpad_assets']==0
+    assert preserved['intentionally_rebuilt_r07_assets']==8
+    assert preserved['intentionally_rebuilt_r03_assets']==6
+    assert preserved['intentionally_rebuilt_r10_assets']==3
+    assert preserved['intentionally_rebuilt_r10b_utility_assets']==4
     return {'passed':True,'closed_outward_components':238,'hearth_triangles':25968,
             'vertex_occlusion_count':VERTEX_COUNT,'geometry_bound_bake':True,
             'new_hostile_controls_rejected':4,'preserved_v3_regression':preserved,
-            'unchanged_nonhearth_assets':21,'visual_approval':False,'independent_critic':False}
+            'unchanged_nonhearth_nonresource_nonpad_assets':0,'intentionally_rebuilt_r07_assets':8,
+            'intentionally_rebuilt_r03_assets':6,'intentionally_rebuilt_r10_assets':3,
+            'intentionally_rebuilt_r10b_utility_assets':4,
+            'visual_approval':False,'independent_critic':False}
 
 
 if __name__=='__main__':print(json.dumps(verify(),indent=2))

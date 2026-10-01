@@ -1,0 +1,57 @@
+{
+  "task": "T05-R10 station-family visual rebuild",
+  "status": "MATERIALIZED_AWAITING_RENDER_VALIDATION",
+  "primary_visual_reference": "18607.png",
+  "secondary_polish_reference": "18608.png",
+  "repaired_families": [
+    "service_counter",
+    "processing_counter",
+    "defense_platform"
+  ],
+  "preserved_families": [
+    "hearth_vessel R01-V4",
+    "R07 resource props",
+    "R03 ground pads"
+  ],
+  "source_commits": {
+    "checkpoint": "6b537e8957addc916db8f0f3357da5b6656dd1bf",
+    "authored_builders": "27d44a097c92e78f9eca665e099900be824b279e",
+    "generator_binding": "de88e8758bdece3c249eed5996dcef528150ebe6",
+    "r10a_wrapper": "4343954b9baa7f83a24bd6be1aab584a9ed39d56",
+    "conventional_core": "90d6cfd8b7ea1c070e1040df407d22d0ee133e2a",
+    "r10a_binding": "1042e40c83b26d729f9c9b537980f2e94d3947d4",
+    "freeze_proof": "e9fdab54f1cf23c883192dff61b2dfa448c72aa9",
+    "v4_preservation_proof": "b05689e3103ec60d1ed2c41db720472707af7366",
+    "materialized_exact_source": "f82b41723f914312fe9f3085177acaf2cddd7f66"
+  },
+  "generation_result": {
+    "assets": 22,
+    "triangles": 69208,
+    "materializer_run": 36313859950,
+    "materializer_conclusion": "success",
+    "generated_outputs_committed": true,
+    "exact_source": "f82b41723f914312fe9f3085177acaf2cddd7f66"
+  },
+  "blocker": {
+    "previous": "camp material-surface union dropped from 11 to 10 after R10 v2",
+    "resolution": "reference_station_families_v3 adds a purposeful cyan insulated tray to service_counter while preserving footprint and contracts",
+    "resolved": true,
+    "verified_generation_triangles": 69208
+  },
+  "previous_exact_source_gate": {
+    "source": "7804b88e5b9d6bac84198f0da6a43f948839ea53",
+    "run": 36310640999,
+    "source_integrity_passed": true,
+    "engine_suite_reached": true,
+    "render_stage_reached": false,
+    "note": "Godot station-kit assertions still contained pre-R07/R03 exact totals, so this run cannot be used for visual approval"
+  },
+  "acceptance": {
+    "actual_godot_multi_angle_evidence": false,
+    "gameplay_distance_evidence": false,
+    "critic_score_over_9": false,
+    "task_approved": false,
+    "physical_4k60_verified": false
+  },
+  "next_action": "Run the exact materialized source through T05 Godot acceptance and capture multi-angle/detail/gameplay/native evidence; inspect station, resource and pad families against supplied HAVENLINE renders before any visual approval."
+}
