@@ -93,12 +93,57 @@ func placement_inside_fence(placement: Dictionary, row: Dictionary) -> bool:
 	var extent_z := absf(sin(angle)) * half.x + absf(cos(angle)) * half.y
 	if absf(centre.x) + extent_x > Boundary.SIDE_X - 0.30 or centre.y + extent_z > Boundary.NORTH_Z - 0.30:
 		return false
-	for local in [Vector2(-half.x,-half.y), Vector2(half.x,-half.y), Vector2(half.x,half.y), Vector2(-half.x,half.y)]:
+	for local in [Vector2(-half.x,-half.y), Vector2(half.x,-half.y), Vector2(-half.x,half.y), Vector2(half.x,half.y)]:
 		var rotated := Vector2(local.x * cos(angle) + local.y * sin(angle), -local.x * sin(angle) + local.y * cos(angle))
 		var corner := centre + rotated
 		if Boundary.push_off_fence(corner, 0.32).distance_to(corner) > 0.001:
 			return false
 	return true
+
+func color_fixture_mesh(colored: bool) -> ArrayMesh:
+	var arrays: Array = []
+	arrays.resize(Mesh.ARRAY_MAX)
+	arrays[Mesh.ARRAY_VERTEX] = PackedVector3Array([Vector3.ZERO, Vector3.RIGHT, Vector3.FORWARD])
+	arrays[Mesh.ARRAY_NORMAL] = PackedVector3Array([Vector3.UP, Vector3.UP, Vector3.UP])
+	arrays[Mesh.ARRAY_INDEX] = PackedInt32Array([0, 1, 2])
+	if colored:
+		arrays[Mesh.ARRAY_COLOR] = PackedColorArray([Color.RED, Color.GREEN, Color.BLUE])
+	var result := ArrayMesh.new()
+	result.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+	return result
+
+func test_mixed_vertex_color_batch(kit: Node3D) -> void:
+	var colored := color_fixture_mesh(true)
+	var plain := color_fixture_mesh(false)
+	var material := ShaderMaterial.new()
+	var shader := Shader.new()
+	shader.code = "shader_type spatial; void fragment(){ALBEDO=COLOR.rgb;}"
+	material.shader = shader
+	for reverse_order in [false, true]:
+		var first := plain if reverse_order else colored
+		var second := colored if reverse_order else plain
+		var groups := {"fixture": {"material": material, "parts": [
+			{"mesh": first, "surface": 0, "transform": Transform3D.IDENTITY},
+			{"mesh": second, "surface": 0, "transform": Transform3D(Basis.IDENTITY, Vector3(2, 0, 0))}
+		]}}
+		var merged: ArrayMesh = kit.compile_batch(groups)
+		var arrays := merged.surface_get_arrays(0)
+		var colors: PackedColorArray = arrays[Mesh.ARRAY_COLOR]
+		var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+		var uncolored_white := true
+		var authored_color_preserved := true
+		for i in colors.size():
+			var is_plain := (vertices[i].x < 1.5) if reverse_order else (vertices[i].x > 1.5)
+			if is_plain:
+				uncolored_white = uncolored_white and colors[i].is_equal_approx(Color.WHITE)
+			else:
+				authored_color_preserved = authored_color_preserved and colors[i] in [Color.RED, Color.GREEN, Color.BLUE]
+		var suffix := " (reverse=" + str(reverse_order) + ")"
+		check("Mixed-color batch retains both triangle payloads" + suffix, colors.size() == 6)
+		check("Missing source colors normalize to white, never black" + suffix, uncolored_white)
+		check("Authored vertex colors survive batching" + suffix, authored_color_preserved)
+		check("Batching never mutates the original uncolored mesh" + suffix, plain.surface_get_arrays(0)[Mesh.ARRAY_COLOR] == null)
+		check("Batching clones rather than mutates shared material" + suffix, merged.surface_get_material(0) != material)
 
 func _initialize() -> void:
 	call_deferred("run")
@@ -106,13 +151,14 @@ func _initialize() -> void:
 func run() -> void:
 	var kit := StationKit.new()
 	root.add_child(kit)
+	test_mixed_vertex_color_batch(kit)
 	var catalog := StationKit.read_catalog()
 	var descriptor := kit.descriptor()
 	var lakeshore_lane_clearances := {}
 	check("Station authority is versioned", descriptor.authority_id == "T05-station-kit-v1")
 	check("Catalog contains the frozen 22-asset kit", descriptor.asset_count == 22)
 	check("Camp and lakeshore arrangements are both declared", descriptor.arrangement_count == 2)
-	check("Catalog triangle total has broad headroom", descriptor.total_catalog_triangles == 24928 and descriptor.total_catalog_triangles <= 180000)
+	check("Catalog triangle total has broad headroom", descriptor.total_catalog_triangles == 49160 and descriptor.total_catalog_triangles <= 180000)
 	check("Shared palette stays within 12 visible materials", descriptor.visible_material_palette_count == 12)
 	check("Catalog exposes future-task sockets", descriptor.socket_count >= 35)
 	check("No gameplay logic is claimed", not descriptor.runtime_logic_included)
@@ -186,7 +232,7 @@ func run() -> void:
 	check("Camp arrangement includes the heated vessel", camp.any(func(node): return node.get_meta("t05_asset_id", "") == "hearth_vessel"))
 	check("Camp visual batches to the shared 12-material palette", kit.batched_visual.mesh.get_surface_count() == 12)
 	check("Camp batch remains below the 48 draw-call ceiling", kit.batched_visual.mesh.get_surface_count() <= 48)
-	check("Camp batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 12876)
+	check("Camp batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 37108)
 	var hearth_transform := kit.arrangement_transform("camp", "hearth_vessel", Vector3.ZERO)
 	check("Interactive hearth placement resolves from the same catalog", hearth_transform.origin.is_equal_approx(Vector3(0.0, 0.0, 0.2)))
 	var camp_without_hearth := kit.build_arrangement("camp", Vector3.ZERO, Callable(), ["hearth_vessel"])

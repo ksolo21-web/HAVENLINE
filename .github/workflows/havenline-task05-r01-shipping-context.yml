@@ -1,0 +1,55 @@
+name: Havenline T05 R01 actual-scene context evidence
+on:
+  push:
+    branches: ['havenline/T05-visual-repair-20260926']
+    paths:
+      - 'Docs/Production/T05/R01_V4_MATERIALIZED.json'
+      - 'tools/havenline/task05/capture_r01_shipping_context.py'
+      - '.github/workflows/havenline-task05-r01-shipping-context.yml'
+permissions:
+  contents: read
+concurrency:
+  group: havenline-t05-r01-context-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  shipping-context:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Verify committed R01-only source boundary
+        run: |
+          set -euo pipefail
+          mkdir -p task05-r01-context
+          python3 tools/havenline/task05/verify_r01_v4_scope.py --head "$GITHUB_SHA" | tee task05-r01-context/source-proof.json
+          python3 -m py_compile tools/havenline/task05/capture_r01_shipping_context.py
+      - name: Prepare checksum-pinned renderer and unchanged runtime fixtures
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install --disable-pip-version-check numpy pillow
+          mkdir -p "$RUNNER_TEMP/engine"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+          python3 tools/havenline/bake_outpost_audio.py > task05-r01-context/audio-fixture.json
+          timeout 240 "$engine" --headless --editor --path HavenlineGodot --import --quit > task05-r01-context/import.log 2>&1
+          timeout 120 "$engine" --headless --audio-driver Dummy --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task05-r01-context/motion-fixture.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task05-r01-context/import.log task05-r01-context/motion-fixture.log; then exit 1; fi
+      - name: Capture phone tablet firebox night blizzard and upgraded states
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          python3 tools/havenline/task05/capture_r01_shipping_context.py --engine "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --source "$GITHUB_SHA" --out task05-r01-context | tee task05-r01-context/execution.log
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: t05-r01-shipping-context-${{ github.sha }}
+          path: task05-r01-context
+          if-no-files-found: error
+          retention-days: 14
