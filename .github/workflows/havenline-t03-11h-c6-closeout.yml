@@ -1,0 +1,120 @@
+name: Havenline T03 11H C6 closeout
+
+on:
+  push:
+    branches:
+      - codex/havenline-sequential-task-01
+    paths:
+      - .github/workflows/havenline-t03-11h-c6-closeout.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  CANDIDATE: e1e7bb2d68d1d53025d1242011ad4c885f08c307
+  PARENT: 2e51ad0d4a9c9ea41fad049066aa585447ad0435
+
+jobs:
+  c6_closeout:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 36228102780
+          name: havenline-t03-reference-repair-36228102780
+          path: t03-repair
+
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 36240885422
+          name: t03-reference-repair-visual-gate-36240885422
+          path: visual-gate
+
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+
+      - name: Run independent C6 against exact 11H delta
+        run: python3 -u .github/scripts/havenline_t03_c6_closeout.py
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: t03-11h-C6-closeout-${{ github.run_id }}
+          path: c6-closeout/
+          retention-days: 30
+          if-no-files-found: error
+
+  final_gate:
+    needs: c6_closeout
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: 36240885422
+          name: t03-reference-repair-visual-gate-36240885422
+          path: visual
+
+      - uses: actions/download-artifact@v4
+        with:
+          name: t03-11h-C6-closeout-${{ github.run_id }}
+          path: c6
+
+      - name: Bind green visual gate to C6 closeout
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,math
+          candidate="e1e7bb2d68d1d53025d1242011ad4c885f08c307"
+          visual=json.loads(next(Path("visual").rglob("result.json")).read_text())
+          c6=json.loads(next(Path("c6").rglob("critic-record.json")).read_text())
+          assert visual["candidate"]==candidate
+          assert visual["passed"] is True
+          assert visual["visual_strictly_gt_9"] is True
+          assert c6["candidate_hash"]==candidate
+          assert c6["critic_id"]=="C6"
+          assert c6["passed"] is True
+          assert c6["coverage_complete"] is True
+          assert c6["confidence"] in ("medium","high")
+          assert c6["defects"]==[]
+          assert len(c6["scores"])==9
+          assert all(type(v) in (int,float) and not isinstance(v,bool) and math.isfinite(v) and v>9.0 for v in c6["scores"].values())
+          out={
+            "task":"T03",
+            "candidate":candidate,
+            "evidence_run":36228102780,
+            "visual_run":36240885422,
+            "C1_C2_strictly_gt_9":True,
+            "C6_scores":c6["scores"],
+            "C6_minimum":min(c6["scores"].values()),
+            "machine_and_critic_gate_passed":True,
+            "final_native_success_required_after_this_gate":True,
+            "task_approved":False
+          }
+          Path("final").mkdir()
+          Path("final/result.json").write_text(json.dumps(out,indent=2)+"\n")
+          print(json.dumps(out,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: t03-11h-final-closeout-${{ github.run_id }}
+          path: final/
+          retention-days: 30
+          if-no-files-found: error

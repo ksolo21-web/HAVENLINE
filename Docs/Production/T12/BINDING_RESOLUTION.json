@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "status": "RESOLVED_FOR_ACTIVATION",
+  "purpose": "Activation-time proof reconciling exact accepted T10/T11 public identifiers against the exact post-T11 integration lineage. Resolution is read-only evidence for T12 fact-slot binding.",
+  "dependencies": {
+    "T10": {
+      "accepted_integrated_source": "eba0107def258824549fb10d81785290d0c81d97",
+      "verified_completion_path": "Docs/Production/T10/verified-completion.json",
+      "resolved_public_ids": [
+        {
+          "id": "framework_anchor_seed_to_foundation",
+          "kind": "transform_recipe",
+          "source_path": "HavenlineGodot/data/world_transform_recipes.json",
+          "json_pointer": "/recipes/0/recipe_id"
+        },
+        {
+          "id": "framework_anchor_foundation_to_reinforced",
+          "kind": "transform_recipe",
+          "source_path": "HavenlineGodot/data/world_transform_recipes.json",
+          "json_pointer": "/recipes/1/recipe_id"
+        }
+      ]
+    },
+    "T11": {
+      "accepted_integrated_source": "4059e159cb2f47a5ff2e713e60d971132da6c421",
+      "verified_completion_path": "Docs/Production/T11/verified-completion.json",
+      "resolved_public_ids": [
+        {
+          "id": "camp_shelter_foundation",
+          "kind": "camp_recipe_binding",
+          "source_path": "HavenlineGodot/data/camp_construction_recipes.json",
+          "json_pointer": "/builds/0/construction_id"
+        },
+        {
+          "id": "camp_shelter_reinforced",
+          "kind": "camp_recipe_binding",
+          "source_path": "HavenlineGodot/data/camp_construction_recipes.json",
+          "json_pointer": "/builds/1/construction_id"
+        }
+      ]
+    }
+  },
+  "resolved_public_id_shape": {
+    "id": "exact accepted upstream identifier",
+    "kind": "semantic kind such as transform_state, transform_recipe, camp_state, camp_recipe_binding",
+    "source_path": "repository-relative JSON source containing the identifier",
+    "json_pointer": "RFC6901-style pointer resolving to the exact identifier value"
+  },
+  "rules": [
+    "Every resolved ID is proven by an ownership-safe repository source_path plus exact JSON pointer, byte-identical to the accepted dependency commit.",
+    "No provisional/prepared/example/debug/test-only identifier is promoted as a shipping progression binding.",
+    "Resolution is read-only proof. T12 may consume accepted IDs but may not mutate T10/T11 source files or semantics.",
+    "Any missing or ambiguous required ID blocks T12 activation rather than being guessed.",
+    "Every resolved public ID kind is allowed for its owning task, and any T10/T11 shipping binding must use an ID kind compatible with the binding fact_kind."
+  ],
+  "promotion_allowed": true,
+  "allowed_id_kinds_by_task": {
+    "T10": [
+      "transform_state",
+      "transform_recipe"
+    ],
+    "T11": [
+      "camp_state",
+      "camp_recipe_binding"
+    ]
+  },
+  "fact_kind_compatibility": {
+    "world_transform_completed": {
+      "source_task": "T10",
+      "accepted_id_kinds": [
+        "transform_state",
+        "transform_recipe"
+      ]
+    },
+    "camp_state_completed": {
+      "source_task": "T11",
+      "accepted_id_kinds": [
+        "camp_state",
+        "camp_recipe_binding"
+      ]
+    }
+  }
+}

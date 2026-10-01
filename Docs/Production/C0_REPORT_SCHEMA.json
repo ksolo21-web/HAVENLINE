@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0",
+  "role": "Root-Cause Advisor",
+  "non_voting": true,
+  "diagnosis_status_values": [
+    "DIAGNOSIS_COMPLETE",
+    "INSUFFICIENT_EVIDENCE"
+  ],
+  "terminal_class_values": [
+    "PRODUCT_DEFECT",
+    "TOOLING_DEFECT",
+    "GOVERNANCE_DEFECT",
+    "EVIDENCE_DEFECT",
+    "INFRASTRUCTURE_FAILURE",
+    "SUPERSEDED",
+    "MIXED"
+  ],
+  "blocker_class_values": [
+    "PRODUCT_DEFECT",
+    "TOOLING_DEFECT",
+    "GOVERNANCE_DEFECT",
+    "EVIDENCE_DEFECT",
+    "INFRASTRUCTURE_FAILURE",
+    "SUPERSEDED"
+  ],
+  "builder_action_values": [
+    "REPAIR",
+    "RETRY_INFRA",
+    "NO_PRODUCT_CHANGE",
+    "FREEZE_AND_VALIDATE",
+    "BLOCKED"
+  ],
+  "required_report_fields": [
+    "schema_version",
+    "critic_id",
+    "non_voting",
+    "diagnosis_id",
+    "task_id",
+    "failed_candidate",
+    "failed_run_id",
+    "integration_head",
+    "diagnosis_status",
+    "terminal_class",
+    "complete_known_blocker_set",
+    "blockers",
+    "unexecuted_checks",
+    "builder_action",
+    "candidate_freeze",
+    "summary",
+    "confidence"
+  ],
+  "required_blocker_fields": [
+    "id",
+    "classification",
+    "symptom",
+    "evidence",
+    "root_cause",
+    "affected_object",
+    "causal_fix",
+    "files_to_change",
+    "files_not_to_change",
+    "verification"
+  ],
+  "candidate_freeze_contract": {
+    "required": true,
+    "validation_concurrency_policy": "finish_running_sha",
+    "cancelled_run_product_judgment": false
+  }
+}

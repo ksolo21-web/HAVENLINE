@@ -1,0 +1,40 @@
+{
+  "critic_id": "C0R",
+  "reviewer": "/root/recovered_t10_review",
+  "non_voting": true,
+  "decision": "REPAIR_PLAN_ACCEPTED",
+  "scope": "Single hosted180case canary after exactsourcebinding refresh; no otherworkflow/admission changes",
+  "reviewed_commit": "9e23938e59de11e8b7c3e48a7bb79d6ab50a7c44",
+  "reviewed_tree": "a2ae569743749152853fec34d11d279d46d18b01",
+  "file_sha256": {
+    "HavenlineGodot/scripts/world_transform_view.gd": "929ac703384276d488a65fdeb01120439f70e0bf8b335ddf7c7de15f8ce45e02",
+    "tools/havenline/task10/preflight_feedback_layout.gd": "af1f4f668f59a70c4726b01bf996c00d588734b0326f8ae4f94c43fd15406a20",
+    "HavenlineGodot/tests/capture_task10_world_transform.gd": "b1254e02b1529d9ee7aec25a5fdd1cdebfe98fb372c3d930f29c459c7642b522",
+    "tools/havenline/task10/verify_screen_pixel_clearance.py": "36961301f7f3e06a36c8b12bb100393b49b7a6476d1ba0ef2a725ec4f20cd6fa",
+    "tools/havenline/task10/run_screen_pixel_canary.py": "933232b0c598e24731a9d67611c12bee3fbdd37b95a5ba3736ab20e0ba8e25df",
+    ".github/workflows/havenline-rendered-clearance-t10-screen-pixel-canary.yml": "b66a28fa4394d2c1c9665b58d671c196bac06dbe204656883ca5c744a64ff28c",
+    "tools/havenline/task10/admit_screen_pixel_canary.py": "adf494370e566cca67f3da66e75ba2eb270395925ca0bb7d8a41dbdad02bb8e3"
+  },
+  "delta_review": "Exactly2files from93ca358: viewdeletes two redundanttransientworldunitwrites; preflight adds frozenprocess readabilitytransition assertions. Baselinecreationconstant andsolecamera-derivedpixelrealization unchanged.",
+  "verification": {
+    "layout_path": "/tmp/t10-single-sink-layout.json",
+    "layout_sha256": "27bebbedb712201e804d343ac844d668bdabe29c03ac61e0780aba8e2a6610f9",
+    "canonical_cases": 1728,
+    "extreme_projection_cases": 111,
+    "frozen_process_transition_cases": 3,
+    "all_passed": true,
+    "integration_log_path": "/tmp/t10-single-sink-integration.log",
+    "integration_log_sha256": "be95d0b07a523c48059a3607c4f353baf455ba97f85d44c2379bf512b55353bd",
+    "integration_checks": 135,
+    "integration_passed": true,
+    "qualification": "Independent source/diff and retained machine-result review; priorindependent1728+111rerun and11hostedtoolingtests remain applicable exceptexactnewsource transitionchecks nowaddtestedcoverage."
+  },
+  "causal_result": "Removing transientworldunit assignments leaves logicalmeasurementindependent and sole inversecamera realization. Frozenprocess explicitprojection tests confirm.85->1.35->1.0 effectivepixels with noauthority/node changes.",
+  "blockers": [],
+  "conditions": [
+    "Canonicalone-shot record mustbind actualremotecommit/tree andnewviewhash; old93carecord not reusable verbatim.",
+    "Hosted180outputs stillmustbeindependentlyreviewed; no productpass orT11unlock."
+  ],
+  "task_approved": false,
+  "source_edited": false
+}

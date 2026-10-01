@@ -1,0 +1,85 @@
+--- a/HavenlineGodot/scripts/outpost_surface.gd
++++ b/HavenlineGodot/scripts/outpost_surface.gd
+@@ -22,7 +22,7 @@
+ static func work_distance(p: Vector2) -> float:
+ 	var main := rounded_rect(p,WORK_CENTER,WORK_HALF,0.72)
+ 	var bay := rounded_rect(p,BAY_CENTER,BAY_HALF,0.65)
+-	var connector := rounded_rect(p,Vector2(-6.5,-6.8),Vector2(2.25,1.25),0.5)
++	var connector := rounded_rect(p,Vector2(-4.3,-6.8),Vector2(4.45,1.25),0.5)
+ 	return minf(main,minf(bay,connector))
+ 
+ static func coast_shape(q: Vector2) -> float:
+--- a/HavenlineGodot/shaders/outpost_snow.gdshader
++++ b/HavenlineGodot/shaders/outpost_snow.gdshader
+@@ -14,7 +14,7 @@
+ float work_distance(vec2 p) {
+  float a=rounded_rect(p,vec2(0,.3),vec2(9.75,6.7),.72);
+  float b=rounded_rect(p,vec2(-6.5,-9.4),vec2(6.6,1.95),.65);
+- return min(a,min(b,rounded_rect(p,vec2(-6.5,-6.8),vec2(2.25,1.25),.5)));
++ return min(a,min(b,rounded_rect(p,vec2(-4.3,-6.8),vec2(4.45,1.25),.5)));
+ }
+ float shore_distance(vec2 p) {
+  vec2 signed_q=(p-lake_center)/lake_half;vec2 q=abs(signed_q);
+--- a/HavenlineGodot/tests/capture_task02.gd
++++ b/HavenlineGodot/tests/capture_task02.gd
+@@ -48,14 +48,14 @@
+ 		focus_at(Vector2(-7.9,-13.7),Vector3(-13,16,-13),10.0);await snap("lakeshore-rear")
+ 		focus_at(Vector2(9.7,4),Vector3(7,9,12),7.0);await snap("snow-workfloor-join")
+ 		normal_at(Vector2(12.4,0));await snap("approved-forest-contact")
+-		focus_at(Vector2(-6.5,-7),Vector3(0,17,12),9.0);await snap("bay-connection")
++		focus_at(Vector2(-2.5,-7),Vector3(0,17,12),9.0);await snap("bay-connection")
+ 		focus_at(Vector2(-7.9,-13.5),Vector3(0,16,13),9.0)
+ 		for i in range(6):
+ 			game.sim.climate.seconds+=.4;game.outpost_view.sync(game.sim,.4,false)
+ 			await snap("water-motion-%02d"%i)
+-		for i in range(8):
+-			var t:=float(i)/7.0
+-			normal_at(Vector2(0,6.2).lerp(Vector2(-6.5,-9.0),t));await snap("route-camera-%02d"%i)
++		var ground_route: Array[Vector2]=[Vector2(0,6.2),Vector2(2.2,3),Vector2(2.2,-2.2),Vector2(-2.2,-2.2),Vector2(-2.2,-6.8),Vector2(-2.2,-9),Vector2(-4.5,-9),Vector2(-6.5,-9)]
++		for i in range(ground_route.size()):
++			normal_at(ground_route[i]);await snap("route-camera-%02d"%i)
+ 		game.sim.climate.seconds=630.0;game.outpost_view.sync(game.sim,.1,false)
+ 		normal_at(Vector2(-6.5,-9));await snap("lakeshore-night")
+ 	var report={"task":"T02","renderer":RenderingServer.get_current_rendering_method(),"device":RenderingServer.get_video_adapter_name(),"captures":records,"forest":game.reference_forest_evidence,"outpost":game.outpost_view.evidence(game.sim),"camera_views_are_disclosed_qa_states":true,"motion_is_sampled_not_fps_evidence":true,"physical_phone_tablet_4k60_verified":false,"task_approved":false}
+--- a/HavenlineGodot/tests/test_task02_surface_stress.gd
++++ b/HavenlineGodot/tests/test_task02_surface_stress.gd
+@@ -1,5 +1,6 @@
+ extends SceneTree
+ const Surface=preload("res://scripts/outpost_surface.gd")
++const Scenery=preload("res://scripts/scenery_batch.gd")
+ const Sim=preload("res://scripts/outpost_simulation.gd")
+ var checks: Array=[]
+ var failures: Array=[]
+@@ -22,12 +23,17 @@
+ 	check("Every sampled projected point is above water with clearance",bank_clear)
+ 	# Vector2 is float32; 0.0001 world units is the comparison tolerance at
+ 	# original bound coordinates, not an expansion of the navigation boundary.
+-	var paths: Array=[];var unobstructed:=true;var route_length:=0.0
++	var paths: Array=[];var unobstructed:=true;var route_length:=0.0;var avoids_buildings:=true
++	var station_bounds: Array[AABB]=[]
++	for record in [["shelter",Vector3(-6.6,0,-4.8),-.12],["shelter",Vector3(6.6,0,-4.8),.12],["furnace",Vector3(0,0,.2),0.0],["storage",Vector3(-2.8,0,2.25),0.0]]:
++		var scene=load("res://assets/environment_v2/%s.glb"%record[0])
++		var box: AABB=Transform3D(Basis(Vector3.UP,record[2]),record[1])*Scenery.compile(scene).get_aabb()
++		station_bounds.append(box.grow(.25))
+ 	# The exact connected workfloor route used by the capture camera, tested with
+ 	# actual velocity/acceleration simulation rather than teleporting a marker.
+ 	var sim:=Sim.new();sim.threats_enabled=false;sim.rescue_enabled=false
+ 	sim.population.enabled_templates.clear();sim.position=Vector2(0,6.2)
+-	for target in [Vector2(0,3),Vector2(-5,0),Vector2(-6.5,-7),Vector2(-6.5,-9),Vector2(-6.5,-11.3)]:
++	for target in [Vector2(2.2,3),Vector2(2.2,-2.2),Vector2(-2.2,-2.2),Vector2(-2.2,-6.8),Vector2(-2.2,-9),Vector2(-6.5,-9),Vector2(-6.5,-11.3)]:
+ 		var reached:=false
+ 		for frame in range(900):
+ 			var delta: Vector2=target-sim.position
+@@ -36,9 +42,12 @@
+ 			sim.step(1.0/60.0,delta.normalized()*minf(1.0,delta.length()*2.),false)
+ 			route_length+=sim.position.distance_to(old)
+ 			unobstructed=unobstructed and Surface.lake_distance(sim.position)>.319
++			for box in station_bounds:
++				if sim.position.x>box.position.x and sim.position.x<box.end.x and sim.position.y>box.position.z and sim.position.y<box.end.z:avoids_buildings=false
+ 		paths.append({"target":[target.x,target.y],"reached":reached,"position":[sim.position.x,sim.position.y]})
+ 		check("Existing controls reach dry waypoint "+str(target),reached)
+ 	check("The full workfloor-to-shore walk never crosses water",unobstructed)
++	check("Ground route avoids all actual cabin/furnace/storage bounds plus clearance",avoids_buildings)
+ 	var all_saved:=true
+ 	for offset in [Vector2.ZERO,Vector2(4,0),Vector2(-4,0),Vector2(0,1.1),Vector2(0,-1.1)]:
+ 		sim.position=Surface.LAKE_CENTER+offset;sim.inventory.wood=321;sim.stored.stone=765

@@ -1,0 +1,99 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-21",
+  "purpose": "Preserve T09 branch-head provenance before stale branch cleanup while retaining the approved task branch, open-PR dependencies and all T01-T70 task information.",
+  "authoritative_integration_branch": "codex/havenline-sequential-task-01",
+  "approved_t09_candidate": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "keep": {
+    "branches": [
+      "havenline/T09-harvesting",
+      "havenline/governance-t09-strict-review"
+    ],
+    "reasons": {
+      "havenline/T09-harvesting": "designated approved T09 task branch",
+      "havenline/governance-t09-strict-review": "open PR #29 head"
+    }
+  },
+  "t09_related_branch_count": 13,
+  "obsolete_branch_count": 11,
+  "obsolete_branches": [
+    {
+      "branch": "codex/t09-c0-permissions",
+      "head_sha": "9d521f0f6aa35935a38192877471c5d48e80fa99",
+      "protected": false,
+      "classification": "OBSOLETE_T09_REPAIR_REVIEW_DIAGNOSTIC_OR_CLOSEOUT",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "codex/t09-c0-route-integration",
+      "head_sha": "f8d047a828aff1843a4f270d5d13838cd857bcda",
+      "protected": false,
+      "classification": "OBSOLETE_T09_REPAIR_REVIEW_DIAGNOSTIC_OR_CLOSEOUT",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "codex/t09-c5-clock-freeze",
+      "head_sha": "cf34ef3fb39df61cdcf185b4fafdf11406618648",
+      "protected": false,
+      "classification": "OBSOLETE_T09_REPAIR_REVIEW_DIAGNOSTIC_OR_CLOSEOUT",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "codex/t09-c5-convergence",
+      "head_sha": "9646eb1612afd9219320c43fad4f6b20cc461f05",
+      "protected": false,
+      "classification": "OBSOLETE_T09_REPAIR_REVIEW_DIAGNOSTIC_OR_CLOSEOUT",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "codex/t09-c5-defect-record",
+      "head_sha": "9d34dfbf8390c35d0ac8d25855c2c7f25e499073",
+      "protected": false,
+      "classification": "OBSOLETE_T09_REPAIR_REVIEW_DIAGNOSTIC_OR_CLOSEOUT",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "codex/t09-c5-init-similarity",
+      "head_sha": "e7baf490f663441037172d0a13905a1e21680b41",
+      "protected": false,
+      "classification": "OBSOLETE_T09_REPAIR_REVIEW_DIAGNOSTIC_OR_CLOSEOUT",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "codex/t09-evidence-review-9bc73550",
+      "head_sha": "3004642cef5a093f74a3c90b66a3401fb9b74d18",
+      "protected": false,
+      "classification": "OBSOLETE_T09_REPAIR_REVIEW_DIAGNOSTIC_OR_CLOSEOUT",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "codex/t09-final-closeout-v31",
+      "head_sha": "6b052683477294dfde72fd38a77995367d380bf9",
+      "protected": false,
+      "classification": "OBSOLETE_T09_REPAIR_REVIEW_DIAGNOSTIC_OR_CLOSEOUT",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "codex/t09-pose-summary-schema",
+      "head_sha": "459d402b1dcfb324c3a10d34aef99ad14c585bc5",
+      "protected": false,
+      "classification": "OBSOLETE_T09_REPAIR_REVIEW_DIAGNOSTIC_OR_CLOSEOUT",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "codex/t09-repair-ledger",
+      "head_sha": "4ebae24585be53171f78e71f984388322b82dda0",
+      "protected": false,
+      "classification": "OBSOLETE_T09_REPAIR_REVIEW_DIAGNOSTIC_OR_CLOSEOUT",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/governance-t09-final-closeout",
+      "head_sha": "8b257ecd091ac5ada0511f59532fe9fa43ed45eb",
+      "protected": false,
+      "classification": "OBSOLETE_T09_REPAIR_REVIEW_DIAGNOSTIC_OR_CLOSEOUT",
+      "safe_for_game_build": true
+    }
+  ],
+  "compile_effect": "Obsolete branch refs are not part of the canonical game build unless explicitly checked out. Removing those refs does not remove T09 code from the approved task branch or canonical integration history."
+}

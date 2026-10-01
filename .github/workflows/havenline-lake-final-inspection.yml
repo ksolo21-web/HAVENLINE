@@ -1,0 +1,70 @@
+name: Havenline lake final inspection and missing review recovery
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-lake-final-inspection.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  missing-review-groups:
+    strategy:
+      fail-fast: false
+      matrix:
+        role: [reference-fidelity,visual-integrity]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      EXPECTED_SOURCE: '0b75bd8366f680df31b708ed181a007de201eef1'
+      REVIEW_ROLE: ${{ matrix.role }}
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-east-west-lake-evidence-34537753114
+          run-id: 34537753114
+          github-token: ${{ github.token }}
+          path: lake-evidence/
+      - run: python3 -m pip install 'gradio_client==1.14.0' pillow
+      - name: Review only unresolved groups with the missing actual overview context
+        run: python3 -u tools/havenline/review_lake_supplement.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-lake-supplement-${{ matrix.role }}-${{ github.run_id }}
+          path: lake-supplement/
+          retention-days: 30
+          if-no-files-found: error
+  native-same-view-diagnosis:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 9
+    steps:
+      - uses: actions/checkout@v4
+      - run: python3 -m pip install pyyaml
+      - name: Compare the exact native overview with controlled fog/shadow/material overrides
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess,hashlib
+          p=Path('HavenlineGodot/tests/probe_lake_shading.gd');s=p.read_text()
+          assert s.count('game.render_review=true')==1
+          s=s.replace('game.render_review=true','game.render_review=false').replace('game.size=Vector2(1280,720)','game.size=Vector2(3840,2160)')
+          assert s.count('focus_at(Vector2(0,-13.85),Vector3(0,25,24),19.0)')==1
+          s=s.replace('focus_at(Vector2(0,-13.85),Vector3(0,25,24),19.0)','focus_at(Vector2(0,-10.8),Vector3(0,25,24),22.0)')
+          p.write_text(s)
+          w=yaml.safe_load(Path('.github/workflows/havenline-lake-shading-diagnostic.yml').read_text());runs=[x['run'] for x in w['jobs']['diagnose']['steps'] if 'run' in x];assert len(runs)==1
+          run=runs[0].replace("'-screen 0 1280x720x24' timeout 180","'-screen 0 3840x2160x24' timeout 300").replace('--resolution 1280x720','--resolution 3840x2160')
+          Path('diagnosis').mkdir(exist_ok=True);Path('diagnosis/executed-harness.gd').write_text(s)
+          subprocess.run(['bash','-euo','pipefail','-c',run],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-lake-exact-view-diagnosis-${{ github.run_id }}
+          path: diagnosis/
+          retention-days: 30
+          if-no-files-found: error
+# Runtime/artwork unchanged. No new APK, no old failure erased, no passing-group rescore.

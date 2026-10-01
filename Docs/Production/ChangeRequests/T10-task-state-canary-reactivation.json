@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "status": "AUTHORIZED",
+  "authorization": "Authorize the bounded V3.2 T10 canary repair.",
+  "request": "Authorize a bounded V3.2 repair that makes the task-state authority mutation canary independent of T10's legitimate lifecycle state.",
+  "scope": [
+    "tools/havenline/production/mutation_canary.py",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "tools/havenline/production/tests/test_architecture_v31.py",
+    "tools/havenline/production/tests/test_architecture_release_lock.py",
+    ".github/workflows/havenline-production-governance.yml"
+  ],
+  "permitted_behavior_change": "Validate a real synthetic snapshot authority mutation instead of treating T10's former LOCKED lifecycle state as the mutation.",
+  "forbidden_changes": [
+    "gameplay or shipping runtime behavior",
+    "critic applicability or score thresholds",
+    "G1-G14 acceptance requirements",
+    "V3.1 historical accepted source or release-lock manifest",
+    "unrelated V3.1 locked files"
+  ],
+  "unchanged_requirements": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "zero_unresolved_mandatory_defects": true
+  }
+}

@@ -1,59 +1,89 @@
 shader_type spatial;
 render_mode diffuse_burley, specular_schlick_ggx;
+// COLOR.r = T02 river shore distance, COLOR.g = warm workfloor distance,
+// COLOR.b = T03 packed-lane signed distance. All three are CPU-authored from
+// gameplay geometry so visible paths cannot diverge from route checks.
 uniform vec2 furnace_center = vec2(0.0,0.2);
 uniform float warmth_radius = 4.5;
 uniform float heat_strength = 1.0;
 uniform float snow_amount = 0.03;
+uniform float daylight_fill = 1.0;
 varying vec3 world_pos;
-float hash(vec2 p) { return fract(sin(dot(p,vec2(127.1,311.7)))*43758.5453); }
-float noise(vec2 p) {
- vec2 i=floor(p); vec2 f=fract(p); f=f*f*(3.0-2.0*f);
- return mix(mix(hash(i),hash(i+vec2(1,0)),f.x),mix(hash(i+vec2(0,1)),hash(i+vec2(1,1)),f.x),f.y);
+varying vec3 authored_distance;
+float material_hash(vec2 p){
+ vec3 h=fract(vec3(p.xyx)*vec3(.1031,.1030,.0973));
+ h+=dot(h,h.yzx+33.33);return fract((h.x+h.y)*h.z);
 }
-float path_distance(vec2 p, vec2 a, vec2 b) {
- vec2 v=b-a; return length(p-a-v*clamp(dot(p-a,v)/dot(v,v),0.0,1.0));
+float material_noise(vec2 p){
+ vec2 cell=floor(p), f=fract(p);f=f*f*(3.-2.*f);
+ return mix(mix(material_hash(cell),material_hash(cell+vec2(1,0)),f.x),
+            mix(material_hash(cell+vec2(0,1)),material_hash(cell+vec2(1,1)),f.x),f.y);
 }
-float boot_track(vec2 p, vec2 a, vec2 b) {
- vec2 dir=normalize(b-a); vec2 side=vec2(-dir.y,dir.x);vec2 d=p-a;
- float along=dot(d,dir);float lane=dot(d,side);
- float stride=floor(along/.58);float phase=fract(along/.58)-.5;
- float lateral=lane-(mod(stride,2.0)*2.0-1.0)*.16;
- float oval=length(vec2(phase*.58/.14,lateral/.072));
- return (1.0-smoothstep(.76,1.16,oval))*step(0.0,along)*step(along,length(b-a));
+void vertex(){
+ world_pos=(MODEL_MATRIX*vec4(VERTEX,1.)).xyz;
+ authored_distance=COLOR.rgb*8.-4.;
 }
-void vertex() { world_pos = (MODEL_MATRIX * vec4(VERTEX,1.0)).xyz; }
-void fragment() {
+void fragment(){
  vec2 p=world_pos.xz;
- float broad=noise(p*.58);float n=noise(p*2.7);float grain=noise(p*29.0);
+ float shore=authored_distance.x;
+ float d=authored_distance.y;
+ float lane=authored_distance.z;
+ float broad=material_noise(p*.37)-.5;
+ float fine=material_noise(p*7.8)-.5;
+ float footprint=max(length(dFdx(p)),length(dFdy(p)));
+ float detail_weight=1.-smoothstep(.025,.16,footprint);
+ vec3 snow=vec3(.98,.994,1.0)+vec3(.042,.029,.016)*broad;
+ snow+=vec3(.012,.010,.008)*fine*detail_weight;
+ float rim=(1.-smoothstep(.04,.48,d))*smoothstep(-.16,.04,d);
+ snow=mix(snow,vec3(.73,.82,.94),rim*.16);
+ float aa=max(fwidth(d)*.75,.022);
+ float edge_d=d+(material_noise(p*1.6)-.5)*.035;
+ float cleared=1.-smoothstep(-.08-aa,.13+aa,edge_d);
+ vec3 floor=vec3(.80,.48,.36)+vec3(.09,.058,.043)*broad;
+ floor+=vec3(.022,.015,.011)*fine*detail_weight;
  float dist=length(p-furnace_center);
- float warm=(1.0-smoothstep(warmth_radius-.80,warmth_radius+.10,dist))*heat_strength;
- float melt=(1.0-smoothstep(warmth_radius-1.50,warmth_radius+.05,dist+(broad-.5)*.72))*heat_strength;
- float path=min(path_distance(p,vec2(0,12.2),furnace_center),path_distance(p,vec2(-2.8,2.25),furnace_center));
- path=min(path,path_distance(p,vec2(-6.6,-3.65),furnace_center));
- path=min(path,path_distance(p,vec2(6.6,-3.65),furnace_center));
- path=min(path,path_distance(p,vec2(0,-10.7),furnace_center));
- float compact=(1.0-smoothstep(.32,1.02,path+(broad-.5)*.29))*(1.0-snow_amount*.44);
- float ripple=sin(p.x*3.8+p.y*1.35+broad*3.0)*.5+.5;
- vec3 snow=mix(vec3(.72,.84,.91),vec3(.92,.96,.98),.38+broad*.32+n*.15+grain*.08);
- snow=mix(snow,vec3(.58,.73,.82),compact*.58);
- float prints=max(boot_track(p,furnace_center,vec2(-6.6,-3.65)),boot_track(p,furnace_center,vec2(6.6,-3.65)));
- prints=max(prints,boot_track(p,vec2(0,12.2),furnace_center))*(1.0-snow_amount*.85);
- snow=mix(snow,vec3(.45,.59,.68),prints*.40);
- snow*=.963+.037*ripple;
- vec3 ground=mix(vec3(.29,.32,.32),vec3(.47,.43,.35),n*.58+broad*.35);
- // Rounded pebbles replace the old thresholded grid-noise cross artifacts.
- vec2 cell=floor(p*7.0);vec2 local=fract(p*7.0)-.5;
- vec2 jitter=vec2(hash(cell),hash(cell+vec2(13.7,9.2)))-.5;
- float pebble=length((local-jitter*.42)*vec2(1.0,1.35));
- float stones=(1.0-smoothstep(.09,.19,pebble))*step(.48,hash(cell+vec2(5.9,17.4)));
- ground=mix(ground,vec3(.56,.56,.50),stones*.36);
- ground=mix(ground,vec3(.19,.23,.26),(1.0-smoothstep(.8,2.0,dist))*heat_strength*.55);
- ALBEDO=mix(pow(snow,vec3(2.2)),pow(ground,vec3(2.2)),melt*.93);
- ROUGHNESS=mix(.88,.79,melt)-stones*melt*.06;
- SPECULAR=.25;
- float dx=noise((p+vec2(.017,0))*29.0)-grain;
- float dz=noise((p+vec2(0,.017))*29.0)-grain;
- NORMAL_MAP=normalize(vec3(-dx*.24,-dz*.24,1.0))*.5+.5;
- NORMAL_MAP_DEPTH=.6;
- EMISSION=vec3(.03,.012,.002)*warm*(1.0-smoothstep(0.,warmth_radius,dist));
+ float warmth=(1.-smoothstep(warmth_radius-.4,warmth_radius+.12,dist))*heat_strength;
+ floor=mix(floor,floor+vec3(.025,.012,0.),warmth*.42);
+ vec3 material=mix(snow,floor,cleared);
+
+ // T03 lanes remain compressed/worn material in the SAME terrain surface.
+ // Source-bound gate preflight showed that the prior blue-grey compression was
+ // still too close to untouched snow at river approaches. Increase value and
+ // temperature separation enough to read without captions, while preserving
+ // broad/fine variation and a noisy edge so it never becomes a painted stripe.
+ float lane_noise=(material_noise(p*1.10)-.5)*.060+(material_noise(p*3.10)-.5)*.025;
+ float lane_aa=max(fwidth(lane)*.8,.025);
+ float lane_edge_d=lane+lane_noise;
+ float lane_mask=1.-smoothstep(-.06-lane_aa,.14+lane_aa,lane_edge_d);
+ // T03 reference repair: T02 remains the dominant surface. Travel is shown by
+ // physical compression plus quiet paired wear, not by repainting a broad dark lane.
+ float packed_macro=material_noise(p*.78+vec2(4.7,-2.1));
+ float packed_mid=material_noise(p*2.20+vec2(-1.3,3.8));
+ float compression=smoothstep(.14,.76,packed_macro*.68+packed_mid*.32);
+ float lane_center_distance=max(lane+1.18,0.0);
+ float paired_rut=1.-smoothstep(.08,.24,abs(lane_center_distance-.62));
+ float rut_breakup=.82+.18*smoothstep(.28,.76,material_noise(p*2.7+vec2(7.1,-4.3)));
+ // Iteration 11E: keep the same physical compression/ruts, but make packed
+ // travel read unmistakably as warm worn earth through snow and camp floor,
+ // matching the reference path language without adding a path plane/overlay.
+ vec3 packed_snow=mix(snow,vec3(.68,.50,.36),.62+.12*compression);
+ packed_snow=mix(packed_snow,vec3(.48,.34,.26),paired_rut*lane_mask*rut_breakup*.50);
+ packed_snow+=vec3(.008,.006,.004)*(packed_mid-.5);
+ vec3 packed_floor=mix(floor,vec3(.64,.34,.24),.42+.12*compression);
+ packed_floor=mix(packed_floor,vec3(.48,.265,.20),paired_rut*lane_mask*rut_breakup*.52);
+ packed_floor+=vec3(.007,.005,.003)*(packed_mid-.5);
+ vec3 packed=mix(packed_snow,packed_floor,cleared);
+ material=mix(material,packed,lane_mask*.98);
+ float lane_edge=(1.-smoothstep(.08,.30,abs(lane_edge_d)))*smoothstep(-.09,.015,abs(lane_edge_d));
+ material=mix(material,material*.96,lane_edge*.16);
+
+ float ice=1.-smoothstep(-.12,.035,shore);
+ material=mix(material,vec3(.37,.67,.84),ice*.35);
+ ALBEDO=pow(clamp(material,vec3(0.),vec3(1.)),vec3(2.2));
+ EMISSION=vec3(.030,.034,.040)*(1.-cleared)*clamp(daylight_fill,0.,1.);
+ float sx=cos(p.x*8.1+p.y*3.7)*.006;
+ float sz=cos(p.x*-4.6+p.y*9.3)*.006;
+ NORMAL=normalize(NORMAL+(VIEW_MATRIX*vec4(-sx,0.,-sz,0.)).xyz*detail_weight);
+ ROUGHNESS=clamp(mix(.92,.88,cleared)+fine*.028*detail_weight+lane_mask*.018,.84,.96);
+ SPECULAR=.18;
 }

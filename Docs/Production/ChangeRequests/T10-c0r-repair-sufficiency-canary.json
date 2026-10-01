@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "requesting_task": "T10",
+  "target_path": [
+    "tools/havenline/production/repair_sufficiency_critic.py",
+    "tools/havenline/production/tests/test_repair_sufficiency_critic.py",
+    "Docs/Production/C0R_REPAIR_SUFFICIENCY_STANDARD.md",
+    "Docs/Production/C0R_REPORT_SCHEMA.json"
+  ],
+  "requested_change": "Add a generic non-voting C0R Repair Sufficiency Critic that reviews a proposed repair before implementation, detects repeated same-family symptom/scalar patching, requires causal blocker coverage and cheap falsification proof, and rejects threshold weakening.",
+  "reason": "T10 demonstrated that C0 plus the builder repair gate can accept a locally causal repair that is still insufficient across the complete failure family. C0R must challenge repair sufficiency before another expensive build/critic cycle.",
+  "dependency": "Validated C0 complete diagnosis plus a machine-readable REPAIR_PLAN.json.",
+  "expected_behavior": "T10's previous repeated scalar-style fix is rejected without full-domain proof; an invariant-level constrained-layout repair with exhaustive 216-case proof can be accepted for implementation without awarding task approval.",
+  "tests_required": [
+    "Reject repeated scalar repair without full-domain proof.",
+    "Reject overclaimed closure while required cases remain unknown.",
+    "Require every C0 blocker to have causal sufficiency coverage.",
+    "Reject critic/quality threshold weakening.",
+    "Reject evidence-only strategy for a product defect.",
+    "Accept an algorithmic repair with exhaustive domain proof and falsifiable preflight.",
+    "Return INSUFFICIENT_EVIDENCE when C0 is incomplete or required observable failure-family evidence is missing."
+  ],
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "APPROVED_BOUNDED_QA_GOV_CANARY",
+  "authorization": "Authorize the non-voting C0R repair-sufficiency canary for T10 without changing C1-C11 authority or thresholds.",
+  "forbidden_changes": [
+    "No gameplay approval authority.",
+    "No 0-10 gameplay score.",
+    "No C1-C11 threshold reduction.",
+    "No replacement of C0 diagnosis.",
+    "No mutation of a repair plan or candidate.",
+    "No edits to V3.1 locked files in this canary."
+  ]
+}

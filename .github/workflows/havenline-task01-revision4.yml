@@ -1,0 +1,151 @@
+name: Havenline T01 revision4 finish review
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-revision4.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.commit.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - name: Prepare pinned renderer and only the active task
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          python3 -m pip install numpy scipy pillow
+          mkdir -p "$RUNNER_TEMP/engine" task01-evidence
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,base64
+          e=Path('task01-evidence');assets=Path('HavenlineGodot/assets')
+          before={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in assets.rglob('*.glb') if 'reference_forest' not in p.parts}
+          assert len(before)==30;(e/'protected-before.json').write_text(json.dumps(before,indent=2))
+          p=Path('HavenlineGodot/tests/capture_task01.gd');s=p.read_text()
+          if 'asset_views_use_actual_snowfield' not in s:
+              old='game.ReferenceForest.set_player_clearance(game, Vector3.ZERO, false)';assert s.count(old)==1
+              s=s.replace(old,'game.outpost_view.visible=true\n\tgame.outpost_view.snow.visible=false\n\t'+old)
+              assert s.count('Vector3((i-2)*2.8,0,0)')==1
+              s=s.replace('Vector3((i-2)*2.8,0,0)','game.xyz(Vector2(18.0+(i-2)*2.8,0))')
+              s=s.replace('"asset_views_isolated":true','"asset_views_isolated":true,"asset_views_use_actual_snowfield":true');p.write_text(s)
+          b=base64.b64decode(Path('Docs/Production/T01/reference-detail.webp.b64').read_text())
+          assert hashlib.sha256(b).hexdigest()=='25b0e78c93f13ddadb8b815e7e19daf68485471d2be3fed0dd99bde8d00c48af'
+          (e/'reference-detail.webp').write_bytes(b)
+          PY
+          python3 -m py_compile tools/havenline/polish_reference_forest.py tools/havenline/review_task01_revision4.py
+          python3 tools/havenline/polish_reference_forest.py > task01-evidence/bake.json
+          python3 tools/havenline/audit_task01_geometry.py > task01-evidence/geometry-audit.json
+          python3 tools/havenline/bake_outpost_audio.py > task01-evidence/audio-fixtures.json
+      - name: Run all eleven engine suites without altering their requirements
+        run: |
+          set -euo pipefail
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task01-evidence/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task01-evidence/motion-fixtures.log 2>&1
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance; do
+            timeout 90 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task01-evidence/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task01-evidence/*.log; then exit 1; fi
+      - name: Commit only tested Task1 meshes and capture correction
+        id: commit
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add HavenlineGodot/assets/reference_forest/*.glb HavenlineGodot/assets/reference_forest/manifest.json HavenlineGodot/tests/capture_task01.gd
+          test "$(git ls-remote origin refs/heads/codex/havenline-sequential-task-01 | cut -f1)" = "$GITHUB_SHA"
+          if ! git diff --cached --quiet; then
+            git commit -m 'T01 revision4: smooth crown normals and tints; grounded diagnostics; no approval claimed'
+            git push origin HEAD:refs/heads/codex/havenline-sequential-task-01
+          fi
+          source=$(git rev-parse HEAD)
+          echo "source=$source" >> "$GITHUB_OUTPUT"
+          echo "$source" > task01-evidence/SOURCE.txt
+      - name: Fresh actual Mobile screenshots and state/motion diagnostics
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          mkdir -p task01-evidence/gallery task01-evidence/clearance task01-evidence/native4k
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 400 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task01.gd -- --out="$(pwd)/task01-evidence/gallery" > task01-evidence/mobile-gallery.log 2>&1
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 150 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task01_clearance.gd -- --out="$(pwd)/task01-evidence/clearance" > task01-evidence/clearance.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 200 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --fixed-fps 60 -- --capture="$(pwd)/task01-evidence/native4k" > task01-evidence/native4k.log 2>&1
+          python3 tools/havenline/verify_task01_evidence.py task01-evidence
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          e=Path('task01-evidence');r=json.loads((e/'gallery/capture.json').read_text());n=json.loads((e/'native4k/render-evidence.json').read_text())
+          captures={str(p.relative_to(e)):hashlib.sha256(p.read_bytes()).hexdigest() for p in e.rglob('*.png')}
+          assert len(captures)==63 and r['renderer']=='mobile' and n['render_scale']==1
+          assert r['asset_views_use_actual_snowfield']
+          assets={str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in Path('HavenlineGodot/assets/reference_forest').glob('*.glb')}
+          pro={'task':'T01','revision':4,'source':(e/'SOURCE.txt').read_text().strip(),'captures':captures,'assets':assets,'renderer':'mobile','device':r['device'],'capture_count':len(captures),'native_dimensions':n['internal_render'],'render_scale':n['render_scale'],'fixed_step_capture_is_not_fps_evidence':True,'task_approved':False,'physical_4k60_verified':False}
+          (e/'provenance.json').write_text(json.dumps(pro,indent=2)+'\n')
+          PY
+          mkdir -p task01-source
+          git archive --format=tar.gz -o task01-source/source.tar.gz HEAD HavenlineGodot tools/havenline Docs AGENTS.md .github
+          git rev-parse HEAD > task01-source/SOURCE.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-revision4-evidence-${{ github.run_id }}
+          path: task01-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: havenline-T01-revision4-source-${{ github.run_id }}
+          path: task01-source/
+          retention-days: 30
+          if-no-files-found: error
+  critic:
+    needs: build
+    strategy:
+      fail-fast: false
+      max-parallel: 6
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        shard: [0, 1, 2]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 32
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_SHARD: ${{ matrix.shard }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build.outputs.source }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-revision4-evidence-${{ github.run_id }}
+          path: task01-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Independent pixel review of the new revision
+        run: python3 -u tools/havenline/review_task01_revision4.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-revision4-${{ matrix.role }}-${{ matrix.shard }}-${{ github.run_id }}
+          path: critic-results/
+          retention-days: 30
+          if-no-files-found: error
+# No later task, APK delivery, original-model modification or FPS approval.

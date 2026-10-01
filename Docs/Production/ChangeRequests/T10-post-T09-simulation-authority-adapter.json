@@ -1,0 +1,14 @@
+{
+  "requesting_task": "T10",
+  "target_path": "HavenlineGodot/scripts/simulation.gd",
+  "status": "APPROVED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "requested_change": "Add delivered-stock atomic debit, latest-per-target replay receipts and validated component persistence.",
+  "reason": "Bind the reconciled T10 framework to real simulation authority without debiting carried inventory.",
+  "dependency": "T05/T08/T09 APPROVED",
+  "expected_behavior": "Exact-once stored debit, immutable retry receipts, stale/forged rejection and crash recovery.",
+  "tests_required": ["T10 real authority integration", "T01-T09 impacted regression", "save recovery and malformed receipt rejection"],
+  "integration_base": "c1768dbba7bacbbc5d0174e6b9b661b6dbdbbc11",
+  "reconciled_candidate": "0cffb41",
+  "forbidden_paths": ["HavenlineGodot/scripts/main.gd", "T11 final content"]
+}

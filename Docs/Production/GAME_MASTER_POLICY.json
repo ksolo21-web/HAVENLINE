@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "authority": "Docs/Production/GAME_MASTER_ACCOUNT_STANDARD.md",
+  "role_id": "GAME_MASTER",
+  "owner_slot_count": 2,
+  "owner_slots": ["OWNER_PRIMARY", "OWNER_SECONDARY"],
+  "identity_policy": {
+    "provider": "Google Sign-In",
+    "server_authoritative_role": true,
+    "verified_account_binding_required": true,
+    "release_oauth_identity_test_required": true,
+    "account_switch_isolation_required": true,
+    "device_recovery_required": true,
+    "public_source_contains_owner_account_identifiers": false
+  },
+  "vip_policy": {
+    "tier_id": "GAME_MASTER",
+    "above_public_max_vip": true,
+    "permanent": true,
+    "purchasable": false,
+    "inherits_all_public_vip_perks_at_maximum": true,
+    "exclusive_perks": [
+      "zero_cost_shop_claims",
+      "all_shop_content_claimable",
+      "toggleable_game_master_identity_cosmetics",
+      "unlimited_cosmetic_loadout_convenience",
+      "audited_game_master_admin_tools",
+      "liveops_preview_admin_access",
+      "gm_challenge_default_profile"
+    ]
+  },
+  "shop_policy": {
+    "all_approved_skus_zero_cost_for_game_master": true,
+    "real_money_checkout_used_for_game_master_claim": false,
+    "server_grant_type": "GM_ZERO_COST_CLAIM",
+    "idempotent_grants_required": true,
+    "audit_required": true,
+    "exclude_from_revenue_metrics": true,
+    "normal_player_prices_unchanged": true,
+    "normal_purchase_verification_unchanged": true
+  },
+  "challenge_policy": {
+    "profile_id": "GM_CHALLENGE",
+    "default_for_game_master_role": true,
+    "selector_source": "server_authorized_game_master_role",
+    "vip_or_spend_signals_used": false,
+    "threat_budget_target_multiplier": 1.35,
+    "threat_budget_min_multiplier": 1.25,
+    "threat_budget_max_multiplier": 1.60,
+    "concurrent_emergency_bonus": 1,
+    "recovery_window_multiplier": 0.85,
+    "wave_delay_multiplier": 0.85,
+    "raw_enemy_hp_modifier_cap": 1.10,
+    "raw_enemy_damage_modifier_cap": 1.15,
+    "resource_yield_penalty_allowed": false,
+    "no_new_permanent_controls": true
+  },
+  "admin_policy": {
+    "modes": ["GM_PLAY", "GM_ADMIN"],
+    "server_authorization_required": true,
+    "audit_required": true,
+    "competitive_value_changes_mark_noncompetitive": true,
+    "public_competitive_ranking_eligible": false
+  },
+  "fairness_policy": {
+    "exclude_from_zero_dollar_player_test": true,
+    "exclude_from_normal_purchase_value_fairness_population": true,
+    "exclude_from_normal_revenue_conversion_metrics": true,
+    "normal_player_difficulty_unaffected": true,
+    "normal_player_economy_unaffected": true
+  },
+  "task_policy": {
+    "applicable_tasks": ["T13", "T33", "T34", "T35", "T36", "T37", "T41", "T42", "T43", "T64", "T65", "T66", "T70"],
+    "required_proof_flags_by_task": {
+      "T13": ["gm_challenge_profile_implemented", "gm_challenge_spend_blind", "gm_challenge_elevated_envelope_proven"],
+      "T33": ["gm_economy_separately_tagged", "gm_excluded_from_f2p_population"],
+      "T34": ["gm_entitlements_server_authoritative", "gm_zero_cost_grants_idempotent_and_audited"],
+      "T35": ["all_shop_skus_zero_cost_for_gm", "gm_claim_does_not_invoke_real_money_checkout"],
+      "T36": ["game_master_vip_tier_implemented", "game_master_inherits_public_max_vip", "game_master_exclusive_perks_implemented"],
+      "T37": ["gm_liveops_admin_controls_server_authorized", "gm_liveops_admin_actions_audited"],
+      "T41": ["gm_role_authority_protected", "gm_privileged_operations_server_authorized"],
+      "T42": ["gm_analytics_separately_tagged", "gm_revenue_conversion_excluded"],
+      "T43": ["google_sign_in_release_identity_proven", "two_game_master_owner_slots_bound_server_side", "account_switch_role_isolation_proven", "reinstall_device_recovery_proven"],
+      "T64": ["gm_excluded_from_normal_purchase_fairness", "normal_player_purchase_value_unchanged"],
+      "T65": ["gm_liveops_admin_rehearsal_passed", "gm_liveops_rollback_rehearsed"],
+      "T66": ["gm_role_authorization_tests_passed", "gm_privileged_operation_validation_passed", "gm_competitive_isolation_proven"],
+      "T70": ["exactly_two_game_master_owner_slots_provisioned", "game_master_release_audit_complete"]
+    },
+    "owner_binding_tasks": ["T43", "T70"]
+  }
+}

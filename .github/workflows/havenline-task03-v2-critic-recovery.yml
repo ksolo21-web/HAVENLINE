@@ -1,0 +1,123 @@
+name: Havenline Task 3 polished v2 critic recovery
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task03-v2-critic-recovery.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  independent-review:
+    strategy:
+      fail-fast: false
+      max-parallel: 8
+      matrix:
+        role: [reference-fidelity,visual-integrity]
+        shard: [0,1,2,3]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 50
+    env:
+      EXPECTED_SOURCE: 703a03af6d5f8b978ba4a6385da6f57f5406f85f
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_SHARD: ${{ matrix.shard }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-task03-polished-evidence-34623500262
+          path: task03-evidence/
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 34623500262
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Execute blind-competency-gated v2 critic
+        run: python3 -u tools/havenline/review_task03_v2_wrapper.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-v2-${{ matrix.role }}-${{ matrix.shard }}-${{ github.run_id }}
+          path: task03-local-review/
+          retention-days: 30
+          if-no-files-found: error
+  critic-gate:
+    needs: independent-review
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    env:
+      SOURCE: 703a03af6d5f8b978ba4a6385da6f57f5406f85f
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-task03-polished-evidence-34623500262
+          path: evidence/
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 34623500262
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-task03-v2-*-*-${{ github.run_id }}
+          path: reviews/
+      - name: Require all 22 raw judgments at nine or higher
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,math,os
+          source=os.environ['SOURCE'];roles={'reference-fidelity','visual-integrity'}
+          groups={'perimeter','north-gate','side-gates','river-gates','south-fence','central-lane','cross-shelter-lanes','bank-lane','detail-contact','gameplay','conditions'}
+          dims={'reference_fidelity','boundary_finish','gate_readability','lane_legibility','river_preservation','view_consistency'}
+          probe={'A':'human_character','B':'snow_tree','C':'snow_tree','D':'human_character'}
+          def sha(p):return hashlib.sha256(p.read_bytes()).hexdigest()
+          pro=json.loads(Path('evidence/provenance.json').read_text());tests=json.loads(Path('evidence/tests.json').read_text())
+          errors=[];all_rows=[];models=[];role_minima={}
+          if pro.get('source')!=source or pro.get('task')!='T03-boundary-v2' or pro.get('all61_images_verified') is not True or len(pro.get('captures',{}))!=61:errors.append('evidence provenance invalid')
+          if tests.get('source')!=source or tests.get('all_passed') is not True or tests.get('suite_count')!=16 or tests.get('total_checks')!=807:errors.append('mechanical evidence invalid')
+          for name,h in pro.get('captures',{}).items():
+              p=Path('evidence')/name
+              if not p.exists() or sha(p)!=h:errors.append('changed capture '+name)
+          for role in roles:
+              rows=[];shards=[]
+              for path in Path('reviews').glob('*'+role+'*/shard-review.json'):
+                  s=json.loads(path.read_text());shards.append(s.get('shard'))
+                  if s.get('source')!=source or s.get('role')!=role or s.get('competency_passed') is not True or s.get('error') is not None:errors.append('bad shard '+str(path))
+                  try:
+                      c=json.loads((path.parent/'competency.json').read_text());raw=json.loads((path.parent/'competency-raw.json').read_text());choice=raw['choices'][0]
+                      if c.get('passed') is not True or c.get('answers')!=probe or choice.get('finish_reason')!='stop' or json.loads(choice['message']['content'])!=probe:errors.append('competency mismatch '+str(path))
+                      pp=json.loads((path.parent/'provenance.json').read_text());m=pp['model_manifest'];models.append((m['base_model'],m['revision']))
+                      wp=(path.parent/'wrapper-provenance.txt').read_text()
+                      if 'change=provenance_task_label_v1_to_v2_only' not in wp or 'threshold_unchanged=9.0' not in wp:errors.append('wrapper provenance invalid '+str(path))
+                  except Exception as exc:errors.append('missing provenance '+str(path)+': '+str(exc))
+                  for r in s.get('reviews',[]):
+                      rows.append(r);label=role+'/'+r.get('group','missing');v=r.get('review',{});scores=v.get('scores',{})
+                      if r.get('independent_execution') is not True or r.get('passed') is not True:errors.append('not passing '+label)
+                      if set(scores)!=dims or any(type(x) not in (int,float) or isinstance(x,bool) or not math.isfinite(x) or x<9 or x>10 for x in scores.values()):errors.append('invalid/below-nine '+label)
+                      if r.get('lowest_score')!=min(scores.values()):errors.append('wrong minimum '+label)
+                      if v.get('defects')!=[] or v.get('coverage_complete') is not True or v.get('confidence') not in ('medium','high'):errors.append('defect/incomplete '+label)
+                      try:
+                          raw=json.loads((path.parent/(r['group']+'-raw.json')).read_text());choice=raw['choices'][0]
+                          if choice.get('finish_reason')!='stop' or json.loads(choice['message']['content'])!=v:errors.append('raw mismatch '+label)
+                      except Exception as exc:errors.append('missing raw '+label+': '+str(exc))
+              if set(shards)!={0,1,2,3} or len(shards)!=4 or len(rows)!=11 or {r.get('group') for r in rows}!=groups:errors.append('incomplete coverage '+role)
+              role_minima[role]=min((r.get('lowest_score',0) for r in rows),default=None);all_rows+=rows
+          if len(models)!=8 or len(set(models))!=1:errors.append('reviewer model/revision mismatch')
+          result={'task':'T03-boundary-v2','source':source,'passed':not errors,'judgments':len(all_rows),'minimum_dimension_score':9.0,'target':10.0,'role_minima':role_minima,'same_model_family_roles_disclosed':True,'errors':errors,'prior_failed_reviewer_runs_preserved':True,'actual_pixel_signoff_still_required':True,'task_approved':False,'physical4k60_verified':False}
+          out=Path('gate-report');out.mkdir(exist_ok=True);(out/'critic-gate.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2));raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-v2-critic-gate-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# Critic-only recovery. Exact 703a evidence and game runtime are read-only.
+# No low score is retried, no threshold is reduced, and Task 4 is not started.

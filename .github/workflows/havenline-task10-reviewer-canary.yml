@@ -1,0 +1,83 @@
+name: Havenline T10 diagnostic reviewer canary
+on:
+  push:
+    branches: [havenline/T10-pipeline-canary]
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-task10-reviewer-canary-${{ github.ref }}
+  cancel-in-progress: false
+jobs:
+  diagnostic-review:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 85
+    strategy:
+      fail-fast: false
+      matrix:
+        critic: [C3, C4, C7]
+    env:
+      HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+      OMP_NUM_THREADS: '4'
+    steps:
+      - name: Require dedicated diagnostic branch
+        run: test "$GITHUB_REF" = refs/heads/havenline/T10-pipeline-canary
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+      - name: Download fixed historical evidence and API metadata
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p canary-provenance
+          gh api "repos/$GITHUB_REPOSITORY/actions/runs/35353927324" > canary-provenance/evidence-run.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/10551832949" > canary-provenance/evidence-artifact.json
+          gh api "repos/$GITHUB_REPOSITORY/actions/artifacts/10551832949/zip" > canary-provenance/evidence.zip
+          python3 tools/havenline/task10/reviewer_canary.py --tool-sha "$GITHUB_SHA" --report canary-provenance/transport.json prepare \
+            --archive canary-provenance/evidence.zip --artifact canary-provenance/evidence-artifact.json --run canary-provenance/evidence-run.json
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        id: reviewer-cache
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Prepare exact pinned reviewer runtime
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > specialist-runtime-preparation.json
+      - uses: actions/cache/save@caa296126883cff596d87d8935842f9db880ef25
+        if: steps.reviewer-cache.outputs.cache-hit != 'true' && success()
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - run: python3 -m pip install pillow
+      - name: Validate unchanged evidence manifest
+        run: python3 tools/havenline/production/specialist_evidence_manifest.py validate "critic-input/${{ matrix.critic }}-manifest.json"
+      - name: Execute unchanged independent reviewer on historical evidence
+        run: |
+          python3 -u tools/havenline/production/specialist_critic_runner.py \
+            --critic "${{ matrix.critic }}" \
+            --candidate c7a18d002fe8d0f3978370f3e4567ba88bfe17e8 \
+            --manifest "critic-input/${{ matrix.critic }}-manifest.json" \
+            --out specialist-review
+      - name: Check actual completion envelopes and unchanged strict critic gate
+        if: always()
+        run: |
+          python3 tools/havenline/task10/reviewer_canary.py --tool-sha "$GITHUB_SHA" --report canary-provenance/diagnostic.json finish --critic "${{ matrix.critic }}"
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: diagnostic-nonapproval-T10-${{ matrix.critic }}-${{ github.sha }}
+          path: |
+            specialist-review/
+            specialist-runtime-preparation.json
+            canary-provenance/
+          retention-days: 30
+          if-no-files-found: error
+# Tool SHA differs from evidence SHA by design. Every output is diagnostic only;
+# neither successful completions nor scores may be reused for task approval.

@@ -1,0 +1,769 @@
+class_name HavenlineWorldTransformView
+extends Node3D
+
+## T10 presentation-only world response. It owns no resources, progression, or
+## transform authority. The geometry is deliberately neutral framework feedback
+## so T11 can attach final camp/build content without changing T10 semantics.
+
+const AUTHORITY_ID := "T10-world-transform-view-v1"
+const CORE_LIFECYCLE := ["locked", "ready", "preview", "committing", "complete"]
+const LIFECYCLE := ["locked", "ready", "preview", "committing", "complete", "blocked"]
+const VISUAL_NODE_BUDGET := 4
+const READABILITY_MIN := 0.85
+const READABILITY_MAX := 1.35
+const PULSE_HZ := 1.4
+const LABEL_CAMERA_OFFSET := Vector2(0.0, -190.0)
+const LABEL_MAX_WIDTH := 960.0
+const LABEL_PIXEL_SIZE := 0.0057
+const LABEL_RENDER_PRIORITY := 100
+const LABEL_OUTLINE_RENDER_PRIORITY := 99
+const LABEL_MIN_CLEARANCE_PX := 12.0
+const LABEL_FIT_SLACK_PX := 1.0
+const LABEL_SAFE_INSET_RATIO := 0.025
+const RESPONSE_BASE_Y := 0.16 # Ring top is 0.08; preserve a visible 0.08 world-unit separation.
+const RESOURCE_SYMBOLS = preload("res://assets/world_transform_v1/resource_symbols.tres")
+const RESOURCE_GLYPHS := {"wood": "", "stone": "", "metal": "", "fuel": ""}
+
+const STATE_COLORS := {
+	"locked": Color("4a5159"),
+	"ready": Color("63879a"),
+	"preview": Color("e7a64a"),
+	"committing": Color("5fa8d3"),
+	"complete": Color("66b86a"),
+	"blocked": Color("d86a5f"),
+}
+
+var target_id := ""
+var lifecycle := "locked"
+var presentation_key := ""
+var source_state := ""
+var target_state := ""
+var target_revision := 0
+var transaction_id := ""
+var block_reasons: Array[String] = []
+var blocked_shortfalls: Dictionary = {}
+var update_count := 0
+var visual_apply_count := 0
+var visual_build_count := 0
+var readability_scale := 1.0
+var _pulse_time := 0.0
+var _accepted_scale := Vector3(0.65, 0.12, 0.65)
+
+var _visual_root: Node3D
+var _ring: MeshInstance3D
+var _ghost: MeshInstance3D
+var _beacon: Label3D
+var _ring_material: StandardMaterial3D
+var _ghost_material: StandardMaterial3D
+var displayed_costs: Dictionary = {}
+var next_preview: Dictionary = {}
+var _last_visual_signature: Array = []
+var _directional_shadow_lights: Array[DirectionalLight3D] = []
+var _shadow_lights_scanned := false
+
+static func contract() -> Dictionary:
+	return {
+		"authority_id": AUTHORITY_ID,
+		"lifecycle": CORE_LIFECYCLE.duplicate(),
+		"blocked_lifecycle": "blocked",
+		"presentation_only": true,
+		"mutates_resources": false,
+		"advances_progression": false,
+		"complete_requires_simulation_receipt": true,
+		"complete_requires_world_transform_acceptance": true,
+		"t11_owns_final_camp_content": true,
+		"neutral_framework_visuals_only": true,
+		"world_response_shapes": ["perimeter_ring", "preview_volume", "status_label"],
+		"shape_and_color_redundancy": true,
+		"visual_node_budget": VISUAL_NODE_BUDGET,
+		"readability_scale_range": [READABILITY_MIN, READABILITY_MAX],
+		"committing_pulse_hz": PULSE_HZ,
+		"label_camera_offset": LABEL_CAMERA_OFFSET,
+		"label_layout_policy": "constrained_screen_pixels_v3",
+		"label_size_coordinate_space": "logical_viewport_pixels",
+		"readability_affects": "text_only",
+		"authored_font_size": 38,
+		"label_dynamic_camera_lane": true,
+		"label_screen_y_axis_inverted": true,
+		"label_min_readability_scale": READABILITY_MIN,
+		"label_fit_slack_px": LABEL_FIT_SLACK_PX,
+		"label_max_width": LABEL_MAX_WIDTH,
+		"label_pixel_size": LABEL_PIXEL_SIZE,
+		"label_render_priority": LABEL_RENDER_PRIORITY,
+		"label_outline_render_priority": LABEL_OUTLINE_RENDER_PRIORITY,
+	}
+
+func _ready() -> void:
+	_ensure_visuals()
+	_apply_visuals()
+
+func configure(next_target_id: String) -> bool:
+	if next_target_id.is_empty():
+		return false
+	target_id = next_target_id
+	return true
+
+func configure_readability(next_scale: float) -> bool:
+	if not is_finite(next_scale) or next_scale < READABILITY_MIN or next_scale > READABILITY_MAX:
+		return false
+	if is_equal_approx(next_scale, readability_scale):
+		return true
+	readability_scale = next_scale
+	_ensure_visuals()
+	visual_apply_count += 1
+	return true
+
+func set_locked() -> void:
+	_clear_blocked()
+	_set_lifecycle("locked")
+
+func set_ready(preview: Dictionary = {}) -> void:
+	if preview.is_empty() and lifecycle == "complete":
+		source_state = target_state
+		target_state = ""
+		displayed_costs.clear()
+		next_preview.clear()
+	if not preview.is_empty() and String(preview.get("target_id", "")) == target_id:
+		displayed_costs = preview.get("costs", {}).duplicate(true)
+		source_state = String(preview.get("source_state", source_state))
+		target_state = String(preview.get("target_state", target_state))
+		presentation_key = String(preview.get("presentation_key", presentation_key))
+		target_revision = int(preview.get("target_revision", 0)) + 1
+	_clear_blocked()
+	_set_lifecycle("ready")
+
+func show_preview(preview: Dictionary) -> bool:
+	if not bool(preview.get("passed", false)) or String(preview.get("target_id", "")) != target_id:
+		return false
+	displayed_costs = preview.get("costs", {}).duplicate(true)
+	presentation_key = String(preview.get("presentation_key", ""))
+	source_state = String(preview.get("source_state", ""))
+	target_state = String(preview.get("target_state", ""))
+	target_revision = int(preview.get("target_revision", 0)) + 1
+	transaction_id = ""
+	_clear_blocked()
+	_set_lifecycle("preview")
+	return true
+
+func show_blocked(preview: Dictionary) -> bool:
+	if bool(preview.get("passed", true)) or String(preview.get("target_id", "")) != target_id:
+		return false
+	var errors: Variant = preview.get("errors", [])
+	if not (errors is Array) or errors.is_empty():
+		return false
+	block_reasons.clear()
+	for error in errors:
+		block_reasons.append(String(error))
+	var shortfalls: Variant = preview.get("shortfalls", {})
+	blocked_shortfalls = shortfalls.duplicate(true) if shortfalls is Dictionary else {}
+	displayed_costs = preview.get("costs", {}).duplicate(true)
+	presentation_key = String(preview.get("presentation_key", presentation_key))
+	source_state = String(preview.get("source_state", source_state))
+	target_state = String(preview.get("target_state", target_state))
+	target_revision = int(preview.get("target_revision", target_revision))
+	transaction_id = ""
+	_set_lifecycle("blocked")
+	return true
+
+func show_commit(intent: Dictionary) -> bool:
+	if not bool(intent.get("passed", false)) or String(intent.get("target_id", "")) != target_id:
+		return false
+	if bool(intent.get("replayed", false)) or bool(intent.get("authoritative_applied", false)):
+		return false
+	var next_transaction_id := String(intent.get("transaction_id", ""))
+	if next_transaction_id.is_empty() or not bool(intent.get("submit_debit_transaction", false)):
+		return false
+	displayed_costs = intent.get("debits", {}).duplicate(true)
+	presentation_key = String(intent.get("presentation_key", ""))
+	source_state = String(intent.get("source_state", ""))
+	target_state = String(intent.get("target_state", ""))
+	target_revision = int(intent.get("target_revision", 0))
+	transaction_id = next_transaction_id
+	_clear_blocked()
+	_set_lifecycle("committing")
+	return true
+
+func mark_complete(receipt: Dictionary, next_offer: Dictionary = {}) -> bool:
+	if lifecycle != "committing":
+		return false
+	if not bool(receipt.get("authority_applied", false)) or String(receipt.get("authority_source", "")) != "simulation":
+		return false
+	if not bool(receipt.get("accepted_by_world_transform", false)):
+		return false
+	if String(receipt.get("transaction_id", "")) != transaction_id:
+		return false
+	if String(receipt.get("target_id", "")) != target_id or int(receipt.get("target_revision", -1)) != target_revision:
+		return false
+	next_preview = next_offer.duplicate(true) if String(next_offer.get("target_id", "")) == target_id else {}
+	_accepted_scale = _target_form_scale()
+	_clear_blocked()
+	_set_lifecycle("complete")
+	return true
+
+func _clear_blocked() -> void:
+	block_reasons.clear()
+	blocked_shortfalls.clear()
+
+func _material(color: Color, alpha := 1.0) -> StandardMaterial3D:
+	var material := StandardMaterial3D.new()
+	var actual := color
+	actual.a = alpha
+	material.albedo_color = actual
+	material.roughness = 0.55
+	if alpha < 1.0:
+		material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA
+	return material
+
+func _ensure_visuals() -> void:
+	if is_instance_valid(_visual_root):
+		return
+	_visual_root = Node3D.new()
+	_visual_root.name = "T10WorldResponse"
+	add_child(_visual_root)
+
+	_ring = MeshInstance3D.new()
+	_ring.name = "StateRing"
+	var ring_mesh := CylinderMesh.new()
+	ring_mesh.top_radius = 1.58
+	ring_mesh.bottom_radius = 1.58
+	ring_mesh.height = 0.08
+	ring_mesh.radial_segments = 32
+	_ring.mesh = ring_mesh
+	_ring.position.y = 0.04
+	_ring_material = _material(STATE_COLORS.locked, 0.78)
+	# One tiny radial emission texture: pending activity, never transaction progress.
+	var flow_gradient := Gradient.new()
+	flow_gradient.offsets = PackedFloat32Array([0.0, 0.80, 0.88, 0.96, 1.0])
+	flow_gradient.colors = PackedColorArray([Color.BLACK, Color.BLACK, Color.WHITE, Color.BLACK, Color.BLACK])
+	var flow_texture := GradientTexture2D.new()
+	flow_texture.width = 64
+	flow_texture.height = 64
+	flow_texture.gradient = flow_gradient
+	flow_texture.fill = GradientTexture2D.FILL_RADIAL
+	flow_texture.fill_from = Vector2(0.5, 0.5)
+	flow_texture.fill_to = Vector2(1.0, 0.5)
+	_ring_material.texture_repeat = false
+	_ring_material.emission_texture = flow_texture
+	_ring_material.emission = Color("b9edff")
+	_ring_material.emission_energy_multiplier = 1.4
+	_ring.material_override = _ring_material
+	_visual_root.add_child(_ring)
+
+	_ghost = MeshInstance3D.new()
+	_ghost.name = "PreviewVolume"
+	var ghost_mesh := BoxMesh.new()
+	ghost_mesh.size = Vector3(2.58, 1.5, 2.58)
+	_ghost.mesh = ghost_mesh
+	_ghost.position.y = RESPONSE_BASE_Y + 0.75 * _ghost.scale.y
+	_ghost_material = _material(STATE_COLORS.preview, 0.17)
+	_ghost.material_override = _ghost_material
+	_visual_root.add_child(_ghost)
+
+	_beacon = Label3D.new()
+	_beacon.name = "StatusLabel"
+	_beacon.position.y = 2.8
+	var resource_font := ThemeDB.fallback_font.duplicate() as Font
+	resource_font.fallbacks = [RESOURCE_SYMBOLS]
+	_beacon.font = resource_font
+	_beacon.font_size = 38
+	_beacon.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_beacon.width = LABEL_MAX_WIDTH
+	_beacon.outline_size = 9
+	_beacon.pixel_size = LABEL_PIXEL_SIZE
+	_beacon.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	_beacon.no_depth_test = true
+	# Label3D.offset is evaluated in the billboard camera plane. Keeping the
+	# status lane above the maximum response envelope prevents the overhead
+	# camera from collapsing world-Y separation into the ring/ghost silhouette.
+	_beacon.offset = LABEL_CAMERA_OFFSET
+	_beacon.render_priority = LABEL_RENDER_PRIORITY
+	_beacon.outline_render_priority = LABEL_OUTLINE_RENDER_PRIORITY
+	_visual_root.add_child(_beacon)
+
+	visual_build_count += 1
+
+func _visual_signature() -> Array:
+	return [lifecycle, presentation_key, source_state, target_state, target_revision, transaction_id, block_reasons.duplicate(), blocked_shortfalls.duplicate(true), displayed_costs.duplicate(true), next_preview.duplicate(true)]
+
+func _set_lifecycle(next: String) -> void:
+	if next not in LIFECYCLE: return
+	if next != lifecycle:
+		lifecycle = next
+		update_count += 1
+		_pulse_time = 0.0
+	if _visual_signature() != _last_visual_signature:
+		_apply_visuals()
+
+func _apply_visuals() -> void:
+	_ensure_visuals()
+	var color: Color = STATE_COLORS.get(lifecycle, STATE_COLORS.locked)
+	# A completed form stays green, but a blocked next transform gets a blocked
+	# perimeter so the world itself reinforces the action hierarchy without
+	# adding authored T11 content or another visual node.
+	var ring_color: Color = STATE_COLORS.blocked if _next_preview_blocked() else color
+	ring_color.a = 0.78 if lifecycle != "complete" else 0.92
+	_ring_material.albedo_color = ring_color
+	_ring_material.emission_enabled = lifecycle == "committing"
+	# CylinderMesh top-cap UV center is (.25, .75), with radius .25.
+	# Normalize that atlas quarter to the full clamped radial texture.
+	_ring_material.uv1_scale = Vector3(2.0, 2.0, 1.0) if lifecycle == "committing" else Vector3.ONE
+	_ring_material.uv1_offset = Vector3(0.0, -1.0, 0.0) if lifecycle == "committing" else Vector3.ZERO
+	var ghost_color := color
+	ghost_color.a = 0.30 if lifecycle in ["preview", "committing"] else 1.0
+	_ghost_material.albedo_color = ghost_color
+	_ghost_material.transparency = BaseMaterial3D.TRANSPARENCY_ALPHA if ghost_color.a < 1.0 else BaseMaterial3D.TRANSPARENCY_DISABLED
+	_ring.visible = lifecycle != "locked"
+	_ghost.visible = lifecycle != "locked"
+	var target_form := lifecycle in ["preview", "committing", "complete"]
+	_ghost.scale = _target_form_scale() if target_form else _accepted_scale
+	_ghost.position.y = RESPONSE_BASE_Y + 0.75 * _ghost.scale.y
+	_beacon.visible = lifecycle != "locked"
+	_beacon.text = feedback_text()
+	set_process(lifecycle != "locked")
+	_last_visual_signature = _visual_signature()
+	visual_apply_count += 1
+
+func _process(delta: float) -> void:
+	if not is_instance_valid(_beacon):
+		return
+	_update_camera_lane()
+	if lifecycle != "committing":
+		return
+	_pulse_time = fmod(_pulse_time + delta, 10.0)
+	var flow_scale := 1.0 + fmod(_pulse_time, 1.0) * 3.0
+	_ring_material.uv1_scale = Vector3(2.0 * flow_scale, 2.0 * flow_scale, 1.0)
+	_ring_material.uv1_offset = Vector3(0.5 - 0.5 * flow_scale, 0.5 - 1.5 * flow_scale, 0.0)
+	var pulse := 1.0 + sin(_pulse_time * TAU * PULSE_HZ) * 0.18
+	_ghost.scale = _target_form_scale() * pulse
+	_ghost.position.y = RESPONSE_BASE_Y + 0.75 * _ghost.scale.y
+
+func _active_directional_shadow_lights() -> Array[DirectionalLight3D]:
+	if not _shadow_lights_scanned:
+		_shadow_lights_scanned = true
+		var tree := get_tree()
+		if tree != null and tree.root != null:
+			for node in tree.root.find_children("*", "DirectionalLight3D", true, false):
+				var light := node as DirectionalLight3D
+				if light != null:
+					_directional_shadow_lights.append(light)
+	var active: Array[DirectionalLight3D] = []
+	for light in _directional_shadow_lights:
+		if not is_instance_valid(light):
+			continue
+		if light.shadow_enabled and light.is_visible_in_tree():
+			active.append(light)
+	return active
+
+func _ground_shadow_point(world_point: Vector3, light: DirectionalLight3D) -> Variant:
+	# DirectionalLight3D emits along local -Z. Project each caster corner along
+	# that ray onto the response ground plane instead of pretending the visible
+	# response ends at the mesh silhouette.
+	var ray_direction := -light.global_transform.basis.z.normalized()
+	var plane_normal := _visual_root.global_transform.basis.y.normalized()
+	var plane_origin := _visual_root.global_position
+	var height := plane_normal.dot(world_point - plane_origin)
+	var denominator := plane_normal.dot(ray_direction)
+	if height <= 0.0 or denominator >= -0.0001:
+		return null
+	var travel := -height / denominator
+	if travel < 0.0:
+		return null
+	return world_point + ray_direction * travel
+
+func _projected_response_rect(active_camera: Camera3D) -> Rect2:
+	var mesh_points: Array[Vector2] = []
+	var shadow_points: Array[Vector2] = []
+	var shadow_lights := _active_directional_shadow_lights()
+	for mesh_instance in [_ring, _ghost]:
+		var box: AABB = mesh_instance.get_aabb()
+		var pose: Transform3D = mesh_instance.global_transform
+		if mesh_instance == _ghost and lifecycle == "committing":
+			var peak := _target_form_scale() * 1.18
+			pose = _visual_root.global_transform * Transform3D(Basis.from_scale(peak), Vector3(0.0, RESPONSE_BASE_Y + 0.75 * peak.y, 0.0))
+		for corner in 8:
+			var world_point := pose * box.get_endpoint(corner)
+			var depth := -(active_camera.global_transform.affine_inverse() * world_point).z
+			if depth <= active_camera.near or depth >= active_camera.far:
+				return Rect2()
+			mesh_points.append(active_camera.unproject_position(world_point))
+			for light in shadow_lights:
+				var shadow_point: Variant = _ground_shadow_point(world_point, light)
+				if shadow_point == null:
+					continue
+				var shadow_world := shadow_point as Vector3
+				var shadow_depth := -(active_camera.global_transform.affine_inverse() * shadow_world).z
+				if shadow_depth <= active_camera.near or shadow_depth >= active_camera.far:
+					return Rect2()
+				shadow_points.append(active_camera.unproject_position(shadow_world))
+	var minimum := mesh_points[0]
+	var maximum := mesh_points[0]
+	for point in mesh_points:
+		minimum = minimum.min(point)
+		maximum = maximum.max(point)
+	var response := Rect2(minimum, maximum - minimum).grow(LABEL_FIT_SLACK_PX)
+	if not shadow_points.is_empty():
+		var shadow_minimum := shadow_points[0]
+		var shadow_maximum := shadow_points[0]
+		for point in shadow_points:
+			shadow_minimum = shadow_minimum.min(point)
+			shadow_maximum = shadow_maximum.max(point)
+		# Shadow-map filtering and raster quantization extend a few pixels past the
+		# geometric ray endpoints. Reuse the existing minimum-clearance contract as
+		# a bounded guard on the shadow footprint only; do not inflate the mesh box.
+		var shadow_response := Rect2(shadow_minimum, shadow_maximum - shadow_minimum).grow(LABEL_MIN_CLEARANCE_PX)
+		response = response.merge(shadow_response)
+	return response
+
+func _label_size_for_wrap(pixels_per_label_unit: float, wrap_width: float) -> Vector2:
+	var measured := _beacon.font.get_multiline_string_size(_beacon.text, HORIZONTAL_ALIGNMENT_CENTER, wrap_width, _beacon.font_size)
+	return (measured + Vector2(_beacon.outline_size * 2.0, _beacon.outline_size * 2.0)) * pixels_per_label_unit
+
+func _minimum_word_wrap_width() -> float:
+	var longest := 1.0
+	for line in _beacon.text.split("\n"):
+		for token in String(line).split(" ", false):
+			if token.is_empty():
+				continue
+			longest = maxf(longest, _beacon.font.get_string_size(token, HORIZONTAL_ALIGNMENT_LEFT, -1, _beacon.font_size).x)
+	return longest
+
+func _rect_clearance(label_rect: Rect2, response_rect: Rect2) -> float:
+	var horizontal_gap := maxf(maxf(response_rect.position.x - label_rect.end.x, label_rect.position.x - response_rect.end.x), 0.0)
+	var vertical_gap := maxf(maxf(response_rect.position.y - label_rect.end.y, label_rect.position.y - response_rect.end.y), 0.0)
+	return maxf(horizontal_gap, vertical_gap)
+
+static func screen_delta_to_label_offset(delta: Vector2, pixels_per_label_unit: float) -> Vector2:
+	# Label3D's billboard offset uses a screen-X/right, screen-Y/up basis.
+	# Viewport coordinates use screen-Y/down, so only the Y component changes
+	# sign.  Keep this transform explicit and independently verify its rendered
+	# result; the analytic rectangle alone is not approval evidence.
+	if not is_finite(pixels_per_label_unit) or pixels_per_label_unit <= 0.0:
+		return Vector2.ZERO
+	return Vector2(delta.x, -delta.y) / pixels_per_label_unit
+
+func _label_candidate(lane: String, response: Rect2, frame: Rect2, gap: float, pixels_per_label_unit: float) -> Dictionary:
+	var available_width := 0.0
+	var available_height := 0.0
+	match lane:
+		"top":
+			available_width = frame.size.x
+			available_height = response.position.y - gap - frame.position.y
+		"bottom":
+			available_width = frame.size.x
+			available_height = frame.end.y - response.end.y - gap
+		"right":
+			available_width = frame.end.x - response.end.x - gap
+			available_height = frame.size.y
+		"left":
+			available_width = response.position.x - gap - frame.position.x
+			available_height = frame.size.y
+		_:
+			return {"valid": false, "lane": lane, "failure": "unknown_lane"}
+	var minimum_wrap_width := _minimum_word_wrap_width()
+	var diagnostic := {
+		"valid": false,
+		"lane": lane,
+		"available_width": available_width,
+		"available_height": available_height,
+		"minimum_wrap_width": minimum_wrap_width,
+		"minimum_readability_scale": READABILITY_MIN,
+	}
+	if available_width <= 0.0 or available_height <= 0.0:
+		diagnostic["failure"] = "no_lane_space"
+		return diagnostic
+	var outline_units := float(_beacon.outline_size) * 2.0
+	var max_wrap_width := (available_width - LABEL_FIT_SLACK_PX) / (pixels_per_label_unit * READABILITY_MIN) - outline_units - 1.0
+	diagnostic["max_wrap_width"] = max_wrap_width
+	# Test the widest wrap that can fit at the protected scale floor. Narrower
+	# wraps cannot reduce height; rejecting only this maximum avoids false
+	# infeasibility caused by wrapping at full size before allowing bounded fit.
+	var wrap_width := minf(LABEL_MAX_WIDTH, maxf(minimum_wrap_width, max_wrap_width))
+	var label_size := _label_size_for_wrap(pixels_per_label_unit, wrap_width)
+	var fit_attempts := 1
+	var bounded_width := maxf(0.0, available_width - LABEL_FIT_SLACK_PX)
+	var bounded_height := maxf(0.0, available_height - LABEL_FIT_SLACK_PX)
+	var required_scale := minf(1.0, minf(bounded_width / maxf(label_size.x, 0.01), bounded_height / maxf(label_size.y, 0.01)))
+	diagnostic["fit_slack_px"] = LABEL_FIT_SLACK_PX
+	diagnostic["bounded_width"] = bounded_width
+	diagnostic["bounded_height"] = bounded_height
+	diagnostic["wrap_width"] = wrap_width
+	diagnostic["fit_attempts"] = fit_attempts
+	diagnostic["unscaled_label_size"] = [label_size.x, label_size.y]
+	diagnostic["required_scale"] = required_scale
+	if required_scale + 0.0001 < READABILITY_MIN:
+		diagnostic["failure"] = "required_scale_below_readability_floor"
+		return diagnostic
+	label_size *= required_scale
+	diagnostic["label_size"] = [label_size.x, label_size.y]
+	var half := label_size * 0.5
+	var desired := response.get_center()
+	match lane:
+		"top":
+			desired.y = response.position.y - gap - half.y
+			desired.x = clampf(desired.x, frame.position.x + half.x, frame.end.x - half.x)
+		"bottom":
+			desired.y = response.end.y + gap + half.y
+			desired.x = clampf(desired.x, frame.position.x + half.x, frame.end.x - half.x)
+		"right":
+			desired.x = response.end.x + gap + half.x
+			desired.y = clampf(desired.y, frame.position.y + half.y, frame.end.y - half.y)
+		"left":
+			desired.x = response.position.x - gap - half.x
+			desired.y = clampf(desired.y, frame.position.y + half.y, frame.end.y - half.y)
+	var label_rect := Rect2(desired - half, label_size)
+	var clearance := _rect_clearance(label_rect, response)
+	diagnostic["desired_center"] = [desired.x, desired.y]
+	diagnostic["label_rect"] = [label_rect.position.x, label_rect.position.y, label_rect.size.x, label_rect.size.y]
+	diagnostic["clearance"] = clearance
+	if not frame.encloses(label_rect):
+		diagnostic["failure"] = "not_in_frame"
+		return diagnostic
+	if label_rect.intersects(response):
+		diagnostic["failure"] = "overlap"
+		return diagnostic
+	if clearance + 0.01 < gap:
+		diagnostic["failure"] = "insufficient_clearance"
+		return diagnostic
+	diagnostic["valid"] = true
+	diagnostic["placement_found"] = true
+	diagnostic["label_scale"] = required_scale
+	diagnostic["effective_pixels_per_label_unit"] = pixels_per_label_unit * required_scale
+	diagnostic["label_size_vector"] = label_size
+	diagnostic["desired_center_vector"] = desired
+	diagnostic["label_rect_value"] = label_rect
+	return diagnostic
+
+func _label_projection(active_camera: Camera3D) -> Dictionary:
+	var viewport_size := Vector2(get_viewport().get_visible_rect().size)
+	var label_depth := -(active_camera.global_transform.affine_inverse() * _beacon.global_position).z
+	var label_in_frustum := label_depth > active_camera.near and label_depth < active_camera.far
+	var base := active_camera.unproject_position(_beacon.global_position) if label_in_frustum else viewport_size * 0.5
+	var camera_up := active_camera.global_transform.basis.y.normalized()
+	var probe := active_camera.unproject_position(_beacon.global_position + camera_up * LABEL_PIXEL_SIZE * _beacon.global_transform.basis.get_scale().y * 100.0) if label_in_frustum else base
+	var world_pixels_per_label_unit := maxf(0.01, absf(probe.y - base.y) / 100.0)
+	var pixels_per_label_unit := readability_scale
+	var response := _projected_response_rect(active_camera)
+	var label_basis_scale := _beacon.global_transform.basis.get_scale()
+	var projection_valid := response.size.x > 0.0 and response.size.y > 0.0 and label_depth > active_camera.near and label_depth < active_camera.far and label_basis_scale.x > 0.0 and is_equal_approx(label_basis_scale.x, label_basis_scale.y) and is_equal_approx(label_basis_scale.y, label_basis_scale.z)
+	var gap := maxf(LABEL_MIN_CLEARANCE_PX, viewport_size.y * 0.015)
+	var inset := maxf(LABEL_MIN_CLEARANCE_PX, minf(viewport_size.x, viewport_size.y) * LABEL_SAFE_INSET_RATIO)
+	var frame := Rect2(Vector2(inset, inset), viewport_size - Vector2.ONE * inset * 2.0)
+	var attempts: Array[Dictionary] = []
+	for lane in ["top", "right", "left", "bottom"]:
+		if not projection_valid: break
+		var candidate := _label_candidate(lane, response, frame, gap, pixels_per_label_unit)
+		var report := candidate.duplicate(true)
+		report.erase("label_size_vector")
+		report.erase("desired_center_vector")
+		report.erase("label_rect_value")
+		attempts.append(report)
+		if not candidate.get("valid", false):
+			continue
+		candidate["projection_valid"] = true
+		candidate["label_size"] = candidate.label_size_vector
+		candidate["desired_center"] = candidate.desired_center_vector
+		candidate["viewport"] = viewport_size
+		candidate["base"] = base
+		candidate["pixels_per_label_unit"] = pixels_per_label_unit
+		candidate["world_pixels_per_label_unit"] = world_pixels_per_label_unit
+		candidate["response_rect"] = response
+		candidate["frame_rect"] = frame
+		candidate["gap"] = gap
+		candidate["safe_inset"] = inset
+		candidate["attempts"] = attempts
+		candidate["offset"] = screen_delta_to_label_offset(
+			candidate.desired_center - base,
+			float(candidate.effective_pixels_per_label_unit)
+		)
+		return candidate
+	# Fail closed when no legal lane exists. Keep a deterministic visible fallback
+	# only so the validator can report the impossible geometry without inventing a pass.
+	var fallback_wrap := LABEL_MAX_WIDTH
+	var fallback_size := _label_size_for_wrap(pixels_per_label_unit, fallback_wrap)
+	var fallback_center := frame.get_center()
+	return {
+		"placement_found": false,
+		"projection_valid": projection_valid,
+		"lane": "none",
+		"wrap_width": fallback_wrap,
+		"viewport": viewport_size,
+		"base": base,
+		"pixels_per_label_unit": pixels_per_label_unit,
+		"world_pixels_per_label_unit": world_pixels_per_label_unit,
+		"label_size": fallback_size,
+		"response_rect": response,
+		"frame_rect": frame,
+		"desired_center": fallback_center,
+		"offset": screen_delta_to_label_offset(fallback_center - base, pixels_per_label_unit),
+		"gap": gap,
+		"safe_inset": inset,
+		"attempts": attempts,
+		"label_scale": 1.0,
+		"effective_pixels_per_label_unit": pixels_per_label_unit,
+	}
+
+func _update_camera_lane() -> void:
+	var active_camera := get_viewport().get_camera_3d()
+	if active_camera == null or lifecycle == "locked":
+		return
+	var projection := _label_projection(active_camera)
+	_beacon.width = float(projection.wrap_width)
+	_beacon.pixel_size = LABEL_PIXEL_SIZE * readability_scale * float(projection.get("label_scale", 1.0)) / float(projection.world_pixels_per_label_unit)
+	_beacon.offset = projection.offset
+
+func projected_readability(active_camera: Camera3D) -> Dictionary:
+	if active_camera == null or not is_instance_valid(_beacon):
+		return {"passed": false, "error": "missing_camera_or_label"}
+	_update_camera_lane()
+	var projection := _label_projection(active_camera)
+	var label_rect := Rect2(projection.desired_center - projection.label_size * 0.5, projection.label_size)
+	var response_rect: Rect2 = projection.response_rect
+	var frame: Rect2 = projection.frame_rect
+	var clearance := _rect_clearance(label_rect, response_rect)
+	var overlap := label_rect.intersects(response_rect)
+	var in_frame := frame.encloses(label_rect)
+	var priority_ok := _beacon.render_priority == LABEL_RENDER_PRIORITY and _beacon.outline_render_priority == LABEL_OUTLINE_RENDER_PRIORITY
+	var placement_found := bool(projection.get("placement_found", false))
+	return {
+		"label_rect": [label_rect.position.x, label_rect.position.y, label_rect.size.x, label_rect.size.y],
+		"response_rect": [response_rect.position.x, response_rect.position.y, response_rect.size.x, response_rect.size.y],
+		"frame_rect": [frame.position.x, frame.position.y, frame.size.x, frame.size.y],
+		"clearance_px": clearance,
+		"required_clearance_px": projection.gap,
+		"overlap": overlap,
+		"fully_in_frame": in_frame,
+		"priority_ok": priority_ok,
+		"placement_found": placement_found,
+		"layout_lane": String(projection.get("lane", "none")),
+		"label_wrap_width": float(projection.get("wrap_width", LABEL_MAX_WIDTH)),
+		"projection_valid": bool(projection.get("projection_valid", false)),
+		"label_size_coordinate_space": "logical_viewport_pixels",
+		"logical_font_size": float(_beacon.font_size) * readability_scale * float(projection.get("label_scale", 1.0)),
+		"logical_outline_size": float(_beacon.outline_size) * readability_scale * float(projection.get("label_scale", 1.0)),
+		"world_pixel_size": _beacon.pixel_size,
+		"label_scale": float(projection.get("label_scale", 1.0)),
+		"minimum_readability_scale": READABILITY_MIN,
+		"layout_attempts": projection.get("attempts", []),
+		"label_offset": [_beacon.offset.x, _beacon.offset.y],
+		"passed": placement_found and not overlap and in_frame and clearance + 0.01 >= float(projection.gap) and priority_ok,
+	}
+
+func _target_form_scale() -> Vector3:
+	return Vector3(1.0, minf(1.35, 1.0 + 0.25 * maxi(0, target_revision - 1)), 1.0)
+
+func _quantities(values: Dictionary) -> String:
+	var parts: Array[String] = []
+	for kind in ["wood", "stone", "metal", "fuel"]:
+		if values.has(kind): parts.append("%d %s" % [int(values[kind]), kind])
+	return " + ".join(parts)
+
+func _resource_cues(values: Dictionary, marker := "") -> String:
+	var parts: Array[String] = []
+	for kind in ["wood", "stone", "metal", "fuel"]:
+		if values.has(kind):
+			parts.append("%s%s %d %s" % [marker, RESOURCE_GLYPHS[kind], int(values[kind]), kind])
+	# Two spaces keep resource tokens visually separate while preserving the
+	# camera-plane side lane on the narrowest canonical landscape viewport.
+	return "  ".join(parts)
+
+func _readable_reasons(reasons: Array, shortfalls: Dictionary = {}) -> String:
+	var readable: Array[String] = []
+	for reason in reasons:
+		var text := String(reason)
+		if text == "insufficient_resources" and not shortfalls.is_empty():
+			continue # The exact delivery action already explains this reason.
+		var friendly := "Needs harvesting access" if text == "missing_prerequisite:harvesting_online" else text.replace("missing_prerequisite:", "Requires ").replace("_", " ")
+		readable.append(friendly.left(1).to_upper() + friendly.substr(1))
+	return " / ".join(readable)
+
+func _harvesting_access_blocked(reasons: Array) -> bool:
+	for reason in reasons:
+		if String(reason) == "missing_prerequisite:harvesting_online":
+			return true
+	return false
+
+func _next_preview_blocked() -> bool:
+	return lifecycle == "complete" and not next_preview.is_empty() and not bool(next_preview.get("passed", false))
+
+func feedback_text() -> String:
+	var destination := target_state.capitalize() if not target_state.is_empty() else "Transformation"
+	var cost_cues := _resource_cues(displayed_costs)
+	if lifecycle == "complete":
+		var completion := "✓ %s complete" % destination
+		if not displayed_costs.is_empty():
+			completion += " · Spent: %s" % _resource_cues(displayed_costs)
+		if next_preview.is_empty():
+			return completion
+		var next_destination := String(next_preview.get("target_state", "")).capitalize()
+		var next_shortfalls: Dictionary = next_preview.get("shortfalls", {})
+		var next_errors: Array = next_preview.get("errors", [])
+		var next_reason := _readable_reasons(next_errors, next_shortfalls)
+		var action := ""
+		if next_preview.get("passed", false):
+			action = "NEXT >> APPROACH → %s" % next_destination
+		elif _harvesting_access_blocked(next_errors):
+			action = "NEXT >> UNLOCK HARVESTING ACCESS"
+			if not next_shortfalls.is_empty():
+				action += "\nThen: deliver → %s · Need: %s" % [next_destination, _resource_cues(next_shortfalls)]
+			else:
+				action += "\nThen: %s" % next_destination
+		elif not next_shortfalls.is_empty():
+			action = "NEXT >> DELIVER → %s\nNeed: %s" % [next_destination, _resource_cues(next_shortfalls)]
+		elif not next_reason.is_empty():
+			action = "NEXT >> RESOLVE → %s\nWhy: %s" % [next_destination, next_reason]
+		else:
+			action = "NEXT >> %s" % next_destination
+		return completion + "\n" + action
+	if lifecycle == "blocked":
+		var reason := _readable_reasons(block_reasons, blocked_shortfalls)
+		if _harvesting_access_blocked(block_reasons):
+			var text := "NEXT >> UNLOCK HARVESTING ACCESS\nBlocked: %s" % destination
+			if not blocked_shortfalls.is_empty():
+				text += "\nThen: deliver · %s" % _resource_cues(blocked_shortfalls)
+			if not displayed_costs.is_empty():
+				text += "\nCost: %s" % cost_cues
+			return text
+		if not blocked_shortfalls.is_empty():
+			var text := "NEXT >> DELIVER → %s\nNeed: %s" % [destination, _resource_cues(blocked_shortfalls)]
+			if not displayed_costs.is_empty():
+				text += "\nCost: %s" % cost_cues
+			if not reason.is_empty():
+				text += "\n" + reason
+			return text
+		return ("NEXT >> %s\n" % reason if not reason.is_empty() else "") + "Blocked: %s" % destination + ("\nCost: %s" % cost_cues if not displayed_costs.is_empty() else "")
+	if lifecycle == "committing":
+		return "APPLYING → " + destination + "\nDelivered resources: " + cost_cues + "\nAwaiting confirmation"
+	if lifecycle == "preview":
+		return "PREVIEW — stay near " + destination + "\nCost from delivered stock:\n" + cost_cues
+	return "READY — approach " + destination + ("\nCost from delivered stock:\n" + cost_cues if not displayed_costs.is_empty() else "")
+
+func descriptor() -> Dictionary:
+	return {
+		"authority_id": AUTHORITY_ID,
+		"label_layout_policy": "constrained_screen_pixels_v3",
+		"label_size_coordinate_space": "logical_viewport_pixels",
+		"target_id": target_id,
+		"lifecycle": lifecycle,
+		"presentation_key": presentation_key,
+		"source_state": source_state,
+		"target_state": target_state,
+		"target_revision": target_revision,
+		"transaction_id": transaction_id,
+		"block_reasons": block_reasons.duplicate(),
+		"blocked_shortfalls": blocked_shortfalls.duplicate(true),
+		"displayed_costs": displayed_costs.duplicate(true),
+		"feedback_text": feedback_text(),
+		"next_preview_blocked": _next_preview_blocked(),
+		"update_count": update_count,
+		"visual_apply_count": visual_apply_count,
+		"visual_build_count": visual_build_count,
+		"visual_node_count": _visual_root.get_child_count() + 1 if is_instance_valid(_visual_root) else 0,
+		"readability_scale": readability_scale,
+		"label_camera_offset": [_beacon.offset.x, _beacon.offset.y] if is_instance_valid(_beacon) else [],
+		"label_render_priority": _beacon.render_priority if is_instance_valid(_beacon) else -1,
+		"label_outline_render_priority": _beacon.outline_render_priority if is_instance_valid(_beacon) else -1,
+		"presentation_only": true,
+		"mutates_resources": false,
+		"advances_progression": false,
+		"neutral_framework_visuals_only": true,
+	}

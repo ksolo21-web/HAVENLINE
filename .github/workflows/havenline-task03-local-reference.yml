@@ -1,0 +1,87 @@
+name: Havenline Task 3 local reference critic
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task03-local-reference.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  reference-review:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        shard: [0,1,2,3]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 36
+    env:
+      REVIEW_SHARD: ${{ matrix.shard }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-task03-evidence-34601284867
+          path: task03-evidence/
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 34601284867
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Blind-competency-gated local reference review
+        run: python3 -u tools/havenline/review_task03_local_reference.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-local-reference-${{ matrix.shard }}-${{ github.run_id }}
+          path: task03-local-reference/
+          retention-days: 30
+          if-no-files-found: error
+  aggregate:
+    needs: reference-review
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-task03-local-reference-*-${{ github.run_id }}
+          path: local-reference/
+      - name: Require all 11 groups exactly once at >=9 with raw independent execution
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,math
+          expected={'perimeter','north-gate','side-gates','river-gates','south-fence','central-lane','cross-shelter-lanes','bank-lane','detail-contact','gameplay','conditions'}
+          rows=[];errors=[];models=[];shards=[]
+          for p in Path('local-reference').glob('*/shard-review.json'):
+            o=json.loads(p.read_text());shards.append(o['shard']);models.append((o['model'],o['model_revision']))
+            if o['source']!='8dc19649160597f2926ad5bacbccc26ad01ab48f' or o['role']!='reference-fidelity' or o['competency_passed'] is not True or o['passed'] is not True:errors.append('invalid shard '+str(p))
+            rows+=o['reviews']
+          if set(shards)!={0,1,2,3} or len(shards)!=4:errors.append('missing/duplicate shards')
+          if len(rows)!=11 or {r.get('group') for r in rows}!=expected:errors.append('incomplete/duplicate group coverage')
+          for r in rows:
+            rev=r.get('review',{});scores=rev.get('scores',{})
+            if r.get('independent_execution') is not True or r.get('passed') is not True:errors.append('not passing '+r.get('group','missing'))
+            if set(scores)!={'reference_fidelity','boundary_finish','gate_readability','lane_legibility','river_preservation','view_consistency'} or any(type(v) not in (int,float) or not math.isfinite(v) or v<9 or v>10 for v in scores.values()):errors.append('bad score '+r.get('group','missing'))
+            if rev.get('defects')!=[] or rev.get('coverage_complete') is not True or rev.get('confidence') not in ('medium','high'):errors.append('defect/incomplete '+r.get('group','missing'))
+          if len(set(models))!=1:errors.append('reviewer model provenance mismatch')
+          result={'task':'T03','source':'8dc19649160597f2926ad5bacbccc26ad01ab48f','role':'reference-fidelity','group_count':len(rows),'passed':not errors,'lowest_score':min((r.get('lowest_score',0) for r in rows),default=None),'model':models[0] if models else None,'errors':errors,'hosted_reference_failures_preserved':True,'task_approved':False}
+          Path('local-reference-gate').mkdir(exist_ok=True);Path('local-reference-gate/gate.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2));raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-local-reference-gate-${{ github.run_id }}
+          path: local-reference-gate/
+          retention-days: 30
+          if-no-files-found: error
+# Public local model cache was checksum-verified in the reviewer. No paid API, no game-source modification, no device-performance claim.

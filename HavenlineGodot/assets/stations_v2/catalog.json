@@ -1,0 +1,972 @@
+{
+  "arrangements": {
+    "camp": [
+      {
+        "id": "hearth_vessel",
+        "position": [
+          0,
+          0,
+          0.2
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "service_counter",
+        "position": [
+          7.8,
+          0,
+          5.1
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "processing_counter",
+        "position": [
+          -7.8,
+          0,
+          5.1
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "pad_upgrade",
+        "position": [
+          -3.0,
+          0,
+          -0.8
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "pad_stock",
+        "position": [
+          7.8,
+          0,
+          7.2
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "pad_payment",
+        "position": [
+          10.7,
+          0,
+          7.1
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "wood_stack",
+        "position": [
+          -10.8,
+          0,
+          7.4
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "stone_stack",
+        "position": [
+          -4.8,
+          0,
+          7.4
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "metal_stack",
+        "position": [
+          -10.8,
+          0,
+          4.8
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "fuel_canister",
+        "position": [
+          10.8,
+          0,
+          4.8
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "defense_platform",
+        "position": [
+          3.5,
+          0,
+          6.6
+        ],
+        "rotation_y": 0
+      }
+    ],
+    "lakeshore": [
+      {
+        "id": "fishing_rack",
+        "position": [
+          -5.6,
+          0,
+          -13.0
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "pad_build",
+        "position": [
+          -6.3,
+          0,
+          -15.1
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "intake_machine",
+        "position": [
+          -2.5,
+          0,
+          -13.0
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "pad_input",
+        "position": [
+          -3.8,
+          0,
+          -15.1
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "fish_crate",
+        "position": [
+          -1.3,
+          0,
+          -15.1
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "conveyor_straight",
+        "position": [
+          4.9,
+          0,
+          -13.0
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "cargo_crate",
+        "position": [
+          7.5,
+          0,
+          -12.8
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "pad_output",
+        "position": [
+          4.3,
+          0,
+          -15.1
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "cooker_processor",
+        "position": [
+          7.1,
+          0,
+          -15.0
+        ],
+        "rotation_y": 0
+      },
+      {
+        "id": "cooked_food_stack",
+        "position": [
+          12.6,
+          0,
+          -14.6
+        ],
+        "rotation_y": 0
+      }
+    ]
+  },
+  "art_language": "bright sculpted winter production kit; shared blue/orange/yellow machinery with warm timber and snow contact",
+  "authority_id": "T05-station-kit-v1",
+  "entries": [
+    {
+      "asset": "res://assets/stations_v2/cargo_crate.glb",
+      "clearance": 0.55,
+      "footprint": [
+        1.7,
+        1.36
+      ],
+      "id": "cargo_crate",
+      "later_task": "T08",
+      "materials": [
+        "dark",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "requirement": "T05-R07",
+      "sha256": "b524e93f6ebc56750c55b67f7e7747c599d956a37f66c4e6368d4314b01c2cf2",
+      "sockets": {
+        "pickup": [
+          0,
+          1.0,
+          0
+        ]
+      },
+      "triangles": 864
+    },
+    {
+      "asset": "res://assets/stations_v2/conveyor_straight.glb",
+      "clearance": 0.55,
+      "footprint": [
+        3.4,
+        1.3
+      ],
+      "id": "conveyor_straight",
+      "later_task": "T18",
+      "materials": [
+        "blue",
+        "dark",
+        "orange",
+        "snow",
+        "yellow"
+      ],
+      "requirement": "T05-R05",
+      "sha256": "89bbeb9f7c38744497deefb414eb0456ed28100a07d4ae6bce47aa85cf40bb15",
+      "sockets": {
+        "input": [
+          -1.8,
+          0.75,
+          0
+        ],
+        "output": [
+          1.8,
+          0.75,
+          0
+        ]
+      },
+      "triangles": 1216
+    },
+    {
+      "asset": "res://assets/stations_v2/cooked_food_stack.glb",
+      "clearance": 0.55,
+      "footprint": [
+        1.65,
+        1.28
+      ],
+      "id": "cooked_food_stack",
+      "later_task": "T16",
+      "materials": [
+        "blue",
+        "orange",
+        "snow",
+        "yellow"
+      ],
+      "requirement": "T05-R07",
+      "sha256": "d235f82290045a02a7fb0200ab95d19192ff0784ef05185bcbe095516567f2f6",
+      "sockets": {
+        "pickup": [
+          0,
+          1.0,
+          0
+        ]
+      },
+      "triangles": 1764
+    },
+    {
+      "asset": "res://assets/stations_v2/cooker_processor.glb",
+      "clearance": 0.55,
+      "footprint": [
+        2.45,
+        2.3
+      ],
+      "id": "cooker_processor",
+      "later_task": "T16",
+      "materials": [
+        "blue",
+        "cream",
+        "metal",
+        "orange",
+        "snow",
+        "wood_light",
+        "yellow"
+      ],
+      "requirement": "T05-R05",
+      "sha256": "6c7820c06c20ed481e4f55b1e9d186f54b1a8e215f337b6a6bdbbe4d703c9688",
+      "sockets": {
+        "fx_heat": [
+          0,
+          1.4,
+          0
+        ],
+        "input": [
+          0,
+          0.65,
+          -1.35
+        ],
+        "output": [
+          0,
+          0.65,
+          1.35
+        ]
+      },
+      "triangles": 1188
+    },
+    {
+      "asset": "res://assets/stations_v2/defense_platform.glb",
+      "clearance": 0.55,
+      "footprint": [
+        3.25,
+        3.05
+      ],
+      "id": "defense_platform",
+      "later_task": "T22",
+      "materials": [
+        "blue",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "requirement": "T05-R06",
+      "sha256": "e5a390811801a7175a6c5e09f086ddb799d3ca65eead7777781dbae4acb80ee4",
+      "sockets": {
+        "repair": [
+          1.7,
+          0,
+          0
+        ],
+        "supply": [
+          0,
+          0.8,
+          -1.65
+        ],
+        "weapon": [
+          0,
+          1.62,
+          0
+        ]
+      },
+      "triangles": 1632
+    },
+    {
+      "asset": "res://assets/stations_v2/fish_crate.glb",
+      "clearance": 0.55,
+      "footprint": [
+        1.7,
+        1.36
+      ],
+      "id": "fish_crate",
+      "later_task": "T16",
+      "materials": [
+        "blue",
+        "cyan",
+        "dark",
+        "snow",
+        "wood",
+        "wood_light"
+      ],
+      "requirement": "T05-R07",
+      "sha256": "6834b98ae6bb37cbca712676326e2c7f8b82ab557d0cffb5ad76712b5bd59320",
+      "sockets": {
+        "pickup": [
+          0,
+          1.05,
+          0
+        ]
+      },
+      "triangles": 1512
+    },
+    {
+      "asset": "res://assets/stations_v2/fishing_rack.glb",
+      "clearance": 0.55,
+      "footprint": [
+        3.25,
+        1.8
+      ],
+      "id": "fishing_rack",
+      "later_task": "T16",
+      "materials": [
+        "blue",
+        "cyan",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "requirement": "T05-R04",
+      "sha256": "56c190ec2abb6efb8b0e21656071ffb7f532941fe3b5a4ca069da3bf23b192bf",
+      "sockets": {
+        "output": [
+          0,
+          0.8,
+          0.5
+        ],
+        "player": [
+          0,
+          0,
+          -1.15
+        ],
+        "water": [
+          0,
+          0,
+          1.15
+        ]
+      },
+      "triangles": 1276
+    },
+    {
+      "asset": "res://assets/stations_v2/fuel_canister.glb",
+      "clearance": 0.55,
+      "footprint": [
+        1.15,
+        1.08
+      ],
+      "id": "fuel_canister",
+      "later_task": "T08",
+      "materials": [
+        "cream",
+        "dark",
+        "metal",
+        "red",
+        "snow",
+        "yellow"
+      ],
+      "requirement": "T05-R07",
+      "sha256": "4f12ab4c8bd7e6a282cbfe797bcebc11b638d4a458f7ad19661e76e6e12f70e5",
+      "sockets": {
+        "pickup": [
+          0,
+          0.75,
+          0
+        ]
+      },
+      "triangles": 640
+    },
+    {
+      "asset": "res://assets/stations_v2/hearth_vessel.glb",
+      "clearance": 0.55,
+      "footprint": [
+        2.6,
+        2.25
+      ],
+      "id": "hearth_vessel",
+      "later_task": "T11",
+      "materials": [
+        "blue",
+        "cream",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "requirement": "T05-R01",
+      "sha256": "f7a10471db0085cead99aaa495493d1031dbd45cfb80612eb1d6c9c0098d1801",
+      "sockets": {
+        "fx_heat": [
+          0,
+          1.35,
+          0
+        ],
+        "input": [
+          0,
+          0.45,
+          -1.45
+        ],
+        "upgrade": [
+          -1.55,
+          0,
+          0
+        ],
+        "worker": [
+          1.55,
+          0,
+          0
+        ]
+      },
+      "triangles": 1736
+    },
+    {
+      "asset": "res://assets/stations_v2/intake_machine.glb",
+      "clearance": 0.55,
+      "footprint": [
+        2.6,
+        2.4
+      ],
+      "id": "intake_machine",
+      "later_task": "T18",
+      "materials": [
+        "blue",
+        "cyan",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "yellow"
+      ],
+      "requirement": "T05-R04",
+      "sha256": "df4a7e95f92b1ebff291506a4bd1eabf989e82cb8feec5efcce87a0eb01ab647",
+      "sockets": {
+        "input": [
+          0,
+          0.8,
+          -1.4
+        ],
+        "output": [
+          0,
+          0.8,
+          1.4
+        ],
+        "upgrade": [
+          -1.65,
+          0,
+          0
+        ]
+      },
+      "triangles": 760
+    },
+    {
+      "asset": "res://assets/stations_v2/metal_stack.glb",
+      "clearance": 0.55,
+      "footprint": [
+        1.75,
+        1.25
+      ],
+      "id": "metal_stack",
+      "later_task": "T08",
+      "materials": [
+        "metal",
+        "orange",
+        "snow"
+      ],
+      "requirement": "T05-R07",
+      "sha256": "44e3467f16ee777878b7881b0a76fc2b41d87cbf199cc2731831a9c881490338",
+      "sockets": {
+        "pickup": [
+          0,
+          0.8,
+          0
+        ]
+      },
+      "triangles": 1404
+    },
+    {
+      "asset": "res://assets/stations_v2/money_stack.glb",
+      "clearance": 0.55,
+      "footprint": [
+        1.55,
+        1.24
+      ],
+      "id": "money_stack",
+      "later_task": "T17",
+      "materials": [
+        "cream",
+        "green",
+        "snow",
+        "yellow"
+      ],
+      "requirement": "T05-R07",
+      "sha256": "564be7e8e5ba47f36f96ab7d7851d4c905f8f005510a0a7b1948dbda5d975864",
+      "sockets": {
+        "pickup": [
+          0,
+          0.95,
+          0
+        ]
+      },
+      "triangles": 2596
+    },
+    {
+      "asset": "res://assets/stations_v2/pad_build.glb",
+      "clearance": 0.55,
+      "footprint": [
+        2.1,
+        2.1
+      ],
+      "id": "pad_build",
+      "later_task": "T11",
+      "materials": [
+        "cream",
+        "wood",
+        "yellow"
+      ],
+      "requirement": "T05-R03",
+      "sha256": "2ae7d7e699b2b3cb8812812d4e2d4afb6bbd491d78aa02422bbba49ab7f34fe1",
+      "sockets": {
+        "icon": [
+          0,
+          0.45,
+          0
+        ],
+        "interaction": [
+          0,
+          0.35,
+          0
+        ]
+      },
+      "triangles": 372,
+      "visual_variant": {
+        "icon": "construction-frame",
+        "silhouette": "diamond",
+        "trim": "yellow"
+      }
+    },
+    {
+      "asset": "res://assets/stations_v2/pad_input.glb",
+      "clearance": 0.55,
+      "footprint": [
+        2.1,
+        2.1
+      ],
+      "id": "pad_input",
+      "later_task": "T16",
+      "materials": [
+        "cream",
+        "cyan",
+        "wood"
+      ],
+      "requirement": "T05-R03",
+      "sha256": "12c40d7e1d7d3dc665ed2f9d6fb93b1f5a2c3a62be610e18af3994e364558b28",
+      "sockets": {
+        "interaction": [
+          0,
+          0.35,
+          0
+        ],
+        "transfer": [
+          0,
+          0.45,
+          0
+        ]
+      },
+      "triangles": 252,
+      "visual_variant": {
+        "icon": "inbound-arrows",
+        "silhouette": "pentagon-forward",
+        "trim": "cyan"
+      }
+    },
+    {
+      "asset": "res://assets/stations_v2/pad_output.glb",
+      "clearance": 0.55,
+      "footprint": [
+        2.1,
+        2.1
+      ],
+      "id": "pad_output",
+      "later_task": "T16",
+      "materials": [
+        "blue",
+        "cream",
+        "wood"
+      ],
+      "requirement": "T05-R03",
+      "sha256": "a1ed448a5dbad221c7218ad56afab617ee3a7be69a35d6d37fd5cbba4aded308",
+      "sockets": {
+        "interaction": [
+          0,
+          0.35,
+          0
+        ],
+        "transfer": [
+          0,
+          0.45,
+          0
+        ]
+      },
+      "triangles": 252,
+      "visual_variant": {
+        "icon": "outbound-arrows",
+        "silhouette": "pentagon-reverse",
+        "trim": "blue"
+      }
+    },
+    {
+      "asset": "res://assets/stations_v2/pad_payment.glb",
+      "clearance": 0.55,
+      "footprint": [
+        2.1,
+        2.1
+      ],
+      "id": "pad_payment",
+      "later_task": "T17",
+      "materials": [
+        "cream",
+        "green",
+        "wood"
+      ],
+      "requirement": "T05-R03",
+      "sha256": "b68afa6bf8695cdf93834a4dc8ccd3a1fdb9ba740e6f5aa67711b05e6d88bff5",
+      "sockets": {
+        "interaction": [
+          0,
+          0.35,
+          0
+        ],
+        "payment": [
+          0,
+          0.45,
+          0
+        ]
+      },
+      "triangles": 528,
+      "visual_variant": {
+        "icon": "coin-cluster",
+        "silhouette": "round",
+        "trim": "green"
+      }
+    },
+    {
+      "asset": "res://assets/stations_v2/pad_stock.glb",
+      "clearance": 0.55,
+      "footprint": [
+        2.1,
+        2.1
+      ],
+      "id": "pad_stock",
+      "later_task": "T17",
+      "materials": [
+        "blue",
+        "cream",
+        "wood"
+      ],
+      "requirement": "T05-R03",
+      "sha256": "46cf98ffcbe0f1a6798ba43b72c47cf9009f8538c68cbc5f0ae05c017cd7ba39",
+      "sockets": {
+        "interaction": [
+          0,
+          0.35,
+          0
+        ],
+        "stock": [
+          0,
+          0.45,
+          0
+        ]
+      },
+      "triangles": 756,
+      "visual_variant": {
+        "icon": "stock-crate",
+        "silhouette": "soft-rectangle",
+        "trim": "cream"
+      }
+    },
+    {
+      "asset": "res://assets/stations_v2/pad_upgrade.glb",
+      "clearance": 0.55,
+      "footprint": [
+        2.1,
+        2.1
+      ],
+      "id": "pad_upgrade",
+      "later_task": "T11",
+      "materials": [
+        "cream",
+        "orange",
+        "wood"
+      ],
+      "requirement": "T05-R03",
+      "sha256": "1e0617e0aaed8fc02ca03e7abac34c77f241436991c84fca897bd484db52a836",
+      "sockets": {
+        "icon": [
+          0,
+          0.45,
+          0
+        ],
+        "interaction": [
+          0,
+          0.35,
+          0
+        ]
+      },
+      "triangles": 132,
+      "visual_variant": {
+        "icon": "upgrade-chevron",
+        "silhouette": "triangle",
+        "trim": "orange"
+      }
+    },
+    {
+      "asset": "res://assets/stations_v2/processing_counter.glb",
+      "clearance": 0.55,
+      "footprint": [
+        3.45,
+        1.95
+      ],
+      "id": "processing_counter",
+      "later_task": "T16",
+      "materials": [
+        "blue",
+        "cyan",
+        "dark",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light",
+        "yellow"
+      ],
+      "requirement": "T05-R02",
+      "sha256": "086ffb770f7253da9e62454bac5238dd57a9bf7e373dc2df120f4cb016da9ec8",
+      "sockets": {
+        "input": [
+          -0.72,
+          1.8,
+          0
+        ],
+        "output": [
+          0.72,
+          1.8,
+          0
+        ],
+        "worker": [
+          0,
+          0,
+          1.35
+        ]
+      },
+      "triangles": 2052
+    },
+    {
+      "asset": "res://assets/stations_v2/service_counter.glb",
+      "clearance": 0.55,
+      "footprint": [
+        3.45,
+        1.95
+      ],
+      "id": "service_counter",
+      "later_task": "T17",
+      "materials": [
+        "blue",
+        "cream",
+        "cyan",
+        "dark",
+        "green",
+        "metal",
+        "orange",
+        "snow",
+        "wood",
+        "wood_light"
+      ],
+      "requirement": "T05-R02",
+      "sha256": "9260c40753c67420924824c19253187bf1b55f962ea1e4da52bb91e612f0f73b",
+      "sockets": {
+        "customer": [
+          0,
+          0,
+          -1.45
+        ],
+        "payment": [
+          1.25,
+          1.3,
+          0
+        ],
+        "stock": [
+          0,
+          1.3,
+          0
+        ],
+        "worker": [
+          0,
+          0,
+          1.35
+        ]
+      },
+      "triangles": 1476
+    },
+    {
+      "asset": "res://assets/stations_v2/stone_stack.glb",
+      "clearance": 0.55,
+      "footprint": [
+        1.75,
+        1.38
+      ],
+      "id": "stone_stack",
+      "later_task": "T08",
+      "materials": [
+        "metal",
+        "snow"
+      ],
+      "requirement": "T05-R07",
+      "sha256": "4fda08c4b117ba6c3c72212cfe02fbed9519dba1a74345f2c2c04bc548d554c7",
+      "sockets": {
+        "pickup": [
+          0,
+          0.9,
+          0
+        ]
+      },
+      "triangles": 1116
+    },
+    {
+      "asset": "res://assets/stations_v2/wood_stack.glb",
+      "clearance": 0.55,
+      "footprint": [
+        1.7,
+        1.18
+      ],
+      "id": "wood_stack",
+      "later_task": "T08",
+      "materials": [
+        "cream",
+        "snow",
+        "wood_light"
+      ],
+      "requirement": "T05-R07",
+      "sha256": "5d5707cc5ecc05a2c586b6a933d15075510a9d091defdd63a42bca693658320b",
+      "sockets": {
+        "pickup": [
+          0,
+          0.75,
+          0
+        ]
+      },
+      "triangles": 1404
+    }
+  ],
+  "generator": "tools/havenline/task05/generate_station_kit.py",
+  "performance_contract": {
+    "active_physics": 0,
+    "animations": 0,
+    "draw_calls_max": 48,
+    "population": 0,
+    "skeletons": 0,
+    "storage_delta_mib_max": 15,
+    "texture_memory_mib_max": 96,
+    "triangles_max": 180000,
+    "visible_materials_max": 12
+  },
+  "physical_4k60_certified": false,
+  "requirements": [
+    "T05-R01",
+    "T05-R02",
+    "T05-R03",
+    "T05-R04",
+    "T05-R05",
+    "T05-R06",
+    "T05-R07",
+    "T05-R08",
+    "T05-R09",
+    "T05-R10",
+    "T05-R11",
+    "T05-R12"
+  ],
+  "runtime_logic_included": false,
+  "schema_version": 1,
+  "visual_approval_claimed": false
+}

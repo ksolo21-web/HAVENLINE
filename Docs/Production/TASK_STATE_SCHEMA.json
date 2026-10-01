@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "required_fields": [
+    "task_id",
+    "lifecycle_status",
+    "integration_branch",
+    "task_branch",
+    "base_commit",
+    "candidate_commit",
+    "dependencies",
+    "owned_paths",
+    "last_verified_gate",
+    "blockers",
+    "v3_readiness",
+    "contracts",
+    "next_executable_action"
+  ],
+  "snapshot_is_derived_not_authority": true,
+  "authoritative_sources": [
+    "WORKSTREAM_REGISTRY.json",
+    "DEPENDENCY_GRAPH.json",
+    "PATH_OWNERSHIP.json",
+    "Architecture V3 readiness",
+    "task defect/C0 records"
+  ]
+}

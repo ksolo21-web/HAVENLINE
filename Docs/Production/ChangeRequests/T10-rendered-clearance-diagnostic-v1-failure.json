@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "record_kind": "T10_RENDERED_CLEARANCE_DIAGNOSTIC_V1_TERMINAL_FAILURE",
+  "status": "TERMINAL_INSUFFICIENT_EVIDENCE",
+  "task_approved": false,
+  "product_evidence": "NONE",
+  "rerun_authorized": false,
+  "run": {
+    "id": 35477329507,
+    "attempt": 1,
+    "conclusion": "failure",
+    "url": "https://github.com/ksolo21-web/HAVENLINE/actions/runs/35477329507",
+    "source_commit": "f3ded9ba3d0c0d2182c9db4efbc9cc0a703dc347",
+    "source_tree": "fca9a337b7b4fdf3b2ccbb1c38ce603876f927c0"
+  },
+  "artifact": {
+    "id": 10594507398,
+    "name": "havenline-task10-rendered-clearance-probe-f3ded9ba3d0c0d2182c9db4efbc9cc0a703dc347",
+    "zip_sha256": "d0fdd3252d330450f83acd14a15ca339fe9eb653cfd78008a09abe5e3c8c9116",
+    "retention_days": 30,
+    "files_sha256": {
+      "admission/admission-summary.json": "db8897518881cfb0b39ea12caa9b38cae49c1de0c13755b92f7ed495a7c2ae3a",
+      "admission/canonical-authorization.json": "2847873e50291fc568143a16ef69ebfc2b85a0ea5aa7842a651211d3215ff9a0",
+      "admission/workflow-runs-api.json": "cbf7f15f8f1ed09952c3e5a48dfac88f5dc8f9d79a158e7cd9fe30c614b53a07",
+      "baseline/capture.log": "92acc0d840eff463682094f10f395e30342397450f5514f78ab96bc7c3c692b4",
+      "baseline/import.log": "caec3306199a6ad2d2130a101b0c4386efef709d6c447881854f9e82b263d843",
+      "identity.txt": "6fa97021ab48b9a4202115cb1e3323a110af59807fe93e1516fb3c926f4be6a0"
+    }
+  },
+  "failure": {
+    "family": "DIAGNOSTIC_HARNESS_PARSE_PREFLIGHT_GAP",
+    "file": "HavenlineGodot/tests/capture_task10_world_transform.gd",
+    "line": 363,
+    "error": "Cannot infer the type of process_was_enabled variable because the value does not have a set type.",
+    "mechanism": "The capture script is not referenced by the project import graph, so editor import did not parse it. The workflow first directly loaded it only during the clean failed-source render."
+  },
+  "diagnosis_sha256": "8b97ef6621bed10bcee713c9aa2021fdee2ebedfd5e2d0aa8d254c931fa1c32f",
+  "admission": {
+    "passed": true,
+    "authorization_sha256": "2847873e50291fc568143a16ef69ebfc2b85a0ea5aa7842a651211d3215ff9a0",
+    "workflow_runs_api_sha256": "cbf7f15f8f1ed09952c3e5a48dfac88f5dc8f9d79a158e7cd9fe30c614b53a07"
+  },
+  "evidence_semantics": {
+    "baseline_png_count": 0,
+    "candidate_png_count": 0,
+    "mask_count": 0,
+    "manifest_count": 0,
+    "rendered_report_count": 0,
+    "strategy_A": "INSUFFICIENT_EVIDENCE"
+  },
+  "disposition": "Preserve original run and artifact. Never rerun, relabel, or reuse its absent product evidence."
+}

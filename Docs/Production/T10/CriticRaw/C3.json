@@ -1,0 +1,162 @@
+{
+  "critic_id": "C3",
+  "provider": "unsloth/Qwen3.5-9B-GGUF",
+  "model": "Qwen/Qwen3.5-9B",
+  "model_revision_expected": "3885219b6810b007914f3a7950a8d1b469d598a5",
+  "model_revision_actual": "3885219b6810b007914f3a7950a8d1b469d598a5",
+  "runtime_release": "b10809",
+  "request_or_run_id": "35600362867/c3",
+  "candidate_hash": "eba0107def258824549fb10d81785290d0c81d97",
+  "input_manifest_hash": "5e578c6c9c1b28dbc0389d3843acf8b5c84e57db60cf0b67f9574851e5a90f68",
+  "raw_output_path": "c3-final/raw-output.json",
+  "raw_output_hash": "19a2daab8b00555a9fec0dbe2ee33c419d7d43ddc2aa3d6165a0c992969b876a",
+  "scores": {
+    "havenline_identity": 9.8,
+    "simple_context_controls": 9.9,
+    "physical_core_loop": 9.5,
+    "complexity_discipline": 9.9,
+    "world_response_readability": 9.6
+  },
+  "defects": [],
+  "coverage_complete": true,
+  "confidence": "high",
+  "independent_runtime": true,
+  "groups": [
+    {
+      "group": "full-lifecycle",
+      "review": {
+        "observations": [
+          "Evidence confirms strict lifecycle adherence (Ready->Blocked->Complete) with atomic resource debiting and zero manual inventory complexity.",
+          "Visual feedback is highly readable, clearly distinguishing between 'Preview' (yellow) and 'Committing' (blue) states to prevent user confusion."
+        ],
+        "defects": [],
+        "coverage_complete": true,
+        "confidence": "high",
+        "scores": {
+          "havenline_identity": 9.8,
+          "simple_context_controls": 9.9,
+          "physical_core_loop": 9.7,
+          "complexity_discipline": 9.9,
+          "world_response_readability": 9.6
+        }
+      },
+      "passed": true,
+      "errors": [],
+      "lowest_score": 9.6
+    },
+    {
+      "group": "motion-0",
+      "review": {
+        "observations": [
+          "Evidence shows 'Cost from delivered stock' in READY/COMPLETE states, confirming R06 (carried harvest cannot pay) and R08 (simulation owns resources).",
+          "Motion-006 PREVIEW state displays a 3D model of the foundation, satisfying R11 (readable world response) and R05 (truthful lifecycle)."
+        ],
+        "defects": [],
+        "coverage_complete": true,
+        "confidence": "high",
+        "scores": {
+          "havenline_identity": 10.0,
+          "simple_context_controls": 10.0,
+          "physical_core_loop": 10.0,
+          "complexity_discipline": 10.0,
+          "world_response_readability": 10.0
+        }
+      },
+      "passed": true,
+      "errors": [],
+      "lowest_score": 10.0
+    },
+    {
+      "group": "motion-6",
+      "review": {
+        "observations": [
+          "Evidence shows a clean, readable lifecycle from Preview to Complete with no hidden menus or complex inputs.",
+          "The 'Delivered resources' text explicitly confirms the 'physically delivered' rule, preventing carry-based fraud."
+        ],
+        "defects": [],
+        "coverage_complete": true,
+        "confidence": "high",
+        "scores": {
+          "havenline_identity": 9.8,
+          "simple_context_controls": 9.9,
+          "physical_core_loop": 9.5,
+          "complexity_discipline": 9.9,
+          "world_response_readability": 9.7
+        }
+      },
+      "passed": true,
+      "errors": [],
+      "lowest_score": 9.5
+    },
+    {
+      "group": "motion-12",
+      "review": {
+        "observations": [
+          "The evidence confirms a strict, single-joystick workflow where the player builds a foundation, and the system automatically handles resource debiting and state,",
+          "The visual feedback loop is clear and readable, showing the 'Foundation complete' state and the next step ('Unlock Harvesting Access') without clutter."
+        ],
+        "defects": [],
+        "coverage_complete": true,
+        "confidence": "high",
+        "scores": {
+          "havenline_identity": 9.8,
+          "simple_context_controls": 9.9,
+          "physical_core_loop": 9.7,
+          "complexity_discipline": 9.9,
+          "world_response_readability": 9.6
+        }
+      },
+      "passed": true,
+      "errors": [],
+      "lowest_score": 9.6
+    },
+    {
+      "group": "device-readability-0",
+      "review": {
+        "observations": [
+          "Evidence shows distinct visual states for Ready, Blocked, Preview, and Complete. The 'Blocked' state clearly indicates prerequisites (Need: 1 wood, 1 stone) and",
+          "The 'Complete' state correctly displays spent resources and unlocks the next action. The visual feedback loop (Blocked -> Complete) is readable and consistent."
+        ],
+        "defects": [],
+        "coverage_complete": true,
+        "confidence": "high",
+        "scores": {
+          "havenline_identity": 10.0,
+          "simple_context_controls": 10.0,
+          "physical_core_loop": 10.0,
+          "complexity_discipline": 10.0,
+          "world_response_readability": 10.0
+        }
+      },
+      "passed": true,
+      "errors": [],
+      "lowest_score": 10.0
+    },
+    {
+      "group": "device-readability-6",
+      "review": {
+        "observations": [
+          "Evidence confirms one-joystick philosophy with clear, atomic transitions between Blocked, Ready, Preview, and Complete states.",
+          "World response is readable; exact resource costs and prerequisites are displayed clearly before and during the build process."
+        ],
+        "defects": [],
+        "coverage_complete": true,
+        "confidence": "high",
+        "scores": {
+          "havenline_identity": 9.8,
+          "simple_context_controls": 9.9,
+          "physical_core_loop": 9.7,
+          "complexity_discipline": 9.9,
+          "world_response_readability": 9.8
+        }
+      },
+      "passed": true,
+      "errors": [],
+      "lowest_score": 9.7
+    }
+  ],
+  "fatal_error": null,
+  "passed": true,
+  "task_id": "T10",
+  "review_mode": "fresh"
+}

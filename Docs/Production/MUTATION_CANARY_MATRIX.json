@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "canaries": [
+    {"id":"CANARY-FLAKE-WAIVER","target":"flake intelligence","expected":"mandatory gate remains required even when classified FLAKY"},
+    {"id":"CANARY-RETENTION-LOCATOR","target":"evidence retention","expected":"irreplaceable evidence without persistent locator is rejected"},
+    {"id":"CANARY-CONTRACT-BREAK","target":"contract compatibility","expected":"breaking change without migration plan is rejected"},
+    {"id":"CANARY-PROOF-FRESH","target":"gate fingerprint policy","expected":"fresh-only critic/physical/integration proof is never reusable cross-SHA"},
+    {"id":"CANARY-CAPABILITY-UNKNOWN","target":"preactivation feasibility","expected":"unknown external capability blocks runtime activation"},
+    {"id":"CANARY-HISTORY-AUTHORITY","target":"failure intelligence","expected":"historical failure match remains advisory-only"},
+    {"id":"CANARY-TASK-STATE-AUTHORITY","target":"task state snapshot","expected":"snapshot remains derived and cannot become lifecycle authority"}
+  ],
+  "shipping_runtime_mutation_allowed": false,
+  "player_save_mutation_allowed": false
+}

@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0",
+  "non_voting": true,
+  "validated": true,
+  "diagnosis_id": "C0-T10-74b19b1-specialist-output-truncation",
+  "task_id": "T10",
+  "failed_candidate": "74b19b1a9f4a1315e2c63f1e508a7b439ba01daa",
+  "failed_run_id": 35348597416,
+  "repair_base": "74b19b1a9f4a1315e2c63f1e508a7b439ba01daa",
+  "integration_head": "82518322a8e0dc9ee6ef12a759bf4ca723c8a490",
+  "diagnosis_status": "DIAGNOSIS_COMPLETE",
+  "terminal_class": "EVIDENCE_DEFECT",
+  "complete_known_blocker_set": true,
+  "blockers": [
+    {
+      "id": "C0-T10-B036",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "C3 motion-0 and C4 full-lifecycle return length-truncated repetitive observations without complete scored JSON.",
+      "evidence": [
+        "C4: 2116 prompt tokens, 900 completion tokens, finish_reason=length; 343.316s prefill plus139.620s decode. Four short observations followed by one unbounded repeated paragraph; no completed group.",
+        "C3: full-lifecycle complete stop response with 298 tokens, all five dimensions10 and no defects; motion-0 uses2919 prompt tokens and900 completion tokens, finish_reason=length,631.116s prefill plus199.899s decode.",
+        "All 74b19 runs are terminal: primary/guard/adapter/capture/C7 passed; C3/C4 incomplete. C1/C2/C6 fresh reviews passed but no scores carry forward."
+      ],
+      "root_cause": "The shared JSON schema bounds observation count but not each string length; neither compact task evidence nor base prompt bounds response verbosity. Repetition within an allowed observation string consumes the immutable output budget. This is not context overflow, timeout or a product judgment; the runner correctly fails closed.",
+      "affected_object": "T10 independent C3/C4 complete reviewer output",
+      "causal_fix": "Generate the exact 423-character formatting-only note and append it last as a hashed task_scope text item in every C3/C4 group. Validate exact presence, content, digest, metadata and final ordering before packaging. Do not change C7, shared runner/schema/model/900-token cap/timeouts, dimensions, thresholds, evidence coverage or gameplay.",
+      "files_to_change": [
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "Docs/Production/T10/C0-specialist-output-truncation-74b19b1.json",
+        "Docs/Production/T10/REPAIR_PLAN-specialist-output-truncation-74b19b1.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "tools/havenline/task10/export_closure_records.py",
+        "tools/havenline/production/specialist_critic_runner.py",
+        "tools/havenline/production/specialist_evidence_manifest.py",
+        "tools/havenline/production/critic_harness.py",
+        "tools/havenline/production/critic_runtime_lock.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "Docs/Production/CRITIC_MATRIX.json",
+        ".github/workflows/havenline-task10-isolated.yml",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "Docs/Production/DEPENDENCY_GRAPH.json",
+        "Docs/Production/PATH_OWNERSHIP.json",
+        "Docs/Production/task-gates.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "Exact generated contract bytes/hash bound once and last in every C3/C4 group; missing, duplicate, changed, wrong-kind/category and non-final contract reject. C7 does not receive it.",
+        "All original groups, images, scope rules and source-bound evidence retained; existing 2800-character/4200-estimate prompt budgets unchanged.",
+        "Run focused hostile tests, full task10 and production tests, exact candidate scope, pre/post builder gates and independent C0 implementation review.",
+        "Fresh frozen candidate primary/capture/benchmark and all six critics required; every C3/C4 group must return complete JSON/stop and pass unchanged strict dimensions. No prior score reused."
+      ]
+    }
+  ],
+  "source_evidence": [
+    {
+      "critic_id": "C3",
+      "artifact_id": 10550617667,
+      "archive_sha256": "daf3a3ae531cad4b28010b92970abf3c74e68ad44e5fdff0c9aafc75d4abc982",
+      "files": {
+        "full-lifecycle-raw.txt": "9e67d48cf281f4d2af96d752b5a1016f2f8786eea5ccacf2be8ff843d6fbcb4f",
+        "motion-0-raw.json": "a20d4208a1ee1f6e2c796e97f4e513455b16096b2be92a79d636e8cec8d5aac0",
+        "motion-0-board.jpg": "207fc11ec3da53c2f6b44ab53563efeee55bf944c52d9afcc91f0699a2c965db",
+        "motion-0-request.json": "477f0a0ebd693536e93be9b0982598dbe5ce09d9d07bb8e422642063d5e57637",
+        "raw-output.json": "232be2a10443321f929aea154882d2e819fe7d18c6d8290e00b68c1f896543fc",
+        "full-lifecycle-request.json": "3672be52e095098d3a59c895ab6968af6492e70e9483340d4b72b0c2c7ecf230",
+        "full-lifecycle-board.jpg": "0b4cc300bec03198bd172ed9c62325002e4550afef2b51a3d22dadad84c9aaa9",
+        "critic-record.json": "3d6add662847afcc5961388bd34daadf53999754f1689d9b955f1752de440261",
+        "specialist-runtime-preparation.json": "f0c87812f013f81d0bf11e2a794af9b030d8b09cd933f8dbc9d0af5a0b315eba",
+        "full-lifecycle-raw.json": "9a4272951c6ba036a416d0a7efa8066b6ea0d4f7a6e5214b0f198554e77d39bd",
+        "runtime.log": "593fff9225a260578ffa22bac4f10e9c91e4c3ad17724b08f8ef1a1205406555"
+      }
+    },
+    {
+      "critic_id": "C4",
+      "artifact_id": 10550775134,
+      "archive_sha256": "219b6ff4a1a6f207b956346a262b632a9069bc1213102a42cd9d60b415cfcc2c",
+      "files": {
+        "raw-output.json": "c1b982de09146dfeeff2d4cff103d7876f8b76b1c4950a4566685d69e0d5dbcf",
+        "full-lifecycle-request.json": "6fa32f185f2ad660801840ecacfdf992189b3c93f4bea9c04942c8b6add454a6",
+        "full-lifecycle-board.jpg": "0b4cc300bec03198bd172ed9c62325002e4550afef2b51a3d22dadad84c9aaa9",
+        "critic-record.json": "d7b1cb2bf7c473847bb2aafe4ed5f9b3b9a708a63e2778e2ab37efc24a247b1d",
+        "specialist-runtime-preparation.json": "f0c87812f013f81d0bf11e2a794af9b030d8b09cd933f8dbc9d0af5a0b315eba",
+        "full-lifecycle-raw.json": "8ba5e15367396d54a5156c533cff327242963ba2aa8abd592fd4ee36bab5a9c9",
+        "runtime.log": "96717bf2b131781d354bdbd0adcef71d0121fb70ca522dff096380c298492af1"
+      }
+    }
+  ],
+  "response_format_contract": "RESPONSE FORMAT ONLY; preserve your independent evidence judgment.\nReturn only the required complete JSON, without preamble or repeated text. Use exactly 2 observations, each <=160 characters. Use 0-5 defects, each <=160 characters and concrete/actionable; [] only if none exist. Include coverage_complete, confidence and every mandatory score. Do not omit defects or fields to fit. Finish within 600 tokens; no narration.\n",
+  "unexecuted_checks": [
+    "C4 motion-0/motion-12/device-readability and C3 motion-12/device-readability did not execute after truncation.",
+    "B036 implementation and fresh candidate validation remain unexecuted. All six critics must review the next exact source anew.",
+    "Integrated-source fresh gates, factory evidence, two-stage export, G1-G14 and atomic final owner closure remain unexecuted."
+  ],
+  "builder_action": "REPAIR",
+  "candidate_freeze": {
+    "required": true,
+    "validation_concurrency_policy": "finish_running_sha",
+    "cancelled_run_product_judgment": false,
+    "next_candidate_policy": "All 74b19 runs terminal and incorporated; freeze one bounded repair, run fresh evidence and all six critics. Never cancel an active source run."
+  },
+  "summary": "Complete known blocker B036: task-owned formatting-only contract prevents unbounded reviewer verbosity without changing evidence, judgment criteria, model or thresholds. No product defect or approval inferred from truncated responses.",
+  "confidence": "high",
+  "approval_claimed": false,
+  "score_assigned": false,
+  "shipping_gameplay_runtime_change_authorized": false
+}

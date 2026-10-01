@@ -1,0 +1,42 @@
+name: Havenline T03 approved integrity check
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify-approved-t03:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Verify T03 remains an approved immutable production checkpoint
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/workstream.py validate-registry
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          registry=json.loads(Path('Docs/Production/WORKSTREAM_REGISTRY.json').read_text())
+          ws=next(x for x in registry['workstreams'] if x['task_id']=='T03')
+          assert ws['status']=='APPROVED',ws
+          assert ws['candidate_commit']=='5df9726e0b1c33f0f8865385b1c49aca229fd461',ws
+          completion=json.loads(Path('Docs/Production/T03/verified-completion.json').read_text())
+          assert completion.get('status')=='APPROVED',completion
+          print(json.dumps({
+            'passed':True,
+            'task':'T03',
+            'status':ws['status'],
+            'accepted_source':ws['candidate_commit'],
+            'note':'This is an integrity check for the approved checkpoint, not a new critic approval.'
+          },indent=2))
+          PY
+      - name: Explain reopening policy
+        run: |
+          cat <<'EOF'
+          T03 is already APPROVED. The former automatic full repair workflow is preserved in Git history.
+          If a future runtime regression genuinely reopens T03, create a new frozen repair candidate and task-specific review workflow under the current anti-loop and governance standards.
+          Unrelated governance or later-task changes must not rerun an ancient T03 repair range.
+          EOF
+# Manual integrity check only. It cannot approve a new T03 runtime candidate.

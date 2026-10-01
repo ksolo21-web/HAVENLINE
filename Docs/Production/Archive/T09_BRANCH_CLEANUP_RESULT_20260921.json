@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "cleanup_date": "2026-09-21",
+  "task": "T09",
+  "approved_candidate": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "policy": "Deleted only obsolete T09 repair/review/diagnostic/closeout refs from the archived inventory. Preserved the approved T09 task branch and open-PR dependencies.",
+  "deleted_or_already_absent": [
+    {
+      "branch": "codex/t09-c0-permissions",
+      "status": "deleted"
+    },
+    {
+      "branch": "codex/t09-c0-route-integration",
+      "status": "deleted"
+    },
+    {
+      "branch": "codex/t09-c5-clock-freeze",
+      "status": "deleted"
+    },
+    {
+      "branch": "codex/t09-c5-convergence",
+      "status": "deleted"
+    },
+    {
+      "branch": "codex/t09-c5-defect-record",
+      "status": "deleted"
+    },
+    {
+      "branch": "codex/t09-c5-init-similarity",
+      "status": "deleted"
+    },
+    {
+      "branch": "codex/t09-evidence-review-9bc73550",
+      "status": "deleted"
+    },
+    {
+      "branch": "codex/t09-final-closeout-v31",
+      "status": "deleted"
+    },
+    {
+      "branch": "codex/t09-pose-summary-schema",
+      "status": "deleted"
+    },
+    {
+      "branch": "codex/t09-repair-ledger",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-t09-final-closeout",
+      "status": "deleted"
+    }
+  ],
+  "retained": {
+    "keep": [
+      "agent/havenline-v7-unity-review",
+      "codex/havenline-environment-review",
+      "codex/havenline-godot-android",
+      "codex/havenline-native-completion-20260907",
+      "codex/havenline-sequential-task-01",
+      "havenline/T09-harvesting",
+      "havenline/governance-t09-strict-review",
+      "havenline/governance-t10-prep",
+      "havenline/governance-t11-prep",
+      "havenline/governance-t12-prep",
+      "havenline/governance-t13-t20-prep",
+      "havenline/governance-t21-t32-prep",
+      "havenline/governance-t33-t43-prep",
+      "havenline/governance-t44-t52-prep",
+      "havenline/governance-t53-t61-prep",
+      "havenline/governance-t62-t70-prep",
+      "main"
+    ],
+    "reasons": {
+      "havenline/T09-harvesting": "designated approved T09 task branch",
+      "havenline/governance-t09-strict-review": "open PR #29 head",
+      "codex/havenline-sequential-task-01": "open PR #5 head",
+      "havenline/governance-t62-t70-prep": "open PR #19 head",
+      "havenline/governance-t53-t61-prep": "open PR #18 head",
+      "havenline/governance-t44-t52-prep": "open PR #17 head",
+      "havenline/governance-t33-t43-prep": "open PR #16 head",
+      "havenline/governance-t21-t32-prep": "open PR #15 head",
+      "havenline/governance-t13-t20-prep": "open PR #13 head",
+      "havenline/governance-t12-prep": "open PR #13 base",
+      "havenline/governance-t11-prep": "open PR #12 head",
+      "havenline/governance-t10-prep": "open PR #12 base",
+      "codex/havenline-environment-review": "open PR #4 head",
+      "codex/havenline-godot-android": "open PR #2 head",
+      "codex/havenline-native-completion-20260907": "open PR #3 head",
+      "main": "open PR #1 base",
+      "agent/havenline-v7-unity-review": "open PR #1 head"
+    }
+  },
+  "remaining_t09_refs": [
+    {
+      "branch": "havenline/T09-harvesting",
+      "head_sha": "5415d85838ecf4bea8b3c71662072670e61797a0"
+    },
+    {
+      "branch": "havenline/governance-t09-strict-review",
+      "head_sha": "d5e517e82428884d8c048fec8cc1eb4c20c37ee5"
+    }
+  ],
+  "game_compile_effect": "none; no HavenlineGodot runtime files changed and the approved T09 task/canonical code remains intact"
+}

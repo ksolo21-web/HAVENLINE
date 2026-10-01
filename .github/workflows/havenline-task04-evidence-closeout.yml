@@ -1,0 +1,121 @@
+name: Havenline T04 evidence-bound final closeout
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task04-evidence-closeout.yml'
+      - 'tools/havenline/task04/resolve_camera_claims.py'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+env:
+  SOURCE: 'e08fd37e9a999d878644c03089c4b4b253bd7472'
+  EVIDENCE_RUN: '34738864775'
+  ISOLATED_RUN: '34738403369'
+  PRIMARY_REVIEW_RUN: '34739476341'
+  SUPPLEMENTAL_REVIEW_RUN: '34742363524'
+
+jobs:
+  resolve-visual-record:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.EVIDENCE_RUN }}'
+          name: 'task04-camera-precritic-${{ env.SOURCE }}'
+          path: task04-evidence
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.PRIMARY_REVIEW_RUN }}'
+          pattern: 'havenline-t04-*-primary-${{ env.PRIMARY_REVIEW_RUN }}'
+          path: primary-reviews
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.SUPPLEMENTAL_REVIEW_RUN }}'
+          pattern: 'havenline-t04-*-supplement-*-${{ env.SUPPLEMENTAL_REVIEW_RUN }}'
+          path: supplemental-reviews
+      - run: python3 tools/havenline/task04/resolve_camera_claims.py --evidence task04-evidence --primary primary-reviews --supplemental supplemental-reviews --output visual/final-visual-decision.json
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'havenline-t04-evidence-resolved-visual-${{ github.run_id }}'
+          path: visual/
+          retention-days: 30
+
+  performance:
+    needs: resolve-visual-record
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+        with: {fetch-depth: 8}
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.EVIDENCE_RUN }}'
+          name: 'task04-camera-precritic-${{ env.SOURCE }}'
+          path: task04-evidence
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: '${{ github.token }}'
+          repository: '${{ github.repository }}'
+          run-id: '${{ env.ISOLATED_RUN }}'
+          name: 'task04-camera-precritic-7c3f6e1c43871a424a78ed7590e3c0b153ef9d62'
+          path: task04-isolated-evidence
+      - run: python3 tools/havenline/task04/performance_gate.py --candidate "$SOURCE" --evidence task04-evidence --baseline task04-isolated-evidence --output task04-C6
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'havenline-t04-evidence-resolved-C6-${{ github.run_id }}'
+          path: task04-C6/
+          retention-days: 30
+
+  final-machine-gate:
+    needs: [resolve-visual-record, performance]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t04-evidence-resolved-visual-${{ github.run_id }}', path: visual}
+      - uses: actions/download-artifact@v4
+        with: {name: 'havenline-t04-evidence-resolved-C6-${{ github.run_id }}', path: performance}
+      - name: Enforce strict selected judgments and C6
+        run: |
+          python3 - <<'PY'
+          import json,math,os
+          from pathlib import Path
+          source=os.environ['SOURCE'];errors=[]
+          visual=json.loads(Path('visual/final-visual-decision.json').read_text())
+          c6=json.loads(next(Path('performance').rglob('result.json')).read_text())
+          values=[value for scores in visual.get('mandatory_scores',{}).values() for value in scores.values()]
+          if visual.get('source')!=source or visual.get('passed') is not True or visual.get('status')!='PASS_BY_CORROBORATED_EVIDENCE':errors.append('visual resolution')
+          if visual.get('valid_unresolved_defects')!=[] or visual.get('additional_visual_model_calls_authorized') is not False:errors.append('visual defect/model-call closure')
+          if len(visual.get('selected_complete_judgments',[]))!=6 or not values or any(v<=9.0 for v in values):errors.append('strict visual scores')
+          if visual.get('score_averaging') is not False or visual.get('completed_low_scores_retried') is not False:errors.append('anti-loop policy')
+          c6scores=c6.get('mandatory_dimensions',{})
+          if c6.get('candidate_commit')!=source or c6.get('passed') is not True or c6.get('defects')!=[]:errors.append('C6 result')
+          if not c6scores or any(isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) or v<=9.0 for v in c6scores.values()):errors.append('C6 strict scores')
+          out={'task':'T04','source':source,'passed':not errors,'strict_rule':'>9.0 unrounded; no averaging; only corroborated in-scope pixel-supported defects block','visual_status':visual.get('status'),'visual_minimum':min(values) if values else None,'C6_minimum':min(c6scores.values()) if c6scores else None,'ready_for_final_pixel_signoff':not errors,'final_pixel_signoff_required':True,'task_approved':False,'physical_4k60_verified':False,'errors':errors}
+          Path('final-gate').mkdir();Path('final-gate/final-machine-gate.json').write_text(json.dumps(out,indent=2)+'\n')
+          print(json.dumps(out,indent=2));raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        with:
+          name: 'havenline-t04-evidence-resolved-final-gate-${{ github.run_id }}'
+          path: final-gate/
+          retention-days: 30
+
+# No visual model runs in this workflow. It binds the finite prior evidence set,
+# rejects claims with false factual premises, executes C6, and stops for the
+# required final human pixel signoff.

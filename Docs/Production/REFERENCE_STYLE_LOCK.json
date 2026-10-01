@@ -1,0 +1,148 @@
+{
+  "schema_version": 1,
+  "status": "MANDATORY_GLOBAL_VISUAL_CONTRACT",
+  "purpose": "Prevent any HAVENLINE in-game material or surface treatment from drifting from the locked reference style.",
+  "authority": {
+    "primary_reference_standard": "Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md",
+    "primary_source_manifest": "Docs/Design/ReferenceVideoLock/reference-video-sources.json",
+    "supplemental_reference_standard": "Docs/Design/ReferenceVideoLock/SUPPLEMENTAL_WHITEOUT_SURVIVAL_AD_REFERENCES.md",
+    "supplemental_source_manifest": "Docs/Design/ReferenceVideoLock/supplemental-whiteout-survival-ad-sources.json",
+    "precedence": [
+      "locked A/B reference pixels and motion",
+      "HAVENLINE identity/contracts",
+      "supplemental Whiteout Survival references"
+    ]
+  },
+  "scope": {
+    "new_or_modified_ingame_visual_materials": true,
+    "full_release_census_task": "T70",
+    "kinds": [
+      "surface_material",
+      "texture",
+      "shader",
+      "procedural_material",
+      "terrain",
+      "snow_ice_water",
+      "structure_prop_machine",
+      "resource_stack_money",
+      "character_animal_hostile",
+      "vfx_particle",
+      "lighting_postprocess_material_perception",
+      "scene_material_assignment",
+      "code_created_material"
+    ]
+  },
+  "acceptance": {
+    "required_style_fidelity": 10,
+    "exact_unrounded": true,
+    "c1_exact_score_dimensions": [
+      "reference_fidelity",
+      "visual_language"
+    ],
+    "zero_style_defects": true,
+    "coverage_complete": true,
+    "no_average_waiver": true,
+    "no_exception_or_substitute": true,
+    "placeholder_default_debug_material_allowed": false,
+    "performance_or_schedule_waiver_allowed": false
+  },
+  "detection": {
+    "always_trigger_tasks": [
+      "T70"
+    ],
+    "visual_roots": [
+      "HavenlineGodot/assets/",
+      "HavenlineGodot/shaders/",
+      "HavenlineGodot/materials/",
+      "HavenlineGodot/textures/",
+      "HavenlineGodot/scenes/"
+    ],
+    "visual_extensions": [
+      ".gdshader",
+      ".shader",
+      ".material",
+      ".mat",
+      ".tres",
+      ".res",
+      ".png",
+      ".jpg",
+      ".jpeg",
+      ".webp",
+      ".svg",
+      ".bmp",
+      ".tga",
+      ".exr",
+      ".hdr",
+      ".glb",
+      ".gltf",
+      ".fbx",
+      ".obj",
+      ".dae",
+      ".tscn",
+      ".scn"
+    ],
+    "script_tokens": [
+      "ShaderMaterial",
+      "StandardMaterial3D",
+      "BaseMaterial3D",
+      "albedo_color",
+      "roughness",
+      "metallic",
+      "emission",
+      "shader_parameter",
+      "set_shader_parameter",
+      "texture_filter",
+      "material_override"
+    ]
+  },
+  "evidence": {
+    "actual_reference_pixels_required": true,
+    "material_inventory_required": true,
+    "source_bound": true,
+    "changed_visual_paths_exact_match": true,
+    "t70_full_release_census_required": true
+  },
+  "invalidation": {
+    "governance_only_change_reopens_unchanged_historical_approval": false,
+    "material_affecting_source_change_invalidates_style_lock": true,
+    "material_affecting_source_change_invalidates_c1": true,
+    "unrelated_same_source_critic_passes_may_be_preserved": true,
+    "discovered_existing_style_drift_is_mandatory_defect": true,
+    "historical_exact_sources": {
+      "T01": [
+        "45ba7905cd468c229cd61364f4d1ac45b14d3e5e"
+      ],
+      "T02": [
+        "96f8d396a5015e136c590dc496214a689adb1e43",
+        "25cf9ea5a31ef0acc90fbc4612498dc671565ccb",
+        "1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff"
+      ],
+      "T03": [
+        "5df9726e0b1c33f0f8865385b1c49aca229fd461"
+      ],
+      "T04": [
+        "e08fd37e9a999d878644c03089c4b4b253bd7472"
+      ],
+      "T05": [
+        "fa6fa70f154f3757d22303522ca3f6de2c3d391f"
+      ],
+      "T06": [
+        "47f86fae25b099abb5c7096c37ca7495453b2b8f"
+      ],
+      "T07": [
+        "0a30dc0859541626eb6aa9a9bb749abc93dcb355"
+      ],
+      "T08": [
+        "9d56ea8ae972d0a0705ff8b985e13fab31dde493"
+      ],
+      "T09": [
+        "5415d85838ecf4bea8b3c71662072670e61797a0"
+      ],
+      "T10": [
+        "eba0107def258824549fb10d81785290d0c81d97"
+      ]
+    },
+    "historical_preservation_is_task_waiver": false,
+    "historical_preservation_rule": "Only the listed immutable already-accepted candidate SHA is preserved from governance-only retroactive invalidation. Any different/reopened source is fully subject to the style lock; T70 still audits every shipped material."
+  }
+}

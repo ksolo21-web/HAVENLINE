@@ -1,0 +1,27 @@
+{
+  "requesting_task": "T10",
+  "target_paths": [
+    ".github/workflows/havenline-production-governance.yml",
+    "tools/havenline/production/tests/test_t10_activation_validation.py"
+  ],
+  "status": "APPROVED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "requested_change": "Replace the three activation-era LOCKED/unowned/stop-warning assertions with canonical graph/registry/ownership/snapshot and active-state packet checks.",
+  "reason": "C0 B022: governance run 35335183259 fails an obsolete LOCKED assertion after legitimate T10 activation; two later obsolete assertions were masked.",
+  "authorization_basis": "Standing finish T10 and explicitly approved bounded T10 C7 governance repair, preserving every critic and threshold.",
+  "reviewer": "/root/t10_c0_critic",
+  "integration_base": "75fa03eb8adc48d7eed75b468b591b93059297d5",
+  "preserved": [
+    "All authority data and lifecycle transitions",
+    "Every critic, dimension and strictly-greater-than-9 threshold",
+    "All V3/V3.1 controls and V3.2 byte-lock exceptions",
+    "All existing governance assertions other than the three obsolete activation assumptions"
+  ],
+  "tests_required": [
+    "Every canonical ACTIVE_RUNTIME_STATES state passes with matching graph/registry and valid ownership/snapshot",
+    "APPROVED handled as completed only",
+    "LOCKED/PREPARED/BLOCKED, mismatches, missing ownership, invalid snapshots, active stop warning reject",
+    "Full production test suite and fresh hosted governance"
+  ],
+  "publication_policy": "Publish only owner governance workflow, its regression tests and this exact approved CR; runtime integration still requires genuine readiness."
+}

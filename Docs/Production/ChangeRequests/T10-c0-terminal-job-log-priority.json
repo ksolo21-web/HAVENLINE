@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "requesting_task": "T10",
+  "blockers": [
+    "C0-T10-B059",
+    "C0-T10-B060",
+    "C0-T10-B061"
+  ],
+  "target_path": [
+    "tools/havenline/production/c0_root_cause_advisor.py",
+    "tools/havenline/production/tests/test_c0_builder.py",
+    "tools/havenline/production/validate_architecture_v32_t10.py"
+  ],
+  "requested_change": "Prioritize latest terminal failed-job log signals and their local context before generic signal lines in C0's bounded model projection. Treat Python AssertionError as a terminal signal. Preserve the full authoritative packet, existing request budget, strict exact-quote/path grounding, historical intelligence as advisory only, and C0's non-voting authority.",
+  "reason": "Run 35444671480 retained the exact terminal T10 packaging traceback in the failed job log, but C0's bounded failed-log projection selected earlier generic branch/critic/defect noise and omitted the terminal traceback. The model then followed advisory historical permission noise and produced an unsupported governance diagnosis that the grounding validator correctly rejected.",
+  "evidence": [
+    "Run 35444671480 terminal traceback: build_critic_evidence.py raises AssertionError because the selected C7 integration row name is stale.",
+    "C0 run on the same failed candidate produced validated=false; its model projection retained generic visual-critic/defect lines but omitted the terminal traceback.",
+    "Hostile regression uses 50 lines of branch/critic/defect noise followed by the exact T10 packaging traceback and requires the latest terminal window to survive."
+  ],
+  "expected_behavior": "For failed job logs containing terminal signals, C0 retains the latest terminal signal windows first under the same byte ceiling. Generic signal fallback is used only when no terminal signal exists. Historical failure intelligence remains advisory and cannot displace current terminal evidence. Unsupported quotes and wildcard/nonexistent file paths remain rejected.",
+  "tests_required": [
+    "Exact T10 packaging traceback survives broad critic/defect noise.",
+    "Python AssertionError is recognized as terminal evidence.",
+    "Model projection marks terminal job-log evidence prioritized and history advisory-only.",
+    "Existing C0 bounded packet, grounding, artifact diagnostics, C0R, builder, and T09/T10 governance tests remain green.",
+    "V3.2 architecture lock accepts only the exact newly authorized advisor bytes."
+  ],
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "APPROVED_BOUNDED_C0_TERMINAL_JOB_LOG_PRIORITY",
+  "authorization": "Authorize terminal failed-job log priority in C0 while preserving strict grounding, request budgets, critics, and thresholds.",
+  "forbidden_changes": [
+    "No weakening of exact quotation grounding.",
+    "No wildcard or nonexistent causal paths.",
+    "No threshold or critic authority changes.",
+    "No increase to C0 request/context budgets.",
+    "No historical failure match may authorize a repair.",
+    "No product-runtime changes."
+  ]
+}

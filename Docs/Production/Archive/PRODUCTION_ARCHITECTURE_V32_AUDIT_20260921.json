@@ -1,0 +1,205 @@
+{
+  "schema_version": 1,
+  "record_type": "production_architecture_audit",
+  "architecture_version": "3.2",
+  "recorded_date": "2026-09-21",
+  "result": "PASS",
+  "result_scope": "repository-side production architecture, governance, resumability, parallel preparation, proof/learning control and workflow registration",
+  "independent_specialist_architecture_review": "NOT_CLAIMED",
+  "machine_governance_verified": true,
+  "verified_architecture_source": "fc74640dc8580be091932846deea591bef35b09a",
+  "hosted_governance": {
+    "workflow": "Havenline production governance validation",
+    "run_id": 35645599220,
+    "run_number": 525,
+    "event": "push",
+    "head_sha": "fc74640dc8580be091932846deea591bef35b09a",
+    "conclusion": "SUCCESS"
+  },
+  "composed_acceptance_runs": [
+    {
+      "run_id": 35626933288,
+      "run_number": 497,
+      "purpose": "core V3.2 fresh-base PR validation",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "run_id": 35641808440,
+      "run_number": 505,
+      "purpose": "future-task prep and external-readiness validation",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "run_id": 35643279851,
+      "run_number": 516,
+      "purpose": "shared T11-T70 forward-control-plane validation",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "run_id": 35643950792,
+      "run_number": 518,
+      "purpose": "reusable-workflow registration repair push validation",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "run_id": 35643970772,
+      "run_number": 519,
+      "purpose": "reusable-workflow registration repair PR validation",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "run_id": 35645331642,
+      "run_number": 523,
+      "purpose": "intelligence closeout push validation",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "run_id": 35645337380,
+      "run_number": 524,
+      "purpose": "intelligence closeout PR validation",
+      "conclusion": "SUCCESS"
+    },
+    {
+      "run_id": 35645599220,
+      "run_number": 525,
+      "purpose": "post-merge final V3.2 integration validation",
+      "conclusion": "SUCCESS"
+    }
+  ],
+  "baseline": {
+    "pre_v32_source": "c35aac981dca87743cacb85e9d83539e6c7a03d5",
+    "commits_ahead_to_verified_source": 88,
+    "changed_files": 56,
+    "havenlinegodot_runtime_files_changed": [],
+    "gameplay_runtime_changed": false
+  },
+  "quality_contract": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9,
+    "unrounded": true,
+    "target": 10,
+    "averaging_waiver": false,
+    "unresolved_mandatory_defects_allowed": 0,
+    "thresholds_changed_by_v32": false
+  },
+  "systems_completed": [
+    "resumable execution checkpoints with SHA chaining and source-switch rejection",
+    "safe parallel preparation planner and WIP controls",
+    "task graduation gate before authoritative runtime construction",
+    "three-blocker causal-family trigger",
+    "authoritative task/repair branch budget",
+    "critic-package preflight with exact-source/evidence bounds",
+    "parallel independent specialist fan-out with critic-specific invalidation",
+    "rolling opening-loop, progression and domain prevention canaries",
+    "cumulative performance budget ledger and preserved headroom",
+    "timeout-safe stage sharding and finish-running-SHA policy",
+    "T10 failure lessons promoted into advisory Failure Intelligence",
+    "post-T10 lifecycle and authority reconciliation",
+    "T12-T70 forward-preparation packets and external-readiness milestones",
+    "shared T11-T70 reusable control plane with preflight/review/failure modes",
+    "reusable-workflow startup-risk regression and valid GitHub registration",
+    "content-addressed gate PASS proposal staging with integration-owner-only durable promotion",
+    "automatic unverified failure-learning staging with verified owner-only durable promotion",
+    "one task-level independent critic batch slot with parallel specialists inside the active batch"
+  ],
+  "authority_boundaries": {
+    "single_integration_authority": true,
+    "ci_repository_write_for_validation": false,
+    "staged_gate_proof_grants_approval": false,
+    "staged_failure_learning_grants_approval": false,
+    "c0_non_voting": true,
+    "c1_c2_remain_task_specific": true,
+    "c6_c9_remain_deterministic_specialist_gates": true,
+    "independent_specialist_review_remains_separate_runtime": true,
+    "physical_certification_T68_T69_unchanged": true,
+    "durable_gate_index_promotion_requires_integration_owner": true,
+    "durable_failure_intelligence_promotion_requires_verified_post_repair_proof_and_integration_owner": true
+  },
+  "t11_preservation": {
+    "task_id": "T11",
+    "status": "PREPARED",
+    "branch": "havenline/T11-camp-construction",
+    "branch_sha": "fbb81ae34b9053f17fc937fb7e67895e3ef0584b",
+    "candidate_commit": null,
+    "integration_status": "not integrated",
+    "runtime_candidate_created_by_v32": false,
+    "next_action": "Claim ASSIGNED on this prepared workstream before T11 runtime construction begins."
+  },
+  "remaining_capability_blockers": [
+    {
+      "capability": "authoritative_backend",
+      "state": "UNVERIFIED",
+      "evidence": null,
+      "classification": "EXTERNAL_OR_HARDWARE_READINESS"
+    },
+    {
+      "capability": "google_play_billing_sandbox",
+      "state": "UNVERIFIED",
+      "evidence": null,
+      "classification": "EXTERNAL_OR_HARDWARE_READINESS"
+    },
+    {
+      "capability": "google_signin_oauth",
+      "state": "UNVERIFIED",
+      "evidence": null,
+      "classification": "EXTERNAL_OR_HARDWARE_READINESS"
+    },
+    {
+      "capability": "cloud_backend",
+      "state": "UNVERIFIED",
+      "evidence": null,
+      "classification": "EXTERNAL_OR_HARDWARE_READINESS"
+    },
+    {
+      "capability": "remote_config_backend",
+      "state": "UNVERIFIED",
+      "evidence": null,
+      "classification": "EXTERNAL_OR_HARDWARE_READINESS"
+    },
+    {
+      "capability": "telemetry_backend",
+      "state": "UNVERIFIED",
+      "evidence": null,
+      "classification": "EXTERNAL_OR_HARDWARE_READINESS"
+    },
+    {
+      "capability": "platform_achievement_backend",
+      "state": "UNVERIFIED",
+      "evidence": null,
+      "classification": "EXTERNAL_OR_HARDWARE_READINESS"
+    },
+    {
+      "capability": "physical_phone_4k60",
+      "state": "UNVERIFIED",
+      "evidence": null,
+      "classification": "EXTERNAL_OR_HARDWARE_READINESS"
+    },
+    {
+      "capability": "physical_tablet_foldable_4k60",
+      "state": "UNVERIFIED",
+      "evidence": null,
+      "classification": "EXTERNAL_OR_HARDWARE_READINESS"
+    },
+    {
+      "capability": "release_signing_identity",
+      "state": "UNVERIFIED",
+      "evidence": null,
+      "classification": "EXTERNAL_OR_HARDWARE_READINESS"
+    },
+    {
+      "capability": "store_release_access",
+      "state": "UNVERIFIED",
+      "evidence": null,
+      "classification": "EXTERNAL_OR_HARDWARE_READINESS"
+    }
+  ],
+  "remaining_blocker_statement": "Remaining blockers are external service/account/hardware readiness only. They remain fail-closed and must be proven with evidence at the task milestones that require them; this audit does not claim those capabilities are ready.",
+  "whole_game_implemented": false,
+  "whole_game_approved": false,
+  "final_physical_4k60_certification_complete": false,
+  "notes": [
+    "The audit document commit is archival bookkeeping and does not replace the verified architecture source.",
+    "Architecture-ready does not mean T11-T70 gameplay is implemented or approved.",
+    "Gate-result and failure-learning systems intentionally stage proposals automatically but never auto-promote governance history or task approval."
+  ]
+}

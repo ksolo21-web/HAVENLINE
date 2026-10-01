@@ -1,0 +1,122 @@
+name: Havenline T03 iteration-10 targeted final C1 C2
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task03-iteration10-targeted-final.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+env:
+  CANDIDATE: '4c0317b82c7da58206a37c3649634f531ee9f2ee'
+  EVIDENCE_RUN: '35946180680'
+  EVIDENCE_ARTIFACT: 'havenline-t03-reference-repair-35946180680'
+
+jobs:
+  critic:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        include:
+          - critic: C1
+            group: lanes-bank
+          - critic: C2
+            group: work-gates
+          - critic: C2
+            group: river-gates
+          - critic: C2
+            group: lanes-bank
+    runs-on: ubuntu-24.04
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prove targeted reviewer did not change frozen candidate runtime
+        run: git diff --exit-code "$CANDIDATE" HEAD -- HavenlineGodot
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.EVIDENCE_RUN }}
+          name: ${{ env.EVIDENCE_ARTIFACT }}
+          path: task03-evidence
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Run targeted independent T03 critic
+        env:
+          EXPECTED_SOURCE: ${{ env.CANDIDATE }}
+          CRITIC_ID: ${{ matrix.critic }}
+          GROUP_ID: ${{ matrix.group }}
+          EVIDENCE_ROOT: task03-evidence
+          OUT_DIR: task03-${{ matrix.critic }}-${{ matrix.group }}
+        run: python3 -u tools/havenline/production/review_t03_iteration9_final.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-t03-iter10-${{ matrix.critic }}-${{ matrix.group }}-${{ github.run_id }}
+          path: task03-${{ matrix.critic }}-${{ matrix.group }}/
+          retention-days: 30
+          if-no-files-found: error
+
+  aggregate:
+    needs: critic
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-t03-iter10-*-${{ github.run_id }}
+          path: results
+      - name: Enforce only the four invalidated domains
+        env:
+          CANDIDATE: ${{ env.CANDIDATE }}
+        run: |
+          python3 - <<'PY'
+          import json,os,pathlib
+          root=pathlib.Path('results');candidate=os.environ['CANDIDATE'];out=pathlib.Path('aggregate');out.mkdir()
+          expected={('C1','lanes-bank'),('C2','work-gates'),('C2','river-gates'),('C2','lanes-bank')}
+          found={};errors=[]
+          for p in root.rglob('critic-record.json'):
+              d=json.loads(p.read_text());key=(d.get('critic_id'),d.get('group'))
+              if key in expected:
+                  found[key]=d
+          if set(found)!=expected:errors.append('targeted coverage mismatch: '+repr(sorted(found)))
+          for key in sorted(expected):
+              d=found.get(key)
+              if not d:continue
+              if d.get('candidate_hash')!=candidate:errors.append(f'{key} candidate mismatch')
+              if d.get('passed') is not True:errors.append(f'{key} failed')
+              if d.get('defects')!=[]:errors.append(f'{key} defects: {d.get("defects")}')
+              if d.get('coverage_complete') is not True:errors.append(f'{key} incomplete')
+              if d.get('confidence') not in ('medium','high'):errors.append(f'{key} confidence')
+          summary={
+            'task_id':'T03','candidate':candidate,'passed':not errors,'errors':errors,
+            'targeted_records':{f'{k[0]}:{k[1]}':{'scores':v.get('scores'),'defects':v.get('defects'),'passed':v.get('passed')} for k,v in found.items()},
+            'preserved_iteration9_passes':{
+              'C1':['fence','north-gate','work-gates','river-gates','lanes-central','conditions'],
+              'C2':['fence','north-gate','lanes-central','conditions']
+            },
+            'c6_preserved':{'status':'PASS','run':'35848567867','reason':'iteration 10 adds no draw batch/material/texture/physics/animation/NPC load and only changes visual transforms plus terrain-build-time wear union/color constants'},
+            'user_visual_signoff_required':True,
+            'task_approved':False
+          }
+          (out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps(summary,indent=2))
+          raise SystemExit(0 if not errors else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-t03-iteration10-targeted-final-${{ github.run_id }}
+          path: aggregate/
+          retention-days: 30
+          if-no-files-found: error
+# Review-only commit. Runtime candidate remains frozen at iteration 10.

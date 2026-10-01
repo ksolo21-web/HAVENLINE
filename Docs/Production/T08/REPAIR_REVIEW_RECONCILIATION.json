@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "task_id": "T08",
+  "candidate": "9efb11e0262ae65de32f664d4627902d565f1148",
+  "source_review_run": 35774180368,
+  "status": "EVIDENCE_PACKAGE_REPAIR_REQUIRED",
+  "runtime_candidate_frozen": true,
+  "shipping_runtime_change_required": false,
+  "dispositions": [
+    {
+      "critic": "C2",
+      "classification": "REVIEW_TRANSPORT_INCOMPLETE",
+      "evidence": "critic-record fatal_error = RuntimeError: incomplete reviewer response; no group score or defect was emitted.",
+      "action": "Retry once with a bounded package; do not treat zeros as product scores."
+    },
+    {
+      "critic": "C3",
+      "classification": "EVIDENCE_CONTEXT_SEMANTIC_AMBIGUITY",
+      "evidence": "Reviewer interpreted primitive_feedback_allowed=false as feedback being disabled, although source-bound contract lists three authored feedback meshes plus a custom shader and rendered evidence shows them.",
+      "action": "Replace ambiguous context wording with primitive_geometry_prohibited=true and authored_feedback_present=true; add source-to-actor, actor-to-destination and visible-carry evidence."
+    },
+    {
+      "critic": "C4",
+      "classification": "EVIDENCE_COVERAGE_INSUFFICIENT",
+      "evidence": "Reviewer defects explicitly say the screenshots did not provide sufficient evidence for interaction, collection, destination, world response and danger scope; no clipping/primitive-art defect was alleged.",
+      "action": "Add exact-source loop frames, native carrying, endpoint-framed routes, compact authoritative transfer-state examples and task-scope guidance; rerun C4 without changing product."
+    }
+  ],
+  "threshold_unchanged": ">9.0 unrounded in every mandatory dimension; zero unresolved defects; no averaging waiver",
+  "next_if_reviewer_confirms_product_defect": "Open a new bounded T08 product repair; do not retry a completed low score merely to improve it."
+}

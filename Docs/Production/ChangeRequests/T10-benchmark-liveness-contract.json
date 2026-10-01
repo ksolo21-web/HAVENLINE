@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "requesting_task": "T10",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "APPROVED_BOUNDED_BENCHMARK_LIVENESS_CONTRACT",
+  "blocker": "C0-T10-B063",
+  "target_path": [
+    "tools/havenline/task10/benchmark_supervisor.py",
+    ".github/workflows/havenline-task10-isolated.yml",
+    "tools/havenline/task10/tests/test_benchmark_supervisor.py",
+    "tools/havenline/task10/tests/test_task10_workflows.py",
+    "Docs/Production/ChangeRequests/T10-benchmark-liveness-contract.json",
+    "Docs/Production/T10/Proofs/benchmark-supervisor-trace-proof.json",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "Docs/Production/WORKSTREAM_REGISTRY.json",
+    "tools/havenline/production/tests/test_t10_activation_validation.py"
+  ],
+  "authorization": "Standing user authorization to complete T10. Independent integration owner accepted exact four-file supervisor implementation9.4 at8475f8c5 and authorized bounded cumulative metadata preparation; final cumulative tree requires independent review before consumption.",
+  "reviewed_commit": "8475f8c5d4dfcd41df6a083e96965d4981b76915",
+  "reviewer": "/root/authorization_critic",
+  "review_score": 9.4,
+  "implementation_sha256": {
+    "tools/havenline/task10/benchmark_supervisor.py": "41631621dc541f0087c913892ef0328b3de760a6b4b628b27b09a5e19849838a",
+    ".github/workflows/havenline-task10-isolated.yml": "6bc062d4e8c5438414dd4781ce5bca23e7977739db73690873593c6c70583c05",
+    "tools/havenline/task10/tests/test_benchmark_supervisor.py": "182fdbb9069a2b649a0eed88c0d482fc50a5928c14bfe4d309c9673591203eac",
+    "tools/havenline/task10/tests/test_task10_workflows.py": "05fb692310055e2020551c707d559deb712f03aafe18286c797707a2f1bed922"
+  },
+  "causal_repair": "Replace elapsed-only wrapper with an ordered-progress supervisor bound to actual GitHub job start, original2400-second cap,120-second retention reserve and1800-second no-progress ceiling. Require all nine exact ordered controls, process exit0 and unchanged complete source-bound manifest validation; preserve failures and immediately retain execution evidence before packaging.",
+  "evidence": [
+    "Original run35461009111/job105944782203: job18:23:11, benchmark18:26:48 (217 seconds prior work), exit124 after8 controls; artifact10590840640 SHA2560bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2.",
+    "One-shot diagnostic35463952552/artifact10591670243 SHA256004e1ff1c9ca448efad9f4c8de3f3f9ed5abb1ad9d11681096a9c00f7e1bb1bf: unchanged subject completed9 controls with observed1771.237608 seconds; final completion bracket1741.211–1771.231 seconds. Finite completion contradicts inevitable deadlock but does not identify original host difference or establish a flaky gate.",
+    "Older same-runtime3d24 completed benchmark in about1174 seconds and packaging plus both uploads in11.6 seconds. The120-second reserve is conservative relative to that observation, not a guarantee under GitHub outage.",
+    "Independent source review9.4 at8475f8c5 verified completed-log EOF drain and hostile trailing duplicate rejection."
+  ],
+  "preserved": [
+    "Original40-minute job cap;1800-second no-progress ceiling;120-second reserved retention margin; one attempt.",
+    "Benchmark GDScript, native4K engine/renderer, conditioning/warmup/sample counts and all C6 thresholds.",
+    "Original failed source45eb remains failed; diagnostic cannot approve or justify unchanged retry.",
+    "T10 FIX_REQUIRED and T11 LOCKED."
+  ],
+  "task_approved": false,
+  "trace_proof_sha256": "4c10b53b809228d72b007d4a6a790c095089e7ec8d9a409effb2436f3b4f3659",
+  "additional_test_after_review": "Explicit later-phase stall and clean-checkout canonical retained event-bracket replay added; runtime unchanged. Final cumulative source review required.",
+  "post_review_caller_delta": {
+    "baseline_source": "2842845c4e4a9866d3bf7bb62a1beeabf58199c2",
+    "scope": "Workflow invocation metadata and tests only; benchmark supervisor, GDScript, budgets, samples and C6 thresholds unchanged.",
+    "repair": "Allow source-verified integrated FIX_REQUIRED capture without approval, and compare scope/regression against authoritative second merge parent H in exact [R,H] promotions.",
+    "final_source_review_required": true,
+    "task_approved": false
+  },
+  "final_runner_dependency_repair": {
+    "base_candidate": "90f1d56e8781f4998b00b9563f0f9d49458ebf53",
+    "root_cause": "T10 tooling tests import NumPy-backed screen-pixel verifier before isolated runner installs NumPy; both final pipelines fail before gameplay.",
+    "repair": "Install pinned numpy==2.3.5 and pillow==12.3.0 before tooling suites; preserve the existing later world NumPy marker for compatibility.",
+    "isolated_workflow_sha256": "6bc062d4e8c5438414dd4781ce5bca23e7977739db73690873593c6c70583c05",
+    "world_workflow_sha256": "7c1518a7995c6888ab403ac678ffc26fb518499300cd87cf50ac9432b3775ea4",
+    "gameplay_runtime_changed": false,
+    "thresholds_changed": false,
+    "task_approved": false
+  }
+}

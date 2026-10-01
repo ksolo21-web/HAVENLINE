@@ -1,0 +1,357 @@
+class_name HavenlineCampBoundaryView
+extends Node3D
+
+const Boundary=preload("res://scripts/camp_boundary.gd")
+const Surface=preload("res://scripts/outpost_surface.gd")
+const Scenery=preload("res://scripts/scenery_batch.gd")
+const BOUNDARY_SHADER=preload("res://assets/t03_boundary_v2/t03_boundary_v2.gdshader")
+const BOUNDARY_ASSET_ROOT := "res://assets/t03_boundary_v2/"
+# Iteration 11H: preserve authored picket rhythm while normalizing only the visual gate-leaf
+# presentation across all six portals. Collision/opening authority remains in camp_boundary.gd.
+const FENCE_SOURCE_LENGTH := 2.9409
+const GATE_LEAF_SOURCE_LENGTH := 2.90
+const FENCE_ROOT_SINK := 0.22
+const VISUAL_JOIN_OVERLAP := 0.012
+const SOUTH_VISUAL_JOIN_OVERLAP := 0.012
+const VISUAL_CORNER_JOIN_OVERLAP := 0.018
+# Rendering may not compress the authored palisade below a readable picket
+# rhythm. Short residual rows keep their gate-side endpoint fixed; only an
+# exterior corner may extend outward, while longer rows share a tiny internal
+# overlap between adjacent visual panels. Collision/gate authority is untouched.
+const SOUTH_VISUAL_MIN_PANEL_LENGTH := 1.95
+const SOUTH_VISUAL_MAX_PANEL_LENGTH := 3.55
+const SOUTH_VISUAL_MAX_OUTER_EXTENSION := 0.95
+const SOUTH_VISUAL_MAX_INTERNAL_EXTENSION := 0.0
+# The scaled threshold post is about 0.35 wide. A 0.18 backset seats the leaf
+# under the post without returning to the old 0.38 over-backset/dark seam.
+const GATE_HINGE_OVERLAP := 0.18
+const VISUAL_GATE_HINGE_BACKSET := GATE_HINGE_OVERLAP
+# One visual-only leaf silhouette prevents a river/work/main portal from changing category
+# between views. These constants do not change collision, navigation, route or opening authority.
+const VISUAL_GATE_LEAF_LENGTH := 1.85
+const VISUAL_GATE_OPEN_ANGLE := 1.12
+const MAIN_WORK_VISUAL_LEAF_LENGTH := VISUAL_GATE_LEAF_LENGTH
+const MAIN_WORK_VISUAL_OPEN_ANGLE := VISUAL_GATE_OPEN_ANGLE
+const MAIN_WORK_GATE_HINGE_OVERLAP := VISUAL_GATE_HINGE_BACKSET
+const RIVER_VISUAL_LEAF_LENGTH := VISUAL_GATE_LEAF_LENGTH
+const RIVER_VISUAL_OPEN_ANGLE := VISUAL_GATE_OPEN_ANGLE
+const RIVER_WEST_VISUAL_OPEN_ANGLE := VISUAL_GATE_OPEN_ANGLE
+const RIVER_GATE_VISUAL_HINGE_OVERLAP := VISUAL_GATE_HINGE_BACKSET
+const GATE_LEAF_HINGE_SINK := 0.08
+const GATE_LEAF_ROOT_SINK := 0.10
+const TERRAIN_SEAT_SAMPLES := 7
+const GATE_POST_ROOT_SINK := 0.04
+const GATE_POST_TERRAIN_SAMPLE_HALF := 0.19
+# Keep the same authored post footprint/height at every portal so threshold
+# markers do not change category between north, work and river entrances.
+const MAIN_GATE_POST_SCALE := 1.12
+const MAIN_GATE_POST_HEIGHT_SCALE := 1.14
+const WORK_GATE_POST_SCALE := 1.12
+const WORK_GATE_POST_HEIGHT_SCALE := 1.14
+const RIVER_GATE_POST_SCALE := 1.12
+const RIVER_GATE_POST_HEIGHT_SCALE := 1.14
+var fence_batch:MultiMeshInstance3D
+var gate_leaf_batch:MultiMeshInstance3D
+var post_batch:MultiMeshInstance3D
+var descriptor:Dictionary={}
+var _boundary_materials:Dictionary={}
+
+func _material(key:String)->ShaderMaterial:
+	if _boundary_materials.has(key):return _boundary_materials[key]
+	var m:=ShaderMaterial.new()
+	m.shader=BOUNDARY_SHADER
+	match key:
+		"timber":
+			m.set_shader_parameter("base_color",Color(0.76,0.53,0.40,1.0));m.set_shader_parameter("roughness_value",0.86);m.set_shader_parameter("detail_strength",0.024);m.set_shader_parameter("detail_scale",3.2)
+		"timber_dark":
+			m.set_shader_parameter("base_color",Color(0.56,0.35,0.23,1.0));m.set_shader_parameter("roughness_value",0.89);m.set_shader_parameter("detail_strength",0.022);m.set_shader_parameter("detail_scale",3.4)
+		"snow":
+			m.set_shader_parameter("base_color",Color(0.95,0.985,1.0,1.0));m.set_shader_parameter("roughness_value",0.78);m.set_shader_parameter("detail_strength",0.025);m.set_shader_parameter("detail_scale",4.0)
+		"blue":
+			m.set_shader_parameter("base_color",Color(0.13,0.28,0.36,1.0));m.set_shader_parameter("roughness_value",0.46);m.set_shader_parameter("metallic_value",0.45);m.set_shader_parameter("detail_strength",0.025)
+		"orange":
+			m.set_shader_parameter("base_color",Color(0.98,0.66,0.22,1.0));m.set_shader_parameter("roughness_value",0.38);m.set_shader_parameter("metallic_value",0.10);m.set_shader_parameter("emission_color",Vector3(0.20,0.045,0.006));m.set_shader_parameter("detail_strength",0.015)
+		"iron":
+			m.set_shader_parameter("base_color",Color(0.20,0.15,0.10,1.0));m.set_shader_parameter("roughness_value",0.42);m.set_shader_parameter("metallic_value",0.70);m.set_shader_parameter("detail_strength",0.02)
+		"stone":
+			m.set_shader_parameter("base_color",Color(0.36,0.46,0.51,1.0));m.set_shader_parameter("roughness_value",0.95);m.set_shader_parameter("detail_strength",0.08);m.set_shader_parameter("detail_scale",4.5)
+		"brass":
+			m.set_shader_parameter("base_color",Color(0.66,0.42,0.17,1.0));m.set_shader_parameter("roughness_value",0.44);m.set_shader_parameter("metallic_value",0.62);m.set_shader_parameter("detail_strength",0.02)
+		_:
+			assert(false,"Unknown T03 authored boundary material: "+key)
+	_boundary_materials[key]=m
+	return m
+
+func _mesh(game,asset:String)->ArrayMesh:
+	var cache_key:="t03-boundary-v2/"+asset
+	if not game.merged_cache.has(cache_key):
+		var path:=BOUNDARY_ASSET_ROOT+asset+".obj"
+		assert(ResourceLoader.exists(path),"Missing authored Task 3 boundary asset: "+path)
+		var source=load(path)
+		assert(source is ArrayMesh,"T03 boundary source must import as ArrayMesh: "+path)
+		var mesh:ArrayMesh=source.duplicate()
+		for index in mesh.get_surface_count():
+			var imported:=mesh.surface_get_material(index)
+			var key:=""
+			if imported!=null:key=String(imported.resource_name).to_lower()
+			if key.is_empty():key=String(mesh.surface_get_name(index)).to_lower()
+			assert(key in ["timber","timber_dark","snow","blue","orange","iron","stone","brass"],"Unmapped T03 boundary surface: "+key)
+			mesh.surface_set_material(index,_material(key))
+		game.merged_cache[cache_key]=mesh
+	return game.merged_cache[cache_key]
+func _segment_transform(a:Vector2,b:Vector2,overlap:=0.0,root_sink:=FENCE_ROOT_SINK,end_root_sink:=-1.0,source_length:=FENCE_SOURCE_LENGTH,terrain_seat:=false)->Transform3D:
+	var aa:=a;var bb:=b
+	var flat:=b-a
+	if overlap>0.0 and flat.length_squared()>.0001:
+		var d:=flat.normalized();aa-=d*overlap*.5;bb+=d*overlap*.5
+	# A rigid authored panel follows the chord between its end points, while the
+	# snow bank curves underneath it. Sampling the full chord prevents a local
+	# terrain crown from leaving visible daylight below an otherwise sunk leaf.
+	var height_a:=Surface.height_at(aa);var height_b:=Surface.height_at(bb)
+	var start_sink:=root_sink
+	var finish_sink:=root_sink if end_root_sink<0.0 else end_root_sink
+	if terrain_seat:
+		# Keep the authored leaf rigid. Find the largest terrain valley under the
+		# chord and lower the whole leaf uniformly instead of pitching only its
+		# free edge. This preserves hinge alignment while eliminating daylight.
+		var uniform_sink:=maxf(start_sink,finish_sink)
+		for sample in range(1,TERRAIN_SEAT_SAMPLES):
+			var t:=float(sample)/float(TERRAIN_SEAT_SAMPLES)
+			var p:=aa.lerp(bb,t)
+			var chord_height:=lerpf(height_a,height_b,t)
+			var required_sink:=maxf(0.0,chord_height-Surface.height_at(p))
+			uniform_sink=maxf(uniform_sink,required_sink+.035)
+		start_sink=uniform_sink
+		finish_sink=uniform_sink
+	var pa:=Vector3(aa.x,height_a-start_sink,aa.y);var pb:=Vector3(bb.x,height_b-finish_sink,bb.y)
+	var x_axis:=(pb-pa).normalized()
+	var z_axis:=x_axis.cross(Vector3.UP).normalized()
+	if z_axis.length_squared()<.001:z_axis=Vector3.FORWARD
+	var y_axis:=z_axis.cross(x_axis).normalized()
+	var length:=pa.distance_to(pb)
+	var basis:=Basis(x_axis,y_axis,z_axis).scaled(Vector3(length/source_length,1.0,1.0))
+	return Transform3D(basis,(pa+pb)*.5)
+
+func _post_transform(p:Vector2,tangent:Vector2,visual_scale:=1.0,height_scale:=1.0)->Transform3D:
+	var direction:=tangent.normalized()
+	var normal:=Vector2(-direction.y,direction.x)
+	# Seat the complete post footprint into the lowest local terrain sample so no
+	# corner can float on bank/camp slopes. The small root sink hides the seam
+	# without reproducing the deep clipping seen in the previous presentation.
+	var base_height:=Surface.height_at(p)
+	for sample in [
+		p+direction*GATE_POST_TERRAIN_SAMPLE_HALF,
+		p-direction*GATE_POST_TERRAIN_SAMPLE_HALF,
+		p+normal*GATE_POST_TERRAIN_SAMPLE_HALF,
+		p-normal*GATE_POST_TERRAIN_SAMPLE_HALF
+	]:
+		base_height=minf(base_height,Surface.height_at(Vector2(sample)))
+	var angle:=atan2(direction.y,direction.x)
+	var basis:=Basis(Vector3.UP,-angle).scaled(Vector3(visual_scale,height_scale,visual_scale))
+	return Transform3D(basis,Vector3(p.x,base_height-GATE_POST_ROOT_SINK,p.y))
+
+func _gate_leaf_transform(leaf:Dictionary,hinge_backset:float)->Transform3D:
+	# Backset only the hinge edge beneath the authored threshold post. The free
+	# edge stays fixed, so seam closure never steals visual or collision aperture.
+	var a:=Vector2(leaf.a);var b:=Vector2(leaf.b)
+	var direction:=(b-a).normalized()
+	return _segment_transform(a-direction*hinge_backset,b,0.0,GATE_LEAF_HINGE_SINK,GATE_LEAF_ROOT_SINK,GATE_LEAF_SOURCE_LENGTH,true)
+
+func _visual_gate_leaf_specs()->Array[Dictionary]:
+	# Iteration 11H is presentation-only: retain every authoritative hinge/gate ID while
+	# showing one consistent open-leaf silhouette at north, work and river thresholds.
+	var result:Array[Dictionary]=[]
+	for gate in Boundary.gate_specs():
+		var a:=Vector2(gate.a);var b:=Vector2(gate.b);var tangent:=Vector2(gate.tangent);var mid:=Vector2(gate.center)
+		var inward:=(Boundary.CAMP_CENTER-mid).normalized()
+		var left_dir:=tangent.rotated(VISUAL_GATE_OPEN_ANGLE)
+		if left_dir.dot(inward)<0.0:left_dir=tangent.rotated(-VISUAL_GATE_OPEN_ANGLE)
+		var right_dir:=(-tangent).rotated(VISUAL_GATE_OPEN_ANGLE)
+		if right_dir.dot(inward)<0.0:right_dir=(-tangent).rotated(-VISUAL_GATE_OPEN_ANGLE)
+		result.append({"gate":gate.id,"hinge":a,"a":a,"b":a+left_dir*VISUAL_GATE_LEAF_LENGTH,"length":VISUAL_GATE_LEAF_LENGTH,"open_angle":VISUAL_GATE_OPEN_ANGLE,"authority_id":gate.authority_id})
+		result.append({"gate":gate.id,"hinge":b,"a":b,"b":b+right_dir*VISUAL_GATE_LEAF_LENGTH,"length":VISUAL_GATE_LEAF_LENGTH,"open_angle":VISUAL_GATE_OPEN_ANGLE,"authority_id":gate.authority_id})
+	return result
+
+func _row_path_point(source:Array[Dictionary],first:int,last_exclusive:int,distance:float)->Vector2:
+	var remaining:=maxf(0.0,distance)
+	for index in range(first,last_exclusive):
+		var a:=Vector2(source[index].a);var b:=Vector2(source[index].b)
+		var length:=a.distance_to(b)
+		if remaining<=length or index==last_exclusive-1:
+			if length<=.0001:return b
+			return a.lerp(b,clampf(remaining/length,0.0,1.0))
+		remaining-=length
+	return Vector2(source[last_exclusive-1].b)
+
+func _visual_fence_specs()->Array[Dictionary]:
+	# Iteration 11F: every authored boundary row is repartitioned by path length
+	# around the fence asset's native 2.9409m span. This keeps picket/rail rhythm
+	# consistent across straight and curved rows while preserving every gate-side
+	# endpoint exactly. Only a tiny side-corner residual may extend outward behind
+	# the perpendicular side fence; collision authority remains Boundary.panel_specs().
+	var source:Array[Dictionary]=Boundary.panel_specs()
+	var result:Array[Dictionary]=[]
+	var i:=0
+	while i<source.size():
+		var row_id:=String(source[i].boundary)
+		var j:=i
+		var total:=0.0
+		while j<source.size() and String(source[j].boundary)==row_id:
+			total+=float(source[j].length);j+=1
+		var groups:=maxi(1,roundi(total/FENCE_SOURCE_LENGTH))
+		while total/float(groups)>SOUTH_VISUAL_MAX_PANEL_LENGTH:groups+=1
+		while groups>1 and total/float(groups)<SOUTH_VISUAL_MIN_PANEL_LENGTH:
+			var candidate:=groups-1
+			if total/float(candidate)>SOUTH_VISUAL_MAX_PANEL_LENGTH:break
+			groups=candidate
+		var step:=total/float(groups)
+		for g in range(groups):
+			var p0:=_row_path_point(source,i,j,step*float(g))
+			var p1:=_row_path_point(source,i,j,step*float(g+1))
+			var visual_length:=p0.distance_to(p1)
+			var outer_extension:=0.0
+			# The tiny south corner residuals are shorter than a readable authored
+			# panel scale. Preserve the river-gate endpoint and extend only the
+			# exterior corner behind the perpendicular side fence.
+			if visual_length<1.56:
+				var direction:=(p1-p0).normalized()
+				var shortage:=1.56-visual_length
+				if g==0 and absf(p0.x)>=Boundary.SIDE_X-.01:
+					assert(shortage<=SOUTH_VISUAL_MAX_OUTER_EXTENSION+.001,"South corner fence extension exceeded safe budget: "+row_id)
+					p0-=direction*shortage;outer_extension=shortage
+				elif g==groups-1 and absf(p1.x)>=Boundary.SIDE_X-.01:
+					assert(shortage<=SOUTH_VISUAL_MAX_OUTER_EXTENSION+.001,"South corner fence extension exceeded safe budget: "+row_id)
+					p1+=direction*shortage;outer_extension=shortage
+				else:
+					assert(false,"Visual fence row cannot preserve readable authored scale without stealing a gate opening: "+row_id)
+				visual_length=p0.distance_to(p1)
+			assert(visual_length>=1.55 and visual_length<3.65,"Visual fence panel outside safe authored-scale range: "+row_id)
+			var source_a:=Vector2(source[i].a);var source_b:=Vector2(source[j-1].b)
+			var gate_endpoint_error:=0.0
+			if g==0 and absf(source_a.x)<Boundary.SIDE_X-.01:gate_endpoint_error=maxf(gate_endpoint_error,p0.distance_to(source_a))
+			if g==groups-1 and absf(source_b.x)<Boundary.SIDE_X-.01:gate_endpoint_error=maxf(gate_endpoint_error,p1.distance_to(source_b))
+			result.append({
+				"boundary":row_id,"a":p0,"b":p1,"mid":(p0+p1)*.5,
+				"length":visual_length,"tangent":(p1-p0).normalized(),
+				"spacing_internal_extension":0.0,
+				"spacing_outer_extension":outer_extension,
+				"gate_endpoint_error":gate_endpoint_error
+			})
+		i=j
+	return result
+
+func configure(game):
+	name="Task03CampBoundary"
+	var fence_transforms:Array[Transform3D]=[]
+	var visual_fence_specs:=_visual_fence_specs()
+	var south_visual_total:=0.0
+	var south_visual_count:=0
+	var south_visual_min:=999.0
+	var south_visual_max:=0.0
+	var south_visual_outer_extension_max:=0.0
+	var south_visual_internal_extension_max:=0.0
+	var south_visual_gate_endpoint_error_max:=0.0
+	var south_corners:=[Boundary.south_point(-Boundary.SIDE_X),Boundary.south_point(Boundary.SIDE_X)]
+	for panel in visual_fence_specs:
+		var is_south:=String(panel.boundary).begins_with("south-")
+		var overlap:=SOUTH_VISUAL_JOIN_OVERLAP if is_south else VISUAL_JOIN_OVERLAP
+		if south_corners.any(func(c):return Vector2(panel.a).distance_to(c)<.01 or Vector2(panel.b).distance_to(c)<.01):overlap=maxf(overlap,VISUAL_CORNER_JOIN_OVERLAP)
+		fence_transforms.append(_segment_transform(panel.a,panel.b,overlap))
+		if is_south:
+			var visual_length:=Vector2(panel.a).distance_to(Vector2(panel.b))
+			south_visual_total+=visual_length;south_visual_count+=1
+			south_visual_min=minf(south_visual_min,visual_length)
+			south_visual_max=maxf(south_visual_max,visual_length)
+			south_visual_outer_extension_max=maxf(south_visual_outer_extension_max,float(panel.get("spacing_outer_extension",0.0)))
+			south_visual_internal_extension_max=maxf(south_visual_internal_extension_max,float(panel.get("spacing_internal_extension",0.0)))
+			south_visual_gate_endpoint_error_max=maxf(south_visual_gate_endpoint_error_max,float(panel.get("gate_endpoint_error",0.0)))
+	fence_batch=Scenery.instances(_mesh(game,"fence_panel"),fence_transforms,self)
+	fence_batch.name="ReferencePalisadeFence"
+	var gate_leaf_transforms:Array[Transform3D]=[]
+	for leaf in _visual_gate_leaf_specs():
+		gate_leaf_transforms.append(_gate_leaf_transform(leaf,VISUAL_GATE_HINGE_BACKSET))
+	gate_leaf_batch=Scenery.instances(_mesh(game,"gate_leaf"),gate_leaf_transforms,self)
+	gate_leaf_batch.name="ReferenceFramedOpenGateLeaves"
+	var post_transforms:Array[Transform3D]=[]
+	for gate in Boundary.gate_specs():
+		var tangent:Vector2=gate.tangent
+		var post_scale:=RIVER_GATE_POST_SCALE if gate.kind=="river" else (WORK_GATE_POST_SCALE if gate.kind=="work" else MAIN_GATE_POST_SCALE)
+		var post_height:=RIVER_GATE_POST_HEIGHT_SCALE if gate.kind=="river" else (WORK_GATE_POST_HEIGHT_SCALE if gate.kind=="work" else MAIN_GATE_POST_HEIGHT_SCALE)
+		post_transforms.append(_post_transform(gate.a,tangent,post_scale,post_height))
+		post_transforms.append(_post_transform(gate.b,tangent,post_scale,post_height))
+	post_batch=Scenery.instances(_mesh(game,"gate_post"),post_transforms,self)
+	post_batch.name="GateLanternPosts"
+	descriptor=Boundary.evidence()
+	descriptor["fence_visual_instances"]=fence_transforms.size()
+	descriptor["collision_panel_instances"]=Boundary.panel_specs().size()
+	descriptor["south_visual_grouping_from_panel_specs"]=true
+	descriptor["visual_fence_rhythm_normalized_all_rows"]=true
+	descriptor["south_visual_spacing_normalized"]=true
+	descriptor["south_visual_panel_instances"]=south_visual_count
+	descriptor["south_visual_panel_average_length"]=south_visual_total/float(maxi(1,south_visual_count))
+	descriptor["south_visual_min_panel_length"]=south_visual_min
+	descriptor["south_visual_max_panel_length"]=south_visual_max
+	descriptor["south_visual_outer_extension_max"]=south_visual_outer_extension_max
+	descriptor["south_visual_internal_extension_max"]=south_visual_internal_extension_max
+	descriptor["south_visual_gate_endpoint_error_max"]=south_visual_gate_endpoint_error_max
+	descriptor["open_gate_leaf_instances"]=gate_leaf_transforms.size()
+	descriptor["gate_post_instances"]=post_transforms.size()
+	descriptor["visual_collision_share_panel_authority"]=true
+	descriptor["authored_fence_asset"]="t03_boundary_v2/fence_panel.obj"
+	descriptor["authored_gate_leaf_asset"]="t03_boundary_v2/gate_leaf.obj"
+	descriptor["authored_gate_post_asset"]="t03_boundary_v2/gate_post.obj"
+	descriptor["boundary_asset_manifest"]="t03_boundary_v2/manifest.json"
+	descriptor["runtime_material_family"]="ShaderMaterial/t03_boundary_v2.gdshader"
+	descriptor["imported_standard_materials_active"]=false
+	descriptor["authored_boundary_asset_family"]="t03_boundary_v2"
+	descriptor["fence_source_length"]=FENCE_SOURCE_LENGTH
+	descriptor["gate_leaf_source_length"]=GATE_LEAF_SOURCE_LENGTH
+	descriptor["uniform_gate_presentation"]=true
+	descriptor["gate_presentation_uses_authoritative_family_geometry"]=false
+	descriptor["visual_gate_family_normalized"]=true
+	descriptor["visual_gate_presentation_preserves_collision_authority"]=true
+	descriptor["rigid_gate_leaf_endpoint_seating"]=true
+	descriptor["fence_root_sink"]=FENCE_ROOT_SINK
+	descriptor["visual_join_overlap"]=VISUAL_JOIN_OVERLAP
+	descriptor["south_visual_join_overlap"]=SOUTH_VISUAL_JOIN_OVERLAP
+	descriptor["visual_corner_join_overlap"]=VISUAL_CORNER_JOIN_OVERLAP
+	descriptor["gate_hinge_overlap"]=GATE_HINGE_OVERLAP
+	descriptor["main_work_visual_gate_leaf_length"]=MAIN_WORK_VISUAL_LEAF_LENGTH
+	descriptor["main_work_visual_gate_open_angle"]=MAIN_WORK_VISUAL_OPEN_ANGLE
+	descriptor["main_work_gate_hinge_overlap"]=MAIN_WORK_GATE_HINGE_OVERLAP
+	descriptor["river_visual_gate_leaf_length"]=RIVER_VISUAL_LEAF_LENGTH
+	descriptor["river_visual_gate_open_angle"]=RIVER_VISUAL_OPEN_ANGLE
+	descriptor["river_west_visual_gate_open_angle"]=RIVER_WEST_VISUAL_OPEN_ANGLE
+	descriptor["river_gate_visual_hinge_overlap"]=RIVER_GATE_VISUAL_HINGE_OVERLAP
+	var river_visual_clear_min:=999.0
+	for gate in Boundary.gate_specs():
+		if gate.kind=="river":
+			var clear_angle:=RIVER_WEST_VISUAL_OPEN_ANGLE if gate.id=="river--9.0" else RIVER_VISUAL_OPEN_ANGLE
+			river_visual_clear_min=minf(river_visual_clear_min,float(gate.width)-2.0*RIVER_VISUAL_LEAF_LENGTH*cos(clear_angle))
+	descriptor["river_visual_clear_width_min"]=river_visual_clear_min
+	descriptor["river_visual_clearance_pass"]=river_visual_clear_min>=Boundary.RIVER_VISUAL_CLEARANCE_MIN
+	descriptor["river_gate_leaf_visual_transform_only"]=true
+	descriptor["gate_leaf_hinge_backset_is_start_only"]=true
+	descriptor["threshold_post_contact_repair"]="terrain-seated-wide-post-plus-authoritative-hinge-backset"
+	descriptor["visual_gate_leaf_transform_only"]=true
+	descriptor["gate_leaf_root_sink"]=GATE_LEAF_ROOT_SINK
+	descriptor["gate_leaf_hinge_sink"]=GATE_LEAF_HINGE_SINK
+	descriptor["terrain_seat_samples"]=TERRAIN_SEAT_SAMPLES
+	descriptor["terrain_crown_applied_to_gate_leaves_only"]=true
+	descriptor["gate_leaf_uniform_terrain_seat"]=true
+	descriptor["gate_post_terrain_footprint_seat"]=true
+	descriptor["gate_post_terrain_sample_half"]=GATE_POST_TERRAIN_SAMPLE_HALF
+	descriptor["gate_post_root_sink"]=GATE_POST_ROOT_SINK
+	descriptor["main_gate_post_scale"]=MAIN_GATE_POST_SCALE
+	descriptor["main_gate_post_height_scale"]=MAIN_GATE_POST_HEIGHT_SCALE
+	descriptor["river_gate_post_scale"]=RIVER_GATE_POST_SCALE
+	descriptor["river_gate_post_height_scale"]=RIVER_GATE_POST_HEIGHT_SCALE
+	descriptor["work_gate_post_scale"]=WORK_GATE_POST_SCALE
+	descriptor["work_gate_post_height_scale"]=WORK_GATE_POST_HEIGHT_SCALE
+	descriptor["lane_compression_depth"]=Surface.T03_LANE_COMPRESSION_DEPTH
+	descriptor["lane_rut_depth"]=Surface.T03_LANE_RUT_DEPTH
+	descriptor["lane_shoulder_height"]=Surface.T03_LANE_SHOULDER_HEIGHT
+	descriptor["visual_lane_half_width"]=Surface.T03_VISUAL_LANE_HALF
+	descriptor["bank_visual_half_expand"]=Surface.T03_BANK_VISUAL_HALF_EXPAND
+	descriptor["primitive_fence_meshes_created"]=false
+	descriptor["draw_batches"]=3

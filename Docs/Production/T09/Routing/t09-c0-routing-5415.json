@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0",
+  "role": "Root-Cause Advisor",
+  "non_voting": true,
+  "diagnosis_id": "C0-T09-35289658148-routing-5415d85",
+  "task_id": "T09",
+  "failed_candidate": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "failed_run_id": 35289658148,
+  "integration_head": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "comparison_base": "00b39caa8a5d4925d1ba0f3d7c19dd9ebdf14f26",
+  "failure_log_path": "/workspace/scratch/9a5e5c6d5884/t09-governance-35289658148.log",
+  "diagnosis_status": "DIAGNOSIS_COMPLETE",
+  "terminal_class": "GOVERNANCE_DEFECT",
+  "complete_known_blocker_set": true,
+  "blockers": [
+    {
+      "id": "C0-T09-5415-B001",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "Production-governance run 35289658148 stops at 'Validate complete V2 state and base-authoritative migration scope' even though its 162 governance tests and complete V2 migration validation pass. The failing command rejects eight T09 runtime/task paths in an actual lifecycle-valid integration merge.",
+      "evidence": [
+        "Exact source is merge commit 5415d85838ecf4bea8b3c71662072670e61797a0 with first parent 00b39caa8a5d4925d1ba0f3d7c19dd9ebdf14f26 and reviewed T09 parent 94714f6f65c26a05d78888802c9fb54d31e8c95b.",
+        "The saved hosted raw log for run 35289658148/job 105429528755 records 162 tests in 20.439 seconds: OK; an independent local reproduction also ran all 162 tests in 17.093 seconds: OK.",
+        "validate_migration.py passes with 70 tasks and 11 critics checked.",
+        "validate_migration_scope.py --base 00b39caa8a5d4925d1ba0f3d7c19dd9ebdf14f26 --head 5415d85838ecf4bea8b3c71662072670e61797a0 exits 2 and rejects exactly eight runtime/task files; its report says runtime_ownership_filtered=true and candidate_cannot_self_authorize=true.",
+        "The rejected paths are HavenlineGodot/assets/harvesting_v1/t09_motion_capture.gd, HavenlineGodot/assets/harvesting_v1/t09_motion_fixture.gd, HavenlineGodot/scripts/harvest_presentation.gd, HavenlineGodot/scripts/main.gd, HavenlineGodot/tests/capture_task09_harvesting.gd, HavenlineGodot/tests/test_task09_integration.gd, tools/havenline/task09/motion_capture.py, and tools/havenline/task09/validate_harvesting.py.",
+        "On the identical base/head pair, validate_integration_scope.py passes with classification=TASK_INTEGRATION, task_id=T09, task_status=APPROVED, seven T09-owned task files, one authorized integration-only file (HavenlineGodot/scripts/main.gd), and zero errors.",
+        "The production-governance workflow calls validate_migration_scope.py unconditionally near the start of the job, while its correct lifecycle-aware validate_integration_scope.py call is in a later step that cannot execute after the earlier set -e failure.",
+        "FI-T09-003 is not the causal match: its ownership-lag signature predicts integration-scope ownership errors, but the exact integration-scope reproduction has zero errors."
+      ],
+      "root_cause": "The production-governance workflow routes every triggered commit through the governance-only, base-authoritative migration-scope validator before classifying lifecycle-valid task integration. validate_migration_scope.py intentionally filters all HavenlineGodot runtime ownership and correctly rejects runtime in a governance migration; applying it to an authorized T09 integration commit is a lane-selection error, not an ownership or product defect.",
+      "affected_object": "Production-governance workflow orchestration and validator selection for integration-branch events; no shipping product object is disproven.",
+      "causal_fix": "Make the early fail-fast scope gate branch/event aware: retain validate_migration.py and the strict validate_migration_scope.py path for governance-only migration work, but use validate_integration_scope.py for actual integration-branch/task-integration changes before downstream governance checks. Add a workflow-routing regression assertion that an authorized task integration is not preempted by the migration-only classifier. Do not broaden migration-scope allowlists.",
+      "files_to_change": [
+        ".github/workflows/havenline-production-governance.yml",
+        "tools/havenline/production/tests/test_governance_scope_routing.py"
+      ],
+      "files_not_to_change": [
+        "tools/havenline/production/validate_migration_scope.py",
+        "tools/havenline/production/validate_integration_scope.py",
+        "Docs/Production/PATH_OWNERSHIP.json",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "Docs/Production/DEPENDENCY_GRAPH.json",
+        ".github/workflows/havenline-candidate-guard.yml",
+        "HavenlineGodot/assets/harvesting_v1/t09_motion_capture.gd",
+        "HavenlineGodot/assets/harvesting_v1/t09_motion_fixture.gd",
+        "HavenlineGodot/scripts/harvest_presentation.gd",
+        "HavenlineGodot/scripts/main.gd",
+        "HavenlineGodot/tests/capture_task09_harvesting.gd",
+        "HavenlineGodot/tests/test_task09_integration.gd",
+        "tools/havenline/task09/motion_capture.py",
+        "tools/havenline/task09/validate_harvesting.py",
+        "Docs/Production/T09/verified-completion.json",
+        "Docs/Production/T09/CriticRaw/**"
+      ],
+      "verification": [
+        "Run the focused production-governance workflow-routing regression and the complete tools/havenline/production test suite; all must pass.",
+        "Prove validate_migration_scope.py still rejects HavenlineGodot runtime when explicitly exercised as a governance-only migration; the repair may not expand its allowlist.",
+        "Reproduce validate_integration_scope.py on 00b39caa8a5d4925d1ba0f3d7c19dd9ebdf14f26..the frozen repaired integration SHA and require classification=TASK_INTEGRATION, task_id=T09, and errors=[].",
+        "Run production governance on the exact frozen repaired SHA and require the correctly selected early scope gate plus every previously masked downstream step to complete.",
+        "Run the exact-source T09 workflow to terminal completion and bind any produced artifact/index to that same frozen SHA.",
+        "After artifact completion, obtain a fresh independent C2/C3/C4/C5/C6 review; C0 supplies no gameplay approval."
+      ]
+    }
+  ],
+  "disposition_findings": [
+    {
+      "id": "C0-T09-5415-F001",
+      "finding": "Candidate-guard run 35289632875/job 105429456103 correctly rejected an isolated T09 candidate while the task retains historical APPROVED state.",
+      "disposition": "VALID_NON_APPLICABLE_ROUTE_REJECTION",
+      "reason": "The authorized repair is an integration-owner reactivation. The isolated guard is V3.1 byte-locked, must remain unchanged, and its rejection contains no product judgment. Integration scope, task CI, production governance, and fresh critic review supply the applicable checks."
+    },
+    {
+      "id": "C0-T09-5415-F002",
+      "finding": "HAVENLINE_BUILD_PLAN_V2.md still names INTEGRATION_READY source 69593a19f56df3105a7b9657a76533e274e2eed6 while CRITIC_READINESS.json still reports T09_plus_runtime LOCKED after T08.",
+      "disposition": "DEFERRED_CLOSEOUT_RECONCILIATION",
+      "reason": "These are stale status surfaces, but no new exact-source artifact or fresh critic verdict existed at diagnosis time. They must be synchronized only after all final evidence gates pass; they are not authorized routing-repair files."
+    }
+  ],
+  "unexecuted_checks": [
+    "Governance run 35289658148: Validate T10-T70 forward execution architecture was masked by B001.",
+    "Governance run 35289658148: Validate Production Architecture V3 intelligence layer was masked by B001.",
+    "Governance run 35289658148: Validate Production Architecture V3.1/V3.2 factory hardening was masked by B001, despite local validate_architecture_v32_t09.py passing.",
+    "Governance run 35289658148: Require C1-C11 execution readiness was masked by B001.",
+    "Governance run 35289658148: packet smoke tests, resource/tool/actor schema, Game Master schema, and hosted integration-impact classification were masked by B001.",
+    "Candidate-guard run 35289632875: all isolated candidate tests/build/evidence were intentionally not executed after the valid APPROVED-state rejection; they are not the applicable integration-owner proof route.",
+    "Task run 35289633249 had passed source/scope/regression but its remaining matrices and terminal artifact identity were still pending at diagnosis time.",
+    "No artifact produced from the frozen repaired integration SHA had yet undergone complete evidence-index hash verification at diagnosis time.",
+    "No fresh independent C2/C3/C4/C5/C6 verdict exists for the eventual exact-source artifact; all prior scores are non-reusable.",
+    "Final T09 governance reconciliation and approval replacement are not authorized until all preceding exact-source gates pass."
+  ],
+  "builder_action": "REPAIR",
+  "dependency_ordered_repair_plan": [
+    {
+      "order": 1,
+      "action": "Repair only B001 workflow lane selection and add its focused regression assertion.",
+      "authorized_files": [
+        ".github/workflows/havenline-production-governance.yml",
+        "tools/havenline/production/tests/test_governance_scope_routing.py"
+      ]
+    },
+    {
+      "order": 2,
+      "action": "Freeze the repaired integration SHA and run the complete hosted production-governance job; do not cancel it for a newer SHA."
+    },
+    {
+      "order": 3,
+      "action": "Let the exact-source T09 workflow reach a terminal result and verify its source/artifact/index provenance."
+    },
+    {
+      "order": 4,
+      "action": "Perform fresh independent C2/C3/C4/C5/C6 review with no score reuse and zero assumed approval."
+    }
+  ],
+  "candidate_freeze": {
+    "required": true,
+    "validation_concurrency_policy": "finish_running_sha",
+    "cancelled_run_product_judgment": false
+  },
+  "protected_runtime": {
+    "no_product_change_authorized": true,
+    "paths": [
+      "HavenlineGodot/assets/harvesting_v1/t09_motion_capture.gd",
+      "HavenlineGodot/assets/harvesting_v1/t09_motion_fixture.gd",
+      "HavenlineGodot/scripts/harvest_presentation.gd",
+      "HavenlineGodot/scripts/main.gd",
+      "HavenlineGodot/tests/capture_task09_harvesting.gd",
+      "HavenlineGodot/tests/test_task09_integration.gd",
+      "tools/havenline/task09/motion_capture.py",
+      "tools/havenline/task09/validate_harvesting.py"
+    ]
+  },
+  "failure_intelligence_disposition": {
+    "queried_match": "FI-T09-003",
+    "disposition": "ADVISORY_SIMILARITY_ONLY_NOT_CAUSAL",
+    "reason": "The exact integration-scope validator passes with zero ownership errors, disproving the ownership-lag root cause for this failure."
+  },
+  "related_runs": {
+    "production_governance": {
+      "run_id": 35289658148,
+      "job_id": 105429528755,
+      "conclusion": "failure"
+    },
+    "candidate_guard": {
+      "run_id": 35289632875,
+      "job_id": 105429456103,
+      "conclusion": "failure",
+      "disposition": "valid isolated-route rejection; no product judgment"
+    },
+    "task_validation": {
+      "run_id": 35289633249,
+      "status_at_diagnosis": "in_progress after scope/regression passes"
+    }
+  },
+  "approval_implication": "NONE. C0 is non-voting; this diagnosis neither approves T09 nor reuses prior critic scores.",
+  "summary": "The failed integrated source is blocked by governance routing, not by demonstrated T09 product or ownership defects. The production-governance job applies the deliberately runtime-rejecting migration-only classifier before its lifecycle-aware integration classifier. Repair only that lane selection and its regression test; preserve both classifiers, the candidate guard, ownership/lifecycle authority, and all T09 runtime. Treat the isolated candidate-guard rejection as correct and non-applicable. Defer stale readiness-document reconciliation until a frozen exact-source artifact and fresh C2-C6 review complete.",
+  "confidence": "high",
+  "validated": true,
+  "validation_errors": []
+}

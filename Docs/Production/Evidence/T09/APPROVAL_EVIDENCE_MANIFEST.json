@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "task_id": "T09",
+  "accepted_source": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "retention_class": "approval_provenance",
+  "records": [
+    {
+      "kind": "verified-completion",
+      "sha256": "2b69ffad9979b1620d3a48a77f049dc7756b85e1c7a6ee33c8c3dd75254c0059",
+      "locator": "repo://ksolo21-web/HAVENLINE/Docs/Production/T09/verified-completion.json",
+      "reproducible": true,
+      "retention_days": 3650
+    },
+    {
+      "kind": "independent-critic-review",
+      "sha256": "646931f7f276ff64bf313b8b67bcb4388eba723c4e75cbfab64b54cab2fb8c06",
+      "locator": "repo://ksolo21-web/HAVENLINE/Docs/Production/T09/independent-critic-review.json",
+      "reproducible": true,
+      "retention_days": 3650
+    },
+    {
+      "kind": "defect-ledger",
+      "sha256": "9d820989c90b977ddb6f9d4a7c95942770f8e94f81e7bb2f86e1e55f76f1a439",
+      "locator": "repo://ksolo21-web/HAVENLINE/Docs/Production/T09/defect-ledger.json",
+      "reproducible": true,
+      "retention_days": 3650
+    },
+    {
+      "kind": "task-state",
+      "sha256": "f70aa712757f72cbd96d75d6717321cb5e3a9d1fcdb55d00060a7fb191d27223",
+      "locator": "repo://ksolo21-web/HAVENLINE/Docs/Production/T09/task-state.json",
+      "reproducible": true,
+      "retention_days": 3650
+    },
+    {
+      "kind": "REVIEW_EVIDENCE_MANIFEST",
+      "sha256": "a2dfcc87bd18d94e5a798c672227cdf6420c51338e50af809d07aed4f190aa59",
+      "locator": "repo://ksolo21-web/HAVENLINE/Docs/Production/Evidence/T09/REVIEW_EVIDENCE_MANIFEST.json",
+      "reproducible": true,
+      "retention_days": 3650
+    },
+    {
+      "kind": "raw_critic_record",
+      "sha256": "2b0e47698bf48e81b2ee8989fec06100c125f5e6eec1acdcbaecc57a06e6571b",
+      "locator": "repo://ksolo21-web/HAVENLINE/Docs/Production/T09/CriticRaw/C2.json",
+      "reproducible": true,
+      "retention_days": 3650
+    },
+    {
+      "kind": "raw_critic_record",
+      "sha256": "9ce6f9fda0b7ea38e85ed31fa8c85e3ffea6e670b42417f8eebb6365e4a46ada",
+      "locator": "repo://ksolo21-web/HAVENLINE/Docs/Production/T09/CriticRaw/C3.json",
+      "reproducible": true,
+      "retention_days": 3650
+    },
+    {
+      "kind": "raw_critic_record",
+      "sha256": "d975c501bebfe15a8f593d5ca423dc55eed0426e04a370cb1973720bee42e9d2",
+      "locator": "repo://ksolo21-web/HAVENLINE/Docs/Production/T09/CriticRaw/C4.json",
+      "reproducible": true,
+      "retention_days": 3650
+    },
+    {
+      "kind": "raw_critic_record",
+      "sha256": "34274007428f9c43946a1938799f082a1d274f4307f13f989b09b93eb6bcd70a",
+      "locator": "repo://ksolo21-web/HAVENLINE/Docs/Production/T09/CriticRaw/C5.json",
+      "reproducible": true,
+      "retention_days": 3650
+    },
+    {
+      "kind": "raw_critic_record",
+      "sha256": "e3171b177c1f680f2ae7de992bf2b50cf02f54b6667b7965666b35858d20f41a",
+      "locator": "repo://ksolo21-web/HAVENLINE/Docs/Production/T09/CriticRaw/C6.json",
+      "reproducible": true,
+      "retention_days": 3650
+    }
+  ],
+  "regeneration_contract": {
+    "workflow": ".github/workflows/havenline-task09-harvesting.yml",
+    "exact_source": "5415d85838ecf4bea8b3c71662072670e61797a0",
+    "source_run_id": 35289633249,
+    "source_artifact_id": 10527144124,
+    "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+    "rule": "Regenerate only from exact accepted source. Regeneration never substitutes for fresh independent review.",
+    "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443"
+  }
+}

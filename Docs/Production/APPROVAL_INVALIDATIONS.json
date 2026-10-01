@@ -1,0 +1,418 @@
+{
+  "schema_version": 1,
+  "authority": "Docs/Production/SHIPPING_VISUAL_APPROVAL_POLICY.json",
+  "records": [
+    {
+      "task_id": "T08",
+      "status": "ACTIVE",
+      "family": "shipping_visual_reference_fidelity_violation",
+      "discovered_at": "2026-09-22T16:51:00Z",
+      "audited_integration_source": "1083d82269e82c5aac678bb5c5c77312dde94099",
+      "reason": "T08 primitive feedback was repaired, but the user rejected the complete final scene for reference fidelity. Only the trees and characters match the intended reference game.",
+      "findings": [
+        {
+          "category": "USER_VISUAL_REJECTION",
+          "scope": "whole_frame",
+          "detail": "Only characters and trees are accepted as reference-matching. Snow, water, terrain/work-floor, fences/gates/lanterns, camera composition, stations/props, structures and other visible scene classes require owner-task re-review or repair."
+        },
+        {
+          "category": "UPSTREAM_REFERENCE_FIDELITY",
+          "owner_task": "T02",
+          "detail": "T02 explicitly owns terrain, snow, warm work areas and river; none are user-accepted as reference-matching under the clarified feedback."
+        },
+        {
+          "category": "UPSTREAM_REFERENCE_FIDELITY",
+          "owner_task": "T03",
+          "detail": "Fence/gate/lantern and ground/work-floor presentation diverge from the locked reference language; preserve the accepted snow treatment."
+        },
+        {
+          "category": "UPSTREAM_REFERENCE_FIDELITY",
+          "owner_task": "T04",
+          "detail": "Normal camera framing/scale does not yet match the reference active-floor actor/item readability."
+        },
+        {
+          "category": "UPSTREAM_REFERENCE_FIDELITY",
+          "owner_task": "T05",
+          "detail": "Station/resource/prop presentation is sparse/boxy and diverges from the locked production-camp language."
+        },
+        {
+          "category": "INTEGRATION_OWNED_REFERENCE_FIDELITY",
+          "owner": "primary-integration-owner",
+          "paths": [
+            "HavenlineGodot/assets/environment_v2/shelter.glb",
+            "HavenlineGodot/assets/environment_v2/furnace.glb",
+            "HavenlineGodot/assets/environment_v2/lantern_post.glb",
+            "HavenlineGodot/scripts/main.gd",
+            "HavenlineGodot/scripts/action_readout.gd",
+            "HavenlineGodot/scripts/outpost_view.gd"
+          ],
+          "detail": "Structures, cabin/furnace staging, lamps and sparse interface/world dressing do not match the authoritative reference composition."
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "reference_fidelity",
+        "C2",
+        "C3",
+        "C4",
+        "closeout",
+        "user_visual_signoff"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "inventory conservation tests",
+        "save matrix",
+        "device matrix",
+        "C6 performance proof",
+        "unrelated deterministic functional proof"
+      ],
+      "required_resolution": "Repair the visible scene beginning at T03 per user direction: T03 fences/gates/lanterns/lanes, T04 camera composition, T05 stations/resources/props, then downstream T08/T09/T10/T11 visual presentation as applicable. Preserve T02. Recapture exact-source 4K60 whole-frame evidence, rerun only invalidated critics/performance domains, and obtain explicit user side-by-side approval.",
+      "repair_status": "USER_REJECTED_REFERENCE_FIDELITY",
+      "repair_candidate_commit": "9efb11e0262ae65de32f664d4627902d565f1148",
+      "repair_evidence_status": "FUNCTIONAL_AND_4K60_EVIDENCE_PASS_BUT_VISUAL_STYLE_REJECTED",
+      "historical_accepted_source": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
+      "user_visual_rejection": true,
+      "user_feedback": "Only the trees and characters match the reference-video look; all other visible scene elements require repair.",
+      "reference_fidelity_passed": false,
+      "primitive_audit_passed": true,
+      "primitive_findings_count": 0
+    },
+    {
+      "task_id": "T09",
+      "status": "ACTIVE",
+      "family": "shipping_visual_primitive_violation",
+      "discovered_at": "2026-09-22T16:51:00Z",
+      "audited_integration_source": "1083d82269e82c5aac678bb5c5c77312dde94099",
+      "reason": "Approved T09 harvesting presentation still creates primitive BoxMesh/PrismMesh/CylinderMesh effects and StandardMaterial3D.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/scripts/harvest_presentation.gd",
+          "tokens": [
+            "BoxMesh",
+            "PrismMesh",
+            "CylinderMesh",
+            "StandardMaterial3D",
+            "PrimitiveMesh"
+          ]
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "C5 motion proof",
+        "harvest conservation tests",
+        "save/device matrices"
+      ],
+      "required_resolution": "Replace primitive presentation with authored production-quality assets/materials, recapture exact-source 4K60 visual evidence, rerun only invalidated critics/performance, obtain explicit user visual signoff."
+    },
+    {
+      "task_id": "T10",
+      "status": "ACTIVE",
+      "family": "shipping_visual_primitive_violation",
+      "discovered_at": "2026-09-22T16:51:00Z",
+      "audited_integration_source": "1083d82269e82c5aac678bb5c5c77312dde94099",
+      "reason": "Approved T10 world-transform presentation still uses primitive CylinderMesh/BoxMesh geometry and StandardMaterial3D.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/scripts/world_transform_view.gd",
+          "tokens": [
+            "CylinderMesh",
+            "BoxMesh",
+            "StandardMaterial3D"
+          ]
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "C1",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "C7 progression/state proof",
+        "world-transaction deterministic semantics",
+        "save matrix"
+      ],
+      "required_resolution": "Replace primitive transform ring/ghost/materials with authored production-quality presentation, recapture exact-source 4K60 visual evidence, rerun invalidated visual/performance critics only, obtain explicit user visual signoff."
+    },
+    {
+      "task_id": "T11",
+      "status": "ACTIVE",
+      "family": "shipping_visual_primitive_violation",
+      "discovered_at": "2026-09-22T16:51:00Z",
+      "audited_integration_source": "1083d82269e82c5aac678bb5c5c77312dde94099",
+      "reason": "Approved T11 shelter content and flow markers still use BoxMesh and StandardMaterial3D in shipping-visible content.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/assets/camp_construction_v1/camp_shelter_seed.tscn",
+          "tokens": [
+            "BoxMesh",
+            "StandardMaterial3D"
+          ]
+        },
+        {
+          "path": "HavenlineGodot/assets/camp_construction_v1/camp_shelter_foundation.tscn",
+          "tokens": [
+            "BoxMesh",
+            "StandardMaterial3D"
+          ]
+        },
+        {
+          "path": "HavenlineGodot/assets/camp_construction_v1/camp_shelter_reinforced.tscn",
+          "tokens": [
+            "BoxMesh",
+            "StandardMaterial3D"
+          ]
+        },
+        {
+          "path": "HavenlineGodot/scripts/camp_construction_view.gd",
+          "tokens": [
+            "BoxMesh",
+            "StandardMaterial3D"
+          ]
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "C2",
+        "C3",
+        "C4",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "594-check functional suites",
+        "T10 transaction semantics",
+        "unrelated deterministic tests"
+      ],
+      "required_resolution": "Replace shelters/markers/materials with authored production-quality assets/materials matching the Havenline reference style, recapture exact-source 4K60 stills and motion, rerun invalidated critics/performance only, show the visual proof to the user, then obtain explicit user visual signoff before INTEGRATION_READY."
+    },
+    {
+      "task_id": "T03",
+      "status": "ACTIVE",
+      "family": "whole_frame_reference_fidelity_violation",
+      "discovered_at": "2026-09-22T20:04:00Z",
+      "audited_integration_source": "7385d2f6c80cb0e09d7f30c41ddc1cdacd1e53e8",
+      "reason": "User whole-frame review clarifies that only trees and characters match the locked reference. T03 fences/gates/work lanes and its current surface presentation therefore remain visually invalidated.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/scripts/camp_boundary_view.gd",
+          "detail": "Fence/gate/lantern presentation requires reference-style art upgrade."
+        },
+        {
+          "path": "HavenlineGodot/scripts/outpost_surface.gd",
+          "detail": "Ground/lane/work-floor composition requires reference-style correction."
+        },
+        {
+          "path": "HavenlineGodot/shaders/outpost_snow.gdshader",
+          "detail": "T03's current use/modification of the snow surface must be revalidated against reference; snow is not grandfathered as user-approved."
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "reference_fidelity",
+        "C1",
+        "C2",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "boundary collision/navigation tests",
+        "gate geometry authority",
+        "T01 tree baseline",
+        "T02 water baseline",
+        "nonvisual deterministic proof"
+      ],
+      "required_resolution": "Re-author T03 visible boundary/environment presentation to match the locked reference language while preserving collision/navigation authority; recapture whole-frame 4K60 evidence and obtain user approval.",
+      "repair_status": "POST_COMPLETION_VISUAL_REPAIR_AUTHORIZED",
+      "repair_summary": "Replace only the visible fence, gate leaves and post art using the user-supplied snowy timber/rope references. Preserve the exact Iteration 11H geometry authority, hinges, six portals, routes, leaf length/open angle, terrain, river and camera.",
+      "preserved_proof": [
+        "boundary collision/navigation tests",
+        "gate geometry authority",
+        "T01 tree baseline",
+        "T02 accepted visual/runtime baseline",
+        "nonvisual deterministic proof"
+      ],
+      "preserved_critic_proof": [
+        "Historical 11H visual/performance results remain archived but do not approve replacement art.",
+        "Unchanged authority and terrain proof may be reused only after byte-identity and impact review."
+      ],
+      "historical_accepted_source": "e1e7bb2d68d1d53025d1242011ad4c885f08c307",
+      "repair_candidate_allowed": true,
+      "repair_branch": "havenline/T03-reference-art-20260926",
+      "repair_scope": "VISUAL_ONLY",
+      "latest_user_direction": "The fence needs to be changed too. Replace the visible family with the supplied palisade/gate renders; preserve approved T03 gameplay geometry and boundary behavior.",
+      "approved_reference_images": [
+        "18590.png: three-quarter rope-lashed snowy palisade",
+        "18595.png: front snowy picket and rope construction",
+        "18596.png: double wooden gate with diagonal braces",
+        "18598.png: straight palisade rhythm and end post"
+      ],
+      "required_visual_scope": [
+        "three authored boundary meshes",
+        "warm carved timber and rope material treatment",
+        "snow crowns and gate snow lip",
+        "source-bound actual Godot closeups, perimeter, six portals and use-state views",
+        "fresh applicable critic/performance review and explicit user visual acceptance"
+      ],
+      "forbidden_repair_scope": [
+        "camp_boundary.gd or collision/opening geometry",
+        "portal IDs, routes, source length constants, hinge/open transforms and leaf normalization",
+        "terrain, river, lane shader, T01 trees and T04 camera",
+        "T05 or any other task's production assets",
+        "automatic approval or clearing this active invalidation"
+      ]
+    },
+    {
+      "task_id": "T05",
+      "status": "ACTIVE",
+      "family": "whole_frame_reference_fidelity_violation",
+      "discovered_at": "2026-09-22T20:04:00Z",
+      "audited_integration_source": "ff7c67285a67dc69a3bd97b207a9e61929e1e3c9",
+      "reason": "The 2026-09-26 post-completion audit, exact historical source-bound evidence and user-approved references confirm that multiple T05 station/resource/prop families remain visually primitive/blockout-like despite being authored GLBs.",
+      "findings": [
+        {
+          "category": "AUTHORED_BUT_PRIMITIVE_LOOKING",
+          "owner_task": "T05",
+          "paths": [
+            "HavenlineGodot/assets/stations_v2/**",
+            "tools/havenline/task05/generate_station_kit.py"
+          ],
+          "detail": "Hearth/furnace, counters, processing fixtures, defense platform, resource stacks and pads are generated primarily from generic boxes/cylinders/related forms and do not meet the sculpted shipping-art bar."
+        },
+        {
+          "category": "RESOURCE_FAMILY_REFERENCE_FIDELITY",
+          "owner_task": "T05",
+          "detail": "Wood/stone/metal/fuel/fish/food/money/crate families must be rebuilt as resource-specific authored silhouettes such as rope-bound logs, faceted ore/crystal, framed bins and physical bundled currency."
+        },
+        {
+          "category": "PAD_FAMILY_REFERENCE_FIDELITY",
+          "owner_task": "T05",
+          "detail": "Ground pads currently read as flat world-space UI tokens and must become shallow constructed camp platforms while preserving six purposes, footprints and sockets."
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "reference_fidelity",
+        "C1",
+        "C2",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "station sockets",
+        "placement contracts",
+        "runtime_logic_included=false",
+        "nonvisual deterministic proof"
+      ],
+      "required_resolution": "Re-author T05 visible station/prop families on the exact authorized repair branch while preserving IDs, sockets, footprints, clearances, arrangements and all gameplay contracts. Require source-bound multi-angle/gameplay/native-4K evidence, zero primitive-looking/blockout findings, exact 10/10 locked style dimensions where required by the global reference-style policy, and explicit user visual approval before clearing the invalidation.",
+      "latest_audit_date": "2026-09-26",
+      "latest_audit_evidence_run": 34824259431,
+      "latest_audit_artifact_id": 10339801250,
+      "historical_accepted_source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+      "repair_candidate_allowed": true,
+      "repair_branch": "havenline/T05-visual-repair-20260926",
+      "repair_scope": "VISUAL_ONLY",
+      "repair_status": "POST_COMPLETION_VISUAL_REPAIR_AUTHORIZED",
+      "latest_user_direction": "Use the newly approved sculpted winter-production asset language; authored meshes that still visually read as primitive/blockout geometry fail. Preserve T05 mechanics/sockets/layout contracts.",
+      "generator_root_cause": "The historical deterministic T05 generator builds much of the final visible kit from generic beveled_box/cylinder/sphere/lathe forms. These are custom-authored GLBs, but exact source-bound renders still read as blockout-like compared with the approved art language.",
+      "first_repair_batch": [
+        "T05-R01 hearth/furnace",
+        "T05-R07 resource props"
+      ],
+      "approved_art_language": [
+        "chunky sculpted mobile-readable silhouettes",
+        "warm carved timber with layered construction",
+        "dark blue-gray metal plates, brackets and rivets",
+        "orange/yellow heat and machinery accents",
+        "thick irregular snow accumulation integrated into silhouettes",
+        "faceted stone, ore and crystal resources with snow contact",
+        "rope-bound logs with bark and readable cut ends",
+        "framed resource bins and storage platforms",
+        "bundled physical currency",
+        "physical constructed camp pads and tiles instead of flat UI-like tokens"
+      ]
+    },
+    {
+      "task_id": "T04",
+      "status": "ACTIVE",
+      "family": "whole_frame_reference_fidelity_violation",
+      "discovered_at": "2026-09-22T20:10:00Z",
+      "audited_integration_source": "efc648ed0ab9b9912743727f722001a63ab152bf",
+      "reason": "User whole-frame review shows current camera composition does not yet match the locked reference-video active-floor scale/readability.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/scripts/camera_composition.gd",
+          "detail": "Wide gameplay framing can read as a distant diagram; reference requires oblique framing with readable actor/item scale and station adjacency."
+        }
+      ],
+      "invalidates": [
+        "effective_approval",
+        "visual_evidence",
+        "reference_fidelity",
+        "C1",
+        "C2",
+        "C6",
+        "closeout"
+      ],
+      "preserves_unless_blast_radius_changes": [
+        "automatic phone/tablet layout logic",
+        "camera authority contract",
+        "nonvisual deterministic proof"
+      ],
+      "required_resolution": "Calibrate landscape camera composition directly against actual reference-video pixels/motion while preserving automatic device adaptation; require exact 10/10 composition fidelity and user approval."
+    },
+    {
+      "task_id": "T02",
+      "status": "RESOLVED_BY_USER_VISUAL_ACCEPTANCE",
+      "family": "whole_frame_reference_fidelity_violation",
+      "discovered_at": "2026-09-22T20:24:00Z",
+      "audited_integration_source": "ef10e2e08562474800bb5973378ee3411abd1168",
+      "reason": "User explicitly accepted T02 as visually okay and directed the repair sequence to start at T03 onward.",
+      "findings": [
+        {
+          "path": "HavenlineGodot/scripts/river_geometry.gd",
+          "detail": "River/water presentation requires fresh reference-fidelity review and repair as needed."
+        },
+        {
+          "path": "HavenlineGodot/scripts/outpost_surface.gd",
+          "detail": "Terrain/warm work-floor presentation requires fresh reference-fidelity review and repair."
+        },
+        {
+          "path": "HavenlineGodot/shaders/outpost_snow.gdshader",
+          "detail": "Snow/ground material treatment is not user-approved as reference-matching."
+        },
+        {
+          "path": "HavenlineGodot/shaders/lakeshore_water.gdshader",
+          "detail": "Water material treatment is not user-approved as reference-matching."
+        }
+      ],
+      "invalidates": [],
+      "preserves_unless_blast_radius_changes": [
+        "river topology/meander geometry",
+        "movement bounds",
+        "dry-bank/crossing geometry",
+        "T01 tree baseline",
+        "nonvisual deterministic proof"
+      ],
+      "required_resolution": "None. Preserve T02 approved terrain/snow/work-floor/water presentation unless a later T03+ repair creates a demonstrated regression.",
+      "repair_status": "USER_ACCEPTED_PRESERVE",
+      "user_visual_acceptance": true,
+      "user_feedback": "T02 is okay; start repairs at T03 onward."
+    }
+  ]
+}

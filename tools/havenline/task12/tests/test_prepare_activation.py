@@ -1,0 +1,335 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import copy
+import importlib.util
+import pathlib
+import unittest
+
+ROOT = pathlib.Path(__file__).resolve().parents[4]
+TOOL_PATH = ROOT / "tools/havenline/task12/prepare_activation.py"
+
+spec = importlib.util.spec_from_file_location("t12_prepare_activation", TOOL_PATH)
+activation = importlib.util.module_from_spec(spec)
+assert spec.loader is not None
+spec.loader.exec_module(activation)
+
+
+class T12PrepareActivationTests(unittest.TestCase):
+    def test_prep_workflow_accepts_only_visual_policy_fail_closed_lock(self):
+        body=(ROOT / ".github/workflows/havenline-task12-prep.yml").read_text()
+        self.assertIn("not effectively approved under shipping visual policy", body)
+        self.assertIn("unexpected activation errors", body)
+        self.assertIn("visual-policy lock may not mask failed T12 preparation gates", body)
+        self.assertIn("binding_resolution_passed", body)
+        self.assertIn("prebuild_benchmark_passed", body)
+
+    t10 = "a" * 40
+    t11 = "b" * 40
+    head = "c" * 40
+
+    def state(self):
+        checklist = {"dependencies": ["T07", "T08", "T10", "T11"]}
+        graph = {
+            "tasks": {
+                task: {"status": "APPROVED"}
+                for task in checklist["dependencies"]
+            }
+        }
+        registry = {
+            "legacy_approvals": {},
+            "workstreams": [
+                {"task_id": task, "status": "APPROVED"}
+                for task in checklist["dependencies"]
+            ],
+        }
+        ownership = {
+            "active_owners": [],
+            "completed_production_owners": [
+                {
+                    "task_id": "T10",
+                    "status": "APPROVED",
+                    "integrated_source": self.t10,
+                },
+                {
+                    "task_id": "T11",
+                    "status": "APPROVED",
+                    "integrated_source": self.t11,
+                },
+            ],
+        }
+        gates = {
+            "approved_tasks": list(checklist["dependencies"]),
+            "completed_task_records": {
+                "T10": {
+                    "status": "APPROVED",
+                    "integrated_source": self.t10,
+                },
+                "T11": {
+                    "status": "APPROVED",
+                    "integrated_source": self.t11,
+                },
+            },
+        }
+        return checklist, graph, registry, ownership, gates
+
+    def validate(self, state=None, ancestry_check=lambda source, head: True):
+        checklist, graph, registry, ownership, gates = state or self.state()
+        return activation.validate_dependency_closeout(
+            checklist,
+            graph,
+            registry,
+            ownership,
+            gates,
+            self.head,
+            ancestry_check=ancestry_check,
+        )
+
+    def test_clean_dependency_closeout_passes(self):
+        errors, sources = self.validate()
+        self.assertEqual(errors, [])
+        self.assertEqual(sources, {"T10": self.t10, "T11": self.t11})
+
+    def test_unapproved_dependency_fails(self):
+        state = self.state()
+        state[1]["tasks"]["T11"]["status"] = "ASSIGNED"
+        state[2]["workstreams"][-1]["status"] = "ASSIGNED"
+        state[4]["approved_tasks"].remove("T11")
+        errors, _ = self.validate(state)
+        self.assertTrue(any("T11 graph status" in e for e in errors))
+        self.assertTrue(any("T11 registry status" in e for e in errors))
+        self.assertTrue(any("T11 missing from task-gates" in e for e in errors))
+
+    def test_missing_completed_task_record_fails(self):
+        state = self.state()
+        del state[4]["completed_task_records"]["T11"]
+        errors, _ = self.validate(state)
+        self.assertTrue(any("T11 has no completed_task_records" in e for e in errors))
+
+    def test_completed_owner_source_mismatch_fails(self):
+        state = self.state()
+        state[3]["completed_production_owners"][0]["integrated_source"] = "d" * 40
+        errors, _ = self.validate(state)
+        self.assertTrue(any("does not match task-gates source" in e for e in errors))
+
+    def test_nonancestor_accepted_source_fails(self):
+        errors, _ = self.validate(
+            ancestry_check=lambda source, head: source != self.t11
+        )
+        self.assertTrue(any("T11 accepted/integrated source" in e and "not an ancestor" in e for e in errors))
+
+    def test_stale_dependency_owner_fails(self):
+        state = self.state()
+        state[3]["active_owners"] = [{
+            "task_id": "T11",
+            "status": "APPROVED",
+            "paths_alias": "@reservation:T11",
+        }]
+        errors, _ = self.validate(state)
+        self.assertTrue(any("still listed as an active owner" in e for e in errors))
+
+    def test_path_safety_rejects_escape_and_absolute(self):
+        self.assertTrue(activation.safe_repo_pattern("HavenlineGodot/data/example.json"))
+        self.assertFalse(activation.safe_repo_pattern("../outside.json"))
+        self.assertFalse(activation.safe_repo_pattern("/absolute/path"))
+
+    def test_overlap_detects_exact_and_prefix_collisions(self):
+        self.assertTrue(
+            activation.may_overlap(
+                "HavenlineGodot/data/**",
+                "HavenlineGodot/data/progression_levels_v1.json",
+            )
+        )
+        self.assertFalse(
+            activation.may_overlap(
+                "HavenlineGodot/data/progression_levels_v1.json",
+                "HavenlineGodot/scripts/world_transform.gd",
+            )
+        )
+
+    def test_glob_overlap_does_not_invent_cross_task_collision(self):
+        self.assertFalse(
+            activation.may_overlap(
+                "tools/havenline/task12/**",
+                "tools/havenline/*task03*",
+            )
+        )
+        self.assertFalse(
+            activation.may_overlap(
+                ".github/workflows/havenline-task12-*.yml",
+                ".github/workflows/havenline-task03-*.yml",
+            )
+        )
+
+    def test_glob_overlap_still_detects_real_subtree_collision(self):
+        self.assertTrue(
+            activation.may_overlap(
+                "Docs/Production/T12/**",
+                "Docs/Production/T12/review/evidence.json",
+            )
+        )
+        self.assertTrue(
+            activation.may_overlap(
+                "HavenlineGodot/assets/**",
+                "HavenlineGodot/assets/world_transform_v1/**",
+            )
+        )
+
+
+    def test_current_cross_contracts_are_consistent(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        self.assertEqual(activation.validate_cross_contracts(checklist), [])
+        self.assertEqual(activation.validate_upstream_preparation_bindings(), [])
+        self.assertEqual(activation.validate_defect_ledger_preparation(), [])
+
+    def test_cross_contract_rejects_level_count_drift(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["product_contract"]["exact_shipping_level_record_count"] = 99
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("product contract drifted" in error for error in errors))
+
+    def test_cross_contract_rejects_fact_slot_namespace_drift(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["fact_slot_contract"]["namespace"] = "wrong.fact.slot"
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("fact-slot namespace drifted" in error for error in errors))
+
+    def test_cross_contract_rejects_binding_shipping_dataset_drift(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["fact_slot_contract"]["shipping_dataset_path"] = "HavenlineGodot/data/wrong.json"
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("shipping dataset path drifted" in error for error in errors))
+
+    def test_cross_contract_rejects_missing_resolved_binding_index_gate(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["preactivation_buildout"]["shipping_write_requires_resolved_binding_index"] = False
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("preactivation_buildout drifted" in error for error in errors))
+
+    def test_cross_contract_rejects_materializer_write_before_activation(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["preactivation_buildout"]["repository_write_allowed_before_activation"] = True
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("preactivation_buildout drifted" in error for error in errors))
+
+    def test_cross_contract_rejects_full_vector_count_drift(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["preactivation_buildout"]["exact_full_vector_count"] = 397
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("preactivation_buildout drifted" in error for error in errors))
+
+    def test_cross_contract_rejects_presentation_fact_slot_authority(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        prebuild["fact_slot_contract"]["presentation_requirements_never_resolve_fact_slots"] = False
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("presentation requirements" in error for error in errors))
+
+    def test_upstream_binding_contract_rejects_missing_t11(self):
+        data = copy.deepcopy(activation.load(activation.UPSTREAM_BINDINGS_PATH))
+        del data["bindings"]["T11"]
+        errors = activation.validate_upstream_preparation_bindings(data)
+        self.assertTrue(any("exactly T07,T08,T10,T11" in error for error in errors))
+
+    def test_defect_ledger_rejects_mandatory_defect(self):
+        ledger = copy.deepcopy(activation.load(activation.DEFECT_LEDGER_PATH))
+        ledger["mandatory_defects"] = [{"id": "T12-D999", "status": "OPEN"}]
+        errors = activation.validate_defect_ledger_preparation(ledger)
+        self.assertTrue(any("unresolved mandatory defects" in error for error in errors))
+
+
+
+    def test_current_performance_budget_contract_is_consistent(self):
+        self.assertEqual(activation.validate_performance_budget_contract(), [])
+
+    def test_performance_budget_rejects_normalized_limit_relaxation(self):
+        data = copy.deepcopy(activation.load(activation.PERFORMANCE_BUDGET_PATH))
+        data["static_validation_budget"]["maximum_mean_ms_per_check"] = 2.0
+        errors = activation.validate_performance_budget_contract(data)
+        self.assertTrue(any("maximum_mean_ms_per_check" in error and "drifted" in error for error in errors))
+
+    def test_performance_budget_rejects_check_count_drift(self):
+        data = copy.deepcopy(activation.load(activation.PERFORMANCE_BUDGET_PATH))
+        data["static_validation_budget"]["check_count"] = 18
+        errors = activation.validate_performance_budget_contract(data)
+        self.assertTrue(any("check_count" in error and "drifted" in error for error in errors))
+
+    def test_performance_budget_rejects_partial_fuzz_acceptance(self):
+        data = copy.deepcopy(activation.load(activation.PERFORMANCE_BUDGET_PATH))
+        data["fuzz_budget"]["minimum_rejected_mutations"] = 240
+        errors = activation.validate_performance_budget_contract(data)
+        self.assertTrue(any("250/250" in error for error in errors))
+
+
+
+    def test_current_builder_reservation_is_shipping_only(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        self.assertEqual(checklist["planned_owned_paths"], activation.EXPECTED_BUILDER_PATHS)
+        self.assertFalse(any(path.startswith("Docs/Production/T12") for path in checklist["planned_owned_paths"]))
+        self.assertFalse(any(path.startswith("tools/havenline/task12") for path in checklist["planned_owned_paths"]))
+        self.assertFalse(any(path.startswith(".github/workflows") for path in checklist["planned_owned_paths"]))
+
+    def test_cross_contract_rejects_broad_builder_ownership(self):
+        checklist = copy.deepcopy(activation.load(activation.CHECKLIST_PATH))
+        checklist["planned_owned_paths"].append("tools/havenline/task12/**")
+        errors = activation.validate_cross_contracts(checklist)
+        self.assertTrue(any("seven frozen shipping/runtime test paths" in error for error in errors))
+
+    def test_current_assignment_templates_use_v32_authority(self):
+        checklist = activation.load(activation.CHECKLIST_PATH)
+        prepared = checklist["prepared_registration_template"]
+        assigned = checklist["claim_template"]
+        self.assertIn("workstream.py claim", prepared)
+        self.assertIn("--status PREPARED", prepared)
+        self.assertNotIn("--status ASSIGNED", prepared)
+        self.assertIn("v32_assignment_claim.py", assigned)
+        self.assertIn("--builder-head <T12_BUILDER_HEAD>", assigned)
+        self.assertIn("--integration-head <ACTIVATION_INTEGRATION_SHA>", assigned)
+        self.assertNotIn("workstream.py claim", assigned)
+
+    def test_cross_contract_rejects_legacy_assigned_claim(self):
+        checklist = copy.deepcopy(activation.load(activation.CHECKLIST_PATH))
+        checklist["claim_template"] = (
+            "python3 tools/havenline/production/workstream.py claim T12 "
+            "--owner progression-architecture-builder "
+            "--branch havenline/T12-progression-architecture "
+            "--base <ACTIVATION_INTEGRATION_SHA> "
+            "--owned-alias @reservation:T12 --status ASSIGNED "
+            "--builder-head <T12_BUILDER_HEAD> --integration-head <ACTIVATION_INTEGRATION_SHA>"
+        )
+        errors = activation.validate_cross_contracts(checklist)
+        self.assertTrue(any("ASSIGNED authority must use v32_assignment_claim.py" in error for error in errors))
+
+    def test_cross_contract_rejects_prepared_template_granting_assigned(self):
+        checklist = copy.deepcopy(activation.load(activation.CHECKLIST_PATH))
+        checklist["prepared_registration_template"] = checklist["prepared_registration_template"].replace(
+            "--status PREPARED", "--status ASSIGNED"
+        )
+        errors = activation.validate_cross_contracts(checklist)
+        self.assertTrue(any("may not grant ASSIGNED authority" in error for error in errors))
+
+    def test_cross_contract_rejects_checklist_identity_drift(self):
+        checklist = copy.deepcopy(activation.load(activation.CHECKLIST_PATH))
+        prebuild = copy.deepcopy(activation.load(activation.PREBUILD_CONTRACT_PATH))
+        schema = copy.deepcopy(activation.load(activation.DATA_SCHEMA_PATH))
+        checklist["future_builder_branch"] = "havenline/T12-wrong"
+        errors = activation.validate_cross_contracts(checklist, prebuild=prebuild, schema=schema)
+        self.assertTrue(any("future_builder_branch" in error for error in errors))
+
+
+
+if __name__ == "__main__":
+    unittest.main()

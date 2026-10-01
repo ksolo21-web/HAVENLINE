@@ -1,0 +1,362 @@
+{
+  "status": "PASS",
+  "scores": {
+    "full_cycle": 9.187,
+    "foot_contact": 9.229,
+    "lower_body_mechanics": 9.154,
+    "upper_body_mechanics": 9.173,
+    "weight_transfer": 9.108,
+    "transitions": 9.143,
+    "clipping": 9.207,
+    "secondary_motion_contact": 9.132
+  },
+  "minimum_score": 9.108,
+  "coverage_complete": true,
+  "confidence": 0.97,
+  "defects": [],
+  "evidence": [
+    {
+      "path": "captures/motion-c5/motion.json",
+      "sha256": "09455e349e8895fd458255569384539c730551e7132a727f633d31bf098643b5"
+    },
+    {
+      "path": "captures/motion-c5/motion-hashes.json",
+      "sha256": "39a4a10c520d35704c1fa491c8753319b2693053d6d74d2e1bef8fe0aaac5ed1"
+    },
+    {
+      "path": "captures/motion-c5/videos/chop-real-time.mp4",
+      "sha256": "3086a858f7ddcd64717b9f24b7675f397eb833e5bdd6346349795043c6005994"
+    },
+    {
+      "path": "captures/motion-c5/videos/chop-slow-review.mp4",
+      "sha256": "a1f08010df97b1ebc5db6ce7de35cd5637b387ed836c5e4bca3bc5ddc63b8e75"
+    },
+    {
+      "path": "captures/motion-c5/videos/mine-real-time.mp4",
+      "sha256": "83bd54cb08ce4d4110f367adf6ec3cb25089b95617c6afbeca4384c32d20d07c"
+    },
+    {
+      "path": "captures/motion-c5/videos/mine-slow-review.mp4",
+      "sha256": "704fd76f688dc6328bbb1f87b010a33930b2a2ff3f8351025118f90cf17ae436"
+    },
+    {
+      "path": "captures/motion-c5/videos/dismantle-real-time.mp4",
+      "sha256": "076fc0ae3088c5ca6fc3e88261652e64c2c3cb1f826b27f799adac9bb3f9bbda"
+    },
+    {
+      "path": "captures/motion-c5/videos/dismantle-slow-review.mp4",
+      "sha256": "99d5a8ea3384622b6c9df14a378ae744d5168115a9f0d7752a311bfe4ab9fc85"
+    },
+    {
+      "path": "captures/motion-c5/t06/chop/turns/turn-180.png",
+      "sha256": "feedc581ca0fcf15860069f03d12cbf04f62cba160ef2d991bf6c9e3a9b3c253"
+    },
+    {
+      "path": "captures/motion-c5/t06/mine/turns/turn-neg-090.png",
+      "sha256": "7e2bddf0074f533b82ce699b5764f1041bde3f74afdbaa545a68fb5dba60c8dd"
+    },
+    {
+      "path": "captures/motion-c5/t06/dismantle/close-contacts/lower-front.png",
+      "sha256": "4591fc7329ea46aae511edaeb421a787e7fdf80228592a89f167e76165512109"
+    }
+  ],
+  "rationale": [
+    "The character-rigging critic protocol was applied to the full real-time and true 0.25x slow-review chop, mine and dismantle cycles, transitions, nine turn angles and five close-contact views per action.",
+    "Real/slow frame counts are 29/112 chop, 32/124 mine and 34/131 dismantle. Slow durations are approximately 3.86 times real durations, confirming genuine quarter-speed review evidence.",
+    "All 27 turns, 15 close contacts and every cycle contact window are contact-ready and aligned with sub-micrometre recorded impact/grip error. Feet/toes/knees/hips, shoulders/elbows/hands, cuffs, boots, belt/pouches, hem, tool grip and target contact remain stable with no visible loop pop or clipping."
+  ],
+  "rig_inventory": {
+    "joint_count": 66,
+    "all_joints_mapped": true,
+    "groups": {
+      "root_core": [
+        "Root",
+        "Hip",
+        "Pelvis",
+        "Waist",
+        "Spine01",
+        "Spine02"
+      ],
+      "head_neck": [
+        "NeckTwist01",
+        "NeckTwist02",
+        "Head"
+      ],
+      "left_arm_hand": [
+        "L_Clavicle",
+        "L_Upperarm",
+        "L_UpperarmTwist01",
+        "L_UpperarmTwist02",
+        "L_Forearm",
+        "L_ForearmTwist01",
+        "L_ForearmTwist02",
+        "L_Hand"
+      ],
+      "right_arm_hand": [
+        "R_Clavicle",
+        "R_Upperarm",
+        "R_UpperarmTwist01",
+        "R_UpperarmTwist02",
+        "R_Forearm",
+        "R_ForearmTwist01",
+        "R_ForearmTwist02",
+        "R_Hand"
+      ],
+      "left_leg_boot": [
+        "L_Thigh",
+        "L_ThighTwist01",
+        "L_ThighTwist02",
+        "L_Calf",
+        "L_CalfTwist01",
+        "L_CalfTwist02",
+        "L_KneePad",
+        "L_Foot",
+        "L_ToeBase",
+        "L_BootFastener_upper_inner",
+        "L_BootFastener_lower_inner",
+        "L_BootFastener_upper_outer",
+        "L_BootFastener_lower_outer"
+      ],
+      "right_leg_boot": [
+        "R_Thigh",
+        "R_ThighTwist01",
+        "R_ThighTwist02",
+        "R_Calf",
+        "R_CalfTwist01",
+        "R_CalfTwist02",
+        "R_KneePad",
+        "R_Foot",
+        "R_ToeBase",
+        "R_BootFastener_upper_inner",
+        "R_BootFastener_lower_inner",
+        "R_BootFastener_upper_outer",
+        "R_BootFastener_lower_outer"
+      ],
+      "coat_pouch_hem": [
+        "CoatFront",
+        "L_CoatFront",
+        "PouchSwing",
+        "HemFastener_01",
+        "HemFastener_02",
+        "HemFastener_03",
+        "HemFastener_04",
+        "HemFastener_05",
+        "HemFastener_06",
+        "HemFastener_07",
+        "HemFastener_08",
+        "HemFastener_09",
+        "HemFastener_10",
+        "HemFastener_11",
+        "HemFastener_12"
+      ]
+    }
+  },
+  "part_clip_ledger": {
+    "check_order": [
+      "transform",
+      "deformation",
+      "clearance",
+      "temporal"
+    ],
+    "root_core": {
+      "chop": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "mine": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "dismantle": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ]
+    },
+    "head_neck_hair_eyewear": {
+      "chop": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "mine": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "dismantle": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ]
+    },
+    "left_arm_hand_cuff": {
+      "chop": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "mine": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "dismantle": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ]
+    },
+    "right_arm_hand_cuff": {
+      "chop": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "mine": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "dismantle": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ]
+    },
+    "left_leg_foot_knee_fasteners": {
+      "chop": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "mine": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "dismantle": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ]
+    },
+    "right_leg_foot_knee_fasteners": {
+      "chop": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "mine": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "dismantle": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ]
+    },
+    "coat_hem_belt_pouches": {
+      "chop": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "mine": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "dismantle": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ]
+    },
+    "tool_grip_target_contact": {
+      "chop": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "mine": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ],
+      "dismantle": [
+        "PASS",
+        "PASS",
+        "PASS",
+        "PASS"
+      ]
+    }
+  },
+  "clip_level_checks": {
+    "chop": {
+      "loop_continuity": "PASS",
+      "ground_contact": "PASS",
+      "motion_intent": "PASS",
+      "entry_exit_transition": "PASS"
+    },
+    "mine": {
+      "loop_continuity": "PASS",
+      "ground_contact": "PASS",
+      "motion_intent": "PASS",
+      "entry_exit_transition": "PASS"
+    },
+    "dismantle": {
+      "loop_continuity": "PASS",
+      "ground_contact": "PASS",
+      "motion_intent": "PASS",
+      "entry_exit_transition": "PASS"
+    },
+    "skeleton_integrity": "PASS",
+    "animation_integrity": "PASS",
+    "runtime_export_integrity": "PASS"
+  },
+  "schema_version": 1,
+  "task_id": "T09",
+  "critic_id": "C5",
+  "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "workflow_run_id": 35289633249,
+  "artifact_id": 10527144124,
+  "artifact_sha256": "78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+  "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "input_manifest_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "passed": true,
+  "score_reuse": false,
+  "minimum_dimension_score": 9.108,
+  "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
+  "provider": "OpenAI",
+  "model": "unavailable in runtime metadata",
+  "request_or_run_id": "/root/t09_final_critic"
+}

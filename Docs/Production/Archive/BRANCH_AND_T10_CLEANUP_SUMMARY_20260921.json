@@ -1,0 +1,269 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-21",
+  "canonical_branch": "codex/havenline-sequential-task-01",
+  "purpose": "Final branch/stale-state cleanup audit after T10 approval and T11 preparation.",
+  "deletion_totals": {
+    "t10_obsolete_refs_deleted": 86,
+    "t09_obsolete_refs_deleted": 11,
+    "fully_merged_non_task_refs_deleted": 14,
+    "t03_fully_merged_hardening_ref_deleted": 1,
+    "v32_fully_merged_refs_deleted": 7,
+    "v32_forward_control_ref_deleted": 1
+  },
+  "total_branch_refs_deleted": 120,
+  "preserved_rules": [
+    "Preserve designated T01-T70 task branches and task evidence.",
+    "Preserve canonical integration/release history.",
+    "Preserve every branch used by an open PR.",
+    "Preserve any unreferenced branch that still has unique commits not contained in canonical.",
+    "Delete only obsolete task-retry/review/diagnostic refs or non-task refs already fully contained in canonical."
+  ],
+  "stale_prs_closed": [
+    {
+      "pr": 29,
+      "reason": "T09 is already APPROVED; unique review branch preserved for audit."
+    },
+    {
+      "pr": 12,
+      "reason": "T11 is already PREPARED canonically; future-governance branches preserved because later prep PRs depend on them."
+    }
+  ],
+  "current_open_prs": [
+    {
+      "number": 19,
+      "title": "Governance: prepare T62-T70 final acceptance and release wave",
+      "head": "havenline/governance-t62-t70-prep",
+      "base": "havenline/governance-t53-t61-prep",
+      "draft": true
+    },
+    {
+      "number": 18,
+      "title": "Governance: prepare T53-T61 transport device rigging wave",
+      "head": "havenline/governance-t53-t61-prep",
+      "base": "havenline/governance-t44-t52-prep",
+      "draft": true
+    },
+    {
+      "number": 17,
+      "title": "Governance: prepare T44-T52 connected-region parallel wave",
+      "head": "havenline/governance-t44-t52-prep",
+      "base": "havenline/governance-t33-t43-prep",
+      "draft": true
+    },
+    {
+      "number": 16,
+      "title": "Governance: prepare T33-T43 economy LiveOps security wave",
+      "head": "havenline/governance-t33-t43-prep",
+      "base": "havenline/governance-t21-t32-prep",
+      "draft": true
+    },
+    {
+      "number": 15,
+      "title": "Governance: prepare T21-T32 parallel dependency wave",
+      "head": "havenline/governance-t21-t32-prep",
+      "base": "havenline/governance-t13-t20-prep",
+      "draft": true
+    },
+    {
+      "number": 14,
+      "title": "Governance: prepare T12 Level 1–100 progression in parallel",
+      "head": "havenline/governance-t12-prep",
+      "base": "havenline/governance-t11-prep",
+      "draft": false
+    },
+    {
+      "number": 13,
+      "title": "Governance: prepare T13-T20 parallel dependency wave",
+      "head": "havenline/governance-t13-t20-prep",
+      "base": "havenline/governance-t12-prep",
+      "draft": true
+    },
+    {
+      "number": 5,
+      "title": "HAVENLINE sequential integration — T01–T10 approved, T11 prepared",
+      "head": "codex/havenline-sequential-task-01",
+      "base": "codex/havenline-environment-review",
+      "draft": false
+    },
+    {
+      "number": 4,
+      "title": "Havenline 0.4.5 environment candidate: verified APK; 10/10 and physical 4K60 gates remain blocked",
+      "head": "codex/havenline-environment-review",
+      "base": "codex/havenline-godot-android",
+      "draft": false
+    },
+    {
+      "number": 3,
+      "title": "Native Havenline: crew runtime, collisions, locomotion candidates and 4K evidence gates",
+      "head": "codex/havenline-native-completion-20260907",
+      "base": "codex/havenline-godot-android",
+      "draft": true
+    },
+    {
+      "number": 2,
+      "title": "Start Havenline's native Godot Android migration without Unity",
+      "head": "codex/havenline-godot-android",
+      "base": "main",
+      "draft": true
+    },
+    {
+      "number": 1,
+      "title": "Add V7 direct Unity character review gate",
+      "head": "agent/havenline-v7-unity-review",
+      "base": "main",
+      "draft": true
+    }
+  ],
+  "current_branch_count_first_page": 47,
+  "current_task_branches": [
+    {
+      "branch": "havenline/T04-camera",
+      "head_sha": "7c3f6e1c43871a424a78ed7590e3c0b153ef9d62"
+    },
+    {
+      "branch": "havenline/T05-props",
+      "head_sha": "8224596250e3cd37df2ea5cb3db3c9328108023c"
+    },
+    {
+      "branch": "havenline/T06-character1",
+      "head_sha": "47f86fae25b099abb5c7096c37ca7495453b2b8f"
+    },
+    {
+      "branch": "havenline/T07-context-director",
+      "head_sha": "0a30dc0859541626eb6aa9a9bb749abc93dcb355"
+    },
+    {
+      "branch": "havenline/T08-visible-inventory",
+      "head_sha": "c6675ddd1a226cc0a2f12bd87ed3d968ed0c6a74"
+    },
+    {
+      "branch": "havenline/T09-harvesting",
+      "head_sha": "5415d85838ecf4bea8b3c71662072670e61797a0"
+    },
+    {
+      "branch": "havenline/T10-world-transformation",
+      "head_sha": "eba0107def258824549fb10d81785290d0c81d97"
+    },
+    {
+      "branch": "havenline/T11-camp-construction",
+      "head_sha": "fbb81ae34b9053f17fc937fb7e67895e3ef0584b"
+    },
+    {
+      "branch": "havenline/t03-gate-hardening-20260911",
+      "head_sha": "a3038269631a7116af16d99a29ee46198a05c2a8"
+    },
+    {
+      "branch": "havenline/t13-t14-handoff-hardening",
+      "head_sha": "956b3b160499ea8907c8b3bd54c583e21a49849d"
+    },
+    {
+      "branch": "havenline/t13-t14-handoff-hardening-final",
+      "head_sha": "4d50285d5faf967d3b9f1f1ed64960397a938665"
+    },
+    {
+      "branch": "havenline/t13-t14-handoff-hardening-final2",
+      "head_sha": "4d50285d5faf967d3b9f1f1ed64960397a938665"
+    },
+    {
+      "branch": "havenline/t13-t14-handoff-hardening-lint",
+      "head_sha": "4d50285d5faf967d3b9f1f1ed64960397a938665"
+    },
+    {
+      "branch": "havenline/t13-t14-handoff-hardening-validation",
+      "head_sha": "4d50285d5faf967d3b9f1f1ed64960397a938665"
+    },
+    {
+      "branch": "havenline/t13-t70-activation-frontier",
+      "head_sha": "00a9e6661db3ef1d3380923faeb159b887350500"
+    },
+    {
+      "branch": "havenline/t13-t70-metadata-hardening",
+      "head_sha": "7b486acd3306895dbe8de35cb2e2d69ad34ee073"
+    },
+    {
+      "branch": "havenline/t13-t70-provenance-hardening",
+      "head_sha": "a4cf2a133ce7e67a5da5a830e0a693aa118230aa"
+    }
+  ],
+  "preserved_unique_non_task_branches": [
+    {
+      "branch": "astra-webgl-review/2026-09-06",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "codex/havenline-environment-calibration",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "codex/havenline-visual-critic",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "havenline/QA-integration",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "havenline/governance-all-t13-t70-ready",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "havenline/governance-c0-terminal-evidence",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "havenline/governance-c0r-workstream-authorization",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    }
+  ],
+  "T10": {
+    "status": "APPROVED",
+    "approved_candidate": "eba0107def258824549fb10d81785290d0c81d97",
+    "integrated_source": "eba0107def258824549fb10d81785290d0c81d97",
+    "minimum_mandatory_dimension_score": 9.350213966238757,
+    "unresolved_mandatory_defects": [],
+    "framework_implemented": true,
+    "simulation_authority_adapter_implemented": true,
+    "save_reload_replay_support_implemented": true,
+    "player_facing_camp_build_upgrade_binding_implemented": false,
+    "boundary": "T10 owns reusable world transformation framework and authority integration. T11 owns authored camp buildings, upgrade visuals, and player-facing BUILD/UPGRADE binding.",
+    "opening_loop_segment": "TRANSFORM is implemented by T10; BUILD/UPGRADE remains the T11 frontier."
+  },
+  "T11": {
+    "status": "PREPARED",
+    "task_branch": "havenline/T11-camp-construction",
+    "base_commit": "87a4346eb33473c3723c7b7c1bbf1dd04dba9131",
+    "critics": [
+      "C2",
+      "C3",
+      "C4",
+      "C6"
+    ]
+  },
+  "dependency_state": {
+    "T10": "APPROVED",
+    "T11": "PREPARED"
+  },
+  "compile_safety": "All branch cleanup operations changed Git refs/governance records only. Approved canonical runtime code was not deleted. Deleting stale branch refs cannot change a game build unless that deleted branch itself was explicitly selected as the build source.",
+  "additional_cleanup": [
+    {
+      "branch": "havenline/t03-gate-hardening-20260911",
+      "head_sha": "a3038269631a7116af16d99a29ee46198a05c2a8",
+      "status": "deleted_after_ancestor_revalidation",
+      "archive_record": "Docs/Production/Archive/T03_FULLY_MERGED_BRANCH_CLEANUP_20260921.json",
+      "compile_effect": "none"
+    },
+    {
+      "family": "V3.2 merged prep",
+      "archive_record": "Docs/Production/Archive/V32_MERGED_BRANCH_CLEANUP_20260921.json",
+      "deleted_refs": 7,
+      "compile_effect": "none"
+    },
+    {
+      "family": "V3.2 forward control",
+      "archive_record": "Docs/Production/Archive/V32_FORWARD_CONTROL_PLANE_CLEANUP_20260921.json",
+      "deleted_refs": 1,
+      "compile_effect": "none"
+    }
+  ]
+}

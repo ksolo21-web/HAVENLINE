@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "authority": "Docs/Production/RESOURCE_TOOL_ACTOR_STANDARD.md",
+  "rules": [
+    "Same gameplay capability does not imply the same animation.",
+    "No animal may silently use a human tool animation.",
+    "Any actor allowed to attack requires an explicit species/class attack animation profile.",
+    "Any actor allowed to gather directly requires an explicit valid acquisition mode and animation profile."
+  ],
+  "actors": {
+    "player_lead": {"actor_class":"human_player","owner_tasks":["T06","T09","T21"],"capabilities":["gather_with_tools","carry","deposit","build","repair","rescue","attack","hunt"],"tool_use":"full_contextual_tool_set","attack_allowed":true,"direct_resource_extraction_allowed":true,"contract_state":"REQUIRED_NOT_YET_PROVEN"},
+    "core_human_companion": {"actor_class":"human_core_companion","owner_tasks":["T06","T31","T59","T60","T61"],"capabilities":["follow","gather_with_tools","carry","deposit","build","repair","guard","attack","hunt"],"tool_use":"full_contextual_tool_set_with_distinct_helper_motion","attack_allowed":true,"direct_resource_extraction_allowed":true,"contract_state":"REQUIRED_NOT_YET_PROVEN"},
+    "rescued_survivor_helper": {"actor_class":"human_survivor","owner_tasks":["T23","T31"],"capabilities":["gather_with_tools","carry","deposit","build","repair","guard","attack","heal"],"tool_use":"job_appropriate_human_tools_with_survivor_motion","attack_allowed":true,"direct_resource_extraction_allowed":true,"contract_state":"REQUIRED_NOT_YET_PROVEN"},
+    "customer_npc": {"actor_class":"human_customer","owner_tasks":["T15","T17","T20"],"capabilities":["route","queue","receive_service","pay"],"tool_use":"none","attack_allowed":false,"direct_resource_extraction_allowed":false,"contract_state":"REQUIRED_NOT_YET_PROVEN"},
+    "guardian_dog": {"actor_class":"animal_dog","owner_tasks":["T24","T31"],"capabilities":["follow","guard","attack","intercept","track","retrieve_light"],"tool_use":"none","attack_allowed":true,"direct_resource_extraction_allowed":false,"contract_state":"REQUIRED_NOT_YET_PROVEN"},
+    "gray_wolf": {"actor_class":"animal_wolf","owner_tasks":["T25","T31"],"capabilities":["follow","guard","attack","hunt","track","retrieve_light"],"tool_use":"none","attack_allowed":true,"direct_resource_extraction_allowed":false,"contract_state":"REQUIRED_NOT_YET_PROVEN"},
+    "fox": {"actor_class":"animal_fox","owner_tasks":["T26","T31"],"capabilities":["follow","scout","attack","retrieve_light"],"tool_use":"none","attack_allowed":true,"direct_resource_extraction_allowed":false,"contract_state":"REQUIRED_NOT_YET_PROVEN"},
+    "owl": {"actor_class":"animal_owl","owner_tasks":["T27","T31"],"capabilities":["follow_air","scout","aerial_attack","retrieve_light"],"tool_use":"none","attack_allowed":true,"direct_resource_extraction_allowed":false,"special_motion_required":["flight","takeoff","landing","wing_clearance","aerial_navigation","dive_attack"],"contract_state":"REQUIRED_NOT_YET_PROVEN"},
+    "male_lion": {"actor_class":"animal_lion","owner_tasks":["T28","T31"],"capabilities":["follow","guard","attack","hunt","intercept"],"tool_use":"none","attack_allowed":true,"direct_resource_extraction_allowed":false,"contract_state":"REQUIRED_NOT_YET_PROVEN"},
+    "white_tiger": {"actor_class":"animal_tiger","owner_tasks":["T29","T31"],"capabilities":["follow","guard","attack","hunt","intercept"],"tool_use":"none","attack_allowed":true,"direct_resource_extraction_allowed":false,"contract_state":"REQUIRED_NOT_YET_PROVEN"},
+    "brown_bear": {"actor_class":"animal_bear","owner_tasks":["T30","T31"],"capabilities":["follow","guard","attack","intercept","heavy_haul","obstacle_break"],"tool_use":"none","attack_allowed":true,"direct_resource_extraction_allowed":false,"contract_state":"REQUIRED_NOT_YET_PROVEN"}
+  },
+  "required_actor_keys_by_task": {
+    "T06":["player_lead","core_human_companion"],
+    "T07":["player_lead","core_human_companion","rescued_survivor_helper"],
+    "T09":["player_lead","core_human_companion","rescued_survivor_helper"],
+    "T21":["player_lead","core_human_companion","rescued_survivor_helper"],
+    "T23":["rescued_survivor_helper"],
+    "T24":["guardian_dog"],"T25":["gray_wolf"],"T26":["fox"],"T27":["owl"],"T28":["male_lion"],"T29":["white_tiger"],"T30":["brown_bear"],
+    "T31":["core_human_companion","rescued_survivor_helper","guardian_dog","gray_wolf","fox","owl","male_lion","white_tiger","brown_bear"],
+    "T32":["player_lead","core_human_companion","rescued_survivor_helper","guardian_dog","gray_wolf","fox","owl","male_lion","white_tiger","brown_bear"],
+    "T59":["core_human_companion"],"T60":["core_human_companion"],"T61":["core_human_companion"]
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "T03",
+  "status": "AUTHORIZED",
+  "authorization": "Authorize the exact bounded T03 Native timeout infrastructure delta without changing test assertions, test membership, or gameplay.",
+  "integration_owner_disposition": "APPROVED_EXACT_BOUNDED_NATIVE_TIMEOUT_INFRASTRUCTURE",
+  "target_path": [
+    ".github/workflows/havenline-godot-android.yml"
+  ],
+  "accepted_v31_source": "673d7a7477cc94aef2b7bb8f3d788b1b3c47f902",
+  "accepted_v31_sha256": "005c85d855284523c009e53c76e9e7db8d2795211f4bdd387c7ad40724da6e0c",
+  "authorized_current_sha256": "cfbbde8302934d9fe58df412375855c7d53cb6729beeee04a30a6fa7da5a5720",
+  "authorized_semantics": {
+    "default_suite_timeout_seconds": 90,
+    "test_outpost_timeout_seconds": 180,
+    "smoke_launch_timeout_seconds": 180,
+    "all_other_suites_timeout_seconds": 90,
+    "suite_name_and_timeout_logging": true,
+    "assertions_unchanged": true,
+    "test_membership_unchanged": true,
+    "gameplay_runtime_changed": false
+  },
+  "forbidden_changes": [
+    "Any additional suite receives the 180-second exception.",
+    "Any test assertion, suite membership, gameplay source, critic threshold, or pass/fail semantic is weakened.",
+    "Any change beyond the exact accepted-V3.1-to-authorized-current workflow transformation."
+  ]
+}

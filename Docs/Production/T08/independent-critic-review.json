@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "task_id": "T08",
+  "status": "PASS",
+  "reviewer": "independent-t08-critic",
+  "accepted_source": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
+  "integrated_source": "9d56ea8ae972d0a0705ff8b985e13fab31dde493",
+  "workflow_run": 35035980827,
+  "artifact_id": 10423956033,
+  "artifact_digest": "sha256:d2e58a9b4736e690b3b9817536b90940fb605e25b47a3ae24146aa8f9440c5c7",
+  "complete_evidence_index_sha256": "17f27e449466524f9838cc592d4f637738f8e4cafd9475f1dc25bc7c2ca72c16",
+  "reference_completeness_sha256": "eb03015b20cd03e65a77c623248de663e2fb6ce69c0290ac7baff8192d50f893",
+  "reference_coverage_sha256": "28e5e707a9c8a8ba163cdd708141e7b84407fe1d78dca616638916c85f496b68",
+  "reference_extraction_report_sha256": "9f8be250fc4b60e6b65be7472cf778ef4bebcaffc05584a0af9087b3c713b702",
+  "indexed_files_verified": 534,
+  "indexed_hash_mismatches": 0,
+  "acceptance_rule": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9.0,
+    "unrounded": true,
+    "score_averaging_used": false
+  },
+  "scores": {"C2": 9.55, "C3": 9.48, "C4": 9.52, "C6": 9.61},
+  "minimum_mandatory_dimension_score": 9.48,
+  "unresolved_mandatory_defects": [],
+  "approval": true,
+  "reviewed_evidence": {
+    "engine_suites": 23,
+    "engine_checks": 1535,
+    "source_contract_checks": 24,
+    "render_manifests": 18,
+    "candidate_pngs": 39,
+    "candidate_video_frames": [60, 148, 148],
+    "route_trace_rows": 448,
+    "completed_routes": 6,
+    "destination_pulse_samples_per_route": 26,
+    "save_states": 7,
+    "device_states": 6,
+    "locked_reference_frames": 44,
+    "locked_source_recordings": 2,
+    "source_and_artifact_identity_verified": true,
+    "reference_source_a_sha256": "62f7cfe644de3826cfdd6d91bc23c0ab8d9e4fde3e175c90f762e604547bb0ca",
+    "reference_source_b_sha256": "4c9051cbea6df0efa3e7288b13b6d17da46e857274869b0b43d2f96ff6cc79d2",
+    "native_3840x2160_scale1": true,
+    "physical_device_native_4k60_certified": false
+  },
+  "critic_notes": {
+    "C2": "Distinct resource-specific carry lanes remain attached and upright without the prior blob, clipping or floating defects; bounded tapered transfer segments, arrowheads and full destination pulses are visible in the exact integrated artifact.",
+    "C3": "The shipping loop preserves Havenline's automatic source-to-actor and actor-to-destination identity while simulation remains the sole inventory authority; all six required routes complete without duplicate or rejected receipts.",
+    "C4": "Cyan source-to-actor and gold actor-to-destination trails, readable arrowheads, held arrival cameras and full pulse lifecycles make resource identity, direction and destination legible across gameplay and device evidence.",
+    "C6": "Equal adjacent 12/12 post-warm-up windows and integrated telemetry remain inside declared budgets with bounded pools and no retained active transfer after the final route."
+  },
+  "reference_disposition": {
+    "defect_id": "REF-COVERAGE-01",
+    "status": "VERIFIED_CLOSED",
+    "locked_frames_verified": 44,
+    "locked_recordings_verified": 2,
+    "supplemental_jpegs_used_as_authority": false
+  },
+  "advisories": [
+    "T09 remains a separate harvesting and automatic-acquisition task and is not approved by this record.",
+    "T68/T69 retain physical-device native-4K/60 certification; this review makes no physical-device performance claim."
+  ]
+}

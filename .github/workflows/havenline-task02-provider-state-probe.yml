@@ -1,0 +1,57 @@
+name: Havenline T02 public image-session competency
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-provider-state-probe.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  probe:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-bank-evidence-34528232295
+          run-id: 34528232295
+          github-token: ${{ github.token }}
+          path: evidence/
+      - run: python3 -m pip install 'gradio_client==1.14.0' pillow pyyaml
+      - name: Use public session state for the owned image and text-only display history
+        env:
+          HF_HUB_DISABLE_TELEMETRY: '1'
+          HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          w=yaml.safe_load(Path('.github/workflows/havenline-task02-provider-competency.yml').read_text())
+          scripts=[s['run'] for s in w['jobs']['factual-probe']['steps'] if 'run' in s]
+          assert len(scripts)==2
+          script=scripts[1].replace('hf_token=False,verbose=False)','hf_token=False,verbose=False,download_files=False)')
+          old="history=client.predict(history=history,text=prompt,api_name='/add_text')"
+          assert script.count(old)==1
+          new="result['stage']='add_text'\n    # The public app keeps the uploaded image in gr.State in this same client session.\n    # Only the display chatbot history is omitted here to avoid re-uploading a\n    # remote /tmp/gradio path as a nonexistent local file. No state/key bypass.\n    history=client.predict(history=[],text=prompt,api_name='/add_text')"
+          script=script.replace(old,new)
+          old="history=client.predict(history=[],file=handle_file(str(image)),api_name='/add_file')"
+          script=script.replace(old,"result['stage']='add_file'\n    "+old+"\n    (out/'upload-history.json').write_text(json.dumps(history,indent=2,default=str))")
+          script=script.replace('started=time.monotonic();reply=client.submit(',"result['stage']='predict'\n    started=time.monotonic();reply=client.submit(")
+          Path('provider-competency').mkdir(exist_ok=True)
+          Path('provider-competency/executed-session-probe.sh').write_text(script)
+          subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-provider-state-probe-${{ github.run_id }}
+          path: provider-competency/
+          retention-days: 30
+          if-no-files-found: error
+# Diagnosed client-side remote-path serialization, not repeated model scoring.
+# Public API and own ephemeral session only; honor refusals/rate limits.
+# No user credential, paid usage setup, task grade, artwork change or APK.

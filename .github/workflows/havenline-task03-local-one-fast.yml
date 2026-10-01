@@ -1,0 +1,54 @@
+name: Havenline Task 3 fast local one-group reference critic
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task03-local-one-fast.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  review-one-fast:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-task03-evidence-34601284867
+          path: task03-evidence/
+          github-token: ${{ github.token }}
+          repository: ksolo21-web/HAVENLINE
+          run-id: 34601284867
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Review the one missing reference group at 1024 visual tokens
+        run: python3 -u tools/havenline/review_task03_local_one_fast.py
+      - name: Require complete cross-shelter-lanes verdict at 9+
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          o=json.loads(Path('task03-local-fast/shard-review.json').read_text())
+          assert o['source']=='8dc19649160597f2926ad5bacbccc26ad01ab48f' and o['role']=='reference-fidelity'
+          assert o['competency_passed'] is True and o['passed'] is True and len(o['reviews'])==1
+          r=o['reviews'][0];assert r['group']=='cross-shelter-lanes' and r['independent_execution'] is True and r['passed'] is True
+          rev=r['review'];assert rev['defects']==[] and rev['coverage_complete'] is True and rev['confidence']!='low' and min(rev['scores'].values())>=9.0
+          print(json.dumps({'passed':True,'group':'cross-shelter-lanes','lowest_score':r['lowest_score'],'visual_tokens':1024,'model':o['model'],'model_revision':o['model_revision']}))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task03-local-one-fast-${{ github.run_id }}
+          path: task03-local-fast/
+          retention-days: 30
+          if-no-files-found: error
+# Same exact evidence and score threshold; no game-source change, paid API or performance claim.

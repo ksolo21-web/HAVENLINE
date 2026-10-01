@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "landscape_required": true,
+  "states": [
+    {
+      "id": "phone_16_9",
+      "logical_size": [
+        2400,
+        1080
+      ],
+      "class": "phone",
+      "fold_state": "none"
+    },
+    {
+      "id": "phone_20_9",
+      "logical_size": [
+        2400,
+        1080
+      ],
+      "class": "phone",
+      "fold_state": "none",
+      "safe_area_test": true
+    },
+    {
+      "id": "tablet_16_10",
+      "logical_size": [
+        2560,
+        1600
+      ],
+      "class": "tablet",
+      "fold_state": "none"
+    },
+    {
+      "id": "tablet_4_3",
+      "logical_size": [
+        2732,
+        2048
+      ],
+      "class": "tablet",
+      "fold_state": "none"
+    },
+    {
+      "id": "foldable_outer",
+      "logical_size": [
+        2520,
+        1080
+      ],
+      "class": "foldable",
+      "fold_state": "outer"
+    },
+    {
+      "id": "foldable_inner",
+      "logical_size": [
+        2208,
+        1768
+      ],
+      "class": "foldable",
+      "fold_state": "inner"
+    }
+  ],
+  "checks": [
+    "safe_area",
+    "primary_joystick_reach",
+    "text_readability",
+    "touch_target_size",
+    "camera_world_scale",
+    "HUD_no_clipping",
+    "menu_scrollability",
+    "resize_transition",
+    "lifecycle_resume",
+    "save_continuity"
+  ],
+  "native4k_note": "Layout matrix is early functional/render validation. T68/T69 require representative physical hardware at native internal >=3840x2160 and >=60 FPS."
+}

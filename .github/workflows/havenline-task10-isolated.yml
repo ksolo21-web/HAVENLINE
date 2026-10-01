@@ -1,0 +1,473 @@
+name: Havenline Task 10 isolated build pending dependency
+
+on:
+  push:
+    branches: ['havenline/T10-world-transformation', 'codex/havenline-sequential-task-01']
+    paths:
+      - 'HavenlineGodot/scripts/world_transform.gd'
+      - 'HavenlineGodot/scripts/world_transform_view.gd'
+      - 'HavenlineGodot/data/world_transform_recipes.json'
+      - 'HavenlineGodot/assets/world_transform_v1/**'
+      - 'HavenlineGodot/tests/test_task10_world_transform.gd'
+      - 'HavenlineGodot/tests/test_task10_integration.gd'
+      - 'HavenlineGodot/tests/capture_task10_world_transform.gd'
+      - 'Docs/Production/T10/**'
+      - '!Docs/Production/T10/verified-completion.json'
+      - '!Docs/Production/T10/Evidence/**'
+      - '!Docs/Production/T10/task-state.json'
+      - '!Docs/Production/T10/ReviewExports/**'
+      - '!Docs/Production/T10/CriticRaw/**'
+      - '!Docs/Production/T10/independent-critic-review.json'
+      - '!Docs/Production/T10/defect-ledger.json'
+      - 'tools/havenline/task10/**'
+      - '.github/workflows/havenline-task10-*.yml'
+  pull_request:
+    branches: ['havenline/T10-world-transformation']
+    paths:
+      - 'Docs/Production/T10/**'
+      - 'tools/havenline/task10/**'
+      - '.github/workflows/havenline-task10-*.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: havenline-task10-isolated-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  repair-sufficiency:
+    name: C0R repair sufficiency pre-build gate
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Challenge proposed repair before building
+        run: |
+          set -euo pipefail
+          mkdir -p task10-c0r
+          python3 tools/havenline/production/repair_sufficiency_critic.py \
+            --c0 Docs/Production/T10/C0_ROOT_CAUSE.json \
+            --plan Docs/Production/T10/REPAIR_PLAN.json \
+            --output task10-c0r/report.json
+          repair_base=$(python3 -c "import json; print(json.load(open('Docs/Production/T10/REPAIR_PLAN.json'))['repair_base'])")
+          INTEGRATION_BRANCH=codex/havenline-sequential-task-01
+          git fetch --no-tags origin "$INTEGRATION_BRANCH"
+          INTEGRATION_HEAD=$(git rev-parse "origin/$INTEGRATION_BRANCH")
+          export INTEGRATION_BRANCH INTEGRATION_HEAD
+          python3 tools/havenline/production/builder_repair_gate.py \
+            --c0 Docs/Production/T10/C0_ROOT_CAUSE.json \
+            --plan Docs/Production/T10/REPAIR_PLAN.json \
+            --base "$repair_base" \
+            --head "$GITHUB_SHA" \
+            --output task10-c0r/builder-gate.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task10-C0R-${{ github.sha }}
+          path: task10-c0r
+          if-no-files-found: warn
+          retention-days: 30
+
+  built-pending-dependency:
+    needs: repair-sufficiency
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Enforce registered candidate ownership
+        run: |
+          set -euo pipefail
+          mkdir -p task10-isolated-evidence/tests task10-isolated-evidence/capture task10-isolated-evidence/device-layout task10-isolated-evidence/native4k
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          base=$(python3 -c "import json; r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json')); print(next(x['base_commit'] for x in r['workstreams'] if x['task_id']=='T10'))")
+          if [ "$GITHUB_SHA" = "$integration" ]; then
+            python3 - <<'PYCODE'
+          import json
+          r=json.load(open('Docs/Production/WORKSTREAM_REGISTRY.json'))
+          assert next(x['status'] for x in r['workstreams'] if x['task_id']=='T10') in ['INTEGRATION_READY','INTEGRATING','UNDER_REVIEW','FIX_REQUIRED']
+          PYCODE
+            python3 tools/havenline/production/validate_integration_scope.py --base "$GITHUB_SHA^2" --head "$GITHUB_SHA" --output task10-isolated-evidence/scope.json
+            python3 tools/havenline/production/validate_integration_scope.py --base c1768dbba7bacbbc5d0174e6b9b661b6dbdbbc11 --head "$GITHUB_SHA" --output task10-isolated-evidence/recovery-scope.json
+          else
+            python3 tools/havenline/production/workstream.py validate-candidate T10 --base "$base" --head "$GITHUB_SHA" --integration-head "$integration" | tee task10-isolated-evidence/scope.json
+          fi
+          python3 tools/havenline/task10/validate_post_t09_adapter.py --require-bound
+
+      - name: Validate isolated-build governance
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task10/prepare_activation.py | tee task10-isolated-evidence/isolated-governance.json
+          python3 tools/havenline/production/workstream.py validate-registry | tee task10-isolated-evidence/registry.json
+          python3 tools/havenline/production/validate_migration.py > task10-isolated-evidence/migration.json
+          python3 -m pip install --disable-pip-version-check --no-input numpy==2.3.5 pillow==12.3.0
+          python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' > task10-isolated-evidence/tests/production-tools.log 2>&1
+          python3 -m unittest discover -s tools/havenline/task10/tests -p 'test_*.py' > task10-isolated-evidence/tests/task10-tooling.log 2>&1
+
+      - name: Prepare pinned Godot and software render path
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y ffmpeg xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+          python3 - <<'PYCODE'
+          import json,os
+          from pathlib import Path
+          fields=['ImageOS','ImageVersion','RUNNER_OS','RUNNER_ARCH']
+          record={k:os.environ.get(k,'') for k in fields}
+          assert all(record.values()),record
+          record.update(candidate_commit=os.environ['GITHUB_SHA'],godot='4.7.2.stable.official.ed1daf0bf')
+          Path('task10-isolated-evidence/runtime-provenance.json').write_text(json.dumps(record,indent=2))
+          PYCODE
+
+      - name: Import and run formal T10 domain stress
+        run: |
+          set -euo pipefail
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task10-isolated-evidence/tests/import.log 2>&1
+          timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_world_transform.gd > task10-isolated-evidence/tests/domain.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-isolated-evidence/tests/import.log task10-isolated-evidence/tests/domain.log; then exit 1; fi
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          reports=[json.loads(x) for x in Path('task10-isolated-evidence/tests/domain.log').read_text().splitlines() if x.startswith('{')]
+          assert reports
+          r=reports[-1]
+          assert r.get('passed') is True and not r.get('failures'),r
+          assert r.get('check_count') >= 130,r
+          assert r.get('stress_targets') == 512 and r.get('stress_transactions') == 1024,r
+          assert r.get('stress_retained_receipts') == 512,r
+          assert r.get('preview_stress_iterations') == 5000 and r.get('reject_stress_iterations') == 5000,r
+          assert r.get('catalog_stress_recipes') == 258,r
+          r['candidate']=os.environ['GITHUB_SHA']
+          r['integration_allowed']=False; r['task_approved']=False
+          Path('task10-isolated-evidence/domain-tests.json').write_text(json.dumps(r,indent=2))
+          PY
+
+      - name: Run fixture-authority integration and R11 presentation tests
+        run: |
+          set -euo pipefail
+          timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task10_integration.gd > task10-isolated-evidence/tests/integration.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-isolated-evidence/tests/integration.log; then exit 1; fi
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          reports=[json.loads(x) for x in Path('task10-isolated-evidence/tests/integration.log').read_text().splitlines() if x.startswith('{')]
+          assert reports
+          r=reports[-1]
+          assert r.get('passed') is True and not r.get('failures'),r
+          assert r.get('check_count') >= 60,r
+          assert r.get('fixture_simulation_only') is False and r.get('real_t09_adapter_bound') is True,r
+          r['candidate']=os.environ['GITHUB_SHA']
+          assert r.get('r11_world_response_tested') is True,r
+          assert r.get('visual_node_budget') == 4 and r.get('visual_build_count') == 1 and r.get('visual_node_count') == 4,r
+          r['integration_allowed']=False; r['task_approved']=False
+          Path('task10-isolated-evidence/integration-tests.json').write_text(json.dumps(r,indent=2))
+          PY
+
+      - name: Validate frozen T10 source contract
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task10/validate_world_transform.py --candidate "$GITHUB_SHA" --output task10-isolated-evidence/source-contract.json
+
+      - name: Capture view-owned lifecycle evidence
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --fixed-fps 30 --write-movie "$(pwd)/task10-isolated-evidence/capture/lifecycle.avi" --script res://tests/capture_task10_world_transform.gd -- --candidate="$CANDIDATE" --out="$(pwd)/task10-isolated-evidence/capture" > task10-isolated-evidence/capture/capture.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-isolated-evidence/capture/capture.log; then exit 1; fi
+          python3 - <<'PY'
+          import hashlib,json,struct
+          from pathlib import Path
+          root=Path('task10-isolated-evidence/capture'); m=json.loads((root/'manifest.json').read_text())
+          assert m.get('passed') is True and m.get('record_count') == 12,m
+          assert m.get('states') == ['ready','blocked','preview','committing','complete','replay'],m
+          assert m.get('angles') == ['front','three-quarter'],m
+          hashes=set()
+          for row in m['records']:
+              data=(root/row['file']).read_bytes(); w,h=struct.unpack('>II',data[16:24])
+              assert (w,h)==(1280,720); hashes.add(hashlib.sha256(data).hexdigest())
+          assert len(hashes)==12
+          assert m['exact_replay_verified'] and m['motion_frames_per_state']==30
+          PY
+          ffmpeg -y -i task10-isolated-evidence/capture/lifecycle.avi -c:v libx264 -crf 18 -pix_fmt yuv420p task10-isolated-evidence/capture/lifecycle.mp4
+          ffmpeg -y -i task10-isolated-evidence/capture/lifecycle.mp4 -vf "select='not(mod(n,15))'" -vsync vfr task10-isolated-evidence/capture/motion-%03d.png
+          ffprobe -v error -show_streams -show_format -of json task10-isolated-evidence/capture/lifecycle.mp4 > task10-isolated-evidence/capture/motion-probe.json
+          rm task10-isolated-evidence/capture/lifecycle.avi
+
+      - name: Validate authoritative Havenline device matrix
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          python3 - <<'PY' > /tmp/t10-device-matrix.tsv
+          import json
+          from pathlib import Path
+          matrix=json.loads(Path('Docs/Production/DEVICE_LAYOUT_MATRIX.json').read_text())
+          assert matrix.get('landscape_required') is True
+          assert len(matrix.get('states',[])) == 6
+          for row in matrix['states']:
+              w,h=row['logical_size']; print(f"{row['id']}\t{w}\t{h}")
+          PY
+
+          while IFS=$'\t' read -r device width height; do
+            out="$(pwd)/task10-isolated-evidence/device-layout/$device"; mkdir -p "$out"
+            set +e
+            xvfb-run -a -s "-screen 0 ${width}x${height}x24" timeout 300 Godot_v4.7.2-stable_linux.x86_64 \
+              --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy \
+              --resolution "${width}x${height}" \
+              --script res://tests/capture_task10_world_transform.gd -- \
+              --candidate="$CANDIDATE" --device-check --exhaustive-projections \
+              --device-id="$device" --width="$width" --height="$height" --out="$out" \
+              > "$out/capture.log" 2>&1
+            rc=$?
+            set -e
+            echo "$rc" > "$out/process-exit.txt"
+            # Projection failures are expected to return 1 only after that device's
+            # complete 36-case projection set is written. Other exit classes are
+            # harness/infrastructure failures and remain terminal.
+            test "$rc" -eq 0 -o "$rc" -eq 1
+            test -s "$out/manifest.json"
+          done < /tmp/t10-device-matrix.tsv
+
+          python3 - <<'PY'
+          import hashlib,json,struct
+          from collections import Counter,defaultdict
+          from pathlib import Path
+
+          matrix=json.loads(Path('Docs/Production/DEVICE_LAYOUT_MATRIX.json').read_text())
+          root=Path('task10-isolated-evidence/device-layout')
+          rows=[]; projection_rows=[]; failures=[]; by_hash=defaultdict(list); by_device=defaultdict(dict); reasons=Counter()
+          expected_states=['ready','blocked','preview','committing','complete','replay']
+          expected_angles=['front','side','three-quarter','overhead','gameplay','detail']
+
+          for device_row in matrix['states']:
+              device=device_row['id']; expected=device_row['logical_size']; d=root/device
+              m=json.loads((d/'manifest.json').read_text())
+              rc=int((d/'process-exit.txt').read_text().strip())
+              assert rc in (0,1),(device,rc)
+              assert m.get('candidate') == __import__('os').environ['CANDIDATE'],(device,m.get('candidate'))
+              assert m.get('logical_size') == expected,m
+              assert m.get('device_id') == device,m
+              assert m.get('states') == expected_states,m
+              assert m.get('record_count') == 6,m
+              assert m.get('projection_angles') == expected_angles,m
+              assert m.get('projection_record_count') == 36,m
+              assert m.get('exhaustive_projections') is True,m
+
+              for record in m['records']:
+                  data=(d/record['file']).read_bytes()
+                  w,h=struct.unpack('>II',data[16:24]); assert [w,h]==expected
+                  digest=hashlib.sha256(data).hexdigest()
+                  row={'device':device,'state':record['state'],'size':[w,h],'sha256':digest}
+                  rows.append(row); by_hash[digest].append(row); by_device[device][record['state']]=digest
+
+              for record in m['projection_records']:
+                  readability=record['projected_readability']
+                  prow={
+                    'device':device,
+                    'state':record['state'],
+                    'angle':record['angle'],
+                    'passed':bool(readability.get('passed',False)),
+                    'readability':readability,
+                  }
+                  projection_rows.append(prow)
+                  if not prow['passed']:
+                      why=[]
+                      if readability.get('overlap',False): why.append('overlap')
+                      if not readability.get('fully_in_frame',False): why.append('containment')
+                      if float(readability.get('clearance_px',-1)) + 0.01 < float(readability.get('required_clearance_px',0)): why.append('clearance')
+                      if not readability.get('priority_ok',False): why.append('priority')
+                      if not readability.get('placement_found',True): why.append('no_legal_placement')
+                      if float(readability.get('label_scale',1.0)) + 0.0001 < float(readability.get('minimum_readability_scale',0.85)): why.append('readability_floor')
+                      if not why: why.append('other')
+                      for reason in why: reasons[reason]+=1
+                      failures.append({**prow,'failure_reasons':why})
+
+          assert len(rows)==36,len(rows)
+          assert len(projection_rows)==216,len(projection_rows)
+          assert len({(x['device'],x['state'],x['angle']) for x in projection_rows})==216
+          for state in matrix['states']:
+              d=state['id']; assert by_device[d]['preview'] != by_device[d]['committing'],d
+          for digest,group in by_hash.items():
+              if len(group)>1:
+                  assert len({(tuple(x['size']),x['state']) for x in group})==1,(digest,group)
+
+          report={
+            'device_count':6,
+            'capture_count':36,
+            'projection_count':216,
+            'projection_failure_count':len(failures),
+            'projection_failure_reason_counts':dict(sorted(reasons.items())),
+            'projection_failures':failures,
+            'complete_failure_set_collected':True,
+            'passed':not failures,
+            'integration_allowed':False,
+            'task_approved':False,
+            'rows':rows,
+          }
+          Path('task10-isolated-evidence/device-layout-evidence.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps({k:v for k,v in report.items() if k not in ('rows','projection_failures')},indent=2))
+          if failures:
+              raise SystemExit(f"authoritative device matrix has {len(failures)} failed projections; complete failure set retained")
+          PY
+
+      - name: Capture critic-ready native 4K multi-angle evidence
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task10_world_transform.gd -- --candidate="$CANDIDATE" --production-evidence --width=3840 --height=2160 --out="$(pwd)/task10-isolated-evidence/native4k" > task10-isolated-evidence/native4k/capture.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' task10-isolated-evidence/native4k/capture.log; then exit 1; fi
+          python3 - <<'PY'
+          import hashlib,json,struct
+          from pathlib import Path
+          root=Path('task10-isolated-evidence/native4k'); m=json.loads((root/'manifest.json').read_text())
+          expected_states=['ready','blocked','preview','committing','complete','replay']
+          expected_angles=['front','side','three-quarter','overhead','gameplay','detail']
+          assert m.get('passed') is True,m
+          assert m.get('native_scale_1') is True and m.get('capture_resolution') == [3840,2160],m
+          assert m.get('record_count') == 36 and m.get('states') == expected_states and m.get('angles') == expected_angles,m
+          assert m.get('view_visual_node_count') == 4 and m.get('view_visual_build_count') == 1,m
+          assert m.get('real_t09_adapter_bound') is True and m.get('exact_debit_verified') is True and m.get('integration_allowed') is False and m.get('task_approved') is False,m
+          files=[]; hashes=set()
+          for row in m['records']:
+              p=root/row['file']; data=p.read_bytes()
+              assert len(data)>4096,(p,len(data)); assert data[:8] == b'\x89PNG\r\n\x1a\n',p
+              w,h=struct.unpack('>II',data[16:24]); assert (w,h)==(3840,2160),(p,w,h)
+              digest=hashlib.sha256(data).hexdigest(); hashes.add(digest)
+              files.append({'file':row['file'],'state':row['state'],'angle':row['angle'],'size':[w,h],'bytes':len(data),'sha256':digest})
+          assert len(files)==36 and len(hashes)==36,(len(files),len(hashes))
+          Path('task10-isolated-evidence/native4k-evidence.json').write_text(json.dumps({
+              'task':'T10','candidate':m['candidate'],'native_scale_1':True,'resolution':[3840,2160],
+              'state_count':6,'angle_count':6,'capture_count':36,'unique_capture_count':36,
+              'states':expected_states,'angles':expected_angles,'files':files,
+              'integration_allowed':False,'real_t09_adapter_bound':True,'exact_debit_verified':True,'task_approved':False,'passed':True
+          },indent=2))
+          PY
+
+      - name: Measure warmed idle and committing performance
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          set -euo pipefail
+          mkdir -p task10-isolated-evidence/benchmark
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          python3 tools/havenline/task10/benchmark_supervisor.py \
+            --candidate "$GITHUB_SHA" --output task10-isolated-evidence/benchmark
+
+      - name: Retain benchmark execution before further packaging
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        timeout-minutes: 1
+        with:
+          name: havenline-task10-benchmark-execution-${{ github.run_id }}-${{ github.run_attempt }}
+          path: task10-isolated-evidence/benchmark
+          if-no-files-found: warn
+          retention-days: 30
+
+      - name: Package source-bound specialist inputs and quantitative C6
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task10/validate_progression.py --candidate "$GITHUB_SHA" --output task10-isolated-evidence/progression.json
+          python3 tools/havenline/production/save_state_matrix.py --candidate "$GITHUB_SHA" --task T10 --adapter "python3 tools/havenline/task10/save_matrix_adapter.py" --out task10-isolated-evidence/save-matrix > task10-isolated-evidence/save-matrix-summary.json
+          python3 tools/havenline/task10/build_critic_evidence.py --candidate "$GITHUB_SHA" --evidence-root task10-isolated-evidence
+          python3 tools/havenline/production/critic_harness.py performance --candidate "$GITHUB_SHA" --record critic-input/performance.json > task10-isolated-evidence/C6.json
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task10-critic-input-${{ github.sha }}
+          path: critic-input
+          if-no-files-found: error
+          retention-days: 90
+
+      - name: Validate critic input readiness
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task10/validate_critic_readiness.py \
+            --evidence-root task10-isolated-evidence \
+            --candidate "$GITHUB_SHA" \
+            --output task10-isolated-evidence/critic-readiness.json
+
+      - name: Declare isolated candidate state
+        run: |
+          set -euo pipefail
+          python3 - <<'PY' | tee task10-isolated-evidence/candidate-state.json
+          import json,subprocess
+          from pathlib import Path
+          graph=json.loads(Path('Docs/Production/DEPENDENCY_GRAPH.json').read_text())
+          critic=json.loads(Path('task10-isolated-evidence/critic-readiness.json').read_text())
+          assert critic.get('passed') is True and critic.get('isolated_critic_input_ready') is True,critic
+          print(json.dumps({
+            'task':'T10','candidate':subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip(),
+            'isolated_state':'BUILDING_ISOLATED','dependency':'T09','dependency_status':graph['tasks']['T09']['status'],
+            'critic_ready_native4k_evidence':True,'isolated_critic_input_ready':True,
+            'critic_evidence_states':['ready','blocked','preview','committing','complete','replay'],
+            'critic_evidence_angles':['front','side','three-quarter','overhead','gameplay','detail'],
+            'integration_allowed':False,'real_t09_adapter_bound':True,'task_approved':False,'passed':True
+          },indent=2))
+          PY
+
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task10-isolated-${{ github.sha }}
+          path: task10-isolated-evidence
+          if-no-files-found: error
+          retention-days: 14
+
+  review-c3:
+    needs: built-pending-dependency
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C3
+      candidate: ${{ github.sha }}
+      evidence_artifact: havenline-task10-critic-input-${{ github.sha }}
+      manifest_name: C3-manifest.json
+      output_artifact: havenline-task10-C3-${{ github.sha }}
+
+  review-c4:
+    needs: built-pending-dependency
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C4
+      candidate: ${{ github.sha }}
+      evidence_artifact: havenline-task10-critic-input-${{ github.sha }}
+      manifest_name: C4-manifest.json
+      output_artifact: havenline-task10-C4-${{ github.sha }}
+
+  review-c7:
+    needs: built-pending-dependency
+    uses: ./.github/workflows/havenline-specialist-critic.yml
+    with:
+      critic_id: C7
+      candidate: ${{ github.sha }}
+      evidence_artifact: havenline-task10-critic-input-${{ github.sha }}
+      manifest_name: C7-manifest.json
+      output_artifact: havenline-task10-C7-${{ github.sha }}
+
+  c0-diagnose:
+    name: C0 diagnosis after failed T10 gates
+    needs: [built-pending-dependency, review-c3, review-c4, review-c7]
+    if: ${{ always() && (needs.built-pending-dependency.result == 'failure' || needs.review-c3.result == 'failure' || needs.review-c4.result == 'failure' || needs.review-c7.result == 'failure') }}
+    uses: ./.github/workflows/havenline-c0-root-cause.yml
+    with:
+      task_id: T10
+      failed_run_id: ${{ github.run_id }}
+      failed_candidate: ${{ github.sha }}
+      task_branch: havenline/T10-world-transformation

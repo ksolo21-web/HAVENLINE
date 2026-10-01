@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "task_id": "T09",
+  "selection_authority": "Docs/Design/ReferenceVideoLock/reference-video-sources.json",
+  "source_manifest_sha256": "e271986bcbf319b7dd3c94bee0813e8cbd7caa4699781096c3f68e701f295d01",
+  "coverage_manifest": "Docs/Production/T05/ReferenceFrames/coverage.json",
+  "coverage_manifest_sha256": "9bb9e6a7199ceb306f8503a371523ccfec9ff86eba92386513e82ccac66c02fe",
+  "extraction_report": "Docs/Production/T05/ReferenceFrames/extraction-report.json",
+  "extraction_report_sha256": "9f8be250fc4b60e6b65be7472cf778ef4bebcaffc05584a0af9087b3c713b702",
+  "selection_basis": "All repository-locked B harvesting/resource pixels plus the relevant repository-locked A acquisition/processing pixels required beside T09 candidate evidence.",
+  "selected_pixels": [
+    {
+      "source_id": "B",
+      "family": "resources",
+      "seek_seconds": 28,
+      "path": "Docs/Production/T05/ReferenceFrames/B-028.00.png",
+      "sha256": "3e983101885a727eb32fcc0d132fcacf8be8c439d2dfefcb267b45326065ee18"
+    },
+    {
+      "source_id": "A",
+      "family": "fishing_acquisition",
+      "seek_seconds": 3,
+      "path": "Docs/Production/T05/ReferenceFrames/A-003.00.png",
+      "sha256": "1dc3c5c3572d49263c6eb8eb3116b44cd31fa17e2634caf1ed3b1a5860737b07"
+    },
+    {
+      "source_id": "A",
+      "family": "processing_continuity",
+      "seek_seconds": 16,
+      "path": "Docs/Production/T05/ReferenceFrames/A-016.00.png",
+      "sha256": "3afe3c0fe64702894b7cac3a0d1b271cac0b2d60e87490063a1def7ee111d5ba"
+    }
+  ],
+  "actual_reference_pixels_required": true,
+  "candidate_pixels_required_beside_reference": true,
+  "physical_4k60_verified": false
+}

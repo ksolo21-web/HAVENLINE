@@ -1,0 +1,30 @@
+{
+  "requesting_task": "T10",
+  "target_paths": [
+    "tools/havenline/production/closure_validator.py",
+    "tools/havenline/production/tests/test_architecture_v31.py"
+  ],
+  "status": "APPROVED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "requested_change": "Replay only T09 closeout-time future lifecycle invariants against its exact immutable closure checkpoint, binding supplied completion bytes to the checkpoint and pinned digest. Preserve every other current closure check.",
+  "reason": "C0 B023: governance run35336280314 incorrectly rechecks T09 temporal closeout invariants against legitimate later T10 activation.",
+  "authorization_basis": "Standing finish T10 and explicit bounded T10 C7 governance repair, preserving all critics and thresholds; exact owner resolution under AGENTS.",
+  "reviewer": "/root/t10_c0_critic",
+  "integration_base": "54fa8b5aed82a4c17da456beb6907f2f35235040",
+  "historical_closure_commit": "62f5a13753968c77a0feb47a18d93c82d8c5b581",
+  "historical_completion_sha256": "2b69ffad9979b1620d3a48a77f049dc7756b85e1c7a6ee33c8c3dd75254c0059",
+  "preserved": [
+    "T09 accepted source, evidence, history and approval",
+    "Every current closure evidence, provenance, critic, threshold and retention check",
+    "Current lifecycle enforcement by validate_migration and canonical B022 activation checks",
+    "All V3.1 locked bytes and exact V3.2 exceptions"
+  ],
+  "tests_required": [
+    "Missing or malformed historical git objects reject",
+    "Changed completion record rejects",
+    "Historical unlocked future task, active owner or active pointer rejects",
+    "Valid immutable T09 closure passes after legitimate later activation",
+    "Full production suite and fresh hosted governance pass"
+  ],
+  "publication_policy": "Owner governance-only publication of these exact files and CR; no runtime or authority-state change."
+}

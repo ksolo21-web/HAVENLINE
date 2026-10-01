@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "requesting_task": "T10",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "authorization": "Approve the bounded T10 C7 governance repair, preserving all critics and thresholds.",
+  "reason": "T10 owns transactional state progression; full Levels 1-100 progression and difficulty belong to T12/T13. The unconditional generic C7 runner currently demands out-of-scope proof.",
+  "scope": [
+    ".github/workflows/havenline-production-governance.yml",
+    "tools/havenline/production/critic_harness.py",
+    "tools/havenline/production/critic_profile.py",
+    "tools/havenline/production/specialist_critic_runner.py",
+    "tools/havenline/production/specialist_evidence_manifest.py",
+    "tools/havenline/production/closure_validator.py",
+    "tools/havenline/production/task_packet.py",
+    "tools/havenline/production/tests/test_critic_profile.py",
+    "tools/havenline/task10/validate_critic_readiness.py",
+    "tools/havenline/production/forward_execution.py",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "tools/havenline/production/tests/test_forward_execution.py",
+    "tools/havenline/production/tests/test_architecture_release_lock.py",
+    "tools/havenline/task10/validate_progression.py",
+    "tools/havenline/task10/tests/test_validate_progression.py",
+    ".github/workflows/havenline-task10-world-transformation.yml",
+    "Docs/Production/T10/**"
+  ],
+  "permitted_behavior_change": "Specialize only T10 progression_sim execution to source-bound transactional state-integrity proof. Keep the gate, independent C7 and all remaining gates mandatory. Every other task retains its original runner.",
+  "forbidden_changes": ["critic applicability", "score thresholds", "G1-G14", "V3.1 historical lock manifest", "T12/T13 runtime or proof requirements", "generic full-progression safeguard checks"],
+  "acceptance": {"operator": ">", "threshold": 9.0, "unrounded": true, "target": 10.0, "unresolved_mandatory_defects": 0}
+}

@@ -1,0 +1,16 @@
+name: Havenline T05 primary review fa6fa70
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task05-primary-fa6fa70.yml']
+
+permissions:
+  contents: read
+  actions: read
+
+jobs:
+  primary:
+    uses: ./.github/workflows/havenline-task05-review.yml
+    with:
+      mode: primary

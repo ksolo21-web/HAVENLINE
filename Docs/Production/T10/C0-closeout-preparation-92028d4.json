@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0",
+  "non_voting": true,
+  "validated": true,
+  "diagnosis_id": "C0-T10-35342235191-92028d4-closeout-preparation",
+  "task_id": "T10",
+  "failed_run_id": 35342235191,
+  "failed_candidate": "92028d4949d086fde99377ce69ffb29f716f0fbe",
+  "repair_base": "92028d4949d086fde99377ce69ffb29f716f0fbe",
+  "integration_head": "82518322a8e0dc9ee6ef12a759bf4ca723c8a490",
+  "candidate_tree": "c33b0fd469f52aa18c84b036f1160e2738c510c2",
+  "diagnosis_status": "DIAGNOSIS_COMPLETE",
+  "terminal_class": "MIXED",
+  "complete_known_blocker_set": true,
+  "builder_action": "REPAIR",
+  "source_evidence": [
+    "Frozen source 92028d4949d086fde99377ce69ffb29f716f0fbe completed primary run 35342234910 successfully with 19 regression suites, 538 supplemental checks, seven canonical save cases and exact runner/image provenance.",
+    "Capture/review run 35342235191 is terminal FAILURE. The benchmark itself completed after 834 seconds with passed=true, three cycles, six 360-sample phases and bounded node/render/memory state; packaging then failed only at benchmark environment validation.",
+    "Artifact 10545781780 was downloaded to /workspace/scratch/59b74b9aed55/t10-92028-isolated and its ZIP SHA256 was verified as d3b3851d99fc5d6a9c21288dfc11fe914f3166b7aa6184830f19992de95a9839.",
+    "The real manifest reports Engine.get_version_info().string as '4.7.2-stable (official)', while benchmark_errors compares it to the CLI-style '4.7.2.stable.official.ed1daf0bf'. The mismatch is representation-only; source must bind the actual structured version and build hash rather than rewrite the original display string.",
+    "Because packaging failed before the reusable specialist jobs, source-92028 C3/C4/C6/C7 reviews did not execute. No current critic score or approval is claimed by this report.",
+    "The measured software-renderer fixture is stable but not sufficient by itself for a >9 frame-time judgment: idle READY is approximately 247-248 ms, committing approximately 285 ms, with repeatable approximately 37-38 ms wall-clock and 46-47 ms process-proxy deltas. READY and committing change geometry, material, label and pulse together, so the delta cannot isolate T10 pulse or script cost.",
+    "Independent measurement review /workspace/scratch/59b74b9aed55/t10-92028-c6-measurement-review.json requires matched committing presentation with pulse disabled versus enabled, a view-hidden baseline and isolated T10 CPU timing. It does not diagnose a shipping runtime defect or require physical certification.",
+    "The shared specialist runner emits original confidence values 'high' or 'medium', whereas closure previously accepted only numeric confidence. The independently reviewed owner repair was published at 82518322a8e0dc9ee6ef12a759bf4ca723c8a490, exact tree 5c7662956bdf61195c25065ff015c28bc10a021f, and also fixes the stale live-ASSIGNED architecture test without changing production lifecycle rules.",
+    "closure_validator.py requires exactly one retained review artifact with retention_days=90 and canonical, source-bound raw critic records. The current final-source critic-input upload is retained for 30 days; regression and individual-review artifacts are shorter-lived."
+  ],
+  "prior_diagnosis": {
+    "report_path": "Docs/Production/T10/C0-frozen-candidate-6999fed.json",
+    "report_sha256": "98cf905bbb61992c6dcc0a5880cfe96f2bbb6369ab90b41515c69ef3d28f5678",
+    "disposition": "Preserved unchanged. The 92028 source contains the bounded B024-B028 repair and does not reopen its protected runtime, view or capture implementation."
+  },
+  "blockers": [
+    {
+      "id": "C0-T10-B029-B031",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "Exact-source specialist records use canonical categorical confidence that the closeout validator formerly rejected, and an architecture unit test was coupled to mutable live T10 ASSIGNED state.",
+      "evidence": [
+        "The shared specialist runner preserves 'high' or 'medium'; inventing a numeric probability would falsify reviewer provenance.",
+        "The owner amendment accepts only exact lowercase high/medium alongside unchanged finite non-bool numeric 0 < value <= 1, rejecting low, missing, boolean, non-finite, out-of-range, case/whitespace and container inputs.",
+        "The owner amendment replaces the live-state assumption with explicit ASSIGNED-active, LOCKED-inactive and APPROVED-inactive fixtures while leaving architecture_v31.py unchanged.",
+        "The exact three-file owner change was independently reviewed, passed 27 focused and 196 full production tests, and was published as 82518322a8e0dc9ee6ef12a759bf4ca723c8a490."
+      ],
+      "root_cause": "Two closure-era consumers encoded incompatible assumptions: numeric-only confidence despite canonical categorical reviewer output, and a mutable live activation state inside a lifecycle unit test.",
+      "affected_object": "T10 critic-record interoperability and final lifecycle governance tests",
+      "causal_fix": "Merge the exact already-approved owner prefix 82518322a8e0dc9ee6ef12a759bf4ca723c8a490 without editing it. Preserve original categorical confidence verbatim and every score, dimension, threshold, defect, coverage, runtime and provenance check.",
+      "files_to_change": [
+        "Docs/Production/ChangeRequests/T10-critic-confidence-schema-compatibility.json",
+        "tools/havenline/production/closure_validator.py",
+        "tools/havenline/production/tests/test_architecture_v31.py"
+      ],
+      "files_not_to_change": [
+        ".github/workflows/havenline-specialist-critic.yml",
+        "tools/havenline/production/specialist_critic_runner.py",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "Docs/Production/T09/verified-completion.json",
+        "Docs/Production/T09/independent-critic-review.json"
+      ],
+      "verification": [
+        "Merged implementations and CR are byte-identical to owner commit 82518322a8e0dc9ee6ef12a759bf4ca723c8a490.",
+        "The CR approved_diff_sha256 remains 4b0ce2cca3e2941768335f30c9d8941a6a05552f3cbdc2abe4f8c5136b779876 over exactly the validator and architecture-test paths.",
+        "Full production governance and hosted governance pass; legacy T09 numeric records remain unchanged and valid."
+      ]
+    },
+    {
+      "id": "C0-T10-B030",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "T10 can produce exact-source critic inputs and independent outputs, but its workflow retains the sole candidate review artifact for only 30 days and has no deterministic exporter for the canonical source-bound closeout records.",
+      "evidence": [
+        "closure_validator.py requires exactly one REVIEW_EVIDENCE_MANIFEST artifact row with retention_days exactly 90 and matching run, artifact, digest, expiry, complete-evidence-index hash and verified file count.",
+        "The current havenline-task10-critic-input-${github.sha} artifact is retained for 30 days; the regression artifact is 14 days and individual specialist artifacts are 30 days.",
+        "The 90-day critic-input artifact can be the sole retained review artifact because it already contains native, motion, device, progression, save, regression/supplement and benchmark inputs. Original review outputs can be preserved durably as hash-bound repository records without adding another artifact row.",
+        "Canonical wrappers must copy original scores and confidence unchanged and preserve original record/raw-output/provider/model/request provenance; they must never assign scores or translate confidence."
+      ],
+      "root_cause": "The task workflow was designed for review execution, not terminal retention and canonical record export, so artifact lifetime and closeout document transport stop before the existing retention/closure contracts.",
+      "affected_object": "T10 final review retention, CriticRaw provenance and deterministic closure record export",
+      "causal_fix": "Retain the exact final integrated-source critic-input artifact for exactly 90 days and add one task-owned fail-closed exporter. It must consume actual terminal API artifact identity plus all six original reviewer records/raw outputs, verify source and hashes, preserve scores/confidence verbatim, materialize canonical CriticRaw/ReviewExports and closure/evidence documents deterministically, and refuse any incomplete, stale, altered or nonterminal input. Keep shorter auxiliary artifacts unlisted and do not add a collector workflow.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/export_closure_records.py",
+        "tools/havenline/task10/tests/test_export_closure_records.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "Docs/Production/T10/C0-closeout-preparation-92028d4.json",
+        "Docs/Production/T10/REPAIR_PLAN-closeout-preparation-92028d4.json",
+        "Docs/Production/T10/ReviewExports/C1-original-record.json",
+        "Docs/Production/T10/ReviewExports/C1-original-raw-output.json",
+        "Docs/Production/T10/ReviewExports/C1-original-bundle.zip",
+        "Docs/Production/T10/ReviewExports/C2-original-record.json",
+        "Docs/Production/T10/ReviewExports/C2-original-raw-output.json",
+        "Docs/Production/T10/ReviewExports/C2-original-bundle.zip",
+        "Docs/Production/T10/ReviewExports/C3-original-record.json",
+        "Docs/Production/T10/ReviewExports/C3-original-raw-output.json",
+        "Docs/Production/T10/ReviewExports/C3-original-bundle.zip",
+        "Docs/Production/T10/ReviewExports/C4-original-record.json",
+        "Docs/Production/T10/ReviewExports/C4-original-raw-output.json",
+        "Docs/Production/T10/ReviewExports/C4-original-bundle.zip",
+        "Docs/Production/T10/ReviewExports/C6-original-record.json",
+        "Docs/Production/T10/ReviewExports/C6-original-raw-output.json",
+        "Docs/Production/T10/ReviewExports/C6-original-bundle.zip",
+        "Docs/Production/T10/ReviewExports/C7-original-record.json",
+        "Docs/Production/T10/ReviewExports/C7-original-raw-output.json",
+        "Docs/Production/T10/ReviewExports/C7-original-bundle.zip",
+        "Docs/Production/T10/ReviewExports/regression-evidence.zip",
+        "Docs/Production/T10/ReviewExports/regression-provenance.json",
+        "Docs/Production/T10/CriticRaw/C1.json",
+        "Docs/Production/T10/CriticRaw/C2.json",
+        "Docs/Production/T10/CriticRaw/C3.json",
+        "Docs/Production/T10/CriticRaw/C4.json",
+        "Docs/Production/T10/CriticRaw/C6.json",
+        "Docs/Production/T10/CriticRaw/C7.json",
+        "Docs/Production/T10/independent-critic-review.json",
+        "Docs/Production/T10/defect-ledger.json",
+        "Docs/Production/T10/task-state.json",
+        "Docs/Production/T10/verified-completion.json",
+        "Docs/Production/Evidence/T10/complete-evidence-index.json",
+        "Docs/Production/Evidence/T10/REVIEW_EVIDENCE_MANIFEST.json",
+        "Docs/Production/Evidence/T10/APPROVAL_EVIDENCE_MANIFEST.json",
+        "Docs/Production/Evidence/T10/artifact-verification.json",
+        "Docs/Production/Evidence/T10/candidate-scope.json",
+        "Docs/Production/Evidence/T10/capture-summary.json",
+        "Docs/Production/Evidence/T10/review-runtime-provenance.json",
+        "Docs/Production/Evidence/T10/runtime-provenance.json",
+        "Docs/Production/Evidence/T10/source-contract.json",
+        "Docs/Production/Evidence/T10/tests.json"
+      ],
+      "files_not_to_change": [
+        "tools/havenline/production/evidence_retention.py",
+        "Docs/Production/EVIDENCE_RETENTION_POLICY.json",
+        ".github/workflows/havenline-specialist-critic.yml",
+        "tools/havenline/production/specialist_critic_runner.py",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json"
+      ],
+      "verification": [
+        "Workflow tests prove the exact critic-input upload uses retention-days 90 on final integrated source and that no second artifact is represented as retained review evidence.",
+        "Exporter accepts only a successful terminal exact-source run and one actual 90-day artifact whose API run/id/digest/expiry and payload index all match; stale source, missing file, duplicate artifact, altered digest/expiry or nonterminal run rejects.",
+        "All six canonical records preserve original scores and exact categorical confidence, include original record/raw-output hashes and reviewer provenance, and reject score/confidence/provider/model/request/manifest substitutions.",
+        "Generated review and approval manifests pass unchanged evidence_retention.py; approval provenance uses the exact required repository record set and no transient artifact is falsely declared durable.",
+        "No generated approval or completion document is written until all fresh exact-source critics pass every mandatory dimension strictly above 9.0 with zero unresolved defects and integration-owner closeout data are present."
+      ]
+    },
+    {
+      "id": "C0-T10-B032",
+      "classification": "TOOLING_DEFECT",
+      "symptom": "The real 92028 benchmark passes but packaging rejects it because the producer records Godot's display string and the validator expects a different CLI-style version representation containing the build hash.",
+      "evidence": [
+        "Real manifest engine is '4.7.2-stable (official)' from Engine.get_version_info().string.",
+        "build_critic_evidence.py requires exact string '4.7.2.stable.official.ed1daf0bf'.",
+        "The pinned binary and primary workflow provenance are Godot 4.7.2 stable official build ed1daf0bf; all other benchmark checks pass."
+      ],
+      "root_cause": "Producer and validator compare two legitimate but non-identical Godot version renderings instead of binding the structured engine version fields and build hash.",
+      "affected_object": "T10 benchmark environment provenance and critic-input packaging",
+      "causal_fix": "Preserve the original display string, add the complete Engine.get_version_info() identity in the report, and validate exact major/minor/patch/status/build/hash values for 4.7.2 stable official ed1daf0bf. Do not normalize by invention or weaken renderer, resolution, sample or source checks.",
+      "files_to_change": [
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "Docs/Production/PERFORMANCE_BUDGETS.json"
+      ],
+      "verification": [
+        "A real pinned Godot manifest with the unchanged display string and exact structured build identity passes environment validation.",
+        "Wrong or missing major, minor, patch, status, build or hash; forged display-only identity; boolean/nonnumeric version parts; renderer/resolution/source mismatch all reject.",
+        "The three-cycle, 360-sample minimums, warm-up, actual measurements and nonphysical certification remain unchanged."
+      ]
+    },
+    {
+      "id": "C0-T10-B033",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "The completed benchmark proves stability and bounded state but its READY-versus-committing comparison cannot isolate the T10 pulse/logic cost or support an honest frame_time score strictly above 9.",
+      "evidence": [
+        "Across three cycles, READY wall intervals are approximately 247-248 ms and committing approximately 285 ms on native-4K llvmpipe, with repeatable approximately 15 percent deltas and no runaway drift.",
+        "READY and committing differ in target geometry scale, material/transparency, label content and pulse processing, so the measured delta is causally confounded.",
+        "Node count, draw calls, memory and within-phase drift remain bounded. The evidence therefore does not establish a shipping runtime defect, physical GPU timing or thermal failure.",
+        "Independent C6 measurement review requires matched committing visuals with pulse disabled/enabled, view-hidden baseline and isolated T10 CPU timing before frame_time and bounded early thermal-risk can be scored."
+      ],
+      "root_cause": "The benchmark compared two different lifecycle presentations rather than a controlled pulse-off/pulse-on pair, and omitted a renderer baseline and isolated script-cost measurement.",
+      "affected_object": "C6 frame-time attribution and bounded early thermal-risk evidence",
+      "causal_fix": "Within the task-owned benchmark only, replace the READY baseline with repeated identical committing presentation phases where processing/pulse is frozen versus enabled, add a source-bound view-hidden renderer baseline and isolated no-I/O T10 update timing, and report all actual raw distributions and deltas. Preserve at least 120 warm-up frames, 360 samples, three repeated matched cycles and explicit llvmpipe/nonphysical limitations. Increase only the task benchmark command's bounded timeout as required within the existing 40-minute job; do not change shared critic runtime budgets or product code.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/production/critic_harness.py",
+        "Docs/Production/PERFORMANCE_BUDGETS.json",
+        ".github/workflows/havenline-specialist-critic.yml"
+      ],
+      "verification": [
+        "Real exact-source evidence contains a view-hidden baseline plus three matched committing pulse-off/pulse-on cycles, each with at least 120 warm-up frames and 360 finite raw samples, and isolated T10 update timing with no screenshot, movie, subprocess or file I/O inside measured intervals.",
+        "Validator recomputes distributions/deltas and rejects missing controls, presentation mismatch, insufficient samples/cycles/warm-up, non-finite data, unstable nodes/memory, false physical claims or source/environment mismatch.",
+        "The fresh C6 reviewer receives both quantitative manifests and independently judges all nine dimensions; measurements are never converted mechanically into scores and no runtime performance repair is inferred without causal evidence."
+      ]
+    }
+  ],
+  "repair_order": [
+    "C0-T10-B029-B031",
+    "C0-T10-B032",
+    "C0-T10-B033",
+    "C0-T10-B030"
+  ],
+  "unexecuted_checks": [
+    "Fresh exact-source C1/C2/C3/C4/C6/C7 reviews have not run for the next repaired candidate; 92028 C3/C4/C6/C7 were skipped after the package gate failed.",
+    "The final 90-day artifact identity and expiry do not exist until the repaired final integrated-source workflow completes.",
+    "Deterministic export of canonical CriticRaw, ReviewExports, retention manifests and closure records has not run and must not run before fresh reviewer success.",
+    "Final integrated-source factory observation, G1-G14 closure, migration closeout, task-state approval and integration-owner approval have not run."
+  ],
+  "candidate_freeze": {
+    "required": true,
+    "validation_concurrency_policy": "finish_running_sha",
+    "cancelled_run_product_judgment": false,
+    "next_candidate_policy": "All 92028 runs are terminal and incorporated. Build only the bounded governance-prefix, benchmark-evidence and closeout-export repair, freeze one new candidate, then run fresh exact-source validation without carrying forward any score."
+  },
+  "acceptance_rule_unchanged": ">9.0 unrounded in every mandatory dimension; no averaging; zero unresolved mandatory defects",
+  "summary": "The frozen 92028 source is not rejected for gameplay behavior: its primary regression passed and its benchmark completed with bounded state. Closeout preparation is blocked by the already-resolved confidence/test interoperability prefix, missing 90-day canonical evidence export, a Godot version-representation mismatch, and a causally confounded C6 frame-time experiment. The authorized work is governance merge plus task-owned tooling/evidence only. Runtime, view, capture, critic roster and thresholds remain protected, and no current critic approval is claimed.",
+  "confidence": "high",
+  "approval_claimed": false,
+  "score_assigned": false,
+  "shipping_gameplay_runtime_change_authorized": false
+}
