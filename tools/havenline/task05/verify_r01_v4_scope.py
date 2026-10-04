@@ -52,7 +52,8 @@ def verify(head):
     assert set(changed)==allowed,changed
 
     test_text=git('show',f'{head}:{TEST}').decode().lower()
-    assert 'task05' in test_text and 'station' in test_text,'Unexpected T05 acceptance-test replacement'
+    assert '"suite": "t05_station_and_prop_kit"' in test_text,'Unexpected T05 acceptance-test replacement'
+    assert 'const stationkit = preload("res://scripts/station_kit.gd")' in test_text,'T05 station authority missing from acceptance test'
     capture_text=git('show',f'{head}:{CAPTURE}').decode()
     assert '\"front_axis\": \"negative-Z\"' in capture_text,'T05 evidence front-axis contract missing'
     assert 'offset = Vector3(0.0, 10.7, -16.0)' in capture_text,'T05 front camera is not on negative-Z axis'

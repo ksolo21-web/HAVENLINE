@@ -47,12 +47,15 @@ def authored_color(material: str, position, normal):
         return (_clamp(tone * .94), _clamp(tone * .98), tone, 1.0)
 
     if material == "wood":
-        tone = _clamp(.76 + .10 * broad + .075 * grain + .025 * fine, .58, .96)
-        return (tone, _clamp(tone * .88), _clamp(tone * .72), 1.0)
+        # R11: linear vertex pigment, not a near-white modulation. The former
+        # .76 fill became pale beige under the unchanged bright shipping light.
+        # Warm heartwood and darker side grain match 18600/18607's timber.
+        tone = _clamp(.31 + .080 * broad + .035 * grain + .055 * upward, .20, .49)
+        return (tone, _clamp(tone * .72), _clamp(tone * .48), 1.0)
 
     if material == "wood_light":
-        tone = _clamp(.82 + .085 * broad + .060 * grain + .020 * fine, .66, 1.0)
-        return (tone, _clamp(tone * .91), _clamp(tone * .77), 1.0)
+        tone = _clamp(.40 + .075 * broad + .030 * grain + .060 * upward, .27, .59)
+        return (tone, _clamp(tone * .78), _clamp(tone * .54), 1.0)
 
     if material == "metal":
         tone = _clamp(.76 + .10 * broad + .075 * edge + .025 * fine, .62, 1.0)
@@ -63,12 +66,12 @@ def authored_color(material: str, position, normal):
         return (_clamp(tone * .82), _clamp(tone * .90), tone, 1.0)
 
     if material == "blue":
-        tone = _clamp(.79 + .09 * broad + .035 * fine + .025 * upward, .66, .98)
-        return (_clamp(tone * .82), _clamp(tone * .93), tone, 1.0)
+        tone = _clamp(.38 + .055 * broad + .030 * fine + .040 * upward, .27, .52)
+        return (_clamp(tone * .63), _clamp(tone * .80), tone, 1.0)
 
     if material == "cyan":
-        tone = _clamp(.82 + .075 * broad + .025 * fine, .70, .99)
-        return (_clamp(tone * .84), _clamp(tone * .96), tone, 1.0)
+        tone = _clamp(.43 + .060 * broad + .025 * fine, .32, .56)
+        return (_clamp(tone * .67), _clamp(tone * .85), tone, 1.0)
 
     if material == "orange":
         tone = _clamp(.84 + .08 * broad + .025 * fine, .70, 1.0)
@@ -124,10 +127,12 @@ def pack_styled_glb(builder: legacy.MeshBuilder, path: Path) -> None:
 
     for material_index, key in enumerate(used):
         surface = builder.surfaces[key]
-        colors = [
-            authored_color(key, position, normal)
-            for position, normal in zip(surface.positions, surface.normals)
-        ]
+        pigments = getattr(builder, "vertex_pigments", {}).get(key, {})
+        colors = []
+        for index, (position, normal) in enumerate(zip(surface.positions, surface.normals)):
+            color = authored_color(key, position, normal)
+            shade = pigments.get(index, 1.0)
+            colors.append(tuple(v * shade for v in color[:3]) + (1.0,))
         pos_data = b"".join(struct.pack("<3f", *p) for p in surface.positions)
         nor_data = b"".join(struct.pack("<3f", *n) for n in surface.normals)
         col_data = b"".join(struct.pack("<4f", *c) for c in colors)

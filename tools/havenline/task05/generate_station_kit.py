@@ -16,6 +16,7 @@ from reference_ground_pads_v2 import build_ground_pads
 from reference_station_families_v3 import build_station_families
 from reference_utility_stations_v3 import build_utility_stations
 from styled_station_glb import pack_styled_glb
+from reference_surface_relief_v2 import install as install_surface_relief
 # R10B utility/processing rebuild is canonical and visually gated before T05 approval.
 # R10B_MATERIALIZER_TRIGGER_20260927: materialize the canonical utility rebuild before exact-source render review.
 # R10D_MATERIALIZER_TRIGGER_20260927: bind the reference-builder cooker rebuild to generated GLB/catalog bytes.\n# R10G_MATERIALIZER_TRIGGER_20260927: materialize the latest station silhouette repair and footprint guard.\n# R10T_MATERIALIZER_TRIGGER_20260927: remove primitive snow slabs and strengthen service/defense silhouettes from actual rendered review.\n# R03_SOURCE_SCOPE: physical camp-platform visuals only; contracts remain frozen.
@@ -44,6 +45,7 @@ def preserve_shared_palette(path):
 
 
 def main():
+    install_surface_relief()
     OUT.mkdir(parents=True,exist_ok=True)
     assets=legacy.asset_specs()
     assets.update(build_resource_props())

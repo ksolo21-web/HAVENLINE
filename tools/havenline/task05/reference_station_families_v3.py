@@ -14,6 +14,51 @@ import math
 import reference_station_families_v2 as v2
 
 
+def _roof_snow_bank(platform, side):
+    """Closed, thick accumulated snow following a pitched roof, not white discs.
+
+    Both sides have unequal scalloped eaves and a continuous ridge-to-eave
+    surface. This is production geometry; capture lights/cameras stay frozen.
+    """
+    nx, nz = 16, 8
+    vertices, normals, indices = [], [], []
+    for layer in (0, 1):
+        for i in range(nx + 1):
+            x = -.84 + 1.68 * i / nx
+            reach = .31 + .11 * math.sin(i * .69 + side) + .035 * math.cos(i * 1.3)
+            for j in range(nz + 1):
+                t = j / nz
+                z = side * (-.035 + (reach + .035) * t)
+                roof_y = 2.82 - abs(z) * math.tan(.40)
+                thickness = (.070 + .080 * math.sin(math.pi * t) + .030 * math.sin(i * .83)) * (.55 + .45 * math.sin(math.pi * i / nx))
+                y = roof_y + (thickness if layer else -.015)
+                vertices.append((x, y, z))
+                normals.append((-.17 * math.cos(i * .83), 1, side * (.42 - .28 * math.cos(math.pi * t))) if layer else (0, -1, 0))
+    row = nz + 1
+    layer_size = (nx + 1) * row
+    def quad(a, b, c, d):
+        indices.extend((a, b, c, a, c, d))
+    for layer in (0, 1):
+        off = layer * layer_size
+        for i in range(nx):
+            for j in range(nz):
+                a = off + i * row + j
+                quad(a, a + row, a + row + 1, a + 1)
+    perimeter = ([i * row for i in range(nx + 1)] +
+                 [nx * row + j for j in range(1, nz + 1)] +
+                 [i * row + nz for i in range(nx - 1, -1, -1)] +
+                 [j for j in range(nz - 1, 0, -1)])
+    for a, b in zip(perimeter, perimeter[1:] + perimeter[:1]):
+        # Side normals must point outward and differ from top/bottom normals.
+        p, q = vertices[a], vertices[b]
+        n = (p[0] + q[0], 0, p[2] + q[2] - side * .20)
+        start = len(vertices)
+        vertices.extend((vertices[a], vertices[b], vertices[b + layer_size], vertices[a + layer_size]))
+        normals.extend((n, n, n, n))
+        quad(start, start + 1, start + 2, start + 3)
+    platform.triangles("snow", vertices, normals, indices)
+
+
 def _augment_service_counter(service):
     # A chunky lower storage carcass breaks the bare-table read while staying
     # inside the frozen 3.45 x 1.95 footprint.
@@ -164,43 +209,40 @@ def _augment_defense_platform(platform):
     # while leaving the central interaction footprint and future sockets intact.
     for x in (-.72, .72):
         for z in (-.54, .54):
-            platform.beveled_box("wood", (x, 2.05, z), (.14, .90, .14), .04)
+            platform.beveled_box("wood", (x, 2.05, z), (.20, .90, .20), .055)
     # Layered overlapping shingle roof. The prior four broad roof blocks still
     # read as separate cyan primitives in actual reverse pixels. Six narrower
     # overlapping shingles per slope plus real rafters/fascia produce the
     # blue-roof watchtower language from 18600/18607.
     for index, x in enumerate((-.75, -.45, -.15, .15, .45, .75)):
         lean = .008 if index % 2 == 0 else -.008
-        platform.beveled_box("blue", (x, 2.58, -.25), (.34, .085, .86), .030,
-                             rotation=(.32, 0, lean))
-        platform.beveled_box("blue", (x, 2.58, .25), (.34, .085, .86), .030,
-                             rotation=(-.32, 0, -lean))
+        platform.beveled_box("blue", (x, 2.65, -.30), (.36, .14, .88), .045,
+                             rotation=(-.40, 0, lean))
+        platform.beveled_box("blue", (x, 2.65, .30), (.36, .14, .88), .045,
+                             rotation=(.40, 0, -lean))
         if index in (1, 4):
             platform.beveled_box("dark", (x, 2.535, -.25), (.30, .035, .74), .014,
-                                 rotation=(.32, 0, lean))
+                                 rotation=(-.40, 0, lean))
             platform.beveled_box("dark", (x, 2.535, .25), (.30, .035, .74), .014,
-                                 rotation=(-.32, 0, -lean))
-    platform.beveled_box("dark", (0, 2.72, 0), (1.92, .12, .14), .038)
+                                 rotation=(.40, 0, -lean))
+    platform.beveled_box("dark", (0, 2.83, 0), (1.98, .14, .16), .045)
     for z in (-.62, .62):
         platform.rod_between("wood", (-.91, 2.47, z), (0, 2.78, z), .050, 8)
         platform.rod_between("wood", (0, 2.78, z), (.91, 2.47, z), .050, 8)
         platform.beveled_box("wood_light", (0, 2.46, z), (1.92, .11, .10), .030)
     # Irregular snow clumps follow the roof pitch instead of sitting as flat
     # rectangular icing plates.
-    for x,z,rx,rz,rot in (
-        (-.52,-.31,.28,.18,.04),(-.18,-.24,.24,.20,-.03),(.28,-.28,.30,.16,.05),
-        (-.40,.28,.26,.18,-.04),(.04,.24,.30,.19,.03),(.48,.31,.22,.16,-.05),
-    ):
-        platform.sphere("snow", (x, 2.73, z), (rx, .060, rz), 5, 10, rotation=(0,rot,0))
+    _roof_snow_bank(platform, -1)
+    _roof_snow_bank(platform, 1)
     # Guard-post half walls close the upper silhouette so it reads as a usable
     # watch post rather than an exposed scaffold. Individual slats preserve
     # authored construction and sight gaps.
     for x in (-.60, -.30, 0.0, .30, .60):
-        platform.beveled_box("wood_light", (x, 1.98, .54), (.22, .34, .095), .028)
-        platform.beveled_box("wood", (x, 1.98, -.54), (.22, .34, .095), .028)
+        platform.beveled_box("wood_light", (x, 1.98, .54), (.29, .52, .13), .035)
+        platform.beveled_box("wood", (x, 1.98, -.54), (.29, .52, .13), .035)
     for z in (-.30, 0.0, .30):
-        platform.beveled_box("wood", (-.72, 1.98, z), (.095, .34, .22), .028)
-        platform.beveled_box("wood_light", (.72, 1.98, z), (.095, .34, .22), .028)
+        platform.beveled_box("wood", (-.72, 1.98, z), (.13, .52, .29), .035)
+        platform.beveled_box("wood_light", (.72, 1.98, z), (.13, .52, .29), .035)
     platform.beveled_box("dark", (0, 2.17, .54), (1.48, .08, .11), .025)
     platform.beveled_box("blue", (0, 2.20, -.54), (1.06, .07, .10), .022)
     platform.rod_between("yellow", (-.32, 2.42, -.56), (-.32, 2.04, -.56), .024, 8)
