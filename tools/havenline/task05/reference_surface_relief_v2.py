@@ -21,51 +21,54 @@ class SurfaceReliefBuilder(BASE_BUILDER):
             self.vertex_pigments.setdefault(material, {}).update(
                 (i, self.pigment) for i in range(start, len(self.surfaces[material].positions)))
 
-    def _grain(self, material, center, size, rotation):
+    def _carved_board(self, material, center, size, bevel, rotation):
+        # Carve the board's own face. No overlaid strips, thin side walls or
+        # detached grains can generate projected dotted shadow rows.
         axis = max(range(3), key=lambda i: size[i])
-        length = size[axis]
-        if length < .58 or length / max(.01, min(size)) < 2.2:
-            return
-        # Broad tapered shallow carvings stay continuous at mobile projection.
-        # Thin buried rods previously became dotted high-contrast pixels.
-        across = 2 if axis in (0, 1) else 0
-        face = 1 if axis != 1 else 0
-        self.pigment = .78
-        for line in (-1, 1):
-            vertices, normals, indices = [], [], []
-            stations = 5
-            width = min(.023, size[across] * .10)
-            for layer in (0, 1):
-                for j in range(stations):
-                    t = j / (stations - 1)
-                    taper = .12 + .88 * math.sin(math.pi * t)
-                    for edge in (-1, 1):
-                        p = [0., 0., 0.]
-                        p[axis] = length * (-.35 + .69 * t) + line * length * .025
-                        p[face] = size[face] * .5 + (.0018 if layer else -.002)
-                        p[across] = line * size[across] * .19 + size[across] * .035 * math.sin(t * 5 + line) + edge * width * taper
-                        vertices.append(p)
-                        n = [0., 0., 0.]; n[face] = 1 if layer else -1
-                        normals.append(n)
-            count = stations * 2
-            def quad(a, b, c, d):
-                indices.extend((a, b, c, a, c, d))
-            for off in (0, count):
-                for j in range(stations - 1):
-                    a = off + j * 2
-                    quad(a, a + 2, a + 3, a + 1)
-            perimeter = list(range(0, count, 2)) + list(range(count - 1, 0, -2))
-            for a, b in zip(perimeter, perimeter[1:] + perimeter[:1]):
-                pa, pb = vertices[a], vertices[b]
-                n = [0., 0., 0.]
-                n[axis] = (pa[axis] + pb[axis]) / length
-                n[across] = (pa[across] + pb[across]) / size[across] - line * .19
-                k = len(vertices)
-                vertices.extend((vertices[a], vertices[b], vertices[b + count], vertices[a + count]))
-                normals.extend((n, n, n, n))
-                quad(k, k + 1, k + 2, k + 3)
-            self.triangles(material, vertices, normals, indices, center, rotation)
-        self.pigment = 1.0
+        half = tuple(value * .5 for value in size)
+        bevel = max(.001, min(bevel, min(half) * .46))
+        inner = tuple(value - bevel for value in half)
+        vertices, normals, indices, shades = [], [], [], []
+        def profile(p, fixed, sign):
+            across = next(i for i in range(3) if i not in (axis, fixed))
+            t, u = p[axis] / inner[axis], p[across] / inner[across]
+            envelope = max(0., 1 - t * t) * max(0., 1 - u * u)
+            wave = .5 + .5 * math.cos(u * 5.3 + .65 * math.sin(t * 2.3 + sign))
+            depth = min(.0045, size[fixed] * .035) * envelope * wave
+            shade = 1 - .15 * envelope * wave
+            return depth, shade
+        for fixed, ua, va, sign in ((0, 1, 2, 1), (0, 1, 2, -1),
+                                     (1, 0, 2, 1), (1, 0, 2, -1),
+                                     (2, 0, 1, 1), (2, 0, 1, -1)):
+            coordinates = lambda a: ([-half[a], -inner[a], inner[a], half[a]] if fixed == axis else [-half[a], -inner[a], -.4 * inner[a], .4 * inner[a], inner[a], half[a]])
+            us, vs = coordinates(ua), coordinates(va)
+            grid = []
+            for vv in vs:
+                row = []
+                for uu in us:
+                    p = [0., 0., 0.];p[fixed] = sign * half[fixed];p[ua], p[va] = uu, vv
+                    q = [max(-inner[i], min(inner[i], p[i])) for i in range(3)]
+                    n = legacy.vnorm(legacy.vsub(p, q))
+                    pos = list(legacy.vadd(q, legacy.vmul(n, bevel)))
+                    shade = 1.
+                    if fixed != axis and abs(uu) < inner[ua] and abs(vv) < inner[va]:
+                        depth, shade = profile(p, fixed, sign)
+                        pos[fixed] -= sign * depth
+                        normal = [0., 0., 0.];normal[fixed] = sign
+                        for tangent in (ua, va):
+                            eps = .0001
+                            a, b = list(p), list(p);a[tangent] += eps;b[tangent] -= eps
+                            normal[tangent] = (profile(a, fixed, sign)[0] - profile(b, fixed, sign)[0]) / (2 * eps)
+                        n = legacy.vnorm(normal)
+                    row.append(len(vertices));vertices.append(pos);normals.append(n);shades.append(shade)
+                grid.append(row)
+            for v in range(len(vs) - 1):
+                for u in range(len(us) - 1):
+                    a, b, c, d = grid[v][u], grid[v][u+1], grid[v+1][u+1], grid[v+1][u]
+                    indices.extend((a, b, c, a, c, d))
+        start = len(self._surface(material).positions)
+        self.triangles(material, vertices, normals, indices, center, rotation)
+        self.vertex_pigments.setdefault(material, {}).update((start+i, shade) for i, shade in enumerate(shades) if shade != 1.)
 
     def beveled_box(self, material, center, size, bevel=.08, rotation=(0, 0, 0)):
         if self.name == "hearth_vessel":
@@ -92,9 +95,9 @@ class SurfaceReliefBuilder(BASE_BUILDER):
                     c, d = (ring + 1) * segments + j, (ring + 1) * segments + i
                     indices.extend((a, c, b, a, d, c))
             return self.triangles(material, vertices, normals, indices, center, rotation)
-        super().beveled_box(material, center, size, bevel, rotation)
-        if material in ("wood", "wood_light"):
-            self._grain(material, center, size, rotation)
+        if material in ("wood", "wood_light") and max(size) >= .58 and max(size) / max(.01, min(size)) >= 2.2:
+            return self._carved_board(material, center, size, bevel, rotation)
+        return super().beveled_box(material, center, size, bevel, rotation)
 
 
 def install():
