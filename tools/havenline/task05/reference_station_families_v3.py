@@ -20,20 +20,33 @@ def _roof_snow_bank(platform, side):
     Both sides have unequal scalloped eaves and a continuous ridge-to-eave
     surface. This is production geometry; capture lights/cameras stay frozen.
     """
-    nx, nz = 16, 8
+    nx, nz = 20, 10
     vertices, normals, indices = [], [], []
+    def reach_at(x):
+        return .43 + .065 * math.sin(x * 3.3 + side * .8) + .025 * math.cos(x * 6.0)
+    def height_at(x, z):
+        t = min(1.0, abs(z) / reach_at(x))
+        end = max(0.0, 1 - (abs(x) / .87) ** 4) ** .65
+        crown = (.190 - .178 * t * t) * end
+        crown += .025 * math.sin(x * 4 + side * .4) * end * (1 - t)
+        return 2.82 - abs(z) * math.tan(.40) + .009 + crown
     for layer in (0, 1):
         for i in range(nx + 1):
-            x = -.84 + 1.68 * i / nx
-            reach = .31 + .11 * math.sin(i * .69 + side) + .035 * math.cos(i * 1.3)
+            x = -.86 + 1.72 * i / nx
+            reach = reach_at(x)
             for j in range(nz + 1):
-                t = j / nz
-                z = side * (-.035 + (reach + .035) * t)
-                roof_y = 2.82 - abs(z) * math.tan(.40)
-                thickness = (.070 + .080 * math.sin(math.pi * t) + .030 * math.sin(i * .83)) * (.55 + .45 * math.sin(math.pi * i / nx))
-                y = roof_y + (thickness if layer else -.015)
+                z = side * reach * j / nz
+                if layer:
+                    y = height_at(x, z)
+                    eps = .001
+                    dx = (height_at(x + eps, z) - height_at(x - eps, z)) / (2 * eps)
+                    dz = (height_at(x, z + eps) - height_at(x, z - eps)) / (2 * eps)
+                    n = (-dx, 1, -dz)
+                else:
+                    y = 2.82 - abs(z) * math.tan(.40) - .015
+                    n = (0, -1, 0)
                 vertices.append((x, y, z))
-                normals.append((-.17 * math.cos(i * .83), 1, side * (.42 - .28 * math.cos(math.pi * t))) if layer else (0, -1, 0))
+                normals.append(n)
     row = nz + 1
     layer_size = (nx + 1) * row
     def quad(a, b, c, d):

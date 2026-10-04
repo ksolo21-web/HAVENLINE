@@ -26,26 +26,45 @@ class SurfaceReliefBuilder(BASE_BUILDER):
         length = size[axis]
         if length < .58 or length / max(.01, min(size)) < 2.2:
             return
-        # Grain follows the construction member, including vertical posts and
-        # rotated diagonal bracing. Lines sit partially inside the wood face.
+        # Broad tapered shallow carvings stay continuous at mobile projection.
+        # Thin buried rods previously became dotted high-contrast pixels.
         across = 2 if axis in (0, 1) else 0
         face = 1 if axis != 1 else 0
-        radius = min(.007, min(size) * .050)
-        matrix = legacy.rotation_matrix(*rotation)
-        def world(p):
-            return legacy.vadd(legacy.mat_vec(matrix, p), center)
-        self.pigment = .42
+        self.pigment = .78
         for line in (-1, 1):
-            points = []
-            for j in range(5):
-                t = j / 4
-                p = [0., 0., 0.]
-                p[axis] = length * (-.36 + .72 * t)
-                p[face] = size[face] * .5 - radius * .25
-                p[across] = line * size[across] * .18 + size[across] * .032 * math.sin(t * 7 + line)
-                points.append(world(p))
-            for a, b in zip(points, points[1:]):
-                super().rod_between(material, a, b, radius, 5)
+            vertices, normals, indices = [], [], []
+            stations = 5
+            width = min(.023, size[across] * .10)
+            for layer in (0, 1):
+                for j in range(stations):
+                    t = j / (stations - 1)
+                    taper = .12 + .88 * math.sin(math.pi * t)
+                    for edge in (-1, 1):
+                        p = [0., 0., 0.]
+                        p[axis] = length * (-.35 + .69 * t) + line * length * .025
+                        p[face] = size[face] * .5 + (.0018 if layer else -.002)
+                        p[across] = line * size[across] * .19 + size[across] * .035 * math.sin(t * 5 + line) + edge * width * taper
+                        vertices.append(p)
+                        n = [0., 0., 0.]; n[face] = 1 if layer else -1
+                        normals.append(n)
+            count = stations * 2
+            def quad(a, b, c, d):
+                indices.extend((a, b, c, a, c, d))
+            for off in (0, count):
+                for j in range(stations - 1):
+                    a = off + j * 2
+                    quad(a, a + 2, a + 3, a + 1)
+            perimeter = list(range(0, count, 2)) + list(range(count - 1, 0, -2))
+            for a, b in zip(perimeter, perimeter[1:] + perimeter[:1]):
+                pa, pb = vertices[a], vertices[b]
+                n = [0., 0., 0.]
+                n[axis] = (pa[axis] + pb[axis]) / length
+                n[across] = (pa[across] + pb[across]) / size[across] - line * .19
+                k = len(vertices)
+                vertices.extend((vertices[a], vertices[b], vertices[b + count], vertices[a + count]))
+                normals.extend((n, n, n, n))
+                quad(k, k + 1, k + 2, k + 3)
+            self.triangles(material, vertices, normals, indices, center, rotation)
         self.pigment = 1.0
 
     def beveled_box(self, material, center, size, bevel=.08, rotation=(0, 0, 0)):
