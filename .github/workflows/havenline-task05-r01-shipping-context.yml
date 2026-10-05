@@ -24,7 +24,31 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p task05-r01-context
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          git lfs fetch origin "$GITHUB_SHA" --include='HavenlineGodot/**,Docs/Production/T02/reference-ground.webp' --exclude=''
+          git lfs checkout 'HavenlineGodot/**' Docs/Production/T02/reference-ground.webp
+          python3 - <<'PYBIND'
+          import hashlib,json,os,re,subprocess
+          from pathlib import Path
+          source=os.environ['GITHUB_SHA']
+          receipt={}
+          paths=subprocess.check_output(['git','ls-tree','-r','--name-only',source,'HavenlineGodot'],text=True).splitlines()
+          for name in paths:
+              frozen=subprocess.check_output(['git','show',source+':'+name])
+              actual=Path(name).read_bytes()
+              if frozen.startswith(b'version https://git-lfs.github.com/spec/v1\n'):
+                  match=re.fullmatch(rb'version https://git-lfs.github.com/spec/v1\noid sha256:([0-9a-f]{64})\nsize ([0-9]+)\n',frozen)
+                  assert match, name
+                  expected=match[1].decode();size=int(match[2])
+                  assert len(actual)==size and hashlib.sha256(actual).hexdigest()==expected,name
+                  receipt[name]={'sha256':expected,'size':size,'lfs_pointer_sha256':hashlib.sha256(frozen).hexdigest()}
+              else:
+                  assert actual==frozen,name
+                  receipt[name]={'sha256':hashlib.sha256(actual).hexdigest(),'size':len(actual),'lfs_pointer_sha256':None}
+          Path('task05-r01-context/runtime-source-binding.json').write_text(json.dumps({'application_source':source,'runtime_paths':receipt,'task_approved':False},indent=2)+'\n')
+          PYBIND
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          echo "TRUSTED_INTEGRATION=$integration" >> "$GITHUB_ENV"
           python3 tools/havenline/task05/verify_r01_v4_scope.py --head "$GITHUB_SHA" --integration-head "$integration" | tee task05-r01-context/source-proof.json
           python3 -m py_compile tools/havenline/task05/capture_r01_shipping_context.py
       - name: Prepare checksum-pinned renderer and unchanged runtime fixtures
@@ -46,7 +70,18 @@ jobs:
           set -euo pipefail
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
           test -n "$VK_ICD_FILENAMES"
-          python3 tools/havenline/task05/capture_r01_shipping_context.py --engine "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --source "$GITHUB_SHA" --out task05-r01-context | tee task05-r01-context/execution.log
+          python3 tools/havenline/task05/capture_r01_shipping_context.py --engine "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64" --source "$GITHUB_SHA" --integration-head "$TRUSTED_INTEGRATION" --executor-source "$GITHUB_SHA" --repo-root "$PWD" --out task05-r01-context | tee task05-r01-context/execution.log
+          python3 - <<'PYAFTER'
+          import hashlib,json,os,subprocess
+          from pathlib import Path
+          assert subprocess.check_output(['git','rev-parse','HEAD'],text=True).strip()==os.environ['GITHUB_SHA']
+          p=Path('task05-r01-context/runtime-source-binding.json');proof=json.loads(p.read_text())
+          for name,row in proof['runtime_paths'].items():
+              actual=Path(name).read_bytes()
+              assert len(actual)==row['size'] and hashlib.sha256(actual).hexdigest()==row['sha256'],name
+          proof['runtime_source_unchanged_after_captures']=True
+          p.write_text(json.dumps(proof,indent=2)+'\n')
+          PYAFTER
       - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         if: always()
         with:
