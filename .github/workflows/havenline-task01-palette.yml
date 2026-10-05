@@ -1,0 +1,118 @@
+name: Havenline T01 calibrated palette acceptance
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-palette.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.build.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - run: python3 -m pip install pyyaml
+      - name: Reuse the preserved sculpture build, tests and native evidence requirements
+        id: build
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          w=yaml.safe_load(Path('.github/workflows/havenline-task01-reference-finish.yml').read_text())
+          code=next(s['run'] for s in w['jobs']['build']['steps'] if s.get('id')=='build')
+          code=code.replace('finish_reference_tree.py','sculpt_reference_tree.py').replace('review_task01_reference_finish.py','review_task01_palette.py').replace("\"'revision':7\"","\"'revision':9\"").replace('T01 revision7: reference notches, blue rims, warm trunk and native clearance diagnostics; unapproved candidate','T01 revision9: rendered palette calibration on the sculpted mantles; not automatically approved')
+          subprocess.run(['bash','-euo','pipefail','-c',code],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-palette-evidence-${{ github.run_id }}
+          path: task01-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: success()
+        with:
+          name: havenline-T01-palette-source-${{ github.run_id }}
+          path: task01-source/
+          retention-days: 30
+          if-no-files-found: error
+  independent-review:
+    needs: build
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        group: [variant-1, variant-2, variant-3, forest, clearance, camera-motion]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      TASK_SOURCE: ${{ needs.build.outputs.source }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build.outputs.source }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-palette-evidence-${{ github.run_id }}
+          path: task01-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-gemma
+          key: havenline-t01-gemma3-12b-qat-b10809-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Inspect actual corrected tree colors and every required view without changing the rubric
+        run: python3 -u tools/havenline/review_task01_palette.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-palette-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
+          path: critic-results/
+          retention-days: 30
+          if-no-files-found: error
+  collect:
+    needs: [build,independent-review]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      TASK_SOURCE: ${{ needs.build.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-T01-palette-reference-fidelity-*-${{ github.run_id }}
+          path: reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-T01-palette-visual-integrity-*-${{ github.run_id }}
+          path: reviews/
+      - run: python3 -m pip install pyyaml
+      - name: Require all raw reviews and every minimum-nine score
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          w=yaml.safe_load(Path('.github/workflows/havenline-task01-reference-finish.yml').read_text())
+          subprocess.run(['bash','-euo','pipefail','-c',next(s['run'] for s in w['jobs']['collect-review']['steps'] if 'run' in s)],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-palette-complete-reviews-${{ github.run_id }}
+          path: reviews/
+          retention-days: 30
+          if-no-files-found: error
+# No unrelated runtime changes, user-test APK, score manipulation or automatic task progression.

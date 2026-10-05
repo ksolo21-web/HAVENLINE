@@ -1,0 +1,267 @@
+name: Havenline Task 7 context director candidate
+
+on:
+  push:
+    branches: ['havenline/T07-context-director', 'codex/havenline-sequential-task-01']
+    paths:
+      - 'HavenlineGodot/scripts/context_director.gd'
+      - 'HavenlineGodot/scripts/simulation.gd'
+      - 'HavenlineGodot/scripts/population_simulation.gd'
+      - 'HavenlineGodot/scripts/main.gd'
+      - 'HavenlineGodot/tests/test_task07_context_director.gd'
+      - 'HavenlineGodot/tests/test_task07_integration.gd'
+      - 'HavenlineGodot/tests/capture_task07_context_director.gd'
+      - 'Docs/Production/T07/**'
+      - 'tools/havenline/task07/**'
+      - '.github/workflows/havenline-task07-*.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-task07-context-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test-capture:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.ref_name != 'codex/havenline-sequential-task-01' || !contains(github.event.head_commit.message, '[governance-only]') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Prepare pinned Godot and evidence dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers ffmpeg
+          python3 -m pip install --disable-pip-version-check numpy pillow
+          mkdir -p "$RUNNER_TEMP/engine" task07-evidence/tests task07-evidence/matrices task07-evidence/captures task07-evidence/native4k task07-evidence/video
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+
+      - name: Verify candidate ownership and static contract
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          if [ "$GITHUB_REF_NAME" = 'codex/havenline-sequential-task-01' ]; then
+            python3 tools/havenline/task07/validate_context_director.py --candidate "$CANDIDATE" --output task07-evidence/source-contract.json
+          else
+            python3 tools/havenline/production/workstream.py validate-candidate T07 --base 91f35f331aaabe2b1785b10c0d911f20da6f12d9 --head "$CANDIDATE" --integration-head "$integration" | tee task07-evidence/candidate-scope.json
+            python3 tools/havenline/task07/validate_context_director.py --candidate "$CANDIDATE" --output task07-evidence/source-contract.json
+          fi
+
+      - name: Validate resource actor and animation contract
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          manifest={
+            'task_id':'T07','candidate_commit':os.environ['CANDIDATE'],
+            'resource_actor_contract':{
+              'introduced_resource_ids':[], 'resource_ids_covered':[],
+              'actor_keys_covered':['player_lead','core_human_companion','rescued_survivor_helper'],
+              'animation_profiles_covered':[], 'animation_delta':False
+            }
+          }
+          Path('task07-evidence/candidate-manifest.json').write_text(json.dumps(manifest,indent=2))
+          PY
+          python3 tools/havenline/production/resource_actor_contract.py --task T07 --manifest task07-evidence/candidate-manifest.json --output task07-evidence/resource-actor-contract.json
+          python3 tools/havenline/audit_task01_geometry.py > task07-evidence/tests/task01-geometry-audit.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          matrix=json.loads(Path('Docs/Production/CRITIC_MATRIX.json').read_text())
+          required=matrix['task_applicability']['T07']
+          assert required==['C2','C3','C4','C6','C11'],required
+          Path('task07-evidence/critic-requirements.json').write_text(json.dumps({'task':'T07','required':required},indent=2))
+          PY
+
+      - name: Import and run inherited plus T07 suites
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/bake_outpost_audio.py > task07-evidence/tests/audio-fixture.json
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task07-evidence/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task07-evidence/tests/motion-fixture.log 2>&1
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary test_task04_camera test_task05_station_kit test_task06_character1 test_task07_context_director test_task07_integration; do
+            timeout 300 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task07-evidence/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task07-evidence/tests/*.log; then exit 1; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,os
+          rows=[]
+          for path in sorted(Path('task07-evidence/tests').glob('test_*.log')):
+              reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
+              assert reports,path
+              report=reports[-1]
+              assert report.get('passed') is True and not report.get('failures'),(path,report.get('failures'))
+              checks=report.get('checks',[])
+              rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
+          total=sum(row['checks'] for row in rows)
+          assert len(rows)==21 and total>=1400,(len(rows),total)
+          out={'task':'T07-context-director-v1','source':os.environ['GITHUB_SHA'],'suite_count':len(rows),'total_checks':total,'suites':rows,'all_passed':True,'task_approved':False}
+          Path('task07-evidence/tests.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps(out))
+          PY
+          python3 tools/havenline/task07/performance_gate.py --log task07-evidence/tests/test_task07_context_director.log --candidate "$GITHUB_SHA" --output task07-evidence/performance.json
+
+      - name: Run save and adaptive-device matrices
+        env:
+          GODOT_BIN: Godot_v4.7.2-stable_linux.x86_64
+        run: |
+          set -euo pipefail
+          HAVENLINE_T07_MATRIX_MODE=save python3 tools/havenline/production/save_state_matrix.py --candidate "$GITHUB_SHA" --task T07 --adapter 'bash tools/havenline/task07/run_matrix_case.sh' --out task07-evidence/matrices/save
+          HAVENLINE_T07_MATRIX_MODE=device python3 tools/havenline/production/device_matrix.py --candidate "$GITHUB_SHA" --task T07 --adapter 'bash tools/havenline/task07/run_matrix_case.sh' --out task07-evidence/matrices/device
+
+      - name: Capture contextual sequence and adaptive layouts
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task07_context_director.gd -- --candidate="$CANDIDATE" --state=sequence --out="$(pwd)/task07-evidence/captures/sequence" > task07-evidence/captures/sequence.log 2>&1
+          while read -r id width height; do
+            for context_state in active blocked; do
+              mkdir -p "task07-evidence/captures/$id-$context_state"
+              xvfb-run -a -s "-screen 0 ${width}x${height}x24" timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution "${width}x${height}" --script res://tests/capture_task07_context_director.gd -- --candidate="$CANDIDATE" --state="$context_state" --device="$id" --out="$(pwd)/task07-evidence/captures/$id-$context_state" > "task07-evidence/captures/$id-$context_state.log" 2>&1
+            done
+          done <<'EOF'
+          phone_16_9 2400 1080
+          phone_20_9 2400 1080
+          tablet_16_10 2560 1600
+          tablet_4_3 2732 2048
+          foldable_outer 2520 1080
+          foldable_inner 2208 1768
+          EOF
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task07_context_director.gd -- --candidate="$CANDIDATE" --state=active --native-4k --out="$(pwd)/task07-evidence/native4k" > task07-evidence/native4k.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task07-evidence/captures/*.log task07-evidence/native4k.log; then exit 1; fi
+          ffmpeg -hide_banner -loglevel error -framerate 20 -i task07-evidence/captures/sequence/frames/frame-%05d.jpg -c:v libx264 -preset veryfast -crf 21 -pix_fmt yuv420p -movflags +faststart task07-evidence/video/context-sequence.mp4
+
+      - name: Enforce capture provenance and content gates
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image,ImageStat
+          import hashlib,json,os
+          root=Path('task07-evidence')
+          manifests=list((root/'captures').glob('*/capture.json'))+[root/'native4k/capture.json']
+          assert len(manifests)==14,len(manifests)
+          hashes=set(); images=[]
+          for path in manifests:
+              report=json.loads(path.read_text())
+              assert report['task']=='T07-context-director-v1'
+              assert report['candidate_commit']==os.environ['CANDIDATE']
+              assert report['shipping_main_scene_rendered'] is True
+              assert report['shipping_call_site_exercised'] is True
+              assert report['candidate_component_applied_directly_because_call_site_is_integration_only'] is False
+              assert report['qa_evidence_banner_present'] is False
+              assert report['permanent_action_buttons']==0
+              assert report['movement_control']=='one_primary_joystick'
+              assert report['physical_device_native_4k60_certified'] is False
+              assert report['trace'] and all(row['kind'] in ('gather','enemy') for row in report['trace'])
+              assert all(row['shipping_hint']==row['presentation_status'] for row in report['trace'])
+              w,h=report['window']
+              assert report['game_rect']==[0.0,0.0,w,h],report['game_rect']
+              for rect in report['layout_rects'].values():
+                  x,y,rw,rh=rect
+                  assert x>=0 and y>=0 and x+rw<=w+0.01 and y+rh<=h+0.01,(path,rect,report['window'])
+              if report['state']=='blocked':
+                  assert all(row['state']=='blocked_movement' and row['cancelled'] and 'stop moving' in row['shipping_hint'] for row in report['trace'])
+              if report['state']=='active':
+                  assert report['trace'][-1]['state']=='active' and '%' in report['trace'][-1]['shipping_hint']
+              if path.parts[-2]=='native4k':
+                  assert report['native_3840x2160_scale1'] is True,report
+              for image_path in path.parent.glob('*.png'):
+                  image=Image.open(image_path).convert('RGB')
+                  assert image.size==tuple(report['window']),(image_path,image.size,report['window'])
+                  assert max(ImageStat.Stat(image).stddev)>=10.0,(image_path,ImageStat.Stat(image).stddev)
+                  sample=image.resize((160,90))
+                  black=sum(1 for pixel in sample.getdata() if max(pixel)<12)/float(160*90)
+                  assert black<0.08,(image_path,black)
+                  right_std=max(ImageStat.Stat(sample.crop((140,0,160,90))).stddev)
+                  bottom_std=max(ImageStat.Stat(sample.crop((0,75,160,90))).stddev)
+                  assert not (right_std<3.0 and bottom_std<3.0),(image_path,'uniform edge padding',right_std,bottom_std)
+                  digest=hashlib.sha256(image_path.read_bytes()).hexdigest()
+                  assert digest not in hashes,image_path
+                  hashes.add(digest);images.append(str(image_path))
+          sequence=json.loads((root/'captures/sequence/capture.json').read_text())
+          states={row['state'] for row in sequence['trace']}
+          assert {'blocked_movement','acquiring','active'}<=states,states
+          identities=[row['kind']+':'+row['id'] for row in sequence['trace'][90:135]]
+          assert len(set(identities))==1,set(identities)
+          assert sequence['switch_count']==2,sequence['switch_count']
+          assert sequence['gather_event_count']==sequence['inventory_gather_delta'] and sequence['gather_event_count']>=1,sequence
+          assert all(row['shipping_hint']==row['presentation_status'] for row in sequence['trace'])
+          assert len(list((root/'captures/sequence/frames').glob('*.jpg')))==60
+          assert (root/'video/context-sequence.mp4').stat().st_size>10000
+          assert len(images)>=19,len(images)
+          result={'task':'T07','candidate_commit':os.environ['CANDIDATE'],'manifest_count':len(manifests),'png_count':len(images),'unique_png_hashes':len(hashes),'sequence_states':sorted(states),'sequence_switch_count':sequence['switch_count'],'video':'video/context-sequence.mp4','passed':True}
+          (root/'capture-gate.json').write_text(json.dumps(result,indent=2))
+          print(json.dumps(result))
+          PY
+
+      - name: Enforce integrated shipping scene performance deltas
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,os,statistics
+          report=json.loads(Path('task07-evidence/captures/sequence/capture.json').read_text())
+          rows=report['trace']
+          def mean(state,key):
+              values=[float(row[key]) for row in rows if row['state']==state]
+              assert values,(state,key)
+              return statistics.fmean(values)
+          baseline={'frame_usec':mean('blocked_movement','frame_usec'),'draw_calls':mean('blocked_movement','draw_calls'),'primitives':mean('blocked_movement','primitives')}
+          active={'frame_usec':mean('active','frame_usec'),'draw_calls':mean('active','draw_calls'),'primitives':mean('active','primitives')}
+          delta={key:active[key]-baseline[key] for key in baseline}
+          budgets={'absolute_frame_usec_delta':8000.0,'absolute_draw_call_delta':8.0,'absolute_primitive_delta':250000.0,'average_shipping_frame_usec':25000.0,'maximum_shipping_frame_usec':100000.0}
+          metrics=report['shipping_scene_metrics']
+          failures=[]
+          if abs(delta['frame_usec'])>budgets['absolute_frame_usec_delta']: failures.append('frame delta')
+          if abs(delta['draw_calls'])>budgets['absolute_draw_call_delta']: failures.append('draw-call delta')
+          if abs(delta['primitives'])>budgets['absolute_primitive_delta']: failures.append('primitive delta')
+          if metrics['average_frame_usec']>budgets['average_shipping_frame_usec']: failures.append('average frame')
+          if metrics['maximum_frame_usec']>budgets['maximum_shipping_frame_usec']: failures.append('maximum frame')
+          out={'task':'T07','candidate_commit':os.environ['GITHUB_SHA'],'baseline_state':'blocked_movement','comparison_state':'active','baseline':baseline,'active':active,'delta':delta,'budgets':budgets,'passed':not failures,'failures':failures,'physical_device_native_4k60_certified':False}
+          Path('task07-evidence/integrated-performance.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps(out))
+          assert not failures,failures
+          PY
+
+      - name: Build evidence index
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          import hashlib,json,os
+          root=Path('task07-evidence')
+          files=[]
+          for path in sorted(root.rglob('*')):
+              if path.is_file():
+                  files.append({'path':str(path.relative_to(root)),'bytes':path.stat().st_size,'sha256':hashlib.sha256(path.read_bytes()).hexdigest()})
+          out={'task':'T07','candidate_commit':os.environ['GITHUB_SHA'],'artifact_file_count':len(files),'files':files,'candidate_passed':True,'critic_approval_pending':True,'task_approved':False}
+          (root/'evidence-index.json').write_text(json.dumps(out,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-task07-context-${{ github.sha }}
+          path: task07-evidence
+          retention-days: 30

@@ -1,0 +1,50 @@
+name: Havenline T01 readable second-family review
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-second-family-review.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  independent-review:
+    strategy:
+      fail-fast: false
+      max-parallel: 12
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        group: [variant-1, variant-2, variant-3, forest, clearance, camera-motion]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-snow-finish-evidence-34242051382
+          run-id: 34242051382
+          github-token: ${{ github.token }}
+          path: task01-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-gemma
+          key: havenline-t01-gemma3-12b-qat-b10809-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Inspect complete readable evidence after blind factual recognition
+        run: python3 -u tools/havenline/review_task01_second_family.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-Gemma-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
+          path: critic-results/
+          retention-days: 30
+          if-no-files-found: error
+# Read-only frozen source and original captures. No old scores/desired minimum in
+# the inference prompt, no image retouching, no APK, no later task implementation.

@@ -1,0 +1,24 @@
+{
+  "requesting_task": "T10",
+  "target_path": "HavenlineGodot/scripts/simulation.gd",
+  "status": "APPROVED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "requested_change": "Preserve saved earned furnace level through T10 delivered-stock debit and JSON recovery; validate whole integer level1..4 before any mutation, then retain existing monotonic update_level.",
+  "reason": "C0 B021 independently reproduced legitimate earned level2 falling to1 after real8wood4stone T10 debit and reload.",
+  "authorization_basis": "Standing finish T10 instruction, approved real-authority adapter/crash recovery, and integration-owner resolution under AGENTS change-request workflow. No threshold or scope waiver.",
+  "reviewer": "/root/t10_c0_critic",
+  "failed_candidate": "8902fa56d5aaace500cf309047f656751859176e",
+  "integration_base": "a0cf1d2ae1b2e33c66eae01de353dd1df1076cf2",
+  "expected_behavior": "Valid naturally earned progression never drops after spending; malformed saved level rejects atomically; existing stock-derived upgrade may still raise level.",
+  "tests_required": [
+    "Earned L2 at20wood12stone, debit8wood4stone, JSONreload retainsL2",
+    "Seven canonical save cases and protected inventory/identity/jobs conservation",
+    "Reject0,5,negative,fraction,string,null,nonfinite levels atomically",
+    "Full impacted T01-T10 regression and contract forecast"
+  ],
+  "forbidden_paths": [
+    "HavenlineGodot/scripts/main.gd",
+    "HavenlineGodot/scripts/world_transform.gd"
+  ],
+  "publication_policy": "Owner commit inherited by isolated task under exact approved CR; no standalone integration push; final integration waits for real readiness."
+}

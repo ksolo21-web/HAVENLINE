@@ -1,0 +1,150 @@
+{
+  "schema_version": 1,
+  "critic_id": "C0",
+  "non_voting": true,
+  "validated": true,
+  "diagnosis_id": "C0-T10-177c35f-final-closeout-trigger",
+  "task_id": "T10",
+  "failed_run_id": 35345760987,
+  "failed_candidate": "177c35fd17a30a1c21c05b2634fe0ceee00e62f4",
+  "repair_base": "177c35fd17a30a1c21c05b2634fe0ceee00e62f4",
+  "integration_head": "82518322a8e0dc9ee6ef12a759bf4ca723c8a490",
+  "candidate_tree": "649df0c44b5f799c606676a65b6307cefae06e07",
+  "diagnosis_status": "DIAGNOSIS_COMPLETE",
+  "terminal_class": "MIXED",
+  "complete_known_blocker_set": true,
+  "builder_action": "REPAIR",
+  "source_evidence": [
+    "Frozen task source 177c35fd17a30a1c21c05b2634fe0ceee00e62f4 is fully terminal. Primary run 35345760749 is SUCCESS with 19 impacted suites, seven canonical saves and 538 supplemental checks. Capture/review run 35345760987 completed the nine-phase benchmark successfully, then failed only benchmark packaging at the unchanged total-RSS-growth threshold; C3/C4/C7 were skipped.",
+    "The required two-stage exporter first commits Docs/Production/T10/ReviewExports/** and then commits Docs/Production/T10/CriticRaw/** plus canonical evidence. Final closeout also commits independent-critic-review.json and defect-ledger.json.",
+    "Both active T10 workflows include Docs/Production/T10/** on the integration branch, but do not exclude those closure-only paths. Their existing Docs/Production/T10/Evidence/** exclusion is ineffective because canonical evidence is Docs/Production/Evidence/T10/**, already outside the include.",
+    "Thus evidence-only export/closeout SHAs launch full candidate workflows. Before approval they create irrelevant new candidates; after approval the primary workflow explicitly rejects APPROVED.",
+    "GATE_RESULT_INDEX.json is explicitly dynamic_not_byte_locked. One non-reusable exact-source T10 row is required and creates no release-lock contradiction.",
+    "The remaining closure documents can be assembled atomically without a self-hash cycle after a real first-stage export commit.",
+    "Artifact 10547691461 was downloaded to /workspace/scratch/59b74b9aed55/t10-177c35-isolated and its ZIP SHA256 was verified as 8c734f8059ab821681bb3725161c64a37fada76ea885dc443374a2f5cb837d7e.",
+    "Measured RSS rises from 630.512 MiB at the first hidden phase to 691.258 MiB at the final pulse phase, exceeding the unchanged <32 MiB total limit. Growth is front-loaded: first hidden +22.72 MiB, the transition to first visible control +15.31 MiB and second hidden plus its transition +13.89 MiB; the final six phases plateau and cycle 2 grows only 1.176 MiB end-to-end.",
+    "Static memory rises by the exact same 0.2703056 MiB in each phase because measure_phase resizes only the outer array, then allocates and retains 360 dictionaries and nested scale arrays inside every measured loop. Nine phases retain 3,240 such records. Nodes, visual builds, draws, primitives and texture memory remain stable, so this is an evidence-harness initialization/allocation defect, not proof of a shipping runtime leak.",
+    "Independent gameplay review agrees that two fixed conditioning sweeps over hidden/frozen/pulse before the primary baseline, plus complete preallocation of all nine fixed sample buffers/record slots before conditioning, is the smallest causal experiment repair. Cold/preallocation memory endpoints must remain recorded; no limit may be raised and no sample may be trimmed."
+  ],
+  "prior_diagnosis": {
+    "report_path": "Docs/Production/T10/C0-closeout-preparation-92028d4.json",
+    "report_sha256": "07e3aa8aadaaaff634a592f3aca33c66a57497d911fa7c0031a37d348e5620bb",
+    "disposition": "Preserved unchanged. B034 is newly knowable closure-trigger governance scope and reopens no protected runtime, view, capture, exporter or shared validator."
+  },
+  "blockers": [
+    {
+      "id": "C0-T10-B034",
+      "classification": "GOVERNANCE_DEFECT",
+      "symptom": "Required evidence-export and closeout-only commits retrigger full primary/capture/critic workflows, and an APPROVED closeout commit can create a guaranteed red primary run.",
+      "evidence": [
+        "Both active T10 workflows trigger on Docs/Production/T10/** for integration pushes.",
+        "ReviewExports/**, CriticRaw/**, independent-critic-review.json and defect-ledger.json are not excluded.",
+        "The primary workflow rejects registry status APPROVED.",
+        "Exporter stage two requires a real earlier original-export commit, so the closure bytes cannot all exist in the reviewed gameplay SHA."
+      ],
+      "root_cause": "The workflow path filters predate the deterministic two-stage closure exporter and enumerate only two completion files rather than the full exact closure-only surface.",
+      "affected_object": "T10 final integrated-source evidence stability and evidence-only closeout publication",
+      "causal_fix": "Add exact negative push-path entries for ReviewExports/**, CriticRaw/**, independent-critic-review.json and defect-ledger.json to both active T10 workflows. Preserve runtime, task-tool, workflow and general T10-document triggers. Add workflow-source tests for both exclusion and retained inclusion behavior.",
+      "files_to_change": [
+        ".github/workflows/havenline-task10-isolated.yml",
+        ".github/workflows/havenline-task10-world-transformation.yml",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "Docs/Production/T10/C0-final-closeout-trigger-177c35f.json",
+        "Docs/Production/T10/REPAIR_PLAN-final-closeout-trigger-177c35f.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/task10/export_closure_records.py",
+        "tools/havenline/production/validate_integration_scope.py",
+        "tools/havenline/production/closure_validator.py",
+        "tools/havenline/production/evidence_retention.py",
+        "tools/havenline/production/factory_observer.py",
+        "tools/havenline/production/factory_closeout_gate.py",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json",
+        "Docs/Production/GATE_RESULT_INDEX.json",
+        "Docs/Production/WORKSTREAM_REGISTRY.json",
+        "Docs/Production/DEPENDENCY_GRAPH.json",
+        "Docs/Production/PATH_OWNERSHIP.json",
+        "Docs/Production/task-gates.json"
+      ],
+      "verification": [
+        "Tests require the exact four new closure-only exclusions in both push path lists, in addition to verified-completion and task-state.",
+        "Tests prove runtime paths, tools/havenline/task10/**, task workflows and ordinary non-closeout T10 documents remain included.",
+        "Final integrated source still launches both workflows; original export, canonical export and final approval-document pushes do not.",
+        "Production governance remains triggered on Docs/Production/** and validates every evidence/state commit. No gate, critic, threshold or approval rule changes."
+      ]
+    },
+    {
+      "id": "C0-T10-B035",
+      "classification": "EVIDENCE_DEFECT",
+      "symptom": "The real nine-phase benchmark passes its execution and all structural checks but packaging rejects total RSS growth of 60.746 MiB because the steady measurement baseline begins before all controls and retained sample records are initialized.",
+      "evidence": [
+        "RSS is 630.512 -> 653.234 MiB in the first hidden phase, jumps to 668.543 MiB before the first frozen measurement, and reaches 684.027 MiB during the second hidden phase; the last six phases then grow only about 0.3-1.1 MiB per phase.",
+        "Cycle 2 is already plateaued: 690.082 -> 691.258 MiB total, with stable node count 13, draw counts 3 hidden/6 visible, stable primitives and stable texture memory.",
+        "Every phase adds exactly 0.2703056 MiB static memory. The producer creates 360 new dictionaries and three-element scale arrays inside each measured loop and retains all nine phase arrays until report serialization.",
+        "The prior B033 repair removed the former both-state warmup; phase-local 120-frame warmup does not condition later visibility/material/font states before the first baseline endpoint."
+      ],
+      "root_cause": "Cold 4K llvmpipe renderer/material/font state and evidence-recorder allocations are mixed into the steady-state total-growth window. Only the outer arrays are resized before sampling; dictionary and nested-array records are allocated during sampling and retained. The threshold correctly rejects that confounded experiment but does not establish product leakage.",
+      "affected_object": "T10 C6 steady-state memory plateau evidence and critic-input packaging",
+      "causal_fix": "In the task-owned benchmark only, record memory before preallocation, preallocate and initialize all nine by 360 sample records including nested scale storage and numeric buffers, then run two fixed 360-frame conditioning sweeps over hidden, frozen and pulse controls at the exact measured presentation/resolution. Record preallocation and every conditioning-control RSS/static endpoint as cold initialization evidence. After conditioning, retain the existing per-phase 120 warmup, 360 samples, three cycles, nine phases, <32 MiB total RSS, <16 MiB static growth and every other threshold. Reuse the preallocated records in the measured loops; do not allocate dictionaries or scale arrays there, raise limits, discard samples or edit product code.",
+      "files_to_change": [
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "Docs/Production/T10/C0-final-closeout-trigger-177c35f.json",
+        "Docs/Production/T10/REPAIR_PLAN-final-closeout-trigger-177c35f.json"
+      ],
+      "files_not_to_change": [
+        "HavenlineGodot/scripts/world_transform.gd",
+        "HavenlineGodot/scripts/world_transform_view.gd",
+        "HavenlineGodot/scripts/simulation.gd",
+        "HavenlineGodot/data/world_transform_recipes.json",
+        "HavenlineGodot/tests/capture_task10_world_transform.gd",
+        "tools/havenline/production/critic_harness.py",
+        "Docs/Production/PERFORMANCE_BUDGETS.json",
+        "Docs/Production/CRITIC_MATRIX.json",
+        "Docs/Production/CRITIC_EXECUTION.json"
+      ],
+      "verification": [
+        "Producer reports exact preallocation cardinality 9 phases x 360 samples and cold endpoints before/after preallocation plus two ordered conditioning sweeps x hidden/frozen/pulse x 360 frames before phase-zero steady baseline.",
+        "Validator recomputes/validates conditioning order, frame counts, finite RSS/static/elapsed endpoint records, exact source/control identity and buffer cardinality; missing/reordered/short/forged cold conditioning or allocation metadata rejects.",
+        "Source/hostile tests prove measured loops reuse preallocated dictionary and nested scale records and reject incomplete buffers; no screenshot, subprocess or file I/O occurs inside measured intervals.",
+        "Real pinned-Godot execution retains three cycles, nine phases, 120 warmup and 360 measured samples per phase and passes the unchanged per-phase and total <32 MiB RSS, <16 MiB static, node/render/texture, identity, motion and timing integrity checks.",
+        "Cold initialization growth remains visible to the reviewer and is never reclassified as steady memory, trimmed, hidden or converted into a score. Fresh C6 still judges all dimensions independently."
+      ]
+    }
+  ],
+  "repair_order": ["C0-T10-B034", "C0-T10-B035"],
+  "unexecuted_checks": [
+    "B034 is locally prepared and reviewed PASS but remains uncommitted/unpublished. B035 has not been implemented or tested.",
+    "Fresh exact integrated-source primary, capture, C1/C2/C3/C4/C6/C7, factory observation, export, G1-G14 closure, migration and owner approval remain unexecuted.",
+    "No 177c35 score or approval is assigned or carried forward."
+  ],
+  "candidate_freeze": {
+    "required": true,
+    "validation_concurrency_policy": "finish_running_sha",
+    "cancelled_run_product_judgment": false,
+    "next_candidate_policy": "All 177c35 work is terminal and incorporated. Build B035 alongside the already prepared B034 only in the dedicated future worktree, run focused real benchmark and bounded regression, freeze one complete next candidate, then obtain all fresh final integrated-source evidence without carrying forward any score."
+  },
+  "closeout_sequence": [
+    "Finish 177c35. Its critics are readiness evidence only and never substitute for integrated-source review.",
+    "Verify B034 locally. Preserve explicit INTEGRATION_READY and INTEGRATING owner checkpoints in history, then publish one integration head containing the task source plus B034 with status INTEGRATING.",
+    "Run primary and isolated capture on that exact integrated SHA; advance authority to UNDER_REVIEW without task-source changes and obtain fresh C1/C2/C3/C4/C6/C7 records for that SHA.",
+    "After every source-bound run and critic is terminal PASS, preserve factory-observation and factory-closeout records from actual API run/jobs/artifacts/provenance and the complete critic aggregate.",
+    "Run exporter stage one and commit exact original records, raw outputs, deterministic bundles and regression provenance as the real export commit.",
+    "Run stage two bound to that export commit. In one proposed owner closeout tree add canonical CriticRaw/index/manifests, aggregate, VERIFIED_CLOSED ledger, G1-G14 completion, non-reusable GATE_RESULT_INDEX row, approval manifest and APPROVED-derived task-state.",
+    "In that tree set graph/registry T10 APPROVED; keep T11+ LOCKED; move the sole owner active-to-completed with accepted_source=integrated_source=reviewed SHA; set registry candidate; append approved/completed task records; mark the wave row APPROVED; clear every active_* field.",
+    "Before commit, run both retention validations, T10 closure_validator, validate_migration, task-state validation, factory closeout and G1-G14 predicates. Commit only the passing tree, then require hosted production governance. Closure-only descendants require no new gameplay evidence."
+  ],
+  "acceptance_rule_unchanged": ">9.0 unrounded in every mandatory dimension; no averaging; zero unresolved mandatory defects",
+  "summary": "The complete known repair set is B034 plus B035. B034 prevents closure-only documents from masquerading as new candidate SHAs. B035 removes cold renderer/recorder initialization from the steady-state window by preallocating all fixed records and recording two full control-conditioning sweeps before the baseline, while preserving every memory/sample/critic threshold. The plateaued late phases and stable runtime counters do not prove a shipping leak. Runtime, exporter, shared validators, lifecycle rules, critics and thresholds remain protected; no approval or score is claimed.",
+  "confidence": "high",
+  "approval_claimed": false,
+  "score_assigned": false,
+  "shipping_gameplay_runtime_change_authorized": false
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "requesting_task": "T10",
+  "target_path": "Docs/Production/WORKSTREAM_REGISTRY.json",
+  "requested_change": "Extend the exact active T10 blocker inventory and next action from B037-B059 to B037-B061 after the bounded C0 artifact-grounding diagnosis.",
+  "reason": "The active canonical C0 report now includes B060 artifact-diagnostic completeness and B061 evidence/path grounding; the central registry must remain exactly synchronized with that complete known blocker set.",
+  "dependency": "Docs/Production/ChangeRequests/T10-c0-grounded-artifact-diagnostics.json",
+  "expected_behavior": "T10 remains FIX_REQUIRED and unapproved with known_blockers exactly C0-T10-B037 through C0-T10-B061; all six required critics and thresholds remain unchanged.",
+  "tests_required": [
+    "tools/havenline/production/tests/test_t10_activation_validation.py",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "tools/havenline/production/workstream.py validate-candidate T10"
+  ],
+  "status": "APPROVED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "authorization": "Approve the bounded T10 C7 governance repair, preserving all critics and thresholds.",
+  "approval_claimed": false
+}

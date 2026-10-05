@@ -1,0 +1,247 @@
+{
+  "schema_version": 1,
+  "task_id": "T05",
+  "candidate_commit": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+  "defects": [
+    {
+      "id": "T05-D01",
+      "source_run": 34771751255,
+      "visible_symptom": "Completed C1/C2 slices reported unrelated T05 families as missing and collapsed group scores to zero.",
+      "triage": ["EVIDENCE_FIX", "TOOLING_FIX"],
+      "affected_production_object": null,
+      "probable_root_cause": "Protocol v2 enumerated the whole T05 inventory on every one-or-two-candidate slice, defined coverage globally, and paired reference families round-robin rather than to the visible candidate family.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Protocol v3 binds exact candidate paths, a matched reference family/path, slice-local coverage, and an explicit unseen-assets-out-of-scope acknowledgment.",
+      "expected_visible_result": "Fresh critics evaluate only what each source-bound slice actually contains; real visible defects remain score-blocking.",
+      "proof_contract": "Twenty visual-integrity tests plus a fresh complete ten-job C1/C2 primary run on the unchanged source.",
+      "counters": {"review_round": 1, "same_family_strikes": 0},
+      "status": "REJECTED_AS_INVALID_FINDING"
+    },
+    {
+      "id": "T05-D02",
+      "source_run": 34771751255,
+      "visible_symptom": "Two C2 groups truncated and one C1 job was cancelled, leaving mandatory visual coverage incomplete.",
+      "triage": ["TOOLING_FIX", "EVIDENCE_FIX"],
+      "affected_production_object": null,
+      "probable_root_cause": "The model output cap and completion contract allowed row-level truncation to exit successfully and the resolver then emitted secondary missing-hash noise.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Constrain response length, raise the response cap, preserve failed-slice raw evidence, set execution_complete=false, exit nonzero, and report the exact row error without fabricated path errors.",
+      "expected_visible_result": "Every required group yields either a fully bound verdict or a precise incomplete execution; cancellations are never treated as votes.",
+      "proof_contract": "Fresh ten-job primary matrix with all artifacts complete and evaluator provenance clean.",
+      "counters": {"review_round": 1, "same_family_strikes": 0},
+      "status": "VERIFIED_CLOSED",
+      "verification": {
+        "runs": [
+          34825220341,
+          34839506095
+        ],
+        "result": "VERIFIED: all ten C1/C2 group decisions are complete, source-bound, provenance-clean, and resolved PASS.",
+        "artifact_ids": [
+          10348819805
+        ]
+      }
+    },
+    {
+      "id": "T05-D03",
+      "source_run": 34771751255,
+      "diagnostic_run": 34774570475,
+      "verification_run": 34781683369,
+      "visible_symptom": "The official single-pair C6 run produced thermal_risk 8.80268 from a 1.119732 RSS ratio, while the diagnostic baseline repeats drifted about eight percent.",
+      "triage": ["DIAGNOSTIC_ONLY", "TEST_FIX"],
+      "affected_production_object": null,
+      "probable_root_cause": "One sequential candidate/baseline pair cannot distinguish production RSS from runner/order drift; the first B-A-A-B verification then showed a 5.9461% baseline repeat spread with cold-cache filesystem input and major faults in baseline A but not baseline B, while the candidate repeats were stable at 1.2647%.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Run equal discarded B-A-A-B 30-second native-4K warm-ups before the unchanged counterbalanced B-A-A-B 20-minute measurements, and fail measurement when either role's max-RSS repeat spread exceeds five percent of its mean.",
+      "expected_visible_result": "C6 applies the unchanged regression score only to stable counterbalanced means and preserves all four raw measurements.",
+      "proof_contract": "Four complete native-4K scale-1 runs with at least 300 samples each, exact condition equality, warning equality, raw hashes, repeat stability, and every unchanged C6 dimension strictly above 9.0.",
+      "counters": {"review_round": 1, "evidence_attempts": 3, "same_family_strikes": 0},
+      "status": "VERIFIED_CLOSED",
+      "verification": {
+        "runs": [
+          34825220341
+        ],
+        "result": "VERIFIED: counterbalanced C6 evidence is stable and all nine dimensions pass; minimum thermal/shader-bound score is 9.1.",
+        "artifact_ids": [
+          10343330715
+        ]
+      }
+    },
+    {
+      "id": "T05-D04",
+      "source_run": 34781683369,
+      "visible_symptom": "Otherwise complete C1/C2 responses penalized required night context, approved camera reversal, close-detail framing, context actors, and an invented in-scene shipping device; single-image slices also received unsupported cross-view scores and clean slices received scores at or below 9.0 without visible defects.",
+      "triage": [
+        "EVIDENCE_FIX",
+        "TOOLING_FIX"
+      ],
+      "affected_production_object": null,
+      "probable_root_cause": "Protocol v3 appended whole-group instructions to slice-local prompts, exposed an ambiguous shipping-device group label, forced cross-view dimensions on single-candidate slices, showed full vertical reference frames at low feature scale, and did not require low scores or defect text to bind a visible region and exact candidate.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Protocol v4 uses family- and condition-specific instructions, display-only device-matrix language, checksum-bound family focus crops, dynamic omission of cross-view dimensions for single candidates, and fail-closed candidate/dimension/region evidence for every score at or below 9.0.",
+      "expected_visible_result": "Fresh critics grade only visible T05 properties on the declared slice, while any genuine visible defect remains localized, reproducible, and score-blocking.",
+      "proof_contract": "Twenty-four visual-integrity tests, independent protocol review above 9/10, and a fresh complete ten-job C1/C2 primary run on unchanged production source 8c9da476ca93a7a826d51eae892449fd20e9c105.",
+      "counters": {
+        "review_round": 2,
+        "same_family_strikes": 0
+      },
+      "status": "VERIFIED_CLOSED",
+      "verification": {
+        "runs": [
+          34825220341,
+          34839506095
+        ],
+        "result": "VERIFIED: protocol-v4 slices resolve without unsupported blocking claims; all five C1/C2 groups PASS with zero defects.",
+        "artifact_ids": [
+          10348819805
+        ]
+      }
+    },
+    {
+      "id": "T05-D05",
+      "source_run": 34799398759,
+      "visible_symptom": "The resources-and-details slice asserted that visible blue/cyan markings and a white rim were missing even though those features were present in the checksum-bound candidate image, and its numeric scores contradicted the written defect claim.",
+      "triage": [
+        "EVIDENCE_FIX",
+        "TOOLING_FIX"
+      ],
+      "affected_production_object": null,
+      "probable_root_cause": "A syntactically valid but internally inconsistent critic response could pass parsing because the protocol did not retry invalid semantic evidence or retain each failed attempt for resolver audit.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Add bounded deterministic retries only for invalid responses, preserve every request/raw/answer attempt, validate retry seeds and artifacts, and resume only a checksum-bound valid prefix during recovery.",
+      "expected_visible_result": "Invalid or internally contradictory responses remain non-votes and produce inspectable evidence; a valid low score is never retried away.",
+      "proof_contract": "Thirty-seven evaluator/protocol tests plus a fresh complete review whose accepted rows bind every blocking claim to a visible candidate region.",
+      "counters": {
+        "review_round": 3,
+        "same_family_strikes": 0
+      },
+      "status": "REJECTED_AS_INVALID_FINDING"
+    },
+    {
+      "id": "T05-D06",
+      "source_run": 34799398759,
+      "visible_symptom": "All six purpose pads shared the same round silhouette and payment-style three-disc glyph; the stock glyph also had insufficient contrast against its cream center.",
+      "triage": [
+        "PRODUCTION_FIX"
+      ],
+      "affected_production_object": "T05-R03 ground-pad family",
+      "probable_root_cause": "asset_specs prefixed each pad kind before calling build_pad, so every value missed the build/input/output/stock branches and fell through to the payment icon; the shared cylinder stack also provided no silhouette-level purpose cue.",
+      "implicated_production_files": [
+        "tools/havenline/task05/generate_station_kit.py",
+        "HavenlineGodot/assets/stations_v2/catalog.json",
+        "HavenlineGodot/assets/stations_v2/pad_build.glb",
+        "HavenlineGodot/assets/stations_v2/pad_upgrade.glb",
+        "HavenlineGodot/assets/stations_v2/pad_input.glb",
+        "HavenlineGodot/assets/stations_v2/pad_output.glb",
+        "HavenlineGodot/assets/stations_v2/pad_stock.glb",
+        "HavenlineGodot/assets/stations_v2/pad_payment.glb"
+      ],
+      "causal_production_change": "Source commit fa6fa70f154f3757d22303522ca3f6de2c3d391f passes the unprefixed kind into build_pad, gives all six pads distinct plan silhouettes and icons, and uses a blue stock center for high-contrast cream markings.",
+      "tooling_change": "Generator and Godot tests now require six unique silhouette identifiers and six unique icon identifiers; CPU quick-look evidence includes front and reverse pad-family views.",
+      "expected_visible_result": "Build, upgrade, input, output, stock, and payment pads remain immediately distinguishable by shape, direction, icon, and trim from front and reverse gameplay-scale views.",
+      "proof_contract": "Fresh source-bound integrated evidence, complete C1/C2 review with every applicable dimension strictly above 9.0, and a passed final machine gate on source fa6fa70f154f3757d22303522ca3f6de2c3d391f.",
+      "counters": {
+        "review_round": 3,
+        "same_family_strikes": 0
+      },
+      "status": "VERIFIED_CLOSED",
+      "verification": {
+        "runs": [
+          34824259431,
+          34839506095
+        ],
+        "result": "VERIFIED: six distinct pad silhouettes/icons are visible in front and reverse views; integrated tests, C1/C2, and final machine gate pass on accepted source.",
+        "artifact_ids": [
+          10339801250,
+          10348819805,
+          10349650771
+        ]
+      }
+    },
+    {
+      "id": "T05-D07",
+      "source_run": 34825220341,
+      "visible_symptom": "The C1 shipping-contexts-and-native primary job timed out on slice 1 in all three deterministic attempts before producing any critic response, leaving mandatory visual coverage incomplete.",
+      "triage": ["TOOLING_FIX", "EVIDENCE_FIX"],
+      "affected_production_object": null,
+      "probable_root_cause": "The checksum-bound 1600x1200 reference/candidate board requires roughly twelve minutes of multimodal prompt ingestion on the pinned four-thread CPU runner before answer generation, while the per-slice HTTP deadline was only fifteen minutes; the server log records task cancellation at that exact deadline with no raw answer artifact.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Raise the primary and supplemental critic per-slice inference deadline from 900 to 1800 seconds and their enclosing job budget from 200 to 340 minutes without changing the model, evidence resolution, review prompt, strict score threshold, or bounded invalid-response retry rule.",
+      "expected_visible_result": "The pinned critic has enough time to finish each full-resolution slice and emit a checksum-bound response; genuine scores and localized defects remain unchanged and enforceable.",
+      "proof_contract": "A fresh source-bound primary or bounded recovery run must complete every affected C1/C2 group with valid raw/request/answer artifacts and every mandatory dimension strictly above 9.0.",
+      "counters": {"review_round": 4, "same_family_strikes": 0},
+      "status": "VERIFIED_CLOSED",
+      "verification": {
+        "runs": [
+          34839506095
+        ],
+        "result": "VERIFIED: C1 shipping-contexts-and-native completed 7/7 slices with minimum 9.3, zero defects, and complete request/raw/answer hashes.",
+        "artifact_ids": [
+          10348144929
+        ]
+      }
+    },
+    {
+      "id": "T05-D08",
+      "source_run": 34825220341,
+      "visible_symptom": "The final visual resolver rejected four otherwise clean shipping-device slices because their very wide candidates were displayed at only 443-465 pixels high, below the declared 480-pixel strict review floor.",
+      "triage": ["TOOLING_FIX", "EVIDENCE_FIX"],
+      "affected_production_object": null,
+      "probable_root_cause": "The board generator reserved a 500-pixel reference column inside a 1600-pixel canvas and capped the candidate column at 1034 pixels; 20:9 and foldable-outer screenshots therefore could not reach the 480-pixel display-height contract even though the per-job critic path did not enforce the manifest floor before inference.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Use the pinned model's full 1664-pixel input width, retain the 500-pixel checksum-bound reference panel, expand the candidate panel to 1122 pixels, assert the 480-pixel floor before inference, and make the resolver accept both legacy 1600-pixel and repaired 1664-pixel source-bound boards.",
+      "expected_visible_result": "Every 20:9, foldable, resize, direction, inclusion, and release candidate is shown at least 480 pixels high without cropping, overlap, upscaling, or reduced reference detail.",
+      "proof_contract": "Layout unit tests plus fresh C1 and C2 shipping-device-and-tracking recovery artifacts whose manifests, requests, and resolver validation all satisfy the unchanged strict resolution contract.",
+      "counters": {"review_round": 4, "same_family_strikes": 0},
+      "status": "VERIFIED_CLOSED",
+      "verification": {
+        "runs": [
+          34839506095
+        ],
+        "result": "VERIFIED: both device critics completed 9/9 slices on 1664x1200 boards with every candidate at least 480 pixels high and every mandatory score above 9.0.",
+        "artifact_ids": [
+          10350210088,
+          10349595955,
+          10348819805
+        ]
+      }
+    },
+    {
+      "id": "T05-D09",
+      "source_run": 34837172675,
+      "visible_symptom": "The repaired C1 and C2 shipping-device recovery jobs stopped before slice 1 with an empty assertion error and produced no critic vote.",
+      "triage": ["TOOLING_FIX", "EVIDENCE_FIX"],
+      "affected_production_object": null,
+      "probable_root_cause": "Recovery correctly downloaded the prior device checkpoint, whose producer execution was complete but whose evidence was resolver-invalid. load_resume_prefix asserted execution_complete=false before it classified the intentionally changed 1600-to-1664-pixel board layout, so the expected stale-layout case aborted before the fresh-slice loop.",
+      "implicated_production_files": [],
+      "causal_production_change": null,
+      "tooling_change": "Check source/role/attempt identity first, then classify the prior slice layout against the current board path, hash, candidate list, and reference binding before applying the incomplete-only resume assertion. A causal board-layout mismatch discards even a producer-complete stale prefix; a compatible complete vote remains non-retriable.",
+      "expected_visible_result": "Both shipping-device critics start at slice 1 on the repaired 1664-pixel boards, preserve the 480-pixel candidate floor, and emit complete independent verdicts without reusing stale pixels.",
+      "proof_contract": "Resume-layout regression test plus fresh C1 and C2 shipping-device recovery artifacts with nine completed slices each, current board hashes, valid raw/request/answer bindings, and every mandatory dimension strictly above 9.0.",
+      "counters": {"review_round": 4, "same_family_strikes": 0},
+      "status": "VERIFIED_CLOSED",
+      "verification": {
+        "runs": [
+          34839506095
+        ],
+        "result": "VERIFIED: stale completed checkpoints were discarded before inference; both device critics produced fresh nine-slice, hash-valid PASS verdicts.",
+        "artifact_ids": [
+          10350210088,
+          10349595955
+        ]
+      }
+    }
+  ],
+  "counters": {
+    "review_round_count": 4,
+    "evidence_only_attempt_count": 6,
+    "production_repair_count": 1
+  },
+  "rule": "Every mandatory finding follows CRITIC SYMPTOM -> ROOT CAUSE -> PRODUCTION CHANGE -> EXPECTED VISIBLE RESULT -> REQUIRED PROOF."
+}

@@ -1,0 +1,120 @@
+name: Havenline T02 controlled surface-light evidence
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-matched-light-evidence.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  controlled-captures:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: '96f8d396a5015e136c590dc496214a689adb1e43'
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-bank-evidence-34528232295
+          run-id: 34528232295
+          github-token: ${{ github.token }}
+          path: original-evidence/
+      - name: Prepare the pinned engine and actual Mobile software renderer
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine" matched-light-evidence
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+      - name: Create an explicitly disclosed diagnostic harness using the unchanged runtime
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib
+          p=json.loads(Path('original-evidence/provenance.json').read_text())
+          assert p['source']=='96f8d396a5015e136c590dc496214a689adb1e43'
+          assert all(hashlib.sha256(Path(n).read_bytes()).hexdigest()==h for n,h in p['runtime_files'].items())
+          script='''extends SceneTree
+          const Main = preload("res://scripts/main.gd")
+          const Surface = preload("res://scripts/outpost_surface.gd")
+          var output := "user://task02-matched"
+          var game
+          var records: Array=[]
+          func _initialize():
+          \tfor arg in OS.get_cmdline_user_args():
+          \t\tif arg.begins_with("--out="):output=arg.trim_prefix("--out=")
+          \tcall_deferred("run")
+          func capture_condition(name: String, seconds: float):
+          \tgame.sim.climate.seconds=seconds
+          \tgame.sim.position=Surface.land_position(Vector2(-6.5,-9.0))
+          \tgame.capture_frames=0;game._process(.001);game.capture_frames=100
+          \tgame.outpost_view.sync(game.sim,0.0,false)
+          \tfor frame in range(3):
+          \t\tawait process_frame
+          \t\tawait RenderingServer.frame_post_draw
+          \tvar image: Image=game.scene_view.get_texture().get_image()
+          \timage.save_png(output.path_join(name+".png"))
+          \trecords.append({"name":name,"simulation_seconds":game.sim.climate.seconds,"hour":game.sim.climate.hour(),"weather":game.sim.climate.weather(),"daylight":game.sim.climate.daylight(),"material_daylight_fill":game.outpost_view.ground_material.get_shader_parameter("daylight_fill"),"water_clock":game.outpost_view.lake_material.get_shader_parameter("sim_time"),"camera_position":[game.camera.position.x,game.camera.position.y,game.camera.position.z],"camera_basis":str(game.camera.basis),"camera_size":game.camera.size,"internal_size":[image.get_width(),image.get_height()],"render_scale":game.scene_view.scaling_3d_scale,"sun_energy":game.sun.light_energy,"ambient_energy":game.outpost_view.environment.ambient_light_energy,"ground_vertex_count":game.outpost_view.terrain.mesh.surface_get_array_len(0),"ground_contact_height":Surface.height_at(game.sim.position),"shader_path":game.outpost_view.ground_material.shader.resource_path,"all_scene_objects_retained":true})
+          func run():
+          \tDirAccess.make_dir_recursive_absolute(output)
+          \tgame=Main.new();game.qa_mode=true;game.render_review=false;game.capture_directory=output;game.capture_frames=100
+          \tgame.size=Vector2(3840,2160);root.add_child(game);game.set_process(false);game.set_physics_process(false)
+          \tawait capture_condition("matched-day-clear",0.0)
+          \tawait capture_condition("matched-dusk-clear",2800.0)
+          \tawait capture_condition("matched-night-clear",930.0)
+          \tawait capture_condition("matched-dawn-clear",990.0)
+          \tawait capture_condition("matched-night-blizzard",630.0)
+          \tawait capture_condition("matched-day-clear-return",0.0)
+          \tvar report={"task":"T02","source":"96f8d396a5015e136c590dc496214a689adb1e43","renderer":RenderingServer.get_current_rendering_method(),"device":RenderingServer.get_video_adapter_name(),"conditions":records,"diagnostic_clock_states_disclosed":true,"not_a_continuous_fps_or_whole_weather_acceptance_test":true,"physical_phone_tablet_4k60_verified":false,"task_approved":false}
+          \tvar f=FileAccess.open(output.path_join("capture.json"),FileAccess.WRITE);f.store_string(JSON.stringify(report,"\\t"));f.close()
+          \tgame.outpost_audio.stop_all();await create_timer(.35).timeout;game.free();await process_frame;quit()
+          '''
+          Path('HavenlineGodot/tests/task02_matched_light_probe.gd').write_text(script)
+          Path('matched-light-evidence/executed-harness.gd').write_text(script)
+          PY
+          python3 tools/havenline/bake_outpost_audio.py > matched-light-evidence/audio-fixture.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > matched-light-evidence/import.log 2>&1
+          timeout 100 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > matched-light-evidence/motion-fixture.log 2>&1
+      - name: Render matched camera conditions and verify state restoration, geometry and source preservation
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 300 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/task02_matched_light_probe.gd -- --out="$(pwd)/matched-light-evidence" > matched-light-evidence/render.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' matched-light-evidence/*.log; then exit 1; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib,math
+          p=json.loads(Path('original-evidence/provenance.json').read_text());out=Path('matched-light-evidence');r=json.loads((out/'capture.json').read_text());c=r['conditions'];checks=[]
+          def check(name,value):
+              checks.append({'name':name,'passed':bool(value)})
+          check('Six actual matched-camera conditions',len(c)==6 and r['renderer']=='mobile')
+          check('Camera position, projection and orientation held fixed',all(x['camera_position']==c[0]['camera_position'] and x['camera_basis']==c[0]['camera_basis'] and x['camera_size']==c[0]['camera_size'] for x in c))
+          check('All conditions render native4K at scale1',all(x['internal_size'][0]>=3840 and x['internal_size'][1]>=2160 and x['render_scale']==1 for x in c))
+          check('Original runtime and assets unchanged',all(hashlib.sha256(Path(n).read_bytes()).hexdigest()==h for n,h in p['runtime_files'].items()))
+          check('Terrain geometry and actor ground contact stable',all(x['ground_vertex_count']==c[0]['ground_vertex_count'] and x['ground_contact_height']==c[0]['ground_contact_height'] for x in c))
+          check('Identical ground shader across conditions',len({x['shader_path'] for x in c})==1)
+          check('Ground fill follows actual daylight',all(abs(x['material_daylight_fill']-x['daylight'])<1e-6 for x in c))
+          check('Clear day and clear night are independently present',c[0]['weather']['snow']==c[2]['weather']['snow'] and c[0]['daylight']==1 and c[2]['daylight']==0)
+          check('Night blizzard retained, not hidden from review',c[4]['daylight']==0 and c[4]['weather']['snow']==1)
+          check('Return to day restores material, light and clock exactly',all(c[0][k]==c[5][k] for k in ('weather','daylight','material_daylight_fill','water_clock','sun_energy','ambient_energy','shader_path')))
+          r['checks']=checks;r['all_checks_passed']=all(x['passed'] for x in checks)
+          r['source_images']={x['name']+'.png':hashlib.sha256((out/(x['name']+'.png')).read_bytes()).hexdigest() for x in c}
+          r['harness_sha256']=hashlib.sha256((out/'executed-harness.gd').read_bytes()).hexdigest()
+          r['original_capture_provenance_sha256']=hashlib.sha256(Path('original-evidence/provenance.json').read_bytes()).hexdigest()
+          (out/'verified-conditions.json').write_text(json.dumps(r,indent=2)+'\n');print(json.dumps(r,indent=2))
+          assert r['all_checks_passed']
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-matched-light-evidence-${{ github.run_id }}
+          path: matched-light-evidence/
+          retention-days: 30
+          if-no-files-found: error
+# Additional actual evidence for a diagnosed comparison ambiguity; no game/runtime
+# change, removed original view, desired score, later-task work or user-facing APK.

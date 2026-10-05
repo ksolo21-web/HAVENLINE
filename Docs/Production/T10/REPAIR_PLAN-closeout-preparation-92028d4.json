@@ -1,0 +1,165 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "failed_candidate": "92028d4949d086fde99377ce69ffb29f716f0fbe",
+  "diagnosis_id": "C0-T10-35342235191-92028d4-closeout-preparation",
+  "c0_report_path": "Docs/Production/T10/C0-closeout-preparation-92028d4.json",
+  "c0_report_sha256": "07e3aa8aadaaaff634a592f3aca33c66a57497d911fa7c0031a37d348e5620bb",
+  "repair_base": "92028d4949d086fde99377ce69ffb29f716f0fbe",
+  "full_blocker_set_acknowledged": true,
+  "candidate_freeze_after_build": true,
+  "validation_concurrency_policy": "finish_running_sha",
+  "plan_path": "Docs/Production/T10/REPAIR_PLAN-closeout-preparation-92028d4.json",
+  "pending_terminal_evidence": "All 92028 runs are terminal. Fresh repaired-source critic judgments, the actual final 90-day artifact identity, deterministic closure export, factory observation, G1-G14 closure and integration-owner approval remain unexecuted and may not reuse 92028 scores.",
+  "authorized_owner_prefix": {
+    "commit": "82518322a8e0dc9ee6ef12a759bf4ca723c8a490",
+    "tree": "5c7662956bdf61195c25065ff015c28bc10a021f",
+    "paths": [
+      "Docs/Production/ChangeRequests/T10-critic-confidence-schema-compatibility.json",
+      "tools/havenline/production/closure_validator.py",
+      "tools/havenline/production/tests/test_architecture_v31.py"
+    ],
+    "policy": "Merge these exact owner-reviewed bytes only; do not amend them on the task branch."
+  },
+  "must_not_change": [
+    "HavenlineGodot/scripts/world_transform.gd",
+    "HavenlineGodot/scripts/world_transform_view.gd",
+    "HavenlineGodot/scripts/simulation.gd",
+    "HavenlineGodot/scripts/main.gd",
+    "HavenlineGodot/data/world_transform_recipes.json",
+    "HavenlineGodot/tests/capture_task10_world_transform.gd",
+    "HavenlineGodot/tests/test_task10_world_transform.gd",
+    "HavenlineGodot/tests/test_task10_integration.gd",
+    "tools/havenline/task10/prepare_reconciliation.py",
+    "tools/havenline/production/workstream.py",
+    "tools/havenline/production/evidence_retention.py",
+    "tools/havenline/production/critic_harness.py",
+    "tools/havenline/production/specialist_critic_runner.py",
+    "tools/havenline/production/specialist_evidence_manifest.py",
+    ".github/workflows/havenline-specialist-critic.yml",
+    "Docs/Production/EVIDENCE_RETENTION_POLICY.json",
+    "Docs/Production/CRITIC_MATRIX.json",
+    "Docs/Production/CRITIC_EXECUTION.json",
+    "Docs/Production/PERFORMANCE_BUDGETS.json",
+    "Docs/Production/T10/FROZEN_SCOPE.md",
+    "Docs/Production/PATH_OWNERSHIP.json",
+    "Docs/Production/WORKSTREAM_REGISTRY.json",
+    "Docs/Production/DEPENDENCY_GRAPH.json",
+    "Docs/Production/task-gates.json",
+    "Docs/Production/T10/C0-frozen-candidate-6999fed.json"
+  ],
+  "blast_radius_checks": [
+    "Validate the new C0 report schema and run builder_repair_gate.py pre-build and post-build against exact base 92028d4949d086fde99377ce69ffb29f716f0fbe and this named plan.",
+    "Prove the merged three-file governance prefix is byte-identical to owner commit 82518322a8e0dc9ee6ef12a759bf4ca723c8a490; run the focused architecture suite, full production suite and hosted governance.",
+    "Run all task10 Python tests, workflow source assertions, candidate ownership/scope, migration and post-build diff gates.",
+    "Run the real pinned-Godot benchmark on the exact candidate with structured engine identity, matched pulse controls, hidden baseline, isolated update timing, preserved warm-up/sample/cycle minimums and bounded job timeout.",
+    "Run fresh exact-source primary regression, seven-save matrix, capture/device/native-4K evidence and C1/C2/C3/C4/C6/C7 reviews; require every mandatory dimension strictly above 9.0 unrounded with zero unresolved defects.",
+    "Retain exactly one final integrated-source critic-input artifact for 90 days, verify its API digest/expiry and complete index, then export original and canonical critic records without score or confidence conversion.",
+    "Run unchanged evidence_retention.py, closure_validator.py, factory observer/closeout, migration, task-state snapshot and all G1-G14 gates before integration-owner approval."
+  ],
+  "fixes": [
+    {
+      "blocker_id": "C0-T10-B029-B031",
+      "files": [
+        "Docs/Production/ChangeRequests/T10-critic-confidence-schema-compatibility.json",
+        "tools/havenline/production/closure_validator.py",
+        "tools/havenline/production/tests/test_architecture_v31.py"
+      ],
+      "causal_change": "Merge the exact independently reviewed owner commit 82518322a8e0dc9ee6ef12a759bf4ca723c8a490. Do not rewrite it: preserve original high/medium confidence alongside legacy numeric confidence and use explicit lifecycle test fixtures without changing production architecture.",
+      "verification": [
+        "All three files match owner commit 82518322a8e0dc9ee6ef12a759bf4ca723c8a490 exactly and the CR diff digest remains 4b0ce2cca3e2941768335f30c9d8941a6a05552f3cbdc2abe4f8c5136b779876.",
+        "Focused architecture, full production and hosted governance pass; hostile confidence inputs and APPROVED runtime activation reject.",
+        "No T09 record, lifecycle authority, critic definition or threshold changes."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B030",
+      "files": [
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/export_closure_records.py",
+        "tools/havenline/task10/tests/test_export_closure_records.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py",
+        "Docs/Production/T10/C0-closeout-preparation-92028d4.json",
+        "Docs/Production/T10/REPAIR_PLAN-closeout-preparation-92028d4.json",
+        "Docs/Production/T10/ReviewExports/C1-original-record.json",
+        "Docs/Production/T10/ReviewExports/C1-original-raw-output.json",
+        "Docs/Production/T10/ReviewExports/C1-original-bundle.zip",
+        "Docs/Production/T10/ReviewExports/C2-original-record.json",
+        "Docs/Production/T10/ReviewExports/C2-original-raw-output.json",
+        "Docs/Production/T10/ReviewExports/C2-original-bundle.zip",
+        "Docs/Production/T10/ReviewExports/C3-original-record.json",
+        "Docs/Production/T10/ReviewExports/C3-original-raw-output.json",
+        "Docs/Production/T10/ReviewExports/C3-original-bundle.zip",
+        "Docs/Production/T10/ReviewExports/C4-original-record.json",
+        "Docs/Production/T10/ReviewExports/C4-original-raw-output.json",
+        "Docs/Production/T10/ReviewExports/C4-original-bundle.zip",
+        "Docs/Production/T10/ReviewExports/C6-original-record.json",
+        "Docs/Production/T10/ReviewExports/C6-original-raw-output.json",
+        "Docs/Production/T10/ReviewExports/C6-original-bundle.zip",
+        "Docs/Production/T10/ReviewExports/C7-original-record.json",
+        "Docs/Production/T10/ReviewExports/C7-original-raw-output.json",
+        "Docs/Production/T10/ReviewExports/C7-original-bundle.zip",
+        "Docs/Production/T10/ReviewExports/regression-evidence.zip",
+        "Docs/Production/T10/ReviewExports/regression-provenance.json",
+        "Docs/Production/T10/CriticRaw/C1.json",
+        "Docs/Production/T10/CriticRaw/C2.json",
+        "Docs/Production/T10/CriticRaw/C3.json",
+        "Docs/Production/T10/CriticRaw/C4.json",
+        "Docs/Production/T10/CriticRaw/C6.json",
+        "Docs/Production/T10/CriticRaw/C7.json",
+        "Docs/Production/T10/independent-critic-review.json",
+        "Docs/Production/T10/defect-ledger.json",
+        "Docs/Production/T10/task-state.json",
+        "Docs/Production/T10/verified-completion.json",
+        "Docs/Production/Evidence/T10/complete-evidence-index.json",
+        "Docs/Production/Evidence/T10/REVIEW_EVIDENCE_MANIFEST.json",
+        "Docs/Production/Evidence/T10/APPROVAL_EVIDENCE_MANIFEST.json",
+        "Docs/Production/Evidence/T10/artifact-verification.json",
+        "Docs/Production/Evidence/T10/candidate-scope.json",
+        "Docs/Production/Evidence/T10/capture-summary.json",
+        "Docs/Production/Evidence/T10/review-runtime-provenance.json",
+        "Docs/Production/Evidence/T10/runtime-provenance.json",
+        "Docs/Production/Evidence/T10/source-contract.json",
+        "Docs/Production/Evidence/T10/tests.json"
+      ],
+      "causal_change": "Set only the exact final-source critic-input artifact to 90-day retention and add a deterministic fail-closed exporter for all six original review records/raw outputs, canonical CriticRaw wrappers, the one-artifact review manifest and source-bound closure documents. Preserve original scores and categorical confidence exactly; do not create a collector workflow or list transient artifacts as retained evidence.",
+      "verification": [
+        "Exporter rejects nonterminal/failed/stale runs, missing or duplicate critic IDs, any altered original/raw/manifest hash, score/confidence mismatch, incomplete dimensions, defects, <=9 score, wrong provider/model/request provenance and any artifact identity mismatch.",
+        "Exactly one REVIEW_EVIDENCE_MANIFEST row uses the real 90-day artifact API run/id/SHA/expiry and verified complete-index file count; auxiliary artifacts remain outside that manifest.",
+        "All original outputs are recoverable and hash-bound from canonical records, unchanged retention and closure validators pass, and generated approval/completion records are impossible before full fresh critic success and integration-owner inputs."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B032",
+      "files": [
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py"
+      ],
+      "causal_change": "Record both the untouched Godot display string and structured Engine.get_version_info fields, then require exact 4.7.2/stable/official/ed1daf0bf identity rather than comparing unlike display and CLI renderings.",
+      "verification": [
+        "Real Godot 4.7.2 stable official ed1daf0bf report passes with display string '4.7.2-stable (official)'.",
+        "Missing/forged structured fields, wrong hash/status/build/version, boolean/nonnumeric components and renderer/resolution/source mismatch reject.",
+        "Sample, warm-up, cycle, actual-measurement and nonphysical-reporting requirements remain at least as strict."
+      ]
+    },
+    {
+      "blocker_id": "C0-T10-B033",
+      "files": [
+        ".github/workflows/havenline-task10-isolated.yml",
+        "tools/havenline/task10/benchmark_world_transform.gd",
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_validate_critic_readiness.py",
+        "tools/havenline/task10/tests/test_task10_workflows.py"
+      ],
+      "causal_change": "Measure a hidden renderer baseline and three repeated matched committing-presentation pulse-off/pulse-on pairs plus isolated T10 update cost, preserving 120-frame warm-up, 360 raw samples per rendered phase, actual distributions, bounded state checks and nonphysical limitations. Increase only the task benchmark process timeout within the existing 40-minute job if the added controlled phases require it.",
+      "verification": [
+        "Matched phases prove identical lifecycle/geometry/material/text identity and differ only by pulse processing; hidden baseline and isolated update timing are exact-source and no-I/O during measurement.",
+        "Validator recomputes every distribution and delta and rejects missing controls, presentation mismatch, undersampling, non-finite values, unstable state, source/environment mismatch or physical-device claims.",
+        "Fresh independent C6 judges all nine dimensions from the controlled evidence; deterministic measurements do not assign scores and no gameplay/runtime edit is made."
+      ]
+    }
+  ]
+}

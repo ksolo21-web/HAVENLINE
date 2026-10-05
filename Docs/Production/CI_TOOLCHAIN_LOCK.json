@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "critical_workflows": [
+    ".github/workflows/havenline-c0-root-cause.yml",
+    ".github/workflows/havenline-candidate-guard.yml",
+    ".github/workflows/havenline-critic-safeguards.yml",
+    ".github/workflows/havenline-device-release-gate.yml",
+    ".github/workflows/havenline-godot-android.yml",
+    ".github/workflows/havenline-production-governance.yml",
+    ".github/workflows/havenline-specialist-critic.yml",
+    ".github/workflows/havenline-specialist-model-cache.yml",
+    ".github/workflows/havenline-task09-harvesting.yml"
+  ],
+  "retired_workflows": {},
+  "action_pins": {
+    "actions/checkout": "fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09",
+    "actions/setup-python": "ece7cb06caefa5fff74198d8649806c4678c61a1",
+    "actions/upload-artifact": "b7c566a772e6b6bfb58ed0dc250532a479d7789f",
+    "actions/download-artifact": "37930b1c2abaa49bbe596cd826c3c89aef350131",
+    "actions/cache": "caa296126883cff596d87d8935842f9db880ef25",
+    "actions/setup-java": "b6effb05e454b25005698d916606bdc6ffcbf961",
+    "android-actions/setup-android": "40fd30fb8d7440372e1316f5d1809ec01dcd3699"
+  },
+  "action_runtime": {
+    "required": "node24",
+    "verified_official_major_tags": {
+      "actions/checkout": "v5",
+      "actions/setup-python": "v6",
+      "actions/upload-artifact": "v6",
+      "actions/download-artifact": "v7",
+      "actions/cache": "v5",
+      "actions/setup-java": "v5",
+      "android-actions/setup-android": "v4"
+    }
+  },
+  "runner": {
+    "required_label": "ubuntu-24.04",
+    "immutable_digest_available": false,
+    "runtime_provenance_required": true,
+    "required_runtime_fields": [
+      "ImageOS",
+      "ImageVersion",
+      "RUNNER_OS",
+      "RUNNER_ARCH"
+    ],
+    "drift_policy": "runner image drift invalidates reusable environment-sensitive proof and requires fresh validation"
+  },
+  "environment_sensitive_reuse_gates": [
+    "focused_unit",
+    "task_sentinel",
+    "motion_preflight",
+    "progression_sim",
+    "economy_sim",
+    "save_matrix",
+    "device_matrix",
+    "security_attack",
+    "liveops_sim",
+    "impacted_regression",
+    "performance",
+    "visual_evidence"
+  ],
+  "tools": {
+    "python": "3.12",
+    "java": "17",
+    "android_build_tools": "35.0.1",
+    "godot": "4.7.2.stable",
+    "godot_editor_sha512": "9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65",
+    "godot_templates_sha512": "ca4d71c4d7b81dfc15d1a98baa07534aa95b03fdda78a0075b06672e1648d2e5f40980c9adc28d23e1b92e732ee7bf3461997aa804af74ec2fcd7a93ccb84079"
+  },
+  "mutable_action_tags_forbidden": true,
+  "lock_change_requires_new_hosted_governance_pass": true
+}

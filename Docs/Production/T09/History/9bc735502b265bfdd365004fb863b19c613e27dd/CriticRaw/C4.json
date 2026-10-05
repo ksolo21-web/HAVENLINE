@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "task_id": "T09",
+  "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+  "workflow_run_id": 35213007340,
+  "artifact_id": 10494819142,
+  "artifact_sha256": "0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1",
+  "complete_evidence_index_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
+  "input_manifest_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
+  "review_export_commit": "3dc86b8f0ed8f6364e78d29e6fd1d0ccd0a76014",
+  "status": "PASS",
+  "passed": true,
+  "coverage_complete": true,
+  "score_reuse": false,
+  "critic_id": "C4",
+  "critic_name": "Gameplay UX / Readability Critic",
+  "provider": "OpenAI",
+  "model": "gpt-6-astra",
+  "request_or_run_id": "35213007340:C4:/root/t09_c3_c4_final",
+  "independent_runtime": true,
+  "confidence": 0.968,
+  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
+  "scores": {
+    "interactable_clarity": 9.238,
+    "danger_clarity": 9.127,
+    "collection_feedback": 9.476,
+    "resource_destination": 9.186,
+    "world_change_clarity": 9.318,
+    "next_action_clarity": 9.367
+  },
+  "minimum_dimension_score": 9.127,
+  "coverage": {
+    "sequence_contact_sheets": 8,
+    "full_resolution_sequence_states": 16,
+    "device_matrix_states": 24,
+    "device_matrix_passed": true,
+    "suite_count": 17,
+    "total_checks": 997
+  },
+  "evidence": [
+    {
+      "path": "captures/sequence-wood/wood-approach.png",
+      "sha256": "3358f674e2171e9b66996758cd013985a631f8c70c61b2d878fcc596e9503b0e"
+    },
+    {
+      "path": "captures/sequence-wood/wood-focus-acquired.png",
+      "sha256": "37ad9320cc2b2c2367e5b79675c27596a8a2ff372c20a7dfa54d579422bbd95a"
+    },
+    {
+      "path": "captures/sequence-wood/wood-depleted.png",
+      "sha256": "8f0300b8327e280acf8641d958343b0809e8d4a8184448a2a3ea31c62196bacd"
+    },
+    {
+      "path": "captures/sequence-wood/wood-respawned.png",
+      "sha256": "f428a7fff5c739b8854adf2cf2268e0135d9ac0445ebbf7dbefb86003431db8c"
+    },
+    {
+      "path": "matrices/device/device-matrix.json",
+      "sha256": "c38b9a0df0900bbec443f782ee4fe4feed83ce952f21d9d9a02496e7c856d055"
+    },
+    {
+      "path": "tests.json",
+      "sha256": "d78c9b0840af0d5a2ad646a93fd244e637e666bbe25febaaba9f8513558c9148"
+    }
+  ],
+  "defects": [],
+  "advisories": [
+    "T09 introduces no danger state; danger clarity is scored for non-interference with existing channels.",
+    "Physical-device 4K60 certification is not claimed."
+  ]
+}

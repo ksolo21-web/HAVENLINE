@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "task_id": "T09",
+  "lifecycle_status": "APPROVED",
+  "integration_branch": "codex/havenline-sequential-task-01",
+  "task_branch": "havenline/T09-harvesting",
+  "base_commit": "7492074e40a0b061f31d8c32602b7a581b2610f3",
+  "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "dependencies": {
+    "T06": "APPROVED",
+    "T07": "APPROVED",
+    "T08": "APPROVED"
+  },
+  "owned_paths": [
+    "HavenlineGodot/assets/harvesting_v1/**",
+    "HavenlineGodot/scripts/harvest_presentation.gd",
+    "HavenlineGodot/tests/test_task09_harvesting.gd",
+    "HavenlineGodot/tests/test_task09_integration.gd",
+    "HavenlineGodot/tests/capture_task09_harvesting.gd",
+    "HavenlineGodot/tests/capture_task09_performance.gd",
+    "Docs/Production/T09/**",
+    "tools/havenline/task09/**",
+    ".github/workflows/havenline-task09-*.yml"
+  ],
+  "last_verified_gate": "G14",
+  "blockers": [],
+  "v3_readiness": null,
+  "contracts": {
+    "produces": [
+      "harvest_resource_identity"
+    ],
+    "consumes": [
+      "context_action_identity",
+      "inventory_transfer"
+    ]
+  },
+  "next_executable_action": "Preserve T09 completion; T10 remains LOCKED pending separate preparation, ownership, and activation.",
+  "snapshot_is_derived_not_authority": true,
+  "validation": {
+    "passed": true,
+    "errors": []
+  }
+}

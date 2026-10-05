@@ -1,0 +1,136 @@
+name: Havenline T02 controlled final-source review
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-grounded-review.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  preflight:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    env:
+      REVIEW_ROLE: reference-fidelity
+      REVIEW_GROUP: workfloor
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-finished-surface-evidence-34505669382
+          run-id: 34505669382
+          github-token: ${{ github.token }}
+          path: task02-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Test the disambiguated image control and preserve the first real review
+        run: |
+          python3 -u tools/havenline/review_task02_fullsize.py
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          r=json.loads(Path('task02-review/review.json').read_text())
+          assert r['source']=='c2ad2b101d863d238342adfa32204faf7d227c07'
+          assert r['control_passed'] is True,'Do not repeat a failed recognition setup across fifteen more jobs'
+          assert r['independent_execution'] is True,'No usable model review produced'
+          # An art failure remains an art failure; completing coverage is useful,
+          # but this control-only preflight cannot approve the task.
+          print(json.dumps({'control_verified':True,'art_passed':r['passed'],'task_approved':False}))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T02-grounded-reference-fidelity-workfloor-${{ github.run_id }}
+          path: task02-review/
+          retention-days: 30
+          if-no-files-found: error
+  critic:
+    needs: preflight
+    strategy:
+      fail-fast: false
+      max-parallel: 15
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        group: [workfloor, shoreline, snow-contact, tree-visibility, camera-route-early, camera-route-late, water-sequence, night-overview]
+        exclude:
+          - role: reference-fidelity
+            group: workfloor
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-finished-surface-evidence-34505669382
+          run-id: 34505669382
+          github-token: ${{ github.token }}
+          path: task02-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - run: python3 -u tools/havenline/review_task02_fullsize.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T02-grounded-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
+          path: task02-review/
+          retention-days: 30
+          if-no-files-found: error
+  task-gate:
+    needs: [preflight,critic]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: T02-grounded-*-${{ github.run_id }}
+          path: gate-report/reviews/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-finished-surface-evidence-34505669382
+          run-id: 34505669382
+          github-token: ${{ github.token }}
+          path: evidence/
+      - run: python3 -m pip install pyyaml
+      - name: Run the unchanged raw-review gate against this exact 723-check source
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          w=yaml.safe_load(Path('.github/workflows/havenline-task02-fullsize-review.yml').read_text())
+          checks=[step['run'] for step in w['jobs']['task-gate']['steps'] if 'run' in step]
+          assert len(checks)==1
+          s=checks[0].replace('3b3e0af44ec638b0671a02e4bd7b5909d89ea2cd','c2ad2b101d863d238342adfa32204faf7d227c07').replace('720','723')
+          Path('gate-report/executed-gate.sh').write_text(s)
+          subprocess.run(['bash','-euo','pipefail','-c',s],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-complete-grounded-reviews-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# Same criteria/model; correct evidence/control input, not a lowered score.
+# First review is retained, not rescored; incomplete/failed findings block T03.

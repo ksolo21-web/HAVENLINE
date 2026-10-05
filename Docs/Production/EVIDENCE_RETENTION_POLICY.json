@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "tiers": {
+    "transient_raw": {
+      "minimum_days": 30,
+      "purpose": "debug/raw intermediate evidence",
+      "durable_manifest_required": false
+    },
+    "review_evidence": {
+      "minimum_days": 90,
+      "purpose": "critic inputs and reproducible review bundles",
+      "durable_manifest_required": true
+    },
+    "approval_provenance": {
+      "minimum_days": 3650,
+      "purpose": "accepted source, run ids, hashes, critic disposition and regeneration contract",
+      "durable_manifest_required": true,
+      "repository_manifest_required": true
+    },
+    "irreplaceable": {
+      "minimum_days": 3650,
+      "purpose": "physical-device or external evidence that cannot be regenerated identically",
+      "durable_manifest_required": true,
+      "persistent_locator_required": true
+    }
+  },
+  "approval_manifest_path": "Docs/Production/Evidence/<TASK>/APPROVAL_EVIDENCE_MANIFEST.json",
+  "artifact_expiry_may_not_erase_approval_provenance": true,
+  "hashes_required": true,
+  "secret_material_forbidden": true
+}

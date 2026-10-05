@@ -1,0 +1,219 @@
+name: Havenline T08 primitive-repair review
+
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task08-repair-review.yml'
+      - 'tools/havenline/task08/build_repair_critic_packages.py'
+      - 'tools/havenline/task08/review_c2.py'
+      - 'tools/havenline/task08/c6_repair_gate.py'
+
+permissions:
+  contents: read
+  actions: read
+
+concurrency:
+  group: havenline-t08-repair-review
+  cancel-in-progress: false
+
+env:
+  T08_CANDIDATE: 9efb11e0262ae65de32f664d4627902d565f1148
+  T08_EVIDENCE_RUN: '35766528817'
+  T08_VISUAL_RUN: '35771749048'
+  HAVENLINE_INDEPENDENT_REVIEW_JOB: '1'
+
+jobs:
+  package:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.T08_EVIDENCE_RUN }}
+          name: havenline-task08-inventory-${{ env.T08_CANDIDATE }}
+          path: evidence
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.T08_VISUAL_RUN }}
+          name: havenline-T08-final-visual-${{ env.T08_CANDIDATE }}
+          path: visual
+      - name: Build exact source-bound critic packages
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/task08/build_repair_critic_packages.py --candidate "$T08_CANDIDATE" --evidence evidence --visual visual --out-root packages
+          for cid in C2 C3 C4; do
+            python3 tools/havenline/production/specialist_evidence_manifest.py validate "packages/havenline-task08-critic-$cid/critic-manifest.json"
+            python3 tools/havenline/production/critic_package_preflight.py "packages/havenline-task08-critic-$cid/critic-manifest.json" --candidate "$T08_CANDIDATE" --critic "$cid" --evidence-root .
+          done
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task08-repair-packages-${{ github.run_id }}
+          path: packages/
+          retention-days: 30
+          if-no-files-found: error
+
+  c2:
+    needs: package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task08-repair-packages-${{ github.run_id }}
+          path: packages
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Prepare exact independent reviewer runtime
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > specialist-runtime-preparation.json
+          python3 -m pip install pillow
+      - name: Review repaired T08 geometry
+        run: |
+          python3 -u tools/havenline/task08/review_c2.py --candidate "$T08_CANDIDATE" --manifest packages/havenline-task08-critic-C2/critic-manifest.json --out review
+          python3 tools/havenline/production/critic_harness.py validate-raw --critic C2 --candidate "$T08_CANDIDATE" --raw review/critic-record.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task08-repair-C2-${{ github.run_id }}
+          path: review/
+          retention-days: 30
+          if-no-files-found: error
+
+  specialist:
+    needs: package
+    strategy:
+      fail-fast: false
+      matrix:
+        critic: [C3, C4]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-task08-repair-packages-${{ github.run_id }}
+          path: packages
+      - uses: actions/cache/restore@caa296126883cff596d87d8935842f9db880ef25
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+      - name: Prepare exact independent reviewer runtime
+        run: |
+          set -euo pipefail
+          if [ ! -s "$HOME/.cache/havenline-t01-qwen35/manifest.json" ]; then
+            sudo apt-get update -qq
+            sudo apt-get install -y aria2
+          fi
+          python3 tools/havenline/production/prepare_specialist_runtime.py > specialist-runtime-preparation.json
+          python3 -m pip install pillow
+      - name: Run independent specialist
+        run: |
+          python3 -u tools/havenline/production/specialist_critic_runner.py --critic "${{ matrix.critic }}" --candidate "$T08_CANDIDATE" --manifest "packages/havenline-task08-critic-${{ matrix.critic }}/critic-manifest.json" --out review
+          python3 tools/havenline/production/critic_harness.py validate-raw --critic "${{ matrix.critic }}" --candidate "$T08_CANDIDATE" --raw review/critic-record.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task08-repair-${{ matrix.critic }}-${{ github.run_id }}
+          path: review/
+          retention-days: 30
+          if-no-files-found: error
+
+  c6:
+    needs: package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 0
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.T08_EVIDENCE_RUN }}
+          name: havenline-task08-inventory-${{ env.T08_CANDIDATE }}
+          path: evidence
+      - name: Score modern quantitative C6
+        run: python3 tools/havenline/task08/c6_repair_gate.py --candidate "$T08_CANDIDATE" --record evidence/integrated-performance.json --out c6/result.json
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        if: always()
+        with:
+          name: havenline-task08-repair-C6-${{ github.run_id }}
+          path: c6/
+          retention-days: 30
+          if-no-files-found: error
+
+  final:
+    needs: [c2, specialist, c6]
+    if: always() && needs.c2.result == 'success' && needs.specialist.result == 'success' && needs.c6.result == 'success'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          pattern: havenline-task08-repair-C*-${{ github.run_id }}
+          path: reviews
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.T08_EVIDENCE_RUN }}
+          name: havenline-task08-inventory-${{ env.T08_CANDIDATE }}
+          path: evidence
+      - uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.T08_VISUAL_RUN }}
+          name: havenline-T08-final-visual-${{ env.T08_CANDIDATE }}
+          path: visual
+      - name: Bind strict repaired proof
+        run: |
+          python3 - <<'PY'
+          import json,math,os
+          from pathlib import Path
+          candidate=os.environ['T08_CANDIDATE'];errors=[];critics={}
+          for cid in ('C2','C3','C4'):
+              paths=list(Path('reviews').rglob('critic-record.json'))
+              row=next(json.loads(p.read_text()) for p in paths if json.loads(p.read_text()).get('critic_id')==cid)
+              critics[cid]=row
+              if row.get('task_id')!='T08' or row.get('candidate_hash')!=candidate or row.get('passed') is not True: errors.append(cid+' identity/pass failure')
+              if row.get('defects')!=[] or row.get('coverage_complete') is not True or row.get('independent_runtime') is not True: errors.append(cid+' unresolved/coverage failure')
+              scores=row.get('scores',{})
+              if not scores or any(isinstance(v,bool) or not isinstance(v,(int,float)) or not math.isfinite(v) or v<=9.0 for v in scores.values()): errors.append(cid+' strict score failure')
+          c6path=next(Path('reviews').rglob('result.json'));c6=json.loads(c6path.read_text());critics['C6']=c6
+          scores=c6.get('mandatory_dimensions',{})
+          if c6.get('task_id')!='T08' or c6.get('candidate')!=candidate or c6.get('passed') is not True or c6.get('defects')!=[]: errors.append('C6 identity/pass failure')
+          if not scores or any(v<=9.0 for v in scores.values()): errors.append('C6 strict score failure')
+          tests=json.load(open('evidence/tests.json'));visual=json.load(open('visual/review-manifest.json'))
+          if tests.get('source')!=candidate or tests.get('all_passed') is not True or tests.get('suite_count')!=23 or tests.get('total_checks',0)<1510: errors.append('functional evidence failure')
+          res=visual.get('internal_resolution',[])
+          if visual.get('candidate_sha')!=candidate or visual.get('primitive_findings_count')!=0 or visual.get('stills_count',0)<4 or visual.get('motion_video_seconds',0)<3 or visual.get('capture_fps',0)<59.9 or len(res)!=2 or res[0]<3840 or res[1]<2160: errors.append('visual proof failure')
+          minima={cid:min((row.get('scores') or row.get('mandatory_dimensions') or {}).values()) for cid,row in critics.items()}
+          out={'schema_version':1,'task_id':'T08','candidate':candidate,'passed':not errors,'errors':errors,'critic_minima':minima,'functional_suites':tests.get('suite_count'),'functional_checks':tests.get('total_checks'),'primitive_findings_count':visual.get('primitive_findings_count'),'visual_resolution':res,'visual_capture_fps':visual.get('capture_fps'),'visual_motion_seconds':visual.get('motion_video_seconds'),'ready_for_user_visual_signoff':not errors,'user_visual_approval':False,'effective_approval':False,'physical_4k60_certified':False}
+          Path('final').mkdir();Path('final/final-review-gate.json').write_text(json.dumps(out,indent=2)+'\n');print(json.dumps(out,indent=2))
+          if errors: raise SystemExit(1)
+          PY
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-task08-repair-final-${{ github.run_id }}
+          path: final/
+          retention-days: 30
+          if-no-files-found: error

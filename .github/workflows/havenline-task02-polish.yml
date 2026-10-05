@@ -1,0 +1,60 @@
+name: Havenline T02 corrected shoreline Mobile evidence
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-polish.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.run.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 2
+      - run: python3 -m pip install pyyaml
+      - name: Apply the actual seam repair then rerun all existing build/capture checks
+        id: run
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess,hashlib
+          w=yaml.safe_load(Path('.github/workflows/havenline-task02.yml').read_text())
+          runs=[s['run'] for s in w['jobs']['terrain-build']['steps'] if 'run' in s]
+          assert len(runs)==5
+          runs[0]+='\nexport PATH="$RUNNER_TEMP/engine:$PATH"\n'
+          runs[1]='python3 tools/havenline/polish_task02.py\n'+runs[1]
+          runs[2]=runs[2].replace('705','707')
+          runs[3]=runs[3].replace('git add HavenlineGodot/tests/test_outpost.gd','git add HavenlineGodot/tests/test_outpost.gd HavenlineGodot/tests/test_task02_terrain.gd HavenlineGodot/scripts/outpost_surface.gd HavenlineGodot/shaders/outpost_snow.gdshader HavenlineGodot/shaders/lakeshore_water.gdshader')
+          runs[4]=runs[4].replace("'tests':705","'tests':707")
+          script='\n'.join(runs)
+          Path('task02-evidence').mkdir(exist_ok=True)
+          Path('task02-evidence/executed-build.sh').write_text(script)
+          subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          e=Path('task02-evidence');ref=Path('Docs/Production/T02/reference-ground.webp')
+          assert hashlib.sha256(ref.read_bytes()).hexdigest()=='3c424b0df53c1c6de49018278779a4ef1ced58562e5b9dbb54fe276d13aa2ddb'
+          (e/'reference-ground.webp').write_bytes(ref.read_bytes())
+          (e/'reference-ground-provenance.json').write_bytes(Path('Docs/Production/T02/reference-ground-provenance.json').read_bytes())
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-terrain-evidence-${{ github.run_id }}
+          path: task02-evidence/
+          retention-days: 30
+          if-no-files-found: error
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-terrain-source-${{ github.run_id }}
+          path: source-snapshot/
+          retention-days: 30
+          if-no-files-found: error
+# T02 only. Preserve the failed earlier seam as history, no image retouch or approval.

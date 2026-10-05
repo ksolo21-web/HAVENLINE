@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "authority": "Docs/Production/PRODUCTION_ARCHITECTURE_V32_STANDARD.md",
+  "canaries": {
+    "opening_loop_L1_10": {
+      "starts_at": "T11",
+      "formal_completion": "T32",
+      "mode": "expanding",
+      "rule": "Exercise all currently implemented segments of move->gather->carry->deliver->transform->build/service/defend-rescue->save-reload; future unavailable segments are explicit N/A, regressions are not."
+    },
+    "level_1_100_reachability": {
+      "starts_at": "T12",
+      "formal_completion": "T62",
+      "mode": "simulation",
+      "rule": "Graph/unlock/cost reachability uses placeholders where content is not authored; no dead ends or impossible prerequisites."
+    },
+    "population_stress": {
+      "starts_at": "T15",
+      "formal_completion": "T31",
+      "rule": "Routing contention, occupancy, spawn/despawn, identity persistence and budget stress."
+    },
+    "contextual_action_arbitration": {
+      "starts_at": "T16",
+      "formal_completion": "T23",
+      "rule": "Priority, tool/weapon selection, cancellation, contact authority, resource conservation and interruption recovery."
+    },
+    "economy_security": {
+      "starts_at": "T33",
+      "formal_completion": "T66",
+      "rule": "Idempotence, replay/duplication, grant authority, rollback and F2P reachability."
+    },
+    "liveops_virtual_clock": {
+      "starts_at": "T37",
+      "formal_completion": "T65",
+      "rule": "DST, leap day, timezone/clock skew, offline return, overlap, kill switch, duplicate reward and rollback."
+    },
+    "region_template": {
+      "starts_at": "T44",
+      "formal_completion": "T53",
+      "rule": "Entry/exit, resource registration, save continuity, streaming/performance and transport hooks."
+    },
+    "accessibility_device_smoke": {
+      "starts_at": "T11",
+      "conditional_on": [
+        "ui",
+        "control",
+        "readability",
+        "motion_feedback"
+      ],
+      "formal_completion": "T55/T58",
+      "rule": "Text scale, touch target, contrast/color differentiation, reduced motion, controller/foldable layout."
+    },
+    "physical_reconnaissance": {
+      "checkpoints": [
+        "T32",
+        "T44",
+        "T54"
+      ],
+      "formal_completion": "T68/T69",
+      "rule": "Non-certification named-device reconnaissance for frame time, memory, thermals and native resolution. Never substitutes final certification."
+    }
+  }
+}

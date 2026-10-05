@@ -1,0 +1,273 @@
+{
+  "task": "T05",
+  "title": "Production station and prop kit",
+  "status": "PASS",
+  "accepted_gameplay_source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+  "completion_governance_parent": "b3c0db92971cc41729959f35a2bec8447edca4b6",
+  "review_runs": {
+    "integrated_precritic": 34824259431,
+    "strict_primary": 34825220341,
+    "bounded_recovery_and_closeout": 34839506095,
+    "integration_regression": 34838425141
+  },
+  "acceptance_rule": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9,
+    "unrounded": true,
+    "score_averaging_used": false,
+    "target": 10,
+    "defect_rule": "Every mandatory defect must be verified closed or rejected as an invalid finding; workflow completion alone is not approval."
+  },
+  "mechanical_evidence": {
+    "functional_suites": 18,
+    "total_assertions_checks": 1119,
+    "all_passed": true,
+    "source_bound_images": 77,
+    "component_images": 12,
+    "formal_family_images": 42,
+    "integrated_gameplay_images": 20,
+    "native_3840x2160_scale1_frames": 3,
+    "shipping_main_call_site_exercised": true,
+    "image_hashes_verified": 77,
+    "cheap_pixel_gate_passed": true,
+    "cheap_performance_gate_passed": true,
+    "integration_regression": {
+      "run_id": 34838425141,
+      "tested_branch_head": "3857d8db6e9e098591b6548e0f6ce221c28d01b6",
+      "functional_suites": 18,
+      "total_assertions_checks": 1119,
+      "source_bound_images": 77,
+      "all_passed": true
+    }
+  },
+  "visual_review": {
+    "source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+    "status": "PASS",
+    "passed": true,
+    "minimum_mandatory_dimension_score": 9.3,
+    "scores": {
+      "C1": {
+        "reference_fidelity": 9.5,
+        "visual_language": 9.3,
+        "cross_view_consistency": 9.6
+      },
+      "C2": {
+        "geometry_contact": 9.5,
+        "clipping_seams": 9.8,
+        "intentional_gap_integrity": 10,
+        "cross_view_integrity": 10
+      }
+    },
+    "group_scores": {
+      "core-families": {
+        "C1": {
+          "reference_fidelity": 9.5,
+          "visual_language": 9.8,
+          "cross_view_consistency": 9.6
+        },
+        "C2": {
+          "geometry_contact": 10,
+          "clipping_seams": 10,
+          "intentional_gap_integrity": 10,
+          "cross_view_integrity": 10
+        }
+      },
+      "loop-families": {
+        "C1": {
+          "reference_fidelity": 9.5,
+          "visual_language": 9.8,
+          "cross_view_consistency": 9.6
+        },
+        "C2": {
+          "geometry_contact": 10,
+          "clipping_seams": 10,
+          "intentional_gap_integrity": 10,
+          "cross_view_integrity": 10
+        }
+      },
+      "resources-and-details": {
+        "C1": {
+          "reference_fidelity": 9.5,
+          "visual_language": 9.8,
+          "cross_view_consistency": 9.6
+        },
+        "C2": {
+          "geometry_contact": 10,
+          "clipping_seams": 10,
+          "intentional_gap_integrity": 10,
+          "cross_view_integrity": 10
+        }
+      },
+      "shipping-contexts-and-native": {
+        "C1": {
+          "reference_fidelity": 9.5,
+          "visual_language": 9.3,
+          "cross_view_consistency": 10
+        },
+        "C2": {
+          "geometry_contact": 9.5,
+          "clipping_seams": 9.8,
+          "intentional_gap_integrity": 10,
+          "cross_view_integrity": 10
+        }
+      },
+      "shipping-device-and-tracking": {
+        "C1": {
+          "reference_fidelity": 9.5,
+          "visual_language": 9.8,
+          "cross_view_consistency": 9.7
+        },
+        "C2": {
+          "geometry_contact": 9.5,
+          "clipping_seams": 9.8,
+          "intentional_gap_integrity": 10,
+          "cross_view_integrity": 10
+        }
+      }
+    },
+    "selected_complete_judgments": 10,
+    "adjudication_used": false,
+    "quorums": [],
+    "completed_low_scores_retried": false,
+    "score_averaging_used": false,
+    "provenance_errors": [],
+    "valid_unresolved_defects": []
+  },
+  "performance_critic": {
+    "critic": "C6",
+    "candidate_source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+    "passed": true,
+    "coverage_complete": true,
+    "confidence": "high",
+    "minimum_mandatory_dimension_score": 9.1,
+    "scores": {
+      "frame_time": 10,
+      "draw_calls": 9.9625,
+      "geometry": 9.93562,
+      "texture_memory": 10,
+      "shader_cost": 9.1,
+      "physics": 10,
+      "animation": 10,
+      "population": 10,
+      "thermal_risk": 9.63068
+    },
+    "run_id": 34825220341,
+    "counterbalanced_measurement": true,
+    "physical_device_certification": false,
+    "defects": []
+  },
+  "final_gate": {
+    "source": "fa6fa70f154f3757d22303522ca3f6de2c3d391f",
+    "run_id": 34839506095,
+    "passed": true,
+    "visual_status": "PASS",
+    "visual_minimum": 9.3,
+    "C6_minimum": 9.1,
+    "ready_for_final_pixel_signoff": true,
+    "visual_decision_sha256": "19eb6a7ff03f5dd54b1b336219ff079cb03825285b695ed21c3dcb15923ea410",
+    "C6_result_sha256": "a1920fbbca1a0fd2a8e6658aec69a0bd6df7e2c35b51d04f6ff0d79172b5dfaa",
+    "errors": []
+  },
+  "pixel_signoff": {
+    "performed_after_C1_C2_and_C6": true,
+    "performed_against_accepted_gameplay_source": true,
+    "all_77_frames_reviewed": true,
+    "all_77_image_hashes_verified": true,
+    "all_42_family_views_reviewed": true,
+    "all_20_integrated_gameplay_views_reviewed": true,
+    "all_12_component_views_reviewed": true,
+    "all_3_native_3840x2160_frames_reviewed": true,
+    "distinct_pad_silhouettes_and_icons_verified": true,
+    "phone_tablet_foldable_framing_verified": true,
+    "no_unresolved_visual_or_geometry_defect": true,
+    "unresolved_mandatory_task_defects": []
+  },
+  "gates": {
+    "G1": true,
+    "G2": true,
+    "G3": true,
+    "G4": true,
+    "G5": true,
+    "G6": true,
+    "G7": true,
+    "G8": true,
+    "G9": true,
+    "G10": true,
+    "G11": true,
+    "G12": true,
+    "G13": true,
+    "G14": true
+  },
+  "gate_dispositions": {
+    "G1": "PASS — T03 dependency APPROVED.",
+    "G2": "PASS — authorized T05 and production-governance paths only.",
+    "G3": "PASS — frozen T05 station/prop scope completed without expansion.",
+    "G4": "PASS — build/import/parser/resource checks passed.",
+    "G5": "PASS — station families, gameplay placements, and use-state captures passed.",
+    "G6": "PASS — approved T01-T04 regression passed.",
+    "G7": "PASS — evidence is exact-source-bound and SHA-256 verified.",
+    "G8": "PASS — C6 all mandatory dimensions >9.0; minimum 9.1.",
+    "G9": "PASS — applicable catalog/load/recovery tests passed.",
+    "G10": "PASS_NOT_APPLICABLE — T05 adds no economy, purchase, LiveOps, cloud, or competitive-value system.",
+    "G11": "PASS — phone/tablet/foldable matrix and adaptive framing passed.",
+    "G12": "PASS — C1, C2, and C6 evidence is complete.",
+    "G13": "PASS — every mandatory dimension strictly >9.0; no averaging; no unresolved defect.",
+    "G14": "PASS — merged integration candidate regression passed 18 suites / 1119 checks."
+  },
+  "artifacts": {
+    "integrated_precritic": {
+      "id": 10339801250,
+      "digest": "sha256:76f6a0237e2676abf86eeac7b82a1005a8bba0dd951b03a14a8022626d982da1",
+      "run_id": 34824259431
+    },
+    "integration_regression": {
+      "id": 10345336492,
+      "digest": "sha256:2f55ed2ba9f029a344d3fccf4b99fb84ea71818bf0759a1ac21659f8d3f559c8",
+      "run_id": 34838425141
+    },
+    "visual_resolution": {
+      "id": 10348819805,
+      "digest": "sha256:12cf136c570e7f2d0dea8973e92d70c40ac84567a6607fe2980d27500f1cdd0a",
+      "run_id": 34839506095
+    },
+    "C6": {
+      "id": 10343330715,
+      "digest": "sha256:49e2a10e8bfcd6479a512884a9d8444c6be2856a0102b4810d624f2cc66cd77b",
+      "run_id": 34825220341
+    },
+    "final_gate": {
+      "id": 10349650771,
+      "digest": "sha256:176b2ddf383b296b87ac866039774dc028a4f943ee3a466dc1046abdca7c7afc",
+      "run_id": 34839506095
+    },
+    "C1_context_recovery": {
+      "id": 10348144929,
+      "digest": "sha256:110238cc7de8725fadb55ab9db052d9e968e3c8613fb3a6d9917eec72c88d165",
+      "run_id": 34839506095
+    },
+    "C1_device_recovery": {
+      "id": 10350210088,
+      "digest": "sha256:147ae3acc1cf997b8e342be02ea125b663d67565eea044f15ed180b34cdb6a88",
+      "run_id": 34839506095
+    },
+    "C2_device_recovery": {
+      "id": 10349595955,
+      "digest": "sha256:e82c8d1ed89697eb65aa00d396326e887668a93870c059b5324cd97d90c10db3",
+      "run_id": 34839506095
+    }
+  },
+  "governance_integrity": {
+    "gameplay_rerendered_during_critic_resolution": false,
+    "raw_low_scores_and_invalid_claims_preserved": true,
+    "completed_valid_low_scores_retried": false,
+    "score_averaging_used": false,
+    "defect_ledger_closed": true,
+    "authoritative_statuses_synchronized": true
+  },
+  "T06_unlocked": false,
+  "T06_lock_reason": "T06 depends on T03, which is approved, but its separate task packet and owner are not prepared; T05 approval does not bypass ownership/preparation gates.",
+  "whole_game_approved": false,
+  "physical_phone_tablet_native_4k60_verified": false,
+  "unfinished_apk_delivered": false,
+  "later_regressions_reopen_this_task": true
+}

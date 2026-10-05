@@ -1,0 +1,56 @@
+name: Havenline T02 public reviewer upload diagnosis
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-provider-upload-check.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 7
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-bank-evidence-34528232295
+          run-id: 34528232295
+          github-token: ${{ github.token }}
+          path: evidence/
+      - run: python3 -m pip install 'gradio_client==1.14.0' pillow pyyaml
+      - name: Preserve remote file handles and identify exactly which published API step fails
+        env:
+          HF_HUB_DISABLE_TELEMETRY: '1'
+          HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import yaml,subprocess
+          w=yaml.safe_load(Path('.github/workflows/havenline-task02-provider-competency.yml').read_text())
+          scripts=[s['run'] for s in w['jobs']['factual-probe']['steps'] if 'run' in s]
+          assert len(scripts)==2
+          script=scripts[1]
+          script=script.replace("hf_token=False,verbose=False)","hf_token=False,verbose=False,download_files=False)")
+          for stage,line in [('add_file',"history=client.predict(history=[],file=handle_file(str(image)),api_name='/add_file')"),('add_text',"history=client.predict(history=history,text=prompt,api_name='/add_text')")]:
+              assert script.count(line)==1
+              script=script.replace(line,"result['stage']='"+stage+"'\n    "+line+"\n    (out/'"+stage+"-returned-history.json').write_text(json.dumps(history,indent=2,default=str))")
+          needle='started=time.monotonic();reply=client.submit('
+          assert script.count(needle)==1
+          script=script.replace(needle,"result['stage']='predict'\n    "+needle)
+          Path('provider-competency').mkdir(exist_ok=True)
+          Path('provider-competency/executed-diagnosis.sh').write_text(script)
+          subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-provider-upload-diagnosis-${{ github.run_id }}
+          path: provider-competency/
+          retention-days: 30
+          if-no-files-found: error
+# One diagnosed transport retry; do not bypass a service refusal or rate limit.
+# No user token, billing changes, scored approval, later-task implementation or APK.

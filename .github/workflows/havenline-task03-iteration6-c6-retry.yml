@@ -1,0 +1,54 @@
+name: Havenline T03 iteration-6 C6 critic retry
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task03-iteration6-c6-retry.yml'
+      - 'tools/havenline/production/review_t03_repair_c6_retry.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+env:
+  CANDIDATE: '725bc8e088818264f9d28a881fdbff8ffb762161'
+  PRIOR_RUN: '35847819344'
+  PRIOR_ARTIFACT: 'havenline-t03-C6-35847819344'
+  METRICS_SHA: '0850b5d4355860054acc3d21e9ae7f6681f6200810d149e0fd04509c3956d391'
+
+jobs:
+  c6-retry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prove retry tooling did not change candidate runtime
+        run: git diff --exit-code "$CANDIDATE" HEAD -- HavenlineGodot
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.PRIOR_RUN }}
+          name: ${{ env.PRIOR_ARTIFACT }}
+          path: prior-c6
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - name: Re-evaluate exact immutable C6 metrics with fail-closed response grammar
+        env:
+          EXPECTED_SOURCE: ${{ env.CANDIDATE }}
+          METRICS_PATH: prior-c6/task03-C6/metrics.json
+          EXPECTED_METRICS_SHA: ${{ env.METRICS_SHA }}
+          OUT_DIR: task03-C6-retry
+        run: python3 -u tools/havenline/production/review_t03_repair_c6_retry.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-t03-C6-retry-${{ github.run_id }}
+          path: task03-C6-retry/
+          retention-days: 30
+          if-no-files-found: error
+# Critic-specific retry only. Reuses exact prior benchmark/metrics; no product rerender or C1/C2 retest.

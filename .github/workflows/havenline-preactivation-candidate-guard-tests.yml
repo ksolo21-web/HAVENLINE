@@ -1,0 +1,46 @@
+name: Havenline preactivation candidate guard tests
+
+on:
+  push:
+    branches:
+      - havenline/governance-preactivation-candidate-guard
+    paths:
+      - '.github/workflows/havenline-candidate-guard.yml'
+      - '.github/workflows/havenline-preactivation-candidate-guard-tests.yml'
+      - 'tools/havenline/production/preactivation_candidate.py'
+      - 'tools/havenline/production/tests/test_preactivation_candidate.py'
+  pull_request:
+    branches:
+      - codex/havenline-sequential-task-01
+    paths:
+      - '.github/workflows/havenline-candidate-guard.yml'
+      - '.github/workflows/havenline-preactivation-candidate-guard-tests.yml'
+      - 'tools/havenline/production/preactivation_candidate.py'
+      - 'tools/havenline/production/tests/test_preactivation_candidate.py'
+
+permissions:
+  contents: read
+
+jobs:
+  validate-governance-change:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - name: Compile guard tooling
+        run: python -m py_compile tools/havenline/production/preactivation_candidate.py
+      - name: Run focused preactivation guard tests
+        run: python -m unittest tools.havenline.production.tests.test_preactivation_candidate
+      - name: Run production governance regression tests
+        run: python -m unittest discover -s tools/havenline/production/tests -p 'test_*.py'
+      - name: Prove governance-only diff
+        run: |
+          base=$(git merge-base origin/codex/havenline-sequential-task-01 HEAD)
+          if git diff --name-only "$base"..HEAD | grep '^HavenlineGodot/'; then
+            echo 'Unexpected HavenlineGodot production/runtime change in governance PR' >&2
+            exit 1
+          fi

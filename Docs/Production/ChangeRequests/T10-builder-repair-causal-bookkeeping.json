@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "requesting_task": "T10",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "authorization": "Also when we find issues with the architecture and/or critics, we need to fix.",
+  "reviewer": "/root/t10_c0_critic",
+  "blocker": "C0-T10-B045",
+  "classification": "GOVERNANCE_DEFECT",
+  "builder_gate_before_sha256": "d48f40f3555e2399833aed6f89d088501fae09cab76dbe4ece6252a136b6cd67",
+  "scope": [
+    "tools/havenline/production/builder_repair_gate.py",
+    "tools/havenline/production/tests/test_c0_builder.py",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "tools/havenline/production/tests/test_architecture_release_lock.py",
+    ".github/workflows/havenline-production-governance.yml",
+    "tools/havenline/production/tests/test_production_governance_v32_consumer.py"
+  ],
+  "permitted_behavior_change": "Require exact canonical report/plan paths; allow those two paths only as bookkeeping, forbid them in fix causal files and require each mapped blocker to touch a non-bookkeeping causal file. Retain every existing source/hash/base/protected-path/freeze rule.",
+  "forbidden_changes": [
+    "critic applicability",
+    "dimensions",
+    "scores",
+    "thresholds",
+    "runtime",
+    "model",
+    "token budget",
+    "shipping gameplay",
+    "historical lock manifest",
+    "approval authority"
+  ]
+}

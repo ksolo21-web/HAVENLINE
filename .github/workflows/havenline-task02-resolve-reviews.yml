@@ -1,0 +1,87 @@
+name: Havenline T02 targeted unresolved-review completion
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-resolve-reviews.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  state-explicit-review:
+    strategy:
+      fail-fast: false
+      max-parallel: 4
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+        group: [tree-visibility, night-overview]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 48
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      REVIEW_GROUP: ${{ matrix.group }}
+      MODEL_FAMILY: qwen
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-final-independent-evidence-34510062914
+          run-id: 34510062914
+          github-token: ${{ github.token }}
+          path: previous/
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-finished-surface-evidence-34508687675
+          run-id: 34508687675
+          github-token: ${{ github.token }}
+          path: task02-evidence/
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Require the blind control and correct candidate-state recognition before accepting independent scores
+        run: python3 -u tools/havenline/finish_task02_reviews.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: T02-state-explicit-${{ matrix.role }}-${{ matrix.group }}-${{ github.run_id }}
+          path: task02-review/
+          retention-days: 30
+          if-no-files-found: error
+  assemble-records:
+    needs: state-explicit-review
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: T02-state-explicit-*-${{ github.run_id }}
+          path: state-explicit-reviews/
+      - name: Preserve all four actual outcomes; no automatic task approval
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          out=Path('state-explicit-reviews');rows=[]
+          for p in sorted(out.glob('*/review.json')):rows.append(json.loads(p.read_text()))
+          r={'task':'T02','source':'586604eb8ab6404fc8084b6853fd03cfa842d3af','reviews':rows,'complete':len(rows)==4,'all_passed':len(rows)==4 and all(x.get('passed') is True and x.get('factual_recognition_passed') is True for x in rows),'alternate_failed_controls_run':34513749870,'unscored_workfloor_retry_continues_in_run':34513749870,'old_raw_failures_preserved':True,'task_approved':False,'task3_started':False,'physical_4k60_verified':False}
+          (out/'summary.json').write_text(json.dumps(r,indent=2));print(json.dumps(r,indent=2))
+          raise SystemExit(0 if r['all_passed'] else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-state-explicit-records-${{ github.run_id }}
+          path: state-explicit-reviews/
+          retention-days: 30
+          if-no-files-found: error
+# The alternate model's failed controls are not treated as scores or approval.
+# Actual source586604e and every original PNG remain unchanged. No thresholds lowered.
+# The prior still-running identical workfloor retry is not cancelled or duplicated.
+# No APK, automatic Task3, new game features, model shopping or injected score.

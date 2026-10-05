@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "requesting_task": "T10",
+  "target_path": [
+    "Docs/Production/PATH_OWNERSHIP.json",
+    ".github/workflows/havenline-task10-benchmark-diagnostic.yml"
+  ],
+  "requested_change": "Register one exact QA-owned diagnostic workflow path, then implement one benchmark-only diagnostic reproduction of frozen subject 45eb7750c52975bd393e9860f11cdf9ac39e4e8a.",
+  "reason": "Run 35461009111 stopped at the unchanged 1800-second benchmark timeout after eight of nine controls, without enough telemetry to distinguish slow progress from a stall. Local display socket creation is unavailable, so a faithful local renderer reproduction is not feasible.",
+  "dependency": "Integrate this exact-path ownership authorization before workflow implementation. Original run 35461009111 and its C0 diagnosis must finish before diagnostic execution. Preserve original artifact 10590840640 with SHA256 0bf632ea29d1010946fb7c23e6171f66fba763e5d6aa4a7decb96c3a648a62f2.",
+  "expected_behavior": "One nonapproval benchmark reproduction with unchanged subject source, native 3840x2160 resolution, samples, conditioning, pinned runtime, renderer and 1800-second timeout. Collect fixed low-frequency external host/process/progress telemetry and retain raw output on success or failure. No critics, scores, aggregation, production promotion or task approval.",
+  "tests_required": [
+    "Base-derived governance scope accepts only the registered exact workflow path",
+    "Literal subject SHA and separate diagnostic workflow SHA are preserved",
+    "Runtime archive hash and benchmark command match the frozen production command",
+    "Only one diagnostic attempt is admitted after the original run and C0 are terminal",
+    "Telemetry stays outside benchmark sample loops and never changes product or benchmark bytes",
+    "Timeout and failure preserve raw logs, telemetry and original exit status",
+    "No task source, task lifecycle, critic, timeout, sampling or acceptance-threshold changes"
+  ],
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "APPROVED_BOUNDED_BENCHMARK_DIAGNOSTIC",
+  "integration_owner": "primary-integration-owner",
+  "subject_commit": "45eb7750c52975bd393e9860f11cdf9ac39e4e8a",
+  "maximum_diagnostic_attempts": 1,
+  "diagnostic_only": true,
+  "task_approved": false,
+  "reusable_for_approval": false
+}

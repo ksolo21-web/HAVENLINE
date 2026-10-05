@@ -1,0 +1,62 @@
+name: Havenline T01 independent-review capability check
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-review-capabilities.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  copilot-requests: write
+jobs:
+  capabilities-only:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - name: Install the official SDK and CLI in an isolated temporary workspace
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t01-capability" capability-evidence
+          cd "$RUNNER_TEMP/t01-capability"
+          npm init -y > /dev/null
+          npm install --save-exact @github/copilot @github/copilot-sdk > "$GITHUB_WORKSPACE/capability-evidence/install.log" 2>&1
+          cp package-lock.json "$GITHUB_WORKSPACE/capability-evidence/package-lock.json"
+          ./node_modules/.bin/copilot --version > "$GITHUB_WORKSPACE/capability-evidence/cli-version.txt"
+          ./node_modules/.bin/copilot --help > "$GITHUB_WORKSPACE/capability-evidence/cli-help.txt"
+      - name: Query authentication and model capabilities only; no session or inference
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+          COPILOT_HOME: ${{ runner.temp }}/t01-copilot-home
+        run: |
+          set -euo pipefail
+          cd "$RUNNER_TEMP/t01-capability"
+          cat > check.mjs <<'JS'
+          import {CopilotClient} from '@github/copilot-sdk';
+          import fs from 'node:fs';
+          import path from 'node:path';
+          const out=path.join(process.env.GITHUB_WORKSPACE,'capability-evidence');
+          const result={purpose:'Metadata-only capability discovery; no model inference, review score, billing changes or game changes',inference_requested:false,billing_settings_modified:false,task_approved:false};
+          const client=new CopilotClient({cliPath:path.resolve('node_modules/.bin/copilot'),logLevel:'error'});
+          try {
+            await client.start();
+            result.runtime=await client.getStatus();
+            if(typeof client.getAuthStatus==='function')result.authentication=await client.getAuthStatus();
+            result.models=await client.listModels();
+          } catch(error) {
+            result.error=String(error);
+          } finally {
+            try {await client.stop();} catch(error) {result.stop_error=String(error);}
+            const text=JSON.stringify(result,null,2);
+            const safe=text.replaceAll(process.env.GITHUB_TOKEN,'[REDACTED]');
+            fs.writeFileSync(path.join(out,'capabilities.json'),safe+'\n');
+            console.log(safe);
+          }
+          JS
+          timeout 120 node check.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-review-capabilities-${{ github.run_id }}
+          path: capability-evidence/
+          retention-days: 14
+          if-no-files-found: error
+# Metadata only. No inference, no paid plan/budget changes, no repository mutation or task approval.

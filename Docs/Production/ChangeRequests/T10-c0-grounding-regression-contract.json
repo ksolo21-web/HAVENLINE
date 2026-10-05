@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "requesting_task": "T10",
+  "target_path": "tools/havenline/production/tests/test_t10_activation_validation.py",
+  "requested_change": "Update the exact active-repair blocker-range assertion from B037-B059 to B037-B061.",
+  "reason": "The regression contract must enforce the same complete known blocker set as the canonical C0 report and workstream registry after B060/B061 were diagnosed and repaired.",
+  "dependency": "Docs/Production/ChangeRequests/T10-c0-grounded-artifact-diagnostics.json",
+  "expected_behavior": "The test requires exact B037-B061 registry/report equality and continues to reject missing, extra or desynchronized blockers.",
+  "tests_required": [
+    "tools/havenline/production/tests/test_t10_activation_validation.py",
+    "python -m unittest discover -s tools/havenline/production/tests -p test_*.py"
+  ],
+  "status": "APPROVED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "authorization": "Also when we find issues with the architecture and/or critics, we need to fix.",
+  "approval_claimed": false
+}

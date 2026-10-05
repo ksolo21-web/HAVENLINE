@@ -1,0 +1,49 @@
+{
+  "requesting_task": "T10",
+  "target_paths": [
+    "tools/havenline/production/closure_validator.py",
+    "tools/havenline/production/tests/test_architecture_v31.py"
+  ],
+  "status": "APPROVED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "requested_change": "Preserve canonical reviewer confidence categories verbatim through closure; decouple the readiness unit test from live ASSIGNED state.",
+  "reason": "C0 B029: pinned shared critics emit high/medium while closure accepted only numeric confidence. C0 B031: live-state test hardcodes ASSIGNED and rejects legitimate later lifecycle states.",
+  "authorization_basis": "Standing finish T10 plus explicit bounded T10 C7 governance repair, preserving all critics and thresholds; separate integration-owner amendment independently diagnosed and scoped by C0.",
+  "reviewer": "/root/t10_c0_critic",
+  "integration_base": "2e5555c616db077df11ab799389a611ee43e2414",
+  "validator_before_sha256": "b95349d53417aea990e05324dce7ca2d376a6ae09007379cb336b8b9c149d02e",
+  "approved_diff_sha256": "4b0ce2cca3e2941768335f30c9d8941a6a05552f3cbdc2abe4f8c5136b779876",
+  "confidence_contract": {
+    "accepted": [
+      "legacy finite non-bool numeric 0 < value <= 1",
+      "exact lowercase high",
+      "exact lowercase medium"
+    ],
+    "rejected": [
+      "low",
+      "missing/null",
+      "booleans",
+      "NaN/Infinity",
+      "out of numeric range",
+      "numeric strings",
+      "case/whitespace variants",
+      "containers"
+    ],
+    "conversion_performed": false
+  },
+  "preserved": [
+    "Every existing critic, pinned model/runtime, dimension and strictly >9.0 unrounded threshold",
+    "All source/run/artifact/index/export hashes, raw score equality, coverage, defects and score reuse checks",
+    "Original reviewer confidence and scores; no assigned numeric confidence",
+    "Historical T09 records and legacy numeric behavior",
+    "Production architecture, ACTIVE_RUNTIME_STATES, all current lifecycle data and byte locks"
+  ],
+  "tests_required": [
+    "Both closure confidence sites share the same fail-closed predicate",
+    "Original categories pass unchanged and hostile confidence inputs reject",
+    "All other raw critic gates remain enforced",
+    "Explicit mocked ASSIGNED active and APPROVED inactive unit states; existing LOCKED rejection",
+    "Full production suite and hosted governance"
+  ],
+  "publication_policy": "Exact three-file owner governance amendment for T10 closeout interoperability; backward compatible for prior numeric records. Does not approve T10 or integrate runtime."
+}

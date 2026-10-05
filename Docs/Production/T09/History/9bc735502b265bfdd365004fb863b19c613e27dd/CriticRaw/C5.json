@@ -1,0 +1,112 @@
+{
+  "schema_version": 1,
+  "task_id": "T09",
+  "critic_id": "C5",
+  "critic_name": "Motion / Rigging Critic",
+  "provider": "OpenAI",
+  "model": "GPT-5 Codex",
+  "request_or_run_id": "github-actions:35213007340/artifact:10494819142",
+  "independent_runtime": true,
+  "score_reuse": false,
+  "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+  "workflow_run_id": 35213007340,
+  "artifact_id": 10494819142,
+  "artifact_sha256": "0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1",
+  "complete_evidence_index_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
+  "input_manifest_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
+  "review_export_commit": "3dc86b8f0ed8f6364e78d29e6fd1d0ccd0a76014",
+  "status": "PASS",
+  "passed": true,
+  "coverage_complete": true,
+  "confidence": 0.971,
+  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
+  "scores": {
+    "full_cycle": 9.6417,
+    "foot_contact": 9.5621,
+    "lower_body_mechanics": 9.3846,
+    "upper_body_mechanics": 9.5128,
+    "weight_transfer": 9.3274,
+    "transitions": 9.7315,
+    "clipping": 9.6842,
+    "secondary_motion_contact": 9.4586
+  },
+  "minimum_dimension_score": 9.3274,
+  "coverage": {
+    "indexed_files_verified": 913,
+    "motion_images_inspected": 238,
+    "real_time_frames": 95,
+    "slow_frames": 95,
+    "turns": 27,
+    "transitions": 6,
+    "close_contact_regions": 15,
+    "motion_contact_sheets": 11,
+    "integrated_sequence_sheets": 8,
+    "tools_in_hand_sheets": 2,
+    "clips": [
+      "chop",
+      "mine",
+      "dismantle"
+    ]
+  },
+  "initialization_validation": {
+    "method": "final_skeleton_pose_transform_v1",
+    "bone_count": 66,
+    "passed": true,
+    "limits": {
+      "start_max_translation_m": 0.005,
+      "start_max_rotation_deg": 1,
+      "first_step_max_translation_m": 0.4,
+      "first_step_max_rotation_deg": 55
+    },
+    "maximum_observed": {
+      "start_translation_m": 0,
+      "start_rotation_deg": 0.032854577893396804,
+      "first_step_translation_m": 0.0090996646004996,
+      "first_step_rotation_deg": 3.129325005034414
+    }
+  },
+  "evidence": [
+    {
+      "path": "captures/motion-c5/motion.json",
+      "sha256": "8ba4b0783b7fb3742fe84da0bb6bb95623c12c30dabc50a4a46ea744b116037d"
+    },
+    {
+      "path": "captures/motion-c5/motion-hashes.json",
+      "sha256": "59584b9b17c6fc137751ae92fbccb89c2889beea1e78f15a818b4b7315d9f898"
+    },
+    {
+      "path": "captures/motion-c5/t06/chop/close-contacts/upper-front.png",
+      "sha256": "9a7691b653b9c96313f13b648b27569c7b1cadac0f6bb9e76ed6cb0a89f7fcf7"
+    },
+    {
+      "path": "captures/motion-c5/t06/mine/close-contacts/upper-front.png",
+      "sha256": "2280dd288387d79e0454716fae0adfc9e382bb19a11251c9be75bd97a0392554"
+    },
+    {
+      "path": "captures/motion-c5/t06/dismantle/close-contacts/upper-front.png",
+      "sha256": "dd60f73a80a9ddc03b00d81f0b0721c03fcd05631dff91eddbe0bbb8442fad3f"
+    },
+    {
+      "path": "captures/motion-c5/t06/chop/transitions/start.png",
+      "sha256": "42cbb84fd932084e42f338cbe7ae0186ab566a1cfc05a90ec4551b6b87133769"
+    },
+    {
+      "path": "captures/motion-c5/t06/mine/transitions/start.png",
+      "sha256": "42cbb84fd932084e42f338cbe7ae0186ab566a1cfc05a90ec4551b6b87133769"
+    },
+    {
+      "path": "captures/motion-c5/t06/dismantle/transitions/start.png",
+      "sha256": "42cbb84fd932084e42f338cbe7ae0186ab566a1cfc05a90ec4551b6b87133769"
+    }
+  ],
+  "observations": [
+    "All three full cycles begin and end in the same neutral pose without visible discontinuity.",
+    "Feet and toes remain planted without visible sliding, penetration, ankle inversion, or inward-knee collapse.",
+    "Hands remain aligned to tool handles in integrated evidence; tool heads meet intended targets without visible detachment or objectionable interpenetration.",
+    "The prior contaminated start-frame defect is absent."
+  ],
+  "defects": [],
+  "advisories": [
+    "The dedicated motion fixture contains no tool/target; grip and target contact were cross-checked against exact-source integrated sequences and tools-in-hand evidence."
+  ]
+}

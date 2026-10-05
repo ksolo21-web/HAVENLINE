@@ -1,0 +1,481 @@
+﻿2026-09-18T00:05:06.3586931Z Current runner version: '2.337.0'
+2026-09-18T00:05:06.3612881Z ##[group]Runner Image Provisioner
+2026-09-18T00:05:06.3613742Z Hosted Compute Agent
+2026-09-18T00:05:06.3614424Z Version: 20260828.587
+2026-09-18T00:05:06.3615141Z Commit: abac92662cab4cc7352de4f9f9d2e2419aad9c29
+2026-09-18T00:05:06.3615894Z Build Date: 2026-08-28T16:44:25Z
+2026-09-18T00:05:06.3616676Z Worker ID: {88577e7d-aaf1-49cf-82ff-28090ad2c928}
+2026-09-18T00:05:06.3617438Z Azure Region: northcentralus
+2026-09-18T00:05:06.3618058Z ##[endgroup]
+2026-09-18T00:05:06.3619605Z ##[group]Operating System
+2026-09-18T00:05:06.3620252Z Ubuntu
+2026-09-18T00:05:06.3620912Z 24.04.5
+2026-09-18T00:05:06.3621453Z LTS
+2026-09-18T00:05:06.3622276Z ##[endgroup]
+2026-09-18T00:05:06.3622988Z ##[group]Runner Image
+2026-09-18T00:05:06.3623618Z Image: ubuntu-24.04
+2026-09-18T00:05:06.3624260Z Version: 20260907.300.1
+2026-09-18T00:05:06.3625597Z Included Software: https://github.com/actions/runner-images/blob/ubuntu24/20260907.300/images/ubuntu/Ubuntu2404-Readme.md
+2026-09-18T00:05:06.3627237Z Image Release: https://github.com/actions/runner-images/releases/tag/ubuntu24%2F20260907.300
+2026-09-18T00:05:06.3628226Z ##[endgroup]
+2026-09-18T00:05:06.3629427Z ##[group]GITHUB_TOKEN Permissions
+2026-09-18T00:05:06.3631295Z Contents: read
+2026-09-18T00:05:06.3632213Z Metadata: read
+2026-09-18T00:05:06.3632822Z ##[endgroup]
+2026-09-18T00:05:06.3634924Z Secret source: Actions
+2026-09-18T00:05:06.3636012Z Cache mode: write
+2026-09-18T00:05:06.3636740Z Prepare workflow directory
+2026-09-18T00:05:06.3980749Z Prepare all required actions
+2026-09-18T00:05:06.4029068Z Getting action download info
+2026-09-18T00:05:06.6776587Z Download action repository 'actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09' (SHA:fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09)
+2026-09-18T00:05:06.9038208Z Complete job name: validate
+2026-09-18T00:05:06.9931423Z ##[group]Run actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+2026-09-18T00:05:06.9932768Z with:
+2026-09-18T00:05:06.9933200Z   fetch-depth: 0
+2026-09-18T00:05:06.9933705Z   repository: ksolo21-web/HAVENLINE
+2026-09-18T00:05:06.9937930Z   token: ***
+2026-09-18T00:05:06.9938375Z   ssh-strict: true
+2026-09-18T00:05:06.9938819Z   ssh-user: git
+2026-09-18T00:05:06.9939268Z   persist-credentials: true
+2026-09-18T00:05:06.9939753Z   clean: true
+2026-09-18T00:05:06.9940194Z   sparse-checkout-cone-mode: true
+2026-09-18T00:05:06.9940714Z   fetch-tags: false
+2026-09-18T00:05:06.9941152Z   show-progress: true
+2026-09-18T00:05:06.9941597Z   lfs: false
+2026-09-18T00:05:06.9942273Z   submodules: false
+2026-09-18T00:05:06.9942737Z   set-safe-directory: true
+2026-09-18T00:05:06.9943244Z   allow-unsafe-pr-checkout: false
+2026-09-18T00:05:06.9944014Z ##[endgroup]
+2026-09-18T00:05:07.0977741Z Syncing repository: ksolo21-web/HAVENLINE
+2026-09-18T00:05:07.0980648Z ##[group]Getting Git version info
+2026-09-18T00:05:07.0981743Z Working directory is '/home/runner/work/HAVENLINE/HAVENLINE'
+2026-09-18T00:05:07.0983449Z [command]/usr/bin/git version
+2026-09-18T00:05:07.1021730Z git version 2.55.0
+2026-09-18T00:05:07.1042721Z ##[endgroup]
+2026-09-18T00:05:07.1058305Z Temporarily overriding HOME='/home/runner/work/_temp/f3bc416a-8c6d-47fd-b290-17e666059645' before making global git config changes
+2026-09-18T00:05:07.1060654Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-18T00:05:07.1064157Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/HAVENLINE/HAVENLINE
+2026-09-18T00:05:07.1123215Z Deleting the contents of '/home/runner/work/HAVENLINE/HAVENLINE'
+2026-09-18T00:05:07.1131328Z ##[group]Initializing the repository
+2026-09-18T00:05:07.1132688Z [command]/usr/bin/git init /home/runner/work/HAVENLINE/HAVENLINE
+2026-09-18T00:05:07.1219290Z hint: Using 'master' as the name for the initial branch. This default branch name
+2026-09-18T00:05:07.1226631Z hint: will change to "main" in Git 3.0. To configure the initial branch name
+2026-09-18T00:05:07.1228344Z hint: to use in all of your new repositories, which will suppress this warning,
+2026-09-18T00:05:07.1230464Z hint: call:
+2026-09-18T00:05:07.1231294Z hint:
+2026-09-18T00:05:07.1232435Z hint: 	git config --global init.defaultBranch <name>
+2026-09-18T00:05:07.1233585Z hint:
+2026-09-18T00:05:07.1234666Z hint: Names commonly chosen instead of 'master' are 'main', 'trunk' and
+2026-09-18T00:05:07.1236277Z hint: 'development'. The just-created branch can be renamed via this command:
+2026-09-18T00:05:07.1237597Z hint:
+2026-09-18T00:05:07.1238243Z hint: 	git branch -m <name>
+2026-09-18T00:05:07.1238888Z hint:
+2026-09-18T00:05:07.1239556Z hint: Disable this message with "git config set advice.defaultBranchName false"
+2026-09-18T00:05:07.1241436Z Initialized empty Git repository in /home/runner/work/HAVENLINE/HAVENLINE/.git/
+2026-09-18T00:05:07.1244289Z [command]/usr/bin/git remote add origin https://github.com/ksolo21-web/HAVENLINE
+2026-09-18T00:05:07.1279360Z ##[endgroup]
+2026-09-18T00:05:07.1280533Z ##[group]Disabling automatic garbage collection
+2026-09-18T00:05:07.1284019Z [command]/usr/bin/git config --local gc.auto 0
+2026-09-18T00:05:07.1318442Z ##[endgroup]
+2026-09-18T00:05:07.1319575Z ##[group]Setting up auth
+2026-09-18T00:05:07.1325675Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-18T00:05:07.1361133Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-18T00:05:07.1703469Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-18T00:05:07.1746669Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-18T00:05:07.2008796Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-18T00:05:07.2048165Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-18T00:05:07.2291655Z [command]/usr/bin/git config --local http.https://github.com/.extraheader AUTHORIZATION: basic ***
+2026-09-18T00:05:07.2333561Z ##[endgroup]
+2026-09-18T00:05:07.2334435Z ##[group]Fetching the repository
+2026-09-18T00:05:07.2343438Z [command]/usr/bin/git -c protocol.version=2 fetch --prune --no-recurse-submodules origin +refs/heads/*:refs/remotes/origin/* +refs/tags/*:refs/tags/*
+2026-09-18T00:05:11.6840928Z From https://github.com/ksolo21-web/HAVENLINE
+2026-09-18T00:05:11.6843269Z  * [new branch]      agent/havenline-production-art-gate -> origin/agent/havenline-production-art-gate
+2026-09-18T00:05:11.6845100Z  * [new branch]      agent/havenline-v7-unity-review -> origin/agent/havenline-v7-unity-review
+2026-09-18T00:05:11.6846461Z  * [new branch]      astra-webgl-review/2026-09-06 -> origin/astra-webgl-review/2026-09-06
+2026-09-18T00:05:11.6847971Z  * [new branch]      codex/havenline-environment-calibration -> origin/codex/havenline-environment-calibration
+2026-09-18T00:05:11.6849536Z  * [new branch]      codex/havenline-environment-review -> origin/codex/havenline-environment-review
+2026-09-18T00:05:11.6850888Z  * [new branch]      codex/havenline-godot-android -> origin/codex/havenline-godot-android
+2026-09-18T00:05:11.6855725Z  * [new branch]      codex/havenline-native-completion-20260907 -> origin/codex/havenline-native-completion-20260907
+2026-09-18T00:05:11.6858045Z  * [new branch]      codex/havenline-sequential-task-01 -> origin/codex/havenline-sequential-task-01
+2026-09-18T00:05:11.6860102Z  * [new branch]      codex/havenline-visual-critic -> origin/codex/havenline-visual-critic
+2026-09-18T00:05:11.6861545Z  * [new branch]      codex/t09-c0-permissions -> origin/codex/t09-c0-permissions
+2026-09-18T00:05:11.6862868Z  * [new branch]      codex/t09-c0-route-integration -> origin/codex/t09-c0-route-integration
+2026-09-18T00:05:11.6863963Z  * [new branch]      codex/t09-c5-clock-freeze -> origin/codex/t09-c5-clock-freeze
+2026-09-18T00:05:11.6865301Z  * [new branch]      codex/t09-c5-convergence -> origin/codex/t09-c5-convergence
+2026-09-18T00:05:11.6866373Z  * [new branch]      codex/t09-c5-defect-record -> origin/codex/t09-c5-defect-record
+2026-09-18T00:05:11.6867551Z  * [new branch]      codex/t09-c5-init-similarity -> origin/codex/t09-c5-init-similarity
+2026-09-18T00:05:11.6869419Z  * [new branch]      codex/t09-evidence-review-9bc73550 -> origin/codex/t09-evidence-review-9bc73550
+2026-09-18T00:05:11.6871130Z  * [new branch]      codex/t09-final-closeout-v31 -> origin/codex/t09-final-closeout-v31
+2026-09-18T00:05:11.6872825Z  * [new branch]      codex/t09-pose-summary-schema -> origin/codex/t09-pose-summary-schema
+2026-09-18T00:05:11.6874491Z  * [new branch]      codex/t09-repair-ledger -> origin/codex/t09-repair-ledger
+2026-09-18T00:05:11.6875999Z  * [new branch]      havenline/QA-integration -> origin/havenline/QA-integration
+2026-09-18T00:05:11.6877453Z  * [new branch]      havenline/T04-camera    -> origin/havenline/T04-camera
+2026-09-18T00:05:11.6878857Z  * [new branch]      havenline/T05-props     -> origin/havenline/T05-props
+2026-09-18T00:05:11.6880283Z  * [new branch]      havenline/T06-character1 -> origin/havenline/T06-character1
+2026-09-18T00:05:11.6882205Z  * [new branch]      havenline/T07-context-director -> origin/havenline/T07-context-director
+2026-09-18T00:05:11.6883990Z  * [new branch]      havenline/T08-visible-inventory -> origin/havenline/T08-visible-inventory
+2026-09-18T00:05:11.6885616Z  * [new branch]      havenline/T09-harvesting -> origin/havenline/T09-harvesting
+2026-09-18T00:05:11.6887279Z  * [new branch]      havenline/T10-world-transformation -> origin/havenline/T10-world-transformation
+2026-09-18T00:05:11.6889395Z  * [new branch]      havenline/T11-camp-construction -> origin/havenline/T11-camp-construction
+2026-09-18T00:05:11.6891495Z  * [new branch]      havenline/governance-all-t12-t70-ready -> origin/havenline/governance-all-t12-t70-ready
+2026-09-18T00:05:11.6893939Z  * [new branch]      havenline/governance-all-t13-t70-ready -> origin/havenline/governance-all-t13-t70-ready
+2026-09-18T00:05:11.6896194Z  * [new branch]      havenline/governance-forward-contract-packets -> origin/havenline/governance-forward-contract-packets
+2026-09-18T00:05:11.6898532Z  * [new branch]      havenline/governance-game-master-accounts -> origin/havenline/governance-game-master-accounts
+2026-09-18T00:05:11.6901212Z  * [new branch]      havenline/governance-preactivation-candidate-guard -> origin/havenline/governance-preactivation-candidate-guard
+2026-09-18T00:05:11.6903900Z  * [new branch]      havenline/governance-resource-actor-contracts -> origin/havenline/governance-resource-actor-contracts
+2026-09-18T00:05:11.6906217Z  * [new branch]      havenline/governance-t03-trigger-scope -> origin/havenline/governance-t03-trigger-scope
+2026-09-18T00:05:11.6908415Z  * [new branch]      havenline/governance-t09-final-closeout -> origin/havenline/governance-t09-final-closeout
+2026-09-18T00:05:11.6910598Z  * [new branch]      havenline/governance-t09-strict-review -> origin/havenline/governance-t09-strict-review
+2026-09-18T00:05:11.6912667Z  * [new branch]      havenline/governance-t10-prep -> origin/havenline/governance-t10-prep
+2026-09-18T00:05:11.6913915Z  * [new branch]      havenline/governance-t11-prep -> origin/havenline/governance-t11-prep
+2026-09-18T00:05:11.6915123Z  * [new branch]      havenline/governance-t12-prep -> origin/havenline/governance-t12-prep
+2026-09-18T00:05:11.6916378Z  * [new branch]      havenline/governance-t13-t20-prep -> origin/havenline/governance-t13-t20-prep
+2026-09-18T00:05:11.6917645Z  * [new branch]      havenline/governance-t21-t32-prep -> origin/havenline/governance-t21-t32-prep
+2026-09-18T00:05:11.6918948Z  * [new branch]      havenline/governance-t33-t43-prep -> origin/havenline/governance-t33-t43-prep
+2026-09-18T00:05:11.6920912Z  * [new branch]      havenline/governance-t44-t52-prep -> origin/havenline/governance-t44-t52-prep
+2026-09-18T00:05:11.6923905Z  * [new branch]      havenline/governance-t53-t61-prep -> origin/havenline/governance-t53-t61-prep
+2026-09-18T00:05:11.6925870Z  * [new branch]      havenline/governance-t62-t70-prep -> origin/havenline/governance-t62-t70-prep
+2026-09-18T00:05:11.6927861Z  * [new branch]      havenline/review-t10-isolated-scope -> origin/havenline/review-t10-isolated-scope
+2026-09-18T00:05:11.6930042Z  * [new branch]      havenline/review-t10-preactivation-handoff -> origin/havenline/review-t10-preactivation-handoff
+2026-09-18T00:05:11.6932482Z  * [new branch]      havenline/t03-gate-hardening-20260911 -> origin/havenline/t03-gate-hardening-20260911
+2026-09-18T00:05:11.6934487Z  * [new branch]      havenline/t13-t14-handoff-hardening -> origin/havenline/t13-t14-handoff-hardening
+2026-09-18T00:05:11.6937114Z  * [new branch]      havenline/t13-t14-handoff-hardening-final -> origin/havenline/t13-t14-handoff-hardening-final
+2026-09-18T00:05:11.6939596Z  * [new branch]      havenline/t13-t14-handoff-hardening-final2 -> origin/havenline/t13-t14-handoff-hardening-final2
+2026-09-18T00:05:11.6941768Z  * [new branch]      havenline/t13-t14-handoff-hardening-lint -> origin/havenline/t13-t14-handoff-hardening-lint
+2026-09-18T00:05:11.6943642Z  * [new branch]      havenline/t13-t14-handoff-hardening-validation -> origin/havenline/t13-t14-handoff-hardening-validation
+2026-09-18T00:05:11.6945104Z  * [new branch]      havenline/t13-t70-activation-frontier -> origin/havenline/t13-t70-activation-frontier
+2026-09-18T00:05:11.6947188Z  * [new branch]      havenline/t13-t70-metadata-hardening -> origin/havenline/t13-t70-metadata-hardening
+2026-09-18T00:05:11.6948707Z  * [new branch]      havenline/t13-t70-provenance-hardening -> origin/havenline/t13-t70-provenance-hardening
+2026-09-18T00:05:11.6949767Z  * [new branch]      main                    -> origin/main
+2026-09-18T00:05:11.6950950Z  * [new branch]      prebuild/T10-world-transform -> origin/prebuild/T10-world-transform
+2026-09-18T00:05:11.6953244Z [command]/usr/bin/git branch --list --remote origin/codex/havenline-sequential-task-01
+2026-09-18T00:05:11.6954213Z   origin/codex/havenline-sequential-task-01
+2026-09-18T00:05:11.6955803Z [command]/usr/bin/git rev-parse refs/remotes/origin/codex/havenline-sequential-task-01
+2026-09-18T00:05:11.6960806Z 5415d85838ecf4bea8b3c71662072670e61797a0
+2026-09-18T00:05:11.6965400Z ##[endgroup]
+2026-09-18T00:05:11.6966261Z ##[group]Determining the checkout info
+2026-09-18T00:05:11.6967316Z ##[endgroup]
+2026-09-18T00:05:11.6979298Z [command]/usr/bin/git sparse-checkout disable
+2026-09-18T00:05:11.7029641Z [command]/usr/bin/git config --local --unset-all extensions.worktreeConfig
+2026-09-18T00:05:11.7062983Z ##[group]Checking out the ref
+2026-09-18T00:05:11.7068028Z [command]/usr/bin/git checkout --progress --force -B codex/havenline-sequential-task-01 refs/remotes/origin/codex/havenline-sequential-task-01
+2026-09-18T00:05:12.7533251Z Updating files:  56% (495/876)
+2026-09-18T00:05:12.7564600Z Updating files:  57% (500/876)
+2026-09-18T00:05:12.7724408Z Updating files:  58% (509/876)
+2026-09-18T00:05:12.7742459Z Updating files:  59% (517/876)
+2026-09-18T00:05:12.7756436Z Updating files:  60% (526/876)
+2026-09-18T00:05:12.7798896Z Updating files:  61% (535/876)
+2026-09-18T00:05:12.7815433Z Updating files:  62% (544/876)
+2026-09-18T00:05:12.7862735Z Updating files:  63% (552/876)
+2026-09-18T00:05:12.7869875Z Updating files:  64% (561/876)
+2026-09-18T00:05:12.7879003Z Updating files:  65% (570/876)
+2026-09-18T00:05:12.7890360Z Updating files:  66% (579/876)
+2026-09-18T00:05:12.7895822Z Updating files:  67% (587/876)
+2026-09-18T00:05:12.7903378Z Updating files:  68% (596/876)
+2026-09-18T00:05:12.7909883Z Updating files:  69% (605/876)
+2026-09-18T00:05:12.7921158Z Updating files:  70% (614/876)
+2026-09-18T00:05:12.7926743Z Updating files:  71% (622/876)
+2026-09-18T00:05:12.7934442Z Updating files:  72% (631/876)
+2026-09-18T00:05:12.7942379Z Updating files:  73% (640/876)
+2026-09-18T00:05:12.7951501Z Updating files:  74% (649/876)
+2026-09-18T00:05:12.7957138Z Updating files:  75% (657/876)
+2026-09-18T00:05:12.7962411Z Updating files:  76% (666/876)
+2026-09-18T00:05:12.7965806Z Updating files:  77% (675/876)
+2026-09-18T00:05:12.7975419Z Updating files:  78% (684/876)
+2026-09-18T00:05:12.7980682Z Updating files:  79% (693/876)
+2026-09-18T00:05:12.7986086Z Updating files:  80% (701/876)
+2026-09-18T00:05:12.7992530Z Updating files:  81% (710/876)
+2026-09-18T00:05:12.7998892Z Updating files:  82% (719/876)
+2026-09-18T00:05:12.8005342Z Updating files:  83% (728/876)
+2026-09-18T00:05:12.8011272Z Updating files:  84% (736/876)
+2026-09-18T00:05:12.8018210Z Updating files:  85% (745/876)
+2026-09-18T00:05:12.8025502Z Updating files:  86% (754/876)
+2026-09-18T00:05:12.8030567Z Updating files:  87% (763/876)
+2026-09-18T00:05:12.8036238Z Updating files:  88% (771/876)
+2026-09-18T00:05:12.8041687Z Updating files:  89% (780/876)
+2026-09-18T00:05:12.8050117Z Updating files:  90% (789/876)
+2026-09-18T00:05:12.8057043Z Updating files:  91% (798/876)
+2026-09-18T00:05:12.8063385Z Updating files:  92% (806/876)
+2026-09-18T00:05:12.8069400Z Updating files:  93% (815/876)
+2026-09-18T00:05:12.8080920Z Updating files:  94% (824/876)
+2026-09-18T00:05:12.8088071Z Updating files:  95% (833/876)
+2026-09-18T00:05:12.8095507Z Updating files:  96% (841/876)
+2026-09-18T00:05:12.8104438Z Updating files:  97% (850/876)
+2026-09-18T00:05:12.8111322Z Updating files:  98% (859/876)
+2026-09-18T00:05:12.8117831Z Updating files:  99% (868/876)
+2026-09-18T00:05:12.8118366Z Updating files: 100% (876/876)
+2026-09-18T00:05:12.8118883Z Updating files: 100% (876/876), done.
+2026-09-18T00:05:12.9389264Z Switched to a new branch 'codex/havenline-sequential-task-01'
+2026-09-18T00:05:12.9395577Z branch 'codex/havenline-sequential-task-01' set up to track 'origin/codex/havenline-sequential-task-01'.
+2026-09-18T00:05:12.9957152Z Encountered 1 file that should have been a pointer, but wasn't:
+2026-09-18T00:05:12.9957919Z 	Assets/TutorialInfo/Icons/URP.png
+2026-09-18T00:05:13.0017441Z ##[endgroup]
+2026-09-18T00:05:13.0508125Z [command]/usr/bin/git log -1 --format=%H
+2026-09-18T00:05:13.0523312Z 5415d85838ecf4bea8b3c71662072670e61797a0
+2026-09-18T00:05:13.0828465Z ##[group]Run python3 -m compileall -q tools/havenline/production
+2026-09-18T00:05:13.0829034Z [36;1mpython3 -m compileall -q tools/havenline/production[0m
+2026-09-18T00:05:13.0874630Z shell: /usr/bin/bash -e {0}
+2026-09-18T00:05:13.0874906Z ##[endgroup]
+2026-09-18T00:05:13.2569324Z ##[group]Run python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' -v
+2026-09-18T00:05:13.2570042Z [36;1mpython3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' -v[0m
+2026-09-18T00:05:13.2612132Z shell: /usr/bin/bash -e {0}
+2026-09-18T00:05:13.2612400Z ##[endgroup]
+2026-09-18T00:05:13.3825296Z test_agents_has_status_fast_path (test_agent_execution_loop_guard.AgentExecutionLoopGuardTests.test_agents_has_status_fast_path) ... ok
+2026-09-18T00:05:13.3827063Z test_guard_forbids_search_chain_escalation (test_agent_execution_loop_guard.AgentExecutionLoopGuardTests.test_guard_forbids_search_chain_escalation) ... ok
+2026-09-18T00:05:13.3828850Z test_guard_has_hard_terminal_conditions (test_agent_execution_loop_guard.AgentExecutionLoopGuardTests.test_guard_has_hard_terminal_conditions) ... ok
+2026-09-18T00:05:13.3830459Z test_guard_is_governance_owned (test_agent_execution_loop_guard.AgentExecutionLoopGuardTests.test_guard_is_governance_owned) ... ok
+2026-09-18T00:05:13.4933968Z test_bounded_v32_reactivation_passes_and_rejects_unrelated_policy_changes (test_architecture_release_lock.ArchitectureReleaseLockTests.test_bounded_v32_reactivation_passes_and_rejects_unrelated_policy_changes) ... ok
+2026-09-18T00:05:13.4935504Z test_byte_drift_is_detected (test_architecture_release_lock.ArchitectureReleaseLockTests.test_byte_drift_is_detected) ... ok
+2026-09-18T00:05:13.4936556Z test_codeowners_must_cover_architecture_control_plane (test_architecture_release_lock.ArchitectureReleaseLockTests.test_codeowners_must_cover_architecture_control_plane) ... ok
+2026-09-18T00:05:13.5946723Z test_current_v31_release_lock_passes (test_architecture_release_lock.ArchitectureReleaseLockTests.test_current_v31_release_lock_passes) ... ok
+2026-09-18T00:05:13.5952455Z test_duplicate_or_unsafe_locked_paths_fail (test_architecture_release_lock.ArchitectureReleaseLockTests.test_duplicate_or_unsafe_locked_paths_fail) ... ok
+2026-09-18T00:05:13.5953924Z test_governance_must_bind_manifest_digest_and_accepted_source (test_architecture_release_lock.ArchitectureReleaseLockTests.test_governance_must_bind_manifest_digest_and_accepted_source) ... ok
+2026-09-18T00:05:13.5958738Z test_manifest_cannot_repoint_v31_to_a_new_source (test_architecture_release_lock.ArchitectureReleaseLockTests.test_manifest_cannot_repoint_v31_to_a_new_source) ... ok
+2026-09-18T00:05:13.5960207Z test_missing_locked_file_is_detected (test_architecture_release_lock.ArchitectureReleaseLockTests.test_missing_locked_file_is_detected) ... ok
+2026-09-18T00:05:13.5961150Z test_version_constants_are_frozen (test_architecture_release_lock.ArchitectureReleaseLockTests.test_version_constants_are_frozen) ... ok
+2026-09-18T00:05:17.9842125Z test_all_61_tasks_resolve_v3_readiness (test_architecture_v3.ArchitectureV3Tests.test_all_61_tasks_resolve_v3_readiness) ... ok
+2026-09-18T00:05:17.9844174Z test_c0_historical_intelligence_is_advisory_and_backward_compatible (test_architecture_v3.ArchitectureV3Tests.test_c0_historical_intelligence_is_advisory_and_backward_compatible) ... ok
+2026-09-18T00:05:22.4664200Z test_combined_v3_validation_passes (test_architecture_v3.ArchitectureV3Tests.test_combined_v3_validation_passes) ... ok
+2026-09-18T00:05:22.4675307Z test_contract_registry_and_breaking_change_rules (test_architecture_v3.ArchitectureV3Tests.test_contract_registry_and_breaking_change_rules) ... ok
+2026-09-18T00:05:22.4685390Z test_external_capability_is_never_assumed_ready (test_architecture_v3.ArchitectureV3Tests.test_external_capability_is_never_assumed_ready) ... ok
+2026-09-18T00:05:22.4688377Z test_failure_intelligence_matches_t09_pose_tooling_without_auto_repair (test_architecture_v3.ArchitectureV3Tests.test_failure_intelligence_matches_t09_pose_tooling_without_auto_repair) ... ok
+2026-09-18T00:05:22.4690453Z test_failure_intelligence_schema_is_valid (test_architecture_v3.ArchitectureV3Tests.test_failure_intelligence_schema_is_valid) ... ok
+2026-09-18T00:05:22.5134138Z test_feasibility_schema_is_valid_for_all_tasks (test_architecture_v3.ArchitectureV3Tests.test_feasibility_schema_is_valid_for_all_tasks) ... ok
+2026-09-18T00:05:22.5135234Z test_forward_packet_exposes_v3_and_blocks_unready_runtime (test_architecture_v3.ArchitectureV3Tests.test_forward_packet_exposes_v3_and_blocks_unready_runtime) ... ok
+2026-09-18T00:05:22.5139977Z test_gate_fingerprint_policy_keeps_fresh_only_gates_exact_source (test_architecture_v3.ArchitectureV3Tests.test_gate_fingerprint_policy_keeps_fresh_only_gates_exact_source) ... ok
+2026-09-18T00:05:22.5148093Z test_physical_certification_requires_real_hardware_capability (test_architecture_v3.ArchitectureV3Tests.test_physical_certification_requires_real_hardware_capability) ... ok
+2026-09-18T00:05:22.5278579Z test_same_head_merge_forecast_is_clean_and_non_mutating (test_architecture_v3.ArchitectureV3Tests.test_same_head_merge_forecast_is_clean_and_non_mutating) ... ok
+2026-09-18T00:05:22.5985302Z test_scheduler_is_advisory_unique_and_preserves_single_integration_owner (test_architecture_v3.ArchitectureV3Tests.test_scheduler_is_advisory_unique_and_preserves_single_integration_owner) ... ok
+2026-09-18T00:05:22.6689769Z test_scheduler_policy_validates (test_architecture_v3.ArchitectureV3Tests.test_scheduler_policy_validates) ... ok
+2026-09-18T00:05:22.6691270Z test_v3_is_mandatory_in_agent_bootstrap_and_owned_by_governance (test_architecture_v3.ArchitectureV3Tests.test_v3_is_mandatory_in_agent_bootstrap_and_owned_by_governance) ... ok
+2026-09-18T00:05:22.6699272Z test_ci_action_and_toolchain_lock_is_valid (test_architecture_v31.ArchitectureV31Tests.test_ci_action_and_toolchain_lock_is_valid) ... ok
+2026-09-18T00:05:22.6700815Z test_ci_lock_rejects_mutable_subpath_action (test_architecture_v31.ArchitectureV31Tests.test_ci_lock_rejects_mutable_subpath_action) ... ok
+2026-09-18T00:05:31.6081727Z test_complete_v31_validation_passes (test_architecture_v31.ArchitectureV31Tests.test_complete_v31_validation_passes) ... ok
+2026-09-18T00:05:31.6086748Z test_contract_override_ids_match_registry (test_architecture_v31.ArchitectureV31Tests.test_contract_override_ids_match_registry) ... ok
+2026-09-18T00:05:31.6091158Z test_environment_sensitive_gate_policy_remains_safe (test_architecture_v31.ArchitectureV31Tests.test_environment_sensitive_gate_policy_remains_safe) ... ok
+2026-09-18T00:05:31.6093205Z test_flake_history_never_waives_mandatory_gate (test_architecture_v31.ArchitectureV31Tests.test_flake_history_never_waives_mandatory_gate) ... ok
+2026-09-18T00:05:31.6095092Z test_irreplaceable_evidence_requires_persistent_locator (test_architecture_v31.ArchitectureV31Tests.test_irreplaceable_evidence_requires_persistent_locator) ... ok
+2026-09-18T00:05:31.6825621Z test_mutation_canaries_all_reject_bad_inputs (test_architecture_v31.ArchitectureV31Tests.test_mutation_canaries_all_reject_bad_inputs) ... ok
+2026-09-18T00:05:31.6826954Z test_pipeline_telemetry_is_valid_and_does_not_drive_thresholds (test_architecture_v31.ArchitectureV31Tests.test_pipeline_telemetry_is_valid_and_does_not_drive_thresholds) ... ok
+2026-09-18T00:05:31.6833131Z test_retention_duration_and_repo_provenance_are_enforced (test_architecture_v31.ArchitectureV31Tests.test_retention_duration_and_repo_provenance_are_enforced) ... ok
+2026-09-18T00:05:31.6835693Z test_runtime_dependency_learning_is_additive_only (test_architecture_v31.ArchitectureV31Tests.test_runtime_dependency_learning_is_additive_only) ... ok
+2026-09-18T00:05:31.6846731Z test_t09_aggregate_and_defect_ledger_are_fail_closed (test_architecture_v31.ArchitectureV31Tests.test_t09_aggregate_and_defect_ledger_are_fail_closed) ... ok
+2026-09-18T00:05:31.7073992Z test_t09_approval_manifest_hashes_and_required_set_are_fail_closed (test_architecture_v31.ArchitectureV31Tests.test_t09_approval_manifest_hashes_and_required_set_are_fail_closed) ... ok
+2026-09-18T00:05:31.7082073Z test_t09_raw_critic_semantics_are_fail_closed (test_architecture_v31.ArchitectureV31Tests.test_t09_raw_critic_semantics_are_fail_closed) ... ok
+2026-09-18T00:05:31.7089804Z test_t09_snapshot_includes_produced_contract (test_architecture_v31.ArchitectureV31Tests.test_t09_snapshot_includes_produced_contract) ... ok
+2026-09-18T00:05:31.7810198Z test_task_snapshot_remains_derived (test_architecture_v31.ArchitectureV31Tests.test_task_snapshot_remains_derived) ... ok
+2026-09-18T00:05:31.7844273Z test_transitive_invalidation_blocks_reuse_without_auto_revocation (test_architecture_v31.ArchitectureV31Tests.test_transitive_invalidation_blocks_reuse_without_auto_revocation) ... ok
+2026-09-18T00:05:31.9283745Z test_v31_readiness_requires_lifecycle_and_ownership (test_architecture_v31.ArchitectureV31Tests.test_v31_readiness_requires_lifecycle_and_ownership) ... ok
+2026-09-18T00:05:31.9285541Z test_cancelled_run_is_superseded_not_product_failure (test_c0_builder.C0BuilderTests.test_cancelled_run_is_superseded_not_product_failure) ... ok
+2026-09-18T00:05:31.9287241Z test_complete_tooling_diagnosis_allows_exact_repair_plan (test_c0_builder.C0BuilderTests.test_complete_tooling_diagnosis_allows_exact_repair_plan) ... ok
+2026-09-18T00:05:31.9288773Z test_missing_blocker_mapping_is_rejected (test_c0_builder.C0BuilderTests.test_missing_blocker_mapping_is_rejected) ... ok
+2026-09-18T00:05:31.9290140Z test_post_build_extra_file_is_rejected (test_c0_builder.C0BuilderTests.test_post_build_extra_file_is_rejected) ... ok
+2026-09-18T00:05:31.9291419Z test_post_build_wrong_base_is_rejected (test_c0_builder.C0BuilderTests.test_post_build_wrong_base_is_rejected) ... ok
+2026-09-18T00:05:31.9292913Z test_protected_approved_file_is_rejected (test_c0_builder.C0BuilderTests.test_protected_approved_file_is_rejected) ... ok
+2026-09-18T00:05:31.9294381Z test_superseded_report_cannot_authorize_builder_repair (test_c0_builder.C0BuilderTests.test_superseded_report_cannot_authorize_builder_repair) ... ok
+2026-09-18T00:05:31.9296417Z test_builder_standard_requires_finish_running_sha (test_c0_governance.C0GovernanceTests.test_builder_standard_requires_finish_running_sha) ... ok
+2026-09-18T00:05:31.9297968Z test_c0_is_operational_but_never_an_approval_vote (test_c0_governance.C0GovernanceTests.test_c0_is_operational_but_never_an_approval_vote) ... ok
+2026-09-18T00:05:31.9303374Z test_c0_workflow_is_diagnostic_only_and_frozen_sha_scoped (test_c0_governance.C0GovernanceTests.test_c0_workflow_is_diagnostic_only_and_frozen_sha_scoped) ... ok
+2026-09-18T00:05:31.9313570Z test_fix_required_builder_requires_c0_contract (test_c0_governance.C0GovernanceTests.test_fix_required_builder_requires_c0_contract) ... ok
+2026-09-18T00:05:31.9315680Z test_post_integration_repair_uses_shared_branch_point_not_historical_assignment_base (test_candidate_reconcile.CandidateReconcileTests.test_post_integration_repair_uses_shared_branch_point_not_historical_assignment_base) ... ok
+2026-09-18T00:05:31.9318092Z test_real_drift_after_shared_branch_point_still_requires_reconcile (test_candidate_reconcile.CandidateReconcileTests.test_real_drift_after_shared_branch_point_still_requires_reconcile) ... ok
+2026-09-18T00:05:31.9320308Z test_development_pr_does_not_require_final_game_release_certification (test_critic_loop_regressions.CriticLoopRegressionTests.test_development_pr_does_not_require_final_game_release_certification) ... ok
+2026-09-18T00:05:31.9322581Z test_diagnostic_governance_finishes_running_sha (test_critic_loop_regressions.CriticLoopRegressionTests.test_diagnostic_governance_finishes_running_sha) ... ok
+2026-09-18T00:05:31.9324549Z test_disposable_readiness_checks_may_cancel_stale_branch_runs (test_critic_loop_regressions.CriticLoopRegressionTests.test_disposable_readiness_checks_may_cancel_stale_branch_runs) ... ok
+2026-09-18T00:05:31.9326603Z test_governance_checkpoint_assertions_are_lifecycle_aware (test_critic_loop_regressions.CriticLoopRegressionTests.test_governance_checkpoint_assertions_are_lifecycle_aware) ... ok
+2026-09-18T00:05:31.9328689Z test_governance_only_changes_do_not_launch_full_native_review (test_critic_loop_regressions.CriticLoopRegressionTests.test_governance_only_changes_do_not_launch_full_native_review) ... ok
+2026-09-18T00:05:31.9336179Z test_incomplete_reviewer_is_retry_not_a_negative_vote (test_critic_loop_regressions.CriticLoopRegressionTests.test_incomplete_reviewer_is_retry_not_a_negative_vote) ... ok
+2026-09-18T00:05:31.9338594Z test_production_governance_is_not_frozen_to_t03_integration (test_critic_loop_regressions.CriticLoopRegressionTests.test_production_governance_is_not_frozen_to_t03_integration) ... ok
+2026-09-18T00:05:31.9340979Z test_repair_policy_blocks_evidence_only_loop_after_real_defect (test_critic_loop_regressions.CriticLoopRegressionTests.test_repair_policy_blocks_evidence_only_loop_after_real_defect) ... ok
+2026-09-18T00:05:31.9350729Z test_single_visual_dissent_routes_to_adjudication_not_product_failure (test_critic_loop_regressions.CriticLoopRegressionTests.test_single_visual_dissent_routes_to_adjudication_not_product_failure) ... ok
+2026-09-18T00:05:31.9353724Z test_t03_closeout_uses_current_governance_with_frozen_candidate_evidence (test_critic_loop_regressions.CriticLoopRegressionTests.test_t03_closeout_uses_current_governance_with_frozen_candidate_evidence) ... ok
+2026-09-18T00:05:31.9363484Z test_two_clean_votes_out_of_three_pass_without_score_averaging (test_critic_loop_regressions.CriticLoopRegressionTests.test_two_clean_votes_out_of_three_pass_without_score_averaging) ... ok
+2026-09-18T00:05:31.9370659Z test_two_correlated_visual_defect_votes_still_fail (test_critic_loop_regressions.CriticLoopRegressionTests.test_two_correlated_visual_defect_votes_still_fail) ... ok
+2026-09-18T00:05:31.9383578Z test_corrupt_cache_is_rejected_before_reuse (test_critic_runtime_cache.CriticRuntimeCacheTests.test_corrupt_cache_is_rejected_before_reuse) ... ok
+2026-09-18T00:05:31.9389980Z test_runtime_lock_schema_is_strict (test_critic_runtime_cache.CriticRuntimeCacheTests.test_runtime_lock_schema_is_strict) ... ok
+2026-09-18T00:05:31.9398844Z test_valid_cache_is_fully_hash_verified (test_critic_runtime_cache.CriticRuntimeCacheTests.test_valid_cache_is_fully_hash_verified) ... ok
+2026-09-18T00:05:31.9411636Z test_valid_cache_requires_zero_network_access (test_critic_runtime_cache.CriticRuntimeCacheTests.test_valid_cache_requires_zero_network_access) ... ok
+2026-09-18T00:05:31.9413623Z test_exact_success_observation_passes_without_granting_approval (test_factory_closeout_gate.FactoryCloseoutGateTests.test_exact_success_observation_passes_without_granting_approval) ... ok
+2026-09-18T00:05:31.9415430Z test_failure_or_stale_source_cannot_close (test_factory_closeout_gate.FactoryCloseoutGateTests.test_failure_or_stale_source_cannot_close) ... ok
+2026-09-18T00:05:31.9417118Z test_t09_is_not_retroactively_reopened_by_forward_gate (test_factory_closeout_gate.FactoryCloseoutGateTests.test_t09_is_not_retroactively_reopened_by_forward_gate) ... ok
+2026-09-18T00:05:31.9419022Z test_unvalidated_runtime_dependency_trace_blocks_closeout (test_factory_closeout_gate.FactoryCloseoutGateTests.test_unvalidated_runtime_dependency_trace_blocks_closeout) ... ok
+2026-09-18T00:05:31.9421162Z test_bad_external_observation_is_rejected_not_partially_learned (test_factory_observation_consumers.FactoryObservationConsumerTests.test_bad_external_observation_is_rejected_not_partially_learned) ... ok
+2026-09-18T00:05:31.9423296Z test_observer_bundle_feeds_flake_and_telemetry_without_repo_ledger_mutation (test_factory_observation_consumers.FactoryObservationConsumerTests.test_observer_bundle_feeds_flake_and_telemetry_without_repo_ledger_mutation) ... ok
+2026-09-18T00:05:31.9425992Z test_runtime_trace_contract_is_source_bound_and_additive_only (test_factory_observation_consumers.FactoryObservationConsumerTests.test_runtime_trace_contract_is_source_bound_and_additive_only) ... ok
+2026-09-18T00:05:32.0162811Z test_ambiguous_artifact_provenance_fails_closed_for_flake_fingerprint (test_factory_observer.FactoryObserverTests.test_ambiguous_artifact_provenance_fails_closed_for_flake_fingerprint) ... ok
+2026-09-18T00:05:32.0892659Z test_bundle_writer_produces_machine_records (test_factory_observer.FactoryObserverTests.test_bundle_writer_produces_machine_records) ... ok
+2026-09-18T00:05:32.1620911Z test_exact_environment_emits_telemetry_flakes_and_task_state (test_factory_observer.FactoryObserverTests.test_exact_environment_emits_telemetry_flakes_and_task_state) ... ok
+2026-09-18T00:05:32.2348041Z test_invalid_dependency_trace_cannot_be_learned (test_factory_observer.FactoryObserverTests.test_invalid_dependency_trace_cannot_be_learned) ... ok
+2026-09-18T00:05:32.3069700Z test_missing_environment_suppresses_flake_claims_not_telemetry (test_factory_observer.FactoryObserverTests.test_missing_environment_suppresses_flake_claims_not_telemetry) ... ok
+2026-09-18T00:05:32.3795358Z test_runtime_dependency_trace_must_be_source_bound_and_schema_valid (test_factory_observer.FactoryObserverTests.test_runtime_dependency_trace_must_be_source_bound_and_schema_valid) ... ok
+2026-09-18T00:05:32.4514932Z test_wrong_source_dependency_trace_blocks_bundle (test_factory_observer.FactoryObserverTests.test_wrong_source_dependency_trace_blocks_bundle) ... ok
+2026-09-18T00:05:32.4774776Z test_all_61_forward_tasks_validate (test_forward_execution.ForwardExecutionTests.test_all_61_forward_tasks_validate) ... ok
+2026-09-18T00:05:32.4780181Z test_t10_world_transform_is_fail_fast_build (test_forward_execution.ForwardExecutionTests.test_t10_world_transform_is_fail_fast_build) ... ok
+2026-09-18T00:05:32.4785285Z test_t14_persistence_runs_security_and_save_proof (test_forward_execution.ForwardExecutionTests.test_t14_persistence_runs_security_and_save_proof) ... ok
+2026-09-18T00:05:32.4790266Z test_t24_animal_requires_reference_motion_and_performance (test_forward_execution.ForwardExecutionTests.test_t24_animal_requires_reference_motion_and_performance) ... ok
+2026-09-18T00:05:32.4795509Z test_t33_economy_gets_progression_economy_security (test_forward_execution.ForwardExecutionTests.test_t33_economy_gets_progression_economy_security) ... ok
+2026-09-18T00:05:32.4800288Z test_t37_liveops_gets_liveops_and_economy_security (test_forward_execution.ForwardExecutionTests.test_t37_liveops_gets_liveops_and_economy_security) ... ok
+2026-09-18T00:05:32.4805393Z test_t58_validation_cannot_integrate_runtime (test_forward_execution.ForwardExecutionTests.test_t58_validation_cannot_integrate_runtime) ... ok
+2026-09-18T00:05:32.4810396Z test_t62_whole_progression_acceptance_is_validation_only (test_forward_execution.ForwardExecutionTests.test_t62_whole_progression_acceptance_is_validation_only) ... ok
+2026-09-18T00:05:32.4815312Z test_t68_physical_cert_cannot_use_runtime_integration (test_forward_execution.ForwardExecutionTests.test_t68_physical_cert_cannot_use_runtime_integration) ... ok
+2026-09-18T00:05:32.4820180Z test_t70_release_only_requires_manifest_and_full_closure (test_forward_execution.ForwardExecutionTests.test_t70_release_only_requires_manifest_and_full_closure) ... ok
+2026-09-18T00:05:32.4825883Z test_candidate_scope_excludes_shared_assignment_checkpoint (test_governance.GovernanceTests.test_candidate_scope_excludes_shared_assignment_checkpoint) ... ok
+2026-09-18T00:05:32.4829504Z test_candidate_scope_falls_back_when_branch_point_predates_registry_base (test_governance.GovernanceTests.test_candidate_scope_falls_back_when_branch_point_predates_registry_base) ... ok
+2026-09-18T00:05:32.4857866Z test_change_impact_river_and_t03 (test_governance.GovernanceTests.test_change_impact_river_and_t03) ... ok
+2026-09-18T00:05:32.4859832Z test_completed_t03_registry_checkpoint (test_governance.GovernanceTests.test_completed_t03_registry_checkpoint) ... ok
+2026-09-18T00:05:32.4861601Z test_critic_matrix (test_governance.GovernanceTests.test_critic_matrix) ... ok
+2026-09-18T00:05:32.4866585Z test_exact_70_task_graph_and_lifecycle_consistency (test_governance.GovernanceTests.test_exact_70_task_graph_and_lifecycle_consistency) ... ok
+2026-09-18T00:05:32.4874155Z test_governance_only_candidate_drift_does_not_force_rebase (test_governance.GovernanceTests.test_governance_only_candidate_drift_does_not_force_rebase) ... ok
+2026-09-18T00:05:32.4875437Z test_governance_only_change (test_governance.GovernanceTests.test_governance_only_change) ... ok
+2026-09-18T00:05:32.4878496Z test_graph_is_acyclic (test_governance.GovernanceTests.test_graph_is_acyclic) ... ok
+2026-09-18T00:05:32.4879513Z test_performance_budget_fields (test_governance.GovernanceTests.test_performance_budget_fields) ... ok
+2026-09-18T00:05:32.4881390Z test_qa_capture_harness_is_governance_only (test_governance.GovernanceTests.test_qa_capture_harness_is_governance_only) ... ok
+2026-09-18T00:05:32.4887365Z test_registry_has_no_active_ownership_collision (test_governance.GovernanceTests.test_registry_has_no_active_ownership_collision) ... ok
+2026-09-18T00:05:32.4888391Z test_strict_score_rule (test_governance.GovernanceTests.test_strict_score_rule) ... ok
+2026-09-18T00:05:32.4902947Z test_t06_closeout_and_t07_lifecycle_checkpoint (test_governance.GovernanceTests.test_t06_closeout_and_t07_lifecycle_checkpoint) ... ok
+2026-09-18T00:05:32.4908764Z test_t09_change_impact_is_fail_closed (test_governance.GovernanceTests.test_t09_change_impact_is_fail_closed) ... ok
+2026-09-18T00:05:32.4912005Z test_t09_closeout_workflow_is_exactly_allowlisted (test_governance.GovernanceTests.test_t09_closeout_workflow_is_exactly_allowlisted) ... ok
+2026-09-18T00:05:32.4914170Z test_unknown_runtime_is_never_hidden_by_docs_match (test_governance.GovernanceTests.test_unknown_runtime_is_never_hidden_by_docs_match) ... ok
+2026-09-18T00:05:32.4992490Z test_assigned_t04_runtime_cannot_integrate_early (test_integration_scope.IntegrationScopeTests.test_assigned_t04_runtime_cannot_integrate_early) ... ok
+2026-09-18T00:05:32.4999542Z test_assigned_t05_runtime_cannot_integrate_early (test_integration_scope.IntegrationScopeTests.test_assigned_t05_runtime_cannot_integrate_early) ... ok
+2026-09-18T00:05:32.5000803Z test_governance_only_change_passes (test_integration_scope.IntegrationScopeTests.test_governance_only_change_passes) ... ok
+2026-09-18T00:05:32.5005274Z test_integration_only_wiring_requires_authorization (test_integration_scope.IntegrationScopeTests.test_integration_only_wiring_requires_authorization) ... ok
+2026-09-18T00:05:32.5011150Z test_sequential_commit_cannot_span_multiple_tasks (test_integration_scope.IntegrationScopeTests.test_sequential_commit_cannot_span_multiple_tasks) ... ok
+2026-09-18T00:05:32.5014536Z test_t04_runtime_passes_when_integration_ready (test_integration_scope.IntegrationScopeTests.test_t04_runtime_passes_when_integration_ready) ... ok
+2026-09-18T00:05:32.5016749Z test_task_closeout_and_dependent_packet_are_governance (test_integration_scope.IntegrationScopeTests.test_task_closeout_and_dependent_packet_are_governance) ... ok
+2026-09-18T00:05:32.5018310Z test_unowned_runtime_is_rejected (test_integration_scope.IntegrationScopeTests.test_unowned_runtime_is_rejected) ... ok
+2026-09-18T00:05:32.5019893Z test_candidate_added_ownership_cannot_change_base_decision (test_migration_scope.MigrationScopeTests.test_candidate_added_ownership_cannot_change_base_decision) ... ok
+2026-09-18T00:05:32.5021580Z test_explicit_qa_capture_harness_remains_allowed (test_migration_scope.MigrationScopeTests.test_explicit_qa_capture_harness_remains_allowed) ... ok
+2026-09-18T00:05:32.5023040Z test_game_runtime_is_rejected_even_if_qa_alias_claims_it (test_migration_scope.MigrationScopeTests.test_game_runtime_is_rejected_even_if_qa_alias_claims_it) ... ok
+2026-09-18T00:05:32.5024053Z test_missing_base_governance_alias_fails_closed (test_migration_scope.MigrationScopeTests.test_missing_base_governance_alias_fails_closed) ... ok
+2026-09-18T00:05:32.5025063Z test_preowned_qa_workflow_is_allowed (test_migration_scope.MigrationScopeTests.test_preowned_qa_workflow_is_allowed) ... ok
+2026-09-18T00:05:32.5026390Z test_unknown_task_workflow_is_rejected (test_migration_scope.MigrationScopeTests.test_unknown_task_workflow_is_rejected) ... ok
+2026-09-18T00:05:32.5027919Z test_integration_only_path_does_not_match_task_reservation (test_preactivation_candidate.PreActivationCandidateTests.test_integration_only_path_does_not_match_task_reservation) ... ok
+2026-09-18T00:05:32.5029269Z test_missing_integration_block_fails_closed (test_preactivation_candidate.PreActivationCandidateTests.test_missing_integration_block_fails_closed) ... ok
+2026-09-18T00:05:32.5030407Z test_path_patterns_cover_task_workflows_but_not_foreign_task (test_preactivation_candidate.PreActivationCandidateTests.test_path_patterns_cover_task_workflows_but_not_foreign_task) ... ok
+2026-09-18T00:05:32.5031532Z test_t10_style_policy_is_explicitly_allowed (test_preactivation_candidate.PreActivationCandidateTests.test_t10_style_policy_is_explicitly_allowed) ... ok
+2026-09-18T00:05:32.5032666Z test_t11_style_policy_is_explicitly_allowed (test_preactivation_candidate.PreActivationCandidateTests.test_t11_style_policy_is_explicitly_allowed) ... ok
+2026-09-18T00:05:32.5056058Z test_changed_persistence_contract_invalidates_transitively (test_proof_invalidation_diff.ProofInvalidationDiffTests.test_changed_persistence_contract_invalidates_transitively) ... ok
+2026-09-18T00:05:32.5057354Z test_no_contract_change_does_not_invalidate (test_proof_invalidation_diff.ProofInvalidationDiffTests.test_no_contract_change_does_not_invalidate) ... ok
+2026-09-18T00:05:32.5083210Z test_removed_contract_uses_base_consumers_for_invalidation (test_proof_invalidation_diff.ProofInvalidationDiffTests.test_removed_contract_uses_base_consumers_for_invalidation) ... ok
+2026-09-18T00:05:32.5084801Z test_camera_only_repair_is_blocked (test_repair_cycle.RepairCycleTests.test_camera_only_repair_is_blocked) ... ok
+2026-09-18T00:05:32.5085959Z test_causal_production_repair_passes (test_repair_cycle.RepairCycleTests.test_causal_production_repair_passes) ... ok
+2026-09-18T00:05:32.5086778Z test_closeup_cannot_replace_gameplay_proof (test_repair_cycle.RepairCycleTests.test_closeup_cannot_replace_gameplay_proof) ... ok
+2026-09-18T00:05:32.5087794Z test_rejected_candidate_cannot_be_relabelled (test_repair_cycle.RepairCycleTests.test_rejected_candidate_cannot_be_relabelled) ... ok
+2026-09-18T00:05:32.5091436Z test_future_unregistered_resource_fails_closed (test_resource_actor_contract.ResourceActorContractTests.test_future_unregistered_resource_fails_closed) ... ok
+2026-09-18T00:05:32.5095475Z test_pet_task_requires_species_actor_and_animation_profiles (test_resource_actor_contract.ResourceActorContractTests.test_pet_task_requires_species_actor_and_animation_profiles) ... ok
+2026-09-18T00:05:32.5097906Z test_schema_is_internally_consistent (test_resource_actor_contract.ResourceActorContractTests.test_schema_is_internally_consistent) ... ok
+2026-09-18T00:05:32.5101340Z test_t05_is_not_retroactively_expanded (test_resource_actor_contract.ResourceActorContractTests.test_t05_is_not_retroactively_expanded) ... ok
+2026-09-18T00:05:32.5105431Z test_t09_fails_closed_when_fuel_evidence_is_missing (test_resource_actor_contract.ResourceActorContractTests.test_t09_fails_closed_when_fuel_evidence_is_missing) ... ok
+2026-09-18T00:05:32.5109917Z test_t09_frozen_registry_passes_with_complete_candidate_coverage (test_resource_actor_contract.ResourceActorContractTests.test_t09_frozen_registry_passes_with_complete_candidate_coverage) ... ok
+2026-09-18T00:05:32.5976977Z test_accessibility_gate_requires_device_matrix_and_touch_targets (test_specialist_safeguards.SpecialistSafeguards.test_accessibility_gate_requires_device_matrix_and_touch_targets) ... ok
+2026-09-18T00:05:32.5980113Z test_all_critics_operational_and_known (test_specialist_safeguards.SpecialistSafeguards.test_all_critics_operational_and_known) ... ok
+2026-09-18T00:05:33.5543314Z test_c9_secure_adapter_passes_and_vulnerable_adapter_fails (test_specialist_safeguards.SpecialistSafeguards.test_c9_secure_adapter_passes_and_vulnerable_adapter_fails) ... ok
+2026-09-18T00:05:33.6410443Z test_economy_fairness_gate_rejects_energy_and_miserable_f2p (test_specialist_safeguards.SpecialistSafeguards.test_economy_fairness_gate_rejects_energy_and_miserable_f2p) ... ok
+2026-09-18T00:05:33.6420291Z test_independent_runtime_cannot_be_faked_by_self_review (test_specialist_safeguards.SpecialistSafeguards.test_independent_runtime_cannot_be_faked_by_self_review) ... ok
+2026-09-18T00:05:33.7291202Z test_liveops_gate_rejects_collisions_and_missing_kill_switch (test_specialist_safeguards.SpecialistSafeguards.test_liveops_gate_rejects_collisions_and_missing_kill_switch) ... ok
+2026-09-18T00:05:33.8173151Z test_progression_spend_blind_and_level100_gate (test_specialist_safeguards.SpecialistSafeguards.test_progression_spend_blind_and_level100_gate) ... ok
+2026-09-18T00:05:33.8189360Z test_raw_critic_strictly_above_nine (test_specialist_safeguards.SpecialistSafeguards.test_raw_critic_strictly_above_nine) ... ok
+2026-09-18T00:05:33.8199588Z test_specialist_manifest_requires_all_categories_and_hashes (test_specialist_safeguards.SpecialistSafeguards.test_specialist_manifest_requires_all_categories_and_hashes) ... ok
+2026-09-18T00:05:33.8201951Z test_accepts_complete_strict_source_bound_record (test_t05_completion.T05CompletionTests.test_accepts_complete_strict_source_bound_record) ... ok
+2026-09-18T00:05:33.8203259Z test_rejects_exactly_nine (test_t05_completion.T05CompletionTests.test_rejects_exactly_nine) ... ok
+2026-09-18T00:05:33.8204640Z test_rejects_missing_gate_and_invalid_artifact_digest (test_t05_completion.T05CompletionTests.test_rejects_missing_gate_and_invalid_artifact_digest) ... ok
+2026-09-18T00:05:33.8205759Z test_rejects_open_defect (test_t05_completion.T05CompletionTests.test_rejects_open_defect) ... ok
+2026-09-18T00:05:33.8206936Z test_rejects_wrong_source_and_incomplete_regression (test_t05_completion.T05CompletionTests.test_rejects_wrong_source_and_incomplete_regression) ... ok
+2026-09-18T00:05:33.8207480Z 
+2026-09-18T00:05:33.8207633Z ----------------------------------------------------------------------
+2026-09-18T00:05:33.8208067Z Ran 162 tests in 20.439s
+2026-09-18T00:05:33.8208236Z 
+2026-09-18T00:05:33.8208684Z OK
+2026-09-18T00:05:33.8440826Z ##[group]Run python3 tools/havenline/production/workstream.py validate-registry
+2026-09-18T00:05:33.8441410Z [36;1mpython3 tools/havenline/production/workstream.py validate-registry[0m
+2026-09-18T00:05:33.8483205Z shell: /usr/bin/bash -e {0}
+2026-09-18T00:05:33.8483478Z ##[endgroup]
+2026-09-18T00:05:33.8950667Z {
+2026-09-18T00:05:33.8950977Z   "passed": true,
+2026-09-18T00:05:33.8951208Z   "errors": []
+2026-09-18T00:05:33.8951414Z }
+2026-09-18T00:05:33.9069981Z ##[group]Run set -euo pipefail
+2026-09-18T00:05:33.9070312Z [36;1mset -euo pipefail[0m
+2026-09-18T00:05:33.9070705Z [36;1mif [ "push" = "pull_request" ]; then base=""; else base=$(git rev-parse HEAD^); fi[0m
+2026-09-18T00:05:33.9071209Z [36;1mpython3 tools/havenline/production/validate_migration.py[0m
+2026-09-18T00:05:33.9072113Z [36;1mpython3 tools/havenline/production/validate_migration_scope.py --base "$base" --head HEAD --output /tmp/migration-scope.json[0m
+2026-09-18T00:05:33.9072764Z [36;1mcat /tmp/migration-scope.json[0m
+2026-09-18T00:05:33.9115947Z shell: /usr/bin/bash --noprofile --norc -e -o pipefail {0}
+2026-09-18T00:05:33.9116303Z ##[endgroup]
+2026-09-18T00:05:33.9689070Z {
+2026-09-18T00:05:33.9689363Z   "passed": true,
+2026-09-18T00:05:33.9689604Z   "errors": [],
+2026-09-18T00:05:33.9689816Z   "checked_tasks": 70,
+2026-09-18T00:05:33.9690049Z   "checked_critics": 11,
+2026-09-18T00:05:33.9690280Z   "migration_base": null
+2026-09-18T00:05:33.9690493Z }
+2026-09-18T00:05:34.0278165Z {
+2026-09-18T00:05:34.0278444Z   "passed": false,
+2026-09-18T00:05:34.0278768Z   "changed_files": [
+2026-09-18T00:05:34.0279169Z     ".github/workflows/havenline-production-governance.yml",
+2026-09-18T00:05:34.0279726Z     ".github/workflows/havenline-task09-harvesting.yml",
+2026-09-18T00:05:34.0280091Z     "Docs/Production/CI_TOOLCHAIN_LOCK.json",
+2026-09-18T00:05:34.0280632Z     "Docs/Production/ChangeRequests/T09-reviewed-repair-reactivation.json",
+2026-09-18T00:05:34.0281114Z     "Docs/Production/T09/repair-artifact-verification.json",
+2026-09-18T00:05:34.0281616Z     "Docs/Production/T09/repair-defect-ledger.json",
+2026-09-18T00:05:34.0282252Z     "Docs/Production/T09/repair-independent-review-94714f6.md",
+2026-09-18T00:05:34.0282685Z     "HavenlineGodot/assets/harvesting_v1/t09_motion_capture.gd",
+2026-09-18T00:05:34.0283204Z     "HavenlineGodot/assets/harvesting_v1/t09_motion_fixture.gd",
+2026-09-18T00:05:34.0283624Z     "HavenlineGodot/scripts/harvest_presentation.gd",
+2026-09-18T00:05:34.0284020Z     "HavenlineGodot/scripts/main.gd",
+2026-09-18T00:05:34.0284340Z     "HavenlineGodot/tests/capture_task09_harvesting.gd",
+2026-09-18T00:05:34.0284791Z     "HavenlineGodot/tests/test_task09_integration.gd",
+2026-09-18T00:05:34.0285245Z     "tools/havenline/production/tests/test_architecture_release_lock.py",
+2026-09-18T00:05:34.0285739Z     "tools/havenline/production/tests/test_architecture_v31.py",
+2026-09-18T00:05:34.0286260Z     "tools/havenline/production/validate_architecture_v32_t09.py",
+2026-09-18T00:05:34.0286638Z     "tools/havenline/task09/motion_capture.py",
+2026-09-18T00:05:34.0287059Z     "tools/havenline/task09/validate_harvesting.py"
+2026-09-18T00:05:34.0287345Z   ],
+2026-09-18T00:05:34.0287537Z   "allowed_files": [
+2026-09-18T00:05:34.0287919Z     ".github/workflows/havenline-production-governance.yml",
+2026-09-18T00:05:34.0288305Z     ".github/workflows/havenline-task09-harvesting.yml",
+2026-09-18T00:05:34.0288733Z     "Docs/Production/CI_TOOLCHAIN_LOCK.json",
+2026-09-18T00:05:34.0289154Z     "Docs/Production/ChangeRequests/T09-reviewed-repair-reactivation.json",
+2026-09-18T00:05:34.0289621Z     "Docs/Production/T09/repair-artifact-verification.json",
+2026-09-18T00:05:34.0289995Z     "Docs/Production/T09/repair-defect-ledger.json",
+2026-09-18T00:05:34.0290368Z     "Docs/Production/T09/repair-independent-review-94714f6.md",
+2026-09-18T00:05:34.0290814Z     "tools/havenline/production/tests/test_architecture_release_lock.py",
+2026-09-18T00:05:34.0291264Z     "tools/havenline/production/tests/test_architecture_v31.py",
+2026-09-18T00:05:34.0292133Z     "tools/havenline/production/validate_architecture_v32_t09.py"
+2026-09-18T00:05:34.0292461Z   ],
+2026-09-18T00:05:34.0292655Z   "rejected_files": [
+2026-09-18T00:05:34.0292947Z     "HavenlineGodot/assets/harvesting_v1/t09_motion_capture.gd",
+2026-09-18T00:05:34.0293345Z     "HavenlineGodot/assets/harvesting_v1/t09_motion_fixture.gd",
+2026-09-18T00:05:34.0293709Z     "HavenlineGodot/scripts/harvest_presentation.gd",
+2026-09-18T00:05:34.0294225Z     "HavenlineGodot/scripts/main.gd",
+2026-09-18T00:05:34.0294545Z     "HavenlineGodot/tests/capture_task09_harvesting.gd",
+2026-09-18T00:05:34.0294890Z     "HavenlineGodot/tests/test_task09_integration.gd",
+2026-09-18T00:05:34.0295237Z     "tools/havenline/task09/motion_capture.py",
+2026-09-18T00:05:34.0295565Z     "tools/havenline/task09/validate_harvesting.py"
+2026-09-18T00:05:34.0295850Z   ],
+2026-09-18T00:05:34.0296057Z   "base_qa_governance_pattern_count": 68,
+2026-09-18T00:05:34.0296341Z   "runtime_ownership_filtered": true,
+2026-09-18T00:05:34.0296624Z   "candidate_cannot_self_authorize": true,
+2026-09-18T00:05:34.0296892Z   "schema_version": 1,
+2026-09-18T00:05:34.0297150Z   "base": "00b39caa8a5d4925d1ba0f3d7c19dd9ebdf14f26",
+2026-09-18T00:05:34.0297467Z   "head": "5415d85838ecf4bea8b3c71662072670e61797a0",
+2026-09-18T00:05:34.0298001Z   "ownership_source": "00b39caa8a5d4925d1ba0f3d7c19dd9ebdf14f26:Docs/Production/PATH_OWNERSHIP.json"
+2026-09-18T00:05:34.0298466Z }
+2026-09-18T00:05:34.0358559Z ##[error]Process completed with exit code 2.
+2026-09-18T00:05:34.0538262Z Post job cleanup.
+2026-09-18T00:05:34.1469515Z [command]/usr/bin/git version
+2026-09-18T00:05:34.1523235Z git version 2.55.0
+2026-09-18T00:05:34.1569676Z Temporarily overriding HOME='/home/runner/work/_temp/15f4ceeb-ce9e-446e-b1d2-71885f7efa9b' before making global git config changes
+2026-09-18T00:05:34.1571108Z Adding repository directory to the temporary git global config as a safe directory
+2026-09-18T00:05:34.1576692Z [command]/usr/bin/git config --global --add safe.directory /home/runner/work/HAVENLINE/HAVENLINE
+2026-09-18T00:05:34.1629021Z [command]/usr/bin/git config --local --name-only --get-regexp core\.sshCommand
+2026-09-18T00:05:34.1672680Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'core\.sshCommand' && git config --local --unset-all 'core.sshCommand' || :"
+2026-09-18T00:05:34.1938693Z [command]/usr/bin/git config --local --name-only --get-regexp http\.https\:\/\/github\.com\/\.extraheader
+2026-09-18T00:05:34.1968590Z http.https://github.com/.extraheader
+2026-09-18T00:05:34.1981018Z [command]/usr/bin/git config --local --unset-all http.https://github.com/.extraheader
+2026-09-18T00:05:34.2020283Z [command]/usr/bin/git submodule foreach --recursive sh -c "git config --local --name-only --get-regexp 'http\.https\:\/\/github\.com\/\.extraheader' && git config --local --unset-all 'http.https://github.com/.extraheader' || :"
+2026-09-18T00:05:34.2322900Z [command]/usr/bin/git config --local --name-only --get-regexp ^includeIf\.gitdir:
+2026-09-18T00:05:34.2374544Z [command]/usr/bin/git submodule foreach --recursive git config --local --show-origin --name-only --get-regexp remote.origin.url
+2026-09-18T00:05:34.2840933Z Cleaning up orphan processes
+

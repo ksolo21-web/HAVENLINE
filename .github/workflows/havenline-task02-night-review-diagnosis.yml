@@ -1,0 +1,53 @@
+name: Havenline T02 night-review evidence diagnosis
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task02-night-review-diagnosis.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  diagnose-review-gap:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 6
+    env:
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      HF_HUB_DISABLE_IMPLICIT_TOKEN: '1'
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T02-publisher-visual-integrity-34531219636
+          run-id: 34531219636
+          github-token: ${{ github.token }}
+          path: prior-review/
+      - run: python3 -m pip install 'gradio_client==1.14.0'
+      - name: Clarify the nonpassing dimension against the identical source image; no score request
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,hashlib,html,re,time,urllib.request
+          from gradio_client import Client,handle_file
+          out=Path('night-review-diagnosis');out.mkdir(exist_ok=True);root=Path('prior-review')
+          prior=json.loads((root/'night-overview-review.json').read_text());req=json.loads((root/'night-overview-request.json').read_text())
+          assert prior['source']=='96f8d396a5015e136c590dc496214a689adb1e43' and prior['review']['scores']['view_consistency']==8.5
+          image=root/'night-overview-input.png';assert hashlib.sha256(image.read_bytes()).hexdigest()==req['image_sha256']
+          prompt='The attached image and the following unedited report belong to the same Task2 terrain review. The report gives view_consistency 8.5 but lists no defects and describes consistent materials. Diagnose the specific basis for that nonpassing dimension. Do NOT output a revised score, recommend a score increase, or invent a flaw to defend the number. Identify any actual visible inconsistency by panel and region, or any missing comparison needed to evaluate consistency. If no concrete deficiency is supported, say that plainly. Night and daytime views have intentionally different illumination and the overview camera is a distant diagnostic; this does not exempt real geometry, material or readability defects. Return only JSON with keys visible_inconsistencies (array of objects with view,region,issue), missing_evidence (array of strings), explanation (string), score_replacement_requested (false).\nOriginal report:\n'+json.dumps(prior['review'])+'\nOriginal recorded conditions:\n'+req['prompt'].split('Group: night-overview')[-1]
+          (out/'request.json').write_text(json.dumps({'input_sha256':req['image_sha256'],'source':prior['source'],'prompt':prompt,'purpose':'Clarify a missing rationale, not grade shopping or approval'},indent=2))
+          client=Client('Qwen/Qwen3-VL-235B-A22B-Instruct-Demo',hf_token=False,download_files=False,verbose=False)
+          client.predict(history=[],file=handle_file(str(image)),api_name='/add_file')
+          history=client.predict(history=[],text=prompt,api_name='/add_text')
+          reply=client.submit(_chatbot=history,api_name='/predict').result(timeout=180)
+          (out/'raw.json').write_text(json.dumps(reply,indent=2));text=reply[-1][1];(out/'raw.txt').write_text(text)
+          clean=html.unescape(re.sub(r'<[^>]+>','\n',text));value,_=json.JSONDecoder().raw_decode(clean[clean.find('{'):])
+          result={'source':prior['source'],'review_diagnosis':value,'previous_score_unchanged':8.5,'task_passed':False,'task3_started':False,'inference_completed':True}
+          (out/'diagnosis.json').write_text(json.dumps(result,indent=2));print(json.dumps(result,indent=2))
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T02-night-review-diagnosis-${{ github.run_id }}
+          path: night-review-diagnosis/
+          retention-days: 30
+          if-no-files-found: error
+# No source/image changes, score replacement, task approval, billing change or APK.

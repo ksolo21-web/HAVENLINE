@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "diagnostic_only": true,
+  "task_approved": false,
+  "rerun_authorized": false,
+  "local_reviewed_commit": "2a7e7f36eeee88de3cf5063b4ca50eb8ac330e5a",
+  "probe": {
+    "commit": "a1474ad88a9a8c062b98141037efa590557c7f03",
+    "tree": "80b09e1326d3e11bdbecef4baa1905b0d227ffe2",
+    "workflow_path": ".github/workflows/havenline-rendered-clearance-t10-full-domain-recovery.yml",
+    "workflow_sha256": "c53581a58add927987e2393949c62b7e050779e137cabdc2ea615012d42b4005",
+    "ref": "refs/heads/havenline/governance-T10-rendered-clearance-full-domain-recovery",
+    "event": "push",
+    "failed_source": "30a7e0cc40d44aea2b21229bc39f312da13865e0",
+    "failed_view_sha256": "6d737567f224be8d221b18e4d0ace6c6ef10de0102d27901c9f9e8d37e6659ac"
+  },
+  "file_sha256": {
+    ".github/workflows/havenline-rendered-clearance-t10-full-domain-recovery.yml": "c53581a58add927987e2393949c62b7e050779e137cabdc2ea615012d42b4005",
+    "HavenlineGodot/tests/capture_task10_world_transform.gd": "b1254e02b1529d9ee7aec25a5fdd1cdebfe98fb372c3d930f29c459c7642b522",
+    "tools/havenline/task10/run_rendered_clearance_domain.py": "098d216b215bd252cc0ef734f60517e78fc947389dc6dbbf6fc272fc7fe0c03e",
+    "tools/havenline/task10/verify_rendered_clearance_domain.py": "e4ce544d93aaebb0f4015e08e234ff78454a156ce1d4a6ae3f975059f0228d23",
+    "tools/havenline/task10/tests/test_verify_rendered_clearance_domain.py": "b8246ab9a89aeddc017fdef505c2071cc2d97bbae17ab34c74c20abc6ae0d6e7",
+    "HavenlineGodot/scripts/world_transform_view.gd": "5067ea967ea527cb28a4d5df5f4a5bd4cca8bf5dad393c4b6ca326a9897d8561"
+  },
+  "c0r_sha256": "0b50ab3c149c5d305d6e67711587acb2b2486001ee5643d1841eb07660f4914a",
+  "owner_sha256": "868044ededc1db54d674315eb0de2de9145963bf3df325ffec0551bf195c6e2d",
+  "v2_result": {
+    "run_id": 35478189624,
+    "artifact_id": 10594858274,
+    "zip_sha256": "234626b1bae1d89cdb94ca6e1c069cc95612cbb80725c08948026e6f25fed8ce"
+  },
+  "domain_cases": 650,
+  "domain": {
+    "core": 216,
+    "readability_endpoints": 432,
+    "native4k_anchors": 2,
+    "maximum_pulse_cases": 108
+  },
+  "scope": "One complete rendered diagnostic only. No product branch promotion, critic score reuse, approval or T11 unlock.",
+  "authorization_kind": "T10_RENDERED_CLEARANCE_FULL_DOMAIN_ONE_SHOT",
+  "disposition": "AUTHORIZED_FOR_ONE_DIAGNOSTIC_EXECUTION",
+  "diagnostic_execution_authorized": true,
+  "max_runs": 1,
+  "clean_preflight": {
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "exit": 0,
+    "cache": "absent_before_check",
+    "log_sha256": "6d1c065383a27c36804949b6ffa4b09714470b112e5dacc0bd5aeb7b9c147c4e"
+  }
+}

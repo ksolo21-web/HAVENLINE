@@ -1,0 +1,126 @@
+name: Havenline T03 iteration-9 final C1 C2
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths:
+      - '.github/workflows/havenline-task03-iteration9-final-visual.yml'
+      - 'tools/havenline/production/review_t03_iteration9_final.py'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+env:
+  CANDIDATE: 'c1c960e25f3549f4f630b4f881295329745e2701'
+  EVIDENCE_RUN: '35910432793'
+  EVIDENCE_ARTIFACT: 'havenline-t03-reference-repair-35910432793'
+
+jobs:
+  critic:
+    strategy:
+      fail-fast: false
+      max-parallel: 14
+      matrix:
+        critic: [C1, C2]
+        group: [fence, north-gate, work-gates, river-gates, lanes-central, lanes-bank, conditions]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 38
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - name: Prove reviewer tooling did not change frozen candidate runtime
+        run: git diff --exit-code "$CANDIDATE" HEAD -- HavenlineGodot
+      - uses: actions/download-artifact@v4
+        with:
+          github-token: ${{ github.token }}
+          repository: ${{ github.repository }}
+          run-id: ${{ env.EVIDENCE_RUN }}
+          name: ${{ env.EVIDENCE_ARTIFACT }}
+          path: task03-evidence
+      - uses: actions/cache/restore@v4
+        with:
+          path: ~/.cache/havenline-t01-qwen35
+          key: havenline-t01-qwen35-9b-q5-20260908-v1
+          fail-on-cache-miss: true
+      - run: python3 -m pip install pillow
+      - name: Run independent exact-source T03 critic
+        env:
+          EXPECTED_SOURCE: ${{ env.CANDIDATE }}
+          CRITIC_ID: ${{ matrix.critic }}
+          GROUP_ID: ${{ matrix.group }}
+          EVIDENCE_ROOT: task03-evidence
+          OUT_DIR: task03-${{ matrix.critic }}-${{ matrix.group }}
+        run: python3 -u tools/havenline/production/review_t03_iteration9_final.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-t03-iter9-${{ matrix.critic }}-${{ matrix.group }}-${{ github.run_id }}
+          path: task03-${{ matrix.critic }}-${{ matrix.group }}/
+          retention-days: 30
+          if-no-files-found: error
+
+  aggregate:
+    needs: critic
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-t03-iter9-*-${{ github.run_id }}
+          path: shards
+      - name: Enforce exact C1 and strict C2 without averaging
+        env:
+          CANDIDATE: ${{ env.CANDIDATE }}
+        run: |
+          python3 - <<'PY'
+          import json,math,os,pathlib
+          root=pathlib.Path('shards');out=pathlib.Path('aggregate');out.mkdir()
+          candidate=os.environ['CANDIDATE']
+          expected={'fence','north-gate','work-gates','river-gates','lanes-central','lanes-bank','conditions'}
+          records=[]
+          for p in root.rglob('critic-record.json'):
+              d=json.loads(p.read_text());records.append(d)
+          errors=[];final={}
+          for cid in ('C1','C2'):
+              rr=[d for d in records if d.get('critic_id')==cid]
+              groups={d.get('group') for d in rr}
+              if len(rr)!=7:errors.append(f'{cid} expected 7 records got {len(rr)}')
+              if groups!=expected:errors.append(f'{cid} coverage {sorted(x for x in groups if x)}')
+              defects=[]
+              for d in rr:
+                  if d.get('candidate_hash')!=candidate:errors.append(cid+' candidate mismatch '+str(d.get('group')))
+                  if d.get('passed') is not True:errors.append(cid+' failed '+str(d.get('group')))
+                  if d.get('defects')!=[]:errors.append(cid+' defects '+str(d.get('group')))
+                  if d.get('coverage_complete') is not True:errors.append(cid+' incomplete '+str(d.get('group')))
+                  if d.get('confidence') not in ('medium','high'):errors.append(cid+' confidence '+str(d.get('group')))
+                  defects.extend([f"{d.get('group')}: {x}" for x in d.get('defects',[])])
+              if cid=='C1':
+                  style=[d for d in rr if d.get('group')!='conditions']
+                  rf=min((d.get('scores',{}).get('reference_fidelity',0) for d in style),default=0)
+                  vl=min((d.get('scores',{}).get('visual_language',0) for d in style),default=0)
+                  cv=min((d.get('scores',{}).get('cross_view_consistency',0) for d in rr),default=0)
+                  scores={'reference_fidelity':rf,'visual_language':vl,'cross_view_consistency':cv}
+                  if rf!=10.0:errors.append('C1 reference_fidelity !=10')
+                  if vl!=10.0:errors.append('C1 visual_language !=10')
+                  if cv<=9.0:errors.append('C1 cross_view_consistency <=9')
+              else:
+                  dims=['geometry_contact','clipping_seams','intentional_gap_integrity','cross_view_integrity']
+                  scores={k:min((d.get('scores',{}).get(k,0) for d in rr),default=0) for k in dims}
+                  if any(not isinstance(v,(int,float)) or isinstance(v,bool) or not math.isfinite(v) or v<=9.0 for v in scores.values()):errors.append('C2 dimension <=9')
+              final[cid]={'scores':scores,'defects':defects,'records':rr}
+          summary={'task_id':'T03','candidate':candidate,'passed':not errors,'errors':errors,'critics':{k:{'scores':v['scores'],'defects':v['defects']} for k,v in final.items()},'c6_preserved':{'status':'PASS','run':'35848567867','reason':'Iteration 9 preserves draw batches/material families/physics/population; fence remains 640 triangles and lane shader instruction topology is unchanged.'},'machine_evidence_run':'35910432793','user_visual_signoff_required':True,'task_approved':False}
+          for cid,v in final.items():
+              (out/(cid+'-aggregate.json')).write_text(json.dumps({'task_id':'T03','critic_id':cid,'candidate_hash':candidate,'scores':v['scores'],'defects':v['defects'],'groups':[{'group':d.get('group'),'scores':d.get('scores'),'defects':d.get('defects'),'passed':d.get('passed')} for d in v['records']],'passed':not any(e.startswith(cid) for e in errors)},indent=2)+'\n')
+          (out/'summary.json').write_text(json.dumps(summary,indent=2)+'\n')
+          print(json.dumps(summary,indent=2))
+          raise SystemExit(0 if summary['passed'] else 1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-t03-iteration9-final-aggregate-${{ github.run_id }}
+          path: aggregate/
+          retention-days: 30
+          if-no-files-found: error
+# Review-only commit. Frozen product candidate remains c1c960e25f3549f4f630b4f881295329745e2701.

@@ -1,0 +1,31 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "requesting_task": "T10",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "AUTHORIZED",
+  "authorization": "Also when we find issues with the architecture and/or critics, we need to fix.",
+  "standing_authorization": "Authorize the bounded V3.2 T10 canary repair.",
+  "reviewer": "/root/t10_c0_critic",
+  "blocker": "C0-T10-B059",
+  "classification": "TOOLING_DEFECT",
+  "failed_run": 35386826359,
+  "failed_job": 105756676039,
+  "failed_artifact": 10566412411,
+  "failed_artifact_sha256": "da1caba052a07adacd35e4df3562b1a2e878043a496768524d2d0f19ed814889",
+  "observed_failure": "The advisor submitted a 29,970-token request to the pinned 16,384-token context and urllib surfaced only HTTP 400 while discarding the response details.",
+  "scope": [
+    "tools/havenline/production/c0_root_cause_advisor.py",
+    "tools/havenline/production/tests/test_c0_builder.py",
+    ".github/workflows/havenline-c0-root-cause.yml"
+  ],
+  "permitted_behavior_change": "Preserve complete failed-job logs and exact structured critic records in the immutable packet; construct a deterministic semantic model projection with hashes, explicit omission metadata and every failed/unexecuted boundary; conservatively preflight the serialized request against the pinned context; write and send identical bytes; retain bounded non-secret HTTP error status/body/headers and fail closed.",
+  "preserved": [
+    "complete authoritative failure packet and factory observation",
+    "C0 non-voting role and complete-blocker-set duty",
+    "pinned model, revision, runtime, 16384 context, 2200 completion tokens, sampling and timeout",
+    "all C1-C11 critics, dimensions and thresholds",
+    "finish-running-SHA and no approval authority",
+    "shipping runtime and approved gameplay"
+  ]
+}

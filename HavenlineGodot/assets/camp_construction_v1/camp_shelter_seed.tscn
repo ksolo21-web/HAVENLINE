@@ -1,0 +1,44 @@
+[gd_scene load_steps=4 format=3]
+
+[sub_resource type="StandardMaterial3D" id="MatSnow"]
+albedo_color = Color(0.72, 0.80, 0.84, 1)
+roughness = 0.95
+
+[sub_resource type="StandardMaterial3D" id="MatWood"]
+albedo_color = Color(0.27, 0.16, 0.09, 1)
+roughness = 0.88
+
+[sub_resource type="BoxMesh" id="Box"]
+size = Vector3(1, 1, 1)
+
+[node name="CampShelterSeed" type="Node3D"]
+
+[node name="Footprint" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatSnow")
+position = Vector3(0, 0.05, 0)
+scale = Vector3(4.8, 0.1, 3.8)
+
+[node name="StakeNW" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(-2.05, 0.34, -1.55)
+scale = Vector3(0.16, 0.68, 0.16)
+
+[node name="StakeNE" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(2.05, 0.34, -1.55)
+scale = Vector3(0.16, 0.68, 0.16)
+
+[node name="StakeSW" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(-2.05, 0.34, 1.55)
+scale = Vector3(0.16, 0.68, 0.16)
+
+[node name="StakeSE" type="MeshInstance3D" parent="."]
+mesh = SubResource("Box")
+material_override = SubResource("MatWood")
+position = Vector3(2.05, 0.34, 1.55)
+scale = Vector3(0.16, 0.68, 0.16)

@@ -1,6 +1,6 @@
 extends Control
 
-const ENVIRONMENT_REVISION := "0.4.5-environment-candidate"
+const ENVIRONMENT_REVISION := "0.5.1-task03-visual-polish"
 var scenery_instances: Array[GeometryInstance3D] = []
 var scenery_origins: Array[Vector3] = []
 var scenery_heights: Array[float] = []
@@ -12,6 +12,8 @@ const OutpostView = preload("res://scripts/outpost_view.gd")
 const Surface = preload("res://scripts/outpost_surface.gd")
 const ActionReadout = preload("res://scripts/action_readout.gd")
 const OutpostAudio = preload("res://scripts/outpost_audio.gd")
+const CameraComposition = preload("res://scripts/camera_composition.gd")
+const Character1Motion = preload("res://scripts/character1_motion.gd")
 var outpost_view: Node3D
 var outpost_audio: Node
 var action_readout: Control
@@ -20,11 +22,20 @@ var environment: Environment
 var capture_scenario := "opening"
 const Saves = preload("res://scripts/save_store.gd")
 const Scenery = preload("res://scripts/scenery_batch.gd")
+const ReferenceForest = preload("res://scripts/reference_forest.gd")
+var reference_forest_evidence: Dictionary = {}
+const CampBoundaryView = preload("res://scripts/camp_boundary_view.gd")
+const StationKit = preload("res://scripts/station_kit.gd")
+var camp_boundary_view: Node3D
+var camp_station_kit: HavenlineStationKit
+var lakeshore_station_kit: HavenlineStationKit
 const DeviceBenchmark = preload("res://scripts/device_benchmark.gd")
 var device_benchmark: PanelContainer
 const FrameRecord = preload("res://scripts/performance_record.gd")
 const CarryStack = preload("res://scripts/carry_stack.gd")
 const TransferFeedback = preload("res://scripts/transfer_feedback.gd")
+const HarvestPresentation = preload("res://scripts/harvest_presentation.gd")
+const StorageStockpile = preload("res://scripts/storage_stockpile.gd")
 const RenderPolicy = preload("res://scripts/render_policy.gd")
 const AdaptiveLayout = preload("res://scripts/adaptive_layout.gd")
 var hud_safe_rect := Rect2()
@@ -47,6 +58,10 @@ var player_rig: Node3D
 var carry_root: Node3D
 var carry_stacks: Dictionary = {}
 var transfer_feedback: Node3D
+var harvest_presentation: HavenlineHarvestPresentation
+var harvest_actor_id := -1
+var storage_stockpile: Node3D
+var last_presented_event_epoch := -1.0
 var menu_column: VBoxContainer
 var camp_button: Button
 var carry_count := -1
@@ -66,6 +81,7 @@ var capture_directory := ""
 var qa_mode := false
 var render_review := false
 var performance_record := FrameRecord.new()
+var camera_composition = CameraComposition.new()
 var merged_cache: Dictionary = {}
 var no_batching := false
 var capture_phase := 0.0
@@ -113,6 +129,11 @@ func _ready():
 	display.stretch_mode = TextureRect.STRETCH_SCALE
 	display.texture = scene_view.get_texture()
 	display.mouse_filter = Control.MOUSE_FILTER_IGNORE
+	# The primary joystick is drawn by this parent Control. Keep the opaque 3D
+	# viewport behind the parent's draw pass so the shipping joystick is visible
+	# during touch/drag input on every adaptive layout. Harvesting remains
+	# automatic and adds no action button.
+	display.show_behind_parent = true
 	add_child(display)
 	world = Node3D.new()
 	scene_view.add_child(world)
@@ -121,6 +142,9 @@ func _ready():
 	outpost_view = OutpostView.new()
 	world.add_child(outpost_view)
 	outpost_view.configure(environment, sun, furnace, heat_light, sim)
+	camp_boundary_view = CampBoundaryView.new()
+	world.add_child(camp_boundary_view)
+	camp_boundary_view.configure(self)
 	outpost_audio = OutpostAudio.new()
 	add_child(outpost_audio)
 	build_crew()
@@ -130,6 +154,12 @@ func _ready():
 	transfer_feedback = TransferFeedback.new()
 	transfer_feedback.loader = resource_piece
 	world.add_child(transfer_feedback)
+	harvest_presentation = HarvestPresentation.new()
+	harvest_presentation.name = "T09HarvestPresentation"
+	world.add_child(harvest_presentation)
+	for resource in sim.resources:
+		harvest_presentation.bind_source(String(resource.id),String(resource.kind),resource_visuals[resource.id],int(resource.units))
+	harvest_actor_id = sim.lead
 	build_hud()
 	action_readout = ActionReadout.new()
 	add_child(action_readout)
@@ -204,6 +234,8 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 	if asset.begins_with("world/"):
 		# Authored replacement required: never silently display the retired blockout.
 		path = "res://assets/environment_v2/" + asset.trim_prefix("world/") + ".glb"
+		if asset.begins_with("world/pine_"):
+			path = "res://assets/reference_forest/" + asset.trim_prefix("world/") + ".glb"
 		assert(ResourceLoader.exists(path), "Missing required winter environment mesh: " + path)
 	if not asset_cache.has(path):
 		asset_cache[path] = load(path)
@@ -212,14 +244,32 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 		if not merged_cache.has(asset):
 			merged_cache[asset] = Scenery.compile(asset_cache[path])
 			if asset.begins_with("world/pine_"):
+				var evergreen_shader: Shader = load("res://shaders/evergreen.gdshader")
+				var forest_varying := "varying float forest_clearance;"
+				var bounded_varying := "varying float forest_clearance;\nvarying float harvest_contact_band;\nvarying float harvest_reveal_side;"
+				var roughness_uniform := "uniform float surface_roughness = 0.95;"
+				var contact_uniform := "uniform float surface_roughness = 0.95;\nuniform float harvest_contact_surface = 0.0;\ninstance uniform float harvest_reveal = 0.0;\ninstance uniform vec2 harvest_reveal_direction = vec2(0.0,1.0);\ninstance uniform vec2 harvest_reveal_center = vec2(0.0);"
+				var forest_vertex := "void vertex() {\n forest_clearance = 0.0;"
+				var bounded_vertex := "void vertex() {\n forest_clearance = 0.0;\n harvest_contact_band = 1.0-smoothstep(1.35,1.75,VERTEX.y);\n harvest_reveal_side = dot(VERTEX.xz-harvest_reveal_center,harvest_reveal_direction);"
+				if not evergreen_shader.code.contains("harvest_contact_band"):
+					evergreen_shader.code = evergreen_shader.code.replace(forest_varying,bounded_varying)
+					evergreen_shader.code = evergreen_shader.code.replace(roughness_uniform,contact_uniform)
+					evergreen_shader.code = evergreen_shader.code.replace(forest_vertex,bounded_vertex)
+				var whole_tree_cutaway := "void fragment() {\n float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));\n if (coverage < max(cutaway,forest_clearance)) { discard; }\n vec3 surface_color = texture(albedo_texture,UV).rgb;\n float wood = step(surface_color.b*1.25,surface_color.r);"
+				var crown_only_cutaway := "void fragment() {\n float coverage = fract(52.9829189*fract(dot(FRAGCOORD.xy,vec2(0.06711056,0.00583715))));\n float bounded_contact_mask = 1.0-harvest_contact_surface*harvest_contact_band;\n float wood_contact_surface_cutaway = max(cutaway,forest_clearance)*bounded_contact_mask;\n float local_harvest_reveal = harvest_reveal*step(0.0,harvest_reveal_side)*bounded_contact_mask;\n if (local_harvest_reveal > 0.5 || coverage < wood_contact_surface_cutaway) { discard; }\n vec3 surface_color = texture(albedo_texture,UV).rgb;\n float wood = step(surface_color.b*1.25,surface_color.r);"
+				if evergreen_shader.code.contains(whole_tree_cutaway):
+					evergreen_shader.code = evergreen_shader.code.replace(whole_tree_cutaway,crown_only_cutaway)
+				assert(evergreen_shader.code.contains("local_harvest_reveal") and evergreen_shader.code.contains("harvest_reveal_side") and evergreen_shader.code.contains("harvest_contact_band"),"Evergreen shader must preserve a far-side crown silhouette around the bounded opaque harvest contact surface")
 				for i in merged_cache[asset].get_surface_count():
 					var source_material: Material = merged_cache[asset].surface_get_material(i)
 					if source_material is BaseMaterial3D:
 						var leaf_material := ShaderMaterial.new()
-						leaf_material.shader=load("res://shaders/evergreen.gdshader")
+						leaf_material.resource_name = source_material.resource_name
+						leaf_material.shader=evergreen_shader
 						leaf_material.set_shader_parameter("albedo_texture",source_material.albedo_texture)
 						leaf_material.set_shader_parameter("normal_texture",source_material.normal_texture)
 						leaf_material.set_shader_parameter("surface_roughness",source_material.roughness)
+						leaf_material.set_shader_parameter("harvest_contact_surface",1.0 if source_material.resource_name.to_lower() == "trunk" else 0.0)
 						merged_cache[asset].surface_set_material(i,leaf_material)
 		instance = MeshInstance3D.new()
 		instance.mesh = merged_cache[asset]
@@ -228,6 +278,8 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 	parent.add_child(instance)
 	instance.position = p
 	if asset.begins_with("world/pine_") and instance is GeometryInstance3D:
+		var pine_center: Vector3 = instance.mesh.get_aabb().get_center()
+		instance.set_instance_shader_parameter("harvest_reveal_center",Vector2(pine_center.x,pine_center.z))
 		scenery_instances.append(instance)
 		scenery_origins.append(p)
 		scenery_heights.append(instance.mesh.get_aabb().end.y)
@@ -237,36 +289,50 @@ func model(asset: String, parent: Node3D, p := Vector3.ZERO) -> Node3D:
 func build_world():
 	# The sculpted OutpostView surface replaces the flat terrain render only.
 	# All original GLB source assets are retained unchanged.
-	furnace = model("world/furnace", world, xyz(Simulation.point(sim.contract.world.furnace)))
+	# T05 replaces only presentation. Existing coordinates, proximity actions,
+	# heat behavior, inventory and save contracts remain authoritative.
+	camp_station_kit = StationKit.new()
+	camp_station_kit.name = "T05CampStationKit"
+	world.add_child(camp_station_kit)
+	lakeshore_station_kit = StationKit.new()
+	lakeshore_station_kit.name = "T05LakeshoreStationKit"
+	world.add_child(lakeshore_station_kit)
+	var station_ground := func(point: Vector2) -> float: return Surface.height_at(point)
+	camp_station_kit.build_arrangement("camp", Vector3.ZERO, station_ground, ["hearth_vessel"])
+	lakeshore_station_kit.build_arrangement("lakeshore", Vector3.ZERO, station_ground)
+	furnace = camp_station_kit.instantiate_asset("hearth_vessel", world)
+	furnace.position = xyz(Simulation.point(sim.contract.world.furnace))
 	heat_light = OmniLight3D.new()
 	heat_light.position = Vector3(0, 1.2, 0.6)
 	heat_light.light_color = Color("ff913d")
 	heat_light.light_energy = 3
 	heat_light.omni_range = 5
 	furnace.add_child(heat_light)
-	model("world/storage", world, xyz(Simulation.point(sim.contract.world.storage)))
-	for x in [-6.6, 6.6]:
-		var shelter := model("world/shelter", world, xyz(Vector2(x, -4.8)))
-		shelter.rotation.y = -0.12 if x < 0 else 0.12
+	var storage_visual: Node3D = camp_station_kit.instantiate_asset("cargo_crate", world)
+	storage_visual.name = "T05StorageCargoCrate"
+	storage_visual.position = xyz(Simulation.point(sim.contract.world.storage))
+	storage_stockpile = StorageStockpile.new()
+	storage_stockpile.name = "T08CampStorageStockpile"
+	storage_stockpile.position = storage_visual.position + Vector3(0.8, 0.05, 0.25)
+	world.add_child(storage_stockpile)
+	storage_stockpile.configure("camp_storage", sim.stored)
+	for key in ["leftTent","rightTent"]:
+		var shelter_point := Simulation.point(sim.contract.world[key])
+		var shelter := model("world/shelter", world, xyz(shelter_point))
+		shelter.rotation.y = -0.12 if shelter_point.x < 0 else 0.12
 	for index in range(sim.resources.size()):
 		var node: Dictionary = sim.resources[index]
 		var asset: String = "pine_" + str(1 + index % 3) if node.kind == "wood" else node.kind
 		resource_visuals[node.id] = model("world/" + asset, world, xyz(node.position))
-	# Irregular woodland groups instead of the old evenly spaced circular fence.
-	for i in range(44):
-		var a := float(i) * 2.399963
-		var rx := 16.6 + sin(i * 7.13) * 3.8
-		var rz := 19.0 + cos(i * 4.71) * 3.2
-		var point := Vector2(cos(a) * rx, sin(a) * rz)
-		# Keep entrances and the default camera's lower central view readable.
-		if absf(point.x) < 4.8 and point.y > 13.0: continue
-		var tree := model("world/pine_" + str(1 + i % 3), world, xyz(point))
-		tree.scale = Vector3.ONE * (0.76 + fposmod(i * .137, .52))
-		tree_rotation(tree, i)
+	# T01 reference forest; no change to resource actions or later-task layout.
+	reference_forest_evidence = ReferenceForest.build(self)
 	build_environment_dressing()
 	for side in sim.defenses:
-		defense_visuals[side] = model("world/barricade", world, xyz(sim.defenses[side].position))
-		defense_visuals[side].scale.y = 0.15
+		var defense:Dictionary=sim.defenses[side]
+		var progress:=int(defense.delivered.wood)+int(defense.delivered.stone)
+		defense_visuals[side] = model("world/barricade", world, xyz(defense.position))
+		defense_visuals[side].visible = bool(defense.built) or progress > 0
+		defense_visuals[side].scale.y = .35 + .65 * clampf(float(progress)/11.0,0.0,1.0) if defense_visuals[side].visible else 1.0
 
 func tree_rotation(tree: Node3D, index: int):
 	tree.rotation.y = index * 1.71
@@ -313,6 +379,8 @@ func actor(id: int) -> Node3D:
 				animation.get_animation(clip).loop_mode = Animation.LOOP_LINEAR
 		root.set_meta("animation", animation)
 	root.set_meta("visual", visual)
+	if id == 1:
+		root.set_meta("t06_character1", true)
 	return root
 
 func find_skeleton(node: Node) -> Skeleton3D:
@@ -343,7 +411,12 @@ func build_crew():
 	player_rig = actors[sim.lead]
 	carry_root = carry_stacks[sim.lead]
 
-func animate(root: Node3D, speed: float):
+func animate(root: Node3D, speed: float, dt: float, action := {}, role := "player_lead"):
+	if bool(root.get_meta("t06_character1", false)):
+		var state := Character1Motion.update_actor(root, speed, action, dt, role)
+		if not bool(state.get("passed", false)):
+			push_error("Character 1 T06 motion integration failed: " + str(state.get("errors", [])))
+		return
 	if not root.has_meta("animation"): return
 	var animation: AnimationPlayer = root.get_meta("animation")
 	var desired := "run" if speed > 4.3 else ("walk" if speed > .15 else "idle")
@@ -360,25 +433,93 @@ func animate(root: Node3D, speed: float):
 			return
 
 func update_carry():
-	carry_stacks[sim.lead].update_inventory(sim.inventory)
+	var empty := {"wood":0,"stone":0,"metal":0,"fuel":0}
+	for stack in carry_stacks.values(): stack.visible = false
+	var lead_ready: bool = carry_stacks.has(sim.lead) and actors.has(sim.lead) and actors[sim.lead].visible and (sim.presented_actor_ids.is_empty() or sim.lead in sim.presented_actor_ids)
+	if lead_ready:
+		carry_stacks[sim.lead].visible = true
+		carry_stacks[sim.lead].update_inventory(sim.inventory)
+	elif carry_stacks.has(sim.lead): carry_stacks[sim.lead].update_inventory(empty)
 	for companion in sim.companions:
 		if not carry_stacks.has(companion.id): continue
 		var inventory := {"wood":0,"stone":0,"metal":0,"fuel":0}
-		inventory[companion.get("cargo_kind","wood")] = companion.get("cargo",0)
+		var actor_ready: bool = actors.has(companion.id) and actors[companion.id].visible and (sim.presented_actor_ids.is_empty() or companion.id in sim.presented_actor_ids)
+		if actor_ready:
+			inventory[companion.get("cargo_kind","wood")] = companion.get("cargo",0)
+			carry_stacks[companion.id].visible = true
 		carry_stacks[companion.id].update_inventory(inventory)
+	if is_instance_valid(storage_stockpile): storage_stockpile.sync(sim.stored)
+
+func event_point_2d(value: Variant) -> Vector2:
+	if value is Vector2: return value
+	if value is Vector3: return Vector2(value.x, value.z)
+	return Vector2.ZERO
+
+func transfer_destination_id(event: Dictionary) -> String:
+	var explicit := String(event.get("destination_id", ""))
+	if not explicit.is_empty(): return explicit
+	var event_type := String(event.get("type", ""))
+	var point := event_point_2d(event.get("target", event.get("position", Vector2.ZERO)))
+	if event_type in ["deposit", "worker_deposit"]:
+		var furnace_point: Vector2 = sim.point(sim.contract.world.furnace)
+		var storage_point: Vector2 = sim.point(sim.contract.world.storage)
+		return "furnace_storage" if point.distance_squared_to(furnace_point) <= point.distance_squared_to(storage_point) else "camp_storage"
+	if event_type in ["build", "worker_build"]:
+		var build_side := ""
+		var build_distance := INF
+		for side in sim.defenses:
+			var distance := point.distance_squared_to(sim.defenses[side].position)
+			if distance < build_distance: build_distance = distance; build_side = String(side)
+		return "defense:" + build_side if not build_side.is_empty() else "defense"
+	if event_type in ["repair", "worker_repair", "defense_repair", "worker_defense_repair"]:
+		var furnace_distance := point.distance_squared_to(sim.point(sim.contract.world.furnace))
+		var repair_side := ""
+		var repair_distance := INF
+		for side in sim.defenses:
+			var distance := point.distance_squared_to(sim.defenses[side].position)
+			if distance < repair_distance: repair_distance = distance; repair_side = String(side)
+		return "repair:" + repair_side if repair_distance < furnace_distance else "repair:furnace"
+	if event_type == "customer_sale": return "customer"
+	return "destination"
 
 func present_events():
+	if is_equal_approx(last_presented_event_epoch, sim.elapsed): return
+	last_presented_event_epoch = sim.elapsed
 	action_readout.consume(sim.events)
 	outpost_audio.consume(sim.events)
-	for event in sim.events:
+	for event_index in sim.events.size():
+		var event: Dictionary = sim.events[event_index]
 		var kind: String = event.get("resource", "")
 		if kind.is_empty(): continue
 		var target: Vector3 = xyz(event.get("target",event.position)) + Vector3(0,.75,0)
 		var origin := xyz(sim.position) + Vector3(0,1.0,-.35)
 		if event.has("actor_id"): origin = xyz(event.position) + Vector3(0,1.0,-.35)
-		if event.type in ["gather","worker_gather"]: transfer_feedback.transfer(kind,target,origin)
-		elif event.type in ["deposit","worker_deposit","build","worker_build","repair","worker_repair","customer_sale"]:
-			transfer_feedback.transfer(kind,origin,target)
+		var actor_id := int(event.get("actor_id", sim.lead))
+		var receipt_id := "%.6f:%d:%s:%s:%d" % [sim.elapsed, event_index, String(event.type), kind, actor_id]
+		if event.type in ["gather","worker_gather"]:
+			if event.type == "gather" and is_instance_valid(harvest_presentation):
+				var harvest_action := HarvestPresentation.canonical_action(sim.action)
+				var profile := HarvestPresentation.profile_for_resource(kind)
+				# The authoritative event lands one physics tick after the validated
+				# pre-impact presentation. Keep that same actor/contact pose available
+				# to the commit synchronizer; it clears and solves from the authored
+				# animation when the action identity is new or was not contact-ready.
+				harvest_presentation.bind_actor(player_rig)
+				var contact := HarvestPresentation.contact_node(player_rig,String(profile.get("contact_marker", "")))
+				if not harvest_action.is_empty() and String(harvest_action.resource) == kind and is_instance_valid(contact):
+					var contact_transform := HarvestPresentation.attachment_transform(player_rig,profile)
+					var source_visual: Node3D = resource_visuals.get(String(harvest_action.source_id))
+					var harvest_target := HarvestPresentation.source_contact_target(source_visual,contact_transform,profile,player_rig.global_position)
+					harvest_presentation.synchronize_committed_contact(harvest_action,contact_transform,harvest_target,actor_id)
+					harvest_presentation.accept_committed_impact({
+						"committed":true, "resource":kind, "source_id":String(harvest_action.source_id),
+						"action_token":int(harvest_action.action_token), "receipt_id":receipt_id,
+						"target_position":harvest_target, "actor_id":actor_id,
+					})
+			transfer_feedback.transfer(kind,target,origin,receipt_id,"source_to_actor",actor_id,"actor:%d" % actor_id)
+		elif event.type in ["deposit","worker_deposit","build","worker_build","repair","worker_repair","defense_repair","worker_defense_repair","customer_sale"]:
+			var destination_id := transfer_destination_id(event)
+			transfer_feedback.transfer(kind,origin,target,receipt_id,"actor_to_destination",actor_id,destination_id)
 
 func text_label(text: String, font_size: int, parent: Control) -> Label:
 	var label := Label.new()
@@ -586,13 +727,35 @@ func _physics_process(dt: float):
 		save_timer = 0
 		Saves.write_state(sim.snapshot())
 
+func camera_action_target() -> Variant:
+	if sim.action.is_empty() or String(sim.action.get("kind", "")).is_empty(): return null
+	var target: Variant = sim.action.get("position")
+	return xyz(target) if target is Vector2 else null
+
 func _process(dt: float):
 	if not is_instance_valid(world): return
 	population_view.pause_animations(paused)
 	player_rig.position = xyz(sim.position)
 	if sim.velocity.length() > .1:
 		player_rig.rotation.y = lerp_angle(player_rig.rotation.y, atan2(sim.facing.x, sim.facing.y), 1 - exp(-16 * dt))
-	animate(player_rig, sim.velocity.length())
+	if harvest_actor_id != sim.lead:
+		harvest_presentation.reset()
+		harvest_actor_id = sim.lead
+	var harvest_action := HarvestPresentation.canonical_action(sim.action)
+	var player_action: Dictionary = harvest_presentation.motion_action(harvest_action) if not harvest_action.is_empty() and bool(harvest_action.actionable) else (sim.action if bool(sim.action.get("actionable", false)) else {})
+	animate(player_rig, sim.velocity.length(), dt, player_action, "player_lead")
+	if not harvest_action.is_empty() and bool(harvest_action.actionable):
+		var harvest_profile := HarvestPresentation.profile_for_resource(String(harvest_action.resource))
+		harvest_presentation.prepare_actor_contact(player_rig)
+		var harvest_contact := HarvestPresentation.contact_node(player_rig,String(harvest_profile.get("contact_marker", "")))
+		if is_instance_valid(harvest_contact):
+			if harvest_presentation.begin_action(harvest_action,sim.lead):
+				var harvest_contact_transform := HarvestPresentation.attachment_transform(player_rig,harvest_profile)
+				var source_visual: Node3D = resource_visuals.get(String(harvest_action.source_id))
+				var harvest_target := HarvestPresentation.source_contact_target(source_visual,harvest_contact_transform,harvest_profile,player_rig.global_position)
+				harvest_presentation.update_action(harvest_action,harvest_contact_transform,harvest_target,player_rig.visible and (sim.presented_actor_ids.is_empty() or sim.lead in sim.presented_actor_ids))
+	else:
+		harvest_presentation.cancel(String(sim.action.get("reason", "context_inactive")))
 	for companion in sim.companions:
 		if not actors.has(companion.id): continue # Additional NPC art remains a release blocker.
 		var root: Node3D = actors[companion.id]
@@ -600,36 +763,54 @@ func _process(dt: float):
 		var motion := target - root.position
 		root.position = target
 		if motion.length() > .005: root.rotation.y = lerp_angle(root.rotation.y, atan2(motion.x, motion.z), .15)
-		animate(root, motion.length() / maxf(dt, .001))
+		animate(root, motion.length() / maxf(dt, .001), dt, {}, "core_human_companion")
 	for node in sim.resources:
-		resource_visuals[node.id].visible = node.units > 0
+		harvest_presentation.sync_source(String(node.id),int(node.units),float(node.respawn))
 	for side in sim.defenses:
 		var d: Dictionary = sim.defenses[side]
-		defense_visuals[side].scale.y = .15 + .85 * (float(d.delivered.wood + d.delivered.stone) / 11)
+		var progress:=int(d.delivered.wood)+int(d.delivered.stone)
+		defense_visuals[side].visible = bool(d.built) or progress > 0
+		if defense_visuals[side].visible:
+			defense_visuals[side].scale.y = .35 + .65 * clampf(float(progress)/11.0,0.0,1.0)
 	update_carry()
 	outpost_view.sync(sim, dt, paused)
 	outpost_audio.sync(sim, paused, dt)
-	# Preserve the close zoom; a short look-ahead includes roofs above the player.
-	var focus := xyz(sim.position) + Vector3(0, .95, -3.6)
-	var offset := Vector3(0, 6.8, 8.6)
-	if qa_mode and capture_scenario in ["shelter-detail","shelter-detail-rear"]:
-		focus=xyz(Vector2(-6.6,-4.8))+Vector3(0,1.45,0);camera.size=5.1;offset=Vector3(4,3.6,7)
-	elif qa_mode and capture_scenario == "furnace-detail":
-		focus=xyz(Vector2(0,.2))+Vector3(0,1.0,0);camera.size=3.8;offset=Vector3(4,3.6,7)
-	elif qa_mode and capture_scenario == "tree-detail":
-		focus=xyz(sim.resources[0].position)+Vector3(0,2.35,0);camera.size=6.6;offset=Vector3(4,3.6,7)
-	if qa_mode:
+	var active_camera_focus := xyz(sim.position) + Vector3(0.0, 0.95, 0.0)
+	var qa_camera_override := qa_mode and (capture_scenario in ["shelter-detail","shelter-detail-rear","furnace-detail","tree-detail"] or capture_view != "front")
+	if qa_camera_override:
+		# Keep disclosed evidence-only viewpoints intact. They never run in normal
+		# gameplay and do not replace the automatic shipping composition.
+		var focus := xyz(sim.position) + Vector3(0, .95, -3.6)
+		var offset := Vector3(0, 6.8, 8.6)
+		if capture_scenario in ["shelter-detail","shelter-detail-rear"]:
+			focus=xyz(Vector2(-6.6,-4.8))+Vector3(0,1.45,0);camera.size=5.1;offset=Vector3(4,3.6,7)
+		elif capture_scenario == "furnace-detail":
+			focus=xyz(Vector2(0,.2))+Vector3(0,1.0,0);camera.size=3.8;offset=Vector3(4,3.6,7)
+		elif capture_scenario == "tree-detail":
+			focus=xyz(sim.resources[0].position)+Vector3(0,2.35,0);camera.size=6.6;offset=Vector3(4,3.6,7)
 		if capture_view == "side": offset = Vector3(8.6, 6.8, 0)
 		elif capture_view == "left": offset = Vector3(-8.6, 6.8, 0)
 		elif capture_view == "rear": offset = Vector3(0, 6.8, -8.6)
 		elif capture_view == "three-quarter": offset = Vector3(8.6, 6.8, 8.6)
 		elif capture_view == "overhead": offset = Vector3(0.001, 16.0, 0.001)
-	var desired := focus + offset
-	# Orthographic framing is unchanged when translated along the viewing ray.
-	# Moving the camera back prevents its near plane cutting foreground scenery.
-	desired += offset.normalized() * 18.0
-	camera.position = camera.position.lerp(desired, 1 - exp(-8.6 * dt)) if capture_frames > 0 else desired
-	camera.look_at(focus)
+		var desired := focus + offset + offset.normalized() * 18.0
+		camera.position = camera.position.lerp(desired, 1 - exp(-8.6 * dt)) if capture_frames > 0 else desired
+		camera.look_at(focus)
+		active_camera_focus = focus
+	else:
+		var camera_state := camera_composition.compose(
+			xyz(sim.position),
+			Vector3(sim.velocity.x, 0.0, sim.velocity.y),
+			Vector3(sim.facing.x, 0.0, sim.facing.y),
+			camera_action_target(),
+			size,
+			dt
+		)
+		camera.keep_aspect = camera_state.keep_aspect
+		camera.size = camera_state.full_height
+		camera.position = camera_state.camera_position
+		camera.look_at(camera_state.focus)
+		active_camera_focus = camera_state.focus
 	update_foreground_visibility(xyz(sim.position)+Vector3(0,.95,0), dt)
 	status.text = "HEAT %d   ·   %d carried" % [sim.level, sim.carried()]
 	var hour: float = sim.climate.hour()
@@ -640,9 +821,12 @@ func _process(dt: float):
 	elif not sim.rescued: objective.text = "Warmth restored · approach the survivor" if sim.rescue_enabled else "Warmth restored · rescue art pending"
 	elif not sim.defenses.north.built: objective.text = "Build the north defense   ·   8 wood + 3 stone"
 	else: objective.text = "Outpost restored · threat art pending"
-	if not sim.action.is_empty():
-		hint.text = {"gather":"Gathering", "deposit":"Delivering", "build":"Building", "repair":"Repairing", "defense_repair":"Repairing", "rescue":"Rescuing", "enemy":"Defending", "npc_rescue":"Welcoming a companion", "customer_service":"Serving a customer"}.get(sim.action.kind, "")
-	else: hint.text = ""
+	var context_display: Dictionary = sim.context_director.presentation()
+	hint.text = String(context_display.status_text) if bool(context_display.visible) else ""
+	var context_state := String(context_display.state)
+	hint.add_theme_color_override("font_color",
+		Color("ffd27a") if bool(context_display.cancelled) or bool(context_display.blocked)
+		else (Color("a9dcff") if context_state == "acquiring" else Color("d9ffd2")))
 	# Presentation capability gates live in simulation, not frame-rate-dependent
 	# timer rewrites. Active saved encounters remain intact but cannot hurt invisibly.
 	measure_frame()
@@ -653,12 +837,22 @@ func _process(dt: float):
 		scene_view.get_texture().get_image().save_png(capture_directory.path_join("native-scene.png"))
 		var report := {"renderer": RenderingServer.get_current_rendering_method(), "device": RenderingServer.get_video_adapter_name(), "window": [get_viewport().size.x, get_viewport().size.y], "internal_render": [scene_view.size.x, scene_view.size.y], "render_scale": scene_view.scaling_3d_scale, "render_review": render_review, "performance_certified": false, "characters": actors.keys(), "source_clips": {}}
 		report["environment_revision"] = ENVIRONMENT_REVISION
+		report["reference_forest"] = reference_forest_evidence
 		report["environment_kit"] = JSON.parse_string(FileAccess.get_file_as_string("res://assets/environment_v2/manifest.json"))
 		report["foreground_faded"] = foreground_faded
 		report["camera_near"] = camera.near
-		report["camera_focus_distance"] = camera.position.distance_to(focus)
+		report["camera_focus_distance"] = camera.position.distance_to(active_camera_focus)
 		report["npc_population"] = population_view.evidence()
 		report["outpost"] = outpost_view.evidence(sim)
+		report["task03_boundary"] = camp_boundary_view.descriptor
+		report["task05_station_kit"] = {
+			"authority_id": StationKit.AUTHORITY_ID,
+			"camp": camp_station_kit.descriptor(),
+			"lakeshore": lakeshore_station_kit.descriptor(),
+			"gameplay_logic_changed": false,
+			"furnace_contract_position": sim.contract.world.furnace,
+			"storage_contract_position": sim.contract.world.storage
+		}
 		report["capture_scenario"] = capture_scenario
 		report["scenario_is_test_fixture"] = capture_scenario != "opening"
 		report["action_readout"] = action_readout.descriptor
@@ -822,6 +1016,8 @@ func build_environment_dressing():
 		var a := i * 2.399963
 		var p := Vector2(cos(a) * (11.8 + fposmod(i * .831, 8.0)), sin(a) * (14.3 + fposmod(i * .713, 7.0)))
 		if absf(p.x) < 3.5: continue
+		# The extended lake must not leave shrub/rock tops protruding through water.
+		if Surface.lake_distance(p) < 1.0: continue
 		var blocked := false
 		for r in sim.resources:
 			if p.distance_to(r.position) < 1.8: blocked = true
@@ -848,9 +1044,14 @@ func build_environment_dressing():
 		world.add_child(light)
 
 func update_foreground_visibility(focus: Vector3, dt: float):
-	# Smooth opaque-dither cutaway for crowns hiding the lead; no transparent sorting.
+	ReferenceForest.set_player_clearance(self, focus + Vector3(0,.05,0))
+	# Smooth opaque-dither cutaway for ordinary crowns hiding the lead. An active
+	# harvested pine instead removes only the actor-facing crown half while keeping
+	# its far-side crown silhouette and authored lower-trunk contact band opaque.
 	# Gameplay nodes remain alive; visibility is not a change to resource state.
 	foreground_faded = 0
+	var harvest_state: Dictionary = harvest_presentation.descriptor() if is_instance_valid(harvest_presentation) else {}
+	var active_harvest_source := String(harvest_state.get("source_id","")) if bool(harvest_state.get("active",false)) else ""
 	var view := camera.global_transform.affine_inverse()
 	var target := view * (focus + Vector3(0,.05,0))
 	for i in range(scenery_instances.size()):
@@ -862,13 +1063,22 @@ func update_foreground_visibility(focus: Vector3, dt: float):
 		var covers := absf(base.x-target.x) < 2.0 and target.y > minf(base.y,top.y)-.65 and target.y < maxf(base.y,top.y)+.65
 		# A depleted resource stays hidden even when camera occlusion changes.
 		var depleted := false
+		var harvest_selected := false
 		for r in sim.resources:
-			if resource_visuals.get(r.id) == tree and r.units <= 0: depleted = true
-		var target_cutaway := 1.0 if depth_front and covers else 0.0
+			if resource_visuals.get(r.id) == tree:
+				depleted = r.units <= 0
+				harvest_selected = active_harvest_source == String(r.id)
+		var target_cutaway := 0.0 if harvest_selected else (1.0 if depth_front and covers else 0.0)
 		scenery_cutaway[i]=move_toward(scenery_cutaway[i],target_cutaway,clampf(dt,0,.10)*4.0)
 		tree.set_instance_shader_parameter("cutaway",scenery_cutaway[i])
+		var local_focus := tree.global_basis.inverse()*(focus-tree.global_position)
+		var reveal_direction := Vector2(local_focus.x,local_focus.z)
+		if reveal_direction.length_squared() <= 0.000001:
+			reveal_direction = Vector2.UP
+		tree.set_instance_shader_parameter("harvest_reveal",1.0 if harvest_selected else 0.0)
+		tree.set_instance_shader_parameter("harvest_reveal_direction",reveal_direction.normalized())
 		tree.visible = not depleted
-		if scenery_cutaway[i] > .01: foreground_faded += 1
+		if harvest_selected or scenery_cutaway[i] > .01: foreground_faded += 1
 
 func start_device_benchmark():
 	if is_instance_valid(device_benchmark): device_benchmark.queue_free()

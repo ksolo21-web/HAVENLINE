@@ -15,11 +15,7 @@ var encounter_sites_seeded := false
 var seeded_sites: Dictionary = {}
 
 func choose_action() -> Dictionary:
-	var original: Dictionary = super.choose_action()
-	var extra: Dictionary = population.action_for(self)
-	if extra.is_empty(): return original
-	if original.is_empty() or extra.score > original.score: return extra
-	return original
+	return super.choose_action()
 
 func perform_action(dt: float):
 	if not population.perform(self, dt): super.perform_action(dt)

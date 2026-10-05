@@ -1,0 +1,104 @@
+{
+  "schema_version": 1,
+  "task_id": "T09",
+  "critic_id": "C2",
+  "critic_name": "Technical / Visual Integrity Critic",
+  "provider": "OpenAI",
+  "model": "Codex GPT-5 family",
+  "request_or_run_id": "/root/t09_c2_final",
+  "independent_runtime": true,
+  "score_reuse": false,
+  "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+  "workflow_run_id": 35213007340,
+  "artifact_id": 10494819142,
+  "artifact_sha256": "0c695f9b4976a7f9bde81f8958903f41287fcc3f794966125307d140ea5b27f1",
+  "complete_evidence_index_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
+  "input_manifest_sha256": "7b0033b88a7345ae6fb2e41636baf9e785036863367842d867aac9cf77f96f76",
+  "review_export_commit": "3dc86b8f0ed8f6364e78d29e6fd1d0ccd0a76014",
+  "status": "PASS",
+  "passed": true,
+  "coverage_complete": true,
+  "confidence": 0.982,
+  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
+  "scores": {
+    "geometry_contact": 9.78,
+    "clipping_seams": 9.36,
+    "intentional_gap_integrity": 9.33,
+    "cross_view_integrity": 9.69
+  },
+  "minimum_dimension_score": 9.33,
+  "coverage": {
+    "indexed_files_verified": 913,
+    "selected_full_resolution_images": 463,
+    "isolated_tool_views": 30,
+    "in_hand_tool_views": 31,
+    "device_matrix_images": 24,
+    "sequence_contact_sheets": 8,
+    "native_4k_internal_resolution": [
+      3840,
+      2160
+    ],
+    "native_4k_render_verified": true
+  },
+  "contact_metrics": {
+    "committed_impacts": 52,
+    "rejected_impacts": 0,
+    "all_alignment_valid": true,
+    "maximum_impact_error_m": 5.96046447753906e-8,
+    "maximum_primary_grip_error_m": 0.00000136961045882344,
+    "maximum_secondary_grip_error_m": 0.00000107288360595703,
+    "minimum_head_clearance_m": 0.337568193674088,
+    "required_minimum_head_clearance_m": 0.18
+  },
+  "evidence": [
+    {
+      "path": "captures/native-4k/tool-wood-front-right.png",
+      "sha256": "7d77896f85e7317af2a100ac4d85eb3067164eac19959b5866d73d87942449a1"
+    },
+    {
+      "path": "captures/native-4k/capture-report.json",
+      "sha256": "1a89a4d9906f5fed958bb61343a3b310df6ed8de060fabfd9d6ae78a911b204e"
+    },
+    {
+      "path": "captures/sequence-wood/wood-committed-contact.png",
+      "sha256": "315364caa0040814c94e35a8e990652aa9879355eb96bc28eb28fa0676a2c68a"
+    },
+    {
+      "path": "captures/sequence-stone/stone-committed-contact.png",
+      "sha256": "6695aee2ef9efc1cbc246c0975811897c1b5daf2a4f703c609d911f511c85c94"
+    },
+    {
+      "path": "captures/sequence-metal/metal-committed-contact.png",
+      "sha256": "330f1806ced3787bd3796d14fc4513c654085463149baa8d2ddfb27e17c205fe"
+    },
+    {
+      "path": "captures/sequence-fuel/fuel-committed-contact.png",
+      "sha256": "e3ebdc89151631d67d7d79b7bae1170574f68f59e5af93a47c8ea328f9ac5c08"
+    },
+    {
+      "path": "captures/tool-wood-detail/tool-wood-detail.png",
+      "sha256": "ef26d89fe200bbf549df3d4bc4d942977d50c1ac5fcabbc20ba7192b842f920f"
+    },
+    {
+      "path": "captures/tool-stone-detail/tool-stone-detail.png",
+      "sha256": "64c266129249571a3c64480ecc0fba7a30ef3e6e3dcc2e6d3bc468388e402315"
+    },
+    {
+      "path": "captures/tool-fuel-detail/tool-fuel-detail.png",
+      "sha256": "2c76849e1e5bf3bf9244ba6afbe9e1e7179084af6c3fd7abd8d7d395231e8ea6"
+    },
+    {
+      "path": "captures/device-foldable_inner/device-foldable_inner-wood-impact-transfer-carry.png",
+      "sha256": "3e02ed19db1c247a5d8e95a50a28d3ac050be7dac54400c70754d7a37b7bb74a"
+    }
+  ],
+  "observations": [
+    "All committed resource contacts retain valid hand/tool/source alignment with near-zero measured grip and impact error.",
+    "No unintended penetration, open seam, detached component, floating grip, or camera-dependent geometry failure was visible across complete turntables.",
+    "Depletion and respawn geometry remain coherent across phone, tablet, and foldable aspect ratios."
+  ],
+  "defects": [],
+  "advisories": [
+    "Physical-device 4K60 certification is not claimed."
+  ]
+}

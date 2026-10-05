@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "failed_candidate": "74b19b1a9f4a1315e2c63f1e508a7b439ba01daa",
+  "diagnosis_id": "C0-T10-74b19b1-specialist-output-truncation",
+  "c0_report_path": "Docs/Production/T10/C0-specialist-output-truncation-74b19b1.json",
+  "c0_report_sha256": "36486ea798c4200d79ef248ae88faaa0f2a4131ff1961a8710bd9df890f880a2",
+  "repair_base": "74b19b1a9f4a1315e2c63f1e508a7b439ba01daa",
+  "full_blocker_set_acknowledged": true,
+  "candidate_freeze_after_build": true,
+  "validation_concurrency_policy": "finish_running_sha",
+  "plan_path": "Docs/Production/T10/REPAIR_PLAN-specialist-output-truncation-74b19b1.json",
+  "must_not_change": [
+    "HavenlineGodot/scripts/world_transform.gd",
+    "HavenlineGodot/scripts/world_transform_view.gd",
+    "HavenlineGodot/scripts/simulation.gd",
+    "HavenlineGodot/data/world_transform_recipes.json",
+    "HavenlineGodot/tests/capture_task10_world_transform.gd",
+    "tools/havenline/task10/benchmark_world_transform.gd",
+    "tools/havenline/task10/export_closure_records.py",
+    "tools/havenline/production/specialist_critic_runner.py",
+    "tools/havenline/production/specialist_evidence_manifest.py",
+    "tools/havenline/production/critic_harness.py",
+    "tools/havenline/production/critic_runtime_lock.json",
+    "Docs/Production/CRITIC_EXECUTION.json",
+    "Docs/Production/CRITIC_MATRIX.json",
+    ".github/workflows/havenline-task10-isolated.yml",
+    ".github/workflows/havenline-task10-world-transformation.yml",
+    "Docs/Production/WORKSTREAM_REGISTRY.json",
+    "Docs/Production/DEPENDENCY_GRAPH.json",
+    "Docs/Production/PATH_OWNERSHIP.json",
+    "Docs/Production/task-gates.json",
+    ".github/workflows/havenline-specialist-critic.yml"
+  ],
+  "blast_radius_checks": [
+    "Exact generated contract bytes/hash bound once and last in every C3/C4 group; missing, duplicate, changed, wrong-kind/category and non-final contract reject. C7 does not receive it.",
+    "All original groups, images, scope rules and source-bound evidence retained; existing 2800-character/4200-estimate prompt budgets unchanged.",
+    "Run focused hostile tests, full task10 and production tests, exact candidate scope, pre/post builder gates and independent C0 implementation review.",
+    "Fresh frozen candidate primary/capture/benchmark and all six critics required; every C3/C4 group must return complete JSON/stop and pass unchanged strict dimensions. No prior score reused."
+  ],
+  "fixes": [
+    {
+      "blocker_id": "C0-T10-B036",
+      "files": [
+        "tools/havenline/task10/build_critic_evidence.py",
+        "tools/havenline/task10/tests/test_build_critic_evidence.py",
+        "Docs/Production/T10/C0-specialist-output-truncation-74b19b1.json",
+        "Docs/Production/T10/REPAIR_PLAN-specialist-output-truncation-74b19b1.json"
+      ],
+      "causal_change": "Generate the exact 423-character formatting-only note and append it last as a hashed task_scope text item in every C3/C4 group. Validate exact presence, content, digest, metadata and final ordering before packaging. Do not change C7, shared runner/schema/model/900-token cap/timeouts, dimensions, thresholds, evidence coverage or gameplay.",
+      "verification": [
+        "Exact generated contract bytes/hash bound once and last in every C3/C4 group; missing, duplicate, changed, wrong-kind/category and non-final contract reject. C7 does not receive it.",
+        "All original groups, images, scope rules and source-bound evidence retained; existing 2800-character/4200-estimate prompt budgets unchanged.",
+        "Run focused hostile tests, full task10 and production tests, exact candidate scope, pre/post builder gates and independent C0 implementation review.",
+        "Fresh frozen candidate primary/capture/benchmark and all six critics required; every C3/C4 group must return complete JSON/stop and pass unchanged strict dimensions. No prior score reused."
+      ]
+    }
+  ]
+}

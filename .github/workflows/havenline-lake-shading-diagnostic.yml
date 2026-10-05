@@ -1,0 +1,39 @@
+name: Havenline lake shading diagnosis
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-lake-shading-diagnostic.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  diagnose:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - name: Prepare engine and capture controlled shader variants without modifying game files
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/engine" diagnosis
+          curl -fL --retry 2 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          export PATH="$RUNNER_TEMP/engine:$PATH"
+          python3 tools/havenline/bake_outpost_audio.py > diagnosis/audio.json
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > diagnosis/import.log 2>&1
+          timeout 100 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > diagnosis/motion.log 2>&1
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 180 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/probe_lake_shading.gd -- --out="$(pwd)/diagnosis" > diagnosis/render.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' diagnosis/*.log; then exit 1; fi
+          git rev-parse HEAD > diagnosis/SOURCE.txt
+          sha256sum diagnosis/*.png > diagnosis/SHA256SUMS.txt
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-lake-shading-diagnosis-${{ github.run_id }}
+          path: diagnosis/
+          retention-days: 30
+          if-no-files-found: error
+# Diagnostic-only material/light overrides; no shipping settings, rubric or scores changed.

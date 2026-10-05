@@ -1,0 +1,633 @@
+{
+  "schema_version": 1,
+  "audit_date": "2026-09-21",
+  "purpose": "Preserve branch-head provenance before T10 stale-branch cleanup while retaining all T01-T70 task information.",
+  "authoritative_integration_branch": "codex/havenline-sequential-task-01",
+  "approved_t10_candidate": "eba0107def258824549fb10d81785290d0c81d97",
+  "approved_t10_closeout_commit": "87a4346eb33473c3723c7b7c1bbf1dd04dba9131",
+  "keep": {
+    "designated_t10_task_branch": {
+      "branch": "havenline/T10-world-transformation",
+      "head_sha": "eba0107def258824549fb10d81785290d0c81d97",
+      "reason": "Preserved T10 task branch; fast-forwarded to approved implementation without history rewrite."
+    },
+    "canonical_branch": "codex/havenline-sequential-task-01",
+    "t11_task_branch": "havenline/T11-camp-construction",
+    "policy": "Preserve designated T01-T70 task branches, canonical integration history, task evidence and compilation/runtime sources."
+  },
+  "t10_related_branch_count": 88,
+  "obsolete_branch_count": 87,
+  "obsolete_branches": [
+    {
+      "branch": "havenline/T10-c0-job-log-reconcile",
+      "head_sha": "e5b95c7b72c31c727879906d69df1109a8e0c317",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-c0-terminal-reconcile",
+      "head_sha": "6dba4981f4c3701bef4dafe88b56e1ce86fc6ced",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-c0r-enforcement-reconcile",
+      "head_sha": "e3751e3021b767b6abaa50cafd0272577d539e08",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-c0r-repair-plan",
+      "head_sha": "42e50af5f40945d922016397aa472025f5f5d51a",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-c4-hierarchy-repair",
+      "head_sha": "a70dd8499eab2b121601d1bcaf8ee0641a8281e4",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-c4-hierarchy-repair-v2",
+      "head_sha": "9a78400614b1a522638d482c7762b6cfc30ae9d9",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-c7-repair-implementation",
+      "head_sha": "19d43b0e406f371bd1b4e1136906c6a82427ec0a",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-c7-repair-plan-v2",
+      "head_sha": "271ec6bc276d20c1c242413398f56cc748f44276",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-c7-selector-prototype",
+      "head_sha": "32e92a1ab8011aa146a07934004a7f8779cc3568",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-exhaustive-diagnostic",
+      "head_sha": "0052f27e2ab738a64b98eac4396e47100ebf6527",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-layout-solver-prototype",
+      "head_sha": "96f65da5a9cc1df837a4a418aff22f3b62b5c7c3",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-layout-solver-repair",
+      "head_sha": "30a7e0cc40d44aea2b21229bc39f312da13865e0",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-pipeline-canary",
+      "head_sha": "8b00db143d0306c2b793480a5b869472ad768cf7",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-pipeline-preflight",
+      "head_sha": "30a7e0cc40d44aea2b21229bc39f312da13865e0",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-rendered-footprint-shadow-repair",
+      "head_sha": "e1a3ce36ecd4891e79e2956dde2c7d8393f0884d",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-repair-base-reconcile",
+      "head_sha": "493a94745d3da4bd43bfd0f99be8e5cb732dc4f6",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-shadow-c0r-prep",
+      "head_sha": "e355637810a56ae2dd002350b91e970fcafc9a53",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-shadow-c0r-validation-v2",
+      "head_sha": "a515d08ac48ad9c9da9d69b9d48bc99015a7a188",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-shadow-c0r-validation-v3",
+      "head_sha": "50805cd6b247ec5deefbac6c36369e56bc203642",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-shadow-c0r-validation-v4",
+      "head_sha": "89e1bc17515f65e7002df1497853589779efb94f",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-shadow-c0r-validation-v5",
+      "head_sha": "e51f0c444e6559602fbcac571cf22205d58172f4",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-shadow-c0r-validation-v6",
+      "head_sha": "c6aa402d1327b2bba618d65b569846d922cd6923",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-shadow-c0r-validation-v7",
+      "head_sha": "4e7497d9a4d2b4f8a6e99e808ac4cb6658722a6a",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-shadow-intelligence-digest",
+      "head_sha": "b7bc9ec44e5462e48e38599e15782d7a4bfc341f",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-shadow-raster-reviewed-source",
+      "head_sha": "f85e2b94cd77676e44f374f8577d079f0d2f6070",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/T10-shadow-source-review-v1",
+      "head_sha": "4f7af4c288560c2f0663b8bcd1cb9895665fe452",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/governance-T10-rendered-clearance-full-domain-recovery",
+      "head_sha": "a1474ad88a9a8c062b98141037efa590557c7f03",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/governance-T10-rendered-clearance-probe",
+      "head_sha": "f3ded9ba3d0c0d2182c9db4efbc9cc0a703dc347",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/governance-T10-rendered-clearance-probe-v2",
+      "head_sha": "da251cdd8556e1c336a3bdf5d5adbd7852decdae",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/governance-T10-screen-pixel-canary",
+      "head_sha": "31f08a6830dcb55855f5c7ef2a54ddb773e99b97",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/governance-t10-benchmark-diagnostic",
+      "head_sha": "b318108536323bd3ae61ba11c156b566b9427c3b",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/governance-t10-prep",
+      "head_sha": "7e95338e339fb331a5d6b094874c15d5a7e96e16",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-approval-closeout",
+      "head_sha": "965823b608563a402f1bdecb8277b5b8ac5edb71",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-bookkeeping-controller",
+      "head_sha": "724e21bb339c8640b7fd1d548d03455af4361b5d",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-bookkeeping-promotion-go",
+      "head_sha": "5e3a83c69ab1215601dba3866b2e8dad7fcbbfc1",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-bookkeeping-promotion-preflight",
+      "head_sha": "0ed20fa92558107106450270cc3d2d57a8debdbe",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-bounded-source-packets",
+      "head_sha": "ff22b6e7b1ad047f4530e52274a0f2f0b550d9da",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-final-controller",
+      "head_sha": "3d8eee85847ce0c5b84b496428ab60f0bd7d3966",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-final-controller-v2",
+      "head_sha": "f9f5b6e7cbe1705a1449fa79124d0ab2014e42a1",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-final-source",
+      "head_sha": "af6742e5fe6c11296dfc7e6ce54e53c93318719e",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-final-source-v2",
+      "head_sha": "d5c1a1fa155e4dab2e20e1b4aea9df48bcb00536",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-history-retry",
+      "head_sha": "c8e469a1d246ba469e7b13a23dc11640cdf96d8f",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-product-proof-retry",
+      "head_sha": "b5aab7a2b0e9818de1108914de531f4929b81be9",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-promotion-go",
+      "head_sha": "c125dcb7609547fb3640ccac00b92cc43acef417",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-promotion-prep",
+      "head_sha": "c125dcb7609547fb3640ccac00b92cc43acef417",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-source-finalize",
+      "head_sha": "b86d74add3a76b15e37fd3c7e49e29d0ad92ce84",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-source-review",
+      "head_sha": "d264aa930d09477d5daf948fbe2377a599f57796",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-source-review-parallel",
+      "head_sha": "f98ac0760cc66ec5a84addfdace1519c9831f33d",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-v2-promotion-prep",
+      "head_sha": "27c4dac5b7d44dda2d66b771fbec8eca9a95c1f1",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-v2-source-review-go",
+      "head_sha": "68c3076c9e7c260b6594424460acf15094a95dd2",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-c4-v2-source-review-prep",
+      "head_sha": "c07cb0be9edd5576f00e5c70a4d9c620f137ebbe",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-closeout-admission",
+      "head_sha": "3675f662d4de31dd35b23a4ffad5b51dd63f6517",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-closeout-preparation",
+      "head_sha": "a3b1df7ef703d8d3bd0e25d349c729272821fbd9",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-closeout-source",
+      "head_sha": "2842845c4e4a9866d3bf7bb62a1beeabf58199c2",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-closeout-workspace",
+      "head_sha": "9129f6f1c43333a863b0eff41c3f2b6f892e93da",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-domain-recovery",
+      "head_sha": "a1474ad88a9a8c062b98141037efa590557c7f03",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-engine-handoff",
+      "head_sha": "2164d91f069d77f5a8db09002f72ad56f0c84b30",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-final-bookkeeping-repair",
+      "head_sha": "fc9010daebf6b4d520333279486a1b6bea164e7c",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-final-c6-retry",
+      "head_sha": "c94fab47f5491f3331be2c50e1acbafcb0b9538a",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-final-closeout-controller",
+      "head_sha": "5807b17019e27c2bda2f9ea165078d7cfe1e5606",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-final-critics-fd962",
+      "head_sha": "68846bbc05bd9f196ae27a1e44aa6add990e0900",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-final-gates-go",
+      "head_sha": "8b444adb376d608a02582fb9ca8b34322dc72343",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-final-monitor",
+      "head_sha": "01f77bd83118ae3a36d4d8251644da48ccf091b0",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-final-six-prep",
+      "head_sha": "8d6ae37c9a8a4cf71ae1d08fe1075a447ef8476f",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-final-valid-aggregate",
+      "head_sha": "e8b1a2f922e39b9b9a975b931f8aa65820bc301e",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-final-visual-critics",
+      "head_sha": "d92043eeeccf508ac6276d41f2e4163dfe5e3c43",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-final-visual-protocol",
+      "head_sha": "797f16a2860657af4788cdccd827bc6b49782c6e",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-integrated-caller-source",
+      "head_sha": "06232b7c0e4cf8662f9b94d51bc93aa125fe2f20",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-integrated-callers-preflight",
+      "head_sha": "e1021c381cc08e0e6dd852d230e8aa0fec33391a",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-light-context-preflight",
+      "head_sha": "731a40d459926a3fd8ff15a6ad1f0ef9efa0f5ee",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-local-validation-bundle",
+      "head_sha": "c6749785c363b759090cfef9d1fd6234f1a06a86",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-owner-promotion-go",
+      "head_sha": "009f006989142f9b19dfbf95298cf17492ccb379",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-owner-promotion-prep",
+      "head_sha": "bb6570ccbc6698d6d9a65a33549fbe984252e1cd",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-rendered-clearance-probe-source",
+      "head_sha": "f3ded9ba3d0c0d2182c9db4efbc9cc0a703dc347",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-rendered-clearance-probe-v2-source",
+      "head_sha": "da251cdd8556e1c336a3bdf5d5adbd7852decdae",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-runner-dependency-controller",
+      "head_sha": "10bc56e738df65434778c98e23e036c3c6c09e6a",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-runner-dependency-repair",
+      "head_sha": "69e13b80540b520f252b4ac959ea374cea9bed85",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-runner-dependency-source-v2",
+      "head_sha": "5484a8c3d47ffb0d895b379aeb267f190f3ff577",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-runner-promotion-go",
+      "head_sha": "6448794f9f05de62b677a272200e546764d4b280",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-runner-promotion-prep",
+      "head_sha": "0661b427136fe09b7c4b1d8a1d9c00cf70e8a3bd",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-screen-pixel-repair",
+      "head_sha": "c645b2c2e12fd8dd417be638bcb752dc0bedf6c0",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-shadow-source-final",
+      "head_sha": "033d219a253c8713f86cddc0c8fa83f6c362a479",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-status-probe",
+      "head_sha": "b28cff6619675f78d6bf92d0f7471fa64be41ac1",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-T10-test-source-preparation",
+      "head_sha": "d721b7ac611377023218af6511bd3b3f3412a149",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-t10-isolated-scope",
+      "head_sha": "d895c4c484aaa67d06c4320b77d8864e7c3529d4",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "havenline/review-t10-preactivation-handoff",
+      "head_sha": "c35b33977d9ff526a9ad5ae3bc1e885566d085ba",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    },
+    {
+      "branch": "prebuild/T10-world-transform",
+      "head_sha": "efaba8368d50a00443f6a22fdc28cdc7af069fb2",
+      "protected": false,
+      "classification": "OBSOLETE_T10_RETRY_REVIEW_DIAGNOSTIC_OR_PREBUILD",
+      "safe_for_game_build": true
+    }
+  ],
+  "compile_effect": "These obsolete refs are not selected by the authoritative registry/task gates and do not affect a build unless someone explicitly checks out that branch or triggers a branch-specific workflow.",
+  "deletion_note": "Branch refs may be deleted only after this inventory is retained. Deleting a stale branch ref does not remove the approved canonical T10 implementation."
+}

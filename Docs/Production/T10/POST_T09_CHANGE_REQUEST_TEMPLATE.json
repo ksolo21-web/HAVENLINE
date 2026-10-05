@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "change_request_id": "T10-post-T09-simulation-authority-adapter",
+  "requesting_task": "T10",
+  "requesting_branch": "havenline/T10-world-transformation",
+  "requesting_owner": "world-transformation-builder",
+  "status": "TEMPLATE_PENDING_T09_APPROVAL",
+  "apply_only_after": [
+    "T09 is APPROVED in dependency graph, workstream registry and task-gates",
+    "T09 active ownership is closed",
+    "exact post-T09 integration head is known",
+    "T10 isolated candidate is reconciled to that exact integration head"
+  ],
+  "requested_integration_owner_paths": [
+    "HavenlineGodot/scripts/simulation.gd"
+  ],
+  "forbidden_scope_expansion": [
+    "HavenlineGodot/scripts/main.gd",
+    "HavenlineGodot/scripts/harvest_presentation.gd",
+    "T09 harvesting assets/tests/tools",
+    "T08 presentation/runtime modules",
+    "T11 final camp content",
+    "global save-versioning implementation"
+  ],
+  "reason": "T10 may not edit integration-only simulation.gd. The real transformation authority must atomically debit delivered simulation.stored resources and return an idempotent simulation receipt. Existing T09 gather commits to carried simulation.inventory and existing deposit moves carried inventory to simulation.stored, so T10 must bind downstream to stored rather than harvesting presentation or carried inventory.",
+  "authoritative_contract": "Docs/Production/T10/POST_T09_ADAPTER_CONTRACT.json",
+  "requested_runtime_changes": [
+    "Add bounded Dictionary world_transform_debit_receipts keyed by target_id, retaining only the latest successful T10 debit receipt per target.",
+    "Add commit_world_transform_debit(intent: Dictionary) -> Dictionary.",
+    "Validate the exact T10 prepared intent shape and positive KINDS-only debits before mutation.",
+    "Use simulation.stored as the only transformation affordability/debit balance; never debit simulation.inventory.",
+    "On first valid commit with sufficient stored balance, subtract each exact debit once and return the intent fields plus authority_source=simulation, authority_applied=true, simulation_replayed=false.",
+    "On exact retry of the latest authority_transaction_key for a target, return the prior receipt with simulation_replayed=true and zero resource mutation.",
+    "Reject malformed, forged, insufficient, or stale/lower-or-equal-revision different-key requests with authority_applied=false and zero mutation.",
+    "Persist/restore the bounded latest-per-target debit receipt component in the existing simulation snapshot/restore surface without defining global save versioning; T14 remains global versioning owner."
+  ],
+  "required_tests_after_apply": [
+    "python3 tools/havenline/task10/validate_post_t09_adapter.py --require-bound",
+    "T10 real integration test proves carried inventory cannot satisfy transform cost before deposit.",
+    "T10 real integration test proves deposited stored resources can satisfy transform cost.",
+    "Exact first debit and duplicate retry conservation tests pass.",
+    "Crash-after-debit/before-T10-acceptance reload test passes without second debit.",
+    "Malformed/forged/stale request tests leave stored unchanged.",
+    "Impacted approved T01-T09 regression passes."
+  ],
+  "expected_disposition_before_t09": "DO_NOT_APPLY",
+  "expected_disposition_after_t09": "INTEGRATION_OWNER_REVIEW_AND_APPLY_IF_EXACT_POST_T09_CONTRACT_STILL_MATCHES"
+}

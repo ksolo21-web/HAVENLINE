@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "cleanup_date": "2026-09-21",
+  "policy": "branch has zero unique commits (behind_by=0 when compared branch\u2192canonical), is not a T01-T70 task branch, is not referenced by an open PR, and is not an authoritative integration/release branch",
+  "deleted_or_already_absent": [
+    {
+      "branch": "agent/havenline-production-art-gate",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-all-t12-t70-ready",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-c0-terminal-job-log",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-c0-terminal-priority",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-c0r-builder-enforcement",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-c0r-frontier",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-c0r-sufficiency",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-forward-contract-packets",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-game-master-accounts",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-preactivation-candidate-guard",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-repair-base-inheritance",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-resource-actor-contracts",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-t03-trigger-scope",
+      "status": "deleted"
+    },
+    {
+      "branch": "havenline/governance-v32-parallel-resumability",
+      "status": "deleted"
+    }
+  ],
+  "preserved_unique_branches": [
+    {
+      "branch": "astra-webgl-review/2026-09-06",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "codex/havenline-environment-calibration",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "codex/havenline-visual-critic",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "havenline/QA-integration",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "havenline/governance-all-t13-t70-ready",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "havenline/governance-c0-terminal-evidence",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    },
+    {
+      "branch": "havenline/governance-c0r-workstream-authorization",
+      "reason": "diverged from canonical; unique commits/information preserved"
+    }
+  ],
+  "task_branch_policy": "All designated T01-T70 task branches and registry-referenced task branches are preserved regardless of ancestry.",
+  "open_pr_policy": "All open PR head/base branches are preserved.",
+  "game_compile_effect": "none; every deleted branch head was already an ancestor of canonical and no task/open-PR branch was removed"
+}

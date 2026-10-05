@@ -1,0 +1,191 @@
+{
+  "schema_version": 1,
+  "authority": "Docs/Production/PRODUCTION_ARCHITECTURE_V32_STANDARD.md",
+  "quality_rule": {
+    "operator": ">",
+    "threshold": 9,
+    "unrounded": true,
+    "target": 10
+  },
+  "contracts": {
+    "progression": {
+      "task_start": "T12",
+      "formal_acceptance": "T62",
+      "required": [
+        "nodes"
+      ],
+      "rules": [
+        "L1 exists",
+        "L100 reachable",
+        "all nodes reachable from L1",
+        "levels monotonic across prerequisites",
+        "no purchase_required path",
+        "positive costs"
+      ]
+    },
+    "difficulty": {
+      "task_start": "T13",
+      "required": [
+        "allowed_inputs",
+        "samples"
+      ],
+      "forbidden_inputs": [
+        "purchase_history",
+        "spend_history",
+        "vip",
+        "premium_balance",
+        "entitlements",
+        "ad_spend",
+        "payer_status"
+      ],
+      "max_step_ratio": 1.25,
+      "hp_only_increase_run_max": 2
+    },
+    "save_versioning": {
+      "task_start": "T14",
+      "required_cases": [
+        "fresh",
+        "current",
+        "previous",
+        "interrupted",
+        "reload",
+        "migration",
+        "rollback",
+        "corrupt"
+      ],
+      "rules": [
+        "migration path from every supported prior version",
+        "unique golden fixture hashes",
+        "corrupt recovery fail-closed"
+      ]
+    },
+    "population": {
+      "task_start": "T15",
+      "rules": [
+        "unique actor identities",
+        "zero deadlocks",
+        "all routes resolve",
+        "population within budget",
+        "save_reload consistency"
+      ]
+    },
+    "action_arbitration": {
+      "task_start": "T16",
+      "formal_integration": "T23",
+      "required": [
+        "contexts"
+      ],
+      "rules": [
+        "unique priorities",
+        "selected action is highest eligible",
+        "automatic contextual selection",
+        "contact authority explicit",
+        "cancel rule explicit"
+      ]
+    },
+    "motion_readiness": {
+      "task_start": "T24",
+      "formal_integration": "T31",
+      "species": [
+        "guardian_dog",
+        "gray_wolf",
+        "fox",
+        "owl",
+        "male_lion",
+        "white_tiger",
+        "brown_bear"
+      ],
+      "rules": [
+        "species-specific locomotion",
+        "species-specific work/retrieve/scout",
+        "species-specific combat",
+        "contact/clearance requirements"
+      ]
+    },
+    "transaction_security": {
+      "task_start": "T33",
+      "formal_attack_review": "T66",
+      "rules": [
+        "stable transaction id",
+        "single debit/grant",
+        "duplicate id idempotent",
+        "replay rejected",
+        "rollback defined",
+        "authority explicit"
+      ]
+    },
+    "liveops_clock": {
+      "task_start": "T37",
+      "formal_rehearsal": "T65",
+      "required_cases": [
+        "dst",
+        "leap_day",
+        "timezone_shift",
+        "clock_skew",
+        "offline_return",
+        "overlap",
+        "kill_switch",
+        "rollback"
+      ],
+      "rules": [
+        "no duplicate reward",
+        "collision resolution deterministic",
+        "kill switch immediate/fail-closed"
+      ]
+    },
+    "region_template": {
+      "task_start": "T44",
+      "formal_integration": "T53",
+      "required": [
+        "region_id",
+        "entry_exit",
+        "resources",
+        "tools",
+        "save_boundary",
+        "streaming_budget",
+        "performance_budget",
+        "transport_hooks"
+      ]
+    },
+    "accessibility_device": {
+      "task_start": "T11",
+      "formal_acceptance": "T55/T58",
+      "required_checks": [
+        "text_scale",
+        "touch_target",
+        "contrast",
+        "reduced_motion",
+        "subtitles",
+        "controller",
+        "foldable"
+      ]
+    },
+    "external_capabilities": {
+      "task_start": "T33",
+      "source": "Docs/Production/CAPABILITY_STATUS.json",
+      "rules": [
+        "READY requires non-null evidence",
+        "UNVERIFIED/UNAVAILABLE/DEFERRED block dependent activation"
+      ]
+    },
+    "physical_reconnaissance": {
+      "checkpoints": [
+        "T32",
+        "T44",
+        "T54"
+      ],
+      "formal_certification": "T68/T69",
+      "required": [
+        "device",
+        "build_sha",
+        "native_width",
+        "native_height",
+        "duration_minutes",
+        "frame_time_ms_p95",
+        "thermal_state",
+        "process_memory_mb",
+        "non_certification"
+      ]
+    }
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "T10",
+  "status": "AUTHORIZED",
+  "blocker": "C0R-T10-RECONCILED-INHERITANCE",
+  "authorization": "Authorize exact-byte noncausal integration inheritance in the FIX_REQUIRED builder repair gate.",
+  "target_paths": [
+    "tools/havenline/production/builder_repair_gate.py",
+    "tools/havenline/production/tests/test_c0_builder.py",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "tools/havenline/production/tests/test_architecture_release_lock.py"
+  ],
+  "requested_change": "Permit a repair plan to declare exact noncausal files inherited from the active integration SHA when the repair base intentionally remains an earlier task candidate. The gate must verify the declared integration SHA equals the active INTEGRATION_HEAD, is an ancestor of the candidate, and that every inherited file is byte-identical at integration and candidate heads. Inherited files never satisfy blocker causal-touch requirements.",
+  "reason": "T10 must retain c7a18d0 as the causal repair base so all B037-B061 fixes remain visible, while C0R governance was integrated later and appears in that diff. Moving repair_base to integration hides already-completed causal fixes; treating C0R governance as ordinary repair files violates C0 authorization. Exact-byte noncausal inheritance preserves both provenance constraints.",
+  "forbidden_changes": [
+    "No inherited file may count as a blocker causal touch.",
+    "No file differing from the exact active integration bytes may be inherited.",
+    "No weakening of C0 blocker mapping, protected-file enforcement, repair-base validation, critic thresholds, or candidate freeze.",
+    "No automatic inference of inherited files; every path must be explicitly declared in the repair plan."
+  ],
+  "tests_required": [
+    "Exact active-integration byte inheritance passes without satisfying a causal touch.",
+    "Wrong integration SHA, non-ancestor source, missing file, changed bytes, unsafe paths, duplicates, bookkeeping overlap, and causal overlap fail closed.",
+    "Existing builder repair tests remain unchanged and passing."
+  ]
+}

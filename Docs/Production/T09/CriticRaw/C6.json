@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "scores": {
+    "frame_time": 9.214,
+    "draw_calls": 9.402,
+    "geometry": 9.482,
+    "texture_memory": 9.237,
+    "shader_cost": 9.491,
+    "physics": 9.488,
+    "animation": 9.472,
+    "population": 9.489,
+    "thermal_risk": 9.067
+  },
+  "minimum_score": 9.067,
+  "coverage_complete": true,
+  "confidence": 0.94,
+  "defects": [],
+  "evidence": [
+    {
+      "path": "performance/c6-performance.json",
+      "sha256": "732715e042c852c57849ce97fe2a425e627d00749d07a48747dd4ac1f1c09658"
+    },
+    {
+      "path": "performance/delta.json",
+      "sha256": "599c9e9b938e6867bdad006a3540eb9787dbbc5ab53457f11fcad8431154a727"
+    },
+    {
+      "path": "performance/c6-gate.json",
+      "sha256": "b67307bc0590c9b3540a36e276d6024806974fb069f189174ed5df63e2650465"
+    }
+  ],
+  "rationale": [
+    "Exact-base and candidate used the same forced-render script at 3840x2160 after 30 warm-up frames for 180 measured active-harvest frames on llvmpipe.",
+    "Candidate deltas: p95 -62.225 ms, p99 -500.047 ms, average draw calls +2, average primitives -330.511, static memory +1.054 MB, visible materials +2, shaders/physics/animation/population +0. All declared limits pass.",
+    "Maximum runtime fragments and impact pulses are zero after settling and unchanged active-state node count is stable. Thermal score applies only to the bounded software preflight; physical 4K60 and thermal certification remain explicitly outside T09."
+  ],
+  "schema_version": 1,
+  "task_id": "T09",
+  "critic_id": "C6",
+  "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "workflow_run_id": 35289633249,
+  "artifact_id": 10527144124,
+  "artifact_sha256": "78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+  "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "input_manifest_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+  "passed": true,
+  "score_reuse": false,
+  "minimum_dimension_score": 9.067,
+  "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+  "acceptance_rule": ">9.0 unrounded in every mandatory dimension; no averaging; zero mandatory defects",
+  "provider": "OpenAI",
+  "model": "unavailable in runtime metadata",
+  "request_or_run_id": "/root/t09_final_critic"
+}

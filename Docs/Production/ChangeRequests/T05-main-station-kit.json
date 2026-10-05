@@ -1,0 +1,30 @@
+{
+  "requesting_task": "T05",
+  "target_path": "HavenlineGodot/scripts/main.gd",
+  "requested_change": "Preload and instantiate the T05 visual-only station kit in the existing camp and lakeshore, replace only the retired furnace and storage visuals at their unchanged contract coordinates, and expose the station-kit descriptors in the built-in capture report.",
+  "reason": "The isolated visual kit cannot appear in the shipping scene until the integration owner performs the bounded main-scene wiring.",
+  "dependency": "T05 isolated candidate 8224596250e3cd37df2ea5cb3db3c9328108023c; T01-T04 remain approved and their gameplay contracts are preserved.",
+  "expected_behavior": "The authored station families appear as static-batched visual dressing at route-safe camp and south-lakeshore positions, while furnace and storage gameplay coordinates, interactions, simulation, camera behavior, routes, gates, save behavior, and progression remain unchanged.",
+  "tests_required": [
+    "test_simulation",
+    "test_crew_and_persistence",
+    "test_motion_and_performance",
+    "test_population",
+    "test_outpost",
+    "test_outpost_runtime",
+    "test_environment",
+    "test_render_budget",
+    "test_adaptive_devices",
+    "test_reference_forest",
+    "test_reference_forest_acceptance",
+    "test_task02_terrain",
+    "test_task02_surface_stress",
+    "test_lake_east_west",
+    "test_task02_river",
+    "test_task03_boundary",
+    "test_task04_camera",
+    "test_task05_station_kit"
+  ],
+  "status": "APPROVED",
+  "integration_owner_disposition": "AUTHORIZED"
+}

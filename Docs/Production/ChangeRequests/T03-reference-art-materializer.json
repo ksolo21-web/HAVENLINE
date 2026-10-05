@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "requesting_task": "T03",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "APPROVED_BOUNDED_T03_REFERENCE_ART",
+  "target_path": [
+    "Docs/Production/APPROVAL_INVALIDATIONS.json",
+    ".github/workflows/havenline-visual-repair-asset-materializer.yml",
+    "tools/havenline/production/tests/test_t03_reference_materializer.py"
+  ],
+  "authorization": "Kaleb explicitly required the fence and gate to be replaced with his supplied renders, approved preserving T03 authoritative geometry/behavior, and directed execution. This only enables the isolated visual-art candidate and deterministic generated-byte handoff; it does not approve art or change gameplay.",
+  "repair_branch": "havenline/T03-reference-art-20260926",
+  "historical_accepted_source": "e1e7bb2d68d1d53025d1242011ad4c885f08c307",
+  "allowed_generated_paths": [
+    "HavenlineGodot/assets/t03_boundary_v2/fence_panel.obj",
+    "HavenlineGodot/assets/t03_boundary_v2/gate_post.obj",
+    "HavenlineGodot/assets/t03_boundary_v2/gate_leaf.obj",
+    "HavenlineGodot/assets/t03_boundary_v2/manifest.json"
+  ],
+  "preserved": [
+    "T03 collision, gate IDs, openings, all six portal locations, hinges, routes, normalization constants and terrain seating",
+    "T01, T02, T04, T05 and all unrelated gameplay source",
+    "historical lifecycle and evidence records",
+    "all current strict visual, performance and explicit user-approval requirements",
+    "existing T05 materialization job checks and source-output restrictions"
+  ],
+  "runtime_artifact_purpose": "Retain the same official checksum-pinned Godot executable used by CI for rapid local authoring preflight. This tool artifact is not visual evidence, approval or physical-device certification.",
+  "forbidden": [
+    "No direct integration-branch asset writes from CI.",
+    "No task can authorize itself from candidate-local metadata.",
+    "No file outside the four explicit T03 generated outputs may be written by the new materializer job.",
+    "No force pushes or overwriting a moved branch.",
+    "No clearing the active visual invalidation before fresh evidence and user approval."
+  ]
+}

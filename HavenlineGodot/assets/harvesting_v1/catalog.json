@@ -1,0 +1,126 @@
+{
+  "art_language": "bright sculpted winter work tools with warm wood, dark metal, blue structure, orange grips and cyan contact accents",
+  "authority_id": "T09-harvesting-tools-v1",
+  "entries": [
+    {
+      "action": "chop",
+      "animation_profile": "human_player_chop",
+      "asset": "res://assets/harvesting_v1/axe.glb",
+      "contact_marker": "C1TwoHandContact",
+      "grip_socket": [
+        0.0,
+        -0.1,
+        0.0
+      ],
+      "id": "axe",
+      "impact_socket": [
+        0.29,
+        0.13,
+        0.0
+      ],
+      "materials": [
+        "blue",
+        "cyan",
+        "metal",
+        "orange",
+        "wood",
+        "wood_light"
+      ],
+      "render_materials": 1,
+      "resources": [
+        "wood"
+      ],
+      "second_hand_socket": [
+        0.0,
+        -0.26,
+        0.0
+      ],
+      "sha256": "79a3c9e4d31c609f0dc552b8810ab4061256def22e2eb9e4cefc3c1a33f3677e",
+      "triangles": 512,
+      "vertex_color_palette": true
+    },
+    {
+      "action": "mine",
+      "animation_profile": "human_player_mine",
+      "asset": "res://assets/harvesting_v1/pickaxe.glb",
+      "contact_marker": "C1TwoHandContact",
+      "grip_socket": [
+        0.0,
+        -0.08,
+        0.0
+      ],
+      "id": "pickaxe",
+      "impact_socket": [
+        0.28,
+        0.14,
+        0.0
+      ],
+      "materials": [
+        "blue",
+        "cyan",
+        "metal",
+        "orange",
+        "wood",
+        "wood_light"
+      ],
+      "render_materials": 1,
+      "resources": [
+        "stone",
+        "metal"
+      ],
+      "second_hand_socket": [
+        0.0,
+        -0.24,
+        0.0
+      ],
+      "sha256": "56494ab63e5b35257f619059af9038227b6350a9584bc2122315558e3de469c6",
+      "triangles": 568,
+      "vertex_color_palette": true
+    },
+    {
+      "action": "dismantle",
+      "animation_profile": "human_player_dismantle",
+      "asset": "res://assets/harvesting_v1/salvage_pry_tool.glb",
+      "contact_marker": "C1RightHandContact",
+      "grip_socket": [
+        0.0,
+        -0.2,
+        0.0
+      ],
+      "id": "salvage_pry_tool",
+      "impact_socket": [
+        0.28,
+        0.43,
+        0.0
+      ],
+      "materials": [
+        "blue",
+        "cyan",
+        "dark",
+        "metal",
+        "orange"
+      ],
+      "render_materials": 1,
+      "resources": [
+        "fuel"
+      ],
+      "second_hand_socket": [],
+      "sha256": "31c7a83e3468476c08bbd0e90abf611962aa4357b917a2334337cf22376804e6",
+      "triangles": 476,
+      "vertex_color_palette": true
+    }
+  ],
+  "generator": "tools/havenline/task09/generate_harvesting_tools.py",
+  "mutates_inventory": false,
+  "performance_contract": {
+    "active_physics": 0,
+    "palette_roles_max_per_tool": 6,
+    "render_materials_max_per_tool": 1,
+    "skeletons": 0,
+    "tool_instances_per_presented_actor": 1,
+    "triangles_max_per_tool": 2500
+  },
+  "runtime_logic_included": false,
+  "schema_version": 1,
+  "simulation_authoritative": true
+}

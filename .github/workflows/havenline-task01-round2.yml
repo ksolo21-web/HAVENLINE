@@ -1,0 +1,110 @@
+name: Havenline T01 corrected-geometry and camera review
+on:
+  push:
+    branches: ['codex/havenline-sequential-task-01']
+    paths: ['.github/workflows/havenline-task01-round2.yml', 'tools/havenline/bake_reference_forest.py', 'tools/havenline/review_task01_round2.py', 'HavenlineGodot/tests/capture_task01.gd']
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    permissions:
+      contents: write
+    outputs:
+      source: ${{ steps.build.outputs.source }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+      - run: python3 -m pip install pyyaml
+      - name: Reuse the exact T01 build steps with new source and extra closed-topology checks
+        id: build
+        run: |
+          python3 - <<'PY'
+          import yaml,pathlib,subprocess
+          w=yaml.safe_load(pathlib.Path('.github/workflows/havenline-task01.yml').read_text())
+          steps=w['jobs']['build-capture']['steps']
+          runs=[s['run'] for s in steps if 'run' in s]
+          assert len(runs)==5
+          runs[0]+='\nexport PATH="$RUNNER_TEMP/engine:$PATH"\n'
+          needle='python3 tools/havenline/bake_reference_forest.py | tee task01-evidence/bake.json'
+          assert runs[1].count(needle)==1
+          runs[1]=runs[1].replace(needle,needle+'\npython3 tools/havenline/audit_task01_geometry.py | tee task01-evidence/geometry-audit.json')
+          runs[-1]=runs[-1].replace('timeout 300','timeout 480')
+          script='\n'.join(runs)
+          pathlib.Path('task01-evidence').mkdir(exist_ok=True)
+          pathlib.Path('task01-evidence/executed-build.sh').write_text(script)
+          subprocess.run(['bash','-euo','pipefail','-c',script],check=True)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-build-${{ github.run_id }}
+          path: task01-evidence/
+          retention-days: 30
+          if-no-files-found: error
+  critic:
+    needs: build
+    strategy:
+      fail-fast: false
+      matrix:
+        role: [reference-fidelity, visual-integrity]
+    runs-on: ubuntu-24.04
+    timeout-minutes: 28
+    env:
+      REVIEW_ROLE: ${{ matrix.role }}
+      OMP_NUM_THREADS: '4'
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ needs.build.outputs.source }}
+      - uses: actions/download-artifact@v4
+        with:
+          name: havenline-T01-build-${{ github.run_id }}
+          path: task01-evidence/
+      - run: python3 -m pip install pillow
+      - run: python3 -u tools/havenline/review_task01_round2.py
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-critic-${{ matrix.role }}-${{ github.run_id }}
+          path: critic-results-v2/
+          retention-days: 30
+          if-no-files-found: error
+  task-gate:
+    needs: [build,critic]
+    if: always()
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    env:
+      EXPECTED_SOURCE: ${{ needs.build.outputs.source }}
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          pattern: havenline-T01-critic-*-${{ github.run_id }}
+          path: reviews/
+      - name: Preserve failed or incomplete reviews and keep next-task lock
+        run: |
+          python3 - <<'PY'
+          import pathlib,json,os
+          out=pathlib.Path('gate-report');out.mkdir(exist_ok=True)
+          reviews=[];blockers=[]
+          for role in ('reference-fidelity','visual-integrity'):
+              files=list(pathlib.Path('reviews').glob('*'+role+'*/task-review.json'))
+              if len(files)!=1:blockers.append('Missing '+role);continue
+              r=json.loads(files[0].read_text());reviews.append(r)
+              if not r.get('passed') or not r.get('independent_execution') or r.get('source')!=os.environ['EXPECTED_SOURCE']:blockers.append('Review failed, incomplete or wrong-source: '+role)
+          blockers.append('Actual-source evidence verification and cumulative sign-off required; never auto-advance from model numbers')
+          r={'task':'T01','source':os.environ['EXPECTED_SOURCE'],'minimum_score':9,'target':10,'reviews':reviews,'blockers':blockers,'task_passed':False,'next_task':'T02','next_task_locked':True,'physical_4k60_verified':False,'game_complete':False}
+          (out/'T01.json').write_text(json.dumps(r,indent=2));print(json.dumps(r,indent=2));raise SystemExit(1)
+          PY
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: havenline-T01-gate-${{ github.run_id }}
+          path: gate-report/
+          retention-days: 30
+          if-no-files-found: error
+# Active task only. No APK export or player testing. No automatic Task 2 start.

@@ -1,0 +1,88 @@
+{
+  "critic_id": "C0R",
+  "non_voting": true,
+  "reviewer": "/root/recovered_t10_review",
+  "decision": "REPAIR_PLAN_ACCEPTED_FOR_BOUNDED_HOSTED_CANARY_WITH_FAILURE_CLASS_COVERAGE",
+  "source": "4521070c4dbf6519105cc96449d0d4e845b62449",
+  "new_view_sha256": "c09e76658fbd1b042aa033463361e74f6d8c180b35b26a5d47f3fa4c704289ea",
+  "new_verifier_sha256": "36961301f7f3e06a36c8b12bb100393b49b7a6476d1ba0ef2a725ec4f20cd6fa",
+  "derivative_evidence": {
+    "source": "a1474ad88a9a8c062b98141037efa590557c7f03",
+    "original_run": 35480539082,
+    "original_artifact": 10595129703,
+    "original_zip_sha256": "a5b0e804ad39d461467dd8bbc29904cd982cf041f87c378741897bd5e3faccf5",
+    "executing_verifier_sha256": "baa5dfa8e503ea487ab225afa8c34769f36f006a67e33701e52ec2ffee13c4a7",
+    "report_hashes_independently_verified": {
+      "phone_16_9__1.0": "25701f0f8c0c2f7b8c24b4a6b07ea4fd725da13016055ed151510a761104f335",
+      "phone_16_9__0.85": "2eeb79f60e3dafdc49277d4230f2739036cbc69f729dd147ee5f237ce27ec7d9",
+      "phone_16_9__1.35": "b53f1671d6cd5186e661204a5c6da533eca519fe45b52aa5de981cdd8d711591",
+      "phone_20_9__1.0": "534e7b2247faff89059442c6e2ce71ba2c3513c46390165d48316f3bd46a2fc6",
+      "phone_20_9__0.85": "674d98630a97af86cf712ed277f7d2cc573885397e4669a41875dfecac25f649",
+      "phone_20_9__1.35": "f151f99dfb9099266dea2a0bb34a09f9704fd8ecc417d75ecc3af49014f8c183",
+      "tablet_16_10__1.0": "4148f40799b8a342715993c603bfb9fd6f382557126771d657770a1cd6dec8fb",
+      "tablet_16_10__0.85": "a23b1248f278d185ce911b60d7a6a99ecf3cd036792ceaf1eca709f32817687f",
+      "tablet_16_10__1.35": "5418d89a3066bb5ca746ee704ded5000b29150da5a0cbada11a5bd093eb856bf",
+      "tablet_4_3__1.0": "aa553266e34b9265449a647287334c465c7c1382cf072220fc3c70070563af56",
+      "tablet_4_3__0.85": "b3ac0cd72c1fb04352bd75aa33389f5d533fb80811312ed00760f7b5e2458b61",
+      "tablet_4_3__1.35": "86c57166cf209a250031911276d21d7d7a099f6c065c925fbcd0f22c063c64cb",
+      "foldable_outer__1.0": "4dbdd3640f64da69b33bc7e17e5ab7847652f9eac34d325eebb950fb0c2a6852",
+      "foldable_outer__0.85": "5f13f923812f128c7dec95e5d81eee5bd0520346959e1008bc8ee1abf9dbdfa3",
+      "foldable_outer__1.35": "7282b98456a1af7ff1588cfaa06bae73c6ff9b1421a3467a1d566b987d7e9ada",
+      "foldable_inner__1.0": "e26b285b643c6ae03b93944ae852a5b0c401b72549ba1e8ba923360e8133a163",
+      "foldable_inner__0.85": "0a586c3437f71dd779421c438ae6ca414111d8de3687b27757c95e37b97ee7ab",
+      "foldable_inner__1.35": "33e8d4845400dae176c0af662a10ee1eee82ed666b6430793dff0d743ef541f5",
+      "native4k_anchors": "5f1a4d938e32b1c94c837b2c6b923b22b2d1fc48d4d779a79e97a23a998ebb38"
+    },
+    "qualification": "Derived raster reanalysis of retained original artifact; not a new capture or a replacement of original process exits."
+  },
+  "counts": {
+    "rows": 650,
+    "failures": 108,
+    "analytic_pass_safe_frame_fail": 41,
+    "analytic_pass_clearance_fail": 36,
+    "analytic_fail_clearance_fail": 18,
+    "analytic_fail_safe_frame_and_clearance_fail": 13,
+    "normal_correspondence_failures": 0
+  },
+  "family": {
+    "each_device_scale0_85": "committing/complete/replay overhead clearance failure",
+    "each_device_scale1_35": "all6states overhead/detail pluscommitting front/side/three-quarter",
+    "scale1_0": "all216 corecasespass",
+    "native4k_anchors": "2pass"
+  },
+  "visual_checks": [
+    {
+      "path": "/tmp/t10-full-domain/cases/foldable_inner__1.35/blocked-overhead.png",
+      "sha256": "9f21de55362c6098b586d8cee8b1c9828a2d68a409d88ef46491cca69db0c72b"
+    },
+    {
+      "path": "/tmp/t10-full-domain/cases/phone_16_9__0.85/committing-overhead.png",
+      "sha256": "ae9145b8502a89b1087171178d7a3b4048fd30dd2bebcab2560c955fc815858d"
+    }
+  ],
+  "causal_assessment": [
+    "Scale0.85 analyticpass/rasterclearancefail andscale1.35 analyticpass/rasterframefail demonstrate measurement-realization divergence consistent with inherited worldscale mismatch.",
+    "Tablet/foldable1.35 analyticno-placement failures add real region feasibility defects; sourceframeerrorsare not merely verifier threshold artifacts.",
+    "New logicalpixel inverseprojection, text-only scale, floor-awarewrap and state-specificmeshbounds address both divergence and regionfeasibility; independently measured1728+111preflight supplies cheap support.",
+    "New product still haszero rendered results: localEPERM failure occurred beforecaptures, so hostedcanary required."
+  ],
+  "bounded_hosted_coverage": {
+    "minimum_recommended_profiles": [
+      "phone_16_9__0.85",
+      "phone_16_9__1.0",
+      "phone_16_9__1.35",
+      "native4k_full",
+      "foldable_inner__1.35"
+    ],
+    "cases": 180,
+    "why_added_profile": "Phone+native144 cases cover only analyticpass/rasterfail mechanisms. Foldableinner1.35 covers narrowest aspect and actual no-feasible-lane failures, including combinedsafe-frame+clearancefailure, with one36case profile.",
+    "eventual_full_requirement": "BeforeT10approval, freshcomplete sixdevice/state/angle/readability domain for changedsource plus newsemanticbranch evidence; canary is not substitution."
+  },
+  "execution_conditions": [
+    "Freshworkflow/source/admission/engine bindings and exactnewview hash; independent finalhostedworkflowreview beforeexecution.",
+    "Keeporiginalrawcaptureexitsandderivativeanalysis provenance separate; no oldfailure becomespass byrelabeling.",
+    "Retain allnewnormal/isolated/masks/cores and failures; fixedfont38/outline9/gap/frame/fitfloor unchanged underexplicitlogicalpixelcontract.",
+    "Review actualnative/device textreadability andshadowclearance; no scoreorproductapproval inferredfromanalyticpass."
+  ],
+  "task_approved": false
+}

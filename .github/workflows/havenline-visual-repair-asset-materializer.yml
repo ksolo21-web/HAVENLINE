@@ -1,0 +1,216 @@
+name: Havenline deterministic visual-repair asset materializer
+on:
+  push:
+    branches: ['havenline/T05-visual-repair-20260926', 'havenline/T03-reference-art-20260926']
+    paths:
+      - 'tools/havenline/task05/**'
+      - '.github/workflows/havenline-task05-station-kit-candidate.yml'
+      - 'tools/havenline/task03_reference_assets.py'
+      - 'tools/havenline/task03_mesh_authoring.py'
+      - 'HavenlineGodot/assets/t03_boundary_v2/wood_reference_crop.png'
+      - '.github/workflows/havenline-visual-repair-asset-materializer.yml'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: havenline-t05-materialize-${{ github.ref }}
+  cancel-in-progress: false
+
+jobs:
+  materialize-t05:
+    if: github.ref_name == 'havenline/T05-visual-repair-20260926'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    # Compare committed raw bytes in this disposable job only. Legacy native-Git
+    # PNG/OBJ files match LFS patterns but are not pointers; running LFS clean
+    # during git diff falsely reports unchanged files as generated changes.
+    # No tracked attributes, global configuration, path gate or file is waived.
+    env:
+      GIT_CONFIG_COUNT: '4'
+      GIT_CONFIG_KEY_0: filter.lfs.process
+      GIT_CONFIG_VALUE_0: ''
+      GIT_CONFIG_KEY_1: filter.lfs.clean
+      GIT_CONFIG_VALUE_1: cat
+      GIT_CONFIG_KEY_2: filter.lfs.smudge
+      GIT_CONFIG_VALUE_2: cat
+      GIT_CONFIG_KEY_3: filter.lfs.required
+      GIT_CONFIG_VALUE_3: 'false'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Verify exact integration-owned visual repair authorization
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin codex/havenline-sequential-task-01
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          git merge-base --is-ancestor "$integration" "$GITHUB_SHA"
+          remote_head=$(git ls-remote origin "refs/heads/$GITHUB_REF_NAME" | cut -f1)
+          test "$remote_head" = "$GITHUB_SHA"
+          python3 - "$integration" <<'PY'
+          import json,os,subprocess,sys
+          integration=sys.argv[1]
+          record=json.loads(subprocess.check_output(
+              ['git','show',f'{integration}:Docs/Production/APPROVAL_INVALIDATIONS.json'],text=True
+          ))
+          task='T05';branch=os.environ['GITHUB_REF_NAME']
+          inv=next((row for row in record.get('records',[]) if row.get('task_id')==task and row.get('status')=='ACTIVE'),None)
+          assert inv is not None
+          assert inv.get('repair_candidate_allowed') is True
+          assert inv.get('repair_scope')=='VISUAL_ONLY'
+          assert inv.get('repair_branch')==branch
+          assert inv.get('historical_accepted_source')=='fa6fa70f154f3757d22303522ca3f6de2c3d391f'
+          assert inv.get('repair_status')=='POST_COMPLETION_VISUAL_REPAIR_AUTHORIZED'
+          PY
+
+      - name: Deterministically regenerate and verify T05 station assets
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          git diff --cached --exit-code
+          test -z "$(git ls-files --others --exclude-standard)"
+          python3 -m pip install --disable-pip-version-check numpy
+          python3 tools/havenline/task05/generate_station_kit.py
+          python3 tools/havenline/task05/test_station_kit.py
+          test -z "$(git ls-files --others --exclude-standard)"
+          mapfile -t changed < <(git diff --name-only)
+          if [ "${#changed[@]}" -eq 0 ]; then
+            echo "No generated asset changes to materialize."
+            echo "MATERIALIZE=false" >> "$GITHUB_ENV"
+            exit 0
+          fi
+          for path in "${changed[@]}"; do
+            case "$path" in
+              HavenlineGodot/assets/stations_v2/*.glb|HavenlineGodot/assets/stations_v2/catalog.json) ;;
+              *) echo "Materializer generated unauthorized path: $path" >&2; exit 1 ;;
+            esac
+          done
+          echo "MATERIALIZE=true" >> "$GITHUB_ENV"
+          printf '%s\n' "${changed[@]}"
+
+      - name: Commit only deterministic generated asset outputs
+        if: env.MATERIALIZE == 'true'
+        shell: bash
+        run: |
+          set -euo pipefail
+          remote_head=$(git ls-remote origin "refs/heads/$GITHUB_REF_NAME" | cut -f1)
+          test "$remote_head" = "$GITHUB_SHA"
+          git config user.name 'havenline-visual-materializer[bot]'
+          git config user.email 'havenline-visual-materializer[bot]@users.noreply.github.com'
+          git add HavenlineGodot/assets/stations_v2
+          mapfile -t staged < <(git diff --cached --name-only)
+          test "${#staged[@]}" -gt 0
+          for path in "${staged[@]}"; do
+            case "$path" in
+              HavenlineGodot/assets/stations_v2/*.glb|HavenlineGodot/assets/stations_v2/catalog.json) ;;
+              *) echo "Unauthorized staged path: $path" >&2; exit 1 ;;
+            esac
+          done
+          git diff --exit-code
+          git commit -m 'T05: materialize deterministic visual repair assets'
+          python3 tools/havenline/task05/test_station_kit.py
+          git diff --exit-code
+          git diff --cached --exit-code
+          test -z "$(git ls-files --others --exclude-standard)"
+          remote_head=$(git ls-remote origin "refs/heads/$GITHUB_REF_NAME" | cut -f1)
+          test "$remote_head" = "$GITHUB_SHA"
+          git push origin "HEAD:$GITHUB_REF_NAME"
+          echo "Materialized exact source: $(git rev-parse HEAD)"
+
+  materialize-t03:
+    if: github.ref_name == 'havenline/T03-reference-art-20260926'
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    env:
+      GIT_CONFIG_COUNT: '4'
+      GIT_CONFIG_KEY_0: filter.lfs.process
+      GIT_CONFIG_VALUE_0: ''
+      GIT_CONFIG_KEY_1: filter.lfs.clean
+      GIT_CONFIG_VALUE_1: cat
+      GIT_CONFIG_KEY_2: filter.lfs.smudge
+      GIT_CONFIG_VALUE_2: cat
+      GIT_CONFIG_KEY_3: filter.lfs.required
+      GIT_CONFIG_VALUE_3: 'false'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+      - name: Require exact T03 owner authorization and preserve geometry authority
+        shell: bash
+        run: |
+          set -euo pipefail
+          git fetch origin codex/havenline-sequential-task-01
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          git merge-base --is-ancestor "$integration" "$GITHUB_SHA"
+          remote_head=$(git ls-remote origin "refs/heads/$GITHUB_REF_NAME" | cut -f1)
+          test "$remote_head" = "$GITHUB_SHA"
+          git diff --exit-code "$integration" "$GITHUB_SHA" -- HavenlineGodot/scripts/camp_boundary.gd HavenlineGodot/scripts/river_geometry.gd HavenlineGodot/scripts/reference_forest.gd HavenlineGodot/scripts/outpost_surface.gd HavenlineGodot/shaders/outpost_snow.gdshader HavenlineGodot/scripts/camera_composition.gd HavenlineGodot/scripts/main.gd HavenlineGodot/assets/reference_forest HavenlineGodot/assets/stations_v2
+          python3 - "$integration" <<'PY'
+          import json,os,subprocess,sys
+          integration=sys.argv[1]
+          records=json.loads(subprocess.check_output(['git','show',f'{integration}:Docs/Production/APPROVAL_INVALIDATIONS.json'],text=True))['records']
+          inv=next((r for r in records if r.get('task_id')=='T03' and r.get('status')=='ACTIVE'),None)
+          assert inv is not None
+          assert inv.get('repair_candidate_allowed') is True
+          assert inv.get('repair_branch')==os.environ['GITHUB_REF_NAME']=='havenline/T03-reference-art-20260926'
+          assert inv.get('repair_scope')=='VISUAL_ONLY'
+          assert inv.get('historical_accepted_source')=='e1e7bb2d68d1d53025d1242011ad4c885f08c307'
+          assert inv.get('repair_status')=='POST_COMPLETION_VISUAL_REPAIR_AUTHORIZED'
+          PY
+      - name: Generate and verify only three boundary models and their manifest
+        shell: bash
+        run: |
+          set -euo pipefail
+          git diff --exit-code
+          git diff --cached --exit-code
+          test -z "$(git ls-files --others --exclude-standard)"
+          python3 -m pip install --disable-pip-version-check numpy
+          python3 tools/havenline/task03_reference_assets.py --write
+          python3 tools/havenline/task03_reference_assets.py --verify
+          test -z "$(git ls-files --others --exclude-standard)"
+          mapfile -t changed < <(git diff --name-only)
+          for path in "${changed[@]}"; do
+            case "$path" in
+              HavenlineGodot/assets/t03_boundary_v2/fence_panel.obj|HavenlineGodot/assets/t03_boundary_v2/gate_post.obj|HavenlineGodot/assets/t03_boundary_v2/gate_leaf.obj|HavenlineGodot/assets/t03_boundary_v2/manifest.json) ;;
+              *) echo "T03 materializer generated unauthorized path: $path" >&2; exit 1 ;;
+            esac
+          done
+          if [ "${#changed[@]}" -gt 0 ]; then
+            remote_head=$(git ls-remote origin "refs/heads/$GITHUB_REF_NAME" | cut -f1)
+            test "$remote_head" = "$GITHUB_SHA"
+            git config user.name 'havenline-visual-materializer[bot]'
+            git config user.email 'havenline-visual-materializer[bot]@users.noreply.github.com'
+            git add HavenlineGodot/assets/t03_boundary_v2/fence_panel.obj HavenlineGodot/assets/t03_boundary_v2/gate_post.obj HavenlineGodot/assets/t03_boundary_v2/gate_leaf.obj HavenlineGodot/assets/t03_boundary_v2/manifest.json
+            git diff --exit-code
+            git commit -m 'T03: materialize supplied-reference fence and gate art'
+            python3 tools/havenline/task03_reference_assets.py --verify
+            git diff --exit-code
+            git diff --cached --exit-code
+            test -z "$(git ls-files --others --exclude-standard)"
+            remote_head=$(git ls-remote origin "refs/heads/$GITHUB_REF_NAME" | cut -f1)
+            test "$remote_head" = "$GITHUB_SHA"
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          fi
+          echo "Materialized exact T03 source: $(git rev-parse HEAD)"
+      - name: Retain checksum-pinned authoring runtime for local mesh preflight
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/authoring-runtime"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/authoring-runtime/engine.zip"
+          cd "$RUNNER_TEMP/authoring-runtime"
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' > SHA512SUMS
+          sha512sum -c SHA512SUMS
+          printf '%s\n' 'Official pinned Godot authoring runtime only. Not game evidence, not visual approval, not physical-device certification.' > SCOPE.txt
+      - uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-pinned-authoring-runtime-${{ github.run_id }}
+          path: ${{ runner.temp }}/authoring-runtime
+          if-no-files-found: error
+          retention-days: 7

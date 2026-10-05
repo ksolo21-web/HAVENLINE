@@ -1,0 +1,30 @@
+{
+  "reviewer": "/root/recovered_t10_review",
+  "decision": "INSUFFICIENT_EVIDENCE",
+  "scope": "Retained V2 normal correspondence replay and recovered full-domain runner",
+  "observations": {
+    "preview_outside_bbox": [
+      1779,
+      1028,
+      2114,
+      1396
+    ],
+    "complete_outside_bbox": [
+      1622,
+      1270,
+      1974,
+      1405
+    ],
+    "outside_pixels": {
+      "preview": 1386,
+      "complete": 584
+    },
+    "difference_magnitude": "Exactly one RGB code value in affected channels",
+    "location": "Response geometry faces/edges; visual crops inspected",
+    "baseline_candidate": "Identical outside-label counts despite differing label placement"
+  },
+  "diagnosis": "Evidence is consistent with renderer/material settling or draw-submission precision, but existing single N/R snapshots cannot prove temporal settling. Do not label hypothesis proven.",
+  "proposed_falsifier": "Freeze scene, record multiple consecutive N frames and multiple R frames; bind per-frame image hashes and transforms. Require consecutive identical raw raster frames in bounded time. Re-run unchanged 1-code-value correspondence; persistent cross-pass changes disprove temporal-only diagnosis.",
+  "runner_review": "Sequential 19-profile runner continues capture exit1 and verifier errors, persists progress after each profile, binds product blob/device matrix, and requires 650 rows. No new scoped source blocker identified apart from unresolved correspondence validity.",
+  "task_approved": false
+}

@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "default_invalidated_gates": ["source_contract", "impacted_regression", "critic_review", "closeout"],
+  "contract_gate_overrides": {
+    "persistence_schema": ["save_matrix", "security_attack", "impacted_regression", "closeout"],
+    "inventory_transfer": ["save_matrix", "impacted_regression", "visual_evidence", "closeout"],
+    "harvest_resource_identity": ["motion_preflight", "save_matrix", "impacted_regression", "critic_review", "closeout"],
+    "world_transaction": ["save_matrix", "impacted_regression", "visual_evidence", "closeout"],
+    "progression_state": ["progression_sim", "economy_sim", "impacted_regression", "closeout"],
+    "economy_grant": ["economy_sim", "security_attack", "impacted_regression", "closeout"],
+    "backend_authority": ["security_attack", "save_matrix", "impacted_regression", "closeout"],
+    "billing_entitlement": ["economy_sim", "security_attack", "device_matrix", "closeout"],
+    "liveops_payload": ["liveops_sim", "economy_sim", "security_attack", "closeout"],
+    "identity_cloud": ["save_matrix", "device_matrix", "security_attack", "closeout"],
+    "region_transition": ["save_matrix", "device_matrix", "performance", "impacted_regression", "closeout"],
+    "accessibility_layout": ["device_matrix", "visual_evidence", "critic_review", "closeout"]
+  },
+  "uncertainty_policy": "INVALIDATE",
+  "invalidated_proof_may_be_reused": false,
+  "automatic_approval_revocation": false,
+  "integration_owner_disposition_required": true
+}

@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "task_id": "T11",
+  "sentinel_adapter": "tools/havenline/task11/sentinel.py",
+  "focused_tests": "HavenlineGodot/tests/test_task11_camp_construction.gd",
+  "integration_tests": "HavenlineGodot/tests/test_task11_integration.gd",
+  "task_workflow": ".github/workflows/havenline-task11-camp-construction.yml",
+  "checkpoint_path": "Docs/Production/T11/EXECUTION_CHECKPOINT.json",
+  "critic_preflight_command": "python3 tools/havenline/production/critic_package_preflight.py <critic-manifest.json> --candidate <SHA> --critic <Cx> --evidence-root .",
+  "stage_plan_command": "python3 tools/havenline/production/timeout_stage_plan.py T11",
+  "failure_router_command": ".github/workflows/havenline-v32-task-preflight.yml mode=failure with exact failed_run_id and candidate",
+  "canary_command": "python3 tools/havenline/production/rolling_canary.py requirements T11",
+  "quality_rule": {
+    "operator": ">",
+    "threshold": 9.0,
+    "unrounded": true,
+    "target": 10.0,
+    "zero_unresolved_mandatory_defects": true
+  },
+  "task_approved": false
+}

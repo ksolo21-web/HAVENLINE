@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "task_id": "T09",
+  "diagnosis_id": "C0-T09-35289658148-routing-5415d85",
+  "failed_source": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "governance_repair_source": "460064be8fff1b970071212a923423f2733024cc",
+  "governance_repair_tree": "0c94915130692fbde60cacb0bdd3841c20647930",
+  "changed_files": [
+    ".github/workflows/havenline-production-governance.yml",
+    "tools/havenline/production/tests/test_governance_scope_routing.py"
+  ],
+  "tests": {
+    "production_unit_tests": 167,
+    "passed": true,
+    "focused_routing_tests": 5,
+    "builder_repair_preflight": "PASS",
+    "builder_repair_postbuild": "PASS",
+    "integration_scope": "PASS: TASK_INTEGRATION/T09; zero errors",
+    "migration_negative_fixture": "PASS: unchanged migration-only validator still rejects all eight runtime/task paths",
+    "unrelated_locked_files_byte_identical": 49
+  },
+  "hosted_governance": {
+    "run_id": 35290773190,
+    "job_id": 105432912191,
+    "result": "success",
+    "all_steps_passed": true
+  },
+  "isolated_candidate_guard": {
+    "run_id": 35289632875,
+    "disposition": "VALID_NON_APPLICABLE_ROUTE_REJECTION",
+    "workflow_unchanged": true
+  },
+  "runtime_or_capture_change": false,
+  "accepted_gameplay_candidate_pending_fresh_review": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "frozen_task_run": 35289633249,
+  "task_approval_granted_by_this_record": false
+}

@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "task_id": "T09",
+  "failed_candidate": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "repair_base": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "diagnosis_id": "C0-T09-35289658148-routing-5415d85",
+  "c0_report_sha256": "d7b85c67f7f96c1bdbd4723ca57906342dd58270e454c45ec0ac2c32e39e31c8",
+  "full_blocker_set_acknowledged": true,
+  "candidate_freeze_after_build": true,
+  "validation_concurrency_policy": "finish_running_sha",
+  "fixes": [{
+    "blocker_id": "C0-T09-5415-B001",
+    "files": [".github/workflows/havenline-production-governance.yml", "tools/havenline/production/tests/test_governance_scope_routing.py"],
+    "causal_change": "Select the existing lifecycle integration validator for pushes on the registered integration branch; preserve the base-authoritative migration-only validator for governance branches and all pull-request candidates. Both validators remain unchanged.",
+    "verification": ["Execute the actual workflow scope shell under integration push, governance push and pull-request event fixtures.", "Require validator failures to remain terminal in both lanes.", "Run all production tests and exact 00b39ca..5415 integration scope; preserve migration runtime rejection.", "Complete hosted governance on the frozen governance-only repair SHA."]
+  }],
+  "must_not_change": ["tools/havenline/production/validate_migration_scope.py", "tools/havenline/production/validate_integration_scope.py", ".github/workflows/havenline-candidate-guard.yml"],
+  "blast_radius_checks": ["Runtime and capture trees unchanged from frozen 5415d858 source.", "49 other V3.1 locked files remain byte-identical.", "Historical approval remains historical until fresh artifact and independent review complete."]
+}

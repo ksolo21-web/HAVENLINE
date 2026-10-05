@@ -1,0 +1,130 @@
+{
+  "task": "T02",
+  "title": "Terrain, snow, warm work areas and full map-spanning expandable river",
+  "status": "PASS",
+  "river_layout_version": "river_v1_mapspan",
+  "accepted_gameplay_source": "1f0ba3bede3d160a34751c2fcdbfa78c1b6785ff",
+  "final_run": 34594901415,
+  "minimum_intermediate_dimension_score": 9.0,
+  "target_score": 10.0,
+  "critic_role_minimums": {
+    "reference-fidelity": 10.0,
+    "visual-integrity": 10.0
+  },
+  "review_groups_per_role": 10,
+  "total_required_role_group_judgments": 20,
+  "critic_dimension_minimum": 10.0,
+  "critic_dimensions": [
+    "reference_fidelity",
+    "river_form",
+    "bank_finish",
+    "expansion_readiness",
+    "view_consistency"
+  ],
+  "same_published_model_for_both_roles": true,
+  "provider_space": "Qwen/Qwen3-VL-235B-A22B-Instruct-Demo",
+  "provider_application_revision": "eb7f245e2c0d3b573dd8ed6addca9b7f6af26847",
+  "declared_model": "qwen3-vl-235b-a22b-instruct",
+  "provider_weights_locally_checksum_verified": false,
+  "blind_controls_passed": true,
+  "raw_scores_modified": false,
+  "first_reference_fidelity_transport_failure_preserved": true,
+  "transport_retry_only_after_no_verdict": true,
+  "completed_low_score_verdict_retried": false,
+  "locked_geometry": {
+    "terrain_bounds": {"x": [-31.0, 31.0], "z": [-31.0, 31.0]},
+    "current_movement_bounds": {"x": [-14.2, 14.2], "z": [-16.2, 16.2]},
+    "anchors": [
+      [-31.0, -8.6], [-24.0, -7.2], [-17.0, -9.0], [-10.0, -6.8], [-3.0, -8.7],
+      [4.0, -6.9], [11.0, -8.5], [19.0, -6.7], [25.0, -8.1], [31.0, -7.3]
+    ],
+    "primary_meander_bends": 5,
+    "water_width_minimum": 3.2,
+    "water_width_maximum": 4.6,
+    "south_bank_dry_depth_minimum": 4.5,
+    "north_side_gross_span_minimum": 16.5,
+    "north_bank_lane_minimum": 2.2,
+    "south_bank_lane_minimum": 2.0,
+    "crossing_reserves_x": [-9.0, 1.5, 10.0],
+    "crossing_reserve_width": 3.0,
+    "main_camp_bank": "north"
+  },
+  "mechanical_evidence": {
+    "functional_suites": 15,
+    "total_assertions_checks": 777,
+    "all_passed": true,
+    "t01_geometry_checks": 9,
+    "t01_geometry_passed": true,
+    "glbs_unchanged": 33,
+    "approved_forest_instances": 586,
+    "approved_t01_trees_flooded": 0
+  },
+  "render_evidence": {
+    "actual_pngs": 61,
+    "gallery_1280x720": 39,
+    "native_3840x2160_scale1": 11,
+    "tree_clearance_1280x720": 11,
+    "renderer": "mobile",
+    "matched_condition_camera_verified": true,
+    "day_return_pixel_identical": true,
+    "all_image_hashes_verified": true
+  },
+  "pixel_signoff": {
+    "all39_gallery_frames_inspected": true,
+    "all11_native4k_frames_inspected": true,
+    "all11_t01_clearance_frames_inspected": true,
+    "continuous_west_to_east_river_verified": true,
+    "smooth_meanders_without_lake_caps_or_spline_kinks": true,
+    "usable_dry_banks_on_both_sides_verified": true,
+    "north_bank_camp_relationship_verified": true,
+    "crossing_reserve_views_inspected": true,
+    "no_visible_water_terrain_gap_or_floating_bank": true,
+    "no_flooded_approved_tree_identified": true,
+    "no_broad_water_banding_defect_identified": true,
+    "t01_clearance_behavior_visually_intact": true,
+    "unresolved_mandatory_task2_visual_defects": []
+  },
+  "artifacts": {
+    "evidence": {
+      "id": 10262071517,
+      "sha256": "0ce40fa6888450509874251e17e4e30c7163f40305e18dbf359d92b3d1b696ee"
+    },
+    "source": {
+      "id": 10262476413,
+      "sha256": "73dcfa46e67441aa88da5c3b675a66b581ed5209465317eb1016be9a3586520e"
+    },
+    "reference_fidelity_final": {
+      "id": 10262588269,
+      "sha256": "4e5343f7e254d71f069a15c3c84007c96d9041485bedb8ef820bf78450403345"
+    },
+    "visual_integrity": {
+      "id": 10262032204,
+      "sha256": "a889622da59d2f77795f4758d44e5f4cb9583e5154d115ae64e37dd40acb9171"
+    },
+    "critic_gate": {
+      "id": 10261968317,
+      "sha256": "e0b75f5c8e4b2b25487441b97c3f6ae402dad0b9c7a047f5f25e94e2645fd6ef"
+    },
+    "reference_fidelity_incomplete_preserved": {
+      "id": 10262442182,
+      "sha256": "84c4bd36948f8508e3e5224bfb377d0f3a6d63b4db93e324d37709df65c354f6"
+    }
+  },
+  "internal_evidence_sha256": {
+    "provenance_json": "f05250102c7a28ee6d4e2ae46d94e3bec7d3220f24e490e104ccbfe27cfde998",
+    "tests_json": "bad548a203ab144ebf75b27a4d0e836e520eaf4ae7fb5afe1ed6b3744af9f3ce",
+    "tree_geometry_json": "9b52a06c4d0ee2078b4baa1781cafde3080d04d0a9a0234289d4186459779f9b",
+    "reference_fidelity_role_summary_json": "de48fb70dc1c783c1fe7bc85cc76de1eb424b0b311e535fa2f6c108975589f40",
+    "visual_integrity_role_summary_json": "6a07986da49af3c87f8a678fd7c6ae52737a74b4a9249c02111b03c48abef8f9",
+    "critic_gate_json": "5c9b66fdfb06de12e5b4f6646eb36d14a81846f9d66ccf065bc8892b605867dc"
+  },
+  "unresolved_mandatory_task_defects": [],
+  "task3_started": false,
+  "task3_ready_after_this_pass": true,
+  "full_game_approved": false,
+  "physical_phone_tablet_native_4k60_verified": false,
+  "unfinished_apk_delivered": false,
+  "user_testing_requested": false,
+  "later_regressions_reopen_this_task": true,
+  "report": "Docs/Production/T02/RIVER_VERIFIED_COMPLETION.md"
+}

@@ -1,0 +1,348 @@
+name: Havenline Task 6 Character 1 candidate
+
+on:
+  push:
+    branches: ['havenline/T06-character1', 'codex/havenline-sequential-task-01']
+    paths:
+      - 'HavenlineGodot/animations/c1/**'
+      - 'HavenlineGodot/scripts/character1_motion.gd'
+      - 'HavenlineGodot/scripts/main.gd'
+      - 'HavenlineGodot/tests/test_outpost_runtime.gd'
+      - 'HavenlineGodot/tests/test_task06_character1.gd'
+      - 'HavenlineGodot/tests/capture_task06_character1.gd'
+      - 'Docs/Production/T06/**'
+      - 'tools/havenline/task06/**'
+      - '.github/workflows/havenline-task06-*.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: havenline-task06-candidate-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build-test-capture:
+    if: ${{ github.event_name == 'workflow_dispatch' || github.ref_name != 'codex/havenline-sequential-task-01' || !contains(github.event.head_commit.message, '[governance-only]') }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+
+      - name: Prepare pinned Godot and evidence dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers ffmpeg
+          python3 -m pip install --disable-pip-version-check pillow numpy==2.3.5 scipy==1.17.0
+          mkdir -p "$RUNNER_TEMP/engine" task06-evidence/tests task06-evidence/gallery task06-evidence/native4k task06-evidence/reference task06-evidence/matrices task06-evidence/videos/realtime task06-evidence/videos/slow
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          (cd "$RUNNER_TEMP/engine"; echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  engine.zip' | sha512sum -c -; unzip -q engine.zip; chmod +x Godot_v4.7.2-stable_linux.x86_64)
+          echo "$RUNNER_TEMP/engine" >> "$GITHUB_PATH"
+
+      - name: Verify isolated ownership and exact Character 1 source
+        env:
+          REVIEWED_T06_SOURCE: 47f86fae25b099abb5c7096c37ca7495453b2b8f
+        run: |
+          set -euo pipefail
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          if [ "$GITHUB_REF_NAME" = 'codex/havenline-sequential-task-01' ]; then
+            git merge-base --is-ancestor "$REVIEWED_T06_SOURCE" "$GITHUB_SHA"
+            git diff --exit-code "$REVIEWED_T06_SOURCE" "$GITHUB_SHA" -- \
+              HavenlineGodot/scripts/character1_motion.gd \
+              HavenlineGodot/tests/capture_task06_character1.gd \
+              HavenlineGodot/tests/test_task06_character1.gd \
+              tools/havenline/task06/deformed_surface_audit.py \
+              tools/havenline/task06/run_matrix_case.sh \
+              tools/havenline/task06/runtime_review_gate.py \
+              tools/havenline/task06/test_character1_motion.py
+            python3 - <<'PY' | tee task06-evidence/candidate-scope.json
+          import json,os
+          reviewed=os.environ['REVIEWED_T06_SOURCE']
+          integrated=os.environ['GITHUB_SHA']
+          print(json.dumps({
+            'task_id':'T06',
+            'reviewed_candidate':reviewed,
+            'integrated_candidate':integrated,
+            'integration_branch':'codex/havenline-sequential-task-01',
+            'reviewed_source_is_ancestor':True,
+            'reviewed_runtime_and_gate_files_byte_identical':True,
+            'passed':True,
+            'errors':[]
+          },indent=2))
+          PY
+          else
+            python3 tools/havenline/production/workstream.py validate-candidate T06 --base f9d815a7d05c4e811d22d620c6b0c00c768ce6c5 --head "$GITHUB_SHA" --integration-head "$integration" | tee task06-evidence/candidate-scope.json
+          fi
+          python3 tools/havenline/task06/test_character1_motion.py | tee task06-evidence/tests/source-integrity.json
+          echo '95e4fed3a2778656cdf8b73affd2eb3feda8a32f82f4a0c3f76d90c82633c099  HavenlineGodot/assets/characters/Character1.glb' | sha256sum -c -
+
+      - name: Validate resource actor and animation contract
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,os
+          from pathlib import Path
+          manifest={
+            'task_id':'T06','candidate_commit':os.environ['CANDIDATE'],
+            'resource_actor_contract':{
+              'introduced_resource_ids':[], 'resource_ids_covered':[],
+              'actor_keys_covered':['player_lead','core_human_companion'],
+              'animation_profiles_covered':[], 'animation_delta':True
+            }
+          }
+          Path('task06-evidence/candidate-manifest.json').write_text(json.dumps(manifest,indent=2))
+          PY
+          python3 tools/havenline/production/resource_actor_contract.py --task T06 --manifest task06-evidence/candidate-manifest.json --output task06-evidence/resource-actor-contract.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          matrix=json.loads(Path('Docs/Production/CRITIC_MATRIX.json').read_text())
+          required=matrix['task_applicability']['T06']
+          assert 'C5' in required,required
+          Path('task06-evidence/critic-requirements.json').write_text(json.dumps({'task':'T06','required':required,'c5_mandatory':True},indent=2))
+          PY
+
+      - name: Import and run inherited plus T06 suites
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/bake_outpost_audio.py > task06-evidence/tests/audio-fixture.json
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > task06-evidence/tests/import.log 2>&1
+          timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > task06-evidence/tests/motion-fixture.log 2>&1
+          timeout 60 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task06_character1.gd > task06-evidence/tests/test_task06_character1.log 2>&1
+          for suite in test_simulation test_crew_and_persistence test_motion_and_performance test_population test_outpost test_outpost_runtime test_environment test_render_budget test_adaptive_devices test_reference_forest test_reference_forest_acceptance test_task02_terrain test_task02_surface_stress test_lake_east_west test_task02_river test_task03_boundary test_task04_camera test_task05_station_kit; do
+            timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script "res://tests/$suite.gd" > "task06-evidence/tests/$suite.log" 2>&1
+          done
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:|ObjectDB instances were leaked' task06-evidence/tests/*.log; then exit 1; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          import json,os
+          rows=[]
+          for path in sorted(Path('task06-evidence/tests').glob('test_*.log')):
+              reports=[json.loads(line) for line in path.read_text().splitlines() if line.startswith('{')]
+              assert reports,path
+              report=reports[-1]
+              assert report.get('passed') is True and not report.get('failures'),(path,report.get('failures'))
+              checks=report.get('checks',[])
+              rows.append({'suite':path.stem,'checks':len(checks) if isinstance(checks,list) else int(checks),'passed':True})
+          total=sum(row['checks'] for row in rows)
+          assert len(rows)==19 and total>=1119,(len(rows),total)
+          out={'task':'T06-character1-motion-v1','source':os.environ['GITHUB_SHA'],'suite_count':len(rows),'total_checks':total,'suites':rows,'all_passed':True,'task_approved':False}
+          Path('task06-evidence/tests.json').write_text(json.dumps(out,indent=2))
+          print(json.dumps(out))
+          PY
+
+      - name: Run save and adaptive-device matrices
+        env:
+          GODOT_BIN: Godot_v4.7.2-stable_linux.x86_64
+        run: |
+          set -euo pipefail
+          HAVENLINE_T06_MATRIX_MODE=save python3 tools/havenline/production/save_state_matrix.py --candidate "$GITHUB_SHA" --task T06 --adapter 'bash tools/havenline/task06/run_matrix_case.sh' --out task06-evidence/matrices/save
+          HAVENLINE_T06_MATRIX_MODE=device python3 tools/havenline/production/device_matrix.py --candidate "$GITHUB_SHA" --task T06 --adapter 'bash tools/havenline/task06/run_matrix_case.sh' --out task06-evidence/matrices/device
+
+      - name: Render complete motion gallery and native 4K evidence
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --out="$(pwd)/task06-evidence/gallery" > task06-evidence/gallery.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --native-4k --out="$(pwd)/task06-evidence/native4k" > task06-evidence/native4k.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task06-evidence/gallery.log task06-evidence/native4k.log; then exit 1; fi
+          python3 tools/havenline/task06/runtime_review_gate.py --glb task06-evidence/gallery/review/Character1-T06-runtime.glb --motion-ledger task06-evidence/gallery/motion-ledger.json --candidate "$GITHUB_SHA" --output task06-evidence/runtime-review-gate.json
+          python3 tools/havenline/task06/deformed_surface_audit.py --glb task06-evidence/gallery/review/Character1-T06-runtime.glb --motion-ledger task06-evidence/gallery/motion-ledger.json --candidate "$GITHUB_SHA" --output task06-evidence/deformed-surface-audit.json
+          cp Docs/Production/T05/ReferenceFrames/*.png task06-evidence/reference/
+          cp Docs/Production/T05/ReferenceFrames/coverage.json task06-evidence/reference/
+
+      - name: Encode every clip at real time and quarter speed
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          xvfb-run -a -s '-screen 0 960x540x24' timeout 1200 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 960x540 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --video-sequences --out="$(pwd)/task06-evidence/videos" > task06-evidence/videos.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task06-evidence/videos.log; then exit 1; fi
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image,ImageChops,ImageStat
+          import hashlib,math
+          for folder in sorted(Path('task06-evidence/videos/video-frames').iterdir()):
+              frames=sorted(folder.glob('frame-*.jpg'))
+              assert frames,(folder,'no source frames')
+              if folder.name.startswith('boundary_'):
+                  hashes={hashlib.sha256(path.read_bytes()).hexdigest() for path in frames}
+                  first=Image.open(frames[0]).convert('RGB')
+                  maximum_rms=0.0
+                  for path in frames[1:]:
+                      current=Image.open(path).convert('RGB')
+                      rms=ImageStat.Stat(ImageChops.difference(first,current)).rms
+                      maximum_rms=max(maximum_rms,math.sqrt(sum(value*value for value in rms)/3.0))
+                  assert len(hashes)>=math.ceil(len(frames)*0.50),(folder,len(frames),len(hashes))
+                  assert maximum_rms>=2.0,(folder,maximum_rms)
+          PY
+          for frames in task06-evidence/videos/video-frames/*; do
+            clip=$(basename "$frames")
+            ffmpeg -hide_banner -loglevel error -framerate 30 -i "$frames/frame-%05d.jpg" -c:v libx264 -preset veryfast -crf 22 -pix_fmt yuv420p -movflags +faststart "task06-evidence/videos/realtime/$clip.mp4"
+            ffmpeg -hide_banner -loglevel error -framerate 7.5 -i "$frames/frame-%05d.jpg" -c:v libx264 -preset veryfast -crf 22 -pix_fmt yuv420p -movflags +faststart "task06-evidence/videos/slow/$clip.mp4"
+          done
+          rm -rf task06-evidence/videos/video-frames
+          test "$(find task06-evidence/videos/realtime -name '*.mp4' | wc -l)" -eq 38
+          test "$(find task06-evidence/videos/slow -name '*.mp4' | wc -l)" -eq 38
+
+      - name: Run counterbalanced shipping-scene motion benchmark
+        run: |
+          set -euo pipefail
+          export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
+          /usr/bin/time -v -o task06-evidence/benchmark-time.txt xvfb-run -a -s '-screen 0 1280x720x24' timeout 900 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task06_character1.gd -- --candidate="$GITHUB_SHA" --benchmark --benchmark-frames=60 --out="$(pwd)/task06-evidence/benchmark" > task06-evidence/benchmark.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task06-evidence/benchmark.log; then exit 1; fi
+          test -s task06-evidence/benchmark/benchmark.json
+
+      - name: Enforce pixel provenance and preflight performance gates
+        env:
+          CANDIDATE: ${{ github.sha }}
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          from pathlib import Path
+          from PIL import Image,ImageDraw,ImageStat
+          import hashlib,json,math,os,struct
+          root=Path('task06-evidence')
+          gallery=json.loads((root/'gallery/capture.json').read_text())
+          native=json.loads((root/'native4k/capture.json').read_text())
+          benchmark=json.loads((root/'benchmark/benchmark.json').read_text())
+          ledger=json.loads((root/'gallery/motion-ledger.json').read_text())
+          surface=json.loads((root/'deformed-surface-audit.json').read_text())
+          for manifest in (gallery,native):
+              assert manifest['task']=='T06-character1-motion-v1'
+              assert manifest['candidate_commit']==os.environ['CANDIDATE']
+              assert manifest['source_immutable'] is True
+              assert manifest['source_sha256']==manifest['source_expected_sha256']=='95e4fed3a2778656cdf8b73affd2eb3feda8a32f82f4a0c3f76d90c82633c099'
+              assert manifest['renderer']=='mobile'
+              assert manifest['visible_meshes']==manifest['visible_materials']==2
+              assert manifest['animated_rigs_active']==1
+              assert manifest['physics_active_bodies']==manifest['npc_companion_active_population']==0
+          assert gallery['full_review'] is True and len(gallery['captures'])==953,len(gallery['captures'])
+          assert len(gallery['gameplay_captures'])==11,len(gallery['gameplay_captures'])
+          assert gallery['six_view_temporal_frames']==507,gallery['six_view_temporal_frames']
+          assert gallery['six_view_angles']==['front','front-three-quarter','left','rear','rear-three-quarter','right'],gallery['six_view_angles']
+          assert gallery['runtime_review_candidate']['shipping_asset'] is False
+          review_glb=root/'gallery'/gallery['runtime_review_candidate']['path']
+          assert review_glb.is_file() and hashlib.sha256(review_glb.read_bytes()).hexdigest()==gallery['runtime_review_candidate']['sha256']
+          review_bytes=review_glb.read_bytes();json_size,json_kind=struct.unpack_from('<II',review_bytes,12)
+          assert json_kind==0x4E4F534A
+          review_model=json.loads(review_bytes[20:20+json_size])
+          review_clips=[row['name'] for row in review_model['animations']]
+          assert len(review_clips)==24 and all(name.startswith('t06_') for name in review_clips),review_clips
+          assert len(review_model['skins'])==1 and len(review_model['skins'][0]['joints'])==66
+          assert all(row['camera_authority']=='T04-reference-camera-v1' and row['shipping_context'].startswith('T04 camera + T05') for row in gallery['gameplay_captures'])
+          assert ledger['sample_rate_hz']==120 and len(ledger['clips'])==24 and len(ledger['actions'])==9 and len(ledger['turns'])==6
+          assert ledger['skin_joint_count']==66 and len(ledger['skin_joint_inventory'])==66
+          assert sum(len(row['joints']) for row in ledger['semantic_parts'])==66
+          assert all(row['skin_joints_sampled']==66 and row['all_joint_transforms_finite'] and row['maximum_joint_scale_error']<0.001 and len(row['joint_metrics'])==66 for row in ledger['clips'].values())
+          assert all(ledger['clips'][clip]['loop_seam']['pose_and_velocity_matched'] for clip in ('idle','walk','run'))
+          assert all(ledger['clips'][clip]['loop_seam']['nonzero_motion_through_seam'] for clip in ('walk','run'))
+          assert surface['passed'] is True and surface['sample_rate_hz']==120,surface.get('errors')
+          assert surface['runtime_glb_sha256']==gallery['runtime_review_candidate']['sha256']
+          assert surface['vertex_count']==52898 and surface['triangle_count']==96001 and surface['skin_joint_count']==66
+          assert len(surface['clips'])==24 and all(row['passed'] for row in surface['clips'].values())
+          assert len(surface['gait_sole_landmarks'])==2 and all(row['passed'] and row['cycles']>=3 for row in surface['gait_sole_landmarks'])
+          assert ledger['clips']['walk']['maximum_moving_root_plant_drift_m']<0.03,ledger['clips']['walk']
+          assert ledger['clips']['run']['maximum_moving_root_plant_drift_m']<0.03,ledger['clips']['run']
+          assert ledger['clips']['walk']['derived_low-contact_stride_median']>0.0,ledger['clips']['walk']
+          assert ledger['clips']['run']['derived_low-contact_stride_median']>0.0,ledger['clips']['run']
+          assert all(row['forward_positive_z'] and row['target_error_m']<0.08 for row in ledger['actions'].values()),ledger['actions']
+          assert all(row['skeleton_returns_neutral'] and abs(row['external_root_facing_delta_degrees']) in (30,90,180) for row in ledger['turns'].values())
+          assert native['native_3840x2160_scale1'] is True and len(native['captures'])==6,len(native['captures'])
+          files=[];declared={}
+          for folder,manifest in [('gallery',gallery),('native4k',native)]:
+              rows=manifest['captures']+manifest.get('gameplay_captures',[])
+              for row in rows:
+                  key=f"{folder}/{row['file']}"; declared[key]=tuple(row['resolution']); files.append(root/key)
+          assert len(files)==970 and len(set(files))==970
+          budgets=json.loads(Path('Docs/Production/PERFORMANCE_BUDGETS.json').read_text())['global_soft_budgets']
+          hashes={};draw=[];primitives=[];thumbs=[]
+          for path in files:
+              assert path.is_file(),path
+              with Image.open(path) as raw:
+                  image=raw.convert('RGB')
+                  assert image.size==declared[str(path.relative_to(root))],(path,image.size)
+                  expected=(3840,2160) if path.parts[-3]=='native4k' or path.parts[-2]=='gameplay' else (1280,720)
+                  assert image.size==expected,(path,image.size)
+                  stat=ImageStat.Stat(image)
+                  assert max(stat.stddev)>=10.0,(path,stat.stddev)
+                  assert len(image.getcolors(maxcolors=image.width*image.height) or [])>=128,path
+                  if path.parts[-3]=='gallery' and len(thumbs)<80:
+                      image.thumbnail((256,144));tile=Image.new('RGB',(276,174),'#0b1117');tile.paste(image,((276-image.width)//2,5));ImageDraw.Draw(tile).text((8,153),path.stem[:38],fill='white');thumbs.append(tile)
+              hashes[str(path.relative_to(root))]=hashlib.sha256(path.read_bytes()).hexdigest()
+          for row in gallery['captures']+gallery['gameplay_captures']+native['captures']:
+              draw.append(int(row['draw_calls']));primitives.append(int(row['submitted_primitives']))
+          assert max(draw)<=budgets['draw_calls'],max(draw)
+          assert max(primitives)<=budgets['visible_triangles'],max(primitives)
+          sheet=Image.new('RGB',(1104,math.ceil(len(thumbs)/4)*174),'#060a0e')
+          for index,tile in enumerate(thumbs): sheet.paste(tile,((index%4)*276,(index//4)*174))
+          sheet.save(root/'motion-contact-sheet.jpg',quality=91)
+          reference={p.name:hashlib.sha256(p.read_bytes()).hexdigest() for p in sorted((root/'reference').glob('*.png'))}
+          assert len(reference)==7
+          storage_mb=sum(p.stat().st_size for p in [Path('HavenlineGodot/scripts/character1_motion.gd'),Path('HavenlineGodot/tests/test_task06_character1.gd')])/(1024*1024)
+          rss_line=next(line for line in (root/'benchmark-time.txt').read_text().splitlines() if 'Maximum resident set size' in line)
+          rss_mb=float(rss_line.split(':')[-1].strip())/1024.0
+          assert benchmark['candidate_commit']==os.environ['CANDIDATE']
+          assert benchmark['source_sha256']==gallery['source_sha256']
+          assert benchmark['measured_frames']==240 and benchmark['software_preflight_passed'] is True
+          assert benchmark['texture_gpu_memory_mb']>0 and benchmark['video_gpu_memory_mb']>0 and benchmark['process_static_memory_mb']>0 and rss_mb>0
+          assert benchmark['animation_inventory_per_rig']['clips']==24 and benchmark['animation_inventory_per_rig']['tracks']>0 and benchmark['animation_inventory_per_rig']['keys']>0
+          assert benchmark['shipping_population_rigs_visible']==4 and benchmark['t06_animated_rigs']==2
+          whole_scene_triangles=max(row['submitted_primitives'] for row in benchmark['phases'])
+          whole_scene_draw_calls=max(row['draw_calls'] for row in benchmark['phases'])
+          performance={
+              'task':'T06','candidate_commit':os.environ['CANDIDATE'],'passed':False,
+              'scene_state':benchmark['scene_state'],'resolution':benchmark['resolution'],'renderer':benchmark['renderer'],
+              'visible_triangles':whole_scene_triangles,'triangles_or_primitives':whole_scene_triangles,
+              'draw_calls':whole_scene_draw_calls,
+              'materials_visible':benchmark['materials_visible_whole_scene'],'materials':benchmark['materials_visible_whole_scene'],
+              'unique_shader_resources_visible':benchmark['unique_shader_resources_visible'],
+              't06_incremental_materials':benchmark['t06_incremental_materials'],'t06_incremental_shaders':benchmark['t06_incremental_shaders'],
+              'texture_gpu_memory_mb':benchmark['texture_gpu_memory_mb'],'video_gpu_memory_mb':benchmark['video_gpu_memory_mb'],
+              'texture_memory_if_measurable':benchmark['texture_gpu_memory_mb'],
+              'cpu_frame_ms':None,'cpu_frame_time_if_measurable':None,
+              'render_submission_p95_ms':benchmark['candidate_p95_ms'],'render_submission_baseline_p95_ms':benchmark['baseline_p95_ms'],'motion_render_submission_p95_delta_ms':benchmark['motion_p95_delta_ms'],'gpu_frame_ms_where_measurable':None,'gpu_frame_time_if_measurable':None,
+              'physics_active_bodies':benchmark['physics_active_bodies'],'physics_body_count':benchmark['physics_active_bodies'],
+              'animated_rigs_active':benchmark['t06_animated_rigs'],'animation_count':benchmark['animation_inventory_per_rig']['clips'],
+              'shipping_population_rigs_visible':benchmark['shipping_population_rigs_visible'],'population_count':benchmark['shipping_population_rigs_visible'],
+              'npc_companion_active_population':benchmark['npc_companion_active_population'],'npc_companion_active_population_definition':benchmark['npc_companion_active_population_definition'],
+              'process_memory_mb':rss_mb,'process_static_memory_mb':benchmark['process_static_memory_mb'],'storage_download_mb':storage_mb,
+              'process_memory_if_measurable':rss_mb,'storage_delta':storage_mb,
+              'animation_install_usec_two_rigs':benchmark['animation_install_usec_two_rigs'],'animation_static_memory_delta_mb_two_rigs':benchmark['animation_static_memory_delta_mb_two_rigs'],'animation_inventory_per_rig':benchmark['animation_inventory_per_rig'],
+              'measurement_method':'Counterbalanced A-B-B-A shipping-scene synchronous forced-render benchmark over 240 measured frames with retained raw samples; measured scene resource/population inventory; Godot GPU-memory counters; process maximum RSS; isolated install static-memory delta; exact animation inventory',
+              'known_unmeasured_fields':['cpu_frame_ms','gpu_frame_ms_where_measurable','direct_gpu_shader_time_ms'],
+              'physical_device_certification':False,'errors':[]
+          }
+          (root/'performance-preflight.json').write_text(json.dumps(performance,indent=2))
+          videos=list((root/'videos/realtime').glob('*.mp4'))+list((root/'videos/slow').glob('*.mp4'))
+          assert len(videos)==76
+          provenance={'task':'T06-character1-motion-v1','source':os.environ['CANDIDATE'],'source_gltf_sha256':gallery['source_sha256'],'runtime_review_glb_sha256':gallery['runtime_review_candidate']['sha256'],'actual_images':970,'full_cycle_images':906,'six_view_temporal_images':507,'bone_overlay_images':47,'gameplay_context_images':11,'native3840x2160_scale1_frames':6,'continuous_motion_videos':76,'standalone_clip_videos':48,'translated_three_cycle_locomotion_videos':16,'runtime_boundary_videos':12,'reference_video_frames':reference,'captures':hashes,'pixel_gate_passed':True,'performance_preflight_passed':False,'manual_quick_look_required_before_critics':True,'critics_executed':False,'task_approved':False,'physical_4k60_verified':False}
+          (root/'provenance.json').write_text(json.dumps(provenance,indent=2))
+          print(json.dumps({k:v for k,v in provenance.items() if k not in ('captures','reference_video_frames')},indent=2))
+          PY
+          python3 tools/havenline/production/critic_harness.py performance --candidate "$CANDIDATE" --record task06-evidence/performance-preflight.json | tee task06-evidence/performance-gate.json
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          gate=json.loads(Path('task06-evidence/performance-gate.json').read_text())
+          assert gate['passed'] is True,gate
+          performance=Path('task06-evidence/performance-preflight.json')
+          record=json.loads(performance.read_text());record['passed']=True;performance.write_text(json.dumps(record,indent=2))
+          provenance=Path('task06-evidence/provenance.json')
+          record=json.loads(provenance.read_text());record['performance_preflight_passed']=True;provenance.write_text(json.dumps(record,indent=2))
+          PY
+
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: task06-character1-candidate-${{ github.sha }}
+          path: task06-evidence
+          if-no-files-found: error
+          retention-days: 14

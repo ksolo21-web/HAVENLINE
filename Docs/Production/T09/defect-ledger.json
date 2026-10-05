@@ -1,0 +1,417 @@
+{
+  "schema_version": 1,
+  "task_id": "T09",
+  "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "integrated_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+  "acceptance_threshold": ">9.0 unrounded in every mandatory dimension",
+  "cycle": "critic-repair-verification",
+  "defects": [
+    {
+      "id": "T09-D001",
+      "severity": "mandatory-evidence",
+      "summary": "Initial visual sequence evidence did not preserve the validated wood contact surface and crown throughout the full action.",
+      "status": "VERIFIED_CLOSED",
+      "resolution": "The shipping presenter and sequence harness now preserve the visible contact surface, crown and authoritative impact through recovery; exact sequence evidence and contact metrics pass.",
+      "historical_status_before_final_review": "RESOLVED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D002",
+      "severity": "mandatory-ci",
+      "summary": "The C6 runner could fall back to an unaccepted renderer or lack a software Vulkan ICD on the hosted runner.",
+      "status": "VERIFIED_CLOSED",
+      "resolution": "The workflow provisions Mesa Vulkan only when absent, pins Lavapipe, validates the ICD, and fails closed unless Godot reports the Mobile renderer.",
+      "historical_status_before_final_review": "RESOLVED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D003",
+      "severity": "mandatory-C5-evidence",
+      "summary": "The generic motion-capture camera framed Character 1 too small for strict hands, knees, feet and contact review.",
+      "status": "VERIFIED_CLOSED",
+      "resolution": "Superseded repair restores the shipping 1.75 m Character 1 scale and uses a dedicated close camera, actual T09 tools, authored targets and the shipping contact solver. The wood contact inspection hides crown surfaces while preserving authored trunk geometry.",
+      "historical_status_before_final_review": "RESOLVED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D004",
+      "severity": "mandatory-C5-tooling",
+      "summary": "C5 initialization validation repeatedly treated separately rendered PNG identity as animation-pose identity, creating false failures after otherwise successful T09 validation.",
+      "status": "VERIFIED_CLOSED",
+      "classification": [
+        "TOOLING_FIX",
+        "TEST_FIX"
+      ],
+      "failed_candidate": "1ff5780f9539be6dbf1d521b23fe49384d3d9c18",
+      "failed_workflow_run": 35205184308,
+      "prior_failed_candidate": "2a9a88ba931bc943bf55e91dbaac3b606c1393e3",
+      "prior_failed_workflow_run": 35195377822,
+      "visible_symptom": "Run 35205184308 passed scope/contracts, 17 impacted suites with 997 checks, save/device matrices and C6, then failed before visual fan-out because repeated t=0 final-skeleton probes differed by 1.037-1.471 degrees against the strict 1-degree start limit.",
+      "triage": "The shipping T06 chop/mine/dismantle clips were not disproven. The failure occurred in the T09 evidence harness and is classified as tooling/test failure rather than a production-motion defect.",
+      "affected_production_object": "T09 C5 evidence harness only; shipping Character 1 mesh, rig and T06 clips remain unchanged.",
+      "probable_root_cause": "The pose-space replacement exposed a second harness defect: settle_pose restarted the animation on every settle frame and warm_pose restarted it once more after warming, discarding the SkeletonModifier3D convergence they were intended to establish. capture_cycle then restarted t=0 again immediately before frame 0000.",
+      "implicated_files": [
+        "HavenlineGodot/assets/harvesting_v1/t09_motion_capture.gd",
+        "tools/havenline/task09/motion_capture.py",
+        "tools/havenline/task09/validate_harvesting.py",
+        ".github/workflows/havenline-task09-harvesting.yml"
+      ],
+      "causal_tooling_change": "Start each sampled pose once, advance eight convergence frames without restarting, preserve the settled t=0 pose for frame 0000, keep the strict 5 mm / 1 degree limits, and make the source contract reject any return of the post-settle restart pattern.",
+      "expected_visible_result": "Rendered C5 evidence remains visually unchanged; equivalent t=0 poses no longer fail because unrelated pixels differ, while a real post-warm-up skeleton discontinuity still fails closed.",
+      "proof_contract": [
+        "T09 static source validation rejects PNG equality/RMSE as a C5 pose invariant.",
+        "C5 metadata reports initialization_pose_schema=skeleton_global_pose_v1 and final_skeleton_pose_transform_v1 validation.",
+        "All three clips pass bounded t=0 final-skeleton equivalence and first-step continuity before gameplay/device visual fan-out.",
+        "Frame SHA-256 hashes remain preserved for evidence provenance.",
+        "Impacted regression, save/device matrices and C6 remain green on the exact repaired candidate."
+      ],
+      "resolution": "Exact-source candidate 9bc735502b265bfdd365004fb863b19c613e27dd passed the unchanged final-skeleton pose gates for all three clips; candidate 5a8cabdfa1ce1d657b9c79e028d280a99f236fbc retains the frozen sampler and adds tool/target review coverage.",
+      "historical_status_before_final_review": "RESOLVED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D005",
+      "severity": "mandatory-ci-governance",
+      "summary": "New C0/builder governance files were omitted from QA-GOV ownership, so exact integrated T09 scope validation rejected them as unowned paths.",
+      "status": "VERIFIED_CLOSED",
+      "failed_candidate": "39315e59250f22087321ca07f1302d77af9b45fe",
+      "failed_workflow_run": 35208413468,
+      "resolution": "Integration commit 8f971724d6ba7331530a4b502328ce1625df2082 adds the complete C0/builder control-plane packet to @ownership:QA-GOV; the reproduced T09 integration-scope comparison passes with zero ownership errors.",
+      "historical_status_before_final_review": "RESOLVED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D006",
+      "severity": "mandatory-C5-tooling",
+      "summary": "C5 settle frames advanced the live AnimationPlayer clock after an explicit seek, so the recorded start pose was a later real-time animation sample.",
+      "status": "VERIFIED_CLOSED",
+      "classification": [
+        "TOOLING_FIX",
+        "TEST_FIX"
+      ],
+      "failed_candidate": "4b303eeb26c19ecb475f893711f5f84800d12781",
+      "failed_workflow_run": 35208966996,
+      "failed_job": 105161573932,
+      "partial_artifact_id": 10492231049,
+      "partial_artifact_digest": "sha256:836d6292e3a7855581ad27b57cc9695d2a061b2d4bdcb7387c32e1ada96d94db",
+      "visible_symptom": "All scope/contracts, 17 suites / 997 checks, save/device matrices and C6 passed, then the C5 preflight measured start drift of 0.079358-0.095225 m and 23.328-28.325 degrees; chop first-step drift reached 0.153894 m / 56.060 degrees.",
+      "root_cause": "set_pose sought the requested sample but left AnimationPlayer running. Eight render-settle frames advanced real time by about 0.13 seconds, invalidating the explicit t=0 proof.",
+      "causal_tooling_change": "Freeze AnimationPlayer.speed_scale at 0.0 before play/seek/advance(0.0), retain settle frames for SkeletonModifier3D convergence, and require the frozen-clock token in the fail-closed T09 source validator. C5 limits remain unchanged.",
+      "proof_contract": [
+        "Exact integrated candidate contains the frozen-clock sampler and early C5 root-cause preflight.",
+        "All three clips pass the unchanged skeleton-global start and first-step limits.",
+        "The complete exact-source T09 workflow, evidence index and independent C5 review pass."
+      ],
+      "resolution": "Exact-source candidate 9bc735502b265bfdd365004fb863b19c613e27dd passed the frozen-clock pose preflight; the repaired C5 runner preserves that gate and reports 0 m / 0.033 degree maximum start drift locally.",
+      "historical_status_before_final_review": "RESOLVED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D007",
+      "severity": "mandatory-ci-governance",
+      "summary": "The T09 workflow called the C0 diagnostic reusable workflow without granting its required actions: read permission, causing an exact-source startup_failure before any T09 job was created.",
+      "status": "VERIFIED_CLOSED",
+      "classification": [
+        "TOOLING_FIX",
+        "TEST_FIX"
+      ],
+      "failed_candidate": "6ceebbfe0cc9db25f4e4fa6d51b58b16eddd9d07",
+      "failed_workflow_run": 35212701311,
+      "visible_symptom": "GitHub resolved havenline-c0-root-cause.yml but completed the T09 run as startup_failure with zero jobs.",
+      "root_cause": "Reusable workflows cannot elevate GITHUB_TOKEN permissions above the caller. The T09 caller granted contents: read only, while the C0 diagnostic requires actions: read to retrieve failed-run evidence.",
+      "causal_tooling_change": "Grant actions: read at the T09 workflow top level and make the T09 source validator require the C0 job, reusable workflow reference, and actions: read permission together.",
+      "proof_contract": [
+        "The exact integrated T09 workflow creates and starts its integrated-candidate job.",
+        "The fail-closed T09 source validator passes with the C0 permission contract present.",
+        "No write permission is added."
+      ],
+      "resolution": "Exact-source candidate 9bc735502b265bfdd365004fb863b19c613e27dd started and completed the integrated-candidate job with read-only actions access.",
+      "historical_status_before_final_review": "RESOLVED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D008",
+      "severity": "mandatory-visual",
+      "summary": "Authored tool GLBs rendered as white silhouettes in isolated evidence because the turntable did not consume COLOR_0.",
+      "status": "VERIFIED_CLOSED",
+      "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "critic_score": 3.6,
+      "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
+      "resolution": "Exact artifact 10515324426 / run 35256227258 independently verified the shared one-surface vertex-palette material in shipping and isolated views; axe, pickaxe and pry-tool colors are visible across the complete turntables.",
+      "historical_status_before_final_review": "VERIFIED_CLOSED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D009",
+      "severity": "mandatory-C5-evidence",
+      "summary": "C5 evidence showed a body-only fixture with no harvesting tool or target, and its slow review repeated the real-time sample cadence.",
+      "status": "VERIFIED_CLOSED",
+      "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
+      "resolution": "Exact artifact 10515324426 / run 35256227258 independently verified all six C5 videos, 510 C5 records, authored tools and targets, aligned contact in every cycle/turn/close view, and genuine approximately 0.25x slow review.",
+      "historical_status_before_final_review": "VERIFIED_CLOSED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D010",
+      "severity": "mandatory-visual",
+      "summary": "Gameplay evidence was blown out by protected terrain/source exposure, hiding material identity and contact readability.",
+      "status": "VERIFIED_CLOSED",
+      "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
+      "resolution": "Exact artifact 10515324426 / run 35256227258 independently verified the disclosed neutral stage, unchanged shipping source materials and bounded shipping resource-color ring across wood, stone, metal and fuel.",
+      "historical_status_before_final_review": "VERIFIED_CLOSED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D011",
+      "severity": "mandatory-visual",
+      "summary": "The evidence fixture depleted full default resource yields, creating overlapping transfers and oversized carry stacks that occluded the tool and target.",
+      "status": "VERIFIED_CLOSED",
+      "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
+      "resolution": "Exact artifact 10515324426 / run 35256227258 independently verified bounded two-unit fixtures, authoritative commit/depletion/respawn, hidden settled tool/action and zero retained fragments, pulses or transfer flights.",
+      "historical_status_before_final_review": "VERIFIED_CLOSED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D012",
+      "severity": "mandatory-evidence-integrity",
+      "summary": "known-failures.json was written after complete-evidence-index.json and was therefore omitted from the supposedly complete manifest.",
+      "status": "VERIFIED_CLOSED",
+      "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
+      "resolution": "Exact artifact 10515324426 independently recomputed to 1,192 indexed payload files with zero missing, mismatched or unindexed files; known-failures.json is bound by index 23b0e20637c71fe1c4de0bd6f3f2e5a42d5e7d3d2dd2868c73360e87a8cd3dc7.",
+      "historical_status_before_final_review": "VERIFIED_CLOSED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D013",
+      "severity": "mandatory-device-evidence",
+      "summary": "Device screenshots did not visibly prove the one-joystick, zero-action-button interaction language.",
+      "status": "VERIFIED_CLOSED",
+      "failed_candidate": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "repair_candidate": "7dffcdfb761e180a356a0546a824e939e4dd149b",
+      "resolution": "Run 35256227258 proved real Main._gui_input touch/drag and zero action buttons, but independent pixel review found the joystick outside all tablet_16_10, tablet_4_3 and foldable_inner captures because the harness sized Main to target native pixels instead of the visible review canvas. The repair now binds Main to root.size, records the target size separately, asserts the entire joystick circle is inside the captured canvas and adds all three tall profiles to integration regression.",
+      "failed_review_source": "754fdde8d21f944cab15365a20a785f6ca887ff6",
+      "failed_review_run": 35256227258,
+      "failed_artifact_id": 10515324426,
+      "failed_pixel_count": 12,
+      "verification_source": "905ba1b4535902961610b238b14d6392914755d8",
+      "verification_run": 35270024497,
+      "verification_artifact_id": 10520649116,
+      "verification": "All 24 device screenshots visibly contain the single joystick, and every device report proves real shipping touch input, zero action buttons and the full joystick circle inside the captured canvas.",
+      "historical_status_before_final_review": "VERIFIED_CLOSED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D014",
+      "severity": "mandatory-evidence-tooling",
+      "summary": "The repaired device capture script relied on Variant-derived local type inference that Godot 4.7.2 rejected before rendering the first sequence.",
+      "status": "VERIFIED_CLOSED",
+      "classification": [
+        "TOOLING_FIX",
+        "TEST_FIX"
+      ],
+      "failed_candidate": "341335ed321581b3a994915a4ecb1ae064b11a2f",
+      "failed_workflow_run": 35267145998,
+      "failed_job": 105357017435,
+      "partial_artifact_id": 10518007997,
+      "partial_artifact_digest": "sha256:3b2a0bfedfe5aec9de30619c4b0901cfeaee79c935bb83a19dbf3ccd962f5eba",
+      "visible_symptom": "All source, regression, save/device matrix and C6 gates passed, and the 510-frame C5 preflight passed, before capture_task09_harvesting.gd failed to parse at joystick_extent.",
+      "root_cause": "joystick_extent used inferred typing from game.joystick_radius, which is accessed through a dynamically typed game reference; Godot could not infer a concrete local type in the standalone render invocation.",
+      "causal_tooling_change": "Convert the radius to float and explicitly type joystick_extent, joystick_bounds and capture_canvas; require those declarations in the T09 static source validator.",
+      "proof_contract": [
+        "Godot 4.7.2 --check-only parses the repaired capture script.",
+        "The T09 static source validator rejects removal of the explicit device-geometry types.",
+        "A fresh exact-source workflow completes the full render and indexed artifact."
+      ],
+      "resolution": "Exact-source run 35270024497 parsed and executed the repaired capture script, completed all 71 reports and sealed the complete indexed artifact; the typed declarations remain fail-closed in source validation.",
+      "historical_status_before_final_review": "VERIFIED_CLOSED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    },
+    {
+      "id": "T09-D015",
+      "severity": "mandatory-device-visual",
+      "summary": "The first joystick-visible repair sized Main in logical points without compensating for the hosted X11 HiDPI canvas transform, leaving dark right and bottom bands in all 24 device screenshots.",
+      "status": "VERIFIED_CLOSED",
+      "failed_candidate": "905ba1b4535902961610b238b14d6392914755d8",
+      "failed_workflow_run": 35270024497,
+      "failed_artifact_id": 10520649116,
+      "failed_artifact_digest": "sha256:46ad89ba5b7d3958a8393a9608ab0799aabc46f2cb5c99a36d9b8d3d7a64e433",
+      "failed_complete_evidence_index_sha256": "97f08c609ee0748898780a866c1efa94c8ca534141cc321f5ed52b96a62994fe",
+      "visible_symptom": "The scene and HUD covered only about two-thirds of each physical output while the remainder showed the dark clear color; the joystick itself was visible in every device frame.",
+      "root_cause": "root.size is expressed before the hosted HiDPI final canvas transform, but root.get_texture().get_image() is saved at physical pixel dimensions. Assigning root.size directly to Main therefore projected a smaller Control into the output texture.",
+      "causal_tooling_change": "Invert root.get_final_transform() scale when deriving Main's local canvas size, transform joystick geometry into capture pixels, and fail closed unless Main's projected canvas covers the entire output within one pixel.",
+      "proof_contract": [
+        "All 24 device screenshots show the gameplay canvas filling the complete output with no dark right/bottom bands.",
+        "Every device report records the canvas transform, local canvas size and projected canvas size.",
+        "The projected Main canvas matches the physical capture window within one pixel and the transformed joystick circle remains fully inside it.",
+        "A fresh independent C2/C3/C4/C5/C6 review approves the exact indexed artifact."
+      ],
+      "historical_status_before_final_review": "FIX_REQUIRED",
+      "final_verification": {
+        "candidate_commit": "5415d85838ecf4bea8b3c71662072670e61797a0",
+        "workflow_run_id": 35289633249,
+        "artifact_id": 10527144124,
+        "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443",
+        "review_export_commit": "2fc3cba32cfcdbb6ebf2503b0a36be7026f442b7",
+        "unresolved_mandatory_defects": []
+      }
+    }
+  ],
+  "unresolved_mandatory_count": 0,
+  "unresolved_tooling_count": 0,
+  "critic_approval_pending": false,
+  "evidence": {
+    "workflow_run": 35289633249,
+    "artifact_id": 10527144124,
+    "artifact_digest": "sha256:78554c4cbdc35710e5261ed217c3eea91a10b4207f20865c7d3b752e06d53e26",
+    "complete_evidence_index_sha256": "f06ca5ee8a076bce2977069a46e92763b86291f41e8d770b14704a936762f443"
+  },
+  "next_action": "T09 is closed; preserve approval. T10 remains LOCKED pending separate activation.",
+  "historical_integration_approval": {
+    "source": "9bc735502b265bfdd365004fb863b19c613e27dd",
+    "run": 35213007340,
+    "retained_as_history": true
+  },
+  "repair_candidate": "94714f6f65c26a05d78888802c9fb54d31e8c95b",
+  "independent_repair_review": "Docs/Production/T09/repair-independent-review-94714f6.md",
+  "integration_revalidation_pending": false,
+  "review_history": {
+    "pre_repair_independent_review": {
+      "candidate_commit": "9bc735502b265bfdd365004fb863b19c613e27dd",
+      "score": 3.6,
+      "passed": false
+    },
+    "second_repair_preflight": {
+      "candidate_commit": "7dffcdfb761e180a356a0546a824e939e4dd149b",
+      "passed": false,
+      "final_acceptance": false,
+      "disposition": "D009/D010/D011/D013 concrete blockers repaired; exact indexed CI artifact and fresh final review still required"
+    },
+    "exact_artifact_review_35256227258": {
+      "candidate_commit": "754fdde8d21f944cab15365a20a785f6ca887ff6",
+      "scores": {
+        "C2": 8.94,
+        "C3": 9.46,
+        "C4": 8.72,
+        "C5": 9.38,
+        "C6": 9.52
+      },
+      "minimum_mandatory_dimension_score": 8.72,
+      "passed": false,
+      "approval": false,
+      "unresolved_mandatory_defects": [
+        "T09-D013"
+      ],
+      "disposition": "D008-D012 verified closed; D013 remains open because the joystick is absent from 12/24 required tall-device captures."
+    }
+  },
+  "critic_scores": {
+    "C2": 9.163,
+    "C3": 9.159,
+    "C4": 9.137,
+    "C5": 9.108,
+    "C6": 9.067
+  },
+  "status": "APPROVED"
+}

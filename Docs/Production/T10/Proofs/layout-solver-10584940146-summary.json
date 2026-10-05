@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "task": "T10",
+  "mode": "diagnostic_exhaustive_projection_enumeration_nonapproval",
+  "source_candidate": "1482ee7d89ec0d7d051b9149323127dfaf1443e4",
+  "harness_commit": "58789aafcba7f2cf85c4097472989f5bb2dc445f",
+  "proof_source_path": "HavenlineGodot/scripts/world_transform_view.gd",
+  "proof_source_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+  "device_count": 6,
+  "state_count": 6,
+  "angle_count": 6,
+  "projection_count": 216,
+  "failure_count": 0,
+  "failures": [],
+  "diagnostic_collection_passed": true,
+  "product_projection_passed": true,
+  "proof_slice_mode": "WHOLE_FILE_EXCEPT_EXACT_METADATA_LINES",
+  "proof_irrelevant_exact_lines": [
+    "\t\t\"label_layout_policy\": \"constrained_screen_lanes_v1\",",
+    "\t\t\"label_dynamic_camera_lane\": true,",
+    "\t\t\"label_min_readability_scale\": READABILITY_MIN,",
+    "\t\t\"label_fit_slack_px\": LABEL_FIT_SLACK_PX,"
+  ],
+  "proof_relevant_sha256": "d15f7d8d1364e041b039c6cfc4d684ae04e76ce7e79b61da9eb52fd1e32ff76e",
+  "derived_effect_bounds": {
+    "_beacon.pixel_size": {
+      "dependency_symbols": ["projection", "label_scale"],
+      "minimum_gte": 0.004845,
+      "maximum_lte": 0.0057,
+      "violation_count": 0
+    },
+    "_beacon.width": {
+      "dependency_symbols": ["projection", "wrap_width"],
+      "minimum_policy": "whole_word_width",
+      "maximum_lte": 960.0,
+      "violation_count": 0
+    }
+  },
+  "task_approved": false,
+  "reusable_for_approval": false,
+  "critic_score_reusable": false
+}

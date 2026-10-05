@@ -1,0 +1,26 @@
+{
+  "task_id": "T10",
+  "status": "FIX_REQUIRED",
+  "approved": false,
+  "failed_task_candidate": "fc5f1d0a687768bb6e36f84e3a8db954e15b4de7",
+  "unapproved_intermediate_integration": "a0cf1d2ae1b2e33c66eae01de353dd1df1076cf2",
+  "recovery_scope_base": "c1768dbba7bacbbc5d0174e6b9b661b6dbdbbc11",
+  "failed_governance_run": 35330549220,
+  "failure": "Standalone adapter integration lacked a task-scoped runtime diff. Preserve failure evidence.",
+  "required_closure": [
+    "Resolve B009-B013 with fresh frozen source evidence",
+    "All C1,C2,C3,C4,C6,C7 required dimensions strictly greater than9; zero unresolved defects",
+    "Existing lifecycle reaches INTEGRATION_READY",
+    "Integration owner integrates exact frozen task source",
+    "Validate parent-to-final scope and c1768-to-final authorized recovery scope",
+    "Fresh final source regression and G1-G14",
+    "Durable evidence retention and terminal closure"
+  ],
+  "forbidden": [
+    "Standalone rollback with same scope failure",
+    "Gate waiver",
+    "No-op task runtime edit to satisfy path count",
+    "Claiming intermediate passed",
+    "Unlocking T11 before T10 approval"
+  ]
+}

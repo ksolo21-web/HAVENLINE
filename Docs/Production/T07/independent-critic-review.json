@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "task_id": "T07",
+  "status": "PASS",
+  "reviewer": "independent-t07-critic",
+  "integrated_source": "94b3f6c5097356a3857ebd13a77fb1e316eb06ae",
+  "workflow_run": 34991148246,
+  "artifact_id": 10405978547,
+  "artifact_digest": "sha256:c243bb1df0625a7fabce9c6a842d88a76e08bca89d416f88ad0ea0a972ec0ada",
+  "indexed_files_verified": 156,
+  "indexed_hash_mismatches": 0,
+  "acceptance_rule": {
+    "mandatory_dimension_operator": ">",
+    "mandatory_dimension_threshold": 9.0,
+    "unrounded": true,
+    "score_averaging_used": false
+  },
+  "scores": {"C2": 9.46, "C3": 9.68, "C4": 9.24, "C6": 9.53, "C11": 9.18},
+  "minimum_mandatory_dimension_score": 9.18,
+  "unresolved_mandatory_defects": [],
+  "approval": true,
+  "reviewed_evidence": {
+    "engine_suites": 21,
+    "engine_checks": 1441,
+    "render_logs": 14,
+    "pngs": 19,
+    "sequence_video": "H264 1280x720, 20 fps, 60 frames, 3.0 seconds",
+    "device_states": 6,
+    "save_states": 7,
+    "native_3840x2160_scale1": true,
+    "source_and_artifact_identity_verified": true
+  },
+  "critic_notes": {
+    "C2": "Full-frame presentation, actor/target reticle, state feedback and cross-device captures have no padding, seams, clipping, blank frames or render errors.",
+    "C3": "Deterministic ranking, bounded evaluation, fail-closed duplicates/capabilities, hysteresis, urgent preemption and simulation-owned one-shot outcomes satisfy the simple contextual-control contract.",
+    "C4": "Paused, ready, gathering and defending states are readable and semantically distinct by text and color; no mandatory target, danger or next-action defect remains.",
+    "C6": "Component and integrated shipping-scene measurements are inside declared CPU, draw, primitive, memory, retained-object and jitter budgets.",
+    "C11": "Phone, tablet and foldable matrices/captures, movement cancellation, text bounds, full-frame occupancy and save continuity pass; physical-device certification remains deferred."
+  },
+  "advisories": [
+    "T21 may add a dedicated danger icon when finished enemy presentation is authored.",
+    "T68/T69 must recheck physical-DPI legibility and native-4K/60 on representative hardware.",
+    "Future capture manifests may embed run ID, timestamp and camera snapshot directly; current exact external provenance is verified."
+  ]
+}

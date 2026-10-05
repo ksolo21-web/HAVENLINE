@@ -24,6 +24,7 @@ func run():
 	check("Initial thaw boundary matches actual gameplay radius",is_equal_approx(game.outpost_view.current_radius,game.sim.warmth()))
 	game.sim.stored.wood=18;game.sim.stored.stone=6;game.sim.update_level()
 	game._process(.1)
+	check("Character 1 uses the integrated T06 motion foundation",game.player_rig.has_meta("t06_motion_player") and String(game.player_rig.get_meta("t06_active_clip", "")) == "idle")
 	check("Real upgrade begins an expanding visual thaw",game.outpost_view.current_radius>4.5 and game.outpost_view.current_radius<8.)
 	check("Furnace animation uses the original furnace node",game.furnace.scale.x>1. and game.furnace.scale.x<1.085)
 	check("Upgraded light reach follows gameplay warmth",is_equal_approx(game.heat_light.omni_range,9.5))
