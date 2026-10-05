@@ -20,9 +20,43 @@ R07_IDS=('wood_stack','stone_stack','metal_stack','fuel_canister','fish_crate','
 R03_IDS=('pad_build','pad_upgrade','pad_input','pad_output','pad_stock','pad_payment')
 R10_IDS=('service_counter','processing_counter','defense_platform')
 R10B_IDS=('fishing_rack','intake_machine','cooker_processor','conveyor_straight')
+BOUNDARY_REQUEST='Docs/Production/ChangeRequests/T05-UPSTREAM-T03-REFERENCE-BOUNDARY-20261005.json'
+BOUNDARY_REQUEST_SHA='33dd06faf2652aa70050a6ba33391f56938e2daa2798e1bbd78f862e0a35d82d'
+BOUNDARY_GAME_PATHS={
+    'HavenlineGodot/assets/t03_boundary_v2/'+name for name in (
+        'fence_panel.obj','gate_leaf.obj','gate_post.obj','panel_joins.obj',
+        'manifest.json','t03_boundary_v2.gdshader','boundary_v2.mtl',
+        'wood_reference_albedo.gd','panel_join_authoring.json')
+}|{'HavenlineGodot/scripts/camp_boundary_view.gd','HavenlineGodot/tests/test_task03_boundary.gd'}
 
 
 def git(*args):return subprocess.check_output(['git',*args],cwd=ROOT)
+
+
+def verify_changed_scope(changed, allowed, head, integration_head=None):
+    """Keep R01's exact scope, admitting only the separately routed T03 delta."""
+    actual=set(changed)
+    if actual==allowed:
+        return None
+    assert allowed<=actual,'Historical R01 scope paths missing'
+    extras=actual-allowed
+    assert integration_head,'Extra runtime paths require explicit trusted integration'
+    ancestor=subprocess.run(['git','merge-base','--is-ancestor',integration_head,head],cwd=ROOT)
+    assert ancestor.returncode==0,'Trusted integration is not a candidate ancestor'
+    raw=git('show',f'{integration_head}:{BOUNDARY_REQUEST}')
+    assert hashlib.sha256(raw).hexdigest()==BOUNDARY_REQUEST_SHA,'Bounded owner request identity changed'
+    request=json.loads(raw)
+    assert request['requesting_task']=='T05' and request['status']=='AUTHORIZED'
+    assert request['integration_owner_disposition']=='APPROVED_BOUNDED_REFERENCE_BOUNDARY'
+    targets=request['target_path']
+    assert isinstance(targets,list) and all(isinstance(path,str) for path in targets)
+    routed={path for path in targets if path.startswith('HavenlineGodot/')}
+    assert routed==BOUNDARY_GAME_PATHS and extras==routed,'Runtime changes exceed exact bounded T03 route'
+    assert request['constraints']['task_approved'] is False
+    assert request['constraints']['thresholds_may_change'] is False
+    return {'trusted_integration':integration_head,'request':BOUNDARY_REQUEST,
+            'request_sha256':BOUNDARY_REQUEST_SHA,'changed_paths':sorted(extras),
+            'mechanical_or_visual_acceptance_claimed':False}
 
 
 def contract_view(catalog):
@@ -137,7 +171,7 @@ def material_supersession(head, asset_bytes):
     return proof
 
 
-def verify(head):
+def verify(head, integration_head=None):
     asset_bytes=git('show',f'{head}:{ASSET}')
     actual_sha=hashlib.sha256(asset_bytes).hexdigest()
     superseded=actual_sha!=EXPECTED_SHA
@@ -152,7 +186,7 @@ def verify(head):
     # source is allowed through this scope proof.
     allowed={ASSET,CATALOG,TEST,CAPTURE}|r07_paths|r03_paths|r10_paths|r10b_paths
     if superseded:allowed.add(LOADER)
-    assert set(changed)==allowed,changed
+    boundary_scope=verify_changed_scope(changed,allowed,head,integration_head)
 
     test_text=git('show',f'{head}:{TEST}').decode().lower()
     assert '"suite": "t05_station_and_prop_kit"' in test_text,'Unexpected T05 acceptance-test replacement'
@@ -208,6 +242,7 @@ def verify(head):
         'changed_game_paths':changed,'model_sha256':actual_sha,'historical_model_sha256':EXPECTED_SHA,
         'scope_mode':'AUTHORIZED_MATERIAL_ONLY_SUPERSESSION' if superseded else 'HISTORICAL_EXACT_FREEZE',
         'material_rebuild_proof':material_proof,
+        'separately_authorized_T03_scope':boundary_scope,
         'other_nonrepaired_models_unchanged':True,'r07_models_rebuilt':8,'r03_models_rebuilt':6,
         'r10_models_rebuilt':3,'r10b_models_rebuilt':4,
         'stone_metal_material_removed':True,'gameplay_contracts_unchanged':True,
@@ -217,5 +252,5 @@ def verify(head):
 
 
 if __name__=='__main__':
-    p=argparse.ArgumentParser();p.add_argument('--head',required=True);a=p.parse_args()
-    print(json.dumps(verify(a.head),indent=2))
+    p=argparse.ArgumentParser();p.add_argument('--head',required=True);p.add_argument('--integration-head');a=p.parse_args()
+    print(json.dumps(verify(a.head,a.integration_head),indent=2))
