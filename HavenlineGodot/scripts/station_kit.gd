@@ -98,9 +98,24 @@ func compile_batch(groups: Dictionary) -> ArrayMesh:
 		var group: Dictionary = groups[material_key]
 		var tool := SurfaceTool.new()
 		tool.begin(Mesh.PRIMITIVE_TRIANGLES)
-		tool.set_material(group.material)
+		# Vertex-colored and uncolored authored GLBs may share a palette. Normalize
+		# missing colors to white before append_from; its implicit zero values
+		# otherwise turn legacy props black once any source introduces COLOR_0.
+		var batch_material: Material = group.material.duplicate()
+		if batch_material.get("vertex_color_use_as_albedo") != null:
+			batch_material.set("vertex_color_use_as_albedo", true)
+		tool.set_material(batch_material)
 		for part: Dictionary in group.parts:
-			tool.append_from(part.mesh, int(part.surface), part.transform)
+			var arrays: Array = part.mesh.surface_get_arrays(int(part.surface))
+			var vertices: PackedVector3Array = arrays[Mesh.ARRAY_VERTEX]
+			if arrays[Mesh.ARRAY_COLOR] == null or arrays[Mesh.ARRAY_COLOR].size() == 0:
+				var colors := PackedColorArray()
+				colors.resize(vertices.size())
+				colors.fill(Color.WHITE)
+				arrays[Mesh.ARRAY_COLOR] = colors
+			var normalized := ArrayMesh.new()
+			normalized.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, arrays)
+			tool.append_from(normalized, 0, part.transform)
 		tool.commit(result)
 	return result
 
