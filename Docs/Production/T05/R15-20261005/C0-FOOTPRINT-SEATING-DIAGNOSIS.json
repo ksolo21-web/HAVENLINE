@@ -1,0 +1,662 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "failed_candidate_commit": "57ebccd57e5cf209dbb571a33a83f02b7ef4eacc",
+  "report_kind": "INDEPENDENT_NON_VOTING_C0R_CAUSAL_PLAN_SUFFICIENCY",
+  "reviewer_session": "/root/t05_c0_critic",
+  "diagnosis_status": "DIAGNOSIS_COMPLETE_FOR_OBSERVED_FOOTPRINT_SEATING_FAMILY",
+  "terminal_class": "PRODUCT_DEFECT",
+  "approval_vote": null,
+  "task_approval": false,
+  "complete_known_blocker_set": [],
+  "all22_accessor_preflight": [
+    {
+      "id": "cargo_crate",
+      "sha256": "2343f1415a0f91da8e16f472ac8baf902008994e027cdace39236b6d9354ebe1",
+      "catalog_footprint": [
+        1.7,
+        1.36
+      ],
+      "position_accessor_min": [
+        -0.7246800485747884,
+        -0.010000000000000002,
+        -0.6174999999999999
+      ],
+      "position_accessor_max": [
+        0.7218256123473171,
+        1.0599810006333248,
+        0.55
+      ],
+      "accessor_span": [
+        1.4465056609221056,
+        1.0699810006333248,
+        1.1675
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "conveyor_straight",
+      "sha256": "63b052198a067e7f903f8db4e1e1387c969c70ff28fef5dc67e814da057f73db",
+      "catalog_footprint": [
+        3.4,
+        1.3
+      ],
+      "position_accessor_min": [
+        -1.7493587802409103,
+        0.0,
+        -0.6428115294937453
+      ],
+      "position_accessor_max": [
+        1.606295824562643,
+        1.4549999999999998,
+        0.6375861046343716
+      ],
+      "accessor_span": [
+        3.3556546048035534,
+        1.4549999999999998,
+        1.280397634128117
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "cooked_food_stack",
+      "sha256": "4dfa9b9410b15b16bd11e587c15b1d0b1f703ce751d551bb65e70d82b652e4ed",
+      "catalog_footprint": [
+        1.65,
+        1.28
+      ],
+      "position_accessor_min": [
+        -0.7028930113519392,
+        -0.010000000000000002,
+        -0.46
+      ],
+      "position_accessor_max": [
+        0.7003427072179327,
+        0.876,
+        0.5211510358635315
+      ],
+      "accessor_span": [
+        1.4032357185698718,
+        0.886,
+        0.9811510358635316
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "cooker_processor",
+      "sha256": "5cc8ecec34b4c415513c0ea9896a5c022c96b0b948d8649ea45211fc3b6be2c0",
+      "catalog_footprint": [
+        2.45,
+        2.3
+      ],
+      "position_accessor_min": [
+        -1.1374899773438567,
+        -0.035,
+        -0.9552812943934883
+      ],
+      "position_accessor_max": [
+        1.1381047106948774,
+        2.4771925602479965,
+        0.96414121446939
+      ],
+      "accessor_span": [
+        2.2755946880387343,
+        2.5121925602479966,
+        1.9194225088628785
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "defense_platform",
+      "sha256": "e419915b62b9d3a23e78cf46984d7b53c1238b0aa00b138a43fd6176b5137d62",
+      "catalog_footprint": [
+        3.25,
+        3.05
+      ],
+      "position_accessor_min": [
+        -1.508915276068381,
+        -0.035,
+        -1.3983910767665846
+      ],
+      "position_accessor_max": [
+        1.509730738676878,
+        3.042678502739924,
+        1.3662272714107244
+      ],
+      "accessor_span": [
+        3.0186460147452587,
+        3.077678502739924,
+        2.764618348177309
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "fish_crate",
+      "sha256": "b22df64bbb1e7f52d0b008d1979088f4fe41ec71fe7f93b3e6bb66581f10993e",
+      "catalog_footprint": [
+        1.7,
+        1.36
+      ],
+      "position_accessor_min": [
+        -0.7246800485747884,
+        -0.010000000000000002,
+        -0.5900000000000001
+      ],
+      "position_accessor_max": [
+        0.7218256123473171,
+        1.195,
+        0.55
+      ],
+      "accessor_span": [
+        1.4465056609221056,
+        1.205,
+        1.1400000000000001
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "fishing_rack",
+      "sha256": "1492f10eccb7fdfdf50b6f57d53019e1965bfab5d951e84cd74e9532ccdee206",
+      "catalog_footprint": [
+        3.25,
+        1.8
+      ],
+      "position_accessor_min": [
+        -1.508915276068381,
+        -0.035,
+        -0.6484836196170528
+      ],
+      "position_accessor_max": [
+        1.509730738676878,
+        2.553173205349184,
+        0.6609147174123511
+      ],
+      "accessor_span": [
+        3.0186460147452587,
+        2.588173205349184,
+        1.3093983370294038
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "fuel_canister",
+      "sha256": "c0caa236e87114203dd96fc6551b281746343ca9c918ad9c3bb6b44a5f6f2f34",
+      "catalog_footprint": [
+        1.15,
+        1.08
+      ],
+      "position_accessor_min": [
+        -0.51,
+        -0.010000000000000002,
+        -0.39
+      ],
+      "position_accessor_max": [
+        0.51,
+        1.0715637382684098,
+        0.39
+      ],
+      "accessor_span": [
+        1.02,
+        1.0815637382684098,
+        0.78
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "hearth_vessel",
+      "sha256": "6d32499229dd22dde1ee32940bb1b0a506a0647ea911a4787b3bce83fe60a8e7",
+      "catalog_footprint": [
+        2.6,
+        2.25
+      ],
+      "position_accessor_min": [
+        -1.2656450271606445,
+        -0.048579808324575424,
+        -1.1100000143051147
+      ],
+      "position_accessor_max": [
+        1.2534834146499634,
+        2.1519999504089355,
+        1.0173813104629517
+      ],
+      "accessor_span": [
+        2.519128441810608,
+        2.200579758733511,
+        2.1273813247680664
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "intake_machine",
+      "sha256": "d1755a28dcb47934ed1d4728e6e38c0c84dd545a404ea787b0c6c68281e5dda6",
+      "catalog_footprint": [
+        2.6,
+        2.4
+      ],
+      "position_accessor_min": [
+        -1.295,
+        0.0,
+        -1.0228115294937452
+      ],
+      "position_accessor_max": [
+        1.2128697807033038,
+        2.1233913202893295,
+        1.08
+      ],
+      "accessor_span": [
+        2.5078697807033037,
+        2.1233913202893295,
+        2.1028115294937453
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "metal_stack",
+      "sha256": "39bc27b930ee4c149d168b1173ca28959f5b209672ec92b145047bbb8c12c244",
+      "catalog_footprint": [
+        1.75,
+        1.25
+      ],
+      "position_accessor_min": [
+        -0.7454290765977422,
+        -0.010000000000000002,
+        -0.4925
+      ],
+      "position_accessor_max": [
+        0.7433085174767016,
+        1.114981000633325,
+        0.43971812859889026
+      ],
+      "accessor_span": [
+        1.4887375940744438,
+        1.124981000633325,
+        0.9322181285988902
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "money_stack",
+      "sha256": "3339bdffa283302829741574b8057b8e9b2655adbeafd61ef4bd9c175c0840b0",
+      "catalog_footprint": [
+        1.55,
+        1.24
+      ],
+      "position_accessor_min": [
+        -0.6599745216640698,
+        -0.010000000000000002,
+        -0.48750000000000004
+      ],
+      "position_accessor_max": [
+        0.6573768969591638,
+        1.1416553057108807,
+        0.43999999999999995
+      ],
+      "accessor_span": [
+        1.3173514186232336,
+        1.1516553057108807,
+        0.9275
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "pad_build",
+      "sha256": "fe5ad832e7782b8d5ab0f7df30e9187caf44ab5b3afbef882946316a11d5e9e8",
+      "catalog_footprint": [
+        2.1,
+        2.1
+      ],
+      "position_accessor_min": [
+        -0.9511901729331277,
+        -0.060454545454545455,
+        -0.9199999999999999
+      ],
+      "position_accessor_max": [
+        0.9540806211336589,
+        0.85,
+        0.9199999999999999
+      ],
+      "accessor_span": [
+        1.9052707940667866,
+        0.9104545454545454,
+        1.8399999999999999
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "pad_input",
+      "sha256": "58d3d4fd04f32dc5a19f0dd969c1c7a74c0ced94888144eb20dce235d45aed77",
+      "catalog_footprint": [
+        2.1,
+        2.1
+      ],
+      "position_accessor_min": [
+        -0.9511901729331277,
+        -0.060454545454545455,
+        -0.9199999999999999
+      ],
+      "position_accessor_max": [
+        0.9540806211336589,
+        0.615,
+        0.9199999999999999
+      ],
+      "accessor_span": [
+        1.9052707940667866,
+        0.6754545454545454,
+        1.8399999999999999
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "pad_output",
+      "sha256": "ac4401bdc398c8f57954b6cf56c737cbda5f72cfd6d9cdd4196cd21f75be02e6",
+      "catalog_footprint": [
+        2.1,
+        2.1
+      ],
+      "position_accessor_min": [
+        -0.9511901729331277,
+        -0.060454545454545455,
+        -0.9199999999999999
+      ],
+      "position_accessor_max": [
+        0.9540806211336589,
+        0.615,
+        0.9199999999999999
+      ],
+      "accessor_span": [
+        1.9052707940667866,
+        0.6754545454545454,
+        1.8399999999999999
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "pad_payment",
+      "sha256": "20c881f715d1ed12f819681a2706e9489f3718155e6590f16444c250257a665d",
+      "catalog_footprint": [
+        2.1,
+        2.1
+      ],
+      "position_accessor_min": [
+        -0.9511901729331277,
+        -0.060454545454545455,
+        -0.9199999999999999
+      ],
+      "position_accessor_max": [
+        0.9540806211336589,
+        0.7525,
+        0.9199999999999999
+      ],
+      "accessor_span": [
+        1.9052707940667866,
+        0.8129545454545454,
+        1.8399999999999999
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "pad_stock",
+      "sha256": "8e3c0597323146eb74fe0ff302d351cf3b3c71c83ac084864249c73617710fe9",
+      "catalog_footprint": [
+        2.1,
+        2.1
+      ],
+      "position_accessor_min": [
+        -0.9511901729331277,
+        -0.060454545454545455,
+        -0.9199999999999999
+      ],
+      "position_accessor_max": [
+        0.9540806211336589,
+        0.86,
+        0.9199999999999999
+      ],
+      "accessor_span": [
+        1.9052707940667866,
+        0.9204545454545454,
+        1.8399999999999999
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "pad_upgrade",
+      "sha256": "8b4faea19de8262ce1b95ab745748ca79f7e094d8bc06bbf6588562017fc805e",
+      "catalog_footprint": [
+        2.1,
+        2.1
+      ],
+      "position_accessor_min": [
+        -0.9511901729331277,
+        -0.060454545454545455,
+        -0.9199999999999999
+      ],
+      "position_accessor_max": [
+        0.9540806211336589,
+        0.8523283700072687,
+        0.9199999999999999
+      ],
+      "accessor_span": [
+        1.9052707940667866,
+        0.9127829154618141,
+        1.8399999999999999
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "processing_counter",
+      "sha256": "a84c5d50654582807fbf5434bef96ee2a9ee21f8a78bd42ad752be358432d6ab",
+      "catalog_footprint": [
+        3.45,
+        1.95
+      ],
+      "position_accessor_min": [
+        -1.6017716007495124,
+        -0.035,
+        -0.8696644203214923
+      ],
+      "position_accessor_max": [
+        1.602637245672378,
+        2.0771958150784684,
+        0.882661826866155
+      ],
+      "accessor_span": [
+        3.2044088464218907,
+        2.1121958150784685,
+        1.7523262471876473
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "service_counter",
+      "sha256": "2aceab4775106dd23d42b721eb08f56226069f789300dd1ab71e9c25b7e7d1b0",
+      "catalog_footprint": [
+        3.45,
+        1.95
+      ],
+      "position_accessor_min": [
+        -1.6017716007495124,
+        -0.035,
+        -0.8825
+      ],
+      "position_accessor_max": [
+        1.602637245672378,
+        2.2794766694473494,
+        0.882661826866155
+      ],
+      "accessor_span": [
+        3.2044088464218907,
+        2.3144766694473495,
+        1.765161826866155
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "stone_stack",
+      "sha256": "233a65c159eb2446bc01b31fdd13930f806eb7d979b0256369a31e7b9e28457d",
+      "catalog_footprint": [
+        1.75,
+        1.38
+      ],
+      "position_accessor_min": [
+        -0.8731878560341202,
+        -0.010000000000000002,
+        -0.5700000000000001
+      ],
+      "position_accessor_max": [
+        0.8160524650566721,
+        1.0590235003023971,
+        0.5801700124238951
+      ],
+      "accessor_span": [
+        1.6892403210907923,
+        1.0690235003023971,
+        1.1501700124238952
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    },
+    {
+      "id": "wood_stack",
+      "sha256": "fb48ea6c36c0db8b4db3cc21f1ba0b227b4e7a8662c2bb76e9aa2a79c9322eae",
+      "catalog_footprint": [
+        1.7,
+        1.18
+      ],
+      "position_accessor_min": [
+        -0.7236966714380455,
+        -0.010000000000000002,
+        -0.47750000000000004
+      ],
+      "position_accessor_max": [
+        0.7218256123473171,
+        1.1699810006333249,
+        0.48
+      ],
+      "accessor_span": [
+        1.4455222837853627,
+        1.179981000633325,
+        0.9575
+      ],
+      "preflight_checks": {
+        "X": true,
+        "Z": true,
+        "Y": true
+      }
+    }
+  ],
+  "preflight_limit": "Accessor bounds corroborate current generated bytes. Fresh transformed imported-Godot mesh bounds remain required; this preflight does not certify unknown transforms/imports.",
+  "root_cause": "Shared snow bevel-box override inflates rx/rz by .52/.53 plus up to1.145 theta wobble and enlarges vertical radius to .095, widening and lowering snow-foot geometry beyond the preserved seating/footprint test. Six pads have width2.1402286 exceeding catalog2.1+.03 and Ymin-.11 below-.09. Source snowbox size2.02 is not catalogfootprint2.1.",
+  "files_to_change": [
+    "tools/havenline/task05/reference_surface_relief_v2.py",
+    "deterministically affected non-hearth station GLBs and art/hash/triangle catalogmetadata"
+  ],
+  "files_not_to_change": [
+    "HavenlineGodot/assets/stations_v2/hearth_vessel.glb",
+    "Catalog IDs/socket coordinates/footprints/clearances/arrangements",
+    "Existing Godot footprint/seating tolerances",
+    "T03 routes/boundary and T04 camera",
+    "Gameplay economy saves characters and accepted runtime"
+  ],
+  "smallest_causal_fix": "Retain irregular rounded snow but normalize horizontal radius by theoretical wobble maximum1.145 so all vertices fit original localX/Zhalf. Limit lower-hemisphere vertical radius while retaining uppercrown. Account for the additional <=1.1 vertical wobble: lower_radius<=sizeY*.5/1.1 guarantees lower hemisphere fits original localYhalf. Generate physically consistent hemisphere-specific normals.",
+  "causal_plan_sufficient": true,
+  "sufficiency_conditions": [
+    "Actual all22 transformed importedGLB bounds meet unchanged catalog and seating gates",
+    "Deterministic materialization and zero oppositewinding",
+    "Exact furnace bytes unchanged",
+    "All mechanicalmetadata/socketcontracts unchanged",
+    "NativeGodot focusedT05 suite freshlyPASS",
+    "Matched pad contact/snow family and gameplay pixels remain rounded grounded and readable; horizontal shape reduction may not introduce floating/cutoff/primitive appearance",
+    "Fresh full impacted regression and applicablecriticproof on frozen newSHA; noapprovalfromthisdiagnosis"
+  ],
+  "builder_action": "REPAIR",
+  "blast_radius": "Shared snow override may change21non-hearth models, including existing patches/counterrails/pads; retestall22 and actualstyleevidence, not just pad_build. Avoid changing approvedfurnace.",
+  "unexecuted_checks": [
+    "Fresh import/transformedGodotmeshbounds",
+    "Fresh focusedGodotT05test",
+    "Postfix fullregression/evidence/critics/Native"
+  ],
+  "candidate_freeze_requirement": "Freeze rematerialized repairSHA for fullvalidation; preserve failedmaterializedcandidate proof and never reuse priorreview as currentapproval."
+}

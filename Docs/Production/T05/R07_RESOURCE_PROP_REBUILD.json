@@ -1,0 +1,57 @@
+{
+  "task": "T05-R07 resource prop visual rebuild",
+  "status": "CANDIDATE_NOT_APPROVED",
+  "parent_materialized_source": "a0598dab01f266ab5896614b571094791db18617",
+  "visual_sources": [
+    {
+      "file": "18607.png",
+      "role": "primary early-camp Havenline art-language board"
+    },
+    {
+      "file": "18608.png",
+      "role": "secondary late-fortress material/polish ceiling"
+    }
+  ],
+  "scope": {
+    "rebuilt_assets": [
+      "wood_stack",
+      "stone_stack",
+      "metal_stack",
+      "fuel_canister",
+      "fish_crate",
+      "cooked_food_stack",
+      "money_stack",
+      "cargo_crate"
+    ],
+    "preserved_nonresource_station_assets": 13,
+    "hearth_v4_sha256": "6d32499229dd22dde1ee32940bb1b0a506a0647ea911a4787b3bce83fe60a8e7",
+    "gameplay_contracts_changed": false,
+    "ids_changed": false,
+    "footprints_changed": false,
+    "sockets_changed": false,
+    "arrangements_changed": false,
+    "material_budget_ceiling_changed": false
+  },
+  "source_integrity": {
+    "total_assets": 22,
+    "total_triangles": 61136,
+    "storage_bytes": 2071724,
+    "active_material_slots": 11,
+    "visible_material_slot_ceiling": 12,
+    "opposite_winding_triangles": 0,
+    "stone_stack_metallic_material_removed": true
+  },
+  "required_before_close": [
+    "exact-source engine regression",
+    "actual rendered resource-family inspection against 18607.png and 18608.png",
+    "multi-angle/use-state evidence where available",
+    "critic score >9 with all mandatory checks green",
+    "no primitive/default-material regression"
+  ],
+  "approval": {
+    "task_approved": false,
+    "independent_critic": false,
+    "user_visual_approval": false,
+    "physical_4k60_verified": false
+  }
+}

@@ -1,0 +1,22 @@
+{
+  "task": "T05",
+  "status": "ACTIVE_NOT_APPROVED",
+  "r13_visual_score": 8.9,
+  "frozen_r13_local_source": "a6ab5633297f817fcc46008422871f42fc500a43",
+  "negative_controls": {
+    "raised_grain_surface": {
+      "top_offset": 0.025,
+      "bottom_offset": 0.02,
+      "dotted_rows_persist": true
+    },
+    "grain_removed": {
+      "dotted_rows_absent": true
+    }
+  },
+  "root_cause": "Added grain geometry projects repeated subpixel side/edge shadows; increasing depth separation does not remove it",
+  "causal_repair": "Remove all overlay grain geometry and integrate smooth local carving and pigment directly into the board surface mesh",
+  "roof_repair_preserved": true,
+  "hearth_immutable": true,
+  "t06_locked": true,
+  "full_approval": false
+}

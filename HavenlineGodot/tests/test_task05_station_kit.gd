@@ -1,4 +1,6 @@
 extends SceneTree
+# Exact-source R10H validation after R10G service-counter/defense visual materialization.
+# Exact triangle assertions intentionally fail closed if authored geometry drifts.
 
 const StationKit = preload("res://scripts/station_kit.gd")
 const Boundary = preload("res://scripts/camp_boundary.gd")
@@ -16,6 +18,39 @@ func visit(node: Node, callback: Callable) -> void:
 	callback.call(node)
 	for child in node.get_children():
 		visit(child, callback)
+
+func material_state(node: Node) -> Array:
+	var state: Array = []
+	visit(node, func(part):
+		if part is MeshInstance3D and part.mesh != null:
+			for surface in part.mesh.get_surface_count():
+				var material = part.get_active_material(surface)
+				var colors = part.mesh.surface_get_arrays(surface)[Mesh.ARRAY_COLOR]
+				if material is BaseMaterial3D:
+					state.append({"material": material, "color": material.albedo_color,
+						"metallic": material.metallic, "roughness": material.roughness,
+						"uses_colors": material.vertex_color_use_as_albedo,
+						"has_colors": colors != null and colors.size() > 0})
+	)
+	return state
+
+func test_material_binding(kit: Node, asset_id: String, before: Array, instance: Node) -> void:
+	var active := material_state(instance)
+	var consistent := before.size() == active.size() and not active.is_empty()
+	for index in mini(before.size(), active.size()):
+		var source: Dictionary = before[index]
+		var actual: Dictionary = active[index]
+		consistent = consistent and (not actual.has_colors or actual.uses_colors)
+		consistent = consistent and source.color == actual.color and source.metallic == actual.metallic and source.roughness == actual.roughness
+	check(asset_id + " preserves authored pigment and PBR in standalone rendering", consistent)
+	# A second instance must not mutate cached imported materials. This catches
+	# global-resource changes that leak into unrelated stations or future loads.
+	var second: Node = kit.instantiate_asset(asset_id)
+	var immutable := true
+	for source: Dictionary in before:
+		immutable = immutable and source.material.vertex_color_use_as_albedo == source.uses_colors
+	check(asset_id + " keeps cached source material flags immutable", immutable)
+	second.queue_free()
 
 func bounds_visit(node: Node, root_node: Node3D, state: Dictionary) -> void:
 	if node is MeshInstance3D:
@@ -158,8 +193,8 @@ func run() -> void:
 	check("Station authority is versioned", descriptor.authority_id == "T05-station-kit-v1")
 	check("Catalog contains the frozen 22-asset kit", descriptor.asset_count == 22)
 	check("Camp and lakeshore arrangements are both declared", descriptor.arrangement_count == 2)
-	check("Catalog triangle total has broad headroom", descriptor.total_catalog_triangles == 49160 and descriptor.total_catalog_triangles <= 180000)
-	check("Shared palette stays within 12 visible materials", descriptor.visible_material_palette_count == 12)
+	check("Catalog triangle total has broad headroom", descriptor.total_catalog_triangles == 176924 and descriptor.total_catalog_triangles <= 180000)
+	check("Shared palette stays within 12 visible materials", descriptor.visible_material_palette_count == 12 and descriptor.visible_material_palette_count <= 12)
 	check("Catalog exposes future-task sockets", descriptor.socket_count >= 35)
 	check("No gameplay logic is claimed", not descriptor.runtime_logic_included)
 	check("No visual approval is self-claimed", not descriptor.visual_approval_claimed)
@@ -187,7 +222,11 @@ func run() -> void:
 		var bytes := FileAccess.get_file_as_bytes(path)
 		total_bytes += bytes.size()
 		check(asset_id + " hash is source-bound", FileAccess.get_sha256(path) == str(row.sha256))
+		var raw: Node = (load(path) as PackedScene).instantiate()
+		var source_materials := material_state(raw)
 		var instance := kit.instantiate_asset(asset_id)
+		test_material_binding(kit, asset_id, source_materials, instance)
+		raw.free()
 		var bounds := local_bounds(instance)
 		var footprint := Vector2(float(row.footprint[0]), float(row.footprint[1]))
 		check(asset_id + " has stable nonzero bounds", bounds.size.x > 0.1 and bounds.size.y > 0.1 and bounds.size.z > 0.1)
@@ -232,17 +271,17 @@ func run() -> void:
 	check("Camp arrangement includes the heated vessel", camp.any(func(node): return node.get_meta("t05_asset_id", "") == "hearth_vessel"))
 	check("Camp visual batches to the shared 12-material palette", kit.batched_visual.mesh.get_surface_count() == 12)
 	check("Camp batch remains below the 48 draw-call ceiling", kit.batched_visual.mesh.get_surface_count() <= 48)
-	check("Camp batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 37108)
+	check("Camp batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 105428)
 	var hearth_transform := kit.arrangement_transform("camp", "hearth_vessel", Vector3.ZERO)
 	check("Interactive hearth placement resolves from the same catalog", hearth_transform.origin.is_equal_approx(Vector3(0.0, 0.0, 0.2)))
 	var camp_without_hearth := kit.build_arrangement("camp", Vector3.ZERO, Callable(), ["hearth_vessel"])
-	check("Integration can reserve the animated gameplay hearth without duplicate geometry", camp_without_hearth.size() == 10 and kit.batched_visual.mesh.get_faces().size() / 3 == 11140)
+	check("Integration can reserve the animated gameplay hearth without duplicate geometry", camp_without_hearth.size() == 10 and kit.batched_visual.mesh.get_faces().size() / 3 == 79460)
 	var lakeshore := kit.build_arrangement("lakeshore")
 	check("Lakeshore arrangement deterministically places 10 assets", lakeshore.size() == 10)
 	check("Lakeshore arrangement includes fishing and processing fixtures", lakeshore.any(func(node): return node.get_meta("t05_asset_id", "") == "fishing_rack") and lakeshore.any(func(node): return node.get_meta("t05_asset_id", "") == "cooker_processor"))
 	check("Lakeshore visual batches to 10 material surfaces", kit.batched_visual.mesh.get_surface_count() == 10)
 	check("Lakeshore batch remains below the 48 draw-call ceiling", kit.batched_visual.mesh.get_surface_count() <= 48)
-	check("Lakeshore batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 9456)
+	check("Lakeshore batch retains its full triangle payload", kit.batched_visual.mesh.get_faces().size() / 3 == 67648)
 
 	print(JSON.stringify({
 		"suite": "T05_station_and_prop_kit",

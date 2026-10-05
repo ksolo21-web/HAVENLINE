@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "frozen_production_candidate": "a6ab5633297f817fcc46008422871f42fc500a43",
+  "report_kind": "INDEPENDENT_NON_VOTING_C0_GRAIN_DIAGNOSIS",
+  "reviewer_session": "/root/t05_c0_critic",
+  "approval": false,
+  "score": null,
+  "diagnosis_status": "DIAGNOSIS_COMPLETE_AT_CAUSAL_FAMILY_LEVEL",
+  "terminal_class": "PRODUCT_DEFECT",
+  "controlled_views_inspected": 12,
+  "controls": [
+    {
+      "variant": "raised",
+      "reported_change": "Ribbon top +.025, bottom +.020 compared to production top +.0018/bottom -.002; camera/light/renderer held constant in isolated copy.",
+      "observation": "Dotted rows remain and strengthen, including on neighboring colored pad bars. Seen in pads detail/three-quarter and fish/cargo rails.",
+      "inference": "Simple nearly-coplanar depth interference is not a sufficient primary explanation; extruded ribbon projected edge/shadow behavior persists with clear separation."
+    },
+    {
+      "variant": "no-grain",
+      "reported_change": "Remove grain overlay ribbons; same camera/light/renderer in isolated copy.",
+      "observation": "Dotted rows disappear in all six inspected views while wood members, fasteners, snow, colored pad bars and major shadows remain.",
+      "inference": "Overlay ribbon geometry is causally necessary for the visible stipple in these controls."
+    }
+  ],
+  "confirmed_root_cause": "Extruded narrow overlay grain ribbons introduce fine projected sides/edges and their shadows that alias or self-shadow into dotted rows at phone-scale camera projection. Raising ribbons cannot cure this representation defect; removing ribbons removes it.",
+  "precision_limit": "These two controls establish ribbon geometry as cause and reject nearly-coplanar interference as sole cause. They do not separately isolate raster edge aliasing from shadow-map aliasing. Do not claim either submechanism is independently proven. Both are eliminated by the proposed integrated-face approach.",
+  "files_to_change": [
+    "tools/havenline/task05/reference_surface_relief_v2.py",
+    "affected non-hearth station/prop GLBs and catalog art metadata through deterministic materializer"
+  ],
+  "files_not_to_change": [
+    "hearth_vessel.glb",
+    "T03/T04 approved geometry/camera",
+    "catalog gameplay sockets footprint clearances arrangements",
+    "gameplay economy saves characters"
+  ],
+  "builder_action": "REPAIR",
+  "smallest_causal_repair": "Remove overlay ribbons. Integrate grain directly into member-local board face vertices/normals/colors, using smooth shallow relief and low-frequency oriented tonal variation; avoid disconnected fine sidewalls/shadow casters. Preserve construction silhouette and broad palette.",
+  "required_proof": [
+    "Same-camera pads/resources/fishing detail and three-quarter show no dotted rows",
+    "Cohesive visible oriented wood breakup remains; deleting grain alone is diagnostic, not acceptable final material finish",
+    "Counter/defense full family view regression",
+    "Phone gameplay-scale and native4K check",
+    "Deterministic materialization, winding, budget and unchanged catalog contract tests",
+    "Fresh complete affected regression and applicable critics after frozen new source"
+  ],
+  "production_r13_retained": true,
+  "negative_control_is_not_approved_product": true,
+  "evidence_hashes": {
+    "local-evidence/grain-diagnostic/raised/family-pads-three-quarter.png": "5be2f8acebded195f2dc3c97f851fd1d0a75c17c88e88ca8d5526afcefa783ab",
+    "local-evidence/grain-diagnostic/raised/family-fishing-three-quarter.png": "f27723f658675c441bad943173e5767def20019ef94a6430d87e8891d674de3e",
+    "local-evidence/grain-diagnostic/raised/family-resources-three-quarter.png": "6ff3bdd643beee3301c8c884a693803a2aa20ce3c9cf2d04850f932c61d65fa4",
+    "local-evidence/grain-diagnostic/raised/family-pads-detail.png": "fd04994523d915dbd826f8e48c12754b9372fef44aa466cf7b18a58bd6c47992",
+    "local-evidence/grain-diagnostic/raised/family-fishing-detail.png": "08314e13e7790ec968a7f9899dd7171af94c032f0d608c4a6679ff82deb22b94",
+    "local-evidence/grain-diagnostic/raised/family-resources-detail.png": "945654bd8f9b75220511dfa380a52d30572577122119801f41e10f240533e9f9",
+    "local-evidence/grain-diagnostic/no-grain/family-pads-three-quarter.png": "d1022ad3ba7f8e96ed3522c5cd0cec00f081cb08e2909345e913c645ff8c88af",
+    "local-evidence/grain-diagnostic/no-grain/family-fishing-three-quarter.png": "5890ed7e6a59539b3dedd2c16c9f99fc1b3c79ded991d27ea6c549ad2bc68f19",
+    "local-evidence/grain-diagnostic/no-grain/family-resources-three-quarter.png": "14cd36ddcadce0b194fd96283b4289e5afa41c807fbef5a653cb481cf46307f3",
+    "local-evidence/grain-diagnostic/no-grain/family-pads-detail.png": "5b911cb41bdbc91e3fc8fdb79c7f8b22f09f29325adc32823b1b9de2974c0f1c",
+    "local-evidence/grain-diagnostic/no-grain/family-fishing-detail.png": "ca7fb0ee9dd907ec66437e1e367ea3b13aa4ae2a6da4f26ad0f12fafab9a610a",
+    "local-evidence/grain-diagnostic/no-grain/family-resources-detail.png": "7bfa03c990065832cbd418355b4e0d17efcb5a38bde0df7db6f9898afd57f71e"
+  }
+}

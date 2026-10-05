@@ -71,9 +71,25 @@ func instantiate_asset(asset_id: String, parent: Node = self) -> Node3D:
 	var packed: PackedScene = scene_cache[asset_path]
 	var instance: Node3D = packed.instantiate()
 	configure_identity(instance, asset_id, row)
+	enable_authored_vertex_colors(instance)
 	parent.add_child(instance)
 	add_socket_markers(instance, row)
 	return instance
+
+func enable_authored_vertex_colors(node: Node3D) -> void:
+	if node is MeshInstance3D and node.mesh != null:
+		for surface_index in node.mesh.get_surface_count():
+			var arrays: Array = node.mesh.surface_get_arrays(surface_index)
+			if arrays[Mesh.ARRAY_COLOR] == null or arrays[Mesh.ARRAY_COLOR].size() == 0:
+				continue
+			var material: Material = node.get_active_material(surface_index)
+			if material is BaseMaterial3D and not material.vertex_color_use_as_albedo:
+				var authored: BaseMaterial3D = material.duplicate()
+				authored.vertex_color_use_as_albedo = true
+				node.set_surface_override_material(surface_index, authored)
+	for child in node.get_children():
+		if child is Node3D:
+			enable_authored_vertex_colors(child)
 
 func collect_batch_parts(node: Node3D, parent_transform: Transform3D, groups: Dictionary) -> void:
 	var combined := parent_transform * node.transform

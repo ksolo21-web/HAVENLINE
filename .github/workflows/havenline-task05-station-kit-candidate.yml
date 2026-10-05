@@ -64,6 +64,7 @@ jobs:
         run: |
           set -euo pipefail
           integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          echo "INTEGRATION_HEAD=$integration" >> "$GITHUB_ENV"
           if [ "$GITHUB_REF_NAME" = 'codex/havenline-sequential-task-01' ]; then
             branch_point=$(git rev-parse "$GITHUB_SHA^")
           else
@@ -73,13 +74,28 @@ jobs:
           echo "candidate_branch_point=$branch_point" | tee task05-evidence/candidate-scope.txt
           printf '%s\n' "${changed[@]}" | tee task05-evidence/changed-files.txt
           test "${#changed[@]}" -gt 0
-          for path in "${changed[@]}"; do
-            case "$path" in
-              HavenlineGodot/assets/stations_v2/*|HavenlineGodot/scripts/station_kit.gd|HavenlineGodot/tests/test_task05_station_kit.gd|HavenlineGodot/tests/capture_task05_station_kit.gd|Docs/Production/T05/*|tools/havenline/task05/*|.github/workflows/havenline-task05-*.yml) ;;
-              *) echo "Foreign path in isolated T05 candidate: $path" >&2; exit 1 ;;
-            esac
-          done
+          INTEGRATION_HEAD="$integration" python3 - <<'PYOWNER'
+          import json,os,sys,subprocess
+          from pathlib import Path
+          import io,tarfile,tempfile
+          from pathlib import Path
+          integration_source=integration if 'integration' in globals() else os.environ['INTEGRATION_HEAD']
+          trusted=tempfile.TemporaryDirectory()
+          archive=subprocess.check_output(['git','archive',integration_source,'tools/havenline/production'])
+          with tarfile.open(fileobj=io.BytesIO(archive)) as bundle:
+              bundle.extractall(trusted.name,filter='data')
+          sys.path.insert(0,str(Path(trusted.name)/'tools/havenline/production'))
+          import workstream
+          workstream.ROOT=Path.cwd().resolve()
+          visual_repair_path_errors=workstream.visual_repair_path_errors
+          paths=Path('task05-evidence/changed-files.txt').read_text().splitlines()
+          owned=['HavenlineGodot/assets/stations_v2/**','HavenlineGodot/scripts/station_kit.gd','HavenlineGodot/tests/test_task05_station_kit.gd','HavenlineGodot/tests/capture_task05_station_kit.gd','Docs/Production/T05/**','tools/havenline/task05/**','.github/workflows/havenline-task05-*.yml']
+          errors=visual_repair_path_errors('T05',paths,owned,os.environ['INTEGRATION_HEAD'])
+          Path('task05-evidence/owner-scope.json').write_text(json.dumps({'integration_head':os.environ['INTEGRATION_HEAD'],'passed':not errors,'errors':errors},indent=2)+'\n')
+          if errors:raise SystemExit('\n'.join(errors))
+          PYOWNER
           python3 tools/havenline/task05/test_station_kit.py | tee task05-evidence/tests/source-integrity.json
+          python3 tools/havenline/task03_reference_lod.py --verify | tee task05-evidence/tests/boundary-source-integrity.json
           if git diff --quiet -- HavenlineGodot/assets/stations_v2; then
             echo 'MATERIALIZATION_REQUIRED=false' >> "$GITHUB_ENV"
           elif [ "$GITHUB_REF_NAME" = 'havenline/T05-visual-repair-20260926' ]; then
@@ -140,6 +156,15 @@ jobs:
           if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' task05-evidence/gallery.log task05-evidence/native4k.log; then exit 1; fi
           cp Docs/Production/T02/reference-ground.webp task05-evidence/reference-ground.webp
 
+      - name: Capture exact-source changed material and boundary views
+        if: env.MATERIALIZATION_REQUIRED != 'true'
+        run: |
+          set -euo pipefail
+          mkdir -p task05-evidence/material-review task05-evidence/boundary-gallery task05-evidence/boundary-native4k
+          timeout 600 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script "$PWD/tools/havenline/task05/capture_material_review.gd" -- --out="$PWD/task05-evidence/material-review" 2>&1 | tee task05-evidence/material-review.log
+          timeout 600 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task03_boundary.gd -- --out="$PWD/task05-evidence/boundary-gallery" 2>&1 | tee task05-evidence/boundary-gallery.log
+          timeout 600 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script res://tests/capture_task03_boundary.gd -- --out="$PWD/task05-evidence/boundary-native4k" --native-4k 2>&1 | tee task05-evidence/boundary-native4k.log
+
       - name: Enforce cheap precritic pixel and provenance gates
         if: env.MATERIALIZATION_REQUIRED != 'true'
         run: |
@@ -192,7 +217,7 @@ jobs:
         if: env.MATERIALIZATION_REQUIRED != 'true'
         run: |
           set -euo pipefail
-          python3 tools/havenline/task05/verify_r01_v4_scope.py --head "$GITHUB_SHA" | tee task05-evidence/r01-v4-scope.json
+          python3 tools/havenline/task05/verify_r01_v4_scope.py --head "$GITHUB_SHA" --integration-head "$INTEGRATION_HEAD" | tee task05-evidence/r01-v4-scope.json
           export VK_ICD_FILENAMES=$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)
           test -n "$VK_ICD_FILENAMES"
           mkdir -p task05-evidence/r01-inspection
@@ -226,7 +251,7 @@ jobs:
           assert hashlib.sha256(asset.read_bytes()).hexdigest()==report['asset_sha256']
           stream=json.loads(subprocess.check_output(['ffprobe','-v','error','-select_streams','v:0','-show_entries','stream=width,height,nb_frames,r_frame_rate','-of','json',str(root/'orbit-4k60.mp4')]))['streams'][0]
           assert (stream['width'],stream['height'],stream['nb_frames'],stream['r_frame_rate'])==(3840,2160,'180','60/1')
-          proof={'source':os.environ['GITHUB_SHA'],'model_revision':'R01-V4','protected_baseline':'b080906140b892f789a5f48a9f8cbeee1359c12e','asset_sha256':report['asset_sha256'],'verified_images':len(hashes),'stills':12,'orbit_frames':180,'image_hashes':hashes,'video_sha256':hashlib.sha256((root/'orbit-4k60.mp4').read_bytes()).hexdigest(),'video_stream':stream,'passed':True,'scope':'R01 V4 furnace art only; all other assets, shared PBR, gameplay, T03 and T04 unchanged','critics_executed':False,'task_approved':False,'physical_4k60_verified':False}
+          proof={'source':os.environ['GITHUB_SHA'],'model_revision':'R01-V4 geometry / R16 material finish','protected_baseline':'b080906140b892f789a5f48a9f8cbeee1359c12e','asset_sha256':report['asset_sha256'],'verified_images':len(hashes),'stills':12,'orbit_frames':180,'image_hashes':hashes,'video_sha256':hashlib.sha256((root/'orbit-4k60.mp4').read_bytes()).hexdigest(),'video_stream':stream,'passed':True,'scope':'Authorized T05 visual repair: R01 V4 furnace geometry preserved; R16 furnace iron/pigment, shared blue roughness and per-instance authored-color binding; R01 geometry, gameplay/collision/placement/T04 contracts and all ceilings preserved; T03 visuals separately owner-authorized','critics_executed':False,'task_approved':False,'physical_4k60_verified':False}
           (root/'provenance.json').write_text(json.dumps(proof,indent=2)+'\n')
           print(json.dumps({key:value for key,value in proof.items() if key!='image_hashes'}))
           PY
