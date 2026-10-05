@@ -117,7 +117,7 @@ def generate(folder, inputs):
    assert np.isfinite(part.vertices).all() and np.isfinite(part.normals).all()
   path=folder/(name+'.obj')
   # Object name is preserved from the independently reviewed prototype.
-  namespace['export_obj'](model,path)
+  namespace['export_obj'](model,path,group_materials=(name=='panel_joins'))
   rows[name]={'triangles':sum(len(p.faces)for p in model.parts),'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'minimum':np.concatenate([p.vertices for p in model.parts]).min(0).tolist(),'maximum':np.concatenate([p.vertices for p in model.parts]).max(0).tolist()}
  for name,digest in inputs['base_asset_sha256'].items():
   assert rows[name]['sha256']==digest,'Base shape changed; regenerate/review joins: '+name
@@ -125,8 +125,12 @@ def generate(folder, inputs):
  old={'fence_panel':640,'gate_leaf':84,'gate_post':176,'panel_joins':0}
  addition=sum((rows[n]['triangles']-old[n])*counts[n]for n in rows)
  assert [rows[n]['triangles']for n in ['fence_panel','gate_post','gate_leaf','panel_joins']]==[1208,240,476,456]
- assert addition==15016 and 162332+addition<=180000
- return {'assets':rows,'instance_counts':counts,'all_instance_triangle_addition':addition,'conservative_combined_delta':162332+addition,'unchanged_incremental_cap':180000,'remaining_headroom':180000-162332-addition,'join_contacts':contacts,'zero_topology_errors':True,'source':inputs['source'],'task_approved':False,'production_visual_approval':False}
+ station_total=sum(row['triangles'] for row in json.loads((ROOT/'HavenlineGodot/assets/stations_v2/catalog.json').read_text())['entries'])
+ # Accepted R16 census:175756 station triangles, measured162332 incremental.
+ # Add subsequent station geometry rather than silently freezing the old delta.
+ station_incremental=162332+station_total-175756
+ assert addition==15016 and station_incremental+addition<=180000
+ return {'assets':rows,'instance_counts':counts,'all_instance_triangle_addition':addition,'station_triangle_census':station_total,'conservative_station_incremental':station_incremental,'conservative_combined_delta':station_incremental+addition,'unchanged_incremental_cap':180000,'remaining_headroom':180000-station_incremental-addition,'join_contacts':contacts,'zero_topology_errors':True,'source':inputs['source'],'task_approved':False,'production_visual_approval':False}
 
 def main():
  ap=argparse.ArgumentParser()

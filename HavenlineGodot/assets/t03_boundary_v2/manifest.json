@@ -53,7 +53,7 @@
       "name": "panel_joins",
       "path": "HavenlineGodot/assets/t03_boundary_v2/panel_joins.obj",
       "triangles": 456,
-      "sha256": "d587c7298755c8b0c581370c01bc3d1ab74e1b1afcc52389342bafb933f0c1a1",
+      "sha256": "5e64ecd8a5fe44787c804a463ccbd299df7aeba43a278552830d411f5c53154f",
       "features": [
         "three rounded visual joining logs and snow",
         "six closed rail connectors touching adjoining rails",
@@ -143,39 +143,49 @@
     {
       "name": "fence_panel",
       "path": "HavenlineGodot/assets/t03_boundary_v2/fence_panel.obj",
-      "triangles": 640,
+      "triangles": 1208,
       "features": [
-        "dense pale warm pointed palisade",
-        "solid full snow crown with symmetric low-amplitude reference-like height variation",
-        "no exposed horizontal support rail",
-        "all-row path-length repartition keeps authored picket rhythm near native scale; tiny side-corner residuals extend only outward behind side fences so gate endpoints remain exact",
-        "small 0.012m seam overlap closes panel-to-panel daylight without compressing authored picket rhythm"
+        "rounded carved logs with reference UV wood grain",
+        "paired rails and visible crossed front rope ties",
+        "closed pointed snow crowns",
+        "unchanged base envelope and placement transforms"
       ],
       "runtime_join_overlap": 0.012,
-      "south_runtime_join_overlap": 0.012
+      "south_runtime_join_overlap": 0.012,
+      "sha256": "e1e94e21413c88ee7dc7535af63670f64847ed679723122e6e53b798ea387042"
     },
     {
       "name": "gate_post",
       "path": "HavenlineGodot/assets/t03_boundary_v2/gate_post.obj",
-      "triangles": 176,
+      "triangles": 240,
       "features": [
-        "matching pale warm post",
-        "solid snow crown",
-        "tiny integrated warm insets only",
-        "1.12 footprint / 1.14 height threshold-marker presentation",
-        "terrain-footprint seating uses the lowest local sample plus a 0.04m root embed to avoid both floating corners and deep clipping"
-      ]
+        "rounded carved timber with rope bindings",
+        "closed snow crown",
+        "unchanged threshold placement and scale"
+      ],
+      "sha256": "7cd6c9287741c50904a648589030e1a55dece1908a88f485b16195fc8937a893"
     },
     {
       "name": "gate_leaf",
       "path": "HavenlineGodot/assets/t03_boundary_v2/gate_leaf.obj",
-      "triangles": 84,
+      "triangles": 476,
       "features": [
-        "solid framed warm timber gate leaf",
-        "dark recessed timber panel",
-        "reference-style diagonal X bracing",
-        "separate from pointed palisade fence",
-        "rigid uniform terrain seating lowers the complete leaf to the worst chord valley instead of pitching the free edge"
+        "ten layered timber planks and diagonal bracing",
+        "snow on upper rail",
+        "unchanged hinges, openings and placement"
+      ],
+      "sha256": "f844c6115c36ebf70654f76b41b4632870ed229cff015b0d51638c149de1415e"
+    },
+    {
+      "name": "panel_joins",
+      "path": "HavenlineGodot/assets/t03_boundary_v2/panel_joins.obj",
+      "triangles": 456,
+      "sha256": "5e64ecd8a5fe44787c804a463ccbd299df7aeba43a278552830d411f5c53154f",
+      "features": [
+        "three rounded visual joining logs and snow",
+        "six closed rail connectors touching adjoining rails",
+        "twelve front tie segments",
+        "inside existing fence world bounds and reserved collision footprint"
       ]
     }
   ],
@@ -225,7 +235,7 @@
       },
       "panel_joins": {
         "triangles": 456,
-        "sha256": "d587c7298755c8b0c581370c01bc3d1ab74e1b1afcc52389342bafb933f0c1a1",
+        "sha256": "5e64ecd8a5fe44787c804a463ccbd299df7aeba43a278552830d411f5c53154f",
         "minimum": [
           -9.12006223397217,
           0.072661290121451,
@@ -245,9 +255,11 @@
       "panel_joins": 1
     },
     "all_instance_triangle_addition": 15016,
-    "conservative_combined_delta": 177348,
+    "station_triangle_census": 176924,
+    "conservative_station_incremental": 163500,
+    "conservative_combined_delta": 178516,
     "unchanged_incremental_cap": 180000,
-    "remaining_headroom": 2652,
+    "remaining_headroom": 1484,
     "join_contacts": [
       {
         "pair": [

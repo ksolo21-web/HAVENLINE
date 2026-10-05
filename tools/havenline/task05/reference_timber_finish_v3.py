@@ -33,13 +33,17 @@ def _end(u,v,seed):
 original_carved_board = SurfaceReliefBuilder._carved_board
 
 def carved_board(self,material,center,size,bevel,rotation):
-    if not (max(size)>=.75 and min(size)>=.17):
+    broad_retaining_face = (self.name in ("stone_stack", "fuel_canister")
+                            and material == "wood_light"
+                            and sorted(size)[1] >= .60
+                            and max(size) >= .75 and min(size) <= .11)
+    if not (max(size)>=.75 and min(size)>=.17) and not broad_retaining_face:
         # Preserve the validated broad face finish on thin planks. Dense heroic
         # grain on a narrow pad seam aliases into dots at gameplay distance.
         return original_carved_board(self,material,center,size,bevel,rotation)
     axis=max(range(3),key=lambda i:size[i]); half=tuple(v*.5 for v in size)
     bevel=max(.001,min(bevel,min(half)*.46));inner=tuple(v-bevel for v in half)
-    hero=max(size)>=.75 and min(size)>=.17
+    hero=(max(size)>=.75 and min(size)>=.17) or broad_retaining_face
     seed=_seed(center,size)
     verts,norms,inds,pigments=[],[],[],[]
     def profile(p,fixed,sign):

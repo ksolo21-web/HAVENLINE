@@ -20,11 +20,12 @@ jobs:
         with:
           ref: ${{ github.sha }}
           fetch-depth: 0
-      - name: Verify committed R01-only source boundary
+      - name: Verify committed R01 identity and bounded source boundary
         run: |
           set -euo pipefail
           mkdir -p task05-r01-context
-          python3 tools/havenline/task05/verify_r01_v4_scope.py --head "$GITHUB_SHA" | tee task05-r01-context/source-proof.json
+          integration=$(git rev-parse origin/codex/havenline-sequential-task-01)
+          python3 tools/havenline/task05/verify_r01_v4_scope.py --head "$GITHUB_SHA" --integration-head "$integration" | tee task05-r01-context/source-proof.json
           python3 -m py_compile tools/havenline/task05/capture_r01_shipping_context.py
       - name: Prepare checksum-pinned renderer and unchanged runtime fixtures
         run: |

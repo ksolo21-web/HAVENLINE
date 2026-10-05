@@ -67,11 +67,16 @@ def gate_post():
     m=Model('gate_post');picket(m,'threshold_post',0,height=1.535,radius=.150,depth=.150,seed=4,ropes=True)
     return fit_visual_envelope(m,(-.168,0.,-.1724),(.168,1.605,.168))
 
-def export_obj(model,path):
+def export_obj(model,path,group_materials=False):
     mapping={'wood':'timber_dark','wood_light':'timber','snow':'snow','cream':'rope','metal':'blue'}
     lines=['# HAVENLINE supplied-reference T03 sculpted visual candidate','mtllib boundary_v2.mtl','o '+model.name,'s 1'];base=1
-    for p in model.parts:
-        lines.append('usemtl '+mapping[p.material])
+    parts=model.parts
+    if group_materials:
+        parts=[p for material in dict.fromkeys(p.material for p in model.parts) for p in model.parts if p.material==material]
+    current_material=None
+    for p in parts:
+        if not group_materials or p.material!=current_material:
+            lines.append('usemtl '+mapping[p.material]);current_material=p.material
         for v,c in zip(p.vertices,p.colors):lines.append('v '+' '.join(f'{x:.8g}' for x in [*v,*c[:3]]))
         for uv in getattr(p,'uv',np.zeros((len(p.vertices),2))):lines.append('vt '+' '.join(f'{x:.8g}' for x in uv))
         for n in p.normals:lines.append('vn '+' '.join(f'{x:.8g}' for x in n))

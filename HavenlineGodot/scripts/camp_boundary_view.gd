@@ -295,7 +295,7 @@ func configure(game):
 	descriptor["additional_visual_rail_connectors"]=6
 	descriptor["additional_visual_join_triangles"]=456
 	descriptor["authored_panel_join_asset"]="t03_boundary_v2/panel_joins.obj"
-	descriptor["authored_panel_join_material_surfaces"]=4
+	descriptor["authored_panel_join_material_surfaces"]=panel_joins.mesh.get_surface_count()
 	descriptor["fence_visual_instances"]=fence_transforms.size()
 	descriptor["collision_panel_instances"]=Boundary.panel_specs().size()
 	descriptor["south_visual_grouping_from_panel_specs"]=true

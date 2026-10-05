@@ -18,6 +18,7 @@ permissions:
 concurrency:
   group: havenline-t05-native-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
+# Every source freeze, including material and evidence routing repairs, gets fresh Native validation.
 env:
   EXPECTED_SOURCE: '${{ github.sha }}'
 
