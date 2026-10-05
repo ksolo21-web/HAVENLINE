@@ -57,12 +57,26 @@ jobs:
           echo "candidate_branch_point=$branch_point" | tee task05-evidence/candidate-scope.txt
           printf '%s\n' "${changed[@]}" | tee task05-evidence/changed-files.txt
           test "${#changed[@]}" -gt 0
-          for path in "${changed[@]}"; do
-            case "$path" in
-              HavenlineGodot/assets/stations_v2/*|HavenlineGodot/scripts/station_kit.gd|HavenlineGodot/tests/test_task05_station_kit.gd|HavenlineGodot/tests/capture_task05_station_kit.gd|Docs/Production/T05/*|tools/havenline/task05/*|.github/workflows/havenline-task05-*.yml) ;;
-              *) echo "Foreign path in isolated T05 candidate: $path" >&2; exit 1 ;;
-            esac
-          done
+          INTEGRATION_HEAD="$integration" python3 - <<'PYOWNER'
+          import json,os,sys,subprocess
+          from pathlib import Path
+          import io,tarfile,tempfile
+          from pathlib import Path
+          integration_source=integration if 'integration' in globals() else os.environ['INTEGRATION_HEAD']
+          trusted=tempfile.TemporaryDirectory()
+          archive=subprocess.check_output(['git','archive',integration_source,'tools/havenline/production'])
+          with tarfile.open(fileobj=io.BytesIO(archive)) as bundle:
+              bundle.extractall(trusted.name,filter='data')
+          sys.path.insert(0,str(Path(trusted.name)/'tools/havenline/production'))
+          import workstream
+          workstream.ROOT=Path.cwd().resolve()
+          visual_repair_path_errors=workstream.visual_repair_path_errors
+          paths=Path('task05-evidence/changed-files.txt').read_text().splitlines()
+          owned=['HavenlineGodot/assets/stations_v2/**','HavenlineGodot/scripts/station_kit.gd','HavenlineGodot/tests/test_task05_station_kit.gd','HavenlineGodot/tests/capture_task05_station_kit.gd','Docs/Production/T05/**','tools/havenline/task05/**','.github/workflows/havenline-task05-*.yml']
+          errors=visual_repair_path_errors('T05',paths,owned,os.environ['INTEGRATION_HEAD'])
+          Path('task05-evidence/owner-scope.json').write_text(json.dumps({'integration_head':os.environ['INTEGRATION_HEAD'],'passed':not errors,'errors':errors},indent=2)+'\n')
+          if errors:raise SystemExit('\n'.join(errors))
+          PYOWNER
           python3 tools/havenline/task05/test_station_kit.py | tee task05-evidence/tests/source-integrity.json
           git diff --exit-code -- HavenlineGodot/assets/stations_v2
 

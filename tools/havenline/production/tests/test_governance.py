@@ -36,10 +36,13 @@ class GovernanceTests(unittest.TestCase):
         self.assertIn("repair_scope",workflow)
         self.assertIn("historical_accepted_source",workflow)
         self.assertIn("visual repair candidate must contain the current integration authorization head",workflow)
-        self.assertIn("candidate may not alter visual/lifecycle authority",workflow)
-        self.assertIn("foreign path in visual repair candidate",workflow)
-        self.assertIn("Docs/Production/SHIPPING_VISUAL_APPROVAL_POLICY.json",workflow)
-        self.assertIn("Docs/Production/REFERENCE_STYLE_LOCK.json",workflow)
+        self.assertIn("git','archive',integration_source,'tools/havenline/production",workflow)
+        self.assertIn("visual_repair_path_errors=workstream.visual_repair_path_errors",workflow)
+        self.assertIn("visual_repair_path_errors(task,changed,patterns,integration,head)",workflow)
+        consumer=(HERE.parents[4]/"tools/havenline/production/workstream.py").read_text()
+        for required in ["candidate may not alter visual/lifecycle authority", "foreign path in visual repair candidate", "Docs/Production/SHIPPING_VISUAL_APPROVAL_POLICY.json", "Docs/Production/REFERENCE_STYLE_LOCK.json"]:
+            self.assertIn(required,consumer)
+
 
     def test_candidate_validation_requires_integration_authority(self):
         from workstream import validate_candidate
