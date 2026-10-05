@@ -1,0 +1,30 @@
+{
+  "request_id": "T05-NATIVE-WORKFLOW-WALLTIME",
+  "candidate_source": "95c11abd7c712a7d8122091682ab830593d28d8d",
+  "disposition": "AUTHORIZED_FOR_ISOLATED_REPAIR",
+  "requested_path": ".github/workflows/havenline-godot-android.yml",
+  "causal_evidence": {
+    "run_id": 37303591643,
+    "job_id": 111741949682,
+    "job_started_utc": "2026-10-05T11:33:25Z",
+    "job_ended_utc": "2026-10-05T12:13:45Z",
+    "cancelled_step": "Measure actual wall-clock native rendering separately from screenshots",
+    "prior_tests_and_captures": "SUCCESS",
+    "current_timeout_minutes": 40
+  },
+  "requested_change": "Native review job timeout-minutes40->60, infrastructure allowance only",
+  "unchanged": [
+    "allcommands",
+    "allstage-specifictimeouts",
+    "allassertions",
+    "benchmarkwarmup10+retainedseconds60",
+    "resolution/rendering settings",
+    "no4K60certificationclaim",
+    "APKvalidation/export/signing"
+  ],
+  "task_approved": false,
+  "production_integration_authorized": false,
+  "owner": "primary-integration-owner",
+  "owner_session": "/root",
+  "infrastructure_only": true
+}

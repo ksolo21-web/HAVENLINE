@@ -1,0 +1,139 @@
+{
+  "request_id": "T05-PROTECTED-HEARTH-MATERIAL-ONLY",
+  "disposition": "AUTHORIZED_FOR_BOUNDED_ISOLATED_IMPLEMENTATION",
+  "purpose": "ResolveC1-R15-04 whilepreserving authoredfurnace identity andgeometry.",
+  "requested_paths": [
+    "tools/havenline/task05/rebind_hearth_materials_v5.py",
+    "tools/havenline/task05/fixtures/hearth_material_source_v4.json",
+    "tools/havenline/task05/fixtures/hearth_geometry_source_v4.glb",
+    "HavenlineGodot/assets/stations_v2/hearth_vessel.glb",
+    "HavenlineGodot/assets/stations_v2/catalog.json",
+    "tools/havenline/task05/generate_station_kit.py",
+    "tools/havenline/task05/verify_r01_v4_scope.py",
+    "HavenlineGodot/scripts/station_kit.gd",
+    "HavenlineGodot/tests/test_task05_station_kit.gd",
+    "tools/havenline/task05/styled_station_glb.py",
+    "Docs/Production/T05 scope/defect/provenance"
+  ],
+  "allowed_change": "Only enumerated 11 body-tag material membership and original V3 source pigments with existing V4 AO; eight enamel_armor_tab instances restore original V3 pigments with existing V4 AO. Add semantically scoped HL_forged_iron, base(.18,.22,.27), metallic .45, roughness .55; all existing PBR definitions exact except HL_blue roughness .4->.65 across kit. Per-instance authored COLOR consistency helper and one instantiate call only.",
+  "prohibited_change": [
+    "Furnace vertexpositionsindicesnormals,silhouette,sockets,footprint,clearance,placement",
+    "Stone/timber/fire/gauge materials except changeexplicitlyneededandreviewed",
+    "Runtimegameplay/camera/environment/lighting",
+    "Threshold/tolerance/stylewaiver"
+  ],
+  "proof": [
+    "Bytewisegeometryattribute equality old/new; onlyCOLOR_0/materialassignment differences",
+    "Semanticallytaggedmaterial census toprove scopedbody remap",
+    "Source-bound negative/positiveactualpixels andfresh C1comparison",
+    "All22 boundscontracts andimpactedregression",
+    "Furnace roleidentity preserved and newsourcehashbind documented"
+  ],
+  "approval_note": "Primary integration owner /root authorizes bounded isolated implementation only. No integration, critic approval, or T05 closure is authorized by this disposition.",
+  "candidate_commit": "95c11abd7c712a7d8122091682ab830593d28d8d",
+  "source_diagnosis_path": "local-evidence/r15/c0-next-repair.json",
+  "user_intent": "Continue material repairs using actual user renders",
+  "actual_reference": {
+    "name": "Furnace_b080906_4K.png",
+    "sha256": "ed48d5e98c3826f778c6a8117025cd2549f75a65db509facec13663dbfd2be6d"
+  },
+  "production_edits_performed": true,
+  "controlled_prototype_status": "CAPTURED_PENDING_INDEPENDENT_DISPOSITION",
+  "task_approved": false,
+  "prototype_proof": {
+    "diagnostic_only": true,
+    "production_edits": false,
+    "baseline_sha256": "6d32499229dd22dde1ee32940bb1b0a506a0647ea911a4787b3bce83fe60a8e7",
+    "prototype_sha256": "51d9a049a298e256c7016557212b35ba8546b8554fda7fdce0dada539f063a2f",
+    "changed_tagged_parts": [
+      "upper_rounded_pressure_shell",
+      "cap_transition",
+      "chimney_wall",
+      "forged_lower_plate_00",
+      "forged_lower_plate_01",
+      "forged_lower_plate_02",
+      "forged_lower_plate_03",
+      "forged_lower_plate_04",
+      "forged_lower_plate_05",
+      "forged_lower_plate_06",
+      "forged_lower_plate_09"
+    ],
+    "positions_normals_bytewise_unchanged": true,
+    "all_original_binary_bytes_preserved": true,
+    "triangle_index_multiset_unchanged": true,
+    "material_palette_unchanged": true,
+    "changed_body_triangles": 2464,
+    "body_material": "HL_metal",
+    "stone_wood_fire_gauge_rivets_unchanged": true,
+    "production_owner_disposition": "SUPERSEDED_BY_EXPLICIT_BOUNDED_SCOPE_ABOVE",
+    "historical_only": true
+  },
+  "known_batch_accent_difference": "Observed source/batch authored COLOR flag mismatch; bounded instance helper normalizes flags without shared-resource mutation. Source enamel pigments restored explicitly as above.",
+  "disposition_by": {
+    "owner": "primary-integration-owner",
+    "session": "/root",
+    "authority_basis": "Primary agent coordinating authorized T05 repair; user explicitly continued material repairs using actual reference renders; C0R confirms R01 falls within existing visual-repair scope and no additional user permission is required"
+  },
+  "production_approval": false,
+  "integration_authorized": false,
+  "scope_supersession": {
+    "historical_exact_hearth_sha256": "6d32499229dd22dde1ee32940bb1b0a506a0647ea911a4787b3bce83fe60a8e7",
+    "replacement_proof_required": [
+      "source-bound current geometry/normal bytes and oriented triangle multiset equality",
+      "preserve v4 baked occlusion;restore original b080906 body material pigments",
+      "no other semantic part changes",
+      "all mechanical/catalog contracts exact",
+      "fresh matched camera material review and complete C1/C2/G1-G14",
+      "immutable raw fixture and canonical census hashes exact",
+      "regenerated candidate bytes equal committed hearth and catalog hash",
+      "remove exact COLOR helper method and one call to recover historical loader bytes",
+      "9->10 hearth materials and11->12 kit vocabulary; original cap12 unchanged"
+    ],
+    "rule": "Only enumerated 11 body-tag material membership and original V3 source pigments with existing V4 AO; eight enamel_armor_tab instances restore original V3 pigments with existing V4 AO. Add semantically scoped HL_forged_iron, base(.18,.22,.27), metallic .45, roughness .55; all existing PBR definitions exact except HL_blue roughness .4->.65 across kit. Per-instance authored COLOR consistency helper and one instantiate call only. Geometry, indices, normals, bounds, sockets, footprints, gameplay, lighting, camera, performance ceilings and acceptance thresholds remain exact. Historical95 and exact6d324 proofs remain historical evidence.",
+    "palette": {
+      "old_kit_vocabulary": 11,
+      "new_kit_vocabulary": 12,
+      "visible_materials_max": 12,
+      "old_hearth_materials": 9,
+      "new_hearth_materials": 10,
+      "budget_waiver": false,
+      "forged_pbr": {
+        "baseColorFactor": [
+          0.18,
+          0.22,
+          0.27,
+          1.0
+        ],
+        "metallicFactor": 0.45,
+        "roughnessFactor": 0.55
+      },
+      "only_original_pbr_change": {
+        "HL_blue.roughnessFactor": [
+          0.4,
+          0.65
+        ]
+      }
+    },
+    "blue_enamel_tag": "enamel_armor_tab",
+    "blue_enamel_instances": 8,
+    "body_tags": [
+      "upper_rounded_pressure_shell",
+      "cap_transition",
+      "chimney_wall",
+      "forged_lower_plate_00",
+      "forged_lower_plate_01",
+      "forged_lower_plate_02",
+      "forged_lower_plate_03",
+      "forged_lower_plate_04",
+      "forged_lower_plate_05",
+      "forged_lower_plate_06",
+      "forged_lower_plate_09"
+    ],
+    "body_triangles": 2464,
+    "material_helper_sha256": "0b4090092e1146631048b5b6f0ebfb522074c8f01535985c5630667dd36f3cac",
+    "baseline_fixture_sha256": "6d32499229dd22dde1ee32940bb1b0a506a0647ea911a4787b3bce83fe60a8e7",
+    "fixture_census_sha256": "17cdbc973ccb7744291c707f6c4d5e5f77c918b0f191e5bf74badc87c7484cf2",
+    "historical_source": "95c11abd7c712a7d8122091682ab830593d28d8d"
+  },
+  "implementation_state": "OWNER_AUTHORIZED_ISOLATED_IMPLEMENTATION_NOT_YET_COMMITTED_OR_INTEGRATED"
+}

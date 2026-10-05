@@ -102,6 +102,7 @@ def pack_styled_glb(builder: legacy.MeshBuilder, path: Path) -> None:
 
     for key in used:
         color, metallic, rough = legacy.MATERIALS[key]
+        if key == "blue": rough = .65
         materials.append({
             "name": "HL_" + key,
             "pbrMetallicRoughness": {

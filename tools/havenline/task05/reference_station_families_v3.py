@@ -72,6 +72,43 @@ def _roof_snow_bank(platform, side):
     platform.triangles("snow", vertices, normals, indices)
 
 
+def _sculpted_roof_piece(platform, x0, z0, y0, side, seed):
+    # Closed panel with crowned face, rounded shoulders and unequal end edges.
+    nx,nz=6,6
+    verts,norms,indices=[],[],[]
+    def point(u,v,top=True):
+        width=.143*(.94+.06*(1-v*v))
+        x=x0+u*width
+        z=z0+v*.23+.009*math.sin(u*2.3+seed)*(abs(v)**4)
+        crown=.012*(1-u*u)*(1-v*v)
+        y=y0-side*(z-z0)*math.tan(.40)
+        y+= (.052+crown-.012*(abs(u)**6+abs(v)**6)) if top else -.040
+        return (x,y,z)
+    for top in (True,False):
+        for j in range(nz+1):
+            v=-1+2*j/nz
+            for i in range(nx+1):
+                u=-1+2*i/nx;verts.append(point(u,v,top))
+                if top:
+                    eps=.0001
+                    a,b=point(u+eps,v),point(u-eps,v)
+                    c,d=point(u,v+eps),point(u,v-eps)
+                    dx=(a[1]-b[1])/(a[0]-b[0]); dz=(c[1]-d[1])/(c[2]-d[2])
+                    norms.append((-dx,1,-dz))
+                else:norms.append((0,-1,0))
+    row=nx+1;off=row*(nz+1)
+    def quad(a,b,c,d):indices.extend((a,b,c,a,c,d))
+    for layer in (0,off):
+        for j in range(nz):
+            for i in range(nx):
+                a=layer+j*row+i;quad(a,a+1,a+row+1,a+row)
+    perimeter=[i for i in range(row)]+[j*row+nx for j in range(1,nz+1)]+[nz*row+i for i in range(nx-1,-1,-1)]+[j*row for j in range(nz-1,0,-1)]
+    for a,b in zip(perimeter,perimeter[1:]+perimeter[:1]):
+        pa,pb=verts[a],verts[b]; n=(pa[0]+pb[0]-2*x0,0,pa[2]+pb[2]-2*z0)
+        start=len(verts);verts.extend((verts[a],verts[b],verts[b+off],verts[a+off]));norms.extend((n,n,n,n));quad(start,start+1,start+2,start+3)
+    platform.triangles("blue",verts,norms,indices)
+
+
 def _augment_service_counter(service):
     # A chunky lower storage carcass breaks the bare-table read while staying
     # inside the frozen 3.45 x 1.95 footprint.
@@ -227,17 +264,12 @@ def _augment_defense_platform(platform):
     # read as separate cyan primitives in actual reverse pixels. Six narrower
     # overlapping shingles per slope plus real rafters/fascia produce the
     # blue-roof watchtower language from 18600/18607.
-    for index, x in enumerate((-.75, -.45, -.15, .15, .45, .75)):
-        lean = .008 if index % 2 == 0 else -.008
-        platform.beveled_box("blue", (x, 2.65, -.30), (.36, .14, .88), .045,
-                             rotation=(-.40, 0, lean))
-        platform.beveled_box("blue", (x, 2.65, .30), (.36, .14, .88), .045,
-                             rotation=(.40, 0, -lean))
-        if index in (1, 4):
-            platform.beveled_box("dark", (x, 2.535, -.25), (.30, .035, .74), .014,
-                                 rotation=(-.40, 0, lean))
-            platform.beveled_box("dark", (x, 2.535, .25), (.30, .035, .74), .014,
-                                 rotation=(.40, 0, -lean))
+    # Diagnostic: separated shingle columns, two stepped courses each slope.
+    for side in (-1, 1):
+        for course, zabs in enumerate((.49, .18)):
+            for index, x in enumerate((-.75, -.45, -.15, .15, .45, .75)):
+                y = 2.79 - zabs * math.tan(.40) + .035 * course
+                _sculpted_roof_piece(platform,x,side*zabs,y,side,index+course*7)
     platform.beveled_box("dark", (0, 2.83, 0), (1.98, .14, .16), .045)
     for z in (-.62, .62):
         platform.rod_between("wood", (-.91, 2.47, z), (0, 2.78, z), .050, 8)
@@ -245,8 +277,12 @@ def _augment_defense_platform(platform):
         platform.beveled_box("wood_light", (0, 2.46, z), (1.92, .11, .10), .030)
     # Irregular snow clumps follow the roof pitch instead of sitting as flat
     # rectangular icing plates.
-    _roof_snow_bank(platform, -1)
-    _roof_snow_bank(platform, 1)
+    # Diagnostic: separate ridge and eave accumulations expose blue courses.
+    platform.beveled_box("snow", (-.08, 2.94, 0), (1.60, .24, .29), .04)
+    for side in (-1, 1):
+        for x, width, zabs in ((-.66, .35, .46), (.31, .46, .52)):
+            platform.beveled_box("snow", (x, 2.85-zabs*math.tan(.40), side*zabs),
+                (width, .27, .39), .05, rotation=(side*.40, 0, .025))
     # Guard-post half walls close the upper silhouette so it reads as a usable
     # watch post rather than an exposed scaffold. Individual slats preserve
     # authored construction and sight gaps.

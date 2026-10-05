@@ -17,6 +17,8 @@ from reference_station_families_v3 import build_station_families
 from reference_utility_stations_v3 import build_utility_stations
 from styled_station_glb import pack_styled_glb
 from reference_surface_relief_v2 import install as install_surface_relief
+from reference_timber_finish_v3 import install as install_timber_finish
+from rebind_hearth_materials_v5 import rebuild as rebuild_hearth_materials
 # R10B utility/processing rebuild is canonical and visually gated before T05 approval.
 # R10B_MATERIALIZER_TRIGGER_20260927: materialize the canonical utility rebuild before exact-source render review.
 # R10D_MATERIALIZER_TRIGGER_20260927: bind the reference-builder cooker rebuild to generated GLB/catalog bytes.\n# R10G_MATERIALIZER_TRIGGER_20260927: materialize the latest station silhouette repair and footprint guard.\n# R10T_MATERIALIZER_TRIGGER_20260927: remove primitive snow slabs and strengthen service/defense silhouettes from actual rendered review.\n# R03_SOURCE_SCOPE: physical camp-platform visuals only; contracts remain frozen.
@@ -46,6 +48,7 @@ def preserve_shared_palette(path):
 
 def main():
     install_surface_relief()
+    install_timber_finish()
     OUT.mkdir(parents=True,exist_ok=True)
     assets=legacy.asset_specs()
     assets.update(build_resource_props())
@@ -59,16 +62,11 @@ def main():
     entries=[]
     for asset_id in sorted(assets):
         builder=assets[asset_id];path=OUT/(asset_id+'.glb')
+        hearth_finish = None
         if asset_id=='hearth_vessel':
-            # R01-V4 is already source-bound and visually repaired. R07 does
-            # not own it, so never re-export the furnace on another CI host:
-            # tiny cross-host floating differences must not mutate approved art.
-            # Fail closed if the exact approved bytes are absent or altered.
-            if not path.exists():
-                raise RuntimeError('Missing approved R01-V4 hearth_vessel.glb')
-            actual=hashlib.sha256(path.read_bytes()).hexdigest()
-            if actual!=EXPECTED_HEARTH_SHA256:
-                raise RuntimeError(f'R01-V4 hearth bytes drifted: {actual}')
+            # R16 owner-authorized material repair. The source fixture remains
+            # exact R01-V4 geometry; no host re-export can change its mesh.
+            hearth_finish = rebuild_hearth_materials(path)
         else:pack_styled_glb(builder,path)
         footprint,requirement,later_task,sockets=legacy.METADATA[asset_id]
         entry={'id':asset_id,'asset':'res://assets/stations_v2/'+path.name,
@@ -76,7 +74,7 @@ def main():
                'requirement':requirement,'later_task':later_task,
                'footprint':list(footprint),'clearance':0.55,
                'sockets':{name:list(value) for name,value in sockets.items()},
-               'triangles':builder.triangle_count(),'materials':sorted(builder.surfaces)}
+               'triangles':builder.triangle_count(),'materials':sorted(hearth_finish['materials'] if hearth_finish else builder.surfaces)}
         if asset_id in legacy.PAD_VISUAL_VARIANTS:entry['visual_variant']=legacy.PAD_VISUAL_VARIANTS[asset_id]
         entries.append(entry)
     catalog={'schema_version':1,'authority_id':'T05-station-kit-v1',

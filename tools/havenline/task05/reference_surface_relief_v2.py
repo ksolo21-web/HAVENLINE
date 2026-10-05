@@ -70,6 +70,29 @@ class SurfaceReliefBuilder(BASE_BUILDER):
         self.triangles(material, vertices, normals, indices, center, rotation)
         self.vertex_pigments.setdefault(material, {}).update((start+i, shade) for i, shade in enumerate(shades) if shade != 1.)
 
+    def sphere(self, material, center, radii, rings=8, segments=16, rotation=(0,0,0)):
+        if material != "snow" or self.name == "hearth_vessel":
+            return super().sphere(material,center,radii,rings,segments,rotation)
+        rx,lower,rz=radii
+        upper=max(lower,min(.22,min(rx,rz)*.60)) if center[1] <= .12 else lower
+        vertices,normals,indices=[],[],[]
+        for ring in range(rings+1):
+            phi=math.pi*ring/rings
+            for i in range(segments):
+                theta=math.tau*i/segments
+                sy,sr=math.cos(phi),math.sin(phi)
+                wobble=.94+.06*math.sin(theta*3+.8)
+                ry=upper if sy >= 0 else lower
+                vertices.append((math.cos(theta)*sr*rx*wobble,sy*ry,math.sin(theta)*sr*rz*wobble))
+                normals.append(legacy.vnorm((math.cos(theta)*sr/rx,sy/ry,math.sin(theta)*sr/rz)))
+        for ring in range(rings):
+            for i in range(segments):
+                j=(i+1)%segments;a=ring*segments+i;b=ring*segments+j;c=(ring+1)*segments+j;d=(ring+1)*segments+i
+                indices.extend((a,c,b,a,d,c))
+        start=len(self._surface(material).positions)
+        self.triangles(material,vertices,normals,indices,center,rotation)
+        self.vertex_pigments.setdefault(material,{}).update((start+i,.62+.38*max(0.,n[1])) for i,n in enumerate(normals))
+
     def beveled_box(self, material, center, size, bevel=.08, rotation=(0, 0, 0)):
         if self.name == "hearth_vessel":
             return super().beveled_box(material, center, size, bevel, rotation)
@@ -78,6 +101,9 @@ class SurfaceReliefBuilder(BASE_BUILDER):
             # normals replace flat rectangular snow plates on rails/crates/pads.
             rx, rz = size[0] * .5 / 1.145, size[2] * .5 / 1.145
             ry = max(size[1] * .62, min(.095, min(rx, rz) * .34))
+            if center[1] <= .12 and min(rx, rz) >= .14:
+                # Ground accumulation keeps its seating plane; upper mass rises.
+                ry = max(ry, min(.19, min(rx, rz) * .65))
             lower_ry = min(ry, size[1] * .5 / 1.1)
             vertices, normals, indices = [], [], []
             rings, segments = 7, 14
@@ -96,7 +122,11 @@ class SurfaceReliefBuilder(BASE_BUILDER):
                     a, b = ring * segments + i, ring * segments + j
                     c, d = (ring + 1) * segments + j, (ring + 1) * segments + i
                     indices.extend((a, c, b, a, d, c))
-            return self.triangles(material, vertices, normals, indices, center, rotation)
+            start = len(self._surface(material).positions)
+            self.triangles(material, vertices, normals, indices, center, rotation)
+            self.vertex_pigments.setdefault(material, {}).update(
+                (start+i, .66 + .34 * max(0., n[1])) for i, n in enumerate(normals))
+            return
         if material in ("wood", "wood_light") and max(size) >= .58 and max(size) / max(.01, min(size)) >= 2.2:
             return self._carved_board(material, center, size, bevel, rotation)
         return super().beveled_box(material, center, size, bevel, rotation)
