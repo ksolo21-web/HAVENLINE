@@ -76,8 +76,9 @@ class SurfaceReliefBuilder(BASE_BUILDER):
         if material == "snow":
             # Closed asymmetric accumulation. Elliptical scallops and crowned
             # normals replace flat rectangular snow plates on rails/crates/pads.
-            rx, rz = size[0] * .52, size[2] * .53
+            rx, rz = size[0] * .5 / 1.145, size[2] * .5 / 1.145
             ry = max(size[1] * .62, min(.095, min(rx, rz) * .34))
+            lower_ry = min(ry, size[1] * .5 / 1.1)
             vertices, normals, indices = [], [], []
             rings, segments = 7, 14
             for ring in range(rings + 1):
@@ -86,8 +87,9 @@ class SurfaceReliefBuilder(BASE_BUILDER):
                     theta = math.tau * i / segments
                     wobble = 1 + .10 * math.sin(theta * 3 + .7) + .045 * math.cos(theta * 5)
                     u = (math.cos(theta) * math.sin(phi), math.cos(phi), math.sin(theta) * math.sin(phi))
-                    vertices.append((u[0] * rx * wobble, u[1] * ry * (1 + .10 * math.sin(theta) * math.sin(phi)), u[2] * rz * wobble))
-                    normals.append(legacy.vnorm((u[0] / rx, u[1] / ry, u[2] / rz)))
+                    vertical_radius = ry if u[1] >= 0 else lower_ry
+                    vertices.append((u[0] * rx * wobble, u[1] * vertical_radius * (1 + .10 * math.sin(theta) * math.sin(phi)), u[2] * rz * wobble))
+                    normals.append(legacy.vnorm((u[0] / rx, u[1] / vertical_radius, u[2] / rz)))
             for ring in range(rings):
                 for i in range(segments):
                     j = (i + 1) % segments
