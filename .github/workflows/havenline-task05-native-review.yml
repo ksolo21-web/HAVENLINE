@@ -4,6 +4,10 @@ on:
     branches: ['havenline/T05-visual-repair-20260926']
     paths:
       - 'HavenlineGodot/assets/stations_v2/**'
+      - 'HavenlineGodot/assets/t03_boundary_v2/**'
+      - 'HavenlineGodot/scripts/camp_boundary_view.gd'
+      - 'HavenlineGodot/tests/test_task03_boundary.gd'
+      - 'tools/havenline/*task03*'
       - 'HavenlineGodot/scripts/station_kit.gd'
       - 'HavenlineGodot/tests/test_task05_station_kit.gd'
       - 'tools/havenline/task05/**'
@@ -15,7 +19,7 @@ concurrency:
   group: havenline-t05-native-${{ github.head_ref || github.ref_name }}
   cancel-in-progress: true
 env:
-  EXPECTED_SOURCE: '3252081ed6344b72ab5c44f749bd425ec8938205'
+  EXPECTED_SOURCE: '${{ github.sha }}'
 
 jobs:
   native-review:

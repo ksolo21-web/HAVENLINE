@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "requesting_task": "QA-GOV",
+  "status": "AUTHORIZED",
+  "integration_owner_disposition": "APPROVED_BOUNDED_REFERENCE_ROUTE",
+  "integration_owner": "primary-integration-owner /root",
+  "user_authorization": "Kaleb explicitly approved the bounded T03 fence/gate material repair and requested in-game renders on 2026-10-05.",
+  "trusted_base": "c5ad8a921a79f7c3829c505051ccd1b175107d73",
+  "target_path": [
+    "tools/havenline/production/workstream.py",
+    ".github/workflows/havenline-candidate-guard.yml",
+    ".github/workflows/havenline-task05-station-kit-candidate.yml",
+    "tools/havenline/production/tests/test_governance.py",
+    "tools/havenline/production/tests/test_bounded_visual_owner_route.py",
+    "tools/havenline/production/validate_architecture_v32_t10.py",
+    "tools/havenline/production/tests/test_architecture_release_lock.py"
+  ],
+  "exact_sources": {
+    "tools/havenline/production/workstream.py": {
+      "prior_sha256": "38c28d372acead6fe416fe822333a3cb2b9881fe5ad6924b7b9677afd6bcfe81",
+      "authorized_sha256": "61c429174fab5790c5e1951a13945cbb58e4035b1542dabc51ad567ff95af20a"
+    },
+    ".github/workflows/havenline-candidate-guard.yml": {
+      "prior_sha256": "3cd34d2fdbc347858e172c774a2af32d9d91af26cdfd01bf4613abe0738c047e",
+      "authorized_sha256": "f39f6ba2373b289d229b020c0aedff4a90f618bd71e5a24a03e9c9418977fea6"
+    },
+    ".github/workflows/havenline-task05-station-kit-candidate.yml": {
+      "prior_sha256": "a49dfc351f1b5c4618fd97cbe05e00ca6fdc87c32bb08153184142b56b65c614",
+      "authorized_sha256": "ed4811aef2057ac5484c3dfb048bea42f6ae31c75156b35095cdd2c2175ccf3a"
+    },
+    "tools/havenline/production/tests/test_governance.py": {
+      "prior_sha256": "d17b39ad2d7539f2509919b4efd39e028e4a6b85cf7bcaf6af786bed2a13e95f",
+      "authorized_sha256": "38c973d99cc767dffa2e3271792f9c3ca5c04bd9b42cb9ab170fe0b43ad6f1bf"
+    },
+    "tools/havenline/production/tests/test_bounded_visual_owner_route.py": {
+      "prior_sha256": null,
+      "authorized_sha256": "7e98c19bb04761db2497171773ecec1666086ab435ab33c3a8c30e83c9a850f0"
+    },
+    "tools/havenline/production/tests/test_architecture_release_lock.py": {
+      "prior_sha256": "f23a6d366094033a4710e64704580379f8e79ee42faf01dfa30ca2bfc4773ade",
+      "authorized_sha256": "98e8495380667b67452b0010b177edc018c8ef9d0459427b3e140d0694636d0b"
+    }
+  },
+  "preserved": "Existing trusted integration/ancestor/exact-path/forbidden-control-plane/invalidation/branch/historical-source rules; old source pins and old authorizations remain immutable; no threshold or lifecycle changes. Validator code and its imports execute only from trusted integration Git archive; malicious candidate helper regression required.",
+  "task_approved": false,
+  "T06": "LOCKED_BY_USER"
+}

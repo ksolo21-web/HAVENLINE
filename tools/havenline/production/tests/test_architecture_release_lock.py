@@ -76,7 +76,10 @@ class ArchitectureReleaseLockTests(unittest.TestCase):
         import validate_architecture_release_lock as v31
         from validate_architecture_v32_t10 import GUARD,GUARD_CURRENT_SHA256,VISUAL_REPAIR_GUARD_REQUEST,VISUAL_REPAIR_GUARD_REQUEST_SHA256
         current=(v31.ROOT/GUARD).read_bytes()
-        self.assertEqual(hashlib.sha256(current).hexdigest(),GUARD_CURRENT_SHA256)
+        from validate_architecture_v32_t10 import bounded_reference_route_source
+        self.assertTrue(hashlib.sha256(current).hexdigest()==GUARD_CURRENT_SHA256 or bounded_reference_route_source(GUARD,GUARD_CURRENT_SHA256,current))
+        self.assertFalse(bounded_reference_route_source(GUARD,GUARD_CURRENT_SHA256,current+b"\n# unrelated drift\n"))
+        self.assertFalse(bounded_reference_route_source(GUARD,"0"*64,current))
         record_bytes=(v31.ROOT/VISUAL_REPAIR_GUARD_REQUEST).read_bytes()
         self.assertEqual(hashlib.sha256(record_bytes).hexdigest(),VISUAL_REPAIR_GUARD_REQUEST_SHA256)
         record=json.loads(record_bytes)

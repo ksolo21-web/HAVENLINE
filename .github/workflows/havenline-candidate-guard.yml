@@ -154,20 +154,19 @@ jobs:
                   patterns.append(item)
           changed=subprocess.check_output(['git','diff','--name-only',integration,head],text=True).splitlines()
           if not changed: raise SystemExit('visual repair candidate contains no task-owned changes')
-          forbidden={
-              'Docs/Production/APPROVAL_INVALIDATIONS.json',
-              'Docs/Production/WORKSTREAM_REGISTRY.json',
-              'Docs/Production/DEPENDENCY_GRAPH.json',
-              'Docs/Production/task-gates.json',
-              'Docs/Production/SHIPPING_VISUAL_APPROVAL_POLICY.json',
-              'Docs/Production/REFERENCE_STYLE_LOCK.json',
-              'Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md',
-          }
-          errors=[]
-          for path in changed:
-              if path in forbidden: errors.append('candidate may not alter visual/lifecycle authority: '+path);continue
-              if not any(fnmatch.fnmatchcase(path,pattern) for pattern in patterns):
-                  errors.append('foreign path in visual repair candidate: '+path)
+          import sys
+          import io,tarfile,tempfile
+          from pathlib import Path
+          integration_source=integration if 'integration' in globals() else os.environ['INTEGRATION_HEAD']
+          trusted=tempfile.TemporaryDirectory()
+          archive=subprocess.check_output(['git','archive',integration_source,'tools/havenline/production'])
+          with tarfile.open(fileobj=io.BytesIO(archive)) as bundle:
+              bundle.extractall(trusted.name,filter='data')
+          sys.path.insert(0,str(Path(trusted.name)/'tools/havenline/production'))
+          import workstream
+          workstream.ROOT=Path.cwd().resolve()
+          visual_repair_path_errors=workstream.visual_repair_path_errors
+          errors=visual_repair_path_errors(task,changed,patterns,integration,head)
           if errors: raise SystemExit('\n'.join(errors))
           audit=f'Docs/Production/{task}/POST_COMPLETION_VISUAL_AUDIT_20260926.json'
           scope=f'Docs/Production/{task}/VISUAL_REPAIR_SCOPE_20260926.md'

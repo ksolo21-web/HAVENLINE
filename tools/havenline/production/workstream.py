@@ -76,6 +76,39 @@ def governance_only_drift(files: list[str]) -> bool:
     impact=calculate_impact(files)
     return impact["governance_only"] and not impact["unknown_production_fallback"]
 
+
+VISUAL_REPAIR_FORBIDDEN = {
+    "Docs/Production/APPROVAL_INVALIDATIONS.json",
+    "Docs/Production/WORKSTREAM_REGISTRY.json",
+    "Docs/Production/DEPENDENCY_GRAPH.json",
+    "Docs/Production/task-gates.json",
+    "Docs/Production/SHIPPING_VISUAL_APPROVAL_POLICY.json",
+    "Docs/Production/REFERENCE_STYLE_LOCK.json",
+    "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
+}
+
+
+def visual_repair_path_errors(task_id, paths, owned_patterns, integration_ref, candidate_ref="HEAD"):
+    """Allow exact owner-routed paths from trusted integration, never local requests."""
+    if not integration_ref:
+        return ["visual repair requires a trusted integration head"]
+    ancestor = subprocess.run(
+        ["git", "merge-base", "--is-ancestor", integration_ref, candidate_ref],
+        cwd=ROOT, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL,
+    )
+    if ancestor.returncode != 0:
+        return ["visual repair candidate must contain trusted integration head"]
+    authorized = approved_change_requests(task_id, integration_ref)
+    errors = []
+    for path in paths:
+        if path in VISUAL_REPAIR_FORBIDDEN or path.startswith("Docs/Production/ChangeRequests/"):
+            errors.append("candidate may not alter visual/lifecycle authority: " + path)
+        elif not _safe_exact_target(path):
+            errors.append("noncanonical visual repair path: " + path)
+        elif not any_match(path, owned_patterns) and path not in authorized:
+            errors.append("foreign path in visual repair candidate: " + path)
+    return errors
+
 def integration_drift_assessment(base: str, integration_head: str|None):
     if not integration_head or base==integration_head:
         return {"base":base,"integration_head":integration_head,"changed_files":[],"governance_only":True,"requires_reconcile":False,"reason":"no integration drift"}

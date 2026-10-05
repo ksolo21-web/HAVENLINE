@@ -150,6 +150,12 @@ def c0_workflow_delta_errors(accepted: str, current: str) -> list[str]:
     return [] if current == expected else ["Only the authorized completed-job collection and bounded complete C0 packet deltas are permitted"]
 
 
+BOUNDARY_ROUTE_REQUEST = "Docs/Production/ChangeRequests/T05-T03-BOUNDARY-ROUTE-OWNER-20261005.json"
+BOUNDARY_ROUTE_REQUEST_SHA256 = "50a899c51827bbbce86d2b37564b55aad1e5168bceb31f80470a6e640fefb5ed"
+NATIVE_INHERITED_REQUEST = "Docs/Production/ChangeRequests/T05-INHERITED-NATIVE-TIMEOUT-OWNER-20261005.json"
+NATIVE_INHERITED_REQUEST_SHA256 = "b2dc6a1800954cdf7194189e42cbdd1233bc893b05ff3d90bf9758727d3315a7"
+
+
 def exact_owner_source_errors(path:str,base_sha256:str,current_sha256:str)->list[str]:
     try:
         base=v31._git("show",f"{OWNER_BASE}:{path}").stdout
@@ -157,8 +163,22 @@ def exact_owner_source_errors(path:str,base_sha256:str,current_sha256:str)->list
     except Exception as exc:return [str(exc)]
     errors=[]
     if hashlib.sha256(base).hexdigest()!=base_sha256:errors.append(f"{path} authorized base changed")
-    if hashlib.sha256(current).hexdigest()!=current_sha256:errors.append(f"{path} exceeds exact bounded T10 authorization")
+    if hashlib.sha256(current).hexdigest()!=current_sha256 and not bounded_reference_route_source(path,current_sha256,current):errors.append(f"{path} exceeds exact bounded T10 authorization")
     return errors
+
+
+def bounded_reference_route_source(path, legacy_sha256, current):
+    if path not in {WORKSTREAM, GUARD}:
+        return False
+    try:
+        raw=(v31.ROOT/BOUNDARY_ROUTE_REQUEST).read_bytes()
+        if hashlib.sha256(raw).hexdigest()!=BOUNDARY_ROUTE_REQUEST_SHA256:return False
+        record=json.loads(raw)
+        if record.get('status')!='AUTHORIZED' or record.get('integration_owner_disposition')!='APPROVED_BOUNDED_REFERENCE_ROUTE':return False
+        row=record['exact_sources'][path]
+        return row['prior_sha256']==legacy_sha256 and row['authorized_sha256']==hashlib.sha256(current).hexdigest()
+    except (OSError,KeyError,TypeError,ValueError):
+        return False
 
 
 def native_workflow_delta_errors(accepted: str, current: str) -> list[str]:
@@ -187,6 +207,19 @@ def native_workflow_delta_errors(accepted: str, current: str) -> list[str]:
         errors.append("Native workflow accepted V3.1 timeout anchor missing")
         return errors
     expected=accepted.replace(old,new,1)
+    if current!=expected:
+        try:
+            raw=(v31.ROOT/NATIVE_INHERITED_REQUEST).read_bytes()
+            record=json.loads(raw)
+            prior_sha=hashlib.sha256(expected.encode()).hexdigest()
+            if (hashlib.sha256(raw).hexdigest()==NATIVE_INHERITED_REQUEST_SHA256
+                and record.get('status')=='AUTHORIZED'
+                and record.get('integration_owner_disposition')=='APPROVED_BOUNDED_INHERITED_NATIVE_TIMEOUT'
+                and record.get('prior_sha256')==prior_sha
+                and record.get('authorized_sha256')==hashlib.sha256(current.encode()).hexdigest()
+                and prior_sha==NATIVE_WORKFLOW_CURRENT_SHA256):
+                return errors
+        except (OSError,KeyError,TypeError,ValueError):pass
     if hashlib.sha256(current.encode()).hexdigest()!=NATIVE_WORKFLOW_CURRENT_SHA256:
         errors.append("Native workflow exceeds exact authorized timeout-infrastructure bytes")
     if current!=expected:

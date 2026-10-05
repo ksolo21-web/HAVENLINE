@@ -5,6 +5,7 @@ const Boundary=preload("res://scripts/camp_boundary.gd")
 const Surface=preload("res://scripts/outpost_surface.gd")
 const Scenery=preload("res://scripts/scenery_batch.gd")
 const BOUNDARY_SHADER=preload("res://assets/t03_boundary_v2/t03_boundary_v2.gdshader")
+const WOOD_REFERENCE_ALBEDO=preload("res://assets/t03_boundary_v2/wood_reference_albedo.gd")
 const BOUNDARY_ASSET_ROOT := "res://assets/t03_boundary_v2/"
 # Iteration 11H: preserve authored picket rhythm while normalizing only the visual gate-leaf
 # presentation across all six portals. Collision/opening authority remains in camp_boundary.gd.
@@ -62,7 +63,10 @@ func _material(key:String)->ShaderMaterial:
 	m.shader=BOUNDARY_SHADER
 	match key:
 		"timber":
-			m.set_shader_parameter("base_color",Color(0.76,0.53,0.40,1.0));m.set_shader_parameter("roughness_value",0.86);m.set_shader_parameter("detail_strength",0.024);m.set_shader_parameter("detail_scale",3.2)
+			m.set_shader_parameter("base_color",Color(1.0,1.0,1.0,1.0));m.set_shader_parameter("roughness_value",0.86);m.set_shader_parameter("detail_strength",0.015);m.set_shader_parameter("detail_scale",3.2)
+			m.set_shader_parameter("use_reference_grain",true);m.set_shader_parameter("reference_grain",WOOD_REFERENCE_ALBEDO.create_texture())
+		"rope":
+			m.set_shader_parameter("base_color",Color(0.86,0.76,0.56,1.0));m.set_shader_parameter("roughness_value",0.9);m.set_shader_parameter("detail_strength",0.025)
 		"timber_dark":
 			m.set_shader_parameter("base_color",Color(0.56,0.35,0.23,1.0));m.set_shader_parameter("roughness_value",0.89);m.set_shader_parameter("detail_strength",0.022);m.set_shader_parameter("detail_scale",3.4)
 		"snow":
@@ -95,7 +99,7 @@ func _mesh(game,asset:String)->ArrayMesh:
 			var key:=""
 			if imported!=null:key=String(imported.resource_name).to_lower()
 			if key.is_empty():key=String(mesh.surface_get_name(index)).to_lower()
-			assert(key in ["timber","timber_dark","snow","blue","orange","iron","stone","brass"],"Unmapped T03 boundary surface: "+key)
+			assert(key in ["timber","timber_dark","snow","blue","orange","iron","stone","brass","rope"],"Unmapped T03 boundary surface: "+key)
 			mesh.surface_set_material(index,_material(key))
 		game.merged_cache[cache_key]=mesh
 	return game.merged_cache[cache_key]
@@ -281,7 +285,17 @@ func configure(game):
 		post_transforms.append(_post_transform(gate.b,tangent,post_scale,post_height))
 	post_batch=Scenery.instances(_mesh(game,"gate_post"),post_transforms,self)
 	post_batch.name="GateLanternPosts"
+	# Authored terrain-chord bridges; no collision or placement changes.
+	var panel_joins:=MeshInstance3D.new()
+	panel_joins.name="AuthoredPalisadeJoins"
+	panel_joins.mesh=_mesh(game,"panel_joins")
+	add_child(panel_joins)
 	descriptor=Boundary.evidence()
+	descriptor["additional_visual_join_logs"]=3
+	descriptor["additional_visual_rail_connectors"]=6
+	descriptor["additional_visual_join_triangles"]=456
+	descriptor["authored_panel_join_asset"]="t03_boundary_v2/panel_joins.obj"
+	descriptor["authored_panel_join_material_surfaces"]=4
 	descriptor["fence_visual_instances"]=fence_transforms.size()
 	descriptor["collision_panel_instances"]=Boundary.panel_specs().size()
 	descriptor["south_visual_grouping_from_panel_specs"]=true
@@ -354,4 +368,6 @@ func configure(game):
 	descriptor["visual_lane_half_width"]=Surface.T03_VISUAL_LANE_HALF
 	descriptor["bank_visual_half_expand"]=Surface.T03_BANK_VISUAL_HALF_EXPAND
 	descriptor["primitive_fence_meshes_created"]=false
-	descriptor["draw_batches"]=3
+	descriptor["draw_batches"]=4
+	descriptor["multimesh_batches"]=3
+	descriptor["authored_extra_mesh_instances"]=1
