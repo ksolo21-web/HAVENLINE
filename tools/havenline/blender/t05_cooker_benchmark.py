@@ -146,7 +146,7 @@ for i in range(36):
     teeth.append((r*math.cos(a),1.265+r*math.sin(a),-.683))
 mesh=bpy.data.meshes.new("Authored saw wheel toothed mesh")
 verts=[(0,1.265,-.683)]+teeth
-faces=[(0,i+1,((i+1)%36)+1) for i in range(36)]
+faces=[(0,((i+1)%36)+1,i+1) for i in range(36)]
 mesh.from_pydata(verts,[],faces);mesh.update()
 wheel=bpy.data.objects.new("Visible steel saw mechanism",mesh)
 art.objects.link(wheel);made.append(wheel)
@@ -203,8 +203,7 @@ for object in made:
 bpy.ops.object.select_all(action="DESELECT")
 for o in made:o.select_set(True)
 bpy.context.view_layer.objects.active=made[0]
-bpy.ops.wm.save_as_mainfile(filepath=str(out/"T05_cooker_EDITABLE.blend"))
-# Preview backdrop with disclosure; never export it.
+# Preview backdrop is a separate labeled studio collection, not exported.
 def staging_box(n,pos,size,color):
     bpy.ops.mesh.primitive_cube_add(size=1,location=pos)
     o=bpy.context.object;o.name=n;o.scale=size
@@ -237,6 +236,10 @@ for key,loc in shots.items():
     cam.location=(loc[0],-loc[2],loc[1]);d=Vector((0,0,1.22))-cam.location;cam.rotation_euler=d.to_track_quat("-Z","Y").to_euler()
     scene.render.filepath=str(out/("T05_cooker_"+key+".png"))
     bpy.ops.render.render(write_still=True)
+# Save editable source with preview studio cameras AND packed authored images.
+# This happens before any join operations used solely for GLB optimization.
+bpy.ops.file.pack_all()
+bpy.ops.wm.save_as_mainfile(filepath=str(out/"T05_cooker_EDITABLE.blend"))
 # Join by material ONLY in the exported GLB, not in editable .blend.
 # Avoid exporting the studio; protect low draw-call model in Godot.
 bpy.ops.object.select_all(action="DESELECT")
@@ -245,7 +248,7 @@ for obj in made:
         bpy.context.view_layer.objects.active=obj
         obj.select_set(True)
         bpy.ops.object.convert(target="MESH")
-        obj.select_set(False)
+        bpy.context.view_layer.objects.active.select_set(False)
 for obj in made:
     if obj.name in bpy.data.objects:pass
 src=[obj for obj in art.objects if obj.type=="MESH"]
