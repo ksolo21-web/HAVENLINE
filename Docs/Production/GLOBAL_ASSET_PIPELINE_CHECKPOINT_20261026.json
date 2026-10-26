@@ -64,6 +64,7 @@
     }
   ],
   "critical_unresolved": [
+    "Real T05 R07 cooker benchmark has 9 material slots, while global v1 baker accepts exactly one atlased material. Add a source-faithful validated multi-material-to-atlas or material-preserving workflow; do not flatten materials and claim style approval.",
     "Render real, exact-owner-reference asset(s) within HavenlineGodot real shipping gameplay scene, at true 3840x2160 from 7 angles and realistic in-use/night/snow states; synthetic fixture is insufficient.",
     "Use actual reference style and materials (Whiteout-style lock) and obtain independent visual critic with both reference fidelity and visual language 10/10 and all other dimensions strictly >9, no visual defects.",
     "Measure physical Android sustained 60 FPS with real GPU/CPU frame times, thermal stability, draw calls, texture memory, collision/physics and save behavior; software llvmpipe screenshot test is NOT Android.",
@@ -79,7 +80,7 @@
     "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
     "Preserve source hashes and evidence across retries"
   ],
-  "next_action": "Choose one genuinely reference-bound Havenline real asset (first known T05 cooker 18567.png), obtain exact approved source/reference and existing geometry, stage using global pipeline without altering original. Render seven native 4K shipping-scene comparison views, compare and get independent critic. Then physical Android performance and explicit owner/integration approvals. Continue 1024px+ bake performance/quality benchmarking separately.",
+  "next_action": "Begin real-asset candidate bridge by staging existing unapproved T05 cooker reference and 9-material Blender master in isolated workspace, preserving untouched T05 branch. Establish exact owner source and material-fidelity plan, then test multi-material support/atlas on real object before 4K shipping renders or Android. Do not merge PR #103 or promote assets.",
   "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
   "superseded_wrong_base_pull_request": 102,
   "latest_work": {
@@ -235,6 +236,18 @@
     "latest_4k_independent_critic": false,
     "latest_4k_image_comparison_note": "Actual seven image PNG bytes inspected and contact sheet reviewed; geometry synthetic sphere+wall. This is evidence for capture resolution/renderer/import only, not approved art style.",
     "current_technical_score_0_to_10": 8.5,
-    "remaining_mandatory_release_gates_count": 7
+    "remaining_mandatory_release_gates_count": 7,
+    "real_t05_reference_candidate_review": {
+      "reference_id": "18567.png",
+      "source_artifact_run": 40346552132,
+      "source_evidence_artifact_id": 12660839315,
+      "source_asset": "cooker_processor",
+      "source_material_slots": 9,
+      "source_visual_internal_score": 5.5,
+      "source_visual_approved": false,
+      "compatibility_with_global_one_material_baker": "BLOCKED_BEFORE_ATLAS_CONVERSION",
+      "no_source_promotion": true,
+      "basis": "T05-BLENDER-R07-PROOF-AND-ACCEPTANCE-CHECKPOINT.json from T05 work branch; source data was inspected without edits"
+    }
   }
 }
