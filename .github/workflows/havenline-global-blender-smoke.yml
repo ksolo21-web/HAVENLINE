@@ -7,6 +7,7 @@ on:
       - 'tools/havenline/asset_pipeline/bvh_bake.py'
       - 'tools/havenline/asset_pipeline/tests/create_blender_smoke.py'
       - 'tools/havenline/asset_pipeline/tests/godot_glb_import_smoke.gd'
+      - 'tools/havenline/asset_pipeline/capture_isolated_asset.gd'
       - 'tools/havenline/asset_pipeline/validate_gltf.mjs'
       - '.github/workflows/havenline-global-blender-smoke.yml'
   workflow_dispatch:
@@ -183,6 +184,40 @@ jobs:
           timeout 120 "$editor" --headless --path "$staging" --script res://godot_glb_import_smoke.gd 2>&1 | tee global-bake-evidence/godot-binding.log
           grep -q HAVENLINE_GODOT_IMPORT_PASS global-bake-evidence/godot-binding.log
           echo 'Isolated headless GLB import PASS; not in-game visual or phone evidence.'
+      - name: Capture real Godot isolated multi-angle material images
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          staging="$PWD/global-bake-evidence/godot-import"
+          editor="$RUNNER_TEMP/havenline-godot-editor/Godot_v4.7.2-stable_linux.x86_64"
+          cp tools/havenline/asset_pipeline/capture_isolated_asset.gd "$staging/capture_isolated_asset.gd"
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo timeout 180 apt-get install -y --no-install-recommends xvfb
+          fi
+          mkdir -p global-bake-evidence/godot-seven-views
+          timeout 240 xvfb-run -a "$editor" --path "$staging" --rendering-method gl_compatibility --audio-driver Dummy --script res://capture_isolated_asset.gd -- --glb=res://assets/smoke_test_LOD0.glb --out="$PWD/global-bake-evidence/godot-seven-views" --asset-id=smoke_test 2>&1 | tee global-bake-evidence/godot-seven-views.log
+          /tmp/havenline-asset-venv/bin/python - <<'PY'
+          import hashlib,json,pathlib
+          from PIL import Image
+          p=pathlib.Path("global-bake-evidence/godot-seven-views")
+          report=json.loads((p/"isolated-import.json").read_text())
+          assert report["status"]=="ISOLATED_TECHNICAL_ENGINE_PROOF_ONLY"
+          assert report["mesh_count"]>0 and report["shipping_scene_loaded"] is False
+          views=report["renders"]
+          assert len(views)==7 and len({v["view"] for v in views})==7
+          evidence=[]
+          for v in views:
+              path=p/v["file"]
+              with Image.open(path) as img:
+                  assert img.format=="PNG" and img.size==(1280,720)
+                  reduced=img.convert("RGB").resize((160,90))
+                  unique=len(set(reduced.getdata()))
+                  assert unique>=16, f"Godot renderer gave empty/flat pixels for {v['view']}"
+              evidence.append({"view":v["view"],"sha256":hashlib.sha256(path.read_bytes()).hexdigest(),"sample_rgb_colors":unique})
+          assert len({x["sha256"] for x in evidence})>=3, "Multi-angle frames are duplicated or frozen"
+          (p/"independent-frame-integrity.json").write_text(json.dumps({"test_only":True,"true_shipping_scene":False,"views":evidence},indent=2)+"\\n")
+          print("GODOT_SEVEN_VIEW_TECHNICAL_PIXELS_PASS",json.dumps(evidence))
+          PY
       - name: Preserve reproducible candidate or failure logs
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
