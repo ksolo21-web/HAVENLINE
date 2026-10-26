@@ -89,7 +89,8 @@ def build(a):
     normal.colorspace_settings.name="Non-Color"
     texture_node(material,normal)
     set_active([high,low],low)
-    result=bpy.ops.object.bake(type="NORMAL",target="IMAGE_TEXTURES",save_mode="INTERNAL",use_clear=True)
+    result=bpy.ops.object.bake(type="NORMAL",target="IMAGE_TEXTURES",save_mode="INTERNAL",use_clear=True,
+                               use_selected_to_active=True,cage_extrusion=.042,normal_space="TANGENT")
     assert "FINISHED" in result, "Cycles high-to-low normal bake did not finish"
     normal.update()
     baked_alpha=list(normal.pixels)[3::4]
@@ -100,7 +101,8 @@ def build(a):
     texture_node(material,ao)
     scene.render.bake.use_selected_to_active=False
     set_active([low],low)
-    result=bpy.ops.object.bake(type="AO",target="IMAGE_TEXTURES",save_mode="INTERNAL",use_clear=True)
+    result=bpy.ops.object.bake(type="AO",target="IMAGE_TEXTURES",save_mode="INTERNAL",use_clear=True,
+                               use_selected_to_active=False)
     assert "FINISHED" in result, "Cycles AO bake did not finish"
     ao.update()
     baked_alpha=list(ao.pixels)[3::4]
