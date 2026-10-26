@@ -211,60 +211,41 @@ cylinder("Chimney neck",(.20,1.95,.06),.135,.37,"dark","Z",16)
 cylinder("Chimney steel collar",(.20,2.18,.06),.175,.13,"metal","Z",18)
 cylinder("Chimney upper cap",(.20,2.34,.06),.19,.10,"dark","Z",18)
 cylinder("Hollow looking black exhaust",(.20,2.398,.06),.113,.012,"dark","Z",18)
-# One hand-shaped continuous snowy overhang over the complete iron roof.
-# Unlike overlapping primitive snow spheres this forms a continuous hood with
-# localized drips and thickness, a core defining feature of owner art 18567.
-x_steps,z_steps=20,16
-top=[];bottom=[];surface_faces=[]
-for zi in range(z_steps+1):
-    uz=zi/z_steps;zz=-.63+1.21*uz
-    for xi in range(x_steps+1):
-        ux=xi/x_steps;xx=-.68+1.36*ux
-        dome=max(0.,1.-.69*((xx/.68)**2)-.59*((zz/.63)**2))
-        # Three asymmetric, physically connected leading-edge snow tongues.
-        # Their drop is strongest at the front, tapering smoothly into the roof.
-        scallop=(.024*math.sin(xx*9.3+.3)+.015*math.sin(zz*13.1+xx*2.7)
-                 +.009*math.sin(xx*21.0-zz*7.4))
-        front_strength=max(0.,1.-uz/.26)**2
-        front_tongues=sum(amplitude*math.exp(-((xx-center)/spread)**2)
-                          for center,amplitude,spread in
-                          ((-.49,.096,.16),(-.14,.062,.12),(.22,.105,.15),(.50,.079,.14)))
-        edge_drape=(.035*(abs(2*uz-1)**7)+.034*(abs(2*ux-1)**8)
-                    +front_strength*front_tongues)
-        y=1.805+.150*dome+scallop-edge_drape
-        top.append((xx,y,zz))
-        bottom.append((xx,min(1.67,y-.12),zz))
-stride=x_steps+1
-num=len(top)
-for zi in range(z_steps):
-    for xi in range(x_steps):
-        q=zi*stride+xi
-        # Positive game Y must be the visible upper-face normal: X/Z order is
-        # inverted compared to Blender's default XY plane.
-        surface_faces.append((q,q+stride,q+stride+1,q+1))
-        surface_faces.append((q+num,q+num+1,q+num+stride+1,q+num+stride))
-# Rounded perimeter drop-face drapes, stitched as one closed mesh.
-edges=[]
-for xi in range(x_steps):edges.append((xi,xi+1))
-for zi in range(z_steps):edges.append((zi*stride+x_steps,(zi+1)*stride+x_steps))
-for xi in range(x_steps,0,-1):edges.append((z_steps*stride+xi,z_steps*stride+xi-1))
-for zi in range(z_steps,0,-1):edges.append((zi*stride,(zi-1)*stride))
-for aidx,bidx in edges:
-    surface_faces.append((aidx,bidx,bidx+num,aidx+num))
-roof_mesh=bpy.data.meshes.new("Sculpted_Continuous_Snow_Hood")
-roof_mesh.from_pydata(top+bottom,[],surface_faces);roof_mesh.update()
-roof=bpy.data.objects.new("Continuous thick snow roof, owner reference 18567",roof_mesh)
-art.objects.link(roof);made.append(roof);roof.data.materials.append(palette["snow"])
-for face in roof_mesh.polygons:face.use_smooth=True
-snow_edge=roof.modifiers.new("Snow overhang soft rounded edge","BEVEL")
-snow_edge.width=.026
-snow_edge.segments=2
-snow_edge.limit_method="ANGLE"
-snow_normal=roof.modifiers.new("Sculpted snow weighted normals","WEIGHTED_NORMAL")
-# Connected leading snow forms overlap the continuous roof perimeter, rather
-# than the isolated bead-like globules rejected by native pixel inspection.
-for x,y,z,rx in ((-.48,1.655,-.585,.134),(-.15,1.680,-.592,.112),(.23,1.651,-.586,.140),(.50,1.667,-.575,.121)):
-    ball("Integrated scalloped snow lip",(x,y,z),(rx,.103,.131),"snow",12,8)
+# R05: true organically fused snow volumes. A Blender metaball implicit
+# sculpt fuses overlapping mounds into a single smooth 3D accumulation, unlike
+# the old flat grid canopy with disconnected bead-like spheres.
+# The source remains fully editable: change each metaball, then re-export.
+snow_meta=bpy.data.metaballs.new("R05_editable_snow_mounds")
+snow_meta.resolution=.110
+snow_meta.render_resolution=.110
+snow_meta.threshold=.72
+snow_part=bpy.data.objects.new("Fused thick sculpted snow roof — owner 18567",snow_meta)
+art.objects.link(snow_part)
+snow_part.data.materials.append(palette["snow"])
+made.append(snow_part)
+# All positions are in Godot-native Y-up before the Blender X rotation.
+# Main deep shoulder + five asymmetric lobes; extra front pieces interpenetrate
+# the main mound to form naturally joined rounded snow drapes, not separate dots.
+mounds=(
+    ( .00,1.812,-.08,.50,.155,.43),
+    (-.35,1.799,-.10,.31,.158,.34),
+    ( .34,1.813, .05,.34,.164,.39),
+    (-.05,1.790, .28,.35,.130,.27),
+    (-.48,1.747,-.34,.22,.152,.22),
+    (-.19,1.741,-.44,.25,.148,.24),
+    ( .13,1.758,-.44,.28,.166,.23),
+    ( .45,1.760,-.36,.23,.140,.23),
+    (-.44,1.770, .34,.22,.118,.22),
+    ( .41,1.780, .33,.22,.119,.22),
+)
+for x,y,z,rx,ry,rz in mounds:
+    el=snow_meta.elements.new(type="ELLIPSOID")
+    el.co=(x,y,z)
+    el.radius=1.0
+    el.size_x=rx;el.size_y=ry;el.size_z=rz
+    el.stiffness=1.5
+# Rounded snow overhangs carry beyond the steel hood without exceeding
+# the frozen 2.45 × 2.30 m station visual footprint.
 for x,z in ((-1.09,-.20),(-.61,.54),(1.02,.61)):
     ball("Accumulated snow on tray edges",(x,1.22,z),(.10,.054,.083),"snow",12,7)
 # Blender is Z-up while Godot and glTF are Y-up: rotate the authored
@@ -324,7 +305,7 @@ bpy.ops.wm.save_as_mainfile(filepath=str(out/"T05_cooker_EDITABLE.blend"))
 # Avoid exporting the studio; protect low draw-call model in Godot.
 bpy.ops.object.select_all(action="DESELECT")
 for obj in made:
-    if obj.type=="CURVE":
+    if obj.type in ("CURVE","META"):
         bpy.context.view_layer.objects.active=obj
         obj.select_set(True)
         bpy.ops.object.convert(target="MESH")
