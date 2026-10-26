@@ -18,6 +18,19 @@ from typing import Any
 REQUIRED_MAPS=("base_color","normal","roughness","metallic","ambient_occlusion")
 REQUIRED_VIEWS=("front","rear","left","right","three-quarter","overhead","in_game_use")
 
+def plausible_baked_pixel(kind: str, rgba: tuple[int,int,int,int]) -> bool:
+    """Check real encoded channel semantics, not merely alpha or file size."""
+    red,green,blue,alpha=rgba
+    if alpha<128:return False
+    if kind=="normal":
+        # Tangent-space outward +Z: reject Blender 4.0's 128,128,128 neutral
+        # clear and opaque-magenta bake-target sentinel.
+        return blue>=160 and blue>=red+14 and blue>=green+14
+    if kind=="ambient_occlusion":
+        # AO is an occlusion scalar, not black/colored placeholder pixels.
+        return max(red,green,blue)>=32 and max(red,green,blue)-min(red,green,blue)<=10
+    raise ValueError("Unsupported bake semantic "+str(kind))
+
 def digest(path: pathlib.Path) -> str:
     h=hashlib.sha256()
     with path.open("rb") as f:
@@ -138,16 +151,7 @@ def run(manifest: dict, policy: dict, root: pathlib.Path, mode: str) -> dict:
                         for i in range(sample_count):
                             offset=(i*104729)%count
                             red,green,blue,a=rgba.getpixel((offset%rgba.width,offset//rgba.width))
-                            if a<128:
-                                continue
-                            if k=="normal":
-                                # Tangent-space normal maps must point outward;
-                                # alpha-only flat gray is not encoded +Z.
-                                real+=blue>=160 and blue>=red+14 and blue>=green+14
-                            else:
-                                # AO is a gray occlusion scalar. A wholly black
-                                # bake is not a meaningful isolated-mesh AO.
-                                real+=max(red,green,blue)>=32 and max(red,green,blue)-min(red,green,blue)<=10
+                            real+=plausible_baked_pixel(k,(red,green,blue,a))
                         plausible=real/max(1,sample_count)
                         check("baked_channel_semantics_"+k,plausible>=.05,
                               {"plausible_sample_ratio":round(plausible,5),
