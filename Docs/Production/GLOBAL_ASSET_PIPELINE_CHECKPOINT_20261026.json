@@ -10,7 +10,7 @@
     "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
     "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
   ],
-  "status": "GLOBAL_SOURCE_13_OF_13_PASS__NONFLAT_BVH_NORMAL_VERIFIED__NEW_OCCLUSION_AND_TANGENT_RUNS_BLOCKED_BY_APT_SETUP__DRAFT_NOT_MERGED",
+  "status": "GLOBAL_13_TESTS_PASS__GEOMETRY_AO_NORMAL_AND_TANGENTS_PASS_128PX__GODOT_4_7_2_IMPORT_PASS__SEVEN_ANGLE_RENDER_PENDING__DRAFT_UNMERGED",
   "complete_with_evidence": [
     {
       "milestone": "Separate from unapproved T05 branch",
@@ -29,8 +29,8 @@
     },
     {
       "milestone": "Seven-angle isolated Godot asset capture utility",
-      "status": "SOURCE_ONLY",
-      "evidence": "capture_isolated_asset.gd, not yet an actual shipping scene"
+      "status": "GODOT_IMPORT_PASS_SEVEN_ANGLE_RENDER_PENDING",
+      "evidence": "Run 40380585851: Godot 4.7.2 successfully imported unmodified synthetic GLB, one mesh/material with normal bound. Seven-angle capture CI run 40381157048 pending; no in-game approval."
     },
     {
       "milestone": "Raw Android physical profiler evidence collection",
@@ -39,24 +39,24 @@
     },
     {
       "milestone": "Khronos glTF validator and glTF Transform inspection",
-      "status": "TECHNICAL_GLTF_PASS_WITH_1_TANGENT_WARNING",
-      "evidence": "Run 40374522541: 0 Khronos errors and 1 missing TANGENT warning; exported TANGENT verification pending run 40375345435"
+      "status": "PASS_AT_128PX_SYNTHETIC_SMOKE",
+      "evidence": "Run 40379776370: Khronos 0 errors/0 warnings, GLB tangent attribute present; map hash and embedded normal exact bytes match"
     },
     {
       "milestone": "Reusable Blender master/low mesh, texture baking and export",
-      "status": "PASS_BVH_NORMAL_ONLY_AO_OCCLUSION_NOT_YET_PROVEN",
-      "evidence": "Run 40374522541 verified 14,353 geometry hits, 775 true normal map colors, 87.604% UV coverage, image embedded in GLB exact-byte match, candidate gate PASS; convex smoke AO all-white (zero intersections)"
+      "status": "PASS_BVH_GEOMETRY_NORMAL_AND_AO_SYNTHETIC_128PX",
+      "evidence": "Run 40379776370: 9692 UV texels, 77536 AO rays, 4092 actual occlusions, 1190 normal colors, 9 AO shades; not approved for 4K production"
     }
   ],
   "critical_unresolved": [
-    "Wait for bounded Blender setup on latest run 40379776370, then inspect saved 128px AO PNG from actual adjoining-occluder fixture: >0 ray intersections and multiple shades; compare independent audit JSON.",
-    "Verify latest GLB has TANGENT on normal-mapped primitives and Khronos glTF validator has 0 errors and 0 warnings; verify normal PNG pixels exactly equal embedded image.",
-    "If apt mirror setup times out, use validated installation alternative and preserve failure logs; do not claim an AO or tangents pass without artifacts.",
-    "Native Blender 4.0.2 Cycles baker remains broken (blank UV, flat-gray normal and black AO) and is prohibited until raster proof.",
-    "CPU BVH geometry fallback capped at 1024px; production 4K bake and speed not verified.",
-    "Real owner-source-bound 4K in-game Godot seven-angle renders and material/AO binding not verified.",
-    "Physical Android sustained 60fps, thermal, GPU/CPU, draw calls and memory profile not available.",
-    "Independent critic reference/visual-language 10/10, all other scores >9, owner acceptance and integration authorization absent. PR #103 remains draft/unmerged; no asset promotion."
+    "Seven-angle isolated Godot rendering smoke run 40381157048 pending; verify 7 distinct 1280x720 genuine engine PNGs and independent nonblank/multi-angle color checks; no production scene claim.",
+    "Blender 4.0.2 native Cycles still produces invalid empty/flat bake outputs; BVH CPU fallback used for validated 128px geometry fixture.",
+    "CPU BVH fallback limited to 1024px; need 4K map production quality and throughput validation without weakening visual/performance standard.",
+    "Real, owner-exact-reference, full native Havenline shipping scene and 3840x2160 multi-angle in-game renders not verified.",
+    "Real device Android 60 FPS, thermal, GPU/CPU frame times, draw calls and memory not verified.",
+    "Independent genuine visual critic, reference/visual language exact 10/10 and other scores >9 not complete.",
+    "Explicit user approval and integration owner approval absent; PR #103 stays draft and unmerged.",
+    "Source-bound packaging, material/AO connection in actual game and production asset parity remain open."
   ],
   "frozen_requirements": [
     "Exact reference style and visual language 10/10, all mandatory other critic dimensions >9/10, no known defects",
@@ -65,7 +65,7 @@
     "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
     "Preserve source hashes and evidence across retries"
   ],
-  "next_action": "Check run 40379776370; if install passes, independently inspect geometry-derived normal/AO PNGs, GLB embedded normal pixels, tangents and Khronos output; rerun until all technical tests pass. Otherwise diagnose bounded apt failure and switch to verified dependency install path. Preserve draft without touching T05 or shipping assets.",
+  "next_action": "Inspect run 40381157048 for seven real isolated Godot 1280x720 screenshots. Review actual pixels/hashes; fix renderer capture defects and retest. Then benchmark scaled BVH, test real author assets in shipping 4K scene, physical Android, independent critique and get explicit approvals. No merge or promotion before all gates.",
   "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
   "superseded_wrong_base_pull_request": 102,
   "latest_work": {
@@ -114,6 +114,30 @@
     "latest_real_ao_tangent_workflow_run": 40379776370,
     "latest_workflow_commit": "9e1cf8f1b0f9f07f2846ba4c6b4515b74a836e4b",
     "latest_critic_status": "INTERNAL_REVIEW_ONLY_NOT_INDEPENDENT",
-    "latest_discovery": "Prior AO/tangent runs remained in Blender apt install. Local apt mirror update also timed out at 18 seconds, supporting package-mirror blockage. No new AO/tangent artifacts have yet passed."
+    "latest_discovery": "Prior AO/tangent runs remained in Blender apt install. Local apt mirror update also timed out at 18 seconds, supporting package-mirror blockage. No new AO/tangent artifacts have yet passed.",
+    "confirmed_full_bake_run": 40379776370,
+    "latest_isolated_godot_import_run": 40380585851,
+    "current_seven_view_render_run": 40381157048,
+    "normal_unique_colors": 1190,
+    "ao_unique_colors": 9,
+    "ao_real_intersections": 4092,
+    "rays_against_actual_geometry": 77536,
+    "rasterized_uv_pixels": 9692,
+    "map_size": [
+      128,
+      128
+    ],
+    "khronos_errors": 0,
+    "khronos_warnings": 0,
+    "glb_has_explicit_tangents": true,
+    "godot_engine_version": "4.7.2.stable.official.ed1daf0bf",
+    "godot_import_mesh_instances": 1,
+    "godot_normal_mapped_material_surfaces": 1,
+    "godot_import_candidate_sha256": "0be5404ca8e14ab90197f5c4d514603842447af5e262322595cad0a0e832817d",
+    "normal_texture_sha256": "86ec5980bb84a9989111d5f142ff190f0d10157128d3294d66664956359a785a",
+    "ao_texture_sha256": "4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134",
+    "godot_import_artifact_id": 12678222113,
+    "independent_image_analysis": "Actual 128px PNG distributions independently inspected; 1190 normal colors, 9 AO shades, 4092 true AO ray intersections, embedded normal exact PNG hash.",
+    "independent_review": "INTERNAL_REVIEW_ONLY; no independent visual critic"
   }
 }
