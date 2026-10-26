@@ -8,7 +8,7 @@ import unittest
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
-from asset_gate import run, get_file, parse_glb, plausible_baked_pixel, embedded_glb_normal_png
+from asset_gate import run, get_file, parse_glb, plausible_baked_pixel, embedded_glb_normal_png, shipping_ao_contract_valid
 
 POLICY=pathlib.Path(__file__).resolve().parents[4]/"Docs/Production/GLOBAL_ASSET_AUTHORING_POLICY.json"
 TEMPLATE=ROOT/"examples/T05-cooker-asset.json"
@@ -92,6 +92,31 @@ class AssetGateTests(unittest.TestCase):
             write_glb(path,invalid)
             with self.assertRaises(ValueError):
                 embedded_glb_normal_png(path,parse_glb(path))
+
+    def test_shipping_ao_source_and_scene_binding_fail_closed(self):
+        sha="a"*64
+        ao="b"*64
+        legitimate={"shipping_scene_loaded":True,"candidate_sha256":sha,
+                    "ao_binding":{"engine":"Godot","shipping_scene_loaded":True,
+                        "candidate_sha256":sha,"texture_sha256":ao,
+                        "bound_material_surfaces":1,
+                        "before":{"path":"native/ao-off.png","sha256":"c"*64},
+                        "after":{"path":"native/ao-on.png","sha256":"d"*64}}}
+        self.assertTrue(shipping_ao_contract_valid(legitimate,sha,ao))
+        for change in ("shipping_scene_loaded","candidate_sha256","texture_sha256",
+                       "bound_material_surfaces","before","after"):
+            bad=copy.deepcopy(legitimate)
+            target=bad if change=="shipping_scene_loaded" else bad["ao_binding"]
+            if change=="shipping_scene_loaded":target[change]=False
+            elif change=="candidate_sha256":target[change]="z"*64
+            elif change=="texture_sha256":target[change]="z"*64
+            elif change=="bound_material_surfaces":target[change]=0
+            else:target.pop(change)
+            self.assertFalse(shipping_ao_contract_valid(bad,sha,ao),
+                             "Accepted invalid AO binding "+change)
+        isolated=copy.deepcopy(legitimate)
+        isolated["shipping_scene_loaded"]=False
+        self.assertFalse(shipping_ao_contract_valid(isolated,sha,ao))
 
     def test_release_never_inferred_from_technical_lint(self):
         with tempfile.TemporaryDirectory() as workspace:
