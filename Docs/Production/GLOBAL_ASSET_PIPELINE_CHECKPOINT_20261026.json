@@ -10,7 +10,7 @@
     "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
     "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
   ],
-  "status": "GLOBAL_TOOLING_IMPLEMENTED_AND_SOURCE_GATES_PASS__BLENDER_PIXEL_BAKE_NOT_VERIFIED__NOT_MERGED",
+  "status": "GLOBAL_SOURCE_POLICY_GATES_PASS__NATIVE_CYCLES_PIXEL_BAKE_FAILS__BVH_FALLBACK_CI_UNVERIFIED__NOT_MERGED",
   "complete_with_evidence": [
     {
       "milestone": "Separate from unapproved T05 branch",
@@ -49,13 +49,14 @@
     }
   ],
   "critical_unresolved": [
-    "Reproduce a nontransparent normal and AO bake from actual Blender high/low geometry; test PNG pixels after save. Current debug run 40355832280 pending.",
-    "Ensure asset_gate.py rejects transparent maps, runs candidate against actual bake report and reference pixels, and inspect complete artifact",
-    "Native Godot import and game-world source-bound 3840x2160 reference views for real assets remain untested by global framework",
-    "Physical Android 60 FPS thermal/memory/CPU/GPU evidence not supplied",
-    "Krita and Material Maker are supported as export map sources but not installed/verified by this framework",
-    "Independent critic run and explicit owner acceptance not obtained",
-    "Integration owner approval and PR #103 merge pending"
+    "Inspect run 40364514593 for geometry-derived BVH maps: require non-flat color-encoded normal map, plausible AO and official glTF validation; verify artifact pixels independently before PASS",
+    "Native Blender 4.0.2 Cycles bakes for UV, normal and AO remain INVALID (all-black UV, flat gray normal, black AO); do not mistake opaque maps for actual bake",
+    "BVH CPU fallback limited to 1024px; production 4K quality and performance must be demonstrated without lowering requirements",
+    "Add explicit negative-pixel and provenance regression tests; ensure real author reference and UV island quality",
+    "Native Godot import and shipping in-game 3840x2160 seven-angle pixels remain untested",
+    "Physical Android 60 FPS device thermal/drawcalls/memory/CPU/GPU evidence not supplied",
+    "Independent critic, owner acceptance, and integration-owner approval absent",
+    "Retain draft PR #103 separate from unfinished T05 work; no merge or asset promotion"
   ],
   "frozen_requirements": [
     "Exact reference style and visual language 10/10, all mandatory other critic dimensions >9/10, no known defects",
@@ -64,7 +65,25 @@
     "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
     "Preserve source hashes and evidence across retries"
   ],
-  "next_action": "Review run 40355832280 AO/normal buffer debug and fix Blender Cycles bake PNG opacity while retaining fail-closed candidate gate. Then re-run Khronos and Godot smoke from same bytes.",
+  "next_action": "Review BVH bake CI run 40364514593 and download artifact for independent alpha/normal/AO pixel inspection. Fix defects, add regression negatives, rerun Khronos. Keep Godot/Android/style and promotion gates open.",
   "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
-  "superseded_wrong_base_pull_request": 102
+  "superseded_wrong_base_pull_request": 102,
+  "latest_work": {
+    "date": "2026-10-26",
+    "scope": "GLOBAL_ASSET_TOOLING_ONLY",
+    "original_transparent_bake_run": 40355106912,
+    "opaque_false_positive_run": 40362621094,
+    "uv_diagnostic_failure_run": 40363461455,
+    "deterministic_bvh_fallback_run": 40364514593,
+    "bvh_fallback_commit": "f4dc840b4dd4d0c9c9dfbc201d3c99692b1783b4",
+    "review": "INTERNAL_REVIEW_NOT_SEPARATE_CRITIC",
+    "observations": [
+      "Old original normal/AO outputs had 0% nontransparent pixels",
+      "Opacity-only fix produced 100% opaque but uniform 128,128,128 normal and uniform 0,0,0 AO",
+      "Blender UV diagnostic produced uniform 0,0,0 despite active low UV and target node",
+      "asset_gate now fails closed on valid channel semantics, not merely alpha",
+      "Separate BVH geometry-based high-to-low/AO backend added, smoke run not yet accepted pending pixel inspection"
+    ],
+    "rollback": "Original shipping assets and approved assets unchanged; PR #103 still draft"
+  }
 }
