@@ -68,43 +68,78 @@ def _add_normal(mat,image,bake_uv_name=None):
     mat.node_tree.links.new(normal.outputs["Normal"],bs.inputs["Normal"])
 
 def _author_separate_bake_uv(low, materials):
-    """Create UV1 strictly for new geometry maps, preserving artist UV0.
+    """Deterministic UV1 repack of connected material components, no UV0 edit.
 
-    This creates extra candidate data; it never unwraps or rewrites the
-    existing UV0 color texture coordinates. It is not visual style approval.
+    Original authored UV0 coordinates are never touched. Each connected mesh
+    piece receives its own padded UV1 tile; within-piece UV shell structure is
+    retained. A subsequent geometric UV-overlap audit MUST still pass: this
+    never silently unrolls an ambiguous or self-overlapping original island.
     """
+    import math
     uv0=low.data.uv_layers.active
     original=[tuple(v.uv) for v in uv0.data]
     if len(low.data.uv_layers)!=1:
-        raise RuntimeError("Separate bake UV mode needs one unambiguous original UV0")
+        raise RuntimeError("Separate bake UV needs exactly one original UV0")
     uv1=low.data.uv_layers.new(name="HAVENLINE_BAKE_UV")
+    used_by_vertex={}
+    for polygon in low.data.polygons:
+        used_by_vertex.setdefault(polygon.material_index,{})
+    for material_index in range(len(materials)):
+        members=[p for p in low.data.polygons if p.material_index==material_index]
+        parent={p.index:p.index for p in members}
+        def find(x):
+            while x!=parent[x]:
+                parent[x]=parent[parent[x]]
+                x=parent[x]
+            return x
+        def union(a,b):
+            ra,rb=find(a),find(b)
+            if ra!=rb:parent[rb]=ra
+        vertex_owner={}
+        for poly in members:
+            for vertex_idx in poly.vertices:
+                previous=vertex_owner.get(vertex_idx)
+                if previous is None:vertex_owner[vertex_idx]=poly.index
+                else:union(poly.index,previous)
+        components={}
+        for poly in members:
+            components.setdefault(find(poly.index),[]).append(poly)
+        pieces=list(components.values())
+        if not pieces:
+            raise RuntimeError("Empty material slot "+str(material_index))
+        grid=math.ceil(math.sqrt(len(pieces)))
+        margin=.035
+        for piece_index,polygons in enumerate(pieces):
+            loops=[loop_idx for poly in polygons for loop_idx in poly.loop_indices]
+            x=[uv0.data[loop_idx].uv.x for loop_idx in loops]
+            y=[uv0.data[loop_idx].uv.y for loop_idx in loops]
+            xmin,xmax,ymin,ymax=min(x),max(x),min(y),max(y)
+            if xmax-xmin<1e-8 or ymax-ymin<1e-8:
+                raise RuntimeError("Degenerate authored UV island in "+materials[material_index].name)
+            tile_x=piece_index%grid
+            tile_y=piece_index//grid
+            for loop_idx in loops:
+                source=uv0.data[loop_idx].uv
+                u=(source.x-xmin)/(xmax-xmin)
+                v=(source.y-ymin)/(ymax-ymin)
+                uv1.data[loop_idx].uv=((tile_x+margin+u*(1-2*margin))/grid,
+                                      (tile_y+margin+v*(1-2*margin))/grid)
+        print("HAVENLINE_BAKE_UV1_PACK",materials[material_index].name,
+              "connected_components",len(pieces),"tile_grid",grid,flush=True)
     low.data.uv_layers.active=uv1
-    bpy.ops.object.select_all(action="DESELECT")
-    low.select_set(True)
-    bpy.context.view_layer.objects.active=low
-    bpy.context.scene.tool_settings.mesh_select_mode=(False,False,True)
-    for i in range(len(materials)):
-        bpy.ops.object.mode_set(mode="OBJECT")
-        for polygon in low.data.polygons:
-            polygon.select=(polygon.material_index==i)
-        bpy.ops.object.mode_set(mode="EDIT")
-        bpy.ops.uv.smart_project(island_margin=.025)
-        bpy.ops.object.mode_set(mode="OBJECT")
-    # glTF normal tangents should be calculated from the explicit UV1 atlas.
     uv1.active_render=True
     uv0.active_render=False
     if [tuple(v.uv) for v in uv0.data]!=original:
-        raise RuntimeError("Source albedo UV0 was modified by candidate bake UV generation")
+        raise RuntimeError("Original author color UV0 changed during UV1 preparation")
     for mat in materials:
         nodes=mat.node_tree.nodes
-        # Lock any implicit source-color sampling to the original UV0.
         uvnode=nodes.new("ShaderNodeUVMap")
         uvnode.name="HL_PRESERVE_AUTHOR_UV0"
         uvnode.uv_map=uv0.name
         for image_node in list(nodes):
-            if image_node.type=="TEX_IMAGE" and image_node.inputs["Vector"].is_linked is False:
+            if image_node.type=="TEX_IMAGE" and not image_node.inputs["Vector"].is_linked:
                 mat.node_tree.links.new(uvnode.outputs["UV"],image_node.inputs["Vector"])
-    return uv1.name, uv0.name
+    return uv1.name,uv0.name
 
 def main():
     argv=sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else []
