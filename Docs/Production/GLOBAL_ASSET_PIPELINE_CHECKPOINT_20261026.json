@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-26",
+  "program": "HAVENLINE Global Asset Studio",
+  "scope": "entire game, all current and future TXX tasks, all biomes and props",
+  "repository": "ksolo21-web/HAVENLINE",
+  "integration_pull_request": 103,
+  "integration_base": "codex/havenline-sequential-task-01",
+  "approved_reference_authority": [
+    "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
+    "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
+  ],
+  "status": "GLOBAL_TOOLING_IMPLEMENTED_AND_SOURCE_GATES_PASS__BLENDER_PIXEL_BAKE_NOT_VERIFIED__NOT_MERGED",
+  "complete_with_evidence": [
+    {
+      "milestone": "Separate from unapproved T05 branch",
+      "status": "PASS",
+      "evidence": "PR #103 compared against f74a84a2a288ab3d3935fba7a6cb9b975c2df239: only 14 global tool/policy/workflow files"
+    },
+    {
+      "milestone": "Global policy and ten negative/positive contract tests",
+      "status": "PASS",
+      "evidence": "GitHub Actions run 40356554818 succeeded"
+    },
+    {
+      "milestone": "Reference owner-image binding and frozen budgets",
+      "status": "PASS_SOURCE_TESTED",
+      "evidence": "asset_gate.py and T05 cooker example"
+    },
+    {
+      "milestone": "Seven-angle isolated Godot asset capture utility",
+      "status": "SOURCE_ONLY",
+      "evidence": "capture_isolated_asset.gd, not yet an actual shipping scene"
+    },
+    {
+      "milestone": "Raw Android physical profiler evidence collection",
+      "status": "SOURCE_ONLY",
+      "evidence": "device_capture.py requires attached phone, not tested"
+    },
+    {
+      "milestone": "Khronos glTF validator and glTF Transform inspection",
+      "status": "TECHNICALLY_EXECUTED_ON_SMOKE_ARTIFACT",
+      "evidence": "earlier run 40355106912 success but baked texture PNGs transparent: artifact invalid for material gate"
+    },
+    {
+      "milestone": "Reusable Blender master/low mesh, texture baking and export",
+      "status": "BLOCKED_PIXEL_BAKE",
+      "evidence": "GlTF exports and save succeeded, but independent raster inspection found normal/AO fully transparent"
+    }
+  ],
+  "critical_unresolved": [
+    "Reproduce a nontransparent normal and AO bake from actual Blender high/low geometry; test PNG pixels after save. Current debug run 40355832280 pending.",
+    "Ensure asset_gate.py rejects transparent maps, runs candidate against actual bake report and reference pixels, and inspect complete artifact",
+    "Native Godot import and game-world source-bound 3840x2160 reference views for real assets remain untested by global framework",
+    "Physical Android 60 FPS thermal/memory/CPU/GPU evidence not supplied",
+    "Krita and Material Maker are supported as export map sources but not installed/verified by this framework",
+    "Independent critic run and explicit owner acceptance not obtained",
+    "Integration owner approval and PR #103 merge pending"
+  ],
+  "frozen_requirements": [
+    "Exact reference style and visual language 10/10, all mandatory other critic dimensions >9/10, no known defects",
+    "Current approved art, T05 R07 candidate, gameplay scripts and frozen sockets remain untouched",
+    "No automatic promotion or fake FPS verification",
+    "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
+    "Preserve source hashes and evidence across retries"
+  ],
+  "next_action": "Review run 40355832280 AO/normal buffer debug and fix Blender Cycles bake PNG opacity while retaining fail-closed candidate gate. Then re-run Khronos and Godot smoke from same bytes.",
+  "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
+  "superseded_wrong_base_pull_request": 102
+}
