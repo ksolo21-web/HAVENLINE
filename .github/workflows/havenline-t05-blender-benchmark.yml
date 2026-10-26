@@ -1,0 +1,68 @@
+name: T05 Blender source model and guarded GLB benchmark
+on:
+  push:
+    branches: ['havenline/T05-r18-visual-corrections-20261025']
+    paths:
+      - 'tools/havenline/blender/**'
+      - '.github/workflows/havenline-t05-blender-benchmark.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t05-blender-benchmark-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  blender-cooker:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Check out exact source, without downloading production LFS
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 1
+          lfs: false
+      - name: Install free Blender and validation tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y blender
+          blender --version | tee blender-version.txt
+          python3 -m pip install --disable-pip-version-check numpy trimesh pillow
+      - name: Generate editable source, candidate GLB, and four real Blender renders
+        run: |
+          set -euo pipefail
+          mkdir -p t05-blender-evidence
+          blender -b -t 2 --factory-startup             --python tools/havenline/blender/t05_cooker_benchmark.py             -- --out "$PWD/t05-blender-evidence" > t05-blender-evidence/build.log 2>&1 || {
+              tail -100 t05-blender-evidence/build.log
+              exit 1
+            }
+      - name: Validate candidate with strict frozen-game contract
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/blender/verify_t05_blender.py             --out t05-blender-evidence             --baseline-catalog HavenlineGodot/assets/stations_v2/catalog.json | tee t05-blender-evidence/validation.log
+          git diff --exit-code -- HavenlineGodot/assets/stations_v2
+          test -z "$(git ls-files --others --exclude-standard HavenlineGodot/assets/stations_v2)"
+      - name: Compose visually labeled comparison contact sheet
+        run: |
+          python3 - <<'PY'
+          from PIL import Image,ImageDraw
+          from pathlib import Path
+          p=Path("t05-blender-evidence")
+          names=["front","three-quarter","right","rear"]
+          sheet=Image.new("RGB",(1536,1616),(21,32,51))
+          for index,name in enumerate(names):
+              with Image.open(p/("T05_cooker_"+name+".png")) as img:
+                  sheet.paste(img.convert("RGB"),((index%2)*768,(index//2)*768+40))
+          ImageDraw.Draw(sheet).text((20,10),"HAVENLINE T05 — BLENDER STUDIO CANDIDATE / NOT IN-GAME / NOT APPROVED",fill=(235,237,243))
+          sheet.save(p/"T05_Benchmark_4_Angles.png")
+          PY
+      - name: Archive explicit candidate evidence, even on failure
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: T05-Blender-cooker-candidate-${{ github.sha }}
+          path: |
+            blender-version.txt
+            t05-blender-evidence/
+          retention-days: 30
+          if-no-files-found: warn
