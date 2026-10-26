@@ -97,6 +97,14 @@ def authored_color(material: str, position, normal, asset_id: str = ""):
 
     if material == "cream":
         tone = _clamp(.88 + .055 * broad + .020 * fine + .015 * upward, .79, 1.0)
+        if asset_id == "wood_stack" and abs(nz) > .91:
+            # End-grain is warm ochre timber, never the pale rope/cream color.
+            # Keep the same shared material/PBR slot; only sculpt-bound vertex
+            # pigment differs on the log-end cap whose normal faces +/-Z.
+            return (_clamp(tone), _clamp(tone*.68), _clamp(tone*.36), 1.0)
+        if asset_id == "wood_stack":
+            # The rope's natural tan dye remains distinct from orange cut ends.
+            return (_clamp(tone*.85), _clamp(tone*.81), _clamp(tone*.67), 1.0)
         if asset_id == "stone_stack":
             # Neutral-gray quarried rock; old cream stones read like tan snowballs.
             return (_clamp(tone * .68), _clamp(tone * .79), _clamp(tone * .98), 1.0)
