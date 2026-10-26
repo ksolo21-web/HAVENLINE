@@ -73,7 +73,7 @@ func _capture() -> void:
         await RenderingServer.frame_post_draw
         var img := viewport.get_texture().get_image()
         assert(img.get_width() == 1280 and img.get_height() == 720, "Native Godot screenshot dimensions changed")
-        var filename := "isolated-godot-" + key + ".png"
+        var filename: String = "isolated-godot-" + str(key) + ".png"
         assert(img.save_png(out_path.path_join(filename)) == OK, "Cannot write Godot evidence")
         evidence.append({"view": key, "file": filename, "resolution": [img.get_width(), img.get_height()]})
     var report := {
@@ -97,7 +97,11 @@ func _capture() -> void:
     quit(0)
 
 func _count_meshes(node: Node) -> int:
-    var count := 1 if node is MeshInstance3D and node.mesh != null else 0
+    var count := 0
+    if node is MeshInstance3D:
+        var instance := node as MeshInstance3D
+        if instance.mesh != null:
+            count = 1
     for child in node.get_children():
         count += _count_meshes(child)
     return count
