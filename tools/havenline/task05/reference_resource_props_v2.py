@@ -39,7 +39,7 @@ def _snow_base(b, size):
         (0.0,-.03*d,.21*w,.13*d,.02),
     )
     for x,z,rx,rz,yaw in patches:
-        b.sphere("snow",(x,.045,z),(rx,.055,rz),4,9,rotation=(0,yaw,0))
+        b.sphere("snow",(x,.045,z),(rx,.055,rz),4,7,rotation=(0,yaw,0))
 
 
 def _pallet(b, width, depth, y=.14, material="wood"):
@@ -54,6 +54,41 @@ def _corner_post(b, x, z, height, material="wood_light"):
     b.beveled_box(material, (x, .24 + height * .5, z), (.12, height, .12), .035)
 
 
+def _authored_fish_body(b, center, length, yaw):
+    """Tapered sculpted skin with a head, belly and tail instead of a lozenge.
+
+    Rings are symmetric in count but asymmetric in profile. The 12-sided skin
+    and two caps use the same triangle allocation as the former smooth fish;
+    separate outward normals retain readable volume under studio lighting.
+    """
+    profile=((-1.0,.12),(-.79,.38),(-.48,.74),(-.08,1.0),
+             (.35,.91),(.73,.56),(1.0,.14))
+    sides=12
+    vertices=[];normals=[];indices=[]
+    for t,rad in profile:
+        for j in range(sides):
+            a=math.tau*float(j)/sides
+            sn=math.sin(a);cs=math.cos(a)
+            vertices.append((length*t,.115*rad*sn,.13*rad*cs))
+            normals.append((0.0,sn,cs))
+    for k in range(len(profile)-1):
+        for j in range(sides):
+            a=k*sides+j; bj=k*sides+(j+1)%sides
+            c=(k+1)*sides+(j+1)%sides;d=(k+1)*sides+j
+            indices.extend((a,bj,c,a,c,d))
+    b.triangles("cyan",vertices,normals,indices,center,(0,yaw,0))
+    for end,sign in ((0,-1),(len(profile)-1,1)):
+        xs=profile[end][0]*length
+        rad=profile[end][1]
+        vv=[(xs,0.0,0.0)]
+        for j in range(sides):
+            a=math.tau*float(j)/sides
+            vv.append((xs,.115*rad*math.sin(a),.13*rad*math.cos(a)))
+        capn=(float(sign),0.0,0.0)
+        ii=[]
+        for j in range(sides):ii.extend((0,1+j,1+(j+1)%sides))
+        b.triangles("cyan",vv,[capn]*len(vv),ii,center,(0,yaw,0))
+
 def _crate_shell(b, name, fish=False):
     _snow_base(b, (1.68, .10, 1.34))
     _pallet(b, 1.48, 1.10, .12)
@@ -67,6 +102,9 @@ def _crate_shell(b, name, fish=False):
             b.beveled_box("wood", (x, y, 0), (.10, .16, .92), .035)
         _corner_post(b, x, -.49, .74)
         _corner_post(b, x, .49, .74)
+    # Continuous inset liner closes the hollow box under the visible payload;
+    # short inner boards give the fish believable support from side angles.
+    b.beveled_box("wood_light", (0, .71, 0), (1.22, .055, .82), .022)
     # Cross-bracing is real geometry and stays inside the locked footprint.
     for sign in (-1, 1):
         b.beveled_box("wood_light", (0, .55, -.555), (.11, .80, .07), .028,
@@ -80,10 +118,15 @@ def _crate_shell(b, name, fish=False):
         # cyan family but no longer float above an open generic cube.
         b.beveled_box("snow", (0, 1.005, 0), (1.08, .06, .70), .025)
         for i, (x, z, r) in enumerate(((-.32,-.10,-.20),(.05,.12,.18),(.34,-.12,-.12))):
-            b.sphere("cyan", (x,1.085,z), (.31,.11,.14), 7, 14, rotation=(0,r,0))
-            tail_x=x-.28*math.cos(r); tail_z=z+.28*math.sin(r)
-            b.beveled_box("blue", (tail_x,1.085,tail_z), (.16,.045,.22), .018, rotation=(0,r,0))
-            b.cylinder("cream", (x+.10,1.10,z-.02), .025, .06, 8, rotation=(math.pi/2,0,0))
+            # Unequal tapered body proportions and small embedded eyes/gill marks;
+            # flesh intersects the ice bed rather than hovering over a hollow box.
+            length=(.30,.33,.27)[i]
+            _authored_fish_body(b,(x,1.075,z),length,r)
+            tail_x=x-length*.91*math.cos(r); tail_z=z+length*.91*math.sin(r)
+            for dz in (-.075,.075):
+                b.rod_between("blue",(tail_x,1.075,tail_z),(tail_x-.12,1.075,tail_z+dz),.027,6)
+            b.sphere("cream", (x+.11,1.084,z-.045), (.026,.018,.015), 4, 8)
+            b.rod_between("blue",(x+.065,1.102,z-.107),(x+.10,1.045,z-.105),.012,6)
     else:
         # Hardware plate/rope lock keeps cargo identity visible at gameplay zoom.
         b.beveled_box("blue", (0,.57,-.565), (.48,.34,.055), .025)
@@ -94,29 +137,80 @@ def _crate_shell(b, name, fish=False):
 
 
 def build_wood_stack():
-    b = legacy.MeshBuilder("wood_stack")
-    _snow_base(b, (1.68, .10, 1.16))
-    _pallet(b, 1.50, .98, .12)
-    # Timber rack echoes the early-camp stockpile rather than a loose pyramid.
-    for x in (-.66, .66):
-        _corner_post(b, x, -.40, .78)
-        _corner_post(b, x, .40, .78)
-    for level, y in enumerate((.31, .55, .79)):
-        count = 4 if level < 2 else 3
-        spacing = .34
-        for i in range(count):
-            x=(i-(count-1)/2)*spacing
-            b.cylinder("wood", (x,y,0), .135, .82, 14, rotation=(math.pi/2,0,0))
-            for z in (-.415,.415):
-                b.cylinder("cream", (x,y,z), .108, .025, 12, rotation=(math.pi/2,0,0))
-    # Bound blue weather cover and lashing; these make the bundle intentionally
-    # built and readable, not a group of raw cylinders.
-    b.beveled_box("blue", (0,1.00,.04), (1.30,.12,.88), .055, rotation=(0,0,.015))
-    b.beveled_box("snow", (-.18,1.075,.02), (.82,.07,.70), .030, rotation=(0,.08,.02))
-    for x in (-.48,.48):
-        b.beveled_box("yellow", (x,.62,-.455), (.055,.86,.045), .015)
+    """18677(1).png: sculpted cut logs in a rope-bound snow-topped pile.
+
+    The supplied render has no rigid box or rack; keep the original object ID,
+    footprint, sockets and station placements, but honor the piled-log silhouette.
+    """
+    b=legacy.MeshBuilder("wood_stack")
+    _snow_base(b,(1.60,.10,1.12))
+    logs=(
+        (-.38,.27,.03,.205,.88),(.05,.26,.02,.225,.91),(.44,.26,.0,.19,.82),
+        (-.32,.61,-.06,.215,.91),(.21,.59,.04,.23,.95),
+        (-.10,.89,-.03,.215,.91),(.47,.50,-.03,.118,.66),(.52,.68,.04,.092,.65),
+    )
+    for i,(x,y,z,r,length) in enumerate(logs):
+        b.cylinder("wood",(x,y,z),r,length,13,rotation=(math.pi/2,0,0))
+        for front in (-1,1):
+            face_z=z+front*length*.5
+            b.cylinder("cream",(x,y,face_z),r*.83,.017,12,rotation=(math.pi/2,0,0))
+            for rad in (.33,.61):
+                b.torus("wood_light",(x,y,face_z+front*.015),r*rad,.010,12,4,rotation=(math.pi/2,0,0))
+        if i in (0,2,3,5):
+            b.sphere("snow",(x-.025,y+r*.88,z-.07),(r*.95,r*.24,length*.30),3,9)
+    for z in (-.28,.29):
+        b.torus("cream",(-.02,.50,z),.48,.052,20,6,rotation=(math.pi/2,0,0))
+        b.torus("yellow",(-.02,.50,z+.027),.466,.016,20,4,rotation=(math.pi/2,0,0))
+    for x,y,z in ((-.30,.38,-.21),(.27,.67,.19)):
+        b.sphere("dark",(x,y,z),(.075,.065,.045),3,8)
     return b
 
+
+def _ore_crystal(b, material, x, y, z, height, radius, sides=6, twist=0.0):
+    """Closed faceted pointed ore prism; authored plane normals, no default cone."""
+    low=[];shoulder=[]
+    for j in range(sides):
+        a=math.tau*j/sides+twist
+        low.append((x+math.cos(a)*radius,y,z+math.sin(a)*radius))
+        shoulder.append((x+math.cos(a)*radius*.82,y+height*.64,z+math.sin(a)*radius*.82))
+    tip=(x-radius*.08,y+height,z+radius*.13)
+    for j in range(sides):
+        k=(j+1)%sides
+        for verts in ((low[j],low[k],shoulder[k]),(low[j],shoulder[k],shoulder[j]),(shoulder[j],shoulder[k],tip)):
+            aa,bb,cc=verts
+            normal=legacy.vnorm(legacy.vcross(legacy.vsub(bb,aa),legacy.vsub(cc,aa)))
+            b.triangles(material,list(verts),[normal]*3,[0,1,2])
+    b.triangles(material,low,[(0.,-1.,0.)]*sides,[i for k in range(1,sides-1) for i in (0,k,k+1)])
+
+
+def _faceted_stone(b, center, radii, rotation, seed):
+    """Irregular outward-facing flat-cut quarry rock, not a smooth snowball.
+
+    20 low-poly facets have independent flat normals. Deterministic asymmetric
+    radii preserve locked resource bounds, existing material palette, and the
+    snow-cap contact without introducing primitive placeholder cylinders.
+    """
+    phi=(1.0+math.sqrt(5.0))*.5
+    raw=((-1,phi,0),(1,phi,0),(-1,-phi,0),(1,-phi,0),
+         (0,-1,phi),(0,1,phi),(0,-1,-phi),(0,1,-phi),
+         (phi,0,-1),(phi,0,1),(-phi,0,-1),(-phi,0,1))
+    faces=((0,11,5),(0,5,1),(0,1,7),(0,7,10),(0,10,11),
+           (1,5,9),(5,11,4),(11,10,2),(10,7,6),(7,1,8),
+           (3,9,4),(3,4,2),(3,2,6),(3,6,8),(3,8,9),
+           (4,9,5),(2,4,11),(6,2,10),(8,6,7),(9,8,1))
+    verts=[]
+    for k,(x,y,z) in enumerate(raw):
+        variation=1.0+.035*math.sin(float(seed+3)*1.3+k*2.71)
+        verts.append((x/phi*radii[0]*variation,y/phi*radii[1]*variation,
+                      z/phi*radii[2]*variation))
+    for ia,ib,ic in faces:
+        a,bv,c=verts[ia],verts[ib],verts[ic]
+        n=legacy.vnorm(legacy.vcross(legacy.vsub(bv,a),legacy.vsub(c,a)))
+        mid=tuple((a[i]+bv[i]+c[i])/3.0 for i in range(3))
+        if sum(n[i]*mid[i] for i in range(3))<0.0:
+            bv,c=c,bv
+            n=tuple(-v for v in n)
+        b.triangles("cream",[a,bv,c],[n,n,n],[0,1,2],center,rotation)
 
 def build_stone_stack():
     b = legacy.MeshBuilder("stone_stack")
@@ -135,7 +229,11 @@ def build_stone_stack():
         (-.03,.86,.02,.27,.20,.24,-.08,.11,.05),
     )
     for i,(x,y,z,rx,ry,rz,px,py,pz) in enumerate(stones):
-        b.sphere("cream",(x,y,z),(rx,ry,rz),4,8,rotation=(px,py,pz))
+        # Native mesh bounds: 1.79221m exceeded the frozen 1.78m X allowance.
+        # Compress rock cluster only; preserve support, socket, and geometry count.
+        x*=.975
+        rx*=.975
+        _faceted_stone(b,(x,y,z),(rx,ry,rz),(px,py,pz),i)
         if i in (0,2,4,6):
             b.sphere("dark",(x-.03,y-ry*.46,z+.02),(rx*.54,ry*.18,rz*.50),3,7,
                      rotation=(0,py*.5,0))
@@ -178,7 +276,9 @@ def build_fuel_canister():
 
     # Two strapped winter canisters replace the former smooth blue tank stack.
     for x,h,yaw in ((-.25,.76,-.04),(.24,.70,.05)):
-        b.beveled_box("blue",(x,.56,0),(.42,h,.58),.085,rotation=(0,yaw,0))
+        b.beveled_box("blue",(x,.56,0),(.42,h,.58),.145,rotation=(0,yaw,0))
+        # Narrow pressed shoulder seam reads as canister shell, not a plate cap.
+        b.beveled_box("metal",(x,.56+h*.36,.0),(.365,.034,.51),.016,rotation=(0,yaw,0))
         b.beveled_box("dark",(x,.56,-.302),(.28,h*.58,.035),.016,rotation=(0,yaw,0))
         b.beveled_box("metal",(x,.56,-.324),(.08,h*.48,.020),.008,rotation=(0,yaw,0))
         b.beveled_box("cream",(x,.50,-.338),(.16,.13,.012),.005,rotation=(0,yaw,0))
@@ -189,8 +289,12 @@ def build_fuel_canister():
             b.beveled_box("metal",(x+hx,.73,.28),(.045,.45,.045),.014,rotation=(0,yaw,0))
 
     # Shared retaining frame, cross lashing and uneven snow load.
+    # Four open corner struts replace two broad, featureless side walls. These
+    # retain the canisters on their rack without hiding the formed sheet metal
+    # from lateral gameplay views or creating primitive wooden slab silhouettes.
     for x in (-.47,.47):
-        b.beveled_box("wood_light",(x,.52,0),(.08,.70,.78),.028)
+        for z in (-.31,.31):
+            b.rod_between("wood_light",(x,.19,z),(x,.88,z),.040,7)
     b.rod_between("yellow",(-.43,.34,-.32),(.43,.75,-.32),.025,7)
     b.rod_between("yellow",(-.43,.75,-.32),(.43,.34,-.32),.025,7)
     b.beveled_box("snow",(-.25,1.03,.02),(.28,.055,.34),.020,rotation=(0,.07,.02))
@@ -211,11 +315,13 @@ def build_cooked_food_stack():
     _pallet(b,1.44,1.04,.12)
     b.beveled_box("wood_light",(0,.28,0),(1.30,.18,.92),.06)
     b.beveled_box("dark",(0,.39,0),(1.16,.07,.78),.025)
-    # Butcher-table-inspired prepared cuts with bones and a small insulated lid.
-    cuts=((-0.36,-.18,.02),(.03,.13,-.08),(.37,-.10,.10),(-.12,.34,-.12))
-    for i,(x,z,yaw) in enumerate(cuts):
-        b.sphere("orange",(x,.53+(i%2)*.10,z),(.26,.12,.18),6,14,rotation=(0,yaw,0))
-        b.rod_between("cream",(x-.16,.57+(i%2)*.10,z),(x+.16,.57+(i%2)*.10,z),.022,8)
+    # Varied prepared red-meat cuts, broad cream fat caps (not uniform rolls).
+    cuts=((-0.36,-.18,.02,.26,.18),(.03,.13,-.22,.31,.15),(.37,-.10,.14,.24,.21),(-.12,.34,.31,.22,.17))
+    for i,(x,z,yaw,rx,rz) in enumerate(cuts):
+        y=.51+(i%2)*.085
+        b.sphere("orange",(x,y,z),(rx,.115,rz),5,13,rotation=(0,yaw,0))
+        b.sphere("cream",(x-.048,y+.085,z+.024),(rx*.62,.031,rz*.69),3,9,rotation=(0,yaw,0))
+        b.rod_between("cream",(x-rx*.50,y+.095,z),(x+rx*.44,y+.096,z),.016,7)
     b.beveled_box("blue",(0,.78,.34),(1.06,.09,.25),.035,rotation=(.05,0,0))
     b.beveled_box("snow",(-.16,.845,.34),(.62,.05,.20),.020)
     return b
