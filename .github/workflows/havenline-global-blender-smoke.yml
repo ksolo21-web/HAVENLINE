@@ -1,0 +1,107 @@
+name: HAVENLINE global Blender high-to-low bake smoke
+on:
+  push:
+    branches: ['havenline/global-asset-pipeline-integration-20261026']
+    paths:
+      - 'tools/havenline/asset_pipeline/blender_build.py'
+      - 'tools/havenline/asset_pipeline/tests/create_blender_smoke.py'
+      - 'tools/havenline/asset_pipeline/validate_gltf.mjs'
+      - '.github/workflows/havenline-global-blender-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: global-blender-smoke-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  bake-and-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+      - name: Install FOSS Blender and isolated validator
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends blender python3-venv python3-numpy
+          blender -b -t 2 --python-expr 'import numpy; print("Blender NumPy",numpy.__version__)'
+          python3 -m venv /tmp/havenline-asset-venv
+          /tmp/havenline-asset-venv/bin/pip install --disable-pip-version-check numpy pillow trimesh
+          blender --version | head -n 2
+      - name: Produce editable synthetic high and low mesh
+        run: |
+          set -euo pipefail
+          mkdir -p global-bake-evidence/fixture global-bake-evidence/candidate
+          timeout 180 blender -b --factory-startup --threads 2 \
+            --python tools/havenline/asset_pipeline/tests/create_blender_smoke.py \
+            -- "$PWD/global-bake-evidence/fixture" > global-bake-evidence/fixture.log 2>&1 || {
+              tail -100 global-bake-evidence/fixture.log; exit 1;
+            }
+      - name: Bake genuine normal and AO maps then export game GLB
+        run: |
+          set -euo pipefail
+          timeout 540 blender -b --factory-startup --threads 2 \
+            --python tools/havenline/asset_pipeline/blender_build.py -- \
+            --source "$PWD/global-bake-evidence/fixture/test_master.blend" \
+            --maps "$PWD/global-bake-evidence/fixture" \
+            --out "$PWD/global-bake-evidence/candidate" \
+            --asset-id smoke_test --size 128 --triangles-max 3000 \
+            > global-bake-evidence/bake.log 2>&1 || {
+              tail -150 global-bake-evidence/bake.log; exit 1;
+            }
+          test -s global-bake-evidence/candidate/smoke_test_MASTER_AND_LOD0.blend
+          test -s global-bake-evidence/candidate/smoke_test_LOD0.glb
+          test -s global-bake-evidence/candidate/textures/normal.png
+          test -s global-bake-evidence/candidate/textures/ambient_occlusion.png
+      - name: Gate exact bytes against global reference and budget policy
+        run: |
+          set -euo pipefail
+          /tmp/havenline-asset-venv/bin/python - <<'PY'
+          import copy,hashlib,json,pathlib,shutil
+          w=pathlib.Path("global-bake-evidence")
+          m=json.loads(pathlib.Path("tools/havenline/asset_pipeline/examples/T05-cooker-asset.json").read_text())
+          m["asset_id"]="smoke_test";m["task_id"]="TOOLING_SMOKE_ONLY"
+          r=w/"fixture/base_color.png"
+          m["owner_reference"]={"binding":"exact_owner","path":"fixture/base_color.png",
+                                 "sha256":hashlib.sha256(r.read_bytes()).hexdigest()}
+          m["outputs"]["master_blend"]="candidate/smoke_test_MASTER_AND_LOD0.blend"
+          m["outputs"]["low_glb"]="candidate/smoke_test_LOD0.glb"
+          g=w/"candidate/smoke_test_LOD0.glb"
+          m["outputs"]["low_glb_sha256"]=hashlib.sha256(g.read_bytes()).hexdigest()
+          m["outputs"]["bake_maps"]={k:f"candidate/textures/{k}.png" for k in
+            ("base_color","normal","roughness","metallic","ambient_occlusion")}
+          m["allowed_material_names"]=["HL_blue"]
+          m["limits"]={"footprint_x_m":2.45,"footprint_z_m":2.3,"triangles_max":3000,
+                       "materials_max":12,"draw_calls_max":48,"texture_mib_max":96,
+                       "baseline_kit_triangles":1000,"baseline_asset_triangles":1000,
+                       "kit_triangles_max":20000}
+          (w/"smoke_manifest.json").write_text(json.dumps(m,indent=2)+"\n")
+          PY
+          /tmp/havenline-asset-venv/bin/python tools/havenline/asset_pipeline/asset_gate.py candidate \
+             --manifest global-bake-evidence/smoke_manifest.json \
+             --policy Docs/Production/GLOBAL_ASSET_AUTHORING_POLICY.json \
+             --workspace global-bake-evidence \
+             --report global-bake-evidence/candidate-validation.json > global-bake-evidence/gate.log
+          grep -q CANDIDATE_TECHNICAL_PASS_NOT_VISUAL_APPROVAL global-bake-evidence/gate.log
+          echo "Smoke test succeeded: editable master, genuine bake maps and bounded GLB candidate; owner approval NOT claimed."
+      - name: Khronos glTF 2.0 spec validation and glTF Transform inspection
+        run: |
+          set -euo pipefail
+          npm install --no-save gltf-validator @gltf-transform/cli
+          node tools/havenline/asset_pipeline/validate_gltf.mjs \
+            global-bake-evidence/candidate/smoke_test_LOD0.glb \
+            global-bake-evidence/official-gltf-validation.json
+          ./node_modules/.bin/gltf-transform inspect \
+            global-bake-evidence/candidate/smoke_test_LOD0.glb \
+            > global-bake-evidence/gltf-transform-inspection.txt
+          grep -q 'TECHNICAL_GLTF_VALIDATION_ONLY' global-bake-evidence/official-gltf-validation.json
+      - name: Preserve reproducible candidate or failure logs
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-global-blender-smoke-${{ github.sha }}
+          path: global-bake-evidence/
+          retention-days: 30
+          if-no-files-found: warn
