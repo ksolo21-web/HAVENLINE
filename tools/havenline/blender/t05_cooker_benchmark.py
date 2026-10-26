@@ -147,19 +147,35 @@ for x in (-.37,.37):
 for x in (-.40,.40):
     for y in (1.055,1.48):
         cylinder("Bezel corner rivet",(x,y,-.67),.034,.020,"metal","Y",12)
-# Tooth silhouette intentionally modeled, not an image decal, visible in GLB.
-teeth=[]
-for i in range(36):
-    a=math.tau*i/36
-    r=.212 if i%3==0 else (.174 if i%3==1 else .195)
-    teeth.append((r*math.cos(a),1.265+r*math.sin(a),-.683))
-mesh=bpy.data.meshes.new("Authored saw wheel toothed mesh")
-verts=[(0,1.265,-.683)]+teeth
-faces=[(0,((i+1)%36)+1,i+1) for i in range(36)]
+# A forged saw disc with actual toothed thickness and machined sidewalls:
+# the previous perfectly flat gear looked like a silhouette decal in Godot.
+tooth_steps=48
+front_z=-.695
+back_z=-.661
+ring=[]
+for i in range(tooth_steps):
+    a=math.tau*i/tooth_steps
+    r=(.215 if i%4==0 else .187 if i%4==1 else .179 if i%4==2 else .207)
+    ring.append((r*math.cos(a),1.265+r*math.sin(a)))
+front=[(x,y,front_z) for x,y in ring]
+rear=[(x,y,back_z) for x,y in ring]
+verts=[(0,1.265,front_z)]+front+[(0,1.265,back_z)]+rear
+rear_center=tooth_steps+1
+faces=[]
+for i in range(tooth_steps):
+    j=(i+1)%tooth_steps
+    faces.extend((
+        (0,1+j,1+i),
+        (rear_center,rear_center+1+i,rear_center+1+j),
+        (1+i,1+j,rear_center+1+j),
+        (1+i,rear_center+1+j,rear_center+1+i)
+    ))
+mesh=bpy.data.meshes.new("Forged steel saw with thick toothed wall")
 mesh.from_pydata(verts,[],faces);mesh.update()
-wheel=bpy.data.objects.new("Visible steel saw mechanism",mesh)
+wheel=bpy.data.objects.new("Visible forged saw thickness",mesh)
 art.objects.link(wheel);made.append(wheel)
 wheel.data.materials.append(palette["metal"])
+cylinder("Saw beveled central steel bearing",(0,1.265,-.703),.098,.032,"metal","Y",18)
 cylinder("Saw axle",(0,1.265,-.709),.060,.060,"dark","Y",16)
 cylinder("Copper axle fastener",(0,1.265,-.752),.040,.034,"orange","Y",12)
 tube("Safety orange handgrip",[(-.27,.90,-.752),(.27,.90,-.752)],"orange",.057,3)
@@ -198,16 +214,24 @@ cylinder("Hollow looking black exhaust",(.20,2.398,.06),.113,.012,"dark","Z",18)
 # One hand-shaped continuous snowy overhang over the complete iron roof.
 # Unlike overlapping primitive snow spheres this forms a continuous hood with
 # localized drips and thickness, a core defining feature of owner art 18567.
-x_steps,z_steps=14,11
+x_steps,z_steps=20,16
 top=[];bottom=[];surface_faces=[]
 for zi in range(z_steps+1):
     uz=zi/z_steps;zz=-.63+1.21*uz
     for xi in range(x_steps+1):
         ux=xi/x_steps;xx=-.68+1.36*ux
         dome=max(0.,1.-.69*((xx/.68)**2)-.59*((zz/.63)**2))
-        scallop=.018*math.sin(xx*12.+.4)+.017*math.sin(zz*15.+xx*3.)
-        edge_drape=.10*(abs(2*uz-1)**9)+.06*(abs(2*ux-1)**10)
-        y=1.775+.162*dome+scallop-edge_drape
+        # Three asymmetric, physically connected leading-edge snow tongues.
+        # Their drop is strongest at the front, tapering smoothly into the roof.
+        scallop=(.024*math.sin(xx*9.3+.3)+.015*math.sin(zz*13.1+xx*2.7)
+                 +.009*math.sin(xx*21.0-zz*7.4))
+        front_strength=max(0.,1.-uz/.26)**2
+        front_tongues=sum(amplitude*math.exp(-((xx-center)/spread)**2)
+                          for center,amplitude,spread in
+                          ((-.49,.096,.16),(-.14,.062,.12),(.22,.105,.15),(.50,.079,.14)))
+        edge_drape=(.035*(abs(2*uz-1)**7)+.034*(abs(2*ux-1)**8)
+                    +front_strength*front_tongues)
+        y=1.805+.150*dome+scallop-edge_drape
         top.append((xx,y,zz))
         bottom.append((xx,min(1.67,y-.12),zz))
 stride=x_steps+1
@@ -232,9 +256,15 @@ roof_mesh.from_pydata(top+bottom,[],surface_faces);roof_mesh.update()
 roof=bpy.data.objects.new("Continuous thick snow roof, owner reference 18567",roof_mesh)
 art.objects.link(roof);made.append(roof);roof.data.materials.append(palette["snow"])
 for face in roof_mesh.polygons:face.use_smooth=True
-# Small irregular local drips, rather than balloon-like piles across the top.
-for x,y,z,rx in ((-.41,1.725,-.595,.105),(-.13,1.71,-.605,.098),(.27,1.73,-.61,.112)):
-    ball("Overhanging edge snow droplet",(x,y,z),(rx,.062,.078),"snow",10,7)
+snow_edge=roof.modifiers.new("Snow overhang soft rounded edge","BEVEL")
+snow_edge.width=.026
+snow_edge.segments=2
+snow_edge.limit_method="ANGLE"
+snow_normal=roof.modifiers.new("Sculpted snow weighted normals","WEIGHTED_NORMAL")
+# Connected leading snow forms overlap the continuous roof perimeter, rather
+# than the isolated bead-like globules rejected by native pixel inspection.
+for x,y,z,rx in ((-.48,1.655,-.585,.134),(-.15,1.680,-.592,.112),(.23,1.651,-.586,.140),(.50,1.667,-.575,.121)):
+    ball("Integrated scalloped snow lip",(x,y,z),(rx,.103,.131),"snow",12,8)
 for x,z in ((-1.09,-.20),(-.61,.54),(1.02,.61)):
     ball("Accumulated snow on tray edges",(x,1.22,z),(.10,.054,.083),"snow",12,7)
 # Blender is Z-up while Godot and glTF are Y-up: rotate the authored
