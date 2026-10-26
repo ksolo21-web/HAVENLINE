@@ -207,6 +207,10 @@ def build_stone_stack():
         (-.03,.86,.02,.27,.20,.24,-.08,.11,.05),
     )
     for i,(x,y,z,rx,ry,rz,px,py,pz) in enumerate(stones):
+        # Native mesh bounds: 1.79221m exceeded the frozen 1.78m X allowance.
+        # Compress rock cluster only; preserve support, socket, and geometry count.
+        x*=.975
+        rx*=.975
         _faceted_stone(b,(x,y,z),(rx,ry,rz),(px,py,pz),i)
         if i in (0,2,4,6):
             b.sphere("dark",(x-.03,y-ry*.46,z+.02),(rx*.54,ry*.18,rz*.50),3,7,
