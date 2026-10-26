@@ -67,6 +67,49 @@ python3 tools/havenline/asset_pipeline/compare_reference.py \
 
 A source-lint PASS means the data contract exists. A candidate PASS means technical candidate checks passed. A release gate PASS means evidence is complete **but the program still does not merge or replace files automatically.**
 
+## Verified isolated rendering and AO contract (October 26, 2026)
+
+The `havenline-global-godot-framing.yml` workflow reuses an immutable, hash-bound
+synthetic smoke GLB from run `40381157048`, avoiding a fresh 190 MB Blender
+installation solely to validate Godot camera or material logic.
+
+- **Geometry bake:** run `40379776370` verified real high-to-low projection,
+  9 AO shades and 4,092 actual hemisphere-ray occlusions; Khronos 0 errors
+  and 0 warnings, explicit tangents and an embedded normal image equal to the
+  saved source pixels.
+- **Engine import and seven-angle rendering:** run `40381157048` used Godot
+  4.7.2 with software OpenGL (llvmpipe); seven true 1280×720 screenshots were
+  nonblank and unique. These are not in-game frames or Android measurements.
+- **Bounds-based camera:** run `40383973244` passed seven real frames, reducing
+  the synthetic orthographic size from 3.80 to 1.95175 with no clipping in the
+  inspected views.
+- **Separately baked AO:** run `40384710252` imported `ambient_occlusion.png`
+  as a Godot texture, bound it to a duplicated inspection-only PBR material,
+  and proved actual pixels changed in **all seven** 1280×720 views. Independent
+  pixel inspection found 18,509–64,766 changed pixels per view (2.008%–7.028%).
+  The AO map is **not automatically included in the GLB** and this proof does
+  not modify shipping assets.
+- **Release safeguards:** `asset_gate.py release` now requires native 4K
+  source-hash-bound AO off/on frames with real pixel differences, the correct
+  separately saved AO atlas SHA, and positive binding evidence **from the true
+  Havenline shipping scene**. Isolated proof intentionally fails this release
+  criterion. The global source suite passes 14 tests.
+
+Manual isolated AO preview uses the same `capture_isolated_asset.gd` utility:
+
+```bash
+godot --path /workspace/isolated-project --rendering-method gl_compatibility \
+ --script res://capture.gd -- \
+ --glb=res://assets/asset_LOD0.glb \
+ --ao=res://assets/ambient_occlusion.png \
+ --out=/workspace/ao-evidence --asset-id=asset
+```
+
+This demonstration only covers a synthetic 128px texture fixture; it does
+**not** verify 4K bake speed, the real reference style, production-scene AO
+appearance, physical-device FPS, or the required independent visual critic and
+owner/integration signoffs.
+
 ## Global rollout
 
 The first object with confirmed exact image mapping is T05 cooker `18567.png`. Its existing R07 Blender benchmark is preserved as a technical proof—not promoted because visual fidelity is not approved. T05’s other 19 assets with missing exact source bindings remain blocked for promotion. Use this pipeline for future Havenline biomes, pets, structures, NPCs, production objects and UI-affecting 3D assets using the same reference/style governance.
