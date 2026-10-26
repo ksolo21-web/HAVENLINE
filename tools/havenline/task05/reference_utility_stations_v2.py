@@ -141,21 +141,31 @@ def build_cooker_processor():
 
     # Purpose-built stove core occupies the right half. Layered shell/trim makes
     # it read as fabricated equipment rather than a cube or cylinder.
-    b.beveled_box("blue",(.34,1.13,.17),(.90,.66,.78),.120)
+    b.beveled_box("blue",(.26,1.19,.10),(1.04,.94,.90),.155)
     # The frozen cooker input faces -Z. Previous +Z facade placed the finished
     # stove door against the BACK of the shipping station, showing a blank
     # blue box to its actual front-facing gameplay/camera views.
-    b.beveled_box("metal",(.34,1.13,-.252),(.72,.50,.090),.065)
-    b.beveled_box("dark",(.34,1.13,-.308),(.58,.38,.036),.035)
-    b.cylinder("metal",(.34,1.13,-.346),.156,.040,16,rotation=(math.pi/2,0,0))
-    b.cylinder("dark",(.34,1.13,-.373),.114,.020,12,rotation=(math.pi/2,0,0))
-    b.cylinder("orange",(.34,1.13,-.394),.052,.045,10,rotation=(math.pi/2,0,0))
+    b.beveled_box("metal",(.34,1.13,-.385),(.72,.50,.090),.065)
+    b.beveled_box("dark",(.34,1.13,-.441),(.58,.38,.036),.035)
+    b.cylinder("metal",(.34,1.13,-.479),.156,.040,16,rotation=(math.pi/2,0,0))
+    # Pentagonal worked-metal teeth make the inset saw legible at normal game zoom.
+    for tooth in range(12):
+        angle=math.tau*float(tooth)/12.0
+        b.cylinder("metal",(.34+math.cos(angle)*.151,1.13+math.sin(angle)*.151,-.479),.030,.035,5,rotation=(math.pi/2,0,0))
+    b.cylinder("dark",(.34,1.13,-.506),.114,.020,12,rotation=(math.pi/2,0,0))
+    b.cylinder("orange",(.34,1.13,-.527),.052,.045,10,rotation=(math.pi/2,0,0))
     for x in (.02,.66):
-        b.beveled_box("wood_light",(x,1.13,-.341),(.09,.52,.08),.030)
+        b.beveled_box("wood_light",(x,1.13,-.474),(.09,.52,.08),.030)
         for y in (.93,1.33):
-            b.cylinder("cream",(x,y,-.393),.030,.040,7,rotation=(math.pi/2,0,0))
-    b.beveled_box("wood_light",(.34,1.42,-.341),(.72,.09,.08),.030)
-    b.rod_between("yellow",(.63,1.09,-.412),(.76,1.09,-.412),.030,7)
+            b.cylinder("cream",(x,y,-.526),.030,.040,7,rotation=(math.pi/2,0,0))
+    b.beveled_box("wood_light",(.34,1.42,-.474),(.72,.09,.08),.030)
+    b.rod_between("yellow",(.63,1.09,-.545),(.76,1.09,-.545),.030,7)
+
+    # Rear access is a fitted, riveted maintenance hatch rather than a blank
+    # slab on the visible return side of the real three-dimensional appliance.
+    b.beveled_box("dark",(.26,1.20,.585),(.62,.38,.08),.048)
+    for x in (.02,.50):
+        b.cylinder("cream",(x,1.20,.642),.030,.035,5,rotation=(math.pi/2,0,0))
 
     # A proper oven roof, NOT a default pot: dark insulated crown and rounded
     # irregular snow masses flowing over its shoulders like supplied 18567.png.
@@ -188,9 +198,9 @@ def build_cooker_processor():
     # Forged arch now frames the actual -Z window rather than floating on the
     # left side. The orange grip is connected to the front lower service hatch.
     for x in (.01,.67):
-        b.rod_between("metal",(x,.92,-.41),(x,1.42,-.41),.039,8)
-    b.rod_between("metal",(.01,1.42,-.41),(.67,1.42,-.41),.048,9)
-    b.beveled_box("orange",(.34,.87,-.46),(.39,.075,.08),.028)
+        b.rod_between("metal",(x,.92,-.543),(x,1.42,-.543),.039,8)
+    b.rod_between("metal",(.01,1.42,-.543),(.67,1.42,-.543),.048,9)
+    b.beveled_box("orange",(.34,.87,-.593),(.39,.075,.08),.028)
 
     # Offset flue: stepped collars, polished throat and bounded snow cap.
     b.cylinder("dark",(.70,1.72,-.22),.12,.42,12)
