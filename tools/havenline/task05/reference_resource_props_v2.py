@@ -137,28 +137,50 @@ def _crate_shell(b, name, fish=False):
 
 
 def build_wood_stack():
-    b = legacy.MeshBuilder("wood_stack")
-    _snow_base(b, (1.68, .10, 1.16))
-    _pallet(b, 1.50, .98, .12)
-    # Timber rack echoes the early-camp stockpile rather than a loose pyramid.
-    for x in (-.66, .66):
-        _corner_post(b, x, -.40, .78)
-        _corner_post(b, x, .40, .78)
-    for level, y in enumerate((.31, .55, .79)):
-        count = 4 if level < 2 else 3
-        spacing = .34
-        for i in range(count):
-            x=(i-(count-1)/2)*spacing
-            b.cylinder("wood", (x,y,0), .135, .82, 14, rotation=(math.pi/2,0,0))
-            for z in (-.415,.415):
-                b.cylinder("cream", (x,y,z), .108, .025, 12, rotation=(math.pi/2,0,0))
-    # Bound blue weather cover and lashing; these make the bundle intentionally
-    # built and readable, not a group of raw cylinders.
-    b.beveled_box("blue", (0,1.00,.04), (1.30,.12,.88), .055, rotation=(0,0,.015))
-    b.beveled_box("snow", (-.18,1.075,.02), (.82,.07,.70), .030, rotation=(0,.08,.02))
-    for x in (-.48,.48):
-        b.beveled_box("yellow", (x,.62,-.455), (.055,.86,.045), .015)
+    """18677(1).png: sculpted cut logs in a rope-bound snow-topped pile.
+
+    The supplied render has no rigid box or rack; keep the original object ID,
+    footprint, sockets and station placements, but honor the piled-log silhouette.
+    """
+    b=legacy.MeshBuilder("wood_stack")
+    _snow_base(b,(1.60,.10,1.12))
+    logs=(
+        (-.38,.27,.03,.205,.88),(.05,.26,.02,.225,.91),(.44,.26,.0,.19,.82),
+        (-.32,.61,-.06,.215,.91),(.21,.59,.04,.23,.95),
+        (-.10,.89,-.03,.215,.91),(.47,.50,-.03,.118,.66),(.52,.68,.04,.092,.65),
+    )
+    for i,(x,y,z,r,length) in enumerate(logs):
+        b.cylinder("wood",(x,y,z),r,length,13,rotation=(math.pi/2,0,0))
+        for front in (-1,1):
+            face_z=z+front*length*.5
+            b.cylinder("cream",(x,y,face_z),r*.83,.017,12,rotation=(math.pi/2,0,0))
+            for rad in (.33,.61):
+                b.torus("wood_light",(x,y,face_z+front*.015),r*rad,.010,12,4,rotation=(math.pi/2,0,0))
+        if i in (0,2,3,5):
+            b.sphere("snow",(x-.025,y+r*.88,z-.07),(r*.95,r*.24,length*.30),3,9)
+    for z in (-.28,.29):
+        b.torus("cream",(-.02,.50,z),.48,.052,20,6,rotation=(math.pi/2,0,0))
+        b.torus("yellow",(-.02,.50,z+.027),.466,.016,20,4,rotation=(math.pi/2,0,0))
+    for x,y,z in ((-.30,.38,-.21),(.27,.67,.19)):
+        b.sphere("dark",(x,y,z),(.075,.065,.045),3,8)
     return b
+
+
+def _ore_crystal(b, material, x, y, z, height, radius, sides=6, twist=0.0):
+    """Closed faceted pointed ore prism; authored plane normals, no default cone."""
+    low=[];shoulder=[]
+    for j in range(sides):
+        a=math.tau*j/sides+twist
+        low.append((x+math.cos(a)*radius,y,z+math.sin(a)*radius))
+        shoulder.append((x+math.cos(a)*radius*.82,y+height*.64,z+math.sin(a)*radius*.82))
+    tip=(x-radius*.08,y+height,z+radius*.13)
+    for j in range(sides):
+        k=(j+1)%sides
+        for verts in ((low[j],low[k],shoulder[k]),(low[j],shoulder[k],shoulder[j]),(shoulder[j],shoulder[k],tip)):
+            aa,bb,cc=verts
+            normal=legacy.vnorm(legacy.vcross(legacy.vsub(bb,aa),legacy.vsub(cc,aa)))
+            b.triangles(material,list(verts),[normal]*3,[0,1,2])
+    b.triangles(material,low,[(0.,-1.,0.)]*sides,[i for k in range(1,sides-1) for i in (0,k,k+1)])
 
 
 def _faceted_stone(b, center, radii, rotation, seed):
