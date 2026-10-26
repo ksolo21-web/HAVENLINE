@@ -10,7 +10,7 @@
     "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
     "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
   ],
-  "status": "GLOBAL_13_TESTS_PASS__GEOMETRY_AO_NORMAL_AND_TANGENTS_PASS_128PX__GODOT_4_7_2_IMPORT_PASS__SEVEN_ANGLE_RENDER_PENDING__DRAFT_UNMERGED",
+  "status": "GLOBAL_13_SOURCE_TESTS_PASS__BVH_128PX_BAKE_AND_AO_PASS__GODOT_IMPORT_AND_7_ANGLE_RENDER_PASS__AUTOFRAMING_RETEST_PENDING__NO_PRODUCTION_RELEASE",
   "complete_with_evidence": [
     {
       "milestone": "Separate from unapproved T05 branch",
@@ -46,17 +46,22 @@
       "milestone": "Reusable Blender master/low mesh, texture baking and export",
       "status": "PASS_BVH_GEOMETRY_NORMAL_AND_AO_SYNTHETIC_128PX",
       "evidence": "Run 40379776370: 9692 UV texels, 77536 AO rays, 4092 actual occlusions, 1190 normal colors, 9 AO shades; not approved for 4K production"
+    },
+    {
+      "milestone": "Isolated Godot 4 import and seven-angle renderer proof",
+      "status": "PASS_SYNTHETIC_ENGINE_PROOF_ONLY",
+      "evidence": "Run 40381157048: Godot 4.7.2 GLB import + normal mapped material, seven different 1280x720 llvmpipe OpenGL PNGs with 262–611 sampled RGB colors and seven unique hashes. Not the shipping scene, device FPS or style approval."
     }
   ],
   "critical_unresolved": [
-    "Seven-angle isolated Godot rendering smoke run 40381157048 pending; verify 7 distinct 1280x720 genuine engine PNGs and independent nonblank/multi-angle color checks; no production scene claim.",
-    "Blender 4.0.2 native Cycles still produces invalid empty/flat bake outputs; BVH CPU fallback used for validated 128px geometry fixture.",
-    "CPU BVH fallback limited to 1024px; need 4K map production quality and throughput validation without weakening visual/performance standard.",
-    "Real, owner-exact-reference, full native Havenline shipping scene and 3840x2160 multi-angle in-game renders not verified.",
-    "Real device Android 60 FPS, thermal, GPU/CPU frame times, draw calls and memory not verified.",
-    "Independent genuine visual critic, reference/visual language exact 10/10 and other scores >9 not complete.",
-    "Explicit user approval and integration owner approval absent; PR #103 stays draft and unmerged.",
-    "Source-bound packaging, material/AO connection in actual game and production asset parity remain open."
+    "Check bounds-derived camera QA retest 40381725395; inspect actual seven Godot screenshots and compare against fixed-size original for larger useful subject framing and no clipping.",
+    "7-angle rendering passed on synthetic 1280x720 isolated GLB in Godot software OpenGL; must test real asset and true Havenline shipping scene at 3840x2160 including use states before visual approval.",
+    "Native Cycles still broken in Ubuntu Blender 4.0.2; current proven CPU BVH geometry fallback limited to <=1024 map size; target real 4K needs new validated fast high-quality bake strategy.",
+    "Per-asset production owner reference exact pixels, art/material style score 10/10 and freeze sockets/bounds on target assets not verified by synthetic sphere fixture.",
+    "AO map is separately saved and not yet integrated into actual shipping Godot PBR materials; prove actual application and normal/AO appearance on real asset.",
+    "Physical Android 60 FPS and long-run thermal/frame CPU/GPU/calls/memory measurements not supplied.",
+    "Independent visual critic (not internal review), all non-reference dimensions >9 and zero defects not delivered.",
+    "Explicit owner approval and integration-owner authorization not obtained. PR #103 must remain draft and unmerged, no shipping asset promotion."
   ],
   "frozen_requirements": [
     "Exact reference style and visual language 10/10, all mandatory other critic dimensions >9/10, no known defects",
@@ -65,7 +70,7 @@
     "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
     "Preserve source hashes and evidence across retries"
   ],
-  "next_action": "Inspect run 40381157048 for seven real isolated Godot 1280x720 screenshots. Review actual pixels/hashes; fix renderer capture defects and retest. Then benchmark scaled BVH, test real author assets in shipping 4K scene, physical Android, independent critique and get explicit approvals. No merge or promotion before all gates.",
+  "next_action": "Inspect auto-framing smoke run 40381725395 and saved 7 Godot PNGs; fix if clipping/scale issues, verify from multiple views. Afterwards stage actual reference-bound Havenline art and 4K/Android evidence, reviewer and owner signoff, without merging PR #103 prematurely.",
   "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
   "superseded_wrong_base_pull_request": 102,
   "latest_work": {
@@ -138,6 +143,35 @@
     "ao_texture_sha256": "4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134",
     "godot_import_artifact_id": 12678222113,
     "independent_image_analysis": "Actual 128px PNG distributions independently inspected; 1190 normal colors, 9 AO shades, 4092 true AO ray intersections, embedded normal exact PNG hash.",
-    "independent_review": "INTERNAL_REVIEW_ONLY; no independent visual critic"
+    "independent_review": "INTERNAL_REVIEW_ONLY; no independent visual critic",
+    "seven_view_verified_run": 40381157048,
+    "seven_view_artifact_id": 12677963723,
+    "native_render_engine": "Godot 4.7.2 stable",
+    "native_render_backend": "gl_compatibility software OpenGL llvmpipe",
+    "native_render_resolution": [
+      1280,
+      720
+    ],
+    "native_render_views": [
+      "front",
+      "rear",
+      "left",
+      "right",
+      "three-quarter",
+      "overhead",
+      "gameplay_oblique"
+    ],
+    "native_render_png_count": 7,
+    "native_render_distinct_sha_count": 7,
+    "native_render_sample_distinct_rgb_min": 262,
+    "native_render_sample_distinct_rgb_max": 611,
+    "native_render_in_real_shipping_scene": false,
+    "native_render_physical_android": false,
+    "baseline_renders_owner_approved": false,
+    "internal_visual_review": "All seven PNGs real, nonblank and differing. Baseline fixed camera 3.8 made the synthetic subject too small for detail evaluation; automatic bounds-based camera framing committed on f223d233.",
+    "autofocus_camera_rerun": 40381725395,
+    "auto_frming_candidate_sha": "f223d233dff987f59921ae9aa3ed8579060024ca",
+    "internal_technical_score_0_to_10": 8,
+    "independent_critic_available": false
   }
 }
