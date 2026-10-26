@@ -26,7 +26,7 @@ def snow(b,size):
     )
     for px,pz,rx,rz,rot in patches:
         b.sphere("snow", (px*sx, .035, pz*sz),
-                 (rx*sx, .070, rz*sz), 5, 10, rotation=(0,rot,0))
+                 (rx*sx, .070, rz*sz), 5, 8, rotation=(0,rot,0))
     stones = ((-.35,-.18,.08,.07,.10),(.34,.11,.08,.07,-.16),(-.15,.36,.07,.06,.22))
     for px,pz,rx,rz,rot in stones:
         b.beveled_box("dark", (px*sx,.045,pz*sz),
@@ -58,7 +58,7 @@ def build_fishing_rack():
     for x in (-.48,.48):
         b.cylinder("blue",(x,1.24,0),.31,.34,18,rotation=(0,0,math.pi/2))
         for dx in (-.17,.17):
-            b.torus("yellow",(x+dx,1.24,0),.28,.045,16,6,rotation=(0,math.pi/2,0))
+            b.torus("yellow",(x+dx,1.24,0),.28,.045,14,5,rotation=(0,math.pi/2,0))
         for dz in (-.16,0,.16):
             b.torus("cream",(x,1.24,dz),.235,.018,14,5,rotation=(0,math.pi/2,0))
     b.rod_between("orange",(1.04,1.24,0),(1.32,1.56,0),.055,8)
@@ -75,7 +75,7 @@ def build_fishing_rack():
 def build_intake_machine():
     b=legacy.MeshBuilder("intake_machine")
     for x,z,rx,rz in ((-.92,-.72,.34,.24),(.88,-.70,.31,.22),(-.92,.70,.30,.23),(.88,.72,.35,.24),(0,-.86,.42,.18),(0,.87,.38,.17)):
-        b.sphere("snow",(x,.08,z),(rx,.08,rz),5,10)
+        b.sphere("snow",(x,.08,z),(rx,.08,rz),5,8)
     for x in (-.88,.88):
         for z in (-.66,.66): leg(b,x,z,.78)
     for z in (-.66,.66):
@@ -209,7 +209,7 @@ def build_cooker_processor():
 def build_conveyor_straight():
     b=legacy.MeshBuilder("conveyor_straight")
     for x,z,rx,rz in ((-1.34,-.48,.26,.18),(-1.34,.48,.24,.17),(1.34,-.48,.28,.18),(1.34,.48,.25,.17),(-.42,-.52,.32,.13),(.54,.52,.30,.13)):
-        b.sphere("snow",(x,.07,z),(rx,.07,rz),5,10)
+        b.sphere("snow",(x,.07,z),(rx,.07,rz),5,8)
     for z in (-.46,.46):
         b.beveled_box("wood",(0,.22,z),(3.02,.18,.18),.050)
         b.rod_between("wood_light",(-1.18,.22,z),(1.18,.64,z),.050,7)
