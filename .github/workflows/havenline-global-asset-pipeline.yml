@@ -25,6 +25,7 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           lfs: false
+          fetch-depth: 0
       - name: Compile globally shared tooling
         run: |
           set -euo pipefail
@@ -50,7 +51,9 @@ jobs:
           fi
       - name: Verify production assets unaffected
         run: |
-          git diff --exit-code -- HavenlineGodot/assets/ HavenlineGodot/scripts/
+          # Compare committed history, not Git LFS working-copy filters.
+          changed=$(git diff --name-only 921eddf55bb0fd6f23e10f3591a3e74b59c6a3d8 HEAD -- HavenlineGodot/assets/ HavenlineGodot/scripts/)
+          test -z "$changed" || { echo "Production paths changed:"; echo "$changed"; exit 1; }
       - name: Retain test evidence
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
