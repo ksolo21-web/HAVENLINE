@@ -215,7 +215,7 @@ jobs:
                   assert unique>=16, f"Godot renderer gave empty/flat pixels for {v['view']}"
               evidence.append({"view":v["view"],"sha256":hashlib.sha256(path.read_bytes()).hexdigest(),"sample_rgb_colors":unique})
           assert len({x["sha256"] for x in evidence})>=3, "Multi-angle frames are duplicated or frozen"
-          (p/"independent-frame-integrity.json").write_text(json.dumps({"test_only":True,"true_shipping_scene":False,"views":evidence},indent=2)+"\\n")
+          (p/"independent-frame-integrity.json").write_text(json.dumps({"test_only":True,"true_shipping_scene":False,"views":evidence},indent=2)+chr(10))
           print("GODOT_SEVEN_VIEW_TECHNICAL_PIXELS_PASS",json.dumps(evidence))
           PY
       - name: Preserve reproducible candidate or failure logs
