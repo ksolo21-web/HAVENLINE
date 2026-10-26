@@ -89,6 +89,14 @@ installation solely to validate Godot camera or material logic.
   pixel inspection found 18,509–64,766 changed pixels per view (2.008%–7.028%).
   The AO map is **not automatically included in the GLB** and this proof does
   not modify shipping assets.
+- **Native 4K isolated capture:** run `40386019672` passed Godot 4.7.2
+  rendering at `3840x2160` for seven genuinely different PNG frames,
+  with the identical source-bound synthetic GLB and the AO atlas applied to a
+  separate preview material. Evidence artifact `12679779624` was independently
+  parsed and its full 4K frame dimensions, hashes and nonblank RGB coverage
+  verified. **These are only technical 4K synthetic renders**, using software
+  OpenGL; the real Havenline shipping-scene 4K, actual style references and
+  physical Android measurements remain untested.
 - **Release safeguards:** `asset_gate.py release` now requires native 4K
   source-hash-bound AO off/on frames with real pixel differences, the correct
   separately saved AO atlas SHA, and positive binding evidence **from the true
@@ -102,7 +110,7 @@ godot --path /workspace/isolated-project --rendering-method gl_compatibility \
  --script res://capture.gd -- \
  --glb=res://assets/asset_LOD0.glb \
  --ao=res://assets/ambient_occlusion.png \
- --out=/workspace/ao-evidence --asset-id=asset
+ --out=/workspace/ao-evidence --asset-id=asset --width=3840 --height=2160
 ```
 
 This demonstration only covers a synthetic 128px texture fixture; it does
