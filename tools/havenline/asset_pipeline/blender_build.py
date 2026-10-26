@@ -90,6 +90,12 @@ def build(a):
     # baking path directly writes raster output; never mark empty PNGs valid.
     scene.render.image_settings.file_format="PNG"
     normal_path=texout/"normal.png"
+    # Blender Cycles requires an active Image Texture bake target even when
+    # saving directly to an external PNG. Without it, the operator misleadingly
+    # returns FINISHED while logging "No active image found".
+    normal_target=bpy.data.images.new("HAVENLINE_NORMAL_BAKE_TARGET",width=a.size,height=a.size,alpha=True)
+    normal_target.colorspace_settings.name="Non-Color"
+    texture_node(material,normal_target)
     set_active([high,low],low)
     result=bpy.ops.object.bake(type="NORMAL",save_mode="EXTERNAL",
                   filepath=str(normal_path),width=a.size,height=a.size,margin=8,
@@ -101,6 +107,9 @@ def build(a):
     normal_pixels=list(normal.pixels)
     assert max(normal_pixels[3::4],default=0)>.5, "Normal PNG contains no opaque painted pixels"
     ao_path=texout/"ambient_occlusion.png"
+    ao_target=bpy.data.images.new("HAVENLINE_AO_BAKE_TARGET",width=a.size,height=a.size,alpha=True)
+    ao_target.colorspace_settings.name="Non-Color"
+    texture_node(material,ao_target)
     set_active([low],low)
     result=bpy.ops.object.bake(type="AO",save_mode="EXTERNAL",
                   filepath=str(ao_path),width=a.size,height=a.size,margin=8,
