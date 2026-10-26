@@ -10,7 +10,7 @@
     "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
     "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
   ],
-  "status": "GLOBAL_POLICY_14_OF_14_PASS__BVH_NORMAL_AND_AO_REAL_PIXELS_PASS__GODOT_AO_7_VIEWS_4K_SYNTHETIC_PASS__REAL_SHIPPING_ANDROID_REFERENCE_STILL_BLOCKED",
+  "status": "SOURCE_14_TESTS_PASS__BVH_NORMAL_AO_TEST_PASS__7_REAL_T05_R07_4K_GODOT_VIEWS_PASS__T05_VISUAL_STYLE_FAIL_AND_MULTIMATERIAL_BAKE_BLOCKED__NO_RELEASE",
   "complete_with_evidence": [
     {
       "milestone": "Separate from unapproved T05 branch",
@@ -61,17 +61,21 @@
       "milestone": "True isolated Godot 4K seven-angle capture with real AO",
       "status": "PASS_SYNTHETIC_TECHNICAL_ONLY",
       "evidence": "Run 40386019672 artifact 12679779624: seven 3840x2160 unique Godot software-rendered PNGs, AO bound, no blank frames, SHA-bound GLB and AO."
+    },
+    {
+      "milestone": "Actual unapproved T05 nine-material asset isolated 4K import",
+      "status": "PASS_VIEWER_TECHNICAL_ONLY_ASSET_VISUAL_FAILURE",
+      "evidence": "Run 40387154217 artifact 12682190633; immutable R07 GLB sha ff9f548c..., 9 material slots, 4 original textures, 7 genuine unique 3840x2160 Godot software-rendered PNGs; AO/normal absent; earlier R07 internal visual score 5.5/10."
     }
   ],
   "critical_unresolved": [
-    "Real T05 R07 cooker benchmark has 9 material slots, while global v1 baker accepts exactly one atlased material. Add a source-faithful validated multi-material-to-atlas or material-preserving workflow; do not flatten materials and claim style approval.",
-    "Render real, exact-owner-reference asset(s) within HavenlineGodot real shipping gameplay scene, at true 3840x2160 from 7 angles and realistic in-use/night/snow states; synthetic fixture is insufficient.",
-    "Use actual reference style and materials (Whiteout-style lock) and obtain independent visual critic with both reference fidelity and visual language 10/10 and all other dimensions strictly >9, no visual defects.",
-    "Measure physical Android sustained 60 FPS with real GPU/CPU frame times, thermal stability, draw calls, texture memory, collision/physics and save behavior; software llvmpipe screenshot test is NOT Android.",
-    "Enforce actual shipping-scene AO material binding and 3840x2160 source-hash-verified before/after AO frames with positive pixel differences; release gate added, evidence not supplied.",
-    "CPU BVH texture baker validated on 128x128 synthetic map only. Real authored maps at 1024+ and performance/memory need direct bake tests; Blender 4.0.2 Cycles native headless remains invalid.",
-    "Per-asset exact owner reference source image binding, real T05 cooker/other future asset geometry, sockets, footprint, triangle/draw-call/texture budget and approved benchmark parity need proof.",
-    "Obtain explicit owner and integration-owner approvals for exact source and outputs. PR #103 remains draft/unmerged; shipping assets and unfinished T05 branch untouched."
+    "Global Blender baker v1 requires one atlased material, while genuine T05 R07 cooker has 9 materials and 4 texture images: build a style-safe multi-material-preserving PBR conversion. Do not flatten to one material without exact image proof.",
+    "T05 R07 cooker visual fidelity recorded only 5.5/10, with snow roof, smoke, metal oven housing, food and base defects. No user style acceptance; exact 18567.png reference must be compared and sculpt reworked.",
+    "Real Godot shipping-scene 3840x2160 seven-angle renders, gameplay context, night/snow states, real sockets/collisions and physical 60 FPS Android benchmark remain untested; verified 4K images are isolated software OpenGL.",
+    "Native Cycles Blender 4.0.2 headless remains invalid for UV/normal/AO baking; CPU BVH tested at 128px only, need production authored maps and performance validation at higher resolutions.",
+    "Production AO binding still absent: release gate requires exact atlas SHA plus actual 4K source-verified Godot shipping scene AO-off/on renders with nonblank pixel differences.",
+    "Independent actual visual critic (reference fidelity and visual language exact 10/10, all other mandatory dimensions strictly >9, no defects) absent.",
+    "Explicit owner approval and integration-owner authorization absent; PR #103 remains draft/unmerged and shipping paths untouched."
   ],
   "frozen_requirements": [
     "Exact reference style and visual language 10/10, all mandatory other critic dimensions >9/10, no known defects",
@@ -80,7 +84,7 @@
     "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
     "Preserve source hashes and evidence across retries"
   ],
-  "next_action": "Begin real-asset candidate bridge by staging existing unapproved T05 cooker reference and 9-material Blender master in isolated workspace, preserving untouched T05 branch. Establish exact owner source and material-fidelity plan, then test multi-material support/atlas on real object before 4K shipping renders or Android. Do not merge PR #103 or promote assets.",
+  "next_action": "Implement multi-material preserving v2 authoring/bake path on immutable staged T05 R07 candidate and test it; do not degrade nine material appearances or substitute procedural art. Then build and show 7 native 4K screenshots of actual T05 cooker in real Havenline shipping scene with owner 18567.png comparison; fix visual defects, run physical Android C6, independent reviewer and owner/integration sign-off.",
   "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
   "superseded_wrong_base_pull_request": 102,
   "latest_work": {
@@ -247,7 +251,40 @@
       "source_visual_approved": false,
       "compatibility_with_global_one_material_baker": "BLOCKED_BEFORE_ATLAS_CONVERSION",
       "no_source_promotion": true,
-      "basis": "T05-BLENDER-R07-PROOF-AND-ACCEPTANCE-CHECKPOINT.json from T05 work branch; source data was inspected without edits"
-    }
+      "basis": "T05-BLENDER-R07-PROOF-AND-ACCEPTANCE-CHECKPOINT.json from T05 work branch; source data was inspected without edits",
+      "verified_4k_review_run": 40387154217,
+      "verified_4k_review_artifact_id": 12682190633,
+      "unapproved_candidate_sha256": "ff9f548c2d16d1f5972b4da2f3162978e65e3caef20ec998ec222e9497cb3a0b",
+      "source_material_names": [
+        "HL_wood",
+        "HL_dark",
+        "HL_wood_light",
+        "HL_blue",
+        "HL_metal",
+        "HL_orange",
+        "HL_red",
+        "HL_cream",
+        "HL_snow"
+      ],
+      "original_primitive_count": 9,
+      "embedded_source_color_images": 4,
+      "normal_maps_embedded": false,
+      "ao_maps_embedded": false,
+      "seven_4k_views_verified": true,
+      "dimensions": [
+        3840,
+        2160
+      ],
+      "native_backend": "Godot 4.7.2 software OpenGL llvmpipe",
+      "isolated": true,
+      "real_shipping_scene": false,
+      "recorded_sampled_rgb_color_range": [
+        796,
+        1484
+      ],
+      "real_visual_review": "Unapproved; roof detail, snow overhang/smoke, metal saw arch, food shapes and base still inaccurate per prior internal 5.5/10 reviewer"
+    },
+    "last_verified_real_asset_run": 40387154217,
+    "last_verified_4k_real_asset": true
   }
 }
