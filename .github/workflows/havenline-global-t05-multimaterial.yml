@@ -65,7 +65,7 @@ jobs:
             --python tools/havenline/asset_pipeline/multimaterial_build.py -- \
             --source "$PWD/real-t05-bridge/T05_R07_MULTIMATERIAL_HIGHLOW_STAGE.blend" \
             --out "$PWD/real-t05-bridge/candidate" --asset-id T05_cooker_R07_UNAPPROVED \
-            --size 128 --materials-max 12 --triangles-max 12424 \
+            --size 128 --materials-max 12 --triangles-max 12424 --bake-uv-mode separate_uv1 \
             > real-t05-bridge/bake.log 2>&1 || {
               tail -180 real-t05-bridge/bake.log; exit 1; }
       - name: Check each original material survives GLB and has real mapped normals
