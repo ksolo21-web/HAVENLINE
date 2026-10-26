@@ -119,6 +119,23 @@ def run(manifest: dict, policy: dict, root: pathlib.Path, mode: str) -> dict:
                     check("texture_dimensions_"+k,im.width>=64 and im.height>=64 and
                           im.width<=4096 and im.height<=4096 and im.width&(im.width-1)==0 and
                           im.height&(im.height-1)==0,im.size)
+                    # A real PNG file is not proof of a real bake. Earlier
+                    # Blender jobs exported fully transparent 128x128 "normal"
+                    # and "AO" textures while all basic file/size checks passed.
+                    rgba=im.convert("RGBA")
+                    alpha_extrema=rgba.getchannel("A").getextrema()
+                    check("texture_contains_painted_pixels_"+k,alpha_extrema[1]>0,
+                          {"alpha_extrema":alpha_extrema})
+                    if k=="normal":
+                        import PIL.ImageStat
+                        avg=PIL.ImageStat.Stat(rgba.convert("RGB")).mean
+                        check("normal_map_has_valid_blue_basis",avg[2]>55,
+                              {"average_RGB":avg})
+                    if k=="ambient_occlusion":
+                        import PIL.ImageStat
+                        avg=PIL.ImageStat.Stat(rgba.convert("RGB")).mean
+                        check("AO_map_not_entirely_black",max(avg)>5,
+                              {"average_RGB":avg})
                     pixels+=im.width*im.height
         # RGBA8 conservative uncompressed estimate with mipmaps; packaging size != VRAM.
         tex_mib=pixels*4*4/3/1048576
