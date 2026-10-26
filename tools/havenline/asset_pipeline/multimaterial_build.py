@@ -98,8 +98,10 @@ def _author_separate_bake_uv(low, materials):
         vertex_owner={}
         for poly in members:
             for vertex_idx in poly.vertices:
-                previous=vertex_owner.get(vertex_idx)
-                if previous is None:vertex_owner[vertex_idx]=poly.index
+                position=low.data.vertices[vertex_idx].co
+                key=tuple(round(float(p)*10000) for p in position)
+                previous=vertex_owner.get(key)
+                if previous is None:vertex_owner[key]=poly.index
                 else:union(poly.index,previous)
         components={}
         for poly in members:
@@ -114,12 +116,24 @@ def _author_separate_bake_uv(low, materials):
             x=[original[loop_idx][0] for loop_idx in loops]
             y=[original[loop_idx][1] for loop_idx in loops]
             xmin,xmax,ymin,ymax=min(x),max(x),min(y),max(y)
+            projected=None
             if xmax-xmin<1e-8 or ymax-ymin<1e-8:
-                raise RuntimeError("Degenerate authored UV island in "+materials[material_index].name)
+                # Source UV0 can be degenerate on certain real mesh surfaces.
+                # Generate only the separate normal/AO UV1 using the two
+                # largest geometry axes; retain original authored UV0 exactly.
+                pts={loop_idx:low.data.vertices[low.data.loops[loop_idx].vertex_index].co for loop_idx in loops}
+                spans=[max(float(v[k]) for v in pts.values())-min(float(v[k]) for v in pts.values()) for k in range(3)]
+                axes=sorted(range(3),key=lambda k:spans[k],reverse=True)[:2]
+                if spans[axes[1]]<1e-7:
+                    raise RuntimeError("Degenerate geometry source cannot form UV1 atlas for "+materials[material_index].name)
+                projected={idx:(float(point[axes[0]]),float(point[axes[1]])) for idx,point in pts.items()}
+                xmin,xmax=min(v[0] for v in projected.values()),max(v[0] for v in projected.values())
+                ymin,ymax=min(v[1] for v in projected.values()),max(v[1] for v in projected.values())
+                print("HAVENLINE_BAKE_UV1_DEGENERATE_SOURCE_RECOVERED",materials[material_index].name,axes,flush=True)
             tile_x=piece_index%grid
             tile_y=piece_index//grid
             for loop_idx in loops:
-                source=original[loop_idx]
+                source=projected[loop_idx] if projected is not None else original[loop_idx]
                 u=(source[0]-xmin)/(xmax-xmin)
                 v=(source[1]-ymin)/(ymax-ymin)
                 uv1.data[loop_idx].uv=((tile_x+margin+u*(1-2*margin))/grid,
