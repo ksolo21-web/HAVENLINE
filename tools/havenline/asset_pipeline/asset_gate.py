@@ -72,6 +72,17 @@ def run(manifest: dict, policy: dict, root: pathlib.Path, mode: str) -> dict:
     check("exact_owner_reference_bound",ref.get("binding")=="exact_owner" and
           isinstance(ref.get("sha256"),str) and len(ref.get("sha256",""))==64 and
           isinstance(ref.get("path"),str) and bool(ref.get("path")))
+    # External models and textures (even from "free" libraries) require
+    # a recorded original source and license. Owner-provided target renders
+    # are reference evidence, not automatically redistributable assets.
+    external=manifest.get("external_assets")
+    allowed=set(policy.get("license_policy",{}).get("allowed_license_spdx",[]))
+    check("external_asset_license_census",isinstance(external,list) and all(
+        isinstance(item,dict) and
+        isinstance(item.get("name"),str) and bool(item.get("name")) and
+        isinstance(item.get("source_url"),str) and item["source_url"].startswith("https://") and
+        item.get("license") in allowed and item.get("license_verified") is True
+        for item in (external if isinstance(external,list) else [])))
     outputs=manifest.get("outputs",{})
     check("master_low_and_bakes_declared",isinstance(outputs.get("master_blend"),str) and
           isinstance(outputs.get("low_glb"),str) and
@@ -160,15 +171,41 @@ def run(manifest: dict, policy: dict, root: pathlib.Path, mode: str) -> dict:
     check("real_shipping_scene",game.get("shipping_scene_loaded") is True and
           game.get("engine")=="Godot" and game.get("candidate_sha256")==expected)
     for view in REQUIRED_VIEWS:
-        filecheck("shipping_native_pixels_"+view,game.get("views",{}).get(view,""))
+        record=game.get("views",{}).get(view,{})
+        if not isinstance(record,dict):
+            check("shipping_native_pixels_"+view,False,"Expected path and SHA256 record")
+            continue
+        expected_image_sha=record.get("sha256")
+        check("native_sha_declared_"+view,isinstance(expected_image_sha,str) and len(expected_image_sha)==64)
+        native=filecheck("shipping_native_pixels_"+view,record.get("path",""),expected_image_sha)
+        if native:
+            try:
+                from PIL import Image
+                with Image.open(native) as image:
+                    valid=image.format=="PNG" and image.width>=policy["evidence"]["minimum_native_frame"][0] and image.height>=policy["evidence"]["minimum_native_frame"][1]
+                    check("native_full_resolution_"+view,valid,{"size":image.size,"format":image.format})
+            except (ImportError,OSError,ValueError) as err:
+                check("native_image_integrity_"+view,False,str(err))
     check("native_pixel_source_binding",game.get("source_commit") == manifest.get("source_commit")
           and bool(game.get("source_commit")))
     perf=e.get("android_physical",{})
     check("real_android_60fps",perf.get("device_type")=="physical_android" and
           isinstance(perf.get("sustained_fps"),(int,float)) and perf["sustained_fps"]>=60 and
           isinstance(perf.get("duration_seconds"),(int,float)) and
-          perf["duration_seconds"]>=policy["performance"]["minimum_sustained_test_seconds"]
-          and perf.get("candidate_sha256")==expected)
+          perf["duration_seconds"]>=policy["performance"]["minimum_sustained_test_seconds"] and
+          bool(perf.get("device_model")) and bool(perf.get("profiler_evidence_id")) and
+          perf.get("candidate_sha256")==expected)
+    cpu=perf.get("p95_cpu_frame_ms")
+    gpu=perf.get("p95_gpu_frame_ms")
+    calls=perf.get("measured_draw_calls")
+    tex=perf.get("measured_texture_gpu_mib")
+    check("physical_frame_drawcalls_texture_budget",
+          all(isinstance(v,(int,float)) and v>=0 for v in (cpu,gpu,calls,tex)) and
+          cpu<=policy["performance"]["global_max_frame_ms"] and
+          gpu<=policy["performance"]["global_max_frame_ms"] and
+          calls<=limits["draw_calls_max"] and tex<=limits["texture_mib_max"] if
+          all(isinstance(v,(int,float)) for v in (cpu,gpu,calls,tex)) else False,
+          {"p95_cpu_ms":cpu,"p95_gpu_ms":gpu,"draw_calls":calls,"texture_mib":tex})
     critic=e.get("independent_critic",{})
     scores=critic.get("scores",{})
     check("independent_reviewer",critic.get("reviewer_kind")=="independent" and
