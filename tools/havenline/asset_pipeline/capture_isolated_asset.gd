@@ -7,6 +7,8 @@ var output_dir: String = ""
 var model_path: String = ""
 var asset_id: String = ""
 var ao_path: String = ""
+var frame_width: int = 1280
+var frame_height: int = 720
 var shots: Array = []
 
 func _initialize() -> void:
@@ -19,9 +21,15 @@ func _initialize() -> void:
             asset_id = arg.trim_prefix("--asset-id=")
         elif arg.begins_with("--ao="):
             ao_path = arg.trim_prefix("--ao=")
+        elif arg.begins_with("--width="):
+            frame_width = arg.trim_prefix("--width=").to_int()
+        elif arg.begins_with("--height="):
+            frame_height = arg.trim_prefix("--height=").to_int()
     assert(not output_dir.is_empty())
     assert(model_path.begins_with("res://assets/"))
     assert(not asset_id.is_empty())
+    assert(frame_width >= 640 and frame_width <= 4096 and frame_width % 16 == 0, "Unsupported capture width")
+    assert(frame_height >= 360 and frame_height <= 4096 and frame_height % 16 == 0, "Unsupported capture height")
     call_deferred("_run_capture")
 
 func _run_capture() -> void:
@@ -29,7 +37,7 @@ func _run_capture() -> void:
     var packed: PackedScene = load(model_path)
     assert(packed != null, "GLB must import before inspection")
     var viewport := SubViewport.new()
-    viewport.size = Vector2i(1280, 720)
+    viewport.size = Vector2i(frame_width, frame_height)
     viewport.own_world_3d = true
     viewport.render_target_update_mode = SubViewport.UPDATE_ALWAYS
     root.add_child(viewport)
@@ -123,6 +131,8 @@ func _run_capture() -> void:
         "ao_preview_only_not_shipping_scene": not ao_path.is_empty(),
         "ao_source_sha256": FileAccess.get_sha256(ao_path) if not ao_path.is_empty() else "",
         "camera_orthographic_size": camera.size,
+        "native_capture_width": frame_width,
+        "native_capture_height": frame_height,
         "world_bounds_min": minimum,
         "world_bounds_max": maximum,
         "view_center": center,
