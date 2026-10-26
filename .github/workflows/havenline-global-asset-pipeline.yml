@@ -34,6 +34,9 @@ jobs:
             tools/havenline/asset_pipeline/compare_reference.py \
             tools/havenline/asset_pipeline/blender_build.py \
             tools/havenline/asset_pipeline/bvh_bake.py \
+            tools/havenline/asset_pipeline/multimaterial_build.py \
+            tools/havenline/asset_pipeline/verify_multimaterial.py \
+            tools/havenline/asset_pipeline/tests/create_multi_material_fixture.py \
             tools/havenline/asset_pipeline/tests/test_asset_gate.py
       - name: Run fail-closed cross-task security and acceptance tests
         run: |
