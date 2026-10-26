@@ -261,6 +261,9 @@ def build_conveyor_straight():
     b.beveled_box("snow",(.67,.88,-.49),(.38,.050,.14),.018,rotation=(0,-.08,-.02))
     return b
 
+# T05 R19: real reference cooker builder, geometry-only; legacy station contracts retained.
+from reference_cooker_r19 import build_cooker_processor
+
 def build_utility_stations():
     result={
         "fishing_rack":build_fishing_rack(),
