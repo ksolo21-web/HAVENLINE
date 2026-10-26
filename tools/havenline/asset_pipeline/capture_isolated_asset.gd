@@ -54,12 +54,26 @@ func _run_capture() -> void:
     ground_material.albedo_color = Color("a3bacb")
     ground_material.roughness = 0.96
     ground.material_override = ground_material
-    ground.position.y = -0.08
     world.add_child(ground)
+    var corners: Array[Vector3] = []
+    _collect_world_corners(subject, corners)
+    assert(not corners.is_empty(), "Imported candidate has no measurable mesh bounds")
+    var minimum: Vector3 = corners[0]
+    var maximum: Vector3 = corners[0]
+    for p in corners:
+        minimum = minimum.min(p)
+        maximum = maximum.max(p)
+    var center: Vector3 = (minimum + maximum) * 0.5
+    var extents: Vector3 = maximum - minimum
+    var largest_extent: float = maxf(extents.x, maxf(extents.y, extents.z))
+    assert(largest_extent > 0.0, "Invalid zero-size candidate bounds")
+    ground.position = Vector3(center.x, minimum.y - 0.08, center.z)
     var camera := Camera3D.new()
     camera.projection = Camera3D.PROJECTION_ORTHOGONAL
     camera.keep_aspect = Camera3D.KEEP_HEIGHT
-    camera.size = 3.8
+    # Frame each asset from measured geometry, not a fixed cooker-sized view.
+    # This prevents small props from appearing tiny and large stations clipping.
+    camera.size = maxf(0.75, largest_extent * 1.85)
     world.add_child(camera)
     camera.current = true
     var count := _count_meshes(subject)
@@ -74,8 +88,9 @@ func _run_capture() -> void:
         "gameplay_oblique": Vector3(5,7,-6)
     }
     for name in viewpoints.keys():
-        camera.position = viewpoints[name]
-        camera.look_at(Vector3(0,1.0,0), Vector3.UP)
+        var direction: Vector3 = (viewpoints[name] as Vector3).normalized()
+        camera.position = center + direction * maxf(4.0, largest_extent * 4.0)
+        camera.look_at(center, Vector3.UP)
         for tick in range(5):
             await process_frame
         await RenderingServer.frame_post_draw
@@ -93,6 +108,10 @@ func _run_capture() -> void:
         "renderer": RenderingServer.get_current_rendering_method(),
         "gpu": RenderingServer.get_video_adapter_name(),
         "mesh_count": count,
+        "camera_orthographic_size": camera.size,
+        "world_bounds_min": minimum,
+        "world_bounds_max": maximum,
+        "view_center": center,
         "shipping_scene_loaded": false,
         "actual_physical_android_tested": false,
         "owner_reference_fidelity_approved": false,
@@ -104,6 +123,22 @@ func _run_capture() -> void:
     file.close()
     print("GLOBAL_ASSET_IMPORT_PROOF ", JSON.stringify(report))
     quit(0)
+
+func _collect_world_corners(node: Node, points: Array[Vector3]) -> void:
+    if node is MeshInstance3D:
+        var mesh_node: MeshInstance3D = node as MeshInstance3D
+        if mesh_node.mesh != null:
+            var local_box: AABB = mesh_node.mesh.get_aabb()
+            for ix in range(2):
+                for iy in range(2):
+                    for iz in range(2):
+                        var p: Vector3 = local_box.position + Vector3(
+                            local_box.size.x * float(ix),
+                            local_box.size.y * float(iy),
+                            local_box.size.z * float(iz))
+                        points.append(mesh_node.global_transform * p)
+    for child in node.get_children():
+        _collect_world_corners(child, points)
 
 func _count_meshes(node: Node) -> int:
     var total: int = 0
