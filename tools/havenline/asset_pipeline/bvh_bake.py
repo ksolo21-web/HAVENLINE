@@ -33,7 +33,7 @@ def _world_bvh_ray(bvh, inv, origin, direction, distance):
     return bvh.ray_cast(local_origin,local_dir,distance)
 
 
-def bake(high, low, size, normal_image, ao_image, ao_rays=8):
+def bake(high, low, size, normal_image, ao_image, ao_rays=8, material_index=None, minimum_pixels=32, minimum_coverage=.05):
     if size>1024:
         raise RuntimeError("CPU BVH fallback limited to 1024px; production 4K needs validated native/accelerated bake")
     if any(abs(x-1.0)>1e-4 for x in (*high.scale,*low.scale)):
@@ -56,6 +56,8 @@ def bake(high, low, size, normal_image, ao_image, ao_rays=8):
     sampled=0
     occlusion_hits=0
     for tri in low.data.loop_triangles:
+        if material_index is not None and low.data.polygons[tri.polygon_index].material_index != material_index:
+            continue
         loops=[low.data.loops[i] for i in tri.loops]
         coords=[Vector(uv[i].uv) for i in tri.loops]
         vertices=[low.data.vertices[loop.vertex_index] for loop in loops]
@@ -119,11 +121,11 @@ def bake(high, low, size, normal_image, ao_image, ao_rays=8):
                 pix_ao[base:base+4]=array("f",(ao_value,ao_value,ao_value,1.0))
                 sampled+=1
     coverage=sampled/(size*size)
-    if sampled<32 or coverage<.05 or high_hits<32:
+    if sampled<minimum_pixels or coverage<minimum_coverage or high_hits<minimum_pixels:
         raise RuntimeError(f"Geometry-derived bake has inadequate UV/ray coverage: {sampled} pixels, fraction {coverage:.4f}")
     normal_image.pixels.foreach_set(pix_normal)
     ao_image.pixels.foreach_set(pix_ao)
-    stats={"backend":"cpu_bvh_real_geometry","rasterized_pixels":sampled,
+    stats={"backend":"cpu_bvh_real_geometry","material_index":material_index,"rasterized_pixels":sampled,
            "texture_coverage":round(coverage,5),"high_to_low_ray_hits":high_hits,
            "ambient_occlusion_ray_count":sampled*ao_rays,
            "ambient_occlusion_intersections":occlusion_hits}
