@@ -24,7 +24,7 @@ def main():
     for view in ("front","three-quarter","right","rear"):
         required.append(out/("T05_cooker_"+view+".png"))
     assert all(p.exists() and p.stat().st_size>100 for p in required), "Blender deliverable missing"
-    assert source_blend.read_bytes()[:7]==b"BLENDER-", "Not a native editable Blender file"
+    assert source_blend.read_bytes()[:7]==b"BLENDER", "Not a native editable Blender file"
     assert target_glb.read_bytes()[:4]==b"glTF", "Not a GLB"
     meta=json.loads(metadata.read_text())
     assert meta["does_not_replace_game_asset"] is True
