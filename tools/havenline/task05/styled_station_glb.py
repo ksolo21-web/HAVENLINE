@@ -81,6 +81,10 @@ def authored_color(material: str, position, normal, asset_id: str = ""):
         if asset_id == "cooked_food_stack":
             # Actual meat, not orange bread/blocks; scoped RGB under same HL_orange.
             return (tone, _clamp(tone * .53), _clamp(tone * .53), 1.0)
+        if asset_id == "cooker_processor" and abs(x) > .53 and 1.035 < y < 1.35 and z > -.27:
+            # Keep bright orange machine controls while giving raw/processed
+            # meat physically readable red color under the frozen HL_orange slot.
+            return (tone, _clamp(.23 + .045 * broad), _clamp(.88 + .04 * fine), 1.0)
         return (tone, _clamp(tone * .89), _clamp(tone * .72), 1.0)
 
     if material == "yellow":
