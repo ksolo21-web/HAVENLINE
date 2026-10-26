@@ -216,8 +216,8 @@ cylinder("Hollow looking black exhaust",(.20,2.398,.06),.113,.012,"dark","Z",18)
 # the old flat grid canopy with disconnected bead-like spheres.
 # The source remains fully editable: change each metaball, then re-export.
 snow_meta=bpy.data.metaballs.new("R05_editable_snow_mounds")
-snow_meta.resolution=.110
-snow_meta.render_resolution=.110
+snow_meta.resolution=.052
+snow_meta.render_resolution=.052
 snow_meta.threshold=.48
 snow_part=bpy.data.objects.new("Fused thick sculpted snow roof — owner 18567",snow_meta)
 art.objects.link(snow_part)
@@ -320,6 +320,16 @@ for obj in made:
         if not converted.data.materials:
             assert source_material is not None, "Unmaterialed Blender "+source_kind+" source"
             converted.data.materials.append(source_material)
+        if source_kind=="META":
+            snow_faces=len(converted.data.polygons)
+            print("T05_METABALL_SNOW_SURFACE_POLYGONS",snow_faces,flush=True)
+            assert snow_faces>=150, "Fused Blender snow has no usable exterior surface"
+            # Editable .blend retains the detailed implicit-surface sculpt;
+            # only the GLB export receives a mobile-targeted decimator.
+            if snow_faces>2450:
+                lod=converted.modifiers.new("Mobile snow silhouette decimator","DECIMATE")
+                lod.ratio=min(1.,2450./snow_faces)
+                print("T05_METABALL_SNOW_EXPORT_RATIO",lod.ratio,flush=True)
         converted.select_set(False)
 # Blender replaces the Object RNA when META is converted into a mesh.
 # Never dereference stale source-object handles after conversion; instead
