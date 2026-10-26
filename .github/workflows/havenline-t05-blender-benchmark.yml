@@ -61,6 +61,35 @@ jobs:
           ImageDraw.Draw(sheet).text((20,10),"HAVENLINE T05 — BLENDER STUDIO CANDIDATE / NOT IN-GAME / NOT APPROVED",fill=(235,237,243))
           sheet.save(p/"T05_Benchmark_4_Angles.png")
           PY
+      - name: Re-import Blender GLB into isolated Godot mobile renderer
+        run: |
+          set -euo pipefail
+          sudo apt-get install -y --no-install-recommends xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/godot-bin" "$RUNNER_TEMP/godot-blender-candidate/assets" t05-blender-evidence/godot
+          cp tools/havenline/blender/capture_isolated_godot_cooker.gd "$RUNNER_TEMP/godot-blender-candidate/capture.gd"
+          cp t05-blender-evidence/T05_cooker_BLENDER_CANDIDATE.glb "$RUNNER_TEMP/godot-blender-candidate/assets/"
+          printf 'config_version=5\n[application]\nconfig/name="Havenline T05 Isolated Blender Import"\n' > "$RUNNER_TEMP/godot-blender-candidate/project.godot"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/godot-bin/engine.zip"
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  '"$RUNNER_TEMP/godot-bin/engine.zip" | sha512sum -c -
+          unzip -q "$RUNNER_TEMP/godot-bin/engine.zip" -d "$RUNNER_TEMP/godot-bin"
+          chmod +x "$RUNNER_TEMP/godot-bin/Godot_v4.7.2-stable_linux.x86_64"
+          engine="$RUNNER_TEMP/godot-bin/Godot_v4.7.2-stable_linux.x86_64"
+          timeout 180 "$engine" --headless --editor --path "$RUNNER_TEMP/godot-blender-candidate" --import --quit > t05-blender-evidence/godot/import.log 2>&1
+          export VK_ICD_FILENAMES="$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)"
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 240 "$engine" \
+            --path "$RUNNER_TEMP/godot-blender-candidate" --rendering-method mobile --rendering-driver vulkan \
+            --audio-driver Dummy --resolution 1280x720 --script res://capture.gd -- \
+            --out="$PWD/t05-blender-evidence/godot" > t05-blender-evidence/godot/capture.log 2>&1 || {
+              tail -100 t05-blender-evidence/godot/import.log
+              tail -100 t05-blender-evidence/godot/capture.log
+              exit 1
+            }
+          test "$(find t05-blender-evidence/godot -name 'isolated-godot-*.png' | wc -l)" -eq 4
+          test -s t05-blender-evidence/godot/isolated-godot-report.json
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' t05-blender-evidence/godot/*.log; then exit 1; fi
+          cmp "$RUNNER_TEMP/godot-blender-candidate/assets/T05_cooker_BLENDER_CANDIDATE.glb" t05-blender-evidence/T05_cooker_BLENDER_CANDIDATE.glb
+          echo "Isolated Godot 4-angle import/render check passed (NOT shipping game certification)"
       - name: Archive explicit candidate evidence, even on failure
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
