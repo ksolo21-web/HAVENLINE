@@ -123,12 +123,35 @@ def run(manifest: dict, policy: dict, root: pathlib.Path, mode: str) -> dict:
                     # that is still wholly transparent. Evaluate actual saved
                     # PNG alpha, not the API response or merely its byte size.
                     if k in ("normal","ambient_occlusion"):
-                        with Image.open(p) as im_check:
-                            alpha=im_check.convert("RGBA").getchannel("A")
-                            hist=alpha.histogram()
-                            coverage=sum(hist[1:])/max(1,sum(hist))
-                            check("nontransparent_baked_"+k,coverage>=.05,
-                                  {"opaque_pixel_ratio":round(coverage,5),"minimum":.05})
+                        # Opacity alone cannot prove a bake: Blender 4.0 returned
+                        # fully opaque 128/128/128 normals and black AO after a
+                        # misleading FINISHED status. Validate channel semantics.
+                        rgba=im.convert("RGBA")
+                        alpha=rgba.getchannel("A")
+                        hist=alpha.histogram()
+                        coverage=sum(hist[1:])/max(1,sum(hist))
+                        check("nontransparent_baked_"+k,coverage>=.05,
+                              {"opaque_pixel_ratio":round(coverage,5),"minimum":.05})
+                        count=rgba.width*rgba.height
+                        sample_count=min(count,8192)
+                        real=0
+                        for i in range(sample_count):
+                            offset=(i*104729)%count
+                            red,green,blue,a=rgba.getpixel((offset%rgba.width,offset//rgba.width))
+                            if a<128:
+                                continue
+                            if k=="normal":
+                                # Tangent-space normal maps must point outward;
+                                # alpha-only flat gray is not encoded +Z.
+                                real+=blue>=160 and blue>=red+14 and blue>=green+14
+                            else:
+                                # AO is a gray occlusion scalar. A wholly black
+                                # bake is not a meaningful isolated-mesh AO.
+                                real+=max(red,green,blue)>=32 and max(red,green,blue)-min(red,green,blue)<=10
+                        plausible=real/max(1,sample_count)
+                        check("baked_channel_semantics_"+k,plausible>=.05,
+                              {"plausible_sample_ratio":round(plausible,5),
+                               "min_ratio":.05,"samples":sample_count})
                     pixels+=im.width*im.height
         # RGBA8 conservative uncompressed estimate with mipmaps; packaging size != VRAM.
         tex_mib=pixels*4*4/3/1048576
