@@ -16,7 +16,7 @@ def move(obj,collection):
     collection.objects.link(obj)
 bpy.ops.mesh.primitive_uv_sphere_add(segments=24,ring_count=16,radius=.46,location=(0,0,.52))
 high=bpy.context.object;high.name="DETAIL_MASTER_High"
-move(high,hi);high.data.materials.append(mat)
+move(high,hi);high.data.materials.append(mat.copy())  # source shader independent from active low bake image target
 bpy.ops.mesh.primitive_uv_sphere_add(segments=12,ring_count=8,radius=.45,location=(0,0,.52))
 low=bpy.context.object;low.name="GAME_LOD0_Low"
 move(low,lo);low.data.materials.append(mat)
