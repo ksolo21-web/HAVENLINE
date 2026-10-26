@@ -206,8 +206,10 @@ num=len(top)
 for zi in range(z_steps):
     for xi in range(x_steps):
         q=zi*stride+xi
-        surface_faces.append((q,q+1,q+stride+1,q+stride))
-        surface_faces.append((q+num+stride,q+num+stride+1,q+num+1,q+num))
+        # Positive game Y must be the visible upper-face normal: X/Z order is
+        # inverted compared to Blender's default XY plane.
+        surface_faces.append((q,q+stride,q+stride+1,q+1))
+        surface_faces.append((q+num,q+num+1,q+num+stride+1,q+num+stride))
 # Rounded perimeter drop-face drapes, stitched as one closed mesh.
 edges=[]
 for xi in range(x_steps):edges.append((xi,xi+1))
