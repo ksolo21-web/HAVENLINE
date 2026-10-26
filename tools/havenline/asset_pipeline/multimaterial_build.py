@@ -76,8 +76,8 @@ def _author_separate_bake_uv(low, materials):
     never silently unrolls an ambiguous or self-overlapping original island.
     """
     import math
-    uv0=low.data.uv_layers.active
-    original=[tuple(v.uv) for v in uv0.data]
+    uv0_name=low.data.uv_layers.active.name
+    original=[tuple(v.uv) for v in low.data.uv_layers[uv0_name].data]
     if len(low.data.uv_layers)!=1:
         raise RuntimeError("Separate bake UV needs exactly one original UV0")
     uv1=low.data.uv_layers.new(name="HAVENLINE_BAKE_UV")
@@ -111,35 +111,35 @@ def _author_separate_bake_uv(low, materials):
         margin=.035
         for piece_index,polygons in enumerate(pieces):
             loops=[loop_idx for poly in polygons for loop_idx in poly.loop_indices]
-            x=[uv0.data[loop_idx].uv.x for loop_idx in loops]
-            y=[uv0.data[loop_idx].uv.y for loop_idx in loops]
+            x=[original[loop_idx][0] for loop_idx in loops]
+            y=[original[loop_idx][1] for loop_idx in loops]
             xmin,xmax,ymin,ymax=min(x),max(x),min(y),max(y)
             if xmax-xmin<1e-8 or ymax-ymin<1e-8:
                 raise RuntimeError("Degenerate authored UV island in "+materials[material_index].name)
             tile_x=piece_index%grid
             tile_y=piece_index//grid
             for loop_idx in loops:
-                source=uv0.data[loop_idx].uv
-                u=(source.x-xmin)/(xmax-xmin)
-                v=(source.y-ymin)/(ymax-ymin)
+                source=original[loop_idx]
+                u=(source[0]-xmin)/(xmax-xmin)
+                v=(source[1]-ymin)/(ymax-ymin)
                 uv1.data[loop_idx].uv=((tile_x+margin+u*(1-2*margin))/grid,
                                       (tile_y+margin+v*(1-2*margin))/grid)
         print("HAVENLINE_BAKE_UV1_PACK",materials[material_index].name,
               "connected_components",len(pieces),"tile_grid",grid,flush=True)
     low.data.uv_layers.active=uv1
     uv1.active_render=True
-    uv0.active_render=False
-    if [tuple(v.uv) for v in uv0.data]!=original:
+    low.data.uv_layers[uv0_name].active_render=False
+    if [tuple(v.uv) for v in low.data.uv_layers[uv0_name].data]!=original:
         raise RuntimeError("Original author color UV0 changed during UV1 preparation")
     for mat in materials:
         nodes=mat.node_tree.nodes
         uvnode=nodes.new("ShaderNodeUVMap")
         uvnode.name="HL_PRESERVE_AUTHOR_UV0"
-        uvnode.uv_map=uv0.name
+        uvnode.uv_map=uv0_name
         for image_node in list(nodes):
             if image_node.type=="TEX_IMAGE" and not image_node.inputs["Vector"].is_linked:
                 mat.node_tree.links.new(uvnode.outputs["UV"],image_node.inputs["Vector"])
-    return uv1.name,uv0.name
+    return uv1.name,uv0_name
 
 def main():
     argv=sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else []
