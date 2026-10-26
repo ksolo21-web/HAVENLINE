@@ -49,6 +49,38 @@ func run():
  game.sim.climate.seconds=0.0;game.outpost_view.sync(game.sim,.1,false)
  focus(Vector2(0,2.0),Vector3(16,20,19),17.0)
  await snap("whole-camp-oblique")
+ # R18: real placed stations on the unmodified shipping gameplay scene.
+ # Camera-only inspection; no isolated stages, asset transforms or hidden props.
+ var catalog=JSON.parse_string(FileAccess.get_file_as_string("res://assets/stations_v2/catalog.json"))
+ assert(catalog is Dictionary)
+ var targets=["cooker_processor","cargo_crate","fish_crate","fuel_canister","intake_machine"]
+ var views=[
+  {"id":"front","offset":Vector3(0,5.4,-8.0),"size":4.6},
+  {"id":"right","offset":Vector3(8.0,5.4,0),"size":4.6},
+  {"id":"rear","offset":Vector3(0,5.4,8.0),"size":4.6},
+  {"id":"three-quarter","offset":Vector3(6.0,5.4,-7.2),"size":4.6}
+ ]
+ var captured_assets=[]
+ for area in ["camp","lakeshore"]:
+  for placement in catalog["arrangements"][area]:
+   var id=String(placement["id"])
+   if not id in targets:continue
+   var xyz=placement["position"]
+   var point=Vector2(float(xyz[0]),float(xyz[2]))
+   captured_assets.append(id)
+   for view in views:
+    var target=Vector3(point.x,Surface.height_at(point)+.95,point.y)
+    game.camera.size=float(view["size"])
+    game.camera.position=target+Vector3(view["offset"])
+    game.camera.look_at(target,Vector3.UP)
+    var frame_name="live-"+id+"-"+String(view["id"])
+    await snap(frame_name)
+    rows[-1]["asset_id"]=id
+    rows[-1]["area"]=area
+    rows[-1]["view"]=String(view["id"])
+    rows[-1]["placement"]=xyz
+    rows[-1]["unmodified_shipped_asset_transform"]=true
+ assert(captured_assets.size()==targets.size())
  var f=FileAccess.open(output.path_join("capture.json"),FileAccess.WRITE)
  f.store_string(JSON.stringify({"candidate_source":candidate_source,"actual_shipping_runtime_scene":true,"disclosed_detail_and_reverse_QA_cameras":true,"production_visual_approval":false,"renderer":RenderingServer.get_current_rendering_method(),"adapter":RenderingServer.get_video_adapter_name(),"frames":rows,"boundary_evidence":game.camp_boundary_view.descriptor}))
  game.outpost_audio.stop_all()
