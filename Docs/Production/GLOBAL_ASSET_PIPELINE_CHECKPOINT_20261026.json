@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-26",
+  "program": "HAVENLINE Global Asset Studio",
+  "scope": "entire game, all current and future TXX tasks, all biomes and props",
+  "repository": "ksolo21-web/HAVENLINE",
+  "integration_pull_request": 103,
+  "integration_base": "codex/havenline-sequential-task-01",
+  "approved_reference_authority": [
+    "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
+    "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
+  ],
+  "status": "GLOBAL_13_TESTS_PASS__GEOMETRY_AO_NORMAL_AND_TANGENTS_PASS_128PX__GODOT_4_7_2_IMPORT_PASS__SEVEN_ANGLE_RENDER_PENDING__DRAFT_UNMERGED",
+  "complete_with_evidence": [
+    {
+      "milestone": "Separate from unapproved T05 branch",
+      "status": "PASS",
+      "evidence": "PR #103 compared against f74a84a2a288ab3d3935fba7a6cb9b975c2df239: only 14 global tool/policy/workflow files"
+    },
+    {
+      "milestone": "Global policy and thirteen positive/negative contract tests",
+      "status": "PASS",
+      "evidence": "Run 40379609976 passed 13/13, including GLB normal binding/buffer bounds, 40379788240 source guards passed after CI timeout change"
+    },
+    {
+      "milestone": "Reference owner-image binding and frozen budgets",
+      "status": "PASS_SOURCE_TESTED",
+      "evidence": "asset_gate.py and T05 cooker example"
+    },
+    {
+      "milestone": "Seven-angle isolated Godot asset capture utility",
+      "status": "GODOT_IMPORT_PASS_SEVEN_ANGLE_RENDER_PENDING",
+      "evidence": "Run 40380585851: Godot 4.7.2 successfully imported unmodified synthetic GLB, one mesh/material with normal bound. Seven-angle capture CI run 40381157048 pending; no in-game approval."
+    },
+    {
+      "milestone": "Raw Android physical profiler evidence collection",
+      "status": "SOURCE_ONLY",
+      "evidence": "device_capture.py requires attached phone, not tested"
+    },
+    {
+      "milestone": "Khronos glTF validator and glTF Transform inspection",
+      "status": "PASS_AT_128PX_SYNTHETIC_SMOKE",
+      "evidence": "Run 40379776370: Khronos 0 errors/0 warnings, GLB tangent attribute present; map hash and embedded normal exact bytes match"
+    },
+    {
+      "milestone": "Reusable Blender master/low mesh, texture baking and export",
+      "status": "PASS_BVH_GEOMETRY_NORMAL_AND_AO_SYNTHETIC_128PX",
+      "evidence": "Run 40379776370: 9692 UV texels, 77536 AO rays, 4092 actual occlusions, 1190 normal colors, 9 AO shades; not approved for 4K production"
+    }
+  ],
+  "critical_unresolved": [
+    "Seven-angle isolated Godot rendering smoke run 40381157048 pending; verify 7 distinct 1280x720 genuine engine PNGs and independent nonblank/multi-angle color checks; no production scene claim.",
+    "Blender 4.0.2 native Cycles still produces invalid empty/flat bake outputs; BVH CPU fallback used for validated 128px geometry fixture.",
+    "CPU BVH fallback limited to 1024px; need 4K map production quality and throughput validation without weakening visual/performance standard.",
+    "Real, owner-exact-reference, full native Havenline shipping scene and 3840x2160 multi-angle in-game renders not verified.",
+    "Real device Android 60 FPS, thermal, GPU/CPU frame times, draw calls and memory not verified.",
+    "Independent genuine visual critic, reference/visual language exact 10/10 and other scores >9 not complete.",
+    "Explicit user approval and integration owner approval absent; PR #103 stays draft and unmerged.",
+    "Source-bound packaging, material/AO connection in actual game and production asset parity remain open."
+  ],
+  "frozen_requirements": [
+    "Exact reference style and visual language 10/10, all mandatory other critic dimensions >9/10, no known defects",
+    "Current approved art, T05 R07 candidate, gameplay scripts and frozen sockets remain untouched",
+    "No automatic promotion or fake FPS verification",
+    "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
+    "Preserve source hashes and evidence across retries"
+  ],
+  "next_action": "Inspect run 40381157048 for seven real isolated Godot 1280x720 screenshots. Review actual pixels/hashes; fix renderer capture defects and retest. Then benchmark scaled BVH, test real author assets in shipping 4K scene, physical Android, independent critique and get explicit approvals. No merge or promotion before all gates.",
+  "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
+  "superseded_wrong_base_pull_request": 102,
+  "latest_work": {
+    "date": "2026-10-26",
+    "scope": "GLOBAL_ASSET_TOOLING_ONLY",
+    "original_transparent_bake_run": 40355106912,
+    "opaque_false_positive_run": 40362621094,
+    "uv_diagnostic_failure_run": 40363461455,
+    "deterministic_bvh_fallback_run": 40364514593,
+    "bvh_fallback_commit": "f4dc840b4dd4d0c9c9dfbc201d3c99692b1783b4",
+    "review": "INTERNAL_REVIEW_NOT_SEPARATE_CRITIC",
+    "observations": [
+      "Old original normal/AO outputs had 0% nontransparent pixels",
+      "Opacity-only fix produced 100% opaque but uniform 128,128,128 normal and uniform 0,0,0 AO",
+      "Blender UV diagnostic produced uniform 0,0,0 despite active low UV and target node",
+      "asset_gate now fails closed on valid channel semantics, not merely alpha",
+      "Separate BVH geometry-based high-to-low/AO backend added, smoke run not yet accepted pending pixel inspection"
+    ],
+    "rollback": "Original shipping assets and approved assets unchanged; PR #103 still draft",
+    "bvh_fallback_verified_run": 40374522541,
+    "verified_normal_colors": 775,
+    "high_to_low_ray_hits": 14353,
+    "uv_raster_coverage": 0.87604,
+    "smoke_map_size": [
+      128,
+      128
+    ],
+    "embedded_normal_matches_png_bytes": true,
+    "verified_glb_sha256": "48745984787fd7f58432aff61322155fbed1d8c5d8ba52f8b38b1ab579cbe926",
+    "verified_normal_sha256": "80af25812e1c921091fc68b00677d7e05b625085b4ee98787a2708c69e423685",
+    "ao_rays_cast": 114824,
+    "ao_ray_intersections": 0,
+    "ao_note": "Convex smoke sphere has no occluder and generated uniformly white AO; source changes now add wall + distinct split UV islands to verify genuinely nonwhite occlusion.",
+    "ao_fixture_run": 40375276759,
+    "tangent_and_json_run": 40375345435,
+    "tangent_warning_on_first_bvh_run": "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE (1 warning, 0 errors)",
+    "latest_source_13_of_13_run": 40379609976,
+    "latest_source_suite_after_timeout_change": 40379788240,
+    "test_count": 13,
+    "embedded_normal_pixel_integrity_gate": true,
+    "mandatory_explicit_normal_tangent_gate": true,
+    "per_commit_ci_concurrency": true,
+    "apt_install_step_timeout_minutes": 10,
+    "apt_update_command_timeout_seconds": 180,
+    "apt_install_command_timeout_seconds": 360,
+    "latest_real_ao_tangent_workflow_run": 40379776370,
+    "latest_workflow_commit": "9e1cf8f1b0f9f07f2846ba4c6b4515b74a836e4b",
+    "latest_critic_status": "INTERNAL_REVIEW_ONLY_NOT_INDEPENDENT",
+    "latest_discovery": "Prior AO/tangent runs remained in Blender apt install. Local apt mirror update also timed out at 18 seconds, supporting package-mirror blockage. No new AO/tangent artifacts have yet passed.",
+    "confirmed_full_bake_run": 40379776370,
+    "latest_isolated_godot_import_run": 40380585851,
+    "current_seven_view_render_run": 40381157048,
+    "normal_unique_colors": 1190,
+    "ao_unique_colors": 9,
+    "ao_real_intersections": 4092,
+    "rays_against_actual_geometry": 77536,
+    "rasterized_uv_pixels": 9692,
+    "map_size": [
+      128,
+      128
+    ],
+    "khronos_errors": 0,
+    "khronos_warnings": 0,
+    "glb_has_explicit_tangents": true,
+    "godot_engine_version": "4.7.2.stable.official.ed1daf0bf",
+    "godot_import_mesh_instances": 1,
+    "godot_normal_mapped_material_surfaces": 1,
+    "godot_import_candidate_sha256": "0be5404ca8e14ab90197f5c4d514603842447af5e262322595cad0a0e832817d",
+    "normal_texture_sha256": "86ec5980bb84a9989111d5f142ff190f0d10157128d3294d66664956359a785a",
+    "ao_texture_sha256": "4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134",
+    "godot_import_artifact_id": 12678222113,
+    "independent_image_analysis": "Actual 128px PNG distributions independently inspected; 1190 normal colors, 9 AO shades, 4092 true AO ray intersections, embedded normal exact PNG hash.",
+    "independent_review": "INTERNAL_REVIEW_ONLY; no independent visual critic"
+  }
+}
