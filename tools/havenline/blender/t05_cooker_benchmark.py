@@ -7,7 +7,7 @@ four reference-comparison camera renders; it never overwrites the game cooker.
 Primary object reference: owner-supplied 18567.png (not redistributable).
 """
 import bpy, math, random, sys, json, pathlib
-from mathutils import Vector
+from mathutils import Vector, Matrix
 
 args=sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else []
 out=pathlib.Path(args[args.index("--out")+1] if "--out" in args else "/tmp/havenline-blender-cooker").resolve()
@@ -88,7 +88,7 @@ def box(name,pos,size,key,bevel=.035):
     if bevel>0:
         mod=o.modifiers.new("Hand-finished edge bevel","BEVEL")
         mod.width=min(bevel,min(size)*.22);mod.segments=2
-        mod.affect="EDGES" if hasattr(mod,"affect") else None
+        if hasattr(mod,"affect"): mod.affect="EDGES"
         o.modifiers.new("Weighted corner normals","WEIGHTED_NORMAL")
     return o
 def cylinder(name,pos,radius,depth,key,axis="Z",verts=20):
@@ -193,6 +193,12 @@ for x,y,z,rx in ((-.42,1.73,-.56,.115),(-.19,1.73,-.55,.16),(.12,1.74,-.57,.13),
     ball("Organic downward snow lip",(x,y,z),(rx,.105,.11),"snow",12,7)
 for x,z in ((-1.09,-.20),(-.61,.54),(1.02,.61)):
     ball("Accumulated snow on tray edges",(x,1.22,z),(.10,.054,.083),"snow",12,7)
+# Blender is Z-up while Godot and glTF are Y-up: rotate the authored
+# Godot-space model into Blender-space before editing, viewing and export.
+# Blender glTF export_yup rotates it back to the original game coordinates.
+coordinate_rotation=Matrix.Rotation(math.pi/2,4,"X")
+for object in made:
+    object.matrix_world=coordinate_rotation @ object.matrix_world
 # Exporting does NOT use the black-background studio, only the actual model.
 bpy.ops.object.select_all(action="DESELECT")
 for o in made:o.select_set(True)
@@ -204,7 +210,7 @@ def staging_box(n,pos,size,color):
     o=bpy.context.object;o.name=n;o.scale=size
     move(o,stage);o.data.materials.append(color)
 floor=mat("preview_floor",(.032,.055,.085),1)
-staging_box("Studio ground only",(0,-.17,0),(7,.1,7),floor)
+staging_box("Studio ground only",(0,0,-.17),(7,7,.1),floor)
 world=bpy.context.scene.world
 if world is None:world=bpy.data.worlds.new("Night stage");bpy.context.scene.world=world
 world.use_nodes=True
@@ -212,8 +218,9 @@ world.node_tree.nodes["Background"].inputs[0].default_value=(.06,.09,.14,1)
 world.node_tree.nodes["Background"].inputs[1].default_value=.65
 def area_light(name,pos,energy,size):
     light=bpy.data.lights.new(name,"AREA");light.energy=energy;light.shape="DISK";light.size=size
-    o=bpy.data.objects.new(name,light);stage.objects.link(o);o.location=pos
-    direction=Vector((0,1.2,0))-o.location;o.rotation_euler=direction.to_track_quat("-Z","Y").to_euler()
+    o=bpy.data.objects.new(name,light);stage.objects.link(o)
+    o.location=(pos[0],-pos[2],pos[1])
+    direction=Vector((0,0,1.2))-o.location;o.rotation_euler=direction.to_track_quat("-Z","Y").to_euler()
 for name,pos,energy,size in (("Key",(3,-2,-4),900,4),("Fill",(-4,2,-1),650,5),("Rim",(-2,4,3),600,4)):
     area_light(name,pos,energy,size)
 camera_data=bpy.data.cameras.new("Review Camera");cam=bpy.data.objects.new("Review Camera",camera_data)
@@ -227,7 +234,7 @@ scene.render.image_settings.file_format="PNG"
 scene.render.film_transparent=False
 shots={"front":(0,2.7,-5.2),"three-quarter":(4.0,3.1,-4.7),"right":(5.4,2.9,.0),"rear":(0,3.0,5.2)}
 for key,loc in shots.items():
-    cam.location=loc;d=Vector((0,1.22,0))-cam.location;cam.rotation_euler=d.to_track_quat("-Z","Y").to_euler()
+    cam.location=(loc[0],-loc[2],loc[1]);d=Vector((0,0,1.22))-cam.location;cam.rotation_euler=d.to_track_quat("-Z","Y").to_euler()
     scene.render.filepath=str(out/("T05_cooker_"+key+".png"))
     bpy.ops.render.render(write_still=True)
 # Join by material ONLY in the exported GLB, not in editable .blend.
@@ -245,8 +252,10 @@ src=[obj for obj in art.objects if obj.type=="MESH"]
 for o in src:
     bpy.context.view_layer.objects.active=o
     for m in list(o.modifiers):
+        o.select_set(True)
         try:bpy.ops.object.modifier_apply(modifier=m.name)
         except RuntimeError:pass
+        o.select_set(False)
 groups={}
 for o in list(src):
     name=o.data.materials[0].name
@@ -263,7 +272,7 @@ for obj in art.objects:
 if not list(x for x in bpy.context.selected_objects if x.type=="MESH"):raise RuntimeError("no candidate meshes")
 bpy.context.view_layer.objects.active=list(bpy.context.selected_objects)[0]
 bpy.ops.export_scene.gltf(filepath=str(out/"T05_cooker_BLENDER_CANDIDATE.glb"),
-                          export_format="GLB",use_selection=True,export_apply=True)
+                          export_format="GLB",use_selection=True,export_apply=True,export_yup=True)
 report={"status":"CANDIDATE_NOT_VISUALLY_APPROVED","source_image":"18567.png",
         "reference_is_user_authority":True,
         "object":"cooker_processor","app":"Blender","candidate_only":True,
