@@ -174,10 +174,34 @@ def build_wood_stack():
                 bx=x+dx*r;by=y+dy*r
                 b.rod_between("wood_light",(bx,by,z-length*.35),
                               (bx,by+.010,z+length*.35),.012,5)
+            # Actual end-grain splits: small asymmetric radial cracks embedded
+            # in each warm growth face instead of six perfect bullseyes.
+            for k in range(3):
+                ang=.31+i*.41+k*math.tau/3
+                face_front=z-length*.5-.027
+                inner=.29+.08*math.sin(i+k)
+                outer=.72+.09*math.cos(i*.8+k)
+                b.rod_between("wood",(x+r*inner*math.cos(ang),y+r*inner*math.sin(ang),face_front),
+                              (x+r*outer*math.cos(ang+.09),y+r*outer*math.sin(ang+.09),face_front),
+                              .008,5)
+            # Bark is sculpted in different-length raised fissures, not painted
+            # onto a perfectly cylindrical tube. Raised ridges break the sheen.
+            for k in range(3):
+                ang=.40+k*.93+i*.13
+                ax=x+r*.972*math.cos(ang)
+                ay=y+r*.972*math.sin(ang)
+                b.rod_between("wood_light",(ax,ay,z-length*.27),
+                              (ax+r*.025,ay-r*.014,z+length*.22),.010,5)
         if i in (0,2,3,4,5,10):
             cap=(.92,.73,.55) if i<4 else (.72,.68,.45)
             b.sphere("snow",(x-.018,y+r*.91,z-.03),
                      (r*cap[0],r*.37,length*cap[2]),4,10)
+            if i<4:
+                # Overlapping lumpy front/side lobes create a shallow natural
+                # overhang like the provided snow-loaded large timber reference.
+                for off,zz in ((-.49,-.18),(.43,.17)):
+                    b.sphere("snow",(x+off*r,y+.66*r,z+zz*length),
+                             (r*.40,r*.23,length*.15),3,8)
     # Two continuous, close-fitting rope hoops encircle the bound small-log
     # bundle instead of floating across the top of unrelated big timbers.
     for z in (-.23,.23):
