@@ -111,6 +111,35 @@ def tube(name,points,material,width=.035,res=2):
     o=bpy.data.objects.new(name,curve);art.objects.link(o)
     o.data.materials.append(palette[material]);made.append(o)
     return o
+def extruded_arch_panel(name, cx, bottom, shoulder, crown, z, width, thickness, key):
+    """Forged semi-circular door housing with real raised thickness, -Z front."""
+    profile=[(cx-width,bottom),(cx+width,bottom),(cx+width,shoulder)]
+    for step in range(1,15):
+        angle=math.pi*step/14
+        profile.append((cx+width*math.cos(angle),shoulder+crown*math.sin(angle)))
+    verts=[(x,y,z-thickness*.5) for x,y in profile]
+    verts += [(x,y,z+thickness*.5) for x,y in profile]
+    n=len(profile)
+    faces=[]
+    for i in range(1,n-1):
+        faces.append((0,i+1,i))
+        faces.append((n,n+i,n+i+1))
+    for i in range(n):
+        j=(i+1)%n
+        faces.append((i,j,n+j,n+i))
+    mesh=bpy.data.meshes.new(name+"_geometry")
+    mesh.from_pydata(verts,[],faces)
+    mesh.validate(clean_customdata=False)
+    mesh.update(calc_edges=True)
+    o=bpy.data.objects.new(name,mesh)
+    art.objects.link(o);made.append(o)
+    mesh.materials.append(palette[key])
+    bevel=o.modifiers.new("Sculpted cast edge bevel","BEVEL")
+    bevel.width=.018
+    bevel.segments=2
+    o.modifiers.new("Weighted forged normals","WEIGHTED_NORMAL")
+    return o
+
 def arch(name,cx,cy,z,rx,ry,key,width=.028):
     pts=[(cx-rx,cy-.24,z),(cx-rx,cy,z)]
     for i in range(21):
@@ -134,11 +163,22 @@ for x in (-.96,.96):
     cylinder("Iron corner rivet",(x,.53,-.683),.038,.018,"dark","Y",10)
 for x in (-.72,-.26,.20,.68):
     box("Joined plank work surface",(x,.73,0),(.43,.13,1.32),"wood",.034)
+# Integrated wide timber-and-steel carriage (not an open four-leg table).
+# Additional front/base dress belongs to existing material groups and budget.
+for front_z in (-.568,.565):
+    box("Continuous timber carriage apron",(0,.467,front_z),(2.10,.186,.126),"wood_light",.027)
+for x in (-.98,-.50,.49,.98):
+    box("Forged blue carriage gusset",(x,.398,-.650),(.129,.266,.102),"blue",.024)
+    cylinder("Carriage front steel rivet",(x,.395,-.710),.028,.016,"metal","Y",10)
+for x in (-.94,.94):
+    box("Corner wood frame overlay",(x,.675,-.553),(.174,.165,.144),"wood",.020)
+    box("Corner bent steel cuff",(x,.559,-.611),(.182,.084,.143),"metal",.025)
 # Main stove architecture; -Z is its actual operator/front side.
 box("Enamel blue forged firebox",(0,1.23,-.11),(.99,.84,.79),"blue",.115)
 box("Raised upper fascia",(0,1.67,-.11),(1.13,.19,.94),"blue",.052)
-box("Outer metal door bezel",(0,1.26,-.545),(.80,.59,.12),"metal",.070)
-box("Recessed black window",(0,1.26,-.62),(.68,.47,.035),"dark",.020)
+# Actual deep cast-iron arch, not the former stacked flat rectangles.
+extruded_arch_panel("Deep forged silver oven surround",0,1.010,1.345,.157,-.563,.425,.118,"metal")
+extruded_arch_panel("Shadowed arched inspection chamber",0,1.065,1.333,.112,-.641,.331,.032,"dark")
 arch("Inset window polished top arch",0,1.38,-.656,.35,.15,"metal",.032)
 tube("Window bottom metal rim",[(-.34,1.015,-.656),(.34,1.015,-.656)],"metal",.039)
 for x in (-.37,.37):
