@@ -49,7 +49,7 @@ jobs:
           test -z "$(git ls-files --others --exclude-standard HavenlineGodot/assets/stations_v2)"
       - name: Compose visually labeled comparison contact sheet
         run: |
-          python3 - <<'PY'
+          /tmp/havenline-blender-check/bin/python - <<'PY'
           from PIL import Image,ImageDraw
           from pathlib import Path
           p=Path("t05-blender-evidence")
