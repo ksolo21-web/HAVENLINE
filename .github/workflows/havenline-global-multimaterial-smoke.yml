@@ -74,6 +74,27 @@ jobs:
           if(r.summary.numErrors!==0)throw Error("Khronos structural errors: "+r.summary.numErrors)
           console.log("GLTF_VALIDATION_TECHNICAL_PASS",r.summary.numErrors,r.summary.numWarnings)
           JS
+      - name: Independently validate non-destructive UV1 normals with preserved UV0
+        run: |
+          set -euo pipefail
+          mkdir -p multi-bake-evidence/uv1-candidate
+          timeout 480 blender -b --factory-startup --threads 2 \
+            --python tools/havenline/asset_pipeline/multimaterial_build.py -- \
+            --source "$PWD/multi-bake-evidence/multimaterial-fixture.blend" \
+            --out "$PWD/multi-bake-evidence/uv1-candidate" \
+            --asset-id multi_uv1 --size 128 --triangles-max 3000 \
+            --materials-max 12 --bake-uv-mode separate_uv1 \
+            > multi-bake-evidence/uv1-bake.log 2>&1 || {
+              tail -160 multi-bake-evidence/uv1-bake.log; exit 1; }
+          "$RUNNER_TEMP/hl-materials-venv/bin/python" \
+            tools/havenline/asset_pipeline/verify_multimaterial.py \
+            --workspace "$PWD/multi-bake-evidence/uv1-candidate" --min-materials 2 \
+            > multi-bake-evidence/uv1-verify.log 2>&1 || {
+              tail -160 multi-bake-evidence/uv1-verify.log; exit 1; }
+          grep -q MULTIMATERIAL_BVH_TECHNICAL_PASS_NOT_STYLE_APPROVAL multi-bake-evidence/uv1-verify.log
+          node tools/havenline/asset_pipeline/validate_gltf.mjs \
+            multi-bake-evidence/uv1-candidate/multi_uv1_MULTIMATERIAL_STAGE.glb \
+            multi-bake-evidence/uv1-khronos.json
       - name: Retain immutable candidate and failing CI logs
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
