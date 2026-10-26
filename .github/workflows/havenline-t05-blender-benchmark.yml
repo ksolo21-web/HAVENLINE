@@ -25,9 +25,11 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y blender
+          sudo apt-get install -y --no-install-recommends blender python3-venv
           blender --version | tee blender-version.txt
-          python3 -m pip install --disable-pip-version-check numpy trimesh pillow
+          python3 -m venv /tmp/havenline-blender-check
+          /tmp/havenline-blender-check/bin/pip install --disable-pip-version-check numpy trimesh pillow
+          python3 -m py_compile tools/havenline/blender/t05_cooker_benchmark.py tools/havenline/blender/validate_cooker_benchmark.py
       - name: Generate editable source, candidate GLB, and four real Blender renders
         run: |
           set -euo pipefail
@@ -39,7 +41,9 @@ jobs:
       - name: Validate candidate with strict frozen-game contract
         run: |
           set -euo pipefail
-          python3 tools/havenline/blender/verify_t05_blender.py             --out t05-blender-evidence             --baseline-catalog HavenlineGodot/assets/stations_v2/catalog.json | tee t05-blender-evidence/validation.log
+          /tmp/havenline-blender-check/bin/python tools/havenline/blender/validate_cooker_benchmark.py \
+            --out t05-blender-evidence \
+            --catalog HavenlineGodot/assets/stations_v2/catalog.json | tee t05-blender-evidence/validation.log
           git diff --exit-code -- HavenlineGodot/assets/stations_v2
           test -z "$(git ls-files --others --exclude-standard HavenlineGodot/assets/stations_v2)"
       - name: Compose visually labeled comparison contact sheet
@@ -49,10 +53,10 @@ jobs:
           from pathlib import Path
           p=Path("t05-blender-evidence")
           names=["front","three-quarter","right","rear"]
-          sheet=Image.new("RGB",(1536,1616),(21,32,51))
+          sheet=Image.new("RGB",(1280,1320),(21,32,51))
           for index,name in enumerate(names):
               with Image.open(p/("T05_cooker_"+name+".png")) as img:
-                  sheet.paste(img.convert("RGB"),((index%2)*768,(index//2)*768+40))
+                  sheet.paste(img.convert("RGB"),((index%2)*640,(index//2)*640+40))
           ImageDraw.Draw(sheet).text((20,10),"HAVENLINE T05 — BLENDER STUDIO CANDIDATE / NOT IN-GAME / NOT APPROVED",fill=(235,237,243))
           sheet.save(p/"T05_Benchmark_4_Angles.png")
           PY
