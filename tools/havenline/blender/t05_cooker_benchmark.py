@@ -45,8 +45,7 @@ mat("snow",(.85,.91,.95),.88)
 mat("cream",(.96,.73,.52),.74)
 mat("orange",(.94,.30,.045),.43,.22)
 mat("yellow",(.86,.60,.15),.54,.20)
-mat("meat",(.65,.115,.11),.72)
-mat("fat",(.91,.65,.57),.80)
+mat("red",(.72,.14,.10),.64,.04)
 # Game-ready 256x256 base color tiles, *not* unsupported procedural BSDF
 # graphs. Wood has subtle longitudinal grain; metal brushed linework.
 def tile(key,kind):
@@ -163,16 +162,16 @@ for x in (-1.145,-.555):
 for z in (-.22,.52):
     box("Raw bin front back board",(-.85,1.07,z),(.66,.29,.09),"wood_light",.03)
 for i,(x,z,rx,rz) in enumerate(((-1.06,-.04,.15,.13),(-.83,-.06,.17,.13),(-.64,.1,.14,.14),(-1.00,.28,.18,.13),(-.72,.36,.17,.13))):
-    ball("Individually sculptable raw meat cut",(x,1.20+i%2*.036,z),(rx,.095,rz),"meat",12,8)
-    ball("Fat marbling",(x-.037,1.28+i%2*.037,z+.027),(rx*.57,.025,rz*.70),"fat",10,6)
+    ball("Individually sculptable raw meat cut",(x,1.20+i%2*.036,z),(rx,.095,rz),"red",12,8)
+    ball("Fat marbling",(x-.037,1.28+i%2*.037,z+.027),(rx*.57,.025,rz*.70),"cream",10,6)
 box("Prepared meat steel tray",(.85,.95,.15),(.66,.12,.85),"metal",.038)
 box("Prepared tray dark inner bed",(.85,1.018,.15),(.56,.04,.72),"dark",.018)
 for x in (.54,1.16): box("Folded steel side tray wall",(x,1.13,.15),(.065,.20,.86),"metal",.016)
 for z in (-.245,.545): box("Steel tray lip",(.85,1.13,z),(.70,.20,.064),"metal",.017)
 for i,(x,z) in enumerate(((.68,-.07),(.96,-.07),(.69,.22),(.96,.23))):
-    o=box("Cooked meat wrapped cut",(x,1.20,z),(.23,.17,.26),"meat",.055)
+    o=box("Cooked meat wrapped cut",(x,1.20,z),(.23,.17,.26),"red",.055)
     o.rotation_euler[2]=(-1)**i*.13
-    box("Fat cap",(x,1.29,z),(.17,.025,.22),"fat",.009)
+    box("Fat cap",(x,1.29,z),(.17,.025,.22),"cream",.009)
     box("Orange securing band",(x,1.304,z),(.045,.041,.28),"orange",.009)
 # Exterior mechanical cylinder, side pipe, gauge (functional hierarchy).
 cylinder("Side pressure vessel",(.59,1.30,.47),.17,.46,"dark","Z",16)
@@ -226,9 +225,11 @@ camera_data=bpy.data.cameras.new("Review Camera");cam=bpy.data.objects.new("Revi
 stage.objects.link(cam);bpy.context.scene.camera=cam
 cam.data.type="ORTHO";cam.data.ortho_scale=3.35
 scene=bpy.context.scene
-try:scene.render.engine="BLENDER_EEVEE_NEXT"
-except Exception:scene.render.engine="BLENDER_EEVEE"
-scene.render.resolution_x=768;scene.render.resolution_y=768;scene.render.resolution_percentage=100
+scene.render.engine="CYCLES"
+scene.cycles.device="CPU"
+scene.cycles.samples=12
+scene.cycles.use_denoising=True
+scene.render.resolution_x=640;scene.render.resolution_y=640;scene.render.resolution_percentage=100
 scene.render.image_settings.file_format="PNG"
 scene.render.film_transparent=False
 shots={"front":(0,2.7,-5.2),"three-quarter":(4.0,3.1,-4.7),"right":(5.4,2.9,.0),"rear":(0,3.0,5.2)}
