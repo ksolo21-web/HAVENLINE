@@ -209,6 +209,15 @@ def build_wood_stack():
                 rotation=(math.pi/2,0,0))
         b.torus("wood_light",(.555,.335,z+.018),.236,.007,16,4,
                 rotation=(math.pi/2,0,0))
+    # Reference 18677(1): big split faces must read on picture-left, smaller
+    # bound kindling on picture-right. The old authored layout was reversed.
+    # Mirror the finished static *mesh* on local X; correct normals and triangle
+    # winding together to keep Godot back-face culling and batch contracts exact.
+    for surface in b.surfaces.values():
+        surface.positions=[(-p[0],p[1],p[2]) for p in surface.positions]
+        surface.normals=[(-n[0],n[1],n[2]) for n in surface.normals]
+        for index in range(0,len(surface.indices),3):
+            surface.indices[index+1],surface.indices[index+2] = surface.indices[index+2],surface.indices[index+1]
     return b
 
 
