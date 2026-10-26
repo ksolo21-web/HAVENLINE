@@ -39,7 +39,7 @@ def _snow_base(b, size):
         (0.0,-.03*d,.21*w,.13*d,.02),
     )
     for x,z,rx,rz,yaw in patches:
-        b.sphere("snow",(x,.045,z),(rx,.055,rz),4,9,rotation=(0,yaw,0))
+        b.sphere("snow",(x,.045,z),(rx,.055,rz),4,7,rotation=(0,yaw,0))
 
 
 def _pallet(b, width, depth, y=.14, material="wood"):
