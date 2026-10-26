@@ -95,6 +95,25 @@ def embedded_glb_normal_png(path: pathlib.Path, gltf: dict) -> bytes:
         raise ValueError("Embedded GLB normal image bounds invalid")
     return raw[bin_start+offset:bin_start+offset+length]
 
+def shipping_ao_contract_valid(game: dict, candidate_sha: str | None, baked_sha: str | None) -> bool:
+    """An isolated AO preview cannot satisfy actual shipping-scene release evidence."""
+    ao=game.get("ao_binding",{})
+    return (
+        isinstance(ao,dict)
+        and game.get("shipping_scene_loaded") is True
+        and game.get("candidate_sha256")==candidate_sha
+        and bool(candidate_sha)
+        and ao.get("engine")=="Godot"
+        and ao.get("shipping_scene_loaded") is True
+        and ao.get("candidate_sha256")==candidate_sha
+        and ao.get("texture_sha256")==baked_sha
+        and bool(baked_sha)
+        and isinstance(ao.get("bound_material_surfaces"),int)
+        and ao["bound_material_surfaces"]>0
+        and isinstance(ao.get("before"),dict)
+        and isinstance(ao.get("after"),dict)
+    )
+
 def run(manifest: dict, policy: dict, root: pathlib.Path, mode: str) -> dict:
     checks=[]
     def check(name,condition,detail=None):
@@ -262,6 +281,41 @@ def run(manifest: dict, policy: dict, root: pathlib.Path, mode: str) -> dict:
     game=e.get("godot_shipping",{})
     check("real_shipping_scene",game.get("shipping_scene_loaded") is True and
           game.get("engine")=="Godot" and game.get("candidate_sha256")==expected)
+    ao_evidence=game.get("ao_binding",{})
+    ao_map_path=map_files.get("ambient_occlusion")
+    ao_hash=digest(ao_map_path) if ao_map_path else None
+    check("shipping_ao_geometry_and_hash_bound",
+          shipping_ao_contract_valid(game,expected,ao_hash))
+    if isinstance(ao_evidence,dict):
+        before=ao_evidence.get("before",{})
+        after=ao_evidence.get("after",{})
+        frames=[]
+        for key,record in (("before",before),("after",after)):
+            rec=record if isinstance(record,dict) else {}
+            h=rec.get("sha256")
+            check("shipping_ao_"+key+"_hash_declared",
+                  isinstance(h,str) and len(h)==64)
+            frames.append(filecheck("shipping_ao_"+key+"_pixels",
+                                    rec.get("path",""),h if isinstance(h,str) and len(h)==64 else None))
+        if all(frames):
+            try:
+                from PIL import Image,ImageChops
+                with Image.open(frames[0]) as off, Image.open(frames[1]) as on:
+                    required=policy["evidence"]["minimum_native_frame"]
+                    good=(off.format=="PNG" and on.format=="PNG" and
+                          off.size==on.size and off.width>=required[0] and
+                          off.height>=required[1])
+                    diff=ImageChops.difference(off.convert("RGB"),on.convert("RGB"))
+                    check("shipping_ao_actual_pixel_difference",
+                          good and diff.getbbox() is not None,
+                          {"both_native_resolution":good,"material_effect_nonblank":diff.getbbox() is not None})
+            except (OSError,ValueError,ImportError) as err:
+                check("shipping_ao_actual_pixel_difference",False,str(err))
+        else:
+            check("shipping_ao_actual_pixel_difference",False,
+                  "Missing source-hash-verified native off/on render evidence")
+    else:
+        check("shipping_ao_actual_pixel_difference",False,"Invalid AO evidence mapping")
     for view in REQUIRED_VIEWS:
         record=game.get("views",{}).get(view,{})
         if not isinstance(record,dict):
