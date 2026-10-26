@@ -25,7 +25,8 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends blender python3-venv
+          sudo apt-get install -y --no-install-recommends blender python3-venv python3-numpy
+          blender -b -t 2 --python-expr 'import numpy; print("Blender embedded NumPy", numpy.__version__)'
           blender --version | tee blender-version.txt
           python3 -m venv /tmp/havenline-blender-check
           /tmp/havenline-blender-check/bin/pip install --disable-pip-version-check numpy trimesh pillow
