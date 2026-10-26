@@ -137,32 +137,54 @@ def _crate_shell(b, name, fish=False):
 
 
 def build_wood_stack():
-    """18677(1).png: sculpted cut logs in a rope-bound snow-topped pile.
+    """R20 reference 18677(1): staggered large timber and bound small firewood.
 
-    The supplied render has no rigid box or rack; keep the original object ID,
-    footprint, sockets and station placements, but honor the piled-log silhouette.
+    Preserve authored footprint/metadata and available palette. Thick end-grain,
+    overlapping rounded snow and physically seated twin rope bindings replace
+    the previous generic cylinder pile and detached pale arc silhouette.
     """
     b=legacy.MeshBuilder("wood_stack")
-    _snow_base(b,(1.60,.10,1.12))
+    b.sphere("snow",(-.36,.042,-.21),(.29,.052,.21),3,9)
+    b.sphere("snow",(.55,.040,.23),(.24,.049,.16),3,9)
+    # Cut faces are intentionally different diameters and staggered vertically.
+    # The larger unbound logs stay left; small sticks stack tightly on the right.
     logs=(
-        (-.38,.27,.03,.205,.88),(.05,.26,.02,.225,.91),(.44,.26,.0,.19,.82),
-        (-.32,.61,-.06,.215,.91),(.21,.59,.04,.23,.95),
-        (-.10,.89,-.03,.215,.91),(.47,.50,-.03,.118,.66),(.52,.68,.04,.092,.65),
+        (-.45,.29,.03,.233,.92),(-.09,.30,.02,.215,.87),
+        (-.38,.66,-.06,.222,.91),(.10,.77,-.03,.198,.90),
+        (.25,.31,.02,.157,.80),(.32,.57,-.02,.150,.82),
+        (.45,.18,-.02,.073,.72),(.59,.18,.02,.070,.74),
+        (.70,.19,-.03,.067,.69),(.43,.34,-.03,.072,.73),
+        (.56,.34,.02,.077,.73),(.54,.49,-.02,.068,.72),
     )
     for i,(x,y,z,r,length) in enumerate(logs):
-        b.cylinder("wood",(x,y,z),r,length,13,rotation=(math.pi/2,0,0))
-        for front in (-1,1):
-            face_z=z+front*length*.5
-            b.cylinder("cream",(x,y,face_z),r*.83,.017,12,rotation=(math.pi/2,0,0))
-            for rad in (.33,.61):
-                b.torus("wood_light",(x,y,face_z+front*.015),r*rad,.010,12,4,rotation=(math.pi/2,0,0))
-        if i in (0,2,3,5):
-            b.sphere("snow",(x-.025,y+r*.88,z-.07),(r*.95,r*.24,length*.30),3,9)
-    for z in (-.28,.29):
-        b.torus("cream",(-.02,.50,z),.48,.052,20,6,rotation=(math.pi/2,0,0))
-        b.torus("yellow",(-.02,.50,z+.027),.466,.016,20,4,rotation=(math.pi/2,0,0))
-    for x,y,z in ((-.30,.38,-.21),(.27,.67,.19)):
-        b.sphere("dark",(x,y,z),(.075,.065,.045),3,8)
+        seg=12 if i<6 else 9
+        b.cylinder("wood",(x,y,z),r,length,seg,rotation=(math.pi/2,0,0))
+        for side in (-1,1):
+            face_z=z+side*(length*.5+.007)
+            b.cylinder("cream",(x,y,face_z),r*.85,.014,
+                       10 if i<6 else 8,rotation=(math.pi/2,0,0))
+        # Narrow, warm growth rings; fewer tiny concentric decals on kindling.
+        if i<6:
+            face_z=z-length*.5-.012
+            for rad in (.32,.64):
+                b.torus("wood",(x,y,face_z),r*rad,.009,10,3,
+                        rotation=(math.pi/2,0,0))
+            # Authored shallow bark ridges on the visible side/top of larger logs.
+            for dx,dy in ((-.62,.47),(.11,.93),(.64,.47)):
+                bx=x+dx*r;by=y+dy*r
+                b.rod_between("wood_light",(bx,by,z-length*.35),
+                              (bx,by+.010,z+length*.35),.012,5)
+        if i in (0,2,3,4,5,10):
+            cap=(.92,.73,.55) if i<4 else (.72,.68,.45)
+            b.sphere("snow",(x-.018,y+r*.91,z-.03),
+                     (r*cap[0],r*.37,length*cap[2]),4,10)
+    # Two continuous, close-fitting rope hoops encircle the bound small-log
+    # bundle instead of floating across the top of unrelated big timbers.
+    for z in (-.23,.23):
+        b.torus("cream",(.555,.335,z),.237,.025,16,5,
+                rotation=(math.pi/2,0,0))
+        b.torus("wood_light",(.555,.335,z+.018),.236,.007,16,4,
+                rotation=(math.pi/2,0,0))
     return b
 
 
