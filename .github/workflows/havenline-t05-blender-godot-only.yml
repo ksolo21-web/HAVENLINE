@@ -1,0 +1,79 @@
+name: HAVENLINE T05 isolated Godot importer — frozen Blender candidate
+on:
+  push:
+    branches: ['havenline/T05-r18-visual-corrections-20261025']
+    paths:
+      - '.github/workflows/havenline-t05-blender-godot-only.yml'
+      - 'tools/havenline/blender/capture_isolated_godot_cooker.gd'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: t05-blender-frozen-import-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  isolated-engine-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 24
+    steps:
+      - name: Checkout immutable audit scripts
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+      - name: Retrieve exact previously generated R03 GLB
+        uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with:
+          name: T05-Blender-cooker-candidate-4dd5b1662a41a1de9baccdd97da8491dea2ef43e
+          run-id: 40338886098
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path: imported-source
+      - name: Enforce immutable candidate hash and stage isolated project
+        run: |
+          set -euo pipefail
+          mkdir -p t05-native-proof "$RUNNER_TEMP/blender-only-godot/assets" "$RUNNER_TEMP/engine"
+          candidate=imported-source/t05-blender-evidence/T05_cooker_BLENDER_CANDIDATE.glb
+          test -s "$candidate"
+          echo 'bbac5d891891d8f3836cb1396a6214f24d2b7641fef46a9325c6433620ad812f  '"$candidate" | sha256sum -c -
+          cp "$candidate" "$RUNNER_TEMP/blender-only-godot/assets/"
+          cp tools/havenline/blender/capture_isolated_godot_cooker.gd "$RUNNER_TEMP/blender-only-godot/capture.gd"
+          printf 'config_version=5\n[application]\nconfig/name="HAVENLINE isolated Blender T05 Godot asset proof"\n' > "$RUNNER_TEMP/blender-only-godot/project.godot"
+          sha256sum "$candidate" > t05-native-proof/candidate-verified.sha256
+          git rev-parse HEAD > t05-native-proof/script-source-sha.txt
+      - name: Provision Godot 4.7.2 and software Vulkan
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends xvfb mesa-vulkan-drivers unzip
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/engine/engine.zip"
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  '"$RUNNER_TEMP/engine/engine.zip" | sha512sum -c -
+          unzip -q "$RUNNER_TEMP/engine/engine.zip" -d "$RUNNER_TEMP/engine"
+          chmod +x "$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+      - name: Run four native Godot mobile-renderer screenshots
+        run: |
+          set -euo pipefail
+          engine="$RUNNER_TEMP/engine/Godot_v4.7.2-stable_linux.x86_64"
+          project="$RUNNER_TEMP/blender-only-godot"
+          timeout 180 "$engine" --headless --editor --path "$project" --import --quit > t05-native-proof/import.log 2>&1
+          export VK_ICD_FILENAMES="$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)"
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 240 "$engine" \
+            --path "$project" --rendering-method mobile --rendering-driver vulkan \
+            --audio-driver Dummy --resolution 1280x720 --script res://capture.gd \
+            -- --out="$PWD/t05-native-proof" > t05-native-proof/capture.log 2>&1 || {
+              tail -100 t05-native-proof/import.log
+              tail -100 t05-native-proof/capture.log
+              exit 1
+            }
+          test -s t05-native-proof/isolated-godot-report.json
+          test "$(find t05-native-proof -maxdepth 1 -name 'isolated-godot-*.png' | wc -l)" -eq 4
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' t05-native-proof/*.log; then exit 1; fi
+          echo 'Isolated Godot GLB importer passed; NOT shipping-scene or owner approval'
+      - name: Preserve frame-level evidence including failures
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-t05-r03-isolated-godot-${{ github.sha }}
+          path: t05-native-proof/
+          retention-days: 30
+          if-no-files-found: warn
