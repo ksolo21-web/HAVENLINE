@@ -11,6 +11,9 @@ Use: blender -b --factory-startup --python blender_build.py -- \
 """
 import argparse,json,pathlib,hashlib,shutil,sys
 import bpy
+# blender --python does not consistently add the script directory to sys.path.
+# Resolve the adjacent, version-controlled geometry baker without site-packages.
+sys.path.insert(0,str(pathlib.Path(__file__).resolve().parent))
 def parse_args():
     a=sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else []
     p=argparse.ArgumentParser()
