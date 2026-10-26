@@ -10,7 +10,7 @@
     "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
     "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
   ],
-  "status": "GLOBAL_13_SOURCE_TESTS_PASS__BVH_128PX_BAKE_AND_AO_PASS__GODOT_IMPORT_AND_7_ANGLE_RENDER_PASS__AUTOFRAMING_RETEST_PENDING__NO_PRODUCTION_RELEASE",
+  "status": "POLICY_14_OF_14_PASS__BVH_GEOMETRY_BAKE_AND_NORMAL_AO_PIXELS_PASS__GODOT_SEVEN_ANGLE_AUTOFRAME_AND_AO_PREVIEW_PASS__SHIPPING_RELEASE_BLOCKED",
   "complete_with_evidence": [
     {
       "milestone": "Separate from unapproved T05 branch",
@@ -18,9 +18,9 @@
       "evidence": "PR #103 compared against f74a84a2a288ab3d3935fba7a6cb9b975c2df239: only 14 global tool/policy/workflow files"
     },
     {
-      "milestone": "Global policy and thirteen positive/negative contract tests",
+      "milestone": "Global policy and 14 fail-closed contract tests",
       "status": "PASS",
-      "evidence": "Run 40379609976 passed 13/13, including GLB normal binding/buffer bounds, 40379788240 source guards passed after CI timeout change"
+      "evidence": "Actions run 40385386438 passed 14/14 including actual shipping-scene AO evidence contract"
     },
     {
       "milestone": "Reference owner-image binding and frozen budgets",
@@ -29,8 +29,8 @@
     },
     {
       "milestone": "Seven-angle isolated Godot asset capture utility",
-      "status": "GODOT_IMPORT_PASS_SEVEN_ANGLE_RENDER_PENDING",
-      "evidence": "Run 40380585851: Godot 4.7.2 successfully imported unmodified synthetic GLB, one mesh/material with normal bound. Seven-angle capture CI run 40381157048 pending; no in-game approval."
+      "status": "PASS_ISOLATED_GODOT_SEVEN_VIEWS_AND_AO_PREVIEW",
+      "evidence": "Run 40383973244 7 auto-framed real Godot 1280x720 PNGs; run 40384710252 AO bound to one PBR surface, with 18,509–64,766 actual changed pixels across all 7 views."
     },
     {
       "milestone": "Raw Android physical profiler evidence collection",
@@ -51,17 +51,22 @@
       "milestone": "Isolated Godot 4 import and seven-angle renderer proof",
       "status": "PASS_SYNTHETIC_ENGINE_PROOF_ONLY",
       "evidence": "Run 40381157048: Godot 4.7.2 GLB import + normal mapped material, seven different 1280x720 llvmpipe OpenGL PNGs with 262–611 sampled RGB colors and seven unique hashes. Not the shipping scene, device FPS or style approval."
+    },
+    {
+      "milestone": "Bounded Godot isolated preview without rebuilding Blender",
+      "status": "PASS",
+      "evidence": "Workflow havenline-global-godot-framing.yml downloads artifact 12677963723 by run ID, verifies exact GLB SHA256 729c0e87, renders in Godot 4.7.2 with software OpenGL, and saves frame evidence"
     }
   ],
   "critical_unresolved": [
-    "Check bounds-derived camera QA retest 40381725395; inspect actual seven Godot screenshots and compare against fixed-size original for larger useful subject framing and no clipping.",
-    "7-angle rendering passed on synthetic 1280x720 isolated GLB in Godot software OpenGL; must test real asset and true Havenline shipping scene at 3840x2160 including use states before visual approval.",
-    "Native Cycles still broken in Ubuntu Blender 4.0.2; current proven CPU BVH geometry fallback limited to <=1024 map size; target real 4K needs new validated fast high-quality bake strategy.",
-    "Per-asset production owner reference exact pixels, art/material style score 10/10 and freeze sockets/bounds on target assets not verified by synthetic sphere fixture.",
-    "AO map is separately saved and not yet integrated into actual shipping Godot PBR materials; prove actual application and normal/AO appearance on real asset.",
-    "Physical Android 60 FPS and long-run thermal/frame CPU/GPU/calls/memory measurements not supplied.",
-    "Independent visual critic (not internal review), all non-reference dimensions >9 and zero defects not delivered.",
-    "Explicit owner approval and integration-owner authorization not obtained. PR #103 must remain draft and unmerged, no shipping asset promotion."
+    "Actual Havenline shipping Godot scene with real reference-authorized assets: 3840x2160 seven-angle screenshots, correct scene sockets, bounds, and AO/normal material integration not yet produced.",
+    "Real physical Android sustained 60 FPS at agreed target resolution with device GPU/CPU frame times, memory, temperature and draw calls remains untested.",
+    "CPU BVH geometry fallback verified only on 128x128 synthetic texture fixture; production map resolutions up to 4096 and performance/artist-quality require testing. Native Blender Cycles 4.0.2 remains unfit for approved map export.",
+    "Independent critic runtime / reviewer has not produced source-hash-bound 10/10 reference style and visual language evidence or >9.0 on every remaining mandatory axis; no visual approval.",
+    "Owner-source-image exact binding, task-specific real material reference, authentic T05/equipment/character appearance, night/snow use states, and manual texture authoring quality remain open.",
+    "Release gate now rejects isolated AO preview: require true shipping scene AO binding with correct separately baked texture hash and two verified 3840x2160 native AO-off/on screenshots with actual difference.",
+    "Owner approval and integration-owner authorization absent; PR #103 intentionally draft and unmerged, no content promotion or gameplay changes.",
+    "Global CI runner may intermittently fail slow Blender APT installation; dedicated Godot-only art QA workflow is proven but reproducible full-scale production dependency handling remains open."
   ],
   "frozen_requirements": [
     "Exact reference style and visual language 10/10, all mandatory other critic dimensions >9/10, no known defects",
@@ -70,7 +75,7 @@
     "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
     "Preserve source hashes and evidence across retries"
   ],
-  "next_action": "Inspect auto-framing smoke run 40381725395 and saved 7 Godot PNGs; fix if clipping/scale issues, verify from multiple views. Afterwards stage actual reference-bound Havenline art and 4K/Android evidence, reviewer and owner signoff, without merging PR #103 prematurely.",
+  "next_action": "Move from synthetic fixture to source-bound real Havenline art and native 3840x2160 shipping scene. Optionally extend isolated camera utility to 4K technical renders as a staging smoke, but never treat these as shipping/Android proof. Then use physical Android test and genuine independent critic, user/integration signoff; keep draft.",
   "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
   "superseded_wrong_base_pull_request": 102,
   "latest_work": {
@@ -109,7 +114,7 @@
     "tangent_warning_on_first_bvh_run": "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE (1 warning, 0 errors)",
     "latest_source_13_of_13_run": 40379609976,
     "latest_source_suite_after_timeout_change": 40379788240,
-    "test_count": 13,
+    "test_count": 14,
     "embedded_normal_pixel_integrity_gate": true,
     "mandatory_explicit_normal_tangent_gate": true,
     "per_commit_ci_concurrency": true,
@@ -119,7 +124,7 @@
     "latest_real_ao_tangent_workflow_run": 40379776370,
     "latest_workflow_commit": "9e1cf8f1b0f9f07f2846ba4c6b4515b74a836e4b",
     "latest_critic_status": "INTERNAL_REVIEW_ONLY_NOT_INDEPENDENT",
-    "latest_discovery": "Prior AO/tangent runs remained in Blender apt install. Local apt mirror update also timed out at 18 seconds, supporting package-mirror blockage. No new AO/tangent artifacts have yet passed.",
+    "latest_discovery": "Blender APT mirror install stalled on 35.9MB data package, so framing/AO workflows were split to reuse SHA-verified GLB. Seven-angle bounds framing and distinct AO-on/off frames now pass in Godot software OpenGL; release remains blocked.",
     "confirmed_full_bake_run": 40379776370,
     "latest_isolated_godot_import_run": 40380585851,
     "current_seven_view_render_run": 40381157048,
@@ -138,7 +143,7 @@
     "godot_engine_version": "4.7.2.stable.official.ed1daf0bf",
     "godot_import_mesh_instances": 1,
     "godot_normal_mapped_material_surfaces": 1,
-    "godot_import_candidate_sha256": "0be5404ca8e14ab90197f5c4d514603842447af5e262322595cad0a0e832817d",
+    "godot_import_candidate_sha256": "729c0e87beb3e34e76abfaf9e2930945b7521c957c5604d3ebbcf2f26c94d3b8",
     "normal_texture_sha256": "86ec5980bb84a9989111d5f142ff190f0d10157128d3294d66664956359a785a",
     "ao_texture_sha256": "4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134",
     "godot_import_artifact_id": 12678222113,
@@ -171,7 +176,41 @@
     "internal_visual_review": "All seven PNGs real, nonblank and differing. Baseline fixed camera 3.8 made the synthetic subject too small for detail evaluation; automatic bounds-based camera framing committed on f223d233.",
     "autofocus_camera_rerun": 40381725395,
     "auto_frming_candidate_sha": "f223d233dff987f59921ae9aa3ed8579060024ca",
-    "internal_technical_score_0_to_10": 8,
-    "independent_critic_available": false
+    "internal_technical_score_0_to_10": 8.5,
+    "independent_critic_available": false,
+    "latest_source_suite_run": 40385386438,
+    "verified_autoframe_run": 40383973244,
+    "verified_autoframe_artifact_id": 12680230116,
+    "autoframe_camera_old": 3.8,
+    "autoframe_camera_new": 1.95174992084503,
+    "verified_ao_godot_run": 40384710252,
+    "ao_godot_artifact_id": 12679529373,
+    "ao_bound_material_surfaces": 1,
+    "ao_preview_reference_sha256": "4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134",
+    "current_synthetic_glb_sha256": "729c0e87beb3e34e76abfaf9e2930945b7521c957c5604d3ebbcf2f26c94d3b8",
+    "ao_off_on_all_7_views_different": true,
+    "ao_per_view_changed_pixels": [
+      25475,
+      24619,
+      18509,
+      64766,
+      62078,
+      22070,
+      56919
+    ],
+    "ao_per_view_changed_ratio_percent": [
+      2.764,
+      2.671,
+      2.008,
+      7.028,
+      6.736,
+      2.395,
+      6.176
+    ],
+    "godot_release_ao_requirement": "Exact atlas SHA plus real shipping scene material binding and source-bound native 4K AO off/on screenshots with actual pixel difference",
+    "godot_release_ao_requirement_verified": false,
+    "global_frame_qa_infrastructure": "Dedicated artifact-reuse workflow avoids repeated 190MB Blender APT setup",
+    "last_verified_commit": "7b0521faed3b77db17dbed863d2e76130f6fb0b8",
+    "internal_review": "Builder-side technical/pixel review only; no separately callable critic runtime or approval"
   }
 }
