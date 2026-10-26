@@ -103,6 +103,27 @@ def build(a):
     def changed_count(before,after):
         return sum(any(abs(v-w)>.03 for v,w in zip(a[:3],b[:3]))
                    for a,b in zip(before,after))
+    # Synthetic smoke only: a UV bake isolates target/selection wiring from
+    # normal and AO ray tracing. This file is never exported as an asset map.
+    if a.asset_id=="smoke_test":
+        uvimg=bpy.data.images.new("HAVENLINE_UV_DIAGNOSTIC",width=a.size,height=a.size,alpha=False)
+        texture_node(material,uvimg)
+        bpy.context.view_layer.update()
+        set_active([low],low)
+        print("HAVENLINE DIAG active",bpy.context.view_layer.objects.active.name,
+              "mode",bpy.context.mode,
+              "render_visible",low.visible_get(),"hide_render",low.hide_render,
+              "uv",low.data.uv_layers.active.name,
+              "material_slots",[x.material.name if x.material else None for x in low.material_slots])
+        print("HAVENLINE DIAG shader targets",[(n.name,n.type, n.image.name if n.type=="TEX_IMAGE" and n.image else None)
+              for n in material.node_tree.nodes])
+        uv_result=bpy.ops.object.bake(type="UV",target="IMAGE_TEXTURES",
+                            save_mode="INTERNAL",use_clear=True,use_selected_to_active=False)
+        uv_samples=sample_pixels(uvimg)
+        print("HAVENLINE DIAG UV_RESULT",uv_result,
+              "examples",uv_samples[:4],uv_samples[len(uv_samples)//2],
+              "distinct_sample_colors",len(set(tuple(round(t,2) for t in v[:3]) for v in uv_samples)))
+        save_image(uvimg,out/"debug-uv-probe.png")
     normal_path=texout/"normal.png"
     normal=bpy.data.images.new("HAVENLINE_NORMAL_BAKE_TARGET",width=a.size,height=a.size,alpha=False)
     # Non-transparent sentinel lets Blender 4.0 preserve opaque output when
