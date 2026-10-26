@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "asset_id": "cooker_processor",
+  "task_id": "T05",
+  "builder_id": "T05-Blender-author",
+  "state": "TEMPLATE_NOT_BUILT_NOT_APPROVED",
+  "source_commit": null,
+  "owner_reference": {
+    "binding": "exact_owner",
+    "path": "references/T05/18567.png",
+    "sha256": "729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635"
+  },
+  "output_instructions": "External owner render must be staged at the declared path with matching SHA256; don't duplicate or invent pixels.",
+  "outputs": {
+    "master_blend": "work/T05/cooker_processor/MASTER.blend",
+    "low_glb": "work/T05/cooker_processor/cooker_processor_LOD0.glb",
+    "low_glb_sha256": null,
+    "bake_maps": {
+      "base_color": "work/T05/cooker_processor/textures/base_color.png",
+      "normal": "work/T05/cooker_processor/textures/normal.png",
+      "roughness": "work/T05/cooker_processor/textures/roughness.png",
+      "metallic": "work/T05/cooker_processor/textures/metallic.png",
+      "ambient_occlusion": "work/T05/cooker_processor/textures/ambient_occlusion.png"
+    }
+  },
+  "allowed_material_names": [
+    "HL_snow",
+    "HL_cream",
+    "HL_wood",
+    "HL_wood_light",
+    "HL_metal",
+    "HL_blue",
+    "HL_cyan",
+    "HL_orange",
+    "HL_yellow",
+    "HL_green",
+    "HL_red",
+    "HL_dark"
+  ],
+  "limits": {
+    "footprint_x_m": 2.45,
+    "footprint_z_m": 2.3,
+    "triangles_max": 12424,
+    "materials_max": 12,
+    "draw_calls_max": 48,
+    "texture_mib_max": 96,
+    "baseline_kit_triangles": 175378,
+    "baseline_asset_triangles": 7802,
+    "kit_triangles_max": 180000
+  },
+  "evidence": {
+    "godot_shipping": {
+      "shipping_scene_loaded": false,
+      "source_commit": null,
+      "candidate_sha256": null,
+      "views": {}
+    },
+    "android_physical": {
+      "device_type": null,
+      "sustained_fps": null,
+      "duration_seconds": null,
+      "candidate_sha256": null,
+      "p95_cpu_frame_ms": null,
+      "p95_gpu_frame_ms": null,
+      "measured_draw_calls": null,
+      "measured_texture_gpu_mib": null,
+      "device_model": null,
+      "profiler_evidence_id": null
+    },
+    "independent_critic": {
+      "reviewer_kind": null,
+      "reviewer_id": null,
+      "reference_pixels_reviewed": false,
+      "scores": {},
+      "defects": [
+        "Not yet independently critiqued"
+      ]
+    },
+    "owner_approval": {
+      "approved": false,
+      "candidate_sha256": null,
+      "evidence_id": null
+    },
+    "integration_approval": {
+      "approved": false,
+      "candidate_sha256": null,
+      "evidence_id": null
+    }
+  },
+  "external_assets": []
+}
