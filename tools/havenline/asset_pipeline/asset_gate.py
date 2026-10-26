@@ -73,7 +73,7 @@ def embedded_glb_normal_png(path: pathlib.Path, gltf: dict) -> bytes:
         raise ValueError("Missing GLB binary chunk")
     bin_len,bin_type=struct.unpack_from("<I4s",raw,bin_header)
     bin_start=bin_header+8
-    if bin_type!=b"BIN\\x00" or bin_start+bin_len>len(raw):
+    if bin_type!=bytes((66,73,78,0)) or bin_start+bin_len>len(raw):
         raise ValueError("Invalid GLB binary chunk")
     mats=gltf.get("materials",[])
     if len(mats)!=1:
