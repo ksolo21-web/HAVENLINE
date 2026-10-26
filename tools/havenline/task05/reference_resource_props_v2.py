@@ -126,6 +126,35 @@ def build_wood_stack():
     return b
 
 
+def _faceted_stone(b, center, radii, rotation, seed):
+    """Irregular outward-facing flat-cut quarry rock, not a smooth snowball.
+
+    20 low-poly facets have independent flat normals. Deterministic asymmetric
+    radii preserve locked resource bounds, existing material palette, and the
+    snow-cap contact without introducing primitive placeholder cylinders.
+    """
+    phi=(1.0+math.sqrt(5.0))*.5
+    raw=((-1,phi,0),(1,phi,0),(-1,-phi,0),(1,-phi,0),
+         (0,-1,phi),(0,1,phi),(0,-1,-phi),(0,1,-phi),
+         (phi,0,-1),(phi,0,1),(-phi,0,-1),(-phi,0,1))
+    faces=((0,11,5),(0,5,1),(0,1,7),(0,7,10),(0,10,11),
+           (1,5,9),(5,11,4),(11,10,2),(10,7,6),(7,1,8),
+           (3,9,4),(3,4,2),(3,2,6),(3,6,8),(3,8,9),
+           (4,9,5),(2,4,11),(6,2,10),(8,6,7),(9,8,1))
+    verts=[]
+    for k,(x,y,z) in enumerate(raw):
+        variation=1.0+.035*math.sin(float(seed+3)*1.3+k*2.71)
+        verts.append((x/phi*radii[0]*variation,y/phi*radii[1]*variation,
+                      z/phi*radii[2]*variation))
+    for ia,ib,ic in faces:
+        a,bv,c=verts[ia],verts[ib],verts[ic]
+        n=legacy.vnorm(legacy.vcross(legacy.vsub(bv,a),legacy.vsub(c,a)))
+        mid=tuple((a[i]+bv[i]+c[i])/3.0 for i in range(3))
+        if sum(n[i]*mid[i] for i in range(3))<0.0:
+            bv,c=c,bv
+            n=tuple(-v for v in n)
+        b.triangles("cream",[a,bv,c],[n,n,n],[0,1,2],center,rotation)
+
 def build_stone_stack():
     b = legacy.MeshBuilder("stone_stack")
     _snow_base(b, (1.73, .10, 1.36))
@@ -143,7 +172,7 @@ def build_stone_stack():
         (-.03,.86,.02,.27,.20,.24,-.08,.11,.05),
     )
     for i,(x,y,z,rx,ry,rz,px,py,pz) in enumerate(stones):
-        b.sphere("cream",(x,y,z),(rx,ry,rz),4,8,rotation=(px,py,pz))
+        _faceted_stone(b,(x,y,z),(rx,ry,rz),(px,py,pz),i)
         if i in (0,2,4,6):
             b.sphere("dark",(x-.03,y-ry*.46,z+.02),(rx*.54,ry*.18,rz*.50),3,7,
                      rotation=(0,py*.5,0))
