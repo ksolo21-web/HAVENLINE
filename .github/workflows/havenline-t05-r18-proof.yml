@@ -14,7 +14,7 @@ permissions:
   contents: write
 concurrency:
   group: havenline-t05-r18-proof
-  cancel-in-progress: false
+  cancel-in-progress: true
 jobs:
   bounded-proof:
     runs-on: ubuntu-24.04
