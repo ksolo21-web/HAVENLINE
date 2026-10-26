@@ -219,7 +219,14 @@ def run(manifest: dict, policy: dict, root: pathlib.Path, mode: str) -> dict:
     critic=e.get("independent_critic",{})
     scores=critic.get("scores",{})
     check("independent_reviewer",critic.get("reviewer_kind")=="independent" and
-          critic.get("reviewer_id") and critic.get("reviewer_id")!=manifest.get("builder_id"))
+          critic.get("reviewer_id") and critic.get("reviewer_id")!=manifest.get("builder_id") and
+          bool(critic.get("evidence_id")))
+    # A visual review of R07 cannot approve R08: all critic evidence must be
+    # tied to the exact GLB bytes and authoring commit being offered for release.
+    check("critic_exact_candidate_and_source_bound",
+          critic.get("candidate_sha256")==expected and
+          critic.get("source_commit")==manifest.get("source_commit") and
+          bool(critic.get("source_commit")))
     check("10_exact_reference_style",scores.get("reference_fidelity")==10 and
           scores.get("visual_language")==10 and critic.get("reference_pixels_reviewed") is True)
     other={k:v for k,v in scores.items() if k not in ("reference_fidelity","visual_language")}
