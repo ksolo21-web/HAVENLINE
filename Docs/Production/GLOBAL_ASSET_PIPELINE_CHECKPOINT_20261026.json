@@ -10,7 +10,7 @@
     "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
     "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
   ],
-  "status": "SOURCE_14_TESTS_PASS__BVH_NORMAL_AO_TEST_PASS__7_REAL_T05_R07_4K_GODOT_VIEWS_PASS__T05_VISUAL_STYLE_FAIL_AND_MULTIMATERIAL_BAKE_BLOCKED__NO_RELEASE",
+  "status": "GLOBAL_14_POLICY_TESTS_PASS__TWO_MATERIAL_BVH_TECHNICALLY_VERIFIED__REAL_NINE_MATERIAL_SOURCE_BRIDGE_PASS__REAL_UV1_BAKE_STILL_IN_VALIDATION__NO_RELEASE",
   "complete_with_evidence": [
     {
       "milestone": "Separate from unapproved T05 branch",
@@ -69,7 +69,7 @@
     }
   ],
   "critical_unresolved": [
-    "Global Blender baker v1 requires one atlased material, while genuine T05 R07 cooker has 9 materials and 4 texture images: build a style-safe multi-material-preserving PBR conversion. Do not flatten to one material without exact image proof.",
+    "True T05 R07 nine-material geometry normal/AO pipeline not verified yet: unique bake UV1 atlas from original UV0-tiled nine materials is in Blender CI run 40392519606; reject overlapping projected texels, invalid author UV0 remaps or altered source shader colors.",
     "T05 R07 cooker visual fidelity recorded only 5.5/10, with snow roof, smoke, metal oven housing, food and base defects. No user style acceptance; exact 18567.png reference must be compared and sculpt reworked.",
     "Real Godot shipping-scene 3840x2160 seven-angle renders, gameplay context, night/snow states, real sockets/collisions and physical 60 FPS Android benchmark remain untested; verified 4K images are isolated software OpenGL.",
     "Native Cycles Blender 4.0.2 headless remains invalid for UV/normal/AO baking; CPU BVH tested at 128px only, need production authored maps and performance validation at higher resolutions.",
@@ -84,7 +84,7 @@
     "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
     "Preserve source hashes and evidence across retries"
   ],
-  "next_action": "Implement multi-material preserving v2 authoring/bake path on immutable staged T05 R07 candidate and test it; do not degrade nine material appearances or substitute procedural art. Then build and show 7 native 4K screenshots of actual T05 cooker in real Havenline shipping scene with owner 18567.png comparison; fix visual defects, run physical Android C6, independent reviewer and owner/integration sign-off.",
+  "next_action": "Inspect 40392519606 real nine-material UV1 bake, 40392519520 controlled UV1 two-slot test and official Khronos/embedded-texture audits. Fix any UV or tangent issues, preserve all 9 source materials & original UV0, ensure no visual/style approval is inferred. Continue shipping scene 4K/Android/critic separately.",
   "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
   "superseded_wrong_base_pull_request": 102,
   "latest_work": {
@@ -285,6 +285,48 @@
       "real_visual_review": "Unapproved; roof detail, snow overhang/smoke, metal saw arch, food shapes and base still inaccurate per prior internal 5.5/10 reviewer"
     },
     "last_verified_real_asset_run": 40387154217,
-    "last_verified_4k_real_asset": true
+    "last_verified_4k_real_asset": true,
+    "multimaterial_work": {
+      "exact_date": "2026-10-26",
+      "candidate_only": true,
+      "two_material_verified_run": 40389837468,
+      "two_material_artifact_id": 12681339340,
+      "two_material_source_shader_names": [
+        "HL_blue",
+        "HL_metal"
+      ],
+      "two_material_bake_normal_maps": 2,
+      "two_material_bake_ao_maps": 2,
+      "two_material_uv_pixels": [
+        6756,
+        2936
+      ],
+      "two_material_high_to_low_ray_hits": [
+        6756,
+        2936
+      ],
+      "two_material_real_ao_intersections": [
+        2408,
+        1684
+      ],
+      "two_material_gltf_validator_warnings": 0,
+      "real_t05_editable_source_sha256": "b3d2d1d42b8e0d2c664323881ca2410f2a6923809c1ee9a0e3ed01499152d087",
+      "real_t05_glb_sha256": "ff9f548c2d16d1f5972b4da2f3162978e65e3caef20ec998ec222e9497cb3a0b",
+      "real_t05_bridge_verified_run": 40390829544,
+      "real_t05_high_authored_object_count": 101,
+      "real_t05_low_triangles": 10700,
+      "real_t05_materials_preserved": 9,
+      "real_t05_bounding_center_delta_m": 2.384185791015625e-7,
+      "real_t05_source_uv0_aliased_texels_detected_first_slot": 13073,
+      "real_t05_original_uv0_mode": "REJECTED_CORRECTLY",
+      "crash_from_blender_native_smart_project": "Blender 4.0.2 segfault; replaced with deterministic connected-piece UV1 packer",
+      "uv1_first_issue": "Blender Python UV RNA invalidation corrected by frozen UV0 snapshot",
+      "uv1_second_issue": "glTF seam-split vertices caused hundreds of false geometry components; quantized position connectivity now in test; planar UV1 fallback for degenerate source islands",
+      "new_uv1_test_run": 40392519606,
+      "source_uv0_policy": "Byte-equivalent coordinate preservation required; separate UV1 only for normal/AO, original material PBR sources untouched",
+      "independent_review": "INTERNAL REVIEW ONLY; no separate available critic agent",
+      "real_nine_material_pbr_bake_approved": false,
+      "shipping_assets_touched": false
+    }
   }
 }
