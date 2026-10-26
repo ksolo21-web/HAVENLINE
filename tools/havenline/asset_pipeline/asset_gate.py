@@ -60,6 +60,41 @@ def parse_glb(path: pathlib.Path) -> dict:
     if kind!=b"JSON" or 20+length>len(raw):raise ValueError("GLB JSON chunk invalid")
     return json.loads(raw[20:20+length].decode("utf-8"))
 
+def embedded_glb_normal_png(path: pathlib.Path, gltf: dict) -> bytes:
+    """Read the exact normal-image payload selected by the GLB's material.
+
+    Missing material bindings, external image URLs and invalid buffer offsets
+    fail closed; a valid GLB JSON header alone does not prove normal binding.
+    """
+    raw=path.read_bytes()
+    json_size=struct.unpack_from("<I",raw,12)[0]
+    bin_header=20+json_size
+    if bin_header+8>len(raw):
+        raise ValueError("Missing GLB binary chunk")
+    bin_len,bin_type=struct.unpack_from("<I4s",raw,bin_header)
+    bin_start=bin_header+8
+    if bin_type!=b"BIN\\x00" or bin_start+bin_len>len(raw):
+        raise ValueError("Invalid GLB binary chunk")
+    mats=gltf.get("materials",[])
+    if len(mats)!=1:
+        raise ValueError("v1 atlas must bind exactly one material")
+    normal_ref=mats[0].get("normalTexture")
+    if not isinstance(normal_ref,dict) or not isinstance(normal_ref.get("index"),int):
+        raise ValueError("Missing GLB normalTexture material binding")
+    textures=gltf.get("textures",[])
+    tex=textures[normal_ref["index"]]
+    source=gltf.get("images",[])[tex["source"]]
+    if source.get("mimeType")!="image/png" or "uri" in source:
+        raise ValueError("GLB normal texture must be embedded PNG")
+    view=gltf.get("bufferViews",[])[source["bufferView"]]
+    if view.get("buffer")!=0:
+        raise ValueError("Unsupported GLB image buffer")
+    offset=view.get("byteOffset",0)
+    length=view.get("byteLength",0)
+    if not isinstance(offset,int) or not isinstance(length,int) or offset<0 or length<=0 or offset+length>bin_len:
+        raise ValueError("Embedded GLB normal image bounds invalid")
+    return raw[bin_start+offset:bin_start+offset+length]
+
 def run(manifest: dict, policy: dict, root: pathlib.Path, mode: str) -> dict:
     checks=[]
     def check(name,condition,detail=None):
@@ -173,6 +208,26 @@ def run(manifest: dict, policy: dict, root: pathlib.Path, mode: str) -> dict:
             check("material_slot_limit",len(mat_names)<=limits["materials_max"],len(mat_names))
             primitives=[p for m in gltf.get("meshes",[]) for p in m.get("primitives",[])]
             check("mesh_primitives_present",bool(primitives))
+            check("normal_mapped_mesh_has_tangents",
+                  bool(primitives) and all("TANGENT" in p.get("attributes",{})
+                                           for p in primitives),
+                  {"primitive_count":len(primitives),"native_tangents_required":True})
+            try:
+                from PIL import Image
+                from io import BytesIO
+                normal_bytes=embedded_glb_normal_png(glb,gltf)
+                with Image.open(BytesIO(normal_bytes)) as embedded, Image.open(map_files["normal"]) as source:
+                    embedded_rgba=embedded.convert("RGBA")
+                    source_rgba=source.convert("RGBA")
+                    consistent=(embedded_rgba.size==source_rgba.size and
+                                embedded_rgba.tobytes()==source_rgba.tobytes())
+                check("embedded_normal_pixels_match_bake",consistent,
+                      {"embedded_sha256":hashlib.sha256(normal_bytes).hexdigest(),
+                       "external_sha256":digest(map_files["normal"]),
+                       "exact_pixel_equality":consistent})
+            except (KeyError,TypeError,IndexError,ValueError,OSError,AttributeError) as err:
+                check("embedded_normal_pixels_match_bake",False,str(err))
+
             check("drawcall_proxy_primitives",len(primitives)<=limits["draw_calls_max"],
                   {"primitive_count":len(primitives),"this_is_not_actual_Godot_drawcalls":True})
             check("no_animation_or_skin",not gltf.get("animations") and not gltf.get("skins"))
