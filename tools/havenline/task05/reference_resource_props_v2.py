@@ -199,8 +199,12 @@ def build_fuel_canister():
             b.beveled_box("metal",(x+hx,.73,.28),(.045,.45,.045),.014,rotation=(0,yaw,0))
 
     # Shared retaining frame, cross lashing and uneven snow load.
+    # Four open corner struts replace two broad, featureless side walls. These
+    # retain the canisters on their rack without hiding the formed sheet metal
+    # from lateral gameplay views or creating primitive wooden slab silhouettes.
     for x in (-.47,.47):
-        b.beveled_box("wood_light",(x,.52,0),(.08,.70,.78),.028)
+        for z in (-.31,.31):
+            b.rod_between("wood_light",(x,.19,z),(x,.88,z),.040,7)
     b.rod_between("yellow",(-.43,.34,-.32),(.43,.75,-.32),.025,7)
     b.rod_between("yellow",(-.43,.75,-.32),(.43,.34,-.32),.025,7)
     b.beveled_box("snow",(-.25,1.03,.02),(.28,.055,.34),.020,rotation=(0,.07,.02))
