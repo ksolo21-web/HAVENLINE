@@ -166,20 +166,21 @@ jobs:
           mkdir -p "$staging/assets" "$RUNNER_TEMP/havenline-godot-editor"
           cp global-bake-evidence/candidate/smoke_test_LOD0.glb "$staging/assets/"
           cp tools/havenline/asset_pipeline/tests/godot_glb_import_smoke.gd "$staging/"
-          printf 'config_version=5\\n[application]\\nconfig/name="Havenline Isolated GLB Technical Smoke"\\n[rendering]\\nrenderer/rendering_method="gl_compatibility"\\n' > "$staging/project.godot"
+          cat > "$staging/project.godot" <<'EOF'
+          config_version=5
+          [application]
+          config/name="Havenline Isolated GLB Technical Smoke"
+          [rendering]
+          renderer/rendering_method="gl_compatibility"
+          EOF
           base='https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable'
-          curl -fL --retry 2 --connect-timeout 20 --max-time 240 \\
-            "$base/Godot_v4.7.2-stable_linux.x86_64.zip" \\
-            -o "$RUNNER_TEMP/havenline-godot-editor/editor.zip"
+          curl -fL --retry 2 --connect-timeout 20 --max-time 240 "$base/Godot_v4.7.2-stable_linux.x86_64.zip" -o "$RUNNER_TEMP/havenline-godot-editor/editor.zip"
           unzip -q "$RUNNER_TEMP/havenline-godot-editor/editor.zip" -d "$RUNNER_TEMP/havenline-godot-editor"
           editor="$RUNNER_TEMP/havenline-godot-editor/Godot_v4.7.2-stable_linux.x86_64"
           chmod +x "$editor"
           "$editor" --version | tee global-bake-evidence/godot-version.log
-          timeout 180 "$editor" --headless --editor --path "$staging" --import --quit \\
-            2>&1 | tee global-bake-evidence/godot-import.log
-          timeout 120 "$editor" --headless --path "$staging" \\
-            --script res://godot_glb_import_smoke.gd \\
-            2>&1 | tee global-bake-evidence/godot-binding.log
+          timeout 180 "$editor" --headless --editor --path "$staging" --import --quit 2>&1 | tee global-bake-evidence/godot-import.log
+          timeout 120 "$editor" --headless --path "$staging" --script res://godot_glb_import_smoke.gd 2>&1 | tee global-bake-evidence/godot-binding.log
           grep -q HAVENLINE_GODOT_IMPORT_PASS global-bake-evidence/godot-binding.log
           echo 'Isolated headless GLB import PASS; not in-game visual or phone evidence.'
       - name: Preserve reproducible candidate or failure logs
