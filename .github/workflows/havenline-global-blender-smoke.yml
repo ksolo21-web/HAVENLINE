@@ -4,6 +4,7 @@ on:
     branches: ['havenline/global-asset-pipeline-integration-20261026']
     paths:
       - 'tools/havenline/asset_pipeline/blender_build.py'
+      - 'tools/havenline/asset_pipeline/bvh_bake.py'
       - 'tools/havenline/asset_pipeline/tests/create_blender_smoke.py'
       - 'tools/havenline/asset_pipeline/validate_gltf.mjs'
       - '.github/workflows/havenline-global-blender-smoke.yml'
@@ -47,7 +48,7 @@ jobs:
             --source "$PWD/global-bake-evidence/fixture/test_master.blend" \
             --maps "$PWD/global-bake-evidence/fixture" \
             --out "$PWD/global-bake-evidence/candidate" \
-            --asset-id smoke_test --size 128 --triangles-max 3000 \
+            --asset-id smoke_test --size 128 --triangles-max 3000 --backend bvh_cpu \
             > global-bake-evidence/bake.log 2>&1 || {
               tail -150 global-bake-evidence/bake.log; exit 1;
             }
