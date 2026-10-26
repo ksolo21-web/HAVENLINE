@@ -82,9 +82,10 @@ jobs:
         if: steps.materialize.outputs.generated == 'false'
         run: |
           set -euo pipefail
-          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > t05-r18-evidence/import.log 2>&1
-          # The shipping scene requires deterministic generated audio/motion fixtures.
+          # Generate WAVs BEFORE Godot's import scan; otherwise ResourceLoader.exists
+          # is false for newly baked files even though the WAVs exist on disk.
           python3 tools/havenline/bake_outpost_audio.py > t05-r18-evidence/audio-fixture.json
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > t05-r18-evidence/import.log 2>&1
           timeout 120 Godot_v4.7.2-stable_linux.x86_64 --headless --path HavenlineGodot --script res://tools/bake_crew_motion.gd > t05-r18-evidence/motion-fixture.log 2>&1
           timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task03_boundary.gd > t05-r18-evidence/boundary-test.log 2>&1
           timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task05_station_kit.gd > t05-r18-evidence/station-test.log 2>&1
