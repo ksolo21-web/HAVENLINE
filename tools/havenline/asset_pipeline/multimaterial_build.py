@@ -83,7 +83,7 @@ def main():
     bpy.ops.wm.open_mainfile(filepath=str(source))
     high=_one_mesh("DETAIL_MASTER")
     low=_one_mesh("GAME_LOD0")
-    if high is low:raise RuntimeError("High and low source meshes must differ")
+    if high is low or high.data is low.data:raise RuntimeError("Independent authored high and low meshes required")
     if low.data.uv_layers.active is None:
         raise RuntimeError("Artist-authored GAME_LOD0 UVs required")
     originals=list(low.data.materials)
@@ -100,6 +100,11 @@ def main():
     if used!=set(range(len(originals))):
         raise RuntimeError("Every source material must own actual geometry; unused slots rejected")
     before={m.name:_snapshot(m) for m in originals}
+    high_materials_isolated=0
+    for slot,mat in enumerate(list(high.data.materials)):
+        if mat in originals:
+            high.data.materials[slot]=mat.copy()
+            high_materials_isolated+=1
     record=[]
     images={}
     for i,material in enumerate(originals):
@@ -150,6 +155,7 @@ def main():
         "materials_preserved":len(originals),
         "source_pbr_base_metal_roughness_preserved":True,
         "independent_high_and_low_source_meshes":True,
+        "detail_source_materials_isolated":high_materials_isolated,
         "native_godot_tested":False,
         "real_shipping_scene_tested":False,
         "physical_android_tested":False,
