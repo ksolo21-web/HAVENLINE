@@ -1,0 +1,109 @@
+name: Havenline T05 R18 bounded regeneration and visual proof
+on:
+  push:
+    branches: ['havenline/T05-r18-visual-corrections-20261025']
+    paths:
+      - 'tools/havenline/task05/**'
+      - 'HavenlineGodot/scripts/camp_boundary_view.gd'
+      - 'HavenlineGodot/scripts/main.gd'
+      - 'HavenlineGodot/assets/stations_v2/**'
+      - '.github/workflows/havenline-t05-r18-proof.yml'
+permissions:
+  contents: write
+concurrency:
+  group: havenline-t05-r18-proof
+  cancel-in-progress: false
+jobs:
+  bounded-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 75
+    env:
+      GIT_CONFIG_COUNT: '4'
+      GIT_CONFIG_KEY_0: filter.lfs.process
+      GIT_CONFIG_VALUE_0: ''
+      GIT_CONFIG_KEY_1: filter.lfs.clean
+      GIT_CONFIG_VALUE_1: cat
+      GIT_CONFIG_KEY_2: filter.lfs.smudge
+      GIT_CONFIG_VALUE_2: cat
+      GIT_CONFIG_KEY_3: filter.lfs.required
+      GIT_CONFIG_VALUE_3: 'false'
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          ref: ${{ github.sha }}
+          fetch-depth: 0
+          lfs: false
+      - name: Verify exact source and run deterministic station authoring audit
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          python3 -m pip install --disable-pip-version-check numpy pillow
+          python3 tools/havenline/task05/test_station_kit.py | tee t05-r18-source-audit.json
+          git diff --cached --exit-code
+          test -z "$(git ls-files --others --exclude-standard | grep -v '^t05-r18-source-audit.json$' || true)"
+      - name: Materialize only derived T05 GLBs/catalog when needed
+        id: materialize
+        run: |
+          set -euo pipefail
+          mapfile -t modified < <(git diff --name-only)
+          for path in "${modified[@]}"; do
+            case "$path" in
+              HavenlineGodot/assets/stations_v2/*.glb|HavenlineGodot/assets/stations_v2/catalog.json) ;;
+              *) echo "Unexpected generator modification: $path"; exit 1 ;;
+            esac
+          done
+          if [ "${#modified[@]}" -gt 0 ]; then
+            echo generated=true >> "$GITHUB_OUTPUT"
+            test "$(git ls-remote origin "refs/heads/$GITHUB_REF_NAME" | cut -f1)" = "$GITHUB_SHA"
+            git config user.name 'havenline-t05-r18-proof[bot]'
+            git config user.email 'havenline-t05-r18-proof[bot]@users.noreply.github.com'
+            git add HavenlineGodot/assets/stations_v2
+            git commit -m 'T05 R18: materialize exact authored station geometry and finishes'
+            git push origin "HEAD:$GITHUB_REF_NAME"
+          else
+            echo generated=false >> "$GITHUB_OUTPUT"
+          fi
+      - name: Set up pinned Godot for native visual evidence
+        if: steps.materialize.outputs.generated == 'false'
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y xvfb mesa-vulkan-drivers ffmpeg
+          mkdir -p "$RUNNER_TEMP/godot" t05-r18-evidence/material t05-r18-evidence/boundary t05-r18-evidence/kit
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/godot/engine.zip"
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  '"$RUNNER_TEMP/godot/engine.zip" | sha512sum -c -
+          unzip -q "$RUNNER_TEMP/godot/engine.zip" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.2-stable_linux.x86_64"
+          echo "$RUNNER_TEMP/godot" >> "$GITHUB_PATH"
+          git lfs fetch origin "$GITHUB_SHA" --include=Docs/Production/T02/reference-ground.webp --exclude=''
+          git lfs checkout Docs/Production/T02/reference-ground.webp
+      - name: Import and inspect exact-source Godot assets
+        if: steps.materialize.outputs.generated == 'false'
+        run: |
+          set -euo pipefail
+          timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > t05-r18-evidence/import.log 2>&1
+          export VK_ICD_FILENAMES="$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)"
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task05_station_kit.gd -- --out="$(pwd)/t05-r18-evidence/kit" > t05-r18-evidence/kit.log 2>&1
+          xvfb-run -a -s '-screen 0 3840x2160x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 3840x2160 --script "$(pwd)/tools/havenline/task05/capture_material_review.gd" -- --out="$(pwd)/t05-r18-evidence/material" > t05-r18-evidence/material.log 2>&1
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task03_boundary.gd -- --out="$(pwd)/t05-r18-evidence/boundary" > t05-r18-evidence/boundary.log 2>&1
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' t05-r18-evidence/*.log; then exit 1; fi
+          printf '{"source":"%s","task":"T05","type":"native-checkpoint-not-approval","task_approved":false,"physical_C6_certified":false}\n' "$GITHUB_SHA" > t05-r18-evidence/source-binding.json
+          python3 - <<'PY'
+          import hashlib,json,pathlib
+          root=pathlib.Path('t05-r18-evidence')
+          frames=sorted(root.rglob('*.png'))
+          assert frames,'No actual Godot renders generated'
+          (root/'sha256.json').write_text(json.dumps({str(p):hashlib.sha256(p.read_bytes()).hexdigest() for p in frames},indent=2))
+          print('Actual Godot native frames:',len(frames))
+          PY
+      - name: Upload exact-source evidence even on failure
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-t05-r18-evidence-${{ github.sha }}
+          path: |
+            t05-r18-source-audit.json
+            t05-r18-evidence/
+          if-no-files-found: warn
+          retention-days: 30
