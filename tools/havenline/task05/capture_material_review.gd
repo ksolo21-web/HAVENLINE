@@ -53,7 +53,7 @@ func run():
  # Camera-only inspection; no isolated stages, asset transforms or hidden props.
  var catalog=JSON.parse_string(FileAccess.get_file_as_string("res://assets/stations_v2/catalog.json"))
  assert(catalog is Dictionary)
- var targets=["cooker_processor","cargo_crate","fish_crate","fuel_canister","intake_machine"]
+ var targets=["cooker_processor","cargo_crate","fish_crate","fuel_canister","intake_machine","wood_stack"]
  var views=[
   {"id":"front","offset":Vector3(0,5.4,-8.0),"size":4.6},
   {"id":"right","offset":Vector3(8.0,5.4,0),"size":4.6},
