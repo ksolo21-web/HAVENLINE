@@ -73,7 +73,7 @@ class AssetGateTests(unittest.TestCase):
         def write_glb(path,meta):
             json_chunk=json.dumps(meta,separators=(",",":")).encode()
             json_chunk+=b" " * ((-len(json_chunk))%4)
-            binary=payload+b"\\x00"*((-len(payload))%4)
+            binary=payload+bytes((-len(payload))%4)
             total=12+8+len(json_chunk)+8+len(binary)
             path.write_bytes(struct.pack("<4sII",b"glTF",2,total)+
                 struct.pack("<I4s",len(json_chunk),b"JSON")+json_chunk+
