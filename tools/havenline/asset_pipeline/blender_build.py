@@ -17,6 +17,7 @@ def parse_args():
     for k in ("source","maps","out","asset-id"):p.add_argument("--"+k,required=True)
     p.add_argument("--size",type=int,default=512)
     p.add_argument("--triangles-max",type=int,default=20000)
+    p.add_argument("--backend",choices=("cycles","bvh_cpu"),default="cycles")
     return p.parse_args(a)
 def coll(name):
     c=bpy.data.collections.get(name)
@@ -105,7 +106,7 @@ def build(a):
                    for a,b in zip(before,after))
     # Synthetic smoke only: a UV bake isolates target/selection wiring from
     # normal and AO ray tracing. This file is never exported as an asset map.
-    if a.asset_id=="smoke_test":
+    if a.asset_id=="smoke_test" and a.backend=="cycles":
         uvimg=bpy.data.images.new("HAVENLINE_UV_DIAGNOSTIC",width=a.size,height=a.size,alpha=False)
         texture_node(material,uvimg)
         bpy.context.view_layer.update()
@@ -124,60 +125,74 @@ def build(a):
               "examples",uv_samples[:4],uv_samples[len(uv_samples)//2],
               "distinct_sample_colors",len(set(tuple(round(t,2) for t in v[:3]) for v in uv_samples)))
         save_image(uvimg,out/"debug-uv-probe.png")
-    normal_path=texout/"normal.png"
-    normal=bpy.data.images.new("HAVENLINE_NORMAL_BAKE_TARGET",width=a.size,height=a.size,alpha=False)
-    # Non-transparent sentinel lets Blender 4.0 preserve opaque output when
-    # use_clear=False. The RGB change check independently proves real painting.
-    normal.generated_color=(.90,.10,.85,1.0)
-    normal.update()
-    normal.colorspace_settings.name="Non-Color"
-    texture_node(material,normal)
-    bpy.context.view_layer.update()
-    pre_normal=sample_pixels(normal)
-    print("HAVENLINE DEBUG low UV samples",len(low.data.uv_layers.active.data),
-          [tuple(x.uv) for x in low.data.uv_layers.active.data[:3]])
-    print("HAVENLINE DEBUG image node active",material.node_tree.nodes.active.name)
-    set_active([high,low],low)
-    # Blender 4.0 saves image-target bakes INTERNALLY even when an external
-    # save_mode is requested. Explicitly save the actual populated image.
-    result=bpy.ops.object.bake(type="NORMAL",target="IMAGE_TEXTURES",
-                               save_mode="INTERNAL",use_clear=False,
-                               use_selected_to_active=True,cage_extrusion=.042,
-                               normal_space="TANGENT")
-    # Do NOT call Image.update() here: it can invalidate the freshly baked
-    # buffer on Blender's generated image backing. Inspect/snapshot first.
-    post_normal=sample_pixels(normal)
-    delta_normal=changed_count(pre_normal,post_normal)
-    print("HAVENLINE NORMAL baked_pixel_before_after",pre_normal[0],post_normal[0])
-    print("HAVENLINE NORMAL baked_sample_changes",delta_normal,"of",len(pre_normal))
-    assert "FINISHED" in result and delta_normal>=max(8,len(pre_normal)//200), (
-        "Cycles failed to paint meaningful high-to-low normal pixels")
-    save_image(normal,normal_path)
-    assert normal_path.is_file() and normal_path.stat().st_size>128
-    print("HAVENLINE NORMAL post-bake sampled opacity",sum(px[3]>.5 for px in post_normal),"/",len(post_normal))
-    ao_path=texout/"ambient_occlusion.png"
-    ao=bpy.data.images.new("HAVENLINE_AO_BAKE_TARGET",width=a.size,height=a.size,alpha=False)
-    ao.colorspace_settings.name="Non-Color"
-    # Even valid isolated objects can have an all-white AO map. Initialize the
-    # target visibly magenta so a white bake must overwrite actual pixels.
-    ao.generated_color=(.90,.10,.85,1.0)
-    ao.update()
-    texture_node(material,ao)
-    bpy.context.view_layer.update()
-    pre_ao=sample_pixels(ao)
-    print("HAVENLINE AO target before bake",pre_ao[0],pre_ao[len(pre_ao)//2])
-    set_active([low],low)
-    result=bpy.ops.object.bake(type="AO",target="IMAGE_TEXTURES",save_mode="INTERNAL",
-                               use_clear=False,use_selected_to_active=False)
-    post_ao=sample_pixels(ao)
-    delta_ao=changed_count(pre_ao,post_ao)
-    print("HAVENLINE AO target after bake",post_ao[0],post_ao[len(post_ao)//2])
-    print("HAVENLINE AO baked_sample_changes",delta_ao,"of",len(pre_ao))
-    assert "FINISHED" in result and delta_ao>=max(8,len(pre_ao)//200), (
-        "Cycles failed to paint meaningful ambient-occlusion pixels")
-    save_image(ao,ao_path)
-    assert ao_path.is_file() and ao_path.stat().st_size>128
-    print("HAVENLINE AO post-bake sampled opacity",sum(px[3]>.5 for px in post_ao),"/",len(post_ao))
+    if a.backend=="bvh_cpu":
+        # Geometry-derived ray casting, rather than native bake FINISHED,
+        # writes the real high-mesh projection and low-mesh hemisphere AO.
+        from bvh_bake import bake as geometry_bake
+        normal=bpy.data.images.new("HAVENLINE_NORMAL_BAKE_TARGET",width=a.size,height=a.size,alpha=False)
+        normal.colorspace_settings.name="Non-Color"
+        ao=bpy.data.images.new("HAVENLINE_AO_BAKE_TARGET",width=a.size,height=a.size,alpha=False)
+        ao.colorspace_settings.name="Non-Color"
+        bake_stats=geometry_bake(high,low,a.size,normal,ao)
+        save_image(normal,texout/"normal.png")
+        save_image(ao,texout/"ambient_occlusion.png")
+        delta_normal=bake_stats["rasterized_pixels"]
+        delta_ao=bake_stats["rasterized_pixels"]
+    else:
+        normal_path=texout/"normal.png"
+        normal=bpy.data.images.new("HAVENLINE_NORMAL_BAKE_TARGET",width=a.size,height=a.size,alpha=False)
+        # Non-transparent sentinel lets Blender 4.0 preserve opaque output when
+        # use_clear=False. The RGB change check independently proves real painting.
+        normal.generated_color=(.90,.10,.85,1.0)
+        normal.update()
+        normal.colorspace_settings.name="Non-Color"
+        texture_node(material,normal)
+        bpy.context.view_layer.update()
+        pre_normal=sample_pixels(normal)
+        print("HAVENLINE DEBUG low UV samples",len(low.data.uv_layers.active.data),
+              [tuple(x.uv) for x in low.data.uv_layers.active.data[:3]])
+        print("HAVENLINE DEBUG image node active",material.node_tree.nodes.active.name)
+        set_active([high,low],low)
+        # Blender 4.0 saves image-target bakes INTERNALLY even when an external
+        # save_mode is requested. Explicitly save the actual populated image.
+        result=bpy.ops.object.bake(type="NORMAL",target="IMAGE_TEXTURES",
+                                   save_mode="INTERNAL",use_clear=False,
+                                   use_selected_to_active=True,cage_extrusion=.042,
+                                   normal_space="TANGENT")
+        # Do NOT call Image.update() here: it can invalidate the freshly baked
+        # buffer on Blender's generated image backing. Inspect/snapshot first.
+        post_normal=sample_pixels(normal)
+        delta_normal=changed_count(pre_normal,post_normal)
+        print("HAVENLINE NORMAL baked_pixel_before_after",pre_normal[0],post_normal[0])
+        print("HAVENLINE NORMAL baked_sample_changes",delta_normal,"of",len(pre_normal))
+        assert "FINISHED" in result and delta_normal>=max(8,len(pre_normal)//200), (
+            "Cycles failed to paint meaningful high-to-low normal pixels")
+        save_image(normal,normal_path)
+        assert normal_path.is_file() and normal_path.stat().st_size>128
+        print("HAVENLINE NORMAL post-bake sampled opacity",sum(px[3]>.5 for px in post_normal),"/",len(post_normal))
+        ao_path=texout/"ambient_occlusion.png"
+        ao=bpy.data.images.new("HAVENLINE_AO_BAKE_TARGET",width=a.size,height=a.size,alpha=False)
+        ao.colorspace_settings.name="Non-Color"
+        # Even valid isolated objects can have an all-white AO map. Initialize the
+        # target visibly magenta so a white bake must overwrite actual pixels.
+        ao.generated_color=(.90,.10,.85,1.0)
+        ao.update()
+        texture_node(material,ao)
+        bpy.context.view_layer.update()
+        pre_ao=sample_pixels(ao)
+        print("HAVENLINE AO target before bake",pre_ao[0],pre_ao[len(pre_ao)//2])
+        set_active([low],low)
+        result=bpy.ops.object.bake(type="AO",target="IMAGE_TEXTURES",save_mode="INTERNAL",
+                                   use_clear=False,use_selected_to_active=False)
+        post_ao=sample_pixels(ao)
+        delta_ao=changed_count(pre_ao,post_ao)
+        print("HAVENLINE AO target after bake",post_ao[0],post_ao[len(post_ao)//2])
+        print("HAVENLINE AO baked_sample_changes",delta_ao,"of",len(pre_ao))
+        assert "FINISHED" in result and delta_ao>=max(8,len(pre_ao)//200), (
+            "Cycles failed to paint meaningful ambient-occlusion pixels")
+        save_image(ao,ao_path)
+        assert ao_path.is_file() and ao_path.stat().st_size>128
+        print("HAVENLINE AO post-bake sampled opacity",sum(px[3]>.5 for px in post_ao),"/",len(post_ao))
     shader=material.node_tree.nodes.get("Principled BSDF")
     if shader is None:raise RuntimeError("Principled BSDF material required")
     target=material.node_tree.nodes.get("HAVENLINE_BAKE_TARGET")
@@ -216,6 +231,7 @@ def build(a):
         "glb_sha256":hashlib.sha256(output_glb.read_bytes()).hexdigest(),
         "normal_baked_from_high":True,"ao_baked_from_low":True,
         "normal_changed_sample_count":delta_normal,"ao_changed_sample_count":delta_ao,
+        "bake_backend":a.backend,"bake_stats":bake_stats if a.backend=="bvh_cpu" else None,
         "base_color_roughness_metallic_are_artist_inputs":True,
         "glb_contains_ao_map":False,
         "native_godot_tested":False,"visual_approved":False,"owner_approved":False,
