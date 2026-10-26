@@ -165,19 +165,35 @@ def build_cooker_processor():
     # Left prep station echoes the 18607 butcher table.
     b.beveled_box("wood_light",(-.55,1.02,-.28),(.68,.10,.58),.045)
     b.beveled_box("cream",(-.55,1.09,-.28),(.52,.055,.42),.025)
-    b.sphere("orange",(-.58,1.18,-.28),(.20,.09,.14),6,12,rotation=(0,.18,0))
+    # Distinct butcher and output-tray meat forms with raised cream fat faces.
+    b.sphere("orange",(-.58,1.17,-.28),(.21,.09,.14),5,12,rotation=(0,.18,0))
+    b.sphere("cream",(-.60,1.25,-.29),(.13,.029,.11),3,8,rotation=(0,.18,0))
     b.rod_between("cream",(-.72,1.21,-.28),(-.43,1.21,-.28),.018,7)
+    b.beveled_box("metal",(-.54,1.07,.38),(.64,.075,.36),.050)
+    b.beveled_box("dark",(-.54,1.12,.38),(.56,.024,.28),.012)
+    for x,z,r,rx in ((-.73,.35,-.18,.16),(-.39,.42,.22,.13)):
+        b.sphere("orange",(x,1.205,z),(rx,.08,.115),4,10,rotation=(0,r,0))
+        b.sphere("cream",(x-.026,1.262,z+.01),(rx*.66,.028,.075),3,8,rotation=(0,r,0))
     b.rod_between("metal",(-.78,1.15,-.05),(-.42,1.15,-.05),.025,7)
     b.beveled_box("blue",(-.55,.88,-.30),(.62,.08,.48),.030)
 
-    # Offset flue: segmented pipe, clamp bands and snow cap.
+    # Forged oven arch/blade is structurally connected above the prep tray.
+    # Keep clear mechanical hierarchy and avoid a freestanding default cylinder.
+    for z in (-.43,.43):
+        b.rod_between("metal",(-.86,1.33,z),(-.86,1.80,z),.039,8)
+    b.rod_between("metal",(-.86,1.80,-.43),(-.86,1.80,.43),.048,9)
+    b.beveled_box("cream",(-.86,1.57,.0),(.075,.31,.21),.022)
+
+    # Offset flue: stepped collars, polished throat and bounded snow cap.
     b.cylinder("dark",(.70,1.72,-.22),.12,.42,12)
     b.cylinder("metal",(.70,2.06,-.22),.14,.28,12)
+    b.cylinder("blue",(.70,2.13,-.22),.168,.055,14)
+    b.torus("metal",(.70,2.19,-.22),.166,.028,14,5)
     for y in (1.90,2.18):
         b.torus("orange",(.70,y,-.22),.145,.030,12,5)
     b.cylinder("blue",(.70,2.28,-.22),.18,.12,12)
     b.torus("yellow",(.70,2.36,-.22),.19,.035,12,5)
-    b.beveled_box("snow",(.64,2.44,-.24),(.28,.06,.22),.025,rotation=(0,.08,.02))
+    b.sphere("snow",(.64,2.445,-.24),(.18,.058,.14),3,9,rotation=(0,.08,.02))
 
     # Small service gauge/handwheel on the left rear adds mechanical asymmetry.
     b.rod_between("metal",(-.76,1.30,-.08),(-.92,1.48,-.08),.040,7)
