@@ -33,7 +33,7 @@ def _world_bvh_ray(bvh, inv, origin, direction, distance):
     return bvh.ray_cast(local_origin,local_dir,distance)
 
 
-def bake(high, low, size, normal_image, ao_image, ao_rays=8, material_index=None, minimum_pixels=32, minimum_coverage=.05):
+def bake(high, low, size, normal_image, ao_image, ao_rays=8, material_index=None, minimum_pixels=32, minimum_coverage=.05, strict_uv_nonoverlap=False):
     if size>1024:
         raise RuntimeError("CPU BVH fallback limited to 1024px; production 4K needs validated native/accelerated bake")
     if any(abs(x-1.0)>1e-4 for x in (*high.scale,*low.scale)):
@@ -52,6 +52,8 @@ def bake(high, low, size, normal_image, ao_image, ao_rays=8, material_index=None
     pix_normal=array("f",(0.5,0.5,1.0,1.0))* (size*size)
     pix_ao=array("f",(1.0,1.0,1.0,1.0))* (size*size)
     touched=bytearray(size*size)
+    surface_at_pixel={} if strict_uv_nonoverlap else None
+    alias_pixels=0
     high_hits=0
     sampled=0
     occlusion_hits=0
@@ -82,10 +84,12 @@ def bake(high, low, size, normal_image, ao_image, ao_rays=8, material_index=None
                 if weights is None:
                     continue
                 index=y*size+x
-                if touched[index]:
-                    continue
                 u,v,w=weights
                 point=pos[0]*u+pos[1]*v+pos[2]*w
+                if touched[index]:
+                    if strict_uv_nonoverlap and (surface_at_pixel[index]-point).length > .015:
+                        alias_pixels+=1
+                    continue
                 N=(normals[0]*u+normals[1]*v+normals[2]*w).normalized()
                 T=tangent-N*tangent.dot(N)
                 if T.length<1e-8:
@@ -104,6 +108,8 @@ def bake(high, low, size, normal_image, ao_image, ao_rays=8, material_index=None
                 encoded=[min(1.0,max(0.0,0.5+0.5*t)) for t in ts]
                 pix_normal[base:base+4]=array("f",(*encoded,1.0))
                 touched[index]=1
+                if strict_uv_nonoverlap:
+                    surface_at_pixel[index]=point.copy()
                 high_hits+=1
                 ao_blocked=0
                 for sample in range(ao_rays):
@@ -120,6 +126,8 @@ def bake(high, low, size, normal_image, ao_image, ao_rays=8, material_index=None
                 ao_value=1.0-ao_blocked/ao_rays
                 pix_ao[base:base+4]=array("f",(ao_value,ao_value,ao_value,1.0))
                 sampled+=1
+    if strict_uv_nonoverlap and alias_pixels:
+        raise RuntimeError("UV_BAKE_ATLAS_OVERLAP: %d conflicting source texels, preserving original tiled UVs requires independently authored bake UV layout"%alias_pixels)
     coverage=sampled/(size*size)
     if sampled<minimum_pixels or coverage<minimum_coverage or high_hits<minimum_pixels:
         raise RuntimeError(f"Geometry-derived bake has inadequate UV/ray coverage: {sampled} pixels, fraction {coverage:.4f}")
