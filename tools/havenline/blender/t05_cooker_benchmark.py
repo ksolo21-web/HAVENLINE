@@ -310,8 +310,9 @@ for obj in made:
         obj.select_set(True)
         bpy.ops.object.convert(target="MESH")
         bpy.context.view_layer.objects.active.select_set(False)
-for obj in made:
-    if obj.name in bpy.data.objects:pass
+# Blender replaces the Object RNA when META is converted into a mesh.
+# Never dereference stale source-object handles after conversion; instead
+# discover actual surviving editable/source meshes from the live collection.
 src=[obj for obj in art.objects if obj.type=="MESH"]
 for o in src:
     bpy.context.view_layer.objects.active=o
