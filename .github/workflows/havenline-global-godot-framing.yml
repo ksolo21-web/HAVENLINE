@@ -34,6 +34,8 @@ jobs:
           echo "729c0e87beb3e34e76abfaf9e2930945b7521c957c5604d3ebbcf2f26c94d3b8  $glb" | sha256sum -c -
           mkdir -p global-godot-framing/assets
           cp "$glb" global-godot-framing/assets/
+          cp global-bake-evidence/candidate/textures/ambient_occlusion.png global-godot-framing/assets/ambient_occlusion.png
+          echo "4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134  global-godot-framing/assets/ambient_occlusion.png" | sha256sum -c -
           cp tools/havenline/asset_pipeline/capture_isolated_asset.gd global-godot-framing/capture.gd
           cat > global-godot-framing/project.godot <<'EOF'
           config_version=5
@@ -63,6 +65,9 @@ jobs:
           fi
           timeout 180 xvfb-run -a "$editor" --path "$project" --rendering-method gl_compatibility --audio-driver Dummy --script res://capture.gd -- --glb=res://assets/smoke_test_LOD0.glb --out="$project/evidence" --asset-id=smoke_test 2>&1 | tee global-godot-framing/capture.log
           grep -q GLOBAL_ASSET_IMPORT_PROOF global-godot-framing/capture.log
+          mkdir -p global-godot-framing/evidence-ao
+          timeout 180 xvfb-run -a "$editor" --path "$project" --rendering-method gl_compatibility --audio-driver Dummy --script res://capture.gd -- --glb=res://assets/smoke_test_LOD0.glb --ao=res://assets/ambient_occlusion.png --out="$project/evidence-ao" --asset-id=smoke_test 2>&1 | tee global-godot-framing/capture-ao.log
+          grep -q GLOBAL_ASSET_IMPORT_PROOF global-godot-framing/capture-ao.log
       - name: Validate camera geometry, seven actual frames and unchanged GLB
         run: |
           set -euo pipefail
@@ -89,10 +94,25 @@ jobs:
                   assert len(rgb)>=25, f"Render flat or blank: {v['view']}"
               recorded.append({"view":v["view"],"sha256":hashlib.sha256(p.read_bytes()).hexdigest(),"sample_color_count":len(rgb)})
           assert len({x["sha256"] for x in recorded})==7
+          ao_report=json.loads((root/"evidence-ao/isolated-import.json").read_text())
+          assert ao_report["candidate_glb_sha256"]==report["candidate_glb_sha256"]
+          assert ao_report["ao_source_sha256"]=="4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134"
+          assert ao_report["ao_bound_material_surfaces"]>0
+          assert ao_report["ao_preview_only_not_shipping_scene"] is True
+          from PIL import ImageChops
+          changed=[]
+          for v in views:
+              prior=root/"evidence"/v["file"]
+              with Image.open(prior) as before, Image.open(root/"evidence-ao"/v["file"]) as after:
+                  assert before.size==after.size==(1280,720)
+                  delta=ImageChops.difference(before.convert("RGB"),after.convert("RGB"))
+                  touched=delta.getbbox() is not None
+                  changed.append({"view":v["view"],"changed_pixels":touched})
+          assert any(v["changed_pixels"] for v in changed), "AO is bound but produces no actual pixel difference; visual integration remains unverified"
           result={"state":"ISOLATED_7_VIEW_FRAMING_PASS_NOT_SHIPPING_VISUAL_APPROVAL",
                   "camera_size":ortho,"view_count":len(recorded),
                   "candidate_sha256":report["candidate_glb_sha256"],
-                  "renders":recorded}
+                  "renders":recorded,"ao_bound_material_surfaces":ao_report["ao_bound_material_surfaces"],"ao_preview_changes":changed
           (root/"framing-audit.json").write_text(json.dumps(result,indent=2)+"\n")
           print(json.dumps(result,indent=2))
           PY
