@@ -5,6 +5,7 @@ on:
     paths:
       - 'tools/havenline/asset_pipeline/blender_build.py'
       - 'tools/havenline/asset_pipeline/tests/create_blender_smoke.py'
+      - 'tools/havenline/asset_pipeline/validate_gltf.mjs'
       - '.github/workflows/havenline-global-blender-smoke.yml'
   workflow_dispatch:
 permissions:
@@ -85,6 +86,17 @@ jobs:
              --report global-bake-evidence/candidate-validation.json > global-bake-evidence/gate.log
           grep -q CANDIDATE_TECHNICAL_PASS_NOT_VISUAL_APPROVAL global-bake-evidence/gate.log
           echo "Smoke test succeeded: editable master, genuine bake maps and bounded GLB candidate; owner approval NOT claimed."
+      - name: Khronos glTF 2.0 spec validation and glTF Transform inspection
+        run: |
+          set -euo pipefail
+          npm install --no-save gltf-validator @gltf-transform/cli
+          node tools/havenline/asset_pipeline/validate_gltf.mjs \
+            global-bake-evidence/candidate/smoke_test_LOD0.glb \
+            global-bake-evidence/official-gltf-validation.json
+          ./node_modules/.bin/gltf-transform inspect \
+            global-bake-evidence/candidate/smoke_test_LOD0.glb \
+            > global-bake-evidence/gltf-transform-inspection.txt
+          grep -q 'TECHNICAL_GLTF_VALIDATION_ONLY' global-bake-evidence/official-gltf-validation.json
       - name: Preserve reproducible candidate or failure logs
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
