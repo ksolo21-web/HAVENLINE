@@ -55,6 +55,17 @@ def execute(root,min_materials):
         raise ValueError("One or more original material surfaces missing")
     if any("TANGENT" not in p.get("attributes",{}) for p in primitives):
         raise ValueError("Normal mapped primitives lack explicit tangent vectors")
+    mode=report.get("bake_uv_mode","original")
+    if mode=="separate_uv1":
+        if not report.get("authored_albedo_uv0_unchanged"):
+            raise ValueError("Original color UV0 coordinates not preserved")
+        if any("TEXCOORD_1" not in p.get("attributes",{}) for p in primitives):
+            raise ValueError("Separate bake UV1 not exported for all normal-mapped primitives")
+        if any(mat.get("normalTexture",{}).get("texCoord",0)!=1 for mat in materials):
+            raise ValueError("Normal textures must explicitly select TEXCOORD_1, not artist tiled UV0")
+        if any(mat.get("pbrMetallicRoughness",{}).get("baseColorTexture",{}).get("texCoord",0)!=0
+               for mat in materials if "baseColorTexture" in mat.get("pbrMetallicRoughness",{})):
+            raise ValueError("Original base color map must continue using artist UV0")
     audit=[]
     ao_total=0
     for entry in entries:
