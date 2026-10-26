@@ -1,13 +1,14 @@
 import copy
 import json
 import pathlib
+import struct
 import sys
 import tempfile
 import unittest
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
-from asset_gate import run, get_file, parse_glb, plausible_baked_pixel
+from asset_gate import run, get_file, parse_glb, plausible_baked_pixel, embedded_glb_normal_png
 
 POLICY=pathlib.Path(__file__).resolve().parents[4]/"Docs/Production/GLOBAL_ASSET_AUTHORING_POLICY.json"
 TEMPLATE=ROOT/"examples/T05-cooker-asset.json"
@@ -58,6 +59,40 @@ class AssetGateTests(unittest.TestCase):
             path=pathlib.Path(workspace)/"broken.glb"
             path.write_bytes(b"no glb")
             with self.assertRaises(ValueError):parse_glb(path)
+    def test_embedded_normal_binding_and_bounds(self):
+        # Pure stdlib synthetic GLB: prove payload selection, absent binding
+        # rejection and out-of-bounds bufferView rejection.
+        payload=b"PNG_BYTES_FOR_STRUCTURE_TEST"
+        doc={
+            "asset":{"version":"2.0"},
+            "materials":[{"normalTexture":{"index":0}}],
+            "textures":[{"source":0}],
+            "images":[{"mimeType":"image/png","bufferView":0}],
+            "bufferViews":[{"buffer":0,"byteOffset":0,"byteLength":len(payload)}]
+        }
+        def write_glb(path,meta):
+            json_chunk=json.dumps(meta,separators=(",",":")).encode()
+            json_chunk+=b" " * ((-len(json_chunk))%4)
+            binary=payload+b"\\x00"*((-len(payload))%4)
+            total=12+8+len(json_chunk)+8+len(binary)
+            path.write_bytes(struct.pack("<4sII",b"glTF",2,total)+
+                struct.pack("<I4s",len(json_chunk),b"JSON")+json_chunk+
+                struct.pack("<I4s",len(binary),bytes((66,73,78,0)))+binary)
+        with tempfile.TemporaryDirectory() as workspace:
+            path=pathlib.Path(workspace)/"sample.glb"
+            write_glb(path,doc)
+            self.assertEqual(embedded_glb_normal_png(path,parse_glb(path)),payload)
+            invalid=copy.deepcopy(doc)
+            invalid["materials"]=[{}]
+            write_glb(path,invalid)
+            with self.assertRaises(ValueError):
+                embedded_glb_normal_png(path,parse_glb(path))
+            invalid=copy.deepcopy(doc)
+            invalid["bufferViews"][0]["byteLength"]=len(payload)+1000
+            write_glb(path,invalid)
+            with self.assertRaises(ValueError):
+                embedded_glb_normal_png(path,parse_glb(path))
+
     def test_release_never_inferred_from_technical_lint(self):
         with tempfile.TemporaryDirectory() as workspace:
             result=run(self.manifest,self.policy,pathlib.Path(workspace),"release")
