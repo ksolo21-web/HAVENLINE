@@ -119,6 +119,16 @@ def run(manifest: dict, policy: dict, root: pathlib.Path, mode: str) -> dict:
                     check("texture_dimensions_"+k,im.width>=64 and im.height>=64 and
                           im.width<=4096 and im.height<=4096 and im.width&(im.width-1)==0 and
                           im.height&(im.height-1)==0,im.size)
+                    # Blenders' bake operator may report FINISHED for an image
+                    # that is still wholly transparent. Evaluate actual saved
+                    # PNG alpha, not the API response or merely its byte size.
+                    if k in ("normal","ambient_occlusion"):
+                        with Image.open(p) as im_check:
+                            alpha=im_check.convert("RGBA").getchannel("A")
+                            hist=alpha.histogram()
+                            coverage=sum(hist[1:])/max(1,sum(hist))
+                            check("nontransparent_baked_"+k,coverage>=.05,
+                                  {"opaque_pixel_ratio":round(coverage,5),"minimum":.05})
                     pixels+=im.width*im.height
         # RGBA8 conservative uncompressed estimate with mipmaps; packaging size != VRAM.
         tex_mib=pixels*4*4/3/1048576
