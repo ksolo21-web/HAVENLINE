@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "created_date": "2026-10-26",
+  "project": "HAVENLINE",
+  "goal": "Permanent cross-task asset-production foundation, not limited to T05",
+  "branch": "havenline/global-asset-pipeline-v1-20261026",
+  "review_pr": "https://github.com/ksolo21-web/HAVENLINE/pull/102",
+  "source_base_commit": "921eddf55bb0fd6f23e10f3591a3e74b59c6a3d8",
+  "production_paths_modified": 0,
+  "project_integration_status": "PENDING_AUTHORIZED_MERGE__NO_PRODUCTION_GAME_ASSETS_REPLACED",
+  "policy": "Docs/Production/GLOBAL_ASSET_AUTHORING_POLICY.json",
+  "software": [
+    "Blender",
+    "Material Maker (external optional)",
+    "Krita (external optional)",
+    "Godot 4",
+    "Pillow/OpenCV",
+    "Khronos glTF Validator",
+    "glTF Transform",
+    "Android GPU Inspector/Perfetto (external physical device)"
+  ],
+  "implemented": [
+    "Global strict owner-reference manifest and SHA checks, task hard budgets and unit tests",
+    "Per-asset editable Blender high-detail master and independently retopologized/UV GAME_LOD0 project structure",
+    "Blender Cycles normal/AO output script with painter-authored albedo/roughness/metalness",
+    "Khronos glTF binary validation and glTF Transform CLI inspection in CI",
+    "Godot seven-angle isolated import/capture script (requires native run to verify)",
+    "Pillow reference/engine screenshot comparison without auto-assigned visual score",
+    "Physical ADB frame/memory/thermal raw-evidence capture; no invented FPS certification",
+    "Fail-closed release validation for source-bound 4K shipping native frames, all mandatory axes, exact reference style 10/10, physical Android, source-matched user/integration owner approval",
+    "Reusable workflow_call gate for future tasks, independent of T05 IDs"
+  ],
+  "confirmed_tests": [
+    {
+      "name": "Global policy/source and 10 unit tests",
+      "status": "PASS",
+      "run": "https://github.com/ksolo21-web/HAVENLINE/actions/runs/40350418977"
+    },
+    {
+      "name": "Exact changed production paths vs immutable base commit",
+      "status": "PASS",
+      "evidence": "git compare file list excludes HavenlineGodot/assets and scripts"
+    },
+    {
+      "name": "Blender editable high/low source and external authored map acceptance",
+      "status": "PARTIAL",
+      "run": "https://github.com/ksolo21-web/HAVENLINE/actions/runs/40350851922"
+    },
+    {
+      "name": "True nonblank high-to-low Cycles normal/AO bake",
+      "status": "OPEN",
+      "details": "Initial smoke export had empty alpha; production code blocks it and new external PNG path is being tested; do not claim PBR authoring verified"
+    },
+    {
+      "name": "Khronos/glTF Transform CLI workflow",
+      "status": "OPEN",
+      "details": "Will run after the external bake passes"
+    },
+    {
+      "name": "Global Godot seven-angle capture",
+      "status": "OPEN",
+      "details": "Script exists but has not been exercised in staging"
+    },
+    {
+      "name": "Physical Android GPU profiling and FPS",
+      "status": "OPEN",
+      "details": "Requires representative Android device and physical test session"
+    },
+    {
+      "name": "Independent reference critic and T05 owner visual acceptance",
+      "status": "OPEN",
+      "details": "T05 cooker R07 remains unapproved reference-fidelity FAIL"
+    }
+  ],
+  "standards": {
+    "reference_fidelity": 10,
+    "visual_language": 10,
+    "other_critic_dimensions": "strictly >9.0",
+    "global_target_fps": 60,
+    "release_approval_default": "DENY"
+  },
+  "dependencies": [
+    "Validate real baked normal and AO pixel maps",
+    "Run Khronos validator/glTF Transform inspection and generic Godot importer against the same GLB",
+    "Obtain authorized integration route to shared production branch",
+    "Use workflow_call from future task pipelines",
+    "Continue T05 asset-by-asset reference sculpting and independent visual review",
+    "Physical 60 FPS device certification"
+  ],
+  "next_action": "Inspect active Blender external-bake smoke run, fix real failure if any, then bind official GLB and Godot evidence. Do not merge or ship until all applicable approval gates pass."
+}
