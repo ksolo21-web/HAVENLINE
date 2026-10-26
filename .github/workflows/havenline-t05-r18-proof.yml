@@ -7,6 +7,7 @@ on:
       - 'HavenlineGodot/scripts/camp_boundary_view.gd'
       - 'HavenlineGodot/scripts/main.gd'
       - 'HavenlineGodot/assets/stations_v2/**'
+      - 'HavenlineGodot/tests/test_task05_station_kit.gd'
       - '.github/workflows/havenline-t05-r18-proof.yml'
 permissions:
   contents: write
@@ -82,6 +83,8 @@ jobs:
         run: |
           set -euo pipefail
           timeout 240 Godot_v4.7.2-stable_linux.x86_64 --headless --editor --path HavenlineGodot --import --quit > t05-r18-evidence/import.log 2>&1
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task03_boundary.gd > t05-r18-evidence/boundary-test.log 2>&1
+          timeout 180 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --path HavenlineGodot --script res://tests/test_task05_station_kit.gd > t05-r18-evidence/station-test.log 2>&1
           export VK_ICD_FILENAMES="$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)"
           test -n "$VK_ICD_FILENAMES"
           xvfb-run -a -s '-screen 0 1280x720x24' timeout 600 Godot_v4.7.2-stable_linux.x86_64 --path HavenlineGodot --rendering-method mobile --rendering-driver vulkan --audio-driver Dummy --resolution 1280x720 --script res://tests/capture_task05_station_kit.gd -- --out="$(pwd)/t05-r18-evidence/kit" > t05-r18-evidence/kit.log 2>&1
