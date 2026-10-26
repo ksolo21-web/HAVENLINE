@@ -48,7 +48,7 @@ def _snapshot(mat):
         }
     return data
 
-def _add_normal(mat,image):
+def _add_normal(mat,image,bake_uv_name=None):
     bs=mat.node_tree.nodes["Principled BSDF"]
     if bs.inputs["Normal"].is_linked:
         raise RuntimeError("Refusing to replace pre-existing authored normal shader for "+mat.name)
@@ -56,12 +56,11 @@ def _add_normal(mat,image):
     image_node=nodes.new("ShaderNodeTexImage")
     image_node.name="HL_GEOMETRY_BAKE_NORMAL"
     image_node.image=image
-    if len(mat.node_tree.nodes):
-        bake_uv=bpy.data.objects.get("REAL_T05_R07_GAME_LOD0")
-        if bake_uv is not None and bake_uv.data.uv_layers.get("HAVENLINE_BAKE_UV") is not None:
-            uvmap=nodes.new("ShaderNodeUVMap")
-            uvmap.uv_map="HAVENLINE_BAKE_UV"
-            mat.node_tree.links.new(uvmap.outputs["UV"],image_node.inputs["Vector"])
+    if bake_uv_name:
+        uvmap=nodes.new("ShaderNodeUVMap")
+        uvmap.name="HL_NORMAL_BAKE_UV_SELECTION"
+        uvmap.uv_map=bake_uv_name
+        mat.node_tree.links.new(uvmap.outputs["UV"],image_node.inputs["Vector"])
     normal=nodes.new("ShaderNodeNormalMap")
     normal.name="HL_GEOMETRY_BAKE_TANGENT"
     normal.space="TANGENT"
@@ -168,7 +167,7 @@ def main():
                             minimum_pixels=8,minimum_coverage=.001,
                             strict_uv_nonoverlap=True)
         # The color/metallic/roughness source shader must stay intact.
-        _add_normal(material,normal)
+        _add_normal(material,normal,baked_uv_name if a.bake_uv_mode=="separate_uv1" else None)
         if _snapshot(material)!=before[name]:
             raise RuntimeError("Authored PBR source inputs altered for "+name)
         targets={}
