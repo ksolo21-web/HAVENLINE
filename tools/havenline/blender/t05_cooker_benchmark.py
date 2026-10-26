@@ -88,6 +88,7 @@ def box(name,pos,size,key,bevel=.035):
         mod=o.modifiers.new("Hand-finished edge bevel","BEVEL")
         mod.width=min(bevel,min(size)*.22);mod.segments=2
         if hasattr(mod,"affect"): mod.affect="EDGES"
+        if hasattr(o.data,"use_auto_smooth"): o.data.use_auto_smooth=True
         o.modifiers.new("Weighted corner normals","WEIGHTED_NORMAL")
     return o
 def cylinder(name,pos,radius,depth,key,axis="Z",verts=20):
@@ -185,19 +186,56 @@ cylinder("Chimney neck",(.20,1.95,.06),.135,.37,"dark","Z",16)
 cylinder("Chimney steel collar",(.20,2.18,.06),.175,.13,"metal","Z",18)
 cylinder("Chimney upper cap",(.20,2.34,.06),.19,.10,"dark","Z",18)
 cylinder("Hollow looking black exhaust",(.20,2.398,.06),.113,.012,"dark","Z",18)
-# Overlapping, thick nonuniform snow banks with draping scallops.
-for i,(x,z,rx,rz) in enumerate(((-.32,-.29,.38,.27),(.12,-.26,.37,.32),(.39,.14,.32,.36),(-.32,.25,.37,.32),(.07,.37,.36,.26))):
-    ball("Sculptable roof snow volume",(x,1.82+(i%3)*.020,z),(rx,.135+(i%2)*.03,rz),"snow",16,9)
-for x,y,z,rx in ((-.42,1.73,-.56,.115),(-.19,1.73,-.55,.16),(.12,1.74,-.57,.13),(.39,1.74,-.56,.13)):
-    ball("Organic downward snow lip",(x,y,z),(rx,.105,.11),"snow",12,7)
+# One hand-shaped continuous snowy overhang over the complete iron roof.
+# Unlike overlapping primitive snow spheres this forms a continuous hood with
+# localized drips and thickness, a core defining feature of owner art 18567.
+x_steps,z_steps=14,11
+top=[];bottom=[];surface_faces=[]
+for zi in range(z_steps+1):
+    uz=zi/z_steps;zz=-.63+1.21*uz
+    for xi in range(x_steps+1):
+        ux=xi/x_steps;xx=-.68+1.36*ux
+        dome=max(0.,1.-.69*((xx/.68)**2)-.59*((zz/.63)**2))
+        scallop=.018*math.sin(xx*12.+.4)+.017*math.sin(zz*15.+xx*3.)
+        edge_drape=.10*(abs(2*uz-1)**9)+.06*(abs(2*ux-1)**10)
+        y=1.775+.162*dome+scallop-edge_drape
+        top.append((xx,y,zz))
+        bottom.append((xx,max(1.668,y-.105),zz))
+stride=x_steps+1
+num=len(top)
+for zi in range(z_steps):
+    for xi in range(x_steps):
+        q=zi*stride+xi
+        surface_faces.append((q,q+1,q+stride+1,q+stride))
+        surface_faces.append((q+num+stride,q+num+stride+1,q+num+1,q+num))
+# Rounded perimeter drop-face drapes, stitched as one closed mesh.
+edges=[]
+for xi in range(x_steps):edges.append((xi,xi+1))
+for zi in range(z_steps):edges.append((zi*stride+x_steps,(zi+1)*stride+x_steps))
+for xi in range(x_steps,0,-1):edges.append((z_steps*stride+xi,z_steps*stride+xi-1))
+for zi in range(z_steps,0,-1):edges.append((zi*stride,(zi-1)*stride))
+for aidx,bidx in edges:
+    surface_faces.append((aidx,bidx,bidx+num,aidx+num))
+roof_mesh=bpy.data.meshes.new("Sculpted_Continuous_Snow_Hood")
+roof_mesh.from_pydata(top+bottom,[],surface_faces);roof_mesh.update()
+roof=bpy.data.objects.new("Continuous thick snow roof, owner reference 18567",roof_mesh)
+art.objects.link(roof);made.append(roof);roof.data.materials.append(palette["snow"])
+for face in roof_mesh.polygons:face.use_smooth=True
+# Small irregular local drips, rather than balloon-like piles across the top.
+for x,y,z,rx in ((-.41,1.725,-.595,.105),(-.13,1.71,-.605,.098),(.27,1.73,-.61,.112)):
+    ball("Overhanging edge snow droplet",(x,y,z),(rx,.062,.078),"snow",10,7)
 for x,z in ((-1.09,-.20),(-.61,.54),(1.02,.61)):
     ball("Accumulated snow on tray edges",(x,1.22,z),(.10,.054,.083),"snow",12,7)
 # Blender is Z-up while Godot and glTF are Y-up: rotate the authored
 # Godot-space model into Blender-space before editing, viewing and export.
 # Blender glTF export_yup rotates it back to the original game coordinates.
 coordinate_rotation=Matrix.Rotation(math.pi/2,4,"X")
+# Align the actual front-facing food workflow to the owner's image: raw wood
+# on visual left, finished steel on visual right, gauge right. Model-space X
+# reflection does not move the frozen origin, socket markers, or Z-facing door.
+reference_layout_reflection=Matrix.Diagonal((-1.0,1.0,1.0,1.0))
 for object in made:
-    object.matrix_world=coordinate_rotation @ object.matrix_world
+    object.matrix_world=coordinate_rotation @ reference_layout_reflection @ object.matrix_world
 # Exporting does NOT use the black-background studio, only the actual model.
 bpy.ops.object.select_all(action="DESELECT")
 for o in made:o.select_set(True)
