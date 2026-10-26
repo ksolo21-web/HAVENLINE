@@ -26,7 +26,7 @@ def snow(b,size):
     )
     for px,pz,rx,rz,rot in patches:
         b.sphere("snow", (px*sx, .035, pz*sz),
-                 (rx*sx, .070, rz*sz), 5, 10, rotation=(0,rot,0))
+                 (rx*sx, .070, rz*sz), 5, 8, rotation=(0,rot,0))
     stones = ((-.35,-.18,.08,.07,.10),(.34,.11,.08,.07,-.16),(-.15,.36,.07,.06,.22))
     for px,pz,rx,rz,rot in stones:
         b.beveled_box("dark", (px*sx,.045,pz*sz),
@@ -58,7 +58,7 @@ def build_fishing_rack():
     for x in (-.48,.48):
         b.cylinder("blue",(x,1.24,0),.31,.34,18,rotation=(0,0,math.pi/2))
         for dx in (-.17,.17):
-            b.torus("yellow",(x+dx,1.24,0),.28,.045,16,6,rotation=(0,math.pi/2,0))
+            b.torus("yellow",(x+dx,1.24,0),.28,.045,14,5,rotation=(0,math.pi/2,0))
         for dz in (-.16,0,.16):
             b.torus("cream",(x,1.24,dz),.235,.018,14,5,rotation=(0,math.pi/2,0))
     b.rod_between("orange",(1.04,1.24,0),(1.32,1.56,0),.055,8)
@@ -75,7 +75,7 @@ def build_fishing_rack():
 def build_intake_machine():
     b=legacy.MeshBuilder("intake_machine")
     for x,z,rx,rz in ((-.92,-.72,.34,.24),(.88,-.70,.31,.22),(-.92,.70,.30,.23),(.88,.72,.35,.24),(0,-.86,.42,.18),(0,.87,.38,.17)):
-        b.sphere("snow",(x,.08,z),(rx,.08,rz),5,10)
+        b.sphere("snow",(x,.08,z),(rx,.08,rz),5,8)
     for x in (-.88,.88):
         for z in (-.66,.66): leg(b,x,z,.78)
     for z in (-.66,.66):
@@ -165,19 +165,35 @@ def build_cooker_processor():
     # Left prep station echoes the 18607 butcher table.
     b.beveled_box("wood_light",(-.55,1.02,-.28),(.68,.10,.58),.045)
     b.beveled_box("cream",(-.55,1.09,-.28),(.52,.055,.42),.025)
-    b.sphere("orange",(-.58,1.18,-.28),(.20,.09,.14),6,12,rotation=(0,.18,0))
+    # Distinct butcher and output-tray meat forms with raised cream fat faces.
+    b.sphere("orange",(-.58,1.17,-.28),(.21,.09,.14),5,12,rotation=(0,.18,0))
+    b.sphere("cream",(-.60,1.25,-.29),(.13,.029,.11),3,8,rotation=(0,.18,0))
     b.rod_between("cream",(-.72,1.21,-.28),(-.43,1.21,-.28),.018,7)
+    b.beveled_box("metal",(-.54,1.07,.38),(.64,.075,.36),.050)
+    b.beveled_box("dark",(-.54,1.12,.38),(.56,.024,.28),.012)
+    for x,z,r,rx in ((-.73,.35,-.18,.16),(-.39,.42,.22,.13)):
+        b.sphere("orange",(x,1.205,z),(rx,.08,.115),4,10,rotation=(0,r,0))
+        b.sphere("cream",(x-.026,1.262,z+.01),(rx*.66,.028,.075),3,8,rotation=(0,r,0))
     b.rod_between("metal",(-.78,1.15,-.05),(-.42,1.15,-.05),.025,7)
     b.beveled_box("blue",(-.55,.88,-.30),(.62,.08,.48),.030)
 
-    # Offset flue: segmented pipe, clamp bands and snow cap.
+    # Forged oven arch/blade is structurally connected above the prep tray.
+    # Keep clear mechanical hierarchy and avoid a freestanding default cylinder.
+    for z in (-.43,.43):
+        b.rod_between("metal",(-.86,1.33,z),(-.86,1.80,z),.039,8)
+    b.rod_between("metal",(-.86,1.80,-.43),(-.86,1.80,.43),.048,9)
+    b.beveled_box("cream",(-.86,1.57,.0),(.075,.31,.21),.022)
+
+    # Offset flue: stepped collars, polished throat and bounded snow cap.
     b.cylinder("dark",(.70,1.72,-.22),.12,.42,12)
     b.cylinder("metal",(.70,2.06,-.22),.14,.28,12)
+    b.cylinder("blue",(.70,2.13,-.22),.168,.055,14)
+    b.torus("metal",(.70,2.19,-.22),.166,.028,14,5)
     for y in (1.90,2.18):
         b.torus("orange",(.70,y,-.22),.145,.030,12,5)
     b.cylinder("blue",(.70,2.28,-.22),.18,.12,12)
     b.torus("yellow",(.70,2.36,-.22),.19,.035,12,5)
-    b.beveled_box("snow",(.64,2.44,-.24),(.28,.06,.22),.025,rotation=(0,.08,.02))
+    b.sphere("snow",(.64,2.445,-.24),(.18,.058,.14),3,9,rotation=(0,.08,.02))
 
     # Small service gauge/handwheel on the left rear adds mechanical asymmetry.
     b.rod_between("metal",(-.76,1.30,-.08),(-.92,1.48,-.08),.040,7)
@@ -193,7 +209,7 @@ def build_cooker_processor():
 def build_conveyor_straight():
     b=legacy.MeshBuilder("conveyor_straight")
     for x,z,rx,rz in ((-1.34,-.48,.26,.18),(-1.34,.48,.24,.17),(1.34,-.48,.28,.18),(1.34,.48,.25,.17),(-.42,-.52,.32,.13),(.54,.52,.30,.13)):
-        b.sphere("snow",(x,.07,z),(rx,.07,rz),5,10)
+        b.sphere("snow",(x,.07,z),(rx,.07,rz),5,8)
     for z in (-.46,.46):
         b.beveled_box("wood",(0,.22,z),(3.02,.18,.18),.050)
         b.rod_between("wood_light",(-1.18,.22,z),(1.18,.64,z),.050,7)
