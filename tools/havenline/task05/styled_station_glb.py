@@ -29,7 +29,7 @@ def _clamp(value: float, lo: float = 0.0, hi: float = 1.0) -> float:
     return max(lo, min(hi, value))
 
 
-def authored_color(material: str, position, normal):
+def authored_color(material: str, position, normal, asset_id: str = ""):
     x, y, z = (float(v) for v in position)
     nx, ny, nz = (float(v) for v in normal)
 
@@ -59,6 +59,9 @@ def authored_color(material: str, position, normal):
 
     if material == "metal":
         tone = _clamp(.76 + .10 * broad + .075 * edge + .025 * fine, .62, 1.0)
+        if asset_id == "cooker_processor":
+            # R18: cool worked blue-gray steel, not featureless black or pale plastic.
+            return (_clamp(tone * .70), _clamp(tone * .84), tone, 1.0)
         return (_clamp(tone * .82), _clamp(tone * .91), tone, 1.0)
 
     if material == "dark":
@@ -75,6 +78,9 @@ def authored_color(material: str, position, normal):
 
     if material == "orange":
         tone = _clamp(.84 + .08 * broad + .025 * fine, .70, 1.0)
+        if asset_id == "cooked_food_stack":
+            # Actual meat, not orange bread/blocks; scoped RGB under same HL_orange.
+            return (tone, _clamp(tone * .53), _clamp(tone * .53), 1.0)
         return (tone, _clamp(tone * .89), _clamp(tone * .72), 1.0)
 
     if material == "yellow":
@@ -87,6 +93,9 @@ def authored_color(material: str, position, normal):
 
     if material == "cream":
         tone = _clamp(.88 + .055 * broad + .020 * fine + .015 * upward, .79, 1.0)
+        if asset_id == "stone_stack":
+            # Neutral-gray quarried rock; old cream stones read like tan snowballs.
+            return (_clamp(tone * .68), _clamp(tone * .79), _clamp(tone * .98), 1.0)
         return (tone, _clamp(tone * .97), _clamp(tone * .89), 1.0)
 
     raise ValueError(f"unknown material {material}")
@@ -131,7 +140,7 @@ def pack_styled_glb(builder: legacy.MeshBuilder, path: Path) -> None:
         pigments = getattr(builder, "vertex_pigments", {}).get(key, {})
         colors = []
         for index, (position, normal) in enumerate(zip(surface.positions, surface.normals)):
-            color = authored_color(key, position, normal)
+            color = authored_color(key, position, normal, builder.name)
             shade = pigments.get(index, 1.0)
             colors.append(tuple(v * shade for v in color[:3]) + (1.0,))
         pos_data = b"".join(struct.pack("<3f", *p) for p in surface.positions)
@@ -216,7 +225,7 @@ def color_span(builder: legacy.MeshBuilder):
     values = []
     for key, surface in builder.surfaces.items():
         values.extend(
-            authored_color(key, position, normal)
+            authored_color(key, position, normal, builder.name)
             for position, normal in zip(surface.positions, surface.normals)
         )
     channels = [v for color in values for v in color[:3]]
