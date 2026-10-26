@@ -1,0 +1,90 @@
+name: HAVENLINE global nine-material real T05 bake bridge — unapproved
+on:
+  push:
+    branches: ['havenline/global-asset-pipeline-integration-20261026']
+    paths:
+      - 'tools/havenline/asset_pipeline/tests/prepare_real_t05_multimaterial.py'
+      - 'tools/havenline/asset_pipeline/multimaterial_build.py'
+      - 'tools/havenline/asset_pipeline/bvh_bake.py'
+      - 'tools/havenline/asset_pipeline/verify_multimaterial.py'
+      - '.github/workflows/havenline-global-t05-multimaterial.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-real-t05-nine-material-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  verify-real-material-bridge:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 27
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+      - name: Retrieve exact immutable, visually unapproved R07 source bundle
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          run-id: 40346552132
+          name: T05-Blender-cooker-candidate-dcb188147f2cde41dd4c02875e12c22131a99bcc
+          path: real-t05-original
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install free Blender without modifying source assets
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          if ! sudo timeout 150 apt-get update -qq; then echo "::warning::APT index refresh timed out"; fi
+          sudo timeout 390 apt-get install -y --no-install-recommends blender python3-venv python3-numpy
+          python3 -m venv "$RUNNER_TEMP/t05-material-venv"
+          "$RUNNER_TEMP/t05-material-venv/bin/pip" install --disable-pip-version-check pillow
+          blender --version | head -n 2
+      - name: Stage real nine-material cooker high and low meshes read-only
+        run: |
+          set -euo pipefail
+          mkdir -p real-t05-bridge/candidate
+          timeout 240 blender -b --factory-startup --threads 2 \
+            --python tools/havenline/asset_pipeline/tests/prepare_real_t05_multimaterial.py -- \
+            --editable "$PWD/real-t05-original/t05-blender-evidence/T05_cooker_EDITABLE.blend" \
+            --candidate-glb "$PWD/real-t05-original/t05-blender-evidence/T05_cooker_BLENDER_CANDIDATE.glb" \
+            --out "$PWD/real-t05-bridge" > real-t05-bridge/bridge.log 2>&1 || {
+              tail -180 real-t05-bridge/bridge.log; exit 1; }
+          test -s real-t05-bridge/T05_R07_MULTIMATERIAL_HIGHLOW_STAGE.blend
+          python3 - <<'PY'
+          import json,pathlib
+          d=json.loads(pathlib.Path('real-t05-bridge/t05_bridge.json').read_text())
+          assert len(d['low_materials'])==9
+          assert d['low_triangles']<=12424 and d['source_editable_original_untouched']
+          assert d['source_highlow_center_delta_m']<=.3
+          print('REAL_T05_GEOMETRY_AND_NINE_SHADER_BRIDGE_PASS',d)
+          PY
+      - name: Attempt nine-material geometry normal and AO candidate without approval
+        run: |
+          set -euo pipefail
+          timeout 780 blender -b --factory-startup --threads 2 \
+            --python tools/havenline/asset_pipeline/multimaterial_build.py -- \
+            --source "$PWD/real-t05-bridge/T05_R07_MULTIMATERIAL_HIGHLOW_STAGE.blend" \
+            --out "$PWD/real-t05-bridge/candidate" --asset-id T05_cooker_R07_UNAPPROVED \
+            --size 128 --materials-max 12 --triangles-max 12424 \
+            > real-t05-bridge/bake.log 2>&1 || {
+              tail -180 real-t05-bridge/bake.log; exit 1; }
+      - name: Check each original material survives GLB and has real mapped normals
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/t05-material-venv/bin/python" tools/havenline/asset_pipeline/verify_multimaterial.py \
+            --workspace "$PWD/real-t05-bridge/candidate" --min-materials 9 | tee real-t05-bridge/independent-verify.log
+      - name: Official Khronos glTF structural validation
+        run: |
+          set -euo pipefail
+          npm install --no-save gltf-validator
+          node tools/havenline/asset_pipeline/validate_gltf.mjs \
+            real-t05-bridge/candidate/T05_cooker_R07_UNAPPROVED_MULTIMATERIAL_STAGE.glb \
+            real-t05-bridge/gltf-validation.json
+      - name: Preserve failed or successful staging evidence only
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-real-T05-multimaterial-staging-${{ github.sha }}
+          path: real-t05-bridge/
+          retention-days: 30
+          if-no-files-found: warn
