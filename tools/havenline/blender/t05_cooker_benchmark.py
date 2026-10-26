@@ -38,7 +38,7 @@ def mat(key,color,rough=.74,metal=0):
     return m
 mat("blue",(.16,.34,.53),.40,.32)
 mat("dark",(.075,.12,.17),.53,.48)
-mat("metal",(.48,.56,.62),.34,.78)
+mat("metal",(.64,.70,.75),.41,.38)
 mat("wood",(.34,.17,.085),.78)
 mat("wood_light",(.59,.32,.14),.74)
 mat("snow",(.85,.91,.95),.88)
@@ -127,6 +127,11 @@ for x in (-1.01,1.01):
 for z in (-.57,.57):
     box("Long carved load rail",(0,.61,z),(2.25,.19,.20),"wood_light",.044)
     box("Blue protective rail",(0,.50,z),(2.17,.075,.20),"blue",.018)
+# Frozen footprint allows stronger ironwork and a readable low-front chassis.
+box("Steel front load beam",(0,.30,-.575),(2.14,.18,.12),"blue",.025)
+for x in (-.96,.96):
+    box("Bolted knee bracket",(x,.51,-.63),(.155,.25,.09),"metal",.022)
+    cylinder("Iron corner rivet",(x,.53,-.683),.038,.018,"dark","Y",10)
 for x in (-.72,-.26,.20,.68):
     box("Joined plank work surface",(x,.73,0),(.43,.13,1.32),"wood",.034)
 # Main stove architecture; -Z is its actual operator/front side.
@@ -138,6 +143,10 @@ arch("Inset window polished top arch",0,1.38,-.656,.35,.15,"metal",.032)
 tube("Window bottom metal rim",[(-.34,1.015,-.656),(.34,1.015,-.656)],"metal",.039)
 for x in (-.37,.37):
     tube("Window rounded vertical edge",[(x,1.02,-.654),(x,1.39,-.654)],"metal",.027)
+# Reference-style visible machined metal hardware and inset steel rivets.
+for x in (-.40,.40):
+    for y in (1.055,1.48):
+        cylinder("Bezel corner rivet",(x,y,-.67),.034,.020,"metal","Y",12)
 # Tooth silhouette intentionally modeled, not an image decal, visible in GLB.
 teeth=[]
 for i in range(36):
@@ -200,7 +209,7 @@ for zi in range(z_steps+1):
         edge_drape=.10*(abs(2*uz-1)**9)+.06*(abs(2*ux-1)**10)
         y=1.775+.162*dome+scallop-edge_drape
         top.append((xx,y,zz))
-        bottom.append((xx,max(1.668,y-.105),zz))
+        bottom.append((xx,min(1.67,y-.12),zz))
 stride=x_steps+1
 num=len(top)
 for zi in range(z_steps):
