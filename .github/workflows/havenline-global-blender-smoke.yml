@@ -12,7 +12,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: global-blender-smoke-${{ github.ref }}
+  group: global-blender-smoke-${{ github.ref }}-${{ github.sha }}
   cancel-in-progress: false
 jobs:
   bake-and-gate:
@@ -136,6 +136,22 @@ jobs:
             global-bake-evidence/candidate/smoke_test_LOD0.glb \
             > global-bake-evidence/gltf-transform-inspection.txt
           grep -q 'TECHNICAL_GLTF_VALIDATION_ONLY' global-bake-evidence/official-gltf-validation.json
+          # Neither a zero-error structural pass nor a Blender exporter setting
+          # is proof that normal-map tangent vectors are actually embedded.
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';
+          const glb=fs.readFileSync('global-bake-evidence/candidate/smoke_test_LOD0.glb');
+          const jsonLength=glb.readUInt32LE(12);
+          const gltf=JSON.parse(glb.subarray(20,20+jsonLength).toString('utf8'));
+          const prims=gltf.meshes.flatMap(m=>m.primitives);
+          if(!prims.length || prims.some(p=>p.attributes.TANGENT===undefined))
+            throw Error('Normal-mapped GLB lacks explicit portable TANGENT attributes');
+          const result=JSON.parse(fs.readFileSync('global-bake-evidence/official-gltf-validation.json'));
+          if(result.summary.numErrors!==0 || result.summary.numWarnings!==0)
+            throw Error('Khronos glTF validator errors/warnings: '+JSON.stringify(result.summary.messages));
+          console.log('Explicit GLB tangents and zero Khronos warnings verified');
+          JS
+
       - name: Preserve reproducible candidate or failure logs
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
