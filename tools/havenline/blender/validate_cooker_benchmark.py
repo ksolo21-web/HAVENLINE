@@ -65,6 +65,34 @@ def check(out,catalog_path):
     sc=trimesh.load(model,force="scene",process=False)
     meshes=[obj for obj in sc.geometry.values() if isinstance(obj,trimesh.Trimesh)]
     triangle_count=sum(len(m.faces) for m in meshes)
+    # Reject invisible/empty Blender snow sculpts. A prior editable metaball
+    # survived in the .blend but exported as NO mesh geometry: all four Godot
+    # pictures showed bare blue oven roof despite an HL_snow material group.
+    snow_sections=[]
+    for node_name in sc.graph.nodes_geometry:
+        transform, geometry_id = sc.graph[node_name]
+        geometry = sc.geometry[geometry_id]
+        material=getattr(geometry.visual,"material",None)
+        if getattr(material,"name",None)!="HL_snow":
+            continue
+        elevated=geometry.copy()
+        elevated.apply_transform(transform)
+        snow_sections.append(elevated)
+    roof_parts=[m for m in snow_sections if len(m.vertices) and float(m.bounds[1,1])>1.70]
+    if roof_parts:
+        all_vertices=np.vstack([m.vertices for m in roof_parts])
+        snow_min=all_vertices.min(axis=0); snow_max=all_vertices.max(axis=0)
+        roof_faces=sum(len(m.faces) for m in roof_parts)
+        roof_present=(snow_max[1]>=1.88 and
+                      snow_max[0]-snow_min[0]>=1.05 and
+                      snow_max[2]-snow_min[2]>=.75 and
+                      roof_faces>=250)
+        snow_evidence={"roof_bounds":[snow_min.tolist(),snow_max.tolist()],
+                       "roof_faces":roof_faces}
+    else:
+        roof_present=False
+        snow_evidence={"roof_bounds":None,"roof_faces":0}
+    validate("modelled_snow_hood_really_exported",roof_present,snow_evidence)
     validate("triangles_within_remaining_kit_budget",0<triangle_count<=max_tris,
              {"candidate":triangle_count,"allowable_if_others_unchanged":max_tris,
               "original_cooker":row["triangles"],"original_total":base_tris})
