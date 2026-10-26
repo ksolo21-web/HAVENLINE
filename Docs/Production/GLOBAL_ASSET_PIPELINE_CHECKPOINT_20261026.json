@@ -10,7 +10,7 @@
     "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
     "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
   ],
-  "status": "GLOBAL_14_POLICY_TESTS_PASS__TWO_MATERIAL_BVH_TECHNICALLY_VERIFIED__REAL_NINE_MATERIAL_SOURCE_BRIDGE_PASS__REAL_UV1_BAKE_STILL_IN_VALIDATION__NO_RELEASE",
+  "status": "GLOBAL_POLICY_PASS__MULTIMATERIAL_UV1_TWO_SLOT_KHRONOS_0_ERRORS_0_WARNINGS__REAL_T05_NINE_SLOT_UV1_PENDING__NO_RELEASE",
   "complete_with_evidence": [
     {
       "milestone": "Separate from unapproved T05 branch",
@@ -84,7 +84,7 @@
     "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
     "Preserve source hashes and evidence across retries"
   ],
-  "next_action": "Inspect 40392519606 real nine-material UV1 bake, 40392519520 controlled UV1 two-slot test and official Khronos/embedded-texture audits. Fix any UV or tangent issues, preserve all 9 source materials & original UV0, ensure no visual/style approval is inferred. Continue shipping scene 4K/Android/critic separately.",
+  "next_action": "Inspect 40392519606 nine-material UV1 Blender run, require per-slot images, source PBR identity, no UV world-space conflicts, TEXCOORD_0 color, TEXCOORD_1 normal maps, real high ray hits, official Khronos; fix/retest failures. Then test successful GLB in Godot isolated 7 angles and compare original appearance, no owner style approval.",
   "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
   "superseded_wrong_base_pull_request": 102,
   "latest_work": {
@@ -326,7 +326,32 @@
       "source_uv0_policy": "Byte-equivalent coordinate preservation required; separate UV1 only for normal/AO, original material PBR sources untouched",
       "independent_review": "INTERNAL REVIEW ONLY; no separate available critic agent",
       "real_nine_material_pbr_bake_approved": false,
-      "shipping_assets_touched": false
+      "shipping_assets_touched": false,
+      "latest_two_material_uv1_pass_run": 40392519520,
+      "latest_two_material_uv1_artifact_id": 12685485959,
+      "latest_two_material_uv1_rasterized_pixels": [
+        11790,
+        6892
+      ],
+      "latest_two_material_uv1_ao_intersections": [
+        4199,
+        3963
+      ],
+      "gltf_uv0_base_color_preserved": true,
+      "gltf_uv1_normal_texture_explicit": true,
+      "gltf_has_uv0_uv1_tangents": true,
+      "khronos_uv1_errors": 0,
+      "khronos_uv1_warnings": 0,
+      "real_t05_bridge_highlow_delta_m": 2.384185791015625e-7,
+      "real_t05_author_source_objects": 101,
+      "real_t05_source_uv0_texel_conflicts": 13073,
+      "real_t05_shader_slots": 9,
+      "real_t05_triangles": 10700,
+      "active_real_t05_uv1_trial_run": 40392519606,
+      "real_uv1_status": "IN_PROGRESS_NO_APPROVAL",
+      "original_reference_source_untouched": true,
+      "blender_native_uv_operator_crashed": true,
+      "current_uv1_strategy": "deterministic connected geometry pieces with spatially reunited seam splits and geometric fallback for degenerate UV0; fail on residual overlapping UV1"
     }
   }
 }
