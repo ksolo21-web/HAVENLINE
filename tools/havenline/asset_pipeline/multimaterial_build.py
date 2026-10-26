@@ -115,7 +115,8 @@ def main():
         normal.colorspace_settings.name="Non-Color"
         ao.colorspace_settings.name="Non-Color"
         stats=geometry_bake(high,low,a.size,normal,ao,material_index=i,
-                            minimum_pixels=8,minimum_coverage=.001)
+                            minimum_pixels=8,minimum_coverage=.001,
+                            strict_uv_nonoverlap=True)
         # The color/metallic/roughness source shader must stay intact.
         _add_normal(material,normal)
         if _snapshot(material)!=before[name]:
