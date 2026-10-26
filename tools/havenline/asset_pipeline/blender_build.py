@@ -36,6 +36,9 @@ def texture_node(mat,img):
     node=nodes.new("ShaderNodeTexImage")
     node.name="HAVENLINE_BAKE_TARGET"
     node.image=img
+    # Cycles writes only to the active AND selected Image Texture node.
+    for existing in nodes: existing.select=False
+    node.select=True
     nodes.active=node
     return node
 def material_for_low(low):
@@ -86,14 +89,22 @@ def build(a):
     normal.colorspace_settings.name="Non-Color"
     texture_node(material,normal)
     set_active([high,low],low)
-    bpy.ops.object.bake(type="NORMAL")
+    result=bpy.ops.object.bake(type="NORMAL",target="IMAGE_TEXTURES",save_mode="INTERNAL",use_clear=True)
+    assert "FINISHED" in result, "Cycles high-to-low normal bake did not finish"
+    normal.update()
+    baked_alpha=list(normal.pixels)[3::4]
+    assert max(baked_alpha,default=0)>.5, "Normal bake has no painted pixels (transparent map)"
     save_image(normal,texout/"normal.png")
     ao=bpy.data.images.new("HAVENLINE_BAKED_AO",width=a.size,height=a.size,alpha=True)
     ao.colorspace_settings.name="Non-Color"
     texture_node(material,ao)
     scene.render.bake.use_selected_to_active=False
     set_active([low],low)
-    bpy.ops.object.bake(type="AO")
+    result=bpy.ops.object.bake(type="AO",target="IMAGE_TEXTURES",save_mode="INTERNAL",use_clear=True)
+    assert "FINISHED" in result, "Cycles AO bake did not finish"
+    ao.update()
+    baked_alpha=list(ao.pixels)[3::4]
+    assert max(baked_alpha,default=0)>.5, "AO bake has no painted pixels (transparent map)"
     save_image(ao,texout/"ambient_occlusion.png")
     shader=material.node_tree.nodes.get("Principled BSDF")
     if shader is None:raise RuntimeError("Principled BSDF material required")
