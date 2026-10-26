@@ -6,7 +6,7 @@
 
 - **Blender**: source-of-truth editable high-detail sculpt (`.blend`) plus separately authored/retopologized game-ready `GAME_LOD0` mesh and UVs. Python automation only for repeatable baking/export.
 - **Material Maker** (optional) and **Krita** (optional): create and paint source `base_color.png`, `roughness.png`, and `metallic.png`. Source assets remain visible/editable; we cannot automatically manufacture artistic quality.
-- **Blender Cycles**: normal map baked from `DETAIL_MASTER` to `GAME_LOD0`, AO map baked from the low mesh. The v1 baker requires one joined low mesh with an atlased material.
+- **Blender baking**: native Cycles is available but the Ubuntu Blender 4.0 headless CI fixture currently yields empty UV output, opaque flat-gray normals and black AO. The global gate rejects these maps. A deterministic CPU BVH fallback derives normals via actual high-to-low geometric rays and AO via hemisphere ray intersections. That fallback is limited to 1024px pending high-resolution performance/quality validation; it does not waive the 4K release evidence.
 - **glTF 2.0 / Godot 4 Mobile**: export Y-up GLB; validate UV, geometry, material slots, bounds, payload and native renderer. AO is separately exported and **not claimed embedded** in the GLB until the Godot integration step binds it.
 - **OpenCV/Pillow**: provenance-bound side-by-side, non-scoring overlay/difference evidence; automatic pixel differences do not equal a fidelity score.
 - **Android GPU Inspector / Perfetto / Godot profiler**: real-device draw-call/frame-time/memory evidence, not synthetic CI FPS claims.
@@ -42,7 +42,7 @@ blender -b --factory-startup --python tools/havenline/asset_pipeline/blender_bui
   --source /workspace/art/asset_master.blend \
   --maps /workspace/art/painted_materials \
   --asset-id asset_name --out /workspace/staging/asset_name \
-  --size 1024 --triangles-max 12000
+  --size 1024 --triangles-max 12000 --backend bvh_cpu
 ```
 
 Complete the SHA-256 and paths in the per-asset manifest, then:
@@ -82,4 +82,4 @@ The first object with confirmed exact image mapping is T05 cooker `18567.png`. I
 
 ## Current limits
 
-Blender smoke checks and package integration are CI-based. A real 3D artist must still sculpt specific reference-accurate geometry; this framework is not an automatic photo-to-perfect-3D system. Actual physical Android C6 and user visual approval remain separate live requirements.
+Blender smoke checks and package integration are CI-based. The Cycles backend remains quarantined until actual nonblank normal, AO and UV maps are proven by raster inspection; `FINISHED` is not proof. The BVH CPU fallback is a distinct real-geometry candidate backend, limited to 1024px; a 4K production-rate bake is not validated. The pixel gate rejects both transparent maps and opaque flat-gray-normal/black-AO false positives. A real 3D artist must still sculpt specific reference-accurate geometry; this framework is not an automatic photo-to-perfect-3D system. Actual physical Android C6 and user visual approval remain separate live requirements.
