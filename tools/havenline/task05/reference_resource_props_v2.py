@@ -54,6 +54,41 @@ def _corner_post(b, x, z, height, material="wood_light"):
     b.beveled_box(material, (x, .24 + height * .5, z), (.12, height, .12), .035)
 
 
+def _authored_fish_body(b, center, length, yaw):
+    """Tapered sculpted skin with a head, belly and tail instead of a lozenge.
+
+    Rings are symmetric in count but asymmetric in profile. The 12-sided skin
+    and two caps use the same triangle allocation as the former smooth fish;
+    separate outward normals retain readable volume under studio lighting.
+    """
+    profile=((-1.0,.12),(-.79,.38),(-.48,.74),(-.08,1.0),
+             (.35,.91),(.73,.56),(1.0,.14))
+    sides=12
+    vertices=[];normals=[];indices=[]
+    for t,rad in profile:
+        for j in range(sides):
+            a=math.tau*float(j)/sides
+            sn=math.sin(a);cs=math.cos(a)
+            vertices.append((length*t,.115*rad*sn,.13*rad*cs))
+            normals.append((0.0,sn,cs))
+    for k in range(len(profile)-1):
+        for j in range(sides):
+            a=k*sides+j; bj=k*sides+(j+1)%sides
+            c=(k+1)*sides+(j+1)%sides;d=(k+1)*sides+j
+            indices.extend((a,bj,c,a,c,d))
+    b.triangles("cyan",vertices,normals,indices,center,(0,yaw,0))
+    for end,sign in ((0,-1),(len(profile)-1,1)):
+        xs=profile[end][0]*length
+        rad=profile[end][1]
+        vv=[(xs,0.0,0.0)]
+        for j in range(sides):
+            a=math.tau*float(j)/sides
+            vv.append((xs,.115*rad*math.sin(a),.13*rad*math.cos(a)))
+        capn=(float(sign),0.0,0.0)
+        ii=[]
+        for j in range(sides):ii.extend((0,1+j,1+(j+1)%sides))
+        b.triangles("cyan",vv,[capn]*len(vv),ii,center,(0,yaw,0))
+
 def _crate_shell(b, name, fish=False):
     _snow_base(b, (1.68, .10, 1.34))
     _pallet(b, 1.48, 1.10, .12)
@@ -86,7 +121,7 @@ def _crate_shell(b, name, fish=False):
             # Unequal tapered body proportions and small embedded eyes/gill marks;
             # flesh intersects the ice bed rather than hovering over a hollow box.
             length=(.30,.33,.27)[i]
-            b.sphere("cyan", (x,1.075,z), (length,.115,.13), 6, 14, rotation=(0,r,0))
+            _authored_fish_body(b,(x,1.075,z),length,r)
             tail_x=x-length*.91*math.cos(r); tail_z=z+length*.91*math.sin(r)
             for dz in (-.075,.075):
                 b.rod_between("blue",(tail_x,1.075,tail_z),(tail_x-.12,1.075,tail_z+dz),.027,6)
