@@ -54,11 +54,15 @@ func run():
  var catalog=JSON.parse_string(FileAccess.get_file_as_string("res://assets/stations_v2/catalog.json"))
  assert(catalog is Dictionary)
  var targets=["cooker_processor","cargo_crate","fish_crate","fuel_canister","intake_machine","wood_stack"]
+ # Two sets: a readable below-tree detail camera and a disclosed shipping-
+ # scale context camera. Both remain on the untouched live scene, and neither
+ # changes a placed mesh, its material, physics, or nearby occluders.
  var views=[
-  {"id":"front","offset":Vector3(0,5.4,-8.0),"size":4.6},
-  {"id":"right","offset":Vector3(8.0,5.4,0),"size":4.6},
-  {"id":"rear","offset":Vector3(0,5.4,8.0),"size":4.6},
-  {"id":"three-quarter","offset":Vector3(6.0,5.4,-7.2),"size":4.6}
+  {"id":"front","offset":Vector3(0,2.8,-4.5),"size":3.1},
+  {"id":"right","offset":Vector3(4.5,2.8,0),"size":3.1},
+  {"id":"rear","offset":Vector3(0,2.8,4.5),"size":3.1},
+  {"id":"three-quarter","offset":Vector3(3.5,3.3,-4.0),"size":3.4},
+  {"id":"gameplay-context","offset":Vector3(0,5.4,-8.0),"size":4.6}
  ]
  var captured_assets=[]
  for area in ["camp","lakeshore"]:
@@ -68,17 +72,31 @@ func run():
    var xyz=placement["position"]
    var point=Vector2(float(xyz[0]),float(xyz[2]))
    captured_assets.append(id)
+   # The real world marker must exist at the catalog-resolved position.
+   # Do not infer proof from empty or misidentified QA camera pixels.
+   var kit=game.camp_station_kit if area=="camp" else game.lakeshore_station_kit
+   var matching=kit.placed.filter(func(node):return String(node.get_meta("t05_asset_id",""))==id)
+   assert(matching.size()==1,"Missing actual shipping kit marker: "+id)
+   var placement_world:Vector3=matching[0].global_position
+   assert(placement_world.distance_to(Vector3(point.x,Surface.height_at(point),point.y))<.05,
+          "Catalog vs shipping placement mismatch: "+id)
    for view in views:
-    var target=Vector3(point.x,Surface.height_at(point)+.95,point.y)
+    var target=placement_world+Vector3(0,.75,0)
     game.camera.size=float(view["size"])
     game.camera.position=target+Vector3(view["offset"])
     game.camera.look_at(target,Vector3.UP)
     var frame_name="live-"+id+"-"+String(view["id"])
     await snap(frame_name)
+    var projected:Vector2=game.camera.unproject_position(target)
+    var canvas_centre=Vector2(1920,1080)
     rows[-1]["asset_id"]=id
     rows[-1]["area"]=area
     rows[-1]["view"]=String(view["id"])
     rows[-1]["placement"]=xyz
+    rows[-1]["actual_live_marker"]=placement_world
+    rows[-1]["projected_target_px"]=projected
+    rows[-1]["center_error_px"]=projected.distance_to(canvas_centre)
+    rows[-1]["camera_uses_reference_materials"]=true
     rows[-1]["unmodified_shipped_asset_transform"]=true
  assert(captured_assets.size()==targets.size())
  var f=FileAccess.open(output.path_join("capture.json"),FileAccess.WRITE)
