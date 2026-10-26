@@ -142,16 +142,20 @@ def build_cooker_processor():
     # Purpose-built stove core occupies the right half. Layered shell/trim makes
     # it read as fabricated equipment rather than a cube or cylinder.
     b.beveled_box("blue",(.34,1.13,.17),(.90,.66,.78),.120)
-    b.beveled_box("dark",(.34,1.13,.565),(.72,.50,.12),.060)
-    b.beveled_box("metal",(.34,1.13,.638),(.58,.38,.07),.040)
-    b.beveled_box("orange",(.34,1.11,.685),(.42,.24,.045),.040)
-    b.beveled_box("yellow",(.34,1.12,.714),(.24,.12,.026),.025)
+    # The frozen cooker input faces -Z. Previous +Z facade placed the finished
+    # stove door against the BACK of the shipping station, showing a blank
+    # blue box to its actual front-facing gameplay/camera views.
+    b.beveled_box("metal",(.34,1.13,-.252),(.72,.50,.090),.065)
+    b.beveled_box("dark",(.34,1.13,-.308),(.58,.38,.036),.035)
+    b.cylinder("metal",(.34,1.13,-.346),.156,.040,16,rotation=(math.pi/2,0,0))
+    b.cylinder("dark",(.34,1.13,-.373),.114,.020,12,rotation=(math.pi/2,0,0))
+    b.cylinder("orange",(.34,1.13,-.394),.052,.045,10,rotation=(math.pi/2,0,0))
     for x in (.02,.66):
-        b.beveled_box("wood_light",(x,1.13,.690),(.09,.52,.08),.030)
+        b.beveled_box("wood_light",(x,1.13,-.341),(.09,.52,.08),.030)
         for y in (.93,1.33):
-            b.cylinder("cream",(x,y,.742),.030,.040,7,rotation=(math.pi/2,0,0))
-    b.beveled_box("wood_light",(.34,1.42,.690),(.72,.09,.08),.030)
-    b.rod_between("yellow",(.63,1.09,.755),(.76,1.09,.755),.030,7)
+            b.cylinder("cream",(x,y,-.393),.030,.040,7,rotation=(math.pi/2,0,0))
+    b.beveled_box("wood_light",(.34,1.42,-.341),(.72,.09,.08),.030)
+    b.rod_between("yellow",(.63,1.09,-.412),(.76,1.09,-.412),.030,7)
 
     # Cooktop with a readable lidded pot and side pan; kept subordinate to the
     # constructed chassis so no single primitive dominates the silhouette.
