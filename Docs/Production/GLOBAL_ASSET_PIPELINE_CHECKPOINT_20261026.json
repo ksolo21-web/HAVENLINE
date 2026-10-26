@@ -10,7 +10,7 @@
     "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
     "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
   ],
-  "status": "GLOBAL_SOURCE_POLICY_GATES_PASS__NATIVE_CYCLES_PIXEL_BAKE_FAILS__BVH_FALLBACK_CI_UNVERIFIED__NOT_MERGED",
+  "status": "SOURCE_POLICY_12_OF_12_PASS__BVH_NONFLAT_NORMAL_VERIFIED__AO_OCCLUSION_FIXTURE_PENDING_CI__NOT_MERGED",
   "complete_with_evidence": [
     {
       "milestone": "Separate from unapproved T05 branch",
@@ -18,9 +18,9 @@
       "evidence": "PR #103 compared against f74a84a2a288ab3d3935fba7a6cb9b975c2df239: only 14 global tool/policy/workflow files"
     },
     {
-      "milestone": "Global policy and ten negative/positive contract tests",
+      "milestone": "Global policy and twelve positive/negative contract tests",
       "status": "PASS",
-      "evidence": "GitHub Actions run 40356554818 succeeded"
+      "evidence": "Run 40365545780 validated 12/12; 40374522454 passed after BVH import fix"
     },
     {
       "milestone": "Reference owner-image binding and frozen budgets",
@@ -39,24 +39,24 @@
     },
     {
       "milestone": "Khronos glTF validator and glTF Transform inspection",
-      "status": "TECHNICALLY_EXECUTED_ON_SMOKE_ARTIFACT",
-      "evidence": "earlier run 40355106912 success but baked texture PNGs transparent: artifact invalid for material gate"
+      "status": "TECHNICAL_GLTF_PASS_WITH_1_TANGENT_WARNING",
+      "evidence": "Run 40374522541: 0 Khronos errors and 1 missing TANGENT warning; exported TANGENT verification pending run 40375345435"
     },
     {
       "milestone": "Reusable Blender master/low mesh, texture baking and export",
-      "status": "BLOCKED_PIXEL_BAKE",
-      "evidence": "GlTF exports and save succeeded, but independent raster inspection found normal/AO fully transparent"
+      "status": "PASS_BVH_NORMAL_ONLY_AO_OCCLUSION_NOT_YET_PROVEN",
+      "evidence": "Run 40374522541 verified 14,353 geometry hits, 775 true normal map colors, 87.604% UV coverage, image embedded in GLB exact-byte match, candidate gate PASS; convex smoke AO all-white (zero intersections)"
     }
   ],
   "critical_unresolved": [
-    "Inspect run 40364514593 for geometry-derived BVH maps: require non-flat color-encoded normal map, plausible AO and official glTF validation; verify artifact pixels independently before PASS",
-    "Native Blender 4.0.2 Cycles bakes for UV, normal and AO remain INVALID (all-black UV, flat gray normal, black AO); do not mistake opaque maps for actual bake",
-    "BVH CPU fallback limited to 1024px; production 4K quality and performance must be demonstrated without lowering requirements",
-    "Add explicit negative-pixel and provenance regression tests; ensure real author reference and UV island quality",
-    "Native Godot import and shipping in-game 3840x2160 seven-angle pixels remain untested",
-    "Physical Android 60 FPS device thermal/drawcalls/memory/CPU/GPU evidence not supplied",
-    "Independent critic, owner acceptance, and integration-owner approval absent",
-    "Retain draft PR #103 separate from unfinished T05 work; no merge or asset promotion"
+    "AO fixture 40375276759 must verify actual >0 hemisphere-ray occlusion and more than one distinct AO pixel color; wait for workflow completion, inspect artifact independently",
+    "Latest tangent export plus corrected JSON audit 40375345435 must complete with Khronos validation, inspect embedded TANGENT attribute and ensure 0 errors and resolve known warning",
+    "Blender 4.0.2 native Cycles UV, AO and normal baker remains invalid and must not be used to produce release assets",
+    "CPU BVH backend currently limited to 1024px; real production 4K quality/performance still untested",
+    "Real-owner reference-bound native Godot shipping scene and seven-angle 3840x2160 screenshots not tested",
+    "Physical Android 60 FPS frame and thermal/memory/drawcall measurements not supplied",
+    "Independent critic, exact 10 reference score, explicit owner acceptance and integration authorization absent",
+    "PR #103 must remain draft unmerged, no asset promotion and unrelated T05 branch untouched"
   ],
   "frozen_requirements": [
     "Exact reference style and visual language 10/10, all mandatory other critic dimensions >9/10, no known defects",
@@ -65,7 +65,7 @@
     "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
     "Preserve source hashes and evidence across retries"
   ],
-  "next_action": "Review BVH bake CI run 40364514593 and download artifact for independent alpha/normal/AO pixel inspection. Fix defects, add regression negatives, rerun Khronos. Keep Godot/Android/style and promotion gates open.",
+  "next_action": "Finish AO occluder fixture and tangents/JSON smoke CI, independently check pixels and GLB tangent attribute from saved artifacts, update README/checkpoint and rerun source policy. No release or merge without Godot/Android/critic/owner proof.",
   "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
   "superseded_wrong_base_pull_request": 102,
   "latest_work": {
@@ -84,6 +84,23 @@
       "asset_gate now fails closed on valid channel semantics, not merely alpha",
       "Separate BVH geometry-based high-to-low/AO backend added, smoke run not yet accepted pending pixel inspection"
     ],
-    "rollback": "Original shipping assets and approved assets unchanged; PR #103 still draft"
+    "rollback": "Original shipping assets and approved assets unchanged; PR #103 still draft",
+    "bvh_fallback_verified_run": 40374522541,
+    "verified_normal_colors": 775,
+    "high_to_low_ray_hits": 14353,
+    "uv_raster_coverage": 0.87604,
+    "smoke_map_size": [
+      128,
+      128
+    ],
+    "embedded_normal_matches_png_bytes": true,
+    "verified_glb_sha256": "48745984787fd7f58432aff61322155fbed1d8c5d8ba52f8b38b1ab579cbe926",
+    "verified_normal_sha256": "80af25812e1c921091fc68b00677d7e05b625085b4ee98787a2708c69e423685",
+    "ao_rays_cast": 114824,
+    "ao_ray_intersections": 0,
+    "ao_note": "Convex smoke sphere has no occluder and generated uniformly white AO; source changes now add wall + distinct split UV islands to verify genuinely nonwhite occlusion.",
+    "ao_fixture_run": 40375276759,
+    "tangent_and_json_run": 40375345435,
+    "tangent_warning_on_first_bvh_run": "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE (1 warning, 0 errors)"
   }
 }
