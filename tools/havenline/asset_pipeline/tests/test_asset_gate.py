@@ -7,7 +7,7 @@ import unittest
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0,str(ROOT))
-from asset_gate import run, get_file, parse_glb
+from asset_gate import run, get_file, parse_glb, plausible_baked_pixel
 
 POLICY=pathlib.Path(__file__).resolve().parents[4]/"Docs/Production/GLOBAL_ASSET_AUTHORING_POLICY.json"
 TEMPLATE=ROOT/"examples/T05-cooker-asset.json"
@@ -63,6 +63,16 @@ class AssetGateTests(unittest.TestCase):
             result=run(self.manifest,self.policy,pathlib.Path(workspace),"release")
         self.assertEqual(result["result"],"FAIL")
         self.assertFalse(result["asset_released"])
+    def test_opaque_gray_normals_are_rejected(self):
+        self.assertFalse(plausible_baked_pixel("normal",(128,128,128,255)))
+        self.assertFalse(plausible_baked_pixel("normal",(230,26,217,255)))
+        self.assertFalse(plausible_baked_pixel("normal",(128,128,255,0)))
+        self.assertTrue(plausible_baked_pixel("normal",(128,128,255,255)))
+    def test_opaque_black_ao_and_colored_sentinel_rejected(self):
+        self.assertFalse(plausible_baked_pixel("ambient_occlusion",(0,0,0,255)))
+        self.assertFalse(plausible_baked_pixel("ambient_occlusion",(230,26,217,255)))
+        self.assertFalse(plausible_baked_pixel("ambient_occlusion",(255,255,255,0)))
+        self.assertTrue(plausible_baked_pixel("ambient_occlusion",(240,240,240,255)))
     def test_lint_game_wide_future_biome(self):
         m=copy.deepcopy(self.manifest)
         m["asset_id"]="volcanic_region_shelter"
