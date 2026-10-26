@@ -10,7 +10,7 @@
     "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
     "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
   ],
-  "status": "POLICY_14_OF_14_PASS__BVH_GEOMETRY_BAKE_AND_NORMAL_AO_PIXELS_PASS__GODOT_SEVEN_ANGLE_AUTOFRAME_AND_AO_PREVIEW_PASS__SHIPPING_RELEASE_BLOCKED",
+  "status": "GLOBAL_POLICY_14_OF_14_PASS__BVH_NORMAL_AND_AO_REAL_PIXELS_PASS__GODOT_AO_7_VIEWS_4K_SYNTHETIC_PASS__REAL_SHIPPING_ANDROID_REFERENCE_STILL_BLOCKED",
   "complete_with_evidence": [
     {
       "milestone": "Separate from unapproved T05 branch",
@@ -56,17 +56,21 @@
       "milestone": "Bounded Godot isolated preview without rebuilding Blender",
       "status": "PASS",
       "evidence": "Workflow havenline-global-godot-framing.yml downloads artifact 12677963723 by run ID, verifies exact GLB SHA256 729c0e87, renders in Godot 4.7.2 with software OpenGL, and saves frame evidence"
+    },
+    {
+      "milestone": "True isolated Godot 4K seven-angle capture with real AO",
+      "status": "PASS_SYNTHETIC_TECHNICAL_ONLY",
+      "evidence": "Run 40386019672 artifact 12679779624: seven 3840x2160 unique Godot software-rendered PNGs, AO bound, no blank frames, SHA-bound GLB and AO."
     }
   ],
   "critical_unresolved": [
-    "Actual Havenline shipping Godot scene with real reference-authorized assets: 3840x2160 seven-angle screenshots, correct scene sockets, bounds, and AO/normal material integration not yet produced.",
-    "Real physical Android sustained 60 FPS at agreed target resolution with device GPU/CPU frame times, memory, temperature and draw calls remains untested.",
-    "CPU BVH geometry fallback verified only on 128x128 synthetic texture fixture; production map resolutions up to 4096 and performance/artist-quality require testing. Native Blender Cycles 4.0.2 remains unfit for approved map export.",
-    "Independent critic runtime / reviewer has not produced source-hash-bound 10/10 reference style and visual language evidence or >9.0 on every remaining mandatory axis; no visual approval.",
-    "Owner-source-image exact binding, task-specific real material reference, authentic T05/equipment/character appearance, night/snow use states, and manual texture authoring quality remain open.",
-    "Release gate now rejects isolated AO preview: require true shipping scene AO binding with correct separately baked texture hash and two verified 3840x2160 native AO-off/on screenshots with actual difference.",
-    "Owner approval and integration-owner authorization absent; PR #103 intentionally draft and unmerged, no content promotion or gameplay changes.",
-    "Global CI runner may intermittently fail slow Blender APT installation; dedicated Godot-only art QA workflow is proven but reproducible full-scale production dependency handling remains open."
+    "Render real, exact-owner-reference asset(s) within HavenlineGodot real shipping gameplay scene, at true 3840x2160 from 7 angles and realistic in-use/night/snow states; synthetic fixture is insufficient.",
+    "Use actual reference style and materials (Whiteout-style lock) and obtain independent visual critic with both reference fidelity and visual language 10/10 and all other dimensions strictly >9, no visual defects.",
+    "Measure physical Android sustained 60 FPS with real GPU/CPU frame times, thermal stability, draw calls, texture memory, collision/physics and save behavior; software llvmpipe screenshot test is NOT Android.",
+    "Enforce actual shipping-scene AO material binding and 3840x2160 source-hash-verified before/after AO frames with positive pixel differences; release gate added, evidence not supplied.",
+    "CPU BVH texture baker validated on 128x128 synthetic map only. Real authored maps at 1024+ and performance/memory need direct bake tests; Blender 4.0.2 Cycles native headless remains invalid.",
+    "Per-asset exact owner reference source image binding, real T05 cooker/other future asset geometry, sockets, footprint, triangle/draw-call/texture budget and approved benchmark parity need proof.",
+    "Obtain explicit owner and integration-owner approvals for exact source and outputs. PR #103 remains draft/unmerged; shipping assets and unfinished T05 branch untouched."
   ],
   "frozen_requirements": [
     "Exact reference style and visual language 10/10, all mandatory other critic dimensions >9/10, no known defects",
@@ -75,7 +79,7 @@
     "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
     "Preserve source hashes and evidence across retries"
   ],
-  "next_action": "Move from synthetic fixture to source-bound real Havenline art and native 3840x2160 shipping scene. Optionally extend isolated camera utility to 4K technical renders as a staging smoke, but never treat these as shipping/Android proof. Then use physical Android test and genuine independent critic, user/integration signoff; keep draft.",
+  "next_action": "Choose one genuinely reference-bound Havenline real asset (first known T05 cooker 18567.png), obtain exact approved source/reference and existing geometry, stage using global pipeline without altering original. Render seven native 4K shipping-scene comparison views, compare and get independent critic. Then physical Android performance and explicit owner/integration approvals. Continue 1024px+ bake performance/quality benchmarking separately.",
   "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
   "superseded_wrong_base_pull_request": 102,
   "latest_work": {
@@ -211,6 +215,26 @@
     "godot_release_ao_requirement_verified": false,
     "global_frame_qa_infrastructure": "Dedicated artifact-reuse workflow avoids repeated 190MB Blender APT setup",
     "last_verified_commit": "7b0521faed3b77db17dbed863d2e76130f6fb0b8",
-    "internal_review": "Builder-side technical/pixel review only; no separately callable critic runtime or approval"
+    "internal_review": "Builder-side technical/pixel review only; no separately callable critic runtime or approval",
+    "latest_isolated_4k_run": 40386019672,
+    "latest_isolated_4k_artifact": 12679779624,
+    "latest_4k_fixture_sha256": "729c0e87beb3e34e76abfaf9e2930945b7521c957c5604d3ebbcf2f26c94d3b8",
+    "latest_4k_ao_sha256": "4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134",
+    "latest_native_godot_4k_resolution": [
+      3840,
+      2160
+    ],
+    "latest_native_godot_4k_views": 7,
+    "latest_4k_unique_hashes": 7,
+    "latest_4k_sample_rgb_unique_min": 731,
+    "latest_4k_sample_rgb_unique_max": 1040,
+    "latest_4k_software_renderer": "Godot 4.7.2 gl_compatibility llvmpipe",
+    "latest_4k_test_scene": "isolated disposable synthetic GLB only, not HavenlineGodot shipping scene",
+    "latest_4k_physical_device": false,
+    "latest_4k_owner_approval": false,
+    "latest_4k_independent_critic": false,
+    "latest_4k_image_comparison_note": "Actual seven image PNG bytes inspected and contact sheet reviewed; geometry synthetic sphere+wall. This is evidence for capture resolution/renderer/import only, not approved art style.",
+    "current_technical_score_0_to_10": 8.5,
+    "remaining_mandatory_release_gates_count": 7
   }
 }
