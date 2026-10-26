@@ -157,14 +157,16 @@ def build_cooker_processor():
     b.beveled_box("wood_light",(.34,1.42,-.341),(.72,.09,.08),.030)
     b.rod_between("yellow",(.63,1.09,-.412),(.76,1.09,-.412),.030,7)
 
-    # Cooktop with a readable lidded pot and side pan; kept subordinate to the
-    # constructed chassis so no single primitive dominates the silhouette.
+    # A proper oven roof, NOT a default pot: dark insulated crown and rounded
+    # irregular snow masses flowing over its shoulders like supplied 18567.png.
     b.beveled_box("metal",(.34,1.52,.10),(.78,.10,.68),.055)
-    b.lathe("dark",(.34,1.58,.08),[(.25,0),(.31,.06),(.30,.24),(.24,.31)],14)
-    b.cylinder("cream",(.34,1.91,.08),.20,.07,12)
-    b.torus("orange",(.34,1.95,.08),.12,.028,10,4)
-    b.rod_between("metal",(-.02,1.69,-.06),(-.39,1.69,-.20),.040,7)
-    b.cylinder("metal",(-.46,1.69,-.23),.18,.07,12)
+    for x,y,z,rx,rz in (
+        (.10,1.61,-.08,.28,.25),
+        (.45,1.63,-.04,.30,.24),
+        (.18,1.62,.31,.29,.25),
+        (.59,1.60,.32,.24,.23),
+    ):
+        b.sphere("snow",(x,y,z),(rx,.135,rz),4,9)
 
     # Left prep station echoes the 18607 butcher table.
     b.beveled_box("wood_light",(-.55,1.02,-.28),(.68,.10,.58),.045)
@@ -173,20 +175,22 @@ def build_cooker_processor():
     b.sphere("orange",(-.58,1.17,-.28),(.21,.09,.14),5,12,rotation=(0,.18,0))
     b.sphere("cream",(-.60,1.25,-.29),(.13,.029,.11),3,8,rotation=(0,.18,0))
     b.rod_between("cream",(-.72,1.21,-.28),(-.43,1.21,-.28),.018,7)
-    b.beveled_box("metal",(-.54,1.07,.38),(.64,.075,.36),.050)
-    b.beveled_box("dark",(-.54,1.12,.38),(.56,.024,.28),.012)
-    for x,z,r,rx in ((-.73,.35,-.18,.16),(-.39,.42,.22,.13)):
+    # Opposite-side steel output tray: physical dual-tray silhouette like 18567.
+    # Tray lip just meets the stove corner; the contents seat onto its dark bed.
+    b.beveled_box("metal",(.90,1.07,.68),(.52,.075,.36),.050)
+    b.beveled_box("dark",(.90,1.12,.68),(.45,.024,.28),.012)
+    for x,z,r,rx in ((.76,.65,-.18,.15),(1.03,.73,.22,.115)):
         b.sphere("orange",(x,1.205,z),(rx,.08,.115),4,10,rotation=(0,r,0))
         b.sphere("cream",(x-.026,1.262,z+.01),(rx*.66,.028,.075),3,8,rotation=(0,r,0))
     b.rod_between("metal",(-.78,1.15,-.05),(-.42,1.15,-.05),.025,7)
     b.beveled_box("blue",(-.55,.88,-.30),(.62,.08,.48),.030)
 
-    # Forged oven arch/blade is structurally connected above the prep tray.
-    # Keep clear mechanical hierarchy and avoid a freestanding default cylinder.
-    for z in (-.43,.43):
-        b.rod_between("metal",(-.86,1.33,z),(-.86,1.80,z),.039,8)
-    b.rod_between("metal",(-.86,1.80,-.43),(-.86,1.80,.43),.048,9)
-    b.beveled_box("cream",(-.86,1.57,.0),(.075,.31,.21),.022)
+    # Forged arch now frames the actual -Z window rather than floating on the
+    # left side. The orange grip is connected to the front lower service hatch.
+    for x in (.01,.67):
+        b.rod_between("metal",(x,.92,-.41),(x,1.42,-.41),.039,8)
+    b.rod_between("metal",(.01,1.42,-.41),(.67,1.42,-.41),.048,9)
+    b.beveled_box("orange",(.34,.87,-.46),(.39,.075,.08),.028)
 
     # Offset flue: stepped collars, polished throat and bounded snow cap.
     b.cylinder("dark",(.70,1.72,-.22),.12,.42,12)
@@ -206,8 +210,8 @@ def build_cooker_processor():
         b.rod_between("orange",(-.92,1.49,-.08),(-.92+math.sin(ang)*.13,1.49+math.cos(ang)*.13,-.08),.020,6)
 
     # Irregular snow loading ties the machine into the winter silhouette.
-    b.beveled_box("snow",(.20,1.61,-.04),(.38,.055,.26),.022,rotation=(0,.08,.02))
-    b.beveled_box("snow",(-.60,1.15,-.32),(.30,.045,.24),.018,rotation=(0,-.07,-.01))
+    # Only small localized snow grains below roof, not planar white shipping slabs.
+    b.sphere("snow",(-.60,1.15,-.32),(.22,.048,.16),3,8,rotation=(0,-.07,-.01))
     return b
 
 def build_conveyor_straight():
