@@ -6,6 +6,7 @@ extends SceneTree
 var output_dir: String = ""
 var model_path: String = ""
 var asset_id: String = ""
+var ao_path: String = ""
 var shots: Array = []
 
 func _initialize() -> void:
@@ -16,6 +17,8 @@ func _initialize() -> void:
             model_path = arg.trim_prefix("--glb=")
         elif arg.begins_with("--asset-id="):
             asset_id = arg.trim_prefix("--asset-id=")
+        elif arg.begins_with("--ao="):
+            ao_path = arg.trim_prefix("--ao=")
     assert(not output_dir.is_empty())
     assert(model_path.begins_with("res://assets/"))
     assert(not asset_id.is_empty())
@@ -35,6 +38,13 @@ func _run_capture() -> void:
     var subject: Node3D = packed.instantiate()
     subject.name = "UnmodifiedArtistCandidate"
     world.add_child(subject)
+    var ao_binding_count: int = 0
+    if not ao_path.is_empty():
+        assert(ao_path.begins_with("res://assets/"), "AO image must come from isolated staging assets")
+        var ao_texture: Texture2D = load(ao_path) as Texture2D
+        assert(ao_texture != null, "Separately baked AO texture failed to import")
+        ao_binding_count = _bind_preview_ao(subject, ao_texture)
+        assert(ao_binding_count > 0, "No imported PBR surfaces accepted AO atlas")
     var env := WorldEnvironment.new()
     env.environment = Environment.new()
     env.environment.background_mode = Environment.BG_COLOR
@@ -108,6 +118,10 @@ func _run_capture() -> void:
         "renderer": RenderingServer.get_current_rendering_method(),
         "gpu": RenderingServer.get_video_adapter_name(),
         "mesh_count": count,
+        "preview_ao_texture": ao_path,
+        "ao_bound_material_surfaces": ao_binding_count,
+        "ao_preview_only_not_shipping_scene": not ao_path.is_empty(),
+        "ao_source_sha256": FileAccess.get_sha256(ao_path) if not ao_path.is_empty() else "",
         "camera_orthographic_size": camera.size,
         "world_bounds_min": minimum,
         "world_bounds_max": maximum,
@@ -123,6 +137,28 @@ func _run_capture() -> void:
     file.close()
     print("GLOBAL_ASSET_IMPORT_PROOF ", JSON.stringify(report))
     quit(0)
+
+func _bind_preview_ao(node: Node, texture: Texture2D) -> int:
+    # Test an actual Godot material texture binding without altering GLB source
+    # resources, master assets, or any shipping Havenline material.
+    var updated: int = 0
+    if node is MeshInstance3D:
+        var mesh_node: MeshInstance3D = node as MeshInstance3D
+        if mesh_node.mesh != null:
+            for surface_index in range(mesh_node.mesh.get_surface_count()):
+                var original: Material = mesh_node.get_active_material(surface_index)
+                if original is BaseMaterial3D:
+                    var material: BaseMaterial3D = original.duplicate(true) as BaseMaterial3D
+                    material.ao_enabled = true
+                    material.ao_texture = texture
+                    material.ao_on_uv2 = false
+                    material.ao_light_affect = 1.0
+                    mesh_node.set_surface_override_material(surface_index, material)
+                    if material.ao_enabled and material.ao_texture == texture:
+                        updated += 1
+    for child in node.get_children():
+        updated += _bind_preview_ao(child, texture)
+    return updated
 
 func _collect_world_corners(node: Node, points: Array[Vector3]) -> void:
     if node is MeshInstance3D:
