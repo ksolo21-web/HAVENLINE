@@ -223,7 +223,8 @@ def build(a):
     set_active([low],low)
     output_glb=out/(a.asset_id+"_LOD0.glb")
     bpy.ops.export_scene.gltf(filepath=str(output_glb),export_format="GLB",
-                              use_selection=True,export_yup=True,export_apply=True)
+                              use_selection=True,export_yup=True,export_apply=True,
+                              export_tangents=True)
     if not output_glb.exists() or output_glb.stat().st_size<128:raise RuntimeError("GLB exporter produced no binary")
     report={
         "asset_id":a.asset_id,"state":"TECHNICAL_BAKE_CANDIDATE_ONLY",
