@@ -13,7 +13,7 @@ permissions:
   contents: read
 concurrency:
   group: global-blender-smoke-${{ github.ref }}
-  cancel-in-progress: true
+  cancel-in-progress: false
 jobs:
   bake-and-gate:
     runs-on: ubuntu-24.04
@@ -56,6 +56,42 @@ jobs:
           test -s global-bake-evidence/candidate/smoke_test_LOD0.glb
           test -s global-bake-evidence/candidate/textures/normal.png
           test -s global-bake-evidence/candidate/textures/ambient_occlusion.png
+      - name: Inspect saved geometry-baked PNG bytes independently
+        run: |
+          set -euo pipefail
+          /tmp/havenline-asset-venv/bin/python - <<'PY'
+          import json,pathlib
+          from PIL import Image
+          root=pathlib.Path("global-bake-evidence/candidate")
+          report=json.loads((root/"bake_report.json").read_text())
+          stats=report.get("bake_stats") or {}
+          assert report["bake_backend"]=="bvh_cpu", "Required independent real-geometry fallback"
+          assert stats.get("high_to_low_ray_hits",0)>32, "No high-to-low geometry intersection"
+          assert stats.get("ambient_occlusion_ray_count",0)>256, "No AO hemisphere rays"
+          assert stats.get("texture_coverage",0)>=.05, "Insufficient artist UV coverage"
+          maps={}
+          for kind in ("normal","ambient_occlusion"):
+              with Image.open(root/"textures"/(kind+".png")) as im:
+                  rgba=im.convert("RGBA")
+                  pix=list(rgba.getdata())
+                  opacity=sum(a>=128 for r,g,b,a in pix)/len(pix)
+                  unique_rgb=len({p[:3] for p in pix})
+                  if kind=="normal":
+                      valid=sum(a>=128 and b>=160 and b>=r+14 and b>=g+14
+                                for r,g,b,a in pix)/len(pix)
+                      assert unique_rgb>=8, "Synthetic curved mesh normal map is uniform or nearly so"
+                  else:
+                      valid=sum(a>=128 and max(r,g,b)>=32 and max(r,g,b)-min(r,g,b)<=10
+                                for r,g,b,a in pix)/len(pix)
+                  assert opacity>=.05 and valid>=.05, f"{kind}: empty or invalid saved pixels"
+                  maps[kind]={"alpha_coverage":round(opacity,5),
+                              "channel_semantics_coverage":round(valid,5),
+                              "unique_rgb_colors":unique_rgb,"dimensions":rgba.size}
+          artifact={"candidate_not_visual_approval":True,
+                    "bake_backend":"bvh_cpu","bvh_stats":stats,"png_evidence":maps}
+          (root.parent/"pixel-integrity.json").write_text(json.dumps(artifact,indent=2)+"\\n")
+          print(json.dumps(artifact,indent=2))
+          PY
       - name: Gate exact bytes against global reference and budget policy
         run: |
           set -euo pipefail
