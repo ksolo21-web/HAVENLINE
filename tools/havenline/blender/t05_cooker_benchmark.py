@@ -228,7 +228,7 @@ scene=bpy.context.scene
 scene.render.engine="CYCLES"
 scene.cycles.device="CPU"
 scene.cycles.samples=12
-scene.cycles.use_denoising=True
+scene.cycles.use_denoising=False # Ubuntu Free Blender 4.0.2 build omits OIDN
 scene.render.resolution_x=640;scene.render.resolution_y=640;scene.render.resolution_percentage=100
 scene.render.image_settings.file_format="PNG"
 scene.render.film_transparent=False
