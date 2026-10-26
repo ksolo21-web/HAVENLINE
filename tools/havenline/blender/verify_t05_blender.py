@@ -46,7 +46,7 @@ def main():
     # 4 actual Blender studio renders; they are NOT Godot native evidence.
     for file in required[3:]:
         with Image.open(file) as im:
-            assert im.size==(768,768), f"Wrong render resolution: {file}"
+            assert im.size==(640,640), f"Wrong render resolution: {file}"
             assert im.convert("RGB").getbbox() is not None
     report={
       "task":"T05","candidate_only":True,"release_approved":False,
