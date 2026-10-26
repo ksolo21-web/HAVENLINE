@@ -156,6 +156,11 @@ def build_wood_stack():
         (.70,.19,-.03,.067,.69),(.43,.34,-.03,.072,.73),
         (.56,.34,.02,.077,.73),(.54,.49,-.02,.068,.72),
     )
+    # Project the tied kindling bundle forward from the large logs so the
+    # sides and physically wrapped cord remain visible at the shipping view.
+    # This is within the locked 1.18 m local-Z resource footprint.
+    logs=tuple((x,y,z-.185 if i>=6 else z,r,length)
+               for i,(x,y,z,r,length) in enumerate(logs))
     for i,(x,y,z,r,length) in enumerate(logs):
         seg=12 if i<6 else 9
         b.cylinder("wood",(x,y,z),r,length,seg,rotation=(math.pi/2,0,0))
@@ -202,13 +207,54 @@ def build_wood_stack():
                 for off,zz in ((-.49,-.18),(.43,.17)):
                     b.sphere("snow",(x+off*r,y+.66*r,z+zz*length),
                              (r*.40,r*.23,length*.15),3,8)
-    # Two continuous, close-fitting rope hoops encircle the bound small-log
-    # bundle instead of floating across the top of unrelated big timbers.
-    for z in (-.23,.23):
-        b.torus("cream",(.555,.335,z),.237,.025,16,5,
-                rotation=(math.pi/2,0,0))
-        b.torus("wood_light",(.555,.335,z+.018),.236,.007,16,4,
-                rotation=(math.pi/2,0,0))
+    # R22 rope is a low-poly, continuous braided tube driven by the kindling's
+    # sampled lumpy outline. Unlike a torus or detached cylinder train, this
+    # produces joined surfaces, consistent outward normals and controllable
+    # contact. The twin strands twist in phase without extra material slots.
+    kindling = [(x,y,r) for x,y,_z,r,_length in logs[6:]]
+    center_x, center_y = .565, .335
+    def contact_radius(angle):
+        dx,dy=math.cos(angle),math.sin(angle)
+        reach=.125
+        for x,y,r in kindling:
+            ox,oy=x-center_x,y-center_y
+            along=ox*dx+oy*dy
+            disc=r*r-(ox*ox+oy*oy-along*along)
+            if disc>=0.0:
+                reach=max(reach,along+math.sqrt(disc))
+        return min(.335,max(.165,reach+.036))
+    for band_z in (-.38,-.055):
+        for strand,material in ((0,"cream"),(1,"wood_light")):
+            segments=36
+            sides=6
+            verts=[];norms=[];idx=[]
+            for j in range(segments):
+                angle=math.tau*j/segments
+                twist=8*angle+strand*math.pi
+                radius=contact_radius(angle)+.008*math.sin(twist)
+                x=center_x+radius*math.cos(angle)
+                y=center_y+radius*math.sin(angle)
+                z=band_z+.012*math.cos(twist)
+                for k in range(sides):
+                    phi=math.tau*k/sides
+                    radial=(math.cos(angle),math.sin(angle),0)
+                    axial=(0,0,1)
+                    normal=(radial[0]*math.cos(phi),radial[1]*math.cos(phi),math.sin(phi))
+                    verts.append((x+.017*normal[0],y+.017*normal[1],z+.017*normal[2]))
+                    norms.append(normal)
+            for j in range(segments):
+                nj=(j+1)%segments
+                for k in range(sides):
+                    nk=(k+1)%sides
+                    idx.extend((j*sides+k, j*sides+nk, nj*sides+nk,
+                                j*sides+k, nj*sides+nk, nj*sides+k))
+            b.triangles(material,verts,norms,idx)
+        # Secured rope knots are small, real joined objects over the top rim.
+        theta=math.pi*.57
+        rad=contact_radius(theta)
+        knot=(center_x+rad*math.cos(theta),center_y+rad*math.sin(theta),band_z)
+        b.sphere("cream",knot,(.028,.024,.026),3,8)
+        b.rod_between("wood_light",knot,(knot[0]-.042,knot[1]-.040,knot[2]-.026),.011,5)
     # Reference 18677(1): big split faces must read on picture-left, smaller
     # bound kindling on picture-right. The old authored layout was reversed.
     # Mirror the finished static *mesh* on local X; correct normals and triangle
