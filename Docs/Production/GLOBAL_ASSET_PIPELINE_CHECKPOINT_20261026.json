@@ -10,7 +10,7 @@
     "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
     "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
   ],
-  "status": "SOURCE_POLICY_12_OF_12_PASS__BVH_NONFLAT_NORMAL_VERIFIED__AO_OCCLUSION_FIXTURE_PENDING_CI__NOT_MERGED",
+  "status": "GLOBAL_SOURCE_13_OF_13_PASS__NONFLAT_BVH_NORMAL_VERIFIED__NEW_OCCLUSION_AND_TANGENT_RUNS_BLOCKED_BY_APT_SETUP__DRAFT_NOT_MERGED",
   "complete_with_evidence": [
     {
       "milestone": "Separate from unapproved T05 branch",
@@ -18,9 +18,9 @@
       "evidence": "PR #103 compared against f74a84a2a288ab3d3935fba7a6cb9b975c2df239: only 14 global tool/policy/workflow files"
     },
     {
-      "milestone": "Global policy and twelve positive/negative contract tests",
+      "milestone": "Global policy and thirteen positive/negative contract tests",
       "status": "PASS",
-      "evidence": "Run 40365545780 validated 12/12; 40374522454 passed after BVH import fix"
+      "evidence": "Run 40379609976 passed 13/13, including GLB normal binding/buffer bounds, 40379788240 source guards passed after CI timeout change"
     },
     {
       "milestone": "Reference owner-image binding and frozen budgets",
@@ -49,14 +49,14 @@
     }
   ],
   "critical_unresolved": [
-    "AO fixture 40375276759 must verify actual >0 hemisphere-ray occlusion and more than one distinct AO pixel color; wait for workflow completion, inspect artifact independently",
-    "Latest tangent export plus corrected JSON audit 40375345435 must complete with Khronos validation, inspect embedded TANGENT attribute and ensure 0 errors and resolve known warning",
-    "Blender 4.0.2 native Cycles UV, AO and normal baker remains invalid and must not be used to produce release assets",
-    "CPU BVH backend currently limited to 1024px; real production 4K quality/performance still untested",
-    "Real-owner reference-bound native Godot shipping scene and seven-angle 3840x2160 screenshots not tested",
-    "Physical Android 60 FPS frame and thermal/memory/drawcall measurements not supplied",
-    "Independent critic, exact 10 reference score, explicit owner acceptance and integration authorization absent",
-    "PR #103 must remain draft unmerged, no asset promotion and unrelated T05 branch untouched"
+    "Wait for bounded Blender setup on latest run 40379776370, then inspect saved 128px AO PNG from actual adjoining-occluder fixture: >0 ray intersections and multiple shades; compare independent audit JSON.",
+    "Verify latest GLB has TANGENT on normal-mapped primitives and Khronos glTF validator has 0 errors and 0 warnings; verify normal PNG pixels exactly equal embedded image.",
+    "If apt mirror setup times out, use validated installation alternative and preserve failure logs; do not claim an AO or tangents pass without artifacts.",
+    "Native Blender 4.0.2 Cycles baker remains broken (blank UV, flat-gray normal and black AO) and is prohibited until raster proof.",
+    "CPU BVH geometry fallback capped at 1024px; production 4K bake and speed not verified.",
+    "Real owner-source-bound 4K in-game Godot seven-angle renders and material/AO binding not verified.",
+    "Physical Android sustained 60fps, thermal, GPU/CPU, draw calls and memory profile not available.",
+    "Independent critic reference/visual-language 10/10, all other scores >9, owner acceptance and integration authorization absent. PR #103 remains draft/unmerged; no asset promotion."
   ],
   "frozen_requirements": [
     "Exact reference style and visual language 10/10, all mandatory other critic dimensions >9/10, no known defects",
@@ -65,7 +65,7 @@
     "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
     "Preserve source hashes and evidence across retries"
   ],
-  "next_action": "Finish AO occluder fixture and tangents/JSON smoke CI, independently check pixels and GLB tangent attribute from saved artifacts, update README/checkpoint and rerun source policy. No release or merge without Godot/Android/critic/owner proof.",
+  "next_action": "Check run 40379776370; if install passes, independently inspect geometry-derived normal/AO PNGs, GLB embedded normal pixels, tangents and Khronos output; rerun until all technical tests pass. Otherwise diagnose bounded apt failure and switch to verified dependency install path. Preserve draft without touching T05 or shipping assets.",
   "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
   "superseded_wrong_base_pull_request": 102,
   "latest_work": {
@@ -101,6 +101,19 @@
     "ao_note": "Convex smoke sphere has no occluder and generated uniformly white AO; source changes now add wall + distinct split UV islands to verify genuinely nonwhite occlusion.",
     "ao_fixture_run": 40375276759,
     "tangent_and_json_run": 40375345435,
-    "tangent_warning_on_first_bvh_run": "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE (1 warning, 0 errors)"
+    "tangent_warning_on_first_bvh_run": "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE (1 warning, 0 errors)",
+    "latest_source_13_of_13_run": 40379609976,
+    "latest_source_suite_after_timeout_change": 40379788240,
+    "test_count": 13,
+    "embedded_normal_pixel_integrity_gate": true,
+    "mandatory_explicit_normal_tangent_gate": true,
+    "per_commit_ci_concurrency": true,
+    "apt_install_step_timeout_minutes": 10,
+    "apt_update_command_timeout_seconds": 180,
+    "apt_install_command_timeout_seconds": 360,
+    "latest_real_ao_tangent_workflow_run": 40379776370,
+    "latest_workflow_commit": "9e1cf8f1b0f9f07f2846ba4c6b4515b74a836e4b",
+    "latest_critic_status": "INTERNAL_REVIEW_ONLY_NOT_INDEPENDENT",
+    "latest_discovery": "Prior AO/tangent runs remained in Blender apt install. Local apt mirror update also timed out at 18 seconds, supporting package-mirror blockage. No new AO/tangent artifacts have yet passed."
   }
 }
