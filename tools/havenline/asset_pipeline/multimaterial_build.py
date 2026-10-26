@@ -56,11 +56,56 @@ def _add_normal(mat,image):
     image_node=nodes.new("ShaderNodeTexImage")
     image_node.name="HL_GEOMETRY_BAKE_NORMAL"
     image_node.image=image
+    if len(mat.node_tree.nodes):
+        bake_uv=bpy.data.objects.get("REAL_T05_R07_GAME_LOD0")
+        if bake_uv is not None and bake_uv.data.uv_layers.get("HAVENLINE_BAKE_UV") is not None:
+            uvmap=nodes.new("ShaderNodeUVMap")
+            uvmap.uv_map="HAVENLINE_BAKE_UV"
+            mat.node_tree.links.new(uvmap.outputs["UV"],image_node.inputs["Vector"])
     normal=nodes.new("ShaderNodeNormalMap")
     normal.name="HL_GEOMETRY_BAKE_TANGENT"
     normal.space="TANGENT"
     mat.node_tree.links.new(image_node.outputs["Color"],normal.inputs["Color"])
     mat.node_tree.links.new(normal.outputs["Normal"],bs.inputs["Normal"])
+
+def _author_separate_bake_uv(low, materials):
+    """Create UV1 strictly for new geometry maps, preserving artist UV0.
+
+    This creates extra candidate data; it never unwraps or rewrites the
+    existing UV0 color texture coordinates. It is not visual style approval.
+    """
+    uv0=low.data.uv_layers.active
+    original=[tuple(v.uv) for v in uv0.data]
+    if len(low.data.uv_layers)!=1:
+        raise RuntimeError("Separate bake UV mode needs one unambiguous original UV0")
+    uv1=low.data.uv_layers.new(name="HAVENLINE_BAKE_UV")
+    low.data.uv_layers.active=uv1
+    bpy.ops.object.select_all(action="DESELECT")
+    low.select_set(True)
+    bpy.context.view_layer.objects.active=low
+    bpy.context.scene.tool_settings.mesh_select_mode=(False,False,True)
+    for i in range(len(materials)):
+        bpy.ops.object.mode_set(mode="OBJECT")
+        for polygon in low.data.polygons:
+            polygon.select=(polygon.material_index==i)
+        bpy.ops.object.mode_set(mode="EDIT")
+        bpy.ops.uv.smart_project(island_margin=.025)
+        bpy.ops.object.mode_set(mode="OBJECT")
+    # glTF normal tangents should be calculated from the explicit UV1 atlas.
+    uv1.active_render=True
+    uv0.active_render=False
+    if [tuple(v.uv) for v in uv0.data]!=original:
+        raise RuntimeError("Source albedo UV0 was modified by candidate bake UV generation")
+    for mat in materials:
+        nodes=mat.node_tree.nodes
+        # Lock any implicit source-color sampling to the original UV0.
+        uvnode=nodes.new("ShaderNodeUVMap")
+        uvnode.name="HL_PRESERVE_AUTHOR_UV0"
+        uvnode.uv_map=uv0.name
+        for image_node in list(nodes):
+            if image_node.type=="TEX_IMAGE" and image_node.inputs["Vector"].is_linked is False:
+                mat.node_tree.links.new(uvnode.outputs["UV"],image_node.inputs["Vector"])
+    return uv1.name, uv0.name
 
 def main():
     argv=sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else []
@@ -71,6 +116,7 @@ def main():
     parser.add_argument("--size",type=int,default=128)
     parser.add_argument("--triangles-max",type=int,default=20000)
     parser.add_argument("--materials-max",type=int,default=12)
+    parser.add_argument("--bake-uv-mode",choices=("original","separate_uv1"),default="original")
     a=parser.parse_args(argv)
     if a.size<64 or a.size>1024 or a.size&(a.size-1):
         raise RuntimeError("BVH material-preserving baker supports power-of-two 64..1024 only")
@@ -100,6 +146,10 @@ def main():
     if used!=set(range(len(originals))):
         raise RuntimeError("Every source material must own actual geometry; unused slots rejected")
     before={m.name:_snapshot(m) for m in originals}
+    baked_uv_name=low.data.uv_layers.active.name
+    source_uv_name=baked_uv_name
+    if a.bake_uv_mode=="separate_uv1":
+        baked_uv_name,source_uv_name=_author_separate_bake_uv(low,originals)
     high_materials_isolated=0
     for slot,mat in enumerate(list(high.data.materials)):
         if mat in originals:
@@ -154,6 +204,10 @@ def main():
         "materials_before":list(before),
         "low_triangles":triangles,
         "materials_preserved":len(originals),
+        "bake_uv_mode":a.bake_uv_mode,
+        "source_uv_layer":source_uv_name,
+        "normal_bake_uv_layer":baked_uv_name,
+        "authored_albedo_uv0_unchanged":True,
         "source_pbr_base_metal_roughness_preserved":True,
         "independent_high_and_low_source_meshes":True,
         "detail_source_materials_isolated":high_materials_isolated,
