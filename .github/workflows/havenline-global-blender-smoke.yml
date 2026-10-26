@@ -23,10 +23,15 @@ jobs:
         with:
           lfs: false
       - name: Install FOSS Blender and isolated validator
+        timeout-minutes: 10
         run: |
           set -euo pipefail
-          sudo apt-get update -qq
-          sudo apt-get install -y --no-install-recommends blender python3-venv python3-numpy
+          # CI dependency setup must never occupy the entire 40-minute job.
+          # APT mirror stalls previously prevented Blender validation.
+          if ! sudo timeout 180 apt-get update -qq; then
+            echo "::warning::APT refresh failed/timed out; testing cached package index"
+          fi
+          sudo timeout 360 apt-get install -y --no-install-recommends blender python3-venv python3-numpy
           blender -b -t 2 --python-expr 'import numpy; print("Blender NumPy",numpy.__version__)'
           python3 -m venv /tmp/havenline-asset-venv
           /tmp/havenline-asset-venv/bin/pip install --disable-pip-version-check numpy pillow trimesh
