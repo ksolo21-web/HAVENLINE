@@ -308,10 +308,19 @@ bpy.ops.wm.save_as_mainfile(filepath=str(out/"T05_cooker_EDITABLE.blend"))
 bpy.ops.object.select_all(action="DESELECT")
 for obj in made:
     if obj.type in ("CURVE","META"):
+        # META conversion can drop the original material slot in Blender 4.0.
+        # Snapshot it before conversion (which invalidates the old object RNA).
+        source_material=(obj.data.materials[0] if len(obj.data.materials) else None)
+        source_kind=obj.type
         bpy.context.view_layer.objects.active=obj
         obj.select_set(True)
         bpy.ops.object.convert(target="MESH")
-        bpy.context.view_layer.objects.active.select_set(False)
+        converted=bpy.context.view_layer.objects.active
+        assert converted is not None and converted.type=="MESH"
+        if not converted.data.materials:
+            assert source_material is not None, "Unmaterialed Blender "+source_kind+" source"
+            converted.data.materials.append(source_material)
+        converted.select_set(False)
 # Blender replaces the Object RNA when META is converted into a mesh.
 # Never dereference stale source-object handles after conversion; instead
 # discover actual surviving editable/source meshes from the live collection.
@@ -325,7 +334,9 @@ for o in src:
         o.select_set(False)
 groups={}
 for o in list(src):
+    assert o.data.materials, "Candidate mesh has no PBR material after conversion: "+o.name
     name=o.data.materials[0].name
+    assert name.startswith("HL_"), "Non-HAVENLINE material leaked into GLB: "+name
     groups.setdefault(name,[]).append(o)
 for key,objs in groups.items():
     bpy.ops.object.select_all(action="DESELECT")
