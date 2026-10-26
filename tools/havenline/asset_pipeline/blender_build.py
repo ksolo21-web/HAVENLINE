@@ -125,13 +125,20 @@ def build(a):
     ao_path=texout/"ambient_occlusion.png"
     ao=bpy.data.images.new("HAVENLINE_AO_BAKE_TARGET",width=a.size,height=a.size,alpha=True)
     ao.colorspace_settings.name="Non-Color"
+    # Even valid isolated objects can have an all-white AO map. Initialize the
+    # target visibly magenta so a white bake must overwrite actual pixels.
+    ao.generated_color=(.90,.10,.85,1.0)
+    ao.update()
     texture_node(material,ao)
     pre_ao=sample_pixels(ao)
+    print("HAVENLINE AO target before bake",pre_ao[0],pre_ao[len(pre_ao)//2])
     set_active([low],low)
     result=bpy.ops.object.bake(type="AO",target="IMAGE_TEXTURES",save_mode="INTERNAL",
                                use_clear=True,use_selected_to_active=False)
     ao.update()
-    delta_ao=changed_count(pre_ao,sample_pixels(ao))
+    post_ao=sample_pixels(ao)
+    delta_ao=changed_count(pre_ao,post_ao)
+    print("HAVENLINE AO target after bake",post_ao[0],post_ao[len(post_ao)//2])
     print("HAVENLINE AO baked_sample_changes",delta_ao,"of",len(pre_ao))
     assert "FINISHED" in result and delta_ao>=max(8,len(pre_ao)//200), (
         "Cycles failed to paint meaningful ambient-occlusion pixels")
