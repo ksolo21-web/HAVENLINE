@@ -112,7 +112,7 @@ jobs:
           result={"state":"ISOLATED_7_VIEW_FRAMING_PASS_NOT_SHIPPING_VISUAL_APPROVAL",
                   "camera_size":ortho,"view_count":len(recorded),
                   "candidate_sha256":report["candidate_glb_sha256"],
-                  "renders":recorded,"ao_bound_material_surfaces":ao_report["ao_bound_material_surfaces"],"ao_preview_changes":changed
+                  "renders":recorded,"ao_bound_material_surfaces":ao_report["ao_bound_material_surfaces"],"ao_preview_changes":changed}
           (root/"framing-audit.json").write_text(json.dumps(result,indent=2)+"\n")
           print(json.dumps(result,indent=2))
           PY
