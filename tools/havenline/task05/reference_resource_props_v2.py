@@ -67,6 +67,9 @@ def _crate_shell(b, name, fish=False):
             b.beveled_box("wood", (x, y, 0), (.10, .16, .92), .035)
         _corner_post(b, x, -.49, .74)
         _corner_post(b, x, .49, .74)
+    # Continuous inset liner closes the hollow box under the visible payload;
+    # short inner boards give the fish believable support from side angles.
+    b.beveled_box("wood_light", (0, .71, 0), (1.22, .055, .82), .022)
     # Cross-bracing is real geometry and stays inside the locked footprint.
     for sign in (-1, 1):
         b.beveled_box("wood_light", (0, .55, -.555), (.11, .80, .07), .028,
@@ -80,10 +83,15 @@ def _crate_shell(b, name, fish=False):
         # cyan family but no longer float above an open generic cube.
         b.beveled_box("snow", (0, 1.005, 0), (1.08, .06, .70), .025)
         for i, (x, z, r) in enumerate(((-.32,-.10,-.20),(.05,.12,.18),(.34,-.12,-.12))):
-            b.sphere("cyan", (x,1.085,z), (.31,.11,.14), 7, 14, rotation=(0,r,0))
-            tail_x=x-.28*math.cos(r); tail_z=z+.28*math.sin(r)
-            b.beveled_box("blue", (tail_x,1.085,tail_z), (.16,.045,.22), .018, rotation=(0,r,0))
-            b.cylinder("cream", (x+.10,1.10,z-.02), .025, .06, 8, rotation=(math.pi/2,0,0))
+            # Unequal tapered body proportions and small embedded eyes/gill marks;
+            # flesh intersects the ice bed rather than hovering over a hollow box.
+            length=(.30,.33,.27)[i]
+            b.sphere("cyan", (x,1.075,z), (length,.115,.13), 6, 14, rotation=(0,r,0))
+            tail_x=x-length*.91*math.cos(r); tail_z=z+length*.91*math.sin(r)
+            for dz in (-.075,.075):
+                b.rod_between("blue",(tail_x,1.075,tail_z),(tail_x-.12,1.075,tail_z+dz),.027,6)
+            b.sphere("cream", (x+.11,1.084,z-.045), (.026,.018,.015), 4, 8)
+            b.rod_between("blue",(x+.065,1.102,z-.107),(x+.10,1.045,z-.105),.012,6)
     else:
         # Hardware plate/rope lock keeps cargo identity visible at gameplay zoom.
         b.beveled_box("blue", (0,.57,-.565), (.48,.34,.055), .025)
@@ -178,7 +186,9 @@ def build_fuel_canister():
 
     # Two strapped winter canisters replace the former smooth blue tank stack.
     for x,h,yaw in ((-.25,.76,-.04),(.24,.70,.05)):
-        b.beveled_box("blue",(x,.56,0),(.42,h,.58),.085,rotation=(0,yaw,0))
+        b.beveled_box("blue",(x,.56,0),(.42,h,.58),.145,rotation=(0,yaw,0))
+        # Narrow pressed shoulder seam reads as canister shell, not a plate cap.
+        b.beveled_box("metal",(x,.56+h*.36,.0),(.365,.034,.51),.016,rotation=(0,yaw,0))
         b.beveled_box("dark",(x,.56,-.302),(.28,h*.58,.035),.016,rotation=(0,yaw,0))
         b.beveled_box("metal",(x,.56,-.324),(.08,h*.48,.020),.008,rotation=(0,yaw,0))
         b.beveled_box("cream",(x,.50,-.338),(.16,.13,.012),.005,rotation=(0,yaw,0))
@@ -211,11 +221,13 @@ def build_cooked_food_stack():
     _pallet(b,1.44,1.04,.12)
     b.beveled_box("wood_light",(0,.28,0),(1.30,.18,.92),.06)
     b.beveled_box("dark",(0,.39,0),(1.16,.07,.78),.025)
-    # Butcher-table-inspired prepared cuts with bones and a small insulated lid.
-    cuts=((-0.36,-.18,.02),(.03,.13,-.08),(.37,-.10,.10),(-.12,.34,-.12))
-    for i,(x,z,yaw) in enumerate(cuts):
-        b.sphere("orange",(x,.53+(i%2)*.10,z),(.26,.12,.18),6,14,rotation=(0,yaw,0))
-        b.rod_between("cream",(x-.16,.57+(i%2)*.10,z),(x+.16,.57+(i%2)*.10,z),.022,8)
+    # Varied prepared red-meat cuts, broad cream fat caps (not uniform rolls).
+    cuts=((-0.36,-.18,.02,.26,.18),(.03,.13,-.22,.31,.15),(.37,-.10,.14,.24,.21),(-.12,.34,.31,.22,.17))
+    for i,(x,z,yaw,rx,rz) in enumerate(cuts):
+        y=.51+(i%2)*.085
+        b.sphere("orange",(x,y,z),(rx,.115,rz),5,13,rotation=(0,yaw,0))
+        b.sphere("cream",(x-.048,y+.085,z+.024),(rx*.62,.031,rz*.69),3,9,rotation=(0,yaw,0))
+        b.rod_between("cream",(x-rx*.50,y+.095,z),(x+rx*.44,y+.096,z),.016,7)
     b.beveled_box("blue",(0,.78,.34),(1.06,.09,.25),.035,rotation=(.05,0,0))
     b.beveled_box("snow",(-.16,.845,.34),(.62,.05,.20),.020)
     return b
