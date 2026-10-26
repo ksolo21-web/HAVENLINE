@@ -85,29 +85,32 @@ def build(a):
         shutil.copy2(path,target)
         originals[name]=image
     material=material_for_low(low)
-    normal=bpy.data.images.new("HAVENLINE_BAKED_NORMAL",width=a.size,height=a.size,alpha=True)
-    normal.colorspace_settings.name="Non-Color"
-    texture_node(material,normal)
+    # Blender 4.0 headless Cycles can return FINISHED while leaving an
+    # internally generated alpha image entirely transparent. The external
+    # baking path directly writes raster output; never mark empty PNGs valid.
+    scene.render.image_settings.file_format="PNG"
+    normal_path=texout/"normal.png"
     set_active([high,low],low)
-    result=bpy.ops.object.bake(type="NORMAL",target="IMAGE_TEXTURES",save_mode="INTERNAL",use_clear=True,
-                               use_selected_to_active=True,cage_extrusion=.042,normal_space="TANGENT")
-    assert "FINISHED" in result, "Cycles high-to-low normal bake did not finish"
-    normal.update()
-    baked_alpha=list(normal.pixels)[3::4]
-    assert max(baked_alpha,default=0)>.5, "Normal bake has no painted pixels (transparent map)"
-    save_image(normal,texout/"normal.png")
-    ao=bpy.data.images.new("HAVENLINE_BAKED_AO",width=a.size,height=a.size,alpha=True)
-    ao.colorspace_settings.name="Non-Color"
-    texture_node(material,ao)
-    scene.render.bake.use_selected_to_active=False
+    result=bpy.ops.object.bake(type="NORMAL",save_mode="EXTERNAL",
+                  filepath=str(normal_path),width=a.size,height=a.size,margin=8,
+                  use_selected_to_active=True,cage_extrusion=.042,normal_space="TANGENT")
+    assert "FINISHED" in result and normal_path.is_file() and normal_path.stat().st_size>128, (
+        "Cycles external high-to-low normal bake did not produce image")
+    normal=bpy.data.images.load(str(normal_path),check_existing=False)
+    normal.colorspace_settings.name="Non-Color"
+    normal_pixels=list(normal.pixels)
+    assert max(normal_pixels[3::4],default=0)>.5, "Normal PNG contains no opaque painted pixels"
+    ao_path=texout/"ambient_occlusion.png"
     set_active([low],low)
-    result=bpy.ops.object.bake(type="AO",target="IMAGE_TEXTURES",save_mode="INTERNAL",use_clear=True,
-                               use_selected_to_active=False)
-    assert "FINISHED" in result, "Cycles AO bake did not finish"
-    ao.update()
-    baked_alpha=list(ao.pixels)[3::4]
-    assert max(baked_alpha,default=0)>.5, "AO bake has no painted pixels (transparent map)"
-    save_image(ao,texout/"ambient_occlusion.png")
+    result=bpy.ops.object.bake(type="AO",save_mode="EXTERNAL",
+                  filepath=str(ao_path),width=a.size,height=a.size,margin=8,
+                  use_selected_to_active=False)
+    assert "FINISHED" in result and ao_path.is_file() and ao_path.stat().st_size>128, (
+        "Cycles external AO bake did not produce image")
+    ao=bpy.data.images.load(str(ao_path),check_existing=False)
+    ao.colorspace_settings.name="Non-Color"
+    ao_pixels=list(ao.pixels)
+    assert max(ao_pixels[3::4],default=0)>.5, "AO PNG contains no opaque painted pixels"
     shader=material.node_tree.nodes.get("Principled BSDF")
     if shader is None:raise RuntimeError("Principled BSDF material required")
     target=material.node_tree.nodes.get("HAVENLINE_BAKE_TARGET")
