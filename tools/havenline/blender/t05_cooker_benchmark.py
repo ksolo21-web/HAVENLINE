@@ -218,7 +218,7 @@ cylinder("Hollow looking black exhaust",(.20,2.398,.06),.113,.012,"dark","Z",18)
 snow_meta=bpy.data.metaballs.new("R05_editable_snow_mounds")
 snow_meta.resolution=.110
 snow_meta.render_resolution=.110
-snow_meta.threshold=.72
+snow_meta.threshold=.48
 snow_part=bpy.data.objects.new("Fused thick sculpted snow roof — owner 18567",snow_meta)
 art.objects.link(snow_part)
 snow_part.data.materials.append(palette["snow"])
@@ -241,8 +241,10 @@ mounds=(
 for x,y,z,rx,ry,rz in mounds:
     el=snow_meta.elements.new(type="ELLIPSOID")
     el.co=(x,y,z)
-    el.radius=1.0
-    el.size_x=rx;el.size_y=ry;el.size_z=rz
+    # Deeper soft accumulation: original R05 volume sat nearly flush with the
+    # steel roof and failed the owner-reference silhouette in studio pixels.
+    el.radius=1.10
+    el.size_x=rx;el.size_y=ry*1.65;el.size_z=rz
     el.stiffness=1.5
 # Rounded snow overhangs carry beyond the steel hood without exceeding
 # the frozen 2.45 × 2.30 m station visual footprint.
