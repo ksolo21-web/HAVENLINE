@@ -107,7 +107,11 @@ def build(a):
     normal=bpy.data.images.new("HAVENLINE_NORMAL_BAKE_TARGET",width=a.size,height=a.size,alpha=True)
     normal.colorspace_settings.name="Non-Color"
     texture_node(material,normal)
+    bpy.context.view_layer.update()
     pre_normal=sample_pixels(normal)
+    print("HAVENLINE DEBUG low UV samples",len(low.data.uv_layers.active.data),
+          [tuple(x.uv) for x in low.data.uv_layers.active.data[:3]])
+    print("HAVENLINE DEBUG image node active",material.node_tree.nodes.active.name)
     set_active([high,low],low)
     # Blender 4.0 saves image-target bakes INTERNALLY even when an external
     # save_mode is requested. Explicitly save the actual populated image.
@@ -115,8 +119,11 @@ def build(a):
                                save_mode="INTERNAL",use_clear=True,
                                use_selected_to_active=True,cage_extrusion=.042,
                                normal_space="TANGENT")
-    normal.update()
-    delta_normal=changed_count(pre_normal,sample_pixels(normal))
+    # Do NOT call Image.update() here: it can invalidate the freshly baked
+    # buffer on Blender's generated image backing. Inspect/snapshot first.
+    post_normal=sample_pixels(normal)
+    delta_normal=changed_count(pre_normal,post_normal)
+    print("HAVENLINE NORMAL baked_pixel_before_after",pre_normal[0],post_normal[0])
     print("HAVENLINE NORMAL baked_sample_changes",delta_normal,"of",len(pre_normal))
     assert "FINISHED" in result and delta_normal>=max(8,len(pre_normal)//200), (
         "Cycles failed to paint meaningful high-to-low normal pixels")
@@ -130,12 +137,12 @@ def build(a):
     ao.generated_color=(.90,.10,.85,1.0)
     ao.update()
     texture_node(material,ao)
+    bpy.context.view_layer.update()
     pre_ao=sample_pixels(ao)
     print("HAVENLINE AO target before bake",pre_ao[0],pre_ao[len(pre_ao)//2])
     set_active([low],low)
     result=bpy.ops.object.bake(type="AO",target="IMAGE_TEXTURES",save_mode="INTERNAL",
                                use_clear=True,use_selected_to_active=False)
-    ao.update()
     post_ao=sample_pixels(ao)
     delta_ao=changed_count(pre_ao,post_ao)
     print("HAVENLINE AO target after bake",post_ao[0],post_ao[len(post_ao)//2])
