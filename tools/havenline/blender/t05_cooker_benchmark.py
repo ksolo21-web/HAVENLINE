@@ -211,43 +211,75 @@ cylinder("Chimney neck",(.20,1.95,.06),.135,.37,"dark","Z",16)
 cylinder("Chimney steel collar",(.20,2.18,.06),.175,.13,"metal","Z",18)
 cylinder("Chimney upper cap",(.20,2.34,.06),.19,.10,"dark","Z",18)
 cylinder("Hollow looking black exhaust",(.20,2.398,.06),.113,.012,"dark","Z",18)
-# R05: true organically fused snow volumes. A Blender metaball implicit
-# sculpt fuses overlapping mounds into a single smooth 3D accumulation, unlike
-# the old flat grid canopy with disconnected bead-like spheres.
-# The source remains fully editable: change each metaball, then re-export.
-snow_meta=bpy.data.metaballs.new("R05_editable_snow_mounds")
-snow_meta.resolution=.052
-snow_meta.render_resolution=.052
-snow_meta.threshold=.48
-snow_part=bpy.data.objects.new("Fused thick sculpted snow roof — owner 18567",snow_meta)
-art.objects.link(snow_part)
-snow_part.data.materials.append(palette["snow"])
-made.append(snow_part)
-# All positions are in Godot-native Y-up before the Blender X rotation.
-# Main deep shoulder + five asymmetric lobes; extra front pieces interpenetrate
-# the main mound to form naturally joined rounded snow drapes, not separate dots.
-mounds=(
-    ( .00,1.812,-.08,.50,.155,.43),
-    (-.35,1.799,-.10,.31,.158,.34),
-    ( .34,1.813, .05,.34,.164,.39),
-    (-.05,1.790, .28,.35,.130,.27),
-    (-.48,1.747,-.34,.22,.152,.22),
-    (-.19,1.741,-.44,.25,.148,.24),
-    ( .13,1.758,-.44,.28,.166,.23),
-    ( .45,1.760,-.36,.23,.140,.23),
-    (-.44,1.770, .34,.22,.118,.22),
-    ( .41,1.780, .33,.22,.119,.22),
-)
-for x,y,z,rx,ry,rz in mounds:
-    el=snow_meta.elements.new(type="ELLIPSOID")
-    el.co=(x,y,z)
-    # Deeper soft accumulation: original R05 volume sat nearly flush with the
-    # steel roof and failed the owner-reference silhouette in studio pixels.
-    el.radius=1.10
-    el.size_x=rx;el.size_y=ry*1.65;el.size_z=rz
-    el.stiffness=1.5
-# Rounded snow overhangs carry beyond the steel hood without exceeding
-# the frozen 2.45 × 2.30 m station visual footprint.
+# R06: authored, closed, sculpted snow hood. 11 concentric contours and 40
+# angular samples form one watertight organic accumulation with substantial
+# roof thickness and asymmetric front draping. This is *mesh geometry*, not
+# a metaball that can vanish during Blender-to-glTF conversion.
+# Artist-adjustable amplitudes below provide a stable modeling base for manual
+# vertex edits in the retained source .blend.
+radial_steps=10
+around_steps=40
+snow_vertices=[]
+snow_faces=[]
+center_top=(0.0,2.050,-.06)
+snow_vertices.append(center_top)
+for ring_index in range(1,radial_steps+1):
+    r=ring_index/radial_steps
+    for a_index in range(around_steps):
+        angle=math.tau*a_index/around_steps
+        spread=1+.037*math.sin(5*angle+1.8*r)+.023*math.cos(9*angle-2*r)
+        x=.690*r*math.cos(angle)*spread
+        z=-.050+.604*r*math.sin(angle)*spread
+        dome=.273*(1-r**1.7)
+        # Three unequal raised pillows are continuous parts of the same roof.
+        pillow=(.041*math.exp(-((x+.34)/.29)**2-((z+.10)/.28)**2)
+                +.054*math.exp(-((x-.22)/.30)**2-((z-.04)/.25)**2)
+                +.020*math.exp(-((x+.02)/.22)**2-((z-.35)/.21)**2))
+        noise=.025*math.sin(angle*3.8+.4*r)+.013*math.sin(angle*7.1-3*r)
+        front=max(0.,(-z-.26)/.40)
+        folds=sum(amp*math.exp(-((x-cx)/width)**2)
+                  for cx,amp,width in ((-.48,.072,.17),(-.12,.103,.16),(.32,.090,.18)))
+        # Snow rolls down unevenly at the front lip without separate spheres.
+        droop=front*max(0.,(r-.78)/.22)*folds
+        y=1.795+dome+pillow+noise-droop
+        snow_vertices.append((x,y,z))
+# Top center fan: front face winding produces positive game-Y normals.
+for j in range(around_steps):
+    next_j=(j+1)%around_steps
+    snow_faces.append((0,1+next_j,1+j))
+for ring_index in range(radial_steps-1):
+    first=1+ring_index*around_steps
+    second=first+around_steps
+    for j in range(around_steps):
+        nj=(j+1)%around_steps
+        snow_faces.append((first+j,first+nj,second+nj,second+j))
+# Deep rounded perimeter; a solid sidewall and underside prevent sheet look.
+lower_start=len(snow_vertices)
+outer_start=1+(radial_steps-1)*around_steps
+for j in range(around_steps):
+    x,y,z=snow_vertices[outer_start+j]
+    # Front leading edge hangs lower than the back to match owner roof drape.
+    depth=.155+max(0.,(-z-.30)/.35)*.047
+    snow_vertices.append((x,y-depth,z))
+for j in range(around_steps):
+    nj=(j+1)%around_steps
+    snow_faces.append((outer_start+j,outer_start+nj,lower_start+nj,lower_start+j))
+lower_center=len(snow_vertices)
+snow_vertices.append((0.0,1.65,-.05))
+for j in range(around_steps):
+    nj=(j+1)%around_steps
+    snow_faces.append((lower_center,lower_start+j,lower_start+nj))
+snow_mesh=bpy.data.meshes.new("R06_watertight_hand_sculpted_snow_roof")
+snow_mesh.from_pydata(snow_vertices,[],snow_faces)
+snow_mesh.validate(clean_customdata=False)
+snow_mesh.update(calc_edges=True)
+snow_object=bpy.data.objects.new("Continuous sculptable thick snow roof / owner 18567",snow_mesh)
+art.objects.link(snow_object)
+snow_object.data.materials.append(palette["snow"])
+for p in snow_object.data.polygons:
+    p.use_smooth=True
+made.append(snow_object)
+# The underside and contours are part of one mesh, not overlapping spheres.
 for x,z in ((-1.09,-.20),(-.61,.54),(1.02,.61)):
     ball("Accumulated snow on tray edges",(x,1.22,z),(.10,.054,.083),"snow",12,7)
 # Blender is Z-up while Godot and glTF are Y-up: rotate the authored
