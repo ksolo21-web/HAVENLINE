@@ -110,7 +110,8 @@ jobs:
                   im.load()
                   assert im.size==(256,256)
                   colors=im.convert('RGB').getcolors(256*256)
-                  assert colors and len(colors)>200, (name,len(colors) if colors else None)
+                  minimum=200 if key=='red' else 60
+                  assert colors and len(colors)>minimum, (name,len(colors) if colors else None)
               mat=mats[name]
               slot=mat['pbrMetallicRoughness']['baseColorTexture']['index']
               tex=gltf['textures'][slot]
@@ -118,6 +119,23 @@ jobs:
               assert embed['mimeType']=='image/png'
               assert mat['pbrMetallicRoughness']['baseColorTexture'].get('texCoord',0)==0
               used.append(name)
+          # The glTF must contain the *same pixels*, not merely a material
+          # label or image filename that happens to exist on disk.
+          import io
+          from PIL import ImageChops
+          binary_header=20+length
+          chunk_size,chunk_tag=struct.unpack_from('<I4s',model,binary_header)
+          assert chunk_tag==b'BIN\\x00'
+          binary=model[binary_header+8:binary_header+8+chunk_size]
+          for name,key in (('HL_red','red'),('HL_snow','snow')):
+              tex=gltf['textures'][mats[name]['pbrMetallicRoughness']['baseColorTexture']['index']]
+              embed=gltf['images'][tex['source']]
+              view=gltf['bufferViews'][embed['bufferView']]
+              begin=view.get('byteOffset',0)
+              blob=binary[begin:begin+view['byteLength']]
+              with Image.open(io.BytesIO(blob)) as image, Image.open(root/('T05_R24_'+key+'_basecolor.png')) as source:
+                  assert image.size==source.size==(256,256)
+                  assert ImageChops.difference(image.convert('RGBA'),source.convert('RGBA')).getbbox() is None, name
           meshes=[p for m in gltf.get('meshes',[]) for p in m['primitives']]
           assert any(p.get('material') is not None and
                      gltf['materials'][p['material']]['name']=='HL_snow'
@@ -128,6 +146,7 @@ jobs:
                   'tested_materials':used,
                   'all_nine_existing_material_ids':list(mats),
                   'roof_uv0_exported':True,
+                  'embedded_red_and_snow_exact_pixel_match':True,
                   'source_unchanged':True,
                   'style_approved':False,
                   'gltf_sha256':hashlib.sha256(model).hexdigest()}
