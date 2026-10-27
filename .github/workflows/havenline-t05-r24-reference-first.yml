@@ -125,7 +125,7 @@ jobs:
           from PIL import ImageChops
           binary_header=20+length
           chunk_size,chunk_tag=struct.unpack_from('<I4s',model,binary_header)
-          assert chunk_tag==b'BIN\\x00'
+          assert chunk_tag==bytes((66,73,78,0))
           binary=model[binary_header+8:binary_header+8+chunk_size]
           for name,key in (('HL_red','red'),('HL_snow','snow')):
               tex=gltf['textures'][mats[name]['pbrMetallicRoughness']['baseColorTexture']['index']]
@@ -150,7 +150,7 @@ jobs:
                   'source_unchanged':True,
                   'style_approved':False,
                   'gltf_sha256':hashlib.sha256(model).hexdigest()}
-          (root/'R24-material-binding-audit.json').write_text(json.dumps(report,indent=2)+'\\n')
+          (root/'R24-material-binding-audit.json').write_text(json.dumps(report,indent=2)+'\n')
           print(json.dumps(report,indent=2))
           PY
       - name: Collect four actual studio PNGs for independent owner-reference visual comparison
