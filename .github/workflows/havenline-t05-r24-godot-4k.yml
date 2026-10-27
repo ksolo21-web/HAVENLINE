@@ -31,7 +31,7 @@ jobs:
           set -euo pipefail
           mkdir -p r24-4k-review/project/assets r24-4k-review/screenshots "$RUNNER_TEMP/hl-godot"
           glb=input-R24/T05_cooker_BLENDER_CANDIDATE.glb
-          echo "73a0671a29ad3d83dd31ab2094b7d2a513d63200c4645982409b2e7bb82dbf1e  $glb" | sha256sum -c -
+          echo "1bcdb50978a710a8930565b3b82cd2fcd9019e834e9108fec90824e8de9e23d2  $glb" | sha256sum -c -
           cp "$glb" r24-4k-review/project/assets/T05_cooker_BLENDER_CANDIDATE.glb
           cp tools/havenline/blender/capture_isolated_godot_cooker.gd r24-4k-review/project/capture.gd
           python3 - <<'PY'
@@ -108,7 +108,7 @@ jobs:
           report={"status":"R24_REAL_GODOT_4K_ISOLATED_RENDER_PASS_NOT_VISUAL_ACCEPTANCE",
                   "source_reference":"18567.png",
                   "source_reference_sha256":"729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
-                  "candidate_glb_sha256":"73a0671a29ad3d83dd31ab2094b7d2a513d63200c4645982409b2e7bb82dbf1e",
+                  "candidate_glb_sha256":"1bcdb50978a710a8930565b3b82cd2fcd9019e834e9108fec90824e8de9e23d2",
                   "resolution":[3840,2160],"frames":frames,
                   "actual_shipping_scene_tested":False,"physical_android_tested":False,
                   "reference_pixel_alignment_done":False,"independent_critic_passed":False,"owner_approved":False}
