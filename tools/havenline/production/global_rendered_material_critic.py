@@ -229,6 +229,8 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
             errors.append(label + ": insufficient source-camera alignment justification")
         if asset.get("known_visible_reference_mismatches") != []:
             errors.append(label + ": unresolved visible reference mismatch or missing explicit empty list")
+        if asset.get("owner_visual_rejection_active") is not False:
+            errors.append(label + ": owner-rejected or unverified acceptance flag blocks reference fidelity")
     if len(asset_ids) != len(set(asset_ids)):
         errors.append("duplicate asset identifiers")
     if len(covered_paths) != len(set(covered_paths)):
