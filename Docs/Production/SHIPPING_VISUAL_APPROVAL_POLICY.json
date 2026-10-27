@@ -58,7 +58,13 @@
     "user_rejection_blocks_until_new_candidate": true,
     "critic_pass_cannot_override_user_rejection": true,
     "actual_reference_pixels_required": true,
-    "reference_fidelity_exact_10_required": true
+    "reference_fidelity_exact_10_required": true,
+    "per_asset_rendered_material_critic_required": true,
+    "rendered_material_critic_policy": "Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json",
+    "rendered_material_critic_report_pattern": "Docs/Production/MaterialCriticApprovals/{task_id}/{candidate_sha}.json",
+    "per_material_minimum_other_axes": 9.5,
+    "per_material_reference_fidelity_and_visual_language_exact_10": true,
+    "no_pass_if_any_material_unreviewed": true
   },
   "visual_critic_ids": [
     "C1",
@@ -84,7 +90,9 @@
     "primitive_findings_allowed": 0,
     "reference_fidelity_failed_visible_classes_allowed": 0,
     "mandatory_visual_dimension_score": 10,
-    "every_mandatory_dimension_must_equal_10": true
+    "every_mandatory_dimension_must_equal_10": true,
+    "all_shipped_material_sources_inventory_checked_at_T70": true,
+    "no_legacy_approval_override_for_known_material_mismatch": true
   },
   "reference_fidelity_standard": "Docs/Production/REFERENCE_FIDELITY_STANDARD.json",
   "reference_video_authority": {
