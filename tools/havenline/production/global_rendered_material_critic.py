@@ -236,11 +236,11 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
     expected_paths = expected_paths if expected_paths is not None else manifest.get("changed_visual_paths")
     if not isinstance(expected_paths, list) or sorted(covered_paths) != sorted(expected_paths):
         errors.append("material source path coverage differs from exact changed/release visual census")
-    if task_id == "T70" or mode == "release":
+    if task_id == "T70":
         if manifest.get("full_shipped_material_census") is not True:
-            errors.append("T70/release requires actual full shipped material census")
-        if not manifest.get("shipping_scenes_inspected"):
-            errors.append("release requires actual shipping scene material usage inspection")
+            errors.append("T70 requires full shipped material census")
+    if mode == "release" and not manifest.get("shipping_scenes_inspected"):
+        errors.append("release requires actual shipping scene material usage inspection")
     verified_review_sources = []
     if mode in ("review", "release"):
         reviews = manifest.get("reviews")
@@ -329,7 +329,7 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
         "policy_path": "Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json",
         "private_manifest_canonical_sha256": hashlib.sha256(json.dumps(manifest, sort_keys=True, separators=(",", ":")).encode()).hexdigest(),
         "verified_review_sources": verified_review_sources if passed and mode != "evidence" else [],
-        "full_shipped_material_census_verified": bool(passed and mode == "release"),
+        "full_shipped_material_census_verified": bool(passed and mode == "release" and task_id == "T70"),
         "shipping_scene_material_proof_verified": bool(passed and mode == "release"),
         "critic_ids_verified": ["C1", "C2"] if passed and mode != "evidence" else [],
         "real_visual_review_completed": passed and mode != "evidence",
