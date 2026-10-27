@@ -60,6 +60,7 @@ class CookerCriticTests(unittest.TestCase):
         self.policy = copy.deepcopy(c.load_policy())
         self.names = self.policy["required_material_names"]
         self.policy["reference"]["pixels"] = [32, 32]
+        self.policy["reference"]["byte_encoding"] = "PNG"
         self.policy["required_godot_pixels"] = [32, 32]
         self.policy["reference"]["sha256"] = c.digest(png(10))
         self.source = png(10)
