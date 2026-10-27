@@ -234,6 +234,14 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
     if len(covered_paths) != len(set(covered_paths)):
         errors.append("duplicate tracked source path; split variants explicitly with unique source inventory")
     expected_paths = expected_paths if expected_paths is not None else manifest.get("changed_visual_paths")
+    if task_id == "T70":
+        try:
+            from inventory_shipped_visual_sources import census as actual_census
+            current=actual_census(candidate)
+            expected_paths=[entry["shipping_path"] for entry in current["source_items"]]
+        except (OSError, ValueError, RuntimeError, KeyError) as ex:
+            errors.append("T70 actual shipping material census unavailable: " + str(ex))
+            expected_paths=None
     if not isinstance(expected_paths, list) or sorted(covered_paths) != sorted(expected_paths):
         errors.append("material source path coverage differs from exact changed/release visual census")
     if task_id == "T70":
