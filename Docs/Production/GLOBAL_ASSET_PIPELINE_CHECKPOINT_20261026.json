@@ -10,7 +10,7 @@
     "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
     "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
   ],
-  "status": "GLOBAL_POLICY_PASS__MULTIMATERIAL_UV1_TWO_SLOT_KHRONOS_0_ERRORS_0_WARNINGS__REAL_T05_NINE_SLOT_UV1_PENDING__NO_RELEASE",
+  "status": "MULTIMATERIAL_SYNTHETIC_PASS_REAL_T05_UV1_DEGENERATE_BLOCKED_NO_RELEASE",
   "complete_with_evidence": [
     {
       "milestone": "Separate from unapproved T05 branch",
@@ -352,6 +352,16 @@
       "original_reference_source_untouched": true,
       "blender_native_uv_operator_crashed": true,
       "current_uv1_strategy": "deterministic connected geometry pieces with spatially reunited seam splits and geometric fallback for degenerate UV0; fail on residual overlapping UV1"
+    },
+    "multimaterial_20261027": {
+      "synthetic_run": 40392043217,
+      "result": "FAIL_CLOSED",
+      "real_t05_run": 40392043572,
+      "blocker": "HL_dark degenerate authored UV island in candidate-only UV1 connected-component repack",
+      "source_material_count": 9,
+      "source_low_triangles": 10700,
+      "source_originals_unchanged": true,
+      "next_action": "Build geometric per-face UV1 unwrap for degenerate islands, validate atlas overlap and glTF TEXCOORD_1 without altering UV0, rerun real nine-material bake"
     }
   }
 }
