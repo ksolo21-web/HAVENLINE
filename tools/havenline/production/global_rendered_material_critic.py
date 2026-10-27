@@ -336,6 +336,7 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
                                               for x in a.get("captures", [])
                                               if isinstance(x, dict) and "view" in x and "sha256" in x}
                                          for a in assets if isinstance(a, dict) and "asset_id" in a},
+        "profiles_by_asset": {a["asset_id"]: a.get("profile") for a in assets if isinstance(a, dict) and "asset_id" in a},
         "reviewed_material_ids": {a["asset_id"]: [m["material_id"] for m in a.get("materials", [])
                                                    if isinstance(m, dict) and "material_id" in m]
                                    for a in assets if isinstance(a, dict) and "asset_id" in a},
