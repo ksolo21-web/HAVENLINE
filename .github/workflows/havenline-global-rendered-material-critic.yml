@@ -10,7 +10,9 @@ on:
       - 'tools/havenline/production/global_rendered_material_critic.py'
       - 'tools/havenline/production/shipping_visual_gate.py'
       - 'tools/havenline/production/reference_style_lock.py'
+      - 'tools/havenline/production/inventory_shipped_visual_sources.py'
       - 'tools/havenline/production/tests/test_reference_style_lock.py'
+      - 'tools/havenline/production/tests/test_inventory_shipped_visual_sources.py'
       - 'tools/havenline/production/tests/test_global_rendered_material_critic.py'
       - 'tools/havenline/production/tests/test_global_rendered_material_shipping_signoff.py'
       - '.github/workflows/havenline-global-rendered-material-critic.yml'
@@ -38,9 +40,11 @@ jobs:
             tools/havenline/production/global_rendered_material_critic.py \
             tools/havenline/production/shipping_visual_gate.py \
             tools/havenline/production/reference_style_lock.py \
+            tools/havenline/production/inventory_shipped_visual_sources.py \
             tools/havenline/production/tests/test_global_rendered_material_critic.py \
             tools/havenline/production/tests/test_global_rendered_material_shipping_signoff.py \
-            tools/havenline/production/tests/test_reference_style_lock.py
+            tools/havenline/production/tests/test_reference_style_lock.py \
+            tools/havenline/production/tests/test_inventory_shipped_visual_sources.py
       - name: Enforce adversarial critic regressions (synthetic only — not real art scores)
         run: |
           set -euo pipefail
@@ -48,6 +52,7 @@ jobs:
             tools/havenline/production/tests/test_global_rendered_material_critic.py \
             tools/havenline/production/tests/test_global_rendered_material_shipping_signoff.py \
             tools/havenline/production/tests/test_reference_style_lock.py \
+            tools/havenline/production/tests/test_inventory_shipped_visual_sources.py \
             2>&1 | tee all-material-critic-tests.log
       - name: Prove all-art permanent policy preserves exact reference requirements
         run: |
@@ -65,11 +70,26 @@ jobs:
           assert b['acceptance']['required_style_fidelity']==10
           print('PERMANENT_SOURCE_BOUND_ALL_MATERIALS_GATE_POLICY_PASS_NOT_REAL_VISUAL_APPROVAL')
           PY
+      - name: Census all actual shipped material source paths without assigning visual scores
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/inventory_shipped_visual_sources.py --ref HEAD --out game-material-census.json
+          python3 - <<'PY'
+          import json,pathlib
+          c=json.loads(pathlib.Path('game-material-census.json').read_text())
+          assert c['identified_visual_source_paths']>0
+          assert c['complete_T70_C1_C2_critic_pass'] is False
+          assert c['material_slot_count_known'] is False
+          assert all(not x['new_individual_material_critic_status'].startswith('PASS') for x in c['source_items'])
+          print('T70_SOURCE_CENSUS_OBSERVED_NOT_CRITIC_APPROVAL')
+          PY
       - name: Preserve test evidence without exporting owner reference images
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
           name: havenline-all-material-critic-regressions-${{ github.sha }}
-          path: all-material-critic-tests.log
+          path: |
+            all-material-critic-tests.log
+            game-material-census.json
           retention-days: 30
           if-no-files-found: warn
