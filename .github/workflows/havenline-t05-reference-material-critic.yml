@@ -1,0 +1,66 @@
+name: T05 source-bound material critic — independent 9.5 / exact 10 safeguards
+on:
+  push:
+    branches: ['havenline/T05-r18-visual-corrections-20261025']
+    paths:
+      - 'Docs/Production/T05/COOKER_REFERENCE_RENDER_MATERIAL_CRITIC_POLICY.json'
+      - 'tools/havenline/blender/t05_reference_material_critic.py'
+      - 'tools/havenline/blender/tests/test_t05_reference_material_critic.py'
+      - '.github/workflows/havenline-t05-reference-material-critic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t05-material-critic-\${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  critic-safeguards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+      - name: Install free offline image-validation dependencies only
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/hl-critic"
+          "$RUNNER_TEMP/hl-critic/bin/pip" install --disable-pip-version-check pillow
+          "$RUNNER_TEMP/hl-critic/bin/python" -m py_compile \
+            tools/havenline/blender/t05_reference_material_critic.py \
+            tools/havenline/blender/tests/test_t05_reference_material_critic.py
+      - name: Run 18 synthetic positive/negative gate regressions
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/hl-critic/bin/python" -m unittest discover \
+            -s tools/havenline/blender/tests \
+            -p 'test_t05_reference_material_critic.py' -v | tee critic-test-results.log
+      - name: Enforce immutable original reference and independent 9.5 / exact 10 rule
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          p=json.loads(pathlib.Path('Docs/Production/T05/COOKER_REFERENCE_RENDER_MATERIAL_CRITIC_POLICY.json').read_text())
+          assert p['reference']['sha256']=='729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635'
+          assert p['reference']['private_owner_asset'] is True
+          scores=p['scores_required']
+          assert len(scores)==13
+          assert scores['reference_fidelity']==scores['visual_language']==10.
+          assert all(v>=9.5 for v in scores.values())
+          assert p['rules']['independent_reviewer_required']
+          assert p['rules']['builder_self_review_disallowed']
+          assert p['rules']['zero_unresolved_mandatory_defects']
+          assert p['rules']['source_camera_alignment_proof_required']
+          assert len(p['required_material_names'])==9
+          assert len(p['required_godot_views'])==5
+          print('T05_CRITIC_POLICY_FAIL_CLOSED_VALIDATED_NO_VISUAL_APPROVAL')
+          PY
+          test -z "$(git status --short -- HavenlineGodot/assets/ HavenlineGodot/scripts/)"
+      - name: Store safeguard test logs (no private art, no fake critic scores)
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-T05-independent-material-critic-safeguards-\${{ github.sha }}
+          path: critic-test-results.log
+          if-no-files-found: warn
+          retention-days: 30
