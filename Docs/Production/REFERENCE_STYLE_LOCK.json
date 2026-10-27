@@ -144,5 +144,26 @@
     },
     "historical_preservation_is_task_waiver": false,
     "historical_preservation_rule": "Only the listed immutable already-accepted candidate SHA is preserved from governance-only retroactive invalidation. Any different/reopened source is fully subject to the style lock; T70 still audits every shipped material."
+  },
+  "per_asset_rendered_material_critic": {
+    "status": "PERMANENT_MANDATORY_SOURCE_BOUND",
+    "policy": "Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json",
+    "independent_critics": [
+      "C1",
+      "C2"
+    ],
+    "actual_native_Godot_material_pixels_required": true,
+    "all_original_material_slots_or_runtime_variants_required": true,
+    "exact_10_dimensions": [
+      "reference_fidelity",
+      "visual_language"
+    ],
+    "minimum_other_visual_axis": 9.5,
+    "unresolved_defects_allowed": 0,
+    "first_application": "all new or modified game visuals",
+    "all_existing_game_assets_census": "T70",
+    "no_averaging": true,
+    "owner_rejection_overrides_critic": true,
+    "private_owner_source_not_publicly_committed": true
   }
 }
