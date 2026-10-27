@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "asset_id": "cooker_processor",
+  "date": "2026-10-27",
+  "status": "SOURCE_EXACT_MATCH_VERIFIED__R22_R23_REAL_BLENDER_GEOMETRY_PASSES__VISUAL_REFERENCE_APPROVAL_FAILS__NO_PRODUCTION_PROMOTION",
+  "reference": {
+    "file": "18567.png",
+    "sha256": "729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
+    "dimensions": [
+      1536,
+      1536
+    ],
+    "source_bytes_verified": true,
+    "location": "private user file library, never committed publicly",
+    "view_count": 1,
+    "hidden_surface_authority": "UNKNOWN_MUST_NOT_FABRICATE"
+  },
+  "original_R07": {
+    "editable_file": "T05_cooker_EDITABLE.blend",
+    "glb_sha256": "ff9f548c2d16d1f5972b4da2f3162978e65e3caef20ec998ec222e9497cb3a0b",
+    "baseline_artifact": 12660839315,
+    "internal_previous_visual_score": 5.5,
+    "score_is_independent": false,
+    "approved": false
+  },
+  "R22": {
+    "source": "tools/havenline/blender/t05_cooker_reference_first_r22.py",
+    "workflow": ".github/workflows/havenline-t05-r22-reference-first.yml",
+    "run": 40514033983,
+    "artifact": 12738965688,
+    "technical_gate": "PASS_17_OF_17",
+    "candidate_triangles": 11394,
+    "material_count": 9,
+    "geometry_edited": [
+      "watertight irregular roof",
+      "deep steel arch and repaired continuous silver sill",
+      "weight-bearing wood support skirts"
+    ],
+    "studio_cameras": [
+      "front",
+      "three-quarter",
+      "right",
+      "rear",
+      "reverse-quarter-diagnostic"
+    ],
+    "visual_status": "PARTIAL_REVIEW_ONLY_NOT_SOURCE_MATCH_APPROVAL"
+  },
+  "R23": {
+    "source": "tools/havenline/blender/t05_cooker_reference_first_r23.py",
+    "workflow": ".github/workflows/havenline-t05-r23-reference-first.yml",
+    "run": 40514923294,
+    "artifact": 12737884718,
+    "technical_gate": "PASS_17_OF_17",
+    "candidate_triangles": 11898,
+    "allowable_triangles": 12424,
+    "material_count": 9,
+    "game_GLBSHA256": "b3e2c695295429a7233664a4199c03b363b5458f3583014fd2663a902fe9983a",
+    "geometry_edited": [
+      "R22 geometry retained",
+      "five distinct irregular raw cuts",
+      "six varied rounded orange-strapped cooked parcels"
+    ],
+    "actual_studio_frames": 5,
+    "visual_review": "FULLER_TRAY_NOT_YET_REFERENCE_ACCURATE",
+    "source_reference_view_camera_calibrated": false,
+    "real_Godot_4k_run": 40515782271,
+    "real_Godot_4k_result": "PENDING"
+  },
+  "frozen_contract": {
+    "triangle_allowance": 12424,
+    "kit_triangles_max": 180000,
+    "material_slots_max": 12,
+    "original_mat_names": [
+      "HL_wood",
+      "HL_dark",
+      "HL_wood_light",
+      "HL_blue",
+      "HL_metal",
+      "HL_orange",
+      "HL_red",
+      "HL_cream",
+      "HL_snow"
+    ],
+    "shipping_files_modified_by_reference_first_trial": false
+  },
+  "visual_defects_remaining": [
+    {
+      "priority": "P0",
+      "area": "roof",
+      "issue": "Still smooth and tentlike rather than truly weighty scalloped puffy snow with irregular overhang and reference surface texture"
+    },
+    {
+      "priority": "P0",
+      "area": "oven and saw",
+      "issue": "Metal arch now continuous, but saw/chamber, corner plates and material depth still lack original authored detail"
+    },
+    {
+      "priority": "P0",
+      "area": "food",
+      "issue": "Parcel count increased and fullness improved but color marbling, bold orange bands, meat shapes and raw cuts still poor compared with source"
+    },
+    {
+      "priority": "P1",
+      "area": "base",
+      "issue": "Lower apron is stronger yet wood grain, joinery, continuous metal plates and snow contacts differ from reference"
+    },
+    {
+      "priority": "P1",
+      "area": "chimney",
+      "issue": "No separately implemented active billowing smoke VFX despite large visual contribution in source"
+    },
+    {
+      "priority": "P1",
+      "area": "comparison",
+      "issue": "Original source image camera not precisely calibrated to diagnostic candidate camera. Need matched silhouette and lighting comparisons; unseen sides remain uncertain"
+    }
+  ],
+  "approval": {
+    "technical_GLBS_PASS": true,
+    "owner_visual_approved": false,
+    "independent_critic_approved": false,
+    "style_fidelity_10_of_10": false,
+    "shipping_scene_4k_tested": false,
+    "actual_physical_android_performance_tested": false,
+    "source_image_aligned_camera": false,
+    "global_permanent_adoption": false
+  },
+  "next_actions": [
+    "Finish independent examination of native isolated Godot 4K five-camera R23 evidence",
+    "Upgrade with skilled authored Blender sculpting and hand-painted texture/marbling from verified exact owner image",
+    "Calibrate a matched reference camera without hiding geometry flaws",
+    "Inspect full snow and saw detail at high resolution; do not manufacture independent critique scores",
+    "Run real shipping-scene and real Android testing after reference approval",
+    "Get independent critic, user and integration-owner approval before any shipping asset replacement"
+  ],
+  "repo_scope": "Only Docs/Production/T05/, tools/havenline/blender/ and special .github/workflows paths changed in reference-first continuation. PR #101 and PR #103 remain draft/unmerged. Don't promote candidate."
+}
