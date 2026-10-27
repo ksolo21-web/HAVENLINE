@@ -222,6 +222,10 @@ glass_mesh.update(calc_edges=True)
 glass=bpy.data.objects.new("Reference 18567 recessed dark inspection surface",glass_mesh)
 art.objects.link(glass);made.append(glass)
 glass_mesh.materials.append(palette["dark"])
+# Owner render has one continuous thick lower steel sill enclosing the dark
+# saw cavity. Never leave the arched frame as a U-shaped unfinished bezel.
+box("R22 continuous lower silver window sill",(0,1.057,-.738),
+    (.946,.099,.092),"metal",.026)
 # Keep already-authored actual toothed saw, metal rivets and orange control.
 for x in (-.40,.40):
     for y in (1.055,1.48):
@@ -399,7 +403,8 @@ scene.cycles.use_denoising=False # Ubuntu Free Blender 4.0.2 build omits OIDN
 scene.render.resolution_x=640;scene.render.resolution_y=640;scene.render.resolution_percentage=100
 scene.render.image_settings.file_format="PNG"
 scene.render.film_transparent=False
-shots={"front":(0,2.7,-5.2),"three-quarter":(4.0,3.1,-4.7),"right":(5.4,2.9,.0),"rear":(0,3.0,5.2)}
+shots={"front":(0,2.7,-5.2),"three-quarter":(4.0,3.1,-4.7),"right":(5.4,2.9,.0),"rear":(0,3.0,5.2),
+       "reverse-quarter-diagnostic":(-4.0,3.1,-4.7)}
 for key,loc in shots.items():
     cam.location=(loc[0],-loc[2],loc[1]);d=Vector((0,0,1.22))-cam.location;cam.rotation_euler=d.to_track_quat("-Z","Y").to_euler()
     scene.render.filepath=str(out/("T05_cooker_"+key+".png"))
@@ -471,6 +476,8 @@ report={"status":"R22_GEOMETRY_CANDIDATE_NOT_VISUALLY_APPROVED","source_image":"
         "reference_sha256":"729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
         "corrected_geometry":["scalloped overhanging snow roof","genuinely hollow inset steel oven arch","integrated continuous supporting timber carriage"],
         "reference_pixel_comparison_in_ci":False,
+        "reverse_camera_only_diagnostic_not_source_alignment":True,
+        "lower_metal_sill_continuous":True,
         "independent_critic_approved":False,
         "source_smoke_vfx_included":False,
         "object":"cooker_processor","app":"Blender","candidate_only":True,
