@@ -241,6 +241,7 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
             errors.append("T70/release requires actual full shipped material census")
         if not manifest.get("shipping_scenes_inspected"):
             errors.append("release requires actual shipping scene material usage inspection")
+    verified_review_sources = []
     if mode in ("review", "release"):
         reviews = manifest.get("reviews")
         if not isinstance(reviews, list):
@@ -267,6 +268,9 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
             raw = verified_file(root, rec.get("raw_output"), label + " raw score output", errors)
             if not raw:
                 continue
+            verified_review_sources.append({"critic_id": critic,
+                                            "independent_run_id": runid,
+                                            "raw_sha256": rec["raw_output"]["sha256"]})
             try:
                 payload = json.loads(raw.read_text(encoding="utf-8"))
             except (OSError, UnicodeDecodeError, ValueError) as e:
@@ -322,6 +326,11 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
         "passed": passed, "mode": mode, "task_id": task_id, "candidate_commit": candidate,
         "asset_ids": asset_ids, "material_count": sum(len(a.get("materials", [])) for a in assets if isinstance(a, dict)),
         "source_paths_covered": covered_paths,
+        "policy_path": "Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json",
+        "private_manifest_canonical_sha256": hashlib.sha256(json.dumps(manifest, sort_keys=True, separators=(",", ":")).encode()).hexdigest(),
+        "verified_review_sources": verified_review_sources if passed and mode != "evidence" else [],
+        "full_shipped_material_census_verified": bool(passed and mode == "release"),
+        "shipping_scene_material_proof_verified": bool(passed and mode == "release"),
         "critic_ids_verified": ["C1", "C2"] if passed and mode != "evidence" else [],
         "real_visual_review_completed": passed and mode != "evidence",
         "reference_fidelity_10_required": True, "other_dimensions_minimum_9_5": True,
@@ -340,6 +349,7 @@ def main() -> None:
     a = parser.parse_args()
     expected = json.loads(pathlib.Path(a.expected_visual_paths_json).read_text()) if a.expected_visual_paths_json else None
     report = validate(json.loads(pathlib.Path(a.manifest).read_text()), pathlib.Path(a.root), a.mode, expected)
+    report["private_manifest_raw_sha256"] = sha256(pathlib.Path(a.manifest))
     if a.report:
         pathlib.Path(a.report).write_text(json.dumps(report, indent=2) + "\n")
     print(json.dumps(report, indent=2))
