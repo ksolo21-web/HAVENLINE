@@ -9,6 +9,8 @@ on:
       - 'Docs/Production/SHIPPING_VISUAL_APPROVAL_POLICY.json'
       - 'tools/havenline/production/global_rendered_material_critic.py'
       - 'tools/havenline/production/shipping_visual_gate.py'
+      - 'tools/havenline/production/reference_style_lock.py'
+      - 'tools/havenline/production/tests/test_reference_style_lock.py'
       - 'tools/havenline/production/tests/test_global_rendered_material_critic.py'
       - 'tools/havenline/production/tests/test_global_rendered_material_shipping_signoff.py'
       - '.github/workflows/havenline-global-rendered-material-critic.yml'
@@ -31,18 +33,21 @@ jobs:
         run: |
           set -euo pipefail
           python3 -m venv "$RUNNER_TEMP/hl-global-critic"
-          "$RUNNER_TEMP/hl-global-critic/bin/pip" install --disable-pip-version-check 'pillow>=10,<13'
+          "$RUNNER_TEMP/hl-global-critic/bin/pip" install --disable-pip-version-check 'pillow>=10,<13' 'pyyaml>=6,<7'
           "$RUNNER_TEMP/hl-global-critic/bin/python" -m py_compile \
             tools/havenline/production/global_rendered_material_critic.py \
             tools/havenline/production/shipping_visual_gate.py \
+            tools/havenline/production/reference_style_lock.py \
             tools/havenline/production/tests/test_global_rendered_material_critic.py \
-            tools/havenline/production/tests/test_global_rendered_material_shipping_signoff.py
+            tools/havenline/production/tests/test_global_rendered_material_shipping_signoff.py \
+            tools/havenline/production/tests/test_reference_style_lock.py
       - name: Enforce adversarial critic regressions (synthetic only — not real art scores)
         run: |
           set -euo pipefail
           "$RUNNER_TEMP/hl-global-critic/bin/python" -m unittest -v \
             tools/havenline/production/tests/test_global_rendered_material_critic.py \
             tools/havenline/production/tests/test_global_rendered_material_shipping_signoff.py \
+            tools/havenline/production/tests/test_reference_style_lock.py \
             2>&1 | tee all-material-critic-tests.log
       - name: Prove all-art permanent policy preserves exact reference requirements
         run: |
