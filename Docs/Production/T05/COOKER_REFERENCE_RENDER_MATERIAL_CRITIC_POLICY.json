@@ -12,7 +12,10 @@
       1536
     ],
     "private_owner_asset": true,
-    "must_not_commit_original_reference": true
+    "must_not_commit_original_reference": true,
+    "byte_encoding": "JPEG",
+    "source_filename_extension_mismatch": true,
+    "note": "The original user-owned file is labeled 18567.png but is actually JPEG-encoded. Preserve exact SHA-256-bound original bytes; do not silently transcode."
   },
   "rules": {
     "evidence": "exact source png + exact 9-material candidate GLB + actual native Godot 4K PNGs at five distinct cameras + source-bound sha audit",
