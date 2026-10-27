@@ -316,10 +316,8 @@ func build_world():
 	storage_stockpile.position = storage_visual.position + Vector3(0.8, 0.05, 0.25)
 	world.add_child(storage_stockpile)
 	storage_stockpile.configure("camp_storage", sim.stored)
-	for key in ["leftTent","rightTent"]:
-		var shelter_point := Simulation.point(sim.contract.world[key])
-		var shelter := model("world/shelter", world, xyz(shelter_point))
-		shelter.rotation.y = -0.12 if shelter_point.x < 0 else 0.12
+	# T05 R18: keep logical leftTent/rightTent data and interactions intact;
+	# the reference camp has no visible shelter houses at these coordinates.
 	for index in range(sim.resources.size()):
 		var node: Dictionary = sim.resources[index]
 		var asset: String = "pine_" + str(1 + index % 3) if node.kind == "wood" else node.kind
