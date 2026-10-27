@@ -20,7 +20,7 @@ from shipping_visual_gate import ROOT, policy
 
 MESH={".glb",".gltf",".fbx",".obj",".dae"}
 TEXTURE={".png",".jpg",".jpeg",".webp",".svg",".bmp",".tga",".exr",".hdr"}
-MATERIAL={".gdshader",".shader",".material",".mat",".tres",".res"}
+MATERIAL={".gdshader",".shader",".material",".mat",".tres",".res",".mtl"}
 SCENE={".tscn",".scn"}
 
 
@@ -45,7 +45,11 @@ def census(ref: str="HEAD") -> dict:
         tree[rel.decode("utf-8")]=bits[2].decode("ascii")
     excluded=policy().get("excluded_patterns",[])
     paths=sorted(x for x in tree if not any(fnmatch.fnmatchcase(x,pat) for pat in excluded))
-    detected=visual_style_paths(paths,(ref,))
+    all_impacted=visual_style_paths(paths,(ref,))
+    # Godot-generated .import sidecars and plain JSON/README catalogs are
+    # tracked metadata, not separate visible material surfaces. Keep source
+    # scanning conservative upstream but avoid inventing critic targets here.
+    detected=[x for x in all_impacted if classify(x)!="other_visual"]
     by_class=dict(sorted(collections.Counter(classify(x) for x in detected).items()))
     items=[{"shipping_path":x,"git_blob_oid":tree[x],"source_class":classify(x),
             "new_individual_material_critic_status":"UNVERIFIED_UNTIL_REAL_C1_C2_AND_NATIVE_GODOT_EVIDENCE",
@@ -54,7 +58,9 @@ def census(ref: str="HEAD") -> dict:
     commit=subprocess.check_output(["git","rev-parse",ref+"^{commit}"],cwd=ROOT,text=True).strip()
     return {"schema_version":1,"status":"SHIPPING_MATERIAL_SOURCE_CENSUS_NOT_VISUAL_APPROVAL",
             "shipping_ref_commit":commit,"total_shipping_tracked_paths":len(paths),
-            "identified_visual_source_paths":len(items),"by_source_class":by_class,
+            "identified_visual_source_paths":len(items),
+            "source_metadata_not_separate_materials":len(all_impacted)-len(items),
+            "by_source_class":by_class,
             "source_path_inventory_sha256":digest,
             "material_slot_count_known":False,
             "actual_material_slots_must_be_enumerated_in_native_godot":True,
