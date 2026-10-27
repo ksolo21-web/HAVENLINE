@@ -94,6 +94,7 @@ class CookerCriticTests(unittest.TestCase):
             "source_builder_commit": "b" * 40,
             "image_shas": hashes,
             "private_reference_sha256": c.digest(self.source),
+            "owner_original_byte_encoding": "PNG",
             "review_board_sha256": c.filehash(self.root / "review-board.png"),
             "raw_godot_shas_verified_without_recompression": True,
             "native_audit_sha256": c.filehash(native_path),
