@@ -74,7 +74,8 @@ class PermanentMaterialCriticTests(unittest.TestCase):
             "reference_camera": {
                 "reference_visible_geometry_calibrated": True,
                 "justification": "Controlled synthetic camera perspective identical to generated comparison test geometry"},
-            "known_visible_reference_mismatches": []
+            "known_visible_reference_mismatches": [],
+            "owner_visual_rejection_active": False
         }
         self.manifest = {
             "schema_version": 1, "task_id": TASK, "candidate_commit": SRC,
@@ -211,6 +212,12 @@ class PermanentMaterialCriticTests(unittest.TestCase):
     def test_visible_owner_rejection_blocks(self):
         self.asset["known_visible_reference_mismatches"] = ["Reference snow does not match"]
         self.assertFalse(self.execute()["passed"])
+
+    def test_explicit_owner_rejection_blocks_even_perfect_critic_scores(self):
+        self.asset["owner_visual_rejection_active"] = True
+        out = self.execute()
+        self.assertFalse(out["passed"])
+        self.assertTrue(any("owner-rejected" in x for x in out["errors"]))
 
     def test_unresolved_critic_defect_blocks(self):
         p = self.root / self.manifest["reviews"][1]["raw_output"]["path"]
