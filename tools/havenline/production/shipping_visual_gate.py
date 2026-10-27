@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 from __future__ import annotations
-import argparse, fnmatch, json, pathlib, re, subprocess
+import argparse, fnmatch, hashlib, json, pathlib, re, subprocess
 from typing import Any
 
 ROOT=pathlib.Path(__file__).resolve().parents[3]
@@ -8,6 +8,7 @@ DOCS=ROOT/"Docs"/"Production"
 POLICY_PATH=DOCS/"SHIPPING_VISUAL_APPROVAL_POLICY.json"
 INVALIDATIONS_PATH=DOCS/"APPROVAL_INVALIDATIONS.json"
 HEX40=re.compile(r"^[0-9a-f]{40}$")
+HEX64=re.compile(r"^[0-9a-f]{64}$")
 
 def load(path: pathlib.Path)->dict[str,Any]:
     return json.loads(path.read_text())
@@ -109,6 +110,115 @@ def _read_record(path: str, integration_ref: str|None)->dict[str,Any]:
         return json.loads(git("show",f"{integration_ref}:{path}"))
     return json.loads((ROOT/path).read_text())
 
+def validate_material_critic_receipt(task_id: str,candidate: str,
+                                     block: dict|None,
+                                     integration_ref: str|None=None)->list[str]:
+    """Require byte-hash-bound independent C1+C2 per-material release testimony.
+
+    Private reference imagery is reviewed in a separate workspace. This public
+    receipt is a governance record, not a substitute for that real independent
+    review or a cryptographic signature from an external service.
+    """
+    errors=[]
+    if not isinstance(block,dict):
+        return ["per-material reference/Godot critic evidence missing"]
+    path=f"Docs/Production/MaterialCriticApprovals/{task_id}/{candidate}.json"
+    if block.get("report_path")!=path:
+        errors.append("per-material critic receipt path must be exact task/candidate source")
+    expected_hash=block.get("report_sha256")
+    if not isinstance(expected_hash,str) or not HEX64.fullmatch(expected_hash):
+        errors.append("per-material critic report byte hash missing")
+    try:
+        if integration_ref:
+            raw=git("show",f"{integration_ref}:{path}",text=False)
+        else:
+            file_path=(ROOT/path).resolve()
+            file_path.relative_to(ROOT.resolve())
+            raw=file_path.read_bytes()
+        if len(raw)>2*1024*1024 or not raw:
+            raise ValueError("receipt missing or excessively large")
+        if hashlib.sha256(raw).hexdigest()!=expected_hash:
+            errors.append("per-material critic release report SHA mismatch")
+        receipt=json.loads(raw)
+    except (OSError,ValueError,TypeError,subprocess.SubprocessError) as exc:
+        return errors+["per-material critic report missing or unreadable: "+str(exc)]
+    if receipt.get("mode")!="release" or receipt.get("status")!="SOURCE_BOUND_MATERIAL_CRITIC_PASS_NOT_USER_APPROVAL" or receipt.get("passed") is not True:
+        errors.append("per-material critic must pass actual shipping-scene review, not isolated candidate")
+    if receipt.get("task_id")!=task_id or receipt.get("candidate_commit")!=candidate:
+        errors.append("per-material critic candidate/task identity mismatch")
+    if receipt.get("real_visual_review_completed") is not True or receipt.get("critic_ids_verified")!=["C1","C2"]:
+        errors.append("both separate C1 and C2 visual critics must be verified")
+    if receipt.get("reference_fidelity_10_required") is not True or receipt.get("other_dimensions_minimum_9_5") is not True:
+        errors.append("per-material 10.0/9.5 score contract missing")
+    if receipt.get("errors")!=[] or receipt.get("user_approved") is not False:
+        errors.append("critic receipt contains unresolved defects or forged owner approval")
+    if receipt.get("shipping_scene_material_proof_verified") is not True:
+        errors.append("real shipping Godot material scene not proven")
+    assets=receipt.get("asset_ids")
+    paths=receipt.get("source_paths_covered")
+    if not isinstance(assets,list) or not assets or len(set(assets))!=len(assets):
+        errors.append("material critic asset census empty/duplicate")
+        assets=[]
+    if not isinstance(paths,list) or not paths or len(set(paths))!=len(paths) or any(
+            not isinstance(p,str) or not p.startswith("HavenlineGodot/") for p in paths):
+        errors.append("actual covered game material source paths missing/invalid")
+        paths=[]
+    if not isinstance(receipt.get("material_count"),int) or receipt["material_count"]<len(assets):
+        errors.append("per-material critic has incomplete material inventory")
+    policy_path="Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json"
+    if receipt.get("policy_path")!=policy_path:
+        errors.append("material critic did not use permanent global source lock")
+    for k in ("private_manifest_raw_sha256","private_manifest_canonical_sha256"):
+        v=receipt.get(k)
+        if not isinstance(v,str) or not HEX64.fullmatch(v):
+            errors.append("per-material critic private source proof hash absent: "+k)
+    hashes=(("source_asset_hashes",False),("reference_image_hashes",True),
+            ("native_godot_capture_hashes",True),("reviewed_material_ids",False),
+            ("profiles_by_asset",False))
+    for key,nested in hashes:
+        mapping=receipt.get(key)
+        if not isinstance(mapping,dict) or set(mapping)!=set(assets):
+            errors.append("per-material critic incomplete: "+key)
+            continue
+        for asset_id,entry in mapping.items():
+            if key=="source_asset_hashes" and (not isinstance(entry,str) or not HEX64.fullmatch(entry)):
+                errors.append("source asset SHA missing: "+asset_id)
+            if key=="reference_image_hashes" and (not isinstance(entry,list) or not entry or
+                  any(not isinstance(x,str) or not HEX64.fullmatch(x) for x in entry)):
+                errors.append("source reference bytes unproven: "+asset_id)
+            if key=="reviewed_material_ids" and (not isinstance(entry,list) or not entry or len(set(entry))!=len(entry)):
+                errors.append("authored material slots unproven: "+asset_id)
+            if key=="profiles_by_asset" and entry not in ("static_3d","scene_or_terrain","dynamic_vfx","ui_and_2d"):
+                errors.append("unrecognized material evidence profile: "+asset_id)
+            if key=="native_godot_capture_hashes":
+                if not isinstance(entry,dict) or not entry or any(
+                     not isinstance(x,str) or not HEX64.fullmatch(x) for x in entry.values()):
+                    errors.append("native Godot PNG SHA coverage incomplete: "+asset_id)
+    reviewers=receipt.get("verified_review_sources")
+    if not isinstance(reviewers,list) or len(reviewers)!=2 or {r.get("critic_id") for r in reviewers
+            if isinstance(r,dict)}!={"C1","C2"}:
+        errors.append("distinct C1/C2 raw critic provenance missing")
+    else:
+        ids=[r.get("independent_run_id") for r in reviewers]
+        if any(type(x) is not int or x<=0 for x in ids) or ids[0]==ids[1]:
+            errors.append("independent C1/C2 run identities invalid")
+        if any(not isinstance(r.get("raw_sha256"),str) or not HEX64.fullmatch(r["raw_sha256"]) for r in reviewers):
+            errors.append("unaltered raw C1/C2 reviewer byte hashes missing")
+    if task_id=="T70":
+        if receipt.get("full_shipped_material_census_verified") is not True:
+            errors.append("T70 full shipped game material census not independently verified")
+        try:
+            from reference_style_lock import visual_style_paths
+            ref=integration_ref or "HEAD"
+            actual=[p for p in tracked_files(ref) if not match(p,policy().get("excluded_patterns",[]))]
+            census=visual_style_paths(actual,(ref,))
+            if sorted(paths)!=census:
+                errors.append("T70 material paths fail actual shipping repository census")
+        except (OSError,ValueError,subprocess.SubprocessError) as exc:
+            errors.append("unable to census T70 live shipping materials: "+str(exc))
+    return errors
+
+
 def validate_signoff(task_id: str,candidate: str,integration_ref: str|None=None)->dict[str,Any]:
     p=policy(); req=p["human_visual_gate"]; errors=[]
     if not HEX40.fullmatch(candidate or ""): errors.append("candidate_sha must be exact 40-hex")
@@ -139,6 +249,8 @@ def validate_signoff(task_id: str,candidate: str,integration_ref: str|None=None)
     if fidelity.get("passed") is not True: errors.append("whole-frame reference fidelity did not pass")
     failed=fidelity.get("failed_visible_classes",[])
     if not isinstance(failed,list) or failed: errors.append("zero failed visible asset classes are required")
+    if req.get("per_asset_rendered_material_critic_required") is True:
+        errors.extend(validate_material_critic_receipt(task_id,candidate,rec.get("rendered_material_critic"),integration_ref))
     if rec.get("user_visual_approval") is not True: errors.append("explicit user visual approval is required")
     return {"passed":not errors,"task_id":task_id,"candidate_sha":candidate,"record_path":path,"errors":errors}
 
