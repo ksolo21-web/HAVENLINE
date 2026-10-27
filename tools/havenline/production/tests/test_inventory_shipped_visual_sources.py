@@ -34,6 +34,21 @@ class MaterialCensusTests(unittest.TestCase):
         self.assertEqual({"code_created_or_modified_material":1,
                           "mesh_or_geometry":1,"shader_or_material":1},out["by_source_class"])
 
+    def test_godot_import_cache_files_are_not_separate_material_review_targets(self):
+        paths=["HavenlineGodot/assets/cooker.glb",
+               "HavenlineGodot/assets/cooker.glb.import"]
+        records=b"".join(b"100644 blob "+(ch*40).encode()+b"\\t"+name.encode()+b"\\0"
+                         for ch,name in zip(("a","b"),paths))
+        # Exact bytes are actual NUL-delimited git ls-tree records.
+        records=records.replace(b"\\t",b"\t").replace(b"\\0",b"\x00")
+        def fake_git(command,*args,**kwargs):
+            return records if "ls-tree" in command else "f"*40+"\n"
+        with patch.object(inv.subprocess,"check_output",side_effect=fake_git), \
+             patch.object(inv,"visual_style_paths",return_value=paths):
+            result=inv.census()
+        self.assertEqual(1,result["identified_visual_source_paths"])
+        self.assertEqual(1,result["source_metadata_not_separate_materials"])
+
     def test_no_review_or_missing_shipping_material_fails_T70(self):
         stock={"source_items":[{"shipping_path":"HavenlineGodot/assets/a.glb"},
                                {"shipping_path":"HavenlineGodot/shaders/a.gdshader"}]}
