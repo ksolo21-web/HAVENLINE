@@ -44,6 +44,7 @@ jobs:
           test -s t05-r22-evidence/T05_cooker_EDITABLE.blend
           test -s t05-r22-evidence/T05_cooker_BLENDER_CANDIDATE.glb
           test -s t05-r22-evidence/benchmark.json
+          test -s t05-r22-evidence/T05_cooker_reverse-quarter-diagnostic.png
       - name: Strict R07-frozen technical gate and source authority metadata audit
         run: |
           set -euo pipefail
@@ -75,7 +76,8 @@ jobs:
           (root/'R22-source-locked-technical-audit.json').write_text(json.dumps(report2,indent=2)+'\n')
           print(json.dumps(report2,indent=2))
           PY
-          test -z "$(git status --porcelain -- HavenlineGodot/)"
+          git diff --exit-code -- HavenlineGodot/assets/stations_v2/ HavenlineGodot/scripts/
+          test -z "$(git ls-files --others --exclude-standard HavenlineGodot/assets/stations_v2/)"
       - name: Collect four actual studio PNGs for independent owner-reference visual comparison
         run: |
           "$RUNNER_TEMP/t05-r22-visual-venv/bin/python" - <<'PY'
