@@ -24,10 +24,16 @@ jobs:
         timeout-minutes: 10
         run: |
           set -euo pipefail
-          if ! sudo timeout 150 apt-get update -qq; then
+          # The default Azure mirror stalled on Blender's 35.9 MB data package
+          # twice; switch THIS disposable runner to Ubuntu's official mirror.
+          sudo sed -i 's|azure.archive.ubuntu.com|archive.ubuntu.com|g' /etc/apt/apt-mirrors.txt
+          if test -f /etc/apt/sources.list.d/ubuntu.sources; then
+            sudo sed -i 's|azure.archive.ubuntu.com|archive.ubuntu.com|g' /etc/apt/sources.list.d/ubuntu.sources
+          fi
+          if ! sudo timeout 150 apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=35 update -qq; then
             echo "::warning::APT metadata refresh stalled; using cached indices"
           fi
-          sudo timeout 390 apt-get install -y --no-install-recommends blender python3-venv python3-numpy
+          sudo timeout 390 apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=40 install -y --no-install-recommends blender python3-venv python3-numpy
           python3 -m venv "$RUNNER_TEMP/t05-r22-visual-venv"
           "$RUNNER_TEMP/t05-r22-visual-venv/bin/pip" install --disable-pip-version-check numpy trimesh pillow
           python3 -m py_compile tools/havenline/blender/t05_cooker_reference_first_r22.py
