@@ -277,5 +277,27 @@ class CookerCriticTests(unittest.TestCase):
                 c.prepare(args)
 
 
+    def test_prepare_preserves_original_jpeg_bytes_even_with_png_filename(self):
+        with Image.open(io.BytesIO(png(10))) as im:
+            b = io.BytesIO()
+            im.save(b, format="JPEG", quality=95, subsampling=0)
+            original_jpeg = b.getvalue()
+        self.assertNotEqual(original_jpeg[:4], b"\x89PNG")
+        self.policy["reference"]["byte_encoding"] = "JPEG"
+        self.policy["reference"]["sha256"] = c.digest(original_jpeg)
+        (self.root / "reference.png").write_bytes(original_jpeg)
+        native_path = self.root / "native-4k-byte-audit.json"
+        native = json.loads(native_path.read_text())
+        native["source_reference_sha256"] = c.digest(original_jpeg)
+        native_path.write_text(json.dumps(native))
+        args = self._prepare_args()
+        with patch.object(c, "load_policy", return_value=self.policy):
+            result = c.prepare(args)
+        self.assertEqual(result["owner_original_byte_encoding"], "JPEG")
+        self.assertEqual(
+            (self.root / "prepared-private-pack/reference.png").read_bytes(),
+            original_jpeg)
+
+
 if __name__ == "__main__":
     unittest.main()
