@@ -1,0 +1,66 @@
+{
+  "schema_version": 1,
+  "task": "Havenline T05 Blender-first visual repair",
+  "revision": "R07",
+  "source_commit": "dcb188147f2cde41dd4c02875e12c22131a99bcc",
+  "checked_at_utc": "2026-10-26",
+  "state": "TECHNICAL_AND_ISOLATED_GODOT_PASS__REFERENCE_FIDELITY_FAIL__NO_SHIPPING_PROMOTION",
+  "exact_owner_reference": "18567.png",
+  "reference_authority": "Docs/Production/T05/NEWEST_USER_RENDER_AUTHORITY_20260927.json",
+  "run_id": 40346552132,
+  "evidence_artifact_id": 12660839315,
+  "exported_candidate_sha256": "ff9f548c2d16d1f5972b4da2f3162978e65e3caef20ec998ec222e9497cb3a0b",
+  "editable_native_blend_in_artifact": true,
+  "rendered_views": [
+    "front",
+    "three-quarter",
+    "right",
+    "rear"
+  ],
+  "workflow": "Blender 4.0 -> GLB -> isolated Godot 4.7.2 mobile Vulkan renderer",
+  "material_slots": 9,
+  "full_model_triangles": 10700,
+  "replaced_source_cooker_triangles": 7802,
+  "canonical_asset_kit_triangles": 175378,
+  "projected_kit_triangles": 178276,
+  "triangle_cap": 180000,
+  "shipped_asset_changed": false,
+  "current_release_approval": false,
+  "technical_checks": {
+    "source_export": "PASS",
+    "candidate_materials": "PASS",
+    "footprint": "PASS",
+    "native_blend": "PASS",
+    "GLB": "PASS",
+    "four_blender_views": "PASS",
+    "four_isolated_Godot_views": "PASS",
+    "snow_roof_physically_present_in_export": "PASS",
+    "Android_C6": "NOT_RUN_ON_CANDIDATE"
+  },
+  "internal_visual_review": {
+    "independent_critic_run": false,
+    "pass": false,
+    "score_0_to_10": 5.5,
+    "reasons": [
+      "Roof is visibly modeled but does not reproduce owner image's puffy scalloped texture, weighted snow overhang and smoke",
+      "Oven saw panel remains a flattened, mechanical relief instead of owner render's inset heavy silver arch/housing",
+      "Raw food and cooked food portions remain procedural simplified solids",
+      "Wood-and-metal base shows improved brackets but far more open spacing than the owner's cohesive chunky base",
+      "Four isolated Godot views do not establish actual shipping scene use-scale or physical mobile device performance"
+    ]
+  },
+  "next_acceptance_path": [
+    "Improve actual sculpted authored Blender shapes and material normal/roughness response guided by exact owner 18567.png",
+    "Rerun bounded technical/visual renderer checks, comparing matched camera angle and use states",
+    "Reconstruct all other T05 assets against exact owner reference binds; current 22 asset registry unresolved for 19 exact matches",
+    "Run source-bound shipping HavenlineGodot scene integration/animations and persistence regression with no gate or house regressions",
+    "Run Android device C6, 60 FPS, material batching, memory and physics/collision tests",
+    "Seek independent visual critic score strictly above 9 on all axes and reference style exact; explicit owner acceptance",
+    "Only then request authorized PR merge"
+  ],
+  "frozen_rules": [
+    "Never overwrite canonical cooker_processor GLB with a visual failure",
+    "Keep 22 T05 IDs, positions, sockets, palettes and frozen footprint",
+    "Respect 180k total triangles, 12 material slots, 48 draw-call and 96MiB texture limits"
+  ]
+}

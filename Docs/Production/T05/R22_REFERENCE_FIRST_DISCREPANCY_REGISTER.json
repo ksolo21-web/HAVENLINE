@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "asset_id": "cooker_processor",
+  "stage": "R22_REFERENCE_FIRST_GEOMETRY_TRIAL",
+  "status": "REFERENCE_EXACT_BYTES_VERIFIED__R22_RENDER_VALIDATION_PENDING__NOT_APPROVED",
+  "reference": {
+    "name": "18567.png",
+    "sha256": "729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
+    "dimensions": [
+      1536,
+      1536
+    ],
+    "exact_bytes_verified_on": "2026-10-27",
+    "authority": "user-original stored privately, never committed to repository",
+    "black_background": true,
+    "source_of_truth": true
+  },
+  "baseline": {
+    "type": "R07 Blender editable cooker",
+    "candidate_glb_sha256": "ff9f548c2d16d1f5972b4da2f3162978e65e3caef20ec998ec222e9497cb3a0b",
+    "visual_approved": false,
+    "previous_internal_visual_score": 5.5,
+    "baseline_comparison_is_camera_matched_to_owner": false
+  },
+  "candidate": {
+    "source": "tools/havenline/blender/t05_cooker_reference_first_r22.py",
+    "artifact_run": 40511782152,
+    "technical_check": "PENDING",
+    "independent_style_review": "PENDING",
+    "shipping_asset_modified": false
+  },
+  "discrepancies": [
+    {
+      "id": "C01",
+      "severity": "P0",
+      "part": "roof",
+      "reference_observation": "Thick layered puffy snow cap with irregular scalloped front edge and substantial overhang, gently mounded around chimney",
+      "baseline_mismatch": "R07 roof is comparatively smooth, conical and sheetlike; lacks heavy drape and scallops",
+      "R22_change": "Watertight 64-point radial scalloped overhang, asymmetrical mounds and thicker drooping perimeter",
+      "verified_visual_correction": false
+    },
+    {
+      "id": "C02",
+      "severity": "P0",
+      "part": "front steel enclosure",
+      "reference_observation": "Wide deep recessed stamped silver arch with actual dark glass opening and internally visible saw, plus distinct corner fasteners",
+      "baseline_mismatch": "Flattened/mechanically simple silver arch and inadequate depth illusion",
+      "R22_change": "Hollow arched bevel ring, charcoal cavity backing behind existing saw, original handle preserved",
+      "verified_visual_correction": false
+    },
+    {
+      "id": "C03",
+      "severity": "P0",
+      "part": "base",
+      "reference_observation": "Integrated weight-bearing timber platform, thick lower aprons and steel-protected posts without broad open daylight",
+      "baseline_mismatch": "Open four-leg table frame with sparse wood beams",
+      "R22_change": "Continuous lower front/rear and side wooden aprons; original footprint unchanged",
+      "verified_visual_correction": false
+    },
+    {
+      "id": "C04",
+      "severity": "P0",
+      "part": "raw and cooked food",
+      "reference_observation": "Full irregular marbled raw-meat pieces in wooden bin; cooked tray holds varied strapped beige and red wrapped food",
+      "baseline_mismatch": "R07 food is smooth simplified lumps and trays show simplistic repeating blocks",
+      "R22_change": "Not yet changed; subsequent geometry milestone",
+      "verified_visual_correction": false
+    },
+    {
+      "id": "C05",
+      "severity": "P1",
+      "part": "chimney smoke",
+      "reference_observation": "Prominent volumetric billowing warm-white smoke from open steel chimney",
+      "baseline_mismatch": "Static cooker GLB has chimney geometry but no smoke VFX",
+      "R22_change": "Not baked into GLB; runtime camera-matched particle or volumetric effect pending",
+      "verified_visual_correction": false
+    },
+    {
+      "id": "C06",
+      "severity": "P1",
+      "part": "material polish",
+      "reference_observation": "Painterly irregular snow, brushed light-metal, grainy chunky wood, red marbled meat and orange bands",
+      "baseline_mismatch": "Simplified PBR color variations and limited surface grain",
+      "R22_change": "Not yet changed; wait until geometry silhouette passes",
+      "verified_visual_correction": false
+    }
+  ],
+  "acceptance": {
+    "source_view_to_candidate_camera_aligned": false,
+    "source_pixels_present_in_ci": false,
+    "geometry_review_complete": false,
+    "independent_critic_complete": false,
+    "actual_Godot_shipping_scene_verified": false,
+    "physical_Android_verified": false,
+    "user_approved": false,
+    "permanent_global_implementation_adopted": false
+  },
+  "release_policy": "Technical GLB and Blender views are not authority to promote R22. Require source-bound independent exact-reference visual pass, in-game native and physical Android, user and integration owner approval. Keep T05 and global pipeline PRs draft."
+}
