@@ -239,7 +239,8 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
             from inventory_shipped_visual_sources import census as actual_census
             current=actual_census(candidate)
             expected_paths=[entry["shipping_path"] for entry in current["source_items"]]
-        except (OSError, ValueError, RuntimeError, KeyError) as ex:
+        except Exception as ex:
+            # Git revisions/LFS/IO errors must fail closed, never skip T70.
             errors.append("T70 actual shipping material census unavailable: " + str(ex))
             expected_paths=None
     if not isinstance(expected_paths, list) or sorted(covered_paths) != sorted(expected_paths):
