@@ -222,5 +222,59 @@ class CookerCriticTests(unittest.TestCase):
         self.assertEqual(data["material_inventory"]["material_count"], 9)
 
 
+    def _prepare_args(self, corrupt_view=None):
+        import zipfile
+        zip_path = self.root / "native_synthetic.zip"
+        native = json.loads((self.root / "native-4k-byte-audit.json").read_text())
+        native["resolution"] = [32, 32]
+        engine = json.loads((self.root / "isolated-godot-report.json").read_text())
+        engine["captures"] = [
+            {"view": v, "file": "isolated-godot-" + v + ".png"}
+            for v in self.policy["required_godot_views"]]
+        with zipfile.ZipFile(zip_path, "w", zipfile.ZIP_DEFLATED) as z:
+            z.writestr("native-4k-byte-audit.json", json.dumps(native))
+            z.writestr("screenshots/isolated-godot-report.json", json.dumps(engine))
+            for view in self.policy["required_godot_views"]:
+                b = (self.root / ("godot-" + view + ".png")).read_bytes()
+                if view == corrupt_view:
+                    b = png(123)
+                z.writestr("screenshots/isolated-godot-" + view + ".png", b)
+        return type("Args", (), {
+            "reference": str(self.root / "reference.png"),
+            "glb": str(self.root / "candidate.glb"),
+            "godot_zip": str(zip_path),
+            "out": str(self.root / "prepared-private-pack"),
+            "builder_commit": "b" * 40, "godot_run": "80001"
+        })()
+
+    def test_prepare_keeps_true_native_png_bytes_unchanged(self):
+        args = self._prepare_args()
+        with patch.object(c, "load_policy", return_value=self.policy):
+            evidence = c.prepare(args)
+        self.assertEqual(evidence["status"], "PRIVATE_SOURCE_BOUND_CRITIC_EVIDENCE_NOT_REVIEWED")
+        self.assertEqual(evidence["material_inventory"]["material_count"], 9)
+        self.assertTrue(evidence["raw_godot_shas_verified_without_recompression"])
+        self.assertEqual(
+            (self.root / "prepared-private-pack/godot-front.png").read_bytes(),
+            (self.root / "godot-front.png").read_bytes())
+        review = json.loads((self.root / "prepared-private-pack/UNREVIEWED-review-template.json").read_text())
+        self.assertEqual(set(review["scores"]), set(self.policy["scores_required"]))
+        self.assertTrue(all(v is None for v in review["scores"].values()))
+        self.assertFalse(review["reviewer"]["builder_independent"])
+
+    def test_prepare_refuses_wrong_owner_source_image(self):
+        args = self._prepare_args()
+        (self.root / "reference.png").write_bytes(png(211))
+        with patch.object(c, "load_policy", return_value=self.policy):
+            with self.assertRaisesRegex(ValueError, "Wrong authoritative owner image"):
+                c.prepare(args)
+
+    def test_prepare_refuses_tampered_native_capture_png(self):
+        args = self._prepare_args(corrupt_view="rear")
+        with patch.object(c, "load_policy", return_value=self.policy):
+            with self.assertRaisesRegex(ValueError, "Godot frame SHA-256 mismatch"):
+                c.prepare(args)
+
+
 if __name__ == "__main__":
     unittest.main()
