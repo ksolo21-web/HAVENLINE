@@ -3,7 +3,7 @@
   "task": "T05",
   "asset_id": "cooker_processor",
   "stage": "R22_REFERENCE_FIRST_GEOMETRY_TRIAL",
-  "status": "REFERENCE_EXACT_BYTES_VERIFIED__R22_RENDER_VALIDATION_PENDING__NOT_APPROVED",
+  "status": "EXACT_OWNER_IMAGE_VERIFIED__FIRST_R22_GLTF_17_OF_17_PASS__INITIAL_VISUAL_REVIEW_FOUND_ARCH_SILL_DEFECT__SECOND_RETEST_PENDING__NOT_APPROVED",
   "reference": {
     "name": "18567.png",
     "sha256": "729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
@@ -28,7 +28,22 @@
     "artifact_run": 40511782152,
     "technical_check": "PENDING",
     "independent_style_review": "PENDING",
-    "shipping_asset_modified": false
+    "shipping_asset_modified": false,
+    "first_render_run": 40511782152,
+    "first_artifact": 12737387877,
+    "first_candidate_glb_sha256": "bdfdef928bc6015df8cf1253811426046a10cec6fd044754ae9df5515e71e0de",
+    "first_technical_checks_passed": "17/17",
+    "first_candidate_triangles": 11286,
+    "allowable_triangles": 12424,
+    "first_run_ci_conclusion": "failure_due_to_workspace_git_status_check_after_all_technical_gates_passed",
+    "first_visual_findings": [
+      "continuous wood lower apron visible and structurally stronger than R07",
+      "more irregular white roof perimeter visible but still too smooth/conical to claim reference fidelity",
+      "new arch was incomplete U-shaped rim lacking continuous lower sill (corrected in source, retest pending)",
+      "cooked/raw food and chimney smoke remain visually inaccurate"
+    ],
+    "retest_run": 40512650310,
+    "retest_results": "PENDING"
   },
   "discrepancies": [
     {
@@ -37,7 +52,7 @@
       "part": "roof",
       "reference_observation": "Thick layered puffy snow cap with irregular scalloped front edge and substantial overhang, gently mounded around chimney",
       "baseline_mismatch": "R07 roof is comparatively smooth, conical and sheetlike; lacks heavy drape and scallops",
-      "R22_change": "Watertight 64-point radial scalloped overhang, asymmetrical mounds and thicker drooping perimeter",
+      "R22_change": "Watertight 64-point radial scalloped overhang, asymmetrical mounds and thicker drooping perimeter. First pass exposed real overhang but roof remains visually unapproved.",
       "verified_visual_correction": false
     },
     {
@@ -46,7 +61,7 @@
       "part": "front steel enclosure",
       "reference_observation": "Wide deep recessed stamped silver arch with actual dark glass opening and internally visible saw, plus distinct corner fasteners",
       "baseline_mismatch": "Flattened/mechanically simple silver arch and inadequate depth illusion",
-      "R22_change": "Hollow arched bevel ring, charcoal cavity backing behind existing saw, original handle preserved",
+      "R22_change": "First real hollow bezel visibly exposed incomplete lower sill; source now includes new continuous stamped steel bottom bar, retest pending. No visual acceptance.",
       "verified_visual_correction": false
     },
     {
@@ -55,7 +70,7 @@
       "part": "base",
       "reference_observation": "Integrated weight-bearing timber platform, thick lower aprons and steel-protected posts without broad open daylight",
       "baseline_mismatch": "Open four-leg table frame with sparse wood beams",
-      "R22_change": "Continuous lower front/rear and side wooden aprons; original footprint unchanged",
+      "R22_change": "Continuous lower front/rear and side wooden aprons; original footprint unchanged. First pass shows a more continuous base but still lacks reference timber grain/steel framing.",
       "verified_visual_correction": false
     },
     {
@@ -94,7 +109,10 @@
     "actual_Godot_shipping_scene_verified": false,
     "physical_Android_verified": false,
     "user_approved": false,
-    "permanent_global_implementation_adopted": false
+    "permanent_global_implementation_adopted": false,
+    "source_owner_exact_image_SHA_verified": true,
+    "current_first_trial_artifact_reviewed": true,
+    "source_pixels_compared_locally_with_R07_and_R22": true
   },
   "release_policy": "Technical GLB and Blender views are not authority to promote R22. Require source-bound independent exact-reference visual pass, in-game native and physical Android, user and integration owner approval. Keep T05 and global pipeline PRs draft."
 }
