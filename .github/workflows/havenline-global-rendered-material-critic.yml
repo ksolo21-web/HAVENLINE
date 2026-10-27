@@ -1,0 +1,67 @@
+name: HAVENLINE permanent per-material Godot reference critic safeguards
+on:
+  push:
+    branches: ['havenline/global-asset-pipeline-integration-20261026']
+    paths:
+      - 'Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json'
+      - 'Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_STANDARD.md'
+      - 'Docs/Production/REFERENCE_STYLE_LOCK.json'
+      - 'Docs/Production/SHIPPING_VISUAL_APPROVAL_POLICY.json'
+      - 'tools/havenline/production/global_rendered_material_critic.py'
+      - 'tools/havenline/production/shipping_visual_gate.py'
+      - 'tools/havenline/production/tests/test_global_rendered_material_critic.py'
+      - '.github/workflows/havenline-global-rendered-material-critic.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: havenline-all-materials-critic-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  global-material-safeguards:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 5
+          lfs: false
+      - name: Install offline-independent screenshot validation dependencies
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/hl-global-critic"
+          "$RUNNER_TEMP/hl-global-critic/bin/pip" install --disable-pip-version-check 'pillow>=10,<13'
+          "$RUNNER_TEMP/hl-global-critic/bin/python" -m py_compile \
+            tools/havenline/production/global_rendered_material_critic.py \
+            tools/havenline/production/shipping_visual_gate.py \
+            tools/havenline/production/tests/test_global_rendered_material_critic.py
+      - name: Enforce adversarial critic regressions (synthetic only — not real art scores)
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/hl-global-critic/bin/python" -m unittest discover -v \
+            -s tools/havenline/production/tests \
+            -p test_global_rendered_material_critic.py 2>&1 | tee all-material-critic-tests.log
+      - name: Prove all-art permanent policy preserves exact reference requirements
+        run: |
+          set -euo pipefail
+          python3 - <<'PY'
+          import json,pathlib
+          a=json.loads(pathlib.Path('Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json').read_text())
+          b=json.loads(pathlib.Path('Docs/Production/REFERENCE_STYLE_LOCK.json').read_text())
+          assert a['scope']['all_new_or_modified_game_art']
+          assert a['scope']['all_existing_shipped_art_at_T70']
+          assert a['threshold']['reference_fidelity']==a['threshold']['visual_language']==10
+          assert a['threshold']['minimum_other_applicable_dimensions']>=9.5
+          assert a['evidence']['both_separately_executed_C1_and_C2_reviews']
+          assert a['release']['requires_full_T70_material_census']
+          assert b['acceptance']['required_style_fidelity']==10
+          print('PERMANENT_SOURCE_BOUND_ALL_MATERIALS_GATE_POLICY_PASS_NOT_REAL_VISUAL_APPROVAL')
+          PY
+      - name: Preserve test evidence without exporting owner reference images
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-all-material-critic-regressions-${{ github.sha }}
+          path: all-material-critic-tests.log
+          retention-days: 30
+          if-no-files-found: warn
