@@ -11,7 +11,7 @@ on:
 permissions:
   contents: read
 concurrency:
-  group: t05-material-critic-\${{ github.sha }}
+  group: t05-material-critic-${{ github.sha }}
   cancel-in-progress: false
 jobs:
   critic-safeguards:
@@ -21,6 +21,7 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           lfs: false
+          fetch-depth: 25
       - name: Install free offline image-validation dependencies only
         run: |
           set -euo pipefail
@@ -55,12 +56,15 @@ jobs:
           assert len(p['required_godot_views'])==5
           print('T05_CRITIC_POLICY_FAIL_CLOSED_VALIDATED_NO_VISUAL_APPROVAL')
           PY
-          test -z "$(git status --short -- HavenlineGodot/assets/ HavenlineGodot/scripts/)"
+          # Compare committed changes since the last verified R26 art checkpoint.
+          # Working-tree git status is unreliable for Git LFS filtered assets.
+          changes="$(git diff --name-only 196c7d2ef4d582fc524abfead17979bde05b9bcc HEAD -- HavenlineGodot/assets/ HavenlineGodot/scripts/)"
+          test -z "$changes" || { echo "Production paths modified:"; echo "$changes"; exit 1; }
       - name: Store safeguard test logs (no private art, no fake critic scores)
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
         with:
-          name: havenline-T05-independent-material-critic-safeguards-\${{ github.sha }}
+          name: havenline-T05-independent-material-critic-safeguards-${{ github.sha }}
           path: critic-test-results.log
           if-no-files-found: warn
           retention-days: 30
