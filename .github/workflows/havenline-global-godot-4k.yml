@@ -1,0 +1,108 @@
+name: HAVENLINE isolated 4K Godot material capture proof
+on:
+  push:
+    branches: ['havenline/global-asset-pipeline-integration-20261026']
+    paths:
+      - 'tools/havenline/asset_pipeline/capture_isolated_asset.gd'
+      - '.github/workflows/havenline-global-godot-4k.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-isolated-4k-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  isolated-4k-technical-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+      - name: Download SHA-verified previous Blender synthetic bake artifact
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          run-id: 40381157048
+          name: havenline-global-blender-smoke-3526054a2d76103e827bb309e6209b2f23f7b1f3
+          path: global-bake-evidence
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Stage 4K material proof without shipping assets
+        run: |
+          set -euo pipefail
+          mkdir -p global-godot-4k/assets global-godot-4k/evidence "$RUNNER_TEMP/hl-godot"
+          echo "729c0e87beb3e34e76abfaf9e2930945b7521c957c5604d3ebbcf2f26c94d3b8  global-bake-evidence/candidate/smoke_test_LOD0.glb" | sha256sum -c -
+          echo "4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134  global-bake-evidence/candidate/textures/ambient_occlusion.png" | sha256sum -c -
+          cp global-bake-evidence/candidate/smoke_test_LOD0.glb global-godot-4k/assets/
+          cp global-bake-evidence/candidate/textures/ambient_occlusion.png global-godot-4k/assets/
+          cp tools/havenline/asset_pipeline/capture_isolated_asset.gd global-godot-4k/capture.gd
+          cat > global-godot-4k/project.godot <<'EOF'
+          config_version=5
+          [application]
+          config/name="HAVENLINE Isolated 4K Technical QA"
+          [rendering]
+          renderer/rendering_method="gl_compatibility"
+          EOF
+      - name: Download official Godot 4.7.2 editor (no Blender reinstall)
+        run: |
+          set -euo pipefail
+          base="https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable"
+          curl -fL --retry 2 --connect-timeout 20 --max-time 240 "$base/Godot_v4.7.2-stable_linux.x86_64.zip" -o "$RUNNER_TEMP/hl-godot/godot.zip"
+          unzip -q "$RUNNER_TEMP/hl-godot/godot.zip" -d "$RUNNER_TEMP/hl-godot"
+          chmod +x "$RUNNER_TEMP/hl-godot/Godot_v4.7.2-stable_linux.x86_64"
+          "$RUNNER_TEMP/hl-godot/Godot_v4.7.2-stable_linux.x86_64" --version | tee global-godot-4k/version.log
+      - name: Import GLB and capture seven native 3840x2160 AO-enabled frames
+        timeout-minutes: 14
+        run: |
+          set -euo pipefail
+          editor="$RUNNER_TEMP/hl-godot/Godot_v4.7.2-stable_linux.x86_64"
+          project="$PWD/global-godot-4k"
+          timeout 120 "$editor" --headless --editor --path "$project" --import --quit 2>&1 | tee global-godot-4k/import.log
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo timeout 120 apt-get install -y --no-install-recommends xvfb
+          fi
+          timeout 660 xvfb-run -a "$editor" --path "$project" --rendering-method gl_compatibility --audio-driver Dummy --script res://capture.gd -- --glb=res://assets/smoke_test_LOD0.glb --ao=res://assets/ambient_occlusion.png --width=3840 --height=2160 --out="$project/evidence" --asset-id=smoke_test 2>&1 | tee global-godot-4k/capture.log
+          grep -q GLOBAL_ASSET_IMPORT_PROOF global-godot-4k/capture.log
+      - name: Independent native 4K PNG integrity and source binding
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/hl-4k-venv"
+          "$RUNNER_TEMP/hl-4k-venv/bin/pip" install --disable-pip-version-check pillow
+          "$RUNNER_TEMP/hl-4k-venv/bin/python" - <<'PY'
+          import hashlib,json,pathlib
+          from PIL import Image
+          root=pathlib.Path('global-godot-4k')
+          report=json.loads((root/'evidence/isolated-import.json').read_text())
+          assert report['candidate_glb_sha256']=='729c0e87beb3e34e76abfaf9e2930945b7521c957c5604d3ebbcf2f26c94d3b8'
+          assert report['ao_source_sha256']=='4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134'
+          assert report['ao_bound_material_surfaces']>0
+          assert report['native_capture_width']==3840 and report['native_capture_height']==2160
+          assert report['shipping_scene_loaded'] is False and report['actual_physical_android_tested'] is False
+          views=report['renders']
+          assert len(views)==7 and len({v['view'] for v in views})==7
+          frames=[]
+          for v in views:
+              imagepath=root/'evidence'/v['file']
+              with Image.open(imagepath) as im:
+                  assert im.format=='PNG' and im.size==(3840,2160)
+                  nonblank=len(set(im.convert('RGB').resize((160,90)).getdata()))
+                  assert nonblank>=25, f'Blank or degenerate 4K frame {v["view"]}'
+              frames.append({'view':v['view'],'sha256':hashlib.sha256(imagepath.read_bytes()).hexdigest(),'sample_rgb_colors':nonblank})
+          assert len({v['sha256'] for v in frames})==7
+          result={'state':'ISOLATED_NATIVE_4K_RENDER_PROOF_NOT_SHIPPING_APPROVAL',
+                  'candidate_sha256':report['candidate_glb_sha256'],
+                  'ao_map_sha256':report['ao_source_sha256'],
+                  'resolution':[3840,2160],'views':frames,
+                  'physical_android_tested':False,'shipping_scene_loaded':False,
+                  'owner_visual_approved':False}
+          (root/'independent-4k-audit.json').write_text(json.dumps(result,indent=2)+chr(10))
+          print(json.dumps(result,indent=2))
+          PY
+      - name: Preserve actual PNGs and import logs
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-isolated-godot-4k-${{ github.sha }}
+          path: global-godot-4k/
+          retention-days: 30
+          if-no-files-found: warn

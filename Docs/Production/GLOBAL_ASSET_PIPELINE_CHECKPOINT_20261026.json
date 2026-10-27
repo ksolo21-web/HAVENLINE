@@ -1,0 +1,367 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-26",
+  "program": "HAVENLINE Global Asset Studio",
+  "scope": "entire game, all current and future TXX tasks, all biomes and props",
+  "repository": "ksolo21-web/HAVENLINE",
+  "integration_pull_request": 103,
+  "integration_base": "codex/havenline-sequential-task-01",
+  "approved_reference_authority": [
+    "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
+    "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
+  ],
+  "status": "MULTIMATERIAL_SYNTHETIC_PASS_REAL_T05_UV1_DEGENERATE_BLOCKED_NO_RELEASE",
+  "complete_with_evidence": [
+    {
+      "milestone": "Separate from unapproved T05 branch",
+      "status": "PASS",
+      "evidence": "PR #103 compared against f74a84a2a288ab3d3935fba7a6cb9b975c2df239: only 14 global tool/policy/workflow files"
+    },
+    {
+      "milestone": "Global policy and 14 fail-closed contract tests",
+      "status": "PASS",
+      "evidence": "Actions run 40385386438 passed 14/14 including actual shipping-scene AO evidence contract"
+    },
+    {
+      "milestone": "Reference owner-image binding and frozen budgets",
+      "status": "PASS_SOURCE_TESTED",
+      "evidence": "asset_gate.py and T05 cooker example"
+    },
+    {
+      "milestone": "Seven-angle isolated Godot asset capture utility",
+      "status": "PASS_ISOLATED_GODOT_SEVEN_VIEWS_AND_AO_PREVIEW",
+      "evidence": "Run 40383973244 7 auto-framed real Godot 1280x720 PNGs; run 40384710252 AO bound to one PBR surface, with 18,509–64,766 actual changed pixels across all 7 views."
+    },
+    {
+      "milestone": "Raw Android physical profiler evidence collection",
+      "status": "SOURCE_ONLY",
+      "evidence": "device_capture.py requires attached phone, not tested"
+    },
+    {
+      "milestone": "Khronos glTF validator and glTF Transform inspection",
+      "status": "PASS_AT_128PX_SYNTHETIC_SMOKE",
+      "evidence": "Run 40379776370: Khronos 0 errors/0 warnings, GLB tangent attribute present; map hash and embedded normal exact bytes match"
+    },
+    {
+      "milestone": "Reusable Blender master/low mesh, texture baking and export",
+      "status": "PASS_BVH_GEOMETRY_NORMAL_AND_AO_SYNTHETIC_128PX",
+      "evidence": "Run 40379776370: 9692 UV texels, 77536 AO rays, 4092 actual occlusions, 1190 normal colors, 9 AO shades; not approved for 4K production"
+    },
+    {
+      "milestone": "Isolated Godot 4 import and seven-angle renderer proof",
+      "status": "PASS_SYNTHETIC_ENGINE_PROOF_ONLY",
+      "evidence": "Run 40381157048: Godot 4.7.2 GLB import + normal mapped material, seven different 1280x720 llvmpipe OpenGL PNGs with 262–611 sampled RGB colors and seven unique hashes. Not the shipping scene, device FPS or style approval."
+    },
+    {
+      "milestone": "Bounded Godot isolated preview without rebuilding Blender",
+      "status": "PASS",
+      "evidence": "Workflow havenline-global-godot-framing.yml downloads artifact 12677963723 by run ID, verifies exact GLB SHA256 729c0e87, renders in Godot 4.7.2 with software OpenGL, and saves frame evidence"
+    },
+    {
+      "milestone": "True isolated Godot 4K seven-angle capture with real AO",
+      "status": "PASS_SYNTHETIC_TECHNICAL_ONLY",
+      "evidence": "Run 40386019672 artifact 12679779624: seven 3840x2160 unique Godot software-rendered PNGs, AO bound, no blank frames, SHA-bound GLB and AO."
+    },
+    {
+      "milestone": "Actual unapproved T05 nine-material asset isolated 4K import",
+      "status": "PASS_VIEWER_TECHNICAL_ONLY_ASSET_VISUAL_FAILURE",
+      "evidence": "Run 40387154217 artifact 12682190633; immutable R07 GLB sha ff9f548c..., 9 material slots, 4 original textures, 7 genuine unique 3840x2160 Godot software-rendered PNGs; AO/normal absent; earlier R07 internal visual score 5.5/10."
+    }
+  ],
+  "critical_unresolved": [
+    "True T05 R07 nine-material geometry normal/AO pipeline not verified yet: unique bake UV1 atlas from original UV0-tiled nine materials is in Blender CI run 40392519606; reject overlapping projected texels, invalid author UV0 remaps or altered source shader colors.",
+    "T05 R07 cooker visual fidelity recorded only 5.5/10, with snow roof, smoke, metal oven housing, food and base defects. No user style acceptance; exact 18567.png reference must be compared and sculpt reworked.",
+    "Real Godot shipping-scene 3840x2160 seven-angle renders, gameplay context, night/snow states, real sockets/collisions and physical 60 FPS Android benchmark remain untested; verified 4K images are isolated software OpenGL.",
+    "Native Cycles Blender 4.0.2 headless remains invalid for UV/normal/AO baking; CPU BVH tested at 128px only, need production authored maps and performance validation at higher resolutions.",
+    "Production AO binding still absent: release gate requires exact atlas SHA plus actual 4K source-verified Godot shipping scene AO-off/on renders with nonblank pixel differences.",
+    "Independent actual visual critic (reference fidelity and visual language exact 10/10, all other mandatory dimensions strictly >9, no defects) absent.",
+    "Explicit owner approval and integration-owner authorization absent; PR #103 remains draft/unmerged and shipping paths untouched."
+  ],
+  "frozen_requirements": [
+    "Exact reference style and visual language 10/10, all mandatory other critic dimensions >9/10, no known defects",
+    "Current approved art, T05 R07 candidate, gameplay scripts and frozen sockets remain untouched",
+    "No automatic promotion or fake FPS verification",
+    "All game-wide soft budgets and stricter per-task geometry, material, draw calls and texture limits",
+    "Preserve source hashes and evidence across retries"
+  ],
+  "next_action": "Inspect 40392519606 nine-material UV1 Blender run, require per-slot images, source PBR identity, no UV world-space conflicts, TEXCOORD_0 color, TEXCOORD_1 normal maps, real high ray hits, official Khronos; fix/retest failures. Then test successful GLB in Godot isolated 7 angles and compare original appearance, no owner style approval.",
+  "checkpoint_branch": "havenline/global-asset-pipeline-integration-20261026",
+  "superseded_wrong_base_pull_request": 102,
+  "latest_work": {
+    "date": "2026-10-26",
+    "scope": "GLOBAL_ASSET_TOOLING_ONLY",
+    "original_transparent_bake_run": 40355106912,
+    "opaque_false_positive_run": 40362621094,
+    "uv_diagnostic_failure_run": 40363461455,
+    "deterministic_bvh_fallback_run": 40364514593,
+    "bvh_fallback_commit": "f4dc840b4dd4d0c9c9dfbc201d3c99692b1783b4",
+    "review": "INTERNAL_REVIEW_NOT_SEPARATE_CRITIC",
+    "observations": [
+      "Old original normal/AO outputs had 0% nontransparent pixels",
+      "Opacity-only fix produced 100% opaque but uniform 128,128,128 normal and uniform 0,0,0 AO",
+      "Blender UV diagnostic produced uniform 0,0,0 despite active low UV and target node",
+      "asset_gate now fails closed on valid channel semantics, not merely alpha",
+      "Separate BVH geometry-based high-to-low/AO backend added, smoke run not yet accepted pending pixel inspection"
+    ],
+    "rollback": "Original shipping assets and approved assets unchanged; PR #103 still draft",
+    "bvh_fallback_verified_run": 40374522541,
+    "verified_normal_colors": 775,
+    "high_to_low_ray_hits": 14353,
+    "uv_raster_coverage": 0.87604,
+    "smoke_map_size": [
+      128,
+      128
+    ],
+    "embedded_normal_matches_png_bytes": true,
+    "verified_glb_sha256": "48745984787fd7f58432aff61322155fbed1d8c5d8ba52f8b38b1ab579cbe926",
+    "verified_normal_sha256": "80af25812e1c921091fc68b00677d7e05b625085b4ee98787a2708c69e423685",
+    "ao_rays_cast": 114824,
+    "ao_ray_intersections": 0,
+    "ao_note": "Convex smoke sphere has no occluder and generated uniformly white AO; source changes now add wall + distinct split UV islands to verify genuinely nonwhite occlusion.",
+    "ao_fixture_run": 40375276759,
+    "tangent_and_json_run": 40375345435,
+    "tangent_warning_on_first_bvh_run": "MESH_PRIMITIVE_GENERATED_TANGENT_SPACE (1 warning, 0 errors)",
+    "latest_source_13_of_13_run": 40379609976,
+    "latest_source_suite_after_timeout_change": 40379788240,
+    "test_count": 14,
+    "embedded_normal_pixel_integrity_gate": true,
+    "mandatory_explicit_normal_tangent_gate": true,
+    "per_commit_ci_concurrency": true,
+    "apt_install_step_timeout_minutes": 10,
+    "apt_update_command_timeout_seconds": 180,
+    "apt_install_command_timeout_seconds": 360,
+    "latest_real_ao_tangent_workflow_run": 40379776370,
+    "latest_workflow_commit": "9e1cf8f1b0f9f07f2846ba4c6b4515b74a836e4b",
+    "latest_critic_status": "INTERNAL_REVIEW_ONLY_NOT_INDEPENDENT",
+    "latest_discovery": "Blender APT mirror install stalled on 35.9MB data package, so framing/AO workflows were split to reuse SHA-verified GLB. Seven-angle bounds framing and distinct AO-on/off frames now pass in Godot software OpenGL; release remains blocked.",
+    "confirmed_full_bake_run": 40379776370,
+    "latest_isolated_godot_import_run": 40380585851,
+    "current_seven_view_render_run": 40381157048,
+    "normal_unique_colors": 1190,
+    "ao_unique_colors": 9,
+    "ao_real_intersections": 4092,
+    "rays_against_actual_geometry": 77536,
+    "rasterized_uv_pixels": 9692,
+    "map_size": [
+      128,
+      128
+    ],
+    "khronos_errors": 0,
+    "khronos_warnings": 0,
+    "glb_has_explicit_tangents": true,
+    "godot_engine_version": "4.7.2.stable.official.ed1daf0bf",
+    "godot_import_mesh_instances": 1,
+    "godot_normal_mapped_material_surfaces": 1,
+    "godot_import_candidate_sha256": "729c0e87beb3e34e76abfaf9e2930945b7521c957c5604d3ebbcf2f26c94d3b8",
+    "normal_texture_sha256": "86ec5980bb84a9989111d5f142ff190f0d10157128d3294d66664956359a785a",
+    "ao_texture_sha256": "4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134",
+    "godot_import_artifact_id": 12678222113,
+    "independent_image_analysis": "Actual 128px PNG distributions independently inspected; 1190 normal colors, 9 AO shades, 4092 true AO ray intersections, embedded normal exact PNG hash.",
+    "independent_review": "INTERNAL_REVIEW_ONLY; no independent visual critic",
+    "seven_view_verified_run": 40381157048,
+    "seven_view_artifact_id": 12677963723,
+    "native_render_engine": "Godot 4.7.2 stable",
+    "native_render_backend": "gl_compatibility software OpenGL llvmpipe",
+    "native_render_resolution": [
+      1280,
+      720
+    ],
+    "native_render_views": [
+      "front",
+      "rear",
+      "left",
+      "right",
+      "three-quarter",
+      "overhead",
+      "gameplay_oblique"
+    ],
+    "native_render_png_count": 7,
+    "native_render_distinct_sha_count": 7,
+    "native_render_sample_distinct_rgb_min": 262,
+    "native_render_sample_distinct_rgb_max": 611,
+    "native_render_in_real_shipping_scene": false,
+    "native_render_physical_android": false,
+    "baseline_renders_owner_approved": false,
+    "internal_visual_review": "All seven PNGs real, nonblank and differing. Baseline fixed camera 3.8 made the synthetic subject too small for detail evaluation; automatic bounds-based camera framing committed on f223d233.",
+    "autofocus_camera_rerun": 40381725395,
+    "auto_frming_candidate_sha": "f223d233dff987f59921ae9aa3ed8579060024ca",
+    "internal_technical_score_0_to_10": 8.5,
+    "independent_critic_available": false,
+    "latest_source_suite_run": 40385386438,
+    "verified_autoframe_run": 40383973244,
+    "verified_autoframe_artifact_id": 12680230116,
+    "autoframe_camera_old": 3.8,
+    "autoframe_camera_new": 1.95174992084503,
+    "verified_ao_godot_run": 40384710252,
+    "ao_godot_artifact_id": 12679529373,
+    "ao_bound_material_surfaces": 1,
+    "ao_preview_reference_sha256": "4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134",
+    "current_synthetic_glb_sha256": "729c0e87beb3e34e76abfaf9e2930945b7521c957c5604d3ebbcf2f26c94d3b8",
+    "ao_off_on_all_7_views_different": true,
+    "ao_per_view_changed_pixels": [
+      25475,
+      24619,
+      18509,
+      64766,
+      62078,
+      22070,
+      56919
+    ],
+    "ao_per_view_changed_ratio_percent": [
+      2.764,
+      2.671,
+      2.008,
+      7.028,
+      6.736,
+      2.395,
+      6.176
+    ],
+    "godot_release_ao_requirement": "Exact atlas SHA plus real shipping scene material binding and source-bound native 4K AO off/on screenshots with actual pixel difference",
+    "godot_release_ao_requirement_verified": false,
+    "global_frame_qa_infrastructure": "Dedicated artifact-reuse workflow avoids repeated 190MB Blender APT setup",
+    "last_verified_commit": "7b0521faed3b77db17dbed863d2e76130f6fb0b8",
+    "internal_review": "Builder-side technical/pixel review only; no separately callable critic runtime or approval",
+    "latest_isolated_4k_run": 40386019672,
+    "latest_isolated_4k_artifact": 12679779624,
+    "latest_4k_fixture_sha256": "729c0e87beb3e34e76abfaf9e2930945b7521c957c5604d3ebbcf2f26c94d3b8",
+    "latest_4k_ao_sha256": "4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134",
+    "latest_native_godot_4k_resolution": [
+      3840,
+      2160
+    ],
+    "latest_native_godot_4k_views": 7,
+    "latest_4k_unique_hashes": 7,
+    "latest_4k_sample_rgb_unique_min": 731,
+    "latest_4k_sample_rgb_unique_max": 1040,
+    "latest_4k_software_renderer": "Godot 4.7.2 gl_compatibility llvmpipe",
+    "latest_4k_test_scene": "isolated disposable synthetic GLB only, not HavenlineGodot shipping scene",
+    "latest_4k_physical_device": false,
+    "latest_4k_owner_approval": false,
+    "latest_4k_independent_critic": false,
+    "latest_4k_image_comparison_note": "Actual seven image PNG bytes inspected and contact sheet reviewed; geometry synthetic sphere+wall. This is evidence for capture resolution/renderer/import only, not approved art style.",
+    "current_technical_score_0_to_10": 8.5,
+    "remaining_mandatory_release_gates_count": 7,
+    "real_t05_reference_candidate_review": {
+      "reference_id": "18567.png",
+      "source_artifact_run": 40346552132,
+      "source_evidence_artifact_id": 12660839315,
+      "source_asset": "cooker_processor",
+      "source_material_slots": 9,
+      "source_visual_internal_score": 5.5,
+      "source_visual_approved": false,
+      "compatibility_with_global_one_material_baker": "BLOCKED_BEFORE_ATLAS_CONVERSION",
+      "no_source_promotion": true,
+      "basis": "T05-BLENDER-R07-PROOF-AND-ACCEPTANCE-CHECKPOINT.json from T05 work branch; source data was inspected without edits",
+      "verified_4k_review_run": 40387154217,
+      "verified_4k_review_artifact_id": 12682190633,
+      "unapproved_candidate_sha256": "ff9f548c2d16d1f5972b4da2f3162978e65e3caef20ec998ec222e9497cb3a0b",
+      "source_material_names": [
+        "HL_wood",
+        "HL_dark",
+        "HL_wood_light",
+        "HL_blue",
+        "HL_metal",
+        "HL_orange",
+        "HL_red",
+        "HL_cream",
+        "HL_snow"
+      ],
+      "original_primitive_count": 9,
+      "embedded_source_color_images": 4,
+      "normal_maps_embedded": false,
+      "ao_maps_embedded": false,
+      "seven_4k_views_verified": true,
+      "dimensions": [
+        3840,
+        2160
+      ],
+      "native_backend": "Godot 4.7.2 software OpenGL llvmpipe",
+      "isolated": true,
+      "real_shipping_scene": false,
+      "recorded_sampled_rgb_color_range": [
+        796,
+        1484
+      ],
+      "real_visual_review": "Unapproved; roof detail, snow overhang/smoke, metal saw arch, food shapes and base still inaccurate per prior internal 5.5/10 reviewer"
+    },
+    "last_verified_real_asset_run": 40387154217,
+    "last_verified_4k_real_asset": true,
+    "multimaterial_work": {
+      "exact_date": "2026-10-26",
+      "candidate_only": true,
+      "two_material_verified_run": 40389837468,
+      "two_material_artifact_id": 12681339340,
+      "two_material_source_shader_names": [
+        "HL_blue",
+        "HL_metal"
+      ],
+      "two_material_bake_normal_maps": 2,
+      "two_material_bake_ao_maps": 2,
+      "two_material_uv_pixels": [
+        6756,
+        2936
+      ],
+      "two_material_high_to_low_ray_hits": [
+        6756,
+        2936
+      ],
+      "two_material_real_ao_intersections": [
+        2408,
+        1684
+      ],
+      "two_material_gltf_validator_warnings": 0,
+      "real_t05_editable_source_sha256": "b3d2d1d42b8e0d2c664323881ca2410f2a6923809c1ee9a0e3ed01499152d087",
+      "real_t05_glb_sha256": "ff9f548c2d16d1f5972b4da2f3162978e65e3caef20ec998ec222e9497cb3a0b",
+      "real_t05_bridge_verified_run": 40390829544,
+      "real_t05_high_authored_object_count": 101,
+      "real_t05_low_triangles": 10700,
+      "real_t05_materials_preserved": 9,
+      "real_t05_bounding_center_delta_m": 2.384185791015625e-7,
+      "real_t05_source_uv0_aliased_texels_detected_first_slot": 13073,
+      "real_t05_original_uv0_mode": "REJECTED_CORRECTLY",
+      "crash_from_blender_native_smart_project": "Blender 4.0.2 segfault; replaced with deterministic connected-piece UV1 packer",
+      "uv1_first_issue": "Blender Python UV RNA invalidation corrected by frozen UV0 snapshot",
+      "uv1_second_issue": "glTF seam-split vertices caused hundreds of false geometry components; quantized position connectivity now in test; planar UV1 fallback for degenerate source islands",
+      "new_uv1_test_run": 40392519606,
+      "source_uv0_policy": "Byte-equivalent coordinate preservation required; separate UV1 only for normal/AO, original material PBR sources untouched",
+      "independent_review": "INTERNAL REVIEW ONLY; no separate available critic agent",
+      "real_nine_material_pbr_bake_approved": false,
+      "shipping_assets_touched": false,
+      "latest_two_material_uv1_pass_run": 40392519520,
+      "latest_two_material_uv1_artifact_id": 12685485959,
+      "latest_two_material_uv1_rasterized_pixels": [
+        11790,
+        6892
+      ],
+      "latest_two_material_uv1_ao_intersections": [
+        4199,
+        3963
+      ],
+      "gltf_uv0_base_color_preserved": true,
+      "gltf_uv1_normal_texture_explicit": true,
+      "gltf_has_uv0_uv1_tangents": true,
+      "khronos_uv1_errors": 0,
+      "khronos_uv1_warnings": 0,
+      "real_t05_bridge_highlow_delta_m": 2.384185791015625e-7,
+      "real_t05_author_source_objects": 101,
+      "real_t05_source_uv0_texel_conflicts": 13073,
+      "real_t05_shader_slots": 9,
+      "real_t05_triangles": 10700,
+      "active_real_t05_uv1_trial_run": 40392519606,
+      "real_uv1_status": "IN_PROGRESS_NO_APPROVAL",
+      "original_reference_source_untouched": true,
+      "blender_native_uv_operator_crashed": true,
+      "current_uv1_strategy": "deterministic connected geometry pieces with spatially reunited seam splits and geometric fallback for degenerate UV0; fail on residual overlapping UV1"
+    },
+    "multimaterial_20261027": {
+      "synthetic_run": 40392043217,
+      "result": "FAIL_CLOSED",
+      "real_t05_run": 40392043572,
+      "blocker": "HL_dark degenerate authored UV island in candidate-only UV1 connected-component repack",
+      "source_material_count": 9,
+      "source_low_triangles": 10700,
+      "source_originals_unchanged": true,
+      "next_action": "Build geometric per-face UV1 unwrap for degenerate islands, validate atlas overlap and glTF TEXCOORD_1 without altering UV0, rerun real nine-material bake"
+    }
+  }
+}

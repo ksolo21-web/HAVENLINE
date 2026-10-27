@@ -1,0 +1,95 @@
+name: HAVENLINE multi-material UV1 Godot visual compatibility
+on:
+  push:
+    branches: ['havenline/global-asset-pipeline-integration-20261026']
+    paths:
+      - '.github/workflows/havenline-global-uv1-godot.yml'
+      - 'tools/havenline/asset_pipeline/capture_isolated_asset.gd'
+      - 'tools/havenline/asset_pipeline/tests/godot_glb_import_smoke.gd'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+jobs:
+  isolated-uv1-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 16
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - name: Reuse verified 2-material Blender UV1 GLB and source maps
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          run-id: 40392519520
+          name: havenline-global-multimaterial-6b3f78795f5f132d13da91c47cae4de763269af6
+          path: verified-uv1-source
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Stage unchanged test GLB with hash and no shipping writes
+        run: |
+          set -euo pipefail
+          mkdir -p isolated-uv1-godot/assets isolated-uv1-godot/evidence "$RUNNER_TEMP/godot"
+          from=verified-uv1-source/uv1-candidate/multi_uv1_MULTIMATERIAL_STAGE.glb
+          echo "6b0c2344c6c2def75ae856acb7a975aa7b438a142a58105a9fc46d5d48ad6fb0  $from" | sha256sum -c -
+          cp "$from" isolated-uv1-godot/assets/smoke_test_LOD0.glb
+          cp tools/havenline/asset_pipeline/capture_isolated_asset.gd isolated-uv1-godot/capture.gd
+          cp tools/havenline/asset_pipeline/tests/godot_glb_import_smoke.gd isolated-uv1-godot/import-proof.gd
+          cat > isolated-uv1-godot/project.godot <<'EOF'
+          config_version=5
+          [application]
+          config/name="Havenline Two Surface UV1 Isolated QA"
+          [rendering]
+          renderer/rendering_method="gl_compatibility"
+          EOF
+      - name: Download official Godot 4.7.2 editor
+        run: |
+          set -euo pipefail
+          base=https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable
+          curl -fL --retry 2 --connect-timeout 20 --max-time 240 "$base/Godot_v4.7.2-stable_linux.x86_64.zip" -o "$RUNNER_TEMP/godot/godot.zip"
+          unzip -q "$RUNNER_TEMP/godot/godot.zip" -d "$RUNNER_TEMP/godot"
+          chmod +x "$RUNNER_TEMP/godot/Godot_v4.7.2-stable_linux.x86_64"
+      - name: Godot imports both independent normal-mapped shader surfaces
+        run: |
+          set -euo pipefail
+          e="$RUNNER_TEMP/godot/Godot_v4.7.2-stable_linux.x86_64"
+          project="$PWD/isolated-uv1-godot"
+          timeout 120 "$e" --headless --editor --path "$project" --import --quit 2>&1 | tee isolated-uv1-godot/import.log
+          timeout 120 "$e" --headless --path "$project" --script res://import-proof.gd 2>&1 | tee isolated-uv1-godot/materials.log
+          grep -q HAVENLINE_GODOT_IMPORT_PASS isolated-uv1-godot/materials.log
+          grep -q '"normal_mapped_surfaces":2' isolated-uv1-godot/materials.log
+      - name: Capture seven actual isolated Godot views with UV1 normal textures
+        run: |
+          set -euo pipefail
+          if ! command -v xvfb-run >/dev/null 2>&1; then sudo timeout 120 apt-get install -y --no-install-recommends xvfb; fi
+          e="$RUNNER_TEMP/godot/Godot_v4.7.2-stable_linux.x86_64"
+          project="$PWD/isolated-uv1-godot"
+          timeout 180 xvfb-run -a "$e" --path "$project" --rendering-method gl_compatibility --audio-driver Dummy --script res://capture.gd -- --glb=res://assets/smoke_test_LOD0.glb --out="$project/evidence" --asset-id=multi_uv1 2>&1 | tee isolated-uv1-godot/capture.log
+          grep -q GLOBAL_ASSET_IMPORT_PROOF isolated-uv1-godot/capture.log
+      - name: Check seven nonblank real engine frames without inferring style approval
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/pillow"
+          "$RUNNER_TEMP/pillow/bin/pip" install --disable-pip-version-check pillow
+          "$RUNNER_TEMP/pillow/bin/python" - <<'PY'
+          import json,pathlib,hashlib
+          from PIL import Image
+          p=pathlib.Path("isolated-uv1-godot/evidence")
+          a=json.loads((p/"isolated-import.json").read_text())
+          assert a["shipping_scene_loaded"] is False and a["actual_physical_android_tested"] is False
+          assert a["candidate_glb_sha256"]=="6b0c2344c6c2def75ae856acb7a975aa7b438a142a58105a9fc46d5d48ad6fb0"
+          assert len(a["renders"])==7
+          hashes=[]
+          for rec in a["renders"]:
+              b=(p/rec["file"]).read_bytes()
+              with Image.open(p/rec["file"]) as image:
+                  assert image.size==(1280,720)
+                  assert len(set(image.convert("RGB").resize((120,68)).getdata()))>=15
+              hashes.append(hashlib.sha256(b).hexdigest())
+          assert len(set(hashes))==7
+          print("HAVENLINE_UV1_GODOT_TWO_NORMAL_MATERIALS_AND_SEVEN_ANGLES_PASS")
+          PY
+      - name: Save actual Godot engine render evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-uv1-godot-isolated-${{ github.sha }}
+          path: isolated-uv1-godot/
+          retention-days: 30

@@ -1,0 +1,126 @@
+name: HAVENLINE isolated Godot framing QA without Blender reinstall
+on:
+  push:
+    branches: ['havenline/global-asset-pipeline-integration-20261026']
+    paths:
+      - 'tools/havenline/asset_pipeline/capture_isolated_asset.gd'
+      - '.github/workflows/havenline-global-godot-framing.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-isolated-framing-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  framing-proof:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+      - name: Fetch exact previously verified synthetic GLB artifact (no new bake)
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          run-id: 40381157048
+          name: havenline-global-blender-smoke-3526054a2d76103e827bb309e6209b2f23f7b1f3
+          path: global-bake-evidence
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Verify immutable smoke GLB and stage disposable Godot project
+        run: |
+          set -euo pipefail
+          glb="global-bake-evidence/candidate/smoke_test_LOD0.glb"
+          echo "729c0e87beb3e34e76abfaf9e2930945b7521c957c5604d3ebbcf2f26c94d3b8  $glb" | sha256sum -c -
+          mkdir -p global-godot-framing/assets
+          cp "$glb" global-godot-framing/assets/
+          cp global-bake-evidence/candidate/textures/ambient_occlusion.png global-godot-framing/assets/ambient_occlusion.png
+          echo "4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134  global-godot-framing/assets/ambient_occlusion.png" | sha256sum -c -
+          cp tools/havenline/asset_pipeline/capture_isolated_asset.gd global-godot-framing/capture.gd
+          cat > global-godot-framing/project.godot <<'EOF'
+          config_version=5
+          [application]
+          config/name="HAVENLINE Isolated Framing QA"
+          [rendering]
+          renderer/rendering_method="gl_compatibility"
+          EOF
+      - name: Download same official Godot 4.7.2 binary as verified baseline
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/hl-godot"
+          base="https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable"
+          curl -fL --retry 2 --connect-timeout 20 --max-time 240 "$base/Godot_v4.7.2-stable_linux.x86_64.zip" -o "$RUNNER_TEMP/hl-godot/godot.zip"
+          unzip -q "$RUNNER_TEMP/hl-godot/godot.zip" -d "$RUNNER_TEMP/hl-godot"
+          chmod +x "$RUNNER_TEMP/hl-godot/Godot_v4.7.2-stable_linux.x86_64"
+          "$RUNNER_TEMP/hl-godot/Godot_v4.7.2-stable_linux.x86_64" --version
+      - name: Import staged GLB and capture seven actual software renderer frames
+        run: |
+          set -euo pipefail
+          editor="$RUNNER_TEMP/hl-godot/Godot_v4.7.2-stable_linux.x86_64"
+          project="$PWD/global-godot-framing"
+          mkdir -p global-godot-framing/evidence
+          timeout 120 "$editor" --headless --editor --path "$project" --import --quit 2>&1 | tee global-godot-framing/import.log
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo timeout 120 apt-get install -y --no-install-recommends xvfb
+          fi
+          timeout 180 xvfb-run -a "$editor" --path "$project" --rendering-method gl_compatibility --audio-driver Dummy --script res://capture.gd -- --glb=res://assets/smoke_test_LOD0.glb --out="$project/evidence" --asset-id=smoke_test 2>&1 | tee global-godot-framing/capture.log
+          grep -q GLOBAL_ASSET_IMPORT_PROOF global-godot-framing/capture.log
+          mkdir -p global-godot-framing/evidence-ao
+          timeout 180 xvfb-run -a "$editor" --path "$project" --rendering-method gl_compatibility --audio-driver Dummy --script res://capture.gd -- --glb=res://assets/smoke_test_LOD0.glb --ao=res://assets/ambient_occlusion.png --out="$project/evidence-ao" --asset-id=smoke_test 2>&1 | tee global-godot-framing/capture-ao.log
+          grep -q GLOBAL_ASSET_IMPORT_PROOF global-godot-framing/capture-ao.log
+      - name: Validate camera geometry, seven actual frames and unchanged GLB
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/hl-pillow-venv"
+          "$RUNNER_TEMP/hl-pillow-venv/bin/pip" install --disable-pip-version-check pillow
+          "$RUNNER_TEMP/hl-pillow-venv/bin/python" - <<'PY'
+          import hashlib,json,pathlib
+          from PIL import Image
+          root=pathlib.Path("global-godot-framing")
+          report=json.loads((root/"evidence/isolated-import.json").read_text())
+          assert report["candidate_glb_sha256"]=="729c0e87beb3e34e76abfaf9e2930945b7521c957c5604d3ebbcf2f26c94d3b8"
+          assert report["shipping_scene_loaded"] is False
+          assert report["mesh_count"]>=1 and report["actual_physical_android_tested"] is False
+          ortho=report["camera_orthographic_size"]
+          assert 0.75<=ortho<3.8, f"Framing not tighter than old fixed 3.8: {ortho}"
+          views=report["renders"]
+          assert len(views)==7 and len(set(v["view"] for v in views))==7
+          recorded=[]
+          for v in views:
+              p=root/"evidence"/v["file"]
+              with Image.open(p) as image:
+                  assert image.format=="PNG" and image.size==(1280,720)
+                  rgb=set(image.convert("RGB").resize((160,90)).getdata())
+                  assert len(rgb)>=25, f"Render flat or blank: {v['view']}"
+              recorded.append({"view":v["view"],"sha256":hashlib.sha256(p.read_bytes()).hexdigest(),"sample_color_count":len(rgb)})
+          assert len({x["sha256"] for x in recorded})==7
+          ao_report=json.loads((root/"evidence-ao/isolated-import.json").read_text())
+          assert ao_report["candidate_glb_sha256"]==report["candidate_glb_sha256"]
+          assert ao_report["ao_source_sha256"]=="4f8c975af984b9a715133b5643727aaf90d250314a601439bae470548ca2b134"
+          assert ao_report["ao_bound_material_surfaces"]>0
+          assert ao_report["ao_preview_only_not_shipping_scene"] is True
+          from PIL import ImageChops
+          changed=[]
+          for v in views:
+              prior=root/"evidence"/v["file"]
+              with Image.open(prior) as before, Image.open(root/"evidence-ao"/v["file"]) as after:
+                  assert before.size==after.size==(1280,720)
+                  delta=ImageChops.difference(before.convert("RGB"),after.convert("RGB"))
+                  touched=delta.getbbox() is not None
+                  changed.append({"view":v["view"],"changed_pixels":touched})
+          assert any(v["changed_pixels"] for v in changed), "AO is bound but produces no actual pixel difference; visual integration remains unverified"
+          result={"state":"ISOLATED_7_VIEW_FRAMING_PASS_NOT_SHIPPING_VISUAL_APPROVAL",
+                  "camera_size":ortho,"view_count":len(recorded),
+                  "candidate_sha256":report["candidate_glb_sha256"],
+                  "renders":recorded,"ao_bound_material_surfaces":ao_report["ao_bound_material_surfaces"],"ao_preview_changes":changed}
+          (root/"framing-audit.json").write_text(json.dumps(result,indent=2)+"\n")
+          print(json.dumps(result,indent=2))
+          PY
+      - name: Retain frames, logs and hashes even on failure
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-isolated-godot-autoframe-${{ github.sha }}
+          path: global-godot-framing/
+          if-no-files-found: warn
+          retention-days: 30

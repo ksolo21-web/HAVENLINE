@@ -1,0 +1,272 @@
+#!/usr/bin/env python3
+"""Candidate-only multi-material PBR baker.
+
+Preserves every authored low-mesh material and its existing Base Color,
+Metallic and Roughness channels. Each material gets a separate geometry-raycast
+normal map and AO sidecar: UVs may overlap across *different* materials.
+Never modifies production assets or the input .blend.
+
+Requires joined DETAIL_MASTER and GAME_LOD0 mesh collections. This does NOT
+automatically retopologize or improve reference style. In particular, an old
+R07 cooker GLB without a separate high/low sculpt cannot be passed off as
+a finished high-detail bake.
+"""
+import argparse
+import hashlib
+import json
+import pathlib
+import re
+import sys
+import bpy
+
+sys.path.insert(0,str(pathlib.Path(__file__).resolve().parent))
+from bvh_bake import bake as geometry_bake
+
+def _one_mesh(name):
+    collection=bpy.data.collections.get(name)
+    if collection is None:
+        raise RuntimeError("Missing required collection "+name)
+    meshes=[x for x in collection.all_objects if x.type=="MESH"]
+    if len(meshes)!=1:
+        raise RuntimeError(name+" requires exactly one joined mesh, got "+str(len(meshes)))
+    return meshes[0]
+
+def _target(path):
+    path.parent.mkdir(parents=True,exist_ok=True)
+    return str(path.resolve())
+
+def _snapshot(mat):
+    bs=mat.node_tree.nodes.get("Principled BSDF") if mat.use_nodes else None
+    if bs is None:
+        raise RuntimeError("Preserving PBR materials requires Principled BSDF "+mat.name)
+    data={}
+    for name in ("Base Color","Metallic","Roughness"):
+        socket=bs.inputs[name]
+        data[name]={
+            "default":list(socket.default_value) if hasattr(socket.default_value,"__len__") else float(socket.default_value),
+            "links":sorted((link.from_node.name, link.from_socket.name) for link in socket.links)
+        }
+    return data
+
+def _add_normal(mat,image,bake_uv_name=None):
+    bs=mat.node_tree.nodes["Principled BSDF"]
+    if bs.inputs["Normal"].is_linked:
+        raise RuntimeError("Refusing to replace pre-existing authored normal shader for "+mat.name)
+    nodes=mat.node_tree.nodes
+    image_node=nodes.new("ShaderNodeTexImage")
+    image_node.name="HL_GEOMETRY_BAKE_NORMAL"
+    image_node.image=image
+    if bake_uv_name:
+        uvmap=nodes.new("ShaderNodeUVMap")
+        uvmap.name="HL_NORMAL_BAKE_UV_SELECTION"
+        uvmap.uv_map=bake_uv_name
+        mat.node_tree.links.new(uvmap.outputs["UV"],image_node.inputs["Vector"])
+    normal=nodes.new("ShaderNodeNormalMap")
+    normal.name="HL_GEOMETRY_BAKE_TANGENT"
+    normal.space="TANGENT"
+    mat.node_tree.links.new(image_node.outputs["Color"],normal.inputs["Color"])
+    mat.node_tree.links.new(normal.outputs["Normal"],bs.inputs["Normal"])
+
+def _author_separate_bake_uv(low, materials):
+    """Deterministic UV1 repack of connected material components, no UV0 edit.
+
+    Original authored UV0 coordinates are never touched. Each connected mesh
+    piece receives its own padded UV1 tile; within-piece UV shell structure is
+    retained. A subsequent geometric UV-overlap audit MUST still pass: this
+    never silently unrolls an ambiguous or self-overlapping original island.
+    """
+    import math
+    uv0_name=low.data.uv_layers.active.name
+    original=[tuple(v.uv) for v in low.data.uv_layers[uv0_name].data]
+    if len(low.data.uv_layers)!=1:
+        raise RuntimeError("Separate bake UV needs exactly one original UV0")
+    uv1=low.data.uv_layers.new(name="HAVENLINE_BAKE_UV")
+    used_by_vertex={}
+    for polygon in low.data.polygons:
+        used_by_vertex.setdefault(polygon.material_index,{})
+    for material_index in range(len(materials)):
+        members=[p for p in low.data.polygons if p.material_index==material_index]
+        parent={p.index:p.index for p in members}
+        def find(x):
+            while x!=parent[x]:
+                parent[x]=parent[parent[x]]
+                x=parent[x]
+            return x
+        def union(a,b):
+            ra,rb=find(a),find(b)
+            if ra!=rb:parent[rb]=ra
+        vertex_owner={}
+        for poly in members:
+            for vertex_idx in poly.vertices:
+                position=low.data.vertices[vertex_idx].co
+                key=tuple(round(float(p)*10000) for p in position)
+                previous=vertex_owner.get(key)
+                if previous is None:vertex_owner[key]=poly.index
+                else:union(poly.index,previous)
+        components={}
+        for poly in members:
+            components.setdefault(find(poly.index),[]).append(poly)
+        pieces=list(components.values())
+        if not pieces:
+            raise RuntimeError("Empty material slot "+str(material_index))
+        grid=math.ceil(math.sqrt(len(pieces)))
+        margin=.035
+        for piece_index,polygons in enumerate(pieces):
+            loops=[loop_idx for poly in polygons for loop_idx in poly.loop_indices]
+            x=[original[loop_idx][0] for loop_idx in loops]
+            y=[original[loop_idx][1] for loop_idx in loops]
+            xmin,xmax,ymin,ymax=min(x),max(x),min(y),max(y)
+            projected=None
+            if xmax-xmin<1e-8 or ymax-ymin<1e-8:
+                # Source UV0 can be degenerate on certain real mesh surfaces.
+                # Generate only the separate normal/AO UV1 using the two
+                # largest geometry axes; retain original authored UV0 exactly.
+                pts={loop_idx:low.data.vertices[low.data.loops[loop_idx].vertex_index].co for loop_idx in loops}
+                spans=[max(float(v[k]) for v in pts.values())-min(float(v[k]) for v in pts.values()) for k in range(3)]
+                axes=sorted(range(3),key=lambda k:spans[k],reverse=True)[:2]
+                if spans[axes[1]]<1e-7:
+                    raise RuntimeError("Degenerate geometry source cannot form UV1 atlas for "+materials[material_index].name)
+                projected={idx:(float(point[axes[0]]),float(point[axes[1]])) for idx,point in pts.items()}
+                xmin,xmax=min(v[0] for v in projected.values()),max(v[0] for v in projected.values())
+                ymin,ymax=min(v[1] for v in projected.values()),max(v[1] for v in projected.values())
+                print("HAVENLINE_BAKE_UV1_DEGENERATE_SOURCE_RECOVERED",materials[material_index].name,axes,flush=True)
+            tile_x=piece_index%grid
+            tile_y=piece_index//grid
+            for loop_idx in loops:
+                source=projected[loop_idx] if projected is not None else original[loop_idx]
+                u=(source[0]-xmin)/(xmax-xmin)
+                v=(source[1]-ymin)/(ymax-ymin)
+                uv1.data[loop_idx].uv=((tile_x+margin+u*(1-2*margin))/grid,
+                                      (tile_y+margin+v*(1-2*margin))/grid)
+        print("HAVENLINE_BAKE_UV1_PACK",materials[material_index].name,
+              "connected_components",len(pieces),"tile_grid",grid,flush=True)
+    low.data.uv_layers.active=uv1
+    uv1.active_render=True
+    low.data.uv_layers[uv0_name].active_render=False
+    if [tuple(v.uv) for v in low.data.uv_layers[uv0_name].data]!=original:
+        raise RuntimeError("Original author color UV0 changed during UV1 preparation")
+    for mat in materials:
+        nodes=mat.node_tree.nodes
+        uvnode=nodes.new("ShaderNodeUVMap")
+        uvnode.name="HL_PRESERVE_AUTHOR_UV0"
+        uvnode.uv_map=uv0_name
+        for image_node in list(nodes):
+            if image_node.type=="TEX_IMAGE" and not image_node.inputs["Vector"].is_linked:
+                mat.node_tree.links.new(uvnode.outputs["UV"],image_node.inputs["Vector"])
+    return uv1.name,uv0_name
+
+def main():
+    argv=sys.argv[sys.argv.index("--")+1:] if "--" in sys.argv else []
+    parser=argparse.ArgumentParser()
+    parser.add_argument("--source",required=True)
+    parser.add_argument("--out",required=True)
+    parser.add_argument("--asset-id",required=True)
+    parser.add_argument("--size",type=int,default=128)
+    parser.add_argument("--triangles-max",type=int,default=20000)
+    parser.add_argument("--materials-max",type=int,default=12)
+    parser.add_argument("--bake-uv-mode",choices=("original","separate_uv1"),default="original")
+    a=parser.parse_args(argv)
+    if a.size<64 or a.size>1024 or a.size&(a.size-1):
+        raise RuntimeError("BVH material-preserving baker supports power-of-two 64..1024 only")
+    if not re.fullmatch(r"[A-Za-z0-9_\\-]{1,64}",a.asset_id):
+        raise RuntimeError("Invalid asset id")
+    source=pathlib.Path(a.source).resolve()
+    if not source.is_file():raise RuntimeError("Editable source .blend required")
+    root=pathlib.Path(a.out).resolve()
+    root.mkdir(parents=True,exist_ok=True)
+    bpy.ops.wm.open_mainfile(filepath=str(source))
+    high=_one_mesh("DETAIL_MASTER")
+    low=_one_mesh("GAME_LOD0")
+    if high is low or high.data is low.data:raise RuntimeError("Independent authored high and low meshes required")
+    if low.data.uv_layers.active is None:
+        raise RuntimeError("Artist-authored GAME_LOD0 UVs required")
+    originals=list(low.data.materials)
+    if not 2<=len(originals)<=a.materials_max:
+        raise RuntimeError("Preservation path requires 2..%d distinct material slots"%a.materials_max)
+    if any(m is None for m in originals) or len({m.name for m in originals})!=len(originals):
+        raise RuntimeError("Missing or duplicate source materials")
+    if any(abs(float(v)-1.0)>1e-4 for o in (high,low) for v in o.scale):
+        raise RuntimeError("Applied high and low transforms required for ray distance")
+    triangles=sum(len(p.vertices)-2 for p in low.data.polygons)
+    if triangles==0 or triangles>a.triangles_max:
+        raise RuntimeError("Low mesh triangle limit exceeded")
+    used={p.material_index for p in low.data.polygons}
+    if used!=set(range(len(originals))):
+        raise RuntimeError("Every source material must own actual geometry; unused slots rejected")
+    before={m.name:_snapshot(m) for m in originals}
+    baked_uv_name=low.data.uv_layers.active.name
+    source_uv_name=baked_uv_name
+    if a.bake_uv_mode=="separate_uv1":
+        baked_uv_name,source_uv_name=_author_separate_bake_uv(low,originals)
+    high_materials_isolated=0
+    for slot,mat in enumerate(list(high.data.materials)):
+        if mat in originals:
+            high.data.materials[slot]=mat.copy()
+            high_materials_isolated+=1
+    record=[]
+    images={}
+    for i,material in enumerate(originals):
+        name=material.name
+        tex=root/"textures"
+        normal=bpy.data.images.new("HL_BVH_NORMAL_"+str(i),width=a.size,height=a.size,alpha=False)
+        ao=bpy.data.images.new("HL_BVH_AO_"+str(i),width=a.size,height=a.size,alpha=False)
+        normal.colorspace_settings.name="Non-Color"
+        ao.colorspace_settings.name="Non-Color"
+        stats=geometry_bake(high,low,a.size,normal,ao,material_index=i,
+                            minimum_pixels=8,minimum_coverage=.001,
+                            strict_uv_nonoverlap=True)
+        # The color/metallic/roughness source shader must stay intact.
+        _add_normal(material,normal,baked_uv_name if a.bake_uv_mode=="separate_uv1" else None)
+        if _snapshot(material)!=before[name]:
+            raise RuntimeError("Authored PBR source inputs altered for "+name)
+        targets={}
+        for key,image in (("normal",normal),("ambient_occlusion",ao)):
+            path=tex/("slot_%02d_%s.png"%(i,key))
+            image.filepath_raw=_target(path)
+            image.file_format="PNG"
+            image.save()
+            if path.stat().st_size<=128:
+                raise RuntimeError("Empty material bake map "+str(path))
+            targets[key]={"path":str(path.relative_to(root)),
+                          "sha256":hashlib.sha256(path.read_bytes()).hexdigest()}
+        record.append({"slot":i,"original_name":name,
+                       "material_source_pbr_unchanged":True,"textures":targets,"stats":stats})
+        images[name]=normal
+    # Original source file remains immutable. This copy is unapproved staged work.
+    bpy.ops.file.pack_all()
+    out_blend=root/(a.asset_id+"_MULTIMATERIAL_STAGE.blend")
+    bpy.ops.wm.save_as_mainfile(filepath=_target(out_blend))
+    bpy.ops.object.select_all(action="DESELECT")
+    low.select_set(True)
+    bpy.context.view_layer.objects.active=low
+    out_glb=root/(a.asset_id+"_MULTIMATERIAL_STAGE.glb")
+    bpy.ops.export_scene.gltf(filepath=_target(out_glb),
+        export_format="GLB",use_selection=True,export_yup=True,
+        export_apply=True,export_tangents=True)
+    if out_glb.stat().st_size<=128:raise RuntimeError("Exported GLB empty")
+    report={
+        "state":"PRESERVED_MULTIMATERIAL_TECHNICAL_CANDIDATE_NOT_VISUAL_APPROVAL",
+        "asset_id":a.asset_id,
+        "input_source_blend_sha256":hashlib.sha256(source.read_bytes()).hexdigest(),
+        "exported_glb_sha256":hashlib.sha256(out_glb.read_bytes()).hexdigest(),
+        "materials_before":list(before),
+        "low_triangles":triangles,
+        "materials_preserved":len(originals),
+        "bake_uv_mode":a.bake_uv_mode,
+        "source_uv_layer":source_uv_name,
+        "normal_bake_uv_layer":baked_uv_name,
+        "authored_albedo_uv0_unchanged":True,
+        "source_pbr_base_metal_roughness_preserved":True,
+        "independent_high_and_low_source_meshes":True,
+        "detail_source_materials_isolated":high_materials_isolated,
+        "native_godot_tested":False,
+        "real_shipping_scene_tested":False,
+        "physical_android_tested":False,
+        "reference_style_approved":False,
+        "source_file_overwritten":False,
+        "material_results":record
+    }
+    (root/"multimaterial_bake_report.json").write_text(json.dumps(report,indent=2)+"\n")
+    print("HAVENLINE_MULTIMATERIAL_TECHNICAL_CANDIDATE "+json.dumps(report))
+if __name__=="__main__":
+    main()

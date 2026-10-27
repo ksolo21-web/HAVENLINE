@@ -1,0 +1,63 @@
+name: HAVENLINE reusable asset gate (all future tasks)
+on:
+  workflow_call:
+    inputs:
+      asset_manifest:
+        description: 'Path to task-specific asset manifest including exact user reference SHA'
+        type: string
+        required: true
+      workspace:
+        description: 'Workspace relative root containing candidate bytes and reference pixels'
+        type: string
+        required: true
+      gate:
+        description: 'lint / candidate / release (release does NOT deploy)'
+        type: string
+        required: true
+    outputs:
+      validation_artifact:
+        description: 'Artifact identifier/name containing machine-readable verification'
+        value: ${{ jobs.check.outputs.artifact_name }}
+permissions:
+  contents: read
+jobs:
+  check:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 14
+    outputs:
+      artifact_name: ${{ steps.name.outputs.artifact }}
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+      - name: Prepare reproducible validator
+        run: |
+          set -euo pipefail
+          python3 -m venv /tmp/havenline-asset-gate
+          /tmp/havenline-asset-gate/bin/pip install --disable-pip-version-check pillow numpy trimesh
+      - name: Fail closed on invalid gate or unbound material
+        env:
+          ASSET_MANIFEST: ${{ inputs.asset_manifest }}
+          ASSET_WORKSPACE: ${{ inputs.workspace }}
+          ASSET_GATE: ${{ inputs.gate }}
+        run: |
+          set -euo pipefail
+          case "$ASSET_GATE" in lint|candidate|release) ;; *) echo 'Invalid gate mode'; exit 1;; esac
+          mkdir -p asset-pipeline-report
+          /tmp/havenline-asset-gate/bin/python tools/havenline/asset_pipeline/asset_gate.py "$ASSET_GATE" \
+            --manifest "$ASSET_MANIFEST" \
+            --policy Docs/Production/GLOBAL_ASSET_AUTHORING_POLICY.json \
+            --workspace "$ASSET_WORKSPACE" \
+            --report asset-pipeline-report/validation.json
+          test -s asset-pipeline-report/validation.json
+      - name: Evidence artifact name
+        id: name
+        run: echo "artifact=havenline-asset-gate-${{ github.sha }}" >> "$GITHUB_OUTPUT"
+      - name: Retain checks on success or failure
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-asset-gate-${{ github.sha }}
+          path: asset-pipeline-report/
+          if-no-files-found: warn
+          retention-days: 30

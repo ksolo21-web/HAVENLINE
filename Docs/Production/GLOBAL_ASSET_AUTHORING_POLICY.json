@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "policy_id": "HAVENLINE-GLOBAL-ASSET-PIPELINE-v1.0",
+  "scope": "ALL_GAME_ART_ACROSS_ALL_TASKS_AND_FUTURE_BIOMES",
+  "authority": [
+    "Docs/Design/ReferenceVideoLock/REFERENCE_VIDEO_LOCK.md",
+    "Docs/Production/REFERENCE_STYLE_LOCK_STANDARD.md",
+    "Docs/Production/REFERENCE_FIDELITY_STANDARD.json"
+  ],
+  "default_pipeline": [
+    "owner_exact_reference_binding",
+    "editable_high_detail_master_blend",
+    "retopologized_or_optimized_game_glb",
+    "UV_and_baked_PBR_maps",
+    "deterministic_manifest_and_hashes",
+    "Godot_import_and_multi_angle_actual_scene_pixels",
+    "independent_visual_critic",
+    "physical_device_performance",
+    "explicit_owner_approval",
+    "integration_owner_authorization"
+  ],
+  "license_policy": {
+    "software": "FOSS-only core pipeline; external assets must have explicit license and provenance",
+    "external_asset_default": "REJECT_WITHOUT_EXPLICIT_LICENSE_AND_SOURCE",
+    "allowed_license_spdx": [
+      "CC0-1.0",
+      "MIT",
+      "Apache-2.0",
+      "GPL-3.0-or-later",
+      "CC-BY-4.0"
+    ],
+    "license_notice_required": true
+  },
+  "exact_owner_reference_required": true,
+  "exact_style_scores": {
+    "reference_fidelity": 10,
+    "visual_language": 10
+  },
+  "independent_review": {
+    "min_other_dimension_exclusive": 9,
+    "known_defects_must_be_empty": true,
+    "reviewer_must_be_separate_from_builder": true
+  },
+  "evidence": {
+    "views": [
+      "front",
+      "rear",
+      "left",
+      "right",
+      "three-quarter",
+      "overhead",
+      "in_game_use"
+    ],
+    "minimum_native_frame": [
+      3840,
+      2160
+    ],
+    "source_hash_binding": true,
+    "real_gameplay_scene_required": true
+  },
+  "performance": {
+    "global_target_fps": 60,
+    "global_max_frame_ms": 16.6667,
+    "global_native_internal_min": [
+      3840,
+      2160
+    ],
+    "require_real_device_for_release": true,
+    "minimum_sustained_test_seconds": 60
+  },
+  "integration": {
+    "promotion_default": "DENY",
+    "never_modify_shipping_assets_during_candidate_build": true,
+    "require_owner_approval": true,
+    "require_integration_owner": true,
+    "protect_approved_baselines": true
+  },
+  "task_constraints_source": "Docs/Production/PERFORMANCE_BUDGETS.json",
+  "note": "Task-specific frozen budgets may be stricter; never substitute global soft budgets for hard T05 limits. QA frameworks never certify reference style or device FPS merely from source tests."
+}

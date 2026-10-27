@@ -1,0 +1,228 @@
+name: HAVENLINE global Blender high-to-low bake smoke
+on:
+  push:
+    branches: ['havenline/global-asset-pipeline-integration-20261026']
+    paths:
+      - 'tools/havenline/asset_pipeline/blender_build.py'
+      - 'tools/havenline/asset_pipeline/bvh_bake.py'
+      - 'tools/havenline/asset_pipeline/tests/create_blender_smoke.py'
+      - 'tools/havenline/asset_pipeline/tests/godot_glb_import_smoke.gd'
+      - 'tools/havenline/asset_pipeline/capture_isolated_asset.gd'
+      - 'tools/havenline/asset_pipeline/validate_gltf.mjs'
+      - '.github/workflows/havenline-global-blender-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: global-blender-smoke-${{ github.ref }}-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  bake-and-gate:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 40
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+      - name: Install FOSS Blender and isolated validator
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          # CI dependency setup must never occupy the entire 40-minute job.
+          # APT mirror stalls previously prevented Blender validation.
+          if ! sudo timeout 180 apt-get update -qq; then
+            echo "::warning::APT refresh failed/timed out; testing cached package index"
+          fi
+          sudo timeout 360 apt-get install -y --no-install-recommends blender python3-venv python3-numpy
+          blender -b -t 2 --python-expr 'import numpy; print("Blender NumPy",numpy.__version__)'
+          python3 -m venv /tmp/havenline-asset-venv
+          /tmp/havenline-asset-venv/bin/pip install --disable-pip-version-check numpy pillow trimesh
+          blender --version | head -n 2
+      - name: Produce editable synthetic high and low mesh
+        run: |
+          set -euo pipefail
+          mkdir -p global-bake-evidence/fixture global-bake-evidence/candidate
+          timeout 180 blender -b --factory-startup --threads 2 \
+            --python tools/havenline/asset_pipeline/tests/create_blender_smoke.py \
+            -- "$PWD/global-bake-evidence/fixture" > global-bake-evidence/fixture.log 2>&1 || {
+              tail -100 global-bake-evidence/fixture.log; exit 1;
+            }
+      - name: Bake genuine normal and AO maps then export game GLB
+        run: |
+          set -euo pipefail
+          timeout 540 blender -b --factory-startup --threads 2 \
+            --python tools/havenline/asset_pipeline/blender_build.py -- \
+            --source "$PWD/global-bake-evidence/fixture/test_master.blend" \
+            --maps "$PWD/global-bake-evidence/fixture" \
+            --out "$PWD/global-bake-evidence/candidate" \
+            --asset-id smoke_test --size 128 --triangles-max 3000 --backend bvh_cpu \
+            > global-bake-evidence/bake.log 2>&1 || {
+              tail -150 global-bake-evidence/bake.log; exit 1;
+            }
+          test -s global-bake-evidence/candidate/smoke_test_MASTER_AND_LOD0.blend
+          test -s global-bake-evidence/candidate/smoke_test_LOD0.glb
+          test -s global-bake-evidence/candidate/textures/normal.png
+          test -s global-bake-evidence/candidate/textures/ambient_occlusion.png
+      - name: Inspect saved geometry-baked PNG bytes independently
+        run: |
+          set -euo pipefail
+          /tmp/havenline-asset-venv/bin/python - <<'PY'
+          import json,pathlib
+          from PIL import Image
+          root=pathlib.Path("global-bake-evidence/candidate")
+          report=json.loads((root/"bake_report.json").read_text())
+          stats=report.get("bake_stats") or {}
+          assert report["bake_backend"]=="bvh_cpu", "Required independent real-geometry fallback"
+          assert stats.get("high_to_low_ray_hits",0)>32, "No high-to-low geometry intersection"
+          assert stats.get("ambient_occlusion_ray_count",0)>256, "No AO hemisphere rays"
+          assert stats.get("ambient_occlusion_intersections",0)>0, "Synthetic occluding wall produced no AO intersections"
+          assert stats.get("texture_coverage",0)>=.05, "Insufficient artist UV coverage"
+          maps={}
+          for kind in ("normal","ambient_occlusion"):
+              with Image.open(root/"textures"/(kind+".png")) as im:
+                  rgba=im.convert("RGBA")
+                  pix=list(rgba.getdata())
+                  opacity=sum(a>=128 for r,g,b,a in pix)/len(pix)
+                  unique_rgb=len({p[:3] for p in pix})
+                  if kind=="normal":
+                      valid=sum(a>=128 and b>=160 and b>=r+14 and b>=g+14
+                                for r,g,b,a in pix)/len(pix)
+                      assert unique_rgb>=8, "Synthetic curved mesh normal map is uniform or nearly so"
+                  else:
+                      assert unique_rgb>=2, "Occluded test fixture generated a uniform white AO map"
+                      valid=sum(a>=128 and max(r,g,b)>=32 and max(r,g,b)-min(r,g,b)<=10
+                                for r,g,b,a in pix)/len(pix)
+                  assert opacity>=.05 and valid>=.05, f"{kind}: empty or invalid saved pixels"
+                  maps[kind]={"alpha_coverage":round(opacity,5),
+                              "channel_semantics_coverage":round(valid,5),
+                              "unique_rgb_colors":unique_rgb,"dimensions":rgba.size}
+          artifact={"candidate_not_visual_approval":True,
+                    "bake_backend":"bvh_cpu","bvh_stats":stats,"png_evidence":maps}
+          (root.parent/"pixel-integrity.json").write_text(json.dumps(artifact,indent=2)+"\n")
+          print(json.dumps(artifact,indent=2))
+          PY
+      - name: Gate exact bytes against global reference and budget policy
+        run: |
+          set -euo pipefail
+          /tmp/havenline-asset-venv/bin/python - <<'PY'
+          import copy,hashlib,json,pathlib,shutil
+          w=pathlib.Path("global-bake-evidence")
+          m=json.loads(pathlib.Path("tools/havenline/asset_pipeline/examples/T05-cooker-asset.json").read_text())
+          m["asset_id"]="smoke_test";m["task_id"]="TOOLING_SMOKE_ONLY"
+          r=w/"fixture/base_color.png"
+          m["owner_reference"]={"binding":"exact_owner","path":"fixture/base_color.png",
+                                 "sha256":hashlib.sha256(r.read_bytes()).hexdigest()}
+          m["outputs"]["master_blend"]="candidate/smoke_test_MASTER_AND_LOD0.blend"
+          m["outputs"]["low_glb"]="candidate/smoke_test_LOD0.glb"
+          g=w/"candidate/smoke_test_LOD0.glb"
+          m["outputs"]["low_glb_sha256"]=hashlib.sha256(g.read_bytes()).hexdigest()
+          m["outputs"]["bake_maps"]={k:f"candidate/textures/{k}.png" for k in
+            ("base_color","normal","roughness","metallic","ambient_occlusion")}
+          m["allowed_material_names"]=["HL_blue"]
+          m["limits"]={"footprint_x_m":2.45,"footprint_z_m":2.3,"triangles_max":3000,
+                       "materials_max":12,"draw_calls_max":48,"texture_mib_max":96,
+                       "baseline_kit_triangles":1000,"baseline_asset_triangles":1000,
+                       "kit_triangles_max":20000}
+          (w/"smoke_manifest.json").write_text(json.dumps(m,indent=2)+"\n")
+          PY
+          /tmp/havenline-asset-venv/bin/python tools/havenline/asset_pipeline/asset_gate.py candidate \
+             --manifest global-bake-evidence/smoke_manifest.json \
+             --policy Docs/Production/GLOBAL_ASSET_AUTHORING_POLICY.json \
+             --workspace global-bake-evidence \
+             --report global-bake-evidence/candidate-validation.json > global-bake-evidence/gate.log
+          grep -q CANDIDATE_TECHNICAL_PASS_NOT_VISUAL_APPROVAL global-bake-evidence/gate.log
+          echo "Smoke test succeeded: editable master, genuine bake maps and bounded GLB candidate; owner approval NOT claimed."
+      - name: Khronos glTF 2.0 spec validation and glTF Transform inspection
+        run: |
+          set -euo pipefail
+          npm install --no-save gltf-validator @gltf-transform/cli
+          node tools/havenline/asset_pipeline/validate_gltf.mjs \
+            global-bake-evidence/candidate/smoke_test_LOD0.glb \
+            global-bake-evidence/official-gltf-validation.json
+          ./node_modules/.bin/gltf-transform inspect \
+            global-bake-evidence/candidate/smoke_test_LOD0.glb \
+            > global-bake-evidence/gltf-transform-inspection.txt
+          grep -q 'TECHNICAL_GLTF_VALIDATION_ONLY' global-bake-evidence/official-gltf-validation.json
+          # Neither a zero-error structural pass nor a Blender exporter setting
+          # is proof that normal-map tangent vectors are actually embedded.
+          node --input-type=module - <<'JS'
+          import fs from 'node:fs';
+          const glb=fs.readFileSync('global-bake-evidence/candidate/smoke_test_LOD0.glb');
+          const jsonLength=glb.readUInt32LE(12);
+          const gltf=JSON.parse(glb.subarray(20,20+jsonLength).toString('utf8'));
+          const prims=gltf.meshes.flatMap(m=>m.primitives);
+          if(!prims.length || prims.some(p=>p.attributes.TANGENT===undefined))
+            throw Error('Normal-mapped GLB lacks explicit portable TANGENT attributes');
+          const result=JSON.parse(fs.readFileSync('global-bake-evidence/official-gltf-validation.json'));
+          if(result.summary.numErrors!==0 || result.summary.numWarnings!==0)
+            throw Error('Khronos glTF validator errors/warnings: '+JSON.stringify(result.summary.messages));
+          console.log('Explicit GLB tangents and zero Khronos warnings verified');
+          JS
+
+      - name: Verify isolated Godot 4 GLB import and material binding
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          staging="$PWD/global-bake-evidence/godot-import"
+          mkdir -p "$staging/assets" "$RUNNER_TEMP/havenline-godot-editor"
+          cp global-bake-evidence/candidate/smoke_test_LOD0.glb "$staging/assets/"
+          cp tools/havenline/asset_pipeline/tests/godot_glb_import_smoke.gd "$staging/"
+          cat > "$staging/project.godot" <<'EOF'
+          config_version=5
+          [application]
+          config/name="Havenline Isolated GLB Technical Smoke"
+          [rendering]
+          renderer/rendering_method="gl_compatibility"
+          EOF
+          base='https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable'
+          curl -fL --retry 2 --connect-timeout 20 --max-time 240 "$base/Godot_v4.7.2-stable_linux.x86_64.zip" -o "$RUNNER_TEMP/havenline-godot-editor/editor.zip"
+          unzip -q "$RUNNER_TEMP/havenline-godot-editor/editor.zip" -d "$RUNNER_TEMP/havenline-godot-editor"
+          editor="$RUNNER_TEMP/havenline-godot-editor/Godot_v4.7.2-stable_linux.x86_64"
+          chmod +x "$editor"
+          "$editor" --version | tee global-bake-evidence/godot-version.log
+          timeout 180 "$editor" --headless --editor --path "$staging" --import --quit 2>&1 | tee global-bake-evidence/godot-import.log
+          timeout 120 "$editor" --headless --path "$staging" --script res://godot_glb_import_smoke.gd 2>&1 | tee global-bake-evidence/godot-binding.log
+          grep -q HAVENLINE_GODOT_IMPORT_PASS global-bake-evidence/godot-binding.log
+          echo 'Isolated headless GLB import PASS; not in-game visual or phone evidence.'
+      - name: Capture real Godot isolated multi-angle material images
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          staging="$PWD/global-bake-evidence/godot-import"
+          editor="$RUNNER_TEMP/havenline-godot-editor/Godot_v4.7.2-stable_linux.x86_64"
+          cp tools/havenline/asset_pipeline/capture_isolated_asset.gd "$staging/capture_isolated_asset.gd"
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            sudo timeout 180 apt-get install -y --no-install-recommends xvfb
+          fi
+          mkdir -p global-bake-evidence/godot-seven-views
+          timeout 240 xvfb-run -a "$editor" --path "$staging" --rendering-method gl_compatibility --audio-driver Dummy --script res://capture_isolated_asset.gd -- --glb=res://assets/smoke_test_LOD0.glb --out="$PWD/global-bake-evidence/godot-seven-views" --asset-id=smoke_test 2>&1 | tee global-bake-evidence/godot-seven-views.log
+          /tmp/havenline-asset-venv/bin/python - <<'PY'
+          import hashlib,json,pathlib
+          from PIL import Image
+          p=pathlib.Path("global-bake-evidence/godot-seven-views")
+          report=json.loads((p/"isolated-import.json").read_text())
+          assert report["status"]=="ISOLATED_TECHNICAL_ENGINE_PROOF_ONLY"
+          assert report["mesh_count"]>0 and report["shipping_scene_loaded"] is False
+          views=report["renders"]
+          assert len(views)==7 and len({v["view"] for v in views})==7
+          evidence=[]
+          for v in views:
+              path=p/v["file"]
+              with Image.open(path) as img:
+                  assert img.format=="PNG" and img.size==(1280,720)
+                  reduced=img.convert("RGB").resize((160,90))
+                  unique=len(set(reduced.getdata()))
+                  assert unique>=16, f"Godot renderer gave empty/flat pixels for {v['view']}"
+              evidence.append({"view":v["view"],"sha256":hashlib.sha256(path.read_bytes()).hexdigest(),"sample_rgb_colors":unique})
+          assert len({x["sha256"] for x in evidence})>=3, "Multi-angle frames are duplicated or frozen"
+          (p/"independent-frame-integrity.json").write_text(json.dumps({"test_only":True,"true_shipping_scene":False,"views":evidence},indent=2)+chr(10))
+          print("GODOT_SEVEN_VIEW_TECHNICAL_PIXELS_PASS",json.dumps(evidence))
+          PY
+      - name: Preserve reproducible candidate or failure logs
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-global-blender-smoke-${{ github.sha }}
+          path: global-bake-evidence/
+          retention-days: 30
+          if-no-files-found: warn
