@@ -169,8 +169,10 @@ def prepare(a: argparse.Namespace) -> dict:
                 continue
             if p.is_absolute() or ".." in p.parts or entry.file_size > MAX_FRAME_BYTES:
                 raise ValueError("Unsafe or oversized archive member")
-        native = json.loads(z.read("native-4k-byte-audit.json"))
-        engine = json.loads(z.read("screenshots/isolated-godot-report.json"))
+        native_bytes = z.read("native-4k-byte-audit.json")
+        engine_bytes = z.read("screenshots/isolated-godot-report.json")
+        native = json.loads(native_bytes)
+        engine = json.loads(engine_bytes)
         if native.get("candidate_glb_sha256") != digest(glb_bytes):
             raise ValueError("Godot evidence not tied to exact candidate GLB")
         if native.get("source_reference_sha256") != digest(reference_bytes):
@@ -204,6 +206,8 @@ def prepare(a: argparse.Namespace) -> dict:
         raise ValueError("Refuse overwriting a preexisting evidence package")
     out.mkdir(parents=True, exist_ok=True)
     (out / "reference.png").write_bytes(reference_bytes)
+    (out / "native-4k-byte-audit.json").write_bytes(native_bytes)
+    (out / "isolated-godot-report.json").write_bytes(engine_bytes)
     shutil.copyfile(glb_path, out / "candidate.glb")
     for name, im in frames:
         # Preserve byte-for-byte original native evidence, not a new PIL PNG.
@@ -217,6 +221,8 @@ def prepare(a: argparse.Namespace) -> dict:
         "source_builder_commit": a.builder_commit,
         "source_godot_run_id": a.godot_run,
         "capture_archive_sha256": filehash(zip_path),
+        "native_audit_sha256": digest(native_bytes),
+        "engine_audit_sha256": digest(engine_bytes),
         "image_shas": {name: filehash(out / ("godot-" + name + ".png")) for name in hashes},
         "raw_godot_shas_verified_without_recompression": True,
         "private_reference_sha256": filehash(out / "reference.png"),
@@ -270,6 +276,15 @@ def validate(a: argparse.Namespace) -> dict:
     test(evidence.get("raw_godot_shas_verified_without_recompression") is True, "native PNG provenance incomplete")
     test(evidence.get("godot_resolution") == p["required_godot_pixels"], "wrong native frame resolution")
     test(set(evidence.get("image_shas", {})) == set(p["required_godot_views"]), "five views not proven")
+    for audit_name, audit_field in (("native-4k-byte-audit.json", "native_audit_sha256"),
+                                   ("isolated-godot-report.json", "engine_audit_sha256")):
+        ap = root / audit_name
+        test(ap.is_file() and filehash(ap) == evidence.get(audit_field), audit_name + " changed or missing")
+    if (root / "native-4k-byte-audit.json").is_file():
+        native = json.loads((root / "native-4k-byte-audit.json").read_text())
+        test(native.get("candidate_glb_sha256") == evidence.get("candidate_glb_sha256"), "engine candidate identity not matched")
+        test(native.get("source_reference_sha256") == p["reference"]["sha256"], "engine reference binding drift")
+        test({f.get("view"): f.get("sha256") for f in native.get("frames", [])} == evidence.get("image_shas"), "native byte audit mismatch")
     for name, expected in [("reference.png", evidence.get("private_reference_sha256")),
                            ("candidate.glb", evidence.get("candidate_glb_sha256")),
                            ("review-board.png", evidence.get("review_board_sha256"))]:
@@ -277,6 +292,17 @@ def validate(a: argparse.Namespace) -> dict:
     for view, expected in evidence.get("image_shas", {}).items():
         path = root / ("godot-" + view + ".png")
         test(path.is_file() and filehash(path) == expected, "frame mutated " + view)
+        if path.is_file():
+            try:
+                exact_png(path.read_bytes(), tuple(p["required_godot_pixels"]), "review " + view)
+            except (ValueError, OSError) as ex:
+                errors.append("native image verification failure " + view + ": " + str(ex))
+    if (root / "candidate.glb").is_file():
+        try:
+            actual_inventory = glb_inventory((root / "candidate.glb").read_bytes(), p["required_material_names"])
+            test(actual_inventory == evidence.get("material_inventory"), "GLB material audit differs from evidence")
+        except (ValueError, KeyError, IndexError, struct.error) as ex:
+            errors.append("GLB material inventory invalid: " + str(ex))
     test(review.get("critic_id") == p["critic_id"], "different critic")
     test(review.get("evidence_manifest_sha256") == filehash(evidence_path), "review evidence manifest hash mismatch")
     test(review.get("candidate_glb_sha256") == evidence.get("candidate_glb_sha256"), "reviewed GLB differs")
