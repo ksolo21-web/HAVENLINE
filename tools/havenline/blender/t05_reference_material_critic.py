@@ -48,12 +48,12 @@ def load_policy() -> dict:
     return p
 
 
-def exact_png(raw: bytes, dimensions: tuple[int, int], label: str) -> Image.Image:
+def exact_png(raw: bytes, dimensions: tuple[int, int], label: str, encoding: str = "PNG") -> Image.Image:
     if len(raw) < 100 or len(raw) > MAX_FRAME_BYTES:
         raise ValueError(label + " image byte size invalid")
     with Image.open(io.BytesIO(raw)) as im:
-        if im.format != "PNG" or im.size != dimensions or im.mode not in ("RGB", "RGBA"):
-            raise ValueError(label + " must be original-size RGB(A) PNG")
+        if im.format != encoding or im.size != dimensions or im.mode not in ("RGB", "RGBA"):
+            raise ValueError(label + " must be original-size RGB(A) " + encoding + " bytes")
         im.load()
         return im.convert("RGB")
 
@@ -153,7 +153,8 @@ def prepare(a: argparse.Namespace) -> dict:
     reference_bytes = reference_path.read_bytes()
     if digest(reference_bytes) != policy["reference"]["sha256"]:
         raise ValueError("Wrong authoritative owner image")
-    reference = exact_png(reference_bytes, tuple(policy["reference"]["pixels"]), "owner")
+    reference = exact_png(reference_bytes, tuple(policy["reference"]["pixels"]), "owner",
+                          policy["reference"]["byte_encoding"])
     glb_bytes = glb_path.read_bytes()
     materials = glb_inventory(glb_bytes, policy["required_material_names"])
     frames = []
@@ -226,6 +227,8 @@ def prepare(a: argparse.Namespace) -> dict:
         "image_shas": {name: filehash(out / ("godot-" + name + ".png")) for name in hashes},
         "raw_godot_shas_verified_without_recompression": True,
         "private_reference_sha256": filehash(out / "reference.png"),
+        "owner_original_byte_encoding": policy["reference"]["byte_encoding"],
+        "source_filename_extension_does_not_match_encoding": True,
         "review_board_sha256": filehash(out / "review-board.png"),
         "material_inventory": materials,
         "godot_renderer": engine.get("renderer"),
@@ -274,6 +277,13 @@ def validate(a: argparse.Namespace) -> dict:
     test(evidence.get("owner_source_sha256") == p["reference"]["sha256"], "wrong owner reference")
     test((root / "reference.png").is_file() and filehash(root / "reference.png") == p["reference"]["sha256"], "actual owner PNG does not match canonical source")
     test(evidence.get("raw_godot_shas_verified_without_recompression") is True, "native PNG provenance incomplete")
+    test(evidence.get("owner_original_byte_encoding") == p["reference"]["byte_encoding"], "owner original encoding mismatch")
+    if (root / "reference.png").is_file():
+        try:
+            exact_png((root / "reference.png").read_bytes(), tuple(p["reference"]["pixels"]),
+                      "original owner", p["reference"]["byte_encoding"])
+        except (ValueError, OSError) as ex:
+            errors.append("original reference encoding/dimensions invalid: " + str(ex))
     test(evidence.get("godot_resolution") == p["required_godot_pixels"], "wrong native frame resolution")
     test(set(evidence.get("image_shas", {})) == set(p["required_godot_views"]), "five views not proven")
     for audit_name, audit_field in (("native-4k-byte-audit.json", "native_audit_sha256"),
