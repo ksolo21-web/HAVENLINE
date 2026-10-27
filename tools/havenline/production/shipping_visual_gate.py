@@ -208,10 +208,10 @@ def validate_material_critic_receipt(task_id: str,candidate: str,
         if receipt.get("full_shipped_material_census_verified") is not True:
             errors.append("T70 full shipped game material census not independently verified")
         try:
-            from reference_style_lock import visual_style_paths
+            from inventory_shipped_visual_sources import census as compute_census
             ref=integration_ref or "HEAD"
-            actual=[p for p in tracked_files(ref) if not match(p,policy().get("excluded_patterns",[]))]
-            census=visual_style_paths(actual,(ref,))
+            material_census=compute_census(ref)
+            census=[entry["shipping_path"] for entry in material_census["source_items"]]
             if sorted(paths)!=census:
                 errors.append("T70 material paths fail actual shipping repository census")
         except (OSError,ValueError,subprocess.SubprocessError) as exc:
