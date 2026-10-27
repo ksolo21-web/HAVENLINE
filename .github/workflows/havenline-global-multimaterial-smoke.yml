@@ -1,0 +1,105 @@
+name: HAVENLINE global multi-material fidelity-preserving bake smoke
+on:
+  push:
+    branches: ['havenline/global-asset-pipeline-integration-20261026']
+    paths:
+      - 'tools/havenline/asset_pipeline/multimaterial_build.py'
+      - 'tools/havenline/asset_pipeline/verify_multimaterial.py'
+      - 'tools/havenline/asset_pipeline/bvh_bake.py'
+      - 'tools/havenline/asset_pipeline/tests/create_multi_material_fixture.py'
+      - '.github/workflows/havenline-global-multimaterial-smoke.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+  actions: read
+concurrency:
+  group: havenline-multimaterial-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  candidate-multimaterial:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 23
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+      - name: Reuse source-bound synthetic high/low fixture from validated bake
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          run-id: 40381157048
+          name: havenline-global-blender-smoke-3526054a2d76103e827bb309e6209b2f23f7b1f3
+          path: prior-bake
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Install free Blender, pinned venv requirements with bounded APT mirrors
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          if ! sudo timeout 150 apt-get update -qq; then
+            echo "::warning::APT metadata refresh timed out; using cached metadata"
+          fi
+          sudo timeout 390 apt-get install -y --no-install-recommends blender python3-venv python3-numpy
+          python3 -m venv "$RUNNER_TEMP/hl-materials-venv"
+          "$RUNNER_TEMP/hl-materials-venv/bin/pip" install --disable-pip-version-check pillow
+          blender --version | head -n 2
+      - name: Prepare independent high/low geometry with two artistic PBR materials
+        run: |
+          set -euo pipefail
+          mkdir -p multi-bake-evidence/fixture multi-bake-evidence/candidate
+          cp prior-bake/fixture/test_master.blend multi-bake-evidence/fixture/test_master.blend
+          sha256sum multi-bake-evidence/fixture/test_master.blend > multi-bake-evidence/fixture-master-sha256.txt
+          timeout 150 blender -b --factory-startup --threads 2 --python tools/havenline/asset_pipeline/tests/create_multi_material_fixture.py -- "$PWD/multi-bake-evidence" > multi-bake-evidence/fixture.log 2>&1 || { tail -120 multi-bake-evidence/fixture.log; exit 1; }
+      - name: Bake actual high detail normals and AO by shader slot
+        run: |
+          set -euo pipefail
+          timeout 480 blender -b --factory-startup --threads 2 --python tools/havenline/asset_pipeline/multimaterial_build.py -- --source "$PWD/multi-bake-evidence/multimaterial-fixture.blend" --out "$PWD/multi-bake-evidence/candidate" --asset-id multi_smoke --size 128 --materials-max 12 --triangles-max 3000 > multi-bake-evidence/build.log 2>&1 || { tail -180 multi-bake-evidence/build.log; exit 1; }
+          test -s multi-bake-evidence/candidate/multi_smoke_MULTIMATERIAL_STAGE.blend
+          test -s multi-bake-evidence/candidate/multi_smoke_MULTIMATERIAL_STAGE.glb
+          test -s multi-bake-evidence/candidate/textures/slot_00_normal.png
+          test -s multi-bake-evidence/candidate/textures/slot_01_normal.png
+          test -s multi-bake-evidence/candidate/textures/slot_00_ambient_occlusion.png
+          test -s multi-bake-evidence/candidate/textures/slot_01_ambient_occlusion.png
+      - name: Audit original shaders and embedded per-material normal maps independently
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/hl-materials-venv/bin/python" tools/havenline/asset_pipeline/verify_multimaterial.py --workspace "$PWD/multi-bake-evidence/candidate" --min-materials 2 | tee multi-bake-evidence/independent-verify.log
+          grep -q MULTIMATERIAL_BVH_TECHNICAL_PASS_NOT_STYLE_APPROVAL multi-bake-evidence/independent-verify.log
+      - name: Validate multi-material GLB using official Khronos implementation
+        run: |
+          set -euo pipefail
+          npm install --no-save gltf-validator @gltf-transform/cli
+          node tools/havenline/asset_pipeline/validate_gltf.mjs multi-bake-evidence/candidate/multi_smoke_MULTIMATERIAL_STAGE.glb multi-bake-evidence/official-gltf-validation.json
+          ./node_modules/.bin/gltf-transform inspect multi-bake-evidence/candidate/multi_smoke_MULTIMATERIAL_STAGE.glb > multi-bake-evidence/gltf-inspection.txt
+          node - <<'JS'
+          const r=require('./multi-bake-evidence/official-gltf-validation.json')
+          if(r.summary.numErrors!==0)throw Error("Khronos structural errors: "+r.summary.numErrors)
+          console.log("GLTF_VALIDATION_TECHNICAL_PASS",r.summary.numErrors,r.summary.numWarnings)
+          JS
+      - name: Independently validate non-destructive UV1 normals with preserved UV0
+        run: |
+          set -euo pipefail
+          mkdir -p multi-bake-evidence/uv1-candidate
+          timeout 480 blender -b --factory-startup --threads 2 \
+            --python tools/havenline/asset_pipeline/multimaterial_build.py -- \
+            --source "$PWD/multi-bake-evidence/multimaterial-fixture.blend" \
+            --out "$PWD/multi-bake-evidence/uv1-candidate" \
+            --asset-id multi_uv1 --size 128 --triangles-max 3000 \
+            --materials-max 12 --bake-uv-mode separate_uv1 \
+            > multi-bake-evidence/uv1-bake.log 2>&1 || {
+              tail -160 multi-bake-evidence/uv1-bake.log; exit 1; }
+          "$RUNNER_TEMP/hl-materials-venv/bin/python" \
+            tools/havenline/asset_pipeline/verify_multimaterial.py \
+            --workspace "$PWD/multi-bake-evidence/uv1-candidate" --min-materials 2 \
+            > multi-bake-evidence/uv1-verify.log 2>&1 || {
+              tail -160 multi-bake-evidence/uv1-verify.log; exit 1; }
+          grep -q MULTIMATERIAL_BVH_TECHNICAL_PASS_NOT_STYLE_APPROVAL multi-bake-evidence/uv1-verify.log
+          node tools/havenline/asset_pipeline/validate_gltf.mjs \
+            multi-bake-evidence/uv1-candidate/multi_uv1_MULTIMATERIAL_STAGE.glb \
+            multi-bake-evidence/uv1-khronos.json
+      - name: Retain immutable candidate and failing CI logs
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-global-multimaterial-${{ github.sha }}
+          path: multi-bake-evidence/
+          retention-days: 30
+          if-no-files-found: warn
