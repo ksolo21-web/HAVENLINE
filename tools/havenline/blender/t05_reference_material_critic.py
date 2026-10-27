@@ -158,6 +158,7 @@ def prepare(a: argparse.Namespace) -> dict:
     materials = glb_inventory(glb_bytes, policy["required_material_names"])
     frames = []
     hashes = {}
+    raw_frames = {}
     with zipfile.ZipFile(zip_path) as z:
         # Read only fixed known paths; never bulk-extract an arbitrary archive.
         if len(z.namelist()) > 30 or len(set(z.namelist())) != len(z.namelist()):
@@ -196,6 +197,7 @@ def prepare(a: argparse.Namespace) -> dict:
                 raise ValueError("Blank or trivial Godot render " + view)
             frames.append((view, im))
             hashes[view] = native_map[view]
+            raw_frames[view] = raw
     if len(set(hashes.values())) != 5:
         raise ValueError("Repeated supposedly independent camera image")
     if out.exists() and any(out.iterdir()):
@@ -204,7 +206,8 @@ def prepare(a: argparse.Namespace) -> dict:
     (out / "reference.png").write_bytes(reference_bytes)
     shutil.copyfile(glb_path, out / "candidate.glb")
     for name, im in frames:
-        im.save(out / ("godot-" + name + ".png"), format="PNG")
+        # Preserve byte-for-byte original native evidence, not a new PIL PNG.
+        (out / ("godot-" + name + ".png")).write_bytes(raw_frames[name])
     make_board(reference, frames, out / "review-board.png")
     evidence = {
         "status": "PRIVATE_SOURCE_BOUND_CRITIC_EVIDENCE_NOT_REVIEWED",
@@ -215,6 +218,7 @@ def prepare(a: argparse.Namespace) -> dict:
         "source_godot_run_id": a.godot_run,
         "capture_archive_sha256": filehash(zip_path),
         "image_shas": {name: filehash(out / ("godot-" + name + ".png")) for name in hashes},
+        "raw_godot_shas_verified_without_recompression": True,
         "private_reference_sha256": filehash(out / "reference.png"),
         "review_board_sha256": filehash(out / "review-board.png"),
         "material_inventory": materials,
@@ -262,6 +266,8 @@ def validate(a: argparse.Namespace) -> dict:
             errors.append(msg)
     test(evidence.get("critic_id") == p["critic_id"], "wrong critic evidence")
     test(evidence.get("owner_source_sha256") == p["reference"]["sha256"], "wrong owner reference")
+    test((root / "reference.png").is_file() and filehash(root / "reference.png") == p["reference"]["sha256"], "actual owner PNG does not match canonical source")
+    test(evidence.get("raw_godot_shas_verified_without_recompression") is True, "native PNG provenance incomplete")
     test(evidence.get("godot_resolution") == p["required_godot_pixels"], "wrong native frame resolution")
     test(set(evidence.get("image_shas", {})) == set(p["required_godot_views"]), "five views not proven")
     for name, expected in [("reference.png", evidence.get("private_reference_sha256")),
@@ -288,6 +294,13 @@ def validate(a: argparse.Namespace) -> dict:
     if isinstance(raw, str) and pathlib.PurePosixPath(raw).name == raw and raw != pathlib.Path(a.review).name:
         raw_path = root / raw
         test(raw_path.is_file() and filehash(raw_path) == raw_sha, "raw independent critic response missing or changed")
+        if raw_path.is_file() and filehash(raw_path) == raw_sha:
+            try:
+                raw_response = json.loads(raw_path.read_text())
+                for field in ("scores", "defects", "observations", "confidence"):
+                    test(raw_response.get(field) == review.get(field), "raw critic response differs: " + field)
+            except (ValueError, UnicodeDecodeError) as ex:
+                errors.append("raw critic output is not parseable JSON: " + str(ex))
     else:
         errors.append("raw independent critic response not bound")
     alignment = review.get("source_camera_alignment") or {}
