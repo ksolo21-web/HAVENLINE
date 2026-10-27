@@ -396,7 +396,7 @@ scene.render.engine="CYCLES"
 scene.cycles.device="CPU"
 scene.cycles.samples=24
 scene.cycles.use_denoising=False # Ubuntu Free Blender 4.0.2 build omits OIDN
-scene.render.resolution_x=768;scene.render.resolution_y=768;scene.render.resolution_percentage=100
+scene.render.resolution_x=640;scene.render.resolution_y=640;scene.render.resolution_percentage=100
 scene.render.image_settings.file_format="PNG"
 scene.render.film_transparent=False
 shots={"front":(0,2.7,-5.2),"three-quarter":(4.0,3.1,-4.7),"right":(5.4,2.9,.0),"rear":(0,3.0,5.2)}
