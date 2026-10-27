@@ -326,6 +326,19 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
         "passed": passed, "mode": mode, "task_id": task_id, "candidate_commit": candidate,
         "asset_ids": asset_ids, "material_count": sum(len(a.get("materials", [])) for a in assets if isinstance(a, dict)),
         "source_paths_covered": covered_paths,
+        "source_asset_hashes": {a["asset_id"]: a["asset_source"]["sha256"]
+                                for a in assets if isinstance(a, dict) and isinstance(a.get("asset_source"), dict)
+                                and "asset_id" in a and "sha256" in a["asset_source"]},
+        "reference_image_hashes": {a["asset_id"]: [r["sha256"] for r in a.get("references", [])
+                                                    if isinstance(r, dict) and "sha256" in r]
+                                    for a in assets if isinstance(a, dict) and "asset_id" in a},
+        "native_godot_capture_hashes": {a["asset_id"]: {x["view"]: x["sha256"]
+                                              for x in a.get("captures", [])
+                                              if isinstance(x, dict) and "view" in x and "sha256" in x}
+                                         for a in assets if isinstance(a, dict) and "asset_id" in a},
+        "reviewed_material_ids": {a["asset_id"]: [m["material_id"] for m in a.get("materials", [])
+                                                   if isinstance(m, dict) and "material_id" in m]
+                                   for a in assets if isinstance(a, dict) and "asset_id" in a},
         "policy_path": "Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json",
         "private_manifest_canonical_sha256": hashlib.sha256(json.dumps(manifest, sort_keys=True, separators=(",", ":")).encode()).hexdigest(),
         "verified_review_sources": verified_review_sources if passed and mode != "evidence" else [],
