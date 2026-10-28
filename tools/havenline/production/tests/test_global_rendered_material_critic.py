@@ -35,6 +35,18 @@ def make_png(seed, w=32, h=32):
     return f.getvalue()
 
 
+def synthetic_glb_for_materials(names):
+    import struct
+    doc={"asset":{"version":"2.0"},
+         "materials":[{"name":name} for name in names],
+         "meshes":[{"primitives":[{"attributes":{"POSITION":0},"material":i}
+                                for i in range(len(names))]}]}
+    payload=json.dumps(doc).encode()
+    payload+=b" "*((-len(payload))%4)
+    chunk=struct.pack("<I4s",len(payload),b"JSON")+payload
+    return struct.pack("<4sII",b"glTF",2,12+len(chunk))+chunk
+
+
 class PermanentMaterialCriticTests(unittest.TestCase):
     def setUp(self):
         self.temp = tempfile.TemporaryDirectory()
@@ -51,7 +63,8 @@ class PermanentMaterialCriticTests(unittest.TestCase):
         jpeg = io.BytesIO()
         reference_image.save(jpeg, format="JPEG", quality=92)
         self.source = self.addfile("18567.png", jpeg.getvalue())
-        self.glb = self.addfile("synthetic_mesh.glb", b"not an actual glTF file; fixture checks source hash binding only")
+        original_materials = ["HL_snow", "HL_wood", "HL_metal"]
+        self.glb = self.addfile("synthetic_mesh.glb", synthetic_glb_for_materials(original_materials))
         profile = self.policy["evidence_profiles"]["static_3d"]
         captures = []
         for i, view in enumerate(profile["views"]):
@@ -60,7 +73,7 @@ class PermanentMaterialCriticTests(unittest.TestCase):
                 "view": view, **p, "engine": "Godot",
                 "render_run_id": 8004, "candidate_commit": SRC,
                 "shipping_scene_loaded": False})
-        self.material_names = ["HL_snow", "HL_wood", "HL_metal"]
+        self.material_names = [str(i)+":"+name for i,name in enumerate(original_materials)]
         self.asset = {
             "asset_id": "test_tree",
             "profile": "static_3d",
@@ -135,6 +148,28 @@ class PermanentMaterialCriticTests(unittest.TestCase):
         self.assertTrue(out["passed"], out["errors"])
         self.assertFalse(out["user_approved"])
         self.assertEqual(["C1", "C2"], out["critic_ids_verified"])
+
+    def test_source_nine_materials_cannot_be_claimed_as_one_reviewed_surface(self):
+        # The exact GLB primitive/material inventory must be used, not a
+        # manifest reporting fewer surfaces than exist on the model.
+        self.asset["materials"] = self.asset["materials"][:1]
+        report=self.execute()
+        self.assertFalse(report["passed"])
+        self.assertTrue(any("omit, invent or merge actual GLB" in msg for msg in report["errors"]), report["errors"])
+
+    def test_misnamed_source_glb_material_slot_is_blocked(self):
+        self.asset["materials"][0]["material_id"] = "0:Imaginary"
+        report=self.execute()
+        self.assertFalse(report["passed"])
+        self.assertTrue(any("actual GLB" in msg for msg in report["errors"]), report["errors"])
+
+    def test_corrupted_glb_does_not_fallback_to_manifest_claims(self):
+        p=self.root/"synthetic_mesh.glb"
+        p.write_bytes(b"not-a-real-GLB")
+        self.asset["asset_source"]["sha256"]=sha256(p)
+        report=self.execute()
+        self.assertFalse(report["passed"])
+        self.assertTrue(any("actual authored GLB" in msg for msg in report["errors"]), report["errors"])
 
     def test_original_source_is_byte_verified_not_extension_based(self):
         self.assertTrue(self.execute()["passed"])
