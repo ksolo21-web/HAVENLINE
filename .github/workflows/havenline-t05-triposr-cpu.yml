@@ -69,6 +69,8 @@ jobs:
       - name: Generate actual neural mesh (unapproved)
         run: |
           set -euo pipefail
+          # TripoSR's --no-remove-bg path does not auto-create /0; do it here.
+          mkdir -p "$RUNNER_TEMP/t05-neural/generated/0"
           python "$RUNNER_TEMP/TripoSR/run.py" \
             "$RUNNER_TEMP/t05-neural/prepared/image.png" \
             --device cpu --no-remove-bg --chunk-size 1024 \
