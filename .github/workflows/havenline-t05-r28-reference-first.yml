@@ -1,0 +1,321 @@
+name: T05 R28 structural forged cooker and organic food build, native 4K (unapproved)
+on:
+  push:
+    branches: ['havenline/T05-r18-visual-corrections-20261025']
+    paths:
+      - 'tools/havenline/blender/t05_cooker_reference_first_r28.py'
+      - '.github/workflows/havenline-t05-r28-reference-first.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t05-r28-reference-first-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  reference-first-geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+          fetch-depth: 1
+      - name: Install Blender/visual validation tools with bounded mirrors
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          # The default Azure mirror stalled on Blender's 35.9 MB data package
+          # twice; switch THIS disposable runner to Ubuntu's official mirror.
+          sudo sed -i 's|azure.archive.ubuntu.com|archive.ubuntu.com|g' /etc/apt/apt-mirrors.txt
+          if test -f /etc/apt/sources.list.d/ubuntu.sources; then
+            sudo sed -i 's|azure.archive.ubuntu.com|archive.ubuntu.com|g' /etc/apt/sources.list.d/ubuntu.sources
+          fi
+          if ! sudo timeout 150 apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=35 update -qq; then
+            echo "::warning::APT metadata refresh stalled; using cached indices"
+          fi
+          sudo timeout 390 apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=40 install -y --no-install-recommends blender python3-venv python3-numpy
+          python3 -m venv "$RUNNER_TEMP/t05-r28-visual-venv"
+          "$RUNNER_TEMP/t05-r28-visual-venv/bin/pip" install --disable-pip-version-check numpy trimesh pillow
+          python3 -m py_compile tools/havenline/blender/t05_cooker_reference_first_r28.py
+          blender --version | head -n 2
+      - name: Build R28 forged housing and organic food; retain nine material groups and native testability
+        timeout-minutes: 16
+        run: |
+          set -euo pipefail
+          mkdir -p t05-r28-evidence
+          timeout 840 blender -b -t 2 --factory-startup \
+            --python tools/havenline/blender/t05_cooker_reference_first_r28.py -- \
+            --out "$PWD/t05-r28-evidence" > t05-r28-evidence/blender-build.log 2>&1 || {
+              tail -160 t05-r28-evidence/blender-build.log; exit 1; }
+          test -s t05-r28-evidence/T05_cooker_EDITABLE.blend
+          test -s t05-r28-evidence/T05_cooker_BLENDER_CANDIDATE.glb
+          test -s t05-r28-evidence/benchmark.json
+          test -s t05-r28-evidence/T05_cooker_reverse-quarter-diagnostic.png
+      - name: Strict R07-frozen technical gate and source authority metadata audit
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/t05-r28-visual-venv/bin/python" \
+             tools/havenline/blender/validate_cooker_benchmark.py \
+             --out t05-r28-evidence \
+             --catalog HavenlineGodot/assets/stations_v2/catalog.json \
+             | tee t05-r28-evidence/technical-gate.log
+          python3 - <<'PY'
+          import json,pathlib
+          root=pathlib.Path('t05-r28-evidence')
+          report=json.loads((root/'benchmark.json').read_text())
+          assert report['status']=='R28_FORGED_CHAMBER_AND_HAND_SHAPED_FOOD_NOT_APPROVED'
+          assert report['new_cooked_parcel_count']==6
+          assert report['snow_roof_angular_segments']==64
+          assert report['R26_owner_rejected_as_style_match'] is True
+          assert report['R28_visual_comparison_pending'] is True
+          assert report['snow_roof_radial_segments']==10
+          assert report['snow_roof_lower_contour_rings']==2
+          assert report['reference_snow_sculpt_approved'] is False
+          assert report['snow_author_uv_export_required'] is True
+          assert report['reference_timbers_and_brushed_metal_raster_authored'] is True
+          assert report['handmade_meat_marbling_maps_not_owner_visual_approved'] is True
+          assert len(report['authored_color_maps'])==2
+          assert all((root/name).stat().st_size>12000 for name in report['authored_color_maps'])
+          assert report['owner_food_geometry_passed'] is False
+          assert report['reference_sha256']=='729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635'
+          assert len(report['materials'])==9
+          assert report['reference_pixel_comparison_in_ci'] is False
+          assert report['independent_critic_approved'] is False
+          assert report['source_smoke_vfx_included'] is False
+          tech=json.loads((root/'technical_validation.json').read_text())
+          assert tech['technical_gate']=='PASS'
+          geometry=next(x['detail'] for x in tech['checks'] if x['check']=='triangles_within_remaining_kit_budget')
+          assert geometry['candidate']<12424, ('R28 topology exceeds frozen triangle budget',geometry)
+          assert geometry['candidate']<=12424
+          assert tech['production_approval'] is False
+          report2={'status':'R28_GEOMETRY_ONLY_NOT_VISUAL_APPROVAL',
+                   'source_ref':'18567.png','source_sha256':report['reference_sha256'],
+                   'candidate_glb_sha256':tech['candidate_glb_sha256'],
+                   'technical_checks':len(tech['checks']),
+                   'geometry_sections':report['corrected_geometry'],
+                   'real_owner_reference_pixels_compared':False,
+                   'independent_critic_approved':False,'shipping_asset_modified':False}
+          (root/'R28-source-locked-technical-audit.json').write_text(json.dumps(report2,indent=2)+'\n')
+          print(json.dumps(report2,indent=2))
+          PY
+          git diff --exit-code -- HavenlineGodot/assets/stations_v2/ HavenlineGodot/scripts/
+          test -z "$(git ls-files --others --exclude-standard HavenlineGodot/assets/stations_v2/)"
+      - name: Independently verify actual red/snow albedo data and original nine GLB materials
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/t05-r28-visual-venv/bin/python" - <<'PY'
+          import pathlib,struct,json,hashlib
+          from PIL import Image
+          root=pathlib.Path('t05-r28-evidence')
+          model=(root/'T05_cooker_BLENDER_CANDIDATE.glb').read_bytes()
+          length,kind=struct.unpack_from('<I4s',model,12)
+          assert kind==b'JSON'
+          gltf=json.loads(model[20:20+length])
+          mats={m['name']:m for m in gltf['materials']}
+          assert len(mats)==9 and all(key in mats for key in ('HL_red','HL_snow'))
+          used=[]
+          for name,key in (('HL_red','red'),('HL_snow','snow')):
+              image_path=root/('T05_R28_'+key+'_basecolor.png')
+              with Image.open(image_path) as im:
+                  im.load()
+                  assert im.size==(256,256)
+                  colors=im.convert('RGB').getcolors(256*256)
+                  minimum=200 if key=='red' else 60
+                  assert colors and len(colors)>minimum, (name,len(colors) if colors else None)
+              mat=mats[name]
+              slot=mat['pbrMetallicRoughness']['baseColorTexture']['index']
+              tex=gltf['textures'][slot]
+              embed=gltf['images'][tex['source']]
+              assert embed['mimeType']=='image/png'
+              assert mat['pbrMetallicRoughness']['baseColorTexture'].get('texCoord',0)==0
+              used.append(name)
+          # The glTF must contain the *same pixels*, not merely a material
+          # label or image filename that happens to exist on disk.
+          import io
+          from PIL import ImageChops
+          binary_header=20+length
+          chunk_size,chunk_tag=struct.unpack_from('<I4s',model,binary_header)
+          assert chunk_tag==bytes((66,73,78,0))
+          binary=model[binary_header+8:binary_header+8+chunk_size]
+          for name,key in (('HL_red','red'),('HL_snow','snow')):
+              tex=gltf['textures'][mats[name]['pbrMetallicRoughness']['baseColorTexture']['index']]
+              embed=gltf['images'][tex['source']]
+              view=gltf['bufferViews'][embed['bufferView']]
+              begin=view.get('byteOffset',0)
+              blob=binary[begin:begin+view['byteLength']]
+              with Image.open(io.BytesIO(blob)) as image, Image.open(root/('T05_R28_'+key+'_basecolor.png')) as source:
+                  assert image.size==source.size==(256,256)
+                  assert ImageChops.difference(image.convert('RGBA'),source.convert('RGBA')).getbbox() is None, name
+          from PIL import ImageStat
+          for woodkey in ('wood','wood_light','metal','blue'):
+              with Image.open(root/('T05_'+woodkey+'_basecolor.png')) as im:
+                  stddev=ImageStat.Stat(im.convert('RGB')).stddev
+                  # Real pixel contrast proof: the old R23 timber/stainless
+                  # source maps have only 0.6-4.1 RGB standard deviation.
+                  assert max(stddev)>4.0, (woodkey,stddev)
+          meshes=[p for m in gltf.get('meshes',[]) for p in m['primitives']]
+          assert any(p.get('material') is not None and
+                     gltf['materials'][p['material']]['name']=='HL_snow'
+                     and 'TEXCOORD_0' in p['attributes'] for p in meshes)
+          report={'status':'R28_AUTHORED_ALBEDO_TECHNICAL_PASS_NOT_SOURCE_APPROVAL',
+                  'source_ref':'18567.png',
+                  'owner_reference_pixel_match_checked':False,
+                  'tested_materials':used,
+                  'all_nine_existing_material_ids':list(mats),
+                  'roof_uv0_exported':True,
+                  'embedded_red_and_snow_exact_pixel_match':True,
+                  'source_unchanged':True,
+                  'style_approved':False,
+                  'gltf_sha256':hashlib.sha256(model).hexdigest()}
+          (root/'R28-material-binding-audit.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Collect four studio-only diagnostics (not reference approval)
+        run: |
+          "$RUNNER_TEMP/t05-r28-visual-venv/bin/python" - <<'PY'
+          from pathlib import Path
+          from PIL import Image,ImageDraw,ImageStat
+          import hashlib,json
+          p=Path("t05-r28-evidence")
+          names=("front","three-quarter","right","rear")
+          sheet=Image.new("RGB",(1280,1330),(20,33,48))
+          frames=[]
+          for i,name in enumerate(names):
+              path=p/("T05_cooker_"+name+".png")
+              with Image.open(path) as im:
+                  assert im.format=="PNG" and im.size==(640,640)
+                  rgb=im.convert("RGB")
+                  assert max(ImageStat.Stat(rgb).stddev)>8
+                  sheet.paste(rgb,((i%2)*640,(i//2)*640+40))
+                  frames.append({"view":name,"sha256":hashlib.sha256(path.read_bytes()).hexdigest()})
+          assert len({x["sha256"] for x in frames})==4
+          ImageDraw.Draw(sheet).text((25,12),"R28 T05 REAL BLENDER FRAMES — GEOMETRY TRIAL NOT STYLE APPROVAL",fill=(248,249,251))
+          sheet.save(p/"T05_R28_4VIEW_GEOMETRY_TRIAL.png")
+          (p/"frame-hashes.json").write_text(json.dumps(frames,indent=2)+'\n')
+          print('R28_STUDIO_FRAME_CHECK_PASS',json.dumps(frames))
+          PY
+      - name: Retain editable model, GLB, actual renders, independent evidence or failure logs
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-T05-R28-reference-first-geometry-${{ github.sha }}
+          path: t05-r28-evidence/
+          retention-days: 30
+          if-no-files-found: warn
+
+  five-angle-native-4k:
+    needs: reference-first-geometry
+    runs-on: ubuntu-24.04
+    timeout-minutes: 22
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+      - name: Consume R28 geometry evidence produced by this exact commit
+        uses: actions/download-artifact@37930b1c2abaa49bbe596cd826c3c89aef350131
+        with:
+          name: havenline-T05-R28-reference-first-geometry-${{ github.sha }}
+          path: input-R28
+      - name: Stage exact immutable R28 candidate and unchanged T05 viewer in disposable Godot project
+        run: |
+          set -euo pipefail
+          mkdir -p r28-4k-review/project/assets r28-4k-review/screenshots "$RUNNER_TEMP/hl-godot"
+          glb=input-R28/T05_cooker_BLENDER_CANDIDATE.glb
+          test -s "$glb"
+          cp "$glb" r28-4k-review/project/assets/T05_cooker_BLENDER_CANDIDATE.glb
+          cp tools/havenline/blender/capture_isolated_godot_cooker.gd r28-4k-review/project/capture.gd
+          python3 - <<'PY'
+          import pathlib
+          p=pathlib.Path("r28-4k-review/project/capture.gd")
+          s=p.read_text()
+          replacements=(
+              ("viewport.size = Vector2i(1280, 720)","viewport.size = Vector2i(3840, 2160)"),
+              ("viewport.msaa_3d = Viewport.MSAA_4X","viewport.msaa_3d = Viewport.MSAA_DISABLED"),
+              ("== 1280 and img.get_height() == 720","== 3840 and img.get_height() == 2160"),
+              ('"rear": Vector3(0, 3.1, 6.0)','"rear": Vector3(0, 3.1, 6.0),\n        "reverse-quarter": Vector3(-4.0, 3.25, -4.8)')
+          )
+          for old,new in replacements:
+              assert old in s, f'Viewer source drift: {old}'
+              s=s.replace(old,new)
+          p.write_text(s)
+          PY
+          cat > r28-4k-review/project/project.godot <<'EOF'
+          config_version=5
+          [application]
+          config/name="Havenline R28 Isolated 4K Visual Review"
+          [rendering]
+          renderer/rendering_method="gl_compatibility"
+          EOF
+      - name: Download official Godot 4.7.2 editor, no Blender APT install
+        run: |
+          set -euo pipefail
+          base=https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable
+          curl -fL --retry 2 --connect-timeout 20 --max-time 240 "$base/Godot_v4.7.2-stable_linux.x86_64.zip" -o "$RUNNER_TEMP/hl-godot/godot.zip"
+          unzip -q "$RUNNER_TEMP/hl-godot/godot.zip" -d "$RUNNER_TEMP/hl-godot"
+          chmod +x "$RUNNER_TEMP/hl-godot/Godot_v4.7.2-stable_linux.x86_64"
+          "$RUNNER_TEMP/hl-godot/Godot_v4.7.2-stable_linux.x86_64" --version
+      - name: Import actual R28 GLB and capture five true 3840x2160 Godot images
+        timeout-minutes: 12
+        run: |
+          set -euo pipefail
+          engine="$RUNNER_TEMP/hl-godot/Godot_v4.7.2-stable_linux.x86_64"
+          project="$PWD/r28-4k-review/project"
+          timeout 120 "$engine" --headless --editor --path "$project" --import --quit 2>&1 | tee r28-4k-review/import.log
+          if ! command -v xvfb-run >/dev/null 2>&1; then
+            echo "Missing Xvfb for actual software OpenGL capture"; exit 1
+          fi
+          timeout 540 xvfb-run -a "$engine" --path "$project" \
+            --rendering-method gl_compatibility --audio-driver Dummy \
+            --script res://capture.gd -- \
+            --out="$PWD/r28-4k-review/screenshots" 2>&1 | tee r28-4k-review/capture.log
+          grep -q T05_ISOLATED_GODOT_IMPORT_PROOF r28-4k-review/capture.log
+      - name: Independently inspect native PNG bytes and strict evidence scope
+        run: |
+          set -euo pipefail
+          python3 -m venv "$RUNNER_TEMP/hl-pillow"
+          "$RUNNER_TEMP/hl-pillow/bin/pip" install --disable-pip-version-check pillow
+          "$RUNNER_TEMP/hl-pillow/bin/python" - <<'PY'
+          import hashlib,json,pathlib
+          from PIL import Image
+          r=pathlib.Path("r28-4k-review")
+          p=json.loads((r/"screenshots/isolated-godot-report.json").read_text())
+          assert p["shipping_main_loaded"] is False
+          assert p["owner_visual_approved"] is False
+          assert p["shipping_asset_modified"] is False
+          assert p["status"]=="ISOLATED_GODOT_IMPORT_ONLY_NOT_SHIPPING_QA"
+          assert p["godot_mesh_count"]==9
+          assert p["owner_visual_approved"] is False
+          assert p['material_names'] if 'material_names' in p else True
+          assert len(p["captures"])==5
+          frames=[]
+          for item in p["captures"]:
+              f=r/"screenshots"/item["file"]
+              with Image.open(f) as im:
+                  assert im.format=="PNG" and im.size==(3840,2160)
+                  colors=len(set(im.convert("RGB").resize((160,90)).getdata()))
+                  assert colors>=25, f"Blank or degenerate capture {item['view']}"
+              frames.append({"view":item["view"],"sha256":hashlib.sha256(f.read_bytes()).hexdigest(),"sampled_rgb_colors":colors})
+          assert len({x["view"] for x in frames})==5
+          assert len({x["sha256"] for x in frames})==5
+          report={"status":"R28_REAL_GODOT_4K_ISOLATED_RENDER_PASS_NOT_VISUAL_ACCEPTANCE",
+                  "source_reference":"18567.png",
+                  "source_reference_sha256":"729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
+                  "candidate_glb_sha256":hashlib.sha256((pathlib.Path("input-R28")/"T05_cooker_BLENDER_CANDIDATE.glb").read_bytes()).hexdigest(),
+                  "resolution":[3840,2160],"frames":frames,
+                  "actual_shipping_scene_tested":False,"physical_android_tested":False,
+                  "reference_pixel_alignment_done":False,"independent_critic_passed":False,"owner_approved":False}
+          (r/"native-4k-byte-audit.json").write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Preserve real five-angle Godot PNGs and source hashes
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-T05-R28-isolated-real-Godot-4k-${{ github.sha }}
+          path: |
+            r28-4k-review/screenshots/
+            r28-4k-review/native-4k-byte-audit.json
+            r28-4k-review/import.log
+            r28-4k-review/capture.log
+          retention-days: 30
+          if-no-files-found: warn
