@@ -133,7 +133,9 @@ func _segment_transform(a:Vector2,b:Vector2,overlap:=0.0,root_sink:=FENCE_ROOT_S
 	if z_axis.length_squared()<.001:z_axis=Vector3.FORWARD
 	var y_axis:=z_axis.cross(x_axis).normalized()
 	var length:=pa.distance_to(pb)
-	var basis:=Basis(x_axis,y_axis,z_axis).scaled(Vector3(length/source_length,1.0,1.0))
+	# Scale the authored panel only along its local X (the chord). Basis.scaled()
+	# applies world-axis scaling, collapsing north-south/diagonal gate silhouettes.
+	var basis:=Basis(x_axis*(length/source_length),y_axis,z_axis)
 	return Transform3D(basis,(pa+pb)*.5)
 
 func _post_transform(p:Vector2,tangent:Vector2,visual_scale:=1.0,height_scale:=1.0)->Transform3D:
