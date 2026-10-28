@@ -75,14 +75,14 @@ jobs:
               views.append(View(image=Image.open(src/v['image']).convert('RGB'),
                   mask=np.asarray(Image.open(src/v['mask']).convert('L')),
                   azimuth_deg=v['azimuth_deg'],elevation_deg=v['elevation_deg']))
-          cfg=RefineConfig(steps=16,rays_per_view=144,render_res=128,mc_resolution=96,device='cpu')
+          cfg=RefineConfig(steps=80,rays_per_view=512,render_res=160,mc_resolution=128,device='cpu')
           print(f'Using {len(views)} exact owner references, {cfg.steps} actual gradient steps',flush=True)
           pipe=HaploSRMV(cfg)
           begin=time.monotonic()
-          seed=pipe.run_baseline(views[0].image,resolution=96)[0]
+          seed=pipe.run_baseline(views[0].image,resolution=128)[0]
           seed.export(output/'single_view_seed.glb')
           print(f'Baseline completed at {time.monotonic()-begin:.1f}s',flush=True)
-          model,codes=pipe.run(views,resolution=96)
+          model,codes=pipe.run(views,resolution=128)
           model.export(output/'three_view_refined.glb')
           (output/'inference_receipt.json').write_text(json.dumps({
               'status':'THREE_AUTHENTIC_VIEWS_NEURAL_OPTIMIZATION_ATTEMPT_COMPLETE',
@@ -112,6 +112,29 @@ jobs:
               'refined_mean_iou':y['mean_iou'],'difference':round(y['mean_iou']-x['mean_iou'],4),
               'method':'approximate silhouette IoU, not reference fidelity or independent art approval'},indent=2))
           PY
+      - name: Require measured three-view silhouette improvement over same-run seed
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"t05-mv/evaluations"
+          seed=json.loads((p/"seed/audit.json").read_text())
+          refined=json.loads((p/"refined/audit.json").read_text())
+          delta=round(refined["mean_iou"]-seed["mean_iou"],4)
+          assert delta>0, f"No measurable multi-view improvement: {delta}"
+          assert len(refined["views"])==3
+          print("Three-view improvement diagnostic PASS",delta,
+                "— ART CRITIC AND OWNER APPROVAL STILL REQUIRED")
+          PY
+      - name: Convert both real GLBs to Godot Y-up without editing game assets
+        run: |
+          set -euo pipefail
+          python tools/havenline/task05/orient_triposr_for_godot.py \
+            --input "$RUNNER_TEMP/t05-mv/meshes/single_view_seed.glb" \
+            --output "$RUNNER_TEMP/t05-mv/meshes/single_view_GODOT_YUP.glb"
+          python tools/havenline/task05/orient_triposr_for_godot.py \
+            --input "$RUNNER_TEMP/t05-mv/meshes/three_view_refined.glb" \
+            --output "$RUNNER_TEMP/t05-mv/meshes/three_view_refined_GODOT_YUP.glb"
       - name: Archive actual candidate, inputs and factual critique without promoting game assets
         if: always()
         uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
