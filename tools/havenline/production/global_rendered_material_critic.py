@@ -148,6 +148,21 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
             continue
         source = asset.get("asset_source")
         source_path = verified_file(root, source, label + " source", errors)
+        authored_mesh_slot_ids = None
+        if source_path and source_path.suffix.lower() in (".glb", ".gltf", ".obj"):
+            try:
+                from inventory_shipped_material_slots import gltf_slots, obj_slots
+                if source_path.suffix.lower() == ".obj":
+                    source_slots = obj_slots(source_path.read_bytes())
+                else:
+                    source_slots = gltf_slots(source_path.read_bytes(), source_path.suffix.lower())
+                authored_mesh_slot_ids = [item["slot_id"] for item in source_slots["material_slots"]]
+                if source_slots.get("unassigned_primitives", 0):
+                    errors.append(label + ": implicit default mesh material cannot be reference-approved")
+                if source_slots.get("unused_authored_slots", 0):
+                    errors.append(label + ": uninstantiated authored material slot needs explicit disposition")
+            except (OSError, ValueError, KeyError, TypeError, IndexError, ImportError) as exc:
+                errors.append(label + ": actual authored GLB/OBJ material inventory unavailable: " + str(exc))
         if source_path and isinstance(source, dict):
             target = source.get("shipping_path")
             if not isinstance(target, str) or not target.startswith("HavenlineGodot/") or ".." in pathlib.PurePosixPath(target).parts:
@@ -222,6 +237,8 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
                 errors.append(label + ": material " + mid + " not bound to all authoritative reference bytes")
         if len(mids) != len(set(mids)):
             errors.append(label + ": repeated material IDs")
+        if authored_mesh_slot_ids is not None and set(mids) != set(authored_mesh_slot_ids):
+            errors.append(label + ": reported material IDs omit, invent or merge actual GLB/OBJ slots; expected "+repr(authored_mesh_slot_ids))
         alignment = asset.get("reference_camera")
         if not isinstance(alignment, dict) or alignment.get("reference_visible_geometry_calibrated") is not True:
             errors.append(label + ": original reference camera/perspective not calibrated")
