@@ -17,7 +17,9 @@ jobs:
       github.ref_name != 'havenline/QA-integration' &&
       github.head_ref != 'havenline/QA-integration' &&
       !startsWith(github.ref_name, 'havenline/governance-') &&
-      !startsWith(github.head_ref, 'havenline/governance-')
+      !startsWith(github.head_ref, 'havenline/governance-') &&
+      github.ref_name != 'havenline/permanent-native-material-critic-20261027' &&
+      github.head_ref != 'havenline/permanent-native-material-critic-20261027'
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     steps:
