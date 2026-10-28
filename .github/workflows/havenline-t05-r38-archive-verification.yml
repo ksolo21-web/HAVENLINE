@@ -58,15 +58,4 @@ jobs:
           cp "$src/T05_R38_3_OWNER_VIEWS_EDITABLE.blend" "$DEST/"
           cp "$src/STATUS.json" "$DEST/"
           cp "$src/NativeGodot/"*.png "$DEST/NativeGodot/"
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add "$DEST"
-          for f in "$DEST"/*.glb "$DEST"/*.blend "$DEST"/NativeGodot/*.png; do
-            bytes="$(git show ":$f" | wc -c)"
-            test "$bytes" -gt 10000 || { echo "::error::File is a Git LFS pointer not real content: $f"; exit 1; }
-          done
-          git diff --cached --check
-          git commit -m 'T05 R38: permanently retain editable owner-source Blender rig, real GLB and four Godot angles (visual FAIL)'
-          git status --short
-          git -c rebase.autoStash=true pull --rebase origin "$GITHUB_REF_NAME"
-          git push origin HEAD:"$GITHUB_REF_NAME"
+          python tools/havenline/task05/publish_r38_actual_git_blobs.py
