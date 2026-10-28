@@ -1,0 +1,56 @@
+name: T05 RECOVER successful true multiview GLB (no GPU generation)
+on:
+  push:
+    branches: [havenline/T05-r18-visual-corrections-20261025]
+    paths:
+      - .github/workflows/havenline-t05-recover-multiview-output.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  retrieve-original-result:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.11'
+      - name: Retrieve existing Hunyuan3D-2mv computed GLB, DO NOT invoke inference
+        run: |
+          set -euo pipefail
+          mkdir -p t05-recovered-multiview
+          URL='https://tencent-hunyuan3d-2mv.hf.space/static/fbad9df7-ce3d-42b6-b569-d0dc6f4d835c/white_mesh.glb'
+          code="$(curl -L -sS --max-time 90 --retry 2 -o t05-recovered-multiview/Havenline_T05_multiview_446452faces_UNAPPROVED.glb -w '%{http_code}' "$URL")"
+          echo "$code" > t05-recovered-multiview/http_status.txt
+          echo "HTTP $code, bytes: $(wc -c < t05-recovered-multiview/Havenline_T05_multiview_446452faces_UNAPPROVED.glb)"
+          test "$code" = 200 || { echo "::error::Original public result expired/inaccessible. No substitute generated."; exit 1; }
+          python -m pip install 'trimesh>=4,<5'
+          python - <<'PY'
+          import pathlib,trimesh,json,hashlib
+          p=pathlib.Path('t05-recovered-multiview/Havenline_T05_multiview_446452faces_UNAPPROVED.glb')
+          raw=p.read_bytes()
+          if not raw.startswith(b'glTF'):
+              raise RuntimeError('Returned data is not GLB bytes.')
+          s=trimesh.load(p,force='scene')
+          tri=sum(len(g.faces) for g in s.geometry.values() if isinstance(g,trimesh.Trimesh))
+          if tri<1000:raise RuntimeError('Not a usable triangle mesh.')
+          r={'status':'RECOVERED_REAL_TRIPLE_REFERENCE_HUNYUAN_GLB_NOT_ART_APPROVED',
+             'source_images':['32451.jpg','32441.png','32450.jpg'],
+             'preexisting_generated_model_server_reported_faces':446452,
+             'downloaded_mesh_faces':tri,'file_sha256':hashlib.sha256(raw).hexdigest(),
+             'bytes':len(raw),'owner_approved':False,'source_fidelity_passed':False,
+             'physical_android_passed':False,'commercial_license_reviewed':False,
+             'shipping_assets_changed':False,'paid_service_used':False,
+             'new_account_created':False}
+          pathlib.Path('t05-recovered-multiview/receipt.json').write_text(json.dumps(r,indent=2)+'\n')
+          print(json.dumps(r,indent=2))
+          PY
+      - name: Preserve actual recovery or HTTP failure evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: HAVENLINE-T05-RECOVERED-TRIPLE-REFERENCE-HUNYUAN-GLB-${{ github.sha }}
+          path: t05-recovered-multiview/
+          retention-days: 30
+          if-no-files-found: warn
