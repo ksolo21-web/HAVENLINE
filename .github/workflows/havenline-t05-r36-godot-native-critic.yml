@@ -88,7 +88,8 @@ jobs:
           git add Docs/Production/T05/NeuralTrials/R36/NativeGodot
           # Fail closed if PNGs are still Git LFS pointers instead of full Git blobs.
           for f in Docs/Production/T05/NeuralTrials/R36/NativeGodot/*.png; do
-            test "$(git check-attr filter -- "$f" | awk '{print $3}')" = unspecified
+            attr="$(git check-attr filter -- "$f" | awk '{print $3}')"
+            case "$attr" in unset|unspecified) ;; *) echo "::error::Unexpected Git LFS filter $attr for $f"; exit 1;; esac
             size="$(git show ":$f" | wc -c)"
             test "$size" -gt 10000 || { echo "::error::Stored PNG is a pointer instead of full pixels: $f ($size)"; exit 1; }
           done
