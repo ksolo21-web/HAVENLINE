@@ -28,10 +28,10 @@ GitHub Actions artifacts expire (currently configured 30 days). Preserve accepte
 
 The owner has explicitly authorized **game photos and game art references to be committed to the public HAVENLINE repository**. After project completion the owner intends to switch the repository to private. This supersedes older T05 *privacy-only* restrictions in historical checkpoint records. It does **not** supersede any art-quality, gameplay, release, third-party copyright or asset-license restriction.
 
-Reference images `32451.jpg`, `32450.jpg`, and `32441.png` remain the authoritative T05 cooker front three-quarter, right-side and rear references; record hashes and exact bytes when adding them under `Docs/Art/SourceReferences/T05/`. Generated derivatives must be labeled as such. Do not substitute AI-invented stone ovens or fake reference views.
+Reference images `32451.jpg`, `32450.jpg`, and `32441.png` are now committed as exact binary Git blobs under `Docs/Art/SourceReferences/T05/` and retain the authoritative T05 cooker front three-quarter, right-side and rear views. SHA-256 and Git object SHA-1 checks confirm byte-exact imports. Generated derivatives must be labeled as such. Do not substitute AI-invented stone ovens or fake reference views.
 
 **Public-history warning:** making the repository private in the future does not erase past public downloads, fork histories, caches, Git blobs or GitHub Actions artifacts. Avoid committing passwords, private signing material, user personal data or unlicensed third-party artwork. Public owner game art is authorized, but release signing secrets are not.
 
 ## Current unclosed work
 
-T05 R33 and all earlier cooker trials have not passed source-fidelity C1/C2 critic, owner sign-off, shipping integration, or physical Android performance testing. GitHub builds can produce and validate review APKs without falsely marking T05 or the whole game complete. The reference images and fresh neural reconstruction candidates must be committed into their appropriate source locations before claiming full source reproducibility.
+T05 R33 and all earlier cooker trials have not passed source-fidelity C1/C2 critic, owner sign-off, shipping integration, or physical Android performance testing. GitHub builds can produce and validate review APKs without falsely marking T05 or the whole game complete. The three exact owner reference images are now committed under `Docs/Art/SourceReferences/T05/`; a passing neural reconstruction mesh, source-matched critic, and shipping asset promotion remain outstanding.

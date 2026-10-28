@@ -6,4 +6,4 @@ Canonical image filenames: `32451.jpg` (front three-quarter), `32450.jpg` (right
 
 Only a model actually passing visual critique against the three source images can be promoted into the shipping `HavenlineGodot/assets/` tree. The R28–R33 models are rejected experimental candidates. Shader, geometry and engine import tests alone do not constitute visual approval.
 
-**Import status:** Manifest is versioned; the three exact original image binaries have not yet been written to this Git branch. Upload as actual Git-tracked image files with matching SHA-256 rather than embedding image data in docs or claiming that an Actions upload artifact is durable source control.
+**Import status: COMPLETE.** Exact owner image binaries are Git-tracked at this directory with source-matched SHA-256 and Git blob SHA-1 in [reference-manifest.json](reference-manifest.json). No downscaled proxies have been substituted. Reference fidelity and T05 owner approval are **not** complete.

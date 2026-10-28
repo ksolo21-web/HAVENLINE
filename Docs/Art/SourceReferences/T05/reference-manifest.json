@@ -7,7 +7,7 @@
   "reference_truth": "Owner-provided original imagery wins over AI-invented turnarounds or rejected procedural cooker models.",
   "source_repo": "ksolo21-web/HAVENLINE",
   "expected_path": "Docs/Art/SourceReferences/T05/",
-  "status": "MANIFEST_TRACKED__ORIGINAL_IMAGE_BINARY_IMPORT_PENDING",
+  "status": "ALL_THREE_EXACT_OWNER_REFERENCE_IMAGES_IN_GIT__NOT_ART_APPROVAL",
   "originals": [
     {
       "file": "32451.jpg",
@@ -16,7 +16,11 @@
       "size": [
         1536,
         1536
-      ]
+      ],
+      "git_blob_sha1": "76646604fe527df45c29ea3b7220f1c9e40b4cd4",
+      "bytes": 240551,
+      "git_path": "Docs/Art/SourceReferences/T05/32451.jpg",
+      "byte_exact_git_blob_verified": true
     },
     {
       "file": "32450.jpg",
@@ -25,7 +29,11 @@
       "size": [
         1536,
         1147
-      ]
+      ],
+      "git_blob_sha1": "acd7ae8a0464464ea5d176670ecbc611296b0bd6",
+      "bytes": 158929,
+      "git_path": "Docs/Art/SourceReferences/T05/32450.jpg",
+      "byte_exact_git_blob_verified": true
     },
     {
       "file": "32441.png",
@@ -34,15 +42,21 @@
       "size": [
         1536,
         903
-      ]
+      ],
+      "git_blob_sha1": "8497b7fee12aad1f5257ee14794e6b243f617b06",
+      "bytes": 148703,
+      "git_path": "Docs/Art/SourceReferences/T05/32441.png",
+      "byte_exact_git_blob_verified": true
     }
   ],
   "notes": [
-    "These references are authorized for public storage; original image bytes must be uploaded to matching filenames before claiming full repository reconstruction reproducibility.",
-    "The GitHub build will not promote R33/older rejected meshes as shipping art.",
-    "Original artwork itself is not a neural 3D reconstruction or independent critic approval."
+    "All 3 ORIGINAL files are tracked as real Git image blobs with byte-exact Git SHA-1 verification.",
+    "GitHub neural source reconstruction is enabled on the T05 branch; technical inference is not multi-view fusion.",
+    "R33 and earlier rejected models remain unapproved; no shipping asset changes.",
+    "These game images are intentionally public by the owner's explicit authorization."
   ],
   "owner_art_approved": false,
   "source_registered_cameras": false,
-  "physical_device_pass": false
+  "physical_device_pass": false,
+  "binary_upload_verified": true
 }

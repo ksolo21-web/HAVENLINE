@@ -2,7 +2,7 @@ name: T05 FREE Neural Image-to-3D CPU (NOT ART APPROVED)
 on:
   push:
     branches: [havenline/T05-r18-visual-corrections-20261025]
-    paths: [.github/workflows/havenline-t05-triposr-cpu.yml]
+    paths: [.github/workflows/havenline-t05-triposr-cpu.yml, 'Docs/Art/SourceReferences/T05/**']
   workflow_dispatch:
     inputs:
       source:
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-24.04
     timeout-minutes: 180
     env:
-      SOURCE_KIND: ${{ github.event.inputs.source || 'fixture' }}
+      SOURCE_KIND: ${{ github.event_name == 'push' && 'owner' || github.event.inputs.source || 'fixture' }}
       TRIPOSR_REV: 107cefdc244c39106fa830359024f6a2f1c78871
       OMP_NUM_THREADS: '4'
       MKL_NUM_THREADS: '4'
