@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "date": "2026-10-28",
+  "candidate": "R32",
+  "status": "PRIVATE_GEOMETRY_AND_NATIVE_GODOT_PASS__REFERENCE_FIDELITY_FAIL__NO_SHIPPING_PROMOTION",
+  "owner_sources_private": [
+    {
+      "file": "32451.jpg",
+      "view": "front three-quarter",
+      "sha256": "70e9e04c329797490b19aaa383865a5a2e20129bd1e0250a6997b170fb0510e4"
+    },
+    {
+      "file": "32450.jpg",
+      "view": "right side",
+      "sha256": "5b1831d03575e705f1baf5af5d4ac4b4ecd62e364b4287c7f841965625d4d719"
+    },
+    {
+      "file": "32441.png",
+      "view": "rear",
+      "sha256": "0ff99199e1eb4bedeffe4d9953f5253a97e49366a2118d5976132c9137d93510"
+    }
+  ],
+  "output_private": {
+    "archive": "HAVENLINE-T05-R32-SOURCE-SCULPT-PRIVATE.zip",
+    "sha256": "5d489a6791409a8531600bae7acc8dbd35c030b19a80125aca7ba9ef2a1e11dc",
+    "files": 50,
+    "includes": "exact 3 owner images, private source-derived 12 material textures, 3 new editable GLB tiers, standalone builder and verifier, 3 native hero screenshots, 3 native source-smoke screenshots, five loop frames, comparison montage and full reproduction readme",
+    "independently_verified_from_clean_zip": true,
+    "hero": {
+      "triangles": 147955,
+      "sha256": "1888eb7db1ecf0f06e3b4b4db244b9579e78935a63f9178817a54f75f0048806"
+    },
+    "balanced": {
+      "triangles": 64027,
+      "sha256": "4f275df6e154e91b0cd583dacea8aa9e903fa4f89819283ad9747eb5c3331a9a"
+    },
+    "performance": {
+      "triangles": 28795,
+      "sha256": "b8b74eefe3ec5d3de65a36dfd6175e76616d5f3fd033f09789c1f82af2bf8432"
+    }
+  },
+  "real_work": [
+    "Source-referenced continuous watertight sculpted roof snow mesh, blue-white shaded folds, corrected original inverted top winding",
+    "Chamfered and longitudinally varied real carved timber geometry and raw-crate grain incisions",
+    "Broader raw beef mesh cuts and geometry-conforming fat surfaces replacing floating noodle lines",
+    "Physical supporting wood under finished steel receiving trough",
+    "Revised small front/rear blue triangular chassis gussets, actual boot face rivets, distinct front blue service cover",
+    "Recessed black chimney cavity below real metal ring",
+    "Source-only original smoke pixels cropped to transparent material, split across three Godot billboard layers with source-shape-preserving subtle periodic motion"
+  ],
+  "engine_evidence": {
+    "Godot": "4.7.2 stable",
+    "renderer": "gl_compatibility",
+    "gpu": "Mesa llvmpipe software",
+    "views": [
+      "front-three-quarter",
+      "right",
+      "rear"
+    ],
+    "resolution": [
+      1536,
+      1536
+    ],
+    "native_hero_render_pass": true,
+    "native_smoke_render_pass": true,
+    "smoke_three_layers": true,
+    "smoke_loop_seconds": 3.5,
+    "smoke_first_equals_last": true,
+    "intermediate_frames_distinct": true,
+    "owner_source_video_motion_match": false
+  },
+  "technical_quality": {
+    "glb_normals": true,
+    "glb_UV0": true,
+    "materials": 12,
+    "textures_embedded": 12,
+    "roof_watertight": true,
+    "roof_signed_volume_positive": true,
+    "source_sha_verified": true,
+    "archive_extracted_and_retested": true
+  },
+  "internal_art_review": {
+    "visual_source_match": "FAIL",
+    "independent_C1_C2_tested": false,
+    "owner_approval": false,
+    "critical_gaps": [
+      "Individual sculpted carpentry and connected frame shape still too flat relative to originals",
+      "Source roof needs significantly more fluffy pillow volume and realistic snow hanging edges",
+      "Saw casing, gear and work face must match image depth and contours",
+      "Finished-food material/shape and steel trough are too simplistic",
+      "Three view matching cameras not calibrated",
+      "Source smoke pixels are real, but billboard motion is not volumetric nor source-video matched"
+    ]
+  },
+  "shipping": {
+    "modified": false,
+    "merged": false,
+    "private_owner_images_publicly_committed": false,
+    "private_derived_pixels_publicly_committed": false,
+    "physical_android_benchmark_pass": false,
+    "graphics_fps_game_settings_implemented": false
+  },
+  "next": "Focus artist-grade source-aligned high-poly sculpt of key signature parts rather than generic pipeline expansion. Calibrate source cameras, iterate physical carving and real Godot previews, then run independent art critic, shipping-scene and physical phone FPS tests before promoting."
+}
