@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "stage": "R28_REFERENCE_IMAGE_EXTRACTION_PIVOT",
+  "date": "2026-10-28",
+  "status": "SOURCE_REGION_EXTRACTION_PASS__UV_PROJECTION_AND_NATIVE_MATERIAL_REVIEW_PENDING__NOT_SHIPPING_APPROVED",
+  "source": {
+    "filename": "18567.png",
+    "sha256": "729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
+    "actual_format": "JPEG under .png filename",
+    "dimensions": [
+      1536,
+      1536
+    ],
+    "raw_bytes_verified_against_locked_reference": true,
+    "location": "Private owner ChatGPT file library; do not commit original or derived crops to public GitHub"
+  },
+  "extracted": {
+    "private_regions": [
+      "snow and overhang",
+      "steel arch/saw/blue front",
+      "raw cuts and wooden bin",
+      "prepared wrapped food tray",
+      "wood carriage and forged trim",
+      "chimney and original smoke"
+    ],
+    "source_surface_samples": 7,
+    "source_smoke_alpha_isolated": true,
+    "private_distribution": "Available to owner as the chat-generated T05-original-reference-regions-private.zip; not stored in public repository",
+    "texture_approval": false,
+    "projection_tested_in_blender": false,
+    "projection_tested_in_native_godot": false
+  },
+  "candidate": {
+    "branch": "havenline/T05-r18-visual-corrections-20261025",
+    "source": "tools/havenline/blender/t05_cooker_reference_first_r28.py",
+    "glb_sha256": "17cd0db93350e0fd3cb63b1dc93bf17b9a7e72e17b77bde563f42ad7b3580134",
+    "blender_technical_checks_passed": 17,
+    "native_five_view_4k_passed": true,
+    "materials": 9,
+    "owner_approved": false,
+    "shipping_edited": false
+  },
+  "actual_artfinding": "R27/R28 native captures remain radically less detailed than original owner render, despite valid export and smaller geometry. Original consists of deep cast oven, layered wood/iron carriage, richly irregular meat and scalloped heavy snow.",
+  "targeted_next_steps": [
+    "Use exact original reference regions as camera-locked texture projection and silhouette guide on appropriately rebuilt geometry, never as an uncalibrated flat image texture.",
+    "Create masks for individual surfaces (wood/steel/enamel/meat/snow) from private original; separate shading baked into the render from base color whenever PBR relighting is required.",
+    "Calibrate viewport perspective and align actual source vs Godot front three-quarter before claiming pixel similarity.",
+    "Use owner reference video frames for occluded faces and motion; reconstruct geometry for side/back, not front-only billboards.",
+    "Review native Godot original-pixel projection at five angles and preserve gameplay, collision, budget and style lock. Apply no new generic infrastructure without demonstrating a unique blocker."
+  ],
+  "acceptance": {
+    "current_score": null,
+    "visual_style_exact_10_pass": false,
+    "independent_C1_C2_pass": false,
+    "physical_android_pass": false,
+    "owner_acceptance": false,
+    "production_merge_allowed": false
+  }
+}
