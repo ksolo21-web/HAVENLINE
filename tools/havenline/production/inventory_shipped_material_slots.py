@@ -13,6 +13,7 @@ import json
 import pathlib
 import re
 import struct
+import collections
 
 from inventory_shipped_visual_sources import ROOT, census
 
@@ -137,7 +138,22 @@ def obj_slots(data: bytes) -> dict:
             used.append(line.strip()[7:].strip())
     order=list(dict.fromkeys(used))
     if not order:
-        raise ValueError("OBJ lacks explicit source material assignments")
+        # OBJ allows faces with no usemtl. This is an *implicit* default
+        # material until a real runtime shader/material override is proven.
+        # Do not mark a legitimate runtime VFX mesh broken merely because
+        # its material is configured by the real Godot script instead.
+        if not any(line.lstrip().startswith("f ") for line in
+                   data.decode("utf-8", errors="replace").splitlines()):
+            raise ValueError("OBJ has neither material assignment nor mesh faces")
+        return {"status":"STATIC_OBJ_RUNTIME_MATERIAL_BINDING_REQUIRED",
+                "runtime_override_required":True,
+                "primitive_count":sum(line.lstrip().startswith("f ") for line in
+                    data.decode("utf-8",errors="replace").splitlines()),
+                "material_slots":[{"slot_id":"__OBJ_NO_AUTHORED_MATERIAL__",
+                   "slot_index":None,"name":"OBJ geometry, runtime material not yet verified",
+                   "used_in_render_mesh":False,"texture_channels_bound":[],
+                   "material_json_sha256":None}],
+                "material_slot_count":1}
     return {"status":"STATIC_OBJ_MTL_NAME_CENSUS_NEEDS_GODOT_IMPORT_VERIFICATION",
             "primitive_count":None,"material_slots":[
                 {"slot_id":str(i)+":"+n,"slot_index":i,"name":n,
@@ -146,10 +162,94 @@ def obj_slots(data: bytes) -> dict:
                 if n],"material_slot_count":len(order)}
 
 
+def resolve_obj_runtime_shader_binding(root: pathlib.Path, obj_shipping_path: str,
+                                       script_paths: list[str]) -> dict:
+    """Read-only link from source OBJ to actual Godot GDScript shader override.
+
+    This checks the real runtime shader authoring path, not its rendered result.
+    It requires the shader and concrete per-direction colored material setups.
+    New shader styles or effects need explicit source binding changes, not
+    permission to silently reuse a generic default.
+    """
+    if not obj_shipping_path.startswith("HavenlineGodot/") or not obj_shipping_path.endswith(".obj"):
+        raise ValueError("Invalid shipping OBJ path")
+    uri="res://"+obj_shipping_path[len("HavenlineGodot/"):]
+    matches=[]
+    for rel in script_paths:
+        if not rel.startswith("HavenlineGodot/") or not rel.endswith(".gd"):
+            continue
+        script=(root/rel).resolve()
+        script.relative_to(root.resolve())
+        if not script.is_file():
+            continue
+        raw=script.read_bytes()
+        body=raw.decode("utf-8")
+        if uri not in body:
+            continue
+        # Ensure both a material and mesh reference are actually bound
+        # together in runtime authoring. Mere text in a comment is insufficient.
+        patterns=(r"ShaderMaterial\.new\s*\(",r"\bmaterial_override\s*=\s*material\b",
+                  r"\bFEEDBACK_MESHES\s*=",r"\bFEEDBACK_SHADER\s*=",
+                  r"result\.multimesh\s*=\s*instances",r"instances\.mesh\s*=\s*mesh")
+        if any(not re.search(p,body) for p in patterns):
+            raise ValueError(rel+" references OBJ but source runtime shader override chain is unproven")
+        shaders=re.findall(r'["\'](res://[^"\']+\.gdshader)["\']',body)
+        shader_uris=sorted(set(shaders))
+        if len(shader_uris)!=1:
+            raise ValueError(rel+" has ambiguous or absent actual runtime shader")
+        shader_rel="HavenlineGodot/"+shader_uris[0][len("res://"):]
+        shader=(root/shader_rel).resolve()
+        shader.relative_to(root.resolve())
+        if not shader.is_file() or "shader_type spatial;" not in shader.read_text():
+            raise ValueError("Referenced native spatial shader missing/invalid")
+        colors=sorted(set(re.findall(r'Color\s*\(\s*["\']([0-9a-fA-F]{6})["\']\s*\)',body)))
+        required={"5deaff","ffb548"}
+        if not required.issubset(set(c.lower() for c in colors)):
+            raise ValueError("No exact independent two-direction runtime VFX colors")
+        # Each OBJ is selected as trail/arrow/pulse and has both directions.
+        # A varying shader role must be inspected in Godot; do not mark it as
+        # a fixed authored OBJ material or assume it visually passes.
+        stem=pathlib.PurePosixPath(obj_shipping_path).stem
+        kind={"transfer_trail_ribbon":"trail",
+              "transfer_arrow_sigil":"arrow",
+              "transfer_arrival_burst":"pulse"}.get(stem)
+        if kind is None or not re.search(
+                rf'["\']{re.escape(kind)}["\']\s*:\s*["\']{re.escape(uri)}["\']',body):
+            raise ValueError("OBJ runtime identity not actually bound to effect kind")
+        role={"trail":0.0,"arrow":1.0,"pulse":2.0}[kind]
+        if not re.search(rf'_make_feedback_instances\(\s*["\']{re.escape(kind)}["\'].*,\s*{role:.1f}\)',body):
+            raise ValueError("Effect shader role binding missing")
+        variants=[
+            {"slot_id":"runtime:"+direction,"slot_index":i,
+             "name":"Godot shader "+kind+" "+direction,
+             "used_in_render_mesh":True,
+             "shader_uniforms":{"tint":hexcolor,"role":role},
+             "runtime_material_variant":True,
+             "texture_channels_bound":[],
+             "material_json_sha256":None}
+            for i,(direction,hexcolor) in enumerate(
+                (("source_to_actor","5deaff"),("actor_to_destination","ffb548")))
+        ]
+        matches.append({
+            "status":"STATIC_SCRIPT_AND_SHADER_BOUND_RUNTIME_VFX_NOT_NATIVE_VISUAL_PROOF",
+            "mesh_uri":uri,"script_path":rel,"script_sha256":digest(raw),
+            "shader_path":shader_rel,"shader_sha256":digest(shader.read_bytes()),
+            "effect_kind":kind,"role":role,
+            "runtime_color_variants":[x["slot_id"] for x in variants],
+            "runtime_material_variants":variants,
+            "native_Godot_runtime_visual_checked":False
+        })
+    if len(matches)!=1:
+        raise ValueError("OBJ runtime shader binding missing/ambiguous (matches="+str(len(matches))+")")
+    return matches[0]
+
+
 def inspect_sources(source_census: dict,root: pathlib.Path=ROOT) -> dict:
     items=[]
     total_model_slots=0
     failures=[]
+    scripts=[x["shipping_path"] for x in source_census.get("source_items",[])
+             if x.get("source_class")=="code_created_or_modified_material"]
     for entry in source_census.get("source_items",[]):
         if entry.get("source_class")!="mesh_or_geometry":
             continue
@@ -172,6 +272,13 @@ def inspect_sources(source_census: dict,root: pathlib.Path=ROOT) -> dict:
                 parsed=gltf_slots(data,suffix)
             elif suffix==".obj":
                 parsed=obj_slots(data)
+                if parsed.get("runtime_override_required"):
+                    runtime=resolve_obj_runtime_shader_binding(root,path,scripts)
+                    parsed["runtime_binding"]=runtime
+                    parsed["material_slots"]=runtime["runtime_material_variants"]
+                    parsed["material_slot_count"]=len(parsed["material_slots"])
+                    parsed["status"]="STATIC_OBJ_RUNTIME_SHADER_VARIANTS_LINKED_NOT_VISUAL_APPROVED"
+                    parsed["runtime_override_required"]=True
             else:
                 raise ValueError("Other format requires native Godot mesh inspector")
             r.update(parsed)
