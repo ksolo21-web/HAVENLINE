@@ -95,6 +95,79 @@ class ActualModelMaterialSlotInventory(unittest.TestCase):
         with self.assertRaisesRegex(ValueError,"Invalid texture index"):
             m.gltf_slots(data,".glb")
 
+    def _runtime_obj_fixture(self):
+        from tempfile import TemporaryDirectory
+        temp=TemporaryDirectory()
+        self.addCleanup(temp.cleanup)
+        root=pathlib.Path(temp.name)
+        script_path="HavenlineGodot/scripts/transfer_feedback.gd"
+        shader_path="HavenlineGodot/assets/transfer_feedback_v2/transfer_feedback_v2.gdshader"
+        mesh_path="HavenlineGodot/assets/transfer_feedback_v2/transfer_arrow_sigil.obj"
+        for rel in (script_path,shader_path,mesh_path):
+            (root/rel).parent.mkdir(parents=True,exist_ok=True)
+        (root/mesh_path).write_text("v 0 0 0\nv 1 0 0\nv 0 1 0\nf 1 2 3\n")
+        (root/shader_path).write_text("shader_type spatial;\nvoid fragment() { ALBEDO = vec3(1.0); }\n")
+        (root/script_path).write_text('''
+const FEEDBACK_MESHES := {
+  "arrow": "res://assets/transfer_feedback_v2/transfer_arrow_sigil.obj"
+}
+const FEEDBACK_SHADER := "res://assets/transfer_feedback_v2/transfer_feedback_v2.gdshader"
+func _feedback_material(color,role):
+ var material := ShaderMaterial.new()
+ material.shader = load(FEEDBACK_SHADER)
+func _make_feedback_instances(kind,color,capacity,role):
+ var instances := MultiMesh.new()
+ instances.mesh = mesh
+ result.multimesh = instances
+ result.material_override = material
+func _make_arrows(color):
+ return _make_feedback_instances("arrow", color, 42, 1.0)
+func _ensure_trails():
+ gather_arrows = _make_arrows(Color("5deaff"))
+ destination_arrows = _make_arrows(Color("ffb548"))
+''')
+        return root,mesh_path,script_path,shader_path
+
+    def test_runtime_obj_has_placeholder_until_real_script_shader_binding(self):
+        raw=b"v 0 0 0\nv 1 0 0\nv 0 1 0\nf 1 2 3\n"
+        row=m.obj_slots(raw)
+        self.assertEqual("STATIC_OBJ_RUNTIME_MATERIAL_BINDING_REQUIRED",row["status"])
+        self.assertTrue(row["runtime_override_required"])
+        self.assertEqual(1,row["primitive_count"])
+        self.assertFalse(row["material_slots"][0]["used_in_render_mesh"])
+
+    def test_real_runtime_shader_script_binding_yields_two_unapproved_color_variants(self):
+        root,mesh,script,shader=self._runtime_obj_fixture()
+        result=m.resolve_obj_runtime_shader_binding(root,mesh,[script])
+        self.assertEqual("arrow",result["effect_kind"])
+        self.assertEqual(2,len(result["runtime_material_variants"]))
+        self.assertEqual(["runtime:source_to_actor","runtime:actor_to_destination"],
+                         result["runtime_color_variants"])
+        self.assertEqual(1.0,result["role"])
+        self.assertFalse(result["native_Godot_runtime_visual_checked"])
+        c=m.inspect_sources({"source_items":[
+            {"shipping_path":mesh,"source_class":"mesh_or_geometry"},
+            {"shipping_path":script,"source_class":"code_created_or_modified_material"},
+            {"shipping_path":shader,"source_class":"shader_or_material"}],
+            "identified_visual_source_paths":3},root=root)
+        self.assertEqual(2,c["glTF_and_OBJ_material_slots_known"])
+        self.assertEqual(0,c["unresolved_mesh_source_count"])
+        self.assertFalse(c["all_materials_reviewed"])
+
+    def test_runtime_obj_without_shader_or_colors_cannot_be_assumed_valid(self):
+        root,mesh,script,shader=self._runtime_obj_fixture()
+        (root/shader).unlink()
+        with self.assertRaisesRegex(ValueError,"shader missing/invalid"):
+            m.resolve_obj_runtime_shader_binding(root,mesh,[script])
+        (root/shader).write_text("shader_type spatial;")
+        (root/script).write_text((root/script).read_text().replace('Color("ffb548")','Color("ff0000")'))
+        with self.assertRaisesRegex(ValueError,"two-direction"):
+            m.resolve_obj_runtime_shader_binding(root,mesh,[script])
+
+    def test_obj_without_faces_or_usemtl_is_not_valid_geometry(self):
+        with self.assertRaisesRegex(ValueError,"neither material assignment nor mesh faces"):
+            m.obj_slots(b"v 0 0 0\n")
+    
     def test_obj_material_names_are_not_a_render_approval(self):
         parsed=m.obj_slots(b"mtllib cooker.mtl\nusemtl Wood\nv 0 0 0\nusemtl Metal\nusemtl Wood\n")
         self.assertEqual(2,parsed["material_slot_count"])
