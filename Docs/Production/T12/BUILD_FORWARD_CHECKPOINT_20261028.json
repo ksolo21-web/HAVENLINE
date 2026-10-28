@@ -1,0 +1,75 @@
+{
+  "schema_version": 1,
+  "task_id": "T12",
+  "date": "2026-10-28",
+  "status": "ACTIVATION_PREFLIGHT_REQUESTED_NOT_ASSIGNED",
+  "source_control": {
+    "integration_branch": "codex/havenline-sequential-task-01",
+    "integration_head_at_preflight": "f74a84a2a288ab3d3935fba7a6cb9b975c2df239",
+    "exact_current_head_required": true
+  },
+  "verified_dependencies": {
+    "T07": {
+      "recorded_status": "APPROVED",
+      "record": "Docs/Production/T07/verified-completion.json"
+    },
+    "T08": {
+      "recorded_status": "APPROVED",
+      "record": "Docs/Production/T08/verified-completion.json"
+    },
+    "T10": {
+      "recorded_status": "APPROVED",
+      "integrated": "eba0107def258824549fb10d81785290d0c81d97",
+      "record": "Docs/Production/T10/verified-completion.json"
+    },
+    "T11": {
+      "recorded_status": "APPROVED",
+      "integrated": "4059e159cb2f47a5ff2e713e60d971132da6c421",
+      "record": "Docs/Production/T11/verified-completion.json"
+    }
+  },
+  "next_task": "T12 Level 1-100 progression architecture",
+  "preparation": {
+    "binding_resolution": "Docs/Production/T12/BINDING_RESOLUTION.json",
+    "status": "RESOLVED_FOR_ACTIVATION",
+    "progression_matrix_records": 100,
+    "full_oracle_vectors": 398,
+    "shipping_progression_runtime_exists": false,
+    "builder_path_reservation_active": false
+  },
+  "activation_safety": {
+    "owner_required": "primary-integration-owner",
+    "workstream_assigned": false,
+    "revision_of_locked_acceptance_criteria_allowed": false,
+    "runtime_changes_allowed_before_authorized_T12_assignment": false,
+    "shipping_scene_changes_this_branch": false
+  },
+  "quality_scope": {
+    "preserve_accepted_T01_T11_gameplay": true,
+    "owner_T05_cooker_reference_mismatch_remains_unresolved": true,
+    "T05_art_candidate_pr": 101,
+    "gamewide_material_critic_pr": 105,
+    "do_not_claim_reference_pass_from_historical_scores": true,
+    "trees_user_likely_reference_matched": true,
+    "snow_user_tentatively_reference_matched": true,
+    "source_video_comparison_is_mandatory_when_actual_art_changes": true
+  },
+  "execution_policy": {
+    "primary": "Move the next unapproved dependency task toward T70 using the approved game systems",
+    "secondary": "Repair user-confirmed reference-visible art defects as targeted tasks",
+    "infrastructure_only_if": "specific blocker prevents a needed game or art milestone",
+    "avoid": "repeated open-ended procedural cooker art increments, acceptance-policy churn, unapproved content shipping, speculative matches",
+    "needed_next_evidence": [
+      "Run exact T12 full-history activation preflight on current integration source",
+      "Report exact effective-visual-approval and ownership blockers",
+      "If gate passes: integration owner claim reservation and activate T12; if blocked: isolate specific visual blocker and continue T12 nonshipping prep without bypassing gate"
+    ]
+  },
+  "approval": {
+    "T12_activated": false,
+    "T12_approved": false,
+    "T05_new_art_approved": false,
+    "full_game_approved": false
+  },
+  "why_checkpoint_exists": "The previous T11 PRECHECK document is stale: T11 has an authoritative verified-completion record and T11 source is already integrated. Focus on T12, avoid redoing completed T11, and keep cooker visual repair separate."
+}
