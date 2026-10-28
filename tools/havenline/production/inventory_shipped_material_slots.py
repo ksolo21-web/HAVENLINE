@@ -48,7 +48,13 @@ def gltf_slots(data: bytes,suffix: str) -> dict:
     meshes=doc.get("meshes",[])
     if not isinstance(meshes,list) or not meshes:
         raise ValueError("Mesh lacks glTF geometry")
+    # A variant-only material is STILL a real rendered material: it can be
+    # selected in Godot even if no default primitive references the slot.
+    variant_specs=(doc.get("extensions") or {}).get("KHR_materials_variants",{}).get("variants",[])
+    if not isinstance(variant_specs,list):
+        raise ValueError("Invalid glTF material variant registry")
     use=[]
+    variants_by_slot={}
     for mesh in meshes:
         if not isinstance(mesh,dict):
             raise ValueError("Invalid glTF mesh")
@@ -60,6 +66,24 @@ def gltf_slots(data: bytes,suffix: str) -> dict:
             if index is not None and (type(index) is not int or index<0 or index>=len(mats)):
                 raise ValueError("Primitive references out-of-range material slot")
             use.append(index)
+            mappings=(primitive.get("extensions") or {}).get("KHR_materials_variants",{}).get("mappings",[])
+            if not isinstance(mappings,list):
+                raise ValueError("Invalid GLB material variants mappings")
+            for mapping in mappings:
+                material=mapping.get("material")
+                choices=mapping.get("variants",[])
+                if type(material) is not int or not 0<=material<len(mats):
+                    raise ValueError("Variant references out-of-range material slot")
+                if not isinstance(choices,list) or not choices:
+                    raise ValueError("Variant mapping has no target names")
+                for variant in choices:
+                    if type(variant) is not int or not 0<=variant<len(variant_specs):
+                        raise ValueError("Variant references unregistered name")
+                    name=variant_specs[variant].get("name")
+                    if not isinstance(name,str) or not name.strip():
+                        raise ValueError("Unnamed material variant")
+                    variants_by_slot.setdefault(material,set()).add(name)
+                use.append(material)
     if not use:
         raise ValueError("No glTF mesh primitives")
     uses={i:use.count(i) for i in set(use)}
@@ -87,6 +111,7 @@ def gltf_slots(data: bytes,suffix: str) -> dict:
         rows.append({
             "slot_id":str(i)+":"+name,
             "slot_index":i,"name":name,"referencing_primitives":uses.get(i,0),
+            "glTF_variant_names":sorted(variants_by_slot.get(i,set())),
             "used_in_render_mesh":uses.get(i,0)>0,
             "texture_channels_bound":[name for name,ref in slots.items() if ref is not None],
             "material_json_sha256":digest(json.dumps(mat,sort_keys=True,separators=(",",":")).encode())
