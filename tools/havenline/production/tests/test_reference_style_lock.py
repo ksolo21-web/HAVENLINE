@@ -5,7 +5,7 @@ import unittest
 
 PRODUCTION = pathlib.Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(PRODUCTION))
-from reference_style_lock import style_lock_required, visual_style_paths
+from reference_style_lock import style_lock_required, visual_style_paths, validate_manifest
 from architecture_v32 import validate as validate_architecture_v32
 
 ROOT = PRODUCTION.parents[2]
@@ -63,6 +63,32 @@ class ReferenceStyleLockTests(unittest.TestCase):
             "reference_style_lock": {"applicable": False},
         }
         self.assertTrue(style_lock_required(manifest))
+
+    def test_global_changed_art_cannot_bypass_independent_per_material_critic(self):
+        report = validate_manifest({
+            "task_id": "T42", "base_commit": "0" * 40,
+            "candidate_commit": "1" * 40,
+            "reference_style_lock": {"applicable": True, "validation_passed": True},
+            "critics": {"C1": {"scores": {"reference_fidelity": 10, "visual_language": 10},
+                               "defects": [], "coverage_complete": True}}
+        })
+        self.assertFalse(report["passed"])
+        self.assertIn("per-asset native Godot C1+C2 material critic evidence missing", report["errors"])
+
+    def test_material_critic_private_reference_path_must_exist_and_match_hash(self):
+        report = validate_manifest({
+            "task_id": "T42", "base_commit": "0" * 40,
+            "candidate_commit": "1" * 40,
+            "reference_style_lock": {"applicable": True, "validation_passed": True},
+            "rendered_material_critic": {
+                "manifest_path": "../unverifiable",
+                "private_evidence_root": "/tmp/nonexistent-material-proof",
+                "manifest_sha256": "a" * 64},
+            "critics": {"C1": {"scores": {"reference_fidelity": 10, "visual_language": 10},
+                               "defects": [], "coverage_complete": True}}
+        })
+        self.assertFalse(report["passed"])
+        self.assertTrue(any("private material C1+C2 review unavailable" in e for e in report["errors"]), report["errors"])
 
     def test_v32_architecture_remains_green_with_style_lock(self):
         report = validate_architecture_v32()

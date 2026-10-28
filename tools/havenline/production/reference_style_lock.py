@@ -102,6 +102,37 @@ def validate_manifest(manifest:dict,critics:dict|None=None)->dict:
             if scores.get(dim)!=policy["acceptance"]["required_style_fidelity"]: errors.append(f"C1 {dim} must equal 10.0 exactly under reference style lock")
         if c1.get("defects"): errors.append("C1 contains style/reference defects")
         if c1.get("coverage_complete") is not True: errors.append("C1 reference-style coverage incomplete")
+        # Permanent per-asset MATERIAL fidelity proof, not just a task-level
+        # C1 number. Owner references may live in a separately provided
+        # private workspace; public CI MUST NOT silently fake their pixels.
+        material=manifest.get("rendered_material_critic")
+        if not isinstance(material,dict):
+            errors.append("per-asset native Godot C1+C2 material critic evidence missing")
+        else:
+            mpath=material.get("manifest_path")
+            root=material.get("private_evidence_root")
+            declared_sha=material.get("manifest_sha256")
+            if not all(isinstance(v,str) and v.strip() for v in (mpath,root,declared_sha)):
+                errors.append("private material evidence manifest path/root/SHA missing")
+            else:
+                try:
+                    import hashlib
+                    from global_rendered_material_critic import validate as check_materials
+                    from global_rendered_material_critic import load_policy as check_policy
+                    root_path=pathlib.Path(root).resolve()
+                    man_path=(root_path/mpath).resolve()
+                    man_path.relative_to(root_path)
+                    if not man_path.is_file() or hashlib.sha256(man_path.read_bytes()).hexdigest()!=declared_sha:
+                        raise ValueError("material critic manifest bytes not source-hash verified")
+                    proof=json.loads(man_path.read_text())
+                    result=check_materials(proof,root_path,mode="review",expected_paths=detected,policy=check_policy())
+                    if result["task_id"]!=task or result["candidate_commit"]!=candidate:
+                        errors.append("material critic manifest task/candidate identity mismatch")
+                    if not result["passed"]:
+                        errors.extend("native material critic: "+issue for issue in result["errors"])
+                except (ValueError,OSError,ImportError,TypeError,KeyError) as exc:
+                    errors.append("private material C1+C2 review unavailable: "+str(exc))
+
     elif block.get("applicable") is True and block.get("validation_passed") is not True:
         errors.append("voluntary reference style lock marked applicable without validation pass")
     return {"task_id":task,"candidate_commit":candidate,"required":required,"historical_exact_source_preserved":preserved,"detected_visual_paths":detected,"passed":not errors,"errors":errors}
