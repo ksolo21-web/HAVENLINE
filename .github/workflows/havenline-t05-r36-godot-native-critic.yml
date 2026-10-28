@@ -77,6 +77,9 @@ jobs:
           },indent=2)+'\n')
           print('Four R36 exact native Godot images saved; ART CRITIC STILL FAILS')
           PY
+      - name: Use native Git PNG blobs for reviewer-visible screenshots, not LFS pointer stubs
+        run: |
+          printf '%s\n' '*.png -filter -diff -merge' > Docs/Production/T05/NeuralTrials/R36/NativeGodot/.gitattributes
       - name: Commit genuine engine frames as permanent GitHub review evidence
         run: |
           set -euo pipefail
