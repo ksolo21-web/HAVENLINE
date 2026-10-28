@@ -2,6 +2,8 @@
 
 **Current status:** preparation only. This document is an execution handoff, not permission to start shipping T12 runtime/data before dependencies close.
 
+**2026-10-28 recheck:** T11 is no longer an unfinished dependency. Its authoritative `verified-completion.json` records approved integrated source `4059e159cb2f47a5ff2e713e60d971132da6c421`, and the integration registry, task gates and dependency graph also show T11 APPROVED. T12 remains **unassigned** until the exact activation preflight, effective upstream visual approvals, V3.2 owner reservation and lineage checks pass. Reuse the existing 100-level preparation and 398-vector engine corpus; do **not** reimplement T11 or infer game-art 10/10 from historical gameplay scores. The separate rejected T05 cooker art candidate must not be promoted to shipping to unlock T12.
+
 ## 0. Non-negotiable entry conditions
 
 All of the following must be true on the authoritative integration branch before T12 activation:
