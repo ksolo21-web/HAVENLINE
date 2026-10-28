@@ -71,12 +71,19 @@ jobs:
           set -euo pipefail
           python3 tools/havenline/production/inventory_shipped_visual_sources.py \
             --ref HEAD --out /tmp/native-material-source-census.json
+          python3 tools/havenline/production/inventory_shipped_material_slots.py \
+            --ref HEAD --out /tmp/native-material-slot-census.json
           python3 - <<'PY'
           import json
           report=json.load(open('/tmp/native-material-source-census.json'))
           assert report['identified_visual_source_paths']>0
           assert report['complete_T70_C1_C2_critic_pass'] is False
           assert report['material_slot_count_known'] is False
+          slots=json.load(open('/tmp/native-material-slot-census.json'))
+          assert slots['mesh_source_count']>0
+          assert slots['glTF_and_OBJ_material_slots_known']>0
+          assert slots['all_materials_reviewed'] is False
+          print('STATIC_MATERIAL_SLOTS_KNOWN_NATIVE_GODOT_REVIEW_PENDING')
           print('SHIPPING_MATERIAL_CENSUS_NOT_SOURCE_VISUAL_APPROVAL')
           PY
       - name: Publish critic safeguard and source-census audit (no private owner imagery)
@@ -87,6 +94,7 @@ jobs:
           path: |
             /tmp/native-material-critic-tests.log
             /tmp/native-material-source-census.json
+            /tmp/native-material-slot-census.json
           if-no-files-found: warn
           retention-days: 30
       - name: Validate workstream registry and ownership collisions
