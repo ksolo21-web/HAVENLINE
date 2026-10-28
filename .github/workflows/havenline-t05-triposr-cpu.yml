@@ -51,8 +51,9 @@ jobs:
             'transformers==4.35.0' 'trimesh==4.0.5' \
             'rembg>=2.0.53,<3' 'huggingface-hub==0.17.3' \
             'imageio[ffmpeg]' 'xatlas==0.0.9' 'moderngl==5.10.0'
+          python -m pip install 'scikit-build-core>=0.11,<1' 'pybind11>=2.13,<3' 'cmake>=3.26' 
           python -m pip install --no-build-isolation \
-            'git+https://github.com/tatsy/torchmcubes.git'
+            'git+https://github.com/tatsy/torchmcubes.git@a9ac95aa329957ba646e7bb057f825f5dfa77f38'
       - name: Select real image or explicit official test fixture
         run: |
           set -euo pipefail
