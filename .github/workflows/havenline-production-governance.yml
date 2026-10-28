@@ -46,6 +46,11 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           fetch-depth: 0
+      - name: Supply image decoder to complete production test suite
+        run: |
+          set -euo pipefail
+          python3 -m pip install --disable-pip-version-check --target "$RUNNER_TEMP/hl-governance-image-deps" 'pillow>=10,<13'
+          echo "PYTHONPATH=$RUNNER_TEMP/hl-governance-image-deps" >> "$GITHUB_ENV"
       - name: Compile production accelerator and specialist critic tooling
         run: python3 -m compileall -q tools/havenline/production
       - name: Run governance and safeguard unit tests
