@@ -149,6 +149,8 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
         source = asset.get("asset_source")
         source_path = verified_file(root, source, label + " source", errors)
         authored_mesh_slot_ids = None
+        authored_mesh_unused_slot_ids = []
+        authored_variant_names = {}
         if source_path and source_path.suffix.lower() in (".glb", ".gltf", ".obj"):
             try:
                 from inventory_shipped_material_slots import gltf_slots, obj_slots
@@ -156,11 +158,20 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
                     source_slots = obj_slots(source_path.read_bytes())
                 else:
                     source_slots = gltf_slots(source_path.read_bytes(), source_path.suffix.lower())
-                authored_mesh_slot_ids = [item["slot_id"] for item in source_slots["material_slots"]]
+                authored_mesh_slot_ids = [item["slot_id"] for item in source_slots["material_slots"]
+                                          if item["used_in_render_mesh"]]
+                authored_mesh_unused_slot_ids = sorted(
+                    item["slot_id"] for item in source_slots["material_slots"]
+                    if not item["used_in_render_mesh"])
+                authored_variant_names = {
+                    item["slot_id"]: item.get("glTF_variant_names", [])
+                    for item in source_slots["material_slots"] if item["used_in_render_mesh"]}
                 if source_slots.get("unassigned_primitives", 0):
                     errors.append(label + ": implicit default mesh material cannot be reference-approved")
-                if source_slots.get("unused_authored_slots", 0):
-                    errors.append(label + ": uninstantiated authored material slot needs explicit disposition")
+                # Unused GLB palette entries are not visible material output.
+                # They require exact C1/C2 inactive-slot coverage but MUST NOT
+                # receive invented real-render scores. Variant-only slots count
+                # as used and can never hide in this inactive list.
             except (OSError, ValueError, KeyError, TypeError, IndexError, ImportError) as exc:
                 errors.append(label + ": actual authored GLB/OBJ material inventory unavailable: " + str(exc))
         if source_path and isinstance(source, dict):
@@ -228,6 +239,9 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
                 errors.append(label + ": invalid material ID")
                 continue
             mids.append(mid)
+            variants=authored_variant_names.get(mid,[])
+            if sorted(surface.get("glTF_variant_names_reviewed", [])) != sorted(variants):
+                errors.append(label + ": glTF variant views were not reviewed for material "+mid)
             views = surface.get("visible_in_views")
             if not isinstance(views, list) or not views or not set(views).issubset(wanted):
                 errors.append(label + ": material slot not visually inspected in actual renderer: " + mid)
@@ -239,6 +253,12 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
             errors.append(label + ": repeated material IDs")
         if authored_mesh_slot_ids is not None and set(mids) != set(authored_mesh_slot_ids):
             errors.append(label + ": reported material IDs omit, invent or merge actual GLB/OBJ slots; expected "+repr(authored_mesh_slot_ids))
+        if authored_mesh_slot_ids is not None:
+            inactive=asset.get("unused_source_material_slots")
+            if not isinstance(inactive,list) or sorted(inactive)!=authored_mesh_unused_slot_ids:
+                errors.append(label + ": inactive source material slot declaration does not match actual unused GLB slots")
+            if authored_mesh_unused_slot_ids and asset.get("unused_material_disposition")!="REVIEWERS_CONFIRMED_NOT_RENDERED_IN_NATIVE_GODOT":
+                errors.append(label + ": unused authored materials need source-bound native inactive-slot disposition")
         alignment = asset.get("reference_camera")
         if not isinstance(alignment, dict) or alignment.get("reference_visible_geometry_calibrated") is not True:
             errors.append(label + ": original reference camera/perspective not calibrated")
@@ -336,6 +356,14 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
                 if set(coverage.get("material_ids", [])) != {
                         m["material_id"] for m in asset.get("materials", []) if isinstance(m, dict)}:
                     errors.append(l + ": not all authored material slots actually judged")
+                if sorted(coverage.get("inactive_source_material_slots_inspected", [])) != sorted(
+                        asset.get("unused_source_material_slots", [])):
+                    errors.append(l + ": independent C1/C2 critics have not attested to inactive GLB slots")
+                if {str(k): sorted(v) for k,v in coverage.get("glTF_variant_names_inspected", {}).items()} != {
+                        m["material_id"]: sorted(m.get("glTF_variant_names_reviewed", []))
+                        for m in asset.get("materials",[]) if isinstance(m,dict)
+                        and m.get("glTF_variant_names_reviewed")}:
+                    errors.append(l + ": incomplete independent glTF visual variant inspection")
                 if set(coverage.get("views", [])) != set(p["evidence_profiles"][asset["profile"]]["views"]):
                     errors.append(l + ": critic did not inspect all actual Godot views")
                 if sorted(coverage.get("reference_shas", [])) != sorted(
