@@ -1,0 +1,101 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-28",
+  "task": "T05",
+  "candidate": "R31_FRESH_3_OWNER_VIEWS",
+  "status": "NEW_GEOMETRY_BUILT_NATIVE_3_VIEWS_PASS__ART_NOT_APPROVED__SHIPPING_UNCHANGED",
+  "references": [
+    {
+      "view": "front_three_quarter",
+      "owner_private_filename": "32451.jpg",
+      "sha256": "70e9e04c329797490b19aaa383865a5a2e20129bd1e0250a6997b170fb0510e4"
+    },
+    {
+      "view": "right_side",
+      "owner_private_filename": "32450.jpg",
+      "sha256": "5b1831d03575e705f1baf5af5d4ac4b4ecd62e364b4287c7f841965625d4d719"
+    },
+    {
+      "view": "rear",
+      "owner_private_filename": "32441.png",
+      "sha256": "0ff99199e1eb4bedeffe4d9953f5253a97e49366a2118d5976132c9137d93510"
+    }
+  ],
+  "art_constraints": {
+    "owner_original_renders_authoritative": true,
+    "obsolete_R28_R29_R30_geometry_imported": false,
+    "old_12424_triangle_cap_retired_from_art_master": true,
+    "raw_beef_bin_visual_left": true,
+    "finished_food_tray_visual_right": true,
+    "rear_blue_door_five_vent_slots": true,
+    "right_pressure_cylinder_rod_and_crank": true,
+    "chimney_snow_saw_and_orange_handle_modeled": true,
+    "unseen_surfaces_are_reconstructed_not_verified": true
+  },
+  "outputs_private_owner_bundle": {
+    "archive": "HAVENLINE-T05-R31-FRESH-3-VIEW-REBUILD-PRIVATE.zip",
+    "archive_sha256": "748d5b9747617f2f9694a424dabf29d430681d457a963ed80f462c4159054935",
+    "photo_and_source_pixels_publicly_committed": false,
+    "embedded_source_derived_texture_data_private": true,
+    "GLB_tiers": [
+      {
+        "tier": "hero",
+        "triangles": 163571,
+        "sha256": "db66dbd7740a86a9c6d69c5a5f8d474756ae78044a584398d21065f63908dc09"
+      },
+      {
+        "tier": "balanced",
+        "triangles": 73295,
+        "sha256": "a9d93aed3bda2ae52a37a2be5b22ce36a3bf4c60b32210ea22e1d227ab6badad"
+      },
+      {
+        "tier": "performance",
+        "triangles": 37727,
+        "sha256": "d61fdc6ad1ab95089b72e87325c436f066a7568c1289d8aca6fe16c48134e66c"
+      }
+    ],
+    "imported_fidelity_technical_check": "PASS all 3 glTF structural audits; 12 PBR groups with embedded image maps, POSITION/NORMAL/TEXCOORD_0",
+    "editable_authoring": "private builder script and detailed part inventory, 243 separately authored parts; GLB joined into 12 materials"
+  },
+  "real_engine_review": {
+    "engine": "Godot 4.7.2",
+    "native_godot_1536px_square_views": [
+      "front-three-quarter",
+      "right",
+      "rear"
+    ],
+    "native_godot_actual_scene": "disposable isolated project only",
+    "native_render_technical_pass": true,
+    "mobile_renderer_profiling": false,
+    "hardware_adapter": "Mesa llvmpipe software",
+    "source_camera_calibration": false,
+    "independent_visual_approval": false,
+    "owner_approval": false
+  },
+  "planned_user_graphics_settings": {
+    "independent_fps_caps": [
+      30,
+      60,
+      90,
+      120,
+      "unlimited"
+    ],
+    "quality_choices": [
+      "Low",
+      "Medium",
+      "High",
+      "Ultra"
+    ],
+    "asset_LOD_tiers": [
+      "performance",
+      "balanced",
+      "hero"
+    ],
+    "game_settings_implemented": false,
+    "high_end_phone_60fps_guaranteed": false
+  },
+  "internal_art_verdict": "REJECT as final fidelity: wood carpentry, continuous roof snow, cut meat details, front casing depth, smoke and exact reference cameras still substantially differ",
+  "next_art_work": "Use three user reference images to sculpt timber joins, carved wood surface, continuous roof powder, handformed raw and prepared meats, mechanical side/rear depth and smoke with an artist-quality editable 3D tool. Validate physical Android renderer and owner signoff after artistic approval.",
+  "shipping_asset_modified": false,
+  "source_pixel_exposure_to_public_repo": false
+}
