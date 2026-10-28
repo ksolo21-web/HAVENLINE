@@ -1,0 +1,72 @@
+name: T05 R38 Permanently archive ALREADY VERIFIED Blender and native Godot outputs
+on:
+  push:
+    branches: [havenline/T05-r18-visual-corrections-20261025]
+    paths: [.github/workflows/havenline-t05-r38-archive-verification.yml]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  save-exact-r38-source-artifacts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    env:
+      GH_TOKEN: ${{ github.token }}
+      SOURCE_RUN: '40789844456'
+      ARTIFACT_NAME: havenline-T05-R38-source-photo-projective-workbench-40789844456
+      DEST: Docs/Production/T05/NeuralTrials/R38
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - name: Retrieve generated original-pixel Blender workbench and native photos, NOT a placeholder
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/verified-R38"
+          gh run download "$SOURCE_RUN" --repo "$GITHUB_REPOSITORY" \
+            --name "$ARTIFACT_NAME" --dir "$RUNNER_TEMP/verified-R38"
+      - name: Verify exact owner original hashes, actual volumetric mesh, packed Blender file and 4 Godot frames
+        run: |
+          python - <<'PY'
+          import hashlib,json,os,struct
+          from pathlib import Path
+          src=Path(os.environ["RUNNER_TEMP"])/"verified-R38"
+          receipt=json.loads((src/"STATUS.json").read_text())
+          for filename,expected in receipt["owner_original_sha256"].items():
+              actual=hashlib.sha256((Path("Docs/Art/SourceReferences/T05")/filename).read_bytes()).hexdigest()
+              assert actual==expected,(filename,actual)
+          model=src/"T05_R38_SOURCE_PROJECTED_UNAPPROVED.glb"
+          blend=src/"T05_R38_3_OWNER_VIEWS_EDITABLE.blend"
+          assert model.stat().st_size>1_000_000 and blend.stat().st_size>1_000_000
+          assert hashlib.sha256(model.read_bytes()).hexdigest()==receipt["model_sha256"]
+          assert receipt["triangles"]==203064
+          assert receipt["watertight"] and not receipt["art_critic_passed"]
+          assert not receipt["shipping_asset_modified"]
+          assert receipt["off_reference_view_render_count"]==1
+          for name,proof in receipt["native_pngs"].items():
+              p=src/"NativeGodot"/("r38_"+name+".png")
+              raw=p.read_bytes()
+              assert raw[:8]==b'\x89PNG\r\n\x1a\n'
+              assert struct.unpack(">II",raw[16:24])==(960,960)
+              assert hashlib.sha256(raw).hexdigest()==proof["sha256"]
+          print("EXACT OWNER R38 model, BLEND, ALL FOUR REAL GODOT PNGs verified; ART STILL FAIL")
+          PY
+      - name: Commit verified real model and Blender source to HAVENLINE review branch
+        run: |
+          set -euo pipefail
+          mkdir -p "$DEST/NativeGodot"
+          src="$RUNNER_TEMP/verified-R38"
+          cp "$src/T05_R38_SOURCE_PROJECTED_UNAPPROVED.glb" "$DEST/"
+          cp "$src/T05_R38_3_OWNER_VIEWS_EDITABLE.blend" "$DEST/"
+          cp "$src/STATUS.json" "$DEST/"
+          cp "$src/NativeGodot/"*.png "$DEST/NativeGodot/"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$DEST"
+          for f in "$DEST"/*.glb "$DEST"/*.blend "$DEST"/NativeGodot/*.png; do
+            bytes="$(git show ":$f" | wc -c)"
+            test "$bytes" -gt 10000 || { echo "::error::File is a Git LFS pointer not real content: $f"; exit 1; }
+          done
+          git diff --cached --check
+          git commit -m 'T05 R38: permanently retain editable owner-source Blender rig, real GLB and four Godot angles (visual FAIL)'
+          git status --short
+          git -c rebase.autoStash=true pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin HEAD:"$GITHUB_REF_NAME"
