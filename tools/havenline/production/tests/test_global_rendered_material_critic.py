@@ -126,7 +126,7 @@ class PermanentMaterialCriticTests(unittest.TestCase):
                         "material_ids": self.material_names[:],
                         "inactive_source_material_slots_inspected": [],
                         "glTF_variant_names_inspected": {},
-                        "views": self.policy["evidence_profiles"]["static_3d"]["views"][:],
+                        "views": self.policy["evidence_profiles"][self.asset["profile"]]["views"][:],
                         "reference_shas": [self.source["sha256"]]
                     }
                 }]
@@ -223,6 +223,94 @@ class PermanentMaterialCriticTests(unittest.TestCase):
         result=self.execute()
         self.assertFalse(result["passed"])
         self.assertTrue(any("inactive GLB slots" in x for x in result["errors"]),result["errors"])
+
+    def _configure_godot_runtime_vfx_obj(self):
+        root=self.root
+        obj="HavenlineGodot/assets/transfer_feedback_v2/transfer_arrow_sigil.obj"
+        shader="HavenlineGodot/assets/transfer_feedback_v2/transfer_feedback_v2.gdshader"
+        script="HavenlineGodot/scripts/transfer_feedback.gd"
+        for path in (obj,shader,script):
+            (root/path).parent.mkdir(parents=True,exist_ok=True)
+        raw=b"v 0 0 0\nv 1 0 0\nv 0 1 0\nf 1 2 3\n"
+        geometry=self.addfile(obj,raw)
+        code='''
+const FEEDBACK_MESHES := {"arrow": "res://assets/transfer_feedback_v2/transfer_arrow_sigil.obj"}
+const FEEDBACK_SHADER := "res://assets/transfer_feedback_v2/transfer_feedback_v2.gdshader"
+func _make_feedback_instances(kind,color,capacity,role):
+ var material := ShaderMaterial.new()
+ material.shader = load(FEEDBACK_SHADER)
+ var instances := MultiMesh.new()
+ instances.mesh = mesh
+ result.multimesh = instances
+ result.material_override = material
+func _make_arrows(color):
+ return _make_feedback_instances("arrow", color, 42, 1.0)
+func _ensure_trails():
+ gather = _make_arrows(Color("5deaff"))
+ destination = _make_arrows(Color("ffb548"))
+'''
+        script_entry=self.addfile(script,code.encode())
+        shader_entry=self.addfile(shader,b"shader_type spatial;\nvoid fragment() { ALBEDO=vec3(1.0); }\n")
+        self.asset["asset_source"]={**geometry,"shipping_path":obj}
+        self.asset["profile"]="dynamic_vfx"
+        self.asset["runtime_material_binding"]={
+            "script":script_entry,"shader":shader_entry,
+            "material_ids":["runtime:source_to_actor","runtime:actor_to_destination"]}
+        views=self.policy["evidence_profiles"]["dynamic_vfx"]["views"]
+        self.asset["captures"]=[]
+        for i,view in enumerate(views):
+            img=self.addfile("godot_dynamic_"+view+".png",make_png(i*25+88))
+            self.asset["captures"].append({
+                "view":view,**img,"engine":"Godot","render_run_id":8004,
+                "candidate_commit":SRC,"shipping_scene_loaded":False})
+        self.asset["motion"]={**self.addfile("godot_motion.bin",b"test-only native motion frames fixture bytes"),
+                              "from_native_Godot":True}
+        self.material_names=self.asset["runtime_material_binding"]["material_ids"][:]
+        self.asset["materials"]=[
+            {"material_id":ident,"reference_shas":[self.source["sha256"]],
+             "visible_in_views":views[:],"glTF_variant_names_reviewed":[]}
+            for ident in self.material_names]
+        self.manifest["changed_visual_paths"]=[obj]
+        self.make_reviews()
+        return obj,script,shader
+
+    def test_runtime_vfx_obj_real_script_shader_binding_proves_two_unapproved_materials(self):
+        self._configure_godot_runtime_vfx_obj()
+        out=self.execute("evidence")
+        self.assertTrue(out["passed"],out["errors"])
+        self.assertEqual(2,out["material_count"])
+        self.assertFalse(out["real_visual_review_completed"])
+
+    def test_runtime_obj_without_source_shader_cannot_pass(self):
+        self._configure_godot_runtime_vfx_obj()
+        (self.root/"HavenlineGodot/assets/transfer_feedback_v2/transfer_feedback_v2.gdshader").unlink()
+        out=self.execute("evidence")
+        self.assertFalse(out["passed"])
+        self.assertTrue(any("runtime Godot shader" in x for x in out["errors"]),out["errors"])
+
+    def test_runtime_obj_missing_second_direction_variant_fails(self):
+        self._configure_godot_runtime_vfx_obj()
+        self.asset["materials"].pop()
+        out=self.execute("evidence")
+        self.assertFalse(out["passed"])
+        self.assertTrue(any("omit, invent or merge actual GLB/OBJ" in x for x in out["errors"]),out["errors"])
+
+    def test_runtime_obj_cannot_masquerade_as_static_prop_without_motion(self):
+        self._configure_godot_runtime_vfx_obj()
+        self.asset["profile"]="static_3d"
+        self.asset["motion"]={}
+        out=self.execute("evidence")
+        self.assertFalse(out["passed"])
+        self.assertTrue(any("dynamic_vfx profile" in x for x in out["errors"]),out["errors"])
+
+    def test_runtime_obj_source_code_shader_material_not_just_text_mentioned(self):
+        self._configure_godot_runtime_vfx_obj()
+        path=self.root/"HavenlineGodot/scripts/transfer_feedback.gd"
+        path.write_text(path.read_text().replace("result.material_override = material","pass"))
+        self.asset["runtime_material_binding"]["script"]["sha256"]=sha256(path)
+        out=self.execute("evidence")
+        self.assertFalse(out["passed"])
+        self.assertTrue(any("source runtime shader override chain is unproven" in x for x in out["errors"]),out["errors"])
 
     def test_original_source_is_byte_verified_not_extension_based(self):
         self.assertTrue(self.execute()["passed"])
