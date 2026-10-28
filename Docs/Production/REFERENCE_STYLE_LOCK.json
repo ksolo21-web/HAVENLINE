@@ -147,7 +147,7 @@
   },
   "per_asset_rendered_material_critic": {
     "status": "PERMANENT_MANDATORY_SOURCE_BOUND",
-    "policy": "Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json",
+    "policy": "Docs/Production/REFERENCE_STYLE_LOCK.json",
     "independent_critics": [
       "C1",
       "C2"
@@ -164,6 +164,167 @@
     "all_existing_game_assets_census": "T70",
     "no_averaging": true,
     "owner_rejection_overrides_critic": true,
-    "private_owner_source_not_publicly_committed": true
+    "private_owner_source_not_publicly_committed": true,
+    "policy_contract_key": "per_asset_rendered_material_critic.contract",
+    "contract": {
+      "schema_version": 1,
+      "status": "PERMANENT_GAMEWIDE_REQUIREMENT_STAGED_FOR_INTEGRATION",
+      "effective_date": "2026-10-27",
+      "purpose": "Every new/modified or shipped Havenline material and asset must actually visually match its authoritative reference, judged in native Godot at the material/surface level. CI build, polygons, pixel change and merely reporting a critic pass are insufficient.",
+      "authority": {
+        "source_style_policy": "Docs/Production/REFERENCE_STYLE_LOCK.json",
+        "source_fidelity_standard": "Docs/Production/REFERENCE_FIDELITY_STANDARD.json",
+        "visual_approval_policy": "Docs/Production/SHIPPING_VISUAL_APPROVAL_POLICY.json",
+        "critic_matrix": "Docs/Production/CRITIC_MATRIX.json",
+        "reviewers": [
+          "C1",
+          "C2"
+        ],
+        "privacy": "Owner source images/videos and captured frames may be private external evidence; never automatically commit/upload them to public repository."
+      },
+      "scope": {
+        "all_tasks": true,
+        "all_new_or_modified_game_art": true,
+        "all_existing_shipped_art_at_T70": true,
+        "include": [
+          "game_objects",
+          "props",
+          "machines",
+          "structures",
+          "characters",
+          "animals",
+          "enemies",
+          "terrain",
+          "snow",
+          "water",
+          "wood",
+          "metal",
+          "food",
+          "vegetation",
+          "shaders",
+          "textures",
+          "procedural_materials",
+          "lighting",
+          "particles",
+          "VFX",
+          "UI_rendered_materials",
+          "runtime_generated_surfaces",
+          "shared_material_variants"
+        ],
+        "asset_level_review_not_only_whole_frame": true,
+        "material_slot_and_visible_surface_coverage": true,
+        "global_whole_frame_review_additional": true,
+        "accepted_unchanged_sources_not_mutated_by_governance_only": true,
+        "previously_accepted_source_if_reused_at_new_sha_must_requalify": true
+      },
+      "threshold": {
+        "reference_fidelity": 10,
+        "visual_language": 10,
+        "minimum_other_applicable_dimensions": 9.5,
+        "zero_unresolved_defects": true,
+        "no_average_waiver": true,
+        "missing_reference_or_camera_binding": "BLOCK",
+        "missing_review": "BLOCK",
+        "builder_self_review": "BLOCK",
+        "synthetic_score_as_real": "BLOCK",
+        "actual_source_perspective_unavailable": "VERIFY_VISIBLE_ONLY_NEVER_INVENT_HIDDEN_REFERENCE_GEOMETRY"
+      },
+      "required_dimensions": [
+        "reference_fidelity",
+        "visual_language",
+        "silhouette_and_proportions",
+        "surface_color_and_pattern",
+        "roughness_metallic_and_normal_response",
+        "texture_and_shader_fidelity",
+        "seams_occlusion_and_contact",
+        "readability_in_native_game",
+        "cross_view_consistency"
+      ],
+      "evidence_profiles": {
+        "static_3d": {
+          "views": [
+            "front",
+            "rear",
+            "left",
+            "right",
+            "three-quarter",
+            "overhead",
+            "in_game_use"
+          ],
+          "minimum_resolution": [
+            3840,
+            2160
+          ],
+          "motion_required": false
+        },
+        "scene_or_terrain": {
+          "views": [
+            "in_game_use",
+            "detail",
+            "wide_context"
+          ],
+          "minimum_resolution": [
+            3840,
+            2160
+          ],
+          "motion_required": false
+        },
+        "dynamic_vfx": {
+          "views": [
+            "in_game_use",
+            "motion_start",
+            "motion_mid",
+            "motion_end"
+          ],
+          "minimum_resolution": [
+            3840,
+            2160
+          ],
+          "motion_required": true
+        },
+        "ui_and_2d": {
+          "views": [
+            "in_game_use",
+            "detail"
+          ],
+          "minimum_resolution": [
+            3840,
+            2160
+          ],
+          "motion_required": false
+        }
+      },
+      "evidence": {
+        "real_godot_pixels": true,
+        "candidate_source_hashes": true,
+        "actual_reference_source_byte_hashes": true,
+        "allow_jpeg_encoded_png_filename_if_bytes_verified": true,
+        "exact_screenshots_sha256": true,
+        "render_job_and_engine_provenance": true,
+        "material_slot_names_or_shader_variant_ids": true,
+        "per_material_visible_views": true,
+        "both_separately_executed_C1_and_C2_reviews": true,
+        "raw_reviewer_files_and_shas": true,
+        "source_camera_alignment_or_explicit_uncertainty": true,
+        "all_profile_views_required": true,
+        "shipping_scene_required_for_release": true,
+        "physical_android_performance_is_separate": true
+      },
+      "release": {
+        "requires_user_approval": true,
+        "requires_shipping_scene_material_proof": true,
+        "requires_full_T70_material_census": true,
+        "requires_physical_device_performance_gate": true,
+        "require_no_known_user_rejection": true,
+        "real_critic_result_required_not_tool_readiness": true,
+        "no_direct_approval_from_legacy_task_status": true
+      },
+      "paths": {
+        "validator": "tools/havenline/production/global_rendered_material_critic.py",
+        "shipping_signoff": "tools/havenline/production/shipping_visual_gate.py",
+        "test": "tools/havenline/production/tests/test_global_rendered_material_critic.py",
+        "private_evidence_contract": "Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_STANDARD.md"
+      }
+    }
   }
 }
