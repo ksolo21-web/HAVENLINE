@@ -17,7 +17,7 @@ import re
 from collections import Counter
 
 ROOT = pathlib.Path(__file__).resolve().parents[3]
-POLICY = ROOT / "Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json"
+POLICY = ROOT / "Docs/Production/REFERENCE_STYLE_LOCK.json"
 HEX40 = re.compile(r"^[a-f0-9]{40}$")
 HEX64 = re.compile(r"^[a-f0-9]{64}$")
 ID = re.compile(r"^[A-Za-z0-9_.:-]{1,100}$")
@@ -25,7 +25,7 @@ MAX_FILE_BYTES = 150_000_000
 
 
 def load_policy(path: pathlib.Path = POLICY) -> dict:
-    p = json.loads(path.read_text())
+    p = json.loads(path.read_text())["per_asset_rendered_material_critic"]["contract"]
     assert p["status"] == "PERMANENT_GAMEWIDE_REQUIREMENT_STAGED_FOR_INTEGRATION"
     assert p["threshold"]["reference_fidelity"] == p["threshold"]["visual_language"] == 10
     assert p["threshold"]["minimum_other_applicable_dimensions"] >= 9.5
@@ -351,7 +351,7 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
         "reviewed_material_ids": {a["asset_id"]: [m["material_id"] for m in a.get("materials", [])
                                                    if isinstance(m, dict) and "material_id" in m]
                                    for a in assets if isinstance(a, dict) and "asset_id" in a},
-        "policy_path": "Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json",
+        "policy_path": "Docs/Production/REFERENCE_STYLE_LOCK.json",
         "private_manifest_canonical_sha256": hashlib.sha256(json.dumps(manifest, sort_keys=True, separators=(",", ":")).encode()).hexdigest(),
         "verified_review_sources": verified_review_sources if passed and mode != "evidence" else [],
         "full_shipped_material_census_verified": bool(passed and mode == "release" and task_id == "T70"),
