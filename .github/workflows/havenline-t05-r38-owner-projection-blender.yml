@@ -137,7 +137,8 @@ jobs:
           done
           git diff --cached --check
           git commit -m 'T05 R38: store editable Blender rig, actual original-image projected GLB and native 4-angle critic evidence (unapproved)'
-          git pull --rebase origin "$GITHUB_REF_NAME"
+          git status --short
+          git -c rebase.autoStash=true pull --rebase origin "$GITHUB_REF_NAME"
           git push origin HEAD:"$GITHUB_REF_NAME"
       - name: Upload source reference model, Blender file, native evidence even if Git storage fails
         if: always()
