@@ -156,6 +156,41 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
                 from inventory_shipped_material_slots import gltf_slots, obj_slots
                 if source_path.suffix.lower() == ".obj":
                     source_slots = obj_slots(source_path.read_bytes())
+                    if source_slots.get("runtime_override_required"):
+                        # OBJ has geometry but no authored usemtl, so the
+                        # runtime binding is a separate actual material
+                        # source. Require the *real* shader and GDScript
+                        # files in the private proof package and hash them.
+                        from inventory_shipped_material_slots import resolve_obj_runtime_shader_binding
+                        runtime=asset.get("runtime_material_binding") or {}
+                        script=verified_file(root,runtime.get("script"),label+" runtime shader script",errors)
+                        shader=verified_file(root,runtime.get("shader"),label+" runtime Godot shader",errors)
+                        target=source.get("shipping_path") if isinstance(source,dict) else ""
+                        if script and shader and isinstance(target,str) and target.startswith("HavenlineGodot/"):
+                            script_rel=runtime["script"].get("path")
+                            shader_rel=runtime["shader"].get("path")
+                            if (not isinstance(script_rel,str) or not script_rel.startswith("HavenlineGodot/")
+                                    or not isinstance(shader_rel,str) or not shader_rel.startswith("HavenlineGodot/")):
+                                errors.append(label+": runtime script and shader paths are not exact game files")
+                            elif source_path != rooted(root,target):
+                                errors.append(label+": OBJ proof must preserve exact source shipping path")
+                            else:
+                                binding=resolve_obj_runtime_shader_binding(root,target,[script_rel])
+                                if (binding["script_sha256"]!=runtime["script"]["sha256"]
+                                        or binding["shader_sha256"]!=runtime["shader"]["sha256"]
+                                        or binding["shader_path"]!=shader_rel
+                                        or binding["script_path"]!=script_rel):
+                                    errors.append(label+": runtime shader/script bytes do not match inspected source")
+                                else:
+                                    source_slots["material_slots"]=binding["runtime_material_variants"]
+                                    source_slots["runtime_override_required"]=False
+                                    asset_runtime_ids=[v["slot_id"] for v in binding["runtime_material_variants"]]
+                                    if asset.get("profile")!="dynamic_vfx":
+                                        errors.append(label+": animated runtime OBJ shader must use dynamic_vfx profile")
+                                    if sorted(runtime.get("material_ids",[]))!=sorted(asset_runtime_ids):
+                                        errors.append(label+": missing actual directional OBJ shader variants")
+                        else:
+                            errors.append(label+": unassigned OBJ runtime material source is not proven")
                 else:
                     source_slots = gltf_slots(source_path.read_bytes(), source_path.suffix.lower())
                 authored_mesh_slot_ids = [item["slot_id"] for item in source_slots["material_slots"]
@@ -393,6 +428,9 @@ def validate(manifest: dict, evidence_root: pathlib.Path, mode: str = "review",
                                               if isinstance(x, dict) and "view" in x and "sha256" in x}
                                          for a in assets if isinstance(a, dict) and "asset_id" in a},
         "profiles_by_asset": {a["asset_id"]: a.get("profile") for a in assets if isinstance(a, dict) and "asset_id" in a},
+        "runtime_shader_evidence": {a["asset_id"]: a.get("runtime_material_binding")
+                                    for a in assets if isinstance(a,dict) and "asset_id" in a
+                                    and a.get("runtime_material_binding")},
         "reviewed_material_ids": {a["asset_id"]: [m["material_id"] for m in a.get("materials", [])
                                                    if isinstance(m, dict) and "material_id" in m]
                                    for a in assets if isinstance(a, dict) and "asset_id" in a},
