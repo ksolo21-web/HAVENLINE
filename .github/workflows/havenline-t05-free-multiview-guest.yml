@@ -68,6 +68,11 @@ jobs:
                   api_name='/shape_generation')
               result=job.result(timeout=590)
               receipt['return_type']=type(result).__name__
+              # A live Gradio endpoint can return an empty file on remote failure.
+              # Log only bounded, sanitized non-file diagnostics before deciding pass/fail.
+              if isinstance(result,(list,tuple)):
+                  receipt['server_message_excerpt']=str(result[1])[:350] if len(result)>1 else None
+                  receipt['server_stats_excerpt']=str(result[2])[:650] if len(result)>2 else None
               if isinstance(result,(list,tuple)):
                   receipt['returned_output_types']=[type(x).__name__ for x in result]
                   candidate=result[0]
