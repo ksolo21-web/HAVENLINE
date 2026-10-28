@@ -1,0 +1,91 @@
+name: T05 no-account free MULTI-VIEW API capability probe (NO ART UPLOAD)
+on:
+  push:
+    branches:
+      - havenline/T05-r18-visual-corrections-20261025
+    paths:
+      - .github/workflows/havenline-t05-hunyuan-guest-probe.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t05-hunyuan-guest-probe-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  confirm-guest-multiview:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - name: Query public zero-cost Space state without sending owner images
+        run: |
+          set -euo pipefail
+          mkdir -p multi-view-probe
+          curl -fLsS --retry 2 --max-time 35 \
+            'https://huggingface.co/api/spaces/tencent/Hunyuan3D-2mv' \
+            -o multi-view-probe/space-status.json
+          python3 - <<'PY'
+          import json
+          x=json.load(open('multi-view-probe/space-status.json'))
+          print(json.dumps({'name':x.get('id'),'sdk':x.get('sdk'),
+                 'runtime':x.get('runtime'), 'gated':x.get('gated')},indent=2))
+          PY
+      - name: Probe public Gradio OpenAPI (guest; no authentication or GPU usage)
+        run: |
+          set -uo pipefail
+          url='https://tencent-hunyuan3d-2mv.hf.space/gradio_api/openapi.json'
+          code="$(curl -LsS --max-time 60 -o multi-view-probe/openapi.json -w '%{http_code}' "$url")"
+          printf '%s\n' "$code" > multi-view-probe/openapi-http-code.txt
+          python3 - <<'PY'
+          import json,pathlib
+          p=pathlib.Path('multi-view-probe/openapi.json')
+          status=pathlib.Path('multi-view-probe/openapi-http-code.txt').read_text().strip()
+          try:
+              doc=json.loads(p.read_text())
+              paths=[x for x in doc.get('paths',{}) if 'predict' in x or 'generate' in x or 'shape' in x or 'multiview' in x or 'mv' in x]
+              print(json.dumps({'openapi_http':status,'found_paths':paths,'path_count':len(doc.get('paths',{}))},indent=2))
+          except Exception as ex:
+              print(json.dumps({'openapi_http':status,'json_error':str(ex),
+                 'body_first_200':p.read_text(errors='replace')[:200]}))
+          PY
+      - name: Discover actual public Gradio API path on both READY Space domains
+        run: |
+          set -uo pipefail
+          python3 - <<'PY'
+          import json,subprocess,pathlib
+          root=pathlib.Path('multi-view-probe')
+          domains=['tencent-hunyuan3d-2mv.hf.space','tencent-hunyuan3d-2mv-turbo.hf.space']
+          endpoints=['/config','/info','/gradio_api/info','/gradio_api/openapi.json','/api/info']
+          results=[]
+          for host in domains:
+              for route in endpoints:
+                  url='https://'+host+route
+                  data=subprocess.run(['curl','-LsS','--max-time','18','-w','\\nHTTP_STATUS:%{http_code}',url],capture_output=True,text=True)
+                  body=data.stdout.rsplit('HTTP_STATUS:',1)
+                  status=body[-1].strip() if len(body)>1 else 'no response'
+                  payload=body[0][:120000] if len(body)>1 else data.stdout[:300]
+                  output={'domain':host,'endpoint':route,'http':status,'body_bytes':len(payload),
+                          'looks_json':payload.startswith('{'),'error':data.stderr[:140]}
+                  if status=='200' and payload.strip().startswith('{'):
+                      name=host.replace('.hf.space','').replace('-','_')+'_'+route.strip('/').replace('/','_')+'.json'
+                      (root/name).write_text(payload)
+                      try:
+                          doc=json.loads(payload)
+                          output['top_keys']=list(doc)[:20]
+                          output['dependency_count']=len(doc.get('dependencies',[]))
+                      except Exception:pass
+                  results.append(output)
+                  print(json.dumps(output))
+          (root/'endpoint-survey.json').write_text(json.dumps(results,indent=2)+'\n')
+          PY
+      - name: Preserve guest feasibility evidence without user artwork
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-T05-Hunyuan-2mv-guest-feasibility-${{ github.sha }}
+          path: multi-view-probe/
+          retention-days: 14
+          if-no-files-found: warn
