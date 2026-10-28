@@ -21,7 +21,8 @@ jobs:
           set -euo pipefail
           sudo apt-get update -qq
           sudo apt-get install -y -qq --no-install-recommends \
-            blender python3-venv xvfb libgl1-mesa-dri
+            blender python3-numpy python3-venv xvfb libgl1-mesa-dri
+          blender -b --python-expr 'import numpy; print("T05 embedded Blender NumPy", numpy.__version__)'
           python3 -m venv "$RUNNER_TEMP/r38-python"
           "$RUNNER_TEMP/r38-python/bin/pip" install --disable-pip-version-check \
             'numpy>=1.26,<3' 'scipy>=1.12,<2' 'scikit-image>=0.23,<1' \
