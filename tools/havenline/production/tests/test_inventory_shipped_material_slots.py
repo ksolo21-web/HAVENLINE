@@ -62,6 +62,33 @@ class ActualModelMaterialSlotInventory(unittest.TestCase):
         p=m.gltf_slots(data,".glb")["material_slots"][0]
         self.assertEqual(["albedo","normal","occlusion"],p["texture_channels_bound"])
 
+    def test_variant_only_material_is_real_used_surface_not_discarded(self):
+        doc={"asset":{"version":"2.0"},
+             "materials":[{"name":"HL_wood"},{"name":"HL_snow"}],
+             "extensions":{"KHR_materials_variants":{"variants":[{"name":"winter"}]}},
+             "meshes":[{"primitives":[{"attributes":{"POSITION":0},"material":0,
+                 "extensions":{"KHR_materials_variants":{"mappings":[
+                     {"material":1,"variants":[0]}]}}}]}]}
+        data=json.dumps(doc).encode()
+        data+=b" "*((-len(data))%4)
+        blob=struct.pack("<I4s",len(data),b"JSON")+data
+        wrapped=struct.pack("<4sII",b"glTF",2,len(blob)+12)+blob
+        result=m.gltf_slots(wrapped,".glb")
+        self.assertEqual(2,result["material_slot_count"])
+        self.assertEqual(0,result["unused_authored_slots"])
+        self.assertEqual(["winter"],result["material_slots"][1]["glTF_variant_names"])
+
+    def test_invalid_variant_material_binding_is_rejected(self):
+        doc={"asset":{"version":"2.0"},"materials":[{"name":"wood"}],
+             "extensions":{"KHR_materials_variants":{"variants":[{"name":"winter"}]}},
+             "meshes":[{"primitives":[{"attributes":{"POSITION":0},"material":0,
+                "extensions":{"KHR_materials_variants":{"mappings":[{"material":3,"variants":[0]}]}}}]}]}
+        data=json.dumps(doc).encode()
+        data+=b" "*((-len(data))%4)
+        blob=struct.pack("<I4s",len(data),b"JSON")+data
+        with self.assertRaisesRegex(ValueError,"Variant references out-of-range"):
+            m.gltf_slots(struct.pack("<4sII",b"glTF",2,len(blob)+12)+blob,".glb")
+
     def test_invalid_glb_texture_binding_fails_closed(self):
         data=glb([{"name":"wood","normalTexture":{"index":3}}],[0],
                  textures=[{"source":0}])
