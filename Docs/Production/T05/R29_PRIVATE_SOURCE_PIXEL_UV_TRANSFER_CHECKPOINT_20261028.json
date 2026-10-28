@@ -3,7 +3,7 @@
   "date": "2026-10-28",
   "task": "T05",
   "trial": "R29_PRIVATE_ORIGINAL_PIXEL_UV_BINDING",
-  "status": "PRIVATE_SOURCE_TEXTURE_TRANSFER_TECHNICAL_PASS__ACTUAL_GODOT_VISUAL_REVIEW_PENDING__NO_SHIPPING_PROMOTION",
+  "status": "R29_PRIVATE_GODOT_FIVE_4K_RENDER_PASS__REFERENCE_FIDELITY_FAILED__NO_SHIPPING_PROMOTION",
   "source": {
     "original": "18567.png",
     "sha256": "729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
@@ -54,12 +54,53 @@
     "local_preview_software_only": true,
     "private_assets_not_committed": true,
     "glb_source_camera_projected": false,
-    "actual_native_godot_R29_pass": false,
-    "texture_style_approved": false
+    "actual_native_godot_R29_pass": true,
+    "texture_style_approved": false,
+    "native_godot_evidence": {
+      "engine": "4.7.2.stable.official",
+      "renderer": "gl_compatibility",
+      "device": "Mesa llvmpipe",
+      "dimensions": [
+        3840,
+        2160
+      ],
+      "actual_views": [
+        "front",
+        "three-quarter",
+        "right",
+        "rear",
+        "reverse-quarter"
+      ],
+      "views_passed": 5,
+      "changed_pixel_fraction_vs_R28_over_max_RGB12_by_view": {
+        "front": 0.18153,
+        "three_quarter": 0.18061,
+        "right": 0.12846,
+        "rear": 0.18574,
+        "reverse_quarter": 0.191
+      },
+      "difference_is_not_source_fidelity_score": true,
+      "native_source_camera_alignment_complete": false
+    },
+    "private_smoke_trial": {
+      "source_original_smoke_cropped_and_transparent": true,
+      "first_crop_was_truncated_and_corrected": true,
+      "source_plume_private_sha256": "d574f186f808da15",
+      "actual_native_godot_cycle_captured": true,
+      "loop_seconds": 3.5,
+      "distinct_frames": 8,
+      "returned_t0_equals_t3_5_pixels": true,
+      "additional_native_angles": 5,
+      "chimney_origin_aligned_in_three_quarter": true,
+      "source_video_motion_match_verified": false,
+      "billowing_reconstruction_complete": false,
+      "source_sprite_not_true_3d_volume": true,
+      "owner_approved": false
+    }
   },
   "internal_critical_visual_review": {
     "reviewer": "builder-side internal visual review, NOT independent C1/C2",
-    "verdict": "FAIL_SOURCE_FIDELITY",
+    "verdict": "FAIL_SOURCE_FIDELITY__GEOMETRY_REBUILD_REQUIRED",
     "visible_material_transfer": "some original wood/blue/red/snow hues/contrast transfer correctly",
     "major_issues": [
       "source roof is deep asymmetric pillow snow; trial roof remains radially ribbed angular drape",
@@ -70,7 +111,25 @@
       "original source camera and in-game camera/light rig not aligned; screenshot-derived colors contain illumination"
     ],
     "score": null,
-    "reason": "No genuine independent art critic or native R29 view; never assign passing score"
+    "reason": "No genuine independent art critic or native R29 view; never assign passing score",
+    "native_findings": [
+      "Actual native 4K Godot source pixel textures are bound and render in all five native views, but this does not make R29 close to source",
+      "Original pixels make meat and timber detail more reference-like in places",
+      "Snow becomes too warm/gray and metal excessively dark because image lighting is double counted",
+      "Arch/saw/oven proportions, organic food volumes, wagon structure and snow depth still visibly fail",
+      "Native Godot 3.5s loop uses full original smoke silhouette and attaches to chimney, but motion is just cyclical image sway and not authentic billowing/dissipation"
+    ],
+    "source_camera_sweep": {
+      "six_actual_native_1536_square_views_tested": true,
+      "all_silhouettes_unclipped": true,
+      "owner_source_visible_width_to_height": 1.329,
+      "model_view_ratio_range": [
+        0.825,
+        0.872
+      ],
+      "source_camera_calibrated": false,
+      "inference": "Large proportion mismatch persists across orientation trials; not a validated pixel fidelity score and does not justify simply scaling to fix physics"
+    }
   },
   "boundaries": {
     "shipping_paths_changed": false,
@@ -80,10 +139,10 @@
     "merge_prohibited": true
   },
   "next": [
-    "Run private reference-pixel R29 GLB inside Godot 4.7.2 and take five source-bound native captures without uploading private art to public GitHub.",
-    "Use the source-aligned 18567 image to rebuild geometry surfaces and large silhouette: snow, saw+arch, food, timber base. Source textures alone cannot compensate.",
-    "Native Godot smoke animated frame sequence required; keep smoke source alpha separate and source-constrained.",
-    "Retain/reuse only the narrow verified private source-binding capability; no generic asset pipeline rebuild.",
-    "After meaningful geometry difference, recompare source original against calibrated native Godot views, then independent C1/C2 and owner signoff."
+    "Replace the fundamental 3D geometry under frozen T05 sockets/performance constraints: broad multi-depth timber carriage, tall forged saw housing with real depth, handformed raw/cooked food, layered sculpted snow, structural metal fasteners.",
+    "Use private original image material crops only where 3D shape and camera projection support them; remove baked-in source shadows where PBR relighting needs pure albedo. Do NOT ship R29 wholesale.",
+    "Recalibrate source camera and lighting from owner source and full original video-frame evidence; do not compare only camera-sweep raw silhouette ratios as exact match.",
+    "Replace rigid billboard smoke sway with actual volumetric animated puffs or shader-distorted evolving plume, then native full-cycle and source-video comparison.",
+    "Independent source-bound C1/C2 visual critic, actual shipping Godot scene proof, phone/tablet C6 and explicit owner acceptance before any merge or completion."
   ]
 }
