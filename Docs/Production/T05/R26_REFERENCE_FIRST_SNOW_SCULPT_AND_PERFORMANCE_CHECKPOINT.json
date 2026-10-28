@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-27",
+  "task": "T05",
+  "asset_id": "cooker_processor",
+  "state": "R26_SOURCE_BOUND_SCULPT_TRIAL_FROZEN_TECHNICAL_PASS_GODOT_4K_PASS_VISUAL_REFERENCE_GAP_REMAINS",
+  "reference": {
+    "file": "18567.png",
+    "verified_sha256": "729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
+    "private_not_in_repo": true
+  },
+  "baseline": {
+    "source": "tools/havenline/blender/t05_cooker_reference_first_r25.py",
+    "run": 40521685074,
+    "triangles": 12290,
+    "real_4k_engine_run": 40522439115
+  },
+  "R26": {
+    "source": "tools/havenline/blender/t05_cooker_reference_first_r26.py",
+    "source_workflow": ".github/workflows/havenline-t05-r26-reference-first.yml",
+    "source_run": 40523998873,
+    "source_artifact_id": 12742289763,
+    "glb_sha256": "c2832480371df482e2f0b6192feab733b3112209b2c4e47b7a09886a22f3f35c",
+    "candidate_triangles": 11778,
+    "frozen_max_triangles": 12424,
+    "triangles_recovered_from_R25": 512,
+    "headroom_triangles": 646,
+    "material_identities_preserved": 9,
+    "frozen_checks_passed": 17,
+    "roof_control_points": {
+      "angular": 48,
+      "radial": 10,
+      "perimeter_contours": 2
+    },
+    "independent_geometry_audit": {
+      "glb_snow_welded_spatial_uv_seam_vertices": true,
+      "watertight": true,
+      "closed_snow_components": 9,
+      "detail": "Topological seam weld for analysis only. Raw exported GLB is not modified."
+    },
+    "engine": {
+      "workflow": ".github/workflows/havenline-t05-r26-godot-4k.yml",
+      "run": 40524651335,
+      "artifact_id": 12743261869,
+      "resolution": [
+        3840,
+        2160
+      ],
+      "distinct_view_count": 5,
+      "conclusion": "PASS_ISOLATED_ENGINE_NOT_SHIPPING_CERTIFICATION"
+    },
+    "reference_aligned_camera_verified": false,
+    "reference_visual_fidelity_approved": false,
+    "visual_finding": "R26's folded side lip is more scalloped and 512 triangles lighter but remains angular and unlike the artist-sculpted owner image. Visual promotion over R25 not established."
+  },
+  "private_artist_handoff_v4": {
+    "name": "Havenline_T05_Cooker_Reference_First_Artist_Handoff_v4.zip",
+    "sha256": "ff10ff3313841c832050ba9a0728767f59ea88717fae5109b5acd5e8eeac05a0",
+    "verified_entries": 68,
+    "includes_reference": true,
+    "stored_outside_repo": true
+  },
+  "ongoing_blockers": [
+    "P0: reference roof has layered rounded variable snow pillows, not a uniform cap / angular scallops",
+    "P0: saw and recessed oven housing, rivet, metalwork fidelity and geometric structure",
+    "P0: raw/cooked meat organic slab shapes, fat marbling, strong wrapping contrast, steel tray detail",
+    "P1: weight-bearing carved timber base, bolted iron corner plates, contact snow",
+    "P1: separately animated runtime smoke plume (not part of static cooker GLB)",
+    "P1: original reference camera, scale and lighting alignment not verified; only one source angle exists",
+    "Independent visual critic 10/10 reference-language acceptance missing",
+    "Actual shipping Godot scene/native mobile and physical Android 60fps telemetry missing",
+    "Explicit user visual approval missing"
+  ],
+  "next_step": "Engage skilled Blender sculptor with private V4 handoff and use R25 and R26 as alternative candidate sources. Correct the largest source-visible silhouette differences with handmade editable meshes; compare in matched camera. Do not infer fidelity from triangle reduction or material image entropy.",
+  "approval": {
+    "source_reference_locked": true,
+    "frozen_geometry_budget_pass": true,
+    "isolated_real_Godot_4k_pass": true,
+    "reference_style_approved": false,
+    "independent_critic_approved": false,
+    "owner_approved": false,
+    "shipping_scene_tested": false,
+    "physical_android_tested": false,
+    "permanent_global_policy_adopted": false
+  },
+  "repo_safety": {
+    "shipping_assets_edited": false,
+    "t05_pr": 101,
+    "t05_draft": true,
+    "global_pipeline_pr": 103,
+    "global_pipeline_draft": true,
+    "unmerged": true
+  }
+}
