@@ -39,6 +39,8 @@ jobs:
           assert all(x['view']==y['view'] and y['approximate_silhouette_iou']>x['approximate_silhouette_iou'] for x,y in zip(b['views'],r['views']))
           print('PASS: 3 real source images; 3 uncalibrated silhouette improvements; NO ART APPROVAL')
           PY
+      - name: Install lightweight free mesh serialization dependency
+        run: python -m pip install 'numpy>=1.26,<3' 'trimesh>=4,<5'
       - name: Commit permanent candidate evidence, not shipping assets
         run: |
           set -euo pipefail
