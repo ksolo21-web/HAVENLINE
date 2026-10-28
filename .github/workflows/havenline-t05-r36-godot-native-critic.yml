@@ -82,6 +82,12 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add Docs/Production/T05/NeuralTrials/R36/NativeGodot
+          # Fail closed if PNGs are still Git LFS pointers instead of full Git blobs.
+          for f in Docs/Production/T05/NeuralTrials/R36/NativeGodot/*.png; do
+            test "$(git check-attr filter -- "$f" | awk '{print $3}')" = unspecified
+            size="$(git show ":$f" | wc -c)"
+            test "$size" -gt 10000 || { echo "::error::Stored PNG is a pointer instead of full pixels: $f ($size)"; exit 1; }
+          done
           git diff --cached --check
           git commit -m 'T05 R36: preserve actual native Godot four-angle render critic evidence (visual FAIL)'
           git push origin HEAD:"$GITHUB_REF_NAME"
