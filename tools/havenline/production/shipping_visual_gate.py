@@ -165,7 +165,7 @@ def validate_material_critic_receipt(task_id: str,candidate: str,
         paths=[]
     if not isinstance(receipt.get("material_count"),int) or receipt["material_count"]<len(assets):
         errors.append("per-material critic has incomplete material inventory")
-    policy_path="Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json"
+    policy_path="Docs/Production/REFERENCE_STYLE_LOCK.json"
     if receipt.get("policy_path")!=policy_path:
         errors.append("material critic did not use permanent global source lock")
     for k in ("private_manifest_raw_sha256","private_manifest_canonical_sha256"):
