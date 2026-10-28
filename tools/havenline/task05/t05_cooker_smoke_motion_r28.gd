@@ -44,10 +44,11 @@ func _build_soft_cloud_texture() -> ImageTexture:
 
 func set_motion_time(seconds: float) -> void:
     # Cyclic smoke: stagger release, lift, grow, wind drift, then softly fade.
+    var cycle := seconds * TAU / (1.0 / 0.28)
     for i in range(billboards.size()):
         var age := fposmod(seconds * 0.28 + float(i) / float(PUFF_COUNT), 1.0)
-        var horizontal := 0.05 * sin(seconds * 1.3 + float(i) * 1.21) + 0.22 * age * age
-        var depth_drift := 0.035 * cos(seconds * 1.7 + float(i) * 0.81)
+        var horizontal := 0.05 * sin(cycle + float(i) * 1.21) + 0.22 * age * age
+        var depth_drift := 0.035 * cos(cycle + float(i) * 0.81)
         billboards[i].position = Vector3(-0.20 + horizontal,
                                         2.40 + age * 0.88,
                                         0.06 + depth_drift)
