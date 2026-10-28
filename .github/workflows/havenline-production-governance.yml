@@ -57,6 +57,38 @@ jobs:
         env:
           HAVENLINE_TRUSTED_INTEGRATION_HEAD: ${{ github.event.pull_request.base.sha || github.sha }}
         run: python3 -m unittest discover -s tools/havenline/production/tests -p 'test_*.py' -v
+      - name: Independently enforce all-art native material critic negative/positive safeguards
+        run: |
+          set -euo pipefail
+          python3 -m unittest -v \
+            tools/havenline/production/tests/test_global_rendered_material_critic.py \
+            tools/havenline/production/tests/test_global_rendered_material_shipping_signoff.py \
+            tools/havenline/production/tests/test_inventory_shipped_visual_sources.py \
+            tools/havenline/production/tests/test_reference_style_lock.py \
+            2>&1 | tee /tmp/native-material-critic-tests.log
+      - name: Enumerate tracked game visual material sources without fabricating critic approval
+        run: |
+          set -euo pipefail
+          python3 tools/havenline/production/inventory_shipped_visual_sources.py \
+            --ref HEAD --out /tmp/native-material-source-census.json
+          python3 - <<'PY'
+          import json
+          report=json.load(open('/tmp/native-material-source-census.json'))
+          assert report['identified_visual_source_paths']>0
+          assert report['complete_T70_C1_C2_critic_pass'] is False
+          assert report['material_slot_count_known'] is False
+          print('SHIPPING_MATERIAL_CENSUS_NOT_SOURCE_VISUAL_APPROVAL')
+          PY
+      - name: Publish critic safeguard and source-census audit (no private owner imagery)
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-permanent-material-critic-${{ github.run_id }}
+          path: |
+            /tmp/native-material-critic-tests.log
+            /tmp/native-material-source-census.json
+          if-no-files-found: warn
+          retention-days: 30
       - name: Validate workstream registry and ownership collisions
         run: python3 tools/havenline/production/workstream.py validate-registry
       - name: Validate complete V2 state and event-appropriate scope
