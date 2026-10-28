@@ -1,4 +1,4 @@
-name: T05 Archive three-view R35 neural candidate IN GIT, unapproved
+name: T05 Archive stronger three-view R36 neural candidate IN GIT, unapproved
 on:
   push:
     branches: [havenline/T05-r18-visual-corrections-20261025]
@@ -12,15 +12,15 @@ jobs:
     timeout-minutes: 12
     env:
       GH_TOKEN: ${{ github.token }}
-      DEST: Docs/Production/T05/NeuralTrials/R35
+      DEST: Docs/Production/T05/NeuralTrials/R36
     steps:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
       - name: Fetch exact successful source-reconstruction artifact
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/t05-evidence"
-          gh run download 40773492785 -R "$GITHUB_REPOSITORY" \
-            -n havenline-T05-three-owner-views-NEURAL-UNAPPROVED-40773492785 \
+          gh run download 40774718455 -R "$GITHUB_REPOSITORY" \
+            -n havenline-T05-three-owner-views-NEURAL-UNAPPROVED-40774718455 \
             -D "$RUNNER_TEMP/t05-evidence"
       - name: Verify all originals and all three improvements before versioning
         run: |
@@ -57,8 +57,8 @@ jobs:
           d=Path(os.environ['DEST'])
           r=json.loads((d/'evaluations/refined/audit.json').read_text())
           (d/'STATUS.json').write_text(json.dumps({
-            'task':'T05','trial':'R35','reference_images':3,
-            'source_github_run_id':40773492785,
+            'task':'T05','trial':'R36','reference_images':3,
+            'source_github_run_id':40774718455,
             'silhouette_mean_iou_approximate':r['mean_iou'],
             'calibrated_cameras':False,'actual_neural_geometry_generated':True,
             'visual_critic_pass':False,'owner_approved':False,
