@@ -52,7 +52,7 @@ class ActualModelMaterialSlotInventory(unittest.TestCase):
             m.gltf_slots(glb([{"name":"wood"}],[1]),".glb")
 
     def test_glb_empty_geometry_is_rejected(self):
-        with self.assertRaisesRegex(ValueError,"geometry"):
+        with self.assertRaisesRegex(ValueError,"No glTF mesh primitives"):
             m.gltf_slots(glb([{"name":"wood"}],[]),".glb")
 
     def test_real_glb_texture_slot_channels_are_source_bound(self):
