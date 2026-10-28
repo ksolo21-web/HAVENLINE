@@ -189,7 +189,7 @@ def resolve_obj_runtime_shader_binding(root: pathlib.Path, obj_shipping_path: st
         # Ensure both a material and mesh reference are actually bound
         # together in runtime authoring. Mere text in a comment is insufficient.
         patterns=(r"ShaderMaterial\.new\s*\(",r"\bmaterial_override\s*=\s*material\b",
-                  r"\bFEEDBACK_MESHES\s*=",r"\bFEEDBACK_SHADER\s*=",
+                  r"\bFEEDBACK_MESHES\s*:?\s*=",r"\bFEEDBACK_SHADER\s*:?\s*=",
                   r"result\.multimesh\s*=\s*instances",r"instances\.mesh\s*=\s*mesh")
         if any(not re.search(p,body) for p in patterns):
             raise ValueError(rel+" references OBJ but source runtime shader override chain is unproven")
