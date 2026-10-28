@@ -82,12 +82,14 @@ class PermanentMaterialCriticTests(unittest.TestCase):
             "captures": captures,
             "materials": [{"material_id": m,
                            "reference_shas": [self.source["sha256"]],
-                           "visible_in_views": list(profile["views"])}
+                           "visible_in_views": list(profile["views"]),
+                           "glTF_variant_names_reviewed": []}
                           for m in self.material_names],
             "reference_camera": {
                 "reference_visible_geometry_calibrated": True,
                 "justification": "Controlled synthetic camera perspective identical to generated comparison test geometry"},
             "known_visible_reference_mismatches": [],
+            "unused_source_material_slots": [],
             "owner_visual_rejection_active": False
         }
         self.manifest = {
@@ -122,6 +124,8 @@ class PermanentMaterialCriticTests(unittest.TestCase):
                         for n in range(3)],
                     "coverage": {
                         "material_ids": self.material_names[:],
+                        "inactive_source_material_slots_inspected": [],
+                        "glTF_variant_names_inspected": {},
                         "views": self.policy["evidence_profiles"]["static_3d"]["views"][:],
                         "reference_shas": [self.source["sha256"]]
                     }
@@ -170,6 +174,55 @@ class PermanentMaterialCriticTests(unittest.TestCase):
         report=self.execute()
         self.assertFalse(report["passed"])
         self.assertTrue(any("actual authored GLB" in msg for msg in report["errors"]), report["errors"])
+
+    def _activate_real_unused_slot_fixture(self):
+        raw=synthetic_glb_for_materials(["HL_snow", "HL_wood", "HL_metal", "UNUSED_BAKED_PALETTE"])
+        # Add a fourth source material which no primitive uses.
+        import struct
+        size=struct.unpack_from("<I",raw,12)[0]
+        doc=json.loads(raw[20:20+size])
+        doc["meshes"][0]["primitives"].pop()
+        doc["meshes"][0]["primitives"].append({"attributes":{"POSITION":0},"material":2})
+        payload=json.dumps(doc).encode()
+        payload+=b" "*((-len(payload))%4)
+        chunk=struct.pack("<I4s",len(payload),b"JSON")+payload
+        glb=struct.pack("<4sII",b"glTF",2,len(chunk)+12)+chunk
+        p=self.root/"synthetic_mesh.glb"
+        p.write_bytes(glb)
+        self.asset["asset_source"]["sha256"]=sha256(p)
+
+    def test_source_unused_palette_cannot_be_silently_removed_from_inventory(self):
+        self._activate_real_unused_slot_fixture()
+        out=self.execute()
+        self.assertFalse(out["passed"])
+        self.assertTrue(any("inactive source material slot declaration" in x for x in out["errors"]),out["errors"])
+
+    def test_unused_source_palette_needs_exact_both_critic_inactive_disposition(self):
+        self._activate_real_unused_slot_fixture()
+        self.asset["unused_source_material_slots"]=["3:UNUSED_BAKED_PALETTE"]
+        self.asset["unused_material_disposition"]="REVIEWERS_CONFIRMED_NOT_RENDERED_IN_NATIVE_GODOT"
+        for critic in self.manifest["reviews"]:
+            p=self.root/critic["raw_output"]["path"]
+            data=json.loads(p.read_text())
+            data["assets"][0]["coverage"]["inactive_source_material_slots_inspected"]=["3:UNUSED_BAKED_PALETTE"]
+            p.write_text(json.dumps(data))
+            critic["raw_output"]["sha256"]=sha256(p)
+        self.assertTrue(self.execute()["passed"])
+
+    def test_one_critic_missing_inactive_material_proof_fails(self):
+        self._activate_real_unused_slot_fixture()
+        self.asset["unused_source_material_slots"]=["3:UNUSED_BAKED_PALETTE"]
+        self.asset["unused_material_disposition"]="REVIEWERS_CONFIRMED_NOT_RENDERED_IN_NATIVE_GODOT"
+        # C1 names the palette, C2 does not; reject rather than average.
+        critic=self.manifest["reviews"][0]
+        p=self.root/critic["raw_output"]["path"]
+        data=json.loads(p.read_text())
+        data["assets"][0]["coverage"]["inactive_source_material_slots_inspected"]=["3:UNUSED_BAKED_PALETTE"]
+        p.write_text(json.dumps(data))
+        critic["raw_output"]["sha256"]=sha256(p)
+        result=self.execute()
+        self.assertFalse(result["passed"])
+        self.assertTrue(any("inactive GLB slots" in x for x in result["errors"]),result["errors"])
 
     def test_original_source_is_byte_verified_not_extension_based(self):
         self.assertTrue(self.execute()["passed"])
