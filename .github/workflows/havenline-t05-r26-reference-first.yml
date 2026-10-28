@@ -1,0 +1,202 @@
+name: T05 R26 sculpted hanging snow lip via topology replacement (unapproved)
+on:
+  push:
+    branches: ['havenline/T05-r18-visual-corrections-20261025']
+    paths:
+      - 'tools/havenline/blender/t05_cooker_reference_first_r26.py'
+      - '.github/workflows/havenline-t05-r26-reference-first.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t05-r26-reference-first-${{ github.sha }}
+  cancel-in-progress: false
+jobs:
+  reference-first-geometry:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+          fetch-depth: 1
+      - name: Install Blender/visual validation tools with bounded mirrors
+        timeout-minutes: 10
+        run: |
+          set -euo pipefail
+          # The default Azure mirror stalled on Blender's 35.9 MB data package
+          # twice; switch THIS disposable runner to Ubuntu's official mirror.
+          sudo sed -i 's|azure.archive.ubuntu.com|archive.ubuntu.com|g' /etc/apt/apt-mirrors.txt
+          if test -f /etc/apt/sources.list.d/ubuntu.sources; then
+            sudo sed -i 's|azure.archive.ubuntu.com|archive.ubuntu.com|g' /etc/apt/sources.list.d/ubuntu.sources
+          fi
+          if ! sudo timeout 150 apt-get -o Acquire::Retries=2 -o Acquire::http::Timeout=35 update -qq; then
+            echo "::warning::APT metadata refresh stalled; using cached indices"
+          fi
+          sudo timeout 390 apt-get -o Acquire::Retries=3 -o Acquire::http::Timeout=40 install -y --no-install-recommends blender python3-venv python3-numpy
+          python3 -m venv "$RUNNER_TEMP/t05-r26-visual-venv"
+          "$RUNNER_TEMP/t05-r26-visual-venv/bin/pip" install --disable-pip-version-check numpy trimesh pillow
+          python3 -m py_compile tools/havenline/blender/t05_cooker_reference_first_r26.py
+          blender --version | head -n 2
+      - name: Build R26 sculpted roof, food paint, and actual UV-bound maps with four real Blender cameras
+        timeout-minutes: 16
+        run: |
+          set -euo pipefail
+          mkdir -p t05-r26-evidence
+          timeout 840 blender -b -t 2 --factory-startup \
+            --python tools/havenline/blender/t05_cooker_reference_first_r26.py -- \
+            --out "$PWD/t05-r26-evidence" > t05-r26-evidence/blender-build.log 2>&1 || {
+              tail -160 t05-r26-evidence/blender-build.log; exit 1; }
+          test -s t05-r26-evidence/T05_cooker_EDITABLE.blend
+          test -s t05-r26-evidence/T05_cooker_BLENDER_CANDIDATE.glb
+          test -s t05-r26-evidence/benchmark.json
+          test -s t05-r26-evidence/T05_cooker_reverse-quarter-diagnostic.png
+      - name: Strict R07-frozen technical gate and source authority metadata audit
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/t05-r26-visual-venv/bin/python" \
+             tools/havenline/blender/validate_cooker_benchmark.py \
+             --out t05-r26-evidence \
+             --catalog HavenlineGodot/assets/stations_v2/catalog.json \
+             | tee t05-r26-evidence/technical-gate.log
+          python3 - <<'PY'
+          import json,pathlib
+          root=pathlib.Path('t05-r26-evidence')
+          report=json.loads((root/'benchmark.json').read_text())
+          assert report['status']=='R26_SCULPTED_SNOW_LIP_CANDIDATE_NOT_VISUALLY_APPROVED'
+          assert report['new_cooked_parcel_count']==6
+          assert report['snow_roof_angular_segments']==48
+          assert report['snow_roof_radial_segments']==10
+          assert report['snow_roof_lower_contour_rings']==2
+          assert report['reference_snow_sculpt_approved'] is False
+          assert report['snow_author_uv_export_required'] is True
+          assert report['reference_timbers_and_brushed_metal_raster_authored'] is True
+          assert report['handmade_meat_marbling_maps_not_owner_visual_approved'] is True
+          assert len(report['authored_color_maps'])==2
+          assert all((root/name).stat().st_size>12000 for name in report['authored_color_maps'])
+          assert report['owner_food_geometry_passed'] is False
+          assert report['reference_sha256']=='729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635'
+          assert len(report['materials'])==9
+          assert report['reference_pixel_comparison_in_ci'] is False
+          assert report['independent_critic_approved'] is False
+          assert report['source_smoke_vfx_included'] is False
+          tech=json.loads((root/'technical_validation.json').read_text())
+          assert tech['technical_gate']=='PASS'
+          geometry=next(x['detail'] for x in tech['checks'] if x['check']=='triangles_within_remaining_kit_budget')
+          assert geometry['candidate']<12290, ('Roof reallocation failed to recover triangles',geometry)
+          assert geometry['candidate']<=12424
+          assert tech['production_approval'] is False
+          report2={'status':'R26_GEOMETRY_ONLY_NOT_VISUAL_APPROVAL',
+                   'source_ref':'18567.png','source_sha256':report['reference_sha256'],
+                   'candidate_glb_sha256':tech['candidate_glb_sha256'],
+                   'technical_checks':len(tech['checks']),
+                   'geometry_sections':report['corrected_geometry'],
+                   'real_owner_reference_pixels_compared':False,
+                   'independent_critic_approved':False,'shipping_asset_modified':False}
+          (root/'R26-source-locked-technical-audit.json').write_text(json.dumps(report2,indent=2)+'\n')
+          print(json.dumps(report2,indent=2))
+          PY
+          git diff --exit-code -- HavenlineGodot/assets/stations_v2/ HavenlineGodot/scripts/
+          test -z "$(git ls-files --others --exclude-standard HavenlineGodot/assets/stations_v2/)"
+      - name: Independently verify actual red/snow albedo data and original nine GLB materials
+        run: |
+          set -euo pipefail
+          "$RUNNER_TEMP/t05-r26-visual-venv/bin/python" - <<'PY'
+          import pathlib,struct,json,hashlib
+          from PIL import Image
+          root=pathlib.Path('t05-r26-evidence')
+          model=(root/'T05_cooker_BLENDER_CANDIDATE.glb').read_bytes()
+          length,kind=struct.unpack_from('<I4s',model,12)
+          assert kind==b'JSON'
+          gltf=json.loads(model[20:20+length])
+          mats={m['name']:m for m in gltf['materials']}
+          assert len(mats)==9 and all(key in mats for key in ('HL_red','HL_snow'))
+          used=[]
+          for name,key in (('HL_red','red'),('HL_snow','snow')):
+              image_path=root/('T05_R26_'+key+'_basecolor.png')
+              with Image.open(image_path) as im:
+                  im.load()
+                  assert im.size==(256,256)
+                  colors=im.convert('RGB').getcolors(256*256)
+                  minimum=200 if key=='red' else 60
+                  assert colors and len(colors)>minimum, (name,len(colors) if colors else None)
+              mat=mats[name]
+              slot=mat['pbrMetallicRoughness']['baseColorTexture']['index']
+              tex=gltf['textures'][slot]
+              embed=gltf['images'][tex['source']]
+              assert embed['mimeType']=='image/png'
+              assert mat['pbrMetallicRoughness']['baseColorTexture'].get('texCoord',0)==0
+              used.append(name)
+          # The glTF must contain the *same pixels*, not merely a material
+          # label or image filename that happens to exist on disk.
+          import io
+          from PIL import ImageChops
+          binary_header=20+length
+          chunk_size,chunk_tag=struct.unpack_from('<I4s',model,binary_header)
+          assert chunk_tag==bytes((66,73,78,0))
+          binary=model[binary_header+8:binary_header+8+chunk_size]
+          for name,key in (('HL_red','red'),('HL_snow','snow')):
+              tex=gltf['textures'][mats[name]['pbrMetallicRoughness']['baseColorTexture']['index']]
+              embed=gltf['images'][tex['source']]
+              view=gltf['bufferViews'][embed['bufferView']]
+              begin=view.get('byteOffset',0)
+              blob=binary[begin:begin+view['byteLength']]
+              with Image.open(io.BytesIO(blob)) as image, Image.open(root/('T05_R26_'+key+'_basecolor.png')) as source:
+                  assert image.size==source.size==(256,256)
+                  assert ImageChops.difference(image.convert('RGBA'),source.convert('RGBA')).getbbox() is None, name
+          from PIL import ImageStat
+          for woodkey in ('wood','wood_light','metal','blue'):
+              with Image.open(root/('T05_'+woodkey+'_basecolor.png')) as im:
+                  stddev=ImageStat.Stat(im.convert('RGB')).stddev
+                  # Real pixel contrast proof: the old R23 timber/stainless
+                  # source maps have only 0.6-4.1 RGB standard deviation.
+                  assert max(stddev)>4.0, (woodkey,stddev)
+          meshes=[p for m in gltf.get('meshes',[]) for p in m['primitives']]
+          assert any(p.get('material') is not None and
+                     gltf['materials'][p['material']]['name']=='HL_snow'
+                     and 'TEXCOORD_0' in p['attributes'] for p in meshes)
+          report={'status':'R26_AUTHORED_ALBEDO_TECHNICAL_PASS_NOT_SOURCE_APPROVAL',
+                  'source_ref':'18567.png',
+                  'owner_reference_pixel_match_checked':False,
+                  'tested_materials':used,
+                  'all_nine_existing_material_ids':list(mats),
+                  'roof_uv0_exported':True,
+                  'embedded_red_and_snow_exact_pixel_match':True,
+                  'source_unchanged':True,
+                  'style_approved':False,
+                  'gltf_sha256':hashlib.sha256(model).hexdigest()}
+          (root/'R26-material-binding-audit.json').write_text(json.dumps(report,indent=2)+'\n')
+          print(json.dumps(report,indent=2))
+          PY
+      - name: Collect four actual studio PNGs for independent owner-reference visual comparison
+        run: |
+          "$RUNNER_TEMP/t05-r26-visual-venv/bin/python" - <<'PY'
+          from pathlib import Path
+          from PIL import Image,ImageDraw,ImageStat
+          import hashlib,json
+          p=Path("t05-r26-evidence")
+          names=("front","three-quarter","right","rear")
+          sheet=Image.new("RGB",(1280,1330),(20,33,48))
+          frames=[]
+          for i,name in enumerate(names):
+              path=p/("T05_cooker_"+name+".png")
+              with Image.open(path) as im:
+                  assert im.format=="PNG" and im.size==(640,640)
+                  rgb=im.convert("RGB")
+                  assert max(ImageStat.Stat(rgb).stddev)>8
+                  sheet.paste(rgb,((i%2)*640,(i//2)*640+40))
+                  frames.append({"view":name,"sha256":hashlib.sha256(path.read_bytes()).hexdigest()})
+          assert len({x["sha256"] for x in frames})==4
+          ImageDraw.Draw(sheet).text((25,12),"R26 T05 REAL BLENDER FRAMES — GEOMETRY TRIAL NOT STYLE APPROVAL",fill=(248,249,251))
+          sheet.save(p/"T05_R26_4VIEW_GEOMETRY_TRIAL.png")
+          (p/"frame-hashes.json").write_text(json.dumps(frames,indent=2)+'\n')
+          print('R26_STUDIO_FRAME_CHECK_PASS',json.dumps(frames))
+          PY
+      - name: Retain editable model, GLB, actual renders, independent evidence or failure logs
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-T05-R26-reference-first-geometry-${{ github.sha }}
+          path: t05-r26-evidence/
+          retention-days: 30
+          if-no-files-found: warn
