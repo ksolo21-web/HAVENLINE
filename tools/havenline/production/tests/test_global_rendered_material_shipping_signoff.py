@@ -33,7 +33,7 @@ class MaterialShippingReceiptTests(unittest.TestCase):
             "other_dimensions_minimum_9_5":True,"errors":[],"user_approved":False,
             "shipping_scene_material_proof_verified":True,
             "full_shipped_material_census_verified":False,
-            "policy_path":"Docs/Production/GLOBAL_RENDERED_MATERIAL_CRITIC_POLICY.json",
+            "policy_path":"Docs/Production/REFERENCE_STYLE_LOCK.json",
             "private_manifest_raw_sha256":SHA,
             "private_manifest_canonical_sha256":REF,
             "source_asset_hashes":{"test_tree":SHA},
