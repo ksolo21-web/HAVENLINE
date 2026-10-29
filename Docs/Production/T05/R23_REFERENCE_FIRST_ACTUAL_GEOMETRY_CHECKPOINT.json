@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "asset_id": "cooker_processor",
+  "date": "2026-10-27",
+  "status": "EXACT_REFERENCE_VERIFIED__R22_R23_FROZEN_TECHNICAL_PASS__R23_FIVE_4K_GODOT_VIEWS_VERIFIED__OWNER_STYLE_MISMATCH_REMAINS__NO_RELEASE",
+  "reference": {
+    "file": "18567.png",
+    "sha256": "729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
+    "dimensions": [
+      1536,
+      1536
+    ],
+    "source_bytes_verified": true,
+    "location": "private user file library, never committed publicly",
+    "view_count": 1,
+    "hidden_surface_authority": "UNKNOWN_MUST_NOT_FABRICATE"
+  },
+  "original_R07": {
+    "editable_file": "T05_cooker_EDITABLE.blend",
+    "glb_sha256": "ff9f548c2d16d1f5972b4da2f3162978e65e3caef20ec998ec222e9497cb3a0b",
+    "baseline_artifact": 12660839315,
+    "internal_previous_visual_score": 5.5,
+    "score_is_independent": false,
+    "approved": false
+  },
+  "R22": {
+    "source": "tools/havenline/blender/t05_cooker_reference_first_r22.py",
+    "workflow": ".github/workflows/havenline-t05-r22-reference-first.yml",
+    "run": 40514033983,
+    "artifact": 12738965688,
+    "technical_gate": "PASS_17_OF_17",
+    "candidate_triangles": 11394,
+    "material_count": 9,
+    "geometry_edited": [
+      "watertight irregular roof",
+      "deep steel arch and repaired continuous silver sill",
+      "weight-bearing wood support skirts"
+    ],
+    "studio_cameras": [
+      "front",
+      "three-quarter",
+      "right",
+      "rear",
+      "reverse-quarter-diagnostic"
+    ],
+    "visual_status": "PARTIAL_REVIEW_ONLY_NOT_SOURCE_MATCH_APPROVAL"
+  },
+  "R23": {
+    "source": "tools/havenline/blender/t05_cooker_reference_first_r23.py",
+    "workflow": ".github/workflows/havenline-t05-r23-reference-first.yml",
+    "run": 40514923294,
+    "artifact": 12737884718,
+    "technical_gate": "PASS_17_OF_17",
+    "candidate_triangles": 11898,
+    "allowable_triangles": 12424,
+    "material_count": 9,
+    "game_GLBSHA256": "b3e2c695295429a7233664a4199c03b363b5458f3583014fd2663a902fe9983a",
+    "geometry_edited": [
+      "R22 geometry retained",
+      "five distinct irregular raw cuts",
+      "six varied rounded orange-strapped cooked parcels"
+    ],
+    "actual_studio_frames": 5,
+    "visual_review": "FULLER_TRAY_NOT_YET_REFERENCE_ACCURATE",
+    "source_reference_view_camera_calibrated": false,
+    "real_Godot_4k_run": 40515782271,
+    "real_Godot_4k_result": "PASS_ISOLATED_5_VIEWS_3840x2160_NOT_SHIPPING_OR_STYLE_APPROVAL",
+    "real_Godot_4k_artifact_id": 12738632741,
+    "real_Godot_4k_sha_hashes": [
+      "7a774c82f29d37f493c7f335dbfb72456d60b76d13db6923040e9678c7bb9a28",
+      "df1bb1612945eb16377ba601c37883202d3108d3f035c517bdd6c6395d4186de",
+      "13e3e9971770f12f2a6620c9d7e2621060a8bf675ff4442b8feb22024b65c717",
+      "2998fcf1cbed363f59385d20b8618ea136038c0426c354864fb4786e833e185a",
+      "a4d77a10941e24d28bb441bef3208c6e6a921568053c369c40f47f82397aad72"
+    ],
+    "real_Godot_4k_views": [
+      "front",
+      "three-quarter",
+      "right",
+      "rear",
+      "reverse-quarter"
+    ],
+    "real_Godot_4k_engine": "Godot 4.7.2 gl_compatibility software OpenGL llvmpipe",
+    "real_Godot_4k_mesh_count": 9,
+    "real_Godot_4k_shipping_scene": false,
+    "real_Godot_4k_critical_visual_review": "Technically real 4K, but drastically less detailed and painterly than exact 18567.png source: white roof slab, flat saw housing, plain wood surface, blocks instead of sculpted meat and no chimney smoke; don't mark any visual correction complete."
+  },
+  "frozen_contract": {
+    "triangle_allowance": 12424,
+    "kit_triangles_max": 180000,
+    "material_slots_max": 12,
+    "original_mat_names": [
+      "HL_wood",
+      "HL_dark",
+      "HL_wood_light",
+      "HL_blue",
+      "HL_metal",
+      "HL_orange",
+      "HL_red",
+      "HL_cream",
+      "HL_snow"
+    ],
+    "shipping_files_modified_by_reference_first_trial": false
+  },
+  "visual_defects_remaining": [
+    {
+      "priority": "P0",
+      "area": "roof",
+      "issue": "Still smooth and tentlike rather than truly weighty scalloped puffy snow with irregular overhang and reference surface texture"
+    },
+    {
+      "priority": "P0",
+      "area": "oven and saw",
+      "issue": "Metal arch now continuous, but saw/chamber, corner plates and material depth still lack original authored detail"
+    },
+    {
+      "priority": "P0",
+      "area": "food",
+      "issue": "Parcel count increased and fullness improved but color marbling, bold orange bands, meat shapes and raw cuts still poor compared with source"
+    },
+    {
+      "priority": "P1",
+      "area": "base",
+      "issue": "Lower apron is stronger yet wood grain, joinery, continuous metal plates and snow contacts differ from reference"
+    },
+    {
+      "priority": "P1",
+      "area": "chimney",
+      "issue": "No separately implemented active billowing smoke VFX despite large visual contribution in source"
+    },
+    {
+      "priority": "P1",
+      "area": "comparison",
+      "issue": "Original source image camera not precisely calibrated to diagnostic candidate camera. Need matched silhouette and lighting comparisons; unseen sides remain uncertain"
+    }
+  ],
+  "approval": {
+    "technical_GLBS_PASS": true,
+    "owner_visual_approved": false,
+    "independent_critic_approved": false,
+    "style_fidelity_10_of_10": false,
+    "shipping_scene_4k_tested": false,
+    "actual_physical_android_performance_tested": false,
+    "source_image_aligned_camera": false,
+    "global_permanent_adoption": false,
+    "real_4k_isolated_godot_passed": true,
+    "real_shipping_scene_4k_tested": false
+  },
+  "next_actions": [
+    "Hire/engage a skilled editable Blender asset modeler or connected 3D sculpting capability to hand-sculpt roof, saw housing, wood construction and meat/wrappers directly from exact privately-provided 18567 reference. Use v2 22-file artist handoff.",
+    "Verify proportion and perspective with source-matched camera and side-by-side source/candidate screenshots, including accurate material/texture look.",
+    "Author chimney smoke as runtime VFX, not static GLB; keep original nine materials and frozen budget.",
+    "Obtain independent visual critic source match 10/10; don't infer acceptance from 17/17 engineering checks.",
+    "After actual artwork approved, do real Godot shipping scene, gameplay states and physical Android sustained 60fps with telemetry, then explicit user and integration signoffs.",
+    "Only after repeated reference-faithful successful assets adopt reference-first policy permanently across Havenline."
+  ],
+  "repo_scope": "Only Docs/Production/T05/, tools/havenline/blender/ and special .github/workflows paths changed in reference-first continuation. PR #101 and PR #103 remain draft/unmerged. Don't promote candidate.",
+  "latest_art_handoff_package": "Havenline_T05_Cooker_Reference_First_Artist_Handoff_v2.zip; 22 archive entries; includes owner image only in private downloadable file, immutable R07, R22 verified, R23 models and five actual 4K Godot frames plus explicit expert work order and SHA256 manifest."
+}
