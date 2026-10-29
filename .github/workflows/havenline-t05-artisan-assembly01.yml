@@ -1,0 +1,119 @@
+name: T05 Artisan Assembly 01 — original saw + real blue shell and joinery (UNAPPROVED)
+on:
+  push:
+    branches: [havenline/T05-r18-visual-corrections-20261025]
+    paths: [.github/workflows/havenline-t05-artisan-assembly01.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: t05-artisan-assembly01-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  physical-assembly-source:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 70
+    steps:
+      - name: Use entire canonical GitHub source and owner reference files
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+      - name: Install free Blender 4 and software native Godot dependencies
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends blender python3-numpy xvfb libgl1-mesa-dri
+          blender --version | head -3
+          blender -b --python-expr 'import numpy; print("Blender embedded NumPy",numpy.__version__)'
+      - name: Reuse exact saw geometry and create blue enclosure and connected timber in Blender
+        run: |
+          set -euo pipefail
+          output="$RUNNER_TEMP/artisan-assembly01"
+          mkdir -p "$output"
+          source=Docs/Production/T05/ArtisanMaster/SawWIP/T05_SAW_ARTISAN_MASTER.blend
+          test "$(wc -c < "$source")" -gt 1000000
+          blender -b -t 2 --factory-startup \
+            --python tools/havenline/blender/t05_artisan_assembly_01_blue_wood.py -- \
+            "$PWD/$source" "$PWD/Docs/Art/SourceReferences/T05" "$output" \
+            > "$output/blender.log" 2>&1 || { tail -110 "$output/blender.log"; exit 1; }
+          grep -q 'T05_ARTISAN_ASSEMBLY_01_REAL_SAW_PRESERVED' "$output/blender.log"
+          test -s "$output/T05_ARTISAN_ASSEMBLY_01_SAW_BLUE_WOOD.blend"
+          test -s "$output/T05_ASSEMBLY_01_SAW_BLUE_WOOD_UNAPPROVED.glb"
+          test "$(find "$output" -maxdepth 1 -name 'ASSEMBLY_*.png' | wc -l)" -eq 5
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"artisan-assembly01"
+          s=json.loads((root/"STATUS.json").read_text())
+          assert s["saw_source_geometry_and_transforms_untouched"]
+          assert s["saw_meshes"]>=12
+          assert s["new_wood_objects"]>=20
+          assert s["new_steel_enclosure_objects"]>=6
+          assert s["new_bracket_and_bolt_objects"]>=12
+          assert s["actual_saw_cavity_preserved"]
+          assert not s["whole_cooker_complete"] and not s["shipping_asset_modified"]
+          print("PHYSICAL SAW FIT AND CONNECTED WOOD BLUE SHELL PASS; ART CRITIC PENDING")
+          PY
+      - name: Install official checksum-verified Godot 4.7.2
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t05-engine"
+          curl -fLsS --retry 3 \
+            https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip \
+            -o "$RUNNER_TEMP/t05-engine/engine.zip"
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  '"$RUNNER_TEMP/t05-engine/engine.zip" | sha512sum -c -
+          unzip -q "$RUNNER_TEMP/t05-engine/engine.zip" -d "$RUNNER_TEMP/t05-engine"
+          chmod +x "$RUNNER_TEMP/t05-engine/Godot_v4.7.2-stable_linux.x86_64"
+      - name: Import exact editable Blender GLB in native Godot renderer and capture five fit angles
+        run: |
+          set -euo pipefail
+          work="$RUNNER_TEMP/artisan-assembly01"
+          stage="$RUNNER_TEMP/t05-artisan-godot"
+          mkdir -p "$stage/assets" "$stage/captures"
+          cp "$work/T05_ASSEMBLY_01_SAW_BLUE_WOOD_UNAPPROVED.glb" "$stage/assets/"
+          cp tools/havenline/task05/t05_artisan_assembly_01_capture.gd "$stage/capture.gd"
+          printf '%s\n' 'config_version=5' '[application]' 'config/name="T05 Artisan Assembly Saw Blue Wood WIP"' \
+            '[rendering]' 'renderer/rendering_method="gl_compatibility"' \
+            'renderer/rendering_method.gl_compatibility="gl_compatibility"' > "$stage/project.godot"
+          engine="$RUNNER_TEMP/t05-engine/Godot_v4.7.2-stable_linux.x86_64"
+          timeout 180 "$engine" --headless --editor --path "$stage" --import --quit > "$work/godot-import.log" 2>&1
+          timeout 200 xvfb-run -a "$engine" --audio-driver Dummy --path "$stage" \
+            --script res://capture.gd -- --out="$stage/captures" \
+            > "$work/godot-capture.log" 2>&1 || { tail -100 "$work/godot-capture.log"; exit 1; }
+          test "$(grep -c 'T05_ASSEMBLY01_GODOT_FRAME_OK' "$work/godot-capture.log")" -eq 5
+          test -s "$stage/captures/godot_receipt.json"
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' "$work/godot-capture.log"; then exit 1; fi
+          mkdir -p "$work/NativeGodot"
+          cp "$stage/captures/"*.png "$work/NativeGodot/"
+          cp "$stage/captures/godot_receipt.json" "$work/NativeGodot/"
+      - name: Record accurate result and hashes — not an artistic acceptance
+        run: |
+          python - <<'PY'
+          import json,hashlib,struct,os
+          from pathlib import Path
+          root=Path(os.environ["RUNNER_TEMP"])/"artisan-assembly01"
+          status=json.loads((root/"STATUS.json").read_text())
+          for p in [root/"T05_ASSEMBLY_01_SAW_BLUE_WOOD_UNAPPROVED.glb",
+                    root/"T05_ARTISAN_ASSEMBLY_01_SAW_BLUE_WOOD.blend"]:
+              status[p.name+"_sha256"]=hashlib.sha256(p.read_bytes()).hexdigest()
+          screenshots={}
+          for p in sorted((root/"NativeGodot").glob("*.png")):
+              raw=p.read_bytes()
+              assert raw[:8]==b'\x89PNG\r\n\x1a\n' and struct.unpack(">II",raw[16:24])==(1280,960)
+              screenshots[p.name]=hashlib.sha256(raw).hexdigest()
+          assert len(screenshots)==5
+          status["native_godot_4_7_2_5_views_verified"]=True
+          status["native_images_sha256"]=screenshots
+          status["independent_visual_critic_passed"]=False
+          (root/"STATUS.json").write_text(json.dumps(status,indent=2)+"\n")
+          print(json.dumps({"assembly_wip":True,"five_native_views":5,
+               "owner_approved":False,"shipping_modified":False},indent=2))
+          PY
+      - name: Upload unapproved but genuine source build as GitHub artifact
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-T05-artisan-assembly01-saw-enclosure-wood-${{ github.run_id }}
+          path: ${{ runner.temp }}/artisan-assembly01/
+          retention-days: 30
+          if-no-files-found: warn
