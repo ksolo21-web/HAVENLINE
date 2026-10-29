@@ -1,0 +1,91 @@
+name: T05 FREE Neural Image-to-3D CPU (NOT ART APPROVED)
+on:
+  push:
+    branches: [havenline/T05-r18-visual-corrections-20261025]
+    paths: [.github/workflows/havenline-t05-triposr-cpu.yml, 'Docs/Art/SourceReferences/T05/**']
+  workflow_dispatch:
+    inputs:
+      source:
+        description: 'fixture public sample, or owner original 32451.jpg from repository'
+        type: choice
+        required: true
+        default: fixture
+        options: [fixture, owner]
+permissions:
+  contents: read
+concurrency:
+  group: t05-triposr-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  cpu-neural-reconstruction:
+    name: Real MIT TripoSR image-to-GLB on standard free Linux CPU
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      SOURCE_KIND: ${{ github.event_name == 'push' && 'owner' || github.event.inputs.source || 'fixture' }}
+      TRIPOSR_REV: 107cefdc244c39106fa830359024f6a2f1c78871
+      OMP_NUM_THREADS: '4'
+      MKL_NUM_THREADS: '4'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+    steps:
+      - name: Checkout HAVENLINE exact commit
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - name: Set up Python 3.10
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.10'
+      - name: Checkout pinned MIT TripoSR
+        run: |
+          set -euo pipefail
+          git clone -q https://github.com/VAST-AI-Research/TripoSR.git "$RUNNER_TEMP/TripoSR"
+          git -C "$RUNNER_TEMP/TripoSR" checkout -q "$TRIPOSR_REV"
+          test "$(git -C "$RUNNER_TEMP/TripoSR" rev-parse HEAD)" = "$TRIPOSR_REV"
+      - name: Install open-source CPU neural dependencies
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip setuptools wheel ninja
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu \
+            'torch==2.3.1' 'torchvision==0.18.1'
+          python -m pip install 'numpy==1.26.4' 'scipy>=1.11,<2' \
+            'omegaconf==2.3.0' 'Pillow==10.1.0' 'einops==0.7.0' \
+            'transformers==4.35.0' 'trimesh==4.0.5' \
+            'rembg>=2.0.53,<3' 'onnxruntime==1.21.0' 'huggingface-hub==0.17.3' \
+            'imageio[ffmpeg]' 'xatlas==0.0.9' 'moderngl==5.10.0'
+          python -m pip install 'scikit-build-core==1.1.1' 'pybind11>=2.13,<3' 'cmake>=3.26' 
+          python -m pip install --no-build-isolation \
+            'git+https://github.com/tatsy/torchmcubes.git@a9ac95aa329957ba646e7bb057f825f5dfa77f38'
+      - name: Select real image or explicit official test fixture
+        run: |
+          set -euo pipefail
+          if [ "$SOURCE_KIND" = owner ]; then
+            input=Docs/Art/SourceReferences/T05/32451.jpg
+            test -s "$input" || { echo "::error::Owner image not yet tracked. Source must be committed, never substituted."; exit 1; }
+          else
+            input="$RUNNER_TEMP/TripoSR/examples/chair.png"
+            test -s "$input"
+          fi
+          python tools/havenline/task05/prepare_triposr_input.py \
+            --image "$input" --source "$SOURCE_KIND" --out "$RUNNER_TEMP/t05-neural/prepared"
+      - name: Generate actual neural mesh (unapproved)
+        run: |
+          set -euo pipefail
+          # TripoSR's --no-remove-bg path does not auto-create /0; do it here.
+          mkdir -p "$RUNNER_TEMP/t05-neural/generated/0"
+          python "$RUNNER_TEMP/TripoSR/run.py" \
+            "$RUNNER_TEMP/t05-neural/prepared/image.png" \
+            --device cpu --no-remove-bg --chunk-size 1024 \
+            --mc-resolution 96 --model-save-format glb \
+            --output-dir "$RUNNER_TEMP/t05-neural/generated" \
+            2>&1 | tee "$RUNNER_TEMP/t05-neural/inference.log"
+          python tools/havenline/task05/verify_triposr_output.py \
+            --candidate "$RUNNER_TEMP/t05-neural/generated/0/mesh.glb" \
+            --input-receipt "$RUNNER_TEMP/t05-neural/prepared/input_receipt.json" \
+            --output "$RUNNER_TEMP/t05-neural/technical-audit.json"
+      - name: Preserve unapproved technical candidate and receipts
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-t05-triposr-${{ github.sha }}-${{ github.run_id }}
+          path: ${{ runner.temp }}/t05-neural/
+          retention-days: 30
+          if-no-files-found: warn
