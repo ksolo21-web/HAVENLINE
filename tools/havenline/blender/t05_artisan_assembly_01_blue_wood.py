@@ -132,6 +132,42 @@ def groove(name,positions,radius=.012):
     for p,point in zip(spline.points,positions):p.co=(*point,1)
     ob=bpy.data.objects.new(name,c);wood.objects.link(ob);ob.data.materials.append(woodscore)
     return ob
+# Carry actual pixels from the owner's original render onto the NEW physical
+# wood and enamel surfaces. This is source artwork on real 3D geometry, not
+# a painted facade or invented photo, and not a claim of physically pure albedo.
+def source_crop_material(base_material,name,source_box,metal=.0,rough=.85):
+    import numpy as np
+    photo=bpy.data.images.load(str(REFS/"32451.jpg"),check_existing=True)
+    width,height=photo.size
+    left,top,right,bottom=source_box
+    assert width==1536 and height==1536
+    assert 0<=left<right<=width and 0<=top<bottom<=height
+    pix=np.empty(width*height*4,dtype=np.float32)
+    photo.pixels.foreach_get(pix)
+    rgba=pix.reshape((height,width,4))
+    # Blender pixel rows start at the bottom; owner's source boxes are top-down.
+    patch=np.ascontiguousarray(rgba[height-bottom:height-top,left:right,:])
+    im=bpy.data.images.new(name,width=right-left,height=bottom-top,alpha=True,float_buffer=False)
+    im.pixels.foreach_set(patch.reshape(-1))
+    im.pack()
+    base_material.use_nodes=True
+    nodes=base_material.node_tree.nodes
+    nodes.clear()
+    tex=nodes.new("ShaderNodeTexImage")
+    tex.image=im
+    tex.interpolation='Linear'
+    tex.extension='REPEAT'
+    bsdf=nodes.new("ShaderNodeBsdfPrincipled")
+    bsdf.inputs['Metallic'].default_value=metal
+    bsdf.inputs['Roughness'].default_value=rough
+    output=nodes.new("ShaderNodeOutputMaterial")
+    base_material.node_tree.links.new(tex.outputs["Color"],bsdf.inputs["Base Color"])
+    base_material.node_tree.links.new(bsdf.outputs["BSDF"],output.inputs["Surface"])
+    return im
+wood_pixels=source_crop_material(woodmat,"OWNER_32451_EXACT_TIMBER_GRAIN_CROP",(485,498,795,520),0.,.89)
+blue_pixels=source_crop_material(blue,"OWNER_32451_EXACT_BLUE_ENAMEL_CROP",(610,590,780,690),.14,.76)
+# Other wood and steel classes remain independently material-addressable.
+
 # Shared low wooden foundation. No isolated pallet boards or floating machine.
 # Three solid load-bearing runners, joined by crossbeams, tapered boots and
 # formed blue gussets. Front is -Y, saw must be visible ahead of front panel.
@@ -215,6 +251,28 @@ for i,(name,loc) in enumerate([
     mounts.objects.link(ob);ob.location=loc
     ob["asset_type"]="CONSTRUCTION_SOCKET_ONLY_NOT_RENDERED"
     ob.hide_render=True
+# Actual timber roof cornice and physical side framing: this is not the
+# finished roof or snow sculpture. It is an attachment structure that matches
+# the reference's wood-and-steel construction.
+beam("UPPER_FRONT_CONTINUOUS_CARVED_WOOD_EAVE",(-.59,-.35,2.22),
+     3.69,.48,.36,woodmat,.068)
+cuboid("UPPER_REAR_TIMBER_EAVE",(-.59,1.49,2.21),(3.51,.39,.35),
+       woodmat,wood,.058)
+for key,x in (("LEFT",-2.39),("RIGHT",1.16)):
+    cuboid("UPPER_"+key+"_TIMBER_EDGE_EAVE",(x,.57,2.19),(.40,2.22,.34),
+           woodtop,wood,.047)
+    cuboid("FRONT_"+key+"_VERTICAL_LIGHT_WOOD_JOINERY",(x,-.37,.77),
+           (.40,.48,2.56),woodtop,wood,.061)
+    cuboid("FRONT_"+key+"_CAST_STEEL_TIE",(x,-.65,.42),
+           (.46,.16,.47),steel_dark,hardware,.04)
+    rivet("ROOF_FRAME_"+key+"_TOP_CORNER_RIVET",(x,-.615,2.23),.071,.08)
+    rivet("WOOD_TO_BLUE_"+key+"_LOWER_CLAMP_RIVET",(x,-.750,.43),.079,.09)
+for k,x in enumerate((-1.90,-1.12,-.20,.67)):
+    # Gentle recesses and joinery lines on the visible fascia, not random
+    # diagonal painted hatchmarks or a fake interior.
+    groove(f"AUTHORED_TIMBER_EAVE_GRAIN_LINE_{k}",
+      [(x-.17,-.610,2.20),(x-.02,-.613,2.18),(x+.18,-.613,2.21)],.009)
+
 # Verify exact previously good saw mesh is untouched. No object rescaling.
 assert fingerprint()==SAW_HASH,"Saw source geometry or object transform was changed"
 scene['T05_master_checkpoint']="ASSEMBLY_01_SAW_PRESERVED_BLUE_ENCLOSURE_TIMBER_CONNECTED"
@@ -271,6 +329,9 @@ status={
   "new_bracket_and_bolt_objects":len(hardware.objects),
   "actual_saw_cavity_preserved":True,
   "front_blue_panel_only_left_of_saw":True,
+  "source_pixel_wood_crop_box":[485,498,795,520],
+  "source_pixel_blue_crop_box":[610,590,780,690],
+  "physical_timber_eaves_and_joinery":True,
   "connected_timber_support_and_physical_brackets":True,
   "reference_cameras_not_calibrated":True,
   "remaining":["raw meat","prepared food","snow roof","chimney","pressure mechanism","rear service door","smoke"],
