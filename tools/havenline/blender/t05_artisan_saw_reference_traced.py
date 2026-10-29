@@ -25,6 +25,7 @@ scene=bpy.context.scene
 scene.render.engine='BLENDER_EEVEE' if bpy.app.version<(4,2,0) else 'BLENDER_EEVEE_NEXT'
 scene.render.resolution_x=960;scene.render.resolution_y=960
 scene.render.resolution_percentage=100
+scene.world=bpy.data.worlds.new('T05 winter studio')
 scene.world.color=(.015,.017,.026)
 reference=bpy.data.collections.new('OWNER_3_PACKED_IMAGES_AND_REFERENCE_CAMERAS')
 scene.collection.children.link(reference)
