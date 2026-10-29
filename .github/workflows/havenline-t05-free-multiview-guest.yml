@@ -1,0 +1,112 @@
+name: T05 Free Guest TRUE Multiview Image-to-3D (UNAPPROVED)
+on:
+  push:
+    branches: [havenline/T05-r18-visual-corrections-20261025]
+    paths:
+      - .github/workflows/havenline-t05-free-multiview-guest.yml
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: t05-guest-multiview-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  one-public-guest-attempt:
+    name: Hunyuan3D-2mv Front/Back/Right single guest request, no account
+    runs-on: ubuntu-24.04
+    timeout-minutes: 18
+    steps:
+      - name: Checkout exact authorized T05 owner image references
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.11'
+      - name: Install open-source public Gradio client and GLB checker
+        run: python -m pip install 'gradio_client==1.5.3' 'trimesh>=4,<5'
+      - name: Submit one free guest multi-image shape-generation job
+        env:
+          HF_HUB_DISABLE_TELEMETRY: '1'
+          HF_HUB_OFFLINE: '0'
+        run: |
+          mkdir -p t05-multiview
+          python3 - <<'PY'
+          import hashlib, json, shutil, pathlib, sys, traceback
+          from gradio_client import Client,handle_file
+          import trimesh
+          root=pathlib.Path('Docs/Art/SourceReferences/T05')
+          files={'front':root/'32451.jpg','rear':root/'32441.png','right':root/'32450.jpg'}
+          expected={'front':'70e9e04c329797490b19aaa383865a5a2e20129bd1e0250a6997b170fb0510e4',
+          'rear':'0ff99199e1eb4bedeffe4d9953f5253a97e49366a2118d5976132c9137d93510',
+          'right':'5b1831d03575e705f1baf5af5d4ac4b4ecd62e364b4287c7f841965625d4d719'}
+          for name,path in files.items():
+              if hashlib.sha256(path.read_bytes()).hexdigest()!=expected[name]:
+                  raise RuntimeError('OWNER_SOURCE_HASH_MISMATCH:'+name)
+          receipt={'status':'NO_RESULT_YET','source_hashes':expected,
+              'method':'Tencent Hunyuan3D-2mv official public ZeroGPU guest API',
+              'endpoint':'/shape_generation',
+              'image_slots':{'front':'32451.jpg (owner 3/4)','back':'32441.png','left':None,'right':'32450.jpg'},
+              'authenticated':False,'paid':False,
+              'source_camera_registration_verified':False,
+              'texture_reconstruction_verified':False,
+              'license_for_commercial_release_reviewed':False,
+              'visual_critic_passed':False,'owner_approved':False,
+              'shipping_asset_modified':False}
+          out=pathlib.Path('t05-multiview')
+          try:
+              client=Client('tencent/Hunyuan3D-2mv',verbose=False)
+              print('Guest client connected; submitting exactly one bounded multi-view request',flush=True)
+              # 13 arguments; order verified from live public /info Gradio 4.44.1 metadata.
+              job=client.submit('',None,
+                  handle_file(str(files['front'])),
+                  handle_file(str(files['rear'])),
+                  None,
+                  handle_file(str(files['right'])),
+                  5,5.0,1234,192,True,8000,False,
+                  api_name='/shape_generation')
+              result=job.result(timeout=590)
+              receipt['return_type']=type(result).__name__
+              # A live Gradio endpoint can return an empty file on remote failure.
+              # Log only bounded, sanitized non-file diagnostics before deciding pass/fail.
+              if isinstance(result,(list,tuple)):
+                  receipt['server_message_excerpt']=str(result[1])[:350] if len(result)>1 else None
+                  receipt['server_stats_excerpt']=str(result[2])[:650] if len(result)>2 else None
+              if isinstance(result,(list,tuple)):
+                  receipt['returned_output_types']=[type(x).__name__ for x in result]
+                  candidate=result[0]
+              else:
+                  candidate=result
+              if isinstance(candidate,dict):
+                  candidate=candidate.get('path') or candidate.get('name')
+              path=pathlib.Path(str(candidate))
+              if not path.exists() or path.suffix.lower() not in ('.glb','.obj','.ply'):
+                  raise RuntimeError('NO_VALID_DOWNLOADED_MESH:'+str(candidate)[:300])
+              final=out/('Havenline_T05_REAL_MULTIVIEW_UNAPPROVED'+path.suffix.lower())
+              shutil.copyfile(path,final)
+              scene=trimesh.load(final,force='scene')
+              meshes=[m for m in scene.geometry.values() if isinstance(m,trimesh.Trimesh)]
+              if not meshes:raise RuntimeError('EMPTY_GEOMETRY')
+              receipt.update({'status':'GUEST_MULTIVIEW_NEURAL_MESH_TECHNICAL_PASS_NOT_ART_APPROVED',
+                  'mesh_sha256':hashlib.sha256(final.read_bytes()).hexdigest(),
+                  'mesh_file':final.name,'mesh_count':len(meshes),
+                  'triangles':sum(len(m.faces) for m in meshes)})
+              print(json.dumps(receipt,indent=2),flush=True)
+          except Exception as exc:
+              receipt.update({'status':'NO_ACCOUNT_GUEST_MULTIVIEW_ATTEMPT_FAILED',
+                  'error_type':type(exc).__name__,
+                  'error_message':str(exc)[:1200]})
+              print(json.dumps(receipt,indent=2),file=sys.stderr,flush=True)
+              (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+              raise
+          (out/'receipt.json').write_text(json.dumps(receipt,indent=2)+'\n')
+          PY
+      - name: Preserve exact result or actual failure receipt as a candidate only
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: HAVENLINE-T05-guest-true-multiview-${{ github.sha }}
+          path: t05-multiview/
+          retention-days: 30
+          if-no-files-found: warn
