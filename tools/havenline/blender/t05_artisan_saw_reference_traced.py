@@ -98,7 +98,7 @@ fade_mix=nd.new('ShaderNodeMixRGB')
 fade_mix.blend_type='MIX'
 fade_mix.inputs['Color1'].default_value=(.39,.43,.52,1.0)
 photo.node_tree.links.new(uvc.outputs['UV'],sep.inputs['Vector'])
-photo.node_tree.links.new(sep.outputs['Z'],fade.inputs['Value'])
+photo.node_tree.links.new(sep.outputs['Y'],fade.inputs['Value'])
 photo.node_tree.links.new(fade.outputs['Result'],fade_mix.inputs[0])
 photo.node_tree.links.new(tex.outputs['Color'],fade_mix.inputs['Color2'])
 photo.node_tree.links.new(fade_mix.outputs['Color'],pbr.inputs['Base Color'])
