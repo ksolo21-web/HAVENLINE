@@ -63,6 +63,16 @@ jobs:
           glb=root/'T05_SOURCE_CONTOUR_FRONTAGE_ONLY_UNAPPROVED.glb'
           assert glb.read_bytes()[:4]==b'glTF'
           assert hashlib.sha256(glb.read_bytes()).hexdigest()==x['SHA256_GLb']
+          import trimesh,numpy as np
+          original=trimesh.load('Docs/Production/T05/ArtisanMaster/SawWIP/T05_SAW_ARTISAN_MODULE.glb',force='scene')
+          combined=trimesh.load(glb,force='scene')
+          assert len(original.geometry)>=16
+          for name,mesh in original.geometry.items():
+              assert name in combined.geometry, 'Original saw mesh missing: '+name
+              retained=combined.geometry[name]
+              assert np.array_equal(mesh.faces,retained.faces), 'Saw faces changed: '+name
+              assert np.array_equal(mesh.vertices,retained.vertices), 'Saw vertices changed: '+name
+          print('EXACT original saw preserved in combined 3D scene:',len(original.geometry),'mesh objects')
           print('PASS geometry/source/unchanged saw; ART FAIL')
           PY
       - name: Retain diagnostic GLB, original-pixel material crops and failed art record
