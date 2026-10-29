@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "created": "2026-10-28",
+  "task": "T05",
+  "trial": "R34_first_actual_open_source_neural_on_exact_original_front_image",
+  "status": "REAL_CPU_NEURAL_GENERATED_GLB__REAL_GODOT_FOUR_VIEW_NATIVE_RENDER_PASS__SOURCE_FIDELITY_CRITIC_FAIL",
+  "owner_source": {
+    "git_path": "Docs/Art/SourceReferences/T05/32451.jpg",
+    "sha256": "70e9e04c329797490b19aaa383865a5a2e20129bd1e0250a6997b170fb0510e4",
+    "owner_right": "Docs/Art/SourceReferences/T05/32450.jpg",
+    "owner_rear": "Docs/Art/SourceReferences/T05/32441.png",
+    "smoke_removed_from_static_geometry_input": true
+  },
+  "neural": {
+    "model": "TripoSR (MIT), commit 107cefdc244c39106fa830359024f6a2f1c78871",
+    "hardware": "free GitHub Actions ubuntu-24.04 CPU",
+    "run_id": 40771079678,
+    "run_url": "https://github.com/ksolo21-web/HAVENLINE/actions/runs/40771079678",
+    "source_image_kind": "owner",
+    "input_is_one_view": true,
+    "glb_sha256": "4c8c4b52b838e628d2bb01cf21e281ce9b5594cef7ac019c7c941e887abf0088",
+    "candidate_glb_file": "T05_neural_owner_front_UNAPPROVED.glb",
+    "triangle_count": 21888,
+    "vertex_count": 10993,
+    "mesh_count": 1,
+    "vertex_color_present": true,
+    "watertight": false,
+    "mesh_extraction_pass": true
+  },
+  "godot": {
+    "engine": "4.7.2.stable.official.ed1daf0bf",
+    "renderer": "OpenGL Compatibility Mesa llvmpipe",
+    "isolated_trial": true,
+    "import_pass": true,
+    "render_pass": true,
+    "views": [
+      "source_inferred",
+      "front",
+      "side",
+      "rear"
+    ],
+    "resolution": [
+      960,
+      960
+    ],
+    "vertex_colors_required_explicit_material_flag": true,
+    "actual_game_shipping_scene_tested": false,
+    "physical_android_tested": false
+  },
+  "visual_critic": {
+    "reviewer": "internal source-bound visual critique, NOT independent C1/C2",
+    "passed": false,
+    "strict_source_style_score": null,
+    "known_issues": [
+      "Single front image has no true multi-view fusion",
+      "Inferred source orientation is severely tilted/misaligned",
+      "Saw housing, rear vent panel, side pressure mechanism, lower timber and trays lack correct physical forms",
+      "Wood and snow surfaces melted/distorted; source projection/view alignment invalid",
+      "Real side and rear are radically different from authoritative owner views",
+      "Cannot classify a standalone GLB import as game integration or approve art"
+    ],
+    "owner_approved": false
+  },
+  "shipping": {
+    "modified": false,
+    "promoted": false,
+    "owner_images_public_with_permission": true,
+    "visual_critic_required": true,
+    "physical_fps_unverified": true
+  },
+  "next": "Use a true multi-view reconstruction system or image-guided mesh fit constrained by all three Git-tracked owner images, then compare all real Godot views. Do not keep refining the single-view TripoSR lump or promote it into HavenlineGodot/assets."
+}
