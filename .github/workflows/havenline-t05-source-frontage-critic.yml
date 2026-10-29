@@ -8,6 +8,7 @@ on:
       - tools/havenline/task05/build_source_contour_frontage.py
       - tools/havenline/task05/source_carved_eave.py
       - tools/havenline/task05/source_rear_service_five_slots.py
+      - tools/havenline/task05/source_right_pressure.py
   workflow_dispatch:
 permissions:
   contents: read
@@ -37,6 +38,7 @@ jobs:
             --reference Docs/Art/SourceReferences/T05/32451.jpg \
             --saw Docs/Production/T05/ArtisanMaster/SawWIP/T05_SAW_ARTISAN_MODULE.glb \
             --rear Docs/Art/SourceReferences/T05/32441.png \
+            --side Docs/Art/SourceReferences/T05/32450.jpg \
             --out "$RUNNER_TEMP/t05-source-frontage" \
             | tee "$RUNNER_TEMP/t05-source-frontage/build.log"
       - name: Verify original pixel scale, unchanged saw and accurate art rejection
@@ -51,6 +53,8 @@ jobs:
           assert x['original_saw_face_count']==7088
           assert x['rear_service_panel']['real_through_holes']==5
           assert x['rear_service_panel']['watertight_service_panel']
+          assert x['right_side_pressure']['physical_rods']==4
+          assert x['right_side_pressure']['separate_lathed_housing']
           assert x['saw_mesh_source_not_rescaled']
           assert x['material_samples_are_separated_blue_wood']
           assert x['overall_triangles']>8000
