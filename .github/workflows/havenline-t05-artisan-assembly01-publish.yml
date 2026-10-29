@@ -2,7 +2,9 @@ name: T05 Artisan Assembly01 — permanently retain source and corrected Godot v
 on:
   push:
     branches: [havenline/T05-r18-visual-corrections-20261025]
-    paths: [.github/workflows/havenline-t05-artisan-assembly01-publish.yml]
+    paths:
+      - .github/workflows/havenline-t05-artisan-assembly01-publish.yml
+      - tools/havenline/task05/publish_artisan_assembly01_git.py
 permissions:
   contents: write
   actions: read
@@ -17,6 +19,8 @@ jobs:
       - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
         with:
           lfs: false
+      - name: Reject invalid publication scripts before any expensive native engine work
+        run: python -m py_compile tools/havenline/task05/publish_artisan_assembly01_git.py
       - name: Retrieve exact successful Blender/Godot source build from same GitHub repo
         run: |
           set -euo pipefail
