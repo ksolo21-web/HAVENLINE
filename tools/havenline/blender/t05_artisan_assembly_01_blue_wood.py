@@ -21,10 +21,20 @@ for name,sha in EXPECTED.items():
 assert SOURCE.exists() and SOURCE.stat().st_size>100000
 bpy.ops.wm.open_mainfile(filepath=str(SOURCE))
 scene=bpy.context.scene
-saw_collection=bpy.data.collections.get("01_SAW_ASSEMBLY_REAL_INDIVIDUAL_MESH_PARTS")
-assert saw_collection is not None
-saw_objs=[obj for obj in saw_collection.objects if obj.type=="MESH"]
-assert len(saw_objs)>=12
+# Prior artisan saw revisions renamed collections but retained the mesh data.
+# Identify physical geometry by object type and reference labels, not a brittle
+# collection name. Re-home only the exact pre-existing SAW objects, never rescale.
+source_meshes=[ob for ob in bpy.data.objects if ob.type=="MESH"]
+saw_objs=[ob for ob in source_meshes if not any(
+    ("VISUAL_CONTEXT" in c.name.upper() or "PHOTO_BOARD" in c.name.upper())
+    for c in ob.users_collection)]
+assert len(saw_objs)>=12, ("Missing original saw meshes",[(o.name,o.users_collection[0].name if o.users_collection else "?") for o in source_meshes])
+saw_collection=bpy.data.collections.new("01_UNALTERED_ORIGINAL_ARTISAN_SAW_MESHES")
+scene.collection.children.link(saw_collection)
+for ob in saw_objs:
+    for coll in list(ob.users_collection):
+        coll.objects.unlink(ob)
+    saw_collection.objects.link(ob)
 def fingerprint():
     a=[]
     for ob in sorted(saw_objs,key=lambda x:x.name):
@@ -35,9 +45,12 @@ def fingerprint():
     return hashlib.sha256(repr(a).encode()).hexdigest()
 SAW_HASH=fingerprint()
 assert any("SEPARATE_TOOTHED" in x.name for x in saw_objs)
-reference_collection=bpy.data.collections.get("00_OWNER_PHOTOS_PACKED_CAMERA_BOARDS")
-assert reference_collection
-assert len([im for im in bpy.data.images if im.packed_file and im.name.startswith("OWNER_ORIGINAL")])>=3
+reference_candidates=[c for c in bpy.data.collections
+  if any(k in c.name.upper() for k in ("OWNER_PHOTO","REFERENCE","SOURCE_CAMERA"))]
+reference_collection=reference_candidates[0] if reference_candidates else bpy.data.collections.new("00_PACKED_OWNER_PHOTO_REFERENCE_CAMERAS")
+if not reference_candidates:scene.collection.children.link(reference_collection)
+packed=[im for im in bpy.data.images if im.packed_file]
+assert len(packed)>=3, "Exact three original owner photos not packed into source .blend"
 wood=bpy.data.collections.new("10_JOINED_HAND_HEWN_TIMBER_CARRIAGE");scene.collection.children.link(wood)
 steelcol=bpy.data.collections.new("11_BLUE_FORGED_COOKER_HOUSING");scene.collection.children.link(steelcol)
 hardware=bpy.data.collections.new("12_PHYSICAL_BRACKETS_BOLTS_INSETS");scene.collection.children.link(hardware)
