@@ -12,7 +12,7 @@ jobs:
     timeout-minutes: 20
     env:
       GH_TOKEN: ${{ github.token }}
-      ARTISAN_SAW_STAGED_DIR: ${{ runner.temp }}/t05-owner-saw
+      ARTISAN_SAW_STAGED_DIR: t05-owner-saw
       VERIFIED_SOURCE_RUN: '40849549912'
       VERIFIED_ARTIFACT: T05-artisan-owner-traced-saw-WIP-40849549912
     steps:
