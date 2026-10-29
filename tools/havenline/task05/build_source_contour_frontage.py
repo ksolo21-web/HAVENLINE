@@ -18,6 +18,7 @@ from trimesh.visual.material import PBRMaterial
 from shapely.geometry import Polygon
 from shapely.ops import triangulate
 from source_carved_eave import build_carved_eave
+from source_rear_service_five_slots import add_rear_panel
 
 SHA="70e9e04c329797490b19aaa383865a5a2e20129bd1e0250a6997b170fb0510e4"
 FRONT_SCALE=1536/1280
@@ -64,7 +65,7 @@ def layer(scene,name,profile,front,back,material):
     assert mesh.is_winding_consistent
     scene.add_geometry(mesh,geom_name=name,node_name=name)
     return len(mesh.faces)
-def build(source,saw,out):
+def build(source,saw,rear,out):
     source,saw,out=Path(source),Path(saw),Path(out)
     out.mkdir(parents=True,exist_ok=True)
     assert hashlib.sha256(source.read_bytes()).hexdigest()==SHA
@@ -92,6 +93,8 @@ def build(source,saw,out):
             added+=len(carved.faces)
         else:
             added+=layer(scene,name,outline,front,back,materials[kind])
+    rear_audit=add_rear_panel(scene,rear,out)
+    assert rear_audit["real_through_holes"]==5
     for name,x,y,r,z in FASTENERS:
         pt=pixel_to_3d(x,y)
         mesh=trimesh.creation.icosphere(subdivisions=2,radius=r)
@@ -107,6 +110,7 @@ def build(source,saw,out):
       "reference_sha256":SHA,"saw_original_sha256":original_sha,
       "original_saw_face_count":saw_faces,"saw_mesh_source_not_rescaled":True,
       "new_frontage_triangles":added,
+      "rear_service_panel":rear_audit,
       "overall_triangles":sum(len(m.faces) for m in final.geometry.values()),
       "material_samples_are_separated_blue_wood":True,
       "display_to_source_coordinate_ratio":FRONT_SCALE,
@@ -127,6 +131,7 @@ if __name__=="__main__":
     p=argparse.ArgumentParser()
     p.add_argument("--reference",required=True)
     p.add_argument("--saw",required=True)
+    p.add_argument("--rear",required=True)
     p.add_argument("--out",required=True)
     args=p.parse_args()
-    print(json.dumps(build(args.reference,args.saw,args.out),indent=2))
+    print(json.dumps(build(args.reference,args.saw,args.rear,args.out),indent=2))
