@@ -8,7 +8,7 @@ Requires GitHub Actions GITHUB_TOKEN with contents:write.
 import base64,hashlib,json,os,sys,time,urllib.request,urllib.error
 from pathlib import Path
 
-ROOT=Path(os.environ.get('artisan saw_STAGED_DIR','Docs/Production/T05/NeuralTrials/artisan saw'))
+ROOT=Path(os.environ.get('ARTISAN_SAW_STAGED_DIR','Docs/Production/T05/ArtisanMaster/SawWIP'))
 BRANCH=os.environ['GITHUB_REF_NAME']
 REPO=os.environ['GITHUB_REPOSITORY']
 TOKEN=os.environ['GH_TOKEN']
