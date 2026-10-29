@@ -26,7 +26,7 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y -qq --no-install-recommends blender python3-numpy xvfb libgl1-mesa-dri
+          sudo apt-get install -y -qq --no-install-recommends blender python3-numpy xvfb libgl1-mesa-dri libegl1 libegl-mesa0 libgles2
           blender --version | head -3
           blender -b --python-expr 'import numpy; print("Blender embedded NumPy",numpy.__version__)'
       - name: Reuse exact saw geometry and create blue enclosure and connected timber in Blender
@@ -36,7 +36,7 @@ jobs:
           mkdir -p "$output"
           source=Docs/Production/T05/ArtisanMaster/SawWIP/T05_SAW_ARTISAN_MASTER.blend
           test "$(wc -c < "$source")" -gt 1000000
-          blender -b -t 2 --factory-startup \
+          xvfb-run -a -s '-screen 0 1600x1200x24' blender -b -t 2 --factory-startup \
             --python tools/havenline/blender/t05_artisan_assembly_01_blue_wood.py -- \
             "$PWD/$source" "$PWD/Docs/Art/SourceReferences/T05" "$output" \
             > "$output/blender.log" 2>&1 || { tail -110 "$output/blender.log"; exit 1; }
