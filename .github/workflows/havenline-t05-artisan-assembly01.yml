@@ -2,7 +2,11 @@ name: T05 Artisan Assembly 01 — original saw + real blue shell and joinery (UN
 on:
   push:
     branches: [havenline/T05-r18-visual-corrections-20261025]
-    paths: [.github/workflows/havenline-t05-artisan-assembly01.yml]
+    paths:
+      - .github/workflows/havenline-t05-artisan-assembly01.yml
+      - tools/havenline/blender/t05_artisan_assembly_01_blue_wood.py
+      - tools/havenline/task05/t05_artisan_assembly_01_capture.gd
+      - Docs/Production/T05/ArtisanMaster/SawWIP/T05_SAW_ARTISAN_MASTER.blend
   workflow_dispatch:
 permissions:
   contents: write
