@@ -20,6 +20,25 @@ for fn,digest in sources.items():assert hashlib.sha256((src/fn).read_bytes()).he
 assert spec['sha256']==sources['32451.jpg']
 outer,inner=spec['outer_steel_arch_pixels'],spec['inner_opening_pixels']
 assert len(outer)==len(inner)==15
+# Preserve the fifteen literal owner-traced anchors, then smoothly interpolate
+# their curved forged perimeter for real geometry (not a 15-facet arch).
+def soften_closed_source_trace(points,steps=4):
+    result=[]
+    for i in range(len(points)):
+        p0=points[(i-1)%len(points)]
+        p1=points[i];p2=points[(i+1)%len(points)];p3=points[(i+2)%len(points)]
+        for j in range(steps):
+            t=j/steps
+            xy=[]
+            for d in (0,1):
+                v=.5*((2*p1[d])+(-p0[d]+p2[d])*t+
+                  (2*p0[d]-5*p1[d]+4*p2[d]-p3[d])*t*t+
+                  (-p0[d]+3*p1[d]-3*p2[d]+p3[d])*t*t*t)
+                xy.append(v)
+            result.append(tuple(xy))
+    return result
+outer=soften_closed_source_trace(outer)
+inner=soften_closed_source_trace(inner)
 bpy.ops.wm.read_factory_settings(use_empty=True)
 scene=bpy.context.scene
 scene.render.engine='BLENDER_EEVEE' if bpy.app.version<(4,2,0) else 'BLENDER_EEVEE_NEXT'
@@ -105,7 +124,7 @@ for i in range(n):
                   [2*n+i,2*n+j,3*n+j,3*n+i]])
 front_lip=mesh('01_SOURCE_TRACED_FRONT_FORGED_ARCH',verts,front,photo,True)
 front_lip.data.materials.append(bright)
-for i in (0,13,14):front_lip.data.polygons[i].material_index=1  # prevent duplicate baked orange at steel sill
+for i in range(14*4,15*4):front_lip.data.polygons[i].material_index=1  # prevent duplicate baked orange at steel sill
 mesh('02_EXTRUDED_FRAME_SIDEWALLS',verts,walls,metal)
 thin_line('03_INNER_RUBBER_STEEL_GASKET',inner,-.31,.017,bright)
 thin_line('04_OUTER_FORGED_EDGE',outer,-.32,.011,metal)
