@@ -1,0 +1,89 @@
+name: T05 Artisan Assembly01 — permanently retain source and corrected Godot views
+on:
+  push:
+    branches: [havenline/T05-r18-visual-corrections-20261025]
+    paths: [.github/workflows/havenline-t05-artisan-assembly01-publish.yml]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  verify-and-version-no-shipping-assets:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 35
+    env:
+      GH_TOKEN: ${{ github.token }}
+      T05_ASSEMBLY_ROOT: ${{ runner.temp }}/t05-assembly01
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          lfs: false
+      - name: Retrieve exact successful Blender/Godot source build from same GitHub repo
+        run: |
+          set -euo pipefail
+          mkdir -p "$T05_ASSEMBLY_ROOT"
+          gh run download 40854250786 --repo "$GITHUB_REPOSITORY" \
+            --name havenline-T05-artisan-assembly01-saw-enclosure-wood-40854250786 \
+            --dir "$T05_ASSEMBLY_ROOT"
+          test -s "$T05_ASSEMBLY_ROOT/T05_ARTISAN_ASSEMBLY_01_SAW_BLUE_WOOD.blend"
+          test -s "$T05_ASSEMBLY_ROOT/T05_ASSEMBLY_01_SAW_BLUE_WOOD_UNAPPROVED.glb"
+      - name: Install official Godot 4.7.2 and correct camera-axis orientation
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends xvfb libgl1-mesa-dri libegl1
+          mkdir -p "$RUNNER_TEMP/t05-engine"
+          curl -fLsS --retry 3 \
+            https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip \
+            -o "$RUNNER_TEMP/t05-engine/engine.zip"
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  '"$RUNNER_TEMP/t05-engine/engine.zip" | sha512sum -c -
+          unzip -q "$RUNNER_TEMP/t05-engine/engine.zip" -d "$RUNNER_TEMP/t05-engine"
+          chmod +x "$RUNNER_TEMP/t05-engine/Godot_v4.7.2-stable_linux.x86_64"
+      - name: Re-render native saw-facing FRONT and real rear using corrected GLB orientation
+        run: |
+          set -euo pipefail
+          stage="$RUNNER_TEMP/t05-artisan-corrected"
+          mkdir -p "$stage/assets" "$stage/captures"
+          cp "$T05_ASSEMBLY_ROOT/T05_ASSEMBLY_01_SAW_BLUE_WOOD_UNAPPROVED.glb" "$stage/assets/"
+          cp tools/havenline/task05/t05_artisan_assembly_01_capture.gd "$stage/capture.gd"
+          printf '%s\n' 'config_version=5' '[application]' 'config/name="T05 Native Correct Saw Front WIP"' \
+            '[rendering]' 'renderer/rendering_method="gl_compatibility"' \
+            'renderer/rendering_method.gl_compatibility="gl_compatibility"' > "$stage/project.godot"
+          engine="$RUNNER_TEMP/t05-engine/Godot_v4.7.2-stable_linux.x86_64"
+          timeout 160 "$engine" --headless --editor --path "$stage" --import --quit > "$stage/import.log" 2>&1
+          timeout 180 xvfb-run -a "$engine" --audio-driver Dummy --path "$stage" \
+            --script res://capture.gd -- --out="$stage/captures" \
+            > "$stage/capture.log" 2>&1 || { tail -100 "$stage/capture.log"; exit 1; }
+          test "$(grep -c 'T05_ASSEMBLY01_GODOT_FRAME_OK' "$stage/capture.log")" -eq 5
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' "$stage/capture.log"; then exit 1; fi
+          mkdir -p "$T05_ASSEMBLY_ROOT/NativeGodot"
+          cp "$stage/captures/"*.png "$T05_ASSEMBLY_ROOT/NativeGodot/"
+          cp "$stage/captures/godot_receipt.json" "$T05_ASSEMBLY_ROOT/NativeGodot/"
+      - name: Validate exact original art and camera-corrected genuine PNG bytes
+        run: |
+          python - <<'PY'
+          import json,hashlib,os,struct
+          from pathlib import Path
+          root=Path(os.environ['T05_ASSEMBLY_ROOT'])
+          status=json.loads((root/'STATUS.json').read_text())
+          assert status['saw_source_geometry_and_transforms_untouched']
+          assert status['saw_meshes']>=12 and status['new_wood_objects']>=40
+          assert not status['owner_approved'] and not status['shipping_asset_modified']
+          for file,sha in status['source_originals_sha256'].items():
+              assert hashlib.sha256((Path('Docs/Art/SourceReferences/T05')/file).read_bytes()).hexdigest()==sha
+          proof={}
+          for path in sorted((root/'NativeGodot').glob('*.png')):
+              data=path.read_bytes()
+              assert data[:8]==b'\x89PNG\r\n\x1a\n' and struct.unpack('>II',data[16:24])==(1280,960)
+              proof[path.name]=hashlib.sha256(data).hexdigest()
+          assert len(proof)==5
+          status['native_godot_4_7_2_5_views_verified']=True
+          status['native_images_sha256']=proof
+          status['reference_camera_sign_correction']='Blender -Y camera-facing is Godot +Z'
+          status['internal_source_critique']='FAIL: original saw preserved, blue casing and wood frame need rich artist-grade reconstruction; missing food, snow, pressure, rear vents'
+          status['independent_visual_critic_passed']=False
+          (root/'STATUS.json').write_text(json.dumps(status,indent=2)+'\n')
+          print('PASS: 5 correctly oriented native render PNGs; original saw preserved; ART CRITIC FAIL')
+          PY
+      - name: Store real Blender file, GLB and correctly oriented render pixels as Git blobs
+        run: |
+          python tools/havenline/task05/publish_artisan_assembly01_git.py
