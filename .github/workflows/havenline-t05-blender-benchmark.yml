@@ -1,0 +1,102 @@
+name: T05 Blender source model and guarded GLB benchmark
+on:
+  push:
+    branches: ['havenline/T05-r18-visual-corrections-20261025']
+    paths:
+      - 'tools/havenline/blender/**'
+      - '.github/workflows/havenline-t05-blender-benchmark.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t05-blender-benchmark-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  blender-cooker:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    steps:
+      - name: Check out exact source, without downloading production LFS
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+        with:
+          fetch-depth: 1
+          lfs: false
+      - name: Install free Blender and validation tools
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y --no-install-recommends blender python3-venv python3-numpy
+          blender -b -t 2 --python-expr 'import numpy; print("Blender embedded NumPy", numpy.__version__)'
+          blender --version | tee blender-version.txt
+          python3 -m venv /tmp/havenline-blender-check
+          /tmp/havenline-blender-check/bin/pip install --disable-pip-version-check numpy trimesh pillow
+          python3 -m py_compile tools/havenline/blender/t05_cooker_benchmark.py tools/havenline/blender/validate_cooker_benchmark.py
+      - name: Generate editable source, candidate GLB, and four real Blender renders
+        run: |
+          set -euo pipefail
+          mkdir -p t05-blender-evidence
+          blender -b -t 2 --factory-startup             --python tools/havenline/blender/t05_cooker_benchmark.py             -- --out "$PWD/t05-blender-evidence" > t05-blender-evidence/build.log 2>&1 || {
+              tail -100 t05-blender-evidence/build.log
+              exit 1
+            }
+      - name: Validate candidate with strict frozen-game contract
+        run: |
+          set -euo pipefail
+          /tmp/havenline-blender-check/bin/python tools/havenline/blender/validate_cooker_benchmark.py \
+            --out t05-blender-evidence \
+            --catalog HavenlineGodot/assets/stations_v2/catalog.json | tee t05-blender-evidence/validation.log
+          git diff --exit-code -- HavenlineGodot/assets/stations_v2
+          test -z "$(git ls-files --others --exclude-standard HavenlineGodot/assets/stations_v2)"
+      - name: Compose visually labeled comparison contact sheet
+        run: |
+          /tmp/havenline-blender-check/bin/python - <<'PY'
+          from PIL import Image,ImageDraw
+          from pathlib import Path
+          p=Path("t05-blender-evidence")
+          names=["front","three-quarter","right","rear"]
+          sheet=Image.new("RGB",(1280,1320),(21,32,51))
+          for index,name in enumerate(names):
+              with Image.open(p/("T05_cooker_"+name+".png")) as img:
+                  sheet.paste(img.convert("RGB"),((index%2)*640,(index//2)*640+40))
+          ImageDraw.Draw(sheet).text((20,10),"HAVENLINE T05 — BLENDER STUDIO CANDIDATE / NOT IN-GAME / NOT APPROVED",fill=(235,237,243))
+          sheet.save(p/"T05_Benchmark_4_Angles.png")
+          PY
+      - name: Re-import Blender GLB into isolated Godot mobile renderer
+        run: |
+          set -euo pipefail
+          sudo apt-get install -y --no-install-recommends xvfb mesa-vulkan-drivers
+          mkdir -p "$RUNNER_TEMP/godot-bin" "$RUNNER_TEMP/godot-blender-candidate/assets" t05-blender-evidence/godot
+          cp tools/havenline/blender/capture_isolated_godot_cooker.gd "$RUNNER_TEMP/godot-blender-candidate/capture.gd"
+          cp t05-blender-evidence/T05_cooker_BLENDER_CANDIDATE.glb "$RUNNER_TEMP/godot-blender-candidate/assets/"
+          printf 'config_version=5\n[application]\nconfig/name="Havenline T05 Isolated Blender Import"\n' > "$RUNNER_TEMP/godot-blender-candidate/project.godot"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o "$RUNNER_TEMP/godot-bin/engine.zip"
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  '"$RUNNER_TEMP/godot-bin/engine.zip" | sha512sum -c -
+          unzip -q "$RUNNER_TEMP/godot-bin/engine.zip" -d "$RUNNER_TEMP/godot-bin"
+          chmod +x "$RUNNER_TEMP/godot-bin/Godot_v4.7.2-stable_linux.x86_64"
+          engine="$RUNNER_TEMP/godot-bin/Godot_v4.7.2-stable_linux.x86_64"
+          timeout 180 "$engine" --headless --editor --path "$RUNNER_TEMP/godot-blender-candidate" --import --quit > t05-blender-evidence/godot/import.log 2>&1
+          export VK_ICD_FILENAMES="$(find /usr/share/vulkan/icd.d -name '*lvp*json' | head -1)"
+          test -n "$VK_ICD_FILENAMES"
+          xvfb-run -a -s '-screen 0 1280x720x24' timeout 240 "$engine" \
+            --path "$RUNNER_TEMP/godot-blender-candidate" --rendering-method mobile --rendering-driver vulkan \
+            --audio-driver Dummy --resolution 1280x720 --script res://capture.gd -- \
+            --out="$PWD/t05-blender-evidence/godot" > t05-blender-evidence/godot/capture.log 2>&1 || {
+              tail -100 t05-blender-evidence/godot/import.log
+              tail -100 t05-blender-evidence/godot/capture.log
+              exit 1
+            }
+          test "$(find t05-blender-evidence/godot -name 'isolated-godot-*.png' | wc -l)" -eq 4
+          test -s t05-blender-evidence/godot/isolated-godot-report.json
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' t05-blender-evidence/godot/*.log; then exit 1; fi
+          cmp "$RUNNER_TEMP/godot-blender-candidate/assets/T05_cooker_BLENDER_CANDIDATE.glb" t05-blender-evidence/T05_cooker_BLENDER_CANDIDATE.glb
+          echo "Isolated Godot 4-angle import/render check passed (NOT shipping game certification)"
+      - name: Archive explicit candidate evidence, even on failure
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: T05-Blender-cooker-candidate-${{ github.sha }}
+          path: |
+            blender-version.txt
+            t05-blender-evidence/
+          retention-days: 30
+          if-no-files-found: warn
