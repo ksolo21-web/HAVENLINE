@@ -1,0 +1,108 @@
+name: T05 Free CPU neural reconstruction of ORIGINAL cooker components (UNAPPROVED)
+on:
+  push:
+    branches: [havenline/T05-r18-visual-corrections-20261025]
+    paths: [.github/workflows/havenline-t05-component-neural.yml]
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t05-original-parts-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-correct-component-neural:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 120
+    env:
+      OMP_NUM_THREADS: '4'
+      MKL_NUM_THREADS: '4'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TRIPOSR_REV: 107cefdc244c39106fa830359024f6a2f1c78871
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.10'
+      - name: Check out frozen MIT TripoSR, no accounts
+        run: |
+          set -euo pipefail
+          git clone -q https://github.com/VAST-AI-Research/TripoSR.git "$RUNNER_TEMP/TripoSR"
+          git -C "$RUNNER_TEMP/TripoSR" checkout -q "$TRIPOSR_REV"
+          test "$(git -C "$RUNNER_TEMP/TripoSR" rev-parse HEAD)" = "$TRIPOSR_REV"
+      - name: Install previously tested free CPU neural dependency stack
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip setuptools wheel ninja
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu \
+            'torch==2.3.1' 'torchvision==0.18.1'
+          python -m pip install 'numpy==1.26.4' 'scipy>=1.11,<2' \
+            'omegaconf==2.3.0' 'Pillow==10.1.0' 'einops==0.7.0' \
+            'transformers==4.35.0' 'trimesh==4.0.5' \
+            'rembg>=2.0.53,<3' 'onnxruntime==1.21.0' 'huggingface-hub==0.17.3' \
+            'imageio[ffmpeg]' 'xatlas==0.0.9' 'moderngl==5.10.0'
+          python -m pip install 'scikit-build-core==1.1.1' 'pybind11>=2.13,<3' 'cmake>=3.26'
+          python -m pip install --no-build-isolation \
+            'git+https://github.com/tatsy/torchmcubes.git@a9ac95aa329957ba646e7bb057f825f5dfa77f38'
+      - name: Extract exactly three source-visible semantic components
+        run: |
+          set -euo pipefail
+          python tools/havenline/task05/prepare_cooker_component_sources.py \
+            --source-dir Docs/Art/SourceReferences/T05 \
+            --out "$RUNNER_TEMP/t05-parts/source"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'t05-parts/source/receipt.json'
+          r=json.loads(p.read_text())
+          assert len(r['components'])==3 and all(not x['T05_critic_approved'] for x in r['components'])
+          print('Verified three components from original source, no invented reference panels')
+          PY
+      - name: Genuine independent neural inference per component, do not falsely merge
+        run: |
+          set -euo pipefail
+          for i in 0 1 2; do mkdir -p "$RUNNER_TEMP/t05-parts/meshes/$i"; done
+          python "$RUNNER_TEMP/TripoSR/run.py" \
+            "$RUNNER_TEMP/t05-parts/source/raw_meat_crate.png" \
+            "$RUNNER_TEMP/t05-parts/source/finished_food_tray.png" \
+            "$RUNNER_TEMP/t05-parts/source/saw_window_and_handle.png" \
+            --device cpu --no-remove-bg --chunk-size 1024 \
+            --mc-resolution 128 --model-save-format glb \
+            --output-dir "$RUNNER_TEMP/t05-parts/meshes" \
+            2>&1 | tee "$RUNNER_TEMP/t05-parts/neural.log"
+      - name: Verify candidate geometry and convert each to native Godot Y-up
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os,json,hashlib
+          from pathlib import Path
+          import trimesh
+          root=Path(os.environ['RUNNER_TEMP'])/'t05-parts'
+          original=json.loads((root/'source/receipt.json').read_text())['components']
+          report=[]
+          for i,x in enumerate(original):
+              file=root/f'meshes/{i}/mesh.glb'
+              assert file.exists() and file.stat().st_size>10000
+              shape=trimesh.load(file,force='scene')
+              n=sum(len(m.faces) for m in shape.geometry.values())
+              assert 500<=n<=2500000
+              report.append({'part':x['component'],'source_sha256':x['source_sha256'],
+                  'source_view':x['source'],'triangles':n,
+                  'glb_sha256':hashlib.sha256(file.read_bytes()).hexdigest(),
+                  'visual_critic_pass':False,'correct_assembly_position_verified':False})
+          (root/'candidate_audit.json').write_text(json.dumps({'status':'THREE_ACTUAL_COMPONENT_NEURAL_GLB_TECHNICAL_PASS_ONLY',
+               'parts':report,'combined_assembly_created':False,'source_style_approved':False},indent=2)+'\n')
+          print(json.dumps(report,indent=2))
+          PY
+          for i in 0 1 2; do
+            python tools/havenline/task05/orient_triposr_for_godot.py \
+              --input "$RUNNER_TEMP/t05-parts/meshes/$i/mesh.glb" \
+              --output "$RUNNER_TEMP/t05-parts/meshes/$i/GODOT_YUP.glb"
+          done
+      - name: Upload unapproved real three-piece neural outputs and source evidence
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-T05-original-physical-component-neural-${{ github.run_id }}
+          path: ${{ runner.temp }}/t05-parts/
+          retention-days: 14
+          if-no-files-found: warn
