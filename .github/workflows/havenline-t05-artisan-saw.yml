@@ -23,7 +23,7 @@ jobs:
         run: |
           set -euo pipefail
           sudo apt-get update -qq
-          sudo apt-get install -y -qq --no-install-recommends blender python3-numpy
+          sudo apt-get install -y -qq --no-install-recommends blender python3-numpy xvfb libegl1 libgl1-mesa-dri libgbm1
           blender -b --python-expr 'import numpy; print("BLENDER_NUMPY_IMPORT_OK",numpy.__version__)'
       - name: Verify all exact original render bytes and literal hand-trace anchors
         run: |
@@ -47,7 +47,7 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p "$RUNNER_TEMP/t05-artisan-saw"
-          blender -b -t 2 --factory-startup \
+          xvfb-run -a -s '-screen 0 1280x960x24' blender -b -t 2 --factory-startup \
             --python tools/havenline/blender/t05_artisan_saw_reference_traced.py \
             -- Docs/Art/SourceReferences/T05 \
                Docs/Art/SourceReferences/T05/saw_mechanical_trace_v1.json \
