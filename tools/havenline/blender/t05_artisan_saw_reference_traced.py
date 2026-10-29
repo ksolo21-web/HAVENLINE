@@ -83,7 +83,25 @@ tex=nd.new('ShaderNodeTexImage');tex.image=source_images['32451.jpg']
 pbr=nd.new('ShaderNodeBsdfPrincipled')
 pbr.inputs['Metallic'].default_value=.03;pbr.inputs['Roughness'].default_value=.93
 output=nd.new('ShaderNodeOutputMaterial')
-photo.node_tree.links.new(tex.outputs['Color'],pbr.inputs['Base Color'])
+# The original reference already contains the pictured orange handle.
+# Gradually remove that *baked* color only below the real physical steel sill
+# so the separately modeled orange roller is not duplicated by its photograph.
+uvc=nd.new('ShaderNodeTexCoord')
+sep=nd.new('ShaderNodeSeparateXYZ')
+fade=nd.new('ShaderNodeMapRange')
+fade.clamp=True
+fade.inputs['From Min'].default_value=0.498
+fade.inputs['From Max'].default_value=0.515
+fade.inputs['To Min'].default_value=0.0
+fade.inputs['To Max'].default_value=1.0
+fade_mix=nd.new('ShaderNodeMixRGB')
+fade_mix.blend_type='MIX'
+fade_mix.inputs['Color1'].default_value=(.39,.43,.52,1.0)
+photo.node_tree.links.new(uvc.outputs['UV'],sep.inputs['Vector'])
+photo.node_tree.links.new(sep.outputs['Z'],fade.inputs['Value'])
+photo.node_tree.links.new(fade.outputs['Result'],fade_mix.inputs[0])
+photo.node_tree.links.new(tex.outputs['Color'],fade_mix.inputs['Color2'])
+photo.node_tree.links.new(fade_mix.outputs['Color'],pbr.inputs['Base Color'])
 photo.node_tree.links.new(pbr.outputs['BSDF'],output.inputs['Surface'])
 def mesh(name,vertices,faces,mat,uv=False):
     data=bpy.data.meshes.new(name+'_mesh');data.from_pydata(vertices,[],faces);data.update()
@@ -128,8 +146,6 @@ for i in range(n):
     walls.extend([[i,j,2*n+j,2*n+i],[n+i,n+j,3*n+j,3*n+i],
                   [2*n+i,2*n+j,3*n+j,3*n+i]])
 front_lip=mesh('01_SOURCE_TRACED_FRONT_FORGED_ARCH',verts,front,photo,True)
-front_lip.data.materials.append(bright)
-for i in range(14*4,15*4):front_lip.data.polygons[i].material_index=1  # prevent duplicate baked orange at steel sill
 mesh('02_EXTRUDED_FRAME_SIDEWALLS',verts,walls,metal)
 thin_line('03_INNER_RUBBER_STEEL_GASKET',inner,-.31,.017,bright)
 thin_line('04_OUTER_FORGED_EDGE',outer,-.32,.011,metal)
