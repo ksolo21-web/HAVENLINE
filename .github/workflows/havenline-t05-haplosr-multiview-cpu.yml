@@ -1,0 +1,145 @@
+name: T05 3-reference MIT neural mesh refinement (UNAPPROVED)
+on:
+  push:
+    branches: [havenline/T05-r18-visual-corrections-20261025]
+    paths:
+      - .github/workflows/havenline-t05-haplosr-multiview-cpu.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t05-haplosr-multi-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  real-three-view-neural-fit:
+    name: Three actual owner references; neural mesh; comparative 3-angle audit
+    runs-on: ubuntu-24.04
+    timeout-minutes: 180
+    env:
+      OMP_NUM_THREADS: '4'
+      MKL_NUM_THREADS: '4'
+      HF_HUB_DISABLE_TELEMETRY: '1'
+      TRIPOSR_REV: 107cefdc244c39106fa830359024f6a2f1c78871
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.10'
+      - name: Retrieve two open MIT source implementations, no account
+        run: |
+          set -euo pipefail
+          git clone -q https://github.com/VAST-AI-Research/TripoSR.git "$RUNNER_TEMP/TripoSR"
+          git -C "$RUNNER_TEMP/TripoSR" checkout -q "$TRIPOSR_REV"
+          test "$(git -C "$RUNNER_TEMP/TripoSR" rev-parse HEAD)" = "$TRIPOSR_REV"
+          git clone -q --depth 1 https://huggingface.co/jc-builds/haplosr-mv "$RUNNER_TEMP/HaploSR-MV"
+          git -C "$RUNNER_TEMP/HaploSR-MV" rev-parse HEAD | tee "$RUNNER_TEMP/haplosr-source-commit.txt"
+      - name: Install proven free CPU TripoSR stack
+        run: |
+          set -euo pipefail
+          python -m pip install --upgrade pip setuptools wheel ninja
+          python -m pip install --index-url https://download.pytorch.org/whl/cpu \
+            'torch==2.3.1' 'torchvision==0.18.1'
+          python -m pip install 'numpy==1.26.4' 'scipy>=1.11,<2' \
+            'omegaconf==2.3.0' 'Pillow==10.1.0' 'einops==0.7.0' \
+            'transformers==4.35.0' 'trimesh==4.0.5' \
+            'rembg>=2.0.53,<3' 'onnxruntime==1.21.0' 'huggingface-hub==0.17.3' \
+            'imageio[ffmpeg]' 'xatlas==0.0.9' 'moderngl==5.10.0' \
+            'opencv-python-headless<5'
+          python -m pip install 'scikit-build-core==1.1.1' 'pybind11>=2.13,<3' 'cmake>=3.26'
+          python -m pip install --no-build-isolation \
+            'git+https://github.com/tatsy/torchmcubes.git@a9ac95aa329957ba646e7bb057f825f5dfa77f38'
+      - name: Prepare exact three owner images and real silhouettes
+        run: |
+          set -euo pipefail
+          python tools/havenline/task05/prepare_haplosr_views.py \
+            --source-dir Docs/Art/SourceReferences/T05 --out "$RUNNER_TEMP/t05-mv/inputs"
+          test "$(python -c "import json,sys; print(len(json.load(open(sys.argv[1]))))" "$RUNNER_TEMP/t05-mv/inputs/poses.json")" = 3
+      - name: Execute differentiable multiview neural optimization on free CPU
+        env:
+          PYTHONPATH: ${{ runner.temp }}/TripoSR:${{ runner.temp }}/HaploSR-MV
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t05-mv/meshes"
+          timeout 100m python -u - <<'PY' 2>&1 | tee "$RUNNER_TEMP/t05-mv/neural.log"
+          import os,json,time
+          from pathlib import Path
+          import torch
+          import numpy as np
+          from PIL import Image
+          from haplosr_mv.pipeline import HaploSRMV,RefineConfig,View
+          torch.set_num_threads(4)
+          src=Path(os.environ['RUNNER_TEMP'])/'t05-mv/inputs'
+          output=Path(os.environ['RUNNER_TEMP'])/'t05-mv/meshes'
+          views=[]
+          for v in json.loads((src/'poses.json').read_text()):
+              views.append(View(image=Image.open(src/v['image']).convert('RGB'),
+                  mask=np.asarray(Image.open(src/v['mask']).convert('L')),
+                  azimuth_deg=v['azimuth_deg'],elevation_deg=v['elevation_deg']))
+          cfg=RefineConfig(steps=80,rays_per_view=512,render_res=160,mc_resolution=128,device='cpu')
+          print(f'Using {len(views)} exact owner references, {cfg.steps} actual gradient steps',flush=True)
+          pipe=HaploSRMV(cfg)
+          begin=time.monotonic()
+          seed=pipe.run_baseline(views[0].image,resolution=128)[0]
+          seed.export(output/'single_view_seed.glb')
+          print(f'Baseline completed at {time.monotonic()-begin:.1f}s',flush=True)
+          model,codes=pipe.run(views,resolution=128)
+          model.export(output/'three_view_refined.glb')
+          (output/'inference_receipt.json').write_text(json.dumps({
+              'status':'THREE_AUTHENTIC_VIEWS_NEURAL_OPTIMIZATION_ATTEMPT_COMPLETE',
+              'steps':cfg.steps,'rays_per_view':cfg.rays_per_view,
+              'minutes':round((time.monotonic()-begin)/60,2),
+              'source_views':len(views),'camera_poses_calibrated':False,
+              'visual_critic_passed':False,'shipping_asset_modified':False},indent=2))
+          print('Refined mesh exported, NOT owner-approved',flush=True)
+          PY
+      - name: Independently audit seed vs three-view result using same source views
+        run: |
+          set -euo pipefail
+          python tools/havenline/task05/audit_haplosr_three_views.py \
+            --mesh "$RUNNER_TEMP/t05-mv/meshes/single_view_seed.glb" \
+            --inputs "$RUNNER_TEMP/t05-mv/inputs" \
+            --out "$RUNNER_TEMP/t05-mv/evaluations/seed"
+          python tools/havenline/task05/audit_haplosr_three_views.py \
+            --mesh "$RUNNER_TEMP/t05-mv/meshes/three_view_refined.glb" \
+            --inputs "$RUNNER_TEMP/t05-mv/inputs" \
+            --out "$RUNNER_TEMP/t05-mv/evaluations/refined"
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ['RUNNER_TEMP'])/'t05-mv/evaluations'
+          x=json.loads((p/'seed/audit.json').read_text());y=json.loads((p/'refined/audit.json').read_text())
+          print(json.dumps({'single_view_seed_mean_iou':x['mean_iou'],
+              'refined_mean_iou':y['mean_iou'],'difference':round(y['mean_iou']-x['mean_iou'],4),
+              'method':'approximate silhouette IoU, not reference fidelity or independent art approval'},indent=2))
+          PY
+      - name: Require measured three-view silhouette improvement over same-run seed
+        run: |
+          python - <<'PY'
+          import json,os
+          from pathlib import Path
+          p=Path(os.environ["RUNNER_TEMP"])/"t05-mv/evaluations"
+          seed=json.loads((p/"seed/audit.json").read_text())
+          refined=json.loads((p/"refined/audit.json").read_text())
+          delta=round(refined["mean_iou"]-seed["mean_iou"],4)
+          assert delta>0, f"No measurable multi-view improvement: {delta}"
+          assert len(refined["views"])==3
+          print("Three-view improvement diagnostic PASS",delta,
+                "— ART CRITIC AND OWNER APPROVAL STILL REQUIRED")
+          PY
+      - name: Convert both real GLBs to Godot Y-up without editing game assets
+        run: |
+          set -euo pipefail
+          python tools/havenline/task05/orient_triposr_for_godot.py \
+            --input "$RUNNER_TEMP/t05-mv/meshes/single_view_seed.glb" \
+            --output "$RUNNER_TEMP/t05-mv/meshes/single_view_GODOT_YUP.glb"
+          python tools/havenline/task05/orient_triposr_for_godot.py \
+            --input "$RUNNER_TEMP/t05-mv/meshes/three_view_refined.glb" \
+            --output "$RUNNER_TEMP/t05-mv/meshes/three_view_refined_GODOT_YUP.glb"
+      - name: Archive actual candidate, inputs and factual critique without promoting game assets
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-T05-three-owner-views-NEURAL-UNAPPROVED-${{ github.run_id }}
+          path: ${{ runner.temp }}/t05-mv/
+          retention-days: 14
+          if-no-files-found: warn
