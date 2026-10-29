@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "type": "source_mounted_artisan_cooker_assembly_fit",
+  "status": "ASSEMBLY_INTERFACE_DEFINED__FULL_ASSEMBLY_NOT_YET_MODELED__VISUAL_CRITIC_PENDING",
+  "owner_source_authority": [
+    {
+      "role": "three_quarter_front",
+      "file": "Docs/Art/SourceReferences/T05/32451.jpg",
+      "sha256": "70e9e04c329797490b19aaa383865a5a2e20129bd1e0250a6997b170fb0510e4"
+    },
+    {
+      "role": "right",
+      "file": "Docs/Art/SourceReferences/T05/32450.jpg",
+      "sha256": "5b1831d03575e705f1baf5af5d4ac4b4ecd62e364b4287c7f841965625d4d719"
+    },
+    {
+      "role": "rear",
+      "file": "Docs/Art/SourceReferences/T05/32441.png",
+      "sha256": "0ff99199e1eb4bedeffe4d9953f5253a97e49366a2118d5976132c9137d93510"
+    }
+  ],
+  "retained_source": "Docs/Production/T05/ArtisanMaster/SawWIP/T05_SAW_ARTISAN_MASTER.blend",
+  "retained_gltf": "Docs/Production/T05/ArtisanMaster/SawWIP/T05_SAW_ARTISAN_MODULE.glb",
+  "geometry_source_policy": "Reuse this separate saw mechanism as linked subassembly. DO NOT import rejected R28-R38 geometry, fuse all machinery into one hull or build from reference-billboards.",
+  "axes": "Godot GLB: +X right, +Y up, +Z forward toward operator/front-facing saw. In Blender source Z is up and -Y points toward the reference camera.",
+  "measured_saw_glb_local_bounds_approx": {
+    "min_xyz": [
+      -0.706,
+      -0.301,
+      -0.54
+    ],
+    "max_xyz": [
+      0.734,
+      1.818,
+      0.833
+    ],
+    "width_x": 1.44,
+    "height_y": 2.119,
+    "full_depth_z": 1.373
+  },
+  "source_derived_saw_mount_depth": {
+    "front_silver_steel_face_z": 0.29,
+    "recessed_wall_z": -0.32,
+    "approx_recess_depth": 0.61,
+    "orange_handle_front_z_approx": 0.833,
+    "minimum_usable_enclosure_depth_to_be_measured_in_fit_review": true
+  },
+  "seam_interfaces": [
+    {
+      "parent": "BLUE_ENCLOSURE",
+      "child": "SAW_ASSEMBLY",
+      "socket": "SAW_CASSETTE_MOUNT",
+      "fit_rule": "Carve a full genuine aperture behind the silver frame, rather than cover the blade with a flat blue panel. Allow real depth for rear chamber and bearing; maintain visible black recess and unobstructed toothed wheel."
+    },
+    {
+      "parent": "TIMBER_CARRIAGE",
+      "child": "BLUE_ENCLOSURE",
+      "socket": "MACHINE_SUPPORT_FOOT",
+      "fit_rule": "The heavy blue body rests on reinforced horizontal timber beams with metal corner brackets; no floating body or saw."
+    },
+    {
+      "parent": "TIMBER_CARRIAGE",
+      "child": "RAW_MEAT_CRATE",
+      "socket": "RAW_INTAKE_LEFT_FRONT",
+      "fit_rule": "Raw beef remains on viewer-left of blue machine in original front three-quarter image; independent carved crate and individual meat volumes."
+    },
+    {
+      "parent": "TIMBER_CARRIAGE",
+      "child": "FINISHED_STEEL_TRAY",
+      "socket": "FINISHED_OUTPUT_RIGHT",
+      "fit_rule": "Prepared portions remain on opposite side, attached by a real supported metal trough and timber beam; no unsupported gap."
+    },
+    {
+      "parent": "BLUE_ENCLOSURE",
+      "child": "RIGHT_PRESSURE_MECHANISM",
+      "socket": "PRESSURE_CRANK_RIGHT",
+      "fit_rule": "Side cylinder, rod, and crank must follow owner side view and remain physically separate from saw mechanism."
+    },
+    {
+      "parent": "BLUE_ENCLOSURE",
+      "child": "REAR_VENTED_SERVICE_PANEL",
+      "socket": "REAR_SERVICE_FACE",
+      "fit_rule": "Rear image must show five slots, bolts, blue rear casing and lower supports; not blank/default material."
+    },
+    {
+      "parent": "BLUE_ENCLOSURE",
+      "child": "SNOW_ROOF_AND_CHIMNEY",
+      "socket": "ROOF_TOP_SEAM",
+      "fit_rule": "Layered roof snow sits on physically modeled top wood rim, with folds and overhangs; chimney pierces roof and smoke begins at opening."
+    }
+  ],
+  "proposed_blender_hierarchy": {
+    "COOKER_ROOT": [
+      "REFERENCE_CAMERAS__three_original_images_packed_no_calibration_claim",
+      "WOOD_CARRIAGE__subassemblies",
+      "BLUE_ENCLOSURE__master_body",
+      "SAW_CASSETTE_MOUNT__empty_parent_no_applied_vertex_transform",
+      "RAW_INTAKE_CRATE",
+      "FINISHED_OUTPUT_TRAY",
+      "PRESSURE_MECHANISM",
+      "REAR_SERVICE_PANEL",
+      "SNOW_ROOF_CHIMNEY",
+      "SMOKE_VFX_SOCKET"
+    ]
+  },
+  "calibration_policy": "Reference views are not a metric photogrammetry set; determine overall camera/proportions iteratively from all three images. No numerical global saw placement is invented until actual surrounding blue enclosure and reference-registered cameras exist.",
+  "iterative_fit_test": [
+    "Start cooker master with timber chassis and blue enclosure outer shell, dimensioned across source front, side and rear, with empty source camera registration.",
+    "Link saw as independent collection via SAW_CASSETTE_MOUNT; adjust only mount parent translation and rotation, keep blade mesh dimensions/proportions intact.",
+    "Construct actual cut-out/opening and structural back wall; inspect saw face, moving clearance and blue housing intersections with wireframe plus solid.",
+    "Render source three-quarter, right and rear plus two off-reference orbit views. Judge relative scale, frame flushness, handle clearance, part continuity and shadows.",
+    "Build raw/finished trays, steel clamps, snow roof and chimney to same world root and shared materials/light rig; no per-part isolated fake scale.",
+    "Only after master artistic approval, create LODs with mobile performance and FPS/quality variants, integrate sockets into actual Godot cooker_processor station and run hardware gate."
+  ],
+  "acceptance": {
+    "saw_alone": "PROMISING_OWNER_FEEDBACK_NOT_FINAL_APPROVAL",
+    "whole_cooker_visual_critic_passed": false,
+    "native_integrated_cooker_render_passed": false,
+    "physically_connected_modules_passed": false,
+    "gameplay_integration_passed": false,
+    "phone_fps_verified": false,
+    "shipping_game_changed": false
+  }
+}
