@@ -88,6 +88,8 @@ def cuboid(name,loc,size,mat,col=wood,bev=.055,segments=3):
     ob=assign(bpy.context.object,col,mat,name)
     ob.dimensions=size
     bpy.ops.object.transform_apply(location=False,rotation=False,scale=True)
+    if hasattr(ob.data,"use_auto_smooth"):
+        ob.data.use_auto_smooth=True
     if bev:
         b=ob.modifiers.new("Actual rounded hand-finished corners","BEVEL")
         b.width=min(bev,min(size)*.19);b.segments=segments
@@ -105,6 +107,8 @@ def extruded_foot(name,points,front,back,mat,col=hardware):
     mesh.from_pydata(verts,[],faces);mesh.update()
     obj=bpy.data.objects.new(name,mesh);col.objects.link(obj)
     obj.data.materials.append(mat)
+    if hasattr(obj.data,"use_auto_smooth"):
+        obj.data.use_auto_smooth=True
     obj.modifiers.new("Forged triangulation normals","WEIGHTED_NORMAL")
     return obj
 def rivet(name,center,radius=.066,depth=.10,axis="front",mat=boltmat,n=24):
@@ -113,6 +117,8 @@ def rivet(name,center,radius=.066,depth=.10,axis="front",mat=boltmat,n=24):
        location=center,rotation=rot)
     obj=assign(bpy.context.object,hardware,mat,name)
     for f in obj.data.polygons:f.use_smooth=True
+    if hasattr(obj.data,"use_auto_smooth"):
+        obj.data.use_auto_smooth=True
     b=obj.modifiers.new("Rivet head soft chamfer","BEVEL");b.width=.013;b.segments=3
     obj.modifiers.new("Rivet weighted normals","WEIGHTED_NORMAL")
     return obj
