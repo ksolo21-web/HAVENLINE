@@ -1,0 +1,66 @@
+name: T05 Source-traced frontage — full-resolution original image (ART FAIL)
+on:
+  push:
+    branches:
+      - havenline/T05-r18-visual-corrections-20261025
+    paths:
+      - .github/workflows/havenline-t05-source-frontage-critic.yml
+      - tools/havenline/task05/build_source_contour_frontage.py
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: t05-traced-frontage-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  source-constrained-3d-trial:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - name: Checkout owner's exact original image and intact saw master
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - name: Set up Python
+        uses: actions/setup-python@ece7cb06caefa5fff74198d8649806c4678c61a1
+        with:
+          python-version: '3.11'
+      - name: Install free open-source polygon-mesh dependencies
+        run: |
+          python -m pip install --disable-pip-version-check \
+            'numpy>=1.26,<3' 'Pillow>=10,<13' 'trimesh>=4,<5' 'shapely>=2,<3'
+      - name: Build nonshipping sculpted reference frontage as actual GLB
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t05-source-frontage"
+          python tools/havenline/task05/build_source_contour_frontage.py \
+            --reference Docs/Art/SourceReferences/T05/32451.jpg \
+            --saw Docs/Production/T05/ArtisanMaster/SawWIP/T05_SAW_ARTISAN_MODULE.glb \
+            --out "$RUNNER_TEMP/t05-source-frontage" \
+            | tee "$RUNNER_TEMP/t05-source-frontage/build.log"
+      - name: Verify original pixel scale, unchanged saw and accurate art rejection
+        run: |
+          python - <<'PY'
+          import os,hashlib,json
+          from pathlib import Path
+          root=Path(os.environ['RUNNER_TEMP'])/'t05-source-frontage'
+          x=json.loads((root/'STATUS.json').read_text())
+          assert x['reference_sha256']=='70e9e04c329797490b19aaa383865a5a2e20129bd1e0250a6997b170fb0510e4'
+          assert x['display_to_source_coordinate_ratio']==1.2
+          assert x['original_saw_face_count']==7088
+          assert x['saw_mesh_source_not_rescaled']
+          assert x['material_samples_are_separated_blue_wood']
+          assert x['overall_triangles']>8000
+          assert not x['art_critic_pass'] and not x['valid_complete_cooker']
+          assert not x['shipping_asset_changed']
+          glb=root/'T05_SOURCE_CONTOUR_FRONTAGE_ONLY_UNAPPROVED.glb'
+          assert glb.read_bytes()[:4]==b'glTF'
+          assert hashlib.sha256(glb.read_bytes()).hexdigest()==x['SHA256_GLb']
+          print('PASS geometry/source/unchanged saw; ART FAIL')
+          PY
+      - name: Retain diagnostic GLB, original-pixel material crops and failed art record
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-T05-owner-traced-frontage-UNAPPROVED-${{ github.run_id }}
+          path: ${{ runner.temp }}/t05-source-frontage/
+          retention-days: 30
+          if-no-files-found: warn
