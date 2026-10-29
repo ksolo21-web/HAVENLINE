@@ -92,7 +92,6 @@ def cylinder(name,loc,radius,depth,mat,rotation=(math.pi/2,0,0),segments=56):
     parts.objects.link(obj);obj.name=name;obj.data.materials.append(mat)
     for polygon in obj.data.polygons:polygon.use_smooth=True
     mod=obj.modifiers.new('Softened real machined edge','BEVEL');mod.width=.013;mod.segments=3
-    obj.modifiers.new('Weighted normals','WEIGHTED_NORMAL')
     return obj
 # Real front ring, 3D sidewall and recessed inner wall; NEVER a 2D billboard.
 n=len(outer)
@@ -104,7 +103,9 @@ for i in range(n):
     front.append([i,j,n+j,n+i])
     walls.extend([[i,j,2*n+j,2*n+i],[n+i,n+j,3*n+j,3*n+i],
                   [2*n+i,2*n+j,3*n+j,3*n+i]])
-mesh('01_SOURCE_TRACED_FRONT_FORGED_ARCH',verts,front,photo,True)
+front_lip=mesh('01_SOURCE_TRACED_FRONT_FORGED_ARCH',verts,front,photo,True)
+front_lip.data.materials.append(bright)
+for i in (0,13,14):front_lip.data.polygons[i].material_index=1  # prevent duplicate baked orange at steel sill
 mesh('02_EXTRUDED_FRAME_SIDEWALLS',verts,walls,metal)
 thin_line('03_INNER_RUBBER_STEEL_GASKET',inner,-.31,.017,bright)
 thin_line('04_OUTER_FORGED_EDGE',outer,-.32,.011,metal)
@@ -118,6 +119,23 @@ for i in range(teeth):
         theta=2*math.pi*(i+phase)/teeth
         blade.append((sx+spec['saw']['outer_radius_px']*rad*math.cos(theta),
                       sy+spec['saw']['outer_radius_px']*rad*math.sin(theta)))
+# The wheel teeth must stop BEHIND the frame sill. Crop true 2D star
+# geometry before extrusion; never let a loose saw protrude below the oven.
+def clip_halfplane(poly,axis,limit,keep_less):
+    result=[]
+    for idx,finish in enumerate(poly):
+        start=poly[idx-1]
+        a=(start[axis]<=limit) if keep_less else (start[axis]>=limit)
+        b=(finish[axis]<=limit) if keep_less else (finish[axis]>=limit)
+        if a!=b:
+            t=(limit-start[axis])/(finish[axis]-start[axis])
+            result.append((start[0]+t*(finish[0]-start[0]),start[1]+t*(finish[1]-start[1])))
+        if b:result.append(finish)
+    return result
+blade=clip_halfplane(blade,1,750,True)
+blade=clip_halfplane(blade,0,1073,False)
+blade=clip_halfplane(blade,0,1207,True)
+assert len(blade)>=12,'Clipped steel teeth must remain present'
 extrude('07_SEPARATE_REAL_SAW_TOOTH_BLADE',blade,.10,.16,blade_mat)
 cylinder('08_INNER_SAW_WHEEL',pos((sx,sy),.085),.32,.09,metal)
 cylinder('09_OUTER_MACHINED_HUB',pos((sx,sy),-.04),.21,.14,bright)
@@ -143,8 +161,8 @@ for key,loc,fn in [('FRONT_TRACE',(0,-5,.45),'32451.jpg'),
                    ('ORBIT_CRITIQUE',(-4,-4,1),'32451.jpg')]:
     ca=bpy.data.cameras.new(key);ob=bpy.data.objects.new('VIEW_'+key,ca)
     reference.objects.link(ob);ob.location=loc
-    ob.rotation_euler=(Vector((0,0,.4))-Vector(loc)).to_track_quat('-Z','Y').to_euler()
-    ca.type='ORTHO';ca.ortho_scale=2.6 if key=='FRONT_TRACE' else 3.3
+    ob.rotation_euler=(Vector((0,0,.75))-Vector(loc)).to_track_quat('-Z','Y').to_euler()
+    ca.type='ORTHO';ca.ortho_scale=3.1 if key=='FRONT_TRACE' else 3.5
     ca.show_background_images=True
     bg=ca.background_images.new();bg.image=source_images[fn];bg.alpha=.35
     ob['SOURCE_CAMERA']='front hand trace; other reference camera poses NOT calibrated'
