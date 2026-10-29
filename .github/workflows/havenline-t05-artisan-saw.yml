@@ -71,7 +71,7 @@ jobs:
           assert not a['visual_critic_pass'] and not a['owner_approved']
           blend=(root/'T05_SAW_ARTISAN_MASTER.blend').read_bytes()
           model=(root/'T05_SAW_ARTISAN_MODULE.glb').read_bytes()
-          assert blend[:7]==b'BLENDER-' and len(blend)>200000
+          assert blend[:8]==b'BLENDER-' and len(blend)>200000
           assert model[:4]==b'glTF' and len(model)>20000
           captures={}
           for v in ['FRONT_TRACE','RIGHT_HYPOTHESIS','REAR_HYPOTHESIS','ORBIT_CRITIQUE']:
