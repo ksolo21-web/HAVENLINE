@@ -1,0 +1,151 @@
+name: T05 R38 SOURCE-PIXEL Blender+Godot 3D proof (UNAPPROVED)
+on:
+  push:
+    branches: [havenline/T05-r18-visual-corrections-20261025]
+    paths: [.github/workflows/havenline-t05-r38-owner-projection-blender.yml]
+  workflow_dispatch:
+permissions:
+  contents: write
+concurrency:
+  group: havenline-t05-r38-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  reference-authored-editable-study:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 80
+    steps:
+      - name: Checkout entire Havenline original artwork and modeling tools
+        uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - name: Install free Blender, Godot software-render dependencies and Python
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq --no-install-recommends \
+            blender python3-numpy python3-venv xvfb libgl1-mesa-dri
+          blender -b --python-expr 'import numpy; print("T05 embedded Blender NumPy", numpy.__version__)'
+          python3 -m venv "$RUNNER_TEMP/r38-python"
+          "$RUNNER_TEMP/r38-python/bin/pip" install --disable-pip-version-check \
+            'numpy>=1.26,<3' 'scipy>=1.12,<2' 'scikit-image>=0.23,<1' \
+            'trimesh>=4,<5' 'Pillow>=10,<13'
+      - name: Reconstruct watertight volume from all three exact original images and project real RGB
+        run: |
+          set -euo pipefail
+          export OUT="$RUNNER_TEMP/t05-r38"
+          mkdir -p "$OUT"
+          "$RUNNER_TEMP/r38-python/bin/python" tools/havenline/task05/build_r38_owner_projection.py \
+            --source-dir Docs/Art/SourceReferences/T05 --out "$OUT" \
+            | tee "$OUT/build.log"
+          test -s "$OUT/T05_R38_SOURCE_PROJECTED_UNAPPROVED.glb"
+          "$RUNNER_TEMP/r38-python/bin/python" - <<'PY'
+          import json,os
+          from pathlib import Path
+          r=json.loads((Path(os.environ['OUT'])/'STATUS.json').read_text())
+          assert len(r['owner_original_sha256'])==3
+          assert r['triangles']>100000 and r['watertight']
+          assert not r['art_critic_passed'] and not r['shipping_asset_modified']
+          print('TRUE RGB OWNER IMAGE PROJECTION PASS — ART CRITIC NOT PASSED')
+          PY
+      - name: Make REAL editable Blender file with all THREE ORIGINAL images packed in camera boards
+        run: |
+          set -euo pipefail
+          export OUT="$RUNNER_TEMP/t05-r38"
+          blender -b -t 2 --factory-startup \
+            --python tools/havenline/blender/r38_owner_three_view_workbench.py -- \
+            "$OUT/T05_R38_SOURCE_PROJECTED_UNAPPROVED.glb" \
+            "$PWD/Docs/Art/SourceReferences/T05" \
+            "$OUT/T05_R38_3_OWNER_VIEWS_EDITABLE.blend" \
+            > "$OUT/blender.log" 2>&1 || { tail -100 "$OUT/blender.log"; exit 1; }
+          grep -q 'T05_R38_EDITABLE_BLENDER_SOURCE_CAMERAS_PACKED_3' "$OUT/blender.log"
+          test -s "$OUT/T05_R38_3_OWNER_VIEWS_EDITABLE.blend"
+      - name: Install official hash-verified Godot 4.7.2
+        run: |
+          set -euo pipefail
+          mkdir -p "$RUNNER_TEMP/t05-engine"
+          curl -fLsS --retry 3 \
+            https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip \
+            -o "$RUNNER_TEMP/t05-engine/engine.zip"
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  '"$RUNNER_TEMP/t05-engine/engine.zip" | sha512sum -c -
+          unzip -q "$RUNNER_TEMP/t05-engine/engine.zip" -d "$RUNNER_TEMP/t05-engine"
+          chmod +x "$RUNNER_TEMP/t05-engine/Godot_v4.7.2-stable_linux.x86_64"
+      - name: Actual Godot renders three reference poses AND unsupported off-angle
+        run: |
+          set -euo pipefail
+          export OUT="$RUNNER_TEMP/t05-r38"
+          stage="$RUNNER_TEMP/t05-review"
+          mkdir -p "$stage/assets" "$stage/captures"
+          cp "$OUT/T05_R38_SOURCE_PROJECTED_UNAPPROVED.glb" "$stage/assets/"
+          cp Docs/Art/SourceReferences/T05/32451.jpg "$stage/assets/"
+          cp Docs/Art/SourceReferences/T05/32450.jpg "$stage/assets/"
+          # 32441.png has JPEG magic bytes; alias without changing the ORIGINAL.
+          cp Docs/Art/SourceReferences/T05/32441.png "$stage/assets/32441_exact_jpeg.jpg"
+          cp tools/havenline/task05/r38_owner_projection.gdshader "$stage/owner_projection.gdshader"
+          cp tools/havenline/task05/r38_owner_projection_capture.gd "$stage/capture.gd"
+          printf '%s\n' 'config_version=5' '[application]' 'config/name="T05 R38 Actual Owner RGB Projection CRITIC UNAPPROVED"' \
+            '[rendering]' 'renderer/rendering_method="gl_compatibility"' \
+            'renderer/rendering_method.gl_compatibility="gl_compatibility"' > "$stage/project.godot"
+          engine="$RUNNER_TEMP/t05-engine/Godot_v4.7.2-stable_linux.x86_64"
+          timeout 180 "$engine" --headless --editor --path "$stage" --import --quit > "$OUT/import.log" 2>&1
+          timeout 180 xvfb-run -a "$engine" --audio-driver Dummy --path "$stage" \
+            --script res://capture.gd > "$OUT/capture.log" 2>&1 || { tail -90 "$OUT/capture.log"; exit 1; }
+          test "$(grep -c 'T05_R38_REAL_GODOT_CAPTURE_OK' "$OUT/capture.log")" -eq 4
+          if grep -E 'SCRIPT ERROR|Parse Error|ERROR:' "$OUT/capture.log"; then exit 1; fi
+          mkdir -p "$OUT/NativeGodot"
+          cp "$stage/captures/"*.png "$OUT/NativeGodot/"
+      - name: Attach explicit visual failure verdict and verify image signatures
+        run: |
+          set -euo pipefail
+          export OUT="$RUNNER_TEMP/t05-r38"
+          "$RUNNER_TEMP/r38-python/bin/python" - <<'PY'
+          import os,json,struct,hashlib
+          from pathlib import Path
+          root=Path(os.environ['OUT'])
+          status=json.loads((root/'STATUS.json').read_text())
+          names=['front','side','rear','unobserved_left']
+          images={}
+          for n in names:
+              path=root/'NativeGodot'/('r38_'+n+'.png')
+              d=path.read_bytes()
+              assert d[:8]==b'\x89PNG\r\n\x1a\n'
+              assert struct.unpack('>II',d[16:24])==(960,960)
+              images[n]={'sha256':hashlib.sha256(d).hexdigest(),'bytes':len(d)}
+          status['native_engine']='Godot 4.7.2 Mesa software, NOT a phone'
+          status['reference_view_render_count']=3
+          status['off_reference_view_render_count']=1
+          status['native_pngs']=images
+          status['off_reference_critic']='FAIL; original images do not contain left-side texture or hidden volume'
+          status['model_interaction']='Real watertight volumetric mesh, not an animated 2D sprite; component structure incomplete'
+          (root/'STATUS.json').write_text(json.dumps(status,indent=2)+'\n')
+          print('4 REAL NATIVE GODOT PNG PASS; ORIGINAL-IMAGE FIDELITY STILL NOT APPROVED')
+          PY
+      - name: Commit source-faithful Blender workbench, model and critic evidence to game GitHub branch
+        run: |
+          set -euo pipefail
+          dest=Docs/Production/T05/NeuralTrials/R38
+          out="$RUNNER_TEMP/t05-r38"
+          mkdir -p "$dest/NativeGodot"
+          cp "$out/T05_R38_SOURCE_PROJECTED_UNAPPROVED.glb" "$dest/"
+          cp "$out/T05_R38_3_OWNER_VIEWS_EDITABLE.blend" "$dest/"
+          cp "$out/NativeGodot/"*.png "$dest/NativeGodot/"
+          cp "$out/STATUS.json" "$dest/"
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add "$dest"
+          # Require actual Git blobs, not 131-byte LFS pointers.
+          for f in "$dest"/*.glb "$dest"/*.blend "$dest"/NativeGodot/*.png; do
+            bytes="$(git show ":$f" | wc -c)"
+            test "$bytes" -gt 10000 || { echo "::error::Git LFS pointer instead of real artifact: $f"; exit 1; }
+          done
+          git diff --cached --check
+          git commit -m 'T05 R38: store editable Blender rig, actual original-image projected GLB and native 4-angle critic evidence (unapproved)'
+          git status --short
+          git -c rebase.autoStash=true pull --rebase origin "$GITHUB_REF_NAME"
+          git push origin HEAD:"$GITHUB_REF_NAME"
+      - name: Upload source reference model, Blender file, native evidence even if Git storage fails
+        if: always()
+        uses: actions/upload-artifact@b7c566a772e6b6bfb58ed0dc250532a479d7789f
+        with:
+          name: havenline-T05-R38-source-photo-projective-workbench-${{ github.run_id }}
+          path: |
+            ${{ runner.temp }}/t05-r38/
+          retention-days: 30
+          if-no-files-found: warn
