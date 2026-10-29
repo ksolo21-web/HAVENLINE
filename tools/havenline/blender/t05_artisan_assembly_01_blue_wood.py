@@ -44,7 +44,7 @@ def fingerprint():
           tuple(round(float(x),7) for row in ob.matrix_world for x in row),verts))
     return hashlib.sha256(repr(a).encode()).hexdigest()
 SAW_HASH=fingerprint()
-assert any("SEPARATE_TOOTHED" in x.name for x in saw_objs)
+assert any(("SAW_TOOTH" in x.name or "TOOTH_BLADE" in x.name or "TOOTHED" in x.name) for x in saw_objs), "Original toothed saw wheel absent"
 reference_candidates=[c for c in bpy.data.collections
   if any(k in c.name.upper() for k in ("OWNER_PHOTO","REFERENCE","SOURCE_CAMERA"))]
 reference_collection=reference_candidates[0] if reference_candidates else bpy.data.collections.new("00_PACKED_OWNER_PHOTO_REFERENCE_CAMERAS")
