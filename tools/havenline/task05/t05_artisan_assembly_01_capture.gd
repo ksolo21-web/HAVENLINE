@@ -49,11 +49,11 @@ func _capture():
     camera.current=true
     stage.add_child(camera)
     var views={
-      "source_three_quarter":Vector3(5.5,5.3,-8.5),
-      "saw_front":Vector3(.2,3.7,-9.5),
+      "source_three_quarter":Vector3(5.5,5.3,8.5),
+      "saw_front":Vector3(.2,3.7,9.5),
       "right_side":Vector3(9.5,4.1,0),
-      "rear":Vector3(0,4.1,9.5),
-      "underframe":Vector3(-4.5,2.6,-8.0)
+      "rear":Vector3(0,4.1,-9.5),
+      "underframe":Vector3(-4.5,2.6,8.0)
     }
     var images=[]
     for label in views:
