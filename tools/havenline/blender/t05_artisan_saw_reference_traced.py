@@ -31,9 +31,14 @@ def soften_closed_source_trace(points,steps=4):
             t=j/steps
             xy=[]
             for d in (0,1):
-                v=.5*((2*p1[d])+(-p0[d]+p2[d])*t+
-                  (2*p0[d]-5*p1[d]+4*p2[d]-p3[d])*t*t+
-                  (-p0[d]+3*p1[d]-3*p2[d]+p3[d])*t*t*t)
+                # Keep sharp joined bottom/side corners literal: cubic overshoot
+                # would self-intersect the actual traced window near its sill.
+                if i in (0,13,14):
+                    v=p1[d]*(1-t)+p2[d]*t
+                else:
+                    v=.5*((2*p1[d])+(-p0[d]+p2[d])*t+
+                      (2*p0[d]-5*p1[d]+4*p2[d]-p3[d])*t*t+
+                      (-p0[d]+3*p1[d]-3*p2[d]+p3[d])*t*t*t)
                 xy.append(v)
             result.append(tuple(xy))
     return result
