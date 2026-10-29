@@ -17,6 +17,7 @@ from trimesh.visual.texture import TextureVisuals
 from trimesh.visual.material import PBRMaterial
 from shapely.geometry import Polygon
 from shapely.ops import triangulate
+from source_carved_eave import build_carved_eave
 
 SHA="70e9e04c329797490b19aaa383865a5a2e20129bd1e0250a6997b170fb0510e4"
 FRONT_SCALE=1536/1280
@@ -83,7 +84,14 @@ def build(source,saw,out):
            roughnessFactor=.78 if name=="blue" else .9,doubleSided=True)
     added=0
     for name,(outline,front,back,kind) in PROFILES.items():
-        added+=layer(scene,name,outline,front,back,materials[kind])
+        if name=="TIMBER_EAVE_REAL_CONTOUR":
+            # Detailed continuous watertight eave, NOT a faceted slab.
+            carved=build_carved_eave(materials["wood_horizontal"],pixel_to_3d)
+            scene.add_geometry(carved,geom_name="SOURCE_SCULPTED_TIMBER_EAVE",
+                               node_name="SOURCE_SCULPTED_TIMBER_EAVE")
+            added+=len(carved.faces)
+        else:
+            added+=layer(scene,name,outline,front,back,materials[kind])
     for name,x,y,r,z in FASTENERS:
         pt=pixel_to_3d(x,y)
         mesh=trimesh.creation.icosphere(subdivisions=2,radius=r)
@@ -107,7 +115,7 @@ def build(source,saw,out):
       "first_person_3D":True,"valid_complete_cooker":False,
       "owner_approved":False,"art_critic_pass":False,
       "shipping_asset_changed":False,
-      "known_defects":["Frontage still too coarse and faceted",
+      "known_defects":["Blue shoulder and vertical framing still too coarse; eave sculpt is only a subpart",
        "Absent snow/food/roof/chimney/rear/pressure",
        "Reference camera not metrically calibrated",
        "Steel shoulder lacks source sculpted volume",
