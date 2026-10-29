@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "task_id": "T05",
+  "asset_id": "cooker_processor",
+  "critic_id": "T05_REFERENCE_RENDER_MATERIAL_C1_C2",
+  "status": "ACTIVE_CANDIDATE_REVIEW_GATE_NOT_SHIPPING_APPROVAL",
+  "reference": {
+    "filename": "18567.png",
+    "sha256": "729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
+    "pixels": [
+      1536,
+      1536
+    ],
+    "private_owner_asset": true,
+    "must_not_commit_original_reference": true,
+    "byte_encoding": "JPEG",
+    "source_filename_extension_mismatch": true,
+    "note": "The original user-owned file is labeled 18567.png but is actually JPEG-encoded. Preserve exact SHA-256-bound original bytes; do not silently transcode."
+  },
+  "rules": {
+    "evidence": "exact source png + exact 9-material candidate GLB + actual native Godot 4K PNGs at five distinct cameras + source-bound sha audit",
+    "independent_reviewer_required": true,
+    "builder_self_review_disallowed": true,
+    "source_camera_alignment_proof_required": true,
+    "full_resolution_visual_inspection_required": true,
+    "no_score_averaging": true,
+    "zero_unresolved_mandatory_defects": true,
+    "missing_material_or_region_blocks": true,
+    "visual_score_not_derived_from_technical_checks": true,
+    "physical_android_separate": true,
+    "owner_visual_acceptance_separate": true
+  },
+  "scores_required": {
+    "reference_fidelity": 10,
+    "visual_language": 10,
+    "silhouette_proportions": 9.5,
+    "mechanical_saw_and_enclosure": 9.5,
+    "woodwork_and_steel_fittings": 9.5,
+    "snow_sculpture_and_contact": 9.5,
+    "raw_food_marbling": 9.5,
+    "cooked_food_and_orange_straps": 9.5,
+    "material_albedo_and_palette": 9.5,
+    "material_roughness_and_metallic": 9.5,
+    "seams_clipping_and_contact": 9.5,
+    "cross_view_consistency": 9.5,
+    "chimney_smoke_and_effects": 9.5
+  },
+  "exact_10_required": [
+    "reference_fidelity",
+    "visual_language"
+  ],
+  "minimum_9_5_dimensions": [
+    "silhouette_proportions",
+    "mechanical_saw_and_enclosure",
+    "woodwork_and_steel_fittings",
+    "snow_sculpture_and_contact",
+    "raw_food_marbling",
+    "cooked_food_and_orange_straps",
+    "material_albedo_and_palette",
+    "material_roughness_and_metallic",
+    "seams_clipping_and_contact",
+    "cross_view_consistency",
+    "chimney_smoke_and_effects"
+  ],
+  "required_reference_regions": [
+    "roof_and_chimney",
+    "steel_saw_window",
+    "raw_meat_bin",
+    "wrapped_food_tray",
+    "wooden_and_steel_base",
+    "smoke_plume"
+  ],
+  "required_godot_views": [
+    "front",
+    "three-quarter",
+    "right",
+    "rear",
+    "reverse-quarter"
+  ],
+  "required_material_names": [
+    "HL_wood",
+    "HL_dark",
+    "HL_wood_light",
+    "HL_blue",
+    "HL_metal",
+    "HL_orange",
+    "HL_red",
+    "HL_cream",
+    "HL_snow"
+  ],
+  "required_godot_pixels": [
+    3840,
+    2160
+  ],
+  "reviewer_rule": "Separate C1 fidelity + C2 integrity visual reviewer must inspect original full-resolution owner source and true rendered Godot pixels, not only textual descriptions or offline Blender previews. The reviewer cannot be the candidate builder. Record raw reviewer output and independently-run provenance.",
+  "acceptance_note": "A score >=9.5 for all non-style visual dimensions and exact 10 for fidelity/style is a critic milestone, NOT a substitute for actual-game/physical-Android performance, C6 or explicit owner approval. A single low axis rejects the candidate.",
+  "privacy": "Build package locally from private user reference, keep private artifact outside public GitHub. GitHub workflows may test the critic validator with synthetic fixtures; do not upload 18567.png or private critic source boards to the repo."
+}

@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "stage": "R21 sculpted wood and live 4K capture instrumentation",
+  "date": "2026-10-26",
+  "candidate_branch": "havenline/T05-r18-visual-corrections-20261025",
+  "candidate_head": "a4a4d37604f5409784add8c5ec3350b4dbb60ac7",
+  "state": "SOURCE_AUDIT_PASSED__NATIVE_R21_PENDING__VISUAL_REVIEW_FAILED",
+  "source_scope": "only wood_stack GLB changed from R20; real-scene camera test script changed",
+  "asset_count": 22,
+  "exact_total_triangles": 174090,
+  "total_triangle_ceiling": 180000,
+  "wood_stack_triangles": 5124,
+  "resource_triangles": 38136,
+  "materials_max": 12,
+  "identity_and_behavior": "Preserved 22 ids, sockets, footprints, placements, runtime and unrelated approved art",
+  "local_audit": {
+    "deterministic_source_pass": true,
+    "catalog_GLBS_sha256_all_pass": true,
+    "changed_asset_count": 1,
+    "twenty_one_other_glbs_unchanged": true
+  },
+  "external_Godot": {
+    "prior_R20_run": 40324191876,
+    "prior_R20_run_conclusion": "success",
+    "R21_run": 40328479701,
+    "R21_result": "PENDING",
+    "expected_native_frames": "five source-bound live cameras for each of six placement-verified assets plus boundary/isolated evidence"
+  },
+  "reference_pins": {
+    "wood_stack": "18677(1).png exact supplied art: larger split logs left; separately bound kindling right; rope and snow drapes",
+    "cooker_processor": "18567.png exact supplied art: integrated blue framed oven, meat input/output, saw window, chimney",
+    "broader": "Docs/Production/T05/NEWEST_USER_RENDER_AUTHORITY_20260927.json"
+  },
+  "visual_assessment": "FAIL: current stylized source still looks procedural; fine bark relief, sculpted snow, rope and end faces are not a verified 10/10 reference match",
+  "blocking_checks": [
+    "Inspect R21 actual Godot 4K visible asset frames and engine logs",
+    "Object-specific reference comparisons for all 22 assets",
+    "Fix all remaining reference mismatch findings",
+    "Independent critic pass strictly >9.0 on all required axes with reference style exact",
+    "Authorized T05 integration candidate guard",
+    "Android device/C6 and physical 4K60",
+    "Explicit user visual approval"
+  ],
+  "must_not_do": [
+    "No merge",
+    "No T05 completion claim",
+    "No implied independent critic",
+    "No substituting staged VTK previews for live Godot"
+  ]
+}

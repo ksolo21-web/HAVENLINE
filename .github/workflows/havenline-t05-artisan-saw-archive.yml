@@ -1,0 +1,46 @@
+name: T05 Save real artisan saw Blender/GLB and critic images in game Git
+on:
+  push:
+    branches: [havenline/T05-r18-visual-corrections-20261025]
+    paths: [.github/workflows/havenline-t05-artisan-saw-archive.yml]
+permissions:
+  contents: write
+  actions: read
+jobs:
+  archive-verified-edited-parts:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    env:
+      GH_TOKEN: ${{ github.token }}
+      ARTISAN_SAW_STAGED_DIR: t05-owner-saw
+      VERIFIED_SOURCE_RUN: '40850048319'
+      VERIFIED_ARTIFACT: T05-artisan-owner-traced-saw-WIP-40850048319
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - name: Download only the successful owner-traced Blender source build
+        run: |
+          set -euo pipefail
+          mkdir -p "$ARTISAN_SAW_STAGED_DIR"
+          gh run download "$VERIFIED_SOURCE_RUN" --repo "$GITHUB_REPOSITORY" \
+            --name "$VERIFIED_ARTIFACT" --dir "$ARTISAN_SAW_STAGED_DIR"
+      - name: Verify source originals, Blender/GLB and four real image captures
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import hashlib,json,os
+          from pathlib import Path
+          root=Path(os.environ['ARTISAN_SAW_STAGED_DIR'])
+          source=Path('Docs/Art/SourceReferences/T05')
+          expected={'32451.jpg':'70e9e04c329797490b19aaa383865a5a2e20129bd1e0250a6997b170fb0510e4',
+            '32450.jpg':'5b1831d03575e705f1baf5af5d4ac4b4ecd62e364b4287c7f841965625d4d719',
+            '32441.png':'0ff99199e1eb4bedeffe4d9953f5253a97e49366a2118d5976132c9137d93510'}
+          for name,digest in expected.items():
+            assert hashlib.sha256((source/name).read_bytes()).hexdigest()==digest
+          checks=json.loads((root/'checks.json').read_text())
+          assert checks['status']=='ACTUAL_BLENDER_SAW_ART_GEOMETRY_AND_4_FRAMES_TECHNICAL_PASS'
+          assert len(checks['renders'])==4 and not checks['whole_cooker_complete']
+          print('Original owner art and 4 actual Blender captures verified — no visual approval')
+          PY
+      - name: Commit actual art bytes atomically without modifying shipping game or Git LFS
+        run: |
+          python tools/havenline/task05/publish_artisan_saw_git_blobs.py

@@ -1,0 +1,98 @@
+name: T05 R36 native four-angle Godot critic proof in Git (NO ART APPROVAL)
+on:
+  push:
+    branches: [havenline/T05-r18-visual-corrections-20261025]
+    paths: [.github/workflows/havenline-t05-r36-godot-native-critic.yml]
+permissions:
+  contents: write
+concurrency:
+  group: t05-r36-native-review-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  render-exact-unapproved-neural-mesh:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@fbc6f3992d24b796d5a048ff273f7fcc4a7b6c09
+      - name: Install official checksum-pinned Godot 4.7.2 and Linux software renderer
+        run: |
+          set -euo pipefail
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq xvfb libgl1-mesa-dri
+          mkdir -p "$RUNNER_TEMP/t05-engine"
+          cd "$RUNNER_TEMP/t05-engine"
+          curl -fL --retry 3 https://github.com/godotengine/godot-builds/releases/download/4.7.2-stable/Godot_v4.7.2-stable_linux.x86_64.zip -o godot.zip
+          echo '9aa00f7a605200940bce3027a567b782f49bd8e940dd06ae9e987bd65aee1b1467edd56ed84fcdcbdd44354bf613bdbb4e5d2913e925850368e150c59ed54c65  godot.zip' | sha512sum -c -
+          unzip -q godot.zip
+          chmod +x Godot_v4.7.2-stable_linux.x86_64
+          echo "$RUNNER_TEMP/t05-engine" >> "$GITHUB_PATH"
+      - name: Create isolated real Godot editor project from exact Git-tracked R36 GLB
+        run: |
+          set -euo pipefail
+          trial=Docs/Production/T05/NeuralTrials/R36
+          test -s "$trial/meshes/three_view_refined_GODOT_YUP.glb"
+          mkdir -p "$RUNNER_TEMP/t05-godot/assets" "$RUNNER_TEMP/t05-godot/captures"
+          cp "$trial/meshes/three_view_refined_GODOT_YUP.glb" "$RUNNER_TEMP/t05-godot/assets/neural_owner_cooker_unapproved.glb"
+          cp tools/havenline/task05/review_r34_neural_candidate.gd "$RUNNER_TEMP/t05-godot/capture.gd"
+          printf '%s\n' 'config_version=5' '[application]' 'config/name="T05 R36 Neural Art Critic Not Approved"' \
+            '[rendering]' 'renderer/rendering_method="gl_compatibility"' 'renderer/rendering_method.gl_compatibility="gl_compatibility"' \
+            > "$RUNNER_TEMP/t05-godot/project.godot"
+      - name: Import and capture actual Godot software OpenGL frames
+        run: |
+          set -euo pipefail
+          project="$RUNNER_TEMP/t05-godot"
+          timeout 150 Godot_v4.7.2-stable_linux.x86_64 --headless --audio-driver Dummy --editor --path "$project" --import --quit \
+            > "$project/import.log" 2>&1
+          timeout 150 xvfb-run -a Godot_v4.7.2-stable_linux.x86_64 --display-driver x11 --rendering-driver opengl3 --audio-driver Dummy --path "$project" --script res://capture.gd \
+            > "$project/capture.log" 2>&1
+          test "$(grep -c 'T05_R34_NATIVE_CAPTURE_OK' "$project/capture.log")" -eq 4
+          if grep -E 'SCRIPT ERROR|Parse Error|ObjectDB instances were leaked' "$project/capture.log"; then exit 1; fi
+      - name: Verify exactly four genuine PNG captures and preserve failing-art evidence in source tree
+        run: |
+          set -euo pipefail
+          python - <<'PY'
+          import os,shutil,json,struct,hashlib
+          from pathlib import Path
+          trial=Path("Docs/Production/T05/NeuralTrials/R36/NativeGodot")
+          trial.mkdir(exist_ok=True,parents=True)
+          src=Path(os.environ['RUNNER_TEMP'])/'t05-godot/captures'
+          views=['source_inferred','front','side','rear']
+          proof={}
+          for v in views:
+              name='godot_neural_'+v+'.png';p=src/name
+              raw=p.read_bytes()
+              assert len(raw)>12000, f'Blank or invalid native renderer frame: {name} {len(raw)} bytes'
+              assert raw[:8]==b'\x89PNG\r\n\x1a\n'
+              w,h=struct.unpack('>II',raw[16:24]);assert (w,h)==(960,960)
+              shutil.copy2(p,trial/name)
+              proof[v]={'sha256':hashlib.sha256(raw).hexdigest(),'pixels':[w,h]}
+          (trial/'STATUS.json').write_text(json.dumps({
+            'task':'T05','trial':'R36','source_model':'../meshes/three_view_refined_GODOT_YUP.glb',
+            'actual_engine':'Godot 4.7.2','renderer':'gl_compatibility',
+            'device':'GitHub Actions Mesa software rendering, NOT a physical phone',
+            'actual_native_godot_views_verified':len(proof),
+            'views':proof,'independent_visual_critic_pass':False,
+            'owner_approved':False,'shipping_game_asset_installed':False,
+            'known_art_defects':['fused saw and side hardware','lumpy snow roof','food merged into blobs','wood frame lacks source-authored joinery','camera poses uncalibrated'],
+          },indent=2)+'\n')
+          print('Four R36 exact native Godot images saved; ART CRITIC STILL FAILS')
+          PY
+      - name: Use native Git PNG blobs for reviewer-visible screenshots, not LFS pointer stubs
+        run: |
+          printf '%s\n' '*.png -filter -diff -merge' > Docs/Production/T05/NeuralTrials/R36/NativeGodot/.gitattributes
+      - name: Commit genuine engine frames as permanent GitHub review evidence
+        run: |
+          set -euo pipefail
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Docs/Production/T05/NeuralTrials/R36/NativeGodot
+          # Fail closed if PNGs are still Git LFS pointers instead of full Git blobs.
+          for f in Docs/Production/T05/NeuralTrials/R36/NativeGodot/*.png; do
+            attr="$(git check-attr filter -- "$f" | awk '{print $3}')"
+            case "$attr" in unset|unspecified) ;; *) echo "::error::Unexpected Git LFS filter $attr for $f"; exit 1;; esac
+            size="$(git show ":$f" | wc -c)"
+            test "$size" -gt 10000 || { echo "::error::Stored PNG is a pointer instead of full pixels: $f ($size)"; exit 1; }
+          done
+          git diff --cached --check
+          git commit -m 'T05 R36: preserve actual native Godot four-angle render critic evidence (visual FAIL)'
+          git push origin HEAD:"$GITHUB_REF_NAME"

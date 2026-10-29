@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "date": "2026-10-28",
+  "task": "T05",
+  "candidate": "R30",
+  "release_status": "PRIVATE_EDITABLE_GEOMETRY_TRIAL_ONLY__VISUAL_REFERENCE_REJECTED__NO_SHIPPING_CHANGE",
+  "baseline": {
+    "owner_reference": "18567.png",
+    "source_sha256": "729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
+    "owner_original_private": true,
+    "reference_pixels_not_committed": true,
+    "derived_pixels_not_committed": true,
+    "R29_private_GLb_sha256": "ebe4c4bb308eab2509ad9f602dcb41b761db59d311f7581e92b2cb52d476d8bb"
+  },
+  "candidate_geometry": {
+    "private_glb_sha256": "dcc1248d5fd093528bc9cdb0fecb3c7304fd49f8083ece085c2288ca72f2b70a",
+    "triangles": 12342,
+    "triangle_budget": 12424,
+    "mesh_groups": 9,
+    "material_groups": 9,
+    "texture_images": 7,
+    "pbr_color_only_groups": [
+      "HL_dark",
+      "HL_orange"
+    ],
+    "normal_attributes_explicit": true,
+    "uv0_present_for_all": true,
+    "footprint_x": [
+      -1.2303781509399414,
+      1.209999918937683
+    ],
+    "footprint_z": [
+      -0.8679999709129333,
+      0.6999998092651367
+    ]
+  },
+  "changed_real_geometry": [
+    "Deep physical arched saw window and continuous steel sill",
+    "20-tooth 3D saw and axle",
+    "Physical timber posts and reinforced wood/steel underframe",
+    "Sculpted roof vertices toward four uneven snow pillows",
+    "Correctly sided right finished-food tray with five handformed 3D portions",
+    "Steel-to-timber supporting platform contacting the tray"
+  ],
+  "failed_trials_corrected": [
+    "Removed R30v1 snow overlay after faceted overbright native evidence",
+    "Shrank excessive timber block posts that obscured oven",
+    "Fixed right receiving tray X orientation and its unsupported gap",
+    "Added missing glTF NORMAL attributes discovered by stricter native material preflight"
+  ],
+  "native_evidence": {
+    "engine": "Godot 4.7.2 stable",
+    "renderer": "gl_compatibility",
+    "device": "Mesa llvmpipe",
+    "five_views_verified": true,
+    "all_dimensions": [
+      3840,
+      2160
+    ],
+    "views": [
+      "front",
+      "three-quarter",
+      "right",
+      "rear",
+      "reverse-quarter"
+    ],
+    "source_camera_registered": false,
+    "downsampled_changed_pixel_fraction_vs_R29_RGBmax_delta_gt12": [
+      0.21113,
+      0.21635,
+      0.15752,
+      0.22011,
+      0.21608
+    ],
+    "pixel_delta_not_reference_fidelity_score": true,
+    "confirmed_normal_uv0_gltf_attributes": true
+  },
+  "private_owner_artifact": {
+    "filename": "T05-R30-PRIVATE-geometry-and-native-validation-checkpoint.zip",
+    "sha256": "465b162193735571c68a361d7aa1d91041ef181c38e1b839d897c45dbb1b9757",
+    "contents": "R30 GLB, R29 original private GLB, exact original user source, R30 geometry authoring Python, validators, 5 real native Godot 4K frames, R29 baseline frames, source comparison and changelog",
+    "public_repository_contains_artifact": false,
+    "archive_entries": 29,
+    "reproducibility": "Exact ZIP extraction PASS, isolated technical validator PASS, archived geometry Python regenerated bit-identical GLB to validated 5-view R30 output",
+    "R28_editable_blend_is_baseline_only": true
+  },
+  "internal_visual_review": {
+    "independent_critic": false,
+    "pass": false,
+    "comment": "All physical geometry and PBR render proofs passed, but still far from original reference. Snow overhang/cap too smooth and singular, central oven silhouette mechanically simplistic, timber base pallet-like, saw/steel ratio wrong, food shapes small and overly rounded, missing volume plume animation; original source camera still unregistered."
+  },
+  "unpassed_mandatory_gates": [
+    "Exact reference camera match",
+    "Owner source and source video fidelity exact 10/10",
+    "Independent native C1/C2 and all applicable 9.5+ axes",
+    "Actual shipping Godot scene",
+    "Godot animation and source video motion comparison",
+    "Physical Android device/performance",
+    "Explicit owner approval and integration-owner signoff"
+  ],
+  "next_best_action": "Stop small mesh additions and do source-driven artisan sculpt/major geometry replacement for cooker's oven, wood construction, food and roof. Preserve frozen gameplay sockets and materials, then calibrate source camera, evaluate native 5-angle and full smoke cycles. No promotion before full gate."
+}

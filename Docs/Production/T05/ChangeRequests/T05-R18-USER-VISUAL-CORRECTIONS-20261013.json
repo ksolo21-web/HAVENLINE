@@ -1,0 +1,125 @@
+{
+  "schema_version": 1,
+  "id": "T05-R18-USER-VISUAL-CORRECTIONS-20261013",
+  "task": "T05",
+  "base_source": "b8408d7d72e0df7227aa2048df3b86a51c1f0752",
+  "branch": "havenline/T05-r18-visual-corrections-20261013",
+  "requested_by": "root task integration owner",
+  "owner_decision": "APPROVED_FOR_BOUNDED_IMPLEMENTATION_ONLY",
+  "user_authority": {
+    "message": "The gate looks great east-west but is terrible/thin north-south. All appliances and storage are primitive. There should be no houses.",
+    "prior_approval_persists": true,
+    "new_user_confirmation_required": false
+  },
+  "independent_C0": {
+    "path": "deliverables/Havenline-T05-user-visual-correction-C0-20261013.json",
+    "sha256": "fd3536355e0a6e82a8b07d786b7b1eb1ba87f5e93b784e17357bc01fff6ee49c"
+  },
+  "causal_changes": [
+    {
+      "path": "HavenlineGodot/scripts/camp_boundary_view.gd",
+      "ownership": "T03 bounded root owner supersession",
+      "only_change": "_segment_transform length scaling becomes local-X column scaling; preserve original meshes, materials,gate IDs/hinges/openangle/terrainseat/routing/collision."
+    },
+    {
+      "path": "HavenlineGodot/scripts/main.gd",
+      "ownership": "integration-only root owner",
+      "only_change": "Remove four-line unconditional creation loop for two world/shelter visuals. Retain source cabin asset,logical leftTent/rightTent positions,lanes,saves,interaction,economy and all camera/light code."
+    },
+    {
+      "paths": [
+        "tools/havenline/task05/reference_resource_props_v2.py",
+        "tools/havenline/task05/reference_utility_stations_v2.py",
+        "tools/havenline/task05/reference_station_families_v3.py"
+      ],
+      "ownership": "disjoint T05 builders",
+      "only_change": "Rebuild eight resource/storage props, four utility appliances and two counters using direct actual supplied renders with readable purposeful contours; replace/reallocate geometry within per-family existing triangle sums."
+    },
+    {
+      "path": "tools/havenline/task05/styled_station_glb.py",
+      "ownership": "root T05 packer",
+      "only_change": "Optional explicit per-vertex RGB pigment under existing named material surfaces to reproduce red meat/cut surfaces without a13th shared material or any rendering/camera change. Unspecified old builder bytes remain identical."
+    },
+    {
+      "path": "Docs/Production/T05/NEWEST_USER_RENDER_AUTHORITY_20260927.json",
+      "ownership": "root T05 reference authority",
+      "only_change": "Add exact supplied appliance/storage reference hashes and latest houseless/orientation user correction, preserving all prior primary reference bindings."
+    }
+  ],
+  "derived_files_allowed": [
+    "HavenlineGodot/assets/stations_v2/catalog.json",
+    "HavenlineGodot/assets/stations_v2/{changed_nonhearth_resources_and_appliances}.glb",
+    "HavenlineGodot/assets/t03_boundary_v2/panel_join_authoring.json"
+  ],
+  "authoring_proof_rule": "If transform SHA/join geometry needs reauthoring, regenerate and validate exact derivation; no arbitrary source-SHA substitution or deletion of prior proof. Originalgeometry authority and runtimegate/collision contracts stay exact.",
+  "protected": [
+    "hearth_vessel GLB geometry/material fixture",
+    "hearth builders/rebinder",
+    "Boundary world/route/collision/gameplay functions",
+    "simulation/economy/saves",
+    "T04camera/light settings",
+    "other task assets/logic"
+  ],
+  "budget": {
+    "catalog_triangles_max": 180000,
+    "conservative_combined_boundary_and_station_max": 180000,
+    "resource_props_sum_max": 39520,
+    "utility_sum_max": 36932,
+    "counter_sum_max": 25688,
+    "visible_material_palette_max": 12,
+    "draw_delta_max": 48,
+    "texture_mib_max": 96,
+    "storage_delta_mib_max": 15
+  },
+  "carry_risk": "Keep currentb840 resourceAABBs during builder implementation; actual fullcount carried/grounded geometry mustbe reviewed. Existing T08 scaledheight drift remains mandatory diagnosis; any T08 codechange requires an additional exact bounded owner disposition, not silent modification.",
+  "proof_invalidation": [
+    "Userfinding reopens applicableC1/C2 and humanvisual acceptance; old10scores remainhistory",
+    "Changedsource invalidates required affectedregression/render/critic/Native/C6evidence; prior C6FAIL preserved",
+    "No acceptance from sourceorpolycountsalone"
+  ],
+  "required_before_close": [
+    "sixportalorientation/contact/aperture proof",
+    "noncollapsedNS/diagonalgate sourceandactualrender checks",
+    "matchedunmodifiedcamera houselessgameplay beforeafter",
+    "front/rear/side/threequarter/details/use-state appliances/storage andshoreline",
+    "fullcountcarried/groundedresource spacing and contact",
+    "deterministicgeneration/integrity/footprints/sockets/caps",
+    "affected regressionunion",
+    "fresh separatecritic allapplicablechecks strictly>9 andstylefidelity10",
+    "allformalNative/C6gates beforeT05approval"
+  ],
+  "task_approved": false,
+  "T05": "ACTIVE_VISUAL_FIX_REQUIRED_AND_C6_BLOCKED",
+  "T06": "LOCKED_BY_USER",
+  "independent_supplemental_C0": {
+    "path": "deliverables/Havenline-T05-R18-bounds-join-preflight-C0-20261013.json",
+    "sha256": "f07561318e2415db7eabbed15deead73b1e70906fd5bf5bb6eadc1c9c205eccb"
+  },
+  "additional_bounded_paths": [
+    {
+      "path": "tools/havenline/task03_reference_lod.py",
+      "scope": "After actualnativeCPU16row proof, translate only complete3joining assemblies inward enough to fit retainedfenceworldbounds with0.001m margin; preserve456triangles/6two-sidedrailcontacts/.32reserve/allbaseassetSHA/topology assertions."
+    },
+    {
+      "path": "HavenlineGodot/assets/t03_boundary_v2/panel_joins.obj",
+      "scope": "Derived exact join-only correction; no change to fence_panel/gate_leaf/gate_post source assets."
+    },
+    {
+      "path": "HavenlineGodot/assets/t03_boundary_v2/manifest.json",
+      "scope": "Rebind actual authoredjoin bytes/derivationproof; preserve priorhistory and originalbaseasset/triangle/collision/route assertions."
+    },
+    {
+      "path": "HavenlineGodot/scripts/carry_stack.gd",
+      "scope": "ONLYtwo held-height constants, wood/metal, after actualFINAL nativegeometry census proves conservativeceil; groundedlayout/counts/budget/camera/actions/saves untouched by this grant."
+    },
+    {
+      "paths": [
+        "HavenlineGodot/tests/test_task05_station_kit.gd",
+        "tools/havenline/task05/verify_r18_user_visual_scope.py",
+        "HavenlineGodot/tests/test_r18_visual_contracts.gd"
+      ],
+      "scope": "Exact materializedtotaltriangle assertions and additive meaningful actualnativebounds/orientation/houseless/source-protection canaries; original checks remain, no threshold/deadline/coverage decrease."
+    }
+  ],
+  "scope_validator_rule": "New additive trustedowner/sourcebound adapter must validate historicalb840 through unchanged oldscopevalidator, then exact b840-to-R18 delta/asset/contract guards and negative mutations. Newrequest alone is not a passing scopeproof."
+}

@@ -4,6 +4,16 @@ The active Android migration is **Godot 4.7.2**, in [`HavenlineGodot/`](Havenlin
 
 **This branch is an incomplete development migration, not the finished game.** The user's original premium stylized 3D design, non-primitive visual requirement, four-character crew and 4K/60 minimum remain the acceptance criteria. A successful APK export does not satisfy those criteria.
 
+## GitHub is the canonical game-build workspace
+
+**The entire active Godot game is built from this GitHub repository.** GitHub Actions checks out the exact commit, imports and tests the game, captures native engine screenshots and produces a review-only Android ARM64 APK. The Unity project is retained as historical source, not a second shipping build.
+
+- [Full game build workflow](.github/workflows/havenline-godot-android.yml) · [Builds and downloadable artifacts](https://github.com/ksolo21-web/HAVENLINE/actions/workflows/havenline-godot-android.yml)
+- [GitHub game source-of-truth and release policy](Docs/Production/GITHUB_GAME_BUILD_SOURCE_OF_TRUTH.md)
+- [T05 authoritative cooker artwork manifest](Docs/Art/SourceReferences/T05/reference-manifest.json)
+
+Owner-provided HAVENLINE artwork is explicitly permitted in the public repository as game development source. This does **not** mean that any unapproved asset or exported debug APK is automatically production-approved. Official release remains gated by source-reference art review, actual gameplay proof and physical Android performance tests.
+
 ## Implemented and verified
 
 - Actual Godot runtime and ARM64 APK export with no Unity or IL2CPP libraries.

@@ -1,0 +1,96 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "asset": "cooker_processor",
+  "date": "2026-10-27",
+  "status": "INDEPENDENT_RENDERED_MATERIAL_CRITIC_GATE_IMPLEMENTED_AND_SYNTHETIC_TESTED__REAL_R26_REVIEW_PENDING__NOT_APPROVED",
+  "existing_governance": {
+    "C1": "reference_fidelity_critic_existed_prior",
+    "C2": "technical_visual_integrity_critic_existed_prior",
+    "C6": "separate_technical_performance_gate_existed_prior",
+    "historical_critic_requirement": "strictly_above_9_for_general_axes_and_exact_10_style",
+    "new_local_t05_requirement": "at_least_9_5_for_every_other_axis_and_exact_10_for_reference_fidelity_visual_language"
+  },
+  "new_code": {
+    "policy": "Docs/Production/T05/COOKER_REFERENCE_RENDER_MATERIAL_CRITIC_POLICY.json",
+    "generator_validator": "tools/havenline/blender/t05_reference_material_critic.py",
+    "tests": "tools/havenline/blender/tests/test_t05_reference_material_critic.py",
+    "workflow": ".github/workflows/havenline-t05-reference-material-critic.yml",
+    "latest_ci_pass_run": 40537067781,
+    "tests_run": 19,
+    "tests_passed": 19,
+    "synthetic_test_scores_are_not_real_cooker_scores": true
+  },
+  "frozen_source": {
+    "user_filename": "18567.png",
+    "actual_file_encoding": "JPEG",
+    "sha256": "729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
+    "dimensions": [
+      1536,
+      1536
+    ],
+    "preserve_exact_original_bytes": true,
+    "private_not_committed_to_repo": true
+  },
+  "real_candidate": {
+    "version": "R26",
+    "blender_geometry_run": 40523998873,
+    "engine_4k_run": 40524651335,
+    "candidate_glb_sha256": "c2832480371df482e2f0b6192feab733b3112209b2c4e47b7a09886a22f3f35c",
+    "actual_native_godot_views": 5,
+    "all_4k_dimensions": [
+      3840,
+      2160
+    ],
+    "material_count": 9,
+    "source_camera_aligned": false,
+    "critic_fidelity_score": null,
+    "critic_material_score": null,
+    "independent_model_review_produced": false,
+    "independent_C1_passed": false,
+    "independent_C2_passed": false
+  },
+  "mandatory_visual_scoring": {
+    "dimensions": 13,
+    "exact_10_axes": [
+      "reference_fidelity",
+      "visual_language"
+    ],
+    "other_11_axes_minimum": 9.5,
+    "averaging_prohibited": true,
+    "independent_critic_required": true,
+    "full_godot_material_inspection_required": true,
+    "unresolved_defects_allowed": 0
+  },
+  "private_critic_package": {
+    "filename": "Havenline_T05_R26_Private_Independent_Critic_Package.zip",
+    "sha256": "b5803050919936c1a40db092455f6f97b58fcd1716b66edcbdcd8ca78f2e1aac",
+    "bytes": 14667992,
+    "entries": 33,
+    "contents": [
+      "owner JPEG-encoded original with unchanged bytes",
+      "exact R26 GLB",
+      "nine material source identities and embedded texture inventory",
+      "full resolution five genuine 4K Godot screens",
+      "unaligned visual comparison board",
+      "source and engine SHA manifests",
+      "unreviewed explicit 13-axis independent critic record template"
+    ],
+    "destination": "private current conversation only",
+    "public_repo_uploaded": false,
+    "unreviewed": true
+  },
+  "current_mandatory_blockers": [
+    "No actual separate independent vision-model or human C1/C2 review of the private source and native Godot renders",
+    "Reference one-view perspective/camera lighting not formally calibrated",
+    "Existing visible cooker snow, steel mechanical window, food, wood/base and missing smoke are inconsistent with original owner image",
+    "Shipping scene full-game and physical Android certification absent",
+    "Explicit owner approval absent"
+  ],
+  "release_rule": "Critic is a hard rejection gate, not an automatic release. Actual independent C1+C2 review score must be >=9.5 on all 11 supporting dimensions, exact 10.0 on reference fidelity and visual language, and zero defects; separately satisfy C6, shipping scene and explicit user approval. Never fabricate missing critic scores.",
+  "unmodified": {
+    "production_HavenlineGodot_assets": true,
+    "unmerged_pr101": true,
+    "unmerged_pr103": true
+  }
+}

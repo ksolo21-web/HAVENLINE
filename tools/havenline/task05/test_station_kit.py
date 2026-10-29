@@ -176,6 +176,14 @@ def main():
         assert path.exists() and row['asset']=='res://assets/stations_v2/'+path.name
         assert row['sha256']==digest(path)
         doc,blob=glb_document(path)
+        # Enforce final generated-mesh footprints locally, before expensive native CI.
+        # Match the existing Godot T05 allowance of 30mm, without weakening it.
+        positions=np.concatenate([accessor(doc,blob,prim['attributes']['POSITION'])
+                                  for prim in doc['meshes'][0]['primitives']],axis=0)
+        size_x=float(positions[:,0].max()-positions[:,0].min())
+        size_z=float(positions[:,2].max()-positions[:,2].min())
+        assert size_x<=float(row['footprint'][0])+.0301,(row['id'],'source footprint X',size_x)
+        assert size_z<=float(row['footprint'][1])+.0301,(row['id'],'source footprint Z',size_z)
         assert {m['name'].removeprefix('HL_') for m in doc['materials']}==set(row['materials'])
         assert all(m['name'].startswith('HL_') for m in doc['materials'])
         assert all(m.get('doubleSided') is False for m in doc['materials'])

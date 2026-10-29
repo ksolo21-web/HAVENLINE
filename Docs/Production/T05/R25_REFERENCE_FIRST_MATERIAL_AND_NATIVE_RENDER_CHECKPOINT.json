@@ -1,0 +1,98 @@
+{
+  "schema_version": 1,
+  "task": "T05",
+  "asset_id": "cooker_processor",
+  "date": "2026-10-27",
+  "status": "R24_R25_FROZEN_TECHNICAL_PASS_FIVE_4K_GODOT_VIEWS_EACH__REFERENCE_FIDELITY_INCOMPLETE__NO_RELEASE",
+  "reference": {
+    "file": "18567.png",
+    "sha256": "729393f7980d8bd70906a7e4de04c3c6b21de5dfe4deb3d98ca7005b54d61635",
+    "pixel_dimensions": [
+      1536,
+      1536
+    ],
+    "exact_source_verified": true,
+    "private_user_art_never_committed": true
+  },
+  "R24": {
+    "source": "tools/havenline/blender/t05_cooker_reference_first_r24.py",
+    "workflow": ".github/workflows/havenline-t05-r24-reference-first.yml",
+    "successful_run": 40520485865,
+    "artifact_id": 12741706867,
+    "candidate_glb_sha256": "1bcdb50978a710a8930565b3b82cd2fcd9019e834e9108fec90824e8de9e23d2",
+    "technical_checks_passed": 17,
+    "triangles": 12090,
+    "material_count": 9,
+    "texture_proof": "Exact RGB pixels for new red and snow raster maps independently matched GLB embedded sources. Roof has UV0.",
+    "Godot_4k_run": 40521335102,
+    "Godot_4k_artifact": 12742457204,
+    "actual_distinct_4k_view_count": 5,
+    "visual_reference_approved": false
+  },
+  "R25": {
+    "source": "tools/havenline/blender/t05_cooker_reference_first_r25.py",
+    "workflow": ".github/workflows/havenline-t05-r25-reference-first.yml",
+    "successful_run": 40521685074,
+    "artifact_id": 12742032585,
+    "candidate_glb_sha256": "d05ab7b2adc35af64a5716364b9d9ea9939ac690dd2d5aa35fe0e0366c8c6b1f",
+    "technical_checks_passed": 17,
+    "triangles": 12290,
+    "max_triangles_if_rest_of_kit_frozen": 12424,
+    "remaining_triangles": 134,
+    "material_count": 9,
+    "changes": [
+      "retained source-locked R22/R23/R24 sculpt updates",
+      "warmer source-inspired wood material factors and warped grain-rich textures",
+      "darker brushed metal and blue enamel texture",
+      "added two snow deposits on cold food tray corner",
+      "added two metal bolts to front workbench feet"
+    ],
+    "independent_map_validation": "GLB exact embedded red/snow pixel equality; nine original materials; wood/metal/blue numeric image-contrast checks",
+    "Godot_4k_run": 40522439115,
+    "Godot_4k_artifact": 12741398263,
+    "actual_distinct_4k_view_count": 5,
+    "matching_camera_R24_vs_R25": true,
+    "changed_pixels_fraction_full_640x360_sample": {
+      "front": 0.0753,
+      "three_quarter": 0.0698,
+      "right": 0.0381,
+      "rear": 0.0636,
+      "reverse_quarter": 0.0818
+    },
+    "visual_reference_approved": false
+  },
+  "artist_private_handoff": {
+    "name": "Havenline_T05_Cooker_Reference_First_Artist_Handoff_v3.zip",
+    "sha256": "17a1fb8848a9dc0ae58e9948202d9c6eb080dc09eb5ddeea4561e2787020615d",
+    "files_verified": 55,
+    "contains_private_source": true,
+    "stored_outside_public_repo": true
+  },
+  "visual_discrepancies_still_blocking": [
+    "Snow remains a broad smooth cap rather than the deeply layered irregular drapes in 18567.png; left-front dark gap/white material geometry seam visible in actual Godot.",
+    "Oven saw/chamber silver window needs deeper sculpted geometry, metal highlights, bolts and realistic/referenced mechanical silhouette.",
+    "Raw/cooked food needs faithful sculptural marbling and much richer organic texture; orange bands and steel container construction remain weak.",
+    "Integrated lower body and wood joinery still look like an open table versus the source's dense weight-bearing bolted crate.",
+    "No source-calibrated camera or aligned lighting evidence, so no 10/10 pixel-match claim is supportable.",
+    "No runtime chimney smoke VFX corresponding to the prominent source plume.",
+    "Only 134 triangles remain in old frozen per-prop allowance; replace lower-value geometry or seek separately authorized art budget; do not silently exceed it."
+  ],
+  "release_gates": {
+    "frozen_technical_17_of_17": true,
+    "source_style_exact_match": false,
+    "independent_critic_approved": false,
+    "owner_visual_approved": false,
+    "shipping_scene_integration_tested": false,
+    "physical_Android_60fps_tested": false,
+    "permanent_global_adoption": false
+  },
+  "next_work": [
+    "Prioritize high-value roof and oven silhouette replacement rather than additive micro-geometry; preserve editor source and remove geometry of lesser silhouette importance.",
+    "Use matched source camera / framing with owner 18567.png to assess real render differences.",
+    "Add properly animated runtime Godot chimney smoke outside the static GLB.",
+    "Engage experienced Blender sculptor using private verified v3 reference handoff for real sculpted materials and trim.",
+    "Repeat source comparison and independent critique; only then revisit PBR baking, shipping scene, physical Android and permanent adoption."
+  ],
+  "source_scope": "Only additive tool scripts, workflows and documentation on T05 candidate branch; no shipping HavenlineGodot files intentionally edited",
+  "merge_policy": "Both T05 PR #101 and pipeline PR #103 remain draft and unmerged; cannot promote candidate art without explicit review."
+}
