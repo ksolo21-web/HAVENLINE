@@ -76,4 +76,4 @@ for attempt in range(5):
     except urllib.error.HTTPError as exc:
         if exc.code not in (409,422) or attempt==4:raise
         time.sleep(1.5)
-raise RuntimeError('Couldn't update review-only Git branch')
+raise RuntimeError("Could not update review-only Git branch")
