@@ -1,0 +1,47 @@
+name: Meshy API verification (no credits)
+on:
+  push:
+    branches:
+      - alfred/meshy-auth-check-20261119
+    paths:
+      - .github/workflows/meshy-auth-check.yml
+permissions: {}
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Verify Meshy authentication without returning account data
+        env:
+          MESHY_API_KEY: ${{ secrets.MESHY_API_KEY }}
+        run: |
+          python3 - <<'PY'
+          import json
+          import os
+          import sys
+          from urllib.error import HTTPError
+          from urllib.request import HTTPRedirectHandler, Request, build_opener
+
+          class NoRedirect(HTTPRedirectHandler):
+              def redirect_request(self, req, fp, code, msg, headers, newurl):
+                  return None
+
+          key = os.environ.get("MESHY_API_KEY", "").strip()
+          if not key:
+              sys.exit("MESHY_API_KEY is unavailable to this job.")
+          request = Request(
+              "https://api.meshy.ai/openapi/v1/balance",
+              headers={"Authorization": "Bearer " + key},
+              method="GET",
+          )
+          try:
+              with build_opener(NoRedirect()).open(request, timeout=15) as response:
+                  body = json.loads(response.read(65536))
+                  if response.status != 200 or not isinstance(body, dict) or type(body.get("balance")) is not int:
+                      sys.exit("Unexpected Meshy balance response.")
+          except HTTPError as error:
+              sys.exit(f"Meshy returned HTTP {error.code}.")
+          except Exception:
+              sys.exit("Could not verify Meshy (network or response error).")
+          print("Meshy API authentication verified. No generation requested.")
+          PY
