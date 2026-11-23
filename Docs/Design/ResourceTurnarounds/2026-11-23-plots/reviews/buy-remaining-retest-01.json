@@ -1,0 +1,80 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "batch": "buy-remaining-retest",
+  "iteration": 2,
+  "assets": [
+    {
+      "asset": "buy_fishing_upgrade",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-3def2740-3014-48c2-bfa4-1f8fdb651649.png",
+      "score": 9.3,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "evidence": [
+        "Full-sheet inspection confirms corrected 135-degree price strip: badge at top/right and 160 toward lower-left.",
+        "All eight rod/reel and upgrade-arrow orientations remain attached to ground; low plane projection coherent.",
+        "Four separate white corners, brown field, source price example qualifier and frame labels retained."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Small glyph detail is foreshortened at 135 degrees but main rod, reel and upgrade-arrow identity remains clear. Minor illustration variation is within static concept scope. A calibrated native camera or shared executable mesh is not certified.",
+      "sha256": "44d1d5ea539b0feb55f050f2a13d532894f06e2d846cae9dee8a8fa45711d5e2",
+      "bytes": 1697168,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    },
+    {
+      "asset": "buy_expansion",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-342959bf-467e-4f03-9c7a-a90826ce8c18.png",
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "evidence": [
+        "Full-sheet inspection confirms both corrected far-side prices: 135 upper-left strip now reads outward from badge at top; 225 upper-right strip reads toward top-left.",
+        "All eight prices and four-way arrow glyphs rotate with flat plot; four separated corner brackets retained.",
+        "Source reference example qualifier and coherent low plane projection retained."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Minor illustration variation is within static concept scope. A calibrated native camera or shared executable mesh is not certified.",
+      "sha256": "7d6448e12aaa64974e6f7cb81087223afb4106355b61667156ad93a74f184ec3",
+      "bytes": 1729070,
+      "dimensions": [
+        1672,
+        941
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    }
+  ],
+  "gate": "PASS requires score strictly above 9.0 with all mandatory concept-image checks passed. Unseen or failed evidence remains blocked.",
+  "supplemental_closeup_inspected": "/workspace/scratch/fc906e16b0fb/havenline-plot-renders/reviews/inspection-crops/price-135-repair-comparison.png",
+  "supplemental_closeup_result": "Actual worker/hand original-versus-repair crops confirm 135-degree price reading direction and corrected foreshortening; their prior passes remain valid."
+}

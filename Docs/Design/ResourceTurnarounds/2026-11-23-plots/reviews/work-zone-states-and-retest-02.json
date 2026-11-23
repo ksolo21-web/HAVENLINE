@@ -1,0 +1,76 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "batch": "work-zone-state-and-retest",
+  "iteration": 3,
+  "assets": [
+    {
+      "asset": "activation_work_zone",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-23bd762c-2076-4859-b47c-fc07bde883a0.png",
+      "score": 8.8,
+      "verdict": "HOLD",
+      "evidence": [
+        "Twelve-segment topology restored to 90/270: four corners, six vertical long-edge dashes, two short-edge dashes.",
+        "Other six remain coherent, flat, unfilled and correctly paired diagonals.",
+        "End projections remain visibly too tall and narrow relative to the unchanged front footprint."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "90,270",
+          "issue": "End-view width:height is about 0.6, inconsistent with the roughly 0.87 projected ratio implied by the front view and fixed concept elevation.",
+          "fix": "Widen and shorten just 90/270 toward a slightly taller-than-wide silhouette, about 160 by 184 at this sheet scale. Keep all 12 pieces and other six panels unchanged."
+        }
+      ],
+      "minor_disposition": "Ratios are visual consistency guidance, not a native camera calibration requirement.",
+      "sha256": "283ce1b6e6d9008b17a5593cfe10c699c44c3ac4c5b566878eedee4101bd055f",
+      "bytes": 1612187,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ]
+    },
+    {
+      "asset": "work_zone_states",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-bf4264aa-65f3-47fd-97b7-f25a14782d7d.png",
+      "score": 9.6,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "format": "2_panel_state_plate",
+      "view_count": 0,
+      "panel_count": 2,
+      "evidence": [
+        "Both actual panels have the same diagonal footprint and 12 segmented-outline pieces.",
+        "Idle is white and active green; both interiors show unfilled navy floor.",
+        "No cost, raised frame, permanent completion checkmark or invented timing.",
+        "Clear state labels and footer accurately state same footprint and unfilled interior."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Static state comparison only; no motion, trigger timing or runtime implementation certification.",
+      "sha256": "dc2ca51569fe6b5df2c399ad701a21d96584f5009aafd7ee292fd33410b78c1c",
+      "bytes": 1730157,
+      "dimensions": [
+        1752,
+        897
+      ],
+      "source_status": "reference_derived_state_concept",
+      "actual_full_sheet_inspected": true
+    }
+  ],
+  "gate": "PASS requires score strictly above 9.0 with all mandatory concept-image checks passed. Unseen or failed evidence remains blocked."
+}

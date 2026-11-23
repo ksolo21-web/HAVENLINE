@@ -1,0 +1,129 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-extra-buy-v1",
+  "contract_path": "/workspace/scratch/fc906e16b0fb/havenline-plot-renders/acceptance-addendum-extra-buy-plots.json",
+  "contract_sha256": "3ac69fd043beb85f8ebb783fb7f50f6635bc3ca32dbd1caf5d3ed9595aac18ae",
+  "core_review_path": "/workspace/scratch/fc906e16b0fb/havenline-plot-renders/reviews/final-independent-visual-review.json",
+  "core_review_sha256": "f19f0774cd45e136b7d7429ccec0566fe6b798bd5c5a7ce12f7e0d3e8616598b",
+  "batch": "supplement-initial-three",
+  "iteration": 1,
+  "source_review": "/workspace/scratch/fc906e16b0fb/havenline-plot-renders/reviews/supplement-source-contract-review.json",
+  "source_addendum": {
+    "path": "/workspace/scratch/fc906e16b0fb/havenline-plot-renders/sources/additional-buy-plot-source-notes.json",
+    "sha256": "9927ef5b30dbed02b6b72bcbf6961ca446c407f5ed038ed6a93f2ef245cbfe94"
+  },
+  "assets": [
+    {
+      "asset": "buy_defense_bow",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-5d582ef7-4a28-47dd-af14-1ee17b3d6f5d.png",
+      "sha256": "3d47ef4f3817a05c6268c284ea9ae24669d463addfb028a21ef5500226223e0a",
+      "bytes": 1671194,
+      "dimensions": [
+        1672,
+        941
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Actual bow source crop inspected; white bow/single-arrow silhouette and $175 source example retained.",
+        "Arrow points left at 0, up at 90, right at 180, down at 270; all four diagonals and bow/string orientation coherent.",
+        "Eight price positions and reading directions correct, including far 135/225.",
+        "Flat brown plane, four separate white corners and reference-price qualifier retained."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Reference visual concept only; no exact action binding, canonical price, native mesh or runtime integration certified."
+    },
+    {
+      "asset": "buy_person_plus",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-73a86057-3a2e-4f93-b72f-262426f72c70.png",
+      "sha256": "904602dcd7dd76c2b41afd6f1e67616581bbb2dd4fc707be9f2a7acbcc4aba36",
+      "bytes": 1651616,
+      "dimensions": [
+        1672,
+        941
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Actual person-plus source crop inspected; one head/bust/plus and $50 source example retained.",
+        "Head and plus rotate coherently through eight cardinal/diagonal directions; no extra features or invented staffing title.",
+        "All eight prices share ground projection and correct far-edge directions.",
+        "Four white corners, flat brown field, complete framing and source-price qualifier retained."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Reference visual concept only; no exact action binding, canonical price, native mesh or runtime integration certified."
+    },
+    {
+      "asset": "buy_counter_action",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-ccbc261a-d1c1-4942-ae9b-1c96bf6008b5.png",
+      "sha256": "616fe15f96a88158a93f04c40d1fe9576114069a4c1bd58c85f05cff6835740c",
+      "bytes": 1745818,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "score": 8.8,
+      "verdict": "HOLD",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Actual counter600 crop inspected; dome/knob and frame/internal-stroke silhouette matches descriptive source.",
+        "All eight dome/frame and cash600 orientations, prices, corners and plane projection are coherent.",
+        "Only rear180 internal motif remains upright like front0 while surrounding icon correctly rotates."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6/addendum fixed ground glyph rotation",
+          "panel": "180",
+          "issue": "Scalloped curves remain above parallel strokes as in front0, instead of rotating with the rear-facing frame.",
+          "fix": "Rotate only the interior motif 180 degrees in place: parallel lines above, scalloped curves below toward dome. Preserve frame/dome, price and other seven panels."
+        }
+      ],
+      "minor_disposition": "Reference visual concept only; no exact action binding, canonical price, native mesh or runtime integration certified."
+    }
+  ],
+  "gate": "PASS strictly above 9.0 with all mandatory visual checks; counter180 remains blocked."
+}

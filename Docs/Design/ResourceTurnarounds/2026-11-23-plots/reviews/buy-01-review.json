@@ -1,0 +1,98 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "batch": "buy-01",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "buy_axe_upgrade",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-53172149-9c58-46ef-ad47-ae23747b0b35.png",
+      "sha256": "666f67e8fe26cc5ae201d6b418dce07fcfa52fdd28e8f7fad3835c0a54e00fca",
+      "bytes": 1626251,
+      "dimensions": [
+        1774,
+        887
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "score": 8.2,
+      "verdict": "FAIL",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Flat brown ground decal with4separated white rounded corner brackets, one white axe and one plus matches observed source vocabulary.",
+        "Reference price example qualifier is visibly present; source$100 is not presented as Havenline economy.",
+        "All cardinal views correctly rotate the price and glyph;45/135/315 follow the orbit, and225 axe/plus themselves have correct rotation."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "REAR LEFT225",
+          "issue": "Price line is attached to near lower-right edge, not fixed physical front edge at far upper-right.",
+          "fix": "Move AND rotate the entire$100 line onto far upper-right edge. Dollar sign is toward lower-right/right corner;100 runs toward upper-left/top corner. Keep all other panels and225axe/plus unchanged."
+        }
+      ],
+      "minor_disposition": "Minor exact perspective variation is within concept scope; no exact measured camera or native mesh claim."
+    },
+    {
+      "asset": "buy_expansion",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-a66a4258-35d5-4439-9007-5bd0496c7231.png",
+      "sha256": "7c9ffbe89587953f41548fa9fc8f948b5e736affe91d0d5e974d73533741f1b5",
+      "bytes": 1515081,
+      "dimensions": [
+        1672,
+        941
+      ],
+      "format": "8_view_turnaround",
+      "source_status": "reference_derived_visual_concept",
+      "score": 7.6,
+      "verdict": "FAIL",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "panel_count": 8,
+      "view_order_degrees": [
+        0,
+        45,
+        90,
+        135,
+        180,
+        225,
+        270,
+        315
+      ],
+      "evidence": [
+        "Flat brown field, exactly4separate white corner brackets and central4outward-arrow pictogram match source.",
+        "Reference price example qualifier clearly limits source$300.",
+        "0/45/90/180/270/315 price positions are consistent; no raised foundation or storage rim."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R6",
+          "panel": "REAR RIGHT135",
+          "issue": "Price appears on far upper-right edge instead of far upper-left physical front edge.",
+          "fix": "Attach$300 to upper-left edge, with dollar toward top corner and300 toward lower-left/left corner. Do not change4-arrow glyph or other panels."
+        },
+        {
+          "requirement": "R6",
+          "panel": "REAR LEFT225",
+          "issue": "Price repeats315 near lower-right placement.",
+          "fix": "Attach$300 to far upper-right edge, dollar toward right/lower-right end,300 toward upper-left/top corner. Rotate the text baseline with that edge."
+        }
+      ],
+      "minor_disposition": "Minor exact perspective variation is within concept scope; no exact measured camera or native mesh claim."
+    }
+  ],
+  "gate": "Strictly above9.0 and every mandatory check; failed fixed-graphic placement cannot be averaged away."
+}

@@ -1,0 +1,47 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-plots-v1",
+  "contract_sha256": "c4ef53e38335f159aa23f1bbb5317b06fe0e402a9fca869229a5910600138498",
+  "batch": "storage-state-initial",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "storage_use_states",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-d467e9f7-2cc2-4256-a6a0-3b1117082d77.png",
+      "score": 8.6,
+      "verdict": "HOLD",
+      "format": "3_by_3_state_plate",
+      "view_count": 0,
+      "panel_count": 9,
+      "evidence": [
+        "Three rows and three columns correctly distinguish empty, partial and stocked with no capacity claim.",
+        "Wood illustrates one to three logs, meat two to six portions, cash one to three separately visible banded stacks.",
+        "Footprints and seven non-defective panels are coherent."
+      ],
+      "blocking_defects": [
+        {
+          "requirement": "R2,R9",
+          "panel": "Empty meat",
+          "issue": "Raised cream rim and cast shadow make empty icon read as a physical steak.",
+          "fix": "Flatten only this icon into painted color without depth or cast shadow."
+        },
+        {
+          "requirement": "R2,R9",
+          "panel": "Empty wood",
+          "issue": "Sideways cut-end direction differs from accepted empty-master front pose.",
+          "fix": "Rotate only flat glyph to cut end near/bottom while retaining center."
+        }
+      ],
+      "minor_disposition": "All other state, framing and illustrative-stock checks pass.",
+      "sha256": "649ec1cce91c11ed6dd42b60e13377147b6df648c96a7710f0a710c484b527df",
+      "bytes": 1501967,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "source_status": "reference_derived_state_concept",
+      "actual_full_sheet_inspected": true
+    }
+  ],
+  "gate": "PASS requires score strictly above 9.0 with all mandatory concept-image checks passed. Unseen or failed evidence remains blocked."
+}
