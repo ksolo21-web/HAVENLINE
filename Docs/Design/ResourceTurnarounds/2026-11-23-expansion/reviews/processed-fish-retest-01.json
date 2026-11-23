@@ -1,0 +1,56 @@
+{
+  "batch": "processed-fish-retest",
+  "iteration": 2,
+  "assets": [
+    {
+      "asset": "cooked_fish",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-83ca7f09-83fc-4ef4-b36a-22623a75d06f.png",
+      "sha256": "f05750afdd656c4aa2f9fae322bfea019ce55b1a6474d57a86cef14444a3cdb5",
+      "bytes": 1699586,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 9.5,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "source_classification": "reference_derived_whole_cooked_fish_from_A016",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "Photographic pores and glaze stippling removed; smooth broad golden sculpted planes now match source style.",
+        "All eight directions retain correct whole-fish head/tail mapping;45/135 tail-near,225/315 head-near,90 tail-on and270 head-on.",
+        "Three broad sear bands, cream belly, dorsal fin, tail and lateral fins remain stable.",
+        "Rounded golden whole fish with broad dark bands matches the visible output type in sourceA016."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Broad material facets may vary slightly between illustrated views; no blocking silhouette, part-count or direction change remains."
+    },
+    {
+      "asset": "prepared_fish_fillet",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-37ad8ca0-2287-4896-9676-2636d11996d1.png",
+      "sha256": "4013e8900958c4d31611fa663b3b4799bf71f164e150932d245eadf33b003ea2",
+      "bytes": 1681343,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 9.3,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "source_classification": "proposed_fillet_form_not_implemented_recipe",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "Repaired45 now places pointed tip near lower image right and large end farther upper left; repaired135 places tip near lower left and large end farther upper right.",
+        "Top diagonals no longer duplicate bottom large-end-near views225/315; cardinal views retained and exact-end90/270 are readable.",
+        "Single peach fillet wedge, four broad cream bands, blue skin base and front-only small cream triangle retained.",
+        "Prepared raw fillet is visually distinct from intact raw, cooked and dried fish concepts."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Rounded far-end bevel remains illustrated rather than metrically exact; major end-near ordering and occlusion are now clear. No native mesh/camera exactness claimed."
+    }
+  ],
+  "set_status": "2_PASS_AFTER_REPAIR",
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-expansion-v1",
+  "gate": "Each score strictly above9.0 and every mandatory concept-image check passed; failed directions cannot be averaged away."
+}

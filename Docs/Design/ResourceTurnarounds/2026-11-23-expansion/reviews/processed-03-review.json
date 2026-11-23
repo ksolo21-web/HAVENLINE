@@ -1,0 +1,90 @@
+{
+  "batch": "processed-03",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "dried_fish",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-1b8953e8-d6af-4a7a-86fb-91791e6a8861.png",
+      "sha256": "9991f21d19cbaee9f76527bda21bd5add8c19ec468fdb77d9beffdd23a685b38",
+      "bytes": 1748028,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 9.3,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "source_classification": "proposed_dried_state_from_visible_fish_drying_rack",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "Single flattened brown leathery whole fish with broad longitudinal grooves, pale belly edge and reduced fins is distinct from raw blue fish and rounded golden cooked fish.",
+        "Tail-near views at45/135 and head-near views at225/315 follow the orbit;90 is thin tail-end and270 is head-on.",
+        "Front-only triangular dark patch remains on0/45/315 and is absent from opposite flank; stable head, tail and major fins.",
+        "All labels, framing and navy-sheet style pass."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "45 is somewhat shallow but visibly tail-near, with reduced distant head and enlarged tail compared with broadside0; eight directions remain readable."
+    },
+    {
+      "asset": "split_firewood",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-1764d691-6c34-45c2-b0f3-8a29440936fe.png",
+      "sha256": "1901b1c7f01e1a0ba67620126a198c81f5b31f5e4f01c69e912191fc6802309f",
+      "bytes": 1542421,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 7.6,
+      "verdict": "FAIL",
+      "source_classification": "proposed_split_log_output_state_from_chopping_reference",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "Single half-log, broad split face versus curved bark back, two opposite end views and stylized materials are otherwise readable."
+      ],
+      "blocking_defects": [
+        {
+          "panel": "REAR LEFT225",
+          "issue": "Repeats the135 handedness: near cut end is on image left.",
+          "required_fix": "Rotate225 so the short cut end is near image right, broad curved bark extends to upper image left, and long axis descends left-to-right. Keep fixed knot at far image-left portion."
+        },
+        {
+          "panel": "REAR RIGHT135",
+          "issue": "Knot sits at the far image-right end, contradicting180 where it is near image-left/right-physical-end.",
+          "required_fix": "Move the same single knot toward the near image-left cut end in135 without changing pose, materials or other six correct views."
+        }
+      ],
+      "minor_disposition": "Blocked pending two targeted pose/landmark edits; no approval inferred."
+    },
+    {
+      "asset": "hide",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-7af29546-2f05-4a1e-ad12-ce5d331ce842.png",
+      "sha256": "12b4e34e7ea1059d6dcd2efa6152506e0507f4d62a969c8c6dbbae6b539f8d8d",
+      "bytes": 1535409,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 8.0,
+      "verdict": "FAIL",
+      "source_classification": "atlas_named_hide_with_proposed_folded_pickup_and_unfrozen_yields",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "Tan hairless folded hide has open two-layer front, closed rounded back, opposite U-shaped end views, front V-notch and consistent broad matte material."
+      ],
+      "blocking_defects": [
+        {
+          "panel": "REAR LEFT225",
+          "issue": "Repeats135 with U-shaped short-end opening on image left.",
+          "required_fix": "Show broad continuous closed rear fold on image left and U-shaped short end on image right, long axis descending left-to-right; do not place front V-notch on rear face. Preserve other seven views."
+        }
+      ],
+      "minor_disposition": "Blocked by one repeated quadrant; no approval inferred."
+    }
+  ],
+  "set_status": "1_PASS_2_REPAIR_REQUIRED",
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-expansion-v1",
+  "gate": "Each score strictly above9.0 and every mandatory concept-image check passed; failed directions cannot be averaged away."
+}

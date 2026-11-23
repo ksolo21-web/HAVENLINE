@@ -1,0 +1,54 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-expansion-v1",
+  "batch": "processed-final-repairs",
+  "iteration": 2,
+  "assets": [
+    {
+      "asset": "split_firewood",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-7a4922da-6207-4a47-be20-be422fe9ee73.png",
+      "sha256": "64a866fffab5200234265ae1217070432d0a9cb491c8a468042c14a00949f06f",
+      "bytes": 1709900,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "source_classification": "proposed_split_log_output_state_from_chopping_reference",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "Repaired225 now shows the cut end near image right and broad bark extending toward upper image left, giving the correct opposite diagonal to135.",
+        "The same single bark knot is now near the cut end at135, near image left at180, and farther image left at225; fixed physical endpoint is coherent.",
+        "Full-sheet regression inspection retains one half-log, opposite split face/bark surfaces, clear D-like end profiles, consistent broad grain and chunky bark, readable eight labels."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Minor sculpted surface variation is within illustrated concept scope; all major direction, silhouette and material landmarks pass."
+    },
+    {
+      "asset": "hide",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-016b1f80-09fe-4186-8678-1433d95a55e7.png",
+      "sha256": "c368be726122e041832c5ded3f197a83e54a42b68b79958cf11f7d178616d1bb",
+      "bytes": 1694994,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "source_classification": "atlas_named_hide_with_proposed_folded_pickup_and_unfrozen_yields",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "Repaired225 now has the broad rounded closed rear fold on image left and the U-shaped short-end opening on image right, correctly descending left-to-right.",
+        "The open front double layer and single V-notch remain at0/45/315; rear180 and rear quadrants retain closed outer fold rather than duplicated front edge.",
+        "Full-sheet regression inspection retains one folded hairless tan sheet, two broad layers, opposed U-shaped end views, supple stylized surface and readable eight labels."
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Minor sculpted surface variation is within illustrated concept scope; all major direction, silhouette and material landmarks pass."
+    }
+  ],
+  "gate": "Score strictly above9.0 and every mandatory concept-image check passed.",
+  "set_status": "2_PASS_AFTER_REPAIR"
+}

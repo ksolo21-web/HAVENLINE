@@ -1,0 +1,410 @@
+{
+  "title": "Havenline expansion metadata and package audit",
+  "auditor_agent": "/root/resource_inventory",
+  "package_assembler_agent": "/root/preserve_render_package",
+  "audit_scope": "Independent of package assembly: ID inventory, source classifications, honest claims, PNG/archive identity, review ledger preservation, prior-package preservation. No visual self-approval: animal builder does not rescore its own images. All visual verdicts remain those of /root/turnaround_critic.",
+  "verdict": "PASS_METADATA_AND_PACKAGE",
+  "metadata_package_score": 10.0,
+  "mandatory_checks_passed": 13,
+  "mandatory_checks_total": 13,
+  "blocking_defects": [],
+  "audited_package_path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion",
+  "audited_package_file_count_before_this_report": 75,
+  "audited_zip_filename": "Havenline-Animal-and-Processed-Resource-360-Renders.zip",
+  "audited_zip_sha256": "6541d30fc31232c2c01a352604276e9cdff8ede78a9ea1853cb8b873b6e28f30",
+  "authoritative_visual_review_sha256": "a94904027f010dacee7417374353ba50715a028eee07cdbbe5fa55bf5845e9be",
+  "new_sheet_count": 20,
+  "prior_sheet_count": 13,
+  "checks": [
+    {
+      "check": "exact_20_new_ids_no_duplicates",
+      "result": "PASS",
+      "evidence": {
+        "expected_ids": [
+          "deer_meat",
+          "boar_meat",
+          "rabbit_meat",
+          "moose_meat",
+          "squirrel_meat",
+          "wild_bear_meat",
+          "wild_wolf_meat",
+          "wild_fox_meat",
+          "lynx_meat",
+          "wolverine_meat",
+          "processed_meat_portion",
+          "cooked_game_meat",
+          "dried_meat",
+          "prepared_fish_fillet",
+          "cooked_fish",
+          "dried_fish",
+          "timber_planks",
+          "split_firewood",
+          "hide",
+          "fur"
+        ],
+        "manifest_count": 20,
+        "review_count": 20,
+        "coverage_count": 20
+      }
+    },
+    {
+      "check": "ten_animal_proposal_classifications_preserved",
+      "result": "PASS",
+      "evidence": {
+        "animal_count": 10,
+        "optional_predator_ids": [
+          "wild_bear_meat",
+          "wild_wolf_meat",
+          "wild_fox_meat",
+          "lynx_meat",
+          "wolverine_meat"
+        ]
+      }
+    },
+    {
+      "check": "no_companion_drop_or_species_eligibility_claim",
+      "result": "PASS",
+      "evidence": {
+        "wildlife_count": 10,
+        "all_food_eligibility": "unspecified",
+        "all_implemented_drops": "not established",
+        "companion_boundary_recorded": true
+      }
+    },
+    {
+      "check": "ten_processed_classes_match_source_map",
+      "result": "PASS",
+      "evidence": {
+        "processed_count": 10,
+        "classes": {
+          "processed_meat_portion": "direct_visual_output_concept",
+          "cooked_game_meat": "art_proposal",
+          "dried_meat": "art_proposal",
+          "prepared_fish_fillet": "art_proposal",
+          "cooked_fish": "locked_reference_output_concept",
+          "dried_fish": "art_proposal",
+          "timber_planks": "explicit_atlas_resource_with_proposed_equipment_mapping",
+          "split_firewood": "art_proposal",
+          "hide": "explicit_atlas_resource_concept",
+          "fur": "explicit_atlas_resource_concept"
+        }
+      }
+    },
+    {
+      "check": "implementation_recipe_and_native_mesh_limits_clear",
+      "result": "PASS",
+      "evidence": {
+        "inspected_documents": [
+          "README.md",
+          "Read-Me.txt",
+          "delivery-manifest.json",
+          "source-equipment-coverage.json",
+          "wildlife-source-provenance.json"
+        ],
+        "manual_read_findings": "Reference evidence, proposed cuts/intermediates and undefined recipes are clearly separated. No companion reclassification, native geometry, production integration or complete future registry is claimed."
+      }
+    },
+    {
+      "check": "exact_authoritative_critic_ledger_preserved",
+      "result": "PASS",
+      "evidence": {
+        "reviewer": "/root/turnaround_critic",
+        "review_sha256": "a94904027f010dacee7417374353ba50715a028eee07cdbbe5fa55bf5845e9be",
+        "visual_approval_not_reperformed_by_auditor": true
+      }
+    },
+    {
+      "check": "all_selected_have_passed_independent_visual_evidence",
+      "result": "PASS",
+      "evidence": {
+        "sheets": 20,
+        "views": 160,
+        "minimum_score": 9.2
+      }
+    },
+    {
+      "check": "selected_png_bytes_match_critic_and_manifest",
+      "result": "PASS",
+      "evidence": {
+        "pngs": [
+          {
+            "id": "deer_meat",
+            "path": "reviewed-concepts/01-deer-meat.png",
+            "sha256": "db54049e15db3e9a38232781f36e17d02dcc5ced1a6f7bd083af6abbfefc1d78",
+            "bytes": 1476935,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "boar_meat",
+            "path": "reviewed-concepts/02-boar-meat.png",
+            "sha256": "6a9d06d3a6553c6ac3ecf4a443f9fc4bf9de5926a5f62f55386991cd03b1f637",
+            "bytes": 1669651,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "rabbit_meat",
+            "path": "reviewed-concepts/03-rabbit-meat.png",
+            "sha256": "38ca37808c4f8e16e090f25c92b1fec7a2fbba5db42e6621152c1e9df796a4e1",
+            "bytes": 1609278,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "moose_meat",
+            "path": "reviewed-concepts/04-moose-meat.png",
+            "sha256": "fdacd8301b8ed9dbe2be1c1f08eddb2f30f988931454656873c2cf570df172e8",
+            "bytes": 1651023,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "squirrel_meat",
+            "path": "reviewed-concepts/05-squirrel-meat.png",
+            "sha256": "e5503021e745122f97b5e00c4e4665e924f2e145a987f0aecf6e33471bea8946",
+            "bytes": 1635640,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "wild_bear_meat",
+            "path": "reviewed-concepts/06-wild-bear-meat.png",
+            "sha256": "e0aaab670cb14ac858bf0188bcbde965829baaec8d02e982138156d9a3fb669b",
+            "bytes": 1574420,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "wild_wolf_meat",
+            "path": "reviewed-concepts/07-wild-wolf-meat.png",
+            "sha256": "8355dfdd8138108ab0ea9e8780ceb6eae5ce3a55182b1abc9fabfeee8902444a",
+            "bytes": 1646236,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "wild_fox_meat",
+            "path": "reviewed-concepts/08-wild-fox-meat.png",
+            "sha256": "6387f2532dfa7568012ffa18c6fc9adb034007ee24bacc08a1cb1221ce065c16",
+            "bytes": 1528852,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "lynx_meat",
+            "path": "reviewed-concepts/09-lynx-meat.png",
+            "sha256": "8f42dcf699d8194718a0459721ac8935a32f64a803c5620de5b1d9b59eed35c6",
+            "bytes": 1724068,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "wolverine_meat",
+            "path": "reviewed-concepts/10-wolverine-meat.png",
+            "sha256": "3419cc2f6df2fb8f985b46033735956176358ab475634cb3bca2c816a3f7ad2d",
+            "bytes": 1568562,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "processed_meat_portion",
+            "path": "reviewed-concepts/11-processed-meat-portion.png",
+            "sha256": "0832968c2a7d3562b7a62caa5a4335c904b520edba7394b16d37e90b2010551e",
+            "bytes": 1614989,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "cooked_game_meat",
+            "path": "reviewed-concepts/12-cooked-game-meat.png",
+            "sha256": "9e18c914d25135cac8bb574d462bc627ee21102cae844cd77dfe10567c6eab33",
+            "bytes": 1767320,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "dried_meat",
+            "path": "reviewed-concepts/13-dried-meat.png",
+            "sha256": "3afb830bf28725de6d5265b9675d6f9fe9dec1cc8770eace80812ef4498424da",
+            "bytes": 1658280,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "prepared_fish_fillet",
+            "path": "reviewed-concepts/14-prepared-fish-fillet.png",
+            "sha256": "4013e8900958c4d31611fa663b3b4799bf71f164e150932d245eadf33b003ea2",
+            "bytes": 1681343,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "cooked_fish",
+            "path": "reviewed-concepts/15-cooked-fish.png",
+            "sha256": "f05750afdd656c4aa2f9fae322bfea019ce55b1a6474d57a86cef14444a3cdb5",
+            "bytes": 1699586,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "dried_fish",
+            "path": "reviewed-concepts/16-dried-fish.png",
+            "sha256": "9991f21d19cbaee9f76527bda21bd5add8c19ec468fdb77d9beffdd23a685b38",
+            "bytes": 1748028,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "timber_planks",
+            "path": "reviewed-concepts/17-timber-planks.png",
+            "sha256": "122191d8f989aa3b739e7db9e2d76e8907493034004105ee14a023917ebf62c5",
+            "bytes": 1603628,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "split_firewood",
+            "path": "reviewed-concepts/18-split-firewood.png",
+            "sha256": "64a866fffab5200234265ae1217070432d0a9cb491c8a468042c14a00949f06f",
+            "bytes": 1709900,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "hide",
+            "path": "reviewed-concepts/19-hide.png",
+            "sha256": "c368be726122e041832c5ded3f197a83e54a42b68b79958cf11f7d178616d1bb",
+            "bytes": 1694994,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          },
+          {
+            "id": "fur",
+            "path": "reviewed-concepts/20-fur.png",
+            "sha256": "f056da43eb6845742d211ade47ecd1ac9441d610b3c6fa5ed4ecb91e3e2dc06d",
+            "bytes": 1536703,
+            "dimensions": [
+              1536,
+              1024
+            ],
+            "matches_selected_review": true
+          }
+        ]
+      }
+    },
+    {
+      "check": "user_zip_exactly_20_final_pngs_and_honest_metadata",
+      "result": "PASS",
+      "evidence": {
+        "zip_filename": "Havenline-Animal-and-Processed-Resource-360-Renders.zip",
+        "zip_sha256": "6541d30fc31232c2c01a352604276e9cdff8ede78a9ea1853cb8b873b6e28f30",
+        "zip_bytes": 28527798,
+        "png_count": 20,
+        "integrity_error": null,
+        "zip_files": 27,
+        "superseded_images_in_user_zip": false
+      }
+    },
+    {
+      "check": "superseded_candidates_and_inspection_evidence_separate",
+      "result": "PASS",
+      "evidence": {
+        "image_disposition_counts": {
+          "selected-reviewed-concept": 20,
+          "superseded-initial-not-current": 4,
+          "inspection-evidence": 3
+        }
+      }
+    },
+    {
+      "check": "all_75_package_manifest_files_match_actual_bytes",
+      "result": "PASS",
+      "evidence": {
+        "manifest_file_count": 75,
+        "actual_file_count": 75,
+        "all_sha256_git_blob_and_size_matches": true
+      }
+    },
+    {
+      "check": "prior_13_sheets_and_60_file_package_preserved",
+      "result": "PASS",
+      "evidence": {
+        "baseline_commit": "ba6b00e5018b658730b3a127e8c9a7896ce5a3a4",
+        "prior_files_checked": 60,
+        "prior_selected_pngs_checked": 13,
+        "all_unchanged": true
+      }
+    },
+    {
+      "check": "public_wildlife_provenance_uses_filename_hash_not_personal_library_link",
+      "result": "PASS",
+      "evidence": {
+        "source_filename": "Havenline: Frostbound World Atlas.png",
+        "sha256": "5a9f9592d2e8a32b3ae0c4117c2d851496d49023e2768c491dc1b211b7865edf"
+      }
+    }
+  ],
+  "limits": [
+    "This audit does not replace the separate visual critic.",
+    "No native 3D, gameplay integration, biological food eligibility or complete future recipe/drop registry is certified.",
+    "This report is to be added separately to the GitHub evidence; the audited ZIP is not rewritten to include the report."
+  ]
+}

@@ -1,0 +1,201 @@
+{
+  "title": "Havenline wildlife roster and meat-cut provenance",
+  "date_utc": "2026-11-23",
+  "purpose": "Provenance for the agreed ten animal-meat ART PROPOSALS; not a species-drop registry.",
+  "sources": [
+    {
+      "id": "frostbound-wildlife-atlas",
+      "kind": "direct_supplied_reference_image",
+      "title": "Havenline: Frostbound World Atlas",
+      "sha256": "5a9f9592d2e8a32b3ae0c4117c2d851496d49023e2768c491dc1b211b7865edf",
+      "visually_inspected": true,
+      "evidence": "WILDLIFE (PASSIVE & HOSTILE) panel names DEER, RABBIT, SQUIRREL, FOX, BOAR, WOLF, BEAR, LYNX, MOOSE, WOLVERINE. Separate stronger-hostile panel and resource-type row do not define exact species drops.",
+      "source_filename": "Havenline: Frostbound World Atlas.png"
+    },
+    {
+      "id": "runtime-resource-and-enemy-logic",
+      "kind": "repository_source",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "08ec81f4668e5285d09172d790554b2f0ae009a5",
+      "path": "HavenlineGodot/scripts/simulation.gd",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/08ec81f4668e5285d09172d790554b2f0ae009a5/HavenlineGodot/scripts/simulation.gd",
+      "evidence": "Lines8 and15-16 have only wood, stone, metal, fuel in KINDS/inventory/stored. Enemy action subtracts wolf health at288-291. Enemy spawn IDs are wolf+serial at381; dead enemies are skipped385-386 and wave-clear removes enemies407-412. No meat/hide/fur/bone/fat drop is created by those inspected runtime paths."
+    },
+    {
+      "id": "companion-roster",
+      "kind": "repository_source",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "08ec81f4668e5285d09172d790554b2f0ae009a5",
+      "path": "Docs/AI/AnimalRosterCorrection.md",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/08ec81f4668e5285d09172d790554b2f0ae009a5/Docs/AI/AnimalRosterCorrection.md",
+      "evidence": "Animal companions are dogs, lions, tigers, bears, wolves, owls and foxes. They are separate companion archetypes using user-supplied references; this is not a food-source list."
+    },
+    {
+      "id": "actor-capabilities",
+      "kind": "repository_source",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "08ec81f4668e5285d09172d790554b2f0ae009a5",
+      "path": "Docs/Production/ACTOR_CAPABILITY_MATRIX.json",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/08ec81f4668e5285d09172d790554b2f0ae009a5/Docs/Production/ACTOR_CAPABILITY_MATRIX.json",
+      "evidence": "Explicit companion actor keys guardian_dog, gray_wolf, fox, owl, male_lion, white_tiger, brown_bear define follow/guard/scout/attack and related capabilities; hunt capability describes an actor action, not that actor being edible or a drop source."
+    },
+    {
+      "id": "future-hunting-contract",
+      "kind": "repository_source",
+      "repository": "ksolo21-web/HAVENLINE",
+      "commit": "426d7973fb64af0ef33208bdb50fd859de58fb0a",
+      "path": "Docs/Production/T21/PREBUILD_CONTRACT.json",
+      "url": "https://github.com/ksolo21-web/HAVENLINE/blob/426d7973fb64af0ef33208bdb50fd859de58fb0a/Docs/Production/T21/PREBUILD_CONTRACT.json",
+      "evidence": "T21 is dependency-independent governance/interface preparation only, with future hunting/combat/loot-conservation proof and forbidden dependency-locked runtime implementation. It does not supply a finished species-drop registry."
+    }
+  ],
+  "atlas_wildlife_roster": [
+    "deer",
+    "rabbit",
+    "squirrel",
+    "fox",
+    "boar",
+    "wolf",
+    "bear",
+    "lynx",
+    "moose",
+    "wolverine"
+  ],
+  "atlas_stronger_variants": [
+    "dire wolf",
+    "snow bear",
+    "saber wolf",
+    "giant boar",
+    "ice lynx",
+    "elite moose"
+  ],
+  "atlas_explicit_byproduct_nouns": [
+    "HIDE",
+    "FUR"
+  ],
+  "species_cut_coverage": [
+    {
+      "asset_id": "deer_meat",
+      "label": "DEER MEAT",
+      "atlas_wildlife_name": "DEER",
+      "classification": "proposed_species_cut",
+      "wildlife_roster_depicted": true,
+      "specific_cut_shape": "art proposal, not a biological or recipe specification",
+      "food_eligibility": "unspecified",
+      "implemented_drop": "not established",
+      "drop_quantities": "unspecified"
+    },
+    {
+      "asset_id": "boar_meat",
+      "label": "BOAR MEAT",
+      "atlas_wildlife_name": "BOAR",
+      "classification": "proposed_species_cut",
+      "wildlife_roster_depicted": true,
+      "specific_cut_shape": "art proposal, not a biological or recipe specification",
+      "food_eligibility": "unspecified",
+      "implemented_drop": "not established",
+      "drop_quantities": "unspecified"
+    },
+    {
+      "asset_id": "rabbit_meat",
+      "label": "RABBIT MEAT",
+      "atlas_wildlife_name": "RABBIT",
+      "classification": "proposed_species_cut",
+      "wildlife_roster_depicted": true,
+      "specific_cut_shape": "art proposal, not a biological or recipe specification",
+      "food_eligibility": "unspecified",
+      "implemented_drop": "not established",
+      "drop_quantities": "unspecified"
+    },
+    {
+      "asset_id": "moose_meat",
+      "label": "MOOSE MEAT",
+      "atlas_wildlife_name": "MOOSE",
+      "classification": "proposed_species_cut",
+      "wildlife_roster_depicted": true,
+      "specific_cut_shape": "art proposal, not a biological or recipe specification",
+      "food_eligibility": "unspecified",
+      "implemented_drop": "not established",
+      "drop_quantities": "unspecified"
+    },
+    {
+      "asset_id": "squirrel_meat",
+      "label": "SQUIRREL MEAT",
+      "atlas_wildlife_name": "SQUIRREL",
+      "classification": "proposed_species_cut",
+      "wildlife_roster_depicted": true,
+      "specific_cut_shape": "art proposal, not a biological or recipe specification",
+      "food_eligibility": "unspecified",
+      "implemented_drop": "not established",
+      "drop_quantities": "unspecified"
+    },
+    {
+      "asset_id": "wild_bear_meat",
+      "label": "WILD BEAR MEAT",
+      "atlas_wildlife_name": "BEAR",
+      "classification": "optional_wildlife_cut_food_eligibility_unfrozen",
+      "wildlife_roster_depicted": true,
+      "specific_cut_shape": "art proposal, not a biological or recipe specification",
+      "food_eligibility": "unspecified",
+      "implemented_drop": "not established",
+      "drop_quantities": "unspecified"
+    },
+    {
+      "asset_id": "wild_wolf_meat",
+      "label": "WILD WOLF MEAT",
+      "atlas_wildlife_name": "WOLF",
+      "classification": "optional_wildlife_cut_food_eligibility_unfrozen",
+      "wildlife_roster_depicted": true,
+      "specific_cut_shape": "art proposal, not a biological or recipe specification",
+      "food_eligibility": "unspecified",
+      "implemented_drop": "not established",
+      "drop_quantities": "unspecified"
+    },
+    {
+      "asset_id": "wild_fox_meat",
+      "label": "WILD FOX MEAT",
+      "atlas_wildlife_name": "FOX",
+      "classification": "optional_wildlife_cut_food_eligibility_unfrozen",
+      "wildlife_roster_depicted": true,
+      "specific_cut_shape": "art proposal, not a biological or recipe specification",
+      "food_eligibility": "unspecified",
+      "implemented_drop": "not established",
+      "drop_quantities": "unspecified"
+    },
+    {
+      "asset_id": "lynx_meat",
+      "label": "LYNX MEAT",
+      "atlas_wildlife_name": "LYNX",
+      "classification": "optional_wildlife_cut_food_eligibility_unfrozen",
+      "wildlife_roster_depicted": true,
+      "specific_cut_shape": "art proposal, not a biological or recipe specification",
+      "food_eligibility": "unspecified",
+      "implemented_drop": "not established",
+      "drop_quantities": "unspecified"
+    },
+    {
+      "asset_id": "wolverine_meat",
+      "label": "WOLVERINE MEAT",
+      "atlas_wildlife_name": "WOLVERINE",
+      "classification": "optional_wildlife_cut_food_eligibility_unfrozen",
+      "wildlife_roster_depicted": true,
+      "specific_cut_shape": "art proposal, not a biological or recipe specification",
+      "food_eligibility": "unspecified",
+      "implemented_drop": "not established",
+      "drop_quantities": "unspecified"
+    }
+  ],
+  "boundaries": [
+    "The atlas confirms a depicted wildlife roster, not that every species is edible, huntable, or an implemented drop.",
+    "All ten cut silhouettes are art proposals. Predator-family cuts (wild bear, wild wolf, wild fox, lynx, wolverine) are explicitly optional and food eligibility is unfrozen.",
+    "Wild animal families are separate from named companion archetypes. None of the new sheets depicts companion characters, clothing, equipment or bodies; no companions have been reclassified as food.",
+    "Strong hostile variants may reuse base-family art for visual planning; neither eligibility nor yields are asserted. No extra stronger-variant meat sheets are part of this bounded expansion.",
+    "Generic MEAT, HIDE and FUR resource nouns do not establish species-specific quantities or harvest recipes.",
+    "No food safety, biological cut accuracy, final gameplay balance, recipe implementation or native mesh approval is implied."
+  ],
+  "related_records": [
+    "acceptance-contract.json",
+    "source-equipment-coverage.json",
+    "animal-build/animal-candidates.json"
+  ]
+}

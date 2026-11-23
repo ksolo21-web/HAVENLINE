@@ -1,0 +1,92 @@
+{
+  "reviewer_agent": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-expansion-v1",
+  "batch": "processed-01",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "processed_meat_portion",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-a8daa5e7-0a32-4af4-b887-501270502dc3.png",
+      "sha256": "0832968c2a7d3562b7a62caa5a4335c904b520edba7394b16d37e90b2010551e",
+      "bytes": 1614989,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "source_classification": "reference_derived_visible_cooker_output",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "Rounded rectangular red/brown portion and cream cap match visible cooker output type.",
+        "Opposite faces and diagonal projections are distinct and coherent.",
+        "No cooked-state or implemented-recipe claim inferred."
+      ],
+      "issues": [],
+      "blocking_defects": [],
+      "minor_disposition": "Fine illustration differences do not establish exact native geometry; recipe behavior remains outside visual approval."
+    },
+    {
+      "asset": "cooked_fish",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-f43e6901-ebdc-422b-947a-764adf7bf876.png",
+      "sha256": "5ae37a64a7b75a9021c9ca1025d30f640ba8a94ec31410d8b88d7bfd708669b4",
+      "bytes": 1814468,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 8.8,
+      "verdict": "HOLD",
+      "source_classification": "reference_derived_whole_cooked_fish",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "Correct tailward and headward orbit directions.",
+        "Golden whole-fish form and broad sear bands follow source output language."
+      ],
+      "issues": [
+        {
+          "severity": "major",
+          "panel": "All eight fish surfaces",
+          "issue": "Tiny skin blisters, pores and glaze stippling are more photographic than the broad sculpted source style.",
+          "fix": "Simplify to smooth broad golden planes, preserving three broad char bands, fins, eyes, colors and all eight poses."
+        }
+      ],
+      "blocking_defects": [
+        {
+          "severity": "major",
+          "panel": "All eight fish surfaces",
+          "issue": "Tiny skin blisters, pores and glaze stippling are more photographic than the broad sculpted source style.",
+          "fix": "Simplify to smooth broad golden planes, preserving three broad char bands, fins, eyes, colors and all eight poses."
+        }
+      ],
+      "minor_disposition": "Fine illustration differences do not establish exact native geometry; recipe behavior remains outside visual approval."
+    },
+    {
+      "asset": "timber_planks",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-ffe69a59-95af-4e05-bbcd-a1a7e6fc73c1.png",
+      "sha256": "122191d8f989aa3b739e7db9e2d76e8907493034004105ee14a023917ebf62c5",
+      "bytes": 1603628,
+      "dimensions": [
+        1536,
+        1024
+      ],
+      "score": 9.5,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "source_classification": "atlas_resource_and_proposed_equipment_mapping",
+      "actual_full_sheet_inspected": true,
+      "view_count": 8,
+      "evidence": [
+        "Exactly three rectangular boards with one center band.",
+        "Top-board front knot disappears on rear views and returns on front-left.",
+        "Opposite ends and four diagonals are coherent; clearly distinct from raw log bundle."
+      ],
+      "issues": [],
+      "blocking_defects": [],
+      "minor_disposition": "Fine illustration differences do not establish exact native geometry; recipe behavior remains outside visual approval."
+    }
+  ],
+  "gate": "Strictly above 9.0 and all mandatory concept-image checks passed.",
+  "set_status": "5 of 20 expansion sheets passed; cooked fish needs surface repair."
+}
