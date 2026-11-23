@@ -1,0 +1,108 @@
+{
+  "reviewer": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-v1",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "meat",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-39a8899c-1c2f-441d-bff9-6381ebddca84.png",
+      "sha256": "5fad1691733e5a446c1de3af422f916243037be761faadeedbb6e1288a57bdbf",
+      "inspected_full_sheet": true,
+      "score": 8.7,
+      "verdict": "HOLD",
+      "mandatory_failed": [
+        "R3"
+      ],
+      "dimension_scores": {
+        "style": 9.5,
+        "material_readability": 9.6,
+        "framing_labels": 9.7,
+        "turnaround": 8.7,
+        "identity": 9.1
+      },
+      "issues": [
+        {
+          "panel": "FRONT RIGHT45\u00b0",
+          "severity": "major",
+          "issue": "Too similar to FRONT0\u00b0 rather than clear45\u00b0 view.",
+          "fix": "Stronger yaw: long axis down-right diagonal; notch and both cream streaks rotate coherently."
+        }
+      ],
+      "scope": "Concept images only; exact mesh/physics/in-game approvals excluded."
+    },
+    {
+      "asset": "fish",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-cc2c83b5-2185-4e13-a495-bec912391511.png",
+      "sha256": "33fc7f32dfbc9d484f13971cf8d5450b886eb767a15e105a254740fd7fc63551",
+      "inspected_full_sheet": true,
+      "score": 7.2,
+      "verdict": "FAIL",
+      "mandatory_failed": [
+        "R3"
+      ],
+      "dimension_scores": {
+        "style": 9.5,
+        "material_readability": 9.6,
+        "framing_labels": 9.7,
+        "turnaround": 7.2,
+        "identity": 9.1
+      },
+      "issues": [
+        {
+          "panel": "FRONT RIGHT45\u00b0",
+          "severity": "blocking",
+          "issue": "Head is toward viewer despite45\u00b0 being tailward under established0\u00b0side/90\u00b0tail convention.",
+          "fix": "Tail near imageRIGHT, head recedesLEFT; shortforeshortened body."
+        },
+        {
+          "panel": "REAR LEFT225\u00b0",
+          "severity": "major",
+          "issue": "Weak3Q separation from rear180\u00b0.",
+          "fix": "HeadRIGHT near,tailLEFT far with visible headward foreshortening."
+        },
+        {
+          "panel": "FRONT LEFT315\u00b0",
+          "severity": "blocking",
+          "issue": "Head onimageRIGHT, contradicts front-side return to0\u00b0headLEFT.",
+          "fix": "HeadLEFT near viewer; tail recedesRIGHT. Preserve same fish."
+        }
+      ],
+      "scope": "Concept images only; exact mesh/physics/in-game approvals excluded."
+    },
+    {
+      "asset": "wheat",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-29210434-546a-470f-bc3d-03c86148f145.png",
+      "sha256": "db64209303c634f7ec1516d084fd468bc5482f4433f68b324a371c78aeb6dcc6",
+      "inspected_full_sheet": true,
+      "score": 7.6,
+      "verdict": "FAIL",
+      "mandatory_failed": [
+        "R3"
+      ],
+      "dimension_scores": {
+        "style": 9.5,
+        "material_readability": 9.6,
+        "framing_labels": 9.7,
+        "turnaround": 7.6,
+        "identity": 9.1
+      },
+      "issues": [
+        {
+          "panel": "REAR RIGHT135\u00b0",
+          "severity": "blocking",
+          "issue": "Cutstems face viewer even though135\u00b0 is ongrainend side between90\u00b0grainend and180\u00b0broadrear.",
+          "fix": "GrainheadsLEFT near; cutstemsRIGHT receding and hidden."
+        },
+        {
+          "panel": "FRONT RIGHT45\u00b0",
+          "severity": "major",
+          "issue": "Some cutstemends face camera, inconsistent with grainward45\u00b0 view.",
+          "fix": "GrainheadsRIGHT near, stemsLEFT receding; hide opposite-facing cutends."
+        }
+      ],
+      "scope": "Concept images only; exact mesh/physics/in-game approvals excluded."
+    }
+  ],
+  "set_status": "9 reviewed;6 pass;3 correctionpending",
+  "gate": "Strictly >9.0, all mandatory conceptchecks"
+}

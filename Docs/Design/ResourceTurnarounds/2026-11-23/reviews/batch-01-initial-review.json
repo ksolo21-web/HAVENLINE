@@ -1,0 +1,115 @@
+{
+  "reviewer": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-v1",
+  "iteration": 1,
+  "assets": [
+    {
+      "asset": "wood",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-e93204af-cdae-4e0b-a7f8-9c176226cdd2.png",
+      "sha256": "6f51e59e43bbeb0b2285b7688f6d8b994142e3d091df7852415a9c5965bdfa55",
+      "inspected_full_sheet": true,
+      "scope": "AI-generated concept turnaround, not exact native mesh validation",
+      "score": 7.5,
+      "dimension_scores": {
+        "style": 9.6,
+        "readability": 9.7,
+        "framing_labels": 9.7,
+        "turnaround": 7.5,
+        "identity": 8.2
+      },
+      "verdict": "FAIL",
+      "blocking_checks": [
+        "R3",
+        "R5"
+      ],
+      "issues": [
+        {
+          "severity": "blocking",
+          "panel": "REAR LEFT (225\u00b0), bottom row column2",
+          "issue": "Repeats rear-right135\u00b0 handed yaw: exposed cut ends remain on image left.",
+          "fix": "Show opposite rear corner, with cut ends on image right and rope knot hidden; retain 3-log bundle."
+        },
+        {
+          "severity": "major",
+          "panel": "LEFT (270\u00b0), bottom row column3",
+          "issue": "Front-facing knot disappears completely, whereas right90\u00b0 shows it protruding at edge.",
+          "fix": "Make front-side knot edge visibility consistent at opposite end; keep knot fixed on same long front face."
+        }
+      ],
+      "good": [
+        "Clear material identity",
+        "Cohesive primary-reference sculpted styling",
+        "Fully framed objects and readable labels",
+        "Honest concept-turnaround labeling"
+      ]
+    },
+    {
+      "asset": "stone",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-14feb171-cb7b-4256-9041-9e1ffa79e541.png",
+      "sha256": "28842deedc75e30ace11b2d26c8596fc1f092f08da73875879e08b7c75efaf4a",
+      "inspected_full_sheet": true,
+      "scope": "AI-generated concept turnaround, not exact native mesh validation",
+      "score": 8.5,
+      "dimension_scores": {
+        "style": 9.4,
+        "readability": 9.7,
+        "framing_labels": 9.7,
+        "turnaround": 8.5,
+        "identity": 9.1
+      },
+      "verdict": "HOLD",
+      "blocking_checks": [
+        "R3"
+      ],
+      "issues": [
+        {
+          "severity": "major",
+          "panel": "FRONT RIGHT45\u00b0 and REAR LEFT225\u00b0",
+          "issue": "Both are near duplicates of adjacent cardinal front0\u00b0 and rear180\u00b0 with insufficient visible yaw separation for claimed 45\u00b0 intervals.",
+          "fix": "Increase visible 3Q rotation and side-face exposure; high shoulder and chipped front corner must move plausibly while same rock silhouette persists."
+        }
+      ],
+      "good": [
+        "Clear material identity",
+        "Cohesive primary-reference sculpted styling",
+        "Fully framed objects and readable labels",
+        "Honest concept-turnaround labeling"
+      ]
+    },
+    {
+      "asset": "slate",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-33c00835-4246-4fad-bc34-73278062cc27.png",
+      "sha256": "a66a498bebad82d73759e8b38aa7a86e668e399ff26eb51ec4586d24a5c5ea71",
+      "inspected_full_sheet": true,
+      "scope": "AI-generated concept turnaround, not exact native mesh validation",
+      "score": 7.8,
+      "dimension_scores": {
+        "style": 9.6,
+        "readability": 9.8,
+        "framing_labels": 9.7,
+        "turnaround": 7.8,
+        "identity": 9.1
+      },
+      "verdict": "FAIL",
+      "blocking_checks": [
+        "R3"
+      ],
+      "issues": [
+        {
+          "severity": "blocking",
+          "panel": "REAR LEFT225\u00b0, bottom row column2",
+          "issue": "Essentially repeats REAR RIGHT135\u00b0, long diagonal and pale vein remain in same orientation.",
+          "fix": "Render opposite rear corner: long-axis diagonal reverses, with three slabs and one vein position fixed on object; do not mirror lettering."
+        }
+      ],
+      "good": [
+        "Clear material identity",
+        "Cohesive primary-reference sculpted styling",
+        "Fully framed objects and readable labels",
+        "Honest concept-turnaround labeling"
+      ]
+    }
+  ],
+  "set_status": "3 reviewed, 0 pass, further assets pending",
+  "gate": "Strictly >9.0 and all mandatory checks passed; no failed view averaged away."
+}

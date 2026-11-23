@@ -1,0 +1,98 @@
+{
+  "title": "Havenline Resource Turnaround Renders",
+  "version": "2026-11-23-v1",
+  "requested": "All resource materials, 360 view; explicitly wood, stone, slate, steel, fuel, meat, fish, etc.",
+  "deliverable": "Separate stylized concept turnaround sheets for material and support-resource inventory. These are concept images, not proof of implemented 3D meshes.",
+  "resources": [
+    "wood",
+    "stone",
+    "slate",
+    "steel",
+    "metal_ore",
+    "fuel",
+    "meat",
+    "fish",
+    "wheat",
+    "cooked_food",
+    "money",
+    "cargo"
+  ],
+  "reference_extra_pending": [
+    "coal"
+  ],
+  "workflow": [
+    "recover references and inventory",
+    "generate separate asset sheets",
+    "independent visual review of actual images",
+    "targeted repairs",
+    "retest",
+    "deliver and preserve source/checkpoint"
+  ],
+  "checks": [
+    {
+      "id": "R1",
+      "required": true,
+      "text": "All seven explicit user resources receive distinct sheets."
+    },
+    {
+      "id": "R2",
+      "required": true,
+      "text": "All identified project resource inventory covered; support props distinguished."
+    },
+    {
+      "id": "R3",
+      "required": true,
+      "text": "Each sheet shows front, front-right, right, rear-right, rear, rear-left, left, front-left views around same object, plus top if useful."
+    },
+    {
+      "id": "R4",
+      "required": true,
+      "text": "Havenline stylized chunky forms, rounded edges, broad sculpted details, clear materials; actual project reference pixels used."
+    },
+    {
+      "id": "R5",
+      "required": true,
+      "text": "Matching objects within sheet: geometry, parts, paint, knots, straps, contents and arrangement stable through view changes."
+    },
+    {
+      "id": "R6",
+      "required": true,
+      "text": "Material silhouettes distinct, objects fully framed, clean dark navy background, readable angle labels."
+    },
+    {
+      "id": "R7",
+      "required": true,
+      "text": "Independent critic inspects generated images; pass strictly >9.0 with no failed mandatory check, or preserve honest defects."
+    },
+    {
+      "id": "R8",
+      "required": true,
+      "text": "Do not imply generated images are native mesh renders, implemented game assets, user-approved production art or executable rotations."
+    },
+    {
+      "id": "R9",
+      "required": true,
+      "text": "Preserve original approved work; new images saved as separate proposed design references and checkpoint."
+    }
+  ],
+  "status": "reference recovery",
+  "sources": {
+    "primary_pending": "18607.png and 18600.png (newest user Havenline boards identified by project reference authority)",
+    "secondary": "Whiteout Survival Asset Reference Guide.png and original A/B reference video frames",
+    "repo": "ksolo21-web/HAVENLINE",
+    "source_registry_branch": "havenline/T05-r18-owner-20261013",
+    "registry_resources": [
+      "wood",
+      "stone",
+      "metal",
+      "fuel",
+      "fish",
+      "wheat"
+    ]
+  },
+  "limitations": [
+    "No recovered distinct approved resource designs for slate, steel or meat yet; current request authorizes concept designs within established art direction.",
+    "Generated view sheets can show a turnaround concept but do not demonstrate geometrically exact 3D assets or runtime behavior."
+  ],
+  "next_action": "Inspect primary source boards, then generate the first three resources."
+}

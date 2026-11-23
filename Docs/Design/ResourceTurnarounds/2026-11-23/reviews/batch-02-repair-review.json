@@ -1,0 +1,78 @@
+{
+  "reviewer": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-v1",
+  "iteration": 2,
+  "supersedes": "batch-02-initial-review.json for these exact files",
+  "assets": [
+    {
+      "asset": "steel",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-f1a13c5c-cfc7-4160-bdf4-c789487d09b0.png",
+      "sha256": "905c74c92209963de34f80efca33408af2738f761ff6c82abe2fefff8f0a4347",
+      "inspected_full_sheet": true,
+      "score": 9.5,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "checks": {
+        "R3": "PASS",
+        "R4": "PASS",
+        "R5": "PASS_AT_CONCEPT_LEVEL",
+        "R6": "PASS",
+        "R8": "PASS_LABELLED_CONCEPT"
+      },
+      "changes_verified": [
+        "225\u00b0 broadface/end handedness reversed correctly",
+        "Long ingot dimensions, top recess and controlled metal material remain coherent"
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Minor illustrative surface/facet variation accepted at concept-sheet scope; geometric identity not proven by native mesh.",
+      "limits": "No exact metric camera or runtime implementation claim."
+    },
+    {
+      "asset": "fuel",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-52c6c1c9-bbbd-4b1a-a260-aee2d464821b.png",
+      "sha256": "c9a17187e1009b9d466b024608a28887b86b7746da3aae8b378e6caee649c306",
+      "inspected_full_sheet": true,
+      "score": 9.5,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "checks": {
+        "R3": "PASS",
+        "R4": "PASS",
+        "R5": "PASS_AT_CONCEPT_LEVEL",
+        "R6": "PASS",
+        "R8": "PASS_LABELLED_CONCEPT"
+      },
+      "changes_verified": [
+        "225\u00b0 broad rear now left with narrow side right",
+        "Far-side cap partly occluded and rear label absent",
+        "Single handle/cap and reinforced base remain coherent"
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Minor illustrative surface/facet variation accepted at concept-sheet scope; geometric identity not proven by native mesh.",
+      "limits": "No exact metric camera or runtime implementation claim."
+    },
+    {
+      "asset": "metal_ore",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-455bd2fd-b5a2-4f86-beb8-e7cea156bed3.png",
+      "sha256": "9e6965c343e017052d14800a7c3d3673ec396552e1f648cac15e7fb26a5b4d4a",
+      "inspected_full_sheet": true,
+      "score": 9.3,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "checks": {
+        "R3": "PASS",
+        "R4": "PASS",
+        "R5": "PASS_AT_CONCEPT_LEVEL",
+        "R6": "PASS",
+        "R8": "PASS_LABELLED_CONCEPT"
+      },
+      "changes_verified": [
+        "45\u00b0 now reveals distinct right-side surface",
+        "Silver lobes and dark host rock read as same object",
+        "Oxidized side remains consistent across rear/left sequence"
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Minor illustrative surface/facet variation accepted at concept-sheet scope; geometric identity not proven by native mesh.",
+      "limits": "No exact metric camera or runtime implementation claim."
+    }
+  ],
+  "set_status": "6/6 reviewed assets pass; next6 pending",
+  "gate": "Strictly >9.0 with all mandatory concept-image checks passed."
+}

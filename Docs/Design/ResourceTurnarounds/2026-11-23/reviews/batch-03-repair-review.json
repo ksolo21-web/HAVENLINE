@@ -1,0 +1,56 @@
+{
+  "reviewer": "/root/turnaround_critic",
+  "contract_version": "2026-11-23-v1",
+  "iteration": 2,
+  "assets": [
+    {
+      "asset": "meat",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-813be1fa-74e9-4b2a-95d7-6e4d41e86b22.png",
+      "sha256": "29671642ed2fbb9d4a7e39b34923f3b9576ee95282ffcea5bb5c16b4f3496254",
+      "inspected_full_sheet": true,
+      "score": 9.3,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "changes_verified": [
+        "45\u00b0 now distinct diagonal with notch/cream marks rotated",
+        "Single thick raw steak and style remain coherent"
+      ],
+      "issues": [],
+      "scope": "Concept-image review only; no exact native geometry/runtime claim."
+    },
+    {
+      "asset": "fish",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-98d99d1f-2212-4cb5-9ae0-c28f45d3abb0.png",
+      "sha256": "b62af41e1c8e96ecd37016ded5b74f3ae34e5beb3fd3d2ad11b02d4498e80901",
+      "inspected_full_sheet": true,
+      "score": 9.4,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "changes_verified": [
+        "45\u00b0 tail near right/head recedesleft",
+        "225\u00b0 head near right/tail recedesleft",
+        "315\u00b0 head near left/tail recedesright",
+        "All8 angles follow fixed orbit, fins and colors retained"
+      ],
+      "issues": [],
+      "scope": "Concept-image review only; no exact native geometry/runtime claim."
+    },
+    {
+      "asset": "wheat",
+      "candidate_path": "/workspace/scratch/fc906e16b0fb/generated_images/exec-b8143df2-c039-474f-b228-504211684c4b.png",
+      "sha256": "ba766eb586fdfbbb459dae6193091f1c9f68c9439f52685351322828102f80ff",
+      "inspected_full_sheet": true,
+      "score": 9.3,
+      "verdict": "PASS_CONCEPT_SHEET",
+      "changes_verified": [
+        "45\u00b0 and135\u00b0 now grainward with stems receding",
+        "Thick stem geometry restored, no pointed-stick regression seen",
+        "225\u00b0/315\u00b0 remain stemward with band stitch continuity"
+      ],
+      "blocking_defects": [],
+      "minor_disposition": "Fine grainhead and stem counting is illustrative rather than exact native geometry; overall sheaf silhouette/ends clearly consistent.",
+      "limits": "Earlier intermediate wheat repair was builder-held and not independently passed; this exact file only is passed."
+    }
+  ],
+  "pending": [],
+  "gate": "All mandatory imagechecks and minimum >9.0",
+  "set_status": "All3 batch03 sheets pass conceptreview"
+}
