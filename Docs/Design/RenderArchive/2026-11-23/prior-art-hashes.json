@@ -1,0 +1,1325 @@
+{
+  "base_commit": "8f46b67568a9ae3bc2df0d9dade8714039a1cc99",
+  "files": [
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/.gitattributes",
+      "sha": "2836922a7f248110e4e3f85c16f427a70ae8cf05"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/README.md",
+      "sha": "90b790bb97ff7763919e98a0ad9d1e4b00de0718"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/acceptance-contract.json",
+      "sha": "0fa12ec62470aca02b708c7249927a9395379cfd"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/animal-candidates.json",
+      "sha": "dbe562693831b007e5b553eb1e553fa42d78573d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-01-prompts.json",
+      "sha": "324d6d02a05a26e94c27e89d0c8422917a2533de"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-01-results.json",
+      "sha": "ebd557aa559f3b344c6c94aeec149e4125ff9c8e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-02-prompts.json",
+      "sha": "b7cc8b3da3e83bc25f57fae8848f9554bc8b5e0e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-02-results.json",
+      "sha": "e68543745c87a06448b8f6dc0973dacd1760cc26"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-03-prompts.json",
+      "sha": "76f06b88c05416b0b5ee9c3b924d9c1029450934"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-03-results.json",
+      "sha": "e6728d7aa9819b37a93ac1109004ed49944a8243"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-04-prompts.json",
+      "sha": "5cd8873353091cda8d157bd7ca1c516ae9ea409f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/animal-build/batch-04-results.json",
+      "sha": "a08f698046caede8479d1f0e65232410ef98ff88"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/archived-candidates/initial/cooked-fish-exec-f43e6901-ebdc-422b-947a-764adf7bf876.png",
+      "sha": "7b868ffcd1c005ac0097f4a048538fa210a5a309"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/archived-candidates/initial/hide-exec-7af29546-2f05-4a1e-ad12-ce5d331ce842.png",
+      "sha": "a750b3c622c037e5f3b0d1d7fa7d7a0d3c3b3c0b"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/archived-candidates/initial/prepared-fish-fillet-exec-c60de7a4-8cee-42bf-9509-9dfd4eb763a0.png",
+      "sha": "312eca7a0aad99282d4d0534a62ffdfdca9aed13"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/archived-candidates/initial/split-firewood-exec-1764d691-6c34-45c2-b0f3-8a29440936fe.png",
+      "sha": "b669ea840f1a4aaa2a2c95bbf6cf66a1430d1e0a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/blob-upload-receipts.json",
+      "sha": "ee4716d4101a45f0193d8ab7dfd9ce026884e646"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/build_expansion_package.py",
+      "sha": "67f2a7638dabd81f12fa4f9b70c45cad1eca9aa7"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/build_source_coverage.py",
+      "sha": "d345c580e7a4ecf077a29b6779e62432a19cbc4e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/common-prompt.txt",
+      "sha": "2b3c55dfdf2b36b7f64fa8e3b2cb3be057369b8d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-manifest.json",
+      "sha": "aa6d78c155dd205483479923599d95eb038efdb7"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/delivery-verification.json",
+      "sha": "2121e9ea692ec628450df6a31d4315e3ba38a9fc"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/download-render-index.json",
+      "sha": "21f33d7302d9b27eb55bed5d8a636bbff3fd5e97"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/merge_blob_receipts.py",
+      "sha": "a4080cd2ea160caf239fe335b8e940434b17b83c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/prior-package-preservation-baseline.json",
+      "sha": "8f781045fc72792bc5c50543a1982060b98bac04"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-01-prompts.json",
+      "sha": "692e61c7809e50cb64436628b77194f3b4908ae5"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-01-results.json",
+      "sha": "58a44f2efdf10ae0110ed232a5713c22a8765898"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-02-prompts.json",
+      "sha": "dd46176a30419bf03c61495eb67632ce7d844c93"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-02-results.json",
+      "sha": "47a339c3b5f7294c7c6368794179585abee15dd6"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-03-prompts.json",
+      "sha": "abfa01f1fdfc711a9028a82b05bfe9c9728a6d30"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-03-results.json",
+      "sha": "8740430d448aaef0a19cb0c4784400f4933bb15d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-04-prompts.json",
+      "sha": "017575949d812bea3e03bdbd0f9dae3d34d383d9"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-04-results.json",
+      "sha": "b9c74a11a68926494a91879f0de6e9a22c7bce02"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-05-repair-prompts.json",
+      "sha": "c818d406c65f5094621bf156860610d417395fca"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/batch-05-results.json",
+      "sha": "1db47d42e7b59ecfa6d7f0d4c1a014b1f57df238"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/cooked-fish-repair-01-prompt.json",
+      "sha": "7c8a86fd57183e0cb6c9fd44c2319bdd3898afef"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/processed-build/prepared-fish-repair-01-prompt.json",
+      "sha": "e05bdb6f05343523abfc665d0aee579da113ee40"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/01-deer-meat.png",
+      "sha": "3811a730e2898605a0f12ea095fc5154eb894208"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/02-boar-meat.png",
+      "sha": "551e5d784d988d486554b08c178d5d8215963239"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/03-rabbit-meat.png",
+      "sha": "a7c18a70b15bbdb8e2aedc751f80fdd09f5ee324"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/04-moose-meat.png",
+      "sha": "efd01d83cae06d9d1dff5f6eba6959fdb1a8c18d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/05-squirrel-meat.png",
+      "sha": "313efa28de4cbc2950ea1b46ad6ef27e7649b499"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/06-wild-bear-meat.png",
+      "sha": "d221d4e1e9b3409502c63884ff067362fc62de48"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/07-wild-wolf-meat.png",
+      "sha": "570a0316e935f1492f914de9639db37bddb8a57f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/08-wild-fox-meat.png",
+      "sha": "390eef42d91cdea496f5dd8696b7ab3ba9f66e89"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/09-lynx-meat.png",
+      "sha": "0ed492a32019479b9be86c2109bde15385184c5d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/10-wolverine-meat.png",
+      "sha": "0d75ef644cd1ef0819f37b43e6cfa57785856003"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/11-processed-meat-portion.png",
+      "sha": "6c54f1be64b52ffd28a41e587060f8ee71c211d2"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/12-cooked-game-meat.png",
+      "sha": "4734e01e81a8237e1316948f776ea74b73f85f01"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/13-dried-meat.png",
+      "sha": "33bf4a241a6d1df8b6f45bdf8d68f2cef8a980cc"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/14-prepared-fish-fillet.png",
+      "sha": "958895f09cbe60973c00046f389d0a1bcf33f438"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/15-cooked-fish.png",
+      "sha": "1ef176e0f029f0bcc7d249e0b3de632b9ddebbfa"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/16-dried-fish.png",
+      "sha": "a696fb34c3962ea95d156d68b7c5cc763486f61e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/17-timber-planks.png",
+      "sha": "a5228c65e84b1a617d821701680483a959694a41"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/18-split-firewood.png",
+      "sha": "44d01752e80d31af1694f07b6e2cd378f0e803ac"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/19-hide.png",
+      "sha": "467d026b3e091a970a52d95352335c545bc65d42"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviewed-concepts/20-fur.png",
+      "sha": "de2c7f0f38f633e0336380337cdb42628ca1b026"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/animal-01-review.json",
+      "sha": "7b1e2ff2ba60fc461deb4bcb5c39f2356b77d9de"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/animal-02-review.json",
+      "sha": "482394ba52833257b7cab4d06f61cd2ad25efa96"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/animal-03-review.json",
+      "sha": "1af626ec57a0c4cf96e4458cfeb5ab5784ddafaa"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/animal-04-review.json",
+      "sha": "6181702737924a2f08953235b2934f12c3d7ffee"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/cross-set-and-source-audit.json",
+      "sha": "129b289bc54ad3e248b5fcf6413f862b0f869294"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/final-independent-visual-review.json",
+      "sha": "2a07e852f70c21854ce8694dca59b107d0fc0d94"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/inspection-crops/animal-cuts-cross-set.png",
+      "sha": "b833d9ad73fe746df263b31b13a8aa3e36400f30"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/inspection-crops/prepared-fish-right-90-inspection.png",
+      "sha": "85934c2403e1379af5c792a044e91288371b549b"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/inspection-crops/world-atlas-resource-row.png",
+      "sha": "8b242db7bdc25a768232bd6ee1da13ed3a07ac32"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/metadata-package-audit.json",
+      "sha": "702637d76383b0ba96af82314801cf62f41e14df"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/processed-01-review.json",
+      "sha": "674e7ab5caabc90918b73ddb7c57c7292cf3425d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/processed-02-review.json",
+      "sha": "f20375794a4b1ee1a4e3411d02eab85a5068a281"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/processed-03-review.json",
+      "sha": "8d26786fe7468bc289b87eb95e679ec72f43a7eb"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/processed-04-review.json",
+      "sha": "9291d9e2a382868488ef7eae8ecc8e4476ffc07f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/processed-final-retest-01.json",
+      "sha": "125a09031fc5745114ad340e85ed647a37f957ba"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/processed-fish-retest-01.json",
+      "sha": "ac0919ef5147e00b91c871cb31b03aa8a309b57a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/reviews/review-index.json",
+      "sha": "b9e96017d68bb0253ec5c489c65fd88bbed858de"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/source-equipment-coverage.json",
+      "sha": "c35ef70315d9059213843f12452fa8ac22fb6c36"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-expansion/wildlife-source-provenance.json",
+      "sha": "82696dffbed450162344010177844ec8106c3368"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/.gitattributes",
+      "sha": "2560a540335dba881db0b60b45f0def1385c1381"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/README.md",
+      "sha": "414d52f98d938280e5fcc8ea6e8d26f753de92df"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/acceptance-addendum-extra-buy-plots.json",
+      "sha": "713160ace4cd19f1567d86ff2b40f86922a3378a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/acceptance-contract.json",
+      "sha": "e045da08c54e6de205fc4ca787018ffa62a2d069"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/activation-construction-exec-fb07c302-2b2a-433f-abe0-5b62a6099fd4.png",
+      "sha": "dd126d4e96ed8970d488c8ffe9d9ad8e75f193a4"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/activation-work-zone-exec-4552c0d2-ca53-42e6-ae6d-da295a691f46.png",
+      "sha": "6ef2f252b19838bb312e858d8a15444b341d8b03"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/buy-axe-upgrade-exec-53172149-9c58-46ef-ad47-ae23747b0b35.png",
+      "sha": "53d904c12bd8c3cc7dcfd9ec4e6b5ebb5a7af2a9"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/buy-counter-action-exec-ccbc261a-d1c1-4942-ae9b-1c96bf6008b5.png",
+      "sha": "c6e3631c266893800bb4b5a518a688a767e2a8e1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/buy-expansion-exec-a66a4258-35d5-4439-9007-5bd0496c7231.png",
+      "sha": "edb596e63131e1e09ab4ff47f2accb4fdc3b3da5"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/buy-fishing-upgrade-exec-21485b8f-6813-463f-baef-1873c76fd151.png",
+      "sha": "e21548778e486ea10491019be09107ee76dcb398"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/buy-hand-action-exec-7b83384e-e056-4b31-b2ff-4202f89208d3.png",
+      "sha": "440e3434aba6e4de3071174901fb3e41d91e3694"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/buy-worker-action-exec-bac37b4d-06f5-40a1-8769-59395c749048.png",
+      "sha": "74e7c752c9562ae98e567f7be0222d5ab9f78bca"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/purchase-activation-states-exec-b0cf10c1-0345-40f1-9b20-f269bd587cc5.png",
+      "sha": "2c06a42e9e34443a68dd395a46a556d144dbcf0e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/storage-coal-exec-faa8af6c-62db-46f6-81c3-31cb7461d5a5.png",
+      "sha": "33893391e5c5a0f5b22acb77b9448ebf5d5a6ec6"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/storage-fuel-exec-bcd86acf-e113-4f02-bb3a-af7b537c707d.png",
+      "sha": "8cd1faa97bdbbd1240ab979911d2b3be8b16d427"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/storage-meat-exec-9826036e-a277-4af8-9470-da3d89b491a3.png",
+      "sha": "bad0121e5cff8b4b92596242a7fef6741a4cf206"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/storage-steel-exec-ab945755-7d60-4fa0-965f-7319e7162e85.png",
+      "sha": "9e69dc041dac423e3675d09b0eabc8dfb987afae"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/storage-use-states-exec-d467e9f7-2cc2-4256-a6a0-3b1117082d77.png",
+      "sha": "0b7ce6f17b7469413df9a69a101c4b1122a9e5c1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/initial/storage-wood-exec-61ec2bdf-826a-484e-8f81-4b95444bed36.png",
+      "sha": "634730549e181b9fc358f2a42708045ef3d39f21"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/superseded-repairs/activation-work-zone-exec-0633578e-5619-482f-ab00-c6b61d0a70d9.png",
+      "sha": "7214fcd62cfb370c78b0dd857846443b805b50ee"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/superseded-repairs/activation-work-zone-exec-23bd762c-2076-4859-b47c-fc07bde883a0.png",
+      "sha": "87dced5d7d58b59729f8846f823c2a673183062a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/superseded-repairs/activation-work-zone-exec-9f336c8b-01f1-4abd-8aa5-3aa177009065.png",
+      "sha": "35405a0f7f7e168e477b0fa105db98c500f23014"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/superseded-repairs/buy-expansion-exec-fd0e50f0-49b5-4c3b-b31f-e780546bf3c2.png",
+      "sha": "72d277dcb600ffe7af54b68b639ca6116c286841"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/superseded-repairs/storage-wood-exec-0a4b846d-c49b-484c-8978-3b2c27a77e0b.png",
+      "sha": "cfee9534a553cbf72cc04812000779527642065f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/superseded-repairs/storage-wood-exec-c568bf14-cde2-4085-be66-5e883ef5668b.png",
+      "sha": "242d33703e2904c53a61466dd12059114a542f9c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/archived-candidates/superseded-repairs/storage-wood-exec-c8c6865b-df58-49eb-a1c9-26c934b1a4f6.png",
+      "sha": "f97cb75837853499e7da257c7b86e820ef927955"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/blob-upload-receipts.json",
+      "sha": "a47ed3eeb25436f758d0a55caca161260e86ca07"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/build_complete_render_kit.py",
+      "sha": "96f899411ffb9b4ae4824b8521add2d2b28252d9"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/build_plot_package.py",
+      "sha": "85146d1aa59544d07a5a547812dcb3160bf9f3e6"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/all-root-render-results.json",
+      "sha": "f289a039eaad321699f0f3ae73ec86924e70615c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/batch-01-prompts.json",
+      "sha": "77236601b643299b3fdb86f4d3b971b2dd5f3d10"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/batch-01-repair-prompts.json",
+      "sha": "4a526f2ebbcd6dc7a8f31faa21632eb76a2ceb6c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/batch-01-repair-results.json",
+      "sha": "d3b80576514a91e41eb587f331e34071192a0332"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/batch-01-results.json",
+      "sha": "8d18e846738c3b6fc3106c6862bef0000c6adfce"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/batch-02-prompts.json",
+      "sha": "9f3cc8048c755b4974c799459a52f908e3a54eb6"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/batch-02-repair-prompts.json",
+      "sha": "d5e9da90cb103225315b1192aa024ddc2fbbd497"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/batch-02-results.json",
+      "sha": "54d4697ce5fad7c8b3c48e584428dafd2652967a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/batch-03-prompts.json",
+      "sha": "41c800975f63e5dad90ecb899aefc3b229c59c3c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/batch-03-repair-prompts.json",
+      "sha": "3819f038fdc81dfe46fd19794ce3667a3f82f3aa"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/blob-receipts-batch-02.json",
+      "sha": "777244f0c2de5dd3dbb524eab8ca9519a888cc12"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/blob-receipts-batch-03.json",
+      "sha": "b5da282f4a054138e0f02d35ba9164bf2eac487b"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/buy-state-repair-01-prompt.json",
+      "sha": "3d9f02aebb864e972c311ee82c84a5a4ca5ead84"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/state-plate-prompts-01.json",
+      "sha": "561e4036c6bfcb6a1f4577a9b10db90a641fba9d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/storage-state-plate-prompt.json",
+      "sha": "8556f9f88c8199809dc05594321f52feb9d137a0"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/storage-state-repair-01-prompt.json",
+      "sha": "c3697a93f628ff3a5927448e6febe80acc2cd417"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/work-zone-repair-02-prompt.json",
+      "sha": "0bce6730bfe509ecd2900243da9c6f1dab380d96"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/work-zone-repair-03-prompt.json",
+      "sha": "f93ada63d916da58c0fedbd22358ca098c79955c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/buy-build/work-zone-repair-04-prompt.json",
+      "sha": "130683e993d5217a7c041e5a8101b608921eee78"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/common-prompt.txt",
+      "sha": "1809f85a4a42ed013b432cf183b2d984519a9850"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/complete-kit-index.json",
+      "sha": "be3a058368ef6a3eb0f2e0e39a9349d6e372b809"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/complete-kit-verification.json",
+      "sha": "d6b3226b8ac8c8bfc29f62fd702165c0a77bee8f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/delivery-manifest.json",
+      "sha": "df62c44e088519d052def9609f318d480d1b25cd"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/delivery-verification.json",
+      "sha": "56a685bf086c8ebc4f10ab77fe585c51cb4487d8"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/download-render-index.json",
+      "sha": "beb3d04506f3d1172c364872989c91cc282bd6c2"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/execution-checkpoint.json",
+      "sha": "26c998a7d0bddaa53edfa14286ba3b91dacf53f1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/prepare_preservation_uploads.py",
+      "sha": "7b3aab8e8505058d689e1454d0586691166f0a53"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/prior-package-preservation-baseline.json",
+      "sha": "7cc388a7652446210655414ff9e549d90ea1a707"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/01-storage-empty.png",
+      "sha": "f1cbcc8f7b5fec01eee0ab20d02905d826a93491"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/02-storage-wood.png",
+      "sha": "a97f83a135812ed263bd4b938a9d660e0fee6a42"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/03-storage-meat.png",
+      "sha": "6f06c9986321c6c4881324626768315f4a9e8369"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/04-storage-money.png",
+      "sha": "bd8c24ecca9be55789f0f82753e0d80861949088"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/05-storage-stone.png",
+      "sha": "4b030b8cd7e6128ad2a1bde50cdc664eca3a23cb"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/06-storage-slate.png",
+      "sha": "dab767877862d327fa90327caa21405639e10c23"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/07-storage-metal-ore.png",
+      "sha": "99fa6f939a98f3fe0ba678f5189e10b5418d4fb7"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/08-storage-steel.png",
+      "sha": "228e9021fcc08293d85e1d5ed7b9d8d64b475060"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/09-storage-fuel.png",
+      "sha": "683a678dbbaa596b9dc3d5ad36e36c7a3e9988d1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/10-storage-coal.png",
+      "sha": "b727fc0ee113afec964c65e639b0b4db58dfe702"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/11-storage-fish.png",
+      "sha": "0dc31f6e784359ff4f4e229dc9a2eb4fa53f88f2"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/12-storage-wheat.png",
+      "sha": "35bd86890af11a9619b93d7e8f22649530ffeb1f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/13-storage-cooked-food.png",
+      "sha": "407db7d98e408a7568e82731a55b77e3060f0929"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/14-storage-cargo.png",
+      "sha": "8b9bf9549ff05ffd32a368a1839a0adde18383a5"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/15-storage-hide.png",
+      "sha": "3c842283fe59de733acd8f5f8f1e943193f3ed90"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/16-storage-fur.png",
+      "sha": "6688ce8d6a633c217cbaced1f5dbac4bf1328cc0"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/17-buy-expansion.png",
+      "sha": "d848df19d226c60ca0aeae0c2bae347d7a2336e5"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/18-buy-axe-upgrade.png",
+      "sha": "5759d792248e3f9fff59a47e855972dd612ef00d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/19-buy-worker-action.png",
+      "sha": "cccd2a85d545c45a1d5f358fb000548c86c7c7b1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/20-buy-hand-action.png",
+      "sha": "e939665acd1f6e2bbd4ba656f4c3e3063a9fd18f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/21-buy-fishing-upgrade.png",
+      "sha": "f62fd8f816ff501c64cc30221f54ff569343b975"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/22-activation-construction.png",
+      "sha": "ee6e4cf3545cafd811d36d662c44710804963ed2"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/23-activation-work-zone.png",
+      "sha": "c60b21fe4ddf50423266d4bc9997bf3effa3c828"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/24-storage-use-states.png",
+      "sha": "af0843aee4d9999b12312884f3ee7f7f48c2e21d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/25-purchase-activation-states.png",
+      "sha": "58ccf2d22537c89c6c597ceecadd6265fda23a82"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/26-work-zone-states.png",
+      "sha": "93464c6c92dcb1b6849d879989bcd1f931fd8c97"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/27-buy-defense-bow.png",
+      "sha": "f28bc4496f23043485e7b91acff13ad033a3576f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/28-buy-person-plus.png",
+      "sha": "d3c60ffd01c9f80b39c91783727507b40f6169bb"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviewed-concepts/29-buy-counter-action.png",
+      "sha": "7e656791e40631e63a791d40c835d6720ff47b09"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/buy-01-review.json",
+      "sha": "1fa1f2b7b8b3533bb3bc8a12618ead8e0aaf4f09"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/buy-02-retest-01.json",
+      "sha": "f0fd57bb166145942fc12c99b263ff7071f9a6ae"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/buy-02-review.json",
+      "sha": "3d3c3da72b1afd72d6fb8fae36c3f907909383dd"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/buy-03-retest-01.json",
+      "sha": "e573b2ea21cdd88f7e65e47da7e00117ad570563"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/buy-03-review.json",
+      "sha": "c54204835e46b86a4e6ffd5acf3b5dfce68294bf"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/buy-remaining-retest-01.json",
+      "sha": "7f36b6b8e0028b055738c48b95f5d653d1aeb149"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/contract-review.json",
+      "sha": "57456eaa1d863afb9f01b00940ea231187a60dda"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/coverage-validation.json",
+      "sha": "89368fd2fafbf7d83ec0086e8f0604a9c64801de"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/final-combined-29-visual-review.json",
+      "sha": "2d575bf68e2d22f672952135b13b835a1213ee33"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/final-independent-visual-review.json",
+      "sha": "7b34c35a7e4995ae19de8d5a369ee725d1a3d762"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/final-supplement-3-visual-review.json",
+      "sha": "512251f8d47274ae9d48a72daa1af3d2224c2f48"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/finalize_core_review.py",
+      "sha": "d3a72624a069e1b74ec1ff3548fbd4480c2e3578"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/finalize_supplement_review.py",
+      "sha": "525c15421769418fa1d1d6d09bac5c3fff069891"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/initial-source-review.json",
+      "sha": "41718ce9cb4a160dd22300d43eda114d7362fba9"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/inspection-crops/counter-interior-initial.png",
+      "sha": "dd29a3fdac05ae3284622d83499b47cca1aec20a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/inspection-crops/counter-interior-retest.png",
+      "sha": "86113dcbebafe5340c0cc6a19ca21e80d808a2cc"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/inspection-crops/price-135-repair-comparison.png",
+      "sha": "3af48be819aae4d5b16964c01b465828b6ce2780"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/inspection-crops/state-marker-surface.png",
+      "sha": "5779efd1b4a47d5f668084213b66908e0b542f3d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/inspection-crops/steel-chip-orbit.png",
+      "sha": "b1484640b7ecf73ff08a221f8a67dd876dd93dd1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/metadata-package-audit.json",
+      "sha": "822fef266308be6ad67f859b20db0b2b02ac9c2e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/prior33-final-preservation.json",
+      "sha": "b5958fb4addd0ef6c232526f72d2d94d27fb6a23"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/record_review.py",
+      "sha": "27fcf504b62dc8c4f0c818f86d91e68fade9850b"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/review-index.json",
+      "sha": "6a61f52e38b2d7f820494fc23af5a51a74d2ea87"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/root-final-retests.json",
+      "sha": "4a23549151751dce89a02972dc9b27972a84bf0f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/sequential-source-review.json",
+      "sha": "08d265a13f54cc391215227a1177c0ce36df9fa1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/source-inspection/A-003.00.png",
+      "sha": "23700d3247ebc22866e7cc459a2e9736d3d258b1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/source-inspection/A-016.00.png",
+      "sha": "95cfb898d2ebd3ec105b1f1200e7e073424c42c6"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/source-inspection/B-028.00.png",
+      "sha": "289bd0c22f1ed4d1167ba80121d33e02d080bb68"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/source-inspection/B-048.00.png",
+      "sha": "a86c22fde7212612f757a70e776103ee08b301dd"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/source-inspection/B-activation-sequence/sequence-contact.png",
+      "sha": "5804182b684468853ae74f996a64095136b6828e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/storage-01-review.json",
+      "sha": "e2afcfbe3439538570f18a43e8810ca388ba556d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/storage-02-review.json",
+      "sha": "33dafcd666f25c81f0fa498be56ba7ec695248e4"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/storage-03-review.json",
+      "sha": "18c175ac45117b06cba2c51a75aa315b165db00a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/storage-04-retest-01.json",
+      "sha": "6c8a67d2993cec91a5c87d4a15aeb03c6f42b82a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/storage-04-review.json",
+      "sha": "b23d20a54f0f4abc33c8f30fbf877ff8217fb36f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/storage-05-review.json",
+      "sha": "4f1ff079bcf30315b746514197eac1f3c0f55efa"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/storage-06-review.json",
+      "sha": "a6727a085d8cacde2e0e6a12c36f4693a0968049"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/storage-state-initial-review.json",
+      "sha": "2b6c2f43cea2181a15a69549451552474adeddf5"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/supplement-counter-retest-01.json",
+      "sha": "f423464975587c1260bcb7b5aed4eda598596e97"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/supplement-initial-review.json",
+      "sha": "1fb360698bdac9e31383061f991350a3fd32d3f9"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/supplement-review-index.json",
+      "sha": "24bf28b161f5bbe8b085e1d84ae9ba8271f7196a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/supplement-source-contract-review.json",
+      "sha": "e221cab05019907193c13b4f67b8d8397aa80bbe"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/templates-retest-01.json",
+      "sha": "28a83b2af4c548f0b855fbecd35aa11bc9036c89"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/work-and-purchase-state-review.json",
+      "sha": "5bbbd2ac70dd87d2b782504f8824bf43c053d2f4"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/reviews/work-zone-states-and-retest-02.json",
+      "sha": "42ed4e0f4101033d91b11aecaf12807fa570631d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-12.00-13.40-detail-sequence.png",
+      "sha": "5d297b0ed20cb8399372743a9e68adb1be7e537f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-counter-600-root-inspection.json",
+      "sha": "b9b7663e7f6884278c4d48b1fe3afbbb97e5933c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-counter-600-root-inspection.png",
+      "sha": "dd8eaef365f6edd45bdc05400dda38a69973c304"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-counter-600.png",
+      "sha": "4a3937c06911b8c568db3b791e2a02344a4fa20d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-fishing-upgrade-160.png",
+      "sha": "6156632208a89d791621d20ab33673d879207a3b"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-hand-240.png",
+      "sha": "35688cfdabaa2fb5f4e9a5365bb81493574fbcb4"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-paid-sequence.png",
+      "sha": "66c58f9f146473f75dbcf9f3b4d3f46bbb7b619e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-wheat-sequence.png",
+      "sha": "38a37e80bd766d9c6a1008230cc9124a401baf11"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-work-zone-active.png",
+      "sha": "841e5211c0159304b130aaeeb81c52405de5b61d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-work-zone-idle.png",
+      "sha": "5ad7adf0c40b92ce34c6958faf66509a8ed0721e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/A-worker-160.png",
+      "sha": "566043099ede70fe0e704721646328c5daee0a63"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-05.40-06.60-detail-sequence.png",
+      "sha": "c5f81815d8b898585b68f596479287262efded07"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-13.00-14.20-detail-sequence.png",
+      "sha": "8b221a089591bb45b5ca9857ebcce2ffb368e4ba"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-axe-upgrade-100.png",
+      "sha": "d63145a29fec6b0d737c94c928b4c94f68467d85"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-build-sequence.png",
+      "sha": "8a208f4fbf305310575cde5043f5e132c3a1e7a6"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-construction-full-active.png",
+      "sha": "46d12511923e9c88c294c282ac2caf7559fe708d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-construction-idle-200.png",
+      "sha": "be887348c02c6601b826a847d887eeb3daf793c1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-construction-idle-inspection.png",
+      "sha": "f50e79bc72f311e81c4f263a57f3a71ba16a8c00"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-construction-marker-removed.png",
+      "sha": "4d5daed2ffcda57026c537d0468b390135ac6327"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-construction-partial-active.png",
+      "sha": "5187a36d4f52d20b0891f5580a412ab92315caae"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-defense-bow-175.png",
+      "sha": "6edd3aeb6c540e10187f447ad04bc2914b1e72e5"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-expansion-300.png",
+      "sha": "2f415b64b2b2fff5400fa7087e7ad55b3e3f3f9e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-person-plus-50.png",
+      "sha": "23e2c551cea3551a6455930fb078c9e7a5c35b30"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/B-upgrade-sequence.png",
+      "sha": "568022849e9f6c46f7d3d3cbd3140cf71744e494"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/additional-buy-plot-source-notes.json",
+      "sha": "040252daaf580d681c3b735ddd1133b9c64dd645"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/buy-activation-source-notes.json",
+      "sha": "fe93ba9649dc402d224fd3baee15cbcd221507f8"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/buy-icon-crop-provenance.json",
+      "sha": "8727cf8a70f6b05a304d09f82e0d51f5aa09635e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/buy-plot-frame-extraction.json",
+      "sha": "8f5d1aed4a8a54a83fcb4b4fec938828ddfe93f4"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/exact-paid-frame-extraction.json",
+      "sha": "c28b67b7280880fa87c2372edea4f57fe3cddc91"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/extract_buy_plot_evidence.py",
+      "sha": "1d4acdf55fc9b092150e8835e1c74d02a5c3fbf0"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/source-evidence-retention.json",
+      "sha": "44fb664a7e6261cc2e93cce9aba4566fac96a82c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/storage-resource-coverage-proposal.json",
+      "sha": "1a05d5aef9ef4e56e4a069a5e0c6f495dfb24fbb"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/sources/storage-source-notes.json",
+      "sha": "cb7d69b2f1afff4fe1d947be49270b6761488971"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/as-built-clarifications.json",
+      "sha": "0c40117ccba1a05fe873cdb8376f317b30a94320"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/batch-01-prompts.json",
+      "sha": "fe663c496e4df505b04657df588ad03a00d95d57"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/batch-01-results.json",
+      "sha": "1a9e00a7da5223dd7b4210ba53dd34559890fc55"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/batch-02-prompts.json",
+      "sha": "4710675b1e747d0979f50a84f72d9916c95fc730"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/batch-02-results.json",
+      "sha": "c617705c826cba3414ecd27a0627e42a1ee0754b"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/batch-03-prompts.json",
+      "sha": "0818ec0bf81ff813e1953470c1dd66328c19ffc5"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/batch-03-results.json",
+      "sha": "2f38fd7001a2b531824172a48a39fd9ed8069479"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/batch-04-prompts.json",
+      "sha": "8b488dd9fc484fcfa1690207814bd2075db754d2"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/batch-04-results.json",
+      "sha": "36652a5c93059bccf82cde30d166d495f9f52805"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/batch-05-prompts.json",
+      "sha": "f061f1084482b3539d70681754921abe6a5951cc"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/batch-05-results.json",
+      "sha": "1ea869709514f7d6af8ad54a53d0431ae4726249"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/batch-06-prompts.json",
+      "sha": "1f61ed55377f325f1490d105a31c503e99bb1f4f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/batch-06-results.json",
+      "sha": "b6ac19db0702fb07c7fac41ec14e5b6cfd7d2582"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/build-checkpoint.json",
+      "sha": "f241889b7e6b335321c3f8e81ce945b065f77eb5"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/cardinal-repairs-01-prompts.json",
+      "sha": "e70589d65bd554be502faf006a055e830709ad6d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/cardinal-repairs-01-results.json",
+      "sha": "be81a418026b2aa2c9bb75162e16c081b56c561d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/steel-repair-01-prompt.json",
+      "sha": "7b57844b3acb7657c77f635fe7379bc0b6fcff6f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/steel-repair-01-results.json",
+      "sha": "58fe12dd23ca7de526ba192f8143d5834df3c074"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/storage-wood-repair-01-prompt.json",
+      "sha": "ad7f1e56cffcc66391bca86ab3a1817462df2769"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/template-repair-01-prompts.json",
+      "sha": "3f408432807efb5c8754d1439beedbb0689edfb2"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/template-repair-01-results.json",
+      "sha": "0d4832e44dac782453deddad388ddaf8c6af4a7a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/template-repair-02-prompt.json",
+      "sha": "185d08bcc77561dda8d6c6f978a7f4dafa8df02a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/template-repair-02-results.json",
+      "sha": "99f58b62f0c42579c744130986c2f093c2ef3e6e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/template-repair-03-prompt.json",
+      "sha": "28d081b4012c4b8282337d7edfb48062c72fb7c8"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/storage-build/template-repair-03-results.json",
+      "sha": "5c765b9605ac476423b5f371bbb709204bf30b6e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/supplement-build/bow-person-prompts.json",
+      "sha": "379f227ccd757bbaabdb46ab28a9bf80424f7123"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/supplement-build/bow-person-results.json",
+      "sha": "a61bb96b2f425dc50b77cdfa2d35994445bc117f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/supplement-build/counter-prompt.json",
+      "sha": "96808618de8e9582808a55f602a2bec65fbd0e7f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/supplement-build/counter-repair-01-prompt.json",
+      "sha": "89b712158886fad605460c9e7af675ce815405df"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23-plots/supplement-build/counter-results-and-blob-receipts.json",
+      "sha": "b6388592673c4aecfbcf8027f63574a2ec7ffea3"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/.gitattributes",
+      "sha": "9cff5b9cbdf0ea3d765b58f14217e0d4eb30c1a6"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/README.md",
+      "sha": "92eac0b91ea01e855c22c39eff2979c48860c178"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/acceptance-contract.json",
+      "sha": "874bd7ad6b8a5cfa11a95adf437b55a399aabb1d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/01-wood.png",
+      "sha": "b2b4c2fc9337e8b9f3b699aca2acb1f90e60bfb3"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/02-stone.png",
+      "sha": "398a9405ed0306becd2282ab760734f0b50bea52"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/03-slate.png",
+      "sha": "1b134f72a20d5d167f4ee6824c634f1fbd51afa3"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/04-steel.png",
+      "sha": "571177564f03e7da7c34ae19b81238cc19f31b99"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/05-metal-ore.png",
+      "sha": "7657ed14a24af8060ccf462303c982fb34f1ce00"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/06-fuel.png",
+      "sha": "4412c9140c1135942db139a0a49faa335f534f2e"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/07-meat.png",
+      "sha": "153e2e6abd6463122a5fd3150b902b90fc503cca"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/08-fish.png",
+      "sha": "b2ee18b0a67b26efce9b52dcb0bf290829895e15"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/09-wheat.png",
+      "sha": "3daed8126631d9af08238e23cccc92c9187e1249"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/10-cooked-food.png",
+      "sha": "b1d9197ad3f666b7a5b95a2ba592e1f36fbce723"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/initial/12-cargo.png",
+      "sha": "d28feb99cf93ab4f3ce33663a89bdabea2237e12"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/archived-candidates/superseded-repairs/exec-1dff713e-c4b5-4c89-a94d-2afce22b6017.png",
+      "sha": "786b79329186114e81257e32bb59307bec1e069d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/blob-upload-receipts.json",
+      "sha": "3a688c854b9c40771fad531e6fb8266e0f3370f9"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/build_git_package.py",
+      "sha": "d4dc413293cc9f412be7180ff96f41aab1a27598"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-manifest.json",
+      "sha": "a9c838e4dd5cd6d5869ae4c7f45c2805a7ccfb40"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/delivery-verification.json",
+      "sha": "1fc9b697a50491c88b3486e2e1b17002f2cf4edf"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/download-render-index.json",
+      "sha": "d712f531acc498964bbb114180a049dc787e4898"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/prompts/prompts-batch1.json",
+      "sha": "21ad99e4821f89b5d74a7f70ab494fd2769eea97"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/prompts/prompts-batch2.json",
+      "sha": "c637b97503cb200a21503fd7eb5fc2a9b488437a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/prompts/prompts-batch3.json",
+      "sha": "e7aad32d359ccb016ec722bb1530470c3d07c4bc"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/prompts/prompts-batch4.json",
+      "sha": "0a6f0aea1ec4cc88ee86c3cd2ae0f80ff2982ac1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/prompts/prompts-batch5-coal.json",
+      "sha": "64405aa95acce23a001dd8601e7fe0770e5b6b10"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-01-repair-prompts.json",
+      "sha": "dbf52cfcd0ce65d9f2f314822624dbb988e24143"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-01-repair-results.json",
+      "sha": "476d3d7d7019f59e36842cd14e3ecfe2cfae5872"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-02-repair-prompts.json",
+      "sha": "c043f0de769fa2c6e9a18d956d6b707cd527a8a3"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-02-repair-results.json",
+      "sha": "6f4a9a3389a6e7d4de55555bcd6f01827c4814e2"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-03-repair-prompts.json",
+      "sha": "56a1be36209247dd7deada033371c98b9f902625"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-03-repair-results.json",
+      "sha": "b8a7f3ce1dcf391f711163c5cc44355065240c4c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-04-repair-prompts.json",
+      "sha": "c14be8b46b2f643941af9f2938fa2be05ae1813f"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/batch-04-repair-results.json",
+      "sha": "d306a383c63c598117be8557b5935a2a41d5833c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/repairs/wheat-repair-iteration-2.json",
+      "sha": "287597882f15be88bf8af222e68d9e40f359c527"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/01-wood.png",
+      "sha": "c94ba1d94a3d7fdbb5c9cc096c5b3f30eb180cb4"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/02-stone.png",
+      "sha": "c2a7e1a7cb2caa8fb1dc80699b5d02604adadbe1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/03-slate.png",
+      "sha": "5280b3c6a69b01b39a1f5577686162228b177008"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/04-steel.png",
+      "sha": "8030843df6055046f23b908c5c5c98c4aa6ceb33"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/05-metal-ore.png",
+      "sha": "c3bdeddef77ddf35f1a32bfc598bea809bb816c8"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/06-fuel.png",
+      "sha": "ac409458a51373a09abb3874dc2f82a28eecca2a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/07-meat.png",
+      "sha": "12dd418cf4ed3e38770a67442bb39beb6cf9180b"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/08-fish.png",
+      "sha": "e69e7fa6d68c2a112e8b12e9ae69e567e7a5c1fd"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/09-wheat.png",
+      "sha": "a87813358bad204455a32ab6f68bfbebfd28426c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/10-cooked-food.png",
+      "sha": "2579fbaee59b771c9956d72dd580255498ade402"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/11-money.png",
+      "sha": "74fe2dd9fcca9e2ad8e266b89d7bba61f5c8df21"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/12-cargo.png",
+      "sha": "0f00f3467086f520c62d4304a8900775e55e02f1"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviewed-concepts/13-coal.png",
+      "sha": "e2e0e11613a65ad01d3aa3255317a3de3bd89ba9"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-01-initial-review.json",
+      "sha": "2dd2f2dd67a20cec9724f66630167e7bf7de4343"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-01-repair-review.json",
+      "sha": "dc6a93da29170621fdb3dac2ddf8c008684ad7ba"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-02-initial-review.json",
+      "sha": "40713a01792dbc90e2c386286bdbe67f7f1580e4"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-02-repair-review.json",
+      "sha": "ef3957c4d08d1afe83e6771d2cf7cb452896c8d0"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-03-initial-review.json",
+      "sha": "8abc3c2fef2a610265d35e6a90759b54fad9479d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-03-repair-review.json",
+      "sha": "e6fa9b0a3aae46cddaef8dab41bb434e67a24f63"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-04-initial-review.json",
+      "sha": "f03cfa9039fb9e661db25c9787ecbdba67a55d87"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-04-repair-review.json",
+      "sha": "efe7461b5b37e2ec45435531d2a8b6cb7d1f1626"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/batch-05-coal-review.json",
+      "sha": "08ae59284628fef7495ed41060758ffc82ea967b"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/final-independent-visual-review.json",
+      "sha": "4fe5f4eebc060ab4e846de4061c452483cd0944a"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/reviews/review-index.json",
+      "sha": "2b887f3c4e1af41d2187ee43892645298729889c"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/scope-addendum.json",
+      "sha": "2406686ae947cbd176d8d4a5839e98c0f1fa052d"
+    },
+    {
+      "path": "Docs/Design/ResourceTurnarounds/2026-11-23/source-reference-provenance.json",
+      "sha": "4d6a1fe3999e560c263e933af18f4380f5771907"
+    }
+  ]
+}
