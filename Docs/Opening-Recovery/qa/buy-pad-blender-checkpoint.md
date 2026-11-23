@@ -1,6 +1,6 @@
 # Level 1 purchase pad — Blender checkpoint
 
-Visual only; **HOLD at 9.4/10 in controlled studio review**, with a 9.5 minimum. The Level 1 build, game camera, states, and mobile performance have not been evaluated for this asset. Do not change the runtime or promote the asset from this checkpoint.
+Visual only; **V5 PASS at 9.6/10 in controlled studio review**, with a 9.5 minimum. Earlier candidates remain held. The Level 1 build, game camera, states, and mobile performance have not been evaluated for this asset. Do not change the runtime or promote the asset from this checkpoint.
 
 | Revision | GLB SHA-256 | Studio review |
 | --- | --- | --- |
@@ -15,3 +15,7 @@ Owner's source model, editable Blender file and full render evidence are preserv
 ## V4 geometry diagnosis and review
 
 Exact GLB SHA-256 `92ea038636fe98599ad7b9b7108b1d148cee4224d67081c5d842c6ce1389fd62`. Removed nine confirmed redundant old-marker faces, preserving the retained vertex, UV and texture data and all four separate inlays. A local 123,201-sample geometry check found no new holes. Fresh same-angle review still scored **9.4/10, HOLD**: the dark marks were reduced, but residual corner tone differences and a faint diagonal substrate line show at close zoom. No runtime change, phone or actual Level 1 verification, or Meshy spend. V4 is diagnostic evidence, not an approval.
+
+## V5 fitted deck visual pass
+
+Exact GLB SHA-256 `d938ed53778f135359d4a345603a84353a7d02daddc0ff6e389453101119b7cb`. A fitted thin slate surface covers the old tonal ghosts and diagonal without replacing the physical rim or four separate corner inlays. Independent review of five new Blender 4.3.2 Cycles views, including opposing grazing angles, scored **9.6/10 studio PASS**; old marks and a separate insert line/lip were not visible under those views. Exact overall bounds retained. Asset has 84,041 triangles (+1,280) and three 2048-square maps plus one 1024-square deck map. Existing deck geometry remains beneath the new surface. No Meshy credits spent. No gameplay approval: actual Level 1 camera, dynamic purchase states, temporal overlap behavior and device performance still require verification against the exact playable build. Docs only; no integration or release.
