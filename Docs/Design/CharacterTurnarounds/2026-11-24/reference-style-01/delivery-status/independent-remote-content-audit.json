@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-24T16:12:28.427562+00:00",
+  "status": "PASS_REMOTE_CONTENT_CHECKPOINT",
+  "score": 10.0,
+  "score_scope": "Live GitHub content checkpoint integrity only; static visual scores remain9.7\u20139.8.",
+  "repository": "ksolo21-web/HAVENLINE",
+  "branch": "art/enemy-invaders-2026-11-24",
+  "commit": "b0d7c09a91dd333636f0f90034bb9e3997cac6e1",
+  "tree": "8582359f58c017a0ee2b35d965aba696276eccd9",
+  "parent": "f3f86e7695e7b68e0d16456dde66788e25291d98",
+  "live_ref_verified": true,
+  "recursive_tree_truncated": false,
+  "expected_manifest_sha256": "80b08b57eb93dca7d0330c29dc69c15fbeb540fc391441a53ec56a2c6ae77464",
+  "frozen_selection_sha256": "535d28cf27900a224f7c9bc5e827c644bb447eb17d7a2968901123ed46bb26ee",
+  "counts": {
+    "remote_blob_files": 2551,
+    "new_package_files": 260,
+    "prior_files_preserved": 2291,
+    "prior_png_paths_preserved": 628,
+    "all_remote_png_paths": 761,
+    "generated_original_pngs": 22,
+    "selected_same_blob_aliases": 12,
+    "exact_invoked_prompts": 22,
+    "qa_records": 117,
+    "qa_images": 99,
+    "unexpected_additions": 0,
+    "deletions": 0,
+    "mismatches": 0
+  },
+  "mandatory_checks": [
+    {
+      "id": "fresh_live_ref_and_graph",
+      "status": "PASS",
+      "finding": "Separate fresh GitHub GETs returned the expected live branch head, exact commit/tree and sole parent; recursive tree is complete."
+    },
+    {
+      "id": "all_package_bytes_by_git_object",
+      "status": "PASS",
+      "finding": "All260 scoped files match the independently approved local manifest by exact Git blob hash, length and mode, including all22 originals and12 selected aliases."
+    },
+    {
+      "id": "prior_archive_preservation",
+      "status": "PASS",
+      "finding": "All2291 baseline file objects/modes/lengths, including628 prior PNG paths, match the independently fetched immutable base tree. No deletion or outside-prefix addition."
+    },
+    {
+      "id": "frozen_visual_bindings_preserved",
+      "status": "PASS",
+      "finding": "All approved selected-image aliases and all attempts match frozen Git blob identities; prompts, requirements, raw reviews, evidence and resolvers are covered by the complete manifest match."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/critic-content-ref-readback.json",
+      "sha256": "49cfbfdc8340dfd083eb3a8f700de37de44713bc9c6e311caa1df176cdefc05d"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/critic-content-commit-readback.json",
+      "sha256": "096b300b5a306d1338118c1bdd56cca5ac326eccbda77eb5f7c7d49f77ecc642"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/critic-content-tree-readback.json",
+      "sha256": "656461beb9a96e07304c0a3fcba3dd71faf81562f17b2e8a34dea3dc5f269774"
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/critic-baseline-readback.json",
+      "sha256": "87472994970328fd89778b802e315c8daa9f5c2bba9483fa8900afbbc9f9c7ae"
+    }
+  ],
+  "issues_remaining": [],
+  "all_mandatory_remote_content_checks_passed": true,
+  "next_gate": "One authorized additive evidence/status child may follow. Verify its live head, sole parent and bounded delta separately; no artwork or frozen-input modification allowed.",
+  "native_mesh_rig_animation_runtime_approval": false
+}

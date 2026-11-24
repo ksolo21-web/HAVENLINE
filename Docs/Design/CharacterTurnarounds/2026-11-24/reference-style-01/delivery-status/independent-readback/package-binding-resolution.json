@@ -1,0 +1,60 @@
+{
+  "reviewer": "/root/render_critic",
+  "recorded_at_utc": "2026-11-24T16:09:01.900903+00:00",
+  "status": "PASS_EXACT_HASH_VERSION_DISAMBIGUATION",
+  "current_origin_identical_documents": 110,
+  "historical_advanced_origins_resolved": [
+    {
+      "archive_path": "evidence/input-history/character-2-4-notes-325e1c93b8805105d3e060d66be6e1378bdaabc572e2e7ac7e48c8884d5fb634.md",
+      "historical_sha256": "325e1c93b8805105d3e060d66be6e1378bdaabc572e2e7ac7e48c8884d5fb634",
+      "current_origin_sha256": "467888127f5a12caa79d125d5207da90762faa1dd39c755602e887e9c678975d",
+      "historical_record_matches": 1,
+      "role": "Earlier exact input version preserved when source metadata advanced."
+    },
+    {
+      "archive_path": "history/v1/CHARACTER_STYLE_REFERENCE.md",
+      "historical_sha256": "bc76bc49170a59069633e62c21f299c8242f52fd0e888723ecd7808109e66ea7",
+      "current_origin_sha256": "32be92026eb2f454f97c253fb32e0bbe79ffa15ad4eb3ec1b30086df18e3bcba",
+      "historical_record_matches": 1,
+      "role": "Exact historical v1 input at the hand-visibility scope change."
+    },
+    {
+      "archive_path": "history/v1/inputs/builder-execution-log-at-cutover.json",
+      "historical_sha256": "defce21d181d885e3d211a4a33a4eeeb6c8f92f47ac7d59ea37525ec0ea6fcd4",
+      "current_origin_sha256": "cff758d18d40902660e1c081279ffded92340a2a2859c4d5550cc4df895fd38d",
+      "historical_record_matches": 1,
+      "role": "Exact historical v1 input at the hand-visibility scope change."
+    },
+    {
+      "archive_path": "history/v1/inputs/builder-index-at-cutover.json",
+      "historical_sha256": "c43a173935098bbe7144a48929eee50b1a5b58debb6239da5e7ce10e3fea2be6",
+      "current_origin_sha256": "0cefc284f07624e892b36f3b5ec1f78b4e718d5493cc0a8dd9344be05e14f98b",
+      "historical_record_matches": 1,
+      "role": "Exact historical v1 input at the hand-visibility scope change."
+    },
+    {
+      "archive_path": "history/v1/inputs/builder-references-at-cutover.json",
+      "historical_sha256": "0d8494b0f174f04a8e7f09de044df56a8896750b255727d8abdffc4b0a6d8544",
+      "current_origin_sha256": "19c33dc09e46f2484bdc5b2e786fa904a906c030e5fadd1b2b0e35bc6fa55369",
+      "historical_record_matches": 1,
+      "role": "Exact historical v1 input at the hand-visibility scope change."
+    },
+    {
+      "archive_path": "history/v1/inputs/root-index-at-cutover.json",
+      "historical_sha256": "0d2edabf35f0dcff5b58189d4a69b4fe25871b67759b3dde64e21546813d00d5",
+      "current_origin_sha256": "3213a76c3403961ea822dd67223b98e375abedf0a0c66b518fabb133d6ea3fde",
+      "historical_record_matches": 1,
+      "role": "Exact historical v1 input at the hand-visibility scope change."
+    },
+    {
+      "archive_path": "history/v1/inputs/root-references-at-cutover.json",
+      "historical_sha256": "05f4008666846d6fbe794f39c820cd2f36e32028b94306357abd0446e2b050c4",
+      "current_origin_sha256": "384e4c0d5d467e807c4518e7bb610159702977a308ffb21fc9b8f6100b870f45",
+      "historical_record_matches": 1,
+      "role": "Exact historical v1 input at the hand-visibility scope change."
+    }
+  ],
+  "failures": [],
+  "explanation": "A generic comparison with each mutable current origin flags seven legitimate historical snapshots. Their archived bytes exactly match the earlier frozen SHA256/byte records and declared historical role; hash-first resolver paths disambiguate versions. These differences are not archive corruption.",
+  "navigation_gap_pending": "Two historical Markdown source links require one same-blob JPEG alias at history/v1/inputs/user-style-reference.jpg; archiver is preparing that bounded addition."
+}

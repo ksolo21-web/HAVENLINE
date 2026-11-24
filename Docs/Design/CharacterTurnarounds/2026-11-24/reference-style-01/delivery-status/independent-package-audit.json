@@ -1,0 +1,103 @@
+{
+  "schema_version": 1,
+  "reviewer": "/root/render_critic",
+  "independent": true,
+  "reviewed_at_utc": "2026-11-24T16:10:14.516355+00:00",
+  "status": "PASS_EXACT_LOCAL_ARCHIVE_PACKAGE",
+  "score": 10.0,
+  "score_scope": "Exact local candidate-package integrity and preservation only. Visual scores remain9.7\u20139.8; this is not live remote or native3D approval.",
+  "repository": "ksolo21-web/HAVENLINE",
+  "branch": "art/enemy-invaders-2026-11-24",
+  "base_commit": "f3f86e7695e7b68e0d16456dde66788e25291d98",
+  "base_tree": "7311e511183ae0a14d25f0a65ff76d0fdf9fdad2",
+  "candidate_tree": "8582359f58c017a0ee2b35d965aba696276eccd9",
+  "prefix": "Docs/Design/CharacterTurnarounds/2026-11-24/reference-style-01",
+  "expected_manifest_path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/archive-expected-paths.json",
+  "expected_manifest_sha256": "80b08b57eb93dca7d0330c29dc69c15fbeb540fc391441a53ec56a2c6ae77464",
+  "final_freeze_sha256": "535d28cf27900a224f7c9bc5e827c644bb447eb17d7a2968901123ed46bb26ee",
+  "counts": {
+    "package_files": 260,
+    "candidate_total_blob_files": 2551,
+    "prior_file_objects_preserved": 2291,
+    "prior_png_paths_preserved": 628,
+    "generated_original_pngs": 22,
+    "selected_same_byte_aliases": 12,
+    "exact_invoked_prompts": 22,
+    "prepared_not_invoked_prompts": 1,
+    "source_document_copy_records": 117,
+    "current_origin_byte_identical_records": 110,
+    "exact_historical_origin_versions_resolved": 7,
+    "qa_records": 117,
+    "qa_images": 99,
+    "resolver_hash_targets_checked": 269,
+    "current_selected_distinct_raw_review_hashes": 7,
+    "relative_markdown_links_checked": 39
+  },
+  "mandatory_checks": [
+    {
+      "id": "manifest_and_candidate_tree",
+      "status": "PASS",
+      "score": 10.0,
+      "finding": "All260 manifest paths match actual local bytes by SHA256, Git blob SHA1 and length; index objects match exact candidate tree."
+    },
+    {
+      "id": "originals_selected_prompts",
+      "status": "PASS",
+      "score": 10.0,
+      "finding": "All22 generated originals and22 invoked prompts match frozen source bytes/hashes; all12 selected aliases match the exact approved source files. Prepared unused C4 diagonalr1 prompt has zero outputs."
+    },
+    {
+      "id": "frozen_requirements_review_inputs",
+      "status": "PASS",
+      "score": 10.0,
+      "finding": "Both requirement versions, visual status, final set audit, final freeze, raw reviews and all117 source document records retain exact frozen hashes.110 current source copies match current origin bytes; seven earlier snapshots match their earlier frozen records and explicitly declared historical roles."
+    },
+    {
+      "id": "resolver_reference_and_qa_bindings",
+      "status": "PASS",
+      "score": 10.0,
+      "finding": "269 hash targets resolve to exact archived bytes; all current12 image-review bindings resolve to7 raw review hashes and the appropriate requirement hash. Existing C2\u20134 identity links target immutable base blobs matching the inspected source PNGs.117 QA records/99 actual QA images and provenance are present."
+    },
+    {
+      "id": "navigation_and_scope",
+      "status": "PASS",
+      "score": 10.0,
+      "finding": "All39 relative Markdown links resolve, including two historical source links repaired by one same-blob JPEG alias. Gallery accurately states12 static sheets,32 body views/16 hand closeups, native1254square and pending publication; no mesh/rig/runtime claims."
+    },
+    {
+      "id": "prior_content_preservation",
+      "status": "PASS",
+      "score": 10.0,
+      "finding": "Compared against critic's fresh independent untruncated GitHub base tree: all2291 prior file objects/modes, including628 PNG paths, remain unchanged. No deletion or addition outside the new prefix."
+    },
+    {
+      "id": "bounded_repair_retest",
+      "status": "PASS",
+      "score": 10.0,
+      "finding": "Final candidate8582359f\u2026 differs from initially reviewed54e94e4\u2026 by exactly one additive historical user JPEG alias. All2550 prior candidate file objects unchanged; no artwork, prompt or frozen-input mutation."
+    }
+  ],
+  "evidence": [
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/critic-baseline-readback.json",
+      "sha256": "87472994970328fd89778b802e315c8daa9f5c2bba9483fa8900afbbc9f9c7ae",
+      "role": "Critic independently fetched immutable GitHub baseline recursive tree; truncatedfalse."
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/critic-package-binding-resolution.json",
+      "sha256": "75e4d271a926b8ea8e2ac2df88875938b05d4dc537425eb643a7aea24b1e4ee3",
+      "role": "Hash-first reconciliation of seven legitimate historical source versions after current origins advanced."
+    },
+    {
+      "path": "/workspace/scratch/9c51da47f878/havenline-character-style-360/critic-package-retest-data.json",
+      "sha256": "b77df954df8aeae0d172e75da64fcfa74d584b03ae8f0210a9c8aec26ba81136",
+      "role": "Actual final manifest/index/tree and bounded alias-delta retest."
+    }
+  ],
+  "issues_remaining": [],
+  "all_mandatory_package_checks_passed": true,
+  "approved_for_publication_of_exact_candidate": true,
+  "remote_delivery_gate": "PENDING_FRESH_LIVE_READBACK",
+  "native_mesh_rig_animation_runtime_approval": false,
+  "mutation_policy": "This verdict is outside the approved content tree. Frozen visual records remain unchanged; later delivery receipts must be additive."
+}
