@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3]
+
+[ext_resource type="Script" path="res://previews/terrain_water_preview.gd" id="1_terrain_water"]
+[ext_resource type="PackedScene" path="res://previews/terrain_contact_preview.tscn" id="2_ground"]
+
+[node name="TerrainAndRiverOnly" type="Node3D"]
+script = ExtResource("1_terrain_water")
+
+[node name="AcceptedGround" parent="." instance=ExtResource("2_ground")]
+
+[node name="MapSpanningRiver" type="MeshInstance3D" parent="."]
+cast_shadow = 0
